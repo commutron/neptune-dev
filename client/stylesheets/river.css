@@ -1,0 +1,97 @@
+/* River */
+
+.stone {
+	 position: relative;
+	 margin: 0.5em;
+  width: 13rem;
+  height: 13rem;
+  font-size: 2rem;
+	 text-transform: uppercase;
+	 text-shadow: 0 0 2px #000;
+  color: white;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-origin: content-box;
+  background-size: 110%;
+  border-radius: 50%;
+  -webkit-transition: all 300ms ease-out;
+  -moz-transition: all 300ms ease-out;
+  -o-transition: all 300ms ease-out;
+  transition: all 300ms ease-out;
+ 	opacity: 0.9;
+  box-shadow: 0 0 .2em .2em rgba(43,43,43,0.3),
+              0 0 .2em .2em rgba(43,43,43,0);
+  cursor: pointer;
+}
+
+.stone:focus {
+	outline: 1px dotted;
+}
+
+.stone:disabled {
+ opacity: 0.5;
+}
+
+#riverStep {
+ font-weight: bolder;
+}
+
+.iFirst {
+ background-image: url(first.svg);
+ background-color: rgb(41,128,185);
+}
+.iFirst:hover, .iFirst:active {
+ box-shadow: 0 0 .2em .2em rgba(43,43,43,0.3),
+             0 0 .2em .2em rgba(41,128,185,0.3);
+}
+
+.iCheck {
+ background-image: url(inspect.svg);
+ background-color: rgb(39,174,96);
+}
+.iCheck:hover, .iCheck:active {
+ box-shadow: 0 0 .2em .2em rgba(43,43,43,0.3),
+             0 0 .2em .2em rgba(39,174,96,0.3);
+}
+
+.iTest {
+ background-image: url(test.svg);
+ background-color: rgb(22,160,133);
+}
+.iTest:hover, .iTest:active {
+ box-shadow: 0 0 .2em .2em rgba(43,43,43,0.3),
+             0 0 .2em .2em rgba(22,160,133,0.3);
+}
+
+.iBuild {
+ background-image: url(build.svg);
+ background-color: rgb(142,68,173);
+}
+.iBuild:hover, .iBuild:active {
+  box-shadow: 0 0 .2em .2em rgba(43,43,43,0.3),
+              0 0 .2em .2em rgba(142,68,173,0.3);
+}
+
+
+.pebble {
+ line-height: 2em;
+ font-size: 1em;
+ min-width: 100%;
+	min-height: 2.5rem;
+	padding: 0 3px;
+	text-transform: uppercase;
+	vertical-align: middle;
+ -moz-box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2);
+ -webkit-box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2);
+ box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2);
+}
+
+.pebbleSVG {
+ backface-visibility: hidden;
+ width: 3rem;
+ height: auto;
+ -webkit-transform: translate(0%, 20%);
+ -moz-transform: translate(0%, 20%);
+ transform: translate(0%, 20%);
+}
+

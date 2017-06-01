@@ -1,0 +1,609 @@
+Meteor.methods({
+
+//// Batches \\\\
+
+  addBatch(batchNum, widgetId, vKey, sDate, eDate) {
+    const doc = WidgetDB.findOne({_id: widgetId});
+    const duplicate = BatchDB.findOne({batch: batchNum});
+    if(!duplicate && Meteor.userId() && doc.orgKey === Meteor.user().orgKey) {
+      BatchDB.insert({
+  			batch: batchNum,
+  			orgKey: Meteor.user().orgKey,
+  			widgetId: widgetId,
+  			versionKey: vKey,
+        tags: [],
+        active: true,
+        createdAt: new Date(),
+  			createdWho: Meteor.userId(),
+  			finishedAt: false,
+  			start: sDate,
+  			end: eDate,
+  			notes: false,
+        river: false,
+        riverAlt: false,
+        items: [],
+        nonCon: [],
+        escaped: [],
+        cascade: [],
+        scrap: Number(0),
+        short: [],
+        });
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  editBatch(batchId, newBatchNum, vKey, sDate, eDate) {
+    const doc = BatchDB.findOne({_id: batchId});
+    let duplicate = BatchDB.findOne({batch: newBatchNum});
+    doc.batch === newBatchNum ? duplicate = false : null;
+    if(!duplicate && Meteor.user().power && doc.orgKey === Meteor.user().orgKey) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        $set : {
+          batch: newBatchNum,
+          versionKey: vKey,
+          start: sDate,
+  			  end: eDate
+        }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  setRiver(batchId, riverId, riverAltId) {
+    if(Meteor.user().power) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        $set : {
+          river: riverId,
+          riverAlt: riverAltId,
+        }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+
+  deleteBatch(batch, pass) {
+    const doc = BatchDB.findOne({_id: batch._id});
+    // if any items have history
+    const inUse = doc.items.some( x => x.history.length > 0 ) ? true : false;
+    if(!inUse) {
+      const lock = doc.createdAt.toISOString();
+      const user = Meteor.user().power;
+      const access = doc.orgKey === Meteor.user().orgKey;
+      const unlock = lock === pass;
+      if(user && access && unlock) {
+        BatchDB.remove(batch);
+        return true;
+      }else{
+        return false;
+      }
+    }else{
+      return 'inUse';
+    }
+  },
+
+  changeStatus(batchId, status) {
+    if(Meteor.user().power) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+  			$set : { 
+  			  active: status
+      }});
+    }else{null}
+  },
+
+  setBatchNote(batchId, note) {
+    BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+      $set : { notes : {
+        time: new Date(),
+        who: Meteor.userId(),
+        content: note
+      }}});
+  },
+
+//// Items \\\\
+
+  addMultiItems(batchId, barFirst, barLast, unit) {
+    if(
+      !isNaN(barFirst)
+      &&
+      !isNaN(barLast)
+      &&
+      barFirst > 0
+      &&
+      barFirst < barLast
+      &&
+      barLast - barFirst <= 1000
+      &&
+      unit > 0
+      &&
+      unit < 100
+      )
+      {
+        const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
+        const open = doc.finishedAt === false;
+        const con1 = Meteor.user().power && doc && open;
+        const con2 = Meteor.user().creator && doc && open;
+        
+        if(con1 || con2) {
+          
+          let bad = [];
+      
+          for(var click = barFirst; click < barLast; click++) {
+            let barcode = click.toString();
+            let duplicate = doc.items.find(x => x.serial === barcode);
+            if(duplicate) {
+              bad.push(barcode);
+            }else{
+              BatchDB.update({_id: batchId}, {
+                $push : { items : {
+                  serial: barcode,
+                  unit: Number(unit),
+                  createdAt: new Date(),
+                  createdWho: Meteor.userId(),
+                  finishedAt: false,
+                  finishedWho: false,
+                  history: [],
+                  alt: false,
+                  rma: [],
+                }}});
+            }
+          }
+    // callbacks = [success, not added]
+          return [true, bad];
+        }else{
+          return [false, false];
+        }
+      }
+      else
+      {
+        return [false, false];
+      }
+  },
+  
+  //// fork, use alternative flow
+  
+  forkItem(id, bar, choice) {
+    if(Meteor.userId()) {
+      BatchDB.update({_id: id, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
+        $set : { 
+          'items.$.alt': choice 
+        }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  //// unit corection
+  
+  setItemUnit(id, bar, unit) {
+    if(unit > 0 && unit < 100) {
+      BatchDB.update({_id: id, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
+        $set : { 
+          'items.$.unit': Number(unit)
+        }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  //// history entries
+
+  addHistory(batchId, bar, key, step, type, com) {
+    if(type === 'inspect' && !Meteor.user().inspector) {
+      return false;
+    }else if(type === 'test' && !Meteor.user().tester) {
+      return false;
+    }else{
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
+        $push : { 'items.$.history': {
+          key: key,
+          step: step,
+          type: type,
+          accept: true,
+          time: new Date(),
+          who: Meteor.userId(),
+          comm : com,
+          first: false
+      }}});
+      return true;
+    }
+  },
+
+  addFirst(batchId, bar, key, step, type, com, good, whoB, howB) {
+    if(!Meteor.user().inspector) {
+      return false;
+    }else{
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
+        $push : { 'items.$.history': {
+          key: key,
+          step: step,
+          type: type,
+          accept: good,
+          time: new Date(),
+          who: Meteor.userId(),
+          comm : com,
+          first: {
+            builder: whoB,
+            method: howB
+          }
+      }}});
+      return true;
+    }
+  },
+
+
+  finishItem(batchId, barcode, key, step, type) {
+    if(!Meteor.user().inspector) {
+      return false;
+    }else{
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': barcode}, {
+  			$push : { 
+  			  'items.$.history': {
+  			    key: key,
+            step: step,
+            type: type,
+            accept: true,
+            time: new Date(),
+            who: Meteor.userId(),
+            comm : '',
+            first: false
+  			  }
+  			},
+  			$set : { 
+  			  'items.$.finishedAt': new Date(),
+  			  'items.$.finishedWho': Meteor.userId()
+  			}
+      });
+      
+      // finish batch
+      const doc = BatchDB.findOne({_id: batchId});
+      const allDone = doc.items.every( x => x.finishedAt !== false );
+      if(doc.finishedAt === false && allDone) {
+        BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+    			$set : { 
+    			  active: false,
+    			  finishedAt: new Date()
+        }});
+      }else{null}
+  		return true;
+    }
+  },
+  
+  //  remove a step
+  pullHistory(batchId, bar, key) {
+    if(Meteor.user().admin) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
+        $pull : {
+          'items.$.history': {key: key}
+        }});
+        return true;
+    }else{
+      return false;
+    }
+  },
+  
+  // replace a step
+  pushHistory(batchId, bar, replace) {
+    //some validation on the replace would be good
+    if(Meteor.user().admin) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
+        $push : { 
+          'items.$.history': replace
+        }});
+    }else{
+      null;
+    }
+  },
+  
+  // delete \\
+  deleteItem(batchId, bar, pass) {
+    const doc = BatchDB.findOne({_id: batchId});
+    const subDoc = doc.items.find( x => x.serial === bar );
+    const inUse = subDoc.history.length > 0 ? true : false;
+    if(!inUse) {
+      const lock = subDoc.createdAt.toISOString();
+      const admin = Meteor.user().admin;
+      const access = doc.orgKey === Meteor.user().orgKey;
+      const unlock = lock === pass;
+      if(admin && access && unlock) {
+    		BatchDB.update(batchId, {
+          $pull : { items: { serial: bar }
+        }});
+        return true;
+      }else{
+        return false;
+      }
+    }else{
+      return 'inUse';
+    }
+  },
+
+
+//// Non-Cons \\\\
+  addNC(batchId, bar, ref, type, step) {
+    BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+      $push : { nonCon: {
+        key: new Meteor.Collection.ObjectID().valueOf(), // id of the nonCon entry
+        serial: bar, // barcode id of item
+        ref: ref, // referance on the widget
+        type: type, // type of nonCon
+        where: step, // where in the process
+        time: new Date(), // when nonCon was discovered
+        who: Meteor.userId(),
+        fix: false,
+        inspect: false,
+        skip: false,
+        }}});
+      },
+
+  fixNC(batchId, ncKey) {
+		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+			$set : { 
+			  'nonCon.$.fix': {
+			    time: new Date(),
+			    who: Meteor.userId()
+			  }
+			}
+		});
+  },
+
+  inspectNC(batchId, ncKey) {
+		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+			$set : { 
+			  'nonCon.$.inspect': {
+			    time: new Date(),
+			    who: Meteor.userId()
+			  }
+			}
+		});
+  },
+    
+  editNC(batchId, ncKey, type) {
+		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+			$set : { 
+			  'nonCon.$.type': type,
+			}
+		});
+  },
+
+  skipNC(batchId, ncKey, com) {
+		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+			$set : {
+			  'nonCon.$.comm': com,
+			  'nonCon.$.skip': { 
+			    time: new Date(),
+			    who: Meteor.userId()
+			  }
+			}
+		});
+  },
+
+  UnSkipNC(batchId, ncKey) {
+		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+			$set : {
+			  'nonCon.$.skip': false
+			}
+		});
+  },
+  
+  addEscape(batchId, ref, type, quant, ncar) {
+    BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+      $push : { escaped: {
+        key: new Meteor.Collection.ObjectID().valueOf(), // flag id
+        ref: ref, // referance on the widget
+        type: type, // type of nonCon
+        quantity: Number(quant),
+        ncar: ncar,
+        time: new Date(), // when nonCon was discovered
+        who: Meteor.userId(),
+        }}});
+      },
+
+  // this has not been implemented or tested \\
+  /*
+  ncRemove(batchId, key) {
+    BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': key}, {
+      $pull : { nonCon: { key: key }
+       }});
+  },
+  */
+  
+  // RMA Cascade //
+  
+  addRMACascade(batchId, rmaId, qua, com, flowObj) {
+    const doc = BatchDB.findOne({_id: batchId});
+    const dupe = doc.cascade.find( x => x.rmaId === rmaId );
+    if(Meteor.user().power && !dupe) {
+      
+      for( let obj of flowObj ) {
+        // set unique key in the track object
+        obj['key'] = new Meteor.Collection.ObjectID().valueOf();
+      }
+      
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        $push : { cascade: {
+          key: new Meteor.Collection.ObjectID().valueOf(),
+          rmaId: rmaId,
+          time: new Date(),
+          who: Meteor.userId(),
+          quantity: Number(qua),
+          comm: com,
+          flow: flowObj,
+          nonCon: []
+        }},
+        $set : { 
+  			  active: true
+        }
+      });
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  setRMA(batchId, bar, cKey) {
+    if(Meteor.user().inspector) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
+        $push : { 
+          'items.$.rma': cKey
+        }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  /*
+  
+  pullRMA(batchId, rmaNum) {
+    if(Meteor.user().power) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'rma.rma': rmaNum}, {
+        $pull : {
+          rma : { rma : rmaNum }
+        }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  */
+  
+
+  // Scrap \\
+  
+  scrapItem(batchId, bar, step, comm) {
+    if(Meteor.user().power) {
+      // update item
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
+        // scrap entry to history
+        $push : { 
+  			  'items.$.history': {
+  			    key: new Meteor.Collection.ObjectID().valueOf(),
+            step: step,
+            type: 'scrap',
+            accept: true,
+            time: new Date(),
+            who: Meteor.userId(),
+            comm: comm,
+            first: false
+  			  }
+  			},
+  			// finish item
+  			$set : { 
+  			  'items.$.finishedAt': new Date(),
+  			  'items.$.finishedWho': Meteor.userId()
+  			}
+      });
+      // increment batch scrap count
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        $inc : { 
+          scrap: Number(1)
+        }
+      });
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+
+  //// Shortages \\\\
+
+  addShort(batchId, prtNm, quant, com) {
+    if(Meteor.user().power || Meteor.user().creator) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        $push : { short: {
+          key: new Meteor.Collection.ObjectID().valueOf(),
+          partNum: prtNm,
+  			  quantity: quant,
+          time: new Date(),
+          who: Meteor.userId(),
+          comm: com,
+          resolve: false,
+          followup: false
+          }}});
+          return true;
+        }else{
+          return false;
+        }
+  },
+  
+  resolveShort(batchId, shKey, act, alt) {
+    if(Meteor.user().power || Meteor.user().creator) {
+  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'short.key': shKey}, {
+  			$set : { 
+  			  'short.$.resolve':
+  			    {
+  			      action: act,
+              time: new Date(),
+              who: Meteor.userId(),
+              alt: alt
+            }
+  			}
+  		});
+  		return true;
+    }else{
+      return false;
+    }
+  },
+  
+  recShort(batchId, shKey) {
+    if(Meteor.user().power || Meteor.user().creator) {
+  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'short.key': shKey}, {
+  			$set : { 
+  			  'short.$.followup': new Date()
+  			}
+  		});
+			return true;
+    }else{
+      return false;
+    }
+  },
+  
+  editShortCom(batchId, shKey, com) {
+    if(Meteor.user().power || Meteor.user().creator) {
+  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'short.key': shKey}, {
+  			$set : { 
+  			  'short.$.comm': com
+  			}
+  		});
+			return true;
+    }else{
+      return false;
+    }
+  },
+  
+  undoReShort(batchId, shKey) {
+    if(Meteor.user().power || Meteor.user().creator) {
+  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'short.key': shKey}, {
+  			$set : { 
+  			  'short.$.resolve': false,
+  			  'short.$.followup': false
+  			}
+  		});
+  		return true;
+    }else{
+      return false;
+    }
+  },
+
+  sRemove(batchId, shKey) {
+    if(Meteor.user().power) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        $pull : { short: { key: shKey }
+         }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+});

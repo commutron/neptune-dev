@@ -1,0 +1,158 @@
+Meteor.startup(function () {  
+  // ensureIndex is depreciated 
+  // but the new createIndex errors as "not a function"
+  BatchDB._ensureIndex({ batch : 1, 'items.serial' : 1 }, { unique: true });
+  GroupDB._ensureIndex({ group : 1}, { unique: true });
+  WidgetDB._ensureIndex({ widget : 1, 'versions.version' : 1 }, { unique: true });
+});
+
+
+Meteor.methods({
+  
+  
+  addSetting() {
+    var orgKey = Meteor.user().orgKey;
+    var db = AppDB.findOne({orgKey: orgKey});
+    if(orgKey) {
+      if(!db) {
+        AppDB.insert({
+          org: Meteor.user().org,
+          orgKey: orgKey,
+          createdAt: new Date(),
+          toolOption: [],
+          trackOption: [],
+          lastTrack: '',
+          nonConOption: [],
+          ancillaryOption: [],
+          instruct: '',
+          timeClock: '',
+          ndaMode: false
+        });
+        Meteor.users.update(Meteor.userId(), {
+          $set: {
+            power: true,
+            active: true,
+            inspector: true,
+            tester: true,
+          }
+        });
+        return true;
+      }else{
+        return false;
+      }
+    }else{
+      return false;
+    }
+  },
+  
+  
+  addTrackOption(flatTrack) {
+    if(Meteor.user().power) {
+      
+      const split = flatTrack.split('|');
+      const step = split[0];
+      const type = split[1];
+      const trackObj = 
+      { 
+        'key' : new Meteor.Collection.ObjectID().valueOf(),
+        'step' : step,
+        'type' : type,
+        'how' : false
+      };
+      
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $push : { 
+          trackOption : trackObj
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  endTrack(flatLast) {
+    if(Meteor.user().power) {
+      
+      const split = flatLast.split('|');
+      const step = split[0];
+      const type = split[1];
+      const how = split[2];
+      const trackObj = 
+      { 
+        'key' : 'f1n15h1t3m5t3p',
+        'step' : step,
+        'type' : type,
+        'how' : how
+      };
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $set : { 
+          lastTrack : trackObj
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  addNCOption(value) {
+    if(Meteor.user().power) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $push : { 
+          nonConOption : value
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  addAncOp(value) {
+    if(Meteor.user().power) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $push : { 
+          ancillaryOption : value
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  addToolOp(value) {
+    if(Meteor.user().power) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $push : { 
+          toolOption : value
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  setInstruct(go) {
+    if(Meteor.user().power) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $set : { 
+          instruct : go
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  setTimeClock(go) {
+    if(Meteor.user().power) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $set : { 
+          timeClock : go
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  
+});

@@ -1,0 +1,9 @@
+.pieContain {
+  max-height: 300px;
+  max-width: 300px;
+}
+
+.barContain {
+  max-height: 600px;
+  max-width: 600px;
+}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="250" height="125" viewBox="0 0 250 125" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="250" height="125" fill="#ffffff" fill-opacity="0"/>
+  <g id="widget" transform="matrix(1,0,0,1,150,150)">
+    <path d="M -127.195 -34.649 C -59.271 -34.649 9.271 -34.649 77.195 -34.649 M -127.195 -44.94 C -59.271 -44.94 9.271 -44.94 77.195 -44.94" fill="#000000" fill-opacity="0" stroke-width="2" stroke="#000000" stroke-opacity="0.3" stroke-linecap="square" stroke-linejoin="miter"/>
+    <path d="M -4.089 -51.461 L -8.033 -53.738 L 35.936 -129.894 L 39.88 -127.617 L -4.089 -51.461 Z" fill="#000000" fill-opacity="0.3"/>
+    <path d="M 15.498 -136.325 L 17.822 -140.351 L 57.993 -117.159 L 55.668 -113.133 L 15.498 -136.325 Z" fill="#000000" fill-opacity="0.3"/>
+    <path d="M -44.129 -51.461 L -40.185 -53.738 L -84.153 -129.894 L -88.097 -127.617 L -44.129 -51.461 Z" fill="#da0011" fill-opacity="0.3"/>
+    <path d="M -63.715 -136.325 L -66.04 -140.351 L -106.21 -117.159 L -103.885 -113.133 L -63.715 -136.325 Z" fill="#da0011" fill-opacity="0.3"/>
+  </g>
+</svg>

@@ -1,0 +1,11 @@
+$ cd /home/ubuntu/scuba
+
+$ meteor --port $IP:$PORT
+
+
+'meteor update --patch'
+
+
+git add .
+git commit -m "comment"
+git push -u orgin master

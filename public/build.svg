@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="250" height="100" viewBox="0 0 250 100" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="250" height="100" fill="#ffffff" fill-opacity="0"/>
+  <g id="widget" transform="matrix(1,0,0,1,150,150)">
+    <path d="M -127.195 -79.606 C -59.271 -79.606 9.271 -79.606 77.195 -79.606 M -127.195 -89.898 C -59.271 -89.898 9.271 -89.898 77.195 -89.898" fill="#000000" fill-opacity="0" stroke-width="2" stroke="#000000" stroke-opacity="0.3" stroke-linecap="square" stroke-linejoin="miter"/>
+    <path d="M 47.467 -95.108 L 37.954 -95.108 L 24.584 -108.478 L 24.584 -117.99 L 21.374 -117.99 L 21.374 -107.123 L 36.6 -91.898 L 47.467 -91.898 Z" fill="#000000" fill-opacity="0.3"/>
+    <path d="M -45.472 -95.108 L -35.959 -95.108 L -22.589 -108.478 L -22.589 -117.99 L -19.379 -117.99 L -19.379 -107.123 L -34.605 -91.898 L -45.472 -91.898 Z" fill="#000000" fill-opacity="0.3"/>
+    <path d="M -25 -117.99 L 25.981 -117.99 L 25.981 -105.594 L -25 -105.594 Z" fill="#000000" fill-opacity="0.3"/>
+    <path d="M -63.126 -141.228 L -63.126 -104.025 L -77.957 -104.025 L -77.957 -141.228 Z" fill="#000000" fill-opacity="0.3"/>
+    <path d="M -70.542 -129.117 L -70.542 -58.772" fill="#000000" fill-opacity="0" stroke-width="2" stroke="#000000" stroke-opacity="0.3" stroke-linecap="square" stroke-linejoin="miter"/>
+  </g>
+</svg>
