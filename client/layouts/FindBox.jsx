@@ -6,10 +6,10 @@ export default class FindBox extends Component	{
   //// Set the Entered Number as Session Variable \\\\
   setVar(e) {
     e.preventDefault();
-    const chosen = this.refs.choose.value.trim().toLowerCase();
+    const chosen = this.choose.value.trim().toLowerCase();
       Session.set('now', chosen);
-        this.refs.choose.value='';
-        this.refs.choose.select();
+        this.choose.value = '';
+        this.choose.select();
   }
 
   render () {
@@ -25,7 +25,7 @@ export default class FindBox extends Component	{
           autoFocus='true'
           type='search'
           id='find'
-          ref='choose'
+          ref={(i)=> this.choose = i}
           className='up'
           placeholder={last}
           list='cuts'

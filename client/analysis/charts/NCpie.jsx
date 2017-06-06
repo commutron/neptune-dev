@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import {Pie} from "react-chartjs-2";
+// {Pie} from "react-chartjs-2"; //prop-type depreciation problem
 
 //// Requires: no-good nonCons, repaired nonCons, and inspected nonCons \\\\
 
@@ -34,15 +34,15 @@ export default class NCpie extends Component	{
         }
       }],
 
-    }
+    };
 
 
     return (
       <div className='cent'>
         <div className='pieContain'>
-          <Pie data={chartData} />
+          {/*<Pie data={chartData} />*/}
         </div>
       </div>
-    )
+    );
   }
 }

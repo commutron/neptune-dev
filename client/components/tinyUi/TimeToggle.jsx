@@ -4,7 +4,7 @@ export default class TimeToggle extends Component	{
   
   
   toggle() {
-    const choice = this.refs.choose.checked;
+    const choice = this.choose.checked;
     Session.set('timeClock', choice);
     }
         
@@ -14,7 +14,7 @@ export default class TimeToggle extends Component	{
         <input
           type='checkbox'
           id='timeToggle'
-          ref='choose'
+          ref={(i)=> this.choose = i}
           defaultChecked={Session.get('timeClock')}
           onChange={this.toggle.bind(this)}
           readOnly />

@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import moment from 'moment';
 
 import RMAFall from './RMAFall.jsx';
 
@@ -56,14 +57,14 @@ export default class RMACascade extends Component {
           // current rma is bold
             return(
               <div key={index} className='bleed cap fadeRed centre'>
-                <b>RMA: {entry.rmaId}, {entry.time.toLocaleDateString()}</b>
+                <b>RMA: {entry.rmaId}, {moment(entry.time).calendar()}</b>
               </div>
               );
           }else{
           // previous rmas are italic
             return(
               <div key={index} className='bleed cap fadeRed centre'>
-                <i>RMA: {entry.rmaId}, {entry.time.toLocaleDateString()}</i>
+                <i>RMA: {entry.rmaId}, {moment(entry.time).calendar()}</i>
               </div>
               );
           }})}

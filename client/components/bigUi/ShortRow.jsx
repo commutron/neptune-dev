@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import Alert from '/client/global/alert.js';
 
@@ -67,17 +68,17 @@ export default class ShortRow extends Component {
     
     const dt = this.props.entry;
     const rlv = dt.resolve;
-    const unlock = Meteor.user().power || Meteor.user().creator;
+    const unlock = Roles.userIsInRole(Meteor.userId(), ['power', 'creator']);
     
     const reOrder = rlv && rlv.action === 'order';
     const reSub = rlv.action === 'sub';
     const reDnp = rlv.action === 'dnp';
-    const reWhen = rlv ? dt.resolve.time.toLocaleString() : false;
+    const reWhen = rlv ? moment(dt.resolve.time).calendar() : false;
     const reWho = rlv ? <UserNice id={dt.resolve.who} /> : false;
     
     const recFollow = rlv ? 
                       typeof dt.followup === 'object' ?
-                      <b>Received {dt.followup.toLocaleString()}</b> :
+                      <b>Received {moment(dt.followup).calendar()}</b> :
                       <button
                         className='smallAction clear greenT'
                         onClick={this.handleRec.bind(this)}
@@ -96,18 +97,18 @@ export default class ShortRow extends Component {
 			<tr>
 				<td className='up'>{dt.partNum}</td>
 				<td>{dt.quantity}</td>
-        <td>{dt.time.toLocaleString()} by <UserNice id={dt.who} /></td>
+        <td>{moment(dt.time).calendar()} by <UserNice id={dt.who} /></td>
         <td>
           <form className='hiddenInput inlineForm' onSubmit={this.handleEditSave.bind(this)}>
             <textarea
-              ref={(input)=> this.com = input}
+              ref={(i)=> this.com = i}
               rows='2'
               disabled={true}
               defaultValue={dt.comm}></textarea>
             <br />
             <button
               type='submit'
-              ref={(input)=> this.sv = input}
+              ref={(i)=> this.sv = i}
               className='smallAction clear greenT'
               disabled={true}>Save</button>
           </form>
@@ -175,7 +176,7 @@ export class ResolveForm extends Component {
   render() {
     return(
       <form className='fullForm' onSubmit={this.handleResolve.bind(this)}>
-        <select ref={(input)=> this.act = input} onChange={this.moreInfo.bind(this)} required>
+        <select ref={(i)=> this.act = i} onChange={this.moreInfo.bind(this)} required>
           <option></option>
           <option value='order'>Order</option>
           <option value='dnp'>DNP - Send Short</option>
@@ -183,7 +184,7 @@ export class ResolveForm extends Component {
         </select>
         <input
           type='text'
-          ref={(input)=> this.more = input}
+          ref={(i)=> this.more = i}
           disabled={true}
           placeholder='sub part number' />
         <button type='submit' className='smallAction clear greenT'>set</button>

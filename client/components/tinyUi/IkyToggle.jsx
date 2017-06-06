@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 export default class IkyToggle extends Component	{
   
   toggle() {
-    const choice = this.refs.choose.checked;
+    const choice = this.choose.checked;
     Session.set('ikyView', choice);
     }
         
@@ -13,7 +13,7 @@ export default class IkyToggle extends Component	{
         <input
           type='checkbox'
           id='ikyToggle'
-          ref='choose'
+          ref={(i)=> this.choose = i}
           defaultChecked={Session.get('ikyView')}
           onChange={this.toggle.bind(this)}
           readOnly />

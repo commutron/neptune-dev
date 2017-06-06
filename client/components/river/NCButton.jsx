@@ -22,7 +22,7 @@ export default class NCButton extends Component {
       this.setState({ show: !this.state.show });
     }
     showScrap() {
-      if(this.refs.ncType.value === 'scrap') {
+      if(this.ncType.value === 'scrap') {
         this.setState({ scrap: true });
       }else{
         this.setState({ scrap: false });
@@ -34,16 +34,16 @@ export default class NCButton extends Component {
 
     handleNC(e) {
       e.preventDefault();
-      this.refs.go.disabled = true;
+      this.go.disabled = true;
       const bar = this.props.barcode;
       const batchId = this.props.id;  
-      const type = this.refs.ncType.value.trim().toLowerCase();
-      const where = this.refs.discStp.value.trim().toLowerCase();
+      const type = this.ncType.value.trim().toLowerCase();
+      const where = this.discStp.value.trim().toLowerCase();
       
-      const refEntry = this.refs.ncRefs.value.trim().toLowerCase();
+      const refEntry = this.ncRefs.value.trim().toLowerCase();
       const refSplit = refEntry.split(' ');
         
-      //for(var bar of bars) {
+      //for(var bar of bars) { // for applying an nc to an array of barcodes
         for(var ref of refSplit) {
           Meteor.call('addNC', batchId, bar, ref, type, where, (error)=>{
             if(error)
@@ -51,8 +51,8 @@ export default class NCButton extends Component {
           });
         }
         
-        this.refs.ncRefs.value='';
-        this.refs.go.disabled = false;
+        this.ncRefs.value='';
+        this.go.disabled = false;
         const findBox = document.getElementById('find');
         findBox.focus();
       //}
@@ -96,7 +96,7 @@ export default class NCButton extends Component {
               <p><label htmlFor='currep'>discovered at</label><br />
                 <select
                   id='currep'
-                  ref='discStp'
+                  ref={(i)=> this.discStp = i}
                   className='cap'
                   defaultValue={now}
                   required >
@@ -112,7 +112,7 @@ export default class NCButton extends Component {
                 <input
                   type='text'
                   id='nonponent'
-                  ref='ncRefs'
+                  ref={(i)=> this.ncRefs = i}
                   placeholder='eg. R45'
                   autoFocus='true'
                   required />
@@ -120,7 +120,7 @@ export default class NCButton extends Component {
               <p><label htmlFor='nonode'>{Pref.nonConType}</label><br />
                 <select 
                   id='nonode'
-                  ref='ncType'
+                  ref={(i)=> this.ncType = i}
                   className='cap'
                   onChange={this.showScrap.bind(this)}
                   required >
@@ -129,13 +129,13 @@ export default class NCButton extends Component {
                       <option key={index} value={entry}>{entry}</option>
                       );
                   })}
-                  {Meteor.user().power ?
+                  {Roles.userIsInRole(Meteor.userId(), 'power') ?
                     <option value='scrap'>scrap</option>
                     : null}
                 </select>
               </p>
               <br />
-              <p><button type='submit' ref='go' disabled={false} className='action clear'>{Pref.post}</button></p>
+              <p><button type='submit' ref={(i)=> this.go = i} disabled={false} className='action clear'>{Pref.post}</button></p>
             </form>
             <br />
         </div>

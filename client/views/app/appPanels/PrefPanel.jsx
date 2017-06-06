@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import SlideDownWrap from '/client/components/tinyUi/SlideDownWrap.jsx';
 import Pref from '/client/global/pref.js';
 
 import {OptionAdd} from '/client/components/forms/AppSettings';
@@ -11,6 +12,7 @@ export default class PrefPanel extends Component {
     const dt = this.props.app;
 
     return (
+      <SlideDownWrap>
       <div className='card cap invert'>
         <div className='space breathe'>
           <h1>app preferences for : <i>{dt.org}</i></h1>
@@ -80,6 +82,7 @@ export default class PrefPanel extends Component {
 
         <br />
       </div>
+      </SlideDownWrap>
     );
   }
 }

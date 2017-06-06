@@ -9,32 +9,22 @@ export default class GroupForm extends Component {
 
     createCustomer(e) {
       e.preventDefault();
-      const groupName = this.refs.gName.value.trim().toLowerCase();
-      const groupAlias = this.refs.gAlias.value.trim().toLowerCase();
+      const groupName = this.gName.value.trim().toLowerCase();
+      const groupAlias = this.gAlias.value.trim().toLowerCase();
       const groupId = this.props.id;
       
       
       function create(groupName, groupAlias) {
-        //check for existing Group
-        if(GroupDB.findOne({group: groupName}) || GroupDB.findOne({alias: groupAlias})) {
-          Bert.alert({
-            title: 'Duplicate',
-            message: Pref.group + ' name or abbreviation already exists. Pick a unique name.',
-            type: 'carrot',
-            style: 'fixed-bottom',
-            icon: 'fa-ban'});
-        }else{
-          Meteor.call('addGroup', groupName, groupAlias, (error, reply)=>{
-            if(error)
-             console.log(error);
-            if(reply) {
-              Bert.alert(Alert.success);
-              Session.set('now', groupName);
-            }else{
-              Bert.alert(Alert.danger);
-            }
-          });
-        }
+        Meteor.call('addGroup', groupName, groupAlias, (error, reply)=>{
+          if(error)
+           console.log(error);
+          if(reply) {
+            Bert.alert(Alert.success);
+            Session.set('now', groupName);
+          }else{
+            Bert.alert(Alert.warning);
+          }
+        });
       }
       
       
@@ -73,13 +63,13 @@ export default class GroupForm extends Component {
         button={title + ' ' + Pref.group}
         title={title + ' ' + Pref.group}
         type='action clear greenT'
-        lock={!Meteor.user().power}>
+        lock={!Roles.userIsInRole(Meteor.userId(), 'power')}>
         <form id='new' className='centre' onSubmit={this.createCustomer.bind(this)}>
           <p><label htmlFor='newName'>Full Name</label><br />
             <input
               type='text'
               id='newName'
-              ref='gName'
+              ref={(i)=> this.gName = i}
               defaultValue={orName}
               placeholder='ie. Trailer Safegaurd'
               autoFocus='true'
@@ -89,7 +79,7 @@ export default class GroupForm extends Component {
             <input
               type='text'
               id='newAlias'
-              ref='gAlias'
+              ref={(i)=> this.gAlias = i}
               defaultValue={orAlias}
               placeholder='ie. TSG'
               required />

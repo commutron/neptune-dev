@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import moment from 'moment';
 import SlideDownWrap from '/client/components/tinyUi/SlideDownWrap.jsx';
+import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
 import UserNice from '../../../components/smallUi/UserNice.jsx';
@@ -19,7 +19,7 @@ export default class WidgetPanel extends Component	{
 
   render() {
 
-    const g = this.props.groupData;
+    //const g = this.props.groupData;
     const w = this.props.widgetData;
     const b = this.props.batchRelated;
     const a = this.props.app;

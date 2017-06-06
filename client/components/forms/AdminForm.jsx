@@ -4,7 +4,7 @@ export default class AdminForm extends Component	{
 
   up(e) {
     e.preventDefault();
-    pIn = this.refs.pIn.value.trim();
+    pIn = this.pIn.value.trim();
     Meteor.call('adminUpgrade', pIn, (err, reply)=>{
       if (err)
         console.log(err);
@@ -25,14 +25,14 @@ export default class AdminForm extends Component	{
   render() {
     return(
       <div>
-      {Meteor.user().power ?
-        !Meteor.user().admin && Meteor.users.find({admin: true}).fetch().length < 2 ?
+      {Roles.userIsInRole(Meteor.userId(), 'power') ?
+        !Roles.userIsInRole(Meteor.userId(), 'admin') && Roles.getUsersInRole( 'admin' ).fetch().length < 2 ?
           <div>
             <p>Enter current administrator PIN to upgrade {Meteor.user().username} to administrator</p>
             <form onSubmit={this.up.bind(this)} autoComplete='off'>
               <input
                 type='password'
-                ref='pIn'
+                ref={(i)=> this.pIn = i}
                 id='pIn'
                 pattern='[0000-9999]*'
                 maxLength='4'
@@ -49,7 +49,7 @@ export default class AdminForm extends Component	{
         : null
       : null}
       
-      {Meteor.user().admin && Meteor.users.find({admin: true}).fetch().length > 1 ?
+      {Roles.userIsInRole(Meteor.userId(), 'admin') && Roles.getUsersInRole( 'admin' ).fetch().length > 1 ?
         <div>
           <p>You are one of two administrators. Click the button to give up being an administrator</p>
           <button onClick={this.down.bind(this)} className='action clear redT'>Downgrade</button>

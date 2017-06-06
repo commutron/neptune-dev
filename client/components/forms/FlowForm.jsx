@@ -96,14 +96,14 @@ export default class FlowForm extends Component	{
       <Model
         button='flow form'
         title='flow form'
-        lock={!Meteor.user().power || this.props.lock}>
+        lock={!Roles.userIsInRole(Meteor.userId(), 'power') || this.props.lock}>
         
         
         {!this.state.fill ?
         
           <div className='centre'>
           <p>choose</p>
-            <select ref={(i)=> this.pick =i} onChange={this.option.bind(this)}>
+            <select ref={(i)=> this.pick = i} onChange={this.option.bind(this)}>
               <option></option>
               <option value='blank'>New</option>
               {this.props.existFlows.map( (entry, index)=>{
@@ -201,7 +201,7 @@ export class FlowRemove extends Component	{
       <button
         className='actionSmall clear redT'
         onClick={this.pull.bind(this)}
-        disabled={!Meteor.user().power}
+        disabled={!Roles.userIsInRole(Meteor.userId(), 'power')}
       >delete</button>
     );
   }

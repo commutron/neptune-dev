@@ -25,8 +25,6 @@ export default class BatchForm extends Component	{
     const startDate = this.sDate.value;
     const endDate = this.eDate.value;
 
-    //console.log(moment(startDate));
-
     function edit(batchId, batchNum, vKey) {
       Meteor.call('editBatch', batchId, batchNum, vKey, startDate, endDate, (error, reply)=>{
         if(error)
@@ -80,7 +78,7 @@ export default class BatchForm extends Component	{
         button={title + ' ' + Pref.batch}
         title={title + ' ' + Pref.batch}
         type='action clear greenT'
-        lock={!Meteor.user().power || this.props.lock}
+        lock={!Roles.userIsInRole(Meteor.userId(), 'power') || this.props.lock}
       >
         <form className='centre' onSubmit={this.save.bind(this)}>
           <p><label htmlFor='vrsl'>Version</label><br />
@@ -102,7 +100,7 @@ export default class BatchForm extends Component	{
             <input
               type='text'
               id='oNum'
-              ref={(input)=> this.oNum = input}
+              ref={(i)=> this.oNum = i}
               pattern='[00000-99999]*'
               maxLength='5'
               minLength='5'
@@ -116,7 +114,7 @@ export default class BatchForm extends Component	{
             <input
               type='date'
               id='sdt'
-              ref={(input)=> this.sDate = input}
+              ref={(i)=> this.sDate = i}
               defaultValue={eS}
               pattern='[0-9]{4}-[0-9]{2}-[0-9]{2}'
               required />
@@ -125,7 +123,7 @@ export default class BatchForm extends Component	{
             <input
               type='date'
               id='egdt'
-              ref={(input)=> this.eDate = input}
+              ref={(i)=> this.eDate = i}
               defaultValue={eE}
               pattern='[0-9]{4}-[0-9]{2}-[0-9]{2}'
               required />

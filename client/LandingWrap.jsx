@@ -30,7 +30,6 @@ export default createContainer( () => {
   let user = usfo ? usfo.username : false;
   let active = usfo ? usfo.active : false;
   let org = usfo ? usfo.org : false;
-  let power = usfo ? usfo.power : false;
   if(!login) {
     return {
       login: Meteor.userId(),
@@ -44,7 +43,6 @@ export default createContainer( () => {
       login: Meteor.userId(),
       user: user,
       org: org,
-      power: power
     };
   }
 }, StartView);

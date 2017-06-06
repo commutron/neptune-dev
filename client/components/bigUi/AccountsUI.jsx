@@ -10,7 +10,7 @@ export default class AccountsUI extends Component {
 
 	componentDidMount() {
 	 	this.view = Blaze.render(Template.loginButtons,
-	 		ReactDOM.findDOMNode(this.refs.container)); 
+	 		ReactDOM.findDOMNode(this.container)); 
 	}
 
 	componentWillUnmount() {
@@ -22,7 +22,7 @@ export default class AccountsUI extends Component {
 		Session.set('Meteor.loginButtons.dropdownVisible', true);
 		
 		return (
-		  <span ref="container" />
+		  <span ref={(i)=> this.container = i} />
 		  );
 	}
 }

@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import moment from 'moment';
 
 import JumpFind from '../smallUi/JumpFind.jsx';
 import UserNice from '../smallUi/UserNice.jsx';
@@ -19,7 +20,7 @@ export default class ScrapRow extends Component {
         <td className='up'>{this.props.group}</td>
         <td className='up'>{this.props.wIdget}</td>
 				<td className='cap'><UserNice id={this.props.entry.who} /></td>
-        <td>{this.props.entry.time.toLocaleString()}</td>
+        <td>{moment(this.props.entry.time).calendar()}</td>
         <td>{this.props.entry.step}</td>
         <td>{this.props.entry.comm}</td>
 			</tr>

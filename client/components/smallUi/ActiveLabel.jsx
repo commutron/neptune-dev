@@ -7,12 +7,10 @@ export default class ActiveLabel extends Component	{
   change() {
     const batchId = this.props.id;
     const status = !this.props.active;
-    if(Meteor.user().power) {
-      Meteor.call('changeStatus', batchId, status, (error)=>{
-        if(error)
-          console.log(error);
-      });
-    }else{null}
+    Meteor.call('changeStatus', batchId, status, (error)=>{
+      if(error)
+        console.log(error);
+    });
   }
 
   render() {
@@ -23,7 +21,7 @@ export default class ActiveLabel extends Component	{
       <button
         className={label}
         onClick={this.change.bind(this)}
-        disabled={!Meteor.user().power}>
+        disabled={!Roles.userIsInRole(Meteor.userId(), 'power')}>
       </button>
     );
   }

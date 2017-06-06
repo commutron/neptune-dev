@@ -14,70 +14,54 @@ export default class UserForm extends Component {
       Bert.alert(Alert.success);
     });
   }
+  
+  hndlRemove() {
+    const user = this.props.id;
+    const pin = this.pIn.value;
+    Meteor.call('removeFromOrg', user, pin, (err, reply)=>{
+      if (err)
+        console.log(err);
+      if(reply) {
+        Bert.alert(Alert.success);
+      }else{
+        Bert.alert(Alert.warning);
+      }
+    });
+  }
 
   render() {
     
-    const dt = this.props;
-    const active = dt.active ? 'open' : 'open blackT';
-    const admin = dt.admin ? 'administrator' : '';
-    const power = dt.power ? 'poweruser' : '';
-    const lock = dt.admin && !Meteor.user().admin ? true : false;
+    const active = Roles.userIsInRole(this.props.id, 'active') ? 'open' : 'open blackT';
+    const admin = Roles.userIsInRole(this.props.id, 'admin');
+    const power = Roles.userIsInRole(this.props.id, 'power');
+    const adminFlag = admin ? 'administrator' : '';
+    const powerFlag = power ? 'poweruser' : '';
+    const lock = Roles.userIsInRole(Meteor.userId(), 'admin') ? false : true;
 
     return (
-      <Model button={dt.name} title='account profile' type={active} >
-        <h2 className='low'>{dt.name}</h2>
-        <p className='up'>id: {dt.id}</p>
-        <p className='greenT'>{admin}</p>
-        <p className='blueT'>{power}</p>
-        <p>organization: {dt.org}</p>
+      <Model button={this.props.name} title='account profile' type={active} >
+        <h2 className='low'>{this.props.name}</h2>
+        <p className='up'>id: {this.props.id}</p>
+        <p className='greenT'>{adminFlag}</p>
+        <p className='blueT'>{powerFlag}</p>
+        <p>organization: {this.props.org}</p>
         <br />
         <fieldset>
           <legend>permissions</legend>
           <br />
           <ul>
-            <SetCheck
-              user={dt.id}
-              id='active'
-              label='active'
-              check={dt.active}
-              lock={lock}
-            />
-            <br />
-            <SetCheck
-              user={dt.id}
-              id='power'
-              label='poweruser'
-              check={dt.power}
-              lock={lock}
-            />
-            <br />
-            <SetCheck
-              user={dt.id}
-              id='inspect'
-              label={Pref.inspect}
-              check={dt.inspector}
-              lock={lock}
-            />
-            <br />
-            <SetCheck
-              user={dt.id}
-              id='test'
-              label={Pref.test}
-              check={dt.tester}
-              lock={lock}
-            />
-            <br />
-            <SetCheck
-              user={dt.id}
-              id='create'
-              label={Pref.create}
-              check={dt.creator}
-              lock={lock}
-            />
+            {['active', 'power', 'creator', 'inspector', 'tester'].map( (entry, index)=>{
+              return(
+                <SetCheck
+                  key={index}
+                  user={this.props.id}
+                  role={entry}
+                />
+              )})}
           </ul>
         </fieldset>
         <br />
-        {dt.power && Meteor.user().admin ?
+        {power || admin ?
           <fieldset>
             <legend>Forgot PIN</legend>
             <button
@@ -89,6 +73,34 @@ export default class UserForm extends Component {
           :
           null
         }
+        
+        {this.props.org && this.props.id !== Meteor.userId() ?
+          // leaving an org is undesirable
+        <div>
+          <label htmlFor='lv'>Leaving an organization is undesirable.</label>
+          <br />
+          <input
+              type='password'
+              ref={(i)=> this.pIn = i}
+              id='pIn'
+              pattern='[0000-9999]*'
+              maxLength='4'
+              minLength='4'
+              cols='4'
+              placeholder='Poweruser PIN'
+              inputMode='numeric'
+              autoComplete='new-password'
+              required
+            />
+          <button 
+            onClick={this.hndlRemove.bind(this)}
+            className='smallAction red'
+            disabled={lock}
+            >Remove from Organization: "{this.props.org}"
+          </button>
+        </div>
+        : null}
+    
       </Model>
           
       );
@@ -98,7 +110,9 @@ export default class UserForm extends Component {
 class SetCheck extends Component	{
   
   change() {
-    Meteor.call('permissionSet', this.props.id, this.props.user, (error, reply)=>{
+    const check = Roles.userIsInRole(this.props.user, this.props.role);
+    const flip = check ? 'permissionUnset' : 'permissionSet';
+    Meteor.call(flip, this.props.user, this.props.role, (error, reply)=>{
       if(error)
         console.log(error);
       if(reply) {
@@ -110,17 +124,22 @@ class SetCheck extends Component	{
   }
   
   render() {
+    
+    const auth = Roles.userIsInRole(Meteor.userId(), ['admin', 'power']) ? false : true;
+    const check = Roles.userIsInRole(this.props.user, this.props.role);
+    
     return(
       <li>
         <input
           type='checkbox'
-          id={this.props.id}
-          defaultChecked={this.props.check}
+          id={this.props.role}
+          defaultChecked={check}
           onChange={this.change.bind(this)}
-          disabled={this.props.lock}
+          disabled={auth}
           readOnly
         />
-        <label htmlFor={this.props.id}>{this.props.label}</label>
+        <label htmlFor={this.props.role}>{this.props.role}</label>
+        <br />
       </li>
       );
   }

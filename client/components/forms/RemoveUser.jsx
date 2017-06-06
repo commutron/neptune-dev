@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 
 export default class RemoveUser extends Component {
   
+  /*
   remove(e) {
     e.preventDefault();
     Meteor.call('removeUser', id, ()=>{
@@ -13,6 +14,7 @@ export default class RemoveUser extends Component {
         icon: 'fa-check'});
     });
   }
+  */
 
   render () {
     return (
@@ -21,7 +23,6 @@ export default class RemoveUser extends Component {
           <button
             type='submit'
             className='smallAction red'
-            onClick={this.remove.bind(this)}
             disabled='true'
           >delete account</button>
         </p>

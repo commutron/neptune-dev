@@ -30,7 +30,7 @@ export default class InitialSetup extends Component	{
           </form>
         </div>
         <hr />
-        <OrgForm org={this.props.org} startup={true} />
+        <OrgForm org={this.props.org} />
       </div>
     );
   }

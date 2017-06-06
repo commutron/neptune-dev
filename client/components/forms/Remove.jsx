@@ -81,14 +81,15 @@ export default class Remove extends Component	{
 
     let title = this.props.title;
     let check = this.props.check;
+    const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
 
     return (
       <Model
         button='Delete'
         title={'Delete "' + title + '" From Database'}
         type='action clear redT'
-        lock={!Meteor.user().admin}>
-        {Meteor.user().admin ?
+        lock={!auth}>
+        {auth ?
           <div className='actionBox redT'>
             <br />
             <p>Are you sure you want to try to delete "{title}"?</p>

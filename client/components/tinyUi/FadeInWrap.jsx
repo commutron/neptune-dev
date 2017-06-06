@@ -1,19 +1,19 @@
 import React, {Component} from 'react';
 import {CSSTransitionGroup} from 'react-transition-group';
 
-export default class SlideDownWrap extends Component	{
+export default class FadeInWrap extends Component	{
 
   render() {
 
     return (
       <CSSTransitionGroup
-				component='div'
-				transitionName='cardTrans'
+				component='span'
+				transitionName='modelTrans'
 				transitionEnter={true}
 				transitionAppear={true}
 				transitionLeave={false}
-				transitionEnterTimeout={400}
-				transitionAppearTimeout={400}>
+				transitionEnterTimeout={200}
+				transitionAppearTimeout={200}>
 				
         {this.props.children}
       

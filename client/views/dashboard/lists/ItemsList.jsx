@@ -43,12 +43,12 @@ export default class ItemsList extends Component	{
                         b.scrap > 0 && scrap.includes(entry.serial) ? 'action clear wide redT' : 
                         'action clear wide';
               return (
-                  <JumpFind
-                    key={index} 
-                    title={entry.serial} 
-                    sub='' 
-                    sty={style}
-                  />
+                <JumpFind
+                  key={index} 
+                  title={entry.serial} 
+                  sub='' 
+                  sty={style}
+                />
               );
             })}
   			</div>

@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import FadeInWrap from '/client/components/tinyUi/FadeInWrap.jsx';
 import Pref from '/client/global/pref.js';
 // requires
 //button
@@ -34,19 +35,21 @@ export default class Model extends Component	{
           disabled={this.props.lock}
         >{this.props.button}</button>
         {this.state.show ?
-        <div className='overlay'>
-          <div className='popup cap'>
-            <button
-              className='action clear redT rAlign'
-              onClick={this.reveal}
-            >{Pref.close}</button>
-            <h2>{this.props.title}</h2>
-            <hr />
-              <div className='content'>
-                {this.props.children}
-              </div>
+        <FadeInWrap>
+          <div className='overlay'>
+            <div className='popup cap'>
+              <button
+                className='action clear redT rAlign'
+                onClick={this.reveal}
+              >{Pref.close}</button>
+              <h2>{this.props.title}</h2>
+              <hr />
+                <div className='content'>
+                  {this.props.children}
+                </div>
+            </div>
           </div>
-        </div>
+        </FadeInWrap>
         : null }
       </span>
     );

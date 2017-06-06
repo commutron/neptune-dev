@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
 import UserNice from './UserNice.jsx';
@@ -16,7 +17,7 @@ export default class FirstList extends Component	{
           return (
             <div className='infoBox' key={index}>
               <div className='titleBar'>
-                {dt.info.step} - {dt.info.type} at {dt.info.time.toLocaleString()} by <UserNice id={dt.info.who} />
+                {dt.info.step} - {dt.info.type} at {moment(dt.info.time).calendar()} by <UserNice id={dt.info.who} />
               </div>
               <p>{dt.info.comm}</p>
               <p>Accepted: {dt.info.accept.toString()}</p>

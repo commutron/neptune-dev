@@ -1,7 +1,11 @@
+/*
+// suspected dead component
+
+
 import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
 
-export default class Chill extends Component	{
+export default class UserNow extends Component	{
 
 // this is not functioning without Tracker react
   render() {
@@ -14,3 +18,6 @@ export default class Chill extends Component	{
     );
   }
 }
+
+
+*/

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import moment from 'moment';
 import SlideDownWrap from '/client/components/tinyUi/SlideDownWrap.jsx';
+import moment from 'moment';
 
 import UserNice from '../../../components/smallUi/UserNice.jsx';
 import GroupForm from '../../../components/forms/GroupForm.jsx';

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
 import {createContainer} from 'meteor/react-meteor-data';
+import RoleCheck from '/client/components/utilities/RoleCheck.js';
 
 import Spin from '../components/tinyUi/Spin.jsx';
 import Freeze from '../components/tinyUi/Freeze.jsx';
@@ -55,7 +56,7 @@ class TopBar extends Component	{
         <div className='bleed middle flexRR'>
           <Chill name={this.props.user} />
           <Freeze>
-            <OrgForm org={this.props.org} startup={true} />
+            <OrgForm org={this.props.org} />
           </Freeze>
         </div>
         );
@@ -87,18 +88,18 @@ class TopBar extends Component	{
             <i className="fa fa-book fa-2x" aria-hidden="true"></i>
             <span className='icontext'>Docs</span>
           </a>
-          {this.props.admin ?
-          <span>
-            <a href='/app'>
-              <i className="fa fa-sliders fa-2x" aria-hidden="true"></i>
-              <span className='icontext'>App</span>
-            </a>
-            <a href='/database'>
-              <i className="icon fa fa-database fa-2x" aria-hidden="true"></i>
-              <span className='icontext'>dB</span>
-            </a>
-          </span>
-          : null}
+          <RoleCheck role={['admin', 'power']}>
+            <span>
+              <a href='/app'>
+                <i className="fa fa-sliders fa-2x" aria-hidden="true"></i>
+                <span className='icontext'>App</span>
+              </a>
+              <a href='/database'>
+                <i className="icon fa fa-database fa-2x" aria-hidden="true"></i>
+                <span className='icontext'>dB</span>
+              </a>
+            </span>
+          </RoleCheck>
           <span className='rAlign middle'>
             <DataToggle />
             <TimeToggle />
@@ -115,11 +116,9 @@ export default createContainer( () => {
   let login = Meteor.userId() ? true : false;
   let usfo = login ? Meteor.user() : false;
   let user = usfo ? usfo.username : false;
-  let active = usfo ? usfo.active : false;
   let org = usfo ? usfo.org : false;
-  let admin = usfo ? usfo.admin : false;
-  let power = usfo ? usfo.power : false;
-  const hotSub = login ? Meteor.subscribe('appSetting') : false;
+  let active = usfo ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
+  const hotSub = login ? Meteor.subscribe('appData') : false;
   if(!login) {
     return {
       orb: Session.get('now'),
@@ -141,8 +140,6 @@ export default createContainer( () => {
       user: user,
       active: active,
       org: org,
-      admin: admin,
-      power: power,
       app: AppDB.findOne({org: org})
     };
   }

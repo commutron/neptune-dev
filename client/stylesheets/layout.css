@@ -294,30 +294,21 @@ nav {
   }
 }
 
-@keyframes slideOut {
-  0% {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-  100% {
-    opacity: 0;
-    transform:translate3d(0, 50px, 0);
-  }
-}
-
 .cardTrans-enter, .cardTrans-appear {
-  animation: slideDown 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-
-.cardTrans-leave {
-  animation: slideOut 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
-  opacity: 1.0;
-}
-    
-.cardTrans-appear {
   animation: slideDown 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .showChange {
   animation: slideDown 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* animation for models */
+
+.modelTrans-enter, .modelTrans-appear {
+  opacity: 0;
+  transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.modelTrans-enter-active, .modelTrans-appear-active {
+  opacity: 1;
 }

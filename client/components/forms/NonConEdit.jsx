@@ -14,7 +14,7 @@ export default class NonConEdit extends Component {
         button={<p><i className='fa fa-pencil-square-o'></i> edit {Pref.nonCon}s</p>}
         title={'Edit ' + Pref.nonCon + 's for ' + this.props.bar}
         type='smallAction red wide'
-        lock={!Meteor.user().power}>
+        lock={!Roles.userIsInRole(Meteor.userId(), 'power')}>
         <div>
           <i>repaired and inspected {Pref.nonCon}s are locked</i>
           <div className='grid'>

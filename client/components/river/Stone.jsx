@@ -29,9 +29,9 @@ export default class Stone extends Component	{
   	const finish = this.props.type === 'finish';
   	const inspector = first || inspect || finish ? true : false;
   	const test = this.props.type === 'test';
-  	if(inspector && !Meteor.user().inspector) {
+  	if(inspector && !Roles.userIsInRole(Meteor.userId(), 'inspector')) {
   		null;
-  	}else if(test && !Meteor.user().tester) {
+  	}else if(test && !Roles.userIsInRole(Meteor.userId(), 'tester')) {
   		null;
   	}else{
   	  Meteor.setTimeout(()=> {
@@ -152,7 +152,7 @@ export default class Stone extends Component	{
 		      	<button
 		      	  className={shape}
 		  				name={this.props.step}
-		  				ref={(input) => this.stone = input}
+		  				ref={(i)=> this.stone = i}
 		  				onClick={ripple}
 		  				disabled={lock} >
 							{this.props.step}
@@ -160,7 +160,7 @@ export default class Stone extends Component	{
 						{this.props.type === 'test' ?
 						  <input
 						    type='text'
-						    ref={(input) => this.comm = input}
+						    ref={(i)=> this.comm = i}
 						    placeholder='comment'
 						    style={sty} />
 						  : null}
@@ -177,20 +177,20 @@ export default class Stone extends Component	{
                   type='checkbox'
                   id='cptbl'
                   className='mini15x'
-                  ref={(input) => this.ac = input}
+                  ref={(i)=> this.ac = i}
                   defaultChecked='true'
                   readOnly />
                 <label htmlFor='cptbl'>acceptable</label><br />
               </p>
               <p><label htmlFor='wuilt'>{Pref.builder}</label><br />
-                <select id='wuilt' ref={(input) => this.wB = input} className='cap' multiple required>
+                <select id='wuilt' ref={(i)=> this.wB = i} className='cap' multiple required>
                   {this.props.users.map( (entry, index)=>{
                     return( <option key={index} value={entry._id}>{entry.username}</option> );
                   })}
                 </select>
               </p>
               <p><label htmlFor='whart'>{Pref.method}</label><br />
-                <select ref={(input) => this.method = input} id='whart' className='cap' required>
+                <select ref={(i)=> this.method = i} id='whart' className='cap' required>
                   <option></option>
                   {this.props.methods.map( (entry, index)=>{
                     return ( <option key={index} value={entry}>{entry}</option> );
@@ -201,13 +201,13 @@ export default class Stone extends Component	{
               <input
     				    type='text'
     				    id='fcom'
-    				    ref={(input) => this.comm = input} />
+    				    ref={(i)=> this.comm = i} />
     				  </p>
               <br />
               <p>
                 <button
                   type='submit'
-                  ref={(input) => this.go = input}
+                  ref={(i)=> this.go = i}
                   className='action clear'
                   disabled={false}
                 >{Pref.post}</button></p>

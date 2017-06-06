@@ -5,7 +5,8 @@ Meteor.methods({
   addBatch(batchNum, widgetId, vKey, sDate, eDate) {
     const doc = WidgetDB.findOne({_id: widgetId});
     const duplicate = BatchDB.findOne({batch: batchNum});
-    if(!duplicate && Meteor.userId() && doc.orgKey === Meteor.user().orgKey) {
+    const auth = Roles.userIsInRole(Meteor.userId(), ['power', 'creator']);
+    if(auth && !duplicate && doc.orgKey === Meteor.user().orgKey) {
       BatchDB.insert({
   			batch: batchNum,
   			orgKey: Meteor.user().orgKey,
@@ -38,7 +39,8 @@ Meteor.methods({
     const doc = BatchDB.findOne({_id: batchId});
     let duplicate = BatchDB.findOne({batch: newBatchNum});
     doc.batch === newBatchNum ? duplicate = false : null;
-    if(!duplicate && Meteor.user().power && doc.orgKey === Meteor.user().orgKey) {
+    const auth = Roles.userIsInRole(Meteor.userId(), 'power');
+    if(auth && !duplicate && doc.orgKey === Meteor.user().orgKey) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $set : {
           batch: newBatchNum,
@@ -53,7 +55,7 @@ Meteor.methods({
   },
   
   setRiver(batchId, riverId, riverAltId) {
-    if(Meteor.user().power) {
+    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $set : {
           river: riverId,
@@ -71,7 +73,7 @@ Meteor.methods({
     const inUse = doc.items.some( x => x.history.length > 0 ) ? true : false;
     if(!inUse) {
       const lock = doc.createdAt.toISOString();
-      const user = Meteor.user().power;
+      const user = Roles.userIsInRole(Meteor.userId(), 'power');
       const access = doc.orgKey === Meteor.user().orgKey;
       const unlock = lock === pass;
       if(user && access && unlock) {
@@ -86,7 +88,7 @@ Meteor.methods({
   },
 
   changeStatus(batchId, status) {
-    if(Meteor.user().power) {
+    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
   			$set : { 
   			  active: status
@@ -124,10 +126,9 @@ Meteor.methods({
       {
         const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
         const open = doc.finishedAt === false;
-        const con1 = Meteor.user().power && doc && open;
-        const con2 = Meteor.user().creator && doc && open;
+        const auth = Roles.userIsInRole(Meteor.userId(), ['power', 'creator']);
         
-        if(con1 || con2) {
+        if(auth && open && doc) {
           
           let bad = [];
       
@@ -180,7 +181,8 @@ Meteor.methods({
   //// unit corection
   
   setItemUnit(id, bar, unit) {
-    if(unit > 0 && unit < 100) {
+    const auth = Roles.userIsInRole(Meteor.userId(), ['power', 'creator']);
+    if(auth && unit > 0 && unit < 100) {
       BatchDB.update({_id: id, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
         $set : { 
           'items.$.unit': Number(unit)
@@ -194,9 +196,9 @@ Meteor.methods({
   //// history entries
 
   addHistory(batchId, bar, key, step, type, com) {
-    if(type === 'inspect' && !Meteor.user().inspector) {
+    if(type === 'inspect' && !Roles.userIsInRole(Meteor.userId(), 'inspector')) {
       return false;
-    }else if(type === 'test' && !Meteor.user().tester) {
+    }else if(type === 'test' && !Roles.userIsInRole(Meteor.userId(), 'tester')) {
       return false;
     }else{
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
@@ -215,7 +217,7 @@ Meteor.methods({
   },
 
   addFirst(batchId, bar, key, step, type, com, good, whoB, howB) {
-    if(!Meteor.user().inspector) {
+    if(!Roles.userIsInRole(Meteor.userId(), 'inspector')) {
       return false;
     }else{
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
@@ -238,7 +240,7 @@ Meteor.methods({
 
 
   finishItem(batchId, barcode, key, step, type) {
-    if(!Meteor.user().inspector) {
+    if(!Roles.userIsInRole(Meteor.userId(), 'inspector')) {
       return false;
     }else{
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': barcode}, {
@@ -276,7 +278,7 @@ Meteor.methods({
   
   //  remove a step
   pullHistory(batchId, bar, key) {
-    if(Meteor.user().admin) {
+    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
         $pull : {
           'items.$.history': {key: key}
@@ -290,7 +292,7 @@ Meteor.methods({
   // replace a step
   pushHistory(batchId, bar, replace) {
     //some validation on the replace would be good
-    if(Meteor.user().admin) {
+    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
         $push : { 
           'items.$.history': replace
@@ -307,7 +309,7 @@ Meteor.methods({
     const inUse = subDoc.history.length > 0 ? true : false;
     if(!inUse) {
       const lock = subDoc.createdAt.toISOString();
-      const admin = Meteor.user().admin;
+      const admin = Roles.userIsInRole(Meteor.userId(), 'admin');
       const access = doc.orgKey === Meteor.user().orgKey;
       const unlock = lock === pass;
       if(admin && access && unlock) {
@@ -407,6 +409,7 @@ Meteor.methods({
   // this has not been implemented or tested \\
   /*
   ncRemove(batchId, key) {
+  const auth = Roles.userIsInRole(Meteor.userId(), 'power');
     BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': key}, {
       $pull : { nonCon: { key: key }
        }});
@@ -418,7 +421,8 @@ Meteor.methods({
   addRMACascade(batchId, rmaId, qua, com, flowObj) {
     const doc = BatchDB.findOne({_id: batchId});
     const dupe = doc.cascade.find( x => x.rmaId === rmaId );
-    if(Meteor.user().power && !dupe) {
+    const auth = Roles.userIsInRole(Meteor.userId(), 'power');
+    if(auth && !dupe) {
       
       for( let obj of flowObj ) {
         // set unique key in the track object
@@ -447,7 +451,7 @@ Meteor.methods({
   },
   
   setRMA(batchId, bar, cKey) {
-    if(Meteor.user().inspector) {
+    if(Roles.userIsInRole(Meteor.userId(), 'inspector')) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
         $push : { 
           'items.$.rma': cKey
@@ -461,7 +465,7 @@ Meteor.methods({
   /*
   
   pullRMA(batchId, rmaNum) {
-    if(Meteor.user().power) {
+    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'rma.rma': rmaNum}, {
         $pull : {
           rma : { rma : rmaNum }
@@ -477,7 +481,7 @@ Meteor.methods({
   // Scrap \\
   
   scrapItem(batchId, bar, step, comm) {
-    if(Meteor.user().power) {
+    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
       // update item
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
         // scrap entry to history
@@ -515,7 +519,8 @@ Meteor.methods({
   //// Shortages \\\\
 
   addShort(batchId, prtNm, quant, com) {
-    if(Meteor.user().power || Meteor.user().creator) {
+    const auth = Roles.userIsInRole(Meteor.userId(), ['power', 'creator']);
+    if(auth) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $push : { short: {
           key: new Meteor.Collection.ObjectID().valueOf(),
@@ -534,7 +539,8 @@ Meteor.methods({
   },
   
   resolveShort(batchId, shKey, act, alt) {
-    if(Meteor.user().power || Meteor.user().creator) {
+    const auth = Roles.userIsInRole(Meteor.userId(), ['power', 'creator']);
+    if(auth) {
   		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'short.key': shKey}, {
   			$set : { 
   			  'short.$.resolve':
@@ -553,7 +559,8 @@ Meteor.methods({
   },
   
   recShort(batchId, shKey) {
-    if(Meteor.user().power || Meteor.user().creator) {
+    const auth = Roles.userIsInRole(Meteor.userId(), ['power', 'creator']);
+    if(auth) {
   		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'short.key': shKey}, {
   			$set : { 
   			  'short.$.followup': new Date()
@@ -566,7 +573,8 @@ Meteor.methods({
   },
   
   editShortCom(batchId, shKey, com) {
-    if(Meteor.user().power || Meteor.user().creator) {
+    const auth = Roles.userIsInRole(Meteor.userId(), ['power', 'creator']);
+    if(auth) {
   		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'short.key': shKey}, {
   			$set : { 
   			  'short.$.comm': com
@@ -579,7 +587,8 @@ Meteor.methods({
   },
   
   undoReShort(batchId, shKey) {
-    if(Meteor.user().power || Meteor.user().creator) {
+    const auth = Roles.userIsInRole(Meteor.userId(), ['power', 'creator']);
+    if(auth) {
   		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'short.key': shKey}, {
   			$set : { 
   			  'short.$.resolve': false,
@@ -593,7 +602,7 @@ Meteor.methods({
   },
 
   sRemove(batchId, shKey) {
-    if(Meteor.user().power) {
+    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $pull : { short: { key: shKey }
          }});

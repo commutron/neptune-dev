@@ -9,14 +9,14 @@ export default class NCEscape extends Component {
 
     handleNC(e) {
       e.preventDefault();
-      this.refs.go.disabled = true;
+      this.go.disabled = true;
       
       const batchId = this.props.id;  
-      const type = this.refs.ncType.value.trim().toLowerCase();
-      const quant = this.refs.quNum.value.trim().toLowerCase();
-      const ncar = this.refs.ncar.value.trim().toLowerCase();
+      const type = this.ncType.value.trim().toLowerCase();
+      const quant = this.quNum.value.trim().toLowerCase();
+      const ncar = this.ncar.value.trim().toLowerCase();
       
-      const refEntry = this.refs.ncRefs.value.trim().toLowerCase();
+      const refEntry = this.ncRefs.value.trim().toLowerCase();
       const refSplit = refEntry.split(' ');
         
       for(var ref of refSplit) {
@@ -26,14 +26,14 @@ export default class NCEscape extends Component {
         });
       }
       
-      this.refs.ncRefs.value = '';
-      this.refs.quNum.value = '';
-      this.refs.out.value = 'saved';
+      this.ncRefs.value = '';
+      this.quNum.value = '';
+      this.out.value = 'saved';
     }
     
     on() {
-      this.refs.go.disabled = false;
-      this.refs.out.value = '';
+      this.go.disabled = false;
+      this.out.value = '';
     }
 
 
@@ -44,7 +44,7 @@ export default class NCEscape extends Component {
         button='escaped'
         title={'escaped ' + Pref.nonCon}
         type='action clear redT'
-        lock={!Meteor.user().power}>
+        lock={!Roles.userIsInRole(Meteor.userId(), 'power')}>
         <div className='actionBox red'>
           <br />
           <form className='centre' onSubmit={this.handleNC.bind(this)} onChange={this.on.bind(this)}>
@@ -52,7 +52,7 @@ export default class NCEscape extends Component {
               <input
                 type='text'
                 id='nonponent'
-                ref='ncRefs'
+                ref={(i)=> this.cRefs = i}
                 placeholder='eg. R45'
                 autoFocus='true'
                 required />
@@ -60,7 +60,7 @@ export default class NCEscape extends Component {
             <p><label htmlFor='nonode'>{Pref.nonConType}</label><br />
               <select 
                 id='nonode'
-                ref='ncType'
+                ref={(i)=> this.ncType = i}
                 className='cap'
                 required >
                 {this.props.nons.map( (entry, index)=>{
@@ -74,7 +74,7 @@ export default class NCEscape extends Component {
               <input
                 type='number'
                 id='quant'
-                ref='quNum'
+                ref={(i)=> this.quNum = i}
                 max='100000'
                 min='1'
                 inputMode='numeric'
@@ -85,12 +85,12 @@ export default class NCEscape extends Component {
               <input
                 type='text'
                 id='ncar'
-                ref='ncar'
+                ref={(i)=> this.ncar = i}
                 required />
             </p>
             <br />
-            <p><button type='submit' ref='go' disabled={false} className='action clear'>{Pref.post}</button></p>
-            <p><output ref='out' /></p>
+            <p><button type='submit' ref={(i)=> this.go = i} disabled={false} className='action clear'>{Pref.post}</button></p>
+            <p><output ref={(i)=> this.out = i} /></p>
           </form>
           <br />
         </div>

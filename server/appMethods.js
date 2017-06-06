@@ -11,12 +11,14 @@ Meteor.methods({
   
   
   addSetting() {
-    var orgKey = Meteor.user().orgKey;
-    var db = AppDB.findOne({orgKey: orgKey});
+    const orgKey = Meteor.user().orgKey;
+    const orgName = Meteor.user().org;
+    var dbK = AppDB.findOne({orgKey: orgKey});
+    var dbN = AppDB.findOne({org: orgName});
     if(orgKey) {
-      if(!db) {
+      if(!dbK && !dbN) {
         AppDB.insert({
-          org: Meteor.user().org,
+          org: orgName,
           orgKey: orgKey,
           createdAt: new Date(),
           toolOption: [],
@@ -28,14 +30,7 @@ Meteor.methods({
           timeClock: '',
           ndaMode: false
         });
-        Meteor.users.update(Meteor.userId(), {
-          $set: {
-            power: true,
-            active: true,
-            inspector: true,
-            tester: true,
-          }
-        });
+        Roles.addUsersToRoles(Meteor.userId(), ['active', 'power']);
         return true;
       }else{
         return false;
@@ -47,7 +42,7 @@ Meteor.methods({
   
   
   addTrackOption(flatTrack) {
-    if(Meteor.user().power) {
+    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
       
       const split = flatTrack.split('|');
       const step = split[0];
@@ -71,7 +66,7 @@ Meteor.methods({
   },
   
   endTrack(flatLast) {
-    if(Meteor.user().power) {
+    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
       
       const split = flatLast.split('|');
       const step = split[0];
@@ -95,7 +90,7 @@ Meteor.methods({
   },
   
   addNCOption(value) {
-    if(Meteor.user().power) {
+    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $push : { 
           nonConOption : value
@@ -107,7 +102,7 @@ Meteor.methods({
   },
   
   addAncOp(value) {
-    if(Meteor.user().power) {
+    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $push : { 
           ancillaryOption : value
@@ -119,7 +114,7 @@ Meteor.methods({
   },
   
   addToolOp(value) {
-    if(Meteor.user().power) {
+    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $push : { 
           toolOption : value
@@ -131,7 +126,7 @@ Meteor.methods({
   },
   
   setInstruct(go) {
-    if(Meteor.user().power) {
+    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $set : { 
           instruct : go
@@ -143,7 +138,7 @@ Meteor.methods({
   },
   
   setTimeClock(go) {
-    if(Meteor.user().power) {
+    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $set : { 
           timeClock : go

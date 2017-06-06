@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import {Bar} from "react-chartjs-2";
+// import {Bar} from "react-chartjs-2"; //prop-type depreciation problem
 
 export default class TestChart extends Component {
 
@@ -31,14 +31,14 @@ export default class TestChart extends Component {
                 }]
         }
       }
-    }
+    };
 
     return (
       <div className='barContain'>
 
-        <Bar data={chartData} />
+        {/*<Bar data={chartData} />*/}
 
       </div>
-    )
+    );
   }
 }

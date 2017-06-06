@@ -4,7 +4,7 @@ export default class ActivateUser extends Component	{
 
   key(e) {
     e.preventDefault();
-    pIn = this.refs.pIn.value.trim();
+    pIn = this.pIn.value.trim();
     Meteor.call('activate', pIn, (err, reply)=>{
       if (err)
         console.log(err);
@@ -17,7 +17,7 @@ export default class ActivateUser extends Component	{
       <form onSubmit={this.key.bind(this)} autoComplete='off'>
         <input
           type='password'
-          ref='pIn'
+          ref={(i)=> this.pIn = i}
           id='pIn'
           pattern='[0000-9999]*'
           maxLength='4'

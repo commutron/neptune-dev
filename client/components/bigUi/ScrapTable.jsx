@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
 import ScrapGroup from './ScrapGroup.jsx';

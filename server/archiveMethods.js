@@ -5,7 +5,7 @@ Meteor.methods({
 
   //// Archive \\\\
   addYear(year) {
-    if(Meteor.user().admin) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       var doc = ArchiveDB.findOne({year: year});
       if(!doc) {
         AchiveDB.insert({

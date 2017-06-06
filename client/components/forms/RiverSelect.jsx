@@ -35,7 +35,7 @@ export default class RiverSelect extends Component	{
         button={Pref.buildFlow}
         title={'Select ' + Pref.buildFlow}
         type='action clear greenT'
-        lock={!Meteor.user().power || this.props.lock}
+        lock={!Roles.userIsInRole(Meteor.userId(), 'power') || this.props.lock}
       >
         <form className='centre' onSubmit={this.save.bind(this)}>
           <p><label htmlFor='fch'>Choose Main {Pref.flow}</label><br />

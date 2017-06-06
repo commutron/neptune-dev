@@ -10,11 +10,11 @@ export default class ScrapForm extends Component {
   
   handleScrap(e) {
     e.preventDefault();
-    this.refs.go.disabled = true;
+    this.go.disabled = true;
     const batchId = this.props.id;  
     const bar = this.props.barcode;
-    const where = this.refs.discStp.value.trim().toLowerCase();
-    const comm = this.refs.comm.value.trim().toLowerCase();
+    const where = this.discStp.value.trim().toLowerCase();
+    const comm = this.comm.value.trim().toLowerCase();
       
     Meteor.call('scrapItem', batchId, bar, where, comm, (error, reply)=> {
       if(error)
@@ -35,14 +35,14 @@ export default class ScrapForm extends Component {
 		
 		return (
 		  <div>
-		    {Meteor.user().power ?
+		    {Roles.userIsInRole(Meteor.userId(), 'power') ?
     		  <form className='centre' onSubmit={this.handleScrap.bind(this)}>
     	      <p><b>Are you sure you want to do this? You Cannot Undo This.</b></p>
     	      <br />
     	      <p><label htmlFor='currep'>current process</label><br />
               <select
                 id='currep'
-                ref='discStp'
+                ref={(i)=> this.discStp = i}
                 className='cap'
                 defaultValue={now}
                 required >
@@ -58,7 +58,7 @@ export default class ScrapForm extends Component {
               <input
                 type='text'
                 id='scomment'
-                ref='comm'
+                ref={(i)=> this.comm = i}
                 placeholder='reason for scrapping'
                 required
               />
@@ -68,7 +68,7 @@ export default class ScrapForm extends Component {
               <button 
                 type="submit"
                 className='action clear'
-                ref='go'
+                ref={(i)=> this.go = i}
                 disabled={false}
                 >SCRAP {this.props.barcode}</button>
             </p>

@@ -51,7 +51,7 @@ export default class ShortButton extends Component {
 
   render () {
     
-    const unlock = Meteor.user().power || Meteor.user().creator ? true : false;
+    const unlock = Roles.userIsInRole(Meteor.userId(), ['power', 'creator']) ? true : false;
 
     return (
       <div>
@@ -69,7 +69,7 @@ export default class ShortButton extends Component {
                   <input
                     type='text'
                     id='shumber'
-                    ref={(input)=> this.pNum = input}
+                    ref={(i)=> this.pNum = i}
                     placeholder='110072'
                     autoFocus='true'
                     required />
@@ -78,7 +78,7 @@ export default class ShortButton extends Component {
                   <input
                     type='number'
                     id='shuantity'
-                    ref={(input)=> this.qNum = input}
+                    ref={(i)=> this.qNum = i}
                     max='100000'
                     min='1'
                     inputMode='numeric'
@@ -89,13 +89,13 @@ export default class ShortButton extends Component {
                   <input
                     type='text'
                     id='cmnt'
-                    ref={(input)=> this.comm = input}
+                    ref={(i)=> this.comm = i}
                     placeholder='other information' />
                 </p>
                 <br />
                 <p><button
                   type='submit'
-                  ref={(input)=> this.go = input}
+                  ref={(i)=> this.go = i}
                   disabled={!unlock}
                   className='action clear'>{Pref.post}</button>
                 </p>

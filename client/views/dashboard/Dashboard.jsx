@@ -9,16 +9,11 @@ export default class Dashboard extends Component	{
     return (
       <div>
         <div className='leftSide'>
-          
           {this.props.children[0]}
-          
         </div>
         
         <div className='rightSide'>
-
           {this.props.children[1]}
-        
-          
         </div>
         <div className='cornerFloat'><IkyToggle /></div>
         <footer className='actionBar'></footer>

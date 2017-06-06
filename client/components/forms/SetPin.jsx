@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
 import Alert from '/client/global/alert.js';
 
-export default class RemoveUser extends Component {
+export default class SetPin extends Component {
   
   setPin(e) {
     e.preventDefault();
-    const old = this.refs.oldPin.value.trim();
-    const newOne = this.refs.newOne.value.trim();
-    const newTwo = this.refs.newTwo.value.trim();
+    this.go.disabled = true;
+    const old = this.oldPin.value.trim();
+    const newOne = this.newOne.value.trim();
+    const newTwo = this.newTwo.value.trim();
     
     if(newOne === newTwo) {
       Meteor.call('setPin', old, newOne, (err, reply)=>{
@@ -15,21 +16,24 @@ export default class RemoveUser extends Component {
           console.log(err);
         if(reply) {
           Bert.alert(Alert.success);
-          this.refs.oldPin.value = '';
-          this.refs.newOne.value = '';
-          this.refs.newTwo.value = '';
+          this.oldPin.value = '';
+          this.newOne.value = '';
+          this.newTwo.value = '';
+          this.go.disabled = false;
         }else{
           Bert.alert(Alert.warning);
+          this.go.disabled = false;
         }
       });
     }else{
       Bert.alert(Alert.danger);
+      this.go.disabled = false;
     }
   }
 
   render () {
     
-    if(Meteor.user().power) {
+    if(Roles.userIsInRole(Meteor.userId(), ['admin', 'power'])) {
       return (
         <fieldset>
           <legend>Change PIN</legend>
@@ -38,7 +42,7 @@ export default class RemoveUser extends Component {
               <label htmlFor='old'>Old PIN</label><br />
               <input
                 type='password'
-                ref='oldPin'
+                ref={(i)=> this.oldPin = i}
                 id='oldPin'
                 pattern='[0000-9999]*'
                 maxLength='4'
@@ -53,7 +57,7 @@ export default class RemoveUser extends Component {
               <label htmlFor='newOne'>New PIN</label><br />
               <input
                 type='password'
-                ref='newOne'
+                ref={(i)=> this.newOne = i}
                 id='newOne'
                 pattern='[0000-9999]*'
                 maxLength='4'
@@ -66,7 +70,7 @@ export default class RemoveUser extends Component {
               <label htmlFor='newTwo'>New PIN again</label><br />
               <input
                 type='password'
-                ref='newTwo'
+                ref={(i)=> this.newTwo = i}
                 id='newTwo'
                 pattern='[0000-9999]*'
                 maxLength='4'
@@ -79,7 +83,12 @@ export default class RemoveUser extends Component {
             </p>
             <br />
             <p>
-              <button type='submit' className='smallAction clear greenT'>Save</button>
+              <button
+                type='submit'
+                ref={(i)=> this.go = i}
+                className='smallAction clear greenT'
+                disabled={false}
+              >Save</button>
             </p>
           </form>
         </fieldset>

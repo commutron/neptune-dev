@@ -72,7 +72,7 @@ export class VersionForm extends Component	{
       <Model
         button={name + ' ' + Pref.version}
         title={name + ' ' + Pref.version}
-        lock={!Meteor.user().power}>
+        lock={!Roles.userIsInRole(Meteor.userId(), 'power')}>
 
       <div className='split'>
 
@@ -143,7 +143,7 @@ export class VersionForm extends Component	{
             <button
               type='submit'
               className='action clear greenT wide'
-              ref={(input) => this.go = input}
+              ref={(i) => this.go = i}
               disabled={false}>SAVE</button>
           </form>
         </div>

@@ -30,7 +30,6 @@ export default createContainer( () => {
   let login = Meteor.userId() ? true : false;
   let usfo = login ? Meteor.user() : false;
   let org = usfo ? usfo.org : false;
-  let hotSub = login ? Meteor.subscribe('appData') : false;
   if(!login) {
     return {
       ready: false,
@@ -38,7 +37,8 @@ export default createContainer( () => {
     };
   }else{
     return {
-      ready: hotSub.ready(),
+      //ready: hotSub.ready(),
+      ready: true,
       app: AppDB.findOne({org: org}),
     };
   }

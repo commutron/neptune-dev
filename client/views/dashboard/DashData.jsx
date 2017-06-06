@@ -27,8 +27,6 @@ class DashView extends Component	{
         snap={this.props.snap}
         brick={this.props.brick}
         org={this.props.org}
-        admin={this.props.admin}
-        power={this.props.power}
         users={this.props.users}
         app={this.props.app}
         allGroup={this.props.allGroup}
@@ -43,10 +41,8 @@ class DashView extends Component	{
 export default createContainer( () => {
   let login = Meteor.userId() ? true : false;
   let usfo = login ? Meteor.user() : false;
-  let active = usfo ? usfo.active : false;
   let org = usfo ? usfo.org : false;
-  let admin = usfo ? usfo.admin : false;
-  let power = usfo ? usfo.power : false;
+  let active = usfo ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   let path = Session.get('allData') ? 'allData' : 'liveData';
   let hotSub = login ? Meteor.subscribe(path) : false;
   if(!login) {
@@ -67,8 +63,6 @@ export default createContainer( () => {
       brick: Session.get('nowWanchor'),
       login: Meteor.userId(),
       org: org,
-      admin: admin,
-      power: power,
       users: Meteor.users.find().fetch(),
       app: AppDB.findOne({org: org}),
       allGroup: GroupDB.find({}, {sort: {group:1}}).fetch(),

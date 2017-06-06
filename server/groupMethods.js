@@ -3,7 +3,10 @@ Meteor.methods({
 //// Groups \\\\
 
   addGroup(groupName, alias) {
-    if(Meteor.userId()) {
+    const duplicate = GroupDB.findOne({group: group});
+    const dupe = GroupDB.findOne({alias: alias});
+    const auth = Roles.userIsInRole(Meteor.userId(), ['power', 'creator']);
+    if(!duplicate && !dupe && auth) {
       GroupDB.insert({
         group: groupName,
         alias: alias,
@@ -19,7 +22,13 @@ Meteor.methods({
   },
 
   editGroup(groupId, newGroupName, newAlias) {
-    if(Meteor.user().power) {
+    const doc = GroupDB.findOne({_id: groupId});
+    let duplicate = GroupDB.findOne({group: newGroupName});
+    let dupe = GroupDB.findOne({alias: newAlias});
+    const auth = Roles.userIsInRole(Meteor.userId(), ['power', 'creator']);
+    doc.group === newGroupName ? duplicate = false : null;
+    doc.alias === newAlias ? dupe = false : null;
+    if(!duplicate && !dupe && auth) {
       GroupDB.update({_id: groupId, orgKey: Meteor.user().orgKey}, {
         $set : {
           group: newGroupName,
@@ -37,7 +46,7 @@ Meteor.methods({
     if(!inUse) {
       const doc = GroupDB.findOne({_id: groupId});
       const lock = doc.createdAt.toISOString();
-      const user = Meteor.user().power;
+      const user = Roles.userIsInRole(Meteor.userId(), 'power');
       const access = doc.orgKey === Meteor.user().orgKey;
       const unlock = lock === pass;
       if(user && access && unlock) {

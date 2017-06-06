@@ -48,7 +48,7 @@ export default class NCTributary extends Component {
 export class NCStream extends Component {
 
     handleFix() {
-      this.refs.fixline.disabled = true;
+      this.fixline.disabled = true;
 			const id = this.props.id;
       const ncKey = this.props.entry.key;
         Meteor.call('fixNC', id, ncKey, (error)=> {
@@ -60,7 +60,7 @@ export class NCStream extends Component {
         }
 
 	  handleInspect() {
-	    this.refs.fixline.disabled = true;
+	    this.fixline.disabled = true;
       const id = this.props.id;
       const ncKey = this.props.entry.key;
         Meteor.call('inspectNC', id, ncKey, (error)=> {
@@ -79,7 +79,7 @@ export class NCStream extends Component {
     const luster = fixed ? '/inspectMini.svg' : '/repair.svg';
     const act = fixed ? this.handleInspect.bind(this) : this.handleFix.bind(this);
     const same = this.props.entry.fix.who === Meteor.userId();
-    const inspector = Meteor.user().inspector;
+    const inspector = Roles.userIsInRole(Meteor.userId(), 'inspector');
     const lock = fixed ? !same && inspector ? false : true : false;
     let skip = this.props.entry.skip;
     let style = !skip ? 'cap gridRow fadeRed' : 'cap gridRow fadeYellow';
@@ -91,7 +91,7 @@ export class NCStream extends Component {
         {!skip ? 
           <div className='gridCell'>
             <button 
-              ref='fixline'
+              ref={(i)=> this.fixline = i}
               className='pebble green'
               readOnly={true}
               onClick={act}

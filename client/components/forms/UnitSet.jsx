@@ -9,7 +9,7 @@ export default class UnitSet extends Component	{
   unitSet() {
     const id = this.props.id;
     const bar = this.props.bar;
-    const unit = this.refs.unit.value.trim();
+    const unit = this.unit.value.trim();
     
     if(unit) {
       Meteor.call('setItemUnit', id, bar, unit, (error, reply)=>{
@@ -26,7 +26,7 @@ export default class UnitSet extends Component	{
 
   render() {
     
-    const allow = Meteor.user().power || Meteor.user().creator;
+    const allow = Roles.userIsInRole(Meteor.userId(), ['power', 'creator']);
     return(
       <Model
         button={Pref.unit + ' set'}
@@ -37,7 +37,7 @@ export default class UnitSet extends Component	{
           <label htmlFor='cln'>{Pref.unit} Quantity</label><br />
           <input
             type='number'
-            ref='unit'
+            ref={(i)=> this.unit = i}
             id='cln'
             pattern='[000-999]*'
             maxLength='3'

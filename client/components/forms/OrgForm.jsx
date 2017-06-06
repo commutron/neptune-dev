@@ -5,57 +5,38 @@ export default class OrgForm extends Component	{
   
   hndlJoin(e) {
     e.preventDefault();
-    this.refs.go.disabled = true;
-    const pIn = this.refs.pIn.value.trim();
-      Meteor.call('joinOrg', pIn, (err, reply)=>{
+    this.go.disabled = true;
+    const org = this.org.value.trim();
+    const pIn = this.pIn.value;
+      Meteor.call('joinOrg', org, pIn, (err, reply)=>{
         if(err)
           console.log(err);
         if(reply) {
           window.location.reload(true);
         }else{
           alert('Incorrect PIN');
-          this.refs.go.disabled = false;
+          this.go.disabled = false;
         }
       });
   }
   
   hndlCreate(e) {
     e.preventDefault();
-    this.refs.go.disabled = true;
-    const org = this.refs.rg.value.trim().toLowerCase();
+    this.go.disabled = true;
+    const org = this.rg.value.trim().toLowerCase();
       Meteor.call('createOrg', org, (err, reply)=>{
         if(err)
           console.log(err);
         reply ? window.location.reload(true) : false;
       });
   }
-  
-  hndlLeave() {
-    const pin = prompt('Poweruser PIN', '');
-    Meteor.call('leaveOrg', pin, (err, reply)=>{
-      if (err)
-        console.log(err);
-      if(reply) {
-        window.location.reload(true);
-      }else{
-        Bert.alert(Alert.warning);
-      }
-    });
-  }
 
   render() {
     
-    // leaving an org is undesirable
     if(this.props.org) {
       return (
-        <div>
-          <label htmlFor='lv'>You belong to "{this.props.org}". Leaving is undesirable.</label>
-          <button 
-            onClick={this.hndlLeave}
-            className='smallAction red'
-            disabled={!this.props.startup}
-            >Leave Organization: "{this.props.org}"
-          </button>
+        <div className='centre'>
+          <p>You belong to "{this.props.org}".</p>
         </div>
         );
     }
@@ -69,8 +50,15 @@ export default class OrgForm extends Component	{
           </p>
           <p>
             <input
+              type='text'
+              ref={(i)=> this.org = i}
+              id='oRg'
+              placeholder='Organization Name'
+              required
+            />
+            <input
               type='password'
-              ref='pIn'
+              ref={(i)=> this.pIn = i}
               id='pIn'
               pattern='[0000-9999]*'
               maxLength='4'
@@ -83,7 +71,7 @@ export default class OrgForm extends Component	{
             />
             <button
               type='submit'
-              ref='go'
+              ref={(i)=> this.go = i}
               className='smallAction clear'
               disabled={false}>Join
             </button>
@@ -97,14 +85,14 @@ export default class OrgForm extends Component	{
             <p>
               <input
                 type='text'
-                ref='rg'
+                ref={(i)=> this.rg = i}
                 id='oRg'
                 placeholder='Organization Name'
                 required
               />
               <button
                 type='submit'
-                ref='go'
+                ref={(i)=> this.go = i}
                 className='smallAction clear'
                 disabled={false}>Create
               </button>

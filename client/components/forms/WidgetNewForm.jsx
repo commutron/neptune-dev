@@ -25,11 +25,11 @@ export default class WidgetNewForm extends Component	{
     e.preventDefault();
     this.go.disabled = true;
     const groupId = this.props.groupId;
-    const newName = this.refs.nwNm.value.trim().toLowerCase();
-    const desc = this.refs.des.value.trim().toLowerCase();
-    const version = this.refs.rev.value.trim();
-    const wiki = this.refs.wiki.value.trim().toLowerCase();
-    const unit = this.refs.unit.value.trim();
+    const newName = this.nwNm.value.trim().toLowerCase();
+    const desc = this.des.value.trim().toLowerCase();
+    const version = this.rev.value.trim();
+    const wiki = this.wiki.value.trim().toLowerCase();
+    const unit = this.unit.value.trim();
     const end = this.props.end;
 
     
@@ -53,7 +53,7 @@ export default class WidgetNewForm extends Component	{
       <Model
         button={'new ' + Pref.widget}
         title={'new ' + Pref.widget}
-        lock={!Meteor.user().power}>
+        lock={!Roles.userIsInRole(Meteor.userId(), 'power')}>
 
       <div className='split'>
 
@@ -63,7 +63,7 @@ export default class WidgetNewForm extends Component	{
               <input
                 type='text'
                 id='widgetId'
-                ref='nwNm'
+                ref={(i)=> this.nwNm = i}
                 placeholder='ID ie. A4-R-0221'
                 autoFocus='true'
                 required />
@@ -72,14 +72,14 @@ export default class WidgetNewForm extends Component	{
               <input
                 type='text'
                 id='prodiption'
-                ref='des'
+                ref={(i)=> this.des = i}
                 placeholder='Description ie. CRC Display'
                 required />
             </p>
             <p><label htmlFor='rv'>Version</label><br />
               <input
                 type='text'
-                ref='rev'
+                ref={(i)=> this.rev = i}
                 id='rv'
                 placeholder='1a'
                 inputMode='numeric'
@@ -89,7 +89,7 @@ export default class WidgetNewForm extends Component	{
             <p><label htmlFor='cln'>{Pref.unit} Quantity</label><br />
               <input
                 type='number'
-                ref='unit'
+                ref={(i)=> this.unit = i}
                 id='cln'
                 pattern='[000-999]*'
                 maxLength='3'
@@ -107,7 +107,7 @@ export default class WidgetNewForm extends Component	{
               <input
                 type='url'
                 id='wikdress'
-                ref='wiki'
+                ref={(i)=> this.wiki = i}
                 defaultValue={this.props.rootWI}
                 placeholder='Full Address'
                 required />{/*this.state.instruct*/}
@@ -116,7 +116,7 @@ export default class WidgetNewForm extends Component	{
             <button
               type='submit'
               className='action clear greenT'
-              ref={(input) => this.go = input}
+              ref={(i) => this.go = i}
               disabled={false}>SAVE</button>
           </form>
         </div>
@@ -126,7 +126,8 @@ export default class WidgetNewForm extends Component	{
             id='instructMini'
             src={this.props.rootWI}
             height='600'
-            width='100%' /><br />
+            width='100%' />
+          <br />
           <button className='smallAction clear' onClick={this.pullOver} disabled>use this page</button>
           <i className='redT'>blocked for security</i>
         </div>

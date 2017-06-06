@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 export default class DataToggle extends Component	{
   
   toggle() {
-    const choice = this.refs.choose.checked;
+    const choice = this.choose.checked;
     Session.set('allData', choice);
     }
         
@@ -13,7 +13,7 @@ export default class DataToggle extends Component	{
         <input
           type='checkbox'
           id='dtToggle'
-          ref='choose'
+          ref={(i)=> this.choose = i}
           defaultChecked={Session.get('allData')}
           onChange={this.toggle.bind(this)}
           readOnly />

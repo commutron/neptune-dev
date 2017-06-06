@@ -12,8 +12,8 @@ export default class WidgetEditForm extends Component	{
   save(e) {
     e.preventDefault();
     const wId = this.props.id;
-    const newName = this.refs.nwNm.value.trim().toLowerCase();
-    const desc = this.refs.des.value.trim().toLowerCase();
+    const newName = this.nwNm.value.trim().toLowerCase();
+    const desc = this.des.value.trim().toLowerCase();
 
     Meteor.call('editWidget', wId, newName, desc, (error, reply)=>{
       if(error)
@@ -36,13 +36,13 @@ export default class WidgetEditForm extends Component	{
       <Model
         button={'Edit ' + Pref.widget}
         title={'Edit ' + Pref.widget}
-        lock={!Meteor.user().power}>
+        lock={!Roles.userIsInRole(Meteor.userId(), 'power')}>
         <form className='centre' onSubmit={this.save.bind(this)}>
           <p><label htmlFor='widgetId'>{Pref.widget} ID</label><br />
             <input
               type='text'
               id='widgetId'
-              ref='nwNm'
+              ref={(i)=> this.nwNm = i}
               defaultValue={now.widget}
               placeholder='ID ie. A4-R-0221'
               autoFocus='true'
@@ -52,7 +52,7 @@ export default class WidgetEditForm extends Component	{
             <input
               type='text'
               id='prodiption'
-              ref='des'
+              ref={(i)=> this.des = i}
               defaultValue={now.describe}
               placeholder='Description ie. CRC Display'
               required />

@@ -36,9 +36,8 @@ export default createContainer( () => {
   let login = Meteor.userId() ? true : false;
   let usfo = login ? Meteor.user() : false;
   let user = usfo ? usfo.username : false;
-  let active = usfo ? usfo.active : false;
   let org = usfo ? usfo.org : false;
-  let power = usfo ? usfo.power : false;
+  let active = usfo ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   let hotSub = login ? Meteor.subscribe('appData') : false;
   if(!login) {
     return {
@@ -63,7 +62,6 @@ export default createContainer( () => {
       user: user,
       active: active,
       org: org,
-      power: power,
       app: AppDB.findOne({org: org}),
       users: Meteor.users.find({}, {sort: {username:1}}).fetch()
     };
