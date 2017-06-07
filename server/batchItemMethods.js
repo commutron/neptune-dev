@@ -5,7 +5,7 @@ Meteor.methods({
   addBatch(batchNum, widgetId, vKey, sDate, eDate) {
     const doc = WidgetDB.findOne({_id: widgetId});
     const duplicate = BatchDB.findOne({batch: batchNum});
-    const auth = Roles.userIsInRole(Meteor.userId(), ['power', 'creator']);
+    const auth = Roles.userIsInRole(Meteor.userId(), 'create');
     if(auth && !duplicate && doc.orgKey === Meteor.user().orgKey) {
       BatchDB.insert({
   			batch: batchNum,
@@ -39,7 +39,7 @@ Meteor.methods({
     const doc = BatchDB.findOne({_id: batchId});
     let duplicate = BatchDB.findOne({batch: newBatchNum});
     doc.batch === newBatchNum ? duplicate = false : null;
-    const auth = Roles.userIsInRole(Meteor.userId(), 'power');
+    const auth = Roles.userIsInRole(Meteor.userId(), 'edit');
     if(auth && !duplicate && doc.orgKey === Meteor.user().orgKey) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $set : {
@@ -55,7 +55,7 @@ Meteor.methods({
   },
   
   setRiver(batchId, riverId, riverAltId) {
-    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
+    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $set : {
           river: riverId,
@@ -73,7 +73,7 @@ Meteor.methods({
     const inUse = doc.items.some( x => x.history.length > 0 ) ? true : false;
     if(!inUse) {
       const lock = doc.createdAt.toISOString();
-      const user = Roles.userIsInRole(Meteor.userId(), 'power');
+      const user = Roles.userIsInRole(Meteor.userId(), 'remove');
       const access = doc.orgKey === Meteor.user().orgKey;
       const unlock = lock === pass;
       if(user && access && unlock) {
@@ -88,7 +88,7 @@ Meteor.methods({
   },
 
   changeStatus(batchId, status) {
-    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
+    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
   			$set : { 
   			  active: status
@@ -97,12 +97,17 @@ Meteor.methods({
   },
 
   setBatchNote(batchId, note) {
-    BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
-      $set : { notes : {
-        time: new Date(),
-        who: Meteor.userId(),
-        content: note
-      }}});
+    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        $set : { notes : {
+          time: new Date(),
+          who: Meteor.userId(),
+          content: note
+        }}});
+      return true;
+    }else{
+      return false;
+    }
   },
 
 //// Items \\\\
@@ -126,7 +131,7 @@ Meteor.methods({
       {
         const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
         const open = doc.finishedAt === false;
-        const auth = Roles.userIsInRole(Meteor.userId(), ['power', 'creator']);
+        const auth = Roles.userIsInRole(Meteor.userId(), 'run');
         
         if(auth && open && doc) {
           
@@ -181,7 +186,7 @@ Meteor.methods({
   //// unit corection
   
   setItemUnit(id, bar, unit) {
-    const auth = Roles.userIsInRole(Meteor.userId(), ['power', 'creator']);
+    const auth = Roles.userIsInRole(Meteor.userId(), 'run');
     if(auth && unit > 0 && unit < 100) {
       BatchDB.update({_id: id, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
         $set : { 
@@ -196,9 +201,9 @@ Meteor.methods({
   //// history entries
 
   addHistory(batchId, bar, key, step, type, com) {
-    if(type === 'inspect' && !Roles.userIsInRole(Meteor.userId(), 'inspector')) {
+    if(type === 'inspect' && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
       return false;
-    }else if(type === 'test' && !Roles.userIsInRole(Meteor.userId(), 'tester')) {
+    }else if(type === 'test' && !Roles.userIsInRole(Meteor.userId(), 'test')) {
       return false;
     }else{
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
@@ -217,7 +222,7 @@ Meteor.methods({
   },
 
   addFirst(batchId, bar, key, step, type, com, good, whoB, howB) {
-    if(!Roles.userIsInRole(Meteor.userId(), 'inspector')) {
+    if(!Roles.userIsInRole(Meteor.userId(), 'inspect')) {
       return false;
     }else{
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
@@ -240,7 +245,7 @@ Meteor.methods({
 
 
   finishItem(batchId, barcode, key, step, type) {
-    if(!Roles.userIsInRole(Meteor.userId(), 'inspector')) {
+    if(!Roles.userIsInRole(Meteor.userId(), 'inspect')) {
       return false;
     }else{
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': barcode}, {
@@ -278,7 +283,7 @@ Meteor.methods({
   
   //  remove a step
   pullHistory(batchId, bar, key) {
-    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
+    if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
         $pull : {
           'items.$.history': {key: key}
@@ -292,7 +297,7 @@ Meteor.methods({
   // replace a step
   pushHistory(batchId, bar, replace) {
     //some validation on the replace would be good
-    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
+    if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
         $push : { 
           'items.$.history': replace
@@ -309,7 +314,7 @@ Meteor.methods({
     const inUse = subDoc.history.length > 0 ? true : false;
     if(!inUse) {
       const lock = subDoc.createdAt.toISOString();
-      const admin = Roles.userIsInRole(Meteor.userId(), 'admin');
+      const admin = Roles.userIsInRole(Meteor.userId(), 'remove');
       const access = doc.orgKey === Meteor.user().orgKey;
       const unlock = lock === pass;
       if(admin && access && unlock) {
@@ -328,88 +333,103 @@ Meteor.methods({
 
 //// Non-Cons \\\\
   addNC(batchId, bar, ref, type, step) {
-    BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
-      $push : { nonCon: {
-        key: new Meteor.Collection.ObjectID().valueOf(), // id of the nonCon entry
-        serial: bar, // barcode id of item
-        ref: ref, // referance on the widget
-        type: type, // type of nonCon
-        where: step, // where in the process
-        time: new Date(), // when nonCon was discovered
-        who: Meteor.userId(),
-        fix: false,
-        inspect: false,
-        skip: false,
-        }}});
-      },
+    if(Meteor.userId()) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        $push : { nonCon: {
+          key: new Meteor.Collection.ObjectID().valueOf(), // id of the nonCon entry
+          serial: bar, // barcode id of item
+          ref: ref, // referance on the widget
+          type: type, // type of nonCon
+          where: step, // where in the process
+          time: new Date(), // when nonCon was discovered
+          who: Meteor.userId(),
+          fix: false,
+          inspect: false,
+          skip: false,
+          }}});
+    }else{null}
+  },
+
 
   fixNC(batchId, ncKey) {
-		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
-			$set : { 
-			  'nonCon.$.fix': {
-			    time: new Date(),
-			    who: Meteor.userId()
-			  }
-			}
-		});
+    if(Meteor.userId()) {
+  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+  			$set : { 
+  			  'nonCon.$.fix': {
+  			    time: new Date(),
+  			    who: Meteor.userId()
+  			  }
+  			}
+  		});
+    }else{null}
   },
 
   inspectNC(batchId, ncKey) {
-		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
-			$set : { 
-			  'nonCon.$.inspect': {
-			    time: new Date(),
-			    who: Meteor.userId()
-			  }
-			}
-		});
+    if(Meteor.userId()) {
+  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+  			$set : { 
+  			  'nonCon.$.inspect': {
+  			    time: new Date(),
+  			    who: Meteor.userId()
+  			  }
+  			}
+  		});
+    }else{null}
   },
     
   editNC(batchId, ncKey, type) {
-		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
-			$set : { 
-			  'nonCon.$.type': type,
-			}
-		});
+    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+  			$set : { 
+  			  'nonCon.$.type': type,
+  			}
+  		});
+    }else{null}
   },
 
   skipNC(batchId, ncKey, com) {
-		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
-			$set : {
-			  'nonCon.$.comm': com,
-			  'nonCon.$.skip': { 
-			    time: new Date(),
-			    who: Meteor.userId()
-			  }
-			}
-		});
+    if(Meteor.userId()) {
+  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+  			$set : {
+  			  'nonCon.$.comm': com,
+  			  'nonCon.$.skip': { 
+  			    time: new Date(),
+  			    who: Meteor.userId()
+  			  }
+  			}
+  		});
+    }else{null}
   },
 
   UnSkipNC(batchId, ncKey) {
-		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
-			$set : {
-			  'nonCon.$.skip': false
-			}
-		});
+    if(Meteor.userId()) {
+  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+  			$set : {
+  			  'nonCon.$.skip': false
+  			}
+  		});
+    }else{null}
   },
   
   addEscape(batchId, ref, type, quant, ncar) {
-    BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
-      $push : { escaped: {
-        key: new Meteor.Collection.ObjectID().valueOf(), // flag id
-        ref: ref, // referance on the widget
-        type: type, // type of nonCon
-        quantity: Number(quant),
-        ncar: ncar,
-        time: new Date(), // when nonCon was discovered
-        who: Meteor.userId(),
-        }}});
-      },
+    if(Roles.userIsInRole(Meteor.userId(), ['run', 'edit'])) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        $push : { escaped: {
+          key: new Meteor.Collection.ObjectID().valueOf(), // flag id
+          ref: ref, // referance on the widget
+          type: type, // type of nonCon
+          quantity: Number(quant),
+          ncar: ncar,
+          time: new Date(), // when nonCon was discovered
+          who: Meteor.userId(),
+          }}});
+    }else{null}
+  },
 
   // this has not been implemented or tested \\
   /*
   ncRemove(batchId, key) {
-  const auth = Roles.userIsInRole(Meteor.userId(), 'power');
+  const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
     BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': key}, {
       $pull : { nonCon: { key: key }
        }});
@@ -421,7 +441,7 @@ Meteor.methods({
   addRMACascade(batchId, rmaId, qua, com, flowObj) {
     const doc = BatchDB.findOne({_id: batchId});
     const dupe = doc.cascade.find( x => x.rmaId === rmaId );
-    const auth = Roles.userIsInRole(Meteor.userId(), 'power');
+    const auth = Roles.userIsInRole(Meteor.userId(), ['edit', 'qa']);
     if(auth && !dupe) {
       
       for( let obj of flowObj ) {
@@ -451,7 +471,7 @@ Meteor.methods({
   },
   
   setRMA(batchId, bar, cKey) {
-    if(Roles.userIsInRole(Meteor.userId(), 'inspector')) {
+    if(Roles.userIsInRole(Meteor.userId(), ['qa', 'run', 'inspect'])) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
         $push : { 
           'items.$.rma': cKey
@@ -462,10 +482,15 @@ Meteor.methods({
     }
   },
   
+  
+  /// editing an RMA Cascade
+  
+  /// unset an rma on an item
+  
   /*
   
   pullRMA(batchId, rmaNum) {
-    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
+    if(Roles.userIsInRole(Meteor.userId(), 'remove')) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'rma.rma': rmaNum}, {
         $pull : {
           rma : { rma : rmaNum }
@@ -481,7 +506,7 @@ Meteor.methods({
   // Scrap \\
   
   scrapItem(batchId, bar, step, comm) {
-    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
+    if(Roles.userIsInRole(Meteor.userId(), 'qa')) {
       // update item
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
         // scrap entry to history
@@ -519,7 +544,7 @@ Meteor.methods({
   //// Shortages \\\\
 
   addShort(batchId, prtNm, quant, com) {
-    const auth = Roles.userIsInRole(Meteor.userId(), ['power', 'creator']);
+    const auth = Roles.userIsInRole(Meteor.userId(), 'run');
     if(auth) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $push : { short: {
@@ -539,7 +564,7 @@ Meteor.methods({
   },
   
   resolveShort(batchId, shKey, act, alt) {
-    const auth = Roles.userIsInRole(Meteor.userId(), ['power', 'creator']);
+    const auth = Roles.userIsInRole(Meteor.userId(), 'run');
     if(auth) {
   		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'short.key': shKey}, {
   			$set : { 
@@ -559,7 +584,7 @@ Meteor.methods({
   },
   
   recShort(batchId, shKey) {
-    const auth = Roles.userIsInRole(Meteor.userId(), ['power', 'creator']);
+    const auth = Roles.userIsInRole(Meteor.userId(), 'run');
     if(auth) {
   		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'short.key': shKey}, {
   			$set : { 
@@ -573,7 +598,7 @@ Meteor.methods({
   },
   
   editShortCom(batchId, shKey, com) {
-    const auth = Roles.userIsInRole(Meteor.userId(), ['power', 'creator']);
+    const auth = Roles.userIsInRole(Meteor.userId(), 'run');
     if(auth) {
   		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'short.key': shKey}, {
   			$set : { 
@@ -587,7 +612,7 @@ Meteor.methods({
   },
   
   undoReShort(batchId, shKey) {
-    const auth = Roles.userIsInRole(Meteor.userId(), ['power', 'creator']);
+    const auth = Roles.userIsInRole(Meteor.userId(), 'run');
     if(auth) {
   		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'short.key': shKey}, {
   			$set : { 
@@ -602,7 +627,7 @@ Meteor.methods({
   },
 
   sRemove(batchId, shKey) {
-    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
+    if(Roles.userIsInRole(Meteor.userId(), 'remove')) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $pull : { short: { key: shKey }
          }});

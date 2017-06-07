@@ -23,14 +23,19 @@ Meteor.methods({
           createdAt: new Date(),
           toolOption: [],
           trackOption: [],
-          lastTrack: '',
+          lastTrack: {
+            key: 'f1n15h1t3m5t3p',
+            step: 'finish',
+            type: 'finish',
+            how: 'finish'
+          },
           nonConOption: [],
           ancillaryOption: [],
           instruct: '',
           timeClock: '',
           ndaMode: false
         });
-        Roles.addUsersToRoles(Meteor.userId(), ['active', 'power']);
+        Roles.addUsersToRoles(Meteor.userId(), ['active', 'admin']);
         return true;
       }else{
         return false;
@@ -42,7 +47,7 @@ Meteor.methods({
   
   
   addTrackOption(flatTrack) {
-    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       
       const split = flatTrack.split('|');
       const step = split[0];
@@ -66,7 +71,7 @@ Meteor.methods({
   },
   
   endTrack(flatLast) {
-    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       
       const split = flatLast.split('|');
       const step = split[0];
@@ -90,7 +95,7 @@ Meteor.methods({
   },
   
   addNCOption(value) {
-    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $push : { 
           nonConOption : value
@@ -102,7 +107,7 @@ Meteor.methods({
   },
   
   addAncOp(value) {
-    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $push : { 
           ancillaryOption : value
@@ -114,7 +119,7 @@ Meteor.methods({
   },
   
   addToolOp(value) {
-    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $push : { 
           toolOption : value
@@ -126,7 +131,7 @@ Meteor.methods({
   },
   
   setInstruct(go) {
-    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $set : { 
           instruct : go
@@ -138,7 +143,7 @@ Meteor.methods({
   },
   
   setTimeClock(go) {
-    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $set : { 
           timeClock : go

@@ -1,6 +1,6 @@
 $ cd /home/ubuntu/scuba
 
-$ meteor --port $IP:$PORT
+$ meteor --settings settings.json --port $IP:$PORT
 
 
 'meteor update --patch'

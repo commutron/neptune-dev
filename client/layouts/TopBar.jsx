@@ -88,12 +88,12 @@ class TopBar extends Component	{
             <i className="fa fa-book fa-2x" aria-hidden="true"></i>
             <span className='icontext'>Docs</span>
           </a>
-          <RoleCheck role={['admin', 'power']}>
+          <a href='/app'>
+            <i className="fa fa-sliders fa-2x" aria-hidden="true"></i>
+            <span className='icontext'>App</span>
+          </a>
+          <RoleCheck role={'admin'}>
             <span>
-              <a href='/app'>
-                <i className="fa fa-sliders fa-2x" aria-hidden="true"></i>
-                <span className='icontext'>App</span>
-              </a>
               <a href='/database'>
                 <i className="icon fa fa-database fa-2x" aria-hidden="true"></i>
                 <span className='icontext'>dB</span>
@@ -127,12 +127,12 @@ export default createContainer( () => {
     };
   }else if(!active) {
     return {
-      ready: hotSub.ready(),
+      ready: hotSub.ready() && Roles.subscription.ready(),
       login: Meteor.userId(),
     };
   }else{
     return {
-      ready: hotSub.ready(),
+      ready: hotSub.ready() && Roles.subscription.ready(),
       orb: Session.get('now'),
       bolt: Session.get('allData'),
       time: Session.get('timeClock'),

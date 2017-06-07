@@ -1,55 +1,28 @@
 Meteor.methods({
     
   activate(pin) {
-    const admins = Roles.getUsersInRole( 'admin' ).fetch();
-    if(admins.length === 0) {
-      Roles.addUsersToRoles(Meteor.userId(), 
-        ['active', 
-         'admin',
-         'power',
-         'inspector',
-         'tester',
-         'creator']
-        );
-      Meteor.users.update(Meteor.userId(), {
-        $set: {
-          pin: pin,
-          watchlist: [],
-          memo: []
-        }
-      });
-      return true;
-    }else{
-      for(let x of admins) {
-        if(x.pin === pin) {
-          Roles.addUsersToRoles(Meteor.userId(), 'active');
-          Meteor.users.update(Meteor.userId(), {
-            $set: {
-              watchlist: [],
-              memo: []
-            }
-          });
-          return true;
-        }else{null}
-      }
-      return false;
-    }
+    const unlock = Meteor.settings.twoFactor;
+      if(unlock === pin) {
+        Roles.addUsersToRoles(Meteor.userId(), 'active');
+        Meteor.users.update(Meteor.userId(), {
+          $set: {
+            pin: false,
+            watchlist: [],
+            memo: []
+          }
+        });
+        return true;
+      }else{null}
   },
       
 
-  adminUpgrade(pin) {
-    const admins = Roles.getUsersInRole( 'admin' ).fetch();
-    if(admins.length < 2) {
-      const auth = admins[0].pin === pin;
+  adminUpgrade(userId, pin) {
+    const adminPin = Meteor.user().pin;
+    const others = Meteor.users.find({orgKey: Meteor.user().orgKey, roles: 'admin'}).fetch();
+    if(adminPin && others.length < 2) {
+      const auth = adminPin === pin;
       if(auth) {
-        Roles.addUsersToRoles(Meteor.userId(), 
-          ['active', 
-           'admin',
-           'power',
-           'inspector',
-           'tester',
-           'creator']
-        );
+        Roles.addUsersToRoles(userId, 'admin');
         return true;
       }else{
         return false;
@@ -61,8 +34,8 @@ Meteor.methods({
   
   
   adminDowngrade() {
-    const admins = Roles.getUsersInRole( 'admin' ).fetch();
-    if(admins.length > 1) {
+    const others = Meteor.users.find({orgKey: Meteor.user().orgKey, roles: 'admin'}).fetch();
+    if(others.length > 1) {
       Roles.removeUsersFromRoles(Meteor.userId(), 'admin');
       return true;
     }else{
@@ -73,7 +46,7 @@ Meteor.methods({
   joinOrg(org, pin) {
     const members = Meteor.users.find({org: org}).fetch();
       for(let x of members) {
-        const auth = Roles.userIsInRole(x._id, 'power');
+        const auth = Roles.userIsInRole(x._id, 'admin');
         if(auth && x.pin === pin) {
           Meteor.users.update(Meteor.userId(), {
             $set: {
@@ -91,7 +64,6 @@ Meteor.methods({
   
   createOrg(orgName) {
     if(!Meteor.user().orgKey) {
-      Roles.addUsersToRoles(Meteor.userId(), 'power');
       Meteor.users.update(Meteor.userId(), {
         $set: {
           org: orgName,
@@ -107,14 +79,14 @@ Meteor.methods({
   
   // ability to kick a user out of an org
   removeFromOrg(badUserId, pin) {
-    const poweruser = Roles.userIsInRole(Meteor.userId(), 'power');
-    const team = Meteor.users.findOne({_id: badUserId, org: Meteor.user().org});
+    const adminPower = Roles.userIsInRole(Meteor.userId(), 'admin');
+    const team = Meteor.users.findOne({_id: badUserId, orgKey: Meteor.user().orgKey});
     const self = Meteor.userId() === badUserId;
     const admin = Roles.userIsInRole(badUserId, 'admin');
-    const auth = poweruser && team && !self && !admin ? true : false;
+    const auth = adminPower && team && !self && !admin ? true : false;
     
     if(auth && Meteor.user().pin === pin) {
-      Roles.removeUsersFromRoles(badUserId, 'power');
+      Roles.removeUsersFromRoles(badUserId, 'active');
       Meteor.users.update(badUserId, {
         $set: {
           org: false,
@@ -128,9 +100,31 @@ Meteor.methods({
     
   },
   
+  forcePasswordChange(userId, newPassword) {
+    const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
+    const team = Meteor.users.findOne({_id: userId, orgKey: Meteor.user().orgKey});
+    const admin = Roles.userIsInRole(userId, 'admin');
+    const self = Meteor.userId() === userId;
+    if(auth && team && !admin && !self) {
+      Accounts.setPassword(userId, newPassword, {logout: true});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  // need to finish email handling \\
+  
+  // emailRemove(email) {
+  // Accounts.removeEmail(Meteor.userId(), email)
+  
+  // emailSet(newEmail) {
+  // Accounts.addEmail(Meteor.userId(), newEmail)
+  
   permissionSet(user, role) {
-    const auth = Roles.userIsInRole(Meteor.userId(), ['admin', 'power']);
-    if(auth) {
+    const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
+    const team = Meteor.users.findOne({_id: user, orgKey: Meteor.user().orgKey});
+    if(auth && team) {
       Roles.addUsersToRoles(user, role);
       return true;
     }else{
@@ -139,8 +133,9 @@ Meteor.methods({
   },
   
   permissionUnset(user, role) {
-    const auth = Roles.userIsInRole(Meteor.userId(), ['admin', 'power']);
-    if(auth) {
+    const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
+    const team = Meteor.users.findOne({_id: user, orgKey: Meteor.user().orgKey});
+    if(auth && team) {
       Roles.removeUsersFromRoles(user, role);
       return true;
     }else{
@@ -163,7 +158,8 @@ Meteor.methods({
   
   noPin(user) {
     const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
-    if(auth) {
+    const team = Meteor.users.findOne({_id: user, orgKey: Meteor.user().orgKey});
+    if(auth && team) {
       Meteor.users.update(user, {
         $set: {
           pin: false

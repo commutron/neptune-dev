@@ -17,6 +17,10 @@ export default class RemoveUser extends Component {
   */
 
   render () {
+    
+    // if no org
+    // if no active role
+    
     return (
       <div>
         <p>

@@ -14,12 +14,12 @@ export default class AppWrap extends Component	{
         <div className='cardView'>
           
           <Tabs
-            tabs={['preferences', 'accounts', 'help']}
+            tabs={['help', 'accounts', 'preferences']}
             stick={true}>
             
-            <PrefPanel app={this.props.app} />
-            <AccountsPanel users={this.props.users} />
             <div>help</div>
+            <AccountsPanel users={this.props.users} />
+            <PrefPanel app={this.props.app} />
           </Tabs>
           
 				</div>

@@ -36,7 +36,7 @@ export default class Model extends Component	{
         >{this.props.button}</button>
         {this.state.show ?
         <FadeInWrap>
-          <div className='overlay'>
+          <div className='overlay scroll'>
             <div className='popup cap'>
               <button
                 className='action clear redT rAlign'

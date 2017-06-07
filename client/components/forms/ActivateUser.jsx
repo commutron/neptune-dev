@@ -23,7 +23,7 @@ export default class ActivateUser extends Component	{
           maxLength='4'
           minLength='4'
           cols='4'
-          placeholder='Administrator PIN'
+          placeholder='Two Factor PIN'
           inputMode='numeric'
           autoComplete='new-password'
           required

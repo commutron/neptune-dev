@@ -19,8 +19,6 @@ export default class AccountsUI extends Component {
 
 	render() {
 		
-		Session.set('Meteor.loginButtons.dropdownVisible', true);
-		
 		return (
 		  <span ref={(i)=> this.container = i} />
 		  );

@@ -1,42 +1,46 @@
 import React, {Component} from 'react';
+import Pref from '/client/global/pref.js';
+
 import SlideDownWrap from '/client/components/tinyUi/SlideDownWrap.jsx';
 import RoleCheck from '/client/components/utilities/RoleCheck.js';
 
+import AccountsUI from '../../../components/bigUi/AccountsUI.jsx';
 import RemoveUser from '../../../components/forms/RemoveUser.jsx';
 import UserForm from '../../../components/forms/UserForm.jsx';
-import AdminForm from '../../../components/forms/AdminForm.jsx';
+import { AdminDown } from '../../../components/forms/AdminForm.jsx';
 import SetPin from '../../../components/forms/SetPin.jsx';
+import EmailForm from '../../../components/forms/EmailForm.jsx';
 
 export default class PrefPanel extends Component {
 
   render() {
     
-    const admin = Roles.userIsInRole(Meteor.userId(), 'admin') ? 'Administrator' : '';
-    const power = Roles.userIsInRole(Meteor.userId(), 'power') ? 'Poweruser' : '';
+    const admin = Roles.userIsInRole(Meteor.userId(), 'admin') ? Pref.admin : '';
     
     return (
       <SlideDownWrap>
       <div className='card'>
         <div className='split'>
           <div className='half space'>
-            <h2>Logged in as: {Meteor.user().username}</h2>
+            <h2>Logged in as: <AccountsUI /></h2>
             <p className='up'>id: {Meteor.user()._id}</p>
-            <p className='greenT'>{admin}</p>
-            <p className='blueT'>{power}</p>
-            <p className='cap'>organization: {Meteor.user().org}</p>
+            <p className='blueT'>{admin}</p>
+            <p>organization: <i className='greenT'>{Meteor.user().org}</i></p>
+            <br />
+            <EmailForm />
             <br />
             <SetPin />
             <br />
             <RemoveUser />
             <br />
-            <AdminForm />
+            <AdminDown />
             <hr />
             <br />
           </div>
           <div className='half space'>
             <h3>User Accounts</h3>
-            <i>powerusers see users in thier organization, administrators see all users</i>
-            <RoleCheck role={['power', 'admin']}>
+            <i>Admins see users in thier organization</i>
+            <RoleCheck role='admin'>
               <ul>
                 {this.props.users.map( (entry, index)=>{
                   return (

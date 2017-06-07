@@ -19,6 +19,7 @@ class Pref {
     this.instruct = 'wiki';
     this.timeClock = 'time clock';
     // terminology
+    this.admin = 'org admin';
 	  this.batch = 'batch';//order
 	  this.item = 'item';//board
     this.group = 'group';//customer

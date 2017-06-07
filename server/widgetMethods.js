@@ -4,7 +4,7 @@ Meteor.methods({
 
   addNewWidget(widget, groupId, desc, version, wiki, unit, endTrack) {
     const duplicate = WidgetDB.findOne({widget: widget});
-    if(!duplicate && Roles.userIsInRole(Meteor.userId(), 'power')) {
+    if(!duplicate && Roles.userIsInRole(Meteor.userId(), 'create')) {
           
       WidgetDB.insert({
         widget: widget,
@@ -47,7 +47,7 @@ Meteor.methods({
     const doc = WidgetDB.findOne({_id: widgetId});
     let duplicate = WidgetDB.findOne({widget: newName});
     doc.widget === newName ? duplicate = false : null;
-    if(!duplicate && Roles.userIsInRole(Meteor.userId(), 'power')) {
+    if(!duplicate && Roles.userIsInRole(Meteor.userId(), 'edit')) {
       WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey}, {
         $set : {
           widget: newName,
@@ -65,7 +65,7 @@ Meteor.methods({
     if(!inUse) {
       const doc = WidgetDB.findOne({_id: widgetId});
       const lock = doc.createdAt.toISOString();
-      const user = Roles.userIsInRole(Meteor.userId(), 'power');
+      const user = Roles.userIsInRole(Meteor.userId(), 'remove');
       const access = doc.orgKey === Meteor.user().orgKey;
       const unlock = lock === pass;
       if(user && access && unlock) {
@@ -83,7 +83,7 @@ Meteor.methods({
   addVersion(widgetId, versionId, wiki, unit) {
     const doc = WidgetDB.findOne({_id: widgetId});
     const duplicate = doc.versions.find(x => x.version === versionId);
-    if(!duplicate && Roles.userIsInRole(Meteor.userId(), 'power')) {
+    if(!duplicate && Roles.userIsInRole(Meteor.userId(), 'create')) {
       WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey}, {
         $push : {
           versions:
@@ -114,7 +114,7 @@ Meteor.methods({
     const ver = doc.versions.find(x => x.versionKey === vKey);
     let duplicate = doc.versions.find(x => x.version === newVer);
     ver.version === newVer ? duplicate = false : null;
-    if(!duplicate && Roles.userIsInRole(Meteor.userId(), 'power')) {
+    if(!duplicate && Roles.userIsInRole(Meteor.userId(), 'edit')) {
       WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.versionKey': vKey}, {
         $set : {
           'versions.$.version': newVer,
@@ -135,7 +135,7 @@ Meteor.methods({
       const doc = WidgetDB.findOne({_id: widgetId});
       const ver = doc.versions.find(x => x.versionKey === vKey);
       const lock = ver.createdAt.toISOString();
-      const user = Roles.userIsInRole(Meteor.userId(), 'power');
+      const user = Roles.userIsInRole(Meteor.userId(), 'remove');
       const access = doc.orgKey === Meteor.user().orgKey;
       const unlock = lock === pass;
       if(user && access && unlock) {
@@ -153,7 +153,7 @@ Meteor.methods({
 
 
   pushFlow(widgetId, flowTitle, flowObj) {
-    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
+    if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
       WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey}, {
         $push : {
           flows: 
@@ -173,7 +173,7 @@ Meteor.methods({
     const inUseR = BatchDB.findOne({river: fKey});
     const inUseRA = BatchDB.findOne({riverAlt: fKey});
     if(!inUseR && !inUseRA) {
-      if(Roles.userIsInRole(Meteor.userId(), 'power')) {
+      if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
     		WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey}, {
           $pull : { flows: { flowKey: fKey }
     		   }});
@@ -205,17 +205,22 @@ Meteor.methods({
   },
 
   setVersionNote(widgetId, vKey, note) {
-    WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.versionKey': vKey}, {
-      $set : { 'versions.$.notes': {
-        time: new Date(),
-        who: Meteor.userId(),
-        content: note,
-      }}});
+    if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
+      WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.versionKey': vKey}, {
+        $set : { 'versions.$.notes': {
+          time: new Date(),
+          who: Meteor.userId(),
+          content: note,
+        }}});
+      return true;
+    }else{
+      return false;
+    }
   },
   
 // needs testing
   killAllVersions(widgetId) {
-    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
+    if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
       WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.live': true}, {
         $set : { 
           'versions.$.live': false
@@ -239,7 +244,7 @@ Meteor.methods({
     ]
     */
   setAssembly(widgetId, vKey, assembly, verify) {
-    if(Roles.userIsInRole(Meteor.userId(), 'power')) {
+    if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
       const verified = verify ? Meteor.userId() : false;
       WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.versionKey': vKey}, {
         $set : {

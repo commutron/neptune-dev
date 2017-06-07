@@ -116,7 +116,7 @@ export default class FindOps extends Component	{
         <Dashboard>
           <div></div>
           <div className='centre'>
-            <p>Waiting...</p>
+            <p>ready</p>
           </div>
         </Dashboard>
       );
