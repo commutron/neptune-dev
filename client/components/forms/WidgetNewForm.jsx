@@ -53,7 +53,7 @@ export default class WidgetNewForm extends Component	{
       <Model
         button={'new ' + Pref.widget}
         title={'new ' + Pref.widget}
-        lock={!Roles.userIsInRole(Meteor.userId(), 'power')}>
+        lock={!Roles.userIsInRole(Meteor.userId(), 'create')}>
 
       <div className='split'>
 

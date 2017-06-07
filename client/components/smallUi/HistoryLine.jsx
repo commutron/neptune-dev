@@ -13,7 +13,7 @@ export default class HistoryLine extends Component	{
 
     const dt = this.props.entry;
     
-    const cancel = Meteor.user().admin && !this.props.done ? 
+    const cancel = Roles.userIsInRole(Meteor.userId(), 'edit') && !this.props.done ? 
                    <StepBack id={this.props.id} bar={this.props.bar} entry={dt} /> 
                    : 
                    '';

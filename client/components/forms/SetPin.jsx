@@ -33,7 +33,7 @@ export default class SetPin extends Component {
 
   render () {
     
-    if(Roles.userIsInRole(Meteor.userId(), ['admin', 'power'])) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       return (
         <fieldset>
           <legend>Change PIN</legend>

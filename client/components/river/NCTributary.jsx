@@ -79,7 +79,7 @@ export class NCStream extends Component {
     const luster = fixed ? '/inspectMini.svg' : '/repair.svg';
     const act = fixed ? this.handleInspect.bind(this) : this.handleFix.bind(this);
     const same = this.props.entry.fix.who === Meteor.userId();
-    const inspector = Roles.userIsInRole(Meteor.userId(), 'inspector');
+    const inspector = Roles.userIsInRole(Meteor.userId(), 'inspect');
     const lock = fixed ? !same && inspector ? false : true : false;
     let skip = this.props.entry.skip;
     let style = !skip ? 'cap gridRow fadeRed' : 'cap gridRow fadeYellow';

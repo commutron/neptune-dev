@@ -26,13 +26,14 @@ export default class UnitSet extends Component	{
 
   render() {
     
-    const allow = Roles.userIsInRole(Meteor.userId(), ['power', 'creator']);
+    const auth = Roles.userIsInRole(Meteor.userId(), 'run');
+    
     return(
       <Model
         button={Pref.unit + ' set'}
         title={Pref.unit + ' set'}
         type='action clear greenT'
-        lock={!allow || this.props.lock}>
+        lock={!auth || this.props.lock}>
         <p className='centre'>
           <label htmlFor='cln'>{Pref.unit} Quantity</label><br />
           <input

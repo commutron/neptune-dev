@@ -63,7 +63,7 @@ export default class GroupForm extends Component {
         button={title + ' ' + Pref.group}
         title={title + ' ' + Pref.group}
         type='action clear greenT'
-        lock={!Roles.userIsInRole(Meteor.userId(), 'power')}>
+        lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit'])}>
         <form id='new' className='centre' onSubmit={this.createCustomer.bind(this)}>
           <p><label htmlFor='newName'>Full Name</label><br />
             <input

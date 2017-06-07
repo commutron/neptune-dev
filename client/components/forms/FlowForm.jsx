@@ -96,7 +96,7 @@ export default class FlowForm extends Component	{
       <Model
         button='flow form'
         title='flow form'
-        lock={!Roles.userIsInRole(Meteor.userId(), 'power') || this.props.lock}>
+        lock={!Roles.userIsInRole(Meteor.userId(), 'edit') || this.props.lock}>
         
         
         {!this.state.fill ?
@@ -201,7 +201,7 @@ export class FlowRemove extends Component	{
       <button
         className='actionSmall clear redT'
         onClick={this.pull.bind(this)}
-        disabled={!Roles.userIsInRole(Meteor.userId(), 'power')}
+        disabled={!Roles.userIsInRole(Meteor.userId(), 'edit')}
       >delete</button>
     );
   }

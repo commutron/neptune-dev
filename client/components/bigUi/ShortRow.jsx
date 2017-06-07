@@ -68,7 +68,7 @@ export default class ShortRow extends Component {
     
     const dt = this.props.entry;
     const rlv = dt.resolve;
-    const unlock = Roles.userIsInRole(Meteor.userId(), ['power', 'creator']);
+    const unlock = Roles.userIsInRole(Meteor.userId(), 'run');
     
     const reOrder = rlv && rlv.action === 'order';
     const reSub = rlv.action === 'sub';
@@ -135,7 +135,7 @@ export default class ShortRow extends Component {
               <i className='fa fa-reply fa-2x'></i>
             </button>
           :null}
-          {Meteor.user().power ?
+          {unlock ?
             <button className='miniAction mini2x redT breath' title='Delete Entry' onClick={this.handleDelete.bind(this)}>
               <i className='fa fa-times fa-2x'></i>
             </button>

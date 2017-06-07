@@ -36,7 +36,7 @@ export default class WidgetEditForm extends Component	{
       <Model
         button={'Edit ' + Pref.widget}
         title={'Edit ' + Pref.widget}
-        lock={!Roles.userIsInRole(Meteor.userId(), 'power')}>
+        lock={!Roles.userIsInRole(Meteor.userId(), 'edit')}>
         <form className='centre' onSubmit={this.save.bind(this)}>
           <p><label htmlFor='widgetId'>{Pref.widget} ID</label><br />
             <input

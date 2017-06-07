@@ -412,7 +412,7 @@ Meteor.methods({
   },
   
   addEscape(batchId, ref, type, quant, ncar) {
-    if(Roles.userIsInRole(Meteor.userId(), ['run', 'edit'])) {
+    if(Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $push : { escaped: {
           key: new Meteor.Collection.ObjectID().valueOf(), // flag id

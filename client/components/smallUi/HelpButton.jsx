@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 // in progress //
 
-export default class ProWrap extends Component	{
+export default class HelpButton extends Component	{
 
   constructor() {
     super();

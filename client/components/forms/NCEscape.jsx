@@ -44,7 +44,7 @@ export default class NCEscape extends Component {
         button='escaped'
         title={'escaped ' + Pref.nonCon}
         type='action clear redT'
-        lock={!Roles.userIsInRole(Meteor.userId(), 'power')}>
+        lock={!Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])}>
         <div className='actionBox red'>
           <br />
           <form className='centre' onSubmit={this.handleNC.bind(this)} onChange={this.on.bind(this)}>
@@ -89,7 +89,14 @@ export default class NCEscape extends Component {
                 required />
             </p>
             <br />
-            <p><button type='submit' ref={(i)=> this.go = i} disabled={false} className='action clear'>{Pref.post}</button></p>
+            <p>
+              <button
+                type='submit'
+                ref={(i)=> this.go = i}
+                disabled={false}
+                className='action clear'
+              >{Pref.post}</button>
+            </p>
             <p><output ref={(i)=> this.out = i} /></p>
           </form>
           <br />

@@ -18,7 +18,7 @@ export default class NoteLine extends Component	{
 
     let dt = this.props.entry;
     let name = this.props.versionKey ? Pref.widget : Pref.batch;
-    const action = this.props.id && Meteor.user().power ? 
+    const action = this.props.id && Roles.userIsInRole(Meteor.userId(), ['edit', 'run']) ? 
                    <NoteForm id={this.props.id} versionKey={this.props.versionKey} content={dt.content} /> : 
                    null;
     

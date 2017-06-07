@@ -29,9 +29,9 @@ export default class Stone extends Component	{
   	const finish = this.props.type === 'finish';
   	const inspector = first || inspect || finish ? true : false;
   	const test = this.props.type === 'test';
-  	if(inspector && !Roles.userIsInRole(Meteor.userId(), 'inspector')) {
+  	if(inspector && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
   		null;
-  	}else if(test && !Roles.userIsInRole(Meteor.userId(), 'tester')) {
+  	}else if(test && !Roles.userIsInRole(Meteor.userId(), 'test')) {
   		null;
   	}else{
   	  Meteor.setTimeout(()=> {

@@ -129,13 +129,19 @@ export default class NCButton extends Component {
                       <option key={index} value={entry}>{entry}</option>
                       );
                   })}
-                  {Roles.userIsInRole(Meteor.userId(), 'power') ?
+                  {Roles.userIsInRole(Meteor.userId(), 'qa') ?
                     <option value='scrap'>scrap</option>
                     : null}
                 </select>
               </p>
               <br />
-              <p><button type='submit' ref={(i)=> this.go = i} disabled={false} className='action clear'>{Pref.post}</button></p>
+              <p>
+                <button
+                  type='submit'
+                  ref={(i)=> this.go = i}
+                  disabled={false}
+                  className='action clear'
+                >{Pref.post}</button></p>
             </form>
             <br />
         </div>

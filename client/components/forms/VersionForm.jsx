@@ -72,7 +72,7 @@ export class VersionForm extends Component	{
       <Model
         button={name + ' ' + Pref.version}
         title={name + ' ' + Pref.version}
-        lock={!Roles.userIsInRole(Meteor.userId(), 'power')}>
+        lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit'])}>
 
       <div className='split'>
 
@@ -189,7 +189,7 @@ export class VersionRemove extends Component	{
   
   render() {
     
-    let user = !Meteor.user().power;
+    let user = !Roles.userIsInRole(Meteor.userId(), 'remove');
     
     return(
       <form className='inlineForm' onSubmit={this.remove.bind(this)}>
@@ -231,7 +231,7 @@ export class VersionKill extends Component	{
       <Model
         button='Deactivate'
         title='Deactivate ALL versions?'
-        lock={!Meteor.user().power}>
+        lock={!Roles.userIsInRole(Meteor.userId(), 'edit')}>
         <div className='centre'>
           <button
             ref={(i)=> this.con = i}

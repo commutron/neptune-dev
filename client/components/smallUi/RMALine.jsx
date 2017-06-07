@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
 import UserNice from './UserNice.jsx';
@@ -22,7 +23,7 @@ export default class RMAList extends Component	{
               return (
                 <div key={index} className='infoBox'>
                   <div className='titleBar'>
-                    RMA: {dt.rma} by <UserNice id={dt.createdWho} /> at {dt.createdAt.toLocaleString()}
+                    RMA: {dt.rma} by <UserNice id={dt.createdWho} /> at {moment(dt.createdAt).calendar()}
                   </div>
                   <p>NCAR: {dt.ncar}</p>
                   <p>Re Assembly Steps: {dt.reAssemble.toString()}</p>

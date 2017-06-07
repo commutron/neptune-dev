@@ -51,7 +51,7 @@ export default class ShortButton extends Component {
 
   render () {
     
-    const unlock = Roles.userIsInRole(Meteor.userId(), ['power', 'creator']) ? true : false;
+    const unlock = Roles.userIsInRole(Meteor.userId(), 'run') ? true : false;
 
     return (
       <div>

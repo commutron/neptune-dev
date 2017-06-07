@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import moment from 'moment';
 import UserNice from './UserNice.jsx';
 
 // requires history entry
@@ -14,7 +15,7 @@ export default class ScrapBox extends Component	{
           <h1 className='up'>{dt.type}</h1>
         </div>
         <div className='centre'>
-          <p>{dt.time.toLocaleString()}</p>
+          <p>{moment(dt.time).calendar()}</p>
           <p>by: <UserNice id={dt.who} /></p>
           <p>at: {dt.step}</p>
           <br />

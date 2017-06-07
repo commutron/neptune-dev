@@ -46,12 +46,16 @@ export default class NoteForm extends Component {
     
     const now = this.props.content ? this.props.content : '';
     const choose = this.props.versionKey ? Pref.widget : Pref.batch;
+    const unlock = !this.props.versionKey ? 
+                   !Roles.userIsInRole(Meteor.userId(), 'run') : 
+                   !Roles.userIsInRole(Meteor.userId(), 'edit');
 
     return (
       <Model
         button={<i className='fa fa-pencil-square-o'></i>}
         title={choose + ' Notes'}
         type='miniAction big blueT'
+        lock={unlock}
       >
         <form className='centre' onSubmit={this.saveNote.bind(this)} onChange={this.goOp.bind(this)} >
           <p className='balance'><label htmlFor='con'>Note</label><br />

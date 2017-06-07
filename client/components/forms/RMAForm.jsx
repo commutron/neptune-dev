@@ -66,7 +66,7 @@ export default class RMAForm extends Component {
         button='rma'
         title={'create ' + Pref.rma}
         type='action clear yellowT'
-        lock={!Roles.userIsInRole(Meteor.userId(), 'power')}>
+        lock={!Roles.userIsInRole(Meteor.userId(), ['edit', 'qa'])}>
         <div className='space'>
           <form
             id='rmaSave'

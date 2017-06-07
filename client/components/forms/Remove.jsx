@@ -81,7 +81,7 @@ export default class Remove extends Component	{
 
     let title = this.props.title;
     let check = this.props.check;
-    const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
+    const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
 
     return (
       <Model
@@ -89,34 +89,30 @@ export default class Remove extends Component	{
         title={'Delete "' + title + '" From Database'}
         type='action clear redT'
         lock={!auth}>
-        {auth ?
-          <div className='actionBox redT'>
-            <br />
-            <p>Are you sure you want to try to delete "{title}"?</p>
-            <p>This cannot be undone and could cause unexpected consequences.</p>
-            <br />
-            <p>Enter "<i className=''>{check + ' '}</i>" to confirm.</p>
-              <form onSubmit={this.remove.bind(this)}>
-                <p>
-                  <input
-                    type='text'
-                    ref={(i)=> this.confirm = i}
-                    placeholder={check}
-                    autoFocus='true'
-                    className='noCopy'
-                    required />
-                  <button
-                    className='smallAction clear'
-                    type='submit'
-                    ref={(i)=> this.cut = i}
-                    disabled={false}>DELETE</button>
-                </p>
-              </form>
-            <br />
-          </div>
-          :
-          <div><p>Current user does not have sufficient permissions for this function</p></div>
-        }
+        <div className='actionBox redT'>
+          <br />
+          <p>Are you sure you want to try to delete "{title}"?</p>
+          <p>This cannot be undone and could cause unexpected consequences.</p>
+          <br />
+          <p>Enter "<i className=''>{check + ' '}</i>" to confirm.</p>
+            <form onSubmit={this.remove.bind(this)}>
+              <p>
+                <input
+                  type='text'
+                  ref={(i)=> this.confirm = i}
+                  placeholder={check}
+                  autoFocus='true'
+                  className='noCopy'
+                  required />
+                <button
+                  className='smallAction clear'
+                  type='submit'
+                  ref={(i)=> this.cut = i}
+                  disabled={false}>DELETE</button>
+              </p>
+            </form>
+          <br />
+        </div>
       </Model>
     );
   }

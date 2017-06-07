@@ -21,7 +21,7 @@ export default class ActiveLabel extends Component	{
       <button
         className={label}
         onClick={this.change.bind(this)}
-        disabled={!Roles.userIsInRole(Meteor.userId(), 'power')}>
+        disabled={!Roles.userIsInRole(Meteor.userId(), 'run')}>
       </button>
     );
   }

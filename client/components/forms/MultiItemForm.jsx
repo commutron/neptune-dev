@@ -92,14 +92,14 @@ export default class MultiItemForm extends Component {
 
   render() {
     
-    const allow = Meteor.user().power || Meteor.user().creator;
+    const auth = Roles.userIsInRole(Meteor.userId(), 'run');
 
     return (
       <Model
         button={'Add ' + Pref.item + 's'}
         title={'Add ' + Pref.item + 's'}
         type='action clear greenT'
-        lock={!allow || !this.props.more} >
+        lock={!auth || !this.props.more} >
         <div className='centre'>
           <form onSubmit={this.addItem.bind(this)} autoComplete='off'>
             <p><label htmlFor='cln'>{Pref.unit} Quantity</label><br />

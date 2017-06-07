@@ -8,9 +8,10 @@ ArchiveDB = new Mongo.Collection('archivedb');
 
 Meteor.publish("appData", function(){
   const user = Meteor.users.findOne({_id: this.userId});
-  const admin = Roles.userIsInRole(this.userId, 'admin');
   const orgKey = user ? user.orgKey : false;
-  if(admin) {
+  const email = user ? user.emails : false;
+  const staircase = email ? Meteor.settings.devMaster === email[0].address : false;
+  if(staircase) {
     return [
       AppDB.find(),
       Meteor.users.find({},
@@ -20,6 +21,8 @@ Meteor.publish("appData", function(){
           // 'pin': 0
         }}),
       ];
+  /* 
+  // not a circumstance that should happen
   }else if(!orgKey)  {
     return [ 
       Meteor.users.find({_id: this.userId},
@@ -29,6 +32,7 @@ Meteor.publish("appData", function(){
           // 'pin': 0,
         }}),
       ];
+  */
   }else if(user) {
     return [ 
       AppDB.find({orgKey: orgKey}),

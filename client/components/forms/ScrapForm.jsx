@@ -35,7 +35,7 @@ export default class ScrapForm extends Component {
 		
 		return (
 		  <div>
-		    {Roles.userIsInRole(Meteor.userId(), 'power') ?
+		    {Roles.userIsInRole(Meteor.userId(), 'qa') ?
     		  <form className='centre' onSubmit={this.handleScrap.bind(this)}>
     	      <p><b>Are you sure you want to do this? You Cannot Undo This.</b></p>
     	      <br />
@@ -74,7 +74,7 @@ export default class ScrapForm extends Component {
             </p>
           </form>
           :
-          <p>How did you even get here? This function is limited to powerusers</p>
+          <p>How did you even get here?</p>
 		    }
 		  </div>
     );

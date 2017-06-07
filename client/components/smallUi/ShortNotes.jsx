@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import moment from 'moment';
 
 // requires data
 // short array as shData
@@ -45,7 +46,7 @@ export class ShortBox extends Component {
         <legend className=''>Shortage <b>{act}</b></legend>
         <p>{this.props.entry.partNum}, {this.props.entry.quantity} pcs, {this.props.entry.comm}</p>
 				<div className='footerBar'>
-          {dt.time.toLocaleString()}
+          {moment(dt.time).calendar()}
         </div>
       </fieldset>
 			);

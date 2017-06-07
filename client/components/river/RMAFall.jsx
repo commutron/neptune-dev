@@ -34,7 +34,7 @@ export default class RMAFall extends Component {
       open && !thisOne ? cascades.push(entry) : null;
     }
 
-    let lock = !Roles.userIsInRole(Meteor.userId(), 'inspector');
+    let lock = !Roles.userIsInRole(Meteor.userId(), ['qa', 'run', 'inspect']);
     
     return (
       <div className='centre'>
