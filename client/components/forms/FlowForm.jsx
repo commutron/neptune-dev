@@ -115,7 +115,6 @@ export default class FlowForm extends Component	{
           
           :
     
-    
         <div>
           <div className='space'>
           <button className='action clear' onClick={this.back.bind(this)}>back</button>

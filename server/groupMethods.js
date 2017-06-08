@@ -3,7 +3,7 @@ Meteor.methods({
 //// Groups \\\\
 
   addGroup(groupName, alias) {
-    const duplicate = GroupDB.findOne({group: group});
+    const duplicate = GroupDB.findOne({group: groupName});
     const dupe = GroupDB.findOne({alias: alias});
     const auth = Roles.userIsInRole(Meteor.userId(), 'create');
     if(!duplicate && !dupe && auth) {

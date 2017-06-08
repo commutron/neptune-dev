@@ -28,7 +28,7 @@ export default createContainer( () => {
   let login = Meteor.userId() ? true : false;
   let usfo = login ? Meteor.user() : false;
   let user = usfo ? usfo.username : false;
-  let active = usfo ? usfo.active : false;
+  let active = usfo ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   let org = usfo ? usfo.org : false;
   if(!login) {
     return {

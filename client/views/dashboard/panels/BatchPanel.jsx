@@ -41,7 +41,7 @@ export default class BatchPanel extends Component	{
         if(value.type === 'first') {
           fList.push({
             bar: entry.serial,
-            info: value
+            entry: value
           });
         // scraps
         }else if(value.type === 'scrap') {

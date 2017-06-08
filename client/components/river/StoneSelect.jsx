@@ -3,6 +3,7 @@ import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
 import Stone from './Stone.jsx';
+import FirstRepeat from './FirstRepeat.jsx';
 
 export default class StoneSelect extends Component	{
 
@@ -14,7 +15,7 @@ export default class StoneSelect extends Component	{
     const fDone = [];
     this.props.allItems.map( (entry)=> {
       entry.history.map( (entry)=> {
-        if(entry.type === 'first' && entry.accept === true) {
+        if(entry.type === 'first' && entry.good === true) {
           fDone.push(entry.type + entry.step);
         }else{null;}
       });
@@ -24,7 +25,7 @@ export default class StoneSelect extends Component	{
       const first = flowStep.type === 'first';
       
       const check = !first ? 
-                    bDone.find(ip => ip.key === flowStep.key && ip.accept === true) 
+                    bDone.find(ip => ip.key === flowStep.key && ip.good === true) 
                     :
                     bDone.find(ip => ip.key === flowStep.key) || fDone.includes(flowStep.type + flowStep.step);
     
@@ -33,7 +34,9 @@ export default class StoneSelect extends Component	{
       }else{
         Session.set('nowStep', flowStep.step);
         Session.set('nowWanchor', flowStep.how);
-        return (
+        return [
+          flow.indexOf(flowStep),
+          (
           <Stone 
             id={this.props.id}
             barcode={this.props.barcode}
@@ -43,7 +46,8 @@ export default class StoneSelect extends Component	{
             users={this.props.users}
             methods={this.props.methods}
           />
-        );
+          )
+        ];
       }
     }
     
@@ -58,9 +62,21 @@ export default class StoneSelect extends Component	{
   }
 
   render() {
+    
+    const current = this.current();
+    const last = current[0] === 0 ? false : current[0] -1;
+    const lastStep = last !== false ? this.props.flow[last] : false;
+    
     return (
       <div>
-        {this.current()}
+        {current[1]}
+        <FirstRepeat
+          flowStep={lastStep}
+          id={this.props.id}
+          barcode={this.props.barcode}
+          history={this.props.history}
+          users={this.props.users}
+          methods={this.props.methods} />
       </div>
     );
   }

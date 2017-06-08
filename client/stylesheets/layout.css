@@ -208,11 +208,11 @@ nav {
 }
 
 .popup {
-  margin: 8rem auto;
+  margin: 7rem auto 3rem auto;
   padding: 25px;
   background: rgb(0,0,0);
   background: rgba(0,0,0,0.9);
-  width: 50%;
+  width: 60%;
   position: relative;
   z-index: 8;
 }
@@ -224,7 +224,7 @@ nav {
 
 @media screen and (max-width: 1000px){
   .popup{
-    width: 70%;
+    width: 80%;
   }
 }
 

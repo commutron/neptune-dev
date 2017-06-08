@@ -37,17 +37,17 @@ class Pref {
     this.buildFlow = 'river';
     this.buildFlowAlt = 'alt river';
     this.buildStep = 'stone';
-    //this.trackProcess = 'route';// remove
-    //this.trackStep = 'route step';// remove
     this.trackFirst = 'first-off';
     this.trackLast =  'pack';
+    this.good = 'good';
+    this.ng = 'ng';
     this.builder = 'operator';
-    this.inspector = 'inspector';
+    this.inspector = 'inspection';
+    this.autoI = 'aoi';
     this.method = 'method';
-    //this.material = 'material';
-    this.partTool = 'part assembly'; // going away
-    this.joinTool = 'soldering'; // going away
-    //this.work = 'function';
+    this.proChange = 'process changes';
+    this.outIssue = 'Outstanding Issues';
+    this.gComm = 'general comments';
     // bad tracking
     this.fixFlow = 'stream';
     this.fixStep = 'rock';

@@ -12,7 +12,7 @@ h1, h2, h3 {
 
 p {
 	font-size: medium;
-  margin: 0 10px;
+  margin: 0 auto;
 }
 
 a {
@@ -76,7 +76,7 @@ button:focus {
 
 form {
   padding: 0px;
-  margin: 1em;
+  margin: auto;
 }
 
 form:focus {
@@ -87,8 +87,18 @@ fieldset {
   border: 1px dashed;
 }
 
+label {
+  line-height: 1.5rem;
+  vertical-align: sub;
+}
+
+input[type='checkbox'] + label {
+  line-height: 1rem;
+  vertical-align: super;
+}
+
 input[type='checkbox'] {
-  margin: 0 3px;
+  margin: 0 5px;
   width: 1rem;
   height: 1rem;
 }

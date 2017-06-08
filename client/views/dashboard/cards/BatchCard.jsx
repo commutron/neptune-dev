@@ -48,7 +48,7 @@ export default class BatchCard extends Component	{
           <div className='space cap'>
             <h1>{b.batch}</h1>
             <hr />
-            <h2><JumpFind title={g.group} sub='' /><JumpFind title={w.widget} sub='' /></h2>
+            <h2><JumpFind title={g.alias} sub='' /><JumpFind title={w.widget} sub='' /></h2>
             
             <h3>{Pref.version}: {v.version}</h3>
             

@@ -12,7 +12,7 @@ export default class StepBack extends Component {
       const flag = entry.key;
       
       let replace = entry;
-      replace.accept = false;
+      replace.good = false;
       
         Meteor.call('pullHistory', id, bar, flag, (error, reply)=> {
           if(error)

@@ -244,6 +244,10 @@
   font-size: 1.5em;
 }
 
+.bigger {
+  font-size: 1.75rem;
+}
+
 .noCopy {
  -webkit-user-select: none;
  -khtml-user-select: none;

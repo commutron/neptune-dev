@@ -211,17 +211,17 @@ Meteor.methods({
           key: key,
           step: step,
           type: type,
-          accept: true,
+          good: true,
           time: new Date(),
           who: Meteor.userId(),
           comm : com,
-          first: false
+          info: false
       }}});
       return true;
     }
   },
 
-  addFirst(batchId, bar, key, step, type, com, good, whoB, howB) {
+  addFirst(batchId, bar, key, step, type, com, good, whoB, howB, howI, diff, ng) {
     if(!Roles.userIsInRole(Meteor.userId(), 'inspect')) {
       return false;
     }else{
@@ -230,13 +230,16 @@ Meteor.methods({
           key: key,
           step: step,
           type: type,
-          accept: good,
+          good: good,
           time: new Date(),
           who: Meteor.userId(),
           comm : com,
-          first: {
+          info: {
             builder: whoB,
-            method: howB
+            buildMethod: howB,
+            verifyMethod: howI,
+            change: diff,
+            issue: ng
           }
       }}});
       return true;
@@ -254,11 +257,11 @@ Meteor.methods({
   			    key: key,
             step: step,
             type: type,
-            accept: true,
+            good: true,
             time: new Date(),
             who: Meteor.userId(),
             comm : '',
-            first: false
+            info: false
   			  }
   			},
   			$set : { 
@@ -515,11 +518,11 @@ Meteor.methods({
   			    key: new Meteor.Collection.ObjectID().valueOf(),
             step: step,
             type: 'scrap',
-            accept: true,
+            good: true,
             time: new Date(),
             who: Meteor.userId(),
             comm: comm,
-            first: false
+            info: false
   			  }
   			},
   			// finish item

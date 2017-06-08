@@ -18,16 +18,19 @@ export default class HistoryLine extends Component	{
                    : 
                    '';
     
-    const accept = dt.accept ? cancel : <b className='redT'>un-accepted</b>;
+    const good = dt.good ? cancel : <b className='up redT'>{Pref.ng}</b>;
 
-    let first = dt.first ?
+    let moreInfo = typeof dt.info === 'object' ?
       <div>
         <p>
-          {Pref.builder}: {dt.first.builder.map( (entry, index)=>{
+          {Pref.builder}: {dt.info.builder.map( (entry, index)=>{
                             return( <UserNice key={index} id={entry} /> );
                           })}
         </p>
-        <p>{Pref.method}: {dt.first.method.toString()}</p>
+        <p>{Pref.method}: {dt.info.buildMethod}</p>
+        <p>{Pref.inspector}: {dt.info.verifyMethod}</p>
+        <p>{Pref.proChange}: {dt.info.change}</p>
+        <p>{Pref.outIssue}: {dt.info.issue}</p>
       </div> 
       : null;
     
@@ -35,10 +38,10 @@ export default class HistoryLine extends Component	{
       <div className='infoBox'>
         <div className='titleBar'>
           {dt.step} - {dt.type}, {moment(dt.time).calendar()} by <UserNice id={dt.who} />
-          <span className='rAlign'>{accept}</span>
+          <span className='rAlign'>{good}</span>
         </div>
         <p>{dt.comm}</p>
-        {first}
+        {moreInfo}
         </div>
     );
   }
