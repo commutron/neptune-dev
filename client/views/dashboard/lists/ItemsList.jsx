@@ -7,20 +7,16 @@ export default class ItemsList extends Component	{
   
   filter() {
     const data = this.props.batchData;
-    const sc = data.scrap;
     let ipList = [];
     let scList = [];
       data.items.map( (entry)=>{
         // check if item is done
         if(entry.finishedAt === false) {
           ipList.push(entry.serial);
-        }else{null}
-        // check for scrap items
-        if(sc > 0 && scList.length < sc) {
-          for(let value of entry.history) {
-            if(value.type === 'scrap') {
-              scList.push(entry.serial);
-            }else{null}
+        }else{
+          // check for scrap items
+          for(let v of entry.history) {
+            v.type === 'scrap' ? scList.push(entry.serial) : null;
           }
         }
       });
@@ -40,7 +36,7 @@ export default class ItemsList extends Component	{
         <div className='card'>
             { b.items.map( (entry, index)=> {
             let style = active.includes(entry.serial) ? 'action clear wide greenT' : 
-                        b.scrap > 0 && scrap.includes(entry.serial) ? 'action clear wide redT' : 
+                        scrap.includes(entry.serial) ? 'action clear wide redT' : 
                         'action clear wide';
               return (
                 <JumpFind

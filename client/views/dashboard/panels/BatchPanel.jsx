@@ -34,20 +34,13 @@ export default class BatchPanel extends Component	{
     const data = this.props.batchData.items;
     let fList = [];
     let scList = [];
-    data.map( (entry)=>{
+    data.map( (item)=>{
       // check history for...
-      for(let value of entry.history) {
+      for(let v of item.history) {
         // firsts
-        if(value.type === 'first') {
-          fList.push({
-            bar: entry.serial,
-            entry: value
-          });
+        v.type === 'first' ? fList.push({bar: item.serial, entry: v}) : null;
         // scraps
-        }else if(value.type === 'scrap') {
-          scList.push(entry.serial);
-        // other
-        }else{null}
+        v.type === 'scrap' ? scList.push(item.serial) : null;
       }
      });
      return [fList, scList];
@@ -128,7 +121,7 @@ export default class BatchPanel extends Component	{
           
           {/*<RMAList id={b._id} data={b.rma} nons={a.nonConOption} rmas={a.rmaOption} />*/}
           
-          <ScrapList data={filter[1]} count={b.scrap} />
+          <ScrapList data={filter[1]} />
 
           <hr />
           

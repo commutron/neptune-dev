@@ -7,17 +7,13 @@ import ScrapBox from '../../../components/smallUi/ScrapBox.jsx';
 
 export default class ItemCard extends Component	{
 
-  scheck() {
-    const result = this.props.itemData.history.find(h => h.type === 'scrap');
-    return result;
-  }
-
   render() {
 
     const b = this.props.batchData;
     const i = this.props.itemData;
     const w = this.props.widgetData;
-    const scrap = b.scrap > 0 ? this.scheck() : false;
+    const done = i.finishedAt !== false;
+    const scrap = done ? i.history.find(x => x.type === 'scrap') : false;
     
     if(!b.river) {
       Session.set('nowStep', 'unavailable');

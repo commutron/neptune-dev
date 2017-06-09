@@ -29,11 +29,11 @@ export default class FlowForm extends Component	{
   
   setFlow(recSet) {
     let input = recSet;
-    this.setState({ flow: [...input] });
-  }
-  
-  clearFlow() {
-    this.setState({ flow: false });
+    if(!input) {
+      this.setState({ flow: false });
+    }else{
+      this.setState({ flow: [...input] });
+    }
   }
   
   
@@ -45,23 +45,32 @@ export default class FlowForm extends Component	{
     
     const flowTitle = this.title.value.trim().toLowerCase();
     
+    // edit existing
+    const f = this.state.fill;
+    const edit = f ? this.props.existFlows.find( x => x.flowKey === f ) : false;
+    const editId = edit ? edit.flowKey : false;
+    
     if(!flowObj) {
       Bert.alert(Alert.warning);
+    }else if(editId) {
+      Meteor.call('setFlow', widgetId, editId, flowTitle, flowObj, (error)=>{
+        if(error)
+          console.log(error);
+        Bert.alert(Alert.success);
+        this.out.value = 'saved';
+        this.setState({ fill: false });
+        this.setState({ flow: false });
+      });
     }else{
       Meteor.call('pushFlow', widgetId, flowTitle, flowObj, (error)=>{
         if(error)
           console.log(error);
         Bert.alert(Alert.success);
-        this.title.value = '';
         this.out.value = 'saved';
+        this.setState({ fill: false });
         this.setState({ flow: false });
       });
     }
-    
-    /*
-    function edit(id, rma, ncar, bars, after) {
-      Meteor.call('editRMA', id, rma, ncar, bars);
-    }*/
   }
     
   clean() {
@@ -69,6 +78,7 @@ export default class FlowForm extends Component	{
   }
   
   option() {
+    this.out.value = '';
     const optn = this.pick.value;
     if(optn !== 'blank') { 
       Meteor.call('activeFlowCheck', optn, (error, reply)=>{
@@ -88,9 +98,9 @@ export default class FlowForm extends Component	{
     const e = f ? this.props.existFlows.find( x => x.flowKey === f ) : false;
     
     const warn = this.state.warn ? this.state.warn : false;
-    console.log(warn);
     
     const eN = e ? e.title : '';
+    const eF = e ? e.flow : false;
 
     return (
       <Model
@@ -98,20 +108,19 @@ export default class FlowForm extends Component	{
         title='flow form'
         lock={!Roles.userIsInRole(Meteor.userId(), 'edit') || this.props.lock}>
         
-        
         {!this.state.fill ?
         
-          <div className='centre'>
+        <div className='centre'>
           <p>choose</p>
-            <select ref={(i)=> this.pick = i} onChange={this.option.bind(this)}>
-              <option></option>
-              <option value='blank'>New</option>
-              {this.props.existFlows.map( (entry, index)=>{
-                return(
-                  <option key={index} value={entry.flowKey}>{entry.title}</option>
-              )})}
-            </select>
-          </div>
+          <select ref={(i)=> this.pick = i} onChange={this.option.bind(this)}>
+            <option></option>
+            <option value='blank'>New</option>
+            {this.props.existFlows.map( (entry, index)=>{
+              return(
+                <option key={index} value={entry.flowKey}>{entry.title}</option>
+            )})}
+          </select>
+        </div>
           
           :
     
@@ -148,6 +157,7 @@ export default class FlowForm extends Component	{
                   placeholder='title the defines this flow'
                   required />
               </p>
+              <i className='small'>duplicate {Pref.flow} names are discouraged but not blocked</i>
             </form>
           </div>
           
@@ -156,8 +166,8 @@ export default class FlowForm extends Component	{
           <FlowBuilder
             options={this.props.options}
             end={this.props.end}
-            onClick={e => this.setFlow(e)}
-            onClear={e => this.clearFlow()} />
+            baseline={eF}
+            onClick={e => this.setFlow(e)} />
             
           <hr />
   
@@ -168,10 +178,14 @@ export default class FlowForm extends Component	{
               disabled={!this.state.flow}
               form='flowSave'
               className='action clear greenT'>SAVE</button>
-            <p><output ref={(i)=> this.out = i} /></p>
             <br />
           </div>
         </div>}
+        
+        <div className='centre'>
+          <p><output ref={(i)=> this.out = i} /></p>
+        </div>
+        
       </Model>
     );
   }

@@ -8,6 +8,7 @@ import UserNice from '../../../components/smallUi/UserNice.jsx';
 import HistoryLine from '../../../components/smallUi/HistoryLine.jsx';
 import NCLine from '../../../components/smallUi/NCLine.jsx';
 //import RMALine from '../../../components/smallUi/RMALine.jsx';
+import { ScrapButton } from '../../../components/forms/ScrapForm.jsx';
 import ScrapBox from '../../../components/smallUi/ScrapBox.jsx';
 import NonConEdit from '../../../components/forms/NonConEdit.jsx';
 import UnitSet from '../../../components/forms/UnitSet.jsx';
@@ -38,12 +39,6 @@ export default class ItemPanel extends Component	{
     return relevant;
   }
   */
-  
-  scheck() {
-    const result = this.props.itemData.history.find(h => h.type === 'scrap');
-    return result;
-  }
-
 
   render() {
 
@@ -53,8 +48,9 @@ export default class ItemPanel extends Component	{
     
     const nc = this.ncData();
     //const rma = this.rmaData();
-    const scrap = b.scrap > 0 ? this.scheck() : false;
+  
     const done = i.finishedAt !== false;
+    const scrap = done ? i.history.find(x => x.type === 'scrap') : false;
 
     const status = done ? <i className='greenT'>Finished</i> : <i className='blueT'>In Process</i>;
 
@@ -99,6 +95,12 @@ export default class ItemPanel extends Component	{
   
           <br />
           <UnitSet id={b._id} bar={i.serial} unit={i.unit} lock={done} />
+          
+          <ScrapButton
+		        barcode={i.serial}
+		        id={b._id}
+		        ancs={a.ancillaryOption}
+		        lock={scrap} />
           
           <Remove
             action='item'

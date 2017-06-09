@@ -10,16 +10,16 @@ export default class ScrapList extends Component	{
 
   render() {
     
-    const dt = this.props.data;
-    const ct = this.props.count;
+    const data = this.props.data;
+    const count = data.length;
 
     return (
       <div className='cap'>
-        {dt.length > 0 ?
+        {count > 0 ?
           <details className='red'>
-            <summary>Scrapped {Pref.item}s: {ct}</summary>
+            <summary>Scrapped {Pref.item}s: {count}</summary>
           <div>
-            {dt.map( (entry, index)=>{
+            {data.map( (entry, index)=>{
               return (
                 <JumpFind
                   key={index}

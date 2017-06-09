@@ -169,6 +169,19 @@ Meteor.methods({
     }
   },
   
+  setFlow(widgetId, editId, flowTitle, flowObj) {
+    if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
+      WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'flows.flowKey': editId}, {
+        $set : {
+          'flows.$.title': flowTitle,
+          'flows.$.flow': flowObj
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
   pullFlow(widgetId, fKey) {
     const inUseR = BatchDB.findOne({river: fKey});
     const inUseRA = BatchDB.findOne({riverAlt: fKey});

@@ -5,30 +5,10 @@ import Pref from '/client/global/pref.js';
 
 import JumpFind from '../../../components/smallUi/JumpFind.jsx';
 import Progress from '../../../components/bigUi/Progress.jsx';
-import ScrapList from '../../../components/smallUi/ScrapList.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';
 import ShortNotes from '../../../components/smallUi/ShortNotes.jsx';
 
 export default class BatchCard extends Component	{
-
-  /// this could be rewritten using the es5 .filter() method
-  filter() {
-    const data = this.props.batchData.items;
-    let scList = [];
-    data.map( (entry)=>{
-      // check history for scraps
-      if(this.props.batchData.scrap > 0) {
-        for(let value of entry.history) {
-          // scraps
-          if(value.type === 'scrap') {
-            scList.push(entry.barcode);
-          // other
-          }else{null}
-        }
-      }
-    });
-    return scList;
-  }
 
   render() {
 
@@ -39,8 +19,6 @@ export default class BatchCard extends Component	{
     const v = w.versions.find( x => x.versionKey === b.versionKey );
     
     const flow = w.flows.find( x => x.flowKey === b.river);
-    
-    let filter = this.filter();
 
     return (
       <SlideDownWrap>
@@ -55,8 +33,6 @@ export default class BatchCard extends Component	{
             {b.finishedAt !== false ?
               <p>finished: {moment(b.finishedAt).calendar()}</p>
             : null}
-            
-            <ScrapList data={filter} count={b.scrap} />
     
             <NoteLine entry={b.notes} id={b._id} versionKey={false} />
             

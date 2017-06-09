@@ -26,8 +26,7 @@ Meteor.methods({
         nonCon: [],
         escaped: [],
         cascade: [],
-        scrap: Number(0),
-        short: [],
+        blocks: [],
         });
       return true;
     }else{
@@ -169,6 +168,29 @@ Meteor.methods({
       }
   },
   
+  // delete \\
+  deleteItem(batchId, bar, pass) {
+    const doc = BatchDB.findOne({_id: batchId});
+    const subDoc = doc.items.find( x => x.serial === bar );
+    const inUse = subDoc.history.length > 0 ? true : false;
+    if(!inUse) {
+      const lock = subDoc.createdAt.toISOString();
+      const admin = Roles.userIsInRole(Meteor.userId(), 'remove');
+      const access = doc.orgKey === Meteor.user().orgKey;
+      const unlock = lock === pass;
+      if(admin && access && unlock) {
+    		BatchDB.update(batchId, {
+          $pull : { items: { serial: bar }
+        }});
+        return true;
+      }else{
+        return false;
+      }
+    }else{
+      return 'inUse';
+    }
+  },
+  
   //// fork, use alternative flow
   
   forkItem(id, bar, choice) {
@@ -284,6 +306,37 @@ Meteor.methods({
     }
   },
   
+    // Scrap \\
+  
+  scrapItem(batchId, bar, step, comm) {
+    if(Roles.userIsInRole(Meteor.userId(), 'qa')) {
+      // update item
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
+        // scrap entry to history
+        $push : { 
+  			  'items.$.history': {
+  			    key: new Meteor.Collection.ObjectID().valueOf(),
+            step: step,
+            type: 'scrap',
+            good: true,
+            time: new Date(),
+            who: Meteor.userId(),
+            comm: comm,
+            info: false
+  			  }
+  			},
+  			// finish item
+  			$set : { 
+  			  'items.$.finishedAt': new Date(),
+  			  'items.$.finishedWho': Meteor.userId()
+  			}
+      });
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
   //  remove a step
   pullHistory(batchId, bar, key) {
     if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
@@ -309,30 +362,6 @@ Meteor.methods({
       null;
     }
   },
-  
-  // delete \\
-  deleteItem(batchId, bar, pass) {
-    const doc = BatchDB.findOne({_id: batchId});
-    const subDoc = doc.items.find( x => x.serial === bar );
-    const inUse = subDoc.history.length > 0 ? true : false;
-    if(!inUse) {
-      const lock = subDoc.createdAt.toISOString();
-      const admin = Roles.userIsInRole(Meteor.userId(), 'remove');
-      const access = doc.orgKey === Meteor.user().orgKey;
-      const unlock = lock === pass;
-      if(admin && access && unlock) {
-    		BatchDB.update(batchId, {
-          $pull : { items: { serial: bar }
-        }});
-        return true;
-      }else{
-        return false;
-      }
-    }else{
-      return 'inUse';
-    }
-  },
-
 
 //// Non-Cons \\\\
   addNC(batchId, bar, ref, type, step) {
@@ -506,51 +535,13 @@ Meteor.methods({
   */
   
 
-  // Scrap \\
-  
-  scrapItem(batchId, bar, step, comm) {
-    if(Roles.userIsInRole(Meteor.userId(), 'qa')) {
-      // update item
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
-        // scrap entry to history
-        $push : { 
-  			  'items.$.history': {
-  			    key: new Meteor.Collection.ObjectID().valueOf(),
-            step: step,
-            type: 'scrap',
-            good: true,
-            time: new Date(),
-            who: Meteor.userId(),
-            comm: comm,
-            info: false
-  			  }
-  			},
-  			// finish item
-  			$set : { 
-  			  'items.$.finishedAt': new Date(),
-  			  'items.$.finishedWho': Meteor.userId()
-  			}
-      });
-      // increment batch scrap count
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
-        $inc : { 
-          scrap: Number(1)
-        }
-      });
-      return true;
-    }else{
-      return false;
-    }
-  },
-  
-
-  //// Shortages \\\\
+  //// Blockers \\\\
 
   addShort(batchId, prtNm, quant, com) {
     const auth = Roles.userIsInRole(Meteor.userId(), 'run');
     if(auth) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
-        $push : { short: {
+        $push : { blocks: {
           key: new Meteor.Collection.ObjectID().valueOf(),
           partNum: prtNm,
   			  quantity: quant,
@@ -569,9 +560,9 @@ Meteor.methods({
   resolveShort(batchId, shKey, act, alt) {
     const auth = Roles.userIsInRole(Meteor.userId(), 'run');
     if(auth) {
-  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'short.key': shKey}, {
+  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'blocks.key': shKey}, {
   			$set : { 
-  			  'short.$.resolve':
+  			  'blocks.$.resolve':
   			    {
   			      action: act,
               time: new Date(),
@@ -589,9 +580,9 @@ Meteor.methods({
   recShort(batchId, shKey) {
     const auth = Roles.userIsInRole(Meteor.userId(), 'run');
     if(auth) {
-  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'short.key': shKey}, {
+  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'blocks.key': shKey}, {
   			$set : { 
-  			  'short.$.followup': new Date()
+  			  'blocks.$.followup': new Date()
   			}
   		});
 			return true;
@@ -603,9 +594,9 @@ Meteor.methods({
   editShortCom(batchId, shKey, com) {
     const auth = Roles.userIsInRole(Meteor.userId(), 'run');
     if(auth) {
-  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'short.key': shKey}, {
+  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'blocks.key': shKey}, {
   			$set : { 
-  			  'short.$.comm': com
+  			  'blocks.$.comm': com
   			}
   		});
 			return true;
@@ -617,10 +608,10 @@ Meteor.methods({
   undoReShort(batchId, shKey) {
     const auth = Roles.userIsInRole(Meteor.userId(), 'run');
     if(auth) {
-  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'short.key': shKey}, {
+  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'blocks.key': shKey}, {
   			$set : { 
-  			  'short.$.resolve': false,
-  			  'short.$.followup': false
+  			  'blocks.$.resolve': false,
+  			  'blocks.$.followup': false
   			}
   		});
   		return true;
@@ -632,7 +623,7 @@ Meteor.methods({
   sRemove(batchId, shKey) {
     if(Roles.userIsInRole(Meteor.userId(), 'remove')) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
-        $pull : { short: { key: shKey }
+        $pull : { blocks: { key: shKey }
          }});
       return true;
     }else{

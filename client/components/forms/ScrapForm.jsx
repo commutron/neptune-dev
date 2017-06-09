@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
 import Alert from '/client/global/alert.js';
 
+import Model from '../smallUi/Model.jsx';
+
 //requires
 // id
 // barcode
@@ -20,7 +22,6 @@ export default class ScrapForm extends Component {
       if(error)
         console.log(error);
       if(reply) {
-        Meteor.call('updateScrap', batchId);
         Bert.alert(Alert.caution);
       }else{
         console.log('BLOCKED BY SERVER METHOD');
@@ -37,6 +38,7 @@ export default class ScrapForm extends Component {
 		  <div>
 		    {Roles.userIsInRole(Meteor.userId(), 'qa') ?
     		  <form className='centre' onSubmit={this.handleScrap.bind(this)}>
+    		    <br />
     	      <p><b>Are you sure you want to do this? You Cannot Undo This.</b></p>
     	      <br />
     	      <p><label htmlFor='currep'>current process</label><br />
@@ -78,5 +80,25 @@ export default class ScrapForm extends Component {
 		    }
 		  </div>
     );
+  }
+}
+
+
+export class ScrapButton extends Component {
+  
+  render() {
+    
+    return(
+      <Model
+        button={Pref.scrap}
+        title={Pref.scrap + ' ' + Pref.item}
+        type='action clear redT'
+        lock={this.props.lock}>
+        <ScrapForm
+		      barcode={this.props.barcode}
+		      id={this.props.id}
+		      ancs={this.props.ancs} />
+      </Model>
+      );
   }
 }

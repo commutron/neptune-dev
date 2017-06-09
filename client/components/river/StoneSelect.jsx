@@ -53,12 +53,15 @@ export default class StoneSelect extends Component	{
     
     // end of flow
     Session.set('nowStep', 'done');
-    return(
+    return [
+      flow.length,
+      (
       <div className='greenT centre cap'>
         <h2>{Pref.trackLast}ed</h2>
         <h3>{moment(bDone[bDone.length -1].time).calendar()}</h3>
       </div>
-    );
+      )
+    ];
   }
 
   render() {
@@ -70,13 +73,15 @@ export default class StoneSelect extends Component	{
     return (
       <div>
         {current[1]}
-        <FirstRepeat
-          flowStep={lastStep}
-          id={this.props.id}
-          barcode={this.props.barcode}
-          history={this.props.history}
-          users={this.props.users}
-          methods={this.props.methods} />
+        {lastStep ?
+          <FirstRepeat
+            flowStep={lastStep}
+            id={this.props.id}
+            barcode={this.props.barcode}
+            history={this.props.history}
+            users={this.props.users}
+            methods={this.props.methods} />
+          :null}
       </div>
     );
   }

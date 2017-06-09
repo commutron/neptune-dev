@@ -20,10 +20,12 @@ export default class Progress extends Component	{
     } */
     let history = 0;
     let firsts = new Set();
+    let scraps = 0;
     for(var item of b.items) {
       for(var entry of item.history) {
         entry.accept && entry.type !== 'first' ? history += 1 : false;
         entry.type === 'first' ? firsts.add(entry.step) : false;
+        entry.type === 'scrap' ? scraps += 1 : false;
       }
     }
     let doneSteps = history + firsts.size;
@@ -50,6 +52,8 @@ export default class Progress extends Component	{
         
         {this.props.detail ? <b className='redT'>{ncF}/{nc} {Pref.nonCon}s remaining</b> : null}
         <progress className='proBad' value={ncF} max={nc}></progress>
+        
+        {scraps > 0 ? <b className='redT'>{Pref.scrap}: {scraps}</b> : null}
         
       </div>
     );

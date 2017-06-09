@@ -10,13 +10,18 @@ export default class FlowForm extends Component	{
   constructor() {
     super();
     this.state = {
-      steps: new Set()
+      steps: new Set(),
    };
     this.removeOne = this.removeOne.bind(this);
   }
   
   sendUp() {
-    this.props.onClick(this.state.steps);
+    // steps set from state
+    let list = this.state.steps;
+    // add the finish step back on the end
+    list.add(this.props.end);
+    // Unlock save button
+    this.props.onClick(list);
   }
 
   addStep(e) {
@@ -33,53 +38,40 @@ export default class FlowForm extends Component	{
     // set how key in the track object
     step['how'] = h;
     
-    // take of the end finish step
+    // take off the end finish step
     list.delete(this.props.end);
     
     // add step to list
     list.add(step);
-    // add the finish step back on the end
-    list.add(this.props.end);
     // update state with the new list
-    this.setState({steps: list });
+    this.setState({ steps: list });
     
     // clear form
     this.rStep.value = '';
     this.wika.value = '';
+    
+    // lock save button
+    this.props.onClick(false);
     
   }
 
   removeOne(entry) {
     const curr = this.state.steps;
     const nope = entry;
+    // take of the end finish step
+    curr.delete(this.props.end);
+    // take off selected step
     curr.delete(nope);
     this.setState({steps: curr });
+    // lock save button
+    this.props.onClick(false);
   }
-  
-  /* not atached to existing flow
-  reset() {
-    let list = new Set();
-    let saved = this.props.flow[0]; 
-      for(var s of saved) {
-        if(s.flow.type !== 'finish') {
-          list.add(s.step + '|' + s.type + '|' + s.how);
-        }else{null}
-      }
-      this.setState({ steps: list });
-    } */
-    
-  /*
-    better UI, check for duplicate flow name 
-    const doc = GroupDB.findOne({_id: id});
-    const widget = doc.widgets.find(x => x.wIdget === widgetId);
-    const duplicate = widget.flows.find(x => x.flowId === flowId);
-  */
     
   clear() {
     this.setState({ steps: new Set() });
+    // lock save button
+    this.props.onClick(false);
   }
-  
-  // future - edit an existing flow
 
   render() {
 
@@ -121,24 +113,34 @@ export default class FlowForm extends Component	{
                 </li>
               )})}
           </ul>
-          <br />
+        <br />
+        <i>Finish step is automatic</i>
+        <br />
         <button
           className='smallAction clear up'
           onClick={this.clear.bind(this)}
-          onMouseUp={this.props.onClear}
           disabled={!this.state.steps.size}>clear</button>
         <button
           value={steps}
           className='smallAction clear greenT up'
-          disabled={!this.state.steps.has(this.props.end)}
+          disabled={false}
           onClick={this.sendUp.bind(this)}>Set {Pref.flow}</button>
       </div>
     </div>
     );
   }
 
-/*
   componentDidMount() {
-    this.reset();
-  } */
+    const base = this.props.baseline;
+    const ops = this.props.options;
+    if(base) {
+      baseSet = new Set();
+      for(let t of base) {
+        let o = ops.find(x => x.key === t.key);
+        o ? o['how'] = t.how : null;
+        o ? baseSet.add(o) : null;
+      }
+      this.setState({ steps: baseSet });
+    }else{null}
+  }
 }

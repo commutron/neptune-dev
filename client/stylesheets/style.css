@@ -240,6 +240,10 @@
   text-transform: uppercase;
 }
 
+.small {
+  font-size: 0.75rem;
+}
+
 .big {
   font-size: 1.5em;
 }
