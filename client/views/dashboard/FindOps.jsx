@@ -14,7 +14,7 @@ import ItemPanel from './panels/ItemPanel.jsx';
 import BatchPanel from './panels/BatchPanel.jsx';
 import WidgetPanel from './panels/WidgetPanel.jsx';
 import GroupPanel from './panels/GroupPanel.jsx';
-import ShortPanel from './panels/ShortPanel.jsx';
+import BlockPanel from './panels/BlockPanel.jsx';
 import ScrapPanel from './panels/ScrapPanel.jsx';
 
 import BatchesList from './lists/BatchesList.jsx';
@@ -150,10 +150,10 @@ export default class FindOps extends Component	{
       );
     }
     
-    if(orb === Pref.missingPart) {
-      Session.set('now', Pref.missingPart);
+    if(orb === Pref.block) {
+      Session.set('now', Pref.block);
       return (
-        <ShortPanel batchData={allBatch} />
+        <BlockPanel batchData={allBatch} />
       );
     }
     if(orb === Pref.scrap) {

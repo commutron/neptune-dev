@@ -72,10 +72,10 @@ Meteor.methods({
     const inUse = doc.items.some( x => x.history.length > 0 ) ? true : false;
     if(!inUse) {
       const lock = doc.createdAt.toISOString();
-      const user = Roles.userIsInRole(Meteor.userId(), 'remove');
+      const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
       const access = doc.orgKey === Meteor.user().orgKey;
       const unlock = lock === pass;
-      if(user && access && unlock) {
+      if(auth && access && unlock) {
         BatchDB.remove(batch);
         return true;
       }else{
@@ -175,10 +175,10 @@ Meteor.methods({
     const inUse = subDoc.history.length > 0 ? true : false;
     if(!inUse) {
       const lock = subDoc.createdAt.toISOString();
-      const admin = Roles.userIsInRole(Meteor.userId(), 'remove');
+      const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
       const access = doc.orgKey === Meteor.user().orgKey;
       const unlock = lock === pass;
-      if(admin && access && unlock) {
+      if(auth && access && unlock) {
     		BatchDB.update(batchId, {
           $pull : { items: { serial: bar }
         }});
@@ -566,100 +566,67 @@ Meteor.methods({
 
   //// Blockers \\\\
 
-  addShort(batchId, prtNm, quant, com) {
-    const auth = Roles.userIsInRole(Meteor.userId(), 'run');
-    if(auth) {
+  addBlock(batchId, blockTxt) {
+    if(Meteor.userId()) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $push : { blocks: {
           key: new Meteor.Collection.ObjectID().valueOf(),
-          partNum: prtNm,
-  			  quantity: quant,
+          block: blockTxt,
           time: new Date(),
           who: Meteor.userId(),
-          comm: com,
-          resolve: false,
-          followup: false
-          }}});
-          return true;
-        }else{
-          return false;
-        }
+          solve: false
+        }}});
+      return true;
+    }else{
+      return false;
+    }
   },
   
-  resolveShort(batchId, shKey, act, alt) {
+  editBlock(batchId, blKey, blockTxt) {
+    const doc = BatchDB.findOne({_id: batchId});
+    const subDoc = doc.blocks.find( x => x.key === blKey );
+    const mine = subDoc.who === Meteor.userId();
+    const auth = Roles.userIsInRole(Meteor.userId(), 'run');
+    if(mine || auth) {
+  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'blocks.key': blKey}, {
+  			$set : { 
+  			  'blocks.$.block': blockTxt,
+  			  'blocks.$.who': Meteor.userId()
+  			}});
+			return true;
+    }else{
+      return false;
+    }
+  },
+  
+  solveBlock(batchId, blKey, act) {
     const auth = Roles.userIsInRole(Meteor.userId(), 'run');
     if(auth) {
-  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'blocks.key': shKey}, {
+  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'blocks.key': blKey}, {
   			$set : { 
-  			  'blocks.$.resolve':
+  			  'blocks.$.solve':
   			    {
   			      action: act,
               time: new Date(),
               who: Meteor.userId(),
-              alt: alt
             }
-  			}
-  		});
-  		return true;
-    }else{
-      return false;
-    }
-  },
-  
-  recShort(batchId, shKey) {
-    const auth = Roles.userIsInRole(Meteor.userId(), 'run');
-    if(auth) {
-  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'blocks.key': shKey}, {
-  			$set : { 
-  			  'blocks.$.followup': new Date()
-  			}
-  		});
-			return true;
-    }else{
-      return false;
-    }
-  },
-  
-  editShortCom(batchId, shKey, com) {
-    const auth = Roles.userIsInRole(Meteor.userId(), 'run');
-    if(auth) {
-  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'blocks.key': shKey}, {
-  			$set : { 
-  			  'blocks.$.comm': com
-  			}
-  		});
-			return true;
-    }else{
-      return false;
-    }
-  },
-  
-  undoReShort(batchId, shKey) {
-    const auth = Roles.userIsInRole(Meteor.userId(), 'run');
-    if(auth) {
-  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'blocks.key': shKey}, {
-  			$set : { 
-  			  'blocks.$.resolve': false,
-  			  'blocks.$.followup': false
-  			}
-  		});
+  			}});
   		return true;
     }else{
       return false;
     }
   },
 
-  sRemove(batchId, shKey) {
-    if(Roles.userIsInRole(Meteor.userId(), 'remove')) {
+  removeBlock(batchId, blKey) {
+    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
-        $pull : { blocks: { key: shKey }
+        $pull : { blocks: { key: blKey }
          }});
       return true;
     }else{
       return false;
     }
   },
-
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 

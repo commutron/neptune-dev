@@ -2,10 +2,10 @@ import React, {Component} from 'react';
 import SlideDownWrap from '/client/components/tinyUi/SlideDownWrap.jsx';
 import Pref from '/client/global/pref.js';
 
-import ShortTable from '../../../components/bigUi/ShortTable.jsx';
+import BlockTable from '../../../components/bigUi/BlockTable.jsx';
 
 //requires batchData
-export default class ShortPanel extends Component	{
+export default class BlockPanel extends Component	{
 
   render() {
 
@@ -15,10 +15,10 @@ export default class ShortPanel extends Component	{
       <SlideDownWrap>
         <div className='card'>
           <div className='space'>
-            <h1 className='cap'>{Pref.missingPart}s</h1>
+            <h1 className='cap'>{Pref.block}s</h1>
             <hr />
   
-            <ShortTable batchData={b} />
+            <BlockTable batchData={b} />
   
   		    <br />
           <hr />

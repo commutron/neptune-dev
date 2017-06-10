@@ -8,6 +8,6 @@ I don't recommend anyone try to run it, nevermind use it.
 
 Although if you can understand my (slightly nuts) river metaphor naming scheme, we can be friends.
 
-Created for Commutron Ind. A Electronics Manufacture in Elbow, Saskatchewan, Canada.
+Created for Commutron Ind. An Electronics Manufacture in Elbow, Saskatchewan, Canada.
 
 -- Matthew

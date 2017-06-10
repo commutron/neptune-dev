@@ -63,12 +63,9 @@ class Pref {
     // rma
     this.rma = 'rma';// ???
     this.rmaProcess = 'cascade'; // ???
-    // missing tracking
-    this.shortPart = 'part shortage';
-    this.missingPart = 'part shortage';
-    this.gotPart = 'received';
-    this.subPart = 'substitute';
-    
+    // blocker tracking
+    this.block = 'blocker';
+    this.solve = 'solve';
     // non tracked, ancillary processes
     this.ancillary = 'indirect';
 

@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
 
-import ShortGroup from './ShortGroup.jsx';
+import BlockGroup from './BlockGroup.jsx';
 
 // requires data
 // all batchData
-export default class ShortTable extends Component {
+export default class BlockTable extends Component {
 
-  //// Shortage Table \\\\
+  //// Blocker Table \\\\
   render () {
     
     return (
@@ -16,17 +16,17 @@ export default class ShortTable extends Component {
           <thead className='yellow cap'>
             <tr>
               <th>{Pref.batch}</th>
-							<th>Part Number</th>
-							<th>Quantity</th>
-							<th>Discovered</th>
-							<th>Comment</th>
-              <th>Resolution</th>
+							<th>Blocker</th>
+							<th>Recorded</th>
+							<th>Solved</th>
+							<th></th>
+              <th></th>
               <th></th>
             </tr>
           </thead>
           {this.props.batchData.map( (entry, index)=>{
             return (
-              <ShortGroup key={index} batchData={entry} />
+              <BlockGroup key={index} batchData={entry} />
               );
           })}
         </table>

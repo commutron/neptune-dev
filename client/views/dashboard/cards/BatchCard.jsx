@@ -6,7 +6,7 @@ import Pref from '/client/global/pref.js';
 import JumpFind from '../../../components/smallUi/JumpFind.jsx';
 import Progress from '../../../components/bigUi/Progress.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';
-import ShortNotes from '../../../components/smallUi/ShortNotes.jsx';
+import BlockNotes from '../../../components/smallUi/BlockNotes.jsx';
 
 export default class BatchCard extends Component	{
 
@@ -38,7 +38,7 @@ export default class BatchCard extends Component	{
             
             <NoteLine entry={v.notes} id={w._id} versionKey={v.versionKey} />
             
-            <ShortNotes shData={b.short} />
+            <BlockNotes data={b.blocks} />
   
           </div>
   				

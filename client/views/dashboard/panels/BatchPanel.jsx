@@ -9,8 +9,8 @@ import JumpFind from '../../../components/smallUi/JumpFind.jsx';
 import FirstList from '../../../components/smallUi/FirstList.jsx';
 import ScrapList from '../../../components/smallUi/ScrapList.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';
-import ShortList from '../../../components/bigUi/ShortList.jsx';
-import ShortButton from '../../../components/forms/ShortButton.jsx';
+import BlockList from '../../../components/bigUi/BlockList.jsx';
+import BlockForm from '../../../components/forms/BlockForm.jsx';
 import ActiveLabel from '../../../components/smallUi/ActiveLabel.jsx';
 import Progress from '../../../components/bigUi/Progress.jsx';
 import Remove from '../../../components/forms/Remove.jsx';
@@ -68,7 +68,7 @@ export default class BatchPanel extends Component	{
     
     const riverTitle = flow ? flow.title : 'not found';
     const riverAltTitle = flowAlt ? flowAlt.title : 'not found';
-    const more = b.finishedAt === false; // no more boards if batch is finished
+    const done = b.finishedAt !== false; // no more boards if batch is finished
     
     const filter = this.filter();
     
@@ -127,9 +127,9 @@ export default class BatchPanel extends Component	{
 
           <hr />
           
-          <ShortList batchData={b} />
+          <BlockForm id={b._id} edit={false} lock={done} />
           
-          <ShortButton id={b._id} short={b.short} />
+          <BlockList id={b._id} data={b.blocks} lock={done} />
 
         <hr />
         </div>
@@ -150,12 +150,12 @@ export default class BatchPanel extends Component	{
           widget={w}
           river={b.river}
           riverAlt={b.riverAlt}
-          lock={!more} />
+          lock={done} />
         
         <MultiItemForm
           id={b._id}
           items={b.items}
-          more={more}
+          more={!done}
           unit={v.unit} />
           
         <NCEscape
