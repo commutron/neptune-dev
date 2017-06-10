@@ -64,7 +64,7 @@ export default class FirstForm extends Component	{
             ref={(i)=> this.good = i}
             defaultChecked='true'
             readOnly />
-          <label htmlFor='cptbl'>{Pref.good}</label><br />
+          <label className='beside' htmlFor='cptbl'>{Pref.good}</label><br />
         </p>
         <p>
           <input
@@ -74,7 +74,7 @@ export default class FirstForm extends Component	{
             ref={(i)=> this.methodI = i}
             defaultChecked={aoi}
             readOnly />
-          <label htmlFor='mthi'>{Pref.autoI} </label><br />
+          <label className='beside' htmlFor='mthi'>{Pref.autoI} </label><br />
         </p>
         <p><label htmlFor='wuilt'>{Pref.builder}</label><br />
           <select id='wuilt' ref={(i)=> this.wB = i} className='cap' multiple required>

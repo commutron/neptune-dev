@@ -74,7 +74,7 @@ class TopBar extends Component	{
     }
     
     return (
-      <div className='bleed middle'>
+      <div className='bleed primeNav'>
         <FindBox orb={this.props.orb} />
         <nav>
           <a className='title' href='/'>
@@ -100,12 +100,11 @@ class TopBar extends Component	{
               </a>
             </span>
           </RoleCheck>
-          <span className='rAlign middle'>
-            <DataToggle />
-            <TimeToggle />
-            <Chill name={this.props.user}/>
-          </span>
         </nav>
+        <span className='navSpacer'></span>
+        <DataToggle />
+        <TimeToggle />
+        <Chill name={this.props.user}/>
         <TimeFrame time={this.props.time} go={this.props.app.timeClock} />
       </div>
     );

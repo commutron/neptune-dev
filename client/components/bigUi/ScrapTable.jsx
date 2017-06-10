@@ -26,11 +26,9 @@ export default class ScrapTable extends Component {
             </tr>
           </thead>
           {this.props.batchData.map( (entry, index)=>{
-            if(entry.scrap > 0) {
-              return (
-                <ScrapGroup key={index} batchData={entry} />
-                );
-            }else{null}
+            return (
+              <ScrapGroup key={index} batchData={entry} />
+            );
           })}
         </table>
       </div>

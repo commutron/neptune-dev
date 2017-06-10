@@ -443,6 +443,18 @@ Meteor.methods({
     }else{null}
   },
   
+  ncRemove(batchId, ncKey) {
+    const auth = Roles.userIsInRole(Meteor.userId(), ['remove', 'qa']);
+    if(auth) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+        $pull : { nonCon: {key: ncKey}
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
   addEscape(batchId, ref, type, quant, ncar) {
     if(Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
@@ -457,16 +469,6 @@ Meteor.methods({
           }}});
     }else{null}
   },
-
-  // this has not been implemented or tested \\
-  /*
-  ncRemove(batchId, key) {
-  const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
-    BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': key}, {
-      $pull : { nonCon: { key: key }
-       }});
-  },
-  */
   
   // RMA Cascade //
   
@@ -489,10 +491,9 @@ Meteor.methods({
           who: Meteor.userId(),
           quantity: Number(qua),
           comm: com,
-          flow: flowObj,
-          nonCon: []
+          flow: flowObj
         }},
-        $set : { 
+        $set : {
   			  active: true
         }
       });
@@ -501,7 +502,41 @@ Meteor.methods({
       return false;
     }
   },
+    
+   /// editing an RMA Cascade
+   
+   editRMACascade(batchId, cKey, rmaId, qua, com) {
+    const doc = BatchDB.findOne({_id: batchId});
+    let dupe = doc.cascade.find( x => x.rmaId === rmaId );
+    dupe ? dupe.rmaId === rmaId ? dupe = false : null : null;
+    const auth = Roles.userIsInRole(Meteor.userId(), ['edit', 'qa']);
+    if(auth && !dupe) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'cascade.key': cKey}, {
+        $set : {
+          'cascade.$.rmaId': rmaId,
+          'cascade.$.quantity': qua,
+          'cascade.$.comm': com
+        }
+      });
+      return true;
+    }else{
+      return false;
+    }
+  },
   
+  pullRMACascade(batchId, cKey) {
+    const auth = Roles.userIsInRole(Meteor.userId(), ['remove', 'qa']);
+    if(auth) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'cascade.key': cKey}, {
+        $pull : { cascade: {key: cKey}
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+   
+   
   setRMA(batchId, bar, cKey) {
     if(Roles.userIsInRole(Meteor.userId(), ['qa', 'run', 'inspect'])) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
@@ -514,25 +549,19 @@ Meteor.methods({
     }
   },
   
-  
-  /// editing an RMA Cascade
-  
   /// unset an rma on an item
-  
-  /*
-  
-  pullRMA(batchId, rmaNum) {
-    if(Roles.userIsInRole(Meteor.userId(), 'remove')) {
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'rma.rma': rmaNum}, {
+  /// low risk, no inUse check
+  unsetRMA(batchId, bar, cKey) {
+    if(Roles.userIsInRole(Meteor.userId(), ['qa', 'remove'])) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
         $pull : {
-          rma : { rma : rmaNum }
+          'items.$.rma': cKey
         }});
       return true;
     }else{
       return false;
     }
   },
-  */
   
 
   //// Blockers \\\\

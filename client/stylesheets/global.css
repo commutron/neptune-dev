@@ -92,11 +92,6 @@ label {
   vertical-align: sub;
 }
 
-input[type='checkbox'] + label {
-  line-height: 1rem;
-  vertical-align: super;
-}
-
 input[type='checkbox'] {
   margin: 0 5px;
   width: 1rem;

@@ -1,13 +1,26 @@
 import React, {Component} from 'react';
-import moment from 'moment';
+// import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
-import UserNice from './UserNice.jsx';
+// import UserNice from './UserNice.jsx';
 
 // requires data
 // rma array
 
-export default class RMAList extends Component	{
+export default class RMALine extends Component	{
+  
+  popRMA(rmaId) {
+    let check = 'Are you sure you want to remove the ' + Pref.rma + ' from this ' + Pref.item;
+    const yes = window.confirm(check);
+    if(yes) {
+      const id = this.props.id;
+      const bar = this.props.bar;
+      Meteor.call('unsetRMA', id, bar, rmaId, (error)=>{
+        if(error)
+          console.log(error);
+      });
+    }else{null}
+  }
 
   render() {
     
@@ -18,19 +31,21 @@ export default class RMAList extends Component	{
         {data.length > 0 ?
           <details className='red'>
             <summary className='up'>{data.length + ' ' + Pref.rma}</summary>
-          <div>
-            { data.map( (dt, index)=>{
-              return (
-                <div key={index} className='infoBox'>
-                  <div className='titleBar'>
-                    RMA: {dt.rma} by <UserNice id={dt.createdWho} /> at {moment(dt.createdAt).calendar()}
-                  </div>
-                  <p>NCAR: {dt.ncar}</p>
-                  <p>Re Assembly Steps: {dt.reAssemble.toString()}</p>
-                </div>
-                );
-            })}
-          </div>
+            <ul>
+              {data.map( (entry, index)=>{
+                return(
+                  <li key={index}>
+                    {entry} -
+                    {Roles.userIsInRole(Meteor.userId(), ['qa', 'remove']) ?
+                      <button
+                        className='miniAction blackT'
+                        onClick={this.popRMA.bind(this, entry)}
+                        readOnly={true}
+                        ><i className='fa fa-times'></i>Unset</button>
+                    :null}
+                  </li>
+              )})}
+            </ul>
           </details>
           :
           null}

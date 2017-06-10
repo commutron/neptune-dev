@@ -56,6 +56,8 @@ class Pref {
     this.nonConType = 'type';
     this.nonConCat = 'category';
     this.skip = 'skip';
+    // escaped nonCons
+    this.escape = 'escaped';
     // scrap
     this.scrap = 'scrap';
     // rma

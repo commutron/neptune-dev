@@ -4,6 +4,7 @@
   line-height: 1;
   height: 100%;
   width: 100%;
+  min-width: 300px;
 	color: white;
 	border-top: 3px solid transparent;
 	border-right: 0;
@@ -15,6 +16,12 @@
   border-radius: 0%;
   -webkit-appearance: none;
   -moz-appearance: none;
+}
+
+@media screen and (max-width: 1000px){
+  #find {
+    min-width: 250px;
+  }
 }
 
 #find:focus {

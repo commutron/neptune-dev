@@ -38,7 +38,6 @@ export default createContainer( () => {
   let user = usfo ? usfo.username : false;
   let org = usfo ? usfo.org : false;
   let active = usfo ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
-  let hotSub = login ? Meteor.subscribe('appData') : false;
   if(!login) {
     return {
       orb: Session.get('now'),
@@ -50,12 +49,12 @@ export default createContainer( () => {
     };
   }else if(!active) {
     return {
-      ready: hotSub.ready(),
+      ready: false,
       login: Meteor.userId(),
     };
   }else{
     return {
-      ready: hotSub.ready(),
+      ready: true,
       orb: Session.get('now'),
       bolt: Session.get('allData'),
       login: Meteor.userId(),

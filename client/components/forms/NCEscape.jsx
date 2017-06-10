@@ -52,7 +52,7 @@ export default class NCEscape extends Component {
               <input
                 type='text'
                 id='nonponent'
-                ref={(i)=> this.cRefs = i}
+                ref={(i)=> this.ncRefs = i}
                 placeholder='eg. R45'
                 autoFocus='true'
                 required />

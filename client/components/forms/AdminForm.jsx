@@ -51,7 +51,8 @@ export class AdminUp extends Component	{
 export class AdminDown extends Component	{
   
   down() {
-    if(window.confirm('Are you sure you want to become a regular user?')) { 
+    const check = window.confirm('Are you sure you want to become a regular user?');
+    if(check) { 
     Meteor.call('adminDowngrade', (err, reply)=>{
       if (err)
         console.log(err);

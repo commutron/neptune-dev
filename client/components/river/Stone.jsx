@@ -37,7 +37,8 @@ export default class Stone extends Component	{
   		null;
   	}else{
   	  Meteor.setTimeout(()=> {
-  		  Session.get('ikyView') === false ? // if item card is displayed
+  		  let iky = Session.get('ikyView');
+  		  !iky || iky === false ? // if item card is displayed
   		    this.setState({lock: false})
   		  : null;
   	  }, 3000);

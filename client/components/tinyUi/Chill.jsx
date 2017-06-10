@@ -9,10 +9,17 @@ export default class Chill extends Component	{
 
   render() {
     return (
-      <button className='cold navIcon' onClick={this.brr}>
-        <i className="fa fa-sign-out fa-2x" aria-hidden="true"></i>
-        <span className='icontext cap'>logout {this.props.name}</span>
-      </button>
+      <span>
+        <input
+          type='button'
+          id='exitToggle'
+          onClick={this.brr}
+          readOnly />
+          <label htmlFor='exitToggle' id='exitSwitch' className='navIcon'>
+            <i className='fa fa-sign-out fa-2x' aria-hidden='true'></i>
+            <span className='icontext cap'>logout {this.props.name}</span>
+          </label>
+      </span>
     );
   }
 }

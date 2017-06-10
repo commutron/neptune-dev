@@ -7,7 +7,7 @@ import UserNice from '../../../components/smallUi/UserNice.jsx';
 
 import HistoryLine from '../../../components/smallUi/HistoryLine.jsx';
 import NCLine from '../../../components/smallUi/NCLine.jsx';
-//import RMALine from '../../../components/smallUi/RMALine.jsx';
+import RMALine from '../../../components/smallUi/RMALine.jsx';
 import { ScrapButton } from '../../../components/forms/ScrapForm.jsx';
 import ScrapBox from '../../../components/smallUi/ScrapBox.jsx';
 import NonConEdit from '../../../components/forms/NonConEdit.jsx';
@@ -26,19 +26,6 @@ export default class ItemPanel extends Component	{
     relevant.sort((nc1, nc2) => {return nc1.ref > nc2.ref});
     return relevant;
   }
-  
-  /*
-  rmaData() {
-    let relevant = [];
-    for (let value of this.props.batchData.rma) {
-      if(value.barcodes.includes(this.props.itemData.serial)) {
-        relevant.push(value);
-      }else{null}
-    }
-    relevant.sort((rma1, rma2) => {return rma1.createdAt > rma2.createdAt});
-    return relevant;
-  }
-  */
 
   render() {
 
@@ -47,7 +34,6 @@ export default class ItemPanel extends Component	{
     const i = this.props.itemData;
     
     const nc = this.ncData();
-    //const rma = this.rmaData();
   
     const done = i.finishedAt !== false;
     const scrap = done ? i.history.find(x => x.type === 'scrap') : false;
@@ -83,12 +69,12 @@ export default class ItemPanel extends Component	{
               <summary>{nc.length} {Pref.nonCon}s</summary>
               {nc.map( (entry, index)=>{
                 return ( 
-                  <NCLine key={index} entry={entry} /> 
+                  <NCLine key={index} id={b._id} entry={entry} /> 
                 )})}
               <NonConEdit data={nc} bar={i.serial} id={b._id} nons={a.nonConOption} />
             </details>
             
-            {/*<RMALine data={rma} />*/}
+            <RMALine id={b._id} bar={i.serial} data={i.rma} />
   
           <hr />
           </div>

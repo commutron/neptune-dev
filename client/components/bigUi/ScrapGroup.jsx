@@ -14,7 +14,7 @@ export default class ShortGroup extends Component	{
       for(let value of entry.history) {
         // scraps
         if(value.type === 'scrap') {
-          scList.push([entry.barcode, value]);
+          scList.push([entry.serial, value]);
         // other
         }else{null}
       }

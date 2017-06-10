@@ -21,18 +21,6 @@ Meteor.publish("appData", function(){
           // 'pin': 0
         }}),
       ];
-  /* 
-  // not a circumstance that should happen
-  }else if(!orgKey)  {
-    return [ 
-      Meteor.users.find({_id: this.userId},
-        {fields: {
-          'services': 0,
-          // 'orgKey': 0,
-          // 'pin': 0,
-        }}),
-      ];
-  */
   }else if(user) {
     return [ 
       AppDB.find({orgKey: orgKey}),

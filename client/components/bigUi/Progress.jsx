@@ -23,7 +23,7 @@ export default class Progress extends Component	{
     let scraps = 0;
     for(var item of b.items) {
       for(var entry of item.history) {
-        entry.accept && entry.type !== 'first' ? history += 1 : false;
+        entry.good && entry.type !== 'first' ? history += 1 : false;
         entry.type === 'first' ? firsts.add(entry.step) : false;
         entry.type === 'scrap' ? scraps += 1 : false;
       }
@@ -36,10 +36,7 @@ export default class Progress extends Component	{
       n.inspect !== false || n.skip !== false ? ncF -= 1 : false;
     }
     
-    if(b.finishedAt !== false) {
-      doneSteps = 1;
-      steps = 1;
-    }else{null}
+    b.finishedAt !== false ? (doneSteps = 1, steps = 1) : null;
 
 
     return (

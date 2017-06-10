@@ -18,7 +18,7 @@ import BatchForm from '../../../components/forms/BatchForm.jsx';
 import RiverSelect from '../../../components/forms/RiverSelect.jsx';
 import NCEscape from '../../../components/forms/NCEscape.jsx';
 import RMAForm from '../../../components/forms/RMAForm.jsx';
-//import RMAList from '../../../components/smallUi/RMAList.jsx';
+import RMAList from '../../../components/smallUi/RMAList.jsx';
 import MultiItemForm from '../../../components/forms/MultiItemForm.jsx';
 
 // props
@@ -34,7 +34,13 @@ export default class BatchPanel extends Component	{
     const data = this.props.batchData.items;
     let fList = [];
     let scList = [];
+    let rmaList = [];
     data.map( (item)=>{
+      if(item.rma.length > 0) {
+        for(let id of item.rma) {
+          rmaList.push(id);
+        }
+      }else{null}
       // check history for...
       for(let v of item.history) {
         // firsts
@@ -43,19 +49,8 @@ export default class BatchPanel extends Component	{
         v.type === 'scrap' ? scList.push(item.serial) : null;
       }
      });
-     return [fList, scList];
+     return [fList, scList, rmaList];
   }
-  /*
-  rmas() {
-    const dt = this.props.batchData.rma;
-    let past = [];
-    if(dt.length > 0) {
-      for(var x of dt) {
-        past.push(x.rma);
-      }
-    }else{null}
-    return past;
-  }*/
 
   render() {
 
@@ -119,9 +114,16 @@ export default class BatchPanel extends Component	{
 
           <FirstList data={filter[0]} />
           
-          {/*<RMAList id={b._id} data={b.rma} nons={a.nonConOption} rmas={a.rmaOption} />*/}
+          <RMAList
+            id={b._id}
+            data={b.cascade}
+            options={a.trackOption}
+            end={a.lastTrack}
+            inUse={filter[2]} />
           
           <ScrapList data={filter[1]} />
+          
+          <p>{Pref.escape} {Pref.nonCon}s: {b.escaped.length}</p>
 
           <hr />
           
@@ -162,7 +164,7 @@ export default class BatchPanel extends Component	{
         
         <RMAForm
           id={b._id}
-          exist={false}
+          edit={false}
           options={a.trackOption}
           end={a.lastTrack} />
         

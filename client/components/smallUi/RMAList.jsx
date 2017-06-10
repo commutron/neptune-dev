@@ -9,38 +9,55 @@ import RMAForm from '../forms/RMAForm.jsx';
 // rma array
 
 export default class RMAList extends Component	{
+  
+  pullRMA(cKey) {
+    let check = 'Are you sure you want to remove this ' + Pref.rmaProcess;
+    const yes = window.confirm(check);
+    if(yes) {
+      const id = this.props.id;
+      Meteor.call('pullRMACascade', id, cKey, (error)=>{
+        if(error)
+          console.log(error);
+      });
+    }else{null}
+  }
 
   render() {
     
     const data = this.props.data;
-    const id = this.props.id;
 
     return (
       <div>
         {data.length > 0 ?
           <details className='red'>
-            <summary className='up'>{data.length} {Pref.rma}</summary>
+            <summary className='up'>{data.length} {Pref.rmaProcess}</summary>
           <div>
             { data.map( (dt, index)=>{
+            let started = this.props.inUse.includes(dt.key);
               return (
                 <div key={index} className='infoBox'>
                   <div className='titleBar'>
-                    RMA: {dt.rma} by <UserNice id={dt.createdWho} /> at {moment(dt.createdAt).calendar()}
-                    { !dt.resolve ? 
-                        <span className='rAlign'>
-                          <RMAForm
-                            id={id}
-                            past={[]}
-                            exist={dt}
-                            nons={this.props.nons}
-                            rmas={this.props.rmas} />
-                        </span>
-                    : null }
+                    RMA: {dt.rmaId} by <UserNice id={dt.who} /> at {moment(dt.time).calendar()}
+                    {!started ?
+                      <span className='rAlign'>
+                      {Roles.userIsInRole(Meteor.userId(), ['qa', 'edit']) ?
+                        <RMAForm
+                          id={this.props.id}
+                          edit={dt} />
+                      :null}
+                      {Roles.userIsInRole(Meteor.userId(), ['qa', 'remove']) ?
+                        <button
+                          className='miniAction blackT'
+                          onClick={this.pullRMA.bind(this, dt.key)}
+                          readOnly={true}
+                          ><i className='fa fa-times'></i>delete</button>
+                      :null}
+                      </span>
+                    : null}
                   </div>
-                  <p>NCAR: {dt.ncar}</p>
-                  <p>Affected {Pref.item}s: {dt.barcodes.toString()}</p>
-                  <p>Re Assembly Steps: {dt.reAssemble.toString()}</p>
-                  <p>Resolved: {dt.resolve.toString()}/{dt.barcodes.length}</p>
+                  <p>quantity required: {dt.quantity}</p>
+                  <p>{dt.comm}</p>
+                  <p>Steps: {dt.flow.length}</p>
                 </div>
                 );
             })}

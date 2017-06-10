@@ -20,11 +20,11 @@ export default class UserForm extends Component {
   
   forcePassword(e) {
     e.preventDefault();
-    window.confirm('Are you sure you to change this users password?');
+    const check = window.confirm('Are you sure you to change this users password?');
     const newPass = prompt('New Password', '');
     const newConfirm = prompt('New Password Again', '');
     const self = Meteor.userId() === this.props.id;
-    if(!self && newPass === newConfirm) {
+    if(check && !self && newPass === newConfirm) {
       Meteor.call('forcePasswordChange', this.props.id, newPass, (error, reply)=>{
         if(error)
           console.log(error);

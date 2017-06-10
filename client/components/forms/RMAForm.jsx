@@ -16,19 +16,20 @@ export default class RMAForm extends Component {
       flow: false
     };
   }
-    
+  
   setFlow(recSet) {
     let input = recSet;
-    this.setState({ flow: [...input] });
-  }
-  
-  clearFlow() {
-    this.setState({ flow: false });
+    if(!input) {
+      this.setState({ flow: false });
+    }else{
+      this.setState({ flow: [...input] });
+    }
   }
   
   save(e) {
     e.preventDefault();
     this.go.disabled = true;
+    const cKey = this.props.edit.key;
     const id = this.props.id;
     const flowObj = this.state.flow;
     
@@ -36,23 +37,31 @@ export default class RMAForm extends Component {
     const quantity = this.quant.value.trim().toLowerCase();
     const comm = this.comm.value.trim().toLowerCase();
     
-    if(!flowObj) {
-      Bert.alert(Alert.warning);
-    }else{
-      Meteor.call('addRMACascade', id, rmaId, quantity, comm, flowObj, ()=>{
+    if(cKey) {
+      Meteor.call('editRMACascade', id, cKey, rmaId, quantity, comm, (error)=>{
+        if(error)
+          console.log(error);
         Bert.alert(Alert.success);
-        this.rmaNum.value = '';
-        this.quant.value = '';
-        this.comm.value = '';
         this.out.value = 'saved';
-        this.setState({ flow: false });
       });
-    }
+      
+    }else{
     
-    /*
-    function edit(id, rma, ncar, bars, after) {
-      Meteor.call('editRMA', id, rma, ncar, bars);
-    }*/
+      if(!flowObj) {
+        Bert.alert(Alert.warning);
+      }else{
+        Meteor.call('addRMACascade', id, rmaId, quantity, comm, flowObj, (error)=>{
+          if(error)
+            console.log(error);
+          Bert.alert(Alert.success);
+          this.rmaNum.value = '';
+          this.quant.value = '';
+          this.comm.value = '';
+          this.out.value = 'saved';
+          this.setState({ flow: false });
+        });
+      }
+    }
   }
   
   clean() {
@@ -60,6 +69,10 @@ export default class RMAForm extends Component {
   }
 
   render () {
+    
+    const edit = this.props.edit ? this.props.edit : false;
+    const numE = edit ? edit.rmaId : '';
+    const quE = edit ? edit.quantity : '';
 
     return (
       <Model
@@ -79,6 +92,7 @@ export default class RMAForm extends Component {
                 type='text'
                 id='rum'
                 ref={(i)=> this.rmaNum = i}
+                defaultValue={numE}
                 placeholder='RMA Number'
                 required />
             </p>
@@ -101,11 +115,15 @@ export default class RMAForm extends Component {
         
         <hr />
         
-        <FlowBuilder
-          options={this.props.options}
-          end={this.props.end}
-          onClick={e => this.setFlow(e)}
-          onClear={e => this.clearFlow()} />
+        {!this.props.edit ?
+        
+          <FlowBuilder
+            options={this.props.options}
+            end={this.props.end}
+            baseline={false}
+            onClick={e => this.setFlow(e)} />
+            
+        : <p>{Pref.flow} is locked</p>}
           
         <hr />
         
@@ -121,5 +139,9 @@ export default class RMAForm extends Component {
         </div>
       </Model>
     );
+  }
+  
+  componentDidMount() {
+    this.props.edit ? this.setState({ flow: true }) : null;
   }
 }

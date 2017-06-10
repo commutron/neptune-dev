@@ -93,7 +93,7 @@ export class ScrapButton extends Component {
         button={Pref.scrap}
         title={Pref.scrap + ' ' + Pref.item}
         type='action clear redT'
-        lock={this.props.lock}>
+        lock={!Roles.userIsInRole(Meteor.userId(), 'qa') || this.props.lock}>
         <ScrapForm
 		      barcode={this.props.barcode}
 		      id={this.props.id}
