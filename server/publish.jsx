@@ -11,7 +11,7 @@ Meteor.publish("appData", function(){
   const orgKey = user ? user.orgKey : false;
   const email = user ? user.emails : false;
   const dev0 = Meteor.settings.devMaster;
-  const dev1 = Roles.userIsInRole(x._id, 'devMaster');
+  const dev1 = Roles.userIsInRole(this.userId, 'devMaster');
   const devMode = email && dev0 ? dev0 === email[0].address : dev1;
   if(devMode) {
     return [
