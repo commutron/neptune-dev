@@ -13,11 +13,10 @@ Meteor.methods({
         });
       return true;
     }else{
-      const xx = Meteor.settings ? Meteor.settings : false;
-      const yy = getUsersInRole('devMaster').fetch();
-      const dev0 = xx ? xx.twoFactor : false;
-      const dev1 = yy ? yy[0].pin : false;
-        if(dev0 === pin || dev1 === pin) {
+      const dev = Meteor.settings ? 
+                  Meteor.settings.twoFactor : 
+                  Roles.getUsersInRole('devMaster').fetch()[0].pin;
+        if(dev === pin) {
           Roles.addUsersToRoles(Meteor.userId(), 'active');
           Meteor.users.update(Meteor.userId(), {
             $set: {
@@ -140,9 +139,10 @@ Meteor.methods({
   // Accounts.addEmail(Meteor.userId(), newEmail)
   
   permissionSet(user, role) {
-    const auth = Roles.userIsInRole(Meteor.userId(), ['devMaster', 'admin']);
+    const dev = Roles.userIsInRole(Meteor.userId(), 'devMaster');
+    const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
     const team = Meteor.users.findOne({_id: user, orgKey: Meteor.user().orgKey});
-    if(auth && team) {
+    if(dev || auth && team) {
       Roles.addUsersToRoles(user, role);
       return true;
     }else{
@@ -151,9 +151,10 @@ Meteor.methods({
   },
   
   permissionUnset(user, role) {
-    const auth = Roles.userIsInRole(Meteor.userId(), ['devMaster', 'admin']);
+    const dev = Roles.userIsInRole(Meteor.userId(), 'devMaster');
+    const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
     const team = Meteor.users.findOne({_id: user, orgKey: Meteor.user().orgKey});
-    if(auth && team) {
+    if(dev || auth && team) {
       Roles.removeUsersFromRoles(user, role);
       return true;
     }else{
