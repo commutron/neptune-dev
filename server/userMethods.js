@@ -15,7 +15,7 @@ Meteor.methods({
     }else{
       const xx = Meteor.settings ? Meteor.settings : false;
       const yy = Meteor.users.find({roles: 'devMaster'}).fetch();
-      let unlock = yy ? yy.pin : false;
+      let unlock = yy ? yy[0].pin : false;
       xx ? unlock = xx.twoFactor : null;
         if(unlock === pin) {
           Roles.addUsersToRoles(Meteor.userId(), 'active');
