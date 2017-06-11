@@ -3,7 +3,7 @@ Meteor.methods({
   activate(pin) {
     const start = Meteor.users.find().fetch().length === 1 ? true : false;
     if(start) {
-      Roles.addUsersToRoles(Meteor.userId(), 'devMaster');
+      Roles.addUsersToRoles(Meteor.userId(), ['devMaster', 'active']);
       Meteor.users.update(Meteor.userId(), {
           $set: {
             pin: pin,
@@ -13,9 +13,10 @@ Meteor.methods({
         });
       return true;
     }else{
-      const xx = Meteor.settings ? true : false;
+      const xx = Meteor.settings ? Meteor.settings : false;
       const yy = Meteor.users.find({roles: 'devMaster'}).fetch();
-      const unlock = xx ? xx.twoFactor : yy ? yy.pin : false;
+      let unlock = yy ? yy.pin : false;
+      xx ? unlock = xx.twoFactor : null;
         if(unlock === pin) {
           Roles.addUsersToRoles(Meteor.userId(), 'active');
           Meteor.users.update(Meteor.userId(), {
@@ -26,7 +27,9 @@ Meteor.methods({
             }
           });
           return true;
-        }else{null}
+        }else{
+          return false;
+        }
     }
   },
       
