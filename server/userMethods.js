@@ -1,18 +1,33 @@
 Meteor.methods({
     
   activate(pin) {
-    const unlock = Meteor.settings.twoFactor;
-      if(unlock === pin) {
-        Roles.addUsersToRoles(Meteor.userId(), 'active');
-        Meteor.users.update(Meteor.userId(), {
+    const start = Meteor.users.find().fetch().length === 1 ? true : false;
+    if(start) {
+      Roles.addUsersToRoles(Meteor.userId(), 'devMaster');
+      Meteor.users.update(Meteor.userId(), {
           $set: {
-            pin: false,
+            pin: pin,
             watchlist: [],
             memo: []
           }
         });
-        return true;
-      }else{null}
+      return true;
+    }else{
+      const xx = Meteor.settings ? true : false;
+      const yy = Meteor.users.find({roles: 'devMaster'}).fetch();
+      const unlock = xx ? xx.twoFactor : yy ? yy.pin : false;
+        if(unlock === pin) {
+          Roles.addUsersToRoles(Meteor.userId(), 'active');
+          Meteor.users.update(Meteor.userId(), {
+            $set: {
+              pin: false,
+              watchlist: [],
+              memo: []
+            }
+          });
+          return true;
+        }else{null}
+    }
   },
       
 

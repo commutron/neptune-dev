@@ -10,8 +10,10 @@ Meteor.publish("appData", function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
   const email = user ? user.emails : false;
-  const staircase = email ? Meteor.settings.devMaster === email[0].address : false;
-  if(staircase) {
+  const dev0 = Meteor.settings.devMaster;
+  const dev1 = Roles.userIsInRole(x._id, 'devMaster');
+  const devMode = email && dev0 ? dev0 === email[0].address : dev1;
+  if(devMode) {
     return [
       AppDB.find(),
       Meteor.users.find({},
