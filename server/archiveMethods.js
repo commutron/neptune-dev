@@ -2,6 +2,50 @@ Meteor.methods({
   
   
   //// THIS IS ALL VERY OUT OF DATE \\\\
+  
+  /*
+  //// Batches Archive \\\\
+
+  ArchiveDB = {
+    achivedAt: new Date(),
+    archivedWho: Meteor.userId(),
+    batch: batchNum,
+    orgKey: Meteor.user().orgKey,
+    org: Meteor.user().org,
+    shareKey: false,
+    groupId: groupId,
+    group: groupName,
+    widgetId: widgetId,
+    widget: widgetName,
+    versionKey: vKey,
+    version: versionName,
+    tags: [],
+    createdAt: new Date(),
+    createdWhoId: Meteor.userId(),
+    createdWhoName: Meteor.user().username,
+    finishedAt: false,
+    start: 'sDate',
+    end: 'eDate',
+    notes: 'note',
+    processId: riverId,
+    processName: riverTitle,
+    altProcessId: riverAltId,
+    altProcessName: riverAltTitle,
+    altUsed: true,
+    serialRange: ['0001','0100'],
+    totalUnits: Number(98),
+    trackEntries: Number(10992),
+    trackTypes: ['build', 'finish'],
+    nonCons: Number(63),
+    nonConTypes: ['missing', 'bridge'], // get the types from escaped as well
+    nonConsEscaped: Number(3), // quantity of each
+    rmas: Number(7), // add up the activated
+    blocks: Number(4)
+  };
+
+   
+  
+*/
 
   //// Archive \\\\
   addYear(year) {

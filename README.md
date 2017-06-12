@@ -1,6 +1,6 @@
-Neptune Tracker
+Neptune Tracker v.0.2 alpha 2
 
-A highly customized Meteor web application for tracking items through a maufacturing process.
+A highly customized Meteor web application for tracking items through a manufacturing process.
 
 Highly experimental and rough all over.
 

@@ -9,11 +9,8 @@ ArchiveDB = new Mongo.Collection('archivedb');
 Meteor.publish("appData", function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  const email = user ? user.emails : false;
-  const dev0 = Meteor.settings.devMaster;
-  const dev1 = Roles.userIsInRole(this.userId, 'devMaster');
-  const devMode = email && dev0 ? dev0 === email[0].address : dev1;
-  if(devMode) {
+  const admin = Roles.userIsInRole(this.userId, 'admin');
+  if(admin) {
     return [
       AppDB.find(),
       Meteor.users.find({},

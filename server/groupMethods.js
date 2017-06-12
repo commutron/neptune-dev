@@ -11,9 +11,10 @@ Meteor.methods({
         group: groupName,
         alias: alias,
         orgKey: Meteor.user().orgKey,
+        shareKey: false,
         createdAt: new Date(),
   			createdWho: Meteor.userId(),
-  			share: false
+  			tags: []
         });
       return true;
     }else{

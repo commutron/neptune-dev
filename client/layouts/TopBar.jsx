@@ -8,7 +8,6 @@ import Freeze from '../components/tinyUi/Freeze.jsx';
 import InitialSetup from '../views/InitialSetup.jsx';
 import Login from '../views/Login.jsx';
 import ActivateUser from '../components/forms/ActivateUser.jsx';
-import OrgForm from '../components/forms/OrgForm.jsx';
 import FindBox from './FindBox.jsx';
 import Chill from '../components/tinyUi/Chill.jsx';
 import TimeToggle from '../components/tinyUi/TimeToggle.jsx';
@@ -35,28 +34,15 @@ class TopBar extends Component	{
         );
     }
     
-    if(!this.props.active) {
+    if(!this.props.active || !this.props.org) {
       return (
         <div className='bleed middle flexRR'>
           <Chill name={this.props.user} />
           <Freeze>
             <div>
-              <p>This user account is deactivated.</p>
-              <p>Contact your administrator.</p>
               <hr />
               <ActivateUser />
             </div>
-          </Freeze>
-        </div>
-        );
-    }
-    
-    if(!this.props.org) {
-      return (
-        <div className='bleed middle flexRR'>
-          <Chill name={this.props.user} />
-          <Freeze>
-            <OrgForm org={this.props.org} />
           </Freeze>
         </div>
         );

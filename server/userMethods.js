@@ -1,34 +1,38 @@
 Meteor.methods({
     
-  activate(pin) {
+  activate(pin, orgName) {
     const start = Meteor.users.find().fetch().length === 1 ? true : false;
     if(start) {
-      Roles.addUsersToRoles(Meteor.userId(), ['devMaster', 'active', 'admin']);
+      Roles.addUsersToRoles(Meteor.userId(), ['active', 'admin']);
       Meteor.users.update(Meteor.userId(), {
           $set: {
+            org: orgName,
+            orgKey: new Meteor.Collection.ObjectID().valueOf(),
             pin: pin,
             watchlist: [],
-            memo: []
+            inbox: []
           }
         });
       return true;
     }else{
-      const dev = Meteor.settings ? 
-                  Meteor.settings.twoFactor : 
-                  Roles.getUsersInRole('devMaster').fetch()[0].pin;
-        if(dev === pin) {
+      const admins = Roles.getUsersInRole('admin').fetch();
+      for(let x of admins) {
+        if(x.pin === pin && x.org === orgName) {
           Roles.addUsersToRoles(Meteor.userId(), 'active');
           Meteor.users.update(Meteor.userId(), {
             $set: {
+              org: x.org,
+              orgKey: x.orgKey,
               pin: false,
               watchlist: [],
-              memo: []
+              inbox: []
             }
           });
           return true;
         }else{
           return false;
         }
+      }
     }
   },
       
@@ -59,40 +63,6 @@ Meteor.methods({
       return false;
     }
   },
-    
-  joinOrg(org, pin) {
-    const members = Meteor.users.find({org: org}).fetch();
-      for(let x of members) {
-        const auth = Roles.userIsInRole(x._id, 'admin');
-        if(auth && x.pin === pin) {
-          Meteor.users.update(Meteor.userId(), {
-            $set: {
-              org: x.org,
-              orgKey: x.orgKey
-            }
-          });
-          return true;
-        }else{
-          null;
-        }
-      }
-      return false;
-  },
-  
-  createOrg(orgName) {
-    if(!Meteor.user().orgKey) {
-      Meteor.users.update(Meteor.userId(), {
-        $set: {
-          org: orgName,
-          orgKey: new Meteor.Collection.ObjectID().valueOf(),
-        }
-      });
-      return true;
-    }else{
-      return false;
-    }
-  },
-  
   
   // ability to kick a user out of an org
   removeFromOrg(badUserId, pin) {

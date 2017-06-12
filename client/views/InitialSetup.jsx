@@ -1,8 +1,15 @@
 import React, {Component} from 'react';
 
-import OrgForm from '../components/forms/OrgForm.jsx';
+import Spin from '../components/tinyUi/Spin.jsx';
 
 export default class InitialSetup extends Component	{
+  
+  constructor() {
+    super();
+    this.state = {
+      lock: true,
+    };
+  }
   
   hndlSet() {
     Meteor.call('addSetting', (err, reply)=>{
@@ -16,22 +23,40 @@ export default class InitialSetup extends Component	{
     });
   }
   
-  // add option to leave group now before there are any consequenses
+  unlock() {
+    Meteor.setTimeout(()=> {
+		  this.state ?
+		    this.setState({lock: false})
+		  : null;
+	  }, 4000);
+  }
+
   render() {
-    return (
-      <div className='space'>
-        <p>"{this.props.org}" is a new organization</p>
-        <hr />
-        <div className='centre'>
-          <form onSubmit={this.hndlSet}>
-            <button 
-              className='stone clear'
-            >START</button>
-          </form>
+  	
+  	if(!this.state.lock) {
+      return(
+        <div className='space'>
+          <p>"{this.props.org}" is a new organization</p>
+          <hr />
+          <div className='centre'>
+            <form onSubmit={this.hndlSet}>
+              <button
+                className='stone clear'
+              >START</button>
+            </form>
+          </div>
+          <hr />
         </div>
-        <hr />
-        <OrgForm org={this.props.org} />
-      </div>
+      );
+  	}
+      
+    return(
+      <Spin />
     );
   }
+  
+  componentDidMount() {
+    this.unlock();
+  }
+  
 }

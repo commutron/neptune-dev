@@ -10,6 +10,7 @@ Meteor.methods({
       BatchDB.insert({
   			batch: batchNum,
   			orgKey: Meteor.user().orgKey,
+  			shareKey: false,
   			widgetId: widgetId,
   			versionKey: vKey,
         tags: [],
