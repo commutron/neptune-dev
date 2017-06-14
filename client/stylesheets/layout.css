@@ -9,6 +9,12 @@
   clear: both;
 }
 
+/*
+html {
+  height: 100%;
+}
+*/
+
 body {
   background-color: rgb(25,25,25);
   color: white;
@@ -17,52 +23,10 @@ body {
   padding: 0;
 }
 
-header {
-  position: fixed;
-  z-index: 10;
-  float: left;
-  left: 0;
-  top: 0;
-  width: 100%;
-  min-width: 1000px;
-  height: 75px;
-  /*commutron brand blue*/
-  background-color: #1c75bc;
-  background-color: rgba(28,117,188,1);
-  -webkit-box-shadow: 0 0 15px 0.5px rgb(0,0,0);
-  -moz-box-shadow:    0 0 15px 0.5px rgb(0,0,0);
-  box-shadow:         0 0 15px 0.5px rgb(0,0,0);
-}
-
 main {
   text-align: left;
   background: rgb(25,25,25);
   z-index: 8;
-  position: absolute;
-  top: 75px;
-  left: 0px;
-  width: 100%;
-  min-width: 1000px;
-  
-}
-main:after {
-  content: '';
-  clear: both;
-}
-
-footer {
-  position: fixed;
-  z-index: 9;
-  left: 0px;
-  bottom: 0px;
-  width: 100%;
-  height: 20px;
-   /*commutron brand blue*/
-  background-color: #1c75bc;
-  background-color: rgba(28,117,188,1);
-  -webkit-box-shadow: 0 0 15px 0.5px rgb(0,0,0);
-  -moz-box-shadow:    0 0 15px 0.5px rgb(0,0,0);
-  box-shadow:         0 0 15px 0.5px rgb(0,0,0);
 }
 
 .ice {
@@ -74,6 +38,27 @@ footer {
   height: 100%;
   background-color: black;
   background-color: rgba(0,0,0,0.8);
+}
+
+.loading {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(0deg);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading > .logoSVG {
+  opacity: 0.2;
+  animation: spinAround 5s infinite linear;
+  width: 60vh;
+  height: 60vh;
+  -webkit-filter: drop-shadow( -5px -5px 5px #000 );
+          filter: drop-shadow( -5px -5px 5px #000 );
 }
 
 .findForm {
@@ -94,11 +79,12 @@ footer {
 
 .primeNav {
   width: auto;
+  height: 100%;
   display: flex;
   align-items: center;
   flex-direction: row;
   flex-wrap: nowrap;
-  justify-content: flex-start;
+  justify-content: space-between;
 }
 
 .navSpacer {
@@ -123,12 +109,91 @@ footer {
   flex-direction: row-reverse;
 }
 
+/* ============================================= */
+
+.basicContainer, .dashContainer {
+  display: grid;
+  grid-template-columns: 300px auto;
+  align-content: center;
+}
+
+
+.basicContainer {
+  grid-template-rows: 75px calc(100vh - 100px) 25px;
+  grid-template-areas: 
+    "headerSearch headerNav"
+    "mainFull mainFull"
+    "footer footer";
+}
+
+.dashContainer {
+  grid-template-rows: 75px calc(100vh - 75px);
+  grid-template-areas: 
+    "headerSearch headerNav"
+    "mainSplit mainSplit";
+}
+
+
+.gridHeaderSearch {
+  grid-area: headerSearch;
+}
+
+.gridHeaderNav {
+  grid-area: headerNav;
+  /*commutron brand blue*/
+  background-color: #1c75bc;
+  background-color: rgba(28,117,188,1);
+  -webkit-box-shadow: 0 0 15px 0.5px rgb(0,0,0);
+  -moz-box-shadow:    0 0 15px 0.5px rgb(0,0,0);
+  box-shadow:         0 0 15px 0.5px rgb(0,0,0);
+}
+
+
+.basicMainFull {
+  grid-area: mainFull;
+}
+
+.basicFooter {
+  grid-area: footer;
+  z-index: 9;
+   /*commutron brand blue*/
+  background-color: #1c75bc;
+  background-color: rgba(28,117,188,1);
+  -webkit-box-shadow: 0 0 15px 0.5px rgb(0,0,0);
+  -moz-box-shadow:    0 0 15px 0.5px rgb(0,0,0);
+  box-shadow:         0 0 15px 0.5px rgb(0,0,0);
+  white-space: nowrap;
+}
+
+.dashMainSplit {
+  display: grid;
+  grid-area: mainSplit;
+  grid-template-columns: 300px auto;
+  grid-template-rows: auto 75px;
+  grid-template-areas: 
+    "mainLeft mainRight"
+    "actionFooter actionFooter";
+}
+
+.dashMainLeft {
+  grid-area: mainLeft;
+}
+
+.dashMainRight {
+  grid-area: mainRight;
+}
+
+.dashAction {
+  grid-area: actionFooter;
+}
+
+/* ============================================= */
 
 .leftSide {
 	float: left;
   width: 300px;
-  height: calc(100% - 95px);
-  min-height: calc(100% - 95px);
+  height: calc(100% - 125px);
+  min-height: calc(100% - 125px);
   padding: 0;
   margin: 0;
   z-index: 5;
@@ -144,13 +209,15 @@ footer {
 	float: right;
   width: calc(100% - 300px);
   min-width: 500px;
-  height: calc(100% - 95px);
-  min-height: calc(100% - 95px);
+  height: calc(100% - 125px);
+  min-height: calc(100% - 125px);
   z-index: 5;
   margin: 0;
   padding: 0;
 }
 
+
+/*
 @media screen and (max-width: 1000px){
   .leftSide, .findForm {
     width: 250px;
@@ -159,6 +226,7 @@ footer {
     width: calc(100% - 250px);
   }
 }
+*/
 
 .scroll {
   overflow-y: scroll;
@@ -185,7 +253,7 @@ footer {
   width: 90%;
   min-width: 215px;
   padding: 0;
-  margin: 25px auto 30px auto;
+  margin: 25px auto 80px auto;
   z-index: 6;
   background-color: rgb(75,75,75);
   -webkit-box-shadow: 0 0 10px 0.5px rgb(0,0,0);
@@ -251,12 +319,14 @@ footer {
   padding: 0;
 }
 
+/*
 .pageMid {
   height: 75vh;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+*/
 
 .split {
   display: flex;

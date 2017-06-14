@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
+import { Meteor } from 'meteor/meteor';
+import {createContainer} from 'meteor/react-meteor-data';
 import Pref from '/client/global/pref.js';
 
-export default class FindBox extends Component	{
+class FindBox extends Component	{
 
   //// Set the Entered Number as Session Variable \\\\
   setVar(e) {
@@ -40,3 +42,9 @@ export default class FindBox extends Component	{
     );
   }
 }
+
+export default createContainer( () => {
+    return {
+      orb: Session.get('now'),
+    };
+}, FindBox);

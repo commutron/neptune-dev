@@ -16,7 +16,7 @@ export default class WikiFrame extends Component {
         id='instruct'
         style={sty}
         src={this.props.go}
-        height={( (document.body.scrollHeight - document.body.scrollTop) - 95 ) +'px'}
+        height={( (document.body.scrollHeight - document.body.scrollTop) - 135 ) +'px'}
         allowFullScreen
         />
     );

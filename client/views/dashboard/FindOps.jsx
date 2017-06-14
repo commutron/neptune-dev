@@ -172,14 +172,14 @@ export default class FindOps extends Component	{
         let group = this.linkedGroup(widget.groupId);
         if(snap) {
           return (
-  			    <Dashboard>
+  			    <Dashboard app={app}>
   			      <ItemsList batchData={lookup} tide={orb} />
               <BatchPanel
                 batchData={lookup}
                 widgetData={widget}
                 versionData={version}
-                groupData={group}
-                app={app} />
+                groupData={group} 
+                app={app}/>
             </Dashboard>
             );
         }else{
@@ -226,7 +226,8 @@ export default class FindOps extends Component	{
               <ItemPanel
                 batchData={lookup}
                 itemData={item}
-                app={app} />
+                app={app}
+                listTitle={true} />
               <BatchPanel
                 batchData={lookup}
                 widgetData={widget}
@@ -271,6 +272,7 @@ export default class FindOps extends Component	{
           return (
             <Dashboard>
               <WidgetsList
+                groupAlias={lookup.alias}
                 widgetData={widgets}
                 active={activeBatch} />
               <GroupPanel groupData={lookup} end={app.lastTrack} root={app.instruct} />
@@ -280,6 +282,7 @@ export default class FindOps extends Component	{
           return (
             <Dashboard>
               <WidgetsList
+                groupAlias={lookup.alias}
                 widgetData={widgets}
                 active={activeBatch} />
               <WikiOps widget='home' wi='home' root={app.instruct} brick={brick} />
@@ -301,8 +304,10 @@ export default class FindOps extends Component	{
         return (
           <Dashboard>
             <WidgetsList
+              groupAlias={group.alias}
               widgetData={allWidgets}
-              active={activeBatch} />
+              active={activeBatch}
+              listTitle={true} />
             <div>
               <WidgetPanel
                 widgetData={lookup}

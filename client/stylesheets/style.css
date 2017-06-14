@@ -63,28 +63,12 @@
 }
 
 #snapSwitch {
-  position: absolute;
   z-index: 1;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(0deg);
+  transform: translate(0%, 0%) rotate(0deg);
   opacity: 0.8;
 }
 #snapSwitch:hover {
   opacity: 1;
-}
-#snapSwitch:after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(0deg);
-  z-index: -1;
-  background-color: black;
-  border-radius: 50%;
-  height: 60px;
-  width: 60px;
-  box-shadow: 0 0 15px 0.5px rgb(0,0,0);
 }
 
 #boltSwitch:hover {
@@ -104,7 +88,7 @@
 }
 
 #ikyToggle:checked + #snapSwitch {
-  transform: translate(-50%, -50%) rotateY(180deg);
+  transform: translate(0%, 0%) rotateY(180deg);
 }
 
 

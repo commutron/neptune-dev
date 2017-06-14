@@ -69,7 +69,7 @@ export class OptionAdd extends Component	{
               ref={(i)=> this.go = i}
               className='smallAction clear greenT'
               disabled={false}
-            >Add
+            >Set
             </button>
           </label>
         </form>

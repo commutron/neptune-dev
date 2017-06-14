@@ -33,7 +33,8 @@ export default class ItemsList extends Component	{
 
     return (
       <SlideDownWrap>
-        <div className='card'>
+        <div className='card centre'>
+        {this.props.listTitle ? <h2 className='up'>{b.batch}</h2> : null}
             { b.items.map( (entry, index)=> {
             let style = active.includes(entry.serial) ? 'action clear wide greenT' : 
                         scrap.includes(entry.serial) ? 'action clear wide redT' : 

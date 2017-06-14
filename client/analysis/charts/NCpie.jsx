@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-// {Pie} from "react-chartjs-2"; //prop-type depreciation problem
+//import {Pie} from "react-chartjs-2"; //prop-type depreciation problem
 
 //// Requires: no-good nonCons, repaired nonCons, and inspected nonCons \\\\
 

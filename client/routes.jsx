@@ -1,7 +1,9 @@
 import React from 'react';
 import {mount} from 'react-mounter';
 
-import {MainLayout} from './layouts/MainLayout.jsx';
+import {MainLayout} from './layouts/MainLayouts.jsx';
+import {BasicLayout} from './layouts/MainLayouts.jsx';
+import {DashLayout} from './layouts/MainLayouts.jsx';
 
 import DashData from './views/dashboard/DashData.jsx';
 import AppData from './views/app/AppData.jsx';
@@ -11,50 +13,40 @@ import LandingWrap from './LandingWrap.jsx';
 
 FlowRouter.route('/', {
   action() {
-    mount(MainLayout, {
+    mount(BasicLayout, {
        content: (<LandingWrap />),
-       link: (<i>landing dynamic</i>),
-       plainFooter: true
     });
   }
 });
 
 FlowRouter.route('/app', {
   action() {
-    mount(MainLayout, {
+    mount(BasicLayout, {
        content: (<AppData />),
-       link: (<i>app dynamic</i>),
-       plainFooter: true
     });
   }
 });
 
 FlowRouter.route('/dashboard', {
   action() {
-    mount(MainLayout, {
+    mount(DashLayout, {
       content: (<DashData />),
-      link: (<i>dash dynamic</i>),
-      plainFooter: false
     });
   }
 });
 
-FlowRouter.route('/wiki', {
+FlowRouter.route('/docs', {
   action() {
-    mount(MainLayout, {
+    mount(BasicLayout, {
       content: (<WikiIndie />),
-      link: (<i>.</i>),
-      plainFooter: true
     });
   }
 });
 
 FlowRouter.route('/database', {
   action() {
-    mount(MainLayout, {
-      content: (<p>this does not exist yet</p>),
-      link: (<i>.</i>),
-      plainFooter: true
+    mount(BasicLayout, {
+      content: (<p>hello future</p>),
     });
   }
 });

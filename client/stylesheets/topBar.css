@@ -64,12 +64,12 @@ input::-webkit-calendar-picker-indicator {
 }
 
 .logoSVG:hover, .logoSVG:active, .logoSVG:focus {
-  animation: spinAround 2s ;
+  animation: spinAround 1s infinite linear ;
 }
 
 @keyframes spinAround {
-  0%   {  }
-  100% { transform: translate(0%, 0%) rotate(1080deg); }
+  0%   { transform: translate(0%, 0%) rotate(0deg); }
+  100% { transform: translate(0%, 0%) rotate(360deg); }
 }
 
 

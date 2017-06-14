@@ -85,7 +85,7 @@ export default class GroupForm extends Component {
               required />
           </p>
           <br />
-          <Submit name='Create' type='action' />
+          <Submit name={title} type='action' />
         </form>
       </Model>
     );

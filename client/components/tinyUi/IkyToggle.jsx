@@ -17,8 +17,11 @@ export default class IkyToggle extends Component	{
           defaultChecked={Session.get('ikyView')}
           onChange={this.toggle.bind(this)}
           readOnly />
-          <label htmlFor='ikyToggle' id='snapSwitch'>
-            <i className='fa fa-window-restore fa-2x' aria-hidden='true'></i>
+          <label htmlFor='ikyToggle' id='snapSwitch' className='navIcon'>
+            <span className='fa-stack fa-2x'>
+              <i className='fa fa-circle fa-stack-2x'></i>
+              <i className="fa fa-window-restore fa-stack-1x fa-inverse"></i>
+            </span>
           </label>
       </span>
     );

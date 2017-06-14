@@ -7,7 +7,7 @@
   "dependencies": {
     "babel-runtime": "^6.23.0",
     "bcrypt": "^1.0.2",
-    "chart.js": "^2.3.0",
+    "chart.js": "^2.6.0",
     "fixed-data-table": "^0.6.3",
     "meteor-node-stubs": "~0.2.0",
     "moment": "^2.18.1",
@@ -15,7 +15,7 @@
     "react": "^15.5.4",
     "react-addons-css-transition-group": "^15.5.2",
     "react-addons-pure-render-mixin": "^15.4.1",
-    "react-chartjs-2": "^1.6.2",
+    "react-chartjs-2": "^2.1.0",
     "react-dom": "^15.5.4",
     "react-mounter": "^1.2.0",
     "react-transition-group": "^1.1.3"

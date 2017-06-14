@@ -1,0 +1,23 @@
+.actionBar {
+  background-color: red;
+  height: 65px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.footLeft {
+  
+}
+
+.footCent {
+  flex-grow: 2;
+  
+}
+
+
+.footRight {
+  display: flex;
+  justify-content: flex-end;
+  
+}

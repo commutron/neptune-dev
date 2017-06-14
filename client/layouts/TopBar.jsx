@@ -8,7 +8,6 @@ import Freeze from '../components/tinyUi/Freeze.jsx';
 import InitialSetup from '../views/InitialSetup.jsx';
 import Login from '../views/Login.jsx';
 import ActivateUser from '../components/forms/ActivateUser.jsx';
-import FindBox from './FindBox.jsx';
 import Chill from '../components/tinyUi/Chill.jsx';
 import TimeToggle from '../components/tinyUi/TimeToggle.jsx';
 import DataToggle from '../components/tinyUi/DataToggle.jsx';
@@ -60,9 +59,8 @@ class TopBar extends Component	{
     }
     
     return (
-      <div className='bleed primeNav'>
-        <FindBox orb={this.props.orb} />
-        <nav>
+      <div className='primeNav'>
+        <nav className='primeNav'>
           <a className='title' href='/'>
             <img src='/neptune-logo-white.svg' className='logoSVG' />
           </a>
@@ -70,7 +68,7 @@ class TopBar extends Component	{
             <i className="fa fa-tachometer fa-2x" aria-hidden="true"></i>
             <span className='icontext'>Dashboard</span>
           </a>
-          <a href='/wiki'>
+          <a href='/docs'>
             <i className="fa fa-book fa-2x" aria-hidden="true"></i>
             <span className='icontext'>Docs</span>
           </a>

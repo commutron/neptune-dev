@@ -108,7 +108,7 @@ export class VersionForm extends Component	{
                 type='number'
                 ref={(i)=> this.unit = i}
                 id='cln'
-                pattern='[000-999]*'
+                pattern='[0-999]*'
                 maxLength='3'
                 minLength='1'
                 max='100'
