@@ -21,6 +21,7 @@ body {
   font-family: 'Open Sans', sans-serif;
   margin: 0;
   padding: 0;
+  overflow: hidden;
 }
 
 main {
@@ -93,7 +94,7 @@ main {
 
 .stickyBar {
   position: sticky;
-  top: 75px;
+  top: 0;
   width: auto;
   background-color: black;
   background-color: rgba(0,0,0,0.8);
@@ -115,11 +116,14 @@ main {
   display: grid;
   grid-template-columns: 300px auto;
   align-content: center;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  min-width: 1000px;
 }
 
 
 .basicContainer {
-  grid-template-rows: 75px calc(100vh - 100px) 25px;
+  grid-template-rows: 75px calc(100vh - 90px) 15px;
   grid-template-areas: 
     "headerSearch headerNav"
     "mainFull mainFull"
@@ -127,19 +131,25 @@ main {
 }
 
 .dashContainer {
-  grid-template-rows: 75px calc(100vh - 75px);
+  grid-template-rows: 75px calc(100vh - 90px) 15px;
   grid-template-areas: 
     "headerSearch headerNav"
-    "mainSplit mainSplit";
+    "mainSplit mainSplit"
+    "footer footer";
 }
 
 
 .gridHeaderSearch {
   grid-area: headerSearch;
+  z-index: 9;
+  -webkit-box-shadow: 0 0 15px 0.5px rgb(0,0,0);
+  -moz-box-shadow:    0 0 15px 0.5px rgb(0,0,0);
+  box-shadow:         0 0 15px 0.5px rgb(0,0,0);
 }
 
 .gridHeaderNav {
   grid-area: headerNav;
+  z-index: 9;
   /*commutron brand blue*/
   background-color: #1c75bc;
   background-color: rgba(28,117,188,1);
@@ -151,6 +161,7 @@ main {
 
 .basicMainFull {
   grid-area: mainFull;
+  overflow-y: scroll;
 }
 
 .basicFooter {
@@ -163,13 +174,15 @@ main {
   -moz-box-shadow:    0 0 15px 0.5px rgb(0,0,0);
   box-shadow:         0 0 15px 0.5px rgb(0,0,0);
   white-space: nowrap;
+  position: sticky;
+  bottom: 0;
 }
 
 .dashMainSplit {
   display: grid;
   grid-area: mainSplit;
   grid-template-columns: 300px auto;
-  grid-template-rows: auto 75px;
+  grid-template-rows: 100% 60px;
   grid-template-areas: 
     "mainLeft mainRight"
     "actionFooter actionFooter";
@@ -177,45 +190,32 @@ main {
 
 .dashMainLeft {
   grid-area: mainLeft;
+  height: 100%;
+  -webkit-overflow-scrolling: touch; /* lets it scroll lazy */
 }
 
 .dashMainRight {
   grid-area: mainRight;
+  height: 100%;
+  -webkit-overflow-scrolling: touch; /* lets it scroll lazy */
 }
 
 .dashAction {
   grid-area: actionFooter;
+  background-color: black;
+  background-color: rgba(0,0,0,0.7);
+  width: 100%;
+  min-width: 1000px;
+  z-index: 9;
+  position: fixed;
+  bottom: 15px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
 }
 
 /* ============================================= */
-
-.leftSide {
-	float: left;
-  width: 300px;
-  height: calc(100% - 125px);
-  min-height: calc(100% - 125px);
-  padding: 0;
-  margin: 0;
-  z-index: 5;
-  position: fixed;
-  top: 75px;
-  left: 0;
-	overflow-y: scroll;
-	-webkit-overflow-scrolling: touch; /* lets it scroll lazy */
-	overflow-x: visible;
-}
-
-.rightSide {
-	float: right;
-  width: calc(100% - 300px);
-  min-width: 500px;
-  height: calc(100% - 125px);
-  min-height: calc(100% - 125px);
-  z-index: 5;
-  margin: 0;
-  padding: 0;
-}
-
 
 /*
 @media screen and (max-width: 1000px){
@@ -226,11 +226,11 @@ main {
     width: calc(100% - 250px);
   }
 }
-*/
 
 .scroll {
   overflow-y: scroll;
 }
+*/
 
 .middle {
   display: flex;
@@ -253,7 +253,7 @@ main {
   width: 90%;
   min-width: 215px;
   padding: 0;
-  margin: 25px auto 80px auto;
+  margin: 25px auto 25px auto;
   z-index: 6;
   background-color: rgb(75,75,75);
   -webkit-box-shadow: 0 0 10px 0.5px rgb(0,0,0);
@@ -266,6 +266,7 @@ main {
   background-color: rgb(236,240,241);
 }
 
+/*
 .cornerFloat {
   display: inline-block;
   text-align: center;
@@ -277,6 +278,7 @@ main {
   right: 5px;
   border-radius: 50%;
 }
+*/
 
 /* modal popup */
 .overlay {
@@ -289,22 +291,26 @@ main {
   background: rgb(0,0,0);
   background: rgba(0,0,0,0.5);
   transition: opacity 200ms;
+  overflow-y: hidden;
 }
 
 .popup {
-  margin: 7rem auto 3rem auto;
+  margin: 3% auto 5% auto;
   padding: 25px;
   background: rgb(0,0,0);
   background: rgba(0,0,0,0.9);
   width: 60%;
+  height: 85%;
   position: relative;
   z-index: 8;
 }
 
-.popup .content {
-  max-height: 30%;
-  overflow: auto;
+.content {
+  min-height: 50%;
+  max-height: 90%;
+  overflow-y: auto;
 }
+
 
 @media screen and (max-width: 1000px){
   .popup{

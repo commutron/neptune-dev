@@ -17,6 +17,7 @@ class FindBox extends Component	{
   render () {
 
    let last = this.props.orb ? this.props.orb : 'Find';
+   const lock = this.props.user ? false : true;
 
 		return (
       <form 
@@ -31,6 +32,7 @@ class FindBox extends Component	{
           className='up'
           placeholder={last}
           list='cuts'
+          disabled={lock}
           />
         <datalist id='cuts' className='cap'>
           <option value={Pref.batch}>All {Pref.batch}s</option>
@@ -46,5 +48,6 @@ class FindBox extends Component	{
 export default createContainer( () => {
     return {
       orb: Session.get('now'),
+      user: Meteor.userId()
     };
 }, FindBox);

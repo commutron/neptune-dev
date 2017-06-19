@@ -3,7 +3,6 @@ import { Meteor } from 'meteor/meteor';
 import {createContainer} from 'meteor/react-meteor-data';
 
 import SampleLine from './components/charts/SampleLine.jsx';
-import Spin from './components/tinyUi/Spin.jsx';
 
 
 class StartView extends Component	{
@@ -20,8 +19,6 @@ class StartView extends Component	{
       <div className='space cap'>
         <p>user: {this.props.user}</p>
         <p>organization: {this.props.org}</p>
-        <Spin />
-
         <SampleLine />
         <p className='centre'>
           <img src='/titleLogo.svg' width='600' />

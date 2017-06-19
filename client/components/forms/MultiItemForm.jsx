@@ -77,6 +77,7 @@ export default class MultiItemForm extends Component {
         this.refs.barNumEnd.value = '';
       }else{
         Bert.alert(Alert.caution);
+        console.log(reply[2]);
       }
       
       if(!reply[1]) {

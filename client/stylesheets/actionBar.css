@@ -1,13 +1,12 @@
 .actionBar {
-  background-color: red;
-  height: 65px;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
 }
 
 .footLeft {
-  
+  display: flex;
+  justify-content: flex-start;
 }
 
 .footCent {
@@ -20,4 +19,36 @@
   display: flex;
   justify-content: flex-end;
   
+}
+
+.actionForm {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.actionForm > input[type='text'],
+.actionForm > select, 
+.actionForm > datalist {
+  line-height: 1.5rem;
+  min-width: 100px;
+  max-width: 200px;
+  height: 1rem;
+  margin: 0 10px;
+  background-color: transparent;
+  border-bottom-color: red;
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-left-color: transparent;
+  color: rgb(231,76,60);
+  outline-color: rgb(231,76,60);
+  outline-width: thick;
+}
+
+.actionForm > button {
+  line-height: 1.5rem;
+  margin: 0 10px;
+  text-transform: capitalize;
 }

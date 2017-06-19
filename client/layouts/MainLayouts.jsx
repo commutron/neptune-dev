@@ -3,7 +3,6 @@ import { Meteor } from 'meteor/meteor';
 
 import FindBox from './FindBox.jsx';
 import TopBar from './TopBar.jsx';
-import Spin from '../components/tinyUi/Spin.jsx';
 
 AppDB = new Mongo.Collection('appdb');
 GroupDB = new Mongo.Collection('groupdb');
@@ -36,7 +35,7 @@ export const BasicLayout = ({content}) => (
     <div className='basicMainFull'>
       {content}
     </div>
-    <div className='basicFooter'>this is a footer</div>
+    <div className='basicFooter'></div>
   </div>
 );
 
@@ -50,6 +49,7 @@ export const DashLayout = ({content}) => (
       <TopBar />
     </div>
       {content}
+    <div className='basicFooter'></div>
   </div>
 );
 

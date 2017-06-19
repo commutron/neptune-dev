@@ -99,12 +99,6 @@ export default class River extends Component	{
             users={this.props.users}
             methods={a.toolOption} />
         </div>
-        
-        <NCButton
-          id={b._id}
-          barcode={i.serial}
-          nons={a.nonConOption}
-          ancs={a.ancillaryOption} />
           
         <NCTributary
   			  id={b._id}

@@ -153,13 +153,19 @@ export default class FindOps extends Component	{
     if(orb === Pref.block) {
       Session.set('now', Pref.block);
       return (
-        <BlockPanel batchData={allBatch} />
+        <Dashboard>
+          <div></div>
+          <BlockPanel batchData={allBatch} />
+        </Dashboard>
       );
     }
     if(orb === Pref.scrap) {
       Session.set('nowPanel', Pref.scrap);
       return (
-        <ScrapPanel batchData={allBatch} />
+        <Dashboard>
+        <div></div>
+          <ScrapPanel batchData={allBatch} />
+        </Dashboard>
       );
     }
 
@@ -172,7 +178,7 @@ export default class FindOps extends Component	{
         let group = this.linkedGroup(widget.groupId);
         if(snap) {
           return (
-  			    <Dashboard app={app}>
+  			    <Dashboard app={app} nc={false}>
   			      <ItemsList batchData={lookup} tide={orb} />
               <BatchPanel
                 batchData={lookup}
@@ -184,7 +190,7 @@ export default class FindOps extends Component	{
             );
         }else{
           return (
-  			    <Dashboard>
+  			    <Dashboard nc={false}>
               <BatchCard
                 batchData={lookup}
                 widgetData={widget}
@@ -192,7 +198,7 @@ export default class FindOps extends Component	{
                 groupData={group} />
               <WikiOps wi={version.wiki} root={app.instruct} brick={brick} />
             </Dashboard>
-            );
+          );
         }
       }
     }
@@ -239,7 +245,7 @@ export default class FindOps extends Component	{
           );
         }else{
           return (
-            <Dashboard>
+            <Dashboard app={app} nc={true} id={lookup._id} serial={item.serial}>
               <div>
                 <ItemCard
                   batchData={lookup}

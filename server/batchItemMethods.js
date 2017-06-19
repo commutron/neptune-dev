@@ -158,14 +158,14 @@ Meteor.methods({
             }
           }
     // callbacks = [success, not added]
-          return [true, bad];
+          return [true, bad, 'partial'];
         }else{
-          return [false, false];
+          return [false, false, 'noAuth'];
         }
       }
       else
       {
-        return [false, false];
+        return [false, false, 'noRange'];
       }
   },
   

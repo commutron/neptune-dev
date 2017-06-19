@@ -72,10 +72,6 @@ class TopBar extends Component	{
             <i className="fa fa-book fa-2x" aria-hidden="true"></i>
             <span className='icontext'>Docs</span>
           </a>
-          <a href='/app'>
-            <i className="fa fa-sliders fa-2x" aria-hidden="true"></i>
-            <span className='icontext'>App</span>
-          </a>
           <RoleCheck role={'admin'}>
             <span>
               <a href='/database'>
@@ -84,6 +80,10 @@ class TopBar extends Component	{
               </a>
             </span>
           </RoleCheck>
+          <a href='/app'>
+            <i className="fa fa-sliders fa-2x" aria-hidden="true"></i>
+            <span className='icontext'>App</span>
+          </a>
         </nav>
         <span className='navSpacer'></span>
         <DataToggle />
