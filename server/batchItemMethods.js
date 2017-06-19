@@ -126,7 +126,7 @@ Meteor.methods({
       &&
       unit > 0
       &&
-      unit < 100
+      unit <= 250
       )
       {
         const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
@@ -140,6 +140,8 @@ Meteor.methods({
           for(var click = barFirst; click < barLast; click++) {
             let barcode = click.toString();
             let duplicate = doc.items.find(x => x.serial === barcode);
+            // this is really slow risks a time out or appears to be a freeze
+            // let wideDuplicate = BatchDB.findOne({'items.serial': barcode});
             if(duplicate) {
               bad.push(barcode);
             }else{

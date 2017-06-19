@@ -52,3 +52,16 @@
   margin: 0 10px;
   text-transform: capitalize;
 }
+
+.actionIconWrap {
+  display: flex;
+  align-items: center;
+}
+
+.actionIconText {
+  color: white;
+  font-size: small;
+  line-height: 1rem;
+  display: block;
+  white-space: nowrap;
+}

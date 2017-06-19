@@ -206,7 +206,7 @@ main {
   background-color: rgba(0,0,0,0.7);
   width: 100%;
   min-width: 1000px;
-  z-index: 9;
+  z-index: 8;
   position: fixed;
   bottom: 15px;
   display: flex;
@@ -291,7 +291,7 @@ main {
   background: rgb(0,0,0);
   background: rgba(0,0,0,0.5);
   transition: opacity 200ms;
-  overflow-y: hidden;
+  overflow: hidden;
 }
 
 .popup {
@@ -309,6 +309,7 @@ main {
   min-height: 50%;
   max-height: 90%;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 
@@ -376,6 +377,10 @@ main {
 .beside {
   line-height: 1rem;
   vertical-align: super;
+}
+
+.wrap {
+  white-space: normal;
 }
 
 /* react animation */

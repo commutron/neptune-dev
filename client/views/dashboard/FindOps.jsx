@@ -217,7 +217,7 @@ export default class FindOps extends Component	{
   // Item
     //// barcode numbers are short durring dev but they will have to longer in production
     ////// this will also need to be changed???? for alphnumeric barcodes such as with TGS
-		if(!isNaN(orb) && orb.length > 5 && orb.length <= 12) {
+		if(!isNaN(orb) && orb.length > 5 && orb.length <= 10) {
 		  let lookup = this.batchByItem();
       if(lookup) {
         let item = this.itemData(lookup.items, orb);

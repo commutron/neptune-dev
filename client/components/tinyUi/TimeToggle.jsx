@@ -9,8 +9,12 @@ export default class TimeToggle extends Component	{
     }
         
   render () {
+    
+  let sty = {
+    zIndex: '11'
+  };
     return (
-      <span>
+      <span style={sty}>
         <input
           type='checkbox'
           id='timeToggle'

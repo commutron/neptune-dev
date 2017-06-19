@@ -16,7 +16,7 @@ export default class BatchesList extends Component	{
               <JumpFind 
                 key={index}
                 title={entry.batch} 
-                sub={' - ' + entry.widgetKey}
+                sub={''}
                 sty={style}
               />
             )})}

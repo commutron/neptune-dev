@@ -10,7 +10,6 @@ import Login from '../views/Login.jsx';
 import ActivateUser from '../components/forms/ActivateUser.jsx';
 import Chill from '../components/tinyUi/Chill.jsx';
 import TimeToggle from '../components/tinyUi/TimeToggle.jsx';
-import DataToggle from '../components/tinyUi/DataToggle.jsx';
 import TimeFrame from '../components/tinyUi/TimeFrame.jsx';
 
 class TopBar extends Component	{
@@ -22,7 +21,7 @@ class TopBar extends Component	{
         <Freeze>
           <Login />
         </Freeze>
-        );
+      );
     }
         
     if(!this.props.ready) {
@@ -30,7 +29,7 @@ class TopBar extends Component	{
         <Freeze>
           <Spin />
         </Freeze>
-        );
+      );
     }
     
     if(!this.props.active || !this.props.org) {
@@ -44,18 +43,18 @@ class TopBar extends Component	{
             </div>
           </Freeze>
         </div>
-        );
+      );
     }
     
     if(!this.props.app) {
       return (
         <div className='bleed middle flexRR'>
-          <Chill name={this.props.user} />
+          <Chill name={this.props.user}/>
           <Freeze>
             <InitialSetup org={this.props.org} />
           </Freeze>
         </div>
-        );
+      );
     }
     
     return (
@@ -86,7 +85,6 @@ class TopBar extends Component	{
           </a>
         </nav>
         <span className='navSpacer'></span>
-        <DataToggle />
         <TimeToggle />
         <Chill name={this.props.user}/>
         <TimeFrame time={this.props.time} go={this.props.app.timeClock} />

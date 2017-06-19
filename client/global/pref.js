@@ -20,10 +20,10 @@ class Pref {
     this.timeClock = 'time clock';
     // terminology
     this.admin = 'org admin';
-	  this.batch = 'batch';//order
-	  this.item = 'item';//board
-    this.group = 'group';//customer
-    this.widget = 'widget';//product
+	  this.batch = 'work order';//order
+	  this.item = 'board';//board
+    this.group = 'customer';//customer
+    this.widget = 'product';//product
     this.version = 'version';// version, variation, rev
     this.live = 'live'; // live / active in context of a product
     this.unit = 'panel';// how many in a panel/set
@@ -31,38 +31,37 @@ class Pref {
     this.test = 'tester';
     this.create = 'creator';
     this.start = 'start';
-    this.end = 'end goal';
+    this.end = 'fulfillment';
     // build tracking
-    this.flow = 'flow';
-    this.buildFlow = 'river';
-    this.buildFlowAlt = 'alt river';
-    this.buildStep = 'stone';
+    this.flow = 'process flow';
+    this.buildFlow = 'main progress flow';
+    this.buildFlowAlt = 'alt process flow';
+    this.buildStep = 'build process';
     this.trackFirst = 'first-off';
     this.trackLast =  'pack';
-    this.good = 'good';
+    this.good = 'accept';
     this.ng = 'ng';
-    this.builder = 'operator';
+    this.builder = 'builder';
     this.inspector = 'inspection';
     this.autoI = 'aoi';
     this.method = 'method';
     this.proChange = 'process changes';
-    this.outIssue = 'Outstanding Issues';
+    this.outIssue = 'outstanding issues';
     this.gComm = 'general comments';
     // bad tracking
-    this.fixFlow = 'stream';
-    this.fixStep = 'rock';
+    this.fixFlow = 'repair process';
+    this.fixStep = 'repair step';
     this.nonCon = 'non conformance';
-    this.nonConRef = 'designation';
-    this.nonConType = 'type';
-    this.nonConCat = 'category';
+    this.nonConRef = 'referance';
+    this.nonConType = 'defect';
     this.skip = 'skip';
     // escaped nonCons
     this.escape = 'escaped';
     // scrap
     this.scrap = 'scrap';
     // rma
-    this.rma = 'rma';// ???
-    this.rmaProcess = 'cascade'; // ???
+    this.rma = 'return material action';// ???
+    this.rmaProcess = 'rma process'; // ???
     // blocker tracking
     this.block = 'blocker';
     this.solve = 'solve';

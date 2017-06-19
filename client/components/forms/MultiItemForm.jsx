@@ -10,10 +10,19 @@ import Model from '../smallUi/Model.jsx';
 /// props.more as true or false
 
 export default class MultiItemForm extends Component {
+  
+  constructor() {
+    super();
+    this.state = {
+      hold: []
+    };
+  }
 
   checkRange() {
-    let barStart = this.refs.barNumStart.value.trim();
-    let barEnd = this.refs.barNumEnd.value.trim();
+    this.setState({ hold: []});
+    const barStart = this.barNumStart.value.trim();
+    const barEnd = this.barNumEnd.value.trim();
+    const unit = this.unit.value.trim();
     
     let first = parseInt(barStart, 10);
     let last = parseInt(barEnd, 10);
@@ -29,7 +38,9 @@ export default class MultiItemForm extends Component {
       &&
       count > 0
       &&
-      count <= 5000
+      count <= 1000
+      &&
+      unit <= 250
       )
       {
         valid = true;
@@ -41,27 +52,27 @@ export default class MultiItemForm extends Component {
     
     // enable or disable submit button
     if(valid) {
-      this.refs.go.disabled = false;
+      this.go.disabled = false;
     }else{
-      this.refs.go.disabled = true;
+      this.go.disabled = true;
     }
     
     // display quantity
     let quantity = isNaN(count) ? 'Not a number' : 
                    count < 1 ? 'Invalid Range' :
                    count + ' ' + Pref.item + '(s)';
-    this.refs.status.value = quantity;
+    this.message.value = quantity;
   }
 
 	addItem(e) {
     e.preventDefault();
-    this.refs.go.disabled = true;
+    this.go.disabled = true;
     
-    let batchId = this.props.id;
+    const batchId = this.props.id;
     
-    const barStart = this.refs.barNumStart.value.trim();
-    const barEnd = this.refs.barNumEnd.value.trim();
-    const unit = this.refs.unit.value.trim();
+    const barStart = this.barNumStart.value.trim();
+    const barEnd = this.barNumEnd.value.trim();
+    const unit = this.unit.value.trim();
   
     const first = parseInt(barStart, 10);
     const end = parseInt(barEnd, 10);
@@ -72,9 +83,9 @@ export default class MultiItemForm extends Component {
         console.log(error);
       if(reply[0]) {
         Bert.alert(Alert.success);
-        this.refs.unit.value = 1;
-        this.refs.barNumStart.value = '';
-        this.refs.barNumEnd.value = '';
+        this.unit.value = this.props.unit;
+        this.barNumStart.value = '';
+        this.barNumEnd.value = '';
       }else{
         Bert.alert(Alert.caution);
         console.log(reply[2]);
@@ -83,10 +94,9 @@ export default class MultiItemForm extends Component {
       if(!reply[1]) {
         null;
       }else if(reply[1].length > 0) {
-        let bad = reply[1].toString();
-        this.refs.status.value = 'duplicates not created - ' + bad;
+        this.setState({ hold: reply[1] });
       }else{
-        this.refs.status.value = 'all created successfully';
+        this.message.value = 'all created successfully';
       }
     });
 	}
@@ -106,15 +116,15 @@ export default class MultiItemForm extends Component {
             <p><label htmlFor='cln'>{Pref.unit} Quantity</label><br />
               <input
                 type='number'
-                ref='unit'
+                ref={(i)=> this.unit = i}
                 id='cln'
                 pattern='[000-999]*'
                 maxLength='3'
                 minLength='1'
-                max='100'
+                max='250'
                 min='1'
                 defaultValue={this.props.unit}
-                placeholder='1-100'
+                placeholder='1-250'
                 inputMode='numeric'
                 required
               />
@@ -123,12 +133,12 @@ export default class MultiItemForm extends Component {
             <p><label htmlFor='strt'>First {Pref.item} Number</label><br />
               <input
                 type='text'
-                ref='barNumStart'
+                ref={(i)=> this.barNumStart = i}
                 id='strt'
-                pattern='[000000-999999]*'
-                maxLength='6'
-                minLength='6'
-                placeholder='100000-999999'
+                pattern='[0000000000-9999999999]*'
+                maxLength='10'
+                minLength='10'
+                placeholder='1000000000-9999999999'
                 inputMode='numeric'
                 autoFocus='true'
                 required
@@ -138,25 +148,34 @@ export default class MultiItemForm extends Component {
             <p><label htmlFor='nd'>Last {Pref.item} Number</label><br />
               <input
                 type='text'
-                ref='barNumEnd'
+                ref={(i)=> this.barNumEnd = i}
                 id='nd'
-                pattern='[000000-999999]*'
-                maxLength='6'
-                minLength='6'
-                placeholder='100000-999999'
+                pattern='[0000000000-9999999999]*'
+                maxLength='10'
+                minLength='10'
+                placeholder='1000000000-9999999999'
                 inputMode='numeric'
                 required
                 onInput={this.checkRange.bind(this)}
               />
             </p>
             <br />
-            <p className='centre'>
-              <output ref='status' />
-            </p>
+            <div className='centre'>
+              <output ref={(i)=> this.message = i} />
+              {this.state.hold.length > 0 ?
+                <b>duplicates not created</b>
+              :null}
+              <ul>
+                {this.state.hold.map( (entry, index)=>{ 
+                  return(
+                    <li key={index}>{entry}</li>
+                )})}
+              </ul>
+            </div>
             <br />
             <p className='centre'>
               <button
-                ref='go'
+                ref={(i)=> this.go = i}
                 disabled='true'
                 className='action clear greenT'
                 type='submit'

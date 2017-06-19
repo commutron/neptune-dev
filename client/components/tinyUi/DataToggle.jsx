@@ -8,18 +8,29 @@ export default class DataToggle extends Component	{
     }
         
   render () {
+    
+    let on = Session.get('allData');
+    let sty = on ? 
+    {
+      color: 'rgb(255,232,0)'
+    }
+    :
+    {
+      color: 'white'
+    };
+    
     return (
-      <span>
+      <span className='actionIconWrap'>
         <input
           type='checkbox'
           id='dtToggle'
           ref={(i)=> this.choose = i}
-          defaultChecked={Session.get('allData')}
+          defaultChecked={on}
           onChange={this.toggle.bind(this)}
           readOnly />
           <label htmlFor='dtToggle' id='boltSwitch' className='navIcon'>
-            <i className="fa fa-bolt fa-2x"></i>
-            <span className='icontext'>Powerup</span>
+            <i className="fa fa-archive fa-lg fa-inverse" style={sty}></i>
+            <span className='actionIconText' style={sty}>Archive Data</span>
           </label>
       </span>
     );

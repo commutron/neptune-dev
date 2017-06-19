@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 
+import DataToggle from '../../components/tinyUi/DataToggle.jsx';
 import IkyToggle from '../../components/tinyUi/IkyToggle.jsx';
 import NCAdd from '../../components/river/NCAdd.jsx';
 
@@ -29,7 +30,9 @@ export default class Dashboard extends Component	{
         
         <div className='dashAction'>
         
-            <div className='footLeft'></div>
+            <div className='footLeft'>
+
+            </div>
             <div className='footCent'>
               <ActionBar 
                 id={this.props.id}
@@ -37,7 +40,10 @@ export default class Dashboard extends Component	{
                 nc={this.props.nc}
                 app={this.props.app} />
               </div>
-            <div className='footRight'><IkyToggle /></div>
+            <div className='footRight'>
+              <DataToggle />
+              <IkyToggle />
+            </div>
       
         </div>
         {/*React.cloneElement(this.props.children[0], this.props)*/}
