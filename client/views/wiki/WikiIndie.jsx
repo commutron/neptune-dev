@@ -21,7 +21,8 @@ export class WikiIndie extends Component {
         widget='home'
         wi='home'
         root={this.props.app.instruct}
-        brick='' />
+        brick='' 
+        indie={true} />
       );
   }
 }

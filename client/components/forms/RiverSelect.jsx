@@ -32,13 +32,13 @@ export default class RiverSelect extends Component	{
   render() {
     return (
       <Model
-        button={Pref.buildFlow}
-        title={'Select ' + Pref.buildFlow}
+        button={Pref.flow}
+        title={'Select ' + Pref.flow}
         type='action clear greenT'
         lock={!Roles.userIsInRole(Meteor.userId(), 'run') || this.props.lock}
       >
         <form className='centre' onSubmit={this.save.bind(this)}>
-          <p><label htmlFor='fch'>Choose Main {Pref.flow}</label><br />
+          <p><label htmlFor='fch'>Choose {Pref.buildFlow}</label><br />
             <select id='fch' ref={(i)=> this.choice = i} defaultValue={this.props.river}>
             <option value={false}></option>
             {this.props.widget.flows.map( (entry, index)=>{
@@ -50,7 +50,7 @@ export default class RiverSelect extends Component	{
           </p>
           <br />
           <br />
-          <p><label htmlFor='fch'>Choose Alternative {Pref.flow}</label><br />
+          <p><label htmlFor='fch'>Choose {Pref.buildFlowAlt}</label><br />
             <select id='fch' ref={(i)=> this.choiceAlt = i} defaultValue={this.props.riverAlt}>
             <option value={false}></option>
             {this.props.widget.flows.map( (entry, index)=>{

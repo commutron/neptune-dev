@@ -161,7 +161,7 @@ main {
 
 .basicMainFull {
   grid-area: mainFull;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .basicFooter {
@@ -186,6 +186,13 @@ main {
   grid-template-areas: 
     "mainLeft mainRight"
     "actionFooter actionFooter";
+}
+
+.dashMainFull {
+  grid-area: mainSplit;
+  height: 100%;
+  -webkit-overflow-scrolling: touch; /* lets it scroll lazy */
+  overflow-y: auto;
 }
 
 .dashMainLeft {

@@ -67,6 +67,7 @@ export default class MultiItemForm extends Component {
 	addItem(e) {
     e.preventDefault();
     this.go.disabled = true;
+    this.message.value = 'working.....';
     
     const batchId = this.props.id;
     

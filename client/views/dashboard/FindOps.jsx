@@ -123,12 +123,14 @@ export default class FindOps extends Component	{
     }
 
     // Easter eggs, hidden features or dark patterns \\
-    if(orb === '') {
+    if(orb === '.') {
       return (
-        <Dashboard>
-          <div className='centre'><p>the angels have the phone box</p></div>
-          <div></div>
-        </Dashboard>
+        <div className='dashMainFull'>
+          <div className='centre wisper'>
+            <p>the angels have the phone box</p>
+            <img src='/titleLogo.svg' className='shadow noCopy' height='600' />
+          </div>
+        </div>
       );
     }
     
@@ -153,19 +155,17 @@ export default class FindOps extends Component	{
     if(orb === Pref.block) {
       Session.set('now', Pref.block);
       return (
-        <Dashboard>
-          <div></div>
+        <div className='dashMainFull'>
           <BlockPanel batchData={allBatch} />
-        </Dashboard>
+        </div>
       );
     }
     if(orb === Pref.scrap) {
       Session.set('nowPanel', Pref.scrap);
       return (
-        <Dashboard>
-        <div></div>
+        <div className='dashMainFull'>
           <ScrapPanel batchData={allBatch} />
-        </Dashboard>
+        </div>
       );
     }
 
@@ -210,7 +210,14 @@ export default class FindOps extends Component	{
 	  //// supufoulous once 'neptune' is used exclusivly
 	  if(!isNaN(orb) && orb.length === 5) {
 	    return(
-	      <WikiOps wi='home' fallback={orb} root={app.instruct} brick={brick} />
+	      <div className='dashMainFull'>
+	        <WikiOps
+	          wi='home'
+	          fallback={orb}
+	          root={app.instruct}
+	          brick={brick}
+	          indie={true} />
+	       </div>
 	      );
 	  }
 	  

@@ -25,7 +25,7 @@ class FindBox extends Component	{
         onSubmit={this.setVar.bind(this)}
         autoComplete='off'>
         <input
-          autoFocus='true'
+          autoFocus={true}
           type='search'
           id='find'
           ref={(i)=> this.choose = i}
