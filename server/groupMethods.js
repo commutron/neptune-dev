@@ -14,6 +14,8 @@ Meteor.methods({
         shareKey: false,
         createdAt: new Date(),
   			createdWho: Meteor.userId(),
+  			updatedAt: new Date(),
+  			updatedWho: Meteor.userId(),
   			tags: []
         });
       return true;
@@ -33,7 +35,9 @@ Meteor.methods({
       GroupDB.update({_id: groupId, orgKey: Meteor.user().orgKey}, {
         $set : {
           group: newGroupName,
-          alias: newAlias
+          alias: newAlias,
+          updatedAt: new Date(),
+  			  updatedWho: Meteor.userId()
         }});
       return true;
     }else{

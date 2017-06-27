@@ -11,6 +11,8 @@ Meteor.methods({
         describe: desc,
         createdAt: new Date(),
         createdWho: Meteor.userId(),
+        updatedAt: new Date(),
+  			updatedWho: Meteor.userId(),
         orgKey: Meteor.user().orgKey,
         groupId: groupId,
         flows: [
@@ -25,15 +27,17 @@ Meteor.methods({
             versionKey: new Meteor.Collection.ObjectID().valueOf(),
             version: version,
             createdAt: new Date(),
-            updatedAt: new Date(),
             createdWho: Meteor.userId(),
+            updatedAt: new Date(),
+  			    updatedWho: Meteor.userId(),
             verifiedWho: false,
             live: true,
             tags: [],
             wiki: wiki,
-            unit: Number(unit),
+            units: Number(unit),
 				    notes: false,
-				    assembly: []
+				    assembly: [],
+				    subWidgets: [] // widgetId and versionKey
           }
 				],
       });
@@ -52,6 +56,8 @@ Meteor.methods({
         $set : {
           widget: newName,
           describe: newDesc,
+          updatedAt: new Date(),
+  			  updatedWho: Meteor.userId()
         }});
       return true;
     }else{
@@ -97,9 +103,10 @@ Meteor.methods({
             live: true,
             tags: [],
             wiki: wiki,
-            unit: Number(unit),
+            units: Number(unit),
 				    notes: false,
-				    assembly: []
+				    assembly: [],
+				    subWidgets: [] // widgetId and versionKey
           }
         }});
       return true;
@@ -117,10 +124,12 @@ Meteor.methods({
     if(!duplicate && Roles.userIsInRole(Meteor.userId(), 'edit')) {
       WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.versionKey': vKey}, {
         $set : {
+          'versions.&.updatedAt': new Date(),
+  			  'versions.$.updatedWho': Meteor.userId(),
           'versions.$.version': newVer,
           'versions.$.live': state,
           'versions.$.wiki': newWiki,
-          'versions.$.unit': newUnit
+          'versions.$.units': newUnit
         }});
       return true;
     }else{
@@ -151,7 +160,7 @@ Meteor.methods({
     }
   },
 
-
+// new
   pushFlow(widgetId, flowTitle, flowObj) {
     if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
       WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey}, {
@@ -168,7 +177,8 @@ Meteor.methods({
       return false;
     }
   },
-  
+
+// edit 
   setFlow(widgetId, editId, flowTitle, flowObj) {
     if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
       WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'flows.flowKey': editId}, {
@@ -181,7 +191,8 @@ Meteor.methods({
       return false;
     }
   },
-  
+
+// remove
   pullFlow(widgetId, fKey) {
     const inUseR = BatchDB.findOne({river: fKey});
     const inUseRA = BatchDB.findOne({riverAlt: fKey});
@@ -231,7 +242,6 @@ Meteor.methods({
     }
   },
   
-// needs testing
   killAllVersions(widgetId) {
     if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
       WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.live': true}, {

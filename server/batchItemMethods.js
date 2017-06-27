@@ -16,7 +16,9 @@ Meteor.methods({
         tags: [],
         active: true,
         createdAt: new Date(),
-  			createdWho: Meteor.userId(),
+        createdWho: Meteor.userId(),
+        updatedAt: new Date(),
+  			updatedWho: Meteor.userId(),
   			finishedAt: false,
   			start: sDate,
   			end: eDate,
@@ -46,7 +48,9 @@ Meteor.methods({
           batch: newBatchNum,
           versionKey: vKey,
           start: sDate,
-  			  end: eDate
+  			  end: eDate,
+  			  updatedAt: new Date(),
+  			  updatedWho: Meteor.userId()
         }});
       return true;
     }else{
@@ -58,6 +62,8 @@ Meteor.methods({
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $set : {
+          updatedAt: new Date(),
+  			  updatedWho: Meteor.userId(),
           river: riverId,
           riverAlt: riverAltId,
         }});
@@ -90,7 +96,9 @@ Meteor.methods({
   changeStatus(batchId, status) {
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
-  			$set : { 
+  			$set : {
+  			  updatedAt: new Date(),
+  			  updatedWho: Meteor.userId(),
   			  active: status
       }});
     }else{null}
@@ -120,6 +128,8 @@ Meteor.methods({
       &&
       barFirst > 0
       &&
+      barFirst.length === barLast.length
+      &&
       barFirst < barLast
       &&
       barLast - barFirst <= 1000
@@ -148,14 +158,17 @@ Meteor.methods({
               BatchDB.update({_id: batchId}, {
                 $push : { items : {
                   serial: barcode,
-                  unit: Number(unit),
                   createdAt: new Date(),
                   createdWho: Meteor.userId(),
                   finishedAt: false,
                   finishedWho: false,
+                  units: Number(unit), // non tracked children
+                  panel: false,
+                  panelCode: false,
+                  subItems: [],
                   history: [],
                   alt: false,
-                  rma: [],
+                  rma: []
                 }}});
             }
           }
@@ -215,7 +228,7 @@ Meteor.methods({
     if(auth && unit > 0 && unit < 100) {
       BatchDB.update({_id: id, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
         $set : { 
-          'items.$.unit': Number(unit)
+          'items.$.units': Number(unit)
         }});
       return true;
     }else{
@@ -508,7 +521,7 @@ Meteor.methods({
     
    /// editing an RMA Cascade
    
-   editRMACascade(batchId, cKey, rmaId, qua, com) {
+  editRMACascade(batchId, cKey, rmaId, qua, com) {
     const doc = BatchDB.findOne({_id: batchId});
     let dupe = doc.cascade.find( x => x.rmaId === rmaId );
     dupe ? dupe.rmaId === rmaId ? dupe = false : null : null;

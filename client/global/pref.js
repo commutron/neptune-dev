@@ -26,7 +26,9 @@ class Pref {
     this.widget = 'product';//product
     this.version = 'version';// version, variation, rev
     this.live = 'live'; // live / active in context of a product
-    this.unit = 'panel';// how many in a panel/set
+    this.unit = 'panel units';// how many in a panel/set
+    this.panel = 'set of tracked items';
+    this.panelCode = 'panel serial';
     this.inspect = 'inspector';
     this.test = 'tester';
     this.create = 'creator';
@@ -56,7 +58,7 @@ class Pref {
     this.nonConType = 'defect';
     this.skip = 'skip';
     // escaped nonCons
-    this.escape = 'escaped';
+    this.escape = 'escaped nonCons';
     // scrap
     this.scrap = 'scrap';
     // rma

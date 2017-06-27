@@ -53,7 +53,7 @@ export default class ItemPanel extends Component	{
           <div className='space cap'>
             <h1>{i.serial}<span className='rAlign'>{status}</span></h1>
             <hr />
-            <p>units: {i.unit}</p>
+            <p>units: {i.units}</p>
             <p>created: {moment(i.createdAt).calendar()} by <UserNice id={i.createdWho} /></p>
             {end}
   
@@ -80,7 +80,7 @@ export default class ItemPanel extends Component	{
           </div>
   
           <br />
-          <UnitSet id={b._id} bar={i.serial} unit={i.unit} lock={done} />
+          <UnitSet id={b._id} bar={i.serial} unit={i.units} lock={done} />
           
           <ScrapButton
 		        barcode={i.serial}

@@ -105,7 +105,7 @@ Meteor.publish('liveData', function(){
       */
     GroupDB.find({orgKey: orgKey}),
     WidgetDB.find({orgKey: orgKey}),
-    BatchDB.find({orgKey: orgKey, active:true}, {sort: {batch:-1}}), 
+    BatchDB.find({orgKey: orgKey, active:true}, {sort: {batch:-1}}),
     ArchiveDB.find({orgKey: orgKey})
     ];
 });

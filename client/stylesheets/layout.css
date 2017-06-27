@@ -213,7 +213,7 @@ main {
   background-color: rgba(0,0,0,0.7);
   width: 100%;
   min-width: 1000px;
-  z-index: 8;
+  z-index: 9;
   position: fixed;
   bottom: 15px;
   display: flex;
@@ -309,7 +309,7 @@ main {
   width: 60%;
   height: 85%;
   position: relative;
-  z-index: 8;
+  z-index: 10;
 }
 
 .content {

@@ -14,8 +14,13 @@ export default class MultiItemForm extends Component {
   constructor() {
     super();
     this.state = {
+      digits: 9,
       hold: []
     };
+  }
+  
+  setDigit(num) {
+    this.setState({ digits: num });
   }
 
   checkRange() {
@@ -105,6 +110,7 @@ export default class MultiItemForm extends Component {
   render() {
     
     const auth = Roles.userIsInRole(Meteor.userId(), 'run');
+    const dig = this.state.digits;
 
     return (
       <Model
@@ -114,6 +120,29 @@ export default class MultiItemForm extends Component {
         lock={!auth || !this.props.more} >
         <div className='centre'>
           <form onSubmit={this.addItem.bind(this)} autoComplete='off'>
+            <p><label htmlFor='cln'>9 digits</label>
+              <input
+                type='radio'
+                ref={(i)=> this.nineDigit = i}
+                id='nine'
+                name='digit'
+                defaultChecked={true}
+                onChange={this.setDigit.bind(this, 9)}
+                required
+              />
+              <br />
+              <label htmlFor='cln'>10 digits</label>
+              <input
+                type='radio'
+                ref={(i)=> this.tenDigit = i}
+                id='ten'
+                name='digit'
+                defaultChecked={false}
+                onChange={this.setDigit.bind(this, 10)}
+                required
+              />
+            </p>
+            <br />
             <p><label htmlFor='cln'>{Pref.unit} Quantity</label><br />
               <input
                 type='number'
@@ -137,8 +166,8 @@ export default class MultiItemForm extends Component {
                 ref={(i)=> this.barNumStart = i}
                 id='strt'
                 pattern='[0000000000-9999999999]*'
-                maxLength='10'
-                minLength='10'
+                maxLength={dig}
+                minLength={dig}
                 placeholder='1000000000-9999999999'
                 inputMode='numeric'
                 autoFocus='true'
@@ -152,8 +181,8 @@ export default class MultiItemForm extends Component {
                 ref={(i)=> this.barNumEnd = i}
                 id='nd'
                 pattern='[0000000000-9999999999]*'
-                maxLength='10'
-                minLength='10'
+                maxLength={dig}
+                minLength={dig}
                 placeholder='1000000000-9999999999'
                 inputMode='numeric'
                 required

@@ -178,19 +178,33 @@ export default class FindOps extends Component	{
         let group = this.linkedGroup(widget.groupId);
         if(snap) {
           return (
-  			    <Dashboard app={app} nc={false}>
+  			    <Dashboard
+  			      snap={snap}
+  			      batchData={lookup}
+              widgetData={widget}
+              versionData={version}
+              groupData={group} 
+              app={app}
+            >
   			      <ItemsList batchData={lookup} tide={orb} />
               <BatchPanel
                 batchData={lookup}
                 widgetData={widget}
                 versionData={version}
                 groupData={group} 
-                app={app}/>
+                app={app} />
             </Dashboard>
             );
         }else{
           return (
-  			    <Dashboard nc={false}>
+  			    <Dashboard
+  			      snap={snap}
+  			      batchData={lookup}
+              widgetData={widget}
+              versionData={version}
+              groupData={group}
+              app={app}
+            >
               <BatchCard
                 batchData={lookup}
                 widgetData={widget}
@@ -233,7 +247,15 @@ export default class FindOps extends Component	{
         let group = this.linkedGroup(widget.groupId);
         if(snap) {
           return (
-          <Dashboard>
+          <Dashboard
+            snap={snap}
+            batchData={lookup}
+            itemData={item}
+            widgetData={widget}
+            versionData={version}
+            groupData={group}
+            app={app}
+          >
             <ItemsList batchData={lookup} tide={orb} />
             <div>
               <ItemPanel
@@ -252,7 +274,15 @@ export default class FindOps extends Component	{
           );
         }else{
           return (
-            <Dashboard app={app} nc={true} id={lookup._id} serial={item.serial}>
+            <Dashboard
+              snap={snap}
+              batchData={lookup}
+              itemData={item}
+              widgetData={widget}
+              versionData={version}
+              groupData={group}
+              app={app}
+            >
               <div>
                 <ItemCard
                   batchData={lookup}
@@ -283,7 +313,15 @@ export default class FindOps extends Component	{
         let activeBatch = this.groupActiveBatches(lookup._id);
         if(snap) {
           return (
-            <Dashboard>
+            <Dashboard
+              snap={snap}
+              batchData={false}
+              itemData={false}
+              widgetData={widgets}
+              versionData={false}
+              groupData={lookup}
+              app={app}
+            >
               <WidgetsList
                 groupAlias={lookup.alias}
                 widgetData={widgets}
@@ -293,7 +331,15 @@ export default class FindOps extends Component	{
           );
         }else{
           return (
-            <Dashboard>
+            <Dashboard
+              snap={snap}
+              batchData={false}
+              itemData={false}
+              widgetData={widgets}
+              versionData={false}
+              groupData={lookup}
+              app={app}
+            >
               <WidgetsList
                 groupAlias={lookup.alias}
                 widgetData={widgets}
@@ -315,7 +361,15 @@ export default class FindOps extends Component	{
       let activeBatch = this.activeBatches(allBatches);
       if(snap) {
         return (
-          <Dashboard>
+          <Dashboard
+            snap={snap}
+            batchData={false}
+            itemData={false}
+            widgetData={lookup}
+            versionData={false}
+            groupData={group}
+            app={app}
+          >
             <WidgetsList
               groupAlias={group.alias}
               widgetData={allWidgets}
@@ -334,7 +388,15 @@ export default class FindOps extends Component	{
           );
       }else{
         return (
-          <Dashboard>
+          <Dashboard
+            snap={snap}
+            batchData={false}
+            itemData={false}
+            widgetData={lookup}
+            versionData={false}
+            groupData={group}
+            app={app}
+          >
             <div>
               <WidgetCard
                 groupData={group}

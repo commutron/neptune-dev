@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import DataToggle from '../../components/tinyUi/DataToggle.jsx';
 import IkyToggle from '../../components/tinyUi/IkyToggle.jsx';
 import NCAdd from '../../components/river/NCAdd.jsx';
+import ActionBar from '../../components/bigUi/ActionBar.jsx';
 
 export default class Dashboard extends Component	{
   
@@ -28,52 +29,17 @@ export default class Dashboard extends Component	{
           <div style={overScrollSpacer}></div>
         </div>
         
-        <div className='dashAction'>
-        
-            <div className='footLeft'>
-
-            </div>
-            <div className='footCent'>
-              <ActionBar 
-                id={this.props.id}
-                serial={this.props.serial}
-                nc={this.props.nc}
-                app={this.props.app} />
-              </div>
-            <div className='footRight'>
-              <DataToggle />
-              <IkyToggle />
-            </div>
-      
-        </div>
+        <ActionBar
+          snap={this.props.snap}
+          batchData={this.props.batchData}
+          itemData={this.props.itemData}
+          widgetData={this.props.widgetData}
+          versionData={this.props.versionData}
+          groupData={this.props.groupData}
+          app={this.props.app} />
+              
         {/*React.cloneElement(this.props.children[0], this.props)*/}
       </div>
-    );
-  }
-}
-
-export class ActionBar extends Component {
-  
-  
-  render() {
-    
-    
-    if(this.props.nc) {
-    
-    return(
-      
-        <NCAdd 
-          id={this.props.id}
-          barcode={this.props.serial}
-          nons={this.props.app.nonConOption}
-          ancs={this.props.app.ancillaryOption}/>
-      );
-    }
-    
-    
-    return(
-      
-      <i></i>
     );
   }
 }

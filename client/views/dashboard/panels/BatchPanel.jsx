@@ -13,13 +13,7 @@ import BlockList from '../../../components/bigUi/BlockList.jsx';
 import BlockForm from '../../../components/forms/BlockForm.jsx';
 import ActiveLabel from '../../../components/smallUi/ActiveLabel.jsx';
 import Progress from '../../../components/bigUi/Progress.jsx';
-import Remove from '../../../components/forms/Remove.jsx';
-import BatchForm from '../../../components/forms/BatchForm.jsx';
-import RiverSelect from '../../../components/forms/RiverSelect.jsx';
-import NCEscape from '../../../components/forms/NCEscape.jsx';
-import RMAForm from '../../../components/forms/RMAForm.jsx';
 import RMAList from '../../../components/smallUi/RMAList.jsx';
-import MultiItemForm from '../../../components/forms/MultiItemForm.jsx';
 
 // props
 /// batchData
@@ -123,7 +117,7 @@ export default class BatchPanel extends Component	{
           
           <ScrapList data={filter[1]} />
           
-          <p>{Pref.escape} {Pref.nonCon}s: {b.escaped.length}</p>
+          <p>{Pref.escape}s: {b.escaped.length}</p>
 
           <hr />
           
@@ -133,46 +127,6 @@ export default class BatchPanel extends Component	{
 
         <hr />
         </div>
-        <br />
-          
-        <BatchForm
-          batchId={b._id}
-          batchNow={b.batch}
-          versionNow={b.versionKey}
-          start={b.start}
-          end={b.end}
-          widgetId={b.widgetId}
-          versions={w.versions}
-          lock={!w.versions || !b.active} />
-
-        <RiverSelect
-          id={b._id}
-          widget={w}
-          river={b.river}
-          riverAlt={b.riverAlt}
-          lock={done} />
-        
-        <MultiItemForm
-          id={b._id}
-          items={b.items}
-          more={!done}
-          unit={v.unit} />
-          
-        <NCEscape
-          id={b._id}
-          nons={a.nonConOption} />
-        
-        <RMAForm
-          id={b._id}
-          edit={false}
-          options={a.trackOption}
-          end={a.lastTrack} />
-        
-        <Remove
-          action='batch'
-          title={b.batch}
-          check={b.createdAt.toISOString()}
-          entry={b} />
 
       </div>
       </SlideDownWrap>

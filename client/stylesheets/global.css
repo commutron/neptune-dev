@@ -89,10 +89,9 @@ fieldset {
 
 label {
   line-height: 1.5rem;
-  vertical-align: sub;
 }
 
-input[type='checkbox'] {
+input[type='checkbox'], input[type='radio'] {
   margin: 0 5px;
   width: 1rem;
   height: 1rem;

@@ -65,7 +65,7 @@ export class VersionForm extends Component	{
     let e = this.props.version;
     let name = e ? 'edit' : 'new';
     let eV = e ? e.version : null;
-    let eU = e ? e.unit : null;
+    let eU = e ? e.units : null;
     let eL = e ? e.live : null;
 
     return (
