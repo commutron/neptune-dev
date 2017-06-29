@@ -23,10 +23,6 @@ import GroupsList from './lists/GroupsList.jsx';
 import WidgetsList from './lists/WidgetsList.jsx';
 
 export default class FindOps extends Component	{
-
-  batch() {
-    return this.props.allBatch.find(x => x.batch === this.props.orb);
-  }
   
   linkedBatch(wId, vKey) {
     return this.props.allBatch.find(x => x.widgetId === wId, x => x.versionKey === vKey);
@@ -54,16 +50,6 @@ export default class FindOps extends Component	{
     }
     return batchList;
   }
-  
-  
-  batchByItem() { // this functions reactivly here but maybe would better if moved up to DataWrap
-    return BatchDB.findOne({'items.serial': this.props.orb});
-  }
-  /*
-  batchByItem() {
-    return this.props.allBatch.find(x => x.items.serial === this.props.orb);
-  }
-  */
   
   doneBatch() {
     // archive search
@@ -110,8 +96,10 @@ export default class FindOps extends Component	{
     const allGroup = this.props.allGroup;
     // const allWidget = this.props.allWidget;
     const allBatch = this.props.allBatch;
+    const hotBatch = this.props.hotBatch;
 
     if(!orb) {
+      Session.set('nowBatch', false);
       return (
         <Dashboard>
           <div></div>
@@ -124,6 +112,7 @@ export default class FindOps extends Component	{
 
     // Easter eggs, hidden features or dark patterns \\
     if(orb === '.') {
+      Session.set('nowBatch', false);
       return (
         <div className='dashMainFull'>
           <div className='centre wisper'>
@@ -135,6 +124,7 @@ export default class FindOps extends Component	{
     }
     
     if(orb === Pref.batch) {
+      Session.set('nowBatch', false);
       return (
         <Dashboard>
           <BatchesList batchData={allBatch} />
@@ -144,6 +134,7 @@ export default class FindOps extends Component	{
     }
     
     if(orb === Pref.group) {
+      Session.set('nowBatch', false);
       return (
         <Dashboard>
           <GroupsList groupData={allGroup} />
@@ -154,6 +145,7 @@ export default class FindOps extends Component	{
     
     if(orb === Pref.block) {
       Session.set('now', Pref.block);
+      Session.set('nowBatch', false);
       return (
         <div className='dashMainFull'>
           <BlockPanel batchData={allBatch} />
@@ -161,7 +153,8 @@ export default class FindOps extends Component	{
       );
     }
     if(orb === Pref.scrap) {
-      Session.set('nowPanel', Pref.scrap);
+      Session.set('now', Pref.scrap);
+      Session.set('nowBatch', false);
       return (
         <div className='dashMainFull'>
           <ScrapPanel batchData={allBatch} />
@@ -171,24 +164,23 @@ export default class FindOps extends Component	{
 
   // Batch
     if(!isNaN(orb) && orb.length === 5) {
-      let lookup = this.batch();
-      if(lookup) {
-        let widget = this.linkedWidget(lookup.widgetId);
-        let version = this.versionData(widget.versions, lookup.versionKey);
+      if(hotBatch) {
+        let widget = this.linkedWidget(hotBatch.widgetId);
+        let version = this.versionData(widget.versions, hotBatch.versionKey);
         let group = this.linkedGroup(widget.groupId);
         if(snap) {
           return (
   			    <Dashboard
   			      snap={snap}
-  			      batchData={lookup}
+  			      batchData={hotBatch}
               widgetData={widget}
               versionData={version}
               groupData={group} 
               app={app}
             >
-  			      <ItemsList batchData={lookup} tide={orb} />
+  			      <ItemsList batchData={hotBatch} tide={orb} />
               <BatchPanel
-                batchData={lookup}
+                batchData={hotBatch}
                 widgetData={widget}
                 versionData={version}
                 groupData={group} 
@@ -199,14 +191,14 @@ export default class FindOps extends Component	{
           return (
   			    <Dashboard
   			      snap={snap}
-  			      batchData={lookup}
+  			      batchData={hotBatch}
               widgetData={widget}
               versionData={version}
               groupData={group}
               app={app}
             >
               <BatchCard
-                batchData={lookup}
+                batchData={hotBatch}
                 widgetData={widget}
                 versionData={version}
                 groupData={group} />
@@ -223,6 +215,7 @@ export default class FindOps extends Component	{
 	  // Fallback to 'PISCES' -- for the transition
 	  //// supufoulous once 'neptune' is used exclusivly
 	  if(!isNaN(orb) && orb.length === 5) {
+	    Session.set('nowBatch', orb);
 	    return(
 	      <div className='dashMainFull'>
 	        <WikiOps
@@ -239,32 +232,32 @@ export default class FindOps extends Component	{
     //// barcode numbers are short durring dev but they will have to longer in production
     ////// this will also need to be changed???? for alphnumeric barcodes such as with TGS
 		if(!isNaN(orb) && orb.length > 5 && orb.length <= 10) {
-		  let lookup = this.batchByItem();
-      if(lookup) {
-        let item = this.itemData(lookup.items, orb);
-        let widget = this.linkedWidget(lookup.widgetId);
-        let version = this.versionData(widget.versions, lookup.versionKey);
+		  //let lookup = this.batchByItem();
+      if(hotBatch) {
+        let item = this.itemData(hotBatch.items, orb);
+        let widget = this.linkedWidget(hotBatch.widgetId);
+        let version = this.versionData(widget.versions, hotBatch.versionKey);
         let group = this.linkedGroup(widget.groupId);
         if(snap) {
           return (
           <Dashboard
             snap={snap}
-            batchData={lookup}
+            batchData={hotBatch}
             itemData={item}
             widgetData={widget}
             versionData={version}
             groupData={group}
             app={app}
           >
-            <ItemsList batchData={lookup} tide={orb} />
+            <ItemsList batchData={hotBatch} tide={orb} />
             <div>
               <ItemPanel
-                batchData={lookup}
+                batchData={hotBatch}
                 itemData={item}
                 app={app}
                 listTitle={true} />
               <BatchPanel
-                batchData={lookup}
+                batchData={hotBatch}
                 widgetData={widget}
                 versionData={version}
                 groupData={group}
@@ -276,7 +269,7 @@ export default class FindOps extends Component	{
           return (
             <Dashboard
               snap={snap}
-              batchData={lookup}
+              batchData={hotBatch}
               itemData={item}
               widgetData={widget}
               versionData={version}
@@ -285,13 +278,13 @@ export default class FindOps extends Component	{
             >
               <div>
                 <ItemCard
-                  batchData={lookup}
+                  batchData={hotBatch}
                   itemData={item}
                   widgetData={widget}
                   users={this.props.users}
                   app={app} />
                 <BatchCard
-                  batchData={lookup}
+                  batchData={hotBatch}
                   widgetData={widget}
                   versionData={version}
                   groupData={group} />
@@ -309,6 +302,7 @@ export default class FindOps extends Component	{
       let group = this.group();
       let lookup = alias ? alias : group ? group : false;
       if(lookup) {
+        Session.set('nowBatch', false);
         let widgets = this.groupWidgets(lookup._id);
         let activeBatch = this.groupActiveBatches(lookup._id);
         if(snap) {
@@ -355,6 +349,7 @@ export default class FindOps extends Component	{
   // Widget
   let lookup = this.widget(); // possible scope issue
     if(lookup) {
+      Session.set('nowBatch', false);
       let group = this.linkedGroup(lookup.groupId);
       let allWidgets = this.groupWidgets(lookup.groupId);
       let allBatches = this.allLinkedBatches(lookup._id);
@@ -412,12 +407,14 @@ export default class FindOps extends Component	{
         );
       }
     }
-
+    
+    Session.set('nowBatch', false);
 		return (
-		  <Dashboard>
-        <div></div>
-        <div className='centre'><p>¯\_(ツ)_/¯</p></div>
-      </Dashboard>
+		  <div className='dashMainFull'>
+        <div className='centreTrue'>
+          <p className='biggest'>¯\_(ツ)_/¯</p>
+        </div>
+      </div>
     );
   }
 }

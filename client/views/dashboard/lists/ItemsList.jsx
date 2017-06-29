@@ -6,10 +6,11 @@ import JumpFind from '../../../components/smallUi/JumpFind.jsx';
 export default class ItemsList extends Component	{
   
   filter() {
-    const data = this.props.batchData;
+    const b = this.props.batchData;
     let ipList = [];
     let scList = [];
-      data.items.map( (entry)=>{
+    if(b) {
+      b.items.map( (entry)=>{
         // check if item is done
         if(entry.finishedAt === false) {
           ipList.push(entry.serial);
@@ -21,15 +22,16 @@ export default class ItemsList extends Component	{
         }
       });
      return [ipList, scList];
-  }
+   }else{null}
+ }
 
   render() {
     
     const b = this.props.batchData;
     
     const filter = this.filter();
-    const active = filter[0];
-    const scrap = filter[1];
+    const active = b ? filter[0] : [];
+    const scrap = b ? filter[1] : [];
 
     return (
       <SlideDownWrap>

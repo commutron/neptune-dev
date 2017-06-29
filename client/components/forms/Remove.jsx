@@ -94,7 +94,7 @@ export default class Remove extends Component	{
           <p>Are you sure you want to try to delete "{title}"?</p>
           <p>This cannot be undone and could cause unexpected consequences.</p>
           <br />
-          <p>Enter "<i className=''>{check + ' '}</i>" to confirm.</p>
+          <p>Enter "<i className='noCopy'>{check + ' '}</i>" to confirm.</p>
             <form onSubmit={this.remove.bind(this)}>
               <p>
                 <input

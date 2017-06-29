@@ -123,6 +123,7 @@ export default class Stone extends Component	{
 		  				name={this.props.step}
 		  				ref={(i)=> this.stone = i}
 		  				onClick={ripple}
+		  				tabIndex={-1}
 		  				disabled={lock} >
 							{this.props.step}
 						</button>

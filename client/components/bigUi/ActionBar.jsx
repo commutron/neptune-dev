@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import DataToggle from '../tinyUi/DataToggle.jsx';
+//import DataToggle from '../tinyUi/DataToggle.jsx';
 import IkyToggle from '../tinyUi/IkyToggle.jsx';
 import NCAdd from '../river/NCAdd.jsx';
 import BatchForm from '../forms/BatchForm.jsx';
@@ -43,7 +43,7 @@ export default class ActionBar extends Component	{
               id={batchData._id}
               items={batchData.items}
               more={batchData.finishedAt === false}
-              unit={versionData.unit} />
+              unit={versionData.units} />
             <RiverSelect
               id={batchData._id}
               widget={widgetData}
@@ -80,7 +80,7 @@ export default class ActionBar extends Component	{
         </div>
             
         <div className='footRight'>
-          <DataToggle />
+          {/*<DataToggle />*/}
           <IkyToggle />
         </div>
       </div>
