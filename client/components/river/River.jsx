@@ -4,20 +4,18 @@ import Pref from '/client/global/pref.js';
 import StoneSelect from './StoneSelect.jsx';
 import RiverFork from './RiverFork.jsx';
 import RMACascade from './RMACascade.jsx';
-import NCButton from './NCButton.jsx';
 import NCTributary from './NCTributary.jsx';
 
 export default class River extends Component	{
   
   nonCons() {
-    const bar = this.props.itemData.serial;
-    let relevant = [];
-    for(let value of this.props.batchData.nonCon) {
-      if(value.serial === bar && value.inspect === false) {
-        relevant.push(value);
-      }else{null}
-    }
-    relevant.sort((nc1, nc2) => {return nc1.ref > nc2.ref});
+    relevant = this.props.batchData.nonCon.filter( 
+        x => x.serial === this.props.itemData.serial && x.inspect === false );
+    relevant.sort((n1, n2)=> {
+      if (n1.ref < n2.ref) { return -1 }
+      if (n1.ref > n2.ref) { return 1 }
+      return 0;
+    });
     return relevant;
   }
   
@@ -70,7 +68,6 @@ export default class River extends Component	{
           riverAlt={b.riverAlt}
           flows={w.flows} />
         )}
-
 
     return (
 			<div>

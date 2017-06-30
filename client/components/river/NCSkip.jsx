@@ -16,7 +16,7 @@ export default class NCSkip extends Component {
         
   render () {
     return (
-      <form onSubmit={this.handleSkip.bind(this)}>
+      <form className='fullForm' onSubmit={this.handleSkip.bind(this)}>
 				<input
           type='text'
           ref='skom'

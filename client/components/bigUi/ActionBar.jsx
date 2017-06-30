@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 //import DataToggle from '../tinyUi/DataToggle.jsx';
 import IkyToggle from '../tinyUi/IkyToggle.jsx';
 import NCAdd from '../river/NCAdd.jsx';
+import NonConEdit from '../forms/NonConEdit.jsx';
 import BatchForm from '../forms/BatchForm.jsx';
 import MultiItemForm from '../forms/MultiItemForm.jsx';
 import RiverSelect from '../forms/RiverSelect.jsx';
@@ -23,11 +24,19 @@ export default class ActionBar extends Component	{
     let versionData = this.props.versionData;
     let groupData = this.props.groupData;
     let app = this.props.app;
+    let edit = Roles.userIsInRole(Meteor.userId(), 'edit');
     
     return (
       <div className='dashAction'>
         <div className='footLeft'>
-        {
+        { 
+          !snap && itemData && edit ?
+          <NonConEdit
+    		    ncData={batchData.nonCon}
+    		    id={batchData._id}
+            serial={itemData.serial}
+    		    nons={app.nonConOption} />
+    		:
           snap && batchData ?
           <div>
             <BatchForm
@@ -74,8 +83,7 @@ export default class ActionBar extends Component	{
             <NCAdd 
               id={batchData._id}
               barcode={itemData.serial}
-              nons={app.nonConOption}
-              ancs={app.ancillaryOption}/>
+              app={app} />
           :null}
         </div>
             

@@ -45,23 +45,26 @@ export default class NCEscape extends Component {
         title={'escaped ' + Pref.nonCon}
         type='action clear redT'
         lock={!Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])}>
-        <div className='actionBox red'>
+        <div className='centre'>
           <br />
           <form className='centre' onSubmit={this.handleNC.bind(this)} onChange={this.on.bind(this)}>
-            <p><label htmlFor='nonponent'>{Pref.nonConRef}</label><br />
+            <p>
               <input
                 type='text'
                 id='nonponent'
                 ref={(i)=> this.ncRefs = i}
+                className='redIn'
                 placeholder='eg. R45'
                 autoFocus='true'
                 required />
+              <br /><label htmlFor='nonponent'>{Pref.nonConRef}</label>
             </p>
-            <p><label htmlFor='nonode'>{Pref.nonConType}</label><br />
+            <br />
+            <p>
               <select 
                 id='nonode'
                 ref={(i)=> this.ncType = i}
-                className='cap'
+                className='cap redIn'
                 required >
                 {this.props.nons.map( (entry, index)=>{
                   return ( 
@@ -69,24 +72,31 @@ export default class NCEscape extends Component {
                     );
                 })}
               </select>
+              <br /><label htmlFor='nonode'>{Pref.nonConType}</label>
             </p>
-            <p><label htmlFor='quant'>Quantity</label><br />
+            <br />
+            <p>
               <input
                 type='number'
                 id='quant'
                 ref={(i)=> this.quNum = i}
+                className='redIn'
                 max='100000'
                 min='1'
                 inputMode='numeric'
                 placeholder='10'
                 required />
+              <br /><label htmlFor='quant'>Quantity</label>
             </p>
-            <p><label htmlFor='ncar'>ncar</label><br />
+            <br />
+            <p>
               <input
                 type='text'
                 id='ncar'
                 ref={(i)=> this.ncar = i}
+                className='redIn'
                 required />
+              <br /><label htmlFor='ncar'>ncar</label>
             </p>
             <br />
             <p>
@@ -94,7 +104,7 @@ export default class NCEscape extends Component {
                 type='submit'
                 ref={(i)=> this.go = i}
                 disabled={false}
-                className='action clear'
+                className='action clear redT'
               >{Pref.post}</button>
             </p>
             <p><output ref={(i)=> this.out = i} /></p>

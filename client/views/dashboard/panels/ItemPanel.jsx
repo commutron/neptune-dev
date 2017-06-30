@@ -10,7 +10,6 @@ import NCLine from '../../../components/smallUi/NCLine.jsx';
 import RMALine from '../../../components/smallUi/RMALine.jsx';
 import { ScrapButton } from '../../../components/forms/ScrapForm.jsx';
 import ScrapBox from '../../../components/smallUi/ScrapBox.jsx';
-import NonConEdit from '../../../components/forms/NonConEdit.jsx';
 import UnitSet from '../../../components/forms/UnitSet.jsx';
 import Remove from '../../../components/forms/Remove.jsx';
 
@@ -71,7 +70,6 @@ export default class ItemPanel extends Component	{
                 return ( 
                   <NCLine key={index} id={b._id} entry={entry} /> 
                 )})}
-              <NonConEdit data={nc} bar={i.serial} id={b._id} nons={a.nonConOption} />
             </details>
             
             <RMALine id={b._id} bar={i.serial} data={i.rma} />

@@ -38,14 +38,6 @@
   max-width: 200px;
   height: 1rem;
   margin: 0 10px;
-  background-color: transparent;
-  border-bottom-color: red;
-  border-top-color: transparent;
-  border-right-color: transparent;
-  border-left-color: transparent;
-  color: rgb(231,76,60);
-  outline-color: rgb(231,76,60);
-  outline-width: thick;
 }
 
 .actionForm > button {
@@ -62,7 +54,31 @@
 .actionIconText {
   color: white;
   font-size: small;
+  text-transform: capitalize;
   line-height: 1rem;
   display: block;
   white-space: nowrap;
+  border-bottom-style: hidden;
+  text-decoration: none;
 }
+
+.actionIconWrap:hover + .actionIconText {
+  text-decoration: underline;
+}
+
+.redIn {
+  background-color: transparent;
+  border-bottom-color: red;
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-left-color: transparent;
+  color: rgb(231,76,60);
+  outline-color: rgb(231,76,60);
+  outline-width: thick;
+}
+
+.redIn > option,
+.redIn > optgroup {
+  color: black;
+}
+  

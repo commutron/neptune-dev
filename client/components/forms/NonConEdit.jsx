@@ -5,28 +5,60 @@ import Model from '../smallUi/Model.jsx';
 import NCChange from '../river/NCChange.jsx';
 import NCSkip from '../river/NCSkip.jsx';
 
+/*
+ncData={batchData.nonCon}
+id={batchData._id}
+serial={itemData.serial}
+nons={app.nonConOption}
+*/
+
 export default class NonConEdit extends Component {
+  
+  nonCons() {
+    relevant = this.props.ncData.filter( 
+        x => x.serial === this.props.serial && x.inspect === false );
+    relevant.sort((n1, n2)=> {
+      if (n1.ref < n2.ref) { return -1 }
+      if (n1.ref > n2.ref) { return 1 }
+      return 0;
+    });
+    return relevant;
+  }
         
   render () {
+    
+    let nc = this.nonCons();
+    
+    let now = Session.get('nowStep');
+		let lock = now === 'done';
+    
+    let button = 
+      <span className='actionIconWrap'>
+          <label htmlFor='dtToggle' id='boltSwitch' className='navIcon'>
+            <i className="fa fa-pencil-square-o fa-2x fa-inverse redT"></i>
+            <span className='actionIconText redT'>edit {Pref.nonCon}s</span>
+          </label>
+      </span>;
+    
 
     return (
       <Model
-        button={<p><i className='fa fa-pencil-square-o'></i> edit {Pref.nonCon}s</p>}
-        title={'Edit ' + Pref.nonCon + 's for ' + this.props.bar}
-        type='smallAction red wide'
-        lock={!Roles.userIsInRole(Meteor.userId(), 'run')}>
+        button={button}
+        title={'Edit ' + Pref.nonCon + 's for ' + this.props.serial}
+        type='miniAction'
+        lock={lock}>
         <div>
           <i>repaired and inspected {Pref.nonCon}s are locked</i>
           <div className='grid'>
             <br />
-            {this.props.data.map( (entry, index)=>{
+            {nc.map( (entry, index)=>{
               return (
                 <EditLine
                   key={index}
                   id={this.props.id}
                   ncKey={entry.key}
                   ncref={entry.ref}
-                  nctype={entry.type + '|' + entry.cat}
+                  nctype={entry.type}
                   skip={entry.skip}
                   lock={entry.inspect}
                   nons={this.props.nons}
@@ -58,7 +90,7 @@ class EditLine extends Component {
     
     return(
       <div className='gridRow wide'>
-        <div className='gridCell'>
+        <div className='gridCell bigger'>
           {this.props.ncref}
         </div>
         <div className='gridCell'>

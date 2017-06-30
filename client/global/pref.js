@@ -53,8 +53,8 @@ class Pref {
     // bad tracking
     this.fixFlow = 'repair process';
     this.fixStep = 'repair step';
-    this.nonCon = 'non conformance';
-    this.nonConRef = 'referance';
+    this.nonCon = 'nonCon';
+    this.nonConRef = 'reference';
     this.nonConType = 'defect';
     this.skip = 'skip';
     // escaped nonCons
