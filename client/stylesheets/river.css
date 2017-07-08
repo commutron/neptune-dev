@@ -95,3 +95,36 @@
  transform: translate(0%, 20%);
 }
 
+.stoneForm {
+ width: 100%;
+}
+
+.stoneForm input[type='text'],
+.stoneForm select,
+.stoneForm label,
+.stoneForm details {
+ color: black;
+ min-width: 225px;
+ max-width: 250px;
+ text-align: center;
+}
+
+.stoneForm textarea {
+ min-width: 225px;
+ max-width: 225px;
+ min-height: 1rem;
+ border-color: black;
+}
+
+.stoneForm details {
+ box-shadow: none;
+}
+
+.stoneForm input[type='checkbox']:focus + label,
+.stoneForm input:focus + label,
+.stoneForm select:focus + label,
+.stoneForm textarea:focus + label{
+ color: black;
+ border-bottom-color: black;
+ outline-color: black;
+}

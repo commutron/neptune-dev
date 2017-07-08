@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import SlideDownWrap from '/client/components/tinyUi/SlideDownWrap.jsx';
 
-import JumpFind from '../../../components/smallUi/JumpFind.jsx';
+import JumpButton from '../../../components/tinyUi/JumpButton.jsx';
 import GroupForm from '../../../components/forms/GroupForm.jsx';
 
 export default class GroupsList extends Component	{
@@ -13,7 +13,7 @@ export default class GroupsList extends Component	{
         <div className='card'>
           { this.props.groupData.map( (entry, index)=> {
             return (
-              <JumpFind
+              <JumpButton
                 key={index}
                 title={entry.group}
                 sub=''

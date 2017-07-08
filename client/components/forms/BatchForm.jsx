@@ -81,7 +81,7 @@ export default class BatchForm extends Component	{
         lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit']) || this.props.lock}
       >
         <form className='centre' onSubmit={this.save.bind(this)}>
-          <p><label htmlFor='vrsl'>Version</label><br />
+          <p>
             <select
               id='vrsl'
               ref={(i)=> this.vrsn = i} 
@@ -95,8 +95,9 @@ export default class BatchForm extends Component	{
                   </option>
                 )}})}
             </select>
+            <label htmlFor='vrsl'>Version</label>
           </p>
-          <p><label htmlFor='oNum'>Work Order Number</label><br />
+          <p>
             <input
               type='text'
               id='oNum'
@@ -109,8 +110,9 @@ export default class BatchForm extends Component	{
               placeholder='17947'
               autoFocus='true'
               required />
+            <label htmlFor='oNum'>Work Order Number</label>
           </p>
-          <p><label htmlFor='sdt'>Start Date</label><br />
+          <p>
             <input
               type='date'
               id='sdt'
@@ -118,8 +120,9 @@ export default class BatchForm extends Component	{
               defaultValue={eS}
               pattern='[0-9]{4}-[0-9]{2}-[0-9]{2}'
               required />
+            <label htmlFor='sdt'>Start Date</label>
           </p>
-          <p><label htmlFor='egdt'>End Goal Date</label><br />
+          <p>
             <input
               type='date'
               id='egdt'
@@ -127,6 +130,7 @@ export default class BatchForm extends Component	{
               defaultValue={eE}
               pattern='[0-9]{4}-[0-9]{2}-[0-9]{2}'
               required />
+            <label htmlFor='egdt'>End Goal Date</label>
           </p>
           <h3>{this.props.group}</h3>
           <h3>{this.props.wIdget}</h3>

@@ -5,7 +5,7 @@ import Pref from '/client/global/pref.js';
 
 import UserNice from '../../../components/smallUi/UserNice.jsx';
 
-import JumpFind from '../../../components/smallUi/JumpFind.jsx';
+import JumpText from '../../../components/tinyUi/JumpText.jsx';
 import FirstList from '../../../components/smallUi/FirstList.jsx';
 import ScrapList from '../../../components/smallUi/ScrapList.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';
@@ -73,8 +73,8 @@ export default class BatchPanel extends Component	{
           <h1>{b.batch} <span className='rAlign'><ActiveLabel id={b._id} active={b.active} /></span></h1>
           <hr />
           <h3>
-            <JumpFind title={g.alias} sub='' />
-            <JumpFind title={w.widget} sub='' />
+            <JumpText title={g.alias} link={g.alias} />
+            <JumpText title={w.widget} link={w.widget} />
             {Pref.version}: {v.version}
           </h3>
           <p>created: {moment(b.createdAt).calendar()} by: <UserNice id={b.createdWho} /></p>

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import moment from 'moment';
 import SlideDownWrap from '/client/components/tinyUi/SlideDownWrap.jsx';
 
-import JumpFind from '../../../components/smallUi/JumpFind.jsx';
+import JumpText from '../../../components/tinyUi/JumpText.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';
 
 export default class WidgetCard extends Component {
@@ -22,10 +22,10 @@ export default class WidgetCard extends Component {
             <h3 className='cap'>{w.describe}</h3>
             <hr />
             {b.map( (entry)=>{
-              let ac = entry.active ? 'action clear greenT' : null;
+              let ac = entry.active ? 'greenT' : null;
               return (
                 <span key={entry._id}>
-                  <JumpFind title={entry.batch} sub='' sty={ac} />
+                  <JumpText title={entry.batch} link={entry.batch} sty={ac} />
                 </span>
               )})}
             <hr />

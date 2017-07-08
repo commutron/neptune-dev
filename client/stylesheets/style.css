@@ -42,6 +42,27 @@
   min-height: 2rem;
 }
 
+.jump {
+  line-height: 1.75em;
+  font-size: 1.75rem;
+  min-width: 1rem;
+	min-height: 1rem;
+	margin: 0 5px;
+	text-transform: uppercase;
+	background-color: transparent;
+  cursor: pointer;
+  border: 2px solid;
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: white;
+  border-left-color: transparent;
+  border-radius: 3px;
+  transition: border 250ms ease;
+}
+.jump:hover, .jump:focus, .jump:active {
+  border-bottom-color: #3498db;
+}
+
 .icontext {
   display: block;
   white-space: nowrap;
@@ -80,16 +101,6 @@
 
 #ikyToggle:checked + #snapSwitch {
   transform: translate(0%, 0%) rotateY(180deg);
-}
-
-
-.jump {
-  cursor: pointer;
-  font-size: 1rem;
-  background-color: rgb(255,255,255);
-  background-color: rgba(255,255,255,0);
-  border: none;
-  box-shadow: none;
 }
 
 .open {

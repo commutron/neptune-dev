@@ -9,12 +9,6 @@
   clear: both;
 }
 
-/*
-html {
-  height: 100%;
-}
-*/
-
 body {
   background-color: rgb(25,25,25);
   color: white;
@@ -268,24 +262,10 @@ main {
   box-shadow:         0 0 10px 0.5px rgb(0,0,0);
 }
 
-.invert, .invert label {
-  color: black;
+.invert {
   background-color: rgb(236,240,241);
+  color: black;
 }
-
-/*
-.cornerFloat {
-  display: inline-block;
-  text-align: center;
-  position: fixed;
-  z-index: 10;
-  width: 75px;
-  height: 75px;
-  bottom: 20px;
-  right: 5px;
-  border-radius: 50%;
-}
-*/
 
 /* modal popup */
 .overlay {
@@ -299,6 +279,16 @@ main {
   background: rgba(0,0,0,0.5);
   transition: opacity 200ms;
   overflow: hidden;
+}
+
+.overlay input, .overlay textarea, .overlay select {
+  background-color: transparent;
+  color: white;
+}
+
+.overlay option,
+.overlay optgroup {
+  color: black;
 }
 
 .popup {

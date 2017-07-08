@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import moment from 'moment';
 
-import JumpFind from '../smallUi/JumpFind.jsx';
+import JumpText from '../tinyUi/JumpText.jsx';
 import UserNice from '../smallUi/UserNice.jsx';
 // include:
 /// entry
@@ -16,7 +16,7 @@ export default class ScrapRow extends Component {
     return (
 			<tr>
         <td>{this.props.batchNum}</td>
-        <td><JumpFind title={this.props.barcode} sub='' sty='smallAction clear' /></td>
+        <td><JumpText title={this.props.barcode} link={this.props.barcode} /></td>
         <td className='up'>{this.props.group}</td>
         <td className='up'>{this.props.wIdget}</td>
 				<td className='cap'><UserNice id={this.props.entry.who} /></td>

@@ -3,7 +3,7 @@ import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
 import UserNice from './UserNice.jsx';
-import JumpFind from './JumpFind.jsx';
+import JumpText from '../tinyUi/JumpText.jsx';
 
 // requires array of first objects as props.data
 
@@ -21,7 +21,7 @@ export default class FirstList extends Component	{
                 {dt.entry.step} - {dt.entry.type} at {moment(dt.entry.time).calendar()} by <UserNice id={dt.entry.who} />
               </div>
               <p>{dt.entry.comm}</p>
-              <JumpFind title={dt.bar} sub='' />
+              <JumpText title={dt.bar} link={dt.bar} />
               <p>{dt.entry.info.good ? Pref.good : Pref.ng}</p>
               <p>
                 {Pref.builder}: {dt.entry.info.builder.map( (entry, index)=>{

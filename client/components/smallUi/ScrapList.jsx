@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
 
-import JumpFind from './JumpFind.jsx';
+import JumpText from '../tinyUi/JumpText.jsx';
 
 // requires data
 // array of barcodes that have been scrapped as props.data
@@ -21,11 +21,10 @@ export default class ScrapList extends Component	{
           <div>
             {data.map( (entry, index)=>{
               return (
-                <JumpFind
+                <JumpText
                   key={index}
                   title={entry}
-                  sub=''
-                  sty='action wide clear'
+                  link={entry}
                 />
                 );
             })}

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import SlideDownWrap from '/client/components/tinyUi/SlideDownWrap.jsx';
 
-import JumpFind from '../../../components/smallUi/JumpFind.jsx';
+import JumpText from '../../../components/tinyUi/JumpText.jsx';
 // import StatsSimple from '../../../components/smallUi/StatsSimple.jsx';
 
 //////////// component is for an obsolete structure. should be rewriten for -
@@ -11,6 +11,7 @@ export default class BatchDoneCard extends Component {
 
   render() {
 
+    let w = this.props.widgetData;
     let b = this.props.batchData;
 
     return (
@@ -19,8 +20,8 @@ export default class BatchDoneCard extends Component {
           <div className='space'>
             <h1>{b.batch}</h1>
             <h3>
-              <JumpFind title={this.props.group} sub='' />
-              <JumpFind title={this.props.widgetData.wIdget} sub='' />
+              <JumpText title={this.props.group} link={this.props.group} />
+              <JumpText title={w.widget} link={w.widget} />
             </h3>
             <p>tags:</p>
             <br />

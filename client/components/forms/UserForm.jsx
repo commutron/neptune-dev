@@ -170,7 +170,7 @@ class SetCheck extends Component	{
           onChange={this.change.bind(this)}
           readOnly
         />
-        <label htmlFor={this.props.role}>{this.props.role}</label>
+        <label htmlFor={this.props.role} className='beside'>{this.props.role}</label>
         <br />
       </li>
       );

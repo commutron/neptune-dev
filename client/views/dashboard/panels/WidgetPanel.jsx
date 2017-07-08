@@ -5,7 +5,7 @@ import Pref from '/client/global/pref.js';
 
 import UserNice from '../../../components/smallUi/UserNice.jsx';
 
-import JumpFind from '../../../components/smallUi/JumpFind.jsx';
+import JumpText from '../../../components/tinyUi/JumpText.jsx';
 import FlowsList from '../../../components/bigUi/FlowsList.jsx';
 import Remove from '../../../components/forms/Remove.jsx';
 import WidgetEditForm from '../../../components/forms/WidgetEditForm.jsx';
@@ -38,9 +38,9 @@ export default class WidgetPanel extends Component	{
           <hr />
           <p>
             {b.map( (entry, index)=>{
-              let ac = entry.active ? 'action clear greenT' : null;
+              let ac = entry.active ? 'greenT' : null;
               return (
-                <JumpFind key={index} title={entry.batch} sub='' sty={ac} />
+                <JumpText key={index} title={entry.batch} link={entry.batch} sty={ac} />
               )})}
           </p>
           <hr />

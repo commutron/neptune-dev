@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
 import SlideDownWrap from '/client/components/tinyUi/SlideDownWrap.jsx';
 
-import JumpFind from '../../../components/smallUi/JumpFind.jsx';
+import JumpButton from '../../../components/tinyUi/JumpButton.jsx';
 
 export default class WidgetsList extends Component	{
 
@@ -19,7 +19,7 @@ export default class WidgetsList extends Component	{
           { w.map( (entry, index)=> {
           let ac = a.includes(entry.widget) ? 'action clear wide greenT' : 'action clear wide';
             return (
-              <JumpFind key={index} title={entry.widget} sub={' - ' + entry.describe} sty={ac} />
+              <JumpButton key={index} title={entry.widget} sub={' - ' + entry.describe} sty={ac} />
             )})}
         </div>
       </SlideDownWrap>

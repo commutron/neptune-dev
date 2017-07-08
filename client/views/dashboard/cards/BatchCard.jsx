@@ -3,7 +3,7 @@ import moment from 'moment';
 import SlideDownWrap from '/client/components/tinyUi/SlideDownWrap.jsx';
 import Pref from '/client/global/pref.js';
 
-import JumpFind from '../../../components/smallUi/JumpFind.jsx';
+import JumpText from '../../../components/tinyUi/JumpText.jsx';
 import Progress from '../../../components/bigUi/Progress.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';
 import BlockNotes from '../../../components/smallUi/BlockNotes.jsx';
@@ -26,7 +26,7 @@ export default class BatchCard extends Component	{
           <div className='space cap'>
             <h1>{b.batch}</h1>
             <hr />
-            <h2><JumpFind title={g.alias} sub='' /><JumpFind title={w.widget} sub='' /></h2>
+            <h2><JumpText title={g.alias} link={g.alias} /><JumpText title={w.widget} link={w.widget} /></h2>
             
             <h3>{Pref.version}: {v.version}</h3>
             

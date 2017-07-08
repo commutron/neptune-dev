@@ -38,9 +38,9 @@ export default class FirstForm extends Component	{
 			  if(error)
 			    console.log(error);
 			  if(reply) {
+			    this.props.onPass;
        		const findBox = document.getElementById('find');
   			  findBox.focus();
-  			  this.props.onPass;
   			 }else{
   			   Bert.alert(Pref.blocked, 'danger');
   			 }
@@ -53,10 +53,10 @@ export default class FirstForm extends Component	{
     const aoi = this.props.step.includes('smt') ? true : false;
      
     return (
-      <form className='centre' onSubmit={this.passF.bind(this)}>
+      <form className='stoneForm centre' onSubmit={this.passF.bind(this)}>
         <p className='bigger'>{this.props.step}</p>
         <br />
-        <p>
+        <label className='beside' htmlFor='cptbl'>
           <input
             type='checkbox'
             id='cptbl'
@@ -64,9 +64,10 @@ export default class FirstForm extends Component	{
             ref={(i)=> this.good = i}
             defaultChecked='true'
             readOnly />
-          <label className='beside' htmlFor='cptbl'>{Pref.good}</label><br />
-        </p>
-        <p>
+          {Pref.good}
+        </label>
+       <br />
+        <label className='beside' htmlFor='mthi'>
           <input
             type='checkbox'
             id='mthi'
@@ -74,44 +75,49 @@ export default class FirstForm extends Component	{
             ref={(i)=> this.methodI = i}
             defaultChecked={aoi}
             readOnly />
-          <label className='beside' htmlFor='mthi'>{Pref.autoI} </label><br />
-        </p>
-        <p><label htmlFor='wuilt'>{Pref.builder}</label><br />
+          {Pref.autoI}
+        </label>
+        <p>
           <select id='wuilt' ref={(i)=> this.wB = i} className='cap' multiple required>
             {this.props.users.map( (entry, index)=>{
               return( <option key={index} value={entry._id}>{entry.username}</option> );
             })}
           </select>
+          <label htmlFor='wuilt'>{Pref.builder}</label>
         </p>
-        <p><label htmlFor='mthb'>{Pref.method}</label><br />
+        <p>
           <select ref={(i)=> this.methodB = i} id='mthb' className='cap' required>
             <option></option>
             {this.props.methods.map( (entry, index)=>{
               return ( <option key={index} value={entry}>{entry}</option> );
             })}
           </select>
+          <label htmlFor='mthb'>{Pref.method}</label>
         </p>
-        <br />
-        <hr className='wide' />
-        <p><label htmlFor='proC'>{Pref.proChange}</label><br />
-        <input
-			    type='text'
-			    id='proC'
-			    ref={(i)=> this.change = i} />
-			  </p>
-			  <p><label htmlFor='oIss'>{Pref.outIssue}</label><br />
-        <input
-			    type='text'
-			    id='oIss'
-			    ref={(i)=> this.issue = i} />
-			  </p>
-        <p><label htmlFor='gcom'>{Pref.gComm}</label><br />
-        <input
-			    type='text'
-			    id='gcom'
-			    ref={(i)=> this.comm = i} />
-			  </p>
-        <br />
+        <details>
+          <summary>more</summary>
+          <p>
+            <textarea
+    			    type='text'
+    			    id='proC'
+    			    ref={(i)=> this.change = i}></textarea>
+    			  <label htmlFor='proC'>{Pref.proChange}</label>
+  			  </p>
+  			  <p>
+            <textarea
+    			    type='text'
+    			    id='oIss'
+    			    ref={(i)=> this.issue = i}></textarea>
+    			  <label htmlFor='oIss'>{Pref.outIssue}</label>
+  			  </p>
+          <p>
+            <textarea
+    			    type='text'
+    			    id='gcom'
+    			    ref={(i)=> this.comm = i}></textarea>
+    			  <label htmlFor='gcom'>{Pref.gComm}</label>
+  			  </p>
+			  </details>
         <p>
           <button
             type='submit'

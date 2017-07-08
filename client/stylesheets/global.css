@@ -1,11 +1,5 @@
 /* global object CSS declarations go here */
 
-/*
-html {
-  overflow: hidden;
-}
-*/
-
 h1, h2, h3 {
   margin: 0.5em 0;
 }
@@ -50,7 +44,7 @@ li > i {
   padding: 0.1em;
 }
 
-button, input[type='submit'], label {
+button, input[type='submit'] {
  	-webkit-transition: all 200ms ease-out;
   -moz-transition: all 200ms ease-out;
   -o-transition: all 200ms ease-out;
@@ -97,6 +91,102 @@ input[type='checkbox'], input[type='radio'] {
   height: 1.25rem;
 }
 
+input[type='checkbox'] + label, input[type='radio'] + label {
+  display: inline-table;
+  line-height: normal;
+  height: auto;
+}
+
+input, textarea, select {
+  line-height: 1.75rem;
+  font-size: 1.5rem;
+  text-indent: 0.5rem;
+  width: 20rem;
+  border-radius: 0px;
+}
+
+input, select, textarea {
+  border-style: solid;
+  border-width: 1px;
+}
+  
+input, select {
+  min-height: 2rem;
+  width: 20rem;
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: inherit;
+  border-left-color: transparent;
+}
+
+select {
+  background-color: white;
+}
+
+textarea {
+  min-width: 20rem;
+  min-height: 6rem;
+  border-color: inherit;
+}
+
+input:focus, input:active {
+  border-bottom-color: #007fff;
+  outline: 0;
+}
+
+select:focus,
+select:active,
+input[type='date']:focus,
+input[type='date']:active,
+input[type='datetime-local']:focus,
+input[type='datetime-local']:active {
+  outline: solid thin #007fff;
+}
+
+textarea:focus, textarea:active {
+  border-color: #007fff;
+  outline: 0;
+}
+
+input:disabled, textarea:disabled, select:disabled {
+  border-bottom-style: dotted;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus
+input:-webkit-autofill, 
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border-bottom-color: rgb(46,204,113);
+  -webkit-text-fill-color: rgb(46,204,113);
+  -webkit-box-shadow: 0 0 0px 1000px black inset;
+  -moz-text-fill-color: rgb(46,204,113);
+  -moz-box-shadow: 0 0 0px 1000px black inset;
+  box-shadow: 0 0 0px 1000px black inset;
+}
+
+input + label, textarea + label, select + label {
+  display: block;
+  font-size: 1rem;
+  line-height: 2rem;
+}
+input:focus + label, textarea:focus + label, select:focus + label {
+  color: #007fff;
+}
+
+form p {
+  padding: 10px 0;
+}
+
+/*
+
 select {
   background: white;
 }
@@ -132,6 +222,13 @@ input[type='datetime-local']:disabled,
 input[type='url']:disabled,
 input[type='submit']:disabled,
 select:disabled, datalist:disabled, textarea:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+*/
+
+button:disabled, datalist:disabled {
   opacity: 0.3;
   cursor: not-allowed;
 }

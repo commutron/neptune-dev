@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import SlideDownWrap from '/client/components/tinyUi/SlideDownWrap.jsx';
 
-import JumpFind from '../../../components/smallUi/JumpFind.jsx';
+import JumpButton from '../../../components/tinyUi/JumpButton.jsx';
 
 export default class ItemsList extends Component	{
   
@@ -42,7 +42,7 @@ export default class ItemsList extends Component	{
                         scrap.includes(entry.serial) ? 'action clear wide redT' : 
                         'action clear wide';
               return (
-                <JumpFind
+                <JumpButton
                   key={index} 
                   title={entry.serial} 
                   sub='' 

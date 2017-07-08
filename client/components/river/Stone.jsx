@@ -19,10 +19,12 @@ export default class Stone extends Component	{
   }
     
   // close first-off form and recheck the lock when switching items 
-  componentWillReceiveProps() {
-    this.setState({show: false});
-    this.setState({lock: true});
-    this.unlock();
+  componentWillReceiveProps(nextProps) {
+    if(this.props.sKey !== nextProps.sKey || this.props.barcode !== nextProps.barcode) {
+      this.setState({show: false});
+      this.setState({lock: true});
+      this.unlock();
+    }else{null}
   }
   
   unlock() {
@@ -43,6 +45,11 @@ export default class Stone extends Component	{
   		  : null;
   	  }, 3000);
   	}
+  }
+  
+  firstDone() {
+    this.reveal();
+    this.unlock();
   }
   
   //// Action for standard step
@@ -148,7 +155,7 @@ export default class Stone extends Component	{
               type={this.props.type}
               users={this.props.users}
               methods={this.props.methods} 
-              onPass={e => this.unlock()} />
+              onPass={e => this.firstDone()} />
             <br />
           </div>
         }
