@@ -12,7 +12,7 @@ Meteor.publish("appData", function(){
   const admin = Roles.userIsInRole(this.userId, 'admin');
   if(admin) {
     return [
-      AppDB.find(),
+      AppDB.find({}, {fields: { 'orgKey': 0 }}),
       Meteor.users.find({},
         {fields: {
           'services': 0,
@@ -31,7 +31,7 @@ Meteor.publish("appData", function(){
       ];
   }else if(user) {
     return [ 
-      AppDB.find({orgKey: orgKey}),
+      AppDB.find({orgKey: orgKey}, {fields: { 'orgKey': 0 }}),
       Meteor.users.find({orgKey: orgKey},
         {fields: {
           'services': 0,
@@ -148,7 +148,7 @@ Meteor.publish('groupwidgetData', function() {
 
 */
 
-
+/*
 
 Meteor.publish("allData", function(){
   const user = Meteor.users.findOne({_id: this.userId});
@@ -178,4 +178,6 @@ Meteor.publish("allData", function(){
       }}),
     ];
 });
+
+*/
   

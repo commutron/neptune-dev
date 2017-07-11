@@ -28,23 +28,23 @@ export default class Stone extends Component	{
   }
   
   unlock() {
-  	const first = this.props.type === 'first';
-  	const inspect = this.props.type === 'inspect';
-  	const finish = this.props.type === 'finish';
-  	const inspector = first || inspect || finish ? true : false;
-  	const test = this.props.type === 'test';
-  	if(inspector && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
-  		null;
-  	}else if(test && !Roles.userIsInRole(Meteor.userId(), 'test')) {
-  		null;
-  	}else{
-  	  Meteor.setTimeout(()=> {
+    Meteor.setTimeout(()=> {
+    	const first = this.props.type === 'first';
+    	const inspect = this.props.type === 'inspect';
+    	const finish = this.props.type === 'finish';
+    	const inspector = first || inspect || finish ? true : false;
+    	const test = this.props.type === 'test' ? true : false;
+    	if(inspector && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
+    		null;
+    	}else if(test && !Roles.userIsInRole(Meteor.userId(), 'test')) {
+    		null;
+    	}else{
   		  let iky = Session.get('ikyView');
   		  !iky || iky === false ? // if item card is displayed
   		    this.setState({lock: false})
   		  : null;
-  	  }, 3000);
-  	}
+    	}
+    }, 3000);
   }
   
   firstDone() {
@@ -139,7 +139,8 @@ export default class Stone extends Component	{
 						    type='text'
 						    ref={(i)=> this.comm = i}
 						    placeholder='comment'
-						    style={sty} />
+						    style={sty} 
+						    disabled={lock} />
 						  : null}
 					</div>
 					:

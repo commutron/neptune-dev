@@ -18,10 +18,28 @@ export default class StoneSelect extends Component	{
     this.setState({show: !this.state.show});
   }
   
-  // close first-off form when switching items 
-  componentWillReceiveProps() {
-    this.setState({show: false});
+  // close first-off form and recheck the lock when switching items 
+  componentWillReceiveProps(nextProps) {
+    if(this.props.flowStep.key !== nextProps.flowStep.key || this.props.barcode !== nextProps.barcode) {
+      this.setState({show: false});
+      this.setState({lock: true});
+      this.unlock();
+    }else{null}
   }
+  
+  unlock() {
+    Meteor.setTimeout(()=> {
+    	if(!Roles.userIsInRole(Meteor.userId(), 'inspect')) {
+    		null;
+    	}else{
+  		  let iky = Session.get('ikyView');
+  		  !iky || iky === false ? // if item card is displayed
+  		    this.setState({lock: false})
+  		  : null;
+  	  }
+  	}, 3000);
+  }
+  
   
   render() {
 
@@ -68,8 +86,7 @@ export default class StoneSelect extends Component	{
     );
   }
   
-  // check for "inspect" permission
   componentDidMount() {
-    Roles.userIsInRole(Meteor.userId(), 'inspect') ? this.setState({lock: false}) : null;
+    this.unlock();
   }
 }

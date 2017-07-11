@@ -25,8 +25,8 @@ export default class NCAdd extends Component {
             console.log(error);
         });
       }
-      
-      this.ncRefs.value='';
+      this.discStp.value = Session.get('nowStep');
+      this.ncRefs.value = '';
       this.go.disabled = false;
       const findBox = document.getElementById('find');
       findBox.focus();

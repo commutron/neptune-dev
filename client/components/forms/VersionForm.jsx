@@ -193,7 +193,7 @@ export class VersionRemove extends Component	{
     
     return(
       <form className='inlineForm' onSubmit={this.remove.bind(this)}>
-        <i>enter: {this.props.lock} to confirm</i>
+        <i className='noCopy'>enter: {this.props.lock} to confirm</i>
         <input 
           type='text' 
           className='noCopy' 
