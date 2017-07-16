@@ -17,7 +17,7 @@ export default class WidgetCard extends Component {
       <SlideDownWrap>
         <div className='card'>
           <div className='space'>
-            <h1 className='cap'>{g.alias}</h1>
+            <JumpText title={g.alias} link={g.alias} />
             <h2 className='cap'>{w.widget}</h2>
             <h3 className='cap'>{w.describe}</h3>
             <hr />

@@ -7,7 +7,7 @@ import Model from '../smallUi/Model.jsx';
 // requires
 // widgetData={widgetData} end={a.lastTrack} rootWI={a.instruct}
 
-export class VersionForm extends Component	{
+export default class VersionForm extends Component	{
 
   constructor() {
     super();
@@ -62,11 +62,16 @@ export class VersionForm extends Component	{
 
   render() {
     
+    const app = this.props.app;
+    
     let e = this.props.version;
     let name = e ? 'edit' : 'new';
     let eV = e ? e.version : null;
     let eU = e ? e.units : null;
     let eL = e ? e.live : null;
+    
+    const w = this.props.widgetData;
+    const instruct = w.versions.length > 0 ? w.versions[w.versions.length -1].wiki : app.instruct;
 
     return (
       <Model
@@ -125,7 +130,7 @@ export class VersionForm extends Component	{
                 type='url'
                 id='wikdress'
                 ref={(i)=> this.wiki = i}
-                defaultValue={this.props.rootWI}
+                defaultValue={instruct}
                 placeholder='Full Address'
                 required />{/*this.state.instruct*/}
             </p>
@@ -151,7 +156,7 @@ export class VersionForm extends Component	{
         <div className='half'>
           <iframe
             id='instructMini'
-            src={this.props.rootWI}
+            src={instruct}
             height='600'
             width='100%' /><br />
           <button className='smallAction clear' onClick={this.pullOver} disabled>use this page</button>
@@ -206,41 +211,6 @@ export class VersionRemove extends Component	{
           className='smallAction clear redT'
           disabled={user}>delete</button>
       </form>
-    );
-  }
-}
-
-
-export class VersionKill extends Component	{
-  
-  kill() {
-    this.con.disabled = true;
-    Meteor.call('killAllVersions', this.props.id, (error, reply)=>{
-      if(error)
-        console.log(error);
-      if(reply) {
-          Bert.alert(Alert.success);
-      }else{
-        Bert.alert(Alert.warning);
-      }
-    });
-  }
-  render() {
-    
-    return(
-      <Model
-        button='Deactivate'
-        title='Deactivate ALL versions?'
-        lock={!Roles.userIsInRole(Meteor.userId(), 'edit')}>
-        <div className='centre'>
-          <button
-            ref={(i)=> this.con = i}
-            className='action clear yellowT big'
-            onClick={this.kill.bind(this)}
-            disabled={false}
-          >Confirm</button>
-        </div>
-      </Model>
     );
   }
 }

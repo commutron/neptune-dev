@@ -204,7 +204,7 @@ main {
 .dashAction {
   grid-area: actionFooter;
   background-color: black;
-  background-color: rgba(0,0,0,0.7);
+  background-color: rgba(0,0,0,0.9);
   width: 100%;
   min-width: 1000px;
   z-index: 9;

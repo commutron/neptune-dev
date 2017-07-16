@@ -84,5 +84,9 @@
   outline: solid thin red;
 }
 
+.redIn:focus + label {
+  color: rgb(231,76,60);
+}
+
 
   

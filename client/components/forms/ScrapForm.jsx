@@ -14,7 +14,7 @@ export default class ScrapForm extends Component {
     e.preventDefault();
     this.go.disabled = true;
     const batchId = this.props.id;  
-    const bar = this.props.barcode;
+    const bar = this.props.item.serial;
     const where = this.discStp.value.trim().toLowerCase();
     const comm = this.comm.value.trim().toLowerCase();
       
@@ -34,71 +34,57 @@ export default class ScrapForm extends Component {
 
 		let now = Session.get('nowStep');
 		
+		let done = this.props.item.finishedAt !== false;
+    let scrap = done ? this.props.item.history.find(x => x.type === 'scrap') : false;
+		
 		return (
-		  <div>
-		    {Roles.userIsInRole(Meteor.userId(), 'qa') ?
+		  <Model
+        button={Pref.scrap}
+        title={Pref.scrap + ' ' + Pref.item}
+        type='action clear redT'
+        lock={!Roles.userIsInRole(Meteor.userId(), 'qa') || scrap}>
     		  <form className='centre' onSubmit={this.handleScrap.bind(this)}>
     		    <br />
     	      <p><b>Are you sure you want to do this? You Cannot Undo This.</b></p>
     	      <br />
-    	      <p><label htmlFor='currep'>current process</label><br />
-              <select
+    	      <p>
+              <input
                 id='currep'
                 ref={(i)=> this.discStp = i}
-                className='cap'
+                className='cap redIn'
                 defaultValue={now}
-                required >
+                list='shortcuts'
+                required />
+              <label htmlFor='currep'>current process</label>
+              <datalist id='shortcuts' className='cap'>
                 <option value={now} id='riverStep'>{now}</option>
-                {this.props.ancs.map( (entry, index)=>{
-                  return ( 
-                    <option key={index} value={entry}>{entry}</option>
-                    );
-                })}
-              </select>
+                  {this.props.anc.map( (entry, index)=>{
+                    return ( 
+                      <option key={index} value={entry}>{entry}</option>
+                  )})}
+              </datalist>
             </p>
-    	      <p><label htmlFor='scomment'>comment</label><br />
+    	      <p>
               <input
                 type='text'
                 id='scomment'
                 ref={(i)=> this.comm = i}
+                className='redIn'
                 placeholder='reason for scrapping'
-                required
-              />
+                required />
+              <label htmlFor='scomment'>comment</label>
             </p>
             <br />
             <p>
               <button 
                 type="submit"
-                className='action clear'
+                className='action clear redT'
                 ref={(i)=> this.go = i}
                 disabled={false}
-                >SCRAP {this.props.barcode}</button>
+                >SCRAP {this.props.item.serial}</button>
             </p>
           </form>
-          :
-          <p>How did you even get here?</p>
-		    }
-		  </div>
-    );
-  }
-}
-
-
-export class ScrapButton extends Component {
-  
-  render() {
-    
-    return(
-      <Model
-        button={Pref.scrap}
-        title={Pref.scrap + ' ' + Pref.item}
-        type='action clear redT'
-        lock={!Roles.userIsInRole(Meteor.userId(), 'qa') || this.props.lock}>
-        <ScrapForm
-		      barcode={this.props.barcode}
-		      id={this.props.id}
-		      ancs={this.props.ancs} />
       </Model>
-      );
+    );
   }
 }

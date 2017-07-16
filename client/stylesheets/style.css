@@ -43,7 +43,7 @@
 }
 
 .jump {
-  line-height: 1.75em;
+  line-height: 1.25em;
   font-size: 1.75rem;
   min-width: 1rem;
 	min-height: 1rem;
@@ -51,12 +51,11 @@
 	text-transform: uppercase;
 	background-color: transparent;
   cursor: pointer;
-  border: 2px solid;
+  border: 1px solid;
   border-top-color: transparent;
   border-right-color: transparent;
   border-bottom-color: white;
   border-left-color: transparent;
-  border-radius: 3px;
   transition: border 250ms ease;
 }
 .jump:hover, .jump:focus, .jump:active {

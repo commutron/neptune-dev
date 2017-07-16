@@ -8,7 +8,7 @@ export default class UnitSet extends Component	{
   
   unitSet() {
     const id = this.props.id;
-    const bar = this.props.bar;
+    const bar = this.props.item.serial;
     const unit = this.unit.value.trim();
     
     if(unit) {
@@ -25,17 +25,17 @@ export default class UnitSet extends Component	{
   }
 
   render() {
-    
+        	    
     const auth = Roles.userIsInRole(Meteor.userId(), 'run');
+    let done = this.props.item.finishedAt !== false;
     
     return(
       <Model
         button={Pref.unit + ' set'}
         title={Pref.unit + ' set'}
         type='action clear greenT'
-        lock={!auth || this.props.lock}>
-        <p className='centre'>
-          <label htmlFor='cln'>{Pref.unit} Quantity</label><br />
+        lock={!auth || done}>
+        <p className='centre centreTrue'>
           <input
             type='number'
             ref={(i)=> this.unit = i}
@@ -45,12 +45,13 @@ export default class UnitSet extends Component	{
             minLength='1'
             max='100'
             min='1'
-            defaultValue={this.props.unit}
+            defaultValue={this.props.item.units}
             placeholder='1-100'
             inputMode='numeric'
             required
             onChange={this.unitSet.bind(this)}
           />
+          <label htmlFor='cln'>{Pref.unit} Quantity</label>
         </p>
       </Model>
       );

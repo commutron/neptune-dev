@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 
 import UserNice from './UserNice.jsx';
 
-import {VersionForm} from '../forms/VersionForm.jsx';
+import VersionForm from '../forms/VersionForm.jsx';
 import {VersionRemove} from '../forms/VersionForm.jsx';
 import NoteLine from './NoteLine.jsx';
 

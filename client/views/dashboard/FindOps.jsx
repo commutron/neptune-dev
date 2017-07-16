@@ -136,7 +136,7 @@ export default class FindOps extends Component	{
     if(orb === Pref.group) {
       Session.set('nowBatch', false);
       return (
-        <Dashboard>
+        <Dashboard action='newGroup'>
           <GroupsList groupData={allGroup} />
           <div></div>
         </Dashboard>
@@ -177,6 +177,7 @@ export default class FindOps extends Component	{
               versionData={version}
               groupData={group} 
               app={app}
+              action='batch'
             >
   			      <ItemsList batchData={hotBatch} tide={orb} />
               <BatchPanel
@@ -196,6 +197,7 @@ export default class FindOps extends Component	{
               versionData={version}
               groupData={group}
               app={app}
+              action={false}
             >
               <BatchCard
                 batchData={hotBatch}
@@ -248,20 +250,18 @@ export default class FindOps extends Component	{
             versionData={version}
             groupData={group}
             app={app}
+            action='item'
           >
             <ItemsList batchData={hotBatch} tide={orb} />
             <div>
               <ItemPanel
                 batchData={hotBatch}
                 itemData={item}
-                app={app}
-                listTitle={true} />
-              <BatchPanel
-                batchData={hotBatch}
                 widgetData={widget}
                 versionData={version}
                 groupData={group}
-                app={app} />
+                app={app}
+                listTitle={true} />
             </div>
           </Dashboard>
           );
@@ -275,6 +275,7 @@ export default class FindOps extends Component	{
               versionData={version}
               groupData={group}
               app={app}
+              action='build'
             >
               <div>
                 <ItemCard
@@ -315,12 +316,13 @@ export default class FindOps extends Component	{
               versionData={false}
               groupData={lookup}
               app={app}
+              action='group'
             >
               <WidgetsList
                 groupAlias={lookup.alias}
                 widgetData={widgets}
                 active={activeBatch} />
-              <GroupPanel groupData={lookup} end={app.lastTrack} root={app.instruct} />
+              <GroupPanel groupData={lookup} />
             </Dashboard>
           );
         }else{
@@ -364,6 +366,7 @@ export default class FindOps extends Component	{
             versionData={false}
             groupData={group}
             app={app}
+            action='widget'
           >
             <WidgetsList
               groupAlias={group.alias}
@@ -377,7 +380,6 @@ export default class FindOps extends Component	{
                 batchRelated={allBatches}
                 app={app}
               />
-              <GroupPanel groupData={group} end={app.lastTrack} root={app.instruct} />
             </div>
           </Dashboard>
           );

@@ -57,9 +57,8 @@ export default class NCEscape extends Component {
                 placeholder='eg. R45'
                 autoFocus='true'
                 required />
-              <br /><label htmlFor='nonponent'>{Pref.nonConRef}</label>
+              <label htmlFor='nonponent'>{Pref.nonConRef}</label>
             </p>
-            <br />
             <p>
               <select 
                 id='nonode'
@@ -72,9 +71,8 @@ export default class NCEscape extends Component {
                     );
                 })}
               </select>
-              <br /><label htmlFor='nonode'>{Pref.nonConType}</label>
+              <label htmlFor='nonode'>{Pref.nonConType}</label>
             </p>
-            <br />
             <p>
               <input
                 type='number'
@@ -86,9 +84,8 @@ export default class NCEscape extends Component {
                 inputMode='numeric'
                 placeholder='10'
                 required />
-              <br /><label htmlFor='quant'>Quantity</label>
+              <label htmlFor='quant'>Quantity</label>
             </p>
-            <br />
             <p>
               <input
                 type='text'
@@ -96,9 +93,8 @@ export default class NCEscape extends Component {
                 ref={(i)=> this.ncar = i}
                 className='redIn'
                 required />
-              <br /><label htmlFor='ncar'>ncar</label>
+              <label htmlFor='ncar'>ncar</label>
             </p>
-            <br />
             <p>
               <button
                 type='submit'
@@ -109,7 +105,6 @@ export default class NCEscape extends Component {
             </p>
             <p><output ref={(i)=> this.out = i} /></p>
           </form>
-          <br />
         </div>
       </Model>
     );

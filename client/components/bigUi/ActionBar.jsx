@@ -11,33 +11,59 @@ import NCEscape from '../forms/NCEscape.jsx';
 import RMAForm from '../forms/RMAForm.jsx';
 import Remove from '../forms/Remove.jsx';
 
+import ScrapForm from '../forms/ScrapForm.jsx';
+import UnitSet from '../forms/UnitSet.jsx';
+
+import WidgetEditForm from '../forms/WidgetEditForm.jsx';
+import VersionForm from '../forms/VersionForm.jsx';
+import FlowForm from '../forms/FlowForm.jsx';
+
+import GroupForm from '../forms/GroupForm.jsx';
+import WidgetNewForm from '../forms/WidgetNewForm.jsx';
 
 
 export default class ActionBar extends Component	{
   
   render() {
     
-    let snap = this.props.snap;
+    //let snap = this.props.snap;
     let batchData = this.props.batchData;
     let itemData = this.props.itemData;
     let widgetData = this.props.widgetData;
     let versionData = this.props.versionData;
     let groupData = this.props.groupData;
     let app = this.props.app;
+    let act = this.props.action;
     let edit = Roles.userIsInRole(Meteor.userId(), 'edit');
     
     return (
       <div className='dashAction'>
         <div className='footLeft'>
         { 
-          !snap && itemData && edit ?
-          <NonConEdit
-    		    ncData={batchData.nonCon}
-    		    id={batchData._id}
-            serial={itemData.serial}
-    		    nons={app.nonConOption} />
+        act === 'build' && edit ?
+            <NonConEdit
+      		    ncData={batchData.nonCon}
+      		    id={batchData._id}
+              serial={itemData.serial}
+      		    nons={app.nonConOption} />
+      	:
+      	act === 'item' ?
+      	  <div> 
+        	  <UnitSet
+        	    id={batchData._id}
+        	    item={itemData} />
+            <ScrapForm
+  		        id={batchData._id}
+  		        item={itemData}
+  		        anc={app.ancillaryOption} />
+            <Remove
+              action='item'
+              title={itemData.serial}
+              check={itemData.createdAt.toISOString()}
+              entry={batchData} />
+          </div>
     		:
-          snap && batchData ?
+        act === 'batch' ?
           <div>
             <BatchForm
               batchId={batchData._id}
@@ -73,13 +99,65 @@ export default class ActionBar extends Component	{
               check={batchData.createdAt.toISOString()}
               entry={batchData} />
           </div>
+          :
+          act === 'widget' ?
+            <div>
+              <WidgetEditForm
+                id={widgetData._id}
+                now={widgetData} />
+              <VersionForm
+                widgetData={widgetData}
+                version={false}
+                app={app} />
+              <FlowForm
+                id={widgetData._id}
+                edit={false}
+                existFlows={widgetData.flows}
+                options={app.trackOption}
+                end={app.lastTrack} />
+              <BatchForm
+                batchId={false}
+                batchNow='new'
+                versionNow='new'
+                start={false}
+                end={false}
+                widgetId={widgetData._id}
+                versions={widgetData.versions}
+                lock={!widgetData.versions} />
+              <Remove
+                action='widget'
+                title={widgetData.widget}
+                check={widgetData.createdAt.toISOString()}
+                entry={widgetData._id} />
+            </div>
+          :
+          act === 'group' ?
+            <div>
+              <GroupForm
+                id={groupData._id}
+                name={groupData.group}
+                alias={groupData.alias} />
+              <WidgetNewForm
+                groupId={groupData._id}
+                end={app.lastTrack} 
+                rootWI={app.instruct} />
+              <Remove
+                action='group'
+                title={groupData.group}
+                check={groupData.createdAt.toISOString()}
+                entry={groupData._id} />
+            </div>
+          :
+          act === 'newGroup' ?
+             <GroupForm id='new' name='new' alias='new' />
           :null
         }
 
         </div>
         
+  { /* Center Section */ }      
         <div className='footCent'>
-          {!snap && itemData ?
+          {act === 'build' ?
             <NCAdd 
               id={batchData._id}
               barcode={itemData.serial}
@@ -87,8 +165,8 @@ export default class ActionBar extends Component	{
           :null}
         </div>
             
+  { /* Right Section */ }
         <div className='footRight'>
-          {/*<DataToggle />*/}
           <IkyToggle />
         </div>
       </div>

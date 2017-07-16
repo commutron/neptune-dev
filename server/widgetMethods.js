@@ -124,7 +124,7 @@ Meteor.methods({
     if(!duplicate && Roles.userIsInRole(Meteor.userId(), 'edit')) {
       WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.versionKey': vKey}, {
         $set : {
-          'versions.&.updatedAt': new Date(),
+          'versions.$.updatedAt': new Date(),
   			  'versions.$.updatedWho': Meteor.userId(),
           'versions.$.version': newVer,
           'versions.$.live': state,
@@ -241,18 +241,24 @@ Meteor.methods({
       return false;
     }
   },
-  
+
+// not a teribly usefull function and doesn't actualy work
+// could be altered to close a whole group
+/*
   killAllVersions(widgetId) {
     if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
       WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.live': true}, {
         $set : { 
           'versions.$.live': false
-  		   }});
+  		   }}, {
+  		     multi: true
+  		   });
   		return true;
     }else{
       return false;
     }
   },
+*/
   
   // needs testing
     /*

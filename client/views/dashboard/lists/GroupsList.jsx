@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import SlideDownWrap from '/client/components/tinyUi/SlideDownWrap.jsx';
 
 import JumpButton from '../../../components/tinyUi/JumpButton.jsx';
-import GroupForm from '../../../components/forms/GroupForm.jsx';
 
 export default class GroupsList extends Component	{
 
@@ -20,9 +19,6 @@ export default class GroupsList extends Component	{
                 sty='action clear wide'
               />
             )})}
-          <br />
-          <br />
-          <GroupForm id='new' name='new' alias='new' />
   			</div>
 			</SlideDownWrap>
     );

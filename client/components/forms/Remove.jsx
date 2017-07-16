@@ -102,10 +102,10 @@ export default class Remove extends Component	{
                   ref={(i)=> this.confirm = i}
                   placeholder={check}
                   autoFocus='true'
-                  className='noCopy'
+                  className='noCopy redIn'
                   required />
                 <button
-                  className='smallAction clear'
+                  className='smallAction clear redT'
                   type='submit'
                   ref={(i)=> this.cut = i}
                   disabled={false}>DELETE</button>

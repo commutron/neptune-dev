@@ -36,7 +36,8 @@ export default class Dashboard extends Component	{
           widgetData={this.props.widgetData}
           versionData={this.props.versionData}
           groupData={this.props.groupData}
-          app={this.props.app} />
+          app={this.props.app}
+          action={this.props.action} />
               
         {/*React.cloneElement(this.props.children[0], this.props)*/}
       </div>

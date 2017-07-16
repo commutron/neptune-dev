@@ -130,7 +130,7 @@ textarea {
 }
 
 input:focus, input:active {
-  border-bottom-color: #007fff;
+  border-bottom-color: var(--neptuneColor);
   outline: 0;
 }
 
@@ -140,11 +140,11 @@ input[type='date']:focus,
 input[type='date']:active,
 input[type='datetime-local']:focus,
 input[type='datetime-local']:active {
-  outline: solid thin #007fff;
+  outline: solid thin var(--neptuneColor);
 }
 
 textarea:focus, textarea:active {
-  border-color: #007fff;
+  border-color: var(--neptuneColor);
   outline: 0;
 }
 
@@ -178,7 +178,7 @@ input + label, textarea + label, select + label {
   line-height: 2rem;
 }
 input:focus + label, textarea:focus + label, select:focus + label {
-  color: #007fff;
+  color: var(--neptuneColor);
 }
 
 form p {

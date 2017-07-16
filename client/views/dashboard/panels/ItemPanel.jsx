@@ -5,13 +5,11 @@ import Pref from '/client/global/pref.js';
 
 import UserNice from '../../../components/smallUi/UserNice.jsx';
 
+import JumpText from '../../../components/tinyUi/JumpText.jsx';
 import HistoryLine from '../../../components/smallUi/HistoryLine.jsx';
 import NCLine from '../../../components/smallUi/NCLine.jsx';
 import RMALine from '../../../components/smallUi/RMALine.jsx';
-import { ScrapButton } from '../../../components/forms/ScrapForm.jsx';
 import ScrapBox from '../../../components/smallUi/ScrapBox.jsx';
-import UnitSet from '../../../components/forms/UnitSet.jsx';
-import Remove from '../../../components/forms/Remove.jsx';
 
 export default class ItemPanel extends Component	{
 
@@ -31,6 +29,10 @@ export default class ItemPanel extends Component	{
     const a = this.props.app;
     const b = this.props.batchData;
     const i = this.props.itemData;
+    const w = this.props.widgetData;
+    const g = this.props.groupData;
+    
+    const v = w.versions.find( x => x.versionKey === b.versionKey );
     
     const nc = this.ncData();
   
@@ -51,6 +53,13 @@ export default class ItemPanel extends Component	{
         <div className='card'>
           <div className='space cap'>
             <h1>{i.serial}<span className='rAlign'>{status}</span></h1>
+            <hr />
+            <h3>
+              <JumpText title={b.batch} link={b.batch} />
+              <JumpText title={g.alias} link={g.alias} />
+              <JumpText title={w.widget} link={w.widget} />
+              {Pref.version}: {v.version}
+            </h3>
             <hr />
             <p>units: {i.units}</p>
             <p>created: {moment(i.createdAt).calendar()} by <UserNice id={i.createdWho} /></p>
@@ -76,21 +85,6 @@ export default class ItemPanel extends Component	{
   
           <hr />
           </div>
-  
-          <br />
-          <UnitSet id={b._id} bar={i.serial} unit={i.units} lock={done} />
-          
-          <ScrapButton
-		        barcode={i.serial}
-		        id={b._id}
-		        ancs={a.ancillaryOption}
-		        lock={scrap} />
-          
-          <Remove
-            action='item'
-            title={i.serial}
-            check={i.createdAt.toISOString()}
-            entry={b} />
   
   			</div>
 			</SlideDownWrap>
