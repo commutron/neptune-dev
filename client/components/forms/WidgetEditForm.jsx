@@ -25,7 +25,6 @@ export default class WidgetEditForm extends Component	{
         Bert.alert(Alert.warning);
       }
     });
-
   }
 
   render() {
@@ -38,7 +37,7 @@ export default class WidgetEditForm extends Component	{
         title={'Edit ' + Pref.widget}
         lock={!Roles.userIsInRole(Meteor.userId(), 'edit')}>
         <form className='centre' onSubmit={this.save.bind(this)}>
-          <p><label htmlFor='widgetId'>{Pref.widget} ID</label><br />
+          <p>
             <input
               type='text'
               id='widgetId'
@@ -47,8 +46,9 @@ export default class WidgetEditForm extends Component	{
               placeholder='ID ie. A4-R-0221'
               autoFocus='true'
               required />
+            <label htmlFor='widgetId'>{Pref.widget} ID</label>
           </p>
-          <p><label htmlFor='prodiption'>{Pref.widget} Description</label><br />
+          <p>
             <input
               type='text'
               id='prodiption'
@@ -56,6 +56,7 @@ export default class WidgetEditForm extends Component	{
               defaultValue={now.describe}
               placeholder='Description ie. CRC Display'
               required />
+            <label htmlFor='prodiption'>{Pref.widget} Description</label>
           </p>
           <br />
           <button type='submit' className='action clear greenT'>SAVE</button>

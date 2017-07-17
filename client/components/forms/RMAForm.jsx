@@ -73,11 +73,14 @@ export default class RMAForm extends Component {
     const edit = this.props.edit ? this.props.edit : false;
     const numE = edit ? edit.rmaId : '';
     const quE = edit ? edit.quantity : '';
-
+    const quC = edit ? edit.comm : '';
+    const title = edit ? 'edit ' + Pref.rma : 'create ' + Pref.rma;
+    const bttn = edit ? 'edit' : 'create ' + Pref.rma;
+    
     return (
       <Model
-        button='rma'
-        title={'create ' + Pref.rma}
+        button={bttn}
+        title={title}
         type='action clear yellowT'
         lock={!Roles.userIsInRole(Meteor.userId(), ['edit', 'qa'])}>
         <div className='space'>
@@ -87,7 +90,7 @@ export default class RMAForm extends Component {
             onSubmit={this.save.bind(this)}
             onChange={this.clean.bind(this)}
           >
-            <p><label htmlFor='rum'>RMA number</label><br />
+            <p>
               <input
                 type='text'
                 id='rum'
@@ -95,20 +98,25 @@ export default class RMAForm extends Component {
                 defaultValue={numE}
                 placeholder='RMA Number'
                 required />
+              <label htmlFor='rum'>RMA number</label>
             </p>
-            <p><label htmlFor='qu'>Quantity</label><br />
+            <p>
               <input
                 type='number'
                 id='qu'
                 ref={(i)=> this.quant = i}
+                defaultValue={quE}
                 placeholder='0 is infinite' />
+              <label htmlFor='qu'>Quantity</label>
             </p>
-            <p><label htmlFor='comm'>Comment</label><br />
+            <p>
               <input
                 type='text'
                 id='comm'
                 ref={(i)=> this.comm = i}
+                defaultValue={quC}
                 placeholder='other details' />
+              <label htmlFor='comm'>Comment</label>
             </p>
           </form>
         </div>

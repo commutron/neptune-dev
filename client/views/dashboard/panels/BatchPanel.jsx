@@ -10,7 +10,6 @@ import FirstList from '../../../components/smallUi/FirstList.jsx';
 import ScrapList from '../../../components/smallUi/ScrapList.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';
 import BlockList from '../../../components/bigUi/BlockList.jsx';
-import BlockForm from '../../../components/forms/BlockForm.jsx';
 import ActiveLabel from '../../../components/smallUi/ActiveLabel.jsx';
 import Progress from '../../../components/bigUi/Progress.jsx';
 import RMAList from '../../../components/smallUi/RMAList.jsx';
@@ -120,8 +119,6 @@ export default class BatchPanel extends Component	{
           <p>{Pref.escape}s: {b.escaped.length}</p>
 
           <hr />
-          
-          <BlockForm id={b._id} edit={false} lock={done} />
           
           <BlockList id={b._id} data={b.blocks} lock={done} />
 

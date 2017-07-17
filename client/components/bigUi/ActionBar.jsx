@@ -4,6 +4,7 @@ import React, {Component} from 'react';
 import IkyToggle from '../tinyUi/IkyToggle.jsx';
 import NCAdd from '../river/NCAdd.jsx';
 import NonConEdit from '../forms/NonConEdit.jsx';
+import BlockForm from '../forms/BlockForm.jsx';
 import BatchForm from '../forms/BatchForm.jsx';
 import MultiItemForm from '../forms/MultiItemForm.jsx';
 import RiverSelect from '../forms/RiverSelect.jsx';
@@ -79,6 +80,10 @@ export default class ActionBar extends Component	{
               items={batchData.items}
               more={batchData.finishedAt === false}
               unit={versionData.units} />
+            <BlockForm
+              id={batchData._id}
+              edit={false}
+              lock={batchData.finishedAt !== false} />
             <RiverSelect
               id={batchData._id}
               widget={widgetData}

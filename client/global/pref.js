@@ -62,8 +62,8 @@ class Pref {
     // scrap
     this.scrap = 'scrap';
     // rma
-    this.rma = 'return material action';// ???
-    this.rmaProcess = 'rma process'; // ???
+    this.rma = 'rma';
+    this.rmaProcess = 'rma process';
     // blocker tracking
     this.block = 'blocker';
     this.solve = 'solve';

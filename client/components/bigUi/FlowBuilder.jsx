@@ -81,19 +81,22 @@ export default class FlowForm extends Component	{
       <div className='split'>
         <div className='half'>
           <form onSubmit={this.addStep.bind(this)} >
-            <p><label htmlFor='rteps'>Tracking Step</label><br />
+            <p>
               <select id='rteps' ref={(i)=> this.rStep = i} className='cap' required>
                 <option value=''></option>
                 {this.props.options.map( (entry, index)=>{
                   return ( <option key={index} value={entry.key}>{entry.step + ' - ' + entry.type}</option> );
                 })}
-              </select></p>
-            <p><label htmlFor='winstruct'>instruction title</label><br />
+              </select>
+              <label htmlFor='rteps'>tracking step</label>
+            </p>
+            <p>
               <input
                 type='text'
                 ref={(i)=> this.wika = i}
                 id='winstruct'
                 placeholder='surface_mount' />
+              <label htmlFor='winstruct'>instruction title</label>
             </p>
             <br />
             <p><button type='submit' className='smallAction clear'>Add</button></p>

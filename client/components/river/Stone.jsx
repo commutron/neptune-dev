@@ -101,6 +101,8 @@ export default class Stone extends Component	{
 		let ripple = '';
 		let lock = this.state.lock;
 		let sty = {width: '100%'};
+		let apend = this.props.type === 'inspect' || this.props.type === 'build' || this.props.type === 'first' ?
+		              <label className='big'>{this.props.type}<br /></label> : null;
 
 	//// Style the Stone Accordingly \\\\
 		if(this.props.type === 'first'){
@@ -132,6 +134,7 @@ export default class Stone extends Component	{
 		  				onClick={ripple}
 		  				tabIndex={-1}
 		  				disabled={lock} >
+		  				{apend}
 							{this.props.step}
 						</button>
 						{this.props.type === 'test' ?

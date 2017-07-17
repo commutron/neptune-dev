@@ -2,19 +2,9 @@ import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
 import Alert from '/client/global/alert.js';
 
+import Model from '../smallUi/Model.jsx';
+
 export default class BlockForm extends Component {
-
-	 constructor() {
-    super();
-    this.state = {
-      show: false
-    };
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  handleClick() {
-    this.setState({ show: !this.state.show });
-  }
 
   addBlock(e) {
     e.preventDefault();
@@ -29,7 +19,6 @@ export default class BlockForm extends Component {
         if(error)
           console.log(error);
         if(reply) {
-          this.setState({ show: !this.state.show });
         }else{
           Bert.alert(Alert.danger);
         }
@@ -40,7 +29,6 @@ export default class BlockForm extends Component {
           console.log(error);
         if(reply) {
           this.blTxt.value='';
-          this.setState({ show: !this.state.show });
         }else{
           Bert.alert(Alert.danger);
         }
@@ -53,42 +41,41 @@ export default class BlockForm extends Component {
     
     const edit = this.props.edit;
     const eTx = edit ? edit.block : '';
-    const title = edit ? 'edit' : 'Add ' + Pref.block;
+    const bttn = edit ? 'edit' : 'Add ' + Pref.block;
+    const title = edit ? 'edit ' + Pref.block : 'Add ' + Pref.block;
 
     return (
-      <div>
-        { !this.state.show ?
-          <div className='centre'>
-					  <button className='action yellow wide cap' onClick={this.handleClick}>{title}</button>
-				  </div>
-          :
-          <div className='actionBox yellow'>
-            <button className='action clear rAlign' onClick={this.handleClick}>{Pref.close}</button>
-              <br />
-              <br />
-              <form className='centre' onSubmit={this.addBlock.bind(this)}>
-                <p><label htmlFor='blk'>Describe the Impediment</label><br />
-                  <input
-                    type='text'
-                    id='blk'
-                    ref={(i)=> this.blTxt = i}
-                    placeholder='110072 short 25pcs'
-                    defaultValue={eTx}
-                    autoFocus='true'
-                    required />
-                </p>
-                <br />
-                <p><button
-                  type='submit'
-                  ref={(i)=> this.go = i}
-                  disabled={this.props.lock}
-                  className='action clear'>{Pref.post}</button>
-                </p>
-              </form>
-              <br />
-            </div>
-        }
-      </div>
+      <Model
+        button={bttn}
+        title={title}
+        type='action clear yellowT'
+        lock={!Roles.userIsInRole(Meteor.userId(), 'run') || this.props.lock}
+      >
+        <div>
+          <form className='centre centreTrue' onSubmit={this.addBlock.bind(this)}>
+            <p>
+              <textarea
+                type='text'
+                id='blk'
+                ref={(i)=> this.blTxt = i}
+                placeholder='110072 short 25pcs'
+                defaultValue={eTx}
+                autoFocus='true'
+                required>
+              </textarea>
+              <label htmlFor='blk'>Describe the Impediment</label>
+            </p>
+            <br />
+            <p><button
+              type='submit'
+              ref={(i)=> this.go = i}
+              disabled={this.props.lock}
+              className='action clear greenT'>{Pref.post}</button>
+            </p>
+          </form>
+          <br />
+        </div>
+      </Model>
     );
   }
 }

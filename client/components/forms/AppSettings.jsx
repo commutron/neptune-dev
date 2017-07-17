@@ -42,7 +42,7 @@ export class OptionAdd extends Component	{
   render() {
     return(
       <div>
-        <form onSubmit={this.addOp.bind(this)} className='lineForm dashLine'>
+        <form onSubmit={this.addOp.bind(this)} className='lineForm'>
           <label htmlFor='iOp'>{this.props.title}<br />
             <input
               type='text'

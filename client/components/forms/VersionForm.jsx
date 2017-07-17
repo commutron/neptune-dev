@@ -57,7 +57,6 @@ export default class VersionForm extends Component	{
         }
       });
     }
-
   }
 
   render() {
@@ -83,21 +82,23 @@ export default class VersionForm extends Component	{
 
         <div className='half space edit'>
           <form onSubmit={this.save.bind(this)}>
-            <p><label htmlFor='widgetId'>{Pref.widget} ID</label><br />
+            <p>
               <input
                 type='text'
                 id='widgetId'
                 defaultValue={this.props.widgetData.widget}
                 disabled={true} />
+              <label htmlFor='widgetId'>{Pref.widget} ID</label>
             </p>
-            <p><label htmlFor='prodiption'>{Pref.widget} Description</label><br />
+            <p>
               <input
                 type='text'
                 id='prodiption'
                 defaultValue={this.props.widgetData.describe}
                 disabled={true} />
+              <label htmlFor='prodiption'>{Pref.widget} Description</label>
             </p>
-            <p><label htmlFor='rv'>Version</label><br />
+            <p>
               <input
                 type='text'
                 ref={(i)=> this.rev = i}
@@ -105,10 +106,10 @@ export default class VersionForm extends Component	{
                 defaultValue={eV}
                 placeholder='1a'
                 inputMode='numeric'
-                required
-              />
+                required />
+              <label htmlFor='rv'>Version</label>
             </p>
-            <p><label htmlFor='cln'>{Pref.unit} Quantity</label><br />
+            <p>
               <input
                 type='number'
                 ref={(i)=> this.unit = i}
@@ -121,11 +122,11 @@ export default class VersionForm extends Component	{
                 defaultValue={eU}
                 placeholder='1-100'
                 inputMode='numeric'
-                required
-              />
+                required />
+              <label htmlFor='cln'>{Pref.unit} Quantity</label>
             </p>
             <hr />
-            <p><label htmlFor='wikdress'>Work Instructions</label><br />
+            <p>
               <input
                 type='url'
                 id='wikdress'
@@ -133,6 +134,7 @@ export default class VersionForm extends Component	{
                 defaultValue={instruct}
                 placeholder='Full Address'
                 required />{/*this.state.instruct*/}
+              <label htmlFor='wikdress'>Work Instructions</label>
             </p>
             <br />
             {e ?

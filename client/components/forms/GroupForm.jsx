@@ -56,16 +56,17 @@ export default class GroupForm extends Component {
     
     const orName = this.props.name === 'new' ? '' : this.props.name;
     const orAlias = this.props.alias === 'new' ? '' : this.props.alias;
-    const title = this.props.name === 'new' ? 'create new' : 'edit';
+    const bttn = this.props.name === 'new' ? 'create new' : 'edit';
+    const title = this.props.name === 'new' ? 'create new' : 'save edit';
 
     return (
       <Model
-        button={title + ' ' + Pref.group}
+        button={bttn + ' ' + Pref.group}
         title={title + ' ' + Pref.group}
         type='action clear greenT'
         lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit'])}>
         <form id='new' className='centre' onSubmit={this.createCustomer.bind(this)}>
-          <p><label htmlFor='newName'>Full Name</label><br />
+          <p>
             <input
               type='text'
               id='newName'
@@ -74,8 +75,9 @@ export default class GroupForm extends Component {
               placeholder='ie. Trailer Safegaurd'
               autoFocus='true'
               required />
+            <label htmlFor='newName'>Full Name</label>
           </p>
-          <p><label htmlFor='newAlias'>Abbreviation / Alias</label><br />
+          <p>
             <input
               type='text'
               id='newAlias'
@@ -83,6 +85,7 @@ export default class GroupForm extends Component {
               defaultValue={orAlias}
               placeholder='ie. TSG'
               required />
+            <label htmlFor='newAlias'>Abbreviation / Alias</label>
           </p>
           <br />
           <Submit name={title} type='action' />

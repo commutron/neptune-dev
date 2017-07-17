@@ -59,7 +59,7 @@ export default class WidgetNewForm extends Component	{
 
         <div className='half space edit'>
           <form onSubmit={this.save.bind(this)}>
-            <p><label htmlFor='widgetId'>{Pref.widget} ID</label><br />
+            <p>
               <input
                 type='text'
                 id='widgetId'
@@ -67,26 +67,28 @@ export default class WidgetNewForm extends Component	{
                 placeholder='ID ie. A4-R-0221'
                 autoFocus='true'
                 required />
+              <label htmlFor='widgetId'>{Pref.widget} ID</label>
             </p>
-            <p><label htmlFor='prodiption'>{Pref.widget} Description</label><br />
+            <p>
               <input
                 type='text'
                 id='prodiption'
                 ref={(i)=> this.des = i}
                 placeholder='Description ie. CRC Display'
                 required />
+              <label htmlFor='prodiption'>{Pref.widget} Description</label>
             </p>
-            <p><label htmlFor='rv'>Version</label><br />
+            <p>
               <input
                 type='text'
                 ref={(i)=> this.rev = i}
                 id='rv'
                 placeholder='1a'
                 inputMode='numeric'
-                required
-              />
+                required />
+              <label htmlFor='rv'>Version</label>
             </p>
-            <p><label htmlFor='cln'>{Pref.unit} Quantity</label><br />
+            <p>
               <input
                 type='number'
                 ref={(i)=> this.unit = i}
@@ -99,11 +101,11 @@ export default class WidgetNewForm extends Component	{
                 defaultValue='1'
                 placeholder='1-100'
                 inputMode='numeric'
-                required
-              />
+                required />
+              <label htmlFor='cln'>{Pref.unit} Quantity</label>
             </p>
             <hr />
-            <p><label htmlFor='wikdress'>Work Instructions</label><br />
+            <p>
               <input
                 type='url'
                 id='wikdress'
@@ -111,6 +113,7 @@ export default class WidgetNewForm extends Component	{
                 defaultValue={this.props.rootWI}
                 placeholder='Full Address'
                 required />{/*this.state.instruct*/}
+              <label htmlFor='wikdress'>Work Instructions</label>
             </p>
             <br />
             <button

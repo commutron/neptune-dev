@@ -148,7 +148,7 @@ export default class FlowForm extends Component	{
                   <p>something</p>}
               </div>
             : null}
-              <p><label htmlFor='flwttl'>{Pref.flow} title</label><br />
+              <p>
                 <input
                   type='text'
                   ref={(i)=> this.title = i}
@@ -156,6 +156,7 @@ export default class FlowForm extends Component	{
                   defaultValue={eN}
                   placeholder='title the defines this flow'
                   required />
+                <label htmlFor='flwttl'>{Pref.flow} title</label>
               </p>
               <i className='small'>duplicate {Pref.flow} names are discouraged but not blocked</i>
             </form>

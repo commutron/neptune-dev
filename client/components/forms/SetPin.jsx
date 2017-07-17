@@ -39,7 +39,6 @@ export default class SetPin extends Component {
           <legend>Change PIN</legend>
           <form onSubmit={this.setPin.bind(this)} autoComplete='off'>
             <p>
-              <label htmlFor='old'>Old PIN</label><br />
               <input
                 type='password'
                 ref={(i)=> this.oldPin = i}
@@ -50,11 +49,10 @@ export default class SetPin extends Component {
                 placeholder='0000-9999'
                 inputMode='numeric'
                 autoComplete='new-password'
-              /><br />
+              />
+              <label htmlFor='old'>Old PIN</label>
             </p>
-            <br />
             <p>
-              <label htmlFor='newOne'>New PIN</label><br />
               <input
                 type='password'
                 ref={(i)=> this.newOne = i}
@@ -66,8 +64,9 @@ export default class SetPin extends Component {
                 inputMode='numeric'
                 autoComplete='new-password'
                 required
-              /><br />
-              <label htmlFor='newTwo'>New PIN again</label><br />
+              />
+              <label htmlFor='newOne'>New PIN</label>
+              <br />
               <input
                 type='password'
                 ref={(i)=> this.newTwo = i}
@@ -79,9 +78,9 @@ export default class SetPin extends Component {
                 inputMode='numeric'
                 autoComplete='new-password'
                 required
-              /><br />
+              />
+              <label htmlFor='newTwo'>New PIN again</label>
             </p>
-            <br />
             <p>
               <button
                 type='submit'

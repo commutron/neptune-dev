@@ -168,8 +168,7 @@ class SetCheck extends Component	{
           id={this.props.role}
           defaultChecked={check}
           onChange={this.change.bind(this)}
-          readOnly
-        />
+          readOnly />
         <label htmlFor={this.props.role} className='beside'>{this.props.role}</label>
         <br />
       </li>

@@ -120,7 +120,7 @@ export default class MultiItemForm extends Component {
         lock={!auth || !this.props.more} >
         <div className='centre'>
           <form onSubmit={this.addItem.bind(this)} autoComplete='off'>
-            <p><label htmlFor='cln'>9 digits</label>
+            <p>
               <input
                 type='radio'
                 ref={(i)=> this.nineDigit = i}
@@ -128,10 +128,9 @@ export default class MultiItemForm extends Component {
                 name='digit'
                 defaultChecked={true}
                 onChange={this.setDigit.bind(this, 9)}
-                required
-              />
-              <br />
-              <label htmlFor='cln'>10 digits</label>
+                required />
+              <label htmlFor='cln' className='beside'>9 digits</label>
+            <br />
               <input
                 type='radio'
                 ref={(i)=> this.tenDigit = i}
@@ -139,11 +138,10 @@ export default class MultiItemForm extends Component {
                 name='digit'
                 defaultChecked={false}
                 onChange={this.setDigit.bind(this, 10)}
-                required
-              />
+                required />
+              <label htmlFor='cln' className='beside'>10 digits</label>
             </p>
-            <br />
-            <p><label htmlFor='cln'>{Pref.unit} Quantity</label><br />
+            <p>
               <input
                 type='number'
                 ref={(i)=> this.unit = i}
@@ -156,11 +154,10 @@ export default class MultiItemForm extends Component {
                 defaultValue={this.props.unit}
                 placeholder='1-250'
                 inputMode='numeric'
-                required
-              />
+                required />
+              <label htmlFor='cln'>{Pref.unit} Quantity</label>
             </p>
-            <br />
-            <p><label htmlFor='strt'>First {Pref.item} Number</label><br />
+            <p>
               <input
                 type='text'
                 ref={(i)=> this.barNumStart = i}
@@ -171,11 +168,10 @@ export default class MultiItemForm extends Component {
                 placeholder='1000000000-9999999999'
                 inputMode='numeric'
                 autoFocus='true'
-                required
-              />
+                required />
+              <label htmlFor='strt'>First {Pref.item} Number</label>
             </p>
-            <br />
-            <p><label htmlFor='nd'>Last {Pref.item} Number</label><br />
+            <p>
               <input
                 type='text'
                 ref={(i)=> this.barNumEnd = i}
@@ -186,8 +182,8 @@ export default class MultiItemForm extends Component {
                 placeholder='1000000000-9999999999'
                 inputMode='numeric'
                 required
-                onInput={this.checkRange.bind(this)}
-              />
+                onInput={this.checkRange.bind(this)} />
+              <label htmlFor='nd'>Last {Pref.item} Number</label>
             </p>
             <br />
             <div className='centre'>

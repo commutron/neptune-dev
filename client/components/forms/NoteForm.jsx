@@ -58,7 +58,7 @@ export default class NoteForm extends Component {
         lock={unlock}
       >
         <form className='centre' onSubmit={this.saveNote.bind(this)} onChange={this.goOp.bind(this)} >
-          <p className='balance'><label htmlFor='con'>Note</label><br />
+          <p className='balance'>
             <textarea
               id='con'
               ref={(i)=> this.mess = i}
@@ -69,6 +69,7 @@ export default class NoteForm extends Component {
               autoFocus='true'
               required >
             </textarea>
+            <label htmlFor='con'>Note</label>
           </p>
           <br />
           <p><button ref={(i)=> this.go = i} disabled={true} className='action clear greenT' type='submit'>Save</button></p>
