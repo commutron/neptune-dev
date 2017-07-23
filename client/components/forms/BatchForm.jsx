@@ -95,7 +95,7 @@ export default class BatchForm extends Component	{
                   </option>
                 )}})}
             </select>
-            <label htmlFor='vrsl'>Version</label>
+            <label htmlFor='vrsl'>{Pref.version}</label>
           </p>
           <p>
             <input
@@ -110,7 +110,7 @@ export default class BatchForm extends Component	{
               placeholder='17947'
               autoFocus='true'
               required />
-            <label htmlFor='oNum'>Work Order Number</label>
+            <label htmlFor='oNum'>{Pref.batch} number</label>
           </p>
           <p>
             <input
@@ -120,7 +120,7 @@ export default class BatchForm extends Component	{
               defaultValue={eS}
               pattern='[0-9]{4}-[0-9]{2}-[0-9]{2}'
               required />
-            <label htmlFor='sdt'>Start Date</label>
+            <label htmlFor='sdt'>start date</label>
           </p>
           <p>
             <input
@@ -130,7 +130,7 @@ export default class BatchForm extends Component	{
               defaultValue={eE}
               pattern='[0-9]{4}-[0-9]{2}-[0-9]{2}'
               required />
-            <label htmlFor='egdt'>End Goal Date</label>
+            <label htmlFor='egdt'>scheduled end date</label>
           </p>
           <h3>{this.props.group}</h3>
           <h3>{this.props.wIdget}</h3>

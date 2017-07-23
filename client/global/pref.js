@@ -36,7 +36,7 @@ class Pref {
     this.end = 'fulfillment';
     // build tracking
     this.flow = 'process flow';
-    this.buildFlow = 'main progress flow';
+    this.buildFlow = 'main process flow';
     this.buildFlowAlt = 'alt process flow';
     this.buildStep = 'build process';
     this.trackFirst = 'first-off';

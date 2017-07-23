@@ -1,15 +1,15 @@
-Neptune Tracker v.0.2 (alpha 2)
+Neptune Tracker v.0.4 (RC1)
 
 A highly customized statistical process control application for manufacturing.
-
-Built with React, Meteor, and MongoDB.
-
-Highly experimental and rough all over.
-
-I don't recommend anyone try to run it, nevermind use it.
-
-Although if you can understand my (slightly nuts) river metaphor naming scheme, we can be friends.
-
 Created for Commutron Ind. An Electronics Manufacture in Elbow, Saskatchewan, Canada.
 
--- Matthew
+Built with ReactJS, Meteor, and MongoDB.
+
+Highly experimental
+
+
+Copyright (c) 2016-present Commutron Industries, https://www.commutron.ca
+Author 2016-present Matthew Andreas https://github.com/mattandwhatnot
+No License
+All Rights Reserved
+Source avaliable within Github, as per the "Github Terms of Service"
