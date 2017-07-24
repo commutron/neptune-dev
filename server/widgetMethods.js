@@ -19,6 +19,7 @@ Meteor.methods({
           {
             flowKey: new Meteor.Collection.ObjectID().valueOf(),
 				    title: 'default flow',
+				    type: 'basic',
             flow: [endTrack]
           }
         ],
@@ -169,6 +170,7 @@ Meteor.methods({
           {
             flowKey: new Meteor.Collection.ObjectID().valueOf(),
   				  title: flowTitle,
+  				  type: 'basic',
             flow: flowObj
           }
       }});
