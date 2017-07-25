@@ -2,14 +2,14 @@ import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
 import {createContainer} from 'meteor/react-meteor-data';
 
-import SampleLine from './components/charts/SampleLine.jsx';
+import OverviewChart from './components/charts/OverviewChart.jsx';
 
 
 class StartView extends Component	{
   
   render() {
 
-    if(!this.props.login) {
+    if(!this.props.login || !this.props.ready) {
       return (
         <div></div>
         );
@@ -19,10 +19,13 @@ class StartView extends Component	{
       <div className='space cap'>
         <p>user: {this.props.user}</p>
         <p>organization: {this.props.org}</p>
-        <SampleLine />
-        <p className='centre'>
-          <img src='/titleLogo.svg' width='600' />
-        </p>
+        <br />
+        <div className='centre centreTrue'>
+          <OverviewChart
+            g={this.props.group}
+            w={this.props.widget}
+            b={this.props.batch} />
+        </div>
       </div>
     );
   }
@@ -34,6 +37,7 @@ export default createContainer( () => {
   let user = usfo ? usfo.username : false;
   let active = usfo ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   let org = usfo ? usfo.org : false;
+  const sub = usfo ? Meteor.subscribe('skinnyData') : false;
   if(!login) {
     return {
       login: Meteor.userId(),
@@ -45,8 +49,12 @@ export default createContainer( () => {
   }else{
     return {
       login: Meteor.userId(),
+      ready: sub.ready(),
       user: user,
       org: org,
+      group: GroupDB.find().fetch(),
+      widget: WidgetDB.find().fetch(),
+      batch: BatchDB.find().fetch()
     };
   }
 }, StartView);

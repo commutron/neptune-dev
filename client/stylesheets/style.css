@@ -70,6 +70,7 @@
 .navIcon {
   padding: 0 0.5rem;
   vertical-align: middle;
+  line-height: normal;
 }
 
 #dtToggle, #ikyToggle, #timeToggle, #exitToggle {

@@ -110,6 +110,7 @@ export default createContainer( () => {
     return {
       ready: hotSub.ready() && Roles.subscription.ready(),
       login: Meteor.userId(),
+      user: user
     };
   }else{
     return {

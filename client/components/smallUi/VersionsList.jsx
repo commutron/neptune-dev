@@ -24,7 +24,7 @@ export default class WidgetPanel extends Component	{
                 <li>{Pref.live}: {entry.live.toString()}</li>
                 <li>tags: {entry.tags.length}</li>
                 <li>wiki address: <a className='low' href={entry.wiki} target='_blank'>{entry.wiki}</a></li>
-                <li>{Pref.unit}s per item: {entry.unit}</li>
+                <li>{Pref.unit} per item: {entry.units}</li>
                 <li>components: {entry.assembly.length}</li>
                 <li><NoteLine entry={entry.notes} id={w._id} versionKey={entry.versionKey} /></li>
                 <li><VersionForm widgetData={w} version={entry} rootWI={entry.wiki} /></li>

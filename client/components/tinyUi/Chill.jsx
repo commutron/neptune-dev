@@ -8,8 +8,11 @@ export default class Chill extends Component	{
   }
 
   render() {
+    
+    const name = this.props.name ? this.props.name.split('.')[0] : '';
+    
     return (
-      <span>
+      <span className='actionIconWrap'>
         <input
           type='button'
           id='exitToggle'
@@ -17,7 +20,7 @@ export default class Chill extends Component	{
           readOnly />
           <label htmlFor='exitToggle' id='exitSwitch' className='navIcon'>
             <i className='fa fa-sign-out fa-2x' aria-hidden='true'></i>
-            <span className='icontext cap'>logout {this.props.name}</span>
+            <span className='icontext'>{name}</span>
           </label>
       </span>
     );

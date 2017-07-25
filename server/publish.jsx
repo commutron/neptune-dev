@@ -42,27 +42,36 @@ Meteor.publish("appData", function(){
   }else{null}
 });
 
-
-Meteor.publish("skinnyData", function(){
+Meteor.publish("shaddowData", function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
   return [
-    /*
     GroupDB.find({orgKey: orgKey}, {
       fields: {
-          'group': 1,
           'alias': 1,
         }}),
     
     WidgetDB.find({orgKey: orgKey}, {
       fields: {
           'widget': 1,
-          'describe': 1,
-          'groupId': 1,
-          'versions.versionKey': 1,
           'versions.version': 1
         }}),
-        */
+    BatchDB.find({orgKey: orgKey}, {
+      sort: {batch:-1},
+      fields: {
+          'batch': 1,
+          'active': 1,
+          'finishedAt': 1,
+          'items.serial': 1,
+          'items.finishedAt': 1
+        }}),
+    ];
+});
+
+Meteor.publish("skinnyData", function(){
+  const user = Meteor.users.findOne({_id: this.userId});
+  const orgKey = user ? user.orgKey : false;
+  return [
     GroupDB.find({orgKey: orgKey}, {
       fields: {
           'orgKey': 0,
@@ -85,7 +94,7 @@ Meteor.publish("skinnyData", function(){
           //'items.serial': 1,
           //'items.finishedAt': 1
         }}),
-    
+    ArchiveDB.find()
     ];
 });
 
@@ -144,39 +153,6 @@ Meteor.publish('groupwidgetData', function() {
   // make sure we clean everything up (note `_publishCursor`
   //   does this for us with the comment observers)
   sub.onStop(function() { groupHandle.stop(); });
-});
-
-*/
-
-/*
-
-Meteor.publish("allData", function(){
-  const user = Meteor.users.findOne({_id: this.userId});
-  const orgKey = user ? user.orgKey : false;
-  return [ 
-    GroupDB.find({orgKey: orgKey}, {
-      fields: {
-        'orgKey': 0,
-        'shareKey': 0
-      }}),
-        
-    WidgetDB.find({orgKey: orgKey}, {
-      fields: {
-        'orgKey': 0
-      }}),
-        
-    BatchDB.find({orgKey: orgKey}, {
-      sort: {batch:-1},
-      fields: {
-        'orgKey': 0,
-        'shareKey': 0
-      }}),
-        
-    ArchiveDB.find({orgKey: orgKey}, {
-      fields: {
-        'orgKey': 0
-      }}),
-    ];
 });
 
 */

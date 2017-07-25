@@ -14,7 +14,7 @@ export default class MultiItemForm extends Component {
   constructor() {
     super();
     this.state = {
-      digits: 9,
+      digits: 10,
       hold: []
     };
   }
@@ -126,7 +126,7 @@ export default class MultiItemForm extends Component {
                 ref={(i)=> this.nineDigit = i}
                 id='nine'
                 name='digit'
-                defaultChecked={true}
+                defaultChecked={false}
                 onChange={this.setDigit.bind(this, 9)}
                 required />
               <label htmlFor='cln' className='beside'>9 digits</label>
@@ -136,7 +136,7 @@ export default class MultiItemForm extends Component {
                 ref={(i)=> this.tenDigit = i}
                 id='ten'
                 name='digit'
-                defaultChecked={false}
+                defaultChecked={true}
                 onChange={this.setDigit.bind(this, 10)}
                 required />
               <label htmlFor='cln' className='beside'>10 digits</label>

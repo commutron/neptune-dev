@@ -1,4 +1,4 @@
-Neptune v.0.4 (RC1)
+Neptune v.0.4.1 (RC1)
 
 A highly customized statistical process control web app.
 Created for Commutron Ind. An Electronics Manufacture in Elbow, Saskatchewan, Canada.
