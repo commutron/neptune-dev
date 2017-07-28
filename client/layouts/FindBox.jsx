@@ -16,7 +16,7 @@ class FindBox extends Component	{
 
   render () {
 
-   let last = this.props.orb ? this.props.orb : 'Find';
+   let last = this.props.orb ? this.props.orb : 'Search';
    const lock = this.props.user ? false : true;
 
 		return (

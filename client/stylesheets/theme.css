@@ -1,3 +1,5 @@
 :root {
   --neptuneColor: #007fff;
+  --clouds: #ecf0f1; /*off white */
+  --cloudsfade: rgba(236, 240, 241, 0.5);
 }

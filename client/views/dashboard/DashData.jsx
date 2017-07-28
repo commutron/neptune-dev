@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
 import {createContainer} from 'meteor/react-meteor-data';
+import Pref from '/client/global/pref.js';
 
 import Spin from '../../components/tinyUi/Spin.jsx';
 import FindOps from './FindOps.jsx';
@@ -15,7 +16,12 @@ class DashView extends Component	{
         );
     }
     
-    if(!this.props.coldReady || !this.props.hotReady || !this.props.app) {
+    if(//!this.props.allData || // diagnose data in development
+       !this.props.coldReady || 
+       !this.props.hotReady || 
+       !this.props.app ||
+       !this.props.allBlock ||
+       !this.props.allScrap) {
       return (
         <Spin />
         );
@@ -40,6 +46,14 @@ class DashView extends Component	{
 }
 
 export default createContainer( () => {
+  
+  // diagnose data in development /////////////////////// 
+  /*
+  const allData = Meteor.settings.public.allData ? true : false;
+  const allSub = Meteor.subscribe('allData', allData);
+  */ 
+  ///////////////////////////////////////////////////////
+  
   const orb = Session.get('now');
   let login = Meteor.userId() ? true : false;
   let usfo = login ? Meteor.user() : false;
@@ -48,17 +62,23 @@ export default createContainer( () => {
   const coldSub = login ? Meteor.subscribe('skinnyData') : false;
   //const experimentSub = login ? Meteor.subscribe('groupwidgetData') : false;
 
-  let hotSub = hotSub = Meteor.subscribe('hotData', false);
+  let hotSub = Meteor.subscribe('hotData', false);
   let hotBatch = false;
+  let blockSub = Meteor.subscribe('blockData', false);
+  let scrapSub = Meteor.subscribe('scrapData', false);
   
   if(coldSub) {
-    if(!isNaN(orb) && orb.length === 5) {
+    if(orb === Pref.block || orb === Pref.blck) {
+      blockSub = Meteor.subscribe('blockData', true);
+    }else if(orb === Pref.scrap || orb === Pref.scrp) {
+      scrapSub = Meteor.subscribe('scrapData', true);
+    }else if(!isNaN(orb) && orb.length === 5) {
       const oneBatch = BatchDB.findOne({batch: orb});
       if(oneBatch) {
         hotSub = Meteor.subscribe('hotData', orb);
         hotBatch = oneBatch;
       }else{null}
-    }else if(!isNaN(orb) && orb.length > 5 && orb.length <= 10) {
+    }else if(!isNaN(orb) && orb.length >= 9 && orb.length <= 10) {
   		const itemsBatch = BatchDB.findOne({'items.serial': orb});
       if(itemsBatch) {
         hotSub = Meteor.subscribe('hotData', itemsBatch.batch);
@@ -86,6 +106,7 @@ export default createContainer( () => {
     };
   }else{
     return {
+      //allData: allSub.ready(), // diagnose data in development
       coldReady: coldSub.ready(),
       hotReady: hotSub.ready(),
       orb: orb,
@@ -99,7 +120,9 @@ export default createContainer( () => {
       allWidget: WidgetDB.find({}, {sort: {widget:1}}).fetch(),
       allBatch: BatchDB.find({}, {sort: {batch:-1}}).fetch(),
       hotBatch: hotBatch,
-      allArchive: ArchiveDB.find({}, {sort: {year:-1}}).fetch()
+      allArchive: ArchiveDB.find({}, {sort: {year:-1}}).fetch(),
+      allBlock: blockSub.ready(),
+      allScrap: scrapSub.ready()
     };
   }
 }, DashView);

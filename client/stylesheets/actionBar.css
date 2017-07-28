@@ -79,9 +79,13 @@
   color: rgb(231,76,60);
 }
 
+.redIn {
+  border-bottom-color: var(--clouds);
+  border-bottom-color: var(--cloudsfade);
+}
+
 .redIn:focus {
   border-bottom-color: red;
-  outline: solid thin red;
 }
 
 .redIn:focus + label {

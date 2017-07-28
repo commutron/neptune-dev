@@ -21,10 +21,15 @@ class Pref {
     // terminology
     this.admin = 'org admin';
 	  this.batch = 'work order';//order
+	  this.btch = 'w'; // batch shortcut
 	  this.item = 'board';//board
+	  this.itm = 'b'; // item shortcut
     this.group = 'customer';//customer
+    this.grp = 'c'; // group shortcut
     this.widget = 'product';//product
+    this.wdgt = 'p'; // widget shortcut
     this.version = 'version';// version, variation, rev
+    this.vrsn = 'v'; // version shorcut
     this.live = 'live'; // live / active in context of a product
     this.unit = 'panel units';// how many in a panel/set
     this.panel = 'set of tracked items';
@@ -61,11 +66,13 @@ class Pref {
     this.escape = 'escaped nonCons';
     // scrap
     this.scrap = 'scrap';
+    this.scrp = 's'; // scrap shortcut
     // rma
     this.rma = 'rma';
     this.rmaProcess = 'rma process';
     // blocker tracking
-    this.block = 'blocker';
+    this.block = 'alert';
+    this.blck = 'a'; // blocker shortcut
     this.solve = 'solve';
     // non tracked, ancillary processes
     this.ancillary = 'indirect';

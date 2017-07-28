@@ -6,7 +6,7 @@ WidgetDB = new Mongo.Collection('widgetdb');
 BatchDB = new Mongo.Collection('batchdb');
 ArchiveDB = new Mongo.Collection('archivedb');
 
-Meteor.publish("appData", function(){
+Meteor.publish('appData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
   const admin = Roles.userIsInRole(this.userId, 'admin');
@@ -42,7 +42,7 @@ Meteor.publish("appData", function(){
   }else{null}
 });
 
-Meteor.publish("shaddowData", function(){
+Meteor.publish('shaddowData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
   return [
@@ -68,7 +68,7 @@ Meteor.publish("shaddowData", function(){
     ];
 });
 
-Meteor.publish("skinnyData", function(){
+Meteor.publish('skinnyData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
   return [
@@ -114,6 +114,49 @@ Meteor.publish('hotData', function(batch){
     
 });
 
+Meteor.publish('blockData', function(active) {
+  if(active) {
+    const user = Meteor.users.findOne({_id: this.userId});
+    const orgKey = user ? user.orgKey : false;
+                
+    return [
+          
+      BatchDB.find({orgKey: orgKey}, {
+        fields: {
+          'blocks': 1
+        }})
+              
+      ];
+    
+  }else{
+    return this.ready();
+  }
+    
+});
+
+Meteor.publish('scrapData', function(active) {
+  if(active) {
+    const user = Meteor.users.findOne({_id: this.userId});
+    const orgKey = user ? user.orgKey : false;
+                
+    return [
+          
+      BatchDB.find({orgKey: orgKey, 'items.history.type': 'scrap'}, {
+        fields: {
+          'items.history': 1,
+          'items.serial': 1,
+          'items.finishedAt': 1
+        }})
+              
+      ];
+      
+  }else{
+    return this.ready();
+  }
+    
+});
+
+
 /*
 // somethings missing, its not adding the information from widgetDB but
 // it is resending the whole groupDB
@@ -157,3 +200,18 @@ Meteor.publish('groupwidgetData', function() {
 
 */
   
+// diagnose data for development
+/*
+Meteor.publish('allData', function(dev){
+  if(dev) {
+    return [
+      GroupDB.find(),
+      WidgetDB.find(),
+      BatchDB.find(),
+      ArchiveDB.find()
+      ];
+  }else{
+    return this.ready();
+  }
+});
+*/

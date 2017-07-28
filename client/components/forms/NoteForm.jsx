@@ -66,9 +66,7 @@ export default class NoteForm extends Component {
               rows='10'
               placeholder='comments, alerts, messages'
               defaultValue={now}
-              autoFocus='true'
-              required >
-            </textarea>
+              autoFocus='true'></textarea>
             <label htmlFor='con'>Note</label>
           </p>
           <br />

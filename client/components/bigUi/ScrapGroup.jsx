@@ -8,18 +8,22 @@ export default class ShortGroup extends Component	{
   
   filter() {
     const data = this.props.batchData.items;
-    let scList = [];
-    data.map( (entry)=>{
-      // check history for...
-      for(let value of entry.history) {
-        // scraps
-        if(value.type === 'scrap') {
-          scList.push([entry.serial, value]);
-        // other
-        }else{null}
-      }
-     });
-     return scList;
+    if(data != undefined) {
+      let scList = [];
+      data.map( (entry)=>{
+        // check history for...
+        for(let value of entry.history) {
+          // scraps
+          if(value.type === 'scrap') {
+            scList.push([entry.serial, value]);
+          // other
+          }else{null}
+        }
+       });
+       return scList;
+    }else{
+      return [];
+    }
   }
   
   

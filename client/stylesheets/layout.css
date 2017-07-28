@@ -263,7 +263,7 @@ main {
 }
 
 .invert {
-  background-color: rgb(236,240,241);
+  background-color: var(--clouds);
   color: black;
 }
 

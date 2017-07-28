@@ -22,7 +22,7 @@ export default class NoteLine extends Component	{
                    <NoteForm id={this.props.id} versionKey={this.props.versionKey} content={dt.content} /> : 
                    null;
     
-    if(!dt) {
+    if(!dt.content) {
       return (
         <fieldset className='low'>
         <legend className='cap'>{name} notes</legend>

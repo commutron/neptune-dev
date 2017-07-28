@@ -4,6 +4,7 @@ import Pref from '/client/global/pref.js';
 import Dashboard from './Dashboard.jsx';
 
 import WikiOps from '../wiki/WikiOps.jsx';
+import SearchHelp from './SearchHelp.jsx';
 
 import ItemCard from './cards/ItemCard.jsx';
 import BatchCard from './cards/BatchCard.jsx';
@@ -123,7 +124,7 @@ export default class FindOps extends Component	{
       );
     }
     
-    if(orb === Pref.batch) {
+    if(orb === Pref.batch || orb === Pref.btch) {
       Session.set('nowBatch', false);
       return (
         <Dashboard>
@@ -133,7 +134,7 @@ export default class FindOps extends Component	{
       );
     }
     
-    if(orb === Pref.group) {
+    if(orb === Pref.group || orb === Pref.grp) {
       Session.set('nowBatch', false);
       return (
         <Dashboard action='newGroup'>
@@ -143,7 +144,7 @@ export default class FindOps extends Component	{
       );
     }
     
-    if(orb === Pref.block) {
+    if(orb === Pref.block || orb === Pref.blck) {
       Session.set('now', Pref.block);
       Session.set('nowBatch', false);
       return (
@@ -152,7 +153,7 @@ export default class FindOps extends Component	{
         </div>
       );
     }
-    if(orb === Pref.scrap) {
+    if(orb === Pref.scrap || orb === Pref.scrp) {
       Session.set('now', Pref.scrap);
       Session.set('nowBatch', false);
       return (
@@ -413,8 +414,9 @@ export default class FindOps extends Component	{
     Session.set('nowBatch', false);
 		return (
 		  <div className='dashMainFull'>
-        <div className='centreTrue'>
+        <div className='centre centreTrue wide'>
           <p className='biggest'>¯\_(ツ)_/¯</p>
+          <SearchHelp />
         </div>
       </div>
     );
