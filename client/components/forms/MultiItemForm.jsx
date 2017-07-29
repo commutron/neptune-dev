@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import Alert from '/client/global/alert.js';
 
@@ -101,6 +102,7 @@ export default class MultiItemForm extends Component {
         null;
       }else if(reply[1].length > 0) {
         this.setState({ hold: reply[1] });
+        this.message.value = '';
       }else{
         this.message.value = 'all created successfully';
       }
@@ -111,6 +113,7 @@ export default class MultiItemForm extends Component {
     
     const auth = Roles.userIsInRole(Meteor.userId(), 'run');
     const dig = this.state.digits;
+    const today = moment().format('YYMMDD');
 
     return (
       <Model
@@ -166,9 +169,11 @@ export default class MultiItemForm extends Component {
                 maxLength={dig}
                 minLength={dig}
                 placeholder='1000000000-9999999999'
+                defaultValue={today}
                 inputMode='numeric'
                 autoFocus='true'
-                required />
+                required
+                onInput={this.checkRange.bind(this)} />
               <label htmlFor='strt'>First {Pref.item} Number</label>
             </p>
             <p>
@@ -180,6 +185,7 @@ export default class MultiItemForm extends Component {
                 maxLength={dig}
                 minLength={dig}
                 placeholder='1000000000-9999999999'
+                defaultValue={today}
                 inputMode='numeric'
                 required
                 onInput={this.checkRange.bind(this)} />

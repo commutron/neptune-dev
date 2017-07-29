@@ -110,7 +110,6 @@ export default class WidgetNewForm extends Component	{
                 type='url'
                 id='wikdress'
                 ref={(i)=> this.wiki = i}
-                defaultValue={this.props.rootWI}
                 placeholder='Full Address'
                 required />{/*this.state.instruct*/}
               <label htmlFor='wikdress'>Work Instructions</label>
@@ -131,7 +130,7 @@ export default class WidgetNewForm extends Component	{
             height='600'
             width='100%' />
           <br />
-          <button className='smallAction clear' onClick={this.pullOver} disabled>use this page</button>
+          <button className='smallAction clear' onClick={this.pullOver}>use this page</button>
           <i className='redT'>blocked for security</i>
         </div>
 

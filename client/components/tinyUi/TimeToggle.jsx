@@ -6,7 +6,9 @@ export default class TimeToggle extends Component	{
   toggle() {
     const choice = this.choose.checked;
     Session.set('timeClock', choice);
-    }
+    let findBox = document.getElementById('find');
+		findBox.focus();
+  }
         
   render () {
     

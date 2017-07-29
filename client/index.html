@@ -4,4 +4,25 @@
   <link href="/logoColorMini.png" sizes="16x16 32x32" rel="icon">
   <!--<meta name="theme-color" content="#007fff" /> neptune blue -->
   <meta name='theme-color' content='#1c75bc' />
+  <script>
+  'use strict';
+  
+    function reFocus() {
+      const findBox = document.getElementById('find');
+  	  findBox.focus();
+    }
+
+    window.addEventListener('visibilitychange', ()=> {
+      if(document.visibilityState === 'visible' || document.hasFocus()) {
+        reFocus();
+      }else{null;}
+    }, false);
+    
+    window.addEventListener('focus', ()=> {
+      reFocus();
+    }, false);
+    
+    //(()=> {window.setInterval(/*do a thing*/, 900000);})();
+
+  </script>
 </head>

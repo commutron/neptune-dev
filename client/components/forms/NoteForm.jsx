@@ -70,8 +70,14 @@ export default class NoteForm extends Component {
             <label htmlFor='con'>Note</label>
           </p>
           <br />
-          <p><button ref={(i)=> this.go = i} disabled={true} className='action clear greenT' type='submit'>Save</button></p>
-          <p><output ref={(i)=> this.out = i} /></p>
+          <p>
+            <button
+              ref={(i)=> this.go = i}
+              disabled={true}
+              className='action clear greenT'
+              type='submit'>Save</button>
+          </p>
+          <p><output ref={(i)=> this.out = i} value='' /></p>
         </form>
       </Model>
     );

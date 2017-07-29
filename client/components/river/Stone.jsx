@@ -16,6 +16,8 @@ export default class Stone extends Component	{
   
   reveal() {
     this.setState({show: !this.state.show});
+    const findBox = document.getElementById('find');
+  	findBox.focus();
   }
     
   // close first-off form and recheck the lock when switching items 

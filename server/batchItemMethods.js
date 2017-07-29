@@ -146,13 +146,18 @@ Meteor.methods({
         if(auth && open && doc) {
           
           let bad = [];
+          let rNum = parseInt(doc.batch, 10) - 25; // should be enough
+          let recent = rNum.toString();
+          // custom to sequencial batch numbers
+          // by date would be better if i could get that to work
       
           for(var click = barFirst; click < barLast; click++) {
             let barcode = click.toString();
             let duplicate = doc.items.find(x => x.serial === barcode);
-            // this is really slow risks a time out or appears to be a freeze
-            // let wideDuplicate = BatchDB.findOne({'items.serial': barcode});
-            if(duplicate) {
+            let wideDuplicate = BatchDB.findOne({
+              batch: {$gte: recent},  
+              'items.serial': barcode});
+            if(duplicate || wideDuplicate) {
               bad.push(barcode);
             }else{
               BatchDB.update({_id: batchId}, {
