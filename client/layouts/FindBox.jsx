@@ -31,15 +31,19 @@ class FindBox extends Component	{
           ref={(i)=> this.choose = i}
           className='up'
           placeholder={last}
-          list='cuts'
           disabled={lock}
+          autoCorrect={false}
+          autoCapitalize={false}
+          spellCheck={false}
           />
+        {/*
         <datalist id='cuts' className='cap'>
           <option value={Pref.batch}>All {Pref.batch}s</option>
           <option value={Pref.group}>All {Pref.group}s</option>
           <option value={Pref.block}>{Pref.block}s</option>
           <option value={Pref.scrap}>All {Pref.scrap}ped {Pref.item}s</option>
         </datalist>
+        */}
       </form>
     );
   }

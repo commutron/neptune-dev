@@ -102,12 +102,11 @@ export default class FindOps extends Component	{
     if(!orb) {
       Session.set('nowBatch', false);
       return (
-        <Dashboard>
-          <div></div>
-          <div className='centre'>
-            <p>ready</p>
+        <div className='dashMainFull'>
+          <div className='centre centreTrue wide'>
+            <SearchHelp />
           </div>
-        </Dashboard>
+        </div>
       );
     }
 
@@ -124,7 +123,7 @@ export default class FindOps extends Component	{
       );
     }
     
-    if(orb === Pref.batch || orb === Pref.btch) {
+    if(orb === Pref.batch || orb === Pref.batch + 's' || orb === Pref.btch) {
       Session.set('nowBatch', false);
       return (
         <Dashboard>
@@ -134,7 +133,7 @@ export default class FindOps extends Component	{
       );
     }
     
-    if(orb === Pref.group || orb === Pref.grp) {
+    if(orb === Pref.group || orb === Pref.group + 's' || orb === Pref.grp) {
       Session.set('nowBatch', false);
       return (
         <Dashboard action='newGroup'>

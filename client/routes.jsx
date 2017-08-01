@@ -43,7 +43,7 @@ FlowRouter.route('/docs', {
   }
 });
 
-FlowRouter.route('/database', {
+FlowRouter.route('/gate', {
   action() {
     mount(BasicLayout, {
       content: (<p>hello future</p>),

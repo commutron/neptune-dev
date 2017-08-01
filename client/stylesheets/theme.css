@@ -1,5 +1,17 @@
 :root {
   --neptuneColor: #007fff;
-  --clouds: #ecf0f1; /*off white */
+  --turquoise: rgb(26, 188, 156);
+  --turquoisefade: rgba(26, 188, 156, 0.5);
+  --emerald: rgb(46, 204, 113);
+  --emeraldfade: rgba(46, 204, 113, 0.5);
+  --peterriver: rgb(52, 152, 219);/* light blue */
+  --peterriverfade: rgba(52, 152, 219, 0.5);
+  --amethyst: rgb(155, 89, 182); /* light purple */
+  --amethystfade: rgba(155, 89, 182, 0.5);
+  --silver: rgb(189, 195, 199);
+  --silverfade: rgba(189, 195, 199, 0.5);
+  --clouds: rgb(236, 240, 241); /*off white */
   --cloudsfade: rgba(236, 240, 241, 0.5);
+  --asbestos: rgb(127, 140, 141);
+  --asbestosfade: rgb(127, 140, 141, 0.5);
 }

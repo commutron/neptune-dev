@@ -27,9 +27,9 @@
 #find:focus {
 	color: white;
 	background: rgb(50,50,50);
-	/*background: #303030;*/
   outline: none;
-  border-bottom-color: #3498db;
+  border-color: #3498db;
+  box-shadow: 0 0 .2em .2em rgba(43,43,43,0.3);
 }
 
 #find::selection {

@@ -124,7 +124,10 @@ Meteor.methods({
     const dev = Roles.userIsInRole(Meteor.userId(), 'devMaster');
     const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
     const team = Meteor.users.findOne({_id: user, orgKey: Meteor.user().orgKey});
-    if(dev || auth && team) {
+    
+    if(role === 'active' && user === Meteor.userId()) {
+      return false;
+    }else if(dev || auth && team) {
       Roles.removeUsersFromRoles(user, role);
       return true;
     }else{

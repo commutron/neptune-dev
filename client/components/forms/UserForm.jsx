@@ -160,6 +160,9 @@ class SetCheck extends Component	{
   render() {
     
     const check = Roles.userIsInRole(this.props.user, this.props.role);
+    const lockout = this.props.role === 'active' && 
+                    this.props.user === Meteor.userId() ?
+                    true : false;
     
     return(
       <li>
@@ -168,7 +171,8 @@ class SetCheck extends Component	{
           id={this.props.role}
           defaultChecked={check}
           onChange={this.change.bind(this)}
-          readOnly />
+          readOnly 
+          disabled={lockout} />
         <label htmlFor={this.props.role} className='beside'>{this.props.role}</label>
         <br />
       </li>

@@ -73,9 +73,9 @@ class TopBar extends Component	{
           </a>
           <RoleCheck role={'admin'}>
             <span>
-              <a href='/database'>
-                <i className="icon fa fa-database fa-2x" aria-hidden="true"></i>
-                <span className='icontext'>dB</span>
+              <a href='/gate'>
+                <i className="icon fa fa-rocket fa-2x" aria-hidden="true"></i>
+                <span className='icontext'>Gate</span>
               </a>
             </span>
           </RoleCheck>

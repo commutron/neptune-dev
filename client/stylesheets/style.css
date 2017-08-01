@@ -198,6 +198,9 @@
 	color: rgb(48,48,48);
 }
 
+.white {
+  color: var(--clouds);
+}
 .whiteT {
   color: white;
 }
