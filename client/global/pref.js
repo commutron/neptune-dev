@@ -45,7 +45,7 @@ class Pref {
     this.buildFlowAlt = 'alt process flow';
     this.buildStep = 'build process';
     this.trackFirst = 'first-off';
-    this.trackLast =  'pack';
+    this.trackLast =  'finish';
     this.good = 'accept';
     this.ng = 'ng';
     this.builder = 'builder';

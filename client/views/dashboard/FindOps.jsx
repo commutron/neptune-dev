@@ -340,7 +340,7 @@ export default class FindOps extends Component	{
                 groupAlias={lookup.alias}
                 widgetData={widgets}
                 active={activeBatch} />
-              <WikiOps widget='home' wi='home' root={app.instruct} brick={brick} />
+              <WikiOps wi={lookup.wiki} root={app.instruct} brick={brick} />
             </Dashboard>
           );
         }

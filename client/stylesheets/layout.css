@@ -369,6 +369,11 @@ main {
   justify-content: space-between;
 }
 
+.balance {
+  display: flex;
+  justify-content: space-around;
+}
+
 .wide {
   width: 100%;
   margin: 0 auto;
@@ -404,9 +409,26 @@ main {
   animation: slideDown 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 50px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0)
+  }
+}
+
+.contentTrans-enter, .contentTrans-appear {
+  animation: slideUp 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/*
 .showChange {
   animation: slideDown 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
+*/
 
 /* animation for models */
 
@@ -417,4 +439,43 @@ main {
 
 .modelTrans-enter-active, .modelTrans-appear-active {
   opacity: 1;
+}
+
+@keyframes slideLeft {
+  0% {
+    opacity: 0;
+    transform: translate3d(50px, 0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0)
+  }
+}
+
+@keyframes slideRight {
+  0% {
+    opacity: 1;
+    transform: translate3d(-50px, 0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0)
+  }
+}
+
+.contentLeft-enter, .contentLeft-appear {
+  animation: slideLeft 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.contentLeft-enter-active, .contentLeft-appear-active {
+  animation: slideLeft 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.contentLeft-exit {
+  opacity: 1;
+}
+
+.contentLeft-exit.contentLeft-exit-active {
+  opacity: 0.01;
+  transition: opacity 1000ms ease-in;
 }

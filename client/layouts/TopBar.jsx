@@ -16,6 +16,18 @@ class TopBar extends Component	{
   
   render() {
     
+    //console.log(Meteor.status().connected);
+    /*
+    if() {
+      return (
+        <Freeze>
+          <div className='actionBox orange centre centreTrue bigger'>
+            <p>OFFLINE</p>
+          </div>
+        </Freeze>
+      );
+    }*/
+    
     if(!this.props.login) {
       return (
         <Freeze>

@@ -25,8 +25,8 @@
   background-color: transparent;
 }
 .miniAction:hover {
-  background-color: rgb(0,0,0);
-  background-color: rgba(0,0,0,0.5);
+  opacity: 1;
+  cursor: pointer;
 }
 .miniAction:focus {
   outline: 1px dotted;

@@ -46,7 +46,7 @@ export default class Stone extends Component	{
   		    this.setState({lock: false})
   		  : null;
     	}
-    }, 3000);
+    }, 1500);
   }
   
   firstDone() {
@@ -146,7 +146,7 @@ export default class Stone extends Component	{
 						  <input
 						    type='text'
 						    ref={(i)=> this.comm = i}
-						    placeholder='comment'
+						    placeholder='optional comment'
 						    style={sty} 
 						    disabled={lock} />
 						  : null}
@@ -155,6 +155,8 @@ export default class Stone extends Component	{
           <div className='actionBox blue'>
             <button className='action clear rAlign' onClick={this.reveal}>{Pref.close}</button>
             <br />
+            <br />
+            <p className='bigger centre'>{this.props.step}</p>
             <br />
             <FirstForm
               id={this.props.id}

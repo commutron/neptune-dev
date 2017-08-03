@@ -141,7 +141,8 @@ export default class ActionBar extends Component	{
               <GroupForm
                 id={groupData._id}
                 name={groupData.group}
-                alias={groupData.alias} />
+                alias={groupData.alias}
+                wiki={groupData.wiki} />
               <WidgetNewForm
                 groupId={groupData._id}
                 end={app.lastTrack} 
@@ -154,7 +155,7 @@ export default class ActionBar extends Component	{
             </div>
           :
           act === 'newGroup' ?
-             <GroupForm id='new' name='new' alias='new' />
+             <GroupForm id={false} name={false} alias={false} wiki={false} />
           :null
         }
 

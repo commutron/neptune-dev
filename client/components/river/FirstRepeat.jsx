@@ -37,7 +37,7 @@ export default class StoneSelect extends Component	{
   		    this.setState({lock: false})
   		  : null;
   	  }
-  	}, 3000);
+  	}, 1500);
   }
   
   
@@ -65,6 +65,7 @@ export default class StoneSelect extends Component	{
           >{Pref.close}</button>
           <br />
           <br />
+          <br />
             <FirstForm
               id={dt.id}
               barcode={dt.barcode}
@@ -73,6 +74,7 @@ export default class StoneSelect extends Component	{
               type={dt.flowStep.type}
               users={dt.users}
               methods={dt.methods}
+              repeat={true}
               onPass={e => this.unlock()} />
             <br />
           </div>

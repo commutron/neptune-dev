@@ -114,7 +114,7 @@ export default createContainer( () => {
       brick: Session.get('nowWanchor'),
       login: Meteor.userId(),
       org: org,
-      users: Meteor.users.find().fetch(),
+      users: Meteor.users.find({}, {sort: {username:1}}).fetch(),
       app: AppDB.findOne({org: org}),
       allGroup: GroupDB.find({}, {sort: {group:1}}).fetch(),
       allWidget: WidgetDB.find({}, {sort: {widget:1}}).fetch(),

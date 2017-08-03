@@ -9,15 +9,6 @@ import { AdminUp } from '../forms/AdminForm.jsx';
 
 export default class UserForm extends Component {
   
-  clearPin() {
-    const user = this.props.id;
-    Meteor.call('noPin', user, (err)=>{
-      if(err)
-        console.log(err);
-      Bert.alert(Alert.success);
-    });
-  }
-  
   forcePassword(e) {
     e.preventDefault();
     const check = window.confirm('Are you sure you to change this users password?');
@@ -91,15 +82,7 @@ export default class UserForm extends Component {
         <br />
         <AdminUp userId={this.props.id} />
         <br />
-        {admin ?
-          <fieldset>
-            <legend>Forgot PIN</legend>
-            <button
-              className='smallAction clear redT'
-              onClick={this.clearPin.bind(this)}
-            >Clear PIN</button>
-          </fieldset>
-          :
+        {!admin ?
           <fieldset>
             <legend>Forgot Password</legend>
             <button
@@ -107,7 +90,7 @@ export default class UserForm extends Component {
               onClick={this.forcePassword.bind(this)}
             >Change Password</button>
           </fieldset>
-        }
+        :null}
         
         
         {this.props.org && this.props.id !== Meteor.userId() ?

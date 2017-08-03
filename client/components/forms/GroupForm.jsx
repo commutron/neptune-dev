@@ -9,13 +9,13 @@ export default class GroupForm extends Component {
 
     createCustomer(e) {
       e.preventDefault();
+      const groupId = this.props.id;
       const groupName = this.gName.value.trim().toLowerCase();
       const groupAlias = this.gAlias.value.trim().toLowerCase();
-      const groupId = this.props.id;
+      const groupWiki = this.gWiki.value.trim().toLowerCase();
       
-      
-      function create(groupName, groupAlias) {
-        Meteor.call('addGroup', groupName, groupAlias, (error, reply)=>{
+      function create(groupName, groupAlias, groupWiki) {
+        Meteor.call('addGroup', groupName, groupAlias, groupWiki, (error, reply)=>{
           if(error)
            console.log(error);
           if(reply) {
@@ -27,9 +27,8 @@ export default class GroupForm extends Component {
         });
       }
       
-      
-      function edit(groupId, groupName, groupAlias) {
-        Meteor.call('editGroup', groupId, groupName, groupAlias, (error, reply)=>{
+      function edit(groupId, groupName, groupAlias, groupWiki) {
+        Meteor.call('editGroup', groupId, groupName, groupAlias, groupWiki, (error, reply)=>{
           if(error)
             console.log(error);
           if(reply) {
@@ -42,11 +41,10 @@ export default class GroupForm extends Component {
       }
       
       /////////Selection/////////
-      
-      if(this.props.name === 'new') {
-        create(groupName, groupAlias);
+      if(this.props.name === false) {
+        create(groupName, groupAlias, groupWiki);
       }else{
-        edit(groupId, groupName, groupAlias);
+        edit(groupId, groupName, groupAlias, groupWiki);
       }
       
     }
@@ -54,10 +52,11 @@ export default class GroupForm extends Component {
 
   render() {
     
-    const orName = this.props.name === 'new' ? '' : this.props.name;
-    const orAlias = this.props.alias === 'new' ? '' : this.props.alias;
-    const bttn = this.props.name === 'new' ? 'create new' : 'edit';
-    const title = this.props.name === 'new' ? 'create new' : 'save edit';
+    const orName = this.props.name ? this.props.name : '';
+    const orAlias = this.props.alias ? this.props.alias : '';
+    const orWiki = this.props.wiki ? this.props.wiki : 'http://';
+    const bttn = this.props.name ? 'edit' : 'create new';
+    const title = this.props.name ? 'edit' : 'create new';
 
     return (
       <Model
@@ -86,6 +85,16 @@ export default class GroupForm extends Component {
               placeholder='ie. TSG'
               required />
             <label htmlFor='newAlias'>Abbreviation / Alias</label>
+          </p>
+          <p>
+            <input
+              type='url'
+              id='newWiki'
+              ref={(i)=> this.gWiki = i}
+              defaultValue={orWiki}
+              placeholder='http://192.168.1.68/dokuwiki'
+              required />
+            <label htmlFor='newAlias'>Group Docs Index</label>
           </p>
           <br />
           <Submit name={title} type='action' />

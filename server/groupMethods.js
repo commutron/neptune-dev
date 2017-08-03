@@ -2,7 +2,7 @@ Meteor.methods({
 
 //// Groups \\\\
 
-  addGroup(groupName, alias) {
+  addGroup(groupName, alias, wiki) {
     const duplicate = GroupDB.findOne({group: groupName});
     const dupe = GroupDB.findOne({alias: alias});
     const auth = Roles.userIsInRole(Meteor.userId(), 'create');
@@ -16,7 +16,8 @@ Meteor.methods({
   			createdWho: Meteor.userId(),
   			updatedAt: new Date(),
   			updatedWho: Meteor.userId(),
-  			tags: []
+  			tags: [],
+  			wiki: wiki
         });
       return true;
     }else{
@@ -24,7 +25,7 @@ Meteor.methods({
     }
   },
 
-  editGroup(groupId, newGroupName, newAlias) {
+  editGroup(groupId, newGroupName, newAlias, newWiki) {
     const doc = GroupDB.findOne({_id: groupId});
     let duplicate = GroupDB.findOne({group: newGroupName});
     let dupe = GroupDB.findOne({alias: newAlias});
@@ -37,7 +38,8 @@ Meteor.methods({
           group: newGroupName,
           alias: newAlias,
           updatedAt: new Date(),
-  			  updatedWho: Meteor.userId()
+  			  updatedWho: Meteor.userId(),
+  			  wiki: newWiki
         }});
       return true;
     }else{

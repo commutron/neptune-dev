@@ -30,11 +30,19 @@ export default class SetPin extends Component {
       this.go.disabled = false;
     }
   }
+  
+  clearPin() {
+    const user = this.props.id;
+    Meteor.call('noPin', user, (err)=>{
+      if(err)
+        console.log(err);
+      Bert.alert(Alert.success);
+    });
+  }
 
   render () {
-    
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      return (
+    return (
+      <div>
         <fieldset>
           <legend>Change PIN</legend>
           <form onSubmit={this.setPin.bind(this)} autoComplete='off'>
@@ -91,11 +99,14 @@ export default class SetPin extends Component {
             </p>
           </form>
         </fieldset>
-        );
-    }
-  
-  return (
-    <div></div>
+        <fieldset>
+          <legend>Forgot PIN</legend>
+          <button
+            className='smallAction clear redT'
+            onClick={this.clearPin.bind(this)}
+          >Clear PIN</button>
+        </fieldset>
+      </div>
     );
   }
 }

@@ -266,7 +266,7 @@ Meteor.methods({
     }
   },
 
-  addFirst(batchId, bar, key, step, type, com, good, whoB, howB, howI, diff, ng) {
+  addFirst(batchId, bar, key, step, type, good, whoB, howB, howI, diff, ng) {
     if(!Roles.userIsInRole(Meteor.userId(), 'inspect')) {
       return false;
     }else{
@@ -278,7 +278,7 @@ Meteor.methods({
           good: good,
           time: new Date(),
           who: Meteor.userId(),
-          comm : com,
+          comm : '',
           info: {
             builder: whoB,
             buildMethod: howB,

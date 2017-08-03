@@ -109,6 +109,7 @@ export default class FlowForm extends Component	{
                 <li key={index} className=''>                      
                   {entry.step} - {entry.type} - {entry.how}                 
                   <button
+                    type='button'
                     name={entry}
                     ref={(i)=> this.ex = i}
                     className='smallAction red'
