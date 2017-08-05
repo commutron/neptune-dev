@@ -105,7 +105,7 @@ export default class FirstForm extends Component	{
 		const step = this.props.step;
     const type = this.props.type;
       
-    const howI = this.state.howI;
+    const howI = this.state.howI ? this.state.howI : 'manual';
     const whoB = [...this.state.whoB];
     const howB = this.state.howB;
     const good = this.state.good;
@@ -177,8 +177,6 @@ export default class FirstForm extends Component	{
         </div>
         </SlideDownWrap>
       );
-    }else{
-      this.eyes.bind(this);
     }
     
     if(step === 1) {

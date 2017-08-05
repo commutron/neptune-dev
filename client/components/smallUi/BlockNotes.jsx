@@ -9,13 +9,23 @@ import UserNice from '../smallUi/UserNice.jsx';
 export default class BlockNotes extends Component {
 
   render () {
-
-    const blockers = this.props.data.sort((s1, s2) => {return s1.time < s2.time});
+    
+    const active = this.props.data.filter( x => x.solve === false );
+    const blockersA = active.sort((s1, s2) => {return s1.time < s2.time});
+    
+    const done = this.props.data.filter( x => x.solve !== false );
+    const blockersD = done.sort((s1, s2) => {return s1.time < s2.time});
 
     return (
       <div>
-        { blockers.length > 0 ?
-            blockers.map( (entry, index)=>{
+        { blockersA.length > 0 ?
+            blockersA.map( (entry, index)=>{
+              return ( <BlockBox key={index} entry={entry}/> );
+            })
+          : null
+        }
+        { blockersD.length > 0 ?
+            blockersD.map( (entry, index)=>{
               return ( <BlockBox key={index} entry={entry}/> );
             })
           : null

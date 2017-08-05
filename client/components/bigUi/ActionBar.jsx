@@ -48,6 +48,13 @@ export default class ActionBar extends Component	{
               serial={itemData.serial}
       		    nons={app.nonConOption} />
       	:
+      	act === 'batchBuild' && batchData.items.length === 0 ?
+      	  <MultiItemForm
+            id={batchData._id}
+            items={batchData.items}
+            more={batchData.finishedAt === false}
+            unit={versionData.units} />
+      	:
       	act === 'item' ?
       	  <div> 
         	  <UnitSet

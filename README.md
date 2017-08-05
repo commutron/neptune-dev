@@ -1,4 +1,4 @@
-Neptune v.0.4.3 (beta)
+Neptune v.0.4.4 (beta)
 
 A highly customized statistical process control web app.
 Created for Commutron Ind. An Electronics Manufacture in Elbow, Saskatchewan, Canada.
@@ -16,4 +16,4 @@ All Rights Reserved
 
 No License
 
-Source avaliable, limited to Github, as per the "Github Terms of Service"
+Source avaliable, limited to Github and the "Github Terms of Service"

@@ -6,14 +6,13 @@ export default class TimeFrame extends Component {
     
     let sty = {
       width: '100%',
+      height: 'calc(100vh - 150px)',
       border: '0',
       position: 'absolute',
-      top: '50%',
+      top: '75px',
       left: '0',
       overflowY: 'hidden',
       overflowX: 'hidden',
-      transform: 'translate(0%, -50%)',
-      zIndex: '10',
       backgroundColor: 'transparent'
     };
     
@@ -21,13 +20,8 @@ export default class TimeFrame extends Component {
     // that could be a preformance problem
     // but its good for user experience
     let show = this.props.time ?
-    {
-      display: 'block'
-    }
-    :
-    {
-      display: 'none'
-    };
+               { display: 'block' } : 
+               { display: 'none' };
     
     return (
       <div style={show}>
@@ -36,7 +30,6 @@ export default class TimeFrame extends Component {
           id='getPaid'
           style={sty}
           src={this.props.go}
-          height='600'
           scrolling='yes'
           />
         

@@ -19,20 +19,44 @@ export default class BatchCard extends Component	{
     const v = w.versions.find( x => x.versionKey === b.versionKey );
     
     const flow = w.flows.find( x => x.flowKey === b.river);
+    
+    let iready = b.items.length === 0;
+    
+    let warn = b.blocks.filter( x => x.solve === false ).length;
+    iready ? warn++ : null;
+    const showWarn = warn === 0 ? 'hide' : 'alertCount clean rAlign';
 
     return (
       <SlideDownWrap>
         <div className='card'>
           <div className='space cap'>
-            <h1>{b.batch}</h1>
+            <h1>
+              <span>{b.batch}</span>
+              <i className={showWarn}>
+                {warn}
+              </i>
+            </h1>
             <hr />
-            <h2><JumpText title={g.alias} link={g.alias} /><JumpText title={w.widget} link={w.widget} /></h2>
             
+            {/*
+            <h2>
+              <JumpText title={g.alias} link={g.alias} />
+              <JumpText title={w.widget} link={w.widget} />
+            </h2>
             <h3>{Pref.version}: {v.version}</h3>
+            */}
+            
+            {iready ?
+              <h2 className='actionBox centreText yellow'>
+                No {Pref.itemSerial}s created
+              </h2>
+            :null}
             
             {b.finishedAt !== false ?
-              <p>finished: {moment(b.finishedAt).calendar()}</p>
-            : null}
+              <h2 className='actionBox centreText green'>
+                Finished: {moment(b.finishedAt).calendar()}
+              </h2>
+            :null}
     
             <NoteLine entry={b.notes} id={b._id} versionKey={false} />
             
@@ -41,7 +65,7 @@ export default class BatchCard extends Component	{
             <BlockNotes data={b.blocks} />
   
           </div>
-  				
+          
   				<Progress batchData={b} flow={flow} detail={false} />
   				
   				<br />

@@ -83,7 +83,8 @@ export default class BlockForm extends Component {
 
 export class SolveBlock extends Component {
   
-  addSolve() {
+  addSolve(e) {
+    e.preventDefault();
 		const id = this.props.id;
 		const blKey = this.props.blKey;
     const act = this.slv.value.trim().toLowerCase();

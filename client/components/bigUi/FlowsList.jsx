@@ -8,6 +8,8 @@ import {FlowRemove} from '../forms/FlowForm.jsx';
 export default class FlowsList extends Component	{
 
   render() {
+    
+    const auth = Roles.userIsInRole(Meteor.userId(), 'edit');
 
     return (
       <details className='blue'>
@@ -18,7 +20,7 @@ export default class FlowsList extends Component	{
               <summary>{entry.title}</summary>
               <i>{entry.flowKey}</i>
               <br />
-              <FlowRemove id={this.props.id} fKey={entry.flowKey} />
+              {auth ? <FlowRemove id={this.props.id} fKey={entry.flowKey} /> : null}
               {entry.flow.map( (step, index)=>{
                 return (
                   <div className='infoBox' key={index}>

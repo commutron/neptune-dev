@@ -33,12 +33,6 @@ nav a:hover {
   transition: 0.4s cubic-bezier(0.2, 0.6, 0.3, 1.1);
 }
 
-/*
-li {
-  list-style: none;
-}
-*/
-
 li > i {
   background-color: rgb(0,0,0);
   background-color: rgba(0,0,0,0.5);
@@ -55,6 +49,7 @@ button, input[type='submit'] {
   border-color: white;
   padding: 0;
   color: white;
+  cursor: pointer;
   -webkit-user-select: none;
   -khtml-user-select: none;
   -moz-user-select: none;
@@ -138,17 +133,6 @@ input:focus, input:active, select:focus, select:active {
   outline: 0;
 }
 
-/*
-select:focus,
-select:active,
-input[type='date']:focus,
-input[type='date']:active,
-input[type='datetime-local']:focus,
-input[type='datetime-local']:active {
-  outline: solid thin var(--neptuneColor);
-}
-*/
-
 textarea:focus, textarea:active {
   border-color: var(--neptuneColor);
   outline: 0;
@@ -190,49 +174,6 @@ input:focus + label, textarea:focus + label, select:focus + label {
 form p {
   padding: 10px 0;
 }
-
-/*
-
-select {
-  background: white;
-}
-
-textarea {
-  font-family: 'Open Sans', sans-serif;
-  font-size: 1em;
-}
-
-input[type='text'],
-input[type='number'],
-input[type='password'],
-input[type='date'],
-input[type='datetime-local'],
-input[type='url'],
-select, datalist {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  width: 200px;
-  min-height: 2rem;
-  max-height: 4rem;
-  padding: 0;
-  font-size: 1.25rem;
-  border-width: 1px;
-}
-
-button:disabled,
-input[type='text']:disabled,
-input[type='number']:disabled,
-input[type='password']:disabled,
-input[type='date']:disabled,
-input[type='datetime-local']:disabled,
-input[type='url']:disabled,
-input[type='submit']:disabled,
-select:disabled, datalist:disabled, textarea:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-
-*/
 
 button:disabled, datalist:disabled {
   opacity: 0.3;

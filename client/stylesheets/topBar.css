@@ -1,3 +1,6 @@
+/*@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+meteor seems to be handling this */
+
 #find {
   font-size: 2rem;
   text-align: center;
@@ -73,3 +76,22 @@ input::-webkit-calendar-picker-indicator {
 }
 
 
+
+/* custom timeClock icon */
+
+#timeToggle:checked + #timeSwitch {
+  color: white;
+}
+
+.customTimeClock:before { 
+  font-family: FontAwesome;
+  font-size: 2em;
+}
+
+.customTimeClock:before { 
+  content: "\f017";
+} /* unchecked icon */
+
+#timeToggle:checked + .customTimeClock:before { 
+  content: "\f00d";
+} /* checked icon */

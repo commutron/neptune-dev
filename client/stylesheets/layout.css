@@ -113,11 +113,12 @@ main {
   overflow-y: hidden;
   overflow-x: hidden;
   min-width: 1000px;
+  min-height: 100vh;
 }
 
 
 .basicContainer {
-  grid-template-rows: 75px calc(100vh - 90px) 15px;
+  grid-template-rows: 75px calc(100vh - 85px) 10px;
   grid-template-areas: 
     "headerSearch headerNav"
     "mainFull mainFull"
@@ -125,7 +126,7 @@ main {
 }
 
 .dashContainer {
-  grid-template-rows: 75px calc(100vh - 90px) 15px;
+  grid-template-rows: 75px calc(100vh - 85px) 10px;
   grid-template-areas: 
     "headerSearch headerNav"
     "mainSplit mainSplit"
@@ -144,14 +145,11 @@ main {
 .gridHeaderNav {
   grid-area: headerNav;
   z-index: 9;
-  /*commutron brand blue*/
-  background-color: #1c75bc;
-  background-color: rgba(28,117,188,1);
+  background-color: var(--commutron);
   -webkit-box-shadow: 0 0 15px 0.5px rgb(0,0,0);
   -moz-box-shadow:    0 0 15px 0.5px rgb(0,0,0);
   box-shadow:         0 0 15px 0.5px rgb(0,0,0);
 }
-
 
 .basicMainFull {
   grid-area: mainFull;
@@ -161,9 +159,7 @@ main {
 .basicFooter {
   grid-area: footer;
   z-index: 9;
-   /*commutron brand blue*/
-  background-color: #1c75bc;
-  background-color: rgba(28,117,188,1);
+  background-color: var(--commutron);
   -webkit-box-shadow: 0 0 15px 0.5px rgb(0,0,0);
   -moz-box-shadow:    0 0 15px 0.5px rgb(0,0,0);
   box-shadow:         0 0 15px 0.5px rgb(0,0,0);
@@ -176,7 +172,7 @@ main {
   display: grid;
   grid-area: mainSplit;
   grid-template-columns: 300px auto;
-  grid-template-rows: 100% 60px;
+  grid-template-rows: 100% 60px; /* changing this 2nd row value doesent do anything?? */
   grid-template-areas: 
     "mainLeft mainRight"
     "actionFooter actionFooter";
@@ -207,9 +203,10 @@ main {
   background-color: rgba(0,0,0,0.9);
   width: 100%;
   min-width: 1000px;
+  height: 60px;
   z-index: 9;
   position: fixed;
-  bottom: 15px;
+  bottom: 10px;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -255,7 +252,7 @@ main {
   min-width: 215px;
   padding: 0;
   margin: 25px auto 25px auto;
-  z-index: 6;
+  /*z-index: 6;*/
   background-color: rgb(75,75,75);
   -webkit-box-shadow: 0 0 10px 0.5px rgb(0,0,0);
   -moz-box-shadow:    0 0 10px 0.5px rgb(0,0,0);
@@ -292,7 +289,7 @@ main {
 }
 
 .popup {
-  margin: 3% auto 5% auto;
+  margin: 5vh auto 5vh auto;
   padding: 25px;
   background: rgb(0,0,0);
   background: rgba(0,0,0,0.9);

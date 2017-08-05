@@ -9,12 +9,15 @@ export default class TimeToggle extends Component	{
     let findBox = document.getElementById('find');
 		findBox.focus();
   }
-        
+  
   render () {
     
   let sty = {
     zIndex: '11'
   };
+  
+  //let icon = 'fa fa-clock-o fa-2x';
+  
     return (
       <span style={sty}>
         <input
@@ -24,8 +27,7 @@ export default class TimeToggle extends Component	{
           defaultChecked={Session.get('timeClock')}
           onChange={this.toggle.bind(this)}
           readOnly />
-          <label htmlFor='timeToggle' id='timeSwitch' className='navIcon'>
-            <i className='fa fa-clock-o fa-2x' aria-hidden='true'></i>
+          <label htmlFor='timeToggle' id='timeSwitch' className='navIcon customTimeClock'>
             <span className='icontext'>Time Clock</span>
           </label>
       </span>

@@ -1,3 +1,6 @@
+/* @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+meteor seems to be handling this */
+
 .action {
   line-height: 2em;
   font-size: 1em;
@@ -26,7 +29,6 @@
 }
 .miniAction:hover {
   opacity: 1;
-  cursor: pointer;
 }
 .miniAction:focus {
   outline: 1px dotted;
@@ -50,13 +52,13 @@
 	margin: 0 5px;
 	text-transform: uppercase;
 	background-color: transparent;
-  cursor: pointer;
   border: 1px solid;
   border-top-color: transparent;
   border-right-color: transparent;
   border-bottom-color: white;
   border-left-color: transparent;
   transition: border 250ms ease;
+  word-break: break-all;
 }
 .jump:hover, .jump:focus, .jump:active {
   border-bottom-color: #3498db;
@@ -93,14 +95,6 @@
 
 #timeSwitch:hover, #exitSwitch:hover, #boltSwitch:hover {
   color: white;
-}
-
-#timeToggle:checked + #timeSwitch {
-  color: white;
-}
-
-#ikyToggle:checked + #snapSwitch {
-  transform: translate(0%, 0%) rotateY(180deg);
 }
 
 .open {
@@ -162,18 +156,16 @@
 }
 
 .yellow {
-  background-color: #f39c12;
-  background-color: rgba(243,156,18,1);
+  background-color: var(--orange);
 }
 .fadeYellow {
-  background-color: rgb(243,156,18);
-  background-color: rgba(243,156,18,0.8);
+  background-color: var(--orangefade);
 }
 .yellowT {
-  color: rgb(243,156,18);
+  color: var(--orange);
 }
 .yellowBox {
-  color: rgb(243,156,18);
+  color: var(--orange);
 }
 .yellowBox > p {
   color: white;
@@ -250,6 +242,10 @@
 
 .biggest {
   font-size: 2rem;
+}
+
+.centreText {
+  text-align: center;
 }
 
 .noCopy {
@@ -340,7 +336,6 @@
 
 .cold {
   background-color: transparent;
-  cursor: pointer;
   font-size: 1rem;
   opacity: 0.9;
 }
@@ -383,6 +378,13 @@
   font-size: 0.75rem;
   display: flex;
   justify-content: flex-end;
+}
+
+.alertCount:before { 
+  content: '\f071';
+  font-family: FontAwesome;
+  color: var(--orange);
+  font-size: 1em;
 }
 
 .proGood::-webkit-progress-value {
@@ -459,7 +461,7 @@
 
 .bert-alert.sunFlower {
   /*yellow*/
-  background: #f1c40f;
+  background: var(--sunflower);
 }
 
 .bert-alert.tuquoise {

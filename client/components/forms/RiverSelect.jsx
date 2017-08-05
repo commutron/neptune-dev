@@ -39,8 +39,8 @@ export default class RiverSelect extends Component	{
       >
         <form className='centre' onSubmit={this.save.bind(this)}>
           <p>
-            <select id='fch' ref={(i)=> this.choice = i} defaultValue={this.props.river}>
-            <option value={false}></option>
+            <select id='fch' ref={(i)=> this.choice = i} defaultValue={this.props.river} required>
+            <option></option>
             {this.props.widget.flows.map( (entry, index)=>{
               return(
                <option key={index} value={entry.flowKey}>{entry.title}</option>

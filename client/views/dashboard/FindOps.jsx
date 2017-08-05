@@ -197,7 +197,7 @@ export default class FindOps extends Component	{
               versionData={version}
               groupData={group}
               app={app}
-              action={false}
+              action='batchBuild'
             >
               <BatchCard
                 batchData={hotBatch}

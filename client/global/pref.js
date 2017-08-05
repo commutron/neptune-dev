@@ -16,7 +16,7 @@ class Pref {
     this.close = 'X';
     this.office = 'office';
     this.floor = 'floor';
-    this.instruct = 'wiki';
+    this.instruct = 'instructions';
     this.timeClock = 'time clock';
     // terminology
     this.admin = 'org admin';
@@ -24,6 +24,7 @@ class Pref {
 	  this.btch = 'w'; // batch shortcut
 	  this.item = 'board';//board
 	  this.itm = 'b'; // item shortcut
+	  this.itemSerial = 'barcode';
     this.group = 'customer';//customer
     this.grp = 'c'; // group shortcut
     this.widget = 'product';//product

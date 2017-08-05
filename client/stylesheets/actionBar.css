@@ -1,8 +1,11 @@
+/* @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+meteor seems to be handling this */
+
 .actionBar {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  z-index: 10;
+  z-index: 8;
 }
 
 .footLeft {
@@ -14,7 +17,6 @@
   flex-grow: 2;
   
 }
-
 
 .footRight {
   display: flex;
@@ -93,4 +95,24 @@
 }
 
 
-  
+/* Data / instruction toggle icon */
+
+.dataFlip:before, .dataFlipText {
+  color: white;
+}
+
+.dataFlip:before { 
+  font-family: FontAwesome;
+  font-size: 2em;
+  margin: 10px;
+}
+
+.dataFlip:before { 
+  content: "\f1c0";
+}
+
+#ikyToggle:checked + .dataFlip:before { 
+  content: "\f2d0";
+}
+
+

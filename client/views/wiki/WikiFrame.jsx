@@ -8,10 +8,10 @@ export default class WikiFrame extends Component {
       width: '100%',
       border: '0',
       margin: '0',
-      paddinng: '0'
+      padding: '0',
     };
     
-    let sizeAdjust = this.props.indie ? 95 : 155;
+    let sizeAdjust = this.props.indie ? 90 : 150;
     
     return (
       <iframe
