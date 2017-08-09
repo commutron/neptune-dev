@@ -161,6 +161,15 @@ export default class FindOps extends Component	{
         </div>
       );
     }
+    if(orb === Pref.docs || orb === 'docs' || orb === 'd') {
+      Session.set('now', Pref.docs);
+      Session.set('nowBatch', false);
+      return (
+        <div className='dashMainFull'>
+          <WikiOps wi={false} root={app.instruct} brick={false} />
+        </div>
+      );
+    }
 
   // Batch
     if(!isNaN(orb) && orb.length === 5) {

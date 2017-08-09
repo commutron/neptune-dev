@@ -93,6 +93,7 @@ export default class River extends Component	{
             allItems={b.items}
             barcode={i.serial}
             history={i.history}
+            regRun={i.finishedAt === false}
             users={this.props.users}
             methods={a.toolOption} />
         </div>

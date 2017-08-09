@@ -76,6 +76,8 @@ export default class FlowForm extends Component	{
   render() {
 
     let steps = [...this.state.steps];
+    
+    let options = this.props.options.sort((t1, t2) => {return t1.step > t2.step});
 
     return (
       <div className='split'>
@@ -84,7 +86,7 @@ export default class FlowForm extends Component	{
             <p>
               <select id='rteps' ref={(i)=> this.rStep = i} className='cap' required>
                 <option value=''></option>
-                {this.props.options.map( (entry, index)=>{
+                {options.map( (entry, index)=>{
                   return ( <option key={index} value={entry.key}>{entry.step + ' - ' + entry.type}</option> );
                 })}
               </select>

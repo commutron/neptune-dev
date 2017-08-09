@@ -11,15 +11,12 @@ export default class WikiFrame extends Component {
       padding: '0',
     };
     
-    let sizeAdjust = this.props.indie ? 90 : 150;
-    
     return (
       <iframe
         id='instruct'
         style={sty}
         src={this.props.go}
-        height={( (document.body.scrollHeight - document.body.scrollTop) - sizeAdjust ) +'px'}
-        allowFullScreen
+        height={( (document.body.scrollHeight - document.body.scrollTop) - 150 ) +'px'}
         />
     );
   }

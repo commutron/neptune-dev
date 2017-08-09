@@ -10,7 +10,6 @@ export default class NCAdd extends Component {
 
   handleNC(e) {
     e.preventDefault();
-    this.go.disabled = true;
     const bar = this.props.barcode;
     const batchId = this.props.id;  
     const type = this.ncType.value.trim().toLowerCase();
@@ -18,9 +17,15 @@ export default class NCAdd extends Component {
     
     const refEntry = this.ncRefs.value.trim().toLowerCase();
     const refSplit = refEntry.split(/\s* \s*/);
+    
+    if(refSplit.length > 0 && refSplit[0] !== '') {
       
-      for(var ref of refSplit) {
-        Meteor.call('addNC', batchId, bar, ref, type, where, (error)=>{
+      this.go.disabled = true;
+      this.goFix.disabled = true;
+      
+      for(let ref of refSplit) {
+        ref = ref.replace(",", "");
+        Meteor.call('addNC', batchId, bar, ref, type, where, false, (error)=>{
           if(error)
             console.log(error);
         });
@@ -28,8 +33,41 @@ export default class NCAdd extends Component {
       this.discStp.value = Session.get('nowStep');
       this.ncRefs.value = '';
       this.go.disabled = false;
+      this.goFix.disabled = false;
       const findBox = document.getElementById('find');
       findBox.focus();
+    }else{null}
+  }
+  
+  handleFixNC(e) {
+    e.preventDefault();
+    const bar = this.props.barcode;
+    const batchId = this.props.id;  
+    const type = this.ncType.value.trim().toLowerCase();
+    const where = this.discStp.value.trim().toLowerCase();
+    
+    const refEntry = this.ncRefs.value.trim().toLowerCase();
+    const refSplit = refEntry.split(/\s* \s*/);
+    
+    if(refSplit.length > 0 && refSplit[0] !== '') {
+      
+      this.go.disabled = true;
+      this.goFix.disabled = true;
+      
+      for(let ref of refSplit) {
+        ref = ref.replace(",", "");
+        Meteor.call('addNC', batchId, bar, ref, type, where, true, (error)=>{
+          if(error)
+            console.log(error);
+        });
+      }
+      this.discStp.value = Session.get('nowStep');
+      this.ncRefs.value = '';
+      this.go.disabled = false;
+      this.goFix.disabled = false;
+      const findBox = document.getElementById('find');
+      findBox.focus();
+    }else{null}
   }
 
 
@@ -97,7 +135,17 @@ export default class NCAdd extends Component {
           ref={(i)=> this.go = i}
           disabled={lock}
           className='smallAction clear redT'
-        >{Pref.post} NonCon</button>
+        >{Pref.post}</button>
+        
+        <span className='breath'></span>
+        
+        <button
+          type='button'
+          ref={(i)=> this.goFix = i}
+          onClick={this.handleFixNC.bind(this)}
+          disabled={lock}
+          className='smallAction clear redT'
+        >{Pref.post} & Repair</button>
             
       </form>
     );

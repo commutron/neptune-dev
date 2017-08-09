@@ -16,18 +16,23 @@ export default class StoneSelect extends Component	{
     this.props.allItems.map( (entry)=> {
       entry.history.map( (entry)=> {
         if(entry.type === 'first' && entry.good === true) {
-          fDone.push(entry.type + entry.step);
+          fDone.push('first' + entry.step);
         }else{null;}
       });
     });
     
     for(let flowStep of flow) {
       const first = flowStep.type === 'first';
+      const inspect = flowStep.type === 'inspect';
       
-      const check = !first ? 
-                    bDone.find(ip => ip.key === flowStep.key && ip.good === true) 
+      const check = first ? 
+                    bDone.find(ip => ip.key === flowStep.key) || fDone.includes('first' + flowStep.step)
                     :
-                    bDone.find(ip => ip.key === flowStep.key) || fDone.includes(flowStep.type + flowStep.step);
+                    inspect && this.props.regRun === true ?
+                    bDone.find(ip => ip.key === flowStep.key && ip.good === true) ||
+                    bDone.find(ip => ip.step === flowStep.step && ip.type === 'first' && ip.good === true)
+                    :
+                    bDone.find(ip => ip.key === flowStep.key && ip.good === true);
     
       if(check) {
         null;

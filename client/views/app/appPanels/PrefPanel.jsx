@@ -11,6 +11,7 @@ export default class PrefPanel extends Component {
     
     const dt = this.props.app;
     const auth = !Roles.userIsInRole(Meteor.userId(), 'admin');
+    let trackOptions = dt.trackOption.sort((t1, t2) => {return t1.step > t2.step});
 
     return (
       <SlideDownWrap>
@@ -24,7 +25,7 @@ export default class PrefPanel extends Component {
           <i>Options for tracked and controlled steps</i>
           <OptionAdd action='track' title='step' />
           <ul>
-            {dt.trackOption.map( (entry, index)=>{
+            {trackOptions.map( (entry, index)=>{
               return ( <li key={index}>{entry.step} - {entry.type}</li> );
             })}
           </ul>

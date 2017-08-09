@@ -7,7 +7,6 @@ import {DashLayout} from './layouts/MainLayouts.jsx';
 
 import DashData from './views/dashboard/DashData.jsx';
 import AppData from './views/app/AppData.jsx';
-import WikiIndie from './views/wiki/WikiIndie.jsx';
 
 import LandingWrap from './LandingWrap.jsx';
 
@@ -31,14 +30,6 @@ FlowRouter.route('/dashboard', {
   action() {
     mount(DashLayout, {
       content: (<DashData />),
-    });
-  }
-});
-
-FlowRouter.route('/docs', {
-  action() {
-    mount(BasicLayout, {
-      content: (<WikiIndie />),
     });
   }
 });

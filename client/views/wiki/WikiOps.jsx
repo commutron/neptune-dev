@@ -33,10 +33,10 @@ export default class WikiOps extends Component {
 
   render () {
     
-    let indie = this.props.indie ? true : false;
-    
     return (
-      <WikiFrame go={this.address()} indie={indie} />
+      <div className='instructionFix'>
+        <WikiFrame go={this.address()} />
+      </div>
     );
   }
 }

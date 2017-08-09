@@ -50,9 +50,9 @@ meteor seems to be handling this */
 
 
 .actionForm > button {
-  line-height: 1.5rem;
   margin: 0 10px;
   text-transform: capitalize;
+  word-break: break-all;
 }
 
 .actionIconWrap {

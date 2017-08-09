@@ -27,6 +27,7 @@ export default class HistoryLine extends Component	{
                             return( <UserNice key={index} id={entry} /> );
                           })}
         </p>
+        <p>{Pref.good}: {dt.good.toString()}</p>
         <p>{Pref.method}: {dt.info.buildMethod}</p>
         <p>{Pref.inspector}: {dt.info.verifyMethod}</p>
         <p>{Pref.proChange}: {dt.info.change}</p>

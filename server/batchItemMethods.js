@@ -387,8 +387,11 @@ Meteor.methods({
   },
 
 //// Non-Cons \\\\
-  addNC(batchId, bar, ref, type, step) {
+  addNC(batchId, bar, ref, type, step, fix) {
     if(Meteor.userId()) {
+      
+      let repaired = fix ? {time: new Date(),who: Meteor.userId()} : false;
+      
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $push : { nonCon: {
           key: new Meteor.Collection.ObjectID().valueOf(), // id of the nonCon entry
@@ -398,7 +401,7 @@ Meteor.methods({
           where: step, // where in the process
           time: new Date(), // when nonCon was discovered
           who: Meteor.userId(),
-          fix: false,
+          fix: repaired,
           inspect: false,
           skip: false,
           }}});
@@ -498,7 +501,7 @@ Meteor.methods({
   addRMACascade(batchId, rmaId, qua, com, flowObj) {
     const doc = BatchDB.findOne({_id: batchId});
     const dupe = doc.cascade.find( x => x.rmaId === rmaId );
-    const auth = Roles.userIsInRole(Meteor.userId(), ['edit', 'qa']);
+    const auth = Roles.userIsInRole(Meteor.userId(), ['qa']);
     if(auth && !dupe) {
       
       for( let obj of flowObj ) {

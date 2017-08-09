@@ -79,10 +79,6 @@ class TopBar extends Component	{
             <i className="fa fa-tachometer fa-2x" aria-hidden="true"></i>
             <span className='icontext'>Dashboard</span>
           </a>
-          <a href='/docs'>
-            <i className="fa fa-book fa-2x" aria-hidden="true"></i>
-            <span className='icontext'>Docs</span>
-          </a>
           <RoleCheck role={'admin'}>
             <span>
               <a href='/gate'>

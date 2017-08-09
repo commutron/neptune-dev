@@ -4,6 +4,7 @@
   box-sizing: border-box;
 }
 
+
 .clearfix:after {
   content: '';
   clear: both;
@@ -16,6 +17,7 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  -webkit-transform: translate3d(0, 0, 0); /* for triggering hardware acceleration */
 }
 
 main {
@@ -110,8 +112,9 @@ main {
   display: grid;
   grid-template-columns: 300px auto;
   align-content: center;
-  overflow-y: hidden;
-  overflow-x: hidden;
+  overflow-y: hidden !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
   min-width: 1000px;
   min-height: 100vh;
 }
@@ -181,20 +184,17 @@ main {
 .dashMainFull {
   grid-area: mainSplit;
   height: 100%;
-  -webkit-overflow-scrolling: touch; /* lets it scroll lazy */
   overflow-y: auto;
 }
 
 .dashMainLeft {
   grid-area: mainLeft;
   height: 100%;
-  -webkit-overflow-scrolling: touch; /* lets it scroll lazy */
 }
 
 .dashMainRight {
   grid-area: mainRight;
   height: 100%;
-  -webkit-overflow-scrolling: touch; /* lets it scroll lazy */
 }
 
 .dashAction {
@@ -212,6 +212,7 @@ main {
   flex-wrap: nowrap;
   align-items: center;
 }
+
 
 /* ============================================= */
 
