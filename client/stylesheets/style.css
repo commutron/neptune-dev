@@ -129,6 +129,12 @@ meteor seems to be handling this */
 .greenT {
 	color: rgb(46,204,113);
 }
+.greenBorder {
+  background-color: transparent;
+	border: 3px solid rgb(46,204,113);
+	box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2),
+	      inset 0 0 .1em .1em rgba(43,43,43,0.2);
+}
 
 .blue {
   background-color: #3498db;

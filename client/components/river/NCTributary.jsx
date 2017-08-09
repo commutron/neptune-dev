@@ -76,7 +76,7 @@ export class NCStream extends Component {
           :
               <button 
                 ref={(i)=> this.fixline = i}
-                className='pebble green'
+                className='pebble greenBorder'
                 readOnly={true}
                 onClick={this.handleFix.bind(this)}
                 disabled={false}>

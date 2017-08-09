@@ -22,7 +22,7 @@ export default class FirstList extends Component	{
               </div>
               <p>{dt.entry.comm}</p>
               <JumpText title={dt.bar} link={dt.bar} />
-              <p>{dt.entry.info.good ? Pref.good : Pref.ng}</p>
+              <p>{dt.entry.good ? Pref.good : Pref.ng}</p>
               <p>
                 {Pref.builder}: {dt.entry.info.builder.map( (entry, index)=>{
                                   return( <UserNice key={index} id={entry} /> );
