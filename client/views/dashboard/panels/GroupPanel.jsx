@@ -12,7 +12,7 @@ export default class GroupPanel extends Component	{
 
     return (
       <SlideDownWrap>
-        <div className='card'>
+        <div className='card' key={g.alias}>
           <div className='space cap edit'>
             <h1>{g.group}</h1>
             <h2>{g.alias}</h2>

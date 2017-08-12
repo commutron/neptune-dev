@@ -20,7 +20,7 @@ export default class WidgetPanel extends Component	{
 
     return (
       <SlideDownWrap>
-      <div className='card'>
+      <div className='card' key={w.widget}>
         <div className='space cap edit'>
           <h1 className='up'>{w.widget}</h1>
           <h2>{w.describe}</h2>

@@ -2,12 +2,9 @@ import React, {Component} from 'react';
 
 // props
 /// id={b._id}
-/// bar={i.serial}
-/// nonCons={nc}
-/// ncOps={a.nonConOption}
+/// nonCons={nonCons}
 
 export default class NCTributary extends Component {
-  
   render() {
     return(
       <div>
@@ -18,7 +15,7 @@ export default class NCTributary extends Component {
             )})}
         </div>
       </div>
-      );
+    );
   }
 }
 
@@ -72,7 +69,7 @@ export class NCStream extends Component {
                 readOnly={true}
                 onClick={this.handleInspect.bind(this)}
                 disabled={lockI}>
-              <img src='/inspectMini.svg' className='pebbleSVG' />Inspected</button>
+              <img src='/inspectMini.svg' className='pebbleSVG' />Inspect</button>
           :
               <button 
                 ref={(i)=> this.fixline = i}
@@ -80,7 +77,7 @@ export class NCStream extends Component {
                 readOnly={true}
                 onClick={this.handleFix.bind(this)}
                 disabled={false}>
-              <img src='/repair.svg' className='pebbleSVG' />Repaired</button>
+              <img src='/repair.svg' className='pebbleSVG' />Repair</button>
           }
         </div>
       </div>

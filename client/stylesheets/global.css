@@ -75,6 +75,8 @@ form:focus {
 
 fieldset {
   border: 1px dashed;
+  word-break: keep-all;
+  overflow-x: hidden;
 }
 
 label {
@@ -178,6 +180,10 @@ form p {
 button:disabled, datalist:disabled {
   opacity: 0.3;
   cursor: not-allowed;
+}
+
+hr {
+  opacity: 0.4; 
 }
 
 details {

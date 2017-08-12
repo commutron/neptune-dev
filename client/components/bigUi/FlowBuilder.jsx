@@ -77,19 +77,30 @@ export default class FlowForm extends Component	{
 
     let steps = [...this.state.steps];
     
-    let options = this.props.options.sort((t1, t2) => {return t1.step > t2.step});
+    //let options = this.props.options.sort((t1, t2) => {return t1.step > t2.step});
+    let options = this.props.options;  
+      options.sort((t1, t2)=> {
+        if (t1.step < t2.step) { return -1 }
+        if (t1.step > t2.step) { return 1 }
+        return 0;
+      });
 
     return (
       <div className='split'>
         <div className='half'>
-          <form onSubmit={this.addStep.bind(this)} >
-            <p>
-              <select id='rteps' ref={(i)=> this.rStep = i} className='cap' required>
-                <option value=''></option>
-                {options.map( (entry, index)=>{
-                  return ( <option key={index} value={entry.key}>{entry.step + ' - ' + entry.type}</option> );
-                })}
-              </select>
+          <form onSubmit={this.addStep.bind(this)}>
+            <p className='lineForm'>
+              <label htmlFor='rteps'><br />
+                <select id='rteps' ref={(i)=> this.rStep = i} className='cap' required>
+                  <option value=''></option>
+                  {options.map( (entry, index)=>{
+                    return ( <option key={index} value={entry.key}>{entry.step + ' - ' + entry.type}</option> );
+                  })}
+                </select>
+              </label>
+              <label><br />
+                <button type='submit' className='smallAction clear'>Add</button>
+              </label>
               <label htmlFor='rteps'>tracking step</label>
             </p>
             <p>
@@ -100,8 +111,6 @@ export default class FlowForm extends Component	{
                 placeholder='surface_mount' />
               <label htmlFor='winstruct'>instruction title</label>
             </p>
-            <br />
-            <p><button type='submit' className='smallAction clear'>Add</button></p>
           </form>
         </div>
         <div className='half'>

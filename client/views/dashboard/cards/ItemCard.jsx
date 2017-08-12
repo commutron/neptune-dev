@@ -6,6 +6,11 @@ import River from '../../../components/river/River.jsx';
 import ScrapBox from '../../../components/smallUi/ScrapBox.jsx';
 
 export default class ItemCard extends Component	{
+  
+  componentWillReceiveProps(nextProps) {
+    this.props.itemData.serial !== nextProps.itemData.serial ?
+      this.forceUpdate() : null;
+  }
 
   render() {
 
@@ -19,7 +24,7 @@ export default class ItemCard extends Component	{
       Session.set('nowStep', 'unavailable');
       return (
         <SlideDownWrap>
-          <div className='card centre big'>
+          <div className='card centre big' key={i.serial}>
             <br />
             <i className="fa fa-exclamation-circle fa-5x redT" aria-hidden="true"></i>
             <br />
@@ -35,7 +40,7 @@ export default class ItemCard extends Component	{
     if(scrap) { 
       return (
         <SlideDownWrap>
-          <div className='card'>
+          <div className='card' key={i.serial}>
             <ScrapBox entry={scrap} />
           </div>
         </SlideDownWrap>
@@ -44,7 +49,7 @@ export default class ItemCard extends Component	{
 
     return (
       <SlideDownWrap>
-        <div className='card'>
+        <div className='card' key={i.serial}>
           <River
             itemData={i}
             batchData={b}

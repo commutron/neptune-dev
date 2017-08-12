@@ -28,7 +28,7 @@ export default class BatchCard extends Component	{
 
     return (
       <SlideDownWrap>
-        <div className='card'>
+        <div className='card' key={b.batch}>
           <div className='space cap'>
             <h1>
               <span>{b.batch}</span>

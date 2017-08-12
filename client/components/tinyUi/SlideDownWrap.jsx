@@ -4,7 +4,6 @@ import {CSSTransitionGroup} from 'react-transition-group';
 export default class SlideDownWrap extends Component	{
 
   render() {
-
     return (
       <CSSTransitionGroup
 				component='div'
@@ -12,8 +11,8 @@ export default class SlideDownWrap extends Component	{
 				transitionEnter={true}
 				transitionAppear={true}
 				transitionLeave={false}
-				transitionEnterTimeout={400}
-				transitionAppearTimeout={400}>
+				transitionEnterTimeout={500}
+				transitionAppearTimeout={500}>
 				
         {this.props.children}
       

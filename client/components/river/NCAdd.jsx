@@ -75,7 +75,7 @@ export default class NCAdd extends Component {
 
 		let now = Session.get('nowStep');
 		let lock = now === 'done';
-
+		
     return (
       <form
         className='actionForm'
@@ -98,6 +98,7 @@ export default class NCAdd extends Component {
                 );
             })}
           </optgroup>
+          {/* these cause an update issue
           <optgroup label='build steps'>
             {this.props.app.trackOption.map( (entry, index)=>{
               if(entry.type === 'build') {
@@ -106,7 +107,7 @@ export default class NCAdd extends Component {
                 );
               }else{null}
             })}
-          </optgroup>
+          </optgroup>*/}
         </select>
         <input
           type='text'

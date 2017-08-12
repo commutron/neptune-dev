@@ -11,7 +11,13 @@ export default class PrefPanel extends Component {
     
     const dt = this.props.app;
     const auth = !Roles.userIsInRole(Meteor.userId(), 'admin');
-    let trackOptions = dt.trackOption.sort((t1, t2) => {return t1.step > t2.step});
+    //let trackOptions = dt.trackOption.sort((t1, t2) => {return t1.step > t2.step});
+    let trackOptions = dt.trackOption;  
+      trackOptions.sort((t1, t2)=> {
+        if (t1.step < t2.step) { return -1 }
+        if (t1.step > t2.step) { return 1 }
+        return 0;
+      });
 
     return (
       <SlideDownWrap>

@@ -67,7 +67,7 @@ export default class BatchPanel extends Component	{
     
     return (
       <SlideDownWrap>
-      <div className='card'>
+      <div className='card' key={b.batch}>
         <div className='space cap'>
           <h1>{b.batch} <span className='rAlign'><ActiveLabel id={b._id} active={b.active} /></span></h1>
           <hr />

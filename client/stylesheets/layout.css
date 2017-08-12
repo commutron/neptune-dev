@@ -51,7 +51,7 @@ main {
 
 .loading > .logoSVG {
   opacity: 0.2;
-  animation: spinAround 5s infinite linear;
+  animation: spinAround 6s infinite linear;
   width: 60vh;
   height: 60vh;
   -webkit-filter: drop-shadow( -5px -5px 5px #000 );
@@ -253,7 +253,7 @@ main {
   min-width: 215px;
   padding: 0;
   margin: 25px auto 25px auto;
-  /*z-index: 6;*/
+  overflow-x: hidden;
   background-color: rgb(75,75,75);
   -webkit-box-shadow: 0 0 10px 0.5px rgb(0,0,0);
   -moz-box-shadow:    0 0 10px 0.5px rgb(0,0,0);
@@ -391,11 +391,19 @@ main {
 }
 
 /* react animation */
+@keyframes fadeAway {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.01;
+  }
+}
 
 @keyframes slideDown {
   0% {
     opacity: 0;
-    transform: translate3d(0, -50px, 0);
+    transform: translate3d(0, -100px, 0);
   }
   100% {
     opacity: 1;
@@ -403,8 +411,10 @@ main {
   }
 }
 
+
 .cardTrans-enter, .cardTrans-appear {
-  animation: slideDown 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  animation: slideDown 500ms cubic-bezier(0.165, 0.84, 0.44, 1);
+  z-index: 1;
 }
 
 @keyframes slideUp {

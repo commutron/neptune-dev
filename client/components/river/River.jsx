@@ -4,7 +4,6 @@ import Pref from '/client/global/pref.js';
 import StoneSelect from './StoneSelect.jsx';
 import RiverFork from './RiverFork.jsx';
 import RMACascade from './RMACascade.jsx';
-import NCTributary from './NCTributary.jsx';
 
 export default class River extends Component	{
   
@@ -55,9 +54,7 @@ export default class River extends Component	{
     }
 		
 		const nc = this.nonCons();
-    let skipped = nc.every( x => x.skip !== false );
-		let detour = nc.length > 0 && !skipped ? 'hide' : ''; // stone display
-		
+
 		// present option between River and Alt River
 		if(i.finishedAt === false && b.riverAlt && !i.alt) {
 		  return(
@@ -82,28 +79,22 @@ export default class River extends Component	{
             allItems={b.items} />
           :null}
 			  
-			  <div className={detour}>
+			  <div>
 			    {i.finishedAt === false && b.riverAlt && i.alt === 'yes' ? 
 			      <p className='blueT centre'>Alternate Flow</p> 
 			    : null}
-          <StoneSelect 
+          <StoneSelect
             id={b._id}
             flow={flow}
             rmas={rma}
             allItems={b.items}
-            barcode={i.serial}
+            nonCons={nc}
+            serial={i.serial}
             history={i.history}
             regRun={i.finishedAt === false}
             users={this.props.users}
             methods={a.toolOption} />
         </div>
-          
-        <NCTributary
-  			  id={b._id}
-  			  bar={i.serial}
-  			  nonCons={nc}
-  			  ncOps={a.nonConOption} />
-                
 			</div>
 			);
   }

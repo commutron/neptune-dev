@@ -50,7 +50,7 @@ export default class ItemPanel extends Component	{
 
     return (
       <SlideDownWrap>
-        <div className='card'>
+        <div className='card' key={i.serial}>
           <div className='space cap'>
             <h1>{i.serial}<span className='rAlign'>{status}</span></h1>
             <hr />

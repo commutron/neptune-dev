@@ -4,10 +4,12 @@ import Pref from '/client/global/pref.js';
 
 import Stone from './Stone.jsx';
 import FirstRepeat from './FirstRepeat.jsx';
+import NCTributary from './NCTributary.jsx';
 
 export default class StoneSelect extends Component	{
 
-  current() {
+  render() {
+    
     const flow = this.props.flow;
     
     const bDone = this.props.history;
@@ -37,56 +39,115 @@ export default class StoneSelect extends Component	{
       if(check) {
         null;
       }else{
-        Session.set('nowStep', flowStep.step);
-        Session.set('nowWanchor', flowStep.how);
-        return [
-          flow.indexOf(flowStep),
-          (
-          <Stone 
-            id={this.props.id}
-            barcode={this.props.barcode}
-            sKey={flowStep.key}
-            step={flowStep.step}
-            type={flowStep.type}
-            users={this.props.users}
-            methods={this.props.methods}
-          />
-          )
-        ];
+        
+        const stepNum = flow.indexOf(flowStep);
+        const last = stepNum === 0 ? false : stepNum -1;
+        const lastStep = last !== false ? flow[last] : false;
+        
+        const nc = this.props.nonCons;
+        let skipped = nc.every( x => x.skip !== false );
+        
+		    let block = nc.some( x => x.where === flowStep.step ) ? false : true;
+		  
+  		  if(nc.length > 0 && !skipped) {
+  		    
+  		    if(block || flowStep.type === 'finish') {
+  		      Session.set( 'nowStep', nc[0].where );
+  		      return (
+    		      <NCTributary
+        			  id={this.props.id}
+        			  nonCons={nc} />
+  		      );
+  		    }else{
+  		      Session.set('nowStep', flowStep.step);
+            Session.set('nowWanchor', flowStep.how);
+  		      return (
+  		        <div>
+    		        <Stone 
+                  id={this.props.id}
+                  barcode={this.props.serial}
+                  sKey={flowStep.key}
+                  step={flowStep.step}
+                  type={flowStep.type}
+                  users={this.props.users}
+                  methods={this.props.methods} />
+                {lastStep ?
+                  <FirstRepeat
+                    flowStep={lastStep}
+                    id={this.props.id}
+                    barcode={this.props.serial}
+                    history={this.props.history}
+                    users={this.props.users}
+                    methods={this.props.methods} />
+                :null}
+                <NCTributary
+          			  id={this.props.id}
+          			  nonCons={this.props.nonCons} />
+        			</div>
+  		      );
+  		    }
+  		  }else if(nc.length > 0) {
+  		    Session.set('nowStep', flowStep.step);
+          Session.set('nowWanchor', flowStep.how);
+  		    return (
+		        <div>
+  		        <Stone 
+                id={this.props.id}
+                barcode={this.props.serial}
+                sKey={flowStep.key}
+                step={flowStep.step}
+                type={flowStep.type}
+                users={this.props.users}
+                methods={this.props.methods} />
+              {lastStep ?
+                <FirstRepeat
+                  flowStep={lastStep}
+                  id={this.props.id}
+                  barcode={this.props.serial}
+                  history={this.props.history}
+                  users={this.props.users}
+                  methods={this.props.methods} />
+              :null}
+              <NCTributary
+        			  id={this.props.id}
+        			  nonCons={this.props.nonCons} />
+      			</div>
+		      );
+  		  }else{
+  		    Session.set('nowStep', flowStep.step);
+          Session.set('nowWanchor', flowStep.how);
+          return (
+            <div>
+              <Stone 
+                id={this.props.id}
+                barcode={this.props.serial}
+                sKey={flowStep.key}
+                step={flowStep.step}
+                type={flowStep.type}
+                users={this.props.users}
+                methods={this.props.methods} />
+              {lastStep ?
+                <FirstRepeat
+                  flowStep={lastStep}
+                  id={this.props.id}
+                  barcode={this.props.serial}
+                  history={this.props.history}
+                  users={this.props.users}
+                  methods={this.props.methods} />
+              :null}
+            </div>
+          );
+        }
       }
+      
     }
     
     // end of flow
     Session.set('nowStep', 'done');
-    return [
-      flow.length,
-      (
+    return (
       <div className='greenT centre cap'>
         <h2>{Pref.trackLast}ed</h2>
         <h3>{moment(bDone[bDone.length -1].time).calendar()}</h3>
-      </div>
-      )
-    ];
-  }
-
-  render() {
-    
-    const current = this.current();
-    const last = current[0] === 0 ? false : current[0] -1;
-    const lastStep = last !== false ? this.props.flow[last] : false;
-    
-    return (
-      <div>
-        {current[1]}
-        {lastStep ?
-          <FirstRepeat
-            flowStep={lastStep}
-            id={this.props.id}
-            barcode={this.props.barcode}
-            history={this.props.history}
-            users={this.props.users}
-            methods={this.props.methods} />
-          :null}
       </div>
     );
   }
