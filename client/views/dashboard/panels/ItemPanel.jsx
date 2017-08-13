@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import moment from 'moment';
-import SlideDownWrap from '/client/components/tinyUi/SlideDownWrap.jsx';
+import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
 
 import UserNice from '../../../components/smallUi/UserNice.jsx';
@@ -49,7 +49,7 @@ export default class ItemPanel extends Component	{
                 <p></p>;
 
     return (
-      <SlideDownWrap>
+      <AnimateWrap type='cardTrans'>
         <div className='card' key={i.serial}>
           <div className='space cap'>
             <h1>{i.serial}<span className='rAlign'>{status}</span></h1>
@@ -87,7 +87,7 @@ export default class ItemPanel extends Component	{
           </div>
   
   			</div>
-			</SlideDownWrap>
+			</AnimateWrap>
     );
   }
 }

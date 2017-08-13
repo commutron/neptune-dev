@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import SlideDownWrap from '/client/components/tinyUi/SlideDownWrap.jsx';
+import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 
 import JumpButton from '../../../components/tinyUi/JumpButton.jsx';
 
@@ -34,8 +34,8 @@ export default class ItemsList extends Component	{
     const scrap = b ? filter[1] : [];
 
     return (
-      <SlideDownWrap>
-        <div className='card centre'>
+      <AnimateWrap type='cardTrans'>
+        <div className='card centre' key={1}>
         {this.props.listTitle ? <h2 className='up'>{b.batch}</h2> : null}
             { b.items.map( (entry, index)=> {
             let style = active.includes(entry.serial) ? 'action clear wide greenT' : 
@@ -51,7 +51,7 @@ export default class ItemsList extends Component	{
               );
             })}
   			</div>
-			</SlideDownWrap>
+			</AnimateWrap>
     );
   }
 }

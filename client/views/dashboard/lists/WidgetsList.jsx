@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
-import SlideDownWrap from '/client/components/tinyUi/SlideDownWrap.jsx';
+import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 
 import JumpButton from '../../../components/tinyUi/JumpButton.jsx';
 import JumpText from '../../../components/tinyUi/JumpText.jsx';
@@ -14,8 +14,8 @@ export default class WidgetsList extends Component	{
     const g = this.props.groupAlias;
 
     return (
-      <SlideDownWrap>
-        <div className='card centre'>
+      <AnimateWrap type='cardTrans'>
+        <div className='card centre' key={1}>
         {this.props.listTitle ? <JumpText title={g} link={g} /> : null}
         {w.length < 1 ? <p>no {Pref.widget}s created</p> : null}
           { w.map( (entry, index)=> {
@@ -24,7 +24,7 @@ export default class WidgetsList extends Component	{
               <JumpButton key={index} title={entry.widget} sub={' - ' + entry.describe} sty={ac} />
             )})}
         </div>
-      </SlideDownWrap>
+      </AnimateWrap>
     );
   }
 }

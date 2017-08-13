@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
-import SlideDownWrap from '/client/components/tinyUi/SlideDownWrap.jsx';
+import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 
 import JumpText from '../../../components/tinyUi/JumpText.jsx';
 // import StatsSimple from '../../../components/smallUi/StatsSimple.jsx';
 
-//////////// component is for an obsolete structure. should be rewriten for -
-/////////////////////// - new archive structure
+//////////// component is for an obsolete structure. should be rewriten
 
 export default class BatchDoneCard extends Component {
 
@@ -15,8 +14,8 @@ export default class BatchDoneCard extends Component {
     let b = this.props.batchData;
 
     return (
-      <SlideDownWrap>
-        <div className='card'>
+      <AnimateWrap type='cardTrans'>
+        <div className='card' key={1}>
           <div className='space'>
             <h1>{b.batch}</h1>
             <h3>
@@ -38,7 +37,7 @@ export default class BatchDoneCard extends Component {
   
           </div>
   			</div>
-			</SlideDownWrap>
+			</AnimateWrap>
     );
   }
 }

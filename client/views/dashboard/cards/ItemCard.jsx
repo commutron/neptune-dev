@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import SlideDownWrap from '/client/components/tinyUi/SlideDownWrap.jsx';
+import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
 
 import River from '../../../components/river/River.jsx';
@@ -23,7 +23,7 @@ export default class ItemCard extends Component	{
     if(!b.river) {
       Session.set('nowStep', 'unavailable');
       return (
-        <SlideDownWrap>
+        <AnimateWrap type='cardTrans'>
           <div className='card centre big' key={i.serial}>
             <br />
             <i className="fa fa-exclamation-circle fa-5x redT" aria-hidden="true"></i>
@@ -33,22 +33,22 @@ export default class ItemCard extends Component	{
             </p>
             <br />
           </div>
-        </SlideDownWrap>
+        </AnimateWrap>
         );
     }
     
     if(scrap) { 
       return (
-        <SlideDownWrap>
+        <AnimateWrap type='cardTrans'>
           <div className='card' key={i.serial}>
             <ScrapBox entry={scrap} />
           </div>
-        </SlideDownWrap>
+        </AnimateWrap>
         );
     }
 
     return (
-      <SlideDownWrap>
+      <AnimateWrap type='cardTrans'>
         <div className='card' key={i.serial}>
           <River
             itemData={i}
@@ -57,7 +57,7 @@ export default class ItemCard extends Component	{
             app={this.props.app}
             users={this.props.users} />
   			</div>
-			</SlideDownWrap>
+			</AnimateWrap>
     );
   }
 }

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import SlideDownWrap from '/client/components/tinyUi/SlideDownWrap.jsx';
+import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
 
 import BlockTable from '../../../components/bigUi/BlockTable.jsx';
@@ -12,7 +12,7 @@ export default class BlockPanel extends Component	{
     let b = this.props.batchData;
 
     return (
-      <SlideDownWrap>
+      <AnimateWrap type='cardTrans'>
         <div className='card' key={2}>
           <div className='space'>
             <h1 className='cap'>{Pref.block}s</h1>
@@ -25,7 +25,7 @@ export default class BlockPanel extends Component	{
           </div>
           <br />
         </div>
-      </SlideDownWrap>
+      </AnimateWrap>
     );
   }
 }

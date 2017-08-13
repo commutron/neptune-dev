@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import SlideDownWrap from '/client/components/tinyUi/SlideDownWrap.jsx';
 
 export default class MetaPanel extends Component {
 

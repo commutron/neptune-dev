@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import moment from 'moment';
-import SlideDownWrap from '/client/components/tinyUi/SlideDownWrap.jsx';
+import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 
 import JumpText from '../../../components/tinyUi/JumpText.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';
@@ -14,7 +14,7 @@ export default class WidgetCard extends Component {
     let b = this.props.batchRelated;
 
     return (
-      <SlideDownWrap>
+      <AnimateWrap type='cardTrans'>
         <div className='card' key={w.widget}>
           <div className='space'>
             <JumpText title={g.alias} link={g.alias} />
@@ -47,7 +47,7 @@ export default class WidgetCard extends Component {
   
           </div>
         </div>
-      </SlideDownWrap>
+      </AnimateWrap>
     );
   }
 }

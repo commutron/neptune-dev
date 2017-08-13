@@ -329,8 +329,7 @@ Meteor.methods({
     }
   },
   
-    // Scrap \\
-  
+// Scrap \\
   scrapItem(batchId, bar, step, comm) {
     if(Roles.userIsInRole(Meteor.userId(), 'qa')) {
       // update item
@@ -360,7 +359,7 @@ Meteor.methods({
     }
   },
   
-  //  remove a step
+//  remove a step
   pullHistory(batchId, bar, key) {
     if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
@@ -373,7 +372,7 @@ Meteor.methods({
     }
   },
   
-  // replace a step
+// replace a step
   pushHistory(batchId, bar, replace) {
     //some validation on the replace would be good
     if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
@@ -496,8 +495,7 @@ Meteor.methods({
     }else{null}
   },
   
-  // RMA Cascade //
-  
+//// RMA Cascade ////
   addRMACascade(batchId, rmaId, qua, com, flowObj) {
     const doc = BatchDB.findOne({_id: batchId});
     const dupe = doc.cascade.find( x => x.rmaId === rmaId );

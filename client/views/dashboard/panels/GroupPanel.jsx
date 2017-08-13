@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import SlideDownWrap from '/client/components/tinyUi/SlideDownWrap.jsx';
+import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import moment from 'moment';
 
 import UserNice from '../../../components/smallUi/UserNice.jsx';
@@ -11,7 +11,7 @@ export default class GroupPanel extends Component	{
     let g = this.props.groupData;
 
     return (
-      <SlideDownWrap>
+      <AnimateWrap type='cardTrans'>
         <div className='card' key={g.alias}>
           <div className='space cap edit'>
             <h1>{g.group}</h1>
@@ -20,7 +20,7 @@ export default class GroupPanel extends Component	{
             <p>created: {moment(g.createdAt).calendar()} by: <UserNice id={g.createdWho} /></p>
           </div>
         </div>
-      </SlideDownWrap>
+      </AnimateWrap>
     );
   }
 }

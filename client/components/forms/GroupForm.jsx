@@ -94,7 +94,7 @@ export default class GroupForm extends Component {
               defaultValue={orWiki}
               placeholder='http://192.168.1.68/dokuwiki'
               required />
-            <label htmlFor='newAlias'>{Pref.group} {Pref.instruct}s Index</label>
+            <label htmlFor='newAlias'>{Pref.group} {Pref.instruct} Index</label>
           </p>
           <br />
           <Submit name={title} type='action' />

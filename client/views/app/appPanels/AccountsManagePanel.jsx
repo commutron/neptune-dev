@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
+import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
 
-import SlideDownWrap from '/client/components/tinyUi/SlideDownWrap.jsx';
 import UserForm from '../../../components/forms/UserForm.jsx';
 
 export default class AccountsManagePanel extends Component {
@@ -9,8 +9,8 @@ export default class AccountsManagePanel extends Component {
   render() {
     
     return (
-      <SlideDownWrap>
-        <div className='card'>
+      <AnimateWrap type='cardTrans'>
+        <div className='card' key={1}>
           <div className='split'>
             <div className='half space'>
               <h3>User Accounts</h3>
@@ -29,12 +29,11 @@ export default class AccountsManagePanel extends Component {
                 </ul>
             </div>
             <div className='half space'>
-      
               
             </div>
           </div>
         </div>
-      </SlideDownWrap>
+      </AnimateWrap>
     );
   }
 }

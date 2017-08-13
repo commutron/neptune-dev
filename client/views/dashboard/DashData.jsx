@@ -67,38 +67,64 @@ export default createContainer( () => {
   let blockSub = Meteor.subscribe('blockData', false);
   let scrapSub = Meteor.subscribe('scrapData', false);
   
-  if(coldSub) {
-    if(orb === Pref.block || orb === Pref.blck) {
-      blockSub = Meteor.subscribe('blockData', true);
-    }else if(orb === Pref.scrap || orb === Pref.scrp) {
-      scrapSub = Meteor.subscribe('scrapData', true);
-    }else if(!isNaN(orb) && orb.length === 5) {
-      const oneBatch = BatchDB.findOne({batch: orb});
-      if(oneBatch) {
-        hotSub = Meteor.subscribe('hotData', orb);
+  if( coldSub ) 
+  {
+    if( orb === Pref.block || orb === Pref.blck ) 
+    {
+      blockSub = Meteor.subscribe( 'blockData', true );
+    }
+    else if( orb === Pref.scrap || orb === Pref.scrp )
+    {
+      scrapSub = Meteor.subscribe( 'scrapData', true );
+    }
+    else if( !isNaN(orb) && orb.length === 5 )
+    {
+      const oneBatch = BatchDB.findOne( { batch: orb } );
+      if( oneBatch )
+      {
+        hotSub = Meteor.subscribe( 'hotData', orb );
         hotBatch = oneBatch;
-      }else{null}
-    }else if(!isNaN(orb) && orb.length >= 9 && orb.length <= 10) {
-  		const itemsBatch = BatchDB.findOne({'items.serial': orb});
-      if(itemsBatch) {
-        hotSub = Meteor.subscribe('hotData', itemsBatch.batch);
-        hotBatch = itemsBatch;
-      }else{
-        Meteor.call('serialLookup', orb, (err, reply)=>{
-          err ? console.log(err) : null;
-          const serverItemsBatch = BatchDB.findOne({batch: reply});
-          hotSub = Meteor.subscribe('hotData', reply);
-          hotBatch = serverItemsBatch;
-        });
       }
-    }else{null}
-  }else{null}
+      else
+      {
+        null;
+      }
+    }
+    else if( !isNaN(orb) && orb.length >= 9 && orb.length <= 10 )
+    {
+  		const itemsBatch = BatchDB.findOne( { 'items.serial': orb } );
+      if( itemsBatch )
+      {
+        hotSub = Meteor.subscribe( 'hotData', itemsBatch.batch );
+        hotBatch = itemsBatch;
+      }
+      else
+      {
+        Meteor.call( 'serialLookup', orb, ( err, reply )=>
+        {
+          err ? console.log( err ) : null;
+          const serverItemsBatch = BatchDB.findOne( { batch: reply } );
+          hotSub = Meteor.subscribe( 'hotData', reply );
+          hotBatch = serverItemsBatch;
+        }
+        );
+      }
+    }
+    else
+    {
+      null;
+    }
+  }
+  else
+  {
+    null;
+  }
   
-  if(!login) {
+  if( !login ) {
     return {
       login: Meteor.userId(),
     };
-  }else if(!active) {
+  }else if( !active ) {
     return {
       coldReady: coldSub.ready(), 
       hotReady: hotSub.ready(),
@@ -110,17 +136,17 @@ export default createContainer( () => {
       coldReady: coldSub.ready(),
       hotReady: hotSub.ready(),
       orb: orb,
-      snap: Session.get('ikyView'),
-      brick: Session.get('nowWanchor'),
+      snap: Session.get( 'ikyView' ),
+      brick: Session.get( 'nowWanchor' ),
       login: Meteor.userId(),
       org: org,
-      users: Meteor.users.find({}, {sort: {username:1}}).fetch(),
+      users: Meteor.users.find( {}, { sort: { username: 1 } } ).fetch(),
       app: AppDB.findOne({org: org}),
-      allGroup: GroupDB.find({}, {sort: {group:1}}).fetch(),
-      allWidget: WidgetDB.find({}, {sort: {widget:1}}).fetch(),
-      allBatch: BatchDB.find({}, {sort: {batch:-1}}).fetch(),
+      allGroup: GroupDB.find( {}, { sort: { group: 1 } } ).fetch(),
+      allWidget: WidgetDB.find( {}, { sort: { widget: 1 } } ).fetch(),
+      allBatch: BatchDB.find( {}, { sort: { batch: -1 } } ).fetch(),
       hotBatch: hotBatch,
-      allArchive: ArchiveDB.find({}, {sort: {year:-1}}).fetch(),
+      allArchive: ArchiveDB.find( {}, { sort: { year:-1 } } ).fetch(),
       allBlock: blockSub.ready(),
       allScrap: scrapSub.ready()
     };

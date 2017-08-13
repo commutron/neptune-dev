@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import SlideDownWrap from '/client/components/tinyUi/SlideDownWrap.jsx';
+import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 
 import JumpButton from '../../../components/tinyUi/JumpButton.jsx';
 
@@ -8,8 +8,8 @@ export default class BatchesList extends Component	{
   render() {
 
     return (
-      <SlideDownWrap>
-        <div className='card'>
+      <AnimateWrap type='cardTrans'>
+        <div className='card' key={1}>
           { this.props.batchData.map( (entry, index)=> {
           const style = entry.finishedAt === false ? 'action clear wide greenT' : 'action clear wide';
             return (
@@ -21,7 +21,7 @@ export default class BatchesList extends Component	{
               />
             )})}
   			</div>
-			</SlideDownWrap>
+			</AnimateWrap>
     );
   }
 }

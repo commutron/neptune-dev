@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import moment from 'moment';
-import SlideDownWrap from '/client/components/tinyUi/SlideDownWrap.jsx';
+import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
 
 import JumpText from '../../../components/tinyUi/JumpText.jsx';
@@ -27,7 +27,7 @@ export default class BatchCard extends Component	{
     const showWarn = warn === 0 ? 'hide' : 'alertCount clean rAlign';
 
     return (
-      <SlideDownWrap>
+      <AnimateWrap type='cardTrans'>
         <div className='card' key={b.batch}>
           <div className='space cap'>
             <h1>
@@ -71,7 +71,7 @@ export default class BatchCard extends Component	{
   				<br />
   
   			</div>
-			</SlideDownWrap>
+			</AnimateWrap>
     );
   }
 }

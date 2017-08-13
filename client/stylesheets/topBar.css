@@ -4,7 +4,6 @@ meteor seems to be handling this */
 #find {
   font-size: 2rem;
   text-align: center;
-  line-height: 1;
   height: 100%;
   width: 100%;
   min-width: 300px;
@@ -21,11 +20,13 @@ meteor seems to be handling this */
   -moz-appearance: none;
 }
 
+/*
 @media screen and (max-width: 1000px){
   #find {
     min-width: 250px;
   }
 }
+*/
 
 #find:focus {
 	color: white;
@@ -43,17 +44,22 @@ meteor seems to be handling this */
 	color: white;
 	background: rgb(50,50,50);
 }
+
 #find::-webkit-input-placeholder { /* Chrome/Opera/Safari */
   color: white;
+  opacity: 0.9;
 }
 #find::-moz-placeholder { /* Firefox 19+ */
   color: white;
-}
-#find:-ms-input-placeholder { /* IE 10+ */
-  color: white;
+  opacity: 0.9;
 }
 #find:-moz-placeholder { /* Firefox 18- */
   color: white;
+  opacity: 0.9;
+}
+#find:-ms-input-placeholder { /* IE 10+ */
+  color: white;
+  opacity: 0.9;
 }
 
 input::-webkit-calendar-picker-indicator {
@@ -71,8 +77,8 @@ input::-webkit-calendar-picker-indicator {
 }
 
 @keyframes spinAround {
-  0%   { transform: translate(0%, 0%) rotate(0deg); }
-  100% { transform: translate(0%, 0%) rotate(360deg); }
+  0%   { transform: translate3d(0, 0, 0) rotate(0deg); }
+  100% { transform: translate3d(0, 0, 0) rotate(360deg); }
 }
 
 

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import SlideDownWrap from '/client/components/tinyUi/SlideDownWrap.jsx';
+import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
@@ -19,32 +19,32 @@ export default class WidgetPanel extends Component	{
     const a = this.props.app;
 
     return (
-      <SlideDownWrap>
-      <div className='card' key={w.widget}>
-        <div className='space cap edit'>
-          <h1 className='up'>{w.widget}</h1>
-          <h2>{w.describe}</h2>
-          <hr />
-          <p>Created: {moment(w.createdAt).calendar()} by <UserNice id={w.createdWho} /></p>
-
-          <hr />
-          <p>
-            {b.map( (entry, index)=>{
-              let ac = entry.active ? 'greenT' : null;
-              return (
-                <JumpText key={index} title={entry.batch} link={entry.batch} sty={ac} />
-              )})}
-          </p>
-          <hr />
+      <AnimateWrap type='cardTrans'>
+        <div className='card' key={w.widget}>
+          <div className='space cap edit'>
+            <h1 className='up'>{w.widget}</h1>
+            <h2>{w.describe}</h2>
+            <hr />
+            <p>Created: {moment(w.createdAt).calendar()} by <UserNice id={w.createdWho} /></p>
+  
+            <hr />
+            <p>
+              {b.map( (entry, index)=>{
+                let ac = entry.active ? 'greenT' : null;
+                return (
+                  <JumpText key={index} title={entry.batch} link={entry.batch} sty={ac} />
+                )})}
+            </p>
+            <hr />
+            
+            <FlowsList id={w._id} flows={w.flows} />
+  
+          </div>
           
-          <FlowsList id={w._id} flows={w.flows} />
-
+          <VersionsList widgetData={w} />
+            
         </div>
-        
-        <VersionsList widgetData={w} />
-          
-      </div>
-      </SlideDownWrap>
+      </AnimateWrap>
     );
   }
 } 
