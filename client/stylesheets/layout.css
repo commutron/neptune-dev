@@ -254,6 +254,7 @@ main {
   padding: 0;
   margin: 25px auto 25px auto;
   overflow-x: hidden;
+  overflow-y: hidden;
   background-color: rgb(75,75,75);
   -webkit-box-shadow: 0 0 10px 0.5px rgb(0,0,0);
   -moz-box-shadow:    0 0 10px 0.5px rgb(0,0,0);
@@ -412,11 +413,64 @@ main {
   }
 }
 
-
-.cardTrans-enter {
-  animation: fadeIn 500ms cubic-bezier(0.165, 0.84, 0.44, 1);
+@keyframes slideRight {
+  0% {
+    opacity: 1;
+    transform: translate3d(-500px, 0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0)
+  }
 }
-.cardTrans-appear {
+
+@-webkit-keyframes slideOutLeft {
+  0%   { 
+    opacity: 0;
+    transform: translate3D(250px, 0, 0);
+  }
+  100% { 
+    opacity: 1;
+    transform: translate3D(0, 0, 0);
+  }
+}
+
+@keyframes slideLeft {
+  0% {
+    opacity: 0;
+    transform: translate3d(250px, 0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@-webkit-keyframes slideOutLeft {
+  0%   { 
+    opacity: 1;
+    transform: translate3D(0, 0, 0);
+  }
+  100% { 
+    opacity: 0;
+    transform: translate3D(-250px, 0, 0);
+  }
+}
+
+@keyframes slideOutLeft {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(-250px, 0, 0);
+  }
+}
+
+
+
+.cardTrans-enter, .cardTrans-appear {
   animation: fadeIn 500ms cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
@@ -434,28 +488,6 @@ main {
 
 .modelTrans-enter-active, .modelTrans-appear-active {
   opacity: 1;
-}
-
-@keyframes slideLeft {
-  0% {
-    opacity: 0;
-    transform: translate3d(50px, 0, 0);
-  }
-  100% {
-    opacity: 1;
-    transform: translate3d(0, 0, 0)
-  }
-}
-
-@keyframes slideRight {
-  0% {
-    opacity: 1;
-    transform: translate3d(-500px, 0, 0);
-  }
-  100% {
-    opacity: 0;
-    transform: translate3d(0, 0, 0)
-  }
 }
 
 .actions-enter, .actions-appear {
@@ -478,3 +510,22 @@ main {
   opacity: 0.01;
   transition: opacity 1000ms ease-in;
 }
+
+/* stones */
+.stoneTrans-enter, .stoneTrans-appear {
+  animation: slideLeft 500ms var(--scottsCurve);
+}
+
+.stoneTrans-leave {
+  position: absolute;
+  bottom: 65%;
+  animation: slideOutLeft 500ms var(--scottsCurve);
+}
+
+/*
+
+.stoneTrans-exit, .stoneTrans-exit-active {
+  animation: slideOutLeft 2s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+*/
+

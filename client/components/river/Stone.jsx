@@ -35,12 +35,14 @@ export default class Stone extends Component	{
     Meteor.setTimeout(()=> {
     	const first = this.props.type === 'first';
     	const inspect = this.props.type === 'inspect';
-    	const finish = this.props.type === 'finish';
-    	const inspector = first || inspect || finish ? true : false;
+    	const inspector = first || inspect ? true : false;
     	const test = this.props.type === 'test' ? true : false;
+    	const finish = this.props.type === 'finish' ? true : false;
     	if(inspector && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
     		null;
     	}else if(test && !Roles.userIsInRole(Meteor.userId(), 'test')) {
+    		null;
+    	}else if(finish && !Roles.userIsInRole(Meteor.userId(), 'finish')) {
     		null;
     	}else{
   		  let iky = Session.get('ikyView');
@@ -48,7 +50,7 @@ export default class Stone extends Component	{
   		    this.setState({lock: false})
   		  : null;
     	}
-    }, 1500);
+    }, 2000);
   }
   
   firstDone() {

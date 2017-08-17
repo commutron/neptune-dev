@@ -188,6 +188,15 @@ meteor seems to be handling this */
 .purple {
 	background-color: rgb(155,89,182);
 }
+.purpleT {
+  color: var(--amethyst);
+}
+.purpleBorder {
+  background-color: transparent;
+	border: 3px solid var(--amethyst);
+	box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2),
+	      inset 0 0 .1em .1em rgba(43,43,43,0.2);
+}
 
 .black {
 	background-color: rgb(48,48,48);
@@ -323,9 +332,8 @@ meteor seems to be handling this */
 	display: table-cell;
   border-bottom: 0.1em solid rgba(255,255,255,0.3);
 	text-align: center;
-  text-transform: capitalize;
 	vertical-align: middle;
-	padding: 2px;
+	padding: 2px 4px;
 }
 
 .openGridCell {

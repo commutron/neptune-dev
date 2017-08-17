@@ -119,7 +119,6 @@ Meteor.methods({
   },
 
 //// Items \\\\
-
   addMultiItems(batchId, barFirst, barLast, unit) {
     if(
       !isNaN(barFirst)
@@ -293,7 +292,7 @@ Meteor.methods({
 
 
   finishItem(batchId, barcode, key, step, type) {
-    if(!Roles.userIsInRole(Meteor.userId(), 'inspect')) {
+    if(!Roles.userIsInRole(Meteor.userId(), 'finish')) {
       return false;
     }else{
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': barcode}, {

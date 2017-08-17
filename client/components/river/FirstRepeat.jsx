@@ -37,7 +37,7 @@ export default class StoneSelect extends Component	{
   		    this.setState({lock: false})
   		  : null;
   	  }
-  	}, 1500);
+  	}, 2000);
   }
   
   
@@ -55,7 +55,7 @@ export default class StoneSelect extends Component	{
 					  className='action blue wide cap'
 					  onClick={this.reveal}
 					  disabled={this.state.lock}
-					  >New {Pref.trackFirst}</button>
+					  >Repeat {Pref.trackFirst}</button>
 				</div>
         :
         <div className='actionBox blue'>

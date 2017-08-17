@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import moment from 'moment';
+import InOutWrap from '/client/components/tinyUi/InOutWrap.jsx';
 import Pref from '/client/global/pref.js';
 
 import Stone from './Stone.jsx';
@@ -63,14 +64,17 @@ export default class StoneSelect extends Component	{
             Session.set('nowWanchor', flowStep.how);
   		      return (
   		        <div>
-    		        <Stone 
-                  id={this.props.id}
-                  barcode={this.props.serial}
-                  sKey={flowStep.key}
-                  step={flowStep.step}
-                  type={flowStep.type}
-                  users={this.props.users}
-                  methods={this.props.methods} />
+    		        <InOutWrap type='stoneTrans'>
+      		        <Stone
+      		          key={flowStep.key}
+                    id={this.props.id}
+                    barcode={this.props.serial}
+                    sKey={flowStep.key}
+                    step={flowStep.step}
+                    type={flowStep.type}
+                    users={this.props.users}
+                    methods={this.props.methods} />
+                </InOutWrap>
                 {lastStep ?
                   <FirstRepeat
                     flowStep={lastStep}
@@ -91,14 +95,17 @@ export default class StoneSelect extends Component	{
           Session.set('nowWanchor', flowStep.how);
   		    return (
 		        <div>
-  		        <Stone 
-                id={this.props.id}
-                barcode={this.props.serial}
-                sKey={flowStep.key}
-                step={flowStep.step}
-                type={flowStep.type}
-                users={this.props.users}
-                methods={this.props.methods} />
+  		        <InOutWrap type='stoneTrans'>
+    		        <Stone
+    		          key={flowStep.key}
+                  id={this.props.id}
+                  barcode={this.props.serial}
+                  sKey={flowStep.key}
+                  step={flowStep.step}
+                  type={flowStep.type}
+                  users={this.props.users}
+                  methods={this.props.methods} />
+              </InOutWrap>
               {lastStep ?
                 <FirstRepeat
                   flowStep={lastStep}
@@ -118,14 +125,17 @@ export default class StoneSelect extends Component	{
           Session.set('nowWanchor', flowStep.how);
           return (
             <div>
-              <Stone 
-                id={this.props.id}
-                barcode={this.props.serial}
-                sKey={flowStep.key}
-                step={flowStep.step}
-                type={flowStep.type}
-                users={this.props.users}
-                methods={this.props.methods} />
+              <InOutWrap type='stoneTrans'>
+                <Stone
+                  key={flowStep.key}
+                  id={this.props.id}
+                  barcode={this.props.serial}
+                  sKey={flowStep.key}
+                  step={flowStep.step}
+                  type={flowStep.type}
+                  users={this.props.users}
+                  methods={this.props.methods} />
+              </InOutWrap>
               {lastStep ?
                 <FirstRepeat
                   flowStep={lastStep}
@@ -145,10 +155,12 @@ export default class StoneSelect extends Component	{
     // end of flow
     Session.set('nowStep', 'done');
     return (
-      <div className='greenT centre cap'>
-        <h2>{Pref.trackLast}ed</h2>
-        <h3>{moment(bDone[bDone.length -1].time).calendar()}</h3>
-      </div>
+      <InOutWrap type='stoneTrans'>
+        <div className='purpleBorder centre cap'>
+          <h2>{Pref.trackLast}ed</h2>
+          <h3>{moment(bDone[bDone.length -1].time).calendar()}</h3>
+        </div>
+      </InOutWrap>
     );
   }
 }

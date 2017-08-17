@@ -53,6 +53,7 @@ export default class UserForm extends Component {
       'create',
       'edit',
       'run',
+      'finish',
       'test',
       'inspect',
       'active'

@@ -19,4 +19,6 @@
   --cloudsfade: rgba(236, 240, 241, 0.5);
   --asbestos: rgb(127, 140, 141);
   --asbestosfade: rgb(127, 140, 141, 0.5);
+  
+  --scottsCurve: cubic-bezier(0.165, 0.84, 0.44, 1);
 }

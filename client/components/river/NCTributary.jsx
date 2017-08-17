@@ -56,7 +56,7 @@ export class NCStream extends Component {
 
     return (
       <div className={style}>
-        <div className='gridCell'>{this.props.entry.ref}</div>
+        <div className='gridCell up'>{this.props.entry.ref}</div>
         <div className='gridCell'>{this.props.entry.type}</div>
         <div className='gridCell'>
           {skip ?
