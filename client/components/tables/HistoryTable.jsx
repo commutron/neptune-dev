@@ -28,7 +28,7 @@ export default class HistoryTable extends Component	{
 							<th>who</th>
 							<th>comment</th>
 							<th>inspect</th>
-              <th>builder</th>
+              <th>{Pref.builder}</th>
               <th>method</th>
               <th>change</th>
               <th>issue</th>
@@ -55,7 +55,7 @@ export default class HistoryTable extends Component	{
 							<th>who</th>
 							<th>comment</th>
 							<th>inspect</th>
-              <th>builder</th>
+              <th>{Pref.builder}</th>
               <th>method</th>
               <th>change</th>
               <th>issue</th>

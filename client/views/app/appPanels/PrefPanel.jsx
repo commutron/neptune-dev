@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
 
 import {OptionAdd} from '/client/components/forms/AppSettings';
@@ -11,7 +10,6 @@ export default class PrefPanel extends Component {
     
     const dt = this.props.app;
     const auth = !Roles.userIsInRole(Meteor.userId(), 'admin');
-    //let trackOptions = dt.trackOption.sort((t1, t2) => {return t1.step > t2.step});
     let trackOptions = dt.trackOption;  
       trackOptions.sort((t1, t2)=> {
         if (t1.step < t2.step) { return -1 }
@@ -20,13 +18,12 @@ export default class PrefPanel extends Component {
       });
 
     return (
-      <AnimateWrap type='cardTrans'>
-        <div className='card cap invert' key={1}>
-          <fieldset disabled={auth}>
+      <div className='card cap invert'>
+        <fieldset disabled={auth}>
           <div className='space breathe'>
             <h1>app preferences for : <i>{dt.org}</i></h1>
             <hr />
-
+  
             <h2>{Pref.trackProcess} Steps</h2>
             <i>Options for tracked and controlled steps</i>
             <OptionAdd action='track' title='step' />
@@ -65,7 +62,7 @@ export default class PrefPanel extends Component {
             </ul>
             
             <hr />
-            
+          
             <h2>{Pref.method} options:</h2>
             <i>available methods for first-off form</i>
             <OptionAdd action='tool' title='tool' />
@@ -91,8 +88,7 @@ export default class PrefPanel extends Component {
   
           <br />
         </fieldset>
-        </div>
-      </AnimateWrap>
+      </div>
     );
   }
 }

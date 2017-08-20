@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 
 export default class Tabs extends Component	{
   
@@ -22,7 +23,7 @@ export default class Tabs extends Component	{
       <div>
         <div className={stick}>
           { this.props.tabs.map( (entry, index)=>{
-            let styl =  show === index ? 'action blue' : 'action clear';
+            let styl =  show === index ? 'action cap tabOn' : 'action cap tabOff';
             return (
               <button
                 key={index}
@@ -32,8 +33,11 @@ export default class Tabs extends Component	{
             );
           })}
         </div>
-        <hr />
-        {this.props.children[show]}
+        <AnimateWrap type='cardTrans'>
+
+          {this.props.children[show]}
+        
+        </AnimateWrap>
       </div>
     );
   }

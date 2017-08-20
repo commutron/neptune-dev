@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
 
-import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import RoleCheck from '/client/components/utilities/RoleCheck.js';
 
 import AccountsUI from '../../../components/bigUi/AccountsUI.jsx';
@@ -18,31 +17,29 @@ export default class AccountPanel extends Component {
     const admin = Roles.userIsInRole(Meteor.userId(), 'admin') ? Pref.admin : '';
     
     return (
-      <AnimateWrap type='cardTrans'>
-        <div className='card' key={0}>
-          <div className='split'>
-            <div className='half space'>
-              <h2>Logged in as: <AccountsUI /></h2>
-              <p className='up'>id: {Meteor.user()._id}</p>
-              <p className='blueT'>{admin}</p>
-              <p>organization: <i className='greenT'>{Meteor.user().org}</i></p>
-              <br />
-              <LogoutOther />
-              <br />
-              <EmailForm />
-              <br />
-              <RemoveUser />
-            </div>
-            <RoleCheck role='admin'>
-              <div className='half space'>
-                <SetPin />
-                <br />
-                <AdminDown />
-              </div>
-            </RoleCheck>
+      <div className='card'>
+        <div className='split'>
+          <div className='half space'>
+            <h2>Logged in as: <AccountsUI /></h2>
+            <p className='up'>id: {Meteor.user()._id}</p>
+            <p className='blueT'>{admin}</p>
+            <p>organization: <i className='greenT'>{Meteor.user().org}</i></p>
+            <br />
+            <LogoutOther />
+            <br />
+            <EmailForm />
+            <br />
+            <RemoveUser />
           </div>
+          <RoleCheck role='admin'>
+            <div className='half space'>
+              <SetPin />
+              <br />
+              <AdminDown />
+            </div>
+          </RoleCheck>
         </div>
-      </AnimateWrap>
+      </div>
     );
   }
 }

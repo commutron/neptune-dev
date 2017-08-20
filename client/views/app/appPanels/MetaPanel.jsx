@@ -5,12 +5,15 @@ export default class MetaPanel extends Component {
   render() {
     
     let sty = {
-      fontFamily: 'monospace'
+      fontFamily: 'monospace',
+      textAlign: 'center',
+      width: '50vw',
+      margin: '25vh auto',
     };
 
     return (
-      <div className='centre centreTrue' style={sty}>
-        <p>Neptune v.0.4.5 Beta</p>
+      <div style={sty}>
+        <p>Neptune v.0.4.6 Beta</p>
         <p>Copyright (c) 2016-present Commutron Industries, https://www.commutron.ca</p>
         <p>Author 2016-present Matthew Andreas https://github.com/mattandwhatnot</p>
         <p>All Rights Reserved</p>

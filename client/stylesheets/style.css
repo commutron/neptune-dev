@@ -6,7 +6,7 @@ meteor seems to be handling this */
   font-size: 1em;
   min-width: 2.5rem;
 	min-height: 2.5em;
-	padding: 0 3px;
+	padding: 0 10px;
 	text-transform: uppercase;
 	vertical-align: bottom;
   -moz-box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2);
@@ -95,6 +95,16 @@ meteor seems to be handling this */
 
 #timeSwitch:hover, #exitSwitch:hover, #boltSwitch:hover {
   color: white;
+}
+
+.tabOn {
+	background-color: var(--midnightblue);
+  border-bottom: 3px solid var(--silver);
+}
+
+.tabOff {
+	background-color: var(--wetasphalt);
+	border-bottom: 3px groove transparent;
 }
 
 .open {

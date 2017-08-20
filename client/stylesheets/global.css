@@ -277,6 +277,10 @@ progress {
   border: 0;
 }
 
+th {
+  padding: 0 10px;
+}
+
 td {
   border-bottom: 1px dashed rgba(255,255,255,0.5);
   line-height: 1.5rem;

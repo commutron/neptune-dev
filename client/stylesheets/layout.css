@@ -11,7 +11,7 @@
 }
 
 body {
-  background-color: rgb(25,25,25);
+  background-color: rgb(20,20,20);
   color: white;
   font-family: 'Open Sans', sans-serif;
   margin: 0;
@@ -22,7 +22,7 @@ body {
 
 main {
   text-align: left;
-  background: rgb(25,25,25);
+  background: rgb(20,20,20);
   z-index: 8;
 }
 
@@ -116,7 +116,7 @@ main {
   overflow-y: hidden !important;
   overflow-x: hidden !important;
   -webkit-overflow-scrolling: touch;
-  min-width: 1000px;
+  min-width: 1200px;
   min-height: 100vh;
 }
 
@@ -256,10 +256,10 @@ main {
   margin: 25px auto 25px auto;
   overflow-x: hidden;
   overflow-y: hidden;
-  background-color: rgb(75,75,75);
-  -webkit-box-shadow: 0 0 10px 0.5px rgb(0,0,0);
-  -moz-box-shadow:    0 0 10px 0.5px rgb(0,0,0);
-  box-shadow:         0 0 10px 0.5px rgb(0,0,0);
+  background-color: rgb(60,60,60);
+  -webkit-box-shadow: 0 0 20px 1px rgb(0,0,0);
+  -moz-box-shadow:    0 0 20px 1px rgb(0,0,0);
+  box-shadow:         0 0 20px 1px rgb(0,0,0);
 }
 
 .invert {
