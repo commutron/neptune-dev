@@ -6,7 +6,7 @@ import Pref from '/client/global/pref.js';
 import UserNice from '../../../components/smallUi/UserNice.jsx';
 
 import JumpText from '../../../components/tinyUi/JumpText.jsx';
-import HistoryLine from '../../../components/smallUi/HistoryLine.jsx';
+import HistoryTable from '../../../components/tables/HistoryTable.jsx';
 import NCLine from '../../../components/smallUi/NCLine.jsx';
 import RMALine from '../../../components/smallUi/RMALine.jsx';
 import ScrapBox from '../../../components/smallUi/ScrapBox.jsx';
@@ -65,13 +65,7 @@ export default class ItemPanel extends Component	{
             <p>created: {moment(i.createdAt).calendar()} by <UserNice id={i.createdWho} /></p>
             {end}
   
-            <details className='green'>
-              <summary>History</summary>
-              {i.history.map( (entry, index)=>{
-                return (
-                  <HistoryLine key={index} entry={entry} id={b._id} bar={i.serial} done={done} />
-                )})}
-            </details>
+            <HistoryTable id={b._id} serial={i.serial} history={i.history} done={done} />
   
             <details className='red'>
               <summary>{nc.length} {Pref.nonCon}s</summary>

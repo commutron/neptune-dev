@@ -277,6 +277,11 @@ progress {
   border: 0;
 }
 
-tbody tr:last-child td, .lastTd {
-  border-bottom: 1px solid white;
+td {
+  border-bottom: 1px dashed rgba(255,255,255,0.5);
+  line-height: 1.5rem;
+}
+
+tr:last-child td {
+  border-bottom: none;
 }

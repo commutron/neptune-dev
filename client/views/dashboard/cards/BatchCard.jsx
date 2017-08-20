@@ -31,7 +31,7 @@ export default class BatchCard extends Component	{
         <div className='card' key={b.batch}>
           <div className='space cap'>
             <h1>
-              <span>{b.batch}</span>
+              <span><JumpText title={b.batch} link={b.batch} /></span>
               <i className={showWarn}>
                 {warn}
               </i>

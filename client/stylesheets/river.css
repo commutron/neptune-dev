@@ -19,12 +19,9 @@
   -moz-transition: all 200ms ease-out;
   -o-transition: all 200ms ease-out;
   transition: all 200ms ease-out;
- 	opacity: 0.9;
   box-shadow: 0 0 .2em .2em rgba(43,43,43,0.3),
               0 0 .2em .2em rgba(43,43,43,0);
   cursor: pointer;
-  -webkit-transform-style: preserve-3d;
-  -webkit-backface-visibility: hidden;
 }
 
 .stone:focus {

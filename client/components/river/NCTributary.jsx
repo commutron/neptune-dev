@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import InOutWrap from '/client/components/tinyUi/InOutWrap.jsx';
 
 // props
 /// id={b._id}
@@ -7,14 +8,12 @@ import React, {Component} from 'react';
 export default class NCTributary extends Component {
   render() {
     return(
-      <div>
-        <div className='grid'>
-          {this.props.nonCons.map( (entry, index)=>{
-            return (
-              <NCStream key={index} entry={entry} id={this.props.id} />
-            )})}
-        </div>
-      </div>
+      <InOutWrap type='ncTrans' add='grid'>
+        {this.props.nonCons.map( (entry)=>{
+          return (
+            <NCStream key={entry.key} entry={entry} id={this.props.id} />
+          )})}
+      </InOutWrap>
     );
   }
 }

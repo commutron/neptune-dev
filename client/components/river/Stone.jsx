@@ -16,8 +16,7 @@ export default class Stone extends Component	{
   
   reveal() {
     this.setState({show: !this.state.show});
-    const findBox = document.getElementById('find');
-  	findBox.focus();
+    document.getElementById('find').focus();
   }
     
   // close first-off form and recheck the lock when switching items 
@@ -71,8 +70,7 @@ export default class Stone extends Component	{
 	    if(error)
 		    console.log(error);
 			if(reply) {
-			  let findBox = document.getElementById('find');
-		    findBox.focus();
+			  document.getElementById('find').focus();
 		  }else{
 		    Bert.alert(Pref.blocked, 'danger');
 		  }
@@ -91,8 +89,7 @@ export default class Stone extends Component	{
 		  if(error)
 		    console.log(error);
 		  if(reply) {
-		    let findBox = document.getElementById('find');
-		    findBox.focus();
+		    document.getElementById('find').focus();
 		  }else{
 		    Bert.alert(Pref.blocked, 'danger');
 		  }

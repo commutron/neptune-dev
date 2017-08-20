@@ -4,16 +4,20 @@ import {CSSTransitionGroup} from 'react-transition-group';
 export default class InOutWrap extends Component	{
 
   render() {
+  	
+  	let more = this.props.add ? this.props.add : '';
+  	
     return (
       <CSSTransitionGroup
-				component='span'
+				component='div'
+				className={more}
 				transitionName={this.props.type}
 				transitionEnter={true}
 				transitionAppear={true}
 				transitionLeave={true}
-				transitionEnterTimeout={500}
-				transitionAppearTimeout={500}
-				transitionLeaveTimeout={500}>
+				transitionEnterTimeout={400}
+				transitionAppearTimeout={400}
+				transitionLeaveTimeout={400}>
 				
         {this.props.children}
       
@@ -21,3 +25,6 @@ export default class InOutWrap extends Component	{
     );
   }
 }
+
+// these timouts are 100ms shorter than the duration in the css
+// this seems to avoid a flicker at the end of the animation
