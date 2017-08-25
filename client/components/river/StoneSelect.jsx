@@ -34,9 +34,10 @@ export default class StoneSelect extends Component	{
                     inspect && this.props.regRun === true ?
                     bDone.find(ip => ip.key === flowStep.key && ip.good === true) ||
                     bDone.find(ip => ip.step === flowStep.step && ip.type === 'first' && ip.good === true)
+                    // ^^ remove " && ip.good === true " if failed firsts should count as inpections
                     :
                     bDone.find(ip => ip.key === flowStep.key && ip.good === true);
-    
+                    
       if(check) {
         null;
       }else{
@@ -49,15 +50,36 @@ export default class StoneSelect extends Component	{
         let skipped = nc.every( x => x.skip !== false );
         
 		    let block = nc.some( x => x.where === flowStep.step ) ? false : true;
+		    
+		    const stone = <Stone
+          		          key={flowStep.key}
+                        id={this.props.id}
+                        barcode={this.props.serial}
+                        sKey={flowStep.key}
+                        step={flowStep.step}
+                        type={flowStep.type}
+                        users={this.props.users}
+                        methods={this.props.methods} />;
+                    
+        const nonCon = <NCTributary
+                			  id={this.props.id}
+                			  nonCons={this.props.nonCons} />;
+                			  
+        const repeat = <FirstRepeat
+                        key={lastStep.key}
+                        flowStep={lastStep}
+                        id={this.props.id}
+                        barcode={this.props.serial}
+                        history={this.props.history}
+                        users={this.props.users}
+                        methods={this.props.methods} />;
 		  
   		  if(nc.length > 0 && !skipped) {
   		    
   		    if(block || flowStep.type === 'finish') {
   		      Session.set( 'nowStep', nc[0].where );
   		      return (
-    		      <NCTributary
-        			  id={this.props.id}
-        			  nonCons={nc} />
+    		      nonCon
   		      );
   		    }else{
   		      Session.set('nowStep', flowStep.step);
@@ -65,28 +87,14 @@ export default class StoneSelect extends Component	{
   		      return (
   		        <div>
     		        <InOutWrap type='stoneTrans'>
-      		        <Stone
-      		          key={flowStep.key}
-                    id={this.props.id}
-                    barcode={this.props.serial}
-                    sKey={flowStep.key}
-                    step={flowStep.step}
-                    type={flowStep.type}
-                    users={this.props.users}
-                    methods={this.props.methods} />
+      		        {stone}
                 </InOutWrap>
-                {lastStep ?
-                  <FirstRepeat
-                    flowStep={lastStep}
-                    id={this.props.id}
-                    barcode={this.props.serial}
-                    history={this.props.history}
-                    users={this.props.users}
-                    methods={this.props.methods} />
-                :null}
-                <NCTributary
-          			  id={this.props.id}
-          			  nonCons={this.props.nonCons} />
+                {lastStep ? 
+                  <InOutWrap type='stoneTrans'>
+                    {repeat}
+                  </InOutWrap>
+                : null}
+                {nonCon}
         			</div>
   		      );
   		    }
@@ -96,28 +104,14 @@ export default class StoneSelect extends Component	{
   		    return (
 		        <div>
   		        <InOutWrap type='stoneTrans'>
-    		        <Stone
-    		          key={flowStep.key}
-                  id={this.props.id}
-                  barcode={this.props.serial}
-                  sKey={flowStep.key}
-                  step={flowStep.step}
-                  type={flowStep.type}
-                  users={this.props.users}
-                  methods={this.props.methods} />
+    		        {stone}
               </InOutWrap>
-              {lastStep ?
-                <FirstRepeat
-                  flowStep={lastStep}
-                  id={this.props.id}
-                  barcode={this.props.serial}
-                  history={this.props.history}
-                  users={this.props.users}
-                  methods={this.props.methods} />
-              :null}
-              <NCTributary
-        			  id={this.props.id}
-        			  nonCons={this.props.nonCons} />
+              {lastStep ? 
+                <InOutWrap type='stoneTrans'>
+                  {repeat}
+                </InOutWrap>
+              : null}
+              {nonCon}
       			</div>
 		      );
   		  }else{
@@ -126,25 +120,13 @@ export default class StoneSelect extends Component	{
           return (
             <div>
               <InOutWrap type='stoneTrans'>
-                <Stone
-                  key={flowStep.key}
-                  id={this.props.id}
-                  barcode={this.props.serial}
-                  sKey={flowStep.key}
-                  step={flowStep.step}
-                  type={flowStep.type}
-                  users={this.props.users}
-                  methods={this.props.methods} />
+                {stone}
               </InOutWrap>
-              {lastStep ?
-                <FirstRepeat
-                  flowStep={lastStep}
-                  id={this.props.id}
-                  barcode={this.props.serial}
-                  history={this.props.history}
-                  users={this.props.users}
-                  methods={this.props.methods} />
-              :null}
+              {lastStep ? 
+                <InOutWrap type='stoneTrans'>
+                  {repeat}
+                </InOutWrap>
+              : null}
             </div>
           );
         }

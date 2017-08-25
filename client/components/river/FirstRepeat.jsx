@@ -18,15 +18,6 @@ export default class StoneSelect extends Component	{
     this.setState({show: !this.state.show});
   }
   
-  // close first-off form and recheck the lock when switching items 
-  componentWillReceiveProps(nextProps) {
-    if(this.props.flowStep.key !== nextProps.flowStep.key || this.props.barcode !== nextProps.barcode) {
-      this.setState({show: false});
-      this.setState({lock: true});
-      this.unlock();
-    }else{null}
-  }
-  
   unlock() {
     Meteor.setTimeout(()=> {
     	if(!Roles.userIsInRole(Meteor.userId(), 'inspect')) {
@@ -55,7 +46,7 @@ export default class StoneSelect extends Component	{
 					  className='action blue wide cap'
 					  onClick={this.reveal}
 					  disabled={this.state.lock}
-					  >Repeat {Pref.trackFirst}</button>
+					  >Repeat First {dt.flowStep.step}</button>
 				</div>
         :
         <div className='actionBox blue'>
@@ -74,8 +65,7 @@ export default class StoneSelect extends Component	{
               type={dt.flowStep.type}
               users={dt.users}
               methods={dt.methods}
-              repeat={true}
-              onPass={e => this.unlock()} />
+              repeat={true} />
             <br />
           </div>
         }

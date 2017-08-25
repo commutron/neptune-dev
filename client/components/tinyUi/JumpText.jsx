@@ -17,7 +17,7 @@ export default class JumpText extends Component {
   render() {
     
     let clss = this.props.sty ? 'jump ' + this.props.sty : 'jump';
-
+    
     return (
       <button
         className={clss}

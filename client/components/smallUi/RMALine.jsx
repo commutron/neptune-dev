@@ -48,7 +48,7 @@ export default class RMALine extends Component	{
             </ul>
           </details>
           :
-          null}
+          <div><p>no {Pref.rmaProcess}</p></div>}
       </div>
     );
   }

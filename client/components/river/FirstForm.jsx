@@ -116,7 +116,6 @@ export default class FirstForm extends Component	{
 		  if(error)
 		    console.log(error);
 		  if(reply) {
-		    this.props.onPass;
      		const findBox = document.getElementById('find');
 			  findBox.focus();
 			 }else{
@@ -129,6 +128,8 @@ export default class FirstForm extends Component	{
   render() {
     
     const step = this.state.step;
+    
+    let secondOpinion = this.state.whoB.has(Meteor.userId()) ? true : false;
     
     if(this.props.repeat && !this.state.diff) {
       return(
@@ -269,7 +270,7 @@ export default class FirstForm extends Component	{
                 type='button'
                 className='miniAction bigger'
                 ref={(i)=> this.go = i}
-                disabled={false}
+                disabled={secondOpinion}
                 onClick={this.pass.bind(this)}>
                 <i className="fa fa-check-circle-o fa-3x" aria-hidden="true"></i>
                 <br />Pass

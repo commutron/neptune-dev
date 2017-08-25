@@ -16,19 +16,22 @@ export default class Tabs extends Component	{
   
   render() {
     
+    const tabs = this.props.tabs;
     let show = this.state.sect;
     const stick = this.props.stick ? 'stickyBar' : '';
+    const styl = this.props.wide ? { width: 100 / tabs.length + '%'} : null;
     
     return (
       <div>
         <div className={stick}>
-          { this.props.tabs.map( (entry, index)=>{
-            let styl =  show === index ? 'action cap tabOn' : 'action cap tabOff';
+          { tabs.map( (entry, index)=>{
+            let clss =  show === index ? 'action cap tabOn' : 'action cap tabOff';
             return (
               <button
                 key={index}
                 onClick={this.handleClick.bind(this, index)}
-                className={styl}
+                className={clss}
+                style={styl}
               >{entry}</button>
             );
           })}

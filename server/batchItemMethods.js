@@ -1,7 +1,6 @@
 Meteor.methods({
 
 //// Batches \\\\
-
   addBatch(batchNum, widgetId, vKey, sDate, eDate) {
     const doc = WidgetDB.findOne({_id: widgetId});
     const duplicate = BatchDB.findOne({batch: batchNum});

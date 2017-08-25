@@ -9,6 +9,10 @@ p {
   margin: 0 auto;
 }
 
+i {
+  font-style: normal;
+}
+
 a {
   border: 1px dotted transparent;
 }
@@ -190,7 +194,7 @@ form p {
   padding: 10px 0;
 }
 
-button:disabled, datalist:disabled {
+button:disabled, button:disabled:hover, datalist:disabled {
   opacity: 0.3;
   cursor: not-allowed;
 }

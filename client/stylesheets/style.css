@@ -408,7 +408,6 @@ meteor seems to be handling this */
   content: '\f071';
   font-family: FontAwesome;
   color: var(--orange);
-  font-size: 1em;
 }
 
 .proGood::-webkit-progress-value {

@@ -18,17 +18,6 @@ export default class Stone extends Component	{
     this.setState({show: !this.state.show});
     document.getElementById('find').focus();
   }
-    
-  // close first-off form and recheck the lock when switching items 
-  componentWillReceiveProps(nextProps) {
-    if(this.props.sKey !== nextProps.sKey || this.props.barcode !== nextProps.barcode) {
-      //if(this.state) {
-        this.setState({show: false});
-        this.setState({lock: true});
-        this.unlock();
-      //}else{null}
-    }else{null}
-  }
   
   unlock() {
     Meteor.setTimeout(()=> {
@@ -50,11 +39,6 @@ export default class Stone extends Component	{
   		  : null;
     	}
     }, 2000);
-  }
-  
-  firstDone() {
-    this.reveal();
-    this.unlock();
   }
   
   //// Action for standard step
@@ -165,8 +149,7 @@ export default class Stone extends Component	{
               step={this.props.step}
               type={this.props.type}
               users={this.props.users}
-              methods={this.props.methods} 
-              onPass={e => this.firstDone()} />
+              methods={this.props.methods} />
             <br />
           </div>
         }

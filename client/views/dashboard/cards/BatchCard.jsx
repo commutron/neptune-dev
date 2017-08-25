@@ -3,8 +3,10 @@ import moment from 'moment';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
 
+import Tabs from '../../../components/smallUi/Tabs.jsx';
+
 import JumpText from '../../../components/tinyUi/JumpText.jsx';
-import Progress from '../../../components/bigUi/Progress.jsx';
+import StepsProgressMini from '../../../components/bigUi/StepsProgressMini.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';
 import BlockNotes from '../../../components/smallUi/BlockNotes.jsx';
 
@@ -24,7 +26,7 @@ export default class BatchCard extends Component	{
     
     let warn = b.blocks.filter( x => x.solve === false ).length;
     iready ? warn++ : null;
-    const showWarn = warn === 0 ? 'hide' : 'alertCount clean rAlign';
+    const showWarn = warn === 0 ? 'hide' : 'alertCount rAlign';
 
     return (
       <AnimateWrap type='cardTrans'>
@@ -38,14 +40,6 @@ export default class BatchCard extends Component	{
             </h1>
             <hr />
             
-            {/*
-            <h2>
-              <JumpText title={g.alias} link={g.alias} />
-              <JumpText title={w.widget} link={w.widget} />
-            </h2>
-            <h3>{Pref.version}: {v.version}</h3>
-            */}
-            
             {iready ?
               <h2 className='actionBox centreText yellow'>
                 No {Pref.itemSerial}s created
@@ -57,16 +51,23 @@ export default class BatchCard extends Component	{
                 Finished: {moment(b.finishedAt).calendar()}
               </h2>
             :null}
-    
-            <NoteLine entry={b.notes} id={b._id} versionKey={false} />
             
-            <NoteLine entry={v.notes} id={w._id} versionKey={v.versionKey} />
-            
-            <BlockNotes data={b.blocks} />
+            <Tabs
+              tabs={['Info', 'Progress']}
+              wide={true}
+              stick={false}>
+              
+              <div>
+                <NoteLine entry={b.notes} id={b._id} versionKey={false} />
+                <NoteLine entry={v.notes} id={w._id} versionKey={v.versionKey} />
+                <BlockNotes data={b.blocks} />
+              </div>
+              
+              <StepsProgressMini batchData={b} flow={flow} />
+              
+            </Tabs>
   
           </div>
-          
-  				<Progress batchData={b} flow={flow} detail={false} />
   				
   				<br />
   
