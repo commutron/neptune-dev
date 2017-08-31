@@ -1,7 +1,6 @@
 Meteor.methods({
   
   //// Widgets \\\\
-
   addNewWidget(widget, groupId, desc, version, wiki, unit, endTrack) {
     const duplicate = WidgetDB.findOne({widget: widget});
     if(!duplicate && Roles.userIsInRole(Meteor.userId(), 'create')) {

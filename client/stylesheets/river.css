@@ -32,6 +32,29 @@
  opacity: 0.5;
 }
 
+.crackedTop {
+ height: 6.5rem;
+ z-index: 2;
+ border-radius: 6.5rem 6.5rem 0 0;
+ margin: 0.5em 0.5em 0 0.5em;
+ box-shadow: 0 -.4em .2em .2em rgba(43,43,43,0.3),
+             0 -.4em .2em .2em rgba(43,43,43,0);
+}
+
+.crackedBot {
+ height: 6.5rem;
+ border-radius: 0 0 6.5rem 6.5rem;
+ margin: 0 0.5em 0.5em 0.5em;
+ background-image: url(test.svg);
+ background-color: var(--alizarin);
+}
+
+.crackedBot:hover {
+ z-index: 2;
+ box-shadow: 0 0 .2em .2em rgba(43,43,43,0.3),
+             0 0 .2em .2em var(--alizarinfade);
+}
+
 .nowUp {
  font-weight: bolder;
 }

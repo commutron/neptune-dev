@@ -160,15 +160,20 @@ meteor seems to be handling this */
   background-color: rgba(0,127,255,1);
 }
 .red {
-  background-color: #e74c3c;
-  background-color: rgba(231,76,60,1);
+  background-color: var(--alizarin);
 }
-.fadeRed {
-  background-color: rgb(231,76,60);
-  background-color: rgba(231,76,60,0.5);
+.darkRed {
+  background-color:  var(--pomegranate);
 }
 .redT {
-  color: rgb(231,76,60);
+  color:  var(--alizarin);
+}
+
+.orange {
+  background-color: var(--carrot);
+}
+.darkOrange {
+  background-color:  var(--pumpkin);
 }
 
 .yellow {

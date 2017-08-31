@@ -51,7 +51,7 @@ export class NCStream extends Component {
     const inspector = Roles.userIsInRole(Meteor.userId(), 'inspect');
     const lockI = fixed ? !same && inspector ? false : true : false;
     let skip = this.props.entry.skip;
-    let style = !skip ? 'cap gridRow fadeRed' : 'cap gridRow fadeYellow';
+    let style = !skip ? !fixed ? 'cap gridRow darkRed' : 'cap gridRow darkOrange' : 'cap gridRow yellow';
 
     return (
       <div className={style}>

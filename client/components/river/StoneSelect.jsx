@@ -5,6 +5,7 @@ import Pref from '/client/global/pref.js';
 
 import Stone from './Stone.jsx';
 import FirstRepeat from './FirstRepeat.jsx';
+import TestFails from './TestFails.jsx';
 import NCTributary from './NCTributary.jsx';
 
 export default class StoneSelect extends Component	{
@@ -45,6 +46,7 @@ export default class StoneSelect extends Component	{
         const stepNum = flow.indexOf(flowStep);
         const last = stepNum === 0 ? false : stepNum -1;
         const lastStep = last !== false ? flow[last] : false;
+        const fTest = flowStep.type === 'test' ? bDone.filter( x => x.type === 'test' && x.good === false) : [];
         
         const nc = this.props.nonCons;
         let skipped = nc.every( x => x.skip !== false );
@@ -73,6 +75,8 @@ export default class StoneSelect extends Component	{
                         history={this.props.history}
                         users={this.props.users}
                         methods={this.props.methods} />;
+                        
+        const tFail = <TestFails fails={fTest} />;
 		  
   		  if(nc.length > 0 && !skipped) {
   		    
@@ -89,6 +93,11 @@ export default class StoneSelect extends Component	{
     		        <InOutWrap type='stoneTrans'>
       		        {stone}
                 </InOutWrap>
+                {fTest.length > 0 ? 
+                  <InOutWrap type='stoneTrans'>
+                    {tFail}
+                  </InOutWrap>
+                : null}
                 {lastStep ? 
                   <InOutWrap type='stoneTrans'>
                     {repeat}
@@ -106,6 +115,11 @@ export default class StoneSelect extends Component	{
   		        <InOutWrap type='stoneTrans'>
     		        {stone}
               </InOutWrap>
+              {fTest.length > 0 ? 
+                <InOutWrap type='stoneTrans'>
+                  {tFail}
+                </InOutWrap>
+              : null}
               {lastStep ? 
                 <InOutWrap type='stoneTrans'>
                   {repeat}
@@ -122,6 +136,11 @@ export default class StoneSelect extends Component	{
               <InOutWrap type='stoneTrans'>
                 {stone}
               </InOutWrap>
+              {fTest.length > 0 ? 
+                <InOutWrap type='stoneTrans'>
+                  {tFail}
+                </InOutWrap>
+              : null}
               {lastStep ? 
                 <InOutWrap type='stoneTrans'>
                   {repeat}

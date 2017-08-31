@@ -243,7 +243,7 @@ Meteor.methods({
   
   //// history entries
 
-  addHistory(batchId, bar, key, step, type, com) {
+  addHistory(batchId, bar, key, step, type, com, pass) {
     if(type === 'inspect' && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
       return false;
     }else if(type === 'test' && !Roles.userIsInRole(Meteor.userId(), 'test')) {
@@ -254,7 +254,7 @@ Meteor.methods({
           key: key,
           step: step,
           type: type,
-          good: true,
+          good: pass,
           time: new Date(),
           who: Meteor.userId(),
           comm : com,
@@ -358,11 +358,11 @@ Meteor.methods({
   },
   
 //  remove a step
-  pullHistory(batchId, bar, key) {
+  pullHistory(batchId, bar, key, time) {
     if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
         $pull : {
-          'items.$.history': {key: key}
+          'items.$.history': {key: key, time: time}
         }});
         return true;
     }else{

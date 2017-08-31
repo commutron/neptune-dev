@@ -35,13 +35,13 @@ export default class ActionBar extends Component	{
     let groupData = this.props.groupData;
     let app = this.props.app;
     let act = this.props.action;
-    let edit = Roles.userIsInRole(Meteor.userId(), 'edit');
+    let ncedit = Roles.userIsInRole(Meteor.userId(), 'run');
     
     return (
       <div className='dashAction'>
         <div className='footLeft'>
         { 
-        act === 'build' && edit ?
+        act === 'build' && ncedit ?
             <NonConEdit
       		    ncData={batchData.nonCon}
       		    id={batchData._id}

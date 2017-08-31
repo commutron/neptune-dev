@@ -42,7 +42,7 @@ export default class Stone extends Component	{
   }
   
   //// Action for standard step
-  passS() {
+  passS(pass) {
     this.setState({lock: true});
     const id = this.props.id;
     const bar = this.props.barcode;
@@ -50,10 +50,11 @@ export default class Stone extends Component	{
 		const step = this.props.step;
     const type = this.props.type;
     const comm = this.comm ? this.comm.value.trim().toLowerCase() : '';
-		Meteor.call('addHistory', id, bar, sKey, step, type, comm, (error, reply)=>{
+		Meteor.call('addHistory', id, bar, sKey, step, type, comm, pass, (error, reply)=>{
 	    if(error)
 		    console.log(error);
 			if(reply) {
+				this.comm ? this.comm.value = '' : false;
 			  document.getElementById('find').focus();
 		  }else{
 		    Bert.alert(Pref.blocked, 'danger');
@@ -86,11 +87,11 @@ export default class Stone extends Component	{
 		let shape = '';
 		let ripple = '';
 		let lock = this.state.lock;
-		let sty = {width: '100%'};
+		let sty = {minWidth: '260px', maxWidth: '260px', width: '260px', minHeight: '3rem', height: '3rem'};
 		let prepend = this.props.type === 'build' || this.props.type === 'first' ?
 		              <label className='big'>{this.props.type}<br /></label> : null;
 		let apend = this.props.type === 'inspect' ?
-		                <label className='big'><br />{this.props.type}</label> : null;
+		              <label className='big'><br />{this.props.type}</label> : null;
 
 	//// Style the Stone Accordingly \\\\
 		if(this.props.type === 'first'){
@@ -98,13 +99,13 @@ export default class Stone extends Component	{
 			ripple = this.reveal;
 		}else if(this.props.type === 'inspect'){
 			shape = 'stone iCheck';
-			ripple = this.passS.bind(this);
+			ripple = this.passS.bind(this, true);
     }else if(this.props.type === 'build'){
 			shape = 'stone iBuild';
-			ripple = this.passS.bind(this);
+			ripple = this.passS.bind(this, true);
     }else if(this.props.type === 'test'){
-			shape = 'stone iTest';
-			ripple = this.passS.bind(this);
+			shape = 'stone crackedTop iTest';
+			ripple = this.passS.bind(this, true);
     }else if(this.props.type === 'finish'){
 			shape = 'stone iFinish';
 			ripple = this.finish.bind(this);
@@ -115,25 +116,50 @@ export default class Stone extends Component	{
     	<div>
         {!this.state.show ?
 					<div className='centre'>
-		      	<button
-		      	  className={shape}
-		  				name={this.props.step}
-		  				ref={(i)=> this.stone = i}
-		  				onClick={ripple}
-		  				tabIndex={-1}
-		  				disabled={lock} >
-		  				{prepend}
-							{this.props.step}
-							{apend}
-						</button>
 						{this.props.type === 'test' ?
-						  <input
+						<div className='centre'>
+							<button
+			      	  className={shape}
+			  				name={this.props.step + ' fail'}
+			  				ref={(i)=> this.stonefail = i}
+			  				onClick={ripple}
+			  				tabIndex={-1}
+			  				disabled={lock} >
+			  				Pass
+			  				<label className='big'><br />{this.props.step}</label>
+							</button>
+							<button
+			      	  className='stone crackedBot'
+			  				name={this.props.step + ' fail'}
+			  				ref={(i)=> this.stonefail = i}
+			  				onClick={this.passS.bind(this, false)}
+			  				tabIndex={-1}
+			  				disabled={lock} >
+			  				Fail
+			  				<label className='big'><br />{this.props.step}</label>
+							</button>
+						  <textarea
 						    type='text'
 						    ref={(i)=> this.comm = i}
-						    placeholder='optional comment'
-						    style={sty} 
-						    disabled={lock} />
-						  : null}
+						    placeholder='comments'
+						    style={sty}
+						    disabled={lock}></textarea>
+						</div>
+						:
+						<div className='centre'>
+			      	<button
+			      	  className={shape}
+			  				name={this.props.step}
+			  				ref={(i)=> this.stone = i}
+			  				onClick={ripple}
+			  				tabIndex={-1}
+			  				disabled={lock} >
+			  				{prepend}
+								{this.props.step}
+								{apend}
+							</button>
+						</div>
+						}
 					</div>
 					:
           <div className='actionBox blue'>

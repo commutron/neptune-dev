@@ -10,11 +10,12 @@ export default class StepBack extends Component {
       const bar = this.props.bar;
       const entry = this.props.entry;
       const flag = entry.key;
+      const time = entry.time;
       
       let replace = entry;
       replace.good = false;
       
-        Meteor.call('pullHistory', id, bar, flag, (error, reply)=> {
+        Meteor.call('pullHistory', id, bar, flag, time, (error, reply)=> {
           if(error)
             console.log(error);
           if(reply) {
