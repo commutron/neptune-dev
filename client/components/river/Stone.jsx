@@ -49,7 +49,7 @@ export default class Stone extends Component	{
     const sKey = this.props.sKey;
 		const step = this.props.step;
     const type = this.props.type;
-    const comm = this.comm ? this.comm.value.trim().toLowerCase() : '';
+    const comm = pass === false ? prompt('Enter A Comment', '').trim().toLowerCase() : '';
 		Meteor.call('addHistory', id, bar, sKey, step, type, comm, pass, (error, reply)=>{
 	    if(error)
 		    console.log(error);
@@ -138,12 +138,6 @@ export default class Stone extends Component	{
 			  				Fail
 			  				<label className='big'><br />{this.props.step}</label>
 							</button>
-						  <textarea
-						    type='text'
-						    ref={(i)=> this.comm = i}
-						    placeholder='comments'
-						    style={sty}
-						    disabled={lock}></textarea>
 						</div>
 						:
 						<div className='centre'>

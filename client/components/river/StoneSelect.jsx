@@ -80,7 +80,7 @@ export default class StoneSelect extends Component	{
 		  
   		  if(nc.length > 0 && !skipped) {
   		    
-  		    if(block || flowStep.type === 'finish') {
+  		    if(block || flowStep.type === 'finish' || flowStep.type === 'test') {
   		      Session.set( 'nowStep', nc[0].where );
   		      return (
     		      nonCon

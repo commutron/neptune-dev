@@ -1,12 +1,9 @@
 import React, {Component} from 'react';
 
-import DataToggle from '../../components/tinyUi/DataToggle.jsx';
-import IkyToggle from '../../components/tinyUi/IkyToggle.jsx';
-import NCAdd from '../../components/river/NCAdd.jsx';
 import ActionBar from '../../components/bigUi/ActionBar.jsx';
 
 export default class Dashboard extends Component	{
-  
+
   render() {
     
     let scrollFix = {
