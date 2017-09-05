@@ -9,14 +9,14 @@ export default class GroupsList extends Component	{
 
     return (
       <AnimateWrap type='cardTrans'>
-        <div className='card' key={1}>
+        <div className='section sidebar' key={1}>
           { this.props.groupData.map( (entry, index)=> {
             return (
               <JumpButton
                 key={index}
                 title={entry.group}
                 sub=''
-                sty='action clear wide'
+                sty='jumpBar'
               />
             )})}
   			</div>

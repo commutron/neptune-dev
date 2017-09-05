@@ -30,46 +30,45 @@ export default class BatchCard extends Component	{
 
     return (
       <AnimateWrap type='cardTrans'>
-        <div className='card' key={b.batch}>
-          <div className='space cap'>
-            <h1>
-              <JumpText title={b.batch} link={b.batch} />
-              <i className={showWarn}>
-                {warn}
-              </i>
-            </h1>
-            <hr />
+        <div className='section sidebar' key={b.batch}>
+          
+          <h1>
+            <JumpText title={b.batch} link={b.batch} />
+            <i className={showWarn}>
+              {warn}
+            </i>
+          </h1>
+          
+          {iready ?
+            <h2 className='actionBox centreText yellow'>
+              No {Pref.itemSerial}s created
+            </h2>
+          :null}
+          
+          {b.finishedAt !== false ?
+            <h2 className='actionBox centreText green'>
+              Finished: {moment(b.finishedAt).calendar()}
+            </h2>
+          :null}
+          
+          <Tabs
+            tabs={['Info', 'Progress']}
+            wide={true}
+            stick={false}>
             
-            {iready ?
-              <h2 className='actionBox centreText yellow'>
-                No {Pref.itemSerial}s created
-              </h2>
-            :null}
+            <div className='space cap'>
+              <NoteLine entry={b.notes} id={b._id} versionKey={false} />
+              <NoteLine entry={v.notes} id={w._id} versionKey={v.versionKey} />
+              <BlockNotes data={b.blocks} />
+            </div>
             
-            {b.finishedAt !== false ?
-              <h2 className='actionBox centreText green'>
-                Finished: {moment(b.finishedAt).calendar()}
-              </h2>
-            :null}
-            
-            <Tabs
-              tabs={['Info', 'Progress']}
-              wide={true}
-              stick={false}>
-              
-              <div>
-                <NoteLine entry={b.notes} id={b._id} versionKey={false} />
-                <NoteLine entry={v.notes} id={w._id} versionKey={v.versionKey} />
-                <BlockNotes data={b.blocks} />
-              </div>
-              
+            <div className='space cap'>
               <StepsProgressMini batchData={b} flow={flow} />
-              
-            </Tabs>
-  
-          </div>
+            </div>
+            
+          </Tabs>
   				
-  				<br />
+  			<br />
   
   			</div>
 			</AnimateWrap>

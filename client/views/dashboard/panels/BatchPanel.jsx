@@ -10,7 +10,6 @@ import FirstList from '../../../components/smallUi/FirstList.jsx';
 import ScrapList from '../../../components/smallUi/ScrapList.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';
 import BlockList from '../../../components/bigUi/BlockList.jsx';
-import ActiveLabel from '../../../components/smallUi/ActiveLabel.jsx';
 import Progress from '../../../components/bigUi/Progress.jsx';
 import RMAList from '../../../components/smallUi/RMAList.jsx';
 
@@ -63,19 +62,26 @@ export default class BatchPanel extends Component	{
     const riverAltTitle = flowAlt ? flowAlt.title : 'not found';
     const done = b.finishedAt !== false; // no more boards if batch is finished
     
+    const active = b.active ? <i className='fa fa-refresh blueT' aria-hidden='true'></i> :
+                              <i className='fa fa-check-circle greenT' aria-hidden='true'></i>;
+    
     const filter = this.filter();
     
     return (
       <AnimateWrap type='cardTrans'>
-        <div className='card' key={b.batch}>
+        <div className='section' key={b.batch}>
+            
+            <div className='titleSection'>
+              <span>{b.batch}</span>
+              <span><JumpText title={g.alias} link={g.alias} /></span>
+              <span><JumpText title={w.widget} link={w.widget} /></span>
+              <span><i className='clean'>v.</i>{v.version}</span>
+              <span>{active}</span>
+            </div>
+            
           <div className='space cap'>
-            <h1>{b.batch} <span className='rAlign'><ActiveLabel id={b._id} active={b.active} /></span></h1>
-            <hr />
-            <h3>
-              <JumpText title={g.alias} link={g.alias} />
-              <JumpText title={w.widget} link={w.widget} />
-              {Pref.version}: {v.version}
-            </h3>
+          
+            
             <p>created: {moment(b.createdAt).calendar()} by: <UserNice id={b.createdWho} /></p>
             <p>{Pref.start}: {moment(b.start).calendar()}</p>
             <p>{Pref.end}: {moment(b.end).calendar()}</p>

@@ -24,12 +24,12 @@ export default class ItemCard extends Component	{
       Session.set('nowStep', 'unavailable');
       return (
         <AnimateWrap type='cardTrans'>
-          <div className='card centre big' key={i.serial}>
+          <div className='section sidebar centre centreText big' key={i.serial}>
             <br />
             <i className="fa fa-exclamation-circle fa-5x redT" aria-hidden="true"></i>
             <br />
             <p>
-              <i>A {Pref.buildFlow} has not been selected for this {Pref.batch}</i>
+              A {Pref.buildFlow} has not been selected for this {Pref.batch}
             </p>
             <br />
           </div>
@@ -38,9 +38,10 @@ export default class ItemCard extends Component	{
     }
     
     if(scrap) { 
+      Session.set('nowStep', 'done');
       return (
         <AnimateWrap type='cardTrans'>
-          <div className='card' key={i.serial}>
+          <div className='section sidebar' key={i.serial}>
             <ScrapBox entry={scrap} />
           </div>
         </AnimateWrap>
@@ -49,7 +50,7 @@ export default class ItemCard extends Component	{
 
     return (
       <AnimateWrap type='cardTrans'>
-        <div className='card' key={i.serial}>
+        <div className='section sidebar' key={i.serial}>
           <River
             itemData={i}
             batchData={b}

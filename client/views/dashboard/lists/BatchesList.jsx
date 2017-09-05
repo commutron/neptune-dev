@@ -9,9 +9,9 @@ export default class BatchesList extends Component	{
 
     return (
       <AnimateWrap type='cardTrans'>
-        <div className='card' key={1}>
+        <div className='section sidebar' key={1}>
           { this.props.batchData.map( (entry, index)=> {
-          const style = entry.finishedAt === false ? 'action clear wide greenT' : 'action clear wide';
+          const style = entry.finishedAt === false ? 'jumpBar gMark' : 'jumpBar';
             return (
               <JumpButton
                 key={index}

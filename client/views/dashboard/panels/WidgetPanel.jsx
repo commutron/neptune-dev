@@ -13,18 +13,22 @@ export default class WidgetPanel extends Component	{
 
   render() {
 
-    //const g = this.props.groupData;
+    const g = this.props.groupData;
     const w = this.props.widgetData;
     const b = this.props.batchRelated;
     const a = this.props.app;
 
     return (
       <AnimateWrap type='cardTrans'>
-        <div className='card' key={w.widget}>
+        <div className='section' key={w.widget}>
+        
+          <div className='titleSection'>
+            <span><JumpText title={g.alias} link={g.alias} /></span>
+            <span><JumpText title={w.widget} link={w.widget} /></span>
+            <span>{w.describe}</span>
+          </div>
+          
           <div className='space cap edit'>
-            <h1 className='up'>{w.widget}</h1>
-            <h2>{w.describe}</h2>
-            <hr />
             <p>Created: {moment(w.createdAt).calendar()} by <UserNice id={w.createdWho} /></p>
   
             <hr />

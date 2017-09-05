@@ -17,6 +17,7 @@ export default class NCTable extends Component	{
     
     return (
       <div>
+      {this.props.nc.length > 0 ?
         <table className='wide'>
           <thead className='red cap'>
             <tr>
@@ -63,6 +64,12 @@ export default class NCTable extends Component	{
             </tr>
           </thead>
         </table>
+      :
+        <div className='centreText fade'>
+          <i className='fa fa-smile-o fa-3x' aria-hidden="true"></i>
+          <p className='big'>no {Pref.nonCon}s</p>
+        </div>
+      }
       </div>
     );
   }

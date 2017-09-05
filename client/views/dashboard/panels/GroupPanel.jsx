@@ -12,11 +12,14 @@ export default class GroupPanel extends Component	{
 
     return (
       <AnimateWrap type='cardTrans'>
-        <div className='card' key={g.alias}>
+        <div className='section' key={g.alias}>
+        
+          <div className='titleSection'>
+            <span className='cap'>{g.group}</span>
+            <span className='up'>{g.alias}</span>
+          </div>
+          
           <div className='space cap edit'>
-            <h1>{g.group}</h1>
-            <h2>{g.alias}</h2>
-            <hr />
             <p>created: {moment(g.createdAt).calendar()} by: <UserNice id={g.createdWho} /></p>
           </div>
         </div>

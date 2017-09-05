@@ -35,18 +35,20 @@ export default class ItemsList extends Component	{
 
     return (
       <AnimateWrap type='cardTrans'>
-        <div className='card centre' key={1}>
+        <div className='section sidebar' key={1}>
         {this.props.listTitle ? <h2 className='up'>{b.batch}</h2> : null}
             { b.items.map( (entry, index)=> {
-            let style = active.includes(entry.serial) ? 'action clear wide greenT' : 
-                        scrap.includes(entry.serial) ? 'action clear wide redT' : 
-                        'action clear wide';
+            let style = active.includes(entry.serial) ? 'jumpBar gMark' : 
+                        scrap.includes(entry.serial) ? 'jumpBar ngMark' : 
+                        'jumpBar';
+            let inStyl = entry.serial === Session.get('now');
               return (
                 <JumpButton
                   key={index} 
                   title={entry.serial} 
                   sub='' 
                   sty={style}
+                  inStyle={inStyl}
                 />
               );
             })}

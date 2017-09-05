@@ -11,7 +11,7 @@
 }
 
 body {
-  background-color: rgb(20,20,20);
+  background-color: rgb(30,30,30);
   color: white;
   font-family: 'Open Sans', sans-serif;
   margin: 0;
@@ -22,7 +22,7 @@ body {
 
 main {
   text-align: left;
-  background: rgb(20,20,20);
+  background: rgb(30,30,30);
   z-index: 8;
 }
 
@@ -61,7 +61,7 @@ main {
 .findForm {
   float: left;
   z-index: 10;
-  width: 300px;
+  width: 275px;
   height: 100%;
   display: -webkit-box;
   display: -webkit-flex;
@@ -111,7 +111,7 @@ main {
 
 .basicContainer, .dashContainer {
   display: grid;
-  grid-template-columns: 300px auto;
+  grid-template-columns: 275px auto;
   align-content: center;
   overflow-y: hidden !important;
   overflow-x: hidden !important;
@@ -175,7 +175,7 @@ main {
 .dashMainSplit {
   display: grid;
   grid-area: mainSplit;
-  grid-template-columns: 300px auto;
+  grid-template-columns: 275px auto;
   grid-template-rows: 100% 60px; /* changing this 2nd row value doesent do anything?? */
   grid-template-areas: 
     "mainLeft mainRight"
@@ -191,6 +191,8 @@ main {
 .dashMainLeft {
   grid-area: mainLeft;
   height: 100%;
+  background-color: rgb(20,20,20);
+  border-right: 2px inset rgb(25,25,25);
 }
 
 .dashMainRight {
@@ -262,6 +264,42 @@ main {
   box-shadow:         0 0 20px 1px rgb(0,0,0);
 }
 
+.section {
+  border-bottom: 1px groove rgba(255,255,255,0.5);
+  width: 100%;
+  min-width: 500px;
+  margin: 0;
+  padding: 1vh 1vw 1vh 1vw;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  
+}
+
+.sidebar {
+  min-width: 215px;
+  padding: 0;
+}
+
+.titleSection {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 1vh 1vw;
+}
+.titleSection > span {
+  display: table-cell;
+  width: auto;
+  font-size: 2rem;
+  font-style: oblique;
+  border-right: 1px solid rgba(255,255,255,0.5);
+  padding: 1vw 2vw;
+  margin: 0;
+}
+
+.titleSection > span:last-child {
+  border-right: none;
+}
+
 .invert {
   background-color: var(--clouds);
   color: black;
@@ -328,6 +366,10 @@ main {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.centreText {
+  text-align: center;
 }
 
 .split {

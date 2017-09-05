@@ -48,7 +48,11 @@ export default class RMALine extends Component	{
             </ul>
           </details>
           :
-          <div><p>no {Pref.rmaProcess}</p></div>}
+          <div className='centreText fade'>
+            <i className='fa fa-smile-o fa-3x' aria-hidden="true"></i>
+            <p className='big'>no {Pref.rmaProcess}</p>
+          </div>
+        }
       </div>
     );
   }

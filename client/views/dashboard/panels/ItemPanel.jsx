@@ -45,62 +45,47 @@ export default class ItemPanel extends Component	{
     const done = i.finishedAt !== false;
     const scrap = done ? i.history.find(x => x.type === 'scrap') : false;
 
-    const status = done ? <i className='greenT'>Finished</i> : <i className='blueT'>In Process</i>;
+    const status = done ? <i className='fa fa-check-circle greenT' aria-hidden='true'></i> : 
+                          <i className='fa fa-refresh blueT' aria-hidden='true'></i>;
 
     const end = done ? scrap ? 
                 <ScrapBox entry={scrap} />
                 :
-                <i className='clean'>{moment(i.finishedAt).calendar()} by <UserNice id={i.finishedWho} /></i> 
+                <p>finished: <i className='clean'>{moment(i.finishedAt).calendar()} by <UserNice id={i.finishedWho} /></i></p> 
                 : 
-                <i></i>;
+               <p>finished:</p>;
 
     return (
       <AnimateWrap type='cardTrans'>
-        <div className='card' key={i.serial}>
+        <div className='section' key={i.serial}>
+        
+          <div className='titleSection'>
+            <span><JumpText title={b.batch} link={b.batch} /></span>
+            <span><JumpText title={g.alias} link={g.alias} /></span>
+            <span><JumpText title={w.widget} link={w.widget} /></span>
+            <span><i className='clean'>v.</i>{v.version}</span>
+            <span>{status}</span>
+          </div>
+        
           <div className='space cap'>
             <h1>
               {i.serial}
               <span className='rAlign'>
-                {status}
+                units: {i.units}
               </span>
             </h1>
-            
-            <hr />
           
-            <div className='space comfort'>
-  
-              
-              <span><h2><JumpText title={b.batch} link={b.batch} /></h2></span>
-              
-              <hr />
-              
-              <span><h2><JumpText title={g.alias} link={g.alias} /></h2></span>
-              
-              
-              <hr />
-              
-              <span><h2>
-                <JumpText title={w.widget} link={w.widget} />
-                {Pref.version}: {v.version}
-              </h2></span>
-              
-              <hr />
-              
-              <span><h2>units: {i.units}</h2></span>
-            
-            </div>
-            
-            
             <hr />
             
             <p>created: {moment(i.createdAt).calendar()} by <UserNice id={i.createdWho} /></p>
               
-            <p>finished: {end}</p>
+            {end}
             
             <hr />
             
             <Tabs
               tabs={['Steps History', Pref.nonCon + 's', 'RMA']}
+              wide={true}
               stick={false}>
             
               <HistoryTable key={1} id={b._id} serial={i.serial} history={i.history} done={done} />

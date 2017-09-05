@@ -16,6 +16,7 @@ export default class JumpFind extends Component {
   render() {
 
     let style = this.props.sty || 'action clear';
+    let inStyle = this.props.inStyle ? { backgroundColor: 'rgba(255,255,255,0.1)' } : {};
 
     return (
       <button
@@ -23,6 +24,7 @@ export default class JumpFind extends Component {
         onClick={this.handle.bind(this)}
         ref='link'
         value={this.props.title}
+        style={inStyle}
         >{this.props.title}{this.props.sub}
       </button>
     );

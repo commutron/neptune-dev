@@ -15,13 +15,19 @@ export default class WidgetsList extends Component	{
 
     return (
       <AnimateWrap type='cardTrans'>
-        <div className='card centre' key={1}>
-        {this.props.listTitle ? <JumpText title={g} link={g} /> : null}
+        <div className='section sidebar' key={1}>
         {w.length < 1 ? <p>no {Pref.widget}s created</p> : null}
           { w.map( (entry, index)=> {
-          let ac = a.includes(entry.widget) ? 'action clear wide greenT' : 'action clear wide';
+          let ac = a.includes(entry.widget) ? 'jumpBar gMark' : 'jumpBar';
+          let inStyl = entry.widget === Session.get('now');
             return (
-              <JumpButton key={index} title={entry.widget} sub={' - ' + entry.describe} sty={ac} />
+              <JumpButton
+                key={index}
+                title={entry.widget}
+                sub={' - ' + entry.describe}
+                sty={ac}
+                inStyle={inStyl}
+              />
             )})}
         </div>
       </AnimateWrap>
