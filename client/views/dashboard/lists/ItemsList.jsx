@@ -1,11 +1,24 @@
 import React, {Component} from 'react';
+import Pref from '/client/global/pref.js';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 
 import JumpButton from '../../../components/tinyUi/JumpButton.jsx';
+import FilterTools from '../../../components/smallUi/FilterTools.jsx';
 
 export default class ItemsList extends Component	{
   
-  filter() {
+  constructor() {
+    super();
+    this.state = {
+      filter: false
+    };
+  }
+  
+  setFilter(rule) {
+    this.setState({ filter: rule });
+  }
+  
+  mark() {
     const b = this.props.batchData;
     let ipList = [];
     let scList = [];
@@ -29,15 +42,30 @@ export default class ItemsList extends Component	{
     
     const b = this.props.batchData;
     
-    const filter = this.filter();
-    const active = b ? filter[0] : [];
-    const scrap = b ? filter[1] : [];
+    const mark = this.mark();
+    const active = b ? mark[0] : [];
+    const scrap = b ? mark[1] : [];
+    
+    const f = this.state.filter;
+    let showList = 
+      f === 'done' ?
+      b.items.filter( x => x.finishedAt !== false) :
+      f === 'inproc' ?
+      b.items.filter( x => x.finishedAt === false) :
+      b.items;
+                    
 
     return (
       <AnimateWrap type='cardTrans'>
         <div className='section sidebar' key={1}>
-        {this.props.listTitle ? <h2 className='up'>{b.batch}</h2> : null}
-            { b.items.map( (entry, index)=> {
+        
+          <FilterTools
+            title={b.batch}
+            total={showList.length}
+            onClick={e => this.setFilter(e)} />
+        
+          {this.props.listTitle ? <h2 className='up'>{b.batch}</h2> : null}
+            { showList.map( (entry, index)=> {
             let style = active.includes(entry.serial) ? 'jumpBar gMark' : 
                         scrap.includes(entry.serial) ? 'jumpBar ngMark' : 
                         'jumpBar';

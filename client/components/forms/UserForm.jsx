@@ -47,17 +47,7 @@ export default class UserForm extends Component {
     const admin = Roles.userIsInRole(this.props.id, 'admin');
     const adminFlag = admin ? Pref.admin : '';
                      
-    const roles = [
-      'qa',
-      'remove',
-      'create',
-      'edit',
-      'run',
-      'finish',
-      'test',
-      'inspect',
-      'active'
-      ];
+    const roles = this.props.roles;
 
     return (
       <Model button={this.props.name} title='account profile' type={active} >

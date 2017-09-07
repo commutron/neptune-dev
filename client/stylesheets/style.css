@@ -305,6 +305,10 @@ meteor seems to be handling this */
   font-size: 0.75rem;
 }
 
+.med {
+  font-size: 1rem;
+}
+
 .big {
   font-size: 1.5rem;
 }
@@ -471,6 +475,30 @@ meteor seems to be handling this */
 
 .proBad::-moz-progress-bar {
   background-color: #c0392b;
+}
+
+/* Filter Tools */
+
+.fltrs summary {
+  opacity: 0.7;
+  cursor: pointer;
+}
+.fltrs summary:hover {
+  opacity: 1;
+}
+.fltrs summary::-webkit-details-marker {
+  display: none
+}
+
+.fltrs input[type='checkbox'], .fltrs input[type='radio'] {
+  margin: 0;
+  width: 17px;
+}
+
+.fltrs label {
+  position: relative;
+  top: 5px;
+  left: -10px;
 }
 
 /* custom Bert alerts */

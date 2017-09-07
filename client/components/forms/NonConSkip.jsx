@@ -36,8 +36,8 @@ export default class NonConSkip extends Component {
     let button = 
       <span className='actionIconWrap'>
         <label htmlFor='dtToggle' id='boltSwitch' className='navIcon'>
-          <i className="fa fa-pencil-square-o fa-2x fa-inverse redT"></i>
-          <span className='actionIconText redT'>skip {Pref.nonCon}s</span>
+          <i className="fa fa-angle-double-right fa-2x fa-inverse yellowT"></i>
+          <span className='actionIconText yellowT'>skip {Pref.nonCon}s</span>
         </label>
       </span>;
     

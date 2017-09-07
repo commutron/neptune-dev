@@ -78,7 +78,7 @@ export default class BatchForm extends Component	{
         button={title + ' ' + Pref.batch}
         title={title + ' ' + Pref.batch}
         type='action clear greenT'
-        lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit']) || this.props.lock}
+        lock={!Roles.userIsInRole(Meteor.userId(), 'create') || this.props.lock}
       >
         <form className='centre' onSubmit={this.save.bind(this)}>
           <p>

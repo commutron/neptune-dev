@@ -16,19 +16,22 @@ export default class NCSkip extends Component {
 	}
         
   render () {
+    
+    let run = Roles.userIsInRole(Meteor.userId(), 'run');
+    
     return (
       <form className='inlineForm' onSubmit={this.handleSkip.bind(this)}>
 				<input
           type='text'
           ref={(i)=> this.skom = i}
           placeholder='Comment'
-          disabled={this.props.lock}
+          disabled={this.props.lock || !run}
         />
         <button
           type='submit'
           className='miniAction yellowT'
           value='Skip'
-          disabled={this.props.lock}>
+          disabled={this.props.lock || !run}>
           <i className='fa fa-truck fa-2x'></i>
           <i className='big cap'>{Pref.skip}</i>
         </button>

@@ -35,7 +35,7 @@ export default class ActionBar extends Component	{
     let groupData = this.props.groupData;
     let app = this.props.app;
     let act = this.props.action;
-    let ncedit = Roles.userIsInRole(Meteor.userId(), 'run');
+    let ncedit = Roles.userIsInRole(Meteor.userId(), 'inspect');
     
     return (
       <div className='dashAction'>
