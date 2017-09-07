@@ -47,6 +47,8 @@ export default class HistoryTable extends Component	{
               );
             })}
           </tbody>
+          {/*
+          maybe not necessary
           <thead className='green cap'>
             <tr>
               <th>step</th>
@@ -62,6 +64,7 @@ export default class HistoryTable extends Component	{
               <th></th>
             </tr>
           </thead>
+          */}
         </table>
       </div>
     );

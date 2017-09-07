@@ -98,6 +98,9 @@ main {
   z-index: 10;
 }
 
+.lAlign {
+  float: left;
+}
 .rAlign {
   float: right;
 }
@@ -116,7 +119,7 @@ main {
   overflow-y: hidden !important;
   overflow-x: hidden !important;
   -webkit-overflow-scrolling: touch;
-  min-width: 1200px;
+  min-width: 1305px;
   min-height: 100vh;
 }
 
@@ -334,10 +337,15 @@ main {
   padding: 25px;
   background: rgb(0,0,0);
   background: rgba(0,0,0,0.9);
-  width: 70%;
-  height: 85%;
+  max-width: 70%;
+  min-height: 500px;
+  max-height: 85%;
   position: relative;
   z-index: 10;
+  border: 1px solid rgb(0,0,0);
+  -webkit-box-shadow: 0 0 30px 1px rgb(0,0,0);
+  -moz-box-shadow:    0 0 30px 1px rgb(0,0,0);
+  box-shadow:         0 0 30px 1px rgb(0,0,0);
 }
 
 .content {
@@ -347,11 +355,22 @@ main {
   overflow-x: hidden;
 }
 
+@media screen and (max-width: 1150px){
+  .popup{
+    max-width: 80%;
+  }
+}
 
 @media screen and (max-width: 1000px){
   .popup{
-    width: 80%;
+    max-width: 90%;
   }
+}
+
+.editStandout {
+  -webkit-box-shadow: 0 0 50px 3px rgb(0,0,0);
+  -moz-box-shadow:    0 0 50px 3px rgb(0,0,0);
+  box-shadow:         0 0 50px 3px rgb(0,0,0);
 }
 
 .centre {

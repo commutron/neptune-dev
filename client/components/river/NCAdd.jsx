@@ -113,7 +113,7 @@ export default class NCAdd extends Component {
           type='text'
           id='nonponent'
           ref={(i)=> this.ncRefs = i}
-          className='redIn'
+          className='redIn up'
           placeholder={Pref.nonConRef}
           disabled={lock}
           required />

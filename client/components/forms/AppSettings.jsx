@@ -10,7 +10,7 @@ export class OptionAdd extends Component	{
     const act = this.props.action;
     const action = act === 'nc' ? 'addNCOption' :
                    act === 'track' ? 'addTrackOption' :
-                   act === 'anc' ? 'addAncOp' : 
+                   act === 'anc' ? 'addAncOp' :
                    act === 'tool' ? 'addToolOp' :
                    act === 'wi' ? 'setInstruct' :
                    act === 'time' ? 'setTimeClock' : false;
@@ -42,7 +42,7 @@ export class OptionAdd extends Component	{
   render() {
     return(
       <div>
-        <form onSubmit={this.addOp.bind(this)} className='lineForm'>
+        <form onSubmit={this.addOp.bind(this)} className='inlineForm'>
           <label htmlFor='iOp'>{this.props.title}<br />
             <input
               type='text'

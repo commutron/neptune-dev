@@ -39,12 +39,12 @@ export default class Model extends Component	{
         {this.state.show ?
         <AnimateWrap type='modelTrans'>
           <div className='overlay' key={1}>
-            <div className='popup cap'>
+            <div className='popup'>
               <button
                 className='action clear redT rAlign'
                 onClick={this.reveal}
               >{Pref.close}</button>
-              <h2>{this.props.title}</h2>
+              <h2 className='cap'>{this.props.title}</h2>
               <hr />
                 <div className='content'>
                   {this.props.children}

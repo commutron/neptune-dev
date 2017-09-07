@@ -64,6 +64,9 @@ class Pref {
     this.nonConRef = 'reference';
     this.nonConType = 'defect';
     this.skip = 'skip';
+    this.skipDescribe = 'Ship With Defect';
+    this.snooze = 'snooze';
+    this.snoozeDescribe = 'Resolve Later';
     // escaped nonCons
     this.escape = 'escaped nonCons';
     // scrap

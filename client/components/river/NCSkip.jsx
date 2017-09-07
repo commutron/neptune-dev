@@ -8,28 +8,84 @@ export default class NCSkip extends Component {
     e.preventDefault();
 		const id = this.props.id;
     const ncKey = this.props.ncKey;
-    const comm = this.refs.skom.value.trim().toLowerCase();
-    Meteor.call('skipNC', id, ncKey, comm, ()=> {
-			Bert.alert(Alert.caution);
+    const comm = this.skom.value.trim().toLowerCase();
+    Meteor.call('skipNC', id, ncKey, comm, (error)=> {
+			if(error)
+        console.log(error);
 		});
 	}
         
   render () {
     return (
-      <form className='fullForm' onSubmit={this.handleSkip.bind(this)}>
+      <form className='inlineForm' onSubmit={this.handleSkip.bind(this)}>
 				<input
           type='text'
-          ref='skom'
+          ref={(i)=> this.skom = i}
           placeholder='Comment'
           disabled={this.props.lock}
         />
         <button
           type='submit'
-          className='smallAction yellow'
+          className='miniAction yellowT'
           value='Skip'
-          disabled={this.props.lock}
-        >{Pref.skip}</button>
+          disabled={this.props.lock}>
+          <i className='fa fa-truck fa-2x'></i>
+          <i className='big cap'>{Pref.skip}</i>
+        </button>
       </form>
+    );
+  }
+}
+
+export class NCSnooze extends Component {
+
+  // records a skip with the snooze keyword in the comment
+  
+	handleSnooze() {
+		const id = this.props.id;
+    const ncKey = this.props.ncKey;
+    const comm = 'sn00ze';
+    Meteor.call('skipNC', id, ncKey, comm, (error)=> {
+			if(error)
+        console.log(error);
+		});
+	}
+        
+  render () {
+    return (
+      <button
+        type='submit'
+        className='miniAction yellowT'
+        value='Skip'
+        onClick={this.handleSnooze.bind(this)}
+        disabled={this.props.lock}>
+        <i className='fa fa-clock-o fa-2x'></i>
+        <i className='big cap'>{Pref.snooze}</i>
+      </button>
+    );
+  }
+}
+
+export class NCUnSkip extends Component {
+
+	handleUnSkip() {
+		const id = this.props.id;
+    const ncKey = this.props.ncKey;
+    Meteor.call('UnSkipNC', id, ncKey, (error)=> {
+      if(error)
+        console.log(error);
+		});
+  }
+        
+  render () {
+    return (
+      <button
+        className='miniAction yellowT'
+        onClick={this.handleUnSkip.bind(this)}
+        disabled={this.props.lock}>
+        <i className='fa fa-play fa-2x'></i>
+        <i className='big'>Activate</i>
+      </button>
     );
   }
 }

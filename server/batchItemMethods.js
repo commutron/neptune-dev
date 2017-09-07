@@ -401,6 +401,7 @@ Meteor.methods({
           fix: repaired,
           inspect: false,
           skip: false,
+          comm: ''
           }}});
     }else{null}
   },
@@ -432,11 +433,22 @@ Meteor.methods({
     }else{null}
   },
     
-  editNC(batchId, ncKey, type) {
+  editNC(batchId, ncKey, ref, type) {
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
-  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+		  BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
   			$set : { 
-  			  'nonCon.$.type': type,
+  			  'nonCon.$.ref': ref,
+  			  'nonCon.$.type': type
+  			}
+  		});
+    }else{null}
+  },
+  
+  UnFixNC(batchId, ncKey) {
+    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+		  BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+  			$set : { 
+  			  'nonCon.$.fix': false
   			}
   		});
     }else{null}
@@ -458,11 +470,12 @@ Meteor.methods({
 
   UnSkipNC(batchId, ncKey) {
     if(Meteor.userId()) {
-  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
-  			$set : {
-  			  'nonCon.$.skip': false
+  	  BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+  	    $set : {
+  			  'nonCon.$.skip': false,
+  			  'nonCon.$.comm' : ''
   			}
-  		});
+  	  });
     }else{null}
   },
   

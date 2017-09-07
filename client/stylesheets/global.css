@@ -110,6 +110,7 @@ input[type='checkbox'] + label, input[type='radio'] + label {
   display: inline-table;
   line-height: normal;
   height: auto;
+  vertical-align: super;
 }
 
 input, select, textarea {
@@ -130,7 +131,7 @@ input:invalid, select:invalid, textarea:invalid {
   
 input, select {
   min-height: 2rem;
-  width: 20rem;
+  width: 15rem;
   border-top-color: transparent;
   border-right-color: transparent;
   border-bottom-color: inherit;
@@ -186,7 +187,11 @@ input + label, textarea + label, select + label {
   font-size: 1rem;
   line-height: 2rem;
 }
-input:focus + label, textarea:focus + label, select:focus + label {
+input:focus + label,
+textarea:focus + label,
+select:focus + label,
+input[type='checkbox']:hover + label,
+input[type='radio']:hover + label {
   color: var(--neptuneColor);
 }
 
@@ -281,15 +286,24 @@ progress {
   border: 0;
 }
 
+tr {
+  line-height: 2rem;
+}
+
 th {
   padding: 0 10px;
 }
 
 td {
-  border-bottom: 1px dashed rgba(255,255,255,0.5);
-  line-height: 1.5rem;
+  border-bottom: 1px groove rgba(255,255,255,0.3);
+  border-right: 1px groove rgba(255,255,255,0.1);
+  line-height: 2rem;
 }
 
 tr:last-child td {
   border-bottom: none;
+}
+
+td:last-child {
+  border-right: none;
 }

@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 //import DataToggle from '../tinyUi/DataToggle.jsx';
 import IkyToggle from '../tinyUi/IkyToggle.jsx';
 import NCAdd from '../river/NCAdd.jsx';
-import NonConEdit from '../forms/NonConEdit.jsx';
+import NonConSkip from '../forms/NonConSkip.jsx';
 import BlockForm from '../forms/BlockForm.jsx';
 import BatchForm from '../forms/BatchForm.jsx';
 import MultiItemForm from '../forms/MultiItemForm.jsx';
@@ -42,7 +42,7 @@ export default class ActionBar extends Component	{
         <div className='footLeft'>
         { 
         act === 'build' && ncedit ?
-            <NonConEdit
+            <NonConSkip
       		    ncData={batchData.nonCon}
       		    id={batchData._id}
               serial={itemData.serial}

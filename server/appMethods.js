@@ -31,6 +31,7 @@ Meteor.methods({
           },
           nonConOption: [],
           ancillaryOption: [],
+          skipOption: [],
           instruct: '',
           timeClock: '',
           ndaMode: false
@@ -94,6 +95,18 @@ Meteor.methods({
     }
   },
   
+  addToolOp(value) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $push : { 
+          toolOption : value
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
   addNCOption(value) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {
@@ -111,18 +124,6 @@ Meteor.methods({
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $push : { 
           ancillaryOption : value
-      }});
-      return true;
-    }else{
-      return false;
-    }
-  },
-  
-  addToolOp(value) {
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      AppDB.update({orgKey: Meteor.user().orgKey}, {
-        $push : { 
-          toolOption : value
       }});
       return true;
     }else{

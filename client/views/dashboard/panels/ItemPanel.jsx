@@ -90,7 +90,14 @@ export default class ItemPanel extends Component	{
             
               <HistoryTable key={1} id={b._id} serial={i.serial} history={i.history} done={done} />
               
-              <NCTable key={2} id={b._id} serial={i.serial} nc={nc} done={done}  multi={false} />
+              <NCTable
+                key={2}
+                id={b._id}
+                serial={i.serial}
+                nc={nc}
+                done={done}
+                multi={false}
+                ncOps={a.nonConOption} />
               
               <RMALine key={3} id={b._id} bar={i.serial} data={i.rma} />
               

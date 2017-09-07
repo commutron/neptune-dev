@@ -65,7 +65,9 @@ export default class StoneSelect extends Component	{
                     
         const nonCon = <NCTributary
                 			  id={this.props.id}
-                			  nonCons={this.props.nonCons} />;
+                			  serial={this.props.serial}
+                			  nonCons={this.props.nonCons}
+                			  sType={flowStep.type} />;
                 			  
         const repeat = <FirstRepeat
                         key={lastStep.key}

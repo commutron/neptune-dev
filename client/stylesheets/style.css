@@ -24,11 +24,14 @@ meteor seems to be handling this */
 .miniAction {
   min-width: 1rem;
   min-height: 1rem;
-  border-radius: 50%;
+  border-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: transparent;
   background-color: transparent;
 }
 .miniAction:hover {
   opacity: 1;
+  border-bottom-color: inherit;
 }
 .miniAction:focus {
   outline: 1px dotted;
@@ -166,6 +169,10 @@ meteor seems to be handling this */
   opacity: 0.5;
 }
 
+.transparent {
+  background-color: transparent;
+}
+
 .green {
 	background-color: rgb(46,204,113);
 }
@@ -287,6 +294,9 @@ meteor seems to be handling this */
   text-transform: capitalize;
 }
 
+.firstLetter:first-letter {
+}
+
 .up {
   text-transform: uppercase;
 }
@@ -316,13 +326,6 @@ meteor seems to be handling this */
  user-select: none;
 }
 
-.lineForm {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0;
-  padding: 0 0 0 5px;
-}
-
 .dashLine {
   border-bottom: 1px dashed;
 }
@@ -332,6 +335,9 @@ meteor seems to be handling this */
   flex-wrap: wrap;
   margin: 0;
   padding: 0 0 0 5px;
+}
+.inlineForm > input[type='text'] {
+  width: 10rem;
 }
 
 .fullForm {
@@ -366,15 +372,16 @@ meteor seems to be handling this */
   display: table;
   width: 100%;
   justify-content: center;
+  border-collapse: collapse;
 }
 
 .gridRow {
 	display: table-row;
+	border-bottom: 1px groove rgba(255,255,255,0.3);
 }
 
 .gridCell {
 	display: table-cell;
-  border-bottom: 0.1em solid rgba(255,255,255,0.3);
 	text-align: center;
 	vertical-align: middle;
 	padding: 2px 4px;
