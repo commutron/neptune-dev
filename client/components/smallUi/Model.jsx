@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 // requires
 //button
 //title
-//type (className)
+//color // css class
 //lock
 //children
 
@@ -25,26 +25,32 @@ export default class Model extends Component	{
 
   render() {
     
-    let style = this.props.type ?
-                this.props.type :
-                'action clear cap';
-    
     return (
       <span>
         <button
-          className={style}
+          title={this.props.title}
+          className='transparent'
           onClick={this.reveal}
-          disabled={this.props.lock}
-        >{this.props.button}</button>
+          disabled={this.props.lock}>
+          <label className='navIcon actionIconWrap'>
+            <i className={'fa ' + this.props.icon + ' fa-2x ' + this.props.color} aria-hidden='true'></i>
+            <span className={'actionIconText ' + this.props.color}>{this.props.button}</span>
+          </label>
+        </button>
+      
+      
         {this.state.show ?
-        <AnimateWrap type='modelTrans'>
+        <AnimateWrap type='modelTrans' el='span'>
           <div className='overlay' key={1}>
             <div className='popup'>
               <button
                 className='action clear redT rAlign'
-                onClick={this.reveal}
-              >{Pref.close}</button>
-              <h2 className='cap'>{this.props.title}</h2>
+                onClick={this.reveal}>{Pref.close}</button>
+              <h2 className='cap'>
+                <i className={'fa ' + this.props.icon + ' fa-lg ' + this.props.color}></i>
+                <i className='breath'></i>
+                {this.props.title}
+              </h2>
               <hr />
                 <div className='content'>
                   {this.props.children}

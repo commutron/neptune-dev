@@ -87,24 +87,24 @@ export default class ActionBar extends Component	{
               items={batchData.items}
               more={batchData.finishedAt === false}
               unit={versionData.units} />
-            <BlockForm
-              id={batchData._id}
-              edit={false}
-              lock={batchData.finishedAt !== false} />
             <RiverSelect
               id={batchData._id}
               widget={widgetData}
               river={batchData.river}
               riverAlt={batchData.riverAlt}
               lock={batchData.finishedAt !== false} />
-            <NCEscape
+            <BlockForm
               id={batchData._id}
-              nons={app.nonConOption} />
+              edit={false}
+              lock={batchData.finishedAt !== false} />
             <RMAForm
               id={batchData._id}
               edit={false}
               options={app.trackOption}
               end={app.lastTrack} />
+            <NCEscape
+              id={batchData._id}
+              nons={app.nonConOption} />
             <Remove
               action='batch'
               title={batchData.batch}

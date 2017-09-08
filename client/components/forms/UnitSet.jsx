@@ -32,8 +32,9 @@ export default class UnitSet extends Component	{
     return(
       <Model
         button={Pref.unit + ' set'}
-        title={Pref.unit + ' set'}
-        type='action clear greenT'
+        title={'set ' + Pref.unit}
+        color='greenT'
+        icon='fa-th'
         lock={!auth || done}>
         <p className='centre centreTrue'>
           <input

@@ -42,8 +42,9 @@ export default class NCEscape extends Component {
     return (
       <Model
         button='escaped'
-        title={'escaped ' + Pref.nonCon}
-        type='action clear redT'
+        title={'record escaped ' + Pref.nonCon}
+        color='orangeT'
+        icon='fa-bug'
         lock={!Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])}>
         <div className='centre'>
           <br />

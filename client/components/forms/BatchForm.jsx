@@ -65,6 +65,7 @@ export default class BatchForm extends Component	{
     
     const ex = this.props.batchNow;
     let title = ex === 'new' ? 'create new' : 'edit';
+    let bttn = ex === 'new' ? 'new' : 'edit';
     let eNum = ex === 'new' ? '' : ex;
     
     const exV = this.props.versionNow;
@@ -75,9 +76,10 @@ export default class BatchForm extends Component	{
 
     return (
       <Model
-        button={title + ' ' + Pref.batch}
+        button={bttn + ' ' + Pref.batch}
         title={title + ' ' + Pref.batch}
-        type='action clear greenT'
+        color='greenT'
+        icon='fa-cubes'
         lock={!Roles.userIsInRole(Meteor.userId(), 'create') || this.props.lock}
       >
         <form className='centre' onSubmit={this.save.bind(this)}>

@@ -3,7 +3,7 @@ import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
-import UserNice from '../../../components/smallUi/UserNice.jsx';
+import CreateTag from '/client/components/uUi/CreateTag.jsx';
 
 import JumpText from '../../../components/tinyUi/JumpText.jsx';
 import FlowsList from '../../../components/bigUi/FlowsList.jsx';
@@ -24,14 +24,11 @@ export default class WidgetPanel extends Component	{
         
           <div className='titleSection'>
             <span><JumpText title={g.alias} link={g.alias} /></span>
-            <span><JumpText title={w.widget} link={w.widget} /></span>
+            <span className='up'>{w.widget}</span>
             <span>{w.describe}</span>
           </div>
           
           <div className='space cap edit'>
-            <p>Created: {moment(w.createdAt).calendar()} by <UserNice id={w.createdWho} /></p>
-  
-            <hr />
             <p>
               {b.map( (entry, index)=>{
                 let ac = entry.active ? 'greenT' : null;
@@ -46,7 +43,9 @@ export default class WidgetPanel extends Component	{
           </div>
           
           <VersionsList widgetData={w} />
-            
+          
+
+          <CreateTag when={w.createdAt} who={w.createdWho} />
         </div>
       </AnimateWrap>
     );

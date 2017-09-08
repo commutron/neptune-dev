@@ -12,7 +12,7 @@ export default class UserNice extends Component {
   render() {
 
     return (
-      <i className='clean breath cap'>{this.find()}</i>
+      <i className='cap'>{this.find()}</i>
     );
   }
 }

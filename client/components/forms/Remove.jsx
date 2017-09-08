@@ -86,8 +86,9 @@ export default class Remove extends Component	{
     return (
       <Model
         button='Delete'
-        title={'Delete "' + title + '" From Database'}
-        type='action clear redT'
+        title={'delete "' + title + '" from database'}
+        color='redT'
+        icon='fa-trash'
         lock={!auth}>
         <div className='actionBox redT'>
           <br />

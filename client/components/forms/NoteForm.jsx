@@ -15,7 +15,7 @@ export default class NoteForm extends Component {
     this.go.disabled = true;
     const id = this.props.id;
     const versionKey = this.props.versionKey;
-    const content = this.mess.value.trim().toLowerCase();
+    const content = this.mess.value.trim();
     const choose = versionKey ? true : false;
 
     if(!choose) {
@@ -52,12 +52,16 @@ export default class NoteForm extends Component {
 
     return (
       <Model
-        button={<i className='fa fa-pencil-square-o'></i>}
-        title={choose + ' Notes'}
-        type='miniAction big blueT'
-        lock={unlock}
-      >
-        <form className='centre' onSubmit={this.saveNote.bind(this)} onChange={this.goOp.bind(this)} >
+        button=''
+        title={choose + ' notes'}
+        color='blueT'
+        icon='fa-pencil-square-o'
+        lock={unlock}>
+        <form
+          className='centre'
+          onSubmit={this.saveNote.bind(this)}
+          onChange={this.goOp.bind(this)}>
+          <br />
           <p>
             <textarea
               id='con'
@@ -76,6 +80,7 @@ export default class NoteForm extends Component {
               className='action clear greenT'
               type='submit'>Save</button>
           </p>
+          <br />
           <p><output ref={(i)=> this.out = i} value='' /></p>
         </form>
       </Model>

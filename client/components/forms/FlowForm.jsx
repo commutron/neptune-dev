@@ -105,7 +105,9 @@ export default class FlowForm extends Component	{
     return (
       <Model
         button={Pref.flow}
-        title={Pref.flow}
+        title={'create or edit ' + Pref.flow + 's'}
+        color='greenT'
+        icon='fa-cogs'
         lock={!Roles.userIsInRole(Meteor.userId(), 'edit') || this.props.lock}>
         
         {!this.state.fill ?

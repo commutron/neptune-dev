@@ -13,7 +13,7 @@ export default class WidgetEditForm extends Component	{
     e.preventDefault();
     const wId = this.props.id;
     const newName = this.nwNm.value.trim().toLowerCase();
-    const desc = this.des.value.trim().toLowerCase();
+    const desc = this.des.value.trim();
 
     Meteor.call('editWidget', wId, newName, desc, (error, reply)=>{
       if(error)
@@ -34,7 +34,9 @@ export default class WidgetEditForm extends Component	{
     return (
       <Model
         button={'Edit ' + Pref.widget}
-        title={'Edit ' + Pref.widget}
+        title={'edit ' + Pref.widget}
+        color='greenT'
+        icon='fa-cube'
         lock={!Roles.userIsInRole(Meteor.userId(), 'edit')}>
         <form className='centre' onSubmit={this.save.bind(this)}>
           <p>

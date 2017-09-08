@@ -189,7 +189,7 @@ Meteor.methods({
       }
   },
   
-  // delete \\
+// delete \\
   deleteItem(batchId, bar, pass) {
     const doc = BatchDB.findOne({_id: batchId});
     const subDoc = doc.items.find( x => x.serial === bar );

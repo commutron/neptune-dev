@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 // title as text
 // sub as text incuding any joiner
 // sty as className text
-export default class JumpFind extends Component {
+export default class JumpButton extends Component {
 
   handle() {
     let value = this.refs.link.value;
@@ -24,8 +24,10 @@ export default class JumpFind extends Component {
         onClick={this.handle.bind(this)}
         ref='link'
         value={this.props.title}
-        style={inStyle}
-        >{this.props.title}{this.props.sub}
+        style={inStyle}>
+        <i className='up big'>{this.props.title}</i>
+        <br />
+        <i className='med'>{this.props.sub}</i>
       </button>
     );
   }

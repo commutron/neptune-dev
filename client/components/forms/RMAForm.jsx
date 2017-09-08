@@ -74,14 +74,15 @@ export default class RMAForm extends Component {
     const numE = edit ? edit.rmaId : '';
     const quE = edit ? edit.quantity : '';
     const quC = edit ? edit.comm : '';
-    const title = edit ? 'edit ' + Pref.rma : 'create ' + Pref.rma;
-    const bttn = edit ? 'edit' : 'create ' + Pref.rma;
+    const title = edit ? 'edit ' + Pref.rmaProcess : 'create ' + Pref.rmaProcess;
+    const bttn = edit ? 'edit' : Pref.rmaProcess;
     
     return (
       <Model
         button={bttn}
         title={title}
-        type='action clear yellowT'
+        color='orangeT'
+        icon='fa-cog'
         lock={!Roles.userIsInRole(Meteor.userId(), ['qa'])}>
         <div className='space'>
           <form

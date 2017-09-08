@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import moment from 'moment';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
+import CreateTag from '/client/components/uUi/CreateTag.jsx';
 
 import UserNice from '../../../components/smallUi/UserNice.jsx';
 
@@ -62,9 +63,6 @@ export default class BatchPanel extends Component	{
     const riverAltTitle = flowAlt ? flowAlt.title : 'not found';
     const done = b.finishedAt !== false; // no more boards if batch is finished
     
-    const active = b.active ? <i className='fa fa-refresh blueT' aria-hidden='true'></i> :
-                              <i className='fa fa-check-circle greenT' aria-hidden='true'></i>;
-    
     const filter = this.filter();
     
     return (
@@ -76,13 +74,17 @@ export default class BatchPanel extends Component	{
               <span><JumpText title={g.alias} link={g.alias} /></span>
               <span><JumpText title={w.widget} link={w.widget} /></span>
               <span><i className='clean'>v.</i>{v.version}</span>
-              <span>{active}</span>
+              <span>
+                { b.active ? 
+                  <i className='fa fa-refresh blueT' aria-hidden='true'></i>
+                  :
+                  <i className='fa fa-check-circle greenT' aria-hidden='true'></i>
+                }
+              </span>
             </div>
             
           <div className='space cap'>
           
-            
-            <p>created: {moment(b.createdAt).calendar()} by: <UserNice id={b.createdWho} /></p>
             <p>{Pref.start}: {moment(b.start).calendar()}</p>
             <p>{Pref.end}: {moment(b.end).calendar()}</p>
             <p>finished: {fnsh}</p>
@@ -130,7 +132,8 @@ export default class BatchPanel extends Component	{
   
           <hr />
           </div>
-  
+          
+          <CreateTag when={b.createdAt} who={b.createdWho} />
         </div>
       </AnimateWrap>
     );

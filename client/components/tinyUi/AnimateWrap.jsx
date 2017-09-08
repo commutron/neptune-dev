@@ -4,9 +4,12 @@ import {CSSTransitionGroup} from 'react-transition-group';
 export default class AnimateWrap extends Component	{
 
   render() {
+    
+    let element = this.props.el ? this.props.el : 'div';
+    
     return (
       <CSSTransitionGroup
-				component='div'
+				component={element}
 				transitionName={this.props.type}
 				transitionEnter={true}
 				transitionAppear={true}

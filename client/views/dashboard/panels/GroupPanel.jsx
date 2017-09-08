@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
-import moment from 'moment';
-
-import UserNice from '../../../components/smallUi/UserNice.jsx';
+import CreateTag from '/client/components/uUi/CreateTag.jsx';
 
 export default class GroupPanel extends Component	{
 
@@ -20,8 +18,9 @@ export default class GroupPanel extends Component	{
           </div>
           
           <div className='space cap edit'>
-            <p>created: {moment(g.createdAt).calendar()} by: <UserNice id={g.createdWho} /></p>
           </div>
+          
+          <CreateTag when={g.createdAt} who={g.createdWho} />
         </div>
       </AnimateWrap>
     );

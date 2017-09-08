@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import moment from 'moment';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
+import CreateTag from '/client/components/uUi/CreateTag.jsx';
 
 import UserNice from '../../../components/smallUi/UserNice.jsx';
 
@@ -45,16 +46,6 @@ export default class ItemPanel extends Component	{
     const done = i.finishedAt !== false;
     const scrap = done ? i.history.find(x => x.type === 'scrap') : false;
 
-    const status = done ? <i className='fa fa-check-circle greenT' aria-hidden='true'></i> : 
-                          <i className='fa fa-refresh blueT' aria-hidden='true'></i>;
-
-    const end = done ? scrap ? 
-                <ScrapBox entry={scrap} />
-                :
-                <p>finished: <i className='clean'>{moment(i.finishedAt).calendar()} by <UserNice id={i.finishedWho} /></i></p> 
-                : 
-               <p>finished:</p>;
-
     return (
       <AnimateWrap type='cardTrans'>
         <div className='section' key={i.serial}>
@@ -64,7 +55,13 @@ export default class ItemPanel extends Component	{
             <span><JumpText title={g.alias} link={g.alias} /></span>
             <span><JumpText title={w.widget} link={w.widget} /></span>
             <span><i className='clean'>v.</i>{v.version}</span>
-            <span>{status}</span>
+            <span>
+              { done ? 
+                <i className='fa fa-check-circle greenT' aria-hidden='true'></i>
+                : 
+                <i className='fa fa-refresh blueT' aria-hidden='true'></i>
+              }
+            </span>
           </div>
         
           <div className='space cap'>
@@ -75,13 +72,15 @@ export default class ItemPanel extends Component	{
               </span>
             </h1>
           
-            <hr />
+            { done ? scrap ? 
+              <ScrapBox entry={scrap} />
+              :
+              <p>Finished <i>{moment(i.finishedAt).calendar()} by <UserNice id={i.finishedWho} /></i></p> 
+              : 
+              null
+            }
             
-            <p>created: {moment(i.createdAt).calendar()} by <UserNice id={i.createdWho} /></p>
-              
-            {end}
-            
-            <hr />
+            <br />
             
             <Tabs
               tabs={['Steps History', Pref.nonCon + 's', 'RMA']}
@@ -102,9 +101,11 @@ export default class ItemPanel extends Component	{
               <RMALine key={3} id={b._id} bar={i.serial} data={i.rma} />
               
             </Tabs>
-  
+            
             <br />
           </div>
+          
+          <CreateTag when={i.createdAt} who={i.createdWho} />
   			</div>
 			</AnimateWrap>
     );

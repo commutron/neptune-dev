@@ -33,23 +33,16 @@ export default class FindOps extends Component	{
     return this.props.allBatch.filter(x => x.widgetId === wId);
   }
   
-  activeBatches(batches) {
-    batchList = [];
-    let active = batches.filter(x => x.active === true);
-    for(let b of active) {
-      batchList.push(b.batch);
-    }
-    return batchList;
-  }
-  
-  groupActiveBatches(gId) {
+  groupActiveWidgets(gId) {
     let widgetsList = this.props.allWidget.filter(x => x.groupId === gId);
-    batchList = [];
-    for(let widget of widgetsList) {
-      let match = this.props.allBatch.find(x => x.widgetId === widget._id, x => x.active === true);
-      match ? batchList.push(match.batch) : false;
+    let activeBatch = this.props.allBatch.filter( x => x.active === true);
+    
+    let activeList = [];
+    for(let wdgt of widgetsList) {
+      let match = activeBatch.find(x => x.widgetId === wdgt._id);
+      match ? activeList.push(match.widgetId) : false;
     }
-    return batchList;
+    return activeList;
   }
   
   doneBatch() {
@@ -95,7 +88,7 @@ export default class FindOps extends Component	{
     const brick= this.props.brick;
     const app = this.props.app;
     const allGroup = this.props.allGroup;
-    // const allWidget = this.props.allWidget;
+    const allWidget = this.props.allWidget;
     const allBatch = this.props.allBatch;
     const hotBatch = this.props.hotBatch;
 
@@ -127,7 +120,7 @@ export default class FindOps extends Component	{
       Session.set('nowBatch', false);
       return (
         <Dashboard>
-          <BatchesList batchData={allBatch} />
+          <BatchesList batchData={allBatch} widgetData={allWidget} />
           <div></div>
         </Dashboard>
       );
@@ -188,7 +181,10 @@ export default class FindOps extends Component	{
               app={app}
               action='batch'
             >
-  			      <ItemsList batchData={hotBatch} tide={orb} />
+  			      <ItemsList
+  			        batchData={hotBatch}
+  			        widgetData={widget}
+  			        tide={orb} />
               <BatchPanel
                 batchData={hotBatch}
                 widgetData={widget}
@@ -261,7 +257,10 @@ export default class FindOps extends Component	{
             app={app}
             action='item'
           >
-            <ItemsList batchData={hotBatch} tide={orb} />
+            <ItemsList
+              batchData={hotBatch}
+              widgetData={widget}
+              tide={orb} />
             <div>
               <ItemPanel
                 batchData={hotBatch}
@@ -314,7 +313,7 @@ export default class FindOps extends Component	{
       if(lookup) {
         Session.set('nowBatch', false);
         let widgets = this.groupWidgets(lookup._id);
-        let activeBatch = this.groupActiveBatches(lookup._id);
+        let activeWidgets = this.groupActiveWidgets(lookup._id);
         if(snap) {
           return (
             <Dashboard
@@ -330,7 +329,7 @@ export default class FindOps extends Component	{
               <WidgetsList
                 groupAlias={lookup.alias}
                 widgetData={widgets}
-                active={activeBatch} />
+                active={activeWidgets} />
               <GroupPanel groupData={lookup} />
             </Dashboard>
           );
@@ -348,7 +347,7 @@ export default class FindOps extends Component	{
               <WidgetsList
                 groupAlias={lookup.alias}
                 widgetData={widgets}
-                active={activeBatch} />
+                active={activeWidgets} />
               <WikiOps wi={lookup.wiki} root={app.instruct} brick={brick} />
             </Dashboard>
           );
@@ -364,7 +363,7 @@ export default class FindOps extends Component	{
       let group = this.linkedGroup(lookup.groupId);
       let allWidgets = this.groupWidgets(lookup.groupId);
       let allBatches = this.allLinkedBatches(lookup._id);
-      let activeBatch = this.activeBatches(allBatches);
+      let activeWidgets = this.groupActiveWidgets(lookup.groupId);
       if(snap) {
         return (
           <Dashboard
@@ -380,7 +379,7 @@ export default class FindOps extends Component	{
             <WidgetsList
               groupAlias={group.alias}
               widgetData={allWidgets}
-              active={activeBatch}
+              active={activeWidgets}
               listTitle={true} />
             <div>
               <WidgetPanel

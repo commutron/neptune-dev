@@ -26,7 +26,7 @@ export default class WidgetNewForm extends Component	{
     this.go.disabled = true;
     const groupId = this.props.groupId;
     const newName = this.nwNm.value.trim().toLowerCase();
-    const desc = this.des.value.trim().toLowerCase();
+    const desc = this.des.value.trim();
     const version = this.rev.value.trim();
     const wiki = this.wiki.value.trim().toLowerCase();
     const unit = this.unit.value.trim();
@@ -53,6 +53,8 @@ export default class WidgetNewForm extends Component	{
       <Model
         button={'new ' + Pref.widget}
         title={'new ' + Pref.widget}
+        color='greenT'
+        icon='fa-cube'
         lock={!Roles.userIsInRole(Meteor.userId(), 'create')}>
 
       <div className='split'>

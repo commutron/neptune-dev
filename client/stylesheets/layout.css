@@ -338,19 +338,19 @@ main {
   background: rgb(0,0,0);
   background: rgba(0,0,0,0.9);
   max-width: 70%;
-  min-height: 500px;
-  max-height: 85%;
+  height: 85vh;
   position: relative;
   z-index: 10;
   border: 1px solid rgb(0,0,0);
   -webkit-box-shadow: 0 0 30px 1px rgb(0,0,0);
   -moz-box-shadow:    0 0 30px 1px rgb(0,0,0);
   box-shadow:         0 0 30px 1px rgb(0,0,0);
+  
 }
 
 .content {
   min-height: 50%;
-  max-height: 90%;
+  max-height: 85%;
   overflow-y: auto;
   overflow-x: hidden;
 }

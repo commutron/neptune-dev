@@ -10,7 +10,8 @@ export default class ItemsList extends Component	{
   constructor() {
     super();
     this.state = {
-      filter: false
+      filter: false,
+      advancedKey: false
     };
   }
   
@@ -18,42 +19,66 @@ export default class ItemsList extends Component	{
     this.setState({ filter: rule });
   }
   
+  setAdvancedFilter(rule) {
+    this.setState({ advancedKey: rule });
+  }
+  
   mark() {
     const b = this.props.batchData;
-    let ipList = [];
     let scList = [];
     if(b) {
       b.items.map( (entry)=>{
-        // check if item is done
-        if(entry.finishedAt === false) {
-          ipList.push(entry.serial);
-        }else{
-          // check for scrap items
-          for(let v of entry.history) {
-            v.type === 'scrap' ? scList.push(entry.serial) : null;
-          }
+        // check for scrap items
+        for(let v of entry.history) {
+          v.type === 'scrap' ? scList.push(entry.serial) : null;
         }
       });
-     return [ipList, scList];
-   }else{null}
- }
+      return scList;
+    }else{null}
+  }
+  
+  flowSteps() {
+    const flow = this.props.widgetData.flows.find( x => x.flowKey === this.props.batchData.river );
+    let steps = new Set();
+    if(flow) {
+      for(let s of flow.flow) {
+        s.type !== 'finish' ? steps.add(s) : null;
+      }
+    }else{null}
+    return steps;
+  }
+  
+  advancedFilter() {
+    filtrA = [];
+    for(let z of this.props.batchData.items) {
+      const match = z.history.find( x => x.key === this.state.advancedKey && x.good === true );
+      !match ? null : filtrA.push(z.serial);
+    }
+    return filtrA;
+  }
 
   render() {
     
     const b = this.props.batchData;
     
-    const mark = this.mark();
-    const active = b ? mark[0] : [];
-    const scrap = b ? mark[1] : [];
+    const scrap = b ? this.mark() : [];
+    
+    const steps = this.flowSteps();
+    
+    const matchList = this.advancedFilter();
     
     const f = this.state.filter;
-    let showList = 
+    let preFilter = 
       f === 'done' ?
       b.items.filter( x => x.finishedAt !== false) :
       f === 'inproc' ?
       b.items.filter( x => x.finishedAt === false) :
       b.items;
-                    
+      
+    let showList = this.state.advancedKey ?
+                   preFilter.filter( z => matchList.includes(z.serial) === true )
+                   :
+                   preFilter;
 
     return (
       <AnimateWrap type='cardTrans'>
@@ -62,13 +87,14 @@ export default class ItemsList extends Component	{
           <FilterTools
             title={b.batch}
             total={showList.length}
-            onClick={e => this.setFilter(e)} />
+            advancedTitle='done Step'
+            advancedList={[...steps]}
+            onClick={e => this.setFilter(e)}
+            onChange={e => this.setAdvancedFilter(e)} />
         
-          {this.props.listTitle ? <h2 className='up'>{b.batch}</h2> : null}
-            { showList.map( (entry, index)=> {
-            let style = active.includes(entry.serial) ? 'jumpBar gMark' : 
-                        scrap.includes(entry.serial) ? 'jumpBar ngMark' : 
-                        'jumpBar';
+          {showList.map( (entry, index)=> {
+            let style = entry.finishedAt === false ? 'jumpBar gMark' : 
+                        scrap.includes(entry.serial) ? 'jumpBar ngMark' : 'jumpBar';
             let inStyl = entry.serial === Session.get('now');
               return (
                 <JumpButton
@@ -79,7 +105,7 @@ export default class ItemsList extends Component	{
                   inStyle={inStyl}
                 />
               );
-            })}
+          })}
   			</div>
 			</AnimateWrap>
     );

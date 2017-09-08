@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 
 export default class TimeToggle extends Component	{
   
-  
   toggle() {
     const choice = this.choose.checked;
     Session.set('timeClock', choice);
@@ -12,11 +11,9 @@ export default class TimeToggle extends Component	{
   
   render () {
     
-  let sty = {
-    zIndex: '11'
-  };
-  
-  //let icon = 'fa fa-clock-o fa-2x';
+    let sty = {
+      zIndex: '11'
+    };
   
     return (
       <span style={sty}>

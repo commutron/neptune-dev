@@ -12,11 +12,13 @@ export default class BatchesList extends Component	{
         <div className='section sidebar' key={1}>
           { this.props.batchData.map( (entry, index)=> {
           const style = entry.finishedAt === false ? 'jumpBar gMark' : 'jumpBar';
+          const subW = this.props.widgetData.find( x => x._id === entry.widgetId);
+          const subV = subW.versions.find( x => x.versionKey === entry.versionKey);
             return (
               <JumpButton
                 key={index}
                 title={entry.batch} 
-                sub={''}
+                sub={subW.widget + ' v.' + subV.version}
                 sty={style}
               />
             )})}

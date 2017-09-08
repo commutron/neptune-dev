@@ -32,21 +32,13 @@ export default class NonConSkip extends Component {
     
     let now = Session.get('nowStep');
 		let lock = now === 'done';
-    
-    let button = 
-      <span className='actionIconWrap'>
-        <label htmlFor='dtToggle' id='boltSwitch' className='navIcon'>
-          <i className="fa fa-angle-double-right fa-2x fa-inverse yellowT"></i>
-          <span className='actionIconText yellowT'>skip {Pref.nonCon}s</span>
-        </label>
-      </span>;
-    
 
     return (
       <Model
-        button={button}
-        title={'Skip ' + Pref.nonCon + 's for ' + this.props.serial}
-        type='transparent'
+        button={'Skip ' + Pref.nonCon + 's'}
+        title={'skip ' + Pref.nonCon + 's for ' + this.props.serial}
+        color='yellowT'
+        icon='fa-angle-double-right'
         lock={lock}>
         <div>
           <p>Repaired and inspected {Pref.nonCon}s are locked</p>

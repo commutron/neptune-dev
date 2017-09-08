@@ -18,13 +18,13 @@ export default class WidgetsList extends Component	{
         <div className='section sidebar' key={1}>
         {w.length < 1 ? <p>no {Pref.widget}s created</p> : null}
           { w.map( (entry, index)=> {
-          let ac = a.includes(entry.widget) ? 'jumpBar gMark' : 'jumpBar';
+          let ac = a.includes(entry._id) ? 'jumpBar gMark' : 'jumpBar';
           let inStyl = entry.widget === Session.get('now');
             return (
               <JumpButton
                 key={index}
                 title={entry.widget}
-                sub={' - ' + entry.describe}
+                sub={entry.describe}
                 sty={ac}
                 inStyle={inStyl}
               />

@@ -34,6 +34,8 @@ export default class AccountsManagePanel extends Component {
                         org={entry.org}
                         roles={roles}
                       />
+                      <br />
+                      <br />
                     </li>
                     );
                 })}

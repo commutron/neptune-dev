@@ -42,13 +42,14 @@ export default class BlockForm extends Component {
     const edit = this.props.edit;
     const eTx = edit ? edit.block : '';
     const bttn = edit ? 'edit' : 'Add ' + Pref.block;
-    const title = edit ? 'edit ' + Pref.block : 'Add ' + Pref.block;
+    const title = edit ? 'edit ' + Pref.block : 'add ' + Pref.block;
 
     return (
       <Model
         button={bttn}
         title={title}
-        type='action clear yellowT'
+        color='yellowT'
+        icon='fa-exclamation-triangle'
         lock={!Roles.userIsInRole(Meteor.userId(), 'run') || this.props.lock}
       >
         <div>

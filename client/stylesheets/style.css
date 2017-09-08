@@ -75,7 +75,6 @@ meteor seems to be handling this */
 	min-height: 1rem;
 	margin: 5px 0;
 	padding: 2px;
-	text-transform: uppercase;
 	background-color: transparent;
   border-bottom: 1px groove rgba(255,255,255,0.3);
   border-left-width: 5px;
@@ -127,6 +126,7 @@ meteor seems to be handling this */
 
 #timeSwitch:hover, #exitSwitch:hover, #boltSwitch:hover {
   color: white;
+  border-bottom-color: transparent;
 }
 
 .tabOn {
@@ -212,8 +212,14 @@ meteor seems to be handling this */
 .orange {
   background-color: var(--carrot);
 }
+.orangeT {
+  color: var(--carrot);
+}
 .darkOrange {
   background-color:  var(--pumpkin);
+}
+.darkOrangeT {
+  color:  var(--pumpkin);
 }
 
 .yellow {

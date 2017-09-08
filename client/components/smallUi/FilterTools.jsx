@@ -6,13 +6,25 @@ export default class ItemsList extends Component	{
     this.props.onClick(keyword);
   }
   
+  changeAdvancedFilter() {
+    this.props.onChange(this.un.value);
+  }
+  
   render() {
     
     let dStyl = {
       lineHeight: '12px',
-      textIndent: '-5px',
+      textIndent: '3px',
       margin: '5px 0',
       padding: '0 10px'
+    };
+    
+    let sStyl = {
+      minHeight: '1.5rem',
+      maxWidth: '150px',
+      lineHeight: '1rem',
+      fontSize: '1.25rem',
+      margin: '5px auto'
     };
     
     return(
@@ -31,6 +43,9 @@ export default class ItemsList extends Component	{
           <br />
           
           <span className='comfort'>
+          
+            <i className='breath'></i>
+            
             <input
               type='radio'
               name='scale'
@@ -58,6 +73,31 @@ export default class ItemsList extends Component	{
         
           </span>
           
+          <span className='balance'>
+          
+            {this.props.advancedTitle ?
+              <span>
+                <label>{this.props.advancedTitle}</label>
+                <select
+                  ref={(i)=> this.un = i}
+                  onChange={this.changeAdvancedFilter.bind(this)}
+                  style={sStyl}>
+                  <option></option>
+                  {this.props.advancedList.map( (entry, index)=>{
+                    return(
+                      <option
+                        key={index}
+                        value={entry.key}
+                        style={sStyl}>{entry.step} {entry.type}
+                      </option>
+                    );
+                  })}
+                </select>
+              </span>
+            : null}
+          
+          </span>
+            
           <hr />
           
           <p className='centreText'>Total: {this.props.total}</p>

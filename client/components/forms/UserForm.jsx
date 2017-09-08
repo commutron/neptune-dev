@@ -43,72 +43,81 @@ export default class UserForm extends Component {
 
   render() {
     
-    const active = Roles.userIsInRole(this.props.id, 'active') ? 'open' : 'open blackT';
+    const active = Roles.userIsInRole(this.props.id, 'active') ? 'whiteT' : 'whiteT fade';
     const admin = Roles.userIsInRole(this.props.id, 'admin');
     const adminFlag = admin ? Pref.admin : '';
                      
     const roles = this.props.roles;
 
     return (
-      <Model button={this.props.name} title='account profile' type={active} >
+      <Model
+        button={<i className='big'>{this.props.name}</i>}
+        title={this.props.name + ' account profile'}
+        color={active}
+        icon='hide'>
         <h2 className='low'>{this.props.name}</h2>
         <p className='up'>id: {this.props.id}</p>
         <p className='blueT'>{adminFlag}</p>
         <p>organization: <i className='greenT'>{this.props.org}</i></p>
         <br />
-        <fieldset>
-          <legend>permissions</legend>
-          <br />
-          <ul>
-            {roles.map( (entry, index)=>{
-              return(
-                <SetCheck
-                  key={index}
-                  user={this.props.id}
-                  role={entry}
-                />
-              )})}
-          </ul>
-        </fieldset>
-        <br />
-        <AdminUp userId={this.props.id} />
-        <br />
-        {!admin ?
-          <fieldset>
-            <legend>Forgot Password</legend>
-            <button
-              className='smallAction clear redT'
-              onClick={this.forcePassword.bind(this)}
-            >Change Password</button>
-          </fieldset>
-        :null}
         
-        
-        {this.props.org && this.props.id !== Meteor.userId() ?
-          // leaving an org is undesirable
+        <div className='balance'>
           <fieldset>
-            <legend>Remove from organization</legend>
-            <input
-                type='password'
-                ref={(i)=> this.pIn = i}
-                id='pIn'
-                pattern='[0000-9999]*'
-                maxLength='4'
-                minLength='4'
-                cols='4'
-                placeholder='Admin PIN'
-                inputMode='numeric'
-                autoComplete='new-password'
-                required
-              />
-            <button 
-              onClick={this.hndlRemove.bind(this)}
-              className='smallAction red'
-              >Remove from Organization: "{this.props.org}"
-            </button>
+            <legend>Permissions</legend>
+            <br />
+            <ul>
+              {roles.map( (entry, index)=>{
+                return(
+                  <SetCheck
+                    key={index}
+                    user={this.props.id}
+                    role={entry}
+                  />
+                )})}
+            </ul>
           </fieldset>
-        : null}
-    
+        
+          <div>
+          
+            <AdminUp userId={this.props.id} />
+            <br />
+            {!admin ?
+              <fieldset>
+                <legend>Forgot Password</legend>
+                <button
+                  className='smallAction clear redT'
+                  onClick={this.forcePassword.bind(this)}
+                >Change Password</button>
+              </fieldset>
+            :null}
+        
+            {this.props.org && this.props.id !== Meteor.userId() ?
+              // leaving an org is undesirable
+              <fieldset>
+                <legend>Remove from organization</legend>
+                <input
+                    type='password'
+                    ref={(i)=> this.pIn = i}
+                    id='pIn'
+                    pattern='[0000-9999]*'
+                    maxLength='4'
+                    minLength='4'
+                    cols='4'
+                    placeholder='Admin PIN'
+                    inputMode='numeric'
+                    autoComplete='new-password'
+                    required
+                  />
+                <button 
+                  onClick={this.hndlRemove.bind(this)}
+                  className='smallAction red'
+                  >Remove from Organization: "{this.props.org}"
+                </button>
+              </fieldset>
+            : null}
+            
+          </div>
+        </div>
       </Model>
           
       );

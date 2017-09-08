@@ -118,8 +118,9 @@ export default class MultiItemForm extends Component {
     return (
       <Model
         button={'Add ' + Pref.item + 's'}
-        title={'Add ' + Pref.item + 's'}
-        type='action clear greenT'
+        title={'add ' + Pref.item + ' ' + Pref.itemSerial + ' numbers'}
+        color='greenT'
+        icon='fa-qrcode'
         lock={!auth || !this.props.more} >
         <div className='centre'>
           <form onSubmit={this.addItem.bind(this)} autoComplete='off'>

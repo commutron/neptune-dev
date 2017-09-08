@@ -76,6 +76,8 @@ export default class VersionForm extends Component	{
       <Model
         button={name + ' ' + Pref.version}
         title={name + ' ' + Pref.version}
+        color='greenT'
+        icon='fa-cube fa-rotate-90'
         lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit'])}>
 
       <div className='split'>
