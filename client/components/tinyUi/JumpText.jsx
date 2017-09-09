@@ -11,7 +11,7 @@ export default class JumpText extends Component {
     let value = this.link.value;
       Session.set('now', value);
       let findBox = document.getElementById('find');
-		  findBox.focus();
+		  findBox ? findBox.focus() : null;
   }
 
   render() {

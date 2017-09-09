@@ -6,12 +6,16 @@ import CreateTag from '/client/components/uUi/CreateTag.jsx';
 
 import UserNice from '../../../components/smallUi/UserNice.jsx';
 
+import Tabs from '../../../components/smallUi/Tabs.jsx';
+
 import JumpText from '../../../components/tinyUi/JumpText.jsx';
-import FirstList from '../../../components/smallUi/FirstList.jsx';
-import ScrapList from '../../../components/smallUi/ScrapList.jsx';
+import FirstsOverview from '../../../components/charts/FirstsOverview.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';
 import BlockList from '../../../components/bigUi/BlockList.jsx';
 import Progress from '../../../components/bigUi/Progress.jsx';
+import StepsProgressMini from '../../../components/bigUi/StepsProgressMini.jsx';
+import NonConOverview from '../../../components/charts/NonConOverview.jsx';
+import NonConPie from '../../../components/charts/NonConPie.jsx';
 import RMAList from '../../../components/smallUi/RMAList.jsx';
 
 // props
@@ -37,7 +41,7 @@ export default class BatchPanel extends Component	{
       // check history for...
       for(let v of item.history) {
         // firsts
-        v.type === 'first' ? fList.push({bar: item.serial, entry: v}) : null;
+        v.type === 'first' ? fList.push({bar: item.serial, fKey: v.key, step: v.step}) : null;
         // scraps
         v.type === 'scrap' ? scList.push(item.serial) : null;
       }
@@ -60,7 +64,9 @@ export default class BatchPanel extends Component	{
     const flowAlt = w.flows.find( x => x.flowKey === b.riverAlt );
     
     const riverTitle = flow ? flow.title : 'not found';
+    const riverFlow = flow ? flow.flow : [];
     const riverAltTitle = flowAlt ? flowAlt.title : 'not found';
+    const riverAltFlow = flowAlt ? flowAlt.flow : [];
     const done = b.finishedAt !== false; // no more boards if batch is finished
     
     const filter = this.filter();
@@ -85,55 +91,79 @@ export default class BatchPanel extends Component	{
             
           <div className='space cap'>
           
-            <p>{Pref.start}: {moment(b.start).calendar()}</p>
-            <p>{Pref.end}: {moment(b.end).calendar()}</p>
-            <p>finished: {fnsh}</p>
-            <NoteLine entry={b.notes} id={b._id} widgetKey={false} />
-  
-            <Progress batchData={b} flow={flow} detail={true} />
-          
-          
-            {!b.river ? 
-            <p>
-              <i className="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
-              <i>The {Pref.buildFlow} has not been selected for this {Pref.batch}</i>
-            </p>
-            :
-            <b>Current {Pref.buildFlow}: <i>{riverTitle}</i></b>}
+            <div className='balance'>
+            
+              <div>
+                <p>{Pref.start}: {moment(b.start).calendar()}</p>
+                <p>{Pref.end}: {moment(b.end).calendar()}</p>
+                <p>finished: {fnsh}</p>
+              </div>
+              
+              <NoteLine entry={b.notes} id={b._id} widgetKey={false} />
+              
+            </div>
             
             <br />
             
-            {!b.riverAlt ? 
-            <p>
-              <i className="fa fa-question-circle fa-2x" aria-hidden="true"></i>
-              <i>The {Pref.buildFlowAlt} has not been selected for this {Pref.batch}</i>
-            </p>
-            :
-            <b>Current {Pref.buildFlowAlt}: <i>{riverAltTitle}</i></b>}
-  
-            {/*<RouteList route={b.route} />*/}
-  
-            <FirstList data={filter[0]} />
-          
-            <RMAList
-              id={b._id}
-              data={b.cascade}
-              options={a.trackOption}
-              end={a.lastTrack}
-              inUse={filter[2]} />
+            <Tabs
+              tabs={
+                [
+                  'Progress',
+                  Pref.trackFirst + 's',
+                  Pref.block + 's',
+                  Pref.nonCon + 's',
+                  Pref.rmaProcess + 'es'
+                ]
+              }
+              wide={true}
+              stick={false}>
+              
+              <div>
+                {/*<RouteList route={b.route} />*/}
+                {!b.river ? 
+                <p>
+                  <i className="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+                  <i>The {Pref.buildFlow} has not been selected for this {Pref.batch}</i>
+                </p>
+                :
+                <b>Current {Pref.buildFlow}: <i>{riverTitle}</i></b>}
+                <br />
+                {!b.riverAlt ? 
+                <p>
+                  <i className="fa fa-question-circle fa-2x" aria-hidden="true"></i>
+                  <i>The {Pref.buildFlowAlt} has not been selected for this {Pref.batch}</i>
+                </p>
+                :
+                <b>Current {Pref.buildFlowAlt}: <i>{riverAltTitle}</i></b>}
+                
+                <Progress batchData={b} flow={riverFlow} detail={true} />
+                <StepsProgressMini batchData={b} flow={riverFlow} />
+              </div>
+              
+              <FirstsOverview doneFirsts={filter[0]} flow={riverFlow} flowAlt={riverAltFlow} />
+              
+              <BlockList id={b._id} data={b.blocks} lock={done} />
+              
+              <div className='balance'>
+                <NonConOverview ncOp={a.nonConOption} nonCons={b.nonCon} />
+                <NonConPie nonCons={b.nonCon} />
+              </div>
+              
+              <div>
+                <RMAList
+                  id={b._id}
+                  data={b.cascade}
+                  options={a.trackOption}
+                  end={a.lastTrack}
+                  inUse={filter[2]} />
+                <p>{Pref.escape}s: {b.escaped.length}</p>
+              </div>
+              
+            </Tabs>
             
-            <ScrapList data={filter[1]} />
-            
-            <p>{Pref.escape}s: {b.escaped.length}</p>
-  
-            <hr />
-            
-            <BlockList id={b._id} data={b.blocks} lock={done} />
-  
-          <hr />
           </div>
           
-          <CreateTag when={b.createdAt} who={b.createdWho} />
+          <CreateTag when={b.createdAt} who={b.createdWho} whenNew={b.updatedAt} whoNew={b.updatedWho} />
         </div>
       </AnimateWrap>
     );

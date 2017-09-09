@@ -3,7 +3,7 @@ import Pref from '/client/global/pref.js';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 
 import JumpButton from '../../../components/tinyUi/JumpButton.jsx';
-import FilterTools from '../../../components/smallUi/FilterTools.jsx';
+import FilterItems from '../../../components/bigUi/FilterItems.jsx';
 
 export default class ItemsList extends Component	{
   
@@ -23,7 +23,7 @@ export default class ItemsList extends Component	{
     this.setState({ advancedKey: rule });
   }
   
-  mark() {
+  scraps() {
     const b = this.props.batchData;
     let scList = [];
     if(b) {
@@ -38,14 +38,21 @@ export default class ItemsList extends Component	{
   }
   
   flowSteps() {
-    const flow = this.props.widgetData.flows.find( x => x.flowKey === this.props.batchData.river );
+    let flow = this.props.widgetData.flows.find( x => x.flowKey === this.props.batchData.river );
+    let flowAlt = this.props.widgetData.flows.find( x => x.flowKey === this.props.batchData.riverAlt );
     let steps = new Set();
     if(flow) {
       for(let s of flow.flow) {
         s.type !== 'finish' ? steps.add(s) : null;
       }
     }else{null}
-    return steps;
+    if(flowAlt) {
+      for(let as of flowAlt.flow) {
+        as.type !== 'finish' ? steps.has({key: as.key}) ? null : steps.add(as) : null;
+      }
+    }else{null}
+    let niceSteps = [...steps].filter( ( v, indx, slf ) => slf.findIndex( x => x.key === v.key ) === indx);
+    return niceSteps;
   }
   
   advancedFilter() {
@@ -61,7 +68,7 @@ export default class ItemsList extends Component	{
     
     const b = this.props.batchData;
     
-    const scrap = b ? this.mark() : [];
+    const scrap = b ? this.scraps() : [];
     
     const steps = this.flowSteps();
     
@@ -70,9 +77,15 @@ export default class ItemsList extends Component	{
     const f = this.state.filter;
     let preFilter = 
       f === 'done' ?
-      b.items.filter( x => x.finishedAt !== false) :
+      b.items.filter( x => x.finishedAt !== false ) :
       f === 'inproc' ?
-      b.items.filter( x => x.finishedAt === false) :
+      b.items.filter( x => x.finishedAt === false ) :
+      f === 'alt' ?
+      b.items.filter( x => x.alt === 'yes' ) :
+      f === 'rma' ?
+      b.items.filter( x => x.rma.length > 0) :
+      f === 'scrap' ?
+      b.items.filter( x => scrap.includes(x.serial) === true ) :
       b.items;
       
     let showList = this.state.advancedKey ?
@@ -84,11 +97,11 @@ export default class ItemsList extends Component	{
       <AnimateWrap type='cardTrans'>
         <div className='section sidebar' key={1}>
         
-          <FilterTools
+          <FilterItems
             title={b.batch}
             total={showList.length}
-            advancedTitle='done Step'
-            advancedList={[...steps]}
+            advancedTitle='Step'
+            advancedList={steps}
             onClick={e => this.setFilter(e)}
             onChange={e => this.setAdvancedFilter(e)} />
         

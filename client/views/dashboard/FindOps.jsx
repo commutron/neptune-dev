@@ -45,10 +45,6 @@ export default class FindOps extends Component	{
     return activeList;
   }
   
-  doneBatch() {
-    // archive search
-  }
-  
   itemData(items, bar) {
     return items.find(x => x.serial === bar);
   }
@@ -130,7 +126,7 @@ export default class FindOps extends Component	{
       Session.set('nowBatch', false);
       return (
         <Dashboard action='newGroup'>
-          <GroupsList groupData={allGroup} />
+          <GroupsList groupData={allGroup} batchData={allBatch} widgetData={allWidget} />
           <div></div>
         </Dashboard>
       );

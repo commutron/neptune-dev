@@ -89,8 +89,8 @@ export class PermissionHelp extends Component {
             <li><b>Remove</b></li>
             <ul>
               <li>Remove a {Pref.group}, {Pref.widget}, {Pref.version} *</li>
-              <li>Remove a {Pref.batch}, {Pref.item}, {Pref.flow} or nonconformace *</li>
-              <p>* subject to "in-use" checks</p> 
+              <li>Remove a {Pref.batch}, {Pref.item}, or nonconformace *</li>
+              <p className='small'>* subject to "in-use" checks</p> 
             </ul>
           </ul>
         : null}
@@ -111,8 +111,9 @@ export class PermissionHelp extends Component {
               <li>Edit {Pref.group} or {Pref.widget} names or descriptions</li>
               <li>Edit {Pref.widget} notes</li>
               <li>Add or edit a {Pref.widget} {Pref.version}</li>
-              <li>Add or edit a {Pref.flow}</li>
+              <li>Add or edit or remove* a {Pref.flow}</li>
               <li>Mark a process step as {Pref.ng}</li>
+              <p className='small'>* subject to "in-use" checks</p> 
             </ul>
           </ul>
         : null}

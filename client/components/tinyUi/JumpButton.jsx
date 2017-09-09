@@ -10,7 +10,7 @@ export default class JumpButton extends Component {
     let value = this.refs.link.value;
       Session.set('now', value);
       let findBox = document.getElementById('find');
-		  findBox.focus();
+		  findBox ? findBox.focus() : null;
   }
 
   render() {

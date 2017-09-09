@@ -105,7 +105,7 @@ export default class ItemPanel extends Component	{
             <br />
           </div>
           
-          <CreateTag when={i.createdAt} who={i.createdWho} />
+          <CreateTag when={i.createdAt} who={i.createdWho} whenN={i.createdAt} whoN={i.createdWho} />
   			</div>
 			</AnimateWrap>
     );

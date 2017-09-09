@@ -20,7 +20,7 @@ export default class Model extends Component	{
   reveal() {
     this.setState({ show: !this.state.show });
     const findBox = document.getElementById('find');
-  	findBox.focus();
+  	findBox ? findBox.focus() : null;
   }
 
   render() {

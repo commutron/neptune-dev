@@ -18,7 +18,7 @@ export default class PrefPanel extends Component {
       });
 
     return (
-      <div className='card cap invert'>
+      <div className='section cap invert'>
         <fieldset disabled={auth}>
           <div className='space breathe'>
             <h1>app preferences for : <i>{dt.org}</i></h1>

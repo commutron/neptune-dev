@@ -2,29 +2,34 @@ import React, {Component} from 'react';
 
 import {Bar} from "react-chartjs-2";
 
-export default class OverviewChart extends Component {
-
+export default class NonConOverview extends Component {
+  
+  
+  ncTypes() {
+    let counts = [];
+    for(let n of this.props.ncOp) {
+      let match = this.props.nonCons.filter( x => x.type === n );
+      counts.push(match.length);
+    }
+    return counts;
+  }
 
   render () {
 
-    //let allNC = this.props.ncData.length;
-    let allG = this.props.g.length;
-    let allW = this.props.w.length;
-    let allB = this.props.b.length;
+    const count = this.ncTypes();
 
     const chartData = {
-      labels: ['Customers', 'Products', 'Work Orders'],
+      labels: this.props.ncOp,
       datasets: [{
         label: '',
-        backgroundColor: ['#1abc9c', '#2ecc71', '#3498db'],
-        borderColor: ['#1abc9c', '#2ecc71', '#3498db'],
-        hoverBackgroundColor: ['#1abc9c', '#2ecc71', '#3498db'],
-        data: [allG, allW, allB]
+        backgroundColor: '#c0392b',
+        borderColor: '#c0392b',
+        hoverBackgroundColor: '#e74c3c',
+        data: count
         }],
     };
     
     const chartOptions = {
-      animation: false,
         scales: {
           yAxes: [{
             type: 'linear',
@@ -38,12 +43,13 @@ export default class OverviewChart extends Component {
           display: false
         },
         title: {
-          display: false
+          display: true,
+          text: 'Total: ' + this.props.nonCons.length,
         }
     };
 
     return (
-      <div className='barContain'>
+      <div className='inlineContain'>
 
         <Bar data={chartData} options={chartOptions} />
 

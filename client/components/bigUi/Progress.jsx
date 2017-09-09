@@ -13,7 +13,7 @@ export default class Progress extends Component	{
     
     const done = b.items.filter(x => x.finishedAt !== false).length;
     
-    let steps = flow ? flow.flow.length * b.items.length : 0;
+    let steps = flow ? flow.length * b.items.length : 0;
     /* not counting rma steps
     for(let cs of b.cascade) {
       steps += cs.flow.length;
@@ -30,14 +30,7 @@ export default class Progress extends Component	{
     }
     let doneSteps = history + firsts.size;
     
-    const nc = b.nonCon.length;
-    let ncF = nc;
-    for(var n of b.nonCon) {
-      n.inspect !== false || n.skip !== false ? ncF -= 1 : false;
-    }
-    
     b.finishedAt !== false ? (doneSteps = 1, steps = 1) : null;
-
 
     return (
       <div className='centre greenT big'>
@@ -46,9 +39,6 @@ export default class Progress extends Component	{
         <progress className='proGood' value={done} max={qu}></progress>
         <progress className='proGood' value={doneSteps} max={steps}></progress>
         {this.props.detail ? <b>{doneSteps}/{steps} {Pref.buildStep}s</b> : null}
-        
-        {this.props.detail ? <b className='redT'>{ncF}/{nc} {Pref.nonCon}s remaining</b> : null}
-        <progress className='proBad' value={ncF} max={nc}></progress>
         
         {scraps > 0 ? <b className='redT'>{Pref.scrap}: {scraps}</b> : null}
         

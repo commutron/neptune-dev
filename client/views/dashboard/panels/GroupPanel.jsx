@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import CreateTag from '/client/components/uUi/CreateTag.jsx';
+import Pref from '/client/global/pref.js';
 
 export default class GroupPanel extends Component	{
 
@@ -18,9 +19,12 @@ export default class GroupPanel extends Component	{
           </div>
           
           <div className='space cap edit'>
+          
+            <p>{Pref.instruct} index: <i className='clean'>{g.wiki}</i></p>
+            
           </div>
           
-          <CreateTag when={g.createdAt} who={g.createdWho} />
+          <CreateTag when={g.createdAt} who={g.createdWho} whenNew={g.updatedAt} whoNew={g.updatedWho} />
         </div>
       </AnimateWrap>
     );

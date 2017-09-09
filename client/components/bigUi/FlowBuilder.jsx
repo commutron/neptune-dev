@@ -89,19 +89,18 @@ export default class FlowForm extends Component	{
       <div className='split'>
         <div className='half'>
           <form onSubmit={this.addStep.bind(this)}>
-            <p className='lineForm'>
-              <label htmlFor='rteps'><br />
+            <p >
+              <label htmlFor='rteps' className='inlineForm'><br />
                 <select id='rteps' ref={(i)=> this.rStep = i} className='cap' required>
                   <option value=''></option>
                   {options.map( (entry, index)=>{
                     return ( <option key={index} value={entry.key}>{entry.step + ' - ' + entry.type}</option> );
                   })}
                 </select>
-              </label>
-              <label><br />
                 <button type='submit' className='smallAction clear'>Add</button>
               </label>
-              <label htmlFor='rteps'>tracking step</label>
+              <i className='breath'></i>
+              <label htmlFor='rteps'>Tracking Step</label>
             </p>
             <p>
               <input
@@ -109,7 +108,7 @@ export default class FlowForm extends Component	{
                 ref={(i)=> this.wika = i}
                 id='winstruct'
                 placeholder='surface_mount' />
-              <label htmlFor='winstruct'>instruction title</label>
+              <label htmlFor='winstruct'>Instruction Section</label>
             </p>
           </form>
         </div>

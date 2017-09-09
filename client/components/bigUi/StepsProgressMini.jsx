@@ -10,7 +10,7 @@ export default class StepsProgressMini extends Component	{
   render() {
 
     const b = this.props.batchData;
-    const flow = this.props.flow.flow;
+    const flow = this.props.flow;
     
     const fItems = b.items.filter(x => x.finishedAt !== false).length;
     

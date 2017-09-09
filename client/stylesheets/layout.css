@@ -127,7 +127,7 @@ main {
 .basicContainer {
   grid-template-rows: 75px calc(100vh - 85px) 10px;
   grid-template-areas: 
-    "headerSearch headerNav"
+    'headerNav headerNav'
     "mainFull mainFull"
     "footer footer";
 }
@@ -151,6 +151,7 @@ main {
 
 .gridHeaderNav {
   grid-area: headerNav;
+  width: 100%;
   z-index: 9;
   background-color: var(--commutron);
   -webkit-box-shadow: 0 0 15px 0.5px rgb(0,0,0);
@@ -437,6 +438,10 @@ main {
 
 .beside {
   line-height: 1rem;
+  vertical-align: super;
+}
+
+.tweekUp {
   vertical-align: super;
 }
 

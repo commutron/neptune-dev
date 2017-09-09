@@ -9,7 +9,7 @@
   
     function reFocus() {
       const findBox = document.getElementById('find');
-  	  findBox.focus();
+  	  findBox ? findBox.focus() : null;
     }
 
     window.addEventListener('visibilitychange', ()=> {

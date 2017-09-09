@@ -6,7 +6,7 @@ export default class IkyToggle extends Component	{
     const choice = this.choose.checked;
     Session.set('ikyView', choice);
     let findBox = document.getElementById('find');
-		findBox.focus();
+		findBox ? findBox.focus() : null;
   }
         
   render () {

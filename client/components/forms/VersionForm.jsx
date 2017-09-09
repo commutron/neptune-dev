@@ -198,23 +198,30 @@ export class VersionRemove extends Component	{
   
   render() {
     
-    let user = !Roles.userIsInRole(Meteor.userId(), 'remove');
+    let user = Roles.userIsInRole(Meteor.userId(), 'remove');
     
-    return(
-      <form className='inlineForm' onSubmit={this.remove.bind(this)}>
-        <i className='noCopy'>enter: {this.props.lock} to confirm</i>
-        <input 
-          type='text' 
-          className='noCopy' 
-          ref={(i)=> this.confirm = i}
-          disabled={user} 
-          placeholder={this.props.lock} />
-        <button
-          type='submit'
-          ref={(i)=> this.cut = i}
-          className='smallAction clear redT'
-          disabled={user}>delete</button>
-      </form>
-    );
+    if(user) {
+      return(
+        <div>
+          <i>To remove enter:</i>
+          <i className='noCopy'>{this.props.lock}</i><br />
+          <form className='inlineForm' onSubmit={this.remove.bind(this)}>
+            <input 
+              type='text' 
+              className='noCopy' 
+              ref={(i)=> this.confirm = i}
+              disabled={!user} 
+              placeholder={this.props.lock} />
+            <button
+              type='submit'
+              ref={(i)=> this.cut = i}
+              className='smallAction clear redT'
+              disabled={!user}>delete</button>
+          </form>
+        </div>
+      );
+    }
+    
+    return(null);
   }
 }

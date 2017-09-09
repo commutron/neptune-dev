@@ -73,8 +73,8 @@ class Pref {
     this.scrap = 'scrap';
     this.scrp = 's'; // scrap shortcut
     // rma
-    this.rma = 'rma';
-    this.rmaProcess = 'rma process';
+    this.rma = 'RMA';
+    this.rmaProcess = 'RMA process';
     // blocker tracking
     this.block = 'alert';
     this.blck = 'a'; // blocker shortcut

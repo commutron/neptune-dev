@@ -26,9 +26,6 @@ export const MainLayout = ({content, link, plainFooter}) => (
 
 export const BasicLayout = ({content}) => (
   <div className='basicContainer'>
-    <div className='gridHeaderSearch'>
-      <FindBox />
-    </div>
     <div className='gridHeaderNav'>
       <TopBar />
     </div>

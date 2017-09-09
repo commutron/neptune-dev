@@ -13,7 +13,7 @@ export default class ScrapPanel extends Component	{
 
     return (
       <AnimateWrap type='cardTrans'>
-        <div className='card' key={1}>
+        <div className='section' key={1}>
           <div className='space'>
             <h1 className='cap'>{Pref.scrap} {Pref.item}s</h1>
             <hr />

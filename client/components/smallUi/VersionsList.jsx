@@ -17,8 +17,9 @@ export default class WidgetPanel extends Component	{
     return(
       <div>
         {w.versions.map( (entry)=>{
-            return(
-              <ul key={entry.versionKey}>
+          return(
+            <div className='balance' key={entry.versionKey}>
+              <ul>
                 <li>version: {entry.version}</li>
                 <li>created: {moment(entry.createdAt).calendar()} by <UserNice id={entry.createdWho} /></li>
                 <li>{Pref.live}: {entry.live.toString()}</li>
@@ -26,11 +27,17 @@ export default class WidgetPanel extends Component	{
                 <li>wiki address: <a className='low' href={entry.wiki} target='_blank'>{entry.wiki}</a></li>
                 <li>{Pref.unit} per item: {entry.units}</li>
                 <li>components: {entry.assembly.length}</li>
-                <li><NoteLine entry={entry.notes} id={w._id} versionKey={entry.versionKey} /></li>
-                <li><VersionForm widgetData={w} version={entry} rootWI={entry.wiki} /></li>
-                <li><VersionRemove widgetId={w._id} versionKey={entry.versionKey} lock={entry.createdAt.toISOString()} /></li>
               </ul>
-            )})}
+              <div>
+                <NoteLine entry={entry.notes} id={w._id} versionKey={entry.versionKey} />
+                <VersionForm widgetData={w} version={entry} rootWI={entry.wiki} />
+                <VersionRemove
+                  widgetId={w._id}
+                  versionKey={entry.versionKey}
+                  lock={entry.createdAt.toISOString()} />
+              </div>
+            </div>
+        )})}
       </div>
       
       

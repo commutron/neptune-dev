@@ -4,6 +4,7 @@ import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
 import CreateTag from '/client/components/uUi/CreateTag.jsx';
+import Tabs from '../../../components/smallUi/Tabs.jsx';
 
 import JumpText from '../../../components/tinyUi/JumpText.jsx';
 import FlowsList from '../../../components/bigUi/FlowsList.jsx';
@@ -36,16 +37,22 @@ export default class WidgetPanel extends Component	{
                   <JumpText key={index} title={entry.batch} link={entry.batch} sty={ac} />
                 )})}
             </p>
-            <hr />
+            <br />
             
-            <FlowsList id={w._id} flows={w.flows} />
+            <Tabs
+              tabs={[Pref.version + 's', Pref.flow + 's']}
+              wide={true}
+              stick={false}>
+              
+              <VersionsList widgetData={w} />
+              
+              <FlowsList id={w._id} flows={w.flows} />
+              
+            </Tabs>
   
           </div>
-          
-          <VersionsList widgetData={w} />
-          
 
-          <CreateTag when={w.createdAt} who={w.createdWho} />
+          <CreateTag when={w.createdAt} who={w.createdWho} whenNew={w.updatedAt} whoNew={w.updatedWho} />
         </div>
       </AnimateWrap>
     );

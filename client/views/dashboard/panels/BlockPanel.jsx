@@ -13,7 +13,7 @@ export default class BlockPanel extends Component	{
 
     return (
       <AnimateWrap type='cardTrans'>
-        <div className='card' key={2}>
+        <div className='section' key={2}>
           <div className='space'>
             <h1 className='cap'>{Pref.block}s</h1>
             <hr />

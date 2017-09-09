@@ -12,11 +12,10 @@ export default class FlowsList extends Component	{
     const auth = Roles.userIsInRole(Meteor.userId(), 'edit');
 
     return (
-      <details className='blue'>
-        <summary>{Pref.flow}s</summary>
+      <div>
         {this.props.flows.map( (entry, index)=>{
           return(
-            <details key={index} className='clear'>
+            <details key={index}>
               <summary>{entry.title}</summary>
               <i>{entry.flowKey}</i>
               <br />
@@ -33,7 +32,7 @@ export default class FlowsList extends Component	{
               })}
             </details>
             )})}
-      </details>
+      </div>
     );
   }
 }
