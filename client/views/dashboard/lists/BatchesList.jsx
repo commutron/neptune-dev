@@ -47,7 +47,7 @@ export default class BatchesList extends Component	{
               <JumpButton
                 key={index}
                 title={entry.batch} 
-                sub={subW.widget + ' v.' + subV.version}
+                sub={<i><i className='up'>{subW.widget}</i> v.{subV.version}</i>}
                 sty={style}
               />
             )})}

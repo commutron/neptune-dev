@@ -164,7 +164,7 @@ export class NCRow extends Component {
      let comment = !dt.comm ? '' : dt.comm === 'sn00ze' ? 'snoozed' : dt.comm;
      
      const remove = Roles.userIsInRole(Meteor.userId(), ['qa', 'remove']) && !done;
-     const edit = Roles.userIsInRole(Meteor.userId(), 'run') && !done;
+     const edit = Roles.userIsInRole(Meteor.userId(), 'inspect') && !done;
      
      let inSty = {
        width: '150px',

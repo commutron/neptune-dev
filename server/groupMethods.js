@@ -1,7 +1,6 @@
 Meteor.methods({
 
 //// Groups \\\\
-
   addGroup(groupName, alias, wiki) {
     const duplicate = GroupDB.findOne({group: groupName});
     const dupe = GroupDB.findOne({alias: alias});

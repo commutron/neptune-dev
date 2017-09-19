@@ -434,7 +434,7 @@ Meteor.methods({
   },
     
   editNC(batchId, ncKey, ref, type) {
-    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+    if(Roles.userIsInRole(Meteor.userId(), 'inspect')) {
 		  BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
   			$set : { 
   			  'nonCon.$.ref': ref,
@@ -445,7 +445,7 @@ Meteor.methods({
   },
   
   UnFixNC(batchId, ncKey) {
-    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+    if(Roles.userIsInRole(Meteor.userId(), 'inspect')) {
 		  BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
   			$set : { 
   			  'nonCon.$.fix': false
@@ -455,7 +455,7 @@ Meteor.methods({
   },
 
   skipNC(batchId, ncKey, com) {
-    if(Meteor.userId()) {
+    if(Roles.userIsInRole(Meteor.userId(), 'inspect')) {
   		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
   			$set : {
   			  'nonCon.$.comm': com,
@@ -469,7 +469,7 @@ Meteor.methods({
   },
 
   UnSkipNC(batchId, ncKey) {
-    if(Meteor.userId()) {
+    if(Roles.userIsInRole(Meteor.userId(), 'inspect')) {
   	  BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
   	    $set : {
   			  'nonCon.$.skip': false,

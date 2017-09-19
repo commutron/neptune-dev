@@ -128,7 +128,6 @@ export class PermissionHelp extends Component {
               <li>Change {Pref.unit}</li>
               <li>Set a {Pref.batch} {Pref.flow}</li>
               <li>Add {Pref.block}s</li>
-              <li>Edit nonconformaces</li>
               <li>Skip/ship nonconformaces</li>
               <li>Add {Pref.escape}</li>
             </ul>
@@ -159,6 +158,7 @@ export class PermissionHelp extends Component {
             <ul>
               <li>Record "First" and "Inspect" steps</li>
               <li>Record "Inspected" nonconformaces</li>
+              <li>Edit nonconformaces</li>
               <li>Snooze and re-activate nonconformaces</li>
               <li>Active an {Pref.rmaProcess} on a {Pref.item}</li>
             </ul>

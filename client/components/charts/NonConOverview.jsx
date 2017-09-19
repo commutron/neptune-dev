@@ -37,6 +37,13 @@ export default class NonConOverview extends Component {
               stepSize: 5,
               beginAtZero: true,
             },
+          }],
+          xAxes: [{
+            type: 'category',
+            labels: this.props.ncOp,
+            ticks: {
+              autoSkip: false
+            }
           }]
         },
         legend: {

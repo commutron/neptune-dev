@@ -97,7 +97,7 @@ export default class Remove extends Component	{
           <br />
           <p>Enter "<i className='noCopy'>{check + ' '}</i>" to confirm.</p>
             <form onSubmit={this.remove.bind(this)}>
-              <p>
+              <p className='inline'>
                 <input
                   type='text'
                   ref={(i)=> this.confirm = i}

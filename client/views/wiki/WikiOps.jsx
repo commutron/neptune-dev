@@ -27,7 +27,7 @@ export default class WikiOps extends Component {
     
     anchor ? wi = wi + '#' + anchor : false;
 
-    console.log(wi);// this is for diagnosics
+    //console.log(wi);// this is for diagnosics
     return wi;
   }
 

@@ -12,7 +12,7 @@ export default class BlockForm extends Component {
     const batchId = this.props.id;
     
     const blKey = this.props.edit ? this.props.edit.key : false;
-    const text = this.blTxt.value.trim().toLowerCase();
+    const text = this.blTxt.value.trim();
     
     if(blKey) {
       Meteor.call('editBlock', batchId, blKey, text, (error, reply)=>{

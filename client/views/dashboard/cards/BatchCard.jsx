@@ -21,22 +21,22 @@ export default class BatchCard extends Component	{
     const v = w.versions.find( x => x.versionKey === b.versionKey );
     
     const flow = w.flows.find( x => x.flowKey === b.river);
+    const riverFlow = flow ? flow.flow : [];
     
     let iready = b.items.length === 0;
     
     let warn = b.blocks.filter( x => x.solve === false ).length;
     iready ? warn++ : null;
-    const showWarn = warn === 0 ? 'hide' : 'alertCount rAlign';
+    const showWarn = warn === 0 ? 'hide' : 'alertCount';
 
     return (
       <AnimateWrap type='cardTrans'>
         <div className='section sidebar' key={b.batch}>
           
-          <h1 className='centre'>
-            <JumpText title={b.batch} link={b.batch} />
-            <i className={showWarn}>
-              {warn}
-            </i>
+          <h1 className='centreText'>
+            {b.batch}
+            <i className='breath'></i>
+            <i className={showWarn}>{warn}</i>
           </h1>
           
           {iready ?
@@ -63,7 +63,7 @@ export default class BatchCard extends Component	{
             </div>
             
             <div className='space cap'>
-              <StepsProgressMini batchData={b} flow={flow} />
+              <StepsProgressMini batchData={b} flow={riverFlow} />
             </div>
             
           </Tabs>
