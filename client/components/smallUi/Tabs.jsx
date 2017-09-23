@@ -37,9 +37,11 @@ export default class Tabs extends Component	{
           })}
         </div>
         <AnimateWrap type='cardTrans'>
+          <div className='tabBody'>
 
-          {this.props.children[show]}
-        
+            {this.props.children[show]}
+          
+          </div>
         </AnimateWrap>
       </div>
     );

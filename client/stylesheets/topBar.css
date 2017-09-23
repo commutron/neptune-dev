@@ -20,14 +20,6 @@ meteor seems to be handling this */
   -moz-appearance: none;
 }
 
-/*
-@media screen and (max-width: 1000px){
-  #find {
-    min-width: 250px;
-  }
-}
-*/
-
 #find:focus {
 	color: white;
 	background: rgb(30,30,30);
@@ -101,3 +93,14 @@ input::-webkit-calendar-picker-indicator {
 #timeToggle:checked + .customTimeClock:before { 
   content: "\f00d";
 } /* checked icon */
+
+
+
+
+
+@media screen and (max-width: 1000px){
+  #find {
+    font-size: 1.75rem;
+    min-width: 225px;
+  }
+}

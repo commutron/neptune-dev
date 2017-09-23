@@ -37,8 +37,8 @@ meteor seems to be handling this */
 .actionForm > datalist {
   line-height: 1.5rem;
   font-size: 1rem;
-  min-width: 100px;
-  max-width: 200px;
+  min-width: 75px;
+  max-width: 150px;
   height: 1.75rem;
   margin: 0 10px;
 }
@@ -50,9 +50,9 @@ meteor seems to be handling this */
 
 
 .actionForm > button {
-  margin: 0 10px;
+  margin: 0 5px;
   text-transform: capitalize;
-  word-break: break-all;
+  word-break: keep-all;
 }
 
 .actionIconWrap {

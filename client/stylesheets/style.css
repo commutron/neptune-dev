@@ -565,3 +565,12 @@ meteor seems to be handling this */
   background: var(--clouds);
   color: black;
 }
+
+
+@media screen and (max-width: 1000px) {
+  .jumpBar {
+    line-height: 1.5em;
+    font-size: 1rem;
+  	min-height: 0.5rem;
+  }
+}

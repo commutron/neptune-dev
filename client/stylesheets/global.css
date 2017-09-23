@@ -315,3 +315,16 @@ tr:last-child td {
 td:last-child {
   border-right: none;
 }
+
+@media screen and (max-width: 1000px) {
+  th {
+    font-size: 0.75rem;
+    padding: 0 10px;
+  }
+  
+  td {
+    font-size: 0.75rem;
+    line-height: 1.5rem;
+    text-indent: 0.25rem;
+  }
+}

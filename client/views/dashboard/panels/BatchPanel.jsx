@@ -112,7 +112,7 @@ export default class BatchPanel extends Component	{
                   Pref.trackFirst + 's',
                   Pref.block + 's',
                   Pref.nonCon + 's',
-                  Pref.rmaProcess + 'es'
+                  Pref.rma + 's'
                 ]
               }
               wide={true}
