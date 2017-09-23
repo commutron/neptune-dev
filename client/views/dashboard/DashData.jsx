@@ -39,7 +39,6 @@ class DashView extends Component	{
         allWidget={this.props.allWidget}
         allBatch={this.props.allBatch}
         hotBatch={this.props.hotBatch}
-        allArchive={this.props.allArchive}
         />
     );
   }
@@ -146,7 +145,6 @@ export default createContainer( () => {
       allWidget: WidgetDB.find( {}, { sort: { widget: 1 } } ).fetch(),
       allBatch: BatchDB.find( {}, { sort: { batch: -1 } } ).fetch(),
       hotBatch: hotBatch,
-      allArchive: ArchiveDB.find( {}, { sort: { year:-1 } } ).fetch(),
       allBlock: blockSub.ready(),
       allScrap: scrapSub.ready()
     };

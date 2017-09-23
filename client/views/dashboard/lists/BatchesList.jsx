@@ -20,6 +20,7 @@ export default class BatchesList extends Component	{
   render() {
     
     const b = this.props.batchData;
+    const w = this.props.widgetData;
     const f = this.state.filter;
     
     let showList = 
@@ -39,18 +40,20 @@ export default class BatchesList extends Component	{
             total={showList.length}
             onClick={e => this.setFilter(e)} />
             
-          { showList.map( (entry, index)=> {
-          const style = entry.finishedAt === false ? 'jumpBar gMark' : 'jumpBar';
-          const subW = this.props.widgetData.find( x => x._id === entry.widgetId);
-          const subV = subW.versions.find( x => x.versionKey === entry.versionKey);
-            return (
-              <JumpButton
-                key={index}
-                title={entry.batch} 
-                sub={<i><i className='up'>{subW.widget}</i> v.{subV.version}</i>}
-                sty={style}
-              />
-            )})}
+          {showList.map( (entry, index)=> {
+            const style = entry.finishedAt === false ? 
+                          'jumpBar activeMark' : 
+                          'jumpBar gMark';
+            const subW = w.find( x => x._id === entry.widgetId);
+            const subV = subW.versions.find( x => x.versionKey === entry.versionKey);
+              return (
+                <JumpButton
+                  key={index}
+                  title={entry.batch} 
+                  sub={<i><i className='up'>{subW.widget}</i> v.{subV.version}</i>}
+                  sty={style}
+                />
+          )})}
   			</div>
 			</AnimateWrap>
     );

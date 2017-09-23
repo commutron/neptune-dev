@@ -6,6 +6,8 @@ WidgetDB = new Mongo.Collection('widgetdb');
 BatchDB = new Mongo.Collection('batchdb');
 ArchiveDB = new Mongo.Collection('archivedb');
 
+import moment from 'moment';
+
 Meteor.publish('appData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
@@ -54,16 +56,17 @@ Meteor.publish('shaddowData', function(){
     WidgetDB.find({orgKey: orgKey}, {
       fields: {
           'widget': 1,
+          'versions.versionKey': 1,
           'versions.version': 1
         }}),
     BatchDB.find({orgKey: orgKey}, {
       sort: {batch:-1},
       fields: {
           'batch': 1,
+          'widgetId': 1,
+          'versionKey': 1,
           'active': 1,
           'finishedAt': 1,
-          'items.serial': 1,
-          'items.finishedAt': 1
         }}),
     ];
 });
@@ -93,8 +96,7 @@ Meteor.publish('skinnyData', function(){
           'finishedAt': 1,
           //'items.serial': 1,
           //'items.finishedAt': 1
-        }}),
-    ArchiveDB.find()
+        }})
     ];
 });
 
@@ -199,6 +201,7 @@ Meteor.publish('groupwidgetData', function() {
 });
 
 */
+/////////////////////////////////////////////////////////////////
   
 // diagnose data for development
 /*
@@ -214,4 +217,45 @@ Meteor.publish('allData', function(dev){
     return this.ready();
   }
 });
+*/
+
+
+//////////////////////////////////////////////////////////////
+
+/*
+
+// Publish the current size of a collection.
+Meteor.publish('WIPData', function (roomId) {
+  const user = Meteor.users.findOne({_id: this.userId});
+  const orgKey = user ? user.orgKey : false;
+    
+  let count = 0;
+  let initializing = true;
+  // `observeChanges` only returns after the initial `added` callbacks have run.
+  // Until then, we don't want to send a lot of `changed` messages—hence
+  // tracking the `initializing` state.
+  const handle = BatchDB.find({ orgKey: orgKey }).observeChanges({
+    added: (id) => {
+      count += 1;
+      if (!initializing) {
+        this.changed('counts', {}, { count });
+      }
+    },
+    removed: (id) => {
+      count -= 1;
+      this.changed('counts', {}, { count });
+    }
+    // We don't care about `changed` events.
+  });
+  // Instead, we'll send one `added` message right after `observeChanges` has
+  // returned, and mark the subscription as ready.
+  initializing = false;
+  this.added('counts', roomId, { count });
+  this.ready();
+  // Stop observing the cursor when the client unsubscribes. Stopping a
+  // subscription automatically takes care of sending the client any `removed`
+  // messages.
+  this.onStop(() => handle.stop());
+});
+
 */

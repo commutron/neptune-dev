@@ -122,7 +122,7 @@ export default class BatchForm extends Component	{
               defaultValue={eS}
               pattern='[0-9]{4}-[0-9]{2}-[0-9]{2}'
               required />
-            <label htmlFor='sdt'>start date</label>
+            <label htmlFor='sdt'>{Pref.start} date</label>
           </p>
           <p>
             <input
@@ -132,10 +132,8 @@ export default class BatchForm extends Component	{
               defaultValue={eE}
               pattern='[0-9]{4}-[0-9]{2}-[0-9]{2}'
               required />
-            <label htmlFor='egdt'>scheduled end date</label>
+            <label htmlFor='egdt'>{Pref.end} date</label>
           </p>
-          <h3>{this.props.group}</h3>
-          <h3>{this.props.wIdget}</h3>
           <br />
           <p><i>are you sure?</i></p>
           <br />

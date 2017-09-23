@@ -39,7 +39,7 @@ class TopBar extends Component	{
     if(!this.props.ready) {
       return (
         <Freeze>
-          <Spin />
+          <Spin color={true} />
         </Freeze>
       );
     }

@@ -62,7 +62,7 @@ export default class GroupsList extends Component	{
             onClick={e => this.setFilter(e)} />
             
           { showList.map( (entry, index)=> {
-            let ac = a.includes(entry._id) ? 'jumpBar gMark' : 'jumpBar';
+            let ac = a.includes(entry._id) ? 'jumpBar activeMark' : 'jumpBar';
             return (
               <JumpButton
                 key={index}

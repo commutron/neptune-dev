@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import moment from 'moment';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 
 import JumpText from '../../../components/tinyUi/JumpText.jsx';
-import NoteLine from '../../../components/smallUi/NoteLine.jsx';
+
+import BatchesList from '../lists/BatchesList.jsx';
 
 export default class WidgetCard extends Component {
 
@@ -12,6 +12,12 @@ export default class WidgetCard extends Component {
     let g = this.props.groupData;
     let w = this.props.widgetData;
     let b = this.props.batchRelated;
+    
+    const v = w.versions.sort((v1, v2)=> {
+                if (v1.version < v2.version) { return 1 }
+                if (v1.version > v2.version) { return -1 }
+                return 0;
+              });
 
     return (
       <AnimateWrap type='cardTrans'>
@@ -20,32 +26,25 @@ export default class WidgetCard extends Component {
             <JumpText title={g.alias} link={g.alias} />
             <h2 className='cap'>{w.widget}</h2>
             <h3 className='cap'>{w.describe}</h3>
-            <hr />
-            {b.map( (entry)=>{
-              let ac = entry.active ? 'greenT' : null;
-              return (
-                <span key={entry._id}>
-                  <JumpText title={entry.batch} link={entry.batch} sty={ac} />
-                </span>
-              )})}
-            <hr />
+            <h3>
+              {v.map( (entry)=>{
+                let live = entry.live ? '' : 'fade';
+                return(
+                  <span key={entry.versionKey}>
+                    <i className={live}>{entry.version}</i>
+                    <i className='breath'></i>
+                  </span>
+                )})}
+            </h3>
             
-            <div>
-            
-            {w.versions.map( (entry)=>{
-              return(
-                <ul key={entry.versionKey}>
-                  <li>version: {entry.version}</li>
-                  <li>created at: {moment(entry.createdAt).calendar()}</li>
-                  <li>live: {entry.live.toString()}</li>
-                  <li>tags: {entry.tags.length}</li>
-                  <li><NoteLine entry={entry.notes} id={w._id} versionKey={entry.versionKey} /></li>
-                </ul>
-              )})}
-          
-            </div>
-  
           </div>
+            
+            <hr />
+            
+            <BatchesList
+              batchData={b}
+              widgetData={[w]} />
+              
         </div>
       </AnimateWrap>
     );

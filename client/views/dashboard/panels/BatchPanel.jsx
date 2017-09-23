@@ -82,21 +82,21 @@ export default class BatchPanel extends Component	{
               <span><i className='clean'>v.</i>{v.version}</span>
               <span>
                 { b.active ? 
-                  <i className='fa fa-refresh blueT' aria-hidden='true'></i>
+                  <i className='fa fa-refresh blueT' aria-hidden='true' title='in progress'></i>
                   :
-                  <i className='fa fa-check-circle greenT' aria-hidden='true'></i>
+                  <i className='fa fa-check-circle greenT' aria-hidden='true' title='finished'></i>
                 }
               </span>
             </div>
             
-          <div className='space cap'>
+          <div className='space'>
           
             <div className='balance'>
             
               <div>
-                <p>{Pref.start}: {moment(b.start).calendar()}</p>
-                <p>{Pref.end}: {moment(b.end).calendar()}</p>
-                <p>finished: {fnsh}</p>
+                <p className='capFL'>{Pref.start}: {moment(b.start).calendar()}</p>
+                <p className='capFL'>{Pref.end}: {moment(b.end).calendar()}</p>
+                <p>Finished: {fnsh}</p>
               </div>
               
               <NoteLine entry={b.notes} id={b._id} widgetKey={false} />
@@ -119,10 +119,15 @@ export default class BatchPanel extends Component	{
               stick={false}>
               
               <div>
-                {/*<RouteList route={b.route} />*/}
+                {b.items.length === 0 ?
+                  <p>
+                    <i className='fa fa-hourglass-start fa-2x' aria-hidden='true'></i>
+                    <i>No {Pref.item}s created</i>
+                  </p>
+                : null}
                 {!b.river ? 
                 <p>
-                  <i className="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+                  <i className='fa fa-exclamation-circle fa-2x' aria-hidden="true"></i>
                   <i>The {Pref.buildFlow} has not been selected for this {Pref.batch}</i>
                 </p>
                 :
@@ -163,7 +168,12 @@ export default class BatchPanel extends Component	{
             
           </div>
           
-          <CreateTag when={b.createdAt} who={b.createdWho} whenNew={b.updatedAt} whoNew={b.updatedWho} />
+          <CreateTag
+            when={b.createdAt}
+            who={b.createdWho}
+            whenNew={b.updatedAt}
+            whoNew={b.updatedWho}
+            dbKey={b._id} />
         </div>
       </AnimateWrap>
     );

@@ -19,18 +19,42 @@ export default class NoteLine extends Component	{
     let dt = this.props.entry;
     let name = this.props.versionKey ? Pref.widget : Pref.batch;
     const action = this.props.id && Roles.userIsInRole(Meteor.userId(), ['edit', 'run']) ? 
-                   <NoteForm id={this.props.id} versionKey={this.props.versionKey} content={dt.content} /> : 
+                   <NoteForm
+                     id={this.props.id}
+                     versionKey={this.props.versionKey}
+                     content={dt.content}
+                     small={this.props.small} /> : 
                    null;
+    
+    if(this.props.plain && !dt.content) {
+      return (
+        <div>
+          {action}
+        </div>
+      );
+    }
+    
+    if(this.props.plain) {
+      return (
+        <div>
+          {dt.content}
+          <div className='footerBar'>
+            {action}
+            {moment(dt.time).calendar()} <UserNice id={dt.who} />
+          </div>
+        </div>
+      );
+    }
     
     if(!dt.content) {
       return (
         <fieldset className='low'>
-        <legend className='cap'>{name} notes</legend>
+          <legend className='cap'>{name} notes</legend>
           {action}
         </fieldset>
-        );
+      );
     }
-
+    
     return (
       <fieldset className='low'>
         <legend className='cap'>{name} notes</legend>

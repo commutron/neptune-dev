@@ -25,6 +25,8 @@ export default class Model extends Component	{
 
   render() {
     
+    let iSize = this.props.smIcon ? ' fa-1x ' : ' fa-2x ';
+    
     return (
       <span>
         <button
@@ -33,7 +35,7 @@ export default class Model extends Component	{
           onClick={this.reveal}
           disabled={this.props.lock}>
           <label className='navIcon actionIconWrap'>
-            <i className={'fa ' + this.props.icon + ' fa-2x ' + this.props.color} aria-hidden='true'></i>
+            <i className={'fa ' + this.props.icon + iSize + this.props.color} aria-hidden='true'></i>
             <span className={'actionIconText ' + this.props.color}>{this.props.button}</span>
           </label>
         </button>

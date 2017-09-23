@@ -43,7 +43,7 @@ export default class SearchHelp extends Component	{
                 <li>{Pref.grp} = {Pref.group}</li>
                 <li>{Pref.blck} = {Pref.block}s</li>
                 <li>{Pref.scrp} = {Pref.scrap}s</li>
-                <li>{Pref.docs} = docs (or) d</li>
+                <li>d = docs / {Pref.docs}</li>
               </ul>
             </ul>
   

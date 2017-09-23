@@ -17,12 +17,9 @@ import ScrapBox from '../../../components/smallUi/ScrapBox.jsx';
 export default class ItemPanel extends Component	{
 
   ncData() {
-    let relevant = [];
-    for (let value of this.props.batchData.nonCon) {
-      if(value.serial === this.props.itemData.serial) {
-        relevant.push(value);
-      }else{null}
-    }
+    const batch = this.props.batchData;
+    const item = this.props.itemData;
+    let relevant = batch.nonCon.filter( x => x.serial === item.serial);
     relevant.sort((n1, n2)=> {
       if (n1.ref < n2.ref) { return -1 }
       if (n1.ref > n2.ref) { return 1 }
@@ -42,7 +39,8 @@ export default class ItemPanel extends Component	{
     const v = w.versions.find( x => x.versionKey === b.versionKey );
     
     const nc = this.ncData();
-  
+    
+    const start = i.history.length > 0;
     const done = i.finishedAt !== false;
     const scrap = done ? i.history.find(x => x.type === 'scrap') : false;
 
@@ -56,10 +54,13 @@ export default class ItemPanel extends Component	{
             <span><JumpText title={w.widget} link={w.widget} /></span>
             <span><i className='clean'>v.</i>{v.version}</span>
             <span>
-              { done ? 
-                <i className='fa fa-check-circle greenT' aria-hidden='true'></i>
+              { !start ?
+                <i className='fa fa-hourglass-start' aria-hidden='true' title='unstarted'></i>
+                :
+                done ? 
+                <i className='fa fa-check-circle greenT' aria-hidden='true' title='finished'></i>
                 : 
-                <i className='fa fa-refresh blueT' aria-hidden='true'></i>
+                <i className='fa fa-refresh blueT' aria-hidden='true' title='in progress'></i>
               }
             </span>
           </div>
@@ -105,7 +106,12 @@ export default class ItemPanel extends Component	{
             <br />
           </div>
           
-          <CreateTag when={i.createdAt} who={i.createdWho} whenN={i.createdAt} whoN={i.createdWho} />
+          <CreateTag
+            when={i.createdAt}
+            who={i.createdWho}
+            whenNew={i.createdAt}
+            whoNew={i.createdWho}
+            dbKey={i.serial} />
   			</div>
 			</AnimateWrap>
     );

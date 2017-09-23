@@ -20,11 +20,16 @@ export default class GroupPanel extends Component	{
           
           <div className='space cap edit'>
           
-            <p>{Pref.instruct} index: <i className='clean'>{g.wiki}</i></p>
+            <p>{Pref.instruct} index: <a className='clean' href={g.wiki} target='_blank'>{g.wiki}</a></p>
             
           </div>
           
-          <CreateTag when={g.createdAt} who={g.createdWho} whenNew={g.updatedAt} whoNew={g.updatedWho} />
+          <CreateTag
+            when={g.createdAt}
+            who={g.createdWho}
+            whenNew={g.updatedAt}
+            whoNew={g.updatedWho}
+            dbKey={g._id} />
         </div>
       </AnimateWrap>
     );

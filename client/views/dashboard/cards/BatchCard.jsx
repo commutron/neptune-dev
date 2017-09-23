@@ -58,7 +58,6 @@ export default class BatchCard extends Component	{
             
             <div className='space cap'>
               <NoteLine entry={b.notes} id={b._id} versionKey={false} />
-              <NoteLine entry={v.notes} id={w._id} versionKey={v.versionKey} />
               <BlockNotes data={b.blocks} />
             </div>
             

@@ -22,11 +22,6 @@ export default class FlowForm extends Component	{
    };
   }
   
-  back() {
-    this.setState({ fill: false});
-    this.setState({ warn: false});
-  }
-  
   setFlow(recSet) {
     let input = recSet;
     if(!input) {
@@ -77,18 +72,17 @@ export default class FlowForm extends Component	{
     this.out.value = '';
   }
   
-  option() {
-    this.out.value = '';
-    const optn = this.pick.value;
-    if(optn !== 'blank') { 
-      Meteor.call('activeFlowCheck', optn, (error, reply)=>{
+  preFill() {
+    const optn = this.props.preFill;
+    if(!optn) {
+      this.setState({ fill: false});
+    }else{
+      Meteor.call('activeFlowCheck', optn.flowKey, (error, reply)=>{
         if(error)
           console.log(error);
         this.setState({ warn: reply});
-        this.setState({ fill: optn});
+        this.setState({ fill: optn.flowKey});
       });
-    }else{
-      this.setState({ fill: optn});
     }
   }
 
@@ -101,34 +95,20 @@ export default class FlowForm extends Component	{
     
     const eN = e ? e.title : '';
     const eF = e ? e.flow : false;
+    
+    const name = this.props.edit ? 'Edit' : 'New Flow';
 
     return (
       <Model
-        button={Pref.flow}
-        title={'create or edit ' + Pref.flow + 's'}
+        button={name}
+        title={name}
         color='greenT'
         icon='fa-cogs'
+        smIcon={this.props.small}
         lock={!Roles.userIsInRole(Meteor.userId(), 'edit') || this.props.lock}>
-        
-        {!this.state.fill ?
-        
-        <div className='centre'>
-          <p>choose</p>
-          <select ref={(i)=> this.pick = i} onChange={this.option.bind(this)}>
-            <option></option>
-            <option value='blank'>New</option>
-            {this.props.existFlows.map( (entry, index)=>{
-              return(
-                <option key={index} value={entry.flowKey}>{entry.title}</option>
-            )})}
-          </select>
-        </div>
-          
-          :
     
         <div>
           <div className='space'>
-          <button className='action clear' onClick={this.back.bind(this)}>back</button>
             <form
               id='flowSave'
               className='centre'
@@ -156,7 +136,7 @@ export default class FlowForm extends Component	{
                   ref={(i)=> this.title = i}
                   id='flwttl'
                   defaultValue={eN}
-                  placeholder='title the defines this flow'
+                  placeholder='descriptive title'
                   required />
                 <label htmlFor='flwttl'>{Pref.flow} title</label>
               </p>
@@ -183,7 +163,7 @@ export default class FlowForm extends Component	{
               className='action clear greenT'>SAVE</button>
             <br />
           </div>
-        </div>}
+        </div>
         
         <div className='centre'>
           <p><output ref={(i)=> this.out = i} /></p>
@@ -191,6 +171,9 @@ export default class FlowForm extends Component	{
         
       </Model>
     );
+  }
+  componentDidMount() {
+    this.preFill();
   }
 }
 
@@ -214,11 +197,18 @@ export class FlowRemove extends Component	{
   render() {
     
     return(
-      <button
-        className='actionSmall clear redT'
-        onClick={this.pull.bind(this)}
-        disabled={!Roles.userIsInRole(Meteor.userId(), 'edit')}
-      >delete</button>
+      <span>
+        <button
+          title='delete process flow *if not in use'
+          className='transparent'
+          onClick={this.pull.bind(this)}
+          disabled={!Roles.userIsInRole(Meteor.userId(), 'edit')}>
+          <label className='navIcon actionIconWrap'>
+            <i className={'fa fa-trash fa-1x redT'} aria-hidden='true'></i>
+            <span className={'actionIconText redT'}>Delete</span>
+          </label>
+        </button>
+      </span>
     );
   }
 }

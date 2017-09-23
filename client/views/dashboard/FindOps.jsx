@@ -359,7 +359,6 @@ export default class FindOps extends Component	{
       let group = this.linkedGroup(lookup.groupId);
       let allWidgets = this.groupWidgets(lookup.groupId);
       let allBatches = this.allLinkedBatches(lookup._id);
-      let activeWidgets = this.groupActiveWidgets(lookup.groupId);
       if(snap) {
         return (
           <Dashboard
@@ -372,11 +371,9 @@ export default class FindOps extends Component	{
             app={app}
             action='widget'
           >
-            <WidgetsList
-              groupAlias={group.alias}
-              widgetData={allWidgets}
-              active={activeWidgets}
-              listTitle={true} />
+            <BatchesList
+              batchData={allBatches}
+              widgetData={allWidgets} />
             <div>
               <WidgetPanel
                 widgetData={lookup}

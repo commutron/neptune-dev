@@ -448,3 +448,28 @@ main {
 .wrap {
   white-space: normal;
 }
+
+.popTbody > tr:first-child > td { 
+  border-top: 3px solid rgba(255,255,255,0.5);
+}
+
+.popTbody > tr:last-child > td {
+  padding-bottom: 50px;
+  border-right: none;
+}
+
+.mockTable {
+  display: table;
+}
+.mockTableHead {
+  display: table-header-group
+}
+.mockTableGroup {
+  display: table-row-group;
+}
+.mockTableRow {
+  display: table-row;
+}
+.mockTableCell {
+  display: table-cell;
+}

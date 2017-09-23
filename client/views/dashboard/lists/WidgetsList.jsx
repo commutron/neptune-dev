@@ -44,7 +44,7 @@ export default class WidgetsList extends Component	{
             
           {w.length < 1 ? <p>no {Pref.widget}s created</p> : null}
             { showList.map( (entry, index)=> {
-            let ac = a.includes(entry._id) ? 'jumpBar gMark' : 'jumpBar';
+            let ac = a.includes(entry._id) ? 'jumpBar activeMark' : 'jumpBar';
             let inStyl = entry.widget === Session.get('now');
               return (
                 <JumpButton

@@ -64,7 +64,7 @@ export default class VersionForm extends Component	{
     const app = this.props.app;
     
     let e = this.props.version;
-    let name = e ? 'edit' : 'new';
+    let name = e ? 'edit' : 'new ' + Pref.version;
     let eV = e ? e.version : null;
     let eU = e ? e.units : null;
     let eL = e ? e.live : null;
@@ -74,10 +74,11 @@ export default class VersionForm extends Component	{
 
     return (
       <Model
-        button={name + ' ' + Pref.version}
-        title={name + ' ' + Pref.version}
+        button={name}
+        title={name}
         color='greenT'
         icon='fa-cube fa-rotate-90'
+        smIcon={this.props.small}
         lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit'])}>
 
       <div className='split'>
@@ -198,30 +199,33 @@ export class VersionRemove extends Component	{
   
   render() {
     
-    let user = Roles.userIsInRole(Meteor.userId(), 'remove');
-    
-    if(user) {
-      return(
-        <div>
-          <i>To remove enter:</i>
-          <i className='noCopy'>{this.props.lock}</i><br />
+    return(
+      <Model
+        button='Delete'
+        title={'Delete ' + Pref.version}
+        color='redT'
+        icon='fa-trash'
+        smIcon={this.props.small}
+        lock={!Roles.userIsInRole(Meteor.userId(), 'remove')}>
+        
+        <div className='centre'>
+          <p>To remove enter:</p>
+          <p className='noCopy'>{this.props.lock}</p>
+          <br />
           <form className='inlineForm' onSubmit={this.remove.bind(this)}>
             <input 
               type='text' 
               className='noCopy' 
               ref={(i)=> this.confirm = i}
-              disabled={!user} 
               placeholder={this.props.lock} />
             <button
               type='submit'
               ref={(i)=> this.cut = i}
               className='smallAction clear redT'
-              disabled={!user}>delete</button>
+            >delete</button>
           </form>
         </div>
-      );
-    }
-    
-    return(null);
+      </Model>
+    );
   }
 }

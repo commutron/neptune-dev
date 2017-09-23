@@ -18,7 +18,7 @@ meteor seems to be handling this */
   line-height: 1rem;
   min-width: 2rem;
 	height: 2rem;
-	padding: 0 3px;
+	padding: 0 10px;
 }
 
 .miniAction {
@@ -85,6 +85,10 @@ meteor seems to be handling this */
 }
 .jumpBar:hover, .jumpBar:focus, .jumpBar:active {
   border-bottom-color: #3498db;
+}
+
+.activeMark {
+  border-left-color: var(--belizeHole);
 }
 
 .gMark {
@@ -166,7 +170,7 @@ meteor seems to be handling this */
 }
 
 .fade {
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
 .transparent {
@@ -187,17 +191,20 @@ meteor seems to be handling this */
 }
 
 .blue {
-  background-color: #3498db;
-	background-color: rgba(52,152,219,1);
+	background-color: var(--peterriver);
 }
 .blueT {
-	color: rgb(52,152,219)
+	color: var(--peterriver);
+}
+.blueBorder {
+  background-color: transparent;
+	border: 3px solid var(--peterriver);;
+	box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2),
+	      inset 0 0 .1em .1em rgba(43,43,43,0.2);
 }
 
 .logoBlue {
-   /*neptune brand blue*/
-  background-color: #007fff;
-  background-color: rgba(0,127,255,1);
+  background-color: var(--neptuneColor);
 }
 .red {
   background-color: var(--alizarin);
@@ -300,7 +307,8 @@ meteor seems to be handling this */
   text-transform: capitalize;
 }
 
-.firstLetter:first-letter {
+.capFL:first-letter {
+  text-transform: capitalize;
 }
 
 .up {

@@ -40,7 +40,7 @@ class Pref {
     this.test = 'tester';
     this.create = 'creator';
     this.start = 'start';
-    this.end = 'fulfillment';
+    this.end = 'fulfill';
     // build tracking
     this.flow = 'process flow';
     this.buildFlow = 'main process flow';

@@ -64,7 +64,11 @@ export default class RMAList extends Component	{
           </div>
           </details>
           :
-          null}
+          <div className='centreText fade'>
+            <i className='fa fa-smile-o fa-3x' aria-hidden="true"></i>
+            <p className='big'>no {Pref.nonCon}s</p>
+          </div>
+        }
       </div>
     );
   }

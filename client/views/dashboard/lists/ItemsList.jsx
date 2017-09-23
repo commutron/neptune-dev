@@ -106,8 +106,9 @@ export default class ItemsList extends Component	{
             onChange={e => this.setAdvancedFilter(e)} />
         
           {showList.map( (entry, index)=> {
-            let style = entry.finishedAt === false ? 'jumpBar gMark' : 
-                        scrap.includes(entry.serial) ? 'jumpBar ngMark' : 'jumpBar';
+            let style = entry.history.length === 0 ? 'jumpBar' :
+                        entry.finishedAt === false ? 'jumpBar activeMark' : 
+                        scrap.includes(entry.serial) ? 'jumpBar ngMark' : 'jumpBar gMark';
             let inStyl = entry.serial === Session.get('now');
               return (
                 <JumpButton

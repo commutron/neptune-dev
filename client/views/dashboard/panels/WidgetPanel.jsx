@@ -7,8 +7,8 @@ import CreateTag from '/client/components/uUi/CreateTag.jsx';
 import Tabs from '../../../components/smallUi/Tabs.jsx';
 
 import JumpText from '../../../components/tinyUi/JumpText.jsx';
-import FlowsList from '../../../components/bigUi/FlowsList.jsx';
-import VersionsList from '../../../components/smallUi/VersionsList.jsx';
+import FlowTable from '../../../components/tables/FlowTable.jsx';
+import VersionTable from '../../../components/tables/VersionTable.jsx';
 
 export default class WidgetPanel extends Component	{
 
@@ -30,13 +30,7 @@ export default class WidgetPanel extends Component	{
           </div>
           
           <div className='space cap edit'>
-            <p>
-              {b.map( (entry, index)=>{
-                let ac = entry.active ? 'greenT' : null;
-                return (
-                  <JumpText key={index} title={entry.batch} link={entry.batch} sty={ac} />
-                )})}
-            </p>
+            
             <br />
             
             <Tabs
@@ -44,15 +38,20 @@ export default class WidgetPanel extends Component	{
               wide={true}
               stick={false}>
               
-              <VersionsList widgetData={w} />
+              <VersionTable widgetData={w} />
               
-              <FlowsList id={w._id} flows={w.flows} />
+              <FlowTable id={w._id} flows={w.flows} app={a} />
               
             </Tabs>
   
           </div>
 
-          <CreateTag when={w.createdAt} who={w.createdWho} whenNew={w.updatedAt} whoNew={w.updatedWho} />
+          <CreateTag
+            when={w.createdAt}
+            who={w.createdWho}
+            whenNew={w.updatedAt}
+            whoNew={w.updatedWho}
+            dbKey={w._id} />
         </div>
       </AnimateWrap>
     );

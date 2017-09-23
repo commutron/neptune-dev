@@ -2,20 +2,30 @@ import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
 import {createContainer} from 'meteor/react-meteor-data';
 
-import ActivityData from './views/activity/ActivityData.jsx';
+import Spin from '../../components/tinyUi/Spin.jsx';
+import OrgWip from './panels/OrgWIP.jsx';
 
-class StartView extends Component	{
+class View extends Component	{
   
   render() {
 
     if(!this.props.login) {
       return (
-        <div>user not found</div>
+        <div></div>
+        );
+    }
+    
+    if(!this.props.ready || !this.props.app) {
+      return (
+        <Spin />
         );
     }
 
     return (
-      <ActivityData />
+      <OrgWip 
+        g={this.props.group}
+        w={this.props.widget}
+        b={this.props.batch} />
     );
   }
 }
@@ -26,6 +36,7 @@ export default createContainer( () => {
   let user = usfo ? usfo.username : false;
   let active = usfo ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   let org = usfo ? usfo.org : false;
+  const sub = usfo ? Meteor.subscribe('shaddowData') : false;
   if(!login) {
     return {
       login: Meteor.userId(),
@@ -37,8 +48,13 @@ export default createContainer( () => {
   }else{
     return {
       login: Meteor.userId(),
+      ready: sub.ready(),
       user: user,
       org: org,
+      app: AppDB.findOne({org: org}),
+      group: GroupDB.find().fetch(),
+      widget: WidgetDB.find().fetch(),
+      batch: BatchDB.find().fetch()
     };
   }
-}, StartView);
+}, View);

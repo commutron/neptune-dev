@@ -15,6 +15,7 @@ i {
 
 a {
   border: 1px dotted transparent;
+  color: var(--belizeHole);
 }
 
 a:link, a:visited {
@@ -83,6 +84,7 @@ fieldset {
 
 label {
   line-height: 1.5rem;
+  text-transform: capitalize;
 }
 
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
@@ -235,6 +237,7 @@ summary {
   line-height: 2em;
   margin: 0 0 0 10px;
   padding: 3px;
+  cursor: pointer;
 }
 summary:focus {
 	outline: none;
@@ -299,9 +302,10 @@ th {
 }
 
 td {
-  border-bottom: 1px groove rgba(255,255,255,0.3);
-  border-right: 1px groove rgba(255,255,255,0.1);
+  border-bottom: 1px inset rgba(255,255,255,0.3);
+  border-right: 1px inset rgba(255,255,255,0.1);
   line-height: 2rem;
+  text-indent: 0.5rem;
 }
 
 tr:last-child td {
