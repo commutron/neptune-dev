@@ -10,14 +10,14 @@ export default class ScrapBox extends Component	{
     const dt = this.props.entry;
 
     return (
-      <div className='actionBox red cap'>
+      <div className='actionBox red'>
         <div className='titleBar centre'>
           <h1 className='up'>{dt.type}</h1>
         </div>
         <div className='centre'>
           <p>{moment(dt.time).calendar()}</p>
-          <p>by: <UserNice id={dt.who} /></p>
-          <p>at: {dt.step}</p>
+          <p>by: <UserNice id={dt.who} />, at step: {dt.step}</p>
+          <p className='capFL'>{dt.comm}</p>
           <br />
         </div>
       </div>

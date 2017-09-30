@@ -31,8 +31,6 @@ export default class ScrapForm extends Component {
   }
     
   render () {
-
-		let now = Session.get('nowStep');
 		
 		let done = this.props.item.finishedAt !== false;
     let scrap = done ? this.props.item.history.find(x => x.type === 'scrap') : false;
@@ -53,12 +51,10 @@ export default class ScrapForm extends Component {
                 id='currep'
                 ref={(i)=> this.discStp = i}
                 className='cap redIn'
-                defaultValue={now}
                 list='shortcuts'
                 required />
               <label htmlFor='currep'>current process</label>
               <datalist id='shortcuts' className='cap'>
-                <option value={now} id='riverStep'>{now}</option>
                   {this.props.anc.map( (entry, index)=>{
                     return ( 
                       <option key={index} value={entry}>{entry}</option>
@@ -66,13 +62,13 @@ export default class ScrapForm extends Component {
               </datalist>
             </p>
     	      <p>
-              <input
-                type='text'
+              <textarea
                 id='scomment'
                 ref={(i)=> this.comm = i}
                 className='redIn'
                 placeholder='reason for scrapping'
-                required />
+                rows='5'
+                required></textarea>
               <label htmlFor='scomment'>comment</label>
             </p>
             <br />

@@ -45,7 +45,7 @@ export class StepCounter extends Component {
 
     for(var item of items) {
       if(item.finishedAt !== false) {
-        complete += 1;
+        complete += 1; // scraps? rmas?
       }else{
         for(var i of item.history) {
           if(type === 'inspect') {
@@ -73,7 +73,7 @@ export class MiniBar extends Component	{
     
     let name = {
       position: 'relative',
-      top: '0.75rem'
+      top: '0.75rem',
     };
     
     let bar = {
@@ -86,7 +86,7 @@ export class MiniBar extends Component	{
     
     return(
       <span>
-        <p style={name}>{this.props.step}</p>
+        <p style={name} className='cap'>{this.props.step}</p>
         <progress style={bar} className='proGood' value={v} max={t}></progress>
         <p style={num}>{v}/{t}</p>
       </span>

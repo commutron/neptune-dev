@@ -39,11 +39,19 @@ export default class NonConPie extends Component {
     const chartOptions = {
       cutoutPercentage: 50,
         legend: {
-          display: true
+          display: true,
+          labels: {
+            fontSize: 14,
+            fontColor: 'white',
+            fontFamily: 'Helvetica Neue, sans-serif'
+          }
         },
         title: {
           display: true,
-          text: 'NonCons Status'
+          text: 'NonCons Status',
+          fontSize: 16,
+          fontColor: 'white',
+          fontFamily: 'Helvetica Neue, sans-serif'
         }
     };
 

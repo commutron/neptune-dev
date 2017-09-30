@@ -89,6 +89,10 @@ meteor seems to be handling this */
   border-bottom-color: red;
 }
 
+textarea.redIn:focus {
+  border-color: red;
+}
+
 .redIn:focus + label {
   color: rgb(231,76,60);
 }

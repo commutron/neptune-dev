@@ -170,3 +170,20 @@
  border-bottom-color: black;
  outline-color: black;
 }
+
+@media screen and (max-width: 1000px) {
+ .stoneForm input[type='text'],
+ .stoneForm textarea,
+ .stoneForm select,
+ .stoneForm label,
+ .stoneForm details {
+  color: black;
+  min-width: 200px;
+  max-width: 200px;
+ }
+ .space {
+  padding: 10px;
+ }
+ 
+ 
+}

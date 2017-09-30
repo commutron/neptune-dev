@@ -257,7 +257,7 @@ main {
 .section {
   border-bottom: 1px groove rgba(255,255,255,0.5);
   width: 100%;
-  min-width: 250px;
+  min-width: 225px;
   margin: 0;
   padding: 1vh 1vw 1vh 1vw;
   overflow-x: hidden;
@@ -471,6 +471,6 @@ main {
     width: 225px;
   }
   .tabBody {
-    overflow-x: scroll;
+    overflow-x: auto;
   }
 }

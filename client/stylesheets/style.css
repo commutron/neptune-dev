@@ -154,7 +154,6 @@ meteor seems to be handling this */
 }
 
 .actionBox {
-  text-transform: uppercase;
   -moz-box-shadow:    0 0.75em 1em -0.5em rgba(0,0,0,0.2),
                       0 -0.75em 1em -0.5em rgba(0,0,0,0.2);
   -webkit-box-shadow: 0 0.75em 1em -0.5em rgba(0,0,0,0.2),

@@ -65,7 +65,7 @@ export default class ItemPanel extends Component	{
             </span>
           </div>
         
-          <div className='space cap'>
+          <div className='space'>
             <h1>
               {i.serial}
               <span className='rAlign'>

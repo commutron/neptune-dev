@@ -34,15 +34,21 @@ export default class NonConOverview extends Component {
           yAxes: [{
             type: 'linear',
             ticks: {
-              stepSize: 5,
+              stepSize: 10,
               beginAtZero: true,
+              fontSize: 12,
+              fontColor: 'white',
+              fontFamily: 'Helvetica Neue, sans-serif'
             },
           }],
           xAxes: [{
             type: 'category',
             labels: this.props.ncOp,
             ticks: {
-              autoSkip: false
+              autoSkip: false,
+              fontSize: 14,
+              fontColor: 'white',
+              fontFamily: 'Helvetica Neue, sans-serif'
             }
           }]
         },
@@ -52,6 +58,9 @@ export default class NonConOverview extends Component {
         title: {
           display: true,
           text: 'Total: ' + this.props.nonCons.length,
+          fontSize: 16,
+          fontColor: 'white',
+          fontFamily: 'Helvetica Neue, sans-serif'
         }
     };
 

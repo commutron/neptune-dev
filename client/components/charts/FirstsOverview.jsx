@@ -60,7 +60,20 @@ export default class FirstsOverview extends Component {
             ticks: {
               stepSize: 5,
               beginAtZero: true,
+              fontSize: 12,
+              fontColor: 'white',
+              fontFamily: 'Helvetica Neue, sans-serif'
             },
+          }],
+          xAxes: [{
+            type: 'category',
+            labels: steps,
+            ticks: {
+              autoSkip: false,
+              fontSize: 14,
+              fontColor: 'white',
+              fontFamily: 'Helvetica Neue, sans-serif'
+            }
           }]
         },
         legend: {
@@ -73,7 +86,7 @@ export default class FirstsOverview extends Component {
     };
 
     return (
-      <div className='inlineContain'>
+      <div className='inlineContain up'>
         <Bar data={chartData} options={chartOptions} />
       </div>
     );

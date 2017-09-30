@@ -29,7 +29,7 @@ export default class WidgetPanel extends Component	{
             <span>{w.describe}</span>
           </div>
           
-          <div className='space cap edit'>
+          <div className='space edit'>
             
             <br />
             

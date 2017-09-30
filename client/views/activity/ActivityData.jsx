@@ -25,7 +25,8 @@ class View extends Component	{
       <OrgWip 
         g={this.props.group}
         w={this.props.widget}
-        b={this.props.batch} />
+        b={this.props.batch}
+        a={this.props.app} />
     );
   }
 }

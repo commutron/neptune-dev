@@ -18,7 +18,7 @@ export default class GroupPanel extends Component	{
             <span className='up'>{g.alias}</span>
           </div>
           
-          <div className='space cap edit'>
+          <div className='space edit'>
           
             <p>{Pref.instruct} index: <a className='clean' href={g.wiki} target='_blank'>{g.wiki}</a></p>
             
