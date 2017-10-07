@@ -16,10 +16,30 @@ Meteor.methods({
       const g = GroupDB.findOne({_id: w.groupId});
       const done = b.finishedAt !== false;
       const river = w.flows.find( x => x.flowKey === b.river);
+      //const riverAlt = w.flows.find( x => x.flowKey === b.riverAlt);
+      
+      let normItems = b.items;
+  
+      normItems = normItems.filter( x => x.history.filter( y => y.type === 'scrap' ).length === 0 );
+      
+      const scrapCount = b.items.length - normItems.length;
+      
+      //let altItems = [];
+      /*
+      if(!riverAlt) {
+        null;
+      }else{
+        normItems = b.items.filter( x => x.alt === false || x.alt === 'no' );
+        altItems = b.items.filter( x => x.alt === 'yes' );
+      }
+      */
+      
+      const byKey = (t, ky)=> { return ( x => x.key === ky && x.good === true )};
+      const byName = (t, nm, ty)=> { return ( x => x.step === nm && ty === 'first' && x.good === true )};
       
       let stepCounts = [];
-      let scrapCount = 0;
       let rmaCount = 0;
+      
       if(!river) {
         null;
       }else{
@@ -28,19 +48,17 @@ Meteor.methods({
             null;
           }else{
             let count = 0;
-            for(let i of b.items) {
+            for(let i of normItems) {
               const h = i.history;
-              if(step.type === 'inspect') {
-                const didDo = h.filter( x => x.key === step.key && x.good === true ).length;
-                if(didDo > 0) {
-                  count = count + 1;
-                }else{
-                  const didOther = h.filter( x => x.step === step.step && x.type === 'first' && x.good === true ).length;
-                  didOther > 0 ? count = count + 1 : null;
-                }
+              if(i.finishedAt !== false) {
+                count += 1;
               }else{
-                const didDo = h.filter( x => x.key === step.key && x.good === true ).length;
-                didDo > 0 ? count = count + 1 : null;
+                if(step.type === 'inspect') {
+                  h.find( byKey(this, step.key) ) ? count += 1 : null;
+                  h.find( byName(this, step.step, step.type) ) ? count += 1 : null;
+                }else{
+                  h.find( byKey(this, step.key) ) ? count = count + 1 : null;
+                }
               }
             }
             stepCounts.push({
@@ -50,19 +68,25 @@ Meteor.methods({
             });
           }
         }
-        for(let i of b.items) {
-          const didScrap = i.history.filter( x => x.type === 'scrap' ).length;
-          didScrap > 0 ? scrapCount = scrapCount + 1 : null;
+        for(let i of normItems) {
           rmaCount = rmaCount + i.rma.length;
         }
       }
+      
+      /*
+      if(!riverAlt) {
+        null;
+      }else{
+        // loop riverAlt
+      }
+      */
       
       liveData.push({
         batch: b.batch,
         widget: w.widget,
         group: g.alias,
         finished: done,
-        total: b.items.length,
+        total: normItems.length,
         steps: stepCounts,
         rma: rmaCount,
         scrap: scrapCount

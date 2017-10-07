@@ -318,12 +318,12 @@ td:last-child {
 
 @media screen and (max-width: 1000px) {
   th {
-    font-size: 0.75rem;
+    font-size: 1rem;
     padding: 0 10px;
   }
   
   td {
-    font-size: 0.75rem;
+    font-size: 1rem;
     line-height: 1.5rem;
     text-indent: 0.25rem;
   }

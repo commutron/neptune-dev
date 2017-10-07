@@ -470,7 +470,4 @@ main {
   .findForm {
     width: 225px;
   }
-  .tabBody {
-    overflow-x: auto;
-  }
 }

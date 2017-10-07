@@ -143,6 +143,10 @@ meteor seems to be handling this */
 	border-bottom: 3px groove transparent;
 }
 
+.tabBody {
+  overflow-x: auto;
+}
+
 .open {
   cursor: pointer;
   color: black;
@@ -242,7 +246,6 @@ meteor seems to be handling this */
 }
 .yellowBox > p {
   color: white;
-  word-break: break-all;
 }
 
 .teal {

@@ -82,8 +82,7 @@ export default class MultiItemForm extends Component {
     const unit = this.unit.value.trim();
   
     const first = parseInt(barStart, 10);
-    const end = parseInt(barEnd, 10);
-    const last = end + 1;
+    const last = parseInt(barEnd, 10);
 
     Meteor.call('addMultiItems', batchId, first, last, unit, (error, reply)=>{
       if(error)

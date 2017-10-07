@@ -157,11 +157,15 @@ export default class Stone extends Component	{
 					</div>
 					:
           <div className='actionBox blue'>
-            <button className='action clear rAlign' onClick={this.reveal}>{Pref.close}</button>
-            <br />
-            <br />
-            <p className='bigger centre'>{this.props.step}</p>
-            <br />
+          	<div className='flexRR'>
+	          	<button
+	          		className='action clear'
+	          		onClick={this.reveal}>
+	          		{Pref.close}
+	          	</button>
+          	</div>
+        		<p className='bigger centreText up'>{this.props.step}</p>
+        		<br />
             <FirstForm
               id={this.props.id}
               barcode={this.props.barcode}

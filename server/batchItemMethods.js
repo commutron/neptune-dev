@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 Meteor.methods({
 
 //// Batches \\\\
@@ -119,18 +121,21 @@ Meteor.methods({
 
 //// Items \\\\
   addMultiItems(batchId, barFirst, barLast, unit) {
+    
+    const barEnd = barLast + 1;
+    
     if(
       !isNaN(barFirst)
       &&
-      !isNaN(barLast)
+      !isNaN(barEnd)
       &&
       barFirst > 0
       &&
-      barFirst.length === barLast.length
+      barFirst.length === barEnd.length
       &&
-      barFirst < barLast
+      barFirst < barEnd
       &&
-      barLast - barFirst <= 1000
+      barEnd - barFirst <= 1000
       &&
       unit > 0
       &&
@@ -144,19 +149,35 @@ Meteor.methods({
         if(auth && open && doc) {
           
           let bad = [];
-          let rNum = parseInt(doc.batch, 10) - 12; // should be enough
-          let fNum = parseInt(doc.batch, 10) + 12; // should be enough
-          let recent = rNum.toString();
-          let future = fNum.toString();
+          
+          /*
+          //testing
+          
+          let yrTxt = doc.batch.slice(0, 2) + '000';
+          let yrInt = parseInt(yrTxt, 10);
+          let yrStr = yrInt.toString();
+          
+          const yrBatch = BatchDB.find({ batch: {$gte: yrStr}, orgKey: Meteor.user().org }).fetch();
+          
+          const thisWeek = (rcnt)=> { return ( moment(rcnt).isSame(now, 'year') ) };
+          let potentialWIP = yrBatch.filter( x => thisWeek(x.upadatedAt) === true );
+          
+          let wideDuplicate = potentialWIP.find( x => x.items.find( y => y.serial === barcode) === true);
+          */
+          
+          // let rNum = parseInt(doc.batch, 10) - 12; // should be enough
+          // let fNum = parseInt(doc.batch, 10) + 12; // should be enough
+          // let recent = rNum.toString();
+          // let future = fNum.toString();
+          
+          // batch: {$gte: recent, $lte: future},
+          
           // custom to sequencial batch numbers
           // by date would be better if i could get that to work
-      
-          for(var click = barFirst; click < barLast; click++) {
+          for(var click = barFirst; click < barEnd; click++) {
             let barcode = click.toString();
             let duplicate = doc.items.find(x => x.serial === barcode);
-            let wideDuplicate = BatchDB.findOne({
-              batch: {$gte: recent, $lte: future},  
-              'items.serial': barcode});
+            let wideDuplicate = BatchDB.findOne({ 'items.serial': barcode });
             if(duplicate || wideDuplicate) {
               bad.push(barcode);
             }else{
@@ -178,6 +199,11 @@ Meteor.methods({
             }
           }
     // callbacks = [success, not added]
+          BatchDB.update({_id: batchId}, {
+            $set : {
+              updatedAt: new Date(),
+      			  updatedWho: Meteor.userId()
+            }});
           return [true, bad, 'partial'];
         }else{
           return [false, false, 'noAuth'];

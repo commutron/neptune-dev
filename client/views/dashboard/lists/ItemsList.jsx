@@ -54,11 +54,11 @@ export default class ItemsList extends Component	{
     let niceSteps = [...steps].filter( ( v, indx, slf ) => slf.findIndex( x => x.key === v.key ) === indx);
     return niceSteps;
   }
-  
+
   advancedFilter() {
     filtrA = [];
     for(let z of this.props.batchData.items) {
-      const match = z.history.find( x => x.key === this.state.advancedKey && x.good === true );
+      const match = z.history.find( x => x.key === this.state.advancedKey );
       !match ? null : filtrA.push(z.serial);
     }
     return filtrA;
