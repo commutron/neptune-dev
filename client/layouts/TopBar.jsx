@@ -72,23 +72,25 @@ class TopBar extends Component	{
     return (
       <div className='primeNav'>
         <nav className='primeNav'>
-          <a className='title' href='/'>
-            <img src='/neptune-logo-white.svg' className='logoSVG' />
+          <a className='title' href='/' title='Home'>
+            <img
+              src='/neptune-logo-white.svg'
+              className={ this.props.link === 'home' ? 'slowSpin logoSVG' : 'logoSVG' } />
           </a>
-          <a href='/dashboard'>
-            <i className="fa fa-tachometer fa-2x" aria-hidden="true"></i>
+          <a href='/dashboard' className={ this.props.link === 'dash' ? 'white' : '' }>
+            <i className="fa fa-tachometer fa-2x" aria-hidden='true'></i>
             <span className='icontext'>Dashboard</span>
           </a>
           <RoleCheck role={'admin'}>
             <span>
-              <a href='/gate' disabled='true'>
+              <a href='/gate' className={ this.props.link === 'gate' ? 'white' : '' }>
                 <i className="icon fa fa-rocket fa-2x" aria-hidden='true'></i>
                 <span className='icontext'>Gate</span>
               </a>
             </span>
           </RoleCheck>
-          <a href='/app'>
-            <i className="fa fa-sliders fa-2x" aria-hidden="true"></i>
+          <a href='/app' className={ this.props.link === 'app' ? 'white' : '' }>
+            <i className="fa fa-sliders fa-2x" aria-hidden='true'></i>
             <span className='icontext'>App</span>
           </a>
         </nav>

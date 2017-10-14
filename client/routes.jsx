@@ -14,6 +14,7 @@ FlowRouter.route('/', {
   action() {
     mount(BasicLayout, {
        content: (<LandingWrap />),
+       link: 'home'
     });
   }
 });
@@ -22,6 +23,7 @@ FlowRouter.route('/app', {
   action() {
     mount(BasicLayout, {
        content: (<AppData />),
+       link: 'app'
     });
   }
 });
@@ -30,6 +32,7 @@ FlowRouter.route('/dashboard', {
   action() {
     mount(DashLayout, {
       content: (<DashData />),
+      link: 'dash'
     });
   }
 });
@@ -38,6 +41,7 @@ FlowRouter.route('/gate', {
   action() {
     mount(BasicLayout, {
       content: (<p>hello future</p>),
+      link: 'gate'
     });
   }
 });

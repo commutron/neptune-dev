@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-//import Pref from '/client/global/pref.js';
+import Pref from '/client/global/pref.js';
 
 // requires 
 /// batchData
@@ -12,21 +12,26 @@ export default class StepsProgressMini extends Component	{
     const b = this.props.batchData;
     const flow = this.props.flow;
     
-    const fItems = b.items.filter(x => x.finishedAt !== false).length;
-    
     const iSteps = flow.filter( x => x.type === 'inspect' || x.type === 'test' || x.type === 'build');
     
+    const normItems = b.items.filter( x => x.history.filter( y => y.type === 'scrap' ).length === 0 );
+    
+    const fItems = normItems.filter(x => x.finishedAt !== false);
+    
+    const scrapCount = b.items.length - normItems.length;
+    
     return (
-      <div>
+      <div className='wide max750'>
         {iSteps.map( (entry, index)=>{
           return(
             <StepCounter
               key={index}
               step={entry.step}
               type={entry.type}
-              items={b.items} />
+              items={normItems} />
           )})}
-        <MiniBar step={'Finished'} total={b.items.length} value={fItems} />
+        <MiniBar step={'Finished'} total={normItems.length} value={fItems.length} />
+        {scrapCount > 0 ? <b className='redT cap'>{Pref.scrap}: {scrapCount}</b> : null}
       </div>
     );
   }

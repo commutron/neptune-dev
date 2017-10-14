@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 import {Doughnut} from "react-chartjs-2";
 
-export default class OverviewChart extends Component {
+export default class ProgCircle extends Component {
 
 
   render () {
@@ -24,12 +24,12 @@ export default class OverviewChart extends Component {
     const chartOptions = {
       animation: false,
       cutoutPercentage: 70,
-        legend: {
-          display: false
-        },
-        title: {
-          display: false
-        }
+      legend: {
+        display: false
+      },
+      title: {
+        display: false
+      }
     };
 
     return (

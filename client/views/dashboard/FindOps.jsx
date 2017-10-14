@@ -92,7 +92,7 @@ export default class FindOps extends Component	{
       Session.set('nowBatch', false);
       return (
         <div className='dashMainFull'>
-          <div className='centre centreTrue wide'>
+          <div className='centre wide'>
             <SearchHelp />
           </div>
         </div>
@@ -411,11 +411,26 @@ export default class FindOps extends Component	{
       }
     }
     
+    // number that looks like a barcode but such a barcode does not exist
+    if(!isNaN(orb) && orb.length > 5 && orb.length <= 10) {
+	    Session.set('nowBatch', orb);
+	    return(
+	      <div className='dashMainFull'>
+          <div className='centre wide space'>
+            <p className='big centerText'>{orb} {Pref.noSerial}</p>
+            <hr />
+            <SearchHelp />
+          </div>
+        </div>
+	      );
+	  }
+    
     Session.set('nowBatch', false);
 		return (
 		  <div className='dashMainFull'>
-        <div className='centre centreTrue wide'>
+        <div className='centre wide'>
           <p className='biggest'>¯\_(ツ)_/¯</p>
+        
           <SearchHelp />
         </div>
       </div>

@@ -8,54 +8,28 @@ Meteor.methods({
   
   
   WIPProgress(batches) {
-    liveData = [];
     
-    for(let batch of batches) {
-      const b = BatchDB.findOne({_id: batch._id});
-      const w = WidgetDB.findOne({_id: batch.widgetId});
-      const g = GroupDB.findOne({_id: w.groupId});
-      const done = b.finishedAt !== false;
-      const river = w.flows.find( x => x.flowKey === b.river);
-      //const riverAlt = w.flows.find( x => x.flowKey === b.riverAlt);
-      
-      let normItems = b.items;
-  
-      normItems = normItems.filter( x => x.history.filter( y => y.type === 'scrap' ).length === 0 );
-      
-      const scrapCount = b.items.length - normItems.length;
-      
-      //let altItems = [];
-      /*
-      if(!riverAlt) {
-        null;
-      }else{
-        normItems = b.items.filter( x => x.alt === false || x.alt === 'no' );
-        altItems = b.items.filter( x => x.alt === 'yes' );
-      }
-      */
-      
-      const byKey = (t, ky)=> { return ( x => x.key === ky && x.good === true )};
-      const byName = (t, nm, ty)=> { return ( x => x.step === nm && ty === 'first' && x.good === true )};
-      
-      let stepCounts = [];
-      let rmaCount = 0;
-      
+    // flow counts loop function
+    function flowLoop(river, items) {
       if(!river) {
-        null;
+        return [];
       }else{
+        const byKey = (t, ky)=> { return ( x => x.key === ky && x.good === true )};
+        const byName = (t, nm)=> { return ( x => x.step === nm && x.type === 'first' && x.good === true )};
+        let stepCounts = [];
         for(let step of river.flow) {
           if(step.type === 'first') {
             null;
           }else{
             let count = 0;
-            for(let i of normItems) {
+            for(let i of items) {
               const h = i.history;
               if(i.finishedAt !== false) {
                 count += 1;
               }else{
                 if(step.type === 'inspect') {
                   h.find( byKey(this, step.key) ) ? count += 1 : null;
-                  h.find( byName(this, step.step, step.type) ) ? count += 1 : null;
+                  h.find( byName(this, step.step) ) ? count += 1 : null;
                 }else{
                   h.find( byKey(this, step.key) ) ? count = count + 1 : null;
                 }
@@ -68,30 +42,58 @@ Meteor.methods({
             });
           }
         }
-        for(let i of normItems) {
-          rmaCount = rmaCount + i.rma.length;
-        }
+        return stepCounts;
       }
+    }
+    
+    let liveData = [];
+    
+    for(let batch of batches) {
+      const b = BatchDB.findOne({_id: batch._id});
+      const w = WidgetDB.findOne({_id: batch.widgetId});
+      const g = GroupDB.findOne({_id: w.groupId});
+      const done = b.finishedAt !== false;
+      const river = w.flows.find( x => x.flowKey === b.river);
+      const riverAlt = w.flows.find( x => x.flowKey === b.riverAlt);
       
-      /*
+      // pull out scrap function
+      const outScrap = (itms)=> { return ( itms.filter( x => x.history.filter( y => y.type === 'scrap' ).length === 0 ) )};
+      
+      // split flows, filter scraps
+      let regItems = b.items;
+      let altItems = [];
+      
       if(!riverAlt) {
-        null;
+        regItems = outScrap(regItems);
       }else{
-        // loop riverAlt
+        regItems = outScrap( b.items.filter( x => x.alt === false || x.alt === 'no' ) );
+        altItems = outScrap( b.items.filter( x => x.alt === 'yes' ) );
       }
-      */
       
+      const scrapCount = b.items.length - regItems.length - altItems.length;
+      
+      let regStepCounts = flowLoop(river, regItems);
+      let altStepCounts = flowLoop(riverAlt, altItems);
+      
+      let rmaCount = 0;
+      for(let i of b.items) {
+        rmaCount = rmaCount + i.rma.length;
+      }
       liveData.push({
         batch: b.batch,
         widget: w.widget,
         group: g.alias,
         finished: done,
-        total: normItems.length,
-        steps: stepCounts,
+        finishedAt: b.finishedAt,
+        totalR: regItems.length,
+        totalA: altItems.length,
+        stepsReg: regStepCounts,
+        stepsAlt: altStepCounts,
         rma: rmaCount,
         scrap: scrapCount
       });
     }
+    
     return liveData;
   }
   

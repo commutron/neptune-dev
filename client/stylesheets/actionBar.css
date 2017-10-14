@@ -111,11 +111,11 @@ textarea.redIn:focus {
 }
 
 .dataFlip:before { 
-  content: "\f1c0";
+  content: "\f080";
 }
 
 #ikyToggle:checked + .dataFlip:before { 
-  content: "\f2d0";
+  content: "\f022";
 }
 
 

@@ -29,7 +29,7 @@ export default class ItemCard extends Component	{
             <i className="fa fa-exclamation-circle fa-5x redT" aria-hidden="true"></i>
             <br />
             <p>
-              A {Pref.buildFlow} has not been selected for this {Pref.batch}
+              This {Pref.batch} does not have a {Pref.flow}
             </p>
             <br />
           </div>

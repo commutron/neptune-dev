@@ -12,7 +12,7 @@ import JumpText from '../../../components/tinyUi/JumpText.jsx';
 import FirstsOverview from '../../../components/charts/FirstsOverview.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';
 import BlockList from '../../../components/bigUi/BlockList.jsx';
-import Progress from '../../../components/bigUi/Progress.jsx';
+import RiverSatus from '../../../components/smallUi/RiverStatus.jsx';
 import StepsProgressMini from '../../../components/bigUi/StepsProgressMini.jsx';
 import NonConOverview from '../../../components/charts/NonConOverview.jsx';
 import NonConPie from '../../../components/charts/NonConPie.jsx';
@@ -118,30 +118,13 @@ export default class BatchPanel extends Component	{
               wide={true}
               stick={false}>
               
-              <div>
-                {b.items.length === 0 ?
-                  <p>
-                    <i className='fa fa-hourglass-start fa-2x' aria-hidden='true'></i>
-                    <i>No {Pref.item}s created</i>
-                  </p>
-                : null}
-                {!b.river ? 
-                <p>
-                  <i className='fa fa-exclamation-circle fa-2x' aria-hidden="true"></i>
-                  <i>The {Pref.buildFlow} has not been selected for this {Pref.batch}</i>
-                </p>
-                :
-                <b>Current {Pref.buildFlow}: <i>{riverTitle}</i></b>}
-                <br />
-                {!b.riverAlt ? 
-                <p>
-                  <i className="fa fa-question-circle fa-2x" aria-hidden="true"></i>
-                  <i>The {Pref.buildFlowAlt} has not been selected for this {Pref.batch}</i>
-                </p>
-                :
-                <b>Current {Pref.buildFlowAlt}: <i>{riverAltTitle}</i></b>}
-                
-                <Progress batchData={b} flow={riverFlow} detail={true} />
+              <div className='balance space'>
+                <RiverSatus
+                  items={b.items.length}
+                  river={b.river}
+                  riverTitle={riverTitle}
+                  riverAlt={b.riverAlt}
+                  riverAltTitle={riverAltTitle} />
                 <StepsProgressMini batchData={b} flow={riverFlow} />
               </div>
               

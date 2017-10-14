@@ -274,6 +274,9 @@ meteor seems to be handling this */
 .blackT {
 	color: rgb(48,48,48);
 }
+.blackFade {
+  background-color: rgba(0,0,0,0.3);
+}
 
 .white {
   color: var(--clouds);
@@ -318,6 +321,7 @@ meteor seems to be handling this */
 }
 
 .small {
+  font-family: 'Open Sans', sans-serif;
   font-size: 0.75rem;
 }
 

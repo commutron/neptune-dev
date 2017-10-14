@@ -30,10 +30,11 @@ export default class NonConPie extends Component {
       datasets: [{
         label: '',
         backgroundColor: ['#e74c3c', '#e67e22', '#2ecc71', '#f39c12', '#f1c40f'],
-        borderColor: ['#e74c3c', '#e67e22', '#2ecc71', '#f39c12', '#f1c40f'],
+        borderWidth: [0, 0, 0, 0, 0],
         hoverBackgroundColor: ['#e74c3c', '#e67e22', '#2ecc71', '#f39c12', '#f1c40f'],
+        hoverBorderWidth: [0, 0, 0, 0, 0],
         data: counts
-        }],
+      }],
     };
     
     const chartOptions = {

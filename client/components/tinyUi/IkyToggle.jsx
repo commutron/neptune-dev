@@ -20,7 +20,7 @@ export default class IkyToggle extends Component	{
           onChange={this.toggle.bind(this)}
           readOnly />
           <label htmlFor='ikyToggle' id='snapSwitch' className='navIcon dataFlip'>
-            <span className='actionIconText'>View</span>
+            <span className='actionIconText'>Switch View</span>
           </label>
       </span>
     );

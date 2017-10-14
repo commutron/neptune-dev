@@ -23,10 +23,10 @@ export const MainLayout = ({content, link, plainFooter}) => (
   </div>
 );
 
-export const BasicLayout = ({content}) => (
+export const BasicLayout = ({content, link}) => (
   <div className='basicContainer'>
     <div className='gridHeaderNav'>
-      <TopBar />
+      <TopBar link={link} />
     </div>
     <div className='basicMainFull'>
       {content}
@@ -36,13 +36,13 @@ export const BasicLayout = ({content}) => (
 );
 
 
-export const DashLayout = ({content}) => (
+export const DashLayout = ({content, link}) => (
   <div className='dashContainer'>
     <div className='gridHeaderSearch'>
       <FindBox />
     </div>
     <div className='gridHeaderNav'>
-      <TopBar />
+      <TopBar link={link} />
     </div>
       {content}
     <div className='basicFooter'></div>

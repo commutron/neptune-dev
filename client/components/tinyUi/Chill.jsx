@@ -12,7 +12,7 @@ export default class Chill extends Component	{
     const name = this.props.name ? this.props.name.split('.')[0] : '';
     
     return (
-      <span className='actionIconWrap'>
+      <span className='actionIconWrap' title='Sign Out'>
         <input
           type='button'
           id='exitToggle'
