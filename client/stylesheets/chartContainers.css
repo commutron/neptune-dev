@@ -18,6 +18,15 @@
   max-height: 500px;
 }
 
+.smallContain {
+  display: flex;
+  justify-content: center;
+  margin: 10px auto;
+  width: 100%;
+  min-height: 200px;
+  max-height: 300px;
+}
+
 .miniContain {
   display: flex;
   justify-content: center;

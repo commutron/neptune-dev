@@ -4,8 +4,6 @@ import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
 import CreateTag from '/client/components/uUi/CreateTag.jsx';
 
-import UserNice from '../../../components/smallUi/UserNice.jsx';
-
 import Tabs from '../../../components/smallUi/Tabs.jsx';
 
 import JumpText from '../../../components/tinyUi/JumpText.jsx';
@@ -13,7 +11,7 @@ import FirstsOverview from '../../../components/charts/FirstsOverview.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';
 import BlockList from '../../../components/bigUi/BlockList.jsx';
 import RiverSatus from '../../../components/smallUi/RiverStatus.jsx';
-import StepsProgressMini from '../../../components/bigUi/StepsProgressMini.jsx';
+import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
 import NonConOverview from '../../../components/charts/NonConOverview.jsx';
 import NonConPie from '../../../components/charts/NonConPie.jsx';
 import RMAList from '../../../components/smallUi/RMAList.jsx';
@@ -30,7 +28,6 @@ export default class BatchPanel extends Component	{
   filter() {
     const data = this.props.batchData.items;
     let fList = [];
-    let scList = [];
     let rmaList = [];
     data.map( (item)=>{
       if(item.rma.length > 0) {
@@ -42,11 +39,9 @@ export default class BatchPanel extends Component	{
       for(let v of item.history) {
         // firsts
         v.type === 'first' ? fList.push({bar: item.serial, fKey: v.key, step: v.step}) : null;
-        // scraps
-        v.type === 'scrap' ? scList.push(item.serial) : null;
       }
      });
-     return [fList, scList, rmaList];
+     return [fList, rmaList];
   }
 
   render() {
@@ -125,7 +120,7 @@ export default class BatchPanel extends Component	{
                   riverTitle={riverTitle}
                   riverAlt={b.riverAlt}
                   riverAltTitle={riverAltTitle} />
-                <StepsProgressMini batchData={b} flow={riverFlow} />
+                <StepsProgress batchData={b} flow={riverFlow} flowAlt={riverAltFlow} mini={false} />
               </div>
               
               <FirstsOverview doneFirsts={filter[0]} flow={riverFlow} flowAlt={riverAltFlow} />
@@ -143,7 +138,7 @@ export default class BatchPanel extends Component	{
                   data={b.cascade}
                   options={a.trackOption}
                   end={a.lastTrack}
-                  inUse={filter[2]} />
+                  inUse={filter[1]} />
                 <p>{Pref.escape}s: {b.escaped.length}</p>
               </div>
               

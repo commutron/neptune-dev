@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+// not in use due to external preformance issue
+
 export default class TimeFrame extends Component {
 
   render () {

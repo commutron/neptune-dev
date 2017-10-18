@@ -9,8 +9,7 @@ import InitialSetup from '../views/InitialSetup.jsx';
 import Login from '../views/Login.jsx';
 import ActivateUser from '../components/forms/ActivateUser.jsx';
 import Chill from '../components/tinyUi/Chill.jsx';
-import TimeToggle from '../components/tinyUi/TimeToggle.jsx';
-import TimeFrame from '../components/tinyUi/TimeFrame.jsx';
+import TimeLink from '../components/uUi/TimeLink.jsx';
 
 class TopBar extends Component	{
   
@@ -75,7 +74,7 @@ class TopBar extends Component	{
           <a className='title' href='/' title='Home'>
             <img
               src='/neptune-logo-white.svg'
-              className={ this.props.link === 'home' ? 'slowSpin logoSVG' : 'logoSVG' } />
+              className='logoSVG' />
           </a>
           <a href='/dashboard' className={ this.props.link === 'dash' ? 'white' : '' }>
             <i className="fa fa-tachometer fa-2x" aria-hidden='true'></i>
@@ -95,9 +94,8 @@ class TopBar extends Component	{
           </a>
         </nav>
         <span className='navSpacer'></span>
-        <TimeToggle />
+        <TimeLink go={this.props.app.timeClock} />
         <Chill name={this.props.user}/>
-        <TimeFrame time={this.props.time} go={this.props.app.timeClock} />
       </div>
     );
   }

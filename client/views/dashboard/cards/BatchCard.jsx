@@ -6,7 +6,7 @@ import Pref from '/client/global/pref.js';
 import Tabs from '../../../components/smallUi/Tabs.jsx';
 
 import JumpText from '../../../components/tinyUi/JumpText.jsx';
-import StepsProgressMini from '../../../components/bigUi/StepsProgressMini.jsx';
+import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';
 import BlockNotes from '../../../components/smallUi/BlockNotes.jsx';
 
@@ -22,6 +22,9 @@ export default class BatchCard extends Component	{
     
     const flow = w.flows.find( x => x.flowKey === b.river);
     const riverFlow = flow ? flow.flow : [];
+    
+    const flowAlt = w.flows.find( x => x.flowKey === b.riverAlt );
+    const riverAltFlow = flowAlt ? flowAlt.flow : [];
     
     let iready = b.items.length === 0;
     
@@ -62,7 +65,7 @@ export default class BatchCard extends Component	{
             </div>
             
             <div className='space cap'>
-              <StepsProgressMini batchData={b} flow={riverFlow} />
+              <StepsProgress batchData={b} flow={riverFlow} flowAlt={riverAltFlow} mini={true} />
             </div>
             
           </Tabs>

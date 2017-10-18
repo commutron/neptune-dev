@@ -77,10 +77,8 @@ input::-webkit-calendar-picker-indicator {
   100% { transform: translate3d(0, 0, 0) rotate(360deg); }
 }
 
-
-
 /* custom timeClock icon */
-
+/*
 #timeToggle:checked + #timeSwitch {
   color: white;
 }
@@ -93,14 +91,15 @@ input::-webkit-calendar-picker-indicator {
 .customTimeClock:before { 
   content: "\f017";
 } /* unchecked icon */
-
+/*
 #timeToggle:checked + .customTimeClock:before { 
   content: "\f00d";
 } /* checked icon */
 
-
-
-
+.timeLink {
+  display: block;
+  white-space: nowrap;
+}
 
 @media screen and (max-width: 1000px){
   #find {

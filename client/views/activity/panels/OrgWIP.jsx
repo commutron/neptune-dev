@@ -3,7 +3,7 @@ import moment from 'moment';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
 
-import SimpleProgPie from '/client/components/charts/SimpleProgPie.jsx';
+import ProgPolar from '/client/components/charts/ProgPolar.jsx';
 
 export default class OrgWIP extends Component	{
   
@@ -17,7 +17,7 @@ export default class OrgWIP extends Component	{
   relevant() {
     const b = this.props.b;
     const now = moment();
-    const thisWeek = (fin)=> { return ( moment(fin).isSame(now, 'year') ) };
+    const thisWeek = (fin)=> { return ( moment(fin).isSame(now, 'week') ) };
     const live = b.filter( x => x.finishedAt === false || thisWeek(x.finishedAt) === true );
     
     Meteor.call('WIPProgress', live, (error, reply)=> {
@@ -38,8 +38,6 @@ export default class OrgWIP extends Component	{
         </div>
       );
     }
-    
-    console.log(wip);
     
     return (
       <AnimateWrap type='cardTrans'>
@@ -68,6 +66,11 @@ export class StatusRow extends Component	{
     
     let dt = this.props.entry;
     
+    const countsR = Array.from(dt.stepsReg, x => x.count);
+    const titlesR = Array.from(dt.stepsReg, x => x.step + ' ' + x.type);
+    const countsA = Array.from(dt.stepsAlt, x => x.count);
+    const titlesA = Array.from(dt.stepsAlt, x => x.step + ' ' + x.type);
+    
     return(
       <section>
         <div className='wellSpacedLine blackFade'>
@@ -85,10 +88,7 @@ export class StatusRow extends Component	{
         </div>
         <div className='centreRow'>
           {dt.stepsReg.length > 0 ?
-            dt.stepsReg.map( (stp, index)=>{
-              return(
-                <StatusCell key={index} step={stp} total={dt.totalR} />
-            )})
+            <StatusCell steps={titlesR} counts={countsR} total={dt.totalR} />
           :
             dt.totalR + dt.totalA < 1 ?
               <span className='yellowT wide centreText'>No {Pref.item}s created</span>
@@ -104,10 +104,7 @@ export class StatusRow extends Component	{
               <i>{Pref.buildFlowAlt}</i>
             </span>
             <div className='centreRow'>
-            {dt.stepsAlt.map( (stp, index)=>{
-              return(
-                <StatusCell key={index} step={stp} total={dt.totalA} />
-            )})}
+              <StatusCell steps={titlesA} counts={countsA} total={dt.totalA} />
             </div>
           </div>
         :null}
@@ -121,21 +118,21 @@ export class StatusCell extends Component	{
   
   
   render() {
-    
+    /*
     let stp = this.props.step;
     
     const title = stp.type === 'finish' ||
                   stp.type === 'test' ?
                   stp.step :
                   stp.step + ' ' + stp.type;
+    */
     
+    console.log(this.props.total);
     return(
-      <span>
-        <SimpleProgPie
-          count={stp.count}
-          total={this.props.total} />
-        <p className='centreText cap small'>{title}</p>
-      </span>
+      <ProgPolar
+        steps={this.props.steps}
+        counts={this.props.counts}
+        total={this.props.total} />
     );
   }
 }

@@ -37,8 +37,8 @@ meteor seems to be handling this */
 .actionForm > datalist {
   line-height: 1.5rem;
   font-size: 1rem;
-  min-width: 75px;
-  max-width: 150px;
+  min-width: 100px;
+  max-width: 175px;
   height: 1.75rem;
   margin: 0 10px;
 }
@@ -47,7 +47,6 @@ meteor seems to be handling this */
 .actionForm optgroup {
   color: black;
 }
-
 
 .actionForm > button {
   margin: 0 5px;
@@ -118,4 +117,12 @@ textarea.redIn:focus {
   content: "\f022";
 }
 
+@media screen and (max-width: 1000px) {
+  .actionForm > input,
+  .actionForm > select, 
+  .actionForm > datalist {
+    min-width: 75px;
+    max-width: 150px;
+  }
+}
 

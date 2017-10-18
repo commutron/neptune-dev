@@ -26,6 +26,7 @@ export default class SimpleProgPie extends Component {
     };
     
     const chartOptions = {
+      animation: false,
       legend: {
         display: false,
       },
@@ -37,11 +38,12 @@ export default class SimpleProgPie extends Component {
     };
 
     return (
-      <div className='miniContain'>
-
-        <Pie data={chartData} options={chartOptions} height={40} width={150} />
-
-      </div>
+      <span>
+        <div className='miniContain'>
+          <Pie data={chartData} options={chartOptions} height={40} width={150} />
+        </div>
+        <p className='centreText cap small'>{this.props.title}</p>
+      </span>
     );
   }
 }
