@@ -3,7 +3,7 @@ import moment from 'moment';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
 
-import ProgPolar from '/client/components/charts/ProgPolar.jsx';
+import ProgPie from '/client/components/charts/ProgPie.jsx';
 
 export default class OrgWIP extends Component	{
   
@@ -75,18 +75,16 @@ export class StatusRow extends Component	{
       <section>
         <div className='wellSpacedLine blackFade'>
           <span className='big'>{dt.batch}</span>
-          <span className='up'>{dt.group} {dt.widget}</span>
+          <span className='up'>{dt.group} {dt.widget} {dt.version}</span>
           <span>Total {Pref.item}s: {dt.totalR + dt.totalA}</span>
           {dt.totalA > 0 ? <span>Reg: {dt.totalR}, Alt: {dt.totalA}</span> : null}
           {dt.scrap > 0 ? <span className='redT'>Scraps: {dt.scrap}</span> : null}
           {dt.rma > 0 ? <span className='redT'>RMAs: {dt.rma}</span> : null}
-          <span>
-            {dt.finished ?
-              <span className='greenT'>Finished {moment(dt.finishedAt).calendar()}</span>
-            : null}
-          </span>
+          {dt.finished ?
+            <span className='greenT'>Finished {moment(dt.finishedAt).calendar()}</span>
+          : null}
         </div>
-        <div className='centreRow'>
+        <div>
           {dt.stepsReg.length > 0 ?
             <StatusCell steps={titlesR} counts={countsR} total={dt.totalR} />
           :
@@ -99,11 +97,11 @@ export class StatusRow extends Component	{
         {dt.stepsAlt.length > 0 ?
           <div>
             <hr />
-            <span className='small cap wellSpacedLine lAlign'>
+            <span className='small cap wellSpacedLine'>
               <i className='fa fa-asterisk fa-lg' aria-hidden='true'></i>
               <i>{Pref.buildFlowAlt}</i>
             </span>
-            <div className='centreRow'>
+            <div>
               <StatusCell steps={titlesA} counts={countsA} total={dt.totalA} />
             </div>
           </div>
@@ -126,13 +124,17 @@ export class StatusCell extends Component	{
                   stp.step :
                   stp.step + ' ' + stp.type;
     */
-    
-    console.log(this.props.total);
     return(
-      <ProgPolar
-        steps={this.props.steps}
-        counts={this.props.counts}
-        total={this.props.total} />
+      <div className='centreRow'>
+        {this.props.steps.map( (entry, index)=>{
+          return(
+            <ProgPie
+              key={index}
+              title={entry}
+              count={this.props.counts[index]}
+              total={this.props.total} />
+        )})}
+      </div>
     );
   }
 }

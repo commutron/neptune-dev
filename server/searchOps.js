@@ -51,6 +51,7 @@ Meteor.methods({
     for(let batch of batches) {
       const b = BatchDB.findOne({_id: batch._id});
       const w = WidgetDB.findOne({_id: batch.widgetId});
+      const v = w.versions.find( x => x.versionKey === b.versionKey );
       const g = GroupDB.findOne({_id: w.groupId});
       const done = b.finishedAt !== false;
       const river = w.flows.find( x => x.flowKey === b.river);
@@ -82,6 +83,7 @@ Meteor.methods({
       liveData.push({
         batch: b.batch,
         widget: w.widget,
+        version: v.version,
         group: g.alias,
         finished: done,
         finishedAt: b.finishedAt,

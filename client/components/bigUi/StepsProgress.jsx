@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
 
-import SimpleProgPie from '/client/components/charts/SimpleProgPie.jsx';
+import ProgPie from '/client/components/charts/ProgPie.jsx';
 import MiniBar from '/client/components/charts/MiniBar.jsx';
 // requires 
 /// batchData
@@ -131,7 +131,7 @@ export class StepDisplay extends Component {
       );
     }
     return(
-      <SimpleProgPie
+      <ProgPie
         title={title}
         count={dt.count}
         total={this.props.total} />

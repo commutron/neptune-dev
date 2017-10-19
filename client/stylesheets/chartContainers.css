@@ -1,3 +1,5 @@
+@import url("node_modules/chartist/dist/chartist.min.css");
+
 .pieContain {
   max-height: 300px;
   max-width: 300px;
@@ -28,10 +30,19 @@
 }
 
 .miniContain {
-  display: flex;
-  justify-content: center;
-  margin: 10px auto;
-  width: 100%;
-  min-height: 25px;
-  max-height: 200px;
+  padding: 5px 15px;
 }
+
+
+.reContain {
+  padding: 10px;
+  width: 800px;
+  height: 800px;
+  background-color: #fff;
+}
+
+.layeredCircles {
+  display: flex;
+  flex-direction: row;
+}
+
