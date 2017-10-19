@@ -1,4 +1,3 @@
-@import url("node_modules/chartist/dist/chartist.min.css");
 
 .pieContain {
   max-height: 300px;
@@ -46,3 +45,7 @@
   flex-direction: row;
 }
 
+.monoPie, .monoPieDone {
+  display: flex;
+  justify-content: center;
+}

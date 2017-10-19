@@ -8,7 +8,7 @@ import MiniBar from '/client/components/charts/MiniBar.jsx';
 /// flow
 /// altflow
 
-export default class StepsProgressMini extends Component	{
+export default class StepsProgress extends Component	{
 
   dataLoop() {
     const b = this.props.batchData;
@@ -23,7 +23,7 @@ export default class StepsProgressMini extends Component	{
     let regItems = b.items;
     let altItems = [];
     
-    if(!flowAlt) {
+    if(aSteps.length < 1) {
       regItems = outScrap(regItems);
     }else{
       regItems = outScrap( b.items.filter( x => x.alt === false || x.alt === 'no' ) );

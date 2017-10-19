@@ -75,7 +75,7 @@ export class StatusRow extends Component	{
       <section>
         <div className='wellSpacedLine blackFade'>
           <span className='big'>{dt.batch}</span>
-          <span className='up'>{dt.group} {dt.widget} {dt.version}</span>
+          <span className='up'>{dt.group} {dt.widget} v.{dt.version}</span>
           <span>Total {Pref.item}s: {dt.totalR + dt.totalA}</span>
           {dt.totalA > 0 ? <span>Reg: {dt.totalR}, Alt: {dt.totalA}</span> : null}
           {dt.scrap > 0 ? <span className='redT'>Scraps: {dt.scrap}</span> : null}
@@ -85,7 +85,7 @@ export class StatusRow extends Component	{
           : null}
         </div>
         <div>
-          {dt.stepsReg.length > 0 ?
+          {countsR.length > 0 ?
             <StatusCell steps={titlesR} counts={countsR} total={dt.totalR} />
           :
             dt.totalR + dt.totalA < 1 ?
@@ -94,10 +94,10 @@ export class StatusRow extends Component	{
               <span className='yellowT wide centreText'>No {Pref.flow} chosen</span>
           }
         </div>
-        {dt.stepsAlt.length > 0 ?
+        {countsA.length > 0 ?
           <div>
-            <hr />
-            <span className='small cap wellSpacedLine'>
+            <hr className='fade'/>
+            <span className='small cap'>
               <i className='fa fa-asterisk fa-lg' aria-hidden='true'></i>
               <i>{Pref.buildFlowAlt}</i>
             </span>

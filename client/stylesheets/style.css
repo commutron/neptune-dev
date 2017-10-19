@@ -298,6 +298,10 @@ meteor seems to be handling this */
   color: transparent;
 }
 
+.fade {
+  opacity: 0.2;
+}
+
 .clean {
   font-style: normal;
   text-transform: none;
