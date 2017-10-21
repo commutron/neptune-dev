@@ -3,9 +3,12 @@ import { Meteor } from 'meteor/meteor';
 import {createContainer} from 'meteor/react-meteor-data';
 
 import Spin from '../../components/tinyUi/Spin.jsx';
-import OrgWip from './panels/OrgWIP.jsx';
+import ActivityWrap from './ActivityWrap.jsx';
 
 class View extends Component	{
+  componentWillUnmount() {
+    this.props.sub.stop();
+  }
   
   render() {
 
@@ -22,7 +25,7 @@ class View extends Component	{
     }
 
     return (
-      <OrgWip 
+      <ActivityWrap 
         g={this.props.group}
         w={this.props.widget}
         b={this.props.batch}
@@ -49,6 +52,7 @@ export default createContainer( () => {
   }else{
     return {
       login: Meteor.userId(),
+      sub: sub,
       ready: sub.ready(),
       user: user,
       org: org,

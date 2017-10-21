@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import moment from 'moment';
-import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
 
 import ProgPie from '/client/components/charts/ProgPie.jsx';
@@ -26,30 +25,48 @@ export default class OrgWIP extends Component	{
     });
   }
 
-
   render() {
     
-    const wip = this.state.wip;
-    
+    let wip = this.state.wip;
+    let wipHot = false;
+    let wipCold = false;
+
     if(!wip) {
+      null;
+    }else{
+      wipHot = wip.filter( x => x.active === true);
+      wipHot.sort((b1, b2)=> {
+                    if (b1.batch < b2.batch) { return 1 }
+                    if (b1.batch > b2.batch) { return -1 }
+                    return 0;
+                  });
+      wipCold = wip.filter( x => x.active === false);
+      wipCold.sort((b1, b2)=> {
+                    if (b1.batch < b2.batch) { return 1 }
+                    if (b1.batch > b2.batch) { return -1 }
+                    return 0;
+                  });
+    }
+    
+    if(!wipHot || !wipCold) {
       return (
-        <div className='centreTrue'>
+        <div>
           loading...
         </div>
       );
     }
     
     return (
-      <AnimateWrap type='cardTrans'>
-        <div className='section space' key={0}>
-          <div className='wipTable'>
-            {wip.map( (entry, index)=>{
-              return(
-                <StatusRow key={index} entry={entry} />
-              )})}
-          </div>
-        </div>
-      </AnimateWrap>
+      <div className='wipCol'>
+        {wipHot.map( (entry, index)=>{
+          return(
+            <StatusRow key={index} entry={entry} active={true} />
+          )})}
+        {wipCold.map( (entry, index)=>{
+          return(
+            <StatusRow key={index} entry={entry} active={false} />
+          )})}
+      </div>
     );
   }
   componentDidMount() {
@@ -61,18 +78,19 @@ export default class OrgWIP extends Component	{
 
 export class StatusRow extends Component	{
   
-  
   render() {
     
     let dt = this.props.entry;
     
     const countsR = Array.from(dt.stepsReg, x => x.count);
-    const titlesR = Array.from(dt.stepsReg, x => x.step + ' ' + x.type);
+    const titlesR = Array.from(dt.stepsReg, x => ({step: x.step, type: x.type}));
     const countsA = Array.from(dt.stepsAlt, x => x.count);
-    const titlesA = Array.from(dt.stepsAlt, x => x.step + ' ' + x.type);
+    const titlesA = Array.from(dt.stepsAlt, x => ({step: x.step, type: x.type}));
     
+    const clss = this.props.active ? 'popExcesive' : '';
+
     return(
-      <section>
+      <section className={clss}>
         <div className='wellSpacedLine blackFade'>
           <span className='big'>{dt.batch}</span>
           <span className='up'>{dt.group} {dt.widget} v.{dt.version}</span>
@@ -83,18 +101,18 @@ export class StatusRow extends Component	{
           {dt.finished ?
             <span className='greenT'>Finished {moment(dt.finishedAt).calendar()}</span>
           : null}
+          <span>Active Today: {dt.active.toString()}</span>
         </div>
         <div>
-          {countsR.length > 0 ?
+          {dt.totalR + dt.totalA < 1 ?
+            <span className='yellowT wide centreText'>No {Pref.item}s created</span>
+          : titlesR.length > 0 ?
             <StatusCell steps={titlesR} counts={countsR} total={dt.totalR} />
           :
-            dt.totalR + dt.totalA < 1 ?
-              <span className='yellowT wide centreText'>No {Pref.item}s created</span>
-            :
-              <span className='yellowT wide centreText'>No {Pref.flow} chosen</span>
+            <span className='yellowT wide centreText'>No {Pref.flow} chosen</span>
           }
         </div>
-        {countsA.length > 0 ?
+        {titlesA.length > 0 ?
           <div>
             <hr className='fade'/>
             <span className='small cap'>
@@ -114,23 +132,18 @@ export class StatusRow extends Component	{
 
 export class StatusCell extends Component	{
   
-  
   render() {
-    /*
-    let stp = this.props.step;
-    
-    const title = stp.type === 'finish' ||
-                  stp.type === 'test' ?
-                  stp.step :
-                  stp.step + ' ' + stp.type;
-    */
     return(
       <div className='centreRow'>
         {this.props.steps.map( (entry, index)=>{
+          const title = entry.type === 'finish' ||
+                        entry.type === 'test' ?
+                        entry.step :
+                        entry.step + ' ' + entry.type;
           return(
             <ProgPie
               key={index}
-              title={entry}
+              title={title}
               count={this.props.counts[index]}
               total={this.props.total} />
         )})}

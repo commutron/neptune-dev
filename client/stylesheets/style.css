@@ -61,7 +61,7 @@ meteor seems to be handling this */
   border-bottom-color: white;
   border-left-color: transparent;
   transition: border 250ms ease;
-  word-break: break-all;
+  word-break: keep-all;
 }
 .jump:hover, .jump:focus, .jump:active {
   border-bottom-color: #3498db;
@@ -170,6 +170,12 @@ meteor seems to be handling this */
   -moz-box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2);
   -webkit-box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2);
   box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2);
+}
+
+.popExcesive {
+  -moz-box-shadow: 0 5px 1vw 1vh rgba(0,0,0,0.3);
+  -webkit-box-shadow: 0 5px 1vw 1vh rgba(0,0,0,0.3);
+  box-shadow: 0 5px 1vw 1vh rgba(0,0,0,0.3);
 }
 
 .fade {

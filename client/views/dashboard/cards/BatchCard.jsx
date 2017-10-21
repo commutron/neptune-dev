@@ -65,7 +65,7 @@ export default class BatchCard extends Component	{
             </div>
             
             <div className='space cap'>
-              <StepsProgress batchData={b} flow={riverFlow} flowAlt={riverAltFlow} mini={false} />
+              <StepsProgress batchData={b} flow={riverFlow} flowAlt={riverAltFlow} mini={true} />
             </div>
             
           </Tabs>

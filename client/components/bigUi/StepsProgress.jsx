@@ -63,7 +63,13 @@ export default class StepsProgress extends Component	{
     let regStepCounts = flowLoop(rSteps, regItems);
     let altStepCounts = flowLoop(aSteps, altItems);
     
-    return [regStepCounts, regItems.length, altStepCounts, altItems.length, scrapCount];
+    return [
+      regStepCounts,
+      regItems.length,
+      altStepCounts,
+      altItems.length,
+      scrapCount
+    ];
   }
     
   render() {

@@ -669,8 +669,8 @@
 }
 
 .monoPie .ct-series-b .ct-slice-pie {
-  stroke: rgba(0,0,0,0.1);
-  fill: rgba(0,0,0,0.1);
+  stroke: rgba(0,0,0,0.2);
+  fill: rgba(0,0,0,0.2);
 }
 
 .monoPie .ct-label, .monoDon .ct-label {

@@ -7,7 +7,7 @@ export default class Tabs extends Component	{
     super();
     this.state = {
       sect: 0
-   };
+    };
   }
   
   handleClick(clk) {
@@ -24,7 +24,7 @@ export default class Tabs extends Component	{
     return (
       <div>
         <div className={stick}>
-          { tabs.map( (entry, index)=>{
+          {tabs.map( (entry, index)=>{
             let clss =  show === index ? 'action cap tabOn' : 'action cap tabOff';
             return (
               <button
@@ -33,8 +33,7 @@ export default class Tabs extends Component	{
                 className={clss}
                 style={styl}
               >{entry}</button>
-            );
-          })}
+          )})}
         </div>
         <AnimateWrap type='cardTrans'>
           <div className='tabBody'>

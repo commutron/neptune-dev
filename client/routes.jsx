@@ -7,13 +7,14 @@ import {DashLayout} from './layouts/MainLayouts.jsx';
 
 import DashData from './views/dashboard/DashData.jsx';
 import AppData from './views/app/AppData.jsx';
+import ActivityData from './views/activity/ActivityData.jsx';
 
 import LandingWrap from './LandingWrap.jsx';
 
 FlowRouter.route('/', {
   action() {
     mount(BasicLayout, {
-       content: (<LandingWrap />),
+       content: (<ActivityData />),
        link: 'home'
     });
   }
@@ -53,3 +54,12 @@ FlowRouter.route('/gate', {
     });
   }
 });*/
+
+FlowRouter.notFound = {
+  action() {
+    mount(BasicLayout, {
+      content: (<p>Page Not Found</p>),
+      link: ''
+    });
+  }
+};

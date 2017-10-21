@@ -64,7 +64,7 @@ input::-webkit-calendar-picker-indicator {
   height: auto;
 }
 
-.logoSVG:hover, .logoSVG:active, .logoSVG:focus {
+.logoSVG:hover, .logoSVG:active {
   animation: spinAround 1s infinite linear ;
 }
 

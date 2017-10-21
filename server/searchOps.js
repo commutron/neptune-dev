@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 Meteor.methods({
   
   serialLookup(orb) {
@@ -80,6 +82,11 @@ Meteor.methods({
       for(let i of b.items) {
         rmaCount = rmaCount + i.rma.length;
       }
+      let active = b.items.find( 
+                    x => x.history.find( 
+                      y => moment(y.time).isSame(new Date(), 'day') ) ) 
+                        ? true : false; 
+      
       liveData.push({
         batch: b.batch,
         widget: w.widget,
@@ -92,11 +99,31 @@ Meteor.methods({
         stepsReg: regStepCounts,
         stepsAlt: altStepCounts,
         rma: rmaCount,
-        scrap: scrapCount
+        scrap: scrapCount,
+        active: active
       });
     }
-    
     return liveData;
+  },
+  
+  bigNow() {
+    const b = BatchDB.find({orgKey: Meteor.user().orgKey}).fetch();
+    let active = b.filter( x => x.finishedAt === false );
+    let today = b.filter(
+                  x => x.items.find(
+                    y => y.history.find( 
+                      z => moment(z.time)
+                            .isSame(new Date(), 'day') ) ) );
+    let doneToday = b.filter( x => x.finishedAt !== false && 
+                                    moment(x.finishedAt)
+                                      .isSame(new Date(), 'day') );
+    
+    const dataPack = {
+      active: active.length,
+      today: today.length,
+      doneToday: doneToday.length
+    };
+    return dataPack;
   }
   
   
