@@ -4,15 +4,15 @@ import {createContainer} from 'meteor/react-meteor-data';
 import Pref from '/client/global/pref.js';
 
 import Spin from '../../components/tinyUi/Spin.jsx';
-import FindOps from './FindOps.jsx';
+import ProductionFindOps from './ProductionFindOps.jsx';
 
-class DashView extends Component	{
+class ProductionView extends Component	{
   
   render() {
     
     if(!this.props.login) {
       return (
-        <div></div>
+        <div>no production access</div>
         );
     }
     
@@ -28,9 +28,8 @@ class DashView extends Component	{
     }
     
     return (
-      <FindOps
+      <ProductionFindOps
         orb={this.props.orb}
-        snap={this.props.snap}
         anchor={this.props.anchor}
         org={this.props.org}
         users={this.props.users}
@@ -135,7 +134,6 @@ export default createContainer( () => {
       coldReady: coldSub.ready(),
       hotReady: hotSub.ready(),
       orb: orb,
-      snap: Session.get( 'ikyView' ),
       anchor: Session.get( 'nowWanchor' ),
       login: Meteor.userId(),
       org: org,
@@ -149,4 +147,4 @@ export default createContainer( () => {
       allScrap: scrapSub.ready()
     };
   }
-}, DashView);
+}, ProductionView);

@@ -1,30 +1,33 @@
 import React from 'react';
 import {mount} from 'react-mounter';
 
-import {MainLayout} from './layouts/MainLayouts.jsx';
 import {BasicLayout} from './layouts/MainLayouts.jsx';
 import {DashLayout} from './layouts/MainLayouts.jsx';
+import {ProductionLayout} from './layouts/MainLayouts.jsx';
+import {AnalyticsLayout} from './layouts/MainLayouts.jsx';
 
 import DashData from './views/dashboard/DashData.jsx';
-import AppData from './views/app/AppData.jsx';
 import ActivityData from './views/activity/ActivityData.jsx';
+import ProdData from './views/production/ProdData.jsx';
+import AnaData from './views/analytics/AnaData.jsx';
+import AppData from './views/app/AppData.jsx';
 
 import LandingWrap from './LandingWrap.jsx';
 
 FlowRouter.route('/', {
   action() {
     mount(BasicLayout, {
-       content: (<ActivityData />),
+       content: (<LandingWrap />),
        link: 'home'
     });
   }
 });
 
-FlowRouter.route('/app', {
+FlowRouter.route('/activity', {
   action() {
     mount(BasicLayout, {
-       content: (<AppData />),
-       link: 'app'
+      content: (<ActivityData />),
+      link: 'act'
     });
   }
 });
@@ -38,22 +41,32 @@ FlowRouter.route('/dashboard', {
   }
 });
 
-FlowRouter.route('/gate', {
+FlowRouter.route('/production', {
   action() {
-    mount(BasicLayout, {
-      content: (<p>hello future</p>),
-      link: 'gate'
+    mount(ProductionLayout, {
+      content: (<ProdData />),
+      link: 'prod'
     });
   }
 });
 
-/*FlowRouter.route('/analysis', {
+FlowRouter.route('/analytics', {
   action() {
-    mount(MainLayout, {
-       content: (<AnalyzeWrap />)
+    mount(AnalyticsLayout, {
+      content: (<AnaData />),
+      link: 'ana'
     });
   }
-});*/
+});
+
+FlowRouter.route('/app', {
+  action() {
+    mount(BasicLayout, {
+       content: (<AppData />),
+       link: 'app'
+    });
+  }
+});
 
 FlowRouter.notFound = {
   action() {

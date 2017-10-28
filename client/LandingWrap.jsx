@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
 import {createContainer} from 'meteor/react-meteor-data';
 
-import ActivityData from './views/activity/ActivityData.jsx';
-
 class StartView extends Component	{
   
   render() {
@@ -15,7 +13,9 @@ class StartView extends Component	{
     }
 
     return (
-      <ActivityData />
+      <div className='centreTrue'>
+        <img src='/titleLogo.svg' className='shadow noCopy' height='600' />
+      </div>
     );
   }
 }

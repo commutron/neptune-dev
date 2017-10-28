@@ -76,21 +76,29 @@ class TopBar extends Component	{
               src='/neptune-logo-white.svg'
               className='logoSVG' />
           </a>
+          <a href='/activity' className={ this.props.link === 'act' ? 'white' : '' }>
+            <i className="fa fa-line-chart fa-2x" aria-hidden='true'></i>
+            <span className='icontext'>Activity</span>
+          </a>
           <a href='/dashboard' className={ this.props.link === 'dash' ? 'white' : '' }>
             <i className="fa fa-tachometer fa-2x" aria-hidden='true'></i>
             <span className='icontext'>Dashboard</span>
           </a>
           <RoleCheck role={'admin'}>
             <span>
-              <a href='/gate' className={ this.props.link === 'gate' ? 'white' : '' }>
-                <i className="icon fa fa-rocket fa-2x" aria-hidden='true'></i>
-                <span className='icontext'>Gate</span>
+              <a href='/production' className={ this.props.link === 'prod' ? 'white' : '' }>
+                <i className="fa fa-flask fa-2x" aria-hidden='true'></i>
+                <span className='icontext'>Production</span>
+              </a>
+              <a href='/analytics' className={ this.props.link === 'ana' ? 'white' : '' }>
+                <i className="icon fa fa-flask fa-2x" aria-hidden='true'></i>
+                <span className='icontext'>Analytics</span>
               </a>
             </span>
           </RoleCheck>
           <a href='/app' className={ this.props.link === 'app' ? 'white' : '' }>
             <i className="fa fa-sliders fa-2x" aria-hidden='true'></i>
-            <span className='icontext'>App</span>
+            <span className='icontext'>Settings</span>
           </a>
         </nav>
         <span className='navSpacer'></span>

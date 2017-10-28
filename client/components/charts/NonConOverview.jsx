@@ -26,11 +26,11 @@ export default class NonConOverview extends Component {
     };
     
     let options = {
-      width: 500,
-      height: 500,
+      width: 600,
+      height: 700,
       horizontalBars: true,
       reverseData: true,
-      stretch: false,
+      stretch: true,
       axisX: {
         low: 0,
         high: Math.max(...counts),

@@ -1,15 +1,9 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
 
-import Dashboard from './Dashboard.jsx';
+import AnalyticsWrap from './AnalyticsWrap.jsx';
 
-import WikiOps from '../wiki/WikiOps.jsx';
 import SearchHelp from './SearchHelp.jsx';
-
-import ItemCard from './cards/ItemCard.jsx';
-import BatchCard from './cards/BatchCard.jsx';
-// import BatchDoneCard from './cards/BatchDoneCard.jsx';
-import WidgetCard from './cards/WidgetCard.jsx';
 
 import ItemPanel from './panels/ItemPanel.jsx';
 import BatchPanel from './panels/BatchPanel.jsx';
@@ -23,7 +17,7 @@ import ItemsList from './lists/ItemsList.jsx';
 import GroupsList from './lists/GroupsList.jsx';
 import WidgetsList from './lists/WidgetsList.jsx';
 
-export default class FindOps extends Component	{
+export default class AnalyticsFindOps extends Component	{
   
   linkedBatch(wId, vKey) {
     return this.props.allBatch.find(x => x.widgetId === wId, x => x.versionKey === vKey);
@@ -79,9 +73,7 @@ export default class FindOps extends Component	{
 
   render () {
 
-    const snap = this.props.snap;
     const orb = this.props.orb;
-    const anchor= this.props.anchor;
     const app = this.props.app;
     const allGroup = this.props.allGroup;
     const allWidget = this.props.allWidget;
@@ -104,9 +96,8 @@ export default class FindOps extends Component	{
       Session.set('nowBatch', false);
       return (
         <div className='dashMainFull'>
-          <div className='centre wisper'>
+          <div className='centre'>
             <p>the angels have the phone box</p>
-            <img src='/titleLogo.svg' className='shadow noCopy' height='600' />
           </div>
         </div>
       );
@@ -115,20 +106,20 @@ export default class FindOps extends Component	{
     if(orb === Pref.batch || orb === Pref.batch + 's' || orb === Pref.btch) {
       Session.set('nowBatch', false);
       return (
-        <Dashboard>
+        <AnalyticsWrap>
           <BatchesList batchData={allBatch} widgetData={allWidget} />
           <div></div>
-        </Dashboard>
+        </AnalyticsWrap>
       );
     }
     
     if(orb === Pref.group || orb === Pref.group + 's' || orb === Pref.grp) {
       Session.set('nowBatch', false);
       return (
-        <Dashboard action='newGroup'>
+        <AnalyticsWrap action='newGroup'>
           <GroupsList groupData={allGroup} batchData={allBatch} widgetData={allWidget} />
           <div></div>
-        </Dashboard>
+        </AnalyticsWrap>
       );
     }
     
@@ -150,15 +141,6 @@ export default class FindOps extends Component	{
         </div>
       );
     }
-    if(orb === Pref.docs || orb === 'docs' || orb === 'd') {
-      Session.set('now', Pref.docs);
-      Session.set('nowBatch', false);
-      return (
-        <div className='dashMainFull'>
-          <WikiOps wi={false} root={app.instruct} anchor={false} />
-        </div>
-      );
-    }
 
   // Batch
     if(!isNaN(orb) && orb.length === 5) {
@@ -166,70 +148,29 @@ export default class FindOps extends Component	{
         let widget = this.linkedWidget(hotBatch.widgetId);
         let version = this.versionData(widget.versions, hotBatch.versionKey);
         let group = this.linkedGroup(widget.groupId);
-        if(snap) {
-          return (
-  			    <Dashboard
-  			      snap={snap}
-  			      batchData={hotBatch}
+        return (
+			    <AnalyticsWrap
+			      batchData={hotBatch}
+            widgetData={widget}
+            versionData={version}
+            groupData={group} 
+            app={app}
+            action='batch'
+          >
+			      <ItemsList
+			        batchData={hotBatch}
+			        widgetData={widget}
+			        tide={orb} />
+            <BatchPanel
+              batchData={hotBatch}
               widgetData={widget}
               versionData={version}
               groupData={group} 
-              app={app}
-              action='batch'
-            >
-  			      <ItemsList
-  			        batchData={hotBatch}
-  			        widgetData={widget}
-  			        tide={orb} />
-              <BatchPanel
-                batchData={hotBatch}
-                widgetData={widget}
-                versionData={version}
-                groupData={group} 
-                app={app} />
-            </Dashboard>
-            );
-        }else{
-          return (
-  			    <Dashboard
-  			      snap={snap}
-  			      batchData={hotBatch}
-              widgetData={widget}
-              versionData={version}
-              groupData={group}
-              app={app}
-              action='batchBuild'
-            >
-              <BatchCard
-                batchData={hotBatch}
-                widgetData={widget}
-                versionData={version}
-                groupData={group} />
-              <WikiOps wi={version.wiki} root={app.instruct} anchor={anchor} />
-            </Dashboard>
-          );
-        }
+              app={app} />
+          </AnalyticsWrap>
+        );
       }
     }
-    
-    // archive search
-        
-	  
-	  // Fallback to 'PISCES' -- for the transition
-	  //// supufoulous once 'neptune' is used exclusivly
-	  if(!isNaN(orb) && orb.length === 5) {
-	    Session.set('nowBatch', orb);
-	    return(
-	      <div className='dashMainFull'>
-	        <WikiOps
-	          wi='home'
-	          fallback={orb}
-	          root={app.instruct}
-	          anchor={anchor}
-	          indie={true} />
-	       </div>
-	      );
-	  }
 	  
   // Item
     //// barcode numbers are short durring dev but they will have to longer in production
@@ -241,10 +182,8 @@ export default class FindOps extends Component	{
         let widget = this.linkedWidget(hotBatch.widgetId);
         let version = this.versionData(widget.versions, hotBatch.versionKey);
         let group = this.linkedGroup(widget.groupId);
-        if(snap) {
-          return (
-          <Dashboard
-            snap={snap}
+        return (
+          <AnalyticsWrap
             batchData={hotBatch}
             itemData={item}
             widgetData={widget}
@@ -267,37 +206,8 @@ export default class FindOps extends Component	{
                 app={app}
                 listTitle={true} />
             </div>
-          </Dashboard>
-          );
-        }else{
-          return (
-            <Dashboard
-              snap={snap}
-              batchData={hotBatch}
-              itemData={item}
-              widgetData={widget}
-              versionData={version}
-              groupData={group}
-              app={app}
-              action='build'
-            >
-              <div>
-                <ItemCard
-                  batchData={hotBatch}
-                  itemData={item}
-                  widgetData={widget}
-                  users={this.props.users}
-                  app={app} />
-                <BatchCard
-                  batchData={hotBatch}
-                  widgetData={widget}
-                  versionData={version}
-                  groupData={group} />
-              </div>
-              <WikiOps wi={version.wiki} root={app.instruct} anchor={anchor} />
-            </Dashboard>
-          );
-        }
+          </AnalyticsWrap>
+        );
       }
     }
 
@@ -310,47 +220,25 @@ export default class FindOps extends Component	{
         Session.set('nowBatch', false);
         let widgets = this.groupWidgets(lookup._id);
         let activeWidgets = this.groupActiveWidgets(lookup._id);
-        if(snap) {
-          return (
-            <Dashboard
-              snap={snap}
-              batchData={false}
-              itemData={false}
+        return (
+          <AnalyticsWrap
+            batchData={false}
+            itemData={false}
+            widgetData={widgets}
+            versionData={false}
+            groupData={lookup}
+            app={app}
+            action='group'
+          >
+            <WidgetsList
+              groupAlias={lookup.alias}
               widgetData={widgets}
-              versionData={false}
-              groupData={lookup}
-              app={app}
-              action='group'
-            >
-              <WidgetsList
-                groupAlias={lookup.alias}
-                widgetData={widgets}
-                active={activeWidgets} />
-              <GroupPanel groupData={lookup} />
-            </Dashboard>
-          );
-        }else{
-          return (
-            <Dashboard
-              snap={snap}
-              batchData={false}
-              itemData={false}
-              widgetData={widgets}
-              versionData={false}
-              groupData={lookup}
-              app={app}
-            >
-              <WidgetsList
-                groupAlias={lookup.alias}
-                widgetData={widgets}
-                active={activeWidgets} />
-              <WikiOps wi={lookup.wiki} root={app.instruct} anchor={anchor} />
-            </Dashboard>
-          );
-        }
+              active={activeWidgets} />
+            <GroupPanel groupData={lookup} />
+          </AnalyticsWrap>
+        );
       }
     }
-    
 
   // Widget
   let lookup = this.widget(); // possible scope issue
@@ -359,56 +247,29 @@ export default class FindOps extends Component	{
       let group = this.linkedGroup(lookup.groupId);
       let allWidgets = this.groupWidgets(lookup.groupId);
       let allBatches = this.allLinkedBatches(lookup._id);
-      if(snap) {
-        return (
-          <Dashboard
-            snap={snap}
-            batchData={false}
-            itemData={false}
-            widgetData={lookup}
-            versionData={false}
-            groupData={group}
-            app={app}
-            action='widget'
-          >
-            <BatchesList
-              batchData={allBatches}
-              widgetData={allWidgets} />
-            <div>
-              <WidgetPanel
-                widgetData={lookup}
-                groupData={group}
-                batchRelated={allBatches}
-                app={app}
-              />
-            </div>
-          </Dashboard>
-          );
-      }else{
-        return (
-          <Dashboard
-            snap={snap}
-            batchData={false}
-            itemData={false}
-            widgetData={lookup}
-            versionData={false}
-            groupData={group}
-            app={app}
-          >
-            <div>
-              <WidgetCard
-                groupData={group}
-                widgetData={lookup}
-                batchRelated={allBatches}
-              />
-            </div>
-            <WikiOps
-              wi={lookup.versions[lookup.versions.length - 1].wiki} // newest version
-              root={app.instruct}
-              anchor={anchor} />
-          </Dashboard>
-        );
-      }
+      return (
+        <AnalyticsWrap
+          batchData={false}
+          itemData={false}
+          widgetData={lookup}
+          versionData={false}
+          groupData={group}
+          app={app}
+          action='widget'
+        >
+          <BatchesList
+            batchData={allBatches}
+            widgetData={allWidgets} />
+          <div>
+            <WidgetPanel
+              widgetData={lookup}
+              groupData={group}
+              batchRelated={allBatches}
+              app={app}
+            />
+          </div>
+        </AnalyticsWrap>
+      );
     }
     
     // number that looks like a barcode but such a barcode does not exist

@@ -1,5 +1,9 @@
 import React, {Component} from 'react';
 
+//import DataToggle from '../tinyUi/DataToggle.jsx';
+import IkyToggle from '../tinyUi/IkyToggle.jsx';
+import NCAdd from '../river/NCAdd.jsx';
+import NonConSkip from '../forms/NonConSkip.jsx';
 import BlockForm from '../forms/BlockForm.jsx';
 import BatchForm from '../forms/BatchForm.jsx';
 import MultiItemForm from '../forms/MultiItemForm.jsx';
@@ -18,10 +22,12 @@ import FlowForm from '../forms/FlowForm.jsx';
 import GroupForm from '../forms/GroupForm.jsx';
 import WidgetNewForm from '../forms/WidgetNewForm.jsx';
 
+
 export default class ActionBar extends Component	{
   
   render() {
     
+    //let snap = this.props.snap;
     let batchData = this.props.batchData;
     let itemData = this.props.itemData;
     let widgetData = this.props.widgetData;
@@ -29,11 +35,26 @@ export default class ActionBar extends Component	{
     let groupData = this.props.groupData;
     let app = this.props.app;
     let act = this.props.action;
+    let ncedit = Roles.userIsInRole(Meteor.userId(), 'inspect');
     
     return (
       <div className='dashAction'>
         <div className='footLeft'>
         { 
+        act === 'build' && ncedit ?
+            <NonConSkip
+      		    ncData={batchData.nonCon}
+      		    id={batchData._id}
+              serial={itemData.serial}
+      		    nons={app.nonConOption} />
+      	:
+      	act === 'batchBuild' && batchData.items.length === 0 ?
+      	  <MultiItemForm
+            id={batchData._id}
+            items={batchData.items}
+            more={batchData.finishedAt === false}
+            unit={versionData.units} />
+      	:
       	act === 'item' ?
       	  <div> 
         	  <UnitSet
@@ -148,10 +169,19 @@ export default class ActionBar extends Component	{
         </div>
         
   { /* Center Section */ }      
-        <div className='footCent'></div>
+        <div className='footCent'>
+          {act === 'build' ?
+            <NCAdd 
+              id={batchData._id}
+              barcode={itemData.serial}
+              app={app} />
+          :null}
+        </div>
             
   { /* Right Section */ }
-        <div className='footRight'></div>
+        <div className='footRight'>
+          <IkyToggle />
+        </div>
       </div>
     );
   }

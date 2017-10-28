@@ -13,10 +13,10 @@
 }
 
 .inlineContain {
-  margin: 20px auto;
-  width: 600px;
+  margin: 25px 0;
+  width: 500px;
   min-height: 200px;
-  max-height: 500px;
+  max-height: 600px;
 }
 
 .smallContain {
@@ -45,7 +45,7 @@
   flex-direction: row;
 }
 
-.monoPie, .monoPieDone {
+.monoPie, .monoPieDone, .monoDon, .monoDonDone {
   display: flex;
   justify-content: center;
 }

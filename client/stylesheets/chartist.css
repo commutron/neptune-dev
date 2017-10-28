@@ -624,12 +624,12 @@
   position: absolute;
   display: inline-block;
   opacity: 0;
-  min-width: 5em;
+  min-width: 3em;
   padding: .5em;
-  background: #F4C63D;
-  color: #453D3F;
-  font-family: Oxygen,Helvetica,Arial,sans-serif;
-  font-weight: 700;
+  background: rgb(0,0,0);
+  background: rgba(0,0,0,0.5);
+  color: white;
+  font-weight: 600;
   text-align: center;
   pointer-events: none;
   z-index: 1;
@@ -646,7 +646,9 @@
   height: 0;
   margin-left: -15px;
   border: 15px solid transparent;
-  border-top-color: #F4C63D; }
+  border-top-color: rgb(0,0,0);
+  border-top-color: rgba(0,0,0,0.5);
+}
 .chartist-tooltip.tooltip-show {
   opacity: 1; }
 
@@ -688,4 +690,25 @@
 
 .monoDon .ct-series-b .ct-slice-donut {
   stroke: rgba(0,0,0,0.1);
+}
+
+
+.nonConPieColors .ct-series-a .ct-slice-donut {
+  stroke: #e74c3c;
+}
+
+.nonConPieColors .ct-series-b .ct-slice-donut {
+  stroke: #e67e22;
+}
+
+.nonConPieColors .ct-series-c .ct-slice-donut {
+  stroke: #2ecc71;
+}
+
+.nonConPieColors .ct-series-d .ct-slice-donut {
+  stroke: #f39c12;
+}
+
+.nonConPieColors .ct-series-e .ct-slice-donut {
+  stroke: #f1c40f;
 }

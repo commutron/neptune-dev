@@ -3,7 +3,8 @@
   --neptuneColor: #007fff;
   --turquoise: rgb(26, 188, 156);
   --turquoisefade: rgba(26, 188, 156, 0.5);
-  --emerald: rgb(46, 204, 113);
+  --greenSea: rgb(22, 160, 133);
+  --emerald: rgb(46, 204, 113); /* light green */
   --emeraldfade: rgba(46, 204, 113, 0.5);
   --nephritis: rgb(39, 174, 96); /* dark green */
   --peterriver: rgb(52, 152, 219);/* light blue */
@@ -11,6 +12,7 @@
   --belizeHole: rgb(41, 128, 185); /* dark blue */
   --amethyst: rgb(155, 89, 182); /* light purple */
   --amethystfade: rgba(155, 89, 182, 0.5);
+  --wisteria: rgb(142, 68, 173);
   --sunflower: rgb(241, 196, 15);
   --sunflowerfade: rgba(241, 196, 15, 0.5);
   --orange: rgb(243, 156, 18);

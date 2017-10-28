@@ -7,7 +7,7 @@ export default class WikiOps extends Component {
   address() {
     let wi = this.props.wi;
     const root = this.props.root;
-    const anchor = this.props.brick;
+    const anchor = this.props.anchor;
     
     ////// custom Fallback for the transition \\\\\\\
     if(this.props.fallback) {

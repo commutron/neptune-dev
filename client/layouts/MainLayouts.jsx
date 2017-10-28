@@ -9,20 +9,6 @@ GroupDB = new Mongo.Collection('groupdb');
 WidgetDB = new Mongo.Collection('widgetdb');
 BatchDB = new Mongo.Collection('batchdb');
 
-export const MainLayout = ({content, link, plainFooter}) => (
-  <div className='main-layout'>
-    <header className='clearfix'>
-      <TopBar link={link} />
-    </header>
-    <main>
-      {content}
-    </main>
-    {plainFooter ?
-      <footer></footer>
-    : null}
-  </div>
-);
-
 export const BasicLayout = ({content, link}) => (
   <div className='basicContainer'>
     <div className='gridHeaderNav'>
@@ -35,8 +21,33 @@ export const BasicLayout = ({content, link}) => (
   </div>
 );
 
-
 export const DashLayout = ({content, link}) => (
+  <div className='dashContainer'>
+    <div className='gridHeaderSearch'>
+      <FindBox />
+    </div>
+    <div className='gridHeaderNav'>
+      <TopBar link={link} />
+    </div>
+      {content}
+    <div className='basicFooter'></div>
+  </div>
+);
+
+export const ProductionLayout = ({content, link}) => (
+  <div className='dashContainer'>
+    <div className='gridHeaderSearch'>
+      <FindBox />
+    </div>
+    <div className='gridHeaderNav'>
+      <TopBar link={link} />
+    </div>
+      {content}
+    <div className='basicFooter'></div>
+  </div>
+);
+
+export const AnalyticsLayout = ({content, link}) => (
   <div className='dashContainer'>
     <div className='gridHeaderSearch'>
       <FindBox />

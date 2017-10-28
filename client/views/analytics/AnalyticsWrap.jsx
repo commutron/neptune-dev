@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 
-import DashActionBar from '../../components/bigUi/DashActionBar.jsx';
+import ActionBar from '../../components/bigUi/ActionBar.jsx';
 
-export default class Dashboard extends Component	{
+export default class AnalyticsWrap extends Component	{
 
   render() {
     
@@ -26,8 +26,7 @@ export default class Dashboard extends Component	{
           <div style={overScrollSpacer}></div>
         </div>
         
-        <DashActionBar
-          snap={this.props.snap}
+        <ActionBar
           batchData={this.props.batchData}
           itemData={this.props.itemData}
           widgetData={this.props.widgetData}

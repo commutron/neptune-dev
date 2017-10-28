@@ -51,7 +51,11 @@ export default class StoneSelect extends Component	{
         const nc = this.props.nonCons;
         let skipped = nc.every( x => x.skip !== false );
         
-		    let block = nc.some( x => x.where === flowStep.step ) ? false : true;
+        const stripSide = (name)=> { let x = name;
+                                     x = x.replace(/top/i, '-').replace(/bottom/i, '-');
+                                     return x; };
+        
+		    let block = nc.some( x => stripSide(x.where) !== stripSide(flowStep.step) ) ? true : false;
 		    
 		    const stone = <Stone
           		          key={flowStep.key}

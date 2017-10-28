@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 
-import DashActionBar from '../../components/bigUi/DashActionBar.jsx';
+import FormBar from '../../components/bigUi/FormBar.jsx';
 
-export default class Dashboard extends Component	{
+export default class ProductionWrap extends Component	{
 
   render() {
     
@@ -26,13 +26,10 @@ export default class Dashboard extends Component	{
           <div style={overScrollSpacer}></div>
         </div>
         
-        <DashActionBar
-          snap={this.props.snap}
+        <FormBar
           batchData={this.props.batchData}
           itemData={this.props.itemData}
-          widgetData={this.props.widgetData}
           versionData={this.props.versionData}
-          groupData={this.props.groupData}
           app={this.props.app}
           action={this.props.action} />
               

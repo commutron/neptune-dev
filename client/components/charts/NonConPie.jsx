@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-
-import {Doughnut} from "react-chartjs-2";
+import Chartist from 'chartist';
+import ChartistGraph from 'react-chartist';
+import Tooltip from 'chartist-plugin-tooltips';
+import fillDonut from 'chartist-plugin-fill-donut';
 
 export default class NonConPie extends Component {
   
@@ -24,43 +26,56 @@ export default class NonConPie extends Component {
   render () {
 
     let counts = this.splitStatus();
-
-    const chartData = {
+    
+    let ttl = '<span class="centre"><i>Total</i><i class="big">' + this.props.nonCons.length + '</i></span>';
+    
+    let data = {
       labels: ['Pending', 'Fixed', 'Inspected', 'Snoozed', 'Skipped'],
-      datasets: [{
-        label: '',
-        backgroundColor: ['#e74c3c', '#e67e22', '#2ecc71', '#f39c12', '#f1c40f'],
-        borderWidth: [0, 0, 0, 0, 0],
-        hoverBackgroundColor: ['#e74c3c', '#e67e22', '#2ecc71', '#f39c12', '#f1c40f'],
-        hoverBorderWidth: [0, 0, 0, 0, 0],
-        data: counts
-      }],
+      series: counts,
     };
     
-    const chartOptions = {
-      cutoutPercentage: 50,
-        legend: {
-          display: true,
-          labels: {
-            fontSize: 14,
-            fontColor: 'white',
-            fontFamily: 'Helvetica Neue, sans-serif'
-          }
-        },
-        title: {
-          display: true,
-          text: 'NonCons Status',
-          fontSize: 16,
-          fontColor: 'white',
-          fontFamily: 'Helvetica Neue, sans-serif'
-        }
+    let options = {
+      width: 300,
+      height: 300,
+      showLabel: false,
+      chartPadding: 25,
+      donut: true,
+      donutWidth: 60,
+      startAngle: 0,
+      total: this.props.nonCons.length,
+      plugins: [
+        Chartist.plugins.tooltip({
+          appendToBody: true
+        }),
+        Chartist.plugins.fillDonut({
+          items: [{
+            content: ttl,
+            position: 'center',
+            offsetY : -3,
+            offsetX: 0
+          }],
+        }),
+      ]
     };
+    
+    let pnd = { color: '#e74c3c' };
+    let fxd = { color: '#e67e22' };
+    let inp = { color: '#2ecc71'};
+    let snz = { color: '#f39c12'};
+    let skp = { color: '#f1c40f'};
 
     return (
-      <div className='inlineContain'>
-
-        <Doughnut data={chartData} options={chartOptions} />
-
+      <div className='inlineContain nonConPieColors'>
+        <p className='centreText'>
+          <i style={pnd}>Pending </i>
+          <i style={fxd}> Fixed </i>
+          <i style={inp}> Inspected </i>
+          <i style={snz}> Snoozed </i>
+          <i style={skp}> Skipped </i>
+        </p>
+        <div className='centre'>
+          <ChartistGraph data={data} options={options} type={'Pie'} />
+        </div>
       </div>
     );
   }

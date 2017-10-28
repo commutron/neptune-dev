@@ -14,7 +14,7 @@ class View extends Component	{
 
     if(!this.props.login) {
       return (
-        <div></div>
+        <div>access blocked, please login as authorized user</div>
         );
     }
     
