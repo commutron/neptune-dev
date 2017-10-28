@@ -60,7 +60,9 @@ Meteor.methods({
       const riverAlt = w.flows.find( x => x.flowKey === b.riverAlt);
       
       // pull out scrap function
-      const outScrap = (itms)=> { return ( itms.filter( x => x.history.filter( y => y.type === 'scrap' ).length === 0 ) )};
+      const outScrap = (itms)=> { return ( itms.filter( x => x.history
+                                                              .filter( y => y.type === 'scrap' )
+                                                                .length === 0 ) )};
       
       // split flows, filter scraps
       let regItems = b.items;
@@ -84,7 +86,7 @@ Meteor.methods({
       }
       let active = b.items.find( 
                     x => x.history.find( 
-                      y => moment(y.time).isSame(new Date(), 'day') ) ) 
+                      y => moment(y.time).isSame(moment(), 'day') ) ) 
                         ? true : false; 
       
       liveData.push({
@@ -108,19 +110,57 @@ Meteor.methods({
   
   bigNow() {
     const b = BatchDB.find({orgKey: Meteor.user().orgKey}).fetch();
+    const aNCOps = AppDB.findOne({orgKey: Meteor.user().orgKey}).nonConOption;
     let active = b.filter( x => x.finishedAt === false );
-    let today = b.filter(
-                  x => x.items.find(
-                    y => y.history.find( 
-                      z => moment(z.time)
-                            .isSame(new Date(), 'day') ) ) );
-    let doneToday = b.filter( x => x.finishedAt !== false && 
-                                    moment(x.finishedAt)
-                                      .isSame(new Date(), 'day') );
+    const today = b.filter(
+                    x => x.items.find(
+                      y => y.history.find( 
+                        z => moment(z.time)
+                              .isSame(moment(), 'day') ) ) );
+    const todayNC = b.filter(
+                      x => x.nonCon.find(
+                        y => moment(y.time)
+                          .isSame(moment().format(), 'day') ) );
+    const doneToday = b.filter( x => x.finishedAt !== false && 
+                                      moment(x.finishedAt)
+                                        .isSame(moment(), 'day') );
+                                        
+    let doneItemsToday = 0;
+    for(let t of today) {
+      let fin = t.items.filter(
+                  x => x.history.find( 
+                    y => y.type === 'finish' ) );
+      doneItemsToday += fin.length;
+    }
+    
+    let newNC = 0;
+    for(let t of todayNC) {
+      let nw = t.nonCon.filter(
+                  x => moment(x.time)
+                    .isSame(moment(), 'day') );
+      newNC += nw.length;
+    }
+    
+    let ncTypeCounts = [];
+    for(let n of aNCOps) {
+      let typNum = 0;
+      for(let t of todayNC) {
+        let nw = t.nonCon.filter(
+                  x => x.type === n &&
+                    moment(x.time)
+                      .isSame(moment(), 'day') );
+        typNum += nw.length;
+      }
+      ncTypeCounts.push(typNum);
+    }
     
     const dataPack = {
       active: active.length,
       today: today.length,
+      todayNC: todayNC.length,
+      newNC: newNC,
+      ncTypeCounts: ncTypeCounts,
+      doneItemsToday: doneItemsToday,
       doneToday: doneToday.length
     };
     return dataPack;

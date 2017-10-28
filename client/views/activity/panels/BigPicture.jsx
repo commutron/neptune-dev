@@ -30,12 +30,16 @@ export default class BigPicture extends Component	{
       );
     }
     
+    console.log(now.ncTypeCounts);
+    
     return (
-      <div className='section'>
+      <div className='wipCol'>
         <div className=''>
-          <i>Active: {now.active}</i>
-          <i>Active Today: {now.today}</i>
-          <i>Finished Today: {now.doneToday}</i>
+          <p>Active: {now.active}</p>
+          <p>Active Today: {now.today}</p>
+          <p>{now.newNC} {Pref.nonCon}s discovered today from {now.todayNC} {Pref.batch}s</p>
+          <p>{Pref.item}s finished Today: {now.doneItemsToday}</p>
+          <p>{Pref.batch}s Finished Today: {now.doneToday}</p>
         </div>
       </div>
     );

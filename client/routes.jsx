@@ -68,6 +68,20 @@ FlowRouter.route('/app', {
   }
 });
 
+
+
+
+FlowRouter.route('/analytics/:postId', {
+    // do some action for this route
+    action: function(params, queryParams) {
+        console.log("Params:", params);
+        console.log("Query Params:", queryParams);
+    },
+    name: "test" // optional
+});
+// FlowRouter.go('/analytics/my-post?comments=on&color=dark');
+
+
 FlowRouter.notFound = {
   action() {
     mount(BasicLayout, {

@@ -460,28 +460,35 @@ main {
 
 .denseData {
   width: 100%;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-around;
 }
 .denseData > span {
-  min-width: 400px;
-  max-width: 95%;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  width: 100vw;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .wipCol {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 .wipCol > section {
-  width: 100%;
-  padding-bottom: 10px;
-  margin-bottom: 50px;
+  width: calc((100vw - 60px) / 3);
+  margin: 5px 10px 40px 10px;
   border: 1px solid rgba(0,0,0,0.5);
 }
+@media screen and (max-width: 1500px){
+  .wipCol > section {
+    width: calc((100vw - 40px) / 2);
+  }
+}
+@media screen and (max-width: 900px){
+  .wipCol > section {
+    width: calc(100vw - 20px);
+  }
+}
+
+
 
 .wellSpacedLine {
   min-height: 3rem;

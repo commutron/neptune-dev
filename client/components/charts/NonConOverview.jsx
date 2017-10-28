@@ -5,7 +5,6 @@ import Tooltip from 'chartist-plugin-tooltips';
 
 export default class NonConOverview extends Component {
   
-  
   ncCounts() {
     let counts = [];
     for(let n of this.props.ncOp) {
@@ -18,7 +17,18 @@ export default class NonConOverview extends Component {
   render () {
 
     const counts = this.ncCounts();
-    
+
+    return (
+      <NonConTypeChart counts={counts} ncOp={this.props.ncOp} />
+    );
+  }
+}
+
+export class NonConTypeChart extends Component {
+
+  render () {
+
+    const counts = this.props.counts;
     
     let data = {
       labels: this.props.ncOp,
@@ -53,10 +63,8 @@ export default class NonConOverview extends Component {
     };
 
     return (
-      <div className=''>
-        
+      <div>
         <ChartistGraph data={data} options={options} type={'Bar'} />
-
       </div>
     );
   }

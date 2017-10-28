@@ -101,7 +101,6 @@ export class StatusRow extends Component	{
           {dt.finished ?
             <span className='greenT'>Finished {moment(dt.finishedAt).calendar()}</span>
           : null}
-          <span>Active Today: {dt.active.toString()}</span>
         </div>
         <div>
           {dt.totalR + dt.totalA < 1 ?

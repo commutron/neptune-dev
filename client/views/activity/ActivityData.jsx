@@ -15,13 +15,13 @@ class View extends Component	{
     if(!this.props.login) {
       return (
         <div>access blocked, please login as authorized user</div>
-        );
+      );
     }
     
     if(!this.props.ready || !this.props.app) {
       return (
         <Spin />
-        );
+      );
     }
 
     return (
