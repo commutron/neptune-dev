@@ -28,8 +28,14 @@
   --cloudsfade: rgba(236, 240, 241, 0.5);
   --wetasphalt: rgb(52, 73, 94);
   --midnightblue: rgb(44, 62, 80);
-  --asbestos: rgb(127, 140, 141);
+  --asbestos: rgb(127, 140, 141); /* gray */
   --asbestosfade: rgb(127, 140, 141, 0.5);
   
+  /* black */
+  --black: rgb(48,48,48);
+  --blackT: rgb(48,48,48);
+  --blackFade: rgba(0,0,0,0.3);
+  
+  /* animation */
   --scottsCurve: cubic-bezier(0.165, 0.84, 0.44, 1);
 }

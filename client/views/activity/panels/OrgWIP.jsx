@@ -3,31 +3,13 @@ import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
 import ProgPie from '/client/components/charts/ProgPie.jsx';
+import RangeTools from '/client/components/smallUi/RangeTools.jsx';
 
 export default class OrgWIP extends Component	{
-  
-  constructor() {
-    super();
-    this.state = {
-      wip: false,
-    };
-  }
-  
-  relevant() {
-    const b = this.props.b;
-    const now = moment();
-    const thisWeek = (fin)=> { return ( moment(fin).isSame(now, 'week') ) };
-    const live = b.filter( x => x.finishedAt === false || thisWeek(x.finishedAt) === true );
-    
-    Meteor.call('WIPProgress', live, (error, reply)=> {
-      error ? console.log(error) : null;
-      this.setState({'wip': reply});
-    });
-  }
 
   render() {
     
-    let wip = this.state.wip;
+    let wip = this.props.wip;
     let wipHot = false;
     let wipCold = false;
 
@@ -50,8 +32,9 @@ export default class OrgWIP extends Component	{
     
     if(!wipHot || !wipCold) {
       return (
-        <div>
-          loading...
+        <div className='space'>
+          <i className='fa fa-circle-o-notch fa-spin fa-3x' aria-hidden='true'></i>
+          <span className='sr-only'>Loading...</span>
         </div>
       );
     }
@@ -69,25 +52,14 @@ export default class OrgWIP extends Component	{
       </div>
     );
   }
-  componentDidMount() {
-    this.relevant();
-  }
 }
-
-
 
 export class StatusRow extends Component	{
   
   render() {
     
-    let dt = this.props.entry;
-    
-    const countsR = Array.from(dt.stepsReg, x => x.count);
-    const titlesR = Array.from(dt.stepsReg, x => ({step: x.step, type: x.type}));
-    const countsA = Array.from(dt.stepsAlt, x => x.count);
-    const titlesA = Array.from(dt.stepsAlt, x => ({step: x.step, type: x.type}));
-    
-    const clss = this.props.active ? 'popExcesive' : '';
+    const dt = this.props.entry;
+    const clss = this.props.active ? 'popBlue' : '';
 
     return(
       <section className={clss}>
@@ -105,13 +77,13 @@ export class StatusRow extends Component	{
         <div>
           {dt.totalR + dt.totalA < 1 ?
             <span className='yellowT wide centreText'>No {Pref.item}s created</span>
-          : titlesR.length > 0 ?
-            <StatusCell steps={titlesR} counts={countsR} total={dt.totalR} />
+          : dt.stepsReg.length > 0 ?
+            <StatusCell steps={dt.stepsReg} total={dt.totalR} />
           :
             <span className='yellowT wide centreText'>No {Pref.flow} chosen</span>
           }
         </div>
-        {titlesA.length > 0 ?
+        {dt.stepsAlt.length > 0 ?
           <div>
             <hr className='fade'/>
             <span className='small cap'>
@@ -119,7 +91,7 @@ export class StatusRow extends Component	{
               <i>{Pref.buildFlowAlt}</i>
             </span>
             <div>
-              <StatusCell steps={titlesA} counts={countsA} total={dt.totalA} />
+              <StatusCell steps={dt.stepsAlt} total={dt.totalA} />
             </div>
           </div>
         :null}
@@ -134,16 +106,17 @@ export class StatusCell extends Component	{
   render() {
     return(
       <div className='centreRow'>
-        {this.props.steps.map( (entry, index)=>{
+        {this.props.steps.map( (entry)=>{
+          let rndmKey = Math.random().toString(36).substr(2, 5);
           const title = entry.type === 'finish' ||
                         entry.type === 'test' ?
                         entry.step :
                         entry.step + ' ' + entry.type;
           return(
             <ProgPie
-              key={index}
+              key={rndmKey}
               title={title}
-              count={this.props.counts[index]}
+              count={entry.count}
               total={this.props.total} />
         )})}
       </div>

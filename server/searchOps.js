@@ -1,4 +1,5 @@
 import moment from 'moment';
+import timezone from 'moment-timezone';
 
 Meteor.methods({
   
@@ -9,7 +10,18 @@ Meteor.methods({
   },
   
   
-  WIPProgress(batches) {
+  activitySnapshot(range, clientTZ) {
+    
+    const now = moment().tz(clientTZ);
+    const sRange = now.clone().startOf(range).format();
+    const eRange = now.clone().endOf(range).format();
+    const b = BatchDB.find({orgKey: Meteor.user().orgKey}).fetch();
+    
+  //////// WIPProgress \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+  
+    const thisWeek = (fin)=> { return ( moment(fin).isBetween(sRange, eRange) ) };
+    const wipBatches = b.filter( x => x.finishedAt === false || 
+                                    thisWeek(x.finishedAt) === true );
     
     // flow counts loop function
     function flowLoop(river, items) {
@@ -48,9 +60,9 @@ Meteor.methods({
       }
     }
     
-    let liveData = [];
+    let wipLiveData = [];
     
-    for(let batch of batches) {
+    for(let batch of wipBatches) {
       const b = BatchDB.findOne({_id: batch._id});
       const w = WidgetDB.findOne({_id: batch.widgetId});
       const v = w.versions.find( x => x.versionKey === b.versionKey );
@@ -84,12 +96,14 @@ Meteor.methods({
       for(let i of b.items) {
         rmaCount = rmaCount + i.rma.length;
       }
+      
       let active = b.items.find( 
                     x => x.history.find( 
-                      y => moment(y.time).isSame(moment(), 'day') ) ) 
-                        ? true : false; 
+                      y => moment(y.time)
+                            .isBetween(sRange, eRange) ) ) 
+                              ? true : false; 
       
-      liveData.push({
+      wipLiveData.push({
         batch: b.batch,
         widget: w.widget,
         version: v.version,
@@ -105,31 +119,49 @@ Meteor.methods({
         active: active
       });
     }
-    return liveData;
-  },
+    
+  //////// bigNow \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
   
-  bigNow() {
-    const b = BatchDB.find({orgKey: Meteor.user().orgKey}).fetch();
+    const sWeek = now.clone().startOf('week').format();
+    const eWeek = now.clone().endOf('week').format();
+    const sLWeek = now.clone().subtract(7, 'days').startOf('week').format();
+    const eLWeek = now.clone().subtract(7, 'days').endOf('week').format();
+    
+    //console.log('clientTZ: ' + clientTZ);
+    //console.log('client time: ' + now.format());
+    //console.log('start: ' + bToday);
+    //console.log('end: ' + eToday);
+    //console.log('start of this week: ' + sWeek);
+    //console.log('end of this week: ' + eWeek);
+    //console.log('start of last week: ' + sLWeek);
+    //console.log('end of lastweek: ' + eLWeek);
+    
+    
     const aNCOps = AppDB.findOne({orgKey: Meteor.user().orgKey}).nonConOption;
     let active = b.filter( x => x.finishedAt === false );
+    
     const today = b.filter(
                     x => x.items.find(
                       y => y.history.find( 
                         z => moment(z.time)
-                              .isSame(moment(), 'day') ) ) );
+                              .isBetween(sRange, eRange) ) ) );
+                              
     const todayNC = b.filter(
                       x => x.nonCon.find(
                         y => moment(y.time)
-                          .isSame(moment().format(), 'day') ) );
+                          .isBetween(sRange, eRange) ) );
+                          
     const doneToday = b.filter( x => x.finishedAt !== false && 
                                       moment(x.finishedAt)
-                                        .isSame(moment(), 'day') );
+                                        .isBetween(sRange, eRange) );
                                         
     let doneItemsToday = 0;
     for(let t of today) {
       let fin = t.items.filter(
-                  x => x.history.find( 
-                    y => y.type === 'finish' ) );
+                  x => x.history.find(
+                    y => y.type === 'finish' && 
+                      moment(y.time)
+                        .isBetween(sRange, eRange) ) );
       doneItemsToday += fin.length;
     }
     
@@ -137,7 +169,7 @@ Meteor.methods({
     for(let t of todayNC) {
       let nw = t.nonCon.filter(
                   x => moment(x.time)
-                    .isSame(moment(), 'day') );
+                    .isBetween(sRange, eRange) );
       newNC += nw.length;
     }
     
@@ -148,13 +180,13 @@ Meteor.methods({
         let nw = t.nonCon.filter(
                   x => x.type === n &&
                     moment(x.time)
-                      .isSame(moment(), 'day') );
+                      .isBetween(sRange, eRange) );
         typNum += nw.length;
       }
       ncTypeCounts.push(typNum);
     }
     
-    const dataPack = {
+    const bigDataPack = {
       active: active.length,
       today: today.length,
       todayNC: todayNC.length,
@@ -163,7 +195,9 @@ Meteor.methods({
       doneItemsToday: doneItemsToday,
       doneToday: doneToday.length
     };
-    return dataPack;
+    
+    //////// Return Object \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+    return { now: bigDataPack, wip: wipLiveData };
   }
   
   

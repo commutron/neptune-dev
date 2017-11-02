@@ -43,10 +43,13 @@ meteor seems to be handling this */
   margin: 0 10px;
 }
 
-.actionForm option,
-.actionForm optgroup {
+
+.actionForm .redIn option,
+.actionForm .redIn optgroup {
   color: black;
+  background-color: white;
 }
+
 
 .actionForm > button {
   margin: 0 5px;

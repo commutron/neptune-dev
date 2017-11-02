@@ -1,4 +1,4 @@
-/* @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+/*@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
 meteor seems to be handling this */
 
 .action {
@@ -172,10 +172,10 @@ meteor seems to be handling this */
   box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2);
 }
 
-.popExcesive {
-  -moz-box-shadow: 0 5px 1vw 1vh rgba(0,0,0,0.3);
-  -webkit-box-shadow: 0 5px 1vw 1vh rgba(0,0,0,0.3);
-  box-shadow: 0 5px 1vw 1vh rgba(0,0,0,0.3);
+.popBlue {
+  -moz-box-shadow: 0 3px 10px 5px rgba(52, 152, 219, 0.3);
+  -webkit-box-shadow: 0 3px 10px 5px rgba(52, 152, 219, 0.3);
+  box-shadow: 0 3px 10px 5px rgba(52, 152, 219, 0.3);
 }
 
 .fade {
@@ -275,13 +275,13 @@ meteor seems to be handling this */
 }
 
 .black {
-	background-color: rgb(48,48,48);
+	background-color: var(--black);
 }
 .blackT {
-	color: rgb(48,48,48);
+	color: var(--blackT);
 }
 .blackFade {
-  background-color: rgba(0,0,0,0.3);
+  background-color: var(--blackFade);
 }
 
 .white {
@@ -529,6 +529,42 @@ meteor seems to be handling this */
   position: relative;
   top: 5px;
   left: -10px;
+}
+
+.rangeTools {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: var(--blackFade);
+}
+
+.rangeTools select, .rangeTools button {
+  width: 110px;
+  min-height: 1.75rem;
+  font-size: medium;
+  background-color: var(--black);
+  border-bottom: none;
+  color: white;
+  -webkit-appearance: none;
+   -moz-appearance: none;
+   appearance: none;
+}
+.uniSelect:after {
+  content: "\f078";
+  font-family: FontAwesome;
+  font-size: small;
+  color: white;
+  position: relative;
+  right: 20px;
+  top: 0;
+  pointer-events: none;
+}
+
+.rangeTools option {
+  background-color: var(--clouds);
+  color: black;
 }
 
 /* custom Bert alerts */

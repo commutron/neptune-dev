@@ -11,9 +11,9 @@ export default class ProgPie extends Component {
     const count = this.props.count;
     const total = this.props.total;
     const remain = total - count;
+    const countText = count.toLocaleString();
     
     let data = {
-      //labels: [count, total],
       series: [count, remain],
     };
     
@@ -25,17 +25,17 @@ export default class ProgPie extends Component {
       donutWidth: 7,
       startAngle: 0,
       plugins: [
+        Chartist.plugins.tooltip({
+          appendToBody: true
+        }),
         Chartist.plugins.fillDonut({
           items: [{
-            content: '<i>' + count + '</i>',
+            content: countText,
             position: 'center',
             offsetY : -3,
             offsetX: 0
           }],
         }),
-        Chartist.plugins.tooltip({
-          appendToBody: true
-        })
       ],
     };
     

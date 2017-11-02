@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-export default class ItemsList extends Component	{
+export default class FilterTools extends Component	{
   
   changeFilter(keyword) {
     this.props.onClick(keyword);
