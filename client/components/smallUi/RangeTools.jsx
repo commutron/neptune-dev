@@ -4,32 +4,47 @@ import moment from 'moment';
 export default class RangeTools extends Component	{
   
   time() {
-    this.props.onChange(this.range.value);
+    this.props.onChange(this.range.value, this.mod.value);
   }
   
   render() {
     
     return(
-      <div className='rangeTools'>
+      <div className='rangeTools stickyBar'>
         <label>
-          <button type='button' onClick={this.time.bind(this)}>
-            Update Now
-          </button>
+          <button
+            type='button'
+            title='Auto updates every hour'
+            onClick={this.time.bind(this)}
+          >Update Now</button>
           <i className='breath clean'>
-            Auto updates every hour, 
-            Last Updated at {moment(this.props.update).format('LT')}
+            Last updated at {moment(this.props.update).format('LT')}
           </i>
         </label>
-        <label className='uniSelect'>
+        <label>
           <i className='breath'>Range</i>
-          <select
-            onChange={this.time.bind(this)}
-            ref={(i)=> this.range = i}
-            defaultValue={this.props.dfkeyword}>
-            <option value='hour'>This Hour</option>
-            <option value='day'>Today</option>
-            <option value='week'>This Week</option>
-          </select>
+          <label className='uniSelect'>
+            <select
+              onChange={this.time.bind(this)}
+              ref={(i)=> this.mod = i}
+              defaultValue={this.props.dfmod}>
+              <option value='this'>This</option>
+              <option value='last'>Last</option>
+            </select>
+          </label>
+          <label className='uniSelect'>
+            <select
+              onChange={this.time.bind(this)}
+              ref={(i)=> this.range = i}
+              defaultValue={this.props.dfkeyword}>
+              <option value='hour'>Hour</option>
+              <option value='day'>Day</option>
+              <option value='week'>Week</option>
+              <option value='month'>Month</option>
+            {/*<option value='quarter'>This Quarter</option>*/}
+              <option value='year'>Year</option>
+            </select>
+          </label>
         </label>
       </div>
     );

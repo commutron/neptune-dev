@@ -20,7 +20,7 @@ export default class Chill extends Component	{
           onClick={this.brr}
           readOnly />
           <label htmlFor='exitToggle' id='exitSwitch' className='navIcon'>
-            <i className='fa fa-user-times fa-2x' aria-hidden='true'></i>
+            <i className='fa fa-user-times fa-lg' aria-hidden='true'></i>
             <span className='icontext cap'>{name}</span>
           </label>
       </span>

@@ -1,7 +1,12 @@
 /* global object CSS declarations go here */
+*, *:after, *:before {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
 
 h1, h2, h3 {
-  margin: 0.5em 0;
+  margin: 0.5rem 0;
 }
 
 p {
@@ -28,7 +33,7 @@ a:active {
 }
 
 nav a, .navIcon {
-  padding: 0 1rem;
+  padding: 0 0.5rem;
   color: black;
   display: inline-block;
   text-align: center;
@@ -48,7 +53,6 @@ button, input[type='submit'], button span, button label {
   -moz-transition: all 200ms ease-out;
   -o-transition: all 200ms ease-out;
   transition: all 200ms ease-out;
-	opacity: 0.9;
   border: 0;
   border-color: white;
   padding: 0;
@@ -61,14 +65,11 @@ button, input[type='submit'], button span, button label {
   -o-user-select: none;
   user-select: none;
 }
-button:hover, input[type='submit']:hover {
-	opacity: 1;
-}
 button:focus {
   outline: none;
 }
 button:disabled, button:disabled:hover, button:disabled span, button:disabled label {
-  opacity: 0.7;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
@@ -85,6 +86,7 @@ fieldset {
   border: 1px dashed;
   word-break: keep-all;
   overflow: hidden;
+  max-width: 400px;
 }
 
 label {
@@ -130,7 +132,7 @@ input[type='checkbox']:hover + label, input[type='radio']:hover + label {
 input, select, textarea {
   line-height: 1.75rem;
   font-size: 1.25rem;
-  text-indent: 0.5rem;
+  text-indent: 0.25rem;
   width: 20rem;
   border-radius: 0px;
   border-style: solid;
@@ -154,6 +156,7 @@ input, select {
 
 select {
   background-color: white;
+  cursor: pointer;
 }
 
 textarea {

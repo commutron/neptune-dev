@@ -48,7 +48,10 @@ export default class ActionBar extends Component	{
               serial={itemData.serial}
       		    nons={app.nonConOption} />
       	:
-      	act === 'batchBuild' && batchData.items.length === 0 ?
+      	act === 'batchBuild' && 
+      	  batchData.items
+      	    .filter( x => x.history.length < 1 )
+      	      .length < 1 ?
       	  <MultiItemForm
             id={batchData._id}
             items={batchData.items}

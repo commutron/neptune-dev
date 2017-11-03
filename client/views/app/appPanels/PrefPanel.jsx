@@ -18,11 +18,9 @@ export default class PrefPanel extends Component {
       });
 
     return (
-      <div className='section cap invert'>
+      <div className='section cap invert balance'>
         <fieldset disabled={auth}>
           <div className='space breathe'>
-            <h1>app preferences for : <i>{dt.org}</i></h1>
-            <hr />
   
             <h2>{Pref.trackProcess} Steps</h2>
             <i>Options for tracked and controlled steps</i>
@@ -38,8 +36,11 @@ export default class PrefPanel extends Component {
             <h2>Final {Pref.trackProcess} step</h2>
             <i>the step that marks a {Pref.item} as finished</i>
             <FinishTrack last={dt.lastTrack} />
-            
-            <hr />
+          
+          </div>
+        </fieldset>    
+        <fieldset disabled={auth}>
+          <div className='space breathe'>
   
             <h2>{Pref.nonCon} Types</h2>
             <i>Options for types of {Pref.nonCon}s</i>
@@ -50,7 +51,10 @@ export default class PrefPanel extends Component {
                 })}
             </ul>
           
-            <hr />
+          </div>
+        </fieldset>    
+        <fieldset disabled={auth}>
+          <div className='space breathe'>
   
             <h2>{Pref.ancillary} Steps</h2>
             <i>Not strictly assembly but part of the total proccess. Not tracked</i>

@@ -11,7 +11,7 @@ export default class TimeFrame extends Component {
       height: 'calc(100vh - 150px)',
       border: '0',
       position: 'absolute',
-      top: '75px',
+      top: '60px',
       left: '0',
       overflowY: 'hidden',
       overflowX: 'hidden',

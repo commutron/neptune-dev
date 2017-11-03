@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
 
 import AccountsUI from '../../../components/bigUi/AccountsUI.jsx';
-import RemoveUser from '../../../components/forms/RemoveUser.jsx';
 import { AdminDown } from '../../../components/forms/AdminForm.jsx';
 import SetPin from '../../../components/forms/SetPin.jsx';
 import LogoutOther from '../../../components/tinyUi/LogoutOther.jsx';
@@ -29,8 +28,6 @@ export default class AccountPanel extends Component {
             <LogoutOther />
             <br />
             <EmailForm />
-            <br />
-            <RemoveUser />
           </div>
           
           <PermissionHelp roles={Meteor.user().roles} admin={admin} />

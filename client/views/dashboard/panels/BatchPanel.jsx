@@ -7,7 +7,6 @@ import CreateTag from '/client/components/uUi/CreateTag.jsx';
 import Tabs from '../../../components/smallUi/Tabs.jsx';
 
 import JumpText from '../../../components/tinyUi/JumpText.jsx';
-import FirstsOverview from '../../../components/charts/FirstsOverview.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';
 import BlockList from '../../../components/bigUi/BlockList.jsx';
 import RiverSatus from '../../../components/smallUi/RiverStatus.jsx';
@@ -104,7 +103,6 @@ export default class BatchPanel extends Component	{
               tabs={
                 [
                   'Progress',
-                  Pref.trackFirst + 's',
                   Pref.block + 's',
                   Pref.nonCon + 's',
                   Pref.rma + 's'
@@ -120,15 +118,20 @@ export default class BatchPanel extends Component	{
                   riverTitle={riverTitle}
                   riverAlt={b.riverAlt}
                   riverAltTitle={riverAltTitle} />
-                <StepsProgress batchData={b} flow={riverFlow} flowAlt={riverAltFlow} mini={false} />
+                <StepsProgress
+                  batchData={b}
+                  flow={riverFlow}
+                  flowAlt={riverAltFlow}
+                  mini={false}
+                  doneFirsts={filter[0]}/>
               </div>
-              
-              <FirstsOverview doneFirsts={filter[0]} flow={riverFlow} flowAlt={riverAltFlow} />
               
               <BlockList id={b._id} data={b.blocks} lock={done} />
               
               <div className='balance'>
-                <NonConOverview ncOp={a.nonConOption} nonCons={b.nonCon} />
+                <div className='wide max600'>
+                  <NonConOverview ncOp={a.nonConOption} nonCons={b.nonCon} />
+                </div>
                 <NonConPie nonCons={b.nonCon} />
               </div>
               

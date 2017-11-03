@@ -40,7 +40,6 @@ export default class Model extends Component	{
           </label>
         </button>
       
-      
         {this.state.show ?
         <AnimateWrap type='modelTrans' el='span'>
           <div className='overlay' key={1}>

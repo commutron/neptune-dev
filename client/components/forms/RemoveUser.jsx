@@ -2,33 +2,30 @@ import React, {Component} from 'react';
 
 export default class RemoveUser extends Component {
   
-  /*
-  remove(e) {
-    e.preventDefault();
-    Meteor.call('removeUser', id, ()=>{
-      Bert.alert({
-        title: 'Success',
-        message: 'User ' + id + ' Deleted',
-        type: 'emerald',
-        style: 'fixed-bottom',
-        icon: 'fa-check'});
-    });
+  deleteForever() {
+    const check = window.confirm('Delete this User Forever??');
+    const userID = this.props.userID;
+    const self = Meteor.userId() === userID;
+    if(check && !self) {
+      Meteor.call('deleteUserForever', userID, (error, reply)=>{
+        if(error)
+          console.log(error);
+        reply ? alert('Account Deleted') : alert('not allowed');
+      });
+    }else{
+      alert('not allowed');
+    }
   }
-  */
 
   render () {
-    
-    // if no org
-    // if no active role
-    
     return (
       <div>
         <p>
           <button
-            type='submit'
-            className='smallAction red'
-            disabled='true'
-          >delete account</button>
+            type='button'
+            className='miniAction red'
+            onClick={this.deleteForever.bind(this)}
+          >Delete User Account</button>
         </p>
       </div>
     );

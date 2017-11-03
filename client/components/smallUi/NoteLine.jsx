@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
-import UserNice from './UserNice.jsx';
+import UserName from '/client/components/uUi/UserName.jsx';
 import NoteForm from '../forms/NoteForm';
 
 // requires data
@@ -40,7 +40,7 @@ export default class NoteLine extends Component	{
           {dt.content}
           <div className='footerBar'>
             {action}
-            {moment(dt.time).calendar()} <UserNice id={dt.who} />
+            <i>{moment(dt.time).calendar()} by <UserName id={dt.who} /></i>
           </div>
         </div>
       );
@@ -61,7 +61,7 @@ export default class NoteLine extends Component	{
         {dt.content}
         <div className='footerBar'>
           {action}
-          {moment(dt.time).calendar()} <UserNice id={dt.who} />
+          <i>{moment(dt.time).calendar()} by <UserName id={dt.who} /></i>
         </div>
       </fieldset>
     );

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
 
 import UserForm from '../../../components/forms/UserForm.jsx';
+import RemoveUser from '../../../components/forms/RemoveUser.jsx';
 
 export default class AccountsManagePanel extends Component {
 
@@ -34,6 +35,10 @@ export default class AccountsManagePanel extends Component {
                         org={entry.org}
                         roles={roles}
                       />
+                      {!Roles.userIsInRole(entry._id, 'active') &&
+                        this.props.id !== Meteor.userId() ?
+                          <RemoveUser userID={entry._id} />
+                      :null}
                       <br />
                       <br />
                     </li>

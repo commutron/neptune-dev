@@ -100,6 +100,20 @@ Meteor.methods({
     }
   },
   
+  deleteUserForever(userId) {
+    const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
+    const team = Meteor.users.findOne({_id: userId, orgKey: false});
+    const inactive = !Roles.userIsInRole(userId, 'active');
+    const admin = Roles.userIsInRole(userId, 'admin');
+    const self = Meteor.userId() === userId;
+    if(auth && !team && inactive && !admin && !self) {
+      Meteor.users.remove(userId);
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
   // need to finish email handling \\
   
   // emailRemove(email) {

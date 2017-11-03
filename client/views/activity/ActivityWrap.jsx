@@ -19,13 +19,15 @@ export default class OrgWIP extends Component	{
       wip: false,
       now: false,
       time: false,
-      timeRange: 'day'
+      timeRange: 'day',
+      timeMod: false
     };
   }
   
-  timeRange(keyword) {
+  timeRange(keyword, mod) {
     this.setState({
-      timeRange: keyword, 
+      timeRange: keyword,
+      timeMod: mod,
       now: false,
       wip: false,
       time: moment().format()
@@ -42,7 +44,8 @@ export default class OrgWIP extends Component	{
     });
     let clientTZ = moment.tz.guess();
     let range = this.state.timeRange;
-    Meteor.call('activitySnapshot', range, clientTZ, (error, reply)=> {
+    let mod = this.state.timeMod;
+    Meteor.call('activitySnapshot', range, clientTZ, mod, (error, reply)=> {
       error ? console.log(error) : null;
       this.setState({ now: reply.now, wip: reply.wip });
       console.log('newData');
@@ -57,14 +60,13 @@ export default class OrgWIP extends Component	{
       );
     }
     
-    console.log('render');
-    
     return(
       <AnimateWrap type='contentTrans'>
         <div className='denseData' key={0}>
           <RangeTools
-            onChange={e => this.timeRange(e)}
+            onChange={(r, m) => this.timeRange(r, m)}
             dfkeyword={this.state.timeRange}
+            dfmod={this.state.timeMod}
             update={this.state.time} />
           <span>
             <BigPicture

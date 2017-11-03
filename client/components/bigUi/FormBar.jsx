@@ -24,7 +24,11 @@ export default class FormBar extends Component	{
       		    id={batchData._id}
               serial={itemData.serial}
       		    nons={app.nonConOption} />
-        	: batchData && act === 'batchBuild' && batchData.items.length === 0 ?
+        	: batchData && 
+        	    act === 'batchBuild' &&
+        	      batchData.items
+        	        .filter( x => x.history.length < 1 )
+      	            .length < 1 ?
           	  <MultiItemForm
                 id={batchData._id}
                 items={batchData.items}

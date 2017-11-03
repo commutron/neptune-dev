@@ -14,7 +14,7 @@ class StartView extends Component	{
 
     return (
       <div className='centreTrue'>
-        <img src='/titleLogo.svg' className='shadow noCopy' height='600' />
+        <img src='/titleLogo.svg' className='shadow noCopy' height='500' />
       </div>
     );
   }

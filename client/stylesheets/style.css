@@ -48,7 +48,6 @@ meteor seems to be handling this */
 }
 
 .jump {
-  line-height: 1.25em;
   font-size: 2rem;
   min-width: 1rem;
 	min-height: 1rem;
@@ -97,40 +96,6 @@ meteor seems to be handling this */
 
 .ngMark {
   border-left-color: var(--pomegranate);
-}
-
-.icontext {
-  display: block;
-  white-space: nowrap;
-}
-
-.navIcon {
-  padding: 0 0.5rem;
-  vertical-align: middle;
-  line-height: normal;
-}
-
-#dtToggle, #ikyToggle, #timeToggle, #exitToggle {
-  display: none;
-}
-
-#boltSwitch, #snapSwitch, #timeSwitch, #exitSwitch {
-  cursor: pointer;
-  transition: 0.4s cubic-bezier(0.2, 0.6, 0.3, 1.1);
-}
-
-#snapSwitch {
-  z-index: 1;
-  transform: translate(0%, 0%) rotate(0deg);
-  opacity: 0.8;
-}
-#snapSwitch:hover {
-  opacity: 1;
-}
-
-#timeSwitch:hover, #exitSwitch:hover, #boltSwitch:hover {
-  color: white;
-  border-bottom-color: transparent;
 }
 
 .tabOn {
@@ -536,14 +501,16 @@ meteor seems to be handling this */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  padding: 5px;
   background-color: var(--blackFade);
+  font-size: 1rem;
 }
 
 .rangeTools select, .rangeTools button {
   width: 110px;
-  min-height: 1.75rem;
-  font-size: medium;
+  min-height: 1.5rem;
+  line-height: 1.25rem;
+  font-size: 1rem;
   background-color: var(--black);
   border-bottom: none;
   color: white;
@@ -557,8 +524,8 @@ meteor seems to be handling this */
   font-size: small;
   color: white;
   position: relative;
-  right: 20px;
-  top: 0;
+  right: 18px;
+  top: -2px;
   pointer-events: none;
 }
 

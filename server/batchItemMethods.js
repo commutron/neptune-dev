@@ -149,31 +149,7 @@ Meteor.methods({
         if(auth && open && doc) {
           
           let bad = [];
-          
-          /*
-          //testing
-          
-          let yrTxt = doc.batch.slice(0, 2) + '000';
-          let yrInt = parseInt(yrTxt, 10);
-          let yrStr = yrInt.toString();
-          
-          const yrBatch = BatchDB.find({ batch: {$gte: yrStr}, orgKey: Meteor.user().org }).fetch();
-          
-          const thisWeek = (rcnt)=> { return ( moment(rcnt).isSame(now, 'year') ) };
-          let potentialWIP = yrBatch.filter( x => thisWeek(x.upadatedAt) === true );
-          
-          let wideDuplicate = potentialWIP.find( x => x.items.find( y => y.serial === barcode) === true);
-          */
-          
-          // let rNum = parseInt(doc.batch, 10) - 12; // should be enough
-          // let fNum = parseInt(doc.batch, 10) + 12; // should be enough
-          // let recent = rNum.toString();
-          // let future = fNum.toString();
-          
-          // batch: {$gte: recent, $lte: future},
-          
-          // custom to sequencial batch numbers
-          // by date would be better if i could get that to work
+
           for(var click = barFirst; click < barEnd; click++) {
             let barcode = click.toString();
             let duplicate = doc.items.find(x => x.serial === barcode);
@@ -196,22 +172,31 @@ Meteor.methods({
                   alt: false,
                   rma: []
                 }}});
+              }
             }
-          }
-    // callbacks = [success, not added]
           BatchDB.update({_id: batchId}, {
             $set : {
               updatedAt: new Date(),
       			  updatedWho: Meteor.userId()
             }});
-          return [true, bad, 'partial'];
+          return {
+            success: true,
+            notAdded: bad,
+            message:'partial'
+          };
         }else{
-          return [false, false, 'noAuth'];
+          return {
+            success: false,
+            notAdded: false,
+            message: 'noAuth'
+          };
         }
-      }
-      else
-      {
-        return [false, false, 'noRange'];
+      }else{
+        return {
+          success: false,
+          notAdded: false,
+          message: 'noRange'
+        };
       }
   },
   

@@ -10,18 +10,21 @@ Meteor.methods({
   },
   
   
-  activitySnapshot(range, clientTZ) {
+  activitySnapshot(range, clientTZ, mod) {
     
-    const now = moment().tz(clientTZ);
+    let now = moment().tz(clientTZ);
+    mod === 'last' ? now.subtract(1, range) : null;
     const sRange = now.clone().startOf(range).format();
     const eRange = now.clone().endOf(range).format();
     const b = BatchDB.find({orgKey: Meteor.user().orgKey}).fetch();
     
   //////// WIPProgress \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
   
-    const thisWeek = (fin)=> { return ( moment(fin).isBetween(sRange, eRange) ) };
-    const wipBatches = b.filter( x => x.finishedAt === false || 
-                                    thisWeek(x.finishedAt) === true );
+    const inRange = (fin)=> { return ( moment(fin).isBetween(sRange, eRange) ) };
+    const upTo = (fin)=> { return ( moment(fin).isBefore(eRange) ) };
+    const wipBatches = b.filter( x => ( x.finishedAt === false || 
+                                          inRange(x.finishedAt) === true ) &&
+                                            upTo(x.createdAt) === true);
     
     // flow counts loop function
     function flowLoop(river, items) {
@@ -36,7 +39,9 @@ Meteor.methods({
             null;
           }else{
             let count = 0;
+            let units = 1;
             for(let i of items) {
+              units = i.units;
               const h = i.history;
               if(i.finishedAt !== false) {
                 count += 1;
@@ -52,7 +57,8 @@ Meteor.methods({
             stepCounts.push({
               step: step.step,
               type: step.type,
-              count: count
+              count: count,
+              units: units,
             });
           }
         }
@@ -94,7 +100,12 @@ Meteor.methods({
       
       let rmaCount = 0;
       for(let i of b.items) {
-        rmaCount = rmaCount + i.rma.length;
+        rmaCount += i.rma.length;
+      }
+      
+      let totalUnits = 0;
+      for(let i of b.items) {
+        totalUnits += i.units;
       }
       
       let active = b.items.find( 
@@ -110,6 +121,7 @@ Meteor.methods({
         group: g.alias,
         finished: done,
         finishedAt: b.finishedAt,
+        totalU: totalUnits,
         totalR: regItems.length,
         totalA: altItems.length,
         stepsReg: regStepCounts,
@@ -122,10 +134,10 @@ Meteor.methods({
     
   //////// bigNow \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
   
-    const sWeek = now.clone().startOf('week').format();
-    const eWeek = now.clone().endOf('week').format();
-    const sLWeek = now.clone().subtract(7, 'days').startOf('week').format();
-    const eLWeek = now.clone().subtract(7, 'days').endOf('week').format();
+    //const sWeek = now.clone().startOf('week').format();
+    //const eWeek = now.clone().endOf('week').format();
+    //const sLWeek = now.clone().subtract(7, 'days').startOf('week').format();
+    //const eLWeek = now.clone().subtract(7, 'days').endOf('week').format();
     
     //console.log('clientTZ: ' + clientTZ);
     //console.log('client time: ' + now.format());
@@ -138,25 +150,28 @@ Meteor.methods({
     
     
     const aNCOps = AppDB.findOne({orgKey: Meteor.user().orgKey}).nonConOption;
-    let active = b.filter( x => x.finishedAt === false );
     
-    const today = b.filter(
-                    x => x.items.find(
-                      y => y.history.find( 
-                        z => moment(z.time)
-                              .isBetween(sRange, eRange) ) ) );
+    let outstanding = b.filter( x => x.finishedAt === false && 
+                                  upTo(x.createdAt) === true );
+    
+    const todayActive = b.filter(
+                          x => x.items.find(
+                            y => y.history.find( 
+                              z => moment(z.time)
+                                    .isBetween(sRange, eRange) ) ) );
                               
     const todayNC = b.filter(
                       x => x.nonCon.find(
                         y => moment(y.time)
                           .isBetween(sRange, eRange) ) );
                           
-    const doneToday = b.filter( x => x.finishedAt !== false && 
-                                      moment(x.finishedAt)
-                                        .isBetween(sRange, eRange) );
+    const doneToday = b.filter(
+                        x => x.finishedAt !== false && 
+                          moment(x.finishedAt)
+                            .isBetween(sRange, eRange) );
                                         
     let doneItemsToday = 0;
-    for(let t of today) {
+    for(let t of todayActive) {
       let fin = t.items.filter(
                   x => x.history.find(
                     y => y.type === 'finish' && 
@@ -187,8 +202,8 @@ Meteor.methods({
     }
     
     const bigDataPack = {
-      active: active.length,
-      today: today.length,
+      outstanding: outstanding.length,
+      today: todayActive.length,
       todayNC: todayNC.length,
       newNC: newNC,
       ncTypeCounts: ncTypeCounts,

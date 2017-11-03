@@ -8,7 +8,7 @@ export default class NoteLine extends Component	{
     const dt = this.props;
     
     return (
-      <div className='mockTable'>
+      <div className='mockTable max400'>
         <div className='mockTableGroup'>
         {dt.items === 0 ?
           <div className='mockTableRow'>

@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
 import {createContainer} from 'meteor/react-meteor-data';
-import Pref from '/client/global/pref.js';
 
 class FindBox extends Component	{
 
@@ -36,14 +35,6 @@ class FindBox extends Component	{
           autoCapitalize={false}
           spellCheck={false}
           />
-        {/*
-        <datalist id='cuts' className='cap'>
-          <option value={Pref.batch}>All {Pref.batch}s</option>
-          <option value={Pref.group}>All {Pref.group}s</option>
-          <option value={Pref.block}>{Pref.block}s</option>
-          <option value={Pref.scrap}>All {Pref.scrap}ped {Pref.item}s</option>
-        </datalist>
-        */}
       </form>
     );
   }

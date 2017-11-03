@@ -3,8 +3,7 @@ import moment from 'moment';
 import timezone from 'moment-timezone';
 import Pref from '/client/global/pref.js';
 import NumBox from '/client/components/uUi/NumBox.jsx';
-
-import RangeTools from '/client/components/smallUi/RangeTools.jsx';
+import { NonConTypeChart } from '/client/components/charts/NonConOverview.jsx';
 
 export default class BigPicture extends Component	{
 
@@ -30,7 +29,7 @@ export default class BigPicture extends Component	{
         <section className='space'>
           <div>
             <NumBox
-              num={now.active}
+              num={now.outstanding}
               name={'Outstanding ' + Pref.batch + 's'}
               color='blueT' />
             <NumBox
@@ -50,6 +49,9 @@ export default class BigPicture extends Component	{
               name={'finished ' + Pref.item + 's'}
               color='greenT' />
           </div>
+        </section>
+        <section className='dblSection'>
+          <NonConTypeChart ncOp={this.props.a.nonConOption} counts={now.ncTypeCounts} />
         </section>
       </div>
     );

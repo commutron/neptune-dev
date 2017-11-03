@@ -6,7 +6,6 @@ import Alert from '/client/global/alert.js';
 import Model from '../smallUi/Model.jsx';
 import { AdminUp } from '../forms/AdminForm.jsx';
 
-
 export default class UserForm extends Component {
   
   forcePassword(e) {

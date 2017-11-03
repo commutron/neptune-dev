@@ -3,7 +3,6 @@ import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
 import ProgPie from '/client/components/charts/ProgPie.jsx';
-import RangeTools from '/client/components/smallUi/RangeTools.jsx';
 
 export default class OrgWIP extends Component	{
 
@@ -60,19 +59,18 @@ export class StatusRow extends Component	{
     
     const dt = this.props.entry;
     const clss = this.props.active ? 'popBlue' : '';
+    const totalAll = dt.totalR + dt.totalA;
 
     return(
       <section className={clss}>
         <div className='wellSpacedLine blackFade'>
           <span className='big'>{dt.batch}</span>
           <span className='up'>{dt.group} {dt.widget} v.{dt.version}</span>
-          <span>Total {Pref.item}s: {dt.totalR + dt.totalA}</span>
+          <span className='capFL'>{Pref.item}s: {totalAll}</span>
+          {dt.totalU > totalAll ? <span className='cap'>{Pref.unit}: {dt.totalU}</span> : null}
           {dt.totalA > 0 ? <span>Reg: {dt.totalR}, Alt: {dt.totalA}</span> : null}
           {dt.scrap > 0 ? <span className='redT'>Scraps: {dt.scrap}</span> : null}
           {dt.rma > 0 ? <span className='redT'>RMAs: {dt.rma}</span> : null}
-          {dt.finished ?
-            <span className='greenT'>Finished {moment(dt.finishedAt).calendar()}</span>
-          : null}
         </div>
         <div>
           {dt.totalR + dt.totalA < 1 ?
@@ -95,6 +93,11 @@ export class StatusRow extends Component	{
             </div>
           </div>
         :null}
+        {dt.finished ?
+          <div className='wide greenT centreText'>
+            <i>Finished {moment(dt.finishedAt).calendar()}</i>
+          </div>
+        : null}
       </section>
     );
   }

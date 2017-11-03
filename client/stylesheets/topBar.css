@@ -20,6 +20,13 @@ meteor seems to be handling this */
   -moz-appearance: none;
 }
 
+@media screen and (max-width: 1000px){
+  #find {
+    font-size: 1.75rem;
+    min-width: 225px;
+  }
+}
+
 #find:focus {
 	color: white;
 	background: rgb(30,30,30);
@@ -60,7 +67,7 @@ input::-webkit-calendar-picker-indicator {
 }
 
 .logoSVG {
-  width: 3rem;
+  width: 2.5rem;
   height: auto;
 }
 
@@ -77,6 +84,55 @@ input::-webkit-calendar-picker-indicator {
   100% { transform: translate3d(0, 0, 0) rotate(360deg); }
 }
 
+.primeNav {
+  width: auto;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  vertical-align: middle;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+
+.navIcon {
+  padding: 0 0.5rem;
+  vertical-align: middle;
+  line-height: normal;
+}
+
+.icontext {
+  display: block;
+  white-space: nowrap;
+  font-size: 0.9rem;
+}
+
+.navSpacer {
+  flex-grow: 2;
+}
+
+#dtToggle, #ikyToggle, #timeToggle, #exitToggle {
+  display: none;
+}
+
+#boltSwitch, #snapSwitch, #timeSwitch, #exitSwitch {
+  cursor: pointer;
+  transition: 0.4s cubic-bezier(0.2, 0.6, 0.3, 1.1);
+}
+
+#snapSwitch {
+  z-index: 1;
+  transform: translate(0%, 0%) rotate(0deg);
+  opacity: 0.8;
+}
+#snapSwitch:hover {
+  opacity: 1;
+}
+
+#timeSwitch:hover, #exitSwitch:hover, #boltSwitch:hover {
+  color: white;
+  border-bottom-color: transparent;
+}
 /* custom timeClock icon */
 /*
 #timeToggle:checked + #timeSwitch {
@@ -99,11 +155,4 @@ input::-webkit-calendar-picker-indicator {
 .timeLink {
   display: block;
   white-space: nowrap;
-}
-
-@media screen and (max-width: 1000px){
-  #find {
-    font-size: 1.75rem;
-    min-width: 225px;
-  }
 }

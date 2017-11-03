@@ -16,7 +16,8 @@ export default class MultiItemForm extends Component {
     super();
     this.state = {
       digits: 10,
-      hold: []
+      hold: [],
+      work: false
     };
   }
   
@@ -73,7 +74,8 @@ export default class MultiItemForm extends Component {
 	addItem(e) {
     e.preventDefault();
     this.go.disabled = true;
-    this.message.value = 'working.....';
+    this.setState({work: true});
+    this.message.value = 'Working...';
     
     const batchId = this.props.id;
     
@@ -87,20 +89,20 @@ export default class MultiItemForm extends Component {
     Meteor.call('addMultiItems', batchId, first, last, unit, (error, reply)=>{
       if(error)
         console.log(error);
-      if(reply[0]) {
+      if(reply.success === true) {
         Bert.alert(Alert.success);
         this.unit.value = this.props.unit;
-        this.barNumStart.value = '';
-        this.barNumEnd.value = '';
+        this.barNumStart.value = moment().format('YYMMDD');
+        this.barNumEnd.value = moment().format('YYMMDD');
+        this.setState({work: false});
       }else{
         Bert.alert(Alert.caution);
-        console.log(reply[2]);
+        console.log(reply.message);
       }
-      
-      if(!reply[1]) {
+      if(!reply.notAdded) {
         null;
-      }else if(reply[1].length > 0) {
-        this.setState({ hold: reply[1] });
+      }else if(reply.notAdded.length > 0) {
+        this.setState({ hold: reply.notAdded });
         this.message.value = '';
       }else{
         this.message.value = 'all created successfully';
@@ -171,7 +173,6 @@ export default class MultiItemForm extends Component {
                 placeholder='1000000000-9999999999'
                 defaultValue={today}
                 inputMode='numeric'
-                autoFocus='true'
                 required
                 onInput={this.checkRange.bind(this)} />
               <label htmlFor='strt'>First {Pref.item} Number</label>
@@ -193,6 +194,9 @@ export default class MultiItemForm extends Component {
             </p>
             <br />
             <div className='centre'>
+              {this.state.work ?
+                <i className='fa fa-circle-o-notch fa-spin' aria-hidden='true'></i>
+              : null }
               <output ref={(i)=> this.message = i} />
               {this.state.hold.length > 0 ?
                 <b>duplicates not created</b>

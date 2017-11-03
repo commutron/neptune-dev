@@ -36,24 +36,24 @@ export class NonConTypeChart extends Component {
     };
     
     let options = {
-      width: 600,
-      height: 700,
+      height: 800,
       horizontalBars: true,
       reverseData: true,
-      stretch: true,
+      stretch: false,
       axisX: {
         low: 0,
         high: Math.max(...counts),
         onlyInteger: true,
+        position: 'start'
       },
       axisY: {
-        offset: 100
+        offset: 150
       },
       chartPadding: {
-        top: 25,
-        right: 25,
-        bottom: 25,
-        left: 25
+        top: 20,
+        right: 20,
+        bottom: 20,
+        left: 20
       },
       plugins: [
         Chartist.plugins.tooltip({
@@ -63,7 +63,7 @@ export class NonConTypeChart extends Component {
     };
 
     return (
-      <div>
+      <div className='min400'>
         <ChartistGraph data={data} options={options} type={'Bar'} />
       </div>
     );

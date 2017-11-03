@@ -34,7 +34,7 @@
   /* black */
   --black: rgb(48,48,48);
   --blackT: rgb(48,48,48);
-  --blackFade: rgba(0,0,0,0.3);
+  --blackFade: rgba(5,5,5,0.5);
   
   /* animation */
   --scottsCurve: cubic-bezier(0.165, 0.84, 0.44, 1);
