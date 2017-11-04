@@ -69,3 +69,50 @@ export class NonConTypeChart extends Component {
     );
   }
 }
+
+export class NonConTypePie extends Component {
+
+  render () {
+
+    const counts = this.props.counts;
+    
+    let mergedSeries = [];
+    counts.forEach( (x, index) => 
+                      mergedSeries.push({
+                        'value': x,
+                        'meta': this.props.ncOp[index]
+                      }) );
+
+    let data = {
+      labels: this.props.ncOp,
+      series: mergedSeries,
+    };
+    
+    let options = {
+      width: 250,
+      height: 250,
+      donut: true,
+      donutWidth: 60,
+      startAngle: 0,
+      showLabel: false,
+      chartPadding: 25,
+      plugins: [
+        Chartist.plugins.tooltip({
+          appendToBody: true
+        })
+      ]
+    };
+    
+    let sty = {
+      width: '250px',
+      display: 'inline-block',
+      margin: '0 auto'
+    };
+
+    return (
+      <div style={sty}>
+        <ChartistGraph data={data} options={options} type={'Pie'} />
+      </div>
+    );
+  }
+}

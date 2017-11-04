@@ -28,8 +28,8 @@ export default class RangeTools extends Component	{
               onChange={this.time.bind(this)}
               ref={(i)=> this.mod = i}
               defaultValue={this.props.dfmod}>
-              <option value='this'>This</option>
-              <option value='last'>Last</option>
+              <option value='this'>Current</option>
+              <option value='last'>Previous</option>
             </select>
           </label>
           <label className='uniSelect'>

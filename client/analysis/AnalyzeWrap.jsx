@@ -1,7 +1,6 @@
 import React from 'react';
 
 
-import TestChart from './TestChart.jsx';
 import TestTable from './TestTable.jsx';
 
 export default class AnalyzeWrap extends React.Component {
@@ -19,7 +18,7 @@ export default class AnalyzeWrap extends React.Component {
       <div>
         
         <div>
-          <TestChart bData={this.bData()} ncData={this.ncData()} pData={this.pData()} />
+          
           
         </div>
         

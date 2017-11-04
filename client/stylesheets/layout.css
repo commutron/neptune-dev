@@ -497,6 +497,10 @@ main {
   }
 }
 
+.wipCol section div {
+  vertical-align: top;
+}
+
 
 
 .wellSpacedLine {
@@ -542,4 +546,7 @@ main {
 }
 .min400 {
   min-width: 400px;
+}
+.max300 {
+  max-width: 300px;
 }

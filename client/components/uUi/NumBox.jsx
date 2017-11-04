@@ -4,7 +4,7 @@ import React from 'react';
     display: 'inline-block',
     textAlign: 'center',
     padding: '5px',
-    margin: '0 10px',
+    margin: '0 5px',
     maxWidth: '100px'
   };
   const bSty = {

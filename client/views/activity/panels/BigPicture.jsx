@@ -3,7 +3,7 @@ import moment from 'moment';
 import timezone from 'moment-timezone';
 import Pref from '/client/global/pref.js';
 import NumBox from '/client/components/uUi/NumBox.jsx';
-import { NonConTypeChart } from '/client/components/charts/NonConOverview.jsx';
+import { NonConTypePie } from '/client/components/charts/NonConOverview.jsx';
 
 export default class BigPicture extends Component	{
 
@@ -20,13 +20,11 @@ export default class BigPicture extends Component	{
       );
     }
     
-    console.log(now.ncTypeCounts);
-    
     // now.todayNC = quantity of batches with new nonCons
     
     return (
       <div className='wipCol'>
-        <section className='space'>
+        <section className='balance'>
           <div>
             <NumBox
               num={now.outstanding}
@@ -37,10 +35,6 @@ export default class BigPicture extends Component	{
               name={'Active ' + Pref.batch + 's'}
               color='blueT' />
             <NumBox
-              num={now.newNC}
-              name={'new ' + Pref.nonCon + 's'}
-              color='redT' />
-            <NumBox
               num={now.doneToday}
               name={'finished ' + Pref.batch + 's'}
               color='greenT' />
@@ -50,8 +44,12 @@ export default class BigPicture extends Component	{
               color='greenT' />
           </div>
         </section>
-        <section className='dblSection'>
-          <NonConTypeChart ncOp={this.props.a.nonConOption} counts={now.ncTypeCounts} />
+        <section className='balance'>
+          <NumBox
+            num={now.newNC}
+            name={'new ' + Pref.nonCon + 's'}
+            color='redT' />
+          <NonConTypePie ncOp={this.props.a.nonConOption} counts={now.ncTypeCounts} />
         </section>
       </div>
     );
