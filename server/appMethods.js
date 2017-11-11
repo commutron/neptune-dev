@@ -6,7 +6,6 @@ Meteor.startup(function () {
   WidgetDB._ensureIndex({ widget : 1, 'versions.version' : 1 }, { unique: true });
 });
 
-
 Meteor.methods({
   
   

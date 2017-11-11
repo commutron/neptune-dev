@@ -25,16 +25,19 @@ export default class StepsProgress extends Component	{
     let regItems = b.items;
     let altItems = [];
     
-    let totalUnits = 0;
-      for(let i of b.items) {
-        totalUnits += i.units;
-      }
-    
     if(aSteps.length < 1) {
       regItems = outScrap(regItems);
     }else{
       regItems = outScrap( b.items.filter( x => x.alt === false || x.alt === 'no' ) );
       altItems = outScrap( b.items.filter( x => x.alt === 'yes' ) );
+    }
+    
+    let totalUnits = 0;
+    for(let i of regItems) {
+      totalUnits += i.units;
+    }
+    for(let i of altItems) {
+      totalUnits += i.units;
     }
     
     const scrapCount = b.items.length - regItems.length - altItems.length;

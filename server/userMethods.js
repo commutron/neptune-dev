@@ -177,7 +177,6 @@ Meteor.methods({
   
 });
 
-
   /*
   // test/example code
   // private operations on private server data

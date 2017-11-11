@@ -4,6 +4,7 @@ import timezone from 'moment-timezone';
 import Pref from '/client/global/pref.js';
 import NumBox from '/client/components/uUi/NumBox.jsx';
 import { NonConTypePie } from '/client/components/charts/NonConOverview.jsx';
+import SimpleRate from '/client/components/charts/SimpleRate.jsx';
 
 export default class BigPicture extends Component	{
 
@@ -35,11 +36,11 @@ export default class BigPicture extends Component	{
               name={'Active ' + Pref.batch + 's'}
               color='blueT' />
             <NumBox
-              num={now.doneToday}
+              num={now.doneBatches}
               name={'finished ' + Pref.batch + 's'}
               color='greenT' />
             <NumBox
-              num={now.doneItemsToday}
+              num={now.doneItems}
               name={'finished ' + Pref.item + 's'}
               color='greenT' />
           </div>
@@ -50,6 +51,12 @@ export default class BigPicture extends Component	{
             name={'new ' + Pref.nonCon + 's'}
             color='redT' />
           <NonConTypePie ncOp={this.props.a.nonConOption} counts={now.ncTypeCounts} />
+        </section>
+        <section className='dblSection'>
+          <SimpleRate
+            data={now.doneItemsOverTime}
+            lastDay={now.end}
+            live={now.live} />
         </section>
       </div>
     );

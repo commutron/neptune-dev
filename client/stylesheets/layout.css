@@ -188,7 +188,7 @@ main {
   height: 60px;
   z-index: 9;
   position: fixed;
-  bottom: 0px;
+  bottom: 5px;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -476,9 +476,7 @@ main {
   border: 1px solid rgba(0,0,0,0.5);
 }
 .wipCol > section.dblSection {
-  width: calc(( (100% - 60px) / 3 ) * 2);
-  height: 400px;
-  overflow-y: auto;
+  width: calc(( (100% - 40px) / 3 ) * 2);
 }
 @media screen and (max-width: 1500px){
   .wipCol > section {
@@ -488,7 +486,7 @@ main {
     width: calc((100% - 40px) / 2);
   }
 }
-@media screen and (max-width: 900px){
+@media screen and (max-width: 1000px){
   .wipCol > section {
     width: calc(100% - 20px);
   }

@@ -12,10 +12,14 @@ Meteor.methods({
   
   activitySnapshot(range, clientTZ, mod) {
     
-    let now = moment().tz(clientTZ);
-    mod === 'last' ? now.subtract(1, range) : null;
-    const sRange = now.clone().startOf(range).format();
-    const eRange = now.clone().endOf(range).format();
+    let now = mod === 'last' ? 
+              moment().tz(clientTZ).subtract(1, range) :
+              moment().tz(clientTZ);
+    const plainStart = now.clone().startOf(range);
+    const sRange = plainStart.format();
+    const plainEnd = now.clone().endOf(range);
+    const eRange = plainEnd.format();
+    
     const b = BatchDB.find({orgKey: Meteor.user().orgKey}).fetch();
     
   //////// WIPProgress \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -104,7 +108,10 @@ Meteor.methods({
       }
       
       let totalUnits = 0;
-      for(let i of b.items) {
+      for(let i of regItems) {
+        totalUnits += i.units;
+      }
+      for(let i of altItems) {
         totalUnits += i.units;
       }
       
@@ -133,52 +140,50 @@ Meteor.methods({
     }
     
   //////// bigNow \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-  
-    //const sWeek = now.clone().startOf('week').format();
-    //const eWeek = now.clone().endOf('week').format();
-    //const sLWeek = now.clone().subtract(7, 'days').startOf('week').format();
-    //const eLWeek = now.clone().subtract(7, 'days').endOf('week').format();
-    
-    //console.log('clientTZ: ' + clientTZ);
-    //console.log('client time: ' + now.format());
-    //console.log('start: ' + bToday);
-    //console.log('end: ' + eToday);
-    //console.log('start of this week: ' + sWeek);
-    //console.log('end of this week: ' + eWeek);
-    //console.log('start of last week: ' + sLWeek);
-    //console.log('end of lastweek: ' + eLWeek);
-    
     
     const aNCOps = AppDB.findOne({orgKey: Meteor.user().orgKey}).nonConOption;
     
     let outstanding = b.filter( x => x.finishedAt === false && 
-                                  upTo(x.createdAt) === true );
+                                      moment(x.createdAt)
+                                        .isBefore(eRange) );
     
-    const todayActive = b.filter(
-                          x => x.items.find(
-                            y => y.history.find( 
-                              z => moment(z.time)
-                                    .isBetween(sRange, eRange) ) ) );
-                              
+    function active(batches, startRange, endRange) {
+      let records = batches.filter(
+                      x => x.items.find(
+                        y => y.history.find( 
+                          z => moment(z.time)
+                                .isBetween(startRange, endRange) ) ) );
+      return records;
+    }
+    const mainActive = active(b, sRange, eRange);
+    
     const todayNC = b.filter(
                       x => x.nonCon.find(
                         y => moment(y.time)
                           .isBetween(sRange, eRange) ) );
-                          
-    const doneToday = b.filter(
+    
+    function doneBatches(batches, startRange, endRange) {
+      const records = batches.filter(
                         x => x.finishedAt !== false && 
                           moment(x.finishedAt)
-                            .isBetween(sRange, eRange) );
-                                        
-    let doneItemsToday = 0;
-    for(let t of todayActive) {
-      let fin = t.items.filter(
-                  x => x.history.find(
-                    y => y.type === 'finish' && 
-                      moment(y.time)
-                        .isBetween(sRange, eRange) ) );
-      doneItemsToday += fin.length;
+                            .isBetween(startRange, endRange) );
+      return records.length;
     }
+    const mainDoneBatches = doneBatches(b, sRange, eRange);                        
+           
+    function doneItems(batches, startRange, endRange) {
+      let items = 0;
+      for(let t of batches) {
+        let fin = t.items.filter(
+                    x => x.history.find(
+                      y => y.type === 'finish' && 
+                        moment(y.time)
+                          .isBetween(startRange, endRange) ) );
+        items += fin.length;
+      }
+      return items;
+    }
+    const mainDoneItems = doneItems(mainActive, sRange, eRange);
     
     let newNC = 0;
     for(let t of todayNC) {
@@ -201,14 +206,41 @@ Meteor.methods({
       ncTypeCounts.push(typNum);
     }
     
+    //// Rates ///////
+    let rate = mod === 'last' ?
+               plainEnd.diff(plainStart, 'days') + 1 :
+               now.diff(plainStart, 'days') + 1;
+    //console.log(rate);
+               
+    let rateDay = mod === 'last' ?
+                  plainEnd.clone() :
+                  now.clone();
+    //console.log(rateDay.format());
+    let rateStart = rateDay.clone().startOf('day');
+    //console.log(rateStart.format());
+    let rateEnd = rateDay.clone().endOf('day');
+    //console.log(rateEnd.format());
+    
+    let doneItemsOverTime = [];
+    for(let i = 0; i < rate; i++) {
+      let start = rateStart.clone().subtract(i, 'day').format();
+      let end = rateEnd.clone().subtract(i, 'day').format();
+      let count = doneItems(mainActive, start, end);
+      doneItemsOverTime.unshift(count);
+    }
+    
     const bigDataPack = {
+      live: mod === 'last' ? false : true,
+      start: sRange,
+      end: eRange,
       outstanding: outstanding.length,
-      today: todayActive.length,
+      today: mainActive.length,
       todayNC: todayNC.length,
       newNC: newNC,
       ncTypeCounts: ncTypeCounts,
-      doneItemsToday: doneItemsToday,
-      doneToday: doneToday.length
+      doneItems: mainDoneItems,
+      doneItemsOverTime: doneItemsOverTime,
+      doneBatches: mainDoneBatches
     };
     
     //////// Return Object \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
