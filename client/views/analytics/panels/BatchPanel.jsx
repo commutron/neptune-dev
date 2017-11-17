@@ -64,6 +64,13 @@ export default class BatchPanel extends Component	{
     
     const filter = this.filter();
     
+    const printData = b.batch + '?group=' + g.alias +
+                                '&widget=' + w.widget + 
+                                '&ver=' + v.version +
+                                '&desc=' + w.describe +
+                                '&quant=' + b.items.length +
+                                '&date=' + moment(b.end).format('MMMM D');
+    
     return (
       <AnimateWrap type='cardTrans'>
         <div className='section' key={b.batch}>

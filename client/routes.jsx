@@ -5,12 +5,15 @@ import {BasicLayout} from './layouts/MainLayouts.jsx';
 import {DashLayout} from './layouts/MainLayouts.jsx';
 import {ProductionLayout} from './layouts/MainLayouts.jsx';
 import {AnalyticsLayout} from './layouts/MainLayouts.jsx';
+import {LabelLayout} from './layouts/MainLayouts.jsx';
 
 import DashData from './views/dashboard/DashData.jsx';
 import ActivityData from './views/activity/ActivityData.jsx';
 import ProdData from './views/production/ProdData.jsx';
 import AnaData from './views/analytics/AnaData.jsx';
 import AppData from './views/app/AppData.jsx';
+
+import GeneralLabel from './views/paper/GeneralLabel.jsx';
 
 import LandingWrap from './LandingWrap.jsx';
 
@@ -80,6 +83,38 @@ FlowRouter.route('/analytics/:postId', {
     name: "test" // optional
 });
 // FlowRouter.go('/analytics/my-post?comments=on&color=dark');
+
+
+FlowRouter.route('/print/generallabel/:batch', {
+    action: function(params, queryParams) {
+      if(queryParams !== null && typeof queryParams === 'object') {
+        const request = Object.keys(queryParams);
+        if(
+          request.includes('group') &&
+          request.includes('widget') &&
+          request.includes('ver') &&
+          request.includes('desc') &&
+          request.includes('quant') &&
+          request.includes('date')
+        ) {
+          mount(LabelLayout, {
+            content: (<GeneralLabel batch={params.batch} data={queryParams} />)
+          });
+        }else{
+          mount(BasicLayout, {
+            content: (<p>Cannot Generate this page. Incomplete information</p>),
+            link: ''
+          });
+        }
+      }else{
+        mount(BasicLayout, {
+          content: (<p>Page Not Found</p>),
+          link: ''
+        });
+      }
+    },
+    name: 'print'
+});
 
 
 FlowRouter.notFound = {

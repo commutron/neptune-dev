@@ -411,6 +411,7 @@ Meteor.methods({
           who: Meteor.userId(),
           fix: repaired,
           inspect: false,
+          reject: [],
           skip: false,
           comm: ''
           }}});
@@ -443,6 +444,26 @@ Meteor.methods({
   		});
     }else{null}
   },
+  
+  rejectNC(batchId, ncKey, timeRepair, whoRepair) {
+    if(Meteor.userId()) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+        $push : {
+          'nonCon.$.reject': {
+            attemptTime: timeRepair,
+            attemptWho: whoRepair,
+            rejectTime: new Date(),
+            rejectWho: Meteor.userId()
+          }
+        }
+      });
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+        $set : {
+          'nonCon.$.fix': false
+        }
+      });
+    }else{null}
+  },
     
   editNC(batchId, ncKey, ref, type) {
     if(Roles.userIsInRole(Meteor.userId(), 'inspect')) {
@@ -455,6 +476,7 @@ Meteor.methods({
     }else{null}
   },
   
+  //potentialy replaced by reject
   UnFixNC(batchId, ncKey) {
     if(Roles.userIsInRole(Meteor.userId(), 'inspect')) {
 		  BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
@@ -501,7 +523,8 @@ Meteor.methods({
       return false;
     }
   },
-  
+
+// Escaped NonCon
   addEscape(batchId, ref, type, quant, ncar) {
     if(Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {

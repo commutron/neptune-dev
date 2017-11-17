@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
+import moment from 'moment';
 
+import ActionLink from '/client/components/uUi/ActionLink.jsx';
 import BlockForm from '../forms/BlockForm.jsx';
 import BatchForm from '../forms/BatchForm.jsx';
 import MultiItemForm from '../forms/MultiItemForm.jsx';
@@ -72,6 +74,18 @@ export default class ActionBar extends Component	{
               river={batchData.river}
               riverAlt={batchData.riverAlt}
               lock={batchData.finishedAt !== false} />
+            <ActionLink
+              address={'/print/generallabel/' + 
+                        batchData.batch + 
+                        '?group=' + groupData.alias +
+                        '&widget=' + widgetData.widget + 
+                        '&ver=' + versionData.version +
+                        '&desc=' + widgetData.describe +
+                        '&quant=' + batchData.items.length +
+                        '&date=' + moment(batchData.end).format('MMMM D')}
+              title='Print Label'
+              icon='fa-print'
+              color='whiteT' />
             <BlockForm
               id={batchData._id}
               edit={false}

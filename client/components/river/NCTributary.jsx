@@ -25,24 +25,37 @@ export class NCStream extends Component {
     handleFix() {
 			const id = this.props.id;
       const ncKey = this.props.entry.key;
-        Meteor.call('fixNC', id, ncKey, (error)=> {
-					if(error)
-					  console.log(error);
-				});
-				let findBox = document.getElementById('find');
-				findBox.focus();
-        }
+      Meteor.call('fixNC', id, ncKey, (error)=> {
+				if(error)
+				  console.log(error);
+			});
+			let findBox = document.getElementById('find');
+			findBox.focus();
+    }
 
 	  handleInspect() {
       const id = this.props.id;
       const ncKey = this.props.entry.key;
-        Meteor.call('inspectNC', id, ncKey, (error)=> {
-					if(error)
-					  console.log(error);
-				});
-				let findBox = document.getElementById('find');
-				findBox.focus();
-        }
+      Meteor.call('inspectNC', id, ncKey, (error)=> {
+				if(error)
+				  console.log(error);
+			});
+			let findBox = document.getElementById('find');
+			findBox.focus();
+    }
+    
+    handleReject() {
+      const id = this.props.id;
+      const ncKey = this.props.entry.key;
+      const fixTime = this.props.entry.fix.time;
+      const fixWho = this.props.entry.fix.who;
+      Meteor.call('rejectNC', id, ncKey, fixTime, fixWho, (error)=> {
+				if(error)
+				  console.log(error);
+			});
+			let findBox = document.getElementById('find');
+			findBox.focus();
+    }
         
         
   render () {
@@ -67,13 +80,22 @@ export class NCStream extends Component {
               <i className='fa fa-truck fa-2x'></i>
           :
             fixed ?
-              <button 
-                ref={(i)=> this.inspectline = i}
-                className='pebble green'
-                readOnly={true}
-                onClick={this.handleInspect.bind(this)}
-                disabled={lockI}>
-              <img src='/inspectMini.svg' className='pebbleSVG' />Inspect</button>
+              <span>
+                <button 
+                  ref={(i)=> this.inspectline = i}
+                  className='pebble green'
+                  readOnly={true}
+                  onClick={this.handleInspect.bind(this)}
+                  disabled={lockI}>
+                <img src='/inspectMini.svg' className='pebbleSVG' />YES</button>
+                <button 
+                  ref={(i)=> this.rejectline = i}
+                  className='pebble red'
+                  readOnly={true}
+                  onClick={this.handleReject.bind(this)}
+                  disabled={lockI}>
+                <img src='/inspectMini.svg' className='pebbleSVG' />NO</button>
+              </span>
           :
               <button 
                 ref={(i)=> this.fixline = i}

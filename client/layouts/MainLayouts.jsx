@@ -60,4 +60,15 @@ export const AnalyticsLayout = ({content, link}) => (
   </div>
 );
 
+export const LabelLayout = ({content}) => (
+  <div>
+    <div className='wide noPrint'>
+      <button className='smallAction clear' onClick={()=> window.history.back()}>Go Back</button>
+    </div>
+    <div className='printLabel'>
+      {content}
+    </div>
+  </div>
+);
+
     

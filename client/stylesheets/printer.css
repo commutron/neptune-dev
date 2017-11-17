@@ -1,0 +1,72 @@
+
+
+.printLabel {
+  width: 900px;
+  height: 600px;
+  border: 2px dashed black;
+  margin: auto;
+  padding: 40px 25px;
+  background-color: white;
+  color: black;
+  font-weight: 900;
+  font-stretch: semi-expanded;
+}
+
+.printLabel div {
+  margin: 15px 0;
+  align-items: center;
+}
+
+.printLabel i {
+  margin: 5px 0;
+  vertical-align: middle;
+}
+
+.printLabel input {
+  width: 300px;
+  border: none;
+  font-size: 3rem;
+  line-height: 3rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.printLabel .bffr {
+  width: 50px;
+}
+.printLabel .bffrbffr {
+  width: 150px;
+}
+
+.pxxlg {
+  font-size: 7rem;
+  line-height: 6rem;
+}
+
+.pxlg {
+  font-size: 4rem;
+}
+
+.plg {
+  font-size: 3rem;
+}
+
+.pmd {
+  font-size: 2rem;
+}
+
+.psm {
+  font-size: 1rem;
+}
+
+@media print {
+  .printLabel {
+     position: absolute;
+     bottom: 0;
+     border: none;
+     margin: 0cm;
+   }
+  .noPrint {
+    display: none;
+  }
+}

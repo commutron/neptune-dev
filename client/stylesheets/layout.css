@@ -434,6 +434,9 @@ main {
   display: none;
 }
 
+.verLine {
+  vertical-align: middle;
+}
 .beside {
   line-height: 1rem;
   vertical-align: super;

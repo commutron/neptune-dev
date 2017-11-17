@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
+import moment from 'moment';
 
-//import DataToggle from '../tinyUi/DataToggle.jsx';
+import ActionLink from '/client/components/uUi/ActionLink.jsx';
 import IkyToggle from '../tinyUi/IkyToggle.jsx';
 import NCAdd from '../river/NCAdd.jsx';
 import NonConSkip from '../forms/NonConSkip.jsx';
@@ -96,6 +97,18 @@ export default class ActionBar extends Component	{
               river={batchData.river}
               riverAlt={batchData.riverAlt}
               lock={batchData.finishedAt !== false} />
+            <ActionLink
+              address={'/print/generallabel/' + 
+                        batchData.batch + 
+                        '?group=' + groupData.alias +
+                        '&widget=' + widgetData.widget + 
+                        '&ver=' + versionData.version +
+                        '&desc=' + widgetData.describe +
+                        '&quant=' + batchData.items.length +
+                        '&date=' + moment(batchData.end).format('MMMM D')}
+              title='Print Label'
+              icon='fa-print'
+              color='whiteT' />
             <BlockForm
               id={batchData._id}
               edit={false}
