@@ -13,6 +13,11 @@ serial={itemData.serial}
 nons={app.nonConOption}
 */
 
+// dormant componet
+// functioon has been intergrated as a context menu
+// on the NCStream component
+// if recieved well remove this
+
 export default class NonConSkip extends Component {
   
   nonCons() {

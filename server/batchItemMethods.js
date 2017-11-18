@@ -487,15 +487,29 @@ Meteor.methods({
     }else{null}
   },
 
-  skipNC(batchId, ncKey, com) {
+  snoozeNC(batchId, ncKey) {
     if(Roles.userIsInRole(Meteor.userId(), 'inspect')) {
   		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
   			$set : {
-  			  'nonCon.$.comm': com,
   			  'nonCon.$.skip': { 
   			    time: new Date(),
   			    who: Meteor.userId()
-  			  }
+  			  },
+  			  'nonCon.$.comm': 'sn00ze',
+  			}
+  		});
+    }else{null}
+  },
+  
+  skipNC(batchId, ncKey) {
+    if(Roles.userIsInRole(Meteor.userId(), 'inspect')) {
+  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+  			$set : {
+  			  'nonCon.$.skip': { 
+  			    time: new Date(),
+  			    who: Meteor.userId()
+  			  },
+  			  'nonCon.$.comm': '',
   			}
   		});
     }else{null}
@@ -509,6 +523,16 @@ Meteor.methods({
   			  'nonCon.$.comm' : ''
   			}
   	  });
+    }else{null}
+  },
+  
+  commentNC(batchId, ncKey, com) {
+    if(Roles.userIsInRole(Meteor.userId(), 'inspect')) {
+  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+  			$set : {
+  			  'nonCon.$.comm': com
+  			}
+  		});
     }else{null}
   },
   

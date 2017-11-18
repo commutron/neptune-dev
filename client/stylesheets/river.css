@@ -67,6 +67,20 @@
  font-weight: bolder;
 }
 
+.riverG {
+  background-color: var(--nephritis);
+}
+.riverG:hover, .riverG:active {
+  background-color: var(--emerald);
+}
+
+.riverNG {
+  background-color: var(--pomegranate);
+}
+.riverNG:hover, .riverNG:active {
+ background-color: var(--alizarin);
+}
+
 .iFirst {
  background-image: url(first.svg);
  background-color: var(--belizeHole);
@@ -80,15 +94,11 @@
 }
 
 .iCheck {
- background-image: url(inspect.svg);
- background-color: var(--nephritis);
+  background-image: url(inspect.svg);
+  background-color: var(--nephritis);
 }
 .iCheck:hover, .iCheck:active {
- background-color: var(--emerald);
- /*
- box-shadow: 0 0 .2em .2em rgba(43,43,43,0.3),
-             0 0 .2em .2em var(--emeraldfade);
-             */
+  background-color: var(--emerald);
 }
 
 .iTest {
@@ -96,11 +106,7 @@
  background-color: var(--greenSea);
 }
 .iTest:hover, .iTest:active {
- background-color: var(--turquoise);
- /*
- box-shadow: 0 0 .2em .2em rgba(43,43,43,0.3),
-             0 0 .2em .2em var(--turquoisefade);
-             */
+  background-color: var(--turquoise);
 }
 
 .iBuild {
@@ -134,81 +140,90 @@
              */
 }
 
-
 .pebble {
- line-height: 1.5rem;
- font-size: 0.9rem;
- min-width: 100%;
-	min-height: 2.5rem;
-	padding: 0 3px;
+  line-height: 1.5rem;
+  font-size: 0.9rem;
+  width: 90px;
+	height: 45px;
 	text-transform: uppercase;
 	vertical-align: middle;
- -moz-box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2);
- -webkit-box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2);
- box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2);
- transition: all 200ms ease-out;
+	transition: all 200ms ease-out;
+	background-color: var(--belizeHole);
+}
+.pebble:hover, .pebble:active {
+  background-color: var(--peterriver);
 }
 
 .pebbleSVG {
- backface-visibility: hidden;
- width: 2.5rem;
- height: auto;
- -webkit-transform: translate(0%, 20%);
- -moz-transform: translate(0%, 20%);
- transform: translate(0%, 20%);
+  backface-visibility: hidden;
+  width: 60px;
+  height: auto;
+  -webkit-transform: translate(0%, 20%);
+  -moz-transform: translate(0%, 20%);
+  -o-transform: translate(0%, 20%);
+  -ms-transform: translate(0%, 20%);
+  transform: translate(0%, 20%);
+}
+
+.granule {
+  line-height: 1.5rem;
+  font-size: 0.9rem;
+  width: 45px;
+  height: 45px;
+	text-transform: uppercase;
+	vertical-align: middle;
+  transition: all 200ms ease-out;
 }
 
 .stoneForm {
- display: flex;
- width: 100%;
- flex-direction: column;
- justify-content: space-around;
- align-items: center;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .stoneForm input[type='text'],
 .stoneForm select,
 .stoneForm label,
 .stoneForm details {
- color: black;
- min-width: 225px;
- max-width: 250px;
- text-align: center;
+  color: black;
+  min-width: 225px;
+  max-width: 250px;
+  text-align: center;
 }
 
 .stoneForm textarea {
- min-width: 225px;
- max-width: 225px;
- min-height: 1rem;
- border-color: black;
+  min-width: 225px;
+  max-width: 225px;
+  min-height: 1rem;
+  border-color: black;
 }
 
 .stoneForm details {
- box-shadow: none;
+  box-shadow: none;
 }
 
 .stoneForm input[type='checkbox']:focus + label,
 .stoneForm input:focus + label,
 .stoneForm select:focus + label,
-.stoneForm textarea:focus + label{
- color: black;
- border-bottom-color: black;
- outline-color: black;
+.stoneForm textarea:focus + label {
+  color: black;
+  border-bottom-color: black;
+  outline-color: black;
 }
 
 @media screen and (max-width: 1000px) {
- .stoneForm input[type='text'],
- .stoneForm textarea,
- .stoneForm select,
- .stoneForm label,
- .stoneForm details {
-  color: black;
-  min-width: 200px;
-  max-width: 200px;
- }
- .space {
-  padding: 10px;
- }
- 
- 
+  .stoneForm input[type='text'],
+  .stoneForm textarea,
+  .stoneForm select,
+  .stoneForm label,
+  .stoneForm details {
+    color: black;
+    min-width: 200px;
+    max-width: 200px;
+  }
+  .space {
+    padding: 10px;
+  }
 }

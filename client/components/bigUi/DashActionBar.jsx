@@ -4,7 +4,7 @@ import moment from 'moment';
 import ActionLink from '/client/components/uUi/ActionLink.jsx';
 import IkyToggle from '../tinyUi/IkyToggle.jsx';
 import NCAdd from '../river/NCAdd.jsx';
-import NonConSkip from '../forms/NonConSkip.jsx';
+//import NonConSkip from '../forms/NonConSkip.jsx';
 import BlockForm from '../forms/BlockForm.jsx';
 import BatchForm from '../forms/BatchForm.jsx';
 import MultiItemForm from '../forms/MultiItemForm.jsx';
@@ -36,12 +36,13 @@ export default class ActionBar extends Component	{
     let groupData = this.props.groupData;
     let app = this.props.app;
     let act = this.props.action;
-    let ncedit = Roles.userIsInRole(Meteor.userId(), 'inspect');
+    //let ncedit = Roles.userIsInRole(Meteor.userId(), 'inspect');
     
     return (
       <div className='dashAction'>
         <div className='footLeft'>
         { 
+        /*
         act === 'build' && ncedit ?
             <NonConSkip
       		    ncData={batchData.nonCon}
@@ -49,6 +50,7 @@ export default class ActionBar extends Component	{
               serial={itemData.serial}
       		    nons={app.nonConOption} />
       	:
+      	*/
       	act === 'batchBuild' && 
       	  batchData.items
       	    .filter( x => x.history.length < 1 )

@@ -2,6 +2,11 @@ import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
 import Alert from '/client/global/alert.js';
 
+// dormant componet
+// functioon has been intergrated as a context menu
+// on the NCStream component
+// if recieved well remove this
+
 export default class NCSkip extends Component {
 
 	handleSkip(e) {
