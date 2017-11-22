@@ -79,8 +79,8 @@ export default class NCTributary extends Component {
     return(
       <InOutWrap type='ncTrans' add='grid'>
         {this.props.nonCons.map( (entry)=>{
-          this.props.sType === 'finish' && entry.comm === 'sn00ze' ?
-            Meteor.call('UnSkipNC', this.props.id, entry.key) : null;
+          this.props.sType === 'finish' && entry.snooze === true ?
+            this.handleUnSkip(entry.key) : null;
           return (
             <NCStream
               key={entry.key}
@@ -120,7 +120,7 @@ export class NCStream extends Component {
         <div className='gridCell'>{this.props.entry.type}</div>
         <div className='gridCell' style={rightCell}>
           {skip ?
-            this.props.entry.comm === 'sn00ze' ?
+            this.props.entry.snooze === true ?
               <i className='fa fa-clock-o fa-2x'></i>
               :
               <i className='fa fa-truck fa-2x'></i>
@@ -156,7 +156,7 @@ export class NCStream extends Component {
           <MenuItem onClick={this.props.snooze} disabled={skip !== false || this.props.end}>
             Snooze
           </MenuItem>
-          <MenuItem onClick={this.props.skip} disabled={skip !== false && this.props.entry.comm === ''}>
+          <MenuItem onClick={this.props.skip} disabled={skip !== false && !this.props.entry.snooze}>
             Skip
           </MenuItem>
           <MenuItem onClick={this.props.unSkip} disabled={!skip}>

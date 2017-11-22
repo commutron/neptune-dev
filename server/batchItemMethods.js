@@ -413,6 +413,7 @@ Meteor.methods({
           inspect: false,
           reject: [],
           skip: false,
+          snooze: false,
           comm: ''
           }}});
     }else{null}
@@ -495,7 +496,7 @@ Meteor.methods({
   			    time: new Date(),
   			    who: Meteor.userId()
   			  },
-  			  'nonCon.$.comm': 'sn00ze',
+  			  'nonCon.$.snooze': true
   			}
   		});
     }else{null}
@@ -509,7 +510,7 @@ Meteor.methods({
   			    time: new Date(),
   			    who: Meteor.userId()
   			  },
-  			  'nonCon.$.comm': '',
+  			  'nonCon.$.snooze': false
   			}
   		});
     }else{null}
@@ -520,7 +521,7 @@ Meteor.methods({
   	  BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
   	    $set : {
   			  'nonCon.$.skip': false,
-  			  'nonCon.$.comm' : ''
+  			  'nonCon.$.snooze': false
   			}
   	  });
     }else{null}

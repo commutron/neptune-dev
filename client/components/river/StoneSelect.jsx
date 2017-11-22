@@ -35,7 +35,7 @@ export default class StoneSelect extends Component	{
                     inspect && this.props.regRun === true ?
                     bDone.find(ip => ip.key === flowStep.key && ip.good === true) ||
                     bDone.find(ip => ip.step === flowStep.step && ip.type === 'first' && ip.good === true)
-                    // ^^ remove " && ip.good === true " if failed firsts should count as inpections
+                    // failed firsts should NOT count as inpections
                     :
                     bDone.find(ip => ip.key === flowStep.key && ip.good === true);
                     
