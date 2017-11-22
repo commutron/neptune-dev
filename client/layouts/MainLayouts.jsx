@@ -62,7 +62,7 @@ export const AnalysisLayout = ({content, link}) => (
 
 export const LabelLayout = ({content}) => (
   <div className='basicContainer'>
-    <div className='gridHeaderNav'>
+    <div className='gridHeaderNav noPrint'>
       <TopBar />
     </div>
     <div className='basicMainFull'>
@@ -76,7 +76,7 @@ export const LabelLayout = ({content}) => (
         {content}
       </div>
     </div>
-    <div className='basicFooter'></div>
+    <div className='basicFooter noPrint'></div>
   </div>
 );
 

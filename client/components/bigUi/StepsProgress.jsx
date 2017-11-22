@@ -10,6 +10,13 @@ import NumBox from '/client/components/uUi/NumBox.jsx';
 /// altflow
 
 export default class StepsProgress extends Component	{
+  
+  constructor() {
+    super();
+    this.state = {
+      countCalc: 'item'
+    };
+  }
 
   dataLoop() {
     const b = this.props.batchData;
@@ -31,12 +38,13 @@ export default class StepsProgress extends Component	{
       altItems = outScrap( b.items.filter( x => x.alt === 'yes' ) );
     }
     
-    let totalUnits = 0;
+    let totalRegUnits = 0;
     for(let i of regItems) {
-      totalUnits += i.units;
+      totalRegUnits += i.units;
     }
+    let totalAltUnits = 0;
     for(let i of altItems) {
-      totalUnits += i.units;
+      totalAltUnits += i.units;
     }
     
     const scrapCount = b.items.length - regItems.length - altItems.length;
@@ -80,7 +88,8 @@ export default class StepsProgress extends Component	{
       regItems: regItems.length,
       altStepCounts: altStepCounts,
       altItems: altItems.length,
-      totalUnits: totalUnits,
+      totalRegUnits: totalRegUnits,
+      totalAltUnits: totalAltUnits,
       scrapCount: scrapCount
     };
   }
@@ -92,34 +101,52 @@ export default class StepsProgress extends Component	{
     const totalR = dt.regItems;
     const alt = dt.altStepCounts;
     const totalA = dt.altItems;
-    const totalU = dt.totalUnits;
+    const totalRU = dt.totalRegUnits;
+    const totalAU = dt.totalAltUnits;
     const scrapCount = dt.scrapCount;
+    
+    const unitsExist = totalRU + totalAU > ( totalR + totalA ) ? true : false;
+    const calcItem = this.state.countCalc === 'item' ? true : false;
     
     return (
       <div className='centreRow'>
-        <div>
-          <NumBox
-            num={totalR + totalA}
-            name={Pref.item + 's'}
-            color='whiteT' />
-          {totalU > ( totalR + totalA ) ?
+        <div className='numBoxRadio'>
+          <input
+            type='radio'
+            id='calcI'
+            name='calc'
+            onChange={()=> this.setState({countCalc: 'item'})}
+            defaultChecked={unitsExist}
+            disabled={!unitsExist} />
+          <label htmlFor='calcI'>
             <NumBox
-              num={totalU}
-              name={Pref.unit}
+              num={totalR + totalA}
+              name={Pref.item + 's'}
               color='whiteT' />
+          </label>
+          <input type='radio' id='calcU' name='calc' onChange={()=> this.setState({countCalc: 'unit'})} />
+          {unitsExist ?
+            <label htmlFor='calcU'>
+              <NumBox
+                num={totalRU + totalAU}
+                name={Pref.unit}
+                color='whiteT' />
+            </label>
           :null}
         </div>
         <div>
           <div className='centreRow'>
             {reg.map( (entry, index)=>{
+              let count = calcItem ? entry.items : entry.units;
+              let total = calcItem ? totalR : totalRU;
               return(
                 <StepDisplay
                   key={index}
                   mini={this.props.mini}
                   step={entry.step}
                   type={entry.type}
-                  count={entry.items}
-                  total={totalR} />
+                  count={count}
+                  total={total} />
             )})}
           </div>
           {totalA > 0 ?
@@ -131,14 +158,16 @@ export default class StepsProgress extends Component	{
               </span>
               <div className='centreRow'>
               {alt.map( (entry, index)=>{
+                let count = calcItem ? entry.items : entry.units;
+                let total = calcItem ? totalA : totalAU;
                 return(
                   <StepDisplay
                     key={index}
                     mini={this.props.mini}
                     step={entry.step}
                     type={entry.type}
-                    count={entry.items}
-                    total={totalA} />
+                    count={count}
+                    total={total} />
               )})}
               </div>
             </div>

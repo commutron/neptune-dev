@@ -538,6 +538,23 @@ meteor seems to be handling this */
   color: black;
 }
 
+.numBoxRadio input[type='radio'] + label {
+  border-bottom: 1px solid transparent;
+}
+.numBoxRadio input[type='radio']:checked + label {
+  background-color: black;
+  border-bottom: 1px solid white;
+}
+.numBoxRadio input[type='radio']:focus + label {
+  color: white;
+}
+.numBoxRadio input[type='radio']:disabled + label {
+  cursor: default;
+}
+.numBoxRadio input {
+  display: none;
+}
+
 /* custom Bert alerts */
 .bert-alert {
   color: #ecf0f1;

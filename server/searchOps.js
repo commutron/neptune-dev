@@ -107,12 +107,13 @@ Meteor.methods({
         rmaCount += i.rma.length;
       }
       
-      let totalUnits = 0;
+      let totalRegUnits = 0;
       for(let i of regItems) {
-        totalUnits += i.units;
+        totalRegUnits += i.units;
       }
+      let totalAltUnits = 0;
       for(let i of altItems) {
-        totalUnits += i.units;
+        totalAltUnits += i.units;
       }
       
       let active = b.items.find( 
@@ -128,7 +129,8 @@ Meteor.methods({
         group: g.alias,
         finished: done,
         finishedAt: b.finishedAt,
-        totalU: totalUnits,
+        totalRU: totalRegUnits,
+        totalAU: totalAltUnits,
         totalR: regItems.length,
         totalA: altItems.length,
         stepsReg: regStepCounts,
@@ -184,6 +186,24 @@ Meteor.methods({
       return items;
     }
     const mainDoneItems = doneItems(mainActive, sRange, eRange);
+    
+    // finished units
+    function doneItemUnits(batches, startRange, endRange) {
+      let units = 0;
+      for(let t of batches) {
+        let fin = t.items.filter(
+                    x => x.history.find(
+                      y => y.type === 'finish' && 
+                        moment(y.time)
+                          .isBetween(startRange, endRange) ) );
+        for(let i of fin) {
+          units += i.units;
+        }
+      }
+      return units;
+    }
+    const mainDoneItemUnits = doneItemUnits(mainActive, sRange, eRange);
+    ////
     
     function recordedNC(batches, startRange, endRange) {
       let newNC = 0;
@@ -252,6 +272,7 @@ Meteor.methods({
       ncTypeCounts: ncTypeCounts,
       newNCOverTime: newNCOverTime,
       doneItems: mainDoneItems,
+      doneUnits: mainDoneItemUnits,
       doneItemsOverTime: doneItemsOverTime,
       doneBatches: mainDoneBatches
     };

@@ -477,6 +477,7 @@ main {
   width: calc((100% - 60px) / 3);
   margin: 5px 10px 40px 10px;
   border: 1px solid rgba(0,0,0,0.5);
+  /*transition: all 200ms ease;*/
 }
 .wipCol > section.dblSection {
   width: calc(( (100% - 40px) / 3 ) * 2);
@@ -518,6 +519,22 @@ main {
 .wellSpacedLine > span:last-child {
   margin: 0;
   border-right: 1px solid transparent;
+}
+
+.functionalFooter {
+  min-height: 1rem;
+  padding: 0 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.functionalFooter > label {
+  font-size: 0.75rem;
+  padding: 0 15px;
+  border-left: 1px solid rgba(255,255,255,0.3);
+}
+.functionalFooter > label:last-child {
+  border-right: 1px solid rgba(255,255,255,0.3);
 }
 
 .mockTable {

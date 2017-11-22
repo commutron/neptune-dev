@@ -55,11 +55,21 @@ export default class OrgWIP extends Component	{
 
 export class StatusRow extends Component	{
   
+  constructor() {
+    super();
+    this.state = {
+      countCalc: 'item'
+    };
+  }
+  
   render() {
     
     const dt = this.props.entry;
     const clss = this.props.active ? 'popBlue' : '';
     const totalAll = dt.totalR + dt.totalA;
+    const totalUnits = dt.totalRU + dt.totalAU;
+    
+    const calcItem = this.state.countCalc === 'item' ? true : false;
 
     return(
       <section className={clss}>
@@ -67,7 +77,7 @@ export class StatusRow extends Component	{
           <span className='big'>{dt.batch}</span>
           <span className='up'>{dt.group} {dt.widget} v.{dt.version}</span>
           <span className='capFL'>{Pref.item}s: {totalAll}</span>
-          {dt.totalU > totalAll ? <span className='cap'>{Pref.unit}: {dt.totalU}</span> : null}
+          {totalUnits > totalAll ? <span className='cap'>{Pref.unit}: {totalUnits}</span> : null}
           {dt.totalA > 0 ? <span>Reg: {dt.totalR}, Alt: {dt.totalA}</span> : null}
           {dt.scrap > 0 ? <span className='redT'>Scraps: {dt.scrap}</span> : null}
           {dt.rma > 0 ? <span className='redT'>RMAs: {dt.rma}</span> : null}
@@ -76,7 +86,7 @@ export class StatusRow extends Component	{
           {dt.totalR + dt.totalA < 1 ?
             <span className='yellowT wide centreText'>No {Pref.item}s created</span>
           : dt.stepsReg.length > 0 ?
-            <StatusCell steps={dt.stepsReg} total={dt.totalR} />
+            <StatusCell steps={dt.stepsReg} total={dt.totalR} unitTotal={dt.totalRU} calc={calcItem} />
           :
             <span className='yellowT wide centreText'>No {Pref.flow} chosen</span>
           }
@@ -89,13 +99,21 @@ export class StatusRow extends Component	{
               <i>{Pref.buildFlowAlt}</i>
             </span>
             <div>
-              <StatusCell steps={dt.stepsAlt} total={dt.totalA} />
+              <StatusCell steps={dt.stepsAlt} total={dt.totalA} unitTotal={dt.totalAU} calc={calcItem} />
             </div>
           </div>
         :null}
         {dt.finished ?
           <div className='wide greenT centreText'>
             <i>Finished {moment(dt.finishedAt).calendar()}</i>
+          </div>
+        : null}
+        {totalUnits > totalAll ?
+          <div className='functionalFooter blackFade numBoxRadio'>
+            <input type='radio' id='calcI' name='calc' onChange={()=> this.setState({countCalc: 'item'})} defaultChecked />
+            <label htmlFor='calcI'>Boards</label>
+            <input type='radio' id='calcU' name='calc' onChange={()=> this.setState({countCalc: 'unit'})} />
+            <label htmlFor='calcU'>Units</label>
           </div>
         : null}
       </section>
@@ -115,13 +133,16 @@ export class StatusCell extends Component	{
                         entry.type === 'test' ?
                         entry.step :
                         entry.step + ' ' + entry.type;
+          let count = this.props.calc ? entry.itemCount : entry.unitCount;
+          let total = this.props.calc ? this.props.total : this.props.unitTotal;
           return(
             <ProgPie
               key={rndmKey}
               title={title}
-              count={entry.itemCount}
-              total={this.props.total} />
-        )})}
+              count={count}
+              total={total} />
+            );
+        })}
       </div>
     );
   }

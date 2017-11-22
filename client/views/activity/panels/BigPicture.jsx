@@ -43,6 +43,10 @@ export default class BigPicture extends Component	{
               num={now.doneItems}
               name={'finished ' + Pref.item + 's'}
               color='greenT' />
+            <NumBox
+              num={now.doneUnits}
+              name={'finished ' + Pref.unit}
+              color='greenT' />
           </div>
         </section>
         <section className='balance middle'>
