@@ -4,16 +4,16 @@ import {createContainer} from 'meteor/react-meteor-data';
 import Pref from '/client/global/pref.js';
 
 import Spin from '../../components/tinyUi/Spin.jsx';
-import AnalyticsFindOps from './AnalyticsFindOps.jsx';
+import AnalysisFindOps from './AnalysisFindOps.jsx';
 
-class AnalyticsView extends Component	{
+class AnalysisView extends Component	{
   
   render() {
     
     if(!this.props.login) {
       return (
         <div>no access</div>
-        );
+      );
     }
     
     if(//!this.props.allData || // diagnose data in development
@@ -24,11 +24,11 @@ class AnalyticsView extends Component	{
        !this.props.allScrap) {
       return (
         <Spin />
-        );
+      );
     }
     
     return (
-      <AnalyticsFindOps
+      <AnalysisFindOps
         orb={this.props.orb}
         org={this.props.org}
         users={this.props.users}
@@ -37,7 +37,7 @@ class AnalyticsView extends Component	{
         allWidget={this.props.allWidget}
         allBatch={this.props.allBatch}
         hotBatch={this.props.hotBatch}
-        />
+      />
     );
   }
 }
@@ -145,4 +145,4 @@ export default createContainer( () => {
       allScrap: scrapSub.ready()
     };
   }
-}, AnalyticsView);
+}, AnalysisView);

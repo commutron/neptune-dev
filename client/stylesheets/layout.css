@@ -206,12 +206,6 @@ main {
 
 /* ============================================= */
 
-
-.middle {
-  display: flex;
-  align-items: center;
-}
-
 .bleed {
   padding: 0;
   margin: 0;
@@ -370,6 +364,7 @@ main {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: baseline;
 }
 .centreRow span {
   margin: 0 10px;
@@ -384,6 +379,11 @@ main {
 
 .centreText {
   text-align: center;
+}
+
+.middle {
+  display: flex;
+  align-items: center;
 }
 
 .split {

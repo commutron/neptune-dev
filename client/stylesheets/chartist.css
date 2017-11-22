@@ -713,6 +713,9 @@
   stroke: #f1c40f;
 }
 
-.greenLine .ct-series-a .ct-line, .greenLine .ct-series-a .ct-point {
+.rateLines .ct-series-a .ct-line, .rateLines .ct-series-a .ct-point {
   stroke: var(--emerald);
+}
+.rateLines .ct-series-b .ct-line, .rateLines .ct-series-b .ct-point {
+  stroke: var(--alizarin);
 }

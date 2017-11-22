@@ -27,7 +27,9 @@ export default class NonConPie extends Component {
 
     let counts = this.splitStatus();
     
-    let ttl = '<span class="centre"><i>Total</i><i class="big">' + this.props.nonCons.length + '</i></span>';
+    let ttl = '<span class="centre smCap"><i class="big redT">' + 
+                this.props.nonCons.length + 
+                  '</i><i>Total</i></span>';
     
     let data = {
       labels: ['Pending', 'Fixed', 'Inspected', 'Snoozed', 'Skipped'],
@@ -51,7 +53,7 @@ export default class NonConPie extends Component {
           items: [{
             content: ttl,
             position: 'center',
-            offsetY : -3,
+            offsetY : -4,
             offsetX: 0
           }],
         }),

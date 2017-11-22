@@ -291,6 +291,10 @@ meteor seems to be handling this */
   text-transform: capitalize;
 }
 
+.smCap {
+  font-variant: small-caps;
+}
+
 .up {
   text-transform: uppercase;
 }

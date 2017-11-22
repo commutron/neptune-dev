@@ -4,7 +4,6 @@ import Pref from '/client/global/pref.js';
 import ProgPie from '/client/components/charts/ProgPie.jsx';
 import MiniBar from '/client/components/charts/MiniBar.jsx';
 import NumBox from '/client/components/uUi/NumBox.jsx';
-import FirstsOverview from '/client/components/bigUi/FirstsOverview.jsx';
 // requires 
 /// batchData
 /// flow
@@ -47,27 +46,27 @@ export default class StepsProgress extends Component	{
       const byName = (t, nm)=> { return ( x => x.step === nm && x.type === 'first' && x.good === true )};
       let stepCounts = [];
       for(let step of river) {
-        let count = 0;
-        let units = 1;
+        let itemCount = 0;
+        let unitCount = 0;
         for(var i of items) {
-          units = i.units;
           const h = i.history;
           if(i.finishedAt !== false) {
-            count += 1;
+            itemCount += 1;
+            unitCount += 1 * i.units;
           }else{
             if(step.type === 'inspect') {
-              h.find( byKey(this, step.key) ) ? count += 1 : null;
-              h.find( byName(this, step.step) ) ? count += 1 : null;
+              h.find( byKey(this, step.key) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
+              h.find( byName(this, step.step) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
             }else{
-              h.find( byKey(this, step.key) ) ? count = count + 1 : null;
+              h.find( byKey(this, step.key) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
             }
           }
         }
         stepCounts.push({
           step: step.step,
           type: step.type,
-          count: count,
-          units: units
+          items: itemCount,
+          units: unitCount
         });
       }   
       return stepCounts;
@@ -109,11 +108,6 @@ export default class StepsProgress extends Component	{
               name={Pref.unit}
               color='whiteT' />
           :null}
-          { !this.props.doneFirsts ? null :
-          <FirstsOverview
-            doneFirsts={this.props.doneFirsts}
-            flow={this.props.flow}
-            flowAlt={this.props.flowAlt} /> }
         </div>
         <div>
           <div className='centreRow'>
@@ -121,8 +115,10 @@ export default class StepsProgress extends Component	{
               return(
                 <StepDisplay
                   key={index}
-                  type={this.props.mini}
-                  entry={entry}
+                  mini={this.props.mini}
+                  step={entry.step}
+                  type={entry.type}
+                  count={entry.items}
                   total={totalR} />
             )})}
           </div>
@@ -138,8 +134,10 @@ export default class StepsProgress extends Component	{
                 return(
                   <StepDisplay
                     key={index}
-                    type={this.props.mini}
-                    entry={entry}
+                    mini={this.props.mini}
+                    step={entry.step}
+                    type={entry.type}
+                    count={entry.items}
                     total={totalA} />
               )})}
               </div>
@@ -156,25 +154,25 @@ export class StepDisplay extends Component {
   
   render() {
     
-    const dt = this.props.entry;
+    const dt = this.props;
     const title = dt.type === 'finish' ||
                   dt.type === 'test' ?
                   dt.step :
                   dt.step + ' ' + dt.type;
     
-    if(this.props.type) {
+    if(this.props.mini) {
       return(
         <MiniBar
           title={title}
           count={dt.count}
-          total={this.props.total} />
+          total={dt.total} />
       );
     }
     return(
       <ProgPie
         title={title}
         count={dt.count}
-        total={this.props.total} />
+        total={dt.total} />
     );
   }
 }

@@ -47,7 +47,7 @@ export const ProductionLayout = ({content, link}) => (
   </div>
 );
 
-export const AnalyticsLayout = ({content, link}) => (
+export const AnalysisLayout = ({content, link}) => (
   <div className='dashContainer'>
     <div className='gridHeaderSearch'>
       <FindBox />
@@ -61,13 +61,22 @@ export const AnalyticsLayout = ({content, link}) => (
 );
 
 export const LabelLayout = ({content}) => (
-  <div>
-    <div className='wide noPrint'>
-      <button className='smallAction clear' onClick={()=> window.history.back()}>Go Back</button>
+  <div className='basicContainer'>
+    <div className='gridHeaderNav'>
+      <TopBar />
     </div>
-    <div className='printLabel'>
-      {content}
+    <div className='basicMainFull'>
+      <div className='wide noPrint'>
+        <button
+          className='smallAction clear'
+          onClick={()=> window.history.back()}
+        ><i className='fa fa-arrow-circle-left fa-lg' aria-hidden='true'></i> Go Back</button>
+      </div>
+      <div className='printLabel'>
+        {content}
+      </div>
     </div>
+    <div className='basicFooter'></div>
   </div>
 );
 

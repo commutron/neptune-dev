@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
 
-import AnalyticsWrap from './AnalyticsWrap.jsx';
+import AnalysisWrap from './AnalysisWrap.jsx';
 
 import SearchHelp from './SearchHelp.jsx';
 
@@ -17,7 +17,7 @@ import ItemsList from './lists/ItemsList.jsx';
 import GroupsList from './lists/GroupsList.jsx';
 import WidgetsList from './lists/WidgetsList.jsx';
 
-export default class AnalyticsFindOps extends Component	{
+export default class AnalysisFindOps extends Component	{
   
   linkedBatch(wId, vKey) {
     return this.props.allBatch.find(x => x.widgetId === wId, x => x.versionKey === vKey);
@@ -106,20 +106,20 @@ export default class AnalyticsFindOps extends Component	{
     if(orb === Pref.batch || orb === Pref.batch + 's' || orb === Pref.btch) {
       Session.set('nowBatch', false);
       return (
-        <AnalyticsWrap>
+        <AnalysisWrap>
           <BatchesList batchData={allBatch} widgetData={allWidget} />
           <div></div>
-        </AnalyticsWrap>
+        </AnalysisWrap>
       );
     }
     
     if(orb === Pref.group || orb === Pref.group + 's' || orb === Pref.grp) {
       Session.set('nowBatch', false);
       return (
-        <AnalyticsWrap action='newGroup'>
+        <AnalysisWrap action='newGroup'>
           <GroupsList groupData={allGroup} batchData={allBatch} widgetData={allWidget} />
           <div></div>
-        </AnalyticsWrap>
+        </AnalysisWrap>
       );
     }
     
@@ -149,7 +149,7 @@ export default class AnalyticsFindOps extends Component	{
         let version = this.versionData(widget.versions, hotBatch.versionKey);
         let group = this.linkedGroup(widget.groupId);
         return (
-			    <AnalyticsWrap
+			    <AnalysisWrap
 			      batchData={hotBatch}
             widgetData={widget}
             versionData={version}
@@ -167,7 +167,7 @@ export default class AnalyticsFindOps extends Component	{
               versionData={version}
               groupData={group} 
               app={app} />
-          </AnalyticsWrap>
+          </AnalysisWrap>
         );
       }
     }
@@ -183,7 +183,7 @@ export default class AnalyticsFindOps extends Component	{
         let version = this.versionData(widget.versions, hotBatch.versionKey);
         let group = this.linkedGroup(widget.groupId);
         return (
-          <AnalyticsWrap
+          <AnalysisWrap
             batchData={hotBatch}
             itemData={item}
             widgetData={widget}
@@ -206,7 +206,7 @@ export default class AnalyticsFindOps extends Component	{
                 app={app}
                 listTitle={true} />
             </div>
-          </AnalyticsWrap>
+          </AnalysisWrap>
         );
       }
     }
@@ -221,7 +221,7 @@ export default class AnalyticsFindOps extends Component	{
         let widgets = this.groupWidgets(lookup._id);
         let activeWidgets = this.groupActiveWidgets(lookup._id);
         return (
-          <AnalyticsWrap
+          <AnalysisWrap
             batchData={false}
             itemData={false}
             widgetData={widgets}
@@ -235,7 +235,7 @@ export default class AnalyticsFindOps extends Component	{
               widgetData={widgets}
               active={activeWidgets} />
             <GroupPanel groupData={lookup} />
-          </AnalyticsWrap>
+          </AnalysisWrap>
         );
       }
     }
@@ -248,7 +248,7 @@ export default class AnalyticsFindOps extends Component	{
       let allWidgets = this.groupWidgets(lookup.groupId);
       let allBatches = this.allLinkedBatches(lookup._id);
       return (
-        <AnalyticsWrap
+        <AnalysisWrap
           batchData={false}
           itemData={false}
           widgetData={lookup}
@@ -268,7 +268,7 @@ export default class AnalyticsFindOps extends Component	{
               app={app}
             />
           </div>
-        </AnalyticsWrap>
+        </AnalysisWrap>
       );
     }
     

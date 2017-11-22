@@ -45,16 +45,19 @@ export default class BigPicture extends Component	{
               color='greenT' />
           </div>
         </section>
-        <section className='balance'>
-          <NumBox
-            num={now.newNC}
-            name={'new ' + Pref.nonCon + 's'}
-            color='redT' />
-          <NonConTypePie ncOp={this.props.a.nonConOption} counts={now.ncTypeCounts} />
+        <section className='balance middle'>
+          <NonConTypePie
+            ncOp={this.props.a.nonConOption}
+            counts={now.ncTypeCounts}
+            total={now.newNC}
+            title={'discovered ' + Pref.nonCon + 's'} />
         </section>
-        <section className='dblSection'>
+        <section>
           <SimpleRate
-            data={now.doneItemsOverTime}
+            dataOne={now.doneItemsOverTime}
+            titleOne={'finished ' + Pref.item + 's'}
+            dataTwo={now.newNCOverTime}
+            titleTwo={'discovered ' + Pref.nonCon + 's'}
             lastDay={now.end}
             live={now.live} />
         </section>

@@ -8,7 +8,7 @@ function GeneralLabel({ batch, data }) {
       <div className='centreRow'>
         <div className='centre'>
           <i className='pxxlg'>{batch}</i>
-          <Barcode id='barcode' value={batch} format='CODE39' text=' ' width={1.5} height={20} margin={1} />
+          <Barcode id='barcode' value={batch} format='CODE39' text=' ' width={1.25} height={20} margin={1} />
         </div>
         <span className='bffrbffr'></span>
         <div className='pmd centreText'>
@@ -25,7 +25,7 @@ function GeneralLabel({ batch, data }) {
       <div className='centreRow'>
         <div className='centreText'>
           <i className='pmd'>Qty</i><br />
-          <i><input defaultValue={data.quant} maxLength='11' /></i>
+          <i><input defaultValue={data.quant} maxLength='10' /></i>
         </div>
         <span className='bffr'></span>
         <i className='pxlg'>{data.date}</i>

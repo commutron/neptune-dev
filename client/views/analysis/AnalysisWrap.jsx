@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 import ActionBar from '../../components/bigUi/ActionBar.jsx';
 
-export default class AnalyticsWrap extends Component	{
+export default class AnalysisWrap extends Component	{
 
   render() {
     

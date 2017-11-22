@@ -16,21 +16,24 @@ export default class SimpleRate extends Component {
     let now = this.props.live ?
               moment() :
               moment(this.props.lastDay);
-    for(let i = 0; i < this.props.data.length; i++) {
+    for(let i = 0; i < this.props.dataOne.length; i++) {
       let day = now.clone().subtract(i, 'day');
-      times.unshift(day.format('MMM D'));
+      times.unshift(day.format('MMM.D'));
     }
     return times;
   }
   
   render () {
     
-    const counts = this.props.data;
+    const countsOne = this.props.dataOne;
+    const maxOne = Math.max(...countsOne);
+    const countsTwo = this.props.dataTwo;
+    const maxTwo = Math.max(...countsTwo);
     const labels = this.labelGenerator();
     
     let data = {
       labels: labels,
-      series: [counts]
+      series: [countsOne, countsTwo]
     };
     
     let options = {
@@ -39,22 +42,23 @@ export default class SimpleRate extends Component {
       showLabel: false,
       axisY: {
         low: 0,
-        high: Math.max(...counts),
+        high: maxOne >= maxTwo ? maxOne : maxTwo,
         onlyInteger: true,
         divisor: 10,
       },
       axisX: {
         labelInterpolationFnc: function(value, index) {
+          let scale = labels.length > 31 ? 91 : 7;
           return index === labels.length - 1 ? 
                  value :
-                 index % 5 === 0 ? 
+                 index % scale === 0 ? 
                  value : 
                  null;
         },
       },
       chartPadding: {
         top: 20,
-        right: 20,
+        right: 45,
         bottom: -10,
         left: -10
       },
@@ -66,7 +70,11 @@ export default class SimpleRate extends Component {
     };
     
     return(
-      <span className='greenLine'>
+      <span className='rateLines'>
+        <div className='wide balance cap'>
+          <i className='greenT'>{this.props.titleOne}</i>
+          <i className='redT'>{this.props.titleTwo}</i>
+        </div>
         <div>
           <ChartistGraph data={data} options={options} type={'Line'} />
         </div>

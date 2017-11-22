@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import NumBox from '/client/components/uUi/NumBox.jsx';
+import NumLine from '/client/components/uUi/NumLine.jsx';
 
 export default class FirstsOverview extends Component {
   
@@ -37,12 +37,13 @@ export default class FirstsOverview extends Component {
       
     return(
       <span>
+        <i>Process Firsts</i>
         {stepsObj.map( (entry, index)=>{
           return(
-            <NumBox
+            <NumLine
               key={index}
               num={entry.count}
-              name={'First ' + entry.step}
+              name={entry.step}
               color='greenT' />
         )})}
       </span>

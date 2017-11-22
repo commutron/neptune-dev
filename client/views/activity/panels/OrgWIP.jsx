@@ -119,7 +119,7 @@ export class StatusCell extends Component	{
             <ProgPie
               key={rndmKey}
               title={title}
-              count={entry.count}
+              count={entry.itemCount}
               total={this.props.total} />
         )})}
       </div>

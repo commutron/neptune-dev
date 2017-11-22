@@ -42,27 +42,27 @@ Meteor.methods({
           if(step.type === 'first') {
             null;
           }else{
-            let count = 0;
-            let units = 1;
+            let itemCount = 0;
+            let unitCount = 0;
             for(let i of items) {
-              units = i.units;
               const h = i.history;
               if(i.finishedAt !== false) {
-                count += 1;
+                itemCount += 1;
+                unitCount += 1 * i.units;
               }else{
                 if(step.type === 'inspect') {
-                  h.find( byKey(this, step.key) ) ? count += 1 : null;
-                  h.find( byName(this, step.step) ) ? count += 1 : null;
+                  h.find( byKey(this, step.key) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
+                  h.find( byName(this, step.step) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
                 }else{
-                  h.find( byKey(this, step.key) ) ? count = count + 1 : null;
+                  h.find( byKey(this, step.key) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
                 }
               }
             }
             stepCounts.push({
               step: step.step,
               type: step.type,
-              count: count,
-              units: units,
+              itemCount: itemCount,
+              unitCount: unitCount,
             });
           }
         }
@@ -157,7 +157,7 @@ Meteor.methods({
     }
     const mainActive = active(b, sRange, eRange);
     
-    const todayNC = b.filter(
+    const batchesNC = b.filter(
                       x => x.nonCon.find(
                         y => moment(y.time)
                           .isBetween(sRange, eRange) ) );
@@ -185,18 +185,22 @@ Meteor.methods({
     }
     const mainDoneItems = doneItems(mainActive, sRange, eRange);
     
-    let newNC = 0;
-    for(let t of todayNC) {
-      let nw = t.nonCon.filter(
-                  x => moment(x.time)
-                    .isBetween(sRange, eRange) );
-      newNC += nw.length;
+    function recordedNC(batches, startRange, endRange) {
+      let newNC = 0;
+      for(let t of batches) {
+        let nw = t.nonCon.filter(
+                    x => moment(x.time)
+                      .isBetween(startRange, endRange) );
+        newNC += nw.length;
+      }
+      return newNC;
     }
+    const ncTotalCount = recordedNC(batchesNC, sRange, eRange);
     
     let ncTypeCounts = [];
     for(let n of aNCOps) {
       let typNum = 0;
-      for(let t of todayNC) {
+      for(let t of batchesNC) {
         let nw = t.nonCon.filter(
                   x => x.type === n &&
                     moment(x.time)
@@ -229,15 +233,24 @@ Meteor.methods({
       doneItemsOverTime.unshift(count);
     }
     
+    let newNCOverTime = [];
+    for(let i = 0; i < rate; i++) {
+      let start = rateStart.clone().subtract(i, 'day').format();
+      let end = rateEnd.clone().subtract(i, 'day').format();
+      let count = recordedNC(batchesNC, start, end);
+      newNCOverTime.unshift(count);
+    }
+    
     const bigDataPack = {
       live: mod === 'last' ? false : true,
       start: sRange,
       end: eRange,
       outstanding: outstanding.length,
       today: mainActive.length,
-      todayNC: todayNC.length,
-      newNC: newNC,
+      todayNC: batchesNC.length,
+      newNC: ncTotalCount,
       ncTypeCounts: ncTypeCounts,
+      newNCOverTime: newNCOverTime,
       doneItems: mainDoneItems,
       doneItemsOverTime: doneItemsOverTime,
       doneBatches: mainDoneBatches

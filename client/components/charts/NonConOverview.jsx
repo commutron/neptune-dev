@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Chartist from 'chartist';
 import ChartistGraph from 'react-chartist';
 import Tooltip from 'chartist-plugin-tooltips';
+import fillDonut from 'chartist-plugin-fill-donut';
 
 export default class NonConOverview extends Component {
   
@@ -75,6 +76,11 @@ export class NonConTypePie extends Component {
   render () {
 
     const counts = this.props.counts;
+                  
+    let cntr = '<span class="centre smCap"><i class="big redT">' + 
+                  this.props.total + 
+                    '</i><i>Total</i></span>';
+
     
     let mergedSeries = [];
     counts.forEach( (x, index) => 
@@ -89,8 +95,8 @@ export class NonConTypePie extends Component {
     };
     
     let options = {
-      width: 250,
-      height: 250,
+      width: 300,
+      height: 300,
       donut: true,
       donutWidth: 60,
       startAngle: 0,
@@ -99,18 +105,21 @@ export class NonConTypePie extends Component {
       plugins: [
         Chartist.plugins.tooltip({
           appendToBody: true
-        })
+        }),
+        Chartist.plugins.fillDonut({
+          items: [{
+            content: cntr,
+            position: 'center',
+            offsetY : -4,
+            offsetX: 0
+          }],
+        }),
       ]
-    };
-    
-    let sty = {
-      width: '250px',
-      display: 'inline-block',
-      margin: '0 auto'
     };
 
     return (
-      <div style={sty}>
+      <div className='centre'>
+        <i className='redT cap'>{this.props.title}</i>
         <ChartistGraph data={data} options={options} type={'Pie'} />
       </div>
     );

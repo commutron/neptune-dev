@@ -10,6 +10,7 @@ import JumpText from '../../../components/tinyUi/JumpText.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';
 import BlockList from '../../../components/bigUi/BlockList.jsx';
 import RiverSatus from '../../../components/smallUi/RiverStatus.jsx';
+import FirstsOverview from '/client/components/bigUi/FirstsOverview.jsx';
 import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
 import NonConOverview from '../../../components/charts/NonConOverview.jsx';
 import NonConPie from '../../../components/charts/NonConPie.jsx';
@@ -111,19 +112,27 @@ export default class BatchPanel extends Component	{
               wide={true}
               stick={false}>
               
-              <div className='balance space'>
-                <RiverSatus
-                  items={b.items.length}
-                  river={b.river}
-                  riverTitle={riverTitle}
-                  riverAlt={b.riverAlt}
-                  riverAltTitle={riverAltTitle} />
-                <StepsProgress
-                  batchData={b}
-                  flow={riverFlow}
-                  flowAlt={riverAltFlow}
-                  mini={false}
-                  doneFirsts={filter[0]}/>
+              <div className='split space'>
+                <div>
+                  <RiverSatus
+                    items={b.items.length}
+                    river={b.river}
+                    riverTitle={riverTitle}
+                    riverAlt={b.riverAlt}
+                    riverAltTitle={riverAltTitle} />
+                  <hr />
+                  <FirstsOverview
+                    doneFirsts={filter[0]}
+                    flow={riverFlow}
+                    flowAlt={riverAltFlow} />
+                </div>
+                <div>
+                  <StepsProgress
+                    batchData={b}
+                    flow={riverFlow}
+                    flowAlt={riverAltFlow}
+                    mini={false} />
+                </div>
               </div>
               
               <BlockList id={b._id} data={b.blocks} lock={done} />
