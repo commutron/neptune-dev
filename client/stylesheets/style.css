@@ -380,14 +380,16 @@ meteor seems to be handling this */
 
 .gridRow {
 	display: table-row;
-	border-bottom: 1px groove rgba(255,255,255,0.3);
+	border-bottom: 1px solid rgba(0,0,0,0.2);
 }
 
 .gridCell {
 	display: table-cell;
 	text-align: center;
 	vertical-align: middle;
-	padding: 2px 5px;
+	padding: 0;
+  word-break: break-word;/*weird no standerd thing but it works*/
+  word-wrap: break-word;
 }
 
 .openGridCell {

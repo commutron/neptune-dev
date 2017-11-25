@@ -41,8 +41,6 @@ export default class NCTributary extends Component {
     
   handleReject(ncKey, fixTime, fixWho) {
     const id = this.props.id;
-    //const fixTime = this.props.entry.fix.time;
-    //const fixWho = this.props.entry.fix.who;
     Meteor.call('rejectNC', id, ncKey, fixTime, fixWho, (error)=> {
 			if(error)
 			  console.log(error);
@@ -75,9 +73,17 @@ export default class NCTributary extends Component {
 		});
   }
   
+  handleComment(ncKey, com) {
+	  const id = this.props.id;
+    Meteor.call('commentNC', id, ncKey, com, (error)=> {
+      if(error)
+        console.log(error);
+		});
+  }
+  
   render() {
     return(
-      <InOutWrap type='ncTrans' add='grid'>
+      <InOutWrap type='ncTrans' add='ncTrib'>
         {this.props.nonCons.map( (entry)=>{
           this.props.sType === 'finish' && entry.snooze === true ?
             this.handleUnSkip(entry.key) : null;
@@ -93,6 +99,7 @@ export default class NCTributary extends Component {
               skip={()=> this.handleSkip(entry.key)}
               snooze={()=> this.handleSnooze(entry.key)}
               unSkip={()=> this.handleUnSkip(entry.key)}
+              comment={(e)=> this.handleComment(entry.key, e)}
             />
           )})}
       </InOutWrap>
@@ -101,6 +108,19 @@ export default class NCTributary extends Component {
 }
 
 export class NCStream extends Component {
+  
+  constructor() {
+    super();
+    this.state = {
+      comment: false,
+      moreInfo: false
+    };
+  }
+  
+  comment() {
+    let val = window.prompt('Add a comment');
+    val !== '' ? this.props.comment(val) : null;
+  }
         
   render () {
     
@@ -110,15 +130,18 @@ export class NCStream extends Component {
     const inspector = Roles.userIsInRole(Meteor.userId(), 'inspect');
     const lockI = fixed ? !same && inspector ? false : true : false;
     let skip = this.props.entry.skip;
-    let style = !skip ? 'cap gridRow darkRed noCopy' : 'cap gridRow yellow noCopy';
-    let rightCell = { width: '90px', padding: '0px' };
-    
+    let style = !skip ? 'cap tribRow darkRed noCopy' : 'cap tribRow yellow noCopy';
+
     return (
       <ContextMenuTrigger id={this.props.entry.key} 
       attributes={ {className:style} }>
-        <div className='gridCell up noCopy'>{this.props.entry.ref}</div>
-        <div className='gridCell'>{this.props.entry.type}</div>
-        <div className='gridCell' style={rightCell}>
+        <div className='tribCell up noCopy' title={this.props.entry.comm}>
+          {this.props.entry.ref}
+        </div>
+        <div className='tribCell' title={this.props.entry.comm}>
+          {this.props.entry.type}
+        </div>
+        <div className='tribCell'>
           {skip ?
             this.props.entry.snooze === true ?
               <i className='fa fa-clock-o fa-2x'></i>
@@ -161,6 +184,9 @@ export class NCStream extends Component {
           </MenuItem>
           <MenuItem onClick={this.props.unSkip} disabled={!skip}>
             Activate
+          </MenuItem>
+          <MenuItem onClick={this.comment.bind(this)}>
+            Comment
           </MenuItem>
         </ContextMenu>
       </ContextMenuTrigger>

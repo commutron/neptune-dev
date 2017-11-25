@@ -27,6 +27,12 @@ export default class ItemPanel extends Component	{
     });
     return relevant;
   }
+  
+  flowSteps() {
+    let allsteps = Array.from( this.props.app.trackOption, x => x.step );
+    let cleansteps = new Set(allsteps);
+    return [...cleansteps];
+  }
 
   render() {
 
@@ -97,7 +103,8 @@ export default class ItemPanel extends Component	{
                 nc={nc}
                 done={done}
                 multi={false}
-                ncOps={a.nonConOption} />
+                ncOps={a.nonConOption}
+                flowSteps={this.flowSteps()} />
               
               <RMALine key={3} id={b._id} bar={i.serial} data={i.rma} />
               

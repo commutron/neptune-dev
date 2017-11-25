@@ -1,13 +1,13 @@
 /* River */
 
 .stone {
-	 position: relative;
-	 margin: 0.5em;
+	position: relative;
+	margin: 0.5em;
   width: 13rem;
   height: 13rem;
   font-size: 2rem;
-	 text-transform: uppercase;
-	 text-shadow: 0 0 10px #000;
+	text-transform: uppercase;
+	text-shadow: 0 0 10px #000;
   color: white;
   background-position: 50% 50%;
   background-repeat: no-repeat;
@@ -20,10 +20,6 @@
   -o-transition: all 200ms ease-out;
   transition: all 200ms ease-out;
   opacity: 1;
-  /*
-  box-shadow: 0 0 .2em .2em rgba(43,43,43,0.3),
-              0 0 .2em .2em rgba(43,43,43,0);
-              */
   cursor: pointer;
 }
 
@@ -32,39 +28,31 @@
 }
 
 .stone:disabled {
- opacity: 0.3;
+  opacity: 0.3;
 }
 
 .crackedTop {
- height: 6.5rem;
- z-index: 2;
- border-radius: 6.5rem 6.5rem 0 0;
- margin: 0.5em 0.5em 0 0.5em;
- /*
- box-shadow: 0 -.4em .2em .2em rgba(43,43,43,0.3),
-             0 -.4em .2em .2em rgba(43,43,43,0);
-             */
+  height: 6.5rem;
+  z-index: 2;
+  border-radius: 6.5rem 6.5rem 0 0;
+  margin: 0.5em 0.5em 0 0.5em;
 }
 
 .crackedBot {
- height: 6.5rem;
- border-radius: 0 0 6.5rem 6.5rem;
- margin: 0 0.5em 0.5em 0.5em;
- background-image: url(test.svg);
- background-color: var(--pomegranate);
+  height: 6.5rem;
+  border-radius: 0 0 6.5rem 6.5rem;
+  margin: 0 0.5em 0.5em 0.5em;
+  background-image: url(test.svg);
+  background-color: var(--pomegranate);
 }
 
 .crackedBot:hover, .crackedBot:active {
- background-color: var(--alizarin);
- z-index: 2;
- /*
- box-shadow: 0 0 .2em .2em rgba(43,43,43,0.3),
-             0 0 .2em .2em var(--alizarinfade);
-             */
+  background-color: var(--alizarin);
+  z-index: 2;
 }
 
 .nowUp {
- font-weight: bolder;
+  font-weight: bolder;
 }
 
 .riverG {
@@ -78,19 +66,15 @@
   background-color: var(--pomegranate);
 }
 .riverNG:hover, .riverNG:active {
- background-color: var(--alizarin);
+  background-color: var(--alizarin);
 }
 
 .iFirst {
- background-image: url(first.svg);
- background-color: var(--belizeHole);
+  background-image: url(first.svg);
+  background-color: var(--belizeHole);
 }
 .iFirst:hover, .iFirst:active {
- background-color: var(--peterriver);
- /*
- box-shadow: 0 0 .2em .2em rgba(43,43,43,0.3),
-             0 0 .2em .2em var(--peterriver);
-             */
+  background-color: var(--peterriver);
 }
 
 .iCheck {
@@ -102,42 +86,58 @@
 }
 
 .iTest {
- background-image: url(test.svg);
- background-color: var(--greenSea);
+  background-image: url(test.svg);
+  background-color: var(--greenSea);
 }
 .iTest:hover, .iTest:active {
   background-color: var(--turquoise);
 }
 
 .iBuild {
- background-image: url(build.svg);
- background-color: transparent;
- border-color: var(--belizeHole);
+  background-image: url(build.svg);
+  background-color: transparent;
+  border-color: var(--belizeHole);
  /*
  box-shadow: inset 0 0 .1em .1em rgba(43,43,43,0.3),
              inset 0 0 .1em .1em rgba(43,43,43,0);
              */
 }
 .iBuild:hover, .iBuild:active {
- border-color: var(--peterriver);
- /*
-  box-shadow: 0 0 .2em .2em rgba(43,43,43,0.3),
-              0 0 .2em .2em var(--peterriver),
-        inset 0 0 .2em .2em rgba(43,43,43,0.3),
-        inset 0 0 .2em .2em var(--peterriver);
-        */
+  border-color: var(--peterriver);
 }
 
 .iFinish {
- background-image: url(inspect.svg);
- background-color: var(--wisteria);
+  background-image: url(inspect.svg);
+  background-color: var(--wisteria);
 }
 .iFinish:hover, .iCheck:active {
- background-color: var(--amethyst);
- /*
- box-shadow: 0 0 .2em .2em rgba(43,43,43,0.3),
-             0 0 .2em .2em var(--amethystfade);
-             */
+  background-color: var(--amethyst);
+}
+
+.ncTrib {
+  display: table;
+  width: 100%;
+  justify-content: center;
+  border-collapse: collapse;
+}
+
+.tribRow {
+	display: table-row;
+	border-bottom: 1px solid rgba(0,0,0,0.2);
+}
+
+.tribCell {
+	display: table-cell;
+	text-align: center;
+	vertical-align: middle;
+	padding: 0 0 0 5px;
+  word-break: break-word;/*weird no standerd thing but it works*/
+  word-wrap: break-word;
+}
+
+.tribRow > div:nth-child(3) {
+  width: 90px;
+  padding: 0;
 }
 
 .pebble {
@@ -222,6 +222,18 @@
     color: black;
     min-width: 200px;
     max-width: 200px;
+  }
+  .ncTrib {
+    font-size: 0.9rem;
+  }
+  .pebble {
+    width: 80px;
+  	height: 40px;
+  }
+  .granule {
+    line-height: 1rem;
+    width: 40px;
+    height: 40px;
   }
   .space {
     padding: 10px;

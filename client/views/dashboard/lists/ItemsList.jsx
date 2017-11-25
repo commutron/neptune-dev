@@ -80,6 +80,8 @@ export default class ItemsList extends Component	{
       b.items.filter( x => x.finishedAt !== false ) :
       f === 'inproc' ?
       b.items.filter( x => x.finishedAt === false ) :
+      f === 'firsts' ?
+      b.items.filter( x => x.history.find( y => y.type === 'first') ) :
       f === 'alt' ?
       b.items.filter( x => x.alt === 'yes' ) :
       f === 'rma' ?

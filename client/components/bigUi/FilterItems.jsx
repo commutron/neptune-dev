@@ -74,6 +74,38 @@ export default class FilterItems extends Component	{
           </span>
           
           <span className='comfort'>
+          
+            <i className='breath'></i>
+            
+            <input
+              type='radio'
+              name='scale'
+              id='firsts'
+              title='First Off Items'
+              onChange={this.changeFilter.bind(this, 'firsts')} />
+            <label htmlFor='firsts'>Firsts</label>
+   
+            <input
+              type='radio'
+              name='scale'
+              id='---'
+              title='---'
+              onChange={this.changeFilter.bind(this, '---')}
+              disabled />
+            <label htmlFor='---'>---</label>
+            
+            <input
+              type='radio'
+              name='scale'
+              id='----'
+              title='----'
+              onChange={this.changeFilter.bind(this, '----')}
+              disabled />
+            <label htmlFor='----'>---</label>
+            
+          </span>
+          
+          <span className='comfort'>
             <i className='breath'></i>
             
             <input

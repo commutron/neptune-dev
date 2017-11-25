@@ -301,26 +301,31 @@ progress {
   border: 0;
 }
 
+table {
+  border-collapse: collapse;
+}
+
 tr {
-  line-height: 2rem;
+  min-height: 1rem;
 }
 
 th {
   padding: 0 10px;
+  border-right: 1px solid rgba(255,255,255,0.5);
 }
 
 td {
-  border-bottom: 1px inset rgba(255,255,255,0.3);
-  border-right: 1px inset rgba(255,255,255,0.1);
-  line-height: 2rem;
-  text-indent: 0.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+  border-right: 1px solid rgba(255,255,255,0.1);
+  line-height: 1.5rem;
+  padding: 10px;
 }
 
 tr:last-child td {
-  border-bottom: none;
+  border-bottom: 1px solid rgb(255,255,255);
 }
 
-td:last-child {
+td:last-child, th:last-child {
   border-right: none;
 }
 

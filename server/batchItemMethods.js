@@ -466,12 +466,13 @@ Meteor.methods({
     }else{null}
   },
     
-  editNC(batchId, ncKey, ref, type) {
+  editNC(batchId, ncKey, ref, type, where) {
     if(Roles.userIsInRole(Meteor.userId(), 'inspect')) {
 		  BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
   			$set : { 
   			  'nonCon.$.ref': ref,
-  			  'nonCon.$.type': type
+  			  'nonCon.$.type': type,
+  			  'nonCon.$.where': where
   			}
   		});
     }else{null}

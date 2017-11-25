@@ -172,23 +172,10 @@ Meteor.methods({
       return records.length;
     }
     const mainDoneBatches = doneBatches(b, sRange, eRange);                        
-           
+    
+    // finished items and units       
     function doneItems(batches, startRange, endRange) {
       let items = 0;
-      for(let t of batches) {
-        let fin = t.items.filter(
-                    x => x.history.find(
-                      y => y.type === 'finish' && 
-                        moment(y.time)
-                          .isBetween(startRange, endRange) ) );
-        items += fin.length;
-      }
-      return items;
-    }
-    const mainDoneItems = doneItems(mainActive, sRange, eRange);
-    
-    // finished units
-    function doneItemUnits(batches, startRange, endRange) {
       let units = 0;
       for(let t of batches) {
         let fin = t.items.filter(
@@ -196,14 +183,14 @@ Meteor.methods({
                       y => y.type === 'finish' && 
                         moment(y.time)
                           .isBetween(startRange, endRange) ) );
+        items += fin.length;
         for(let i of fin) {
           units += i.units;
         }
       }
-      return units;
+      return { items: items, units: units };
     }
-    const mainDoneItemUnits = doneItemUnits(mainActive, sRange, eRange);
-    ////
+    const mainDoneItems = doneItems(mainActive, sRange, eRange);
     
     function recordedNC(batches, startRange, endRange) {
       let newNC = 0;
@@ -249,7 +236,7 @@ Meteor.methods({
     for(let i = 0; i < rate; i++) {
       let start = rateStart.clone().subtract(i, 'day').format();
       let end = rateEnd.clone().subtract(i, 'day').format();
-      let count = doneItems(mainActive, start, end);
+      let count = doneItems(mainActive, start, end).items;
       doneItemsOverTime.unshift(count);
     }
     
@@ -271,8 +258,8 @@ Meteor.methods({
       newNC: ncTotalCount,
       ncTypeCounts: ncTypeCounts,
       newNCOverTime: newNCOverTime,
-      doneItems: mainDoneItems,
-      doneUnits: mainDoneItemUnits,
+      doneItems: mainDoneItems.items,
+      doneUnits: mainDoneItems.units,
       doneItemsOverTime: doneItemsOverTime,
       doneBatches: mainDoneBatches
     };
