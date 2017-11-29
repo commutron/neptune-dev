@@ -14,6 +14,7 @@ import FirstsOverview from '/client/components/bigUi/FirstsOverview.jsx';
 import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
 import NonConOverview from '../../../components/charts/NonConOverview.jsx';
 import NonConPie from '../../../components/charts/NonConPie.jsx';
+import NonConRefPie from '../../../components/charts/NonConRefPie.jsx';
 import RMAList from '../../../components/smallUi/RMAList.jsx';
 
 // props
@@ -139,9 +140,15 @@ export default class BatchPanel extends Component	{
               
               <div className='balance'>
                 <div className='wide max600'>
-                  <NonConOverview ncOp={a.nonConOption} nonCons={b.nonCon} />
+                  <NonConOverview
+                    ncOp={a.nonConOption}
+                    trOp={a.trackOption}
+                    nonCons={b.nonCon} />
                 </div>
-                <NonConPie nonCons={b.nonCon} />
+                <div className='centre'>
+                  <NonConRefPie nonCons={b.nonCon} />
+                  <NonConPie nonCons={b.nonCon} />
+                </div>
               </div>
               
               <div>

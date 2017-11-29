@@ -14,6 +14,7 @@ import FirstsOverview from '/client/components/bigUi/FirstsOverview.jsx';
 import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
 import NonConOverview from '../../../components/charts/NonConOverview.jsx';
 import NonConPie from '../../../components/charts/NonConPie.jsx';
+import NonConRefPie from '../../../components/charts/NonConRefPie.jsx';
 import RMAList from '../../../components/smallUi/RMAList.jsx';
 
 // props
@@ -136,11 +137,17 @@ export default class BatchPanel extends Component	{
               
               <BlockList id={b._id} data={b.blocks} lock={done} />
               
-              <div className='balance'>
-                <div className='wide max600'>
-                  <NonConOverview ncOp={a.nonConOption} nonCons={b.nonCon} />
+              <div className='split'>
+                <div className='wide'>
+                  <NonConOverview
+                    ncOp={a.nonConOption}
+                    trOp={a.trackOption}
+                    nonCons={b.nonCon} />
                 </div>
-                <NonConPie nonCons={b.nonCon} />
+                <div className='centre'>
+                  <NonConPie nonCons={b.nonCon} />
+                  <NonConRefPie nonCons={b.nonCon} />
+                </div>
               </div>
               
               <div>

@@ -49,10 +49,10 @@ nav a:active,
 }
 
 button, input[type='submit'], button span, button label {
- 	-webkit-transition: all 200ms ease-out;
-  -moz-transition: all 200ms ease-out;
-  -o-transition: all 200ms ease-out;
-  transition: all 200ms ease-out;
+ 	-webkit-transition: all 200ms ease-in-out;
+  -moz-transition: all 200ms ease-in-out;
+  -o-transition: all 200ms ease-in-out;
+  transition: all 200ms ease-in-out;
   border: 0;
   border-color: white;
   padding: 0;

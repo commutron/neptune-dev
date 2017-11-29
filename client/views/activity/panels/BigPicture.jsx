@@ -3,7 +3,7 @@ import moment from 'moment';
 import timezone from 'moment-timezone';
 import Pref from '/client/global/pref.js';
 import NumBox from '/client/components/uUi/NumBox.jsx';
-import { NonConTypePie } from '/client/components/charts/NonConOverview.jsx';
+import NonConTypePie from '/client/components/charts/NonConTypePie.jsx';
 import SimpleRate from '/client/components/charts/SimpleRate.jsx';
 
 export default class BigPicture extends Component	{

@@ -7,12 +7,29 @@ import fillDonut from 'chartist-plugin-fill-donut';
 export default class NonConOverview extends Component {
   
   ncCounts() {
-    let counts = [];
-    for(let n of this.props.ncOp) {
-      let match = this.props.nonCons.filter( x => x.type === n );
-      counts.push(match.length);
+    const dprt = new Set( Array.from(this.props.trOp, x => x.step) );
+
+    let splitByStep = [];
+    for(let stp of dprt) {
+      let match = this.props.nonCons.filter( y => y.where === stp );
+      splitByStep.push({
+        'name': stp,
+        'ncs': match
+      });
     }
-    return counts;
+    splitByType = [];
+    for(let stp of splitByStep) {
+      let type = [];
+      for(let n of this.props.ncOp) {
+        let match = stp.ncs.filter( x => x.type === n );
+        type.push({
+          'value': match.length,
+          'meta': stp.name
+        });
+      }
+      splitByType.push(type); 
+    }
+    return splitByType;
   }
 
   render () {
@@ -33,94 +50,44 @@ export class NonConTypeChart extends Component {
     
     let data = {
       labels: this.props.ncOp,
-      series: [counts],
+      series: counts,
     };
     
     let options = {
       height: 800,
+      fullWidth: true,
       horizontalBars: true,
-      reverseData: true,
       stretch: false,
+      stackBars: true,
       axisX: {
         low: 0,
-        high: Math.max(...counts),
         onlyInteger: true,
         position: 'start'
       },
       axisY: {
-        offset: 150
+        offset: 100
       },
       chartPadding: {
-        top: 20,
+        top: 10,
         right: 20,
         bottom: 20,
         left: 20
       },
       plugins: [
         Chartist.plugins.tooltip({
-          appendToBody: true
+          appendToBody: true,
+          class: 'cap'
         })
       ]
     };
 
     return (
-      <div className='min400'>
+      <div>
+        <br />
+        <p className='centreText'>
+          <i>Defect Type and Process Discovered</i><br />
+        </p>
         <ChartistGraph data={data} options={options} type={'Bar'} />
-      </div>
-    );
-  }
-}
-
-export class NonConTypePie extends Component {
-
-  render () {
-
-    const counts = this.props.counts;
-                  
-    let cntr = '<span class="centre smCap"><i class="big redT">' + 
-                  this.props.total + 
-                    '</i><i>Total</i></span>';
-
-    
-    let mergedSeries = [];
-    counts.forEach( (x, index) => 
-                      mergedSeries.push({
-                        'value': x,
-                        'meta': this.props.ncOp[index]
-                      }) );
-
-    let data = {
-      labels: this.props.ncOp,
-      series: mergedSeries,
-    };
-    
-    let options = {
-      width: 300,
-      height: 300,
-      donut: true,
-      donutWidth: 60,
-      startAngle: 0,
-      showLabel: false,
-      chartPadding: 25,
-      plugins: [
-        Chartist.plugins.tooltip({
-          appendToBody: true
-        }),
-        Chartist.plugins.fillDonut({
-          items: [{
-            content: cntr,
-            position: 'center',
-            offsetY : -4,
-            offsetX: 0
-          }],
-        }),
-      ]
-    };
-
-    return (
-      <div className='centre'>
-        <i className='redT cap'>{this.props.title}</i>
-        <ChartistGraph data={data} options={options} type={'Pie'} />
       </div>
     );
   }

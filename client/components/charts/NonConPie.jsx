@@ -20,7 +20,13 @@ export default class NonConPie extends Component {
       n.skip !== false && n.comm === 'sn00ze' ? snooze += 1 : false;
       n.inspect === false && n.skip !== false && n.comm !== 'sn00ze' ? skip += 1 : false;
     }
-    return [ none, fix, done, snooze, skip ];
+    return [
+      {'value': none, 'meta': 'None'},
+      {'value': fix, 'meta': 'Fix'},
+      {'value': done, 'meta': 'Done'},
+      {'value': snooze, 'meta': 'Snooze'},
+      {'value': skip, 'meta': 'Skip' }
+    ];
   }
     
   render () {
@@ -69,6 +75,7 @@ export default class NonConPie extends Component {
     return (
       <div className='inlineContain nonConPieColors'>
         <p className='centreText'>
+          <i>Repair Status</i><br />
           <i style={pnd}>Pending </i>
           <i style={fxd}> Fixed </i>
           <i style={inp}> Inspected </i>

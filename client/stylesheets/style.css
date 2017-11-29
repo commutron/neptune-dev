@@ -107,6 +107,9 @@ meteor seems to be handling this */
 	background-color: var(--wetasphalt);
 	border-bottom: 3px groove transparent;
 }
+.tabOff:hover {
+	background-color: var(--midnightblue);
+}
 
 .tabBody {
   overflow-x: auto;
