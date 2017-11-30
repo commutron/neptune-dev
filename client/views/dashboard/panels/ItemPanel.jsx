@@ -74,7 +74,8 @@ export default class ItemPanel extends Component	{
           <div className='space'>
             <h1>
               {i.serial}
-              <span className='rAlign'>
+              <span className='rAlign cap'>
+                {i.alt ? <i>alt flow | </i> : ''}
                 units: {i.units}
               </span>
             </h1>
@@ -93,9 +94,9 @@ export default class ItemPanel extends Component	{
               tabs={['Steps History', Pref.nonCon + 's', 'RMA']}
               wide={true}
               stick={false}>
-            
-              <HistoryTable key={1} id={b._id} serial={i.serial} history={i.history} done={done} />
               
+              <HistoryTable key={1} id={b._id} serial={i.serial} history={i.history} done={done} />
+
               <NCTable
                 key={2}
                 id={b._id}

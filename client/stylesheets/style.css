@@ -153,6 +153,14 @@ meteor seems to be handling this */
 .transparent {
   background-color: transparent;
 }
+button.transparent {
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: transparent;
+}
+button.transparent:hover {
+  border-bottom-color: inherit;
+}
 
 .green {
 	background-color: rgb(46,204,113);

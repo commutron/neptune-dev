@@ -478,8 +478,9 @@ main {
   flex-wrap: wrap;
 }
 .wipCol > section {
+  position: relative;
   width: calc((100% - 60px) / 3);
-  margin: 5px 10px 40px 10px;
+  margin: 5px 10px 30px 10px;
   border: 1px solid rgba(0,0,0,0.5);
   /*transition: all 200ms ease;*/
 }
@@ -504,6 +505,11 @@ main {
   vertical-align: top;
 }
 
+.bottomRightFloat {
+  position: absolute;
+  right: -5px;
+  bottom: -5px;
+}
 
 
 .wellSpacedLine {
@@ -523,12 +529,14 @@ main {
 }
 
 .functionalFooter {
+  width: 100%;
   max-height: 1.25rem;
   padding: 0 10px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
+  position: absolute;
+  bottom: 0;
 }
 .functionalFooter label {
   font-size: 0.75rem;

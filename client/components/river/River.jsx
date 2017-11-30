@@ -4,6 +4,7 @@ import Pref from '/client/global/pref.js';
 import StoneSelect from './StoneSelect.jsx';
 import RiverFork from './RiverFork.jsx';
 import RMACascade from './RMACascade.jsx';
+import AltMarker from '/client/components/uUi/AltMarker.jsx';
 
 export default class River extends Component	{
   
@@ -80,8 +81,8 @@ export default class River extends Component	{
           :null}
 			  
 			  <div>
-			    {i.finishedAt === false && b.riverAlt && i.alt === 'yes' ? 
-			      <p className='blueT centre'>Alternate Flow</p> 
+			    {i.finishedAt === false && b.riverAlt && i.alt !== false ? 
+			      <AltMarker id={b._id} serial={i.serial} alt={i.alt} />
 			    : null}
           <StoneSelect
             id={b._id}

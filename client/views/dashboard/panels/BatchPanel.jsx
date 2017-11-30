@@ -127,7 +127,7 @@ export default class BatchPanel extends Component	{
                     flow={riverFlow}
                     flowAlt={riverAltFlow} />
                 </div>
-                <div>
+                <div className='centreRow wide'>
                   <StepsProgress
                     batchData={b}
                     flow={riverFlow}
