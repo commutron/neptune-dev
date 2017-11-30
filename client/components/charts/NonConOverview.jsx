@@ -85,7 +85,7 @@ export class NonConTypeChart extends Component {
       <div>
         <br />
         <p className='centreText'>
-          <i>Defect Type and Process Discovered</i><br />
+          <i>Defect Type and Process</i><br />
         </p>
         <ChartistGraph data={data} options={options} type={'Bar'} />
       </div>

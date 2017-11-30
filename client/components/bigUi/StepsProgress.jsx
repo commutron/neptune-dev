@@ -129,7 +129,7 @@ export default class StepsProgress extends Component	{
             <label htmlFor='calcU'>
               <NumBox
                 num={totalRU + totalAU}
-                name={Pref.unit}
+                name={Pref.unit + 's'}
                 color='whiteT' />
             </label>
           :null}

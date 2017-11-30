@@ -84,7 +84,7 @@ class TopBar extends Component	{
             <i className="fa fa-tachometer fa-lg" aria-hidden='true'></i>
             <span className='icontext'>Dashboard</span>
           </a>
-          <RoleCheck role={'admin'}>
+          <RoleCheck role={'nightly'}>
             <span>
               <a href='/production' className={ this.props.link === 'prod' ? 'white' : '' }>
                 <i className="fa fa-flask fa-lg" aria-hidden='true'></i>

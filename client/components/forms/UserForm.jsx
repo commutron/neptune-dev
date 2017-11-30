@@ -97,7 +97,7 @@ export default class UserForm extends Component {
                 <input
                     type='password'
                     ref={(i)=> this.pIn = i}
-                    id='pIn'
+                    id='pInNum'
                     pattern='[0000-9999]*'
                     maxLength='4'
                     minLength='4'

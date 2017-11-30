@@ -9,6 +9,7 @@ export default class AccountsManagePanel extends Component {
   render() {
     
     const roles = [
+      'nightly',
       'qa',
       'remove',
       'create',

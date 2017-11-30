@@ -25,7 +25,7 @@ export default class BigPicture extends Component	{
     
     return (
       <div className='wipCol'>
-        <section className='balance'>
+        <section className='balance dblSection'>
           <div>
             <NumBox
               num={now.outstanding}
@@ -34,6 +34,10 @@ export default class BigPicture extends Component	{
             <NumBox
               num={now.today}
               name={'Active ' + Pref.batch + 's'}
+              color='blueT' />
+            <NumBox
+              num={now.historyCount}
+              name={'Total History Events'}
               color='blueT' />
             <NumBox
               num={now.doneBatches}
@@ -45,25 +49,28 @@ export default class BigPicture extends Component	{
               color='greenT' />
             <NumBox
               num={now.doneUnits}
-              name={'finished ' + Pref.unit}
+              name={'finished ' + Pref.unit + 's'}
               color='greenT' />
           </div>
+        </section>
+        <section>
+          <SimpleRate
+            dataOne={now.historyCountOverTime}
+            titleOne={'history events'}
+            dataTwo={now.newNCOverTime}
+            titleTwo={Pref.nonCon + 's'}
+            dataThree={now.doneUnitsOT}
+            titleThree={'finished ' + Pref.unit + 's'}
+            lastDay={now.end}
+            live={now.live}
+            timeRange={this.props.timeRange} />
         </section>
         <section className='balance middle'>
           <NonConTypePie
             ncOp={this.props.a.nonConOption}
             counts={now.ncTypeCounts}
             total={now.newNC}
-            title={'discovered ' + Pref.nonCon + 's'} />
-        </section>
-        <section>
-          <SimpleRate
-            dataOne={now.doneItemsOverTime}
-            titleOne={'finished ' + Pref.item + 's'}
-            dataTwo={now.newNCOverTime}
-            titleTwo={'discovered ' + Pref.nonCon + 's'}
-            lastDay={now.end}
-            live={now.live} />
+            title={'types of discovered ' + Pref.nonCon + 's'} />
         </section>
       </div>
     );

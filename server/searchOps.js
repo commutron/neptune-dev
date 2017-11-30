@@ -127,6 +127,7 @@ Meteor.methods({
         widget: w.widget,
         version: v.version,
         group: g.alias,
+        endGoal: b.end,
         finished: done,
         finishedAt: b.finishedAt,
         totalRU: totalRegUnits,
@@ -158,6 +159,20 @@ Meteor.methods({
       return records;
     }
     const mainActive = active(b, sRange, eRange);
+
+    function historyPings(batches, startRange, endRange) {
+      let count = 0;
+      for(let b of batches) {
+        for(let i of b.items) {
+          let pings = i.history.filter( 
+                        x => moment(x.time)
+                              .isBetween(startRange, endRange) );
+          count += pings.length;
+        }
+      }
+      return count;
+    }
+    //const mainHistoryPings = historyPings(mainActive, sRange, eRange);
     
     const batchesNC = b.filter(
                       x => x.nonCon.find(
@@ -179,10 +194,9 @@ Meteor.methods({
       let units = 0;
       for(let t of batches) {
         let fin = t.items.filter(
-                    x => x.history.find(
-                      y => y.type === 'finish' && 
-                        moment(y.time)
-                          .isBetween(startRange, endRange) ) );
+                    x => x.finishedAt !== false && 
+                          moment(x.finishedAt)
+                            .isBetween(startRange, endRange) );
         items += fin.length;
         for(let i of fin) {
           units += i.units;
@@ -190,7 +204,7 @@ Meteor.methods({
       }
       return { items: items, units: units };
     }
-    const mainDoneItems = doneItems(mainActive, sRange, eRange);
+    //const mainDoneItems = doneItems(mainActive, sRange, eRange);
     
     function recordedNC(batches, startRange, endRange) {
       let newNC = 0;
@@ -202,7 +216,7 @@ Meteor.methods({
       }
       return newNC;
     }
-    const ncTotalCount = recordedNC(batchesNC, sRange, eRange);
+    //const ncTotalCount = recordedNC(batchesNC, sRange, eRange);
     
     let ncTypeCounts = [];
     for(let n of aNCOps) {
@@ -218,34 +232,38 @@ Meteor.methods({
     }
     
     //// Rates ///////
+    let frequency = range === 'day' ? 'hour' : 'day';
     let rate = mod === 'last' ?
-               plainEnd.diff(plainStart, 'days') + 1 :
-               now.diff(plainStart, 'days') + 1;
+               plainEnd.diff(plainStart, frequency) + 1 :
+               now.diff(plainStart, frequency) + 1;
     //console.log(rate);
                
     let rateDay = mod === 'last' ?
                   plainEnd.clone() :
                   now.clone();
     //console.log(rateDay.format());
-    let rateStart = rateDay.clone().startOf('day');
+    let rateStart = rateDay.clone().startOf(frequency);
     //console.log(rateStart.format());
-    let rateEnd = rateDay.clone().endOf('day');
+    let rateEnd = rateDay.clone().endOf(frequency);
     //console.log(rateEnd.format());
     
-    let doneItemsOverTime = [];
+    let historyPingsOT = [];
+    let doneItemsOT = [];
+    let doneUnitsOT = [];
+    let newNCOT = [];
     for(let i = 0; i < rate; i++) {
-      let start = rateStart.clone().subtract(i, 'day').format();
-      let end = rateEnd.clone().subtract(i, 'day').format();
-      let count = doneItems(mainActive, start, end).items;
-      doneItemsOverTime.unshift(count);
-    }
-    
-    let newNCOverTime = [];
-    for(let i = 0; i < rate; i++) {
-      let start = rateStart.clone().subtract(i, 'day').format();
-      let end = rateEnd.clone().subtract(i, 'day').format();
-      let count = recordedNC(batchesNC, start, end);
-      newNCOverTime.unshift(count);
+      let start = rateStart.clone().subtract(i, frequency).format();
+      let end = rateEnd.clone().subtract(i, frequency).format();
+      
+      let historyCount = historyPings(mainActive, start, end);
+      historyPingsOT.unshift(historyCount);
+      
+      let doneCount = doneItems(mainActive, start, end);
+      doneItemsOT.unshift(doneCount.items);
+      doneUnitsOT.unshift(doneCount.units);
+      
+      let ncCount = recordedNC(batchesNC, start, end);
+      newNCOT.unshift(ncCount);
     }
     
     const bigDataPack = {
@@ -254,13 +272,16 @@ Meteor.methods({
       end: eRange,
       outstanding: outstanding.length,
       today: mainActive.length,
+      historyCount: historyPingsOT.reduce((x, y) => x + y),
+      historyCountOverTime: historyPingsOT,
       todayNC: batchesNC.length,
-      newNC: ncTotalCount,
+      newNC: newNCOT.reduce((x, y) => x + y),
       ncTypeCounts: ncTypeCounts,
-      newNCOverTime: newNCOverTime,
-      doneItems: mainDoneItems.items,
-      doneUnits: mainDoneItems.units,
-      doneItemsOverTime: doneItemsOverTime,
+      newNCOverTime: newNCOT,
+      doneItems: doneItemsOT.reduce((x, y) => x + y),
+      doneUnits: doneUnitsOT.reduce((x, y) => x + y),
+      doneItemsOT: doneItemsOT,
+      doneUnitsOT: doneUnitsOT,
       doneBatches: mainDoneBatches
     };
     

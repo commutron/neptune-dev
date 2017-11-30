@@ -33,7 +33,7 @@ class Pref {
     this.version = 'version';// version, variation, rev
     this.vrsn = 'v'; // version shorcut
     this.live = 'live'; // live / active in context of a product
-    this.unit = 'panel units';// how many in a panel/set
+    this.unit = 'unit';// how many in a panel/set
     this.panel = 'set of tracked items';
     this.panelCode = 'panel serial';
     this.inspect = 'inspector';

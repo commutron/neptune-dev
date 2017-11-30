@@ -48,7 +48,6 @@ export default class OrgWIP extends Component	{
     Meteor.call('activitySnapshot', range, clientTZ, mod, (error, reply)=> {
       error ? console.log(error) : null;
       this.setState({ now: reply.now, wip: reply.wip });
-      console.log('newData');
     });
   }
   
@@ -74,7 +73,8 @@ export default class OrgWIP extends Component	{
               w={this.props.w}
               b={this.props.b}
               a={this.props.a}
-              now={this.state.now} />
+              now={this.state.now}
+              timeRange={this.state.timeRange} />
           </span>
           <span>
             <OrgWip 

@@ -8,7 +8,6 @@ Meteor.startup(function () {
 
 Meteor.methods({
   
-  
   addSetting() {
     const orgKey = Meteor.user().orgKey;
     const orgName = Meteor.user().org;

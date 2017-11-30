@@ -85,6 +85,10 @@ main {
   flex-direction: row-reverse;
 }
 
+.flexSpace {
+  flex-grow: 2
+}
+
 /* ============================================= */
 
 .basicContainer, .dashContainer {
@@ -479,15 +483,12 @@ main {
   border: 1px solid rgba(0,0,0,0.5);
   /*transition: all 200ms ease;*/
 }
-.wipCol > section.dblSection {
-  width: calc(( (100% - 40px) / 3 ) * 2);
-}
 @media screen and (max-width: 1500px){
   .wipCol > section {
     width: calc((100% - 40px) / 2);
   }
   .wipCol > section.dblSection {
-    width: calc((100% - 40px) / 2);
+    width: calc(( (100% - 40px) / 2 ) * 2);
   }
 }
 @media screen and (max-width: 1000px){
@@ -522,18 +523,17 @@ main {
 }
 
 .functionalFooter {
-  min-height: 1rem;
+  max-height: 1.25rem;
   padding: 0 10px;
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: flex-start;
 }
-.functionalFooter > label {
+.functionalFooter label {
   font-size: 0.75rem;
   padding: 0 15px;
   border-left: 1px solid rgba(255,255,255,0.3);
-}
-.functionalFooter > label:last-child {
   border-right: 1px solid rgba(255,255,255,0.3);
 }
 

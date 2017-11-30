@@ -65,14 +65,17 @@ export class StatusRow extends Component	{
   render() {
     
     const dt = this.props.entry;
+    
+    const late = moment(dt.endGoal).isBefore(moment().now);
     const clss = this.props.active ? 'popBlue' : '';
+    const sty = late ? { border: '3px solid rgba(211,84,0,0.5)' } : {};
     const totalAll = dt.totalR + dt.totalA;
     const totalUnits = dt.totalRU + dt.totalAU;
     
     const calcItem = this.state.countCalc === 'item' ? true : false;
 
     return(
-      <section className={clss}>
+      <section className={clss} style={sty}>
         <div className='wellSpacedLine blackFade'>
           <span className='big'>{dt.batch}</span>
           <span className='up'>{dt.group} {dt.widget} v.{dt.version}</span>
@@ -108,12 +111,24 @@ export class StatusRow extends Component	{
             <i>Finished {moment(dt.finishedAt).calendar()}</i>
           </div>
         : null}
-        {totalUnits > totalAll ?
-          <div className='functionalFooter blackFade numBoxRadio'>
-            <input type='radio' id='calcI' name='calc' onChange={()=> this.setState({countCalc: 'item'})} defaultChecked />
-            <label htmlFor='calcI'>Boards</label>
-            <input type='radio' id='calcU' name='calc' onChange={()=> this.setState({countCalc: 'unit'})} />
-            <label htmlFor='calcU'>Units</label>
+        {totalUnits > totalAll || late ?
+          <div className='functionalFooter numBoxRadio blackFade'>
+            {totalUnits > totalAll ?
+            <span>
+              <input type='radio' id='calcI' name='calc' onChange={()=> this.setState({countCalc: 'item'})} defaultChecked />
+              <label htmlFor='calcI'>Boards</label>
+              <input type='radio' id='calcU' name='calc' onChange={()=> this.setState({countCalc: 'unit'})} />
+              <label htmlFor='calcU'>Units</label>
+              <i className='flexSpace'></i>
+            </span>
+            :null}
+            {late ?
+            <i
+              title='Late'
+              className='fa fa-exclamation-triangle yellowT'
+              aria-hidden='true'>
+            </i>
+            :null}
           </div>
         : null}
       </section>
