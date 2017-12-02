@@ -1,0 +1,58 @@
+.containerEx {
+  display: grid;
+  grid-template-columns: 50px auto;
+  grid-template-rows: 50px calc(100vh - 55px) 5px;
+  grid-template-areas: 
+    'headerNav headerNav'
+    'taskBar contentArea'
+    'footer footer';
+  align-content: center;
+  overflow-y: hidden !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch;
+  min-width: 500px;
+  min-height: 100vh;
+}
+
+.taskBarEx {
+  grid-area: taskBar;
+  height: 100%;
+  background-color: rgb(20,20,20);
+  border-right: 2px inset rgb(25,25,25);
+}
+
+.contentAreaEx {
+  grid-area: contentArea;
+  overflow-y: auto;
+}
+
+
+.traverseContainer {
+  display: grid;
+  grid-template-columns: auto 200px;
+  grid-template-rows: 35px calc(100vh - 140px) 50px;
+  grid-template-areas: 
+    'cookieNav traverseList'
+    'traverseContent traverseList'
+    'actionBarEx traverseList';
+  align-content: center;
+  overflow-y: hidden !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+.cookieNavEx {
+  grid-area: cookieNav;
+}
+
+.traverseContent {
+  grid-area: traverseContent;
+}
+
+.traverseList {
+  grid-area: traverseList;
+}
+
+.actionBarEx {
+  grid-area: actionBarEx;
+}

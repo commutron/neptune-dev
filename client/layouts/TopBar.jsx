@@ -90,7 +90,7 @@ class TopBar extends Component	{
                 <i className="fa fa-flask fa-lg" aria-hidden='true'></i>
                 <span className='icontext'>Production</span>
               </a>
-              <a href='/data' className={ this.props.link === 'ana' ? 'white' : '' }>
+              <a href='/data' className={ this.props.link === 'data' ? 'white' : '' }>
                 <i className="icon fa fa-flask fa-lg" aria-hidden='true'></i>
                 <span className='icontext'>Data</span>
               </a>

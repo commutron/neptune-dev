@@ -4,7 +4,7 @@ import {mount} from 'react-mounter';
 import {BasicLayout} from './layouts/MainLayouts.jsx';
 import {DashLayout} from './layouts/MainLayouts.jsx';
 import {ProductionLayout} from './layouts/MainLayouts.jsx';
-import {DataLayout} from './layouts/MainLayouts.jsx';
+import {ExploreLayout} from './layouts/DataExploreLayout.jsx';
 import {LabelLayout} from './layouts/MainLayouts.jsx';
 
 import DashData from './views/dashboard/DashData.jsx';
@@ -16,6 +16,12 @@ import AppData from './views/app/AppData.jsx';
 import GeneralLabel from './views/paper/GeneralLabel.jsx';
 
 import LandingWrap from './LandingWrap.jsx';
+
+// Client Side Colllections
+AppDB = new Mongo.Collection('appdb');
+GroupDB = new Mongo.Collection('groupdb');
+WidgetDB = new Mongo.Collection('widgetdb');
+BatchDB = new Mongo.Collection('batchdb');
 
 FlowRouter.route('/', {
   action() {
@@ -53,15 +59,6 @@ FlowRouter.route('/production', {
   }
 });
 
-FlowRouter.route('/data', {
-  action() {
-    mount(DataLayout, {
-      content: (<DataData />),
-      link: 'data'
-    });
-  }
-});
-
 FlowRouter.route('/app', {
   action() {
     mount(BasicLayout, {
@@ -71,9 +68,7 @@ FlowRouter.route('/app', {
   }
 });
 
-
-
-
+/*
 FlowRouter.route('/analytics/:postId', {
     // do some action for this route
     action: function(params, queryParams) {
@@ -83,7 +78,7 @@ FlowRouter.route('/analytics/:postId', {
     name: "test" // optional
 });
 // FlowRouter.go('/analytics/my-post?comments=on&color=dark');
-
+*/
 
 FlowRouter.route('/print/generallabel/:batch', {
     action: function(params, queryParams) {

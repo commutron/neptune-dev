@@ -4,10 +4,13 @@ import { Meteor } from 'meteor/meteor';
 import FindBox from './FindBox.jsx';
 import TopBar from './TopBar.jsx';
 
+/*
+// moved to routes
 AppDB = new Mongo.Collection('appdb');
 GroupDB = new Mongo.Collection('groupdb');
 WidgetDB = new Mongo.Collection('widgetdb');
 BatchDB = new Mongo.Collection('batchdb');
+*/
 
 export const BasicLayout = ({content, link}) => (
   <div className='basicContainer'>

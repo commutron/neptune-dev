@@ -33,7 +33,7 @@ export default class ActionBar extends Component	{
     let act = this.props.action;
     
     return (
-      <div className='dashAction'>
+      <div>
         <div className='footLeft'>
         { 
       	act === 'item' ?

@@ -116,6 +116,18 @@ Meteor.publish('hotData', function(batch){
     
 });
 
+Meteor.publish('hotDataEx', function(batch){
+  const user = Meteor.users.findOne({_id: this.userId});
+  const orgKey = user ? user.orgKey : false;
+  return [
+    BatchDB.find({batch: batch, orgKey: orgKey}, {
+      fields: {
+        'orgKey': 0,
+        'shareKey': 0
+      }})
+    ];
+});
+
 Meteor.publish('blockData', function(active) {
   if(active) {
     const user = Meteor.users.findOne({_id: this.userId});

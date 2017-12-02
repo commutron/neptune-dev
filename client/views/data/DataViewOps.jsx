@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
 
 import DataWrap from './DataWrap.jsx';
+import { TraverseWrap } from '/client/layouts/DataExploreLayout.jsx';
 
 import SearchHelp from './SearchHelp.jsx';
 
@@ -9,15 +10,21 @@ import ItemPanel from './panels/ItemPanel.jsx';
 import BatchPanel from './panels/BatchPanel.jsx';
 import WidgetPanel from './panels/WidgetPanel.jsx';
 import GroupPanel from './panels/GroupPanel.jsx';
-import BlockPanel from './panels/BlockPanel.jsx';
-import ScrapPanel from './panels/ScrapPanel.jsx';
+//import BlockPanel from './panels/BlockPanel.jsx';
+//import ScrapPanel from './panels/ScrapPanel.jsx';
 
 import BatchesList from './lists/BatchesList.jsx';
 import ItemsList from './lists/ItemsList.jsx';
 import GroupsList from './lists/GroupsList.jsx';
 import WidgetsList from './lists/WidgetsList.jsx';
 
-export default class DataFindOps extends Component	{
+/*
+view: this.props.view,
+request: this.props.request,
+specify: this.props.specify
+*/
+
+export default class DataViewOps extends Component	{
   
   linkedBatch(wId, vKey) {
     return this.props.allBatch.find(x => x.widgetId === wId, x => x.versionKey === vKey);
@@ -43,6 +50,14 @@ export default class DataFindOps extends Component	{
     return items.find(x => x.serial === bar);
   }
 
+  getGroup(request) {
+    return this.props.allGroup
+            .find( x => 
+              x._id === request || 
+              x.alias === request || 
+              x.group === request );
+  }
+  
   group() {
     return this.props.allGroup.find(x => x.group === this.props.orb);
   }
@@ -53,6 +68,13 @@ export default class DataFindOps extends Component	{
   
   linkedGroup(gId) {
     return this.props.allGroup.find(x => x._id === gId);
+  }
+  
+  getWidget(request) {
+    return this.props.allWidget
+            .find( x => 
+              x._id === request || 
+              x.widget === request );
   }
   
   widget() {
@@ -79,50 +101,58 @@ export default class DataFindOps extends Component	{
     const allWidget = this.props.allWidget;
     const allBatch = this.props.allBatch;
     const hotBatch = this.props.hotBatch;
+    
+    const view = this.props.view;
+    const request = this.props.request;
+    const specify = this.props.specify;
 
-    if(!orb) {
+    if(!view) {
       Session.set('nowBatch', false);
       return (
         <div className='dashMainFull'>
           <div className='centre wide'>
             <SearchHelp />
+            
+            <div className='centre'>
+              {allBatch.map( (entry, index)=>{
+                return(
+                  <button
+                    key={index}
+                    className='action clear'
+                    onClick={()=>FlowRouter.go('/data/batch?request=' + entry.batch)}
+                  >{entry.batch}</button>
+              )})}
+              <hr />
+              <button
+                className='action clear'
+                onClick={()=>FlowRouter.go('/data/group?request=protogen')}
+              >Protogen</button>
+            </div>
           </div>
         </div>
       );
     }
 
-    // Easter eggs, hidden features or dark patterns \\
-    if(orb === '.') {
-      Session.set('nowBatch', false);
+    if(request === 'protogen') {
+      Session.set('nowBatch', 'julie');
       return (
         <div className='dashMainFull'>
           <div className='centre'>
-            <p>the angels have the phone box</p>
+            <p>remember the cant</p>
           </div>
         </div>
       );
     }
     
-    if(orb === Pref.batch || orb === Pref.batch + 's' || orb === Pref.btch) {
-      Session.set('nowBatch', false);
+    if(view === 'allgroup') {
       return (
-        <DataWrap>
-          <BatchesList batchData={allBatch} widgetData={allWidget} />
-          <div></div>
-        </DataWrap>
-      );
-    }
-    
-    if(orb === Pref.group || orb === Pref.group + 's' || orb === Pref.grp) {
-      Session.set('nowBatch', false);
-      return (
-        <DataWrap action='newGroup'>
+        <TraverseWrap action='newGroup'>
           <GroupsList groupData={allGroup} batchData={allBatch} widgetData={allWidget} />
-          <div></div>
-        </DataWrap>
+        </TraverseWrap>
       );
     }
     
+    /*
     if(orb === Pref.block || orb === Pref.blck) {
       Session.set('now', Pref.block);
       Session.set('nowBatch', false);
@@ -141,15 +171,16 @@ export default class DataFindOps extends Component	{
         </div>
       );
     }
+    */
 
   // Batch
-    if(!isNaN(orb) && orb.length === 5) {
+    if(view === 'batch') {
       if(hotBatch) {
         let widget = this.linkedWidget(hotBatch.widgetId);
         let version = this.versionData(widget.versions, hotBatch.versionKey);
         let group = this.linkedGroup(widget.groupId);
         return (
-			    <DataWrap
+			    <TraverseWrap
 			      batchData={hotBatch}
             widgetData={widget}
             versionData={version}
@@ -157,21 +188,23 @@ export default class DataFindOps extends Component	{
             app={app}
             action='batch'
           >
-			      <ItemsList
-			        batchData={hotBatch}
-			        widgetData={widget}
-			        tide={orb} />
             <BatchPanel
               batchData={hotBatch}
               widgetData={widget}
               versionData={version}
               groupData={group} 
               app={app} />
-          </DataWrap>
+            <ItemsList
+			        batchData={hotBatch}
+			        widgetData={widget}
+			        tide={orb} />
+          </TraverseWrap>
         );
       }
     }
 	  
+	  
+	  /*
   // Item
     //// barcode numbers are short durring dev but they will have to longer in production
     ////// this will also need to be changed???? for alphnumeric barcodes such as with TGS
@@ -183,7 +216,7 @@ export default class DataFindOps extends Component	{
         let version = this.versionData(widget.versions, hotBatch.versionKey);
         let group = this.linkedGroup(widget.groupId);
         return (
-          <DataWrap
+          <TraverseWrap
             batchData={hotBatch}
             itemData={item}
             widgetData={widget}
@@ -206,72 +239,73 @@ export default class DataFindOps extends Component	{
                 app={app}
                 listTitle={true} />
             </div>
-          </DataWrap>
+          </TraverseWrap>
         );
       }
     }
-
+*/
   // Group
-    if(isNaN(orb)) {
-      let alias = this.groupAlias();
-      let group = this.group();
-      let lookup = alias ? alias : group ? group : false;
-      if(lookup) {
-        Session.set('nowBatch', false);
-        let widgets = this.groupWidgets(lookup._id);
-        let activeWidgets = this.groupActiveWidgets(lookup._id);
+    if(view === 'group') {
+      const group = this.getGroup(request);
+      //let alias = this.groupAlias();
+      //let group = this.group();
+      //let lookup = alias ? alias : group ? group : false;
+      if(group) {
+        let widgets = this.groupWidgets(group._id);
+        let activeWidgets = this.groupActiveWidgets(group._id);
         return (
-          <DataWrap
+          <TraverseWrap
             batchData={false}
             itemData={false}
             widgetData={widgets}
             versionData={false}
-            groupData={lookup}
+            groupData={group}
             app={app}
             action='group'
           >
+            <GroupPanel groupData={group} />
             <WidgetsList
-              groupAlias={lookup.alias}
+              groupAlias={group.alias}
               widgetData={widgets}
               active={activeWidgets} />
-            <GroupPanel groupData={lookup} />
-          </DataWrap>
+          </TraverseWrap>
         );
       }
     }
 
+
   // Widget
-  let lookup = this.widget(); // possible scope issue
-    if(lookup) {
-      Session.set('nowBatch', false);
-      let group = this.linkedGroup(lookup.groupId);
-      let allWidgets = this.groupWidgets(lookup.groupId);
-      let allBatches = this.allLinkedBatches(lookup._id);
-      return (
-        <DataWrap
-          batchData={false}
-          itemData={false}
-          widgetData={lookup}
-          versionData={false}
-          groupData={group}
-          app={app}
-          action='widget'
-        >
-          <BatchesList
-            batchData={allBatches}
-            widgetData={allWidgets} />
-          <div>
+    if(view === 'widget') {
+      const widget = this.getWidget(request);
+      if(widget) {
+        Session.set('nowBatch', false);
+        let group = this.linkedGroup(widget.groupId);
+        let allWidgets = this.groupWidgets(widget.groupId);
+        let allBatches = this.allLinkedBatches(widget._id);
+        return (
+          <TraverseWrap
+            batchData={false}
+            itemData={false}
+            widgetData={widget}
+            versionData={false}
+            groupData={group}
+            app={app}
+            action='widget'
+          >
             <WidgetPanel
-              widgetData={lookup}
+              widgetData={widget}
               groupData={group}
               batchRelated={allBatches}
               app={app}
             />
-          </div>
-        </DataWrap>
-      );
+            <BatchesList
+              batchData={allBatches}
+              widgetData={allWidgets} />
+          </TraverseWrap>
+        );
+      }
     }
-    
+    /*
     // number that looks like a barcode but such a barcode does not exist
     if(!isNaN(orb) && orb.length > 5 && orb.length <= 10) {
 	    Session.set('nowBatch', orb);
@@ -285,16 +319,18 @@ export default class DataFindOps extends Component	{
         </div>
 	      );
 	  }
+	  */
     
     Session.set('nowBatch', false);
 		return (
-		  <div className='dashMainFull'>
+		  <TraverseWrap>
         <div className='centre wide'>
           <p className='biggest'>¯\_(ツ)_/¯</p>
           <br />
           <SearchHelp />
         </div>
-      </div>
+        <div></div>
+      </TraverseWrap>
     );
   }
 }
