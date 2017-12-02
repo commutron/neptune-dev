@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import {createContainer} from 'meteor/react-meteor-data';
 import Pref from '/client/global/pref.js';
 
-import Spin from '../../components/tinyUi/Spin.jsx';
+import Spin from '../../components/uUi/Spin.jsx';
 import ProductionFindOps from './ProductionFindOps.jsx';
 
 class ProductionView extends Component	{

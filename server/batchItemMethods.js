@@ -300,12 +300,12 @@ Meteor.methods({
     }
   },
 
-
-  finishItem(batchId, barcode, key, step, type) {
+  // finish Item
+  finishItem(batchId, serial, key, step, type) {
     if(!Roles.userIsInRole(Meteor.userId(), 'finish')) {
       return false;
     }else{
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': barcode}, {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': serial}, {
   			$push : { 
   			  'items.$.history': {
   			    key: key,
@@ -323,19 +323,22 @@ Meteor.methods({
   			  'items.$.finishedWho': Meteor.userId()
   			}
       });
-      
-      // finish batch
-      const doc = BatchDB.findOne({_id: batchId});
-      const allDone = doc.items.every( x => x.finishedAt !== false );
-      if(doc.finishedAt === false && allDone) {
-        BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
-    			$set : { 
-    			  active: false,
-    			  finishedAt: new Date()
-        }});
-      }else{null}
+      Meteor.call('finishBatch', batchId, Meteor.user().orgKey);
   		return true;
     }
+  },
+  
+  // finish Batch
+  finishBatch(batchId, permission) {
+    const doc = BatchDB.findOne({_id: batchId});
+    const allDone = doc.items.every( x => x.finishedAt !== false );
+    if(doc.finishedAt === false && allDone) {
+      BatchDB.update({_id: batchId, orgKey: permission}, {
+  			$set : { 
+  			  active: false,
+  			  finishedAt: new Date()
+      }});
+    }else{null}
   },
   
 // Scrap \\

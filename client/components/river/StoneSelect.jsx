@@ -14,30 +14,27 @@ export default class StoneSelect extends Component	{
     
     const flow = this.props.flow;
     
-    const bDone = this.props.history;
+    const iDone = this.props.history;
 
     const fDone = [];
-    this.props.allItems.map( (entry)=> {
-      entry.history.map( (entry)=> {
-        if(entry.type === 'first' && entry.good === true) {
-          fDone.push('first' + entry.step);
-        }else{null;}
-      });
-    });
+    for(let item of this.props.allItems) {
+      const firsts = item.history.filter( x => x.type === 'first' && x.good === true );
+      firsts.forEach( x => fDone.push( 'first' + x.step ) );
+    }
     
     for(let flowStep of flow) {
       const first = flowStep.type === 'first';
       const inspect = flowStep.type === 'inspect';
       
       const check = first ? 
-                    bDone.find(ip => ip.key === flowStep.key) || fDone.includes('first' + flowStep.step)
+                    iDone.find(ip => ip.key === flowStep.key) || fDone.includes('first' + flowStep.step)
                     :
                     inspect && this.props.regRun === true ?
-                    bDone.find(ip => ip.key === flowStep.key && ip.good === true) ||
-                    bDone.find(ip => ip.step === flowStep.step && ip.type === 'first' && ip.good === true)
+                    iDone.find(ip => ip.key === flowStep.key && ip.good === true) ||
+                    iDone.find(ip => ip.step === flowStep.step && ip.type === 'first' && ip.good === true)
                     // failed firsts should NOT count as inpections
                     :
-                    bDone.find(ip => ip.key === flowStep.key && ip.good === true);
+                    iDone.find(ip => ip.key === flowStep.key && ip.good === true);
                     
       if(check) {
         null;
@@ -46,7 +43,7 @@ export default class StoneSelect extends Component	{
         const stepNum = flow.indexOf(flowStep);
         const last = stepNum === 0 ? false : stepNum -1;
         const lastStep = last !== false ? flow[last] : false;
-        const fTest = flowStep.type === 'test' ? bDone.filter( x => x.type === 'test' && x.good === false) : [];
+        const fTest = flowStep.type === 'test' ? iDone.filter( x => x.type === 'test' && x.good === false) : [];
         
         const nc = this.props.nonCons;
         let skipped = nc.every( x => x.skip !== false );
@@ -56,7 +53,7 @@ export default class StoneSelect extends Component	{
                                      return x; };
         
 		    let block = nc.some( x => stripSide(x.where) !== stripSide(flowStep.step) ) ? true : false;
-		    
+
 		    const stone = <Stone
           		          key={flowStep.key}
                         id={this.props.id}
@@ -66,7 +63,7 @@ export default class StoneSelect extends Component	{
                         type={flowStep.type}
                         users={this.props.users}
                         methods={this.props.methods} />;
-                    
+
         const nonCon = <NCTributary
                 			  id={this.props.id}
                 			  serial={this.props.serial}
@@ -165,7 +162,7 @@ export default class StoneSelect extends Component	{
       <InOutWrap type='stoneTrans'>
         <div className='purpleBorder centre cap'>
           <h2>{Pref.trackLast}ed</h2>
-          <h3>{moment(bDone[bDone.length -1].time).calendar()}</h3>
+          <h3>{moment(iDone[iDone.length -1].time).calendar()}</h3>
         </div>
       </InOutWrap>
     );

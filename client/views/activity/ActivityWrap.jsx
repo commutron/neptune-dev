@@ -3,7 +3,7 @@ import moment from 'moment';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
 
-import Spin from '../../components/tinyUi/Spin.jsx';
+import Spin from '../../components/uUi/Spin.jsx';
 import RangeTools from '/client/components/smallUi/RangeTools.jsx';
 import OrgWip from './panels/OrgWIP.jsx';
 import BigPicture from './panels/BigPicture.jsx';

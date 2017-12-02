@@ -8,7 +8,6 @@ import SearchHelp from './SearchHelp.jsx';
 
 import ItemCard from './cards/ItemCard.jsx';
 import BatchCard from './cards/BatchCard.jsx';
-// import BatchDoneCard from './cards/BatchDoneCard.jsx';
 import WidgetCard from './cards/WidgetCard.jsx';
 
 import ItemPanel from './panels/ItemPanel.jsx';
@@ -422,7 +421,7 @@ export default class FindOps extends Component	{
             <SearchHelp />
           </div>
         </div>
-	      );
+      );
 	  }
     
     Session.set('nowBatch', false);

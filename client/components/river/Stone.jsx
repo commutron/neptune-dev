@@ -12,6 +12,8 @@ export default class Stone extends Component	{
       show: false
     };
     this.reveal = this.reveal.bind(this);
+    this.passS = this.passS.bind(this);
+    this.finish = this.finish.bind(this);
   }
   
   reveal() {
@@ -87,7 +89,6 @@ export default class Stone extends Component	{
 		let shape = '';
 		let ripple = '';
 		let lock = this.state.lock;
-		let sty = {minWidth: '260px', maxWidth: '260px', width: '260px', minHeight: '3rem', height: '3rem'};
 		let prepend = this.props.type === 'build' || this.props.type === 'first' ?
 		              <label className='big'>{this.props.type}<br /></label> : null;
 		let apend = this.props.type === 'inspect' ?
@@ -99,16 +100,16 @@ export default class Stone extends Component	{
 			ripple = this.reveal;
 		}else if(this.props.type === 'inspect'){
 			shape = 'stone iCheck';
-			ripple = this.passS.bind(this, true);
+			ripple = ()=>this.passS(true);
     }else if(this.props.type === 'build'){
 			shape = 'stone iBuild';
-			ripple = this.passS.bind(this, true);
+			ripple = ()=>this.passS(true);
     }else if(this.props.type === 'test'){
 			shape = 'stone crackedTop iTest';
-			ripple = this.passS.bind(this, true);
+			ripple = ()=>this.passS(true);
     }else if(this.props.type === 'finish'){
 			shape = 'stone iFinish';
-			ripple = this.finish.bind(this);
+			ripple = this.finish;
     }else{
       null }
      

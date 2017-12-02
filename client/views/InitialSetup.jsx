@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import Spin from '../components/tinyUi/Spin.jsx';
+import Spin from '../components/uUi/Spin.jsx';
 
 export default class InitialSetup extends Component	{
   

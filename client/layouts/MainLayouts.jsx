@@ -47,7 +47,7 @@ export const ProductionLayout = ({content, link}) => (
   </div>
 );
 
-export const AnalysisLayout = ({content, link}) => (
+export const DataLayout = ({content, link}) => (
   <div className='dashContainer'>
     <div className='gridHeaderSearch'>
       <FindBox />

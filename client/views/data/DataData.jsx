@@ -3,8 +3,8 @@ import { Meteor } from 'meteor/meteor';
 import {createContainer} from 'meteor/react-meteor-data';
 import Pref from '/client/global/pref.js';
 
-import Spin from '../../components/tinyUi/Spin.jsx';
-import AnalysisFindOps from './AnalysisFindOps.jsx';
+import Spin from '../../components/uUi/Spin.jsx';
+import DataFindOps from './DataFindOps.jsx';
 
 class AnalysisView extends Component	{
   
@@ -28,7 +28,7 @@ class AnalysisView extends Component	{
     }
     
     return (
-      <AnalysisFindOps
+      <DataFindOps
         orb={this.props.orb}
         org={this.props.org}
         users={this.props.users}

@@ -222,6 +222,12 @@ main {
   margin: 0 5px;
 }
 
+.badge {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}
+
 .card {
   width: 90%;
   min-width: 215px;
@@ -480,9 +486,14 @@ main {
 .wipCol > section {
   position: relative;
   width: calc((100% - 60px) / 3);
+  min-height: 100%;
   margin: 5px 10px 30px 10px;
   border: 1px solid rgba(0,0,0,0.5);
   /*transition: all 200ms ease;*/
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
 }
 @media screen and (max-width: 1500px){
   .wipCol > section {
@@ -501,8 +512,11 @@ main {
   }
 }
 
-.wipCol section div {
-  vertical-align: top;
+.wipCol > section > div {
+  width: 100%;
+}
+.wipCol > section > .fillHeight {
+  flex-grow: 2;
 }
 
 .bottomRightFloat {
@@ -510,7 +524,6 @@ main {
   right: -5px;
   bottom: -5px;
 }
-
 
 .wellSpacedLine {
   min-height: 3rem;
@@ -532,11 +545,6 @@ main {
   width: 100%;
   max-height: 1.25rem;
   padding: 0 10px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  position: absolute;
-  bottom: 0;
 }
 .functionalFooter label {
   font-size: 0.75rem;

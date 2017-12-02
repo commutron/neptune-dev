@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import InOutWrap from '/client/components/tinyUi/InOutWrap.jsx';
+import Pref from '/client/global/pref.js';
 
 // props
 /// id={b._id}
@@ -131,6 +132,13 @@ export class NCStream extends Component {
     const lockI = fixed ? !same && inspector ? false : true : false;
     let skip = this.props.entry.skip;
     let style = !skip ? 'cap tribRow darkRed noCopy' : 'cap tribRow yellow noCopy';
+    
+    let tryAgain = !this.props.entry.reject ? null :
+                   this.props.entry.reject.length > 0 ?
+                   <i className='badge'>
+                    {this.props.entry.reject.length + 1}
+                   </i>:
+                   null;
 
     return (
       <ContextMenuTrigger id={this.props.entry.key} 
@@ -150,14 +158,16 @@ export class NCStream extends Component {
           :
             fixed ?
               <span>
-                <button 
+                <button
+                  title={Pref.inspect}
                   ref={(i)=> this.inspectline = i}
                   className='granule riverG'
                   readOnly={true}
                   onClick={this.props.inspect}
                   disabled={lockI}>
                 <i className='fa fa-check fa-lg' aria-hidden='true'></i></button>
-                <button 
+                <button
+                  title={Pref.reject}
                   ref={(i)=> this.rejectline = i}
                   className='granule riverNG'
                   readOnly={true}
@@ -166,13 +176,14 @@ export class NCStream extends Component {
                 <i className='fa fa-times fa-lg' aria-hidden='true'></i></button>
               </span>
           :
-              <button 
+              <button
+                title={Pref.repair}
                 ref={(i)=> this.fixline = i}
                 className='pebble'
                 readOnly={true}
                 onClick={this.props.fix}
                 disabled={false}>
-              <img src='/repair.svg' className='pebbleSVG' /></button>
+              <img src='/repair.svg' className='pebbleSVG' />{tryAgain}</button>
           }
         </div>
         <ContextMenu id={this.props.entry.key}>

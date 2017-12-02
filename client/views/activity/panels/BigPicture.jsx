@@ -26,7 +26,7 @@ export default class BigPicture extends Component	{
     return (
       <div className='wipCol'>
         <section className='balance dblSection'>
-          <div>
+          <div className='centreRow'>
             <NumBox
               num={now.outstanding}
               name={'Outstanding ' + Pref.batch + 's'}

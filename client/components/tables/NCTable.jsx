@@ -119,7 +119,7 @@ export class NCRow extends Component {
                    
     const fx = typeof dt.fix === 'object';
     const ins = typeof dt.inspect === 'object';
-    const rjc = dt.reject.length > 0;
+    const rjc = !dt.reject || dt.reject.length === 0 ? false : true;
     const skp = typeof dt.skip === 'object';
      
     let fixed = !fx ? '' : <i>{moment(dt.fix.time).calendar()}, <UserNice id={dt.fix.who} /></i>;

@@ -84,27 +84,27 @@ export class StatusRow extends Component	{
           {dt.scrap > 0 ? <span className='redT'>Scraps: {dt.scrap}</span> : null}
           {dt.rma > 0 ? <span className='redT'>RMAs: {dt.rma}</span> : null}
         </div>
-        <div>
-          {dt.totalR + dt.totalA < 1 ?
-            <span className='yellowT wide centreText'>No {Pref.item}s created</span>
-          : dt.stepsReg.length > 0 ?
+        {dt.totalR + dt.totalA < 1 ?
+          <div className='yellowT wide centreText'>No {Pref.item}s created</div>
+        : dt.stepsReg.length > 0 ?
+          <div className='fillHeight'>
             <StatusCell steps={dt.stepsReg} total={dt.totalR} unitTotal={dt.totalRU} calc={calcItem} />
-          :
-            <span className='yellowT wide centreText'>No {Pref.flow} chosen</span>
-          }
-        </div>
-        {dt.stepsAlt.length > 0 ?
-          <div>
-            <hr className='fade'/>
-            <span className='small cap'>
-              <i className='fa fa-asterisk fa-lg' aria-hidden='true'></i>
-              <i>{Pref.buildFlowAlt}</i>
-            </span>
-            <div>
-              <StatusCell steps={dt.stepsAlt} total={dt.totalA} unitTotal={dt.totalAU} calc={calcItem} />
-            </div>
+            {dt.stepsAlt.length > 0 ?
+              <div>
+                <hr className='fade'/>
+                <span className='small cap'>
+                  <i className='fa fa-asterisk fa-lg' aria-hidden='true'></i>
+                  <i>{Pref.buildFlowAlt}</i>
+                </span>
+                <div>
+                  <StatusCell steps={dt.stepsAlt} total={dt.totalA} unitTotal={dt.totalAU} calc={calcItem} />
+                </div>
+              </div>
+            :null}
           </div>
-        :null}
+        :
+          <div className='yellowT wide centreText'>No {Pref.flow} chosen</div>
+        }
         {dt.finished ?
           <div className='wide greenT centreText'>
             <i>Finished {moment(dt.finishedAt).calendar()}</i>

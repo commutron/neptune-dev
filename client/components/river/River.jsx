@@ -61,10 +61,10 @@ export default class River extends Component	{
 		  return(
 		    <RiverFork
           id={b._id}
-          barcode={i.serial}
+          serial={i.serial}
+          flows={w.flows}
           river={b.river}
-          riverAlt={b.riverAlt}
-          flows={w.flows} />
+          riverAlt={b.riverAlt} />
         )}
 
     return (

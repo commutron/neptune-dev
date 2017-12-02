@@ -36,7 +36,7 @@ class Pref {
     this.unit = 'unit';// how many in a panel/set
     this.panel = 'set of tracked items';
     this.panelCode = 'panel serial';
-    this.inspect = 'inspector';
+    this.inspect = 'inspect';
     this.test = 'tester';
     this.create = 'creator';
     this.start = 'start';
@@ -63,6 +63,8 @@ class Pref {
     this.nonCon = 'nonCon';
     this.nonConRef = 'reference';
     this.nonConType = 'defect';
+    this.repair = 'repair';
+    this.reject = 'reject';
     this.skip = 'skip';
     this.skipDescribe = 'Ship With Defect';
     this.snooze = 'snooze';

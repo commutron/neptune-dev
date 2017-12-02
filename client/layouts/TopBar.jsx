@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import {createContainer} from 'meteor/react-meteor-data';
 import RoleCheck from '/client/components/utilities/RoleCheck.js';
 
-import Spin from '../components/tinyUi/Spin.jsx';
+import Spin from '../components/uUi/Spin.jsx';
 import Freeze from '../components/tinyUi/Freeze.jsx';
 import InitialSetup from '../views/InitialSetup.jsx';
 import Login from '../views/Login.jsx';
@@ -90,9 +90,9 @@ class TopBar extends Component	{
                 <i className="fa fa-flask fa-lg" aria-hidden='true'></i>
                 <span className='icontext'>Production</span>
               </a>
-              <a href='/analysis' className={ this.props.link === 'ana' ? 'white' : '' }>
+              <a href='/data' className={ this.props.link === 'ana' ? 'white' : '' }>
                 <i className="icon fa fa-flask fa-lg" aria-hidden='true'></i>
-                <span className='icontext'>Analysis</span>
+                <span className='icontext'>Data</span>
               </a>
             </span>
           </RoleCheck>

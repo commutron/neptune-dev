@@ -138,6 +138,7 @@
 .tribRow > div:nth-child(3) {
   width: 90px;
   padding: 0;
+  position: relative;
 }
 
 .pebble {
@@ -225,6 +226,9 @@
   }
   .ncTrib {
     font-size: 0.9rem;
+  }
+  .tribRow > div:nth-child(3) {
+    width: 80px;
   }
   .pebble {
     width: 80px;

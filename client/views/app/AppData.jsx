@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
 import {createContainer} from 'meteor/react-meteor-data';
 
-import Spin from '../../components/tinyUi/Spin.jsx';
+import Spin from '../../components/uUi/Spin.jsx';
 import AppWrap from './AppWrap.jsx';
 
 class AppView extends Component	{

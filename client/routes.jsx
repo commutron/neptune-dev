@@ -4,13 +4,13 @@ import {mount} from 'react-mounter';
 import {BasicLayout} from './layouts/MainLayouts.jsx';
 import {DashLayout} from './layouts/MainLayouts.jsx';
 import {ProductionLayout} from './layouts/MainLayouts.jsx';
-import {AnalysisLayout} from './layouts/MainLayouts.jsx';
+import {DataLayout} from './layouts/MainLayouts.jsx';
 import {LabelLayout} from './layouts/MainLayouts.jsx';
 
 import DashData from './views/dashboard/DashData.jsx';
 import ActivityData from './views/activity/ActivityData.jsx';
 import ProdData from './views/production/ProdData.jsx';
-import AnaData from './views/analysis/AnaData.jsx';
+import DataData from './views/data/DataData.jsx';
 import AppData from './views/app/AppData.jsx';
 
 import GeneralLabel from './views/paper/GeneralLabel.jsx';
@@ -53,11 +53,11 @@ FlowRouter.route('/production', {
   }
 });
 
-FlowRouter.route('/analysis', {
+FlowRouter.route('/data', {
   action() {
-    mount(AnalysisLayout, {
-      content: (<AnaData />),
-      link: 'ana'
+    mount(DataLayout, {
+      content: (<DataData />),
+      link: 'data'
     });
   }
 });

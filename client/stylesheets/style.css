@@ -158,8 +158,8 @@ button.transparent {
   border-bottom-style: solid;
   border-bottom-color: transparent;
 }
-button.transparent:hover {
-  border-bottom-color: inherit;
+button.transparent:hover + label {
+  text-decoration: underline;
 }
 
 .green {

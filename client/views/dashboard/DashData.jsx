@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import {createContainer} from 'meteor/react-meteor-data';
 import Pref from '/client/global/pref.js';
 
-import Spin from '../../components/tinyUi/Spin.jsx';
+import Spin from '../../components/uUi/Spin.jsx';
 import FindOps from './FindOps.jsx';
 
 class DashView extends Component	{
@@ -13,7 +13,7 @@ class DashView extends Component	{
     if(!this.props.login) {
       return (
         <div></div>
-        );
+      );
     }
     
     if(//!this.props.allData || // diagnose data in development
@@ -24,7 +24,7 @@ class DashView extends Component	{
        !this.props.allScrap) {
       return (
         <Spin />
-        );
+      );
     }
     
     return (
@@ -39,7 +39,7 @@ class DashView extends Component	{
         allWidget={this.props.allWidget}
         allBatch={this.props.allBatch}
         hotBatch={this.props.hotBatch}
-        />
+      />
     );
   }
 }

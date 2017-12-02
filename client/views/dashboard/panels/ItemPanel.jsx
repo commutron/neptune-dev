@@ -29,9 +29,8 @@ export default class ItemPanel extends Component	{
   }
   
   flowSteps() {
-    let allsteps = Array.from( this.props.app.trackOption, x => x.step );
-    let cleansteps = new Set(allsteps);
-    return [...cleansteps];
+    const dprts = new Set( Array.from(this.props.app.trackOption, x => x.step) );
+    return [...dprts];
   }
 
   render() {

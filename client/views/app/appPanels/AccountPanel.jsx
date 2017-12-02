@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 import AccountsUI from '../../../components/bigUi/AccountsUI.jsx';
 import { AdminDown } from '../../../components/forms/AdminForm.jsx';
 import SetPin from '../../../components/forms/SetPin.jsx';
-import LogoutOther from '../../../components/tinyUi/LogoutOther.jsx';
+import LogoutOther from '../../../components/uUi/LogoutOther.jsx';
 import EmailForm from '../../../components/forms/EmailForm.jsx';
 import { PermissionHelp } from './AccountsManagePanel';
 
