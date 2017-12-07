@@ -40,9 +40,9 @@ export default class RangeTools extends Component	{
               <option value='hour'>Hour</option>
               <option value='day'>Day</option>
               <option value='week'>Week</option>
-              <option value='month'>Month</option>
+              <option value='month' disabled={true}>Month</option>
             {/*<option value='quarter'>This Quarter</option>*/}
-              <option value='year'>Year</option>
+              <option value='year' disabled={true}>Year</option>
             </select>
           </label>
         </label>

@@ -104,6 +104,29 @@ Meteor.methods({
       }});
     }else{null}
   },
+  
+  // push a tag
+  pushTag(batchId, tag) {
+    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        $push : { 
+          tags: tag
+        }});
+    }else{
+      null;
+    }
+  },
+  // pull a tag
+  pullTag(batchId, tag) {
+    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        $pull : {
+          tags: tag
+        }});
+    }else{
+      null;
+    }
+  },
 
   setBatchNote(batchId, note) {
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {

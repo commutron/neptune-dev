@@ -7,6 +7,7 @@ import CreateTag from '/client/components/uUi/CreateTag.jsx';
 import Tabs from '../../../components/smallUi/Tabs.jsx';
 
 import JumpText from '../../../components/tinyUi/JumpText.jsx';
+import TagsModule from '../../../components/bigUi/TagsModule.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';
 import BlockList from '../../../components/bigUi/BlockList.jsx';
 import RiverSatus from '../../../components/smallUi/RiverStatus.jsx';
@@ -95,6 +96,8 @@ export default class BatchPanel extends Component	{
                 <p>Finished: {fnsh}</p>
               </div>
               
+              <TagsModule id={b._id} tags={b.tags} />
+              
               <NoteLine entry={b.notes} id={b._id} widgetKey={false} />
               
             </div>
@@ -138,8 +141,8 @@ export default class BatchPanel extends Component	{
               
               <BlockList id={b._id} data={b.blocks} lock={done} />
               
-              <div className='balance'>
-                <div className='wide max600'>
+              <div className='split'>
+                <div className='wide'>
                   <NonConOverview
                     ncOp={a.nonConOption}
                     trOp={a.trackOption}
