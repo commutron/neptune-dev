@@ -47,7 +47,7 @@ export default class NonConPie extends Component {
       donut: true,
       donutWidth: 60,
       startAngle: 0,
-      total: this.props.nonCons.length,
+      total: this.props.nonCons,
       plugins: [
         Chartist.plugins.tooltip({
           appendToBody: true,

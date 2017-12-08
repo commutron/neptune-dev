@@ -7,6 +7,7 @@ import CreateTag from '/client/components/uUi/CreateTag.jsx';
 import Tabs from '../../../components/smallUi/Tabs.jsx';
 
 import JumpText from '../../../components/tinyUi/JumpText.jsx';
+import TagsModule from '../../../components/bigUi/TagsModule.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';
 import BlockList from '../../../components/bigUi/BlockList.jsx';
 import RiverSatus from '../../../components/smallUi/RiverStatus.jsx';
@@ -77,7 +78,7 @@ export default class BatchPanel extends Component	{
               <span><i className='clean'>v.</i>{v.version}</span>
               <span>
                 { b.active ? 
-                  <i className='fa fa-refresh blueT' aria-hidden='true' title='in progress'></i>
+                  <i className='fas fa-sync blueT' aria-hidden='true' title='in progress'></i>
                   :
                   <i className='fa fa-check-circle greenT' aria-hidden='true' title='finished'></i>
                 }
@@ -94,6 +95,12 @@ export default class BatchPanel extends Component	{
                 <p>Finished: {fnsh}</p>
               </div>
               
+              <TagsModule
+                id={b._id}
+                tags={b.tags}
+                vKey={false}
+                tagOps={a.tagOption} />
+               
               <NoteLine entry={b.notes} id={b._id} widgetKey={false} />
               
             </div>

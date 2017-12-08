@@ -9,6 +9,7 @@ import JumpText from '../../../components/tinyUi/JumpText.jsx';
 import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';
 import BlockNotes from '../../../components/smallUi/BlockNotes.jsx';
+import TagsModule from '../../../components/bigUi/TagsModule.jsx';
 
 export default class BatchCard extends Component	{
 
@@ -17,6 +18,7 @@ export default class BatchCard extends Component	{
     const b = this.props.batchData;
     const w = this.props.widgetData;
     const g = this.props.groupData;
+    const a = this.props.app;
     
     const v = w.versions.find( x => x.versionKey === b.versionKey );
     
@@ -60,6 +62,11 @@ export default class BatchCard extends Component	{
             stick={false}>
             
             <div className='space cap'>
+              <TagsModule
+                id={b._id}
+                tags={b.tags}
+                vKey={false}
+                tagOps={a.tagOption} />
               <NoteLine entry={b.notes} id={b._id} versionKey={false} />
               <BlockNotes data={b.blocks} />
             </div>

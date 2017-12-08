@@ -106,7 +106,7 @@ Meteor.methods({
   },
   
   // push a tag
-  pushTag(batchId, tag) {
+  pushBTag(batchId, tag) {
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $push : { 
@@ -117,7 +117,7 @@ Meteor.methods({
     }
   },
   // pull a tag
-  pullTag(batchId, tag) {
+  pullBTag(batchId, tag) {
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $pull : {

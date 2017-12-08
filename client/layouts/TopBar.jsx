@@ -77,11 +77,11 @@ class TopBar extends Component	{
               className='logoSVG' />
           </a>
           <a href='/activity' className={ this.props.link === 'act' ? 'white' : '' }>
-            <i className="fa fa-line-chart fa-lg" aria-hidden='true'></i>
+            <i className="fas fa-chart-line fa-lg" aria-hidden='true'></i>
             <span className='icontext'>Activity</span>
           </a>
           <a href='/dashboard' className={ this.props.link === 'dash' ? 'white' : '' }>
-            <i className="fa fa-tachometer fa-lg" aria-hidden='true'></i>
+            <i className="fas fa-tachometer-alt fa-lg" aria-hidden='true'></i>
             <span className='icontext'>Dashboard</span>
           </a>
           <RoleCheck role={'nightly'}>
@@ -97,7 +97,7 @@ class TopBar extends Component	{
             </span>
           </RoleCheck>
           <a href='/app' className={ this.props.link === 'app' ? 'white' : '' }>
-            <i className="fa fa-sliders fa-lg" aria-hidden='true'></i>
+            <i className="fas fa-sliders-h fa-lg" aria-hidden='true'></i>
             <span className='icontext'>Settings</span>
           </a>
         </nav>

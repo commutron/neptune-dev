@@ -243,6 +243,29 @@ Meteor.methods({
       return false;
     }
   },
+  
+  // push a tag
+  pushWTag(widgetId, vKey, tag) {
+    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+      WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.versionKey': vKey}, {
+        $push : { 
+          'versions.$.tags': tag
+        }});
+    }else{
+      null;
+    }
+  },
+  // pull a tag
+  pullWTag(widgetId, vKey, tag) {
+    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+      WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.versionKey': vKey}, {
+        $pull : {
+          'versions.$.tags': tag
+        }});
+    }else{
+      null;
+    }
+  },
 
 // not a teribly usefull function and doesn't actualy work
 // could be altered to close a whole group

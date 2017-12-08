@@ -38,7 +38,7 @@ export default class WidgetPanel extends Component	{
               wide={true}
               stick={false}>
               
-              <VersionTable widgetData={w} />
+              <VersionTable widgetData={w} app={a} />
               
               <FlowTable id={w._id} flows={w.flows} app={a} />
               

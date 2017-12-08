@@ -14,10 +14,17 @@ export default class TagsModule extends Component	{
     if(!cleanTag || cleanTag == '' || this.props.tags.includes(cleanTag)) {
       null;
     }else{
-      Meteor.call('pushTag', this.props.id, cleanTag, (error)=>{
+      if(!this.props.vKey) {
+        Meteor.call('pushBTag', this.props.id, cleanTag, (error)=>{
+          if(error)
+            console.log(error);
+        });
+      }else{
+        Meteor.call('pushWTag', this.props.id, this.props.vKey, cleanTag, (error)=>{
         if(error)
           console.log(error);
       });
+      }
     }
   }
   
@@ -26,16 +33,23 @@ export default class TagsModule extends Component	{
     if(!yes) {
       null;
     }else{
-      Meteor.call('pullTag', this.props.id, tag, (error)=>{
-        if(error)
-          console.log(error);
-      });
+      if(!this.props.vKey) {
+        Meteor.call('pullBTag', this.props.id, tag, (error)=>{
+          if(error)
+            console.log(error);
+        });
+      }else{
+        Meteor.call('pullWTag', this.props.id, this.props.vKey, tag, (error)=>{
+          if(error)
+            console.log(error);
+        });  
+      }
     }
   }
 
   render() {
     return (
-      <div>
+      <div className='rowWrap'>
         {this.props.tags.map( (entry, index)=>{
           return(
            <IndieTag
@@ -43,17 +57,29 @@ export default class TagsModule extends Component	{
             tagText={entry}
             removeTag={()=>this.removeTag(entry)} />
         )})}
-        <ContextMenuTrigger id={this.props.id} holdToDisplay={1}>
-          <i className='tagAddButton'>ADD</i>
-        </ContextMenuTrigger>
+        {Roles.userIsInRole(Meteor.userId(), 'run') ?
+          <ContextMenuTrigger
+            id={this.props.id}
+            holdToDisplay={1}
+            renderTag='span'>
+            <i className='fas fa-plus-circle tagAddButton'></i>
+          </ContextMenuTrigger>
+        :null}
         
         <ContextMenu id={this.props.id}>
-          <MenuItem onClick={()=>this.addTag('LF')} disabled={this.props.tags.includes('LF')}>
-            LF
-          </MenuItem>
+          {!this.props.tagOps ? null :
+            this.props.tagOps.map( (entry, index)=>{
+              return(
+                <MenuItem
+                  key={index}
+                  onClick={()=>this.addTag(entry)}
+                  disabled={this.props.tags.includes(entry)}>
+                  {entry}
+                </MenuItem>
+          )})}
           <MenuItem divider />
           <MenuItem onClick={()=>this.addTag(window.prompt('Add a new ' + Pref.tag))}>
-            + Custom
+            Custom
           </MenuItem>
         </ContextMenu>
       </div>
@@ -65,8 +91,8 @@ const IndieTag = ({ tagText, removeTag }) => (
   <span className='tagFlag'>
     <i>{tagText}</i>
     <button
-      onClick={removeTag}>
-      <i className='big'>-</i>
+      onClick={removeTag}
+      disabled={!Roles.userIsInRole(Meteor.userId(), 'run')}>
     </button>
   </span>
 );

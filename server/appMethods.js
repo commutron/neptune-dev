@@ -29,7 +29,7 @@ Meteor.methods({
           },
           nonConOption: [],
           ancillaryOption: [],
-          skipOption: [],
+          tagOption: [],
           instruct: '',
           timeClock: '',
           ndaMode: false
@@ -122,6 +122,18 @@ Meteor.methods({
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $push : { 
           ancillaryOption : value
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  addTagOp(value) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $push : { 
+          tagOption : value
       }});
       return true;
     }else{

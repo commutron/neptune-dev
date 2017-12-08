@@ -35,7 +35,7 @@ export default class Model extends Component	{
           onClick={this.reveal}
           disabled={this.props.lock}>
           <label className='navIcon actionIconWrap'>
-            <i className={'fa ' + this.props.icon + iSize + this.props.color} aria-hidden='true'></i>
+            <i className={'fas ' + this.props.icon + iSize + this.props.color} aria-hidden='true'></i>
             <span className={'actionIconText ' + this.props.color}>{this.props.button}</span>
           </label>
         </button>
@@ -48,7 +48,7 @@ export default class Model extends Component	{
                 className='action clear redT rAlign'
                 onClick={this.reveal}>{Pref.close}</button>
               <h2 className='cap'>
-                <i className={'fa ' + this.props.icon + ' fa-lg ' + this.props.color}></i>
+                <i className={'fas ' + this.props.icon + ' fa-lg ' + this.props.color}></i>
                 <i className='breath'></i>
                 {this.props.title}
               </h2>

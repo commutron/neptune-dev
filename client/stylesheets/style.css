@@ -1,5 +1,3 @@
-/*@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
-meteor seems to be handling this */
 
 .action {
   line-height: 2em;
@@ -479,6 +477,59 @@ meteor seems to be handling this */
 
 .proBad::-moz-progress-bar {
   background-color: #c0392b;
+}
+
+.tagFlag {
+  margin: 3px 4px;
+  padding: 2px 2px 2px 5px;
+  border: 0.5px solid white;
+  border-radius: 5px;
+  background-color: var(--belizeHole);
+  font-size: 0.9rem;
+  color: white;
+  cursor: default;
+}
+.tagFlag > button {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  margin: 0px 0px 0px 5px;
+  padding: 1px;
+  border-radius: 50%;
+  background-color: transparent;
+  font-size: 0.8rem;
+  vertical-align: auto;
+}
+.tagFlag > button:after {
+  content: "\f00d";
+  font-family: FontAwesome;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.tagFlag > button:hover {
+  background-color: white;
+  color: var(--belizeHole);
+}
+.tagFlag > button:disabled {
+  margin: 0px 0px 0px -10px;
+}
+.tagFlag > button:disabled:after {
+  display: none;
+}
+
+.tagAddButton {
+  display: inline-block;
+  margin: 0px 5px;
+  vertical-align: middle;
+  color: var(--nephritis);
+  background-color: transparent;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.tagAddButton:hover {
+  color: var(--emerald);
 }
 
 /* Filter Tools */

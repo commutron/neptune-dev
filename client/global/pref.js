@@ -41,7 +41,7 @@ class Pref {
     this.create = 'creator';
     this.start = 'start';
     this.end = 'fulfill';
-    this.tag = 'tag';
+    this.tag = 'flag';
     // build tracking
     this.flow = 'process flow';
     this.buildFlow = 'main process flow';

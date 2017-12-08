@@ -55,7 +55,7 @@ export default class NoteForm extends Component {
         button=''
         title={choose + ' notes'}
         color='blueT'
-        icon='fa-pencil-square-o'
+        icon='fa-edit'
         smIcon={this.props.small}
         lock={unlock}>
         <form

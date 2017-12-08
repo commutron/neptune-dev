@@ -46,7 +46,6 @@ Meteor.methods({
     }
   },
 
-
   deleteGroup(groupId, pass) {
     const inUse = WidgetDB.findOne({groupId: groupId});
     if(!inUse) {

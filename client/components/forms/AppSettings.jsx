@@ -12,11 +12,11 @@ export class OptionAdd extends Component	{
                    act === 'track' ? 'addTrackOption' :
                    act === 'anc' ? 'addAncOp' :
                    act === 'tool' ? 'addToolOp' :
+                   act === 'tag' ? 'addTagOp' :
                    act === 'wi' ? 'setInstruct' :
                    act === 'time' ? 'setTimeClock' : false;
-    let newOp = this.iop.value.trim().toLocaleLowerCase();
+    let newOp = this.iop.value.trim();
     newOp = newOp.replace("|", "-");
-    
     let type = this.type ? this.type.value.trim() : false;
     if(type) { newOp = newOp + '|' + type }
     

@@ -19,6 +19,13 @@ export default class PrefPanel extends Component {
 
     return (
       <div className='section cap invert balance'>
+        <div className='wide clean'>
+          <p>
+            <i className='fas fa-exclamation-circle'>
+            </i> Capitals are optional but discouraged. Entries are case sensitive smt != SMT.
+          </p>
+          <br />
+        </div>
         <fieldset disabled={auth}>
           <div className='space breathe'>
   
@@ -73,6 +80,18 @@ export default class PrefPanel extends Component {
               <ul>
                 {dt.toolOption.map( (entry, index)=>{
                   return ( <li key={index}><i>{entry}</i></li> );
+                })}
+              </ul>
+          
+            <hr />
+            
+            <h2>{Pref.tag} options:</h2>
+            <i>available reusable {Pref.tag}s</i>
+            <OptionAdd action='tag' title={Pref.tag} />
+              <ul>
+                {!dt.tagOption ? null :
+                  dt.tagOption.map( (entry, index)=>{
+                    return ( <li key={index}><i>{entry}</i></li> );
                 })}
               </ul>
           

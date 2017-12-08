@@ -203,7 +203,8 @@ export default class FindOps extends Component	{
                 batchData={hotBatch}
                 widgetData={widget}
                 versionData={version}
-                groupData={group} />
+                groupData={group}
+                app={app} />
               <WikiOps wi={version.wiki} root={app.instruct} anchor={anchor} />
             </Dashboard>
           );
@@ -291,7 +292,8 @@ export default class FindOps extends Component	{
                   batchData={hotBatch}
                   widgetData={widget}
                   versionData={version}
-                  groupData={group} />
+                  groupData={group}
+                  app={app} />
               </div>
               <WikiOps wi={version.wiki} root={app.instruct} anchor={anchor} />
             </Dashboard>
@@ -399,6 +401,7 @@ export default class FindOps extends Component	{
                 groupData={group}
                 widgetData={lookup}
                 batchRelated={allBatches}
+                app={app}
               />
             </div>
             <WikiOps

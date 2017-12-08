@@ -8,7 +8,7 @@ import UserNice from '../smallUi/UserNice.jsx';
 import VersionForm from '../forms/VersionForm.jsx';
 import {VersionRemove} from '../forms/VersionForm.jsx';
 import NoteLine from '../smallUi/NoteLine.jsx';
-
+import TagsModule from '../bigUi/TagsModule.jsx';
 
 export default class VersionTable extends Component	{
 
@@ -30,7 +30,8 @@ export default class VersionTable extends Component	{
               <VersionRow
                 key={index}
                 entry={entry}
-                widgetData={w} />
+                widgetData={w}
+                app={this.props.app} />
             )})}
         </table>
       </div>
@@ -44,6 +45,7 @@ export class VersionRow extends Component {
   render() {
     
     const w = this.props.widgetData;
+    const a = this.props.app;
     const v = this.props.entry;
     
     let live = v.live ? 'popTbody' : 'fade popTbody';
@@ -65,7 +67,13 @@ export class VersionRow extends Component {
               plain={true}
               small={true} />
           </td>
-          <td colSpan='2'>tags: {v.tags.length}</td>
+          <td colSpan='2'>
+            <TagsModule
+              id={w._id}
+              tags={v.tags}
+              vKey={v.versionKey}
+              tagOps={a.tagOption} />
+          </td>
         </tr>
         <tr>
           <td colSpan='3'>

@@ -79,7 +79,7 @@ export default class BatchPanel extends Component	{
               <span><i className='clean'>v.</i>{v.version}</span>
               <span>
                 { b.active ? 
-                  <i className='fa fa-refresh blueT' aria-hidden='true' title='in progress'></i>
+                  <i className='fas fa-sync blueT' aria-hidden='true' title='in progress'></i>
                   :
                   <i className='fa fa-check-circle greenT' aria-hidden='true' title='finished'></i>
                 }
@@ -96,7 +96,13 @@ export default class BatchPanel extends Component	{
                 <p>Finished: {fnsh}</p>
               </div>
               
-              <TagsModule id={b._id} tags={b.tags} />
+              <div className='max300'>
+                <TagsModule
+                  id={b._id}
+                  tags={b.tags}
+                  vKey={false}
+                  tagOps={a.tagOption} />
+              </div>
               
               <NoteLine entry={b.notes} id={b._id} widgetKey={false} />
               

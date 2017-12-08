@@ -32,11 +32,11 @@ export default class FilterTools extends Component	{
       <details className='fltrs' style={dStyl}>
           <summary className='fltrs'>
             <span>
-              <i className='fa fa-filter' aria-hidden='true'></i>
+              <i className='fas fa-filter' aria-hidden='true'></i>
               <i className='med'>Filter</i>
             </span>
             <span className='rAlign'>
-              <i className='fa fa-chevron-down' aria-hidden='true'></i>
+              <i className='fas fa-chevron-down' aria-hidden='true'></i>
             </span>
           </summary>
           

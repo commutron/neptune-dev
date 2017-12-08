@@ -40,7 +40,7 @@ export default class ScrapForm extends Component {
         button={Pref.scrap}
         title={Pref.scrap + ' ' + Pref.item}
         color='redT'
-        icon='fa-trash-o'
+        icon='fa-cut'
         lock={!Roles.userIsInRole(Meteor.userId(), 'qa') || scrap}>
     		  <form className='centre' onSubmit={this.handleScrap.bind(this)}>
     		    <br />
