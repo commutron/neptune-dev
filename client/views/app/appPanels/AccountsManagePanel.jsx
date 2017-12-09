@@ -129,6 +129,7 @@ export class PermissionHelp extends Component {
             <li><b>Run</b></li>
             <ul>
               <li>Edit {Pref.batch} name or dates</li>
+              <li>Add or Remove {Pref.tag}s</li>
               <li>Edit {Pref.batch} notes</li>
               <li>Create new {Pref.itemSerial}s</li>
               <li>Change {Pref.unit}</li>

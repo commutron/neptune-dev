@@ -101,7 +101,7 @@ export default class BatchPanel extends Component	{
                 vKey={false}
                 tagOps={a.tagOption} />
                
-              <NoteLine entry={b.notes} id={b._id} widgetKey={false} />
+              <NoteLine entry={b.notes} id={b._id} widgetKey={false}  />
               
             </div>
             

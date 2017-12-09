@@ -48,7 +48,7 @@ export default class NCTable extends Component	{
         </table>
       :
         <div className='centreText fade'>
-          <i className='fa fa-smile-o fa-3x' aria-hidden="true"></i>
+          <i className='fas fa-smile fa-3x' aria-hidden="true"></i>
           <p className='big'>no {Pref.nonCon}s</p>
         </div>
       }
@@ -184,7 +184,7 @@ export class NCRow extends Component {
                   onClick={this.handleChange}
                   style={inClk}
                   readOnly={true}>
-                  <i className='fa fa-arrow-circle-down fa-2x'></i>
+                  <i className='fas fa-arrow-circle-down fa-2x'></i>
                   <i className='big'>Save</i>
                 </button>
                 {remove ?
@@ -193,7 +193,7 @@ export class NCRow extends Component {
                     onClick={this.popNC}
                     style={inClk}
                     readOnly={true}>
-                    <i className='fa fa-times fa-2x'></i>
+                    <i className='fas fa-times fa-2x'></i>
                     <i className='big'>Remove</i>
                   </button>
                 :null}
@@ -202,7 +202,7 @@ export class NCRow extends Component {
                   onClick={this.edit}
                   style={inClk}
                   readOnly={true}>
-                  <i className='fa fa-ban fa-2x'></i>
+                  <i className='fas fa-ban fa-2x'></i>
                   <i className='big'>Cancel</i>
                 </button>
               </span>
@@ -232,7 +232,7 @@ export class NCRow extends Component {
                 className='miniAction blueT'
                 onClick={this.edit.bind(this)}
                 readOnly={true}>
-                <i className='fa fa-pencil-square-o fa-2x'></i>
+                <i className='fas fa-edit'></i>
               </button>
             }
           </td>

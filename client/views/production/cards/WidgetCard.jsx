@@ -3,15 +3,17 @@ import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 
 import JumpText from '../../../components/tinyUi/JumpText.jsx';
 
+import TagsModule from '../../../components/bigUi/TagsModule.jsx';
 import BatchesList from '../lists/BatchesList.jsx';
 
 export default class WidgetCard extends Component {
 
   render() {
 
-    let g = this.props.groupData;
-    let w = this.props.widgetData;
-    let b = this.props.batchRelated;
+    const g = this.props.groupData;
+    const w = this.props.widgetData;
+    const b = this.props.batchRelated;
+    const a = this.props.app;
     
     const v = w.versions.sort((v1, v2)=> {
                 if (v1.version < v2.version) { return 1 }
@@ -32,6 +34,11 @@ export default class WidgetCard extends Component {
                 return(
                   <span key={entry.versionKey}>
                     <i className={live}>{entry.version}</i>
+                    <TagsModule
+                      id={w._id}
+                      tags={entry.tags}
+                      vKey={entry.versionKey}
+                      tagOps={a.tagOption} />
                     <i className='breath'></i>
                   </span>
                 )})}

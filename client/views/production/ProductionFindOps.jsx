@@ -149,7 +149,8 @@ export default class ProductionFindOps extends Component	{
               batchData={hotBatch}
               widgetData={widget}
               versionData={version}
-              groupData={group} />
+              groupData={group}
+              app={app} />
             <WikiOps wi={version.wiki} root={app.instruct} anchor={anchor} />
           </ProductionWrap>
         );
@@ -200,7 +201,8 @@ export default class ProductionFindOps extends Component	{
                 batchData={hotBatch}
                 widgetData={widget}
                 versionData={version}
-                groupData={group} />
+                groupData={group}
+                app={app} />
             </div>
             <WikiOps wi={version.wiki} root={app.instruct} anchor={anchor} />
           </ProductionWrap>
@@ -253,6 +255,7 @@ export default class ProductionFindOps extends Component	{
               groupData={group}
               widgetData={lookup}
               batchRelated={allBatches}
+              app={app}
             />
           </div>
           <WikiOps

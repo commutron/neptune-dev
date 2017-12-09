@@ -3,11 +3,14 @@ import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import CreateTag from '/client/components/uUi/CreateTag.jsx';
 import Pref from '/client/global/pref.js';
 
+import TagsModule from '/client/components/bigUi/TagsModule.jsx';
+
 export default class GroupPanel extends Component	{
 
   render() {
 
     let g = this.props.groupData;
+    const a = this.props.app;
 
     return (
       <AnimateWrap type='cardTrans'>
@@ -22,6 +25,15 @@ export default class GroupPanel extends Component	{
           
             <p>{Pref.instruct} index: <a className='clean' href={g.wiki} target='_blank'>{g.wiki}</a></p>
             
+            <br />
+            
+            <TagsModule
+              id={g._id}
+              tags={g.tags}
+              vKey={false}
+              group={true}
+              tagOps={a.tagOption} />
+              
           </div>
           
           <CreateTag

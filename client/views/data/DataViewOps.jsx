@@ -263,7 +263,7 @@ export default class DataViewOps extends Component	{
             app={app}
             action='group'
           >
-            <GroupPanel groupData={group} />
+            <GroupPanel groupData={group} app={app} />
             <WidgetsList
               groupAlias={group.alias}
               widgetData={widgets}

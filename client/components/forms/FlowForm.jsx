@@ -27,7 +27,7 @@ export default class FlowForm extends Component	{
     if(!input) {
       this.setState({ flow: false });
     }else{
-      this.setState({ flow: [...input] });
+      this.setState({ flow: input });
     }
   }
   

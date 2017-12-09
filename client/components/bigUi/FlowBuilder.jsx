@@ -21,7 +21,7 @@ export default class FlowForm extends Component	{
     // add the finish step back on the end
     list.add(this.props.end);
     // Unlock save button
-    this.props.onClick(list);
+    this.props.onClick([...list]);
   }
 
   addStep(e) {
@@ -66,6 +66,32 @@ export default class FlowForm extends Component	{
     // lock save button
     this.props.onClick(false);
   }
+  
+  moveUp(list, obj, indx) {
+    let newList = list;
+    if(indx === 0) {
+      null;
+    }else{
+      newList.splice(indx, 1);
+      newList.splice(indx - 1, 0, obj);
+    }
+    this.setState({ steps: new Set(newList) });
+    // lock save button
+    this.props.onClick(false);
+  }
+  
+  moveDown(list, obj, indx) {
+    let newList = list;
+    if(indx === list.length - 1) {
+      null;
+    }else{
+      newList.splice(indx, 1);
+      newList.splice(indx + 1, 0, obj);
+    }
+    this.setState({ steps: new Set(newList) });
+    // lock save button
+    this.props.onClick(false);
+  }
     
   clear() {
     this.setState({ steps: new Set() });
@@ -77,7 +103,11 @@ export default class FlowForm extends Component	{
 
     let steps = [...this.state.steps];
     
-    //let options = this.props.options.sort((t1, t2) => {return t1.step > t2.step});
+    const lockout = steps.filter( 
+                      y => Object.values( y )
+                        .includes( 'f1n15h1t3m5t3p' ) )
+                          .length > 0;
+    
     let options = this.props.options;  
       options.sort((t1, t2)=> {
         if (t1.step < t2.step) { return -1 }
@@ -114,21 +144,37 @@ export default class FlowForm extends Component	{
         </div>
         <div className='half'>
           <ul className='stepList'>
-            { steps.map( (entry, index)=> {            
+            { steps.map( (entry, index)=> {  
               return (                 
                 <li key={index} className=''>                      
                   {entry.step} - {entry.type} - {entry.how}                 
                   <button
                     type='button'
-                    name={entry}
+                    name='Move Up'
+                    ref={(i)=> this.up = i}
+                    className='smallAction blueT'
+                    onClick={()=>this.moveUp(steps, entry, index)}
+                    disabled={lockout || index === 0}
+                  >moveUp</button>
+                  <button
+                    type='button'
+                    name='Move Down'
+                    ref={(i)=> this.dn = i}
+                    className='smallAction blueT'
+                    onClick={()=>this.moveDown(steps, entry, index)}
+                    disabled={lockout || index === steps.length - 1}
+                  >moveDown</button>
+                  <button
+                    type='button'
+                    name='Remove'
                     ref={(i)=> this.ex = i}
                     className='smallAction red'
-                    onClick={()=>this.removeOne(entry)}>x</button>                  
+                    onClick={()=>this.removeOne(entry)}
+                    disabled={lockout && entry.key !== 'f1n15h1t3m5t3p'}
+                  >x</button>
                 </li>
               )})}
           </ul>
-        <br />
-        <i>Finish step is automatic</i>
         <br />
         <button
           className='smallAction clear up'
@@ -139,6 +185,11 @@ export default class FlowForm extends Component	{
           className='smallAction clear greenT up'
           disabled={false}
           onClick={this.sendUp.bind(this)}>Set {Pref.flow}</button>
+        <br />
+        <p className='clean'>
+          <i> The Finish Step is added and reordering is locked once the process flow is set.</i>
+          <i> Remove the Finish Step to continue editing.</i>
+        </p>
       </div>
     </div>
     );

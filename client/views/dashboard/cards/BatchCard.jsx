@@ -67,6 +67,7 @@ export default class BatchCard extends Component	{
                 tags={b.tags}
                 vKey={false}
                 tagOps={a.tagOption} />
+              <br />
               <NoteLine entry={b.notes} id={b._id} versionKey={false} />
               <BlockNotes data={b.blocks} />
             </div>

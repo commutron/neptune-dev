@@ -23,7 +23,7 @@ export default class NoteLine extends Component	{
                      id={this.props.id}
                      versionKey={this.props.versionKey}
                      content={dt.content}
-                     small={this.props.small} /> : 
+                     small={true} /> : 
                    null;
     
     if(this.props.plain && !dt.content) {

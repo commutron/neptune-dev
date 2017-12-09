@@ -21,8 +21,9 @@ export default class PrefPanel extends Component {
       <div className='section cap invert balance'>
         <div className='wide clean'>
           <p>
-            <i className='fas fa-exclamation-circle'>
-            </i> Capitals are optional but discouraged. Entries are case sensitive smt != SMT.
+            <i className='fas fa-exclamation-circle'></i>
+            <i> Entries are case sensitive, smt =/= SMT.</i>
+            <i> Capitalizing is unnecessary in most cases and only recommended for abbreviations.</i>
           </p>
           <br />
         </div>

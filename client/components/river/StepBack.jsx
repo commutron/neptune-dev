@@ -36,7 +36,7 @@ export default class StepBack extends Component {
         onClick={this.handle.bind(this)}
         disabled={this.props.lock}
         readOnly={true}
-        ><i className='fa fa-times'></i></button>
+        ><i className='fas fa-times'></i></button>
     );
   }
 }

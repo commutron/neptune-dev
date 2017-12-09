@@ -61,12 +61,12 @@ export default class ItemPanel extends Component	{
             <span><i className='clean'>v.</i>{v.version}</span>
             <span>
               { !start ?
-                <i className='fa fa-hourglass-start' aria-hidden='true' title='unstarted'></i>
+                <i className='fas fa-hourglass-start' aria-hidden='true' title='unstarted'></i>
                 :
                 done ? 
-                <i className='fa fa-check-circle greenT' aria-hidden='true' title='finished'></i>
+                <i className='fas fa-check-circle greenT' aria-hidden='true' title='finished'></i>
                 : 
-                <i className='fa fa-refresh blueT' aria-hidden='true' title='in progress'></i>
+                <i className='fas fa-sync blueT' aria-hidden='true' title='in progress'></i>
               }
             </span>
           </div>

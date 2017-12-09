@@ -15,10 +15,17 @@ export default class TagsModule extends Component	{
       null;
     }else{
       if(!this.props.vKey) {
-        Meteor.call('pushBTag', this.props.id, cleanTag, (error)=>{
-          if(error)
-            console.log(error);
-        });
+        if(!this.props.group) {
+          Meteor.call('pushBTag', this.props.id, cleanTag, (error)=>{
+            if(error)
+              console.log(error);
+          });
+        }else{
+          Meteor.call('pushGTag', this.props.id, cleanTag, (error)=>{
+            if(error)
+              console.log(error);
+          });
+        }
       }else{
         Meteor.call('pushWTag', this.props.id, this.props.vKey, cleanTag, (error)=>{
         if(error)
@@ -34,10 +41,17 @@ export default class TagsModule extends Component	{
       null;
     }else{
       if(!this.props.vKey) {
-        Meteor.call('pullBTag', this.props.id, tag, (error)=>{
-          if(error)
-            console.log(error);
-        });
+        if(!this.props.group) {
+          Meteor.call('pullBTag', this.props.id, tag, (error)=>{
+            if(error)
+              console.log(error);
+          });
+        }else{
+          Meteor.call('pullGTag', this.props.id, tag, (error)=>{
+            if(error)
+              console.log(error);
+          });
+        }
       }else{
         Meteor.call('pullWTag', this.props.id, this.props.vKey, tag, (error)=>{
           if(error)

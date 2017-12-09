@@ -47,24 +47,6 @@ export default class HistoryTable extends Component	{
               );
             })}
           </tbody>
-          {/*
-          maybe not necessary
-          <thead className='green cap'>
-            <tr>
-              <th>step</th>
-							<th>type</th>
-							<th>time</th>
-							<th>who</th>
-							<th>comment</th>
-							<th>inspect</th>
-              <th>{Pref.builder}</th>
-              <th>method</th>
-              <th>change</th>
-              <th>issue</th>
-              <th></th>
-            </tr>
-          </thead>
-          */}
         </table>
       </div>
     );

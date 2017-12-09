@@ -152,9 +152,9 @@ export class NCStream extends Component {
         <div className='tribCell'>
           {skip ?
             this.props.entry.snooze === true ?
-              <i className='fa fa-clock-o fa-2x'></i>
+              <i className='fas fa-clock fa-2x'></i>
               :
-              <i className='fa fa-truck fa-2x'></i>
+              <i className='fas fa-truck fa-2x'></i>
           :
             fixed ?
               <span>
@@ -165,7 +165,7 @@ export class NCStream extends Component {
                   readOnly={true}
                   onClick={this.props.inspect}
                   disabled={lockI}>
-                <i className='fa fa-check fa-lg' aria-hidden='true'></i></button>
+                <i className='fas fa-check fa-lg' aria-hidden='true'></i></button>
                 <button
                   title={Pref.reject}
                   ref={(i)=> this.rejectline = i}
@@ -173,7 +173,7 @@ export class NCStream extends Component {
                   readOnly={true}
                   onClick={this.props.reject}
                   disabled={lockI}>
-                <i className='fa fa-times fa-lg' aria-hidden='true'></i></button>
+                <i className='fas fa-times fa-lg' aria-hidden='true'></i></button>
               </span>
           :
               <button

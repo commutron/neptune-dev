@@ -50,7 +50,7 @@ export default class RMAList extends Component	{
                           className='miniAction blackT'
                           onClick={this.pullRMA.bind(this, dt.key)}
                           readOnly={true}
-                          ><i className='fa fa-times'></i>delete</button>
+                          ><i className='fas fa-times'></i>delete</button>
                       :null}
                       </span>
                     : null}
@@ -65,7 +65,7 @@ export default class RMAList extends Component	{
           </details>
           :
           <div className='centreText fade'>
-            <i className='fa fa-smile-o fa-3x' aria-hidden="true"></i>
+            <i className='fas fa-smile fa-3x' aria-hidden="true"></i>
             <p className='big'>no {Pref.nonCon}s</p>
           </div>
         }

@@ -327,7 +327,7 @@ export default class FindOps extends Component	{
                 groupAlias={lookup.alias}
                 widgetData={widgets}
                 active={activeWidgets} />
-              <GroupPanel groupData={lookup} />
+              <GroupPanel groupData={lookup} app={app} />
             </Dashboard>
           );
         }else{

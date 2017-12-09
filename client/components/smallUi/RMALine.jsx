@@ -41,7 +41,7 @@ export default class RMALine extends Component	{
                         className='miniAction blackT'
                         onClick={this.popRMA.bind(this, entry)}
                         readOnly={true}
-                        ><i className='fa fa-times'></i>Unset</button>
+                        ><i className='fas fa-times'></i>Unset</button>
                     :null}
                   </li>
               )})}
@@ -49,7 +49,7 @@ export default class RMALine extends Component	{
           </details>
           :
           <div className='centreText fade'>
-            <i className='fa fa-smile-o fa-3x' aria-hidden="true"></i>
+            <i className='fas fa-smile fa-3x' aria-hidden="true"></i>
             <p className='big'>no {Pref.rmaProcess}</p>
           </div>
         }

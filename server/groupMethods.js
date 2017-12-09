@@ -17,7 +17,7 @@ Meteor.methods({
   			updatedWho: Meteor.userId(),
   			tags: [],
   			wiki: wiki
-        });
+      });
       return true;
     }else{
       return false;
@@ -62,6 +62,29 @@ Meteor.methods({
       }
     }else{
       return 'inUse';
+    }
+  },
+  
+  // push a tag
+  pushGTag(groupId, tag) {
+    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+      GroupDB.update({_id: groupId, orgKey: Meteor.user().orgKey}, {
+        $push : { 
+          tags: tag
+        }});
+    }else{
+      null;
+    }
+  },
+  // pull a tag
+  pullGTag(groupId, tag) {
+    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+      GroupDB.update({_id: groupId, orgKey: Meteor.user().orgKey}, {
+        $pull : {
+          tags: tag
+        }});
+    }else{
+      null;
     }
   },
 
