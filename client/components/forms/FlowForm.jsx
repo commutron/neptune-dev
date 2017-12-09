@@ -204,7 +204,7 @@ export class FlowRemove extends Component	{
           onClick={this.pull.bind(this)}
           disabled={!Roles.userIsInRole(Meteor.userId(), 'edit')}>
           <label className='navIcon actionIconWrap'>
-            <i className={'fa fa-trash fa-1x redT'} aria-hidden='true'></i>
+            <i className={'fas fa-trash fa-1x redT'} aria-hidden='true'></i>
             <span className={'actionIconText redT'}>Delete</span>
           </label>
         </button>

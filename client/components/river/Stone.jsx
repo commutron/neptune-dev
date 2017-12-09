@@ -104,6 +104,9 @@ export default class Stone extends Component	{
     }else if(this.props.type === 'build'){
 			shape = 'stone iBuild';
 			ripple = ()=>this.passS(true);
+    }else if(this.props.type === 'checkpoint'){
+			shape = 'stone iPoint';
+			ripple = ()=>this.passS(true);
     }else if(this.props.type === 'test'){
 			shape = 'stone crackedTop iTest';
 			ripple = ()=>this.passS(true);
@@ -150,7 +153,7 @@ export default class Stone extends Component	{
 			  				tabIndex={-1}
 			  				disabled={lock} >
 			  				{prepend}
-								{this.props.step}
+								<i>{this.props.step}</i>
 								{apend}
 							</button>
 						</div>

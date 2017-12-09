@@ -117,7 +117,7 @@ export default class FlowForm extends Component	{
 
     return (
       <div className='split'>
-        <div className='half'>
+        <div className='min300 max400'>
           <form onSubmit={this.addStep.bind(this)}>
             <p >
               <label htmlFor='rteps' className='inlineForm'><br />
@@ -142,39 +142,49 @@ export default class FlowForm extends Component	{
             </p>
           </form>
         </div>
-        <div className='half'>
-          <ul className='stepList'>
+        <div className='wide'>
+          <div className='stepList'>
             { steps.map( (entry, index)=> {  
               return (                 
-                <li key={index} className=''>                      
-                  {entry.step} - {entry.type} - {entry.how}                 
-                  <button
-                    type='button'
-                    name='Move Up'
-                    ref={(i)=> this.up = i}
-                    className='smallAction blueT'
-                    onClick={()=>this.moveUp(steps, entry, index)}
-                    disabled={lockout || index === 0}
-                  >moveUp</button>
-                  <button
-                    type='button'
-                    name='Move Down'
-                    ref={(i)=> this.dn = i}
-                    className='smallAction blueT'
-                    onClick={()=>this.moveDown(steps, entry, index)}
-                    disabled={lockout || index === steps.length - 1}
-                  >moveDown</button>
-                  <button
-                    type='button'
-                    name='Remove'
-                    ref={(i)=> this.ex = i}
-                    className='smallAction red'
-                    onClick={()=>this.removeOne(entry)}
-                    disabled={lockout && entry.key !== 'f1n15h1t3m5t3p'}
-                  >x</button>
-                </li>
+                <div key={index}>                      
+                  <div>
+                    {entry.step}
+                  </div>
+                  <div>
+                    {entry.type}
+                  </div>
+                  <div>
+                    {entry.how}
+                  </div>
+                  <div>
+                    <button
+                      type='button'
+                      name='Move Up'
+                      ref={(i)=> this.up = i}
+                      className='smallAction blueHover'
+                      onClick={()=>this.moveUp(steps, entry, index)}
+                      disabled={lockout || index === 0}
+                    ><i className='fas fa-arrow-up'></i></button>
+                    <button
+                      type='button'
+                      name='Move Down'
+                      ref={(i)=> this.dn = i}
+                      className='smallAction blueHover'
+                      onClick={()=>this.moveDown(steps, entry, index)}
+                      disabled={lockout || index === steps.length - 1}
+                    ><i className='fas fa-arrow-down'></i></button>
+                    <button
+                      type='button'
+                      name='Remove'
+                      ref={(i)=> this.ex = i}
+                      className='smallAction redHover'
+                      onClick={()=>this.removeOne(entry)}
+                      disabled={lockout && entry.key !== 'f1n15h1t3m5t3p'}
+                    ><i className='fas fa-times'></i></button>
+                  </div>
+                </div>
               )})}
-          </ul>
+          </div>
         <br />
         <button
           className='smallAction clear up'

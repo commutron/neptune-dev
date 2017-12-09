@@ -76,27 +76,27 @@ class TopBar extends Component	{
               src='/neptune-logo-white.svg'
               className='logoSVG' />
           </a>
-          <a href='/activity' className={ this.props.link === 'act' ? 'white' : '' }>
+          <a href='/activity' className={ this.props.link === 'act' ? 'whiteT' : '' }>
             <i className="fas fa-chart-line fa-lg" aria-hidden='true'></i>
             <span className='icontext'>Activity</span>
           </a>
-          <a href='/dashboard' className={ this.props.link === 'dash' ? 'white' : '' }>
+          <a href='/dashboard' className={ this.props.link === 'dash' ? 'whiteT' : '' }>
             <i className="fas fa-tachometer-alt fa-lg" aria-hidden='true'></i>
             <span className='icontext'>Dashboard</span>
           </a>
           <RoleCheck role={'nightly'}>
             <span>
-              <a href='/production' className={ this.props.link === 'prod' ? 'white' : '' }>
+              <a href='/production' className={ this.props.link === 'prod' ? 'whiteT' : '' }>
                 <i className="fa fa-flask fa-lg" aria-hidden='true'></i>
                 <span className='icontext'>Production</span>
               </a>
-              <a href='/data' className={ this.props.link === 'data' ? 'white' : '' }>
+              <a href='/data' className={ this.props.link === 'data' ? 'whiteT' : '' }>
                 <i className="icon fa fa-flask fa-lg" aria-hidden='true'></i>
                 <span className='icontext'>Data</span>
               </a>
             </span>
           </RoleCheck>
-          <a href='/app' className={ this.props.link === 'app' ? 'white' : '' }>
+          <a href='/app' className={ this.props.link === 'app' ? 'whiteT' : '' }>
             <i className="fas fa-sliders-h fa-lg" aria-hidden='true'></i>
             <span className='icontext'>Settings</span>
           </a>

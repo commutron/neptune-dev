@@ -171,6 +171,19 @@
 .blueT {
 	color: var(--peterriver);
 }
+.blueHover {
+	color: var(--peterriver);
+	background-color: var(--clouds);
+}
+.blueHover:hover {
+  color: var(--clouds);
+	background-color: var(--peterriver);
+}
+.blueHover:disabled:hover {
+  color: var(--peterriver);
+	background-color: var(--clouds);
+	cursor: default;
+}
 .blueBorder {
   background-color: transparent;
 	border: 3px solid var(--peterriver);;
@@ -185,10 +198,24 @@
   background-color: var(--alizarin);
 }
 .darkRed {
-  background-color:  var(--pomegranate);
+  background-color: var(--pomegranate);
 }
 .redT {
   color:  var(--alizarin);
+}
+
+.redHover {
+	color: var(--alizarin);
+	background-color: var(--clouds);
+}
+.redHover:hover {
+  color: var(--clouds);
+	background-color: var(--alizarin);
+}
+.redHover:disabled:hover {
+  color: var(--alizarin);
+	background-color: var(--clouds);
+	cursor: default;
 }
 
 .orange {
@@ -251,7 +278,7 @@
 }
 
 .white {
-  color: var(--clouds);
+  background-color: var(--clouds);
 }
 .whiteT {
   color: white;
@@ -416,15 +443,6 @@
   transition: 0.4s cubic-bezier(0.2, 0.6, 0.3, 1.1);
 }
 
-.stepList {
-  margin: auto;
-  padding-right: 3em;
-  text-transform: uppercase;
-  list-style: none;
-  text-align: center;
-  background-color: rgb(48,48,48);
-}
-
 .stoneMapItem {
   width: 10%;
   margin: 0 auto;
@@ -478,6 +496,38 @@
 .proBad::-moz-progress-bar {
   background-color: #c0392b;
 }
+
+.stepList {
+  display: table;
+  width: 100%;
+  text-align: center;
+  background-color: var(--silver);
+  color: black;
+}
+
+.stepList > div {
+  display: table-row;
+  border-bottom: 1px solid var(--blackFade);
+}
+.stepList > div:last-child {
+  border-bottom: none
+}
+.stepList > div > div {
+  display: table-cell;
+  border-right: 1px solid var(--blackFade);
+  vertical-align: middle;
+  padding: 0px 3px;
+}
+.stepList > div > div:last-child {
+  border-right: none;
+  margin: 0px;
+  padding: 0px 0px;
+  width: 96px;
+  white-space: nowrap;
+  text-indent: 0px;
+  background-color: var(--clouds);
+}
+
 
 .tagFlag {
   margin: 3px 4px;
@@ -610,6 +660,16 @@
 .numBoxRadio input {
   display: none;
 }
+
+.workIcon {
+  animation: spinAround 3s infinite linear;
+}
+.workIcon:after {
+  content: '\f1ce';
+  font-family: FontAwesome;
+  font-size: 2em;
+}
+
 
 /* custom Bert alerts */
 .bert-alert {

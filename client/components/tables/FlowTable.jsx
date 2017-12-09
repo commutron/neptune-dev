@@ -20,7 +20,7 @@ export default class FlowTable extends Component	{
       <div>
         {flows.map( (entry, index)=>{ 
           return(
-            <details key={index} className='blueBorder' open={index === 0 ? true : false}>
+            <details key={entry.flowKey} className='blueBorder' open={index === 0 ? true : false}>
               <summary>{entry.title}</summary>
               <div className='balance'>
                 <table>
@@ -51,10 +51,10 @@ export default class FlowTable extends Component	{
                     </tr>
                   </thead>
                   <tbody>
-                    {entry.flow.map( (step, index)=>{
+                    {entry.flow.map( (step)=>{
                       return (
                         <FlowRow
-                          key={index}
+                          key={step.key}
                           step={step} />
                       )})}
                   </tbody>

@@ -571,9 +571,21 @@ main {
 }
 .mockTableRow {
   display: table-row;
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+}
+.mockTableRow:last-child {
+  border-bottom: none
 }
 .mockTableCell {
   display: table-cell;
+  border-right: 1px solid rgba(255,255,255,0.3);
+  vertical-align: middle;
+  padding: 0px 3px;
+}
+.mockTableCell:last-child {
+  border-right: none;
+  margin: none;
+  padding: 0px 0px;
 }
 
 .max750 {
@@ -585,9 +597,16 @@ main {
 .max400 {
   max-width: 400px;
 }
+.max300 {
+  max-width: 300px;
+}
+
 .min400 {
   min-width: 400px;
 }
-.max300 {
-  max-width: 300px;
+.min300 {
+  min-width: 300px;
+}
+.min200 {
+  min-width: 200px;
 }

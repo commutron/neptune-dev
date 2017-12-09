@@ -145,7 +145,7 @@ export default class FirstForm extends Component	{
     			  </p>
             <button
               className='action clear'>
-              <i className="fa fa-arrow-right fa-lg" aria-hidden="true"></i>
+              <i className="fas fa-arrow-right fa-lg" aria-hidden="true"></i>
               <br />Continue
             </button>
           </form>
@@ -163,7 +163,7 @@ export default class FirstForm extends Component	{
                 type='button'
                 className='miniAction bigger'
                 onClick={this.eyes.bind(this)}>
-                <i className="fa fa-eye fa-3x" aria-hidden="true"></i>
+                <i className="fas fa-eye fa-3x" aria-hidden="true"></i>
                 <br />Manual
               </button>
               <span className='space' />
@@ -171,7 +171,7 @@ export default class FirstForm extends Component	{
                 type='button'
                 className='miniAction bigger'
                 onClick={this.auto.bind(this)}>
-                <i className="fa fa-camera fa-3x" aria-hidden="true"></i>
+                <i className="fas fa-camera fa-3x" aria-hidden="true"></i>
                 <br />AOI
               </button>
             </span>
@@ -207,7 +207,7 @@ export default class FirstForm extends Component	{
                     ref={(i)=> this.ex = i}
                     className='miniAction big redT'
                     onClick={()=>this.down(entry)}>
-                    <i className="fa fa-times" aria-hidden="true"></i>
+                    <i className="fas fa-times" aria-hidden="true"></i>
                   </button>
                 </i>
             )})}
@@ -217,7 +217,7 @@ export default class FirstForm extends Component	{
                 type='button'
                 className='action clear'
                 onClick={this.goNext}>
-                <i className="fa fa-arrow-right fa-lg" aria-hidden="true"></i>
+                <i className="fas fa-arrow-right fa-lg" aria-hidden="true"></i>
                 <br />Continue
               </button>
             :null}
@@ -262,7 +262,7 @@ export default class FirstForm extends Component	{
                 ref={(i)=> this.goBad = i}
                 disabled={false}
                 onClick={this.notgood.bind(this)}>
-                <i className="fa fa-times-circle-o fa-3x" aria-hidden="true"></i>
+                <i className="fas fa-times-circle fa-3x" aria-hidden="true"></i>
                 <br />Fail
               </button>
               <span className='space' />
@@ -272,7 +272,7 @@ export default class FirstForm extends Component	{
                 ref={(i)=> this.go = i}
                 disabled={secondOpinion}
                 onClick={this.pass.bind(this)}>
-                <i className="fa fa-check-circle-o fa-3x" aria-hidden="true"></i>
+                <i className="fas fa-check-circle fa-3x" aria-hidden="true"></i>
                 <br />Pass
               </button>
             </span>

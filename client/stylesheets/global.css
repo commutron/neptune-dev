@@ -69,7 +69,7 @@ button:focus {
   outline: none;
 }
 button:disabled, button:disabled:hover, button:disabled span, button:disabled label {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 

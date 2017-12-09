@@ -8,44 +8,46 @@ export default class NoteLine extends Component	{
     const dt = this.props;
     
     return (
-      <div className='mockTable max400'>
-        <div className='mockTableGroup'>
+      <div className='mockTable min300 max400'>
+        <div className='mockTableGroup cap'>
         {dt.items === 0 ?
           <div className='mockTableRow'>
             <div className='mockTableCell'>
-              <i className='fa fa-hourglass-start fa-2x' aria-hidden='true'></i>
-              <i>No {Pref.item}s created</i>
+              <i className='fas fa-hourglass-start fa-lg' aria-hidden='true'></i>
+              <i> No {Pref.item}s created</i>
             </div>
           </div>
         : null}
-        {!dt.river ? 
-          <div className='mockTableRow'>
-            <div className='mockTableCell'>
-              <i className='fa fa-exclamation-circle fa-2x' aria-hidden='true'></i>
-              <i>No {Pref.buildFlow} selected</i>
-            </div>
+        <div className='mockTableRow'>
+          <div className='mockTableCell'>
+            {!dt.river ?
+              <span>
+                <i className='fas fa-exclamation-circle fa-lg' aria-hidden='true'></i>
+                <i> No {Pref.buildFlow}</i>
+              </span>
+            :
+              <span>
+                <i className='fas fa-check-square fa-lg greenT' aria-hidden='true'></i>
+                <i> {Pref.buildFlow}: <b>{dt.riverTitle}</b></i>
+              </span>
+            }
           </div>
-        :
-          <div className='mockTableRow'>
-            <div className='mockTableCell'>
-              <i>Current {Pref.buildFlow}: <b>{dt.riverTitle}</b></i>
-            </div>
+        </div>
+        <div className='mockTableRow'>
+          <div className='mockTableCell'>
+            {!dt.riverAlt ? 
+              <span>
+                <i className="fas fa-question-circle fa-lg" aria-hidden='true'></i>
+                <i> No {Pref.buildFlowAlt}</i>
+              </span>
+            :
+              <span>
+                <i className='fas fa-check-square fa-lg greenT' aria-hidden='true'></i>
+                <i> {Pref.buildFlowAlt}: <b>{dt.riverAltTitle}</b></i>
+              </span>
+            }
           </div>
-        }
-        {!dt.riverAlt ? 
-          <div className='mockTableRow'>
-            <div className='mockTableCell'>
-              <i className="fa fa-question-circle fa-2x" aria-hidden='true'></i>
-              <i>No {Pref.buildFlowAlt} selected</i>
-            </div>
-          </div>
-        :
-          <div className='mockTableRow'>
-            <div className='mockTableCell'>
-              <i>Current {Pref.buildFlowAlt}: <b>{dt.riverAltTitle}</b></i>
-            </div>
-          </div>
-        }
+        </div>
         </div>
       </div>
     );

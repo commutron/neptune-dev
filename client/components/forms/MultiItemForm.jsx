@@ -19,6 +19,8 @@ export default class MultiItemForm extends Component {
       hold: [],
       work: false
     };
+    this.checkRange = this.checkRange.bind(this);
+    this.addItem = this.addItem.bind(this);
   }
   
   setDigit(num) {
@@ -115,6 +117,7 @@ export default class MultiItemForm extends Component {
     const auth = Roles.userIsInRole(Meteor.userId(), 'run');
     const dig = this.state.digits;
     const today = moment().format('YYMMDD');
+    let iconSty = this.state.work ? 'workIcon' : 'transparent';
 
     return (
       <Model
@@ -124,7 +127,7 @@ export default class MultiItemForm extends Component {
         icon='fa-qrcode'
         lock={!auth || !this.props.more} >
         <div className='centre'>
-          <form onSubmit={this.addItem.bind(this)} autoComplete='off'>
+          <form onSubmit={this.addItem} autoComplete='off'>
             <p>
               <input
                 type='radio'
@@ -174,7 +177,7 @@ export default class MultiItemForm extends Component {
                 defaultValue={today}
                 inputMode='numeric'
                 required
-                onInput={this.checkRange.bind(this)} />
+                onInput={this.checkRange} />
               <label htmlFor='strt'>First {Pref.item} Number</label>
             </p>
             <p>
@@ -189,15 +192,13 @@ export default class MultiItemForm extends Component {
                 defaultValue={today}
                 inputMode='numeric'
                 required
-                onInput={this.checkRange.bind(this)} />
+                onInput={this.checkRange} />
               <label htmlFor='nd'>Last {Pref.item} Number</label>
             </p>
             <br />
             <div className='centre'>
-              {this.state.work ?
-                <i className='fa fa-circle-o-notch fa-spin' aria-hidden='true'></i>
-              : null }
-              <output ref={(i)=> this.message = i} />
+              <i className={iconSty}></i>
+              <output ref={(i)=> this.message = i} value='' />
               {this.state.hold.length > 0 ?
                 <b>duplicates not created</b>
               :null}
