@@ -19,6 +19,7 @@ export default class StoneSelect extends Component	{
   }
   
   unlock() {
+    let speed = !Meteor.user().unlockSpeed ? 2000 : Meteor.user().unlockSpeed; 
     Meteor.setTimeout(()=> {
     	if(!Roles.userIsInRole(Meteor.userId(), 'inspect')) {
     		null;
@@ -28,7 +29,7 @@ export default class StoneSelect extends Component	{
   		    this.setState({lock: false})
   		  : null;
   	  }
-  	}, 2000);
+  	}, speed);
   }
   
   

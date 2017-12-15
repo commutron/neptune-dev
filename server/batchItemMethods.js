@@ -280,8 +280,6 @@ Meteor.methods({
   addHistory(batchId, bar, key, step, type, com, pass) {
     if(type === 'inspect' && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
       return false;
-    }else if(type === 'test' && !Roles.userIsInRole(Meteor.userId(), 'test')) {
-      return false;
     }else{
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
         $push : { 'items.$.history': {
@@ -318,6 +316,26 @@ Meteor.methods({
             change: diff,
             issue: ng
           }
+      }}});
+      return true;
+    }
+  },
+  
+  // ship failed test
+  addTest(batchId, bar, key, step, type, com, pass, more) {
+    if(type === 'test' && !Roles.userIsInRole(Meteor.userId(), 'test')) {
+      return false;
+    }else{
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
+        $push : { 'items.$.history': {
+          key: key,
+          step: step,
+          type: type,
+          good: pass,
+          time: new Date(),
+          who: Meteor.userId(),
+          comm : com,
+          info: more
       }}});
       return true;
     }
@@ -482,9 +500,7 @@ Meteor.methods({
             rejectTime: new Date(),
             rejectWho: Meteor.userId()
           }
-        }
-      });
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+        },
         $set : {
           'nonCon.$.fix': false
         }
@@ -504,12 +520,12 @@ Meteor.methods({
     }else{null}
   },
   
-  //potentialy replaced by reject
-  UnFixNC(batchId, ncKey) {
+  // trigger a re-inspect
+  reInspectNC(batchId, ncKey) {
     if(Roles.userIsInRole(Meteor.userId(), 'inspect')) {
 		  BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
   			$set : { 
-  			  'nonCon.$.fix': false
+  			  'nonCon.$.inspect': false
   			}
   		});
     }else{null}

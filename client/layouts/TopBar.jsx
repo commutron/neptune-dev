@@ -9,7 +9,7 @@ import InitialSetup from '../views/InitialSetup.jsx';
 import Login from '../views/Login.jsx';
 import ActivateUser from '../components/forms/ActivateUser.jsx';
 import Chill from '../components/tinyUi/Chill.jsx';
-import TimeLink from '../components/uUi/TimeLink.jsx';
+import ExternalLink from '../components/uUi/ExternalLink.jsx';
 
 class TopBar extends Component	{
   
@@ -102,7 +102,8 @@ class TopBar extends Component	{
           </a>
         </nav>
         <span className='navSpacer'></span>
-        <TimeLink go={this.props.app.timeClock} />
+        <ExternalLink go={this.props.app.helpDocs} title='Help' icon='far fa-question-circle' />
+        <ExternalLink go={this.props.app.timeClock} title='Time Clock' icon='far fa-clock' />
         <Chill name={this.props.user}/>
       </div>
     );

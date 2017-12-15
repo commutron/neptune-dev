@@ -97,12 +97,17 @@ export default class PrefPanel extends Component {
               </ul>
           
             <hr />
-              
+            
             <h2>{Pref.instruct} Root Address</h2>
-            <i>The root adress for embeded work instructions</i>
+            <i>The root address for embeded work instructions</i>
             <OptionAdd action='wi' title='address' />
             <p>current: <i className='clean'>{dt.instruct}</i></p>
-              
+            
+            <h2>{Pref.helpDocs} Address</h2>
+            <i>The address for Neptune documentation</i>
+            <OptionAdd action='help' title='address' />
+            <p>current: <i className='clean'>{!dt.helpDocs ? null : dt.helpDocs}</i></p>
+            
             <h2>{Pref.timeClock} Address</h2>
             <i>For a 3rd party, employee time tracker</i>
             <OptionAdd action='time' title='address' />

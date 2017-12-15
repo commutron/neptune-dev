@@ -141,6 +141,18 @@ Meteor.methods({
     }
   },
   
+  setHelpDocs(go) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $set : { 
+          helpDocs : go
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
   setInstruct(go) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {

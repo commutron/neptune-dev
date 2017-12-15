@@ -69,13 +69,16 @@ export class HistoryRow extends Component {
                    
      let good = dt.good ? <i className='clean greenT'>G{cancel}</i> : <b className='up redT'>{Pref.ng}</b>;
      
-     const info = typeof dt.info === 'object';
+     const infoF = dt.type === 'first' && typeof dt.info === 'object';
+     const infoT = dt.type === 'test' && typeof dt.info === 'string';
      
-     let inspect = info ? dt.info.verifyMethod : '';
-     let builder = info ? dt.info.builder.map( (e, i)=>{ return( <UserNice key={i} id={e} /> ) }) : '';
-     let method = info ? dt.info.buildMethod : '';
-     let change = info ? dt.info.change : '';
-     let issue = info ? dt.info.issue : '';
+     let inspect = infoF ? dt.info.verifyMethod : '';
+     let builder = infoF ? dt.info.builder.map( (e, i)=>{ return( <UserNice key={i} id={e} /> ) }) : '';
+     let method = infoF ? dt.info.buildMethod : '';
+     let change = infoF ? dt.info.change : '';
+     let issue = infoF ? dt.info.issue : infoT ? dt.info : '';
+     
+     
                    
     return(
       <tr>

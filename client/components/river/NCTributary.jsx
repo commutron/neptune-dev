@@ -157,7 +157,7 @@ export class NCStream extends Component {
               <i className='fas fa-truck fa-2x'></i>
           :
             fixed ?
-              <span>
+              <div className='twoSqIcons'>
                 <button
                   title={Pref.inspect}
                   ref={(i)=> this.inspectline = i}
@@ -174,7 +174,7 @@ export class NCStream extends Component {
                   onClick={this.props.reject}
                   disabled={lockI}>
                 <i className='fas fa-times fa-lg' aria-hidden='true'></i></button>
-              </span>
+              </div>
           :
               <button
                 title={Pref.repair}

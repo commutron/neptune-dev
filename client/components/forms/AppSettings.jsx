@@ -13,6 +13,7 @@ export class OptionAdd extends Component	{
                    act === 'anc' ? 'addAncOp' :
                    act === 'tool' ? 'addToolOp' :
                    act === 'tag' ? 'addTagOp' :
+                   act === 'help' ? 'setHelpDocs' :
                    act === 'wi' ? 'setInstruct' :
                    act === 'time' ? 'setTimeClock' : false;
     let newOp = this.iop.value.trim();

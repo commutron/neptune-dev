@@ -24,6 +24,7 @@ Meteor.methods({
               org: x.org,
               orgKey: x.orgKey,
               pin: false,
+              unlockSpeed: 2000,
               watchlist: [],
               inbox: []
             }
@@ -150,7 +151,7 @@ Meteor.methods({
   },
   
   setPin(old, pin) {
-    if(old === Meteor.user().pin || !Meteor.user().pin) {
+    if(!Meteor.user().pin || Meteor.user().pin === false || Meteor.user().pin === old) {
       Meteor.users.update(Meteor.userId(), {
           $set: {
             pin: pin,
@@ -172,6 +173,16 @@ Meteor.methods({
         }
       });
     }else{null}
+  },
+  
+  setSpeed(time) {
+    let setTime = !time ? 2000 : time;
+    Meteor.users.update(Meteor.userId(), {
+      $set: {
+        unlockSpeed: setTime,
+      }
+    });
+    return true;
   },
   
   

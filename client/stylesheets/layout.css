@@ -588,6 +588,14 @@ main {
   padding: 0px 0px;
 }
 
+.twoSqIcons {
+  width: 90px;
+}
+@media screen and (max-width: 1000px) {
+  .twoSqIcons {
+    width: 80px;
+  } 
+}
 .max750 {
   max-width: 750px;
 }

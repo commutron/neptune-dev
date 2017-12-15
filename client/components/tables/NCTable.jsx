@@ -67,6 +67,7 @@ export class NCRow extends Component {
    };
     this.edit = this.edit.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleReInspect = this.handleReInspect.bind(this);
     this.popNC = this.popNC.bind(this);
   }
   edit() {
@@ -93,6 +94,16 @@ export class NCRow extends Component {
     }else{
       this.setState({ edit: false });
     }
+  }
+  
+  handleReInspect() {
+    const id = this.props.id;
+    const ncKey = this.props.entry.key;
+    Meteor.call('reInspectNC', id, ncKey, (error)=> {
+			if(error)
+			  console.log(error);
+			this.edit();
+		});
   }
   
   popNC() {
@@ -132,12 +143,12 @@ export class NCRow extends Component {
     const edit = Roles.userIsInRole(Meteor.userId(), 'inspect') && !done;
     
     let inSty = {
-     width: '150px',
+      width: '125px',
     };
     
     let inClk = { 
-    minWidth: '20px',
-    margin: '0 10px'
+      minWidth: '15px',
+      margin: '0 5px'
     };
     
     if(this.state.edit === true) {
@@ -145,7 +156,7 @@ export class NCRow extends Component {
         <tbody>
           <tr className='editStandout'>
           {multi ? <td>{dt.serial}</td> : null}
-            <td colSpan='7'>
+            <td colSpan='6'>
               <input
                 type='text'
                 ref={(i)=> this.ncRef = i}
@@ -177,15 +188,26 @@ export class NCRow extends Component {
                   })}
               </select>
             </td>
-            <td colSpan='3'>
+            <td colSpan='4'>
               <span className='rAlign'>
+                {ins ?
+                  <button
+                    className='miniAction yellowT'
+                    onClick={this.handleReInspect}
+                    style={inClk}
+                    readOnly={true}
+                    disabled={done}>
+                    <i className='fas fa-redo fa-lg'></i>
+                    <i className='med'> ReInspect</i>
+                  </button>
+                :null}
                 <button
                   className='miniAction greenT'
                   onClick={this.handleChange}
                   style={inClk}
                   readOnly={true}>
-                  <i className='fas fa-arrow-circle-down fa-2x'></i>
-                  <i className='big'>Save</i>
+                  <i className='fas fa-arrow-circle-down fa-lg'></i>
+                  <i className='med'> Save</i>
                 </button>
                 {remove ?
                   <button
@@ -193,8 +215,8 @@ export class NCRow extends Component {
                     onClick={this.popNC}
                     style={inClk}
                     readOnly={true}>
-                    <i className='fas fa-times fa-2x'></i>
-                    <i className='big'>Remove</i>
+                    <i className='fas fa-times fa-lg'></i>
+                    <i className='med'> Remove</i>
                   </button>
                 :null}
                 <button
@@ -202,8 +224,8 @@ export class NCRow extends Component {
                   onClick={this.edit}
                   style={inClk}
                   readOnly={true}>
-                  <i className='fas fa-ban fa-2x'></i>
-                  <i className='big'>Cancel</i>
+                  <i className='fas fa-ban fa-lg'></i>
+                  <i className='med'> Cancel</i>
                 </button>
               </span>
             </td>
@@ -226,7 +248,7 @@ export class NCRow extends Component {
           <td>{snoozed ? 'Snoozed, ' : ''}{skipped}</td>
           <td>{comment}</td>
           <td>
-            {!edit || ins ?
+            {!edit || done ?
               null :
               <button
                 className='miniAction blueT'

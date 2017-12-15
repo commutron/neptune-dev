@@ -5,6 +5,7 @@ import AccountsUI from '../../../components/bigUi/AccountsUI.jsx';
 import { AdminDown } from '../../../components/forms/AdminForm.jsx';
 import SetPin from '../../../components/forms/SetPin.jsx';
 import LogoutOther from '../../../components/uUi/LogoutOther.jsx';
+import UserSpeedSet from '../../../components/forms/UserSpeedSet.jsx';
 import EmailForm from '../../../components/forms/EmailForm.jsx';
 import { PermissionHelp } from './AccountsManagePanel';
 
@@ -26,6 +27,9 @@ export default class AccountPanel extends Component {
             <p>organization: <i className='greenT'>{Meteor.user().org}</i></p>
             <br />
             <LogoutOther />
+            <br />
+            <br />
+            <UserSpeedSet />
             <br />
             <EmailForm />
           </div>

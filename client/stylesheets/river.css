@@ -159,10 +159,10 @@
   word-wrap: break-word;
 }
 
-.tribRow > div:nth-child(3) {
+.tribRow .tribCell:nth-child(3) {
   width: 90px;
+  margin: 0;
   padding: 0;
-  position: relative;
 }
 
 .pebble {
@@ -191,6 +191,7 @@
 }
 
 .granule {
+  border: none;
   line-height: 1.5rem;
   font-size: 0.9rem;
   width: 45px;
@@ -248,12 +249,6 @@
     min-width: 200px;
     max-width: 200px;
   }
-  .ncTrib {
-    font-size: 0.9rem;
-  }
-  .tribRow > div:nth-child(3) {
-    width: 80px;
-  }
   .pebble {
     width: 80px;
   	height: 40px;
@@ -262,6 +257,12 @@
     line-height: 1rem;
     width: 40px;
     height: 40px;
+  }
+  .ncTrib {
+    font-size: 0.9rem;
+  }
+  .tribRow .tribCell:nth-child(3) {
+    width: 80px;
   }
   .space {
     padding: 10px;

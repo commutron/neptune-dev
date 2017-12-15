@@ -18,6 +18,7 @@ class Pref {
     this.floor = 'floor';
     this.instruct = 'instructions';
     this.docs = 'pisces';
+    this.helpDocs = 'help';
     this.timeClock = 'time clock';
     // terminology
     this.admin = 'org admin';
