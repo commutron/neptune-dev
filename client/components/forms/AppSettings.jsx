@@ -121,3 +121,35 @@ export class FinishTrack extends Component {
       );
   }
 }
+
+export const SetScale = ({ curScale })=> {
+  let df = curScale || { low: 5, high: 10, max: 25 };
+  
+  function handle(e) {
+    e.preventDefault();
+    let l = this.low.value;
+    let h = this.high.value;
+    let m = this.max.value;
+    Meteor.call('addNCScale', l, h, m, (error, reply)=>{
+      if(error)
+        console.log(error);
+      if(reply) {
+        Bert.alert(Alert.success);
+      }else{
+        Bert.alert(Alert.danger);
+      }
+    });
+  }
+  
+  return(
+    <div>
+      <label htmlFor='scaleForm'>Set Scale</label>
+      <form id='scaleForm' className='inlineForm' onSubmit={(e)=>handle(e)}>
+        <input type='number' id='low' className='miniNumIn' defaultValue={df.low} />
+        <input type='number' id='high' className='miniNumIn' defaultValue={df.high} />
+        <input type='number' id='max' className='miniNumIn' defaultValue={df.max} />
+        <button type='submit' className='smallAction clear greenT'>Save</button>
+      </form>
+    </div>
+  );
+};

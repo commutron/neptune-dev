@@ -247,7 +247,6 @@ Meteor.methods({
   },
   
   //// fork, use alternative flow
-  
   forkItem(id, bar, choice) {
     if(Meteor.userId()) {
       BatchDB.update({_id: id, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
@@ -261,7 +260,6 @@ Meteor.methods({
   },
   
   //// unit corection
-  
   setItemUnit(id, bar, unit) {
     const auth = Roles.userIsInRole(Meteor.userId(), 'run');
     if(auth && unit > 0 && unit < 100) {

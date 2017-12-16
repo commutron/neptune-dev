@@ -386,6 +386,11 @@
   width: 50%;
 }
 
+.miniNumIn {
+  width: 60px;
+  border-left: 1px solid black;
+}
+
 .hiddenInput > textarea:disabled {
   opacity: 1;
   border: none;

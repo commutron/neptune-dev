@@ -152,6 +152,7 @@ export default class BatchPanel extends Component	{
                   <NonConOverview
                     ncOp={a.nonConOption}
                     trOp={a.trackOption}
+                    lstOp={a.lastTrack}
                     nonCons={b.nonCon} />
                 </div>
                 <div className='centre'>

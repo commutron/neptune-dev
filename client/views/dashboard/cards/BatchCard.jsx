@@ -5,8 +5,9 @@ import Pref from '/client/global/pref.js';
 
 import Tabs from '../../../components/smallUi/Tabs.jsx';
 
-import JumpText from '../../../components/tinyUi/JumpText.jsx';
+//import JumpText from '../../../components/tinyUi/JumpText.jsx';
 import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
+import NonConMiniSatus from '/client/components/charts/NonConMiniStatus.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';
 import BlockNotes from '../../../components/smallUi/BlockNotes.jsx';
 import TagsModule from '../../../components/bigUi/TagsModule.jsx';
@@ -17,10 +18,10 @@ export default class BatchCard extends Component	{
 
     const b = this.props.batchData;
     const w = this.props.widgetData;
-    const g = this.props.groupData;
+    //const g = this.props.groupData;
     const a = this.props.app;
     
-    const v = w.versions.find( x => x.versionKey === b.versionKey );
+    //const v = w.versions.find( x => x.versionKey === b.versionKey );
     
     const flow = w.flows.find( x => x.flowKey === b.river);
     const riverFlow = flow ? flow.flow : [];
@@ -57,7 +58,11 @@ export default class BatchCard extends Component	{
           :null}
           
           <Tabs
-            tabs={['Info', 'Progress']}
+            tabs={[
+              <i className='fas fa-info-circle' data-fa-transform='down-2'></i>, 
+              <i className='fas fa-tasks' data-fa-transform='down-2'></i>, 
+              <i className='fas fa-thumbs-down' data-fa-transform='down-2'></i>
+            ]}
             wide={true}
             stick={false}>
             
@@ -74,6 +79,10 @@ export default class BatchCard extends Component	{
             
             <div className='space cap'>
               <StepsProgress batchData={b} flow={riverFlow} flowAlt={riverAltFlow} mini={true} />
+            </div>
+            
+            <div className='space cap'>
+              <NonConMiniSatus noncons={b.nonCon} app={a} />
             </div>
             
           </Tabs>

@@ -68,7 +68,6 @@ const NCAdd = ({ id, barcode, app })=> {
         placeholder={Pref.nonConRef}
         disabled={lock}
         required />
-
       <select 
         id='ncType'
         className='cap redIn'

@@ -28,6 +28,11 @@ Meteor.methods({
             how: 'finish'
           },
           nonConOption: [],
+          ncScale: {
+            low: Number(5),
+            high: Number(10),
+            max: Number(25)
+          },
           ancillaryOption: [],
           tagOption: [],
           instruct: '',
@@ -110,6 +115,22 @@ Meteor.methods({
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $push : { 
           nonConOption : value
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  addNCScale(low, high, max) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $set : { 
+          ncScale : {
+            low: Number(low),
+            high : Number(high),
+            max : Number(max)
+          }
       }});
       return true;
     }else{

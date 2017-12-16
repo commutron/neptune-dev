@@ -8,7 +8,7 @@ export default class NonConOverview extends Component {
   
   ncCounts() {
     const dprt = new Set( Array.from(this.props.trOp, x => x.step) );
-
+    dprt.add(this.props.lstOp.step);
     let splitByStep = [];
     for(let stp of dprt) {
       let match = this.props.nonCons.filter( y => y.where === stp );

@@ -3,6 +3,7 @@ import Pref from '/client/global/pref.js';
 
 import {OptionAdd} from '/client/components/forms/AppSettings';
 import {FinishTrack} from '/client/components/forms/AppSettings';
+import {SetScale} from '/client/components/forms/AppSettings';
 
 export default class PrefPanel extends Component {
 
@@ -58,6 +59,10 @@ export default class PrefPanel extends Component {
                   return ( <li key={index}><i>{entry}</i></li> );
                 })}
             </ul>
+            
+            <hr />
+            
+            <SetScale curScale={dt.ncScale || null} />
           
           </div>
         </fieldset>    
