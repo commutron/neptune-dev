@@ -1,33 +1,26 @@
-import React, {Component} from 'react';
+import React from 'react';
 
-//<MiniBar title={} total={} value={} />
-
-export default class MiniBar extends Component	{
+const MiniBar = ({ title, count, total })=> {
+  let v = count;
+  let t = total;
   
-  render() {
-    
-    const v = this.props.count;
-    const t = this.props.total;
-    
-    let name = {
-      position: 'relative',
-      top: '0.75rem',
-    };
-    
-    let bar = {
-      width: '100%'
-    };
-    
-    let num = {
-      textAlign: 'right'
-    };
-    
-    return(
-      <span className='wide'>
-        <p style={name} className='cap'>{this.props.title}</p>
-        <progress style={bar} className='proGood' value={v} max={t}></progress>
-        <p style={num}>{v}/{t}</p>
-      </span>
-    );
-  }
-}
+  let name = {
+    position: 'relative',
+    top: '0.75rem',
+  };
+  let bar = {
+    width: '100%'
+  };
+  let num = {
+    textAlign: 'right'
+  };
+  return(
+    <div className='wide'>
+      <p style={name} className='cap'>{title}</p>
+      <progress style={bar} className='proGood' value={v} max={t}></progress>
+      <p style={num}>{v}/{t}</p>
+    </div>
+  );
+};
+
+export default MiniBar;

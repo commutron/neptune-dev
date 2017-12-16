@@ -23,5 +23,4 @@ RoleCheck.propTypes = {
   ]).isRequired
 };
 
-
 export default RoleCheck;

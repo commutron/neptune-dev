@@ -109,8 +109,8 @@ export default class StepsProgress extends Component	{
     const calcItem = this.state.countCalc === 'item' ? true : false;
     
     return (
-      <div className='centreRow'>
-        <div className='numBoxRadio'>
+      <div>
+        <div className='numBoxRadio centreRow'>
           <input
             type='radio'
             id='calcI'
@@ -179,29 +179,23 @@ export default class StepsProgress extends Component	{
   }
 }
 
-export class StepDisplay extends Component {
-  
-  render() {
-    
-    const dt = this.props;
-    const title = dt.type === 'finish' ||
-                  dt.type === 'test' ?
-                  dt.step :
-                  dt.step + ' ' + dt.type;
-    
-    if(this.props.mini) {
-      return(
-        <MiniBar
-          title={title}
-          count={dt.count}
-          total={dt.total} />
-      );
-    }
+const StepDisplay = ({ mini, step, type, count, total })=> {
+  const title = type === 'finish' ||
+                type === 'test' ?
+                step :
+                step + ' ' + type;
+  if(mini) {
     return(
-      <ProgPie
+      <MiniBar
         title={title}
-        count={dt.count}
-        total={dt.total} />
+        count={count}
+        total={total} />
     );
   }
-}
+  return(
+    <ProgPie
+      title={title}
+      count={count}
+      total={total} />
+  );
+};

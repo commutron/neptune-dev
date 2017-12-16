@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Pref from '/client/global/pref.js';
+//import Pref from '/client/global/pref.js';
 
 import StoneSelect from './StoneSelect.jsx';
 import RiverFork from './RiverFork.jsx';
@@ -65,7 +65,8 @@ export default class River extends Component	{
           flows={w.flows}
           river={b.river}
           riverAlt={b.riverAlt} />
-        )}
+      );
+		}
 
     return (
 			<div>
@@ -75,7 +76,7 @@ export default class River extends Component	{
             id={b._id}
             barcode={i.serial}
             rma={rma}
-            cascades={b.cascade}
+            cascadeData={b.cascade}
             rmaList={i.rma}
             allItems={b.items} />
           :null}
@@ -96,7 +97,8 @@ export default class River extends Component	{
             users={this.props.users}
             methods={a.toolOption} />
         </div>
+        
 			</div>
-			);
+		);
   }
 }

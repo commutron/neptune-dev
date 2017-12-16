@@ -4,59 +4,45 @@ import Pref from '/client/global/pref.js';
 
 import UserNice from '../smallUi/UserNice.jsx';
 
-// requires
-/*
-id={b._id}
-nc={nc}
-done={done}
-*/
-
-export default class NCTable extends Component	{
-
-  render() {
-    
-    return (
-      <div>
-      {this.props.nc.length > 0 ?
-        <table className='wide'>
-          <thead className='red cap'>
-            <tr>
-              <th>Ref</th>
-							<th>type</th>
-							<th>where</th>
-							<th>time</th>
-							<th>who</th>
-							<th>fixed</th>
-              <th>inspected</th>
-              <th>skipped</th>
-              <th>comment</th>
-              <th></th>
-            </tr>
-          </thead>
-          {this.props.nc.map( (entry, index)=>{
-            return (
-              <NCRow
-                key={index}
-                entry={entry}
-                id={this.props.id}
-                done={this.props.done}
-                multi={this.props.multi}
-                ncOps={this.props.ncOps}
-                flowSteps={this.props.flowSteps} />
-            );
-          })}
-        </table>
-      :
-        <div className='centreText fade'>
-          <i className='fas fa-smile fa-3x' aria-hidden="true"></i>
-          <p className='big'>no {Pref.nonCon}s</p>
-        </div>
-      }
+const NCTable = ({ id, nc, done, multi, ncOps, flowSteps })=> (
+  <div>
+    {nc.length > 0 ?
+      <table className='wide'>
+        <thead className='red cap'>
+          <tr>
+            <th>Ref</th>
+						<th>type</th>
+						<th>where</th>
+						<th>time</th>
+						<th>who</th>
+						<th>fixed</th>
+            <th>inspected</th>
+            <th>skipped</th>
+            <th>comment</th>
+            <th></th>
+          </tr>
+        </thead>
+        {nc.map( (entry, index)=>{
+          return (
+            <NCRow
+              key={index}
+              entry={entry}
+              id={id}
+              done={done}
+              multi={multi}
+              ncOps={ncOps}
+              flowSteps={flowSteps} />
+          );
+        })}
+      </table>
+    :
+      <div className='centreText fade'>
+        <i className='fas fa-smile fa-3x' aria-hidden="true"></i>
+        <p className='big'>no {Pref.nonCon}s</p>
       </div>
-    );
-  }
-}
-
+    }
+  </div>
+);
 
 export class NCRow extends Component {
   
@@ -277,3 +263,5 @@ export class NCRow extends Component {
     );
   }
 }
+
+export default NCTable;

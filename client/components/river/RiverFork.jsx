@@ -2,13 +2,6 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import Alert from '/client/global/alert.js';
 
-// props
-/// id={b._id}
-/// barcode={i.serial}
-/// river={b.river}
-/// riverAlt={b.riverAlt}
-/// flows={w.flows}
-
 function activate(id, serial, choice) {
   Meteor.call('forkItem', id, serial, choice, (error, reply)=>{
     if(error)
@@ -17,7 +10,7 @@ function activate(id, serial, choice) {
   });
 }
     
-function RiverFork({ id, serial, flows, river, riverAlt }) {
+const RiverFork = ({ id, serial, flows, river, riverAlt })=> {
   
   let flow = flows.find(x => x.flowKey === river);
   flow ? flow = flow.title : flow = false;
@@ -26,7 +19,7 @@ function RiverFork({ id, serial, flows, river, riverAlt }) {
   
   let sty = { height: '5em', fontSize: '1.5rem' };
   
-  return (
+  return(
     <div className='wide'>
       <button
         title='regular flow'
@@ -44,6 +37,6 @@ function RiverFork({ id, serial, flows, river, riverAlt }) {
       >{flowAlt}</button>
     </div>
   );
-}
+};
 
 export default RiverFork;

@@ -1,18 +1,12 @@
-import React, {Component} from 'react';
+import React from 'react';
 
-export default class UserNice extends Component {
-  
-  find() {
-    const name = Meteor.users.findOne({_id : this.props.id});
-    let nice = 'not found';
-    name ? nice = name.username : false;
-    return nice;
-  }
+const UserNice = ({ id })=> {
+  const name = Meteor.users.findOne({_id : id});
+  let nice = 'not found';
+  name ? nice = name.username : false;
+  return (
+    <i className='cap'>{nice}</i>
+  );
+};
 
-  render() {
-
-    return (
-      <i className='cap'>{this.find()}</i>
-    );
-  }
-}
+export default UserNice;

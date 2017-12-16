@@ -7,7 +7,7 @@ import RMAFall from './RMAFall.jsx';
 /// id={b._id}
 /// barcode={i.barcode}
 /// rma={rma} // relevent cascades
-/// cascades={b.cascade} // all cascades
+/// cascadeData={b.cascade} // all cascades
 /// rmaList={i.rma}
 
 export default class RMACascade extends Component {
@@ -36,23 +36,19 @@ export default class RMACascade extends Component {
   }
   
   render() {
-    
     return (
       <div className='wide'>
-        {
+        {this.state.fall ?
         // RMA activating available after current RMAs are finished
-        this.state.fall ?
           <RMAFall
             id={this.props.id}
-            cascades={this.props.cascades}
+            cascadeData={this.props.cascadeData}
             barcode={this.props.barcode}
             rma={this.props.rmaList}
             allItems={this.props.allItems} />
         :null}
-      
-        {
-        // list rmas active on this item
-        this.props.rma.map( (entry, index)=>{
+        {this.props.rma.map( (entry, index)=>{
+        // list rmas active on this item  
           if(index == this.props.rma.length - 1) {
           // current rma is bold
             return(
@@ -67,8 +63,8 @@ export default class RMACascade extends Component {
                 <i>RMA: {entry.rmaId}, {moment(entry.time).calendar()}</i>
               </div>
               );
-          }})}
-
+          }})
+        }
       </div>
     );
   }

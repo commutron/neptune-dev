@@ -4,24 +4,9 @@ import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import InOutWrap from '/client/components/tinyUi/InOutWrap.jsx';
 import Pref from '/client/global/pref.js';
 
-// props
-/// id={b._id}
-/// nonCons={nonCons}
+const NCTributary = ({ id, serial, nonCons, sType })=> {
 
-export default class NCTributary extends Component {
-  
-  constructor() {
-    super();
-    this.handleFix = this.handleFix.bind(this);
-    this.handleInspect = this.handleInspect.bind(this);
-    this.handleReject = this.handleReject.bind(this);
-    this.handleSkip = this.handleSkip.bind(this);
-    this.handleSnooze = this.handleSnooze.bind(this);
-    this.handleUnSkip = this.handleUnSkip.bind(this);
-  }
-  
-  handleFix(ncKey) {
-    const id = this.props.id;
+  function handleFix(ncKey) {
     Meteor.call('fixNC', id, ncKey, (error)=> {
 			if(error)
 			  console.log(error);
@@ -30,8 +15,7 @@ export default class NCTributary extends Component {
 		findBox.focus();
   }
 
-  handleInspect(ncKey) {
-    const id = this.props.id;
+  function handleInspect(ncKey) {
     Meteor.call('inspectNC', id, ncKey, (error)=> {
 			if(error)
 			  console.log(error);
@@ -40,8 +24,7 @@ export default class NCTributary extends Component {
 		findBox.focus();
   }
     
-  handleReject(ncKey, fixTime, fixWho) {
-    const id = this.props.id;
+  function handleReject(ncKey, fixTime, fixWho) {
     Meteor.call('rejectNC', id, ncKey, fixTime, fixWho, (error)=> {
 			if(error)
 			  console.log(error);
@@ -50,63 +33,57 @@ export default class NCTributary extends Component {
 		findBox.focus();
   }
     
-  handleSkip(ncKey) {
-    const id = this.props.id;
+  function handleSkip(ncKey) {
     Meteor.call('skipNC', id, ncKey, (error)=> {
 			if(error)
         console.log(error);
 		});
 	}
 	
-	handleSnooze(ncKey) {
-	  const id = this.props.id;
+	function handleSnooze(ncKey) {
     Meteor.call('snoozeNC', id, ncKey, (error)=> {
 			if(error)
         console.log(error);
 		});
 	}
 	
-	handleUnSkip(ncKey) {
-	  const id = this.props.id;
+	function handleUnSkip(ncKey) {
     Meteor.call('UnSkipNC', id, ncKey, (error)=> {
       if(error)
         console.log(error);
 		});
   }
   
-  handleComment(ncKey, com) {
-	  const id = this.props.id;
+  function handleComment(ncKey, com) {
     Meteor.call('commentNC', id, ncKey, com, (error)=> {
       if(error)
         console.log(error);
 		});
   }
   
-  render() {
-    return(
-      <InOutWrap type='ncTrans' add='ncTrib'>
-        {this.props.nonCons.map( (entry)=>{
-          this.props.sType === 'finish' && entry.snooze === true ?
-            this.handleUnSkip(entry.key) : null;
-          return (
-            <NCStream
-              key={entry.key}
-              entry={entry}
-              id={this.props.id}
-              end={this.props.sType === 'finish'}
-              fix={()=> this.handleFix(entry.key)}
-              inspect={()=> this.handleInspect(entry.key)}
-              reject={()=> this.handleReject(entry.key, entry.fix.time, entry.fix.who)}
-              skip={()=> this.handleSkip(entry.key)}
-              snooze={()=> this.handleSnooze(entry.key)}
-              unSkip={()=> this.handleUnSkip(entry.key)}
-              comment={(e)=> this.handleComment(entry.key, e)}
-            />
-          )})}
-      </InOutWrap>
-    );
-  }
-}
+  return(
+    <InOutWrap type='ncTrans' add='ncTrib'>
+      {nonCons.map( (entry)=>{
+        sType === 'finish' && entry.snooze === true ?
+          handleUnSkip(entry.key) : null;
+        return (
+          <NCStream
+            key={entry.key}
+            entry={entry}
+            id={id}
+            end={sType === 'finish'}
+            fix={()=> handleFix(entry.key)}
+            inspect={()=> handleInspect(entry.key)}
+            reject={()=> handleReject(entry.key, entry.fix.time, entry.fix.who)}
+            skip={()=> handleSkip(entry.key)}
+            snooze={()=> handleSnooze(entry.key)}
+            unSkip={()=> handleUnSkip(entry.key)}
+            comment={(e)=> handleComment(entry.key, e)}
+          />
+        )})}
+    </InOutWrap>
+  );
+};
 
 export class NCStream extends Component {
   
@@ -140,7 +117,7 @@ export class NCStream extends Component {
                    </i>:
                    null;
 
-    return (
+    return(
       <ContextMenuTrigger id={this.props.entry.key} 
       attributes={ {className:style} }>
         <div className='tribCell up noCopy' title={this.props.entry.comm}>
@@ -152,9 +129,9 @@ export class NCStream extends Component {
         <div className='tribCell'>
           {skip ?
             this.props.entry.snooze === true ?
-              <i className='fas fa-clock fa-2x'></i>
+              <i><i className='fas fa-clock fa-2x'></i></i>
               :
-              <i className='fas fa-truck fa-2x'></i>
+              <b><i className='fas fa-truck fa-2x'></i></b>
           :
             fixed ?
               <div className='twoSqIcons'>
@@ -204,3 +181,5 @@ export class NCStream extends Component {
     );
   }
 }
+
+export default NCTributary;

@@ -4,54 +4,50 @@ import Pref from '/client/global/pref.js';
 
 import ProgPie from '/client/components/charts/ProgPie.jsx';
 
-export default class OrgWIP extends Component	{
+const OrgWIP = ({ wip })=> {
 
-  render() {
-    
-    let wip = this.props.wip;
-    let wipHot = false;
-    let wipCold = false;
+  let wipHot = false;
+  let wipCold = false;
 
-    if(!wip) {
-      null;
-    }else{
-      wipHot = wip.filter( x => x.active === true);
-      wipHot.sort((b1, b2)=> {
-                    if (b1.batch < b2.batch) { return 1 }
-                    if (b1.batch > b2.batch) { return -1 }
-                    return 0;
-                  });
-      wipCold = wip.filter( x => x.active === false);
-      wipCold.sort((b1, b2)=> {
-                    if (b1.batch < b2.batch) { return 1 }
-                    if (b1.batch > b2.batch) { return -1 }
-                    return 0;
-                  });
-    }
-    
-    if(!wipHot || !wipCold) {
-      return (
-        <div className='space'>
-          <i className='fa fa-circle-o-notch fa-spin fa-3x' aria-hidden='true'></i>
-          <span className='sr-only'>Loading...</span>
-        </div>
-      );
-    }
-    
+  if(!wip) {
+    null;
+  }else{
+    wipHot = wip.filter( x => x.active === true);
+    wipHot.sort((b1, b2)=> {
+                  if (b1.batch < b2.batch) { return 1 }
+                  if (b1.batch > b2.batch) { return -1 }
+                  return 0;
+                });
+    wipCold = wip.filter( x => x.active === false);
+    wipCold.sort((b1, b2)=> {
+                  if (b1.batch < b2.batch) { return 1 }
+                  if (b1.batch > b2.batch) { return -1 }
+                  return 0;
+                });
+  }
+  
+  if(!wipHot || !wipCold) {
     return (
-      <div className='wipCol'>
-        {wipHot.map( (entry, index)=>{
-          return(
-            <StatusRow key={index} entry={entry} active={true} />
-          )})}
-        {wipCold.map( (entry, index)=>{
-          return(
-            <StatusRow key={index} entry={entry} active={false} />
-          )})}
+      <div className='space'>
+        <i className='fa fa-circle-o-notch fa-spin fa-3x' aria-hidden='true'></i>
+        <span className='sr-only'>Loading...</span>
       </div>
     );
   }
-}
+  
+  return (
+    <div className='wipCol'>
+      {wipHot.map( (entry, index)=>{
+        return(
+          <StatusRow key={index} entry={entry} active={true} />
+        )})}
+      {wipCold.map( (entry, index)=>{
+        return(
+          <StatusRow key={index} entry={entry} active={false} />
+        )})}
+    </div>
+  );
+};
 
 export class StatusRow extends Component	{
   
@@ -130,29 +126,25 @@ export class StatusRow extends Component	{
   }
 }
 
+const StatusCell = ({ steps, total, unitTotal, calc })=> (
+  <div className='centreRow'>
+    {steps.map( (entry)=>{
+      let rndmKey = Math.random().toString(36).substr(2, 5);
+      const title = entry.type === 'finish' ||
+                    entry.type === 'test' ?
+                    entry.step :
+                    entry.step + ' ' + entry.type;
+      let count = calc ? entry.itemCount : entry.unitCount;
+      let totalCount = calc ? total : unitTotal;
+      return(
+        <ProgPie
+          key={rndmKey}
+          title={title}
+          count={count}
+          total={totalCount} />
+      );
+    })}
+  </div>
+);
 
-export class StatusCell extends Component	{
-  
-  render() {
-    return(
-      <div className='centreRow'>
-        {this.props.steps.map( (entry)=>{
-          let rndmKey = Math.random().toString(36).substr(2, 5);
-          const title = entry.type === 'finish' ||
-                        entry.type === 'test' ?
-                        entry.step :
-                        entry.step + ' ' + entry.type;
-          let count = this.props.calc ? entry.itemCount : entry.unitCount;
-          let total = this.props.calc ? this.props.total : this.props.unitTotal;
-          return(
-            <ProgPie
-              key={rndmKey}
-              title={title}
-              count={count}
-              total={total} />
-            );
-        })}
-      </div>
-    );
-  }
-}
+export default OrgWIP;

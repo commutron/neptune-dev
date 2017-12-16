@@ -1,15 +1,11 @@
-import React, {Component} from 'react';
+import React from 'react';
 
-export default class Freeze extends Component	{
+const Freeze = ({ children })=>	(
+  <div className='ice'>
+    <div className='space centre'>
+      {children}
+    </div>
+  </div>
+);
 
-  render() {
-
-    return (
-      <div className='ice'>
-        <div className='space centre'>
-          {this.props.children}
-        </div>
-      </div>
-    );
-  }
-}
+export default Freeze;

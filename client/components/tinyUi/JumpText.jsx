@@ -1,31 +1,21 @@
-import React, {Component} from 'react';
+import React from 'react';
 
-// requires props
-// title as text
-// link as text
-// sty as text
-
-export default class JumpText extends Component {
-
-  handle() {
-    let value = this.link.value;
-      Session.set('now', value);
-      let findBox = document.getElementById('find');
-		  findBox ? findBox.focus() : null;
-  }
-
-  render() {
-    
-    let clss = this.props.sty ? 'jump ' + this.props.sty : 'jump';
-    
-    return (
-      <button
-        className={clss}
-        onClick={this.handle.bind(this)}
-        ref={(i)=> this.link = i}
-        value={this.props.link}
-        >{this.props.title}
-      </button>
-    );
-  }
+function handle(value) {
+  Session.set('now', value);
+  let findBox = document.getElementById('find');
+  findBox ? findBox.focus() : null;
 }
+
+const JumpText = ({ title, link, sty })=> {
+  let cssStyle = sty ? 'jump ' + sty : 'jump';
+  return (
+    <button
+      className={cssStyle}
+      onClick={()=>handle(link)}
+      value={link}
+      >{title}
+    </button>
+  );
+};
+
+export default JumpText;

@@ -18,6 +18,14 @@ i {
   font-style: normal;
 }
 
+dl {
+  margin: 5px;
+}
+
+dd {
+  margin-left: 25px;
+}
+
 a {
   border: 1px dotted transparent;
   color: var(--belizeHole);

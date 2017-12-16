@@ -1,21 +1,18 @@
-import React, {Component} from 'react';
+import React from 'react';
 
-import AccountsUI from '../components/bigUi/AccountsUI.jsx';
+import AccountsUI from '/client/components/bigUi/AccountsUI.jsx';
 
-export default class Login extends Component	{
+const Login = ()=> {
+  Session.set('Meteor.loginButtons.dropdownVisible', true);
+  return (
+    <div>
+      <br />
+      <br />
+        <AccountsUI />
+      <br />
+      <br />
+    </div>
+  );
+};
 
-  render() {
-    
-    Session.set('Meteor.loginButtons.dropdownVisible', true);
-
-    return (
-      <div>
-        <br />
-        <br />
-          <AccountsUI />
-        <br />
-        <br />
-      </div>
-    );
-  }
-}
+export default Login;

@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
 import {createContainer} from 'meteor/react-meteor-data';
-import Pref from '/client/global/pref.js';
+//import Pref from '/client/global/pref.js';
 
-import Spin from '../../components/uUi/Spin.jsx';
+import Spin from '/client/components/uUi/Spin.jsx';
 import ProductionFindOps from './ProductionFindOps.jsx';
 
 class ProductionView extends Component	{
@@ -13,18 +13,17 @@ class ProductionView extends Component	{
     if(!this.props.login) {
       return (
         <div>no production access</div>
-        );
+      );
     }
     
     if(//!this.props.allData || // diagnose data in development
        !this.props.coldReady || 
        !this.props.hotReady || 
-       !this.props.app ||
-       !this.props.allBlock ||
-       !this.props.allScrap) {
+       !this.props.app
+      ) {
       return (
         <Spin />
-        );
+      );
     }
     
     return (
@@ -38,7 +37,7 @@ class ProductionView extends Component	{
         allWidget={this.props.allWidget}
         allBatch={this.props.allBatch}
         hotBatch={this.props.hotBatch}
-        />
+      />
     );
   }
 }
@@ -62,20 +61,10 @@ export default createContainer( () => {
 
   let hotSub = Meteor.subscribe('hotData', false);
   let hotBatch = false;
-  let blockSub = Meteor.subscribe('blockData', false);
-  let scrapSub = Meteor.subscribe('scrapData', false);
   
   if( coldSub ) 
   {
-    if( orb === Pref.block || orb === Pref.blck ) 
-    {
-      blockSub = Meteor.subscribe( 'blockData', true );
-    }
-    else if( orb === Pref.scrap || orb === Pref.scrp )
-    {
-      scrapSub = Meteor.subscribe( 'scrapData', true );
-    }
-    else if( !isNaN(orb) && orb.length === 5 )
+    if( !isNaN(orb) && orb.length === 5 )
     {
       const oneBatch = BatchDB.findOne( { batch: orb } );
       if( oneBatch )
@@ -143,8 +132,6 @@ export default createContainer( () => {
       allWidget: WidgetDB.find( {}, { sort: { widget: 1 } } ).fetch(),
       allBatch: BatchDB.find( {}, { sort: { batch: -1 } } ).fetch(),
       hotBatch: hotBatch,
-      allBlock: blockSub.ready(),
-      allScrap: scrapSub.ready()
     };
   }
 }, ProductionView);
