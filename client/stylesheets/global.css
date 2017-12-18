@@ -309,6 +309,40 @@ progress {
   border: 0;
 }
 
+meter {
+  -webkit-appearance: meter; /* Reset appearance */
+  -moz-appearance: meterbar;
+  appearance: meter;
+  border: none;
+  
+}
+meter::-webkit-meter-optimum-value {
+  background: none;
+  background-color: var(--sunflower);
+  color: var(--nephritis);
+}
+meter::-moz-meter-optimum {
+  background: none;
+  background-color: var(--sunflower);
+  color: var(--nephritis);
+}
+meter::-webkit-meter-suboptimum-value {
+  background: none;
+  background-color: var(--carrot);
+}
+meter::-moz-meter-sub-optimum {
+  background: none;
+  background-color: var(--carrot);
+}
+meter::-webkit-meter-even-less-good-value {
+  background: none;
+  background-color: var(--pomegranate);
+}
+meter::-moz-meter-meter-sub-sub-optimum {
+  background: none;
+  background-color: var(--pomegranate);
+}
+
 table {
   border-collapse: collapse;
 }

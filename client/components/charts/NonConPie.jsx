@@ -21,7 +21,7 @@ export default class NonConPie extends Component {
       n.inspect === false && n.skip !== false && n.comm !== 'sn00ze' ? skip += 1 : false;
     }
     return [
-      {'value': none, 'meta': 'None'},
+      {'value': none, 'meta': 'Pending'},
       {'value': fix, 'meta': 'Fix'},
       {'value': done, 'meta': 'Done'},
       {'value': snooze, 'meta': 'Snooze'},
@@ -50,7 +50,7 @@ export default class NonConPie extends Component {
       donut: true,
       donutWidth: 60,
       startAngle: 0,
-      total: this.props.nonCons.length,
+      //total: this.props.nonCons.length,
       plugins: [
         Chartist.plugins.tooltip({
           appendToBody: true

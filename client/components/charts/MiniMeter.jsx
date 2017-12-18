@@ -9,7 +9,7 @@ const MiniMeter = ({ title, count, app })=> {
   };
   let bar = {
     width: '100%',
-    height: '7px'
+    height: '5px'
   };
   let num = {
     textAlign: 'right'

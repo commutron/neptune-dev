@@ -5,21 +5,22 @@ import Tooltip from 'chartist-plugin-tooltips';
 import fillDonut from 'chartist-plugin-fill-donut';
 import Pref from '/client/global/pref.js';
 
+//<NonConRefPie nonCons={b.nonCon} />
+
 export default class NonConPie extends Component {
   
   ncCounts() {
-    const refs = Array.from(this.props.nonCons, x => x.ref);
     
-    const uniqueRefs = new Set(refs);
+    const uniqueRefs = new Set( Array.from(this.props.nonCons, x => x.ref) );
     
     let refCounts = [];
-    uniqueRefs.forEach( x => {
-      let qu = refs.filter( y => y === x );
+    for(let x of uniqueRefs) {
+      let qu = this.props.nonCons.filter( y => y.ref === x );
       refCounts.push({
         'value': qu.length,
         'meta': x
       });
-    });
+    }
     return {
       'uniques': uniqueRefs.size,
       'counts': refCounts
@@ -46,8 +47,8 @@ export default class NonConPie extends Component {
       chartPadding: 25,
       donut: true,
       donutWidth: 60,
-      startAngle: 0,
-      total: this.props.nonCons,
+      //startAngle: 0,
+      //total: this.props.nonCons.length,
       plugins: [
         Chartist.plugins.tooltip({
           appendToBody: true,

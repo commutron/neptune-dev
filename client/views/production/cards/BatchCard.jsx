@@ -82,7 +82,7 @@ export default class BatchCard extends Component	{
             </div>
             
             <div className='space cap'>
-              <NonConMiniSatus noncons={b.nonCon} app={a} />
+              <NonConMiniSatus noncons={b.nonCon} flow={riverFlow} flowAlt={riverAltFlow} app={a} />
             </div>
             
           </Tabs>

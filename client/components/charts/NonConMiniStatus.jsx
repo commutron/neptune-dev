@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import MiniMeter from './MiniMeter.jsx';
 
-const NonConMiniSatus = ({ noncons, app })=> {
+const NonConMiniSatus = ({ noncons, flow, flowAlt, app })=> {
   
-  let dprt = new Set( Array.from(app.trackOption, x => x.step) );
-  dprt.add(app.lastTrack.step);
+  let dprt = new Set( Array.from(flow, x => x.step), Array.from(flowAlt, x => x.step) );
+  
   let splitByStep = [];
   for(let stp of dprt) {
     let match = noncons.filter( y => y.where === stp );

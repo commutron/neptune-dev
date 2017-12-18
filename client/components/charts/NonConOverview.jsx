@@ -6,19 +6,37 @@ import fillDonut from 'chartist-plugin-fill-donut';
 
 export default class NonConOverview extends Component {
   
+  constructor() {
+    super();
+    this.state = {
+      stackFilter: 'dprt'
+    };
+    this.ncCounts = this.ncCounts.bind(this);
+  }
+  
   ncCounts() {
-    const dprt = new Set( Array.from(this.props.trOp, x => x.step) );
-    dprt.add(this.props.lstOp.step);
-    let splitByStep = [];
-    for(let stp of dprt) {
-      let match = this.props.nonCons.filter( y => y.where === stp );
-      splitByStep.push({
-        'name': stp,
-        'ncs': match
-      });
+    let splitByFirst = [];
+    if(this.state.stackFilter === 'ref') {
+      const uniqueRefs = new Set( Array.from(this.props.nonCons, x => x.ref) );
+      for(let ref of uniqueRefs) {
+        let match = this.props.nonCons.filter( y => y.ref === ref );
+        splitByFirst.push({
+          'name': ref,
+          'ncs': match
+        });
+      }
+    }else{
+      const dprt = new Set( Array.from(this.props.flow, x => x.step), Array.from(this.props.flowAlt, x => x.step) );
+      for(let stp of dprt) {
+        let match = this.props.nonCons.filter( y => y.where === stp );
+        splitByFirst.push({
+          'name': stp,
+          'ncs': match
+        });
+      }
     }
     splitByType = [];
-    for(let stp of splitByStep) {
+    for(let stp of splitByFirst) {
       let type = [];
       for(let n of this.props.ncOp) {
         let match = stp.ncs.filter( x => x.type === n );
@@ -32,12 +50,25 @@ export default class NonConOverview extends Component {
     return splitByType;
   }
 
+
   render () {
 
     const counts = this.ncCounts();
 
-    return (
-      <NonConTypeChart counts={counts} ncOp={this.props.ncOp} />
+    return(
+      <div>
+        <p className='centreText'>
+          <i className='med'>Defect Type and </i>
+          <select
+            className='transparent blueT'
+            ref={(i)=>this.frstFiltr=i} 
+            onChange={()=>this.setState({stackFilter: this.frstFiltr.value})}>
+            <option value='dprt' defaultValue>Department</option>
+            <option value='ref'>Referance</option>
+          </select>
+        </p>
+        <NonConTypeChart counts={counts} ncOp={this.props.ncOp} />
+      </div>
     );
   }
 }
@@ -84,9 +115,6 @@ export class NonConTypeChart extends Component {
     return (
       <div>
         <br />
-        <p className='centreText'>
-          <i>Defect Type and Process</i><br />
-        </p>
         <ChartistGraph data={data} options={options} type={'Bar'} />
       </div>
     );
