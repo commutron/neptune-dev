@@ -11,7 +11,7 @@ const NCTributary = ({ id, serial, nonCons, sType })=> {
 			if(error)
 			  console.log(error);
 		});
-		let findBox = document.getElementById('find');
+		let findBox = document.getElementById('lookup');
 		findBox.focus();
   }
 
@@ -20,7 +20,7 @@ const NCTributary = ({ id, serial, nonCons, sType })=> {
 			if(error)
 			  console.log(error);
 		});
-		let findBox = document.getElementById('find');
+		let findBox = document.getElementById('lookup');
 		findBox.focus();
   }
     
@@ -29,7 +29,7 @@ const NCTributary = ({ id, serial, nonCons, sType })=> {
 			if(error)
 			  console.log(error);
 		});
-		let findBox = document.getElementById('find');
+		let findBox = document.getElementById('lookup');
 		findBox.focus();
   }
     

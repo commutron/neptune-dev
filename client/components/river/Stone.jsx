@@ -31,7 +31,7 @@ export default class Stone extends Component	{
   
   reveal() {
     this.setState({show: !this.state.show});
-    document.getElementById('find').focus();
+    document.getElementById('lookup').focus();
   }
   
   unlock() {
@@ -72,7 +72,7 @@ export default class Stone extends Component	{
 		    console.log(error);
 			if(reply) {
 				console.log('server: ' + this.props.sKey);
-			  document.getElementById('find').focus();
+			  document.getElementById('lookup').focus();
 		  }else{
 		    Bert.alert(Pref.blocked, 'danger');
 		  }
@@ -95,7 +95,7 @@ export default class Stone extends Component	{
 		    console.log(error);
 			if(reply) {
 				console.log('server: ' + this.props.sKey);
-			  document.getElementById('find').focus();
+			  document.getElementById('lookup').focus();
 		  }else{
 		    Bert.alert(Pref.blocked, 'danger');
 		  }
@@ -116,7 +116,7 @@ export default class Stone extends Component	{
 		    console.log(error);
 		  if(reply) {
 		  	console.log('server: ' + this.props.sKey);
-		    document.getElementById('find').focus();
+		    document.getElementById('lookup').focus();
 		  }else{
 		    Bert.alert(Pref.blocked, 'danger');
 		  }

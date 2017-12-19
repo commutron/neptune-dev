@@ -100,12 +100,12 @@ export default createContainer( () => {
       else
       {
         Meteor.call( 'serialLookup', orb, ( err, reply )=>
-        {
-          err ? console.log( err ) : null;
-          const serverItemsBatch = BatchDB.findOne( { batch: reply } );
-          hotSub = Meteor.subscribe( 'hotData', reply );
-          hotBatch = serverItemsBatch;
-        }
+          {
+            err ? console.log( err ) : null;
+            hotSub = Meteor.subscribe( 'hotData', reply );
+            const serverItemsBatch = BatchDB.findOne( { batch: reply } );
+            hotBatch = serverItemsBatch;
+          }
         );
       }
     }

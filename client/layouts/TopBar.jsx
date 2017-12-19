@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import {createContainer} from 'meteor/react-meteor-data';
 import RoleCheck from '/client/components/utilities/RoleCheck.js';
@@ -11,106 +11,103 @@ import ActivateUser from '../components/forms/ActivateUser.jsx';
 import Chill from '../components/tinyUi/Chill.jsx';
 import ExternalLink from '../components/uUi/ExternalLink.jsx';
 
-class TopBar extends Component	{
-  
-  render() {
+const TopBar = ({ ready, orb, login, user, active, org, app, link })=> {
     
-    //console.log(Meteor.status().connected);
-    /*
-    if() {
-      return (
+  //console.log(Meteor.status().connected);
+  /*
+  if() {
+    return (
+      <Freeze>
+        <div className='actionBox orange centre centreTrue bigger'>
+          <p>OFFLINE</p>
+        </div>
+      </Freeze>
+    );
+  }*/
+  
+  if(!login) {
+    return (
+      <Freeze>
+        <Login />
+      </Freeze>
+    );
+  }
+      
+  if(!ready) {
+    return (
+      <Freeze>
+        <Spin color={true} />
+      </Freeze>
+    );
+  }
+  
+  if(!active || !org) {
+    return (
+      <div className='bleed middle flexRR'>
+        <Chill name={user} />
         <Freeze>
-          <div className='actionBox orange centre centreTrue bigger'>
-            <p>OFFLINE</p>
+          <div>
+            <hr />
+            <ActivateUser />
           </div>
         </Freeze>
-      );
-    }*/
-    
-    if(!this.props.login) {
-      return (
-        <Freeze>
-          <Login />
-        </Freeze>
-      );
-    }
-        
-    if(!this.props.ready) {
-      return (
-        <Freeze>
-          <Spin color={true} />
-        </Freeze>
-      );
-    }
-    
-    if(!this.props.active || !this.props.org) {
-      return (
-        <div className='bleed middle flexRR'>
-          <Chill name={this.props.user} />
-          <Freeze>
-            <div>
-              <hr />
-              <ActivateUser />
-            </div>
-          </Freeze>
-        </div>
-      );
-    }
-    
-    if(!this.props.app) {
-      return (
-        <div className='bleed middle flexRR'>
-          <Chill name={this.props.user}/>
-          <Freeze>
-            <InitialSetup org={this.props.org} />
-          </Freeze>
-        </div>
-      );
-    }
-    
-    return (
-      <div className='primeNav'>
-        <nav className='primeNav'>
-          <a className='title' href='/' title='Home'>
-            <img
-              src='/neptune-logo-white.svg'
-              className='logoSVG' />
-          </a>
-          <a href='/activity' className={ this.props.link === 'act' ? 'whiteT' : '' }>
-            <i className="fas fa-chart-line fa-lg" aria-hidden='true'></i>
-            <span className='icontext'>Activity</span>
-          </a>
-          <a href='/dashboard' className={ this.props.link === 'dash' ? 'whiteT' : '' }>
-            <i className="fas fa-tachometer-alt fa-lg" aria-hidden='true'></i>
-            <span className='icontext'>Dashboard</span>
-          </a>
-          <RoleCheck role={'nightly'}>
-            <span>
-              <a href='/production' className={ this.props.link === 'prod' ? 'whiteT' : '' }>
-                <i className="fa fa-flask fa-lg" aria-hidden='true'></i>
-                <span className='icontext'>Production</span>
-              </a>
-              <a href='/data' className={ this.props.link === 'data' ? 'whiteT' : '' }>
-                <i className="icon fa fa-flask fa-lg" aria-hidden='true'></i>
-                <span className='icontext'>Data</span>
-              </a>
-            </span>
-          </RoleCheck>
-          <a href='/app' className={ this.props.link === 'app' ? 'whiteT' : '' }>
-            <i className="fas fa-sliders-h fa-lg" aria-hidden='true'></i>
-            <span className='icontext'>Settings</span>
-          </a>
-        </nav>
-        <span className='navSpacer'></span>
-        <ExternalLink go={this.props.app.helpDocs} title='Help' icon='far fa-question-circle' />
-        <ExternalLink go={this.props.app.timeClock} title='Time Clock' icon='far fa-clock' />
-        <Chill name={this.props.user}/>
       </div>
     );
   }
-}
+  
+  if(!app) {
+    return (
+      <div className='bleed middle flexRR'>
+        <Chill name={user}/>
+        <Freeze>
+          <InitialSetup org={org} />
+        </Freeze>
+      </div>
+    );
+  }
+  
+  return (
+    <div className='primeNav'>
+      <nav className='primeNav'>
+        <a className='title' href='/' title='Home'>
+          <img
+            src='/neptune-logo-white.svg'
+            className='logoSVG' />
+        </a>
+        <a href='/activity' className={ link === 'act' ? 'whiteT' : '' }>
+          <i className="fas fa-chart-line fa-lg" aria-hidden='true'></i>
+          <span className='icontext'>Activity</span>
+        </a>
+        <a href='/dashboard' className={ link === 'dash' ? 'whiteT' : '' }>
+          <i className="fas fa-tachometer-alt fa-lg" aria-hidden='true'></i>
+          <span className='icontext'>Dashboard</span>
+        </a>
+        <RoleCheck role={'nightly'}>
+          <span>
+            <a href='/production' className={ link === 'prod' ? 'whiteT' : '' }>
+              <i className="fa fa-flask fa-lg" aria-hidden='true'></i>
+              <span className='icontext'>Production</span>
+            </a>
+            <a href='/data' className={ link === 'data' ? 'whiteT' : '' }>
+              <i className="icon fa fa-flask fa-lg" aria-hidden='true'></i>
+              <span className='icontext'>Data</span>
+            </a>
+          </span>
+        </RoleCheck>
+        <a href='/app' className={ link === 'app' ? 'whiteT' : '' }>
+          <i className="fas fa-sliders-h fa-lg" aria-hidden='true'></i>
+          <span className='icontext'>Settings</span>
+        </a>
+      </nav>
+      <span className='navSpacer'></span>
+      <ExternalLink go={app.helpDocs} title='Help' icon='far fa-question-circle' />
+      <ExternalLink go={app.timeClock} title='Time Clock' icon='far fa-clock' />
+      <Chill name={user}/>
+    </div>
+  );
+};
 
-export default createContainer( () => {
+export default createContainer( ({ link }) => {
   let login = Meteor.userId() ? true : false;
   let usfo = login ? Meteor.user() : false;
   let user = usfo ? usfo.username : false;
@@ -133,13 +130,12 @@ export default createContainer( () => {
     return {
       ready: hotSub.ready() && Roles.subscription.ready(),
       orb: Session.get('now'),
-      bolt: Session.get('allData'),
-      time: Session.get('timeClock'),
       login: Meteor.userId(),
       user: user,
       active: active,
       org: org,
-      app: AppDB.findOne({org: org})
+      app: AppDB.findOne({org: org}),
+      link: link
     };
   }
 }, TopBar);

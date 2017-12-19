@@ -1,7 +1,7 @@
 /*@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
 meteor seems to be handling this */
 
-#find {
+#lookup {
   font-size: 2rem;
   text-align: center;
   height: 100%;
@@ -21,13 +21,13 @@ meteor seems to be handling this */
 }
 
 @media screen and (max-width: 1000px){
-  #find {
+  #lookup {
     font-size: 1.75rem;
     min-width: 225px;
   }
 }
 
-#find:focus {
+#lookup:focus {
 	color: white;
 	background: rgb(30,30,30);
   outline: none;
@@ -35,28 +35,28 @@ meteor seems to be handling this */
   box-shadow: 0 0 .2em .2em rgba(43,43,43,0.3);
 }
 
-#find::selection {
+#lookup::selection {
 	color: white;
 	background: rgb(30,30,30);
 }
-#find::-moz-selection {
+#lookup::-moz-selection {
 	color: white;
 	background: rgb(30,30,30);
 }
 
-#find::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+#lookup::-webkit-input-placeholder { /* Chrome/Opera/Safari */
   color: white;
   opacity: 0.9;
 }
-#find::-moz-placeholder { /* Firefox 19+ */
+#lookup::-moz-placeholder { /* Firefox 19+ */
   color: white;
   opacity: 0.9;
 }
-#find:-moz-placeholder { /* Firefox 18- */
+#lookup:-moz-placeholder { /* Firefox 18- */
   color: white;
   opacity: 0.9;
 }
-#find:-ms-input-placeholder { /* IE 10+ */
+#lookup:-ms-input-placeholder { /* IE 10+ */
   color: white;
   opacity: 0.9;
 }

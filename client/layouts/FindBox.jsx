@@ -1,44 +1,39 @@
-import React, {Component} from 'react';
+import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import {createContainer} from 'meteor/react-meteor-data';
 
-class FindBox extends Component	{
-
-  //// Set the Entered Number as Session Variable \\\\
-  setVar(e) {
+const FindBox = ({ orb, user })=> {
+    
+  function setVar(e) {
     e.preventDefault();
-    const chosen = this.choose.value.trim().toLowerCase();
+    const chosen = this.lookup.value.trim().toLowerCase();
       Session.set('now', chosen);
-        this.choose.value = '';
-        this.choose.select();
+        this.lookup.value = '';
+        this.lookup.select();
   }
 
-  render () {
+  let last = orb || 'Search';
+  let lock = user ? false : true;
 
-   let last = this.props.orb ? this.props.orb : 'Search';
-   const lock = this.props.user ? false : true;
-
-		return (
-      <form 
-        className='findForm' 
-        onSubmit={this.setVar.bind(this)}
-        autoComplete='off'>
-        <input
-          autoFocus={true}
-          type='search'
-          id='find'
-          ref={(i)=> this.choose = i}
-          className='up'
-          placeholder={last}
-          disabled={lock}
-          autoCorrect={false}
-          autoCapitalize={false}
-          spellCheck={false}
-          />
-      </form>
-    );
-  }
-}
+	return (
+    <form 
+      className='findForm' 
+      onSubmit={(e)=>setVar(e)}
+      autoComplete='off'>
+      <input
+        autoFocus={true}
+        type='search'
+        id='lookup'
+        className='up'
+        placeholder={last}
+        disabled={lock}
+        autoCorrect={false}
+        autoCapitalize={false}
+        spellCheck={false}
+      />
+    </form>
+  );
+};
 
 export default createContainer( () => {
     return {

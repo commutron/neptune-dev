@@ -2,7 +2,7 @@ import React from 'react';
 
 function handle(value) {
   Session.set('now', value);
-  let findBox = document.getElementById('find');
+  let findBox = document.getElementById('lookup');
   findBox ? findBox.focus() : null;
 }
 

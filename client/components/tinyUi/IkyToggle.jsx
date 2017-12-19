@@ -4,7 +4,7 @@ const IkyToggle = ()=> {
   function toggle() {
     const choice = this.ikyToggle.checked;
     Session.set('ikyView', choice);
-    let findBox = document.getElementById('find');
+    let findBox = document.getElementById('lookup');
   	findBox ? findBox.focus() : null;
   }
   return(

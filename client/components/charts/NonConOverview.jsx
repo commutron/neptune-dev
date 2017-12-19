@@ -34,6 +34,8 @@ export default class NonConOverview extends Component {
           'ncs': match
         });
       }
+      let leftover = this.props.nonCons.filter( z => dprt.has(z.where) === false );
+      leftover.length > 0 ? splitByFirst.unshift({ 'name': 'before start', 'ncs': leftover }) : null;
     }
     splitByType = [];
     for(let stp of splitByFirst) {

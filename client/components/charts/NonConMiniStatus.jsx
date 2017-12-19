@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import MiniMeter from './MiniMeter.jsx';
 
 const NonConMiniSatus = ({ noncons, flow, flowAlt, app })=> {
@@ -13,6 +13,9 @@ const NonConMiniSatus = ({ noncons, flow, flowAlt, app })=> {
       'ncs': match.length
     });
   }
+  let leftover = noncons.filter( z => dprt.has(z.where) === false );
+  leftover.length > 0 ? splitByStep.unshift({ 'name': 'before start', 'ncs': leftover.length }) : null;
+  
   return(
     <div className='centre'>
       {/*<MiniMeter title='total' count={noncons.length} />*/}

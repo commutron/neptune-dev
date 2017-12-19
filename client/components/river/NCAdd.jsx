@@ -21,7 +21,7 @@ const NCAdd = ({ id, barcode, app })=> {
       }
       this.discStp.value = Session.get('nowStep');
       this.ncRefs.value = '';
-      const findBox = document.getElementById('find');
+      const findBox = document.getElementById('lookup');
       findBox.focus();
     }else{null}
   }

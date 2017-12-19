@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import moment from 'moment';
 import InOutWrap from '/client/components/tinyUi/InOutWrap.jsx';
 import Pref from '/client/global/pref.js';
@@ -8,112 +8,95 @@ import FirstRepeat from './FirstRepeat.jsx';
 import TestFails from './TestFails.jsx';
 import NCTributary from './NCTributary.jsx';
 
-export default class StoneSelect extends Component	{
+  
+const StoneSelect = ({ id, flow, rmas, allItems, nonCons, serial, history, regRun, users, methods })=> {
+    
+  const nc = nonCons.filter( 
+                x => x.serial === serial && x.inspect === false )
+                  .sort((n1, n2)=> {
+                    if (n1.ref < n2.ref) { return -1 }
+                    if (n1.ref > n2.ref) { return 1 }
+                    return 0;
+                  });
+ 
+  
+  const iDone = history;
 
-  render() {
+  const fDone = [];
+  for(let item of allItems) {
+    const firsts = item.history.filter( x => x.type === 'first' && x.good === true );
+    firsts.forEach( x => fDone.push( 'first' + x.step ) );
+  }
+  
+  for(let flowStep of flow) {
+    const first = flowStep.type === 'first';
+    const inspect = flowStep.type === 'inspect';
     
-    const flow = this.props.flow;
-    
-    const iDone = this.props.history;
-
-    const fDone = [];
-    for(let item of this.props.allItems) {
-      const firsts = item.history.filter( x => x.type === 'first' && x.good === true );
-      firsts.forEach( x => fDone.push( 'first' + x.step ) );
-    }
-    
-    for(let flowStep of flow) {
-      const first = flowStep.type === 'first';
-      const inspect = flowStep.type === 'inspect';
+    const check = first ? 
+                  iDone.find(ip => ip.key === flowStep.key) || fDone.includes('first' + flowStep.step)
+                  :
+                  inspect && regRun === true ?
+                  iDone.find(ip => ip.key === flowStep.key && ip.good === true) ||
+                  iDone.find(ip => ip.step === flowStep.step && ip.type === 'first' && ip.good === true)
+                  // failed firsts should NOT count as inpections
+                  :
+                  iDone.find(ip => ip.key === flowStep.key && ip.good === true);
+                  
+    if(check) {
+      null;
+    }else{
       
-      const check = first ? 
-                    iDone.find(ip => ip.key === flowStep.key) || fDone.includes('first' + flowStep.step)
-                    :
-                    inspect && this.props.regRun === true ?
-                    iDone.find(ip => ip.key === flowStep.key && ip.good === true) ||
-                    iDone.find(ip => ip.step === flowStep.step && ip.type === 'first' && ip.good === true)
-                    // failed firsts should NOT count as inpections
-                    :
-                    iDone.find(ip => ip.key === flowStep.key && ip.good === true);
-                    
-      if(check) {
-        null;
-      }else{
-        
-        const stepNum = flow.indexOf(flowStep);
-        const last = stepNum === 0 ? false : stepNum -1;
-        const lastStep = last !== false ? flow[last] : false;
-        const fTest = flowStep.type === 'test' ? iDone.filter( x => x.type === 'test' && x.good === false) : [];
-        
-        const nc = this.props.nonCons;
-        let skipped = nc.every( x => x.skip !== false );
-        
-        const stripSide = (name)=> { let x = name;
-                                     x = x.replace(/top/i, '-').replace(/bottom/i, '-');
-                                     return x; };
-        
-		    let block = nc.some( x => stripSide(x.where) !== stripSide(flowStep.step) ) ? true : false;
+      const stepNum = flow.indexOf(flowStep);
+      const last = stepNum === 0 ? false : stepNum -1;
+      const lastStep = last !== false ? flow[last] : false;
+      const fTest = flowStep.type === 'test' ? iDone.filter( x => x.type === 'test' && x.good === false) : [];
+      
+      let skipped = nc.every( x => x.skip !== false );
+      
+      const stripSide = (name)=> { let x = name;
+                                   x = x.replace(/top/i, '-').replace(/bottom/i, '-');
+                                   return x; };
+      
+	    let block = nc.some( x => stripSide(x.where) !== stripSide(flowStep.step) ) ? true : false;
 
-		    const stone = <Stone
-          		          key={flowStep.key}
-                        id={this.props.id}
-                        barcode={this.props.serial}
-                        sKey={flowStep.key}
-                        step={flowStep.step}
-                        type={flowStep.type}
-                        users={this.props.users}
-                        methods={this.props.methods} />;
+	    const stone = <Stone
+        		          key={flowStep.key}
+                      id={id}
+                      barcode={serial}
+                      sKey={flowStep.key}
+                      step={flowStep.step}
+                      type={flowStep.type}
+                      users={users}
+                      methods={methods} />;
 
-        const nonCon = <NCTributary
-                			  id={this.props.id}
-                			  serial={this.props.serial}
-                			  nonCons={this.props.nonCons}
-                			  sType={flowStep.type} />;
+      const nonCon = <NCTributary
+              			  id={id}
+              			  serial={serial}
+              			  nonCons={nc}
+              			  sType={flowStep.type} />;
                 			  
-        const repeat = <FirstRepeat
-                        key={lastStep.key}
-                        flowStep={lastStep}
-                        id={this.props.id}
-                        barcode={this.props.serial}
-                        history={this.props.history}
-                        users={this.props.users}
-                        methods={this.props.methods} />;
-                        
-        const tFail = <TestFails fails={fTest} />;
-		  
-  		  if(nc.length > 0 && !skipped) {
-  		    
-  		    if(block || flowStep.type === 'finish' || flowStep.type === 'test') {
-  		      Session.set( 'nowStep', nc[0].where );
-  		      return (
-    		      nonCon
-  		      );
-  		    }else{
-  		      Session.set('nowStep', flowStep.step);
-            Session.set('nowWanchor', flowStep.how);
-  		      return (
-  		        <div>
-    		        <InOutWrap type='stoneTrans'>
-      		        {stone}
-                </InOutWrap>
-                {fTest.length > 0 ? 
-                  <InOutWrap type='stoneTrans'>
-                    {tFail}
-                  </InOutWrap>
-                : null}
-                {lastStep ? 
-                  <InOutWrap type='stoneTrans'>
-                    {repeat}
-                  </InOutWrap>
-                : null}
-                {nonCon}
-        			</div>
-  		      );
-  		    }
-  		  }else if(nc.length > 0) {
-  		    Session.set('nowStep', flowStep.step);
+      const repeat = <FirstRepeat
+                      key={lastStep.key}
+                      flowStep={lastStep}
+                      id={id}
+                      barcode={serial}
+                      history={history}
+                      users={users}
+                      methods={methods} />;
+                      
+      const tFail = <TestFails fails={fTest} />;
+	  
+		  if(nc.length > 0 && !skipped) {
+		    
+		    if(block || flowStep.type === 'finish' || flowStep.type === 'test') {
+		      Session.set( 'nowStep', nc[0].where );
+		      return (
+  		      nonCon
+		      );
+		    }else{
+		      Session.set('nowStep', flowStep.step);
           Session.set('nowWanchor', flowStep.how);
-  		    return (
+		      return (
 		        <div>
   		        <InOutWrap type='stoneTrans'>
     		        {stone}
@@ -131,40 +114,63 @@ export default class StoneSelect extends Component	{
               {nonCon}
       			</div>
 		      );
-  		  }else{
-  		    Session.set('nowStep', flowStep.step);
-          Session.set('nowWanchor', flowStep.how);
-          return (
-            <div>
+		    }
+		  }else if(nc.length > 0) {
+		    Session.set('nowStep', flowStep.step);
+        Session.set('nowWanchor', flowStep.how);
+		    return (
+	        <div>
+		        <InOutWrap type='stoneTrans'>
+  		        {stone}
+            </InOutWrap>
+            {fTest.length > 0 ? 
               <InOutWrap type='stoneTrans'>
-                {stone}
+                {tFail}
               </InOutWrap>
-              {fTest.length > 0 ? 
-                <InOutWrap type='stoneTrans'>
-                  {tFail}
-                </InOutWrap>
-              : null}
-              {lastStep ? 
-                <InOutWrap type='stoneTrans'>
-                  {repeat}
-                </InOutWrap>
-              : null}
-            </div>
-          );
-        }
+            : null}
+            {lastStep ? 
+              <InOutWrap type='stoneTrans'>
+                {repeat}
+              </InOutWrap>
+            : null}
+            {nonCon}
+    			</div>
+	      );
+		  }else{
+		    Session.set('nowStep', flowStep.step);
+        Session.set('nowWanchor', flowStep.how);
+        return (
+          <div>
+            <InOutWrap type='stoneTrans'>
+              {stone}
+            </InOutWrap>
+            {fTest.length > 0 ? 
+              <InOutWrap type='stoneTrans'>
+                {tFail}
+              </InOutWrap>
+            : null}
+            {lastStep ? 
+              <InOutWrap type='stoneTrans'>
+                {repeat}
+              </InOutWrap>
+            : null}
+          </div>
+        );
       }
-      
     }
     
-    // end of flow
-    Session.set('nowStep', 'done');
-    return (
-      <InOutWrap type='stoneTrans'>
-        <div className='purpleBorder centre cap'>
-          <h2>{Pref.trackLast}ed</h2>
-          <h3>{moment(iDone[iDone.length -1].time).calendar()}</h3>
-        </div>
-      </InOutWrap>
-    );
   }
-}
+  
+  // end of flow
+  Session.set('nowStep', 'done');
+  return (
+    <InOutWrap type='stoneTrans'>
+      <div className='purpleBorder centre cap'>
+        <h2>{Pref.trackLast}ed</h2>
+        <h3>{moment(iDone[iDone.length -1].time).calendar()}</h3>
+      </div>
+    </InOutWrap>
+  );
+};
+  
+export default StoneSelect;

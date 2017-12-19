@@ -116,7 +116,7 @@ export default class FirstForm extends Component	{
 		  if(error)
 		    console.log(error);
 		  if(reply) {
-     		const findBox = document.getElementById('find');
+     		const findBox = document.getElementById('lookup');
 			  findBox.focus();
 			 }else{
 			   Bert.alert(Pref.blocked, 'danger');

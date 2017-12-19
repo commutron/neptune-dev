@@ -6,7 +6,7 @@ WidgetDB = new Mongo.Collection('widgetdb');
 BatchDB = new Mongo.Collection('batchdb');
 ArchiveDB = new Mongo.Collection('archivedb');
 
-import moment from 'moment';
+//import moment from 'moment';
 
 Meteor.publish('appData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
