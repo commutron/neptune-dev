@@ -59,9 +59,9 @@ export default class BatchCard extends Component	{
           
           <Tabs
             tabs={[
-              <i className='fas fa-info-circle' data-fa-transform='down-2'></i>, 
-              <i className='fas fa-tasks' data-fa-transform='down-2'></i>, 
-              <i className='fas fa-thumbs-down' data-fa-transform='down-2'></i>
+              <i className='fas fa-info-circle' data-fa-transform='down-2' title='Info'></i>, 
+              <i className='fas fa-tasks' data-fa-transform='down-2' title='Progress'></i>, 
+              <i className='fas fa-thumbs-down' data-fa-transform='down-2' title='NonConformances'></i>
             ]}
             wide={true}
             stick={false}>

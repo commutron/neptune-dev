@@ -33,7 +33,6 @@ export default class BatchCard extends Component	{
     
     let warn = b.blocks.filter( x => x.solve === false ).length;
     iready ? warn++ : null;
-    const showWarn = warn === 0 ? 'hide' : 'alertCount';
 
     return (
       <AnimateWrap type='cardTrans'>
@@ -42,7 +41,9 @@ export default class BatchCard extends Component	{
           <h1 className='centreText'>
             {b.batch}
             <i className='breath'></i>
-            <i className={showWarn}>{warn}</i>
+            {warn === 0 ? null :
+              <i className='alertCount'>{warn}</i>
+            }
           </h1>
           
           {iready ?
@@ -59,9 +60,9 @@ export default class BatchCard extends Component	{
           
           <Tabs
             tabs={[
-              <i className='fas fa-info-circle' data-fa-transform='down-2'></i>, 
-              <i className='fas fa-tasks' data-fa-transform='down-2'></i>, 
-              <i className='fas fa-thumbs-down' data-fa-transform='down-2'></i>
+              <i className='fas fa-info-circle' data-fa-transform='down-2' title='Info'></i>, 
+              <i className='fas fa-tasks' data-fa-transform='down-2' title='Progress'></i>, 
+              <i className='fas fa-thumbs-down' data-fa-transform='down-2' title='NonConformances'></i>
             ]}
             wide={true}
             stick={false}>

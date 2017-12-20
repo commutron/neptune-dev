@@ -14,6 +14,7 @@ import RiverSatus from '../../../components/smallUi/RiverStatus.jsx';
 import FirstsOverview from '/client/components/bigUi/FirstsOverview.jsx';
 import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
 import NonConOverview from '../../../components/charts/NonConOverview.jsx';
+import NonConRate from '../../../components/charts/NonConRate.jsx';
 import NonConPie from '../../../components/charts/NonConPie.jsx';
 import RMAList from '../../../components/smallUi/RMAList.jsx';
 
@@ -153,6 +154,7 @@ export default class BatchPanel extends Component	{
                     flow={riverFlow}
                     flowAlt={riverAltFlow}
                     nonCons={b.nonCon} />
+                  <NonConRate batches={[b.batch]} />
                 </div>
                 <div className='centre'>
                   <NonConPie nonCons={b.nonCon} />

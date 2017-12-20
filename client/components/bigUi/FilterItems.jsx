@@ -88,11 +88,10 @@ export default class FilterItems extends Component	{
             <input
               type='radio'
               name='scale'
-              id='---'
-              title='---'
-              onChange={this.changeFilter.bind(this, '---')}
-              disabled />
-            <label htmlFor='---'>---</label>
+              id='nonCons'
+              title='Items with NonConformances'
+              onChange={this.changeFilter.bind(this, 'noncons')} />
+            <label htmlFor='nonCons'>NonCons</label>
             
             <input
               type='radio'

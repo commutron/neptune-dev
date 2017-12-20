@@ -788,3 +788,8 @@
 .rateLines .ct-series-c .ct-line, .rateLines .ct-series-c .ct-point {
   stroke: var(--emerald);
 }
+
+
+.rateLinesBad .ct-series-a .ct-line, .rateLines .ct-series-a .ct-point {
+  stroke: var(--alizarin);
+}

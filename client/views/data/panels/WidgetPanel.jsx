@@ -9,6 +9,7 @@ import Tabs from '../../../components/smallUi/Tabs.jsx';
 import JumpText from '../../../components/tinyUi/JumpText.jsx';
 import FlowTable from '../../../components/tables/FlowTable.jsx';
 import VersionTable from '../../../components/tables/VersionTable.jsx';
+import NonConRate from '../../../components/charts/NonConRate.jsx';
 
 export default class WidgetPanel extends Component	{
 
@@ -34,13 +35,15 @@ export default class WidgetPanel extends Component	{
             <br />
             
             <Tabs
-              tabs={[Pref.version + 's', Pref.flow + 's']}
+              tabs={[Pref.version + 's', Pref.flow + 's', Pref.nonCon + 's']}
               wide={true}
               stick={false}>
               
               <VersionTable widgetData={w} />
               
               <FlowTable id={w._id} flows={w.flows} app={a} />
+              
+              <NonConRate batches={Array.from( b, x => x.batch )} />
               
             </Tabs>
   

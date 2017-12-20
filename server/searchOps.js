@@ -287,6 +287,75 @@ Meteor.methods({
     
     //////// Return Object \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     return { now: bigDataPack, wip: wipLiveData };
+  },
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ///////////////////////////////////////////////////////////////////////////////////
+  
+  // nonCon Rate
+  
+  ///////////////////////////////////////////////////////////////////////////////////
+  
+  nonConRateLoop(batches) {
+
+    const allNC = Array.from( batches, x => BatchDB.findOne({batch: x}).nonCon );
+    
+    function oneRate(theseNC) {
+      
+      function recordedNC(noncons, qDay) {
+        let relevant = noncons.filter(
+                        x => moment(x.time)
+                          .isSame(qDay, 'day') );
+        let ncPack = {
+          'value': relevant.length,
+          'meta': moment(qDay).format('MMM.D')
+        };
+        return ncPack;
+      }
+      
+      const begin = moment(theseNC[0].time);
+      const end = moment(theseNC[theseNC.length - 1].time);
+      const range = end.diff(begin, 'day') + 2;
+      
+      let nonconSet = [];
+      let labelSet = [];
+      for(let i = 0; i < range; i++) {
+        let qDay = begin.clone().add(i, 'day').format();
+        
+        let ncCount = recordedNC(theseNC, qDay);
+        nonconSet.push(ncCount.value);
+        labelSet.push(ncCount.meta);
+      }
+      return { counts: nonconSet, labels: labelSet };
+    }
+    
+    nonconCollection = [];
+    for(let nc of allNC) {
+      if(nc.length > 0) {
+        let rateLoop = oneRate(nc);
+        nonconCollection.push(rateLoop);
+      }else{null}
+    }
+    
+    const allCounts = Array.from( nonconCollection, x => x.counts );
+    
+    let buildLabels = [];
+    let combine = Array.from( nonconCollection, x => x.labels );
+    combine.forEach( x => x.forEach( y => buildLabels.push(y) ) );
+    
+    let allLabels = [... new Set( buildLabels ) ];
+    
+    return { counts: allCounts, labels: allLabels };
   }
   
   
