@@ -69,7 +69,6 @@
   font-size: 1.25rem;
   letter-spacing: 1px;
   width: 100%;
-	min-height: 1rem;
 	margin: 5px 0;
 	padding: 2px;
 	background-color: transparent;
@@ -330,6 +329,10 @@
 .small {
   font-family: 'Open Sans', sans-serif;
   font-size: 0.75rem;
+}
+
+.smaller {
+  font-size: smaller;
 }
 
 .med {
@@ -603,13 +606,15 @@
 .fltrs input[type='checkbox'], .fltrs input[type='radio'] {
   margin: 0;
   width: 17px;
+  min-height: 1rem;
 }
 
-.fltrs label {
-  position: relative;
-  top: 5px;
-  left: -10px;
+.radioLabelPair {
+  margin: 0 3px;
+  vertical-align: middle;
+  white-space: nowrap;
 }
+
 
 .rangeTools {
   width: 100%;

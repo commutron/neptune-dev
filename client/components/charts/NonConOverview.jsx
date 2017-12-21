@@ -66,7 +66,7 @@ export default class NonConOverview extends Component {
             ref={(i)=>this.frstFiltr=i} 
             onChange={()=>this.setState({stackFilter: this.frstFiltr.value})}>
             <option value='dprt' defaultValue>Department</option>
-            <option value='ref'>Referance</option>
+            <option value='ref'>Reference</option>
           </select>
         </p>
         <NonConTypeChart counts={counts} ncOp={this.props.ncOp} />

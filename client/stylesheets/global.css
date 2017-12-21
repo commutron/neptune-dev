@@ -124,7 +124,6 @@ input[type='checkbox'], input[type='radio'] {
 
 input[type='checkbox'] + label, input[type='radio'] + label {
   display: inline-table;
-  line-height: normal;
   height: auto;
   vertical-align: super;
   border-bottom-width: 1px;

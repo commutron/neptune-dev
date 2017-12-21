@@ -50,16 +50,7 @@ const NCAdd = ({ id, barcode, app })=> {
               );
           })}
         </optgroup>
-        {/* these cause an update issue
-        <optgroup label='build steps'>
-          {app.trackOption.map( (entry, index)=>{
-            if(entry.type === 'build') {
-              return (
-                <option key={index} value={entry.step}>{entry.step}</option>
-              );
-            }else{null}
-          })}
-        </optgroup>*/}
+
       </select>
       <input
         type='text'
@@ -68,6 +59,7 @@ const NCAdd = ({ id, barcode, app })=> {
         placeholder={Pref.nonConRef}
         disabled={lock}
         required />
+      
       <select 
         id='ncType'
         className='cap redIn'
@@ -75,7 +67,7 @@ const NCAdd = ({ id, barcode, app })=> {
         required >
         {app.nonConOption.map( (entry, index)=>{
           return ( 
-            <option key={index} value={entry}>{entry}</option>
+            <option key={index} value={entry}>{index + 1}. {entry}</option>
             );
         })}
       </select>

@@ -9,18 +9,17 @@ const WikiOps = ({ wi, root, anchor, fallback })=> {
   if(fallback) {
     const num = fallback;
     const yr = num.slice(0,2);
-    let pisces = root + '/doku.php?id=workorders:';
+    let pisces = root + '?id=workorders:';
     if(yr == '16') {
       pisces = pisces + '16000:' + num;
     }else{
       pisces = pisces + '17000:' + num;
     }
-    return pisces;
+    goto = pisces;
+  }else{
+    !goto || goto === 'home' || goto === 'none' ? goto = root : false;
+    anchor ? goto = goto + '#' + anchor : false;
   }
-  ////
-  !goto || goto === 'home' || goto === 'none' ? goto = root : false;
-  
-  anchor ? goto = goto + '#' + anchor : false;
 
   return(
     <div className='instructionFix'>

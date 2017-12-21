@@ -32,7 +32,7 @@ export default class BatchesList extends Component	{
 
     return (
       <AnimateWrap type='cardTrans'>
-        <div className='section sidebar' key={1}>
+        <div className='' key={1}>
         
           <FilterActive
             title={b.batch}

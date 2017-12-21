@@ -42,94 +42,88 @@ export default class FilterItems extends Component	{
           
           <br />
           
-          <span className='comfort'>
+          <span className='balance'>
           
-            <i className='breath'></i>
+            <span className='radioLabelPair'>
+              <input
+                type='radio'
+                name='scale'
+                id='all'
+                title='All'
+                defaultChecked={true}
+                onChange={this.changeFilter.bind(this, 'all')} />
+              <label htmlFor='all'>All</label>
+            </span>
             
-            <input
-              type='radio'
-              name='scale'
-              id='all'
-              title='All'
-              defaultChecked={true}
-              onChange={this.changeFilter.bind(this, 'all')} />
-            <label htmlFor='all'>All</label>
-   
-            <input
-              type='radio'
-              name='scale'
-              id='inproc'
-              title='In Regular Process'
-              onChange={this.changeFilter.bind(this, 'inproc')} />
-            <label htmlFor='inproc'>Active</label>
+            <span className='radioLabelPair'>
+              <input
+                type='radio'
+                name='scale'
+                id='inproc'
+                title='In Regular Process'
+                onChange={this.changeFilter.bind(this, 'inproc')} />
+              <label htmlFor='inproc'>In Progress</label>
+            </span>
             
-            <input
-              type='radio'
-              name='scale'
-              id='done'
-              title='Finished Regular Process'
-              onChange={this.changeFilter.bind(this, 'done')} />
-            <label htmlFor='done'>Finished</label>
+            <span className='radioLabelPair'>
+              <input
+                type='radio'
+                name='scale'
+                id='done'
+                title='Finished Regular Process'
+                onChange={this.changeFilter.bind(this, 'done')} />
+              <label htmlFor='done'>Finished</label>
+            </span>
             
-          </span>
-          
-          <span className='comfort'>
-          
-            <i className='breath'></i>
+            <span className='radioLabelPair'>
+              <input
+                type='radio'
+                name='scale'
+                id='firsts'
+                title='First Off Items'
+                onChange={this.changeFilter.bind(this, 'firsts')} />
+              <label htmlFor='firsts'>Firsts</label>
+            </span>
             
-            <input
-              type='radio'
-              name='scale'
-              id='firsts'
-              title='First Off Items'
-              onChange={this.changeFilter.bind(this, 'firsts')} />
-            <label htmlFor='firsts'>Firsts</label>
-   
-            <input
-              type='radio'
-              name='scale'
-              id='nonCons'
-              title='Items with NonConformances'
-              onChange={this.changeFilter.bind(this, 'noncons')} />
-            <label htmlFor='nonCons'>NonCons</label>
+            <span className='radioLabelPair'>
+              <input
+                type='radio'
+                name='scale'
+                id='nonCons'
+                title='Items with NonConformances'
+                onChange={this.changeFilter.bind(this, 'noncons')} />
+              <label htmlFor='nonCons'>NonCons</label>
+            </span>
             
-            <input
-              type='radio'
-              name='scale'
-              id='----'
-              title='----'
-              onChange={this.changeFilter.bind(this, '----')}
-              disabled />
-            <label htmlFor='----'>---</label>
+            <span className='radioLabelPair'>
+              <input
+                type='radio'
+                name='scale'
+                id='lt'
+                title='Alt Process'
+                onChange={this.changeFilter.bind(this, 'alt')} />
+              <label htmlFor='lt'>Alt</label>
+            </span>
             
-          </span>
-          
-          <span className='comfort'>
-            <i className='breath'></i>
+            <span className='radioLabelPair'>
+              <input
+                type='radio'
+                name='scale'
+                id='rma'
+                title='RMA'
+                onChange={this.changeFilter.bind(this, 'rma')} />
+              <label htmlFor='rma'>RMA</label>
+            </span>
             
-            <input
-              type='radio'
-              name='scale'
-              id='lt'
-              title='Alt Process'
-              onChange={this.changeFilter.bind(this, 'alt')} />
-            <label htmlFor='lt'>Alt</label>
-            
-            <input
-              type='radio'
-              name='scale'
-              id='rma'
-              title='RMA'
-              onChange={this.changeFilter.bind(this, 'rma')} />
-            <label htmlFor='rma'>RMA</label>
-            
-            <input
-              type='radio'
-              name='scale'
-              id='scrp'
-              title='Scrapped'
-              onChange={this.changeFilter.bind(this, 'scrap')} />
-            <label htmlFor='scrp'>Scrapped</label>
+            <span className='radioLabelPair'>
+              <input
+                type='radio'
+                name='scale'
+                id='scrp'
+                title='Scrapped'
+                onChange={this.changeFilter.bind(this, 'scrap')} />
+              <label htmlFor='scrp'>Scrapped</label>
+            </span>
             
           </span>
           

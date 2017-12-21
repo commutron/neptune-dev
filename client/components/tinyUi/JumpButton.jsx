@@ -20,9 +20,9 @@ const JumpButton = ({ title, sub, sty, inStyle })=> {
       onClick={()=>handle(title)}
       value={title}
       style={inlineStyle}>
-      <i className='up big'>{title}</i>
+      <i className='up'>{title}</i>
       <br />
-      <i className='med'>{sub}</i>
+      <i className='smaller'>{sub}</i>
     </button>
   );
 };
