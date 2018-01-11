@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
-import {createContainer} from 'meteor/react-meteor-data';
+import { withTracker } from 'meteor/react-meteor-data';
 
 import Spin from '../../components/uUi/Spin.jsx';
 import ActivityWrap from './ActivityWrap.jsx';
@@ -34,7 +34,7 @@ class View extends Component	{
   }
 }
 
-export default createContainer( () => {
+export default withTracker( () => {
   let login = Meteor.userId() ? true : false;
   let usfo = login ? Meteor.user() : false;
   let user = usfo ? usfo.username : false;
@@ -62,4 +62,4 @@ export default createContainer( () => {
       batch: BatchDB.find().fetch()
     };
   }
-}, View);
+})(View);

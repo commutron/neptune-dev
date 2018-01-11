@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
-import {createContainer} from 'meteor/react-meteor-data';
+import { withTracker } from 'meteor/react-meteor-data';
 
 import Spin from '../../components/uUi/Spin.jsx';
 import AppWrap from './AppWrap.jsx';
@@ -32,7 +32,7 @@ class AppView extends Component	{
   }
 }
 
-export default createContainer( () => {
+export default withTracker( () => {
   let login = Meteor.userId() ? true : false;
   let usfo = login ? Meteor.user() : false;
   let user = usfo ? usfo.username : false;
@@ -65,4 +65,4 @@ export default createContainer( () => {
       users: Meteor.users.find({}, {sort: {username:1}}).fetch()
     };
   }
-}, AppView);
+})(AppView);

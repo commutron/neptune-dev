@@ -34,30 +34,36 @@ export default class FilterActive extends Component	{
           
             <i className='breath'></i>
             
-            <input
-              type='radio'
-              name='scale'
-              id='all'
-              title='All'
-              defaultChecked={true}
-              onChange={this.changeFilter.bind(this, 'all')} />
-            <label htmlFor='all'>All</label>
-   
-            <input
-              type='radio'
-              name='scale'
-              id='inproc'
-              title='In Regular Process'
-              onChange={this.changeFilter.bind(this, 'inproc')} />
-            <label htmlFor='inproc'>Active</label>
+            <span className='radioLabelPair'>
+              <input
+                type='radio'
+                name='scale'
+                id='all'
+                title='All'
+                defaultChecked={true}
+                onChange={this.changeFilter.bind(this, 'all')} />
+              <label htmlFor='all'>All</label>
+            </span>
             
-            <input
-              type='radio'
-              name='scale'
-              id='done'
-              title={this.props.done + ' Regular Process'}
-              onChange={this.changeFilter.bind(this, 'done')} />
-            <label htmlFor='done'>{this.props.done}</label>
+            <span className='radioLabelPair'>
+              <input
+                type='radio'
+                name='scale'
+                id='inproc'
+                title='In Regular Process'
+                onChange={this.changeFilter.bind(this, 'inproc')} />
+              <label htmlFor='inproc'>Active</label>
+            </span>
+            
+            <span className='radioLabelPair'>
+              <input
+                type='radio'
+                name='scale'
+                id='done'
+                title={this.props.done + ' Regular Process'}
+                onChange={this.changeFilter.bind(this, 'done')} />
+              <label htmlFor='done'>{this.props.done}</label>
+            </span>
         
           </span>
             

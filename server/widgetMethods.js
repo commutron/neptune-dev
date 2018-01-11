@@ -317,4 +317,38 @@ Meteor.methods({
   },
   
   
+// push a Component
+  pushComp(widgetId, vKey, comps) {
+    if(Roles.userIsInRole(Meteor.userId(), ['create', 'edit'])) {
+      for(let c of comps) {
+        WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.versionKey': vKey}, {
+          $push : { 
+            'versions.$.assembly': { 
+              ref: false,
+              component: c,
+              location: false,
+              theta: false,
+              bSide: false
+            }
+        }});
+      }
+    }else{
+      null;
+    }
+  },
+  /*
+  // pull a Component
+  pullComp(widgetId, vKey, tag) {
+    if(Roles.userIsInRole(Meteor.userId(), ['create', 'edit'])) {
+      WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.versionKey': vKey}, {
+        $pull : {
+          'versions.$.tags': tag
+        }});
+    }else{
+      null;
+    }
+  },
+  */
+  
+  
 });

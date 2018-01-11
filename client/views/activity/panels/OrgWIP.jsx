@@ -108,10 +108,14 @@ export class StatusRow extends Component	{
         : null}
         {totalUnits > totalAll ?
           <div className='functionalFooter numBoxRadio blackFade'>
+            <span className='radioLabelPair'>
             <input type='radio' id='calcI' name='calc' onChange={()=> this.setState({countCalc: 'item'})} defaultChecked />
             <label htmlFor='calcI'>Boards</label>
+            </span>
+            <span className='radioLabelPair'>
             <input type='radio' id='calcU' name='calc' onChange={()=> this.setState({countCalc: 'unit'})} />
             <label htmlFor='calcU'>Units</label>
+            </span>
           </div>
         : null}
         {late ?

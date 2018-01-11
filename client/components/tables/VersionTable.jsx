@@ -1,9 +1,11 @@
 import React from 'react';
+import Pref from '/client/global/pref.js';
 
 import CreateTag from '/client/components/uUi/CreateTag.jsx';
 
 import VersionForm from '../forms/VersionForm.jsx';
 import { VersionRemove } from '../forms/VersionForm.jsx';
+import CompForm from '../forms/CompForm.jsx';
 import NoteLine from '../smallUi/NoteLine.jsx';
 import TagsModule from '../bigUi/TagsModule.jsx';
 
@@ -39,9 +41,10 @@ const VersionRow = ({ widgetData, app, entry })=> {
     <tbody className={live}>
       <tr>
         <td className='bigger'>{v.version}</td>
-        <td><a className='clean' href={v.wiki} target='_blank'>{v.wiki}</a></td>
-        <td>default units: {v.units}</td>
-        <td>components: {v.assembly.length}</td>
+        <td>
+          <a className='clean break' href={v.wiki} target='_blank'>{v.wiki}</a>
+        </td>
+        <td colSpan='2'>default units: {v.units}</td>
       </tr>
       <tr>
         <td colSpan='2' className='clean'>
@@ -61,7 +64,21 @@ const VersionRow = ({ widgetData, app, entry })=> {
         </td>
       </tr>
       <tr>
-        <td colSpan='3'>
+        <td colSpan='2' className='fill'>
+          <details>
+            <summary>{Pref.comp}s: {v.assembly.length}</summary>
+            {v.assembly.map((entry, index)=>{
+              return(
+                <i key={index}>{entry.component}, </i>
+            )})}
+          </details>
+        </td>
+        <td colSpan='2'>
+          <CompForm id={w._id} versionKey={v.versionKey} />
+        </td>
+      </tr>
+      <tr>
+        <td colSpan='2'>
           <CreateTag
             when={v.createdAt}
             who={v.createdWho}
@@ -69,7 +86,7 @@ const VersionRow = ({ widgetData, app, entry })=> {
             whoNew={v.updatedWho}
             dbKey={v.versionKey} />
         </td>
-        <td colSpan='1'>
+        <td colSpan='2'>
           <VersionForm
             widgetData={w}
             version={v}

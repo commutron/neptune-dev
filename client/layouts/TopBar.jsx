@@ -84,6 +84,10 @@ const TopBar = ({ ready, orb, login, user, active, org, app, link })=> {
         </a>
         <RoleCheck role={'nightly'}>
           <span>
+            <a href='/starfish' className={ link === 'comp' ? 'whiteT' : '' }>
+              <i className="fas fa-microchip fa-lg" aria-hidden='true'></i>
+              <span className='icontext'>Parts Search</span>
+            </a>
             <a href='/production' className={ link === 'prod' ? 'whiteT' : '' }>
               <i className="fa fa-flask fa-lg" aria-hidden='true'></i>
               <span className='icontext'>Production</span>

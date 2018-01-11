@@ -421,6 +421,11 @@ main {
   margin: 0 5px;
 }
 
+.fill {
+  margin: 0;
+  padding: 0;
+}
+
 .comfort {
   display: flex;
   justify-content: space-between;
@@ -465,6 +470,10 @@ main {
 
 .wrap {
   white-space: normal;
+}
+
+.break {
+  word-wrap: break-word;
 }
 
 .popTbody > tr:first-child > td { 
@@ -550,7 +559,6 @@ main {
 
 .functionalFooter {
   width: 100%;
-  max-height: 1.25rem;
   padding: 0 10px;
 }
 .functionalFooter label {

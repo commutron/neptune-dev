@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
-import {createContainer} from 'meteor/react-meteor-data';
+import { withTracker } from 'meteor/react-meteor-data';
 //import Pref from '/client/global/pref.js';
 
 import Spin from '/client/components/uUi/Spin.jsx';
@@ -42,7 +42,7 @@ class ProductionView extends Component	{
   }
 }
 
-export default createContainer( () => {
+export default withTracker( () => {
   
   // diagnose data in development /////////////////////// 
   /*
@@ -134,4 +134,4 @@ export default createContainer( () => {
       hotBatch: hotBatch,
     };
   }
-}, ProductionView);
+})(ProductionView);

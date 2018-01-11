@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
-import {createContainer} from 'meteor/react-meteor-data';
+import { withTracker } from 'meteor/react-meteor-data';
 
 class StartView extends Component	{
   
@@ -20,7 +20,7 @@ class StartView extends Component	{
   }
 }
 
-export default createContainer( () => {
+export default withTracker( () => {
   let login = Meteor.userId() ? true : false;
   let usfo = login ? Meteor.user() : false;
   let user = usfo ? usfo.username : false;
@@ -41,4 +41,4 @@ export default createContainer( () => {
       org: org,
     };
   }
-}, StartView);
+})(StartView);

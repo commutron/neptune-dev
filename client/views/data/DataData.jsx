@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
-import {createContainer} from 'meteor/react-meteor-data';
+import { withTracker } from 'meteor/react-meteor-data';
 //import Pref from '/client/global/pref.js';
 
 import Spin from '../../components/uUi/Spin.jsx';
@@ -44,7 +44,7 @@ class ExploreView extends Component	{
   }
 }
 
-export default createContainer( (props) => {
+export default withTracker( (props) => {
   
   //const orb = Session.get('now');
   let login = Meteor.userId() ? true : false;
@@ -106,4 +106,4 @@ export default createContainer( (props) => {
       specify: props.specify
     };
   }
-}, ExploreView);
+})(ExploreView);
