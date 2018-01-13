@@ -138,6 +138,17 @@ textarea.redIn:focus {
   content: "\f022";
 }
 
+#snapSwitch {
+  display: inline-block;
+  vertical-align: baseline;
+  z-index: 1;
+  transform: translate(0%, 0%) rotate(0deg);
+  opacity: 0.8;
+}
+#snapSwitch:hover {
+  opacity: 1;
+}
+
 @media screen and (max-width: 1000px) {
   .actionForm > input,
   .actionForm > select, 

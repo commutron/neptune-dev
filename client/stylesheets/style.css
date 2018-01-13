@@ -615,7 +615,6 @@
   white-space: nowrap;
 }
 
-
 .rangeTools {
   width: 100%;
   display: flex;
@@ -680,6 +679,30 @@
   font-size: 2em;
 }
 
+.searchResult {
+  max-width: 500px;
+  text-align: center;
+}
+.searchResult td {
+  padding: 20px;
+}
+.searchResult tr:nth-child(1) td {
+  padding: 10px;
+  text-align: left;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+.searchResult .mockTableCell {
+  padding: 5px 10px;
+  width: 1%;
+  border-color: black;
+  border-color: rgba(0,0,0,0.2);
+}
+.searchResult .mockTableRow {
+  border-color: black;
+  border-color: rgba(0,0,0,0.2);
+}
+
 
 /* custom Bert alerts */
 .bert-alert {
@@ -739,4 +762,51 @@
     font-size: 1rem;
   	min-height: 0.5rem;
   }
+}
+
+.starfishColour {
+  color: #00bde0;
+}
+.starfishAccents #pnFindButton {
+  color: #00bde0;
+  background-color: white;
+  border-color: #00bde0;
+}
+.starfishAccents #pnFindButton:hover {
+  color: white;
+  background-color: #00bde0;
+  border-color: #00bde0;
+}
+/*
+.starfishAccents #pnFind::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+*/
+.starfishAccents #pnFind {
+  border-color: black;
+  border-right-color: transparent;
+  letter-spacing: 1px;
+}
+.starfishAccents #pnFind:focus {
+  border-color: #00bde0;
+  border-right-color: transparent;
+}
+.starfishAccents input[type='checkbox'] + label,
+.starfishAccents input[type='radio'] + label {
+  color: black;
+  border-bottom: none;
+}
+.starfishAccents input[type='checkbox']:hover + label,
+.starfishAccents input[type='checkbox']:active + label,
+.starfishAccents input[type='checkbox']:checked + label {
+  color: #00bde0;
+}
+.starfishAccents input[type='checkbox']:focus + label {
+  color: black;
+}
+.starfishAccents input[type='checkbox']:focus:hover + label {
+  color: #00bde0;
+}
+.starfishAccents input[type='checkbox']:checked:focus + label {
+  color: #00bde0;
 }

@@ -270,24 +270,6 @@ Meteor.methods({
       null;
     }
   },
-
-// not a teribly usefull function and doesn't actualy work
-// could be altered to close a whole group
-/*
-  killAllVersions(widgetId) {
-    if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
-      WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.live': true}, {
-        $set : { 
-          'versions.$.live': false
-  		   }}, {
-  		     multi: true
-  		   });
-  		return true;
-    }else{
-      return false;
-    }
-  },
-*/
   
   // needs testing
     /*

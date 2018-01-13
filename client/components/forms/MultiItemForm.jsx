@@ -137,7 +137,7 @@ export default class MultiItemForm extends Component {
                 defaultChecked={false}
                 onChange={this.setDigit.bind(this, 9)}
                 required />
-              <label htmlFor='cln' className='beside'>9 digits</label>
+              <label htmlFor='nine' className='beside'>9 digits</label>
             <br />
               <input
                 type='radio'
@@ -147,7 +147,7 @@ export default class MultiItemForm extends Component {
                 defaultChecked={true}
                 onChange={this.setDigit.bind(this, 10)}
                 required />
-              <label htmlFor='cln' className='beside'>10 digits</label>
+              <label htmlFor='ten' className='beside'>10 digits</label>
             </p>
             <p>
               <input

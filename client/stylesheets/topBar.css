@@ -120,15 +120,6 @@ input::-webkit-calendar-picker-indicator {
   transition: 0.4s cubic-bezier(0.2, 0.6, 0.3, 1.1);
 }
 
-#snapSwitch {
-  z-index: 1;
-  transform: translate(0%, 0%) rotate(0deg);
-  opacity: 0.8;
-}
-#snapSwitch:hover {
-  opacity: 1;
-}
-
 #timeSwitch:hover, #exitSwitch:hover, #boltSwitch:hover {
   color: white;
   border-bottom-color: transparent;

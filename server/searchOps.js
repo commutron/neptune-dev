@@ -356,6 +356,47 @@ Meteor.methods({
     let allLabels = [... new Set( buildLabels ) ];
     
     return { counts: allCounts, labels: allLabels };
+  },
+  
+  
+  
+  componentFind(num, batchInfo, unitInfo) {
+    const widgets = WidgetDB.find({'versions.assembly.component': num}).fetch();
+    const send = [];
+    for(let w of widgets) {
+      let findG = GroupDB.findOne({ _id: w.groupId });
+      let findV = w.versions.filter( x => x.assembly.find( y => y.component === num));
+      let versions = [];
+      for(let v of findV) {
+        let batches = [];
+        if(batchInfo) {
+          const findB = BatchDB.find({active: true, versionKey: v.versionKey}).fetch();
+          batches = Array.from(findB, x => { 
+                                  countI = 0;
+                                  unitInfo ? 
+                                    x.items.forEach( y => countI += y.units )
+                                  : null;
+                                  return {
+                                    btch: x.batch,
+                                    cnt: countI
+                                } } );
+        }else{null}
+        versions.push({ 
+          vKey: v.versionKey,
+          ver: v.version,
+          places: 1,
+          //v.assembly.filter( x => x.component === num ).length,
+          btchs: batches
+        });
+      }
+      send.push({ 
+        wdgt: w.widget,
+        dsc: w.describe,
+        grp: findG.alias,
+        vrsns: versions
+      });
+    }
+    return send;
   }
   
   

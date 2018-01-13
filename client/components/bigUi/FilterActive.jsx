@@ -30,7 +30,7 @@ export default class FilterActive extends Component	{
           
           <br />
           
-          <span className='comfort'>
+          <span className='balance'>
           
             <i className='breath'></i>
             

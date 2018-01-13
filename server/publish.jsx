@@ -170,6 +170,32 @@ Meteor.publish('scrapData', function(active) {
     
 });
 
+/*alternitive components search data
+Meteor.publish('compData', function(cNum){
+  const user = Meteor.users.findOne({_id: this.userId});
+  const orgKey = user ? user.orgKey : false;
+  return [
+    GroupDB.find({orgKey: orgKey}, {
+      fields: {
+          'alias': 1,
+        }}),
+    WidgetDB.find({orgKey: orgKey, 'versions.assembly.component': cNum}, {
+      fields: {
+          'widget': 1,
+          'versions.versionKey': 1,
+          'versions.version': 1,
+          'versions.assembly': 1
+        }}),
+    BatchDB.find({orgKey: orgKey, active: true}, {
+      sort: {batch:-1},
+      fields: {
+          'batch': 1,
+          'versionKey': 1,
+      }})
+    ];
+});
+*/
+  
 
 /*
 // somethings missing, its not adding the information from widgetDB but

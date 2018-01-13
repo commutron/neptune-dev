@@ -140,6 +140,7 @@ main {
 
 .basicMainFull {
   grid-area: mainFull;
+  min-height: calc(100vh - 65px);
   overflow-y: auto;
 }
 
@@ -206,6 +207,10 @@ main {
   .findForm {
     width: 225px;
   }
+}
+
+.fullViewHeight {
+  min-height: calc(100vh - 65px);
 }
 
 /* ============================================= */
@@ -295,6 +300,13 @@ main {
 .invert {
   background-color: var(--clouds);
   color: black;
+}
+.invert td,
+.invert tr:last-child td,
+.invert .mockTableCell,
+.invert .mockTableRow {
+  border-color: black;
+  border-color: rgba(0,0,0,0.5);
 }
 
 /* modal popup */
