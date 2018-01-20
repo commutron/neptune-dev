@@ -1,6 +1,6 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import {createContainer} from 'meteor/react-meteor-data';
+import { withTracker } from 'meteor/react-meteor-data';
 import RoleCheck from '/client/components/utilities/RoleCheck.js';
 
 import Spin from '../components/uUi/Spin.jsx';
@@ -82,12 +82,12 @@ const TopBar = ({ ready, orb, login, user, active, org, app, link })=> {
           <i className="fas fa-tachometer-alt fa-lg" aria-hidden='true'></i>
           <span className='icontext'>Dashboard</span>
         </a>
+        <a href='/starfish' className={ link === 'comp' ? 'whiteT' : '' }>
+          <i className="fas fa-microchip fa-lg" aria-hidden='true'></i>
+          <span className='icontext'>Parts Search</span>
+        </a>
         <RoleCheck role={'nightly'}>
           <span>
-            <a href='/starfish' className={ link === 'comp' ? 'whiteT' : '' }>
-              <i className="fas fa-microchip fa-lg" aria-hidden='true'></i>
-              <span className='icontext'>Parts Search</span>
-            </a>
             <a href='/production' className={ link === 'prod' ? 'whiteT' : '' }>
               <i className="fa fa-flask fa-lg" aria-hidden='true'></i>
               <span className='icontext'>Production</span>
@@ -111,7 +111,7 @@ const TopBar = ({ ready, orb, login, user, active, org, app, link })=> {
   );
 };
 
-export default createContainer( ({ link }) => {
+export default withTracker( ({ link }) => {
   let login = Meteor.userId() ? true : false;
   let usfo = login ? Meteor.user() : false;
   let user = usfo ? usfo.username : false;
@@ -142,4 +142,4 @@ export default createContainer( ({ link }) => {
       link: link
     };
   }
-}, TopBar);
+})(TopBar);

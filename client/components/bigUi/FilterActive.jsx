@@ -17,7 +17,7 @@ export default class FilterActive extends Component	{
     
     return(
       
-      <details className='fltrs' style={dStyl}>
+      <details className='fltrs noCopy' style={dStyl}>
           <summary className='fltrs'>
             <span>
               <i className='fa fa-filter' aria-hidden='true'></i>

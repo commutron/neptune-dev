@@ -40,13 +40,15 @@ export default class Model extends Component	{
           </label>
         </button>
       
-        {this.state.show ?
+        {this.state.show &&
         <AnimateWrap type='modelTrans' el='span'>
           <div className='overlay' key={1}>
             <div className='popup'>
               <button
-                className='action clear redT rAlign'
-                onClick={this.reveal}>{Pref.close}</button>
+                className='action clearRed rAlign'
+                onClick={this.reveal}
+                title='close'
+              ><i className='fas fa-times fa-lg'></i></button>
               <h2 className='cap'>
                 <i className={'fas ' + this.props.icon + ' fa-lg ' + this.props.color}></i>
                 <i className='breath'></i>
@@ -59,7 +61,7 @@ export default class Model extends Component	{
             </div>
           </div>
         </AnimateWrap>
-        : null }
+        }
       </span>
     );
   }

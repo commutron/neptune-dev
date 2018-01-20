@@ -7,7 +7,7 @@ const RiverStatus = ({ items, river, riverTitle, riverAlt, riverAltTitle })=> (
     {items === 0 ?
       <div className='mockTableRow'>
         <div className='mockTableCell'>
-          <i className='fas fa-hourglass-start fa-lg' aria-hidden='true'></i>
+          <i className='fas fa-hourglass-start fa-lg'></i>
           <i> No {Pref.item}s created</i>
         </div>
       </div>
@@ -17,15 +17,15 @@ const RiverStatus = ({ items, river, riverTitle, riverAlt, riverAltTitle })=> (
         {!river ?
           <dl>
             <dt>
-              <i className='fas fa-exclamation-circle fa-lg' aria-hidden='true'>
-              </i> No {Pref.buildFlow}
+              <i className='fas fa-exclamation-circle fa-lg fa-fw'>
+              </i>No {Pref.buildFlow}
             </dt>
           </dl>
         :
           <dl>
             <dt>
-              <i className='fas fa-check-square fa-lg greenT' aria-hidden='true'>
-              </i> {Pref.buildFlow}: 
+              <i className='fas fa-check-square fa-lg fa-fw greenT'>
+              </i>{Pref.buildFlow}: 
             </dt>    
             <dd>{riverTitle}</dd>
           </dl>
@@ -37,15 +37,15 @@ const RiverStatus = ({ items, river, riverTitle, riverAlt, riverAltTitle })=> (
         {!riverAlt ? 
           <dl>
             <dt>
-              <i className="fas fa-question-circle fa-lg" aria-hidden='true'>
-              </i> No {Pref.buildFlowAlt}
+              <i className='fas fa-question-circle fa-lg fa-fw'>
+              </i>No {Pref.buildFlowAlt}
             </dt>
           </dl>
         :
           <dl>
             <dt>
-              <i className='fas fa-check-square fa-lg greenT' aria-hidden='true'>
-              </i> {Pref.buildFlowAlt}:
+              <i className='fas fa-check-square fa-lg fa-fw greenT'>
+              </i>{Pref.buildFlowAlt}:
             </dt>    
             <dd>{riverAltTitle}</dd>
           </dl>

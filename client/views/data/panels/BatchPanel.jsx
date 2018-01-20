@@ -16,7 +16,7 @@ import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
 import NonConOverview from '../../../components/charts/NonConOverview.jsx';
 import NonConRate from '../../../components/charts/NonConRate.jsx';
 import NonConPie from '../../../components/charts/NonConPie.jsx';
-import RMAList from '../../../components/smallUi/RMAList.jsx';
+import RMATable from '../../../components/tables/RMATable.jsx';
 
 // props
 /// batchData
@@ -144,22 +144,22 @@ export default class BatchPanel extends Component	{
               
               <BlockList id={b._id} data={b.blocks} lock={done} />
               
-              <div className='split'>
+              <div className='balance'>
                 <div className='wide'>
                   <NonConOverview
                     ncOp={a.nonConOption}
                     flow={riverFlow}
                     flowAlt={riverAltFlow}
                     nonCons={b.nonCon} />
-                  <NonConRate batches={[b.batch]} />
                 </div>
-                <div className='centre'>
+                <div className='balance'>
                   <NonConPie nonCons={b.nonCon} />
+                  <NonConRate batches={[b.batch]} />
                 </div>
               </div>
               
               <div>
-                <RMAList
+                <RMATable
                   id={b._id}
                   data={b.cascade}
                   options={a.trackOption}

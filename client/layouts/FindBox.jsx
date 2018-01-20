@@ -1,6 +1,6 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import {createContainer} from 'meteor/react-meteor-data';
+import { withTracker } from 'meteor/react-meteor-data';
 
 const FindBox = ({ orb, user })=> {
     
@@ -24,6 +24,7 @@ const FindBox = ({ orb, user })=> {
         autoFocus={true}
         type='search'
         id='lookup'
+        aria-label='main searchbox'
         className='up'
         placeholder={last}
         disabled={lock}
@@ -35,9 +36,9 @@ const FindBox = ({ orb, user })=> {
   );
 };
 
-export default createContainer( () => {
+export default withTracker( () => {
     return {
       orb: Session.get('now'),
       user: Meteor.userId()
     };
-}, FindBox);
+})(FindBox);

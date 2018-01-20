@@ -283,6 +283,7 @@ Meteor.methods({
       }
     ]
     */
+  /*
   setAssembly(widgetId, vKey, assembly, verify) {
     if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
       const verified = verify ? Meteor.userId() : false;
@@ -297,6 +298,7 @@ Meteor.methods({
       return false;
     }
   },
+  */
   
   
 // push a Component
@@ -318,19 +320,21 @@ Meteor.methods({
       null;
     }
   },
-  /*
+
   // pull a Component
-  pullComp(widgetId, vKey, tag) {
-    if(Roles.userIsInRole(Meteor.userId(), ['create', 'edit'])) {
+  pullComp(widgetId, vKey, comp) {
+    if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
       WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.versionKey': vKey}, {
-        $pull : {
-          'versions.$.tags': tag
+          $pull : { 
+            'versions.$.assembly': { 
+               component: comp
+            }
         }});
     }else{
       null;
     }
   },
-  */
+
   
   
 });

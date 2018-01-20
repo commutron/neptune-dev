@@ -41,20 +41,23 @@ export class OptionAdd extends Component	{
   }
   
   render() {
+    
+    const rndmKey = this.props.rndmKey;
+    
     return(
       <div>
         <form onSubmit={this.addOp.bind(this)} className='inlineForm'>
-          <label htmlFor='iOp'>{this.props.title}<br />
+          <label htmlFor={rndmKey}>{this.props.title}<br />
             <input
               type='text'
-              id='iOp'
+              id={rndmKey}
               ref={(i)=> this.iop = i}
               required
             />
           </label>
             {this.props.action === 'track' ?
-              <label htmlFor='type'>Type<br />
-                <select id='type' ref={(i)=> this.type = i} required >
+              <label htmlFor={rndmKey + 'type'}>Type<br />
+                <select id={rndmKey + 'type'} ref={(i)=> this.type = i} required >
                   <option></option>
                   <option value='first'>first</option>
                   <option value='build'>build</option>
@@ -64,19 +67,18 @@ export class OptionAdd extends Component	{
                 </select>
               </label>
             : null}
-          <label htmlFor='add'><br />
+          <label htmlFor={rndmKey + 'add'}><br />
             <button
               type='submit'
-              id='add'
+              id={rndmKey + 'add'}
               ref={(i)=> this.go = i}
-              className='smallAction clear greenT'
+              className='smallAction clearGreen'
               disabled={false}
-            >Set
-            </button>
+            >Set</button>
           </label>
         </form>
       </div>
-      );
+    );
   }
 }
 
@@ -148,7 +150,7 @@ export const SetScale = ({ curScale })=> {
         <input type='number' id='low' className='miniNumIn' defaultValue={df.low} />
         <input type='number' id='high' className='miniNumIn' defaultValue={df.high} />
         <input type='number' id='max' className='miniNumIn' defaultValue={df.max} />
-        <button type='submit' className='smallAction clear greenT'>Save</button>
+        <button type='submit' className='smallAction clearGreen'>Save</button>
       </form>
     </div>
   );

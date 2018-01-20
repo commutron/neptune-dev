@@ -7,9 +7,11 @@
 	padding: 0 10px;
 	text-transform: uppercase;
 	vertical-align: bottom;
+	/*
   -moz-box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2);
   -webkit-box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2);
   box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2);
+  */
 }
 
 .smallAction {
@@ -65,10 +67,10 @@
 }
 
 .jumpBar {
-  line-height: 1.5em;
-  font-size: 1.25rem;
-  letter-spacing: 1px;
   width: 100%;
+  line-height: 1.5em;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
 	margin: 5px 0;
 	padding: 2px;
 	background-color: transparent;
@@ -152,14 +154,14 @@
 }
 
 .green {
-	background-color: rgb(46,204,113);
+	background-color: var(--emerald);
 }
 .greenT {
-	color: rgb(46,204,113);
+	color: var(--emerald);
 }
 .greenBorder {
   background-color: transparent;
-	border: 3px solid rgb(46,204,113);
+	border: 3px solid var(--emerald);
 	box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2),
 	      inset 0 0 .1em .1em rgba(43,43,43,0.2);
 }
@@ -291,6 +293,33 @@
   background-color: rgba(255,255,255,0.1);
 }
 
+.clearGreen {
+  background-color: transparent;
+  color: var(--emerald);
+  border: 1px solid var(--emerald);
+  font-size: medium;
+}
+.clearGreen:hover {
+  background-color: var(--emerald);
+  color: black;
+}
+
+.clearRed {
+  background-color: transparent;
+  color: var(--alizarin);
+  border: 1px solid var(--alizarin);
+  font-size: medium;
+}
+.clearRed:hover {
+  background-color: var(--alizarin);
+  color: black;
+}
+
+.invert .clearGreen:hover,
+.invert .clearRed:hover {
+  color: white;
+}
+
 .wisper {
   font-size: 0.5em;
   color: transparent;
@@ -351,6 +380,10 @@
   font-size: 2rem;
 }
 
+.letterSpaced {
+  letter-spacing: 2px;
+}
+
 .noCopy {
  -webkit-user-select: none;
  -khtml-user-select: none;
@@ -358,6 +391,15 @@
  -ms-user-select: none;
  -o-user-select: none;
  user-select: none;
+}
+.textSelect {
+ -webkit-user-select: text;
+ -khtml-user-select: text;
+ -moz-user-select: text;
+ -ms-user-select: text;
+ -o-user-select: text;
+ user-select: text;
+ cursor: text;
 }
 
 .dashLine {
@@ -757,11 +799,7 @@
 
 
 @media screen and (max-width: 1000px) {
-  .jumpBar {
-    line-height: 1.5em;
-    font-size: 1rem;
-  	min-height: 0.5rem;
-  }
+  
 }
 
 .starfishColour {

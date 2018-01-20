@@ -147,14 +147,24 @@ Meteor.methods({
     
     const barEnd = barLast + 1;
     
+    const appSetting = AppDB.findOne({orgKey: Meteor.user().orgKey});
+    
+    // simplify after appDB is updated
+    const floor = barFirst.toString().length === 10 ?
+                  !appSetting.latestSerial.tenDigit ?
+                    10 : appSetting.latestSerial.tenDigit
+                  :
+                  !appSetting.latestSerial.nineDigit ?
+                    9 : appSetting.latestSerial.nineDigit;
+    
     if(
       !isNaN(barFirst)
       &&
       !isNaN(barEnd)
       &&
-      barFirst > 0
+      barFirst > floor
       &&
-      barFirst.length === barEnd.length
+      barFirst.toString().length === barEnd.toString().length
       &&
       barFirst < barEnd
       &&
@@ -163,8 +173,7 @@ Meteor.methods({
       unit > 0
       &&
       unit <= 250
-      )
-      {
+      ) {
         const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
         const open = doc.finishedAt === false;
         const auth = Roles.userIsInRole(Meteor.userId(), 'run');
@@ -202,6 +211,19 @@ Meteor.methods({
               updatedAt: new Date(),
       			  updatedWho: Meteor.userId()
             }});
+          if(barLast < 999999999 ) {
+            AppDB.update({orgKey: Meteor.user().orgKey}, {
+              $set : {
+                'latestSerial.nineDigit': Number(barLast)
+              }});
+          }else if(barLast < 10000000000 ) {
+            AppDB.update({orgKey: Meteor.user().orgKey}, {
+              $set : {
+                'latestSerial.tenDigit': Number(barLast)
+              }});
+          }else{
+            null;
+          }
           return {
             success: true,
             notAdded: bad,
@@ -215,11 +237,19 @@ Meteor.methods({
           };
         }
       }else{
-        return {
-          success: false,
-          notAdded: false,
-          message: 'noRange'
-        };
+        if(barFirst <= floor) {
+          return {
+            success: false,
+            notAdded: false,
+            message: 'tooLowRange'
+          };
+        }else{
+          return {
+            success: false,
+            notAdded: false,
+            message: 'noRange'
+          };
+        }
       }
   },
   

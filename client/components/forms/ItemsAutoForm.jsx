@@ -10,7 +10,11 @@ import Model from '../smallUi/Model.jsx';
 /// items array as props.items
 /// props.more as true or false
 
-export default class MultiItemForm extends Component {
+////////////                \\\\\\\\\
+/////////// work in progress \\\\\\\\\
+//////////                    \\\\\\\\\\
+
+export default class ItemsAutoForm extends Component {
   
   constructor() {
     super();
@@ -33,13 +37,6 @@ export default class MultiItemForm extends Component {
     const barEnd = this.barNumEnd.value.trim();
     const unit = this.unit.value.trim();
     
-    const floor = this.state.digits === 10 ? // simplify after appDB is updated
-                  !this.props.app.latestSerial.tenDigit ?
-                    10 : this.props.app.latestSerial.tenDigit
-                  :
-                  !this.props.app.latestSerial.nineDigit ?
-                    9 : this.props.app.latestSerial.nineDigit;
-    
     let first = parseInt(barStart, 10);
     let last = parseInt(barEnd, 10);
     
@@ -50,8 +47,6 @@ export default class MultiItemForm extends Component {
     let valid = false;
     
     if(
-      first > floor
-      &&
       !isNaN(count)
       &&
       count > 0
@@ -59,7 +54,8 @@ export default class MultiItemForm extends Component {
       count <= 1000
       &&
       unit <= 250
-    ) {
+      )
+      {
         valid = true;
       }
     else
@@ -74,15 +70,11 @@ export default class MultiItemForm extends Component {
       this.go.disabled = true;
     }
     
-    if(first <= floor) {
-      this.message.value = 'Please begin above ' + floor;
-    }else{
-      // display quantity
-      let quantity = isNaN(count) ? 'Not a number' : 
-                     count < 1 ? 'Invalid Range' :
-                     count + ' ' + Pref.item + '(s)';
-      this.message.value = quantity;
-    }
+    // display quantity
+    let quantity = isNaN(count) ? 'Not a number' : 
+                   count < 1 ? 'Invalid Range' :
+                   count + ' ' + Pref.item + '(s)';
+    this.message.value = quantity;
   }
 
 	addItem(e) {
@@ -112,7 +104,6 @@ export default class MultiItemForm extends Component {
       }else{
         Bert.alert(Alert.caution);
         console.log(reply.message);
-        this.setState({work: false});
       }
       if(!reply.notAdded) {
         null;
@@ -131,13 +122,6 @@ export default class MultiItemForm extends Component {
     const dig = this.state.digits;
     const today = moment().format('YYMMDD');
     let iconSty = this.state.work ? 'workIcon' : 'transparent';
-    
-    const floor = dig === 10 ? // simplify after appDB is updated
-                  !this.props.app.latestSerial.tenDigit ?
-                    1 : this.props.app.latestSerial.tenDigit
-                  :
-                  !this.props.app.latestSerial.nineDigit ?
-                    1 : this.props.app.latestSerial.nineDigit;
 
     return (
       <Model
@@ -234,7 +218,7 @@ export default class MultiItemForm extends Component {
               <button
                 ref={(i)=> this.go = i}
                 disabled='true'
-                className='action clearGreen'
+                className='action clear greenT'
                 type='submit'
               >Add</button>
             </p>

@@ -1,3 +1,4 @@
+//import moment from 'moment';
 // Collections \\
 
 AppDB = new Mongo.Collection('appdb');
@@ -5,8 +6,6 @@ GroupDB = new Mongo.Collection('groupdb');
 WidgetDB = new Mongo.Collection('widgetdb');
 BatchDB = new Mongo.Collection('batchdb');
 ArchiveDB = new Mongo.Collection('archivedb');
-
-//import moment from 'moment';
 
 Meteor.publish('appData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
@@ -105,13 +104,11 @@ Meteor.publish('hotData', function(batch){
   const orgKey = user ? user.orgKey : false;
               
   return [
-        
     BatchDB.find({batch: batch, orgKey: orgKey}, {
       fields: {
         'orgKey': 0,
         'shareKey': 0
       }})
-            
     ];
     
 });

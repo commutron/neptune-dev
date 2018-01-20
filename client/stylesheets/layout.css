@@ -622,6 +622,9 @@ main {
 .max600 {
   max-width: 600px;
 }
+.max500 {
+  max-width: 500px;
+}
 .max400 {
   max-width: 400px;
 }
@@ -629,6 +632,9 @@ main {
   max-width: 300px;
 }
 
+.min600 {
+  min-width: 600px;
+}
 .min400 {
   min-width: 400px;
 }

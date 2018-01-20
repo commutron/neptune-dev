@@ -5,30 +5,6 @@ import StoneSelect from './StoneSelect.jsx';
 import RiverFork from './RiverFork.jsx';
 import RMACascade from './RMACascade.jsx';
 import AltMarker from '/client/components/uUi/AltMarker.jsx';
-  
-  /*
-  nonCons() {
-    relevant = this.props.batchData.nonCon.filter( 
-        x => x.serial === this.props.itemData.serial && x.inspect === false );
-    relevant.sort((n1, n2)=> {
-      if (n1.ref < n2.ref) { return -1 }
-      if (n1.ref > n2.ref) { return 1 }
-      return 0;
-    });
-    console.log(relevant);
-    return relevant;
-  }
-  */
-  /*
-  rmas() {
-    let relevant = [];
-    for(let doRMA of this.props.itemData.rma) {
-      let match = this.props.batchData.cascade.find( x => x.key === doRMA);
-      match ? relevant.push(match) : false;
-    }
-    return relevant;
-  }
-  */
 
 const River = ({ itemData, batchData, widgetData, app, users })=> {
 

@@ -76,7 +76,7 @@ const NCAdd = ({ id, barcode, app })=> {
         type='submit'
         id='go'
         disabled={lock}
-        className='smallAction clear redT'
+        className='smallAction clearRed'
       >{Pref.post}</button>
       
       <span className='breath'></span>
@@ -86,7 +86,7 @@ const NCAdd = ({ id, barcode, app })=> {
         id='goFix'
         onClick={(e)=>handleNC(e, true)}
         disabled={lock}
-        className='smallAction clear redT'
+        className='smallAction clearRed'
       >{Pref.post} & Repair</button>
           
     </form>

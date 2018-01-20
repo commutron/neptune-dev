@@ -419,9 +419,12 @@ export default class FindOps extends Component	{
 	    return(
 	      <div className='dashMainFull'>
           <div className='centre wide space'>
-            <p className='big centerText'>{orb} {Pref.noSerial}</p>
-            <hr />
-            <SearchHelp />
+            <br />
+            <i className='fas fa-search fa-2x'></i>
+            <br />
+            <p className='big centreText max500'>
+              {orb} appears to be a barcode number but it is not in the database
+            </p>
           </div>
         </div>
       );
@@ -432,6 +435,7 @@ export default class FindOps extends Component	{
 		  <div className='dashMainFull'>
         <div className='centre wide'>
           <p className='biggest'>¯\_(ツ)_/¯</p>
+          <p className='biggest'>No Match</p>
           <br />
           <SearchHelp />
         </div>

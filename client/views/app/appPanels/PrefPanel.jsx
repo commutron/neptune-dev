@@ -33,7 +33,7 @@ export default class PrefPanel extends Component {
   
             <h2>{Pref.trackProcess} Steps</h2>
             <i>Options for tracked and controlled steps</i>
-            <OptionAdd action='track' title='step' />
+            <OptionAdd action='track' title='step' rndmKey={Math.random().toString(36).substr(2, 5)} />
             <ul>
               {trackOptions.map( (entry, index)=>{
                 return ( <li key={index}>{entry.step} - {entry.type}</li> );
@@ -53,7 +53,7 @@ export default class PrefPanel extends Component {
   
             <h2>{Pref.nonCon} Types</h2>
             <i>Options for types of {Pref.nonCon}s</i>
-            <OptionAdd action='nc' title='defect' />
+            <OptionAdd action='nc' title='defect' rndmKey={Math.random().toString(36).substr(2, 5)} />
             <ul>
               {dt.nonConOption.map( (entry, index)=>{
                   return ( <li key={index}><i>{entry}</i></li> );
@@ -71,7 +71,7 @@ export default class PrefPanel extends Component {
   
             <h2>{Pref.ancillary} Steps</h2>
             <i>Not strictly assembly but part of the total proccess. Not tracked</i>
-            <OptionAdd action='anc' title='step' />
+            <OptionAdd action='anc' title='step' rndmKey={Math.random().toString(36).substr(2, 5)} />
             <ul>
               {dt.ancillaryOption.map( (entry, index)=>{
                 return ( <li key={index}><i>{entry}</i></li> );
@@ -82,7 +82,7 @@ export default class PrefPanel extends Component {
           
             <h2>{Pref.method} options:</h2>
             <i>available methods for first-off form</i>
-            <OptionAdd action='tool' title='tool' />
+            <OptionAdd action='tool' title='tool' rndmKey={Math.random().toString(36).substr(2, 5)} />
               <ul>
                 {dt.toolOption.map( (entry, index)=>{
                   return ( <li key={index}><i>{entry}</i></li> );
@@ -93,7 +93,7 @@ export default class PrefPanel extends Component {
             
             <h2>{Pref.tag} options:</h2>
             <i>available reusable {Pref.tag}s</i>
-            <OptionAdd action='tag' title={Pref.tag} />
+            <OptionAdd action='tag' title={Pref.tag} rndmKey={Math.random().toString(36).substr(2, 5)} />
               <ul>
                 {!dt.tagOption ? null :
                   dt.tagOption.map( (entry, index)=>{
@@ -105,17 +105,17 @@ export default class PrefPanel extends Component {
             
             <h2>{Pref.instruct} Root Address</h2>
             <i>The root address for embeded work instructions</i>
-            <OptionAdd action='wi' title='address' />
+            <OptionAdd action='wi' title='address' rndmKey={Math.random().toString(36).substr(2, 5)} />
             <p>current: <i className='clean'>{dt.instruct}</i></p>
             
             <h2>{Pref.helpDocs} Address</h2>
             <i>The address for Neptune documentation</i>
-            <OptionAdd action='help' title='address' />
+            <OptionAdd action='help' title='address' rndmKey={Math.random().toString(36).substr(2, 5)} />
             <p>current: <i className='clean'>{!dt.helpDocs ? null : dt.helpDocs}</i></p>
             
             <h2>{Pref.timeClock} Address</h2>
             <i>For a 3rd party, employee time tracker</i>
-            <OptionAdd action='time' title='address' />
+            <OptionAdd action='time' title='address' rndmKey={Math.random().toString(36).substr(2, 5)} />
             <p>current: <i className='clean'>{dt.timeClock}</i></p>
   
           </div>

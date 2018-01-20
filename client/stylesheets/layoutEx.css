@@ -29,7 +29,7 @@
 
 .traverseContainer {
   display: grid;
-  grid-template-columns: auto 200px;
+  grid-template-columns: auto 175px;
   grid-template-rows: 35px calc(100vh - 140px) 50px;
   grid-template-areas: 
     'cookieNav traverseList'

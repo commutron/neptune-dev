@@ -37,6 +37,25 @@ const VersionRow = ({ widgetData, app, entry })=> {
   let a = app;
   let v = entry;
   let live = v.live ? 'popTbody' : 'fade popTbody';
+  
+  const vAssmbl = v.assembly.sort((p1, p2)=> {
+                    if (p1.component < p2.component) { return -1 }
+                    if (p1.component > p2.component) { return 1 }
+                    return 0;
+                  });
+  
+  function removeComp(id, vKey, compPN) {
+    const check = confirm('Are you sure you want to remove this ' + Pref.comp + '?');
+    if(!check) {
+      null;
+    }else{
+      Meteor.call('pullComp', id, vKey, compPN, (error)=>{
+        if(error)
+          console.log(error);
+      });
+    }
+  }
+                  
   return(
     <tbody className={live}>
       <tr>
@@ -65,12 +84,21 @@ const VersionRow = ({ widgetData, app, entry })=> {
       </tr>
       <tr>
         <td colSpan='2' className='fill'>
-          <details>
+          <details className='up textSelect'>
             <summary>{Pref.comp}s: {v.assembly.length}</summary>
-            {v.assembly.map((entry, index)=>{
-              return(
-                <i key={index}>{entry.component}, </i>
-            )})}
+            <dl>
+              {vAssmbl.map((entry, index)=>{
+                return(
+                  <dt key={index} className='letterSpaced'>
+                    {entry.component}
+                    <button
+                      className='miniAction redT'
+                      onClick={()=>removeComp(w._id, v.versionKey, entry.component)}
+                      disabled={!Roles.userIsInRole(Meteor.userId(), 'remove')}>
+                    <i className='fas fa-times fa-fw'></i></button>
+                  </dt>
+              )})}
+            </dl>
           </details>
         </td>
         <td colSpan='2'>

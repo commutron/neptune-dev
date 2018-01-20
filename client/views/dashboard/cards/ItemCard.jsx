@@ -13,8 +13,6 @@ export default class ItemCard extends Component	{
   }
 
   render() {
-    
-    console.log('serial: ' + this.props.itemData.serial);
 
     const b = this.props.batchData;
     const i = this.props.itemData;

@@ -55,7 +55,8 @@ const ActionBar = ({batchData, itemData, widgetData, versionData, groupData, app
           id={batchData._id}
           items={batchData.items}
           more={batchData.finishedAt === false}
-          unit={versionData.units} />
+          unit={versionData.units}
+          app={app} />
         <RiverSelect
           id={batchData._id}
           widget={widgetData}

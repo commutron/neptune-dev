@@ -16,7 +16,7 @@ import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
 import NonConOverview from '../../../components/charts/NonConOverview.jsx';
 import NonConRate from '../../../components/charts/NonConRate.jsx';
 import NonConPie from '../../../components/charts/NonConPie.jsx';
-import RMAList from '../../../components/smallUi/RMAList.jsx';
+import RMATable from '../../../components/tables/RMATable.jsx';
 
 // props
 /// batchData
@@ -162,7 +162,7 @@ export default class BatchPanel extends Component	{
               </div>
               
               <div>
-                <RMAList
+                <RMATable
                   id={b._id}
                   data={b.cascade}
                   options={a.trackOption}

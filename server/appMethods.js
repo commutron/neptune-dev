@@ -36,7 +36,12 @@ Meteor.methods({
           ancillaryOption: [],
           tagOption: [],
           instruct: '',
+          helpDocs: '',
           timeClock: '',
+          latestSerial: {
+            nineDigit: Number(123456789),
+            tenDigit: Number(1234567890)
+          },
           ndaMode: false
         });
         Roles.addUsersToRoles(Meteor.userId(), ['active', 'admin']);

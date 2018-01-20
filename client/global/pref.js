@@ -86,9 +86,6 @@ class Pref {
     this.solve = 'solve';
     // non tracked, ancillary processes
     this.ancillary = 'indirect';
-    
-    // error messages
-    this.noSerial = 'appears to be a barcode number but no such barcode could be found';
 
   }
 }

@@ -1,0 +1,26 @@
+{
+  "short_name": "neptune",
+  "name": "neptune",
+  "icons": [
+    {
+      "src": "logoColorMini.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "logoColorMini.png",
+      "type": "image/png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "logoColorMini.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait"
+  "background_color": "#1c75bc",
+  "theme_color": "#1c75bc",
+}

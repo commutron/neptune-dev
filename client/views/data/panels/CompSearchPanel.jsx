@@ -8,7 +8,7 @@ export default class CompSearchPanel extends Component	{
   constructor() {
     super();
     this.state = {
-      bChk: false,
+      bChk: true,
       uChk: false,
       thing: false,
       results: []
@@ -65,15 +65,14 @@ export default class CompSearchPanel extends Component	{
                   ref={(i)=>this.pn = i}
                   onChange={()=> this.thisThing(this.pn.value)}
                   autoFocus
-                  tabIndex='1'
                 />
               </label>
               <label>
                 <button
                   type='submit'
                   id='pnFindButton'
+                  aria-label='search button'
                   className='smallAction clear'
-                  tabIndex='4'
                 ><i className='fas fa-search'></i></button>
               </label>
             </form>
@@ -83,9 +82,9 @@ export default class CompSearchPanel extends Component	{
                 <input
                   type='checkbox'
                   id='bc'
-                  defaultChecked={false}
+                  defaultChecked={true}
                   onChange={()=>this.setState({bChk: !this.state.bChk})}
-                  tabIndex='2'/>
+                />
                 <label htmlFor='bc'>{Pref.batch} Info</label>
               </span>
               <span>
@@ -94,7 +93,7 @@ export default class CompSearchPanel extends Component	{
                   id='uc'
                   defaultChecked={false}
                   onChange={()=>this.setState({uChk: !this.state.uChk})}
-                  tabIndex='3'/>
+                />
                 <label htmlFor='uc'>{Pref.unit}s Quantity</label>
               </span>
             </div>
@@ -119,17 +118,17 @@ export default class CompSearchPanel extends Component	{
                 {r.map((entry, index)=>{
                   return(
                     <tbody key={index}>
-                      <tr className='up'>
+                      <tr className='cap'>
                         <td colSpan='2'>
-                          {entry.grp} {entry.wdgt} {entry.dsc}
+                          {entry.grp} {entry.dsc}
                         </td>
                       </tr>
                       
                       {entry.vrsns.map((e)=>{
                         return(
                           <tr key={e.vKey}>
-                            <td>
-                              {e.ver}
+                            <td className='up'>
+                              {entry.wdgt}{e.ver}
                             </td>
                             <td>
                             {e.btchs.map((b)=>{

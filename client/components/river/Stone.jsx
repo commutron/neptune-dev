@@ -59,7 +59,6 @@ export default class Stone extends Component	{
   
   //// Action for standard step
   passS(pass, doComm) {
-  	console.log('client: ' + this.props.sKey);
     this.setState({lock: true});
     const id = this.props.id;
     const bar = this.props.barcode;
@@ -71,7 +70,6 @@ export default class Stone extends Component	{
 	    if(error)
 		    console.log(error);
 			if(reply) {
-				console.log('server: ' + this.props.sKey);
 			  document.getElementById('lookup').focus();
 		  }else{
 		    Bert.alert(Pref.blocked, 'danger');
@@ -81,7 +79,6 @@ export default class Stone extends Component	{
   
   //// Action for test step
   passT(pass, doComm, shipFail) {
-  	console.log('client: ' + this.props.sKey);
     this.setState({lock: true});
     const id = this.props.id;
     const bar = this.props.barcode;
@@ -94,7 +91,6 @@ export default class Stone extends Component	{
 	    if(error)
 		    console.log(error);
 			if(reply) {
-				console.log('server: ' + this.props.sKey);
 			  document.getElementById('lookup').focus();
 		  }else{
 		    Bert.alert(Pref.blocked, 'danger');
@@ -104,7 +100,6 @@ export default class Stone extends Component	{
 
   //// Action for marking the board as complete
 	finish() {
-		console.log('client: ' + this.props.sKey);
 	  this.setState({lock: true});
     const batchId = this.props.id;
 		const barcode = this.props.barcode;
@@ -115,7 +110,6 @@ export default class Stone extends Component	{
 		  if(error)
 		    console.log(error);
 		  if(reply) {
-		  	console.log('server: ' + this.props.sKey);
 		    document.getElementById('lookup').focus();
 		  }else{
 		    Bert.alert(Pref.blocked, 'danger');
@@ -125,8 +119,6 @@ export default class Stone extends Component	{
 
 
   render() {
-  	
-  	console.log('update ' + this.props.step + ' ' + this.props.type);
 
 		let shape = '';
 		let ripple = '';

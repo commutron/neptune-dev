@@ -45,7 +45,8 @@ const DashActionBar = ({ batchData, itemData, widgetData, versionData, groupData
         id={batchData._id}
         items={batchData.items}
         more={batchData.finishedAt === false}
-        unit={versionData.units} />
+        unit={versionData.units}
+        app={app} />
   	:
   	action === 'item' ?
   	  <div> 
@@ -78,7 +79,8 @@ const DashActionBar = ({ batchData, itemData, widgetData, versionData, groupData
           id={batchData._id}
           items={batchData.items}
           more={batchData.finishedAt === false}
-          unit={versionData.units} />
+          unit={versionData.units}
+          app={app} />
         <RiverSelect
           id={batchData._id}
           widget={widgetData}

@@ -43,8 +43,8 @@ export default class NonConPie extends Component {
     };
     
     let options = {
-      width: 300,
-      height: 300,
+      width: 250,
+      height: 250,
       showLabel: false,
       chartPadding: 25,
       donut: true,
