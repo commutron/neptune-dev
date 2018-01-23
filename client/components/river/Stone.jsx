@@ -3,6 +3,7 @@ import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import Pref from '/client/global/pref.js';
 
 import FirstForm from './FirstForm.jsx';
+import StoneProgRing from './StoneProgRing.jsx';
 
 export default class Stone extends Component	{
   
@@ -153,6 +154,14 @@ export default class Stone extends Component	{
     return (
     	<div>
         {!this.state.show ?
+        	<StoneProgRing
+	        				serial={this.props.barcode}
+	        				allItems={this.props.allItems}
+	        				sKey={this.props.sKey}
+		              step={this.props.step}
+		              type={this.props.type}>
+		              
+		              
 					<ContextMenuTrigger
 						id={this.props.barcode}
 						attributes={ {className:'centre'} }>
@@ -192,9 +201,22 @@ export default class Stone extends Component	{
 								<i>{this.props.step}</i>
 								{apend}
 							</button>
+							
+							{/*!Roles.userIsInRole(Meteor.userId(), 'nightly') ? null :
+        		
+	        			<StoneProgRing
+	        				serial={this.props.barcode}
+	        				allItems={this.props.allItems}
+	        				sKey={this.props.sKey}
+		              step={this.props.step}
+		              type={this.props.type} />
+        			*/}
+        		
 						</div>
 						}
 					</ContextMenuTrigger>
+					
+					</StoneProgRing>
 					:
           <div className='actionBox blue'>
           	<div className='flexRR'>

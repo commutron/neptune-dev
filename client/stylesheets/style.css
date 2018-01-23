@@ -651,6 +651,20 @@
   min-height: 1rem;
 }
 
+.fltrsInput {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.fltrsInput input, .fltrsInput select {
+  height: 1.25rem;
+  min-width: 130px;
+  max-width: 200px;
+  font-size: 0.9rem;
+  margin: 5px 5px;
+}
+
 .radioLabelPair {
   margin: 0 3px;
   vertical-align: middle;

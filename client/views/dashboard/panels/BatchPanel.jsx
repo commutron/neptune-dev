@@ -165,6 +165,7 @@ export default class BatchPanel extends Component	{
                 <RMATable
                   id={b._id}
                   data={b.cascade}
+                  items={b.items}
                   options={a.trackOption}
                   end={a.lastTrack}
                   inUse={filter[1]} />

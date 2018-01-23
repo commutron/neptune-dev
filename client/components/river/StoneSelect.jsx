@@ -66,6 +66,7 @@ const StoneSelect = ({ id, flow, rmas, allItems, nonCons, serial, history, regRu
                       sKey={flowStep.key}
                       step={flowStep.step}
                       type={flowStep.type}
+                      allItems={allItems}
                       users={users}
                       methods={methods} />;
 

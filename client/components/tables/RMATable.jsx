@@ -36,6 +36,7 @@ export default class RMATable extends Component	{
   						<th>who</th>
   						<th>time</th>
               <th>required</th>
+              <th>assigned</th>
               <th>steps</th>
               <th>comment</th>
               <th></th>
@@ -49,6 +50,7 @@ export default class RMATable extends Component	{
                 key={entry.key}
                 entry={entry}
                 id={this.props.id}
+                assigned={this.props.items.filter(x => x.rma.includes(entry.key)).length}
                 onClick={()=>this.pullRMA.bind(this, entry.key)}
                 lock={started} />
             );
@@ -68,7 +70,7 @@ export default class RMATable extends Component	{
 
 
 
-const RMARow = ({ entry, id, onClick, lock })=> {
+const RMARow = ({ entry, id, assigned, onClick, lock })=> {
   let dt = entry;
   
   return(
@@ -78,6 +80,7 @@ const RMARow = ({ entry, id, onClick, lock })=> {
         <td><UserNice id={dt.who} /></td>
         <td>{moment(dt.time).calendar()}</td>
         <td>{dt.quantity === 0 ? 'unlimited' : dt.quantity}</td>
+        <td>{assigned}</td>
         <td>{dt.flow.length}</td>
         <td>{dt.comm}</td>
         <td>

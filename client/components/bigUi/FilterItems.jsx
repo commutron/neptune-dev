@@ -7,7 +7,7 @@ export default class FilterItems extends Component	{
   }
   
   changeAdvancedFilter() {
-    this.props.onChange(this.un.value);
+    this.props.onChange({step: this.un.value, time: this.day.value});
   }
   
   render() {
@@ -16,15 +16,7 @@ export default class FilterItems extends Component	{
       lineHeight: '12px',
       textIndent: '3px',
       margin: '5px 0',
-      padding: '0 10px'
-    };
-    
-    let sStyl = {
-      minHeight: '1.5rem',
-      maxWidth: '150px',
-      lineHeight: '1rem',
-      fontSize: '1.25rem',
-      margin: '5px auto'
+      padding: '0 5px'
     };
     
     return(
@@ -127,30 +119,37 @@ export default class FilterItems extends Component	{
             
           </span>
           
-          <span className='balance'>
-          
-            {this.props.advancedTitle ?
-              <span>
-                <label className='tweekUp'>{this.props.advancedTitle}</label>
+          {this.props.advancedTitle ?
+            <div>
+              <label className='fltrsInput'>
+                <i className='fas fa-map-marker-alt'>{/*this.props.advancedTitle*/}</i>
                 <select
                   ref={(i)=> this.un = i}
-                  onChange={this.changeAdvancedFilter.bind(this)}
-                  style={sStyl}>
+                  onChange={this.changeAdvancedFilter.bind(this)}>
                   <option></option>
                   {this.props.advancedList.map( (entry, index)=>{
                     return(
                       <option
                         key={index}
                         value={entry.key}
-                        style={sStyl}>{entry.step} {entry.type}
+                      >{entry.step === entry.type ? 
+                        entry.step : 
+                        entry.step + ' ' + entry.type}
                       </option>
                     );
                   })}
                 </select>
-              </span>
-            : null}
-          
-          </span>
+              </label>
+              <br />
+              <label className='fltrsInput'>
+                <i className='far fa-calendar-alt'></i>
+                <input
+                  type='date'
+                  ref={(i)=> this.day = i}
+                  onChange={this.changeAdvancedFilter.bind(this)} />
+              </label>
+            </div>
+          : null}
             
           <hr />
           

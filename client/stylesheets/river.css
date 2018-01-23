@@ -1,7 +1,8 @@
 /* River */
 
 .stone {
-	position: relative;
+	position: static;
+	z-index: 1;
 	margin: 0.5em;
   width: 13rem;
   height: 13rem;
@@ -238,6 +239,21 @@
   border-bottom-color: black;
   outline-color: black;
 }
+
+
+.stoneRing {
+  z-index: 0;
+  
+}
+
+.stoneCenter {
+  z-index: 1;
+  position: relative;
+  top: 15.4rem;
+}
+
+
+
 
 @media screen and (max-width: 1000px) {
   .stoneForm input[type='text'],

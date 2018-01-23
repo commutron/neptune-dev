@@ -102,10 +102,7 @@ Meteor.methods({
       let regStepCounts = flowLoop(river, regItems);
       let altStepCounts = flowLoop(riverAlt, altItems);
       
-      let rmaCount = 0;
-      for(let i of b.items) {
-        rmaCount += i.rma.length;
-      }
+      let rmaCount = b.items.filter( x => x.rma.length > 0).length;
       
       let totalRegUnits = 0;
       for(let i of regItems) {

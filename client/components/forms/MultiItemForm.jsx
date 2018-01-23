@@ -34,11 +34,13 @@ export default class MultiItemForm extends Component {
     const unit = this.unit.value.trim();
     
     const floor = this.state.digits === 10 ? // simplify after appDB is updated
-                  !this.props.app.latestSerial.tenDigit ?
-                    10 : this.props.app.latestSerial.tenDigit
+                  !this.props.app.latestSerial ? 10 :
+                    !this.props.app.latestSerial.tenDigit ? 10 : 
+                      this.props.app.latestSerial.tenDigit
                   :
-                  !this.props.app.latestSerial.nineDigit ?
-                    9 : this.props.app.latestSerial.nineDigit;
+                  !this.props.app.latestSerial ? 9 :
+                    !this.props.app.latestSerial.nineDigit ? 9 :
+                      this.props.app.latestSerial.nineDigit;
     
     let first = parseInt(barStart, 10);
     let last = parseInt(barEnd, 10);
@@ -132,13 +134,6 @@ export default class MultiItemForm extends Component {
     const today = moment().format('YYMMDD');
     let iconSty = this.state.work ? 'workIcon' : 'transparent';
     
-    const floor = dig === 10 ? // simplify after appDB is updated
-                  !this.props.app.latestSerial.tenDigit ?
-                    1 : this.props.app.latestSerial.tenDigit
-                  :
-                  !this.props.app.latestSerial.nineDigit ?
-                    1 : this.props.app.latestSerial.nineDigit;
-
     return (
       <Model
         button={'Add ' + Pref.item + 's'}

@@ -151,11 +151,13 @@ Meteor.methods({
     
     // simplify after appDB is updated
     const floor = barFirst.toString().length === 10 ?
-                  !appSetting.latestSerial.tenDigit ?
-                    10 : appSetting.latestSerial.tenDigit
+                  !appSetting.latestSerial ? 10 :
+                    !appSetting.latestSerial.tenDigit ? 10 :
+                      appSetting.latestSerial.tenDigit
                   :
-                  !appSetting.latestSerial.nineDigit ?
-                    9 : appSetting.latestSerial.nineDigit;
+                  !appSetting.latestSerial ? 9 :
+                    !appSetting.latestSerial.nineDigit ? 9 :
+                      appSetting.latestSerial.nineDigit;
     
     if(
       !isNaN(barFirst)
@@ -703,7 +705,10 @@ Meteor.methods({
    
    
   setRMA(batchId, bar, cKey) {
-    if(Roles.userIsInRole(Meteor.userId(), ['qa', 'run', 'inspect'])) {
+    const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar});
+    const subDoc = doc.items.find( x => x.serial === bar );
+    if( Roles.userIsInRole(Meteor.userId(), ['qa', 'run', 'inspect']) && 
+        subDoc.rma.includes( cKey ) === false ) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
         $push : { 
           'items.$.rma': cKey

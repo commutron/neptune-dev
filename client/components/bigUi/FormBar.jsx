@@ -15,7 +15,8 @@ const FormBar = ({ batchData, itemData, versionData, app, action})=> (
           id={batchData._id}
           items={batchData.items}
           more={batchData.finishedAt === false}
-          unit={versionData.units} />
+          unit={versionData.units}
+          app={app} />
       :null}
     </div>
     <div className='footCent'>
