@@ -1,9 +1,17 @@
 /* River */
 
+.stoneRing {
+  position: relative;
+  z-index: 0;
+}
+
 .stone {
-	position: static;
+	position: absolute;
+	top: 49%;
+	left: 50%;
+	transform: translate(-50%, -50%) rotate(0deg);
 	z-index: 1;
-	margin: 0.5em;
+	margin: 0;
   width: 13rem;
   height: 13rem;
   font-size: 1.75rem;
@@ -33,17 +41,25 @@
 }
 
 .crackedTop {
+  width: 13rem;
   height: 6.5rem;
   z-index: 2;
   border-radius: 6.5rem 6.5rem 0 0;
-  margin: 0.5em 0.5em 0 0.5em;
+  margin: -0.7em 0.5em 0 0.5em;
+  background-position: top;
+  background-size: 80%;
+  background-repeat: no-repeat;
 }
 
 .crackedBot {
+  width: 13rem;
   height: 6.5rem;
   border-radius: 0 0 6.5rem 6.5rem;
-  margin: 0 0.5em 0.5em 0.5em;
+  margin: 0 0.5em -0.7em 0.5em;
   background-image: url(test.svg);
+  background-position: top;
+  background-size: 80%;
+  background-repeat: no-repeat;
   background-color: var(--pomegranate);
 }
 
@@ -106,7 +122,6 @@
 .iPoint {
   background-color: transparent;
   border-color: var(--asbestos);
-  position: relative;
   z-index: 1;
   font-size: 1.5rem;
 }
@@ -121,7 +136,7 @@
   content: "\f08d";
   font-family: FontAwesome;
   font-size: 6em;
-  color: black;
+  color: var(--asbestos);
 }
 .iPoint i {
   position: absolute;
@@ -140,6 +155,8 @@
 }
 
 .ncTrib {
+  position: relative;
+  z-index: 3;
   display: table;
   width: 100%;
   justify-content: center;
@@ -239,21 +256,6 @@
   border-bottom-color: black;
   outline-color: black;
 }
-
-
-.stoneRing {
-  z-index: 0;
-  
-}
-
-.stoneCenter {
-  z-index: 1;
-  position: relative;
-  top: 15.4rem;
-}
-
-
-
 
 @media screen and (max-width: 1000px) {
   .stoneForm input[type='text'],

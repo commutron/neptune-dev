@@ -760,13 +760,27 @@
 
 /* stone ring */
 
-.stoneRing .ct-series-a .ct-slice-donut {
-  stroke: var(--midnightblue);
+.glowgreen .ct-series-a .ct-slice-donut {
+  stroke: var(--nephritis);
+}
+.glowblue .ct-series-a .ct-slice-donut {
+  stroke: var(--belizeHole);
+}
+.glowwhite .ct-series-a .ct-slice-donut {
+  stroke: var(--asbestos);
+}
+.glowteal .ct-series-a .ct-slice-donut {
+  stroke: var(--greenSea);
+}
+.glowpurple .ct-series-a .ct-slice-donut {
+  stroke: var(--wisteria);
 }
 
 .stoneRing .ct-series-b .ct-slice-donut {
   stroke: rgb(50,50,50);
 }
+
+/* ------------------- */
 
 .nonConPieColors .ct-series-a .ct-slice-donut {
   stroke: #e74c3c;

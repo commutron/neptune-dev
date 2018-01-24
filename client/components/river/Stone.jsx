@@ -143,79 +143,67 @@ export default class Stone extends Component	{
 			shape = 'stone iPoint';
 			ripple = ()=>this.passS(true, false);
     }else if(this.props.type === 'test'){
-			shape = 'stone crackedTop iTest';
+			shape = 'crackedTop iTest';
 			ripple = ()=>this.passT(true, false, false);
     }else if(this.props.type === 'finish'){
 			shape = 'stone iFinish';
 			ripple = this.finish;
     }else{
       null }
+      
+    const stopmooving = { minHeight: '253px' };
      
     return (
-    	<div>
+    	<div style={stopmooving}>
         {!this.state.show ?
         	<StoneProgRing
-	        				serial={this.props.barcode}
-	        				allItems={this.props.allItems}
-	        				sKey={this.props.sKey}
-		              step={this.props.step}
-		              type={this.props.type}>
-		              
-		              
-					<ContextMenuTrigger
-						id={this.props.barcode}
-						attributes={ {className:'centre'} }>
-						{this.props.type === 'test' ?
-						<div className='centre'>
-							<button
-			      	  className={shape}
-			  				name={this.props.step + ' fail'}
-			  				ref={(i)=> this.stonefail = i}
-			  				onClick={ripple}
-			  				tabIndex={-1}
-			  				disabled={lock}>
-			  				Pass
-			  				<label className='big'><br />{this.props.step}</label>
-							</button>
-							<button
-			      	  className='stone crackedBot'
-			  				name={this.props.step + ' fail'}
-			  				ref={(i)=> this.stonefail = i}
-			  				onClick={this.passT.bind(this, false, true, false)}
-			  				tabIndex={-1}
-			  				disabled={lock}>
-			  				Fail
-			  				<label className='big'><br />{this.props.step}</label>
-							</button>
-						</div>
-						:
-						<div className='centre'>
-			      	<button
-			      	  className={shape}
-			  				name={this.props.step}
-			  				ref={(i)=> this.stone = i}
-			  				onClick={ripple}
-			  				tabIndex={-1}
-			  				disabled={lock}>
-			  				{prepend}
-								<i>{this.props.step}</i>
-								{apend}
-							</button>
-							
-							{/*!Roles.userIsInRole(Meteor.userId(), 'nightly') ? null :
-        		
-	        			<StoneProgRing
-	        				serial={this.props.barcode}
-	        				allItems={this.props.allItems}
-	        				sKey={this.props.sKey}
-		              step={this.props.step}
-		              type={this.props.type} />
-        			*/}
-        		
-						</div>
-						}
-					</ContextMenuTrigger>
-					
+    				serial={this.props.barcode}
+    				allItems={this.props.allItems}
+    				sKey={this.props.sKey}
+            step={this.props.step}
+            type={this.props.type}>
+						<ContextMenuTrigger
+							id={this.props.barcode}
+							attributes={ {className:'centre'} }>
+							{this.props.type === 'test' ?
+							<div className='centre stone'>
+								<button
+				      	  className={shape}
+				  				name={this.props.step + ' fail'}
+				  				ref={(i)=> this.stonefail = i}
+				  				onClick={ripple}
+				  				tabIndex={-1}
+				  				disabled={lock}>
+				  				Pass
+				  				<label className='big'><br />{this.props.step}</label>
+								</button>
+								<button
+				      	  className='crackedBot'
+				  				name={this.props.step + ' fail'}
+				  				ref={(i)=> this.stonefail = i}
+				  				onClick={this.passT.bind(this, false, true, false)}
+				  				tabIndex={-1}
+				  				disabled={lock}>
+				  				Fail
+				  				<label className='big'><br />{this.props.step}</label>
+								</button>
+							</div>
+							:
+							<div className='centre'>
+				      	<button
+				      	  className={shape}
+				  				name={this.props.step}
+				  				ref={(i)=> this.stone = i}
+				  				onClick={ripple}
+				  				tabIndex={-1}
+				  				disabled={lock}>
+				  				{prepend}
+									<i>{this.props.step}</i>
+									{apend}
+								</button>
+							</div>
+							}
+						</ContextMenuTrigger>
 					</StoneProgRing>
 					:
           <div className='actionBox blue'>
@@ -254,7 +242,6 @@ export default class Stone extends Component	{
       </div>
     );
   }
-  
   componentDidMount() {
     this.unlock();
   }
