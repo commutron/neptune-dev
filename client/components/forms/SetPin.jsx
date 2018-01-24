@@ -93,7 +93,7 @@ export default class SetPin extends Component {
               <button
                 type='submit'
                 ref={(i)=> this.go = i}
-                className='smallAction clear greenT'
+                className='smallAction clearGreen'
                 disabled={false}
               >Save</button>
             </p>
@@ -102,7 +102,7 @@ export default class SetPin extends Component {
         <fieldset>
           <legend>Forgot PIN</legend>
           <button
-            className='smallAction clear redT'
+            className='smallAction clearRed'
             onClick={this.clearPin.bind(this)}
           >Clear PIN</button>
         </fieldset>

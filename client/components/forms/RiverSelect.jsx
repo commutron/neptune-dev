@@ -68,7 +68,7 @@ export default class RiverSelect extends Component	{
             type='submit'
             ref={(i)=> this.go = i}
             disabled={false}
-            className='action clear greenT'
+            className='action clearGreen'
           >Save</button>
         </form>
       </Model>

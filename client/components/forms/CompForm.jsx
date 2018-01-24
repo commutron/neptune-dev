@@ -51,7 +51,7 @@ export default class CompForm extends Component	{
             <button
               ref={(i)=> this.go = i}
               disabled={false}
-              className='action clear greenT'
+              className='action clearGreen'
               type='submit'>Add</button>
           </p>
         </form>

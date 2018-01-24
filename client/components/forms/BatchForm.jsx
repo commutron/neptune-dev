@@ -137,7 +137,7 @@ export default class BatchForm extends Component	{
           <br />
           <p><i>are you sure?</i></p>
           <br />
-          <button type='submit' className='action clear greenT'>Save</button>
+          <button type='submit' className='action clearGreen'>Save</button>
         </form>
       </Model>
     );

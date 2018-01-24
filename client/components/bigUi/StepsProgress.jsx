@@ -61,13 +61,11 @@ export default class StepsProgress extends Component	{
           if(i.finishedAt !== false) {
             itemCount += 1;
             unitCount += 1 * i.units;
+          }else if(step.type === 'inspect') {
+            h.find( byKey(this, step.key) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
+            h.find( byName(this, step.step) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
           }else{
-            if(step.type === 'inspect') {
-              h.find( byKey(this, step.key) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
-              h.find( byName(this, step.step) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
-            }else{
-              h.find( byKey(this, step.key) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
-            }
+            h.find( byKey(this, step.key) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
           }
         }
         stepCounts.push({

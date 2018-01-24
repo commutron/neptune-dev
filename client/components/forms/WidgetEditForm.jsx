@@ -61,7 +61,7 @@ export default class WidgetEditForm extends Component	{
             <label htmlFor='prodiption'>{Pref.widget} Description</label>
           </p>
           <br />
-          <button type='submit' className='action clear greenT'>SAVE</button>
+          <button type='submit' className='action clearGreen'>SAVE</button>
         </form>
       </Model>
     );

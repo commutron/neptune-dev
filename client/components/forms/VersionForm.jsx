@@ -152,7 +152,7 @@ export default class VersionForm extends Component	{
             <br />
             <button
               type='submit'
-              className='action clear greenT'
+              className='action clearGreen'
               ref={(i) => this.go = i}
               disabled={false}>SAVE</button>
           </form>

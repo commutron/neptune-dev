@@ -101,7 +101,7 @@ export default class NCEscape extends Component {
                 type='submit'
                 ref={(i)=> this.go = i}
                 disabled={false}
-                className='action clear redT'
+                className='action clearRed'
               >{Pref.post}</button>
             </p>
             <p><output ref={(i)=> this.out = i} /></p>

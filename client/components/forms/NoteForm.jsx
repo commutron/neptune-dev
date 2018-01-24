@@ -78,7 +78,7 @@ export default class NoteForm extends Component {
             <button
               ref={(i)=> this.go = i}
               disabled={true}
-              className='action clear greenT'
+              className='action clearGreen'
               type='submit'>Save</button>
           </p>
           <br />

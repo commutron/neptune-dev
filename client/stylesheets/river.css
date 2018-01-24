@@ -257,6 +257,11 @@
   outline-color: black;
 }
 
+.stoneForm .clearWhite:hover {
+  background-color: white;
+  color: var(--peterriver);
+}
+
 @media screen and (max-width: 1000px) {
   .stoneForm input[type='text'],
   .stoneForm textarea,

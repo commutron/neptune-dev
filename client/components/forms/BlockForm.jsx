@@ -71,7 +71,7 @@ export default class BlockForm extends Component {
               type='submit'
               ref={(i)=> this.go = i}
               disabled={this.props.lock}
-              className='action clear greenT'>{Pref.post}</button>
+              className='action clearGreen'>{Pref.post}</button>
             </p>
           </form>
           <br />
@@ -107,7 +107,7 @@ export class SolveBlock extends Component {
         <button
           type='submit'
           ref={(i)=> this.go = i}
-          className='smallAction clear greenT'
+          className='smallAction clearGreen'
           disabled={this.props.lock}>Solve</button>
       </form>
     );
@@ -129,7 +129,7 @@ export class RemoveBlock extends Component {
   render() {
     return(
       <button
-        className='miniAction clear redT'
+        className='miniAction clearRed'
         onClick={this.remove.bind(this)}
         disabled={this.props.lock}>Remove</button>
     );

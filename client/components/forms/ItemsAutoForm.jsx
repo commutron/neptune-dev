@@ -218,7 +218,7 @@ export default class ItemsAutoForm extends Component {
               <button
                 ref={(i)=> this.go = i}
                 disabled='true'
-                className='action clear greenT'
+                className='action clearGreen'
                 type='submit'
               >Add</button>
             </p>

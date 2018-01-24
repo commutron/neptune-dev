@@ -75,7 +75,7 @@ export default class ScrapForm extends Component {
             <p>
               <button 
                 type="submit"
-                className='action clear redT'
+                className='action clearRed'
                 ref={(i)=> this.go = i}
                 disabled={false}
                 >SCRAP {this.props.item.serial}</button>

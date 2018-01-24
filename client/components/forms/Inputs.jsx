@@ -25,7 +25,7 @@ export class Submit extends Component	{
         <button
           type='submit'
           id={this.props.name}
-          className={this.props.type + ' clear greenT'}
+          className={this.props.type + ' clearGreen'}
           disabled={this.props.disabled}
         >{this.props.name}
         </button>

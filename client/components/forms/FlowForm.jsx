@@ -160,7 +160,7 @@ export default class FlowForm extends Component	{
               ref={(i)=> this.go = i}
               disabled={!this.state.flow}
               form='flowSave'
-              className='action clear greenT'>SAVE</button>
+              className='action clearGreen'>SAVE</button>
             <br />
           </div>
         </div>

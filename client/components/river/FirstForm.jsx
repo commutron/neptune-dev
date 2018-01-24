@@ -144,7 +144,7 @@ export default class FirstForm extends Component	{
       			  <label htmlFor='proC'>{Pref.proChange}</label>
     			  </p>
             <button
-              className='action clear'>
+              className='action clearWhite'>
               <i className="fas fa-arrow-right fa-lg" aria-hidden="true"></i>
               <br />Continue
             </button>
@@ -215,7 +215,7 @@ export default class FirstForm extends Component	{
             {this.state.whoB.size > 0 ?
               <button
                 type='button'
-                className='action clear'
+                className='action clearWhite'
                 onClick={this.goNext}>
                 <i className="fas fa-arrow-right fa-lg" aria-hidden="true"></i>
                 <br />Continue

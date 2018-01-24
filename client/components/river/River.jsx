@@ -66,6 +66,7 @@ const River = ({ itemData, batchData, widgetData, app, users })=> {
         <StoneSelect
           id={b._id}
           flow={flow}
+          isAlt={!b.riverAlt ? false : true}
           rmas={rma}
           allItems={b.items}
           nonCons={b.nonCon}

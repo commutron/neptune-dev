@@ -9,10 +9,8 @@ export default class StepsProgress extends Component	{
   constructor() {
     super();
     this.state = {
-      count: {
-        done: 0,
-        remain: 0
-      }
+      countDone: 0,
+      countRemain: 0
     };
   }
   
@@ -26,7 +24,9 @@ export default class StepsProgress extends Component	{
     }else{
       const allitems = this.props.allItems;
       const item = allitems.find( x => x.serial === this.props.serial );
-      const items = item.alt === 'yes' ?
+      const items = !this.props.isAlt ?
+                    allitems :
+                    item.alt === 'yes' ?
                     allitems.filter( x => x.alt === 'yes' ) : 
                     allitems.filter( x => x.alt === 'no' || x.alt === false );
       const total = items.length;
@@ -37,7 +37,9 @@ export default class StepsProgress extends Component	{
       let itemCount = 0;
       for(let i of items) {
         const h = i.history;
-        if(type === 'inspect') {
+        if(i.finishedAt !== false) {
+          itemCount += 1;
+        }else if(type === 'inspect') {
           h.find( byKey(this, sKey) ) ? itemCount += 1 : null;
           h.find( byName(this, step) ) ? itemCount += 1 : null;
         }else{
@@ -45,7 +47,8 @@ export default class StepsProgress extends Component	{
         }
       }
       const remain = total - itemCount;
-      this.setState({ count: { done: itemCount, remain: remain } });
+      this.setState({ countDone: itemCount });
+      this.setState({ countRemain: remain });
     }
   }
   
@@ -67,10 +70,11 @@ export default class StepsProgress extends Component	{
       );
     }
     
-    const counter = this.state.count;
+    const done = this.state.countDone;
+    const remain = this.state.countRemain;
     
     let data = {
-      series: [counter.done, counter.remain],
+      series: [done, remain],
     };
     
     let options = {

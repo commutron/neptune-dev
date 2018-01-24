@@ -127,7 +127,7 @@ export default class FlowForm extends Component	{
                     return ( <option key={index} value={entry.key}>{entry.step + ' - ' + entry.type}</option> );
                   })}
                 </select>
-                <button type='submit' className='smallAction clear'>Add</button>
+                <button type='submit' className='smallAction clearWhite'>Add</button>
               </label>
               <i className='breath'></i>
               <label htmlFor='rteps'>Tracking Step</label>
@@ -187,12 +187,12 @@ export default class FlowForm extends Component	{
           </div>
         <br />
         <button
-          className='smallAction clear up'
+          className='smallAction clearWhite up'
           onClick={this.clear.bind(this)}
           disabled={!this.state.steps.size}>clear</button>
         <button
           value={steps}
-          className='smallAction clear greenT up'
+          className='smallAction clearGreen up'
           disabled={false}
           onClick={this.sendUp.bind(this)}>Set {Pref.flow}</button>
         <br />

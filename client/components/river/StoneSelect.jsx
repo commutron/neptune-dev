@@ -9,7 +9,7 @@ import TestFails from './TestFails.jsx';
 import NCTributary from './NCTributary.jsx';
 
   
-const StoneSelect = ({ id, flow, rmas, allItems, nonCons, serial, history, regRun, users, methods })=> {
+const StoneSelect = ({ id, flow, isAlt, rmas, allItems, nonCons, serial, history, regRun, users, methods })=> {
     
   const nc = nonCons.filter( 
                 x => x.serial === serial && x.inspect === false )
@@ -67,6 +67,7 @@ const StoneSelect = ({ id, flow, rmas, allItems, nonCons, serial, history, regRu
                       step={flowStep.step}
                       type={flowStep.type}
                       allItems={allItems}
+                      isAlt={isAlt}
                       users={users}
                       methods={methods} />;
 

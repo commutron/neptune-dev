@@ -159,6 +159,7 @@ export default class Stone extends Component	{
         	<StoneProgRing
     				serial={this.props.barcode}
     				allItems={this.props.allItems}
+    				isAlt={this.props.isAlt}
     				sKey={this.props.sKey}
             step={this.props.step}
             type={this.props.type}>

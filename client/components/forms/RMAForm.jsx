@@ -143,7 +143,7 @@ export default class RMAForm extends Component {
             ref={(i)=> this.go = i}
             disabled={!this.state.flow}
             form='rmaSave'
-            className='action clear greenT'>SAVE</button>
+            className='action clearGreen'>SAVE</button>
           <p><output ref={(i)=> this.out = i} /></p>
           <br />
         </div>

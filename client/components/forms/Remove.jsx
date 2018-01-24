@@ -106,7 +106,7 @@ export default class Remove extends Component	{
                   className='noCopy redIn'
                   required />
                 <button
-                  className='smallAction clear redT'
+                  className='smallAction clearRed'
                   type='submit'
                   ref={(i)=> this.cut = i}
                   disabled={false}>DELETE</button>

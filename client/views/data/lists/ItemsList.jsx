@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 
@@ -21,7 +22,7 @@ export default class ItemsList extends Component	{
   }
   
   setAdvancedFilter(rule) {
-    this.setState({ advancedKey: rule });
+    this.setState({ advancedKey: rule.step });
     this.setState({ advancedTime: rule.time });
   }
   
@@ -50,7 +51,7 @@ export default class ItemsList extends Component	{
     }else{null}
     if(flowAlt) {
       for(let as of flowAlt.flow) {
-        as.type !== 'finish' ? steps.has({key: as.key}) ? null : steps.add(as) : null;
+        steps.has({key: as.key}) ? null : steps.add(as);
       }
     }else{null}
     let niceSteps = [...steps].filter( ( v, indx, slf ) => slf.findIndex( x => x.key === v.key ) === indx);

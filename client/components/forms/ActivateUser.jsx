@@ -45,7 +45,7 @@ export default class ActivateUser extends Component	{
             <button
               type='submit'
               ref={(i)=> this.go = i}
-              className='smallAction clear'
+              className='smallAction clearWhite'
               disabled={false}>Join
             </button>
           </p>

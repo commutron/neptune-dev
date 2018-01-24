@@ -37,7 +37,7 @@ export class AdminUp extends Component	{
               autoComplete='new-password'
               required
             />
-            <button type='submit' className='smallAction clear greenT'>Upgrade</button>
+            <button type='submit' className='smallAction clearGreen'>Upgrade</button>
           </form>
         </fieldset>
       : null}
@@ -71,7 +71,7 @@ export class AdminDown extends Component	{
       {self && adminOther.length > 1 ?
         <fieldset>
           <legend>Give up being an Admin</legend>
-          <button onClick={this.down.bind(this)} className='action clear redT'>Downgrade</button>
+          <button onClick={this.down.bind(this)} className='action clearRed'>Downgrade</button>
         </fieldset>
       : null}
       </div>
