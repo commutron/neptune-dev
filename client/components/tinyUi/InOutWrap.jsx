@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {CSSTransitionGroup} from 'react-transition-group';
 
-const InOutWrap = ({ children, type, add })=> (
+const InOutWrap = ({ children, type, contain, add })=> (
   <CSSTransitionGroup
-		component='div'
+		component={contain || 'div'}
 		className={add || ''}
 		transitionName={type}
 		transitionEnter={true}

@@ -134,12 +134,13 @@ export default class StepsProgress extends Component	{
         </div>
         <div>
           <div className='centreRow'>
-            {reg.map( (entry, index)=>{
+            {reg.map( (entry)=>{
               let count = calcItem ? entry.items : entry.units;
               let total = calcItem ? totalR : totalRU;
+              let rndmKeyR = Math.random().toString(36).substr(2, 5);
               return(
                 <StepDisplay
-                  key={index}
+                  key={rndmKeyR}
                   mini={this.props.mini}
                   step={entry.step}
                   type={entry.type}
@@ -155,12 +156,13 @@ export default class StepsProgress extends Component	{
                 <i>{Pref.buildFlowAlt}</i>
               </span>
               <div className='centreRow'>
-              {alt.map( (entry, index)=>{
+              {alt.map( (entry)=>{
                 let count = calcItem ? entry.items : entry.units;
                 let total = calcItem ? totalA : totalAU;
+                let rndmKeyA = Math.random().toString(36).substr(2, 5);
                 return(
                   <StepDisplay
-                    key={index}
+                    key={rndmKeyA}
                     mini={this.props.mini}
                     step={entry.step}
                     type={entry.type}
@@ -182,6 +184,7 @@ const StepDisplay = ({ mini, step, type, count, total })=> {
                 type === 'test' ?
                 step :
                 step + ' ' + type;
+                
   if(mini) {
     return(
       <MiniBar

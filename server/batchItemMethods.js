@@ -148,16 +148,9 @@ Meteor.methods({
     const barEnd = barLast + 1;
     
     const appSetting = AppDB.findOne({orgKey: Meteor.user().orgKey});
-    
-    // simplify after appDB is updated
     const floor = barFirst.toString().length === 10 ?
-                  !appSetting.latestSerial ? 10 :
-                    !appSetting.latestSerial.tenDigit ? 10 :
-                      appSetting.latestSerial.tenDigit
-                  :
-                  !appSetting.latestSerial ? 9 :
-                    !appSetting.latestSerial.nineDigit ? 9 :
-                      appSetting.latestSerial.nineDigit;
+                  appSetting.latestSerial.tenDigit :
+                  appSetting.latestSerial.nineDigit;
     
     if(
       !isNaN(barFirst)
@@ -180,33 +173,25 @@ Meteor.methods({
         const open = doc.finishedAt === false;
         const auth = Roles.userIsInRole(Meteor.userId(), 'run');
         
-        if(auth && open && doc) {
-          
-          let bad = [];
+        if(doc && open && auth) {
 
           for(var click = barFirst; click < barEnd; click++) {
             let barcode = click.toString();
-            let duplicate = doc.items.find(x => x.serial === barcode);
-            let wideDuplicate = BatchDB.findOne({ 'items.serial': barcode });
-            if(duplicate || wideDuplicate) {
-              bad.push(barcode);
-            }else{
-              BatchDB.update({_id: batchId}, {
-                $push : { items : {
-                  serial: barcode,
-                  createdAt: new Date(),
-                  createdWho: Meteor.userId(),
-                  finishedAt: false,
-                  finishedWho: false,
-                  units: Number(unit), // non tracked children
-                  panel: false,
-                  panelCode: false,
-                  subItems: [],
-                  history: [],
-                  alt: false,
-                  rma: []
-                }}});
-              }
+            BatchDB.update({_id: batchId}, {
+              $push : { items : {
+                serial: barcode,
+                createdAt: new Date(),
+                createdWho: Meteor.userId(),
+                finishedAt: false,
+                finishedWho: false,
+                units: Number(unit), // non tracked children
+                panel: false,
+                panelCode: false,
+                subItems: [],
+                history: [],
+                alt: false,
+                rma: []
+              }}});
             }
           BatchDB.update({_id: batchId}, {
             $set : {
@@ -228,13 +213,11 @@ Meteor.methods({
           }
           return {
             success: true,
-            notAdded: bad,
-            message:'partial'
+            message:'done'
           };
         }else{
           return {
             success: false,
-            notAdded: false,
             message: 'noAuth'
           };
         }
@@ -242,18 +225,16 @@ Meteor.methods({
         if(barFirst <= floor) {
           return {
             success: false,
-            notAdded: false,
             message: 'tooLowRange'
           };
         }else{
           return {
             success: false,
-            notAdded: false,
             message: 'noRange'
           };
         }
       }
-  },
+    },
   
 // delete \\
   deleteItem(batchId, bar, pass) {

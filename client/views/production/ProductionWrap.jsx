@@ -29,9 +29,10 @@ export default class ProductionWrap extends Component	{
         <FormBar
           batchData={this.props.batchData}
           itemData={this.props.itemData}
+          widgetData={this.props.widgetData}
           versionData={this.props.versionData}
-          app={this.props.app}
-          action={this.props.action} />
+          users={this.props.users}
+          app={this.props.app} />
               
         {/*React.cloneElement(this.props.children[0], this.props)*/}
       </div>

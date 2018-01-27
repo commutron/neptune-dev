@@ -193,7 +193,6 @@ Meteor.publish('compData', function(cNum){
 });
 */
   
-
 /*
 // somethings missing, its not adding the information from widgetDB but
 // it is resending the whole groupDB

@@ -187,7 +187,9 @@ export default class ProductionFindOps extends Component	{
           <ProductionWrap
             batchData={hotBatch}
             itemData={item}
+            widgetData={widget}
             versionData={version}
+            users={this.props.users}
             app={app}
           >
             <div>

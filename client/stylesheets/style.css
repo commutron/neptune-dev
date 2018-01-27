@@ -8,11 +8,6 @@
 	padding: 0 10px;
 	text-transform: uppercase;
 	vertical-align: bottom;
-	/*
-  -moz-box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2);
-  -webkit-box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2);
-  box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2);
-  */
 }
 
 .smallAction {
@@ -637,14 +632,21 @@
 .tagAddButton {
   display: inline-block;
   margin: 0px 5px;
+  padding: 2px;
   vertical-align: middle;
-  color: var(--nephritis);
+  color: var(--belizeHole);
   background-color: transparent;
   font-size: 1.5rem;
   cursor: pointer;
+  border-radius: 50%;
+  -webkit-transition: all 150ms ease-in-out;
+  -moz-transition: all 150ms ease-in-out;
+  -o-transition: all 150ms ease-in-out;
+  transition: all 150ms ease-in-out;
 }
 .tagAddButton:hover {
-  color: var(--emerald);
+  color: black;
+  background-color: var(--belizeHole);
 }
 
 /* Filter Tools */

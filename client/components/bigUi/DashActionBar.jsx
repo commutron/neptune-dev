@@ -27,16 +27,7 @@ import WidgetNewForm from '../forms/WidgetNewForm.jsx';
 const DashActionBar = ({ batchData, itemData, widgetData, versionData, groupData, app, action})=>	(
   <div className='dashAction'>
     <div className='footLeft'>
-    { 
-    /*
-    action === 'build' && ncedit ?
-        <NonConSkip
-  		    ncData={batchData.nonCon}
-  		    id={batchData._id}
-          serial={itemData.serial}
-  		    nons={app.nonConOption} />
-  	:
-  	*/
+    {
   	action === 'batchBuild' && 
   	  batchData.items
   	    .filter( x => x.history.length < 1 )

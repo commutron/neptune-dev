@@ -9,9 +9,9 @@ const SlideLeftWrap = ({ children })=> (
 		transitionEnter={true}
 		transitionAppear={true}
 		transitionLeave={true}
-		transitionEnterTimeout={1000}
-		transitionAppearTimeout={1000}
-		transitionLeaveTimeout={1000}
+		transitionEnterTimeout={400}
+		transitionAppearTimeout={400}
+		transitionLeaveTimeout={400}
 	>
     {children}
   </CSSTransitionGroup>

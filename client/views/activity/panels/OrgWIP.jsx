@@ -37,13 +37,15 @@ const OrgWIP = ({ wip })=> {
   
   return (
     <div className='wipCol'>
-      {wipHot.map( (entry, index)=>{
+      {wipHot.map( (entry)=>{
+        let hotrndmKey = Math.random().toString(36).substr(2, 5);
         return(
-          <StatusRow key={index} entry={entry} active={true} />
+          <StatusRow key={hotrndmKey} entry={entry} active={true} />
         )})}
-      {wipCold.map( (entry, index)=>{
+      {wipCold.map( (entry)=>{
+        let coldrndmKey = Math.random().toString(36).substr(2, 5);
         return(
-          <StatusRow key={index} entry={entry} active={false} />
+          <StatusRow key={coldrndmKey} entry={entry} active={false} />
         )})}
     </div>
   );
@@ -68,6 +70,8 @@ export class StatusRow extends Component	{
     const totalUnits = dt.totalRU + dt.totalAU;
     
     const calcItem = this.state.countCalc === 'item' ? true : false;
+    
+    let rndmKey = Math.random().toString(36).substr(2, 5);
 
     return(
       <section className={clss}>
@@ -109,12 +113,21 @@ export class StatusRow extends Component	{
         {totalUnits > totalAll ?
           <div className='functionalFooter numBoxRadio blackFade'>
             <span className='radioLabelPair'>
-            <input type='radio' id='calcI' name='calc' onChange={()=> this.setState({countCalc: 'item'})} defaultChecked />
-            <label htmlFor='calcI'>Boards</label>
+              <input
+                type='radio'
+                id={rndmKey + 'calcI'}
+                name={rndmKey + 'calc'}
+                onChange={()=> this.setState({countCalc: 'item'})}
+                defaultChecked />
+              <label htmlFor={rndmKey + 'calcI'}>Boards</label>
             </span>
             <span className='radioLabelPair'>
-            <input type='radio' id='calcU' name='calc' onChange={()=> this.setState({countCalc: 'unit'})} />
-            <label htmlFor='calcU'>Units</label>
+              <input
+                type='radio'
+                id={rndmKey + 'calcU'}
+                name={rndmKey + 'calc'}
+                onChange={()=> this.setState({countCalc: 'unit'})} />
+              <label htmlFor={rndmKey + 'calcU'}>Units</label>
             </span>
           </div>
         : null}

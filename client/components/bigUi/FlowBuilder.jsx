@@ -27,7 +27,7 @@ export default class FlowForm extends Component	{
   addStep(e) {
     e.preventDefault();
     let list = this.state.steps; // steps set from state
-    const sk = this.rStep.value; // key ofth selected step
+    const sk = this.rStep.value; // key of the selected step
     const step = this.props.options.find( x => x.key === sk ); // the step object
     let h = this.wika.value.trim().toLowerCase(); // instruction title
     

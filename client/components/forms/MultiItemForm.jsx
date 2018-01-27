@@ -16,7 +16,6 @@ export default class MultiItemForm extends Component {
     super();
     this.state = {
       digits: 10,
-      hold: [],
       work: false
     };
     this.checkRange = this.checkRange.bind(this);
@@ -28,7 +27,6 @@ export default class MultiItemForm extends Component {
   }
 
   checkRange() {
-    this.setState({ hold: []});
     const barStart = this.barNumStart.value.trim();
     const barEnd = this.barNumEnd.value.trim();
     const unit = this.unit.value.trim();
@@ -111,18 +109,11 @@ export default class MultiItemForm extends Component {
         this.barNumStart.value = moment().format('YYMMDD');
         this.barNumEnd.value = moment().format('YYMMDD');
         this.setState({work: false});
+        this.message.value = 'all created successfully';
       }else{
         Bert.alert(Alert.caution);
         console.log(reply.message);
         this.setState({work: false});
-      }
-      if(!reply.notAdded) {
-        null;
-      }else if(reply.notAdded.length > 0) {
-        this.setState({ hold: reply.notAdded });
-        this.message.value = '';
-      }else{
-        this.message.value = 'all created successfully';
       }
     });
 	}
@@ -214,15 +205,6 @@ export default class MultiItemForm extends Component {
             <div className='centre'>
               <i className={iconSty}></i>
               <output ref={(i)=> this.message = i} value='' />
-              {this.state.hold.length > 0 ?
-                <b>duplicates not created</b>
-              :null}
-              <ul>
-                {this.state.hold.map( (entry, index)=>{ 
-                  return(
-                    <li key={index}>{entry}</li>
-                )})}
-              </ul>
             </div>
             <br />
             <p className='centre'>

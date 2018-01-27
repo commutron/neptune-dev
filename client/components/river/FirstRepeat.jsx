@@ -3,7 +3,7 @@ import Pref from '/client/global/pref.js';
 
 import FirstForm from './FirstForm.jsx';
 
-export default class StoneSelect extends Component	{
+export default class FirstRepeat extends Component	{
   
   constructor() {
     super();

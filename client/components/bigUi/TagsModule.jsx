@@ -76,7 +76,7 @@ export default class TagsModule extends Component	{
             id={this.props.id}
             holdToDisplay={1}
             renderTag='span'>
-            <i className='fas fa-plus-circle tagAddButton'></i>
+            <i className='fas fa-plus tagAddButton'></i>
           </ContextMenuTrigger>
         :null}
         

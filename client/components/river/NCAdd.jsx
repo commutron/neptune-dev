@@ -50,8 +50,8 @@ const NCAdd = ({ id, barcode, app })=> {
               );
           })}
         </optgroup>
-
       </select>
+      
       <input
         type='text'
         id='ncRefs'

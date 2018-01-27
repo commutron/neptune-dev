@@ -20,7 +20,6 @@ export default class ItemsAutoForm extends Component {
     super();
     this.state = {
       digits: 10,
-      hold: [],
       work: false
     };
     this.checkRange = this.checkRange.bind(this);
@@ -32,10 +31,18 @@ export default class ItemsAutoForm extends Component {
   }
 
   checkRange() {
-    this.setState({ hold: []});
     const barStart = this.barNumStart.value.trim();
     const barEnd = this.barNumEnd.value.trim();
     const unit = this.unit.value.trim();
+    
+    const floor = this.state.digits === 10 ? // simplify after appDB is updated
+                  !this.props.app.latestSerial ? 10 :
+                    !this.props.app.latestSerial.tenDigit ? 10 : 
+                      this.props.app.latestSerial.tenDigit
+                  :
+                  !this.props.app.latestSerial ? 9 :
+                    !this.props.app.latestSerial.nineDigit ? 9 :
+                      this.props.app.latestSerial.nineDigit;
     
     let first = parseInt(barStart, 10);
     let last = parseInt(barEnd, 10);
@@ -47,6 +54,8 @@ export default class ItemsAutoForm extends Component {
     let valid = false;
     
     if(
+      first > floor
+      &&
       !isNaN(count)
       &&
       count > 0
@@ -54,8 +63,7 @@ export default class ItemsAutoForm extends Component {
       count <= 1000
       &&
       unit <= 250
-      )
-      {
+    ) {
         valid = true;
       }
     else
@@ -70,11 +78,15 @@ export default class ItemsAutoForm extends Component {
       this.go.disabled = true;
     }
     
-    // display quantity
-    let quantity = isNaN(count) ? 'Not a number' : 
-                   count < 1 ? 'Invalid Range' :
-                   count + ' ' + Pref.item + '(s)';
-    this.message.value = quantity;
+    if(first <= floor) {
+      this.message.value = 'Please begin above ' + floor;
+    }else{
+      // display quantity
+      let quantity = isNaN(count) ? 'Not a number' : 
+                     count < 1 ? 'Invalid Range' :
+                     count + ' ' + Pref.item + '(s)';
+      this.message.value = quantity;
+    }
   }
 
 	addItem(e) {
@@ -101,17 +113,11 @@ export default class ItemsAutoForm extends Component {
         this.barNumStart.value = moment().format('YYMMDD');
         this.barNumEnd.value = moment().format('YYMMDD');
         this.setState({work: false});
+        this.message.value = 'all created successfully';
       }else{
         Bert.alert(Alert.caution);
         console.log(reply.message);
-      }
-      if(!reply.notAdded) {
-        null;
-      }else if(reply.notAdded.length > 0) {
-        this.setState({ hold: reply.notAdded });
-        this.message.value = '';
-      }else{
-        this.message.value = 'all created successfully';
+        this.setState({work: false});
       }
     });
 	}
@@ -122,7 +128,7 @@ export default class ItemsAutoForm extends Component {
     const dig = this.state.digits;
     const today = moment().format('YYMMDD');
     let iconSty = this.state.work ? 'workIcon' : 'transparent';
-
+    
     return (
       <Model
         button={'Add ' + Pref.item + 's'}
@@ -203,15 +209,6 @@ export default class ItemsAutoForm extends Component {
             <div className='centre'>
               <i className={iconSty}></i>
               <output ref={(i)=> this.message = i} value='' />
-              {this.state.hold.length > 0 ?
-                <b>duplicates not created</b>
-              :null}
-              <ul>
-                {this.state.hold.map( (entry, index)=>{ 
-                  return(
-                    <li key={index}>{entry}</li>
-                )})}
-              </ul>
             </div>
             <br />
             <p className='centre'>
