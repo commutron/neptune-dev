@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import Select from 'react-select';
+//import 'react-select/dist/react-select.css';
 import Pref from '/client/global/pref.js';
 
 import UserNice from '../smallUi/UserNice.jsx';
@@ -31,6 +33,7 @@ export default class FirstForm extends Component	{
     this.goNext = this.goNext.bind(this);
     this.up = this.up.bind(this);
     this.down = this.down.bind(this);
+    this.who = this.who.bind(this);
   }
   
   goNext() {
@@ -70,6 +73,15 @@ export default class FirstForm extends Component	{
     let who = this.state.whoB;
     who.delete(entry);
     this.setState({ whoB: who });
+  }
+  
+  who(e) {
+    console.log(e);
+    let who = this.state.whoB;
+    e.forEach( x => who.add(x.value));
+    this.setState({ whoB: who });
+
+    console.log(this.state.whoB);
   }
 
 // step 2
@@ -127,8 +139,8 @@ export default class FirstForm extends Component	{
 		});
 	}
 	
-	handleFirst(e) {
-	  e.preventDefault();
+	handleFirst() {
+	  null;
 	}
 
 
@@ -161,8 +173,10 @@ export default class FirstForm extends Component	{
                      'forward' : 
                      'backward';
     
+    const userOps = Array.from(this.props.users, x => { return {value: x._id, label: x.username } } );
     
-    console.log(firsts);
+    
+    console.log(userOps);
     
     if(this.state.page === 1) {                 
       return(
@@ -241,8 +255,24 @@ export default class FirstForm extends Component	{
             </optgroup>
           </select>
           
+          {/*
+          <Select
+            name='whoBuilt'
+            value={this.state.whoB}
+            onChange={this.who}
+            multi={true}
+            options={userOps}
+          />
+          */}
           
-          {[...this.state.whoB].map( (entry, index)=>{
+          <InputMulti
+            name='whoBuilt'
+            onChange={this.who}
+            options={userOps}
+          />
+          
+          
+          {/*[...this.state.whoB].map( (entry, index)=>{
             return(
               <i className='tempTag big' key={index}>
                 <UserNice id={entry} />
@@ -255,7 +285,7 @@ export default class FirstForm extends Component	{
                   <i className="fas fa-times" aria-hidden="true"></i>
                 </button>
               </i>
-          )})}
+          )})*/}
               
               
           <select
@@ -311,3 +341,97 @@ export default class FirstForm extends Component	{
   }
 }
 
+
+
+
+
+
+
+
+export class InputMulti extends Component	{
+  
+  constructor() {
+    super();
+    this.state = {
+      choice: new Set()
+    };
+    this.handle = this.handle.bind(this);
+    this.pull = this.pull.bind(this);
+  }
+  
+  handle() {
+    let cH = this.state.choice;
+    let oP = this.sL.value;
+    console.log(oP);
+    let sP = oP.split("|");
+    cH.add({
+      value: sP[0],
+      label: sP[1]
+    });
+    this.setState({ choice: cH });
+  }
+  
+  pull(kY) {
+    let cH = this.state.choice;
+    cH.delete( kY );
+    this.setState({ choice: cH });
+  }
+  
+  render() {
+    
+    console.log([...this.state.choice]);
+    
+    inputMultiSTY = {
+      height: '32px',
+      width: '200px',
+      backgroundColor: 'transparent',
+      border: '1px solid transparent',
+      borderBottomColor: 'white'
+    };
+    
+    inputMultiSelectedSTY = {
+      visibility: 'hidden'
+    };
+    
+    return(
+      <div className='inputMulti' style={inputMultiSTY}>
+        <div className='inputMultiMenu'>
+          <select
+            id='selectMultiOptions'
+            ref={(i)=> this.sL = i}
+            className='hiddenSelect'
+            style={inputMultiSelectedSTY}
+            onChange={()=>this.handle()}
+          >
+            {this.props.options.map( (entry)=>{
+              return(
+                <option
+                  key={entry.value}
+                  value={entry.value + '|' + entry.label}
+                  //disabled={this.state.choice.has( x => x.value === entry.value )}///// whattt the fuuuuck
+                >{entry.label}</option> 
+            )})}
+          </select>
+          <div className='inputMultiSelected'>
+            
+            {[...this.state.choice].map( (entry, index)=>{
+            return(
+              <i className='tempTag' key={index}>
+                {entry.label}
+                <button
+                  type='button'
+                  name={entry}
+                  ref={(i)=> this.ex = i}
+                  className='miniAction redT'
+                  onClick={()=>this.pull(entry)}>
+                  <i className='fas fa-times'></i>
+                </button>
+              </i>
+          )})}
+              
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
