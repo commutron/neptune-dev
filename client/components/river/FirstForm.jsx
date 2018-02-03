@@ -103,7 +103,6 @@ export default class FirstForm extends Component	{
     const bar = this.props.barcode;
     const sKey = this.props.sKey;
 		const step = this.props.step;
-    const type = this.props.type;
       
     const howI = this.state.howI ? this.state.howI : 'manual';
     const whoB = [...this.state.whoB];
@@ -112,7 +111,7 @@ export default class FirstForm extends Component	{
     const diff = this.state.diff;
     const ng = this.state.ng;
       
-		Meteor.call('addFirst', id, bar, sKey, step, type, good, whoB, howB, howI, diff, ng, (error, reply)=>{
+		Meteor.call('addFirst', id, bar, sKey, step, good, whoB, howB, howI, diff, ng, (error, reply)=>{
 		  if(error)
 		    console.log(error);
 		  if(reply) {
@@ -240,7 +239,13 @@ export default class FirstForm extends Component	{
                 required>
                 <option></option>
                 {this.props.methods.map( (entry, index)=>{
-                  return ( <option key={index} value={entry}>{entry}</option> );
+                  if(typeof entry === 'string') {// redundant after migration
+                    return ( <option key={index} value={entry}>{entry}</option> );
+                  }else if(typeof entry === 'object') {// redundant after migration
+                    if(entry.forSteps.includes(this.props.sKey)) {
+                      return ( <option key={index} value={entry.title}>{entry.title}</option> );
+                    }else{null}
+                  }else{null}
                 })}
               </select>
               <label htmlFor='mthb'>{Pref.method}</label>
@@ -291,16 +296,7 @@ export default class FirstForm extends Component	{
     return(
       null
     );
-  
-  /* General Comments if found necessary 
-  <p>
-    <textarea
-	    type='text'
-	    id='gcom'
-	    ref={(i)=> this.comm = i}></textarea>
-	  <label htmlFor='gcom'>{Pref.gComm}</label>
-  </p>
-*/
+
   }
 }
 

@@ -4,6 +4,8 @@ import Pref from '/client/global/pref.js';
 import {OptionAdd} from '/client/components/forms/AppSettings';
 import {FinishTrack} from '/client/components/forms/AppSettings';
 import {SetScale} from '/client/components/forms/AppSettings';
+import {MethodOptionAdd} from '/client/components/forms/AppSettings';
+import {ClearMethodOptions} from '/client/components/forms/AppSettings';
 
 export default class PrefPanel extends Component {
 
@@ -80,14 +82,35 @@ export default class PrefPanel extends Component {
             
             <hr />
           
-            <h2>{Pref.method} options:</h2>
+            <h2>Clear Dumb {Pref.method} options:</h2>
+            <ClearMethodOptions />
+            
+            <h2>Smarter {Pref.method} options:</h2>
             <i>available methods for first-off form</i>
-            <OptionAdd action='tool' title='tool' rndmKey={Math.random().toString(36).substr(2, 5)} />
-              <ul>
-                {dt.toolOption.map( (entry, index)=>{
-                  return ( <li key={index}><i>{entry}</i></li> );
-                })}
-              </ul>
+            <MethodOptionAdd existOps={dt.toolOption} trackedSteps={trackOptions} />
+            
+            <ul>
+              {dt.toolOption.map( (entry, index)=>{
+                if(typeof entry === 'string') {// redundant after migration
+                  return( <li key={index}><i>{entry}</i></li> );// redundant after migration
+                }else if(typeof entry === 'object') {// redundant after migration
+                  return(
+                    <li key={index}>
+                      <dl>
+                        <dt>{entry.title}</dt>
+                        {entry.forSteps.map( (ntry, ndx)=>{
+                          let nice = trackOptions.find( x => x.key === ntry ).step;
+                          return( <dd key={ndx}>{nice}</dd> );
+                        })}
+                      </dl>
+                    </li>
+                  );
+                }else{
+                  null;
+                }
+              })}
+            </ul>
+              
           
             <hr />
             

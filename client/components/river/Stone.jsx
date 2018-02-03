@@ -50,10 +50,10 @@ export default class Stone extends Component	{
     	}else if(finish && !Roles.userIsInRole(Meteor.userId(), 'finish')) {
     		null;
     	}else{
-  		  let iky = Session.get('ikyView');
-  		  !iky || iky === false ? // if item card is displayed
-  		    this.setState({lock: false})
-  		  : null;
+  		  //let iky = Session.get('ikyView');
+  		  //!iky || iky === false ? // if item card is displayed
+  		    this.setState({lock: false});
+  		  //: null;
     	}
     }, speed);
   }

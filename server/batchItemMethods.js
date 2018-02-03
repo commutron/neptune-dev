@@ -307,7 +307,7 @@ Meteor.methods({
     }
   },
 
-  addFirst(batchId, bar, key, step, type, good, whoB, howB, howI, diff, ng) {
+  addFirst(batchId, bar, key, step, good, whoB, howB, howI, diff, ng) {
     if(!Roles.userIsInRole(Meteor.userId(), 'inspect')) {
       return false;
     }else{
@@ -315,7 +315,7 @@ Meteor.methods({
         $push : { 'items.$.history': {
           key: key,
           step: step,
-          type: type,
+          type: 'first',
           good: good,
           time: new Date(),
           who: Meteor.userId(),

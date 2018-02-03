@@ -250,6 +250,7 @@ export default class FindOps extends Component	{
             widgetData={widget}
             versionData={version}
             groupData={group}
+            users={this.props.users}
             app={app}
             action='item'
           >
@@ -278,6 +279,7 @@ export default class FindOps extends Component	{
               widgetData={widget}
               versionData={version}
               groupData={group}
+              users={this.props.users}
               app={app}
               action='build'
             >

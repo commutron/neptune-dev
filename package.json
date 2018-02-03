@@ -26,7 +26,6 @@
     "react-contextmenu": "^2.8.0",
     "react-dom": "^15.5.4",
     "react-mounter": "^1.2.0",
-    "react-select": "^1.2.1",
     "react-transition-group": "^1.1.3"
   }
 }

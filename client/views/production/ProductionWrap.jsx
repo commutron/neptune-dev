@@ -26,13 +26,15 @@ export default class ProductionWrap extends Component	{
           <div style={overScrollSpacer}></div>
         </div>
         
-        <FormBar
-          batchData={this.props.batchData}
-          itemData={this.props.itemData}
-          widgetData={this.props.widgetData}
-          versionData={this.props.versionData}
-          users={this.props.users}
-          app={this.props.app} />
+        {!this.props.actionBar ||
+          <FormBar
+            batchData={this.props.batchData}
+            itemData={this.props.itemData}
+            widgetData={this.props.widgetData}
+            versionData={this.props.versionData}
+            users={this.props.users}
+            app={this.props.app} />
+        }
               
         {/*React.cloneElement(this.props.children[0], this.props)*/}
       </div>

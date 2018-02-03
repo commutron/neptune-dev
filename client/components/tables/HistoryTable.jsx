@@ -54,7 +54,9 @@ const HistoryRow = ({ entry, id, serial, done })=> {
    const infoT = dt.type === 'test' && typeof dt.info === 'string';
    
    let inspect = infoF ? dt.info.verifyMethod : '';
-   let builder = infoF ? dt.info.builder.map( (e, i)=>{ return( <UserNice key={i} id={e} /> ) }) : '';
+   let builder = infoF ? dt.info.builder.map( (e, i)=> { return( 
+                          <i key={i}><UserNice id={e} />, </i> )})
+                       : '';
    let method = infoF ? dt.info.buildMethod : '';
    let change = infoF ? dt.info.change : '';
    let issue = infoF ? dt.info.issue : infoT ? dt.info : '';

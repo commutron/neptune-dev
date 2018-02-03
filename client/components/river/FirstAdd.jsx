@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
-import Select from 'react-select';
-//import 'react-select/dist/react-select.css';
 import Pref from '/client/global/pref.js';
 
-import UserNice from '../smallUi/UserNice.jsx';
 import InOutWrap from '/client/components/tinyUi/InOutWrap.jsx';
+import InputMulti from '../smallUi/InputMulti.jsx';
 
 // id={this.props.id}
 // barcode={this.props.barcode}
@@ -20,137 +18,23 @@ export default class FirstForm extends Component	{
   constructor() {
     super();
     this.state = {
+      availableSteps: new Set(),
       goforward: false,
       page: 1,
-      step: '',
-      howInspect: false,
-      whoB: new Set(),
-      howB: false,
+      step: false,
+      howInspect: 'manual',
+      changes: '',
+      whoBuilt: [],
+      howBuilt: false,
+      stillIssue: '',
       good: true,
-      ng: false,
-      diff: false
     };
-    this.goNext = this.goNext.bind(this);
-    this.up = this.up.bind(this);
-    this.down = this.down.bind(this);
-    this.who = this.who.bind(this);
   }
   
-  goNext() {
-    // if done
-    this.setState({ goforward: 'forward' });
-    this.setState({ page: 2});
-  }
-  goBack() {
-    this.setState({ goforward: 'backward' });
-    this.setState({ page: 1});
-  }
-  
-  again(e) {
-    e.preventDefault();
-    let val = this.change.value.trim().toLowerCase();
-    if(!val) {
-      null;
-    }else{
-      this.setState({ diff: val });
-    }
-  }
-  
-  how() {
-    this.setState({ howInspect: this.howI.value });
-  }
-
-// step 1
-  up() {
-    let who = this.state.whoB;
-    let val = this.user.value;
-    who.add(val);
-    this.setState({ whoB: who });
-    this.user.value = '';
-  }
-  
-  down(entry) {
-    let who = this.state.whoB;
-    who.delete(entry);
-    this.setState({ whoB: who });
-  }
-  
-  who(e) {
-    console.log(e);
-    let who = this.state.whoB;
-    e.forEach( x => who.add(x.value));
-    this.setState({ whoB: who });
-
-    console.log(this.state.whoB);
-  }
-
-// step 2
-  tool() {
-    let val = this.methodB.value.trim().toLowerCase();
-    if(!val) {
-      null;
-    }else{
-      this.setState({ howB: val });
-      this.goNext();
-    }
-  }
-
-// step 3
-  flaw() {
-    let val = this.issue.value.trim().toLowerCase();
-    if(!val) {
-      null;
-    }else{
-      this.setState({ ng: val });
-    }
-  }
-  
-  notgood() {
-    this.goBad.disabled = true;
-    this.setState({ good: false }, ()=>{
-      this.pass();
-    });
-  }
-  
-  pass() {
-    this.go.disabled = true;
-    const id = this.props.id;
-    const bar = this.props.barcode;
-    const sKey = this.props.sKey;
-		const step = this.props.step;
-    const type = this.props.type;
-      
-    const howI = this.state.howI ? this.state.howI : 'manual';
-    const whoB = [...this.state.whoB];
-    const howB = this.state.howB;
-    const good = this.state.good;
-    const diff = this.state.diff;
-    const ng = this.state.ng;
-      
-		Meteor.call('addFirst', id, bar, sKey, step, type, good, whoB, howB, howI, diff, ng, (error, reply)=>{
-		  if(error)
-		    console.log(error);
-		  if(reply) {
-     		const findBox = document.getElementById('lookup');
-			  findBox.focus();
-			 }else{
-			   Bert.alert(Pref.blocked, 'danger');
-			 }
-		});
-	}
-	
-	handleFirst() {
-	  null;
-	}
-
-
-  render() {
-    
+  componentWillMount() {
     const allFlows = this.props.allFlows;
     const riverKey = this.props.riverKey;
     const riverAltKey = this.props.riverAltKey;
-    const a = this.props.app;
-    
     const river = riverKey ? 
                   allFlows.find( x => x.flowKey === riverKey).flow :
                   [];
@@ -164,8 +48,92 @@ export default class FirstForm extends Component	{
     for(let s of riverAlt) {
       s.type === 'first' ? firsts.add(s) : null;
     }
+    this.setState({ availableSteps: firsts });
+  }
+  
+  goNext() {
+    this.setState({ goforward: 'forward' });
+    this.setState({ page: 2});
+  }
+  goBack() {
+    this.setState({ goforward: 'backward' });
+    this.setState({ page: 1});
+  }
+  
+  setStep() {
+    !this.repeatStep.value ? null :
+    this.setState({ step: this.repeatStep.value });
+  }
+  
+  setChanges() {
+    !this.change.value ? null :
+    this.setState({ changes: this.change.value.trim().toLowerCase() });
+  }
+  
+  setHow() {
+    !this.howI.checked ?
+    this.setState({ howInspect: 'manual' }) :
+    this.setState({ howInspect: 'auto' });
+  }
+  
+  setTool() {
+    !this.methodB.value ? null :
+    this.setState({ howBuilt: this.methodB.value });
+  }
+  
+  setIssue() {
+    !this.issue.value ? null :
+    this.setState({ stillIssue: this.issue.value.trim().toLowerCase() });
+  }
+  
+  setWho(who) {
+    !who ? null :
+    this.setState({ whoBuilt: who });
+  }
+
+  notgood() {
+    this.goBad.disabled = true;
+    this.setState({ good: false }, ()=>{
+      this.pass();
+    });
+  }
+  
+  pass() {
+    this.go.disabled = true;
+    const id = this.props.id;
+    const serial = this.props.barcode;
     
-    let secondOpinion = this.state.whoB.has(Meteor.userId()) ? true : false;
+    const sKey = this.state.step;
+    const stepObj = [...this.state.availableSteps].find( x => x.key === sKey );
+		const step = !stepObj ? null : stepObj.step; 
+      
+    const howI = this.state.howInspect;
+    const diff = this.state.changes;
+    const whoB = this.state.whoBuilt;
+    const howB = this.state.howBuilt;
+    const good = this.state.good;
+    const ng = this.state.stillIssue;
+      
+		Meteor.call('addFirst', id, serial, sKey, step, good, whoB, howB, howI, diff, ng, (error, reply)=>{
+		  if(error)
+		    console.log(error);
+		  if(reply) {
+     		const findBox = document.getElementById('lookup');
+			  findBox.focus();
+			  this.props.doneClose();
+			 }else{
+			   Bert.alert(Pref.blocked, 'danger');
+			 }
+		});
+	}
+
+  render() {
+    
+    const a = this.props.app;
+    
+    const firsts = this.state.availableSteps;
+    
+    let secondOpinion = this.state.whoBuilt.includes(Meteor.userId());
     
     const movement = !this.state.goforward ? 
                      '' :
@@ -175,53 +143,55 @@ export default class FirstForm extends Component	{
     
     const userOps = Array.from(this.props.users, x => { return {value: x._id, label: x.username } } );
     
-    
-    console.log(userOps);
-    
     if(this.state.page === 1) {                 
       return(
         <InOutWrap type={movement}>
-        <div className='actionForm' key='page1'>
+        <div className='actionForm inlineFirst' key='page1'>
             
-            <select
-              id='whatfirst'
-              className='cap blueIn'
-              required>
-                {[...firsts].map( (dt)=>{
-                  return (
-                    <option key={dt.key} value={dt}>{dt.step}</option>
-                )})}
-            </select>
+            <span>
+              <select
+                id='whatfirst'
+                className='cap blueIn'
+                ref={(i)=> this.repeatStep = i}
+                onChange={this.setStep.bind(this)}
+                defaultValue={this.state.step}
+                required>
+                  <option></option>
+                  {[...firsts].map( (dt)=>{
+                    return (
+                      <option key={dt.key} value={dt.key}>{dt.step}</option>
+                  )})}
+              </select>
+              <label htmlFor='whatfirst'>Repeat First-off</label>
+            </span>
             
+            <span>
+              <input
+                type='checkbox'
+                id='howinspect'
+                className='blueIn'
+                ref={(i)=> this.howI = i}
+                onChange={this.setHow.bind(this)}
+                defaultChecked={this.state.howInspect === 'auto'} />
+              <label htmlFor='howinspect'>AOI</label>
+            </span>
             
-            <input
-    			    type='text'
-    			    id='proC'
-    			    ref={(i)=> this.change = i}
-    			    placeholder={Pref.proChange} />
-          
-          
-            <select
-              id='howinspect'
-              className='cap blueIn'
-              ref={(i)=> this.howI = i}
-              onChange={this.how.bind(this)}
-              required>
-              <option
-                value='manual'
-                defaultValue={!this.state.step.toLowerCase().includes('smt')}
-                required
-              >Manual</option>
-              <option
-                value='auto'
-                defaultValue={this.state.step.toLowerCase().includes('smt')}
-              >AOI</option>
-            </select>
-            
+            <span>
+              <input
+      			    type='text'
+      			    id='proC'
+      			    className='blueIn'
+      			    ref={(i)=> this.change = i}
+      			    onChange={this.setChanges.bind(this)}
+      			    defaultValue={this.state.changes} />
+              <label htmlFor='proC'>Process Changes</label>
+            </span>
             
             <button
+              title='Next'
               className='miniAction bigger'
-              onClick={()=>this.goNext()}>
+              onClick={()=>this.goNext()}
+              disabled={!this.state.step}>
               <i className='fas fa-arrow-right fa-lg'></i>
             </button>
 
@@ -230,95 +200,67 @@ export default class FirstForm extends Component	{
       );
     }
     
-    if(this.state.page === 2) {                 
+    if(this.state.page === 2) {    
       return(
         <InOutWrap type={movement}>
-        <div className='actionForm' key='page2'>
+        <div className='actionForm inlineFirst' key='page2'>
           
           <button
+            title='Back'
             className='miniAction bigger'
             onClick={()=>this.goBack()}>
             <i className='fas fa-arrow-left fa-lg'></i>
           </button>
           
-          <select
-            id='wuilt'
-            className='cap'
-            ref={(i)=> this.user = i}
-            onChange={this.up.bind(this)}>
-            <optgroup label={Pref.builder}>
-              <option></option>
-              {this.props.users.map( (entry, index)=>{
-                return(
-                  <option key={index} value={entry._id}>{entry.username}</option>
-              )})}
-            </optgroup>
-          </select>
+          <span>
+            <InputMulti
+              id='whoBuilt'
+              onChange={(e)=>this.setWho(e)}
+              options={userOps}
+              defaultEntries={this.state.whoBuilt}
+            />
+            <label htmlFor='whoBuilt'>Who Built</label>
+          </span>
           
-          {/*
-          <Select
-            name='whoBuilt'
-            value={this.state.whoB}
-            onChange={this.who}
-            multi={true}
-            options={userOps}
-          />
-          */}
-          
-          <InputMulti
-            name='whoBuilt'
-            onChange={this.who}
-            options={userOps}
-          />
-          
-          
-          {/*[...this.state.whoB].map( (entry, index)=>{
-            return(
-              <i className='tempTag big' key={index}>
-                <UserNice id={entry} />
-                <button
-                  type='button'
-                  name={entry}
-                  ref={(i)=> this.ex = i}
-                  className='miniAction big redT'
-                  onClick={()=>this.down(entry)}>
-                  <i className="fas fa-times" aria-hidden="true"></i>
-                </button>
-              </i>
-          )})*/}
-              
-              
-          <select
-            id='mthb'
-            className='cap'
-            ref={(i)=> this.methodB = i}
-            onChange={this.tool.bind(this)}
-            required>
-            <optgroup label={Pref.method}>
+          <span>
+            <select
+              id='mthb'
+              className='cap blueIn'
+              ref={(i)=> this.methodB = i}
+              onChange={this.setTool.bind(this)}
+              defaultValue={this.state.howBuilt}
+              required>
               <option></option>
               {a.toolOption.map( (entry, index)=>{
-                return(
-                  <option key={index} value={entry}>{entry}</option>
-              )})}
-            </optgroup>
-          </select>
-          
-          
-          <input
-  			    type='text'
-  			    id='oIss'
-  			    ref={(i)=> this.issue = i}
-  			    onChange={this.flaw.bind(this)}
-  			    placeholder={Pref.outIssue} />
-  			    
-  			    
+                if(typeof entry === 'string') {// redundant after migration
+                  return ( <option key={index} value={entry}>{entry}</option> );
+                }else if(typeof entry === 'object') {// redundant after migration
+                  if(entry.forSteps.includes(this.state.step)) {
+                      return ( <option key={index} value={entry.title}>{entry.title}</option> );
+                    }else{null}
+                  }else{null}
+                })}
+            </select>
+            <label htmlFor='mthb'>Built With</label>
+          </span>
+            
+          <span>
+            <input
+    			    type='text'
+    			    id='oIss'
+    			    className='blueIn'
+    			    ref={(i)=> this.issue = i}
+    			    onChange={this.setIssue.bind(this)}
+    			    defaultValue={this.state.stillIssue} />
+    			  <label htmlFor='oIss'>{Pref.outIssue}</label>
+    			</span>
 			    
 			    <span className=''>
             <button
               type='button'
               className='miniAction bigger redT'
               ref={(i)=> this.goBad = i}
-              disabled={false}
+              disabled={this.state.whoBuilt.length === 0}
               onClick={this.notgood.bind(this)}>
               <i className="fas fa-times-circle fa-lg"></i>
             </button>
@@ -326,7 +268,7 @@ export default class FirstForm extends Component	{
               type='button'
               className='miniAction bigger'
               ref={(i)=> this.go = i}
-              disabled={secondOpinion}
+              disabled={this.state.whoBuilt.length === 0 || secondOpinion}
               onClick={this.pass.bind(this)}>
               <i className="fas fa-check-circle fa-lg"></i>
             </button>
@@ -338,100 +280,5 @@ export default class FirstForm extends Component	{
     }
     
     return(null);
-  }
-}
-
-
-
-
-
-
-
-
-export class InputMulti extends Component	{
-  
-  constructor() {
-    super();
-    this.state = {
-      choice: new Set()
-    };
-    this.handle = this.handle.bind(this);
-    this.pull = this.pull.bind(this);
-  }
-  
-  handle() {
-    let cH = this.state.choice;
-    let oP = this.sL.value;
-    console.log(oP);
-    let sP = oP.split("|");
-    cH.add({
-      value: sP[0],
-      label: sP[1]
-    });
-    this.setState({ choice: cH });
-  }
-  
-  pull(kY) {
-    let cH = this.state.choice;
-    cH.delete( kY );
-    this.setState({ choice: cH });
-  }
-  
-  render() {
-    
-    console.log([...this.state.choice]);
-    
-    inputMultiSTY = {
-      height: '32px',
-      width: '200px',
-      backgroundColor: 'transparent',
-      border: '1px solid transparent',
-      borderBottomColor: 'white'
-    };
-    
-    inputMultiSelectedSTY = {
-      visibility: 'hidden'
-    };
-    
-    return(
-      <div className='inputMulti' style={inputMultiSTY}>
-        <div className='inputMultiMenu'>
-          <select
-            id='selectMultiOptions'
-            ref={(i)=> this.sL = i}
-            className='hiddenSelect'
-            style={inputMultiSelectedSTY}
-            onChange={()=>this.handle()}
-          >
-            {this.props.options.map( (entry)=>{
-              return(
-                <option
-                  key={entry.value}
-                  value={entry.value + '|' + entry.label}
-                  //disabled={this.state.choice.has( x => x.value === entry.value )}///// whattt the fuuuuck
-                >{entry.label}</option> 
-            )})}
-          </select>
-          <div className='inputMultiSelected'>
-            
-            {[...this.state.choice].map( (entry, index)=>{
-            return(
-              <i className='tempTag' key={index}>
-                {entry.label}
-                <button
-                  type='button'
-                  name={entry}
-                  ref={(i)=> this.ex = i}
-                  className='miniAction redT'
-                  onClick={()=>this.pull(entry)}>
-                  <i className='fas fa-times'></i>
-                </button>
-              </i>
-          )})}
-              
-          </div>
-        </div>
-      </div>
-    );
   }
 }

@@ -11,7 +11,6 @@ export class OptionAdd extends Component	{
     const action = act === 'nc' ? 'addNCOption' :
                    act === 'track' ? 'addTrackOption' :
                    act === 'anc' ? 'addAncOp' :
-                   act === 'tool' ? 'addToolOp' :
                    act === 'tag' ? 'addTagOp' :
                    act === 'help' ? 'setHelpDocs' :
                    act === 'wi' ? 'setInstruct' :
@@ -152,6 +151,87 @@ export const SetScale = ({ curScale })=> {
         <input type='number' id='max' className='miniNumIn' defaultValue={df.max} />
         <button type='submit' className='smallAction clearGreen'>Save</button>
       </form>
+    </div>
+  );
+};
+
+
+export const MethodOptionAdd = ({ existOps, trackedSteps })=> {
+  
+  function handle(e) {
+    e.preventDefault();
+    let title = this.tooltitle.value;
+    let steps = Array.from(
+                  this.corrSteps.options, 
+                    x => x.selected === true && x.value
+                  ).filter( 
+                    y => y !== false
+                  );
+    Meteor.call('addToolOp', title, steps, (error, reply)=>{
+      if(error)
+        console.log(error);
+      if(reply) {
+        Bert.alert(Alert.success);
+        this.tooltitle.value = '';
+        this.corrSteps.value = null;
+      }else{
+        Bert.alert(Alert.danger);
+      }
+    });
+  }
+  
+  return(
+    <div>
+      <form id='toolForm' onSubmit={(e)=>handle(e)}>
+        <label htmlFor='tooltitle'>{Pref.method} name</label>
+        <input type='text' id='tooltitle' list='preExist' required />
+        <datalist id='preExist'>
+          {existOps.map( (entry, index)=>{
+            if(typeof entry === 'object') {// redundant after migration
+              return(
+                <option key={index} value={entry.title}>{entry.title}</option>
+              );
+            }else{null}
+          })}
+        </datalist>
+        <label htmlFor='steps'>Corresponding Steps</label>
+        <select id='corrSteps' multiple required>
+          {trackedSteps.map( (entry)=>{
+            if(entry.type === 'first') {
+              return(
+                <option key={entry.key} value={entry.key}>{entry.step}</option>
+              );
+            }else{null}
+          })}
+        </select>
+        <br />
+        <button type='submit' className='smallAction clearGreen'>Save</button>
+      </form>
+    </div>
+  );
+};
+
+
+export const ClearMethodOptions = ()=> {
+  
+  function handle() {
+    Meteor.call('clearToolOp', (error, reply)=>{
+      if(error)
+        console.log(error);
+      if(reply) {
+        Bert.alert(Alert.success);
+      }else{
+        Bert.alert(Alert.danger);
+      }
+    });
+  }
+  
+  return(
+    <div>
+      <label htmlFor='scaleForm'>Clear All Tool Options</label>
+      <button
+        className='smallAction blackT clearRed'
+        onClick={()=>handle()} />
     </div>
   );
 };

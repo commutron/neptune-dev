@@ -103,11 +103,37 @@ Meteor.methods({
     }
   },
   
-  addToolOp(value) {
+  // clear tool option
+  clearToolOp() {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $set : { 
+          toolOption : []
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  // new tool option
+  addToolOp(title, forStep) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+/*
+      const doc = AppDB.findOne({orgKey: Meteor.user().orgKey});
+      if(doc.toolOption.find( x => x.title === title )) {
+        AppDB.update({orgKey: Meteor.user().orgKey, 'toolOption.title': title}, {
+          $pull : {
+            toolOption: { title: title }
+        }});
+      }else{null}
+*/
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
         $push : { 
-          toolOption : value
+          toolOption : {
+            title: title,
+            forSteps: forStep
+          }
       }});
       return true;
     }else{

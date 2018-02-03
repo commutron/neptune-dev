@@ -191,6 +191,7 @@ export default class ProductionFindOps extends Component	{
             versionData={version}
             users={this.props.users}
             app={app}
+            actionBar={true}
           >
             <div>
               <ItemCard

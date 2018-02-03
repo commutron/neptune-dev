@@ -3,7 +3,6 @@ import moment from 'moment';
 
 import ActionLink from '/client/components/uUi/ActionLink.jsx';
 import IkyToggle from '../tinyUi/IkyToggle.jsx';
-import NCAdd from '../river/NCAdd.jsx';
 
 import BlockForm from '../forms/BlockForm.jsx';
 import BatchForm from '../forms/BatchForm.jsx';
@@ -166,14 +165,7 @@ const DashActionBar = ({ batchData, itemData, widgetData, versionData, groupData
     </div>
     
 { /* Center Section */ }      
-    <div className='footCent'>
-      {action === 'build' ?
-        <NCAdd 
-          id={batchData._id}
-          barcode={itemData.serial}
-          app={app} />
-      :null}
-    </div>
+    <div className='footCent'></div>
         
 { /* Right Section */ }
     <div className='footRight'>
