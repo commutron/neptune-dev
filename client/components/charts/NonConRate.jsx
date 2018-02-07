@@ -2,23 +2,22 @@ import React, {Component} from 'react';
 import Chartist from 'chartist';
 import ChartistGraph from 'react-chartist';
 import Tooltip from 'chartist-plugin-tooltips';
-import moment from 'moment';
+import { CalcSpin } from '/client/components/uUi/Spin.jsx';
 
 export default class NonConRate extends Component {
   
   constructor() {
     super();
     this.state = {
-      ratesC: [],
-      ratesL: []
+      ratesC: false,
+      ratesL: false
     };
   }
+  
   loop() {
-    
     Meteor.call('nonConRateLoop', this.props.batches, (error, reply)=>{
       if(error)
         console.log(error);
-      
       this.setState({ ratesC: reply.counts, ratesL: reply.labels });
     });
   }
@@ -27,6 +26,12 @@ export default class NonConRate extends Component {
     
     const counts = this.state.ratesC;
     const labels = this.state.ratesL;
+    
+    if(!counts || !labels) {
+      return(
+        <CalcSpin />
+      );
+    }
     
     let data = {
       labels: labels,

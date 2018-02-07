@@ -106,7 +106,12 @@ export default class ItemPanel extends Component	{
                 ncOps={a.nonConOption}
                 flowSteps={this.flowSteps()} />
               
-              <RMALine key={3} id={b._id} bar={i.serial} data={i.rma} />
+              <RMALine
+                key={3}
+                id={b._id}
+                bar={i.serial}
+                data={i.rma}
+                allRMA={b.cascade} />
               
             </Tabs>
             

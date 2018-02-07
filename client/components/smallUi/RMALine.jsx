@@ -15,26 +15,42 @@ function popRMA(id, bar, rmaId) {
   }else{null}
 }
 
-const RMALine = ({ id, bar, data })=> (
+function rmaDetail(allRMA, rmaKey) {
+  const dt = allRMA.find( x => x.key === rmaKey );
+  return {
+    name: dt.rmaId,
+    comment: dt.comm,
+    steps: dt.flow,
+  };
+}
+
+const RMALine = ({ id, bar, data, allRMA })=> (
   <div>
     {data.length > 0 ?
-      <div className='red'>
-        <b className='up'>{data.length + ' ' + Pref.rma}</b>
-        <ul>
+      <div className='red space'>
+        <b className='up'>{data.length + ' ' + Pref.rma} assigned to this {Pref.item}</b>
+        <hr />
+        <div>
           {data.map( (entry)=>{
+            const dts = rmaDetail(allRMA, entry);
             return(
-              <li key={entry}>
-                {entry} -
-                {Roles.userIsInRole(Meteor.userId(), ['qa', 'remove']) ?
-                  <button
-                    className='miniAction blackT'
-                    onClick={()=>popRMA(id, bar, entry)}
-                    readOnly={true}
-                    ><i className='fas fa-times'></i>Unset</button>
-                :null}
-              </li>
+              <dl key={entry}>
+                <dt>RMA {dts.name}</dt>
+                <dd className='capFL'>{dts.comment}</dd>
+                <dd>Steps: {Array.from(dts.steps, x => x.step).toString()}</dd>
+                <dd>
+                  {Roles.userIsInRole(Meteor.userId(), ['qa', 'remove']) ?
+                    <button
+                      className='miniAction blackT'
+                      onClick={()=>popRMA(id, bar, entry)}
+                      readOnly={true}
+                      ><i className='fas fa-times'></i>Unset</button>
+                  :null}
+                </dd>
+              </dl>
           )})}
-        </ul>
+        </div>
+        <br />
       </div>
       :
       <div className='centreText fade'>

@@ -128,7 +128,7 @@ export default class RMAForm extends Component {
         {!this.props.edit ?
         
           <FlowBuilder
-            options={this.props.options}
+            options={this.props.options.filter( x => x.type !== 'first')}
             end={this.props.end}
             baseline={false}
             onClick={e => this.setFlow(e)} />

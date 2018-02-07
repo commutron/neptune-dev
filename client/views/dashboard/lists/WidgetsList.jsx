@@ -21,7 +21,12 @@ export default class WidgetsList extends Component	{
   render() {
 
     const a = this.props.active;
-    const w = this.props.widgetData.sort((w1, w2) => {return w1.widget > w2.widget});
+    const w = this.props.widgetData
+                .sort((w1, w2)=> {
+                  if (w1.widget < w2.widget) { return -1 }
+                  if (w1.widget > w2.widget) { return 1 }
+                  return 0;
+                });
     const g = this.props.groupAlias;
     const f = this.state.filter;
     

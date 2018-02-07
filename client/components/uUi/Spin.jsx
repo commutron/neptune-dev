@@ -16,3 +16,12 @@ const Spin = ({ color }) => {
 };
 
 export default Spin;
+
+export const CalcSpin = () => (
+  <div className='centre'>
+    <br />
+      <i className='fas fa-circle-notch fa-2x fa-spin'></i>
+      <em>Calculating</em>
+    <br />
+  </div>
+);

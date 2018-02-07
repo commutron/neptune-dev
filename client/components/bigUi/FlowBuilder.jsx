@@ -108,12 +108,12 @@ export default class FlowForm extends Component	{
                         .includes( 'f1n15h1t3m5t3p' ) )
                           .length > 0;
     
-    let options = this.props.options;  
-      options.sort((t1, t2)=> {
-        if (t1.step < t2.step) { return -1 }
-        if (t1.step > t2.step) { return 1 }
-        return 0;
-      });
+    let options = this.props.options
+                    .sort((t1, t2)=> {
+                      if (t1.step < t2.step) { return -1 }
+                      if (t1.step > t2.step) { return 1 }
+                      return 0;
+                    });
 
     return (
       <div className='split'>
@@ -142,6 +142,7 @@ export default class FlowForm extends Component	{
             </p>
           </form>
         </div>
+        <span className='breath'></span>
         <div className='wide'>
           <div className='stepList'>
             { steps.map( (entry, index)=> {  
