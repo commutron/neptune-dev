@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Pref from '/client/global/pref.js';
 
 import NCAdd from '../river/NCAdd.jsx';
 import FirstAdd from '../river/FirstAdd.jsx';
@@ -15,6 +16,11 @@ export default class FormBar extends Component	{
     };
   }
   
+  handleDone() {
+    this.setState({ showNC: true });
+    this.ncSlct.checked = true;
+  }
+  
   render() {
     
     const b = this.props.batchData;
@@ -27,28 +33,29 @@ export default class FormBar extends Component	{
     return(
       <div className='dashAction'>
         <div className='footLeft'>
-          <span className='radioLabelPair'>
+          <label htmlFor='ncselect' className='formBarToggle'>
             <input
               type='radio'
               id='ncselect'
               name='formbarselect'
+              className='radioIcon'
+              ref={(i)=>this.ncSlct = i}
               onChange={()=>this.setState({ showNC: true })}
               defaultChecked />
-            <label htmlFor='ncselect'>
-              <i className='fas fa-bug fa-2x'></i>
-            </label>
-          </span>
-          <span className='radioLabelPair'>
+            <i className='fas fa-bug formBarIcon'></i>
+            <span className='actionIconText'>{Pref.nonCon}</span>
+          </label>
+          <label htmlFor='firstselect' className='formBarToggle'>
             <input
               type='radio'
               id='firstselect'
               name='formbarselect'
+              className='radioIcon'
               onChange={()=>this.setState({ showNC: false })}
               disabled={b.finishedAt !== false || i.finishedAt !== false} />
-            <label htmlFor='firstselect'>
-              <i className='fas fa-flag-checkered fa-2x'></i>
-            </label>
-          </span>
+            <i className='fas fa-flag-checkered formBarIcon'></i>
+            <span className='actionIconText'>First</span>
+          </label>
         </div>
         <div className='footCent'>
           {b && i ?
@@ -66,7 +73,7 @@ export default class FormBar extends Component	{
                 allFlows={w.flows}
                 users={users}
                 app={app}
-                doneClose={()=>this.setState({ showNC: true })} />
+                doneClose={()=>this.handleDone()} />
           :null}
         </div>
         <div className='footRight'>

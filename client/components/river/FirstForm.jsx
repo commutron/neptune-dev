@@ -14,7 +14,7 @@ import AnimateWrap from '../tinyUi/AnimateWrap.jsx';
 // onPass={e => this.unlock()}
 
 export default class FirstForm extends Component	{
-  
+
   constructor() {
     super();
     this.state = {
@@ -24,7 +24,6 @@ export default class FirstForm extends Component	{
       howB: false,
       good: true,
       ng: false,
-      diff: false
     };
     this.goNext = this.goNext.bind(this);
     this.up = this.up.bind(this);
@@ -35,16 +34,6 @@ export default class FirstForm extends Component	{
     let count = this.state.step;
     count++;
     this.setState({ step: count});
-  }
-  
-  again(e) {
-    e.preventDefault();
-    let val = this.change.value.trim().toLowerCase();
-    if(!val) {
-      null;
-    }else{
-      this.setState({ diff: val });
-    }
   }
   
   auto() {
@@ -108,7 +97,7 @@ export default class FirstForm extends Component	{
     const whoB = [...this.state.whoB];
     const howB = this.state.howB;
     const good = this.state.good;
-    const diff = this.state.diff;
+    const diff = '';
     const ng = this.state.ng;
       
 		Meteor.call('addFirst', id, bar, sKey, step, good, whoB, howB, howI, diff, ng, (error, reply)=>{
@@ -130,48 +119,24 @@ export default class FirstForm extends Component	{
     
     let secondOpinion = this.state.whoB.has(Meteor.userId()) ? true : false;
     
-    if(this.props.repeat && !this.state.diff) {
-      return(
-        <AnimateWrap type='contentTrans'>
-          <form className='stoneForm' onSubmit={this.again.bind(this)} key={1}>
-            <p>
-              <textarea
-      			    type='text'
-      			    id='proC'
-      			    ref={(i)=> this.change = i}
-      			    required></textarea>
-      			  <label htmlFor='proC'>{Pref.proChange}</label>
-    			  </p>
-            <button
-              className='action clearWhite'>
-              <i className="fas fa-arrow-right fa-lg" aria-hidden="true"></i>
-              <br />Continue
-            </button>
-          </form>
-        </AnimateWrap>
-      );
-    }
-    
-    if(this.props.step.includes('smt') && !this.state.howI) {
+    if(this.props.step.toLowerCase().includes('smt') && !this.state.howI) {
       return(
         <AnimateWrap type='contentTrans'>
           <div className='stoneForm' key={2}>
-            <br />
             <span className='balance'>
               <button
                 type='button'
-                className='miniAction bigger'
+                className='roundActionIcon trpplRound onblueHover'
                 onClick={this.eyes.bind(this)}>
-                <i className="fas fa-eye fa-3x" aria-hidden="true"></i>
-                <br />Manual
+                <i className="fas fa-eye fa-5x"></i>
+                <br /><i className='medBig'>Manual</i>
               </button>
-              <span className='space' />
               <button
                 type='button'
-                className='miniAction bigger'
+                className='roundActionIcon trpplRound onblueHover'
                 onClick={this.auto.bind(this)}>
-                <i className="fas fa-camera fa-3x" aria-hidden="true"></i>
-                <br />AOI
+                <i className="fas fa-camera fa-5x"></i>
+                <br /><i className='medBig'>AOI</i>
               </button>
             </span>
           </div>
@@ -206,7 +171,7 @@ export default class FirstForm extends Component	{
                     ref={(i)=> this.ex = i}
                     className='miniAction big redT'
                     onClick={()=>this.down(entry)}>
-                    <i className="fas fa-times" aria-hidden="true"></i>
+                    <i className="fas fa-times"></i>
                   </button>
                 </i>
             )})}
@@ -214,10 +179,10 @@ export default class FirstForm extends Component	{
             {this.state.whoB.size > 0 ?
               <button
                 type='button'
-                className='action clearWhite'
+                className='roundActionIcon dbblRound onblueHover'
                 onClick={this.goNext}>
-                <i className="fas fa-arrow-right fa-lg" aria-hidden="true"></i>
-                <br />Continue
+                <i className="fas fa-arrow-right fa-3x"></i>
+                <br /><i className='medBig'>Next</i>
               </button>
             :null}
           </div>
@@ -259,26 +224,24 @@ export default class FirstForm extends Component	{
       return(
         <AnimateWrap type='contentTrans'>
           <div className='stoneForm' key={5}>
-    			  <br />
             <span className='balance'>
               <button
                 type='button'
-                className='miniAction bigger redT'
+                className='roundActionIcon trpplRound firstBad'
                 ref={(i)=> this.goBad = i}
                 disabled={false}
                 onClick={this.notgood.bind(this)}>
-                <i className="fas fa-times-circle fa-3x" aria-hidden="true"></i>
-                <br />Fail
+                <i className="fas fa-times fa-5x"></i>
+                <br /><i className='medBig'>Fail</i>
               </button>
-              <span className='space' />
               <button
                 type='button'
-                className='miniAction bigger'
+                className='roundActionIcon trpplRound firstGood'
                 ref={(i)=> this.go = i}
                 disabled={secondOpinion}
                 onClick={this.pass.bind(this)}>
-                <i className="fas fa-check-circle fa-3x" aria-hidden="true"></i>
-                <br />Pass
+                <i className="fas fa-check fa-5x"></i>
+                <br /><i className='medBig'>Pass</i>
               </button>
             </span>
             <br />

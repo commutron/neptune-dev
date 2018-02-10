@@ -82,6 +82,32 @@
   border-bottom-color: #3498db;
 }
 
+.roundActionIcon {
+  display: block;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 5px;
+  border-radius: 50%;
+  background-color: transparent;
+}
+
+.dbblRound {
+  width: 5rem;
+  height: 5rem;
+}
+.trpplRound {
+  width: 7.5rem;
+  height: 7.5rem;
+}
+
+.moveLR {
+  color: white;
+}
+.moveLR:hover, .moveLR:active {
+  color: black;
+  background-color: white;
+}
+
 .activeMark {
   border-left-color: var(--belizeHole);
 }
@@ -181,6 +207,14 @@
   color: var(--peterriver);
 	background-color: var(--clouds);
 	cursor: default;
+}
+.onblueHover {
+  color: var(--clouds);
+	background-color: var(--peterriver);
+}
+.onblueHover:hover {
+  color: var(--peterriver);
+	background-color: var(--clouds);
 }
 .blueBorder {
   background-color: transparent;
@@ -367,7 +401,7 @@
 
 .small {
   font-family: 'Open Sans', sans-serif;
-  font-size: 0.75rem;
+  font-size: small;
 }
 
 .smaller {
@@ -376,6 +410,10 @@
 
 .med {
   font-size: 1rem;
+}
+
+.medBig {
+  font-size: 1.2rem;
 }
 
 .big {
@@ -690,6 +728,10 @@
   margin: 0 3px;
   vertical-align: middle;
   white-space: nowrap;
+}
+
+.radioIcon {
+  display: none;
 }
 
 .rangeTools {

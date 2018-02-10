@@ -9,7 +9,7 @@ const MetaPanel = ()=> {
   };
   return(
     <div style={sty}>
-      <p>Neptune v.0.9.4 Beta</p>
+      <p>Neptune v.0.9.5 Beta</p>
       <p>Copyright (c) 2016-present Commutron Industries, https://www.commutron.ca</p>
       <p>Author 2016-present Matthew Andreas https://github.com/mattandwhatnot</p>
       <p>All Rights Reserved</p>

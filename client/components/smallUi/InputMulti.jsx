@@ -31,65 +31,62 @@ export default class InputMulti extends Component	{
   
   render() {
     
-    inputMultiWrapSTY = {
-      position: 'static',
+    let inputMultiParentSTY = {
       height: '32px',
-      width: '300px',
-      margin: '0 10px'
+      width: '240px',
     };
     
-    inputMultiSTY = {
+    let inputMultiWrapSTY = {
       position: 'relative',
+    };
+    
+    let inputMultiSTY = {
+      position: 'absolute',
       top: '0',
       right: '0px',
       zIndex: '3',
-      height: '32px',
-      width: '300px',
-      opacity: '0.01',
-      border: '1px solid transparent',
+      width: '240px',
+      opacity: '0.01'
     };
     
-    inputMultiSelectedSTY = {
+    let inputMultiSelectedSTY = {
       position: 'absolute',
       zIndex: '1',
       height: '32px',
-      width: '300px',
-      padding: '0 5px',
-      backgroundColor: 'transparent',
-      border: '1px solid transparent',
-      borderBottomColor: 'white',
-      overflow: 'hidden'
+      width: '240px',
+      overflow: 'hidden',
     };
     
-    endSpacerArrow = {
+    let selectLabel = {
       position: 'relative',
-      bottom: '30px',
-      right: '2px',
+      bottom: '-32px',
+      left: '0px',
+      float: 'left',
+      zIndex: '4',
+      width: '240px',
+    };
+    
+    let endSpacerArrow = {
+      position: 'relative',
+      bottom: '10px',
+      right: '0px',
       float: 'right',
       zIndex: '2',
-      width: '25px',
-      height: '32px',
+      width: '20px',
+      height: '20px',
       color: 'white'
     };
     
     return(
-      <div className='inputMulti' style={inputMultiWrapSTY}>
+      <div className={'inputMulti ' + this.props.classStyle} style={inputMultiParentSTY}>
       
-        <div 
-          className='inputMultiSelected'
-          style={inputMultiSelectedSTY}>
-          {[...this.state.choice].map( (entry)=>{
-            const dspNm = this.props.options.find( x => x.value === entry );
-            return(
-              <i className='tempTag' key={entry}>
-                {dspNm.label},</i>
-          )})}
-        </div>
+      <div style={inputMultiWrapSTY}>
         
         <select
           id='selectMultiOptions'
           ref={(i)=> this.sL = i}
           style={inputMultiSTY}
+          className={this.props.classStyle}
           onChange={()=>this.handle()}
         >
           <option></option>
@@ -102,10 +99,33 @@ export default class InputMulti extends Component	{
                {entry.label}</option> 
           )})}
         </select>
+        <label
+          id='selectMultiOptionsLabel'
+          htmlFor='selectMultiOptions'
+          style={selectLabel}
+          className={this.props.classStyle}>
+          {this.props.label}
+        </label>
+        
+        <div
+          id='inputMultiSelected'
+          className='inputMultiSelected'
+          style={inputMultiSelectedSTY}>
+          {[...this.state.choice].map( (entry)=>{
+            const dspNm = this.props.options.find( x => x.value === entry );
+            return(
+              <i className='tempTag' key={entry}>
+                {dspNm.label},</i>
+          )})}
+        </div>
           
         <div style={endSpacerArrow}>
           <i className='fas fa-caret-down fa-fw'></i>
         </div>
+        
+        </div>
+        
+        
 
       </div>
     );

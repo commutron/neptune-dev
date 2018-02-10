@@ -86,6 +86,21 @@
   background-color: var(--alizarin);
 }
 
+.firstGood {
+  color: var(--emerald);
+}
+.firstGood:hover {
+  background-color: var(--emerald);
+  color: white;
+}
+.firstBad {
+  color: var(--alizarin);
+}
+.firstBad:hover {
+  background-color: var(--alizarin);
+  color: white;
+}
+
 .iFirst {
   background-image: url(first.svg);
   background-color: var(--belizeHole);

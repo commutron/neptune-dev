@@ -4,7 +4,6 @@ import InOutWrap from '/client/components/tinyUi/InOutWrap.jsx';
 import Pref from '/client/global/pref.js';
 
 import Stone from './Stone.jsx';
-import FirstRepeat from './FirstRepeat.jsx';
 import TestFails from './TestFails.jsx';
 import NCTributary from './NCTributary.jsx';
 
@@ -46,9 +45,6 @@ const StoneSelect = ({ id, flow, isAlt, rmas, allItems, nonCons, serial, history
       null;
     }else{
       
-      const stepNum = flow.indexOf(flowStep);
-      const last = stepNum === 0 ? false : stepNum -1;
-      const lastStep = last !== false ? flow[last] : false;
       const fTest = flowStep.type === 'test' ? iDone.filter( x => x.type === 'test' && x.good === false) : [];
       
       let skipped = nc.every( x => x.skip !== false );
@@ -76,15 +72,6 @@ const StoneSelect = ({ id, flow, isAlt, rmas, allItems, nonCons, serial, history
               			  serial={serial}
               			  nonCons={nc}
               			  sType={flowStep.type} />;
-                			  
-      const repeat = <FirstRepeat
-                      key={lastStep.key}
-                      flowStep={lastStep}
-                      id={id}
-                      barcode={serial}
-                      history={history}
-                      users={users}
-                      methods={methods} />;
                       
       const tFail = <TestFails fails={fTest} />;
 	  
@@ -108,11 +95,6 @@ const StoneSelect = ({ id, flow, isAlt, rmas, allItems, nonCons, serial, history
                   {tFail}
                 </InOutWrap>
               : null}
-              {lastStep ? 
-                <InOutWrap type='stoneTrans'>
-                  {repeat}
-                </InOutWrap>
-              : null}
               {nonCon}
       			</div>
 		      );
@@ -128,11 +110,6 @@ const StoneSelect = ({ id, flow, isAlt, rmas, allItems, nonCons, serial, history
             {fTest.length > 0 ? 
               <InOutWrap type='stoneTrans'>
                 {tFail}
-              </InOutWrap>
-            : null}
-            {lastStep ? 
-              <InOutWrap type='stoneTrans'>
-                {repeat}
               </InOutWrap>
             : null}
             {nonCon}
@@ -151,16 +128,10 @@ const StoneSelect = ({ id, flow, isAlt, rmas, allItems, nonCons, serial, history
                 {tFail}
               </InOutWrap>
             : null}
-            {lastStep ? 
-              <InOutWrap type='stoneTrans'>
-                {repeat}
-              </InOutWrap>
-            : null}
           </div>
         );
       }
     }
-    
   }
   
   // end of flow

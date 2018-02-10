@@ -480,6 +480,10 @@ main {
   vertical-align: super;
 }
 
+.overrideline {
+  line-height: 1rem;
+}
+
 .wrap {
   white-space: normal;
 }

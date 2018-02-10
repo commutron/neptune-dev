@@ -53,16 +53,25 @@ export default class FirstForm extends Component	{
   
   goNext() {
     this.setState({ goforward: 'forward' });
-    this.setState({ page: 2});
+    this.setState({ page: this.state.page + 1 });
   }
   goBack() {
     this.setState({ goforward: 'backward' });
-    this.setState({ page: 1});
+    this.setState({ page: this.state.page - 1 });
   }
   
   setStep() {
-    !this.repeatStep.value ? null :
-    this.setState({ step: this.repeatStep.value });
+    const stepKey = this.repeatStep.value;
+    if(!stepKey) {
+      null;
+    }else{
+      this.setState({ step: stepKey });
+      ![...this.state.availableSteps]
+        .find( x => x.key === stepKey )
+          .step.toLowerCase().includes('smt') ? 
+            null :
+              this.setState({ howInspect: 'auto' });
+    }
   }
   
   setChanges() {
@@ -133,6 +142,9 @@ export default class FirstForm extends Component	{
     
     const firsts = this.state.availableSteps;
     
+    const stepObj = !this.state.step ? false :
+                    [...firsts].find( x => x.key === this.state.step );
+    
     let secondOpinion = this.state.whoBuilt.includes(Meteor.userId());
     
     const movement = !this.state.goforward ? 
@@ -167,17 +179,6 @@ export default class FirstForm extends Component	{
             
             <span>
               <input
-                type='checkbox'
-                id='howinspect'
-                className='blueIn'
-                ref={(i)=> this.howI = i}
-                onChange={this.setHow.bind(this)}
-                defaultChecked={this.state.howInspect === 'auto'} />
-              <label htmlFor='howinspect'>AOI</label>
-            </span>
-            
-            <span>
-              <input
       			    type='text'
       			    id='proC'
       			    className='blueIn'
@@ -187,13 +188,15 @@ export default class FirstForm extends Component	{
               <label htmlFor='proC'>Process Changes</label>
             </span>
             
-            <button
-              title='Next'
-              className='miniAction bigger'
-              onClick={()=>this.goNext()}
-              disabled={!this.state.step}>
-              <i className='fas fa-arrow-right fa-lg'></i>
-            </button>
+            <span className='middle'>
+              <button
+                title='Next'
+                className='roundActionIcon moveLR'
+                onClick={()=>this.goNext()}
+                disabled={!this.state.step}>
+                <i className='fas fa-arrow-right fa-2x'></i>
+              </button>
+            </span>
 
         </div>
         </InOutWrap>
@@ -204,24 +207,40 @@ export default class FirstForm extends Component	{
       return(
         <InOutWrap type={movement}>
         <div className='actionForm inlineFirst' key='page2'>
-          
-          <button
-            title='Back'
-            className='miniAction bigger'
-            onClick={()=>this.goBack()}>
-            <i className='fas fa-arrow-left fa-lg'></i>
-          </button>
-          
-          <span>
-            <InputMulti
-              id='whoBuilt'
-              onChange={(e)=>this.setWho(e)}
-              options={userOps}
-              defaultEntries={this.state.whoBuilt}
-            />
-            <label htmlFor='whoBuilt'>Who Built</label>
+            
+          <span className='middle'>
+            <button
+              title='Back'
+              className='roundActionIcon moveLR'
+              onClick={()=>this.goBack()}>
+              <i className='fas fa-arrow-left fa-2x'></i>
+            </button>
           </span>
           
+          {!stepObj || !stepObj.step.toLowerCase().includes('smt') ? null :
+            <span className='middle centreText'>
+              <label htmlFor='howinspect' className='small overrideline'>
+                <input
+                  type='checkbox'
+                  id='howinspect'
+                  className='blueIn'
+                  ref={(i)=> this.howI = i}
+                  onChange={this.setHow.bind(this)}
+                  defaultChecked={this.state.howInspect === 'auto'} />
+                <br />AOI
+              </label>
+            </span>
+          }
+          
+          <InputMulti
+            id='whoBuilt'
+            onChange={(e)=>this.setWho(e)}
+            options={userOps}
+            defaultEntries={this.state.whoBuilt}
+            label='Who Built'
+            classStyle='blueIn'
+          />
+            
           <span>
             <select
               id='mthb'
@@ -243,7 +262,36 @@ export default class FirstForm extends Component	{
             </select>
             <label htmlFor='mthb'>Built With</label>
           </span>
-            
+          
+          <span className='middle'>
+            <button
+              title='Next'
+              className='roundActionIcon moveLR'
+              onClick={()=>this.goNext()}
+              disabled={this.state.whoBuilt.length === 0 || !this.state.howBuilt}>
+              <i className='fas fa-arrow-right fa-2x'></i>
+            </button>
+          </span>
+          
+        </div>
+        </InOutWrap>
+      );
+    }
+          
+    if(this.state.page === 3) {    
+      return(
+        <InOutWrap type={movement}>
+        <div className='actionForm inlineFirst' key='page3'>
+          
+          <span className='middle'>
+            <button
+              title='Back'
+              className='roundActionIcon moveLR'
+              onClick={()=>this.goBack()}>
+              <i className='fas fa-arrow-left fa-2x'></i>
+            </button>
+          </span>
+          
           <span>
             <input
     			    type='text'
@@ -255,22 +303,22 @@ export default class FirstForm extends Component	{
     			  <label htmlFor='oIss'>{Pref.outIssue}</label>
     			</span>
 			    
-			    <span className=''>
+			    <span className='middle'>
             <button
               type='button'
-              className='miniAction bigger redT'
+              className='roundActionIcon firstBad'
               ref={(i)=> this.goBad = i}
-              disabled={this.state.whoBuilt.length === 0}
               onClick={this.notgood.bind(this)}>
-              <i className="fas fa-times-circle fa-lg"></i>
+              <i className="fas fa-times fa-2x"></i>
             </button>
+            <span className='breath'></span>
             <button
               type='button'
-              className='miniAction bigger'
+              className='roundActionIcon firstGood'
               ref={(i)=> this.go = i}
-              disabled={this.state.whoBuilt.length === 0 || secondOpinion}
+              disabled={secondOpinion}
               onClick={this.pass.bind(this)}>
-              <i className="fas fa-check-circle fa-lg"></i>
+              <i className="fas fa-check fa-2x"></i>
             </button>
           </span>
           
