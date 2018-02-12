@@ -248,13 +248,13 @@
 .stoneForm details {
   color: black;
   min-width: 225px;
-  max-width: 250px;
+  max-width: 256px;
   text-align: center;
 }
 
 .stoneForm textarea {
   min-width: 225px;
-  max-width: 225px;
+  max-width: 256px;
   min-height: 1rem;
   border-color: black;
 }
@@ -275,34 +275,4 @@
 .stoneForm .clearWhite:hover {
   background-color: white;
   color: var(--peterriver);
-}
-
-@media screen and (max-width: 1000px) {
-  .stoneForm input[type='text'],
-  .stoneForm textarea,
-  .stoneForm select,
-  .stoneForm label,
-  .stoneForm details {
-    color: black;
-    min-width: 200px;
-    max-width: 200px;
-  }
-  .pebble {
-    width: 80px;
-  	height: 40px;
-  }
-  .granule {
-    line-height: 1rem;
-    width: 40px;
-    height: 40px;
-  }
-  .ncTrib {
-    font-size: 0.9rem;
-  }
-  .tribRow .tribCell:nth-child(3) {
-    width: 80px;
-  }
-  .space {
-    padding: 10px;
-  }
 }

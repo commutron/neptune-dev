@@ -1,11 +1,10 @@
 .containerEx {
   display: grid;
   grid-template-columns: 50px auto;
-  grid-template-rows: 50px calc(100vh - 55px) 5px;
+  grid-template-rows: 50px calc(100vh - 50px);
   grid-template-areas: 
     'headerNav headerNav'
-    'taskBar contentArea'
-    'footer footer';
+    'taskBar contentArea';
   align-content: center;
   overflow-y: hidden !important;
   overflow-x: hidden !important;
@@ -25,7 +24,6 @@
   grid-area: contentArea;
   overflow-y: auto;
 }
-
 
 .traverseContainer {
   display: grid;

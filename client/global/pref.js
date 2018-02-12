@@ -73,7 +73,7 @@ class Pref {
     this.snooze = 'snooze';
     this.snoozeDescribe = 'Resolve Later';
     // escaped nonCons
-    this.escape = 'escaped nonCons';
+    this.escape = 'escaped';
     // scrap
     this.scrap = 'scrap';
     this.scrp = 's'; // scrap shortcut

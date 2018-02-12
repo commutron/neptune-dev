@@ -6,7 +6,7 @@ meteor seems to be handling this */
   text-align: center;
   height: 100%;
   width: 100%;
-  min-width: 275px;
+  min-width: 256px;
 	color: white;
 	border-top: 3px solid transparent;
 	border-right: 0;
@@ -18,13 +18,6 @@ meteor seems to be handling this */
   border-radius: 0%;
   -webkit-appearance: none;
   -moz-appearance: none;
-}
-
-@media screen and (max-width: 1000px){
-  #lookup {
-    font-size: 1.75rem;
-    min-width: 225px;
-  }
 }
 
 #lookup:focus {

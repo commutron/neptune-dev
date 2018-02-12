@@ -17,6 +17,7 @@ import NonConOverview from '../../../components/charts/NonConOverview.jsx';
 import NonConRate from '../../../components/charts/NonConRate.jsx';
 import NonConPie from '../../../components/charts/NonConPie.jsx';
 import RMATable from '../../../components/tables/RMATable.jsx';
+import EscapeTable from '../../../components/tables/EscapeTable.jsx';
 
 // props
 /// batchData
@@ -114,9 +115,9 @@ export default class BatchPanel extends Component	{
               tabs={
                 [
                   'Progress',
-                  Pref.block + 's',
-                  Pref.nonCon + 's',
-                  Pref.rma + 's'
+                  `${Pref.block}s`,
+                  `${Pref.nonCon}s`,
+                  `${Pref.rma}s and ${Pref.escape}`
                 ]
               }
               wide={true}
@@ -169,7 +170,10 @@ export default class BatchPanel extends Component	{
                   options={a.trackOption}
                   end={a.lastTrack}
                   inUse={filter[1]} />
-                <p>{Pref.escape}s: {b.escaped.length}</p>
+                <br />
+                <EscapeTable
+                  id={b._id}
+                  data={b.escaped} />
               </div>
               
             </Tabs>

@@ -12,7 +12,7 @@ const WikiFrame = ({ go })=> {
       id='instruct'
       style={sty}
       src={go}
-      height={( (document.body.scrollHeight - document.body.scrollTop) - 130 ) +'px'}
+      height={( (document.body.scrollHeight - document.body.scrollTop) - 125 ) +'px'}
       allowFullScreen
     />
   );

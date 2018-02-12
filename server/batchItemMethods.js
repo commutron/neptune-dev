@@ -651,8 +651,7 @@ Meteor.methods({
     }
   },
     
-   /// editing an RMA Cascade
-   
+/// editing an RMA Cascade
   editRMACascade(batchId, cKey, rmaId, qua, com) {
     const doc = BatchDB.findOne({_id: batchId});
     let dupe = doc.cascade.find( x => x.rmaId === rmaId );

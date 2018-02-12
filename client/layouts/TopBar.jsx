@@ -96,6 +96,10 @@ const TopBar = ({ ready, orb, login, user, active, org, app, link })=> {
               <i className="icon fa fa-flask fa-lg" aria-hidden='true'></i>
               <span className='icontext'>Data</span>
             </a>
+            <a href='/scan' className={ link === 'scan' ? 'whiteT' : '' }>
+              <i className="icon fa fa-flask fa-lg" aria-hidden='true'></i>
+              <span className='icontext'>Scan</span>
+            </a>
           </span>
         </RoleCheck>
         <a href='/app' className={ link === 'app' ? 'whiteT' : '' }>

@@ -32,49 +32,54 @@ export default class FormBar extends Component	{
     
     return(
       <div className='dashAction'>
-        <div className='footLeft'>
-          <label htmlFor='ncselect' className='formBarToggle'>
-            <input
-              type='radio'
-              id='ncselect'
-              name='formbarselect'
-              className='radioIcon'
-              ref={(i)=>this.ncSlct = i}
-              onChange={()=>this.setState({ showNC: true })}
-              defaultChecked />
-            <i className='fas fa-bug formBarIcon'></i>
-            <span className='actionIconText'>{Pref.nonCon}</span>
-          </label>
-          <label htmlFor='firstselect' className='formBarToggle'>
-            <input
-              type='radio'
-              id='firstselect'
-              name='formbarselect'
-              className='radioIcon'
-              onChange={()=>this.setState({ showNC: false })}
-              disabled={b.finishedAt !== false || i.finishedAt !== false} />
-            <i className='fas fa-flag-checkered formBarIcon'></i>
-            <span className='actionIconText'>First</span>
-          </label>
-        </div>
+        {b && i ?
+          b.finishedAt !== false || i.finishedAt !== false ?
+          null :
+          <div className='footLeft'>
+            <label htmlFor='ncselect' className='formBarToggle'>
+              <input
+                type='radio'
+                id='ncselect'
+                name='formbarselect'
+                className='radioIcon'
+                ref={(i)=>this.ncSlct = i}
+                onChange={()=>this.setState({ showNC: true })}
+                defaultChecked />
+              <i className='fas fa-bug formBarIcon'></i>
+              <span className='actionIconText'>{Pref.nonCon}</span>
+            </label>
+            <label htmlFor='firstselect' className='formBarToggle'>
+              <input
+                type='radio'
+                id='firstselect'
+                name='formbarselect'
+                className='radioIcon'
+                onChange={()=>this.setState({ showNC: false })} />
+              <i className='fas fa-flag-checkered formBarIcon'></i>
+              <span className='actionIconText'>First</span>
+            </label>
+          </div>
+        : null}
         <div className='footCent'>
           {b && i ?
-            this.state.showNC ?
-              <NCAdd 
-                id={b._id}
-                barcode={i.serial}
-                app={app} />
-            :
-              <FirstAdd
-                id={b._id}
-                barcode={i.serial}
-                riverKey={b.river}
-                riverAltKey={b.riverAlt}
-                allFlows={w.flows}
-                users={users}
-                app={app}
-                doneClose={()=>this.handleDone()} />
-          :null}
+            b.finishedAt !== false || i.finishedAt !== false ?
+              null :
+              this.state.showNC ?
+                <NCAdd 
+                  id={b._id}
+                  barcode={i.serial}
+                  app={app} />
+              :
+                <FirstAdd
+                  id={b._id}
+                  barcode={i.serial}
+                  riverKey={b.river}
+                  riverAltKey={b.riverAlt}
+                  allFlows={w.flows}
+                  users={users}
+                  app={app}
+                  doneClose={()=>this.handleDone()} />
+          : null}
         </div>
         <div className='footRight'>
           <IkyToggle />

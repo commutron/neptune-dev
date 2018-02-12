@@ -6,7 +6,11 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  /*-webkit-transform: translate3d(0, 0, 0); /* for triggering hardware acceleration */
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
 }
 
 main {
@@ -93,30 +97,28 @@ main {
 
 .basicContainer, .dashContainer {
   display: grid;
-  grid-template-columns: 275px auto;
+  grid-template-columns: 256px auto;
   align-content: center;
   overflow-y: hidden !important;
   overflow-x: hidden !important;
   -webkit-overflow-scrolling: touch;
-  min-width: 500px;
+  min-width: 768px;
   min-height: 100vh;
 }
 
 
 .basicContainer {
-  grid-template-rows: 60px calc(100vh - 65px) 5px;
+  grid-template-rows: 60px calc(100vh - 60px);
   grid-template-areas: 
     'headerNav headerNav'
-    "mainFull mainFull"
-    "footer footer";
+    "mainFull mainFull";
 }
 
 .dashContainer {
-  grid-template-rows: 60px calc(100vh - 65px) 5px;
+  grid-template-rows: 60px calc(100vh - 60px);
   grid-template-areas: 
     "headerSearch headerNav"
-    "mainSplit mainSplit"
-    "footer footer";
+    "mainSplit mainSplit";
 }
 
 
@@ -140,27 +142,15 @@ main {
 
 .basicMainFull {
   grid-area: mainFull;
-  min-height: calc(100vh - 65px);
+  min-height: calc(100vh - 60px);
   overflow-y: auto;
-}
-
-.basicFooter {
-  grid-area: footer;
-  z-index: 9;
-  background-color: var(--commutron);
-  -webkit-box-shadow: 0 0 15px 0.5px rgb(0,0,0);
-  -moz-box-shadow:    0 0 15px 0.5px rgb(0,0,0);
-  box-shadow:         0 0 15px 0.5px rgb(0,0,0);
-  white-space: nowrap;
-  position: sticky;
-  bottom: 0;
 }
 
 .dashMainSplit {
   display: grid;
   grid-area: mainSplit;
-  grid-template-columns: 275px auto;
-  grid-template-rows: 100% 60px; /* changing this 2nd row value doesent do anything?? */
+  grid-template-columns: 256px auto;
+  grid-template-rows: 100% 60px;
   grid-template-areas: 
     "mainLeft mainRight"
     "actionFooter actionFooter";
@@ -189,17 +179,22 @@ main {
   background-color: black;
   background-color: rgba(0,0,0,0.9);
   width: 100%;
-  min-width: 800px;
+  min-width: 768px;
   height: 60px;
   z-index: 9;
   position: fixed;
-  bottom: 5px;
+  bottom: 0;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
 }
 
+.fullViewHeight {
+  min-height: calc(100vh - 60px);
+}
+
+/*
 @media screen and (max-width: 1000px){
   .basicContainer, .dashContainer, .dashMainSplit {
     grid-template-columns: 225px auto;
@@ -208,10 +203,7 @@ main {
     width: 225px;
   }
 }
-
-.fullViewHeight {
-  min-height: calc(100vh - 65px);
-}
+*/
 
 /* ============================================= */
 
@@ -235,7 +227,7 @@ main {
 
 .card {
   width: 90%;
-  min-width: 215px;
+  min-width: 256px;
   padding: 0;
   margin: 25px auto 25px auto;
   overflow-x: hidden;
@@ -250,7 +242,7 @@ main {
   border-bottom: 1px groove rgb(255,255,255);
   border-bottom: 1px groove rgba(255,255,255,0.5);
   width: 100%;
-  min-width: 225px;
+  min-width: 256px;
   margin: 0;
   padding: 1vh 1vw 1vh 1vw;
   overflow-x: hidden;
@@ -258,7 +250,7 @@ main {
 }
 
 .sidebar {
-  min-width: 215px;
+  min-width: 256px;
   padding: 0;
 }
 

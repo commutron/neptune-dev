@@ -1,17 +1,6 @@
 import React from 'react';
 
-import FormBar from '../../components/bigUi/FormBar.jsx';
-
-const ProductionWrap  = ({ 
-  children,
-  batchData,
-  itemData,
-  widgetData,
-  versionData,
-  users,
-  app,
-  actionBar
-})=> {
+const ScanWrap = ({ children })=> {
     
   let scrollFix = {
     overflowY: 'auto'
@@ -20,7 +9,7 @@ const ProductionWrap  = ({
     width: '100%',
     height: '60px'
   };
-    
+  
   return (
     <div className='dashMainSplit'>
       <div className='dashMainLeft' style={scrollFix}>
@@ -32,19 +21,8 @@ const ProductionWrap  = ({
         {children[1]}
         <div style={overScrollSpacer}></div>
       </div>
-      
-      {!actionBar ||
-        <FormBar
-          batchData={batchData}
-          itemData={itemData}
-          widgetData={widgetData}
-          versionData={versionData}
-          users={users}
-          app={app} />
-      }
-
     </div>
   );
 };
 
-export default ProductionWrap;
+export default ScanWrap;

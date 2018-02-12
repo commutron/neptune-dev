@@ -90,7 +90,7 @@ export default class ItemPanel extends Component	{
             <br />
             
             <Tabs
-              tabs={['Steps History', Pref.nonCon + 's', 'RMA']}
+              tabs={['Steps History', `${Pref.nonCon}s`, 'RMA']}
               wide={true}
               stick={false}>
             

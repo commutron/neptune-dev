@@ -111,9 +111,9 @@ export default class BatchPanel extends Component	{
               tabs={
                 [
                   'Progress',
-                  Pref.block + 's',
-                  Pref.nonCon + 's',
-                  Pref.rma + 's'
+                  `${Pref.block}s`,
+                  `${Pref.nonCon}s`,
+                  `${Pref.rma}s and ${Pref.escape}`
                 ]
               }
               wide={true}
