@@ -212,10 +212,13 @@ export const MethodOptionAdd = ({ existOps, trackedSteps })=> {
 };
 
 
-export const ClearMethodOptions = ()=> {
+export const OverrideLastestSerial = ({dfNine, dfTen})=> {
   
-  function handle() {
-    Meteor.call('clearToolOp', (error, reply)=>{
+  function handle(e) {
+    e.preventDefault();
+    const serialNine = this.srlNine.value;
+    const serialTen = this.srlTen.value;
+    Meteor.call('setlastestSerial', serialNine, serialTen, (error, reply)=>{
       if(error)
         console.log(error);
       if(reply) {
@@ -226,12 +229,49 @@ export const ClearMethodOptions = ()=> {
     });
   }
   
+  let ldBox = {
+    display: 'inline-block',
+    width: '22px',
+    fontWeight: '600',
+    textAlign: 'center',
+  };
+  
   return(
     <div>
-      <label htmlFor='scaleForm'>Clear All Tool Options</label>
-      <button
-        className='smallAction blackT clearRed'
-        onClick={()=>handle()} />
+      <label htmlFor='scaleForm'>Manualy Override Last Serial</label>
+      <form onSubmit={(e)=>handle(e)}>
+        <label htmlFor='srlNine'>
+          <span style={ldBox}>9</span>
+          <input
+            id='srlNine'
+            type='text'
+            maxLength={9}
+            minLength={9}
+            pattern='[0000000000-9999999999]*'
+            inputMode='numeric'
+            defaultValue={dfNine}
+            required />
+        </label>
+        <br />
+        <label htmlFor='srlNine'>
+          <div style={ldBox}>10</div>
+          <input
+            id='srlTen'
+            type='text'
+            maxLength={10}
+            minLength={10}
+            pattern='[0000000000-9999999999]*'
+            inputMode='numeric'
+            defaultValue={dfTen} 
+            required />
+        </label>
+        <br />
+        <input type='reset' className='smallAction blackT clear' />
+        <button
+          type='submit'
+          className='smallAction blackT clearGreen'
+        >Save</button>
+      </form>
     </div>
   );
 };

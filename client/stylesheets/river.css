@@ -193,16 +193,16 @@
 }
 
 .tribRow .tribCell:nth-child(3) {
-  width: 90px;
+  width: 80px;
   margin: 0;
   padding: 0;
 }
 
 .pebble {
   line-height: 1.5rem;
-  font-size: 0.9rem;
-  width: 90px;
-	height: 45px;
+  font-size: 0.8rem;
+  width: 80px;
+	height: 40px;
 	text-transform: uppercase;
 	vertical-align: middle;
 	transition: all 200ms ease-out;
@@ -227,8 +227,8 @@
   border: none;
   line-height: 1.5rem;
   font-size: 0.9rem;
-  width: 45px;
-  height: 45px;
+  width: 40px;
+  height: 40px;
 	text-transform: uppercase;
 	vertical-align: middle;
   transition: all 200ms ease-out;

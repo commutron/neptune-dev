@@ -79,7 +79,7 @@ Meteor.methods({
     // if any items have history
     const inUse = doc.items.some( x => x.history.length > 0 ) ? true : false;
     if(!inUse) {
-      const lock = doc.createdAt.toISOString();
+      const lock = doc.createdAt.toISOString().split("T")[0];
       const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
       const access = doc.orgKey === Meteor.user().orgKey;
       const unlock = lock === pass;
@@ -242,7 +242,7 @@ Meteor.methods({
     const subDoc = doc.items.find( x => x.serial === bar );
     const inUse = subDoc.history.length > 0 ? true : false;
     if(!inUse) {
-      const lock = subDoc.createdAt.toISOString();
+      const lock = subDoc.createdAt.toISOString().split("T")[0];
       const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
       const access = doc.orgKey === Meteor.user().orgKey;
       const unlock = lock === pass;

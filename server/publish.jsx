@@ -18,7 +18,7 @@ Meteor.publish('appData', function(){
         {fields: {
           'services': 0,
           'orgKey': 0,
-          'pin': 0
+          //'pin': 0
         }}),
       ];
   }else if(!orgKey) {

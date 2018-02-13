@@ -103,12 +103,17 @@ Meteor.methods({
     }
   },
   
-  // clear tool option
-  clearToolOp() {
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+// set last serial
+  setlastestSerial(serialNine, serialTen) {
+    const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
+    const validNums = !isNaN(serialNine) && !isNaN(serialTen) ? true : false;
+    const validN = serialNine.length === 9;
+    const validT = serialTen.length === 10;
+    if(auth && validNums && validN && validT) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $set : { 
-          toolOption : []
+          'latestSerial.nineDigit': Number(serialNine),
+          'latestSerial.tenDigit': Number(serialTen)
       }});
       return true;
     }else{
@@ -119,7 +124,7 @@ Meteor.methods({
   // new tool option
   addToolOp(title, forStep) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-/*
+
       const doc = AppDB.findOne({orgKey: Meteor.user().orgKey});
       if(doc.toolOption.find( x => x.title === title )) {
         AppDB.update({orgKey: Meteor.user().orgKey, 'toolOption.title': title}, {
@@ -127,7 +132,7 @@ Meteor.methods({
             toolOption: { title: title }
         }});
       }else{null}
-*/
+
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $push : { 
           toolOption : {

@@ -227,7 +227,7 @@ main {
 
 .card {
   width: 90%;
-  min-width: 256px;
+  min-width: 236px;
   padding: 0;
   margin: 25px auto 25px auto;
   overflow-x: hidden;
@@ -242,7 +242,7 @@ main {
   border-bottom: 1px groove rgb(255,255,255);
   border-bottom: 1px groove rgba(255,255,255,0.5);
   width: 100%;
-  min-width: 256px;
+  min-width: 236px;
   margin: 0;
   padding: 1vh 1vw 1vh 1vw;
   overflow-x: hidden;
@@ -250,7 +250,7 @@ main {
 }
 
 .sidebar {
-  min-width: 256px;
+  min-width: 236px;
   padding: 0;
 }
 
@@ -605,13 +605,9 @@ main {
 }
 
 .twoSqIcons {
-  width: 90px;
+  width: 80px;
 }
-@media screen and (max-width: 1000px) {
-  .twoSqIcons {
-    width: 80px;
-  } 
-}
+
 .max750 {
   max-width: 750px;
 }

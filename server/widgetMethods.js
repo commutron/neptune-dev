@@ -70,7 +70,7 @@ Meteor.methods({
     const inUse = BatchDB.findOne({widgetId: widgetId});
     if(!inUse) {
       const doc = WidgetDB.findOne({_id: widgetId});
-      const lock = doc.createdAt.toISOString();
+      const lock = doc.createdAt.toISOString().split("T")[0];
       const user = Roles.userIsInRole(Meteor.userId(), 'remove');
       const access = doc.orgKey === Meteor.user().orgKey;
       const unlock = lock === pass;
@@ -144,7 +144,7 @@ Meteor.methods({
     if(!inUse) {
       const doc = WidgetDB.findOne({_id: widgetId});
       const ver = doc.versions.find(x => x.versionKey === vKey);
-      const lock = ver.createdAt.toISOString();
+      const lock = ver.createdAt.toISOString().split("T")[0];
       const user = Roles.userIsInRole(Meteor.userId(), 'remove');
       const access = doc.orgKey === Meteor.user().orgKey;
       const unlock = lock === pass;

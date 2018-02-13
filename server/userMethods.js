@@ -169,7 +169,7 @@ Meteor.methods({
     if(auth && team) {
       Meteor.users.update(user, {
         $set: {
-          pin: false
+          pin: '0000'
         }
       });
     }else{null}

@@ -80,7 +80,7 @@ export default class Remove extends Component	{
   render() {
 
     let title = this.props.title;
-    let check = this.props.check;
+    let check = this.props.check.split('T')[0];
     const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
 
     return (
@@ -96,22 +96,21 @@ export default class Remove extends Component	{
           <p>This cannot be undone and could cause unexpected consequences.</p>
           <br />
           <p>Enter "<i className='noCopy'>{check + ' '}</i>" to confirm.</p>
-            <form onSubmit={this.remove.bind(this)}>
-              <p className='inline'>
-                <input
-                  type='text'
-                  ref={(i)=> this.confirm = i}
-                  placeholder={check}
-                  autoFocus='true'
-                  className='noCopy redIn'
-                  required />
-                <button
-                  className='smallAction clearRed'
-                  type='submit'
-                  ref={(i)=> this.cut = i}
-                  disabled={false}>DELETE</button>
-              </p>
-            </form>
+          <br />
+          <form onSubmit={this.remove.bind(this)} className='inlineForm'>
+            <input
+              type='text'
+              ref={(i)=> this.confirm = i}
+              placeholder={check}
+              autoFocus='true'
+              className='noCopy redIn'
+              required />
+            <button
+              className='smallAction clearRed'
+              type='submit'
+              ref={(i)=> this.cut = i}
+              disabled={false}>DELETE</button>
+          </form>
           <br />
         </div>
       </Model>

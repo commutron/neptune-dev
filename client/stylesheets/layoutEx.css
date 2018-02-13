@@ -1,7 +1,7 @@
 .containerEx {
   display: grid;
-  grid-template-columns: 50px auto;
-  grid-template-rows: 50px calc(100vh - 50px);
+  grid-template-columns: 48px auto;
+  grid-template-rows: 48px calc(100vh - 48px);
   grid-template-areas: 
     'headerNav headerNav'
     'taskBar contentArea';
@@ -27,8 +27,8 @@
 
 .traverseContainer {
   display: grid;
-  grid-template-columns: auto 175px;
-  grid-template-rows: 35px calc(100vh - 140px) 50px;
+  grid-template-columns: auto 192px;
+  grid-template-rows: 32px calc(100vh - 128px) 48px;
   grid-template-areas: 
     'cookieNav traverseList'
     'traverseContent traverseList'

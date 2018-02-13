@@ -57,8 +57,8 @@ export default class StepsProgress extends Component	{
     if(this.props.type === 'first') {
       
       let sty = {
-        width: '15.5rem',
-        height: '15.5rem',
+        width: '15rem',
+        height: '15rem',
       };
       
       return(
@@ -78,8 +78,8 @@ export default class StepsProgress extends Component	{
     };
     
     let options = {
-      width: '15.5rem',
-      height: '15.5rem',
+      width: '15rem',
+      height: '15rem',
       showLabel: false,
       donut: true,
       donutWidth: 5,

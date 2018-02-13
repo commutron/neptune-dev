@@ -5,7 +5,7 @@ import {OptionAdd} from '/client/components/forms/AppSettings';
 import {FinishTrack} from '/client/components/forms/AppSettings';
 import {SetScale} from '/client/components/forms/AppSettings';
 import {MethodOptionAdd} from '/client/components/forms/AppSettings';
-import {ClearMethodOptions} from '/client/components/forms/AppSettings';
+import {OverrideLastestSerial} from '/client/components/forms/AppSettings';
 
 export default class PrefPanel extends Component {
 
@@ -21,7 +21,7 @@ export default class PrefPanel extends Component {
       });
 
     return (
-      <div className='section cap invert balance'>
+      <div className='section cap invert rowWrap'>
         <div className='wide clean'>
           <p>
             <i className='fas fa-exclamation-circle'></i>
@@ -64,13 +64,6 @@ export default class PrefPanel extends Component {
             
             <hr />
             
-            <SetScale curScale={dt.ncScale || null} />
-          
-          </div>
-        </fieldset>    
-        <fieldset disabled={auth}>
-          <div className='space breathe'>
-  
             <h2>{Pref.ancillary} Steps</h2>
             <i>Not strictly assembly but part of the total proccess. Not tracked</i>
             <OptionAdd action='anc' title='step' rndmKey={Math.random().toString(36).substr(2, 5)} />
@@ -81,9 +74,13 @@ export default class PrefPanel extends Component {
             </ul>
             
             <hr />
+            
+            <SetScale curScale={dt.ncScale || null} />
           
-            <h2>Clear Dumb {Pref.method} options:</h2>
-            <ClearMethodOptions />
+          </div>
+        </fieldset>    
+        <fieldset disabled={auth}>
+          <div className='space breathe'>
             
             <h2>Smarter {Pref.method} options:</h2>
             <i>available methods for first-off form</i>
@@ -91,9 +88,7 @@ export default class PrefPanel extends Component {
             
             <ul>
               {dt.toolOption.map( (entry, index)=>{
-                if(typeof entry === 'string') {// redundant after migration
-                  return( <li key={index}><i>{entry}</i></li> );// redundant after migration
-                }else if(typeof entry === 'object') {// redundant after migration
+                if(typeof entry === 'object') {
                   return(
                     <li key={index}>
                       <dl>
@@ -110,7 +105,17 @@ export default class PrefPanel extends Component {
                 }
               })}
             </ul>
-              
+            
+            
+          </div>
+        </fieldset>    
+        <fieldset disabled={auth}>
+          <div className='space breathe'>
+          
+            <h2>Override Last Serials</h2>
+            <OverrideLastestSerial
+              dfNine={dt.latestSerial.nineDigit}
+              dfTen={dt.latestSerial.tenDigit} />
           
             <hr />
             

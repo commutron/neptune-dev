@@ -652,7 +652,7 @@
   content: "\f00d";
   font-family: FontAwesome;
   position: absolute;
-  top: 50%;
+  top: 49%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
@@ -674,9 +674,10 @@
   vertical-align: middle;
   color: var(--belizeHole);
   background-color: transparent;
+  height: 20px;
   font-size: 1.5rem;
-  cursor: pointer;
   border-radius: 50%;
+  cursor: pointer;
   -webkit-transition: all 150ms ease-in-out;
   -moz-transition: all 150ms ease-in-out;
   -o-transition: all 150ms ease-in-out;

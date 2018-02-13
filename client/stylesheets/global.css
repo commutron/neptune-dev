@@ -58,7 +58,11 @@ nav a:active,
   transition: 0.4s cubic-bezier(0.2, 0.6, 0.3, 1.1);
 }
 
-button, input[type='submit'], button span, button label {
+button,
+button span,
+button label,
+input[type='submit'],
+input[type='reset'] {
  	-webkit-transition: all 150ms ease-in-out;
   -moz-transition: all 150ms ease-in-out;
   -o-transition: all 150ms ease-in-out;
@@ -67,6 +71,7 @@ button, input[type='submit'], button span, button label {
   border-color: white;
   padding: 0;
   color: white;
+  text-indent: 0;
   cursor: pointer;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -81,6 +86,27 @@ button:focus {
 button:disabled, button:disabled:hover, button:disabled span, button:disabled label {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+input[type='reset'] {
+  width: 70px;
+  height: 32px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: white;
+  background-color: transparent;
+}
+input[type='reset']:hover {
+  color: black;
+  background-color: white;
+}
+.invert input[type='reset'] {
+  color: black;
+  border-color: black;
+}
+.invert input[type='reset']:hover {
+  color: white;
+  background-color: black;
 }
 
 form {

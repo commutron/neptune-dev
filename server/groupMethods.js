@@ -50,7 +50,7 @@ Meteor.methods({
     const inUse = WidgetDB.findOne({groupId: groupId});
     if(!inUse) {
       const doc = GroupDB.findOne({_id: groupId});
-      const lock = doc.createdAt.toISOString();
+      const lock = doc.createdAt.toISOString().split("T")[0];
       const user = Roles.userIsInRole(Meteor.userId(), 'remove');
       const access = doc.orgKey === Meteor.user().orgKey;
       const unlock = lock === pass;
