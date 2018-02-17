@@ -5,6 +5,7 @@ function brr() {
   Meteor.logoutOtherClients( (error)=>{
     error ? Bert.alert(Alert.warning) : Bert.alert(Alert.success);
   });
+  Session.set('loggedIn', true);
 }
     
 const LogoutOther = () => (

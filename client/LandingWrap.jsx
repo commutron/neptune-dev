@@ -24,15 +24,10 @@ export default withTracker( () => {
   let login = Meteor.userId() ? true : false;
   let user = login ? Meteor.user() : false;
   let name = user ? user.username : false;
-  let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   let org = user ? user.org : false;
   if(!login) {
     return {
       login: Meteor.userId(),
-    };
-  }else if(!active) {
-    return {
-      login: Meteor.userId()
     };
   }else{
     return {

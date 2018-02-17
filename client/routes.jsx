@@ -9,6 +9,7 @@ import { ExploreLayout } from './layouts/DataExploreLayout.jsx';
 import { LabelLayout } from './layouts/MainLayouts.jsx';
 
 import Login from './views/Login.jsx';
+import ActivateUser from '/client/components/forms/ActivateUser.jsx';
 
 import DashData from './views/dashboard/DashData.jsx';
 import ActivityData from './views/activity/ActivityData.jsx';
@@ -51,11 +52,15 @@ exposedRoutes.route('/login', {
 const privlegedRoutes = FlowRouter.group({
   triggersEnter: [
     ()=> {
-      if (Meteor.loggingIn() || Meteor.userId()) {
-        null;
+      let route = FlowRouter.current();
+      if(Meteor.loggingIn() || Meteor.userId()) {
+        if(Roles.userIsInRole(Meteor.userId(), 'active')) {
+          null;
+        }else{
+          FlowRouter.go('activate');
+        }
       }else{
-        let route = FlowRouter.current();
-        if(route.route.name === 'login') {
+        if(route.route.name === 'login' || route.route.name === 'activate') {
           null;
         }else{
           Session.set('redirectAfterLogin', route.path);
@@ -66,7 +71,17 @@ const privlegedRoutes = FlowRouter.group({
   ]
 });
 
+privlegedRoutes.route('/activate', {
+  name: 'activate',
+  action() {
+    mount(PublicLayout, {
+       content: (<ActivateUser />)
+    });
+  }
+});
+
 privlegedRoutes.route('/', {
+  name: 'home',
   action() {
     mount(BasicLayout, {
        content: (<LandingWrap />),

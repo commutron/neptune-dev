@@ -7,15 +7,11 @@ Accounts.ui.config({
 });
 
 Accounts.onLogin( ()=>{
-  let redirect = Session.get('redirectAfterLogin');
-  if(redirect) {
-    if(redirect === '/login') {
-      null;
-    }else{
-      FlowRouter.go(redirect);
-    }
+	let redirect = Session.get('redirectAfterLogin');
+  if(!redirect || redirect === '/login' || redirect === '/activate') {
+  	null;
   }else{
-    null;
+    FlowRouter.go(redirect);
   }
 });
 

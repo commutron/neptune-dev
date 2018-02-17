@@ -5,9 +5,7 @@ import RoleCheck from '/client/components/utilities/RoleCheck.js';
 
 import Spin from '../components/uUi/Spin.jsx';
 import Freeze from '../components/tinyUi/Freeze.jsx';
-import InitialSetup from '../views/InitialSetup.jsx';
-import Login from '../views/Login.jsx';
-import ActivateUser from '../components/forms/ActivateUser.jsx';
+//import InitialSetup from '../views/InitialSetup.jsx';
 import Chill from '../components/tinyUi/Chill.jsx';
 import ExternalLink from '../components/uUi/ExternalLink.jsx';
 
@@ -25,7 +23,7 @@ const TopBar = ({ ready, user, active, org, app, link })=> {
     );
   }*/
       
-  if(!ready) {
+  if(!ready || !active || !org || !app) {
     return (
       <Freeze>
         <Spin color={true} />
@@ -33,20 +31,7 @@ const TopBar = ({ ready, user, active, org, app, link })=> {
     );
   }
   
-  if(!active || !org) {
-    return (
-      <div className='bleed middle flexRR'>
-        <Chill name={user} />
-        <Freeze>
-          <div>
-            <hr />
-            <ActivateUser />
-          </div>
-        </Freeze>
-      </div>
-    );
-  }
-  
+  /*
   if(!app) {
     return (
       <div className='bleed middle flexRR'>
@@ -57,6 +42,7 @@ const TopBar = ({ ready, user, active, org, app, link })=> {
       </div>
     );
   }
+  */
   
   return (
     <div className='primeNav'>
@@ -112,7 +98,6 @@ export default withTracker( ({ link }) => {
   let user = login ? Meteor.user() : false;
   let name = user ? user.username : false;
   let org = user ? user.org : false;
-  let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   const hotSub = login ? Meteor.subscribe('appData') : false;
   if(!login) {
     return {
@@ -120,19 +105,13 @@ export default withTracker( ({ link }) => {
       orb: Session.get('now'),
       bolt: Session.get('allData'),
     };
-  }else 
-  if(!active) {
-    return {
-      ready: hotSub.ready() && Roles.subscription.ready(),
-      user: name
-    };
   }else{
     return {
-      ready: hotSub.ready() && Roles.subscription.ready(),
+      ready: hotSub.ready(),
       orb: Session.get('now'),
       user: name,
-      active: active,
       org: org,
+      active: Roles.userIsInRole(Meteor.userId(), 'active'),
       app: AppDB.findOne({org: org}),
       link: link
     };
