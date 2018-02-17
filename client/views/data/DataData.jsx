@@ -10,12 +10,6 @@ class ExploreView extends Component	{
   
   render() {
     
-    if(!this.props.login) {
-      return (
-        <div>no access</div>
-      );
-    }
-    
     if(
       !this.props.coldReady || 
       !this.props.hotReady || 
@@ -48,9 +42,9 @@ export default withTracker( (props) => {
   
   //const orb = Session.get('now');
   let login = Meteor.userId() ? true : false;
-  let usfo = login ? Meteor.user() : false;
-  let org = usfo ? usfo.org : false;
-  let active = usfo ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
+  let user = login ? Meteor.user() : false;
+  let org = user ? user.org : false;
+  let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   const coldSub = login ? Meteor.subscribe('skinnyData') : false;
   
   const batchRequest = props.view === 'batch' ? props.request : false;
@@ -78,22 +72,16 @@ export default withTracker( (props) => {
     */
   
   
-  if( !login ) {
+  if( !login || !active ) {
     return {
-      login: Meteor.userId(),
-    };
-  }else if( !active ) {
-    return {
-      coldReady: coldSub.ready(), 
-      hotReady: hotSubEx.ready(),
-      login: Meteor.userId(),
+      coldReady: false,
+      hotReady: false
     };
   }else{
     return {
       coldReady: coldSub.ready(),
       hotReady: hotSubEx.ready(),
       //orb: orb,
-      login: Meteor.userId(),
       org: org,
       users: Meteor.users.find( {}, { sort: { username: 1 } } ).fetch(),
       app: AppDB.findOne({org: org}),

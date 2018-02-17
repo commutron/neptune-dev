@@ -5,7 +5,7 @@ import AccountsUI from '/client/components/bigUi/AccountsUI.jsx';
 const Login = ()=> {
   Session.set('Meteor.loginButtons.dropdownVisible', true);
   return (
-    <div>
+    <div className='centre'>
       <br />
       <br />
         <AccountsUI />

@@ -22,10 +22,10 @@ class StartView extends Component	{
 
 export default withTracker( () => {
   let login = Meteor.userId() ? true : false;
-  let usfo = login ? Meteor.user() : false;
-  let user = usfo ? usfo.username : false;
-  let active = usfo ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
-  let org = usfo ? usfo.org : false;
+  let user = login ? Meteor.user() : false;
+  let name = user ? user.username : false;
+  let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
+  let org = user ? user.org : false;
   if(!login) {
     return {
       login: Meteor.userId(),
@@ -37,7 +37,7 @@ export default withTracker( () => {
   }else{
     return {
       login: Meteor.userId(),
-      user: user,
+      user: name,
       org: org,
     };
   }

@@ -6,17 +6,13 @@ import Spin from '../../components/uUi/Spin.jsx';
 import ActivityWrap from './ActivityWrap.jsx';
 
 class View extends Component	{
+  /*
   componentWillUnmount() {
     this.props.sub.stop();
   }
+  */
   
   render() {
-
-    if(!this.props.login) {
-      return (
-        <div>access blocked, please login as authorized user</div>
-      );
-    }
     
     if(!this.props.ready || !this.props.app) {
       return (
@@ -36,25 +32,21 @@ class View extends Component	{
 
 export default withTracker( () => {
   let login = Meteor.userId() ? true : false;
-  let usfo = login ? Meteor.user() : false;
-  let user = usfo ? usfo.username : false;
-  let active = usfo ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
-  let org = usfo ? usfo.org : false;
-  const sub = usfo ? Meteor.subscribe('shaddowData') : false;
-  if(!login) {
+  let user = login ? Meteor.user() : false;
+  let name = user ? user.username : false;
+  let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
+  let org = user ? user.org : false;
+  const sub = login ? Meteor.subscribe('shaddowData') : false;
+  if(!login || !active) {
     return {
-      login: Meteor.userId(),
-    };
-  }else if(!active) {
-    return {
-      login: Meteor.userId()
+      ready: false
     };
   }else{
     return {
       login: Meteor.userId(),
       sub: sub,
       ready: sub.ready(),
-      user: user,
+      user: name,
       org: org,
       app: AppDB.findOne({org: org}),
       group: GroupDB.find().fetch(),

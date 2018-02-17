@@ -9,12 +9,6 @@ class AppView extends Component	{
   
   render() {
     
-    if(!this.props.login) {
-      return (
-        <div></div>
-        );
-    }
-    
     if(!this.props.ready || !this.props.app) {
       return (
         <Spin />
@@ -34,31 +28,24 @@ class AppView extends Component	{
 
 export default withTracker( () => {
   let login = Meteor.userId() ? true : false;
-  let usfo = login ? Meteor.user() : false;
-  let user = usfo ? usfo.username : false;
-  let org = usfo ? usfo.org : false;
-  let active = usfo ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
+  let user = login ? Meteor.user() : false;
+  let name = user ? user.username : false;
+  let org = user ? user.org : false;
+  let active = login ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   if(!login) {
     return {
-      orb: Session.get('now'),
-      bolt: Session.get('allData'),
-      login: Meteor.userId(),
-      user: user,
-      active: active,
-      org: org,
+      ready: false,
     };
   }else if(!active) {
     return {
       ready: false,
-      login: Meteor.userId(),
     };
   }else{
     return {
       ready: true,
       orb: Session.get('now'),
       bolt: Session.get('allData'),
-      login: Meteor.userId(),
-      user: user,
+      user: name,
       active: active,
       org: org,
       app: AppDB.findOne({org: org}),

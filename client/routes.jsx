@@ -1,15 +1,19 @@
 import React from 'react';
 import {mount} from 'react-mounter';
 
-import {BasicLayout} from './layouts/MainLayouts.jsx';
-import {DashLayout} from './layouts/MainLayouts.jsx';
-import {ProductionLayout} from './layouts/MainLayouts.jsx';
-//import {ExploreLayout} from './layouts/DataExploreLayout.jsx';
-import {LabelLayout} from './layouts/MainLayouts.jsx';
+import { PublicLayout } from './layouts/MainLayouts.jsx';
+import { BasicLayout } from './layouts/MainLayouts.jsx';
+import { DashLayout } from './layouts/MainLayouts.jsx';
+import { ProductionLayout } from './layouts/MainLayouts.jsx';
+import { ExploreLayout } from './layouts/DataExploreLayout.jsx';
+import { LabelLayout } from './layouts/MainLayouts.jsx';
+
+import Login from './views/Login.jsx';
 
 import DashData from './views/dashboard/DashData.jsx';
 import ActivityData from './views/activity/ActivityData.jsx';
 import ProdData from './views/production/ProdData.jsx';
+import DataData from './views/data/DataData.jsx';
 import ScanData from './views/scanListenerEx/ScanData.jsx';
 import CompSearchPanel from './views/data/panels/CompSearchPanel.jsx';
 import AppData from './views/app/AppData.jsx';
@@ -24,7 +28,45 @@ GroupDB = new Mongo.Collection('groupdb');
 WidgetDB = new Mongo.Collection('widgetdb');
 BatchDB = new Mongo.Collection('batchdb');
 
-FlowRouter.route('/', {
+FlowRouter.notFound = {
+  action() {
+    mount(PublicLayout, {
+      content: (<p>Page Not Found</p>),
+      link: ''
+    });
+  }
+};
+
+const exposedRoutes = FlowRouter.group({});
+
+exposedRoutes.route('/login', {
+  name: 'login',
+  action() {
+    mount(PublicLayout, {
+       content: (<Login />)
+    });
+  }
+});
+
+const privlegedRoutes = FlowRouter.group({
+  triggersEnter: [
+    ()=> {
+      if (Meteor.loggingIn() || Meteor.userId()) {
+        null;
+      }else{
+        let route = FlowRouter.current();
+        if(route.route.name === 'login') {
+          null;
+        }else{
+          Session.set('redirectAfterLogin', route.path);
+          FlowRouter.go('login');
+        }
+      }
+    }
+  ]
+});
+
+privlegedRoutes.route('/', {
   action() {
     mount(BasicLayout, {
        content: (<LandingWrap />),
@@ -33,7 +75,7 @@ FlowRouter.route('/', {
   }
 });
 
-FlowRouter.route('/activity', {
+privlegedRoutes.route('/activity', {
   action() {
     mount(BasicLayout, {
       content: (<ActivityData />),
@@ -42,7 +84,7 @@ FlowRouter.route('/activity', {
   }
 });
 
-FlowRouter.route('/dashboard', {
+privlegedRoutes.route('/dashboard', {
   action() {
     mount(DashLayout, {
       content: (<DashData />),
@@ -51,7 +93,7 @@ FlowRouter.route('/dashboard', {
   }
 });
 
-FlowRouter.route('/production', {
+privlegedRoutes.route('/production', {
   action() {
     mount(ProductionLayout, {
       content: (<ProdData />),
@@ -60,7 +102,7 @@ FlowRouter.route('/production', {
   }
 });
 
-FlowRouter.route('/scan', {
+privlegedRoutes.route('/scan', {
   action() {
     mount(BasicLayout, {
       content: (<ScanData />),
@@ -69,7 +111,7 @@ FlowRouter.route('/scan', {
   }
 });
 
-FlowRouter.route('/starfish', {
+privlegedRoutes.route('/starfish', {
   action() {
     mount(BasicLayout, {
       content: (<CompSearchPanel />),
@@ -78,7 +120,7 @@ FlowRouter.route('/starfish', {
   }
 });
 
-FlowRouter.route('/app', {
+privlegedRoutes.route('/app', {
   action() {
     mount(BasicLayout, {
        content: (<AppData />),
@@ -87,19 +129,7 @@ FlowRouter.route('/app', {
   }
 });
 
-/*
-FlowRouter.route('/analytics/:postId', {
-    // do some action for this route
-    action: function(params, queryParams) {
-        console.log("Params:", params);
-        console.log("Query Params:", queryParams);
-    },
-    name: "test" // optional
-});
-// FlowRouter.go('/analytics/my-post?comments=on&color=dark');
-*/
-
-FlowRouter.route('/print/generallabel/:batch', {
+privlegedRoutes.route('/print/generallabel/:batch', {
     action: function(params, queryParams) {
       if(queryParams !== null && typeof queryParams === 'object') {
         const request = Object.keys(queryParams);
@@ -131,11 +161,32 @@ FlowRouter.route('/print/generallabel/:batch', {
 });
 
 
-FlowRouter.notFound = {
+// Explore Routing
+
+privlegedRoutes.route('/data', {
   action() {
-    mount(BasicLayout, {
-      content: (<p>Page Not Found</p>),
-      link: ''
+    mount(ExploreLayout, {
+      content: (<DataData />),
+      link: 'data'
     });
   }
-};
+});
+
+// FlowRouter.go('/data/my-post?comments=on&color=dark');
+
+privlegedRoutes.route('/data/:view', {
+  name: 'explore', // optional
+  // do some action for this route
+  action: function(params, queryParams) {
+    //console.log("Params:", params);
+    //console.log("Query:", queryParams);
+    mount(ExploreLayout, {
+      content: (<DataData
+                  view={params.view}
+                  request={queryParams.request}
+                  specify={queryParams.specify} />
+                ),
+      link: 'data'
+    });
+  },
+});

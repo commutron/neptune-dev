@@ -1,5 +1,11 @@
-import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
+import { Accounts } from 'meteor/accounts-base';
+import React from 'react';
+
+Accounts.onLogout( ()=>{
+  Session.set('redirectAfterLogin', FlowRouter.current().path);
+  FlowRouter.go('login');
+});
 
 function brr() {
   Meteor.logout();

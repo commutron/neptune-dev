@@ -11,7 +11,7 @@ import ActivateUser from '../components/forms/ActivateUser.jsx';
 import Chill from '../components/tinyUi/Chill.jsx';
 import ExternalLink from '../components/uUi/ExternalLink.jsx';
 
-const TopBar = ({ ready, orb, login, user, active, org, app, link })=> {
+const TopBar = ({ ready, user, active, org, app, link })=> {
     
   //console.log(Meteor.status().connected);
   /*
@@ -24,14 +24,6 @@ const TopBar = ({ ready, orb, login, user, active, org, app, link })=> {
       </Freeze>
     );
   }*/
-  
-  if(!login) {
-    return (
-      <Freeze>
-        <Login />
-      </Freeze>
-    );
-  }
       
   if(!ready) {
     return (
@@ -116,30 +108,29 @@ const TopBar = ({ ready, orb, login, user, active, org, app, link })=> {
 };
 
 export default withTracker( ({ link }) => {
-  let login = Meteor.userId() ? true : false;
-  let usfo = login ? Meteor.user() : false;
-  let user = usfo ? usfo.username : false;
-  let org = usfo ? usfo.org : false;
-  let active = usfo ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
+  const login = Meteor.userId() ? true : false;
+  let user = login ? Meteor.user() : false;
+  let name = user ? user.username : false;
+  let org = user ? user.org : false;
+  let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   const hotSub = login ? Meteor.subscribe('appData') : false;
   if(!login) {
     return {
+      ready: false,
       orb: Session.get('now'),
       bolt: Session.get('allData'),
-      login: Meteor.userId(),
     };
-  }else if(!active) {
+  }else 
+  if(!active) {
     return {
       ready: hotSub.ready() && Roles.subscription.ready(),
-      login: Meteor.userId(),
-      user: user
+      user: name
     };
   }else{
     return {
       ready: hotSub.ready() && Roles.subscription.ready(),
       orb: Session.get('now'),
-      login: Meteor.userId(),
-      user: user,
+      user: name,
       active: active,
       org: org,
       app: AppDB.findOne({org: org}),

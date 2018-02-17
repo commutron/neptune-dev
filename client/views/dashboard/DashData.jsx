@@ -10,12 +10,6 @@ class DashView extends Component	{
   
   render() {
     
-    if(!this.props.login) {
-      return (
-        <div></div>
-      );
-    }
-    
     if(//!this.props.allData || // diagnose data in development
        !this.props.coldReady || 
        !this.props.hotReady || 
@@ -55,9 +49,9 @@ export default withTracker( () => {
   
   const orb = Session.get('now');
   let login = Meteor.userId() ? true : false;
-  let usfo = login ? Meteor.user() : false;
-  let org = usfo ? usfo.org : false;
-  let active = usfo ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
+  let user = login ? Meteor.user() : false;
+  let org = user ? user.org : false;
+  let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   const coldSub = login ? Meteor.subscribe('skinnyData') : false;
   //const experimentSub = login ? Meteor.subscribe('groupwidgetData') : false;
 
@@ -121,13 +115,13 @@ export default withTracker( () => {
   
   if( !login ) {
     return {
-      login: Meteor.userId(),
+      coldReady: false, 
+      hotReady: false,
     };
   }else if( !active ) {
     return {
       coldReady: coldSub.ready(), 
       hotReady: hotSub.ready(),
-      login: Meteor.userId(),
     };
   }else{
     return {
@@ -137,7 +131,6 @@ export default withTracker( () => {
       orb: orb,
       snap: Session.get( 'ikyView' ),
       anchor: Session.get( 'nowWanchor' ),
-      login: Meteor.userId(),
       org: org,
       users: Meteor.users.find( {}, { sort: { username: 1 } } ).fetch(),
       app: AppDB.findOne({org: org}),

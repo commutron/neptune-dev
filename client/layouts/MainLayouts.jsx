@@ -1,16 +1,18 @@
-import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
+import React from 'react';
 
 import FindBox from './FindBox.jsx';
 import TopBar from './TopBar.jsx';
 
-/*
-// moved to routes
-AppDB = new Mongo.Collection('appdb');
-GroupDB = new Mongo.Collection('groupdb');
-WidgetDB = new Mongo.Collection('widgetdb');
-BatchDB = new Mongo.Collection('batchdb');
-*/
+export const PublicLayout = ({content}) => (
+  <div className='basicContainer'>
+    <div className='gridHeaderNav'>
+    </div>
+    <div className='basicMainFull'>
+      {content}
+    </div>
+  </div>
+);
 
 export const BasicLayout = ({content, link}) => (
   <div className='basicContainer'>

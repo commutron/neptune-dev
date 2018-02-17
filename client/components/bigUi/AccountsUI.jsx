@@ -6,6 +6,19 @@ Accounts.ui.config({
   passwordSignupFields: 'USERNAME_AND_OPTIONAL_EMAIL',
 });
 
+Accounts.onLogin( ()=>{
+  let redirect = Session.get('redirectAfterLogin');
+  if(redirect) {
+    if(redirect === '/login') {
+      null;
+    }else{
+      FlowRouter.go(redirect);
+    }
+  }else{
+    null;
+  }
+});
+
 export default class AccountsUI extends Component {
 
 	componentDidMount() {
@@ -18,9 +31,8 @@ export default class AccountsUI extends Component {
 	}
 
 	render() {
-		
-		return (
+		return(
 		  <span ref={(i)=> this.container = i} />
-		  );
+		);
 	}
 }
