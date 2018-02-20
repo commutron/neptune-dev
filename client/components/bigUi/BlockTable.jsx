@@ -20,8 +20,7 @@ const BlockTable = ({ batchData })=> (
       {batchData.map( (entry, index)=>{
         return (
           <BlockGroup key={index} batchData={entry} />
-          );
-      })}
+      )})}
     </table>
   </div>
 );

@@ -165,7 +165,8 @@ export default class BatchPanel extends Component	{
                   items={b.items}
                   options={a.trackOption}
                   end={a.lastTrack}
-                  inUse={filter.rmaList} />
+                  inUse={filter.rmaList}
+                  app={a} />
                 <p>{Pref.escape}s: {b.escaped.length}</p>
               </div>
               

@@ -53,7 +53,7 @@ const StoneSelect = ({ id, flow, isAlt, rmas, allItems, nonCons, serial, history
                                    x = x.replace(/top/i, '-').replace(/bottom/i, '-');
                                    return x; };
       
-	    let block = nc.some( x => stripSide(x.where) !== stripSide(flowStep.step) ) ? true : false;
+	    let block = nc.some( x => stripSide(x.where || '') !== stripSide(flowStep.step) ) ? true : false;
 
 	    const stone = <Stone
         		          key={flowStep.key}

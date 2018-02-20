@@ -146,7 +146,9 @@ export default class BatchPanel extends Component	{
                 </div>
               </div>
               
-              <BlockList id={b._id} data={b.blocks} lock={done} />
+              <div>
+                <BlockList id={b._id} data={b.blocks} lock={done} />
+              </div>
               
               <div className='split'>
                 <div className='wide'>
@@ -169,7 +171,8 @@ export default class BatchPanel extends Component	{
                   items={b.items}
                   options={a.trackOption}
                   end={a.lastTrack}
-                  inUse={filter[1]} />
+                  inUse={filter[1]}
+                  app={a} />
                 <br />
                 <EscapeTable
                   id={b._id}

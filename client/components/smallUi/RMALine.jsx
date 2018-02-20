@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 // import moment from 'moment';
 import Pref from '/client/global/pref.js';
+import Alert from '/client/global/alert.js';
 
 // import UserNice from './UserNice.jsx';
 
@@ -8,9 +9,10 @@ function popRMA(id, bar, rmaId) {
   let check = 'Are you sure you want to remove the ' + Pref.rma + ' from this ' + Pref.item;
   const yes = window.confirm(check);
   if(yes) {
-    Meteor.call('unsetRMA', id, bar, rmaId, (error)=>{
+    Meteor.call('unsetRMA', id, bar, rmaId, (error, reply)=>{
       if(error)
         console.log(error);
+      reply ? Bert.alert(Alert.success) : Bert.alert(Alert.warning);
     });
   }else{null}
 }

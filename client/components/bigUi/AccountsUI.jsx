@@ -10,7 +10,7 @@ Accounts.onLogin( ()=>{
 	let redirect = Session.get('redirectAfterLogin');
   if(!redirect || redirect === '/login' || redirect === '/activate') {
   	null;
-  }else{
+  }else {
     FlowRouter.go(redirect);
   }
 });

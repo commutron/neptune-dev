@@ -62,23 +62,21 @@ export default class FormBar extends Component	{
         : null}
         <div className='footCent'>
           {b && i ?
-            b.finishedAt !== false || i.finishedAt !== false ?
-              null :
-              this.state.showNC ?
-                <NCAdd 
-                  id={b._id}
-                  barcode={i.serial}
-                  app={app} />
-              :
-                <FirstAdd
-                  id={b._id}
-                  barcode={i.serial}
-                  riverKey={b.river}
-                  riverAltKey={b.riverAlt}
-                  allFlows={w.flows}
-                  users={users}
-                  app={app}
-                  doneClose={()=>this.handleDone()} />
+            this.state.showNC ?
+              <NCAdd 
+                id={b._id}
+                barcode={i.serial}
+                app={app} />
+            :
+              <FirstAdd
+                id={b._id}
+                barcode={i.serial}
+                riverKey={b.river}
+                riverAltKey={b.riverAlt}
+                allFlows={w.flows}
+                users={users}
+                app={app}
+                doneClose={()=>this.handleDone()} />
           : null}
         </div>
         <div className='footRight'>

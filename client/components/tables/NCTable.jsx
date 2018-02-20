@@ -167,7 +167,7 @@ export class NCRow extends Component {
                 id='ncW'
                 className='redIn cap breath'
                 style={inSty}
-                defaultValue={dt.where}
+                defaultValue={dt.where || ''}
                 required>
                 {this.props.flowSteps.map( (entry, index)=>{
                   return( <option key={index} value={entry}>{entry}</option> );

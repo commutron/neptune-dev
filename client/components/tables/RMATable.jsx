@@ -38,6 +38,7 @@ export default class RMATable extends Component	{
               <th>required</th>
               <th>assigned</th>
               <th>steps</th>
+              <th>auto NonCons</th>
               <th>comment</th>
               <th></th>
               <th></th>
@@ -52,7 +53,8 @@ export default class RMATable extends Component	{
                 id={this.props.id}
                 assigned={this.props.items.filter(x => x.rma.includes(entry.key)).length}
                 onClick={()=>this.pullRMA.bind(this, entry.key)}
-                lock={started} />
+                lock={started}
+                app={this.props.app} />
             );
           })}
         </table>
@@ -70,7 +72,7 @@ export default class RMATable extends Component	{
 
 
 
-const RMARow = ({ entry, id, assigned, onClick, lock })=> {
+const RMARow = ({ entry, id, assigned, onClick, lock, app })=> {
   let dt = entry;
   
   return(
@@ -82,13 +84,20 @@ const RMARow = ({ entry, id, assigned, onClick, lock })=> {
         <td>{dt.quantity === 0 ? 'unlimited' : dt.quantity}</td>
         <td>{assigned}</td>
         <td>{dt.flow.length}</td>
+        <td>
+          {!dt.nonCons ? '' : 
+              dt.nonCons.map( (entry, index)=>{
+                return( <i key={index}>{entry.ref}({entry.type}), </i> );
+          })}
+        </td>
         <td>{dt.comm}</td>
         <td>
           {Roles.userIsInRole(Meteor.userId(), ['qa', 'edit']) &&
             <RMAForm
               id={id}
               edit={dt}
-              small={true} />
+              small={true}
+              app={app} />
           }
         </td>
         <td>

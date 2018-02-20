@@ -10,18 +10,6 @@ import Chill from '../components/tinyUi/Chill.jsx';
 import ExternalLink from '../components/uUi/ExternalLink.jsx';
 
 const TopBar = ({ ready, user, active, org, app, link })=> {
-    
-  //console.log(Meteor.status().connected);
-  /*
-  if() {
-    return (
-      <Freeze>
-        <div className='actionBox orange centre centreTrue bigger'>
-          <p>OFFLINE</p>
-        </div>
-      </Freeze>
-    );
-  }*/
       
   if(!ready || !active || !org || !app) {
     return (

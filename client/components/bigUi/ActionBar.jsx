@@ -83,7 +83,8 @@ const ActionBar = ({batchData, itemData, widgetData, versionData, groupData, app
           id={batchData._id}
           edit={false}
           options={app.trackOption}
-          end={app.lastTrack} />
+          end={app.lastTrack}
+          app={app} />
         <NCEscape
           id={batchData._id}
           nons={app.nonConOption} />

@@ -7,6 +7,15 @@ import TopBar from './TopBar.jsx';
 export const PublicLayout = ({content}) => (
   <div className='basicContainer'>
     <div className='gridHeaderNav'>
+      <div className='primeNav'>
+        <nav className='primeNav'>
+          <a className='title' href='/' title='Home'>
+            <img
+              src='/neptune-logo-white.svg'
+              className='logoSVG' />
+          </a>
+        </nav>
+      </div>
     </div>
     <div className='basicMainFull'>
       {content}

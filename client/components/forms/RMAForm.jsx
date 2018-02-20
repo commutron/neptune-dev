@@ -13,7 +13,8 @@ export default class RMAForm extends Component {
   constructor() {
     super();
     this.state = {
-      flow: false
+      flow: false,
+      nonCons: []
     };
   }
   
@@ -26,12 +27,31 @@ export default class RMAForm extends Component {
     }
   }
   
+  handleNC() {
+    const type = this.ncType.value.trim().toLowerCase();
+    
+    const refEntry = this.ncRefs.value.trim().toLowerCase();
+    const refSplit = refEntry.split(/\s* \s*/);
+    
+    let allNonCons = this.state.nonCons;
+    
+    if(refSplit.length > 0 && refSplit[0] !== '') {
+      for(let ref of refSplit) {
+        ref = ref.replace(",", "");
+        allNonCons.push({ref: ref, type: type});
+      }
+      this.setState({'nonCons': allNonCons });
+      this.ncRefs.value = '';
+    }else{null}
+  }
+  
   save(e) {
     e.preventDefault();
     this.go.disabled = true;
     const cKey = this.props.edit.key;
     const id = this.props.id;
     const flowObj = this.state.flow;
+    const nonConArr = this.state.nonCons;
     
     const rmaId = this.rmaNum.value.trim().toLowerCase();
     const quantity = this.quant.value.trim().toLowerCase();
@@ -50,7 +70,7 @@ export default class RMAForm extends Component {
       if(!flowObj) {
         Bert.alert(Alert.warning);
       }else{
-        Meteor.call('addRMACascade', id, rmaId, quantity, comm, flowObj, (error)=>{
+        Meteor.call('addRMACascade', id, rmaId, quantity, comm, flowObj, nonConArr, (error)=>{
           if(error)
             console.log(error);
           Bert.alert(Alert.success);
@@ -135,6 +155,58 @@ export default class RMAForm extends Component {
             
         : <p>{Pref.flow} is locked</p>}
           
+        <hr />
+        
+        <div className='centre'>
+        
+          <p><em>{Pref.nonCon}s to be attached automatically to every activated {Pref.item}</em></p>
+          
+          <br />
+        
+          <div className='inlineForm'>
+      
+            <input
+              type='text'
+              id='ncRefs'
+              ref={(i)=> this.ncRefs = i}
+              className='redIn up'
+              placeholder={Pref.nonConRef} />
+        
+            <select 
+              id='ncType'
+              ref={(i)=> this.ncType = i}
+              className='cap redIn'>
+              {this.props.app.nonConOption.map( (entry, index)=>{
+                return ( 
+                  <option key={index} value={entry}>{index + 1}. {entry}</option>
+                  );
+              })}
+            </select>
+        
+            <button
+              type='button'
+              id='addNC'
+              onClick={(e)=>this.handleNC(e)}
+              disabled={false}
+              className='smallAction clearRed'
+            >Add</button>
+          
+          </div>
+          
+          <br />
+          
+          <div>
+            <dl>
+              {this.state.nonCons.map( (entry, index)=>{
+                return(
+                  <dt key={index}>{entry.ref} - {entry.type}</dt>
+              )})}
+            </dl>
+          </div>
+              
+      
+        </div>
+
         <hr />
         
         <div className='space centre'>

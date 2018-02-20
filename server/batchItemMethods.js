@@ -620,7 +620,7 @@ Meteor.methods({
   },
   
 //// RMA Cascade ////
-  addRMACascade(batchId, rmaId, qua, com, flowObj) {
+  addRMACascade(batchId, rmaId, qua, com, flowObj, nonConArr) {
     const doc = BatchDB.findOne({_id: batchId});
     const dupe = doc.cascade.find( x => x.rmaId === rmaId );
     const auth = Roles.userIsInRole(Meteor.userId(), ['qa']);
@@ -639,7 +639,8 @@ Meteor.methods({
           who: Meteor.userId(),
           quantity: Number(qua),
           comm: com,
-          flow: flowObj
+          flow: flowObj,
+          nonCons: nonConArr
         }},
         $set : {
   			  active: true
@@ -687,12 +688,33 @@ Meteor.methods({
   setRMA(batchId, bar, cKey) {
     const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar});
     const subDoc = doc.items.find( x => x.serial === bar );
+    const rmaDoc = doc.cascade.find( x => x.key === cKey );
     if( Roles.userIsInRole(Meteor.userId(), ['qa', 'run', 'inspect']) && 
         subDoc.rma.includes( cKey ) === false ) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
         $push : { 
           'items.$.rma': cKey
         }});
+      // add noncons
+      const nonCons = rmaDoc.nonCons || [];
+      for(let nc of nonCons) {
+        BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+          $push : { nonCon: {
+            key: new Meteor.Collection.ObjectID().valueOf(), // id of the nonCon entry
+            serial: bar, // barcode id of item
+            ref: nc.ref, // referance on the widget
+            type: nc.type, // type of nonCon
+            where: 'rma', // where in the process
+            time: new Date(), // when nonCon was discovered
+            who: Meteor.userId(),
+            fix: false,
+            inspect: false,
+            reject: [],
+            skip: false,
+            snooze: false,
+            comm: ''
+        }}});
+      }
       return true;
     }else{
       return false;
@@ -700,9 +722,10 @@ Meteor.methods({
   },
   
   /// unset an rma on an item
-  /// low risk, no inUse check
   unsetRMA(batchId, bar, cKey) {
-    if(Roles.userIsInRole(Meteor.userId(), ['qa', 'remove'])) {
+    const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar});
+    const outstndng = doc.nonCon.filter( x => x.inspect !== false && x.skip === false );
+    if(outstndng.length === 0 && Roles.userIsInRole(Meteor.userId(), ['qa', 'remove'])) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
         $pull : {
           'items.$.rma': cKey
