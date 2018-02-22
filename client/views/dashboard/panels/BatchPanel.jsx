@@ -13,6 +13,7 @@ import BlockList from '../../../components/bigUi/BlockList.jsx';
 import RiverSatus from '../../../components/smallUi/RiverStatus.jsx';
 import FirstsOverview from '/client/components/bigUi/FirstsOverview.jsx';
 import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
+import ProgBurndown from '/client/components/charts/ProgBurndown.jsx';
 import NonConOverview from '../../../components/charts/NonConOverview.jsx';
 import NonConRate from '../../../components/charts/NonConRate.jsx';
 import NonConPie from '../../../components/charts/NonConPie.jsx';
@@ -27,7 +28,6 @@ import EscapeTable from '../../../components/tables/EscapeTable.jsx';
 
 export default class BatchPanel extends Component	{
     
-  // replace using es5 .filter() method
   filter() {
     const data = this.props.batchData.items;
     let fList = [];
@@ -137,12 +137,20 @@ export default class BatchPanel extends Component	{
                     flow={riverFlow}
                     flowAlt={riverAltFlow} />
                 </div>
-                <div className='centreRow wide'>
-                  <StepsProgress
-                    batchData={b}
-                    flow={riverFlow}
-                    flowAlt={riverAltFlow}
-                    mini={false} />
+                <div className='wide'>
+                  <div className='centreRow'>
+                    <StepsProgress
+                      batchData={b}
+                      flow={riverFlow}
+                      flowAlt={riverAltFlow}
+                      mini={false} />
+                  </div>
+                  <ProgBurndown
+                    start={b.start}
+                    flowData={riverFlow}
+                    flowAltData={riverAltFlow}
+                    itemData={b.items}
+                    title='Progress Burndown' />
                 </div>
               </div>
               
