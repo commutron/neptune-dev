@@ -35,10 +35,12 @@ export default class BigPicture extends Component	{
               num={now.today}
               name={'Active ' + Pref.batch + 's'}
               color='blueT' />
+            {/*
             <NumBox
               num={now.historyCount}
               name={'Total History Events'}
               color='blueT' />
+            */}
             <NumBox
               num={now.doneBatches}
               name={'finished ' + Pref.batch + 's'}
@@ -55,8 +57,8 @@ export default class BigPicture extends Component	{
         </section>
         <section>
           <SimpleRate
-            dataOne={now.historyCountOverTime}
-            titleOne={'history events'}
+            dataOne={[]}
+            titleOne={false}
             dataTwo={now.newNCOverTime}
             titleTwo={Pref.nonCon + 's'}
             dataThree={now.doneUnitsOT}

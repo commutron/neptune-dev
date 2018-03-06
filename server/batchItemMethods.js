@@ -157,8 +157,6 @@ Meteor.methods({
       &&
       !isNaN(barEnd)
       &&
-      barFirst > floor
-      &&
       barFirst.toString().length === barEnd.toString().length
       &&
       barFirst < barEnd
@@ -173,7 +171,28 @@ Meteor.methods({
         const open = doc.finishedAt === false;
         const auth = Roles.userIsInRole(Meteor.userId(), 'run');
         
-        if(doc && open && auth) {
+        const dupeCheck = (barFirst, barEnd, floor) => {
+          let clear = true;
+          if(barFirst < floor) { 
+            for(var flick = barFirst; flick < barEnd; flick++) {
+              let barcode = flick.toString();
+              let wideDuplicate = BatchDB.findOne({ 'items.serial': barcode });
+              if(wideDuplicate) {
+                clear = false;
+                break;
+              }else{
+                null;
+              }
+            }
+          }else{
+            null;
+          }
+          return clear;
+        };
+        
+        const dupeClear = dupeCheck(barFirst, barEnd, floor);
+        
+        if(doc && open && auth && dupeClear ) {
 
           for(var click = barFirst; click < barEnd; click++) {
             let barcode = click.toString();
@@ -198,16 +217,20 @@ Meteor.methods({
               updatedAt: new Date(),
       			  updatedWho: Meteor.userId()
             }});
-          if(barLast < 999999999 ) {
-            AppDB.update({orgKey: Meteor.user().orgKey}, {
-              $set : {
-                'latestSerial.nineDigit': Number(barLast)
-              }});
-          }else if(barLast < 10000000000 ) {
-            AppDB.update({orgKey: Meteor.user().orgKey}, {
-              $set : {
-                'latestSerial.tenDigit': Number(barLast)
-              }});
+          if(barLast > floor) {
+            if(barLast < 999999999 ) {
+              AppDB.update({orgKey: Meteor.user().orgKey}, {
+                $set : {
+                  'latestSerial.nineDigit': Number(barLast)
+                }});
+            }else if(barLast < 10000000000 ) {
+              AppDB.update({orgKey: Meteor.user().orgKey}, {
+                $set : {
+                  'latestSerial.tenDigit': Number(barLast)
+                }});
+            }else{
+              null;
+            }
           }else{
             null;
           }
@@ -216,10 +239,17 @@ Meteor.methods({
             message:'done'
           };
         }else{
-          return {
-            success: false,
-            message: 'noAuth'
-          };
+          if(!dupeClear) {
+            return {
+              success: false,
+              message: 'duplicate serials'
+            };
+          }else{
+            return {
+              success: false,
+              message: 'noAuth'
+            };
+          }
         }
       }else{
         if(barFirst <= floor) {

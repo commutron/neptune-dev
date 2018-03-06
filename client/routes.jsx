@@ -53,19 +53,15 @@ const privlegedRoutes = FlowRouter.group({
   triggersEnter: [
     ()=> {
       let route = FlowRouter.current();
-      if(Meteor.loggingIn() || Meteor.userId()) {
-        if(Roles.userIsInRole(Meteor.userId(), 'active')) {
-          null;
-        }else{
-          FlowRouter.go('activate');
-        }
+      if(Meteor.loggingIn() || route.route.name === 'login' || route.route.name === 'activate') {
+        null;
+      }else if(!Meteor.userId()) {
+        Session.set('redirectAfterLogin', route.path);
+        FlowRouter.go('login');
+      }else if(!Roles.userIsInRole(Meteor.userId(), 'active')) {
+        FlowRouter.go('activate');
       }else{
-        if(route.route.name === 'login' || route.route.name === 'activate') {
-          null;
-        }else{
-          Session.set('redirectAfterLogin', route.path);
-          FlowRouter.go('login');
-        }
+        Session.set('redirectAfterLogin', route.path);
       }
     }
   ]

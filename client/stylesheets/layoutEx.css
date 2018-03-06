@@ -53,4 +53,6 @@
 
 .actionBarEx {
   grid-area: actionBarEx;
+  display: flex;
+  align-items: stretch;
 }

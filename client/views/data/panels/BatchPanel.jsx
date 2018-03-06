@@ -13,6 +13,7 @@ import BlockList from '../../../components/bigUi/BlockList.jsx';
 import RiverSatus from '../../../components/smallUi/RiverStatus.jsx';
 import FirstsOverview from '/client/components/bigUi/FirstsOverview.jsx';
 import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
+import ProgBurndown from '/client/components/charts/ProgBurndown.jsx';
 import NonConOverview from '../../../components/charts/NonConOverview.jsx';
 import NonConRate from '../../../components/charts/NonConRate.jsx';
 import NonConPie from '../../../components/charts/NonConPie.jsx';
@@ -71,56 +72,60 @@ export default class BatchPanel extends Component	{
       <AnimateWrap type='cardTrans'>
         <div className='section' key={b.batch}>
             
-            <div className='titleSection'>
-              <span>{b.batch}</span>
-              <span><JumpText title={g.alias} link={g.alias} /></span>
-              <span><JumpText title={w.widget} link={w.widget} /></span>
-              <span><i className='clean'>v.</i>{v.version}</span>
-              <span>
-                { b.active ? 
-                  <i className='fas fa-sync blueT' aria-hidden='true' title='in progress'></i>
-                  :
-                  <i className='fa fa-check-circle greenT' aria-hidden='true' title='finished'></i>
-                }
-              </span>
-            </div>
-            
-          <div className='space'>
+          <div className='titleSection'>
+            <span>{b.batch}</span>
+            <span><JumpText title={g.alias} link={g.alias} /></span>
+            <span><JumpText title={w.widget} link={w.widget} /></span>
+            <span><i className='clean'>v.</i>{v.version}</span>
+            <span>
+              { b.active ? 
+                <i className='fas fa-sync blueT' aria-hidden='true' title='in progress'></i>
+                :
+                <i className='fa fa-check-circle greenT' aria-hidden='true' title='finished'></i>
+              }
+            </span>
+          </div>
           
-            <div className='balance'>
+          <br />
+          
+          <Tabs
+            tabs={
+              [
+                'Info',
+                'Progress',
+                `${Pref.nonCon}s`,
+                `${Pref.rma}s and ${Pref.escape}`
+              ]
+            }
+            wide={true}
+            stick={false}>
             
+            <div className='split space'>
               <div>
-                <p className='capFL'>{Pref.start}: {moment(b.start).calendar()}</p>
-                <p className='capFL'>{Pref.end}: {moment(b.end).calendar()}</p>
-                <p>Finished: {fnsh}</p>
+                <TagsModule
+                  id={b._id}
+                  tags={b.tags}
+                  vKey={false}
+                  tagOps={a.tagOption} />
+                 
+                <NoteLine entry={b.notes} id={b._id} widgetKey={false}  />
               </div>
               
-              <TagsModule
-                id={b._id}
-                tags={b.tags}
-                vKey={false}
-                tagOps={a.tagOption} />
-               
-              <NoteLine entry={b.notes} id={b._id} widgetKey={false}  />
+              <span className='breath' />
+              
+              <BlockList id={b._id} data={b.blocks} lock={done} />
               
             </div>
-            
-            <br />
-            
-            <Tabs
-              tabs={
-                [
-                  'Progress',
-                  `${Pref.block}s`,
-                  `${Pref.nonCon}s`,
-                  `${Pref.rma}s and ${Pref.escape}`
-                ]
-              }
-              wide={true}
-              stick={false}>
-              
+          
+            <div>
               <div className='split space'>
                 <div>
+                  <div>
+                    <p className='capFL'>{Pref.start}: {moment(b.start).calendar()}</p>
+                    <p className='capFL'>{Pref.end}: {moment(b.end).calendar()}</p>
+                    <p>Finished: {fnsh}</p>
+                  </div>
+                  <hr />
                   <RiverSatus
                     items={b.items.length}
                     river={b.river}
@@ -138,41 +143,47 @@ export default class BatchPanel extends Component	{
                     batchData={b}
                     flow={riverFlow}
                     flowAlt={riverAltFlow}
-                    mini={false} />
+                    mini={true} />
                 </div>
               </div>
-              
-              <BlockList id={b._id} data={b.blocks} lock={done} />
-              
-              <div className='balance'>
+              <ProgBurndown
+                start={b.start}
+                end={b.finishedAt}
+                flowData={riverFlow}
+                flowAltData={riverAltFlow}
+                itemData={b.items}
+                title='Progress Burndown' />
+            </div>
+            
+            <div>
+              <div className='split'>
+                <NonConPie nonCons={b.nonCon} />
                 <div className='wide'>
-                  <NonConOverview
-                    ncOp={a.nonConOption}
-                    flow={riverFlow}
-                    flowAlt={riverAltFlow}
-                    nonCons={b.nonCon} />
-                </div>
-                <div className='balance'>
-                  <NonConPie nonCons={b.nonCon} />
                   <NonConRate batches={[b.batch]} />
                 </div>
               </div>
-              
-              <div>
-                <RMATable
-                  id={b._id}
-                  data={b.cascade}
-                  items={b.items}
-                  options={a.trackOption}
-                  end={a.lastTrack}
-                  inUse={filter.rmaList}
-                  app={a} />
-                <p>{Pref.escape}s: {b.escaped.length}</p>
+              <div className='wide'>
+                <NonConOverview
+                  ncOp={a.nonConOption}
+                  flow={riverFlow}
+                  flowAlt={riverAltFlow}
+                  nonCons={b.nonCon} />
               </div>
-              
-            </Tabs>
+            </div>
             
-          </div>
+            <div>
+              <RMATable
+                id={b._id}
+                data={b.cascade}
+                items={b.items}
+                options={a.trackOption}
+                end={a.lastTrack}
+                inUse={filter.rmaList}
+                app={a} />
+              <p>{Pref.escape}s: {b.escaped.length}</p>
+            </div>
+            
+          </Tabs>
           
           <CreateTag
             when={b.createdAt}

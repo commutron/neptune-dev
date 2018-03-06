@@ -35,7 +35,8 @@ const AccountsManagePanel = ({ users })=> {
                       roles={roles}
                     />
                     {!Roles.userIsInRole(entry._id, 'active') &&
-                      entry._id !== Meteor.userId() ?
+                      entry._id !== Meteor.userId() &&
+                      !entry.org ?
                         <RemoveUser userID={entry._id} />
                     :null}
                     <br />

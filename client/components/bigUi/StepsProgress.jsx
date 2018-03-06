@@ -131,6 +131,14 @@ export default class StepsProgress extends Component	{
                 color='whiteT' />
             </label>
           :null}
+          {scrapCount > 0 ? 
+          <label>
+            <NumBox
+              num={scrapCount}
+              name={Pref.scrap}
+              color='redT' />
+            </label>
+          :null}
         </div>
         <div>
           <div className='centreRow'>
@@ -172,7 +180,6 @@ export default class StepsProgress extends Component	{
               </div>
             </div>
           :null}
-          {scrapCount > 0 ? <b className='redT cap'>{Pref.scrap}: {scrapCount}</b> : null}
         </div>
       </div>
     );

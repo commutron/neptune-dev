@@ -51,8 +51,8 @@ export default class NonConRate extends Component {
         labelInterpolationFnc: function(value, index) {
           return index % 7 === 0 ? 
                  value : 
-                 index === labels.length - 1 ? 
-                 value :
+                 //index === labels.length - 1 ? 
+                 //value :
                  null;
         },
       },

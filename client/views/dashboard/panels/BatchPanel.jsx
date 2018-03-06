@@ -147,6 +147,7 @@ export default class BatchPanel extends Component	{
                   </div>
                   <ProgBurndown
                     start={b.start}
+                    end={b.finishedAt}
                     flowData={riverFlow}
                     flowAltData={riverAltFlow}
                     itemData={b.items}

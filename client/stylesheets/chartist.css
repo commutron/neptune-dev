@@ -816,3 +816,8 @@
 .rateLinesBad .ct-series-a .ct-line, .rateLines .ct-series-a .ct-point {
   stroke: var(--alizarin);
 }
+
+.rateFill .ct-series-a .ct-area {
+  fill: var(--peterriver);
+  fill-opacity: 0.5;
+}

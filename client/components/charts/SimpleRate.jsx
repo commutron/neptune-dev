@@ -16,7 +16,12 @@ export default class SimpleRate extends Component {
     let now = this.props.live ?
               moment() :
               moment(this.props.lastDay);
-    for(let i = 0; i < this.props.dataOne.length; i++) {
+    let range = this.props.titleOne ?
+                this.props.dataOne.length :
+                this.props.titleTwo ?
+                this.props.dataTwo.length :
+                this.props.dataThree.length;
+    for(let i = 0; i < range; i++) {
       if(this.props.timeRange === 'day' || this.props.timeRange === 'hour') {
         let fqu = now.clone().subtract(i, 'hour');
         times.unshift(fqu.format('h.A'));
@@ -85,7 +90,8 @@ export default class SimpleRate extends Component {
     return(
       <span className='rateLines'>
         <div className='wide balance cap'>
-          <i className='blueT'>{this.props.titleOne}</i>
+          {this.props.titleOne &&
+            <i className='blueT'>{this.props.titleOne}</i>}
           <i className='redT'>{this.props.titleTwo}</i>
           <i className='greenT'>{this.props.titleThree}</i>
         </div>

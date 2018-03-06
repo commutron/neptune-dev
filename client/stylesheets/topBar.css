@@ -104,6 +104,10 @@ input::-webkit-calendar-picker-indicator {
   flex-grow: 2;
 }
 
+.primeNav .login-link-text {
+  color: black;
+}
+
 #dtToggle, #ikyToggle, #timeToggle, #exitToggle {
   display: none;
 }

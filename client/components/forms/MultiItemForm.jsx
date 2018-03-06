@@ -50,8 +50,8 @@ export default class MultiItemForm extends Component {
     let valid = false;
     
     if(
-      first > floor
-      &&
+      //first > floor
+      //&&
       !isNaN(count)
       &&
       count > 0
@@ -73,16 +73,14 @@ export default class MultiItemForm extends Component {
     }else{
       this.go.disabled = true;
     }
-    
-    if(first <= floor) {
-      this.message.value = 'Please begin above ' + floor;
-    }else{
-      // display quantity
-      let quantity = isNaN(count) ? 'Not a number' : 
-                     count < 1 ? 'Invalid Range' :
-                     count + ' ' + Pref.item + '(s)';
-      this.message.value = quantity;
-    }
+    first <= floor ? 
+      this.floorCheck.value = 'Please begin above ' + floor : 
+      this.floorCheck.value = '';
+    // display quantity
+    let quantity = isNaN(count) ? 'Not a number' : 
+                   count < 1 ? 'Invalid Range' :
+                   count + ' ' + Pref.item + '(s)';
+    this.message.value = quantity;
   }
 
 	addItem(e) {
@@ -112,6 +110,7 @@ export default class MultiItemForm extends Component {
         this.message.value = 'all created successfully';
       }else{
         Bert.alert(Alert.caution);
+        this.message.value = reply.message;
         console.log(reply.message);
         this.setState({work: false});
       }
@@ -204,6 +203,7 @@ export default class MultiItemForm extends Component {
             <br />
             <div className='centre'>
               <i className={iconSty}></i>
+              <output ref={(i)=> this.floorCheck = i} value='' />
               <output ref={(i)=> this.message = i} value='' />
             </div>
             <br />

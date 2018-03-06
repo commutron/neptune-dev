@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import React from 'react';
+//import AccountsUI from '/client/components/bigUi/AccountsUI.jsx';
 
 Accounts.onLogout( ()=>{
   Session.set('redirectAfterLogin', FlowRouter.current().path);
@@ -8,6 +9,8 @@ Accounts.onLogout( ()=>{
 });
 
 function brr() {
+  //let loginTab = Session.get('Meteor.loginButtons.dropdownVisible');
+  //Session.set('Meteor.loginButtons.dropdownVisible', !loginTab);
   Meteor.logout();
 }
 
@@ -19,10 +22,10 @@ const Chill = ({ name })=> {
         type='button'
         id='exitToggle'
         title='logout'
-        onClick={brr}
+        onClick={()=>brr()}
         readOnly />
         <label htmlFor='exitToggle' id='exitSwitch' className='navIcon'>
-          <i className='fa fa-user-times fa-lg' aria-hidden='true'></i>
+          <i className='fas fa-sign-out-alt fa-lg' aria-hidden='true'></i>
           <span className='icontext cap'>{shortname}</span>
         </label>
     </span>

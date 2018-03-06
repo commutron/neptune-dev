@@ -6,6 +6,9 @@ import { TraverseWrap } from '/client/layouts/DataExploreLayout.jsx';
 
 import SearchHelp from './SearchHelp.jsx';
 
+import AllOrg from './panels/AllOrg.jsx';
+import AllBatches from './panels/AllBatches.jsx';
+
 import ItemPanel from './panels/ItemPanel.jsx';
 import BatchPanel from './panels/BatchPanel.jsx';
 import WidgetPanel from './panels/WidgetPanel.jsx';
@@ -105,32 +108,43 @@ export default class DataViewOps extends Component	{
     const view = this.props.view;
     const request = this.props.request;
     const specify = this.props.specify;
-
+    
     if(!view) {
       Session.set('nowBatch', false);
       return (
-        <div className='dashMainFull'>
-          <div className='centre wide'>
-            <SearchHelp />
-            
-            <div className='centre'>
-              {allBatch.map( (entry, index)=>{
-                return(
-                  <button
-                    key={index}
-                    className='action clear'
-                    onClick={()=>FlowRouter.go('/data/batch?request=' + entry.batch)}
-                  >{entry.batch}</button>
-              )})}
-              <hr />
-              <button
-                className='action clear'
-                onClick={()=>FlowRouter.go('/data/group?request=protogen')}
-              >Protogen</button>
-            </div>
-          </div>
-        </div>
+        <AllOrg />
       );
+    }
+    
+    if(view === 'overview') {
+      Session.set('nowBatch', false);
+      if(request === 'batches') {
+        return(
+          <TraverseWrap
+			      batchData={false}
+            widgetData={false}
+            versionData={false}
+            groupData={false}
+            app={app}
+            action={false}
+          >
+            <AllBatches
+              batchData={allBatch}
+              widgetData={allWidget}
+              groupData={allGroup} 
+              app={app} />
+            <BatchesList
+              batchData={allBatch}
+              widgetData={allWidget} />
+          </TraverseWrap>
+        );
+      }else{
+        return(
+          <div className='dashMainFull'>
+            xxxxxxxx
+          </div>
+        );
+      }
     }
 
     if(request === 'protogen') {

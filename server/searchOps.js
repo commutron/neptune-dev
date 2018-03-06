@@ -156,20 +156,6 @@ Meteor.methods({
       return records;
     }
     const mainActive = active(b, sRange, eRange);
-
-    function historyPings(batches, startRange, endRange) {
-      let count = 0;
-      for(let b of batches) {
-        for(let i of b.items) {
-          let pings = i.history.filter( 
-                        x => moment(x.time)
-                              .isBetween(startRange, endRange) );
-          count += pings.length;
-        }
-      }
-      return count;
-    }
-    //const mainHistoryPings = historyPings(mainActive, sRange, eRange);
     
     const batchesNC = b.filter(
                       x => x.nonCon.find(
@@ -244,16 +230,12 @@ Meteor.methods({
     let rateEnd = rateDay.clone().endOf(frequency);
     //console.log(rateEnd.format());
     
-    let historyPingsOT = [];
     let doneItemsOT = [];
     let doneUnitsOT = [];
     let newNCOT = [];
     for(let i = 0; i < rate; i++) {
       let start = rateStart.clone().subtract(i, frequency).format();
       let end = rateEnd.clone().subtract(i, frequency).format();
-      
-      let historyCount = historyPings(mainActive, start, end);
-      historyPingsOT.unshift(historyCount);
       
       let doneCount = doneItems(mainActive, start, end);
       doneItemsOT.unshift(doneCount.items);
@@ -269,8 +251,6 @@ Meteor.methods({
       end: eRange,
       outstanding: outstanding.length,
       today: mainActive.length,
-      historyCount: historyPingsOT.reduce((x, y) => x + y),
-      historyCountOverTime: historyPingsOT,
       todayNC: batchesNC.length,
       newNC: newNCOT.reduce((x, y) => x + y),
       ncTypeCounts: ncTypeCounts,
@@ -287,14 +267,89 @@ Meteor.methods({
   },
   
   
+  ///////////////////////////////////////////////////////////////////////////////////
   
+  // History Rate
   
+  ///////////////////////////////////////////////////////////////////////////////////
   
+  /*
+  historyPings(batches, startRange, endRange) {
+    let count = 0;
+    for(let b of batches) {
+      for(let i of b.items) {
+        let pings = i.history.filter( 
+                      x => moment(x.time)
+                            .isBetween(startRange, endRange) );
+        count += pings.length;
+      }
+    }
+    return count;
+  },
+  */
   
-  
-  
-  
-  
+  historyRate(start, end, flowData, flowAltData, itemData, clientTZ) {
+    //const b = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
+    //const itemData = b ? b.items : [];
+    const flowKeys = Array.from( 
+                      flowData.filter( x => x.type !== 'first'), 
+                        x => x.key );
+    const altKeys = Array.from( 
+                      flowAltData.filter( x => x.type !== 'first'), 
+                        x => x.key );
+    const outScrap = (itms)=> { return ( 
+                                  itms.filter( 
+                                    x => x.history.filter( 
+                                      y => y.type === 'scrap' )
+                                        .length === 0 ) ) };
+    // split flows, filter scraps
+    let regItems = itemData;
+    let altItems = [];
+      
+    if(altKeys.length === 0) {
+      regItems = outScrap(regItems);
+    }else{
+      regItems = outScrap( itemData.filter( x => x.alt === false || x.alt === 'no' ) );
+      altItems = outScrap( itemData.filter( x => x.alt === 'yes' ) );
+    }
+    
+    const totalRegSteps = flowKeys.length * regItems.length;
+    const totalAltSteps = altKeys.length * altItems.length;
+    
+    let now = moment().tz(clientTZ);
+    const endDay = end !== false ? moment(end).endOf('day') : now.clone().endOf('day');
+    const startDay = moment(start);
+    const howManyDays = endDay.diff(startDay, 'day') + 1;
+    
+    function historyPings(regItems, flowKeys, totalSteps, day) {
+      let count = 0;
+      for(let ky of flowKeys) {
+        const ping = regItems.filter( 
+                      x => x.history.find( 
+                        y => y.key === ky &&
+                             y.good === true &&
+                             moment(y.time).isSameOrBefore(day) ) );
+        count += ping.length;
+      }
+      const remain = totalSteps - count;
+      return remain;
+    }
+    
+    let historyPingsOT = [];
+    let labelsOT = [];
+    for(let i = 0; i < howManyDays; i++) {
+      const day = startDay.clone().add(i, 'day');
+      
+      const historyCountR = historyPings(regItems, flowKeys, totalRegSteps, day);
+      const historyCountA = historyPings(altItems, altKeys, totalAltSteps, day);
+      
+      historyPingsOT.push( historyCountR + historyCountA );
+      labelsOT.push(day.format('MMM.D'));
+    }
+    
+    return { counts: historyPingsOT, labels: labelsOT };
+                    
+  },
   
   
   ///////////////////////////////////////////////////////////////////////////////////
