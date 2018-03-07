@@ -25,7 +25,7 @@ export default class WidgetPanel extends Component	{
         <div className='section' key={w.widget}>
         
           <div className='titleSection'>
-            <span><JumpText title={g.alias} link={g.alias} /></span>
+            <span className='up'>{g.alias}</span>
             <span className='up'>{w.widget}</span>
             <span>{w.describe}</span>
           </div>
@@ -39,7 +39,7 @@ export default class WidgetPanel extends Component	{
               wide={true}
               stick={false}>
               
-              <VersionTable widgetData={w} />
+              <VersionTable widgetData={w} app={a} />
               
               <FlowTable id={w._id} flows={w.flows} app={a} />
               

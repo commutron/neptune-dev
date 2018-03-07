@@ -16,7 +16,6 @@ const SearchHelp = ()=> (
             <li>{Pref.group}'s full name</li>
             <li>{Pref.group}'s abreviation</li>
             <li>{Pref.widget} id</li>
-            <li>all {Pref.batch} {Pref.block}s</li>
             <li>all {Pref.scrap} {Pref.item}s</li>
           </ul>
         </ul>
@@ -35,7 +34,6 @@ const SearchHelp = ()=> (
           <ul>
             <li>{Pref.btch} = {Pref.batch}</li>
             <li>{Pref.grp} = {Pref.group}</li>
-            <li>{Pref.blck} = {Pref.block}s</li>
             <li>{Pref.scrp} = {Pref.scrap}s</li>
           </ul>
         </ul>

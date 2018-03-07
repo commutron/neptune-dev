@@ -15,7 +15,7 @@ export default class FilterItems extends Component	{
     let dStyl = {
       lineHeight: '12px',
       textIndent: '3px',
-      margin: '5px 0',
+      margin: '0',
       padding: '0 5px'
     };
     

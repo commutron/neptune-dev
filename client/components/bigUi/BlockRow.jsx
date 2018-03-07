@@ -28,7 +28,7 @@ const BlockRow = ({ entry, id, lock })=> {
       </td>
       <td>
       {!lock && !solved ?
-        <BlockForm id={id} edit={dt} />
+        <BlockForm id={id} edit={dt} smIcon={true} />
       :null}
       </td>
       <td>

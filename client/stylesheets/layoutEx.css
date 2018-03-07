@@ -16,8 +16,11 @@
 .taskBarEx {
   grid-area: taskBar;
   height: 100%;
-  background-color: rgb(20,20,20);
-  border-right: 2px inset rgb(25,25,25);
+  background-color: var(--black);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  overflow: hidden;
 }
 
 .contentAreaEx {
@@ -41,6 +44,7 @@
 
 .cookieNavEx {
   grid-area: cookieNav;
+  background-color: var(--black);
 }
 
 .traverseContent {
@@ -53,6 +57,56 @@
 
 .actionBarEx {
   grid-area: actionBarEx;
+  align-self: stretch;
+  background-color: var(--black);
+}
+
+.cookieRow {
   display: flex;
-  align-items: stretch;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+.cookieCrumb {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  height: 32px;
+  overflow: hidden;
+  background-color: var(--black);
+}
+.cookie {
+  background-color: var(--black);
+  color: var(--silver);
+  min-width: 64px;
+  max-width: 256px;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0 10px;
+}
+.crumb {
+  color: var(--silverfade);
+  font-size: 40px;
+  overflow: hidden;
+}
+.cookieCrumb:hover > .cookie {
+  color: var(--clouds);
+}
+
+.taskColumn {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+}
+.taskLink {
+  background-color: var(--black);
+  color: var(--silver);
+  padding: 10px 0;
+}
+
+.taskLink:hover, .taskLink:active {
+  color: var(--clouds);
 }

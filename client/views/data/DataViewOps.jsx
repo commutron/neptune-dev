@@ -7,14 +7,14 @@ import { TraverseWrap } from '/client/layouts/DataExploreLayout.jsx';
 import SearchHelp from './SearchHelp.jsx';
 
 import AllOrg from './panels/AllOrg.jsx';
+import AllGroups from './panels/AllGroups.jsx';
 import AllBatches from './panels/AllBatches.jsx';
 
 import ItemPanel from './panels/ItemPanel.jsx';
 import BatchPanel from './panels/BatchPanel.jsx';
 import WidgetPanel from './panels/WidgetPanel.jsx';
 import GroupPanel from './panels/GroupPanel.jsx';
-//import BlockPanel from './panels/BlockPanel.jsx';
-//import ScrapPanel from './panels/ScrapPanel.jsx';
+import ScrapPanel from './panels/ScrapPanel.jsx';
 
 import BatchesList from './lists/BatchesList.jsx';
 import ItemsList from './lists/ItemsList.jsx';
@@ -118,7 +118,28 @@ export default class DataViewOps extends Component	{
     
     if(view === 'overview') {
       Session.set('nowBatch', false);
-      if(request === 'batches') {
+      if(request === 'groups') {
+        return(
+          <TraverseWrap
+			      batchData={false}
+            widgetData={false}
+            versionData={false}
+            groupData={false}
+            app={app}
+            action={false}
+          >
+            <AllGroups
+              batchData={allBatch}
+              widgetData={allWidget}
+              groupData={allGroup} 
+              app={app} />
+            <GroupsList
+              groupData={allGroup}
+              batchData={allBatch}
+              widgetData={allWidget} />
+          </TraverseWrap>
+        );
+      }else if(request === 'batches') {
         return(
           <TraverseWrap
 			      batchData={false}
@@ -138,54 +159,64 @@ export default class DataViewOps extends Component	{
               widgetData={allWidget} />
           </TraverseWrap>
         );
+      }else if(request === 'scraps') {
+        return(
+          <TraverseWrap
+			      batchData={false}
+            widgetData={false}
+            versionData={false}
+            groupData={false}
+            app={app}
+            action={false}
+          >
+            <ScrapPanel batchData={allBatch} />
+            <div></div>
+          </TraverseWrap>
+        );
       }else{
         return(
           <div className='dashMainFull'>
-            xxxxxxxx
+            <div className='centre'>
+              <p>remember the cant</p>
+            </div>
           </div>
         );
       }
     }
-
-    if(request === 'protogen') {
-      Session.set('nowBatch', 'julie');
-      return (
-        <div className='dashMainFull'>
-          <div className='centre'>
-            <p>remember the cant</p>
-          </div>
-        </div>
-      );
-    }
     
-    if(view === 'allgroup') {
-      return (
-        <TraverseWrap action='newGroup'>
-          <GroupsList groupData={allGroup} batchData={allBatch} widgetData={allWidget} />
-        </TraverseWrap>
-      );
+  // Item
+		if(view === 'batch' && specify) {
+      if(hotBatch) {
+        let item = this.itemData(hotBatch.items, specify);
+        let widget = this.linkedWidget(hotBatch.widgetId);
+        let version = this.versionData(widget.versions, hotBatch.versionKey);
+        let group = this.linkedGroup(widget.groupId);
+        return (
+          <TraverseWrap
+            batchData={hotBatch}
+            itemData={item}
+            widgetData={widget}
+            versionData={version}
+            groupData={group}
+            app={app}
+            action='item'
+          >
+            <ItemPanel
+              batchData={hotBatch}
+              itemData={item}
+              widgetData={widget}
+              versionData={version}
+              groupData={group}
+              app={app}
+              listTitle={true} />
+            <ItemsList
+              batchData={hotBatch}
+              widgetData={widget}
+              tide={orb} />
+          </TraverseWrap>
+        );
+      }
     }
-    
-    /*
-    if(orb === Pref.block || orb === Pref.blck) {
-      Session.set('now', Pref.block);
-      Session.set('nowBatch', false);
-      return (
-        <div className='dashMainFull'>
-          <BlockPanel batchData={allBatch} />
-        </div>
-      );
-    }
-    if(orb === Pref.scrap || orb === Pref.scrp) {
-      Session.set('now', Pref.scrap);
-      Session.set('nowBatch', false);
-      return (
-        <div className='dashMainFull'>
-          <ScrapPanel batchData={allBatch} />
-        </div>
-      );
-    }
-    */
 
   // Batch
     if(view === 'batch') {
@@ -216,48 +247,7 @@ export default class DataViewOps extends Component	{
         );
       }
     }
-	  
-	  
-	  /*
-  // Item
-    //// barcode numbers are short durring dev but they will have to longer in production
-    ////// this will also need to be changed???? for alphnumeric barcodes such as with TGS
-		if(!isNaN(orb) && orb.length > 5 && orb.length <= 10) {
-		  //let lookup = this.batchByItem();
-      if(hotBatch) {
-        let item = this.itemData(hotBatch.items, orb);
-        let widget = this.linkedWidget(hotBatch.widgetId);
-        let version = this.versionData(widget.versions, hotBatch.versionKey);
-        let group = this.linkedGroup(widget.groupId);
-        return (
-          <TraverseWrap
-            batchData={hotBatch}
-            itemData={item}
-            widgetData={widget}
-            versionData={version}
-            groupData={group}
-            app={app}
-            action='item'
-          >
-            <ItemsList
-              batchData={hotBatch}
-              widgetData={widget}
-              tide={orb} />
-            <div>
-              <ItemPanel
-                batchData={hotBatch}
-                itemData={item}
-                widgetData={widget}
-                versionData={version}
-                groupData={group}
-                app={app}
-                listTitle={true} />
-            </div>
-          </TraverseWrap>
-        );
-      }
-    }
-*/
+
   // Group
     if(view === 'group') {
       const group = this.getGroup(request);
@@ -271,7 +261,7 @@ export default class DataViewOps extends Component	{
           <TraverseWrap
             batchData={false}
             itemData={false}
-            widgetData={widgets}
+            widgetData={false}
             versionData={false}
             groupData={group}
             app={app}
@@ -286,7 +276,6 @@ export default class DataViewOps extends Component	{
         );
       }
     }
-
 
   // Widget
     if(view === 'widget') {
@@ -319,21 +308,6 @@ export default class DataViewOps extends Component	{
         );
       }
     }
-    /*
-    // number that looks like a barcode but such a barcode does not exist
-    if(!isNaN(orb) && orb.length > 5 && orb.length <= 10) {
-	    Session.set('nowBatch', orb);
-	    return(
-	      <div className='dashMainFull'>
-          <div className='centre wide space'>
-            <p className='big centerText'>{orb} {Pref.noSerial}</p>
-            <hr />
-            <SearchHelp />
-          </div>
-        </div>
-	      );
-	  }
-	  */
     
     Session.set('nowBatch', false);
 		return (

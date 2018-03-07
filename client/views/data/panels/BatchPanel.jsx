@@ -74,8 +74,8 @@ export default class BatchPanel extends Component	{
             
           <div className='titleSection'>
             <span>{b.batch}</span>
-            <span><JumpText title={g.alias} link={g.alias} /></span>
-            <span><JumpText title={w.widget} link={w.widget} /></span>
+            <span className='up'>{g.alias}</span>
+            <span className='up'>{w.widget}</span>
             <span><i className='clean'>v.</i>{v.version}</span>
             <span>
               { b.active ? 
@@ -100,7 +100,7 @@ export default class BatchPanel extends Component	{
             wide={true}
             stick={false}>
             
-            <div className='split space'>
+            <div className='balance space'>
               <div>
                 <TagsModule
                   id={b._id}
@@ -111,14 +111,12 @@ export default class BatchPanel extends Component	{
                 <NoteLine entry={b.notes} id={b._id} widgetKey={false}  />
               </div>
               
-              <span className='breath' />
-              
               <BlockList id={b._id} data={b.blocks} lock={done} />
               
             </div>
           
             <div>
-              <div className='split space'>
+              <div className='balance space'>
                 <div>
                   <div>
                     <p className='capFL'>{Pref.start}: {moment(b.start).calendar()}</p>

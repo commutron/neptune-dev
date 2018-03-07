@@ -14,7 +14,6 @@ class DashView extends Component	{
        !this.props.coldReady || 
        !this.props.hotReady || 
        !this.props.app ||
-       !this.props.allBlock ||
        !this.props.allScrap) {
       return (
         <Spin />
@@ -57,7 +56,6 @@ export default withTracker( () => {
 
   let hotSub = Meteor.subscribe('hotData', false);
   let hotBatch = false;
-  let blockSub = Meteor.subscribe('blockData', false);
   let scrapSub = Meteor.subscribe('scrapData', false);
   
   if( coldSub ) 
@@ -138,7 +136,6 @@ export default withTracker( () => {
       allWidget: WidgetDB.find( {}, { sort: { widget: 1 } } ).fetch(),
       allBatch: BatchDB.find( {}, { sort: { batch: -1 } } ).fetch(),
       hotBatch: hotBatch,
-      allBlock: blockSub.ready(),
       allScrap: scrapSub.ready()
     };
   }

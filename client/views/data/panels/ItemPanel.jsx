@@ -55,9 +55,10 @@ export default class ItemPanel extends Component	{
         <div className='section' key={i.serial}>
         
           <div className='titleSection'>
-            <span><JumpText title={b.batch} link={b.batch} /></span>
-            <span><JumpText title={g.alias} link={g.alias} /></span>
-            <span><JumpText title={w.widget} link={w.widget} /></span>
+            <span>{i.serial}</span>
+            <span>{b.batch}</span>
+            <span className='up'>{g.alias}</span>
+            <span className='up'>{w.widget}</span>
             <span><i className='clean'>v.</i>{v.version}</span>
             <span>
               { !start ?
@@ -73,7 +74,6 @@ export default class ItemPanel extends Component	{
         
           <div className='space'>
             <h1>
-              {i.serial}
               <span className='rAlign'>
                 units: {i.units}
               </span>

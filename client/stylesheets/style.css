@@ -462,6 +462,7 @@
 }
 .inlineForm > input[type='text'] {
   width: 10rem;
+  min-width: 150px;
 }
 
 .fullForm {
@@ -822,7 +823,6 @@
   border-color: black;
   border-color: rgba(0,0,0,0.2);
 }
-
 
 /* custom Bert alerts */
 .bert-alert {

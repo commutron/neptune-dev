@@ -33,9 +33,9 @@ const BlockGroup = ({ batchData })=> {
       <tbody>
         <tr>
           <th className='up'>{b.batch}</th>
-        </tr>
-        <tr>
-          <td rowSpan={b.blocks.length + 1} className='lastTd'></td>
+          </tr>
+          <tr>
+            <td rowSpan={b.blocks.length + 1} className='lastTd'></td>
         </tr>
         {sh.map( (entry, index)=>{
           return (

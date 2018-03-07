@@ -50,6 +50,7 @@ export default class BlockForm extends Component {
         title={title}
         color='yellowT'
         icon='fa-exclamation-triangle'
+        smIcon={this.props.smIcon}
         lock={!Roles.userIsInRole(Meteor.userId(), 'run') || this.props.lock}
       >
         <div>
@@ -88,28 +89,27 @@ export class SolveBlock extends Component {
     e.preventDefault();
 		const id = this.props.id;
 		const blKey = this.props.blKey;
-    const act = this.slv.value.trim().toLowerCase();
+    const act = prompt('Solution', '');
+    !act ? null : act.trim();
+    if(!act || act === '') {
+      null;
+    }else{
       Meteor.call('solveBlock', id, blKey, act, (error, reply)=> {
         if(error)
           console.log(error);
         reply ? Bert.alert(Alert.success) : Bert.alert(Alert.warning); 
 			});
+    }
   }
   
   render() {
     return(
-      <form className='hiddenInput inlineForm' onSubmit={this.addSolve.bind(this)}>
-        <input
-          ref={(i)=> this.slv = i}
-          rows='2'
-          disabled={false} />
-        <br />
-        <button
-          type='submit'
-          ref={(i)=> this.go = i}
-          className='smallAction clearGreen'
-          disabled={this.props.lock}>Solve</button>
-      </form>
+      <button
+        type='submit'
+        ref={(i)=> this.go = i}
+        className='smallAction clearGreen'
+        onClick={this.addSolve.bind(this)}
+        disabled={this.props.lock}>Solve</button>
     );
   }
 }
@@ -129,7 +129,7 @@ export class RemoveBlock extends Component {
   render() {
     return(
       <button
-        className='miniAction clearRed'
+        className='smallAction clearRed'
         onClick={this.remove.bind(this)}
         disabled={this.props.lock}>Remove</button>
     );

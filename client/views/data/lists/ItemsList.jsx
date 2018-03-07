@@ -3,7 +3,7 @@ import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 
-import JumpButton from '../../../components/tinyUi/JumpButton.jsx';
+import LeapButton from '/client/components/tinyUi/LeapButton.jsx';
 import FilterItems from '../../../components/bigUi/FilterItems.jsx';
 
 export default class ItemsList extends Component	{
@@ -107,27 +107,26 @@ export default class ItemsList extends Component	{
     return (
       <AnimateWrap type='cardTrans'>
         <div className='' key={1}>
-        
-          <FilterItems
-            title={b.batch}
-            total={showList.length}
-            advancedTitle='Step'
-            advancedList={steps}
-            onClick={e => this.setFilter(e)}
-            onChange={e => this.setAdvancedFilter(e)} />
-        
+          <div className='stickyBar'>
+            <FilterItems
+              title={b.batch}
+              total={showList.length}
+              advancedTitle='Step'
+              advancedList={steps}
+              onClick={e => this.setFilter(e)}
+              onChange={e => this.setAdvancedFilter(e)} />
+          </div>
           {showList.map( (entry, index)=> {
             let style = entry.history.length === 0 ? 'jumpBar' :
                         entry.finishedAt === false ? 'jumpBar activeMark' : 
                         scrap.includes(entry.serial) ? 'jumpBar ngMark' : 'jumpBar gMark';
-            let inStyl = entry.serial === Session.get('now');
               return (
-                <JumpButton
+                <LeapButton
                   key={index} 
                   title={entry.serial} 
                   sub='' 
                   sty={style}
-                  inStyle={inStyl}
+                  address={'/data/batch?request=' + b.batch + '&specify=' + entry.serial}
                 />
               );
           })}

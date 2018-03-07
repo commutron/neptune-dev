@@ -14,7 +14,6 @@ import ItemPanel from './panels/ItemPanel.jsx';
 import BatchPanel from './panels/BatchPanel.jsx';
 import WidgetPanel from './panels/WidgetPanel.jsx';
 import GroupPanel from './panels/GroupPanel.jsx';
-import BlockPanel from './panels/BlockPanel.jsx';
 import ScrapPanel from './panels/ScrapPanel.jsx';
 
 import BatchesList from './lists/BatchesList.jsx';
@@ -131,15 +130,6 @@ export default class FindOps extends Component	{
       );
     }
     
-    if(orb === Pref.block || orb === Pref.blck) {
-      Session.set('now', Pref.block);
-      Session.set('nowBatch', false);
-      return (
-        <div className='dashMainFull'>
-          <BlockPanel batchData={allBatch} />
-        </div>
-      );
-    }
     if(orb === Pref.scrap || orb === Pref.scrp) {
       Session.set('now', Pref.scrap);
       Session.set('nowBatch', false);
@@ -149,6 +139,7 @@ export default class FindOps extends Component	{
         </div>
       );
     }
+    
     if(orb === Pref.docs || orb === 'docs' || orb === 'd') {
       Session.set('now', Pref.docs);
       Session.set('nowBatch', false);

@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
-import Pref from '/client/global/pref.js';
+//import Pref from '/client/global/pref.js';
 
 import TopBar from './TopBar.jsx';
+import TaskBar from '/client/components/bigUi/TaskBar.jsx';
 import ActionBar from '/client/components/bigUi/ActionBar.jsx';
 import CookieBar from '/client/components/bigUi/CookieBar.jsx';
 
@@ -18,10 +19,7 @@ export const ExploreLayout = ({content, link}) => {
         <TopBar link={link} />
       </div>
       <aside className='taskBarEx'>
-        <button
-          className='action clear'
-          onClick={()=>FlowRouter.go('/data/overview?request=batches')}
-        >{Pref.batch}</button>
+        <TaskBar />
       </aside>
       <section className='contentAreaEx'>
         {content}
@@ -41,7 +39,7 @@ export class TraverseWrap extends Component	{
     
     return (
       <div className='traverseContainer'>
-        <div className='cookieNav'>
+        <div className='cookieNavEx'>
           <CookieBar
             batchData={this.props.batchData}
             itemData={this.props.itemData}

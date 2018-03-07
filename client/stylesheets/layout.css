@@ -106,7 +106,6 @@ main {
   min-height: 100vh;
 }
 
-
 .basicContainer {
   grid-template-rows: 60px calc(100vh - 60px);
   grid-template-areas: 

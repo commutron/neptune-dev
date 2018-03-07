@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 
-import JumpButton from '../../../components/tinyUi/JumpButton.jsx';
+import LeapButton from '/client/components/tinyUi/LeapButton.jsx';
 import FilterActive from '../../../components/bigUi/FilterActive.jsx';
 
 export default class BatchesList extends Component	{
@@ -42,16 +42,17 @@ export default class BatchesList extends Component	{
             
           {showList.map( (entry, index)=> {
             const style = entry.finishedAt === false ? 
-                          'jumpBar activeMark' : 
+                          'jumpBar activeMark' :
                           'jumpBar gMark';
             const subW = w.find( x => x._id === entry.widgetId);
             const subV = subW.versions.find( x => x.versionKey === entry.versionKey);
               return (
-                <JumpButton
+                <LeapButton
                   key={index}
                   title={entry.batch} 
                   sub={<i><i className='up'>{subW.widget}</i> v.{subV.version}</i>}
                   sty={style}
+                  address={'/data/batch?request=' + entry.batch}
                 />
           )})}
   			</div>

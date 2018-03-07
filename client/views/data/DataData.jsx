@@ -12,7 +12,8 @@ class ExploreView extends Component	{
     
     if(
       !this.props.coldReady || 
-      !this.props.hotReady || 
+      !this.props.hotReady ||
+      !this.props.allScrap ||
       !this.props.app 
     ) {
       return (
@@ -51,8 +52,35 @@ export default withTracker( (props) => {
   let hotSubEx = Meteor.subscribe('hotDataEx', batchRequest);
   let hotBatch = BatchDB.findOne( { batch: batchRequest } );
   
+  let scrapSub = Meteor.subscribe('scrapData', false);
+  props.view === 'overview' && props.request === 'scraps' ?
+    scrapSub = Meteor.subscribe( 'scrapData', true )
+  :null;
+  
+  if( !login || !active ) {
+    return {
+      coldReady: false,
+      hotReady: false
+    };
+  }else{
+    return {
+      coldReady: coldSub.ready(),
+      hotReady: hotSubEx.ready(),
+      allScrap: scrapSub.ready(),
+      org: org,
+      users: Meteor.users.find( {}, { sort: { username: 1 } } ).fetch(),
+      app: AppDB.findOne({org: org}),
+      allGroup: GroupDB.find( {}, { sort: { group: 1 } } ).fetch(),
+      allWidget: WidgetDB.find( {}, { sort: { widget: 1 } } ).fetch(),
+      allBatch: BatchDB.find( {}, { sort: { batch: -1 } } ).fetch(),
+      hotBatch: hotBatch,
+      view: props.view,
+      request: props.request,
+      specify: props.specify
+    };
+  }
+})(ExploreView);
 
-      
     /*
     // Out of context serial search
     if( !isNaN(orb) && orb.length >= 9 && orb.length <= 10 ) {
@@ -70,28 +98,3 @@ export default withTracker( (props) => {
       }
     }
     */
-  
-  
-  if( !login || !active ) {
-    return {
-      coldReady: false,
-      hotReady: false
-    };
-  }else{
-    return {
-      coldReady: coldSub.ready(),
-      hotReady: hotSubEx.ready(),
-      //orb: orb,
-      org: org,
-      users: Meteor.users.find( {}, { sort: { username: 1 } } ).fetch(),
-      app: AppDB.findOne({org: org}),
-      allGroup: GroupDB.find( {}, { sort: { group: 1 } } ).fetch(),
-      allWidget: WidgetDB.find( {}, { sort: { widget: 1 } } ).fetch(),
-      allBatch: BatchDB.find( {}, { sort: { batch: -1 } } ).fetch(),
-      hotBatch: hotBatch,
-      view: props.view,
-      request: props.request,
-      specify: props.specify
-    };
-  }
-})(ExploreView);

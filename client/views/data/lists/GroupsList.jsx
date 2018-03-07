@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 
-import JumpButton from '../../../components/tinyUi/JumpButton.jsx';
+import LeapButton from '/client/components/tinyUi/LeapButton.jsx';
 import FilterActive from '../../../components/bigUi/FilterActive.jsx';
 
 export default class GroupsList extends Component	{
@@ -64,11 +64,12 @@ export default class GroupsList extends Component	{
           { showList.map( (entry, index)=> {
             let ac = a.includes(entry._id) ? 'jumpBar activeMark' : 'jumpBar';
             return (
-              <JumpButton
+              <LeapButton
                 key={index}
                 title={entry.group}
                 sub=''
                 sty={ac}
+                address={'/data/group?request=' + entry.group}
               />
             )})}
   			</div>

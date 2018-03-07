@@ -59,14 +59,14 @@ export default class ProgBurndown extends Component {
       axisX: {
         labelInterpolationFnc: function(value, index) {
           let scale = labels.length < 7 ?
-                      2 :
+                      1 :
                       labels.length < 30 ?
                       4 :
                       labels.length < 60 ?
                       8 :
                       labels.length < 90 ?
-                      16 :
-                      30;
+                      12 :
+                      24;
           return index % scale === 0 ? value : null;
         },
       },

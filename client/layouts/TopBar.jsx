@@ -55,12 +55,12 @@ const TopBar = ({ ready, user, active, org, app, link })=> {
         <RoleCheck role={'nightly'}>
           <span>
             <a href='/production' className={ link === 'prod' ? 'whiteT' : '' }>
-              <i className="fa fa-flask fa-lg" aria-hidden='true'></i>
+              <i className="fas fa-paper-plane fa-lg" aria-hidden='true'></i>
               <span className='icontext'>Production</span>
             </a>
             <a href='/data' className={ link === 'data' ? 'whiteT' : '' }>
-              <i className="icon fa fa-flask fa-lg" aria-hidden='true'></i>
-              <span className='icontext'>Data</span>
+              <i className="fas fa-binoculars fa-lg" aria-hidden='true'></i>
+              <span className='icontext'>Data Explore</span>
             </a>
             <a href='/scan' className={ link === 'scan' ? 'whiteT' : '' }>
               <i className="icon fa fa-flask fa-lg" aria-hidden='true'></i>

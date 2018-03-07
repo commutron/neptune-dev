@@ -8,10 +8,7 @@ const AllOrg = ({  }) => {
     <div className='dashMainFull'>
       <div className='centre wide'>
         
-        <button
-          className='action clear'
-          onClick={()=>FlowRouter.go('/data/group?request=protogen')}
-        >Protogen</button>
+        <h1>All Org</h1>
         
       </div>
     </div>
