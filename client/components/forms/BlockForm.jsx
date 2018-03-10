@@ -86,7 +86,6 @@ export default class BlockForm extends Component {
 export class SolveBlock extends Component {
   
   addSolve(e) {
-    e.preventDefault();
 		const id = this.props.id;
 		const blKey = this.props.blKey;
     const act = prompt('Solution', '');
@@ -105,11 +104,17 @@ export class SolveBlock extends Component {
   render() {
     return(
       <button
-        type='submit'
+        type='button'
+        title='solve this block'
+        className='transparent'
         ref={(i)=> this.go = i}
-        className='smallAction clearGreen'
         onClick={this.addSolve.bind(this)}
-        disabled={this.props.lock}>Solve</button>
+        disabled={this.props.lock}>
+        <label className='navIcon actionIconWrap'>
+          <i className='fas fa-check-circle greenT'></i>
+          <span className='actionIconText greenT'>Solve</span>
+        </label>
+      </button>
     );
   }
 }
@@ -129,9 +134,16 @@ export class RemoveBlock extends Component {
   render() {
     return(
       <button
-        className='smallAction clearRed'
+        type='button'
+        title='remove this block'
+        className='transparent'
         onClick={this.remove.bind(this)}
-        disabled={this.props.lock}>Remove</button>
+        disabled={this.props.lock}>
+        <label className='navIcon actionIconWrap'>
+          <i className='fas fa-trash redT'></i>
+          <span className='actionIconText redT'>Remove</span>
+        </label>
+      </button>
     );
   }
 }

@@ -40,13 +40,13 @@ export default class WidgetsList extends Component	{
     return (
       <AnimateWrap type='cardTrans'>
         <div className='' key={1}>
-        
-          <FilterActive
-            title={g.alias}
-            done='Inactive'
-            total={showList.length}
-            onClick={e => this.setFilter(e)} />
-            
+          <div className='stickyBar'>
+            <FilterActive
+              title={g.alias}
+              done='Inactive'
+              total={showList.length}
+              onClick={e => this.setFilter(e)} />
+          </div>
           {w.length < 1 ? <p>no {Pref.widget}s created</p> : null}
             { showList.map( (entry, index)=> {
             let ac = a.includes(entry._id) ? 'jumpBar activeMark' : 'jumpBar';

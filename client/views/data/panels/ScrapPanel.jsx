@@ -2,14 +2,34 @@ import React, {Component} from 'react';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
 
-import ScrapTable from '../../../components/bigUi/ScrapTable.jsx';
+import { CalcSpin } from '/client/components/uUi/Spin.jsx';
+import ScrapTable from '/client/components/bigUi/ScrapTable.jsx';
 
-//requires batchData
 export default class ScrapPanel extends Component	{
+  
+  constructor() {
+    super();
+    this.state = {
+      scraps: false,
+    };
+  }
+  
+  getScraps() {
+    Meteor.call('scrapItems', (error, reply)=> {
+      error ? console.log(error) : null;
+      this.setState({ scraps: reply });
+    });
+  }
 
   render() {
-
-    let b = this.props.batchData;
+    
+    const scraps = this.state.scraps;
+    
+    if(!scraps) {
+      return(
+        <CalcSpin />
+      );
+    }
 
     return (
       <AnimateWrap type='cardTrans'>
@@ -18,7 +38,7 @@ export default class ScrapPanel extends Component	{
             <h1 className='cap'>{Pref.scrap} {Pref.item}s</h1>
             <hr />
   
-            <ScrapTable batchData={b} />
+            <ScrapTable batchData={scraps} />
   
   		    <br />
           <hr />
@@ -27,5 +47,8 @@ export default class ScrapPanel extends Component	{
         </div>
       </AnimateWrap>
     );
+  }
+  componentDidMount() {
+    this.getScraps();
   }
 }

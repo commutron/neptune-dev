@@ -1,18 +1,17 @@
 import React, {Component} from 'react';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
-import moment from 'moment';
+//import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
 import CreateTag from '/client/components/uUi/CreateTag.jsx';
-import Tabs from '../../../components/smallUi/Tabs.jsx';
+import Tabs from '/client/components/smallUi/Tabs.jsx';
 
-import JumpText from '../../../components/tinyUi/JumpText.jsx';
 import FlowTable from '../../../components/tables/FlowTable.jsx';
 import VersionTable from '../../../components/tables/VersionTable.jsx';
 import NonConRate from '../../../components/charts/NonConRate.jsx';
 
 export default class WidgetPanel extends Component	{
-
+  
   render() {
 
     const g = this.props.groupData;

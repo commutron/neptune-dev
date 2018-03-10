@@ -25,7 +25,7 @@ export default class Model extends Component	{
 
   render() {
     
-    let iSize = this.props.smIcon ? ' fa-1x ' : ' fa-2x ';
+    let iSize = this.props.smIcon ? ' fa-1x ' : ' fa-lg ';
     
     return (
       <span>

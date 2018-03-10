@@ -93,6 +93,10 @@ main {
   flex-grow: 2
 }
 
+.centreSelf {
+  align-self: center;
+}
+
 /* ============================================= */
 
 .basicContainer, .dashContainer {
@@ -263,7 +267,7 @@ main {
 .titleSection > span {
   display: table-cell;
   width: auto;
-  font-size: 2rem;
+  font-size: 1.75rem;
   font-style: normal;
   vertical-align: bottom;
   border-right: 1px solid rgb(255,255,255);
@@ -277,13 +281,12 @@ main {
 }
 @media screen and (max-width: 1200px){
   .titleSection span, .titleSection button {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
     padding: 0.5vh 1.25vw 0 1.25vw;
   }
 }
 @media screen and (max-width: 900px){
   .titleSection span, .titleSection button {
-    font-size: 1.5rem;
     padding: 0.25vh 1vw 0 1vw;
   }
 }
@@ -393,6 +396,9 @@ main {
 .centreText {
   text-align: center;
 }
+.rightText {
+  text-align: right;
+}
 
 .middle {
   display: flex;
@@ -477,10 +483,6 @@ main {
 
 .wrap {
   white-space: normal;
-}
-
-.break {
-  word-wrap: break-word;
 }
 
 .popTbody > tr:first-child > td { 
@@ -607,6 +609,9 @@ main {
   width: 80px;
 }
 
+.max1000 {
+  max-width: 1000px;
+}
 .max750 {
   max-width: 750px;
 }
@@ -634,4 +639,16 @@ main {
 }
 .min200 {
   min-width: 200px;
+}
+.flxGrow {
+  flex-grow: 2;
+}
+.flxShrink {
+  flex-shrink: 1;
+}
+.flxBiasZero {
+  flex-basis: 0;
+}
+.flxBiasAuto {
+  flex-basis: auto;
 }

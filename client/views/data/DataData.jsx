@@ -13,7 +13,7 @@ class ExploreView extends Component	{
     if(
       !this.props.coldReady || 
       !this.props.hotReady ||
-      !this.props.allScrap ||
+      //!this.props.allScrap ||
       !this.props.app 
     ) {
       return (
@@ -51,12 +51,12 @@ export default withTracker( (props) => {
   const batchRequest = props.view === 'batch' ? props.request : false;
   let hotSubEx = Meteor.subscribe('hotDataEx', batchRequest);
   let hotBatch = BatchDB.findOne( { batch: batchRequest } );
-  
+  /*
   let scrapSub = Meteor.subscribe('scrapData', false);
   props.view === 'overview' && props.request === 'scraps' ?
     scrapSub = Meteor.subscribe( 'scrapData', true )
   :null;
-  
+  */
   if( !login || !active ) {
     return {
       coldReady: false,
@@ -66,7 +66,7 @@ export default withTracker( (props) => {
     return {
       coldReady: coldSub.ready(),
       hotReady: hotSubEx.ready(),
-      allScrap: scrapSub.ready(),
+      //allScrap: scrapSub.ready(),
       org: org,
       users: Meteor.users.find( {}, { sort: { username: 1 } } ).fetch(),
       app: AppDB.findOne({org: org}),

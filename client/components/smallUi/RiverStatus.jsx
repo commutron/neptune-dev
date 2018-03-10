@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
                     
 const RiverStatus = ({ items, river, riverTitle, riverAlt, riverAltTitle })=> (
-  <div className='mockTable min300 max400'>
+  <div className='mockTable'>
     <div className='mockTableGroup cap'>
     {items === 0 ?
       <div className='mockTableRow'>

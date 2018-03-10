@@ -10,7 +10,7 @@ import CookieBar from '/client/components/bigUi/CookieBar.jsx';
 export const ExploreLayout = ({content, link}) => {
   let w = window.innerWidth;
   let h = window.innerHeight;
-  w < 1000 || h < 500 ? 
+  w < 500 || h < 500 ? 
   alert('Uh O! Your window or display is too small, this page is not going to look good')
   : null;
   return(
@@ -24,7 +24,6 @@ export const ExploreLayout = ({content, link}) => {
       <section className='contentAreaEx'>
         {content}
       </section>
-      <div className='basicFooter'></div>
     </div>
   );
 };

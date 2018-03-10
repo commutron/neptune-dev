@@ -10,16 +10,21 @@ const CookieBar = ({ groupData, widgetData, versionData, batchData, itemData, ac
           <button 
             className='cookie up'
             onClick={()=>FlowRouter.go('/data/group?request=' + groupData.alias)}>
-            {groupData.alias}
+            {groupData.alias.length < 16 ? 
+              groupData.alias :
+              groupData.alias.substring(0, 15) + '...'}
           </button>
         </span>}
       {widgetData && 
         <span className='cookieCrumb'>
           <span className='crumb'><i className='fas fa-chevron-right fa-lg'></i></span>
           <button 
-            className='cookie cap'
+            className='cookie up'
             onClick={()=>FlowRouter.go('/data/widget?request=' + widgetData.widget)}>
-            {widgetData.widget}
+            {widgetData.widget.length < 16 ? 
+              widgetData.widget :
+              widgetData.widget.substring(0, 15) + '...'}
+            {versionData && <i className='clean'> v.{versionData.version}</i>}
           </button>
         </span>}
       {/*versionData && 

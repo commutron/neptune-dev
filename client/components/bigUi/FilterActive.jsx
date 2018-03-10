@@ -11,8 +11,8 @@ export default class FilterActive extends Component	{
     let dStyl = {
       lineHeight: '12px',
       textIndent: '3px',
-      margin: '5px 0',
-      padding: '0 10px'
+      margin: '0',
+      padding: '0 5px'
     };
     
     return(

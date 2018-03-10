@@ -142,7 +142,6 @@ fieldset {
   border: 1px dashed;
   word-break: keep-all;
   overflow: hidden;
-  max-width: 400px;
 }
 
 label {

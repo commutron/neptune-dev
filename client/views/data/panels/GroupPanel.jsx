@@ -24,7 +24,7 @@ export default class GroupPanel extends Component	{
           <div className='space edit'>
           
             <p className='capFL'>
-              {Pref.instruct} index: <a className='clean' href={g.wiki} target='_blank'>{g.wiki}</a>
+              {Pref.instruct} index: <a className='clean wordBr' href={g.wiki} target='_blank'>{g.wiki}</a>
             </p>
             
             <br />

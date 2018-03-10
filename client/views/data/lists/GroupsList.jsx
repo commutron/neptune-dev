@@ -54,13 +54,13 @@ export default class GroupsList extends Component	{
     return (
       <AnimateWrap type='cardTrans'>
         <div className='' key={1}>
-        
-          <FilterActive
-            title={g.alias}
-            done='Inactive'
-            total={showList.length}
-            onClick={e => this.setFilter(e)} />
-            
+          <div className='stickyBar'>
+            <FilterActive
+              title={g.alias}
+              done='Inactive'
+              total={showList.length}
+              onClick={e => this.setFilter(e)} />
+          </div>  
           { showList.map( (entry, index)=> {
             let ac = a.includes(entry._id) ? 'jumpBar activeMark' : 'jumpBar';
             return (

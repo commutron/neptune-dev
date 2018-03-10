@@ -72,7 +72,7 @@ export default class ProgBurndown extends Component {
       },
       chartPadding: {
         top: 20,
-        right: 45,
+        right: 0,
         bottom: 0,
         left: 0
       },

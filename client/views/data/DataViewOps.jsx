@@ -126,7 +126,7 @@ export default class DataViewOps extends Component	{
             versionData={false}
             groupData={false}
             app={app}
-            action={false}
+            action='newGroup'
           >
             <AllGroups
               batchData={allBatch}
@@ -161,17 +161,7 @@ export default class DataViewOps extends Component	{
         );
       }else if(request === 'scraps') {
         return(
-          <TraverseWrap
-			      batchData={false}
-            widgetData={false}
-            versionData={false}
-            groupData={false}
-            app={app}
-            action={false}
-          >
-            <ScrapPanel batchData={allBatch} />
-            <div></div>
-          </TraverseWrap>
+          <ScrapPanel batchData={allBatch} />
         );
       }else{
         return(

@@ -411,6 +411,40 @@ Meteor.methods({
   },
   
   
+   ///////////////////////////////////////////////////////////////////////////////////
+  
+  // Scap Items
+  
+  ///////////////////////////////////////////////////////////////////////////////////
+  
+  scrapItems() {
+    const batchWithScrap = BatchDB.find({
+                            orgKey: Meteor.user().orgKey,
+                            'items.history.type': 'scrap'
+                          }).fetch();
+    let compactData = [];
+    for(let b of batchWithScrap) {
+      const w = WidgetDB.findOne({_id: b.widgetId});
+      const g = GroupDB.findOne({_id: w.groupId});
+      const items = b.items.filter( 
+                      x => x.history.find( 
+                        y => y.type === 'scrap' ) );
+      compactData.push({
+        batch: b.batch,
+        widget: w.widget,
+        group: g.alias,
+        items: items
+      });
+    }
+    return compactData;
+  },
+  
+  
+   ///////////////////////////////////////////////////////////////////////////////////
+  
+  // Component Search
+  
+  ///////////////////////////////////////////////////////////////////////////////////
   
   componentFind(num, batchInfo, unitInfo) {
     const widgets = WidgetDB.find({'versions.assembly.component': num}).fetch();

@@ -43,12 +43,15 @@ export default class NonConPie extends Component {
     };
     
     let options = {
-      width: 250,
-      height: 250,
-      showLabel: false,
-      chartPadding: 25,
+      width: 300,
+      height: 300,
+      showLabel: true,
+      labelOffset: 30,
+      labelDirection: 'explode',
+      ignoreEmptyValues: true,
+      chartPadding: 60,
       donut: true,
-      donutWidth: 60,
+      donutWidth: 40,
       startAngle: 0,
       //total: this.props.nonCons.length,
       plugins: [
@@ -65,26 +68,10 @@ export default class NonConPie extends Component {
         }),
       ]
     };
-    
-    let pnd = { color: '#e74c3c' };
-    let fxd = { color: '#e67e22' };
-    let inp = { color: '#2ecc71'};
-    let snz = { color: '#f39c12'};
-    let skp = { color: '#f1c40f'};
 
     return (
-      <div className='inlineContain nonConPieColors'>
-        <p className='centreText'>
-          <i>Repair Status</i><br />
-          <i style={pnd}>Pending </i>
-          <i style={fxd}> Fixed </i>
-          <i style={inp}> Inspected </i>
-          <i style={snz}> Snoozed </i>
-          <i style={skp}> Skipped </i>
-        </p>
-        <div className='centre'>
-          <ChartistGraph data={data} options={options} type={'Pie'} />
-        </div>
+      <div className='nonConPieColors centre middle'>
+        <ChartistGraph data={data} options={options} type={'Pie'} />
       </div>
     );
   }

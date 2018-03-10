@@ -12,6 +12,7 @@ export default class Tabs extends Component	{
   
   handleClick(clk) {
     this.setState({sect: clk});
+    !this.props.hold ? null : Session.set(this.props.sessionTab, clk);
   }
   
   render() {
@@ -44,5 +45,13 @@ export default class Tabs extends Component	{
         </AnimateWrap>
       </div>
     );
+  }
+  componentDidMount() {
+    if(!this.props.hold) { 
+      null;
+    }else{
+      const hold = Session.get(this.props.sessionTab);
+      !hold ? null : this.setState({ sect: hold });
+    }
   }
 }

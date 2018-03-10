@@ -4,9 +4,8 @@ import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
 import CreateTag from '/client/components/uUi/CreateTag.jsx';
 
-import Tabs from '../../../components/smallUi/Tabs.jsx';
+import Tabs from '/client/components/smallUi/Tabs.jsx';
 
-import JumpText from '../../../components/tinyUi/JumpText.jsx';
 import TagsModule from '../../../components/bigUi/TagsModule.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';
 import BlockList from '../../../components/bigUi/BlockList.jsx';
@@ -26,7 +25,7 @@ import RMATable from '../../../components/tables/RMATable.jsx';
 /// app
 
 export default class BatchPanel extends Component	{
-    
+  
   filter() {
     const data = this.props.batchData.items;
     let fList = [];
@@ -94,30 +93,29 @@ export default class BatchPanel extends Component	{
                 'Info',
                 'Progress',
                 `${Pref.nonCon}s`,
-                `${Pref.rma}s and ${Pref.escape}`
+                `${Pref.rma}s`
               ]
             }
             wide={true}
             stick={false}>
             
-            <div className='balance space'>
-              <div>
+            <div className='oneTwoThreeContainer space'>
+              <div className='oneThirdContent min200'>
                 <TagsModule
                   id={b._id}
                   tags={b.tags}
                   vKey={false}
                   tagOps={a.tagOption} />
-                 
                 <NoteLine entry={b.notes} id={b._id} widgetKey={false}  />
               </div>
-              
-              <BlockList id={b._id} data={b.blocks} lock={done} />
-              
+              <div className='twoThirdsContent'>
+                <BlockList id={b._id} data={b.blocks} lock={done} />
+              </div>
             </div>
           
-            <div>
-              <div className='balance space'>
-                <div>
+            
+              <div className='oneTwoThreeContainer space'>
+                <div className='oneThirdContent min200'>
                   <div>
                     <p className='capFL'>{Pref.start}: {moment(b.start).calendar()}</p>
                     <p className='capFL'>{Pref.end}: {moment(b.end).calendar()}</p>
@@ -136,31 +134,35 @@ export default class BatchPanel extends Component	{
                     flow={riverFlow}
                     flowAlt={riverAltFlow} />
                 </div>
-                <div>
+              
+                <div className='twoThirdsContent'>
                   <StepsProgress
                     batchData={b}
                     flow={riverFlow}
                     flowAlt={riverAltFlow}
                     mini={true} />
                 </div>
-              </div>
-              <ProgBurndown
-                start={b.start}
-                end={b.finishedAt}
-                flowData={riverFlow}
-                flowAltData={riverAltFlow}
-                itemData={b.items}
-                title='Progress Burndown' />
-            </div>
-            
-            <div>
-              <div className='split'>
-                <NonConPie nonCons={b.nonCon} />
-                <div className='wide'>
-                  <NonConRate batches={[b.batch]} />
+                
+                <div className='threeThirdsContent wide'>
+                  <ProgBurndown
+                    start={b.start}
+                    end={b.finishedAt}
+                    flowData={riverFlow}
+                    flowAltData={riverAltFlow}
+                    itemData={b.items}
+                    title='Progress Burndown' />
                 </div>
               </div>
-              <div className='wide'>
+          
+            
+            <div className='oneTwoThreeContainer space'>
+              <div className='oneThirdContent min300 centreSelf'>
+                <NonConPie nonCons={b.nonCon} />
+              </div>
+              <div className='twoThirdsContent'>
+                <NonConRate batches={[b.batch]} />
+              </div>
+              <div className='threeThirdsContent'>
                 <NonConOverview
                   ncOp={a.nonConOption}
                   flow={riverFlow}

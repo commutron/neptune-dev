@@ -49,18 +49,23 @@ export default class NonConRate extends Component {
       },
       axisX: {
         labelInterpolationFnc: function(value, index) {
-          return index % 7 === 0 ? 
-                 value : 
-                 //index === labels.length - 1 ? 
-                 //value :
-                 null;
+          let scale = labels.length < 7 ?
+                      1 :
+                      labels.length < 30 ?
+                      4 :
+                      labels.length < 60 ?
+                      8 :
+                      labels.length < 90 ?
+                      12 :
+                      24;
+          return index % scale === 0 ? value : null;
         },
       },
       chartPadding: {
-        top: 20,
-        right: 45,
+        top: 30,
+        right: 30,
         bottom: 0,
-        left: -10
+        left: 0
       },
       plugins: [
         Chartist.plugins.tooltip({

@@ -30,7 +30,7 @@
 
 .traverseContainer {
   display: grid;
-  grid-template-columns: auto 192px;
+  grid-template-columns: auto 160px;
   grid-template-rows: 32px calc(100vh - 128px) 48px;
   grid-template-areas: 
     'cookieNav traverseList'
@@ -59,6 +59,27 @@
   grid-area: actionBarEx;
   align-self: stretch;
   background-color: var(--black);
+}
+
+.oneTwoThreeContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto auto;
+  grid-template-areas: 
+    'oneThird twoThirds twoThirds'
+    'threeThirds threeThirds threeThirds';
+  grid-column-gap: 16px;
+  grid-row-gap: 16px;
+  justify-items: stretch;
+}
+.oneThirdContent {
+  grid-area: oneThird;
+}
+.twoThirdsContent {
+  grid-area: twoThirds;
+}
+.threeThirdsContent {
+  grid-area: threeThirds;
 }
 
 .cookieRow {

@@ -6,16 +6,18 @@ import CreateTag from '/client/components/uUi/CreateTag.jsx';
 
 import UserNice from '../../../components/smallUi/UserNice.jsx';
 
-import Tabs from '../../../components/smallUi/Tabs.jsx';
+import Tabs from '/client/components/smallUi/Tabs.jsx';
 
-import JumpText from '../../../components/tinyUi/JumpText.jsx';
 import HistoryTable from '../../../components/tables/HistoryTable.jsx';
 import NCTable from '../../../components/tables/NCTable.jsx';
 import RMALine from '../../../components/smallUi/RMALine.jsx';
 import ScrapBox from '../../../components/smallUi/ScrapBox.jsx';
 
 export default class ItemPanel extends Component	{
-
+  componentWillUnmount() {
+    Session.set('itemExPanelTabs', false);
+  }
+  
   ncData() {
     const batch = this.props.batchData;
     const item = this.props.itemData;
@@ -55,11 +57,11 @@ export default class ItemPanel extends Component	{
         <div className='section' key={i.serial}>
         
           <div className='titleSection'>
-            <span>{i.serial}</span>
+            {/*<span className='up'>{g.alias}</span>
+            <span className='up'>{w.widget} <i className='clean'>v.</i>{v.version}</span>*/}
             <span>{b.batch}</span>
-            <span className='up'>{g.alias}</span>
-            <span className='up'>{w.widget}</span>
-            <span><i className='clean'>v.</i>{v.version}</span>
+            <span>{i.serial}</span>
+            <span>units: {i.units}</span>
             <span>
               { !start ?
                 <i className='fas fa-hourglass-start' aria-hidden='true' title='unstarted'></i>
@@ -74,11 +76,7 @@ export default class ItemPanel extends Component	{
         
           <div className='space'>
             <h1>
-              <span className='rAlign'>
-                units: {i.units}
-              </span>
-            </h1>
-          
+              
             { done ? scrap ? 
               <ScrapBox entry={scrap} />
               :
@@ -86,13 +84,16 @@ export default class ItemPanel extends Component	{
               : 
               null
             }
+            </h1>
             
             <br />
             
             <Tabs
               tabs={['Steps History', `${Pref.nonCon}s`, 'RMA']}
               wide={true}
-              stick={false}>
+              stick={false}
+              hold={true}
+              sessionTab='itemExPanelTabs'>
             
               <HistoryTable key={1} id={b._id} serial={i.serial} history={i.history} done={done} />
               

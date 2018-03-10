@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
-import JumpText from '../tinyUi/JumpText.jsx';
+import LeapText from '../tinyUi/LeapText.jsx';
 import UserNice from '../smallUi/UserNice.jsx';
 
 const ScrapTable = ({ batchData })=> (
@@ -16,7 +16,7 @@ const ScrapTable = ({ batchData })=> (
           <th>{Pref.widget}</th>
 					<th>who</th>
 					<th>when</th>
-					<th>{Pref.trackStep}</th>
+					<th>where</th>
           <th>comment</th>
         </tr>
       </thead>
@@ -54,10 +54,9 @@ const ScrapGroup = ({ batchData })=> {
           <ScrapRow 
             key={index}
             entry={entry[1]}
-            id={b._id}
             group={b.group}
             batchNum={b.batch}
-            wIdget={b.wIdget}
+            widget={b.widget}
             barcode={entry[0]} />
           );
       })}
@@ -65,12 +64,18 @@ const ScrapGroup = ({ batchData })=> {
   );
 };
 
-const ScrapRow = ({ entry, id, group, batchNum, wIdget, barcode })=> (
+const ScrapRow = ({ entry, group, batchNum, widget, barcode })=> (
 	<tr>
     <td>{batchNum}</td>
-    <td><JumpText title={barcode} link={barcode} /></td>
+    <td>
+      <LeapText
+        title={barcode} 
+        sty={false}
+        address={'/data/batch?request=' + batchNum + '&specify=' + barcode}
+      />
+    </td>
     <td className='up'>{group}</td>
-    <td className='up'>{wIdget}</td>
+    <td className='up'>{widget}</td>
 		<td className='cap'><UserNice id={entry.who} /></td>
     <td>{moment(entry.time).calendar()}</td>
     <td>{entry.step}</td>

@@ -33,13 +33,13 @@ export default class BatchesList extends Component	{
     return (
       <AnimateWrap type='cardTrans'>
         <div className='' key={1}>
-        
-          <FilterActive
-            title={b.batch}
-            done='Finished'
-            total={showList.length}
-            onClick={e => this.setFilter(e)} />
-            
+          <div className='stickyBar'>
+            <FilterActive
+              title={b.batch}
+              done='Finished'
+              total={showList.length}
+              onClick={e => this.setFilter(e)} />
+          </div>  
           {showList.map( (entry, index)=> {
             const style = entry.finishedAt === false ? 
                           'jumpBar activeMark' :
