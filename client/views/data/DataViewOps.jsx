@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
 
-import DataWrap from './DataWrap.jsx';
 import { TraverseWrap } from '/client/layouts/DataExploreLayout.jsx';
 
 import SearchHelp from './SearchHelp.jsx';
@@ -165,10 +164,8 @@ export default class DataViewOps extends Component	{
         );
       }else{
         return(
-          <div className='dashMainFull'>
-            <div className='centre'>
-              <p>remember the cant</p>
-            </div>
+          <div className='centre'>
+            <p>remember the cant</p>
           </div>
         );
       }

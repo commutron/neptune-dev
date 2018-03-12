@@ -48,6 +48,7 @@ export const DashLayout = ({content, link}) => (
   </div>
 );
 
+/*
 export const ProductionLayout = ({content, link}) => (
   <div className='dashContainer'>
     <div className='gridHeaderSearch'>
@@ -73,6 +74,7 @@ export const DataLayout = ({content, link}) => (
     <div className='basicFooter'></div>
   </div>
 );
+*/
 
 export const LabelLayout = ({content}) => (
   <div className='basicContainer'>

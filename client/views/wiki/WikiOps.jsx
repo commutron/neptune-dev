@@ -1,6 +1,6 @@
 import React from 'react';
 
-import WikiFrame from './WikiFrame';
+//import WikiFrame from './WikiFrame';
 
 const WikiOps = ({ wi, root, anchor, fallback })=> {
   let goto = wi;
@@ -20,10 +20,24 @@ const WikiOps = ({ wi, root, anchor, fallback })=> {
     !goto || goto === 'home' || goto === 'none' ? goto = root : false;
     anchor ? goto = goto + '#' + anchor : false;
   }
+  
+  let sty = {
+    width: '100%',
+    border: '0',
+    margin: '0',
+    padding: '0',
+  };
 
   return(
     <div className='instructionFix'>
-      <WikiFrame go={goto} />
+      {/*<WikiFrame go={goto} />*/}
+      <object
+        data={goto}
+        style={sty}
+        height={ ( window.innerHeight - 113 ) + 'px' } 
+        type="text/html">
+        Alternative Content
+      </object>
     </div>
   );
 };

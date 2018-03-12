@@ -2,6 +2,8 @@ import React from 'react';
 
 import FormBar from '../../components/bigUi/FormBar.jsx';
 
+// depreciated
+
 const ProductionWrap  = ({ 
   children,
   batchData,

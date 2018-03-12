@@ -30,8 +30,10 @@ export default class FormBar extends Component	{
     const users = this.props.users;
     const app = this.props.app;
     
+    let tempStyle = !Roles.userIsInRole(Meteor.userId(), 'nightly') ? 'dashAction' : 'proActionForm';
+    
     return(
-      <div className='dashAction'>
+      <div className={tempStyle}>
         {b && i ?
           b.finishedAt !== false || i.finishedAt !== false ?
           null :

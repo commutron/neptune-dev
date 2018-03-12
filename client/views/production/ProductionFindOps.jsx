@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
 
 import ProductionWrap from './ProductionWrap.jsx';
+import { ProWrap } from '/client/layouts/ProLayout.jsx';
 
 import WikiOps from '../wiki/WikiOps.jsx';
 import SearchHelp from './SearchHelp.jsx';
@@ -81,7 +82,7 @@ export default class ProductionFindOps extends Component	{
     if(!orb) {
       Session.set('nowBatch', false);
       return (
-        <div className='dashMainFull'>
+        <div className='proFull'>
           <div className='centre wide'>
             <SearchHelp />
           </div>
@@ -93,7 +94,7 @@ export default class ProductionFindOps extends Component	{
     if(orb === '.') {
       Session.set('nowBatch', false);
       return (
-        <div className='dashMainFull'>
+        <div className='proFull'>
           <div className='centre'>
             <p>the special hell</p>
             {/*<img src='/titleLogo.svg' className='shadow noCopy' height='600' />*/}
@@ -105,20 +106,20 @@ export default class ProductionFindOps extends Component	{
     if(orb === Pref.batch || orb === Pref.batch + 's' || orb === Pref.btch) {
       Session.set('nowBatch', false);
       return (
-        <ProductionWrap>
+        <ProWrap>
           <BatchesList batchData={allBatch} widgetData={allWidget} />
           <div></div>
-        </ProductionWrap>
+        </ProWrap>
       );
     }
     
     if(orb === Pref.group || orb === Pref.group + 's' || orb === Pref.grp) {
       Session.set('nowBatch', false);
       return (
-        <ProductionWrap>
+        <ProWrap>
           <GroupsList groupData={allGroup} batchData={allBatch} widgetData={allWidget} />
           <div></div>
-        </ProductionWrap>
+        </ProWrap>
       );
     }
     
@@ -126,7 +127,7 @@ export default class ProductionFindOps extends Component	{
       Session.set('now', Pref.docs);
       Session.set('nowBatch', false);
       return (
-        <div className='dashMainFull'>
+        <div className='proFull'>
           <WikiOps wi={false} root={app.instruct} anchor={false} />
         </div>
       );
@@ -139,7 +140,7 @@ export default class ProductionFindOps extends Component	{
         let version = this.versionData(widget.versions, hotBatch.versionKey);
         let group = this.linkedGroup(widget.groupId);
         return (
-			    <ProductionWrap
+			    <ProWrap
 			      batchData={hotBatch}
             versionData={version}
             app={app}
@@ -152,7 +153,7 @@ export default class ProductionFindOps extends Component	{
               groupData={group}
               app={app} />
             <WikiOps wi={version.wiki} root={app.instruct} anchor={anchor} />
-          </ProductionWrap>
+          </ProWrap>
         );
       }
     }
@@ -162,7 +163,7 @@ export default class ProductionFindOps extends Component	{
 	  if(!isNaN(orb) && orb.length === 5) {
 	    Session.set('nowBatch', orb);
 	    return(
-	      <div className='dashMainFull'>
+	      <div className='proFull'>
 	        <WikiOps
 	          wi='home'
 	          fallback={orb}
@@ -184,7 +185,7 @@ export default class ProductionFindOps extends Component	{
         let version = this.versionData(widget.versions, hotBatch.versionKey);
         let group = this.linkedGroup(widget.groupId);
         return (
-          <ProductionWrap
+          <ProWrap
             batchData={hotBatch}
             itemData={item}
             widgetData={widget}
@@ -208,7 +209,7 @@ export default class ProductionFindOps extends Component	{
                 app={app} />
             </div>
             <WikiOps wi={version.wiki} root={app.instruct} anchor={anchor} />
-          </ProductionWrap>
+          </ProWrap>
         );
       }
     }
@@ -223,7 +224,7 @@ export default class ProductionFindOps extends Component	{
         let widgets = this.groupWidgets(lookup._id);
         let activeWidgets = this.groupActiveWidgets(lookup._id);
         return (
-          <ProductionWrap
+          <ProWrap
             batchData={false}
             itemData={false}
             versionData={false}
@@ -234,7 +235,7 @@ export default class ProductionFindOps extends Component	{
               widgetData={widgets}
               active={activeWidgets} />
             <WikiOps wi={lookup.wiki} root={app.instruct} anchor={anchor} />
-          </ProductionWrap>
+          </ProWrap>
         );
       }
     }
@@ -247,7 +248,7 @@ export default class ProductionFindOps extends Component	{
       let group = this.linkedGroup(lookup.groupId);
       let allBatches = this.allLinkedBatches(lookup._id);
       return (
-        <ProductionWrap
+        <ProWrap
           batchData={false}
           itemData={false}
           versionData={false}
@@ -265,7 +266,7 @@ export default class ProductionFindOps extends Component	{
             wi={lookup.versions[lookup.versions.length - 1].wiki} // newest version
             root={app.instruct}
             anchor={anchor} />
-        </ProductionWrap>
+        </ProWrap>
       );
     }
     
@@ -273,7 +274,7 @@ export default class ProductionFindOps extends Component	{
     if(!isNaN(orb) && orb.length > 5 && orb.length <= 10) {
 	    Session.set('nowBatch', orb);
 	    return(
-	      <div className='dashMainFull'>
+	      <div className='proFull'>
           <div className='centre wide space'>
             <p className='big centerText'>{orb} {Pref.noSerial}</p>
             <hr />
@@ -285,7 +286,7 @@ export default class ProductionFindOps extends Component	{
     
     Session.set('nowBatch', false);
 		return (
-		  <div className='dashMainFull'>
+		  <div className='proFull'>
         <div className='centre wide'>
           <p className='biggest'>¯\_(ツ)_/¯</p>
           <br />

@@ -54,7 +54,7 @@ main {
 .findForm {
   float: left;
   z-index: 10;
-  width: 275px;
+  width: 256px;
   height: 100%;
   display: -webkit-box;
   display: -webkit-flex;
@@ -133,7 +133,7 @@ main {
   box-shadow:         0 0 15px 0.5px rgb(0,0,0);
 }
 
-.gridHeaderNav {
+.gridHeaderNav { /* this stays */
   grid-area: headerNav;
   width: 100%;
   z-index: 9;

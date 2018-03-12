@@ -1,5 +1,7 @@
 import React from 'react';
 
+// depreciated
+
 const WikiFrame = ({ go })=> {
   let sty = {
     width: '100%',
@@ -12,7 +14,7 @@ const WikiFrame = ({ go })=> {
       id='instruct'
       style={sty}
       src={go}
-      height={( (document.body.scrollHeight - document.body.scrollTop) - 125 ) +'px'}
+      height={( (document.body.scrollHeight - document.body.scrollTop) - 113 ) +'px'}
       allowFullScreen
     />
   );

@@ -1,0 +1,104 @@
+.containerPro, .proDefault, .proExpand {
+  align-content: center;
+  overflow-y: hidden !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+.containerPro {
+  display: grid;
+  grid-template-columns: 256px auto;
+  grid-template-rows: 48px calc(100vh - 48px);
+  grid-template-areas: 
+    "proSearch headerNav"
+    "proContent proContent";
+  min-width: 768px;
+  min-height: 100vh;
+}
+
+.proSearch {
+  grid-area: proSearch;
+  z-index: 9;
+  -webkit-box-shadow: 0 0 15px 0.5px rgb(0,0,0);
+  -moz-box-shadow:    0 0 15px 0.5px rgb(0,0,0);
+  box-shadow:         0 0 15px 0.5px rgb(0,0,0);
+}
+
+.contentAreaPro {
+  grid-area: proContent;
+  /*min-height: calc(100vh - 48px);*/
+  overflow-y: auto;
+}
+
+.proDefault, .proExpand {
+  display: grid;
+  grid-template-rows: calc(100vh - 108px) 60px;
+}
+.proLeftMinor, .proLeftMajor {
+  background-color: rgb(20,20,20);
+  border-right: 2px inset rgb(25,25,25);
+}
+.proLeftMinor, .proLeftMajor, .proRightMajor, .proRightMinor {
+  height: 100%;
+}
+
+.proDefault {
+  grid-template-columns: 256px auto;
+  grid-template-areas: 
+    'proRiverMinor proInstructMajor'
+    'formFooter formFooter';
+}
+.proLeftMinor {
+  grid-area: proRiverMinor;
+}
+.proRightMajor {
+  grid-area: proInstructMajor;
+}
+
+.proExpand {
+  grid-template-columns: 512px auto;
+  grid-template-areas: 
+    'proRiverMajor proInstructMinor'
+    'formFooter formFooter';
+}
+.proLeftMajor {
+  grid-area: proRiverMajor;
+}
+.proRightMinor {
+  grid-area: proInstructMinor;
+}
+
+.proActionForm {
+  grid-area: formFooter;
+  background-color: black;
+  background-color: rgba(0,0,0,0.9);
+  width: 100%;
+  min-width: 768px;
+  height: 60px;
+  z-index: 9;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.riverExpandToggle, .riverShrinkToggle {
+  position: absolute;
+  top: 50%;
+  z-index: 9;
+  opacity: 0.5;
+  padding: 5px;
+  background-color: var(--silver);
+  color: var(--clouds);
+  border-radius: 50%;
+}
+.riverExpandToggle {
+  left: 235px;
+}
+.riverShrinkToggle {
+  left: 490px;
+}
+
+.riverExpandToggle:hover, .riverShrinkToggle:hover {
+  opacity: 1;
+}

@@ -4,7 +4,7 @@ import {mount} from 'react-mounter';
 import { PublicLayout } from './layouts/MainLayouts.jsx';
 import { BasicLayout } from './layouts/MainLayouts.jsx';
 import { DashLayout } from './layouts/MainLayouts.jsx';
-import { ProductionLayout } from './layouts/MainLayouts.jsx';
+import { ProductionLayout } from './layouts/ProLayout.jsx';
 import { ExploreLayout } from './layouts/DataExploreLayout.jsx';
 import { LabelLayout } from './layouts/MainLayouts.jsx';
 
