@@ -82,7 +82,33 @@ export default class FormBar extends Component	{
           : null}
         </div>
         <div className='footRight'>
-          <IkyToggle />
+          {!Roles.userIsInRole(Meteor.userId(), 'nightly') ?
+            <IkyToggle />//depreciated
+          :
+            b && i ?
+              <label htmlFor='exItem' className='formBarToggle'>
+                <button
+                  id='exItem'
+                  className=''
+                  title='view in data explore'
+                  onClick={()=>FlowRouter.go('/data/batch?request=' + b.batch + '&specify=' + i.serial)}>
+                </button>
+                  <i className='fas fa-binoculars formBarIcon'></i>
+                <span className='actionIconText'>Explore</span>
+              </label>
+          :
+            b && !i ?
+              <label htmlFor='exBatch' className='formBarToggle'>
+                <button
+                  id='exBatch'
+                  className=''
+                  title='view in data explore'
+                  onClick={()=>FlowRouter.go('/data/batch?request=' + b.batch)}>
+                </button>
+                  <i className='fas fa-binoculars formBarIcon'></i>
+                  <span className='actionIconText'>Explore</span>
+              </label>
+          : null}
         </div>
       </div>
     );

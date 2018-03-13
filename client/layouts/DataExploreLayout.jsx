@@ -5,7 +5,7 @@ import { Meteor } from 'meteor/meteor';
 import TopBar from './TopBar.jsx';
 import TaskBar from '/client/components/bigUi/TaskBar.jsx';
 import ActionBar from '/client/components/bigUi/ActionBar.jsx';
-import CookieBar from '/client/components/bigUi/CookieBar.jsx';
+import CookieBar from './CookieBar.jsx';
 
 export const ExploreLayout = ({content, link}) => {
   let w = window.innerWidth;

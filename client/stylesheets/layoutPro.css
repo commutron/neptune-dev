@@ -13,7 +13,7 @@
     "proSearch headerNav"
     "proContent proContent";
   min-width: 768px;
-  min-height: 100vh;
+  min-height: 768px;
 }
 
 .proSearch {
@@ -86,19 +86,22 @@
   position: absolute;
   top: 50%;
   z-index: 9;
-  opacity: 0.5;
-  padding: 5px;
+  opacity: 0.4;
+  padding: 15px 0;
+  font-family: FontAwesome;
   background-color: var(--silver);
   color: var(--clouds);
-  border-radius: 50%;
 }
 .riverExpandToggle {
-  left: 235px;
+  left: 256px;
 }
 .riverShrinkToggle {
-  left: 490px;
+  left: 512px;
+  -moz-transform: scaleX(-1);
+  -o-transform: scaleX(-1);
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
 }
-
 .riverExpandToggle:hover, .riverShrinkToggle:hover {
   opacity: 1;
 }

@@ -11,7 +11,7 @@ meteor seems to be handling this */
 .footLeft {
   display: flex;
   justify-content: flex-start;
-  padding: 7px 0 0 5px;
+  padding: 0 0 0 5px;
 }
 
 .footCent {
@@ -21,7 +21,8 @@ meteor seems to be handling this */
 .footRight {
   display: flex;
   justify-content: flex-end;
-  padding: 7px 5px 0 0;
+  padding: 0 5px 0 0;
+  align-content: center;
 }
 
 .actionForm {
@@ -213,9 +214,7 @@ select.blueIn > option {
   color: black;
 }
 
-
-
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1024px) {
   .actionForm > input,
   .actionForm > select, 
   .actionForm > datalist {

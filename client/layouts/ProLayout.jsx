@@ -60,7 +60,7 @@ export class ProWrap extends Component	{
           type='button'
           className={toggleClass}
           onClick={()=>this.handleExpand()}>
-          <i className='fas fa-exchange-alt fa-3x'></i>
+          <i className='fas fa-chevron-right fa-2x'></i>
         </button>
         
         <div className={rightClass} style={scrollFix}>

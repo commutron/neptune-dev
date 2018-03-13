@@ -381,6 +381,29 @@ Meteor.methods({
       return true;
     }
   },
+  
+  addNested(batchId, serial, key, step, subSerial) {
+    if(!Roles.userIsInRole(Meteor.userId(), 'active')) {
+      return false;
+    }else{
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': serial}, {
+        $push : { 
+          'items.$.history': {
+            key: key,
+            step: step,
+            type: 'nest',
+            good: true,
+            time: new Date(),
+            who: Meteor.userId(),
+            comm : subSerial,
+            info: false
+          },
+          'items.$.subItems' : subSerial
+        }
+      });
+      return true;
+    }
+  },
 
   // finish Item
   finishItem(batchId, serial, key, step, type) {

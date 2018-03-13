@@ -12,6 +12,7 @@ import HistoryTable from '../../../components/tables/HistoryTable.jsx';
 import NCTable from '../../../components/tables/NCTable.jsx';
 import RMALine from '../../../components/smallUi/RMALine.jsx';
 import ScrapBox from '../../../components/smallUi/ScrapBox.jsx';
+import SubItemLink from '/client/components/tinyUi/SubItemLink.jsx';
 
 export default class ItemPanel extends Component	{
   componentWillUnmount() {
@@ -75,15 +76,19 @@ export default class ItemPanel extends Component	{
           </div>
         
           <div className='space'>
+            <p>
+              { i.subItems.length > 0 && <i>Nested sub {Pref.item}s: </i> }
+              { i.subItems.length > 0 &&
+                i.subItems.map((ent, inx)=> { 
+                  return( <i key={inx}><SubItemLink serial={ent} />, </i> ) } ) }
+            </p>
             <h1>
-              
             { done ? scrap ? 
               <ScrapBox entry={scrap} />
               :
               <p>Finished <i>{moment(i.finishedAt).calendar()} by <UserNice id={i.finishedWho} /></i></p> 
               : 
-              null
-            }
+              null }
             </h1>
             
             <br />

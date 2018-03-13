@@ -63,6 +63,7 @@ export class OptionAdd extends Component	{
                   <option value='inspect'>inspect</option>
                   <option value='test'>test</option>
                   <option value='checkpoint'>checkpoint</option>
+                  <option value='nest'>nest</option>
                 </select>
               </label>
             : null}

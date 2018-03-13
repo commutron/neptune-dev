@@ -2,7 +2,12 @@ import { Meteor } from 'meteor/meteor';
 import React from 'react';
 
 const CookieBar = ({ groupData, widgetData, versionData, batchData, itemData, action }) => {
-            
+  
+  function goPro(location) {
+    Session.set('now', location);
+    FlowRouter.go('/production');
+  } 
+  
   return(
     <div className='cookieRow'>
       {groupData && 
@@ -54,7 +59,27 @@ const CookieBar = ({ groupData, widgetData, versionData, batchData, itemData, ac
             {itemData.serial}
           </button>
         </span>}
-      
+      <span className='navSpacer'></span>
+      {itemData ? 
+        <span className='cookieCrumb'>
+          <button 
+            className='cookie'
+            title='view in production'
+            onClick={()=>goPro(itemData.serial)}>
+            <i className='fas fa-paper-plane'></i>
+          </button>
+        </span>
+      :
+        batchData ? 
+        <span className='cookieCrumb'>
+          <button 
+            className='cookie'
+            title='view in production'
+            onClick={()=>goPro(batchData.batch)}>
+            <i className='fas fa-paper-plane'></i>
+          </button>
+        </span>
+      :null}
      
     </div>
   );

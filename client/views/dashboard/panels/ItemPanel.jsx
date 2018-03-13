@@ -78,7 +78,7 @@ export default class ItemPanel extends Component	{
                 units: {i.units}
               </span>
             </h1>
-          
+            
             { done ? scrap ? 
               <ScrapBox entry={scrap} />
               :

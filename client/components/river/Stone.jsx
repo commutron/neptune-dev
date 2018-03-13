@@ -3,6 +3,7 @@ import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import Pref from '/client/global/pref.js';
 
 import FirstForm from './FirstForm.jsx';
+import FoldInNested from './FoldInNested.jsx';
 import StoneProgRing from './StoneProgRing.jsx';
 
 export default class Stone extends Component	{
@@ -155,7 +156,14 @@ export default class Stone extends Component	{
      
     return (
     	<div style={stopmooving}>
-        {!this.state.show ?
+        {this.props.type === 'nest' ?
+        	<FoldInNested
+            id={this.props.id}
+            serial={this.props.barcode}
+            sKey={this.props.sKey}
+            step={this.props.step}
+            lock={lock} />
+        : !this.state.show ?
         	<StoneProgRing
     				serial={this.props.barcode}
     				allItems={this.props.allItems}
@@ -167,42 +175,42 @@ export default class Stone extends Component	{
 							id={this.props.barcode}
 							attributes={ {className:'centre'} }>
 							{this.props.type === 'test' ?
-							<div className='centre stone'>
-								<button
-				      	  className={shape}
-				  				name={this.props.step + ' fail'}
-				  				ref={(i)=> this.stonefail = i}
-				  				onClick={ripple}
-				  				tabIndex={-1}
-				  				disabled={lock}>
-				  				Pass
-				  				<label className='big'><br />{this.props.step}</label>
-								</button>
-								<button
-				      	  className='crackedBot'
-				  				name={this.props.step + ' fail'}
-				  				ref={(i)=> this.stonefail = i}
-				  				onClick={this.passT.bind(this, false, true, false)}
-				  				tabIndex={-1}
-				  				disabled={lock}>
-				  				Fail
-				  				<label className='big'><br />{this.props.step}</label>
-								</button>
-							</div>
+								<div className='centre stone'>
+									<button
+					      	  className={shape}
+					  				name={this.props.step + ' fail'}
+					  				ref={(i)=> this.stonefail = i}
+					  				onClick={ripple}
+					  				tabIndex={-1}
+					  				disabled={lock}>
+					  				Pass
+					  				<label className='big'><br />{this.props.step}</label>
+									</button>
+									<button
+					      	  className='crackedBot'
+					  				name={this.props.step + ' fail'}
+					  				ref={(i)=> this.stonefail = i}
+					  				onClick={this.passT.bind(this, false, true, false)}
+					  				tabIndex={-1}
+					  				disabled={lock}>
+					  				Fail
+					  				<label className='big'><br />{this.props.step}</label>
+									</button>
+								</div>
 							:
-							<div className='centre'>
-				      	<button
-				      	  className={shape}
-				  				name={this.props.step}
-				  				ref={(i)=> this.stone = i}
-				  				onClick={ripple}
-				  				tabIndex={-1}
-				  				disabled={lock}>
-				  				{prepend}
-									<i>{this.props.step}</i>
-									{apend}
-								</button>
-							</div>
+								<div className='centre'>
+					      	<button
+					      	  className={shape}
+					  				name={this.props.step}
+					  				ref={(i)=> this.stone = i}
+					  				onClick={ripple}
+					  				tabIndex={-1}
+					  				disabled={lock}>
+					  				{prepend}
+										<i>{this.props.step}</i>
+										{apend}
+									</button>
+								</div>
 							}
 						</ContextMenuTrigger>
 					</StoneProgRing>

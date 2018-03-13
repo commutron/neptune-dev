@@ -9,8 +9,8 @@
   overflow-y: hidden !important;
   overflow-x: hidden !important;
   -webkit-overflow-scrolling: touch;
-  min-width: 500px;
-  min-height: 100vh;
+  min-width: 768px;
+  min-height: 768px;
 }
 
 .taskBarEx {
@@ -96,6 +96,7 @@
   height: 32px;
   overflow: hidden;
   background-color: var(--black);
+  overflow: hidden;
 }
 .cookie {
   background-color: var(--black);

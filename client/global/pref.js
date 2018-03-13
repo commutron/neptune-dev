@@ -60,6 +60,7 @@ class Pref {
     this.proChange = 'process changes';
     this.outIssue = 'outstanding issues';
     this.gComm = 'general comments';
+    this.nest = 'nest';
     // bad tracking
     this.fixFlow = 'repair process';
     this.fixStep = 'repair step';

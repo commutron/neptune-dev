@@ -145,6 +145,7 @@ export default class ProductionFindOps extends Component	{
             versionData={version}
             app={app}
             action='batchBuild'
+            actionBar={true}
           >
             <BatchCard
               batchData={hotBatch}

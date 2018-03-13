@@ -38,7 +38,7 @@ export default class BatchCard extends Component	{
     return (
       <AnimateWrap type='cardTrans'>
         <div className='section sidebar' key={b.batch}>
-          
+
           <h1 className='centreText'>
             {b.batch}
             <i className='breath'></i>
@@ -56,7 +56,7 @@ export default class BatchCard extends Component	{
               Finished: {moment(b.finishedAt).calendar()}
             </h2>
           :null}
-          
+            
           <Tabs
             tabs={[
               <i className='fas fa-info-circle' data-fa-transform='down-2' title='Info'></i>, 
