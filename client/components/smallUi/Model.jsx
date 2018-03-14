@@ -35,7 +35,7 @@ export default class Model extends Component	{
           onClick={this.reveal}
           disabled={this.props.lock}>
           <label className='navIcon actionIconWrap'>
-            <i className={'fas ' + this.props.icon + iSize + this.props.color} aria-hidden='true'></i>
+            <i className={'fas ' + this.props.icon + iSize + this.props.color}></i>
             <span className={'actionIconText ' + this.props.color}>{this.props.button}</span>
           </label>
         </button>

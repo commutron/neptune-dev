@@ -15,9 +15,9 @@ const CookieBar = ({ groupData, widgetData, versionData, batchData, itemData, ac
           <button 
             className='cookie up'
             onClick={()=>FlowRouter.go('/data/group?request=' + groupData.alias)}>
-            {groupData.alias.length < 16 ? 
+            {groupData.alias.length < 10 ? 
               groupData.alias :
-              groupData.alias.substring(0, 15) + '...'}
+              groupData.alias.substring(0, 9) + '...'}
           </button>
         </span>}
       {widgetData && 

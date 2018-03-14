@@ -13,7 +13,7 @@ import NoteLine from '../../../components/smallUi/NoteLine.jsx';
 import BlockNotes from '../../../components/smallUi/BlockNotes.jsx';
 
 export default class BatchCard extends Component	{
-
+  
   render() {
 
     const b = this.props.batchData;
@@ -34,6 +34,8 @@ export default class BatchCard extends Component	{
     let warn = b.blocks.filter( x => x.solve === false ).length;
     iready ? warn++ : null;
     const showWarn = warn === 0 ? 'hide' : 'alertCount';
+    
+    const expand = this.props.expand;
 
     return (
       <AnimateWrap type='cardTrans'>
@@ -56,36 +58,74 @@ export default class BatchCard extends Component	{
               Finished: {moment(b.finishedAt).calendar()}
             </h2>
           :null}
-            
-          <Tabs
-            tabs={[
-              <i className='fas fa-info-circle' data-fa-transform='down-2' title='Info'></i>, 
-              <i className='fas fa-tasks' data-fa-transform='down-2' title='Progress'></i>, 
-              <i className='fas fa-thumbs-down' data-fa-transform='down-2' title='NonConformances'></i>
-            ]}
-            wide={true}
-            stick={false}>
-            
-            <div className='space cap'>
-              <TagsModule
-                id={b._id}
-                tags={b.tags}
-                vKey={false}
-                tagOps={a.tagOption} />
-              <br />
-              <NoteLine entry={b.notes} id={b._id} versionKey={false} />
-              <BlockNotes data={b.blocks} />
+          
+          {!expand ?
+            <Tabs
+              tabs={[
+                <i className='fas fa-info-circle' data-fa-transform='down-2' title='Info'></i>, 
+                <i className='fas fa-tasks' data-fa-transform='down-2' title='Progress'></i>, 
+                <i className='fas fa-thumbs-down' data-fa-transform='down-2' title='NonConformances'></i>
+              ]}
+              wide={true}
+              stick={false}>
+              
+              <div className='space cap'>
+                <TagsModule
+                  id={b._id}
+                  tags={b.tags}
+                  vKey={false}
+                  tagOps={a.tagOption} />
+                <br />
+                <NoteLine entry={b.notes} id={b._id} versionKey={false} />
+                <BlockNotes data={b.blocks} />
+              </div>
+              
+              <div className='space cap'>
+                <StepsProgress batchData={b} flow={riverFlow} flowAlt={riverAltFlow} mini={true} />
+              </div>
+              
+              <div className='space cap'>
+                <NonConMiniSatus noncons={b.nonCon} flow={riverFlow} flowAlt={riverAltFlow} app={a} />
+              </div>
+              
+            </Tabs>
+          :
+            <div>
+              <div className='triSplit'>
+                <div className='triSplitOne cap'>
+                  <div className='action cap wetasphalt centreText'>
+                    <i className='fas fa-info-circle' data-fa-transform='down-2'></i> Info
+                  </div>
+                  <div className='space'>
+                    <TagsModule
+                      id={b._id}
+                      tags={b.tags}
+                      vKey={false}
+                      tagOps={a.tagOption} />
+                    <br />
+                    <NoteLine entry={b.notes} id={b._id} versionKey={false} />
+                    <BlockNotes data={b.blocks} />
+                  </div>
+                </div>
+                <div className='triSplitTwo cap'>
+                  <div className='action cap wetasphalt centreText'>
+                    <i className='fas fa-tasks' data-fa-transform='down-2'></i> Progress
+                  </div>
+                  <div className='space'>
+                    <StepsProgress batchData={b} flow={riverFlow} flowAlt={riverAltFlow} mini={true} />
+                  </div>
+                </div>
+                <div className='triSplitThree cap'>
+                  <div className='action cap wetasphalt centreText'>
+                    <i className='fas fa-thumbs-down' data-fa-transform='down-2'></i> NonCons
+                  </div>
+                  <div className='space'>
+                    <NonConMiniSatus noncons={b.nonCon} flow={riverFlow} flowAlt={riverAltFlow} app={a} />
+                  </div>
+                </div>
+              </div>
             </div>
-            
-            <div className='space cap'>
-              <StepsProgress batchData={b} flow={riverFlow} flowAlt={riverAltFlow} mini={true} />
-            </div>
-            
-            <div className='space cap'>
-              <NonConMiniSatus noncons={b.nonCon} flow={riverFlow} flowAlt={riverAltFlow} app={a} />
-            </div>
-            
-          </Tabs>
+          }
   				
   			<br />
   

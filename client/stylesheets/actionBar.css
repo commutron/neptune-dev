@@ -5,6 +5,7 @@ meteor seems to be handling this */
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
+  flex-shrink: 0;
   z-index: 8;
 }
 

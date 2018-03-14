@@ -35,8 +35,13 @@ export default class UnitSet extends Component	{
         title={'set ' + Pref.unit}
         color='greenT'
         icon='fa-th'
-        lock={!auth || done}>
+        lock={!auth}>
         <p className='centre centreTrue'>
+        {done &&
+          <b className='big'>
+            This serial number is finished, are you sure you want to adjust how many units were included under this serial?
+          </b>}
+          <br />
           <input
             type='number'
             ref={(i)=> this.unit = i}

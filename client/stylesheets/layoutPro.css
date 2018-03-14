@@ -56,7 +56,7 @@
 }
 
 .proExpand {
-  grid-template-columns: 512px auto;
+  grid-template-columns: minmax(512px, 50%) auto;
   grid-template-areas: 
     'proRiverMajor proInstructMinor'
     'formFooter formFooter';
@@ -79,6 +79,7 @@
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
+  flex-shrink: 0;
   align-items: center;
 }
 
@@ -96,12 +97,35 @@
   left: 256px;
 }
 .riverShrinkToggle {
-  left: 512px;
+  left: calc(512px + (50% - 512px) );
   -moz-transform: scaleX(-1);
   -o-transform: scaleX(-1);
   -webkit-transform: scaleX(-1);
   transform: scaleX(-1);
 }
+@media screen and (max-width: 1024px) {
+  .riverShrinkToggle {
+    left: 512px;
+  }
+}
 .riverExpandToggle:hover, .riverShrinkToggle:hover {
   opacity: 1;
+}
+
+.triSplit {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto;
+  grid-template-areas: 
+    'triSplitOne triSplitTwo triSplitThree';
+  justify-items: stretch;
+}
+.triSplitOne {
+  grid-area: triSplitOne;
+}
+.triSplitTwo {
+  grid-area: triSplitTwo;
+}
+.triSplitThree {
+  grid-area: triSplitThree;
 }

@@ -195,20 +195,18 @@ export default class ProductionFindOps extends Component	{
             app={app}
             actionBar={true}
           >
-            <div>
-              <ItemCard
-                batchData={hotBatch}
-                itemData={item}
-                widgetData={widget}
-                users={this.props.users}
-                app={app} />
-              <BatchCard
-                batchData={hotBatch}
-                widgetData={widget}
-                versionData={version}
-                groupData={group}
-                app={app} />
-            </div>
+            <ItemCard
+              batchData={hotBatch}
+              itemData={item}
+              widgetData={widget}
+              users={this.props.users}
+              app={app} />
+            <BatchCard
+              batchData={hotBatch}
+              widgetData={widget}
+              versionData={version}
+              groupData={group}
+              app={app} />
             <WikiOps wi={version.wiki} root={app.instruct} anchor={anchor} />
           </ProWrap>
         );
@@ -255,14 +253,12 @@ export default class ProductionFindOps extends Component	{
           versionData={false}
           app={app}
         >
-          <div>
-            <WidgetCard
-              groupData={group}
-              widgetData={lookup}
-              batchRelated={allBatches}
-              app={app}
-            />
-          </div>
+          <WidgetCard
+            groupData={group}
+            widgetData={lookup}
+            batchRelated={allBatches}
+            app={app}
+          />
           <WikiOps
             wi={lookup.versions[lookup.versions.length - 1].wiki} // newest version
             root={app.instruct}

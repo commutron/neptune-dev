@@ -67,7 +67,7 @@
   border-bottom-color: white;
   border-left-color: transparent;
   transition: border 250ms ease;
-  word-break: normal;
+  word-break: break-all;
 }
 .jump:hover, .jump:focus, .jump:active {
   border-bottom-color: #3498db;
@@ -75,7 +75,7 @@
 
 .jumpBar {
   width: 100%;
-  line-height: 1.5em;
+  min-height: 32px;
   font-size: 1rem;
   letter-spacing: 1px;
 	margin: 5px 0;
@@ -86,8 +86,8 @@
   border-left-style: solid;
   border-left-color: white;
   transition: border 250ms ease;
-  word-break: break-all;
-  word-wrap: break-word;
+  word-break: keep-all;
+  word-wrap: normal;
 }
 .jumpBar:hover, .jumpBar:focus, .jumpBar:active {
   border-bottom-color: #3498db;
@@ -308,6 +308,10 @@
 	border: 3px solid var(--amethyst);
 	box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2),
 	      inset 0 0 .1em .1em rgba(43,43,43,0.2);
+}
+
+.wetasphalt {
+	background-color: var(--wetasphalt);
 }
 
 .black {
@@ -889,11 +893,6 @@
   /*light*/
   background: var(--clouds);
   color: black;
-}
-
-
-@media screen and (max-width: 1000px) {
-  
 }
 
 .starfishColour {

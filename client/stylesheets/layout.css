@@ -1,4 +1,3 @@
-
 body {
   background-color: rgb(30,30,30);
   color: white;
@@ -110,8 +109,8 @@ main {
   min-height: 100vh;
 }
 
-.basicContainer {
-  grid-template-rows: 60px calc(100vh - 60px);
+.basicContainer { /* this stays */
+  grid-template-rows: 48px calc(100vh - 48px);
   grid-template-areas: 
     'headerNav headerNav'
     "mainFull mainFull";
@@ -143,9 +142,9 @@ main {
   box-shadow:         0 0 15px 0.5px rgb(0,0,0);
 }
 
-.basicMainFull {
+.basicMainFull { /* this stays */
   grid-area: mainFull;
-  min-height: calc(100vh - 60px);
+  min-height: calc(100vh - 48px);
   overflow-y: auto;
 }
 
@@ -193,22 +192,9 @@ main {
   align-items: center;
 }
 
-.fullViewHeight {
-  min-height: calc(100vh - 60px);
+.fullViewHeight { /* this stays */
+  min-height: calc(100vh - 48px);
 }
-
-/*
-@media screen and (max-width: 1000px){
-  .basicContainer, .dashContainer, .dashMainSplit {
-    grid-template-columns: 225px auto;
-  }
-  .findForm {
-    width: 225px;
-  }
-}
-*/
-
-/* ============================================= */
 
 .bleed {
   padding: 0;
@@ -282,12 +268,7 @@ main {
 @media screen and (max-width: 1200px){
   .titleSection span, .titleSection button {
     font-size: 1.5rem;
-    padding: 0.5vh 1.25vw 0 1.25vw;
-  }
-}
-@media screen and (max-width: 900px){
-  .titleSection span, .titleSection button {
-    padding: 0.25vh 1vw 0 1vw;
+    padding: 0.75vh 1.5vw 0 1.5vw;
   }
 }
 
@@ -316,12 +297,10 @@ main {
   transition: opacity 200ms;
   overflow: hidden;
 }
-
 .overlay input, .overlay textarea, .overlay select {
   background-color: transparent;
   color: white;
 }
-
 .overlay option,
 .overlay optgroup {
   color: black;
@@ -340,7 +319,6 @@ main {
   -webkit-box-shadow: 0 0 30px 1px rgb(0,0,0);
   -moz-box-shadow:    0 0 30px 1px rgb(0,0,0);
   box-shadow:         0 0 30px 1px rgb(0,0,0);
-  
 }
 
 .content {
@@ -355,7 +333,6 @@ main {
     max-width: 80%;
   }
 }
-
 @media screen and (max-width: 1000px){
   .popup{
     max-width: 90%;
@@ -423,7 +400,7 @@ main {
 }
 
 .space {
-  padding: 20px;
+  padding: 16px;
 }
 
 .breath {
@@ -468,10 +445,6 @@ main {
 .verLine {
   vertical-align: middle;
 }
-.beside {
-  line-height: 1rem;
-  vertical-align: super;
-}
 
 .tweekUp {
   vertical-align: super;
@@ -494,6 +467,7 @@ main {
   border-right: none;
 }
 
+/* whats this for */
 .denseData {
   width: 100%;
 }
@@ -627,7 +601,6 @@ main {
 .max300 {
   max-width: 300px;
 }
-
 .min600 {
   min-width: 600px;
 }
@@ -642,13 +615,4 @@ main {
 }
 .flxGrow {
   flex-grow: 2;
-}
-.flxShrink {
-  flex-shrink: 1;
-}
-.flxBiasZero {
-  flex-basis: 0;
-}
-.flxBiasAuto {
-  flex-basis: auto;
 }

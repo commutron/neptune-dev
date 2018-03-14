@@ -106,6 +106,11 @@ export default class BatchPanel extends Component	{
                   tags={b.tags}
                   vKey={false}
                   tagOps={a.tagOption} />
+                {b.items.length > 0 &&
+                  <fieldset>
+                    <legend>Serial Range</legend>
+                    {b.items[0].serial} - {b.items[b.items.length-1].serial}
+                  </fieldset>}
                 <NoteLine entry={b.notes} id={b._id} widgetKey={false}  />
               </div>
               <div className='twoThirdsContent'>

@@ -53,7 +53,14 @@ export class ProWrap extends Component	{
       <div className={topClass}>
         
         <div className={leftClass} style={scrollFix}>
-          {this.props.children[0]}
+          {this.props.children.length > 2 ?
+            React.cloneElement(this.props.children[0],
+              { expand: this.state.expand }
+            )
+          :null}
+          {React.cloneElement(this.props.children[this.props.children.length - 2],
+            { expand: this.state.expand }
+          )}
         </div>
         
         <button
@@ -62,11 +69,10 @@ export class ProWrap extends Component	{
           onClick={()=>this.handleExpand()}>
           <i className='fas fa-chevron-right fa-2x'></i>
         </button>
-        
+          
         <div className={rightClass} style={scrollFix}>
-          {this.props.children[1]}
+          {this.props.children[this.props.children.length - 1]}
         </div>
-        
         
         {!this.props.actionBar ||
           <FormBar

@@ -66,7 +66,7 @@ export default class ProgBurndown extends Component {
                       8 :
                       labels.length < 90 ?
                       12 :
-                      24;
+                      16;
           return index % scale === 0 ? value : null;
         },
       },
