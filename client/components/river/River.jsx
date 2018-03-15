@@ -6,7 +6,7 @@ import RiverFork from './RiverFork.jsx';
 import RMACascade from './RMACascade.jsx';
 import AltMarker from '/client/components/uUi/AltMarker.jsx';
 
-const River = ({ itemData, batchData, widgetData, app, users })=> {
+const River = ({ itemData, batchData, widgetData, app, users, expand })=> {
 
   const b = batchData;
   const i = itemData;
@@ -74,7 +74,8 @@ const River = ({ itemData, batchData, widgetData, app, users })=> {
           history={i.history}
           regRun={i.finishedAt === false}
           users={users}
-          methods={app.toolOption} />
+          methods={app.toolOption}
+          expand={expand} />
       </div>
       
 		</div>

@@ -821,3 +821,6 @@
   fill: var(--peterriver);
   fill-opacity: 0.5;
 }
+.rateFill .ct-series-a .ct-line {
+  stroke: var(--asbestos);
+}

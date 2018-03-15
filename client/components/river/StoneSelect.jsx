@@ -6,9 +6,9 @@ import Pref from '/client/global/pref.js';
 import Stone from './Stone.jsx';
 import TestFails from './TestFails.jsx';
 import NCTributary from './NCTributary.jsx';
+import MiniHistory from './MiniHistory.jsx';
 
-  
-const StoneSelect = ({ id, flow, isAlt, rmas, allItems, nonCons, serial, history, regRun, users, methods })=> {
+const StoneSelect = ({ id, flow, isAlt, rmas, allItems, nonCons, serial, history, regRun, users, methods, expand })=> {
     
   const nc = nonCons.filter( 
                 x => x.serial === serial && x.inspect === false )
@@ -80,13 +80,43 @@ const StoneSelect = ({ id, flow, isAlt, rmas, allItems, nonCons, serial, history
 		    if(block || flowStep.type === 'finish' || flowStep.type === 'test') {
 		      Session.set( 'nowStep', nc[0].where );
 		      return (
-  		      nonCon
+		        <div className={expand && 'stonePlus'}>
+  		        <div className={expand && 'ncPlus'}>
+  		          {nonCon}
+  		        </div>
+  		      </div>
 		      );
 		    }else{
 		      Session.set('nowStep', flowStep.step);
           Session.set('nowWanchor', flowStep.how);
 		      return (
-		        <div>
+		        <div className={expand && 'stonePlus'}>
+              <div className={expand && 'stonePlusLeft'}>
+    		        <InOutWrap type='stoneTrans'>
+      		        {stone}
+                </InOutWrap>
+                {fTest.length > 0 ? 
+                  <InOutWrap type='stoneTrans'>
+                    {tFail}
+                  </InOutWrap>
+                : null}
+              </div>
+              {expand &&
+          		  <div className='stonePlusRight space'>
+          			  <MiniHistory history={history} />
+          			</div>}
+              <div className={expand && 'ncPlus'}>
+                {nonCon}
+              </div>
+      			</div>
+		      );
+		    }
+		  }else if(nc.length > 0) {
+		    Session.set('nowStep', flowStep.step);
+        Session.set('nowWanchor', flowStep.how);
+		    return (
+	        <div className={expand && 'stonePlus'}>
+            <div className={expand && 'stonePlusLeft'}>
   		        <InOutWrap type='stoneTrans'>
     		        {stone}
               </InOutWrap>
@@ -95,39 +125,35 @@ const StoneSelect = ({ id, flow, isAlt, rmas, allItems, nonCons, serial, history
                   {tFail}
                 </InOutWrap>
               : null}
+            </div>
+            {expand &&
+        		  <div className='stonePlusRight space'>
+        			  <MiniHistory history={history} />
+        			</div>}
+            <div className={expand && 'ncPlus'}>
               {nonCon}
-      			</div>
-		      );
-		    }
-		  }else if(nc.length > 0) {
-		    Session.set('nowStep', flowStep.step);
-        Session.set('nowWanchor', flowStep.how);
-		    return (
-	        <div>
-		        <InOutWrap type='stoneTrans'>
-  		        {stone}
-            </InOutWrap>
-            {fTest.length > 0 ? 
-              <InOutWrap type='stoneTrans'>
-                {tFail}
-              </InOutWrap>
-            : null}
-            {nonCon}
+            </div>
     			</div>
 	      );
 		  }else{
 		    Session.set('nowStep', flowStep.step);
         Session.set('nowWanchor', flowStep.how);
         return (
-          <div>
-            <InOutWrap type='stoneTrans'>
-              {stone}
-            </InOutWrap>
-            {fTest.length > 0 ? 
+          <div className={expand && 'stonePlus'}>
+            <div className={expand && 'stonePlusLeft'}>
               <InOutWrap type='stoneTrans'>
-                {tFail}
+                {stone}
               </InOutWrap>
-            : null}
+              {fTest.length > 0 ? 
+                <InOutWrap type='stoneTrans'>
+                  {tFail}
+                </InOutWrap>
+              : null}
+            </div>
+            {expand &&
+        		  <div className='stonePlusRight space'>
+        			  <MiniHistory history={history} />
+        			</div>}
           </div>
         );
       }
@@ -137,12 +163,20 @@ const StoneSelect = ({ id, flow, isAlt, rmas, allItems, nonCons, serial, history
   // end of flow
   Session.set('nowStep', 'done');
   return (
-    <InOutWrap type='stoneTrans'>
-      <div className='purpleBorder centre cap'>
-        <h2>{Pref.trackLast}ed</h2>
-        <h3>{moment(iDone[iDone.length -1].time).calendar()}</h3>
+    <div className={expand && 'stonePlus'}>
+      <div className={expand && 'stonePlusLeft'}>
+        <InOutWrap type='stoneTrans'>
+          <div className='purpleBorder centre cap'>
+            <h2>{Pref.trackLast}ed</h2>
+            <h3>{moment(iDone[iDone.length -1].time).calendar()}</h3>
+          </div>
+        </InOutWrap>
       </div>
-    </InOutWrap>
+      {expand &&
+  		  <div className='stonePlusRight space'>
+  			  <MiniHistory history={history} />
+  			</div>}
+  	</div>
   );
 };
   

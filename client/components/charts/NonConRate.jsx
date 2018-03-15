@@ -58,7 +58,11 @@ export default class NonConRate extends Component {
                       labels.length < 90 ?
                       12 :
                       24;
-          return index % scale === 0 ? value : null;
+          return index === labels.length - 4 ? null :
+                 index === labels.length - 3 ? null :
+                 index === labels.length - 2 ? null :
+                 index === labels.length - 1 ? value :
+                 index % scale === 0 ? value : null;
         },
       },
       chartPadding: {

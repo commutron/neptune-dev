@@ -50,13 +50,14 @@ export default class ItemCard extends Component	{
 
     return (
       <AnimateWrap type='cardTrans'>
-        <div className='section sidebar' key={i.serial}>
+        <div key={i.serial}>
           <River
             itemData={i}
             batchData={b}
             widgetData={w}
             app={this.props.app}
-            users={this.props.users} />
+            users={this.props.users}
+            expand={this.props.expand} />
   			</div>
 			</AnimateWrap>
     );

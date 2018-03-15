@@ -49,7 +49,7 @@ export default class ProgBurndown extends Component {
       height: 300,
       showLabel: false,
       showArea: true,
-      showLine: false,
+      showLine: true,
       showPoint: false,
       axisY: {
         low: 0,
@@ -57,6 +57,7 @@ export default class ProgBurndown extends Component {
         divisor: 100,
       },
       axisX: {
+        divisor: 7,
         labelInterpolationFnc: function(value, index) {
           let scale = labels.length < 7 ?
                       1 :
@@ -67,12 +68,16 @@ export default class ProgBurndown extends Component {
                       labels.length < 90 ?
                       12 :
                       16;
-          return index % scale === 0 ? value : null;
+          return index === labels.length - 4 ? null :
+                 index === labels.length - 3 ? null :
+                 index === labels.length - 2 ? null :
+                 index === labels.length - 1 ? value :
+                 index % scale === 0 ? value : null;
         },
       },
       chartPadding: {
         top: 20,
-        right: 0,
+        right: 30,
         bottom: 0,
         left: 0
       },

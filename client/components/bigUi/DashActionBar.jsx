@@ -27,17 +27,6 @@ const DashActionBar = ({ batchData, itemData, widgetData, versionData, groupData
   <div className='dashAction'>
     <div className='footLeft'>
     {
-  	action === 'batchBuild' && 
-  	  batchData.items
-  	    .filter( x => x.history.length < 1 )
-  	      .length < 1 ?
-  	  <MultiItemForm
-        id={batchData._id}
-        items={batchData.items}
-        more={batchData.finishedAt === false}
-        unit={versionData.units}
-        app={app} />
-  	:
   	action === 'item' ?
   	  <div> 
     	  <UnitSet

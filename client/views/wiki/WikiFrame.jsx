@@ -1,7 +1,5 @@
 import React from 'react';
 
-// depreciated
-
 const WikiFrame = ({ go })=> {
   let sty = {
     width: '100%',

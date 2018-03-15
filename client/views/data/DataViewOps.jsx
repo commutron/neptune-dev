@@ -38,7 +38,7 @@ export default class DataViewOps extends Component	{
   
   groupActiveWidgets(gId) {
     let widgetsList = this.props.allWidget.filter(x => x.groupId === gId);
-    let activeBatch = this.props.allBatch.filter( x => x.active === true);
+    let activeBatch = this.props.allBatch.filter( x => x.finishedAt === false);
     
     let activeList = [];
     for(let wdgt of widgetsList) {
