@@ -3,11 +3,11 @@ import { Meteor } from 'meteor/meteor';
 //import Pref from '/client/global/pref.js';
 
 import TopBar from './TopBar.jsx';
-import TaskBar from '/client/components/bigUi/TaskBar.jsx';
+import TaskBar from './TaskBar.jsx';
 import ActionBar from '/client/components/bigUi/ActionBar.jsx';
 import CookieBar from './CookieBar.jsx';
 
-export const ExploreLayout = ({content, link}) => {
+export const ExploreLayout = ({content, link, subLink}) => {
   let w = window.innerWidth;
   let h = window.innerHeight;
   w < 500 || h < 500 ? 
@@ -19,7 +19,7 @@ export const ExploreLayout = ({content, link}) => {
         <TopBar link={link} />
       </div>
       <aside className='taskBarEx'>
-        <TaskBar />
+        <TaskBar subLink={subLink} />
       </aside>
       <section className='contentAreaEx'>
         {content}

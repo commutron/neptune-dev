@@ -73,17 +73,15 @@ export class ProWrap extends Component	{
         <div className={rightClass} style={scrollFix}>
           {this.props.children[this.props.children.length - 1]}
         </div>
+
+        <FormBar
+          batchData={this.props.batchData}
+          itemData={this.props.itemData}
+          widgetData={this.props.widgetData}
+          versionData={this.props.versionData}
+          users={this.props.users}
+          app={this.props.app} />
         
-        {!this.props.actionBar ||
-          <FormBar
-            batchData={this.props.batchData}
-            itemData={this.props.itemData}
-            widgetData={this.props.widgetData}
-            versionData={this.props.versionData}
-            users={this.props.users}
-            app={this.props.app} />
-        }
-              
       </div>
     );
   }

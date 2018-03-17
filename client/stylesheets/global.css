@@ -62,22 +62,7 @@ a:active {
   opacity: 0.9;
 }
 
-nav a, .navIcon {
-  padding: 0 0.5rem;
-  color: black;
-  display: inline-block;
-  text-align: center;
-}
-nav a:hover,
-nav a:focus,
-nav a:active,
-.navIcon:hover,
-.navIcon:focus,
-.navIcon:active {
-  color: white;
-  transition: 0.4s cubic-bezier(0.2, 0.6, 0.3, 1.1);
-}
-
+a,
 button,
 button span,
 button label,

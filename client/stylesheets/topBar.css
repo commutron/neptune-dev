@@ -4,6 +4,7 @@ meteor seems to be handling this */
 #lookup {
   font-size: 2rem;
   text-align: center;
+  line-height: normal;
   height: 100%;
   width: 100%;
   min-width: 256px;
@@ -12,7 +13,6 @@ meteor seems to be handling this */
 	border-right: 0;
 	border-bottom: 3px solid transparent;
 	border-left: 0;
-	/*background-color: #222222;*/
 	background-color: rgb(20,20,20);
   padding: 0;
   border-radius: 0%;
@@ -24,7 +24,7 @@ meteor seems to be handling this */
 	color: white;
 	background: rgb(30,30,30);
   outline: none;
-  border-color: #3498db;
+  border-color: var(--neptuneColor);
   box-shadow: 0 0 .2em .2em rgba(43,43,43,0.3);
 }
 
@@ -41,11 +41,7 @@ meteor seems to be handling this */
   color: white;
   opacity: 0.9;
 }
-#lookup::-moz-placeholder { /* Firefox 19+ */
-  color: white;
-  opacity: 0.9;
-}
-#lookup:-moz-placeholder { /* Firefox 18- */
+#lookup:-moz-placeholder { /* Firefox */
   color: white;
   opacity: 0.9;
 }
@@ -59,13 +55,18 @@ input::-webkit-calendar-picker-indicator {
   background-color: rgba(0,0,0,0);
 }
 
+.logoWrap {
+  display: flex;
+  align-items: center;
+}
 .logoSVG {
   width: 2.5rem;
-  height: auto;
 }
-
 .logoSVG:hover, .logoSVG:active {
-  animation: spinAround 1s infinite linear ;
+  animation: spinAround 1s infinite linear;
+}
+.logoSVG:hover svg, .logoSVG:active svg {
+  fill: var(--neptuneColor);
 }
 
 .slowSpin {
@@ -78,19 +79,36 @@ input::-webkit-calendar-picker-indicator {
 }
 
 .primeNav {
+  display: flex;
   width: auto;
   height: 100%;
-  display: flex;
-  align-items: center;
-  vertical-align: middle;
+  align-items: stretch;
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: space-between;
   flex-shrink: 0;
 }
+.primeNavItem, .primeNavLogo {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  padding: 0 0.5rem;
+  text-align: center;
+}
+.primeNavItem a,
+.primeNavItem .navIcon {
+  color: black;
+}
+.primeNavItem a:hover,
+.primeNavItem.onPNv a,
+.primeNavItem .navIcon:hover,
+.primeNavItem.onPNv .navIcon
+.primeNavItem #exitSwitch:hover {
+  color: white
+}
 
 .navIcon {
-  padding: 0 0.5rem;
+  display: inline-block;
   vertical-align: middle;
   line-height: normal;
 }
@@ -118,7 +136,7 @@ input::-webkit-calendar-picker-indicator {
   transition: 0.4s cubic-bezier(0.2, 0.6, 0.3, 1.1);
 }
 
-#timeSwitch:hover, #exitSwitch:hover, #boltSwitch:hover {
+#timeSwitch:hover, #boltSwitch:hover {
   color: white;
   border-bottom-color: transparent;
 }

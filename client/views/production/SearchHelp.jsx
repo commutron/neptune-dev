@@ -13,17 +13,15 @@ const SearchHelp = ()=> (
           <ul>
             <li>{Pref.item} serial number</li>
             <li>{Pref.batch} number</li>
-            <li>{Pref.group}'s full name</li>
             <li>{Pref.group}'s abreviation</li>
-            <li>{Pref.widget} id</li>
             <li>{Pref.docs}</li>
           </ul>
         </ul>
         <ul>
-          <li>Not Searchable Yet</li>
+          <li>Not Searchable</li>
           <ul>
             <li>part numbers</li>
-            <li>{Pref.widget} descriptions</li>
+            <li>{Pref.widget}s</li>
             <li>partial names</li>
             <li>tags</li>
             <li>users</li>

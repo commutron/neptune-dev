@@ -197,7 +197,8 @@ privlegedRoutes.route('/data/:view', {
                   request={queryParams.request}
                   specify={queryParams.specify} />
                 ),
-      link: 'data'
+      link: 'data',
+      subLink: params.view + queryParams.request
     });
   },
 });

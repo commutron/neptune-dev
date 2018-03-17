@@ -17,6 +17,7 @@ export default class BatchCard extends Component	{
   render() {
 
     const b = this.props.batchData;
+    const iS = this.props.itemSerial;
     const w = this.props.widgetData;
     //const g = this.props.groupData;
     const a = this.props.app;
@@ -33,19 +34,30 @@ export default class BatchCard extends Component	{
     
     let warn = b.blocks.filter( x => x.solve === false ).length;
     iready ? warn++ : null;
-    const showWarn = warn === 0 ? 'hide' : 'alertCount';
+    const showWarn = warn === 0 ? 'alertCount invisible' : 'alertCount';
     
     const expand = this.props.expand;
+    
+    const exploreLink = !iS ?
+                        '/data/batch?request=' + b.batch :
+                        '/data/batch?request=' + b.batch + '&specify=' + iS;
 
     return (
       <AnimateWrap type='cardTrans'>
         <div className='section sidebar' key={b.batch}>
 
-          <h1 className='centreText'>
-            {b.batch}
-            <i className='breath'></i>
-            <i className={showWarn}>{warn}</i>
-          </h1>
+          <div className='cardTitle'>
+            <i className={showWarn}></i>
+            <i className='bigger'>{b.batch}</i>
+            <label htmlFor='exBatch'>
+              <button
+                id='exBatch'
+                title='explore'
+                onClick={()=>FlowRouter.go(exploreLink)}>
+              </button>
+                <i className='fas fa-search'></i>
+            </label>
+          </div>
           
           {iready ?
             <h2 className='actionBox centreText yellow'>

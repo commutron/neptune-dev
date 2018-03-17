@@ -1,4 +1,4 @@
-Neptune v.0.9.6 (beta)
+Neptune v.0.9.7 (beta)
 
 A highly customized statistical process control web app for electronics manufacturing.
 A Commutron Industries project.

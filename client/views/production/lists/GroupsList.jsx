@@ -66,7 +66,7 @@ export default class GroupsList extends Component	{
             return (
               <JumpButton
                 key={index}
-                title={entry.group}
+                title={entry.alias}
                 sub=''
                 sty={ac}
               />

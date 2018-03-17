@@ -5,7 +5,7 @@ import { TraverseWrap } from '/client/layouts/DataExploreLayout.jsx';
 
 import SearchHelp from './SearchHelp.jsx';
 
-import AllOrg from './panels/AllOrg.jsx';
+import AdvancedSearch from './panels/AdvancedSearch.jsx';
 import AllGroups from './panels/AllGroups.jsx';
 import AllBatches from './panels/AllBatches.jsx';
 
@@ -111,7 +111,7 @@ export default class DataViewOps extends Component	{
     if(!view) {
       Session.set('nowBatch', false);
       return (
-        <AllOrg />
+        <AdvancedSearch />
       );
     }
     

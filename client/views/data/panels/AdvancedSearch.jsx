@@ -1,11 +1,11 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
 
-const AllOrg = ({  }) => {
+const AdvancedSearch = ({  }) => {
 
 
   return(
-    <div className='dashMainFull'>
+    <div className=''>
       <div className='centre wide'>
         
         <h1>All Org</h1>
@@ -15,4 +15,4 @@ const AllOrg = ({  }) => {
   );
 };
 
-export default AllOrg;
+export default AdvancedSearch;

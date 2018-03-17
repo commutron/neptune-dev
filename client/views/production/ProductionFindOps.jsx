@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
 
-import ProductionWrap from './ProductionWrap.jsx';
 import { ProWrap } from '/client/layouts/ProLayout.jsx';
 
 import WikiOps from '../wiki/WikiOps.jsx';
@@ -9,7 +8,7 @@ import SearchHelp from './SearchHelp.jsx';
 
 import ItemCard from './cards/ItemCard.jsx';
 import BatchCard from './cards/BatchCard.jsx';
-import WidgetCard from './cards/WidgetCard.jsx';
+//import WidgetCard from './cards/WidgetCard.jsx';
 
 import BatchesList from './lists/BatchesList.jsx';
 import GroupsList from './lists/GroupsList.jsx';
@@ -40,11 +39,11 @@ export default class ProductionFindOps extends Component	{
   itemData(items, bar) {
     return items.find(x => x.serial === bar);
   }
-
+/*
   group() {
     return this.props.allGroup.find(x => x.group === this.props.orb);
   }
-
+*/
   groupAlias() {
     return this.props.allGroup.find(x => x.alias === this.props.orb);
   }
@@ -203,6 +202,7 @@ export default class ProductionFindOps extends Component	{
               app={app} />
             <BatchCard
               batchData={hotBatch}
+              itemSerial={item.serial}
               widgetData={widget}
               versionData={version}
               groupData={group}
@@ -216,8 +216,7 @@ export default class ProductionFindOps extends Component	{
   // Group
     if(isNaN(orb)) {
       let alias = this.groupAlias();
-      let group = this.group();
-      let lookup = alias ? alias : group ? group : false;
+      let lookup = alias ? alias : false;
       if(lookup) {
         Session.set('nowBatch', false);
         let widgets = this.groupWidgets(lookup._id);
@@ -239,34 +238,6 @@ export default class ProductionFindOps extends Component	{
       }
     }
     
-
-  // Widget
-  let lookup = this.widget(); // possible scope issue
-    if(lookup) {
-      Session.set('nowBatch', false);
-      let group = this.linkedGroup(lookup.groupId);
-      let allBatches = this.allLinkedBatches(lookup._id);
-      return (
-        <ProWrap
-          batchData={false}
-          itemData={false}
-          versionData={false}
-          app={app}
-        >
-          <WidgetCard
-            groupData={group}
-            widgetData={lookup}
-            batchRelated={allBatches}
-            app={app}
-          />
-          <WikiOps
-            wi={lookup.versions[lookup.versions.length - 1].wiki} // newest version
-            root={app.instruct}
-            anchor={anchor} />
-        </ProWrap>
-      );
-    }
-    
     // number that looks like a barcode but such a barcode does not exist
     if(!isNaN(orb) && orb.length > 5 && orb.length <= 10) {
 	    Session.set('nowBatch', orb);
@@ -278,7 +249,7 @@ export default class ProductionFindOps extends Component	{
             <SearchHelp />
           </div>
         </div>
-	      );
+	    );
 	  }
     
     Session.set('nowBatch', false);

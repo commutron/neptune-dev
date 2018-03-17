@@ -9,6 +9,13 @@ Meteor.methods({
     return found;
   },
   
+  quickVersion(vKey) {
+    const widget = WidgetDB.findOne({'versions.versionKey': vKey});
+    const version = widget ? widget.versions.find( x => x.versionKey === vKey) : false;
+    const found = version.version;
+    return found;
+  },
+  
   
   activitySnapshot(range, clientTZ, mod) {
     

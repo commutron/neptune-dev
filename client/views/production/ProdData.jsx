@@ -50,10 +50,9 @@ export default withTracker( () => {
   let user = login ? Meteor.user() : false;
   let org = user ? user.org : false;
   let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
-  const coldSub = login ? Meteor.subscribe('skinnyData') : false;
-  //const experimentSub = login ? Meteor.subscribe('groupwidgetData') : false;
+  const coldSub = login ? Meteor.subscribe('thinData') : false;
 
-  let hotSub = Meteor.subscribe('hotData', false);
+  let hotSub = Meteor.subscribe('hotDataPlus', false);
   let hotBatch = false;
   
   if( coldSub ) 
@@ -63,7 +62,7 @@ export default withTracker( () => {
       const oneBatch = BatchDB.findOne( { batch: orb } );
       if( oneBatch )
       {
-        hotSub = Meteor.subscribe( 'hotData', orb );
+        hotSub = Meteor.subscribe( 'hotDataPlus', orb );
         hotBatch = oneBatch;
       }
       else
@@ -76,7 +75,7 @@ export default withTracker( () => {
   		const itemsBatch = BatchDB.findOne( { 'items.serial': orb } );
       if( itemsBatch )
       {
-        hotSub = Meteor.subscribe( 'hotData', itemsBatch.batch );
+        hotSub = Meteor.subscribe( 'hotDataPlus', itemsBatch.batch );
         hotBatch = itemsBatch;
       }
       else
@@ -85,7 +84,7 @@ export default withTracker( () => {
         {
           err ? console.log( err ) : null;
           const serverItemsBatch = BatchDB.findOne( { batch: reply } );
-          hotSub = Meteor.subscribe( 'hotData', reply );
+          hotSub = Meteor.subscribe( 'hotDataPlus', reply );
           hotBatch = serverItemsBatch;
         }
         );

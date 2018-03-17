@@ -66,7 +66,6 @@
   border-right-color: transparent;
   border-bottom-color: white;
   border-left-color: transparent;
-  transition: border 250ms ease;
   word-break: break-all;
 }
 .jump:hover, .jump:focus, .jump:active {
@@ -85,7 +84,6 @@
   border-left-width: 5px;
   border-left-style: solid;
   border-left-color: white;
-  transition: border 250ms ease;
   word-break: keep-all;
   word-wrap: normal;
 }
@@ -237,6 +235,7 @@
 .logoBlue {
   background-color: var(--neptuneColor);
 }
+
 .red {
   background-color: var(--alizarin);
 }
@@ -917,6 +916,8 @@
   border-color: black;
   border-right-color: transparent;
   letter-spacing: 1px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }
 .starfishAccents #pnFind:focus {
   border-color: #00bde0;

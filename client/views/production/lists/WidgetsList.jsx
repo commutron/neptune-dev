@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 
-import JumpButton from '../../../components/tinyUi/JumpButton.jsx';
+import LeapButton from '../../../components/tinyUi/LeapButton.jsx';
 import FilterActive from '../../../components/bigUi/FilterActive.jsx';
 
 export default class WidgetsList extends Component	{
@@ -45,14 +45,13 @@ export default class WidgetsList extends Component	{
           {w.length < 1 ? <p>no {Pref.widget}s created</p> : null}
             { showList.map( (entry, index)=> {
             let ac = a.includes(entry._id) ? 'jumpBar activeMark' : 'jumpBar';
-            let inStyl = entry.widget === Session.get('now');
               return (
-                <JumpButton
+                <LeapButton
                   key={index}
                   title={entry.widget}
                   sub={entry.describe}
                   sty={ac}
-                  inStyle={inStyl}
+                  address={'/data/widget?request=' + entry.widget}
                 />
             )})}
         </div>

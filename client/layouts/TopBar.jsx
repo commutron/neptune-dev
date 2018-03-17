@@ -34,49 +34,71 @@ const TopBar = ({ ready, user, active, org, app, link })=> {
   
   return (
     <div className='primeNav'>
-      <nav className='primeNav'>
-        <a className='title' href='/' title='Home'>
+      <span className='primeNavLogo'>
+        <a className='logoWrap' href='/' title='Home'>
           <img
             src='/neptune-logo-white.svg'
             className='logoSVG' />
         </a>
-        <a href='/activity' className={ link === 'act' ? 'whiteT' : '' }>
-          <i className="fas fa-chart-line fa-lg" aria-hidden='true'></i>
+      </span>
+      <span className={ link === 'act' ? 'primeNavItem onPNv' : 'primeNavItem' }>
+        <a href='/activity'>
+          <i className='fas fa-chart-line fa-lg'></i>
           <span className='icontext'>Activity</span>
         </a>
-        <a href='/dashboard' className={ link === 'dash' ? 'whiteT' : '' }>
-          <i className="fas fa-tachometer-alt fa-lg" aria-hidden='true'></i>
+      </span>
+      <span className={ link === 'dash' ? 'primeNavItem onPNv' : 'primeNavItem' }>
+        <a href='/dashboard'>
+          <i className='fas fa-tachometer-alt fa-lg'></i>
           <span className='icontext'>Dashboard</span>
         </a>
-        <a href='/starfish' className={ link === 'comp' ? 'whiteT' : '' }>
-          <i className="fas fa-microchip fa-lg" aria-hidden='true'></i>
+      </span>
+      <span className={ link === 'comp' ? 'primeNavItem onPNv' : 'primeNavItem' }>
+        <a href='/starfish'>
+          <i className='fas fa-microchip fa-lg'></i>
           <span className='icontext'>Parts Search</span>
         </a>
-        <RoleCheck role={'nightly'}>
-          <span>
-            <a href='/production' className={ link === 'prod' ? 'whiteT' : '' }>
-              <i className="fas fa-paper-plane fa-lg" aria-hidden='true'></i>
-              <span className='icontext'>Production</span>
-            </a>
-            <a href='/data' className={ link === 'data' ? 'whiteT' : '' }>
-              <i className="fas fa-binoculars fa-lg" aria-hidden='true'></i>
-              <span className='icontext'>Data Explore</span>
-            </a>
-            <a href='/scan' className={ link === 'scan' ? 'whiteT' : '' }>
-              <i className="icon fa fa-flask fa-lg" aria-hidden='true'></i>
-              <span className='icontext'>Scan</span>
-            </a>
-          </span>
-        </RoleCheck>
-        <a href='/app' className={ link === 'app' ? 'whiteT' : '' }>
-          <i className="fas fa-sliders-h fa-lg" aria-hidden='true'></i>
+      </span>
+      <RoleCheck role={'nightly'}>
+        <span className={ link === 'prod' ? 'primeNavItem onPNv' : 'primeNavItem' }>
+          <a href='/production'>
+            <i className='fas fa-paper-plane fa-lg'></i>
+            <span className='icontext'>Production</span>
+          </a>
+        </span>
+      </RoleCheck>
+      <RoleCheck role={'nightly'}>
+        <span className={ link === 'data' ? 'primeNavItem onPNv' : 'primeNavItem' }>
+          <a href='/data'>
+            <i className='fas fa-search fa-lg'></i>
+            <span className='icontext'>Data Explore</span>
+          </a>
+        </span>
+      </RoleCheck>
+      <RoleCheck role={'nightly'}>
+        <span className={ link === 'scan' ? 'primeNavItem onPNv' : 'primeNavItem' }>
+          <a href='/scan'>
+            <i className='icon fa fa-flask fa-lg'></i>
+            <span className='icontext'>Scan</span>
+          </a>
+        </span>
+      </RoleCheck>
+      <span className={ link === 'app' ? 'primeNavItem onPNv' : 'primeNavItem' }>
+        <a href='/app'>
+          <i className='fas fa-sliders-h fa-lg'></i>
           <span className='icontext'>Settings</span>
         </a>
-      </nav>
+      </span>
       <span className='navSpacer'></span>
-      <ExternalLink go={app.helpDocs} title='Help' icon='far fa-question-circle' />
-      <ExternalLink go={app.timeClock} title='Time Clock' icon='far fa-clock' />
-      <Chill name={user}/>
+      <span className='primeNavItem'>
+        <ExternalLink go={app.helpDocs} title='Help' icon='far fa-question-circle' />
+      </span>
+      <span className='primeNavItem'>
+        <ExternalLink go={app.timeClock} title='Time Clock' icon='far fa-clock' />
+      </span>
+      <span className='primeNavItem'>
+        <Chill name={user}/>
+      </span>
     </div>
   );
 };

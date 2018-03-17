@@ -18,7 +18,7 @@ Meteor.publish('appData', function(){
         {fields: {
           'services': 0,
           'orgKey': 0,
-          //'pin': 0
+          'pin': 0
         }}),
       ];
   }else if(!orgKey) {
@@ -43,6 +43,7 @@ Meteor.publish('appData', function(){
   }else{null}
 });
 
+// Activity
 Meteor.publish('shaddowData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
@@ -70,6 +71,55 @@ Meteor.publish('shaddowData', function(){
     ];
 });
 
+// production
+Meteor.publish('thinData', function(){
+  const user = Meteor.users.findOne({_id: this.userId});
+  const orgKey = user ? user.orgKey : false;
+  return [
+    GroupDB.find({orgKey: orgKey}, {
+      fields: {
+          'orgKey': 0,
+          'shareKey': 0,
+        }}),
+    
+    WidgetDB.find({orgKey: orgKey}, {
+      fields: {
+          'widget': 1,
+          'describe': 1,
+          'groupId': 1,
+        }}),
+    
+    BatchDB.find({orgKey: orgKey}, {
+      sort: {batch:-1},
+      fields: {
+          'batch': 1,
+          'widgetId': 1,
+          'versionKey': 1,
+          'active': 1,
+          'finishedAt': 1,
+        }})
+    ];
+});
+
+Meteor.publish('hotDataPlus', function(batch){
+  const user = Meteor.users.findOne({_id: this.userId});
+  const orgKey = user ? user.orgKey : false;
+  const bWidget = BatchDB.findOne({batch: batch, orgKey: orgKey});
+  const wID = !bWidget ? false : bWidget.widgetId;         
+  return [
+    BatchDB.find({batch: batch, orgKey: orgKey}, {
+      fields: {
+        'orgKey': 0,
+        'shareKey': 0
+      }}),
+    WidgetDB.find({_id: wID, orgKey: orgKey}, {
+      fields: {
+        'orgKey': 0
+      }})
+    ];
+});
+
+// Explore
 Meteor.publish('skinnyData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
@@ -93,16 +143,13 @@ Meteor.publish('skinnyData', function(){
           'versionKey': 1,
           'active': 1,
           'finishedAt': 1,
-          //'items.serial': 1,
-          //'items.finishedAt': 1
         }})
     ];
 });
 
-Meteor.publish('hotData', function(batch){
+Meteor.publish('hotDataEx', function(batch){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-              
   return [
     BatchDB.find({batch: batch, orgKey: orgKey}, {
       fields: {
@@ -110,10 +157,10 @@ Meteor.publish('hotData', function(batch){
         'shareKey': 0
       }})
     ];
-    
 });
 
-Meteor.publish('hotDataEx', function(batch){
+//dashboard
+Meteor.publish('hotData', function(batch){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
   return [

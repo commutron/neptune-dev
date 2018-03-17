@@ -9,8 +9,6 @@
   overflow-y: hidden !important;
   overflow-x: hidden !important;
   -webkit-overflow-scrolling: touch;
-  min-width: 768px;
-  min-height: 768px;
 }
 
 .taskBarEx {
@@ -132,9 +130,28 @@
 .taskLink {
   background-color: var(--black);
   color: var(--silver);
-  padding: 10px 0;
+  margin: 5px 0;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  font-size: 1.4rem;
+}
+.taskLink:first-child {
+  margin: 10px 0 5px 0;
+}
+.taskLink:disabled {
+  color: black;
+}
+.taskLink:hover, .taskLink:active {
+  color: var(--black);
+  background-color: var(--silver);
+}
+.onTL {
+  color: var(--black);
+  background-color: var(--silver);
+}
+.onTL:hover, .onTL:active {
+  cursor: default;
 }
 
-.taskLink:hover, .taskLink:active {
-  color: var(--clouds);
-}
+
