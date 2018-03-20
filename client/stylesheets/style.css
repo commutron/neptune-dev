@@ -91,6 +91,27 @@
   border-bottom-color: #3498db;
 }
 
+.leapBar {
+  width: 100%;
+  min-height: 32px;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  font-weight: 600;
+	margin: 5px 0;
+	padding: 2px;
+	background-color: transparent;
+	color: var(--clouds);
+  border-left-width: 5px;
+  border-left-style: solid;
+  border-left-color: white;
+  word-break: keep-all;
+  word-wrap: normal;
+}
+.leapBar:hover, .leapBar:focus, .leapBar:active {
+  background-color: var(--clouds);
+  color: var(--black);
+}
+
 .roundActionIcon {
   display: block;
   width: 2.5rem;

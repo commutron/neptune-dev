@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
+import ScanListenerUtility from '/client/components/utilities/ScanListener.js';
 //import Pref from '/client/global/pref.js';
-
 
 import FindBox from './FindBox.jsx';
 import TopBar from './TopBar.jsx';

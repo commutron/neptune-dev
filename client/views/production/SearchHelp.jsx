@@ -5,7 +5,7 @@ import Pref from '/client/global/pref.js';
 const SearchHelp = ()=> (
   <AnimateWrap type='cardTrans'>
     <div className='card'>
-      <div className='space comfort'>
+      <div className='space centre'>
         <hr />
 
         <ul>

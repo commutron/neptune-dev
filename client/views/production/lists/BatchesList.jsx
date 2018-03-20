@@ -60,8 +60,8 @@ export default class BatchesList extends Component	{
             
           {showList.map( (entry, index)=> {
             const style = entry.finishedAt === false ? 
-                          'jumpBar activeMark' : 
-                          'jumpBar gMark';
+                          'leapBar activeMark' : 
+                          'leapBar gMark';
             const subW = w.find( x => x._id === entry.widgetId);
             const subV = !v ? false : v.find( x => x.vKey === entry.versionKey);
             const subVname = !subV ? false : subV.vName;

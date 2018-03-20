@@ -244,7 +244,7 @@ export default class ProductionFindOps extends Component	{
 	    return(
 	      <div className='proFull'>
           <div className='centre wide space'>
-            <p className='big centerText'>{orb} {Pref.noSerial}</p>
+            <p className='big centerText'>{orb} is not a serial number</p>
             <hr />
             <SearchHelp />
           </div>

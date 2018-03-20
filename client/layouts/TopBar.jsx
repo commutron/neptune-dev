@@ -71,7 +71,7 @@ const TopBar = ({ ready, user, active, org, app, link })=> {
         <span className={ link === 'data' ? 'primeNavItem onPNv' : 'primeNavItem' }>
           <a href='/data'>
             <i className='fas fa-search fa-lg'></i>
-            <span className='icontext'>Data Explore</span>
+            <span className='icontext'>Explore</span>
           </a>
         </span>
       </RoleCheck>

@@ -117,9 +117,9 @@ export default class ItemsList extends Component	{
               onChange={e => this.setAdvancedFilter(e)} />
           </div>
           {showList.map( (entry, index)=> {
-            let style = entry.history.length === 0 ? 'jumpBar' :
-                        entry.finishedAt === false ? 'jumpBar activeMark' : 
-                        scrap.includes(entry.serial) ? 'jumpBar ngMark' : 'jumpBar gMark';
+            let style = entry.history.length === 0 ? 'leapBar' :
+                        entry.finishedAt === false ? 'leapBar activeMark' : 
+                        scrap.includes(entry.serial) ? 'leapBar ngMark' : 'leapBar gMark';
               return (
                 <LeapButton
                   key={index} 

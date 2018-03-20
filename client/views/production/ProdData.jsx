@@ -6,7 +6,7 @@ import { withTracker } from 'meteor/react-meteor-data';
 import Spin from '/client/components/uUi/Spin.jsx';
 import ProductionFindOps from './ProductionFindOps.jsx';
 
-class ProductionView extends Component	{
+class ProdData extends Component	{
   
   render() {
     
@@ -42,8 +42,7 @@ export default withTracker( () => {
   /*
   const allData = Meteor.settings.public.allData ? true : false;
   const allSub = Meteor.subscribe('allData', allData);
-  */ 
-  ///////////////////////////////////////////////////////
+  */
   
   const orb = Session.get('now');
   let login = Meteor.userId() ? true : false;
@@ -126,4 +125,4 @@ export default withTracker( () => {
       hotBatch: hotBatch,
     };
   }
-})(ProductionView);
+})(ProdData);

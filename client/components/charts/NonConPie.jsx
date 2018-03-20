@@ -46,7 +46,7 @@ export default class NonConPie extends Component {
       width: 300,
       height: 300,
       showLabel: true,
-      labelOffset: 30,
+      labelOffset: 40,
       labelDirection: 'explode',
       ignoreEmptyValues: true,
       chartPadding: 60,

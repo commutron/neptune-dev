@@ -62,7 +62,7 @@ export default class GroupsList extends Component	{
               onClick={e => this.setFilter(e)} />
           </div>  
           { showList.map( (entry, index)=> {
-            let ac = a.includes(entry._id) ? 'jumpBar activeMark' : 'jumpBar';
+            let ac = a.includes(entry._id) ? 'leapBar activeMark' : 'leapBar';
             return (
               <LeapButton
                 key={index}
