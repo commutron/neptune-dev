@@ -161,3 +161,19 @@ class SetCheck extends Component	{
       );
   }
 }
+
+export const ChangeAutoScan = ()=> {
+  function handle() {
+    Meteor.call('setAutoScan', (error)=>{
+      if(error)
+        console.log(error);
+    });
+  }
+  let current = Meteor.user().autoScan ? 'OFF' : 'ON';
+  return(
+    <button
+      className='action clean clearBlue'
+      onClick={()=>handle()}
+    >Turn Auto Scan {current}</button>
+  );
+};

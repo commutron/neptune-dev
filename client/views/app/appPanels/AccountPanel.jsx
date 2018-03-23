@@ -4,6 +4,7 @@ import Pref from '/client/global/pref.js';
 import AccountsUI from '../../../components/bigUi/AccountsUI.jsx';
 import { AdminDown } from '../../../components/forms/AdminForm.jsx';
 import LogoutOther from '../../../components/uUi/LogoutOther.jsx';
+import { ChangeAutoScan } from '/client/components/forms/UserForm.jsx';
 import UserSpeedSet from '../../../components/forms/UserSpeedSet.jsx';
 import EmailForm from '../../../components/forms/EmailForm.jsx';
 import { PermissionHelp } from './AccountsManagePanel';
@@ -17,7 +18,7 @@ const AccountPanel = ()=> {
     <div className='section'>
       <div className='space balance'>
       
-        <div>
+        <div className='centre'>
           <h2>Logged in as: <AccountsUI /></h2>
           <p className='up'>id: {Meteor.user()._id}</p>
           <p className='blueT'>{adminNice}</p>
@@ -25,6 +26,7 @@ const AccountPanel = ()=> {
           <br />
           <LogoutOther />
           <br />
+          <ChangeAutoScan />
           <br />
           <UserSpeedSet />
           <br />

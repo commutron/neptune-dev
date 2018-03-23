@@ -13,6 +13,7 @@ Meteor.methods({
         $set: {
           org: orgName,
           orgKey: new Meteor.Collection.ObjectID().valueOf(),
+          autoScan: true,
           unlockSpeed: 2000,
           watchlist: [],
           inbox: []
@@ -28,6 +29,7 @@ Meteor.methods({
             $set: {
               org: orgIs.org,
               orgKey: orgIs.orgKey,
+              autoScan: true,
               unlockSpeed: 2000,
               watchlist: [],
               inbox: []
@@ -157,6 +159,16 @@ Meteor.methods({
     }else{
       return false;
     }
+  },
+  
+  setAutoScan() {
+    const curr = Meteor.user().autoScan;
+    const change = !curr ? true : false;
+    Meteor.users.update(Meteor.userId(), {
+      $set: {
+        autoScan: change,
+      }
+    });
   },
   
   setSpeed(time) {

@@ -8,24 +8,19 @@
   <meta name="theme-color" content="#007fff" />
   <!--<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>-->
   <script defer src="https://use.fontawesome.com/releases/v5.0.0/js/all.js"></script>
-  <!--<script defer src="/client/global/fontawesome-all.js"></script>-->
   <script>
   'use strict';
-  
-    function reFocus() {
-      const findBox = document.getElementById('lookup');
-  	  findBox ? findBox.focus() : null;
-    }
 
-    window.addEventListener('visibilitychange', ()=> {
+    function reFocus() {
       if(document.visibilityState === 'visible' || document.hasFocus()) {
-        reFocus();
-      }else{null;}
-    }, false);
-    
-    window.addEventListener('focus', ()=> {
-      reFocus();
-    }, false);
+        const findBox = document.getElementById('lookup');
+    	  findBox ? findBox.focus() : null;
+      }else{
+        null;
+      }
+    }
+    window.addEventListener('visibilitychange', reFocus);
+    window.addEventListener('focus', reFocus);
     
     //(()=> {window.setInterval(/*do a thing*/, 900000);})();
 

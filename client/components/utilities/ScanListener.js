@@ -1,13 +1,16 @@
+function reFocus() {
+  if(document.visibilityState === 'visible' || document.hasFocus()) {
+    const findBox = document.getElementById('lookup');
+    findBox ? findBox.focus() : null;
+  }else{null}
+}
 
 function onPress(event) {
   const element = document.activeElement;
-  if(element.id !== 'lookup' || element.id !== 'nestSerial') {
+  if(element.id !== 'lookup' && element.id !== 'nestSerial') {
     const inputKey = event.key;
-    console.log(inputKey);
     const inputCode = event.keyCode;
-    let scanListener = Session.get('scanListener') ? 
-                       Session.get('scanListener') : 
-                       '';
+    let scanListener = Session.get('scanListener') || '';
     if( inputKey ) {
       if( inputCode === 13 ) { // "enter"
         const slL = scanListener.length;
@@ -27,26 +30,45 @@ function onPress(event) {
     null;
   }
 }
-      
+
 export function ScanListenerUtility() {
-    
-    /*  
-    window.addEventListener("message", function receiveMessage(event)
-      {
-        if (event.origin !== "https://neptune-dev-0-mattatcommutron.c9users.io/production")
-          console.log('from the iframe');
+  window.addEventListener('visibilitychange', reFocus);
+  window.addEventListener('focus', reFocus);
+  
+  Meteor.setTimeout( ()=>{
+    const autoScan = Meteor.user().autoScan;
+    autoScan === undefined ? console.log(autoScan) : null;
+    if(!autoScan) {
+      null;
+    }else{
+      window.addEventListener('keypress', onPress);
       
-        // ...
-      }, false);
-    */
-    
-  if( Roles.userIsInRole(Meteor.userId(), 'nightly') ) {
-    document.addEventListener('keypress', onPress);
-  }else{
-    null;
-  }
+      var pisces = document.getElementsByTagName("iframe")[0];
+      if(pisces) {
+        pisces.contentWindow.addEventListener('keypress', (event)=>{
+          console.log(event);
+        });
+      }else{null}
+      
+    }
+  },150);
+  /*
+  window.addEventListener('keypress', (event)=>{
+    window.parent.postMessage('event,key', "*");
+  });
+  
+  window.addEventListener("message", function receiveMessage(event)
+    {
+      if (event.origin !== "https://192.168.1.68:8000")
+        console.log('from the iframe');
+      // ...
+    }, false);
+  */
 }
 
 export function ScanListenerOff() {
-  document.removeEventListener('keypress', onPress);
+  window.removeEventListener('visibilitychange', reFocus);
+  window.removeEventListener('focus', reFocus);
+  window.removeEventListener('keypress', onPress);
+  Session.set('scanListener', '');
 }
