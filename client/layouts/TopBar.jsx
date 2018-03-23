@@ -75,14 +75,6 @@ const TopBar = ({ ready, user, active, org, app, link })=> {
           </a>
         </span>
       </RoleCheck>
-      <RoleCheck role={'nightly'}>
-        <span className={ link === 'scan' ? 'primeNavItem onPNv' : 'primeNavItem' }>
-          <a href='/scan'>
-            <i className='icon fa fa-flask fa-lg'></i>
-            <span className='icontext'>Scan</span>
-          </a>
-        </span>
-      </RoleCheck>
       <span className={ link === 'app' ? 'primeNavItem onPNv' : 'primeNavItem' }>
         <a href='/app'>
           <i className='fas fa-sliders-h fa-lg'></i>

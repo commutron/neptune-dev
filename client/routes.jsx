@@ -15,7 +15,6 @@ import DashData from './views/dashboard/DashData.jsx';
 import ActivityData from './views/activity/ActivityData.jsx';
 import ProdData from './views/production/ProdData.jsx';
 import DataData from './views/data/DataData.jsx';
-import ScanData from './views/scanListenerEx/ScanData.jsx';
 import CompSearchPanel from './views/data/panels/CompSearchPanel.jsx';
 import AppData from './views/app/AppData.jsx';
 
@@ -109,15 +108,6 @@ privlegedRoutes.route('/production', {
     mount(ProductionLayout, {
       content: (<ProdData />),
       link: 'prod'
-    });
-  }
-});
-
-privlegedRoutes.route('/scan', {
-  action() {
-    mount(BasicLayout, {
-      content: (<ScanData />),
-      link: 'scan'
     });
   }
 });

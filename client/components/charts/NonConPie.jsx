@@ -43,7 +43,7 @@ export default class NonConPie extends Component {
     };
     
     let options = {
-      width: 300,
+      width: 350,
       height: 300,
       showLabel: true,
       labelOffset: 40,
@@ -53,7 +53,7 @@ export default class NonConPie extends Component {
       donut: true,
       donutWidth: 40,
       startAngle: 0,
-      //total: this.props.nonCons.length,
+      total: this.props.nonCons.length,
       plugins: [
         Chartist.plugins.tooltip({
           appendToBody: true

@@ -1,6 +1,34 @@
 
-
-  if( Roles.userIsInRole(Meteor.userId(), 'nightly') ) {
+function onPress(event) {
+  const element = document.activeElement;
+  if(element.id !== 'lookup' || element.id !== 'nestSerial') {
+    const inputKey = event.key;
+    console.log(inputKey);
+    const inputCode = event.keyCode;
+    let scanListener = Session.get('scanListener') ? 
+                       Session.get('scanListener') : 
+                       '';
+    if( inputKey ) {
+      if( inputCode === 13 ) { // "enter"
+        const slL = scanListener.length;
+        if( slL === 9 || slL === 10 ) {
+          Session.set('now', scanListener);
+          event.preventDefault();
+        }
+        scanListener = '';
+      }else if( !inputKey.match(/[0-9]/) || inputCode === 8 ) {
+        scanListener = '';
+      }else if( inputKey.match(/[0-9]/) ) {
+        scanListener = scanListener.concat(event.key);
+      }
+      Session.set('scanListener', scanListener);
+    }
+  }else{
+    null;
+  }
+}
+      
+export function ScanListenerUtility() {
     
     /*  
     window.addEventListener("message", function receiveMessage(event)
@@ -11,27 +39,14 @@
         // ...
       }, false);
     */
-
-    window.addEventListener('keypress', function onPress(event) {
-      const inputKey = event.key;
-      console.log(inputKey);
-      const inputCode = event.keyCode;
-      let scanListener = Session.get('scanListener') ? 
-                         Session.get('scanListener') : 
-                         '';
-      if( inputKey ) {
-        if( inputCode === 13 ) { // "enter"
-          if(scanListener.length === 9 || scanListener.length === 10) {
-            Session.set('now', scanListener);
-          }
-          scanListener = '';
-        }else if( !inputKey.match(/[0-9]/) ) {
-          scanListener = '';
-        }else if( inputKey.match(/[0-9]/) ) {
-          scanListener = scanListener.concat(event.key);
-        }
-        Session.set('scanListener', scanListener);
-        event.preventDefault();
-      }
-    }, true);
+    
+  if( Roles.userIsInRole(Meteor.userId(), 'nightly') ) {
+    document.addEventListener('keypress', onPress);
+  }else{
+    null;
   }
+}
+
+export function ScanListenerOff() {
+  document.removeEventListener('keypress', onPress);
+}

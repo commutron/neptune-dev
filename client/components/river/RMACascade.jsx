@@ -54,6 +54,7 @@ export default class RMACascade extends Component {
             return(
               <div key={index} className='bleed cap fadeRed centre'>
                 <b>RMA: {entry.rmaId}, {moment(entry.time).calendar()}</b>
+                {this.props.expand && <p>{entry.comm}</p>}
               </div>
               );
           }else{

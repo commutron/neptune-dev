@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import moment from 'moment';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
+import Alert from '/client/global/alert.js';
 
 import Spin from '../../components/uUi/Spin.jsx';
 import RangeTools from '/client/components/smallUi/RangeTools.jsx';
@@ -89,6 +90,7 @@ export default class OrgWIP extends Component	{
     );
   }
   componentDidMount() {
+    Bert.alert(Alert.wait);
     this.relevant();
     this.interval = setInterval(() => this.relevant(), 1000*60*60);
   }

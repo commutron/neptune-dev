@@ -3,6 +3,8 @@ import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 //import Pref from '/client/global/pref.js';
 
+import { ScanListenerUtility } from '/client/components/utilities/ScanListener.js';
+import { ScanListenerOff } from '/client/components/utilities/ScanListener.js';
 import Spin from '/client/components/uUi/Spin.jsx';
 import ProductionFindOps from './ProductionFindOps.jsx';
 
@@ -33,6 +35,12 @@ class ProdData extends Component	{
         hotBatch={this.props.hotBatch}
       />
     );
+  }
+  componentDidMount() {
+    ScanListenerUtility();
+  }
+  componentWillUnmount() {
+    ScanListenerOff();
   }
 }
 

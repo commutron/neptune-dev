@@ -13,12 +13,11 @@ Meteor.publish('appData', function(){
   const admin = Roles.userIsInRole(this.userId, 'admin');
   if(admin) {
     return [
-      AppDB.find({}, {fields: { 'orgKey': 0 }}),
+      AppDB.find({}, {fields: { 'orgKey': 0, 'orgPIN': 0 }}),
       Meteor.users.find({},
         {fields: {
           'services': 0,
           'orgKey': 0,
-          'pin': 0
         }}),
       ];
   }else if(!orgKey) {
@@ -27,17 +26,15 @@ Meteor.publish('appData', function(){
         {fields: {
           'services': 0,
           'orgKey': 0,
-          'pin': 0,
         }}),
       ];
   }else if(user) {
     return [ 
-      AppDB.find({orgKey: orgKey}, {fields: { 'orgKey': 0 }}),
+      AppDB.find({orgKey: orgKey}, {fields: { 'orgKey': 0, 'orgPIN': 0 }}),
       Meteor.users.find({orgKey: orgKey},
         {fields: {
           'services': 0,
           'orgKey': 0,
-          'pin': 0,
         }}),
       ];
   }else{null}

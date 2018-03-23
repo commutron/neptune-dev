@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
+import Alert from '/client/global/alert.js';
 
+import SetPin from '/client/components/forms/SetPin.jsx';
 import {OptionAdd} from '/client/components/forms/AppSettings';
 import {FinishTrack} from '/client/components/forms/AppSettings';
 import {SetScale} from '/client/components/forms/AppSettings';
@@ -8,6 +10,32 @@ import {MethodOptionAdd} from '/client/components/forms/AppSettings';
 import {OverrideLastestSerial} from '/client/components/forms/AppSettings';
 
 export default class PrefPanel extends Component {
+  
+  ncRemove(name) {
+    Bert.alert(Alert.wait);
+    Meteor.call('removeNCOption', name, (error, reply)=>{
+      if(error)
+        console.log(error);
+      if(reply) {
+        Bert.alert(Alert.success);
+      }else{
+        Bert.alert(Alert.inUse);
+      }
+    });
+  }
+  
+  ancRemove(name) {
+    Bert.alert(Alert.wait);
+    Meteor.call('removeAncOption', name, (error, reply)=>{
+      if(error)
+        console.log(error);
+      if(reply) {
+        Bert.alert(Alert.success);
+      }else{
+        Bert.alert(Alert.inUse);
+      }
+    });
+  }
 
   render() {
     
@@ -56,11 +84,18 @@ export default class PrefPanel extends Component {
             <h2>{Pref.nonCon} Types</h2>
             <i>Options for types of {Pref.nonCon}s</i>
             <OptionAdd action='nc' title='defect' rndmKey={Math.random().toString(36).substr(2, 5)} />
-            <ul>
+            <ol>
               {dt.nonConOption.map( (entry, index)=>{
-                  return ( <li key={index}><i>{entry}</i></li> );
-                })}
-            </ul>
+                  return( 
+                    <li key={index}>
+                      <i>{entry}</i>
+                      <button 
+                        className='miniAction redT'
+                        onClick={()=>this.ncRemove(entry)}
+                      ><i className='fas fa-times fa-fw'></i></button>
+                    </li>
+              )})}
+            </ol>
             
             <hr />
             
@@ -69,8 +104,15 @@ export default class PrefPanel extends Component {
             <OptionAdd action='anc' title='step' rndmKey={Math.random().toString(36).substr(2, 5)} />
             <ul>
               {dt.ancillaryOption.map( (entry, index)=>{
-                return ( <li key={index}><i>{entry}</i></li> );
-              })}
+                return( 
+                  <li key={index}>
+                    <i>{entry}</i>
+                    <button 
+                      className='miniAction redT'
+                      onClick={()=>this.ancRemove(entry)}
+                    ><i className='fas fa-times fa-fw'></i></button>
+                  </li>
+              )})}
             </ul>
             
             <hr />
@@ -149,6 +191,12 @@ export default class PrefPanel extends Component {
           </div>
   
           <br />
+        </fieldset>
+        
+        <fieldset disabled={auth}>
+          <div className='space breathe'>
+            <SetPin />
+          </div>
         </fieldset>
       </div>
     );

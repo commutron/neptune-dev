@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Chartist from 'chartist';
 import ChartistGraph from 'react-chartist';
 import moment from 'moment';
+import timezone from 'moment-timezone';
 import { CalcSpin } from '/client/components/uUi/Spin.jsx';
 
 export default class ProgBurndown extends Component {
@@ -23,9 +24,9 @@ export default class ProgBurndown extends Component {
     let clientTZ = moment.tz.guess();
   
     Meteor.call('historyRate', start, end, flowData, flowAltData, itemData, clientTZ, (error, reply)=> {
-        error ? console.log(error) : null;
-        this.setState({ counts: reply.counts, labels: reply.labels });
-      });
+      error ? console.log(error) : null;
+      this.setState({ counts: reply.counts, labels: reply.labels });
+    });
   }
   
   render () {
@@ -77,7 +78,7 @@ export default class ProgBurndown extends Component {
       },
       chartPadding: {
         top: 20,
-        right: 30,
+        right: 40,
         bottom: 0,
         left: 0
       },

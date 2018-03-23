@@ -18,6 +18,7 @@ Meteor.methods({
         AppDB.insert({
           org: orgName,
           orgKey: orgKey,
+          orgPIN: '0000',
           createdAt: new Date(),
           toolOption: [],
           trackOption: [],
@@ -54,6 +55,44 @@ Meteor.methods({
     }
   },
   
+// Clearly this is not secure.
+// The use case of this software is to be used by a single organization,
+// hosted and made available internaly.
+// In this context, the intention of a PIN is to promt behavior.
+// To encourage an interaction between the new user and the org's admin
+  setPin(oldPIN, newPIN) {
+    const adminPower = Roles.userIsInRole(Meteor.userId(), 'admin');
+    const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
+    const orgPIN = org ? org.orgPIN : false;
+    if(adminPower) {
+      if(!orgPIN || orgPIN === false || orgPIN === oldPIN) {
+        AppDB.update({orgKey: Meteor.user().orgKey}, {
+          $set : { 
+            orgPIN : newPIN
+        }});
+        return true;
+      }else{
+        return false;
+      }
+    }else{
+      return false;
+    }
+  },
+  revealPIN(passCode) {
+    const adminPower = Roles.userIsInRole(Meteor.userId(), 'admin');
+    const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
+    const orgPIN = org ? org.orgPIN : false;
+    if(adminPower) {
+      const backdoor = "People don't appreciate the substance of things. Objects in space.";
+      if(passCode === backdoor) {
+        return [true, orgPIN];
+      }else{
+        return [false, 'no'];
+      }
+    }else{
+      return [false, 'no'];
+    }
+  },
   
   addTrackOption(flatTrack) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
@@ -146,6 +185,7 @@ Meteor.methods({
     }
   },
   
+// NonCon Types
   addNCOption(value) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {
@@ -153,6 +193,23 @@ Meteor.methods({
           nonConOption : value
       }});
       return true;
+    }else{
+      return false;
+    }
+  },
+  
+  removeNCOption(value) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      const used = BatchDB.findOne({orgKey: Meteor.user().orgKey, 'nonCon.type': value});
+      if(!used) {
+        AppDB.update({orgKey: Meteor.user().orgKey}, {
+          $pull : { 
+            nonConOption : value
+        }});
+        return true;
+      }else{
+        return false;
+      }
     }else{
       return false;
     }
@@ -181,6 +238,23 @@ Meteor.methods({
           ancillaryOption : value
       }});
       return true;
+    }else{
+      return false;
+    }
+  },
+    
+  removeAncOption(value) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      const used = BatchDB.findOne({orgKey: Meteor.user().orgKey, 'nonCon.where': value});
+      if(!used) {
+        AppDB.update({orgKey: Meteor.user().orgKey}, {
+          $pull : { 
+            ancillaryOption : value
+        }});
+        return true;
+      }else{
+        return false;
+      }
     }else{
       return false;
     }

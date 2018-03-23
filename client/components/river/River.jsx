@@ -4,6 +4,7 @@ import React from 'react';
 import StoneSelect from './StoneSelect.jsx';
 import RiverFork from './RiverFork.jsx';
 import RMACascade from './RMACascade.jsx';
+import MiniHistory from './MiniHistory.jsx';
 import AltMarker from '/client/components/uUi/AltMarker.jsx';
 
 const River = ({ itemData, batchData, widgetData, app, users, expand })=> {
@@ -37,12 +38,20 @@ const River = ({ itemData, batchData, widgetData, app, users, expand })=> {
 	// present option between River and Alt River
 	if(i.finishedAt === false && b.riverAlt && !i.alt) {
 	  return(
-	    <RiverFork
-        id={b._id}
-        serial={i.serial}
-        flows={w.flows}
-        river={b.river}
-        riverAlt={b.riverAlt} />
+	    <div className={expand && 'stonePlus'}>
+        <div className={expand && 'stonePlusLeft'}>
+    	    <RiverFork
+            id={b._id}
+            serial={i.serial}
+            flows={w.flows}
+            river={b.river}
+            riverAlt={b.riverAlt} />
+        </div>
+        {expand &&
+    		  <div className='stonePlusRight space'>
+    			  <MiniHistory history={i.history} />
+    			</div>}
+    	</div>
     );
 	}
 
@@ -56,7 +65,8 @@ const River = ({ itemData, batchData, widgetData, app, users, expand })=> {
           rma={rma}
           cascadeData={b.cascade}
           rmaList={i.rma}
-          allItems={b.items} />
+          allItems={b.items}
+          expand={expand} />
         :null}
 		  
 		  <div>

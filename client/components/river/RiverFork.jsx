@@ -17,7 +17,7 @@ const RiverFork = ({ id, serial, flows, river, riverAlt })=> {
   let flowAlt = flows.find(x => x.flowKey === riverAlt);
   flowAlt ? flowAlt = flowAlt.title : flowAlt = false;
   
-  let sty = { height: '5em', fontSize: '1.5rem' };
+  let sty = { minHeight: '5em', fontSize: '1.5rem' };
   
   return(
     <div className='wide'>

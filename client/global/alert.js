@@ -4,7 +4,7 @@ import { Meteor } from 'meteor/meteor';
 
 // Change Bert's time on screen to be two seconds instead of the
 // default three and a half.
-Bert.defaults.hideDelay = 2000;
+Bert.defaults.hideDelay = 5000;
 
 // Change Bert's default type to be a warning instead of default.
 // Bert.defaults.type = 'warning';
@@ -26,6 +26,14 @@ class Alert {
     this.info = {
       title: 'Info',
       message: 'a thing happened',
+      type: 'peterRiver',
+      style: 'fixed-bottom',
+      icon: 'fa-info'
+    };
+    
+    this.wait = {
+      title: 'Working',
+      message: 'This operation may take a moment',
       type: 'peterRiver',
       style: 'fixed-bottom',
       icon: 'fa-info'

@@ -325,7 +325,7 @@ Meteor.methods({
     
     let now = moment().tz(clientTZ);
     const endDay = end !== false ? moment(end).endOf('day') : now.clone().endOf('day');
-    const startDay = moment(start);
+    const startDay = moment(start).endOf('day');
     const howManyDays = endDay.diff(startDay, 'day') + 1;
     
     function historyPings(regItems, flowKeys, totalSteps, day) {

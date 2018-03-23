@@ -1,29 +1,33 @@
 Meteor.methods({
-    
+  
+// Clearly this is not secure.
+// The use case of this software is to be used by a single organization,
+// hosted and made available internaly.
+// In this context, the intention of a PIN is to promt behavior.
+// To encourage an interaction between the new user and the org's admin
   activate(pin, orgName) {
     const start = Meteor.users.find().fetch().length === 1 ? true : false;
-    if(start) {
+    if(start && pin === '0000') {
       Roles.addUsersToRoles(Meteor.userId(), ['active', 'admin']);
       Meteor.users.update(Meteor.userId(), {
-          $set: {
-            org: orgName,
-            orgKey: new Meteor.Collection.ObjectID().valueOf(),
-            pin: pin,
-            watchlist: [],
-            inbox: []
-          }
-        });
+        $set: {
+          org: orgName,
+          orgKey: new Meteor.Collection.ObjectID().valueOf(),
+          unlockSpeed: 2000,
+          watchlist: [],
+          inbox: []
+        }
+      });
       return true;
     }else{
-      const admins = Roles.getUsersInRole('admin').fetch();
-      for(let x of admins) {
-        if(x.pin === pin && x.org === orgName) {
+      const orgIs = AppDB.findOne({ org: orgName });
+      if(orgIs) {
+        if(orgIs.orgPIN === pin) {
           Roles.addUsersToRoles(Meteor.userId(), 'active');
           Meteor.users.update(Meteor.userId(), {
             $set: {
-              org: x.org,
-              orgKey: x.orgKey,
-              pin: false,
+              org: orgIs.org,
+              orgKey: orgIs.orgKey,
               unlockSpeed: 2000,
               watchlist: [],
               inbox: []
@@ -33,16 +37,18 @@ Meteor.methods({
         }else{
           return false;
         }
+      }else{
+        return false;
       }
     }
   },
-      
 
   adminUpgrade(userId, pin) {
-    const adminPin = Meteor.user().pin;
+    const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
+    const orgPIN = org ? org.orgPIN : false;
     const others = Meteor.users.find({orgKey: Meteor.user().orgKey, roles: 'admin'}).fetch();
-    if(adminPin && others.length < 2) {
-      const auth = adminPin === pin;
+    if(orgPIN && others.length < 2) {
+      const auth = orgPIN === pin;
       if(auth) {
         Roles.addUsersToRoles(userId, 'admin');
         return true;
@@ -53,7 +59,6 @@ Meteor.methods({
       return false;
     }
   },
-  
   
   adminDowngrade() {
     const others = Meteor.users.find({orgKey: Meteor.user().orgKey, roles: 'admin'}).fetch();
@@ -72,20 +77,24 @@ Meteor.methods({
     const self = Meteor.userId() === badUserId;
     const admin = Roles.userIsInRole(badUserId, 'admin');
     const auth = adminPower && team && !self && !admin ? true : false;
-    
-    if(auth && Meteor.user().pin === pin) {
-      Roles.removeUsersFromRoles(badUserId, 'active');
-      Meteor.users.update(badUserId, {
-        $set: {
-          org: false,
-          orgKey: false
-        }
-      });
-      return true;
+    if(auth) {
+      const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
+      const orgPIN = org ? org.orgPIN : false;
+      if(orgPIN && orgPIN === pin) {
+        Roles.removeUsersFromRoles(badUserId, 'active');
+        Meteor.users.update(badUserId, {
+          $set: {
+            org: false,
+            orgKey: false
+          }
+        });
+        return true;
+      }else{
+        return false;
+      }
     }else{
       return false;
     }
-    
   },
   
   forcePasswordChange(userId, newPassword) {
@@ -148,31 +157,6 @@ Meteor.methods({
     }else{
       return false;
     }
-  },
-  
-  setPin(old, pin) {
-    if(!Meteor.user().pin || Meteor.user().pin === false || Meteor.user().pin === old) {
-      Meteor.users.update(Meteor.userId(), {
-          $set: {
-            pin: pin,
-          }
-        });
-      return true;
-    }else{
-      return false;
-    }
-  },
-  
-  noPin(user) {
-    const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
-    const team = Meteor.users.findOne({_id: user, orgKey: Meteor.user().orgKey});
-    if(auth && team) {
-      Meteor.users.update(user, {
-        $set: {
-          pin: '0000'
-        }
-      });
-    }else{null}
   },
   
   setSpeed(time) {
