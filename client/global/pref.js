@@ -20,6 +20,7 @@ class Pref {
     this.docs = 'pisces';
     this.helpDocs = 'help';
     this.timeClock = 'time clock';
+    this.user = 'employees';
     // terminology
     this.admin = 'org admin';
 	  this.batch = 'work order';//order

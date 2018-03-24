@@ -16,6 +16,48 @@ Meteor.methods({
     return found;
   },
   
+  topViewStats(u, g, w, b, a) {
+    const usrC = u ? Meteor.users.find({orgKey: Meteor.user().orgKey}).fetch().length : 0;
+    const grpC = g ? GroupDB.find({orgKey: Meteor.user().orgKey}).fetch().length : 0;
+    const wdgtC = w ? WidgetDB.find({orgKey: Meteor.user().orgKey}).fetch().length : 0;
+    const btch = b ? BatchDB.find({orgKey: Meteor.user().orgKey}).fetch() : [];
+    const btchC = b ? btch.length : 0;
+    const btchLv = a ? btch.filter( x => x.finishedAt === false ).length : 0;
+    return {
+      usrC, grpC, wdgtC, btchC, btchLv
+    };
+  },
+  
+  popularWidgets() {
+    const wdgts = WidgetDB.find({orgKey: Meteor.user().orgKey}).fetch();
+    let numOfwdgt = [];
+    for(let w of wdgts) {
+      const num = BatchDB.find({widgetId: w._id}).fetch().length;
+      numOfwdgt.push({group: w.groupId, meta: w.widget, value: num});
+    }
+    return numOfwdgt;
+  },
+  
+  BestWorstStats(best, worst) {
+    const btch = BatchDB.find({orgKey: Meteor.user().orgKey}).fetch();
+    const lowNC = btch.filter( x => x.nonCon.length < best ); 
+    const highNC = btch.filter( x => x.nonCon.length > worst );
+    const bestNC = Array.from(lowNC, 
+                    x => { 
+                      return ( 
+                        {b: x.batch, w: x.widgetId, value: x.nonCon.length} 
+                    )});
+    const worstNC = Array.from(highNC, 
+                      x => { 
+                        return ( 
+                          {b: x.batch, w: x.widgetId, value: x.nonCon.length}
+                      )});
+    return {
+      bestNC, worstNC
+    };
+  },
+  
+  
   
   activitySnapshot(range, clientTZ, mod) {
     

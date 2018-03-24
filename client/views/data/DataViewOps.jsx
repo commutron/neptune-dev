@@ -111,7 +111,11 @@ export default class DataViewOps extends Component	{
     if(!view) {
       Session.set('nowBatch', false);
       return (
-        <AdvancedSearch />
+        <AdvancedSearch
+          batchData={allBatch}
+          widgetData={allWidget}
+          groupData={allGroup} 
+          app={app} />
       );
     }
     
