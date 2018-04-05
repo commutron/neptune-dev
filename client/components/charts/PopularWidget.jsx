@@ -26,6 +26,8 @@ export default class NonConRate extends Component {
           const num = reply.filter( x => x.group === g._id ).length;
           groupSet.push({meta: g.alias, value: num});
         }
+        //const other = reply.find( x => x.meta === 'OTHER');
+        //groupSet.push({meta: 'OTHER', value: other.value});
         this.setState({ groups: groupSet });
       }
     });
@@ -44,36 +46,26 @@ export default class NonConRate extends Component {
 
     let dataOne = {
       series: counts,
-      labels: Array.from(counts, x => x.meta)
-    };
-    let optionsOne = {
-      width: 400,
-      height: 300,
-      showLabel: true,
-      labelOffset: 60,
-      labelDirection: 'explode',
-      ignoreEmptyValues: true,
-      chartPadding: 50,
-      plugins: [
-        Chartist.plugins.tooltip({
-          appendToBody: true,
-          class: 'up'
-        }),
-      ]
+      labels: Array.from(counts, x => { 
+                                  let name = x.value > 1 ? x.meta : ' '; 
+                                  return name })
     };
 
     let dataTwo = {
       series: groups,
-      labels: Array.from(groups, x => x.meta)
+      labels: Array.from(groups, x => { 
+                                  let name = x.value > 1 ? x.meta : ' '; 
+                                  return name })
     };
-    let optionsTwo = {
-      width: 400,
-      height: 300,
+    
+    let options = {
+      width: 450,
+      height: 400,
       showLabel: true,
-      labelOffset: 60,
+      labelOffset: 75,
       labelDirection: 'explode',
       ignoreEmptyValues: true,
-      chartPadding: 50,
+      chartPadding: 75,
       plugins: [
         Chartist.plugins.tooltip({
           appendToBody: true,
@@ -88,11 +80,11 @@ export default class NonConRate extends Component {
         <div className='wide centreRow cap'>
           <div className='centre'>
             <i>{Pref.group}s</i>
-            <ChartistGraph data={dataTwo} options={optionsTwo} type={'Pie'} />
+            <ChartistGraph data={dataTwo} options={options} type={'Pie'} />
           </div>
           <div className='centre'>
             <i>{Pref.widget}s</i>
-            <ChartistGraph data={dataOne} options={optionsOne} type={'Pie'} />
+            <ChartistGraph data={dataOne} options={options} type={'Pie'} />
           </div>        
         </div>
       </div>

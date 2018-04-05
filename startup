@@ -9,3 +9,5 @@ $ meteor --settings settings.json --port $IP:$PORT
 git add .
 git commit -m "comment"
 git push -u orgin master
+
+npm i -g mup

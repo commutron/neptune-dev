@@ -33,25 +33,56 @@ Meteor.methods({
     let numOfwdgt = [];
     for(let w of wdgts) {
       const num = BatchDB.find({widgetId: w._id}).fetch().length;
-      numOfwdgt.push({group: w.groupId, meta: w.widget, value: num});
+        numOfwdgt.push({group: w.groupId, meta: w.widget, value: num});
     }
     return numOfwdgt;
   },
   
-  BestWorstStats(best, worst) {
+  BestWorstStats(best, worst, start, end) {
     const btch = BatchDB.find({orgKey: Meteor.user().orgKey}).fetch();
-    const lowNC = btch.filter( x => x.nonCon.length < best ); 
-    const highNC = btch.filter( x => x.nonCon.length > worst );
-    const bestNC = Array.from(lowNC, 
+    
+    const from = !start ? 
+                  moment().startOf('week').format() :
+                  moment(start).startOf('day').format();
+    const to = !end ? 
+                moment().endOf('week').format() :
+                moment(end).endOf('day').format();
+    
+    const lowWindow = (finishedAt)=>
+      finishedAt !== false ?
+      moment(finishedAt).isBetween(from, to) :
+      false;
+
+    const lowNC = btch.filter( x => 
+                                  lowWindow(x.finishedAt) === true && 
+                                  x.nonCon.length <= best ); 
+    
+    let bestNC = Array.from(lowNC,
                     x => { 
                       return ( 
                         {b: x.batch, w: x.widgetId, value: x.nonCon.length} 
-                    )});
-    const worstNC = Array.from(highNC, 
+                    )}).sort((a, b)=> { return a.value - b.value });
+                    
+    ////////////////////////////
+    
+    const highWindowOne = (createdAt)=>
+      moment(createdAt).isBefore(to);
+      
+    const highWindowTwo = (finishedAt)=>
+      finishedAt !== false ?
+      moment(finishedAt).isBetween(to, from) :
+      true;
+    
+    const highNC = btch.filter( x => 
+                                  highWindowOne(x.createdAt) === true && 
+                                  highWindowTwo(x.finishedAt) === true && 
+                                  x.nonCon.length >= worst );
+                    
+    let worstNC = Array.from(highNC, 
                       x => { 
                         return ( 
                           {b: x.batch, w: x.widgetId, value: x.nonCon.length}
-                      )});
+                      )}).sort((a, b)=> { return b.value - a.value });
     return {
       bestNC, worstNC
     };

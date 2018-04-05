@@ -1,7 +1,7 @@
 import React from 'react';
 
 const LeapText = ({ title, sty, address })=> {
-  let cssStyle = sty ? 'jump ' + sty : 'jump';
+  let cssStyle = sty ? 'leapText ' + sty : 'leapText';
   return (
     <button
       className={cssStyle}

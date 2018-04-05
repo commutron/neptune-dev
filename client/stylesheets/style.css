@@ -90,12 +90,28 @@
   border-bottom-color: #3498db;
 }
 
+.leapText {
+  font-size: 1rem;
+  min-width: 1rem;
+	min-height: 1rem;
+	margin: 0 5px;
+	text-transform: uppercase;
+	background-color: transparent;
+  border: none;
+  border-bottom: 1px solid white;
+  word-break: break-all;
+}
+.leapText:hover, .leapText:focus, .leapText:active {
+  color: var(--peterriver);
+  border-bottom-color: var(--peterriver);
+}
+
 .leapBar {
   width: 100%;
   min-height: 32px;
   font-size: 1rem;
   letter-spacing: 1px;
-  font-weight: 600;
+  font-weight: 400;
 	margin: 3px 0;
 	padding: 4px;
 	background-color: transparent;

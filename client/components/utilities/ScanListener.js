@@ -16,10 +16,10 @@ function onPress(event) {
         const slL = scanListener.length;
         if( slL === 9 || slL === 10 ) {
           Session.set('now', scanListener);
-          event.preventDefault();
+          !event.preventDefault ? null : event.preventDefault();
         }
         scanListener = '';
-      }else if( !inputKey.match(/[0-9]/) || inputCode === 8 ) {
+      }else if( !inputKey.match(/[0-9]/) ) {
         scanListener = '';
       }else if( inputKey.match(/[0-9]/) ) {
         scanListener = scanListener.concat(event.key);
@@ -42,28 +42,20 @@ export function ScanListenerUtility() {
       null;
     }else{
       window.addEventListener('keypress', onPress);
-      
-      var pisces = document.getElementsByTagName("iframe")[0];
-      if(pisces) {
-        pisces.contentWindow.addEventListener('keypress', (event)=>{
-          console.log(event);
-        });
-      }else{null}
-      
+      window.addEventListener('message', (mss)=>{
+        if(mss.data.orgin === 'pisces') {
+          onPress(mss.data);
+        }else{null}
+      });
     }
-  },150);
+  },250);
   /*
   window.addEventListener('keypress', (event)=>{
-    window.parent.postMessage('event,key', "*");
+    window.parent.postMessage(event.key, "*");
   });
-  
-  window.addEventListener("message", function receiveMessage(event)
-    {
-      if (event.origin !== "https://192.168.1.68:8000")
-        console.log('from the iframe');
-      // ...
-    }, false);
   */
+
+
 }
 
 export function ScanListenerOff() {

@@ -102,9 +102,9 @@ export class NonConTypeChart extends Component {
       },
       chartPadding: {
         top: 10,
-        right: 20,
+        right: 25,
         bottom: 20,
-        left: 20
+        left: 25
       },
       plugins: [
         Chartist.plugins.tooltip({

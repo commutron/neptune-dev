@@ -66,7 +66,13 @@ const ScrapGroup = ({ batchData })=> {
 
 const ScrapRow = ({ entry, group, batchNum, widget, barcode })=> (
 	<tr>
-    <td>{batchNum}</td>
+    <td>
+      <LeapText
+        title={batchNum} 
+        sty={false}
+        address={'/data/batch?request=' + batchNum}
+      />
+    </td>
     <td>
       <LeapText
         title={barcode} 
@@ -74,8 +80,20 @@ const ScrapRow = ({ entry, group, batchNum, widget, barcode })=> (
         address={'/data/batch?request=' + batchNum + '&specify=' + barcode}
       />
     </td>
-    <td className='up'>{group}</td>
-    <td className='up'>{widget}</td>
+    <td>
+      <LeapText
+        title={group} 
+        sty={false}
+        address={'/data/group?request=' + group}
+      />
+    </td>
+    <td>
+      <LeapText
+        title={widget} 
+        sty={false}
+        address={'/data/widget?request=' + widget}
+      />
+    </td>
 		<td className='cap'><UserNice id={entry.who} /></td>
     <td>{moment(entry.time).calendar()}</td>
     <td>{entry.step}</td>

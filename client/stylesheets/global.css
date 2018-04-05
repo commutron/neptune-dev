@@ -3,7 +3,7 @@
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Nunito', 'Open Sans', sans-serif;
 }
 /*
 non standerd, seems to affect scrolling preformance
@@ -192,7 +192,7 @@ input, select {
   width: 15rem;
   border-top-color: transparent;
   border-right-color: transparent;
-  border-bottom-color: inherit;
+  border-bottom-color: white;
   border-left-color: transparent;
 }
 

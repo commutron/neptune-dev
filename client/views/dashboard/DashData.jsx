@@ -3,6 +3,8 @@ import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import Pref from '/client/global/pref.js';
 
+import { ScanListenerUtility } from '/client/components/utilities/ScanListener.js';
+import { ScanListenerOff } from '/client/components/utilities/ScanListener.js';
 import Spin from '../../components/uUi/Spin.jsx';
 import FindOps from './FindOps.jsx';
 
@@ -34,6 +36,12 @@ class DashView extends Component	{
         hotBatch={this.props.hotBatch}
       />
     );
+  }
+  componentDidMount() {
+    ScanListenerUtility();
+  }
+  componentWillUnmount() {
+    ScanListenerOff();
   }
 }
 
