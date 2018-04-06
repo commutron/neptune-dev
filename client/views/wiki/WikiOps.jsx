@@ -30,7 +30,7 @@ const WikiOps = ({ wi, root, anchor, fallback })=> {
   */
 
   return(
-    <div className='instructionFix'>
+    <div className='invert'>
       <WikiFrame go={goto} />
       {/*
       <object

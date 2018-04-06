@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
 import moment from 'moment';
 import { CalcSpin } from '/client/components/uUi/Spin.jsx';
+import DateRangeSelect from '/client/components/smallUi/DateRangeSelect.jsx';
+import LeapText from '/client/components/tinyUi/LeapText.jsx';
 import NumBox from '/client/components/uUi/NumBox.jsx';
 
 const BestWorstBatch = ({ groupData, widgetData, app })=> (
@@ -37,6 +39,16 @@ class BestWorstContent extends Component {
     });
   }
   
+  matchWidget(wKey) {
+    const widget = this.props.widgetData.find( x => x._id === wKey );
+    return widget;
+  }
+  
+  matchGroup(gKey) {
+    const group = this.props.groupData.find( x => x._id === gKey );
+    return group;
+  }
+  
   render () {
     
     const tops = this.state.tops;
@@ -44,75 +56,34 @@ class BestWorstContent extends Component {
     return(
       <div className='centre'>
       
-        <div className=''>
-          <span>
-            <label htmlFor='startRange'> FROM </label>
-          </span>
-          <span>
-            <input
-              type='date'
-              id='startRange'
-              title='From'
-              defaultValue={moment().startOf('week').add(1, 'day').format('YYYY-MM-DD')}
-              onChange={(e)=>this.setState({start: startRange.value})} />
-          </span>
-          <span>
-            <label htmlFor='endRange'> TO </label>
-          </span>
-          <span>
-            <input
-              type='date'
-              id='endRange'
-              title='To'
-              defaultValue={moment().format('YYYY-MM-DD')}
-               onChange={(e)=>this.setState({end: endRange.value})} />
-          </span>
-          <span className='breath' />
-          <span>
-            <button
-              className='smallAction clearWhite'
-              onClick={(e)=>this.tops()}
-            > <i className='fas fa-sync fa-fw'></i> REFRESH </button>
-          </span>
-        </div>
+        <DateRangeSelect
+          setFrom={(v)=>this.setState({start: v})}
+          setTo={(v)=>this.setState({end: v})}
+          doRefresh={(e)=>this.tops()} />
         
         {!tops ?
           <CalcSpin />
         :
-          <div className='wide space balance'>
-            <div>
-              <i>Best</i>
-              {this.state.tops.bestNC.map( (entry, index)=>{
-                return(
-                  <dl key={index}>
-                    <dt>{entry.b}</dt>
-                    <dd>{entry.w}</dd>
-                    <dd>{entry.value}</dd>
-                  </dl>
-              )})}
-            </div>
-            <div>
-              <i>Worst</i>
-              {this.state.tops.worstNC.map( (entry, index)=>{
-                return(
-                  <dl key={index}>
-                    <dt>{entry.b}</dt>
-                    <dd>{entry.w}</dd>
-                    <dd>{entry.value}</dd>
-                  </dl>
-              )})}
-            </div>
+          <div className='wide max1000 space balance'>
+        
+            <BstWrstNCresults
+              title='Best'
+              color='goodBox'
+              results={this.state.tops.bestNC}
+              widgetData={this.props.widgetData}
+              groupData={this.props.groupData}
+            />
+            
+            <BstWrstNCresults
+              title='Worst'
+              color='badBox'
+              results={this.state.tops.worstNC}
+              widgetData={this.props.widgetData}
+              groupData={this.props.groupData}
+            />
+            
           </div>
         }
-        
-        
-        
-        {this.props.users &&
-          <NumBox
-            num={counts.usrC}
-            name={Pref.user + 's'}
-            color='blueT' />}
-        
         
       </div>
     );
@@ -121,5 +92,56 @@ class BestWorstContent extends Component {
     this.tops();
   }
 }
+
+const BstWrstNCresults = ({ title, color, results, widgetData, groupData })=> {
+  
+  function matchWidget(wKey) {
+    const widget = widgetData.find( x => x._id === wKey );
+    return widget;
+  }
+  
+  function matchGroup(gKey) {
+    const group = groupData.find( x => x._id === gKey );
+    return group;
+  }
+  
+  return(
+    <div className={'smallResultsBox ' + color}>
+      <table className='wide'><tbody>
+        <tr colSpan='4'><th>{title}</th></tr>
+        {results.map( (entry, index)=>{
+          let wdgt = matchWidget(entry.w);
+          let grp = !wdgt ? 'unknown' : matchGroup(wdgt.groupId); 
+          return(
+            <tr key={index}>
+              <td>
+                <LeapText
+                  title={entry.b} 
+                  sty={false}
+                  address={'/data/batch?request=' + entry.b}
+                />
+              </td>
+              <td>
+                <LeapText
+                  title={grp.alias} 
+                  sty={false}
+                  address={'/data/group?request=' + grp.alias}
+                />
+              </td>
+              <td>
+                <LeapText
+                  title={wdgt.widget} 
+                  sty={false}
+                  address={'/data/widget?request=' + wdgt.widget}
+                />
+              </td>
+              <td className='medBig'>{entry.value}</td>
+            </tr>
+        )})}
+      </tbody></table>
+    </div> 
+    
+  );
+};
 
 export default BestWorstBatch;

@@ -49,7 +49,7 @@ export default class BatchCard extends Component	{
           <div className='cardTitle'>
             <i className={showWarn}></i>
             <i className='bigger'>{b.batch}</i>
-            <label htmlFor='exBatch'>
+            <label htmlFor='exBatch' title='view in explore'>
               <button
                 id='exBatch'
                 title='explore'
@@ -103,8 +103,9 @@ export default class BatchCard extends Component	{
             </Tabs>
           :
             <div>
-              <div className='triSplit'>
-                <div className='triSplitOne cap'>
+              <div className='onetwoSplit'>
+              
+                <div className='onetwoSplitOne cap'>
                   <div className='action cap wetasphalt centreText'>
                     <i className='fas fa-info-circle' data-fa-transform='down-2'></i> Info
                   </div>
@@ -119,21 +120,25 @@ export default class BatchCard extends Component	{
                     <BlockNotes data={b.blocks} />
                   </div>
                 </div>
-                <div className='triSplitTwo cap'>
-                  <div className='action cap wetasphalt centreText'>
-                    <i className='fas fa-tasks' data-fa-transform='down-2'></i> Progress
-                  </div>
+                
+                <div className='onetwoSplitTwo cap'>
+                  <Tabs
+                    tabs={[
+                      <i className='fas fa-tasks' data-fa-transform='down-2' title='Progress'></i>, 
+                      <i className='fas fa-thumbs-down' data-fa-transform='down-2' title='NonConformances'></i>
+                    ]}
+                    wide={true}
+                    stick={false}>
+              
+            
                   <div className='space'>
                     <StepsProgress batchData={b} flow={riverFlow} flowAlt={riverAltFlow} mini={true} />
                   </div>
-                </div>
-                <div className='triSplitThree cap'>
-                  <div className='action cap wetasphalt centreText'>
-                    <i className='fas fa-thumbs-down' data-fa-transform='down-2'></i> NonCons
-                  </div>
+
                   <div className='space'>
                     <NonConMiniSatus noncons={b.nonCon} flow={riverFlow} flowAlt={riverAltFlow} app={a} />
                   </div>
+                  </Tabs>
                 </div>
               </div>
             </div>

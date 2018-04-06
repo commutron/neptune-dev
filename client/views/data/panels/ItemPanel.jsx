@@ -15,9 +15,9 @@ import ScrapBox from '../../../components/smallUi/ScrapBox.jsx';
 import SubItemLink from '/client/components/tinyUi/SubItemLink.jsx';
 
 export default class ItemPanel extends Component	{
-  componentWillUnmount() {
-    Session.set('itemExPanelTabs', false);
-  }
+  //componentWillUnmount() {
+    //Session.set('itemExPanelTabs', false);
+  //}
   
   ncData() {
     const batch = this.props.batchData;

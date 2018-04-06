@@ -97,7 +97,9 @@ export default class BatchPanel extends Component	{
               ]
             }
             wide={true}
-            stick={false}>
+            stick={false}
+            hold={true}
+            sessionTab='batchExPanelTabs'>
             
             <div className='oneTwoThreeContainer space'>
               <div className='oneThirdContent min200'>

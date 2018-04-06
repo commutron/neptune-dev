@@ -154,4 +154,17 @@
   cursor: default;
 }
 
+.smallResultsBox {
+  width: 450px;
+}
+.smallResultsBox th {
+  text-align: left;
+}
+
+.goodBox {
+  background-color: var(--emeraldfade);
+}
+.badBox {
+  background-color: var(--alizarinfade);
+}
 

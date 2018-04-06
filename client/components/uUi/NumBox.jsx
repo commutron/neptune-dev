@@ -5,7 +5,7 @@ import React from 'react';
     textAlign: 'center',
     padding: '5px',
     margin: '0 5px',
-    maxWidth: '100px'
+    width: '110px'
   };
   const bSty = {
     fontSize: '2em',

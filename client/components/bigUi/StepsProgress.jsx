@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
+import Chartist from 'chartist';
+import ChartistGraph from 'react-chartist';
+import Tooltip from 'chartist-plugin-tooltips';
 
 import ProgPie from '/client/components/charts/ProgPie.jsx';
 import MiniBar from '/client/components/charts/MiniBar.jsx';
@@ -122,15 +125,19 @@ export default class StepsProgress extends Component	{
               name={Pref.item + 's'}
               color='whiteT' />
           </label>
-          <input type='radio' id='calcU' name='calc' onChange={()=> this.setState({countCalc: 'unit'})} />
-          {unitsExist ?
-            <label htmlFor='calcU'>
-              <NumBox
-                num={totalRU + totalAU}
-                name={Pref.unit + 's'}
-                color='whiteT' />
-            </label>
-          :null}
+          <input
+            type='radio'
+            id='calcU'
+            name='calc'
+            onChange={()=> this.setState({countCalc: 'unit'})} />
+            {unitsExist ?
+              <label htmlFor='calcU'>
+                <NumBox
+                  num={totalRU + totalAU}
+                  name={Pref.unit + 's'}
+                  color='whiteT' />
+              </label>
+            :null}
           {scrapCount > 0 ? 
           <label>
             <NumBox
@@ -207,3 +214,54 @@ const StepDisplay = ({ mini, step, type, count, total })=> {
       total={total} />
   );
 };
+/*
+
+export class NonConTypeChart extends Component {
+
+  render () {
+
+    const counts = this.props.counts;
+    
+    let data = {
+      labels: this.props.ncOp,
+      series: counts,
+    };
+    
+    let options = {
+      height: 800,
+      fullWidth: true,
+      horizontalBars: true,
+      stretch: false,
+      stackBars: true,
+      axisX: {
+        low: 0,
+        onlyInteger: true,
+        position: 'start'
+      },
+      axisY: {
+        offset: 100
+      },
+      chartPadding: {
+        top: 10,
+        right: 25,
+        bottom: 20,
+        left: 25
+      },
+      plugins: [
+        Chartist.plugins.tooltip({
+          appendToBody: true,
+          class: 'cap'
+        })
+      ]
+    };
+
+    return (
+      <div>
+        <br />
+        <ChartistGraph data={data} options={options} type={'Bar'} />
+      </div>
+    );
+  }
+}
+
+*/

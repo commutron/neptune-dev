@@ -36,7 +36,9 @@ export default class WidgetPanel extends Component	{
             <Tabs
               tabs={[Pref.version + 's', Pref.flow + 's', Pref.nonCon + 's']}
               wide={true}
-              stick={false}>
+              stick={false}
+              hold={true}
+              sessionTab='widgetExPanelTabs'>
               
               <VersionTable widgetData={w} app={a} />
               
