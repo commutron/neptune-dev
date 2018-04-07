@@ -1,12 +1,11 @@
-Neptune v.0.9.7 (beta)
+Neptune v.0.9.9 (beta)
 
 A highly customized statistical process control web app for electronics manufacturing.
 A Commutron Industries project.
 
 Built with ReactJS, MeteorJS, and MongoDB.
 
-Highly experimental
-
+Highly experimental, potentialy unstable.
 
 Copyright (c) 2016-present Commutron Industries, https://www.commutron.ca
 

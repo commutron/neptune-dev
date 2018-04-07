@@ -2,11 +2,21 @@ import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
 import moment from 'moment';
 
-const DateRangeSelect = ({ setFrom, setTo, doRefresh })=> (
+const DateRangeSelect = ({ setNew, setFrom, setTo, doRefresh })=> (
 
   <div className='miniDateRange'>
     <span>
-      <label htmlFor='startRange'>FROM</label>
+      <select
+        id='scope'
+        title='include'
+        defaultValue={false}
+        onChange={(e)=>setNew(scope.value)}>
+        <option value='all'>Active {Pref.batch}s</option>
+        <option value='new'>Newly Discovered</option>
+      </select>
+    </span>
+    <span>
+      <label htmlFor='startRange'>Between</label>
     </span>
     <span>
       <input
@@ -17,7 +27,7 @@ const DateRangeSelect = ({ setFrom, setTo, doRefresh })=> (
         onChange={(e)=>setFrom(startRange.value)} />
     </span>
     <span>
-      <label htmlFor='endRange'>TO</label>
+      <label htmlFor='endRange'>and</label>
     </span>
     <span>
       <input
@@ -27,7 +37,6 @@ const DateRangeSelect = ({ setFrom, setTo, doRefresh })=> (
         defaultValue={moment().format('YYYY-MM-DD')}
         onChange={(e)=>setTo(endRange.value)} />
     </span>
-    <span className='breath' />
     <span>
       <button
         className='clearWhite'

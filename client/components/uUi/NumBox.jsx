@@ -3,9 +3,8 @@ import React from 'react';
   const sty = {
     display: 'inline-block',
     textAlign: 'center',
-    padding: '5px',
-    margin: '0 5px',
-    width: '110px'
+    margin: '5px',
+    width: '105px'
   };
   const bSty = {
     fontSize: '2em',

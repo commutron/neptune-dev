@@ -850,6 +850,7 @@
 .miniDateRange span {
   margin: 0 3px;
 }
+.miniDateRange select,
 .miniDateRange input[type='date'],
 .miniDateRange button {
   font-size: 1.1rem;
@@ -857,14 +858,29 @@
   background-color: transparent;
   color: white;
 }
+.miniDateRange select,
 .miniDateRange input[type='date'] {
   min-height: 24px;
   line-height: 1.2rem;
   text-indent: 3px;
-  width: 150px;
+}
+.miniDateRange select,
+.miniDateRange button{
+  height: 24px;
+}
+.miniDateRange select {
+  width: 175px;
+}
+.miniDateRange option {
+  color: black;
+}
+.miniDateRange input[type='date'] {
+  width: 136px;
+}
+.miniDateRange input[type='date']::-webkit-clear-button {
+  display: none;
 }
 .miniDateRange button {
-  height: 24px;
   width: 36px;
 }
 

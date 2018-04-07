@@ -10,7 +10,7 @@ const AllBatches = ({ groupData, widgetData, batchData, app }) => {
   const active = batchData.filter( x => x.finishedAt === false ).length;
   
   return(
-    <div className=''>
+    <div className='overscroll'>
       <div className='centre'>
         
         <div className='centreRow'>

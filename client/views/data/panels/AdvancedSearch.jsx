@@ -7,6 +7,7 @@ const AdvancedSearch = ({ groupData, widgetData, batchData, app }) => {
   
   const total = batchData.length;
   const active = batchData.filter( x => x.finishedAt === false ).length;
+  const verAdd = Array.from(widgetData, x => x.versions.length).reduce((x, y) => x + y);
 
   return(
     <div className=''>
@@ -20,6 +21,10 @@ const AdvancedSearch = ({ groupData, widgetData, batchData, app }) => {
           <NumBox
             num={widgetData.length}
             name={Pref.widget + 's'}
+            color='blueT' />
+          <NumBox
+            num={verAdd}
+            name={Pref.version + 's'}
             color='blueT' />
           <NumBox
             num={total}

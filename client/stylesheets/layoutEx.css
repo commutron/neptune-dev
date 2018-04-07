@@ -159,6 +159,7 @@
 }
 .smallResultsBox th {
   text-align: left;
+  border-right: none;
 }
 
 .goodBox {
