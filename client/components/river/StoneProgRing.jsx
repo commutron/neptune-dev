@@ -84,13 +84,6 @@ export default class StepsProgress extends Component	{
       donut: true,
       donutWidth: 5,
       startAngle: 0,
-      /*
-      plugins: [
-        Chartist.plugins.tooltip({
-          appendToBody: true
-        }),
-      ],
-      */
     };
     
     let wake = 'stoneRing centre glowgreen';

@@ -18,7 +18,6 @@ const StoneSelect = ({ id, flow, isAlt, rmas, allItems, nonCons, serial, history
                     return 0;
                   });
  
-  
   const iDone = history;
 
   const fDone = [];

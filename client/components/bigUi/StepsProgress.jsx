@@ -10,6 +10,8 @@ import NumBox from '/client/components/uUi/NumBox.jsx';
 /// batchData
 /// flow
 /// altflow
+/// expand
+/// soon also quotas
 
 export default class StepsProgress extends Component	{
   
@@ -21,27 +23,30 @@ export default class StepsProgress extends Component	{
   }
 
   dataLoop() {
-    const b = this.props.batchData;
     const flow = this.props.flow;
     const flowAlt = this.props.flowAlt;
+    const rSteps = flow.filter( r => r.type !== 'first' );
+    const aSteps = flowAlt.filter( a => a.type !== 'first' );
+    
+    const allItems = this.props.batchData.items;
     
     const outScrap = (itms)=> { 
                       return ( 
-                        itms.filter( x => x.history.filter( y => y.type === 'scrap' ).length === 0 )
+                        itms.filter( 
+                          o => o.history.filter( 
+                            s => s.type === 'scrap' ).length === 0 )
                       )};
     
-    const rSteps = flow.filter( x => x.type !== 'first' );
-    const aSteps = flowAlt.filter( x => x.type !== 'first' );
+    const allLiveItems = outScrap(allItems);
+    const scrapCount = allItems.length - allLiveItems.length;
     
-    let regItems = b.items;
+    let regItems = allLiveItems;
     let altItems = [];
     
-    if(aSteps.length < 1) {
-      regItems = outScrap(regItems);
-    }else{
-      regItems = outScrap( b.items.filter( x => x.alt === false || x.alt === 'no' ) );
-      altItems = outScrap( b.items.filter( x => x.alt === 'yes' ) );
-    }
+    if(aSteps.length > 0) {
+      regItems = allLiveItems.filter( r => r.alt === 'no' || r.alt === false );
+      altItems = allLiveItems.filter( a => a.alt === 'yes' );
+    }else{null}
     
     let totalRegUnits = 0;
     for(let i of regItems) {
@@ -52,12 +57,11 @@ export default class StepsProgress extends Component	{
       totalAltUnits += i.units;
     }
     
-    const scrapCount = b.items.length - regItems.length - altItems.length;
-    
-    function flowLoop(river, items, expand, timeWindow) {
+    function flowLoop(river, items, expand, quotaStart) {
       const now = moment().format();
-      const byKey = (t, ky)=> { return ( x => x.key === ky && x.good === true )};
-      const byName = (t, nm)=> { return ( x => x.step === nm && x.type === 'first' && x.good === true )};
+      const wndw = !quotaStart ? (t)=>moment(t).isSame(now, 'day') : (t)=>moment(t).isBetween(quotaStart, now);
+      const byKey = (t, ky)=> { return ( k => k.key === ky )};
+      const byName = (t, nm)=> { return ( s => s.step === nm && s.type === 'first' )};
       let stepCounts = [];
       for(let step of river) {
         let itemCount = 0;
@@ -65,13 +69,13 @@ export default class StepsProgress extends Component	{
         let itemCountNew = 0;
         let unitCountNew = 0;
         for(var i of items) {
-          const h = i.history;
-          const hNew = h.filter( x => moment(x.time).isSame(now, 'day') === true );
+          const h = i.history.filter( g => g.good === true);
+          const hNew = h.filter( q => wndw(q.time) === true );
           if(i.finishedAt !== false) {
             itemCount += 1;
             unitCount += 1 * i.units;
             if(expand) {
-              if(hNew.find( x => x.key === 'f1n15h1t3m5t3p' && moment(x.time).isSame(now, 'day') === true )) {
+              if(hNew.find( f => f.key === 'f1n15h1t3m5t3p' )) {
                 itemCountNew += 1;
                 unitCountNew += 1 * i.units;
               }
@@ -102,8 +106,8 @@ export default class StepsProgress extends Component	{
       return stepCounts;
     }
   
-    let regStepCounts = flowLoop(rSteps, regItems, this.props.expand);
-    let altStepCounts = flowLoop(aSteps, altItems, this.props.expand);
+    let regStepCounts = flowLoop(rSteps, regItems, this.props.expand, false);
+    let altStepCounts = flowLoop(aSteps, altItems, this.props.expand, false);
     
     return {
       regStepCounts: regStepCounts,
