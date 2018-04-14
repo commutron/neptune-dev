@@ -46,7 +46,7 @@
   white-space: nowrap;
   background: 0 0;
   border: 0;
-	cursor: pointer;
+	/*cursor: pointer;*/
 }
 
 .react-contextmenu-item.react-contextmenu-item--active,

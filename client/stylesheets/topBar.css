@@ -95,9 +95,11 @@ input::-webkit-calendar-picker-indicator {
   padding: 0 0.5rem;
   text-align: center;
 }
+.primeNavLogo a,
 .primeNavItem a,
 .primeNavItem .navIcon {
   color: black;
+  cursor: default;
 }
 .primeNavItem a:hover,
 .primeNavItem.onPNv a,
@@ -132,7 +134,7 @@ input::-webkit-calendar-picker-indicator {
 }
 
 #boltSwitch, #snapSwitch, #timeSwitch, #exitSwitch {
-  cursor: pointer;
+  /*cursor: pointer;*/
   transition: 0.4s cubic-bezier(0.2, 0.6, 0.3, 1.1);
 }
 

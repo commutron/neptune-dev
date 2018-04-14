@@ -54,7 +54,7 @@
 }
 
 .proExpand {
-  grid-template-columns: minmax(512px, 50%) auto;
+  grid-template-columns: minmax(512px, 48%) auto;
   grid-template-areas: 
     'proRiverMajor proInstructMinor'
     'formFooter formFooter';
@@ -91,7 +91,7 @@
 }
 .cardTitle > label {
   color: var(--silver);
-  cursor: pointer;
+  /*cursor: pointer;*/
 }
 .cardTitle > label:hover {
   color: var(--clouds);
@@ -111,7 +111,7 @@
   left: 256px;
 }
 .riverShrinkToggle {
-  left: calc(512px + (50% - 512px) );
+  left: calc(512px + (48% - 512px) );
   -moz-transform: scaleX(-1);
   -o-transform: scaleX(-1);
   -webkit-transform: scaleX(-1);
@@ -126,13 +126,20 @@
   opacity: 1;
 }
 
-.onetwoSplit {
+.onetwoSplit, .twooneSplit {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   grid-template-rows: auto;
+  grid-column-gap: 8px;
+  justify-items: stretch;
+}
+.onetwoSplit {
   grid-template-areas: 
     'splitOne splitTwo splitTwo';
-  justify-items: stretch;
+}
+.twooneSplit {
+  grid-template-areas: 
+    'splitTwo splitTwo splitOne';
 }
 .onetwoSplitOne {
   grid-area: splitOne;

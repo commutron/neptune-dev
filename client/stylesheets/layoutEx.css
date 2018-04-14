@@ -151,11 +151,14 @@
   background-color: var(--silver);
 }
 .onTL:hover, .onTL:active {
-  cursor: default;
+  /*cursor: default;*/
 }
 
 .smallResultsBox {
-  width: 450px;
+  width: 500px;
+}
+.smallResultsBox td:last-child {
+  font-weight: bold;
 }
 .smallResultsBox th {
   text-align: left;

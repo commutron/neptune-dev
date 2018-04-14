@@ -8,6 +8,7 @@ import Tabs from '../../../components/smallUi/Tabs.jsx';
 //import JumpText from '../../../components/tinyUi/JumpText.jsx';
 import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
 import NonConMiniSatus from '/client/components/charts/NonConMiniStatus.jsx';
+import NonConMiniTops from '/client/components/bigUi/NonConMiniTops.jsx';
 import TagsModule from '../../../components/bigUi/TagsModule.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';
 import BlockNotes from '../../../components/smallUi/BlockNotes.jsx';
@@ -20,6 +21,7 @@ export default class BatchCard extends Component	{
     const iS = this.props.itemSerial;
     const w = this.props.widgetData;
     //const g = this.props.groupData;
+    const u = this.props.user;
     const a = this.props.app;
     
     //const v = w.versions.find( x => x.versionKey === b.versionKey );
@@ -71,7 +73,8 @@ export default class BatchCard extends Component	{
             </h2>
           :null}
           
-          {!expand ?
+          
+          {/*!expand ?*/}
             <Tabs
               tabs={[
                 <i className='fas fa-info-circle' data-fa-transform='down-2' title='Info'></i>, 
@@ -96,53 +99,22 @@ export default class BatchCard extends Component	{
                 <StepsProgress batchData={b} flow={riverFlow} flowAlt={riverAltFlow} mini={true} />
               </div>
               
-              <div className='space cap'>
-                <NonConMiniSatus noncons={b.nonCon} flow={riverFlow} flowAlt={riverAltFlow} app={a} />
+              <div className={!expand ? 'space' : 'indent twooneSplit'}>
+                <div className={!expand ? '' : 'onetwoSplitTwo'}>
+                  <NonConMiniSatus
+                    noncons={b.nonCon}
+                    flow={riverFlow}
+                    flowAlt={riverAltFlow}
+                    user={u}
+                    app={a} />
+                </div>
+                {expand &&
+                  <div className='onetwoSplitOne'>
+                    <NonConMiniTops noncons={b.nonCon} user={u} app={a} />
+                  </div>}
               </div>
               
             </Tabs>
-          :
-            <div>
-              <div className='onetwoSplit'>
-              
-                <div className='onetwoSplitOne cap'>
-                  <div className='action cap wetasphalt centreText'>
-                    <i className='fas fa-info-circle' data-fa-transform='down-2'></i> Info
-                  </div>
-                  <div className='space'>
-                    <TagsModule
-                      id={b._id}
-                      tags={b.tags}
-                      vKey={false}
-                      tagOps={a.tagOption} />
-                    <br />
-                    <NoteLine entry={b.notes} id={b._id} versionKey={false} />
-                    <BlockNotes data={b.blocks} />
-                  </div>
-                </div>
-                
-                <div className='onetwoSplitTwo cap'>
-                  <Tabs
-                    tabs={[
-                      <i className='fas fa-tasks' data-fa-transform='down-2' title='Progress'></i>, 
-                      <i className='fas fa-thumbs-down' data-fa-transform='down-2' title='NonConformances'></i>
-                    ]}
-                    wide={true}
-                    stick={false}>
-              
-            
-                  <div className='space'>
-                    <StepsProgress batchData={b} flow={riverFlow} flowAlt={riverAltFlow} mini={true} />
-                  </div>
-
-                  <div className='space'>
-                    <NonConMiniSatus noncons={b.nonCon} flow={riverFlow} flowAlt={riverAltFlow} app={a} />
-                  </div>
-                  </Tabs>
-                </div>
-              </div>
-            </div>
-          }
   				
   			<br />
   

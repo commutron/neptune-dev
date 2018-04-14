@@ -71,7 +71,8 @@ export default class ProductionFindOps extends Component	{
   render () {
 
     const orb = this.props.orb;
-    const anchor= this.props.anchor;
+    const anchor = this.props.anchor;
+    const user = this.props.user;
     const app = this.props.app;
     const allGroup = this.props.allGroup;
     const allWidget = this.props.allWidget;
@@ -151,6 +152,7 @@ export default class ProductionFindOps extends Component	{
               widgetData={widget}
               versionData={version}
               groupData={group}
+              user={user}
               app={app} />
             <WikiOps wi={version.wiki} root={app.instruct} anchor={anchor} />
           </ProWrap>
@@ -206,6 +208,7 @@ export default class ProductionFindOps extends Component	{
               widgetData={widget}
               versionData={version}
               groupData={group}
+              user={user}
               app={app} />
             <WikiOps wi={version.wiki} root={app.instruct} anchor={anchor} />
           </ProWrap>

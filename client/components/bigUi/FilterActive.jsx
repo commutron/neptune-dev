@@ -1,80 +1,45 @@
-import React, {Component} from 'react';
+import React from 'react';
 
-export default class FilterActive extends Component	{
+const FilterActive = ({ total, onClick })=>	{
   
-  changeFilter(keyword) {
-    this.props.onClick(keyword);
+  function changeBasicFilter() {
+    onClick(this.basic.value);
   }
   
-  render() {
-    
-    let dStyl = {
-      lineHeight: '12px',
-      textIndent: '3px',
-      margin: '0',
-      padding: '0 5px'
-    };
-    
-    return(
+  return(
+    <details className='fltrs noCopy'>
+      <summary className='fltrs'>
+        <span>
+          <i className='fas fa-filter'></i>
+          <i className='med'>Filter</i>
+        </span>
+        <span className='rAlign'>
+          <i className='fas fa-chevron-down fa-fw'></i>
+        </span>
+      </summary>
       
-      <details className='fltrs noCopy' style={dStyl}>
-          <summary className='fltrs'>
-            <span>
-              <i className='fa fa-filter' aria-hidden='true'></i>
-              <i className='med'>Filter</i>
-            </span>
-            <span className='rAlign'>
-              <i className='fa fa-chevron-down' aria-hidden='true'></i>
-            </span>
-          </summary>
+      <div>
+        <label className='fltrsInput'>
+          <i className='fas fa-map-marker-alt fa-fw'></i>
+          <select
+            ref={(i)=> this.basic = i}
+            onChange={(e)=>changeBasicFilter(e)}>
+            <option value='all'>All</option>
+            <option value='done'>Finished</option>
+            <option value='inproc'>In Progress</option>
+          </select>
+        </label>
+      </div>
           
-          <br />
-          
-          <span className='balance'>
-          
-            <i className='breath'></i>
-            
-            <span className='radioLabelPair'>
-              <input
-                type='radio'
-                name='scale'
-                id='all'
-                title='All'
-                defaultChecked={true}
-                onChange={this.changeFilter.bind(this, 'all')} />
-              <label htmlFor='all'>All</label>
-            </span>
-            
-            <span className='radioLabelPair'>
-              <input
-                type='radio'
-                name='scale'
-                id='inproc'
-                title='In Regular Process'
-                onChange={this.changeFilter.bind(this, 'inproc')} />
-              <label htmlFor='inproc'>Active</label>
-            </span>
-            
-            <span className='radioLabelPair'>
-              <input
-                type='radio'
-                name='scale'
-                id='done'
-                title={this.props.done + ' Regular Process'}
-                onChange={this.changeFilter.bind(this, 'done')} />
-              <label htmlFor='done'>{this.props.done}</label>
-            </span>
-        
-          </span>
-            
-          <hr />
-          
-          <p className='centreText'>Total: {this.props.total}</p>
-          
-          <br />
-          
-        </details>
+      <hr />
       
-    );
-  }
-}
+      <p className='centreText'>Total: {total}</p>
+      
+      <br />
+      
+    </details>
+    
+  );
+};
+  
+export default FilterActive;

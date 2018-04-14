@@ -97,8 +97,8 @@
 	margin: 0 5px;
 	text-transform: uppercase;
 	background-color: transparent;
-  border: none;
-  border-bottom: 1px solid white;
+  border: 1px solid transparent;
+  border-bottom-color: white;
   word-break: break-all;
 }
 .leapText:hover, .leapText:focus, .leapText:active {
@@ -183,7 +183,7 @@
 }
 
 .open {
-  cursor: pointer;
+  /*cursor: pointer;*/
   color: black;
   font-size: 1.5rem;
   background-color: rgb(255,255,255);
@@ -251,7 +251,7 @@
 .blueHover:disabled:hover {
   color: var(--peterriver);
 	background-color: var(--clouds);
-	cursor: default;
+	/*cursor: default;*/
 }
 .onblueHover {
   color: var(--clouds);
@@ -293,7 +293,7 @@
 .redHover:disabled:hover {
   color: var(--alizarin);
 	background-color: var(--clouds);
-	cursor: default;
+	/*cursor: default;*/
 }
 
 .orange {
@@ -560,7 +560,7 @@
   background-color: transparent;
   color: white;
   resize: none;
-  cursor: default;
+  /*cursor: default;*/
 }
 
 .hiddenInput > button:disabled {
@@ -705,7 +705,7 @@
   background-color: var(--belizeHole);
   font-size: 0.9rem;
   color: white;
-  cursor: default;
+  /*cursor: default;*/
 }
 .tagFlag > button {
   position: relative;
@@ -747,7 +747,7 @@
   height: 20px;
   font-size: 1.5rem;
   border-radius: 50%;
-  cursor: pointer;
+  /*cursor: pointer;*/
   -webkit-transition: all 150ms ease-in-out;
   -moz-transition: all 150ms ease-in-out;
   -o-transition: all 150ms ease-in-out;
@@ -763,21 +763,13 @@
 }
 
 /* Filter Tools */
-
-.fltrs summary {
-  opacity: 0.7;
-  cursor: pointer;
-}
-.fltrs summary:hover {
-  opacity: 1;
-}
 .fltrs summary::-webkit-details-marker {
   display: none
 }
 
 .fltrs input[type='checkbox'], .fltrs input[type='radio'] {
   margin: 0;
-  width: 17px;
+  width: 100%;
   min-height: 1rem;
 }
 
@@ -895,7 +887,7 @@
   color: white;
 }
 .numBoxRadio input[type='radio']:disabled + label {
-  cursor: default;
+  /*cursor: default;*/
 }
 .numBoxRadio input {
   display: none;

@@ -3,26 +3,33 @@
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+  font-family: inherit;
+  /*outline-color: var(--neptuneColor);*/
+  outline: none;/*This is of course awfull*/
+}
+
+body {
   font-family: 'Nunito', 'Open Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: greyscale;
 }
 /*
-non standerd, seems to affect scrolling preformance
 ::-webkit-scrollbar {
   width: 8px;
 }
  
 ::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
-  -moz-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-  box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+  -moz-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+  box-shadow: inset 0 0 6px rgb(0,0,0); 
   border-radius: 10px;
 }
  
 ::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
-  -moz-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
-  box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+  border-radius: 0px;
+  -webkit-box-shadow: inset 0 0 6px rgba(255,255,255,0.5);
+  -moz-box-shadow: inset 0 0 6px rgba(255,255,255,0.5);
+  box-shadow: inset 0 0 6px rgba(255,255,255,0.5);
 }
 */
 
@@ -62,7 +69,6 @@ a:active {
   opacity: 0.9;
 }
 
-a,
 button,
 button span,
 button label,
@@ -77,7 +83,7 @@ input[type='reset'] {
   padding: 0;
   color: white;
   text-indent: 0;
-  cursor: pointer;
+  /*cursor: pointer;*/
   -webkit-user-select: none;
   -khtml-user-select: none;
   -moz-user-select: none;
@@ -86,7 +92,7 @@ input[type='reset'] {
   user-select: none;
 }
 button:focus {
-  outline: none;
+  
 }
 button:disabled, button:disabled:hover, button:disabled span, button:disabled label {
   opacity: 0.5;
@@ -134,15 +140,9 @@ label {
   text-transform: capitalize;
 }
 
-::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-  opacity: 0.5;
-}
-::-moz-placeholder { /* Firefox 19+ */
-  opacity: 0.5;
-}
-:-moz-placeholder { /* Firefox 18- */
-  opacity: 0.5;
-}
+::-webkit-input-placeholder, /* Chrome/Opera/Safari */
+::-moz-placeholder, /* Firefox 19+ */
+:-moz-placeholder, /* Firefox 18- */
 :-ms-input-placeholder { /* IE 10+ */
   opacity: 0.5;
 }
@@ -152,7 +152,7 @@ input[type='checkbox'], input[type='radio'] {
   padding: 0;
   width: 1.25rem;
   min-height: 1.25rem;
-  cursor: pointer;
+  /*cursor: pointer;*/
 }
 
 input[type='checkbox'] + label, input[type='radio'] + label {
@@ -160,7 +160,7 @@ input[type='checkbox'] + label, input[type='radio'] + label {
   border-bottom-width: 1px;
   border-bottom-style: solid;
   border-bottom-color: transparent;
-  cursor: pointer;
+  /*cursor: pointer;*/
 }
 input[type='checkbox'] + label {
   vertical-align: super;
@@ -174,7 +174,6 @@ input, select, textarea {
   line-height: 1.75rem;
   font-size: 1.2rem;
   text-indent: 0.25rem;
-  width: 20rem;
   border-width: 1px;
   border-style: solid;
   border-bottom-color: white;
@@ -198,7 +197,7 @@ input, select {
 
 select {
   background-color: white;
-  cursor: pointer;
+  /*cursor: pointer;*/
 }
 
 textarea {
@@ -209,12 +208,12 @@ textarea {
 
 input:focus, input:active, select:focus, select:active {
   border-bottom-color: var(--neptuneColor);
-  outline: 0;
+  /*outline: 0;*/
 }
 
 textarea:focus, textarea:active {
   border-color: var(--neptuneColor);
-  outline: 0;
+  /*outline: 0;*/
 }
 
 input:disabled, textarea:disabled, select:disabled, datalist:disabled {
@@ -265,7 +264,7 @@ details {
   line-height: 1.25em;
   font-size: 1em;
 	border: 0;
-  margin: 10px 0;
+  margin: 0;
   padding: 0;
   text-transform: capitalize;
   -moz-box-shadow:    inset 0 -1em 1em -0.5em rgb(48,48,48);
@@ -280,12 +279,9 @@ details[open] summary {
 
 summary {
   line-height: 2em;
-  margin: 0 0 0 10px;
-  padding: 3px;
-  cursor: pointer;
-}
-summary:focus {
-	outline: none;
+  margin: 0;
+  padding: 0;
+  /*cursor: pointer;*/
 }
 
 input::-webkit-inner-spin-button {
@@ -388,7 +384,6 @@ th {
 td {
   border-bottom: 1px solid rgba(255,255,255,0.3);
   border-right: 1px solid rgba(255,255,255,0.1);
-  line-height: 1.5rem;
   padding: 10px;
 }
 

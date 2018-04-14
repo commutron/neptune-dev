@@ -31,6 +31,13 @@ function onPress(event) {
   }
 }
 
+function onMessage(event) {
+  if(event.data.orgin === 'pisces') {
+    console.log(event);
+    onPress(event.data);
+  }else{null}
+}
+
 export function ScanListenerUtility() {
   window.addEventListener('visibilitychange', reFocus);
   window.addEventListener('focus', reFocus);
@@ -42,11 +49,7 @@ export function ScanListenerUtility() {
       null;
     }else{
       window.addEventListener('keypress', onPress);
-      window.addEventListener('message', (mss)=>{
-        if(mss.data.orgin === 'pisces') {
-          onPress(mss.data);
-        }else{null}
-      });
+      window.addEventListener('message', onMessage);
     }
   },250);
   /*
@@ -62,5 +65,6 @@ export function ScanListenerOff() {
   window.removeEventListener('visibilitychange', reFocus);
   window.removeEventListener('focus', reFocus);
   window.removeEventListener('keypress', onPress);
+  window.removeEventListener('message', onMessage);
   Session.set('scanListener', '');
 }

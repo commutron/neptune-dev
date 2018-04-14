@@ -26,6 +26,7 @@ class ProdData extends Component	{
       <ProductionFindOps
         orb={this.props.orb}
         anchor={this.props.anchor}
+        user={this.props.user}
         org={this.props.org}
         users={this.props.users}
         app={this.props.app}
@@ -124,6 +125,7 @@ export default withTracker( () => {
       hotReady: hotSub.ready(),
       orb: orb,
       anchor: Session.get( 'nowWanchor' ),
+      user: user,
       org: org,
       users: Meteor.users.find( {}, { sort: { username: 1 } } ).fetch(),
       app: AppDB.findOne({org: org}),

@@ -74,7 +74,7 @@ class BestWorstContent extends Component {
             
             <NonConTypePie ncTypes={this.state.tops.ncTypeCounts} />
             
-            <div className='wide max1000 balance'>
+            <div className='wide max1200 balance'>
           
               <BstWrstNCresults
                 title='Best'
@@ -126,7 +126,7 @@ const BstWrstNCresults = ({ title, color, results, widgetData, groupData, scale,
       <table className='wide'><tbody>
         <tr>
           <th colSpan={!widgetSort ? '3' : '2'}>{title}</th>
-          <th colSpan='1'>{scale}</th>
+          <th>{scale}</th>
         </tr>
         {results.map( (entry, index)=>{
           let wdgt = matchWidget(entry.w);
@@ -155,7 +155,7 @@ const BstWrstNCresults = ({ title, color, results, widgetData, groupData, scale,
                   address={'/data/widget?request=' + wdgt.widget}
                 />
               </td>
-              <td className='medBig'>{entry.value}</td>
+              <td>{entry.value}</td>
             </tr>
         )})}
       </tbody></table>

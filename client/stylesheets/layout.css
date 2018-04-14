@@ -55,10 +55,10 @@ main {
   z-index: 10;
   width: 256px;
   height: 100%;
-  display: -webkit-box;
+  /*display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
-  display: -ms-flexbox;
+  display: -ms-flexbox;*/
   display: flex;
   background-color: rgb(25,25,25);
   background-color: rgba(25,25,25,0.5);
@@ -69,10 +69,10 @@ main {
 .stickyBar {
   position: -webkit-sticky;
   position: sticky;
-  top: 0;
+  top: 0px;
   width: auto;
   background-color: black;
-  background-color: rgba(0,0,0,0.8);
+  background-color: rgb(0,0,0);
   z-index: 8;
 }
 
@@ -403,6 +403,10 @@ main {
   padding: 16px;
 }
 
+.indent {
+  padding-left: 16px;
+}
+
 .breath {
   margin: 0 5px;
 }
@@ -590,6 +594,12 @@ main {
   width: 80px;
 }
 
+.max1200 {
+  max-width: 1200px;
+}
+.max1000 {
+  max-width: 1000px;
+}
 .max1000 {
   max-width: 1000px;
 }

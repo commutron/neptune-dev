@@ -18,7 +18,7 @@ const NonConMiniSatus = ({ noncons, flow, flowAlt, app })=> {
   
   return(
     <div className='centre'>
-      {/*<MiniMeter title='total' count={noncons.length} />*/}
+      <MiniMeter title='All Processes' count={noncons.length} app={app} />
       {splitByStep.map( (entry, index)=> {
         return(
           <MiniMeter key={index} title={entry.name} count={entry.ncs} app={app} />
