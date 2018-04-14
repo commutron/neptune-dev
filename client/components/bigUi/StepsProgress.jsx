@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
+import moment from 'moment';
 import Pref from '/client/global/pref.js';
-import Chartist from 'chartist';
-import ChartistGraph from 'react-chartist';
-import Tooltip from 'chartist-plugin-tooltips';
 
 import ProgPie from '/client/components/charts/ProgPie.jsx';
 import MiniBar from '/client/components/charts/MiniBar.jsx';
+import MiniStack from '/client/components/charts/MiniStack.jsx';
 import NumBox from '/client/components/uUi/NumBox.jsx';
 // requires 
 /// batchData
@@ -26,7 +25,10 @@ export default class StepsProgress extends Component	{
     const flow = this.props.flow;
     const flowAlt = this.props.flowAlt;
     
-    const outScrap = (itms)=> { return ( itms.filter( x => x.history.filter( y => y.type === 'scrap' ).length === 0 ) )};
+    const outScrap = (itms)=> { 
+                      return ( 
+                        itms.filter( x => x.history.filter( y => y.type === 'scrap' ).length === 0 )
+                      )};
     
     const rSteps = flow.filter( x => x.type !== 'first' );
     const aSteps = flowAlt.filter( x => x.type !== 'first' );
@@ -52,37 +54,56 @@ export default class StepsProgress extends Component	{
     
     const scrapCount = b.items.length - regItems.length - altItems.length;
     
-    function flowLoop(river, items) {
+    function flowLoop(river, items, expand, timeWindow) {
+      const now = moment().format();
       const byKey = (t, ky)=> { return ( x => x.key === ky && x.good === true )};
       const byName = (t, nm)=> { return ( x => x.step === nm && x.type === 'first' && x.good === true )};
       let stepCounts = [];
       for(let step of river) {
         let itemCount = 0;
         let unitCount = 0;
+        let itemCountNew = 0;
+        let unitCountNew = 0;
         for(var i of items) {
           const h = i.history;
+          const hNew = h.filter( x => moment(x.time).isSame(now, 'day') === true );
           if(i.finishedAt !== false) {
             itemCount += 1;
             unitCount += 1 * i.units;
+            if(expand) {
+              if(hNew.find( x => x.key === 'f1n15h1t3m5t3p' && moment(x.time).isSame(now, 'day') === true )) {
+                itemCountNew += 1;
+                unitCountNew += 1 * i.units;
+              }
+            }
           }else if(step.type === 'inspect') {
             h.find( byKey(this, step.key) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
             h.find( byName(this, step.step) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
+            if(expand) {
+              hNew.find( byKey(this, step.key) ) ? (itemCountNew += 1, unitCountNew += 1 * i.units ) : null;
+              hNew.find( byName(this, step.step) ) ? (itemCountNew += 1, unitCountNew += 1 * i.units ) : null;
+            }
           }else{
             h.find( byKey(this, step.key) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
+            if(expand) {
+              hNew.find( byKey(this, step.key) ) ? (itemCountNew += 1, unitCountNew += 1 * i.units ) : null;
+            }
           }
         }
         stepCounts.push({
           step: step.step,
           type: step.type,
           items: itemCount,
-          units: unitCount
+          units: unitCount,
+          itemsNew: itemCountNew,
+          unitsNew: unitCountNew
         });
       }   
       return stepCounts;
     }
   
-    let regStepCounts = flowLoop(rSteps, regItems);
-    let altStepCounts = flowLoop(aSteps, altItems);
+    let regStepCounts = flowLoop(rSteps, regItems, this.props.expand);
+    let altStepCounts = flowLoop(aSteps, altItems, this.props.expand);
     
     return {
       regStepCounts: regStepCounts,
@@ -151,15 +172,18 @@ export default class StepsProgress extends Component	{
           <div className='centreRow'>
             {reg.map( (entry)=>{
               let count = calcItem ? entry.items : entry.units;
+              let countNew = calcItem ? entry.itemsNew : entry.unitsNew;
               let total = calcItem ? totalR : totalRU;
               let rndmKeyR = Math.random().toString(36).substr(2, 5);
               return(
                 <StepDisplay
                   key={rndmKeyR}
                   mini={this.props.mini}
+                  expand={this.props.expand}
                   step={entry.step}
                   type={entry.type}
                   count={count}
+                  countNew={countNew}
                   total={total} />
             )})}
           </div>
@@ -173,15 +197,18 @@ export default class StepsProgress extends Component	{
               <div className='centreRow'>
               {alt.map( (entry)=>{
                 let count = calcItem ? entry.items : entry.units;
+                let countNew = calcItem ? entry.itemsNew : entry.unitsNew;
                 let total = calcItem ? totalA : totalAU;
                 let rndmKeyA = Math.random().toString(36).substr(2, 5);
                 return(
                   <StepDisplay
                     key={rndmKeyA}
                     mini={this.props.mini}
+                    expand={this.props.expand}
                     step={entry.step}
                     type={entry.type}
                     count={count}
+                    countNew={countNew}
                     total={total} />
               )})}
               </div>
@@ -193,12 +220,20 @@ export default class StepsProgress extends Component	{
   }
 }
 
-const StepDisplay = ({ mini, step, type, count, total })=> {
+const StepDisplay = ({ mini, expand, step, type, count, countNew, total })=> {
   const title = type === 'finish' ||
                 type === 'test' ?
                 step :
                 step + ' ' + type;
-                
+  if(expand) {
+    return(
+      <MiniStack
+        title={title}
+        count={count}
+        countNew={countNew}
+        total={total} />
+    );
+  }              
   if(mini) {
     return(
       <MiniBar
@@ -214,54 +249,3 @@ const StepDisplay = ({ mini, step, type, count, total })=> {
       total={total} />
   );
 };
-/*
-
-export class NonConTypeChart extends Component {
-
-  render () {
-
-    const counts = this.props.counts;
-    
-    let data = {
-      labels: this.props.ncOp,
-      series: counts,
-    };
-    
-    let options = {
-      height: 800,
-      fullWidth: true,
-      horizontalBars: true,
-      stretch: false,
-      stackBars: true,
-      axisX: {
-        low: 0,
-        onlyInteger: true,
-        position: 'start'
-      },
-      axisY: {
-        offset: 100
-      },
-      chartPadding: {
-        top: 10,
-        right: 25,
-        bottom: 20,
-        left: 25
-      },
-      plugins: [
-        Chartist.plugins.tooltip({
-          appendToBody: true,
-          class: 'cap'
-        })
-      ]
-    };
-
-    return (
-      <div>
-        <br />
-        <ChartistGraph data={data} options={options} type={'Bar'} />
-      </div>
-    );
-  }
-}
-
-*/

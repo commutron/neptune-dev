@@ -5,7 +5,6 @@ import { CalcSpin } from '/client/components/uUi/Spin.jsx';
 import DateRangeSelect from '/client/components/smallUi/DateRangeSelect.jsx';
 import LeapText from '/client/components/tinyUi/LeapText.jsx';
 import NonConTypePie from '/client/components/charts/NonConTypePie.jsx';
-//import NumBox from '/client/components/uUi/NumBox.jsx';
 
 const BestWorstBatch = ({ groupData, widgetData, app, widgetSort })=> (
   <div>
@@ -42,16 +41,6 @@ class BestWorstContent extends Component {
       error ? console.log(error) : null;
       this.setState({ tops: reply });
     });
-  }
-  
-  matchWidget(wKey) {
-    const widget = this.props.widgetData.find( x => x._id === wKey );
-    return widget;
-  }
-  
-  matchGroup(gKey) {
-    const group = this.props.groupData.find( x => x._id === gKey );
-    return group;
   }
   
   render () {
@@ -100,7 +89,6 @@ class BestWorstContent extends Component {
             
           </div>
         }
-        
       </div>
     );
   }
@@ -126,10 +114,12 @@ const BstWrstNCresults = ({ title, color, results, widgetData, groupData, scale,
       <table className='wide'><tbody>
         <tr>
           <th colSpan={!widgetSort ? '3' : '2'}>{title}</th>
-          <th>{scale}</th>
+          <th className='rAlign'>{scale}</th>
         </tr>
         {results.map( (entry, index)=>{
           let wdgt = matchWidget(entry.w);
+          let vrsn = !wdgt || !entry.v ? 
+                      '' : wdgt.versions.find( x => x.versionKey === entry.v ).version;  
           let grp = !wdgt ? 'unknown' : matchGroup(wdgt.groupId); 
           return(
             <tr key={index}>
@@ -150,17 +140,20 @@ const BstWrstNCresults = ({ title, color, results, widgetData, groupData, scale,
               </td>
               <td>
                 <LeapText
-                  title={wdgt.widget} 
+                  title={wdgt.widget + ' ' + vrsn} 
                   sty={false}
                   address={'/data/widget?request=' + wdgt.widget}
                 />
               </td>
-              <td>{entry.value}</td>
+              <td>
+                {entry.value}
+                {!entry.done ? 
+                  '' : <i className='fas fa-check fa-fw' title='finished'></i>}
+              </td>
             </tr>
         )})}
       </tbody></table>
-    </div> 
-    
+    </div>
   );
 };
 

@@ -26,8 +26,6 @@ export default class NonConRate extends Component {
           const num = reply.filter( x => x.group === g._id ).length;
           groupSet.push({meta: g.alias, value: num});
         }
-        //const other = reply.find( x => x.meta === 'OTHER');
-        //groupSet.push({meta: 'OTHER', value: other.value});
         this.setState({ groups: groupSet });
       }
     });
@@ -46,16 +44,18 @@ export default class NonConRate extends Component {
 
     let dataOne = {
       series: counts,
-      labels: Array.from(counts, x => { 
-                                  let name = x.value > 1 ? x.meta : ' '; 
-                                  return name })
+      labels: Array.from(counts, 
+                x => { 
+                  let name = x.value > counts.length % 5 ? x.meta : ' '; 
+                  return name })
     };
 
     let dataTwo = {
       series: groups,
-      labels: Array.from(groups, x => { 
-                                  let name = x.value > 1 ? x.meta : ' '; 
-                                  return name })
+      labels: Array.from(groups,
+                x => { 
+                  let name = x.value > counts.length % 5 ? x.meta : ' ';
+                  return name })
     };
     
     let options = {

@@ -185,17 +185,18 @@ export const MethodOptionAdd = ({ existOps, trackedSteps })=> {
     <div>
       <form id='toolForm' onSubmit={(e)=>handle(e)}>
         <label htmlFor='tooltitle'>{Pref.method} name</label>
+        <br />
         <input type='text' id='tooltitle' list='preExist' required />
         <datalist id='preExist'>
           {existOps.map( (entry, index)=>{
-            if(typeof entry === 'object') {// redundant after migration
-              return(
-                <option key={index} value={entry.title}>{entry.title}</option>
-              );
-            }else{null}
+            return(
+              <option key={index} value={entry.title}>{entry.title}</option>
+            );
           })}
         </datalist>
+        <br />
         <label htmlFor='steps'>Corresponding Steps</label>
+        <br />
         <select id='corrSteps' multiple required>
           {trackedSteps.map( (entry)=>{
             if(entry.type === 'first') {

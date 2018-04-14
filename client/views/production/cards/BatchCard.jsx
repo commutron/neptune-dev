@@ -82,7 +82,9 @@ export default class BatchCard extends Component	{
                 <i className='fas fa-thumbs-down' data-fa-transform='down-2' title='NonConformances'></i>
               ]}
               wide={true}
-              stick={false}>
+              stick={false}
+              hold={true}
+              sessionTab='batchExPanelTabs'>
               
               <div className='space cap'>
                 <TagsModule
@@ -96,7 +98,12 @@ export default class BatchCard extends Component	{
               </div>
               
               <div className='space cap'>
-                <StepsProgress batchData={b} flow={riverFlow} flowAlt={riverAltFlow} mini={true} />
+                <StepsProgress
+                  batchData={b}
+                  flow={riverFlow}
+                  flowAlt={riverAltFlow}
+                  mini={true}
+                  expand={expand} />
               </div>
               
               <div className={!expand ? 'space' : 'indent twooneSplit'}>

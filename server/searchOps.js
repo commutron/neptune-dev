@@ -57,7 +57,11 @@ Meteor.methods({
       
     const relevantBatches = allBatches.filter( x => 
                               inWindow(x.finishedAt, x.createdAt) === true );
-                              
+    /*  limit Low batches to only finished                       
+    const doneBatches = allBatches.filter( x => 
+                          x.finishedAt !== false &&
+                          moment(x.finishedAt).isBetween(from, to) === true );
+    */                          
     const relevantNC = (ncArray)=>
                         !newOnly ? ncArray :
                         ncArray.filter( x => moment(x.time).isBetween(from, to) );
@@ -67,18 +71,28 @@ Meteor.methods({
     
     if( !widgetSort ) {
       // low filter
-      const lowNC = relevantBatches.filter( x => relevantNC(x.nonCon).length <= best ); 
+      const lowNC = relevantBatches.filter( x => relevantNC(x.nonCon).length <= best );
+      //const lowNC = doneBatches.filter( x => x.nonCon.length <= best ); 
       const bestBatchNC = Array.from(lowNC,
                             x => { 
-                              return ( 
-                                {b: x.batch, w: x.widgetId, value: relevantNC(x.nonCon).length} 
-                            )}).sort((a, b)=> { return a.value - b.value });
+                              return ( {
+                                b: x.batch,
+                                w: x.widgetId,
+                                v: x.versionKey,
+                                done: x.finishedAt !== false,
+                                value: relevantNC(x.nonCon).length } 
+                            )}).sort((a, b)=> { 
+                                 return a.done === true ? a : a.value - b.value });
       // high filter
       const highNC = relevantBatches.filter( x => relevantNC(x.nonCon).length >= worst );
       const worstBatchNC = Array.from(highNC,
                             x => { 
-                              return ( 
-                                {b: x.batch, w: x.widgetId, value: relevantNC(x.nonCon).length}
+                              return ( {
+                                b: x.batch,
+                                w: x.widgetId,
+                                v: x.versionKey,
+                                done: x.finishedAt !== false,
+                                value: relevantNC(x.nonCon).length }
                             )}).sort((a, b)=> { return b.value - a.value });
       bestNC = bestBatchNC;
       worstNC = worstBatchNC;

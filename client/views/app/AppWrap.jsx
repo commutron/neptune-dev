@@ -20,7 +20,8 @@ export default class AppWrap extends Component	{
             
             <Tabs
               tabs={['profile', 'accounts', 'preferences', 'meta']}
-              stick={true}>
+              stick={true}
+              wide={true}>
               
               <AccountPanel key={1} />
               <AccountsManagePanel key={2} users={this.props.users} />
