@@ -8,7 +8,21 @@ import TestFails from './TestFails.jsx';
 import NCTributary from './NCTributary.jsx';
 import MiniHistory from './MiniHistory.jsx';
 
-const StoneSelect = ({ id, flow, isAlt, rmas, allItems, nonCons, serial, history, regRun, users, methods, expand })=> {
+const StoneSelect = ({ 
+  id, 
+  flow,
+  isAlt,
+  rmas,
+  allItems,
+  nonCons,
+  serial,
+  history,
+  regRun,
+  users,
+  methods,
+  progCounts,
+  expand 
+})=> {
     
   const nc = nonCons.filter( 
                 x => x.serial === serial && x.inspect === false )
@@ -64,7 +78,8 @@ const StoneSelect = ({ id, flow, isAlt, rmas, allItems, nonCons, serial, history
                       allItems={allItems}
                       isAlt={isAlt}
                       users={users}
-                      methods={methods} />;
+                      methods={methods}
+                      progCounts={progCounts} />;
 
       const nonCon = <NCTributary
               			  id={id}

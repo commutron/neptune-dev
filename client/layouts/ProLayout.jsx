@@ -5,6 +5,7 @@ import { Meteor } from 'meteor/meteor';
 import FindBox from './FindBox.jsx';
 import TopBar from './TopBar.jsx';
 import FormBar from '/client/components/bigUi/FormBar.jsx';
+import ProgressCounter from '/client/components/utilities/ProgressCounter.js';
 
 export const ProductionLayout = ({content, link}) => (
   <div className='containerPro'>
@@ -36,17 +37,35 @@ export class ProWrap extends Component	{
     Session.set( 'riverExpand', !openState );
   }
   
+  getFlows() {
+    const b = this.props.batchData;
+    const w = this.props.widgetData;
+    let flow = [];
+    let flowAlt = [];
+    let progCounts = false;
+    if( b && w ) {
+      const river = w.flows.find( x => x.flowKey === b.river);
+      const riverAlt = w.flows.find( x => x.flowKey === b.riverAlt );
+      flow = river ? river.flow : [];
+      flowAlt = riverAlt ? riverAlt.flow : [];
+      progCounts = ProgressCounter(flow, flowAlt, b, this.state.expand);
+    }
+    return { flow, flowAlt, progCounts };
+  }
+  
   render() {
     
     let scrollFix = {
       overflowY: 'auto'
     };
     
+    const path = this.getFlows();
+    
     let riverExpand = this.state.expand;
-    let topClass = riverExpand === true ? 'proExpand' : 'proDefault';
-    let leftClass = riverExpand === true ? 'proLeftMajor' : 'proLeftMinor';
-    let rightClass = riverExpand === true ? 'proRightMinor' : 'proRightMajor';
-    let toggleClass = riverExpand === true ? 'riverShrinkToggle' : 'riverExpandToggle';
+    let topClass = !riverExpand ? 'proDefault' : 'proExpand';
+    let leftClass = !riverExpand ? 'proLeftMinor' : 'proLeftMajor';
+    let rightClass = !riverExpand ? 'proRightMajor' : 'proRightMinor';
+    let toggleClass = !riverExpand ? 'riverExpandToggle' : 'riverShrinkToggle';
     
     return (
       <div className={topClass}>
@@ -54,11 +73,21 @@ export class ProWrap extends Component	{
         <div className={leftClass} style={scrollFix}>
           {this.props.children.length > 2 ?
             React.cloneElement(this.props.children[0],
-              { expand: this.state.expand }
+              { 
+                expand: this.state.expand,
+                flow: path.flow,
+                flowAlt: path.flowAlt,
+                progCounts: path.progCounts
+              }
             )
           :null}
           {React.cloneElement(this.props.children[this.props.children.length - 2],
-            { expand: this.state.expand }
+            { 
+              expand: this.state.expand,
+              flow: path.flow,
+              flowAlt: path.flowAlt,
+              progCounts: path.progCounts
+            }
           )}
         </div>
         

@@ -18,7 +18,7 @@ export default class StepsProgress extends Component	{
   constructor() {
     super();
     this.state = {
-      countCalc: 'item'
+      countCalc: 'item',
     };
   }
 
@@ -68,6 +68,7 @@ export default class StepsProgress extends Component	{
         let unitCount = 0;
         let itemCountNew = 0;
         let unitCountNew = 0;
+        
         for(var i of items) {
           const h = i.history.filter( g => g.good === true);
           const hNew = h.filter( q => wndw(q.time) === true );
@@ -108,7 +109,7 @@ export default class StepsProgress extends Component	{
   
     let regStepCounts = flowLoop(rSteps, regItems, this.props.expand, false);
     let altStepCounts = flowLoop(aSteps, altItems, this.props.expand, false);
-    
+  
     return {
       regStepCounts: regStepCounts,
       regItems: regItems.length,
@@ -122,7 +123,7 @@ export default class StepsProgress extends Component	{
     
   render() {
     
-    const dt = this.dataLoop();
+    const dt = this.props.progCounts || this.dataLoop();
     const reg = dt.regStepCounts;
     const totalR = dt.regItems;
     const alt = dt.altStepCounts;

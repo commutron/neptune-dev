@@ -170,7 +170,8 @@ export default class Stone extends Component	{
     				isAlt={this.props.isAlt}
     				sKey={this.props.sKey}
             step={this.props.step}
-            type={this.props.type}>
+            type={this.props.type}
+            progCounts={this.props.progCounts}>
 						<ContextMenuTrigger
 							id={this.props.barcode}
 							attributes={ {className:'centre'} }>

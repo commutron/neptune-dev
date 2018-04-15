@@ -7,13 +7,13 @@ import RMACascade from './RMACascade.jsx';
 import MiniHistory from './MiniHistory.jsx';
 import AltMarker from '/client/components/uUi/AltMarker.jsx';
 
-const River = ({ itemData, batchData, widgetData, app, users, expand })=> {
+const River = ({ itemData, batchData, widgetData, app, users, flow, flowAlt, progCounts, expand })=> {
 
   const b = batchData;
   const i = itemData;
   const w = widgetData;
   
-  let flow = [];
+  let useFlow = [];
   let rma = [];
   
   if(i.finishedAt !== false) {
@@ -24,15 +24,15 @@ const River = ({ itemData, batchData, widgetData, app, users, expand })=> {
     }
     for(let rflw of rma) {
       for(let step of rflw.flow) {
-        flow.push(step);
+        useFlow.push(step);
       }
     }
   }else if(b.riverAlt && i.alt === 'yes') {
   // set flow as Alt River
-    flow = w.flows.find( x => x.flowKey === b.riverAlt).flow;
+    useFlow = !flowAlt ? w.flows.find( x => x.flowKey === b.riverAlt).flow : flowAlt;
   }else{
   // set flow as River
-    flow = w.flows.find( x => x.flowKey === b.river).flow;
+    useFlow = !flow ? w.flows.find( x => x.flowKey === b.river).flow : flow;
   }
 
 	// present option between River and Alt River
@@ -75,7 +75,7 @@ const River = ({ itemData, batchData, widgetData, app, users, expand })=> {
 		    : null}
         <StoneSelect
           id={b._id}
-          flow={flow}
+          flow={useFlow}
           isAlt={!b.riverAlt ? false : true}
           rmas={rma}
           allItems={b.items}
@@ -85,6 +85,7 @@ const River = ({ itemData, batchData, widgetData, app, users, expand })=> {
           regRun={i.finishedAt === false}
           users={users}
           methods={app.toolOption}
+          progCounts={progCounts}
           expand={expand} />
       </div>
       

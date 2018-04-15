@@ -27,6 +27,7 @@ class DashView extends Component	{
         orb={this.props.orb}
         snap={this.props.snap}
         anchor={this.props.anchor}
+        user={this.props.user}
         org={this.props.org}
         users={this.props.users}
         app={this.props.app}
@@ -38,7 +39,7 @@ class DashView extends Component	{
     );
   }
   componentDidMount() {
-    ScanListenerUtility();
+    ScanListenerUtility(this.props.user);
   }
   componentWillUnmount() {
     ScanListenerOff();
@@ -137,6 +138,7 @@ export default withTracker( () => {
       orb: orb,
       snap: Session.get( 'ikyView' ),
       anchor: Session.get( 'nowWanchor' ),
+      user: user,
       org: org,
       users: Meteor.users.find( {}, { sort: { username: 1 } } ).fetch(),
       app: AppDB.findOne({org: org}),

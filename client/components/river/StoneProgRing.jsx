@@ -19,9 +19,25 @@ export default class StepsProgress extends Component	{
     const step = this.props.step;
     const type = this.props.type;
     
+    const pre = this.props.progCounts;
+    let preFetch = false;
+      
     if(type === 'first') {
       null;
     }else{
+    ///
+      if(pre) {
+        const preTotal = this.props.isAlt ?
+                          pre.altItems :
+                          pre.regItems;
+        const preCount = this.props.isAlt ?
+                          pre.altStepCounts.find( x => x.key === sKey ) :
+                          pre.regStepCounts.find( x => x.key === sKey );
+        const preDoneNum = preCount ? preCount.items : 0;
+        const preRemain = preTotal - preDoneNum;
+        preFetch = {preDoneNum, preRemain};
+      }
+    ///
       const allitems = this.props.allItems;
       const item = allitems.find( x => x.serial === this.props.serial );
       const items = !this.props.isAlt ?
@@ -47,8 +63,14 @@ export default class StepsProgress extends Component	{
         }
       }
       const remain = total - itemCount;
-      this.setState({ countDone: itemCount });
-      this.setState({ countRemain: remain });
+      
+      if(!preFetch) {
+        this.setState({ countDone: itemCount });
+        this.setState({ countRemain: remain });
+      }else{
+        this.setState({ countDone: preFetch.preDoneNum });
+        this.setState({ countRemain: preFetch.preRemain });
+      }
     }
   }
   

@@ -24,21 +24,26 @@ export default class BatchCard extends Component	{
     const u = this.props.user;
     const a = this.props.app;
     
+    const flow = this.props.flow;
+    const flowAlt = this.props.flowAlt;
+    
+    const progCounts = this.props.progCounts;
+    const expand = this.props.expand;
+    
     //const v = w.versions.find( x => x.versionKey === b.versionKey );
     
+    /*
     const flow = w.flows.find( x => x.flowKey === b.river);
     const riverFlow = flow ? flow.flow : [];
     
     const flowAlt = w.flows.find( x => x.flowKey === b.riverAlt );
     const riverAltFlow = flowAlt ? flowAlt.flow : [];
-    
+    */
     let iready = b.items.length === 0;
     
     let warn = b.blocks.filter( x => x.solve === false ).length;
     iready ? warn++ : null;
     const showWarn = warn === 0 ? 'alertCount invisible' : 'alertCount';
-    
-    const expand = this.props.expand;
     
     const exploreLink = !iS ?
                         '/data/batch?request=' + b.batch :
@@ -99,19 +104,20 @@ export default class BatchCard extends Component	{
               
               <div className='space cap'>
                 <StepsProgress
-                  batchData={b}
-                  flow={riverFlow}
-                  flowAlt={riverAltFlow}
+                  //batchData={b}
+                  //flow={flow}
+                  //flowAlt={flowAlt}
                   mini={true}
-                  expand={expand} />
+                  expand={expand}
+                  progCounts={progCounts} />
               </div>
               
               <div className={!expand ? 'space' : 'indent twooneSplit'}>
                 <div className={!expand ? '' : 'onetwoSplitTwo'}>
                   <NonConMiniSatus
                     noncons={b.nonCon}
-                    flow={riverFlow}
-                    flowAlt={riverAltFlow}
+                    flow={flow}
+                    flowAlt={flowAlt}
                     user={u}
                     app={a} />
                 </div>

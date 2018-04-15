@@ -20,6 +20,11 @@ export default class ItemCard extends Component	{
     const done = i.finishedAt !== false;
     const scrap = done ? i.history.find(x => x.type === 'scrap') : false;
     
+    const expand = this.props.expand;
+    const flow = this.props.flow;
+    const flowAlt = this.props.flowAlt;
+    const progCounts = this.props.progCounts;
+    
     if(!b.river) {
       Session.set('nowStep', 'unavailable');
       return (
@@ -57,7 +62,10 @@ export default class ItemCard extends Component	{
             widgetData={w}
             app={this.props.app}
             users={this.props.users}
-            expand={this.props.expand} />
+            flow={flow}
+            flowAlt={flowAlt}
+            progCounts={progCounts}
+            expand={expand} />
   			</div>
 			</AnimateWrap>
     );

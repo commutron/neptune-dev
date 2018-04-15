@@ -38,12 +38,13 @@ function onMessage(event) {
   }else{null}
 }
 
-export function ScanListenerUtility() {
+export function ScanListenerUtility(user) {
   window.addEventListener('visibilitychange', reFocus);
   window.addEventListener('focus', reFocus);
   
   Meteor.setTimeout( ()=>{
-    const autoScan = Meteor.user().autoScan;
+    //const autoScan = Meteor.user().autoScan;
+    const autoScan = user.autoScan;
     autoScan === undefined ? console.log(autoScan) : null;
     if(!autoScan) {
       null;

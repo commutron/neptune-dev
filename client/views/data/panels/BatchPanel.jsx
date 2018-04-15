@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import moment from 'moment';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
+import ProgressCounter from '/client/components/utilities/ProgressCounter.js';
 import CreateTag from '/client/components/uUi/CreateTag.jsx';
 
 import Tabs from '/client/components/smallUi/Tabs.jsx';
@@ -66,6 +67,7 @@ export default class BatchPanel extends Component	{
     const done = b.finishedAt !== false; // no more boards if batch is finished
     
     const filter = this.filter();
+    const progCounts = ProgressCounter(riverFlow, riverAltFlow, b, true);
     
     return (
       <AnimateWrap type='cardTrans'>
@@ -144,10 +146,12 @@ export default class BatchPanel extends Component	{
               
                 <div className='twoThirdsContent'>
                   <StepsProgress
-                    batchData={b}
-                    flow={riverFlow}
-                    flowAlt={riverAltFlow}
-                    mini={true} />
+                    //batchData={b}
+                    //flow={riverFlow}
+                    //flowAlt={riverAltFlow}
+                    mini={true}
+                    expand={true}
+                    progCounts={progCounts} />
                 </div>
                 
                 <div className='threeThirdsContent wide'>

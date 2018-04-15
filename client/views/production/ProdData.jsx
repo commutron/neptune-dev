@@ -38,7 +38,7 @@ class ProdData extends Component	{
     );
   }
   componentDidMount() {
-    ScanListenerUtility();
+    ScanListenerUtility(this.props.user);
   }
   componentWillUnmount() {
     ScanListenerOff();
