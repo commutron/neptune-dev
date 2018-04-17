@@ -12,6 +12,7 @@ import Remove from '../forms/Remove.jsx';
 
 import ScrapForm from '../forms/ScrapForm.jsx';
 import UnitSet from '../forms/UnitSet.jsx';
+import PanelBreak from '../forms/PanelBreak.jsx';
 
 import WidgetEditForm from '../forms/WidgetEditForm.jsx';
 import VersionForm from '../forms/VersionForm.jsx';
@@ -28,6 +29,10 @@ const ActionBar = ({batchData, itemData, widgetData, versionData, groupData, app
   	  <div> 
     	  <UnitSet
     	    id={batchData._id}
+    	    item={itemData} />
+    	 <PanelBreak
+          id={batchData._id}
+          batch={batchData.batch}
     	    item={itemData} />
         <ScrapForm
 	        id={batchData._id}

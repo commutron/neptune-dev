@@ -55,7 +55,8 @@ export default class ProgBurndown extends Component {
       axisY: {
         low: 0,
         onlyInteger: true,
-        divisor: 100,
+        showLabel: false,
+        showGrid: false
       },
       axisX: {
         divisor: 7,

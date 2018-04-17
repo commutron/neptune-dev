@@ -15,7 +15,7 @@ const NonConTypePie = ({ ncTypes })=> {
     series: ncTypes,
     labels: Array.from(ncTypes, 
                         x => { 
-                          let name = x.value > ncTypes.length % 10 ? x.meta : ' '; 
+                          let name = x.value > ncTypes.length % 5 ? x.meta : ' '; 
                             return name })
   };
   

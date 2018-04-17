@@ -23,7 +23,7 @@ const MiniStack = ({ title, count, countNew, total })=> {
     <div className='wide'>
       <p style={name} className='cap'>{title}</p>
       <progress style={bar} className='proGood' value={v} max={t}></progress>
-      <p style={num}>{vX} + {v - vX}/{t}</p>
+      <p style={num}><i className='blueT'>{vX}</i> / {v}/{t}</p>
     </div>
   );
 };

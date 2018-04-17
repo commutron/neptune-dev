@@ -501,6 +501,43 @@ Meteor.methods({
       null;
     }
   },
+  
+//// panel break
+  breakItemIntoUnits(id, bar, newSerials) {
+    const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
+    const batch = BatchDB.findOne({_id: id, orgKey: Meteor.user().orgKey});
+    const item = batch ? batch.items.find( x => x.serial === bar ) : false;
+    if(auth && item) {
+      for(let sn of newSerials) {
+        BatchDB.update({_id: id}, {
+          $push : { items : {
+            serial: sn,
+            createdAt: new Date(),
+            createdWho: Meteor.userId(),
+            finishedAt: false,
+            finishedWho: false,
+            units: Number(1),
+            panel: false,
+            panelCode: bar,
+            subItems: [],
+            history: item.history,
+            alt: item.alt,
+            rma: []
+        }}});
+      }
+      BatchDB.update({_id: id}, {
+        $set : {
+          updatedAt: new Date(),
+  			  updatedWho: Meteor.userId()
+      }});
+      BatchDB.update(id, {
+        $pull : { items: { serial: bar }
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
 
 //// Non-Cons \\\\
   addNC(batchId, bar, ref, type, step, fix) {
@@ -788,10 +825,8 @@ Meteor.methods({
       return false;
     }
   },
-  
 
   //// Blockers \\\\
-
   addBlock(batchId, blockTxt) {
     if(Meteor.userId()) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {

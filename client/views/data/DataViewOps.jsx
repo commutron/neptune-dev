@@ -182,30 +182,41 @@ export default class DataViewOps extends Component	{
         let widget = this.linkedWidget(hotBatch.widgetId);
         let version = this.versionData(widget.versions, hotBatch.versionKey);
         let group = this.linkedGroup(widget.groupId);
-        return (
-          <TraverseWrap
-            batchData={hotBatch}
-            itemData={item}
-            widgetData={widget}
-            versionData={version}
-            groupData={group}
-            app={app}
-            action='item'
-          >
-            <ItemPanel
+        if(item && widget && version && group) {
+          return (
+            <TraverseWrap
               batchData={hotBatch}
               itemData={item}
               widgetData={widget}
               versionData={version}
               groupData={group}
               app={app}
-              listTitle={true} />
-            <ItemsList
-              batchData={hotBatch}
-              widgetData={widget}
-              tide={orb} />
-          </TraverseWrap>
-        );
+              action='item'
+            >
+              <ItemPanel
+                batchData={hotBatch}
+                itemData={item}
+                widgetData={widget}
+                versionData={version}
+                groupData={group}
+                app={app}
+                listTitle={true} />
+              <ItemsList
+                batchData={hotBatch}
+                widgetData={widget}
+                tide={orb} />
+            </TraverseWrap>
+          );
+        }else{
+          return(
+            <TraverseWrap>
+              <div className='centre wide'>
+                <p className='big'>Data Does Not Exist</p>
+              </div>
+              <div></div>
+            </TraverseWrap>
+          );
+        }
       }
     }
 

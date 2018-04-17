@@ -76,12 +76,13 @@ export default class ItemPanel extends Component	{
           </div>
         
           <div className='space'>
-            <p>
-              { i.subItems.length > 0 && <i>Nested sub {Pref.item}s: </i> }
-              { i.subItems.length > 0 &&
-                i.subItems.map((ent, inx)=> { 
+              { i.subItems.length > 0 && 
+              <p> 
+                <i>Nested sub {Pref.item}s: </i>
+                {i.subItems.map((ent, inx)=> { 
                   return( <i key={inx}><SubItemLink serial={ent} />, </i> ) } ) }
-            </p>
+              </p>}
+              { i.panelCode !== false && <p>Panel: {i.panelCode}</p> }
             <h1>
             { done ? scrap ? 
               <ScrapBox entry={scrap} />
