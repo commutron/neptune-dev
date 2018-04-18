@@ -3,7 +3,8 @@ import moment from 'moment';
 import timezone from 'moment-timezone';
 import Pref from '/client/global/pref.js';
 import NumBox from '/client/components/uUi/NumBox.jsx';
-import NonConTypeDonut from '/client/components/charts/NonConTypeDonut.jsx';
+import NonConTypePie from '/client/components/charts/NonConTypePie.jsx';
+
 import SimpleRate from '/client/components/charts/SimpleRate.jsx';
 
 export default class BigPicture extends Component	{
@@ -67,12 +68,9 @@ export default class BigPicture extends Component	{
             live={now.live}
             timeRange={this.props.timeRange} />
         </section>
-        <section className='balance middle'>
-          <NonConTypeDonut
-            ncOp={this.props.a.nonConOption}
-            counts={now.ncTypeCounts}
-            total={now.newNC}
-            title={'types of discovered ' + Pref.nonCon + 's'} />
+        <section className='wide centre'>
+          <i className='redT cap centreText'>{'types of discovered ' + Pref.nonCon + 's'}</i>
+          <NonConTypePie ncTypes={now.ncTypeCounts} fullWidth={true} />
         </section>
       </div>
     );

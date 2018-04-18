@@ -35,7 +35,7 @@ Meteor.methods({
       const num = BatchDB.find({widgetId: w._id}).fetch().length;
         numOfwdgt.push({group: w.groupId, meta: w.widget, value: num});
     }
-    return numOfwdgt;
+    return numOfwdgt.sort((a, b)=> { return b.value - a.value });
   },
 
 // Best and Worst batches by nonconformance

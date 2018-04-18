@@ -26,7 +26,8 @@ export default class NonConRate extends Component {
           const num = reply.filter( x => x.group === g._id ).length;
           groupSet.push({meta: g.alias, value: num});
         }
-        this.setState({ groups: groupSet });
+        let groupSetOrder = groupSet.sort((a, b)=> { return b.value - a.value });
+        this.setState({ groups: groupSetOrder });
       }
     });
   }

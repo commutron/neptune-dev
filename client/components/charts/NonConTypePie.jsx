@@ -4,32 +4,36 @@ import ChartistGraph from 'react-chartist';
 import Tooltip from 'chartist-plugin-tooltips';
 import fillDonut from 'chartist-plugin-fill-donut';
 
-const NonConTypePie = ({ ncTypes })=> {
+const NonConTypePie = ({ ncTypes, fullWidth })=> {
   
+  let ncTypesOrder = ncTypes.sort((a, b)=> { return b.value - a.value });
+  let med = ncTypesOrder.length / 2;
+  let median = ncTypesOrder[med];
+  let labelLine = !median ? 0 : median.value;
   let total = Array.from(ncTypes, x => x.value).reduce((x,y)=> x + y);
-  let cntr = '<span class="centre smCap"><i class="medBig redT">' + 
-                  total + 
-                    '</i><i>Total</i></span>';
-
+  let cntr = '<span class="centre smCap"><i class="big redT">' + 
+                total + '</i><i>Total</i></span>';
+                    
   let data = {
-    series: ncTypes,
-    labels: Array.from(ncTypes, 
+    series: ncTypesOrder,
+    labels: Array.from(ncTypesOrder, 
                         x => { 
-                          let name = x.value > ncTypes.length % 5 ? x.meta : ' '; 
+                          let name = x.value > labelLine ? x.meta : ' '; 
                             return name })
   };
   
   let options = {
-    width: 500,
-    height: 350,
+    width: fullWidth ? '' : 600,
+    fullWidth: fullWidth,
+    height: 400,
     startAngle: 0,
     donut: true,
-    donutWidth: 75,
+    donutWidth: 80,
     showLabel: true,
     labelOffset: 50,
     labelDirection: 'explode',
     ignoreEmptyValues: true,
-    chartPadding: 50,
+    chartPadding: 70,
     plugins: [
       Chartist.plugins.tooltip({
         appendToBody: true

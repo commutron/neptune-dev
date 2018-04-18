@@ -60,8 +60,8 @@ class BestWorstContent extends Component {
           <CalcSpin />
         :
           <div className='wide centre'>
-            
-            <NonConTypePie ncTypes={this.state.tops.ncTypeCounts} />
+          
+            <NonConTypePie ncTypes={this.state.tops.ncTypeCounts} fullWidth={false} />
             
             <div className='wide max1200 balance'>
           

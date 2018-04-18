@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
-
+import RoleCheck from '/client/components/utilities/RoleCheck.js';
 import InOutWrap from '/client/components/tinyUi/InOutWrap.jsx';
 import InputMulti from '../smallUi/InputMulti.jsx';
 
@@ -103,6 +103,12 @@ export default class FirstForm extends Component	{
   notgood() {
     this.goBad.disabled = true;
     this.setState({ good: false }, ()=>{
+      this.pass();
+    });
+  }
+  finegood() {
+    this.goFine.disabled = true;
+    this.setState({ good: 'fine' }, ()=>{
       this.pass();
     });
   }
@@ -306,14 +312,29 @@ export default class FirstForm extends Component	{
 			    <span className='middle'>
             <button
               type='button'
+              title='Nope, try again'
               className='roundActionIcon firstBad'
               ref={(i)=> this.goBad = i}
               onClick={this.notgood.bind(this)}>
               <i className="fas fa-times fa-2x"></i>
             </button>
             <span className='breath'></span>
+            <RoleCheck role={'nightly'}>
+              <button
+                type='button'
+                title='Fine, good enough'
+                className='roundActionIcon firstGood'
+                ref={(i)=> this.goFine = i}
+                onClick={this.finegood.bind(this)}>
+                <i className="fas fa-thumbs-up fa-2x"></i>
+              </button>
+            </RoleCheck>
+            <RoleCheck role={'nightly'}>
+              <span className='breath'></span>
+            </RoleCheck>
             <button
               type='button'
+              title='Great, pass to next step'
               className='roundActionIcon firstGood'
               ref={(i)=> this.go = i}
               disabled={secondOpinion}

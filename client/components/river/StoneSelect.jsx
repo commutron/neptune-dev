@@ -36,7 +36,9 @@ const StoneSelect = ({
 
   const fDone = [];
   for(let item of allItems) {
-    const firsts = item.history.filter( x => x.type === 'first' && x.good === true );
+    const firsts = item.history.filter( 
+      x => x.type === 'first' && 
+        ( x.good === true || x.good === 'fine' ) );
     firsts.forEach( x => fDone.push( 'first' + x.step ) );
   }
   

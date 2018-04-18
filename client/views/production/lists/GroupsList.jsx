@@ -9,12 +9,16 @@ export default class GroupsList extends Component	{
   constructor() {
     super();
     this.state = {
-      filter: false
+      filter: false,
+      textString: ''
     };
   }
   
   setFilter(rule) {
     this.setState({ filter: rule });
+  }
+  setTextFilter(rule) {
+    this.setState({ textString: rule.toLowerCase() });
   }
   
   groupActive() {
@@ -44,12 +48,15 @@ export default class GroupsList extends Component	{
     const a = this.groupActive();
     const f = this.state.filter;
     
-    let showList = 
+    let basicFilter = 
       f === 'done' ?
       g.filter( x => a.includes(x._id) === false ) :
       f === 'inproc' ?
       g.filter( x => a.includes(x._id) !== false ) :
       g;
+    let showList = basicFilter.filter( 
+      tx => tx.group.toLowerCase().includes(this.state.textString) === true ||
+            tx.alias.toLowerCase().includes(this.state.textString) === true);
 
     return (
       <AnimateWrap type='cardTrans'>
@@ -59,7 +66,8 @@ export default class GroupsList extends Component	{
             title={g.alias}
             done='Inactive'
             total={showList.length}
-            onClick={e => this.setFilter(e)} />
+            onClick={e => this.setFilter(e)}
+            onTxtChange={e => this.setTextFilter(e)} />
             
           { showList.map( (entry, index)=> {
             let ac = a.includes(entry._id) ? 'leapBar activeMark' : 'leapBar';

@@ -66,6 +66,8 @@ export default class BatchPanel extends Component	{
     const riverAltFlow = flowAlt ? flowAlt.flow : [];
     const done = b.finishedAt !== false; // no more boards if batch is finished
     
+    const itemsOrder = b.items.sort( (x,y)=> x.serial - y.serial);
+    
     const filter = this.filter();
     const progCounts = ProgressCounter(riverFlow, riverAltFlow, b, true);
     
@@ -113,7 +115,7 @@ export default class BatchPanel extends Component	{
                 {b.items.length > 0 &&
                   <fieldset>
                     <legend>Serial Range</legend>
-                    {b.items[0].serial} - {b.items[b.items.length-1].serial}
+                    {itemsOrder[0].serial} - {itemsOrder[itemsOrder.length-1].serial}
                   </fieldset>}
                 <NoteLine entry={b.notes} id={b._id} widgetKey={false}  />
               </div>

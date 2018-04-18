@@ -9,12 +9,16 @@ export default class BatchesList extends Component	{
   constructor() {
     super();
     this.state = {
-      filter: false
+      filter: false,
+      textString: ''
     };
   }
   
   setFilter(rule) {
     this.setState({ filter: rule });
+  }
+  setTextFilter(rule) {
+    this.setState({ textString: rule.toLowerCase() });
   }
 
   render() {
@@ -23,12 +27,14 @@ export default class BatchesList extends Component	{
     const w = this.props.widgetData;
     const f = this.state.filter;
     
-    let showList = 
+    let basicFilter = 
       f === 'done' ?
       b.filter( x => x.finishedAt !== false ) :
       f === 'inproc' ?
       b.filter( x => x.finishedAt === false ) :
       b;
+    let showList = basicFilter.filter( 
+                    tx => tx.batch.toLowerCase().includes(this.state.textString) === true );
 
     return (
       <AnimateWrap type='cardTrans'>
@@ -38,7 +44,8 @@ export default class BatchesList extends Component	{
               title={b.batch}
               done='Finished'
               total={showList.length}
-              onClick={e => this.setFilter(e)} />
+              onClick={e => this.setFilter(e)}
+              onTxtChange={e => this.setTextFilter(e)} />
           </div>  
           {showList.map( (entry, index)=> {
             const style = entry.finishedAt === false ? 

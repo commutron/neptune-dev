@@ -79,19 +79,19 @@ Meteor.methods({
       const outScrap = (itms)=> { return ( itms.filter( x => x.history
                                                               .filter( y => y.type === 'scrap' )
                                                                 .length === 0 ) )};
+      const allLiveItems = outScrap(b.items);
+      const scrapCount = b.items.length - allLiveItems.length;
       
-      // split flows, filter scraps
-      let regItems = b.items;
+      // split flows
+      let regItems = allLiveItems;
       let altItems = [];
       
       if(!riverAlt) {
-        regItems = outScrap(regItems);
+        null;
       }else{
-        regItems = outScrap( b.items.filter( x => x.alt === false || x.alt === 'no' ) );
-        altItems = outScrap( b.items.filter( x => x.alt === 'yes' ) );
+        regItems = allLiveItems.filter( x => x.alt === 'no' || x.alt === false );
+        altItems = allLiveItems.filter( x => x.alt === 'yes' );
       }
-      
-      const scrapCount = b.items.length - regItems.length - altItems.length;
       
       let regStepCounts = flowLoop(river, regItems);
       let altStepCounts = flowLoop(riverAlt, altItems);
@@ -107,11 +107,16 @@ Meteor.methods({
         totalAltUnits += i.units;
       }
       
-      let active = b.items.find( 
-                    x => x.history.find( 
-                      y => moment(y.time)
-                            .isBetween(sRange, eRange) ) ) 
-                              ? true : false; 
+      let activeH = b.items.find( 
+                    i => i.history.find( 
+                      h => moment(h.time)
+                        .isBetween(sRange, eRange) ) )
+                          ? true : false;
+      let activeN = b.nonCon.find( 
+                      n => moment(n.time)
+                        .isBetween(sRange, eRange) )
+                          ? true : false; 
+      let active = activeH || activeN;
       
       wipLiveData.push({
         batch: b.batch,
@@ -150,6 +155,10 @@ Meteor.methods({
       return records;
     }
     const mainActive = active(b, sRange, eRange);
+    //const mainActive = wipLiveData.filter( l => l.active === true );
+    
+    
+    
     
     const batchesNC = b.filter(
                       x => x.nonCon.find(
@@ -166,11 +175,19 @@ Meteor.methods({
     const mainDoneBatches = doneBatches(b, sRange, eRange);                        
     
     // finished items and units       
-    function doneItems(batches, startRange, endRange) {
+    function doneItems(mainActive, startRange, endRange) {
       let items = 0;
       let units = 0;
-      for(let t of batches) {
-        let fin = t.items.filter(
+      for(let mA of mainActive) {
+        /*
+        const regCounts = mA.stepsReg.find( x => x.type = 'finish' );
+        !regCounts ? null : items += regCounts.itemCount;
+        !regCounts ? null : units += regCounts.unitCount;
+        const altCounts = mA.stepsAlt.find( x => x.type = 'finish' );
+        !altCounts ? null : items += altCounts.itemCount;
+        !altCounts ? null : units += altCounts.unitCount;
+        */
+        let fin = mA.items.filter(
                     x => x.finishedAt !== false && 
                           moment(x.finishedAt)
                             .isBetween(startRange, endRange) );
@@ -181,7 +198,6 @@ Meteor.methods({
       }
       return { items: items, units: units };
     }
-    //const mainDoneItems = doneItems(mainActive, sRange, eRange);
     
     function recordedNC(batches, startRange, endRange) {
       let newNC = 0;
@@ -196,16 +212,16 @@ Meteor.methods({
     //const ncTotalCount = recordedNC(batchesNC, sRange, eRange);
     
     let ncTypeCounts = [];
-    for(let n of aNCOps) {
+    for(let ncType of aNCOps) {
       let typNum = 0;
       for(let t of batchesNC) {
         let nw = t.nonCon.filter(
-                  x => x.type === n &&
+                  x => x.type === ncType &&
                     moment(x.time)
                       .isBetween(sRange, eRange) );
         typNum += nw.length;
       }
-      ncTypeCounts.push(typNum);
+      ncTypeCounts.push({meta: ncType, value: typNum});
     }
     
     //// Rates ///////
@@ -231,7 +247,7 @@ Meteor.methods({
       let start = rateStart.clone().subtract(i, frequency).format();
       let end = rateEnd.clone().subtract(i, frequency).format();
       
-      let doneCount = doneItems(mainActive, start, end);
+      let doneCount = doneItems(mainActive);
       doneItemsOT.unshift(doneCount.items);
       doneUnitsOT.unshift(doneCount.units);
       

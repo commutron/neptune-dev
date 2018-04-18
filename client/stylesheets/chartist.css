@@ -2,7 +2,7 @@
   fill: rgba(255, 255, 255, 0.9);
   color: rgb(255, 255, 255);
   color: rgba(255, 255, 255, 0.9);
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   line-height: 1.25rem;
   text-transform: capitalize;
 }
@@ -730,17 +730,14 @@
   stroke: transparent;
   fill: rgb(41, 128, 185);
 }
-
 .monoPieDone .ct-series-a .ct-slice-pie {
   stroke: rgb(39, 174, 96);
   fill: rgb(39, 174, 96);
 }
-
 .monoPie .ct-series-b .ct-slice-pie {
   stroke: rgba(0,0,0,0.2);
   fill: rgba(0,0,0,0.2);
 }
-
 .monoPie .ct-label, .monoDon .ct-label {
   font-size: 0.75rem;
   line-height: 1; 
@@ -749,11 +746,9 @@
 .monoDon .ct-series-a .ct-slice-donut {
   stroke: rgb(41, 128, 185);
 }
-
 .monoDonDone .ct-series-a .ct-slice-donut {
   stroke: rgb(39, 174, 96);
 }
-
 .monoDon .ct-series-b .ct-slice-donut {
   stroke: rgba(0,0,0,0.1);
 }
@@ -824,3 +819,15 @@
 .rateFill .ct-series-a .ct-line {
   stroke: var(--asbestos);
 }
+
+.miniStack .ct-series-a .ct-bar {
+  stroke: var(--nephritisfade);
+}
+.miniStack .ct-series-b .ct-bar {
+  stroke: var(--emerald);
+}
+.miniStack .ct-series-c .ct-bar {
+  stroke: var(--clouds);
+}
+.miniStack .ct-grid-background {
+  fill: var(--black); }

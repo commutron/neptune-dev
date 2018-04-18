@@ -1,9 +1,12 @@
 import React from 'react';
 
-const FilterActive = ({ total, onClick })=>	{
+const FilterActive = ({ total, onClick, onTxtChange })=>	{
   
   function changeBasicFilter() {
     onClick(this.basic.value);
+  }
+  function changeTextFilter() {
+    onTxtChange(this.text.value);
   }
   
   return(
@@ -19,6 +22,14 @@ const FilterActive = ({ total, onClick })=>	{
       </summary>
       
       <div>
+        <label className='fltrsInput'>
+          <i className='fas fa-font fa-fw'></i>
+          <input
+            type='search'
+            ref={(i)=>this.text = i}
+            onChange={(e)=>changeTextFilter(e)}
+            disabled={!onTxtChange} />
+        </label>
         <label className='fltrsInput'>
           <i className='fas fa-map-marker-alt fa-fw'></i>
           <select

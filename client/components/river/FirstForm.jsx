@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
-
+import RoleCheck from '/client/components/utilities/RoleCheck.js';
 import UserNice from '../smallUi/UserNice.jsx';
 import AnimateWrap from '../tinyUi/AnimateWrap.jsx';
 
@@ -82,6 +82,12 @@ export default class FirstForm extends Component	{
   notgood() {
     this.goBad.disabled = true;
     this.setState({ good: false }, ()=>{
+      this.pass();
+    });
+  }
+  finegood() {
+    this.goFine.disabled = true;
+    this.setState({ good: 'fine' }, ()=>{
       this.pass();
     });
   }
@@ -227,20 +233,33 @@ export default class FirstForm extends Component	{
             <span className='balance'>
               <button
                 type='button'
+                title='Nope, try again'
                 className='roundActionIcon trpplRound firstBad'
                 ref={(i)=> this.goBad = i}
                 disabled={false}
                 onClick={this.notgood.bind(this)}>
-                <i className="fas fa-times fa-5x"></i>
+                <i className="fas fa-times fa-4x"></i>
                 <br /><i className='medBig'>Fail</i>
               </button>
+              <RoleCheck role={'nightly'}>
+                <button
+                  type='button'
+                  title='Fine, good enough'
+                  className='roundActionIcon trpplRound firstGood'
+                  ref={(i)=> this.goFine = i}
+                  onClick={this.finegood.bind(this)}>
+                  <i className="fas fa-thumbs-up fa-4x"></i>
+                  <br /><i className='medBig'>Fine</i>
+                </button>
+              </RoleCheck>
               <button
                 type='button'
+                title='Great, pass to next step'
                 className='roundActionIcon trpplRound firstGood'
                 ref={(i)=> this.go = i}
                 disabled={secondOpinion}
                 onClick={this.pass.bind(this)}>
-                <i className="fas fa-check fa-5x"></i>
+                <i className="fas fa-check fa-4x"></i>
                 <br /><i className='medBig'>Pass</i>
               </button>
             </span>

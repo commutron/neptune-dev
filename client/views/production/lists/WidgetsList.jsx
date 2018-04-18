@@ -10,12 +10,16 @@ export default class WidgetsList extends Component	{
   constructor() {
     super();
     this.state = {
-      filter: false
+      filter: false,
+      textString: ''
     };
   }
   
   setFilter(rule) {
     this.setState({ filter: rule });
+  }
+  setTextFilter(rule) {
+    this.setState({ textString: rule.toLowerCase() });
   }
 
   render() {
@@ -25,12 +29,15 @@ export default class WidgetsList extends Component	{
     const g = this.props.groupAlias;
     const f = this.state.filter;
     
-    let showList = 
+    let basicFilter = 
       f === 'done' ?
       w.filter( x => a.includes(x._id) === false ) :
       f === 'inproc' ?
       w.filter( x => a.includes(x._id) !== false ) :
       w;
+    let showList = basicFilter.filter( 
+      tx => tx.widget.toLowerCase().includes(this.state.textString) === true ||
+            tx.describe.toLowerCase().includes(this.state.textString) === true);
 
     return (
       <AnimateWrap type='cardTrans'>
@@ -40,7 +47,8 @@ export default class WidgetsList extends Component	{
             title={g.alias}
             done='Inactive'
             total={showList.length}
-            onClick={e => this.setFilter(e)} />
+            onClick={e => this.setFilter(e)}
+            onTxtChange={e => this.setTextFilter(e)} />
             
           {w.length < 1 ? <p>no {Pref.widget}s created</p> : null}
             { showList.map( (entry, index)=> {

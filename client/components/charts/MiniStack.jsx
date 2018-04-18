@@ -5,79 +5,59 @@ import Tooltip from 'chartist-plugin-tooltips';
 
 const MiniStack = ({ title, count, countNew, total })=> {
   
-  let v = count;
-  let vX = countNew;
-  let t = total;
+  const v = count;
+  const vX = countNew;
+  
+  const dataArr = [ [v - vX], [vX], [total - v] ];
   
   let name = {
     position: 'relative',
     top: '0.75rem',
   };
-  let bar = {
-    width: '100%'
-  };
   let num = {
-    textAlign: 'right'
+    textAlign: 'right',
+    letterSpacing: '1px'
   };
+  
+  let data = {
+    series: dataArr,
+  };
+    
+  let options = {
+    height: 5,
+    fullWidth: true,
+    stretch:true,
+    horizontalBars: true,
+    stackBars: true,
+    showGridBackground: true,
+    axisX: {
+      offset: 0,
+      low: 0,
+      high: total,
+      showLabel: false,
+      showGrid: false,
+    },
+    axisY: {
+      showLabel: false,
+      showGrid: false,
+      offset: 0
+    },
+    chartPadding: 0,
+    plugins: [
+      Chartist.plugins.tooltip({
+        appendToBody: true
+      })
+    ]
+  };
+    
   return(
-    <div className='wide'>
+    <div className='wide miniStack'>
       <p style={name} className='cap'>{title}</p>
-      <progress style={bar} className='proGood' value={v} max={t}></progress>
-      <p style={num}><i className='blueT'>{vX}</i> / {v}/{t}</p>
+      <ChartistGraph data={data} options={options} type={'Bar'} />
+      <p style={num}>{v}/{total}</p>
     </div>
   );
 };
 
 export default MiniStack;
-
-/*
-
-export class NonConTypeChart extends Component {
-
-  render () {
-
-    const counts = this.props.counts;
-    
-    let data = {
-      labels: this.props.ncOp,
-      series: counts,
-    };
-    
-    let options = {
-      height: 800,
-      fullWidth: true,
-      horizontalBars: true,
-      stretch: false,
-      stackBars: true,
-      axisX: {
-        low: 0,
-        onlyInteger: true,
-        position: 'start'
-      },
-      axisY: {
-        offset: 100
-      },
-      chartPadding: {
-        top: 10,
-        right: 25,
-        bottom: 20,
-        left: 25
-      },
-      plugins: [
-        Chartist.plugins.tooltip({
-          appendToBody: true,
-          class: 'cap'
-        })
-      ]
-    };
-
-    return (
-      <div>
-        <br />
-        <ChartistGraph data={data} options={options} type={'Bar'} />
-      </div>
-    );
-  }
-}
-
-*/
+     

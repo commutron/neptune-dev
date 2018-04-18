@@ -29,7 +29,7 @@
   -o-transition: all 200ms ease-out;
   transition: all 200ms ease-out;
   opacity: 1;
-  /*cursor: pointer;*/
+  will-change: transform;
 }
 
 .stone:focus {

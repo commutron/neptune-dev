@@ -13,17 +13,20 @@ export default class ItemsList extends Component	{
     this.state = {
       filter: false,
       advancedKey: false,
-      advancedTime: false
+      advancedTime: false,
+      textString: ''
     };
   }
   
   setFilter(rule) {
     this.setState({ filter: rule });
   }
-  
   setAdvancedFilter(rule) {
     this.setState({ advancedKey: rule.step });
     this.setState({ advancedTime: rule.time });
+  }
+  setTextFilter(rule) {
+    this.setState({ textString: rule.toLowerCase() });
   }
   
   scraps() {
@@ -65,7 +68,9 @@ export default class ItemsList extends Component	{
       !this.state.advancedTime ?
         match = z.history.find( x => x.key === this.state.advancedKey )
       :
-        match = z.history.find( x => x.key === this.state.advancedKey && moment(moment(x.time).format('YYYY-MM-DD')).isSame(this.state.advancedTime) === true );
+        match = z.history.find( 
+                  x => x.key === this.state.advancedKey && 
+                  moment(moment(x.time).format('YYYY-MM-DD')).isSame(this.state.advancedTime) === true );
       !match ? null : filtrA.push(z.serial);
     }
     return filtrA;
@@ -99,10 +104,13 @@ export default class ItemsList extends Component	{
       b.items.filter( x => scrap.includes(x.serial) === true ) :
       b.items;
       
-    let showList = this.state.advancedKey ?
+    let stepTimeFilter = this.state.advancedKey ?
                    preFilter.filter( z => matchList.includes(z.serial) === true )
                    :
                    preFilter;
+    let textFilter = stepTimeFilter.filter( 
+                      tx => tx.serial.toLowerCase().includes(this.state.textString) === true );
+    let showListOrder = textFilter.sort( (x,y)=> x.serial - y.serial);
 
     return (
       <AnimateWrap type='cardTrans'>
@@ -110,13 +118,14 @@ export default class ItemsList extends Component	{
           <div className='stickyBar'>
             <FilterItems
               title={b.batch}
-              total={showList.length}
+              total={showListOrder.length}
               advancedTitle='Step'
               advancedList={steps}
               onClick={e => this.setFilter(e)}
-              onChange={e => this.setAdvancedFilter(e)} />
+              onChange={e => this.setAdvancedFilter(e)}
+              onTxtChange={e => this.setTextFilter(e)} />
           </div>
-          {showList.map( (entry, index)=> {
+          {showListOrder.map( (entry, index)=> {
             let style = entry.history.length === 0 ? 'leapBar' :
                         entry.finishedAt === false ? 'leapBar activeMark' : 
                         scrap.includes(entry.serial) ? 'leapBar ngMark' : 'leapBar gMark';
