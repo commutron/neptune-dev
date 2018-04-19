@@ -71,7 +71,7 @@ main {
   top: 0px;
   width: auto;
   background-color: black;
-  background-color: rgb(0,0,0);
+  background-color: var(--black);
   z-index: 8;
 }
 

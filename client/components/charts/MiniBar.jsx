@@ -12,7 +12,8 @@ const MiniBar = ({ title, count, total })=> {
     width: '100%'
   };
   let num = {
-    textAlign: 'right'
+    textAlign: 'right',
+    letterSpacing: '1px'
   };
   return(
     <div className='wide'>

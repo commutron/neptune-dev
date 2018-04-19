@@ -148,10 +148,7 @@ const ActionBar = ({batchData, itemData, widgetData, versionData, groupData, app
             check={groupData.createdAt.toISOString()}
             entry={groupData._id} />
         </div>
-      :
-      action === 'newGroup' ?
-         <GroupForm id={false} name={false} alias={false} wiki={false} />
-      :null
+      : null
     }
 
     </div>
@@ -160,7 +157,10 @@ const ActionBar = ({batchData, itemData, widgetData, versionData, groupData, app
     <div className='footCent'></div>
         
   { /* Right Section */ }
-    <div className='footRight'></div>
+    <div className='footRight'>
+      {action === 'newGroup' &&
+         <GroupForm id={false} name={false} alias={false} wiki={false} />}
+    </div>
   </div>
 );
 

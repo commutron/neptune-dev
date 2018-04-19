@@ -68,8 +68,10 @@
 
 .proActionForm {
   grid-area: formFooter;
-  background-color: black;
-  background-color: rgba(0,0,0,0.9);
+  background-color: rgb(20,20,20);
+  -webkit-box-shadow: 0 0 15px 0.5px rgb(0,0,0);
+  -moz-box-shadow:    0 0 15px 0.5px rgb(0,0,0);
+  box-shadow:         0 0 15px 0.5px rgb(0,0,0);
   width: 100%;
   min-width: 768px;
   height: 60px;

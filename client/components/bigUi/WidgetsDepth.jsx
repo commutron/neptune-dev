@@ -3,9 +3,9 @@ import Pref from '/client/global/pref.js';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 
 import LeapButton from '/client/components/tinyUi/LeapButton.jsx';
-import FilterActive from '../../../components/bigUi/FilterActive.jsx';
+import FilterActive from '/client/components/bigUi/FilterActive.jsx';
 
-export default class WidgetsList extends Component	{
+export default class WidgetsDepth extends Component	{
   
   constructor() {
     super();

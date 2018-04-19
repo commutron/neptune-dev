@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
 
+import { LandingWrap } from '/client/layouts/DataExploreLayout.jsx';
 import { TraverseWrap } from '/client/layouts/DataExploreLayout.jsx';
 
 import SearchHelp from './SearchHelp.jsx';
@@ -19,7 +20,6 @@ import BatchesList from './lists/BatchesList.jsx';
 import ItemsList from './lists/ItemsList.jsx';
 import GroupsList from './lists/GroupsList.jsx';
 import WidgetsList from './lists/WidgetsList.jsx';
-
 /*
 view: this.props.view,
 request: this.props.request,
@@ -38,13 +38,10 @@ export default class DataViewOps extends Component	{
   
   groupActiveWidgets(gId) {
     let widgetsList = this.props.allWidget.filter(x => x.groupId === gId);
-    let activeBatch = this.props.allBatch.filter( x => x.finishedAt === false);
-    
-    let activeList = [];
-    for(let wdgt of widgetsList) {
-      let match = activeBatch.find(x => x.widgetId === wdgt._id);
-      match ? activeList.push(match.widgetId) : false;
-    }
+    let activeBatch = this.props.allBatch.filter( b => b.finishedAt === false);
+    const hasBatch = (id)=> activeBatch.find( b => b.widgetId === id) ? true : false;
+    let activeWidgets = widgetsList.filter( w => hasBatch(w._id) == true );
+    const activeList = Array.from(activeWidgets, w => w._id);
     return activeList;
   }
   
@@ -123,7 +120,7 @@ export default class DataViewOps extends Component	{
       Session.set('nowBatch', false);
       if(request === 'groups') {
         return(
-          <TraverseWrap
+          <LandingWrap
 			      batchData={false}
             widgetData={false}
             versionData={false}
@@ -140,11 +137,11 @@ export default class DataViewOps extends Component	{
               groupData={allGroup}
               batchData={allBatch}
               widgetData={allWidget} />
-          </TraverseWrap>
+          </LandingWrap>
         );
       }else if(request === 'batches') {
         return(
-          <TraverseWrap
+          <LandingWrap
 			      batchData={false}
             widgetData={false}
             versionData={false}
@@ -160,7 +157,7 @@ export default class DataViewOps extends Component	{
             <BatchesList
               batchData={allBatch}
               widgetData={allWidget} />
-          </TraverseWrap>
+          </LandingWrap>
         );
       }else if(request === 'scraps') {
         return(
@@ -253,9 +250,6 @@ export default class DataViewOps extends Component	{
   // Group
     if(view === 'group') {
       const group = this.getGroup(request);
-      //let alias = this.groupAlias();
-      //let group = this.group();
-      //let lookup = alias ? alias : group ? group : false;
       if(group) {
         let widgets = this.groupWidgets(group._id);
         let activeWidgets = this.groupActiveWidgets(group._id);
@@ -269,7 +263,11 @@ export default class DataViewOps extends Component	{
             app={app}
             action='group'
           >
-            <GroupPanel groupData={group} app={app} />
+            <GroupPanel
+              groupData={group}
+              widgetData={widgets}
+              active={activeWidgets}
+              app={app} />
             <WidgetsList
               groupAlias={group.alias}
               widgetData={widgets}

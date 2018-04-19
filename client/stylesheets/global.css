@@ -8,7 +8,7 @@
   outline: none;/*This is of course awfull*/
 }
 body {
-  font-family: 'Open Sans', 'Nunito', sans-serif;
+  font-family: 'Nunito', 'Open Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: greyscale;
 }

@@ -11,7 +11,6 @@ export default class ProgBurndown extends Component {
     super();
     this.state = {
       counts: false,
-      labels: false
     };
   }
   
@@ -25,30 +24,28 @@ export default class ProgBurndown extends Component {
   
     Meteor.call('historyRate', start, end, flowData, flowAltData, itemData, clientTZ, (error, reply)=> {
       error ? console.log(error) : null;
-      this.setState({ counts: reply.counts, labels: reply.labels });
+      this.setState({ counts: reply });
     });
   }
   
   render () {
     
     const counts = this.state.counts;
-    const labels = this.state.labels;
-    
-    if(!counts || !labels) {
+
+    if(!counts) {
       return(
         <CalcSpin />
       );
     }
     
     let data = {
-      labels: labels,
-      series: [counts]
+      series: [counts],
+      labels: counts
     };
     
     let options = {
       fullWidth: true,
       height: 300,
-      showLabel: false,
       showArea: true,
       showLine: true,
       showPoint: false,
@@ -59,23 +56,24 @@ export default class ProgBurndown extends Component {
         showGrid: false
       },
       axisX: {
+        labelOffset: {x:-20, y: 0},
         divisor: 7,
         labelInterpolationFnc: function(value, index) {
-          let scale = labels.length < 7 ?
+          let scale = counts.length < 7 ?
                       1 :
-                      labels.length < 30 ?
+                      counts.length < 30 ?
                       4 :
-                      labels.length < 60 ?
+                      counts.length < 60 ?
                       8 :
-                      labels.length < 90 ?
+                      counts.length < 90 ?
                       12 :
                       16;
-          return index === labels.length - 4 ? null :
-                 index === labels.length - 3 ? null :
-                 index === labels.length - 2 ? null :
-                 index === labels.length - 1 ? value :
-                 index % scale === 0 ? value : null;
-        },
+          return index === counts.length - 4 ? null :
+                 index === counts.length - 3 ? null :
+                 index === counts.length - 2 ? null :
+                 index === counts.length - 1 ? value.meta :
+                 index % scale === 0 ? value.meta : null;
+        }
       },
       chartPadding: {
         top: 20,
@@ -91,7 +89,10 @@ export default class ProgBurndown extends Component {
           <i className='blueT'>{this.props.title}</i>
         </div>
         <div>
-          <ChartistGraph data={data} options={options} type={'Line'} />
+          <ChartistGraph
+            data={data}
+            options={options}
+            type={'Line'} />
         </div>
       </span>
     );

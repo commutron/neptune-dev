@@ -40,6 +40,7 @@ Meteor.methods({
 
 // Best and Worst batches by nonconformance
   BestWorstStats(best, worst, start, end, newOnly, widgetSort) {
+    
     const allBatches = BatchDB.find({orgKey: Meteor.user().orgKey}).fetch();
     
     // time window - without timezone corection, assumes the server is onsite
@@ -97,9 +98,10 @@ Meteor.methods({
       bestNC = bestBatchNC;
       worstNC = worstBatchNC;
     }else{
-      const widgetsInWindow = new Set( Array.from(relevantBatches, x => x.widgetId ));
+      const widgetsInWindow = [... new Set( Array.from(relevantBatches, x => x.widgetId )) ];
+      
       countsBywidget = [];
-      for(let wW of [...widgetsInWindow]) {
+      for(let wW of widgetsInWindow) {
         let wBstack = relevantBatches.filter( x => x.widgetId === wW );
         let wTotal = 0;
         for(let b of wBstack) {
@@ -142,21 +144,6 @@ Meteor.methods({
   
   ///////////////////////////////////////////////////////////////////////////////////
   
-  /*
-  historyPings(batches, startRange, endRange) {
-    let count = 0;
-    for(let b of batches) {
-      for(let i of b.items) {
-        let pings = i.history.filter( 
-                      x => moment(x.time)
-                            .isBetween(startRange, endRange) );
-        count += pings.length;
-      }
-    }
-    return count;
-  },
-  */
-  
   historyRate(start, end, flowData, flowAltData, itemData, clientTZ) {
     //const b = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
     //const itemData = b ? b.items : [];
@@ -171,15 +158,15 @@ Meteor.methods({
                                     x => x.history.filter( 
                                       y => y.type === 'scrap' )
                                         .length === 0 ) ) };
-    // split flows, filter scraps
-    let regItems = itemData;
+    const allItems = outScrap(itemData); // split flows, filter scraps
+    let regItems = allItems;
     let altItems = [];
       
     if(altKeys.length === 0) {
-      regItems = outScrap(regItems);
+      null;
     }else{
-      regItems = outScrap( itemData.filter( x => x.alt === false || x.alt === 'no' ) );
-      altItems = outScrap( itemData.filter( x => x.alt === 'yes' ) );
+      regItems = allItems.filter( x => x.alt === 'no' || x.alt === false );
+      altItems = allItems.filter( x => x.alt === 'yes' );
     }
     
     const totalRegSteps = flowKeys.length * regItems.length;
@@ -205,18 +192,19 @@ Meteor.methods({
     }
     
     let historyPingsOT = [];
-    let labelsOT = [];
     for(let i = 0; i < howManyDays; i++) {
       const day = startDay.clone().add(i, 'day');
       
       const historyCountR = historyPings(regItems, flowKeys, totalRegSteps, day);
       const historyCountA = historyPings(altItems, altKeys, totalAltSteps, day);
       
-      historyPingsOT.push( historyCountR + historyCountA );
-      labelsOT.push(day.format('MMM.D'));
+      historyPingsOT.push({
+        meta: day.format('MMM.D'), 
+        value: historyCountR + historyCountA
+      });
     }
     
-    return { counts: historyPingsOT, labels: labelsOT };
+    return historyPingsOT;
                     
   },
   
@@ -317,7 +305,7 @@ Meteor.methods({
   
   componentFind(num, batchInfo, unitInfo) {
     const widgets = WidgetDB.find({'versions.assembly.component': num}).fetch();
-    const send = [];
+    const data = [];
     for(let w of widgets) {
       let findG = GroupDB.findOne({ _id: w.groupId });
       let findV = w.versions.filter( x => x.assembly.find( y => y.component === num));
@@ -344,14 +332,14 @@ Meteor.methods({
           btchs: batches
         });
       }
-      send.push({ 
+      data.push({ 
         wdgt: w.widget,
         dsc: w.describe,
         grp: findG.alias,
         vrsns: versions
       });
     }
-    return send;
+    return data;
   }
   
   

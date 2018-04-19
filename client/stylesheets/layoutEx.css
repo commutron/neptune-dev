@@ -26,18 +26,26 @@
   overflow-y: auto;
 }
 
-.traverseContainer {
+.landingContainer, .traverseContainer {
   display: grid;
   grid-template-columns: auto 176px;
   grid-template-rows: 32px calc(100vh - 128px) 48px;
-  grid-template-areas: 
-    'cookieNav traverseList'
-    'traverseContent traverseList'
-    'actionBarEx actionBarEx';
   align-content: center;
   overflow-y: hidden !important;
   overflow-x: hidden !important;
   -webkit-overflow-scrolling: touch;
+}
+.landingContainer {
+  grid-template-areas: 
+    'traverseContent traverseList'
+    'traverseContent traverseList'
+    'traverseContent actionBarEx';
+} 
+.traverseContainer {
+  grid-template-areas: 
+    'cookieNav traverseList'
+    'traverseContent traverseList'
+    'actionBarEx actionBarEx';
 }
 
 .cookieNavEx {
@@ -59,10 +67,12 @@
   background-color: var(--black);
   display: flex;
   align-items: center;
+  justify-content: space-evenly;
 }
 .actionBarEx > div {
   display: flex;
   flex-shrink: 0;
+  /*flex-grow: 2;*/
 }
 
 .oneTwoThreeContainer {
@@ -113,8 +123,21 @@
 }
 .crumb {
   color: var(--silverfade);
-  font-size: 40px;
   overflow: hidden;
+}
+.crumb::before {
+	border-style: solid;
+	border-width: 0.25em 0.25em 0 0;
+	border-radius: 10%;
+	content: '';
+	display: inline-block;
+	height: 2em;
+	left: -10px;
+	position: relative;
+	top: 0em;
+	transform: rotate(45deg);
+	vertical-align: top;
+	width: 2em;
 }
 .cookieCrumb:hover > .cookie {
   color: var(--clouds);

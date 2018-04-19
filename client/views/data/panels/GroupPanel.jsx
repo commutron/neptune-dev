@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import CreateTag from '/client/components/uUi/CreateTag.jsx';
 import Pref from '/client/global/pref.js';
-
+import WidgetsDepth from '/client/components/bigUi/WidgetsDepth.jsx';
 import TagsModule from '/client/components/bigUi/TagsModule.jsx';
 
 export default class GroupPanel extends Component	{
@@ -10,7 +10,10 @@ export default class GroupPanel extends Component	{
   render() {
 
     const g = this.props.groupData;
-    const a = this.props.app;
+    const widgetData = this.props.widgetData;
+    const allBatch = this.props.allBatch;
+    const active = this.props.active;
+    const app = this.props.app;
 
     return (
       <AnimateWrap type='cardTrans'>
@@ -34,9 +37,15 @@ export default class GroupPanel extends Component	{
               tags={g.tags}
               vKey={false}
               group={true}
-              tagOps={a.tagOption} />
+              tagOps={app.tagOption} />
           </div>
           
+          <WidgetsDepth
+            groupAlias={g.alias}
+            widgetData={widgetData}
+            allBatch={allBatch}
+            active={active} />
+
           <CreateTag
             when={g.createdAt}
             who={g.createdWho}

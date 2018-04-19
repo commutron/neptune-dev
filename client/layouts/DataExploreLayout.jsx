@@ -28,6 +28,42 @@ export const ExploreLayout = ({content, link, subLink}) => {
   );
 };
 
+export class LandingWrap extends Component	{
+
+  render() {
+    
+    let scrollFix = {
+      overflowY: 'auto'
+    };
+    
+    return (
+      <div className='landingContainer'>
+        
+        <section className='traverseContent' style={scrollFix}>
+          {this.props.children[0]}
+        </section>
+        
+        <aside className='traverseList' style={scrollFix}>
+          {this.props.children[1]}
+        </aside>
+        
+        <div className='actionBarEx'>
+          <ActionBar
+            batchData={this.props.batchData}
+            itemData={this.props.itemData}
+            widgetData={this.props.widgetData}
+            versionData={this.props.versionData}
+            groupData={this.props.groupData}
+            app={this.props.app}
+            action={this.props.action} />
+        </div>
+              
+        {/*React.cloneElement(this.props.children[0], this.props)*/}
+      </div>
+    );
+  }
+}
+
 export class TraverseWrap extends Component	{
 
   render() {
