@@ -15,6 +15,7 @@ Meteor.methods({
           orgKey: new Meteor.Collection.ObjectID().valueOf(),
           autoScan: true,
           unlockSpeed: 2000,
+          miniAction: false,
           watchlist: [],
           inbox: []
         }
@@ -181,48 +182,15 @@ Meteor.methods({
     return true;
   },
   
+  setMinAction() {
+    const curr = Meteor.user().miniAction;
+    const change = !curr ? true : false;
+    Meteor.users.update(Meteor.userId(), {
+      $set: {
+        miniAction: change,
+      }
+    });
+  },
+  
   
 });
-
-  /*
-  // test/example code
-  // private operations on private server data
-  userOps() {
-    var start = Meteor.users.find().fetch();
-    let next = new Set();
-    for(var x of start) {
-      next.add(x.username);
-    }
-    let send = [...next];
-    return send;
-  },
-// on client
-    Meteor.call('userOps', (err, data)=>{
-      if (err)
-        console.log(err);
-    this.setState({data: data});
-    });
-    */
-    
-/* this could be used in the future with PINs
-  powerCheck() {
-    var go = Meteor.user().power;
-    return go;
-  },
-  ///////////// CLIENT ///////////
-    constructor() {
-    super();
-    this.state = {
-      lock: true
-   };
-  }
-  
-  key() {
-    Meteor.call('powerCheck', (err, reply)=>{
-      if (err)
-        console.log(err);
-      reply ? this.setState({lock: false}) : null;
-    });
-  }
-  \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-  */

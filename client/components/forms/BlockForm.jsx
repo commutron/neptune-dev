@@ -52,7 +52,7 @@ export default class BlockForm extends Component {
         icon='fa-exclamation-triangle'
         smIcon={this.props.smIcon}
         lock={!Roles.userIsInRole(Meteor.userId(), 'run') || this.props.lock}
-      >
+        noText={this.props.noText}>
         <div>
           <form className='centre centreTrue' onSubmit={this.addBlock.bind(this)}>
             <p>

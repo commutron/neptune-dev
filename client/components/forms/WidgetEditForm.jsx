@@ -37,7 +37,8 @@ export default class WidgetEditForm extends Component	{
         title={'edit ' + Pref.widget}
         color='greenT'
         icon='fa-cube'
-        lock={!Roles.userIsInRole(Meteor.userId(), 'edit')}>
+        lock={!Roles.userIsInRole(Meteor.userId(), 'edit')}
+        noText={this.props.noText}>
         <form className='centre' onSubmit={this.save.bind(this)}>
           <p>
             <input

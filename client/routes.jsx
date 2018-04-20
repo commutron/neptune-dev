@@ -10,6 +10,7 @@ import { LabelLayout } from './layouts/MainLayouts.jsx';
 
 import Login from './views/Login.jsx';
 import ActivateUser from '/client/components/forms/ActivateUser.jsx';
+import InitialSetup from './views/InitialSetup.jsx';
 
 import DashData from './views/dashboard/DashData.jsx';
 import ActivityData from './views/activity/ActivityData.jsx';
@@ -71,6 +72,21 @@ privlegedRoutes.route('/activate', {
   action() {
     mount(PublicLayout, {
        content: (<ActivateUser />)
+    });
+  }
+});
+
+privlegedRoutes.route('/initialsetup', {
+  name: 'initialsetup',
+  action() {
+    mount(PublicLayout, {
+       content: (
+        <div>
+          <Login />
+          <hr />
+          <InitialSetup />
+        </div>
+      )
     });
   }
 });

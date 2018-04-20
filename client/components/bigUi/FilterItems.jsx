@@ -18,7 +18,7 @@ const FilterItems = ({ advancedTitle, advancedList, total, onClick, onChange, on
     <details className='fltrs noCopy'>
       <summary className='fltrs'>
         <span>
-          <i className='fas fa-filter'></i>
+          <i className='fas fa-filter fa-fw'></i>
           <i className='med'>Filter</i>
         </span>
         <span className='rAlign'>

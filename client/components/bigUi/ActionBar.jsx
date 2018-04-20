@@ -21,7 +21,7 @@ import FlowForm from '../forms/FlowForm.jsx';
 import GroupForm from '../forms/GroupForm.jsx';
 import WidgetNewForm from '../forms/WidgetNewForm.jsx';
 
-const ActionBar = ({batchData, itemData, widgetData, versionData, groupData, app, action})=> (
+const ActionBar = ({batchData, itemData, widgetData, versionData, groupData, app, action, noText})=> (
   <div>
     <div className='footLeft'>
     { 
@@ -29,20 +29,24 @@ const ActionBar = ({batchData, itemData, widgetData, versionData, groupData, app
   	  <div> 
     	  <UnitSet
     	    id={batchData._id}
-    	    item={itemData} />
+    	    item={itemData}
+    	    noText={noText} />
     	 <PanelBreak
           id={batchData._id}
           batch={batchData.batch}
-    	    item={itemData} />
+    	    item={itemData}
+    	    noText={noText} />
         <ScrapForm
 	        id={batchData._id}
 	        item={itemData}
-	        anc={app.ancillaryOption} />
+	        anc={app.ancillaryOption}
+	        noText={noText} />
         <Remove
           action='item'
           title={itemData.serial}
           check={itemData.createdAt.toISOString()}
-          entry={batchData} />
+          entry={batchData}
+          noText={noText} />
       </div>
 		:
     action === 'batch' ?
@@ -55,19 +59,22 @@ const ActionBar = ({batchData, itemData, widgetData, versionData, groupData, app
           end={batchData.end}
           widgetId={batchData.widgetId}
           versions={widgetData.versions}
-          lock={!widgetData.versions || !batchData.active} />
+          lock={!widgetData.versions || !batchData.active}
+          noText={noText} />
         <MultiItemForm
           id={batchData._id}
           items={batchData.items}
           more={batchData.finishedAt === false}
           unit={versionData.units}
-          app={app} />
+          app={app}
+          noText={noText} />
         <RiverSelect
           id={batchData._id}
           widget={widgetData}
           river={batchData.river}
           riverAlt={batchData.riverAlt}
-          lock={batchData.finishedAt !== false} />
+          lock={batchData.finishedAt !== false}
+          noText={noText} />
         <ActionLink
           address={'/print/generallabel/' + 
                     batchData.batch + 
@@ -79,42 +86,50 @@ const ActionBar = ({batchData, itemData, widgetData, versionData, groupData, app
                     '&date=' + moment(batchData.end).format('MMMM D')}
           title='Print Label'
           icon='fa-print'
-          color='whiteT' />
+          color='whiteT'
+          noText={noText} />
         <BlockForm
           id={batchData._id}
           edit={false}
-          lock={batchData.finishedAt !== false} />
+          lock={batchData.finishedAt !== false}
+          noText={noText} />
         <RMAForm
           id={batchData._id}
           edit={false}
           options={app.trackOption}
           end={app.lastTrack}
-          app={app} />
+          app={app}
+          noText={noText} />
         <NCEscape
           id={batchData._id}
-          nons={app.nonConOption} />
+          nons={app.nonConOption}
+          noText={noText} />
         <Remove
           action='batch'
           title={batchData.batch}
           check={batchData.createdAt.toISOString()}
-          entry={batchData} />
+          entry={batchData}
+          noText={noText} />
       </div>
       :
       action === 'widget' ?
         <div>
           <WidgetEditForm
             id={widgetData._id}
-            now={widgetData} />
+            now={widgetData}
+            noText={noText} />
           <VersionForm
             widgetData={widgetData}
             version={false}
-            app={app} />
+            app={app}
+            noText={noText} />
           <FlowForm
             id={widgetData._id}
             edit={false}
             existFlows={widgetData.flows}
             options={app.trackOption}
-            end={app.lastTrack} />
+            end={app.lastTrack}
+            noText={noText} />
           <BatchForm
             batchId={false}
             batchNow='new'
@@ -123,12 +138,14 @@ const ActionBar = ({batchData, itemData, widgetData, versionData, groupData, app
             end={false}
             widgetId={widgetData._id}
             versions={widgetData.versions}
-            lock={!widgetData.versions} />
+            lock={!widgetData.versions}
+            noText={noText} />
           <Remove
             action='widget'
             title={widgetData.widget}
             check={widgetData.createdAt.toISOString()}
-            entry={widgetData._id} />
+            entry={widgetData._id}
+            noText={noText} />
         </div>
       :
       action === 'group' ?
@@ -137,16 +154,19 @@ const ActionBar = ({batchData, itemData, widgetData, versionData, groupData, app
             id={groupData._id}
             name={groupData.group}
             alias={groupData.alias}
-            wiki={groupData.wiki} />
+            wiki={groupData.wiki}
+            noText={noText} />
           <WidgetNewForm
             groupId={groupData._id}
             end={app.lastTrack} 
-            rootWI={app.instruct} />
+            rootWI={app.instruct}
+            noText={noText} />
           <Remove
             action='group'
             title={groupData.group}
             check={groupData.createdAt.toISOString()}
-            entry={groupData._id} />
+            entry={groupData._id}
+            noText={noText} />
         </div>
       : null
     }
@@ -159,7 +179,12 @@ const ActionBar = ({batchData, itemData, widgetData, versionData, groupData, app
   { /* Right Section */ }
     <div className='footRight'>
       {action === 'newGroup' &&
-         <GroupForm id={false} name={false} alias={false} wiki={false} />}
+         <GroupForm
+          id={false}
+          name={false}
+          alias={false}
+          wiki={false}
+          noText={false} />}
     </div>
   </div>
 );

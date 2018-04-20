@@ -79,7 +79,8 @@ export default class VersionForm extends Component	{
         color='greenT'
         icon='fa-cube fa-rotate-90'
         smIcon={this.props.small}
-        lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit'])}>
+        lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit'])}
+        noText={this.props.noText}>
 
       <div className='split'>
 
@@ -204,7 +205,7 @@ export class VersionRemove extends Component	{
         button='Delete'
         title={'Delete ' + Pref.version}
         color='redT'
-        icon='fa-trash'
+        icon='fa-minus-circle'
         smIcon={this.props.small}
         lock={!Roles.userIsInRole(Meteor.userId(), 'remove')}>
         

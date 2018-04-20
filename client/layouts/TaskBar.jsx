@@ -42,7 +42,7 @@ const TaskBar = ({ subLink }) => {
         title={Pref.scrap + 's'}
         className={subLink === 'overviewscraps' ? 'taskLink onTL' : 'taskLink'}
         onClick={()=>FlowRouter.go('/data/overview?request=scraps')}
-      ><i className='fas fa-minus-circle'></i></button>
+      ><i className='fas fa-trash'></i></button>
       
     </div>
   );

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ActionLink = ({ address, title, icon, color }) => (
+const ActionLink = ({ address, title, icon, color, noText }) => (
   <button
     title={title}
     className='transparent'
@@ -8,7 +8,7 @@ const ActionLink = ({ address, title, icon, color }) => (
     disabled={false}>
     <label className='navIcon actionIconWrap'>
       <i className={'fa ' + icon + ' fa-lg ' + color} aria-hidden='true'></i>
-      <span className={'actionIconText ' + color}> {title}</span>
+      {!noText && <span className={'actionIconText ' + color}> {title}</span>}
     </label>
   </button>
 );

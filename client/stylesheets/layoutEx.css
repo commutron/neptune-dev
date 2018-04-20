@@ -26,14 +26,22 @@
   overflow-y: auto;
 }
 
-.landingContainer, .traverseContainer {
+.landingContainer, .traverseContainer, .traverseContainerMin {
   display: grid;
   grid-template-columns: auto 176px;
-  grid-template-rows: 32px calc(100vh - 128px) 48px;
   align-content: center;
   overflow-y: hidden !important;
   overflow-x: hidden !important;
   -webkit-overflow-scrolling: touch;
+}
+.landingContainer {
+  grid-template-rows: 32px calc(100vh - 120px) 40px;
+}
+.traverseContainer {
+  grid-template-rows: 32px calc(100vh - 128px) 48px;
+}
+.traverseContainerMin {
+  grid-template-rows: 32px calc(100vh - 80px);
 }
 .landingContainer {
   grid-template-areas: 
@@ -46,6 +54,11 @@
     'cookieNav traverseList'
     'traverseContent traverseList'
     'actionBarEx actionBarEx';
+}
+.traverseContainerMin {
+  grid-template-areas: 
+    'cookieNav traverseList'
+    'traverseContent traverseList';
 }
 
 .cookieNavEx {
@@ -141,6 +154,14 @@
 }
 .cookieCrumb:hover > .cookie {
   color: var(--clouds);
+}
+.cookieGap {
+  border-style: solid;
+	border-width: 0 0.25em 0 0;
+	height: 2em;
+	width: 1em;
+  color: var(--silverfade);
+  opacity: 0;
 }
 
 .taskColumn {

@@ -81,7 +81,7 @@ export default class BatchForm extends Component	{
         color='greenT'
         icon='fa-cubes'
         lock={!Roles.userIsInRole(Meteor.userId(), 'create') || this.props.lock}
-      >
+        noText={this.props.noText}>
         <form className='centre' onSubmit={this.save.bind(this)}>
           <p>
             <select

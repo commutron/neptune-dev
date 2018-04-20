@@ -56,8 +56,9 @@ export default class PanelBreak extends Component	{
         button='Split Panel'
         title='Split Panel Into Its Units'
         color='yellowT'
-        icon='fa-clone'
-        lock={done || this.props.item.units < 2 || !auth}>
+        icon='fa-cut'
+        lock={done || this.props.item.units < 2 || !auth}
+        noText={this.props.noText}>
         <p className='medBig space'>
           <b>Transform this item into new individual units</b><br />
           <i>New Items are created with a copy of this item's history</i><br />

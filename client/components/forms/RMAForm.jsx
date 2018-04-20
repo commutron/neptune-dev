@@ -102,9 +102,10 @@ export default class RMAForm extends Component {
         button={bttn}
         title={title}
         color='orangeT'
-        icon='fa-cog'
+        icon='fa-exchange-alt'
         smIcon={this.props.small}
-        lock={!Roles.userIsInRole(Meteor.userId(), ['qa'])}>
+        lock={!Roles.userIsInRole(Meteor.userId(), ['qa'])}
+        noText={this.props.noText}>
         <div className='space'>
           <form
             id='rmaSave'

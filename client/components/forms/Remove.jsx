@@ -88,8 +88,9 @@ export default class Remove extends Component	{
         button='Delete'
         title={'delete "' + title + '" from database'}
         color='redT'
-        icon='fa-trash'
-        lock={!auth}>
+        icon='fa-minus-circle'
+        lock={!auth}
+        noText={this.props.noText}>
         <div className='actionBox redT'>
           <br />
           <p>Are you sure you want to try to delete "{title}"?</p>

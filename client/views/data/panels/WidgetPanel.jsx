@@ -6,7 +6,7 @@ import Tabs from '/client/components/smallUi/Tabs.jsx';
 
 import FlowTable from '../../../components/tables/FlowTable.jsx';
 import VersionTable from '../../../components/tables/VersionTable.jsx';
-import NonConRate from '../../../components/charts/NonConRate.jsx';
+import NonConMultiBatchBar from '../../../components/charts/NonConMultiBatchBar.jsx';
 
 const WidgetPanel = ({ groupData, widgetData, batchRelated, app })=> {
 
@@ -40,7 +40,7 @@ const WidgetPanel = ({ groupData, widgetData, batchRelated, app })=> {
           
           <FlowTable id={w._id} flows={w.flows} app={a} />
           
-          <NonConRate batches={Array.from( b, x => x.batch )} />
+          <NonConMultiBatchBar batchIDs={Array.from( b, x => x._id )} />
           
         </Tabs>
   

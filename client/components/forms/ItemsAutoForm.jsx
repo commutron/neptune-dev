@@ -134,7 +134,7 @@ export default class ItemsAutoForm extends Component {
         button={'Add ' + Pref.item + 's'}
         title={'add ' + Pref.item + ' ' + Pref.itemSerial + ' numbers'}
         color='greenT'
-        icon='fa-qrcode'
+        icon={'fa-' + Pref.serialType}
         lock={!auth || !this.props.more} >
         <div className='centre'>
           <form onSubmit={this.addItem} autoComplete='off'>

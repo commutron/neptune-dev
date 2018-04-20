@@ -818,6 +818,7 @@
 }
 .rateFill .ct-series-a .ct-line {
   stroke: var(--asbestos);
+  stroke-width: 3px;
 }
 
 .miniStack .ct-series-a .ct-bar {

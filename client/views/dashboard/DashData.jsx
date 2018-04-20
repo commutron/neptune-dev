@@ -15,6 +15,7 @@ class DashView extends Component	{
     if(//!this.props.allData || // diagnose data in development
        !this.props.coldReady || 
        !this.props.hotReady || 
+       !this.props.user ||
        !this.props.app ||
        !this.props.allScrap) {
       return (

@@ -148,9 +148,6 @@ export default class BatchPanel extends Component	{
               
                 <div className='twoThirdsContent'>
                   <StepsProgress
-                    //batchData={b}
-                    //flow={riverFlow}
-                    //flowAlt={riverAltFlow}
                     mini={true}
                     expand={true}
                     progCounts={progCounts} />

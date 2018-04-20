@@ -13,6 +13,7 @@ class ExploreView extends Component	{
     if(
       !this.props.coldReady || 
       !this.props.hotReady ||
+      !this.props.user ||
       !this.props.app 
     ) {
       return (
@@ -23,6 +24,7 @@ class ExploreView extends Component	{
     return (
       <DataViewOps
         //orb={this.props.orb}
+        user={this.props.user}
         org={this.props.org}
         users={this.props.users}
         app={this.props.app}
@@ -60,6 +62,7 @@ export default withTracker( (props) => {
     return {
       coldReady: coldSub.ready(),
       hotReady: hotSubEx.ready(),
+      user: user,
       org: org,
       users: Meteor.users.find( {}, { sort: { username: 1 } } ).fetch(),
       app: AppDB.findOne({org: org}),

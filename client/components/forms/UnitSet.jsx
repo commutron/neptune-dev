@@ -35,7 +35,8 @@ export default class UnitSet extends Component	{
         title={'set ' + Pref.unit}
         color='greenT'
         icon='fa-th'
-        lock={!auth}>
+        lock={!auth}
+        noText={this.props.noText}>
         <p className='centre centreTrue'>
         {done &&
           <b className='big'>

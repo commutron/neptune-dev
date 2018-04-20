@@ -25,6 +25,7 @@ export default class Model extends Component	{
 
   render() {
     
+    const noText = this.props.noText;
     let iSize = this.props.smIcon ? ' fa-1x ' : ' fa-lg ';
     
     return (
@@ -36,7 +37,7 @@ export default class Model extends Component	{
           disabled={this.props.lock}>
           <label className='navIcon actionIconWrap'>
             <i className={'fas ' + this.props.icon + iSize + this.props.color}></i>
-            <span className={'actionIconText ' + this.props.color}>{this.props.button}</span>
+            {!noText && <span className={'actionIconText ' + this.props.color}>{this.props.button}</span>}
           </label>
         </button>
       

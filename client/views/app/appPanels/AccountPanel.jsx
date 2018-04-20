@@ -5,6 +5,7 @@ import AccountsUI from '../../../components/bigUi/AccountsUI.jsx';
 import { AdminDown } from '../../../components/forms/AdminForm.jsx';
 import LogoutOther from '../../../components/uUi/LogoutOther.jsx';
 import { ChangeAutoScan } from '/client/components/forms/UserForm.jsx';
+import { ChangeMinAction } from '/client/components/forms/UserForm.jsx';
 import UserSpeedSet from '../../../components/forms/UserSpeedSet.jsx';
 import EmailForm from '../../../components/forms/EmailForm.jsx';
 import { PermissionHelp } from './AccountsManagePanel';
@@ -23,13 +24,15 @@ const AccountPanel = ()=> {
           <p className='up'>id: {Meteor.user()._id}</p>
           <p className='blueT'>{adminNice}</p>
           <p>organization: <i className='greenT'>{Meteor.user().org}</i></p>
-          <br />
+          <br /><br />
           <LogoutOther />
-          <br />
+          <br /><br />
           <ChangeAutoScan />
-          <br />
+          <br /><br />
           <UserSpeedSet />
-          <br />
+          <br /><br />
+          <ChangeMinAction />
+          <br /><br />
           <EmailForm />
         </div>
         

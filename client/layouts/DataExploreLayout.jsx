@@ -7,62 +7,19 @@ import TaskBar from './TaskBar.jsx';
 import ActionBar from '/client/components/bigUi/ActionBar.jsx';
 import CookieBar from './CookieBar.jsx';
 
-export const ExploreLayout = ({content, link, subLink}) => {
-  let w = window.innerWidth;
-  let h = window.innerHeight;
-  w < 500 || h < 500 ? 
-  alert('Uh O! Your window or display is too small, this page is not going to look good')
-  : null;
-  return(
-    <div className='containerEx'>
-      <div className='gridHeaderNav'>
-        <TopBar link={link} />
-      </div>
-      <aside className='taskBarEx'>
-        <TaskBar subLink={subLink} />
-      </aside>
-      <section className='contentAreaEx'>
-        {content}
-      </section>
+export const ExploreLayout = ({content, link, subLink}) => (
+  <div className='containerEx'>
+    <div className='gridHeaderNav'>
+      <TopBar link={link} />
     </div>
-  );
-};
-
-export class LandingWrap extends Component	{
-
-  render() {
-    
-    let scrollFix = {
-      overflowY: 'auto'
-    };
-    
-    return (
-      <div className='landingContainer'>
-        
-        <section className='traverseContent' style={scrollFix}>
-          {this.props.children[0]}
-        </section>
-        
-        <aside className='traverseList' style={scrollFix}>
-          {this.props.children[1]}
-        </aside>
-        
-        <div className='actionBarEx'>
-          <ActionBar
-            batchData={this.props.batchData}
-            itemData={this.props.itemData}
-            widgetData={this.props.widgetData}
-            versionData={this.props.versionData}
-            groupData={this.props.groupData}
-            app={this.props.app}
-            action={this.props.action} />
-        </div>
-              
-        {/*React.cloneElement(this.props.children[0], this.props)*/}
-      </div>
-    );
-  }
-}
+    <aside className='taskBarEx'>
+      <TaskBar subLink={subLink} />
+    </aside>
+    <section className='contentAreaEx'>
+      {content}
+    </section>
+  </div>
+);
 
 export class TraverseWrap extends Component	{
 
@@ -73,15 +30,23 @@ export class TraverseWrap extends Component	{
     };
     
     return (
-      <div className='traverseContainer'>
-        <div className='cookieNavEx'>
+      <div 
+        className={
+          this.props.landing ? 'landingContainer' :
+          this.props.user.miniAction ? 'traverseContainerMin' : 'traverseContainer'}>
+        <div 
+          className={
+            //!this.props.user.miniAction &&
+            this.props.landing ? 'hidden' : 'cookieNavEx'}>
           <CookieBar
             batchData={this.props.batchData}
             itemData={this.props.itemData}
             widgetData={this.props.widgetData}
             versionData={this.props.versionData}
             groupData={this.props.groupData}
-            action={this.props.action} />
+            app={this.props.app}
+            action={this.props.action}
+            miniAction={this.props.user.miniAction} />
         </div>
         
         <section className='traverseContent' style={scrollFix}>
@@ -92,18 +57,18 @@ export class TraverseWrap extends Component	{
           {this.props.children[1]}
         </aside>
         
-        <div className='actionBarEx'>
-          <ActionBar
-            batchData={this.props.batchData}
-            itemData={this.props.itemData}
-            widgetData={this.props.widgetData}
-            versionData={this.props.versionData}
-            groupData={this.props.groupData}
-            app={this.props.app}
-            action={this.props.action} />
-        </div>
+        {( this.props.landing || !this.props.user.miniAction ) &&
+          <div className='actionBarEx'>
+            <ActionBar
+              batchData={this.props.batchData}
+              itemData={this.props.itemData}
+              widgetData={this.props.widgetData}
+              versionData={this.props.versionData}
+              groupData={this.props.groupData}
+              app={this.props.app}
+              action={this.props.action} />
+          </div>}
               
-        {/*React.cloneElement(this.props.children[0], this.props)*/}
       </div>
     );
   }

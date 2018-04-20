@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
 
-import { LandingWrap } from '/client/layouts/DataExploreLayout.jsx';
 import { TraverseWrap } from '/client/layouts/DataExploreLayout.jsx';
 
 import SearchHelp from './SearchHelp.jsx';
@@ -95,6 +94,7 @@ export default class DataViewOps extends Component	{
   render () {
 
     const orb = this.props.orb;
+    const user = this.props.user;
     const app = this.props.app;
     const allGroup = this.props.allGroup;
     const allWidget = this.props.allWidget;
@@ -120,13 +120,15 @@ export default class DataViewOps extends Component	{
       Session.set('nowBatch', false);
       if(request === 'groups') {
         return(
-          <LandingWrap
+          <TraverseWrap
 			      batchData={false}
             widgetData={false}
             versionData={false}
             groupData={false}
+            user={user}
             app={app}
             action='newGroup'
+            landing={true}
           >
             <AllGroups
               batchData={allBatch}
@@ -137,17 +139,19 @@ export default class DataViewOps extends Component	{
               groupData={allGroup}
               batchData={allBatch}
               widgetData={allWidget} />
-          </LandingWrap>
+          </TraverseWrap>
         );
       }else if(request === 'batches') {
         return(
-          <LandingWrap
+          <TraverseWrap
 			      batchData={false}
             widgetData={false}
             versionData={false}
             groupData={false}
+            user={user}
             app={app}
             action={false}
+            landing={true}
           >
             <AllBatches
               batchData={allBatch}
@@ -157,7 +161,7 @@ export default class DataViewOps extends Component	{
             <BatchesList
               batchData={allBatch}
               widgetData={allWidget} />
-          </LandingWrap>
+          </TraverseWrap>
         );
       }else if(request === 'scraps') {
         return(
@@ -187,6 +191,7 @@ export default class DataViewOps extends Component	{
               widgetData={widget}
               versionData={version}
               groupData={group}
+              user={user}
               app={app}
               action='item'
             >
@@ -228,7 +233,8 @@ export default class DataViewOps extends Component	{
 			      batchData={hotBatch}
             widgetData={widget}
             versionData={version}
-            groupData={group} 
+            groupData={group}
+            user={user}
             app={app}
             action='batch'
           >
@@ -260,6 +266,7 @@ export default class DataViewOps extends Component	{
             widgetData={false}
             versionData={false}
             groupData={group}
+            user={user}
             app={app}
             action='group'
           >
@@ -292,6 +299,7 @@ export default class DataViewOps extends Component	{
             widgetData={widget}
             versionData={false}
             groupData={group}
+            user={user}
             app={app}
             action='widget'
           >

@@ -177,3 +177,19 @@ export const ChangeAutoScan = ()=> {
     >Turn Auto Scan {current}</button>
   );
 };
+
+export const ChangeMinAction = ()=> {
+  function handle() {
+    Meteor.call('setMinAction', (error)=>{
+      if(error)
+        console.log(error);
+    });
+  }
+  let current = Meteor.user().miniAction ? 'OFF' : 'ON';
+  return(
+    <button
+      className='action clean clearBlue'
+      onClick={()=>handle()}
+    >Turn Mini Actions {current}</button>
+  );
+};

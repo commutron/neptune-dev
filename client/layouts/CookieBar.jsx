@@ -1,7 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
+import ActionBar from '/client/components/bigUi/ActionBar.jsx';
 
-const CookieBar = ({ groupData, widgetData, versionData, batchData, itemData, action }) => {
+const CookieBar = ({ groupData, widgetData, versionData, batchData, itemData, app, action, miniAction }) => {
   
   function goPro(location) {
     Session.set('now', location);
@@ -59,14 +60,28 @@ const CookieBar = ({ groupData, widgetData, versionData, batchData, itemData, ac
             {itemData.serial}
           </button>
         </span>}
-      <span className='navSpacer'></span>
+      <span className='navSpacer' />
+      
+      {miniAction &&
+        <ActionBar
+          batchData={batchData}
+          itemData={itemData}
+          widgetData={widgetData}
+          versionData={versionData}
+          groupData={groupData}
+          app={app}
+          action={action}
+          noText={true} />}
+      
+      {miniAction && !itemData && !batchData && <span className='cookieGap' />}
+      
       {itemData ? 
         <span className='cookieCrumb'>
           <button 
             className='cookie'
             title='view in production'
             onClick={()=>goPro(itemData.serial)}>
-            <i className='fas fa-paper-plane'></i>
+            <i className='fas fa-paper-plane fa-lg'></i>
           </button>
         </span>
       :
@@ -76,7 +91,7 @@ const CookieBar = ({ groupData, widgetData, versionData, batchData, itemData, ac
             className='cookie'
             title='view in production'
             onClick={()=>goPro(batchData.batch)}>
-            <i className='fas fa-paper-plane'></i>
+            <i className='fas fa-paper-plane fa-lg'></i>
           </button>
         </span>
       :null}

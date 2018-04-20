@@ -37,108 +37,8 @@ Meteor.methods({
     }
     return numOfwdgt.sort((a, b)=> { return b.value - a.value });
   },
-
-// Best and Worst batches by nonconformance
-  BestWorstStats(best, worst, start, end, newOnly, widgetSort) {
-    
-    const allBatches = BatchDB.find({orgKey: Meteor.user().orgKey}).fetch();
-    
-    // time window - without timezone corection, assumes the server is onsite
-    const from = !start ? 
-                  moment().startOf('week').format() :
-                  moment(start).startOf('day').format();
-    const to = !end ? 
-                moment().endOf('week').format() :
-                moment(end).endOf('day').format();
-      
-    const inWindow = (finishedAt, createdAt)=>
-      finishedAt !== false ?
-      moment(finishedAt).isBetween(from, to) :
-      moment(createdAt).isBefore(to);
-      
-    const relevantBatches = allBatches.filter( x => 
-                              inWindow(x.finishedAt, x.createdAt) === true );
-    /*  limit Low batches to only finished                       
-    const doneBatches = allBatches.filter( x => 
-                          x.finishedAt !== false &&
-                          moment(x.finishedAt).isBetween(from, to) === true );
-    */                          
-    const relevantNC = (ncArray)=>
-                        !newOnly ? ncArray :
-                        ncArray.filter( x => moment(x.time).isBetween(from, to) );
-    
-    let bestNC = [];
-    let worstNC = [];
-    
-    if( !widgetSort ) {
-      // low filter
-      const lowNC = relevantBatches.filter( x => relevantNC(x.nonCon).length <= best );
-      //const lowNC = doneBatches.filter( x => x.nonCon.length <= best ); 
-      const bestBatchNC = Array.from(lowNC,
-                            x => { 
-                              return ( {
-                                b: x.batch,
-                                w: x.widgetId,
-                                v: x.versionKey,
-                                done: x.finishedAt !== false,
-                                value: relevantNC(x.nonCon).length } 
-                            )}).sort((a, b)=> { 
-                                 return a.done === true ? a : a.value - b.value });
-      // high filter
-      const highNC = relevantBatches.filter( x => relevantNC(x.nonCon).length >= worst );
-      const worstBatchNC = Array.from(highNC,
-                            x => { 
-                              return ( {
-                                b: x.batch,
-                                w: x.widgetId,
-                                v: x.versionKey,
-                                done: x.finishedAt !== false,
-                                value: relevantNC(x.nonCon).length }
-                            )}).sort((a, b)=> { return b.value - a.value });
-      bestNC = bestBatchNC;
-      worstNC = worstBatchNC;
-    }else{
-      const widgetsInWindow = [... new Set( Array.from(relevantBatches, x => x.widgetId )) ];
-      
-      countsBywidget = [];
-      for(let wW of widgetsInWindow) {
-        let wBstack = relevantBatches.filter( x => x.widgetId === wW );
-        let wTotal = 0;
-        for(let b of wBstack) {
-          let bTotal = relevantNC(b.nonCon).length;
-          wTotal += bTotal;
-        }
-        countsBywidget.push({b: wBstack.length, w: wW, value: wTotal});
-      }
-      // low filter
-      const bestWidgetNC = countsBywidget.filter( x => x.value <= best )
-                            .sort((a, b)=> { return a.value - b.value });
-      // high filter
-      const worstWidgetNC = countsBywidget.filter( x => x.value >= worst )
-                            .sort((a, b)=> { return b.value - a.value });
-      bestNC = bestWidgetNC;
-      worstNC = worstWidgetNC;
-    }
-
-    // number of each nonCon type discovered in the window
-    const aNCOps = AppDB.findOne({orgKey: Meteor.user().orgKey}).nonConOption;
-    let ncTypeCounts = [];
-    for(let ncType of aNCOps) {
-      let typNum = 0;
-      for(let b of relevantBatches) {
-        let count = relevantNC(b.nonCon).filter( x => x.type === ncType );
-        typNum += count.length;
-      }
-      ncTypeCounts.push({meta: ncType, value: typNum});
-    }
-
-    return {
-      bestNC, worstNC, ncTypeCounts
-    };
-  },
   
-  
-  ///////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////
   
   // History Rate
   
@@ -208,6 +108,159 @@ Meteor.methods({
                     
   },
   
+      ///////////////////////////////////////////////////////////////////////////////////
+  
+    // Counts Of Each NonConformance Type
+  
+  ///////////////////////////////////////////////////////////////////////////////////
+  countNonConTypes(nonConArray, nonConOptions) {
+    function findOptions() {
+      let org = AppDB.findOne({orgKey: Meteor.user().orgKey});
+      let options = !org ? [] : org.nonConOption;
+      return options;
+    }
+    function ncCounter(ncArray, ncOptions) {
+      let ncCounts = [];
+      for(let ncType of ncOptions) {
+        const typeCount = relevantNC(ncArray, ncType);
+        ncCounts.push({meta: ncType, value: typeCount});
+      }
+      return ncCounts;
+    }
+    function relevantNC(ncArray, ncType) {
+      return ncArray.filter( x => x.type === ncType ).length;
+    }
+    const ncOptions = Array.isArray(nonConOptions) ? nonConOptions : findOptions();
+    const ncArray = Array.isArray(nonConArray) ? nonConArray : [];
+    const allTypes = ncCounter(ncArray, ncOptions);
+    return allTypes;
+  },
+  
+    ///////////////////////////////////////////////////////////////////////////////////
+  
+   // nonCons of Multiple Batches
+  
+  ///////////////////////////////////////////////////////////////////////////////////
+  nonConBatchesTypes(batchIDs) {
+    const batch = (bID)=> {
+      let b = BatchDB.findOne({_id: bID});
+      let bData = !b ? {batch: '', nonCon: []} : {batch: b.batch, nonCon: b.nonCon};
+      return bData;
+    };
+    const allBatch = Array.from( batchIDs, bID => batch(bID) );
+    
+    nonconCollection = [];
+    for(let b of allBatch) {
+      let counts = Meteor.call('countNonConTypes', b.nonCon, false);
+      nonconCollection.push({meta: b.batch, value: counts});
+    }
+    
+    return nonconCollection;
+  },
+
+      ///////////////////////////////////////////////////////////////////////////////////
+  
+    // Best and Worst batches by nonconformance
+  
+  ///////////////////////////////////////////////////////////////////////////////////
+  
+  BestWorstStats(best, worst, start, end, newOnly, widgetSort) {
+    
+    const allBatches = BatchDB.find({orgKey: Meteor.user().orgKey}).fetch();
+    
+    // time window - without timezone corection, assumes the server is onsite
+    const from = !start ? 
+                  moment().startOf('week').format() :
+                  moment(start).startOf('day').format();
+    const to = !end ? 
+                moment().endOf('week').format() :
+                moment(end).endOf('day').format();
+      
+    const inWindow = (finishedAt, createdAt)=>
+      finishedAt !== false ?
+      moment(finishedAt).isBetween(from, to) :
+      moment(createdAt).isBefore(to);
+      
+    const relevantBatches = allBatches.filter( x => 
+                              inWindow(x.finishedAt, x.createdAt) === true );
+    /*  limit Low batches to only finished                       
+    const doneBatches = allBatches.filter( x => 
+                          x.finishedAt !== false &&
+                          moment(x.finishedAt).isBetween(from, to) === true );
+    */                          
+    const relevantNC = (ncArray)=>
+                        !newOnly ? ncArray :
+                        ncArray.filter( x => moment(x.time).isBetween(from, to) );
+    
+    let bestNC = [];
+    let worstNC = [];
+    
+    if(!widgetSort) {
+      // low filter
+      const lowNC = relevantBatches.filter( x => relevantNC(x.nonCon).length <= best );
+      //const lowNC = doneBatches.filter( x => x.nonCon.length <= best ); 
+      const bestBatchNC = Array.from(lowNC,
+                            x => { 
+                              return ( {
+                                b: x.batch,
+                                w: x.widgetId,
+                                v: x.versionKey,
+                                done: x.finishedAt !== false,
+                                value: relevantNC(x.nonCon).length } 
+                            )}).sort((a, b)=> { 
+                                 return a.done === true ? a : a.value - b.value });
+      // high filter
+      const highNC = relevantBatches.filter( x => relevantNC(x.nonCon).length >= worst );
+      const worstBatchNC = Array.from(highNC,
+                            x => { 
+                              return ( {
+                                b: x.batch,
+                                w: x.widgetId,
+                                v: x.versionKey,
+                                done: x.finishedAt !== false,
+                                value: relevantNC(x.nonCon).length }
+                            )}).sort((a, b)=> { return b.value - a.value });
+      bestNC = bestBatchNC;
+      worstNC = worstBatchNC;
+    }else{
+      const widgetsInWindow = [... new Set( Array.from(relevantBatches, x => x.widgetId )) ];
+      
+      countsBywidget = [];
+      for(let wW of widgetsInWindow) {
+        let wBstack = relevantBatches.filter( x => x.widgetId === wW );
+        let wTotal = 0;
+        for(let b of wBstack) {
+          let bTotal = relevantNC(b.nonCon).length;
+          wTotal += bTotal;
+        }
+        countsBywidget.push({b: wBstack.length, w: wW, value: wTotal});
+      }
+      // low filter
+      const bestWidgetNC = countsBywidget.filter( x => x.value <= best )
+                            .sort((a, b)=> { return a.value - b.value });
+      // high filter
+      const worstWidgetNC = countsBywidget.filter( x => x.value >= worst )
+                            .sort((a, b)=> { return b.value - a.value });
+      bestNC = bestWidgetNC;
+      worstNC = worstWidgetNC;
+    }
+
+    // number of each nonCon type discovered in the window
+    const aNCOps = AppDB.findOne({orgKey: Meteor.user().orgKey}).nonConOption;
+    let ncTypeCounts = [];
+    for(let ncType of aNCOps) {
+      let typNum = 0;
+      for(let b of relevantBatches) {
+        let count = relevantNC(b.nonCon).filter( x => x.type === ncType );
+        typNum += count.length;
+      }
+      ncTypeCounts.push({meta: ncType, value: typNum});
+    }
+
+    return {
+      bestNC, worstNC, ncTypeCounts
+    };
+  },
   
   ///////////////////////////////////////////////////////////////////////////////////
   

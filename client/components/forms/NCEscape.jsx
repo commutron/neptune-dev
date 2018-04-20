@@ -45,7 +45,8 @@ export default class NCEscape extends Component {
         title={'record escaped ' + Pref.nonCon}
         color='orangeT'
         icon='fa-bug'
-        lock={!Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])}>
+        lock={!Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])}
+        noText={this.props.noText}>
         <div className='centre'>
           <br />
           <form className='centre' onSubmit={this.handleNC.bind(this)} onChange={this.on.bind(this)}>

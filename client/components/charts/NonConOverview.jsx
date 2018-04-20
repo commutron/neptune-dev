@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import Chartist from 'chartist';
 import ChartistGraph from 'react-chartist';
 import Tooltip from 'chartist-plugin-tooltips';
-import fillDonut from 'chartist-plugin-fill-donut';
 
 export default class NonConOverview extends Component {
   
@@ -69,56 +68,52 @@ export default class NonConOverview extends Component {
             <option value='ref'>Reference</option>
           </select>
         </p>
-        <NonConTypeChart counts={counts} ncOp={this.props.ncOp} />
+        <NonConTypeChart
+          counts={counts}
+          labels={this.props.ncOp}
+          stack={true} />
       </div>
     );
   }
 }
 
-export class NonConTypeChart extends Component {
+export const NonConTypeChart = ({ counts, labels, stack })=> {
 
-  render () {
+  let heightCalc = (labels.length * 75) + (counts.length * 15);
+  
+  let data = {
+    labels: labels,
+    series: counts,
+  };
+  
+  let options = {
+    height: heightCalc,
+    fullWidth: true,
+    horizontalBars: true,
+    stretch: false,
+    stackBars: stack,
+    seriesBarDistance: 15,
+    axisX: {
+      low: 0,
+      onlyInteger: true,
+      position: 'start',
+      labelOffset: {x:-5, y: 0},
+    },
+    chartPadding: {
+      top: 25,
+      right: 25,
+      bottom: 25,
+      left: 50
+    },
+    plugins: [
+      Chartist.plugins.tooltip({
+        appendToBody: true,
+        class: 'cap'
+      })
+    ]
+  };
 
-    const counts = this.props.counts;
-    
-    let data = {
-      labels: this.props.ncOp,
-      series: counts,
-    };
-    
-    let options = {
-      height: 800,
-      fullWidth: true,
-      horizontalBars: true,
-      stretch: false,
-      stackBars: true,
-      axisX: {
-        low: 0,
-        onlyInteger: true,
-        position: 'start'
-      },
-      axisY: {
-        offset: 100
-      },
-      chartPadding: {
-        top: 10,
-        right: 25,
-        bottom: 20,
-        left: 25
-      },
-      plugins: [
-        Chartist.plugins.tooltip({
-          appendToBody: true,
-          class: 'cap'
-        })
-      ]
-    };
-
-    return (
-      <div>
-        <br />
-        <ChartistGraph data={data} options={options} type={'Bar'} />
-      </div>
-    );
-  }
-}
+  return (
+    <ChartistGraph data={data} options={options} type={'Bar'} />
+  );
+};

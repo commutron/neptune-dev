@@ -64,7 +64,8 @@ export default class GroupForm extends Component {
         title={title + ' ' + Pref.group}
         color='greenT'
         icon='fa-users'
-        lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit'])}>
+        lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit'])}
+        noText={this.props.noText}>
         <form id='new' className='centre' onSubmit={this.createCustomer.bind(this)}>
           <p>
             <input

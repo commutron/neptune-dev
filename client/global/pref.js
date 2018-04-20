@@ -9,6 +9,8 @@ class Pref {
     if(!instance){
       instance = this;
     }
+    
+    this.InitialAppSetup = false;
 
     this.prefName = 'default';
     // app navigation
@@ -28,6 +30,7 @@ class Pref {
 	  this.item = 'board';//board
 	  this.itm = 'b'; // item shortcut
 	  this.itemSerial = 'barcode';
+	  this.serialType = 'qrcode';
     this.group = 'customer';//customer
     this.grp = 'c'; // group shortcut
     this.widget = 'product';//product

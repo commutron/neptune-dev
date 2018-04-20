@@ -37,7 +37,7 @@ export default class RiverSelect extends Component	{
         color='greenT'
         icon='fa-sitemap'
         lock={!Roles.userIsInRole(Meteor.userId(), 'run') || this.props.lock}
-      >
+        noText={this.props.noText}>
         <form className='centre' onSubmit={this.save.bind(this)}>
           <p>
             <select id='fch' ref={(i)=> this.choice = i} defaultValue={this.props.river} required>

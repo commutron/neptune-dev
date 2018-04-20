@@ -129,8 +129,9 @@ export default class MultiItemForm extends Component {
         button={'Add ' + Pref.item + 's'}
         title={'add ' + Pref.item + ' ' + Pref.itemSerial + ' numbers'}
         color='greenT'
-        icon='fa-qrcode'
-        lock={!auth || !this.props.more} >
+        icon={'fa-' + Pref.serialType}
+        lock={!auth || !this.props.more}
+        noText={this.props.noText}>
         <div className='centre'>
           <form onSubmit={this.addItem} autoComplete='off'>
             <p>

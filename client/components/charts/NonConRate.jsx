@@ -48,6 +48,7 @@ export default class NonConRate extends Component {
         divisor: 10,
       },
       axisX: {
+        labelOffset: {x:-20, y: 0},
         labelInterpolationFnc: function(value, index) {
           let scale = labels.length < 7 ?
                       1 :

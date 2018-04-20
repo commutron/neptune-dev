@@ -7,7 +7,7 @@ import fillDonut from 'chartist-plugin-fill-donut';
 const NonConTypePie = ({ ncTypes, fullWidth })=> {
   
   let ncTypesOrder = ncTypes.sort((a, b)=> { return b.value - a.value });
-  let med = ncTypesOrder.length / 2;
+  let med = Math.floor(ncTypesOrder.length / 2);
   let median = ncTypesOrder[med];
   let labelLine = !median ? 0 : median.value;
   let total = Array.from(ncTypes, x => x.value).reduce((x,y)=> x + y);

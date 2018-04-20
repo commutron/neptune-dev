@@ -12,11 +12,12 @@ const MiniStack = ({ title, count, countNew, total })=> {
   
   let name = {
     position: 'relative',
-    top: '0.75rem',
+    top: '0.6rem',
+    letterSpacing: '1.5px'
   };
   let num = {
     textAlign: 'right',
-    letterSpacing: '1px'
+    letterSpacing: '1.5px'
   };
   
   let data = {
@@ -24,7 +25,7 @@ const MiniStack = ({ title, count, countNew, total })=> {
   };
     
   let options = {
-    height: 5,
+    height: 8,
     fullWidth: true,
     stretch:true,
     horizontalBars: true,

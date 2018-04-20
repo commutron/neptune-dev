@@ -105,7 +105,8 @@ export default class FlowForm extends Component	{
         color='greenT'
         icon='fa-sitemap'
         smIcon={this.props.small}
-        lock={!Roles.userIsInRole(Meteor.userId(), 'edit') || this.props.lock}>
+        lock={!Roles.userIsInRole(Meteor.userId(), 'edit') || this.props.lock}
+        noText={this.props.noText}>
     
         <div>
           <div className='space'>

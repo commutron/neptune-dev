@@ -55,7 +55,8 @@ export default class WidgetNewForm extends Component	{
         title={'new ' + Pref.widget}
         color='greenT'
         icon='fa-cube'
-        lock={!Roles.userIsInRole(Meteor.userId(), 'create')}>
+        lock={!Roles.userIsInRole(Meteor.userId(), 'create')}
+        noText={this.props.noText}>
 
       <div className='split'>
 
