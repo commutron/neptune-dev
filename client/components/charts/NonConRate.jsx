@@ -41,11 +41,15 @@ export default class NonConRate extends Component {
     let options = {
       fullWidth: true,
       height: 300,
+      showArea: true,
+      showLine: true,
+      showPoint: false,
       showLabel: false,
       axisY: {
         low: 0,
         onlyInteger: true,
         divisor: 10,
+        labelOffset: {x:0, y: 10},
       },
       axisX: {
         labelOffset: {x:-20, y: 0},
@@ -58,8 +62,11 @@ export default class NonConRate extends Component {
                       8 :
                       labels.length < 90 ?
                       12 :
-                      24;
-          return index === labels.length - 4 ? null :
+                      labels.length < 120 ?
+                      24 :
+                      36;
+          return index === labels.length - 5 ? null :
+                 index === labels.length - 4 ? null :
                  index === labels.length - 3 ? null :
                  index === labels.length - 2 ? null :
                  index === labels.length - 1 ? value :

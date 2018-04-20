@@ -277,7 +277,7 @@ Meteor.methods({
       function recordedNC(noncons, qDay) {
         let relevant = noncons.filter(
                         x => moment(x.time)
-                          .isSame(qDay, 'day') );
+                          .isSameOrBefore(qDay, 'day') );
         let ncPack = {
           'value': relevant.length,
           'meta': moment(qDay).format('MMM.D')
