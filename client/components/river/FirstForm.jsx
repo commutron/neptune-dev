@@ -230,46 +230,49 @@ export default class FirstForm extends Component	{
       return(
         <AnimateWrap type='contentTrans'>
           <div className='stoneForm' key={5}>
-            <span className='balance'>
-              <button
-                type='button'
-                title='Nope, try again'
-                className='roundActionIcon trpplRound firstBad'
-                ref={(i)=> this.goBad = i}
-                disabled={false}
-                onClick={this.notgood.bind(this)}>
-                <i className="fas fa-times fa-4x"></i>
-                <br /><i className='medBig'>Fail</i>
-              </button>
-              <RoleCheck role={'nightly'}>
+            <p>
+              <span className='balance'>
                 <button
                   type='button'
-                  title='Fine, good enough'
-                  className='roundActionIcon trpplRound firstGood'
-                  ref={(i)=> this.goFine = i}
-                  onClick={this.finegood.bind(this)}>
-                  <i className="fas fa-thumbs-up fa-4x"></i>
-                  <br /><i className='medBig'>Fine</i>
+                  title='Nope, repeat First-Off'
+                  className='roundActionIcon dbblRound firstBad'
+                  ref={(i)=> this.goBad = i}
+                  disabled={false}
+                  onClick={this.notgood.bind(this)}>
+                  <i className="fas fa-times fa-4x"></i>
                 </button>
-              </RoleCheck>
-              <button
-                type='button'
-                title='Great, pass to next step'
-                className='roundActionIcon trpplRound firstGood'
-                ref={(i)=> this.go = i}
-                disabled={secondOpinion}
-                onClick={this.pass.bind(this)}>
-                <i className="fas fa-check fa-4x"></i>
-                <br /><i className='medBig'>Pass</i>
-              </button>
-            </span>
-            <br />
-            <textarea
-    			    type='text'
-    			    id='oIss'
-    			    ref={(i)=> this.issue = i}
-    			    onChange={this.flaw.bind(this)}></textarea>
-    			  <label htmlFor='oIss'>{Pref.outIssue}</label>
+                <RoleCheck role={'nightly'}>
+                  <button
+                    type='button'
+                    title='Fine, pass First-Off'
+                    className='roundActionIcon dbblRound firstGood'
+                    ref={(i)=> this.goFine = i}
+                    onClick={this.finegood.bind(this)}>
+                    <i className="fas fa-check fa-4x"></i>
+                  </button>
+                </RoleCheck>
+                <button
+                  type='button'
+                  title='Great, pass First-Off and Inspection'
+                  className='roundActionIcon dbblRound firstBetter'
+                  ref={(i)=> this.go = i}
+                  disabled={secondOpinion}
+                  onClick={this.pass.bind(this)}>
+                  <span className="fa-layers">
+                    <i className="fas fa-forward fa-2x" data-fa-transform="grow-1 left-2 up-9"></i>
+                    <i className="fas fa-check fa-4x" data-fa-transform="left-5 down-2"></i>
+                  </span>
+                </button>
+              </span>
+            </p>
+            <p>
+              <textarea
+      			    type='text'
+      			    id='oIss'
+      			    ref={(i)=> this.issue = i}
+      			    onChange={this.flaw.bind(this)}></textarea>
+      			  <label htmlFor='oIss'>{Pref.outIssue}</label>
+      			</p>
           </div>
         </AnimateWrap>
       );

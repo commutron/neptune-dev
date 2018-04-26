@@ -502,6 +502,24 @@ Meteor.methods({
     }
   },
   
+  //  Undo a Finish
+  pullFinish(batchId, serial) {
+    if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': serial}, {
+        $pull : {
+          'items.$.history': { key: 'f1n15h1t3m5t3p' }
+        },
+        $set : { 
+  			  'items.$.finishedAt': false,
+  			  'items.$.finishedWho': false
+  			}
+      });
+        return true;
+    }else{
+      return false;
+    }
+  },
+  
 //// panel break
   breakItemIntoUnits(id, bar, newSerials) {
     const auth = Roles.userIsInRole(Meteor.userId(), 'remove');

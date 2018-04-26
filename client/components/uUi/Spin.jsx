@@ -3,6 +3,7 @@ import React from 'react';
 const Spin = ({ color }) => {
   let img = !color ? '/neptune-logo-white.svg' : '/neptune-logo-color.svg';
   let sty = { height: '50vh' };
+  
   return (
     <div className='loading'>
       <img
@@ -17,11 +18,18 @@ const Spin = ({ color }) => {
 
 export default Spin;
 
-export const CalcSpin = () => (
-  <div className='centre'>
-    <br />
-      <i className='fas fa-circle-notch fa-2x fa-spin'></i>
-      <em>Calculating</em>
-    <br />
-  </div>
-);
+export const CalcSpin = () => {
+  let sty = { height: '50px' };
+  return(
+    <div className='centre'>
+      <p className='centreText'>
+        <img
+          src='/neptuneMiniSpin.svg'
+          className='minispinLogoSVG'
+          style={sty} />
+        <br />
+        <em>Calculating</em>
+      </p>
+    </div>
+  );
+};

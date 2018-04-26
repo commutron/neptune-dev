@@ -48,6 +48,12 @@ main {
   -webkit-filter: drop-shadow( -5px -5px 5px #000 );
           filter: drop-shadow( -5px -5px 5px #000 );
 }
+.minispinLogoSVG {
+  opacity: 0.8;
+  animation: spinAround 4s infinite linear;
+  -webkit-filter: drop-shadow( -5px -5px 5px #000 );
+          filter: drop-shadow( -5px -5px 5px #000 );
+}
 
 .findForm {
   float: left;

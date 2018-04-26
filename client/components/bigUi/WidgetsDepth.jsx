@@ -58,14 +58,17 @@ export default class WidgetsDepth extends Component	{
           {w.length < 1 ? <p>no {Pref.widget}s created</p> : null}
             { showList.map( (entry, index)=> {
             let ac = active.includes(entry._id) ? 'leapBar activeMark' : 'leapBar';
-              return (
-                <LeapButton
-                  key={index}
-                  title={entry.widget}
-                  sub={entry.describe}
-                  sty={ac}
-                  address={'/data/widget?request=' + entry.widget}
-                />
+              return(
+                <div className='widgetIndexCard'>
+                  <LeapButton
+                    key={index}
+                    title={entry.widget}
+                    sub={entry.describe}
+                    sty={ac}
+                    address={'/data/widget?request=' + entry.widget}
+                  />
+                  <p>other stuff</p>
+                </div>
             )})}
         </div>
       </AnimateWrap>

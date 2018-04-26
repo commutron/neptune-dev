@@ -15,7 +15,7 @@ const MiniMeter = ({ title, count, app })=> {
     textAlign: 'right'
   };
   return(
-    <div className='wide'>
+    <div className='wide meterprogStack'>
       <p style={name} className='cap'>{title}</p>
       <meter
         style={bar}

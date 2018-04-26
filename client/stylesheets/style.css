@@ -349,6 +349,10 @@
 	background-color: var(--wetasphalt);
 }
 
+.grayT {
+  color: var(--concrete);
+}
+
 .black {
 	background-color: var(--black);
 }
@@ -641,6 +645,10 @@
   content: '\f071';
   font-family: FontAwesome;
   color: var(--orange);
+}
+
+.meterprogStack p {
+  margin: 0;
 }
 
 .proGood::-webkit-progress-value {

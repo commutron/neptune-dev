@@ -93,6 +93,15 @@
   background-color: var(--emerald);
   color: white;
 }
+.firstBetter span {
+  color: var(--emerald);
+}
+.firstBetter:hover {
+  background-color: var(--emerald);
+}
+.firstBetter:hover span {
+  color: white;
+}
 .firstBad {
   color: var(--alizarin);
 }

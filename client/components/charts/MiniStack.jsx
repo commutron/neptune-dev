@@ -52,7 +52,7 @@ const MiniStack = ({ title, count, countNew, total })=> {
   };
     
   return(
-    <div className='wide miniStack'>
+    <div className='wide miniStack meterprogStack'>
       <p style={name} className='cap'>{title}</p>
       <ChartistGraph data={data} options={options} type={'Bar'} />
       <p style={num}>{v}/{total}</p>

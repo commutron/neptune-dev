@@ -86,7 +86,7 @@ export const LabelLayout = ({content}) => (
         <button
           className='smallAction clear'
           onClick={()=> window.history.back()}
-        ><i className='fas fa-arrow-circle-left fa-lg' aria-hidden='true'></i> Go Back</button>
+        ><i className='fas fa-arrow-circle-left fa-lg'></i> Go Back</button>
       </div>
       <div className='printLabel'>
         {content}

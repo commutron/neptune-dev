@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
-import RoleCheck from '/client/components/utilities/RoleCheck.js';
 import InOutWrap from '/client/components/tinyUi/InOutWrap.jsx';
 import InputMulti from '../smallUi/InputMulti.jsx';
 
@@ -312,34 +311,33 @@ export default class FirstForm extends Component	{
 			    <span className='middle'>
             <button
               type='button'
-              title='Nope, try again'
+              title='Nope, repeat First-Off'
               className='roundActionIcon firstBad'
               ref={(i)=> this.goBad = i}
               onClick={this.notgood.bind(this)}>
               <i className="fas fa-times fa-2x"></i>
             </button>
             <span className='breath'></span>
-            <RoleCheck role={'nightly'}>
-              <button
-                type='button'
-                title='Fine, good enough'
-                className='roundActionIcon firstGood'
-                ref={(i)=> this.goFine = i}
-                onClick={this.finegood.bind(this)}>
-                <i className="fas fa-thumbs-up fa-2x"></i>
-              </button>
-            </RoleCheck>
-            <RoleCheck role={'nightly'}>
-              <span className='breath'></span>
-            </RoleCheck>
             <button
               type='button'
-              title='Great, pass to next step'
+              title='Fine, pass First-Off'
               className='roundActionIcon firstGood'
+              ref={(i)=> this.goFine = i}
+              onClick={this.finegood.bind(this)}>
+              <i className="fas fa-check fa-2x"></i>
+            </button>
+            <span className='breath'></span>
+            <button
+              type='button'
+              title='Great, pass First-Off and Inspection'
+              className='roundActionIcon firstBetter'
               ref={(i)=> this.go = i}
               disabled={secondOpinion}
               onClick={this.pass.bind(this)}>
-              <i className="fas fa-check fa-2x"></i>
+              <span className="fa-layers">
+                <i className="fas fa-forward" data-fa-transform="grow-2 up-10"></i>
+                <i className="fas fa-check fa-2x" data-fa-transform="left-3"></i>
+              </span>
             </button>
           </span>
           

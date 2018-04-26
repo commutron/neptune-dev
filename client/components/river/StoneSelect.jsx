@@ -7,6 +7,7 @@ import Stone from './Stone.jsx';
 import TestFails from './TestFails.jsx';
 import NCTributary from './NCTributary.jsx';
 import MiniHistory from './MiniHistory.jsx';
+import UndoFinish from '/client/components/forms/UndoFinish.jsx';
 
 const StoneSelect = ({ 
   id, 
@@ -17,6 +18,7 @@ const StoneSelect = ({
   nonCons,
   serial,
   history,
+  finishedAt,
   regRun,
   users,
   methods,
@@ -185,6 +187,12 @@ const StoneSelect = ({
           <div className='purpleBorder centre cap'>
             <h2>{Pref.trackLast}ed</h2>
             <h3>{moment(iDone[iDone.length -1].time).calendar()}</h3>
+              {moment(finishedAt).isSame(moment(), 'hour') &&
+                <UndoFinish
+            	    id={id}
+            	    serial={serial}
+            	    finishedAt={finishedAt}
+            	    noText={false} />}
           </div>
         </InOutWrap>
       </div>

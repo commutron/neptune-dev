@@ -16,7 +16,7 @@ const MiniBar = ({ title, count, total })=> {
     letterSpacing: '1px'
   };
   return(
-    <div className='wide'>
+    <div className='wide meterprogStack'>
       <p style={name} className='cap'>{title}</p>
       <progress style={bar} className='proGood' value={v} max={t}></progress>
       <p style={num}>{v}/{t}</p>

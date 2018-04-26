@@ -10,9 +10,10 @@ import NCEscape from '../forms/NCEscape.jsx';
 import RMAForm from '../forms/RMAForm.jsx';
 import Remove from '../forms/Remove.jsx';
 
-import ScrapForm from '../forms/ScrapForm.jsx';
 import UnitSet from '../forms/UnitSet.jsx';
+import UndoFinish from '../forms/UndoFinish.jsx';
 import PanelBreak from '../forms/PanelBreak.jsx';
+import ScrapForm from '../forms/ScrapForm.jsx';
 
 import WidgetEditForm from '../forms/WidgetEditForm.jsx';
 import VersionForm from '../forms/VersionForm.jsx';
@@ -30,6 +31,11 @@ const ActionBar = ({batchData, itemData, widgetData, versionData, groupData, app
     	  <UnitSet
     	    id={batchData._id}
     	    item={itemData}
+    	    noText={noText} />
+    	 <UndoFinish
+    	    id={batchData._id}
+    	    serial={itemData.serial}
+    	    finishedAt={itemData.finishedAt}
     	    noText={noText} />
     	 <PanelBreak
           id={batchData._id}

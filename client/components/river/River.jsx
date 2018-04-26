@@ -82,6 +82,7 @@ const River = ({ itemData, batchData, widgetData, app, users, flow, flowAlt, pro
           nonCons={b.nonCon}
           serial={i.serial}
           history={i.history}
+          finishedAt={i.finishedAt}
           regRun={i.finishedAt === false}
           users={users}
           methods={app.toolOption}
