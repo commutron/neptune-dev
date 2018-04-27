@@ -118,9 +118,15 @@ export default class BatchPanel extends Component	{
                     {itemsOrder[0].serial} - {itemsOrder[itemsOrder.length-1].serial}
                   </fieldset>}
                 <NoteLine entry={b.notes} id={b._id} widgetKey={false}  />
+                <BlockList id={b._id} data={b.blocks} lock={done} />
               </div>
               <div className='twoThirdsContent'>
-                <BlockList id={b._id} data={b.blocks} lock={done} />
+                <em>firsts time line</em>
+                
+                <FirstsOverview
+                  doneFirsts={filter.fList}
+                  flow={riverFlow}
+                  flowAlt={riverAltFlow} />
               </div>
             </div>
           
@@ -137,13 +143,10 @@ export default class BatchPanel extends Component	{
                     items={b.items.length}
                     river={b.river}
                     riverTitle={riverTitle}
+                    riverFlow={riverFlow}
                     riverAlt={b.riverAlt}
-                    riverAltTitle={riverAltTitle} />
-                  <hr />
-                  <FirstsOverview
-                    doneFirsts={filter.fList}
-                    flow={riverFlow}
-                    flowAlt={riverAltFlow} />
+                    riverAltTitle={riverAltTitle}
+                    riverAltFlow={riverAltFlow} />
                 </div>
               
                 <div className='twoThirdsContent'>

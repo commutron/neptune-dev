@@ -117,7 +117,7 @@ export default class FlowForm extends Component	{
 
     return (
       <div className='split'>
-        <div className='min300 max400'>
+        <div className='min350 max400'>
           <form onSubmit={this.addStep.bind(this)}>
             <p >
               <label htmlFor='rteps' className='inlineForm'><br />

@@ -43,7 +43,7 @@ export default class Model extends Component	{
       
         {this.state.show &&
         <AnimateWrap type='modelTrans' el='span'>
-          <div className='overlay' key={1}>
+          <div className='overlay invert' key={1}>
             <div className='popup'>
               <button
                 className='action clearRed rAlign'

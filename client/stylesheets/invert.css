@@ -1,0 +1,214 @@
+/* Invert Rules */
+.invert {
+  color: black;
+  border-color: black;
+}
+.invert a:active {
+  border: 1px dotted black;
+}
+.invert button,
+.invert button span,
+.invert button label,
+.invert input[type='submit'],
+.invert input[type='reset'] {
+  border-color: black;
+  color: black;
+}
+.invert button:hover {
+  border-color: transparent;
+}
+.invert input[type='reset']:hover {
+  color: white;
+  background-color: black;
+  border-color: white;
+}
+.invert input[type='reset'] {
+  color: black;
+  border-color: black;
+}
+.invert input[type='reset']:hover {
+  color: white;
+  background-color: black;
+  border-color: white;
+}
+.invert form:focus {
+  border-color: rgb(28,117,188);
+}
+.invert fieldset {
+  border-color: black;
+}
+.invert input, .invert select, .invert textarea,
+.invert input {
+  border-bottom-color: black;
+}
+.invert select {
+  background-color: white;
+  border-color: black;
+}
+.invert input:focus, .invert input:active {
+  border-bottom-color: var(--neptuneColor);
+}
+.invert select:focus, .invert select:active,
+.invert textarea:focus, .invert textarea:active {
+  border-color: var(--neptuneColor);
+}
+.invert input:focus + label,
+.invert textarea:focus + label,
+.invert select:focus + label {
+  color: var(--neptuneColor);
+}
+.invert hr {
+  opacity: 0.8; 
+}
+.invert::-webkit-input-placeholder, /* Chrome/Opera/Safari */
+.invert::-moz-placeholder, /* Firefox 19+ */
+.invert:-moz-placeholder, /* Firefox 18- */
+.invert:-ms-input-placeholder { /* IE 10+ */
+  opacity: 1;
+}
+.invert .inlineLink {
+  color: black;
+}
+.jump {
+  border-bottom-color: black;
+}
+.invert .jump:hover, .invert .jump:focus, .invert .jump:active {
+  border-bottom-color: #3498db;
+}
+.invert .jumpBar {
+  border-left-color: black;
+}
+.invert .jumpBar:hover, .invert .jumpBar:focus, .invert .jumpBar:active {
+  border-bottom-color: #3498db;
+}
+.invert .leapText {
+  border-bottom-color: black;
+}
+.invert .leapText:hover,
+.invert .leapText:focus,
+.invert .leapText:active {
+  color: var(--peterriver);
+  border-bottom-color: var(--peterriver);
+}
+.invert .leapBar {
+	color: var(--black);
+  border-left-color: black;
+}
+.invert .leapBar:hover, .invert .leapBar:focus, .invert .leapBar:active {
+  background-color: var(--black);
+  color: var(--clouds);
+}
+.invert .moveLR {
+  color: black;
+}
+.invert .moveLR:hover, .invert .moveLR:active {
+  color: white;
+  background-color: black;
+}
+.invert .open {
+  color: white;
+}
+.invert .yellowBox > p {
+  color: black;
+}
+.invert .clearWhite:hover,
+.invert .clearGreen:hover,
+.invert .clearBlue:hover,
+.invert .clearRed:hover {
+  color: white;
+}
+.invert .clearWhite {
+  color: black;
+  border-color: black;
+}
+.invert .clearWhite:hover {
+  background-color: black;
+}
+.invert .cold:hover {
+  color: black;
+}
+.invert .tagFlag {
+  color: black;
+}
+.invert .tagFlag > button:hover {
+  background-color: black;
+}
+.invert .tagAddButton:hover {
+  color: white;
+}
+.invert .actionForm .redIn option,
+.invert .actionForm .redIn optgroup {
+  color: black;
+  background-color: white;
+}
+.invert .actionIconText {
+  color: black;
+}
+.invert input.redIn, .invert input.blueIn {
+  background-color: transparent;
+  border-bottom-color: var(--black);
+}
+.invert select.redIn, .invert select.blueIn {
+  background-color: transparent;
+  border-color: var(--black);
+}
+.invert .redIn {
+  color: rgb(231,76,60);
+}
+.invert input.redIn:focus {
+  border-bottom-color: red;
+}
+.invert select.redIn:focus {
+  border-color: red;
+}
+.invert textarea.redIn:focus {
+  border-color: red;
+}
+.invert .redIn:focus + label {
+  color: rgb(231,76,60);
+}
+.invert .blueIn {
+  color: black;
+}
+.invert .blueIn + label {
+  font-size: small;
+  line-height: 1rem;
+}
+.invert input.blueIn:focus {
+  border-bottom-color: var(--peterriver);
+}
+.invert select.blueIn:focus {
+  border-color: var(--peterriver);
+}
+.invert .blueIn:focus + label {
+  color: var(--peterriver);
+}
+.invert .inputMultiSelected {
+  background-color: white;
+  border-bottom-color: var(--black);
+}
+.invert .blueIn:focus ~ .inputMultiSelected {
+  border-bottom-color: var(--peterriver);
+}
+.invert .dataFlip:before, .invert .dataFlipText {
+  color: black;
+}
+.invert #ncselect + .formBarIcon,
+.invert #ncselect ~ .actionIconText {
+  color: var(--alizarin);
+}
+.invert #ncselect:hover + .formBarIcon,
+.invert #ncselect:checked + .formBarIcon {
+  background-color: var(--alizarin);
+  color: white;
+}
+.invert #firstselect + .formBarIcon,
+.invert #firstselect ~ .actionIconText {
+  color: var(--peterriver);
+}
+.invert #firstselect:hover + .formBarIcon,
+.invert #firstselect:checked + .formBarIcon {
+  background-color: var(--peterriver);
+  color: white;
+}
+

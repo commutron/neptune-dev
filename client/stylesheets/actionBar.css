@@ -81,10 +81,13 @@ meteor seems to be handling this */
   text-decoration: underline;
 }
 
-.redIn, .blueIn {
+input.redIn, input.blueIn {
   background-color: transparent;
   border-bottom-color: var(--clouds);
-  border-bottom-color: var(--cloudsfade);
+}
+select.redIn, select.blueIn {
+  background-color: transparent;
+  border-color: var(--clouds);
 }
 
 .redIn {
@@ -94,10 +97,12 @@ select.redIn > option {
   color: black;
 }
 
-.redIn:focus {
+input.redIn:focus {
   border-bottom-color: red;
 }
-
+select.redIn:focus {
+  border-color: red;
+}
 textarea.redIn:focus {
   border-color: red;
 }
@@ -123,10 +128,12 @@ select.blueIn > option {
   line-height: 1rem;
 }
 
-.blueIn:focus {
+input.blueIn:focus {
   border-bottom-color: var(--peterriver);
 }
-
+select.blueIn:focus {
+  border-color: var(--peterriver);
+}
 .blueIn:focus + label {
   color: var(--peterriver);
 }

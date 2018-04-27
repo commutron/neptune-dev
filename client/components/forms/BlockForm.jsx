@@ -112,7 +112,7 @@ export class SolveBlock extends Component {
         disabled={this.props.lock}>
         <label className='navIcon actionIconWrap'>
           <i className='fas fa-check-circle greenT'></i>
-          <span className='actionIconText greenT'>Solve</span>
+          {!this.props.noText && <span className='actionIconText greenT'>Solve</span>}
         </label>
       </button>
     );
@@ -141,7 +141,7 @@ export class RemoveBlock extends Component {
         disabled={this.props.lock}>
         <label className='navIcon actionIconWrap'>
           <i className='fas fa-trash redT'></i>
-          <span className='actionIconText redT'>Remove</span>
+          {!this.props.noText && <span className='actionIconText redT'>Remove</span>}
         </label>
       </button>
     );

@@ -8,7 +8,7 @@
   outline: none;/*This is of course awfull*/
 }
 body {
-  font-family: 'Open Sans', 'Nunito', sans-serif;
+  font-family: 'Nunito', 'Open Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: greyscale;
 }
@@ -82,16 +82,12 @@ input[type='reset'] {
   padding: 0;
   color: white;
   text-indent: 0;
-  /*cursor: pointer;*/
   -webkit-user-select: none;
   -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   -o-user-select: none;
   user-select: none;
-}
-button:focus {
-  
 }
 button:disabled, button:disabled:hover, button:disabled span, button:disabled label {
   opacity: 0.5;
@@ -109,14 +105,6 @@ input[type='reset'] {
 input[type='reset']:hover {
   color: black;
   background-color: white;
-}
-.invert input[type='reset'] {
-  color: black;
-  border-color: black;
-}
-.invert input[type='reset']:hover {
-  color: white;
-  background-color: black;
 }
 
 form {
@@ -143,7 +131,7 @@ label {
 ::-moz-placeholder, /* Firefox 19+ */
 :-moz-placeholder, /* Firefox 18- */
 :-ms-input-placeholder { /* IE 10+ */
-  opacity: 0.5;
+  opacity: 0.6;
 }
 
 input[type='checkbox'], input[type='radio'] {
@@ -188,6 +176,9 @@ input:invalid, select:invalid, textarea:invalid {
 input, select {
   min-height: 2rem;
   width: 15rem;
+}
+
+input {
   border-top-color: transparent;
   border-right-color: transparent;
   border-bottom-color: white;
@@ -195,8 +186,8 @@ input, select {
 }
 
 select {
-  background-color: white;
-  /*cursor: pointer;*/
+  background-color: var(--clouds);
+  border-color: white;
 }
 
 textarea {
@@ -205,8 +196,12 @@ textarea {
   border-color: inherit;
 }
 
-input:focus, input:active, select:focus, select:active {
+input:focus, input:active {
   border-bottom-color: var(--neptuneColor);
+  /*outline: 0;*/
+}
+select:focus, select:active {
+  border-color: var(--neptuneColor);
   /*outline: 0;*/
 }
 
@@ -216,7 +211,7 @@ textarea:focus, textarea:active {
 }
 
 input:disabled, textarea:disabled, select:disabled, datalist:disabled {
-  border-bottom-style: dotted;
+  border-style: dotted;
   cursor: not-allowed;
   opacity: 0.8;
 }

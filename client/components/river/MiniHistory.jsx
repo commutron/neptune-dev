@@ -7,7 +7,7 @@ const MiniHistory = ({ history })=> (
     {history.map( (hst, idx)=>{
   		return( 
   		  <div className='mockTableRow cap' key={idx}>
-  		    <div className='mockTableCell'>{hst.step}</div>
+  		    <div className='mockTableCell'>{hst.type} {hst.step}</div>
   		    <div className='mockTableCell'>{moment(hst.time).calendar()}</div>
   		  </div>
   		)})}

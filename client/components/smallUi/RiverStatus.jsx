@@ -1,7 +1,7 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
                     
-const RiverStatus = ({ items, river, riverTitle, riverAlt, riverAltTitle })=> (
+const RiverStatus = ({ items, river, riverTitle, riverFlow, riverAlt, riverAltTitle, riverAltFlow })=> (
   <div className='mockTable'>
     <div className='mockTableGroup cap'>
     {items === 0 ?
@@ -23,11 +23,13 @@ const RiverStatus = ({ items, river, riverTitle, riverAlt, riverAltTitle })=> (
           </dl>
         :
           <dl>
-            <dt>
+            <dt className='bold'>
               <i className='fas fa-check-square fa-lg fa-fw greenT'>
-              </i>{Pref.buildFlow}: 
-            </dt>    
-            <dd>{riverTitle}</dd>
+              </i>{Pref.buildFlow}: {riverTitle}
+            </dt>
+            {!riverFlow || riverFlow.map( (ent, ndx)=>{
+              return(<dd key={ndx}>{ent.type} {ent.step}</dd>);
+            })}
           </dl>
         }
       </div>
@@ -43,11 +45,13 @@ const RiverStatus = ({ items, river, riverTitle, riverAlt, riverAltTitle })=> (
           </dl>
         :
           <dl>
-            <dt>
+            <dt className='bold'>
               <i className='fas fa-check-square fa-lg fa-fw greenT'>
-              </i>{Pref.buildFlowAlt}:
-            </dt>    
-            <dd>{riverAltTitle}</dd>
+              </i>{Pref.buildFlowAlt}: {riverAltTitle}
+            </dt> 
+            {!riverAltFlow || riverAltFlow.map( (ent, ndx)=>{
+              return(<dd key={ndx}>{ent.type} {ent.step}</dd>);
+            })}
           </dl>
         }
       </div>

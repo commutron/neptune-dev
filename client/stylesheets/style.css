@@ -3,6 +3,8 @@
   line-height: 2em;
   /*font-size: 1em;*/
   font-size: medium;
+  font-weight: 600;
+  letter-spacing: 1px;
   min-width: 2.5rem;
 	min-height: 2.5em;
 	padding: 0 10px;
@@ -12,6 +14,7 @@
 .smallAction {
   line-height: 1rem;
   font-size: medium;
+  letter-spacing: 1px;
   min-width: 2rem;
 	height: 2rem;
 	padding: 0 10px;
@@ -240,24 +243,28 @@
 .blueT {
 	color: var(--peterriver);
 }
-.blueHover {
+.blueHover ,
+.invert .blueHover {
 	color: var(--peterriver);
 	background-color: var(--clouds);
 }
-.blueHover:hover {
+.blueHover:hover,
+.invert .blueHover:hover {
   color: var(--clouds);
 	background-color: var(--peterriver);
 }
-.blueHover:disabled:hover {
+.blueHover:disabled:hover,
+.invert .blueHover:disabled:hover {
   color: var(--peterriver);
 	background-color: var(--clouds);
-	/*cursor: default;*/
 }
-.onblueHover {
+.onblueHover,
+.invert .onblueHover {
   color: var(--clouds);
 	background-color: var(--peterriver);
 }
-.onblueHover:hover {
+.onblueHover:hover,
+.invert .onblueHover:hover {
   color: var(--peterriver);
 	background-color: var(--clouds);
 }
@@ -282,18 +289,20 @@
   color:  var(--alizarin);
 }
 
-.redHover {
+.redHover,
+.invert .redHover {
 	color: var(--alizarin);
 	background-color: var(--clouds);
 }
-.redHover:hover {
+.redHover:hover,
+.invert .redHover:hover {
   color: var(--clouds);
 	background-color: var(--alizarin);
 }
-.redHover:disabled:hover {
+.redHover:disabled:hover,
+.invert .redHover:disabled:hover {
   color: var(--alizarin);
 	background-color: var(--clouds);
-	/*cursor: default;*/
 }
 
 .orange {
@@ -402,34 +411,34 @@
   background-color: white;
 }
 
-.clearGreen {
+.clearGreen,
+.invert .clearGreen{
   color: var(--emerald);
   border-color: var(--emerald);
 }
-.clearGreen:hover {
+.clearGreen:hover,
+.invert .clearGreen:hover {
   background-color: var(--emerald);
 }
 
-.clearBlue {
+.clearBlue,
+.invert .clearBlue {
   color: var(--peterriver);
 	border-color: var(--peterriver);
 }
-.clearBlue:hover {
+.clearBlue:hover,
+.invert .clearBlue:hover {
 	background-color: var(--peterriver);
 }
 
-.clearRed {
+.clearRed,
+.invert .clearRed {
   color: var(--alizarin);
   border-color: var(--alizarin);
 }
-.clearRed:hover {
-  background-color: var(--alizarin);
-}
-
-.invert .clearGreen:hover,
-.invert .clearBlue:hover,
+.clearRed:hover,
 .invert .clearRed:hover {
-  color: white;
+  background-color: var(--alizarin);
 }
 
 .wisper {
@@ -494,6 +503,10 @@
 
 .biggest {
   font-size: 2rem;
+}
+
+.bold {
+  font-weight: 600;
 }
 
 .letterSpaced {
@@ -620,6 +633,32 @@
   margin: 0 auto;
   background-color: rgba(59,206,74,0.3);
   text-transform: uppercase;
+}
+
+.blockerList {
+  width: 100%;
+  margin: 10px 0;
+  border-top: 3px solid var(--sunflower);
+}
+.blockerCard {
+  margin-top: 5px;
+  border-top: 1px dotted var(--sunflower);
+  padding-top: 5px;
+  margin-bottom: 10px;
+}
+.blockerCard > div {
+  padding-bottom: 10px;
+}
+.blockerHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.blockerHead > span:last-child {
+  min-width:  90px;
+}
+.blockerSolve {
+  font-weight: bold;
 }
 
 .infoBox {
