@@ -23,7 +23,7 @@ import GroupForm from '../forms/GroupForm.jsx';
 import WidgetNewForm from '../forms/WidgetNewForm.jsx';
 
 const ActionBar = ({batchData, itemData, widgetData, versionData, groupData, app, action, noText})=> (
-  <div>
+  <div className='actionBar'>
     <div className='footLeft'>
     { 
   	action === 'item' ?

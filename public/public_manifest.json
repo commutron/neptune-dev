@@ -20,7 +20,7 @@
   ],
   "start_url": "/",
   "display": "standalone",
-  "orientation": "portrait"
-  "background_color": "#1c75bc",
-  "theme_color": "#1c75bc",
+  "orientation": "landscape"
+  "background_color": "#007fff",
+  "theme_color": "#007fff",
 }

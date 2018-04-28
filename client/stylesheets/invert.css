@@ -1,7 +1,7 @@
 /* Invert Rules */
 .invert {
+  background-color: var(--clouds);
   color: black;
-  border-color: black;
 }
 .invert a:active {
   border: 1px dotted black;
@@ -59,6 +59,13 @@
 }
 .invert hr {
   opacity: 0.8; 
+}
+.invert td,
+.invert tr:last-child td,
+.invert .mockTableCell,
+.invert .mockTableRow {
+  border-color: black;
+  border-color: rgba(0,0,0,0.5);
 }
 .invert::-webkit-input-placeholder, /* Chrome/Opera/Safari */
 .invert::-moz-placeholder, /* Firefox 19+ */
@@ -185,10 +192,10 @@
 }
 .invert .inputMultiSelected {
   background-color: white;
-  border-bottom-color: var(--black);
+  border-color: var(--black);
 }
 .invert .blueIn:focus ~ .inputMultiSelected {
-  border-bottom-color: var(--peterriver);
+  border-color: var(--peterriver);
 }
 .invert .dataFlip:before, .invert .dataFlipText {
   color: black;

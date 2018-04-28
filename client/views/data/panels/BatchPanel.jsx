@@ -121,24 +121,20 @@ export default class BatchPanel extends Component	{
                 <BlockList id={b._id} data={b.blocks} lock={done} />
               </div>
               <div className='twoThirdsContent'>
-                <em>firsts time line</em>
-                
-                <FirstsOverview
-                  doneFirsts={filter.fList}
-                  flow={riverFlow}
-                  flowAlt={riverAltFlow} />
+                <div className='wellSpacedLine'>
+                  <p className='capFL'>{Pref.start}: {moment(b.start).calendar()}</p>
+                  <p className='capFL'>{Pref.end}: {moment(b.end).calendar()}</p>
+                  <p>Finished: {fnsh}</p>
+                </div>
+                <br />
+                {Roles.userIsInRole(Meteor.userId(), 'nightly') &&
+                  <em>firsts timeline or recent activity</em>}
               </div>
             </div>
           
             
               <div className='oneTwoThreeContainer space'>
                 <div className='oneThirdContent min200'>
-                  <div>
-                    <p className='capFL'>{Pref.start}: {moment(b.start).calendar()}</p>
-                    <p className='capFL'>{Pref.end}: {moment(b.end).calendar()}</p>
-                    <p>Finished: {fnsh}</p>
-                  </div>
-                  <hr />
                   <RiverSatus
                     items={b.items.length}
                     river={b.river}
@@ -147,6 +143,11 @@ export default class BatchPanel extends Component	{
                     riverAlt={b.riverAlt}
                     riverAltTitle={riverAltTitle}
                     riverAltFlow={riverAltFlow} />
+                  <hr />
+                  <FirstsOverview
+                    doneFirsts={filter.fList}
+                    flow={riverFlow}
+                    flowAlt={riverAltFlow} />
                 </div>
               
                 <div className='twoThirdsContent'>

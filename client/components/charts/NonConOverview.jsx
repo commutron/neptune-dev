@@ -58,10 +58,9 @@ export default class NonConOverview extends Component {
 
     return(
       <div>
-        <p className='centreText'>
+        <p className='centreText listSortInput'>
           <i className='med'>Defect Type and </i>
           <select
-            className='transparent blueT'
             ref={(i)=>this.frstFiltr=i} 
             onChange={()=>this.setState({stackFilter: this.frstFiltr.value})}>
             <option value='dprt' defaultValue>Department</option>

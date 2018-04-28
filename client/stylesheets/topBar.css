@@ -148,24 +148,6 @@ input::-webkit-calendar-picker-indicator {
   color: white;
   border-bottom-color: transparent;
 }
-/* custom timeClock icon */
-/*
-#timeToggle:checked + #timeSwitch {
-  color: white;
-}
-
-.customTimeClock:before { 
-  font-family: FontAwesome;
-  font-size: 2em;
-}
-
-.customTimeClock:before { 
-  content: "\f017";
-} /* unchecked icon */
-/*
-#timeToggle:checked + .customTimeClock:before { 
-  content: "\f00d";
-} /* checked icon */
 
 .timeLink {
   display: block;

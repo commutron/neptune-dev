@@ -57,7 +57,7 @@ export default class FormBar extends Component	{
                 name='formbarselect'
                 className='radioIcon'
                 onChange={()=>this.setState({ showNC: false })} />
-              <i className='fas fa-flag-checkered formBarIcon'></i>
+              <i className='fas fa-play-circle formBarIcon'></i>
               <span className='actionIconText'>First</span>
             </label>
           </div>

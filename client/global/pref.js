@@ -26,14 +26,18 @@ class Pref {
     // terminology
     this.admin = 'org admin';
 	  this.batch = 'work order';//order
+	  this.Batch = 'Work Order';//Order
 	  this.btch = 'w'; // batch shortcut
 	  this.item = 'board';//board
+	  this.Item = 'Board';//Board
 	  this.itm = 'b'; // item shortcut
 	  this.itemSerial = 'barcode';
 	  this.serialType = 'qrcode';
     this.group = 'customer';//customer
+    this.Group = 'Customer';//Customer
     this.grp = 'c'; // group shortcut
     this.widget = 'product';//product
+    this.Widget = 'Product';//Product
     this.wdgt = 'p'; // widget shortcut
     this.version = 'version';// version, variation, rev
     this.vrsn = 'v'; // version shorcut
@@ -81,6 +85,7 @@ class Pref {
     this.escape = 'escaped';
     // scrap
     this.scrap = 'scrap';
+    this.Scrap = 'Scrap';
     this.scrp = 's'; // scrap shortcut
     // rma
     this.rma = 'RMA';

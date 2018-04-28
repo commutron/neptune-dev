@@ -114,16 +114,17 @@
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
+  height: inherit;
 }
 .cookieCrumb {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  align-items: center;
+  align-items: stretch;
   height: 32px;
-  overflow: hidden;
   background-color: var(--black);
   overflow: hidden;
+  white-space: nowrap;
 }
 .cookie {
   background-color: var(--black);
@@ -131,8 +132,12 @@
   min-width: 64px;
   max-width: 256px;
   font-size: 1rem;
+  line-height: 1rem;
   font-weight: 600;
-  padding: 0 10px;
+  padding: 0 0 0 5px;
+  overflow: hidden;
+  word-break: keep-all;
+  text-overflow: ellipsis;
 }
 .crumb {
   color: var(--silverfade);
@@ -214,5 +219,9 @@
 }
 .badBox {
   background-color: var(--alizarinfade);
+}
+
+.indexCard {
+  background-color: rgb(20,20,20);
 }
 

@@ -277,16 +277,28 @@ main {
   }
 }
 
-.invert {
-  background-color: var(--clouds);
-  color: black;
+/* wrapDeck is a snaking flex layout */
+.wrapDeck {
+  display: flex;
+  width: 100%;
+  margin: 16px 0;
+  flex-flow: row wrap;
+  align-items: flex-start;
+  justify-content: space-evenly;
 }
-.invert td,
-.invert tr:last-child td,
-.invert .mockTableCell,
-.invert .mockTableRow {
-  border-color: black;
-  border-color: rgba(0,0,0,0.5);
+.wrapDeckCard {
+  width: calc(92% / 3);
+  margin: 8px 0;
+}
+@media screen and (max-width: 1500px){
+  .wrapDeckCard {
+    width: calc(94% / 2);
+  }
+}
+@media screen and (max-width: 1000px){
+  .wrapDeckCard {
+    width: 96%
+  }
 }
 
 /* modal popup */
@@ -484,6 +496,7 @@ main {
   padding-top: 10px;
   padding-bottom: 10px;
 }
+/*--------*/
 
 .wipCol {
   display: flex;

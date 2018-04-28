@@ -323,6 +323,7 @@ export default class FirstForm extends Component	{
               title='Fine, pass First-Off'
               className='roundActionIcon firstGood'
               ref={(i)=> this.goFine = i}
+              disabled={secondOpinion}
               onClick={this.finegood.bind(this)}>
               <i className="fas fa-check fa-2x"></i>
             </button>

@@ -86,20 +86,13 @@
   background-color: var(--alizarin);
 }
 
-.firstGood {
+.firstGood, .firstBetter span {
   color: var(--emerald);
 }
-.firstGood:hover {
-  background-color: var(--emerald);
-  color: white;
-}
-.firstBetter span {
-  color: var(--emerald);
-}
-.firstBetter:hover {
-  background-color: var(--emerald);
-}
+.firstGood:hover, 
+.firstBetter:hover,
 .firstBetter:hover span {
+  background-color: var(--emerald);
   color: white;
 }
 .firstBad {

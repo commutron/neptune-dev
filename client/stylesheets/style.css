@@ -168,11 +168,13 @@
   border-left-color: var(--pomegranate);
 }
 
+.tabOn, .tabOff {
+  font-weight: 400;
+}
 .tabOn {
 	background-color: var(--midnightblue);
   border-bottom: 3px solid var(--silver);
 }
-
 .tabOff {
 	background-color: var(--wetasphalt);
 	border-bottom: 3px groove transparent;
@@ -835,6 +837,20 @@
   max-width: 160px;
   font-size: 0.9rem;
   margin: 5px 5px;
+}
+
+.listSort {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+.listSortInput input,
+.listSortInput select {
+  background-color: transparent;
+  color: white;
+}
+.listSortInput option {
+  color: black;
 }
 
 .radioLabelPair {

@@ -8,26 +8,26 @@ const TaskBar = ({ subLink }) => {
     <div className='taskColumn'>
     
       <button
-        title='advanced search'
+        title='Advanced Search'
         className={!subLink ? 'taskLink onTL' : 'taskLink'}
         onClick={()=>FlowRouter.go('/data')}
       ><i className='fas fa-search'></i></button>
       
       <button
-        title='schedule'
+        title='Schedule'
         className={subLink === 'schedule' ? 'taskLink onTL' : 'taskLink'}
         onClick={()=>FlowRouter.go('/data/schedule')}
         disabled={true}
       ><i className='far fa-calendar-alt'></i></button>
       
       <button
-        title={Pref.group + 's'}
+        title={Pref.Group + 's'}
         className={subLink === 'overviewgroups' ? 'taskLink onTL' : 'taskLink'}
         onClick={()=>FlowRouter.go('/data/overview?request=groups')}
       ><i className='fas fa-users'></i></button>
       
       <button
-        title={Pref.batch + 's'}
+        title={Pref.Batch + 's'}
         className={subLink === 'overviewbatches' ? 'taskLink onTL' : 'taskLink'}
         onClick={()=>FlowRouter.go('/data/overview?request=batches')}
       ><i className='fas fa-cubes'></i></button>
@@ -39,7 +39,7 @@ const TaskBar = ({ subLink }) => {
       ><i className='fas fa-microchip fa-2x'></i></button>
       */}
       <button
-        title={Pref.scrap + 's'}
+        title={Pref.Scrap + 's'}
         className={subLink === 'overviewscraps' ? 'taskLink onTL' : 'taskLink'}
         onClick={()=>FlowRouter.go('/data/overview?request=scraps')}
       ><i className='fas fa-trash'></i></button>

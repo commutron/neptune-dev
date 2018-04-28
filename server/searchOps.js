@@ -38,6 +38,17 @@ Meteor.methods({
     return numOfwdgt.sort((a, b)=> { return b.value - a.value });
   },
   
+  widgetTops(wID) {
+    const batches = BatchDB.find({orgKey: Meteor.user().orgKey, widgetId: wID}).fetch();
+    const batchInfo = Array.from(batches, x => { return { 
+      start: x.createdAt,
+      finish: x.finishedAt,
+      items: x.items.length,
+      nonCons: x.nonCon.length,
+    }});
+    return batchInfo;
+  },
+  
     ///////////////////////////////////////////////////////////////////////////////////
   
   // History Rate

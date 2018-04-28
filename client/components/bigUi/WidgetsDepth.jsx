@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
+import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
-
+import { CalcSpin } from '/client/components/uUi/Spin.jsx';
 import LeapButton from '/client/components/tinyUi/LeapButton.jsx';
-import FilterActive from '/client/components/bigUi/FilterActive.jsx';
+import WidgetSort from '/client/components/bigUi/WidgetSort.jsx';
+import NumStat from '/client/components/uUi/NumStat.jsx';
 
 export default class WidgetsDepth extends Component	{
   
@@ -47,31 +49,109 @@ export default class WidgetsDepth extends Component	{
     return (
       <AnimateWrap type='cardTrans'>
         <div className='' key={1}>
-          <div className='stickyBar'>
-            <FilterActive
-              title={g.alias}
-              done='Inactive'
-              total={showList.length}
-              onClick={e => this.setFilter(e)}
-              onTxtChange={e => this.setTextFilter(e)} />
-          </div>
-          {w.length < 1 ? <p>no {Pref.widget}s created</p> : null}
-            { showList.map( (entry, index)=> {
-            let ac = active.includes(entry._id) ? 'leapBar activeMark' : 'leapBar';
-              return(
-                <div className='widgetIndexCard'>
-                  <LeapButton
-                    key={index}
-                    title={entry.widget}
-                    sub={entry.describe}
-                    sty={ac}
-                    address={'/data/widget?request=' + entry.widget}
-                  />
-                  <p>other stuff</p>
-                </div>
-            )})}
+          <WidgetSort
+            title={g.alias}
+            total={showList.length}
+            onClick={e => this.setFilter(e)}
+            onTxtChange={e => this.setTextFilter(e)} />
+          <div className='wrapDeck'>
+            {w.length < 1 ? <p>no {Pref.widget}s created</p> : null}
+              { showList.map( (entry, index)=> {
+              let ac = active.includes(entry._id) ? 'leapBar activeMark' : 'leapBar';
+                return(
+                  <WidgetIndexCard key={index} data={entry} barStyle={ac} />
+              )})}
+            </div>
         </div>
       </AnimateWrap>
+    ); 
+  }
+}
+
+class WidgetIndexCard extends Component {
+  
+  constructor() {
+    super();
+    this.state = {
+      moreData: false
+    };
+  }
+  
+  totalI(mData) {
+    let items = Array.from(mData, x => x.items);
+    let total = items > 0 ? items.reduce((x,y)=>x+y) : 0;
+    return total;
+  }
+  
+  avgTime(mData) {
+    let elapsed = [];
+    for(let md of mData) {
+      let t = md.finish !== false && moment(md.finish).diff(moment(md.start), 'day');
+      t !== false && t > 0 ? elapsed.push(t) : null;
+    }
+    let avgElapse = elapsed.length > 0 ?
+      elapsed.reduce((x,y)=>x+y) / elapsed.length : 0;
+    return avgElapse;
+  }
+  
+  avgNC(mData) {
+    let ncs = Array.from(mData, x => x.nonCons);
+    let avgNCs = ncs > 0 ? ncs.reduce((x,y)=>x+y) / ncs.length : 0;
+    return avgNCs;
+  }
+  
+  render() {
+    
+    const data = this.props.data;
+    const mData = this.state.moreData;
+    
+    if(!mData) {
+      return(
+        <CalcSpin />
+      );
+    }
+    
+    let totalItems = this.totalI(mData);
+    
+    let avgTime = this.avgTime(mData);
+    let avgDur = avgTime > 0 ?
+      moment.duration(avgTime, "days").humanize() : 'n/a';
+   
+   let avgNCs = this.avgNC(mData);
+      
+    return(
+      <div className='wrapDeckCard indexCard'>
+        <LeapButton
+          title={data.widget}
+          sub={data.describe}
+          sty={this.props.barStyle}
+          address={'/data/widget?request=' + data.widget}
+        />
+        <div className='wellSpacedLine balance'>
+          <NumStat
+            num={totalItems}
+            name={'total ' + Pref.item + 's'}
+            color='blueT'
+            size='big' />
+          <NumStat
+            num={avgDur}
+            name='on average'
+            color='greenT'
+            size='big' />
+          <NumStat
+            num={avgNCs}
+            name='nonCons on average'
+            color='redT'
+            size='big' />
+        </div>
+      </div>
     );
+  }
+  componentDidMount() {
+    Meteor.call('widgetTops', this.props.data._id, (err, reply)=>{
+      if(err)
+        console.log(err);
+      !reply ? null : this.setState({ moreData : reply });
+    });
   }
 }

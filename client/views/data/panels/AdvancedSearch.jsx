@@ -40,6 +40,18 @@ const AdvancedSearch = ({ groupData, widgetData, batchData, app }) => {
             color='greenT' />
         </div>
         
+        <p><i className='biggest'>~</i></p>
+        
+        <div className='balance'>
+          <label className='listSortInput'>
+            <input
+              type='search'
+              id='advSearch'
+              placeholder='comming soon'
+              disabled={true}/>
+            <br />Advanced Search
+          </label>
+        </div>
       </div>
     </div>
   );
