@@ -11,6 +11,7 @@
   --peterriver: rgb(52, 152, 219);/* light blue */
   --peterriverfade: rgba(52, 152, 219, 0.5);
   --belizeHole: rgb(41, 128, 185); /* dark blue */
+  --belizeHolefade: rgba(41, 128, 185, 0.5); /* dark blue fade */
   --amethyst: rgb(155, 89, 182); /* light purple */
   --amethystfade: rgba(155, 89, 182, 0.5);
   --wisteria: rgb(142, 68, 173); /* dark purple */
@@ -22,7 +23,8 @@
   --pumpkin: rgb(211, 84, 0);
   --alizarin: rgb(231, 76, 60);
   --alizarinfade: rgba(231, 76, 60, 0.1);
-  --pomegranate: rgb(192, 57, 43);
+  --pomegranate: rgb(192, 57, 43); /* dark red */
+  --pomegranatefade: rgba(192, 57, 43, 0.5); /* dark red fade */
   --silver: rgb(189, 195, 199);
   --silverfade: rgba(189, 195, 199, 0.5);
   --clouds: rgb(236, 240, 241); /*off white */

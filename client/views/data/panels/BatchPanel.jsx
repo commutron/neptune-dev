@@ -12,6 +12,7 @@ import NoteLine from '../../../components/smallUi/NoteLine.jsx';
 import BlockList from '../../../components/bigUi/BlockList.jsx';
 import RiverSatus from '../../../components/smallUi/RiverStatus.jsx';
 import FirstsOverview from '/client/components/bigUi/FirstsOverview.jsx';
+import FirstsTimeline from '/client/components/bigUi/FirstsTimeline.jsx';
 import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
 import ProgBurndown from '/client/components/charts/ProgBurndown.jsx';
 import NonConOverview from '../../../components/charts/NonConOverview.jsx';
@@ -40,7 +41,14 @@ export default class BatchPanel extends Component	{
       // check history for...
       for(let v of item.history) {
         // firsts
-        v.type === 'first' ? fList.push({bar: item.serial, fKey: v.key, step: v.step}) : null;
+        v.type === 'first' ? 
+          fList.push({
+            bar: item.serial,
+            fKey: v.key,
+            step: v.step,
+            time: v.time,
+            good: v.good
+          }) : null;
       }
      });
      return {fList: fList, rmaList: rmaList};
@@ -53,7 +61,7 @@ export default class BatchPanel extends Component	{
     const w = this.props.widgetData;
     const g = this.props.groupData;
     
-    const fnsh = b.finishedAt ? moment(b.finishedAt).calendar() : '';
+    const fnsh = b.finishedAt ? moment(b.finishedAt).format("YYYY, ddd, MMM Do, h:mm a") : '';
     
     const v = w.versions.find( x => x.versionKey === b.versionKey );
     
@@ -122,13 +130,15 @@ export default class BatchPanel extends Component	{
               </div>
               <div className='twoThirdsContent'>
                 <div className='wellSpacedLine'>
-                  <p className='capFL'>{Pref.start}: {moment(b.start).calendar()}</p>
-                  <p className='capFL'>{Pref.end}: {moment(b.end).calendar()}</p>
-                  <p>Finished: {fnsh}</p>
+                  <p className='capFL bold letterSpaced'>{Pref.start}: {moment(b.start).format("YYYY, ddd, MMM Do, h:mm a")}</p>
+                  <p className='capFL bold letterSpaced'>{Pref.end}: {moment(b.end).format("YYYY, ddd, MMM Do, h:mm a")}</p>
+                  <p className='bold letterSpaced'>Finished: {fnsh}</p>
                 </div>
                 <br />
-                {Roles.userIsInRole(Meteor.userId(), 'nightly') &&
-                  <em>firsts timeline or recent activity</em>}
+                  <FirstsTimeline
+                    id={b._id}
+                    batch={b.batch}
+                    doneFirsts={filter.fList} />
               </div>
             </div>
           
