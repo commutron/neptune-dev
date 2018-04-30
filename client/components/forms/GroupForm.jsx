@@ -10,9 +10,9 @@ export default class GroupForm extends Component {
     createCustomer(e) {
       e.preventDefault();
       const groupId = this.props.id;
-      const groupName = this.gName.value.trim().toLowerCase();
+      const groupName = this.gName.value.trim();
       const groupAlias = this.gAlias.value.trim().toLowerCase();
-      const groupWiki = this.gWiki.value.trim().toLowerCase();
+      const groupWiki = this.gWiki.value.trim();
       
       function create(groupName, groupAlias, groupWiki) {
         Meteor.call('addGroup', groupName, groupAlias, groupWiki, (error, reply)=>{
@@ -20,7 +20,8 @@ export default class GroupForm extends Component {
            console.log(error);
           if(reply) {
             Bert.alert(Alert.success);
-            Session.set('now', groupName);
+            //Session.set('now', groupName);
+            FlowRouter.go('/data/group?request=' + groupAlias);
           }else{
             Bert.alert(Alert.warning);
           }
@@ -33,7 +34,8 @@ export default class GroupForm extends Component {
             console.log(error);
           if(reply) {
             Bert.alert(Alert.success);
-            Session.set('now', groupName);
+            //Session.set('now', groupName);
+            FlowRouter.go('/data/group?request=' + groupAlias);
           }else{
             Bert.alert(Alert.warning);
           }

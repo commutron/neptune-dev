@@ -33,7 +33,7 @@ export class TraverseWrap extends Component	{
       <div 
         className={
           this.props.landing ? 'landingContainer' :
-          this.props.user.miniAction ? 'traverseContainerMin' : 'traverseContainer'}>
+          this.props.user.miniAction === true ? 'traverseContainerMin' : 'traverseContainer'}>
         <div 
           className={
             //!this.props.user.miniAction &&

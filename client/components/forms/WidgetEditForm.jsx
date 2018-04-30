@@ -20,7 +20,8 @@ export default class WidgetEditForm extends Component	{
         console.log(error);
       if(reply) {
         Bert.alert(Alert.success);
-        Session.set('now', newName);
+        //Session.set('now', newName);
+        FlowRouter.go('/data/widget?request=' + newName);
       }else{
         Bert.alert(Alert.warning);
       }

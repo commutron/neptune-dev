@@ -50,14 +50,12 @@ export default class WidgetsDepth extends Component	{
       <AnimateWrap type='cardTrans'>
         <div className='' key={1}>
           <WidgetSort
-            title={g.alias}
-            total={showList.length}
-            onClick={e => this.setFilter(e)}
+            onChange={e => this.setFilter(e)}
             onTxtChange={e => this.setTextFilter(e)} />
           <div className='wrapDeck'>
             {w.length < 1 ? <p>no {Pref.widget}s created</p> : null}
               { showList.map( (entry, index)=> {
-              let ac = active.includes(entry._id) ? 'leapBar activeMark' : 'leapBar';
+              let ac = active.includes(entry._id) ? 'leapBar activeMark medBig' : 'leapBar medBig';
                 return(
                   <WidgetIndexCard key={index} data={entry} barStyle={ac} />
               )})}

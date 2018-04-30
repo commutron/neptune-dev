@@ -77,7 +77,7 @@ export default class GroupsList extends Component	{
                 title={entry.group}
                 sub=''
                 sty={ac}
-                address={'/data/group?request=' + entry.group}
+                address={'/data/group?request=' + entry.alias}
               />
             )})}
   			</div>

@@ -32,7 +32,8 @@ export default class BatchForm extends Component	{
           Bert.alert(Alert.warning);
         if(reply) {
           Bert.alert(Alert.success);
-          Session.set('now', batchNum);
+          //Session.set('now', batchNum);
+          FlowRouter.go('/data/batch?request=' + batchNum);
         }else{
           Bert.alert(Alert.duplicate);
         }
@@ -46,7 +47,8 @@ export default class BatchForm extends Component	{
           Bert.alert(Alert.warning);
         if(reply) {
           Bert.alert(Alert.success);
-          Session.set('now', batchNum);
+          //Session.set('now', batchNum);
+          FlowRouter.go('/data/batch?request=' + batchNum);
         }else{
           Bert.alert(Alert.duplicate);
         }

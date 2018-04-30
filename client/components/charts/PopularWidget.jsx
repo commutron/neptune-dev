@@ -42,12 +42,16 @@ export default class NonConRate extends Component {
         <CalcSpin />
       );
     }
-
+    
+    const countLine = Array.from(counts, x => x.value).reduce((x,y)=> x + y) / counts.length;
+    const groupLine = Array.from(groups, x => x.value).reduce((x,y)=> x + y) / groups.length;
+    
+  
     let dataOne = {
       series: counts,
       labels: Array.from(counts, 
                 x => { 
-                  let name = x.value > counts.length % 5 ? x.meta : ' '; 
+                  let name = x.value > countLine ? x.meta.toUpperCase() : ' '; 
                   return name })
     };
 
@@ -55,12 +59,12 @@ export default class NonConRate extends Component {
       series: groups,
       labels: Array.from(groups,
                 x => { 
-                  let name = x.value > counts.length % 5 ? x.meta : ' ';
+                  let name = x.value > groupLine ? x.meta.toUpperCase() : ' ';
                   return name })
     };
     
     let options = {
-      width: 450,
+      width: 500,
       height: 400,
       showLabel: true,
       labelOffset: 75,

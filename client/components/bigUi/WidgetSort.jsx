@@ -1,12 +1,12 @@
 import React from 'react';
 
-const FilterActive = ({ total, onClick, onTxtChange })=>	{
+const FilterActive = ({ onChange, onTxtChange })=>	{
   
   function changeBasicFilter() {
-    onClick(this.basic.value);
+    onChange(this.basicWS.value);
   }
   function changeTextFilter() {
-    onTxtChange(this.text.value);
+    onTxtChange(this.textWS.value);
   }
   
   return(
@@ -17,14 +17,14 @@ const FilterActive = ({ total, onClick, onTxtChange })=>	{
           <i className='fas fa-font fa-fw'></i>
           <input
             type='search'
-            ref={(i)=>this.text = i}
+            ref={(i)=>this.textWS = i}
             onChange={(e)=>changeTextFilter(e)}
             disabled={!onTxtChange} />
         </label>
         <label className='listSortInput'>
           <i className='fas fa-map-marker-alt fa-fw'></i>
           <select
-            ref={(i)=> this.basic = i}
+            ref={(i)=> this.basicWS = i}
             onChange={(e)=>changeBasicFilter(e)}>
             <option value='all'>All</option>
             <option value='done'>Finished</option>
