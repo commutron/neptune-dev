@@ -61,7 +61,7 @@ export default class BatchPanel extends Component	{
     const w = this.props.widgetData;
     const g = this.props.groupData;
     
-    const fnsh = b.finishedAt ? moment(b.finishedAt).format("YYYY, ddd, MMM Do, h:mm a") : '';
+    const fnsh = b.finishedAt ? moment(b.finishedAt).format("MMMM Do, YYYY, h:mm a") : '';
     
     const v = w.versions.find( x => x.versionKey === b.versionKey );
     
@@ -121,18 +121,18 @@ export default class BatchPanel extends Component	{
                   vKey={false}
                   tagOps={a.tagOption} />
                 {b.items.length > 0 &&
-                  <fieldset>
+                  <fieldset className='noteCard'>
                     <legend>Serial Range</legend>
-                    {itemsOrder[0].serial} - {itemsOrder[itemsOrder.length-1].serial}
+                    <i className='letterSpaced'>{itemsOrder[0].serial} - {itemsOrder[itemsOrder.length-1].serial}</i>
                   </fieldset>}
                 <NoteLine entry={b.notes} id={b._id} widgetKey={false}  />
                 <BlockList id={b._id} data={b.blocks} lock={done} />
               </div>
               <div className='twoThirdsContent'>
                 <div className='wellSpacedLine'>
-                  <p className='capFL bold letterSpaced'>{Pref.start}: {moment(b.start).format("YYYY, ddd, MMM Do, h:mm a")}</p>
-                  <p className='capFL bold letterSpaced'>{Pref.end}: {moment(b.end).format("YYYY, ddd, MMM Do, h:mm a")}</p>
-                  <p className='bold letterSpaced'>Finished: {fnsh}</p>
+                  <p className='capFL'>{Pref.start}: {moment(b.start).format("MMMM Do, YYYY, h:mm a")}</p>
+                  <p className='capFL'>{Pref.end}: {moment(b.end).format("MMMM Do, YYYY, h:mm a")}</p>
+                  <p className=''>Finished: {fnsh}</p>
                 </div>
                 <br />
                   <FirstsTimeline

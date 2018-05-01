@@ -45,7 +45,6 @@ export default class NonConRate extends Component {
     
     const countLine = Array.from(counts, x => x.value).reduce((x,y)=> x + y) / counts.length;
     const groupLine = Array.from(groups, x => x.value).reduce((x,y)=> x + y) / groups.length;
-    
   
     let dataOne = {
       series: counts,

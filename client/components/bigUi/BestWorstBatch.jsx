@@ -131,12 +131,13 @@ const BstWrstNCresults = ({ title, color, results, widgetData, groupData, scale,
                   address={'/data/batch?request=' + entry.b}
                 />
               </td>}
-              <td>
-                <LeapText
+              <td className='up'>
+                {/*<LeapText
                   title={grp.alias} 
                   sty={false}
                   address={'/data/group?request=' + grp.alias}
-                />
+                />*/}
+                {grp.alias}
               </td>
               <td>
                 <LeapText

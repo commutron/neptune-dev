@@ -30,12 +30,11 @@ const BlockNotes = ({ data })=> {
 
 const BlockBox = ({ dt })=> {
 /// Display simple information about the Blocker \\\\
-  let solved = dt.solve ? <p>{dt.solve.action}</p> : null;
-  let color = solved ? '' : 'yellowBox';
+  let solved = dt.solve ? <p className='bold'>{dt.solve.action}</p> : null;
   let when = solved ? dt.solve.time : dt.time;
   let who = solved ? dt.solve.who : dt.who;
   return (
-  	<fieldset className={color}>
+  	<fieldset className='blockerCard'>
       <legend>{Pref.block}</legend>
       <p>{dt.block}</p>
       {solved}

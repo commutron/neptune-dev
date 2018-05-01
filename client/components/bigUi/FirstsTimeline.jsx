@@ -8,18 +8,16 @@ const FirstsTimeline = ({ id, batch, doneFirsts })=> {
                       return 0;
                     });
                     
-                    
-                    
   return(
     <div className='wide centre'>
       <h3>Process First-Offs</h3>
-      <div className='timelineList'>
+      <div className='timelineList forceScrollStyle'>
         {sortedFirst.map( (dt, index)=>{
           let color = dt.good === true ? 'good' : dt.good === false ? 'bad' : 'fine';
           return(
             <div key={index} className='timelineWrap'>
               <dl className={'timelineItem ' + color}>
-                <dt className='timelineItemTitle'>{moment(dt.time).format("YYYY, ddd, MMM Do, h:mm a")}</dt>
+                <dt className='timelineItemTitle'>{moment(dt.time).format("MMM Do, YYYY, h:mm a")}</dt>
                 <dd className='timelineItemBody cap'>
                   {dt.step} <i className='breath'></i>
                   <button
@@ -30,6 +28,7 @@ const FirstsTimeline = ({ id, batch, doneFirsts })=> {
               </dl>
             </div>
         )})}
+        <div className='timelineEnd'></div>
       </div>
       <div className='timelineListFooter centre'><i className='fas fa-chevron-down fa-lg fa-fw blueT'></i></div>
     </div>

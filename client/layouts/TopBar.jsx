@@ -47,34 +47,32 @@ const TopBar = ({ ready, user, active, org, app, link })=> {
           <span className='icontext'>Activity</span>
         </a>
       </span>
-      <span className={ link === 'dash' ? 'primeNavItem onPNv' : 'primeNavItem' }>
-        <a href='/dashboard'>
-          <i className='fas fa-tachometer-alt fa-lg'></i>
-          <span className='icontext'>Dashboard</span>
-        </a>
-      </span>
+      <RoleCheck role={'nightly'}>
+        <span className={ link === 'dash' ? 'primeNavItem onPNv' : 'primeNavItem' }>
+          <a href='/dashboard'>
+            <i className='fas fa-tachometer-alt fa-lg'></i>
+            <span className='icontext'>Dashboard</span>
+          </a>
+        </span>
+      </RoleCheck>
       <span className={ link === 'comp' ? 'primeNavItem onPNv' : 'primeNavItem' }>
         <a href='/starfish'>
           <i className='fas fa-microchip fa-lg'></i>
           <span className='icontext'>Parts Search</span>
         </a>
       </span>
-      <RoleCheck role={'nightly'}>
-        <span className={ link === 'prod' ? 'primeNavItem onPNv' : 'primeNavItem' }>
-          <a href='/production'>
-            <i className='fas fa-paper-plane fa-lg'></i>
-            <span className='icontext'>Production</span>
-          </a>
-        </span>
-      </RoleCheck>
-      <RoleCheck role={'nightly'}>
-        <span className={ link === 'data' ? 'primeNavItem onPNv' : 'primeNavItem' }>
-          <a href='/data'>
-            <i className='fas fa-search fa-lg'></i>
-            <span className='icontext'>Explore</span>
-          </a>
-        </span>
-      </RoleCheck>
+      <span className={ link === 'prod' ? 'primeNavItem onPNv' : 'primeNavItem' }>
+        <a href='/production'>
+          <i className='fas fa-paper-plane fa-lg'></i>
+          <span className='icontext'>Production</span>
+        </a>
+      </span>
+      <span className={ link === 'data' ? 'primeNavItem onPNv' : 'primeNavItem' }>
+        <a href='/data'>
+          <i className='fas fa-search fa-lg'></i>
+          <span className='icontext'>Explore</span>
+        </a>
+      </span>
       <span className={ link === 'app' ? 'primeNavItem onPNv' : 'primeNavItem' }>
         <a href='/app'>
           <i className='fas fa-sliders-h fa-lg'></i>

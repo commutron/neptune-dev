@@ -28,7 +28,7 @@ export default class NoteLine extends Component	{
     
     if(this.props.plain && !dt.content) {
       return (
-        <div>
+        <div className='noteCard'>
           {action}
         </div>
       );
@@ -36,7 +36,7 @@ export default class NoteLine extends Component	{
     
     if(this.props.plain) {
       return (
-        <div>
+        <div className='noteCard'>
           {dt.content}
           <div className='footerBar'>
             {action}
@@ -48,7 +48,7 @@ export default class NoteLine extends Component	{
     
     if(!dt.content) {
       return (
-        <fieldset className='low'>
+        <fieldset className='noteCard low'>
           <legend className='cap'>{name} notes</legend>
           {action}
         </fieldset>
@@ -56,7 +56,7 @@ export default class NoteLine extends Component	{
     }
     
     return (
-      <fieldset className='low'>
+      <fieldset className='noteCard low'>
         <legend className='cap'>{name} notes</legend>
         {dt.content}
         <div className='footerBar'>

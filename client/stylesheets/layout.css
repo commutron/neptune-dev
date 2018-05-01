@@ -17,6 +17,22 @@ main {
   z-index: 8;
 }
 
+.forceScrollStyle::-webkit-scrollbar {
+  width: 12px;
+}
+.forceScrollStyle::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(10,10,0,0.8); 
+  -moz-box-shadow: inset 0 0 6px rgba(10,10,10,0.8);
+  box-shadow: inset 0 0 6px rgba(10,10,10,0.8); 
+  border-radius: 10px;
+}
+.forceScrollStyle::-webkit-scrollbar-thumb {
+  border-radius: 0px;
+  -webkit-box-shadow: inset 0 0 6px rgb(255,255,255);
+  -moz-box-shadow: inset 0 0 6px rgb(255,255,255);
+  box-shadow: inset 0 0 6px rgb(255,255,255);
+}
+
 .ice {
   position: fixed;
   z-index: 10;

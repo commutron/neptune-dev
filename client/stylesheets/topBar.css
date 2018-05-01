@@ -96,7 +96,6 @@ input::-webkit-calendar-picker-indicator {
 }
 .primeNavItem {
   align-items: flex-end;
-  align-items: center;
 }
 .primeNavLogo {
   align-items: center;

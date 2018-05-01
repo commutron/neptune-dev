@@ -14,6 +14,10 @@ const UndoFinish = ({ id, serial, finishedAt, noText })=>	{
           console.log(error);
         if(reply) {
           Bert.alert(Alert.success);
+          Meteor.call('pushUndoFinish', id, serial, (error)=>{
+            if(error)
+              console.log(error);
+          });
         }else{
           Bert.alert(Alert.warning);
         }

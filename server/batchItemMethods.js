@@ -504,7 +504,7 @@ Meteor.methods({
   
   //  Undo a Finish
   pullFinish(batchId, serial) {
-    if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
+    if(Roles.userIsInRole(Meteor.userId(), 'finish')) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': serial}, {
         $pull : {
           'items.$.history': { key: 'f1n15h1t3m5t3p' }
@@ -512,11 +512,29 @@ Meteor.methods({
         $set : { 
   			  'items.$.finishedAt': false,
   			  'items.$.finishedWho': false
-  			}
+  			},
       });
         return true;
     }else{
       return false;
+    }
+  },
+  pushUndoFinish(batchId, serial) {
+    if(Roles.userIsInRole(Meteor.userId(), 'finish')) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': serial}, {
+        $push : { 
+  			  'items.$.history': {
+  			    key: new Meteor.Collection.ObjectID().valueOf(),
+            step: 'undo finish',
+            type: 'undo',
+            good: false,
+            time: new Date(),
+            who: Meteor.userId(),
+            comm: '',
+            info: false
+  			  }}});
+    }else{
+      null;
     }
   },
   

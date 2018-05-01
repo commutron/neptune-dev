@@ -8,11 +8,14 @@ const NonConTypePie = ({ ncTypes, fullWidth })=> {
   
   let total = Array.from(ncTypes, x => x.value).reduce((x,y)=> x + y);
   let ncTypesOrder = ncTypes.sort((a, b)=> { return b.value - a.value });
-  //let med = Math.floor(ncTypesOrder.length / 2);
-  //let median = ncTypesOrder[med];
-  //let labelLine = !median ? total / ncTypes.length : median.value;
-  let labelLine = Math.floor(total / ncTypes.length);
-  console.log(labelLine);
+  
+  let mean = Math.floor( total / ncTypes.length );
+  
+  let ncTypesNoZero = Array.from(ncTypes, x => x.value > 0 && x);
+  let medianTry = ncTypesNoZero[Math.floor(ncTypesNoZero.length / 2)];
+  let median = !medianTry ? mean : medianTry.value;
+  
+  console.log(median, mean);
   let cntr = '<span class="centre smCap"><i class="big redT">' + 
                 total + '</i><i>Total</i></span>';
                     
@@ -20,7 +23,7 @@ const NonConTypePie = ({ ncTypes, fullWidth })=> {
     series: ncTypesOrder,
     labels: Array.from(ncTypesOrder, 
                         x => { 
-                          let name = x.value > labelLine ? x.meta : ' '; 
+                          let name = x.value > median ? x.meta : ' '; 
                             return name })
   };
   
