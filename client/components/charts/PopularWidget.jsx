@@ -45,12 +45,15 @@ export default class NonConRate extends Component {
     
     const countLine = Array.from(counts, x => x.value).reduce((x,y)=> x + y) / counts.length;
     const groupLine = Array.from(groups, x => x.value).reduce((x,y)=> x + y) / groups.length;
+    
+    let medianTry = counts[Math.floor(counts.length / 2)];
+    let median = !medianTry ? countLine : medianTry.value;
   
     let dataOne = {
       series: counts,
       labels: Array.from(counts, 
                 x => { 
-                  let name = x.value > countLine ? x.meta.toUpperCase() : ' '; 
+                  let name = x.value > median ? x.meta.toUpperCase() : ' '; 
                   return name })
     };
 
@@ -58,7 +61,7 @@ export default class NonConRate extends Component {
       series: groups,
       labels: Array.from(groups,
                 x => { 
-                  let name = x.value > groupLine ? x.meta.toUpperCase() : ' ';
+                  let name = x.value > ( groupLine % 2 ) ? x.meta.toUpperCase() : ' ';
                   return name })
     };
     
