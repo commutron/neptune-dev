@@ -7,7 +7,7 @@ function updateSpeed(value) {
 const UserSpeedSet = ()=> {
   let current = !Meteor.user().unlockSpeed ? 2000 : Meteor.user().unlockSpeed; 
   return(
-    <label><i>Step Unlock Speed </i>
+    <label><i>Step Unlock Speed </i><br />
       <select
         ref={(i)=> this.speed = i}
         onChange={()=> updateSpeed(speed.value)}

@@ -170,9 +170,10 @@ export const ChangeAutoScan = ()=> {
     });
   }
   let current = Meteor.user().autoScan ? 'OFF' : 'ON';
+  let color = Meteor.user().autoScan ? 'clearRed' : 'clearGreen';
   return(
     <button
-      className='action clean clearBlue'
+      className={'action clean ' + color}
       onClick={()=>handle()}
     >Turn Auto Scan {current}</button>
   );
@@ -186,9 +187,10 @@ export const ChangeMinAction = ()=> {
     });
   }
   let current = Meteor.user().miniAction ? 'OFF' : 'ON';
+  let color = Meteor.user().miniAction ? 'clearRed' : 'clearGreen';
   return(
     <button
-      className='action clean clearBlue'
+      className={'action clean ' + color}
       onClick={()=>handle()}
     >Turn Mini Actions {current}</button>
   );

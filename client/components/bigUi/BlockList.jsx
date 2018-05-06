@@ -6,14 +6,14 @@ import BlockForm from '../forms/BlockForm.jsx';
 import {SolveBlock} from '../forms/BlockForm.jsx';
 import {RemoveBlock} from '../forms/BlockForm.jsx';
 
-const BlockList = ({ id, data, lock })=> {
+const BlockList = ({ id, data, lock, expand })=> {
   let blocks = data.sort((s1, s2) => {return s1.time < s2.time});
   if(blocks.length > 0) {
     return (
       <div className='blockerList'>
           {blocks.map( (entry, index)=>{
             return (
-              <BlockRow key={index} entry={entry} id={id} lock={lock} />
+              <BlockRow key={index} entry={entry} id={id} lock={lock} expand={expand} />
           )})}
       </div>
     );
@@ -23,33 +23,34 @@ const BlockList = ({ id, data, lock })=> {
   );
 };
 
-const BlockRow = ({ entry, id, lock })=> {
+const BlockRow = ({ entry, id, lock, expand })=> {
   let dt = entry;
   let unlock = Roles.userIsInRole(Meteor.userId(), 'run');
   let solved = dt.solve && typeof dt.solve === 'object' &&
     <i>
-      {dt.solve.action} - {moment(dt.solve.time).calendar()} by <UserNice id={dt.solve.who} />
+      {moment(dt.solve.time).calendar()} <br /> {dt.solve.action} - <UserNice id={dt.solve.who} />
     </i>;
   return(
-		<div className='blockerCard'>
-		  <div className='blockerHead'>
-		    <span>{moment(dt.time).calendar()} by <UserNice id={dt.who} /></span>
-		    <span>
-  		    {unlock && !lock && !solved &&
-            <SolveBlock id={id} blKey={dt.key} noText={true} />}
-          {!lock && !solved &&
-            <BlockForm id={id} edit={dt} smIcon={true} noText={true} />}
-          {unlock && !lock && !solved &&
-            <RemoveBlock id={id} blKey={dt.key} noText={true} />}
-        </span>
-		  </div>
+		<fieldset className='blockerCard'>
+		  <legend className='blockerHead'>
+		    <span>{moment(dt.time).calendar()}</span>
+		    {expand &&
+  		    <span>
+    		    {unlock && !lock && !solved &&
+              <SolveBlock id={id} blKey={dt.key} noText={true} />}
+            {!lock && !solved &&
+              <BlockForm id={id} edit={dt} smIcon={true} noText={true} />}
+            {unlock && !lock && !solved &&
+              <RemoveBlock id={id} blKey={dt.key} noText={true} />}
+          </span>}
+		  </legend>
       <div>
-        {dt.block}
+        {dt.block} - <UserNice id={dt.who} />
       </div>
       <div className='blockerSolve'>
         {solved}
       </div>
-    </div>
+    </fieldset>
   );
 };
 

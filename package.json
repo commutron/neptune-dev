@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.46",
+    "@fortawesome/fontawesome": "^1.1.7",
     "@fortawesome/react-fontawesome": "0.0.18",
     "babel-runtime": "^6.26.0",
     "bcrypt": "^1.0.3",

@@ -9,13 +9,10 @@ Accounts.onLogout( ()=>{
 });
 
 function brr() {
-  //let loginTab = Session.get('Meteor.loginButtons.dropdownVisible');
-  //Session.set('Meteor.loginButtons.dropdownVisible', !loginTab);
   Meteor.logout();
 }
 
-const Chill = ({ name })=> {
-  let shortname = name ? name.split('.')[0] : '';
+const Chill = ()=> {
   return (
     <span className='actionIconWrap' title='Sign Out'>
       <input
@@ -26,7 +23,7 @@ const Chill = ({ name })=> {
         readOnly />
         <label htmlFor='exitToggle' id='exitSwitch' className='navIcon'>
           <i className='fas fa-sign-out-alt fa-lg' aria-hidden='true'></i>
-          <span className='icontext cap'>{shortname}</span>
+          <span className='icontext cap'>Sign-out</span>
         </label>
     </span>
   );

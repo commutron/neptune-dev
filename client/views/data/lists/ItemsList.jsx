@@ -21,9 +21,12 @@ export default class ItemsList extends Component	{
   setFilter(rule) {
     this.setState({ filter: rule });
   }
-  setAdvancedFilter(rule) {
-    this.setState({ advancedKey: rule.step });
-    this.setState({ advancedTime: rule.time });
+  setStepFilter(rule) {
+    let realRule = rule === 'false' ? false : rule;
+    this.setState({ advancedKey: realRule });
+  }
+  setTimeFilter(rule) {
+    this.setState({ advancedTime: rule });
   }
   setTextFilter(rule) {
     this.setState({ textString: rule.toLowerCase() });
@@ -61,32 +64,58 @@ export default class ItemsList extends Component	{
     return niceSteps;
   }
 
-  advancedFilter() {
+  advancedStepFilter() {
     filtrA = [];
     for(let z of this.props.batchData.items) {
       let match = false;
-      !this.state.advancedTime ?
-        match = z.history.find( x => x.key === this.state.advancedKey )
-      :
-        match = z.history.find( 
-                  x => x.key === this.state.advancedKey && 
-                  moment(moment(x.time).format('YYYY-MM-DD')).isSame(this.state.advancedTime) === true );
+      if(this.state.advancedKey == false) {
+        match = true;
+      }else{
+        match = z.history.find( x => x.key === this.state.advancedKey );
+      }
       !match ? null : filtrA.push(z.serial);
     }
     return filtrA;
   }
-
+  
+  advancedTimeFilter() {
+    filtrA = [];
+    for(let z of this.props.batchData.items) {
+      let match = false;
+      if(!this.state.advancedTime || this.state.advancedTime === '') {
+        match = true;
+      }else if(this.state.filter === 'noncons') {
+        match = this.props.batchData.nonCon.find( x => x.serial === z.serial &&
+                  moment(moment(x.time).format('YYYY-MM-DD'))
+                    .isSame(this.state.advancedTime, 'day') === true );
+      }else{
+        match = z.history.find( x =>
+                  moment(moment(x.time).format('YYYY-MM-DD'))
+                    .isSame(this.state.advancedTime, 'day') === true );
+      }
+      !match ? null : filtrA.push(z.serial);
+    }
+    return filtrA;
+  }
+  
   render() {
     
+    const filter = this.state.filter;
+    const advancedKey = this.state.advancedKey;
+    const advancedTime = this.state.advancedTime;
+    const textString = this.state.textString;
+      
     const b = this.props.batchData;
     
     const scrap = b ? this.scraps() : [];
     
     const steps = this.flowSteps();
     
-    const matchList = this.advancedFilter();
+    const matchStep = this.advancedStepFilter();
     
-    const f = this.state.filter;
+    const matchTime = this.advancedTimeFilter();
+    
+    const f = filter;
     let preFilter = 
       f === 'done' ?
       b.items.filter( x => x.finishedAt !== false ) :
@@ -103,14 +132,17 @@ export default class ItemsList extends Component	{
       f === 'scrap' ?
       b.items.filter( x => scrap.includes(x.serial) === true ) :
       b.items;
-      
-    let stepTimeFilter = this.state.advancedKey ?
-                   preFilter.filter( z => matchList.includes(z.serial) === true )
-                   :
-                   preFilter;
-    let textFilter = stepTimeFilter.filter( 
-                      tx => tx.serial.toLowerCase().includes(this.state.textString) === true );
-    let showListOrder = textFilter.sort( (x,y)=> x.serial - y.serial);
+    
+    let textFilter = preFilter.filter( 
+                      tx => tx.serial.toLowerCase().includes(textString) === true );
+                      
+    let stepFilter = advancedKey == false ? textFilter :
+                      textFilter.filter( z => matchStep.includes(z.serial) === true );
+                         
+    let timeFilter = !advancedTime || advancedTime == '' ? stepFilter :
+                      stepFilter.filter( z => matchTime.includes(z.serial) === true );
+                      
+    let showListOrder = timeFilter.sort( (x,y)=> x.serial - y.serial);
 
     return (
       <AnimateWrap type='cardTrans'>
@@ -119,10 +151,10 @@ export default class ItemsList extends Component	{
             <FilterItems
               title={b.batch}
               total={showListOrder.length}
-              advancedTitle='Step'
               advancedList={steps}
               onClick={e => this.setFilter(e)}
-              onChange={e => this.setAdvancedFilter(e)}
+              onStepChange={e => this.setStepFilter(e)}
+              onTimeChange={e => this.setTimeFilter(e)}
               onTxtChange={e => this.setTextFilter(e)} />
           </div>
           {showListOrder.map( (entry, index)=> {

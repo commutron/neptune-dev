@@ -11,7 +11,7 @@ import NonConMiniSatus from '/client/components/charts/NonConMiniStatus.jsx';
 import NonConMiniTops from '/client/components/bigUi/NonConMiniTops.jsx';
 import TagsModule from '../../../components/bigUi/TagsModule.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';
-import BlockNotes from '../../../components/smallUi/BlockNotes.jsx';
+import BlockList from '../../../components/bigUi/BlockList.jsx';
 
 export default class BatchCard extends Component	{
   
@@ -26,19 +26,11 @@ export default class BatchCard extends Component	{
     
     const flow = this.props.flow;
     const flowAlt = this.props.flowAlt;
+    const done = b.finishedAt !== false;
     
     const progCounts = this.props.progCounts;
     const expand = this.props.expand;
-    
-    //const v = w.versions.find( x => x.versionKey === b.versionKey );
-    
-    /*
-    const flow = w.flows.find( x => x.flowKey === b.river);
-    const riverFlow = flow ? flow.flow : [];
-    
-    const flowAlt = w.flows.find( x => x.flowKey === b.riverAlt );
-    const riverAltFlow = flowAlt ? flowAlt.flow : [];
-    */
+
     let iready = b.items.length === 0;
     
     let warn = b.blocks.filter( x => x.solve === false ).length;
@@ -56,14 +48,14 @@ export default class BatchCard extends Component	{
           <div className='cardTitle'>
             <i className={showWarn}></i>
             <i className='bigger'>{b.batch}</i>
-            <label htmlFor='exBatch' title='view in explore'>
-              <button
-                id='exBatch'
-                title='explore'
-                onClick={()=>FlowRouter.go(exploreLink)}>
-              </button>
-                <i className='fas fa-search'></i>
-            </label>
+            <button
+              id='exBatch'
+              title='View this in explore'
+              className='exLeap'
+              onClick={()=>FlowRouter.go(exploreLink)}>
+              {expand && <i className='small'>Explore </i>}
+              <i className='fas fa-rocket fa-fw'></i>
+            </button>
           </div>
           
           {iready ?
@@ -78,14 +70,13 @@ export default class BatchCard extends Component	{
             </h2>
           :null}
           
-          
-          {/*!expand ?*/}
             <Tabs
               tabs={[
-                <i className='fas fa-info-circle' data-fa-transform='down-2' title='Info'></i>, 
-                <i className='fas fa-tasks' data-fa-transform='down-2' title='Progress'></i>, 
-                <i className='fas fa-thumbs-down' data-fa-transform='down-2' title='NonConformances'></i>
+                <i className='fas fa-info-circle fa-fw' data-fa-transform='down-2' title='Info'></i>, 
+                <i className='fas fa-tasks fa-fw' data-fa-transform='down-2' title='Progress'></i>, 
+                <i className='fas fa-thumbs-down fa-fw' data-fa-transform='down-2' title='NonConformances'></i>
               ]}
+              names={expand ? ['Info', 'Progress', 'NonCons'] : false}
               wide={true}
               stick={false}
               hold={true}
@@ -99,7 +90,7 @@ export default class BatchCard extends Component	{
                   tagOps={a.tagOption} />
                 <br />
                 <NoteLine entry={b.notes} id={b._id} versionKey={false} />
-                <BlockNotes data={b.blocks} />
+                <BlockList id={b._id} data={b.blocks} lock={done} expand={expand} />
               </div>
               
               <div className='space cap'>

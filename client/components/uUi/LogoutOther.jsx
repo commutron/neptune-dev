@@ -10,9 +10,9 @@ function brr() {
     
 const LogoutOther = () => (
   <button
-    className='smallAction clear yellowT'
+    className='action clean clearBlue'
     onClick={brr}
-  >Logout of all other clients</button>
+  >Sign-out All Other Terminals</button>
 );
 
 export default LogoutOther;

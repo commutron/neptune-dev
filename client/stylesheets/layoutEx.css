@@ -64,6 +64,7 @@
 .cookieNavEx {
   grid-area: cookieNav;
   background-color: var(--black);
+  z-index: 8;
 }
 
 .traverseContent {
@@ -115,12 +116,13 @@
   flex-wrap: nowrap;
   align-items: center;
   height: inherit;
+  padding: 0 8px 0 0;
 }
 .cookieCrumb {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  align-items: stretch;
+  align-items: center;
   height: 32px;
   background-color: var(--black);
   overflow: hidden;
@@ -132,9 +134,9 @@
   min-width: 64px;
   max-width: 256px;
   font-size: 1rem;
-  line-height: 1rem;
+  height: 100%;
   font-weight: 600;
-  padding: 0 0 0 5px;
+  padding: 0 2px;
   overflow: hidden;
   word-break: keep-all;
   text-overflow: ellipsis;
@@ -157,8 +159,9 @@
 	vertical-align: top;
 	width: 2em;
 }
-.cookieCrumb:hover > .cookie {
-  color: var(--clouds);
+.cookie:hover {
+  color: var(--black);
+  background-color: var(--silver);
 }
 .cookieGap {
   border-style: solid;

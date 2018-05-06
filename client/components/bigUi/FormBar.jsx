@@ -30,10 +30,10 @@ export default class FormBar extends Component	{
     const users = this.props.users;
     const app = this.props.app;
     
-    let tempStyle = !Roles.userIsInRole(Meteor.userId(), 'nightly') ? 'dashAction' : 'proActionForm';
+    //let tempStyle = !Roles.userIsInRole(Meteor.userId(), 'nightly') ? 'dashAction' : 'proActionForm';
     
     return(
-      <div className={tempStyle}>
+      <div className='proActionForm'>
         {b && i ?
           b.finishedAt !== false || i.finishedAt !== false ?
           null :
@@ -56,7 +56,8 @@ export default class FormBar extends Component	{
                 id='firstselect'
                 name='formbarselect'
                 className='radioIcon'
-                onChange={()=>this.setState({ showNC: false })} />
+                onChange={()=>this.setState({ showNC: false })}
+                disabled={!Roles.userIsInRole(Meteor.userId(), 'verify')} />
               <i className='fas fa-play-circle formBarIcon'></i>
               <span className='actionIconText'>First</span>
             </label>
@@ -82,8 +83,6 @@ export default class FormBar extends Component	{
           : null}
         </div>
         <div className='footRight'>
-          {!Roles.userIsInRole(Meteor.userId(), 'nightly') &&
-            <IkyToggle />}
         </div>
       </div>
     );

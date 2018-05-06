@@ -132,8 +132,7 @@ export default class FirstForm extends Component	{
 		  if(error)
 		    console.log(error);
 		  if(reply) {
-     		const findBox = document.getElementById('lookup');
-			  findBox.focus();
+     		//document.getElementById('lookup').focus();
 			  this.props.doneClose();
 			 }else{
 			   Bert.alert(Pref.blocked, 'danger');
@@ -311,7 +310,7 @@ export default class FirstForm extends Component	{
 			    <span className='middle'>
             <button
               type='button'
-              title='Nope, repeat First-Off'
+              title='No Good, repeat First-Off'
               className='roundActionIcon firstBad'
               ref={(i)=> this.goBad = i}
               onClick={this.notgood.bind(this)}>
@@ -320,7 +319,7 @@ export default class FirstForm extends Component	{
             <span className='breath'></span>
             <button
               type='button'
-              title='Fine, pass First-Off'
+              title='Good First-Off, Continue Process'
               className='roundActionIcon firstGood'
               ref={(i)=> this.goFine = i}
               disabled={secondOpinion}
@@ -330,7 +329,7 @@ export default class FirstForm extends Component	{
             <span className='breath'></span>
             <button
               type='button'
-              title='Great, pass First-Off and Inspection'
+              title='Great First-Off and Pass Inspection'
               className='roundActionIcon firstBetter'
               ref={(i)=> this.go = i}
               disabled={secondOpinion}

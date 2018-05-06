@@ -260,7 +260,7 @@ details {
   font-size: 1em;
 	border: 0;
   margin: 0;
-  padding: 0;
+  padding: 0 0 4px 0;
   text-transform: capitalize;
   -moz-box-shadow:    inset 0 -1em 1em -0.5em rgb(48,48,48);
   -webkit-box-shadow: inset 0 -1em 1em -0.5em rgb(48,48,48);

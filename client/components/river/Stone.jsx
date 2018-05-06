@@ -33,18 +33,19 @@ export default class Stone extends Component	{
   
   reveal() {
     this.setState({show: !this.state.show});
-    document.getElementById('lookup').focus();
+    //document.getElementById('lookup').focus();
   }
   
   unlock() {
   	let speed = !Meteor.user().unlockSpeed ? 2000 : Meteor.user().unlockSpeed; 
     Meteor.setTimeout(()=> {
-    	const first = this.props.type === 'first';
     	const inspect = this.props.type === 'inspect';
-    	const inspector = first || inspect ? true : false;
-    	const test = this.props.type === 'test' ? true : false;
-    	const finish = this.props.type === 'finish' ? true : false;
-    	if(inspector && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
+    	const first = this.props.type === 'first';
+    	const test = this.props.type === 'test';
+    	const finish = this.props.type === 'finish';
+    	if(inspect && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
+    		null;
+    	}else if(first && !Roles.userIsInRole(Meteor.userId(), 'verify')) {
     		null;
     	}else if(test && !Roles.userIsInRole(Meteor.userId(), 'test')) {
     		null;
@@ -69,7 +70,7 @@ export default class Stone extends Component	{
 	    if(error)
 		    console.log(error);
 			if(reply) {
-			  document.getElementById('lookup').focus();
+			  //document.getElementById('lookup').focus();
 		  }else{
 		    Bert.alert(Pref.blocked, 'danger');
 		  }
@@ -84,17 +85,22 @@ export default class Stone extends Component	{
     const sKey = this.props.sKey;
 		const step = this.props.step;
     const type = this.props.type;
-    const comm = doComm ? prompt('Enter A Comment', '').trim() : '';
+    const comm = doComm ? prompt('Enter A Comment', '') : '';
     const more = shipFail ? 'ship a failed test' : false;
-		Meteor.call('addTest', id, bar, sKey, step, type, comm, pass, more, (error, reply)=>{
-	    if(error)
-		    console.log(error);
-			if(reply) {
-			  document.getElementById('lookup').focus();
-		  }else{
-		    Bert.alert(Pref.blocked, 'danger');
-		  }
-		});
+    if(pass === false && ( !comm || comm == '' ) ) {
+    	this.unlock();
+    }else{
+			Meteor.call('addTest', id, bar, sKey, step, type, comm, pass, more, (error, reply)=>{
+		    if(error)
+			    console.log(error);
+				if(reply) {
+					pass === false && this.unlock();
+				  //document.getElementById('lookup').focus();
+			  }else{
+			    Bert.alert(Pref.blocked, 'danger');
+			  }
+			});
+    }
   }
 
   //// Action for marking the board as complete
@@ -109,7 +115,7 @@ export default class Stone extends Component	{
 		  if(error)
 		    console.log(error);
 		  if(reply) {
-		    document.getElementById('lookup').focus();
+		    //document.getElementById('lookup').focus();
 		  }else{
 		    Bert.alert(Pref.blocked, 'danger');
 		  }

@@ -94,7 +94,7 @@ main {
   width: auto;
   background-color: black;
   background-color: var(--black);
-  z-index: 8;
+  z-index: 7;
 }
 
 .lAlign {
@@ -147,7 +147,7 @@ main {
 
 .gridHeaderSearch {
   grid-area: headerSearch;
-  z-index: 9;
+  z-index: 8;
   -webkit-box-shadow: 0 0 15px 0.5px rgb(0,0,0);
   -moz-box-shadow:    0 0 15px 0.5px rgb(0,0,0);
   box-shadow:         0 0 15px 0.5px rgb(0,0,0);
@@ -324,7 +324,7 @@ main {
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 9;
+  z-index: 10;
   background: rgb(0,0,0);
   background: rgba(0,0,0,0.5);
   transition: opacity 200ms;
@@ -332,26 +332,38 @@ main {
 }
 
 .popup {
-  margin: 5vh auto 5vh auto;
+  margin: 48px auto 5vh auto;
   padding: 25px 25px 0 25px;
   background: rgb(0,0,0);
   background: rgba(236, 240, 241, 1);
   max-width: 70%;
-  height: 85vh;
+  height: 85%;
   position: relative;
   z-index: 10;
   border: 2px solid rgb(0,0,0);
-  -webkit-box-shadow: 0 0 100px 200px rgba(0,0,0,0.5);
-  -moz-box-shadow:    0 0 100px 200px rgba(0,0,0,0.5);
-  box-shadow:         0 0 100px 200px rgba(0,0,0,0.5);
+  -webkit-box-shadow: 0 0 100px 500px rgba(0,0,0,0.5);
+  -moz-box-shadow:    0 0 100px 500px rgba(0,0,0,0.5);
+  box-shadow:         0 0 100px 500px rgba(0,0,0,0.5);
+}
+.popupHead {
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  font-size: 1.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+.popupContent {
+  height: calc(100% - 25px - 40px);
+  overflow-y: auto;
+  margin: 8px 0 0 0;
+  padding: 8px 0;
+  border-top: 1px dotted black;
+  border-bottom: 1px dotted black;
 }
 
-.content {
-  min-height: 50%;
-  max-height: 87%;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
+
 
 @media screen and (max-width: 1150px){
   .popup{

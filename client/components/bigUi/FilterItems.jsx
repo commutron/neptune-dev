@@ -1,15 +1,24 @@
 import React from 'react';
 
-const FilterItems = ({ advancedTitle, advancedList, total, onClick, onChange, onTxtChange })=>	{
+const FilterItems = ({ 
+  advancedList,
+  total,
+  onClick,
+  onStepChange,
+  onTimeChange,
+  onTxtChange,
+  disableTime
+})=>	{
 
   function changeBasicFilter() {
     onClick(this.basic.value);
   }
-  
-  function changeAdvancedFilter() {
-    onChange({step: this.un.value, time: this.day.value});
+  function changeStepFilter() {
+    onStepChange(this.step.value);
   }
-  
+  function changeTimeFilter() {
+    onTimeChange(this.day.value);
+  }
   function changeTextFilter() {
     onTxtChange(this.text.value);
   }
@@ -51,40 +60,37 @@ const FilterItems = ({ advancedTitle, advancedList, total, onClick, onChange, on
         </label>
       </div>
         
-      {advancedTitle ?
-        <div>
-          <label className='fltrsInput'>
-            <i className='fas fa-history fa-fw'></i>
-            <select
-              ref={(i)=> this.un = i}
-              onChange={(e)=>changeAdvancedFilter(e)}>
-              <option>Any</option>
-              {advancedList.map( (entry, index)=>{
-                return(
-                  <option
-                    key={index}
-                    value={entry.key}
-                  >{entry.step === entry.type ? 
-                    entry.step : 
-                    entry.step + ' ' + entry.type}
-                  </option>
-                );
-              })}
-            </select>
-          </label>
-          <label className='fltrsInput'>
-            <i className='far fa-calendar-alt fa-fw'></i>
-            <input
-              type='date'
-              ref={(i)=>this.day = i}
-              onChange={(e)=>changeAdvancedFilter(e)} />
-          </label>
+      <div>
+        <label className='fltrsInput'>
+          <i className='fas fa-history fa-fw'></i>
+          <select
+            ref={(i)=> this.step = i}
+            onChange={(e)=>changeStepFilter(e)}>
+            <option value={false}>Any</option>
+            {advancedList.map( (entry, index)=>{
+              return(
+                <option
+                  key={index}
+                  value={entry.key}
+                >{entry.step === entry.type ? 
+                  entry.step : 
+                  entry.step + ' ' + entry.type}
+                </option>
+              );
+            })}
+          </select>
+        </label>
+        <label className='fltrsInput'>
+          <i className='far fa-calendar-alt fa-fw'></i>
+          <input
+            type='date'
+            ref={(i)=>this.day = i}
+            onChange={(e)=>changeTimeFilter(e)}
+            disabled={disableTime} />
+        </label>
         </div>
-      : null}
         
-      <hr />
       <p className='centreText'>Total: {total}</p>
-      <br />
     </details>
   );
 };

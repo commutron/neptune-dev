@@ -338,7 +338,7 @@ Meteor.methods({
   },
 
   addFirst(batchId, bar, key, step, good, whoB, howB, howI, diff, ng) {
-    if(!Roles.userIsInRole(Meteor.userId(), 'inspect')) {
+    if(!Roles.userIsInRole(Meteor.userId(), 'verify')) {
       return false;
     }else{
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {

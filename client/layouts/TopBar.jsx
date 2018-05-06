@@ -6,12 +6,13 @@ import RoleCheck from '/client/components/utilities/RoleCheck.js';
 import Spin from '../components/uUi/Spin.jsx';
 import Freeze from '../components/tinyUi/Freeze.jsx';
 //import InitialSetup from '../views/InitialSetup.jsx';
+import UserSlide from '/client/views/app/UserSlide.jsx';
 import Chill from '../components/tinyUi/Chill.jsx';
 import ExternalLink from '../components/uUi/ExternalLink.jsx';
 
 const TopBar = ({ ready, user, active, org, app, link })=> {
       
-  if(!ready || !active || !org || !app) {
+  if(!ready || !active || !user || !org || !app) {
     return (
       <Freeze>
         <Spin color={true} />
@@ -41,53 +42,56 @@ const TopBar = ({ ready, user, active, org, app, link })=> {
             className='logoSVG' />
         </a>
       </span>
-      <span className={ link === 'act' ? 'primeNavItem onPNv' : 'primeNavItem' }>
-        <a href='/activity'>
-          <i className='fas fa-chart-line fa-lg'></i>
-          <span className='icontext'>Activity</span>
-        </a>
-      </span>
-      <RoleCheck role={'nightly'}>
-        <span className={ link === 'dash' ? 'primeNavItem onPNv' : 'primeNavItem' }>
-          <a href='/dashboard'>
-            <i className='fas fa-tachometer-alt fa-lg'></i>
-            <span className='icontext'>Dashboard</span>
-          </a>
-        </span>
-      </RoleCheck>
-      <span className={ link === 'comp' ? 'primeNavItem onPNv' : 'primeNavItem' }>
-        <a href='/starfish'>
-          <i className='fas fa-microchip fa-lg'></i>
-          <span className='icontext'>Parts Search</span>
-        </a>
-      </span>
       <span className={ link === 'prod' ? 'primeNavItem onPNv' : 'primeNavItem' }>
         <a href='/production'>
           <i className='fas fa-paper-plane fa-lg'></i>
           <span className='icontext'>Production</span>
         </a>
       </span>
+      {/*<RoleCheck role='nightly'>
+      <span className={ link === 'gate' ? 'primeNavItem onPNv' : 'primeNavItem' }>
+        <a href='/scangate' disabled={true}>
+          <i className='fas fa-plane fa-lg' data-fa-transform="rotate--45"></i>
+          <span className='icontext'>Scan Gate</span>
+        </a>
+      </span>
+      </RoleCheck>*/}
       <span className={ link === 'data' ? 'primeNavItem onPNv' : 'primeNavItem' }>
         <a href='/data'>
-          <i className='fas fa-search fa-lg'></i>
+          <i className='fas fa-rocket fa-lg'></i>
           <span className='icontext'>Explore</span>
         </a>
       </span>
+      <span className={ link === 'act' ? 'primeNavItem onPNv' : 'primeNavItem' }>
+        <a href='/activity'>
+          <i className='fas fa-chart-line fa-lg'></i>
+          <span className='icontext'>Activity</span>
+        </a>
+      </span>
+      <span className={ link === 'comp' ? 'primeNavItem onPNv' : 'primeNavItem' }>
+        <a href='/starfish'>
+          <i className='fas fa-microchip fa-lg'></i>
+          <span className='icontext'>Parts Search</span>
+        </a>
+      </span>
+      <span className='navSpacer'></span>
+      <RoleCheck role='admin'>
       <span className={ link === 'app' ? 'primeNavItem onPNv' : 'primeNavItem' }>
         <a href='/app'>
           <i className='fas fa-sliders-h fa-lg'></i>
           <span className='icontext'>Settings</span>
         </a>
       </span>
-      <span className='navSpacer'></span>
+      </RoleCheck>
       <span className='primeNavItem'>
         <ExternalLink go={app.helpDocs} title='Help' icon='far fa-question-circle' />
       </span>
       <span className='primeNavItem'>
         <ExternalLink go={app.timeClock} title='Time Clock' icon='far fa-clock' />
       </span>
+      <UserSlide user={user} app={app} />
       <span className='primeNavItem'>
-        <Chill name={user}/>
+        <Chill name={user.username}/>
       </span>
     </div>
   );
@@ -96,7 +100,6 @@ const TopBar = ({ ready, user, active, org, app, link })=> {
 export default withTracker( ({ link }) => {
   const login = Meteor.userId() ? true : false;
   let user = login ? Meteor.user() : false;
-  let name = user ? user.username : false;
   let org = user ? user.org : false;
   const hotSub = login ? Meteor.subscribe('appData') : false;
   if(!login) {
@@ -109,7 +112,7 @@ export default withTracker( ({ link }) => {
     return {
       ready: hotSub.ready(),
       orb: Session.get('now'),
-      user: name,
+      user: user,
       org: org,
       active: Roles.userIsInRole(Meteor.userId(), 'active'),
       app: AppDB.findOne({org: org}),

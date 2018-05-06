@@ -36,17 +36,13 @@ const FilterActive = ({ total, onClick, onTxtChange })=>	{
             ref={(i)=> this.basic = i}
             onChange={(e)=>changeBasicFilter(e)}>
             <option value='all'>All</option>
-            <option value='done'>Finished</option>
+            <option value='done'>Inactive</option>
             <option value='inproc'>In Progress</option>
           </select>
         </label>
       </div>
           
-      <hr />
-      
       <p className='centreText'>Total: {total}</p>
-      
-      <br />
       
     </details>
     

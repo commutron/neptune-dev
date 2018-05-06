@@ -110,8 +110,8 @@ export default class FirstForm extends Component	{
 		  if(error)
 		    console.log(error);
 		  if(reply) {
-     		const findBox = document.getElementById('lookup');
-			  findBox.focus();
+     		//const findBox = document.getElementById('lookup');
+			  //findBox.focus();
 			 }else{
 			   Bert.alert(Pref.blocked, 'danger');
 			 }
@@ -234,27 +234,25 @@ export default class FirstForm extends Component	{
               <span className='balance'>
                 <button
                   type='button'
-                  title='Nope, repeat First-Off'
+                  title='No Good, repeat First-Off'
                   className='roundActionIcon dbblRound firstBad'
                   ref={(i)=> this.goBad = i}
                   disabled={false}
                   onClick={this.notgood.bind(this)}>
                   <i className="fas fa-times fa-4x"></i>
                 </button>
-                <RoleCheck role={'nightly'}>
-                  <button
-                    type='button'
-                    title='Fine, pass First-Off'
-                    className='roundActionIcon dbblRound firstGood'
-                    ref={(i)=> this.goFine = i}
-                    disabled={secondOpinion}
-                    onClick={this.finegood.bind(this)}>
-                    <i className="fas fa-check fa-4x"></i>
-                  </button>
-                </RoleCheck>
                 <button
                   type='button'
-                  title='Great, pass First-Off and Inspection'
+                  title='Good First-Off, continue process'
+                  className='roundActionIcon dbblRound firstGood'
+                  ref={(i)=> this.goFine = i}
+                  disabled={secondOpinion}
+                  onClick={this.finegood.bind(this)}>
+                  <i className="fas fa-check fa-4x"></i>
+                </button>
+                <button
+                  type='button'
+                  title='Great First-Off and Pass Inspection'
                   className='roundActionIcon dbblRound firstBetter'
                   ref={(i)=> this.go = i}
                   disabled={secondOpinion}

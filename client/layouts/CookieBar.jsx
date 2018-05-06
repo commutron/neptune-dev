@@ -79,8 +79,9 @@ const CookieBar = ({ groupData, widgetData, versionData, batchData, itemData, ap
         <span className='cookieCrumb'>
           <button 
             className='cookie'
-            title='view in production'
+            title='View this in production'
             onClick={()=>goPro(itemData.serial)}>
+            {!miniAction && <i className='small'>Production </i>}
             <i className='fas fa-paper-plane fa-lg'></i>
           </button>
         </span>
@@ -89,8 +90,9 @@ const CookieBar = ({ groupData, widgetData, versionData, batchData, itemData, ap
         <span className='cookieCrumb'>
           <button 
             className='cookie'
-            title='view in production'
+            title='View this in production'
             onClick={()=>goPro(batchData.batch)}>
+            {!miniAction && <i className='small'>Production </i>}
             <i className='fas fa-paper-plane fa-lg'></i>
           </button>
         </span>

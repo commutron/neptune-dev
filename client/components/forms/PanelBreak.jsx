@@ -100,6 +100,6 @@ export default class PanelBreak extends Component	{
           </p>
         </form>
       </Model>
-      );
+    );
   }
 }

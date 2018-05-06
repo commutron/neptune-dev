@@ -105,7 +105,7 @@ export class SolveBlock extends Component {
     return(
       <button
         type='button'
-        title='solve this block'
+        title={'Solve this ' + Pref.block}
         className='transparent'
         ref={(i)=> this.go = i}
         onClick={this.addSolve.bind(this)}
@@ -135,7 +135,7 @@ export class RemoveBlock extends Component {
     return(
       <button
         type='button'
-        title='remove this block'
+        title={'Remove this ' + Pref.block}
         className='transparent'
         onClick={this.remove.bind(this)}
         disabled={this.props.lock}>

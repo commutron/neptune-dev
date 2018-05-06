@@ -650,7 +650,6 @@
 .blockerList {
   width: 100%;
   margin: 10px 0;
-  border-top: 3px solid var(--sunflower);
 }
 .blockerCard {
   margin-top: 5px;
@@ -829,7 +828,8 @@
   padding: 0 5px;
 }
 .fltrs summary::-webkit-details-marker {
-  display: none
+  display: none;
+  -moz-display: block;/*maybe*/
 }
 
 .fltrs input[type='checkbox'], .fltrs input[type='radio'] {
@@ -1051,7 +1051,7 @@
   left: 0px;
   height: 5px;
   width: 20px;
-  border-bottom: 5px dashed var(--peterriver);
+  border-bottom: 5px solid var(--peterriver);
 }
 .timelineWrap:nth-child(even):before {
   content: "";
@@ -1061,7 +1061,7 @@
   left: 0px;
   height: 5px;
   width: 20px;
-  border-bottom: 5px dashed var(--peterriver);
+  border-bottom: 5px solid var(--peterriver);
 }
 .timelineItemTitle {
   padding: 5px 10px 5px 10px;
@@ -1074,11 +1074,11 @@
 .timelineItem.good .timelineItemTitle { 
   background-color: var(--nephritis) }
 .timelineItem.fine .timelineItemTitle { 
-  background-color: var(--belizeHole) }
+  background-color: var(--orange) }
 .timelineItem.bad .timelineItemTitle { 
   background-color: var(--pomegranate) }
 .timelineItem.good { background-color: var(--nephritisfade) }
-.timelineItem.fine { background-color: var(--belizeHolefade) }
+.timelineItem.fine { background-color: var(--orangefade) }
 .timelineItem.bad { background-color: var(--pomegranatefade) }
 
 .timelineListFooter {

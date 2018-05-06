@@ -17,7 +17,6 @@ export default class NoteLine extends Component	{
   render() {
 
     let dt = this.props.entry;
-    let name = this.props.versionKey ? Pref.widget : Pref.batch;
     const action = this.props.id && Roles.userIsInRole(Meteor.userId(), ['edit', 'run']) ? 
                    <NoteForm
                      id={this.props.id}
@@ -40,7 +39,7 @@ export default class NoteLine extends Component	{
           {dt.content}
           <div className='footerBar'>
             {action}
-            <i>{moment(dt.time).calendar()} by <UserName id={dt.who} /></i>
+            <i>{moment(dt.time).calendar()} - <UserName id={dt.who} /></i>
           </div>
         </div>
       );
@@ -49,7 +48,7 @@ export default class NoteLine extends Component	{
     if(!dt.content) {
       return (
         <fieldset className='noteCard low'>
-          <legend className='cap'>{name} notes</legend>
+          <legend className='cap'>notes</legend>
           {action}
         </fieldset>
       );
@@ -57,11 +56,11 @@ export default class NoteLine extends Component	{
     
     return (
       <fieldset className='noteCard low'>
-        <legend className='cap'>{name} notes</legend>
+        <legend className='cap'>notes</legend>
         {dt.content}
         <div className='footerBar'>
           {action}
-          <i>{moment(dt.time).calendar()} by <UserName id={dt.who} /></i>
+          <i>{moment(dt.time).calendar()} - <UserName id={dt.who} /></i>
         </div>
       </fieldset>
     );

@@ -9,7 +9,7 @@ import Tabs from '../../../components/smallUi/Tabs.jsx';
 import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
 import NonConMiniSatus from '/client/components/charts/NonConMiniStatus.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';
-import BlockNotes from '../../../components/smallUi/BlockNotes.jsx';
+//import BlockNotes from '../../../components/smallUi/BlockNotes.jsx';
 import TagsModule from '../../../components/bigUi/TagsModule.jsx';
 
 export default class BatchCard extends Component	{
@@ -75,7 +75,7 @@ export default class BatchCard extends Component	{
                 tagOps={a.tagOption} />
               <br />
               <NoteLine entry={b.notes} id={b._id} versionKey={false} />
-              <BlockNotes data={b.blocks} />
+              {/*<BlockNotes data={b.blocks} />*/}
             </div>
             
             <div className='space cap'>

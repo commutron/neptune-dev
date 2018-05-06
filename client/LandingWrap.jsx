@@ -9,12 +9,27 @@ class StartView extends Component	{
     if(!this.props.login) {
       return (
         <div>user not found</div>
-        );
+      );
     }
+    
+    let metasty = {
+      fontFamily: 'monospace',
+      textAlign: 'center',
+      width: '50vw',
+    };
 
     return (
       <div className='centreTrue'>
-        <img src='/titleLogo.svg' className='shadow noCopy' height='500' />
+        <p className='centre'>
+          <img src='/titleLogo.svg' className='shadow noCopy' height='400' />
+        </p>
+        <div style={metasty}>
+          <p>Neptune 1.0.1</p>
+          <p>Copyright (c) 2016-present Commutron Industries <a href='https://www.commutron.ca' target='_blank'>https://www.commutron.ca</a></p>
+          <p>Author 2016-present Matthew Andreas <a href='https://github.com/mattandwhatnot' target='_blank'>https://github.com/mattandwhatnot</a></p>
+          <p>All Rights Reserved, No Public License</p>
+          <p>Source avaliable <a href='https://github.com/commutron/neptune-dev' target='_blank'>https://github.com/commutron/neptune-dev</a></p>
+        </div>
       </div>
     );
   }

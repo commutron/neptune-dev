@@ -18,6 +18,7 @@ export default class Tabs extends Component	{
   render() {
     
     const tabs = this.props.tabs;
+    const names = this.props.names;
     let show = this.state.sect;
     const stick = this.props.stick ? 'stickyBar' : '';
     const styl = this.props.wide ? { width: 100 / tabs.length + '%'} : null;
@@ -33,7 +34,7 @@ export default class Tabs extends Component	{
                 onClick={this.handleClick.bind(this, index)}
                 className={clss}
                 style={styl}
-              >{entry}</button>
+              >{entry} {names && names[index]}</button>
           )})}
         </div>
         <AnimateWrap type='cardTrans'>

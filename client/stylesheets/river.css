@@ -85,11 +85,16 @@
 .riverNG:hover, .riverNG:active {
   background-color: var(--alizarin);
 }
-
-.firstGood, .firstBetter span {
+.firstGood {
+  color: var(--orange);
+}
+.firstGood:hover {
+  background-color: var(--orange);
+  color: white;
+}
+.firstBetter span {
   color: var(--emerald);
 }
-.firstGood:hover, 
 .firstBetter:hover,
 .firstBetter:hover span {
   background-color: var(--emerald);
@@ -275,4 +280,8 @@
 .stoneForm .clearWhite:hover {
   background-color: white;
   color: var(--peterriver);
+}
+
+.testFail summary::-webkit-details-marker {
+  display: none;
 }

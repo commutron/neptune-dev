@@ -90,6 +90,7 @@
   flex-wrap: nowrap;
   padding: 5px 10px;
   font-size: 1.25rem;
+  background-color: rbg(20,20,20);
 }
 .cardTitle > label {
   color: var(--silver);
@@ -102,11 +103,11 @@
 .riverExpandToggle, .riverShrinkToggle {
   position: absolute;
   top: 50%;
-  z-index: 9;
+  z-index: 8;
   opacity: 0.8;
   padding: 15px 0;
   font-family: FontAwesome;
-  background-color: var(--silver);
+  background-color: var(--asbestos);
   color: var(--clouds);
 }
 .riverExpandToggle {
@@ -126,6 +127,22 @@
 }
 .riverExpandToggle:hover, .riverShrinkToggle:hover {
   opacity: 1;
+}
+
+.exLeap {
+  color: var(--silver);
+  background-color: transparent;
+  min-width: 32px;
+  min-height: 32px;
+  padding: 0 4px;
+  font-size: 1.25rem;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+}
+.exLeap:hover {
+  color: rgb(20,20,20);
+  background-color: var(--silver);
 }
 
 .onetwoSplit, .twooneSplit {

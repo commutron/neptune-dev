@@ -9,15 +9,13 @@ const TestFails = ({ fails })=> {
     backgroundColor: 'transparent',
     borderLeft: '5px solid var(--pomegranate)',
   };
-  let styS = {
-    textIndent: '-15px'
-  };
+  
   return (
     <div>
       {dt.map( (entry, index)=>{
         return(
-          <details key={index} style={styD}>
-            <summary style={styS}>
+          <details key={index} style={styD} className='testFail'>
+            <summary>
               Fail {moment(entry.time).calendar()}
             </summary>
             {entry.comm}

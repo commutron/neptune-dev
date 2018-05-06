@@ -47,7 +47,7 @@ const AdvancedSearch = ({ groupData, widgetData, batchData, app }) => {
             <input
               type='search'
               id='advSearch'
-              placeholder='comming soon'
+              placeholder='coming soon'
               disabled={true}/>
             <br />Advanced Search
           </label>

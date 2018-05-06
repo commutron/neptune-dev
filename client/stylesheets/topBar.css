@@ -152,3 +152,21 @@ input::-webkit-calendar-picker-indicator {
   display: block;
   white-space: nowrap;
 }
+
+.userSlideButton {
+  display: flex;
+  align-items: flex-end;
+  color: black;
+  background-color: transparent;
+}
+.userSlideButton button {
+  font-size: 16px;
+}
+.userSlideButton button,
+.userSlideButton .icontext {
+  color: black;
+}
+.userSlideButton:hover button,
+.userSlideButton:hover .icontext {
+  color: white;
+}

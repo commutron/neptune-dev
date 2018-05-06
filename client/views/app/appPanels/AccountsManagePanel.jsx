@@ -15,6 +15,7 @@ const AccountsManagePanel = ({ users })=> {
     'run',
     'finish',
     'test',
+    'verify',
     'inspect',
     'active'
     ];
@@ -153,11 +154,20 @@ export const PermissionHelp = ({ roles, admin })=> {
         </ul>
       : null}
       
+      {r.includes('verify') ?
+        <ul>
+          <li><b>Verify</b></li>
+          <ul>
+            <li>Record "Verify" or "First-Off' inspections</li>
+          </ul>
+        </ul>
+      : null}
+      
       {r.includes('inspect') ?
         <ul>
           <li><b>Inspect</b></li>
           <ul>
-            <li>Record "First" and "Inspect" steps</li>
+            <li>Record "Inspect" steps</li>
             <li>Record "Inspected" nonconformaces</li>
             <li>Edit nonconformaces</li>
             <li>Snooze and re-activate nonconformaces</li>

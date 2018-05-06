@@ -126,7 +126,7 @@ export default class BatchPanel extends Component	{
                     <i className='letterSpaced'>{itemsOrder[0].serial} - {itemsOrder[itemsOrder.length-1].serial}</i>
                   </fieldset>}
                 <NoteLine entry={b.notes} id={b._id} widgetKey={false}  />
-                <BlockList id={b._id} data={b.blocks} lock={done} />
+                <BlockList id={b._id} data={b.blocks} lock={done} expand={true} />
               </div>
               <div className='twoThirdsContent'>
                 <div className='wellSpacedLine'>

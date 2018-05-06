@@ -19,8 +19,7 @@ export default class Model extends Component	{
   }
   reveal() {
     this.setState({ show: !this.state.show });
-    const findBox = document.getElementById('find');
-  	findBox ? findBox.focus() : null;
+    //document.getElementById('find').focus();
   }
 
   render() {
@@ -45,20 +44,21 @@ export default class Model extends Component	{
         <AnimateWrap type='modelTrans' el='span'>
           <div className='overlay invert' key={1}>
             <div className='popup'>
-              <button
-                className='action clearRed rAlign'
-                onClick={this.reveal}
-                title='close'
-              ><i className='fas fa-times fa-lg'></i></button>
-              <h2 className='cap'>
-                <i className={'fas ' + this.props.icon + ' fa-lg ' + this.props.color}></i>
-                <i className='breath'></i>
-                {this.props.title}
-              </h2>
-              <hr />
-                <div className='content'>
-                  {this.props.children}
-                </div>
+              <div className='popupHead'>
+                <span>
+                  <i className={'fas ' + this.props.icon + ' fa-lg ' + this.props.color}></i>
+                  <i className='breath'></i>
+                  {this.props.title}
+                </span>
+                <button
+                  className='action clearRed rAlign'
+                  onClick={this.reveal}
+                  title='close'
+                ><i className='fas fa-times fa-lg'></i></button>
+              </div>
+              <div className='popupContent'>
+                {this.props.children}
+              </div>
             </div>
           </div>
         </AnimateWrap>

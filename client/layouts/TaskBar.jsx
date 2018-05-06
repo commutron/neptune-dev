@@ -11,7 +11,7 @@ const TaskBar = ({ subLink }) => {
         title='Advanced Search'
         className={!subLink ? 'taskLink onTL' : 'taskLink'}
         onClick={()=>FlowRouter.go('/data')}
-      ><i className='fas fa-search'></i></button>
+      ><i className='fas fa-search-plus'></i></button>
       
       <button
         title='Schedule'

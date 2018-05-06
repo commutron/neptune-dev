@@ -209,7 +209,6 @@ select.blueIn:focus {
   font-size: 2rem;
   border-radius: 50%;
 }
-
 #ncselect + .formBarIcon,
 #ncselect ~ .actionIconText {
   color: var(--alizarin);
@@ -228,6 +227,17 @@ select.blueIn:focus {
 #firstselect:checked + .formBarIcon {
   background-color: var(--peterriver);
   color: black;
+}
+#firstselect:disabled + .formBarIcon,
+#firstselect:disabled ~ .actionIconText {
+  opacity: 0.5;
+}
+#firstselect:disabled:hover + .formBarIcon {
+  background-color: black;
+  color: var(--peterriver);
+}
+#firstselect:disabled {
+  cursor: disabled;
 }
 
 @media screen and (max-width: 1024px) {
