@@ -143,16 +143,30 @@ Meteor.methods({
     }
   },
   
-  releaseToFloor(batchId) {
+  releaseToFloor(batchId, rDate) {
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $set : {
           updatedAt: new Date(),
   			  updatedWho: Meteor.userId(),
           floorRelease: {
-            time: new Date(),
+            time: rDate,
             who: Meteor.userId()
           }
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  cancelFloorRelease(batchId) {
+    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        $set : {
+          updatedAt: new Date(),
+  			  updatedWho: Meteor.userId(),
+          floorRelease: false
       }});
       return true;
     }else{

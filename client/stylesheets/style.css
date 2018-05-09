@@ -866,6 +866,7 @@
 .listSortInput select {
   background-color: transparent;
   color: white;
+  text-align: center;
 }
 .listSortInput option {
   color: black;

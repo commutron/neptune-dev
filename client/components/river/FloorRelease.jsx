@@ -1,11 +1,17 @@
 import React from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
+import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
+import UserName from '/client/components/uUi/UserName.jsx';
 
 const FloorRelease = ({ id })=> {
   
-  function handleRelease() {
-    Meteor.call('releaseToFloor', id, (err)=>{
+  function handleRelease(e) {
+    e.preventDefault();
+    const date = e.target.rdate.value;
+    const time = e.target.rtime.value;
+    const datetime = date + 'T' + time;
+    Meteor.call('releaseToFloor', id, datetime, (err)=>{
       if(err)
         console.log(err);
     });
@@ -16,19 +22,59 @@ const FloorRelease = ({ id })=> {
   };
   
   return(
-    <div className='wide centre'>
-      <p>
+    <div className='wide actionBox greenBorder' style={sty}>
+      <form onSubmit={(e)=>handleRelease(e)} className='centre listSortInput'>
+        <p className='centreText big cap greenT'>Release {Pref.batch} to the floor</p>
+        <input
+          type='date'
+          id='rdate'
+          defaultValue={moment().format('YYYY-MM-DD')}
+          required />
+        <input
+          type='time'
+          id='rtime'
+          defaultValue={moment().format('hh:mm')}
+          required />
+        <br />
         <button
+          type='submit'
           title={`Release ${Pref.batch} to the floor`}
-          className='action medBig clearGreen cap'
+          className='roundActionIcon dbblRound clearGreen cap'
           style={sty}
-          onClick={()=>handleRelease()}
           disabled={!Roles.userIsInRole(Meteor.userId(), 'run')}
-        ><i className='fas fa-play fa-2x fa-fw'></i>
-        <br />Release {Pref.batch} to the floor</button>
-      </p>
+        ><i className='fas fa-play fa-2x'></i></button>
+      </form>
     </div>
   );
 };
   
 export default FloorRelease;
+
+export const ReleaseNote = ({ id, floorRelease, expand })=> {
+  
+  function handleCancel() {
+    Meteor.call('cancelFloorRelease', id, (err)=>{
+      if(err)
+        console.log(err);
+    });
+  }
+  return(
+    <div className='noCopy'>
+      <ContextMenuTrigger id={id+'release'}>
+  			<fieldset className='noteCard'>
+          <legend>Released to the Floor</legend>
+          {moment(floorRelease.time).calendar()}
+          {expand && ' by '}
+          {expand && <UserName id={floorRelease.who} />}
+        </fieldset>
+      </ContextMenuTrigger>
+      <ContextMenu id={id+'release'}>
+	      <MenuItem
+	        onClick={()=>handleCancel()} 
+	        disabled={!Roles.userIsInRole(Meteor.userId(), 'run')}>
+	        Cancel Release
+	      </MenuItem>
+	    </ContextMenu>
+	  </div>
+  );
+};

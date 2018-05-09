@@ -2,11 +2,11 @@ import React, {Component} from 'react';
 import moment from 'moment';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
-import UserName from '/client/components/uUi/UserName.jsx';
 import Tabs from '../../../components/smallUi/Tabs.jsx';
 
 //import JumpText from '../../../components/tinyUi/JumpText.jsx';
 import FloorRelease from '/client/components/river/FloorRelease.jsx';
+import { ReleaseNote } from '/client/components/river/FloorRelease.jsx';
 import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
 import NonConMiniSatus from '/client/components/charts/NonConMiniStatus.jsx';
 import NonConMiniTops from '/client/components/bigUi/NonConMiniTops.jsx';
@@ -97,22 +97,14 @@ export default class BatchCard extends Component	{
                   vKey={false}
                   tagOps={a.tagOption} />
                 <br />
+                {released === true && 
+                  <ReleaseNote id={b._id} floorRelease={b.floorRelease} expand={expand} />}
                 <NoteLine entry={b.notes} id={b._id} versionKey={false} />
-                {released === true &&
-                  <fieldset className='noteCard'>
-                    <legend>Released to the Floor</legend>
-                      {moment(b.floorRelease.time).calendar()}
-                      {expand && ' by '}
-                      {expand && <UserName id={b.floorRelease.who} />}
-                    </fieldset>}
                 <BlockList id={b._id} data={b.blocks} lock={done} expand={expand} />
               </div>
               
               <div className='space cap'>
                 <StepsProgress
-                  //batchData={b}
-                  //flow={flow}
-                  //flowAlt={flowAlt}
                   mini={true}
                   expand={expand}
                   progCounts={progCounts} />

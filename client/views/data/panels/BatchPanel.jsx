@@ -4,10 +4,13 @@ import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
 import ProgressCounter from '/client/components/utilities/ProgressCounter.js';
 import CreateTag from '/client/components/uUi/CreateTag.jsx';
-
+import UserName from '/client/components/uUi/UserName.jsx';
 import Tabs from '/client/components/smallUi/Tabs.jsx';
 
 import TagsModule from '../../../components/bigUi/TagsModule.jsx';
+
+import FloorRelease from '/client/components/river/FloorRelease.jsx';
+import { ReleaseNote } from '/client/components/river/FloorRelease.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';
 import BlockList from '../../../components/bigUi/BlockList.jsx';
 import RiverSatus from '../../../components/smallUi/RiverStatus.jsx';
@@ -74,6 +77,10 @@ export default class BatchPanel extends Component	{
     const riverAltFlow = flowAlt ? flowAlt.flow : [];
     const done = b.finishedAt !== false; // no more boards if batch is finished
     
+    let released = b.floorRelease === undefined ? undefined : 
+                    b.floorRelease === false ? false :
+                    typeof b.floorRelease === 'object';
+                    
     const itemsOrder = b.items.sort( (x,y)=> x.serial - y.serial);
     
     const filter = this.filter();
@@ -125,6 +132,10 @@ export default class BatchPanel extends Component	{
                     <legend>Serial Range</legend>
                     <i className='letterSpaced'>{itemsOrder[0].serial} - {itemsOrder[itemsOrder.length-1].serial}</i>
                   </fieldset>}
+                {released === undefined ? null :
+                  released === true ?
+                    <ReleaseNote id={b._id} floorRelease={b.floorRelease} expand={true} />
+                  : <FloorRelease id={b._id} /> }
                 <NoteLine entry={b.notes} id={b._id} widgetKey={false}  />
                 <BlockList id={b._id} data={b.blocks} lock={done} expand={true} />
               </div>
