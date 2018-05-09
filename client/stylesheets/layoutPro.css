@@ -31,6 +31,10 @@
 .proDefault, .proExpand {
   display: grid;
   grid-template-rows: calc(100vh - 108px) 60px;
+  -webkit-transition: all 150ms ease-in-out;
+  -moz-transition: all 150ms ease-in-out;
+  -o-transition: all 150ms ease-in-out;
+  transition: all 150ms ease-in-out;
 }
 .proLeftMinor, .proLeftMajor {
   background-color: rgb(20,20,20);
@@ -94,7 +98,6 @@
 }
 .cardTitle > label {
   color: var(--silver);
-  /*cursor: pointer;*/
 }
 .cardTitle > label:hover {
   color: var(--clouds);
@@ -105,7 +108,7 @@
   top: 50%;
   z-index: 8;
   opacity: 0.8;
-  padding: 15px 0;
+  padding: 16px 2px;
   font-family: FontAwesome;
   background-color: var(--asbestos);
   color: var(--clouds);

@@ -82,7 +82,7 @@ const CookieBar = ({ groupData, widgetData, versionData, batchData, itemData, ap
             title='View this in production'
             onClick={()=>goPro(itemData.serial)}>
             {!miniAction && <i className='small'>Production </i>}
-            <i className='fas fa-paper-plane fa-lg'></i>
+            <i className='fas fa-paper-plane fa-lg fa-fw'></i>
           </button>
         </span>
       :
@@ -93,7 +93,7 @@ const CookieBar = ({ groupData, widgetData, versionData, batchData, itemData, ap
             title='View this in production'
             onClick={()=>goPro(batchData.batch)}>
             {!miniAction && <i className='small'>Production </i>}
-            <i className='fas fa-paper-plane fa-lg'></i>
+            <i className='fas fa-paper-plane fa-lg fa-fw'></i>
           </button>
         </span>
       :null}

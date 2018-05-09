@@ -158,7 +158,7 @@ select.blueIn:focus {
 }
 
 /* Data / instruction toggle icon */
-
+/*
 .dataFlip:before, .dataFlipText {
   color: white;
 }
@@ -187,7 +187,7 @@ select.blueIn:focus {
 #snapSwitch:hover {
   opacity: 1;
 }
-
+*/
 
 .formBarToggle {
   display: flex;
@@ -195,7 +195,6 @@ select.blueIn:focus {
   justify-content: center;
   align-items: center;
   margin: 0 5px;
-  /*cursor: pointer;*/
   -webkit-transition: all 150ms ease-in-out;
   -moz-transition: all 150ms ease-in-out;
   -o-transition: all 150ms ease-in-out;
@@ -235,9 +234,7 @@ select.blueIn:focus {
 #firstselect:disabled:hover + .formBarIcon {
   background-color: black;
   color: var(--peterriver);
-}
-#firstselect:disabled {
-  cursor: disabled;
+  cursor: not-allowed;
 }
 
 @media screen and (max-width: 1024px) {

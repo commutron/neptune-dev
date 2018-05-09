@@ -43,7 +43,6 @@ export function ScanListenerUtility(user) {
   window.addEventListener('focus', reFocus);
   
   Meteor.setTimeout( ()=>{
-    //const autoScan = Meteor.user().autoScan;
     const autoScan = user.autoScan;
     autoScan === undefined ? console.log(autoScan) : null;
     if(!autoScan) {
@@ -53,12 +52,6 @@ export function ScanListenerUtility(user) {
       window.addEventListener('message', onMessage);
     }
   },250);
-  /*
-  window.addEventListener('keypress', (event)=>{
-    window.parent.postMessage(event.key, "*");
-  });
-  */
-
 
 }
 

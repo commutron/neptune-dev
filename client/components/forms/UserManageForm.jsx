@@ -6,7 +6,7 @@ import Alert from '/client/global/alert.js';
 import Model from '../smallUi/Model.jsx';
 import { AdminUp } from '../forms/AdminForm.jsx';
 
-export default class UserForm extends Component {
+export default class UserManageForm extends Component {
   
   forcePassword(e) {
     e.preventDefault();
@@ -51,11 +51,11 @@ export default class UserForm extends Component {
     return (
       <Model
         button={<i className='big'>{this.props.name}</i>}
-        title={this.props.name + ' account profile'}
+        title={this.props.name + "'s account permissions"}
         color={active}
         icon='hide'>
         <h2 className='low'>{this.props.name}</h2>
-        <p className='up'>id: {this.props.id}</p>
+        <p className='clean'>id: {this.props.id}</p>
         <p className='blueT'>{adminFlag}</p>
         <p>organization: <i className='greenT'>{this.props.org}</i></p>
         <br />
@@ -132,7 +132,7 @@ class SetCheck extends Component	{
       if(error)
         console.log(error);
       if(reply) {
-        Bert.alert('saved', 'success');
+        Bert.alert(Alert.success);
       }else{
         console.log("BLOCKED BY SERVER");
       }

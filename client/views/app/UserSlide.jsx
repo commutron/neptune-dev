@@ -5,8 +5,8 @@ import Pref from '/client/global/pref.js';
 import AccountsUI from '/client/components/bigUi/AccountsUI.jsx';
 import { AdminDown } from '/client/components/forms/AdminForm.jsx';
 import LogoutOther from '/client/components/uUi/LogoutOther.jsx';
-import { ChangeAutoScan } from '/client/components/forms/UserForm.jsx';
-import { ChangeMinAction } from '/client/components/forms/UserForm.jsx';
+import { ChangeAutoScan } from '/client/components/forms/UserManageForm.jsx';
+import { ChangeMinAction } from '/client/components/forms/UserManageForm.jsx';
 import UserSpeedSet from '/client/components/forms/UserSpeedSet.jsx';
 //import EmailForm from '/client/components/forms/EmailForm.jsx';
 import { PermissionHelp } from '/client/views/app/appPanels/AccountsManagePanel';
@@ -65,7 +65,7 @@ export default class UserSlide extends Component	{
       
                   <div className='centre'>
                     <h2>Logged in as: <AccountsUI /></h2>
-                    <p className='up'>id: {Meteor.user()._id}</p>
+                    <p className='clean'>id: {Meteor.user()._id}</p>
                     <p>organization: <i className='greenT'>{Meteor.user().org}</i></p>
                     <p><LogoutOther /></p>
                     <p><ChangeAutoScan /></p>

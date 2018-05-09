@@ -26,12 +26,13 @@ Meteor.methods({
   			notes: false,
         river: false,
         riverAlt: false,
+        floorRelease: false,
         items: [],
         nonCon: [],
         escaped: [],
         cascade: [],
         blocks: [],
-        });
+      });
       return true;
     }else{
       return false;
@@ -136,6 +137,23 @@ Meteor.methods({
           who: Meteor.userId(),
           content: note
         }}});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  releaseToFloor(batchId) {
+    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        $set : {
+          updatedAt: new Date(),
+  			  updatedWho: Meteor.userId(),
+          floorRelease: {
+            time: new Date(),
+            who: Meteor.userId()
+          }
+      }});
       return true;
     }else{
       return false;

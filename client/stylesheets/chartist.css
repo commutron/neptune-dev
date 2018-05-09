@@ -814,11 +814,10 @@
 
 .rateFill .ct-series-a .ct-area {
   fill: var(--peterriver);
-  fill-opacity: 0.5;
+  fill-opacity: 0.1;
 }
 .rateFill .ct-series-a .ct-line {
-  stroke: var(--asbestos);
-  stroke-width: 3px;
+  stroke: var(--peterriver);
 }
 
 .miniStack .ct-series-a .ct-bar {

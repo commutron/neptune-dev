@@ -56,6 +56,7 @@
   text-decoration: underline;
 }
 
+/*
 .jump {
   font-size: 2rem;
   min-width: 1rem;
@@ -92,7 +93,7 @@
 .jumpBar:hover, .jumpBar:focus, .jumpBar:active {
   border-bottom-color: #3498db;
 }
-
+*/
 .leapText {
   font-size: 1rem;
   min-width: 1rem;
@@ -147,6 +148,11 @@
   width: 7.5rem;
   height: 7.5rem;
 }
+.qdpplRound {
+  width: 10rem;
+  height: 10rem;
+  font-size: 2rem;
+}
 
 .moveLR {
   color: white;
@@ -172,15 +178,15 @@
   font-weight: 400;
 }
 .tabOn {
-	background-color: var(--midnightblue);
-  border-bottom: 3px solid var(--silver);
+	background-color: var(--wetasphalt);
+  border-bottom: 2px solid var(--silver);
 }
 .tabOff {
-	background-color: var(--wetasphalt);
-	border-bottom: 3px groove transparent;
+	background-color: var(--midnightblue);
+	border-bottom: 2px solid transparent;
 }
 .tabOff:hover {
-	background-color: var(--midnightblue);
+	background-color: var(--wetasphalt);
 }
 
 .tabBody {
@@ -478,13 +484,12 @@
   text-transform: uppercase;
 }
 
-.small {
-  font-family: 'Open Sans', sans-serif;
-  font-size: small;
-}
-
 .smaller {
   font-size: smaller;
+}
+.small {
+  /*font-family: 'Open Sans', sans-serif;*/
+  font-size: small;
 }
 
 .med {
@@ -579,7 +584,6 @@
   background-color: transparent;
   color: white;
   resize: none;
-  /*cursor: default;*/
 }
 
 .hiddenInput > button:disabled {
@@ -694,6 +698,8 @@
   justify-content: flex-end;
 }
 
+.alertCount.nSpace { min-width: 33px }
+.alertCount.exSpace { min-width: 76px }
 .alertCount:before { 
   content: '\f071';
   font-family: FontAwesome;
@@ -766,7 +772,6 @@
   background-color: var(--belizeHole);
   font-size: 0.9rem;
   color: white;
-  /*cursor: default;*/
 }
 .tagFlag > button {
   position: relative;
@@ -808,7 +813,6 @@
   height: 20px;
   font-size: 1.5rem;
   border-radius: 50%;
-  /*cursor: pointer;*/
   -webkit-transition: all 150ms ease-in-out;
   -moz-transition: all 150ms ease-in-out;
   -o-transition: all 150ms ease-in-out;
@@ -825,6 +829,7 @@
 
 /* Filter Tools */
 .fltrs summary {
+  height: 32px;
   padding: 0 5px;
 }
 .fltrs summary::-webkit-details-marker {
@@ -965,9 +970,6 @@
 .numBoxRadio input[type='radio']:focus + label {
   color: white;
 }
-.numBoxRadio input[type='radio']:disabled + label {
-  /*cursor: default;*/
-}
 .numBoxRadio input {
   display: none;
 }
@@ -1006,7 +1008,6 @@
 }
 
 /* timeline */
-
 .timelineList {
   margin: 10px;
   width: 90%;

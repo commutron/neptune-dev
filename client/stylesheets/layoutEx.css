@@ -128,6 +128,7 @@
   overflow: hidden;
   white-space: nowrap;
 }
+
 .cookie {
   background-color: var(--black);
   color: var(--silver);
@@ -136,10 +137,15 @@
   font-size: 1rem;
   height: 100%;
   font-weight: 600;
-  padding: 0 2px;
+  padding: 0 4px;
+  border-radius: 16px;
   overflow: hidden;
   word-break: keep-all;
   text-overflow: ellipsis;
+}
+.cookie:hover {
+  color: var(--black);
+  background-color: var(--silver);
 }
 .crumb {
   color: var(--silverfade);
@@ -158,10 +164,6 @@
 	transform: rotate(45deg);
 	vertical-align: top;
 	width: 2em;
-}
-.cookie:hover {
-  color: var(--black);
-  background-color: var(--silver);
 }
 .cookieGap {
   border-style: solid;

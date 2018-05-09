@@ -23,7 +23,7 @@ export default class Remove extends Component	{
             Bert.alert(Alert.inUse);
           }else if(reply) {
             Bert.alert( Alert.success );
-            Session.set('now', '');
+            FlowRouter.go('/data/overview?request=groups');
           }else{
             Bert.alert( 'Rejected by Server', 'danger' );
             this.cut.disabled = false;
@@ -37,7 +37,7 @@ export default class Remove extends Component	{
             Bert.alert(Alert.inUse);
           }else if(reply) {
             Bert.alert( Alert.success );
-            Session.set('now', Pref.group);
+            FlowRouter.go('/data/overview?request=groups');
           }else{
             Bert.alert( 'Rejected by Server', 'danger' );
             this.cut.disabled = false;
@@ -51,7 +51,7 @@ export default class Remove extends Component	{
             Bert.alert(Alert.inUse);
           }else if(reply) {
             Bert.alert( Alert.success );
-            Session.set('now', Pref.batch);
+            FlowRouter.go('/data/overview?request=batches');
           }else{
             Bert.alert( 'Rejected by Server', 'danger' );
             this.cut.disabled = false;
@@ -65,7 +65,7 @@ export default class Remove extends Component	{
             Bert.alert(Alert.inUse);
           }else if(reply) {
             Bert.alert( Alert.success );
-            Session.set('now', this.props.entry.batch);
+            FlowRouter.go('/data/batch?request=' + this.props.entry.batch);
           }else{
             Bert.alert( 'Rejected by Server', 'danger' );
             this.cut.disabled = false;

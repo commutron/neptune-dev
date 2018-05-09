@@ -2,10 +2,11 @@ import React, {Component} from 'react';
 import moment from 'moment';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
-
+import UserName from '/client/components/uUi/UserName.jsx';
 import Tabs from '../../../components/smallUi/Tabs.jsx';
 
 //import JumpText from '../../../components/tinyUi/JumpText.jsx';
+import FloorRelease from '/client/components/river/FloorRelease.jsx';
 import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
 import NonConMiniSatus from '/client/components/charts/NonConMiniStatus.jsx';
 import NonConMiniTops from '/client/components/bigUi/NonConMiniTops.jsx';
@@ -36,17 +37,22 @@ export default class BatchCard extends Component	{
     let warn = b.blocks.filter( x => x.solve === false ).length;
     iready ? warn++ : null;
     const showWarn = warn === 0 ? 'alertCount invisible' : 'alertCount';
+    const exSpace = !expand ? 'nSpace' : 'exSpace';
+    
+    let released = b.floorRelease === undefined ? undefined : 
+                    b.floorRelease === false ? false :
+                    typeof b.floorRelease === 'object';
     
     const exploreLink = !iS ?
                         '/data/batch?request=' + b.batch :
                         '/data/batch?request=' + b.batch + '&specify=' + iS;
 
-    return (
+    return(
       <AnimateWrap type='cardTrans'>
         <div className='section sidebar' key={b.batch}>
 
           <div className='cardTitle'>
-            <i className={showWarn}></i>
+            <i className={showWarn + ' ' + exSpace}></i>
             <i className='bigger'>{b.batch}</i>
             <button
               id='exBatch'
@@ -62,13 +68,15 @@ export default class BatchCard extends Component	{
             <h2 className='actionBox centreText yellow'>
               No {Pref.itemSerial}s created
             </h2>
-          :null}
+          :
+            released === undefined || released === true ? null :
+              <FloorRelease id={b._id} />
+          }
           
-          {b.finishedAt !== false ?
+          {b.finishedAt !== false &&
             <h2 className='actionBox centreText green'>
               Finished: {moment(b.finishedAt).calendar()}
-            </h2>
-          :null}
+            </h2>}
           
             <Tabs
               tabs={[
@@ -90,6 +98,13 @@ export default class BatchCard extends Component	{
                   tagOps={a.tagOption} />
                 <br />
                 <NoteLine entry={b.notes} id={b._id} versionKey={false} />
+                {released === true &&
+                  <fieldset className='noteCard'>
+                    <legend>Released to the Floor</legend>
+                      {moment(b.floorRelease.time).calendar()}
+                      {expand && ' by '}
+                      {expand && <UserName id={b.floorRelease.who} />}
+                    </fieldset>}
                 <BlockList id={b._id} data={b.blocks} lock={done} expand={expand} />
               </div>
               

@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
 
-import FindBox from './FindBox.jsx';
+//import FindBox from './FindBox.jsx';
 import TopBar from './TopBar.jsx';
 
 export const PublicLayout = ({content}) => (
@@ -35,6 +35,7 @@ export const BasicLayout = ({content, link}) => (
   </div>
 );
 
+/*
 export const DashLayout = ({content, link}) => (
   <div className='dashContainer'>
     <div className='gridHeaderSearch'>
@@ -47,7 +48,7 @@ export const DashLayout = ({content, link}) => (
     <div className='basicFooter'></div>
   </div>
 );
-
+*/
 /*
 export const ProductionLayout = ({content, link}) => (
   <div className='dashContainer'>

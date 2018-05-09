@@ -1,7 +1,7 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 
-import UserForm from '/client/components/forms/UserForm.jsx';
+import UserManageForm from '/client/components/forms/UserManageForm.jsx';
 import RemoveUser from '/client/components/forms/RemoveUser.jsx';
 
 const AccountsManagePanel = ({ users })=> {
@@ -24,12 +24,12 @@ const AccountsManagePanel = ({ users })=> {
     <div className='section'>
       <div className='space balance'>
         <div>
-          <h2>User Accounts</h2>
+          <h2>User Accounts Permissions</h2>
             <ul>
               {users.map( (entry)=>{
                 return (
                   <li key={entry._id}>
-                    <UserForm
+                    <UserManageForm
                       id={entry._id}
                       name={entry.username}
                       org={entry.org}
@@ -60,7 +60,7 @@ export const PermissionHelp = ({ roles, admin })=> {
   return(
     <div>
     
-      <h2>Permissions</h2>
+      <h2>Available Permissions</h2>
       
       {admin ?
         <ul>

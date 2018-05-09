@@ -3,7 +3,7 @@ import {mount} from 'react-mounter';
 
 import { PublicLayout } from './layouts/MainLayouts.jsx';
 import { BasicLayout } from './layouts/MainLayouts.jsx';
-import { DashLayout } from './layouts/MainLayouts.jsx';
+//import { DashLayout } from './layouts/MainLayouts.jsx';
 import { ProductionLayout } from './layouts/ProLayout.jsx';
 import { ExploreLayout } from './layouts/DataExploreLayout.jsx';
 import { LabelLayout } from './layouts/MainLayouts.jsx';
@@ -12,7 +12,7 @@ import Login from './views/Login.jsx';
 import ActivateUser from '/client/components/forms/ActivateUser.jsx';
 import InitialSetup from './views/InitialSetup.jsx';
 
-import DashData from './views/dashboard/DashData.jsx';
+//import DashData from './views/dashboard/DashData.jsx';
 import ActivityData from './views/activity/ActivityData.jsx';
 import ProdData from './views/production/ProdData.jsx';
 import DataData from './views/data/DataData.jsx';
@@ -110,6 +110,7 @@ privlegedRoutes.route('/activity', {
   }
 });
 
+/*
 privlegedRoutes.route('/dashboard', {
   action() {
     mount(DashLayout, {
@@ -118,7 +119,7 @@ privlegedRoutes.route('/dashboard', {
     });
   }
 });
-
+*/
 privlegedRoutes.route('/production', {
   action() {
     mount(ProductionLayout, {

@@ -15,7 +15,7 @@ const AppWrap = ({ users, app })=> {
         <div className='cardView'>
           
           <Tabs
-            tabs={['accounts', 'preferences']}
+            tabs={['user permissions', 'preferences']}
             stick={true}
             wide={true}>
             

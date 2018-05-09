@@ -4,7 +4,7 @@ import { Meteor } from 'meteor/meteor';
 
 // Change Bert's time on screen to be two seconds instead of the
 // default three and a half.
-Bert.defaults.hideDelay = 5000;
+Bert.defaults.hideDelay = 10000;
 
 // Change Bert's default type to be a warning instead of default.
 // Bert.defaults.type = 'warning';
@@ -12,7 +12,15 @@ Bert.defaults.hideDelay = 5000;
 // Change Bert's default style
 // instead of fixed-top.
 Bert.defaults.style = 'fixed-bottom';
-
+/*
+Bert.defaults.icons = {
+  default: 'fa-bell',
+  success: 'fa-check-circle',
+  info: 'fa-info',
+  warning: 'fa-warning',
+  danger: 'fa-remove',
+};
+*/
 //// Alerts singleton class \\\\
 
 let instance = null;

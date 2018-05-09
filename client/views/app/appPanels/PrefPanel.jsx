@@ -170,8 +170,14 @@ export default class PrefPanel extends Component {
                     return ( <li key={index}><i>{entry}</i></li> );
                 })}
               </ul>
+              
+          </div>
+  
+          <br />
+        </fieldset>
           
-            <hr />
+        <fieldset disabled={auth}>
+          <div className='space breathe'>
             
             <h2>{Pref.instruct} Root Address</h2>
             <i>The root address for embeded work instructions</i>
@@ -195,6 +201,7 @@ export default class PrefPanel extends Component {
         
         <fieldset disabled={auth}>
           <div className='space breathe'>
+            <h2>Set or Change PIN</h2>
             <SetPin />
           </div>
         </fieldset>

@@ -119,7 +119,7 @@ main {
 
 /* ============================================= */
 
-.basicContainer, .dashContainer {
+.basicContainer {
   display: grid;
   grid-template-columns: 256px auto;
   align-content: center;
@@ -136,15 +136,13 @@ main {
     'headerNav headerNav'
     "mainFull mainFull";
 }
-
+/*
 .dashContainer {
   grid-template-rows: 60px calc(100vh - 60px);
   grid-template-areas: 
     "headerSearch headerNav"
     "mainSplit mainSplit";
 }
-
-
 .gridHeaderSearch {
   grid-area: headerSearch;
   z-index: 8;
@@ -152,7 +150,7 @@ main {
   -moz-box-shadow:    0 0 15px 0.5px rgb(0,0,0);
   box-shadow:         0 0 15px 0.5px rgb(0,0,0);
 }
-
+*/
 .gridHeaderNav { /* this stays */
   grid-area: headerNav;
   width: 100%;
@@ -168,7 +166,7 @@ main {
   min-height: calc(100vh - 48px);
   overflow-y: auto;
 }
-
+/*
 .dashMainSplit {
   display: grid;
   grid-area: mainSplit;
@@ -212,7 +210,7 @@ main {
   flex-wrap: nowrap;
   align-items: center;
 }
-
+*/
 .fullViewHeight { /* this stays */
   min-height: calc(100vh - 48px);
 }

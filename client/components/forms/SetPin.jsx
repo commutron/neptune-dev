@@ -42,66 +42,62 @@ const SetPin = ()=> {
   
   return (
     <div>
-      <fieldset>
-        <legend>Set or Change PIN</legend>
-        <p>A pin is necessary for activating new users and admins</p>
-        <form onSubmit={(e)=>setPin(e)} autoComplete='off'>
-          <p>
-            <input
-              type='password'
-              id='oldPin'
-              pattern='[0000-9999]*'
-              maxLength='4'
-              minLength='4'
-              placeholder='0000-9999'
-              inputMode='numeric'
-              autoComplete='new-password'
-            />
-            <label htmlFor='old'>Old PIN</label>
-          </p>
-          <p>
-            <input
-              type='password'
-              id='newOne'
-              pattern='[0000-9999]*'
-              maxLength='4'
-              minLength='4'
-              placeholder='0000-9999'
-              inputMode='numeric'
-              autoComplete='new-password'
-              required
-            />
-            <label htmlFor='newOne'>New PIN</label>
-            <br />
-            <input
-              type='password'
-              id='newTwo'
-              pattern='[0000-9999]*'
-              maxLength='4'
-              minLength='4'
-              placeholder='0000-9999'
-              inputMode='numeric'
-              autoComplete='new-password'
-              required
-            />
-            <label htmlFor='newTwo'>New PIN again</label>
-          </p>
-          <p>
-            <button
-              type='submit'
-              className='smallAction clearGreen'
-              disabled={false}
-            >Save</button>
-          </p>
-        </form>
-      </fieldset>
-      <fieldset>
-        <legend>Forgot PIN</legend>
-        <button
-          className='smallAction clearBlue'
-          onClick={()=>tellMeThePin()}
-        >Tell Me The Pin</button>
-      </fieldset>
+      <p>A pin is necessary for activating new users and admins</p>
+      <form onSubmit={(e)=>setPin(e)} autoComplete='off'>
+        <p>
+          <input
+            type='password'
+            id='oldPin'
+            pattern='[0000-9999]*'
+            maxLength='4'
+            minLength='4'
+            placeholder='0000-9999'
+            inputMode='numeric'
+            autoComplete='new-password'
+          />
+          <label htmlFor='old'>Old PIN</label>
+        </p>
+        <p>
+          <input
+            type='password'
+            id='newOne'
+            pattern='[0000-9999]*'
+            maxLength='4'
+            minLength='4'
+            placeholder='0000-9999'
+            inputMode='numeric'
+            autoComplete='new-password'
+            required
+          />
+          <label htmlFor='newOne'>New PIN</label>
+          <br />
+          <input
+            type='password'
+            id='newTwo'
+            pattern='[0000-9999]*'
+            maxLength='4'
+            minLength='4'
+            placeholder='0000-9999'
+            inputMode='numeric'
+            autoComplete='new-password'
+            required
+          />
+          <label htmlFor='newTwo'>New PIN again</label>
+        </p>
+        <p>
+          <button
+            type='submit'
+            className='smallAction clearGreen'
+            disabled={false}
+          >Save</button>
+        </p>
+      </form>
+      <hr />
+      <legend>Forgot PIN</legend>
+      <button
+        className='smallAction clearBlue'
+        onClick={()=>tellMeThePin()}
+      >Tell Me The Pin</button>
     </div>
   );
 };
