@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
+import LeapText from '/client/components/tinyUi/LeapText.jsx';
+import NumBox from '/client/components/uUi/NumBox.jsx';
 import ProgPie from '/client/components/charts/ProgPie.jsx';
 
 const OrgWIP = ({ wip })=> {
@@ -74,43 +76,36 @@ export class StatusRow extends Component	{
     let rndmKey = Math.random().toString(36).substr(2, 5);
 
     return(
-      <section className={clss}>
+      <div className={'wipRow ' + clss}>
         <div className='wellSpacedLine blackFade'>
-          <span className='big'>{dt.batch}</span>
+          <span>
+            <LeapText
+              title={dt.batch} 
+              sty='big'
+              address={'/data/batch?request=' + dt.batch} />
+          </span>
           <span className='up'>{dt.group} {dt.widget} v.{dt.version}</span>
           <span className='capFL'>{Pref.item}s: {totalAll}</span>
-          {totalUnits > totalAll ? <span className='cap'>{Pref.unit}: {totalUnits}</span> : null}
-          {dt.totalA > 0 ? <span>Reg: {dt.totalR}, Alt: {dt.totalA}</span> : null}
-          {dt.scrap > 0 ? <span className='redT'>Scraps: {dt.scrap}</span> : null}
-          {dt.rma > 0 ? <span className='redT'>RMAs: {dt.rma}</span> : null}
+          {totalUnits > totalAll && <span className='cap'>{Pref.unit}: {totalUnits}</span>}
+          {dt.totalA > 0 && <span>Reg: {dt.totalR}, Alt: {dt.totalA}</span>}
+          {dt.scrap > 0 && <span className='redT'>Scraps: {dt.scrap}</span>}
+          {dt.rma > 0 && <span className='redT'>RMAs: {dt.rma}</span>}
         </div>
-        {dt.totalR + dt.totalA < 1 ?
-          <div className='yellowT wide centreText'>No {Pref.item}s created</div>
-        : dt.stepsReg.length > 0 ?
-          <div className='fillHeight'>
-            <StatusCell steps={dt.stepsReg} total={dt.totalR} unitTotal={dt.totalRU} calc={calcItem} />
-            {dt.stepsAlt.length > 0 ?
-              <div>
-                <hr className='fade'/>
-                <span className='small cap'>
-                  <i className='fas fa-asterisk fa-lg'></i>
-                  <i>{Pref.buildFlowAlt}</i>
-                </span>
-                <div>
-                  <StatusCell steps={dt.stepsAlt} total={dt.totalA} unitTotal={dt.totalAU} calc={calcItem} />
-                </div>
-              </div>
-            :null}
-          </div>
-        :
-          <div className='yellowT wide centreText'>No {Pref.flow} chosen</div>
-        }
-        {dt.finished ?
-          <div className='wide greenT centreText'>
-            <i>Finished {moment(dt.finishedAt).calendar()}</i>
-          </div>
-        : null}
-        {totalUnits > totalAll ?
+        {dt.totalR + dt.totalA < 1 &&
+          <div className='yellowT wide centreText'>No {Pref.item}s created</div>}
+        <StatusCell steps={dt.stepsReg} total={dt.totalR} unitTotal={dt.totalRU} calc={calcItem} />
+        {dt.stepsAlt.length > 0 && 
+          <fieldset className='noteCard'>
+            <legend className='medBig smCap centreText'>{Pref.buildFlowAlt}</legend>
+            <StatusCell 
+              steps={dt.stepsAlt}
+              total={dt.totalA}
+              unitTotal={dt.totalAU}
+              calc={calcItem} />
+          </fieldset>}
+        {dt.finished &&
+          <p className='wide greenT centreText'>Finished {moment(dt.finishedAt).calendar()}</p>}
+        {/*totalUnits > totalAll &&
           <div className='functionalFooter numBoxRadio blackFade'>
             <span className='radioLabelPair'>
               <input
@@ -129,15 +124,10 @@ export class StatusRow extends Component	{
                 onChange={()=> this.setState({countCalc: 'unit'})} />
               <label htmlFor={rndmKey + 'calcU'}>Units</label>
             </span>
-          </div>
-        : null}
-        {late ?
-          <i
-            title='Late'
-            className='fas fa-exclamation-triangle fa-2x yellowT bottomRightFloat'>
-          </i>
-        :null}
-      </section>
+          </div>*/}
+        {late && 
+          <i title='Late' className='fas fa-exclamation-triangle fa-2x yellowT bottomRightFloat'></i>}
+      </div>
     );
   }
 }

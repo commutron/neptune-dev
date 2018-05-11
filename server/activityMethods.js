@@ -23,8 +23,8 @@ Meteor.methods({
                                             upTo(x.createdAt) === true);
     let newTotal = 0;
     // flow counts loop function
-    function flowLoop(now, river, items) {
-      const wndw = (t)=>moment(t).isSame(now, 'day');
+    function flowLoop(now, range, river, items) {
+      const wndw = (t)=>moment(t).isSame(now, range);
       let stepCounts = [];
       if(!river) {
         return [];
@@ -107,8 +107,8 @@ Meteor.methods({
         altItems = allLiveItems.filter( x => x.alt === 'yes' );
       }
       
-      let regStepCounts = flowLoop(now, river, regItems);
-      let altStepCounts = flowLoop(now, riverAlt, altItems);
+      let regStepCounts = flowLoop(now, range, river, regItems);
+      let altStepCounts = flowLoop(now, range, riverAlt, altItems);
       
       let rmaCount = b.items.filter( x => x.rma.length > 0).length;
       

@@ -29,9 +29,10 @@
 }
 
 .miniContain {
-  padding: 5px 15px;
+  max-width: 150px;
+  padding: 5px 10px;
 }
-
+.miniContain p { margin: 2px; }
 
 .reContain {
   padding: 10px;

@@ -1,40 +1,38 @@
 import React, {Component} from 'react';
 import moment from 'moment';
 
-export default class RangeTools extends Component	{
+const RangeTools = ({ onChange, update, dfkeyword }) => {
   
-  time() {
-    this.props.onChange(this.range.value, this.mod.value);
+  function time(e) {
+    onChange(this.range.value);
   }
-  
-  render() {
     
-    return(
-      <div className='rangeTools stickyBar'>
-        <label>
-          <button
-            type='button'
-            title='Auto updates every hour'
-            onClick={this.time.bind(this)}
-          >Update Now</button>
-          <i className='breath clean'>
-            Last updated at {moment(this.props.update).format('LT')}
-          </i>
+  return(
+    <div className='rangeTools stickyBar'>
+      <label>
+        <button
+          type='button'
+          title='Auto updates every hour'
+          onClick={(e)=>time(e)}
+        >Update Now</button>
+        <i className='breath clean'>
+          Last updated at {moment(update).format('LT')}
+        </i>
+      </label>
+      <label>
+        <i className='breath'>Range</i>
+        <label className='uniSelect'>
+          <select
+            onChange={(e)=>time(e)}
+            ref={(i)=> this.range = i}
+            defaultValue={dfkeyword}>
+            <option value='day'>Day</option>
+            <option value='week'>Week</option>
+          </select>
         </label>
-        <label>
-          <i className='breath'>Range</i>
-          <label className='uniSelect'>
-            <select
-              onChange={this.time.bind(this)}
-              ref={(i)=> this.range = i}
-              defaultValue={this.props.dfkeyword}>
-              <option value='hour'>Hour</option>
-              <option value='day'>Day</option>
-              <option value='week'>Week</option>
-            </select>
-          </label>
-        </label>
-      </div>
-    );
-  }
-}
+      </label>
+    </div>
+  );
+};
+
+export default RangeTools;

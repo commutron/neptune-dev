@@ -534,8 +534,6 @@ main {
   width: calc((100% - 60px) / 3);
   min-height: 100%;
   margin: 5px 10px 30px 10px;
-  border: 1px solid rgba(0,0,0,0.5);
-  /*transition: all 200ms ease;*/
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -563,6 +561,15 @@ main {
 }
 .wipCol > section > .fillHeight {
   flex-grow: 2;
+}
+
+.wipRow {
+  position: relative;
+  width: 100%;
+  min-height: 100%;
+  margin: 5px 10px 30px 10px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 
+              0 6px 6px rgba(0,0,0,0.23);
 }
 
 .bottomRightFloat {

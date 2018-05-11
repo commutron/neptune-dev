@@ -22,28 +22,26 @@ export default class BigPicture extends Component	{
     
     return (
       <div className='wipCol'>
-        <section className='balance dblSection'>
-          <div className='centreRow'>
-            <NumBox
-              num={now.outstanding}
-              name={'Outstanding ' + Pref.batch + 's'}
-              color='blueT' />
-            <NumBox
-              num={now.today}
-              name={'Active ' + Pref.batch + 's'}
-              color='blueT' />
-            <NumBox
-              num={now.newHistoryTotal}
-              name='History Pings'
-              color='blueT' />
-            <NumBox
-              num={now.doneBatches}
-              name={'finished ' + Pref.batch + 's'}
-              color='greenT' />
-          </div>
-        </section>
+        <div className='centreRow wide'>
+          <NumBox
+            num={now.outstanding}
+            name={'Outstanding ' + Pref.batch + 's'}
+            color='blueT' />
+          <NumBox
+            num={now.today}
+            name={'Active ' + Pref.batch + 's'}
+            color='blueT' />
+          <NumBox
+            num={now.newHistoryTotal}
+            name='History Pings'
+            color='blueT' />
+          <NumBox
+            num={now.doneBatches}
+            name={'finished ' + Pref.batch + 's'}
+            color='greenT' />
+        </div>
         <section>
-          {/*current benchmarks*/}
+          <em>current benchmarks, coming soon</em>
         </section>
         <section className='wide centre'>
           <i className='redT cap centreText'>{'types of discovered ' + Pref.nonCon + 's'}</i>
