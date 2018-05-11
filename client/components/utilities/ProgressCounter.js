@@ -17,6 +17,7 @@ function flowLoop(river, items, expand, quotaStart) {
     for(var i of items) {
       const h = i.history.filter( g => g.good === true);
       const hNew = h.filter( q => wndw(q.time) === true );
+      /*
       if(i.finishedAt !== false) {
         itemCount += 1;
         unitCount += 1 * i.units;
@@ -26,7 +27,8 @@ function flowLoop(river, items, expand, quotaStart) {
             unitCountNew += 1 * i.units;
           }
         }
-      }else if(step.type === 'inspect') {
+      }else*/ 
+      if(step.type === 'inspect') {
         h.find( byKey(this, step.key) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
         h.find( byName(this, step.step) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
         if(expand) {

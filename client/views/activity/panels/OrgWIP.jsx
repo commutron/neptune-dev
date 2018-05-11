@@ -29,7 +29,7 @@ const OrgWIP = ({ wip })=> {
   if(!wipHot || !wipCold) {
     return (
       <div className='space'>
-        <i className='fa fa-circle-o-notch fa-spin fa-3x' aria-hidden='true'></i>
+        <i className='fas fa-circle-o-notch fa-spin fa-3x'></i>
         <span className='sr-only'>Loading...</span>
       </div>
     );
@@ -93,7 +93,7 @@ export class StatusRow extends Component	{
               <div>
                 <hr className='fade'/>
                 <span className='small cap'>
-                  <i className='fa fa-asterisk fa-lg' aria-hidden='true'></i>
+                  <i className='fas fa-asterisk fa-lg'></i>
                   <i>{Pref.buildFlowAlt}</i>
                 </span>
                 <div>
@@ -134,8 +134,7 @@ export class StatusRow extends Component	{
         {late ?
           <i
             title='Late'
-            className='fa fa-exclamation-triangle fa-2x yellowT bottomRightFloat'
-            aria-hidden='true'>
+            className='fas fa-exclamation-triangle fa-2x yellowT bottomRightFloat'>
           </i>
         :null}
       </section>

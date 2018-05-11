@@ -4,11 +4,9 @@ import timezone from 'moment-timezone';
 Meteor.methods({
   
   
-   activitySnapshot(range, clientTZ, mod) {
+   activitySnapshot(range, clientTZ) {
     
-    let now = mod === 'last' ? 
-              moment().tz(clientTZ).subtract(1, range) :
-              moment().tz(clientTZ);
+    let now = moment().tz(clientTZ);
     const plainStart = now.clone().startOf(range);
     const sRange = plainStart.format();
     const plainEnd = now.clone().endOf(range);
@@ -23,41 +21,57 @@ Meteor.methods({
     const wipBatches = b.filter( x => ( x.finishedAt === false || 
                                           inRange(x.finishedAt) === true ) &&
                                             upTo(x.createdAt) === true);
-    
+    let newTotal = 0;
     // flow counts loop function
-    function flowLoop(river, items) {
+    function flowLoop(now, river, items) {
+      const wndw = (t)=>moment(t).isSame(now, 'day');
+      let stepCounts = [];
       if(!river) {
         return [];
       }else{
         const byKey = (t, ky)=> { return ( x => x.key === ky && x.good === true )};
         const byName = (t, nm)=> { return ( x => x.step === nm && x.type === 'first' && x.good === true )};
-        let stepCounts = [];
         for(let step of river.flow) {
           if(step.type === 'first') {
             null;
           }else{
             let itemCount = 0;
             let unitCount = 0;
+            let itemCountNew = 0;
+            let unitCountNew = 0;
             for(let i of items) {
               const h = i.history;
+              const hNew = h.filter( q => wndw(q.time) === true );
+              /*
               if(i.finishedAt !== false) {
                 itemCount += 1;
                 unitCount += 1 * i.units;
+                if(hNew.find( f => f.key === 'f1n15h1t3m5t3p' )) {
+                  itemCountNew += 1;
+                  unitCountNew += 1 * i.units;
+                }
               }else{
+              */
                 if(step.type === 'inspect') {
                   h.find( byKey(this, step.key) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
                   h.find( byName(this, step.step) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
+                  hNew.find( byKey(this, step.key) ) ? (itemCountNew += 1, unitCountNew += 1 * i.units ) : null;
+                  hNew.find( byName(this, step.step) ) ? (itemCountNew += 1, unitCountNew += 1 * i.units ) : null;
                 }else{
                   h.find( byKey(this, step.key) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
+                  hNew.find( byKey(this, step.key) ) ? (itemCountNew += 1, unitCountNew += 1 * i.units ) : null;
                 }
-              }
+              //}
             }
             stepCounts.push({
               step: step.step,
               type: step.type,
               itemCount: itemCount,
               unitCount: unitCount,
+              itemsNew: itemCountNew,
+              unitsNew: unitCountNew
             });
+            newTotal += itemCountNew;
           }
         }
         return stepCounts;
@@ -93,8 +107,8 @@ Meteor.methods({
         altItems = allLiveItems.filter( x => x.alt === 'yes' );
       }
       
-      let regStepCounts = flowLoop(river, regItems);
-      let altStepCounts = flowLoop(riverAlt, altItems);
+      let regStepCounts = flowLoop(now, river, regItems);
+      let altStepCounts = flowLoop(now, riverAlt, altItems);
       
       let rmaCount = b.items.filter( x => x.rma.length > 0).length;
       
@@ -136,81 +150,28 @@ Meteor.methods({
         scrap: scrapCount,
         active: active
       });
+      //newTotalTotal += ( regStepCounts.newTotal + altStepCounts.newTotal );
     }
     
   //////// bigNow \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     
     const aNCOps = AppDB.findOne({orgKey: Meteor.user().orgKey}).nonConOption;
     
-    let outstanding = b.filter( x => x.finishedAt === false && 
-                                      moment(x.createdAt)
-                                        .isBefore(eRange) );
+    let outstanding = wipLiveData.length;
     
-    function active(batches, startRange, endRange) {
-      let records = batches.filter(
-                      x => x.items.find(
-                        y => y.history.find( 
-                          z => moment(z.time)
-                                .isBetween(startRange, endRange) ) ) );
-      return records;
-    }
-    const mainActive = active(b, sRange, eRange);
-    //const mainActive = wipLiveData.filter( l => l.active === true );
-    
-    
-    
+    const mainActive = wipLiveData.filter(x => x.active === true ).length;
     
     const batchesNC = b.filter(
                       x => x.nonCon.find(
                         y => moment(y.time)
                           .isBetween(sRange, eRange) ) );
     
-    function doneBatches(batches, startRange, endRange) {
-      const records = batches.filter(
-                        x => x.finishedAt !== false && 
-                          moment(x.finishedAt)
-                            .isBetween(startRange, endRange) );
-      return records.length;
-    }
-    const mainDoneBatches = doneBatches(b, sRange, eRange);                        
-    
-    // finished items and units       
-    function doneItems(mainActive, startRange, endRange) {
-      let items = 0;
-      let units = 0;
-      for(let mA of mainActive) {
-        /*
-        const regCounts = mA.stepsReg.find( x => x.type = 'finish' );
-        !regCounts ? null : items += regCounts.itemCount;
-        !regCounts ? null : units += regCounts.unitCount;
-        const altCounts = mA.stepsAlt.find( x => x.type = 'finish' );
-        !altCounts ? null : items += altCounts.itemCount;
-        !altCounts ? null : units += altCounts.unitCount;
-        */
-        let fin = mA.items.filter(
-                    x => x.finishedAt !== false && 
-                          moment(x.finishedAt)
-                            .isBetween(startRange, endRange) );
-        items += fin.length;
-        for(let i of fin) {
-          units += i.units;
-        }
-      }
-      return { items: items, units: units };
-    }
-    
-    function recordedNC(batches, startRange, endRange) {
-      let newNC = 0;
-      for(let t of batches) {
-        let nw = t.nonCon.filter(
-                    x => moment(x.time)
-                      .isBetween(startRange, endRange) );
-        newNC += nw.length;
-      }
-      return newNC;
-    }
-    //const ncTotalCount = recordedNC(batchesNC, sRange, eRange);
-    
+    const doneBatches = b.filter(
+                          x => x.finishedAt !== false && 
+                            moment(x.finishedAt)
+                              .isBetween(sRange, eRange) )
+                                .length;
+
     let ncTypeCounts = [];
     for(let ncType of aNCOps) {
       let typNum = 0;
@@ -224,52 +185,14 @@ Meteor.methods({
       ncTypeCounts.push({meta: ncType, value: typNum});
     }
     
-    //// Rates ///////
-    let frequency = range === 'day' ? 'hour' : 'day';
-    let rate = mod === 'last' ?
-               plainEnd.diff(plainStart, frequency) + 1 :
-               now.diff(plainStart, frequency) + 1;
-    //console.log(rate);
-               
-    let rateDay = mod === 'last' ?
-                  plainEnd.clone() :
-                  now.clone();
-    //console.log(rateDay.format());
-    let rateStart = rateDay.clone().startOf(frequency);
-    //console.log(rateStart.format());
-    let rateEnd = rateDay.clone().endOf(frequency);
-    //console.log(rateEnd.format());
-    
-    let doneItemsOT = [];
-    let doneUnitsOT = [];
-    let newNCOT = [];
-    for(let i = 0; i < rate; i++) {
-      let start = rateStart.clone().subtract(i, frequency).format();
-      let end = rateEnd.clone().subtract(i, frequency).format();
-      
-      let doneCount = doneItems(mainActive);
-      doneItemsOT.unshift(doneCount.items);
-      doneUnitsOT.unshift(doneCount.units);
-      
-      let ncCount = recordedNC(batchesNC, start, end);
-      newNCOT.unshift(ncCount);
-    }
-    
     const bigDataPack = {
-      live: mod === 'last' ? false : true,
       start: sRange,
       end: eRange,
-      outstanding: outstanding.length,
-      today: mainActive.length,
-      todayNC: batchesNC.length,
-      newNC: newNCOT.reduce((x, y) => x + y),
+      outstanding: outstanding,
+      today: mainActive,
       ncTypeCounts: ncTypeCounts,
-      newNCOverTime: newNCOT,
-      doneItems: doneItemsOT.reduce((x, y) => x + y),
-      doneUnits: doneUnitsOT.reduce((x, y) => x + y),
-      doneItemsOT: doneItemsOT,
-      doneUnitsOT: doneUnitsOT,
-      doneBatches: mainDoneBatches
+      newHistoryTotal: newTotal,
+      doneBatches: doneBatches
     };
     
     //////// Return Object \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

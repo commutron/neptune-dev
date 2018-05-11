@@ -5,8 +5,6 @@ import Pref from '/client/global/pref.js';
 import NumBox from '/client/components/uUi/NumBox.jsx';
 import NonConTypePie from '/client/components/charts/NonConTypePie.jsx';
 
-import SimpleRate from '/client/components/charts/SimpleRate.jsx';
-
 export default class BigPicture extends Component	{
 
   render() {
@@ -22,8 +20,6 @@ export default class BigPicture extends Component	{
       );
     }
     
-    // now.todayNC = quantity of batches with new nonCons
-    
     return (
       <div className='wipCol'>
         <section className='balance dblSection'>
@@ -36,37 +32,18 @@ export default class BigPicture extends Component	{
               num={now.today}
               name={'Active ' + Pref.batch + 's'}
               color='blueT' />
-            {/*
             <NumBox
-              num={now.historyCount}
-              name={'Total History Events'}
+              num={now.newHistoryTotal}
+              name='History Pings'
               color='blueT' />
-            */}
             <NumBox
               num={now.doneBatches}
               name={'finished ' + Pref.batch + 's'}
               color='greenT' />
-            <NumBox
-              num={now.doneItems}
-              name={'finished ' + Pref.item + 's'}
-              color='greenT' />
-            <NumBox
-              num={now.doneUnits}
-              name={'finished ' + Pref.unit + 's'}
-              color='greenT' />
           </div>
         </section>
         <section>
-          <SimpleRate
-            dataOne={[]}
-            titleOne={false}
-            dataTwo={now.newNCOverTime}
-            titleTwo={Pref.nonCon + 's'}
-            dataThree={now.doneUnitsOT}
-            titleThree={'finished ' + Pref.unit + 's'}
-            lastDay={now.end}
-            live={now.live}
-            timeRange={this.props.timeRange} />
+          {/*current benchmarks*/}
         </section>
         <section className='wide centre'>
           <i className='redT cap centreText'>{'types of discovered ' + Pref.nonCon + 's'}</i>
