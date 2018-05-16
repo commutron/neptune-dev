@@ -106,7 +106,7 @@
 .riverExpandToggle, .riverShrinkToggle {
   position: absolute;
   top: 50%;
-  z-index: 8;
+  z-index: 7;
   opacity: 0.8;
   padding: 16px 2px;
   font-family: FontAwesome;

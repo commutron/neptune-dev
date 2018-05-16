@@ -11,6 +11,8 @@ export default class BigPicture extends Component	{
     
     const now = this.props.now;
     
+    let range = moment(now.start).isSame(now.end, 'day') ? 'today' : 'this week';
+    
     if(!now) {
       return (
         <div className='space'>
@@ -40,11 +42,16 @@ export default class BigPicture extends Component	{
             name={'finished ' + Pref.batch + 's'}
             color='greenT' />
         </div>
+        {/*
         <section>
           <em>current benchmarks, coming soon</em>
         </section>
+        */}
         <section className='wide centre'>
-          <i className='redT cap centreText'>{'types of discovered ' + Pref.nonCon + 's'}</i>
+          <p className='centreText'>
+            <i className='redT cap'>{'types of ' + Pref.nonCon + 's'}</i>
+            <br /><i>Discovered {range}</i>
+          </p>
           <NonConTypePie ncTypes={now.ncTypeCounts} fullWidth={true} />
         </section>
       </div>

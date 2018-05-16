@@ -164,15 +164,21 @@
 }
 
 .pop {
-  -moz-box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2);
-  -webkit-box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2);
-  box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2);
+  -moz-box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 
+                   0 15px 12px rgba(0, 0, 0, 0.22);
+  -webkit-box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 
+                      0 15px 12px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 
+              0 15px 12px rgba(0, 0, 0, 0.22);
 }
 
 .popBlue {
-  -moz-box-shadow: 0 3px 10px 5px rgba(52, 152, 219, 0.3);
-  -webkit-box-shadow: 0 3px 10px 5px rgba(52, 152, 219, 0.3);
-  box-shadow: 0 3px 10px 5px rgba(52, 152, 219, 0.3);
+  -moz-box-shadow: 0 10px 30px rgba(52, 152, 219, 0.30), 
+                   0 0 10px rgba(52, 152, 219, 0.22);
+  -webkit-box-shadow: 0 10px 30px rgba(52, 152, 219, 0.30), 
+                      0 0 10px rgba(52, 152, 219, 0.22);
+  box-shadow: 0 10px 30px rgba(52, 152, 219, 0.30), 
+              0 0 10px rgba(52, 152, 219, 0.22);
 }
 
 .fade { opacity: 0.4; }
@@ -727,25 +733,35 @@
 
 .rangeTools {
   width: 100%;
+  height: 32px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 5px;
-  background-color: var(--blackFade);
+  background-color: var(--black);
   font-size: 1rem;
 }
 
-.rangeTools select, .rangeTools button {
+.rangeTools button, .rangeTools select {
   width: 110px;
   min-height: 1.5rem;
   line-height: 1.25rem;
   font-size: 1rem;
-  background-color: var(--black);
-  border-bottom: none;
+  background-color: transparent;
   color: white;
   -webkit-appearance: none;
    -moz-appearance: none;
    appearance: none;
+}
+.rangeTools button {
+  border: 1px solid white;
+}
+.rangeTools button:hover {
+  background-color: white;
+  color: var(--black);
+}
+.rangeTools option {
+  background-color: var(--clouds);
+  color: black;
 }
 .uniSelect:after {
   content: "\f078";
@@ -758,17 +774,14 @@
   pointer-events: none;
 }
 
-.rangeTools option {
-  background-color: var(--clouds);
-  color: black;
-}
-
 .miniDateRange {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 .miniDateRange span {
-  margin: 0 3px;
+  margin: 3px;
 }
 .miniDateRange select,
 .miniDateRange input[type='date'],
@@ -789,7 +802,7 @@
   height: 24px;
 }
 .miniDateRange select {
-  width: 175px;
+  width: 248px;
 }
 .miniDateRange option {
   color: black;

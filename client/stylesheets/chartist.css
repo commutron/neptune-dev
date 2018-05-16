@@ -45,7 +45,8 @@
   -ms-flex-pack: flex-start;
   justify-content: flex-start;
   text-align: left;
-  text-anchor: middle; }
+  text-anchor: middle;
+  flex-wrap: wrap-reverse }
 
 .ct-label.ct-vertical.ct-start {
   -webkit-box-align: flex-end;

@@ -164,11 +164,11 @@ export default class BatchPanel extends Component	{
                     riverAlt={b.riverAlt}
                     riverAltTitle={riverAltTitle}
                     riverAltFlow={riverAltFlow} />
-                  <hr />
+                  {/*<hr />
                   <FirstsOverview
                     doneFirsts={filter.fList}
                     flow={riverFlow}
-                    flowAlt={riverAltFlow} />
+                    flowAlt={riverAltFlow} />*/}
                 </div>
               
                 <div className='twoThirdsContent'>
@@ -181,6 +181,7 @@ export default class BatchPanel extends Component	{
                 <div className='threeThirdsContent wide'>
                   <ProgBurndown
                     start={b.start}
+                    floorRelease={b.floorRelease}
                     end={b.finishedAt}
                     flowData={riverFlow}
                     flowAltData={riverAltFlow}

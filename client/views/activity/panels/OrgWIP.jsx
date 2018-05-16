@@ -29,7 +29,7 @@ const OrgWIP = ({ wip })=> {
   }
   
   if(!wipHot || !wipCold) {
-    return (
+    return(
       <div className='space'>
         <i className='fas fa-circle-o-notch fa-spin fa-3x'></i>
         <span className='sr-only'>Loading...</span>
@@ -72,8 +72,6 @@ export class StatusRow extends Component	{
     const totalUnits = dt.totalRU + dt.totalAU;
     
     const calcItem = this.state.countCalc === 'item' ? true : false;
-    
-    let rndmKey = Math.random().toString(36).substr(2, 5);
 
     return(
       <div className={'wipRow ' + clss}>

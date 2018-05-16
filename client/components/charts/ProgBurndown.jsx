@@ -31,7 +31,9 @@ export default class ProgBurndown extends Component {
   render () {
     
     const counts = this.state.counts;
-
+    const flR = !this.props.floorRelease ? null : 
+      moment(this.props.floorRelease.time).format('MMM.D');
+      
     if(!counts) {
       return(
         <CalcSpin />
@@ -68,18 +70,20 @@ export default class ProgBurndown extends Component {
                       counts.length < 90 ?
                       12 :
                       16;
-          return index === counts.length - 5 ? null :
+          return value.meta == flR ? 'Floor Release ' + value.meta :
+                 index === counts.length - 5 ? null :
                  index === counts.length - 4 ? null :
                  index === counts.length - 3 ? null :
                  index === counts.length - 2 ? null :
                  index === counts.length - 1 ? value.meta :
                  index % scale === 0 ? value.meta : null;
-        }
+        },
+        scaleMinSpace: 15
       },
       chartPadding: {
         top: 20,
         right: 40,
-        bottom: 0,
+        bottom: 10,
         left: 0
       },
     };

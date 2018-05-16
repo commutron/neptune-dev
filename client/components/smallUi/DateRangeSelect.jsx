@@ -8,11 +8,11 @@ const DateRangeSelect = ({ setNew, setFrom, setTo, doRefresh })=> (
     <span>
       <select
         id='scope'
-        title='include'
+        title='Scope'
         defaultValue={false}
         onChange={(e)=>setNew(scope.value)}>
-        <option value='all'>Active {Pref.batch}s</option>
-        <option value='new'>Newly Discovered</option>
+        <option value='all'>All from Active {Pref.Batch}s</option>
+        <option value='new'>Limit to Newly Discovered</option>
       </select>
     </span>
     <span>
@@ -39,8 +39,9 @@ const DateRangeSelect = ({ setNew, setFrom, setTo, doRefresh })=> (
     </span>
     <span>
       <button
+      title='Refresh'
         className='clearWhite'
-        onClick={(e)=>doRefresh()}
+        onClick={(e)=>doRefresh(e)}
       ><i className='fas fa-redo'></i></button>
     </span>
   </div>

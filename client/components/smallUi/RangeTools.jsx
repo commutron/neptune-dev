@@ -26,8 +26,8 @@ const RangeTools = ({ onChange, update, dfkeyword }) => {
             onChange={(e)=>time(e)}
             ref={(i)=> this.range = i}
             defaultValue={dfkeyword}>
-            <option value='day'>Day</option>
-            <option value='week'>Week</option>
+            <option value='day'>Today</option>
+            <option value='week'>This Week</option>
           </select>
         </label>
       </label>
