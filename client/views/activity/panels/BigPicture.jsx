@@ -3,6 +3,7 @@ import moment from 'moment';
 import timezone from 'moment-timezone';
 import Pref from '/client/global/pref.js';
 import NumBox from '/client/components/uUi/NumBox.jsx';
+import PopGroupWIP from '/client/components/charts/PopGroupWIP.jsx';
 import NonConTypePie from '/client/components/charts/NonConTypePie.jsx';
 
 export default class BigPicture extends Component	{
@@ -10,6 +11,7 @@ export default class BigPicture extends Component	{
   render() {
     
     const now = this.props.now;
+    const wip =this.props.wip;
     
     let range = moment(now.start).isSame(now.end, 'day') ? 'today' : 'this week';
     
@@ -42,11 +44,12 @@ export default class BigPicture extends Component	{
             name={'finished ' + Pref.batch + 's'}
             color='greenT' />
         </div>
-        {/*
-        <section>
-          <em>current benchmarks, coming soon</em>
+        <section className='wide centre'>
+          <p className='centreText'>
+            <i className='blueT cap'>{Pref.group + 's in Progress'}</i>
+          </p>
+          <PopGroupWIP wip={wip} />
         </section>
-        */}
         <section className='wide centre'>
           <p className='centreText'>
             <i className='redT cap'>{'types of ' + Pref.nonCon + 's'}</i>

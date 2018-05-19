@@ -26,21 +26,27 @@
   overflow-y: auto;
 }
 
-.landingContainer, .traverseContainer, .traverseContainerMin {
+.landingContainer, .traverseContainer, .traverseContainerMin,
+.baseTraverseContainer, .baseTraverseContainerMin {
   display: grid;
-  grid-template-columns: auto 176px;
   align-content: center;
   overflow-y: hidden !important;
   overflow-x: hidden !important;
   -webkit-overflow-scrolling: touch;
 }
+.landingContainer, .traverseContainer, .traverseContainerMin {
+  grid-template-columns: auto 176px;
+}
+.baseTraverseContainer, .baseTraverseContainerMin {
+  grid-template-columns: auto;
+}
 .landingContainer {
   grid-template-rows: 32px calc(100vh - 120px) 40px;
 }
-.traverseContainer {
+.traverseContainer, .baseTraverseContainer {
   grid-template-rows: 32px calc(100vh - 128px) 48px;
 }
-.traverseContainerMin {
+.traverseContainerMin, .baseTraverseContainerMin {
   grid-template-rows: 32px calc(100vh - 80px);
 }
 .landingContainer {
@@ -59,6 +65,17 @@
   grid-template-areas: 
     'cookieNav traverseList'
     'traverseContent traverseList';
+}
+.baseTraverseContainer {
+  grid-template-areas: 
+    'cookieNav'
+    'traverseContent'
+    'actionBarEx';
+}
+.baseTraverseContainerMin {
+  grid-template-areas: 
+    'cookieNav'
+    'traverseContent';
 }
 
 .cookieNavEx {
@@ -204,12 +221,12 @@
   color: var(--black);
   background-color: var(--silver);
 }
-.onTL:hover, .onTL:active {
-  /*cursor: default;*/
-}
 
 .smallResultsBox {
-  width: 500px;
+  width: 512px;
+}
+.smallResultsBox td:first-child {
+  min-width: 96px;
 }
 .smallResultsBox td:last-child {
   font-weight: bold;

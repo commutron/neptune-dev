@@ -11,6 +11,7 @@ export default class ProgBurndown extends Component {
     super();
     this.state = {
       counts: false,
+      first: false
     };
   }
   
@@ -21,7 +22,10 @@ export default class ProgBurndown extends Component {
     const flowAltData = this.props.flowAltData;
     const itemData = this.props.itemData;
     let clientTZ = moment.tz.guess();
-  
+    Meteor.call('firstFirst', this.props.id, clientTZ, (error, reply)=> {
+      error && console.log(error);
+      this.setState({ first: reply });
+    });
     Meteor.call('historyRate', start, end, flowData, flowAltData, itemData, clientTZ, (error, reply)=> {
       error ? console.log(error) : null;
       this.setState({ counts: reply });
@@ -33,8 +37,9 @@ export default class ProgBurndown extends Component {
     const counts = this.state.counts;
     const flR = !this.props.floorRelease ? null : 
       moment(this.props.floorRelease.time).format('MMM.D');
-      
-    if(!counts) {
+    const frst = this.state.first;
+
+    if(!counts || !frst) {
       return(
         <CalcSpin />
       );
@@ -64,13 +69,12 @@ export default class ProgBurndown extends Component {
           let scale = counts.length < 7 ?
                       1 :
                       counts.length < 30 ?
-                      4 :
+                      7 :
                       counts.length < 60 ?
-                      8 :
-                      counts.length < 90 ?
-                      12 :
-                      16;
+                      14 :
+                      30;
           return value.meta == flR ? 'Floor Release ' + value.meta :
+                 moment(value.meta).isSame(frst, 'day') ? value.meta:
                  index === counts.length - 5 ? null :
                  index === counts.length - 4 ? null :
                  index === counts.length - 3 ? null :
@@ -78,7 +82,7 @@ export default class ProgBurndown extends Component {
                  index === counts.length - 1 ? value.meta :
                  index % scale === 0 ? value.meta : null;
         },
-        scaleMinSpace: 15
+        scaleMinSpace: 25
       },
       chartPadding: {
         top: 20,

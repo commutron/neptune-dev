@@ -33,7 +33,7 @@ export default class WidgetsDepth extends Component	{
                   if (w1.widget > w2.widget) { return 1 }
                   return 0;
                 });
-    const g = this.props.groupAlias;
+    //const g = this.props.groupAlias;
     const f = this.state.filter;
     
     let basicFilter = 
@@ -55,7 +55,7 @@ export default class WidgetsDepth extends Component	{
           <div className='wrapDeck'>
             {w.length < 1 ? <p>no {Pref.widget}s created</p> : null}
               { showList.map( (entry, index)=> {
-              let ac = active.includes(entry._id) ? 'leapBar activeMark medBig' : 'leapBar medBig';
+              let ac = active.includes(entry._id) ? 'leapBar activeMark' : 'leapBar';
                 return(
                   <WidgetIndexCard key={index} data={entry} barStyle={ac} />
               )})}
@@ -77,7 +77,7 @@ class WidgetIndexCard extends Component {
   
   totalI(mData) {
     let items = Array.from(mData, x => x.items);
-    let total = items > 0 ? items.reduce((x,y)=>x+y) : 0;
+    let total = items.length > 0 ? items.reduce((x,y)=>x+y) : 0;
     return total;
   }
   
@@ -93,9 +93,13 @@ class WidgetIndexCard extends Component {
   }
   
   avgNC(mData) {
+    let items = Array.from(mData, x => x.items);
+    let total = items.length > 0 ? items.reduce((x,y)=>x+y) : 0;
     let ncs = Array.from(mData, x => x.nonCons);
-    let avgNCs = ncs > 0 ? ncs.reduce((x,y)=>x+y) / ncs.length : 0;
-    return avgNCs;
+    let allNCs = ncs.length > 0 ? ncs.reduce((x,y)=>x+y) : 0;
+    let perI = (allNCs / total).toFixed(1);
+    let perW = (allNCs / ncs.length).toFixed(1);
+    return { perI, perW };
   }
   
   render() {
@@ -130,17 +134,22 @@ class WidgetIndexCard extends Component {
             num={totalItems}
             name={'total ' + Pref.item + 's'}
             color='blueT'
-            size='big' />
+            size='medBig' />
           <NumStat
             num={avgDur}
-            name='on average'
+            name={'~ per ' + Pref.batch}
             color='greenT'
-            size='big' />
+            size='medBig' />
           <NumStat
-            num={avgNCs}
-            name='nonCons on average'
+            num={avgNCs.perI}
+            name={'~ nonCons per ' + Pref.item}
             color='redT'
-            size='big' />
+            size='medBig' />
+          <NumStat
+            num={avgNCs.perW}
+           name={'~ nonCons per ' + Pref.batch}
+            color='redT'
+            size='medBig' />
         </div>
       </div>
     );

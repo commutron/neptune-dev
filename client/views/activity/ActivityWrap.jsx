@@ -71,6 +71,7 @@ export default class OrgWIP extends Component	{
               b={this.props.b}
               a={this.props.a}
               now={this.state.now}
+              wip={this.state.wip}
               timeRange={this.state.timeRange} />
           </span>
           <span>

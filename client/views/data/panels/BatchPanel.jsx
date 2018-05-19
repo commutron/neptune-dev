@@ -180,6 +180,7 @@ export default class BatchPanel extends Component	{
                 
                 <div className='threeThirdsContent wide'>
                   <ProgBurndown
+                    id={b._id}
                     start={b.start}
                     floorRelease={b.floorRelease}
                     end={b.finishedAt}

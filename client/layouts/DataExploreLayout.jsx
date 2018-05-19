@@ -32,8 +32,13 @@ export class TraverseWrap extends Component	{
     return (
       <div 
         className={
-          this.props.landing ? 'landingContainer' :
-          this.props.user.miniAction === true ? 'traverseContainerMin' : 'traverseContainer'}>
+          this.props.landing ? 
+            'landingContainer' :
+          !this.props.children[1] ?
+            this.props.user.miniAction === true ? 
+              'baseTraverseContainerMin' : 'baseTraverseContainer' :
+          this.props.user.miniAction === true ? 
+            'traverseContainerMin' : 'traverseContainer'}>
         <div 
           className={
             //!this.props.user.miniAction &&
@@ -50,12 +55,13 @@ export class TraverseWrap extends Component	{
         </div>
         
         <section className='traverseContent' style={scrollFix}>
-          {this.props.children[0]}
+          {this.props.children[0] || this.props.children}
         </section>
         
-        <aside className='traverseList' style={scrollFix}>
-          {this.props.children[1]}
-        </aside>
+        {this.props.children[1] &&
+          <aside className='traverseList' style={scrollFix}>
+            {this.props.children[1]}
+          </aside>}
         
         {( this.props.landing || !this.props.user.miniAction ) &&
           <div className='actionBarEx'>

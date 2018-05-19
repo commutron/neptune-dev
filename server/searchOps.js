@@ -41,7 +41,7 @@ Meteor.methods({
   widgetTops(wID) {
     const batches = BatchDB.find({orgKey: Meteor.user().orgKey, widgetId: wID}).fetch();
     const batchInfo = Array.from(batches, x => { return { 
-      start: x.createdAt,
+      start: x.start,
       finish: x.finishedAt,
       items: x.items.length,
       nonCons: x.nonCon.length,
@@ -105,9 +105,9 @@ Meteor.methods({
     let historyPingsOT = [];
     for(let i = 0; i < howManyDays; i++) {
       const day = startDay.clone().add(i, 'day');
-      
       const historyCountR = historyPings(regItems, flowKeys, totalRegSteps, day);
       const historyCountA = historyPings(altItems, altKeys, totalAltSteps, day);
+
       historyPingsOT.push({
         meta: day.format('MMM.D'), 
         value: historyCountR + historyCountA
@@ -115,7 +115,22 @@ Meteor.methods({
     }
     
     return historyPingsOT;
-                    
+  },
+  
+  firstFirst(batchId, clientTZ) {
+    const b = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
+    let first = moment();
+    if(!b) { null }else{
+      for(let i of b.items) {
+        let firstHistory = i.history[0];
+        if(!firstHistory || moment(firstHistory.time).isSameOrAfter(first)) {
+          null;
+        }else{
+          first = moment(firstHistory.time);
+        }
+      }
+    }
+    return first.tz(clientTZ).format('MMM.D hh:mm a');
   },
   
       ///////////////////////////////////////////////////////////////////////////////////
@@ -192,6 +207,7 @@ Meteor.methods({
       moment(createdAt).isBefore(to);
       
     const relevantBatches = allBatches.filter( x => 
+                              ( x.floorRelease === undefined || x.floorRelease === true) &&
                               inWindow(x.finishedAt, x.createdAt) === true );
     /*  limit Low batches to only finished                       
     const doneBatches = allBatches.filter( x => 
@@ -208,7 +224,7 @@ Meteor.methods({
     if(!widgetSort) {
       // low filter
       const lowNC = relevantBatches.filter( x => relevantNC(x.nonCon).length <= best );
-      //const lowNC = doneBatches.filter( x => x.nonCon.length <= best ); 
+      //const lowNC = doneBatches.filter( x => relevantNC(x.nonCon).length <= best ); 
       const bestBatchNC = Array.from(lowNC,
                             x => { 
                               return ( {

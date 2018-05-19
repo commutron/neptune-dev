@@ -69,7 +69,7 @@ export default class GroupsList extends Component	{
               onClick={e => this.setFilter(e)}
               onTxtChange={e => this.setTextFilter(e)} />
           </div>  
-          { showList.map( (entry, index)=> {
+          { showList.sort( (x,y)=> x.group - y.group).map( (entry, index)=> {
             let ac = a.includes(entry._id) ? 'leapBar activeMark' : 'leapBar';
             return (
               <LeapButton

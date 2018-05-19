@@ -150,7 +150,6 @@ Meteor.methods({
         scrap: scrapCount,
         active: active
       });
-      //newTotalTotal += ( regStepCounts.newTotal + altStepCounts.newTotal );
     }
     
   //////// bigNow \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

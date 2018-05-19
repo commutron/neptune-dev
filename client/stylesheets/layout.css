@@ -17,6 +17,8 @@ main {
   z-index: 8;
 }
 
+.hidden { display: none; }
+
 .forceScrollStyle::-webkit-scrollbar {
   width: 12px;
 }
