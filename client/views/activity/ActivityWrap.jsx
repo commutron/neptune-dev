@@ -59,7 +59,7 @@ export default class OrgWIP extends Component	{
     
     return(
       <AnimateWrap type='contentTrans'>
-        <div className='denseData' key={0}>
+        <div key={0}>
           <RangeTools
             onChange={(r) => this.timeRange(r)}
             dfkeyword={this.state.timeRange}

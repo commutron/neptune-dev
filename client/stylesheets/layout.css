@@ -411,15 +411,6 @@ main {
   border-right: none;
 }
 
-/* whats this for */
-.denseData { width: 100%; }
-.denseData > span {
-  width: 100vw;
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-/*--------*/
-
 .wipCol {
   display: flex;
   flex-direction: row;
@@ -465,6 +456,7 @@ main {
   min-height: 100%;
   margin: 16px 32px;
   border: 1px solid rgb(20,20,20);
+  background-color: var(--black);
 }
 
 .bottomRightFloat {

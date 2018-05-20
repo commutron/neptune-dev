@@ -736,15 +736,18 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--black);
   font-size: 1rem;
+  background-color: rgba(5,5,5,0.8);
+  -moz-box-shadow: 0 10px 30px rgba(0, 0, 0, 0.30);
+  -webkit-box-shadow: 0 10px 30px rgba(0, 0, 0, 0.30);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.30);
 }
 
 .rangeTools button, .rangeTools select {
   width: 110px;
   min-height: 1.5rem;
   line-height: 1.25rem;
-  font-size: 1rem;
+  font-size: inherit;
   background-color: transparent;
   color: white;
   -webkit-appearance: none;
