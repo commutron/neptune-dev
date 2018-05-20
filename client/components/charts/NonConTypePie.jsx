@@ -29,15 +29,15 @@ const NonConTypePie = ({ ncTypes, fullWidth })=> {
   let options = {
     width: fullWidth ? '' : 600,
     fullWidth: fullWidth,
-    height: 400,
+    height: 325,
     startAngle: 0,
     donut: true,
-    donutWidth: 80,
+    donutWidth: 60,
     showLabel: true,
-    labelOffset: 50,
+    labelOffset: 40,
     labelDirection: 'explode',
     ignoreEmptyValues: true,
-    chartPadding: 70,
+    chartPadding: 50,
     plugins: [
       Chartist.plugins.tooltip({
         appendToBody: true

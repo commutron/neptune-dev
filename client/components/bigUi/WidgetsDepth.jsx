@@ -133,23 +133,27 @@ class WidgetIndexCard extends Component {
           <NumStat
             num={totalItems}
             name={'total ' + Pref.item + 's'}
+            title={'serialized items of all ' + Pref.batch + 'es'}
             color='blueT'
-            size='medBig' />
+            size='big' />
+          <NumStat
+            num={isNaN(avgNCs.perI) ? 'n/a' : avgNCs.perI}
+            name={'nonCons per ' + Pref.item}
+            title={'mean average of all ' + Pref.batch + 'es'}
+            color='redT'
+            size='big' />
+          <NumStat
+            num={isNaN(avgNCs.perW) === true ? 'n/a' : avgNCs.perW}
+            name={'nonCons per ' + Pref.batch}
+            title={'mean average of all ' + Pref.batch + 'es'}
+            color='redT'
+            size='big' />
           <NumStat
             num={avgDur}
-            name={'~ per ' + Pref.batch}
+            name={'per ' + Pref.batch}
+            title={'mean average of all ' + Pref.batch + 'es'}
             color='greenT'
-            size='medBig' />
-          <NumStat
-            num={avgNCs.perI}
-            name={'~ nonCons per ' + Pref.item}
-            color='redT'
-            size='medBig' />
-          <NumStat
-            num={avgNCs.perW}
-           name={'~ nonCons per ' + Pref.batch}
-            color='redT'
-            size='medBig' />
+            size='big' />
         </div>
       </div>
     );

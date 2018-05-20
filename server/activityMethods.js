@@ -69,7 +69,7 @@ Meteor.methods({
               itemCount: itemCount,
               unitCount: unitCount,
               itemsNew: itemCountNew,
-              unitsNew: unitCountNew
+              unitsNew: unitCountNew,
             });
             newTotal += itemCountNew;
           }
@@ -121,6 +121,11 @@ Meteor.methods({
         totalAltUnits += i.units;
       }
       
+      let hasNonCon = 0;
+      for(let i of b.items) {
+        b.nonCon.find( n => n.serial === i.serial ) ? hasNonCon += 1 : null;
+      }
+      
       let activeH = b.items.find( 
                     i => i.history.find( 
                       h => moment(h.time)
@@ -137,15 +142,20 @@ Meteor.methods({
         widget: w.widget,
         version: v.version,
         group: g.alias,
+        start: b.start,
+        floorRelease: b.floorRelease,
         endGoal: b.end,
         finished: done,
         finishedAt: b.finishedAt,
-        totalRU: totalRegUnits,
-        totalAU: totalAltUnits,
+        itemsTotal: b.items.length,
         totalR: regItems.length,
         totalA: altItems.length,
+        totalRU: totalRegUnits,
+        totalAU: totalAltUnits,
         stepsReg: regStepCounts,
         stepsAlt: altStepCounts,
+        nonConTotal: b.nonCon.length,
+        hasNonCon: hasNonCon,
         rma: rmaCount,
         scrap: scrapCount,
         active: active

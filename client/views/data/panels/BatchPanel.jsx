@@ -4,7 +4,7 @@ import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
 import ProgressCounter from '/client/components/utilities/ProgressCounter.js';
 import CreateTag from '/client/components/uUi/CreateTag.jsx';
-import UserName from '/client/components/uUi/UserName.jsx';
+//import UserName from '/client/components/uUi/UserName.jsx';
 import Tabs from '/client/components/smallUi/Tabs.jsx';
 
 import TagsModule from '../../../components/bigUi/TagsModule.jsx';
@@ -14,7 +14,7 @@ import { ReleaseNote } from '/client/components/river/FloorRelease.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';
 import BlockList from '../../../components/bigUi/BlockList.jsx';
 import RiverSatus from '../../../components/smallUi/RiverStatus.jsx';
-import FirstsOverview from '/client/components/bigUi/FirstsOverview.jsx';
+//import FirstsOverview from '/client/components/bigUi/FirstsOverview.jsx';
 import FirstsTimeline from '/client/components/bigUi/FirstsTimeline.jsx';
 import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
 import ProgBurndown from '/client/components/charts/ProgBurndown.jsx';
@@ -64,7 +64,18 @@ export default class BatchPanel extends Component	{
     const w = this.props.widgetData;
     const g = this.props.groupData;
     
-    const fnsh = b.finishedAt ? moment(b.finishedAt).format("MMMM Do, YYYY, h:mm a") : '';
+    const end = b.finishedAt !== false ? moment(b.finishedAt) : moment();
+    const timeElapse = moment.duration(end.diff(b.start)).asWeeks().toFixed(1);
+    
+    const timeasweeks = timeElapse.split('.');
+    const timeweeks = timeasweeks[0];
+    const timedays = moment.duration(timeasweeks[1] * 0.1, 'weeks').asDays().toFixed(0);
+    const elapseNice = timeweeks + ' week' + 
+                        (timeweeks == 1 ? ', ' : 's, ') + 
+                          timedays + ' day' +
+                            (timedays == 1 ? '' : 's');
+                 
+    const fnsh = b.finishedAt ? end.format("MMMM Do, YYYY") : null;
     
     const v = w.versions.find( x => x.versionKey === b.versionKey );
     
@@ -127,6 +138,13 @@ export default class BatchPanel extends Component	{
                   tags={b.tags}
                   vKey={false}
                   tagOps={a.tagOption} />
+                <fieldset className='noteCard'>
+                  <legend>Time Range</legend>
+                  <p className='capFL'>{Pref.start}: {moment(b.start).format("MMMM Do, YYYY")}</p>
+                  <p className='capFL'>{Pref.end}: {moment(b.end).format("MMMM Do, YYYY")}</p>
+                  {fnsh !== null && <p>Finished: {fnsh}</p>}
+                  <p>{fnsh !== null ? 'Total Time:' : 'Elapsed:'} {elapseNice}</p>
+                </fieldset>
                 {b.items.length > 0 &&
                   <fieldset className='noteCard'>
                     <legend>Serial Range</legend>
@@ -140,16 +158,10 @@ export default class BatchPanel extends Component	{
                 <BlockList id={b._id} data={b.blocks} lock={done} expand={true} />
               </div>
               <div className='twoThirdsContent'>
-                <div className='wellSpacedLine'>
-                  <p className='capFL'>{Pref.start}: {moment(b.start).format("MMMM Do, YYYY, h:mm a")}</p>
-                  <p className='capFL'>{Pref.end}: {moment(b.end).format("MMMM Do, YYYY, h:mm a")}</p>
-                  <p className=''>Finished: {fnsh}</p>
-                </div>
-                <br />
-                  <FirstsTimeline
-                    id={b._id}
-                    batch={b.batch}
-                    doneFirsts={filter.fList} />
+                <FirstsTimeline
+                  id={b._id}
+                  batch={b.batch}
+                  doneFirsts={filter.fList} />
               </div>
             </div>
           

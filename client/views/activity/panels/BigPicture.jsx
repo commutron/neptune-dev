@@ -37,7 +37,7 @@ export default class BigPicture extends Component	{
             color='blueT' />
           <NumBox
             num={now.newHistoryTotal}
-            name='History Pings'
+            name='History Record Events'
             color='blueT' />
           <NumBox
             num={now.doneBatches}
@@ -46,14 +46,15 @@ export default class BigPicture extends Component	{
         </div>
         <section className='wide centre'>
           <p className='centreText'>
-            <i className='blueT cap'>{Pref.group + 's in Progress'}</i>
+            <i className='blueT cap'>{Pref.group + 's'}</i>
+            <br /><i>in progress</i>
           </p>
           <PopGroupWIP wip={wip} />
         </section>
         <section className='wide centre'>
           <p className='centreText'>
             <i className='redT cap'>{'types of ' + Pref.nonCon + 's'}</i>
-            <br /><i>Discovered {range}</i>
+            <br /><i>discovered {range}</i>
           </p>
           <NonConTypePie ncTypes={now.ncTypeCounts} fullWidth={true} />
         </section>

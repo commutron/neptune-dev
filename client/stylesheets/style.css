@@ -164,12 +164,12 @@
 }
 
 .pop {
-  -moz-box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 
-                   0 15px 12px rgba(0, 0, 0, 0.22);
-  -webkit-box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 
-                      0 15px 12px rgba(0, 0, 0, 0.22);
-  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 
-              0 15px 12px rgba(0, 0, 0, 0.22);
+  -moz-box-shadow: 0 10px 30px rgba(0, 0, 0, 0.30), 
+                   0 0 10px rgba(0, 0, 0, 0.22);
+  -webkit-box-shadow: 0 10px 30px rgba(0, 0, 0, 0.30), 
+                      0 0 10px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.30), 
+              0 0 10px rgba(0, 0, 0, 0.22);
 }
 
 .popBlue {
@@ -180,8 +180,6 @@
   box-shadow: 0 10px 30px rgba(52, 152, 219, 0.30), 
               0 0 10px rgba(52, 152, 219, 0.22);
 }
-
-.fade { opacity: 0.4; }
 
 .transparent {
   background-color: transparent;
@@ -347,8 +345,6 @@
   background-color: var(--alizarin);
 }
 
-.fade { opacity: 0.2; }
-
 .clean {
   font-style: normal;
   text-transform: none;
@@ -383,6 +379,9 @@
 .bold { font-weight: 600; }
 
 .letterSpaced { letter-spacing: 2px; }
+
+.fade { opacity: 0.6; }
+.fadeMore { opacity: 0.3; }
 
 .wordBr {
   word-break: break-all;

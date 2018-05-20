@@ -18,7 +18,10 @@ const PopGroupWIP = ({ wip })=> {
     }
     
     const groupLine = Array.from(counts, x => x.value).reduce((x,y)=> x + y) / counts.length;
-  
+    
+    let cntr = '<span class="centre smCap"><i class="big redT">' + 
+                counts.length + '</i><i>Total</i></span>';
+                
     let data = {
       series: counts,
       labels: Array.from(counts,
@@ -29,16 +32,27 @@ const PopGroupWIP = ({ wip })=> {
     
     let options = {
       fullWidth: true,
-      height: 400,
+      height: 325,
+      startAngle: 0,
+      donut: true,
+      donutWidth: 60,
       showLabel: true,
-      labelOffset: 75,
+      labelOffset: 40,
       labelDirection: 'explode',
       ignoreEmptyValues: true,
-      chartPadding: 75,
+      chartPadding: 50,
       plugins: [
         Chartist.plugins.tooltip({
           appendToBody: true,
           class: 'up'
+        }),
+        Chartist.plugins.fillDonut({
+          items: [{
+            content: cntr,
+            position: 'center',
+            offsetY : -4,
+            offsetX: 0
+          }],
         }),
       ]
     };
