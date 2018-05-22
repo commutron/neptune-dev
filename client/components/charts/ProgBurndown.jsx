@@ -36,7 +36,7 @@ export default class ProgBurndown extends Component {
     
     const counts = this.state.counts;
     const flR = !this.props.floorRelease ? null : 
-      moment(this.props.floorRelease.time).format('MMM.D');
+      moment(this.props.floorRelease.time);
     const frst = this.state.first;
 
     if(!counts || !frst) {

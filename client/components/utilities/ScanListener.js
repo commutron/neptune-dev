@@ -44,14 +44,14 @@ export function ScanListenerUtility(user) {
   
   Meteor.setTimeout( ()=>{
     const autoScan = user.autoScan;
-    autoScan === undefined ? console.log(autoScan) : null;
+    autoScan === undefined && console.log('User Scan Setting Not Found');
     if(!autoScan) {
       null;
     }else{
       window.addEventListener('keypress', onPress);
       window.addEventListener('message', onMessage);
     }
-  },250);
+  },500);
 
 }
 

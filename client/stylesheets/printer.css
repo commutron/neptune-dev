@@ -5,7 +5,7 @@
   height: 600px;
   margin: auto;
   border: 2px dashed black;
-  padding: 40px 25px 0px 25px;
+  padding: 30px 20px 0px 20px;
   background-color: white;
   color: black;
   font-weight: 900;
@@ -13,7 +13,8 @@
 }
 
 .printLabel div {
-  margin: 15px 0;
+  margin: 15px 5px;
+  padding: 0 5px;
   align-items: center;
 }
 
@@ -23,9 +24,8 @@
 }
 
 .printLabel input {
-  width: 300px;
+  width: 350px;
   border: none;
-  font-size: 3rem;
   line-height: 3rem;
   font-weight: 800;
   text-align: center;
@@ -35,7 +35,7 @@
   width: 25px;
 }
 .printLabel .bffrbffr {
-  width: 150px;
+  width: 125px;
 }
 
 .pxxlg {
@@ -45,6 +45,7 @@
 
 .pxlg {
   font-size: 4rem;
+  line-height: 5rem;
 }
 
 .plg {
