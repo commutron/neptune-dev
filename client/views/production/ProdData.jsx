@@ -9,7 +9,7 @@ import Spin from '/client/components/uUi/Spin.jsx';
 import ProductionFindOps from './ProductionFindOps.jsx';
 
 class ProdData extends Component	{
-  
+
   render() {
     
     if(//!this.props.allData || // diagnose data in development
@@ -22,6 +22,8 @@ class ProdData extends Component	{
         <Spin />
       );
     }
+    
+    ScanListenerUtility(this.props.user);
     
     return (
       <ProductionFindOps
@@ -37,9 +39,6 @@ class ProdData extends Component	{
         hotBatch={this.props.hotBatch}
       />
     );
-  }
-  componentDidMount() {
-    ScanListenerUtility(this.props.user);
   }
   componentWillUnmount() {
     ScanListenerOff();

@@ -148,7 +148,7 @@
   background-color: var(--silver);
 }
 
-.onetwoSplit, .twooneSplit {
+.onetwoSplit, .twooneSplit, .triSplit {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: auto;
@@ -163,12 +163,19 @@
   grid-template-areas: 
     'splitTwo splitTwo splitOne';
 }
+.triSplit {
+  grid-template-areas: 
+    'oneTri twoTri threeTri';
+}
 .onetwoSplitOne {
   grid-area: splitOne;
 }
 .onetwoSplitTwo {
   grid-area: splitTwo;
 }
+.triSplitOne { grid-area: oneTri; }
+.triSplitTwo { grid-area: twoTri; }
+.triSplitThree { grid-area: threeTri; }
 
 .stonePlus {
   display: grid;

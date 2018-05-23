@@ -74,7 +74,7 @@ export default class ProgBurndown extends Component {
                       14 :
                       30;
           return value.meta == flR ? 'Floor Release ' + value.meta :
-                 moment(value.meta).isSame(frst, 'day') ? value.meta:
+                 moment(value.meta, 'MMM.D').isSame(moment(frst, 'MMM.D hh:mm a'), 'day') ? value.meta:
                  index === counts.length - 5 ? null :
                  index === counts.length - 4 ? null :
                  index === counts.length - 3 ? null :

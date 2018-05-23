@@ -121,7 +121,7 @@ export default class BatchCard extends Component	{
                 </div>
                 {expand &&
                   <div className='onetwoSplitOne'>
-                    <NonConMiniTops noncons={b.nonCon} user={u} app={a} />
+                    <NonConMiniTops noncons={b.nonCon} items={b.items} user={u} app={a} />
                   </div>}
               </div>
               

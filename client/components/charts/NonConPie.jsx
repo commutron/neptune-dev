@@ -7,25 +7,25 @@ import fillDonut from 'chartist-plugin-fill-donut';
 export default class NonConPie extends Component {
   
   splitStatus() {
+    const nc = this.props.nonCons;
     let none = 0;
     let fix = 0;
     let done = 0;
     let snooze = 0;
     let skip = 0;
     
-    for( let n of this.props.nonCons) {
-      n.fix === false && n.inspect === false && n.skip === false ? none += 1 : false;
-      n.fix !== false && n.inspect === false && n.skip === false ? fix += 1 : false;
-      n.fix !== false && n.inspect !== false && n.skip === false ? done += 1 : false;
-      n.skip !== false && n.comm === 'sn00ze' ? snooze += 1 : false;
-      n.inspect === false && n.skip !== false && n.comm !== 'sn00ze' ? skip += 1 : false;
-    }
+    none = nc.filter( n => n.fix === false && n.inspect === false && n.skip === false ).length;
+    fix = nc.filter( n => n.fix !== false && n.inspect === false && n.skip === false ).length;
+    done = nc.filter( n => n.fix !== false && n.inspect !== false && n.skip === false ).length;
+    snooze = nc.filter( n => n.skip !== false && ( n.snooze === true || n.comm === 'sn00ze' ) ).length;
+    skip = nc.filter( n => n.inspect === false && n.skip !== false && ( n.snooze === false || n.comm !== 'sn00ze' ) ).length;
+
     return [
-      {'value': none, 'meta': 'Pending'},
-      {'value': fix, 'meta': 'Fix'},
-      {'value': done, 'meta': 'Done'},
-      {'value': snooze, 'meta': 'Snooze'},
-      {'value': skip, 'meta': 'Skip' }
+      {'value': none, 'meta': 'To Fix'},
+      {'value': fix, 'meta': 'To Inspect'},
+      {'value': done, 'meta': 'Resolved'},
+      {'value': snooze, 'meta': 'Snoozing'},
+      {'value': skip, 'meta': 'Skipped' }
     ];
   }
     
@@ -38,8 +38,8 @@ export default class NonConPie extends Component {
                   '</i><i>Total</i></span>';
     
     let data = {
-      labels: ['Pending', 'Fixed', 'Inspected', 'Snoozed', 'Skipped'],
       series: counts,
+      labels: Array.from(counts, x => x.meta )
     };
     
     let options = {
@@ -53,7 +53,6 @@ export default class NonConPie extends Component {
       donut: true,
       donutWidth: 40,
       startAngle: 0,
-      total: this.props.nonCons.length,
       plugins: [
         Chartist.plugins.tooltip({
           appendToBody: true

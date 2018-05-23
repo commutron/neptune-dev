@@ -162,9 +162,9 @@ Meteor.methods({
     }
   },
   
-  setAutoScan() {
+  setAutoScan(value) {
     const curr = Meteor.user().autoScan;
-    const change = !curr ? true : false;
+    const change = value === undefined ? !curr ? true : false : value;
     Meteor.users.update(Meteor.userId(), {
       $set: {
         autoScan: change,

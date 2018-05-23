@@ -44,14 +44,17 @@ export function ScanListenerUtility(user) {
   
   Meteor.setTimeout( ()=>{
     const autoScan = user.autoScan;
-    autoScan === undefined && console.log('User Scan Setting Not Found');
-    if(!autoScan) {
-      null;
+    if(autoScan === undefined) {
+      const check = window.confirm('Would you like to use a barcode scanner from anywhere in this window?');
+      Meteor.call('setAutoScan', check, (error)=> error && console.log(error));
+    }else if(autoScan === false) {
+      null;//console.log('auto window scanning OFF');
     }else{
+      //console.log('auto window scanning ON');
       window.addEventListener('keypress', onPress);
       window.addEventListener('message', onMessage);
     }
-  },500);
+  },100);
 
 }
 

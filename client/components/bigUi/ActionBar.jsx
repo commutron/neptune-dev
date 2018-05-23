@@ -52,6 +52,7 @@ const ActionBar = ({batchData, itemData, widgetData, versionData, groupData, app
           title={itemData.serial}
           check={itemData.createdAt.toISOString()}
           entry={batchData}
+          lock={batchData.finishedAt !== false}
           noText={noText} />
       </div>
 		:
@@ -115,6 +116,7 @@ const ActionBar = ({batchData, itemData, widgetData, versionData, groupData, app
           title={batchData.batch}
           check={batchData.createdAt.toISOString()}
           entry={batchData}
+          lock={batchData.finishedAt !== false}
           noText={noText} />
       </div>
       :

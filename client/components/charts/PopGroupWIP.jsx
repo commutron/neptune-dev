@@ -18,15 +18,17 @@ const PopGroupWIP = ({ wip })=> {
     }
     
     const groupLine = Array.from(counts, x => x.value).reduce((x,y)=> x + y) / counts.length;
+    let medianTry = counts[Math.floor(counts.length / 2)];
+    let median = !medianTry ? groupLine : medianTry.value;//x.value > ( groupLine % 2 )  
     
-    let cntr = '<span class="centre smCap"><i class="big redT">' + 
+    let cntr = '<span class="centre smCap"><i class="big blueT">' + 
                 counts.length + '</i><i>Total</i></span>';
                 
     let data = {
       series: counts,
       labels: Array.from(counts,
                 x => { 
-                  let name = x.value > ( groupLine % 2 ) ? x.meta.toUpperCase() : ' ';
+                  let name = x.value > median ? x.meta.toUpperCase() : ' ';
                   return name })
     };
     
