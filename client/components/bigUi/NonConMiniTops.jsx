@@ -61,7 +61,7 @@ export const MostNonCon = ({ noncons, app })=> {
       name='Most Common Type'
       title='most frequent'
       color='redT'
-      size='bigger' />
+      size='big' />
   );
 };
 

@@ -88,9 +88,7 @@ export default class NonConRate extends Component {
     
     return(
       <span>
-        <div className='wide balance cap'>
-          <i className=''>NonCon Rate</i>
-        </div>
+        
         <div>
           <ChartistGraph data={data} options={options} type={'Line'} />
         </div>

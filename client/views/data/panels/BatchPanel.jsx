@@ -20,6 +20,9 @@ import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
 import ProgBurndown from '/client/components/charts/ProgBurndown.jsx';
 import NonConOverview from '../../../components/charts/NonConOverview.jsx';
 import NonConRate from '../../../components/charts/NonConRate.jsx';
+import { HasNonCon } from '../../../components/bigUi/NonConMiniTops.jsx';
+import { NonConPer } from '../../../components/bigUi/NonConMiniTops.jsx';
+import { MostNonCon } from '../../../components/bigUi/NonConMiniTops.jsx';
 import NonConPie from '../../../components/charts/NonConPie.jsx';
 import RMATable from '../../../components/tables/RMATable.jsx';
 
@@ -209,7 +212,17 @@ export default class BatchPanel extends Component	{
                 <NonConPie nonCons={b.nonCon} />
               </div>
               <div className='twoThirdsContent'>
-                <NonConRate batches={[b.batch]} />
+                <p className='wide centreText'>NonCon Rate</p>
+                <div className='split'>
+                  <div className='centre'>
+                    <HasNonCon noncons={b.nonCon} items={b.items} />
+                    <NonConPer noncons={b.nonCon} items={b.items} />
+                    <MostNonCon noncons={b.nonCon} app={a} />
+                  </div>
+                  <div className='wide'>
+                    <NonConRate batches={[b.batch]} />
+                  </div>
+                </div>
               </div>
               <div className='threeThirdsContent'>
                 <NonConOverview
