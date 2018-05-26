@@ -251,6 +251,21 @@
 
 .orange { background-color: var(--carrot); }
 .orangeT { color: var(--carrot); }
+.orangeHover,
+.invert .orangeHover {
+	color: var(--orange);
+	background-color: var(--clouds);
+}
+.orangeHover:hover,
+.invert .orangeHover:hover {
+  color: var(--clouds);
+	background-color: var(--orange);
+}
+.orangeHover:disabled:hover,
+.invert .orangeHover:disabled:hover {
+  color: var(--orange);
+	background-color: var(--clouds);
+}
 .darkOrange { background-color:  var(--pumpkin); }
 .darkOrangeT { color:  var(--pumpkin); }
 
@@ -294,7 +309,8 @@
 .clearWhite,
 .clearGreen,
 .clearBlue,
-.clearRed {
+.clearRed,
+.clearOrange {
   background-color: transparent;
   border-width: 1px;
   border-style: solid;
@@ -303,7 +319,8 @@
 .clearWhite:hover,
 .clearGreen:hover,
 .clearBlue:hover,
-.clearRed:hover {
+.clearRed:hover,
+.clearOrange:hover {
   color: black;
 }
   
@@ -343,6 +360,16 @@
 .clearRed:hover,
 .invert .clearRed:hover {
   background-color: var(--alizarin);
+}
+
+.clearOrange,
+.invert .clearOrange {
+  color: var(--orange);
+  border-color: var(--orange);
+}
+.clearOrange:hover,
+.invert .clearOrange:hover {
+  background-color: var(--orange);
 }
 
 .clean {

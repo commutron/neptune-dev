@@ -162,7 +162,7 @@ export default class FirstAdd extends Component	{
     if(this.state.page === 1) {                 
       return(
         <InOutWrap type={movement}>
-        <div className='actionForm inlineFirst' key='page1'>
+        <div className='actionForm' key='page1'>
             
             <span>
               <select
@@ -210,7 +210,7 @@ export default class FirstAdd extends Component	{
     if(this.state.page === 2) {    
       return(
         <InOutWrap type={movement}>
-        <div className='actionForm inlineFirst' key='page2'>
+        <div className='actionForm' key='page2'>
             
           <span className='middle'>
             <button
@@ -285,7 +285,7 @@ export default class FirstAdd extends Component	{
     if(this.state.page === 3) {    
       return(
         <InOutWrap type={movement}>
-        <div className='actionForm inlineFirst' key='page3'>
+        <div className='actionForm' key='page3'>
           
           <span className='middle'>
             <button

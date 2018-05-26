@@ -21,8 +21,8 @@ const NCAdd = ({ id, barcode, app })=> {
       }
       this.discStp.value = Session.get('nowStep');
       this.ncRefs.value = '';
-      const findBox = document.getElementById('lookup');
-      findBox.focus();
+      //const findBox = document.getElementById('lookup');
+      //findBox.focus();
     }else{null}
   }
 
@@ -34,6 +34,7 @@ const NCAdd = ({ id, barcode, app })=> {
       className='actionForm'
       onSubmit={(e)=>handleNC(e, false)}>
     
+    <span>
       <select
         id='discStp'
         className='cap redIn'
@@ -51,7 +52,8 @@ const NCAdd = ({ id, barcode, app })=> {
           })}
         </optgroup>
       </select>
-      
+    </span>
+    <span>
       <input
         type='text'
         id='ncRefs'
@@ -59,7 +61,8 @@ const NCAdd = ({ id, barcode, app })=> {
         placeholder={Pref.nonConRef}
         disabled={lock}
         required />
-      
+    </span>
+    <span>
       <select 
         id='ncType'
         className='cap redIn'
@@ -71,15 +74,13 @@ const NCAdd = ({ id, barcode, app })=> {
             );
         })}
       </select>
-      
+    </span>  
       <button
         type='submit'
         id='go'
         disabled={lock}
         className='smallAction clearRed'
       >{Pref.post}</button>
-      
-      <span className='breath'></span>
       
       <button
         type='button'

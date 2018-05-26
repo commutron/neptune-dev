@@ -6,6 +6,7 @@ import Pref from '/client/global/pref.js';
 import Stone from './Stone.jsx';
 import TestFails from './TestFails.jsx';
 import NCTributary from './NCTributary.jsx';
+import Shortfalls from './Shortfalls.jsx';
 import MiniHistory from './MiniHistory.jsx';
 import UndoFinish from '/client/components/forms/UndoFinish.jsx';
 
@@ -16,6 +17,7 @@ const StoneSelect = ({
   rmas,
   allItems,
   nonCons,
+  shortfalls,
   serial,
   history,
   finishedAt,
@@ -43,6 +45,13 @@ const StoneSelect = ({
         ( x.good === true || x.good === 'fine' ) );
     firsts.forEach( x => fDone.push( 'first' + x.step ) );
   }
+  
+  const sh = shortfalls.filter( x => x.serial === serial )
+              .sort((s1, s2)=> {
+                if (s1.partNum < s2.partNum) { return -1 }
+                if (s1.partNum > s2.partNum) { return 1 }
+                return 0;
+              });
   
   for(let flowStep of flow) {
     const first = flowStep.type === 'first';
@@ -90,6 +99,11 @@ const StoneSelect = ({
               			  serial={serial}
               			  nonCons={nc}
               			  sType={flowStep.type} />;
+              			  
+      const sFall = <Shortfalls
+              			  id={id}
+              			  shortfalls={sh}
+              			  expand={expand} />;
                       
       const tFail = <TestFails fails={fTest} />;
 	  
@@ -101,6 +115,7 @@ const StoneSelect = ({
 		        <div className={expand && 'stonePlus'}>
   		        <div className={expand && 'ncPlus'}>
   		          {nonCon}
+  		          {sFall}
   		        </div>
   		      </div>
 		      );
@@ -125,6 +140,7 @@ const StoneSelect = ({
           			</div>}
               <div className={expand && 'ncPlus'}>
                 {nonCon}
+                {sFall}
               </div>
       			</div>
 		      );
@@ -150,6 +166,7 @@ const StoneSelect = ({
         			</div>}
             <div className={expand && 'ncPlus'}>
               {nonCon}
+              {sFall}
             </div>
     			</div>
 	      );
@@ -172,6 +189,9 @@ const StoneSelect = ({
         		  <div className='stonePlusRight space'>
         			  <MiniHistory history={history} />
         			</div>}
+        		<div className={expand && 'ncPlus'}>
+              {sFall}
+            </div>
           </div>
         );
       }
@@ -184,15 +204,17 @@ const StoneSelect = ({
     <div className={expand && 'stonePlus'}>
       <div className={expand && 'stonePlusLeft'}>
         <InOutWrap type='stoneTrans'>
-          <div className='purpleBorder centre cap'>
-            <h2>{Pref.trackLast}ed</h2>
-            <h3>{moment(iDone[iDone.length -1].time).calendar()}</h3>
-              {moment(finishedAt).isSame(moment(), 'hour') &&
-                <UndoFinish
-            	    id={id}
-            	    serial={serial}
-            	    finishedAt={finishedAt}
-            	    noText={false} />}
+          <div>
+            <div className='purpleBorder centre cap'>
+              <h2>{Pref.trackLast}ed</h2>
+              <h3>{moment(iDone[iDone.length -1].time).calendar()}</h3>
+                {moment(finishedAt).isSame(moment(), 'hour') &&
+                  <UndoFinish
+              	    id={id}
+              	    serial={serial}
+              	    finishedAt={finishedAt}
+              	    noText={false} />}
+            </div>
           </div>
         </InOutWrap>
       </div>
@@ -200,6 +222,9 @@ const StoneSelect = ({
   		  <div className='stonePlusRight space'>
   			  <MiniHistory history={history} />
   			</div>}
+  		<div className={expand && 'ncPlus'}>
+        {sFall}
+      </div>
   	</div>
   );
 };

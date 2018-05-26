@@ -80,6 +80,7 @@ const River = ({ itemData, batchData, widgetData, app, users, flow, flowAlt, pro
           rmas={rma}
           allItems={b.items}
           nonCons={b.nonCon}
+          shortfalls={b.shortfall || []}
           serial={i.serial}
           history={i.history}
           finishedAt={i.finishedAt}

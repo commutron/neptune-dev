@@ -37,34 +37,6 @@ meteor seems to be handling this */
   width: 100%;
 }
 
-.actionForm > input,
-.actionForm > select, 
-.actionForm > datalist {
-  line-height: 1.5rem;
-  font-size: 1rem;
-  min-width: 100px;
-  max-width: 175px;
-  height: 1.75rem;
-  margin: 0 10px;
-  letter-spacing: 2px;
-}
-
-
-.actionForm .redIn option,
-.actionForm .redIn optgroup {
-  color: black;
-  background-color: white;
-}
-
-.actionForm > button {
-  margin: 0 5px;
-  font-size: medium;
-  text-transform: capitalize; 
-  word-break: keep-all;
-  letter-spacing: 1px;
-  overflow: hidden;
-}
-
 .actionIconWrap {
   margin: 0 0.5rem;
 }
@@ -84,11 +56,42 @@ meteor seems to be handling this */
   text-decoration: underline;
 }
 
-input.redIn, input.blueIn {
+.actionForm input,
+.actionForm select, 
+.actionForm datalist {
+  line-height: 1.5rem;
+  font-size: 1rem;
+  min-width: 125px;
+  max-width: 200px;
+  height: 1.75rem;
+  letter-spacing: 1.5px;
+}
+.actionForm label {
+  min-width: 125px;
+  max-width: 200px;
+  letter-spacing: 1.5px;
+}
+
+.actionForm .redIn option,
+.actionForm .redIn optgroup {
+  color: black;
+  background-color: white;
+}
+
+.actionForm > button {
+  margin: 0 5px;
+  font-size: medium;
+  text-transform: capitalize; 
+  word-break: keep-all;
+  letter-spacing: 1px;
+  overflow: hidden;
+}
+
+input.redIn, input.blueIn, input.orangeIn {
   background-color: transparent;
   border-bottom-color: var(--clouds);
 }
-select.redIn, select.blueIn {
+select.redIn, select.blueIn, select.orangeIn {
   background-color: transparent;
   border-color: var(--clouds);
 }
@@ -103,9 +106,7 @@ select.redIn > option {
 input.redIn:focus {
   border-bottom-color: red;
 }
-select.redIn:focus {
-  border-color: red;
-}
+select.redIn:focus, 
 textarea.redIn:focus {
   border-color: red;
 }
@@ -114,19 +115,20 @@ textarea.redIn:focus {
   color: rgb(231,76,60);
 }
 
-.inlineFirst > span,
-.inlineFirst > div {
+.actionForm > span,
+.actionForm > div {
   margin: 0 10px;
 }
 
-.blueIn {
+.blueIn, .orangeIn {
   color: white;
 }
 select.blueIn > option {
   color: black;
 }
 
-.blueIn + label {
+.blueIn + label,
+.orangeIn + label {
   font-size: small;
   line-height: 1rem;
 }
@@ -139,6 +141,13 @@ select.blueIn:focus {
 }
 .blueIn:focus + label {
   color: var(--peterriver);
+}
+
+input.orangeIn:focus {
+  border-bottom-color: var(--orange);
+}
+.orangeIn:focus + label {
+  color: var(--orange);
 }
 
 .inputMultiSelected {
@@ -216,11 +225,12 @@ select.blueIn:focus {
 }
 
 @media screen and (max-width: 1024px) {
-  .actionForm > input,
-  .actionForm > select, 
-  .actionForm > datalist {
-    min-width: 75px;
-    max-width: 150px;
+  .actionForm input,
+  .actionForm select, 
+  .actionForm datalist
+  .actionForm label {
+    min-width: 100px;
+    max-width: 175px;
   }
 }
 

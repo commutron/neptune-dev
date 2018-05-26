@@ -33,7 +33,7 @@ export default class InputMulti extends Component	{
     
     let inputMultiParentSTY = {
       height: '32px',
-      width: '240px',
+      width: '200px',
     };
     
     let inputMultiWrapSTY = {
@@ -45,7 +45,7 @@ export default class InputMulti extends Component	{
       top: '0',
       right: '0px',
       zIndex: '3',
-      width: '240px',
+      width: '200px',
       opacity: '0.01'
     };
     
@@ -53,7 +53,7 @@ export default class InputMulti extends Component	{
       position: 'absolute',
       zIndex: '1',
       height: '32px',
-      width: '240px',
+      width: '200px',
       overflow: 'hidden',
     };
     
@@ -63,7 +63,7 @@ export default class InputMulti extends Component	{
       left: '0px',
       float: 'left',
       zIndex: '4',
-      width: '240px',
+      width: '200px',
     };
     
     let endSpacerArrow = {

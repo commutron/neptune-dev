@@ -44,7 +44,11 @@ export default class GroupsList extends Component	{
 
   render() {
     
-    const g = this.props.groupData;
+    const g = this.props.groupData.sort((g1, g2)=> {
+                    if (g1.group < g2.group) { return -1 }
+                    if (g1.group > g2.group) { return 1 }
+                    return 0;
+                  });
     const a = this.groupActive();
     const f = this.state.filter;
     
@@ -69,7 +73,7 @@ export default class GroupsList extends Component	{
               onClick={e => this.setFilter(e)}
               onTxtChange={e => this.setTextFilter(e)} />
           </div>  
-          { showList.sort(x => x.group).map( (entry, index)=> {
+          { showList.map( (entry, index)=> {
             let ac = a.includes(entry._id) ? 'leapBar activeMark' : 'leapBar';
             return (
               <LeapButton
