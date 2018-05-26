@@ -103,7 +103,7 @@ export default class FlowForm extends Component	{
         button={name}
         title={name}
         color='greenT'
-        icon='fa-sitemap'
+        icon='fa-project-diagram'
         smIcon={this.props.small}
         lock={!Roles.userIsInRole(Meteor.userId(), 'edit') || this.props.lock}
         noText={this.props.noText}>

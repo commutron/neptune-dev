@@ -132,6 +132,7 @@ export const PermissionHelp = ({ roles, admin })=> {
             <li>Add {Pref.block}s</li>
             <li>Skip/ship nonconformaces</li>
             <li>Add {Pref.escape}</li>
+            <li>Add, Edit or Remove {Pref.omit}s</li>
           </ul>
         </ul>
       : null}
@@ -159,6 +160,7 @@ export const PermissionHelp = ({ roles, admin })=> {
           <li><b>Verify</b></li>
           <ul>
             <li>Record "Verify" or "First-Off' inspections</li>
+            <li>Remove {Pref.shortfall}s</li>
           </ul>
         </ul>
       : null}

@@ -27,9 +27,11 @@ class Pref {
     this.admin = 'org admin';
 	  this.batch = 'work order';//order
 	  this.Batch = 'Work Order';//Order
+	  this.batches = 'work orders';
 	  this.btch = 'w'; // batch shortcut
 	  this.item = 'board';//board
 	  this.Item = 'Board';//Board
+	  this.items = 'boards';
 	  this.itm = 'b'; // item shortcut
 	  this.itemSerial = 'barcode';
 	  this.serialType = 'qrcode';
@@ -86,6 +88,7 @@ class Pref {
     // scrap
     this.scrap = 'scrap';
     this.Scrap = 'Scrap';
+    this.scraps = 'scraps';
     this.scrp = 's'; // scrap shortcut
     // rma
     this.rma = 'RMA';
@@ -96,6 +99,11 @@ class Pref {
     this.solve = 'solve';
     // non tracked, ancillary processes
     this.ancillary = 'indirect';
+    // shortage tracking
+    this.omit = 'omit'; // wide
+    this.omitted = 'omitted';
+    this.shortfall = 'shortfall'; // narrow
+    this.shortfalls = 'shortfalls';
 
   }
 }

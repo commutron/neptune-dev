@@ -3,7 +3,7 @@ import Pref from '/client/global/pref.js';
 
 import NCAdd from '../river/NCAdd.jsx';
 import FirstAdd from '../river/FirstAdd.jsx';
-import IkyToggle from '../tinyUi/IkyToggle.jsx';
+import ShortAdd from '../river/ShortAdd.jsx';
 
 // batchData, itemData, app, action
 
@@ -12,12 +12,12 @@ export default class FormBar extends Component	{
   constructor() {
     super();
     this.state = {
-      showNC: true,
+      show: 'NC',
     };
   }
   
   handleDone() {
-    this.setState({ showNC: true });
+    this.setState({ show: 'NC' });
     this.ncSlct.checked = true;
   }
   
@@ -29,8 +29,6 @@ export default class FormBar extends Component	{
     //const v = this.props.versionData;
     const users = this.props.users;
     const app = this.props.app;
-    
-    //let tempStyle = !Roles.userIsInRole(Meteor.userId(), 'nightly') ? 'dashAction' : 'proActionForm';
     
     return(
       <div className='proActionForm'>
@@ -45,7 +43,7 @@ export default class FormBar extends Component	{
                 name='formbarselect'
                 className='radioIcon'
                 ref={(i)=>this.ncSlct = i}
-                onChange={()=>this.setState({ showNC: true })}
+                onChange={()=>this.setState({ show: 'NC' })}
                 defaultChecked />
               <i className='fas fa-bug formBarIcon'></i>
               <span className='actionIconText'>{Pref.nonCon}</span>
@@ -56,21 +54,31 @@ export default class FormBar extends Component	{
                 id='firstselect'
                 name='formbarselect'
                 className='radioIcon'
-                onChange={()=>this.setState({ showNC: false })}
+                onChange={()=>this.setState({ show: 'F' })}
                 disabled={!Roles.userIsInRole(Meteor.userId(), 'verify')} />
               <i className='fas fa-play-circle formBarIcon'></i>
               <span className='actionIconText'>First</span>
+            </label>
+            <label htmlFor='shortselect' className='formBarToggle'>
+              <input
+                type='radio'
+                id='shortselect'
+                name='formbarselect'
+                className='radioIcon'
+                onChange={()=>this.setState({ show: 'S' })} />
+              <i className='fas fa-pause-circle formBarIcon'></i>
+              <span className='actionIconText'>Shortfall</span>
             </label>
           </div>
         : null}
         <div className='footCent'>
           {b && i ?
-            this.state.showNC ?
+            this.state.show === 'NC' ?
               <NCAdd 
                 id={b._id}
                 barcode={i.serial}
                 app={app} />
-            :
+            : this.state.show === 'F' ?
               <FirstAdd
                 id={b._id}
                 barcode={i.serial}
@@ -80,6 +88,13 @@ export default class FormBar extends Component	{
                 users={users}
                 app={app}
                 doneClose={()=>this.handleDone()} />
+            : this.state.show === 'S' ?
+              <ShortAdd
+                id={b._id}
+                serial={i.serial}
+                app={app}
+                doneClose={()=>this.handleDone()} />
+            : null
           : null}
         </div>
         <div className='footRight'>

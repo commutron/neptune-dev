@@ -35,7 +35,7 @@ export default class RiverSelect extends Component	{
         button={Pref.flow}
         title={'select ' + Pref.flow}
         color='greenT'
-        icon='fa-sitemap'
+        icon='fa-project-diagram'
         lock={!Roles.userIsInRole(Meteor.userId(), 'run') || this.props.lock}
         noText={this.props.noText}>
         <form className='centre' onSubmit={this.save.bind(this)}>

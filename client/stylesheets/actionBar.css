@@ -157,38 +157,6 @@ select.blueIn:focus {
   bottom: -5px;
 }
 
-/* Data / instruction toggle icon */
-/*
-.dataFlip:before, .dataFlipText {
-  color: white;
-}
-
-.dataFlip:before { 
-  font-family: FontAwesome;
-  font-size: 2em;
-  margin: 10px;
-}
-
-.dataFlip:before { 
-  content: "\f080";
-}
-
-#ikyToggle:checked + .dataFlip:before { 
-  content: "\f022";
-}
-
-#snapSwitch {
-  display: inline-block;
-  vertical-align: baseline;
-  z-index: 1;
-  transform: translate(0%, 0%) rotate(0deg);
-  opacity: 0.8;
-}
-#snapSwitch:hover {
-  opacity: 1;
-}
-*/
-
 .formBarToggle {
   display: flex;
   flex-direction: column;
@@ -235,6 +203,16 @@ select.blueIn:focus {
   background-color: black;
   color: var(--peterriver);
   cursor: not-allowed;
+}
+
+#shortselect + .formBarIcon,
+#shortselect ~ .actionIconText {
+  color: var(--orange);
+}
+#shortselect:hover + .formBarIcon,
+#shortselect:checked + .formBarIcon {
+  background-color: var(--orange);
+  color: black;
 }
 
 @media screen and (max-width: 1024px) {

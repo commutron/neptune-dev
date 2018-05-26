@@ -12,7 +12,7 @@ import InputMulti from '../smallUi/InputMulti.jsx';
 // methods={this.props.methods}
 // onPass={e => this.unlock()}
 
-export default class FirstAdd extends Component	{
+export default class FirstForm extends Component	{
   
   constructor() {
     super();

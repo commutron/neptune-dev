@@ -5,6 +5,7 @@ AppDB = new Mongo.Collection('appdb');
 GroupDB = new Mongo.Collection('groupdb');
 WidgetDB = new Mongo.Collection('widgetdb');
 BatchDB = new Mongo.Collection('batchdb');
+//ItemDB = new Mongo.Collection('itemdb');// future plans, DO NOT enable
 ArchiveDB = new Mongo.Collection('archivedb');
 
 Meteor.publish('appData', function(){

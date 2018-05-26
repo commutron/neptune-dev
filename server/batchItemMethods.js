@@ -32,6 +32,8 @@ Meteor.methods({
         escaped: [],
         cascade: [],
         blocks: [],
+        omitted: [],
+        shortfall: []
       });
       return true;
     }else{
@@ -954,6 +956,118 @@ Meteor.methods({
       return true;
     }else{
       return false;
+    }
+  },
+  
+  //// Shortages \\\\ Roles.userIsInRole(Meteor.userId(), 'run')
+  
+  // Omitted // Wide Shortage
+  
+  addOmit(batchId, partNum, refs, inEffect, comm) {
+    if(!Roles.userIsInRole(Meteor.userId(), 'run')) { null }else{
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        $push : { omitted: {
+          key: new Meteor.Collection.ObjectID().valueOf(), // id of the shortage entry
+          partNum: partNum || '', // short part number
+          refs: refs || [], // referances on the widget
+          time: new Date(), // Object
+          who: Meteor.userId(), // Object
+          inEffect: inEffect || false, // Boolean or Null
+          comm: comm || '' // comments
+      }}});
+    }
+  },
+  
+  editOmit(batchId, omKey, partNum, refs, inEffect, comm) {
+    if(!Roles.userIsInRole(Meteor.userId(), 'run')) { null }else{
+      const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
+      const prevOm = doc && doc.omitted.find( x => x.key === omKey );
+      let pn = partNum;
+      let rf = refs;
+      let ef = inEffect;
+      let cm = comm;
+      if(!prevOm) { null }else{
+        pn = !partNum || partNum === '' && prevOM.partNum;
+        rf = !refs || refs === [] || refs === '' && prevOM.refs; 
+        ef = inEffect === undefined && prevOM.inEffect; 
+        cm = !comm || comm === '' && prevOM.comm; 
+      }
+		  BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'omitted.key': omKey}, {
+  			$set : { 
+  			  'omitted.$.partNum': pn || '',
+  			  'omitted.$.refs': rf || [],
+  			  'omitted.$.inEffect': ef || false,
+  			  'omitted.$.comm': cm || ''
+  			}
+  		});
+    }
+  },
+  
+  removeOmit(batchId, omKey) {
+    if(!Roles.userIsInRole(Meteor.userId(), 'run')) { 
+      return false;
+    }else{
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'omitted.key': omKey}, {
+        $pull : { omitted: {key: omKey}
+      }});
+      return true;
+    }
+  },
+  
+  // Shortfall // Narrow Shortage
+  
+  addShort(batchId, partNum, refs, serial, step, comm) {
+    if(!Meteor.userId()) { null }else{
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        $push : { shortfall: {
+          key: new Meteor.Collection.ObjectID().valueOf(), // id of the shortage entry
+          partNum: partNum || '', // short part number
+          refs: refs || [], // referances on the widget
+          serial: serial || '', // apply to item
+          where: step || '', // where in the process
+          time: new Date(), // Object
+          who: Meteor.userId(), // Object
+          comm: comm || '' // comments // String
+      }}});
+    }
+  },
+  
+  editShort(batchId, omKey, partNum, refs, serial, step, comm) {
+    if(!Meteor.userId()) { null }else{
+      const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
+      const prevSh = doc && doc.shortfall.find( x => x.key === omKey );
+      let pn = partNum;
+      let rf = refs;
+      let sn = serial;
+      let st = step;
+      let cm = comm;
+      if(!prevSh) { null }else{
+        pn = !partNum || partNum === '' && prevSh.partNum;
+        rf = !refs || refs === [] || refs === '' && prevSh.refs;
+        sn = !serial || serial === '' && prevSh.serial;
+        st = !step || step === '' && prevSh.step; 
+        cm = !comm || comm === '' && prevSh.comm; 
+      }
+		  BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'shortfall.key': omKey}, {
+  			$set : { 
+  			  'shortfall.$.partNum': pn || '',
+  			  'shortfall.$.refs': rf || [],
+  			  'shortfall.$.serial': sn || '',
+  			  'shortfall.$.step': st || '',
+  			  'shortfall.$.comm': cm || ''
+  			}
+  		});
+    }
+  },
+  
+  removeShort(batchId, omKey) {
+    if(!Roles.userIsInRole(Meteor.userId(), 'verify')) {
+      return false;
+    }else{
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'shortfall.key': omKey}, {
+        $pull : { shortfall: {key: omKey}
+      }});
+      return true;
     }
   },
 
