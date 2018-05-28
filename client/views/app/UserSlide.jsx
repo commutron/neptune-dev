@@ -38,7 +38,7 @@ export default class UserSlide extends Component	{
             title={user.username}
             className='transparent'
             onClick={this.reveal}>
-            <i className='fas fa-user-circle fa-lg'></i>
+            <i className='fas fa-id-card fa-lg'></i>
             <span className='icontext cap'>{user.username.split('.')[0]}</span>
           </button>
         </span>
@@ -50,7 +50,7 @@ export default class UserSlide extends Component	{
             <div className='popup'>
               <div className='popupHead'>
                 <span>
-                  <i className='fas fa-user-circle fa-lg'></i>
+                  <i className='fas fa-user-astronaut fa-lg'></i>
                   <i className='breath'></i>
                   {user.username}
                 </span>

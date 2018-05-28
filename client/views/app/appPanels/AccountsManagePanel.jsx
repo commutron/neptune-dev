@@ -172,6 +172,8 @@ export const PermissionHelp = ({ roles, admin })=> {
             <li>Record "Inspect" steps</li>
             <li>Record "Inspected" nonconformaces</li>
             <li>Edit nonconformaces</li>
+            <li>Edit {Pref.shortfall}s</li>
+            <li>Resolve {Pref.shortfall}s</li>
             <li>Snooze and re-activate nonconformaces</li>
             <li>Active an {Pref.rmaProcess} on a {Pref.item}</li>
           </ul>
@@ -185,6 +187,7 @@ export const PermissionHelp = ({ roles, admin })=> {
             <li>View {Pref.group} and {Pref.batch} information</li>
             <li>Record "Build" steps</li>
             <li>Record nonconformaces</li>
+            <li>Record {Pref.shortfall}s</li>
             <li>Record "Repaired" nonconformaces</li>
           </ul>
         </ul>
