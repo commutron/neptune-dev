@@ -37,9 +37,11 @@ class Pref {
 	  this.serialType = 'qrcode';
     this.group = 'customer';//customer
     this.Group = 'Customer';//Customer
+    this.groups = 'customers';//customer
     this.grp = 'c'; // group shortcut
     this.widget = 'product';//product
     this.Widget = 'Product';//Product
+    this.widgets = 'products';//product
     this.wdgt = 'p'; // widget shortcut
     this.version = 'version';// version, variation, rev
     this.vrsn = 'v'; // version shorcut

@@ -21,8 +21,8 @@ const PopGroupWIP = ({ wip })=> {
     let medianTry = counts[Math.floor(counts.length / 2)];
     let median = !medianTry ? groupLine : medianTry.value;//x.value > ( groupLine % 2 )  
     
-    let cntr = '<span class="centre smCap"><i class="big blueT">' + 
-                counts.length + '</i><i>Total</i></span>';
+    let cntr = '<span class="centre smCap"><i class="bigger blueT">' + 
+                counts.length + '</i><i>' + Pref.groups + '</i></span>';
                 
     let data = {
       series: counts,
@@ -37,7 +37,7 @@ const PopGroupWIP = ({ wip })=> {
       height: 325,
       startAngle: 0,
       donut: true,
-      donutWidth: 60,
+      donutWidth: 40,
       showLabel: true,
       labelOffset: 40,
       labelDirection: 'explode',

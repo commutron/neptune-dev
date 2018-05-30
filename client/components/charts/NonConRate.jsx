@@ -40,7 +40,7 @@ export default class NonConRate extends Component {
     
     let options = {
       fullWidth: true,
-      height: 300,
+      height: 350,
       showArea: true,
       showLine: true,
       showPoint: false,

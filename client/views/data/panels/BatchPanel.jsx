@@ -207,24 +207,20 @@ export default class BatchPanel extends Component	{
               </div>
           
             
-            <div className='oneTwoThreeContainer space'>
-              <div className='oneThirdContent min300 centreSelf'>
+            <div className='vFrameContainer space'>
+              <div className='avOneContent min300 centreSelf'>
+                <div className='wide centreRow'>
+                  <HasNonCon noncons={b.nonCon} items={b.items} />
+                  <NonConPer noncons={b.nonCon} items={b.items} />
+                  <MostNonCon noncons={b.nonCon} app={a} />
+                </div>
                 <NonConPie nonCons={b.nonCon} />
               </div>
-              <div className='twoThirdsContent'>
+              <div className='avTwoContent'>
                 <p className='wide centreText'>NonCon Rate</p>
-                <div className='split'>
-                  <div className='centre'>
-                    <HasNonCon noncons={b.nonCon} items={b.items} />
-                    <NonConPer noncons={b.nonCon} items={b.items} />
-                    <MostNonCon noncons={b.nonCon} app={a} />
-                  </div>
-                  <div className='wide'>
-                    <NonConRate batches={[b.batch]} />
-                  </div>
-                </div>
+                <NonConRate batches={[b.batch]} />
               </div>
-              <div className='threeThirdsContent'>
+              <div className='avThreeContent'>
                 <NonConOverview
                   ncOp={a.nonConOption}
                   flow={riverFlow}

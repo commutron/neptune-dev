@@ -35,7 +35,7 @@
   -webkit-overflow-scrolling: touch;
 }
 .landingContainer, .traverseContainer, .traverseContainerMin {
-  grid-template-columns: auto 176px;
+  grid-template-columns: auto 192px;
 }
 .baseTraverseContainer, .baseTraverseContainerMin {
   grid-template-columns: auto;
@@ -106,26 +106,41 @@
   /*flex-grow: 2;*/
 }
 
-.oneTwoThreeContainer {
+.oneTwoThreeContainer, 
+.aFrameContainer,
+.vFrameContainer {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: auto auto;
+  grid-column-gap: 24px;
+  grid-row-gap: 24px;
+  justify-items: stretch;
+}
+.oneTwoThreeContainer {
+  grid-template-columns: 1fr 1fr 1fr;
   grid-template-areas: 
     'oneThird twoThirds twoThirds'
     'threeThirds threeThirds threeThirds';
-  grid-column-gap: 16px;
-  grid-row-gap: 16px;
-  justify-items: stretch;
 }
-.oneThirdContent {
-  grid-area: oneThird;
+.oneThirdContent { grid-area: oneThird; }
+.twoThirdsContent { grid-area: twoThirds; }
+.threeThirdsContent { grid-area: threeThirds; }
+
+.aFrameContainer, .vFrameContainer {
+  grid-template-columns: 1fr 1fr;
 }
-.twoThirdsContent {
-  grid-area: twoThirds;
+.aFrameContainer {
+  grid-template-areas: 
+    'avOne avOne'
+    'avTwo avThree';
 }
-.threeThirdsContent {
-  grid-area: threeThirds;
+.vFrameContainer {
+  grid-template-areas: 
+    'avOne avTwo'
+    'avThree avThree';
 }
+.avOneContent { grid-area: avOne; }
+.avTwoContent { grid-area: avTwo; }
+.avThreeContent { grid-area: avThree; }
 
 .cookieRow {
   display: flex;
@@ -201,7 +216,7 @@
 .taskLink {
   background-color: var(--black);
   color: var(--silver);
-  margin: 5px 0;
+  margin: 8px 0;
   width: 35px;
   height: 35px;
   border-radius: 50%;

@@ -53,7 +53,7 @@ export default class BatchCard extends Component	{
 
           <div className='cardTitle'>
             <i className={showWarn + ' ' + exSpace}></i>
-            <i className='bigger'>{b.batch}</i>
+            <i className='biggest'>{b.batch}</i>
             <button
               id='exBatch'
               title='View this in explore'
@@ -110,7 +110,7 @@ export default class BatchCard extends Component	{
                   progCounts={progCounts} />
               </div>
               
-              <div className={!expand ? 'space' : 'indent twooneSplit'}>
+              <div className={!expand ? 'space' : 'space twooneSplit'}>
                 <div className={!expand ? '' : 'onetwoSplitTwo'}>
                   <NonConMiniSatus
                     noncons={b.nonCon}

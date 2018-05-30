@@ -15,7 +15,7 @@ const NonConTypePie = ({ ncTypes, fullWidth })=> {
   let medianTry = ncTypesNoZero[Math.floor(ncTypesNoZero.length / 2)];
   let median = !medianTry ? mean : ( ( mean + medianTry.value ) / 2 );
   
-  let cntr = '<span class="centre smCap"><i class="big redT">' + 
+  let cntr = '<span class="centre smCap"><i class="bigger redT">' + 
                 total + '</i><i>Total</i></span>';
                     
   let data = {
@@ -32,7 +32,7 @@ const NonConTypePie = ({ ncTypes, fullWidth })=> {
     height: 325,
     startAngle: 0,
     donut: true,
-    donutWidth: 60,
+    donutWidth: 40,
     showLabel: true,
     labelOffset: 40,
     labelDirection: 'explode',
@@ -40,7 +40,8 @@ const NonConTypePie = ({ ncTypes, fullWidth })=> {
     chartPadding: 50,
     plugins: [
       Chartist.plugins.tooltip({
-        appendToBody: true
+        appendToBody: true,
+        class: 'cap'
       }),
       Chartist.plugins.fillDonut({
         items: [{

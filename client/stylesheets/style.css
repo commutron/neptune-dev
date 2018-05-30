@@ -5,7 +5,7 @@
   font-weight: 600;
   letter-spacing: 1px;
   min-width: 2.5rem;
-	min-height: 2.5em;
+	min-height: 2.5rem;
 	padding: 0 10px;
 	text-transform: uppercase;
 }
@@ -77,10 +77,12 @@
   font-size: 1rem;
   letter-spacing: 1px;
   font-weight: 400;
-	margin: 3px 0;
-	padding: 4px;
+	margin: 0;
+	padding: 12px 6px;
 	background-color: transparent;
 	color: var(--clouds);
+	border-top: 1px inset transparent;
+	border-bottom: 1px inset var(--black);
   border-left-width: 5px;
   border-left-style: solid;
   border-left-color: white;
@@ -145,7 +147,6 @@
 .tabBody { overflow-x: auto; }
 
 .open {
-  /*cursor: pointer;*/
   color: black;
   font-size: 1.5rem;
   background-color: rgb(255,255,255);
@@ -525,13 +526,13 @@
 }
 
 .noteCard {
-  margin-top: 5px;
+  margin-top: 8px;
+  margin-bottom: 16px;
   border-top: 1px dotted var(--peterriver);
   border-right: none;
   border-bottom: none;
   border-left: none;
-  padding-top: 5px;
-  margin-bottom: 10px;
+  padding: 8px 0;
 }
 
 .blockerList {
@@ -539,13 +540,13 @@
   margin: 10px 0;
 }
 .blockerCard {
-  margin-top: 5px;
+  margin-top: 8px;
+  margin-bottom: 16px;
   border-top: 1px dotted var(--sunflower);
   border-right: none;
   border-bottom: none;
   border-left: none;
-  padding-top: 5px;
-  margin-bottom: 10px;
+  padding: 8px 0px;
 }
 .blockerCard > div {
   padding-bottom: 10px;
@@ -558,9 +559,7 @@
 .blockerHead > span:last-child {
   min-width:  90px;
 }
-.blockerSolve {
-  font-weight: bold;
-}
+.blockerSolve { font-weight: bold; }
 
 .infoBox {
   background-color: rgba(48,48,48,0.1);
@@ -581,17 +580,18 @@
   justify-content: flex-end;
 }
 
-.alertCount.nSpace { min-width: 33px }
-.alertCount.exSpace { min-width: 76px }
+.alertCount.nSpace { min-width: 40px }
+.alertCount.exSpace { min-width: 81px }
 .alertCount:before { 
   content: '\f071';
   font-family: FontAwesome;
   color: var(--orange);
+  width: 40px;
+  padding: 0 4px;
+  font-size: 1.5rem;
 }
 
-.meterprogStack p {
-  margin: 0;
-}
+.meterprogStack p { margin: 0; }
 
 .proGood::-webkit-progress-value {
   background-color: #27ae60;
