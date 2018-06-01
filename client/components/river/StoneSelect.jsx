@@ -99,11 +99,13 @@ const StoneSelect = ({
               			  serial={serial}
               			  nonCons={nc}
               			  sType={flowStep.type} />;
-              			  
+      /*        			  
       const sFall = <Shortfalls
               			  id={id}
               			  shortfalls={sh}
               			  expand={expand} />;
+      */       			  
+      let sFall = null;
                       
       const tFail = <TestFails fails={fTest} />;
 	  
@@ -223,7 +225,7 @@ const StoneSelect = ({
   			  <MiniHistory history={history} />
   			</div>}
   		<div className={expand && 'ncPlus'}>
-        {sFall}
+        {/*sFall*/}
       </div>
   	</div>
   );

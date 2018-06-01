@@ -180,7 +180,7 @@ main {
   border-bottom: 1px groove rgb(255,255,255);
   border-bottom: 1px groove rgba(255,255,255,0.5);
   width: 100%;
-  min-width: 236px;
+  /*min-width: 236px;*/
   margin: 0;
   padding: 1vh 1vw 1vh 1vw;
   overflow-x: hidden;
@@ -188,7 +188,7 @@ main {
 }
 
 .sidebar {
-  min-width: 236px;
+  /*min-width: 236px;*/
   padding: 0;
 }
 

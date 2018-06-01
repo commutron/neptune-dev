@@ -17,8 +17,9 @@ const Shortfalls = ({ id, shortfalls, expand })=> {
   */
   
   return(
-    <InOutWrap type='ncTrans' add='shortGrid'>
-      {shortfalls.map( (entry)=>{
+    <div>
+    {/*<InOutWrap type='ncTrans' add='shortGrid'>
+      {!shortfalls || shortfalls.map( (entry)=>{
         return (
           <ShortLine
             key={entry.key}
@@ -27,7 +28,8 @@ const Shortfalls = ({ id, shortfalls, expand })=> {
             //doFix={()=> handleFix(entry.key)}
           />
         )})}
-    </InOutWrap>
+    </InOutWrap>*/}
+    </div>
   );
 };
 

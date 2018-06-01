@@ -79,8 +79,8 @@ export default class StepsProgress extends Component	{
     if(this.props.type === 'first') {
       
       let sty = {
-        width: '15rem',
-        height: '15rem',
+        width: this.props.adaptiveWidth,
+        height: this.props.adaptiveWidth,
       };
       
       return(
@@ -94,14 +94,14 @@ export default class StepsProgress extends Component	{
     
     const done = this.state.countDone;
     const remain = this.state.countRemain;
-    
+
     let data = {
       series: [done, remain],
     };
     
     let options = {
-      width: '15rem',
-      height: '15rem',
+      width: this.props.adaptiveWidth,
+      height: this.props.adaptiveWidth,
       showLabel: false,
       donut: true,
       donutWidth: 5,

@@ -53,7 +53,7 @@ export default class BatchCard extends Component	{
 
           <div className='cardTitle'>
             <i className={showWarn + ' ' + exSpace}></i>
-            <i className='biggest'>{b.batch}</i>
+            <i className=''>{b.batch}</i>
             <button
               id='exBatch'
               title='View this in explore'

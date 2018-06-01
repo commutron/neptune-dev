@@ -153,8 +153,14 @@ export default class Stone extends Component	{
 			ripple = this.finish;
     }else{
       null }
-      
-    const stopmooving = { minHeight: '253px' };
+    
+    const vw = (v)=> {
+      var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+      return (v * w) / 100;
+    };
+    const adaptiveWidth = vw(19) + "px";
+    
+    const stopmooving = { minHeight: vw(20) + "px" };
      
     return (
     	<div style={stopmooving}>
@@ -173,7 +179,8 @@ export default class Stone extends Component	{
     				sKey={this.props.sKey}
             step={this.props.step}
             type={this.props.type}
-            progCounts={this.props.progCounts}>
+            progCounts={this.props.progCounts}
+            adaptiveWidth={adaptiveWidth}>
 						<ContextMenuTrigger
 							id={this.props.barcode}
 							attributes={ {className:'centre'} }>
@@ -187,7 +194,7 @@ export default class Stone extends Component	{
 					  				tabIndex={-1}
 					  				disabled={lock}>
 					  				Pass
-					  				<label className='big'><br />{this.props.step}</label>
+					  				<label className=''><br />{this.props.step}</label>
 									</button>
 									<button
 					      	  className='crackedBot'
@@ -197,7 +204,7 @@ export default class Stone extends Component	{
 					  				tabIndex={-1}
 					  				disabled={lock}>
 					  				Fail
-					  				<label className='big'><br />{this.props.step}</label>
+					  				<label className=''><br />{this.props.step}</label>
 									</button>
 								</div>
 							:

@@ -1,11 +1,10 @@
 
 #lookup {
-  font-size: 2rem;
+  font-size: calc(1rem + 1vw);
   text-align: center;
   line-height: normal;
   height: 100%;
-  width: 100%;
-  min-width: 256px;
+  width: 20vw;
 	color: white;
 	border-top: 3px solid transparent;
 	border-right: 0;

@@ -4,7 +4,7 @@
   font-size: medium;
   font-weight: 600;
   letter-spacing: 1px;
-  min-width: 2.5rem;
+  /*min-width: 2.5rem;*/
 	min-height: 2.5rem;
 	padding: 0 10px;
 	text-transform: uppercase;
@@ -75,10 +75,12 @@
   width: 100%;
   min-height: 32px;
   font-size: 1rem;
+  font-size: calc(1.1rem - 0.1vw);
   letter-spacing: 1px;
   font-weight: 400;
 	margin: 0;
 	padding: 12px 6px;
+	padding: calc(1.1em - 0.1vw) calc(1.1em - 0.1vw);
 	background-color: transparent;
 	color: var(--clouds);
 	border-top: 1px inset transparent;

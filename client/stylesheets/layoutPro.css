@@ -7,7 +7,7 @@
 
 .containerPro {
   display: grid;
-  grid-template-columns: 256px auto;
+  grid-template-columns: 20vw auto;
   grid-template-rows: 48px calc(100vh - 48px);
   grid-template-areas: 
     "proSearch headerNav"
@@ -45,7 +45,7 @@
 }
 
 .proDefault {
-  grid-template-columns: 256px auto;
+  grid-template-columns: 20vw auto;
   grid-template-areas: 
     'proRiverMinor proInstructMajor'
     'formFooter formFooter';
@@ -58,7 +58,7 @@
 }
 
 .proExpand {
-  grid-template-columns: minmax(512px, 48%) auto;
+  grid-template-columns: 40vw auto;
   grid-template-areas: 
     'proRiverMajor proInstructMinor'
     'formFooter formFooter';
@@ -93,7 +93,7 @@
   align-items: center;
   flex-wrap: nowrap;
   padding: 10px;
-  font-size: 1.25rem;
+  font-size: calc(1rem + 1vw);
   background-color: rbg(20,20,20);
 }
 .cardTitle > label {
@@ -114,19 +114,14 @@
   color: var(--clouds);
 }
 .riverExpandToggle {
-  left: 256px;
+  left: 20vw;
 }
 .riverShrinkToggle {
-  left: calc(512px + (48% - 512px) );
+  left: 40vw;
   -moz-transform: scaleX(-1);
   -o-transform: scaleX(-1);
   -webkit-transform: scaleX(-1);
   transform: scaleX(-1);
-}
-@media screen and (max-width: 1024px) {
-  .riverShrinkToggle {
-    left: 512px;
-  }
 }
 .riverExpandToggle:hover, .riverShrinkToggle:hover {
   opacity: 1;
@@ -179,7 +174,7 @@
 
 .stonePlus {
   display: grid;
-  grid-template-columns: 256px auto;
+  grid-template-columns: 20vw auto;
   grid-template-rows: auto auto;
   grid-template-areas: 
     'stoneArea plusArea'
@@ -208,4 +203,13 @@
 .miniHistory .mockTableCell {
   padding: 5px;
   text-align: center;
+}
+
+@media screen and (max-width: 1000px){
+  .proExpand {
+    grid-template-columns: 60vw auto;
+  }
+  .riverShrinkToggle {
+    left: 60vw;
+  }
 }

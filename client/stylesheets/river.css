@@ -12,9 +12,9 @@
 	transform: translate(-50%, -50%) rotate(0deg);
 	z-index: 1;
 	margin: 0;
-  width: 13rem;
-  height: 13rem;
-  font-size: 1.75rem;
+  width: 16vw;
+  height: 16vw;
+  font-size: calc(0.5rem + 2vw);
 	text-transform: uppercase;
 	text-shadow: 0 0 10px #000;
   color: white;
@@ -41,26 +41,28 @@
 }
 
 .crackedTop {
-  width: 13rem;
-  height: 6.5rem;
+  width: 16vw;
+  height: 8vw;
   z-index: 2;
   border-radius: 6.5rem 6.5rem 0 0;
-  margin: -0.7em 0.5em 0 0.5em;
+  margin: -0.5em 0.5em 0 0.5em;
   background-position: top;
   background-size: 80%;
   background-repeat: no-repeat;
+  font-size: calc(0.5rem + 1vw);
 }
 
 .crackedBot {
-  width: 13rem;
-  height: 6.5rem;
+  width: 16vw;
+  height: 8vw;
   border-radius: 0 0 6.5rem 6.5rem;
-  margin: 0 0.5em -0.7em 0.5em;
+  margin: 0 0.5em -0.5em 0.5em;
   background-image: url(test.svg);
   background-position: top;
   background-size: 80%;
   background-repeat: no-repeat;
   background-color: var(--pomegranate);
+  font-size: calc(0.5rem + 1vw);
 }
 
 .crackedBot:hover, .crackedBot:active {

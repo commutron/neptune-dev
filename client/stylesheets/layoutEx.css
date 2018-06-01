@@ -35,7 +35,8 @@
   -webkit-overflow-scrolling: touch;
 }
 .landingContainer, .traverseContainer, .traverseContainerMin {
-  grid-template-columns: auto 192px;
+  /*grid-template-columns: auto 192px;*/
+  grid-template-columns: auto calc(15vmin + 5vw);
 }
 .baseTraverseContainer, .baseTraverseContainerMin {
   grid-template-columns: auto;
