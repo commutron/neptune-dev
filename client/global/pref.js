@@ -52,8 +52,8 @@ class Pref {
     this.inspect = 'inspect';
     this.test = 'tester';
     this.create = 'creator';
-    this.start = 'start';
-    this.end = 'fulfill';
+    this.start = 'start sales order';
+    this.end = 'fulfill sales order';
     this.tag = 'flag';
     this.comp = 'part';
     // build tracking

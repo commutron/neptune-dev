@@ -50,7 +50,7 @@ export default class BatchCard extends Component	{
     return(
       <AnimateWrap type='cardTrans'>
         <div className='section sidebar' key={b.batch}>
-
+          
           <div className='cardTitle'>
             <i className={showWarn + ' ' + exSpace}></i>
             <i className=''>{b.batch}</i>

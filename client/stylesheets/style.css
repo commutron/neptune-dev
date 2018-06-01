@@ -593,6 +593,7 @@
   font-size: 1.5rem;
 }
 
+.meterprogStack { margin: 5px; }
 .meterprogStack p { margin: 0; }
 
 .proGood::-webkit-progress-value {
