@@ -8,6 +8,7 @@ import SearchHelp from './SearchHelp.jsx';
 
 import ItemCard from './cards/ItemCard.jsx';
 import BatchCard from './cards/BatchCard.jsx';
+import SimpleBatchCard from './cards/SimpleBatchCard.jsx';
 //import WidgetCard from './cards/WidgetCard.jsx';
 
 import BatchesList from './lists/BatchesList.jsx';
@@ -77,7 +78,9 @@ export default class ProductionFindOps extends Component	{
     const allGroup = this.props.allGroup;
     const allWidget = this.props.allWidget;
     const allBatch = this.props.allBatch;
+    const allpBatch = this.props.allpBatch;
     const hotBatch = this.props.hotBatch;
+    const hotpBatch = this.props.hotpBatch;
 
     if(!orb) {
       Session.set('nowBatch', false);
@@ -150,6 +153,29 @@ export default class ProductionFindOps extends Component	{
           >
             <BatchCard
               batchData={hotBatch}
+              widgetData={widget}
+              versionData={version}
+              groupData={group}
+              user={user}
+              app={app} />
+            <WikiOps wi={version.wiki} root={app.instruct} anchor={anchor} />
+          </ProWrap>
+        );
+      }else if(hotpBatch) {
+        let widget = this.linkedWidget(hotpBatch.widgetId);
+        let version = this.versionData(widget.versions, hotpBatch.versionKey);
+        let group = this.linkedGroup(hotpBatch.groupId);
+        return (
+			    <ProWrap
+			      batchData={hotBatch}
+			      widgetData={widget}
+            versionData={version}
+            app={app}
+            action='pBatchBuild'
+            actionBar={true}
+          >
+            <SimpleBatchCard
+              batchData={hotpBatch}
               widgetData={widget}
               versionData={version}
               groupData={group}

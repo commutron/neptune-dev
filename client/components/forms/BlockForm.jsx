@@ -14,25 +14,39 @@ export default class BlockForm extends Component {
     const blKey = this.props.edit ? this.props.edit.key : false;
     const text = this.blTxt.value.trim();
     
-    if(blKey) {
-      Meteor.call('editBlock', batchId, blKey, text, (error, reply)=>{
-        if(error)
-          console.log(error);
-        if(reply) {
-        }else{
-          Bert.alert(Alert.danger);
-        }
-      });
+    if(this.props.pBatch) {
+      if(blKey) {
+        Meteor.call('editpBlock', batchId, blKey, text, (error, reply)=>{
+          error && console.log(error);
+          !reply && Bert.alert(Alert.danger);
+        });
+      }else{
+        Meteor.call('addpBlock', batchId, text, (error, reply)=>{
+          error && console.log(error);
+          reply ? this.blTxt.value='' : Bert.alert(Alert.danger);
+        });
+      }
     }else{
-      Meteor.call('addBlock', batchId, text, (error, reply)=>{
-        if(error)
-          console.log(error);
-        if(reply) {
-          this.blTxt.value='';
-        }else{
-          Bert.alert(Alert.danger);
-        }
-      });
+      if(blKey) {
+        Meteor.call('editBlock', batchId, blKey, text, (error, reply)=>{
+          if(error)
+            console.log(error);
+          if(reply) {
+          }else{
+            Bert.alert(Alert.danger);
+          }
+        });
+      }else{
+        Meteor.call('addBlock', batchId, text, (error, reply)=>{
+          if(error)
+            console.log(error);
+          if(reply) {
+            this.blTxt.value='';
+          }else{
+            Bert.alert(Alert.danger);
+          }
+        });
+      }
     }
   }
 
@@ -93,11 +107,19 @@ export class SolveBlock extends Component {
     if(!act || act === '') {
       null;
     }else{
-      Meteor.call('solveBlock', id, blKey, act, (error, reply)=> {
-        if(error)
-          console.log(error);
-        reply ? Bert.alert(Alert.success) : Bert.alert(Alert.warning); 
-			});
+      if(this.props.pBatch) {
+        Meteor.call('solvepBlock', id, blKey, act, (error, reply)=> {
+          if(error)
+            console.log(error);
+          reply ? Bert.alert(Alert.success) : Bert.alert(Alert.warning); 
+  			});
+      }else{
+        Meteor.call('solveBlock', id, blKey, act, (error, reply)=> {
+          if(error)
+            console.log(error);
+          reply ? Bert.alert(Alert.success) : Bert.alert(Alert.warning); 
+  			});
+      }
     }
   }
   
@@ -124,11 +146,19 @@ export class RemoveBlock extends Component {
   remove() {
 		const id = this.props.id;
 		const blKey = this.props.blKey;
-      Meteor.call('removeBlock', id, blKey, (error, reply)=> {
+		if(this.props.pBatch) {
+      Meteor.call('removepBlock', id, blKey, (error, reply)=> {
         if(error)
           console.log(error);
         reply ? Bert.alert(Alert.success) : Bert.alert(Alert.warning); 
 			});
+  }else{
+			Meteor.call('removepBlock', id, blKey, (error, reply)=> {
+        if(error)
+          console.log(error);
+        reply ? Bert.alert(Alert.success) : Bert.alert(Alert.warning); 
+			});
+    }
   }
   
   render() {

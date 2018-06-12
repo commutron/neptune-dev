@@ -57,6 +57,20 @@ export default class Remove extends Component	{
             this.cut.disabled = false;
           }
         });
+      }else if(this.props.action === 'pbatch') {
+        Meteor.call('deleteSimpleBatch', this.props.entry, confirm, (error, reply)=>{
+          if(error)
+            console.log(error);
+          if(reply === 'inUse') {
+            Bert.alert(Alert.inUse);
+          }else if(reply) {
+            Bert.alert( Alert.success );
+            FlowRouter.go('/data/overview?request=batches');
+          }else{
+            Bert.alert( 'Rejected by Server', 'danger' );
+            this.cut.disabled = false;
+          }
+        });
       }else if(this.props.action === 'item') {
         Meteor.call('deleteItem', this.props.entry._id, this.props.title, confirm, (error, reply)=>{
           if(error)

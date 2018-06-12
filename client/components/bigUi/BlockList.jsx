@@ -6,14 +6,14 @@ import BlockForm from '../forms/BlockForm.jsx';
 import {SolveBlock} from '../forms/BlockForm.jsx';
 import {RemoveBlock} from '../forms/BlockForm.jsx';
 
-const BlockList = ({ id, data, lock, expand })=> {
+const BlockList = ({ id, data, pBatch, lock, expand })=> {
   let blocks = data.sort((s1, s2) => {return s1.time < s2.time});
   if(blocks.length > 0) {
     return (
       <div className='blockerList'>
           {blocks.map( (entry, index)=>{
             return (
-              <BlockRow key={index} entry={entry} id={id} lock={lock} expand={expand} />
+              <BlockRow key={index} entry={entry} id={id} pBatch={pBatch} lock={lock} expand={expand} />
           )})}
       </div>
     );
@@ -23,7 +23,7 @@ const BlockList = ({ id, data, lock, expand })=> {
   );
 };
 
-const BlockRow = ({ entry, id, lock, expand })=> {
+const BlockRow = ({ entry, id, pBatch, lock, expand })=> {
   let dt = entry;
   let unlock = Roles.userIsInRole(Meteor.userId(), 'run');
   let solved = dt.solve && typeof dt.solve === 'object' &&
@@ -37,11 +37,11 @@ const BlockRow = ({ entry, id, lock, expand })=> {
 		    {expand &&
   		    <span>
     		    {unlock && !lock && !solved &&
-              <SolveBlock id={id} blKey={dt.key} noText={true} />}
+              <SolveBlock id={id} blKey={dt.key} pBatch={pBatch} noText={true} />}
             {!lock && !solved &&
-              <BlockForm id={id} edit={dt} smIcon={true} noText={true} />}
+              <BlockForm id={id} edit={dt} pBatch={pBatch} smIcon={true} noText={true} />}
             {unlock && !lock && !solved &&
-              <RemoveBlock id={id} blKey={dt.key} noText={true} />}
+              <RemoveBlock id={id} blKey={dt.key} pBatch={pBatch} noText={true} />}
           </span>}
 		  </legend>
       <div>

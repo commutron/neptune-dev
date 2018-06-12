@@ -130,11 +130,10 @@ const StoneSelect = ({
     		        <InOutWrap type='stoneTrans'>
       		        {stone}
                 </InOutWrap>
-                {fTest.length > 0 ? 
+                {fTest.length > 0 && 
                   <InOutWrap type='stoneTrans'>
                     {tFail}
-                  </InOutWrap>
-                : null}
+                  </InOutWrap>}
               </div>
               {expand &&
           		  <div className='stonePlusRight space'>
@@ -156,11 +155,10 @@ const StoneSelect = ({
   		        <InOutWrap type='stoneTrans'>
     		        {stone}
               </InOutWrap>
-              {fTest.length > 0 ? 
+              {fTest.length > 0 && 
                 <InOutWrap type='stoneTrans'>
                   {tFail}
-                </InOutWrap>
-              : null}
+                </InOutWrap>}
             </div>
             {expand &&
         		  <div className='stonePlusRight space'>
@@ -181,11 +179,10 @@ const StoneSelect = ({
               <InOutWrap type='stoneTrans'>
                 {stone}
               </InOutWrap>
-              {fTest.length > 0 ? 
+              {fTest.length > 0 && 
                 <InOutWrap type='stoneTrans'>
                   {tFail}
-                </InOutWrap>
-              : null}
+                </InOutWrap>}
             </div>
             {expand &&
         		  <div className='stonePlusRight space'>
@@ -211,11 +208,13 @@ const StoneSelect = ({
               <h2>{Pref.trackLast}ed</h2>
               <h3>{moment(iDone[iDone.length -1].time).calendar()}</h3>
                 {moment(finishedAt).isSame(moment(), 'hour') &&
+                  <span className='space'>
                   <UndoFinish
               	    id={id}
               	    serial={serial}
               	    finishedAt={finishedAt}
-              	    noText={false} />}
+              	    noText={false} />
+              	  </span>}
             </div>
           </div>
         </InOutWrap>

@@ -19,11 +19,18 @@ export default class NoteForm extends Component {
     const choose = versionKey ? true : false;
 
     if(!choose) {
-      Meteor.call('setBatchNote', id, content, (error)=>{
-        if(error)
-          console.log(error);
-        this.out.value = 'saved';
-      });
+      if(this.props.pBatch) {
+        Meteor.call('setSimpleBatchNote', id, content, (error)=>{
+          error && console.log(error);
+          this.out.value = 'saved';
+        });
+      }else{
+        Meteor.call('setBatchNote', id, content, (error)=>{
+          if(error)
+            console.log(error);
+          this.out.value = 'saved';
+        });
+      }
     }else if(choose) {
       Meteor.call('setVersionNote', id, versionKey, content, (error)=>{
         if(error)

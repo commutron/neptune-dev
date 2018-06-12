@@ -59,6 +59,7 @@ export default class FormBar extends Component	{
               <i className='fas fa-play-circle formBarIcon'></i>
               <span className='actionIconText'>First</span>
             </label>
+            {Roles.userIsInRole(Meteor.userId(), 'nightly') &&
             <label htmlFor='shortselect' className='formBarToggle'>
               <input
                 type='radio'
@@ -68,7 +69,7 @@ export default class FormBar extends Component	{
                 onChange={()=>this.setState({ show: 'S' })} />
               <i className='fas fa-pause-circle formBarIcon'></i>
               <span className='actionIconText'>Shortfall</span>
-            </label>
+            </label>}
           </div>
         : null}
         <div className='footCent'>

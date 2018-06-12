@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-require('velocity-animate');
-require('velocity-animate/velocity.ui');
-import { VelocityComponent } from 'velocity-react';
+//require('velocity-animate');
+//require('velocity-animate/velocity.ui');
+//import { VelocityComponent } from 'velocity-react';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import Pref from '/client/global/pref.js';
 
@@ -165,12 +165,14 @@ export default class Stone extends Component	{
     
     const stopmooving = { minHeight: vw(20) + "px" };
      
-    return (
+    //return (
+    	{/*
     	<VelocityComponent 
         animation={{opacity: 1}}
         duration="slow"
         runOnMount={true}
-        interruptBehavior="finish">
+        interruptBehavior="finish">*/}
+     return(
     	<div style={stopmooving}>
         {this.props.type === 'nest' ?
         	<FoldInNested
@@ -267,8 +269,8 @@ export default class Stone extends Component	{
 	        </ContextMenu>
 	    	}
       </div>
-      </VelocityComponent>
     );
+    //</VelocityComponent>
   }
   componentDidMount() {
     this.unlock();

@@ -5,9 +5,10 @@ Meteor.methods({
 //// Batches \\\\
   addBatch(batchNum, widgetId, vKey, sDate, eDate) {
     const doc = WidgetDB.findOne({_id: widgetId});
-    const duplicate = BatchDB.findOne({batch: batchNum});
+    const legacyduplicate = BatchDB.findOne({batch: batchNum});
+    const simpleduplicate = SimpleBatchDB.findOne({batch: batchNum});
     const auth = Roles.userIsInRole(Meteor.userId(), 'create');
-    if(auth && !duplicate && doc.orgKey === Meteor.user().orgKey) {
+    if(auth && !legacyduplicate && !simpleduplicate && doc.orgKey === Meteor.user().orgKey) {
       BatchDB.insert({
   			batch: batchNum,
   			orgKey: Meteor.user().orgKey,

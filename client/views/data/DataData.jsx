@@ -32,6 +32,7 @@ class ExploreView extends Component	{
         allWidget={this.props.allWidget}
         allBatch={this.props.allBatch}
         hotBatch={this.props.hotBatch}
+        hotpBatch={this.props.hotpBatch}
         view={this.props.view}
         request={this.props.request}
         specify={this.props.specify}
@@ -51,7 +52,8 @@ export default withTracker( (props) => {
   
   const batchRequest = props.view === 'batch' ? props.request : false;
   let hotSubEx = Meteor.subscribe('hotDataEx', batchRequest);
-  let hotBatch = BatchDB.findOne( { batch: batchRequest } );
+  let hotBatch = BatchDB.findOne( { batch: batchRequest } ) || false;
+  let hotpBatch = SimpleBatchDB.findOne( { batch: batchRequest } ) || false;
 
   if( !login || !active ) {
     return {
@@ -69,7 +71,9 @@ export default withTracker( (props) => {
       allGroup: GroupDB.find( {}, { sort: { group: 1 } } ).fetch(),
       allWidget: WidgetDB.find( {}, { sort: { widget: 1 } } ).fetch(),
       allBatch: BatchDB.find( {}, { sort: { batch: -1 } } ).fetch(),
+      allpBatch: BatchDB.find( {}, { sort: { batch: -1 } } ).fetch(),
       hotBatch: hotBatch,
+      hotpBatch: hotpBatch,
       view: props.view,
       request: props.request,
       specify: props.specify

@@ -80,7 +80,7 @@
   font-weight: 400;
 	margin: 0;
 	padding: 12px 6px;
-	padding: calc(1.1em - 0.1vw) calc(1.1em - 0.1vw);
+	padding: calc(1em - 0.1vw) calc(1em - 0.1vw);
 	background-color: transparent;
 	color: var(--clouds);
 	border-top: 1px inset transparent;

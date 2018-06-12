@@ -11,6 +11,7 @@ import AllBatches from './panels/AllBatches.jsx';
 
 import ItemPanel from './panels/ItemPanel.jsx';
 import BatchPanel from './panels/BatchPanel.jsx';
+import SimpleBatchPanel from './panels/SimpleBatchPanel.jsx';
 import WidgetPanel from './panels/WidgetPanel.jsx';
 import GroupPanel from './panels/GroupPanel.jsx';
 import ScrapPanel from './panels/ScrapPanel.jsx';
@@ -100,6 +101,7 @@ export default class DataViewOps extends Component	{
     const allWidget = this.props.allWidget;
     const allBatch = this.props.allBatch;
     const hotBatch = this.props.hotBatch;
+    const hotpBatch = this.props.hotpBatch;
     
     const view = this.props.view;
     const request = this.props.request;
@@ -248,6 +250,29 @@ export default class DataViewOps extends Component	{
 			        batchData={hotBatch}
 			        widgetData={widget}
 			        tide={orb} />
+          </TraverseWrap>
+        );
+      }else if(hotpBatch) {
+        let widget = this.linkedWidget(hotpBatch.widgetId);
+        let version = this.versionData(widget.versions, hotpBatch.versionKey);
+        let group = this.linkedGroup(hotpBatch.groupId);
+        return (
+			    <TraverseWrap
+			      batchData={hotpBatch}
+            widgetData={widget}
+            versionData={version}
+            groupData={group}
+            user={user}
+            app={app}
+            action='pbatch'
+          >
+            <SimpleBatchPanel
+              batchData={hotBatch}
+              widgetData={widget}
+              versionData={version}
+              groupData={group} 
+              app={app} />
+            <div>no items</div>
           </TraverseWrap>
         );
       }

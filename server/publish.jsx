@@ -5,6 +5,7 @@ AppDB = new Mongo.Collection('appdb');
 GroupDB = new Mongo.Collection('groupdb');
 WidgetDB = new Mongo.Collection('widgetdb');
 BatchDB = new Mongo.Collection('batchdb');
+SimpleBatchDB = new Mongo.Collection('simplebatchdb');
 //ItemDB = new Mongo.Collection('itemdb');// future plans, DO NOT enable
 ArchiveDB = new Mongo.Collection('archivedb');
 
@@ -66,6 +67,16 @@ Meteor.publish('shaddowData', function(){
           'active': 1,
           'finishedAt': 1,
         }}),
+    SimpleBatchDB.find({orgKey: orgKey}, {
+      sort: {batch:-1},
+      fields: {
+          'batch': 1,
+          'groupId': 1,
+          'widgetId': 1,
+          'versionKey': 1,
+          'active': 1,
+          'finishedAt': 1,
+        }}),
     ];
 });
 
@@ -95,6 +106,17 @@ Meteor.publish('thinData', function(){
           'versionKey': 1,
           'active': 1,
           'finishedAt': 1,
+        }}),
+        
+    SimpleBatchDB.find({orgKey: orgKey}, {
+      sort: {batch:-1},
+      fields: {
+          'batch': 1,
+          'groupId': 1,
+          'widgetId': 1,
+          'versionKey': 1,
+          'active': 1,
+          'finishedAt': 1,
         }})
     ];
 });
@@ -106,6 +128,11 @@ Meteor.publish('hotDataPlus', function(batch){
   const wID = !bWidget ? false : bWidget.widgetId;         
   return [
     BatchDB.find({batch: batch, orgKey: orgKey}, {
+      fields: {
+        'orgKey': 0,
+        'shareKey': 0
+      }}),
+    SimpleBatchDB.find({batch: batch, orgKey: orgKey}, {
       fields: {
         'orgKey': 0,
         'shareKey': 0
@@ -141,6 +168,17 @@ Meteor.publish('skinnyData', function(){
           'versionKey': 1,
           'active': 1,
           'finishedAt': 1,
+        }}),
+    
+    SimpleBatchDB.find({orgKey: orgKey}, {
+      sort: {batch:-1},
+      fields: {
+          'batch': 1,
+          'groupId': 1,
+          'widgetId': 1,
+          'versionKey': 1,
+          'active': 1,
+          'finishedAt': 1,
         }})
     ];
 });
@@ -153,10 +191,16 @@ Meteor.publish('hotDataEx', function(batch){
       fields: {
         'orgKey': 0,
         'shareKey': 0
+      }}),
+    SimpleBatchDB.find({batch: batch, orgKey: orgKey}, {
+      fields: {
+        'orgKey': 0,
+        'shareKey': 0
       }})
     ];
 });
 
+/*
 //dashboard
 Meteor.publish('hotData', function(batch){
   const user = Meteor.users.findOne({_id: this.userId});
@@ -169,7 +213,8 @@ Meteor.publish('hotData', function(batch){
       }})
     ];
 });
-
+*/
+/*
 Meteor.publish('scrapData', function(active) {
   if(active) {
     const user = Meteor.users.findOne({_id: this.userId});
@@ -191,6 +236,7 @@ Meteor.publish('scrapData', function(active) {
   }
     
 });
+*/
 
 /*alternitive components search data
 Meteor.publish('compData', function(cNum){

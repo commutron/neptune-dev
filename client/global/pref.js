@@ -52,6 +52,7 @@ class Pref {
     this.inspect = 'inspect';
     this.test = 'tester';
     this.create = 'creator';
+    this.salesOrder = 'sales order';
     this.start = 'start sales order';
     this.end = 'fulfill sales order';
     this.tag = 'flag';
@@ -106,7 +107,12 @@ class Pref {
     this.omitted = 'omitted';
     this.shortfall = 'shortfall'; // narrow
     this.shortfalls = 'shortfalls';
-
+    // simpleBatch and counters
+    this.pBatch = 'simple batch';
+    this.pBatchs = 'simple batches';
+    this.counter = 'counter';
+    this.count = 'tick';
+    this.counts = 'ticks';
   }
 }
 

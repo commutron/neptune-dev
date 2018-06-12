@@ -26,6 +26,12 @@ BatchDB.deny({
   remove: () => { return true; },
 });
 
+SimpleBatchDB.deny({
+  insert: () => { return true; },
+  update: () => { return true; },
+  remove: () => { return true; },
+});
+
 ArchiveDB.deny({
   insert: () => { return true; },
   update: () => { return true; },

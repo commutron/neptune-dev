@@ -4,6 +4,7 @@ import moment from 'moment';
 import ActionLink from '/client/components/uUi/ActionLink.jsx';
 import BlockForm from '../forms/BlockForm.jsx';
 import BatchForm from '../forms/BatchForm.jsx';
+import SimpleBatchForm from '../forms/SimpleBatchForm.jsx';
 import MultiItemForm from '../forms/MultiItemForm.jsx';
 import RiverSelect from '../forms/RiverSelect.jsx';
 import NCEscape from '../forms/NCEscape.jsx';
@@ -120,6 +121,47 @@ const ActionBar = ({batchData, itemData, widgetData, versionData, groupData, app
           noText={noText} />
       </div>
       :
+      action === 'pbatch' ?
+      <div>
+        <SimpleBatchForm
+          batchId={batchData._id}
+          batchNow={batchData.batch}
+          versionNow={batchData.versionKey}
+          salesOrder={batchData.salesOrder}
+          start={batchData.start}
+          end={batchData.end}
+          widgetId={batchData.widgetId}
+          versions={widgetData.versions}
+          lock={!widgetData.versions || !batchData.active}
+          noText={noText} />
+        <ActionLink
+          address={'/print/generallabel/' + 
+                    batchData.batch + 
+                    '?group=' + groupData.alias +
+                    '&widget=' + widgetData.widget + 
+                    '&ver=' + versionData.version +
+                    '&desc=' + widgetData.describe +
+                    '&quant=' + batchData.quantity +
+                    '&date=' + batchData.end}
+          title='Print Label'
+          icon='fa-print'
+          color='whiteT'
+          noText={noText} />
+        <BlockForm
+          id={batchData._id}
+          edit={false}
+          pBatch={true}
+          lock={batchData.finishedAt !== false}
+          noText={noText} />
+        <Remove
+          action='pbatch'
+          title={batchData.batch}
+          check={batchData.createdAt.toISOString()}
+          entry={batchData}
+          lock={batchData.finishedAt !== false}
+          noText={noText} />
+      </div>
+      :
       action === 'widget' ?
         <div>
           <WidgetEditForm
@@ -142,6 +184,17 @@ const ActionBar = ({batchData, itemData, widgetData, versionData, groupData, app
             batchId={false}
             batchNow='new'
             versionNow='new'
+            start={false}
+            end={false}
+            widgetId={widgetData._id}
+            versions={widgetData.versions}
+            lock={!widgetData.versions}
+            noText={noText} />
+          <SimpleBatchForm
+            batchId={false}
+            batchNow='new'
+            versionNow='new'
+            salesOrder={false}
             start={false}
             end={false}
             widgetId={widgetData._id}
