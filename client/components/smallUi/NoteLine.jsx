@@ -22,7 +22,7 @@ export default class NoteLine extends Component	{
                      id={this.props.id}
                      versionKey={this.props.versionKey}
                      content={dt.content}
-                     pBatch={this.props.pBatch}
+                     xBatch={this.props.xBatch}
                      small={true} /> : 
                    null;
     

@@ -57,8 +57,8 @@ export default class Remove extends Component	{
             this.cut.disabled = false;
           }
         });
-      }else if(this.props.action === 'pbatch') {
-        Meteor.call('deleteSimpleBatch', this.props.entry, confirm, (error, reply)=>{
+      }else if(this.props.action === 'xbatch') {
+        Meteor.call('deleteXBatch', this.props.entry, confirm, (error, reply)=>{
           if(error)
             console.log(error);
           if(reply === 'inUse') {

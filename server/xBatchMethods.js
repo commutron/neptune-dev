@@ -2,49 +2,45 @@
 
 Meteor.methods({
 
-//// Simple Batches \\\\
-  addSimpleBatch(batchNum, groupId, widgetId, vKey, salesNum, sDate, eDate, quantity, counterSelect) {
+//// Complex, Dexterous, Multiplex Batches \\\\
+  addBatchX(batchNum, groupId, widgetId, vKey, salesNum, sDate, eDate, quantity) {
     const doc = WidgetDB.findOne({_id: widgetId});
     const legacyduplicate = BatchDB.findOne({batch: batchNum});
-    const simpleduplicate = SimpleBatchDB.findOne({batch: batchNum});
+    const duplicateX = XBatchDB.findOne({batch: batchNum});
     const auth = Roles.userIsInRole(Meteor.userId(), 'create');
     
-    let counterObjs = [];
-    for(let cs of counterSelect) {
-      let app = AppDB.findOne({orgKey: Meteor.user().orgKey});
-      let step = app && app.counterOptions && app.counterOptions.find( x => x.key === cs );
-      if(step) {
-        counterObjs.push({
-          ckey: cs,
-          step: step.step,
-          counts: []
-        });
-      }
-    }
-    
-    if(auth && !legacyduplicate && !simpleduplicate && doc.orgKey === Meteor.user().orgKey) {
-      SimpleBatchDB.insert({
+    if(auth && !legacyduplicate && !duplicateX && doc.orgKey === Meteor.user().orgKey) {
+      XBatchDB.insert({
   			batch: batchNum,
   			orgKey: Meteor.user().orgKey,
-  			shareKey: false,
+  			shareKey: null,
   			groupId: groupId,
   			widgetId: widgetId,
   			versionKey: vKey,
         tags: [],
+        notes: false,
         createdAt: new Date(),
         createdWho: Meteor.userId(),
         updatedAt: new Date(),
   			updatedWho: Meteor.userId(),
-  			finishedAt: false,
+  			active: true,
   			salesOrder: salesNum,
-  			start: sDate,
-  			end: eDate,
-  			notes: false,
-        floorRelease: false,
-        blocks: [],
+  			salesStart: sDate,
+  			salesEnd: eDate,
+  			complete: false,
+  			completedAt: null,
+  			completedWho: null,
+  			quantity: Number(quantity),
+  			serialize: false,
+  			river: false,
+  			waterfall: null,
+  			rapids: [],
+  			blocks: [],
+        releases: [],
+        verifications: [],
+        nonconformaces: [],
         omitted: [],
-        quantity: Number(quantity),
-        counters: counterObjs
+        altered: []
       });
       return true;
     }else{

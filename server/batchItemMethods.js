@@ -6,9 +6,9 @@ Meteor.methods({
   addBatch(batchNum, widgetId, vKey, sDate, eDate) {
     const doc = WidgetDB.findOne({_id: widgetId});
     const legacyduplicate = BatchDB.findOne({batch: batchNum});
-    const simpleduplicate = SimpleBatchDB.findOne({batch: batchNum});
+    const duplicateX = xBatchDB.findOne({batch: batchNum});
     const auth = Roles.userIsInRole(Meteor.userId(), 'create');
-    if(auth && !legacyduplicate && !simpleduplicate && doc.orgKey === Meteor.user().orgKey) {
+    if(auth && !legacyduplicate && !duplicateX && doc.orgKey === Meteor.user().orgKey) {
       BatchDB.insert({
   			batch: batchNum,
   			orgKey: Meteor.user().orgKey,
@@ -44,10 +44,11 @@ Meteor.methods({
   
   editBatch(batchId, newBatchNum, vKey, sDate, eDate) {
     const doc = BatchDB.findOne({_id: batchId});
-    let duplicate = BatchDB.findOne({batch: newBatchNum});
-    doc.batch === newBatchNum ? duplicate = false : null;
+    let legacyduplicate = BatchDB.findOne({batch: newBatchNum});
+    let duplicateX = BatchDB.findOne({batch: newBatchNum});
+    doc.batch === newBatchNum ? legacyduplicate = false : null;
     const auth = Roles.userIsInRole(Meteor.userId(), 'edit');
-    if(auth && !duplicate && doc.orgKey === Meteor.user().orgKey) {
+    if(auth && !legacyduplicate && !duplicateX && doc.orgKey === Meteor.user().orgKey) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $set : {
           batch: newBatchNum,

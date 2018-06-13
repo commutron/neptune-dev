@@ -121,7 +121,7 @@ const ActionBar = ({batchData, itemData, widgetData, versionData, groupData, app
           noText={noText} />
       </div>
       :
-      action === 'pbatch' ?
+      action === 'xbatch' ?
       <div>
         <SimpleBatchForm
           batchId={batchData._id}
@@ -141,7 +141,7 @@ const ActionBar = ({batchData, itemData, widgetData, versionData, groupData, app
                     '&widget=' + widgetData.widget + 
                     '&ver=' + versionData.version +
                     '&desc=' + widgetData.describe +
-                    '&quant=' + batchData.quantity +
+                    '&quant=' + batchData.unitQuantity +
                     '&date=' + batchData.end}
           title='Print Label'
           icon='fa-print'
@@ -150,11 +150,11 @@ const ActionBar = ({batchData, itemData, widgetData, versionData, groupData, app
         <BlockForm
           id={batchData._id}
           edit={false}
-          pBatch={true}
+          xBatch={true}
           lock={batchData.finishedAt !== false}
           noText={noText} />
         <Remove
-          action='pbatch'
+          action='xbatch'
           title={batchData.batch}
           check={batchData.createdAt.toISOString()}
           entry={batchData}

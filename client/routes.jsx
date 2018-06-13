@@ -26,7 +26,7 @@ AppDB = new Mongo.Collection('appdb');
 GroupDB = new Mongo.Collection('groupdb');
 WidgetDB = new Mongo.Collection('widgetdb');
 BatchDB = new Mongo.Collection('batchdb');
-SimpleBatchDB = new Mongo.Collection('simplebatchdb');
+XBatchDB = new Mongo.Collection('xbatchdb');
 
 FlowRouter.notFound = {
   action() {

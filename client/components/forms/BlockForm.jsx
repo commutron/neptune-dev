@@ -14,14 +14,14 @@ export default class BlockForm extends Component {
     const blKey = this.props.edit ? this.props.edit.key : false;
     const text = this.blTxt.value.trim();
     
-    if(this.props.pBatch) {
+    if(this.props.xBatch) {
       if(blKey) {
-        Meteor.call('editpBlock', batchId, blKey, text, (error, reply)=>{
+        Meteor.call('editBlockX', batchId, blKey, text, (error, reply)=>{
           error && console.log(error);
           !reply && Bert.alert(Alert.danger);
         });
       }else{
-        Meteor.call('addpBlock', batchId, text, (error, reply)=>{
+        Meteor.call('addBlockX', batchId, text, (error, reply)=>{
           error && console.log(error);
           reply ? this.blTxt.value='' : Bert.alert(Alert.danger);
         });
@@ -107,10 +107,9 @@ export class SolveBlock extends Component {
     if(!act || act === '') {
       null;
     }else{
-      if(this.props.pBatch) {
-        Meteor.call('solvepBlock', id, blKey, act, (error, reply)=> {
-          if(error)
-            console.log(error);
+      if(this.props.xBatch) {
+        Meteor.call('solveBlockX', id, blKey, act, (error, reply)=> {
+          error && console.log(error);
           reply ? Bert.alert(Alert.success) : Bert.alert(Alert.warning); 
   			});
       }else{
@@ -146,14 +145,13 @@ export class RemoveBlock extends Component {
   remove() {
 		const id = this.props.id;
 		const blKey = this.props.blKey;
-		if(this.props.pBatch) {
-      Meteor.call('removepBlock', id, blKey, (error, reply)=> {
-        if(error)
-          console.log(error);
+		if(this.props.xBatch) {
+      Meteor.call('removeBlockX', id, blKey, (error, reply)=> {
+        error && console.log(error);
         reply ? Bert.alert(Alert.success) : Bert.alert(Alert.warning); 
 			});
   }else{
-			Meteor.call('removepBlock', id, blKey, (error, reply)=> {
+			Meteor.call('removeBlock', id, blKey, (error, reply)=> {
         if(error)
           console.log(error);
         reply ? Bert.alert(Alert.success) : Bert.alert(Alert.warning); 

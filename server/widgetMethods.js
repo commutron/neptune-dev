@@ -179,6 +179,21 @@ Meteor.methods({
       return false;
     }
   },
+  
+  /*
+  let counterObjs = [];
+    for(let cs of counterSelect) {
+      let app = AppDB.findOne({orgKey: Meteor.user().orgKey});
+      let step = app && app.counterOptions && app.counterOptions.find( x => x.key === cs );
+      if(step) {
+        counterObjs.push({
+          ckey: cs,
+          step: step.step,
+          counts: []
+        });
+      }
+    }
+    */
 
 // edit 
   setFlow(widgetId, editId, flowTitle, flowObj) {

@@ -100,8 +100,9 @@ export default class DataViewOps extends Component	{
     const allGroup = this.props.allGroup;
     const allWidget = this.props.allWidget;
     const allBatch = this.props.allBatch;
+    const allXBatch = this.props.allXBatch;
     const hotBatch = this.props.hotBatch;
-    const hotpBatch = this.props.hotpBatch;
+    const hotXBatch = this.props.hotXBatch;
     
     const view = this.props.view;
     const request = this.props.request;
@@ -252,22 +253,22 @@ export default class DataViewOps extends Component	{
 			        tide={orb} />
           </TraverseWrap>
         );
-      }else if(hotpBatch) {
-        let widget = this.linkedWidget(hotpBatch.widgetId);
-        let version = this.versionData(widget.versions, hotpBatch.versionKey);
-        let group = this.linkedGroup(hotpBatch.groupId);
+      }else if(hotXBatch) {
+        let widget = this.linkedWidget(hotXBatch.widgetId);
+        let version = this.versionData(widget.versions, hotXBatch.versionKey);
+        let group = this.linkedGroup(hotXBatch.groupId);
         return (
 			    <TraverseWrap
-			      batchData={hotpBatch}
+			      batchData={hotXBatch}
             widgetData={widget}
             versionData={version}
             groupData={group}
             user={user}
             app={app}
-            action='pbatch'
+            action='xbatch'
           >
             <SimpleBatchPanel
-              batchData={hotBatch}
+              batchData={hotXBatch}
               widgetData={widget}
               versionData={version}
               groupData={group} 

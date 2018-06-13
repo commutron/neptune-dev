@@ -5,7 +5,7 @@ AppDB = new Mongo.Collection('appdb');
 GroupDB = new Mongo.Collection('groupdb');
 WidgetDB = new Mongo.Collection('widgetdb');
 BatchDB = new Mongo.Collection('batchdb');
-SimpleBatchDB = new Mongo.Collection('simplebatchdb');
+XBatchDB = new Mongo.Collection('xbatchdb');
 //ItemDB = new Mongo.Collection('itemdb');// future plans, DO NOT enable
 ArchiveDB = new Mongo.Collection('archivedb');
 
@@ -67,7 +67,7 @@ Meteor.publish('shaddowData', function(){
           'active': 1,
           'finishedAt': 1,
         }}),
-    SimpleBatchDB.find({orgKey: orgKey}, {
+    XBatchDB.find({orgKey: orgKey}, {
       sort: {batch:-1},
       fields: {
           'batch': 1,
@@ -108,7 +108,7 @@ Meteor.publish('thinData', function(){
           'finishedAt': 1,
         }}),
         
-    SimpleBatchDB.find({orgKey: orgKey}, {
+    XBatchDB.find({orgKey: orgKey}, {
       sort: {batch:-1},
       fields: {
           'batch': 1,
@@ -132,7 +132,7 @@ Meteor.publish('hotDataPlus', function(batch){
         'orgKey': 0,
         'shareKey': 0
       }}),
-    SimpleBatchDB.find({batch: batch, orgKey: orgKey}, {
+    XBatchDB.find({batch: batch, orgKey: orgKey}, {
       fields: {
         'orgKey': 0,
         'shareKey': 0
@@ -170,7 +170,7 @@ Meteor.publish('skinnyData', function(){
           'finishedAt': 1,
         }}),
     
-    SimpleBatchDB.find({orgKey: orgKey}, {
+    XBatchDB.find({orgKey: orgKey}, {
       sort: {batch:-1},
       fields: {
           'batch': 1,
@@ -192,7 +192,7 @@ Meteor.publish('hotDataEx', function(batch){
         'orgKey': 0,
         'shareKey': 0
       }}),
-    SimpleBatchDB.find({batch: batch, orgKey: orgKey}, {
+    XBatchDB.find({batch: batch, orgKey: orgKey}, {
       fields: {
         'orgKey': 0,
         'shareKey': 0
