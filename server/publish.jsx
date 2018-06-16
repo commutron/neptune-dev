@@ -75,7 +75,8 @@ Meteor.publish('shaddowData', function(){
           'widgetId': 1,
           'versionKey': 1,
           'active': 1,
-          'finishedAt': 1,
+          'completed': 1,
+          'completedAt': 1,
         }}),
     ];
 });
@@ -116,7 +117,8 @@ Meteor.publish('thinData', function(){
           'widgetId': 1,
           'versionKey': 1,
           'active': 1,
-          'finishedAt': 1,
+          'completed': 1,
+          'completedAt': 1,
         }})
     ];
 });
@@ -178,7 +180,8 @@ Meteor.publish('skinnyData', function(){
           'widgetId': 1,
           'versionKey': 1,
           'active': 1,
-          'finishedAt': 1,
+          'completed': 1,
+          'completedAt': 1,
         }})
     ];
 });

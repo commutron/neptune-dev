@@ -1,8 +1,8 @@
 import React from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
-import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
-import UserName from '/client/components/uUi/UserName.jsx';
+//import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
+//import UserName from '/client/components/uUi/UserName.jsx';
 
 const FloorRelease = ({ id })=> {
   
@@ -49,32 +49,3 @@ const FloorRelease = ({ id })=> {
 };
   
 export default FloorRelease;
-
-export const ReleaseNote = ({ id, floorRelease, expand })=> {
-  
-  function handleCancel() {
-    Meteor.call('cancelFloorRelease', id, (err)=>{
-      if(err)
-        console.log(err);
-    });
-  }
-  return(
-    <div className='noCopy'>
-      <ContextMenuTrigger id={id+'release'}>
-  			<fieldset className='noteCard'>
-          <legend>Released to the Floor</legend>
-          {moment(floorRelease.time).calendar()}
-          {expand && ' by '}
-          {expand && <UserName id={floorRelease.who} />}
-        </fieldset>
-      </ContextMenuTrigger>
-      <ContextMenu id={id+'release'}>
-	      <MenuItem
-	        onClick={()=>handleCancel()} 
-	        disabled={!Roles.userIsInRole(Meteor.userId(), 'run')}>
-	        Cancel Release
-	      </MenuItem>
-	    </ContextMenu>
-	  </div>
-  );
-};

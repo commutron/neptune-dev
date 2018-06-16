@@ -27,7 +27,7 @@ Meteor.methods({
   			salesOrder: salesNum,
   			salesStart: sDate,
   			salesEnd: eDate,
-  			complete: false,
+  			completed: false,
   			completedAt: null,
   			completedWho: null,
   			quantity: Number(quantity),
@@ -48,18 +48,21 @@ Meteor.methods({
     }
   },
   
-  editSimpleBatch(batchId, newBatchNum, vKey, sDate, eDate) {
-    const doc = BatchDB.findOne({_id: batchId});
-    let duplicate = BatchDB.findOne({batch: newBatchNum});
+  editBatchX(batchId, newBatchNum, vKey, salesNum, sDate, eDate, quantity) {
+    const doc = XBatchDB.findOne({_id: batchId});
+    const legacyduplicate = BatchDB.findOne({batch: newBatchNum});
+    let duplicate = XBatchDB.findOne({batch: newBatchNum});
     doc.batch === newBatchNum ? duplicate = false : null;
     const auth = Roles.userIsInRole(Meteor.userId(), 'edit');
-    if(auth && !duplicate && doc.orgKey === Meteor.user().orgKey) {
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+    if(auth && !duplicate && !legacyduplicate && doc.orgKey === Meteor.user().orgKey) {
+      XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $set : {
           batch: newBatchNum,
           versionKey: vKey,
-          start: sDate,
-  			  end: eDate,
+          salesOrder: salesNum,
+          salesStart: sDate,
+  			  salesEnd: eDate,
+  			  quantity: Number(quantity),
   			  updatedAt: new Date(),
   			  updatedWho: Meteor.userId()
         }});
@@ -69,17 +72,22 @@ Meteor.methods({
     }
   },
 
-  deleteSimpleBatch(batch, pass) {
-    const doc = BatchDB.findOne({_id: batch._id});
+  deleteBatchX(batch, pass) {
+    const doc = XBatchDB.findOne({_id: batch._id});
     // if any items have history
-    const inUse = doc.items.some( x => x.history.length > 0 ) ? true : false;
+    const inUse = doc.rapids.length > 1 ||
+                  doc.blocks.length > 1 ||
+                  doc.releases.length > 1 ||
+                  doc.verifications.length > 1 ||
+                  doc.nonconformaces.length > 1 ||
+                  doc.omitted.length > 1;
     if(!inUse) {
       const lock = doc.createdAt.toISOString().split("T")[0];
       const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
       const access = doc.orgKey === Meteor.user().orgKey;
       const unlock = lock === pass;
       if(auth && access && unlock) {
-        BatchDB.remove(batch);
+        XBatchDB.remove(batch);
         return true;
       }else{
         return false;
@@ -101,9 +109,9 @@ Meteor.methods({
   },
 */  
   // push a tag
-  pushpBTag(batchId, tag) {
+  pushBTagX(batchId, tag) {
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+      XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $push : { 
           tags: tag
         }});
@@ -112,9 +120,9 @@ Meteor.methods({
     }
   },
   // pull a tag
-  pullpBTag(batchId, tag) {
+  pullBTagX(batchId, tag) {
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+      XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $pull : {
           tags: tag
         }});
@@ -123,9 +131,9 @@ Meteor.methods({
     }
   },
 
-  setSimpleBatchNote(batchId, note) {
+  setBatchNoteX(batchId, note) {
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+      XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $set : { notes : {
           time: new Date(),
           who: Meteor.userId(),
@@ -137,13 +145,11 @@ Meteor.methods({
     }
   },
   
-  releaseToFloorSimple(batchId, rDate) {
+  addRelease(batchId, rType, rDate) {
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
-        $set : {
-          updatedAt: new Date(),
-  			  updatedWho: Meteor.userId(),
-          floorRelease: {
+      XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        $push : { releases: {
+            type: rType,
             time: rDate,
             who: Meteor.userId()
           }
@@ -154,13 +160,10 @@ Meteor.methods({
     }
   },
   
-  cancelFloorReleaseSimple(batchId) {
+  cancelRelease(batchId, rType) {
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
-        $set : {
-          updatedAt: new Date(),
-  			  updatedWho: Meteor.userId(),
-          floorRelease: false
+      XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'releases.type': rType}, {
+        $pull : { releases: { type: rType }
       }});
       return true;
     }else{

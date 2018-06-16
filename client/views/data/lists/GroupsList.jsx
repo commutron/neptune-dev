@@ -39,6 +39,9 @@ export default class GroupsList extends Component	{
         }
       }
     }
+    const xBatches = this.props.batchDataX.filter( x => x.active === true);
+    for(let x of xBatches) { activeList.push(x.groupsId) }
+    
     return activeList;
   }
 

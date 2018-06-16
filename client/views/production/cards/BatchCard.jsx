@@ -5,8 +5,8 @@ import Pref from '/client/global/pref.js';
 import Tabs from '../../../components/smallUi/Tabs.jsx';
 
 //import JumpText from '../../../components/tinyUi/JumpText.jsx';
-import FloorRelease from '/client/components/river/FloorRelease.jsx';
-import { ReleaseNote } from '/client/components/river/FloorRelease.jsx';
+import FloorRelease from '/client/components/smallUi/FloorRelease.jsx';
+import { ReleaseNote } from '/client/components/bigUi/ReleasesModule.jsx';
 import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
 import NonConMiniSatus from '/client/components/charts/NonConMiniStatus.jsx';
 import NonConMiniTops from '/client/components/bigUi/NonConMiniTops.jsx';
@@ -98,7 +98,7 @@ export default class BatchCard extends Component	{
                   tagOps={a.tagOption} />
                 <br />
                 {released === true && 
-                  <ReleaseNote id={b._id} floorRelease={b.floorRelease} expand={expand} />}
+                  <ReleaseNote id={b._id} release={b.floorRelease} expand={expand} />}
                 <NoteLine entry={b.notes} id={b._id} versionKey={false} />
                 <BlockList id={b._id} data={b.blocks} lock={done} expand={expand} />
               </div>

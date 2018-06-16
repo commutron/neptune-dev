@@ -9,8 +9,8 @@ import Tabs from '/client/components/smallUi/Tabs.jsx';
 
 import TagsModule from '../../../components/bigUi/TagsModule.jsx';
 
-import FloorRelease from '/client/components/river/FloorRelease.jsx';
-import { ReleaseNote } from '/client/components/river/FloorRelease.jsx';
+import FloorRelease from '/client/components/smallUi/FloorRelease.jsx';
+import { ReleaseNote } from '/client/components/bigUi/ReleasesModule.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';
 import BlockList from '../../../components/bigUi/BlockList.jsx';
 import RiverSatus from '../../../components/smallUi/RiverStatus.jsx';
@@ -155,7 +155,7 @@ export default class BatchPanel extends Component	{
                   </fieldset>}
                 {released === undefined ? null :
                   released === true ?
-                    <ReleaseNote id={b._id} floorRelease={b.floorRelease} expand={true} />
+                    <ReleaseNote id={b._id} release={b.floorRelease} expand={true} />
                   : <FloorRelease id={b._id} /> }
                 <NoteLine entry={b.notes} id={b._id} widgetKey={false}  />
                 <BlockList id={b._id} data={b.blocks} lock={done} expand={true} />

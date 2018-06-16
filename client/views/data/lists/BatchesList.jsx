@@ -29,13 +29,17 @@ export default class BatchesList extends Component	{
     
     let basicFilter = 
       f === 'done' ?
-      b.filter( x => x.finishedAt !== false ) :
+      b.filter( x => x.finishedAt ? x.finishedAt !== false : x.active === false ) :
       f === 'inproc' ?
-      b.filter( x => x.finishedAt === false ) :
+      b.filter( x => x.finishedAt ? x.finishedAt === false : x.active === true ) :
       b;
     let showList = basicFilter.filter( 
                     tx => tx.batch.toLowerCase().includes(this.state.textString) === true );
-
+    let sortList = showList.sort((b1, b2)=> {
+                if (b1.batch < b2.batch) { return 1 }
+                if (b1.batch > b2.batch) { return -1 }
+                return 0;
+              });
     return (
       <AnimateWrap type='cardTrans'>
         <div className='' key={1}>
@@ -47,8 +51,8 @@ export default class BatchesList extends Component	{
               onClick={e => this.setFilter(e)}
               onTxtChange={e => this.setTextFilter(e)} />
           </div>  
-          {showList.map( (entry, index)=> {
-            const style = entry.finishedAt === false ? 
+          {sortList.map( (entry, index)=> {
+            const style = entry.active === true ? 
                           'leapBar activeMark' :
                           'leapBar gMark';
             const subW = w.find( x => x._id === entry.widgetId);

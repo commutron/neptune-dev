@@ -27,18 +27,23 @@ specify: this.props.specify
 */
 
 export default class DataViewOps extends Component	{
-  
+  /*
   linkedBatch(wId, vKey) {
     return this.props.allBatch.find(x => x.widgetId === wId, x => x.versionKey === vKey);
   }
-  
+  */
   allLinkedBatches(wId) {
-    return this.props.allBatch.filter(x => x.widgetId === wId);
+    const xBatches = this.props.allXBatch.filter(x => x.widgetId === wId);
+    const legacyBatches = this.props.allBatch.filter(x => x.widgetId === wId);
+    return [...xBatches, ...legacyBatches ];
   }
   
   groupActiveWidgets(gId) {
     let widgetsList = this.props.allWidget.filter(x => x.groupId === gId);
-    let activeBatch = this.props.allBatch.filter( b => b.finishedAt === false);
+    let xActive = this.props.allXBatch.filter( b => b.completed === false);
+    let legacyActive = this.props.allBatch.filter( b => b.finishedAt === false);
+    const activeBatch = [...xActive, ...legacyActive ];
+    
     const hasBatch = (id)=> activeBatch.find( b => b.widgetId === id) ? true : false;
     let activeWidgets = widgetsList.filter( w => hasBatch(w._id) == true );
     const activeList = Array.from(activeWidgets, w => w._id);
@@ -135,12 +140,14 @@ export default class DataViewOps extends Component	{
           >
             <AllGroups
               batchData={allBatch}
+              batchDataX={allXBatch}
               widgetData={allWidget}
               groupData={allGroup} 
               app={app} />
             <GroupsList
               groupData={allGroup}
               batchData={allBatch}
+              batchDataX={allXBatch}
               widgetData={allWidget} />
           </TraverseWrap>
         );
@@ -162,7 +169,7 @@ export default class DataViewOps extends Component	{
               groupData={allGroup} 
               app={app} />
             <BatchesList
-              batchData={allBatch}
+              batchData={[...allBatch, ...allXBatch]}
               widgetData={allWidget} />
           </TraverseWrap>
         );
@@ -337,7 +344,6 @@ export default class DataViewOps extends Component	{
             />
             <BatchesList
               batchData={allBatches}
-              //xbatchData={allXBatches}
               widgetData={allWidgets} />
           </TraverseWrap>
         );
