@@ -14,7 +14,7 @@
 .taskBarEx {
   grid-area: taskBar;
   height: 100%;
-  background-color: var(--black);
+  background-color: rgb(25,25,25);
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -81,7 +81,7 @@
 
 .cookieNavEx {
   grid-area: cookieNav;
-  background-color: var(--black);
+  background-color: rgb(25,25,25);
   z-index: 8;
 }
 
@@ -96,7 +96,7 @@
 .actionBarEx {
   grid-area: actionBarEx;
   align-self: stretch;
-  background-color: var(--black);
+  background-color: rgb(25,25,25);
   display: flex;
   align-items: center;
   justify-content: space-evenly;
@@ -157,13 +157,13 @@
   flex-wrap: nowrap;
   align-items: center;
   height: 32px;
-  background-color: var(--black);
+  background-color: rgb(25,25,25);
   overflow: hidden;
   white-space: nowrap;
 }
 
 .cookie {
-  background-color: var(--black);
+  background-color: rgb(25,25,25);
   color: var(--silver);
   min-width: 64px;
   max-width: 256px;
@@ -177,7 +177,7 @@
   text-overflow: ellipsis;
 }
 .cookie:hover {
-  color: var(--black);
+  color: rgb(25,25,25);
   background-color: var(--silver);
 }
 .crumb {
@@ -215,7 +215,7 @@
   justify-content: center;
 }
 .taskLink {
-  background-color: var(--black);
+  background-color: rgb(25,25,25);
   color: var(--silver);
   margin: 8px 0;
   width: 35px;
@@ -230,7 +230,7 @@
   color: black;
 }
 .taskLink:hover, .taskLink:active {
-  color: var(--black);
+  color: rgb(25,25,25);
   background-color: var(--silver);
 }
 .onTL {
@@ -260,6 +260,6 @@
 }
 
 .indexCard {
-  background-color: rgb(20,20,20);
+  background-color: rgb(25,25,25);
 }
 

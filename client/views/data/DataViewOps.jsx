@@ -11,7 +11,7 @@ import AllBatches from './panels/AllBatches.jsx';
 
 import ItemPanel from './panels/ItemPanel.jsx';
 import BatchPanel from './panels/BatchPanel.jsx';
-import SimpleBatchPanel from './panels/SimpleBatchPanel.jsx';
+import BatchPanelX from './panels/BatchPanelX.jsx';
 import WidgetPanel from './panels/WidgetPanel.jsx';
 import GroupPanel from './panels/GroupPanel.jsx';
 import ScrapPanel from './panels/ScrapPanel.jsx';
@@ -267,7 +267,7 @@ export default class DataViewOps extends Component	{
             app={app}
             action='xbatch'
           >
-            <SimpleBatchPanel
+            <BatchPanelX
               batchData={hotXBatch}
               widgetData={widget}
               versionData={version}
@@ -337,6 +337,7 @@ export default class DataViewOps extends Component	{
             />
             <BatchesList
               batchData={allBatches}
+              //xbatchData={allXBatches}
               widgetData={allWidgets} />
           </TraverseWrap>
         );

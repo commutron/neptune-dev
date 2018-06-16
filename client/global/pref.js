@@ -108,8 +108,8 @@ class Pref {
     this.shortfall = 'shortfall'; // narrow
     this.shortfalls = 'shortfalls';
     // simpleBatch and counters
-    this.pBatch = 'simple batch';
-    this.pBatchs = 'simple batches';
+    this.xBatch = 'batch+';
+    this.xBatchs = 'batches+';
     this.counter = 'counter';
     this.count = 'tick';
     this.counts = 'ticks';

@@ -37,8 +37,7 @@
   transition: all 150ms ease-in-out;
 }
 .proLeftMinor, .proLeftMajor {
-  background-color: rgb(20,20,20);
-  border-right: 2px inset rgb(25,25,25);
+  background-color: rgb(35,35,35);
 }
 .proLeftMinor, .proLeftMajor, .proRightMajor, .proRightMinor {
   height: 100%;
@@ -72,7 +71,7 @@
 
 .proActionForm {
   grid-area: formFooter;
-  background-color: rgb(20,20,20);
+  background-color: rgb(25,25,25);
   -webkit-box-shadow: 0 0 15px 0.5px rgb(0,0,0);
   -moz-box-shadow:    0 0 15px 0.5px rgb(0,0,0);
   box-shadow:         0 0 15px 0.5px rgb(0,0,0);

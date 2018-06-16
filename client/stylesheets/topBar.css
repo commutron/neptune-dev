@@ -10,7 +10,7 @@
 	border-right: 0;
 	border-bottom: 3px solid transparent;
 	border-left: 0;
-	background-color: rgb(20,20,20);
+	background-color: rgb(25,25,25);
   padding: 0;
   border-radius: 0%;
   -webkit-appearance: none;
@@ -19,7 +19,7 @@
 
 #lookup:focus {
 	color: white;
-	background: rgb(30,30,30);
+	background: rgb(25,25,25);
   outline: none;
   border-color: var(--neptuneColor);
   box-shadow: 0 0 .2em .2em rgba(43,43,43,0.3);

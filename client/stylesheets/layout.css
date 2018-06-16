@@ -1,5 +1,5 @@
 body {
-  background-color: rgb(30,30,30);
+  background-color: rgb(35,35,35);
   color: white;
   margin: 0;
   padding: 0;
@@ -92,7 +92,7 @@ main {
   top: 0px;
   width: auto;
   background-color: black;
-  background-color: var(--black);
+  background-color: rgb(25,25,25);
   z-index: 7;
 }
 
@@ -259,36 +259,43 @@ main {
   overflow: hidden;
 }
 
-.popup {
-  margin: 48px auto 5vh auto;
-  padding: 25px 25px 0 25px;
+.popup, .medModel {
   background: rgb(0,0,0);
   background: rgba(236, 240, 241, 1);
-  max-width: 70%;
-  height: 85%;
   position: relative;
   z-index: 10;
-  border: 2px solid rgb(0,0,0);
+  border: 1px solid rgb(0,0,0);
   -webkit-box-shadow: 0 0 100px 500px rgba(0,0,0,0.5);
   -moz-box-shadow:    0 0 100px 500px rgba(0,0,0,0.5);
   box-shadow:         0 0 100px 500px rgba(0,0,0,0.5);
 }
-.popupHead {
-  height: 40px;
+.popupHead, .medModelHead {
   display: flex;
   justify-content: space-between;
   align-content: center;
-  font-size: 1.75rem;
-  font-weight: 600;
   text-transform: capitalize;
 }
-.popupContent {
-  height: calc(100% - 25px - 40px);
+.popupContent, .medModelContent {
   overflow-y: auto;
   margin: 8px 0 0 0;
   padding: 8px 0;
   border-top: 1px dotted black;
   border-bottom: 1px dotted black;
+}
+
+.popup {
+  margin: 48px auto 5vh auto;
+  padding: 25px 25px 0 25px;
+  max-width: 70%;
+  height: 85%;
+}
+.popupHead {
+  height: 40px;
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+.popupContent {
+  height: calc(100% - 25px - 40px);
 }
 
 @media screen and (max-width: 1150px){
@@ -298,6 +305,20 @@ main {
   .popup{ max-width: 90%; }
 }
 
+.medModel {
+  margin: 25vh auto 25vh auto;
+  padding: 15px 25px 0 25px;
+  max-width: 50%;
+  height: 50vh;
+}
+.medModelHead {
+  height: 40px;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+.medModelContent {
+  height: calc(50vh - 30px - 40px);
+}
 /*
 .editStandout {
   -webkit-box-shadow: 0 0 50px 3px rgb(0,0,0);

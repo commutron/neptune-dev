@@ -4,7 +4,7 @@ import moment from 'moment';
 import ActionLink from '/client/components/uUi/ActionLink.jsx';
 import BlockForm from '../forms/BlockForm.jsx';
 import BatchForm from '../forms/BatchForm.jsx';
-import SimpleBatchForm from '../forms/SimpleBatchForm.jsx';
+import BatchFormX from '../forms/BatchFormX.jsx';
 import MultiItemForm from '../forms/MultiItemForm.jsx';
 import RiverSelect from '../forms/RiverSelect.jsx';
 import NCEscape from '../forms/NCEscape.jsx';
@@ -23,7 +23,7 @@ import FlowForm from '../forms/FlowForm.jsx';
 import GroupForm from '../forms/GroupForm.jsx';
 import WidgetNewForm from '../forms/WidgetNewForm.jsx';
 
-const ActionBar = ({batchData, itemData, widgetData, versionData, groupData, app, action, noText})=> (
+const ActionBar = ({batchData, itemData, groupData, widgetData, versionData, app, action, noText})=> (
   <div className='actionBar'>
     <div className='footLeft'>
     { 
@@ -123,13 +123,15 @@ const ActionBar = ({batchData, itemData, widgetData, versionData, groupData, app
       :
       action === 'xbatch' ?
       <div>
-        <SimpleBatchForm
+        <BatchFormX
           batchId={batchData._id}
           batchNow={batchData.batch}
           versionNow={batchData.versionKey}
           salesOrder={batchData.salesOrder}
-          start={batchData.start}
-          end={batchData.end}
+          start={batchData.salesStart}
+          end={batchData.salesEnd}
+          quantity={batchData.quantity}
+          groupId={batchData.groupId}
           widgetId={batchData.widgetId}
           versions={widgetData.versions}
           lock={!widgetData.versions || !batchData.active}
@@ -190,13 +192,15 @@ const ActionBar = ({batchData, itemData, widgetData, versionData, groupData, app
             versions={widgetData.versions}
             lock={!widgetData.versions}
             noText={noText} />
-          <SimpleBatchForm
+          <BatchFormX
             batchId={false}
             batchNow='new'
             versionNow='new'
             salesOrder={false}
             start={false}
             end={false}
+            quantity={false}
+            groupId={groupData._id}
             widgetId={widgetData._id}
             versions={widgetData.versions}
             lock={!widgetData.versions}

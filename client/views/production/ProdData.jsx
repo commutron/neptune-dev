@@ -36,9 +36,9 @@ class ProdData extends Component	{
         allGroup={this.props.allGroup}
         allWidget={this.props.allWidget}
         allBatch={this.props.allBatch}
-        allpBatch={this.props.allpBatch}
+        allxBatch={this.props.allxBatch}
         hotBatch={this.props.hotBatch}
-        hotpBatch={this.props.hotpBatch}
+        hotxBatch={this.props.hotxBatch}
       />
     );
   }
@@ -64,23 +64,23 @@ export default withTracker( () => {
 
   let hotSub = Meteor.subscribe('hotDataPlus', false);
   let hotBatch = false;
-  let hotpBatch = false;
+  let hotxBatch = false;
   
   if( coldSub ) 
   {
     if( !isNaN(orb) && orb.length === 5 )
     {
       const oneBatch = BatchDB.findOne( { batch: orb } );
-      const onepBatch = SimpleBatchDB.findOne( { batch: orb } );
+      const onexBatch = XBatchDB.findOne( { batch: orb } );
       if( oneBatch )
       {
         hotSub = Meteor.subscribe( 'hotDataPlus', orb );
         hotBatch = oneBatch;
       }
-      else if(onepBatch)
+      else if(onexBatch)
       {
         hotSub = Meteor.subscribe( 'hotDataPlus', orb );
-        hotpBatch = onepBatch;
+        hotxBatch = onexBatch;
       }
       else
       {
@@ -141,9 +141,9 @@ export default withTracker( () => {
       allGroup: GroupDB.find( {}, { sort: { group: 1 } } ).fetch(),
       allWidget: WidgetDB.find( {}, { sort: { widget: 1 } } ).fetch(),
       allBatch: BatchDB.find( {}, { sort: { batch: -1 } } ).fetch(),
-      allpBatch: SimpleBatchDB.find( {}, { sort: { batch: -1 } } ).fetch(),
+      allxBatch: XBatchDB.find( {}, { sort: { batch: -1 } } ).fetch(),
       hotBatch: hotBatch,
-      hotpBatch: hotpBatch,
+      hotxBatch: hotxBatch,
     };
   }
 })(ProdData);

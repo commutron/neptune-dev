@@ -161,7 +161,7 @@ export default class Stone extends Component	{
       var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
       return (v * w) / 100;
     };
-    const adaptiveWidth = vw(19) + "px";
+    const adaptiveWidth = vw(17) + "px";
     
     const stopmooving = { minHeight: vw(20) + "px" };
      
@@ -173,7 +173,7 @@ export default class Stone extends Component	{
         runOnMount={true}
         interruptBehavior="finish">*/}
      return(
-    	<div style={stopmooving}>
+    	<div style={stopmooving} className='space'>
         {this.props.type === 'nest' ?
         	<FoldInNested
             id={this.props.id}

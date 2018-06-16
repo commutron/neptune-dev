@@ -167,12 +167,9 @@
 }
 
 .pop {
-  -moz-box-shadow: 0 10px 30px rgba(0, 0, 0, 0.30), 
-                   0 0 10px rgba(0, 0, 0, 0.22);
-  -webkit-box-shadow: 0 10px 30px rgba(0, 0, 0, 0.30), 
-                      0 0 10px rgba(0, 0, 0, 0.22);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.30), 
-              0 0 10px rgba(0, 0, 0, 0.22);
+  -moz-box-shadow: var(--dropShadow1);
+  -webkit-box-shadow: var(--dropShadow1);
+  box-shadow: var(--dropShadow1);
 }
 
 .popBlue {

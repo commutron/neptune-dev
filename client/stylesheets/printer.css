@@ -64,8 +64,8 @@
   .printLabel {
      position: absolute;
      top: 0;
-     left: 0;/*bottom: 0;*/
-     transform: rotate(180deg);
+     left: 0;
+     transform: rotate(180deg) scale(1.2);
      width: 100%;
      margin: 0;
      padding: 0;

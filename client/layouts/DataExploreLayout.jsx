@@ -28,7 +28,7 @@ export class TraverseWrap extends Component	{
     let scrollFix = {
       overflowY: 'auto'
     };
-    
+
     return (
       <div 
         className={
@@ -68,9 +68,9 @@ export class TraverseWrap extends Component	{
             <ActionBar
               batchData={this.props.batchData}
               itemData={this.props.itemData}
+              groupData={this.props.groupData}
               widgetData={this.props.widgetData}
               versionData={this.props.versionData}
-              groupData={this.props.groupData}
               app={this.props.app}
               action={this.props.action} />
           </div>}

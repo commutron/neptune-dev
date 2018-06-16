@@ -9,24 +9,28 @@ import Model from '../smallUi/Model.jsx';
 /// batchId={false}
 /// batchNow='new'
 /// versionNow='new'
+/// groupId={g._id}
 /// widgetId={w._id}
 /// versions={w.versions}
 /// lock={!w.versions}
 
-export default class SimpleBatchForm extends Component	{
+export default class BatchFormX extends Component	{
 
   save(e) {
     e.preventDefault();
     const batchId = this.props.batchId;
     const batchNow = this.props.batchNow;
+    const gId = this.props.groupId;
     const wId = this.props.widgetId;
     const vKey = this.vrsn.value;
     const batchNum = this.oNum.value.trim().toLowerCase();
+    const salesNum = this.soNum.value.trim().toLowerCase();
     const startDate = this.sDate.value;
     const endDate = this.eDate.value;
+    const quantity = this.quant.value.trim().toLowerCase();
 
-    function edit(batchId, batchNum, vKey) {
-      Meteor.call('editSimpleBatch', batchId, batchNum, vKey, startDate, endDate, (error, reply)=>{
+    function edit(batchId, batchNum, vKey, salesNum, startDate, endDate, quantity) {
+      Meteor.call('editBatchX', batchId, batchNum, vKey, salesNum, startDate, endDate, quantity, (error, reply)=>{
         if(error)
           console.log(error);
           Bert.alert(Alert.warning);
@@ -40,8 +44,8 @@ export default class SimpleBatchForm extends Component	{
       });
     }
 
-    function create(batchNum, wId, vKey, startDate, endDate) {
-      Meteor.call('addSimpleBatch', batchNum, wId, vKey, startDate, endDate, (error, reply)=>{
+    function create(batchNum, gId, wId, vKey, salesNum, startDate, endDate, quantity) {
+      Meteor.call('addBatchX', batchNum, gId, wId, vKey, salesNum, startDate, endDate, quantity, (error, reply)=>{
         if(error)
           console.log(error);
           Bert.alert(Alert.warning);
@@ -56,9 +60,9 @@ export default class SimpleBatchForm extends Component	{
     }
     
     if(batchNow === 'new') {
-      create(batchNum, wId, vKey, startDate, endDate);
+      create(batchNum, gId, wId, vKey, salesNum, startDate, endDate, quantity);
     }else{
-      edit(batchId, batchNum, vKey, startDate, endDate);
+      edit(batchId, batchNum, vKey, salesNum, startDate, endDate, quantity);
     }
   }
   
@@ -76,14 +80,15 @@ export default class SimpleBatchForm extends Component	{
     let eSO = this.props.salesOrder || '';
     let eS = this.props.start || moment().format('YYYY-MM-DD');
     let eE = this.props.end || '';
-
+    let eQ = this.props.quantity || '';
+    
     return (
       <Model
-        button={bttn + ' ' + Pref.pBatch}
-        title={title + ' ' + Pref.pBatch}
-        color='greenT'
-        icon='fa-stopwatch'
-        lock={!Roles.userIsInRole(Meteor.userId(), 'create') || this.props.lock}
+        button={bttn + ' ' + Pref.xBatch}
+        title={title + ' ' + Pref.xBatch}
+        color='blueT'
+        icon='fa-cubes'
+        lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'nightly']) || this.props.lock}
         noText={this.props.noText}>
         <form className='centre' onSubmit={this.save.bind(this)}>
           <p>
@@ -115,7 +120,7 @@ export default class SimpleBatchForm extends Component	{
               placeholder='17947'
               autoFocus='true'
               required />
-            <label htmlFor='oNum'>{Pref.pBatch} number</label>
+            <label htmlFor='oNum'>{Pref.xBatch} number</label>
           </p>
           <p>
             <input
@@ -123,8 +128,6 @@ export default class SimpleBatchForm extends Component	{
               id='oNum'
               ref={(i)=> this.soNum = i}
               pattern='[00000-99999]*'
-              maxLength='5'
-              minLength='5'
               inputMode='numeric'
               defaultValue={eSO}
               placeholder='17947000' />
@@ -149,6 +152,19 @@ export default class SimpleBatchForm extends Component	{
               pattern='[0-9]{4}-[0-9]{2}-[0-9]{2}'
               required />
             <label htmlFor='egdt'>{Pref.end} date</label>
+          </p>
+          <p>
+            <input
+              type='text'
+              id='qNum'
+              ref={(i)=> this.quant = i}
+              pattern='[00000-99999]*'
+              maxLength='5'
+              minLength='1'
+              inputMode='numeric'
+              defaultValue={eQ}
+              placeholder='10000' />
+            <label htmlFor='soNum'>Quantity</label>
           </p>
           <br />
           <p><i>are you sure?</i></p>

@@ -12,8 +12,8 @@
 	transform: translate(-50%, -50%) rotate(0deg);
 	z-index: 1;
 	margin: 0;
-  width: 16vw;
-  height: 16vw;
+  width: 14vw;
+  height: 14vw;
   font-size: calc(0.5rem + 2vw);
 	text-transform: uppercase;
 	text-shadow: 0 0 10px #000;
@@ -24,6 +24,9 @@
   background-size: 110%;
   border-radius: 50%;
   border: 10px solid transparent;
+  -moz-box-shadow: var(--dropShadow1);
+  -webkit-box-shadow: var(--dropShadow1);
+  box-shadow: var(--dropShadow1);
   -webkit-transition: all 200ms ease-out;
   -moz-transition: all 200ms ease-out;
   -o-transition: all 200ms ease-out;
@@ -40,29 +43,29 @@
   opacity: 0.3;
 }
 
-.crackedTop {
-  width: 16vw;
-  height: 8vw;
+.crackedTop, .crackedBot {
+  width: 14vw;
+  height: 7vw;
   z-index: 2;
-  border-radius: 6.5rem 6.5rem 0 0;
-  margin: -0.5em 0.5em 0 0.5em;
   background-position: top;
   background-size: 80%;
   background-repeat: no-repeat;
   font-size: calc(0.5rem + 1vw);
+  -moz-box-shadow: var(--dropShadow1);
+  -webkit-box-shadow: var(--dropShadow1);
+  box-shadow: var(--dropShadow1);
+}
+
+.crackedTop {
+  border-radius: 11rem 11rem 0 0;
+  margin: -0.25em 0.25em 0 0.25em;
 }
 
 .crackedBot {
-  width: 16vw;
-  height: 8vw;
-  border-radius: 0 0 6.5rem 6.5rem;
-  margin: 0 0.5em -0.5em 0.5em;
+  border-radius: 0 0 11rem 11rem;
+  margin: 0 0.25em -0.25em 0.25em;
   background-image: url(test.svg);
-  background-position: top;
-  background-size: 80%;
-  background-repeat: no-repeat;
   background-color: var(--pomegranate);
-  font-size: calc(0.5rem + 1vw);
 }
 
 .crackedBot:hover, .crackedBot:active {

@@ -43,5 +43,8 @@
   /* animation */
   --scottsCurve: cubic-bezier(0.165, 0.84, 0.44, 1);
   
+  /* material shaddow */
+  --dropShadow1: 0 10px 30px rgba(0, 0, 0, 0.30), 
+                 0 0 10px rgba(0, 0, 0, 0.22);
 
 }
