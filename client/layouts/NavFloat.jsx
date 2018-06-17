@@ -10,7 +10,7 @@ import UserSlide from '/client/views/app/UserSlide.jsx';
 import Chill from '../components/tinyUi/Chill.jsx';
 import ExternalLink from '../components/uUi/ExternalLink.jsx';
 
-const TopBar = ({ ready, user, active, org, app, link })=> {
+const NavFloat = ({ ready, user, active, org, app, link })=> {
       
   if(!ready || !active || !user || !org || !app) {
     return (
@@ -34,6 +34,17 @@ const TopBar = ({ ready, user, active, org, app, link })=> {
   */
   
   return (
+      <div className='navFloatIcon'>
+        <span className='primeNavLogo'>
+          <a className='logoWrap' href='/' title='Home'>
+            <img
+              src='/neptune-logo-white.svg'
+              className='logoSVG' />
+          </a>
+        </span>
+      </div>
+    );
+    /*
     <div className='primeNav'>
       <span className='primeNavLogo'>
         <a className='logoWrap' href='/' title='Home'>
@@ -56,14 +67,14 @@ const TopBar = ({ ready, user, active, org, app, link })=> {
         </a>
       </span>
       </RoleCheck>
-      {/*<RoleCheck role='nightly'>
+      <RoleCheck role='nightly'>
       <span className={ link === 'gate' ? 'primeNavItem onPNv' : 'primeNavItem' }>
         <a href='/scangate' disabled={true}>
           <i className='fas fa-plane fa-lg' data-fa-transform="rotate--45"></i>
           <span className='icontext'>Scan Gate</span>
         </a>
       </span>
-      </RoleCheck>*/}
+      </RoleCheck>
       <span className={ link === 'data' ? 'primeNavItem onPNv' : 'primeNavItem' }>
         <a href='/data'>
           <i className='fas fa-rocket fa-lg'></i>
@@ -103,6 +114,7 @@ const TopBar = ({ ready, user, active, org, app, link })=> {
       </span>
     </div>
   );
+  */
 };
 
 export default withTracker( ({ link }) => {
@@ -127,4 +139,4 @@ export default withTracker( ({ link }) => {
       link: link
     };
   }
-})(TopBar);
+})(NavFloat);

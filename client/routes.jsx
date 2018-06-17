@@ -21,6 +21,9 @@ import GeneralLabel from './views/paper/GeneralLabel.jsx';
 
 import LandingWrap from './LandingWrap.jsx';
 
+import { ProductionNightlyLayout } from './views/proNightly/layout/ProNight.jsx';
+import ProdNightData from './views/proNightly/ProdData.jsx';
+
 // Client Side Colllections
 AppDB = new Mongo.Collection('appdb');
 GroupDB = new Mongo.Collection('groupdb');
@@ -124,6 +127,15 @@ privlegedRoutes.route('/production', {
     mount(ProductionLayout, {
       content: (<ProdData />),
       link: 'prod'
+    });
+  }
+});
+
+privlegedRoutes.route('/nightly/production', {
+  action() {
+    mount(ProductionNightlyLayout, {
+      content: (<ProdNightData />),
+      link: 'pronight'
     });
   }
 });

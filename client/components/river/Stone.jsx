@@ -173,7 +173,7 @@ export default class Stone extends Component	{
         runOnMount={true}
         interruptBehavior="finish">*/}
      return(
-    	<div style={stopmooving} className='space'>
+    	<div style={stopmooving} className='vspace noCopy'>
         {this.props.type === 'nest' ?
         	<FoldInNested
             id={this.props.id}

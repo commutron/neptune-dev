@@ -375,6 +375,8 @@ main {
 
 .space { padding: 24px; }
 
+.vspace { padding: 24px 0; }
+
 .indent { padding-left: 16px; }
 
 .breath { margin: 0 5px; }
