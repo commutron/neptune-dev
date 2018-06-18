@@ -15,9 +15,7 @@ export const ProductionLayout = ({content, link}) => (
     <div className='gridHeaderNav'>
       <TopBar link={link} />
     </div>
-    <section className='contentAreaPro'>
-      {content}
-    </section>
+    {content}
   </div>
 );
 
@@ -63,14 +61,12 @@ export class ProWrap extends Component	{
     
     let riverExpand = this.state.expand;
     let topClass = !riverExpand ? 'proDefault' : 'proExpand';
-    let leftClass = !riverExpand ? 'proLeftMinor' : 'proLeftMajor';
-    let rightClass = !riverExpand ? 'proRightMajor' : 'proRightMinor';
     let toggleClass = !riverExpand ? 'riverExpandToggle' : 'riverShrinkToggle';
     
     return (
-      <div className={topClass}>
+      <section className={topClass}>
         
-        <div className={leftClass} style={scrollFix}>
+        <div className='proLeft' style={scrollFix}>
           {this.props.children.length > 2 ?
             React.cloneElement(this.props.children[0],
               { 
@@ -98,7 +94,7 @@ export class ProWrap extends Component	{
           <i className='fas fa-chevron-right fa-2x'></i>
         </button>
           
-        <div className={rightClass} style={scrollFix}>
+        <div className='proRight' style={scrollFix}>
           {this.props.children[this.props.children.length - 1]}
         </div>
 
@@ -110,7 +106,7 @@ export class ProWrap extends Component	{
           users={this.props.users}
           app={this.props.app} />
         
-      </div>
+      </section>
     );
   }
   componentDidMount() {

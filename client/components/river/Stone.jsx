@@ -186,6 +186,7 @@ export default class Stone extends Component	{
     				serial={this.props.barcode}
     				allItems={this.props.allItems}
     				isAlt={this.props.isAlt}
+    				hasAlt={this.props.hasAlt}
     				sKey={this.props.sKey}
             step={this.props.step}
             type={this.props.type}

@@ -22,51 +22,35 @@
   box-shadow:         0 0 15px 0.5px rgb(0,0,0);
 }
 
-.contentAreaPro {
-  grid-area: proContent;
-  /*min-height: calc(100vh - 48px);*/
-  overflow-y: auto;
-}
-
 .proDefault, .proExpand {
+  grid-area: proContent;
   display: grid;
   grid-template-rows: calc(100vh - 108px) 60px;
+  grid-template-areas: 
+    'proRiver proInstruct'
+    'formFooter formFooter';
+  overflow-y: auto;
   -webkit-transition: all 150ms ease-in-out;
   -moz-transition: all 150ms ease-in-out;
   -o-transition: all 150ms ease-in-out;
   transition: all 150ms ease-in-out;
 }
-.proLeftMinor, .proLeftMajor {
-  background-color: rgb(35,35,35);
-}
-.proLeftMinor, .proLeftMajor, .proRightMajor, .proRightMinor {
-  height: 100%;
-}
 
 .proDefault {
   grid-template-columns: 20vw auto;
-  grid-template-areas: 
-    'proRiverMinor proInstructMajor'
-    'formFooter formFooter';
 }
-.proLeftMinor {
-  grid-area: proRiverMinor;
-}
-.proRightMajor {
-  grid-area: proInstructMajor;
-}
-
 .proExpand {
   grid-template-columns: 40vw auto;
-  grid-template-areas: 
-    'proRiverMajor proInstructMinor'
-    'formFooter formFooter';
 }
-.proLeftMajor {
-  grid-area: proRiverMajor;
+
+.proLeft {
+  grid-area: proRiver;
+  height: 100%;
+  background-color: rgb(35,35,35);
 }
-.proRightMinor {
-  grid-area: proInstructMinor;
+.proRight {
+  height: 100%;
+  grid-area: proInstruct;
 }
 
 .proActionForm {
@@ -193,11 +177,6 @@
 .miniHistory {
   width: 100%;
   border-collapse: collapse;
-  border-bottom: 1px solid white;
-  
-}
-.miniHistory .mockTableRow {
-  border-bottom: 1px solid white;
 }
 .miniHistory .mockTableCell {
   padding: 5px;

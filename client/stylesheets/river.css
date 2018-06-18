@@ -5,7 +5,7 @@
   z-index: 0;
 }
 
-.stone {
+.stone, .doneStone {
 	position: absolute;
 	top: 49%;
 	left: 50%;
@@ -14,25 +14,41 @@
 	margin: 0;
   width: 14vw;
   height: 14vw;
-  font-size: calc(0.5rem + 2vw);
+  font-size: calc(0.5rem + 1.5vw);
 	text-transform: uppercase;
-	text-shadow: 0 0 10px #000;
   color: white;
   background-position: 50% 50%;
   background-repeat: no-repeat;
   background-origin: content-box;
   background-size: 110%;
   border-radius: 50%;
-  border: 10px solid transparent;
-  -moz-box-shadow: var(--dropShadow1);
-  -webkit-box-shadow: var(--dropShadow1);
-  box-shadow: var(--dropShadow1);
   -webkit-transition: all 200ms ease-out;
   -moz-transition: all 200ms ease-out;
   -o-transition: all 200ms ease-out;
   transition: all 200ms ease-out;
   opacity: 1;
   will-change: transform;
+}
+.stone {
+	text-shadow: 0 0 10px #000;
+  border: 10px solid transparent;
+}
+.doneStone {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding: calc(0.5rem + 1vw) 0 0 0;
+  background-color: transparent !important;
+  border-color: transparent !important;
+}
+.stone label, .doneStone label {
+  width: 100%;
+  padding: 10px 0 0 0;
+  font-size: calc(0.5rem + 1vw);
+}
+.stone br, .doneStone br {
+  margin: 0;
+  padding: 0;
 }
 
 .stone:focus {
@@ -181,6 +197,27 @@
   background-color: var(--amethyst);
 }
 
+/*
+.doneFirst {
+  background-color: var(--peterriver);
+}
+.doneCheck {
+  border: 8px solid var(--emerald);
+}
+.doneTest {
+  background-color: var(--turquoise);
+}
+.doneBuild {
+  background-color: var(--peterriver);
+}
+.donePoint {
+  background-color: var(--silver);
+}
+.doneFinish {
+  background-color: var(--amethyst);
+}
+*/
+
 .ncTrib {
   position: relative;
   z-index: 3;
@@ -196,12 +233,14 @@
 .tribCell {
 	display: table-cell;
 	text-align: center;
+	height: 40px;
 	vertical-align: middle;
 	padding: 0 0 0 5px;
+}
+.tribRow .tribCell:nth-child(2) {
   word-break: break-word;/*weird no standerd thing but it works*/
   word-wrap: break-word;
 }
-
 .tribRow .tribCell:nth-child(3) {
   width: 80px;
   margin: 0;

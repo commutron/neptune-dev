@@ -1,7 +1,6 @@
 import React from 'react';
 import moment from 'moment';
 
-
 const MiniHistory = ({ history })=> (
   <div className='mockTable miniHistory'>
     {history.map( (hst, idx)=>{
@@ -12,7 +11,6 @@ const MiniHistory = ({ history })=> (
   		  </div>
   		)})}
   </div>
-  
-  );
+);
   
 export default MiniHistory;
