@@ -74,6 +74,7 @@ class Pref {
     this.outIssue = 'outstanding issues';
     this.gComm = 'general comments';
     this.nest = 'nest';
+    this.stoneislocked = 'locked. \n unable to proceed';
     // bad tracking
     this.fixFlow = 'repair process';
     this.fixStep = 'repair step';

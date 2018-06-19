@@ -25,9 +25,12 @@ export default class Stone extends Component	{
   
   // removes excessive re-renders
   shouldComponentUpdate(nextProps, nextState) {
-  	if(this.state !== nextState) {
-  		return true;
-  	}else if(this.props.sKey !== nextProps.sKey) {
+  	if(
+  		this.state !== nextState ||
+  		this.props.doneStone !== nextProps.doneStone ||
+  		this.props.blockStone !== nextProps.blockStone ||
+  		this.props.sKey !== nextProps.sKey
+  	) {
     	return true;
   	}else{
   		return false;
@@ -124,12 +127,38 @@ export default class Stone extends Component	{
 		  }
 		});
 	}
+	
+	handleUndoLast() {
+		const id = this.props.id;
+		const bar = this.props.barcode;
+		const entry = this.props.compEntry;
+	  const flag = entry.key;
+	  const time = entry.time;
+	  let replace = entry;
+	  replace.good = false;
+	  if(entry) {
+		  Meteor.call('pullHistory', id, bar, flag, time, (error, reply)=> {
+		    error && console.log(error);
+		    if(reply) {
+		      Meteor.call('pushHistory', id, bar, replace, (error)=> {
+		        error && console.log(error);
+		        this.unlock();
+		      });
+		    }else{
+		      Bert.alert(Pref.blocked, 'danger');
+		    }
+		  });
+	  }else{
+	  	Bert.alert(Pref.blocked, 'danger');
+	  }
+	}
 
   render() {
 
 		let shape = '';
 		let ripple = '';
-		let lock = this.state.lock;
+		let lock = this.props.doneStone || this.props.blockStone ? 
+							 true : this.state.lock;
 		let prepend = this.props.type === 'build' || this.props.type === 'first' ?
 		              <label className='big'>{this.props.type}<br /></label> : null;
 		let apend = this.props.type === 'inspect' ?
@@ -164,7 +193,10 @@ export default class Stone extends Component	{
     const adaptiveWidth = vw(17) + "px";
     
     const stopmooving = { minHeight: vw(20) + "px" };
-     
+    
+    const topClass = this.props.doneStone ? 'doneStoneMask' :
+    								 this.props.blockStone ? 'blockStone' : '';
+    const topTitle = topClass !== '' ? Pref.stoneislocked : '';
     //return (
     	{/*
     	<VelocityComponent 
@@ -173,7 +205,7 @@ export default class Stone extends Component	{
         runOnMount={true}
         interruptBehavior="finish">*/}
      return(
-    	<div style={stopmooving} className='vspace noCopy'>
+    	<div style={stopmooving} className={topClass + ' vspace noCopy'} title={topTitle}>
         {this.props.type === 'nest' ?
         	<FoldInNested
             id={this.props.id}
@@ -267,6 +299,10 @@ export default class Stone extends Component	{
 		            Ship a Failed Test
 		          </MenuItem>
 	          :null}
+	          {this.props.compEntry &&
+          <MenuItem onClick={()=>this.handleUndoLast()}>
+            Undo Completed Step
+          </MenuItem>}
 	        </ContextMenu>
 	    	}
       </div>

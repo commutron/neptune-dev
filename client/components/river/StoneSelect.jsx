@@ -4,7 +4,6 @@ import InOutWrap from '/client/components/tinyUi/InOutWrap.jsx';
 import Pref from '/client/global/pref.js';
 
 import Stone from './Stone.jsx';
-import StoneComplete from './StoneComplete.jsx';
 import TestFails from './TestFails.jsx';
 import NCTributary from './NCTributary.jsx';
 import Shortfalls from './Shortfalls.jsx';
@@ -92,7 +91,8 @@ const StoneSelect = ({
 	    let block = nc.some( x => (x.where || '') !== flowStep.step ) ? true : false;
       */
       
-      const stoneBlocked = <div>{flowStep.type} {flowStep.step} is Next but must clear nonCons</div>;
+      const blockStone = damStep && !ncAllClear;
+      const doneStone = stepComplete;
       
 	    const stone = <Stone
         		          key={flowStep.key}
@@ -106,25 +106,10 @@ const StoneSelect = ({
                       hasAlt={hasAlt}
                       users={users}
                       methods={methods}
-                      progCounts={progCounts} />;
-                      
-      const stoneComplete = <StoneComplete
-                              id={id}
-                              barcode={serial}
-                              sKey={flowStep.key}
-                              step={flowStep.step}
-                              type={flowStep.type}
-                              allItems={allItems}
-                              isAlt={isAlt}
-                              hasAlt={hasAlt}
-                              progCounts={progCounts}
-                              compEntry={compEntry} />;
-      
-      const showStone = stepComplete ?
-                        stoneComplete :
-                        damStep && !ncAllClear ?
-                        stoneBlocked : 
-                        stone;
+                      progCounts={progCounts}
+                      blockStone={blockStone}
+                      doneStone={doneStone}
+                      compEntry={compEntry} />;
       
       const nonCon = <NCTributary
               			  id={id}
@@ -186,7 +171,7 @@ const StoneSelect = ({
 	        <div className={expand && 'stonePlus'}>
             <div className={expand && 'stonePlusLeft'}>
   		        <InOutWrap type='stoneTrans'>
-    		        {showStone}
+    		        {stone}
               </InOutWrap>
               {fTest.length > 0 && 
                 <InOutWrap type='stoneTrans'>

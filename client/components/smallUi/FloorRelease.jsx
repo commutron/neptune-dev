@@ -33,7 +33,7 @@ const FloorRelease = ({ id })=> {
         <input
           type='time'
           id='rtime'
-          defaultValue={moment().format('hh:mm')}
+          defaultValue={moment().format('HH:mm')}
           required />
         <br />
         <button

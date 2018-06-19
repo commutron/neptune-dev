@@ -33,7 +33,7 @@ const ReleaseAction = ({ id, rType })=> {
         <input
           type='time'
           id='rtime'
-          defaultValue={moment().format('hh:mm')}
+          defaultValue={moment().format('HH:mm')}
           required />
         <p>
           <button
@@ -74,7 +74,7 @@ export const ReleaseNote = ({ id, release, xBatch, expand })=> {
       <ContextMenuTrigger id={id+'release'}>
   			<fieldset className='noteCard'>
           <legend>{releaseType || 'Released to the Floor'}</legend>
-          {moment(release.time).calendar()}
+          {moment(release.time).format("ddd, MMM Do YYYY, h:mm a")}
           {expand && ' by '}
           {expand && <UserName id={release.who} />}
         </fieldset>
