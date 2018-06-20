@@ -25,8 +25,8 @@ export default class BatchForm extends Component	{
     const startDate = this.sDate.value;
     const endDate = this.eDate.value;
 
-    function edit(batchId, batchNum, vKey) {
-      Meteor.call('editBatch', batchId, batchNum, vKey, startDate, endDate, (error, reply)=>{
+    function edit(batchId, batchNum, vKey, salesNum, startDate, endDate) {
+      Meteor.call('editBatch', batchId, batchNum, vKey, salesNum, startDate, endDate, (error, reply)=>{
         if(error)
           console.log(error);
           Bert.alert(Alert.warning);
@@ -40,8 +40,8 @@ export default class BatchForm extends Component	{
       });
     }
 
-    function create(batchNum, wId, vKey, startDate, endDate) {
-      Meteor.call('addBatch', batchNum, wId, vKey, startDate, endDate, (error, reply)=>{
+    function create(batchNum, wId, vKey, salesNum, startDate, endDate) {
+      Meteor.call('addBatch', batchNum, wId, vKey, salesNum, startDate, endDate, (error, reply)=>{
         if(error)
           console.log(error);
           Bert.alert(Alert.warning);
@@ -56,9 +56,9 @@ export default class BatchForm extends Component	{
     }
     
     if(batchNow === 'new') {
-      create(batchNum, wId, vKey, startDate, endDate);
+      create(batchNum, wId, vKey, salesNum, startDate, endDate);
     }else{
-      edit(batchId, batchNum, vKey, startDate, endDate);
+      edit(batchId, batchNum, vKey, salesNum, startDate, endDate);
     }
   }
   
@@ -73,6 +73,7 @@ export default class BatchForm extends Component	{
     const exV = this.props.versionNow;
     let eVer = exV === 'new' ? '' : exV;
     
+    let eSO = this.props.salesOrder || '';
     let eS = this.props.start ? this.props.start : moment().format('YYYY-MM-DD');
     let eE = this.props.end ? this.props.end : '';
 
@@ -115,6 +116,18 @@ export default class BatchForm extends Component	{
               autoFocus='true'
               required />
             <label htmlFor='oNum'>{Pref.batch} number</label>
+          </p>
+          <p>
+            <input
+              type='text'
+              id='oNum'
+              ref={(i)=> this.soNum = i}
+              maxLength='32'
+              minLength='1'
+              defaultValue={eSO}
+              placeholder='179470b'
+              required/>
+            <label htmlFor='soNum'>{Pref.salesOrder} number</label>
           </p>
           <p>
             <input

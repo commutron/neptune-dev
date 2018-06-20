@@ -127,10 +127,11 @@ export default class BatchFormX extends Component	{
               type='text'
               id='oNum'
               ref={(i)=> this.soNum = i}
-              pattern='[00000-99999]*'
-              inputMode='numeric'
+              maxLength='32'
+              minLength='1'
               defaultValue={eSO}
-              placeholder='17947000' />
+              placeholder='179470b'
+              required/>
             <label htmlFor='soNum'>{Pref.salesOrder} number</label>
           </p>
           <p>

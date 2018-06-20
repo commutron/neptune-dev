@@ -143,6 +143,7 @@ export default class BatchPanel extends Component	{
                   tagOps={a.tagOption} />
                 <fieldset className='noteCard'>
                   <legend>Time Range</legend>
+                  <p className='capFL'>{Pref.salesOrder}: {b.salesOrder || 'not available'}</p>
                   <p className='capFL'>{Pref.start}: {moment(b.start).format("MMMM Do, YYYY")}</p>
                   <p className='capFL'>{Pref.end}: {moment(b.end).format("MMMM Do, YYYY")}</p>
                   {fnsh !== null && <p>Finished: {fnsh}</p>}

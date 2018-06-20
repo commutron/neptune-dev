@@ -3,7 +3,7 @@
 Meteor.methods({
 
 //// Batches \\\\
-  addBatch(batchNum, widgetId, vKey, sDate, eDate) {
+  addBatch(batchNum, widgetId, vKey, salesNum, sDate, eDate) {
     const doc = WidgetDB.findOne({_id: widgetId});
     const legacyduplicate = BatchDB.findOne({batch: batchNum});
     const duplicateX = xBatchDB.findOne({batch: batchNum});
@@ -22,6 +22,7 @@ Meteor.methods({
         updatedAt: new Date(),
   			updatedWho: Meteor.userId(),
   			finishedAt: false,
+  			salesOrder: salesNum,
   			start: sDate,
   			end: eDate,
   			notes: false,
@@ -42,7 +43,7 @@ Meteor.methods({
     }
   },
   
-  editBatch(batchId, newBatchNum, vKey, sDate, eDate) {
+  editBatch(batchId, newBatchNum, vKey, salesNum, sDate, eDate) {
     const doc = BatchDB.findOne({_id: batchId});
     let legacyduplicate = BatchDB.findOne({batch: newBatchNum});
     let duplicateX = BatchDB.findOne({batch: newBatchNum});
@@ -53,6 +54,7 @@ Meteor.methods({
         $set : {
           batch: newBatchNum,
           versionKey: vKey,
+          salesOrder: salesNum,
           start: sDate,
   			  end: eDate,
   			  updatedAt: new Date(),
