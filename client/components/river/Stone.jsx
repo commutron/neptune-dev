@@ -18,6 +18,7 @@ export default class Stone extends Component	{
       show: false
     };
     this.reveal = this.reveal.bind(this);
+    //this.unreveal = this.unreveal.bind(this);
     this.passS = this.passS.bind(this);
     this.passT = this.passT.bind(this);
     this.finish = this.finish.bind(this);
@@ -41,6 +42,9 @@ export default class Stone extends Component	{
     this.setState({show: !this.state.show});
     //document.getElementById('lookup').focus();
   }
+  //unreveal() {
+    //this.setState({show: false});
+  //}
   
   unlock() {
   	let speed = !Meteor.user().unlockSpeed ? 2000 : Meteor.user().unlockSpeed; 
@@ -286,6 +290,7 @@ export default class Stone extends Component	{
               type={this.props.type}
               users={this.props.users}
               methods={this.props.methods} />
+              {/*onPass={this.unreveal} />*/}
             <br />
           </div>
         }

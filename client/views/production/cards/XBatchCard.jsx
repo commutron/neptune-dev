@@ -5,11 +5,12 @@ import Pref from '/client/global/pref.js';
 import Tabs from '../../../components/smallUi/Tabs.jsx';
 
 //import JumpText from '../../../components/tinyUi/JumpText.jsx';
-import FloorRelease from '/client/components/smallUi/FloorRelease.jsx';
+//import FloorRelease from '/client/components/smallUi/FloorRelease.jsx';
+import ReleaseAction from '/client/components/bigUi/ReleasesModule.jsx';
 import { ReleaseNote } from '/client/components/bigUi/ReleasesModule.jsx';
-import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
-import NonConMiniSatus from '/client/components/charts/NonConMiniStatus.jsx';
-import NonConMiniTops from '/client/components/bigUi/NonConMiniTops.jsx';
+//import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
+//import NonConMiniSatus from '/client/components/charts/NonConMiniStatus.jsx';
+//import NonConMiniTops from '/client/components/bigUi/NonConMiniTops.jsx';
 import TagsModule from '../../../components/bigUi/TagsModule.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';
 import BlockList from '../../../components/bigUi/BlockList.jsx';
@@ -19,33 +20,29 @@ export default class BatchCardX extends Component	{
   render() {
 
     const b = this.props.batchData;
-    const iS = this.props.itemSerial;
+    //const iS = this.props.itemSerial;
     const w = this.props.widgetData;
     //const g = this.props.groupData;
     const u = this.props.user;
     const a = this.props.app;
     
-    const flow = this.props.flow;
-    const flowAlt = this.props.flowAlt;
-    const done = b.finishedAt !== false;
+    //const flow = this.props.flow;
+    //const flowAlt = this.props.flowAlt;
+    const done = b.completed === true;
     
-    const progCounts = this.props.progCounts;
+    //const progCounts = this.props.progCounts;
     const expand = this.props.expand;
 
-    let iready = b.items.length === 0;
+    //let iready = b.items.length === 0;
     
     let warn = b.blocks.filter( x => x.solve === false ).length;
-    iready ? warn++ : null;
+    //iready ? warn++ : null;
     const showWarn = warn === 0 ? 'alertCount invisible' : 'alertCount';
     const exSpace = !expand ? 'nSpace' : 'exSpace';
     
-    let released = b.floorRelease === undefined ? undefined : 
-                    b.floorRelease === false ? false :
-                    typeof b.floorRelease === 'object';
+    let released = b.releases.find( x => x.type === 'floorRelease');
     
-    const exploreLink = !iS ?
-                        '/data/batch?request=' + b.batch :
-                        '/data/batch?request=' + b.batch + '&specify=' + iS;
+    const exploreLink = '/data/batch?request=' + b.batch;
 
     return(
       <AnimateWrap type='cardTrans'>
@@ -64,18 +61,12 @@ export default class BatchCardX extends Component	{
             </button>
           </div>
           
-          {iready ?
-            <h2 className='actionBox centreText yellow'>
-              No {Pref.itemSerial}s created
-            </h2>
-          :
-            released === undefined || released === true ? null :
-              <ReleaseAction id={b._id} />
-          }
+          {!released &&
+            <ReleaseAction id={b._id} rType='floorRelease' />}
           
-          {b.finishedAt !== false &&
+          {b.completed === true &&
             <h2 className='actionBox centreText green'>
-              Finished: {moment(b.finishedAt).calendar()}
+              Finished: {moment(b.completedAt).calendar()}
             </h2>}
           
             <Tabs
@@ -97,37 +88,48 @@ export default class BatchCardX extends Component	{
                   vKey={false}
                   tagOps={a.tagOption} />
                 <br />
-                {released === true && 
-                  <ReleaseNote id={b._id} release={b.release} expand={expand} />}
-                <NoteLine entry={b.notes} id={b._id} versionKey={false} />
-                <BlockList id={b._id} data={b.blocks} lock={done} expand={expand} />
+                {released &&
+                  <ReleaseNote
+                    id={b._id}
+                    release={released}
+                    xBatch={true}
+                    expand={expand} />}
+                <NoteLine entry={b.notes} id={b._id} xbatch={true} versionKey={false} />
+                <BlockList id={b._id} data={b.blocks} xbatch={true} lock={done} expand={expand} />
               </div>
               
+
               <div className='space cap'>
+              {/*
                 <StepsProgress
                   mini={true}
                   expand={expand}
                   progCounts={progCounts} />
+                */}
               </div>
               
               <div className={!expand ? 'space' : 'space twooneSplit'}>
                 <div className={!expand ? '' : 'onetwoSplitTwo'}>
+                {/*
                   <NonConMiniSatus
                     noncons={b.nonCon}
                     flow={flow}
                     flowAlt={flowAlt}
                     user={u}
                     app={a} />
+                  */}
                 </div>
                 {expand &&
                   <div className='onetwoSplitOne'>
+                  {/*
                     <NonConMiniTops noncons={b.nonCon} items={b.items} user={u} app={a} />
+                  */}
                   </div>}
               </div>
               
             </Tabs>
   				
-  			<br />
+  			  <br />
   
   			</div>
 			</AnimateWrap>

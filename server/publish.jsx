@@ -127,7 +127,8 @@ Meteor.publish('hotDataPlus', function(batch){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
   const bWidget = BatchDB.findOne({batch: batch, orgKey: orgKey});
-  const wID = !bWidget ? false : bWidget.widgetId;         
+  const xbWidget = XBatchDB.findOne({batch: batch, orgKey: orgKey});
+  const wID = !bWidget ? !xbWidget ? false : xbWidget.widgetId : bWidget.widgetId;         
   return [
     BatchDB.find({batch: batch, orgKey: orgKey}, {
       fields: {

@@ -255,9 +255,9 @@ Meteor.methods({
   */
 
   //// Blockers \\\\
-  addpBlock(batchId, blockTxt) {
+  addBlockX(batchId, blockTxt) {
     if(Meteor.userId()) {
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+      XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $push : { blocks: {
           key: new Meteor.Collection.ObjectID().valueOf(),
           block: blockTxt,
@@ -271,13 +271,13 @@ Meteor.methods({
     }
   },
   
-  editpBlock(batchId, blKey, blockTxt) {
-    const doc = BatchDB.findOne({_id: batchId});
+  editBlockX(batchId, blKey, blockTxt) {
+    const doc = XBatchDB.findOne({_id: batchId});
     const subDoc = doc.blocks.find( x => x.key === blKey );
     const mine = subDoc.who === Meteor.userId();
     const auth = Roles.userIsInRole(Meteor.userId(), 'run');
     if(mine || auth) {
-  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'blocks.key': blKey}, {
+  		XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'blocks.key': blKey}, {
   			$set : { 
   			  'blocks.$.block': blockTxt,
   			  'blocks.$.who': Meteor.userId()
@@ -288,10 +288,10 @@ Meteor.methods({
     }
   },
   
-  solvepBlock(batchId, blKey, act) {
+  solveBlockX(batchId, blKey, act) {
     const auth = Roles.userIsInRole(Meteor.userId(), 'run');
     if(auth) {
-  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'blocks.key': blKey}, {
+  		XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'blocks.key': blKey}, {
   			$set : { 
   			  'blocks.$.solve':
   			    {
@@ -306,9 +306,9 @@ Meteor.methods({
     }
   },
 
-  removepBlock(batchId, blKey) {
+  removeBlockX(batchId, blKey) {
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+      XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $pull : { blocks: { key: blKey }
          }});
       return true;

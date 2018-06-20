@@ -107,11 +107,9 @@ export default class FirstForm extends Component	{
     const ng = this.state.ng;
       
 		Meteor.call('addFirst', id, bar, sKey, step, good, whoB, howB, howI, diff, ng, (error, reply)=>{
-		  if(error)
-		    console.log(error);
+		  error && console.log(error);
 		  if(reply) {
-     		//const findBox = document.getElementById('lookup');
-			  //findBox.focus();
+     	  //this.props.onPass;
 			 }else{
 			   Bert.alert(Pref.blocked, 'danger');
 			 }

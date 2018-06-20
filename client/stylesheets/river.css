@@ -1,4 +1,4 @@
-@import "./fontawesome/css/fontawesome.css";
+
 /* River */
 
 .stoneRing {
@@ -6,16 +6,18 @@
   z-index: 0;
 }
 
-.stone, .doneStone {
+.stone {
 	position: absolute;
 	top: 49%;
 	left: 50%;
 	transform: translate(-50%, -50%) rotate(0deg);
 	z-index: 1;
 	margin: 0;
+  border: 10px solid transparent;
   width: 14vw;
   height: 14vw;
   font-size: calc(0.5rem + 1.5vw);
+  text-shadow: 0 0 10px #000;
 	text-transform: uppercase;
   color: white;
   background-position: 50% 50%;
@@ -30,24 +32,12 @@
   opacity: 1;
   will-change: transform;
 }
-.stone {
-	text-shadow: 0 0 10px #000;
-  border: 10px solid transparent;
-}
-.doneStone {
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  padding: calc(0.5rem + 1vw) 0 0 0;
-  background-color: transparent !important;
-  border-color: transparent !important;
-}
-.stone label, .doneStone label {
+.stone label {
   width: 100%;
   padding: 10px 0 0 0;
   font-size: calc(0.5rem + 1vw);
 }
-.stone br, .doneStone br {
+.stone br {
   margin: 0;
   padding: 0;
 }

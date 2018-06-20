@@ -106,7 +106,7 @@ export default class BatchPanelX extends Component	{
                   id={b._id}
                   tags={b.tags}
                   vKey={false}
-                  pBatch={true}
+                  xBatch={true}
                   tagOps={a.tagOption} />
                 <fieldset className='noteCard'>
                   <legend>Time Range</legend>
@@ -124,8 +124,8 @@ export default class BatchPanelX extends Component	{
                     xBatch={true}
                     expand={true} />
                 }
-                <NoteLine entry={b.notes} id={b._id} pBatch={true} widgetKey={false}  />
-                <BlockList id={b._id} data={b.blocks} pBatch={true} lock={done} expand={true} />
+                <NoteLine entry={b.notes} id={b._id} xBatch={true} widgetKey={false}  />
+                <BlockList id={b._id} data={b.blocks} xBatch={true} lock={done} expand={true} />
               </div>
               <div className='twoThirdsContent'>
               {/*

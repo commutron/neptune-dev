@@ -153,14 +153,14 @@ const ActionBar = ({batchData, itemData, groupData, widgetData, versionData, app
           id={batchData._id}
           edit={false}
           xBatch={true}
-          lock={batchData.finishedAt !== false}
+          lock={batchData.completed === true}
           noText={noText} />
         <Remove
           action='xbatch'
           title={batchData.batch}
           check={batchData.createdAt.toISOString()}
           entry={batchData}
-          lock={batchData.finishedAt !== false}
+          lock={batchData.completed === true}
           noText={noText} />
       </div>
       :

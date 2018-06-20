@@ -46,7 +46,9 @@ export class ProWrap extends Component	{
       const riverAlt = w.flows.find( x => x.flowKey === b.riverAlt );
       flow = river ? river.flow : [];
       flowAlt = riverAlt ? riverAlt.flow : [];
-      progCounts = ProgressCounter(flow, flowAlt, b, this.state.expand);
+      if(this.props.action !== 'xBatchBuild') {
+        progCounts = ProgressCounter(flow, flowAlt, b, this.state.expand);
+      }
     }
     return { flow, flowAlt, progCounts };
   }

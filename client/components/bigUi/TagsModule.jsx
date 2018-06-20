@@ -49,8 +49,8 @@ export default class TagsModule extends Component	{
     }else{
       if(!this.props.vKey) {
         if(!this.props.group) {
-          if(this.props.pBatch) {
-            Meteor.call('pullpBTag', this.props.id, tag, (error)=>{
+          if(this.props.xBatch) {
+            Meteor.call('pullBTagX', this.props.id, tag, (error)=>{
               if(error)
                 console.log(error);
             });

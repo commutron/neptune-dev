@@ -123,6 +123,9 @@ fieldset {
   word-break: keep-all;
   overflow: hidden;
 }
+legend {
+  margin-left: 2%;
+}
 
 label {
   line-height: 1.5rem;
