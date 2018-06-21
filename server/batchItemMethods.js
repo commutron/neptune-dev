@@ -6,7 +6,7 @@ Meteor.methods({
   addBatch(batchNum, widgetId, vKey, salesNum, sDate, eDate) {
     const doc = WidgetDB.findOne({_id: widgetId});
     const legacyduplicate = BatchDB.findOne({batch: batchNum});
-    const duplicateX = xBatchDB.findOne({batch: batchNum});
+    const duplicateX = XBatchDB.findOne({batch: batchNum});
     const auth = Roles.userIsInRole(Meteor.userId(), 'create');
     if(auth && !legacyduplicate && !duplicateX && doc.orgKey === Meteor.user().orgKey) {
       BatchDB.insert({
@@ -46,7 +46,7 @@ Meteor.methods({
   editBatch(batchId, newBatchNum, vKey, salesNum, sDate, eDate) {
     const doc = BatchDB.findOne({_id: batchId});
     let legacyduplicate = BatchDB.findOne({batch: newBatchNum});
-    let duplicateX = BatchDB.findOne({batch: newBatchNum});
+    let duplicateX = XBatchDB.findOne({batch: newBatchNum});
     doc.batch === newBatchNum ? legacyduplicate = false : null;
     const auth = Roles.userIsInRole(Meteor.userId(), 'edit');
     if(auth && !legacyduplicate && !duplicateX && doc.orgKey === Meteor.user().orgKey) {

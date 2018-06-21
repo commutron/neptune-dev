@@ -22,6 +22,10 @@
   box-shadow:         0 0 15px 0.5px rgb(0,0,0);
 }
 
+.proFull {
+  grid-area: proContent;
+}
+
 .proDefault, .proExpand {
   grid-area: proContent;
   display: grid;

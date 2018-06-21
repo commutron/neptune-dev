@@ -64,7 +64,13 @@ export default class GroupsList extends Component	{
     let showList = basicFilter.filter( 
       tx => tx.group.toLowerCase().includes(this.state.textString) === true ||
             tx.alias.toLowerCase().includes(this.state.textString) === true);
-
+    
+    let sortList = showList.sort((g1, g2)=> {
+                    if (g1.alias < g2.alias) { return -1 }
+                    if (g1.alias > g2.alias) { return 1 }
+                    return 0;
+                  });
+                  
     return (
       <AnimateWrap type='cardTrans'>
         <div className='' key={1}>
@@ -76,7 +82,7 @@ export default class GroupsList extends Component	{
               onClick={e => this.setFilter(e)}
               onTxtChange={e => this.setTextFilter(e)} />
           </div>  
-          { showList.map( (entry, index)=> {
+          { sortList.map( (entry, index)=> {
             let ac = a.includes(entry._id) ? 'leapBar activeMark' : 'leapBar';
             return (
               <LeapButton

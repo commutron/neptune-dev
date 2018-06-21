@@ -33,7 +33,7 @@ Meteor.methods({
   			quantity: Number(quantity),
   			serialize: false,
   			river: false,
-  			waterfall: null,
+  			waterfall: [],
   			rapids: [],
   			blocks: [],
         releases: [],
@@ -171,7 +171,42 @@ Meteor.methods({
     }
   },
 
-
+  //// Waterfall
+  
+  AddCounter(batchId, wfKey, gate) {
+    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+      XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        $push : { 
+          waterfall: {
+            wfKey: wfKey,
+            gate: gate,
+            counts: []
+          }
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  // pull a tag
+  RemoveCounter(batchId, wfKey) {
+    const doc = XBatchDB.findOne({_id: batchId});
+    const subdoc = doc ? doc.waterfall.find( x => x.key === wfKey) : null;
+    const inUse = subdoc ? subdoc.counts.length > 0 : null;
+    if(doc && subdoc && !inUse) {
+      if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+        XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+          $pull : {
+            waterfall: { wfKey : wfKey }
+          }});
+        return true;
+      }else{
+        return false;
+      }
+    }else{
+      return 'inUse';
+    }
+  },
   
   //// history entries
 
@@ -179,7 +214,7 @@ Meteor.methods({
     if(type === 'inspect' && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
       return false;
     }else{
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
+      XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
         $push : { 'items.$.history': {
           key: key,
           step: step,
@@ -189,6 +224,8 @@ Meteor.methods({
           who: Meteor.userId(),
           comm : com,
           info: false
+          //{ ping: 1, time: new Date() },
+          //{ ping: -1, time: new Date() }
       }}});
       return true;
     }
@@ -220,7 +257,7 @@ Meteor.methods({
     }
   },
 */
-  
+  /*
   // finish Batch
   finishSimpleBatch(batchId, permission) {
     const doc = BatchDB.findOne({_id: batchId});
@@ -233,6 +270,7 @@ Meteor.methods({
       }});
     }else{null}
   },
+  */
   
   /*
 

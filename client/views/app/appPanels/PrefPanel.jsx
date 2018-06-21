@@ -24,6 +24,56 @@ export default class PrefPanel extends Component {
     });
   }
   
+  ncRemoveA(key, defect) {
+    Bert.alert(Alert.wait);
+    Meteor.call('removePrimaryNCOption', key, defect, (error, reply)=>{
+      if(error)
+        console.log(error);
+      if(reply) {
+        Bert.alert(Alert.success);
+      }else{
+        Bert.alert(Alert.inUse);
+      }
+    });
+  }
+  ncDormantA(key, live) {
+    const make = !live;
+    Meteor.call('dormantPrimaryNCOption', key, make, (error, reply)=>{
+      if(error)
+        console.log(error);
+      if(reply) {
+        Bert.alert(Alert.success);
+      }else{
+        Bert.alert(Alert.inUse);
+      }
+    });
+  }
+  
+  ncRemoveB(key, defect) {
+    Bert.alert(Alert.wait);
+    Meteor.call('removeSecondaryNCOption', key, defect, (error, reply)=>{
+      if(error)
+        console.log(error);
+      if(reply) {
+        Bert.alert(Alert.success);
+      }else{
+        Bert.alert(Alert.inUse);
+      }
+    });
+  }
+  ncDormantB(key, live) {
+    const make = !live;
+    Meteor.call('dormantSecondaryNCOption', key, make, (error, reply)=>{
+      if(error)
+        console.log(error);
+      if(reply) {
+        Bert.alert(Alert.success);
+      }else{
+        Bert.alert(Alert.inUse);
+      }
+    });
+  }
+  
   ancRemove(name) {
     Bert.alert(Alert.wait);
     Meteor.call('removeAncOption', name, (error, reply)=>{
@@ -78,11 +128,27 @@ export default class PrefPanel extends Component {
           
           </div>
         </fieldset>    
+        
         <fieldset disabled={auth}>
           <div className='space breathe'>
   
-            <h2>{Pref.nonCon} Types</h2>
-            <i>Options for types of {Pref.nonCon}s</i>
+            <h2>{Pref.counter} gates</h2>
+            <i>Options for counters</i>
+            <OptionAdd action='count' title='gate' rndmKey={Math.random().toString(36).substr(2, 5)} />
+            <ul>
+              {dt.countOption && dt.countOption.map( (entry, index)=>{
+                return ( <li key={index}>{entry.gate}</li> );
+              })}
+            </ul>
+          
+          </div>
+        </fieldset> 
+        
+        <fieldset disabled={auth}>
+          <div className='space breathe'>
+  
+            <h2>Legacy {Pref.nonCon} Types</h2>
+            <i>Options for types of legacy {Pref.nonCon}s.</i>
             <OptionAdd action='nc' title='defect' rndmKey={Math.random().toString(36).substr(2, 5)} />
             <ol>
               {dt.nonConOption.map( (entry, index)=>{
@@ -120,7 +186,60 @@ export default class PrefPanel extends Component {
             <SetScale curScale={dt.ncScale || null} />
           
           </div>
-        </fieldset>    
+        </fieldset>
+        
+        <fieldset disabled={true}>
+          <div className='space breathe'>
+  
+            <h2>Primary {Pref.nonCon} Types</h2>
+            <p>Options for types of Primary {Pref.nonCon}s</p>
+            <i>a new smarter, keyed collection for serialized batches</i>
+            <OptionAdd action='ncA' title='defect' rndmKey={Math.random().toString(36).substr(2, 5)} />
+            <ol>
+              {dt.nonConOptionA && dt.nonConOptionA.map( (entry)=>{
+                  return( 
+                    <li key={entry.key}>
+                      <i className={entry.live ? '' : 'fade'}>{entry.defect}</i>
+                      <button 
+                        className='miniAction redT'
+                        onClick={()=>this.ncRemoveA(entry.key, entry.defect)}
+                      ><i className='fas fa-times fa-fw'></i></button>
+                      <button 
+                        className='miniAction redT'
+                        onClick={()=>this.ncDormantA(entry.key, entry.live)}
+                      ><i className='fas fa-power-off fa-fw'></i></button>
+                    </li>
+              )})}
+            </ol>
+          </div>
+        </fieldset>
+        
+        <fieldset disabled={auth}>
+          <div className='space breathe'>
+  
+            <h2>Secondary {Pref.nonCon} Types</h2>
+            <p>Options for types of Secondary {Pref.nonCon}s</p>
+            <i>a new smarter, keyed collection for NON serialized batches</i>
+            <OptionAdd action='ncB' title='defect' rndmKey={Math.random().toString(36).substr(2, 5)} />
+            <ol>
+              {dt.nonConOptionB && dt.nonConOptionB.map( (entry)=>{
+                  return( 
+                    <li key={entry.key}>
+                      <i className={entry.live ? '' : 'fade'}>{entry.defect}</i>
+                      <button 
+                        className='miniAction redT'
+                        onClick={()=>this.ncRemoveB(entry.key, entry.defect)}
+                      ><i className='fas fa-times fa-fw'></i></button>
+                      <button 
+                        className='miniAction redT'
+                        onClick={()=>this.ncDormantB(entry.key, entry.live)}
+                      ><i className='fas fa-power-off fa-fw'></i></button>
+                    </li>
+              )})}
+            </ol>
+          </div>
+        </fieldset>
+        
         <fieldset disabled={auth}>
           <div className='space breathe'>
             

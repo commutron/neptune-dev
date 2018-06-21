@@ -106,7 +106,8 @@ export class ProWrap extends Component	{
           widgetData={this.props.widgetData}
           versionData={this.props.versionData}
           users={this.props.users}
-          app={this.props.app} />
+          app={this.props.app}
+          action={this.props.action} />
         
       </section>
     );

@@ -27,13 +27,13 @@ export default class ProductionFindOps extends Component	{
   
   groupActiveWidgets(gId) {
     let widgetsList = this.props.allWidget.filter(x => x.groupId === gId);
-    let activeBatch = this.props.allBatch.filter( x => x.active === true);
+    let xActive = this.props.allxBatch.filter( b => b.completed === false);
+    let legacyActive = this.props.allBatch.filter( b => b.finishedAt === false);
+    const activeBatch = [...xActive, ...legacyActive ];
     
-    let activeList = [];
-    for(let wdgt of widgetsList) {
-      let match = activeBatch.find(x => x.widgetId === wdgt._id);
-      match ? activeList.push(match.widgetId) : false;
-    }
+    const hasBatch = (id)=> activeBatch.find( b => b.widgetId === id) ? true : false;
+    let activeWidgets = widgetsList.filter( w => hasBatch(w._id) == true );
+    const activeList = Array.from(activeWidgets, w => w._id);
     return activeList;
   }
   
@@ -110,7 +110,7 @@ export default class ProductionFindOps extends Component	{
       Session.set('nowBatch', false);
       return (
         <ProWrap>
-          <BatchesList batchData={allBatch} widgetData={allWidget} />
+          <BatchesList batchData={[...allBatch, ...allxBatch]} widgetData={allWidget} />
           <div></div>
         </ProWrap>
       );
@@ -131,7 +131,7 @@ export default class ProductionFindOps extends Component	{
       Session.set('nowBatch', false);
       return (
         <div className='proFull'>
-          <WikiOps wi={false} root={app.instruct} anchor={false} />
+          <WikiOps wi={false} root={app.instruct} anchor={false} full={true} />
         </div>
       );
     }
@@ -198,7 +198,7 @@ export default class ProductionFindOps extends Component	{
 	          fallback={orb}
 	          root={app.instruct}
 	          anchor={anchor}
-	          indie={true} />
+	          full={true} />
 	       </div>
 	      );
 	  }

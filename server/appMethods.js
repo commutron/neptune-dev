@@ -1,8 +1,9 @@
 Meteor.startup(function () {  
   // ensureIndex is depreciated 
   // but the new createIndex errors as "not a function"
+  BatchDB._ensureIndex({ batch : 1 }, { unique: true });
   BatchDB._ensureIndex({ batch : 1, 'items.serial' : 1 }, { unique: true });
-  GroupDB._ensureIndex({ group : 1}, { unique: true });
+  GroupDB._ensureIndex({ group : 1 }, { unique: true });
   WidgetDB._ensureIndex({ widget : 1, 'versions.version' : 1 }, { unique: true });
 });
 
@@ -28,6 +29,7 @@ Meteor.methods({
             type: 'finish',
             how: 'finish'
           },
+          countOption: [],
           nonConOption: [],
           ncScale: {
             low: Number(5),
@@ -142,6 +144,21 @@ Meteor.methods({
     }
   },
   
+  addCountOption(gate) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $push : { 
+          countOption : { 
+            key : new Meteor.Collection.ObjectID().valueOf(),
+            gate : gate
+          }
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
 // set last serial
   setlastestSerial(serialNine, serialTen) {
     const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
@@ -205,6 +222,96 @@ Meteor.methods({
         AppDB.update({orgKey: Meteor.user().orgKey}, {
           $pull : { 
             nonConOption : value
+        }});
+        return true;
+      }else{
+        return false;
+      }
+    }else{
+      return false;
+    }
+  },
+  
+  // Smarter NonCon Types
+  addPrimaryNCOption(defect) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $push : { 
+          nonConOptionA : { 
+            key : new Meteor.Collection.ObjectID().valueOf(),
+            defect : defect,
+            live : true
+          }
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  dormantPrimaryNCOption(key, make) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey, 'nonConOptionA.key': key}, {
+        $set : { 
+          'nonConOptionA.$.live' : make
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  removePrimaryNCOption(badKey, defect) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      const usedLegacy = BatchDB.findOne({orgKey: Meteor.user().orgKey, 'nonCon.type': defect});
+      const usedX = XBatchDB.findOne({orgKey: Meteor.user().orgKey, 'nonconformaces.type': defect});
+      if(!usedLegacy && !usedX) {
+        AppDB.update({orgKey: Meteor.user().orgKey}, {
+          $pull : { 
+            nonConOptionA : { key : badKey }
+        }});
+        return true;
+      }else{
+        return false;
+      }
+    }else{
+      return false;
+    }
+  },
+  
+  // secondary noncon options
+  addSecondaryNCOption(defect) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $push : { 
+          nonConOptionB : { 
+            key : new Meteor.Collection.ObjectID().valueOf(),
+            defect : defect,
+            live : true
+          }
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  dormantSecondaryNCOption(key, make) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey, 'nonConOptionB.key': key}, {
+        $set : { 
+          'nonConOptionB.$.live' : make
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  removeSecondaryNCOption(badKey, defect) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      const usedLegacy = BatchDB.findOne({orgKey: Meteor.user().orgKey, 'nonCon.type': defect});
+      const usedX = XBatchDB.findOne({orgKey: Meteor.user().orgKey, 'nonconformaces.type': defect});
+      if(!usedLegacy && !usedX) {
+        AppDB.update({orgKey: Meteor.user().orgKey}, {
+          $pull : { 
+            nonConOptionB : { key : badKey }
         }});
         return true;
       }else{

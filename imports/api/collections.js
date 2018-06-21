@@ -26,7 +26,7 @@ BatchDB.deny({
   remove: () => { return true; },
 });
 
-SimpleBatchDB.deny({
+XBatchDB.deny({
   insert: () => { return true; },
   update: () => { return true; },
   remove: () => { return true; },

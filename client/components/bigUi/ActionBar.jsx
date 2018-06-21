@@ -7,6 +7,7 @@ import BatchForm from '../forms/BatchForm.jsx';
 import BatchFormX from '../forms/BatchFormX.jsx';
 import MultiItemForm from '../forms/MultiItemForm.jsx';
 import RiverSelect from '../forms/RiverSelect.jsx';
+import CounterAssign from '../forms/CounterAssign.jsx';
 import NCEscape from '../forms/NCEscape.jsx';
 import RMAForm from '../forms/RMAForm.jsx';
 import Remove from '../forms/Remove.jsx';
@@ -135,6 +136,12 @@ const ActionBar = ({batchData, itemData, groupData, widgetData, versionData, app
           widgetId={batchData.widgetId}
           versions={widgetData.versions}
           lock={!widgetData.versions || !batchData.active}
+          noText={noText} />
+        <CounterAssign
+          id={batchData._id}
+          waterfall={batchData.waterfall}
+          app={app}
+          lock={batchData.completed === true}
           noText={noText} />
         <ActionLink
           address={'/print/generallabel/' + 

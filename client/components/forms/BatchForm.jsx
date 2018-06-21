@@ -22,6 +22,7 @@ export default class BatchForm extends Component	{
     const wId = this.props.widgetId;
     const vKey = this.vrsn.value;
     const batchNum = this.oNum.value.trim().toLowerCase();
+    const salesNum = this.soNum.value.trim().toLowerCase();
     const startDate = this.sDate.value;
     const endDate = this.eDate.value;
 

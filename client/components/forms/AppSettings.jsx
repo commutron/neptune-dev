@@ -9,7 +9,10 @@ export class OptionAdd extends Component	{
     this.go ? this.go.disabled = true : false;
     const act = this.props.action;
     const action = act === 'nc' ? 'addNCOption' :
+                   act === 'ncA' ? 'addPrimaryNCOption' :
+                   act === 'ncB' ? 'addSecondaryNCOption' :
                    act === 'track' ? 'addTrackOption' :
+                   act === 'count' ? 'addCountOption' :
                    act === 'anc' ? 'addAncOp' :
                    act === 'tag' ? 'addTagOp' :
                    act === 'help' ? 'setHelpDocs' :

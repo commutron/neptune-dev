@@ -54,6 +54,12 @@ export default class BatchesList extends Component	{
     let showList = basicFilter.filter( 
                     tx => tx.batch.toLowerCase().includes(this.state.textString) === true );
     
+    let sortList = showList.sort((b1, b2)=> {
+                    if (b1.batch < b2.batch) { return 1 }
+                    if (b1.batch > b2.batch) { return -1 }
+                    return 0;
+                  });
+    
     return (
       <AnimateWrap type='cardTrans'>
         <div className='section sidebar' key={1}>
@@ -65,8 +71,8 @@ export default class BatchesList extends Component	{
             onClick={e => this.setFilter(e)}
             onTxtChange={e => this.setTextFilter(e)} />
             
-          {showList.map( (entry, index)=> {
-            const style = entry.finishedAt === false ? 
+          {sortList.map( (entry, index)=> {
+            const style = entry.active === true ? 
                           'leapBar activeMark' : 
                           'leapBar gMark';
             const subW = w.find( x => x._id === entry.widgetId);
