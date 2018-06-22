@@ -611,35 +611,52 @@
   background-color: #c0392b;
 }
 
-.stepList {
+.stepList,
+.gateList {
   display: table;
-  width: 100%;
   text-align: center;
   background-color: var(--silver);
   color: black;
 }
-
-.stepList > div {
+.stepList > div, 
+.gateList > div {
   display: table-row;
   border-bottom: 1px solid var(--blackFade);
 }
-.stepList > div:last-child {
+.stepList > div:last-child,
+.gateList > div:last-child {
   border-bottom: none
 }
-.stepList > div > div {
+.stepList > div > div,
+.gateList > div > div {
   display: table-cell;
   border-right: 1px solid var(--blackFade);
   vertical-align: middle;
   padding: 0px 3px;
 }
-.stepList > div > div:last-child {
+.stepList > div > div:last-child,
+.gateList > div > div:last-child {
   border-right: none;
   margin: 0px;
   padding: 0px 0px;
-  width: 96px;
   white-space: nowrap;
   text-indent: 0px;
   background-color: var(--clouds);
+}
+
+.stepList {
+  width: 100%;  
+}
+.stepList > div > div:last-child {
+  width: 96px;
+}
+
+.gateList {
+  width: 50%;
+  margin: 0 auto;
+}
+.gateList > div > div:last-child {
+  width: 32px;
 }
 
 

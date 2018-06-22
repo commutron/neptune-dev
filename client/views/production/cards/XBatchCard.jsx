@@ -5,7 +5,7 @@ import Pref from '/client/global/pref.js';
 import Tabs from '../../../components/smallUi/Tabs.jsx';
 
 //import JumpText from '../../../components/tinyUi/JumpText.jsx';
-//import FloorRelease from '/client/components/smallUi/FloorRelease.jsx';
+import WaterfallSelect from '/client/components/waterfall/WaterfallSelect.jsx';
 import ReleaseAction from '/client/components/bigUi/ReleasesModule.jsx';
 import { ReleaseNote } from '/client/components/bigUi/ReleasesModule.jsx';
 //import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
@@ -61,12 +61,15 @@ export default class BatchCardX extends Component	{
             </button>
           </div>
           
-          {!released &&
-            <ReleaseAction id={b._id} rType='floorRelease' />}
+          {!released ?
+            <ReleaseAction id={b._id} rType='floorRelease' />
+          :
+            <WaterfallSelect batchData={b} app={a} />
+          }
           
           {b.completed === true &&
             <h2 className='actionBox centreText green'>
-              Finished: {moment(b.completedAt).calendar()}
+              Completed: {moment(b.completedAt).calendar()}
             </h2>}
           
             <Tabs

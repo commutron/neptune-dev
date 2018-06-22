@@ -173,7 +173,7 @@ Meteor.methods({
 
   //// Waterfall
   
-  AddCounter(batchId, wfKey, gate) {
+  addCounter(batchId, wfKey, gate) {
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
       XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $push : { 
@@ -188,10 +188,9 @@ Meteor.methods({
       return false;
     }
   },
-  // pull a tag
-  RemoveCounter(batchId, wfKey) {
+  removeCounter(batchId, wfKey) {
     const doc = XBatchDB.findOne({_id: batchId});
-    const subdoc = doc ? doc.waterfall.find( x => x.key === wfKey) : null;
+    const subdoc = doc ? doc.waterfall.find( x => x.wfKey === wfKey) : null;
     const inUse = subdoc ? subdoc.counts.length > 0 : null;
     if(doc && subdoc && !inUse) {
       if(Roles.userIsInRole(Meteor.userId(), 'run')) {
@@ -208,26 +207,31 @@ Meteor.methods({
     }
   },
   
-  //// history entries
+  //// counter entries
 
-  positiveCounter(batchId, bar, key, step, type, com, pass) {
-    if(type === 'inspect' && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
-      return false;
+  positiveCounter(batchId, wfKey) {
+    if(!Roles.userIsInRole(Meteor.userId(), 'active')) {
+      null;
     }else{
-      XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
-        $push : { 'items.$.history': {
-          key: key,
-          step: step,
-          type: type,
-          good: pass,
+      XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'waterfall.wfKey': wfKey}, {
+        $push : { 'waterfall.$.counts': { 
+          tick: Number(1),
           time: new Date(),
-          who: Meteor.userId(),
-          comm : com,
-          info: false
-          //{ ping: 1, time: new Date() },
-          //{ ping: -1, time: new Date() }
+          who: Meteor.userId()
       }}});
-      return true;
+    }
+  },
+  
+  negativeCounter(batchId, wfKey) {
+    if(!Roles.userIsInRole(Meteor.userId(), 'active')) {
+      null;
+    }else{
+      XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'waterfall.wfKey': wfKey}, {
+        $push : { 'waterfall.$.counts': { 
+          tick: Number(-1),
+          time: new Date(),
+          who: Meteor.userId()
+      }}});
     }
   },
 

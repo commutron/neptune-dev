@@ -31,6 +31,8 @@ Meteor.methods({
           },
           countOption: [],
           nonConOption: [],
+          nonConOptionA: [],
+          nonConOptionB: [],
           ncScale: {
             low: Number(5),
             high: Number(10),

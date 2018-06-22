@@ -146,6 +146,15 @@ export default class BatchPanelX extends Component	{
                     doneFirsts={filter.fList}
                     flow={riverFlow}
                     flowAlt={riverAltFlow} />*/}
+                  <h3>Assigned Counters</h3>
+                  <dl>
+                    {b.waterfall.map( (entry)=>{
+                    let total = entry.counts.length > 0 ?
+                    Array.from(entry.counts, x => x.tick).reduce((x,y)=> x + y) :
+                    0;
+                      return <dd key={entry.wfKey}>{entry.gate} : {total}</dd>;
+                    })}
+                  </dl>
                 </div>
               
                 <div className='twoThirdsContent'>
