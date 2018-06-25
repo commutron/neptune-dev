@@ -67,11 +67,6 @@ export default class BatchCardX extends Component	{
             <WaterfallSelect batchData={b} app={a} />
           }
           
-          {b.completed === true &&
-            <h2 className='actionBox centreText green'>
-              Completed: {moment(b.completedAt).calendar()}
-            </h2>}
-          
             <Tabs
               tabs={[
                 <i className='fas fa-info-circle fa-fw' data-fa-transform='down-2' title='Info'></i>, 

@@ -2,12 +2,8 @@ import React from 'react';
 //import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
-const Waterfall = ({ id, fall, quantity, app })=> {
-  
-  let total = fall.counts.length > 0 ?
-  Array.from(fall.counts, x => x.tick).reduce((x,y)=> x + y) :
-  0;
-  
+const Waterfall = ({ id, fall, total, quantity, lock, app })=> {
+
   function plusOne() {
     const batchID = id;
     if(total < quantity) {
@@ -28,27 +24,25 @@ const Waterfall = ({ id, fall, quantity, app })=> {
   return (
     <div className='waterfallGrid'>
       <button
-        className='smallAction clearRed'
+        className='countMinus smallAction clearRed'
         onClick={()=>minusOne()}
-        disabled={total === 0}
+        disabled={lock || total === 0}
       >-1</button>
-      <br />
+      
       <button
-        className='smallAction'
-        disabled={true}
+        className='countN smallAction'
+        disabled={lock || true}
       >+n</button>
-      <br />
+      
       <button
-        className='smallAction'
-        disabled={true}
+        className='countRec smallAction'
+        disabled={lock || true}
       >rec</button>
       
-      <br />
-      
       <button
-        className='action big clearBlue'
+        className='countPlus action big clearBlue'
         onClick={()=>plusOne()}
-        disabled={total >= quantity}
+        disabled={lock || total >= quantity}
       >{total}/{quantity}</button>
   	</div>
   );

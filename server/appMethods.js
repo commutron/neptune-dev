@@ -98,6 +98,26 @@ Meteor.methods({
     }
   },
   
+  // find a more secure way of dooing this.
+  // worker changes role with timeout???
+  /*
+  requestPINoverride(pinInput) {
+    const userActive = Roles.userIsInRole(Meteor.userId(), 'active');
+    const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
+    const orgPIN = org ? org.orgPIN : undefined;
+    if(userActive && orgPIN) {
+      const correct = orgPIN === pinInput;
+      if(correct) {
+        return true;
+      }else{
+        return false;
+      }
+    }else{
+      return false;
+    }
+  },
+  */
+  
   addTrackOption(flatTrack) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       

@@ -1,4 +1,4 @@
-//import moment from 'moment';
+import moment from 'moment';
 
 Meteor.methods({
 
@@ -234,6 +234,50 @@ Meteor.methods({
       }}});
     }
   },
+  
+  // Finish Batch
+  finishBatchX(batchId) {
+    if(!Roles.userIsInRole(Meteor.userId(), 'finish')) {
+      null;
+    }else{
+      const doc = XBatchDB.findOne({_id: batchId});
+      const did = doc.quantity > 0;
+      const noItems = doc.serialize === false;
+      if(doc && did && noItems) {
+        XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+    			$set : { 
+    			  active: false,
+    			  completed: true,
+    			  completedAt: new Date(),
+    			  completedWho: Meteor.userId(),
+        }});
+      }else{null}
+    }
+  },
+  
+  // Undo Finish Batch
+  undoFinishBatchX(batchId, override) {
+    if(!Roles.userIsInRole(Meteor.userId(), 'finish')) {
+      null;
+    }else{
+      const doc = XBatchDB.findOne({_id: batchId});
+      const inTime = doc.completed ? moment(doc.completedAt).isSame(moment(), 'hour') : false;
+      const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
+      const orgPIN = org ? org.orgPIN : null;
+      if(doc && (inTime || orgPIN === override)) {
+        XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+    			$set : { 
+    			  active: true,
+    			  completed: false,
+    			  completedAt: false,
+    			  completedWho: false,
+        }});
+        return true;
+      }else{
+        return false;
+      }
+    }
+  },
 
 /*
   addFirst(batchId, bar, key, step, good, whoB, howB, howI, diff, ng) {
@@ -261,20 +305,7 @@ Meteor.methods({
     }
   },
 */
-  /*
-  // finish Batch
-  finishSimpleBatch(batchId, permission) {
-    const doc = BatchDB.findOne({_id: batchId});
-    const allDone = doc.items.every( x => x.finishedAt !== false );
-    if(doc.finishedAt === false && allDone) {
-      BatchDB.update({_id: batchId, orgKey: permission}, {
-  			$set : { 
-  			  active: false,
-  			  finishedAt: new Date()
-      }});
-    }else{null}
-  },
-  */
+
   
   /*
 

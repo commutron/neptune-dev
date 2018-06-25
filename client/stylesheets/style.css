@@ -310,7 +310,8 @@
 .clearGreen,
 .clearBlue,
 .clearRed,
-.clearOrange {
+.clearOrange,
+.clearPurple {
   background-color: transparent;
   border-width: 1px;
   border-style: solid;
@@ -320,7 +321,8 @@
 .clearGreen:hover,
 .clearBlue:hover,
 .clearRed:hover,
-.clearOrange:hover {
+.clearOrange:hover,
+.clearPurple:hover {
   color: black;
 }
   
@@ -370,6 +372,16 @@
 .clearOrange:hover,
 .invert .clearOrange:hover {
   background-color: var(--orange);
+}
+
+.clearPurple,
+.invert .clearPurple {
+  color: var(--amethyst);
+  border-color: var(--amethyst);
+}
+.clearPurple:hover,
+.invert .clearPurple:hover {
+  background-color: var(--amethyst);
 }
 
 .clean {
