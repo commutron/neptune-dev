@@ -57,16 +57,17 @@ export class OptionAdd extends Component	{
               required
             />
           </label>
-            {this.props.action === 'track' ?
+            {this.props.action === 'track' || this.props.action === 'count' ?
               <label htmlFor={rndmKey + 'type'}>Type<br />
                 <select id={rndmKey + 'type'} ref={(i)=> this.type = i} required >
                   <option></option>
-                  <option value='first'>first</option>
+                  <option value='first' disabled={this.props.action === 'count'}>first</option>
                   <option value='build'>build</option>
                   <option value='inspect'>inspect</option>
                   <option value='test'>test</option>
                   <option value='checkpoint'>checkpoint</option>
-                  <option value='nest'>nest</option>
+                  <option value='nest' disabled={this.props.action === 'count'}>nest</option>
+                  <option value='finish' disabled={this.props.action === 'track'}>finish</option>
                 </select>
               </label>
             : null}

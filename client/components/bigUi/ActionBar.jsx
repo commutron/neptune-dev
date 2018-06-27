@@ -64,6 +64,7 @@ const ActionBar = ({batchData, itemData, groupData, widgetData, versionData, app
           batchId={batchData._id}
           batchNow={batchData.batch}
           versionNow={batchData.versionKey}
+          salesOrder={batchData.salesOrder || ''}
           start={batchData.start}
           end={batchData.end}
           widgetId={batchData.widgetId}

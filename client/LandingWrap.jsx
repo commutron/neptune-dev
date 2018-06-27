@@ -24,7 +24,7 @@ class StartView extends Component	{
           <img src='/titleLogo.svg' className='shadow noCopy' height='400' />
         </p>
         <div style={metasty}>
-          <p>Neptune 1.5.0</p>
+          <p>Neptune 1.5.2</p>
           <p>Copyright (c) 2016-present Commutron Industries <a href='https://www.commutron.ca' target='_blank'>https://www.commutron.ca</a></p>
           <p>Author 2016-present Matthew Andreas <a href='https://github.com/mattandwhatnot' target='_blank'>https://github.com/mattandwhatnot</a></p>
           <p>All Rights Reserved, No Public License</p>

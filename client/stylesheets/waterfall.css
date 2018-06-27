@@ -19,7 +19,7 @@
   font-weight: 600;
   background-color: var(--silver);
   color: black;
-  border-top: 5px solid var(--asbestos);
+  border-top: 5px solid var(--clouds);
 }
 
 .waterfallGrid {
@@ -27,7 +27,7 @@
   width: 100%;
   height: 15vw;
   grid-template-columns: 5vw auto;
-  grid-template-rows: 1fr 1fr 1fr);
+  grid-template-rows: repeat(3, 1fr);
   grid-template-areas: 
     'minusOne plusOne'
     'plusN plusOne'
@@ -42,13 +42,22 @@
 .countPlus {
   width: 100%;
   height: 100%;
-  border-width: 10px;
+}
+.countPlus:active,
+.countMinus:active {
+  filter: blur(5px);
 }
 
 .countMinus {
   grid-area: minusOne;
   font-size: calc(0.5rem + 1vw);
+  background-color: var(--alizarin);
 }
+.countMinus:hover,
+.countMinus:active {
+  background-color: --pomegranate;
+}
+
 .countN {
   grid-area: plusN;
   font-size: calc(0.5rem + 1vw);
@@ -59,5 +68,16 @@
 }
 .countPlus {
   grid-area: plusOne;
-  font-size: calc(0.5rem + 1.5vw);
+  font-size: calc(0.5rem + 1.25vw);
+  background-color: transparent;
+  border-width: 10px;
+  border-style: solid;
+  border-radius: 0;
 }
+.countPlus:disabled { opacity: 1; }
+.countPlus:disabled:hover { opacity: 1; }
+
+.countPlusTop {
+  font-size: calc(2rem + 2vw);
+}  
+

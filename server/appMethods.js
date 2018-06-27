@@ -166,13 +166,17 @@ Meteor.methods({
     }
   },
   
-  addCountOption(gate) {
+  addCountOption(flatOp) {
+    const split = flatOp.split('|');
+    const gate = split[0];
+    const type = split[1];
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $push : { 
           countOption : { 
             key : new Meteor.Collection.ObjectID().valueOf(),
-            gate : gate
+            gate : gate,
+            type : type
           }
       }});
       return true;

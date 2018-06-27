@@ -137,7 +137,7 @@ export default class PrefPanel extends Component {
             <OptionAdd action='count' title='gate' rndmKey={Math.random().toString(36).substr(2, 5)} />
             <ul>
               {dt.countOption && dt.countOption.map( (entry, index)=>{
-                return ( <li key={index}>{entry.gate}</li> );
+                return ( <li key={index}>{entry.gate} - {entry.type}</li> );
               })}
             </ul>
           

@@ -311,6 +311,7 @@
 .clearBlue,
 .clearRed,
 .clearOrange,
+.clearTeal,
 .clearPurple {
   background-color: transparent;
   border-width: 1px;
@@ -374,6 +375,16 @@
   background-color: var(--orange);
 }
 
+.clearTeal,
+.invert .clearTeal {
+  color: var(--turquoise);
+  border-color: var(--turquoise);
+}
+.clearTeal:hover,
+.invert .clearTeal:hover {
+  background-color: var(--turquoise);
+}
+
 .clearPurple,
 .invert .clearPurple {
   color: var(--amethyst);
@@ -383,6 +394,14 @@
 .invert .clearPurple:hover {
   background-color: var(--amethyst);
 }
+
+.borderWhite { border-color: var(--clouds); }
+.borderGreen { border-color: var(--nephritis); }
+.borderBlue { border-color: var(--belizeHole); }
+.borderRed { border-color: var(--alizarin); }
+.borderOrange { border-color: var(--orange); }
+.borderTeal { border-color: var(--greenSea); }
+.borderPurple { border-color: var(--wisteria); }
 
 .clean {
   font-style: normal;

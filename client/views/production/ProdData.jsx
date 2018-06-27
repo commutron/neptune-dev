@@ -54,6 +54,8 @@ export default withTracker( () => {
   const allData = Meteor.settings.public.allData ? true : false;
   const allSub = Meteor.subscribe('allData', allData);
   */
+  const allUsers = Meteor.users.find( {}, { sort: { username: 1 } } ).fetch();
+  const activeUsers = allUsers.filter( x => Roles.userIsInRole(x._id, 'active') === true);
   
   const orb = Session.get('now');
   let login = Meteor.userId() ? true : false;
@@ -136,7 +138,7 @@ export default withTracker( () => {
       anchor: Session.get( 'nowWanchor' ),
       user: user,
       org: org,
-      users: Meteor.users.find( {}, { sort: { username: 1 } } ).fetch(),
+      users: activeUsers,
       app: AppDB.findOne({org: org}),
       allGroup: GroupDB.find( {}, { sort: { group: 1 } } ).fetch(),
       allWidget: WidgetDB.find( {}, { sort: { widget: 1 } } ).fetch(),

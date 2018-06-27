@@ -68,7 +68,14 @@ const StoneSelect = ({
       :
       iDone.find(ip => ip.key === flowStep.key && ip.good === true);
     
-    const ncFromHere = nc.filter( x => (x.where || '') === flowStep.step.toLocaleLowerCase() );
+    const stepclean = flowStep.step.toLocaleLowerCase();
+    const stepmatch = stepclean + flowStep.type;
+    const stepfirst = stepclean + 'first';
+    
+    const ncFromInspect = nc.filter( x => (x.where || '') === stepmatch || (x.where || '') === stepfirst || (x.where || '') === stepclean );
+    const ncFromElse = nc.filter( x => (x.where || '') === stepmatch );
+    
+    const ncFromHere = flowStep.type === 'inspect' ? ncFromInspect : ncFromElse;
     const hereSkipped = ncFromHere.every( x => x.skip !== false );
     
     const ncResolved = ncFromHere.length === 0 || hereSkipped === true;
@@ -77,7 +84,7 @@ const StoneSelect = ({
     const allSkipped = nc.every( x => x.skip !== false );
     const ncAllClear = nc.length === 0 || allSkipped === true;
 
-    if(stepComplete && ncResolved) {
+    if( (flowStep.type === 'first' && stepComplete) || (stepComplete && ncResolved) ) {
       null;
     }else{
       
@@ -165,7 +172,7 @@ const StoneSelect = ({
 		    }
 	  }else if(nc.length > 0) {
 	  */
-		    Session.set('nowStep', flowStep.step);
+		    Session.set('nowStep', flowStep.step + flowStep.type);
         Session.set('nowWanchor', flowStep.how);
 		    return (
 	        <div className={expand && 'stonePlus'}>

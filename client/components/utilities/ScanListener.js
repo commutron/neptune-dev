@@ -17,6 +17,8 @@ function onPress(event) {
         if( slL === 9 || slL === 10 ) {
           Session.set('now', scanListener);
           !event.preventDefault ? null : event.preventDefault();
+          document.getElementById('ncRefs').value = '';
+          document.getElementById('lookup').value = '';
         }
         scanListener = '';
       }else if( !inputKey.match(/[0-9]/) ) {
@@ -24,6 +26,7 @@ function onPress(event) {
       }else if( inputKey.match(/[0-9]/) ) {
         scanListener = scanListener.concat(event.key);
       }
+      console.log(scanListener);
       Session.set('scanListener', scanListener);
     }
   }else{
@@ -33,7 +36,7 @@ function onPress(event) {
 
 function onMessage(event) {
   if(event.data.orgin === 'pisces') {
-    console.log(event);
+    //console.log(event);
     onPress(event.data);
   }else{null}
 }
@@ -42,6 +45,8 @@ export function ScanListenerUtility(user) {
   window.addEventListener('visibilitychange', reFocus);
   window.addEventListener('focus', reFocus);
   
+  navigator.usb ? console.log('WebUSB IS supported') : console.log('WebUSB NOT supported');
+    
   Meteor.setTimeout( ()=>{
     const autoScan = user.autoScan;
     if(autoScan === undefined) {
@@ -54,7 +59,7 @@ export function ScanListenerUtility(user) {
       window.addEventListener('keypress', onPress);
       window.addEventListener('message', onMessage);
     }
-  },100);
+  },250);
 
 }
 
