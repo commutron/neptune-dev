@@ -35,47 +35,7 @@ export const BasicLayout = ({content, link}) => (
   </div>
 );
 
-/*
-export const DashLayout = ({content, link}) => (
-  <div className='dashContainer'>
-    <div className='gridHeaderSearch'>
-      <FindBox />
-    </div>
-    <div className='gridHeaderNav'>
-      <TopBar link={link} />
-    </div>
-      {content}
-    <div className='basicFooter'></div>
-  </div>
-);
-*/
-/*
-export const ProductionLayout = ({content, link}) => (
-  <div className='dashContainer'>
-    <div className='gridHeaderSearch'>
-      <FindBox />
-    </div>
-    <div className='gridHeaderNav'>
-      <TopBar link={link} />
-    </div>
-      {content}
-    <div className='basicFooter'></div>
-  </div>
-);
-
-export const DataLayout = ({content, link}) => (
-  <div className='dashContainer'>
-    <div className='gridHeaderSearch'>
-      <FindBox />
-    </div>
-    <div className='gridHeaderNav'>
-      <TopBar link={link} />
-    </div>
-      {content}
-    <div className='basicFooter'></div>
-  </div>
-);
-*/
+export const LandingLayout = ({content}) => ( content );
 
 export const LabelLayout = ({content}) => (
   <div className='basicContainer'>

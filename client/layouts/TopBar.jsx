@@ -56,14 +56,6 @@ const TopBar = ({ ready, user, active, org, app, link })=> {
         </a>
       </span>
       </RoleCheck>
-      {/*<RoleCheck role='nightly'>
-      <span className={ link === 'gate' ? 'primeNavItem onPNv' : 'primeNavItem' }>
-        <a href='/scangate' disabled={true}>
-          <i className='fas fa-plane fa-lg' data-fa-transform="rotate--45"></i>
-          <span className='icontext'>Scan Gate</span>
-        </a>
-      </span>
-      </RoleCheck>*/}
       <span className={ link === 'data' ? 'primeNavItem onPNv' : 'primeNavItem' }>
         <a href='/data'>
           <i className='fas fa-rocket fa-lg'></i>
@@ -92,12 +84,8 @@ const TopBar = ({ ready, user, active, org, app, link })=> {
       </span>
       </RoleCheck>
       <span className='primeNavItem'>
-        <ExternalLink go={app.helpDocs} title='Help' icon='far fa-question-circle' />
-      </span>
-      <span className='primeNavItem'>
         <ExternalLink go={app.timeClock} title='Time Clock' icon='far fa-clock' />
       </span>
-      <UserSlide user={user} app={app} />
       <span className='primeNavItem'>
         <Chill name={user.username}/>
       </span>

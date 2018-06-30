@@ -27,19 +27,19 @@ export default class UserSlide extends Component	{
   render() {
     
     const user = this.props.user;
-    const app = this.props.user;
     
     const admin = Roles.userIsInRole(Meteor.userId(), 'admin'); 
     
     return (
       <span className=''>
-        <span className='primeNavItem userSlideButton'>
+        <span className='navButtonWrap' title={user.username + "'s\n" + 'preferences'}>
           <button
-            title={user.username}
-            className='transparent'
-            onClick={this.reveal}>
-            <i className='fas fa-id-card fa-lg'></i>
-            <span className='icontext cap'>{user.username.split('.')[0]}</span>
+            type='button'
+            className='navButtonWrap'
+            onClick={this.reveal}
+            readOnly>
+            <i className='fas fa-id-card fa-fw navButtonIcon'></i>
+            <i className='navButtonText'>{user.username}</i>
           </button>
         </span>
       

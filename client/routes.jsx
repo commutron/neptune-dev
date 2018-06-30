@@ -1,8 +1,10 @@
 import React from 'react';
 import {mount} from 'react-mounter';
+import Pref from '/client/global/pref.js';
 
 import { PublicLayout } from './layouts/MainLayouts.jsx';
 import { BasicLayout } from './layouts/MainLayouts.jsx';
+import { LandingLayout } from './layouts/MainLayouts.jsx';
 import { ProductionLayout } from './layouts/ProLayout.jsx';
 import { ExploreLayout } from './layouts/DataExploreLayout.jsx';
 import { LabelLayout } from './layouts/MainLayouts.jsx';
@@ -47,6 +49,30 @@ exposedRoutes.route('/login', {
   action() {
     mount(PublicLayout, {
        content: (<Login />)
+    });
+  }
+});
+
+exposedRoutes.route('/meta', {
+  name: 'meta',
+  action() {
+    mount(LandingLayout, {
+      content: (
+        <div className='centreContainer'>
+          <div className='centrecentre'>
+            <p className='centre'>
+              <img src='/titleLogo.svg' className='shadow noCopy' height='400' />
+            </p>
+            <div className='monoFont centreText'>
+              <p>Neptune {Pref.neptuneVersion}</p>
+              <p>Copyright (c) 2016-present Commutron Industries <a href='https://www.commutron.ca' target='_blank'>https://www.commutron.ca</a></p>
+              <p>Author 2016-present Matthew Andreas <a href='https://github.com/mattandwhatnot' target='_blank'>https://github.com/mattandwhatnot</a></p>
+              <p>All Rights Reserved, No Public License</p>
+              <p>Source avaliable <a href='https://github.com/commutron/neptune-dev' target='_blank'>https://github.com/commutron/neptune-dev</a></p>
+            </div>
+          </div>
+        </div>
+      )
     });
   }
 });
@@ -96,9 +122,9 @@ privlegedRoutes.route('/initialsetup', {
 privlegedRoutes.route('/', {
   name: 'home',
   action() {
-    mount(BasicLayout, {
+    mount(LandingLayout, {
        content: (<LandingWrap />),
-       link: 'home'
+       link: false
     });
   }
 });

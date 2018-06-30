@@ -42,6 +42,9 @@ export default class CounterAssign extends Component	{
   }
 
   render() {
+    
+    const cOp = this.props.app.countOption || [];
+    
     return (
       <Model
         button={Pref.counter + 's'}
@@ -57,7 +60,7 @@ export default class CounterAssign extends Component	{
             <p>
               <select id='fch' ref={(i)=> this.choice = i} required>
               <option></option>
-              {this.props.app.countOption.map( (entry)=>{
+              {cOp.map( (entry)=>{
                 let opLock = this.props.waterfall.find( x => x.wfKey === entry.key);
                 return(
                   <option 

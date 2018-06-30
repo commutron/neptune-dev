@@ -6,6 +6,7 @@ function reFocus() {
 }
 
 function onPress(event) {
+  console.log(event);
   const element = document.activeElement;
   if(element.id !== 'lookup' && element.id !== 'nestSerial') {
     const inputKey = event.key;
@@ -26,7 +27,7 @@ function onPress(event) {
       }else if( inputKey.match(/[0-9]/) ) {
         scanListener = scanListener.concat(event.key);
       }
-      console.log(scanListener);
+      //console.log(scanListener);
       Session.set('scanListener', scanListener);
     }
   }else{
@@ -45,9 +46,9 @@ export function ScanListenerUtility(user) {
   window.addEventListener('visibilitychange', reFocus);
   window.addEventListener('focus', reFocus);
   
-  navigator.usb ? console.log('WebUSB IS supported') : console.log('WebUSB NOT supported');
+  //navigator.usb ? console.log('WebUSB IS supported') : console.log('WebUSB NOT supported');
     
-  Meteor.setTimeout( ()=>{
+  //Meteor.setTimeout( ()=>{
     const autoScan = user.autoScan;
     if(autoScan === undefined) {
       const check = window.confirm('Would you like to use a barcode scanner from anywhere in this window?');
@@ -59,7 +60,7 @@ export function ScanListenerUtility(user) {
       window.addEventListener('keypress', onPress);
       window.addEventListener('message', onMessage);
     }
-  },250);
+  //},250);
 
 }
 

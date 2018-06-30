@@ -1,8 +1,10 @@
 import React from 'react';
 
-const Spin = ({ color }) => {
+const Spin = ({ color, message }) => {
   let img = !color ? '/neptune-logo-white.svg' : '/neptune-logo-color.svg';
   let sty = { height: '50vh' };
+  
+  let text = message || 'Fetching Records From The Server, Please Wait';
   
   return (
     <div className='loading'>
@@ -11,7 +13,7 @@ const Spin = ({ color }) => {
         className='logoSVG shadow'
         style={sty} />
       <br />
-      <p className='centreText'>Fetching Records From The Server, Please Wait...</p>
+      <p className='centreText'>{text}...</p>
     </div>
   );
 };

@@ -30,3 +30,18 @@ const Chill = ()=> {
 };
 
 export default Chill;
+
+
+export const ChillHome = ({ currentUser })=> (
+  <span className='navButtonWrap' title={'Sign Out\n' + currentUser}>
+    <button
+      type='button'
+      id='homeExitButton'
+      className='navButtonWrap'
+      onClick={()=>brr()}
+      readOnly>
+      <i className='fas fa-sign-out-alt fa-fw navButtonIcon'></i>
+      <i className='navButtonText'>Sign-out</i>
+    </button>
+  </span>
+);

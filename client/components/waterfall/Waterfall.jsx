@@ -12,6 +12,7 @@ const Waterfall = ({ id, fall, total, quantity, lock, app })=> {
       });
     }
   }
+  
   function minusOne() {
     const batchID = id;
     if(total > 0) {
@@ -61,8 +62,9 @@ const Waterfall = ({ id, fall, total, quantity, lock, app })=> {
   return (
     <div className='waterfallGrid'>
       <button
+        id={'goMinus' + fall.wfKey}
         className='countMinus'
-        onClick={()=>minusOne()}
+        onClick={(e)=>minusOne(e)}
         disabled={lock || total === 0}
       >-1</button>
       
@@ -77,8 +79,9 @@ const Waterfall = ({ id, fall, total, quantity, lock, app })=> {
       >rec</button>
       
       <button
+        id={'goPlus' + fall.wfKey}
         className={'countPlus ' + borderColor + ' ' + fadeClass}
-        onClick={()=>plusOne()}
+        onClick={(e)=>plusOne(e)}
         disabled={lock || total >= quantity}>
         <i className='countPlusTop'>{total}</i>
         <br /><i>/{quantity}</i>

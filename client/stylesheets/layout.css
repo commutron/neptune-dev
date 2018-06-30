@@ -144,6 +144,91 @@ main {
   overflow-y: auto;
 }
 
+.centreContainer {
+  display: grid;
+  width: 100vw;
+  height: 100vh;
+  grid-template-columns: 100%;
+  grid-template-rows: 100%;
+  grid-template-areas: 
+    'centrecentre';
+  align-items: center;
+  justify-items: center;
+}
+.centreBox {
+  grid-area: centrecentre;
+}
+/* home / landing page */
+
+.homeNavContainer {
+  display: grid;
+  width: 100vw;
+  height: 100vh;
+  grid-template-rows: 10vh 1fr;
+  grid-template-columns: 100%;
+  grid-template-areas: 
+    'homeTitleBar'
+    'homeContent';
+}
+.homeTitle {
+  grid-area: homeTitleBar;
+  display: grid;
+  grid-template-rows: 1vh 1fr;
+  grid-template-columns: 10vh 1fr 10vh;
+  grid-template-areas: 
+    'homeTopBorder homeTopBorder homeTopBorder'
+    'homeIcon homeName homeRightSpace';
+  overflow-y: hidden;
+}
+.homeTopBorder {
+  grid-area: homeTopBorder;
+  background-color: var(--neptuneColor);
+}
+.homeIcon {
+  grid-area: homeIcon;
+  background-color: var(--neptuneColor);
+  padding-bottom: 1vh;
+}
+.homeName {
+  grid-area: homeName;
+  background-color: rgb(30,30,30);
+  font-size: 6vh;
+  font-weight: 900;
+  color: var(--neptuneColor);
+}
+.homeRightSpace {
+  grid-area: homeRightSpace;
+  background-color: rgb(30,30,30);
+}
+.homeIcon, .homeIconLink, .homeName, .homeRightSpace {
+  display: flex;
+  align-items: center;
+  justify-content : center;
+}
+.homeIconLink {
+  width: 100%;
+  height: 100%;
+}
+.homeIconLogo {
+  width: 7vh;
+  height: 7vh
+}
+.homeIconLogo:hover, .homeIconLogo:active {
+  animation: spinAround 2s infinite linear;
+}
+
+.homeNavi {
+  grid-area: homeContent;
+  display: grid;
+  grid-template-rows: 20vh 20vh 20vh;
+  grid-template-columns: repeat(4, 20vw);
+  grid-gap: 1vh 1vw;
+  place-self: center center;
+  place-items: stretch stretch;
+}
+
+/* ////////////////////////// */
+
 .fullViewHeight { /* this stays */
   min-height: calc(100vh - 48px);
 }
