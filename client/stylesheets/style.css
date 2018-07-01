@@ -56,6 +56,13 @@
   background-color: var(--neptuneColor);
   color: rgb(30,30,30);
 }
+
+.navButtonWrap a,
+.navButtonWrap button {
+  -moz-box-shadow: var(--dropShadow0);
+  -webkit-box-shadow: var(--dropShadow0);
+  box-shadow: var(--dropShadow0);
+}
 .navButtonWrap a,
 .navButtonWrap button,
 .navButtonPlaceHolder {

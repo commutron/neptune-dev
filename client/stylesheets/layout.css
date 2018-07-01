@@ -158,6 +158,47 @@ main {
 .centreBox {
   grid-area: centrecentre;
 }
+
+/* simple */
+
+.simpleContainer {
+  display: grid;
+  min-width: 768px;
+  min-height: 100%;
+  grid-template-rows: 10vh 90vh;
+  grid-template-columns: 100%;
+  grid-template-areas: 
+    'tenHeader'
+    'simpleContent';
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch;
+}
+.rightSpace {
+  grid-area: rightSpace;
+  background-color: rgb(30,30,30);
+}
+.rightSpace button {
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+}
+.topRightIcon {
+  padding: 1vh;
+  font-size: 6vh;
+  color: var(--silver);
+  border-radius: 50%;
+}
+.topRightIcon:hover,
+.topRightIcon:active {
+  background-color: var(--silver);
+  color: rgb(30,30,30);
+}
+.simpleContent {
+  grid-area: simpleContent;
+  overflow-y: auto;
+}
+
+
 /* home / landing page */
 
 .homeNavContainer {
@@ -167,21 +208,24 @@ main {
   grid-template-rows: 10vh 1fr;
   grid-template-columns: 100%;
   grid-template-areas: 
-    'homeTitleBar'
+    'tenHeader'
     'homeContent';
 }
-.homeTitle {
-  grid-area: homeTitleBar;
+.tenHeader {
+  grid-area: tenHeader;
   display: grid;
   grid-template-rows: 1vh 1fr;
   grid-template-columns: 10vh 1fr 10vh;
   grid-template-areas: 
-    'homeTopBorder homeTopBorder homeTopBorder'
-    'homeIcon homeName homeRightSpace';
+    'topBorder topBorder topBorder'
+    'homeIcon frontCenter rightSpace';
   overflow-y: hidden;
+  -moz-box-shadow: var(--dropShadow0);
+  -webkit-box-shadow: var(--dropShadow0);
+  box-shadow: var(--dropShadow0);
 }
-.homeTopBorder {
-  grid-area: homeTopBorder;
+.topBorder {
+  grid-area: topBorder;
   background-color: var(--neptuneColor);
 }
 .homeIcon {
@@ -189,18 +233,16 @@ main {
   background-color: var(--neptuneColor);
   padding-bottom: 1vh;
 }
-.homeName {
-  grid-area: homeName;
+.frontCenterTitle {
+  grid-area: frontCenter;
   background-color: rgb(30,30,30);
   font-size: 6vh;
   font-weight: 900;
-  color: var(--neptuneColor);
+  color: var(--silver);
 }
-.homeRightSpace {
-  grid-area: homeRightSpace;
-  background-color: rgb(30,30,30);
-}
-.homeIcon, .homeIconLink, .homeName, .homeRightSpace {
+.homeIcon, .homeIconLink, .homeName,
+.frontCenterTitle,
+.rightSpace {
   display: flex;
   align-items: center;
   justify-content : center;

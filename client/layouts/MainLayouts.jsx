@@ -35,7 +35,7 @@ export const BasicLayout = ({content, link}) => (
   </div>
 );
 
-export const LandingLayout = ({content}) => ( content );
+export const CleanLayout = ({content}) => ( content );
 
 export const LabelLayout = ({content}) => (
   <div className='basicContainer'>

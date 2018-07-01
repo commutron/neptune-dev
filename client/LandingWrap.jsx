@@ -1,14 +1,15 @@
 import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
+import Pref from '/client/global/pref.js';
 
 import Spin from '/client/components/uUi/Spin.jsx';
 
 import UserSlide from '/client/views/app/UserSlide.jsx';
 import { ChillHome } from '/client/components/tinyUi/Chill.jsx';
+import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
 import NavButton from '/client/components/uUi/NavButton.jsx';
 import { NavPlaceholder } from '/client/components/uUi/NavButton.jsx';
-import ExternalLink from '/client/components/uUi/ExternalLink.jsx';
 
 const StartView = ({ready, user, org, app}) =>	{
     
@@ -24,17 +25,11 @@ const StartView = ({ready, user, org, app}) =>	{
   
   return(
     <div className='homeNavContainer noCopy'>
-      <div className='homeTitle'>
-        <div className='homeTopBorder'></div>
-        <div className='homeIcon'>
-          <a className='homeIconLink' href='/' title='Home'>
-            <img
-              src='/neptune-logo-white.svg'
-              className='homeIconLogo' />
-          </a>
-        </div>
-        <div className='homeName'>Neptune Statistical Process Control</div>
-        <div className='homeRightSpace'></div>
+      <div className='tenHeader'>
+        <div className='topBorder'></div>
+        <HomeIcon />
+        <div className='frontCenterTitle'>Neptune {Pref.neptuneIs}</div>
+        <div className='rightSpace'></div>
       </div>
       <div className='homeNavi'>
         <NavButton title='Production' icon='fa-paper-plane' link='/production' />

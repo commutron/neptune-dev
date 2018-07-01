@@ -14,9 +14,13 @@ class View extends Component	{
   
   render() {
     
-    if(!this.props.ready || !this.props.app) {
+    if(!this.props.appReady || !this.props.ready || !this.props.app) {
       return (
-        <Spin />
+        <div className='centreContainer'>
+          <div className='centrecentre'>
+            <Spin />
+          </div>
+        </div>
       );
     }
 
@@ -36,15 +40,18 @@ export default withTracker( () => {
   let name = user ? user.username : false;
   let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   let org = user ? user.org : false;
+  const appSub = login ? Meteor.subscribe('appData') : false;
   const sub = login ? Meteor.subscribe('shaddowData') : false;
   if(!login || !active) {
     return {
+      appReady: false,
       ready: false
     };
   }else{
     return {
       login: Meteor.userId(),
       sub: sub,
+      appReady: appSub.ready(),
       ready: sub.ready(),
       user: name,
       org: org,

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
-
+import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
 
 export default class CompSearchPanel extends Component	{
   
@@ -47,12 +47,15 @@ export default class CompSearchPanel extends Component	{
 
     return (
       <AnimateWrap type='cardTrans'>
-        <div className='section space fullViewHeight invert starfishAccents' key={1}>
-          <h1 className='cap'>
-            <i className='fas fa-microchip fa-fw starfishColour'></i>
-            {Pref.comp}s Search
-          </h1>
-          <hr />
+        <div key={1} className='simpleContainer'>
+          <div className='tenHeader'>
+            <div className='topBorder'></div>
+            <HomeIcon />
+            <div className='frontCenterTitle invert'>Parts Search</div>
+            <div className='rightSpace invert'></div>
+          </div>
+        
+        <div className='simpleContent invert starfishAccents vspace'>
           <div className='centre space'>
             <form
               className='inlineForm'
@@ -148,7 +151,7 @@ export default class CompSearchPanel extends Component	{
               </table>
             </div>
           }
-
+        </div>
         </div>
       </AnimateWrap>
     );

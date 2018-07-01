@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import moment from 'moment';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
-//import Pref from '/client/global/pref.js';
+import Pref from '/client/global/pref.js';
 import Alert from '/client/global/alert.js';
 
 import Spin from '../../components/uUi/Spin.jsx';
+import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
+
 import RangeTools from '/client/components/smallUi/RangeTools.jsx';
 import OrgWip from './panels/OrgWIP.jsx';
 import BigPicture from './panels/BigPicture.jsx';
@@ -53,13 +55,32 @@ export default class OrgWIP extends Component	{
     
     if(!this.state.wip || !this.state.now) {
       return (
-        <Spin />
+        <div className='centreContainer'>
+          <div className='centrecentre'>
+            <Spin />
+          </div>
+        </div>
       );
     }
     
     return(
       <AnimateWrap type='contentTrans'>
-        <div key={0}>
+      <div key={0} className='simpleContainer'>
+        <div className='tenHeader'>
+          <div className='topBorder'></div>
+          <HomeIcon />
+          <div className='frontCenterTitle'>Activity</div>
+          <div className='rightSpace'>
+            <button
+              type='button'
+              title='Auto updates every hour'
+              onClick={(e)=>this.relevant(e)}>
+            <i className='fas fa-sync-alt topRightIcon'></i>
+            </button>
+          </div>
+        </div>
+      
+        <div className='simpleContent'>
           <RangeTools
             onChange={(r) => this.timeRange(r)}
             dfkeyword={this.state.timeRange}
@@ -82,6 +103,7 @@ export default class OrgWIP extends Component	{
               a={this.props.a}
               wip={this.state.wip} />
           </span>
+        </div>
         </div>
       </AnimateWrap>
     );

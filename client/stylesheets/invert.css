@@ -73,6 +73,13 @@
 .invert:-ms-input-placeholder { /* IE 10+ */
   opacity: 1;
 }
+
+.frontCenterTitle.invert,
+.rightSpace.invert {
+  background-color: var(--clouds);
+  color: var(--black);
+}
+
 .invert .inlineLink {
   color: black;
 }

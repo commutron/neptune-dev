@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 
 import { PublicLayout } from './layouts/MainLayouts.jsx';
 import { BasicLayout } from './layouts/MainLayouts.jsx';
-import { LandingLayout } from './layouts/MainLayouts.jsx';
+import { CleanLayout } from './layouts/MainLayouts.jsx';
 import { ProductionLayout } from './layouts/ProLayout.jsx';
 import { ExploreLayout } from './layouts/DataExploreLayout.jsx';
 import { LabelLayout } from './layouts/MainLayouts.jsx';
@@ -56,7 +56,7 @@ exposedRoutes.route('/login', {
 exposedRoutes.route('/meta', {
   name: 'meta',
   action() {
-    mount(LandingLayout, {
+    mount(CleanLayout, {
       content: (
         <div className='centreContainer'>
           <div className='centrecentre'>
@@ -122,18 +122,17 @@ privlegedRoutes.route('/initialsetup', {
 privlegedRoutes.route('/', {
   name: 'home',
   action() {
-    mount(LandingLayout, {
+    mount(CleanLayout, {
        content: (<LandingWrap />),
-       link: false
     });
   }
 });
 
 privlegedRoutes.route('/activity', {
+  name: 'activity',
   action() {
-    mount(BasicLayout, {
-      content: (<ActivityData />),
-      link: 'act'
+    mount(CleanLayout, {
+      content: (<ActivityData />)
     });
   }
 });
@@ -168,9 +167,8 @@ privlegedRoutes.route('/nightly/production', {
 
 privlegedRoutes.route('/starfish', {
   action() {
-    mount(BasicLayout, {
-      content: (<CompSearchPanel />),
-      link: 'comp'
+    mount(CleanLayout, {
+      content: (<CompSearchPanel />)
     });
   }
 });

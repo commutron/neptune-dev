@@ -64,7 +64,7 @@ const TopBar = ({ ready, user, active, org, app, link })=> {
       </span>
       <span className={ link === 'act' ? 'primeNavItem onPNv' : 'primeNavItem' }>
         <a href='/activity'>
-          <i className='fas fa-chart-line fa-lg'></i>
+          <i className='fab fa-wpexplorer fa-lg'></i>
           <span className='icontext'>Activity</span>
         </a>
       </span>

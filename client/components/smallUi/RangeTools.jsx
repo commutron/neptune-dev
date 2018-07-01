@@ -10,11 +10,6 @@ const RangeTools = ({ onChange, update, dfkeyword }) => {
   return(
     <div className='rangeTools stickyBar'>
       <label>
-        <button
-          type='button'
-          title='Auto updates every hour'
-          onClick={(e)=>time(e)}
-        >Update Now</button>
         <i className='breath clean'>
           Last updated at {moment(update).format('LT')}
         </i>
