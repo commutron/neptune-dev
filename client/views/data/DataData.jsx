@@ -11,6 +11,7 @@ class ExploreView extends Component	{
   render() {
     
     if(
+      !this.props.appReady ||
       !this.props.coldReady || 
       !this.props.hotReady ||
       !this.props.user ||
@@ -49,6 +50,7 @@ export default withTracker( (props) => {
   let user = login ? Meteor.user() : false;
   let org = user ? user.org : false;
   let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
+  const appSub = login ? Meteor.subscribe('appData') : false;
   const coldSub = login ? Meteor.subscribe('skinnyData') : false;
   
   const batchRequest = props.view === 'batch' ? props.request : false;
@@ -58,11 +60,13 @@ export default withTracker( (props) => {
 
   if( !login || !active ) {
     return {
+      appReady: false,
       coldReady: false,
       hotReady: false
     };
   }else{
     return {
+      appReady: appSub.ready(),
       coldReady: coldSub.ready(),
       hotReady: hotSubEx.ready(),
       user: user,

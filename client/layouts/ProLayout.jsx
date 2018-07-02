@@ -2,18 +2,23 @@ import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
 //import Pref from '/client/global/pref.js';
 
+import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
 import FindBox from './FindBox.jsx';
 import TopBar from './TopBar.jsx';
 import FormBar from '/client/components/bigUi/FormBar.jsx';
 import ProgressCounter from '/client/components/utilities/ProgressCounter.js';
 
-export const ProductionLayout = ({content, link}) => (
+export const ProductionLayout = ({content}) => (
   <div className='containerPro'>
-    <div className='proSearch'>
-      <FindBox />
-    </div>
-    <div className='gridHeaderNav'>
-      <TopBar link={link} />
+    <div className='tenHeader'>
+      <div className='topBorder' />
+      <HomeIcon />
+      <div className='frontCenterTitle'>
+        <FindBox />
+      </div>
+      <div className='rightSpace'>
+        
+      </div>
     </div>
     {content}
   </div>

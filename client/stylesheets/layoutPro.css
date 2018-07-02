@@ -7,10 +7,10 @@
 
 .containerPro {
   display: grid;
-  grid-template-columns: 20vw auto;
-  grid-template-rows: 48px calc(100vh - 48px);
+  grid-template-rows: 10vh 90vh;
+  grid-template-columns: 20vw 1fr;
   grid-template-areas: 
-    "proSearch headerNav"
+    "tenHeader tenHeader"
     "proContent proContent";
 }
 
@@ -21,6 +21,16 @@
   -moz-box-shadow:    0 0 15px 0.5px rgb(0,0,0);
   box-shadow:         0 0 15px 0.5px rgb(0,0,0);
 }
+.findForm {
+  z-index: 10;
+  width: 50vw;
+  height: 100%;
+  display: flex;
+  background-color: rgb(25,25,25);
+  background-color: rgba(25,25,25,0.5);
+  padding: 0;
+  margin: 0;
+}
 
 .proFull {
   grid-area: proContent;
@@ -29,7 +39,7 @@
 .proDefault, .proExpand {
   grid-area: proContent;
   display: grid;
-  grid-template-rows: calc(100vh - 108px) 60px;
+  grid-template-rows: calc(90vh - 60px) 60px;
   grid-template-areas: 
     'proRiver proInstruct'
     'formFooter formFooter';
@@ -41,10 +51,10 @@
 }
 
 .proDefault {
-  grid-template-columns: 20vw auto;
+  grid-template-columns: 20vw 1fr;
 }
 .proExpand {
-  grid-template-columns: 40vw auto;
+  grid-template-columns: 40vw 1fr;
 }
 
 .proLeft {
@@ -55,6 +65,7 @@
 .proRight {
   height: 100%;
   grid-area: proInstruct;
+  background-color: var(--clouds);
 }
 
 .proActionForm {

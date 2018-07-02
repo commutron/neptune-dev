@@ -3,14 +3,20 @@ import { Meteor } from 'meteor/meteor';
 //import Pref from '/client/global/pref.js';
 
 import TopBar from './TopBar.jsx';
+import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
 import TaskBar from './TaskBar.jsx';
 import ActionBar from '/client/components/bigUi/ActionBar.jsx';
 import CookieBar from './CookieBar.jsx';
 
-export const ExploreLayout = ({content, link, subLink}) => (
+export const ExploreLayout = ({content, subLink}) => (
   <div className='containerEx'>
-    <div className='gridHeaderNav'>
-      <TopBar link={link} />
+    <div className='tenHeader'>
+      <div className='topBorder' />
+      <HomeIcon />
+      <div className='frontCenterTitle'>Data Explore</div>
+      <div className='rightSpace'>
+        
+      </div>
     </div>
     <aside className='taskBarEx'>
       <TaskBar subLink={subLink} />

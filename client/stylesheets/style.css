@@ -59,9 +59,9 @@
 
 .navButtonWrap a,
 .navButtonWrap button {
-  -moz-box-shadow: var(--dropShadow0);
-  -webkit-box-shadow: var(--dropShadow0);
-  box-shadow: var(--dropShadow0);
+  -moz-box-shadow: var(--dropShadow00);
+  -webkit-box-shadow: var(--dropShadow00);
+  box-shadow: var(--dropShadow00);
 }
 .navButtonWrap a,
 .navButtonWrap button,

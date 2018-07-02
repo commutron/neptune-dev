@@ -137,16 +137,6 @@ privlegedRoutes.route('/activity', {
   }
 });
 
-/*
-privlegedRoutes.route('/dashboard', {
-  action() {
-    mount(DashLayout, {
-      content: (<DashData />),
-      link: 'dash'
-    });
-  }
-});
-*/
 privlegedRoutes.route('/production', {
   action() {
     mount(ProductionLayout, {
@@ -175,9 +165,8 @@ privlegedRoutes.route('/starfish', {
 
 privlegedRoutes.route('/app', {
   action() {
-    mount(BasicLayout, {
-       content: (<AppData />),
-       link: 'app'
+    mount(CleanLayout, {
+       content: (<AppData />)
     });
   }
 });

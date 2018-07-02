@@ -1,9 +1,9 @@
 .containerEx {
   display: grid;
+  grid-template-rows: 10vh 90vh;
   grid-template-columns: 48px auto;
-  grid-template-rows: 48px calc(100vh - 48px);
   grid-template-areas: 
-    'headerNav headerNav'
+    'tenHeader tenHeader'
     'taskBar contentArea';
   align-content: center;
   overflow-y: hidden !important;
@@ -42,13 +42,13 @@
   grid-template-columns: auto;
 }
 .landingContainer {
-  grid-template-rows: 32px calc(100vh - 120px) 40px;
+  grid-template-rows: 32px calc(90vh - 72px) 40px;
 }
 .traverseContainer, .baseTraverseContainer {
-  grid-template-rows: 32px calc(100vh - 128px) 48px;
+  grid-template-rows: 32px calc(90vh - 80px) 48px;
 }
 .traverseContainerMin, .baseTraverseContainerMin {
-  grid-template-rows: 32px calc(100vh - 80px);
+  grid-template-rows: 32px calc(90vh - 32px);
 }
 .landingContainer {
   grid-template-areas: 

@@ -22,9 +22,7 @@ const WikiOps = ({ wi, root, anchor, fallback, full })=> {
   }
 
   return(
-    <div className='invert'>
-      <WikiFrame go={goto} full={full} />
-    </div>
+    <WikiFrame go={goto} full={full} />
   );
 };
 

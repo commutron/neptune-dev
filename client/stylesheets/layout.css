@@ -74,18 +74,6 @@ main {
           filter: drop-shadow( -5px -5px 5px #000 );
 }
 
-.findForm {
-  float: left;
-  z-index: 10;
-  width: 256px;
-  height: 100%;
-  display: flex;
-  background-color: rgb(25,25,25);
-  background-color: rgba(25,25,25,0.5);
-  padding: 0;
-  margin: 0;
-}
-
 .stickyBar {
   position: -webkit-sticky;
   position: sticky;
@@ -173,6 +161,11 @@ main {
   overflow-x: hidden !important;
   -webkit-overflow-scrolling: touch;
 }
+.simpleContent {
+  grid-area: simpleContent;
+  overflow-y: auto;
+}
+
 .rightSpace {
   grid-area: rightSpace;
   background-color: rgb(30,30,30);
@@ -192,10 +185,6 @@ main {
 .topRightIcon:active {
   background-color: var(--silver);
   color: rgb(30,30,30);
-}
-.simpleContent {
-  grid-area: simpleContent;
-  overflow-y: auto;
 }
 
 
@@ -220,9 +209,6 @@ main {
     'topBorder topBorder topBorder'
     'homeIcon frontCenter rightSpace';
   overflow-y: hidden;
-  -moz-box-shadow: var(--dropShadow0);
-  -webkit-box-shadow: var(--dropShadow0);
-  box-shadow: var(--dropShadow0);
 }
 .topBorder {
   grid-area: topBorder;

@@ -11,8 +11,12 @@ class AppView extends Component	{
     
     if(!this.props.ready || !this.props.app) {
       return (
-        <Spin />
-        );
+        <div className='centreContainer'>
+          <div className='centrecentre'>
+            <Spin />
+          </div>
+        </div>
+      );
     }
     
     return (
@@ -32,6 +36,7 @@ export default withTracker( () => {
   let name = user ? user.username : false;
   let org = user ? user.org : false;
   let active = login ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
+  const appSub = login ? Meteor.subscribe('appData') : false;
   if(!login) {
     return {
       ready: false,
@@ -42,7 +47,7 @@ export default withTracker( () => {
     };
   }else{
     return {
-      ready: true,
+      ready: appSub.ready(),
       orb: Session.get('now'),
       bolt: Session.get('allData'),
       user: name,

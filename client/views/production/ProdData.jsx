@@ -12,7 +12,8 @@ class ProdData extends Component	{
 
   render() {
     
-    if(//!this.props.allData || // diagnose data in development
+    if(
+       !this.props.appReady ||
        !this.props.coldReady || 
        !this.props.hotReady ||
        !this.props.user ||
@@ -49,11 +50,6 @@ class ProdData extends Component	{
 
 export default withTracker( () => {
   
-  // diagnose data in development /////////////////////// 
-  /*
-  const allData = Meteor.settings.public.allData ? true : false;
-  const allSub = Meteor.subscribe('allData', allData);
-  */
   const allUsers = Meteor.users.find( {}, { sort: { username: 1 } } ).fetch();
   const activeUsers = allUsers.filter( x => Roles.userIsInRole(x._id, 'active') === true);
   
@@ -62,6 +58,7 @@ export default withTracker( () => {
   let user = login ? Meteor.user() : false;
   let org = user ? user.org : false;
   let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
+  const appSub = login ? Meteor.subscribe('appData') : false;
   const coldSub = login ? Meteor.subscribe('thinData') : false;
 
   let hotSub = Meteor.subscribe('hotDataPlus', false);
@@ -121,17 +118,19 @@ export default withTracker( () => {
   
   if( !login ) {
     return {
+      appReady: false,
       coldReady: false,
       hotReady: false
     };
   }else if( !active ) {
     return {
+      appReady: appSub.ready(),
       coldReady: coldSub.ready(), 
       hotReady: hotSub.ready(),
     };
   }else{
     return {
-      //allData: allSub.ready(), // diagnose data in development
+      appReady: appSub.ready(),
       coldReady: coldSub.ready(),
       hotReady: hotSub.ready(),
       orb: orb,
