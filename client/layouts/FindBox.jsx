@@ -2,7 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 
-const FindBox = ({ orb, user })=> {
+const FindBox = ({ orb, user, append })=> {
     
   function setVar(e) {
     e.preventDefault();
@@ -11,10 +11,11 @@ const FindBox = ({ orb, user })=> {
         this.lookup.value = '';
         this.lookup.select();
   }
-
-  let last = orb || 'Search';
+  
+  let holder = !append ? orb : append + ' ~ ' + orb;
+  let last = holder || 'Search';
   let lock = user ? false : true;
-
+  
 	return (
     <form 
       className='findForm' 
@@ -36,9 +37,10 @@ const FindBox = ({ orb, user })=> {
   );
 };
 
-export default withTracker( () => {
+export default withTracker( (props) => {
     return {
       orb: Session.get('now'),
-      user: Meteor.userId()
+      user: Meteor.userId(),
+      append: props.append
     };
 })(FindBox);

@@ -4,25 +4,8 @@ import { Meteor } from 'meteor/meteor';
 
 import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
 import FindBox from './FindBox.jsx';
-import TopBar from './TopBar.jsx';
 import FormBar from '/client/components/bigUi/FormBar.jsx';
 import ProgressCounter from '/client/components/utilities/ProgressCounter.js';
-
-export const ProductionLayout = ({content}) => (
-  <div className='containerPro'>
-    <div className='tenHeader'>
-      <div className='topBorder' />
-      <HomeIcon />
-      <div className='frontCenterTitle'>
-        <FindBox />
-      </div>
-      <div className='rightSpace'>
-        
-      </div>
-    </div>
-    {content}
-  </div>
-);
 
 export class ProWrap extends Component	{
   
@@ -64,57 +47,89 @@ export class ProWrap extends Component	{
       overflowY: 'auto'
     };
     
-    const path = this.getFlows();
+    const bData = this.props.batchData;
+    const iS = this.props.itemSerial;
+    const append = bData && iS ? bData.batch : null;
+    
+    const exploreLink = !bData ? false : !iS ?
+                        '/data/batch?request=' + bData.batch :
+                        '/data/batch?request=' + bData.batch + '&specify=' + iS;
+    
+    const path = !bData ? { flow: [], flowAlt: [], progCounts: false } : this.getFlows();
     
     let riverExpand = this.state.expand;
     let topClass = !riverExpand ? 'proDefault' : 'proExpand';
     let toggleClass = !riverExpand ? 'riverExpandToggle' : 'riverShrinkToggle';
     
-    return (
-      <section className={topClass}>
+    return(
+      <div className='containerPro'>
+        <div className='tenHeader'>
+          <div className='topBorder' />
+          <HomeIcon />
+          <div className='frontCenterTitle'>
+            <FindBox append={append} />
+          </div>
+          <div className='rightSpace'>
+            <button
+              id='exBatch'
+              title='View this in explore'
+              onClick={()=>FlowRouter.go(exploreLink)}>
+              <i className='fas fa-rocket topRightIcon' data-fa-transform='left-1'></i>
+            </button>
+          </div>
+        </div>
         
-        <div className='proLeft' style={scrollFix}>
-          {this.props.children.length > 2 ?
-            React.cloneElement(this.props.children[0],
+        {this.props.standAlone ?
+          <div className='proFull'>
+            {this.props.children}
+          </div>
+        :
+        <section className={topClass}>
+          
+          <div className='proLeft' style={scrollFix}>
+            {this.props.children.length > 2 ?
+              React.cloneElement(this.props.children[0],
+                { 
+                  expand: this.state.expand,
+                  flow: path.flow,
+                  flowAlt: path.flowAlt,
+                  progCounts: path.progCounts
+                }
+              )
+            :null}
+            {React.cloneElement(this.props.children[this.props.children.length - 2],
               { 
                 expand: this.state.expand,
                 flow: path.flow,
                 flowAlt: path.flowAlt,
                 progCounts: path.progCounts
               }
-            )
-          :null}
-          {React.cloneElement(this.props.children[this.props.children.length - 2],
-            { 
-              expand: this.state.expand,
-              flow: path.flow,
-              flowAlt: path.flowAlt,
-              progCounts: path.progCounts
-            }
-          )}
-        </div>
+            )}
+          </div>
         
-        <button
-          type='button'
-          className={toggleClass}
-          onClick={()=>this.handleExpand()}>
-          <i className='fas fa-chevron-right fa-2x'></i>
-        </button>
+          <button
+            type='button'
+            className={toggleClass}
+            onClick={()=>this.handleExpand()}>
+            <i className='fas fa-chevron-right fa-2x'></i>
+          </button>
+            
+          <div className='proRight' style={scrollFix}>
+            {this.props.children[this.props.children.length - 1]}
+          </div>
+  
+          <FormBar
+            batchData={this.props.batchData}
+            itemData={this.props.itemData}
+            widgetData={this.props.widgetData}
+            versionData={this.props.versionData}
+            users={this.props.users}
+            app={this.props.app}
+            action={this.props.action} />
           
-        <div className='proRight' style={scrollFix}>
-          {this.props.children[this.props.children.length - 1]}
-        </div>
-
-        <FormBar
-          batchData={this.props.batchData}
-          itemData={this.props.itemData}
-          widgetData={this.props.widgetData}
-          versionData={this.props.versionData}
-          users={this.props.users}
-          app={this.props.app}
-          action={this.props.action} />
-        
-      </section>
+        </section>
+        }
+      </div>
     );
   }
   componentDidMount() {

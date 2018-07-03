@@ -105,10 +105,6 @@ export default class BatchPanel extends Component	{
         <div className='section' key={b.batch}>
             
           <div className='titleSection'>
-            <span>{b.batch}</span>
-            <span className='up'>{g.alias}</span>
-            <span className='up'>{w.widget}</span>
-            <span><i className='clean'>v.</i>{v.version}</span>
             <span>
               { b.active ? 
                 <i className='fas fa-sync blueT' aria-hidden='true' title='in progress'></i>

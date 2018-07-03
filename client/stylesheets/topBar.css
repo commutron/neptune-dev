@@ -1,6 +1,6 @@
 
 #lookup {
-  font-size: 6vh;
+  font-size: 5vh;
   text-align: center;
   line-height: normal;
   height: 100%;
@@ -75,7 +75,7 @@ input::-webkit-calendar-picker-indicator {
   0%   { transform: translate3d(0, 0, 0) rotate(0deg); }
   100% { transform: translate3d(0, 0, 0) rotate(360deg); }
 }
-
+/*
 .primeNav {
   display: flex;
   width: auto;
@@ -111,7 +111,7 @@ input::-webkit-calendar-picker-indicator {
 .primeNavItem #exitSwitch:hover {
   color: white
 }
-
+*/
 .navIcon {
   display: inline-block;
   vertical-align: middle;
@@ -150,7 +150,7 @@ input::-webkit-calendar-picker-indicator {
   display: block;
   white-space: nowrap;
 }
-
+/*
 .userSlideButton {
   display: flex;
   align-items: flex-end;
@@ -168,3 +168,4 @@ input::-webkit-calendar-picker-indicator {
 .userSlideButton:hover .icontext {
   color: white;
 }
+*/

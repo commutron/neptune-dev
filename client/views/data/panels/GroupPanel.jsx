@@ -21,7 +21,6 @@ export default class GroupPanel extends Component	{
         
           <div className='titleSection'>
             <span className='cap'>{g.group}</span>
-            <span className='up'>{g.alias}</span>
           </div>
           
           <div className='space edit'>

@@ -5,8 +5,6 @@ import Pref from '/client/global/pref.js';
 import { PublicLayout } from './layouts/MainLayouts.jsx';
 import { SplashLayout } from './layouts/MainLayouts.jsx';
 import { CleanLayout } from './layouts/MainLayouts.jsx';
-import { ProductionLayout } from './layouts/ProLayout.jsx';
-import { ExploreLayout } from './layouts/DataExploreLayout.jsx';
 import { LabelLayout } from './layouts/MainLayouts.jsx';
 
 import Login from './views/Login.jsx';
@@ -141,7 +139,7 @@ privlegedRoutes.route('/activity', {
 
 privlegedRoutes.route('/production', {
   action() {
-    mount(ProductionLayout, {
+    mount(CleanLayout, {
       content: (<ProdData />)
     });
   }

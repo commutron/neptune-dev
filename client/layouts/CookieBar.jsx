@@ -55,20 +55,6 @@ const CookieBar = ({ groupData, widgetData, versionData, batchData, itemData, ap
             {itemData.serial}
           </button>
         </span>}
-      <span className='navSpacer' />
-      
-      {miniAction &&
-        <ActionBar
-          batchData={batchData}
-          itemData={itemData}
-          widgetData={widgetData}
-          versionData={versionData}
-          groupData={groupData}
-          app={app}
-          action={action}
-          noText={true} />}
-      
-      {miniAction && !itemData && !batchData && <span className='cookieGap' />}
      
     </div>
   );

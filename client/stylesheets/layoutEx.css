@@ -14,7 +14,7 @@
 .taskBarEx {
   grid-area: taskBar;
   height: 100%;
-  background-color: rgb(25,25,25);
+  background-color: rgb(30,30,30);
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -129,67 +129,64 @@
 .avThreeContent { grid-area: avThree; }
 
 .cookieRow {
+  grid-area: frontCenter;
+  background-color: rgb(30,30,30);
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
-  height: inherit;
-  padding: 0 8px 0 0;
+  width: 100%;
+  max-width: calc(100vw - 20vh);
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
 }
 .cookieCrumb {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
-  height: 32px;
-  background-color: rgb(25,25,25);
+  height: 9vh;
+  background-color: transparent;
   overflow: hidden;
   white-space: nowrap;
 }
 
 .cookie {
-  background-color: rgb(25,25,25);
+  background-color: transparent;
   color: var(--silver);
-  min-width: 64px;
-  max-width: 256px;
-  font-size: 1rem;
-  height: 100%;
+  max-width: 20vw;
+  height: 5vh;
+  font-size: 3vh;
   font-weight: 600;
-  padding: 0 4px;
-  border-radius: 16px;
+  padding: 0 1vh;
+  border-radius: 2.5vh;
   overflow: hidden;
   word-break: keep-all;
   text-overflow: ellipsis;
 }
 .cookie:hover {
-  color: rgb(25,25,25);
+  color: rgb(30,30,30);
   background-color: var(--silver);
 }
 .crumb {
   color: var(--silverfade);
   overflow: hidden;
+  width: 6vh;
 }
 .crumb::before {
 	border-style: solid;
-	border-width: 0.25em 0.25em 0 0;
-	border-radius: 10%;
+	border-width: 1vh 1vh 0 0;
+	border-radius: 5%;
 	content: '';
 	display: inline-block;
-	height: 2em;
-	left: -10px;
+	height: 12vh;
 	position: relative;
 	top: 0em;
+	left: -8.5vh;
 	transform: rotate(45deg);
 	vertical-align: top;
-	width: 2em;
-}
-.cookieGap {
-  border-style: solid;
-	border-width: 0 0.25em 0 0;
-	height: 2em;
-	width: 1em;
-  color: var(--silverfade);
-  opacity: 0;
+	width: 12vh;
 }
 
 .taskColumn {

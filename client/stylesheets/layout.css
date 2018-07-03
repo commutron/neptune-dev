@@ -97,7 +97,7 @@ main {
 .centreSelf { align-self: center; }
 
 /* ============================================= */
-
+/*
 .basicContainer {
   display: grid;
   grid-template-columns: 256px auto;
@@ -109,14 +109,14 @@ main {
   min-height: 100vh;
 }
 
-.basicContainer { /* this stays */
+.basicContainer {
   grid-template-rows: 48px calc(100vh - 48px);
   grid-template-areas: 
     'headerNav headerNav'
     "mainFull mainFull";
 }
 
-.gridHeaderNav { /* this stays */
+.gridHeaderNav {
   grid-area: headerNav;
   width: 100%;
   z-index: 9;
@@ -126,12 +126,12 @@ main {
   box-shadow:         0 0 15px 0.5px rgb(0,0,0);
 }
 
-.basicMainFull { /* this stays */
+.basicMainFull {
   grid-area: mainFull;
   min-height: calc(100vh - 48px);
   overflow-y: auto;
 }
-
+*/
 .centreContainer {
   display: grid;
   width: 100vw;
@@ -203,11 +203,13 @@ main {
 .tenHeader {
   grid-area: tenHeader;
   display: grid;
+  max-width: 100vw;
   grid-template-rows: 1vh 1fr;
   grid-template-columns: 10vh 1fr 10vh;
   grid-template-areas: 
     'topBorder topBorder topBorder'
     'homeIcon frontCenter rightSpace';
+  overflow-x: hidden;
   overflow-y: hidden;
 }
 .topBorder {
@@ -221,8 +223,9 @@ main {
 }
 .frontCenterTitle {
   grid-area: frontCenter;
+  max-width: calc(100vw - 20vh);
   background-color: rgb(30,30,30);
-  font-size: 6vh;
+  font-size: 5vh;
   font-weight: 900;
   color: var(--silver);
 }

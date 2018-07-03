@@ -20,7 +20,11 @@ class ProdData extends Component	{
        !this.props.app
       ) {
       return (
-        <Spin />
+        <div className='centreContainer'>
+          <div className='centrecentre'>
+            <Spin />
+          </div>
+        </div>
       );
     }
     

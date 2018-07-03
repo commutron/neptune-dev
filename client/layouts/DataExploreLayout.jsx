@@ -7,25 +7,6 @@ import TaskBar from './TaskBar.jsx';
 import ActionBar from '/client/components/bigUi/ActionBar.jsx';
 import CookieBar from './CookieBar.jsx';
 
-export const ExploreLayout = ({content, subLink}) => (
-  <div className='containerEx'>
-    <div className='tenHeader'>
-      <div className='topBorder' />
-      <HomeIcon />
-      <div className='frontCenterTitle'>Data Explore</div>
-      <div className='rightSpace'>
-        
-      </div>
-    </div>
-    <aside className='taskBarEx'>
-      <TaskBar subLink={subLink} />
-    </aside>
-    <section className='contentAreaEx'>
-      {content}
-    </section>
-  </div>
-);
-
 export const TraverseWrap = ({
   itemData,
   batchData,
@@ -56,19 +37,19 @@ export const TraverseWrap = ({
         <div className='tenHeader'>
           <div className='topBorder' />
           <HomeIcon />
-          <div className='frontCenterTitle'>
-            {landing || base ? title :
-              <CookieBar
-                batchData={batchData}
-                itemData={itemData}
-                widgetData={widgetData}
-                versionData={versionData}
-                groupData={groupData}
-                app={app}
-                action={action}
-                miniAction={false} />
-            }
-          </div>
+          {landing || base ? 
+            <div className='frontCenterTitle'>{title}</div>
+          :
+            <CookieBar
+              batchData={batchData}
+              itemData={itemData}
+              widgetData={widgetData}
+              versionData={versionData}
+              groupData={groupData}
+              app={app}
+              action={action}
+              miniAction={false} />
+          }
           
           <div className='rightSpace'>
             {itemData ? 

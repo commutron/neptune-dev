@@ -58,11 +58,7 @@ export default class ItemPanel extends Component	{
         <div className='section' key={i.serial}>
         
           <div className='titleSection'>
-            {/*<span className='up'>{g.alias}</span>
-            <span className='up'>{w.widget} <i className='clean'>v.</i>{v.version}</span>*/}
-            <span>{b.batch}</span>
-            <span>{i.serial}</span>
-            <span>units: {i.units}</span>
+            <span>Units: {i.units}</span>
             <span>
               { !start ?
                 <i className='fas fa-hourglass-start' aria-hidden='true' title='unstarted'></i>

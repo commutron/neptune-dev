@@ -85,11 +85,11 @@ export default class ProductionFindOps extends Component	{
     if(!orb) {
       Session.set('nowBatch', false);
       return (
-        <div className='proFull'>
+        <ProWrap standAlone={true}>
           <div className='centre wide'>
             <SearchHelp />
           </div>
-        </div>
+        </ProWrap>
       );
     }
 
@@ -97,12 +97,12 @@ export default class ProductionFindOps extends Component	{
     if(orb === '.') {
       Session.set('nowBatch', false);
       return (
-        <div className='proFull'>
+        <ProWrap standAlone={true}>
           <div className='centre'>
             <p>the special hell</p>
             {/*<img src='/titleLogo.svg' className='shadow noCopy' height='600' />*/}
           </div>
-        </div>
+        </ProWrap>
       );
     }
     
@@ -130,9 +130,9 @@ export default class ProductionFindOps extends Component	{
       Session.set('now', Pref.docs);
       Session.set('nowBatch', false);
       return (
-        <div className='proFull'>
+        <ProWrap standAlone={true}>
           <WikiOps wi={false} root={app.instruct} anchor={false} full={true} />
-        </div>
+        </ProWrap>
       );
     }
 
@@ -192,15 +192,15 @@ export default class ProductionFindOps extends Component	{
 	  if(!isNaN(orb) && orb.length === 5) {
 	    Session.set('nowBatch', orb);
 	    return(
-	      <div className='proFull'>
+	      <ProWrap standAlone={true}>
 	        <WikiOps
 	          wi='home'
 	          fallback={orb}
 	          root={app.instruct}
 	          anchor={anchor}
 	          full={true} />
-	       </div>
-	      );
+       </ProWrap>
+      );
 	  }
 	  
   // Item
@@ -216,6 +216,7 @@ export default class ProductionFindOps extends Component	{
           <ProWrap
             batchData={hotBatch}
             itemData={item}
+            itemSerial={item.serial}
             widgetData={widget}
             versionData={version}
             users={this.props.users}
@@ -271,25 +272,25 @@ export default class ProductionFindOps extends Component	{
     if(!isNaN(orb) && orb.length > 5 && orb.length <= 10) {
 	    Session.set('nowBatch', orb);
 	    return(
-	      <div className='proFull'>
+	      <ProWrap standAlone={true}>
           <div className='centre wide space'>
             <p className='big centerText'>{orb} is not a serial number</p>
             <hr />
             <SearchHelp />
           </div>
-        </div>
+        </ProWrap>
 	    );
 	  }
     
     Session.set('nowBatch', false);
 		return (
-		  <div className='proFull'>
+		  <ProWrap standAlone={true}>
         <div className='centre wide'>
           <p className='biggest'>¯\_(ツ)_/¯</p>
           <br />
           <SearchHelp />
         </div>
-      </div>
+      </ProWrap>
     );
   }
 }

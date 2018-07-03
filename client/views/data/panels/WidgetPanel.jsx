@@ -20,9 +20,7 @@ const WidgetPanel = ({ groupData, widgetData, batchRelated, app })=> {
       <div className='section' key={w.widget}>
       
         <div className='titleSection'>
-          <span className='up'>{g.alias}</span>
-          <span className='up'>{w.widget}</span>
-          <span>{w.describe}</span>
+          <span className='cap'>{w.describe}</span>
         </div>
         
         <div className='space edit'>
