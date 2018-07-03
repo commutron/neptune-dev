@@ -1,48 +1,51 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
 
-//import FindBox from './FindBox.jsx';
-import TopBar from './TopBar.jsx';
+import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
 
-export const PublicLayout = ({content}) => (
-  <div className='basicContainer'>
-    <div className='gridHeaderNav'>
-      <div className='primeNav'>
-        <nav className='primeNav'>
-          <a className='title' href='/' title='Home'>
-            <img
-              src='/neptune-logo-white.svg'
-              className='logoSVG' />
-          </a>
-        </nav>
+export const PublicLayout = ({content, title}) => (
+  <div className='simpleContainer'>
+    <div className='tenHeader'>
+      <div className='topBorder' />
+      <HomeIcon />
+      <div className='frontCenterTitle'>
+        {title}
       </div>
+      <div className='rightSpace' />
     </div>
-    <div className='basicMainFull'>
+    <div className='simpleContent'>
       {content}
     </div>
   </div>
 );
 
-export const BasicLayout = ({content, link}) => (
-  <div className='basicContainer'>
-    <div className='gridHeaderNav'>
-      <TopBar link={link} />
+export const SplashLayout = ({content, title}) => (
+  <div className='splashContainer'>
+    <div className='tenHeader'>
+      <div className='topBorder' />
+      <HomeIcon />
+      <div className='frontCenterTitle'>
+        {title}
+      </div>
+      <div className='rightSpace' />
     </div>
-    <div className='basicMainFull'>
-      {content}
-    </div>
-    <div className='basicFooter'></div>
+    {content}
   </div>
 );
 
 export const CleanLayout = ({content}) => ( content );
 
 export const LabelLayout = ({content}) => (
-  <div className='basicContainer'>
-    <div className='gridHeaderNav noPrint'>
-      <TopBar />
+  <div className='simpleContainer'>
+    <div className='tenHeader noPrint'>
+      <div className='topBorder' />
+      <HomeIcon />
+      <div className='frontCenterTitle'>
+        Print Label
+      </div>
+      <div className='rightSpace' />
     </div>
-    <div className='basicMainFull'>
+    <div className='simpleContent'>
       <div className='wide noPrint'>
         <button
           className='smallAction clear'
@@ -53,7 +56,6 @@ export const LabelLayout = ({content}) => (
         {content}
       </div>
     </div>
-    <div className='basicFooter noPrint'></div>
   </div>
 );
 

@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
 //import Pref from '/client/global/pref.js';
 
-import TopBar from './TopBar.jsx';
 import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
 import TaskBar from './TaskBar.jsx';
 import ActionBar from '/client/components/bigUi/ActionBar.jsx';
@@ -27,61 +26,105 @@ export const ExploreLayout = ({content, subLink}) => (
   </div>
 );
 
-export class TraverseWrap extends Component	{
-
-  render() {
+export const TraverseWrap = ({
+  itemData,
+  batchData,
+  versionData,
+  widgetData,
+  groupData,
+  user,
+  app,
+  title,
+  subLink,
+  action,
+  landing,
+  base,
+  children
+}) =>	{
+  
+  function goPro(location) {
+    Session.set('now', location);
+    FlowRouter.go('/production');
+  }
     
     let scrollFix = {
       overflowY: 'auto'
     };
 
-    return (
-      <div 
-        className={
-          this.props.landing ? 
-            'landingContainer' :
-          !this.props.children[1] ?
-            this.props.user.miniAction === true ? 
-              'baseTraverseContainerMin' : 'baseTraverseContainer' :
-          this.props.user.miniAction === true ? 
-            'traverseContainerMin' : 'traverseContainer'}>
-        <div 
-          className={
-            //!this.props.user.miniAction &&
-            this.props.landing ? 'hidden' : 'cookieNavEx'}>
-          <CookieBar
-            batchData={this.props.batchData}
-            itemData={this.props.itemData}
-            widgetData={this.props.widgetData}
-            versionData={this.props.versionData}
-            groupData={this.props.groupData}
-            app={this.props.app}
-            action={this.props.action}
-            miniAction={this.props.user.miniAction} />
-        </div>
+    return(
+      <div className='containerEx'>
+        <div className='tenHeader'>
+          <div className='topBorder' />
+          <HomeIcon />
+          <div className='frontCenterTitle'>
+            {landing || base ? title :
+              <CookieBar
+                batchData={batchData}
+                itemData={itemData}
+                widgetData={widgetData}
+                versionData={versionData}
+                groupData={groupData}
+                app={app}
+                action={action}
+                miniAction={false} />
+            }
+          </div>
+          
+          <div className='rightSpace'>
+            {itemData ? 
+              <button 
+                title='View this in production'
+                onClick={()=>goPro(itemData.serial)}>
+                <i className='fas fa-paper-plane topRightIcon' data-fa-transform='left-1'></i>
+              </button>
+            :
+             batchData ? 
+              <button 
+                title='View this in production'
+                onClick={()=>goPro(batchData.batch)}>
+                <i className='fas fa-paper-plane topRightIcon' data-fa-transform='left-1'></i>
+              </button>
+            :null}
+          </div>
         
-        <section className='traverseContent' style={scrollFix}>
-          {this.props.children[0] || this.props.children}
+        </div>
+        <aside className='taskBarEx'>
+          <TaskBar subLink={subLink} />
+        </aside>
+        
+        <section className='contentAreaEx'>
+          <div 
+            className={
+              base ? 'baseConainer' :
+              landing ? 'landingContainer' :
+              !children[1] ?
+                'baseTraverseContainer' : 'traverseContainer'}>
+            
+            <section className='traverseContent' style={scrollFix}>
+              {children[0] || children}
+            </section>
+            
+            {children[1] &&
+              <aside className='traverseList' style={scrollFix}>
+                {children[1]}
+              </aside>}
+            
+            {!base &&
+              <div className='actionBarEx'>
+                <ActionBar
+                  batchData={batchData}
+                  itemData={itemData}
+                  groupData={groupData}
+                  widgetData={widgetData}
+                  versionData={versionData}
+                  app={app}
+                  action={action} />
+              </div>}
+              
+          </div>
+          
         </section>
         
-        {this.props.children[1] &&
-          <aside className='traverseList' style={scrollFix}>
-            {this.props.children[1]}
-          </aside>}
-        
-        {( this.props.landing || !this.props.user.miniAction ) &&
-          <div className='actionBarEx'>
-            <ActionBar
-              batchData={this.props.batchData}
-              itemData={this.props.itemData}
-              groupData={this.props.groupData}
-              widgetData={this.props.widgetData}
-              versionData={this.props.versionData}
-              app={this.props.app}
-              action={this.props.action} />
-          </div>}
-              
       </div>
     );
-  }
-}
+  };

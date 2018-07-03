@@ -112,15 +112,30 @@ export default class DataViewOps extends Component	{
     const view = this.props.view;
     const request = this.props.request;
     const specify = this.props.specify;
+    const subLink = this.props.subLink;
     
     if(!view) {
       Session.set('nowBatch', false);
       return (
-        <AdvancedSearch
-          batchData={allBatch}
-          widgetData={allWidget}
-          groupData={allGroup} 
-          app={app} />
+        <TraverseWrap
+		      batchData={false}
+          widgetData={false}
+          versionData={false}
+          groupData={false}
+          user={user}
+          app={app}
+          title='Advanced Search'
+          subLink={subLink}
+          action={false}
+          base={true}
+          landing={false}
+        >
+          <AdvancedSearch
+            batchData={allBatch}
+            widgetData={allWidget}
+            groupData={allGroup} 
+            app={app} />
+        </TraverseWrap>
       );
     }
     
@@ -135,6 +150,8 @@ export default class DataViewOps extends Component	{
             groupData={false}
             user={user}
             app={app}
+            title='Groups Overview'
+            subLink={subLink}
             action='newGroup'
             landing={true}
           >
@@ -160,6 +177,8 @@ export default class DataViewOps extends Component	{
             groupData={false}
             user={user}
             app={app}
+            title='Batches Overview'
+            subLink={subLink}
             action={false}
             landing={true}
           >
@@ -175,13 +194,41 @@ export default class DataViewOps extends Component	{
         );
       }else if(request === 'scraps') {
         return(
-          <ScrapPanel batchData={allBatch} />
+          <TraverseWrap
+  		      batchData={false}
+            widgetData={false}
+            versionData={false}
+            groupData={false}
+            user={user}
+            app={app}
+            title='Scraps Overview'
+            subLink={subLink}
+            action={false}
+            base={true}
+            landing={false}
+          >
+            <ScrapPanel batchData={allBatch} />
+          </TraverseWrap>
         );
       }else{
         return(
-          <div className='centre'>
-            <p>remember the cant</p>
-          </div>
+          <TraverseWrap
+  		      batchData={false}
+            widgetData={false}
+            versionData={false}
+            groupData={false}
+            user={user}
+            app={app}
+            title=''
+            subLink={subLink}
+            action={false}
+            base={true}
+            landing={false}
+          >
+            <div className='centre'>
+              <p>remember the cant</p>
+            </div>
+          </TraverseWrap>
         );
       }
     }
@@ -203,6 +250,8 @@ export default class DataViewOps extends Component	{
               groupData={group}
               user={user}
               app={app}
+              title='Item'
+              subLink={subLink}
               action='item'
             >
               <ItemPanel
@@ -221,7 +270,18 @@ export default class DataViewOps extends Component	{
           );
         }else{
           return(
-            <TraverseWrap>
+            <TraverseWrap
+    		      batchData={false}
+              widgetData={false}
+              versionData={false}
+              groupData={false}
+              user={user}
+              app={app}
+              title='!!!'
+              subLink={subLink}
+              action={false}
+              landing={true}
+            >
               <div className='centre wide'>
                 <p className='big'>Data Does Not Exist</p>
               </div>
@@ -246,6 +306,8 @@ export default class DataViewOps extends Component	{
             groupData={group}
             user={user}
             app={app}
+            title='Batch'
+            subLink={subLink}
             action='batch'
           >
             <BatchPanel
@@ -272,6 +334,8 @@ export default class DataViewOps extends Component	{
             groupData={group}
             user={user}
             app={app}
+            title='Batch+'
+            subLink={subLink}
             action='xbatch'
           >
             <BatchPanelX
@@ -301,6 +365,8 @@ export default class DataViewOps extends Component	{
             groupData={group}
             user={user}
             app={app}
+            title='Group'
+            subLink={subLink}
             action='group'
           >
             <GroupPanel
@@ -334,6 +400,8 @@ export default class DataViewOps extends Component	{
             groupData={group}
             user={user}
             app={app}
+            title='Widget'
+            subLink={subLink}
             action='widget'
           >
             <WidgetPanel
@@ -352,7 +420,19 @@ export default class DataViewOps extends Component	{
     
     Session.set('nowBatch', false);
 		return (
-		  <TraverseWrap>
+		  <TraverseWrap
+	      batchData={false}
+        widgetData={false}
+        versionData={false}
+        groupData={false}
+        user={user}
+        app={app}
+        title='???'
+        subLink={subLink}
+        action={false}
+        base={true}
+        landing={false}
+      >
         <div className='centre wide'>
           <p className='biggest'>¯\_(ツ)_/¯</p>
           <br />

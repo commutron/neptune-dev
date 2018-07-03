@@ -3,7 +3,7 @@ import {mount} from 'react-mounter';
 import Pref from '/client/global/pref.js';
 
 import { PublicLayout } from './layouts/MainLayouts.jsx';
-import { BasicLayout } from './layouts/MainLayouts.jsx';
+import { SplashLayout } from './layouts/MainLayouts.jsx';
 import { CleanLayout } from './layouts/MainLayouts.jsx';
 import { ProductionLayout } from './layouts/ProLayout.jsx';
 import { ExploreLayout } from './layouts/DataExploreLayout.jsx';
@@ -23,9 +23,6 @@ import GeneralLabel from './views/paper/GeneralLabel.jsx';
 
 import LandingWrap from './LandingWrap.jsx';
 
-import { ProductionNightlyLayout } from './views/proNightly/layout/ProNight.jsx';
-import ProdNightData from './views/proNightly/ProdData.jsx';
-
 // Client Side Colllections
 AppDB = new Mongo.Collection('appdb');
 GroupDB = new Mongo.Collection('groupdb');
@@ -36,8 +33,8 @@ XBatchDB = new Mongo.Collection('xbatchdb');
 FlowRouter.notFound = {
   action() {
     mount(PublicLayout, {
-      content: (<p>Page Not Found</p>),
-      link: ''
+      content: (<p className='centreText'>Page Not Found</p>),
+      title: '404'
     });
   }
 };
@@ -48,7 +45,8 @@ exposedRoutes.route('/login', {
   name: 'login',
   action() {
     mount(PublicLayout, {
-       content: (<Login />)
+       content: (<Login />),
+       title: 'User Login'
     });
   }
 });
@@ -56,10 +54,10 @@ exposedRoutes.route('/login', {
 exposedRoutes.route('/meta', {
   name: 'meta',
   action() {
-    mount(CleanLayout, {
+    mount(SplashLayout, {
       content: (
-        <div className='centreContainer'>
-          <div className='centrecentre'>
+        <div className='centreSpash'>
+          <div>
             <p className='centre'>
               <img src='/titleLogo.svg' className='shadow noCopy' height='400' />
             </p>
@@ -72,7 +70,8 @@ exposedRoutes.route('/meta', {
             </div>
           </div>
         </div>
-      )
+      ),
+      title: Pref.neptuneIs
     });
   }
 });
@@ -99,7 +98,8 @@ privlegedRoutes.route('/activate', {
   name: 'activate',
   action() {
     mount(PublicLayout, {
-       content: (<ActivateUser />)
+       content: (<ActivateUser />),
+       title: 'User Activation'
     });
   }
 });
@@ -114,7 +114,8 @@ privlegedRoutes.route('/initialsetup', {
           <hr />
           <InitialSetup />
         </div>
-      )
+      ),
+      title: 'Initial App Setup'
     });
   }
 });
@@ -122,8 +123,9 @@ privlegedRoutes.route('/initialsetup', {
 privlegedRoutes.route('/', {
   name: 'home',
   action() {
-    mount(CleanLayout, {
+    mount(SplashLayout, {
        content: (<LandingWrap />),
+       title: Pref.neptuneIs
     });
   }
 });
@@ -140,17 +142,7 @@ privlegedRoutes.route('/activity', {
 privlegedRoutes.route('/production', {
   action() {
     mount(ProductionLayout, {
-      content: (<ProdData />),
-      link: 'prod'
-    });
-  }
-});
-
-privlegedRoutes.route('/nightly/production', {
-  action() {
-    mount(ProductionNightlyLayout, {
-      content: (<ProdNightData />),
-      link: 'pronight'
+      content: (<ProdData />)
     });
   }
 });
@@ -187,15 +179,15 @@ privlegedRoutes.route('/print/generallabel/:batch', {
             content: (<GeneralLabel batch={params.batch} data={queryParams} />)
           });
         }else{
-          mount(BasicLayout, {
+          mount(SplashLayout, {
             content: (<p>Cannot Generate this page. Incomplete information</p>),
-            link: ''
+            title: 'Error'
           });
         }
       }else{
-        mount(BasicLayout, {
+        mount(SplashLayout, {
           content: (<p>Page Not Found</p>),
-          link: ''
+          title: '404'
         });
       }
     },
@@ -207,9 +199,8 @@ privlegedRoutes.route('/print/generallabel/:batch', {
 
 privlegedRoutes.route('/data', {
   action() {
-    mount(ExploreLayout, {
-      content: (<DataData />),
-      link: 'data'
+    mount(CleanLayout, {
+      content: (<DataData />)
     });
   }
 });
@@ -222,14 +213,13 @@ privlegedRoutes.route('/data/:view', {
   action: function(params, queryParams) {
     //console.log("Params:", params);
     //console.log("Query:", queryParams);
-    mount(ExploreLayout, {
+    mount(CleanLayout, {
       content: (<DataData
                   view={params.view}
                   request={queryParams.request}
-                  specify={queryParams.specify} />
-                ),
-      link: 'data',
-      subLink: params.view + queryParams.request
+                  specify={queryParams.specify}
+                  subLink={params.view + queryParams.request} />
+                )
     });
   },
 });

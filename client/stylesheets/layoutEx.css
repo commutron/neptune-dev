@@ -26,63 +26,46 @@
   overflow-y: auto;
 }
 
-.landingContainer, .traverseContainer, .traverseContainerMin,
-.baseTraverseContainer, .baseTraverseContainerMin {
+.landingContainer, .traverseContainer,
+.baseTraverseContainer {
   display: grid;
   align-content: center;
   overflow-y: hidden !important;
   overflow-x: hidden !important;
   -webkit-overflow-scrolling: touch;
 }
-.landingContainer, .traverseContainer, .traverseContainerMin {
+.landingContainer, .traverseContainer {
   /*grid-template-columns: auto 192px;*/
   grid-template-columns: auto calc(15vmin + 5vw);
 }
-.baseTraverseContainer, .baseTraverseContainerMin {
+.baseContainer, .baseTraverseContainer {
   grid-template-columns: auto;
 }
 .landingContainer {
-  grid-template-rows: 32px calc(90vh - 72px) 40px;
+  grid-template-rows: calc(90vh - 40px) 40px;
 }
 .traverseContainer, .baseTraverseContainer {
-  grid-template-rows: 32px calc(90vh - 80px) 48px;
-}
-.traverseContainerMin, .baseTraverseContainerMin {
-  grid-template-rows: 32px calc(90vh - 32px);
+  grid-template-rows: calc(90vh - 48px) 48px;
 }
 .landingContainer {
   grid-template-areas: 
-    'traverseContent traverseList'
     'traverseContent traverseList'
     'traverseContent actionBarEx';
 } 
 .traverseContainer {
   grid-template-areas: 
-    'cookieNav traverseList'
     'traverseContent traverseList'
     'actionBarEx actionBarEx';
 }
-.traverseContainerMin {
+.baseContainer {
   grid-template-areas: 
-    'cookieNav traverseList'
-    'traverseContent traverseList';
+    'traverseContent'
+    'traverseContent';
 }
 .baseTraverseContainer {
   grid-template-areas: 
-    'cookieNav'
     'traverseContent'
     'actionBarEx';
-}
-.baseTraverseContainerMin {
-  grid-template-areas: 
-    'cookieNav'
-    'traverseContent';
-}
-
-.cookieNavEx {
-  grid-area: cookieNav;
-  background-color: rgb(25,25,25);
-  z-index: 8;
 }
 
 .traverseContent {
@@ -96,7 +79,7 @@
 .actionBarEx {
   grid-area: actionBarEx;
   align-self: stretch;
-  background-color: rgb(25,25,25);
+  background-color: rgb(30,30,30);
   display: flex;
   align-items: center;
   justify-content: space-evenly;
@@ -106,6 +89,8 @@
   flex-shrink: 0;
   /*flex-grow: 2;*/
 }
+
+/* ////////////////////////////////// */
 
 .oneTwoThreeContainer, 
 .aFrameContainer,

@@ -15,41 +15,31 @@ const StartView = ({ready, user, org, app}) =>	{
     
   if(!ready || !user || !org || !app) {
     return (
-      <div className='centreContainer'>
-        <div className='centrecentre'>
-          <Spin color={true} message='Just a moment'/>
-        </div>
+      <div className='centreSpash'>
+        <Spin color={true} message='Just a moment'/>
       </div>
     );
   }
   
   return(
-    <div className='homeNavContainer noCopy'>
-      <div className='tenHeader'>
-        <div className='topBorder'></div>
-        <HomeIcon />
-        <div className='frontCenterTitle'>Neptune {Pref.neptuneIs}</div>
-        <div className='rightSpace'></div>
-      </div>
-      <div className='homeNavi'>
-        <NavButton title='Production' icon='fa-paper-plane' link='/production' />
-        <NavPlaceholder icon='fa-plane' trans='rotate--45'/>
-        <NavButton title='Activity' icon='fab fa-wpexplorer' trans='flip-h' link='/activity' />
-        <NavButton title='Explore' icon='fa-rocket' link='/data' />
-        
-        <NavButton title='Pisces' icon='fa-file-alt' link={app.instruct || ''} blank={true} />
-        <NavButton title='Parts Search' icon='fa-microchip' link='/starfish' />
-        <NavPlaceholder />
-        {Roles.userIsInRole(Meteor.userId(), 'admin') ?
-          <NavButton title='Settings' icon='fa-sliders-h' link='/app' />
-        : <NavPlaceholder title='Settings' icon='fa-sliders-h'/>}
-        
-        <NavButton title='Help' icon='fa-question' link={app.help || ''} blank={true} />
-        <NavButton title='Time Clock' icon='fa-clock' link={app.timeClock || ''} blank={true} />
-        <UserSlide user={user} app={app} />
-        <ChillHome currentUser={user.username} />
+    <div className='homeNavi'>
+      <NavButton title='Production' icon='fa-paper-plane' link='/production' />
+      <NavPlaceholder icon='fa-plane' trans='rotate--45'/>
+      <NavButton title='Activity' icon='fab fa-wpexplorer' trans='flip-h' link='/activity' />
+      <NavButton title='Explore' icon='fa-rocket' link='/data' />
       
-      </div>
+      <NavButton title='Pisces' icon='fa-file-alt' link={app.instruct || ''} blank={true} />
+      <NavButton title='Parts Search' icon='fa-microchip' link='/starfish' />
+      <NavPlaceholder />
+      {Roles.userIsInRole(Meteor.userId(), 'admin') ?
+        <NavButton title='Settings' icon='fa-sliders-h' link='/app' />
+      : <NavPlaceholder title='Settings' icon='fa-sliders-h'/>}
+      
+      <NavButton title='Help' icon='fa-question' link={app.help || ''} blank={true} />
+      <NavButton title='Time Clock' icon='fa-clock' link={app.timeClock || ''} blank={true} />
+      <UserSlide user={user} app={app} />
+      <ChillHome currentUser={user.username} />
+    
     </div>
   );
 };

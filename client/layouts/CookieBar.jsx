@@ -4,11 +4,6 @@ import ActionBar from '/client/components/bigUi/ActionBar.jsx';
 
 const CookieBar = ({ groupData, widgetData, versionData, batchData, itemData, app, action, miniAction }) => {
   
-  function goPro(location) {
-    Session.set('now', location);
-    FlowRouter.go('/production');
-  } 
-  
   return(
     <div className='cookieRow'>
       {groupData && 
@@ -74,29 +69,6 @@ const CookieBar = ({ groupData, widgetData, versionData, batchData, itemData, ap
           noText={true} />}
       
       {miniAction && !itemData && !batchData && <span className='cookieGap' />}
-      
-      {itemData ? 
-        <span className='cookieCrumb'>
-          <button 
-            className='cookie'
-            title='View this in production'
-            onClick={()=>goPro(itemData.serial)}>
-            {!miniAction && <i className='small'>Production </i>}
-            <i className='fas fa-paper-plane fa-lg fa-fw'></i>
-          </button>
-        </span>
-      :
-        batchData ? 
-        <span className='cookieCrumb'>
-          <button 
-            className='cookie'
-            title='View this in production'
-            onClick={()=>goPro(batchData.batch)}>
-            {!miniAction && <i className='small'>Production </i>}
-            <i className='fas fa-paper-plane fa-lg fa-fw'></i>
-          </button>
-        </span>
-      :null}
      
     </div>
   );

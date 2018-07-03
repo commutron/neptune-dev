@@ -17,8 +17,12 @@ class ExploreView extends Component	{
       !this.props.user ||
       !this.props.app 
     ) {
-      return (
-        <Spin />
+      return(
+        <div className='centreContainer'>
+          <div className='centrecentre'>
+            <Spin />
+          </div>
+        </div>
       );
     }
     
@@ -38,6 +42,7 @@ class ExploreView extends Component	{
         view={this.props.view}
         request={this.props.request}
         specify={this.props.specify}
+        subLink={this.props.subLink}
       />
     );
   }

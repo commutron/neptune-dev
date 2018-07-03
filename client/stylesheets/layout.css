@@ -190,7 +190,7 @@ main {
 
 /* home / landing page */
 
-.homeNavContainer {
+.splashContainer {
   display: grid;
   width: 100vw;
   height: 100vh;
@@ -198,7 +198,7 @@ main {
   grid-template-columns: 100%;
   grid-template-areas: 
     'tenHeader'
-    'homeContent';
+    'splashContent';
 }
 .tenHeader {
   grid-area: tenHeader;
@@ -246,7 +246,7 @@ main {
 }
 
 .homeNavi {
-  grid-area: homeContent;
+  grid-area: splashContent;
   display: grid;
   grid-template-rows: 20vh 20vh 20vh;
   grid-template-columns: repeat(4, 20vw);
@@ -255,12 +255,22 @@ main {
   place-items: stretch stretch;
 }
 
-/* ////////////////////////// */
-
-.fullViewHeight { /* this stays */
-  min-height: calc(100vh - 48px);
+.centreSpash {
+  grid-area: splashContent;
+  display: grid;
+  grid-template-rows: 75vh;
+  grid-template-columns: 75vw);
+  place-self: center center;
+  place-items: stretch stretch;
 }
 
+/* ////////////////////////// */
+
+/*
+.fullViewHeight {
+  min-height: calc(100vh - 48px);
+}
+*/
 .bleed {
   padding: 0;
   margin: 0;
