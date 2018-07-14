@@ -13,7 +13,7 @@ body {
 
 main {
   text-align: left;
-  background: rgb(30,30,30);
+  background: rgb(35,35,35);
   z-index: 8;
 }
 
@@ -79,8 +79,7 @@ main {
   position: sticky;
   top: 0px;
   width: auto;
-  background-color: black;
-  background-color: rgb(25,25,25);
+  background-color: rgb(20,20,20);
   z-index: 7;
 }
 
@@ -168,7 +167,7 @@ main {
 
 .rightSpace {
   grid-area: rightSpace;
-  background-color: rgb(30,30,30);
+  background-color: rgb(25,25,25);
 }
 .rightSpace button {
   width: 100%;
@@ -184,7 +183,7 @@ main {
 .topRightIcon:hover,
 .topRightIcon:active {
   background-color: var(--silver);
-  color: rgb(30,30,30);
+  color: rgb(25,25,25);
 }
 
 
@@ -224,7 +223,8 @@ main {
 .frontCenterTitle {
   grid-area: frontCenter;
   max-width: calc(100vw - 20vh);
-  background-color: rgb(30,30,30);
+  height: 9vh;
+  background-color: rgb(25,25,25);
   font-size: 5vh;
   font-weight: 900;
   color: var(--silver);
@@ -235,6 +235,11 @@ main {
   display: flex;
   align-items: center;
   justify-content : center;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .homeIconLink {
   width: 100%;

@@ -13,7 +13,6 @@ import RMAForm from '../forms/RMAForm.jsx';
 import Remove from '../forms/Remove.jsx';
 
 import UnitSet from '../forms/UnitSet.jsx';
-import UndoFinish from '../forms/UndoFinish.jsx';
 import PanelBreak from '../forms/PanelBreak.jsx';
 import ScrapForm from '../forms/ScrapForm.jsx';
 
@@ -33,11 +32,6 @@ const ActionBar = ({batchData, itemData, groupData, widgetData, versionData, app
     	  <UnitSet
     	    id={batchData._id}
     	    item={itemData}
-    	    noText={noText} />
-    	 <UndoFinish
-    	    id={batchData._id}
-    	    serial={itemData.serial}
-    	    finishedAt={itemData.finishedAt}
     	    noText={noText} />
     	 <PanelBreak
           id={batchData._id}

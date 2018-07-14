@@ -23,7 +23,7 @@ const FindBox = ({ orb, user, append })=> {
       autoComplete='off'>
       <input
         autoFocus={true}
-        type='text'
+        type='search'
         id='lookup'
         aria-label='main searchbox'
         className='up'

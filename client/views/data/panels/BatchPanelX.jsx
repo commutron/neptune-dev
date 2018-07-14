@@ -13,6 +13,8 @@ import ReleaseAction from '/client/components/bigUi/ReleasesModule.jsx';
 import { ReleaseNote } from '/client/components/bigUi/ReleasesModule.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';
 import BlockList from '../../../components/bigUi/BlockList.jsx';
+import WaterfallTimeline from '/client/components/bigUi/WaterfallTimeline.jsx';
+
 //import RiverSatus from '../../../components/smallUi/RiverStatus.jsx';
 //import FirstsOverview from '/client/components/bigUi/FirstsOverview.jsx';
 //import FirstsTimeline from '/client/components/bigUi/FirstsTimeline.jsx';
@@ -121,16 +123,10 @@ export default class BatchPanelX extends Component	{
                     xBatch={true}
                     expand={true} />
                 }
-                <NoteLine entry={b.notes} id={b._id} xBatch={true} widgetKey={false}  />
-                <BlockList id={b._id} data={b.blocks} xBatch={true} lock={done} expand={true} />
               </div>
               <div className='twoThirdsContent'>
-              {/*
-                <FirstsTimeline
-                  id={b._id}
-                  batch={b.batch}
-                  doneFirsts={filter.fList} />
-              */}
+                <NoteLine entry={b.notes} id={b._id} xBatch={true} widgetKey={false}  />
+                <BlockList id={b._id} data={b.blocks} xBatch={true} lock={done} expand={true} />
               </div>
             </div>
           
@@ -142,38 +138,17 @@ export default class BatchPanelX extends Component	{
                     doneFirsts={filter.fList}
                     flow={riverFlow}
                     flowAlt={riverAltFlow} />*/}
-                  <h3>Assigned Counters</h3>
-                  <dl>
-                    {b.waterfall.map( (entry)=>{
-                    let total = entry.counts.length > 0 ?
-                    Array.from(entry.counts, x => x.tick).reduce((x,y)=> x + y) :
-                    0;
-                      return <dd key={entry.wfKey}>{entry.gate} : {total}</dd>;
-                    })}
-                  </dl>
                 </div>
               
                 <div className='twoThirdsContent'>
-                {/*
-                  <StepsProgress
-                    mini={true}
-                    expand={true}
-                    progCounts={progCounts} />
-                */}
+                  
                 </div>
                 
                 <div className='threeThirdsContent wide'>
-                {/*
-                  <ProgBurndown
-                    id={b._id}
-                    start={b.start}
-                    floorRelease={b.floorRelease}
-                    end={b.finishedAt}
-                    flowData={riverFlow}
-                    flowAltData={riverAltFlow}
-                    itemData={b.items}
-                    title='Progress Burndown' />
-                */}
+                  <WaterfallTimeline
+                    waterfalls={b.waterfall}
+                    quantity={b.quantity}
+                    app={a} />
                 </div>
               </div>
             

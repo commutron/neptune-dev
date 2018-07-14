@@ -12,6 +12,7 @@ import UndoFinish from '/client/components/forms/UndoFinish.jsx';
 
 const StoneSelect = ({ 
   id, 
+  bComplete,
   flow,
   isAlt,
   hasAlt,
@@ -53,6 +54,7 @@ const StoneSelect = ({
                 if (s1.partNum > s2.partNum) { return 1 }
                 return 0;
               });
+  let sFall = null;
   
   for(let flowStep of flow) {
     const first = flowStep.type === 'first';
@@ -93,11 +95,6 @@ const StoneSelect = ({
       const fTest = flowStep.type === 'test' ? 
                     iDone.filter( x => x.type === 'test' && x.good === false) : [];
       
-      /*
-      let skipped = nc.every( x => x.skip !== false );
-	    let block = nc.some( x => (x.where || '') !== flowStep.step ) ? true : false;
-      */
-      
       const blockStone = damStep && !ncAllClear;
       const doneStone = stepComplete;
       
@@ -129,194 +126,38 @@ const StoneSelect = ({
               			  shortfalls={sh}
               			  expand={expand} />;
       */       			  
-      let sFall = null;
                       
       const tFail = <TestFails fails={fTest} />;
-	  /*
-	  if(nc.length > 0 && !skipped) {
-		    
-		    if(block || flowStep.type === 'finish' || flowStep.type === 'test') {
-		      Session.set( 'nowStep', nc[0].where );
-		      return (
-		        <div className={expand && 'stonePlus'}>
-  		        <div className={expand && 'ncPlus'}>
-  		          {nonCon}
-  		          {sFall}
-  		        </div>
-  		      </div>
-		      );
-		    }else{
-		      Session.set('nowStep', flowStep.step);
-          Session.set('nowWanchor', flowStep.how);
-		      return (
-		        <div className={expand && 'stonePlus'}>
-              <div className={expand && 'stonePlusLeft'}>
-    		        <InOutWrap type='stoneTrans'>
-      		        {stone}
-                </InOutWrap>
-                {fTest.length > 0 && 
-                  <InOutWrap type='stoneTrans'>
-                    {tFail}
-                  </InOutWrap>}
-              </div>
-              {expand &&
-          		  <div className='stonePlusRight space'>
-          			  <MiniHistory history={history} />
-          			</div>}
-              <div className={expand && 'ncPlus'}>
-                {nonCon}
-                {sFall}
-              </div>
-      			</div>
-		      );
-		    }
-	  }else if(nc.length > 0) {
-	  */
-		    Session.set('nowStep', flowStep.step + flowStep.type);
-        Session.set('nowWanchor', flowStep.how);
-		    return (
-	        <div className={expand && 'stonePlus'}>
-            <div className={expand && 'stonePlusLeft'}>
-  		        <InOutWrap type='stoneTrans'>
-    		        {stone}
-              </InOutWrap>
-              {fTest.length > 0 && 
-                <InOutWrap type='stoneTrans'>
-                  {tFail}
-                </InOutWrap>}
-            </div>
-            {expand &&
-        		  <div className='stonePlusRight vspace'>
-        			  <MiniHistory history={history} />
-        			</div>}
-            <div className={expand && 'ncPlus'}>
-              {nonCon}
-              {sFall}
-            </div>
-    			</div>
-	      );
-	      
-	    /*  
-		  }else{
-		    Session.set('nowStep', flowStep.step);
-        Session.set('nowWanchor', flowStep.how);
-        return (
-          <div className={expand && 'stonePlus'}>
-            <div className={expand && 'stonePlusLeft'}>
-              <InOutWrap type='stoneTrans'>
-                {stone}
-              </InOutWrap>
-              {fTest.length > 0 && 
-                <InOutWrap type='stoneTrans'>
-                  {tFail}
-                </InOutWrap>}
-            </div>
-            {expand &&
-        		  <div className='stonePlusRight space'>
-        			  <MiniHistory history={history} />
-        			</div>}
-        		<div className={expand && 'ncPlus'}>
-              {sFall}
-            </div>
-          </div>
-        );
-      }
-      */
-    }
-  }
 	  
-	  /*
-		  if(nc.length > 0 && !skipped) {
-		    
-		    if(block || flowStep.type === 'finish' || flowStep.type === 'test') {
-		      Session.set( 'nowStep', nc[0].where );
-		      return (
-		        <div className={expand && 'stonePlus'}>
-  		        <div className={expand && 'ncPlus'}>
-  		          {nonCon}
-  		          {sFall}
-  		        </div>
-  		      </div>
-		      );
-		    }else{
-		      Session.set('nowStep', flowStep.step);
-          Session.set('nowWanchor', flowStep.how);
-		      return (
-		        <div className={expand && 'stonePlus'}>
-              <div className={expand && 'stonePlusLeft'}>
-    		        <InOutWrap type='stoneTrans'>
-      		        {stone}
-                </InOutWrap>
-                {fTest.length > 0 && 
-                  <InOutWrap type='stoneTrans'>
-                    {tFail}
-                  </InOutWrap>}
-              </div>
-              {expand &&
-          		  <div className='stonePlusRight space'>
-          			  <MiniHistory history={history} />
-          			</div>}
-              <div className={expand && 'ncPlus'}>
-                {nonCon}
-                {sFall}
-              </div>
-      			</div>
-		      );
-		    }
-		  }else if(nc.length > 0) {
-		    Session.set('nowStep', flowStep.step);
-        Session.set('nowWanchor', flowStep.how);
-		    return (
-	        <div className={expand && 'stonePlus'}>
-            <div className={expand && 'stonePlusLeft'}>
-  		        <InOutWrap type='stoneTrans'>
-    		        {stone}
-              </InOutWrap>
-              {fTest.length > 0 && 
-                <InOutWrap type='stoneTrans'>
-                  {tFail}
-                </InOutWrap>}
-            </div>
-            {expand &&
-        		  <div className='stonePlusRight space'>
-        			  <MiniHistory history={history} />
-        			</div>}
-            <div className={expand && 'ncPlus'}>
-              {nonCon}
-              {sFall}
-            </div>
-    			</div>
-	      );
-		  }else{
-		    Session.set('nowStep', flowStep.step);
-        Session.set('nowWanchor', flowStep.how);
-        return (
-          <div className={expand && 'stonePlus'}>
-            <div className={expand && 'stonePlusLeft'}>
+	    Session.set('nowStep', flowStep.step + flowStep.type);
+      Session.set('nowWanchor', flowStep.how);
+	    return (
+        <div className={expand && 'stonePlus'}>
+          <div className={expand && 'stonePlusLeft'}>
+		        <InOutWrap type='stoneTrans'>
+  		        {stone}
+            </InOutWrap>
+            {fTest.length > 0 && 
               <InOutWrap type='stoneTrans'>
-                {stone}
-              </InOutWrap>
-              {fTest.length > 0 && 
-                <InOutWrap type='stoneTrans'>
-                  {tFail}
-                </InOutWrap>}
-            </div>
-            {expand &&
-        		  <div className='stonePlusRight space'>
-        			  <MiniHistory history={history} />
-        			</div>}
-        		<div className={expand && 'ncPlus'}>
-              {sFall}
-            </div>
+                {tFail}
+              </InOutWrap>}
           </div>
-        );
-      }
+          {expand &&
+      		  <div className='stonePlusRight vspace'>
+      			  <MiniHistory history={history} />
+      			</div>}
+          <div className={expand && 'ncPlus'}>
+            {nonCon}
+            {sFall}
+          </div>
+  			</div>
+      );
     }
   }
-  */
   
   // end of flow
   Session.set('nowStep', 'done');
+  const timelock = moment().diff(moment(finishedAt), 'minutes') > 60;
   return (
     <div className={expand && 'stonePlus'}>
       <div className={expand && 'stonePlusLeft'}>
@@ -325,14 +166,17 @@ const StoneSelect = ({
             <div className='purpleBorder centre cap'>
               <h2>{Pref.trackLast}ed</h2>
               <h3>{moment(iDone[iDone.length -1].time).calendar()}</h3>
-                {moment(finishedAt).isSame(moment(), 'hour') &&
-                  <span className='space'>
-                  <UndoFinish
-              	    id={id}
-              	    serial={serial}
-              	    finishedAt={finishedAt}
-              	    noText={false} />
-              	  </span>}
+                {bComplete === false ?
+                  <span className='space centre'>
+                    {timelock && <p><i className='fas fa-lock fa-fw fa-lg'></i></p>}
+                    <UndoFinish
+                	    id={id}
+                	    serial={serial}
+                	    finishedAt={finishedAt}
+                	    timelock={timelock}
+                	    noText={false} />
+              	  </span>
+                : <p><i className='fas fa-lock fa-fw fa-lg'></i></p>}
             </div>
           </div>
         </InOutWrap>
@@ -342,7 +186,7 @@ const StoneSelect = ({
   			  <MiniHistory history={history} />
   			</div>}
   		<div className={expand && 'ncPlus'}>
-        {/*sFall*/}
+        {sFall}
       </div>
   	</div>
   );

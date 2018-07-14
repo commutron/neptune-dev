@@ -79,16 +79,16 @@ const NCAdd = ({ id, barcode, app })=> {
         type='submit'
         id='go'
         disabled={lock}
-        className='smallAction clearRed'
-      >{Pref.post}</button>
+        className='smallAction clearRed bold'
+      >Repair Later</button>
       
       <button
         type='button'
         id='goFix'
         onClick={(e)=>handleNC(e, true)}
         disabled={lock}
-        className='smallAction clearRed'
-      >{Pref.post} & Repair</button>
+        className='smallAction clearRed bold'
+      >Repaired Now</button>
           
     </form>
   );

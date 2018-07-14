@@ -6,7 +6,7 @@ function reFocus() {
 }
 
 function onPress(event) {
-  console.log(event);
+  //console.log(event);
   const element = document.activeElement;
   if(element.id !== 'lookup' && element.id !== 'nestSerial') {
     const inputKey = event.key;
@@ -16,8 +16,8 @@ function onPress(event) {
       if( inputCode === 13 ) { // "enter"
         const slL = scanListener.length;
         if( slL === 9 || slL === 10 ) {
-          Session.set('now', scanListener);
           !event.preventDefault ? null : event.preventDefault();
+          Session.set('now', scanListener);
           document.getElementById('ncRefs').value = '';
           document.getElementById('lookup').value = '';
         }
@@ -57,7 +57,7 @@ export function ScanListenerUtility(user) {
       null;//console.log('auto window scanning OFF');
     }else{
       //console.log('auto window scanning ON');
-      window.addEventListener('keypress', onPress);
+      window.addEventListener('keydown', onPress);
       window.addEventListener('message', onMessage);
     }
   //},250);

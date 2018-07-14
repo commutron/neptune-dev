@@ -49,12 +49,12 @@
 }
 
 .navButtonWrap {
-  background-color: rgb(30,30,30);
+  background-color: rgb(25,25,25);
   color: var(--neptuneColor);
 }
 .navButtonWrap:hover {
   background-color: var(--neptuneColor);
-  color: rgb(30,30,30);
+  color: rgb(25,25,25);
 }
 
 .navButtonWrap a,
@@ -72,6 +72,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 .navButtonWrap button {
   cursor: pointer;
@@ -84,6 +85,7 @@
 .navButtonText {
   margin: 1vh 0 0 0;
   font-size: 3vh;
+  text-align: center;
   color: var(--neptuneColor);
 }
 .navButtonWrap:hover .navButtonIcon,
@@ -242,6 +244,21 @@
 	border: 3px solid var(--emerald);
 	box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2),
 	      inset 0 0 .1em .1em rgba(43,43,43,0.2);
+}
+.greenHover,
+.invert .greenHover {
+	color: var(--emerald);
+	background-color: var(--clouds);
+}
+.greenHover:hover,
+.invert .greenHover:hover {
+  color: var(--clouds);
+	background-color: var(--emerald);
+}
+.greenHover:disabled:hover,
+.invert .greenHover:disabled:hover {
+  color: var(--emerald);
+	background-color: var(--clouds);
 }
 
 .blue { background-color: var(--peterriver); }
@@ -671,8 +688,9 @@
   font-size: 1.5rem;
 }
 
-.meterprogStack { margin: 5px; }
+.meterprogStack { padding: 5px; }
 .meterprogStack p { margin: 0; }
+.meterprogStack progress { width: 100%; }
 
 .proGood::-webkit-progress-value {
   background-color: #27ae60;
@@ -1067,6 +1085,39 @@
   height: 10px;
   width: 100%;
 }
+
+.waterfallHistory {
+  margin: 2vh 0;
+  border-width: 2px;
+  border-style: solid;
+  padding-bottom: 1vh;
+}
+.waterfallHistory summary {
+  display: flex;
+  align-items: center;
+}
+.waterfallHistory summary .meterprogStack {
+  display: inline-block;
+  width: 100%; 
+}
+.waterfallHistory summary::-webkit-details-marker {
+  display: none;
+}
+
+.waterfallTimeline dd {
+  margin: 0 3vw;
+  padding: 0.5em 0;
+  letter-spacing: 1px;
+  vertical-align: middle;
+}
+.waterfallTimeline dd:nth-child(odd) {
+  background-color: rgba(50,50,50,0.3);
+}
+.waterfallTimeline b {
+  font-size: 1.75em;
+  padding: 0 2vw;
+}
+
 /* custom Bert alerts */
 .bert-alert {
   color: #ecf0f1;

@@ -26,6 +26,8 @@ import { MostNonCon } from '../../../components/bigUi/NonConMiniTops.jsx';
 import NonConPie from '../../../components/charts/NonConPie.jsx';
 import RMATable from '../../../components/tables/RMATable.jsx';
 
+import BatchFinish from '/client/components/forms/BatchFinish.jsx';
+
 // props
 /// batchData
 /// widgetData 
@@ -78,7 +80,7 @@ export default class BatchPanel extends Component	{
                           timedays + ' day' +
                             (timedays == 1 ? '' : 's');
                  
-    const fnsh = b.finishedAt ? end.format("MMMM Do, YYYY") : null;
+    const fnsh = b.finishedAt ? end.format("MMMM Do, YYYY h:mm A") : null;
     
     const v = w.versions.find( x => x.versionKey === b.versionKey );
     
@@ -90,7 +92,8 @@ export default class BatchPanel extends Component	{
     const riverAltTitle = flowAlt ? flowAlt.title : 'not found';
     const riverAltFlow = flowAlt ? flowAlt.flow : [];
     const done = b.finishedAt !== false; // no more boards if batch is finished
-    
+    const allDone = b.items.every( x => x.finishedAt !== false );
+
     let released = b.floorRelease === undefined ? undefined : 
                     b.floorRelease === false ? false :
                     typeof b.floorRelease === 'object';
@@ -111,7 +114,10 @@ export default class BatchPanel extends Component	{
                 :
                 <i className='fa fa-check-circle greenT' aria-hidden='true' title='finished'></i>
               }
+              {!done && allDone && 
+                <BatchFinish batchId={b._id} alreadyDone={done} />}
             </span>
+            
           </div>
           
           <br />

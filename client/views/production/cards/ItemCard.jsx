@@ -17,8 +17,8 @@ export default class ItemCard extends Component	{
     const b = this.props.batchData;
     const i = this.props.itemData;
     const w = this.props.widgetData;
-    const done = i.finishedAt !== false;
-    const scrap = done ? i.history.find(x => x.type === 'scrap') : false;
+    //const done = i.finishedAt !== false;
+    const scrap = i.history.find(x => x.type === 'scrap' && x.good === true);
     
     const expand = this.props.expand;
     const flow = this.props.flow;
@@ -41,21 +41,15 @@ export default class ItemCard extends Component	{
         </AnimateWrap>
         );
     }
-    
-    if(scrap) { 
-      Session.set('nowStep', 'done');
-      return (
-        <AnimateWrap type='cardTrans'>
-          <div className='section sidebar' key={i.serial}>
-            <ScrapBox entry={scrap} />
-          </div>
-        </AnimateWrap>
-        );
-    }
 
     return (
       <AnimateWrap type='cardTrans'>
         <div key={i.serial}>
+          {scrap &&
+            <div className='section sidebar' key={i.serial}>
+              <ScrapBox entry={scrap} />
+            </div>
+          }
           <River
             itemData={i}
             batchData={b}

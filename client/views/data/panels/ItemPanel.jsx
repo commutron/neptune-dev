@@ -51,7 +51,7 @@ export default class ItemPanel extends Component	{
     
     const start = i.history.length > 0;
     const done = i.finishedAt !== false;
-    const scrap = done ? i.history.find(x => x.type === 'scrap') : false;
+    const scrap = i.history.find(x => x.type === 'scrap' && x.good === true);
 
     return (
       <AnimateWrap type='cardTrans'>
@@ -72,20 +72,18 @@ export default class ItemPanel extends Component	{
           </div>
         
           <div className='space'>
-              { i.subItems.length > 0 && 
+            { i.subItems.length > 0 && 
               <p> 
                 <i>Nested sub {Pref.item}s: </i>
                 {i.subItems.map((ent, inx)=> { 
                   return( <i key={inx}><SubItemLink serial={ent} />, </i> ) } ) }
               </p>}
-              { i.panelCode !== false && <p>Panel: {i.panelCode}</p> }
+            { i.panelCode !== false && <p>Panel: {i.panelCode}</p> }
+            {scrap &&
+              <ScrapBox entry={scrap} />}
             <h1>
-            { done ? scrap ? 
-              <ScrapBox entry={scrap} />
-              :
-              <p>Finished <i>{moment(i.finishedAt).calendar()} by <UserNice id={i.finishedWho} /></i></p> 
-              : 
-              null }
+            { done &&
+              <p>Finished <i>{moment(i.finishedAt).calendar()} by <UserNice id={i.finishedWho} /></i></p>}
             </h1>
             
             <br />

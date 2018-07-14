@@ -1,4 +1,4 @@
-//import moment from 'moment';
+import moment from 'moment';
 
 Meteor.methods({
 
@@ -475,8 +475,9 @@ Meteor.methods({
   finishBatch(batchId, permission) {
     const doc = BatchDB.findOne({_id: batchId});
     const allDone = doc.items.every( x => x.finishedAt !== false );
+    const privateKey = permission || Meteor.user().orgKey;
     if(doc.finishedAt === false && allDone) {
-      BatchDB.update({_id: batchId, orgKey: permission}, {
+      BatchDB.update({_id: batchId, orgKey: privateKey}, {
   			$set : { 
   			  active: false,
   			  finishedAt: new Date()
@@ -541,20 +542,30 @@ Meteor.methods({
   },
   
   //  Undo a Finish
-  pullFinish(batchId, serial) {
-    if(Roles.userIsInRole(Meteor.userId(), 'finish')) {
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': serial}, {
-        $pull : {
-          'items.$.history': { key: 'f1n15h1t3m5t3p' }
-        },
-        $set : { 
-  			  'items.$.finishedAt': false,
-  			  'items.$.finishedWho': false
-  			},
-      });
-        return true;
+  pullFinish(batchId, serial, override) {
+    if(!Roles.userIsInRole(Meteor.userId(), 'finish' || override === undefined)) {
+      null;
     }else{
-      return false;
+      const doc = BatchDB.findOne({_id: batchId});
+      const docOpen = doc ? doc.finishedAt === false : false;
+      const subDoc = doc ? doc.items.find( x => x.serial === serial ) : false;
+      const inTime = subDoc.finishedAt !== false ? moment().diff(moment(subDoc.finishedAt), 'minutes') < 60 : false;
+      const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
+      const orgPIN = org ? org.orgPIN : null;
+      if(doc && docOpen && (inTime || orgPIN === override)) {
+        BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': serial}, {
+          $pull : {
+            'items.$.history': { key: 'f1n15h1t3m5t3p' }
+          },
+          $set : { 
+    			  'items.$.finishedAt': false,
+    			  'items.$.finishedWho': false
+    			},
+        });
+          return true;
+      }else{
+        return false;
+      }
     }
   },
   pushUndoFinish(batchId, serial) {

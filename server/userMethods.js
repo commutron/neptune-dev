@@ -113,13 +113,19 @@ Meteor.methods({
     }
   },
   
-  deleteUserForever(userId) {
+  deleteUserForever(userId, pin) {
     const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
-    const team = Meteor.users.findOne({_id: userId, orgKey: false});
+    const user = Meteor.users.findOne({_id: userId});
+    const orgless = user.orgKey === false;
     const inactive = !Roles.userIsInRole(userId, 'active');
     const admin = Roles.userIsInRole(userId, 'admin');
     const self = Meteor.userId() === userId;
-    if(auth && !team && inactive && !admin && !self) {
+    
+    const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
+    const orgPIN = org ? org.orgPIN : null;
+    const dbblCheck = orgPIN === pin;
+
+    if(auth && orgless && inactive && !admin && !self && dbblCheck) {
       Meteor.users.remove(userId);
       return true;
     }else{

@@ -42,7 +42,7 @@ const ActivateUser = ()=>	{
             maxLength='4'
             minLength='4'
             cols='4'
-            placeholder='Admin PIN'
+            placeholder='PIN'
             inputMode='numeric'
             autoComplete='new-password'
             required

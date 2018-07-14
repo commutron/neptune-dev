@@ -257,11 +257,11 @@ Meteor.methods({
   
   // Undo Finish Batch
   undoFinishBatchX(batchId, override) {
-    if(!Roles.userIsInRole(Meteor.userId(), 'finish')) {
+    if(!Roles.userIsInRole(Meteor.userId(), 'finish' || override === undefined)) {
       null;
     }else{
       const doc = XBatchDB.findOne({_id: batchId});
-      const inTime = doc.completed ? moment(doc.completedAt).isSame(moment(), 'hour') : false;
+      const inTime = doc.completed ? moment().diff(moment(completedAt), 'minutes') < 60 : false;
       const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
       const orgPIN = org ? org.orgPIN : null;
       if(doc && (inTime || orgPIN === override)) {

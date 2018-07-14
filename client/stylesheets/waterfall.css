@@ -13,8 +13,10 @@
 }
 
 .waterfallTitle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 5vw;
-  text-align: center;
   font-size: calc(0.5rem + 1.5vw);
   font-weight: 600;
   background-color: var(--silver);

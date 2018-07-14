@@ -66,7 +66,7 @@ const WaterfallSelect = ({ batchData, app })=> {
               <h2 className='actionBox centreText green'>
                 Completed: {moment(batchData.completedAt).calendar()}
               </h2>
-              {moment(batchData.completedAt).isSame(moment(), 'hour') ?
+              {moment().diff(moment(batchData.completedAt), 'minutes') < 60 ?
                 <div className='centre'>
                   <button
                     className='action clearWhite'

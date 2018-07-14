@@ -6,8 +6,9 @@ export default class RemoveUser extends Component {
     const check = window.confirm('Delete this User Forever??');
     const userID = this.props.userID;
     const self = Meteor.userId() === userID;
-    if(check && !self) {
-      Meteor.call('deleteUserForever', userID, (error, reply)=>{
+    const pin = prompt("Enter PIN", "");
+    if(check && !self && pin !== undefined) {
+      Meteor.call('deleteUserForever', userID, pin, (error, reply)=>{
         if(error)
           console.log(error);
         reply ? alert('Account Deleted') : alert('not allowed');

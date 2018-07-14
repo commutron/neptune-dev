@@ -25,7 +25,6 @@ export default class UserManageForm extends Component {
     }
   }
   
-  
   hndlRemove() {
     const user = this.props.id;
     const pin = this.pIn.value;

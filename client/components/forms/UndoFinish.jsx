@@ -5,49 +5,39 @@ import Alert from '/client/global/alert.js';
 
 import ModelMedium from '../smallUi/ModelMedium.jsx';
 
-const UndoFinish = ({ id, serial, finishedAt, noText })=>	{
+const UndoFinish = ({ id, serial, finishedAt, timelock, noText })=>	{
   
   const handleUndo = ()=> {
-    if(moment(finishedAt).isSame(moment(), 'hour')) {
-      Meteor.call('pullFinish', id, serial, (error, reply)=>{
-        if(error)
-          console.log(error);
-        if(reply) {
-          Bert.alert(Alert.success);
-          Meteor.call('pushUndoFinish', id, serial, (error)=>{
-            if(error)
-              console.log(error);
-          });
-        }else{
-          Bert.alert(Alert.warning);
-        }
-      });
-    }else{
-      Bert.alert(Alert.warning);
-    }
+    const override = timelock ? prompt("Enter PIN to override", "") : false;
+    Meteor.call('pullFinish', id, serial, override, (error, reply)=>{
+      error && console.log(error);
+      if(reply) {
+        Bert.alert(Alert.success);
+        Meteor.call('pushUndoFinish', id, serial, (error)=>{
+          error && console.log(error);
+        });
+      }else{
+        Bert.alert(Alert.warning);
+      }
+    });
   };
   
-  const timeElapsed = finishedAt !== false ? moment().diff(moment(finishedAt), 'minutes') : 0;
-  
-  const auth = Roles.userIsInRole(Meteor.userId(), 'finish') && 
-               finishedAt !== false && timeElapsed < 60;
-  const timeLeft = timeElapsed > 60 ? 0 : 60 - timeElapsed;
+  const auth = Roles.userIsInRole(Meteor.userId(), 'finish') && finishedAt !== false;
   
   return(
     <ModelMedium
       button='Undo Finish'
-      title='Undo Finish'
+      title={'Undo Finish and Reactivate ' + Pref.item}
       color='yellowT'
       icon='fa-backward'
       lock={!auth}
       noText={noText}>
       <div>
-        <p className='centreText'>After One Hour items are locked and cannot be changed</p>
-        <br />
+        <p className='centreText'>After one hour, reactivating an {Pref.item} requires an override</p>
+        <p className='centreText'>After the {Pref.batch} is finished, {Pref.items} are locked and cannot be changed</p>
         <p className='centreText'>
-          <i>There are <b>{timeLeft}</b> minutes left to re-activate this {Pref.item}</i>
+          <i>This {Pref.item} was finished <b>{moment(finishedAt).fromNow()}</b></i>
         </p>
-        <br />
         <p className='centre'>
           <button
             id='notDone'

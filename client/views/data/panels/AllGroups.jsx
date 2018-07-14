@@ -30,7 +30,8 @@ const AllGroups = ({ groupData, widgetData, batchData, app }) => {
           
         <i className='biggest'>~</i>
         
-        <PopularWidget groupData={groupData} widgetData={widgetData} />
+        {/*<PopularWidget groupData={groupData} widgetData={widgetData} />*/}
+        <em>popular products unavailable</em>
        
       </div>
       
