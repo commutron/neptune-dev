@@ -1,6 +1,6 @@
 import React from 'react';
 //import moment from 'moment';
-import Pref from '/client/global/pref.js';
+//import Pref from '/client/global/pref.js';
 
 const Waterfall = ({ id, fall, total, quantity, lock, app })=> {
 
@@ -63,7 +63,7 @@ const Waterfall = ({ id, fall, total, quantity, lock, app })=> {
     <div className='waterfallGrid'>
       <button
         id={'goMinus' + fall.wfKey}
-        className='countMinus'
+        className='countMinus numFont'
         onClick={(e)=>minusOne(e)}
         disabled={lock || total === 0}
       >-1</button>
@@ -83,8 +83,8 @@ const Waterfall = ({ id, fall, total, quantity, lock, app })=> {
         className={'countPlus ' + borderColor + ' ' + fadeClass}
         onClick={(e)=>plusOne(e)}
         disabled={lock || total >= quantity}>
-        <i className='countPlusTop'>{total}</i>
-        <br /><i>/{quantity}</i>
+        <i className='countPlusTop numFont'>{total}</i>
+        <br /><i className='numFont'>/{quantity}</i>
       </button>
   	</div>
   );

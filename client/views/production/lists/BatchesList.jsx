@@ -73,8 +73,8 @@ export default class BatchesList extends Component	{
             
           {sortList.map( (entry, index)=> {
             const style = entry.active === true ? 
-                          'leapBar activeMark' : 
-                          'leapBar gMark';
+                          'leapBar numFont activeMark' : 
+                          'leapBar numFont gMark';
             const subW = w.find( x => x._id === entry.widgetId);
             const subV = !v ? false : v.find( x => x.vKey === entry.versionKey);
             const subVname = !subV ? false : subV.vName;

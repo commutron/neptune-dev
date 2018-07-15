@@ -106,7 +106,7 @@ export class StatusRow extends Component	{
           <span>
             <LeapText
               title={dt.batch} 
-              sty='big'
+              sty='big numFont'
               address={'/data/batch?request=' + dt.batch} />
           </span>
           <span className='up'>{dt.group} {dt.widget} v.{dt.version}</span>

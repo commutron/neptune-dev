@@ -8,12 +8,12 @@ function GeneralLabel({ batch, data }) {
     <div className='noCopy'>
       <div className='centreRow'>
         <div className='centre'>
-          <i className='pxxlg'>{batch}</i>
+          <i className='pxxlg numFont'>{batch}</i>
           {/*<Barcode id='barcode' value={batch} format='CODE39' text=' ' width={1.25} height={20} margin={1} />*/}
         </div>
         <span className='bffr'></span>
         <div className='centreText'>
-          <i className='pmd'>Qty</i><br />
+          <i className='pmd numFont'>Qty</i><br />
           <i><input className='pxlg' defaultValue={data.quant} maxLength='10' /></i>
         </div>
         <span className='bffr'></span>

@@ -33,7 +33,7 @@ export default class NonConPie extends Component {
 
     let counts = this.splitStatus();
     
-    let ttl = '<span class="centre smCap"><i class="big redT">' + 
+    let ttl = '<span class="centre smCap"><i class="big redT numFont">' + 
                 this.props.nonCons.length + 
                   '</i><i>Total</i></span>';
     

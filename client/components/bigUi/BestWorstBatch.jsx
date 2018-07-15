@@ -127,7 +127,7 @@ const BstWrstNCresults = ({ title, color, results, widgetData, groupData, scale,
               <td>
                 <LeapText
                   title={entry.b} 
-                  sty={false}
+                  sty='numFont'
                   address={'/data/batch?request=' + entry.b}
                 />
               </td>}

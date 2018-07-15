@@ -63,7 +63,7 @@ const VersionRow = ({ widgetData, app, entry })=> {
         <td>
           <a className='clean wordBr' href={v.wiki} target='_blank'>{v.wiki}</a>
         </td>
-        <td colSpan='2'>default units: {v.units}</td>
+        <td colSpan='2' className='numFont'>default units: {v.units}</td>
       </tr>
       <tr>
         <td colSpan='2' className='clean'>

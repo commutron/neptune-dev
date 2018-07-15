@@ -77,9 +77,9 @@ export default class BatchPanelX extends Component	{
           <div className='titleSection'>
             <span>
               { b.active ? 
-                <i className='fas fa-sync blueT' aria-hidden='true' title='in progress'></i>
+                <i className='fas fa-sync blueT' title='in progress'></i>
                 :
-                <i className='fa fa-check-circle greenT' aria-hidden='true' title='finished'></i>
+                <i className='fa fa-check-circle greenT' title='finished'></i>
               }
             </span>
           </div>

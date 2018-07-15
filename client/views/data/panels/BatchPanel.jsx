@@ -110,9 +110,9 @@ export default class BatchPanel extends Component	{
           <div className='titleSection'>
             <span>
               { b.active ? 
-                <i className='fas fa-sync blueT' aria-hidden='true' title='in progress'></i>
+                <i className='fas fa-sync blueT' title='in progress'></i>
                 :
-                <i className='fa fa-check-circle greenT' aria-hidden='true' title='finished'></i>
+                <i className='fa fa-check-circle greenT' title='finished'></i>
               }
               {!done && allDone && 
                 <BatchFinish batchId={b._id} alreadyDone={done} />}
@@ -154,7 +154,7 @@ export default class BatchPanel extends Component	{
                 {b.items.length > 0 &&
                   <fieldset className='noteCard'>
                     <legend>Serial Range</legend>
-                    <i className='letterSpaced'>{itemsOrder[0].serial} - {itemsOrder[itemsOrder.length-1].serial}</i>
+                    <i className='numFont'>{itemsOrder[0].serial} - {itemsOrder[itemsOrder.length-1].serial}</i>
                   </fieldset>}
                 {released === undefined ? null :
                   released === true ?

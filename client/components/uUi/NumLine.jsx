@@ -19,7 +19,7 @@ import React from 'react';
  
 const NumLine = ({ num, name, color }) => (
   <div style={sty}>
-    <i style={bSty} className={color}>{num}</i>
+    <i style={bSty} className={color + ' numFont'}>{num}</i>
     <i style={sSty}> {name}</i>
   </div>
 );

@@ -26,7 +26,7 @@ const MiniMeter = ({ title, count, app })=> {
         high={df.high}
         max={df.max}>
       </meter>
-      <p style={num}>{count}</p>
+      <p style={num} className='numFont'>{count}</p>
     </div>
   );
 };

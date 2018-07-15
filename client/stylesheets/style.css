@@ -476,6 +476,10 @@
   text-decoration: none;
 }
 
+.numFont {
+  font-family: 'Varela Round';
+}
+
 .low { text-transform: lowercase; }
 
 .cap { text-transform: capitalize; }

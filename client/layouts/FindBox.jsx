@@ -26,7 +26,7 @@ const FindBox = ({ orb, user, append })=> {
         type='search'
         id='lookup'
         aria-label='main searchbox'
-        className='up'
+        className='up numFont'
         placeholder={last}
         disabled={lock}
         autoCorrect={false}

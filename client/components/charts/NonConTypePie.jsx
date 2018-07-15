@@ -15,7 +15,7 @@ const NonConTypePie = ({ ncTypes, fullWidth })=> {
   let medianTry = ncTypesNoZero[Math.floor(ncTypesNoZero.length / 2)];
   let median = !medianTry ? mean : ( ( mean + medianTry.value ) / 2 );
   
-  let cntr = '<span class="centre smCap"><i class="bigger redT">' + 
+  let cntr = '<span class="centre smCap"><i class="bigger redT numFont">' + 
                 total + '</i><i>Total</i></span>';
                     
   let data = {

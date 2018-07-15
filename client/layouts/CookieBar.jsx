@@ -9,7 +9,7 @@ const CookieBar = ({ groupData, widgetData, versionData, batchData, itemData, ap
       {groupData && 
         <span className='cookieCrumb'>
           <button 
-            className='cookie up'
+            className='cookie up numFont'
             onClick={()=>FlowRouter.go('/data/group?request=' + groupData.alias)}>
             {groupData.alias.length < 10 ? 
               groupData.alias :
@@ -20,7 +20,7 @@ const CookieBar = ({ groupData, widgetData, versionData, batchData, itemData, ap
         <span className='cookieCrumb'>
           <span className='crumb'></span>
           <button 
-            className='cookie up'
+            className='cookie up numFont'
             onClick={()=>FlowRouter.go('/data/widget?request=' + widgetData.widget)}>
             {widgetData.widget.length < 16 ? 
               widgetData.widget :
@@ -41,7 +41,7 @@ const CookieBar = ({ groupData, widgetData, versionData, batchData, itemData, ap
         <span className='cookieCrumb'>
           <span className='crumb'></span>
           <button 
-            className='cookie'
+            className='cookie numFont'
             onClick={()=>FlowRouter.go('/data/batch?request=' + batchData.batch)}>
             {batchData.batch}
           </button>
@@ -50,7 +50,7 @@ const CookieBar = ({ groupData, widgetData, versionData, batchData, itemData, ap
         <span className='cookieCrumb'>
           <span className='crumb'></span>
           <button 
-            className='cookie'
+            className='cookie numFont'
             onClick={()=>FlowRouter.go('/data/batch?request=' + batchData.batch + '&specify=' + itemData.serial)}>
             {itemData.serial}
           </button>

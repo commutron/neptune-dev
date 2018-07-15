@@ -12,12 +12,12 @@ const MiniStack = ({ title, count, countNew, total })=> {
   
   let name = {
     fontSize: '15px',
-    letterSpacing: '1.5px'
+    letterSpacing: '1px'
   };
   let num = {
     textAlign: 'right',
     fontSize: '15px',
-    letterSpacing: '1.5px'
+    letterSpacing: '1px'
   };
   
   let data = {
@@ -55,7 +55,7 @@ const MiniStack = ({ title, count, countNew, total })=> {
     <div className='wide miniStack meterprogStack'>
       <p style={name} className='cap'>{title}</p>
       <ChartistGraph data={data} options={options} type={'Bar'} />
-      <p style={num}>{v}/{total}</p>
+      <p style={num} className='numFont'>{v}/{total}</p>
     </div>
   );
 };

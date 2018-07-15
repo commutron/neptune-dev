@@ -158,9 +158,9 @@ export default class ItemsList extends Component	{
               onTxtChange={e => this.setTextFilter(e)} />
           </div>
           {showListOrder.map( (entry, index)=> {
-            let style = entry.history.length === 0 ? 'leapBar' :
-                        entry.finishedAt === false ? 'leapBar activeMark' : 
-                        scrap.includes(entry.serial) ? 'leapBar ngMark' : 'leapBar gMark';
+            let style = entry.history.length === 0 ? 'leapBar numFont' :
+                        entry.finishedAt === false ? 'leapBar numFont activeMark' : 
+                        scrap.includes(entry.serial) ? 'leapBar numFont ngMark' : 'leapBar numFont gMark';
               return (
                 <LeapButton
                   key={index} 

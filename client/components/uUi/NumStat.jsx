@@ -19,7 +19,7 @@ import React from 'react';
  
 const NumBox = ({ num, name, title, color, size }) => (
   <div style={sty} title={title}>
-    <i style={bSty} className={color + ' ' + size}>{num}</i>
+    <i style={bSty} className={color + ' numFont ' + size}>{num}</i>
     <br />
     <i style={sSty}>{name}</i>
   </div>

@@ -31,7 +31,7 @@ export default class ItemCard extends Component	{
         <AnimateWrap type='cardTrans'>
           <div className='section sidebar centre centreText big' key={i.serial}>
             <br />
-            <i className="fa fa-exclamation-circle fa-5x redT" aria-hidden="true"></i>
+            <i className="fas fa-exclamation-circle fa-5x redT"></i>
             <br />
             <p>
               This {Pref.batch} does not have a {Pref.flow}
