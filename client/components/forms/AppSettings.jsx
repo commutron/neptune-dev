@@ -13,6 +13,7 @@ export class OptionAdd extends Component	{
                    act === 'ncB' ? 'addSecondaryNCOption' :
                    act === 'track' ? 'addTrackOption' :
                    act === 'count' ? 'addCountOption' :
+                   act === 'miss' ? 'addMissingType' :
                    act === 'anc' ? 'addAncOp' :
                    act === 'tag' ? 'addTagOp' :
                    act === 'help' ? 'setHelpDocs' :

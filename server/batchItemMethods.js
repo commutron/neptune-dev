@@ -1072,36 +1072,28 @@ Meteor.methods({
     }
   },
   
-  editShort(batchId, shKey, partNum, refs, serial, step, inEffect, reSolve, comm) {
+  editShort(batchId, shKey, partNum, refs, inEffect, reSolve, comm) {
     if(!Roles.userIsInRole(Meteor.userId(), 'inspect')) { null }else{
       const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
-      const prevSH = doc && doc.shortfall.find( x => x.key === shKey );
-      let pn = partNum;
-      let rf = refs;
-      let sn = serial;
-      let st = step;
-      let ef = inEffect;
-      let sv = reSolve;
-      let cm = comm;
-      if(!prevSH) { null }else{
-        pn = !partNum || partNum === '' && prevSH.partNum;
-        rf = !refs || refs === [] || refs === '' && prevSH.refs;
-        sn = !serial || serial === '' && prevSH.serial;
-        st = !step || step === '' && prevSH.step;
-        ef = inEffect === undefined && prevSH.inEffect;
-        sv = reSolve === undefined && prevSH.reSolve;
-        cm = !comm || comm === '' && prevSH.comm;
-      }
+      const prevSH = doc.shortfall.find( x => x.key === shKey );
+      let pn = partNum || prevSH.partNum;
+      let rf = refs || prevSH.refs;
+      //let sn = serial;
+      //let st = step;
+      let ef = inEffect === undefined ? prevSH.inEffect : inEffect;
+      let sv = reSolve === undefined ? prevSH.reSolve : reSolve;
+      let cm = comm || prevSH.comm;
+
 		  BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'shortfall.key': shKey}, {
   			$set : { 
   			  'shortfall.$.partNum': pn || '',
   			  'shortfall.$.refs': rf || [],
-  			  'shortfall.$.serial': sn || '',
-  			  'shortfall.$.step': st || '',
+  			  //'shortfall.$.serial': sn || '',
+  			  //'shortfall.$.step': st || '',
   			  'shortfall.$.uTime': new Date(),
           'shortfall.$.uWho': Meteor.userId(),
-          'shortfall.$.inEffect': ef || null,
-          'shortfall.$.reSolve': sv || null,
+          'shortfall.$.inEffect': ef,
+          'shortfall.$.reSolve': sv,
   			  'shortfall.$.comm': cm || ''
   			}
   		});

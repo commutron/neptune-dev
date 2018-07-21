@@ -120,12 +120,11 @@ const StoneSelect = ({
               			  serial={serial}
               			  nonCons={nc}
               			  sType={flowStep.type} />;
-      /*        			  
+              			  
       const sFall = <Shortfalls
               			  id={id}
               			  shortfalls={sh}
               			  expand={expand} />;
-      */       			  
                       
       const tFail = <TestFails fails={fTest} />;
 	  

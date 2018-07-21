@@ -111,6 +111,13 @@ class Pref {
     this.omitted = 'omitted';
     this.shortfall = 'shortfall'; // narrow
     this.shortfalls = 'shortfalls';
+      // shortage states
+      this.shortagePending = "Don't have a thing, what to do?";
+      this.doOmit = "Leave thing out, Continue and Ship";
+      this.doNotOmit = "Stop and Resolve";
+      this.shortageWaiting = "Waiting to be Resolved";
+      this.notResolved = "Can be Resolved but is Not Yet";
+      this.isResolved = "Problem Resolved";
     // simpleBatch and counters
     this.xBatch = 'batch+';
     this.xBatchs = 'batches+';

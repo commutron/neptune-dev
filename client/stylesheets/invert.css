@@ -225,4 +225,8 @@
   background-color: var(--peterriver);
   color: white;
 }
+/*
+.contrastList:nth-child(odd) {
+  background-color: rgba(50,50,50,0.3);
+}*/
 

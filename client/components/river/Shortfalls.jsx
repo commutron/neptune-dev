@@ -18,17 +18,17 @@ const Shortfalls = ({ id, shortfalls, expand })=> {
   
   return(
     <div>
-    {/*<InOutWrap type='ncTrans' add='shortGrid'>
-      {!shortfalls || shortfalls.map( (entry)=>{
-        return (
-          <ShortLine
-            key={entry.key}
-            entry={entry}
-            expand={expand}
-            //doFix={()=> handleFix(entry.key)}
-          />
-        )})}
-    </InOutWrap>*/}
+      <InOutWrap type='ncTrans' add='shortGrid'>
+        {!shortfalls || shortfalls.map( (entry)=>{
+          return (
+            <ShortLine
+              key={entry.key}
+              entry={entry}
+              expand={expand}
+              //doFix={()=> handleFix(entry.key)}
+            />
+          )})}
+      </InOutWrap>
     </div>
   );
 };
@@ -41,8 +41,8 @@ const ShortLine = ({ entry, expand, })=>{
         <div className='shortCell up noCopy' title={entry.comm}>
           {entry.partNum}
         </div>
-        <div className='shortCell' title={entry.comm}>
-          {entry.refs}
+        <div className='shortCell up' title={entry.comm}>
+          {entry.refs.toString()}
         </div>
         <div className='shortCell'>
           {/*

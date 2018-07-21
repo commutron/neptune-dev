@@ -165,6 +165,17 @@ export default class PrefPanel extends Component {
             
             <hr />
             
+            <SetScale curScale={dt.ncScale || null} />
+            
+            <hr />
+            
+            <h2>Missing Type</h2>
+            <i>Type of {Pref.nonCon} that can be converted into a shortfall</i>
+            <OptionAdd action='miss' title='type' rndmKey={Math.random().toString(36).substr(2, 5)} />
+            <i><em>currently set to: </em>{dt.missingType || ''}</i>
+            
+            <hr />
+            
             <h2>{Pref.ancillary} Steps</h2>
             <i>Not strictly assembly but part of the total proccess. Not tracked</i>
             <OptionAdd action='anc' title='step' rndmKey={Math.random().toString(36).substr(2, 5)} />
@@ -180,10 +191,6 @@ export default class PrefPanel extends Component {
                   </li>
               )})}
             </ul>
-            
-            <hr />
-            
-            <SetScale curScale={dt.ncScale || null} />
           
           </div>
         </fieldset>

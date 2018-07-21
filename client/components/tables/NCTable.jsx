@@ -139,7 +139,7 @@ export class NCRow extends Component {
     
     if(this.state.edit === true) {
       return(
-        <tbody>
+        <tbody className='contrastList'>
           <tr className='editStandout'>
           {multi ? <td>{dt.serial}</td> : null}
             <td colSpan='6'>
@@ -221,7 +221,7 @@ export class NCRow extends Component {
     }
     
     return(
-      <tbody>
+      <tbody className='contrastList'>
         <tr>
           {multi ? <td>{dt.serial}</td> : null}
           <td className='up'>{dt.ref}</td>

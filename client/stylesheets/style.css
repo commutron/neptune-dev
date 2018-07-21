@@ -604,6 +604,10 @@
 	padding: 2px 2px 2px 2px;
 }
 
+.contrastList:nth-child(odd) {
+  background-color: rgba(50,50,50,0.3);
+}
+
 .confirm {
   position: relative;
   background-color: orange;
@@ -692,7 +696,10 @@
   font-size: 1.5rem;
 }
 
-.meterprogStack { padding: 5px; }
+.meterprogStack { 
+  padding: 5px;
+  width: 100%;
+}
 .meterprogStack p { margin: 0; }
 .meterprogStack progress { width: 100%; }
 
@@ -1102,7 +1109,6 @@
 }
 .waterfallHistory summary .meterprogStack {
   display: inline-block;
-  width: 100%; 
 }
 .waterfallHistory summary::-webkit-details-marker {
   display: none;

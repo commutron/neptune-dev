@@ -170,6 +170,7 @@ privlegedRoutes.route('/print/generallabel/:batch', {
           request.includes('widget') &&
           request.includes('ver') &&
           request.includes('desc') &&
+          request.includes('sales') &&
           request.includes('quant') &&
           request.includes('date')
         ) {

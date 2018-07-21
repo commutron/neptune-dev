@@ -62,7 +62,7 @@ const HistoryRow = ({ entry, id, serial, done })=> {
    let issue = infoF ? dt.info.issue : infoT ? dt.info : '';
 
   return(
-    <tr>
+    <tr className='contrastList'>
       <td>{dt.step}</td>
       <td>{dt.type}</td>
       <td>{moment(dt.time).calendar()}</td>

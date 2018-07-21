@@ -9,7 +9,7 @@ function GeneralLabel({ batch, data }) {
       <div className='centreRow'>
         <div className='centre'>
           <i className='pxxlg numFont'>{batch}</i>
-          {/*<Barcode id='barcode' value={batch} format='CODE39' text=' ' width={1.25} height={20} margin={1} />*/}
+          <i className='pmd'>{data.sales}</i>
         </div>
         <span className='bffr'></span>
         <div className='centreText'>

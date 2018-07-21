@@ -98,7 +98,7 @@ const NCStream = ({ entry, id, end, doFix, doInspect, doReject, doSkip, doSnooze
   const inspector = Roles.userIsInRole(Meteor.userId(), 'inspect');
   const lockI = fixed ? !same && inspector ? false : true : false;
   let skip = entry.skip;
-  let style = !skip ? 'cap tribRow darkRed noCopy' : 'cap tribRow yellow noCopy';
+  let style = !skip ? 'cap tribRow tribRed noCopy' : 'cap tribRow yellow noCopy';
   
   let tryAgain = !entry.reject ? null :
                  entry.reject.length > 0 ?

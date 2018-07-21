@@ -250,7 +250,7 @@
 }
 */
 
-.ncTrib {
+.ncTrib, .shortGrid {
   position: relative;
   z-index: 3;
   display: table;
@@ -258,11 +258,17 @@
   justify-content: center;
   border-collapse: collapse;
 }
-.tribRow {
+.tribRow, .shortRow {
 	display: table-row;
 	border-bottom: 1px solid rgba(0,0,0,0.2);
 }
-.tribCell {
+.tribRed:nth-child(odd) {
+	background-color: rgb(192, 57, 43);
+}
+.tribRed:nth-child(even) {
+	background-color: rgba(192, 57, 43, 0.8);
+}
+.tribCell, .shortCell {
 	display: table-cell;
 	text-align: center;
 	height: 40px;

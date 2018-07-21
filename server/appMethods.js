@@ -38,6 +38,7 @@ Meteor.methods({
             high: Number(10),
             max: Number(25)
           },
+          missingType: 'missing',
           ancillaryOption: [],
           tagOption: [],
           instruct: '',
@@ -357,6 +358,18 @@ Meteor.methods({
             high : Number(high),
             max : Number(max)
           }
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  addMissingType(newType) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $set : { 
+          missingType : newType || 'missing'
       }});
       return true;
     }else{
