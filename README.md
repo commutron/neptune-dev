@@ -1,4 +1,4 @@
-Neptune v.1.5.4
+Neptune v.1.6.0
 
 A highly customized statistical process control web app for electronics manufacturing.
 

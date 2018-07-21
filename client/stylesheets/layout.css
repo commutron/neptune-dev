@@ -556,6 +556,8 @@ main {
 
 .wrap { white-space: normal; }
 
+.noWrap { white-space: nowrap; }
+
 .popTbody > tr:first-child > td { 
   border-top: 3px solid rgba(255,255,255,0.5);
 }

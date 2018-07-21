@@ -106,6 +106,7 @@ export default class ItemsList extends Component	{
     const textString = this.state.textString;
       
     const b = this.props.batchData;
+    const short = b.shortfall || [];
     
     const scrap = b ? this.scraps() : [];
     
@@ -125,6 +126,8 @@ export default class ItemsList extends Component	{
       b.items.filter( x => x.history.find( y => y.type === 'first') ) :
       f === 'noncons' ?
       b.items.filter( x => b.nonCon.find( y => y.serial === x.serial ) )  :
+      f === 'shortfalls' ?
+      b.items.filter( x => short.find( y => y.serial === x.serial ) )  :
       f === 'alt' ?
       b.items.filter( x => x.alt === 'yes' ) :
       f === 'rma' ?

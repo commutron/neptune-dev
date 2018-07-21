@@ -69,14 +69,14 @@ const ScrapRow = ({ entry, group, batchNum, widget, barcode })=> (
     <td>
       <LeapText
         title={batchNum} 
-        sty='numFont'
+        sty='numFont noWrap'
         address={'/data/batch?request=' + batchNum}
       />
     </td>
     <td>
       <LeapText
         title={barcode} 
-        sty='numFont'
+        sty='numFont noWrap'
         address={'/data/batch?request=' + batchNum + '&specify=' + barcode}
       />
     </td>

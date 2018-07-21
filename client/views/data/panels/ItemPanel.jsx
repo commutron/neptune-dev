@@ -120,7 +120,8 @@ export default class ItemPanel extends Component	{
                 done={done}
                 multi={false}
                 ncOps={a.nonConOption}
-                flowSteps={this.flowSteps()} />
+                flowSteps={this.flowSteps()}
+                app={a} />
                 
               <ShortTable
                 key={3}

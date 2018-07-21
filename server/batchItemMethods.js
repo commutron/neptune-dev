@@ -543,7 +543,7 @@ Meteor.methods({
   
   //  Undo a Finish
   pullFinish(batchId, serial, override) {
-    if(!Roles.userIsInRole(Meteor.userId(), 'finish' || override === undefined)) {
+    if(!Roles.userIsInRole(Meteor.userId(), 'finish') || override === undefined) {
       null;
     }else{
       const doc = BatchDB.findOne({_id: batchId});
@@ -766,15 +766,21 @@ Meteor.methods({
     }else{null}
   },
   
-  ncRemove(batchId, ncKey) {
+  ncRemove(batchId, ncKey, override) {
     const auth = Roles.userIsInRole(Meteor.userId(), ['remove', 'qa']);
-    if(auth) {
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
-        $pull : { nonCon: {key: ncKey}
-      }});
-      return true;
+    if(!auth && override === undefined) {
+      null;
     }else{
-      return false;
+      const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
+      const orgPIN = org ? org.orgPIN : null;
+      if(auth || orgPIN === override) {
+        BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+          $pull : { nonCon: {key: ncKey}
+        }});
+        return true;
+      }else{
+        return false;
+      }
     }
   },
 
@@ -1102,12 +1108,15 @@ Meteor.methods({
   
   setShort(batchId, shKey, inEffect, reSolve) {
     if(!Roles.userIsInRole(Meteor.userId(), 'inspect')) { null }else{
+		  let ef = inEffect === undefined ? null : inEffect;
+      let sv = reSolve === undefined ? null : reSolve;
+		  
 		  BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'shortfall.key': shKey}, {
   			$set : {
   			  'shortfall.$.uTime': new Date(),
           'shortfall.$.uWho': Meteor.userId(),
-          'shortfall.$.inEffect': inEffect || null,
-          'shortfall.$.reSolve': reSolve || null,
+          'shortfall.$.inEffect': ef,
+          'shortfall.$.reSolve': sv,
   			}
   		});
     }

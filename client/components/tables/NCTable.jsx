@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 
 import UserNice from '../smallUi/UserNice.jsx';
 
-const NCTable = ({ id, nc, done, multi, ncOps, flowSteps })=> (
+const NCTable = ({ id, nc, done, multi, ncOps, flowSteps, app })=> (
   <div>
     {nc.length > 0 ?
       <table className='wide'>
@@ -31,7 +31,8 @@ const NCTable = ({ id, nc, done, multi, ncOps, flowSteps })=> (
               done={done}
               multi={multi}
               ncOps={ncOps}
-              flowSteps={flowSteps} />
+              flowSteps={flowSteps}
+              app={app} />
           );
         })}
       </table>
@@ -98,7 +99,9 @@ export class NCRow extends Component {
     if(yes) {
       const id = this.props.id;
       const ncKey = this.props.entry.key;
-      Meteor.call('ncRemove', id, ncKey, (error)=>{
+      const override = !Roles.userIsInRole(Meteor.userId(), ['qa', 'remove']) ? 
+                        prompt("Enter PIN to override", "") : false;
+      Meteor.call('ncRemove', id, ncKey, override, (error)=>{
         if(error)
           console.log(error);
         this.setState({ edit: false });
@@ -125,7 +128,8 @@ export class NCRow extends Component {
     let snoozed = !dt.snooze ? false : true;
     let comment = !dt.comm ? '' : dt.comm;
     
-    const remove = Roles.userIsInRole(Meteor.userId(), ['qa', 'remove']) && !done;
+    const remove = (Roles.userIsInRole(Meteor.userId(), ['qa', 'remove']) || 
+                    dt.type === (this.props.app.missingType || false) ) && !done;
     const edit = Roles.userIsInRole(Meteor.userId(), 'inspect') && !done;
     
     let inSty = {

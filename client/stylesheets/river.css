@@ -80,7 +80,7 @@
 }
 
 .blockStone:before {
-  content: 'All nonconformances need to be resolved before this next step';
+  content: 'All nonconformances and shortages need to be resolved before this next step';
   font-size: calc(0.5rem + 1vw);
   left: 0;
   z-index: 3;
@@ -273,16 +273,22 @@
 	text-align: center;
 	height: 40px;
 	vertical-align: middle;
-	padding: 0 0 0 5px;
+	padding-left: 5px;
 }
-.tribRow .tribCell:nth-child(2) {
+
+.tribRow .tribCell:nth-child(2),
+.shortRow .shortCell:nth-child(2) {
   word-break: break-word;/*weird no standerd thing but it works*/
   word-wrap: break-word;
 }
-.tribRow .tribCell:nth-child(3) {
+.tribRow .tribCell:nth-child(3),
+.shortRow .shortCell:nth-child(3) {
   width: 80px;
   margin: 0;
   padding: 0;
+}
+.shortCell span {
+  padding-right: 5px;
 }
 
 .pebble {

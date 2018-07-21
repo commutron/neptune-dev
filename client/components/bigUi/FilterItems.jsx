@@ -54,6 +54,7 @@ const FilterItems = ({
             <option value='alt'>On Alt Flow</option>
             <option value='firsts'>First Offs</option>
             <option value='noncons'>With NonCons</option>
+            <option value='shortfalls'>With Shortfalls</option>
             <option value='rma'>With an RMA</option>
             <option value='scrap'>Scrapped</option>
           </select>

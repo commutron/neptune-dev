@@ -54,7 +54,10 @@ const StoneSelect = ({
                 if (s1.partNum > s2.partNum) { return 1 }
                 return 0;
               });
-  let sFall = null;
+  const sFall = <Shortfalls
+          			  id={id}
+          			  shortfalls={sh}
+          			  lock={finishedAt !== false} />;
   
   for(let flowStep of flow) {
     const first = flowStep.type === 'first';
@@ -84,7 +87,9 @@ const StoneSelect = ({
     
     const damStep = flowStep.type === 'test' || flowStep.type === 'finish';
     const allSkipped = nc.every( x => x.skip !== false );
+    const allAnswered = sh.every( x => x.inEffect === true || x.reSolve === true );
     const ncAllClear = nc.length === 0 || allSkipped === true;
+    const shAllClear = sh.length === 0 || allAnswered === true;
 
     if( (flowStep.type === 'first' && stepComplete) || (stepComplete && ncResolved) ) {
       null;
@@ -95,7 +100,7 @@ const StoneSelect = ({
       const fTest = flowStep.type === 'test' ? 
                     iDone.filter( x => x.type === 'test' && x.good === false) : [];
       
-      const blockStone = damStep && !ncAllClear;
+      const blockStone = damStep && ( !ncAllClear || !shAllClear );
       const doneStone = stepComplete;
       
 	    const stone = <Stone
@@ -120,11 +125,6 @@ const StoneSelect = ({
               			  serial={serial}
               			  nonCons={nc}
               			  sType={flowStep.type} />;
-              			  
-      const sFall = <Shortfalls
-              			  id={id}
-              			  shortfalls={sh}
-              			  expand={expand} />;
                       
       const tFail = <TestFails fails={fTest} />;
 	  

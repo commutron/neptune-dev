@@ -260,6 +260,12 @@
   color: var(--emerald);
 	background-color: var(--clouds);
 }
+.greenList:nth-child(odd) {
+  background-color: rgb(39, 174, 96);
+}
+.greenList:nth-child(even) {
+  background-color: rgba(39, 174, 96, 0.8);
+}
 
 .blue { background-color: var(--peterriver); }
 .blueT { color: var(--peterriver); }
@@ -335,6 +341,12 @@
 }
 .darkOrange { background-color:  var(--pumpkin); }
 .darkOrangeT { color:  var(--pumpkin); }
+.orangeList:nth-child(odd) {
+  background-color: rgb(243, 156, 18);
+}
+.orangeList:nth-child(even) {
+  background-color: rgba(243, 156, 18, 0.8);
+}
 
 .yellow { background-color: var(--orange); }
 .fadeYellow { background-color: var(--orangefade); }
