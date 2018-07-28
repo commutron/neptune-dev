@@ -32,13 +32,6 @@ const NCTributary = ({ id, serial, nonCons, sType })=> {
 		let findBox = document.getElementById('lookup');
 		findBox.focus();
   }
-    
-  function handleSkip(ncKey) {
-    Meteor.call('skipNC', id, ncKey, (error)=> {
-			if(error)
-        console.log(error);
-		});
-	}
 	
 	function handleSnooze(ncKey) {
     Meteor.call('snoozeNC', id, ncKey, (error)=> {
@@ -53,7 +46,14 @@ const NCTributary = ({ id, serial, nonCons, sType })=> {
         console.log(error);
 		});
   }
-  
+  /*
+  function handleSkip(ncKey, serial) {
+    Meteor.call('skipNC', id, serial, ncKey, (error)=> {
+			if(error)
+        console.log(error);
+		});
+	}
+  */
   function handleComment(ncKey, com) {
     Meteor.call('commentNC', id, ncKey, com, (error)=> {
       if(error)
@@ -75,9 +75,9 @@ const NCTributary = ({ id, serial, nonCons, sType })=> {
             doFix={()=> handleFix(entry.key)}
             doInspect={()=> handleInspect(entry.key)}
             doReject={()=> handleReject(entry.key, entry.fix.time, entry.fix.who)}
-            doSkip={()=> handleSkip(entry.key)}
             doSnooze={()=> handleSnooze(entry.key)}
             doUnSkip={()=> handleUnSkip(entry.key)}
+            //doSkip={()=> handleSkip(entry.key)}
             doComment={(e)=> handleComment(entry.key, e)}
           />
         )})}
@@ -85,7 +85,7 @@ const NCTributary = ({ id, serial, nonCons, sType })=> {
   );
 };
 
-const NCStream = ({ entry, id, end, doFix, doInspect, doReject, doSkip, doSnooze, doUnSkip, doComment })=>{
+const NCStream = ({ entry, id, end, doFix, doInspect, doReject, doSnooze, doUnSkip, doComment })=>{
   
   comment = ()=> {
     let val = window.prompt('Add a comment');
@@ -98,7 +98,7 @@ const NCStream = ({ entry, id, end, doFix, doInspect, doReject, doSkip, doSnooze
   const inspector = Roles.userIsInRole(Meteor.userId(), 'inspect');
   const lockI = fixed ? !same && inspector ? false : true : false;
   let skip = entry.skip;
-  let style = !skip ? 'cap tribRow tribRed noCopy' : 'cap tribRow yellow noCopy';
+  let style = !skip ? 'cap tribRow tribRed noCopy' : 'cap tribRow yellowList noCopy';
   
   let tryAgain = !entry.reject ? null :
                  entry.reject.length > 0 ?
@@ -157,11 +157,11 @@ const NCStream = ({ entry, id, end, doFix, doInspect, doReject, doSkip, doSnooze
         <MenuItem onClick={doSnooze} disabled={skip !== false || end}>
           Snooze
         </MenuItem>
-        <MenuItem onClick={doSkip} disabled={skip !== false && !entry.snooze}>
+        {/*<MenuItem onClick={doSkip} disabled={skip !== false && !entry.snooze}>
           Skip
-        </MenuItem>
+        </MenuItem>*/}
         <MenuItem onClick={doUnSkip} disabled={!skip}>
-          Activate
+          Wake Up
         </MenuItem>
         <MenuItem onClick={this.comment.bind(this)}>
           Comment

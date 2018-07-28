@@ -30,7 +30,12 @@ const WaterfallSelect = ({ batchData, app })=> {
   Session.set('nowWanchor', '');
   return (
     <div className='waterfallSelector'>
-      {batchData.waterfall.map( (entry)=>{
+      {batchData.waterfall.length === 0 ?
+        <div className='wide space orangeBorder'>
+          <p>No {Pref.counter}s are assigned</p>
+        </div>
+      :
+      batchData.waterfall.map( (entry)=>{
         let total = entry.counts.length > 0 ?
           Array.from(entry.counts, x => x.tick).reduce((x,y)=> x + y) :
         0;
@@ -53,7 +58,7 @@ const WaterfallSelect = ({ batchData, app })=> {
           {batchData.completed === false ?
             <div>
               <p className='centreText'>
-                <i>All {Pref.counter}s are complete</i>
+                <i>All assigned processes are complete</i>
               </p>
               <button
                 className='action clearPurple'

@@ -40,6 +40,28 @@ const SetPin = ()=> {
     });
   }
   
+  function setMinor(e) {
+    e.preventDefault();
+    const newOne = this.newOneM.value.trim();
+    const newTwo = this.newTwoM.value.trim();
+    
+    if(newOne === newTwo) {
+      Meteor.call('setMinorPin', newOne, (err, reply)=>{
+        if(err)
+          console.log(err);
+        if(reply) {
+          Bert.alert(Alert.success);
+          this.newOne.value = '';
+          this.newTwo.value = '';
+        }else{
+          Bert.alert(Alert.warning);
+        }
+      });
+    }else{
+      Bert.alert(Alert.danger);
+    }
+  }
+  
   return (
     <div>
       <p>A pin is necessary for activating new users and admins</p>
@@ -98,6 +120,44 @@ const SetPin = ()=> {
         className='smallAction clearBlue'
         onClick={()=>tellMeThePin()}
       >Tell Me The Pin</button>
+      <hr />
+        <form onSubmit={(e)=>setMinor(e)} autoComplete='off'>
+        <p>A minor pin for operations that are risky, or outside of regular permissions</p>
+        <p>
+          <input
+            type='password'
+            id='newOneM'
+            pattern='[000-999]*'
+            maxLength='3'
+            minLength='3'
+            placeholder='000-999'
+            inputMode='numeric'
+            autoComplete='000'
+            required
+          />
+          <label htmlFor='newOne'>New PIN</label>
+          <br />
+          <input
+            type='password'
+            id='newTwoM'
+            pattern='[000-999]*'
+            maxLength='3'
+            minLength='3'
+            placeholder='000-999'
+            inputMode='numeric'
+            autoComplete='000'
+            required
+          />
+          <label htmlFor='newTwo'>New PIN again</label>
+        </p>
+        <p>
+          <button
+            type='submit'
+            className='smallAction clearGreen'
+            disabled={false}
+          >Save</button>
+        </p>
+      </form>
     </div>
   );
 };

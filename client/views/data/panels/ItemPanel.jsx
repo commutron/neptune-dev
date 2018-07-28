@@ -126,6 +126,7 @@ export default class ItemPanel extends Component	{
               <ShortTable
                 key={3}
                 id={b._id}
+                serial={i.serial}
                 shortfalls={sh}
                 done={done}
                 app={a} />

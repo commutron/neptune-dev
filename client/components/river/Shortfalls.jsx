@@ -21,7 +21,7 @@ const Shortfalls = ({ id, shortfalls, lock })=> {
               key={entry.key}
               entry={entry}
               doSet={(a, b)=>handleChange(entry.key, a, b)}
-              lock={lock}
+              lock={lock || !Roles.userIsInRole(Meteor.userId(), 'verify')}
             />
           )})}
       </InOutWrap>
@@ -34,10 +34,10 @@ const ShortLine = ({ entry, doSet, lock })=>{
   const inE = entry.inEffect;
   const reS = entry.reSolve;
   const actionColor = 
-    inE === null ? 'orangeList' :
+    inE === null ? 'yellowList' :
     inE === true ? 'black orangeT' :
-    reS === null ? 'orangeList' :
-    reS === false ? 'orangeList' :
+    reS === null ? 'yellowList' :
+    reS === false ? 'yellowList' :
     reS === true ? 'greenList' :
     'unknown';
   const actionState = 
@@ -60,23 +60,25 @@ const ShortLine = ({ entry, doSet, lock })=>{
         <div className='shortCell'>
           {actionState}
         </div>
-      <ContextMenu id={entry.key}>
-        <MenuItem onClick={()=>doSet(null, null)} disabled={lock}>
-          <i className='fas fa-hand-paper fa-lg'></i>  {Pref.shortagePending}
-        </MenuItem>
-        <MenuItem onClick={()=>doSet(true, false)} disabled={lock}>
-          <i className='fas fa-hand-peace fa-lg'></i>  {Pref.doOmit}
-        </MenuItem>
-        <MenuItem onClick={()=>doSet(false, null)} disabled={lock}>
-          <i className='fas fa-hand-holding fa-lg'></i>  {Pref.shortageWaiting}
-        </MenuItem>
-        <MenuItem onClick={()=>doSet(false, false)} disabled={lock}>
-          <i className='fas fa-hand-rock fa-lg'></i>  {Pref.notResolved}
-        </MenuItem>
-        <MenuItem onClick={()=>doSet(false, true)} disabled={lock}>
-          <i className='fas fa-thumbs-up'></i>  {Pref.isResolved}
-        </MenuItem>
-      </ContextMenu>
+        <ContextMenu id={entry.key}>
+          {!Roles.userIsInRole(Meteor.userId(), 'verify') &&
+            <MenuItem disabled={true}>"Verify" Permission Required</MenuItem>}
+          <MenuItem onClick={()=>doSet(null, null)} disabled={lock}>
+            <i className='fas fa-hand-paper fa-lg'></i>  {Pref.shortagePending}
+          </MenuItem>
+          <MenuItem onClick={()=>doSet(true, false)} disabled={lock}>
+            <i className='fas fa-hand-peace fa-lg'></i>  {Pref.doOmit}
+          </MenuItem>
+          <MenuItem onClick={()=>doSet(false, null)} disabled={lock}>
+            <i className='fas fa-hand-holding fa-lg'></i>  {Pref.shortageWaiting}
+          </MenuItem>
+          <MenuItem onClick={()=>doSet(false, false)} disabled={lock}>
+            <i className='fas fa-hand-rock fa-lg'></i>  {Pref.notResolved}
+          </MenuItem>
+          <MenuItem onClick={()=>doSet(false, true)} disabled={lock}>
+            <i className='fas fa-thumbs-up'></i>  {Pref.isResolved}
+          </MenuItem>
+        </ContextMenu>
     </ContextMenuTrigger>
   );
 };

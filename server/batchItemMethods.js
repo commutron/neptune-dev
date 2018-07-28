@@ -626,7 +626,14 @@ Meteor.methods({
 
 //// Non-Cons \\\\
   addNC(batchId, bar, ref, type, step, fix) {
-    if(Meteor.userId()) {
+    const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
+    const double = doc.nonCon.find( x => 
+                    x.serial === bar &&
+                    x.ref === ref &&
+                    x.type === type &&
+                    x.inspect === false
+                  );
+    if(!Meteor.userId() || double) { null }else{
       
       let repaired = fix ? {time: new Date(),who: Meteor.userId()} : false;
       
@@ -645,8 +652,8 @@ Meteor.methods({
           skip: false,
           snooze: false,
           comm: ''
-          }}});
-    }else{null}
+      }}});
+    }
   },
 
 
@@ -694,8 +701,15 @@ Meteor.methods({
     }else{null}
   },
     
-  editNC(batchId, ncKey, ref, type, where) {
-    if(Roles.userIsInRole(Meteor.userId(), 'inspect')) {
+  editNC(batchId, serial, ncKey, ref, type, where) {
+    const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
+    const double = doc.nonCon.find( x => 
+                    x.serial === serial &&
+                    x.ref === ref &&
+                    x.type === type &&
+                    x.inspect === false
+                  );
+    if(!Roles.userIsInRole(Meteor.userId(), 'inspect') || double) { null }else{
 		  BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
   			$set : { 
   			  'nonCon.$.ref': ref,
@@ -703,7 +717,7 @@ Meteor.methods({
   			  'nonCon.$.where': where
   			}
   		});
-    }else{null}
+    }
   },
   
   // trigger a re-inspect
@@ -744,6 +758,26 @@ Meteor.methods({
   		});
     }else{null}
   },
+  
+  autoTrashShortNC(accessKey, batchId, serial, refs) {
+    const org = AppDB.findOne({ orgKey: accessKey });
+    const type = org ? org.missingType : false;
+    const doc = BatchDB.findOne({_id: batchId, orgKey: accessKey});
+    if(type && doc) {
+      const related = doc.nonCon.filter( x => 
+                        x.serial === serial &&
+                        x.type === type &&
+                        x.inspect === false &&
+                        refs.includes( x.ref ) 
+                      );
+      const trash = Array.from(related, x => x.key);
+      for( let tKey of trash) {
+        BatchDB.update({_id: batchId, orgKey: accessKey, 'nonCon.key': tKey}, {
+          $pull : { nonCon: {key: tKey}
+        }});
+      }
+    }
+  },
 
   UnSkipNC(batchId, ncKey) {
     if(Roles.userIsInRole(Meteor.userId(), 'inspect')) {
@@ -767,13 +801,13 @@ Meteor.methods({
   },
   
   ncRemove(batchId, ncKey, override) {
-    const auth = Roles.userIsInRole(Meteor.userId(), ['remove', 'qa']);
+    const auth = Roles.userIsInRole(Meteor.userId(), ['remove', 'qa', 'run']);
     if(!auth && override === undefined) {
       null;
     }else{
       const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
-      const orgPIN = org ? org.orgPIN : null;
-      if(auth || orgPIN === override) {
+      const minorPIN = org ? org.minorPIN : null;
+      if(auth || minorPIN === override) {
         BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
           $pull : { nonCon: {key: ncKey}
         }});
@@ -1059,7 +1093,12 @@ Meteor.methods({
   // Shortfall // Narrow Shortage
   
   addShort(batchId, partNum, refs, serial, step, comm) {
-    if(!Meteor.userId()) { null }else{
+    const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
+    const double = doc.shortfall.find( x => 
+                    x.partNum === partNum &&
+                    x.serial === serial
+                  );
+    if(!Meteor.userId() || double) { null }else{
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $push : { shortfall: {
           key: new Meteor.Collection.ObjectID().valueOf(), // id of the shortage entry
@@ -1075,11 +1114,18 @@ Meteor.methods({
           reSolve: null, // Boolean or Null
           comm: comm || '' // comments // String
       }}});
+      const accessKey = Meteor.user().orgKey;
+      Meteor.call('autoTrashShortNC', accessKey, batchId, serial, refs);
     }
   },
   
-  editShort(batchId, shKey, partNum, refs, inEffect, reSolve, comm) {
-    if(!Roles.userIsInRole(Meteor.userId(), 'inspect')) { null }else{
+  editShort(batchId, serial, shKey, partNum, refs, inEffect, reSolve, comm) {
+    const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
+    const double = doc.shortfall.filter( x => 
+                    x.partNum === partNum &&
+                    x.serial === serial
+                  );
+    if(!Roles.userIsInRole(Meteor.userId(), 'verify') || double.length > 1) { null }else{
       const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
       const prevSH = doc.shortfall.find( x => x.key === shKey );
       let pn = partNum || prevSH.partNum;
@@ -1103,11 +1149,13 @@ Meteor.methods({
   			  'shortfall.$.comm': cm || ''
   			}
   		});
+  		const accessKey = Meteor.user().orgKey;
+  		Meteor.call('autoTrashShortNC', accessKey, batchId, serial, refs);
     }
   },
   
   setShort(batchId, shKey, inEffect, reSolve) {
-    if(!Roles.userIsInRole(Meteor.userId(), 'inspect')) { null }else{
+    if(!Roles.userIsInRole(Meteor.userId(), 'verify')) { null }else{
 		  let ef = inEffect === undefined ? null : inEffect;
       let sv = reSolve === undefined ? null : reSolve;
 		  
@@ -1122,14 +1170,21 @@ Meteor.methods({
     }
   },
   
-  removeShort(batchId, shKey) {
-    if(!Roles.userIsInRole(Meteor.userId(), 'verify')) {
-      return false;
+  removeShort(batchId, shKey, override) {
+    const auth = Roles.userIsInRole(Meteor.userId(), ['remove', 'qa', 'run']);
+    if(!auth && override === undefined) {
+      null;
     }else{
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'shortfall.key': shKey}, {
-        $pull : { shortfall: {key: shKey}
-      }});
-      return true;
+      const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
+      const minorPIN = org ? org.minorPIN : null;
+      if(auth || minorPIN === override) {
+        BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'shortfall.key': shKey}, {
+          $pull : { shortfall: {key: shKey}
+        }});
+        return true;
+      }else{
+        return false;
+      }
     }
   },
 

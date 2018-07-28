@@ -48,7 +48,7 @@ export default class RiverSelect extends Component	{
                );
             })}
             </select>
-            <label htmlFor='fch'>Choose {Pref.buildFlow}</label>
+            <label htmlFor='fch'>Enable {Pref.buildFlow}</label>
           </p>
           <br />
           <br />
@@ -61,7 +61,7 @@ export default class RiverSelect extends Component	{
                );
             })}
             </select>
-            <label htmlFor='fch'>Choose {Pref.buildFlowAlt}</label>
+            <label htmlFor='fch'>Enable <em>optional</em> {Pref.buildFlowAlt} if needed</label>
           </p>
           <br />
           <button

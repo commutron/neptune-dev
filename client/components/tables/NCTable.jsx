@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 
 import UserNice from '../smallUi/UserNice.jsx';
 
-const NCTable = ({ id, nc, done, multi, ncOps, flowSteps, app })=> (
+const NCTable = ({ id, serial, nc, done, multi, ncOps, flowSteps, app })=> (
   <div>
     {nc.length > 0 ?
       <table className='wide'>
@@ -28,6 +28,7 @@ const NCTable = ({ id, nc, done, multi, ncOps, flowSteps, app })=> (
               key={index}
               entry={entry}
               id={id}
+              serial={serial}
               done={done}
               multi={multi}
               ncOps={ncOps}
@@ -63,6 +64,7 @@ export class NCRow extends Component {
   
   handleChange() {
 		const id = this.props.id;
+		const serial = this.props.serial;
     const ncKey = this.props.entry.key;
     const ref = this.ncRef.value.trim().toLowerCase();
     const type = this.ncType.value;
@@ -73,9 +75,8 @@ export class NCRow extends Component {
       this.props.entry.type !== type ||
       this.props.entry.where !== where
       ) {  
-      Meteor.call('editNC', id, ncKey, ref, type, where, (error)=> {
-        if(error)
-          console.log(error);
+      Meteor.call('editNC', id, serial, ncKey, ref, type, where, (error)=> {
+        error && console.log(error);
   			this.setState({ edit: false });
   		});
     }else{
@@ -99,7 +100,7 @@ export class NCRow extends Component {
     if(yes) {
       const id = this.props.id;
       const ncKey = this.props.entry.key;
-      const override = !Roles.userIsInRole(Meteor.userId(), ['qa', 'remove']) ? 
+      const override = !Roles.userIsInRole(Meteor.userId(), ['qa', 'remove', 'run']) ? 
                         prompt("Enter PIN to override", "") : false;
       Meteor.call('ncRemove', id, ncKey, override, (error)=>{
         if(error)
@@ -128,8 +129,6 @@ export class NCRow extends Component {
     let snoozed = !dt.snooze ? false : true;
     let comment = !dt.comm ? '' : dt.comm;
     
-    const remove = (Roles.userIsInRole(Meteor.userId(), ['qa', 'remove']) || 
-                    dt.type === (this.props.app.missingType || false) ) && !done;
     const edit = Roles.userIsInRole(Meteor.userId(), 'inspect') && !done;
     
     let inSty = {
@@ -199,16 +198,14 @@ export class NCRow extends Component {
                   <i className='fas fa-arrow-circle-down fa-lg'></i>
                   <i className='med'> Save</i>
                 </button>
-                {remove ?
-                  <button
-                    className='miniAction redT'
-                    onClick={this.popNC}
-                    style={inClk}
-                    readOnly={true}>
-                    <i className='fas fa-times fa-lg'></i>
-                    <i className='med'> Remove</i>
-                  </button>
-                :null}
+                <button
+                  className='miniAction redT'
+                  onClick={this.popNC}
+                  style={inClk}
+                  readOnly={true}>
+                  <i className='fas fa-times fa-lg'></i>
+                  <i className='med'> Remove</i>
+                </button>
                 <button
                   className='miniAction blueT'
                   onClick={this.edit}

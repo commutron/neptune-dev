@@ -1,7 +1,7 @@
 Meteor.startup(function () {  
   // ensureIndex is depreciated 
   // but the new createIndex errors as "not a function"
-  BatchDB._ensureIndex({ batch : 1 }, { unique: true });
+  XBatchDB._ensureIndex({ batch : 1 }, { unique: true });
   BatchDB._ensureIndex({ batch : 1, 'items.serial' : 1 }, { unique: true });
   GroupDB._ensureIndex({ group : 1 }, { unique: true });
   WidgetDB._ensureIndex({ widget : 1, 'versions.version' : 1 }, { unique: true });
@@ -20,6 +20,7 @@ Meteor.methods({
           org: orgName,
           orgKey: orgKey,
           orgPIN: '0000',
+          minorPIN: '0000',
           createdAt: new Date(),
           toolOption: [],
           trackOption: [],
@@ -98,26 +99,19 @@ Meteor.methods({
       return [false, 'no'];
     }
   },
-  
-  // find a more secure way of dooing this.
-  // worker changes role with timeout???
-  /*
-  requestPINoverride(pinInput) {
-    const userActive = Roles.userIsInRole(Meteor.userId(), 'active');
-    const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
-    const orgPIN = org ? org.orgPIN : undefined;
-    if(userActive && orgPIN) {
-      const correct = orgPIN === pinInput;
-      if(correct) {
-        return true;
-      }else{
-        return false;
-      }
+  // // // // // // // // //
+  setMinorPin(newPIN) {
+    const adminPower = Roles.userIsInRole(Meteor.userId(), 'admin');
+    if(adminPower) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $set : { 
+          minorPIN : newPIN
+      }});
+      return true;
     }else{
       return false;
     }
   },
-  */
   
   addTrackOption(flatTrack) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {

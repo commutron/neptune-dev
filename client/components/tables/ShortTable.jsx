@@ -4,11 +4,11 @@ import Pref from '/client/global/pref.js';
 
 import UserNice from '../smallUi/UserNice.jsx';
 
-const ShortTable = ({ id, shortfalls, done, app })=> (
+const ShortTable = ({ id, serial, shortfalls, done, app })=> (
   <div>
     {shortfalls.length > 0 ?
       <table className='wide'>
-        <thead className='orange cap'>
+        <thead className='yellow cap'>
           <tr>
             <th>part number</th>
 						<th>refs</th>
@@ -26,6 +26,7 @@ const ShortTable = ({ id, shortfalls, done, app })=> (
               key={index}
               entry={entry}
               id={id}
+              serial={serial}
               done={done}
               app={app} />
           );
@@ -59,6 +60,7 @@ export class ShRow extends Component {
   
   handleChange() {
 		const id = this.props.id;
+		const serial = this.props.serial;
     const shKey = this.props.entry.key;
     const partNum = this.shPN.value.trim();
     const refs = this.shRefs.value.trim().toLowerCase()
@@ -82,7 +84,7 @@ export class ShRow extends Component {
     }
     const comm = this.shCm.value.trim();
     
-    Meteor.call('editShort', id, shKey, partNum, refs, effect, solve, comm, (error)=> {
+    Meteor.call('editShort', id, serial, shKey, partNum, refs, effect, solve, comm, (error)=> {
       if(error)
         console.log(error);
 			this.setState({ edit: false });
@@ -95,7 +97,9 @@ export class ShRow extends Component {
     if(yes) {
       const id = this.props.id;
       const shKey = this.props.entry.key;
-      Meteor.call('removeShort', id, shKey, (error)=>{
+      const override = !Roles.userIsInRole(Meteor.userId(), ['qa', 'remove', 'run']) ? 
+                        prompt("Enter PIN to override", "") : false;
+      Meteor.call('removeShort', id, shKey, override, (error)=>{
         if(error)
           console.log(error);
         this.setState({ edit: false });
@@ -119,9 +123,8 @@ export class ShRow extends Component {
                         reS === false ? Pref.notResolved : // Can be Resolved but is Not Yet
                         reS === true ? Pref.isResolved : // Problem is Resolved
                         'unknown';
-                   
-    const remove = Roles.userIsInRole(Meteor.userId(), ['qa', 'remove']) && !done;
-    const edit = Roles.userIsInRole(Meteor.userId(), 'inspect') && !done;
+
+    const edit = Roles.userIsInRole(Meteor.userId(), 'verify') && !done;
     
     let inSty = {
       width: '125px',
@@ -187,16 +190,14 @@ export class ShRow extends Component {
                   <i className='fas fa-arrow-circle-down fa-lg'></i>
                   <i className='med'> Save</i>
                 </button>
-                {remove ?
-                  <button
-                    className='miniAction redT'
-                    onClick={this.popSh}
-                    style={inClk}
-                    readOnly={true}>
-                    <i className='fas fa-times fa-lg'></i>
-                    <i className='med'> Remove</i>
-                  </button>
-                :null}
+                <button
+                  className='miniAction redT'
+                  onClick={this.popSh}
+                  style={inClk}
+                  readOnly={true}>
+                  <i className='fas fa-times fa-lg'></i>
+                  <i className='med'> Remove</i>
+                </button>
                 <button
                   className='miniAction blueT'
                   onClick={this.edit}

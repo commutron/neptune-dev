@@ -339,13 +339,26 @@
   color: var(--orange);
 	background-color: var(--clouds);
 }
+.orangeBorder { 
+  background-color: transparent;
+	border: 3px solid var(--carrot);
+	box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2),
+	      inset 0 0 .1em .1em rgba(43,43,43,0.2);
+}
+
 .darkOrange { background-color:  var(--pumpkin); }
 .darkOrangeT { color:  var(--pumpkin); }
 .orangeList:nth-child(odd) {
-  background-color: rgb(243, 156, 18);
+  background-color: rgb(230, 126, 34);
 }
 .orangeList:nth-child(even) {
-  background-color: rgba(243, 156, 18, 0.8);
+  background-color: rgba(230, 126, 34, 0.8);
+}
+.orangeList:nth-child(odd):hover,
+.orangeList:nth-child(odd):active,
+.orangeList:nth-child(even):hover,
+.orangeList:nth-child(even):active {
+  background-color: var(--pumpkin);
 }
 
 .yellow { background-color: var(--orange); }
@@ -353,6 +366,18 @@
 .yellowT { color: var(--orange); }
 .yellowBox { color: var(--orange); }
 .yellowBox > p { color: white; }
+.yellowList:nth-child(odd) {
+  background-color: rgb(243, 156, 18, 0.9);
+}
+.yellowList:nth-child(even) {
+  background-color: rgba(243, 156, 18, 0.8);
+}
+.yellowList:nth-child(odd):hover,
+.yellowList:nth-child(odd):active,
+.yellowList:nth-child(even):hover,
+.yellowList:nth-child(even):active {
+  background-color: var(--orange);
+}
 
 .teal { background-color: rgb(26,188,156); }
 .tealT { color: rgb(26,188,156); }
