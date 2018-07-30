@@ -1100,7 +1100,7 @@ Meteor.methods({
                       x.partNum === partNum &&
                       x.serial === serial
                     ) : false;
-    if(!Meteor.userId() || double) { null }else{
+    if(!Meteor.userId() || double) { return false }else{
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $push : { shortfall: {
           key: new Meteor.Collection.ObjectID().valueOf(), // id of the shortage entry
@@ -1118,6 +1118,7 @@ Meteor.methods({
       }}});
       const accessKey = Meteor.user().orgKey;
       Meteor.call('autoTrashShortNC', accessKey, batchId, serial, refs);
+      return true;
     }
   },
   

@@ -35,7 +35,7 @@ const ShortLine = ({ entry, doSet, lock })=>{
   const reS = entry.reSolve;
   const actionColor = 
     inE === null ? 'yellowList' :
-    inE === true ? 'black orangeT' :
+    inE === true ? 'blackList orangeT' :
     reS === null ? 'yellowList' :
     reS === false ? 'yellowList' :
     reS === true ? 'greenList' :

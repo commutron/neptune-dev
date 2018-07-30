@@ -14,7 +14,7 @@ const ShortAdd = ({ id, serial, app, doneClose })=> {
     const step = Session.get('nowStep') || 'unavailable';
     
     //console.log({ id, partNum, refs, serial, step, comm });
-    Meteor.call('addShort', id, partNum, refs, serial, step, comm, (error)=>{
+    Meteor.call('addShort', id, partNum, refs, serial, step, comm, (error, reply)=>{
       error && console.log(error);
       doneClose();
     });

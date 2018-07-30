@@ -266,6 +266,12 @@
 .greenList:nth-child(even) {
   background-color: rgba(39, 174, 96, 0.8);
 }
+.greenList:nth-child(odd):hover,
+.greenList:nth-child(odd):active,
+.greenList:nth-child(even):hover,
+.greenList:nth-child(even):active {
+  background-color: var(--emerald);
+}
 
 .blue { background-color: var(--peterriver); }
 .blueT { color: var(--peterriver); }
@@ -398,6 +404,18 @@
 .black { background-color: var(--black); }
 .blackT { color: var(--blackT); }
 .blackFade { background-color: var(--blackFade); }
+.blackList:nth-child(odd) {
+  background-color: rgb(45, 45, 45);
+}
+.blackList:nth-child(even) {
+  background-color: rgb(40, 40, 40);
+}
+.blackList:nth-child(odd):hover,
+.blackList:nth-child(odd):active,
+.blackList:nth-child(even):hover,
+.blackList:nth-child(even):active {
+  background-color: rgb(50,50,50);
+}
 
 .white { background-color: var(--clouds); }
 .whiteT { color: white; }
