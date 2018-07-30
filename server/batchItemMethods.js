@@ -1094,10 +1094,12 @@ Meteor.methods({
   
   addShort(batchId, partNum, refs, serial, step, comm) {
     const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
-    const double = doc.shortfall.find( x => 
-                    x.partNum === partNum &&
-                    x.serial === serial
-                  );
+    const legacyCheck = doc.shortfall ? true : false;
+    const double = legacyCheck ? 
+                    doc.shortfall.find( x => 
+                      x.partNum === partNum &&
+                      x.serial === serial
+                    ) : false;
     if(!Meteor.userId() || double) { null }else{
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $push : { shortfall: {
