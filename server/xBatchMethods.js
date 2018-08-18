@@ -261,7 +261,7 @@ Meteor.methods({
       null;
     }else{
       const doc = XBatchDB.findOne({_id: batchId});
-      const inTime = doc.completed ? moment().diff(moment(completedAt), 'minutes') < 60 : false;
+      const inTime = doc.completed ? moment().diff(moment(doc.completedAt), 'minutes') < 60 : false;
       const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
       const orgPIN = org ? org.orgPIN : null;
       if(doc && (inTime || orgPIN === override)) {

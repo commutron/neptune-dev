@@ -56,7 +56,7 @@ const WaterfallSelect = ({ batchData, app })=> {
       {allTotal.every( x => x === true ) &&
         <div className='centre vspace purpleBorder'>
           {batchData.completed === false ?
-            <div>
+            <div className='centre'>
               <p className='centreText'>
                 <i>All assigned processes are complete</i>
               </p>
@@ -67,7 +67,7 @@ const WaterfallSelect = ({ batchData, app })=> {
               >Complete {Pref.xBatch}</button>
             </div>
           :
-            <div>
+            <div className='centre'>
               <h2 className='actionBox centreText green'>
                 Completed: {moment(batchData.completedAt).calendar()}
               </h2>

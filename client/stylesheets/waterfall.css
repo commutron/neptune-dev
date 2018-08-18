@@ -45,9 +45,19 @@
   width: 100%;
   height: 100%;
 }
+.countPlus:disabled { opacity: 1; }
+.countPlus:disabled:hover { opacity: 1; }
+
 .countPlus:active,
-.countMinus:active {
+.countPlus:disabled,
+.countMinus:active,
+.countMinus:disabled {
   filter: blur(5px);
+}
+.countPlus.countStop:disabled,
+.countMinus.countStop:disabled {
+  filter: none;
+  border: none;
 }
 
 .countMinus {
@@ -74,10 +84,9 @@
   background-color: transparent;
   border-width: 10px;
   border-style: solid;
+  
   border-radius: 0;
 }
-.countPlus:disabled { opacity: 1; }
-.countPlus:disabled:hover { opacity: 1; }
 
 .countPlusTop {
   font-size: calc(2rem + 2vw);

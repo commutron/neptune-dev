@@ -318,6 +318,7 @@
 .stoneTrans-leave {
   position: absolute;
   top: 0%;
+  z-index: 0;
   -webkit-animation: slideOut 500ms var(--scottsCurve);
   -moz-animation: slideOut 500ms var(--scottsCurve);
   animation: slideOut 500ms var(--scottsCurve);

@@ -9,29 +9,17 @@ function GeneralLabel({ batch, data }) {
       <div className='centreRow'>
         <div className='centre'>
           <i className='pxxlg numFont'>{batch}</i>
-          <i className='pmd'>{data.sales}</i>
+          <i className='pmd numFont'>{data.sales}</i>
         </div>
-        <span className='bffr'></span>
         <div className='centreText'>
           <i className='pmd numFont'>Qty</i><br />
-          <i><input className='pxlg' defaultValue={data.quant} maxLength='10' /></i>
+          <i><input className='pxlg numFont' defaultValue={data.quant} maxLength='10' /></i>
         </div>
-        <span className='bffr'></span>
       </div>
       <div className='centre up'>
-        <i className='plg'>{data.group}</i>
-        <i className='pmd'>{data.widget} Rev {data.ver}</i>
-        <i className='pmd'>{data.desc}</i>
-      </div>
-      <div className='centreRow'>
-        <div className='centreText yellowT'>
-          <i className='pmd'>Release By</i><br />
-          <i><input className='yellowT plg' defaultValue='?' maxLength='14' /></i>
-        </div>
-        <div className='centreText'>
-          <i className='pmd'>Ship by</i><br />
-          <i className='pxlg'>{moment(data.date, "YYYY-MM-DD").format("ddd MMM Do")}</i>
-        </div>
+        <i className='plg numFont'>{data.group}</i>
+        <i className='pmd numFont'>{data.widget} Rev {data.ver}</i>
+        <i className='pmd numFont'>{data.desc}</i>
       </div>
     </div>
   );

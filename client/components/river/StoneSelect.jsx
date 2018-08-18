@@ -75,16 +75,17 @@ const StoneSelect = ({
     
     const stepClean = flowStep.step.toLocaleLowerCase();
                                    
-    const stepmatch = stepClean + ' ' + flowStep.type;
-    const stepmatchodd = stepClean + flowStep.type; // depreciated
+    //const stepmatch = stepClean + ' ' + flowStep.type;
+    //const stepmatchodd = stepClean + flowStep.type; // depreciated
     
     const stepVauge = stepClean.replace(/top/i, '').replace(/bottom/i, '');
     
     const ncFromInspect = nc.filter( x => (x.where || '').includes(stepVauge) );
     
-    const ncFromElse = nc.filter( x => (x.where || '') === stepmatch || (x.where || '') === stepmatchodd );
+    //const ncFromElse = nc.filter( x => (x.where || '') === stepmatch || (x.where || '') === stepmatchodd );
+    const secondary = stepClean.includes('bottom') || stepClean.includes('side 2') || stepClean.includes(' b ');
     
-    const ncFromHere = flowStep.type === 'inspect' ? ncFromInspect : ncFromElse;
+    const ncFromHere = flowStep.type === 'inspect' && !secondary ? ncFromInspect : [];
     
     const hereSkipped = ncFromHere.every( x => x.skip !== false );
     

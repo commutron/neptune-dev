@@ -8,7 +8,7 @@ function reFocus() {
 function onPress(event) {
   //console.log(event);
   const element = document.activeElement;
-  if(element.id !== 'lookup' && element.id !== 'nestSerial') {
+  if(element.id !== 'lookup' && element.id !== 'nestSerial' && element.id !== 'ncRefs') {
     const inputKey = event.key;
     const inputCode = event.keyCode;
     let scanListener = Session.get('scanListener') || '';

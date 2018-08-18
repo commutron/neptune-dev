@@ -171,8 +171,7 @@ privlegedRoutes.route('/print/generallabel/:batch', {
           request.includes('ver') &&
           request.includes('desc') &&
           request.includes('sales') &&
-          request.includes('quant') &&
-          request.includes('date')
+          request.includes('quant')
         ) {
           mount(LabelLayout, {
             content: (<GeneralLabel batch={params.batch} data={queryParams} />)

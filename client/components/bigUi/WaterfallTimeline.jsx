@@ -39,7 +39,7 @@ const WaterfallTimeline = ({ waterfalls, quantity, app })=> (
             return(
               <dd key={index}>
                 <b className={dt.tick === 1 ? 'greenT' : 'redT'}>{dt.tick === 1 ? '+' : '\u2212'}</b>
-                {moment(dt.time).format('YYYY ddd MMM DD hh:mm:ss A')}, <UserName id={dt.who} />
+                {moment(dt.time).format('YYYY ddd MMM DD hh:mm:ss.SS A')}, <UserName id={dt.who} />
               </dd>
           )})}
           </dl>

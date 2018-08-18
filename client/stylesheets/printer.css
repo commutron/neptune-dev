@@ -1,15 +1,15 @@
 
-
 .printLabel {
   width: 900px;
   height: 600px;
   margin: auto;
   border: 2px dashed black;
-  padding: 30px 20px 0px 20px;
+  padding: 75px 20px 0px 20px;
   background-color: white;
   color: black;
   font-weight: 900;
   font-stretch: semi-expanded;
+  vertical-align: middle;
 }
 
 .printLabel div {
@@ -29,13 +29,6 @@
   line-height: 3rem;
   font-weight: 800;
   text-align: center;
-}
-
-.printLabel .bffr {
-  width: 25px;
-}
-.printLabel .bffrbffr {
-  width: 125px;
 }
 
 .pxxlg {
@@ -65,12 +58,9 @@
      position: absolute;
      top: 0;
      left: 0;
-     transform: rotate(180deg) scale(1.2);
-     width: 100%;
      margin: 0;
-     padding: 0;
      border: none;
-   }
+  }
   .noPrint {
     display: none;
   }

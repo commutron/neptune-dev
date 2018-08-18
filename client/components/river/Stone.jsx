@@ -80,7 +80,7 @@ export default class Stone extends Component	{
 	    if(error)
 		    console.log(error);
 			if(reply) {
-			  //document.getElementById('lookup').focus();
+			  document.getElementById('lookup').focus();
 		  }else{
 		    Bert.alert(Pref.blocked, 'danger');
 		  }
@@ -105,7 +105,7 @@ export default class Stone extends Component	{
 			    console.log(error);
 				if(reply) {
 					pass === false && this.unlock();
-				  //document.getElementById('lookup').focus();
+				  document.getElementById('lookup').focus();
 			  }else{
 			    Bert.alert(Pref.blocked, 'danger');
 			  }
@@ -125,7 +125,7 @@ export default class Stone extends Component	{
 		  if(error)
 		    console.log(error);
 		  if(reply) {
-		    //document.getElementById('lookup').focus();
+		    document.getElementById('lookup').focus();
 		  }else{
 		    Bert.alert(Pref.blocked, 'danger');
 		  }
@@ -196,7 +196,7 @@ export default class Stone extends Component	{
     };
     const adaptiveWidth = vw(17) + "px";
     
-    const stopmooving = { minHeight: vw(20) + "px" };
+    const stopmooving = { height: vw(20) + "px" };
     
     const topClass = this.props.doneStone ? 'doneStoneMask' :
     								 this.props.blockStone ? 'blockStone' : '';

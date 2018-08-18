@@ -235,6 +235,10 @@ input + label, textarea + label, select + label {
   display: block;
   font-size: 1rem;
   line-height: 2rem;
+  width: 15rem;
+  word-wrap: normal;
+  word-break: keep-all;
+  
 }
 
 input:focus + label,
