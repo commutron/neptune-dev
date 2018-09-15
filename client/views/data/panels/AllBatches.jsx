@@ -2,9 +2,9 @@ import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import Pref from '/client/global/pref.js';
 import NumBox from '/client/components/uUi/NumBox.jsx';
-import BestWorstBatch from '/client/components/bigUi/BestWorstBatch.jsx';
+import BatchesListWide from '../lists/BatchesListWide.jsx';
 
-const AllBatches = ({ groupData, widgetData, batchData, app }) => {
+const AllBatches = ({ groupData, widgetData, allWidget, batchData, allBatch, allXBatch, app }) => {
   
   const total = batchData.length;
   const active = batchData.filter( x => x.finishedAt === false ).length;
@@ -31,10 +31,10 @@ const AllBatches = ({ groupData, widgetData, batchData, app }) => {
         <i className='biggest'>~</i>
       </div>
         
-        <BestWorstBatch
-          groupData={groupData}
-          widgetData={widgetData} 
-          app={app} />
+        <BatchesListWide
+          batchData={[...allBatch, ...allXBatch]}
+          widgetData={allWidget}
+          groupData={groupData} />
 
         
     </div>

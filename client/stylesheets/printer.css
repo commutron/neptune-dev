@@ -4,7 +4,7 @@
   height: 600px;
   margin: auto;
   border: 2px dashed black;
-  padding: 75px 20px 0px 20px;
+  padding: 30px 30px 30px 30px;
   background-color: white;
   color: black;
   font-weight: 900;
@@ -32,25 +32,25 @@
 }
 
 .pxxlg {
-  font-size: 7rem;
-  line-height: 6rem;
+  font-size: 8rem;
+  line-height: 8rem;
 }
 
 .pxlg {
-  font-size: 4rem;
-  line-height: 5rem;
+  font-size: 4.5rem;
+  line-height: 4.5rem;
 }
 
 .plg {
-  font-size: 3rem;
+  font-size: 4rem;
 }
 
 .pmd {
-  font-size: 2rem;
+  font-size: 2.5rem;
 }
 
 .psm {
-  font-size: 1rem;
+  font-size: 1.5rem;
 }
 
 @media print {
@@ -60,6 +60,7 @@
      left: 0;
      margin: 0;
      border: none;
+     transform: rotate(180deg);
   }
   .noPrint {
     display: none;

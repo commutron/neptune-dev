@@ -180,6 +180,7 @@ Meteor.publish('skinnyData', function(){
           'widgetId': 1,
           'versionKey': 1,
           'active': 1,
+          'salesOrder': 1,
           'finishedAt': 1,
         }}),
     
@@ -191,8 +192,9 @@ Meteor.publish('skinnyData', function(){
           'widgetId': 1,
           'versionKey': 1,
           'active': 1,
+          'salesOrder': 1,
           'completed': 1,
-          'completedAt': 1,
+          'completedAt': 1
         }})
     ];
 });

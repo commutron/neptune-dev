@@ -375,6 +375,15 @@ main {
   }
 }
 
+.tableList {
+  width: 80%;
+  display: table;
+}
+.tableList div:nth-child(odd),
+.tableList button:nth-child(odd) {
+  margin: 32px 0;
+}
+
 /* modal popup */
 .overlay {
   position: fixed;

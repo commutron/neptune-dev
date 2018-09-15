@@ -2,10 +2,9 @@ import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import Pref from '/client/global/pref.js';
 import NumBox from '/client/components/uUi/NumBox.jsx';
-import PopularWidget from '/client/components/charts/PopularWidget.jsx';
-import BestWorstBatch from '/client/components/bigUi/BestWorstBatch.jsx';
+import GroupsListWide from '../lists/GroupsListWide.jsx';
 
-const AllGroups = ({ groupData, widgetData, batchData, app }) => {
+const AllGroups = ({ groupData, widgetData, batchData, batchDataX, app }) => {
   
   const verAdd = Array.from(widgetData, x => x.versions.length).reduce((x, y) => x + y);
   
@@ -30,16 +29,14 @@ const AllGroups = ({ groupData, widgetData, batchData, app }) => {
           
         <i className='biggest'>~</i>
         
-        {/*<PopularWidget groupData={groupData} widgetData={widgetData} />*/}
-        <em>popular products unavailable</em>
+        <GroupsListWide
+          groupData={groupData}
+          batchData={batchData}
+          batchDataX={batchDataX}
+          widgetData={widgetData} />
        
       </div>
       
-      <BestWorstBatch
-        groupData={groupData}
-        widgetData={widgetData} 
-        app={app}
-        widgetSort={true} />
           
     </div>
   );

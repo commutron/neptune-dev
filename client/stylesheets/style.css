@@ -124,7 +124,7 @@
   border-bottom-color: var(--peterriver);
 }
 
-.leapBar {
+.leapBar, .leapRow {
   width: 100%;
   min-height: 32px;
   font-size: 1rem;
@@ -136,6 +136,11 @@
 	padding: calc(1em - 0.1vw) calc(1em - 0.1vw);
 	background-color: transparent;
 	color: var(--clouds);
+  word-break: keep-all;
+  word-wrap: normal;
+}
+
+.leapBar {
 	border-top: 1px inset transparent;
 	border-bottom: 1px inset var(--black);
   border-left-width: 5px;
@@ -144,7 +149,29 @@
   word-break: keep-all;
   word-wrap: normal;
 }
-.leapBar:hover, .leapBar:focus, .leapBar:active {
+
+.leapRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+	align-items: center;
+	border: 2px solid var(--black);
+  border-left-width: 8px;
+  border-left-style: solid;
+  border-left-color: white;
+  word-break: keep-all;
+  word-wrap: normal;
+}
+.leapRow > span > p{
+  cursor: default;
+  height: 100%;
+  font-size: 1.25rem;
+}
+.leapRow > span:first-child > p {
+ font-size: 1.75rem;
+}
+
+.leapBar:hover, .leapBar:focus, .leapBar:active,
+.leapRow:hover, .leapRow:focus, .leapRow:active {
   background-color: var(--clouds);
   color: var(--black);
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const FilterActive = ({ total, onClick, onTxtChange })=>	{
+const FilterActive = ({ title, open, done, total, onClick, onTxtChange })=>	{
   
   function changeBasicFilter() {
     onClick(this.basic.value);
@@ -10,7 +10,7 @@ const FilterActive = ({ total, onClick, onTxtChange })=>	{
   }
   
   return(
-    <details className='fltrs noCopy'>
+    <details className='fltrs noCopy' open={open}>
       <summary className='fltrs'>
         <span>
           <i className='fas fa-filter fa-fw'></i>

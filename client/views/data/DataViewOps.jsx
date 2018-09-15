@@ -6,6 +6,7 @@ import { TraverseWrap } from '/client/layouts/DataExploreLayout.jsx';
 import SearchHelp from './SearchHelp.jsx';
 
 import AdvancedSearch from './panels/AdvancedSearch.jsx';
+import Reports from './panels/Reports.jsx';
 import AllGroups from './panels/AllGroups.jsx';
 import AllBatches from './panels/AllBatches.jsx';
 
@@ -18,7 +19,6 @@ import ScrapPanel from './panels/ScrapPanel.jsx';
 
 import BatchesList from './lists/BatchesList.jsx';
 import ItemsList from './lists/ItemsList.jsx';
-import GroupsList from './lists/GroupsList.jsx';
 import WidgetsList from './lists/WidgetsList.jsx';
 /*
 view: this.props.view,
@@ -139,6 +139,31 @@ export default class DataViewOps extends Component	{
       );
     }
     
+    if(view === 'reports') {
+      Session.set('nowBatch', false);
+      return (
+        <TraverseWrap
+		      batchData={false}
+          widgetData={false}
+          versionData={false}
+          groupData={false}
+          user={user}
+          app={app}
+          title='Reports'
+          subLink={subLink}
+          action={false}
+          base={true}
+          landing={false}
+        >
+          <Reports
+            batchData={allBatch}
+            widgetData={allWidget}
+            groupData={allGroup} 
+            app={app} />
+        </TraverseWrap>
+      );
+    }
+    
     if(view === 'overview') {
       Session.set('nowBatch', false);
       if(request === 'groups') {
@@ -153,7 +178,8 @@ export default class DataViewOps extends Component	{
             title='Groups Overview'
             subLink={subLink}
             action='newGroup'
-            landing={true}
+            base={true}
+            landing={false}
           >
             <AllGroups
               batchData={allBatch}
@@ -161,11 +187,6 @@ export default class DataViewOps extends Component	{
               widgetData={allWidget}
               groupData={allGroup} 
               app={app} />
-            <GroupsList
-              groupData={allGroup}
-              batchData={allBatch}
-              batchDataX={allXBatch}
-              widgetData={allWidget} />
           </TraverseWrap>
         );
       }else if(request === 'batches') {
@@ -180,16 +201,17 @@ export default class DataViewOps extends Component	{
             title='Batches Overview'
             subLink={subLink}
             action={false}
-            landing={true}
+            base={true}
+            landing={false}
           >
             <AllBatches
               batchData={allBatch}
               widgetData={allWidget}
-              groupData={allGroup} 
+              groupData={allGroup}
+              allWidget={allWidget}
+              allBatch={allBatch}
+              allXBatch={allXBatch}
               app={app} />
-            <BatchesList
-              batchData={[...allBatch, ...allXBatch]}
-              widgetData={allWidget} />
           </TraverseWrap>
         );
       }else if(request === 'scraps') {

@@ -1,7 +1,7 @@
 .containerEx {
   display: grid;
   grid-template-rows: 10vh 90vh;
-  grid-template-columns: 48px auto;
+  grid-template-columns: 10vh auto;
   grid-template-areas: 
     'tenHeader tenHeader'
     'taskBar contentArea';
@@ -199,10 +199,10 @@
   background-color: rgb(25,25,25);
   color: var(--silver);
   margin: 8px 0;
-  width: 35px;
-  height: 35px;
+  width: 6vh;
+  height: 6vh;
   border-radius: 50%;
-  font-size: 1.4rem;
+  font-size: 3.5vh;
 }
 .taskLink:first-child {
   margin: 10px 0 5px 0;
@@ -215,7 +215,7 @@
   background-color: var(--silver);
 }
 .onTL {
-  color: var(--black);
+  color: rgb(25,25,25);
   background-color: var(--silver);
 }
 

@@ -33,7 +33,7 @@ const UndoFinish = ({ id, serial, finishedAt, timelock, noText })=>	{
       lock={!auth}
       noText={noText}>
       <div>
-        <p className='centreText'>After one hour, reactivating an {Pref.item} requires an override</p>
+        <p className='centreText'>After one week, reactivating an {Pref.item} requires an override</p>
         <p className='centreText'>After the {Pref.batch} is finished, {Pref.items} are locked and cannot be changed</p>
         <p className='centreText'>
           <i>This {Pref.item} was finished <b>{moment(finishedAt).fromNow()}</b></i>

@@ -549,7 +549,7 @@ Meteor.methods({
       const doc = BatchDB.findOne({_id: batchId});
       const docOpen = doc ? doc.finishedAt === false : false;
       const subDoc = doc ? doc.items.find( x => x.serial === serial ) : false;
-      const inTime = subDoc.finishedAt !== false ? moment().diff(moment(subDoc.finishedAt), 'minutes') < 60 : false;
+      const inTime = subDoc.finishedAt !== false ? moment().diff(moment(subDoc.finishedAt), 'minutes') < (60 * 24 * 7) : false;
       const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
       const orgPIN = org ? org.orgPIN : null;
       if(doc && docOpen && (inTime || orgPIN === override)) {

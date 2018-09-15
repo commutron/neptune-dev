@@ -162,7 +162,7 @@ const StoneSelect = ({
   
   // end of flow
   Session.set('nowStep', 'done');
-  const timelock = moment().diff(moment(finishedAt), 'minutes') > 60;
+  const timelock = moment().diff(moment(finishedAt), 'minutes') > (60 * 24 * 7);
   return (
     <div className={expand && 'stonePlus'}>
       <div className={expand && 'stonePlusLeft'}>
