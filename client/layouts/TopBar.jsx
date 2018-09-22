@@ -1,14 +1,14 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import RoleCheck from '/client/components/utilities/RoleCheck.js';
+//import RoleCheck from '/client/components/utilities/RoleCheck.js';
 
 import Spin from '../components/uUi/Spin.jsx';
 import Freeze from '../components/tinyUi/Freeze.jsx';
 //import InitialSetup from '../views/InitialSetup.jsx';
-import UserSlide from '/client/views/app/UserSlide.jsx';
-import Chill from '../components/tinyUi/Chill.jsx';
-import ExternalLink from '../components/uUi/ExternalLink.jsx';
+//import UserSlide from '/client/views/app/UserSlide.jsx';
+//import Chill from '../components/tinyUi/Chill.jsx';
+//import ExternalLink from '../components/uUi/ExternalLink.jsx';
 
 const TopBar = ({ ready, user, active, org, app, link })=> {
       
@@ -33,6 +33,10 @@ const TopBar = ({ ready, user, active, org, app, link })=> {
   }
   */
   
+  return(
+    <div>dead component</div>
+  );
+  /*
   return (
     <div className='primeNav'>
       <span className='primeNavLogo'>
@@ -91,6 +95,7 @@ const TopBar = ({ ready, user, active, org, app, link })=> {
       </span>
     </div>
   );
+  */
 };
 
 export default withTracker( ({ link }) => {

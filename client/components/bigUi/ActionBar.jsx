@@ -87,6 +87,7 @@ const ActionBar = ({batchData, itemData, groupData, widgetData, versionData, app
                     '&ver=' + versionData.version +
                     '&desc=' + widgetData.describe +
                     '&sales=' + (batchData.salesOrder || '') +
+                    '&fulfill=' + (batchData.end || '') +
                     '&quant=' + batchData.items.length }
           title='Print Label'
           icon='fa-print'
@@ -146,6 +147,7 @@ const ActionBar = ({batchData, itemData, groupData, widgetData, versionData, app
                     '&ver=' + versionData.version +
                     '&desc=' + widgetData.describe +
                     '&sales=' + (batchData.salesOrder || '') +
+                    '&fulfill=' + (batchData.salesEnd || '') +
                     '&quant=' + batchData.quantity }
           title='Print Label'
           icon='fa-print'
@@ -222,7 +224,8 @@ const ActionBar = ({batchData, itemData, groupData, widgetData, versionData, app
             name={groupData.group}
             alias={groupData.alias}
             wiki={groupData.wiki}
-            noText={noText} />
+            noText={noText}
+            primeTopRight={false} />
           <WidgetNewForm
             groupId={groupData._id}
             end={app.lastTrack} 
@@ -244,15 +247,7 @@ const ActionBar = ({batchData, itemData, groupData, widgetData, versionData, app
     <div className='footCent'></div>
         
   { /* Right Section */ }
-    <div className='footRight'>
-      {action === 'newGroup' &&
-         <GroupForm
-          id={false}
-          name={false}
-          alias={false}
-          wiki={false}
-          noText={false} />}
-    </div>
+    <div className='footRight'></div>
   </div>
 );
 

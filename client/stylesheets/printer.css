@@ -1,10 +1,12 @@
 
 .printLabel {
+  box-sizing: content-box;
+  font-family: 'Varela Round';
   width: 900px;
   height: 600px;
   margin: auto;
   border: 2px dashed black;
-  padding: 30px 30px 30px 30px;
+  padding: 0;
   background-color: white;
   color: black;
   font-weight: 900;
@@ -13,8 +15,8 @@
 }
 
 .printLabel div {
-  margin: 15px 5px;
-  padding: 0 5px;
+  margin: 15px 0;
+  padding: 0;
   align-items: center;
 }
 
@@ -24,25 +26,21 @@
 }
 
 .printLabel input {
-  width: 350px;
+  width: 300px;
   border: none;
-  line-height: 3rem;
   font-weight: 800;
   text-align: center;
 }
 
-.pxxlg {
+
+.pxlg {
   font-size: 8rem;
   line-height: 8rem;
 }
 
-.pxlg {
-  font-size: 4.5rem;
-  line-height: 4.5rem;
-}
-
 .plg {
   font-size: 4rem;
+  line-height: 4rem;
 }
 
 .pmd {

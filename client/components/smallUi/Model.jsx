@@ -25,7 +25,8 @@ export default class Model extends Component	{
   render() {
     
     const noText = this.props.noText;
-    let iSize = this.props.smIcon ? ' fa-1x ' : ' fa-lg ';
+    let iSize = this.props.primeTopRight ? ' fa-2x ' :
+                this.props.smIcon ? ' fa-1x ' : ' fa-lg ';
     
     return (
       <span>

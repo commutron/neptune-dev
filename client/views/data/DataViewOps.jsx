@@ -175,7 +175,7 @@ export default class DataViewOps extends Component	{
             groupData={false}
             user={user}
             app={app}
-            title='Groups Overview'
+            title={Pref.groups + ' Overview'}
             subLink={subLink}
             action='newGroup'
             base={true}
@@ -198,7 +198,7 @@ export default class DataViewOps extends Component	{
             groupData={false}
             user={user}
             app={app}
-            title='Batches Overview'
+            title={Pref.batches + ' Overview'}
             subLink={subLink}
             action={false}
             base={true}

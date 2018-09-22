@@ -57,17 +57,18 @@ export default class GroupForm extends Component {
     const orName = this.props.name ? this.props.name : '';
     const orAlias = this.props.alias ? this.props.alias : '';
     const orWiki = this.props.wiki ? this.props.wiki : '';
-    const bttn = this.props.name ? 'edit' : 'new';
+    const bttn = this.props.name ? 'edit ' + Pref.group : 'new';
     const title = this.props.name ? 'edit' : 'create new';
 
     return (
       <Model
-        button={bttn + ' ' + Pref.group}
+        button={bttn}
         title={title + ' ' + Pref.group}
         color='greenT'
         icon='fa-users'
         lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit'])}
-        noText={this.props.noText}>
+        noText={this.props.noText}
+        primeTopRight={this.props.primeTopRight}>
         <form id='new' className='centre' onSubmit={this.createCustomer.bind(this)}>
           <p>
             <input

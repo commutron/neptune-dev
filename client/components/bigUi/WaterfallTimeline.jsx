@@ -13,15 +13,20 @@ const WaterfallTimeline = ({ waterfalls, quantity, app })=> (
       
       const type = app.countOption.find( x => x.key === entry.wfKey ).type;
       let borderColor = 'borderBlue';
+      let barColor = 'proBlue';
       //// Style the Stone Accordingly \\\\
     	if(type === 'inspect'){
     		borderColor = 'borderGreen';
+    		barColor = 'proGreen';
       }else if(type === 'checkpoint'){
     		borderColor = 'borderWhite';
+    		barColor = 'proWhite';
       }else if(type === 'test'){
     		borderColor = 'borderTeal';
+    		barColor = 'proTeal';
       }else if(type === 'finish'){
-    		borderColor = 'borderPurple'
+    		borderColor = 'borderPurple';
+    		barColor = 'proPurple';
       }else{
         null }
         
@@ -32,7 +37,8 @@ const WaterfallTimeline = ({ waterfalls, quantity, app })=> (
               key={entry.wfKey}
               title={entry.gate}
               count={count}
-              total={quantity} />
+              total={quantity}
+              barColor={barColor} />
           </summary>
           <dl className='waterfallTimeline'>
           {entry.counts.map( (dt, index)=>{

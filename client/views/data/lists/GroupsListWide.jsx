@@ -2,21 +2,17 @@ import React, {Component} from 'react';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 
 import LeapRow from '/client/components/tinyUi/LeapRow.jsx';
-import FilterActive from '../../../components/bigUi/FilterActive.jsx';
+import DumbFilter from '/client/components/tinyUi/DumbFilter.jsx';
 
 export default class GroupsList extends Component	{
   
   constructor() {
     super();
     this.state = {
-      filter: false,
       textString: ''
     };
   }
   
-  setFilter(rule) {
-    this.setState({ filter: rule });
-  }
   setTextFilter(rule) {
     this.setState({ textString: rule.toLowerCase() });
   }
@@ -47,21 +43,18 @@ export default class GroupsList extends Component	{
 
   render() {
     
+    /*
     const g = this.props.groupData.sort((g1, g2)=> {
                     if (g1.group < g2.group) { return -1 }
                     if (g1.group > g2.group) { return 1 }
                     return 0;
                   });
+    */
     const a = this.groupActive();
     const f = this.state.filter;
     
-    let basicFilter = 
-      f === 'done' ?
-      g.filter( x => a.includes(x._id) === false ) :
-      f === 'inproc' ?
-      g.filter( x => a.includes(x._id) !== false ) :
-      g;
-    let showList = basicFilter.filter( 
+    
+    let showList = this.props.groupData.filter( 
       tx => tx.group.toLowerCase().includes(this.state.textString) === true ||
             tx.alias.toLowerCase().includes(this.state.textString) === true);
     
@@ -77,12 +70,8 @@ export default class GroupsList extends Component	{
           <div className='tableList'>
           
             <div className=''>
-              <FilterActive
-                title={g.alias}
-                done='Inactive'
-                open={true}
-                total={showList.length}
-                onClick={e => this.setFilter(e)}
+              <DumbFilter
+                size='big'
                 onTxtChange={e => this.setTextFilter(e)} />
             </div>  
           
@@ -91,8 +80,8 @@ export default class GroupsList extends Component	{
               return (
                 <LeapRow
                   key={index}
-                  title={entry.group}
-                  cTwo={false}
+                  title={entry.alias}
+                  cTwo={entry.group}
                   cThree={false}
                   cFour={false}
                   sty={ac}

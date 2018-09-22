@@ -171,6 +171,7 @@ privlegedRoutes.route('/print/generallabel/:batch', {
           request.includes('ver') &&
           request.includes('desc') &&
           request.includes('sales') &&
+          request.includes('fulfill') &&
           request.includes('quant')
         ) {
           mount(LabelLayout, {

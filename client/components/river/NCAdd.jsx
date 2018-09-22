@@ -14,10 +14,17 @@ const NCAdd = ({ id, barcode, app })=> {
     if(refSplit.length > 0 && refSplit[0] !== '') {
       for(let ref of refSplit) {
         ref = ref.replace(",", "");
-        Meteor.call('addNC', id, barcode, ref, type, where, andFix, (error)=>{
-          if(error)
-            console.log(error);
-        });
+        if(ref.length < 9) {
+          Meteor.call('addNC', id, barcode, ref, type, where, andFix, (error)=>{
+            error && console.log(error);
+          });
+        }else{
+          Bert.alert({ 
+            title: 'Caution',
+            message: "Can't add '" + ref + "', A referance can only be 8 characters long",
+            type: 'carrot'
+          });
+        }
       }
       this.discStp.value = Session.get('nowStep');
       this.ncRefs.value = '';

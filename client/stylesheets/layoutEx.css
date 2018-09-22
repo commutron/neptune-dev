@@ -203,6 +203,7 @@
   height: 6vh;
   border-radius: 50%;
   font-size: 3.5vh;
+  cursor: pointer;
 }
 .taskLink:first-child {
   margin: 10px 0 5px 0;
@@ -210,13 +211,12 @@
 .taskLink:disabled {
   color: black;
 }
-.taskLink:hover, .taskLink:active {
+.taskLink:hover, .taskLink:active, .onTL {
   color: rgb(25,25,25);
   background-color: var(--silver);
-}
-.onTL {
-  color: rgb(25,25,25);
-  background-color: var(--silver);
+  -moz-box-shadow: var(--dropShadow00);
+  -webkit-box-shadow: var(--dropShadow00);
+  box-shadow: var(--dropShadow00);
 }
 
 .smallResultsBox {

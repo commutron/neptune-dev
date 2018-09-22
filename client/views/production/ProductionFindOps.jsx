@@ -256,6 +256,7 @@ export default class ProductionFindOps extends Component	{
             batchData={false}
             itemData={false}
             versionData={false}
+            groupAlias={lookup.alias}
             app={app}
           >
             <WidgetsList

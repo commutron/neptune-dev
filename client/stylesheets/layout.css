@@ -96,41 +96,7 @@ main {
 .centreSelf { align-self: center; }
 
 /* ============================================= */
-/*
-.basicContainer {
-  display: grid;
-  grid-template-columns: 256px auto;
-  align-content: center;
-  overflow-y: hidden !important;
-  overflow-x: hidden !important;
-  -webkit-overflow-scrolling: touch;
-  min-width: 768px;
-  min-height: 100vh;
-}
 
-.basicContainer {
-  grid-template-rows: 48px calc(100vh - 48px);
-  grid-template-areas: 
-    'headerNav headerNav'
-    "mainFull mainFull";
-}
-
-.gridHeaderNav {
-  grid-area: headerNav;
-  width: 100%;
-  z-index: 9;
-  background-color: var(--neptuneColor);
-  -webkit-box-shadow: 0 0 15px 0.5px rgb(0,0,0);
-  -moz-box-shadow:    0 0 15px 0.5px rgb(0,0,0);
-  box-shadow:         0 0 15px 0.5px rgb(0,0,0);
-}
-
-.basicMainFull {
-  grid-area: mainFull;
-  min-height: calc(100vh - 48px);
-  overflow-y: auto;
-}
-*/
 .centreContainer {
   display: grid;
   width: 100vw;
@@ -169,7 +135,7 @@ main {
   grid-area: rightSpace;
   background-color: rgb(25,25,25);
 }
-.rightSpace button {
+.rightSpace > button {
   width: 100%;
   height: 100%;
   background-color: transparent;
@@ -376,7 +342,8 @@ main {
 }
 
 .tableList {
-  width: 80%;
+  min-width: 80vw;
+  max-width: 1200px;
   display: table;
 }
 .tableList div:nth-child(odd),

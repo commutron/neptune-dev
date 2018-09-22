@@ -6,6 +6,7 @@ import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
 import TaskBar from './TaskBar.jsx';
 import ActionBar from '/client/components/bigUi/ActionBar.jsx';
 import CookieBar from './CookieBar.jsx';
+import GroupForm from '/client/components/forms/GroupForm.jsx';
 
 export const TraverseWrap = ({
   itemData,
@@ -38,7 +39,7 @@ export const TraverseWrap = ({
           <div className='topBorder' />
           <HomeIcon />
           {landing || base ? 
-            <div className='frontCenterTitle'>{title}</div>
+            <div className='frontCenterTitle cap'>{title}</div>
           :
             <CookieBar
               batchData={batchData}
@@ -65,6 +66,22 @@ export const TraverseWrap = ({
                 onClick={()=>goPro(batchData.batch)}>
                 <i className='fas fa-paper-plane topRightIcon' data-fa-transform='left-1'></i>
               </button>
+            :
+             groupData ? 
+              <button 
+                title='View this in production'
+                onClick={()=>goPro(groupData.alias)}>
+                <i className='fas fa-paper-plane topRightIcon' data-fa-transform='left-1'></i>
+              </button>
+            :
+             action === 'newGroup' ?
+              <GroupForm
+                id={false}
+                name={false}
+                alias={false}
+                wiki={false}
+                noText={false}
+                primeTopRight={true} />
             :null}
           </div>
         

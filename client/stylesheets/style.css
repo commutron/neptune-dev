@@ -134,10 +134,11 @@
 	margin: 0;
 	padding: 12px 6px;
 	padding: calc(1em - 0.1vw) calc(1em - 0.1vw);
-	background-color: transparent;
+	background-color: rgb(25,25,25);
 	color: var(--clouds);
   word-break: keep-all;
   word-wrap: normal;
+  cursor: pointer;
 }
 
 .leapBar {
@@ -152,17 +153,18 @@
 
 .leapRow {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-template-columns: 200px repeat(auto-fit, minmax(100px, 1fr));
 	align-items: center;
-	border: 2px solid var(--black);
+	border: none;
   border-left-width: 8px;
   border-left-style: solid;
   border-left-color: white;
-  word-break: keep-all;
-  word-wrap: normal;
+  overflow: hidden;
+  -moz-box-shadow: var(--dropShadow00);
+  -webkit-box-shadow: var(--dropShadow00);
+  box-shadow: var(--dropShadow00);
 }
 .leapRow > span > p{
-  cursor: default;
   height: 100%;
   font-size: 1.25rem;
 }
@@ -553,6 +555,28 @@
 .borderTeal { border-color: var(--greenSea); }
 .borderPurple { border-color: var(--wisteria); }
 
+.proWhite::-webkit-progress-value { background-color: var(--clouds); }
+.proWhite::-moz-progress-bar { background-color: var(--clouds); }
+
+.proGreen::-webkit-progress-value { background-color: var(--nephritis); }
+.proGreen::-moz-progress-bar { background-color: var(--nephritis); }
+
+.proBlue::-webkit-progress-value { background-color: var(--belizeHole); }
+.proBlue::-moz-progress-bar { background-color: var(--belizeHole); }
+
+.proRed::-webkit-progress-value { background-color: var(--alizarin); }
+.proRed::-moz-progress-bar { background-color: var(--alizarin); }
+
+.proOrange::-webkit-progress-value { background-color: var(--orange); }
+.proOrange::-moz-progress-bar { background-color: var(--orange); }
+
+.proTeal::-webkit-progress-value { background-color: var(--greenSea); }
+.proTeal::-moz-progress-bar { background-color: var(--greenSea); }
+
+.proPurple::-webkit-progress-value { background-color: var(--wisteria); }
+.proPurple::-moz-progress-bar { background-color: var(--wisteria); }
+
+
 .clean {
   font-style: normal;
   text-transform: none;
@@ -660,6 +684,32 @@
 }
 .hiddenInput > button:disabled {
   display: none;
+}
+
+input.variableInput.med { 
+  font-size: 1rem;
+  height: 32px;
+  width: 240px;
+}
+input.variableInput.medBig {
+  font-size: 1.2rem; 
+  height: 40px;
+  width: 248px;
+}
+input.variableInput.big { 
+  font-size: 1.5rem;
+  height: 48px;
+  width: 256px;
+}
+input.variableInput.bigger { 
+  font-size: 1.75rem; 
+  height: 56px;
+  width: 264px;
+}
+input.variableInput.biggest { 
+  font-size: 2rem;
+  height: 64px;
+  width: 272px;
 }
 
 .grid {

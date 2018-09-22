@@ -1,6 +1,6 @@
 import React from 'react';
 
-const MiniBar = ({ title, count, total })=> {
+const MiniBar = ({ title, count, total, barColor })=> {
   let v = count;
   let t = total;
   
@@ -15,7 +15,7 @@ const MiniBar = ({ title, count, total })=> {
   return(
     <div className='meterprogStack'>
       <p style={name} className='cap'>{title}</p>
-      <progress className='proGood' value={v} max={t}></progress>
+      <progress className={barColor || 'proGood'} value={v} max={t}></progress>
       <p style={num} className='numFont'>{v}/{t}</p>
     </div>
   );

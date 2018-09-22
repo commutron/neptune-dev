@@ -47,14 +47,25 @@ export class ProWrap extends Component	{
       overflowY: 'auto'
     };
     
+    const gAlias = this.props.groupAlias;
     const bData = this.props.batchData;
     const iS = this.props.itemSerial;
     const append = bData && iS ? bData.batch : null;
     
-    const exploreLink = !bData ? false : !iS ?
-                        '/data/batch?request=' + bData.batch :
-                        '/data/batch?request=' + bData.batch + '&specify=' + iS;
+    //const exploreLink = !bData ? false : !iS ?
+                        //'/data/batch?request=' + bData.batch :
+                        //'/data/batch?request=' + bData.batch + '&specify=' + iS;
     
+    const exploreLink = iS && bData ?
+                        '/data/batch?request=' + bData.batch + '&specify=' + iS :
+                        bData ?
+                        '/data/batch?request=' + bData.batch :
+                        gAlias ?
+                        '/data/group?request=' + gAlias :
+                        null;
+                        
+                        
+                        
     const path = !bData ? { flow: [], flowAlt: [], progCounts: false } : this.getFlows();
     
     let riverExpand = this.state.expand;
