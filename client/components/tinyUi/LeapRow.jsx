@@ -10,7 +10,7 @@ const LeapRow = ({ title, cTwo, cThree, cFour, cFive, sty, address })=> {
   return(
     <div
       role='button'
-      className={sty + ' leapRow up'}
+      className={sty + ' leapRow'}
       onClick={()=>FlowRouter.go(address)}
       value={title}>
       <span>{title}</span>

@@ -14,7 +14,7 @@ export default class BatchesListWide extends Component	{
   }
 
   setTextFilter(rule) {
-    this.setState({ textString: rule });
+    this.setState({ textString: rule.toLowerCase() });
   }
 
   render() {
@@ -39,16 +39,16 @@ export default class BatchesListWide extends Component	{
       });
     }
     
-    const query = this.state.textString;
+    const query = this.state.textString.toLowerCase();
     
     let showList = blendedList.filter( 
                     tx => 
-                      tx.batchNumber.toLowerCase().includes(query.toLowerCase()) === true ||
-                      tx.salesNumber.toLowerCase().includes(query.toLowerCase()) === true ||
-                      tx.groupAlias.toLowerCase().includes(query.toLowerCase()) === true ||
-                      tx.widget.toLowerCase().includes(query.toLowerCase()) === true ||
-                      tx.version.toLowerCase().includes(query.toLowerCase()) === true ||
-                      tx.tags.includes(query) === true
+                      tx.batchNumber.toLowerCase().includes(query) === true ||
+                      tx.salesNumber.toLowerCase().includes(query) === true ||
+                      tx.groupAlias.toLowerCase().includes(query) === true ||
+                      tx.widget.toLowerCase().includes(query) === true ||
+                      tx.version.toLowerCase().includes(query) === true ||
+                      tx.tags.join('|').toLowerCase().split('|').includes(query) === true
                   );
     let sortList = showList.sort((b1, b2)=> {
                 if (b1.batchNumber < b2.batchNumber) { return 1 }
@@ -64,7 +64,7 @@ export default class BatchesListWide extends Component	{
                 id='batchOverview'
                 size='big'
                 onTxtChange={e => this.setTextFilter(e)}
-                labelText='Filter searches all columns, only tags are case-sensitve'
+                labelText='Filter searches all columns, not case-sensitve.'
                 list={this.props.app.tagOption} />
             </div>
 
@@ -74,10 +74,10 @@ export default class BatchesListWide extends Component	{
                 return (
                   <LeapRow
                     key={index}
-                    title={entry.batchNumber}
-                    cTwo={<i><i className='smaller'>so: </i>{entry.salesNumber}</i>}
-                    cThree={entry.groupAlias}
-                    cFour={entry.widget + ' v.' + entry.version}
+                    title={entry.batchNumber.toUpperCase()}
+                    cTwo={<i><i className='smaller'>so: </i>{entry.salesNumber.toUpperCase()}</i>}
+                    cThree={entry.groupAlias.toUpperCase()}
+                    cFour={entry.widget.toUpperCase() + ' v.' + entry.version}
                     cFive={tags}
                     sty={entry.highlight}
                     address={'/data/batch?request=' + entry.batchNumber}
