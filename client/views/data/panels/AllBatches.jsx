@@ -34,7 +34,8 @@ const AllBatches = ({ groupData, widgetData, allWidget, batchData, allBatch, all
         <BatchesListWide
           batchData={[...allBatch, ...allXBatch]}
           widgetData={allWidget}
-          groupData={groupData} />
+          groupData={groupData}
+          app={app} />
 
         
     </div>

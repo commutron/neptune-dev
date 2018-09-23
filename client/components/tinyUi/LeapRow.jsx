@@ -6,17 +6,18 @@ import React from 'react';
 // sty as className text
 // address as string
 
-const LeapRow = ({ title, cTwo, cThree, cFour, sty, address })=> {
+const LeapRow = ({ title, cTwo, cThree, cFour, cFive, sty, address })=> {
   return(
     <div
       role='button'
       className={sty + ' leapRow up'}
       onClick={()=>FlowRouter.go(address)}
       value={title}>
-      <span><p>{title}</p></span>
-      {cTwo && <span><p>{cTwo}</p></span>}
-      {cThree && <span><p>{cThree}</p></span>}
-      {cFour && <span><p>{cFour}</p></span>}
+      <span>{title}</span>
+      {cTwo && <span>{cTwo}</span>}
+      {cThree && <span>{cThree}</span>}
+      {cFour && <span>{cFour}</span>}
+      {cFive && <span>{cFive}</span>}
     </div>
   );
 };

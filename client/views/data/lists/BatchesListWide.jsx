@@ -14,7 +14,7 @@ export default class BatchesListWide extends Component	{
   }
 
   setTextFilter(rule) {
-    this.setState({ textString: rule.toLowerCase() });
+    this.setState({ textString: rule });
   }
 
   render() {
@@ -34,17 +34,21 @@ export default class BatchesListWide extends Component	{
         groupAlias: subG.alias,
         widget: subW.widget, 
         version: subV.version,
+        tags: b.tags,
         highlight: style
       });
     }
     
+    const query = this.state.textString;
+    
     let showList = blendedList.filter( 
                     tx => 
-                      tx.batchNumber.toLowerCase().includes(this.state.textString) === true ||
-                      tx.salesNumber.toLowerCase().includes(this.state.textString) === true ||
-                      tx.groupAlias.toLowerCase().includes(this.state.textString) === true ||
-                      tx.widget.toLowerCase().includes(this.state.textString) === true ||
-                      tx.version.toLowerCase().includes(this.state.textString) === true
+                      tx.batchNumber.toLowerCase().includes(query.toLowerCase()) === true ||
+                      tx.salesNumber.toLowerCase().includes(query.toLowerCase()) === true ||
+                      tx.groupAlias.toLowerCase().includes(query.toLowerCase()) === true ||
+                      tx.widget.toLowerCase().includes(query.toLowerCase()) === true ||
+                      tx.version.toLowerCase().includes(query.toLowerCase()) === true ||
+                      tx.tags.includes(query) === true
                   );
     let sortList = showList.sort((b1, b2)=> {
                 if (b1.batchNumber < b2.batchNumber) { return 1 }
@@ -57,11 +61,16 @@ export default class BatchesListWide extends Component	{
           <div className='tableList'>
             <div className=''>
               <DumbFilter
+                id='batchOverview'
                 size='big'
-                onTxtChange={e => this.setTextFilter(e)} />
+                onTxtChange={e => this.setTextFilter(e)}
+                labelText='Filter searches all columns, only tags are case-sensitve'
+                list={this.props.app.tagOption} />
             </div>
 
             {sortList.map( (entry, index)=> {
+              const tags = entry.tags.map( (et, ix)=>{
+                return(<span key={ix} className='tagFlag'><i>{et}</i></span>)});
                 return (
                   <LeapRow
                     key={index}
@@ -69,6 +78,7 @@ export default class BatchesListWide extends Component	{
                     cTwo={<i><i className='smaller'>so: </i>{entry.salesNumber}</i>}
                     cThree={entry.groupAlias}
                     cFour={entry.widget + ' v.' + entry.version}
+                    cFive={tags}
                     sty={entry.highlight}
                     address={'/data/batch?request=' + entry.batchNumber}
                   />

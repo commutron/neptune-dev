@@ -346,8 +346,8 @@ main {
   max-width: 1200px;
   display: table;
 }
-.tableList div:nth-child(odd),
-.tableList button:nth-child(odd) {
+.tableList > div,
+.tableList > button {
   margin: 32px 0;
 }
 

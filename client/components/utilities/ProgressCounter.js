@@ -67,7 +67,7 @@ function outScrap(items) {
   return ( 
     items.filter( 
       o => o.history.filter( 
-        s => s.type === 'scrap' ).length === 0 )
+        s => s.type === 'scrap' && s.good === true ).length === 0 )
   );
 }
     

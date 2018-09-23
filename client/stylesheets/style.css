@@ -129,15 +129,13 @@
   min-height: 32px;
   font-size: 1rem;
   font-size: calc(1.1rem - 0.1vw);
-  letter-spacing: 1px;
+  /*letter-spacing: 1px;*/
   font-weight: 400;
 	margin: 0;
 	padding: 12px 6px;
 	padding: calc(1em - 0.1vw) calc(1em - 0.1vw);
 	background-color: rgb(25,25,25);
 	color: var(--clouds);
-  word-break: keep-all;
-  word-wrap: normal;
   cursor: pointer;
 }
 
@@ -160,15 +158,19 @@
   border-left-style: solid;
   border-left-color: white;
   overflow: hidden;
+  word-break: break-all;
+  word-wrap: break-word;
   -moz-box-shadow: var(--dropShadow00);
   -webkit-box-shadow: var(--dropShadow00);
   box-shadow: var(--dropShadow00);
 }
-.leapRow > span > p{
-  height: 100%;
+.leapRow > span {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
   font-size: 1.25rem;
 }
-.leapRow > span:first-child > p {
+.leapRow > span:first-child {
  font-size: 1.75rem;
 }
 
@@ -904,13 +906,16 @@ input.variableInput.biggest {
 
 
 .tagFlag {
-  margin: 3px 4px;
-  padding: 2px 2px 2px 5px;
+  margin: 4px 4px;
+  padding: 2px 5px 2px 5px;
   border: 0.5px solid white;
   border-radius: 5px;
   background-color: var(--belizeHole);
   font-size: 0.9rem;
   color: white;
+  word-break: keep-all;
+  word-wrap: normal;
+  
 }
 .tagFlag > button {
   position: relative;
@@ -927,7 +932,7 @@ input.variableInput.biggest {
   content: "\f00d";
   font-family: FontAwesome;
   position: absolute;
-  top: 49%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }

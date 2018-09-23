@@ -84,6 +84,7 @@ export default class GroupsList extends Component	{
                   cTwo={entry.group}
                   cThree={false}
                   cFour={false}
+                  cFive={false}
                   sty={ac}
                   address={'/data/group?request=' + entry.alias}
                 />
