@@ -208,7 +208,21 @@ Meteor.methods({
   },
   
   //// counter entries
-
+  
+  metaCounter(batchId, wfKey, meta) {
+    if(!Roles.userIsInRole(Meteor.userId(), 'active')) {
+      null;
+    }else{
+      XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'waterfall.wfKey': wfKey}, {
+        $push : { 'waterfall.$.counts': { 
+          tick: Number(0),
+          time: new Date(),
+          who: Meteor.userId(),
+          meta: meta
+      }}});
+    }
+  },
+  
   positiveCounter(batchId, wfKey) {
     if(!Roles.userIsInRole(Meteor.userId(), 'active')) {
       null;

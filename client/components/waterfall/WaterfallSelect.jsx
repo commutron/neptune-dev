@@ -41,16 +41,42 @@ const WaterfallSelect = ({ batchData, app })=> {
         0;
         const clear = total >= batchData.quantity;
         allTotal.push(clear);
+        const type = app.countOption.find( x => x.key === entry.wfKey ).type;
+        //let bannerColor = 'blue';
+        let borderColor = 'borderBlue';
+        let fadeColor = 'Blue';
+        //// Style the Stone Accordingly \\\\
+      	if(type === 'inspect'){
+      	  //bannerColor = 'green';
+      		borderColor = 'borderGreen';
+      		fadeColor = 'Green';
+        }else if(type === 'checkpoint'){
+          //bannerColor = 'white';
+      		borderColor = 'borderWhite';
+      		fadeColor = 'White';
+        }else if(type === 'test'){
+          //bannerColor = 'teal';
+      		borderColor = 'borderTeal';
+      		fadeColor = 'Teal';
+        }else if(type === 'finish'){
+          //bannerColor = 'purple';
+      		borderColor = 'borderPurple';
+      		fadeColor = 'Purple';
+        }else{
+          null }
+        const bannerColor = fadeColor.toLowerCase();
         return(
           <details key={entry.wfKey} className='waterfallWrap'>
-            <summary className='waterfallTitle'>{entry.gate}</summary>
+            <summary className={'waterfallTitle ' + bannerColor}>{entry.gate}</summary>
             <Waterfall
               id={batchData._id}
               fall={entry}
               total={total}
               quantity={batchData.quantity}
               lock={batchData.completed === true}
-              app={app} />
+              app={app}
+              borderColor={borderColor}
+              fadeColor={fadeColor} />
           </details>
       )})}
       {allTotal.every( x => x === true ) &&

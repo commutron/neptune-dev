@@ -1,11 +1,11 @@
 .waterfallSelector details {
-  height: 5vw;
+  height: 3vw;
   -webkit-box-shadow: none; 
   -moz-box-shadow: none;
   box-shadow: none;
 }
 .waterfallSelector details[open] {
-  height: 20vw;
+  height: 18vw;
 }
 
 .waterfallWrap {
@@ -16,12 +16,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 5vw;
-  font-size: calc(0.5rem + 1.5vw);
+  height: 3vw;
+  font-size: calc(0.5rem + 1vw);
   font-weight: 600;
-  background-color: var(--silver);
   color: black;
-  border-top: 5px solid var(--clouds);
+  border-top: 5px solid var(--silverfade);
 }
 
 .waterfallGrid {
@@ -33,7 +32,7 @@
   grid-template-areas: 
     'minusOne plusOne'
     'plusN plusOne'
-    'recKeys plusOne';
+    'recKey plusOne';
   justify-content: stretch;
   align-content: stretch;
 }
@@ -51,7 +50,11 @@
 .countPlus:active,
 .countPlus:disabled,
 .countMinus:active,
-.countMinus:disabled {
+.countMinus:disabled,
+.countOn:active,
+.countOn:disabled,
+.countOff:active,
+.countOff:disabled {
   filter: blur(5px);
 }
 .countPlus.countStop:disabled,
@@ -67,17 +70,32 @@
 }
 .countMinus:hover,
 .countMinus:active {
-  background-color: --pomegranate;
+  background-color: var(--pomegranate);
 }
 
 .countN {
   grid-area: plusN;
   font-size: calc(0.5rem + 1vw);
 }
+
 .countRec {
-  grid-area: recKeys;
+  grid-area: recKey;
   font-size: calc(0.5rem + 1vw);
 }
+
+/*
+.countOnOff {
+  grid-area: onoffKey;
+  font-size: calc(0.5rem + 1vw);
+}
+.countOff {
+  background-color: var(--alizarin);
+}
+.countOff:hover {
+  background-color: var(--pomegranate);
+}
+*/
+
 .countPlus {
   grid-area: plusOne;
   font-size: calc(0.5rem + 1.25vw);

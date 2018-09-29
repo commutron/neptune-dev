@@ -16,13 +16,13 @@
 
 .proSearch {
   grid-area: proSearch;
-  z-index: 10;
+  z-index: 9;
   -webkit-box-shadow: 0 0 15px 0.5px rgb(0,0,0);
   -moz-box-shadow:    0 0 15px 0.5px rgb(0,0,0);
   box-shadow:         0 0 15px 0.5px rgb(0,0,0);
 }
 .findForm {
-  z-index: 10;
+  z-index: 9;
   width: 100%;
   height: 100%;
   display: flex;

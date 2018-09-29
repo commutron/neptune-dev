@@ -42,9 +42,12 @@ const WaterfallTimeline = ({ waterfalls, quantity, app })=> (
           </summary>
           <dl className='waterfallTimeline'>
           {entry.counts.map( (dt, index)=>{
+            const tickColor = dt.tick === 0 ? 'whiteT small numFont' : dt.tick === 1 ? 'greenT' : 'redT';
+            const tickSymbol = dt.tick === 0 ? dt.meta === 'start' ?  '\u25B6' : '\u2BC0' :
+                                dt.tick === 1 ? '+' : '\u2212';
             return(
               <dd key={index}>
-                <b className={dt.tick === 1 ? 'greenT' : 'redT'}>{dt.tick === 1 ? '+' : '\u2212'}</b>
+                <b className={tickColor}>{tickSymbol}</b>
                 {moment(dt.time).format('YYYY ddd MMM DD hh:mm:ss.SS A')}, <UserName id={dt.who} />
               </dd>
           )})}

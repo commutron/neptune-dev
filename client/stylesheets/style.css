@@ -1264,7 +1264,11 @@ input.variableInput.biggest {
 }
 .waterfallTimeline b {
   font-size: 1.75em;
-  padding: 0 2vw;
+  padding: 0 20px;
+}
+.waterfallTimeline b.small {
+  font-size: 1em;
+  line-height: 1.75em;
 }
 
 /* custom Bert alerts */

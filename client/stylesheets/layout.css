@@ -185,7 +185,7 @@ main {
   grid-area: homeIcon;
   background-color: var(--neptuneColor);
   padding-bottom: 1vh;
-  z-index: 11;
+  z-index: 10;
 }
 .frontCenterTitle {
   grid-area: frontCenter;
