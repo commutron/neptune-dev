@@ -43,16 +43,7 @@ export default class GroupsList extends Component	{
 
   render() {
     
-    /*
-    const g = this.props.groupData.sort((g1, g2)=> {
-                    if (g1.group < g2.group) { return -1 }
-                    if (g1.group > g2.group) { return 1 }
-                    return 0;
-                  });
-    */
     const a = this.groupActive();
-    const f = this.state.filter;
-    
     
     let showList = this.props.groupData.filter( 
       tx => tx.group.toLowerCase().includes(this.state.textString) === true ||
@@ -72,7 +63,8 @@ export default class GroupsList extends Component	{
             <div className=''>
               <DumbFilter
                 size='big'
-                onTxtChange={e => this.setTextFilter(e)} />
+                onTxtChange={e => this.setTextFilter(e)}
+                labelText='Filter searches all text, not case-sensitve.' />
             </div>  
           
             {sortList.map( (entry, index)=> {
@@ -80,8 +72,8 @@ export default class GroupsList extends Component	{
               return (
                 <LeapRow
                   key={index}
-                  title={entry.alias}
-                  cTwo={entry.group}
+                  title={entry.alias.toUpperCase()}
+                  cTwo={<i className='cap'>{entry.group}</i>}
                   cThree={false}
                   cFour={false}
                   cFive={false}

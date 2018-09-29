@@ -124,14 +124,14 @@ export default class DataViewOps extends Component	{
           groupData={false}
           user={user}
           app={app}
-          title='Advanced Search'
+          title='Explore'
           subLink={subLink}
           action={false}
           base={true}
-          landing={false}
         >
           <AdvancedSearch
             batchData={allBatch}
+            xBatchData={allXBatch}
             widgetData={allWidget}
             groupData={allGroup} 
             app={app} />
@@ -153,7 +153,6 @@ export default class DataViewOps extends Component	{
           subLink={subLink}
           action={false}
           base={true}
-          landing={false}
         >
           <Reports
             batchData={allBatch}
@@ -179,7 +178,6 @@ export default class DataViewOps extends Component	{
             subLink={subLink}
             action='newGroup'
             base={true}
-            landing={false}
           >
             <AllGroups
               batchData={allBatch}
@@ -202,7 +200,6 @@ export default class DataViewOps extends Component	{
             subLink={subLink}
             action={false}
             base={true}
-            landing={false}
           >
             <AllBatches
               batchData={allBatch}
@@ -227,7 +224,6 @@ export default class DataViewOps extends Component	{
             subLink={subLink}
             action={false}
             base={true}
-            landing={false}
           >
             <ScrapPanel batchData={allBatch} />
           </TraverseWrap>
@@ -245,7 +241,6 @@ export default class DataViewOps extends Component	{
             subLink={subLink}
             action={false}
             base={true}
-            landing={false}
           >
             <div className='centre'>
               <p>remember the cant</p>
@@ -302,7 +297,7 @@ export default class DataViewOps extends Component	{
               title='!!!'
               subLink={subLink}
               action={false}
-              landing={true}
+              base={true}
             >
               <div className='centre wide'>
                 <p className='big'>Data Does Not Exist</p>
@@ -390,16 +385,13 @@ export default class DataViewOps extends Component	{
             title='Group'
             subLink={subLink}
             action='group'
+            base={false}
           >
             <GroupPanel
               groupData={group}
               widgetData={widgets}
               active={activeWidgets}
               app={app} />
-            <WidgetsList
-              groupAlias={group.alias}
-              widgetData={widgets}
-              active={activeWidgets} />
           </TraverseWrap>
         );
       }
@@ -453,7 +445,6 @@ export default class DataViewOps extends Component	{
         subLink={subLink}
         action={false}
         base={true}
-        landing={false}
       >
         <div className='centre wide'>
           <p className='biggest'>¯\_(ツ)_/¯</p>

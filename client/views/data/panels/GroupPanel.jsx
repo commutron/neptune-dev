@@ -17,7 +17,7 @@ export default class GroupPanel extends Component	{
 
     return (
       <AnimateWrap type='cardTrans'>
-        <div className='section' key={g.alias}>
+        <div className='section centre' key={g.alias}>
         
           <div className='titleSection'>
             <span className='cap'>{g.group}</span>

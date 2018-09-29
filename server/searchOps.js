@@ -40,13 +40,20 @@ Meteor.methods({
   
   widgetTops(wID) {
     const batches = BatchDB.find({orgKey: Meteor.user().orgKey, widgetId: wID}).fetch();
+    const batchesX = XBatchDB.find({orgKey: Meteor.user().orgKey, widgetId: wID}).fetch();
     const batchInfo = Array.from(batches, x => { return { 
       start: x.start,
       finish: x.finishedAt,
       items: x.items.length,
       nonCons: x.nonCon.length,
     }});
-    return batchInfo;
+    const batchInfoX = Array.from(batchesX, x => { return { 
+      start: x.salesStart,
+      complete: x.completedAt,
+      quantity: x.quantity,
+      nonCons: x.nonconformaces.length,
+    }});
+    return { batchInfo, batchInfoX };
   },
   
     ///////////////////////////////////////////////////////////////////////////////////

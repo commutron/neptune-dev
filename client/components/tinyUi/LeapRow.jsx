@@ -6,7 +6,7 @@ import React from 'react';
 // sty as className text
 // address as string
 
-const LeapRow = ({ title, cTwo, cThree, cFour, cFive, sty, address })=> {
+const LeapRow = ({ title, cTwo, cThree, cFour, cFive, cSix, cSeven, cEight, cNine, cTen, sty, address })=> {
   return(
     <div
       role='button'
@@ -18,6 +18,11 @@ const LeapRow = ({ title, cTwo, cThree, cFour, cFive, sty, address })=> {
       {cThree && <span>{cThree}</span>}
       {cFour && <span>{cFour}</span>}
       {cFive && <span>{cFive}</span>}
+      {cSix && <span>{cSix}</span>}
+      {cSeven && <span>{cSeven}</span>}
+      {cEight && <span>{cEight}</span>}
+      {cNine && <span>{cNine}</span>}
+      {cTen && <span>{cTen}</span>}
     </div>
   );
 };

@@ -3,10 +3,14 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import NumBox from '/client/components/uUi/NumBox.jsx';
 
-const AdvancedSearch = ({ groupData, widgetData, batchData, app }) => {
+const AdvancedSearch = ({ groupData, widgetData, batchData, xBatchData, app }) => {
   
   const total = batchData.length;
-  const active = batchData.filter( x => x.finishedAt === false ).length;
+  const xTotal = xBatchData.length;
+  const active = batchData.filter( x => x.active === true ).length;
+  const xActive = xBatchData.filter( x => x.active === true ).length;
+  const process = batchData.filter( x => x.finishedAt === false ).length;
+  const xProcess = xBatchData.filter( x => x.completed === false ).length;
   const verAdd = Array.from(widgetData, x => x.versions.length).reduce((x, y) => x + y);
 
   return(
@@ -27,15 +31,19 @@ const AdvancedSearch = ({ groupData, widgetData, batchData, app }) => {
             name={Pref.version + 's'}
             color='blueT' />
           <NumBox
-            num={total}
+            num={total + xTotal}
             name={'Total ' + Pref.batch + 's'}
             color='blueT' />
           <NumBox
-            num={active}
+            num={active + xActive}
             name={'Active ' + Pref.batch + 's'}
             color='blueT' />
           <NumBox
-            num={total - active}
+            num={process + xProcess}
+            name={'In Process ' + Pref.batch + 's'}
+            color='blueT' />
+          <NumBox
+            num={(total + xTotal) - (process + xProcess)}
             name={'Finished ' + Pref.batch + 's'}
             color='greenT' />
         </div>

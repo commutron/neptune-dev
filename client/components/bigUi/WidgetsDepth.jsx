@@ -3,8 +3,8 @@ import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import { CalcSpin } from '/client/components/uUi/Spin.jsx';
-import LeapButton from '/client/components/tinyUi/LeapButton.jsx';
-import WidgetSort from '/client/components/bigUi/WidgetSort.jsx';
+import DumbFilter from '/client/components/tinyUi/DumbFilter.jsx';
+import LeapRow from '/client/components/tinyUi/LeapRow.jsx';
 import NumStat from '/client/components/uUi/NumStat.jsx';
 
 export default class WidgetsDepth extends Component	{
@@ -12,14 +12,10 @@ export default class WidgetsDepth extends Component	{
   constructor() {
     super();
     this.state = {
-      filter: false,
       textString: ''
     };
   }
   
-  setFilter(rule) {
-    this.setState({ filter: rule });
-  }
   setTextFilter(rule) {
     this.setState({ textString: rule.toLowerCase() });
   }
@@ -34,25 +30,19 @@ export default class WidgetsDepth extends Component	{
                   return 0;
                 });
     //const g = this.props.groupAlias;
-    const f = this.state.filter;
     
-    let basicFilter = 
-      f === 'done' ?
-      w.filter( x => active.includes(x._id) === false ) :
-      f === 'inproc' ?
-      w.filter( x => active.includes(x._id) !== false ) :
-      w;
-    let showList = basicFilter.filter( 
+    let showList = w.filter( 
       tx => tx.widget.toLowerCase().includes(this.state.textString) === true ||
             tx.describe.toLowerCase().includes(this.state.textString) === true);
 
     return (
       <AnimateWrap type='cardTrans'>
         <div className='' key={1}>
-          <WidgetSort
-            onChange={e => this.setFilter(e)}
-            onTxtChange={e => this.setTextFilter(e)} />
-          <div className='wrapDeck'>
+          <DumbFilter
+            size='big'
+            onTxtChange={e => this.setTextFilter(e)}
+            labelText='Filter searches id and description, not case-sensitve.' />
+          <div className='tableList'>
             {w.length < 1 ? <p>no {Pref.widget}s created</p> : null}
               { showList.map( (entry, index)=> {
               let ac = active.includes(entry._id) ? 'leapBar activeMark' : 'leapBar';
@@ -76,15 +66,21 @@ class WidgetIndexCard extends Component {
   }
   
   totalI(mData) {
-    let items = Array.from(mData, x => x.items);
+    let items = Array.from(mData.batchInfo, x => x.items);
+    let quantities = Array.from(mData.batchInfoX, x => x.quantity);
     let total = items.length > 0 ? items.reduce((x,y)=>x+y) : 0;
-    return total;
+    let totalX = quantities.length > 0 ? quantities.reduce((x,y)=>x+y) : 0;
+    return total + totalX;
   }
   
   avgTime(mData) {
     let elapsed = [];
-    for(let md of mData) {
+    for(let md of mData.batchInfo) {
       let t = md.finish !== false && moment(md.finish).diff(moment(md.start), 'day');
+      t !== false && t > 0 ? elapsed.push(t) : null;
+    }
+    for(let md of mData.batchInfoX) {
+      let t = md.complete !== false && moment(md.complete).diff(moment(md.start), 'day');
       t !== false && t > 0 ? elapsed.push(t) : null;
     }
     let avgElapse = elapsed.length > 0 ?
@@ -93,13 +89,26 @@ class WidgetIndexCard extends Component {
   }
   
   avgNC(mData) {
-    let items = Array.from(mData, x => x.items);
+    let items = Array.from(mData.batchInfo, x => x.items);
+    let quantities = Array.from(mData.batchInfoX, x => x.quantity);
     let total = items.length > 0 ? items.reduce((x,y)=>x+y) : 0;
-    let ncs = Array.from(mData, x => x.nonCons);
+    let totalX = quantities.length > 0 ? quantities.reduce((x,y)=>x+y) : 0;
+    
+    let ncs = Array.from(mData.batchInfo, x => x.nonCons);
+    let ncsX = Array.from(mData.batchInfoX, x => x.nonCons);
+    
     let allNCs = ncs.length > 0 ? ncs.reduce((x,y)=>x+y) : 0;
-    let perI = (allNCs / total).toFixed(1);
-    let perW = (allNCs / ncs.length).toFixed(1);
-    return { perI, perW };
+    let allNCsX = ncsX.length > 0 ? ncsX.reduce((x,y)=>x+y) : 0;
+    
+    let perI = (allNCs / ( total > 0 ? total : 1));
+    let perIX = (allNCsX / ( totalX > 0 ? totalX : 1) );
+    const perItem = ( perI + perIX ).toFixed(1);
+    
+    let perW = (allNCs / (ncs.length > 0 ? ncs.length : 1) );
+    let perWX = (allNCsX / (ncsX.length > 0 ? ncsX.length : 1) );
+    const perWOrder = ( perW + perWX ).toFixed(1);
+    
+    return { perItem, perWOrder };
   }
   
   render() {
@@ -122,6 +131,46 @@ class WidgetIndexCard extends Component {
    let avgNCs = this.avgNC(mData);
       
     return(
+      <LeapRow
+        title={data.widget.toUpperCase()}
+        cTwo={data.describe}
+        cThree={
+          <NumStat
+            num={totalItems}
+            name={'total ' + Pref.item + 's'}
+            title={'serialized items of all ' + Pref.batch + 'es'}
+            color='blueT'
+            size='big' />
+        }
+        cFour={
+          <NumStat
+            num={isNaN(avgNCs.perItem) ? 'n/a' : avgNCs.perItem}
+            name={'nonCons per ' + Pref.item}
+            title={'mean average of all ' + Pref.batch + 'es'}
+            color='redT'
+            size='big' />
+        }
+        cFive={
+          <NumStat
+            num={isNaN(avgNCs.perWOrder) === true ? 'n/a' : avgNCs.perWOrder}
+            name={'nonCons per ' + Pref.batch}
+            title={'mean average of all ' + Pref.batch + 'es'}
+            color='redT'
+            size='big' />
+        }
+        cSix={
+          <NumStat
+            num={avgDur}
+            name={'per ' + Pref.batch}
+            title={'mean average of all ' + Pref.batch + 'es'}
+            color='greenT'
+            size='big' />
+        }
+        sty={this.props.barStyle}
+        address={'/data/widget?request=' + data.widget}
+      />
+      );
+      /*
       <div className='wrapDeckCard indexCard'>
         <LeapButton
           title={data.widget}
@@ -137,13 +186,13 @@ class WidgetIndexCard extends Component {
             color='blueT'
             size='big' />
           <NumStat
-            num={isNaN(avgNCs.perI) ? 'n/a' : avgNCs.perI}
+            num={isNaN(avgNCs.perItem) ? 'n/a' : avgNCs.perItem}
             name={'nonCons per ' + Pref.item}
             title={'mean average of all ' + Pref.batch + 'es'}
             color='redT'
             size='big' />
           <NumStat
-            num={isNaN(avgNCs.perW) === true ? 'n/a' : avgNCs.perW}
+            num={isNaN(avgNCs.perWOrder) === true ? 'n/a' : avgNCs.perWOrder}
             name={'nonCons per ' + Pref.batch}
             title={'mean average of all ' + Pref.batch + 'es'}
             color='redT'
@@ -156,12 +205,12 @@ class WidgetIndexCard extends Component {
             size='big' />
         </div>
       </div>
-    );
+      */
+    
   }
   componentDidMount() {
     Meteor.call('widgetTops', this.props.data._id, (err, reply)=>{
-      if(err)
-        console.log(err);
+      err && console.log(err);
       !reply ? null : this.setState({ moreData : reply });
     });
   }

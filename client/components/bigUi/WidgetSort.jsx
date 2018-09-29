@@ -19,6 +19,7 @@ const FilterActive = ({ onChange, onTxtChange })=>	{
             type='search'
             ref={(i)=>this.textWS = i}
             onChange={(e)=>changeTextFilter(e)}
+            autoFocus={true}
             disabled={!onTxtChange} />
         </label>
         <label className='listSortInput'>

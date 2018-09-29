@@ -19,7 +19,6 @@ export const TraverseWrap = ({
   title,
   subLink,
   action,
-  landing,
   base,
   children
 }) =>	{
@@ -38,7 +37,7 @@ export const TraverseWrap = ({
         <div className='tenHeader'>
           <div className='topBorder' />
           <HomeIcon />
-          {landing || base ? 
+          {base ? 
             <div className='frontCenterTitle cap'>{title}</div>
           :
             <CookieBar
@@ -94,7 +93,6 @@ export const TraverseWrap = ({
           <div 
             className={
               base ? 'baseConainer' :
-              landing ? 'landingContainer' :
               !children[1] ?
                 'baseTraverseContainer' : 'traverseContainer'}>
             

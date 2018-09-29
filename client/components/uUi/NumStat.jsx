@@ -8,16 +8,19 @@ import React from 'react';
   };
   const bSty = {
     verticalAlign: 'bottom',
+    wordBreak: 'keep-all',
+    wordWrap: 'keep-all'
   };
   
   const sSty = {
     fontSize: 'smaller',
     verticalAlign: 'top',
     textTransform: 'capitalize',
+    wordBreak: 'keep-all',
     wordWrap: 'keep-all'
   };
  
-const NumBox = ({ num, name, title, color, size }) => (
+const NumStat = ({ num, name, title, color, size }) => (
   <div style={sty} title={title}>
     <i style={bSty} className={color + ' numFont ' + size}>{num}</i>
     <br />
@@ -25,4 +28,4 @@ const NumBox = ({ num, name, title, color, size }) => (
   </div>
 );
 
-export default NumBox;
+export default NumStat;
