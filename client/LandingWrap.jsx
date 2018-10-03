@@ -24,13 +24,13 @@ const StartView = ({ready, user, org, app}) =>	{
   return(
     <div className='homeNavi'>
       <NavButton title='Production' icon='fa-paper-plane' link='/production' />
-      <NavPlaceholder icon='fa-plane' trans='rotate--45'/>
+      <NavPlaceholder icon='fab fa-fly' /*title='Express'*/ />
       <NavButton title='Activity' icon='fab fa-wpexplorer' trans='flip-h' link='/activity' />
       <NavButton title='Explore' icon='fa-rocket' link='/data' />
       
       <NavButton title='Pisces' icon='fa-file-alt' link={app.instruct || ''} blank={true} />
       <NavButton title='Parts Search' icon='fa-microchip' link='/starfish' />
-      <NavPlaceholder />
+      <NavPlaceholder icon="fa-bell" title='Notifications' />
       {Roles.userIsInRole(Meteor.userId(), 'admin') ?
         <NavButton title='Settings' icon='fa-sliders-h' link='/app' />
       : <NavPlaceholder title='Settings' icon='fa-sliders-h'/>}

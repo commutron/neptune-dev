@@ -103,6 +103,22 @@ export default class BatchPanel extends Component	{
     const filter = this.filter();
     const progCounts = ProgressCounter(riverFlow, riverAltFlow, b, true);
     
+
+////////////////////////////////////////
+    const proto = Roles.userIsInRole(Meteor.userId(), 'admin');
+    let allthetimes = [];
+    for(let item of b.items) {
+      for(let entry of item.history) {
+        if(entry.type === 'inspect' && entry.good === true) {
+          allthetimes.push({
+            step: entry.step,
+            time: entry.time,
+            who: entry.who,
+          });
+        }
+      }
+    }
+    
     return (
       <AnimateWrap type='cardTrans'>
         <div className='section' key={b.batch}>
@@ -128,7 +144,8 @@ export default class BatchPanel extends Component	{
                 'Info',
                 'Progress',
                 `${Pref.nonCon}s`,
-                `${Pref.rma}s`
+                `${Pref.rma}s`,
+                'proto'
               ]
             }
             wide={true}
@@ -243,6 +260,20 @@ export default class BatchPanel extends Component	{
                 app={a} />
               <p>{Pref.escape}s: {b.escaped.length}</p>
             </div>
+            
+            {proto &&
+              <div>
+                <ol>
+                  {allthetimes.map( (ding, index)=>{
+                    return(
+                      <li key={index}>
+                        {ding.step} - 
+                        - {ding.time.toString()} - 
+                        - {ding.who.slice(0, 3).toLowerCase()}
+                      </li> );
+                  })}
+                </ol>
+              </div>}
             
           </Tabs>
           
