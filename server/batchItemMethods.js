@@ -707,6 +707,7 @@ Meteor.methods({
                     x.serial === serial &&
                     x.ref === ref &&
                     x.type === type &&
+                    x.where === where &&
                     x.inspect === false
                   );
     if(!Roles.userIsInRole(Meteor.userId(), 'inspect') || double) { null }else{

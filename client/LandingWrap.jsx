@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import Pref from '/client/global/pref.js';
+//import Pref from '/client/global/pref.js';
 
 import Spin from '/client/components/uUi/Spin.jsx';
 
 import UserSlide from '/client/views/app/UserSlide.jsx';
 import { ChillHome } from '/client/components/tinyUi/Chill.jsx';
-import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
+//import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
 import NavButton from '/client/components/uUi/NavButton.jsx';
 import { NavPlaceholder } from '/client/components/uUi/NavButton.jsx';
 
@@ -24,13 +24,13 @@ const StartView = ({ready, user, org, app}) =>	{
   return(
     <div className='homeNavi'>
       <NavButton title='Production' icon='fa-paper-plane' link='/production' />
-      <NavPlaceholder icon='fab fa-fly' /*title='Express'*/ />
-      <NavButton title='Activity' icon='fab fa-wpexplorer' trans='flip-h' link='/activity' />
+      <NavPlaceholder icon='fab fa-fly' /*title='Activity/Pings'*/ />
+      <NavButton title='Activity' icon='fab fa-wpexplorer' /*title='Observe'*/ trans='flip-h' link='/activity' />
       <NavButton title='Explore' icon='fa-rocket' link='/data' />
       
       <NavButton title='Pisces' icon='fa-file-alt' link={app.instruct || ''} blank={true} />
       <NavButton title='Parts Search' icon='fa-microchip' link='/starfish' />
-      <NavPlaceholder icon="fa-bell" title='Notifications' />
+      <NavPlaceholder icon="fa-unlink" />
       {Roles.userIsInRole(Meteor.userId(), 'admin') ?
         <NavButton title='Settings' icon='fa-sliders-h' link='/app' />
       : <NavPlaceholder title='Settings' icon='fa-sliders-h'/>}

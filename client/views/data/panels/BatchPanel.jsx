@@ -67,7 +67,7 @@ export default class BatchPanel extends Component	{
     const a = this.props.app;
     const b = this.props.batchData;
     const w = this.props.widgetData;
-    const g = this.props.groupData;
+    //const g = this.props.groupData;
     
     const end = b.finishedAt !== false ? moment(b.finishedAt) : moment();
     const timeElapse = moment.duration(end.diff(b.start)).asWeeks().toFixed(1);
@@ -82,7 +82,7 @@ export default class BatchPanel extends Component	{
                  
     const fnsh = b.finishedAt ? end.format("MMMM Do, YYYY h:mm A") : null;
     
-    const v = w.versions.find( x => x.versionKey === b.versionKey );
+    //const v = w.versions.find( x => x.versionKey === b.versionKey );
     
     const flow = w.flows.find( x => x.flowKey === b.river );
     const flowAlt = w.flows.find( x => x.flowKey === b.riverAlt );
@@ -111,6 +111,7 @@ export default class BatchPanel extends Component	{
       for(let entry of item.history) {
         if(entry.type === 'inspect' && entry.good === true) {
           allthetimes.push({
+            key: entry.key,
             step: entry.step,
             time: entry.time,
             who: entry.who,
@@ -118,6 +119,23 @@ export default class BatchPanel extends Component	{
         }
       }
     }
+    const cronoTimes = allthetimes.sort((x1, x2)=> {
+                        if (x1.time < x2.time) { return -1 }
+                        if (x1.time > x2.time) { return 1 }
+                        return 0;
+                      });
+    let sortedTimes = [];
+    for(let step of riverFlow) {
+      if(step.type === 'inspect') {
+        const thesetimes = cronoTimes.filter( x => x.key === step.key );
+        sortedTimes.push({
+          step: step.step,
+          entries: thesetimes
+        });
+      }
+    }
+    
+/////////////////////////////////////////
     
     return (
       <AnimateWrap type='cardTrans'>
@@ -264,14 +282,20 @@ export default class BatchPanel extends Component	{
             {proto &&
               <div>
                 <ol>
-                  {allthetimes.map( (ding, index)=>{
+                  {sortedTimes.map( (step, index)=>{
                     return(
-                      <li key={index}>
-                        {ding.step} - 
-                        - {ding.time.toString()} - 
-                        - {ding.who.slice(0, 3).toLowerCase()}
-                      </li> );
-                  })}
+                      <ol key={index}>
+                        <b>{step.step}</b>
+                        {step.entries.map( (ding, inx)=>{
+                          return(
+                            <li key={inx}>
+                              {ding.step} - 
+                              - {ding.time.toString()} - 
+                              - {ding.who.slice(0, 3).toLowerCase()}
+                            </li> );
+                        })}
+                      </ol>
+                  )})}
                 </ol>
               </div>}
             

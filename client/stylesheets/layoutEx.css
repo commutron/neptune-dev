@@ -146,32 +146,18 @@
   -o-transition: all 150ms ease-in-out;
   transition: all 150ms ease-in-out;
 }
-.cookieCrumb:hover {
-  background-color: var(--silver);
-}
-.cookieCrumb:hover > .cookie {
-  color: rgb(25,25,25);
-}
-.cookieCrumb:hover > .crumb:before {
-  color: var(--silver);
-}
-.cookieCrumb:hover + .cookieCrumb > .crumb:before {
-  background-color: var(--silver);
-}
-
 .cookie {
   background-color: transparent;
   color: var(--silver);
   max-width: 20vw;
-  height: 5vh;
+  height: 100%;
   font-size: 3vh;
   padding: 0 1vh;
-  border-radius: 2.5vh;
   overflow: hidden;
   word-break: keep-all;
   text-overflow: ellipsis;
+  cursor: pointer;
 }
-
 .crumb {
   color: var(--silverfade);
   overflow: hidden;
@@ -195,6 +181,21 @@
   -moz-transition: all 150ms ease-in-out;
   -o-transition: all 150ms ease-in-out;
   transition: all 150ms ease-in-out;
+}
+.cookieCrumb:hover, .cookieCrumb:active {
+  background-color: var(--silver);
+}
+.cookieCrumb:hover > .cookie,
+.cookieCrumb:active > .cookie {
+  color: rgb(25,25,25);
+}
+.cookieCrumb:hover > .crumb:before,
+.cookieCrumb:active > .crumb:before {
+  color: var(--silver);
+}
+.cookieCrumb:hover + .cookieCrumb > .crumb:before,
+.cookieCrumb:active + .cookieCrumb > .crumb:before {
+  background-color: var(--silver);
 }
 
 .taskColumn {

@@ -25,7 +25,7 @@ const NCTable = ({ id, serial, nc, done, multi, ncOps, flowSteps, app })=> (
         {nc.map( (entry, index)=>{
           return (
             <NCRow
-              key={index}
+              key={index + entry.key}
               entry={entry}
               id={id}
               serial={serial}
@@ -74,7 +74,7 @@ export class NCRow extends Component {
       this.props.entry.ref !== ref || 
       this.props.entry.type !== type ||
       this.props.entry.where !== where
-      ) {  
+    ) {  
       Meteor.call('editNC', id, serial, ncKey, ref, type, where, (error)=> {
         error && console.log(error);
   			this.setState({ edit: false });
@@ -170,10 +170,10 @@ export class NCRow extends Component {
                 id='ncW'
                 className='redIn cap breath'
                 style={inSty}
-                defaultValue={dt.where || ''}
+                defaultValue={dt.where.toLowerCase() || ''}
                 required>
                 {this.props.flowSteps.map( (entry, index)=>{
-                  return( <option key={index} value={entry}>{entry}</option> );
+                  return( <option key={index} value={entry.toLowerCase()}>{entry}</option> );
                   })}
               </select>
             </td>

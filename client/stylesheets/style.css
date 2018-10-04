@@ -151,7 +151,7 @@
 
 .leapRow {
   display: grid;
-  grid-template-columns: 200px repeat(auto-fit, minmax(100px, 1fr));
+  grid-template-columns: 15vw repeat(auto-fit, minmax(100px, 1fr));
 	grid-gap: 0px 16px;
 	align-items: center;
 	border: none;

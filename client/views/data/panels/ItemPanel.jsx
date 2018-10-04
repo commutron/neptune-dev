@@ -45,8 +45,8 @@ export default class ItemPanel extends Component	{
     return relevant;
   }
   
-  flowSteps() {
-    let allsteps = Array.from( this.props.app.trackOption, x => x.step );
+  flowSteps() { // don't really need to send all the steps?
+    let allsteps = Array.from( this.props.app.trackOption, x => x.step + ' ' + x.type );
     let cleansteps = new Set(allsteps);
     return [...cleansteps];
   }
@@ -56,10 +56,10 @@ export default class ItemPanel extends Component	{
     const a = this.props.app;
     const b = this.props.batchData;
     const i = this.props.itemData;
-    const w = this.props.widgetData;
-    const g = this.props.groupData;
+    //const w = this.props.widgetData;
+    //const g = this.props.groupData;
     
-    const v = w.versions.find( x => x.versionKey === b.versionKey );
+    //const v = w.versions.find( x => x.versionKey === b.versionKey );
     
     const nc = this.ncData();
     const sh = this.shData();
