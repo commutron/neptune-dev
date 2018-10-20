@@ -223,6 +223,52 @@ Meteor.methods({
     }
   },
   
+////// Repeat First / Verify Reason
+  addRepeatOption(reason) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $push : { 
+          repeatOption : { 
+            key : new Meteor.Collection.ObjectID().valueOf(),
+            reason : reason,
+            live : true
+          }
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  dormantRepeatOption(key, make) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey, 'repeatOption.key': key}, {
+        $set : { 
+          'repeatOption.$.live' : make
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  removeRepeatOption(badKey, reason) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      //const usedLegacy = BatchDB.findOne({orgKey: Meteor.user().orgKey, 'nonCon.type': reason});
+      const usedX = XBatchDB.findOne({orgKey: Meteor.user().orgKey, 'verifications.change': reason});
+      if(!usedX) {
+        AppDB.update({orgKey: Meteor.user().orgKey}, {
+          $pull : { 
+            repeatOption : { key : badKey }
+        }});
+        return true;
+      }else{
+        return false;
+      }
+    }else{
+      return false;
+    }
+  },
+  ////////////
+  
 // NonCon Types
   addNCOption(value) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {

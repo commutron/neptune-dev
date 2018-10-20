@@ -22,7 +22,6 @@
   box-shadow:         0 0 15px 0.5px rgb(0,0,0);
 }
 .findForm {
-  z-index: 9;
   width: 100%;
   height: 100%;
   display: flex;

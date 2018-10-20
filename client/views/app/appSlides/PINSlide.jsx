@@ -1,7 +1,7 @@
 import React from 'react';
 import Alert from '/client/global/alert.js';
 
-const SetPin = ()=> {
+const PINSlide = ()=> {
   
   function setPin(e) {
     e.preventDefault();
@@ -64,6 +64,7 @@ const SetPin = ()=> {
   
   return (
     <div>
+      <h2>Set or Change PIN Numbers</h2>
       <p>A pin is necessary for activating new users and admins</p>
       <form onSubmit={(e)=>setPin(e)} autoComplete='off'>
         <p>
@@ -162,4 +163,4 @@ const SetPin = ()=> {
   );
 };
 
-export default SetPin;
+export default PINSlide;

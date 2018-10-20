@@ -105,7 +105,7 @@ export default class BatchPanel extends Component	{
     
 
 ////////////////////////////////////////
-    const proto = Roles.userIsInRole(Meteor.userId(), 'admin');
+    const proto = Roles.userIsInRole(Meteor.userId(), 'nightly');
     let allthetimes = [];
     for(let item of b.items) {
       for(let entry of item.history) {
@@ -134,7 +134,6 @@ export default class BatchPanel extends Component	{
         });
       }
     }
-    
 /////////////////////////////////////////
     
     return (
@@ -279,17 +278,19 @@ export default class BatchPanel extends Component	{
               <p>{Pref.escape}s: {b.escaped.length}</p>
             </div>
             
-            {proto &&
+            {proto ?
               <div>
                 <ol>
-                  {sortedTimes.map( (step, index)=>{
+                  {sortedTimes.length === 0 ?
+                  <p className='centreText'>no inspections</p>
+                  :
+                  sortedTimes.map( (step, index)=>{
                     return(
                       <ol key={index}>
-                        <b>{step.step}</b>
+                        <b>{step.step} inspect</b>
                         {step.entries.map( (ding, inx)=>{
                           return(
                             <li key={inx}>
-                              {ding.step} - 
                               - {ding.time.toString()} - 
                               - {ding.who.slice(0, 3).toLowerCase()}
                             </li> );
@@ -297,7 +298,8 @@ export default class BatchPanel extends Component	{
                       </ol>
                   )})}
                 </ol>
-              </div>}
+              </div>
+            : <div><p className='centreText'>nothing to see here</p></div> }
             
           </Tabs>
           

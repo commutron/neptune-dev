@@ -118,17 +118,22 @@ main {
   display: grid;
   min-width: 768px;
   min-height: 100%;
+  max-height: 100%;
   grid-template-rows: 10vh 90vh;
   grid-template-columns: 100%;
   grid-template-areas: 
     'tenHeader'
     'simpleContent';
+  overflow-y: hidden !important;
   overflow-x: hidden !important;
   -webkit-overflow-scrolling: touch;
 }
 .simpleContent {
   grid-area: simpleContent;
   overflow-y: auto;
+}
+.simpleContent.locked {
+  overflow-y: hidden;
 }
 
 .rightSpace {
@@ -185,7 +190,6 @@ main {
   grid-area: homeIcon;
   background-color: var(--neptuneColor);
   padding-bottom: 1vh;
-  z-index: 10;
 }
 .frontCenterTitle {
   grid-area: frontCenter;
@@ -234,10 +238,59 @@ main {
   grid-area: splashContent;
   display: grid;
   grid-template-rows: 75vh;
-  grid-template-columns: 75vw);
+  grid-template-columns: 75vw;
   place-self: center center;
   place-items: stretch stretch;
 }
+
+.slidesLayout {
+  display: grid;
+  grid-template-rows: 90vh;
+  grid-template-columns: 25vw 1fr;
+  grid-template-areas: 
+    'slidemenu slidearea';
+  width: 100%;
+  height: calc(100% - 10vh);
+}
+.slidesMenu {
+  grid-area: slidemenu;
+  background-color: rgb(35,35,35);
+  overflow-y: auto;
+}
+.slidesSlide {
+  grid-area: slidearea;
+  background-color: var(--clouds);
+  overflow-y: auto;
+  color: black;
+  -moz-box-shadow: var(--dropShadow2);
+  -webkit-box-shadow: var(--dropShadow2);
+  box-shadow: var(--dropShadow2);
+  padding: 5vh 10vw;
+}
+.slideMenuButton {
+  width: 100%;
+  min-height: 6vh;
+  padding: 0 2vw;
+  font-size: 2vh;
+  color: var(--silver);
+  background-color: transparent;
+  border-bottom: 1px solid black;
+  cursor: pointer;
+  text-align: left;
+}
+.slideMenuButton:hover, .slideMenuButton:active, 
+.slideMenuButton.slideOn {
+  width: 100%;
+  color: rgb(35,35,35);
+  background-color: var(--silver);
+  -moz-box-shadow: var(--dropShadow00);
+  -webkit-box-shadow: var(--dropShadow00);
+  box-shadow: var(--dropShadow00);
+}
+.slideMenuButton:disabled {
+  color: black;
+}
+
 
 /* ////////////////////////// */
 

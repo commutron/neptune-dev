@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 
 
-const ShortAdd = ({ id, serial, app, doneClose })=> {
+const ShortAdd = ({ id, serial, pastPN, pastRF, app, doneClose })=> {
 
   function handleShort(e) {
     e.preventDefault();
@@ -27,9 +27,15 @@ const ShortAdd = ({ id, serial, app, doneClose })=> {
       className='actionForm'
       onSubmit={(e)=>handleShort(e)}>
       <span>
+        <datalist id='pastPNlist'>
+          {pastPN.map( (entry)=>{
+            return( <option key={entry} value={entry}>{entry}</option> );
+          })}
+        </datalist>
         <input
           type='text'
           id='partNum'
+          list='pastPNlist'
           className='orangeIn up'
           placeholder='13-bC_047'
           disabled={lock}
@@ -37,10 +43,15 @@ const ShortAdd = ({ id, serial, app, doneClose })=> {
         <label htmlFor='shRefs'>Part Number</label>
       </span>
       <span>
+        <datalist id='pastRFlist'>
+          {pastRF.map( (entry)=>{
+            return( <option key={entry} value={entry}>{entry}</option> );
+          })}
+        </datalist>
         <input
           type='text'
           id='shRefs'
-          list='prevRefs'
+          list='pastRFlist'
           className='orangeIn up'
           placeholder='R1 R2 R3'
           disabled={lock}

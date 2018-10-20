@@ -182,9 +182,17 @@ export default class FirstAdd extends Component	{
             </span>
             
             <span>
+              <datalist id='commonReasons'>
+                {this.props.app.repeatOption.map( (entry)=>{
+                  if(entry.live === true) {
+                    return( 
+                      <option key={entry.key} value={entry.reason}>{entry.reason}</option> 
+                )}})}
+              </datalist>
               <input
       			    type='text'
       			    id='proC'
+      			    list='commonReasons'
       			    className='blueIn'
       			    ref={(i)=> this.change = i}
       			    onChange={this.setChanges.bind(this)}

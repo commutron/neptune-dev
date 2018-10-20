@@ -41,7 +41,7 @@ export default class UserManageForm extends Component {
 
   render() {
     
-    const active = Roles.userIsInRole(this.props.id, 'active') ? 'whiteT' : 'whiteT fade';
+    const active = Roles.userIsInRole(this.props.id, 'active') ? 'blackT' : 'blackT fade';
     const admin = Roles.userIsInRole(this.props.id, 'admin');
     const adminFlag = admin ? Pref.admin : '';
                      

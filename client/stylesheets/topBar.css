@@ -75,43 +75,7 @@ input::-webkit-calendar-picker-indicator {
   0%   { transform: translate3d(0, 0, 0) rotate(0deg); }
   100% { transform: translate3d(0, 0, 0) rotate(360deg); }
 }
-/*
-.primeNav {
-  display: flex;
-  width: auto;
-  height: 100%;
-  align-items: stretch;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: space-between;
-  flex-shrink: 0;
-}
-.primeNavItem, .primeNavLogo {
-  display: flex;
-  height: 100%;
-  padding: 0 0.5rem;
-  text-align: center;
-}
-.primeNavItem {
-  align-items: flex-end;
-}
-.primeNavLogo {
-  align-items: center;
-}
-.primeNavLogo a,
-.primeNavItem a,
-.primeNavItem .navIcon {
-  color: black;
-  cursor: default;
-}
-.primeNavItem a:hover,
-.primeNavItem.onPNv a,
-.primeNavItem .navIcon:hover,
-.primeNavItem.onPNv .navIcon
-.primeNavItem #exitSwitch:hover {
-  color: white
-}
-*/
+
 .navIcon {
   display: inline-block;
   vertical-align: middle;
@@ -150,22 +114,4 @@ input::-webkit-calendar-picker-indicator {
   display: block;
   white-space: nowrap;
 }
-/*
-.userSlideButton {
-  display: flex;
-  align-items: flex-end;
-  color: black;
-  background-color: transparent;
-}
-.userSlideButton button {
-  font-size: 16px;
-}
-.userSlideButton button,
-.userSlideButton .icontext {
-  color: black;
-}
-.userSlideButton:hover button,
-.userSlideButton:hover .icontext {
-  color: white;
-}
-*/
+
