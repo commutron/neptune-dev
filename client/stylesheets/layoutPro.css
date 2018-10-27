@@ -1,4 +1,4 @@
-.containerPro, .proDefault, .proExpand {
+.containerPro, .proNarrow, .proWide {
   align-content: center;
   overflow-y: hidden !important;
   overflow-x: hidden !important;
@@ -34,36 +34,47 @@
   grid-area: proContent;
 }
 
-.proDefault, .proExpand {
+.proNarrow, .proWide {
   grid-area: proContent;
   display: grid;
   grid-template-rows: calc(90vh - 60px) 60px;
   grid-template-areas: 
-    'proRiver proInstruct'
+    'proLeft proInstruct'
     'formFooter formFooter';
-  overflow-y: auto;
   -webkit-transition: all 150ms ease-in-out;
   -moz-transition: all 150ms ease-in-out;
   -o-transition: all 150ms ease-in-out;
   transition: all 150ms ease-in-out;
 }
-
-.proDefault {
+.proNarrow {
   grid-template-columns: 20vw 1fr;
 }
-.proExpand {
+.proWide {
   grid-template-columns: 40vw 1fr;
 }
 
-.proLeft {
-  grid-area: proRiver;
-  height: 100%;
+
+.proSingle, .proDual {
+  grid-area: proLeft;
+  display: grid;
+  overflow-y: auto;
   background-color: rgb(35,35,35);
 }
+.proSingle {
+  grid-template-columns: auto;
+}
+.proDual {
+  grid-template-columns: 1fr 1fr;
+}
+
+
 .proRight {
   height: 100%;
   grid-area: proInstruct;
   background-color: var(--clouds);
+  -moz-box-shadow: var(--dropShadow2);
+  -webkit-box-shadow: var(--dropShadow2);
+  box-shadow: var(--dropShadow2);
 }
 
 .proActionForm {
@@ -197,8 +208,8 @@
 }
 
 @media screen and (max-width: 1000px){
-  .proExpand {
-    grid-template-columns: 60vw auto;
+  .proNarrow, .proWide, .proDual {
+    grid-template-columns: 30vw 30vw 1fr;
   }
   .riverShrinkToggle {
     left: 60vw;

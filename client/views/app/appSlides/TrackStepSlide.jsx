@@ -2,6 +2,8 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import Alert from '/client/global/alert.js';
 
+import TrackStepEdit from '/client/components/forms/TrackStepEdit.jsx';
+
 const TrackStepSlide = ({app, sorted})=> {
   
   const rndmKey = Math.random().toString(36).substr(2, 5);
@@ -10,17 +12,15 @@ const TrackStepSlide = ({app, sorted})=> {
     e.preventDefault();
     
     let newOp = this[rndmKey + 'input'].value.trim();
-    newOp = newOp.replace("|", "-");
     let type = this[rndmKey + 'type'].value.trim();
+    let phase = this[rndmKey + 'phase'].value.trim();
     
-    const newSet = newOp + '|' + type;
-    
-    Meteor.call('addTrackOption', newSet, (error, reply)=>{
-      if(error)
-        console.log(error);
+    Meteor.call('addTrackStepOption', newOp, type, phase, (error, reply)=>{
+      error && console.log(error);
       if(reply) {
         this[rndmKey + 'input'].value = '';
         this[rndmKey + 'type'].value = '';
+        this[rndmKey + 'phase'].value = '';
       }else{
         Bert.alert(Alert.warning);
       }
@@ -28,7 +28,7 @@ const TrackStepSlide = ({app, sorted})=> {
   }
   
   return (
-    <div>
+    <div className='invert'>
       
       <p>
         <i className='fas fa-exclamation-circle'></i>
@@ -57,20 +57,33 @@ const TrackStepSlide = ({app, sorted})=> {
             <option value='nest'>nest</option>
           </select>
         </label>
+        <label htmlFor={rndmKey + 'type'}>Department<br />
+          <select id={rndmKey + 'phase'} required >
+            <option></option>
+            <option value='surface mount'>Surface Mount</option>
+            <option value='through hole'>Through Hole</option>
+            <option value='selective solder'>Selective Solder</option>
+            <option value='wave solder'>Wave Solder</option>
+            <option value='testing'>Testing</option>
+            <option value='conformal coat'>Conformal Coat</option>
+            <option value='shipping'>Shipping</option>
+          </select>
+        </label>
         <label htmlFor={rndmKey + 'add'}><br />
           <button
             type='submit'
             id={rndmKey + 'add'}
             className='smallAction clearGreen'
             disabled={false}
-          >Set</button>
+          >Add New</button>
         </label>
       </form>
         
       <ul>
         {sorted.map( (entry, index)=>{
-          return ( <li key={index}>{entry.step} - {entry.type}</li> );
-        })}
+          return ( 
+            <TrackStepEdit key={index} data={entry} />
+        )})}
       </ul>
     </div>
   );

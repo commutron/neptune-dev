@@ -137,6 +137,39 @@ Meteor.methods({
     }
   },
   
+  addTrackStepOption(step, type, phase) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $push : { 
+          trackOption : { 
+            'key' : new Meteor.Collection.ObjectID().valueOf(),
+            'step' : step,
+            'type' : type,
+            'phase' : phase,
+            'how' : false
+          }
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  editTrackStepOption(opKey, step, type, phase) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey, 'trackOption.key' : opKey}, {
+        $set : { 
+          'trackOption.$.step' : step,
+          'trackOption.$.type' : type,
+          'trackOption.$.phase' : phase,
+          }
+      });
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
   endTrack(flatLast) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       

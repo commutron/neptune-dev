@@ -7,7 +7,7 @@ import RMACascade from './RMACascade.jsx';
 import MiniHistory from './MiniHistory.jsx';
 import AltMarker from '/client/components/uUi/AltMarker.jsx';
 
-const River = ({ itemData, batchData, widgetData, app, users, flow, flowAlt, progCounts, expand })=> {
+const River = ({ itemData, batchData, widgetData, app, users, flow, flowAlt, progCounts })=> {
 
   const b = batchData;
   const i = itemData;
@@ -38,8 +38,8 @@ const River = ({ itemData, batchData, widgetData, app, users, flow, flowAlt, pro
 	// present option between River and Alt River
 	if(i.finishedAt === false && b.riverAlt && !i.alt) {
 	  return(
-	    <div className={expand && 'stonePlus'}>
-        <div className={expand && 'stonePlusLeft'}>
+	    <div>
+        <div>
     	    <RiverFork
             id={b._id}
             serial={i.serial}
@@ -47,10 +47,9 @@ const River = ({ itemData, batchData, widgetData, app, users, flow, flowAlt, pro
             river={b.river}
             riverAlt={b.riverAlt} />
         </div>
-        {expand &&
-    		  <div className='stonePlusRight space'>
-    			  <MiniHistory history={i.history} />
-    			</div>}
+  		  <div className='space'>
+  			  <MiniHistory history={i.history} />
+  			</div>
     	</div>
     );
 	}
@@ -65,8 +64,7 @@ const River = ({ itemData, batchData, widgetData, app, users, flow, flowAlt, pro
           rma={rma}
           cascadeData={b.cascade}
           rmaList={i.rma}
-          allItems={b.items}
-          expand={expand} />
+          allItems={b.items} />
         :null}
 		  
 		  <div>
@@ -89,8 +87,7 @@ const River = ({ itemData, batchData, widgetData, app, users, flow, flowAlt, pro
           regRun={i.finishedAt === false}
           users={users}
           methods={app.toolOption}
-          progCounts={progCounts}
-          expand={expand} />
+          progCounts={progCounts} />
       </div>
       
 		</div>

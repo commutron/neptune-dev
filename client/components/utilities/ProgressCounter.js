@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 
-function flowLoop(river, items, expand, quotaStart) {
+function flowLoop(river, items, quotaStart) {
   const now = moment().format();
   const wndw = !quotaStart ? (t)=>moment(t).isSame(now, 'day') : 
                               (t)=>moment(t).isBetween(quotaStart, now);
@@ -31,15 +31,15 @@ function flowLoop(river, items, expand, quotaStart) {
       if(step.type === 'inspect') {
         h.find( byKey(this, step.key) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
         h.find( byName(this, step.step) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
-        if(expand) {
+        //if(expand) {
           hNew.find( byKey(this, step.key) ) ? (itemCountNew += 1, unitCountNew += 1 * i.units ) : null;
           hNew.find( byName(this, step.step) ) ? (itemCountNew += 1, unitCountNew += 1 * i.units ) : null;
-        }
+        //}
       }else{
         h.find( byKey(this, step.key) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
-        if(expand) {
+        //if(expand) {
           hNew.find( byKey(this, step.key) ) ? (itemCountNew += 1, unitCountNew += 1 * i.units ) : null;
-        }
+        //}
       }
     }
     stepCounts.push({
@@ -71,7 +71,7 @@ function outScrap(items) {
   );
 }
     
-function ProgressCounter(flow, flowAlt, batchData, expand) {
+function ProgressCounter(flow, flowAlt, batchData) {
   const rSteps = flow.filter( r => r.type !== 'first' );
   const aSteps = flowAlt.filter( a => a.type !== 'first' );
   
@@ -91,8 +91,8 @@ function ProgressCounter(flow, flowAlt, batchData, expand) {
   const totalRegUnits = unitTotalCount(regItems);
   const totalAltUnits = unitTotalCount(altItems);
 
-  const regStepCounts = flowLoop(rSteps, regItems, expand, false);
-  const altStepCounts = flowLoop(aSteps, altItems, expand, false);
+  const regStepCounts = flowLoop(rSteps, regItems, false);
+  const altStepCounts = flowLoop(aSteps, altItems, false);
 
   return {
     regStepCounts: regStepCounts,

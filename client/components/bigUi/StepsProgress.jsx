@@ -3,14 +3,13 @@ import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
 import ProgPie from '/client/components/charts/ProgPie.jsx';
-import MiniBar from '/client/components/charts/MiniBar.jsx';
+//import MiniBar from '/client/components/charts/MiniBar.jsx';
 import MiniStack from '/client/components/charts/MiniStack.jsx';
 import NumBox from '/client/components/uUi/NumBox.jsx';
 // requires 
 /// batchData
 /// flow
 /// altflow
-/// expand
 /// soon also quotas
 
 export default class StepsProgress extends Component	{
@@ -84,8 +83,6 @@ export default class StepsProgress extends Component	{
               return(
                 <StepDisplay
                   key={rndmKeyR}
-                  mini={this.props.mini}
-                  expand={this.props.expand}
                   step={entry.step}
                   type={entry.type}
                   count={count}
@@ -109,8 +106,6 @@ export default class StepsProgress extends Component	{
                 return(
                   <StepDisplay
                     key={rndmKeyA}
-                    mini={this.props.mini}
-                    expand={this.props.expand}
                     step={entry.step}
                     type={entry.type}
                     count={count}
@@ -126,32 +121,17 @@ export default class StepsProgress extends Component	{
   }
 }
 
-const StepDisplay = ({ mini, expand, step, type, count, countNew, total })=> {
+const StepDisplay = ({step, type, count, countNew, total })=> {
   const title = type === 'finish' ||
                 type === 'test' ?
                 step :
                 step + ' ' + type;
-  if(expand) {
-    return(
-      <MiniStack
-        title={title}
-        count={count}
-        countNew={countNew}
-        total={total} />
-    );
-  }              
-  if(mini) {
-    return(
-      <MiniBar
-        title={title}
-        count={count}
-        total={total} />
-    );
-  }
+
   return(
-    <ProgPie
+    <MiniStack
       title={title}
       count={count}
+      countNew={countNew}
       total={total} />
   );
 };

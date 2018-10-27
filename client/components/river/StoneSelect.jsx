@@ -26,8 +26,7 @@ const StoneSelect = ({
   regRun,
   users,
   methods,
-  progCounts,
-  expand 
+  progCounts
 })=> {
     
   const nc = nonCons.filter( 
@@ -137,8 +136,8 @@ const StoneSelect = ({
 	    Session.set('nowStep', flowStep.step + ' ' + flowStep.type);
       Session.set('nowWanchor', flowStep.how);
 	    return (
-        <div className={expand && 'stonePlus'}>
-          <div className={expand && 'stonePlusLeft'}>
+        <div>
+          <div>
 		        <InOutWrap type='stoneTrans'>
   		        {stone}
             </InOutWrap>
@@ -147,14 +146,15 @@ const StoneSelect = ({
                 {tFail}
               </InOutWrap>}
           </div>
-          {expand &&
-      		  <div className='stonePlusRight vspace'>
-      			  <MiniHistory history={history} />
-      			</div>}
-          <div className={expand && 'ncPlus'}>
+          <div>
             {nonCon}
             {sFall}
           </div>
+          {/*
+          <div className='space'>
+    			  <MiniHistory history={history} />
+    			</div>
+    			*/}
   			</div>
       );
     }
@@ -164,8 +164,8 @@ const StoneSelect = ({
   Session.set('nowStep', 'done');
   const timelock = moment().diff(moment(finishedAt), 'minutes') > (60 * 24 * 7);
   return (
-    <div className={expand && 'stonePlus'}>
-      <div className={expand && 'stonePlusLeft'}>
+    <div>
+      <div>
         <InOutWrap type='stoneTrans'>
           <div>
             <div className='purpleBorder centre cap'>
@@ -186,13 +186,12 @@ const StoneSelect = ({
           </div>
         </InOutWrap>
       </div>
-      {expand &&
-  		  <div className='stonePlusRight space'>
-  			  <MiniHistory history={history} />
-  			</div>}
-  		<div className={expand && 'ncPlus'}>
+  		<div>
         {sFall}
       </div>
+      <div className='space'>
+			  <MiniHistory history={history} />
+			</div>
   	</div>
   );
 };

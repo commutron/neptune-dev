@@ -33,8 +33,8 @@ export default class FormBar extends Component	{
     const showX = b && this.props.action === 'xBatchBuild' && b.completed === false;
     const showlegacyItem = (b && i) && !(b.finishedAt !== false || i.finishedAt !== false );
     
-    const pastPN = [...new Set( Array.from(b.shortfall, x => x.partNum ) )];
-    const pastRF = [...new Set( Array.from(b.shortfall, x => x.refs.toString() ) )];
+    const pastPN = b.shortfall ? [...new Set( Array.from(b.shortfall, x => x.partNum ) )] : [];
+    const pastRF = b.shortfall ? [...new Set( Array.from(b.shortfall, x => x.refs.toString() ) )] : [];
     
     return(
       <div className='proActionForm'>

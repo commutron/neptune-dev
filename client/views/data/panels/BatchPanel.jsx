@@ -23,6 +23,9 @@ import NonConRate from '../../../components/charts/NonConRate.jsx';
 import { HasNonCon } from '../../../components/bigUi/NonConMiniTops.jsx';
 import { NonConPer } from '../../../components/bigUi/NonConMiniTops.jsx';
 import { MostNonCon } from '../../../components/bigUi/NonConMiniTops.jsx';
+import { TodayNonCon } from '../../../components/bigUi/NonConMiniTops.jsx';
+import { LeftFxNonCon } from '../../../components/bigUi/NonConMiniTops.jsx';
+import { LeftInNonCon } from '../../../components/bigUi/NonConMiniTops.jsx';
 import NonConPie from '../../../components/charts/NonConPie.jsx';
 import RMATable from '../../../components/tables/RMATable.jsx';
 
@@ -101,7 +104,7 @@ export default class BatchPanel extends Component	{
     const itemsOrder = b.items.sort( (x,y)=> x.serial - y.serial);
     
     const filter = this.filter();
-    const progCounts = ProgressCounter(riverFlow, riverAltFlow, b, true);
+    const progCounts = ProgressCounter(riverFlow, riverAltFlow, b);
     
 
 ////////////////////////////////////////
@@ -192,7 +195,7 @@ export default class BatchPanel extends Component	{
                   </fieldset>}
                 {released === undefined ? null :
                   released === true ?
-                    <ReleaseNote id={b._id} release={b.floorRelease} expand={true} />
+                    <ReleaseNote id={b._id} release={b.floorRelease} />
                   : <FloorRelease id={b._id} /> }
                 <NoteLine entry={b.notes} id={b._id} widgetKey={false}  />
                 <BlockList id={b._id} data={b.blocks} lock={done} expand={true} />
@@ -250,6 +253,9 @@ export default class BatchPanel extends Component	{
                   <HasNonCon noncons={b.nonCon} items={b.items} />
                   <NonConPer noncons={b.nonCon} items={b.items} />
                   <MostNonCon noncons={b.nonCon} app={a} />
+                  <TodayNonCon noncons={b.nonCon} />
+                  <LeftFxNonCon noncons={b.nonCon} />
+                  <LeftInNonCon noncons={b.nonCon} />
                 </div>
                 <NonConPie nonCons={b.nonCon} />
               </div>

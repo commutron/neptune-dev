@@ -20,7 +20,6 @@ export default class ItemCard extends Component	{
     //const done = i.finishedAt !== false;
     const scrap = i.history.find(x => x.type === 'scrap' && x.good === true);
     
-    const expand = this.props.expand;
     const flow = this.props.flow;
     const flowAlt = this.props.flowAlt;
     const progCounts = this.props.progCounts;
@@ -58,8 +57,7 @@ export default class ItemCard extends Component	{
             users={this.props.users}
             flow={flow}
             flowAlt={flowAlt}
-            progCounts={progCounts}
-            expand={expand} />
+            progCounts={progCounts} />
   			</div>
 			</AnimateWrap>
     );

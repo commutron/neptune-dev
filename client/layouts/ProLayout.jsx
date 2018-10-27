@@ -35,7 +35,7 @@ export class ProWrap extends Component	{
       flow = river ? river.flow : [];
       flowAlt = riverAlt ? riverAlt.flow : [];
       if(this.props.action !== 'xBatchBuild') {
-        progCounts = ProgressCounter(flow, flowAlt, b, this.state.expand);
+        progCounts = ProgressCounter(flow, flowAlt, b);
       }
     }
     return { flow, flowAlt, progCounts };
@@ -52,10 +52,6 @@ export class ProWrap extends Component	{
     const iS = this.props.itemSerial;
     const append = bData && iS ? bData.batch : null;
     
-    //const exploreLink = !bData ? false : !iS ?
-                        //'/data/batch?request=' + bData.batch :
-                        //'/data/batch?request=' + bData.batch + '&specify=' + iS;
-    
     const exploreLink = iS && bData ?
                         '/data/batch?request=' + bData.batch + '&specify=' + iS :
                         bData ?
@@ -65,11 +61,12 @@ export class ProWrap extends Component	{
                         '/data/overview?request=batches';
                         
                         
-                        
     const path = !bData ? { flow: [], flowAlt: [], progCounts: false } : this.getFlows();
     
+    const cSize = this.props.children.length;
+    
     let riverExpand = this.state.expand;
-    let topClass = !riverExpand ? 'proDefault' : 'proExpand';
+    let topClass = !riverExpand ? 'proNarrow' : 'proWide';
     let toggleClass = !riverExpand ? 'riverExpandToggle' : 'riverShrinkToggle';
     
     return(
@@ -97,26 +94,32 @@ export class ProWrap extends Component	{
         :
         <section className={topClass}>
           
-          <div className='proLeft' style={scrollFix}>
-            {this.props.children.length > 2 ?
-              React.cloneElement(this.props.children[0],
+          <div className={!riverExpand ? 'proSingle' : cSize > 2 ? 'proDual' : 'proSingle'}>
+            <div className='proPrime'>
+              {React.cloneElement(this.props.children[0],
                 { 
-                  expand: this.state.expand,
+                  //expand: this.state.expand,
                   flow: path.flow,
                   flowAlt: path.flowAlt,
                   progCounts: path.progCounts
                 }
-              )
+              )}
+            </div>
+            
+            {cSize > 2 && riverExpand ?
+              <div className='proExpand'>
+                {React.cloneElement(this.props.children[1],
+                  { 
+                    //expand: this.state.expand,
+                    flow: path.flow,
+                    flowAlt: path.flowAlt,
+                    progCounts: path.progCounts
+                  }
+                )}
+              </div>
             :null}
-            {React.cloneElement(this.props.children[this.props.children.length - 2],
-              { 
-                expand: this.state.expand,
-                flow: path.flow,
-                flowAlt: path.flowAlt,
-                progCounts: path.progCounts
-              }
-            )}
           </div>
+          
         
           <button
             type='button'

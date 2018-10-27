@@ -50,7 +50,7 @@ const ReleaseAction = ({ id, rType })=> {
 };
 export default ReleaseAction;
 
-export const ReleaseNote = ({ id, release, xBatch, expand })=> {
+export const ReleaseNote = ({ id, release, xBatch })=> {
   
   function handleCancel() {
     if(xBatch) {
@@ -75,8 +75,7 @@ export const ReleaseNote = ({ id, release, xBatch, expand })=> {
   			<fieldset className='noteCard'>
           <legend>{releaseType || 'Released to the Floor'}</legend>
           {moment(release.time).format("ddd, MMM Do YYYY, h:mm a")}
-          {expand && ' by '}
-          {expand && <UserName id={release.who} />}
+          {' by ' + <UserName id={release.who} />}
         </fieldset>
       </ContextMenuTrigger>
       <ContextMenu id={id+'release'}>

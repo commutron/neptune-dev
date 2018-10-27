@@ -262,10 +262,10 @@ main {
   background-color: var(--clouds);
   overflow-y: auto;
   color: black;
-  -moz-box-shadow: var(--dropShadow2);
-  -webkit-box-shadow: var(--dropShadow2);
-  box-shadow: var(--dropShadow2);
-  padding: 5vh 10vw;
+  -moz-box-shadow: var(--dropShadowLeft1);
+  -webkit-box-shadow: var(--dropShadowLeft1);
+  box-shadow: var(--dropShadowLeft1);
+  padding: 5vh 5vw;
 }
 .slideMenuButton {
   width: 100%;
@@ -535,6 +535,8 @@ main {
 .space { padding: 24px; }
 
 .vspace { padding: 24px 0; }
+
+.vmargin { margin: 24px 0; }
 
 .indent { padding-left: 16px; }
 

@@ -24,6 +24,9 @@
 .contentAreaEx {
   grid-area: contentArea;
   overflow-y: auto;
+  -moz-box-shadow: var(--dropShadowLeft0);
+  -webkit-box-shadow: var(--dropShadowLeft0);
+  box-shadow: var(--dropShadowLeft0);
 }
 
 .traverseContainer,
