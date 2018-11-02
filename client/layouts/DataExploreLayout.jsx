@@ -20,6 +20,7 @@ export const TraverseWrap = ({
   subLink,
   action,
   base,
+  invertColor,
   children
 }) =>	{
   
@@ -31,6 +32,8 @@ export const TraverseWrap = ({
     let scrollFix = {
       overflowY: 'auto'
     };
+    
+    const invert = invertColor ? 'invert' : '';
 
     return(
       <div className='containerEx'>
@@ -89,7 +92,7 @@ export const TraverseWrap = ({
           <TaskBar subLink={subLink} />
         </aside>
         
-        <section className='contentAreaEx'>
+        <section className={'contentAreaEx ' + invert}>
           <div 
             className={
               base ? 'baseConainer' :

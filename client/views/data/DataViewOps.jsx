@@ -153,6 +153,7 @@ export default class DataViewOps extends Component	{
           subLink={subLink}
           action={false}
           base={true}
+          invertColor={true}
         >
           <Reports
             batchData={allBatch}

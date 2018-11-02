@@ -1078,6 +1078,7 @@ input.variableInput.biggest {
 .miniDateRange span {
   margin: 3px;
 }
+/*
 .miniDateRange select,
 .miniDateRange input[type='date'],
 .miniDateRange button {
@@ -1086,12 +1087,14 @@ input.variableInput.biggest {
   background-color: transparent;
   color: white;
 }
+*/
 .miniDateRange select,
 .miniDateRange input[type='date'] {
-  min-height: 24px;
+  /*min-height: 24px;*/
   line-height: 1.2rem;
   text-indent: 3px;
 }
+/*
 .miniDateRange select,
 .miniDateRange button{
   height: 24px;
@@ -1105,6 +1108,7 @@ input.variableInput.biggest {
 .miniDateRange input[type='date'] {
   width: 136px;
 }
+*/
 .miniDateRange input[type='date']::-webkit-clear-button {
   display: none;
 }
