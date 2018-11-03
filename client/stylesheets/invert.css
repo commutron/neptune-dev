@@ -65,7 +65,7 @@
 .invert .mockTableCell,
 .invert .mockTableRow {
   border-color: black;
-  border-color: rgba(0,0,0,0.5);
+  border-color: rgba(0,0,0,0.4);
 }
 .invert::-webkit-input-placeholder, /* Chrome/Opera/Safari */
 .invert::-moz-placeholder, /* Firefox 19+ */

@@ -1,51 +1,88 @@
 import React from 'react';
-import Alert from '/client/global/alert.js';
+//import Alert from '/client/global/alert.js';
 import DateRangeSelect from '/client/components/smallUi/DateRangeSelect.jsx';
 
-const ReportRequest = ({ setFrom, setTo })=> {
-  
-  /*function setApp(e) {
-    e.preventDefault();
-    const act = action;
-    const newSet = this[rndmKey + 'inputR'].value.trim();
-    
-    if(act) {
-      Meteor.call(act, newSet, (error, reply)=>{
-        error && console.log(error);
-        if(reply) {
-          this[rndmKey + 'input'].value = '';
-        }else{
-          Bert.alert(Alert.warning);
-        }
-      });
-    }else{
-      alert('action not found');
-    }
-  }*/
-    
+const ReportRequest = ({ 
+        setFrom, setTo, 
+        shortCheck, setShort,
+        firstCheck, setFirst,
+        testCheck, setTest,
+        scrapCheck, setScrap, 
+        ncCheck, setNC,
+        typeCheck, setType,
+        refCheck, setRef 
+})=> {
+
   return(
     <div>
-      <form id='formR' className='inlineForm'>
-        {/*
-        <label htmlFor='inputOne'><br />
-          <input
-            type='text'
-            id='inputOne'
-            required
-          />
-        </label>
-        <label htmlFor='inputR'><br />
-          <input
-            type='text'
-            id='inputR'
-            required
-          />
-        </label>
-        */}
+      <form id='formR' className=''>
         
-        <DateRangeSelect
-          setFrom={setFrom}
-          setTo={setTo} />
+        <p>
+          <DateRangeSelect
+            setFrom={setFrom}
+            setTo={setTo} />
+        </p>
+        
+        <div className='centreRow'>
+          <span>
+            <input
+              type='checkbox'
+              id='inputShort'
+              onChange={(e)=>setShort(inputShort.value)}
+              checked={shortCheck} />
+            <label htmlFor='inputShort'>Shortfalls</label>
+          </span>
+          <span>
+            <input
+              type='checkbox'
+              id='inputFirst'
+              onChange={(e)=>setFirst(inputFirst.value)}
+              checked={firstCheck} />
+            <label htmlFor='inputFirst'>First-offs</label>
+          </span>
+          <span>
+            <input
+              type='checkbox'
+              id='inputTest'
+              onChange={(e)=>setTest(inputTest.value)}
+              checked={testCheck} />
+            <label htmlFor='inputTest'>Failed Tests</label>
+          </span>
+          <span>
+            <input
+              type='checkbox'
+              id='inputScrap'
+              onChange={(e)=>setScrap(inputScrap.value)}
+              checked={scrapCheck} />
+            <label htmlFor='inputScrap'>Scrapped Items</label>
+          </span>
+        </div>
+        <div className='centreRow'>
+          <span>
+            <input
+              type='checkbox'
+              id='inputNC'
+              onChange={(e)=>setNC(inputNC.value)}
+              checked={ncCheck} />
+            <label htmlFor='inputNC'>Non-conformances</label>
+          </span>
+          <span>
+            <input
+              type='checkbox'
+              id='inputType'
+              onChange={(e)=>setType(inputType.value)}
+              checked={typeCheck} />
+            <label htmlFor='inputType'>Type Breakdown</label>
+          </span>
+          <span>
+            <input
+              type='checkbox'
+              id='inputRef'
+              onChange={(e)=>setRef(inputRef.value)}
+              checked={refCheck} />
+            <label htmlFor='inputRef'>Ref Breakdown</label>
+          </span>
+        </div>
         
       </form>
     </div>

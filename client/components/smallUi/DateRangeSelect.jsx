@@ -1,24 +1,12 @@
 import React, {Component} from 'react';
-import Pref from '/client/global/pref.js';
-import moment from 'moment';
+//import Pref from '/client/global/pref.js';
+//import moment from 'moment';
 
 const DateRangeSelect = ({ setFrom, setTo })=> ( //setNew, doRefresh
 
   <span className='miniDateRange'>
-    {/*<span>
-      <select
-        id='scope'
-        title='Scope'
-        defaultValue={false}
-        onChange={(e)=>setNew(scope.value)}>
-        <option value='all'>All from Active {Pref.Batch}s</option>
-        <option value='new'>Limit to Newly Discovered</option>
-      </select>
-    </span>*/}
     <span>
       <label htmlFor='startRange'>From</label>
-    </span>
-    <span>
       <input
         type='date'
         id='startRange'
@@ -28,8 +16,6 @@ const DateRangeSelect = ({ setFrom, setTo })=> ( //setNew, doRefresh
     </span>
     <span>
       <label htmlFor='endRange'>To</label>
-    </span>
-    <span>
       <input
         type='date'
         id='endRange'
@@ -37,14 +23,6 @@ const DateRangeSelect = ({ setFrom, setTo })=> ( //setNew, doRefresh
         //defaultValue={moment().format('YYYY-MM-DD')}
         onChange={(e)=>setTo(endRange.value)} />
     </span>
-    {/*
-    <span>
-      <button
-      title='Refresh'
-        className='clearWhite'
-        onClick={(e)=>doRefresh(e)}
-      ><i className='fas fa-redo'></i></button>
-    </span>*/}
   </span>
 );
       

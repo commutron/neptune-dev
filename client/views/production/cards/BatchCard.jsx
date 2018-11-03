@@ -41,7 +41,7 @@ export default class BatchCard extends Component	{
 
     return(
       <AnimateWrap type='cardTrans'>
-        <div className='section sidebar' key={b.batch}>
+        <div className='sidebar' key={b.batch}>
           
           {iready ?
             <h2 className='actionBox centreText yellow'>

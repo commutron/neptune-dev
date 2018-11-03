@@ -1,9 +1,11 @@
 import { Meteor } from 'meteor/meteor';
 import React, {Component} from 'react';
-//import Pref from '/client/global/pref.js';
+import Pref from '/client/global/pref.js';
+import { CalcSpin } from '/client/components/uUi/Spin.jsx';
 //import BestWorstBatch from '/client/components/bigUi/BestWorstBatch.jsx';
 // import PopularWidget from '/client/components/charts/PopularWidget.jsx'; 
 import ReportRequest from '/client/components/forms/ReportRequest.jsx'; 
+import ReportBasicTable from '/client/components/tables/ReportBasicTable.jsx'; 
 
 export default class Reports extends Component {
   
@@ -13,30 +15,92 @@ export default class Reports extends Component {
       //tops: false,
       start: false,
       end: false,
+      getShort: true, 
+      getFirst: true,
+      getTest: true,
+      getScrap: true,
+      getNC: true,
+      getType: true,
+      getRef: true,
+      working: false,
+      replyData: false
     };
   }
   
-  tops() {
-    //this.setState({ tops: false });
-    //const best = this.props.app.ncScale.low;
-    //const worst = this.props.app.ncScale.max;
-    const start = this.state.start;
-    const end = this.state.end;
-    //const newOnly = this.state.newOnly === 'new' ? true : false;
-    //const widgetSort = this.props.widgetSort;
-    Meteor.call('buildReport', start, end, (error, reply)=> {
+  changeNC() {
+    if(this.state.getNC === true) {
+      this.setState({getNC: false});
+      this.setState({getType: false});
+      this.setState({getRef: false});
+    }else{
+      this.setState({getNC: true});
+    }
+  }
+  changeType() {
+    if(this.state.getType === false) {
+      this.setState({getNC: true});
+      this.setState({getType: true});
+    }else{
+      this.setState({getType: false});
+    }
+  }
+  changeRef() {
+    if(this.state.getRef === false) {
+      this.setState({getNC: true});
+      this.setState({getRef: true});
+    }else{
+      this.setState({getRef: false});
+    }
+  }
+  
+  getReport(){
+    this.setState({working: true});
+    this.setState({replyData: false});
+    Meteor.call('buildReport', 
+      this.state.start, 
+      this.state.end, 
+      this.state.getShort, 
+      this.state.getFirst, 
+      this.state.getTest,
+      this.state.getScrap,
+      this.state.getNC, 
+      this.state.getType,
+      this.state.getRef, 
+    (error, reply)=> {
       error && console.log(error);
       //this.setState({ tops: reply });
       if(reply) {
-        console.log(reply);
+        //console.log(reply);
+        let arrange = [
+          ['Included ' + Pref.batches, reply.batchInclude ],
+          [ 'Included Serialized Items', reply.itemsInclude ],
+          [ 'Finished Serialized Items', reply.itemStats.finishedItems ],
+          [ 'Passed First-offs', reply.itemStats.firstPass ],
+          [ 'Rejected First-offs', reply.itemStats.firstFail ],
+          [ 'Scrapped Serialized Items', reply.itemStats.scraps ],
+          [ 'Failed Tests', reply.itemStats.testFail ],
+          [ 'Part Shortfalls', reply.shortfallCount ],
+          [ 'Discovered Non-conformances', reply.nonConStats.foundNC ],
+          [ 'Serial Numbers with Non-conformances', 
+            this.state.getNC ?
+              [  [ 'Quantity of Items', reply.nonConStats.uniqueSerials ],
+                [ 'Percent of All Items', reply.itemsWithPercent ] ]
+            : false
+          ],
+          [ 'Non-conformance Types', reply.nonConStats.typeBreakdown ],
+          [ 'Non-conformance Referances', reply.nonConStats.refBreakdown ]
+        ];
+        this.setState({working: false});
+        this.setState({replyData: arrange});
       }
     });
   }
   
   render () {
     
-    //const tops = this.state.tops;
-    console.log({start: this.state.start, end: this.state.end});
+    //console.log(this.state);
+    
+    const lock = !this.state.start || !this.state.end;
     
     const g = this.props.groupData;
     const w =this.props.widgetData;
@@ -46,23 +110,46 @@ export default class Reports extends Component {
     
     return(
       <div className='overscroll'>
-        <div className='centre wide'>
+        <div className='centre wide space noPrint'>
+        
+          <h2>Generate Basic Report</h2>
           
           <ReportRequest 
             setFrom={(v)=>this.setState({start: v})}
-            setTo={(v)=>this.setState({end: v})} />
+            setTo={(v)=>this.setState({end: v})}
+            shortCheck={this.state.getShort}
+            setShort={(v)=>this.setState({getShort: !this.state.getShort})}
+            firstCheck={this.state.getFirst}
+            setFirst={(v)=>this.setState({getFirst: !this.state.getFirst})}
+            testCheck={this.state.getTest}
+            setTest={(v)=>this.setState({getTest: !this.state.getTest})}
+            scrapCheck={this.state.getScrap}
+            setScrap={(v)=>this.setState({getScrap: !this.state.getScrap})}
+            ncCheck={this.state.getNC}
+            setNC={(v)=>this.changeNC(v)}
+            typeCheck={this.state.getType}
+            setType={(v)=>this.changeType(v)}
+            refCheck={this.state.getRef}
+            setRef={(v)=>this.changeRef(v)} />
           
-          {/*  
-          <GenerateReport
-            doRefresh={(e)=>this.tops()} />
-          */}
-          
-          <button 
-            className='action clear'
-            onClick={this.tops.bind(this)} 
-          >Generate Report</button>
+          <div className='space'>
+            <button 
+              className='action clearWhite'
+              onClick={this.getReport.bind(this)} 
+              disabled={lock || this.state.working}
+            >Generate Report</button>
+          </div>
         
         </div>
+        
+        {this.state.working ?
+          <div>
+            <p className='centreText'>This may take a while...</p>
+            <CalcSpin />
+          </div>
+        :
+          <ReportBasicTable title='Basic Report' rows={this.state.replyData} />
+        }
         
       
         {/*<PopularWidget groupData={groupData} widgetData={widgetData} />*/}

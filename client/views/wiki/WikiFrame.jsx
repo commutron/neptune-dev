@@ -9,6 +9,9 @@ const WikiFrame = ({ go, full })=> {
     padding: '0'
   };
   //let correct = full ? 45 : 115;
+  
+  console.log(go);
+  
   return (
     <iframe
       id='instruct'

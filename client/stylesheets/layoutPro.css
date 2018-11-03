@@ -58,10 +58,11 @@
   grid-area: proLeft;
   display: grid;
   overflow-y: auto;
+  overflow-x: hidden;
   background-color: rgb(35,35,35);
 }
 .proSingle {
-  grid-template-columns: auto;
+  grid-template-columns: 1fr;
 }
 .proDual {
   grid-template-columns: 1fr 1fr;

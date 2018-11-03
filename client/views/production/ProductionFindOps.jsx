@@ -187,22 +187,6 @@ export default class ProductionFindOps extends Component	{
       }
     }
 	  
-	  // Fallback to 'PISCES' -- for the transition
-	  //// supufoulous once 'neptune' is used exclusivly
-	  if(!isNaN(orb) && orb.length === 5) {
-	    Session.set('nowBatch', orb);
-	    return(
-	      <ProWrap standAlone={true}>
-	        <WikiOps
-	          wi='home'
-	          fallback={orb}
-	          root={app.instruct}
-	          anchor={anchor}
-	          full={true} />
-       </ProWrap>
-      );
-	  }
-	  
   // Item
     ////// will need to be changed?? for alphnumeric barcodes such as with TGS
 		if(!isNaN(orb) && orb.length > 5 && orb.length <= 10) {

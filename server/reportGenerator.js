@@ -14,20 +14,21 @@ function findRelevantBatches(orgKey, from, to) {
   });
 }
 
-function loopBatches(batches, from, to) {
+function loopBatches(batches, from, to, getShort) {
   return new Promise(resolve => {
     let allItems = [];
     let allNonCons = [];
-    let shortfallCount = 0;
+    let shortfallCount = getShort ? 0 : false;
     for(let b of batches) {
-      const shortfallUnique = !b.shortfall ? [] : 
-                                [...new Set(
+      if(getShort) {
+        const inTimeShort = !b.shortfall ? [] : b.shortfall.filter( x => moment(x.cTime).isBetween(from, to) );
+        const shortfallUnique = [...new Set(
                                   Array.from(
-                                    b.shortfall, 
-                                    x => moment(x.cTime).isBetween(from, to) ? 
-                                    x.partNum : null ) 
+                                    inTimeShort, 
+                                      x => x.partNum ) 
                                 ) ];
-      shortfallCount += shortfallUnique.length;
+        shortfallCount += shortfallUnique.length;
+      }else{null}
       allNonCons.push(...b.nonCon);
       allItems.push(...b.items);
     }
@@ -35,40 +36,58 @@ function loopBatches(batches, from, to) {
   });
 }
 
-function loopItems(items, from, to) {
+function loopItems(items, from, to, getFirst, getTest, getScrap) {
   return new Promise(resolve => {
     let finishedItems = 0;
-    let firstPass = 0;
-    let firstFail = 0;
-    let testFail = 0;
-    let scraps = 0;
+    let firstPass = getFirst ? 0 : false;
+    let firstFail = getFirst ? 0 : false;
+    let testFail = getTest ? 0 : false;
+    let scraps = getScrap ? 0 : false;
     for(let i of items) {
       if(i.finishedAt !== false && moment(i.finishedAt).isBetween(from, to) ) { finishedItems += 1 }
       const inTime = i.history.filter( x => moment(x.time).isBetween(from, to) );
-      firstPass += inTime.filter( x => x.type === 'first' && x.good !== false ).length;
-      firstFail += inTime.filter( x => x.type === 'first' && x.good === false ).length;
-      testFail += inTime.filter( x => x.type === 'test' && x.good === false ).length;
-      scraps += inTime.filter( x => x.type === 'scrap' && x.good === true ).length;
+      if(getFirst) {
+        firstPass += inTime.filter( x => x.type === 'first' && x.good !== false ).length;
+        firstFail += inTime.filter( x => x.type === 'first' && x.good === false ).length;
+      }else{null}
+      if(getTest) {
+        testFail += inTime.filter( x => x.type === 'test' && x.good === false ).length;
+      }else{null}
+      if(getScrap) {
+        scraps += inTime.filter( x => x.type === 'scrap' && x.good === true ).length;
+      }else{null}
     }
+    
     resolve({finishedItems, firstPass, firstFail, testFail, scraps});
   });
 }
 
-function loopNonCons(nonCons, from, to, optionsLegacy) {
+function loopNonCons(nonCons, from, to, optionsLegacy, getNC, getType, getRef) {
   return new Promise(resolve => {
-    const inTime = nonCons.filter( x => moment(x.time).isBetween(from, to) );
-    let foundNC = inTime.length;
-    let uniqueSerials = [... new Set( Array.from(inTime, x => x.serial ) ) ].length;
-    let refC = inTime.filter( x => x.ref.split('')[0] === 'c' ).length;
-    let refR = inTime.filter( x => x.ref.split('')[0] === 'r' ).length;
-    let refU = inTime.filter( x => x.ref.split('')[0] === 'u' ).length;
-    let refQ = inTime.filter( x => x.ref.split('')[0] === 'q' ).length;
-    const refBreakdown = { refC, refR, refU, refQ };
-    let typeBreakdown = [];
-    for(let ncOp of optionsLegacy) {
-      const num = inTime.filter( x => x.type === ncOp ).length;
-      typeBreakdown.push({ type: ncOp, quantity: num });
-    }
+    const inTime = getNC ? nonCons.filter( x => moment(x.time).isBetween(from, to) ) : [];
+    let foundNC = getNC ? inTime.length : false;
+    let uniqueSerials = getNC ? [... new Set( Array.from(inTime, x => x.serial ) ) ].length : false;
+    let refC = getNC && getRef ? inTime.filter( x => x.ref.split('')[0] === 'c' ).length : false;
+    let refR = getNC && getRef ? inTime.filter( x => x.ref.split('')[0] === 'r' ).length : false;
+    let refU = getNC && getRef ? inTime.filter( x => x.ref.split('')[0] === 'u' ).length : false;
+    let refQ = getNC && getRef ? inTime.filter( x => x.ref.split('')[0] === 'q' ).length : false;
+    let refPCB = getNC && getRef ? inTime.filter( x => 
+                                    x.ref.includes('pcb') || x.ref.includes('board')
+                                  ).length : false;
+    const refBreakdown = getNC && getRef ? [ 
+      [ 'C', refC ], 
+      [ 'R', refR ], 
+      [ 'U', refU ], 
+      [ 'Q', refQ ], 
+      [ 'PCB', refPCB ] 
+    ] : false;
+    let typeBreakdown = getNC && getType ? [] : false;
+    if(getNC && getType) {
+      for(let ncOp of optionsLegacy) {
+        const num = inTime.filter( x => x.type === ncOp ).length;
+        typeBreakdown.push([ ncOp, num ]);
+      }
+    }else{null}
     resolve({foundNC, uniqueSerials, refBreakdown, typeBreakdown});
   });
 }
@@ -78,7 +97,7 @@ function loopNonCons(nonCons, from, to, optionsLegacy) {
 
 Meteor.methods({
   
-  buildReport(startDay, endDay) {
+  buildReport(startDay, endDay, getShort, getFirst, getTest, getScrap, getNC, getType, getRef) {
     const orgKey = Meteor.user().orgKey;
     let org = AppDB.findOne({orgKey: Meteor.user().orgKey});
     let optionsLegacy = !org ? [] : org.nonConOption;
@@ -88,20 +107,20 @@ Meteor.methods({
     async function getBatches() {
       try {
         batchSlice = await findRelevantBatches(orgKey, from, to);
-        batchArange = await loopBatches(batchSlice, from, to);
-        itemStats = await loopItems(batchArange.allItems, from, to);
-        nonConStats = await loopNonCons(batchArange.allNonCons, from, to, optionsLegacy);
+        batchArange = await loopBatches(batchSlice, from, to, getShort);
+        itemStats = await loopItems(batchArange.allItems, from, to, getFirst, getTest, getScrap);
+        nonConStats = await loopNonCons(batchArange.allNonCons, from, to, optionsLegacy, getNC, getType, getRef);
+        const batchInclude = batchSlice.length;
+        const itemsInclude = batchArange.allItems.length;
+        const itemsWithPercent = ( ( nonConStats.uniqueSerials / itemsInclude ) * 100 ).toFixed(1) + '%';
         const shortfallCount = batchArange.shortfallCount;
-        return {shortfallCount, itemStats, nonConStats};
+        return {batchInclude, itemsInclude, itemsWithPercent, shortfallCount, itemStats, nonConStats};
       }catch (err) {
         throw new Meteor.Error(err);
       }
     }
     
     return getBatches();
-
-
-
     
   },
   

@@ -1275,6 +1275,27 @@ input.variableInput.biggest {
   line-height: 1.75em;
 }
 
+.reportTable {
+  font-family: 'Varela Round';
+  max-width: 750px;
+  background-color: white;
+}
+.reportTable td:last-child {
+  text-align: right;
+  border-left-width: 0px;
+  border-left-color: transparent;
+  border-left-style: hidden;
+}
+.reportTable td {
+  padding-right: 50px;
+  padding-left: 50px;
+}
+.reportTable .indent {
+  padding-right: 50px;
+  padding-left: 100px;
+}
+
+
 /* custom Bert alerts */
 .bert-alert {
   color: #ecf0f1;

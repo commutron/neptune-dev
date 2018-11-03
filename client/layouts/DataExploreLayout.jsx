@@ -37,7 +37,7 @@ export const TraverseWrap = ({
 
     return(
       <div className='containerEx'>
-        <div className='tenHeader'>
+        <div className='tenHeader noPrint'>
           <div className='topBorder' />
           <HomeIcon />
           {base ? 
@@ -88,7 +88,7 @@ export const TraverseWrap = ({
           </div>
         
         </div>
-        <aside className='taskBarEx'>
+        <aside className='taskBarEx noPrint'>
           <TaskBar subLink={subLink} />
         </aside>
         
