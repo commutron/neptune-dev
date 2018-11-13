@@ -1,5 +1,7 @@
 import { Mongo } from 'meteor/mongo';
 
+FontAwesomeConfig = { autoReplaceSvg: 'nest' };
+
 // Deny all client-side updates on collections
 
 AppDB.deny({

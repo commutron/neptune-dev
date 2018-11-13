@@ -12,7 +12,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '1.8.0';
+    this.neptuneVersion = '1.8.1';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -85,7 +85,7 @@ class Pref {
     this.nonConRef = 'reference';
     this.nonConType = 'defect';
     this.repair = 'repair';
-    this.reject = 'reject';
+    this.reject = 'reject repair';
     this.skip = 'skip';
     this.skipDescribe = 'Ship With Defect';
     this.snooze = 'snooze';

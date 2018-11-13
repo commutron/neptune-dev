@@ -41,45 +41,52 @@ const ShortLine = ({ entry, doSet, lock })=>{
     reS === true ? 'greenList' :
     'unknown';
   const actionState = 
-    inE === null ? <span title={Pref.Pending}><i><i className='fas fa-hand-paper fa-lg'></i></i> Decide</span> :
-    inE === true ? <span title={Pref.doOmit}><b><i className='fas fa-hand-peace fa-lg'></i></b> Leave</span> :
-    reS === null ? <span title={Pref.shortageWaiting}><em><i className='fas fa-hand-holding fa-lg'></i></em> Wait</span> :
-    reS === false ? <span title={Pref.notResolved}><strong><i className='fas fa-hand-rock fa-lg'></i> Have</strong></span> :
-    reS === true ? <span title={Pref.isResolved}><ins><i className='fas fa-thumbs-up'></i></ins> Good</span> :
+    inE === null ? <span title={Pref.Pending} className='centre'><i><i className='fas fa-hand-paper fa-lg'></i></i>Decide</span> :
+    inE === true ? <span title={Pref.doOmit} className='centre'><b><i className='fas fa-hand-peace fa-lg'></i></b>Leave</span> :
+    reS === null ? <span title={Pref.shortageWaiting} className='centre'><em><i className='fas fa-hand-holding fa-lg'></i></em>Wait</span> :
+    reS === false ? <span title={Pref.notResolved} className='centre'><strong><i className='fas fa-hand-rock fa-lg'></i></strong>Have</span> :
+    reS === true ? <span title={Pref.isResolved} className='centre'><ins><i className='fas fa-thumbs-up'></i></ins>Good</span> :
     'unknown';
 
   return(
-    <ContextMenuTrigger id={entry.key} 
-      attributes={ {className:'shortRow noCopy ' + actionColor } }>
-        <div className='shortCell up' title={entry.comm}>
-          {entry.partNum}
-        </div>
-        <div className='shortCell up' title={entry.comm}>
-          {entry.refs.toString()}
-        </div>
-        <div className='shortCell'>
+    <div className={'shortRow noCopy ' + actionColor }>
+      <div className='tribInfo' title={entry.comm}>
+        <div className='up numFont'>{entry.partNum}</div>
+        <div className='up'>{entry.refs.toString()}</div>
+      </div>
+      <div className='tribAction'>
+        <div className='tribActionMain'>
           {actionState}
         </div>
-        <ContextMenu id={entry.key}>
-          {!Roles.userIsInRole(Meteor.userId(), 'verify') &&
-            <MenuItem disabled={true}>"Verify" Permission Required</MenuItem>}
-          <MenuItem onClick={()=>doSet(null, null)} disabled={lock}>
-            <i className='fas fa-hand-paper fa-lg'></i>  {Pref.shortagePending}
-          </MenuItem>
-          <MenuItem onClick={()=>doSet(true, false)} disabled={lock}>
-            <i className='fas fa-hand-peace fa-lg'></i>  {Pref.doOmit}
-          </MenuItem>
-          <MenuItem onClick={()=>doSet(false, null)} disabled={lock}>
-            <i className='fas fa-hand-holding fa-lg'></i>  {Pref.shortageWaiting}
-          </MenuItem>
-          <MenuItem onClick={()=>doSet(false, false)} disabled={lock}>
-            <i className='fas fa-hand-rock fa-lg'></i>  {Pref.notResolved}
-          </MenuItem>
-          <MenuItem onClick={()=>doSet(false, true)} disabled={lock}>
-            <i className='fas fa-thumbs-up'></i>  {Pref.isResolved}
-          </MenuItem>
-        </ContextMenu>
-    </ContextMenuTrigger>
+        <div className='tribActionExtra'>
+          <ContextMenuTrigger
+            id={entry.key}
+            holdToDisplay={1}
+            renderTag='span'>
+            <i className='fas fa-ellipsis-v fa-fw fa-lg'></i>
+          </ContextMenuTrigger>
+          <ContextMenu id={entry.key}>
+            {!Roles.userIsInRole(Meteor.userId(), 'verify') &&
+              <MenuItem disabled={true}>"Verify" Permission Required</MenuItem>}
+            <MenuItem onClick={()=>doSet(null, null)} disabled={lock}>
+              <i className='fas fa-hand-paper fa-lg'></i>  {Pref.shortagePending}
+            </MenuItem>
+            <MenuItem onClick={()=>doSet(true, false)} disabled={lock}>
+              <i className='fas fa-hand-peace fa-lg'></i>  {Pref.doOmit}
+            </MenuItem>
+            <MenuItem onClick={()=>doSet(false, null)} disabled={lock}>
+              <i className='fas fa-hand-holding fa-lg'></i>  {Pref.shortageWaiting}
+            </MenuItem>
+            <MenuItem onClick={()=>doSet(false, false)} disabled={lock}>
+              <i className='fas fa-hand-rock fa-lg'></i>  {Pref.notResolved}
+            </MenuItem>
+            <MenuItem onClick={()=>doSet(false, true)} disabled={lock}>
+              <i className='fas fa-thumbs-up'></i>  {Pref.isResolved}
+            </MenuItem>
+          </ContextMenu>
+        </div>
+      </div>
+    </div>
   );
 };
 

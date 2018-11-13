@@ -125,6 +125,12 @@
   font-weight: bolder;
 }
 
+.riverInfo {
+  background-color: var(--belizeHole);
+}
+.riverInfo:hover, .riverInfo:active {
+  background-color: var(--peterriver);
+}
 .riverG {
   background-color: var(--nephritis);
 }
@@ -259,80 +265,91 @@
   border-collapse: collapse;
 }
 .tribRow, .shortRow {
-	display: table-row;
-	border-bottom: 1px solid rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  margin: 12px 0;
+  padding: 0px;
+	width: 100%;
+	min-height: 65px;
 }
-.tribRed:nth-child(odd) {
-	background-color: rgb(192, 57, 43);
+.tribRed {
+  background-color: rgba(192, 57, 43, 0.8);
 }
-.tribRed:nth-child(even) {
-	background-color: rgba(192, 57, 43, 0.8);
+.tribRed:hover,
+.tribRed:active {
+  background-color: rgb(192, 57, 43);
 }
-.tribRed:nth-child(odd):hover,
-.tribRed:nth-child(odd):active,
-.tribRed:nth-child(even):hover,
-.tribRed:nth-child(even):active {
-  background-color: var(--alizarin);
-}
-
-.tribCell, .shortCell {
-	display: table-cell;
-	text-align: center;
-	height: 40px;
-	vertical-align: middle;
-	padding-left: 5px;
+.tribRow:last-child,
+.shortRow:last-child {
+  margin-bottom: 32px;
 }
 
-.tribRow .tribCell:nth-child(2),
-.shortRow .shortCell:nth-child(2) {
+.tribInfo {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 8px;
   word-break: break-word;/*weird no standerd thing but it works*/
   word-wrap: break-word;
 }
-.tribRow .tribCell:nth-child(3),
-.shortRow .shortCell:nth-child(3) {
-  width: 80px;
-  margin: 0;
-  padding: 0;
+.tribAction {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  width: 40%;
 }
-
-.shortCell span {
-  padding-right: 5px;
+.tribActionMain {
+  width: 70%;
+  height: 100%;
 }
-
-.pebble {
+.tribActionMain > button {
+  cursor: pointer;
+}
+.tribActionMain > button {
+  border: none;
   line-height: 1.5rem;
-  font-size: 0.8rem;
-  width: 80px;
-	height: 40px;
+  font-size: 0.9rem;
+  width: 100%;
+  height: 100%;
 	text-transform: uppercase;
 	vertical-align: middle;
-	transition: all 200ms ease-out;
-	background-color: var(--belizeHole);
+  transition: all 200ms ease-out;
 }
-.pebble:hover, .pebble:active {
-  background-color: var(--peterriver);
+.tribActionExtra {
+  width: 30%;
+  cursor: pointer;
+  background-color: var(--belizeHole);
+  border-left: 1px inset rgba(0,0,0,0.1);
+}
+.tribActionExtra > .react-contextmenu-wrapper {
+  width: 100%;
+  height: 100%;
+}
+.tribActionMain, .tribActionExtra,
+.tribActionExtra > .react-contextmenu-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }
 
 .pebbleSVG {
   backface-visibility: hidden;
-  width: 60px;
+  width: 80%;
   height: auto;
   -webkit-transform: translate(0%, 20%);
   -moz-transform: translate(0%, 20%);
   -o-transform: translate(0%, 20%);
   -ms-transform: translate(0%, 20%);
   transform: translate(0%, 20%);
-}
-
-.granule {
-  border: none;
-  line-height: 1.5rem;
-  font-size: 0.9rem;
-  width: 40px;
-  height: 40px;
-	text-transform: uppercase;
-	vertical-align: middle;
-  transition: all 200ms ease-out;
 }
 
 .stoneForm {

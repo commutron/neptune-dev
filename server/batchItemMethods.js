@@ -746,6 +746,7 @@ Meteor.methods({
     }else{null}
   },
   
+  /*
   skipNC(batchId, ncKey) {
     if(Roles.userIsInRole(Meteor.userId(), 'inspect')) {
   		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
@@ -759,6 +760,7 @@ Meteor.methods({
   		});
     }else{null}
   },
+  */
   
   autoTrashShortNC(accessKey, batchId, serial, refs) {
     const org = AppDB.findOne({ orgKey: accessKey });

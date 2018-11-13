@@ -99,75 +99,69 @@ const NCStream = ({ entry, id, end, doFix, doInspect, doReject, doSnooze, doUnSk
   const lockI = fixed ? !same && inspector ? false : true : false;
   let skip = entry.skip;
   let style = !skip ? 'cap tribRow tribRed noCopy' : 'cap tribRow yellowList noCopy';
-  
-  let tryAgain = !entry.reject ? null :
-                 entry.reject.length > 0 ?
-                 <i className='badge'>
-                  {entry.reject.length + 1}
-                 </i>:
-                 null;
+
+  const smple = window.innerWidth <= 1200;
 
   return(
-    <ContextMenuTrigger id={entry.key} 
-      attributes={ {className:style} }>
-        <div className='tribCell up noCopy' title={entry.comm}>
-          {entry.ref}
-        </div>
-        <div className='tribCell' title={entry.comm}>
-          {entry.type}
-        </div>
-        <div className='tribCell'>
+    <div className={style} >
+      <div className='tribInfo' title={entry.comm}>
+        <div className='up numFont'>{entry.ref}</div>
+        <div>{entry.type}</div>
+      </div>
+      <div className='tribAction'>
+        <div className='tribActionMain'>
           {skip ?
-            entry.snooze === true ?
-              <i><i className='fas fa-clock fa-lg'></i></i>
-              :
-              <b><i className='fas fa-truck fa-lg'></i></b>
+            <span className='centre'>
+              <i className='far fa-clock fa-lg'></i>{smple ? null : 'Snoozing'}
+            </span>
           :
             fixed ?
-              <div className='twoSqIcons'>
-                <button
-                  title={Pref.inspect}
-                  ref={(i)=> this.inspectline = i}
-                  className='granule riverG'
-                  readOnly={true}
-                  onClick={doInspect}
-                  disabled={lockI}>
-                <i className='fas fa-check fa-lg'></i></button>
-                <button
-                  title={Pref.reject}
-                  ref={(i)=> this.rejectline = i}
-                  className='granule riverNG'
-                  readOnly={true}
-                  onClick={doReject}
-                  disabled={lockI}>
-                <i className='fas fa-times fa-lg'></i></button>
-              </div>
+              <button
+                title='All Correct'
+                ref={(i)=> this.inspectline = i}
+                className='riverG'
+                readOnly={true}
+                onClick={doInspect}
+                disabled={lockI}>
+              <i className='fas fa-check fa-lg'></i><br />{smple ? null : 'OK'}</button>
           :
               <button
-                title={Pref.repair}
                 ref={(i)=> this.fixline = i}
-                className='pebble'
+                className='riverInfo'
                 readOnly={true}
                 onClick={doFix}
                 disabled={false}>
-              <img src='/repair.svg' className='pebbleSVG' />{tryAgain}</button>
+              <img src='/repair.svg' className='pebbleSVG' /><br />{smple ? null : 'Repaired'}</button>
           }
         </div>
-      <ContextMenu id={entry.key}>
-        <MenuItem onClick={doSnooze} disabled={skip !== false || end}>
-          Snooze
-        </MenuItem>
-        {/*<MenuItem onClick={doSkip} disabled={skip !== false && !entry.snooze}>
-          Skip
-        </MenuItem>*/}
-        <MenuItem onClick={doUnSkip} disabled={!skip}>
-          Wake Up
-        </MenuItem>
-        <MenuItem onClick={this.comment.bind(this)}>
-          Comment
-        </MenuItem>
-      </ContextMenu>
-    </ContextMenuTrigger>
+        <div className='tribActionExtra'>
+          <ContextMenuTrigger
+            id={entry.key}
+            holdToDisplay={1}
+            renderTag='span'>
+            <i className='fas fa-ellipsis-v fa-fw fa-lg'></i>
+          </ContextMenuTrigger>
+        
+          <ContextMenu id={entry.key}>
+            <MenuItem onClick={doReject} disabled={lockI || !fixed}>
+              {Pref.reject} 
+            </MenuItem>      
+            <MenuItem onClick={doSnooze} disabled={skip !== false || end}>
+              Snooze
+            </MenuItem>
+            {/*<MenuItem onClick={doSkip} disabled={skip !== false && !entry.snooze}>
+              Skip
+            </MenuItem>*/}
+            <MenuItem onClick={doUnSkip} disabled={!skip}>
+              Wake Up
+            </MenuItem>
+            <MenuItem onClick={this.comment.bind(this)}>
+              Comment
+            </MenuItem>
+          </ContextMenu>
+        </div>
+      </div>
+    </div>
   );
 };
 
