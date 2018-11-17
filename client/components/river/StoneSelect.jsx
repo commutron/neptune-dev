@@ -4,6 +4,7 @@ import InOutWrap from '/client/components/tinyUi/InOutWrap.jsx';
 import Pref from '/client/global/pref.js';
 
 import Stone from './Stone.jsx';
+import FoldInNested from './FoldInNested.jsx';
 import TestFails from './TestFails.jsx';
 import NCTributary from './NCTributary.jsx';
 import Shortfalls from './Shortfalls.jsx';
@@ -23,11 +24,14 @@ const StoneSelect = ({
   serial,
   history,
   finishedAt,
-  regRun,
+  subItems,
+  //regRun,
   users,
-  methods,
-  progCounts
+  progCounts,
+  app
 })=> {
+  
+  const allTrackOption = app.trackOption;
     
   const nc = nonCons.filter( 
               x => x.serial === serial && x.inspect === false )
@@ -36,14 +40,14 @@ const StoneSelect = ({
                   if (n1.ref > n2.ref) { return 1 }
                   return 0;
                 });
- 
+  const ncOutstanding = nc.filter( x => x.skip === false );
+  
   const iDone = history;
                                    
   const fDone = [];
   for(let item of allItems) {
-    const firsts = item.history.filter( 
-      x => x.type === 'first' && 
-        ( x.good === true || x.good === 'fine' ) );
+    let firsts = item.history.filter( 
+      x => x.type === 'first' && x.good !== false );
     firsts.forEach( x => fDone.push( 'first' + x.step ) );
   }
   
@@ -53,59 +57,44 @@ const StoneSelect = ({
                 if (s1.partNum > s2.partNum) { return 1 }
                 return 0;
               });
+  const allAnswered = sh.every( x => x.inEffect === true || x.reSolve === true );
   const sFall = <Shortfalls
           			  id={id}
           			  shortfalls={sh}
           			  lock={finishedAt !== false} />;
   
   for(let flowStep of flow) {
+    const coreStep = allTrackOption.find( t => t.key === flowStep.key);
+    const stepPhase = !coreStep || !coreStep.phase ? flowStep.step : coreStep.phase;
+
     const first = flowStep.type === 'first';
-    const inspect = flowStep.type === 'inspect';
-    
+
     const stepComplete = first ? 
       iDone.find(ip => ip.key === flowStep.key) || fDone.includes('first' + flowStep.step)
       :
-      inspect && regRun === true ?
-      iDone.find(ip => ip.key === flowStep.key && ip.good === true) ||
-      iDone.find(ip => ip.step === flowStep.step && ip.type === 'first' && ip.good === true)
-      // failed firsts should NOT count as inpections
-      :
       iDone.find(ip => ip.key === flowStep.key && ip.good === true);
     
-    const stepClean = flowStep.step.toLocaleLowerCase();
-                                   
-    //const stepmatch = stepClean + ' ' + flowStep.type;
-    //const stepmatchodd = stepClean + flowStep.type; // depreciated
-    
-    const stepVauge = stepClean.replace(/top/i, '').replace(/bottom/i, '');
-    
-    const ncFromInspect = nc.filter( x => (x.where || '').includes(stepVauge) );
-    
-    //const ncFromElse = nc.filter( x => (x.where || '') === stepmatch || (x.where || '') === stepmatchodd );
-    const secondary = stepClean.includes('bottom') || stepClean.includes('side 2') || stepClean.includes(' b ');
-    
-    const ncFromHere = flowStep.type === 'inspect' && !secondary ? ncFromInspect : [];
-    
-    const hereSkipped = ncFromHere.every( x => x.skip !== false );
-    
-    const ncResolved = ncFromHere.length === 0 || hereSkipped === true;
+    const ncFromHere = ncOutstanding.filter( x => x.where === stepPhase );
+    const ncResolved = ncFromHere.length === 0;
+    //console.log(stepMatch, ncResolved);
     
     const damStep = flowStep.type === 'test' || flowStep.type === 'finish';
-    const allSkipped = nc.every( x => x.skip !== false );
-    const allAnswered = sh.every( x => x.inEffect === true || x.reSolve === true );
-    const ncAllClear = nc.length === 0 || allSkipped === true;
+  
+    const ncAllClear = ncOutstanding.length === 0;
     const shAllClear = sh.length === 0 || allAnswered === true;
 
-    if( (flowStep.type === 'first' && stepComplete) || (stepComplete && ncResolved) ) {
+
+    if( ( ( flowStep.type === 'first' || flowStep.type === 'build' ) && stepComplete ) 
+        || ( stepComplete && ncResolved ) ) {
       null;
     }else{
-      
+
       const compEntry = iDone.find( sc => sc.key === flowStep.key && sc.good === true);
       
       const fTest = flowStep.type === 'test' ? 
                     iDone.filter( x => x.type === 'test' && x.good === false) : [];
       
-      const blockStone = damStep && ( !ncAllClear || !shAllClear );
+      const blockStone = damStep && (!ncAllClear || !shAllClear );
       const doneStone = stepComplete;
       
 	    const stone = <Stone
@@ -119,11 +108,20 @@ const StoneSelect = ({
                       isAlt={isAlt}
                       hasAlt={hasAlt}
                       users={users}
-                      methods={methods}
+                      methods={app.toolOption}
                       progCounts={progCounts}
                       blockStone={blockStone}
                       doneStone={doneStone}
                       compEntry={compEntry} />;
+
+      const nested = <FoldInNested
+                      id={id}
+                      serial={serial}
+                      sKey={flowStep.key}
+                      step={flowStep.step}
+                      doneStone={doneStone}
+                      subItems={subItems}
+                      lock={false} />;
       
       const nonCon = <NCTributary
               			  id={id}
@@ -132,14 +130,16 @@ const StoneSelect = ({
               			  sType={flowStep.type} />;
                       
       const tFail = <TestFails fails={fTest} />;
-	  
-	    Session.set('nowStep', flowStep.step + ' ' + flowStep.type);
+	    
+	    Session.set('ncWhere', stepPhase);
+	    Session.set('nowStepKey', flowStep.key);
       Session.set('nowWanchor', flowStep.how);
 	    return (
         <div>
           <div>
 		        <InOutWrap type='stoneTrans'>
-  		        {stone}
+  		        {flowStep.type === 'nest' ?
+  		          nested : stone}
             </InOutWrap>
             {fTest.length > 0 && 
               <InOutWrap type='stoneTrans'>
@@ -150,18 +150,15 @@ const StoneSelect = ({
             {nonCon}
             {sFall}
           </div>
-          {/*
-          <div className='space'>
-    			  <MiniHistory history={history} />
-    			</div>
-    			*/}
   			</div>
       );
     }
   }
   
   // end of flow
-  Session.set('nowStep', 'done');
+  Session.set('ncWhere', 'done');
+  Session.set('nowStepKey', 'd0n3');
+  Session.set('nowWanchor', '');
   const timelock = moment().diff(moment(finishedAt), 'minutes') > (60 * 24 * 7);
   return (
     <div>

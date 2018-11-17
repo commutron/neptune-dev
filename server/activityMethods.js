@@ -42,26 +42,13 @@ Meteor.methods({
             for(let i of items) {
               const h = i.history;
               const hNew = h.filter( q => wndw(q.time) === true );
-              /*
               if(i.finishedAt !== false) {
                 itemCount += 1;
                 unitCount += 1 * i.units;
-                if(hNew.find( f => f.key === 'f1n15h1t3m5t3p' )) {
-                  itemCountNew += 1;
-                  unitCountNew += 1 * i.units;
-                }
               }else{
-              */
-                if(step.type === 'inspect') {
-                  h.find( byKey(this, step.key) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
-                  h.find( byName(this, step.step) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
-                  hNew.find( byKey(this, step.key) ) ? (itemCountNew += 1, unitCountNew += 1 * i.units ) : null;
-                  hNew.find( byName(this, step.step) ) ? (itemCountNew += 1, unitCountNew += 1 * i.units ) : null;
-                }else{
-                  h.find( byKey(this, step.key) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
-                  hNew.find( byKey(this, step.key) ) ? (itemCountNew += 1, unitCountNew += 1 * i.units ) : null;
-                }
-              //}
+                h.find( byKey(this, step.key) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
+              }
+              hNew.find( byKey(this, step.key) ) ? (itemCountNew += 1, unitCountNew += 1 * i.units ) : null;
             }
             stepCounts.push({
               step: step.step,

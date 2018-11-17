@@ -84,10 +84,11 @@ const River = ({ itemData, batchData, widgetData, app, users, flow, flowAlt, pro
           serial={i.serial}
           history={i.history}
           finishedAt={i.finishedAt}
-          regRun={i.finishedAt === false}
+          subItems={i.subItems}
+          //regRun={i.finishedAt === false}
           users={users}
-          methods={app.toolOption}
-          progCounts={progCounts} />
+          progCounts={progCounts}
+          app={app} />
       </div>
       
 		</div>

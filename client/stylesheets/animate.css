@@ -265,6 +265,69 @@
   }
 }
 
+/*/////////////////////////////////////////////////*/
+@-webkit-keyframes blurOut {
+  0%   { 
+    opacity: 1;
+    filter: blur(0px);
+  }
+  100% { 
+    opacity: 0;
+    filter: blur(30px);
+  }
+}
+@-moz-keyframes blurOut {
+  0%   { 
+    opacity: 1;
+    filter: blur(0px);
+  }
+  100% { 
+    opacity: 0;
+    filter: blur(30px);
+  }
+}
+@keyframes blurOut {
+  0% {
+    opacity: 1;
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 0;
+    filter: blur(50px);
+  }
+}
+@-webkit-keyframes blurIn {
+  0%   { 
+    opacity: 0;
+    filter: blur(30px);
+  }
+  100% { 
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+@-moz-keyframes blurIn {
+  0%   { 
+    opacity: 0;
+    filter: blur(30px);
+  }
+  100% { 
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+@keyframes blurIn {
+  0% {
+    opacity: 0;
+    filter: blur(50px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+
+/*/////////////////////////////////////////////////*/
 
 .cardTrans-enter, .cardTrans-appear {
   -webkit-animation: fadeIn 500ms var(--scottsCurve);
@@ -310,18 +373,18 @@
 
 /* stones */
 .stoneTrans-enter, .stoneTrans-appear {
-  -webkit-animation: slideIn 500ms var(--scottsCurve);
-  -moz-animation: slideIn 500ms var(--scottsCurve);
-  animation: slideIn 500ms var(--scottsCurve);
+  -webkit-animation: blurIn 300ms linear;
+  -moz-animation: blurIn 300ms linear;
+  animation: blurIn 200ms linear;
 }
 
 .stoneTrans-leave {
   position: absolute;
   top: 0%;
   z-index: 0;
-  -webkit-animation: slideOut 500ms var(--scottsCurve);
-  -moz-animation: slideOut 500ms var(--scottsCurve);
-  animation: slideOut 500ms var(--scottsCurve);
+  -webkit-animation: blurOut 300ms linear;
+  -moz-animation: blurOut 300ms linear;
+  animation: blurOut 200ms linear;
 }
 
 /* nonCons */

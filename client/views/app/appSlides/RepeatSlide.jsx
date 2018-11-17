@@ -38,18 +38,18 @@ const RepeatSlide = ({app})=> {
       <AppSetSimple title='Reason' action='addRepeatOption' rndmKey={Math.random().toString(36).substr(2, 5)} />
       <ol>
         {app.repeatOption && app.repeatOption.map( (entry)=>{
-            return( 
-              <li key={entry.key}>
-                <i className={entry.live ? '' : 'fade'}>{entry.reason}</i>
-                <button 
-                  className='miniAction redT'
-                  onClick={()=>reptRemove(entry.key, entry.reason)}
-                ><i className='fas fa-times fa-fw'></i></button>
-                <button 
-                  className='miniAction redT'
-                  onClick={()=>reptDormant(entry.key, entry.live)}
-                ><i className='fas fa-power-off fa-fw'></i></button>
-              </li>
+          return( 
+            <li key={entry.key}>
+              <i className={entry.live ? '' : 'fade'}>{entry.reason}</i>
+              <button 
+                className='miniAction redT'
+                onClick={()=>reptRemove(entry.key, entry.reason)}
+              ><i className='fas fa-times fa-fw'></i></button>
+              <button 
+                className='miniAction redT'
+                onClick={()=>reptDormant(entry.key, entry.live)}
+              ><i className='fas fa-power-off fa-fw'></i></button>
+            </li>
         )})}
       </ol>
     </div>

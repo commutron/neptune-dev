@@ -20,7 +20,7 @@ Meteor.methods({
           org: orgName,
           orgKey: orgKey,
           orgPIN: '0000',
-          minorPIN: '0000',
+          minorPIN: '000',
           createdAt: new Date(),
           toolOption: [],
           trackOption: [],
@@ -113,6 +113,7 @@ Meteor.methods({
     }
   },
   
+  /*
   addTrackOption(flatTrack) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       
@@ -136,7 +137,7 @@ Meteor.methods({
       return false;
     }
   },
-  
+  */
   addTrackStepOption(step, type, phase) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {
@@ -182,6 +183,7 @@ Meteor.methods({
         'key' : 'f1n15h1t3m5t3p',
         'step' : step,
         'type' : type,
+        'phase' : 'finish',
         'how' : how
       };
       AppDB.update({orgKey: Meteor.user().orgKey}, {

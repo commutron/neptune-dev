@@ -10,7 +10,7 @@ const WikiFrame = ({ go, full })=> {
   };
   //let correct = full ? 45 : 115;
   
-  console.log(go);
+  //console.log(go);
   
   return (
     <iframe

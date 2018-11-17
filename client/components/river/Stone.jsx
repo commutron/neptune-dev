@@ -4,9 +4,7 @@ import React, {Component} from 'react';
 //import { VelocityComponent } from 'velocity-react';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import Pref from '/client/global/pref.js';
-
 import FirstForm from './FirstForm.jsx';
-import FoldInNested from './FoldInNested.jsx';
 import StoneProgRing from './StoneProgRing.jsx';
 
 export default class Stone extends Component	{
@@ -201,23 +199,10 @@ export default class Stone extends Component	{
     const topClass = this.props.doneStone ? 'doneStoneMask' :
     								 this.props.blockStone ? 'blockStone' : '';
     const topTitle = topClass !== '' ? Pref.stoneislocked : '';
-    //return (
-    	{/*
-    	<VelocityComponent 
-        animation={{opacity: 1}}
-        duration="slow"
-        runOnMount={true}
-        interruptBehavior="finish">*/}
+ 
      return(
     	<div style={stopmooving} className={topClass + ' vspace noCopy'} title={topTitle}>
-        {this.props.type === 'nest' ?
-        	<FoldInNested
-            id={this.props.id}
-            serial={this.props.barcode}
-            sKey={this.props.sKey}
-            step={this.props.step}
-            lock={lock} />
-        : !this.state.show ?
+        {!this.state.show ?
         	<StoneProgRing
     				serial={this.props.barcode}
     				allItems={this.props.allItems}
@@ -305,14 +290,13 @@ export default class Stone extends Component	{
 		          </MenuItem>
 	          :null}
 	          {this.props.compEntry &&
-          <MenuItem onClick={()=>this.handleUndoLast()}>
-            Undo Completed Step
-          </MenuItem>}
+		          <MenuItem onClick={()=>this.handleUndoLast()}>
+		            Undo Completed Step
+		          </MenuItem>}
 	        </ContextMenu>
 	    	}
       </div>
     );
-    //</VelocityComponent>
   }
   componentDidMount() {
     this.unlock();

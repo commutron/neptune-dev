@@ -85,12 +85,6 @@ export default class FirstForm extends Component	{
       this.pass();
     });
   }
-  finegood() {
-    this.goFine.disabled = true;
-    this.setState({ good: 'fine' }, ()=>{
-      this.pass();
-    });
-  }
   
   pass() {
     this.go.disabled = true;
@@ -122,6 +116,44 @@ export default class FirstForm extends Component	{
     const step = this.state.step;
     
     let secondOpinion = this.state.whoB.has(Meteor.userId()) ? true : false;
+    
+    {/*
+    <span>
+      <select
+        id='whatfirst'
+        className='cap blueIn'
+        ref={(i)=> this.repeatStep = i}
+        onChange={this.setStep.bind(this)}
+        defaultValue={this.state.step}
+        required>
+          <option></option>
+          {[...firsts].map( (dt)=>{
+            return (
+              <option key={dt.key} value={dt.key}>{dt.step}</option>
+          )})}
+      </select>
+      <label htmlFor='whatfirst'>Repeat First-off</label>
+    </span>
+            
+    <span>
+      <datalist id='commonReasons'>
+        {this.props.app.repeatOption.map( (entry)=>{
+          if(entry.live === true) {
+            return( 
+              <option key={entry.key} value={entry.reason}>{entry.reason}</option> 
+        )}})}
+      </datalist>
+      <input
+		    type='text'
+		    id='proC'
+		    list='commonReasons'
+		    className='blueIn'
+		    ref={(i)=> this.change = i}
+		    onChange={this.setChanges.bind(this)}
+		    defaultValue={this.state.changes} />
+      <label htmlFor='proC'>Process Changes</label>
+    </span>
+    */}
     
     if(this.props.step.toLowerCase().includes('smt') && !this.state.howI) {
       return(
@@ -208,12 +240,8 @@ export default class FirstForm extends Component	{
                 required>
                 <option></option>
                 {this.props.methods.map( (entry, index)=>{
-                  if(typeof entry === 'string') {// redundant after migration
-                    return ( <option key={index} value={entry}>{entry}</option> );
-                  }else if(typeof entry === 'object') {// redundant after migration
-                    if(entry.forSteps.includes(this.props.sKey)) {
-                      return ( <option key={index} value={entry.title}>{entry.title}</option> );
-                    }else{null}
+                  if(entry.forSteps.includes(this.props.sKey)) {
+                    return ( <option key={index} value={entry.title}>{entry.title}</option> );
                   }else{null}
                 })}
               </select>
@@ -241,24 +269,12 @@ export default class FirstForm extends Component	{
                 </button>
                 <button
                   type='button'
-                  title='Good First-Off, continue process'
-                  className='roundActionIcon dbblRound firstGood'
-                  ref={(i)=> this.goFine = i}
-                  disabled={secondOpinion}
-                  onClick={this.finegood.bind(this)}>
-                  <i className="fas fa-check fa-4x"></i>
-                </button>
-                <button
-                  type='button'
-                  title='Great First-Off and Pass Inspection'
+                  title='OK First-Off, continue process'
                   className='roundActionIcon dbblRound firstBetter'
                   ref={(i)=> this.go = i}
                   disabled={secondOpinion}
                   onClick={this.pass.bind(this)}>
-                  <span className="fa-layers">
-                    <i className="fas fa-forward fa-2x" data-fa-transform="grow-1 left-2 up-9"></i>
-                    <i className="fas fa-check fa-4x" data-fa-transform="left-5 down-2"></i>
-                  </span>
+                  <i className="fas fa-check fa-2x"></i>
                 </button>
               </span>
             </p>

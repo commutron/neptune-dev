@@ -1,12 +1,10 @@
 import React from 'react';
 import moment from 'moment';
 
-function flowLoop(river, items, quotaStart) {
+function flowLoop(river, items) {
   const now = moment().format();
-  const wndw = !quotaStart ? (t)=>moment(t).isSame(now, 'day') : 
-                              (t)=>moment(t).isBetween(quotaStart, now);
+  const wndw = (t)=>moment(t).isSame(now, 'day');
   const byKey = (t, ky)=> { return ( k => k.key === ky )};
-  const byName = (t, nm)=> { return ( s => s.step === nm && s.type === 'first' )};
   let stepCounts = [];
   for(let step of river) {
     let itemCount = 0;
@@ -17,30 +15,13 @@ function flowLoop(river, items, quotaStart) {
     for(var i of items) {
       const h = i.history.filter( g => g.good === true);
       const hNew = h.filter( q => wndw(q.time) === true );
-      /*
       if(i.finishedAt !== false) {
         itemCount += 1;
         unitCount += 1 * i.units;
-        if(expand) {
-          if(hNew.find( f => f.key === 'f1n15h1t3m5t3p' )) {
-            itemCountNew += 1;
-            unitCountNew += 1 * i.units;
-          }
-        }
-      }else*/ 
-      if(step.type === 'inspect') {
-        h.find( byKey(this, step.key) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
-        h.find( byName(this, step.step) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
-        //if(expand) {
-          hNew.find( byKey(this, step.key) ) ? (itemCountNew += 1, unitCountNew += 1 * i.units ) : null;
-          hNew.find( byName(this, step.step) ) ? (itemCountNew += 1, unitCountNew += 1 * i.units ) : null;
-        //}
       }else{
         h.find( byKey(this, step.key) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
-        //if(expand) {
-          hNew.find( byKey(this, step.key) ) ? (itemCountNew += 1, unitCountNew += 1 * i.units ) : null;
-        //}
       }
+      hNew.find( byKey(this, step.key) ) ? (itemCountNew += 1, unitCountNew += 1 * i.units ) : null;
     }
     stepCounts.push({
       key: step.key,
@@ -91,8 +72,8 @@ function ProgressCounter(flow, flowAlt, batchData) {
   const totalRegUnits = unitTotalCount(regItems);
   const totalAltUnits = unitTotalCount(altItems);
 
-  const regStepCounts = flowLoop(rSteps, regItems, false);
-  const altStepCounts = flowLoop(aSteps, altItems, false);
+  const regStepCounts = flowLoop(rSteps, regItems);
+  const altStepCounts = flowLoop(aSteps, altItems);
 
   return {
     regStepCounts: regStepCounts,

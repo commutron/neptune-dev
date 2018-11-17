@@ -4,7 +4,7 @@ import WikiFrame from './WikiFrame';
 
 const WikiOps = ({ wi, root, anchor, full })=> {
   
-  console.log(anchor);
+  //console.log(anchor);
   
   let goto = wi;
   

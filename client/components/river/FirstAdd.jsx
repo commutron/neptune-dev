@@ -105,12 +105,6 @@ export default class FirstAdd extends Component	{
       this.pass();
     });
   }
-  finegood() {
-    this.goFine.disabled = true;
-    this.setState({ good: 'fine' }, ()=>{
-      this.pass();
-    });
-  }
   
   pass() {
     this.go.disabled = true;
@@ -327,25 +321,12 @@ export default class FirstAdd extends Component	{
             <span className='breath'></span>
             <button
               type='button'
-              title='Good First-Off, Continue Process'
-              className='roundActionIcon firstGood'
-              ref={(i)=> this.goFine = i}
-              disabled={secondOpinion}
-              onClick={this.finegood.bind(this)}>
-              <i className="fas fa-check fa-2x"></i>
-            </button>
-            <span className='breath'></span>
-            <button
-              type='button'
-              title='Great First-Off and Pass Inspection'
+              title='OK First-Off, Continue Process'
               className='roundActionIcon firstBetter'
               ref={(i)=> this.go = i}
               disabled={secondOpinion}
               onClick={this.pass.bind(this)}>
-              <span className="fa-layers">
-                <i className="fas fa-forward" data-fa-transform="grow-2 up-10"></i>
-                <i className="fas fa-check fa-2x" data-fa-transform="left-3"></i>
-              </span>
+              <i className="fas fa-check fa-2x"></i>
             </button>
           </span>
           

@@ -13,7 +13,7 @@ const FirstsTimeline = ({ id, batch, doneFirsts })=> {
       <h3>Process First-Offs</h3>
       <div className='timelineList forceScrollStyle'>
         {sortedFirst.map( (dt, index)=>{
-          let color = dt.good === true ? 'good' : dt.good === false ? 'bad' : 'fine';
+          let color = dt.good !== false ? 'good' : 'bad';
           return(
             <div key={index} className='timelineWrap'>
               <dl className={'timelineItem ' + color}>

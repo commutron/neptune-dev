@@ -1,7 +1,7 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 
-const FoldInNested = ({ id, serial, sKey, step, lock })=> {
+const FoldInNested = ({ id, serial, sKey, step, doneStone, subItems, lock })=> {
   
   function passNested(e) {
     e.preventDefault();
@@ -24,25 +24,31 @@ const FoldInNested = ({ id, serial, sKey, step, lock })=> {
       <br />
       <p className='bigger centreText up'>{step}</p>
   		<br />
-  		<form className='centre' onSubmit={(e)=>passNested(e)}>
-		    <input
-		      type='text'
-		      className='centreText'
-		      id='nestSerial'
-		      maxLength={10}
-          minLength={9}
-          placeholder='1000000000-9999999999'
-          inputMode='numeric' />
-        <br />
-		    <button
-		      type='submit'
-				  className='action clearWhite up'
-				  name='include this serial number'
-				  id='goNest'
-				  tabIndex={-1}
-				  disabled={lock}
-				>{Pref.nest}</button>
-			</form>
+  		{doneStone ?
+  			<div>
+  				<p className='centreText'>Includes: {subItems.toString()}</p>
+  			</div>
+  		:
+	  		<form className='centre' onSubmit={(e)=>passNested(e)}>
+			    <input
+			      type='text'
+			      className='centreText'
+			      id='nestSerial'
+			      maxLength={10}
+	          minLength={9}
+	          placeholder='1000000000-9999999999'
+	          inputMode='numeric' />
+	        <br />
+			    <button
+			      type='submit'
+					  className='action clearWhite up'
+					  name='include this serial number'
+					  id='goNest'
+					  tabIndex={-1}
+					  disabled={lock}
+					>{Pref.nest}</button>
+				</form>
+			}
 			<br />
     </div>
   );

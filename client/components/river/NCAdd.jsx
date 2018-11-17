@@ -26,14 +26,14 @@ const NCAdd = ({ id, barcode, app })=> {
           });
         }
       }
-      this.discStp.value = Session.get('nowStep');
+      this.discStp.value = Session.get('ncWhere');
       this.ncRefs.value = '';
       const findBox = document.getElementById('lookup');
       findBox.focus();
     }else{null}
   }
 
-	let now = Session.get('nowStep');
+	let now = Session.get('ncWhere');
 	let lock = now === 'done';
 	
   return (
