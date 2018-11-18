@@ -194,13 +194,26 @@
   width: 5rem;
   height: 5rem;
 }
+label.dbblRound {
+  width: 6rem;
+  height: 6rem;
+}
 .trpplRound {
   width: 7.5rem;
   height: 7.5rem;
 }
+label.trpplRound {
+  width: 8.5rem;
+  height: 8.5rem;
+}
 .qdpplRound {
   width: 10rem;
   height: 10rem;
+  font-size: 2rem;
+}
+label.qdpplRound {
+  width: 11rem;
+  height: 11rem;
   font-size: 2rem;
 }
 

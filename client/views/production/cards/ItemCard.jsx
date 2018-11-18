@@ -57,7 +57,8 @@ export default class ItemCard extends Component	{
             users={this.props.users}
             flow={flow}
             flowAlt={flowAlt}
-            progCounts={progCounts} />
+            progCounts={progCounts}
+            showVerify={this.props.showVerify} />
   			</div>
 			</AnimateWrap>
     );

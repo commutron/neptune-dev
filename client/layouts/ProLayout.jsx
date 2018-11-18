@@ -13,6 +13,7 @@ export class ProWrap extends Component	{
     super();
     this.state = {
       expand: false,
+      showVerify: false
     };
     this.handleExpand = this.handleExpand.bind(this);
   }
@@ -62,7 +63,7 @@ export class ProWrap extends Component	{
                         
                         
     const path = !bData ? { flow: [], flowAlt: [], progCounts: false } : this.getFlows();
-    
+
     const cSize = this.props.children.length;
     
     let riverExpand = this.state.expand;
@@ -101,7 +102,8 @@ export class ProWrap extends Component	{
                   //expand: this.state.expand,
                   flow: path.flow,
                   flowAlt: path.flowAlt,
-                  progCounts: path.progCounts
+                  progCounts: path.progCounts,
+                  showVerify: this.state.showVerify
                 }
               )}
             </div>
@@ -139,7 +141,8 @@ export class ProWrap extends Component	{
             versionData={this.props.versionData}
             users={this.props.users}
             app={this.props.app}
-            action={this.props.action} />
+            action={this.props.action}
+            changeVerify={()=>this.setState({showVerify: !this.state.showVerify })} />
           
         </section>
         }

@@ -1,14 +1,25 @@
 
 /* River */
+.stoneFrame {
+  width: 20vw;
+  min-height: 20vw;
+  display: flex;
+  justify-content: center;
+}
 
 .stoneRing {
   position: relative;
   z-index: 0;
+  width: 17vw;
+  height: 17vw;
+}
+.stoneRing .ct-chart {
+  height: 17vw;
 }
 
 .stone {
 	position: absolute;
-	top: 49%;
+	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%) rotate(0deg);
 	z-index: 1;
@@ -151,11 +162,10 @@
   background-color: var(--orange);
   color: white;
 }
-.firstBetter span {
+.firstBetter {
   color: var(--emerald);
 }
-.firstBetter:hover,
-.firstBetter:hover span {
+.firstBetter:hover {
   background-color: var(--emerald);
   color: white;
 }
@@ -352,6 +362,9 @@
   transform: translate(0%, 20%);
 }
 
+.stoneFrame .actionBox {
+  width: 18vw;
+}
 .stoneForm {
   display: flex;
   width: 100%;
@@ -359,20 +372,29 @@
   justify-content: space-around;
   align-items: center;
 }
+fieldset.stoneForm {
+  border-top: 5px dashed rgba(255,255,255,0.5);
+  border-right: none;
+  border-bottom: none;
+  border-left: none;
+  padding: 48px 1vw;
+}
 
 .stoneForm input[type='text'],
 .stoneForm select,
 .stoneForm label,
 .stoneForm details {
-  color: black;
-  min-width: 225px;
-  max-width: 256px;
+  width: 16vw;
   text-align: center;
 }
 
+.stoneForm label {
+  color: white;
+}
+
 .stoneForm textarea {
-  min-width: 225px;
-  max-width: 256px;
+  min-width: 16vw;
+  width: 16vw;
   min-height: 1rem;
   border-color: black;
 }
@@ -385,9 +407,21 @@
 .stoneForm input:focus + label,
 .stoneForm select:focus + label,
 .stoneForm textarea:focus + label {
-  color: black;
+  color: white;
   border-bottom-color: black;
   outline-color: black;
+}
+
+.stoneForm input[type='radio'] {
+  display: none;
+}
+.stoneForm input[type='radio']:checked + label {
+  background-color: white;
+  color: var(--peterriver);
+}
+
+.stoneForm .tempTag {
+  padding-left: 12px;
 }
 
 .stoneForm .clearWhite:hover {

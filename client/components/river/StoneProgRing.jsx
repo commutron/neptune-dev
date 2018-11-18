@@ -16,61 +16,27 @@ export default class StepsProgress extends Component	{
   
   count() {
     const sKey = this.props.sKey;
-    const step = this.props.step;
+    //const step = this.props.step;
     const type = this.props.type;
     
     const pre = this.props.progCounts;
     let preFetch = false;
-    let itemCount = 0;
-    let remain = 0;
+    
     if(type === 'first') {
       null;
     }else{
-    ///
-      if(pre) {
-        const preTotal = this.props.isAlt ?
-                          pre.altItems :
-                          pre.regItems;
-        const preCount = this.props.isAlt ?
-                          pre.altStepCounts.find( x => x.key === sKey ) :
-                          pre.regStepCounts.find( x => x.key === sKey );
-        const preDoneNum = preCount ? preCount.items : 0;
-        const preRemain = preTotal - preDoneNum;
-        preFetch = {preDoneNum, preRemain};
-      }else{
-    ///
-      const allitems = this.props.allItems;
-      const item = allitems.find( x => x.serial === this.props.serial );
-      const items = !this.props.hasAlt ?
-                    allitems :
-                    item.alt === 'yes' ?
-                    allitems.filter( x => x.alt === 'yes' ) : 
-                    allitems.filter( x => x.alt === 'no' || x.alt === false );
-      const total = items.length;
-      
-      const byKey = (t, ky)=> { return ( x => x.key === ky && x.good === true )};
-      const byName = (t, nm)=> { return ( x => x.step === nm && x.type === 'first' && x.good === true )};
-      
-      for(let i of items) {
-        const h = i.history;
-        if(i.finishedAt !== false) {
-          itemCount += 1;
-        }else if(type === 'inspect') {
-          h.find( byKey(this, sKey) ) ? itemCount += 1 : null;
-          h.find( byName(this, step) ) ? itemCount += 1 : null;
-        }else{
-          h.find( byKey(this, sKey) ) ? itemCount += 1 : null;
-        }
-      }
-      remain = total - itemCount;
-      }
-      if(!preFetch) {
-        this.setState({ countDone: itemCount });
-        this.setState({ countRemain: remain });
-      }else{
-        this.setState({ countDone: preFetch.preDoneNum });
-        this.setState({ countRemain: preFetch.preRemain });
-      }
+      const preTotal = this.props.isAlt ?
+                        pre.altItems :
+                        pre.regItems;
+      const preCount = this.props.isAlt ?
+                        pre.altStepCounts.find( x => x.key === sKey ) :
+                        pre.regStepCounts.find( x => x.key === sKey );
+      const preDoneNum = preCount ? preCount.items : 0;
+      const preRemain = preTotal - preDoneNum;
+      preFetch = {preDoneNum, preRemain};
+ 
+      this.setState({ countDone: preFetch.preDoneNum });
+      this.setState({ countRemain: preFetch.preRemain });
     }
   }
   
@@ -78,14 +44,9 @@ export default class StepsProgress extends Component	{
     
     if(this.props.type === 'first') {
       
-      let sty = {
-        width: this.props.adaptiveWidth,
-        height: this.props.adaptiveWidth,
-      };
-      
       return(
         <span className='stoneRing centre'>
-          <div style={sty}>
+          <div>
             {this.props.children}
           </div>
         </span>
@@ -100,8 +61,7 @@ export default class StepsProgress extends Component	{
     };
     
     let options = {
-      width: this.props.adaptiveWidth,
-      height: this.props.adaptiveWidth,
+      width: '100%',
       showLabel: false,
       donut: true,
       donutWidth: 5,

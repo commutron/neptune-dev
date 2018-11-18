@@ -16,6 +16,10 @@ export default class FormBar extends Component	{
     };
   }
   
+  handleVerify() {
+    this.setState({ show: 'F' });
+    this.props.changeVerify();
+  }
   handleDone() {
     this.setState({ show: 'NC' });
     this.ncSlct.checked = true;
@@ -58,7 +62,7 @@ export default class FormBar extends Component	{
                 id='firstselect'
                 name='formbarselect'
                 className='radioIcon'
-                onChange={()=>this.setState({ show: 'F' })}
+                onChange={()=>this.handleVerify()}
                 disabled={!Roles.userIsInRole(Meteor.userId(), 'verify')} />
               <i className='fas fa-play-circle formBarIcon'></i>
               <span className='actionIconText'>First</span>

@@ -8,8 +8,7 @@ import FoldInNested from './FoldInNested.jsx';
 import TestFails from './TestFails.jsx';
 import NCTributary from './NCTributary.jsx';
 import Shortfalls from './Shortfalls.jsx';
-import MiniHistory from './MiniHistory.jsx';
-import UndoFinish from '/client/components/forms/UndoFinish.jsx';
+import CompleteRest from './CompleteRest.jsx';
 
 const StoneSelect = ({ 
   id, 
@@ -20,17 +19,21 @@ const StoneSelect = ({
   rmas,
   allItems,
   nonCons,
-  shortfalls,
-  serial,
-  history,
-  finishedAt,
-  subItems,
+  sh,
+  item,
   //regRun,
   users,
   progCounts,
-  app
+  app,
+  showVerify
 })=> {
   
+  console.log('stoneSelect: ' + showVerify);
+  
+  const serial = item.serial;
+  const history = item.history;
+  const finishedAt = item.finishedAt;
+  const subItems = item.subItems;
   const allTrackOption = app.trackOption;
     
   const nc = nonCons.filter( 
@@ -51,17 +54,7 @@ const StoneSelect = ({
     firsts.forEach( x => fDone.push( 'first' + x.step ) );
   }
   
-  const sh = shortfalls.filter( x => x.serial === serial )
-              .sort((s1, s2)=> {
-                if (s1.partNum < s2.partNum) { return -1 }
-                if (s1.partNum > s2.partNum) { return 1 }
-                return 0;
-              });
   const allAnswered = sh.every( x => x.inEffect === true || x.reSolve === true );
-  const sFall = <Shortfalls
-          			  id={id}
-          			  shortfalls={sh}
-          			  lock={finishedAt !== false} />;
   
   for(let flowStep of flow) {
     const coreStep = allTrackOption.find( t => t.key === flowStep.key);
@@ -74,8 +67,8 @@ const StoneSelect = ({
       :
       iDone.find(ip => ip.key === flowStep.key && ip.good === true);
     
-    const ncFromHere = ncOutstanding.filter( x => x.where === stepPhase );
-    const ncResolved = ncFromHere.length === 0;
+    //const ncFromHere = ncOutstanding.filter( x => x.where === stepPhase );
+    //const ncResolved = ncFromHere.length === 0;
     //console.log(stepMatch, ncResolved);
     
     const damStep = flowStep.type === 'test' || flowStep.type === 'finish';
@@ -85,7 +78,8 @@ const StoneSelect = ({
 
 
     if( ( ( flowStep.type === 'first' || flowStep.type === 'build' ) && stepComplete ) 
-        || ( stepComplete && ncResolved ) ) {
+        || ( stepComplete /*&& ncResolved*/ ) 
+      ) {
       null;
     }else{
 
@@ -96,40 +90,6 @@ const StoneSelect = ({
       
       const blockStone = damStep && (!ncAllClear || !shAllClear );
       const doneStone = stepComplete;
-      
-	    const stone = <Stone
-        		          key={flowStep.key}
-                      id={id}
-                      barcode={serial}
-                      sKey={flowStep.key}
-                      step={flowStep.step}
-                      type={flowStep.type}
-                      allItems={allItems}
-                      isAlt={isAlt}
-                      hasAlt={hasAlt}
-                      users={users}
-                      methods={app.toolOption}
-                      progCounts={progCounts}
-                      blockStone={blockStone}
-                      doneStone={doneStone}
-                      compEntry={compEntry} />;
-
-      const nested = <FoldInNested
-                      id={id}
-                      serial={serial}
-                      sKey={flowStep.key}
-                      step={flowStep.step}
-                      doneStone={doneStone}
-                      subItems={subItems}
-                      lock={false} />;
-      
-      const nonCon = <NCTributary
-              			  id={id}
-              			  serial={serial}
-              			  nonCons={nc}
-              			  sType={flowStep.type} />;
-                      
-      const tFail = <TestFails fails={fTest} />;
 	    
 	    Session.set('ncWhere', stepPhase);
 	    Session.set('nowStepKey', flowStep.key);
@@ -139,58 +99,69 @@ const StoneSelect = ({
           <div>
 		        <InOutWrap type='stoneTrans'>
   		        {flowStep.type === 'nest' ?
-  		          nested : stone}
+  		          <FoldInNested
+                  id={id}
+                  serial={serial}
+                  sKey={flowStep.key}
+                  step={flowStep.step}
+                  doneStone={doneStone}
+                  subItems={subItems}
+                  lock={false} />
+              : 
+  		          <Stone
+    		          key={flowStep.key}
+                  id={id}
+                  barcode={serial}
+                  sKey={flowStep.key}
+                  step={flowStep.step}
+                  type={flowStep.type}
+                  allItems={allItems}
+                  isAlt={isAlt}
+                  hasAlt={hasAlt}
+                  users={users}
+                  methods={app.toolOption}
+                  progCounts={progCounts}
+                  blockStone={blockStone}
+                  doneStone={doneStone}
+                  compEntry={compEntry}
+                  showVerify={showVerify} />
+  		        }
             </InOutWrap>
             {fTest.length > 0 && 
               <InOutWrap type='stoneTrans'>
-                {tFail}
+                <TestFails fails={fTest} />
               </InOutWrap>}
           </div>
           <div>
-            {nonCon}
-            {sFall}
+            <NCTributary
+      			  id={id}
+      			  serial={serial}
+      			  nonCons={nc}
+      			  sType={flowStep.type} />
+            <Shortfalls
+      			  id={id}
+      			  shortfalls={sh}
+      			  lock={finishedAt !== false} />
           </div>
   			</div>
       );
     }
   }
   
-  // end of flow
-  Session.set('ncWhere', 'done');
-  Session.set('nowStepKey', 'd0n3');
-  Session.set('nowWanchor', '');
-  const timelock = moment().diff(moment(finishedAt), 'minutes') > (60 * 24 * 7);
-  return (
-    <div>
-      <div>
-        <InOutWrap type='stoneTrans'>
-          <div>
-            <div className='purpleBorder centre cap'>
-              <h2>{Pref.trackLast}ed</h2>
-              <h3>{moment(iDone[iDone.length -1].time).calendar()}</h3>
-                {bComplete === false ?
-                  <span className='space centre'>
-                    {timelock && <p><i className='fas fa-lock fa-fw fa-lg'></i></p>}
-                    <UndoFinish
-                	    id={id}
-                	    serial={serial}
-                	    finishedAt={finishedAt}
-                	    timelock={timelock}
-                	    noText={false} />
-              	  </span>
-                : <p><i className='fas fa-lock fa-fw fa-lg'></i></p>}
-            </div>
-          </div>
-        </InOutWrap>
-      </div>
-  		<div>
-        {sFall}
-      </div>
-      <div className='space'>
-			  <MiniHistory history={history} />
-			</div>
-  	</div>
-  );
+  // Complete
+  if(finishedAt !== false) {
+    return(
+      <InOutWrap type='stoneTrans'>
+        <CompleteRest
+          id={id}
+          bComplete={bComplete}
+          sh={sh}
+          serial={serial}
+          history={history}
+          finishedAt={finishedAt} />
+      </InOutWrap>
+    );
+  }
 };
   
 export default StoneSelect;

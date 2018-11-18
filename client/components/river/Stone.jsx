@@ -7,7 +7,7 @@ import Pref from '/client/global/pref.js';
 import FirstForm from './FirstForm.jsx';
 import StoneProgRing from './StoneProgRing.jsx';
 
-export default class Stone extends Component	{
+export default class Stone extends Component {
   
   constructor() {
     super();
@@ -16,7 +16,6 @@ export default class Stone extends Component	{
       show: false
     };
     this.reveal = this.reveal.bind(this);
-    //this.unreveal = this.unreveal.bind(this);
     this.passS = this.passS.bind(this);
     this.passT = this.passT.bind(this);
     this.finish = this.finish.bind(this);
@@ -40,9 +39,6 @@ export default class Stone extends Component	{
     this.setState({show: !this.state.show});
     //document.getElementById('lookup').focus();
   }
-  //unreveal() {
-    //this.setState({show: false});
-  //}
   
   unlock() {
   	let speed = !Meteor.user().unlockSpeed ? 2000 : Meteor.user().unlockSpeed; 
@@ -188,20 +184,14 @@ export default class Stone extends Component	{
     }else{
       null }
     
-    const vw = (v)=> {
-      var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-      return (v * w) / 100;
-    };
-    const adaptiveWidth = vw(17) + "px";
-    
-    const stopmooving = { minHeight: vw(20) + "px" };
+    console.log('stone: ' + this.props.showVerify);
     
     const topClass = this.props.doneStone ? 'doneStoneMask' :
     								 this.props.blockStone ? 'blockStone' : '';
     const topTitle = topClass !== '' ? Pref.stoneislocked : '';
  
      return(
-    	<div style={stopmooving} className={topClass + ' vspace noCopy'} title={topTitle}>
+    	<div className={topClass + ' vspace noCopy stoneFrame'} title={topTitle}>
         {!this.state.show ?
         	<StoneProgRing
     				serial={this.props.barcode}
@@ -211,8 +201,7 @@ export default class Stone extends Component	{
     				sKey={this.props.sKey}
             step={this.props.step}
             type={this.props.type}
-            progCounts={this.props.progCounts}
-            adaptiveWidth={adaptiveWidth}>
+            progCounts={this.props.progCounts}>
 						<ContextMenuTrigger
 							id={this.props.barcode}
 							attributes={ {className:'centre'} }>
@@ -275,7 +264,6 @@ export default class Stone extends Component	{
               type={this.props.type}
               users={this.props.users}
               methods={this.props.methods} />
-              {/*onPass={this.unreveal} />*/}
             <br />
           </div>
         }

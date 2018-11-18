@@ -9,9 +9,9 @@ const InOutWrap = ({ children, type, contain, add })=> (
 		transitionEnter={true}
 		transitionAppear={true}
 		transitionLeave={true}
-		transitionEnterTimeout={400}
-		transitionAppearTimeout={400}
-		transitionLeaveTimeout={400}
+		transitionEnterTimeout={300}
+		transitionAppearTimeout={300}
+		transitionLeaveTimeout={300}
 	>
     {children}
   </CSSTransitionGroup>

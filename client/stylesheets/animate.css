@@ -273,7 +273,7 @@
   }
   100% { 
     opacity: 0;
-    filter: blur(30px);
+    filter: blur(50px);
   }
 }
 @-moz-keyframes blurOut {
@@ -283,7 +283,7 @@
   }
   100% { 
     opacity: 0;
-    filter: blur(30px);
+    filter: blur(50px);
   }
 }
 @keyframes blurOut {
@@ -299,7 +299,7 @@
 @-webkit-keyframes blurIn {
   0%   { 
     opacity: 0;
-    filter: blur(30px);
+    filter: blur(50px);
   }
   100% { 
     opacity: 1;
@@ -309,7 +309,7 @@
 @-moz-keyframes blurIn {
   0%   { 
     opacity: 0;
-    filter: blur(30px);
+    filter: blur(50px);
   }
   100% { 
     opacity: 1;
@@ -330,15 +330,15 @@
 /*/////////////////////////////////////////////////*/
 
 .cardTrans-enter, .cardTrans-appear {
-  -webkit-animation: fadeIn 500ms var(--scottsCurve);
-  -moz-animation: fadeIn 500ms var(--scottsCurve);
-  animation: fadeIn 500ms var(--scottsCurve);
+  -webkit-animation: fadeIn 300ms var(--scottsCurve);
+  -moz-animation: fadeIn 300ms var(--scottsCurve);
+  animation: fadeIn 300ms var(--scottsCurve);
 }
 
 .contentTrans-enter, .contentTrans-appear {
-  -webkit-animation: fadeIn 500ms var(--scottsCurve);
-  -moz-animation: fadeIn 500ms var(--scottsCurve);
-  animation: fadeIn 500ms var(--scottsCurve);
+  -webkit-animation: fadeIn 300ms var(--scottsCurve);
+  -moz-animation: fadeIn 300ms var(--scottsCurve);
+  animation: fadeIn 300ms var(--scottsCurve);
 }
 
 
@@ -354,28 +354,28 @@
 }
 
 .actions-enter, .actions-appear {
-  -webkit-animation: slideRight 500ms var(--scottsCurve);
-  -moz-animation: slideRight 500ms var(--scottsCurve);
-  animation: slideRight 500ms var(--scottsCurve);
+  -webkit-animation: slideRight 300ms var(--scottsCurve);
+  -moz-animation: slideRight 300ms var(--scottsCurve);
+  animation: slideRight 300ms var(--scottsCurve);
 }
 
 .contentLeft-enter, .contentLeft-appear {
   -webkit-animation: slideLeft 1s var(--scottsCurve);
   -moz-animation: slideLeft 1s var(--scottsCurve);
-  animation: slideLeft 500ms var(--scottsCurve);
+  animation: slideLeft 300ms var(--scottsCurve);
 }
 
 .contentLeft-leave {
   -webkit-animation: slideLeft 1s var(--scottsCurve);
   -moz-animation: slideLeft 1s var(--scottsCurve);
-  animation: slideLeft 500ms var(--scottsCurve);
+  animation: slideLeft 300ms var(--scottsCurve);
 }
 
 /* stones */
 .stoneTrans-enter, .stoneTrans-appear {
   -webkit-animation: blurIn 300ms linear;
   -moz-animation: blurIn 300ms linear;
-  animation: blurIn 200ms linear;
+  animation: blurIn 300ms linear;
 }
 
 .stoneTrans-leave {
@@ -384,28 +384,28 @@
   z-index: 0;
   -webkit-animation: blurOut 300ms linear;
   -moz-animation: blurOut 300ms linear;
-  animation: blurOut 200ms linear;
+  animation: blurOut 300ms linear;
 }
 
 /* nonCons */
 .ncTrans-enter, .ncTrans-appear {
-  -webkit-animation: slideInRight 500ms var(--scottsCurve);
-  -moz-animation: slideInRight 500ms var(--scottsCurve);
-  animation: slideInRight 500ms var(--scottsCurve);
+  -webkit-animation: slideInRight 300ms var(--scottsCurve);
+  -moz-animation: slideInRight 300ms var(--scottsCurve);
+  animation: slideInRight 300ms var(--scottsCurve);
 }
 
 .ncTrans-leave {
-  -webkit-animation: slideOutLeft 500ms var(--scottsCurve);
-  -moz-animation: slideOutLeft 500ms var(--scottsCurve);
-  animation: slideOutLeft 500ms var(--scottsCurve);
+  -webkit-animation: slideOutLeft 300ms var(--scottsCurve);
+  -moz-animation: slideOutLeft 300ms var(--scottsCurve);
+  animation: slideOutLeft 300ms var(--scottsCurve);
 }
 
 
 /* right left */
 .forward-enter, .forward-appear {
-  -webkit-animation: slideInRight 500ms var(--scottsCurve);
-  -moz-animation: slideInRight 500ms var(--scottsCurve);
-  animation: slideInRight 500ms var(--scottsCurve);
+  -webkit-animation: slideInRight 300ms var(--scottsCurve);
+  -moz-animation: slideInRight 300ms var(--scottsCurve);
+  animation: slideInRight 300ms var(--scottsCurve);
 }
 
 .forward-leave {
@@ -413,16 +413,16 @@
   top: 25%;
   left: 25%;
   transform: translate(-50%, -50%) rotate(0deg);
-  -webkit-animation: slideOutLeft 500ms var(--scottsCurve);
-  -moz-animation: slideOutLeft 500ms var(--scottsCurve);
-  animation: slideOutLeft 500ms var(--scottsCurve);
+  -webkit-animation: slideOutLeft 300ms var(--scottsCurve);
+  -moz-animation: slideOutLeft 300ms var(--scottsCurve);
+  animation: slideOutLeft 300ms var(--scottsCurve);
 }
 
 /* left right */
 .backward-enter, .backward-appear {
-  -webkit-animation: slideInLeft 500ms var(--scottsCurve);
-  -moz-animation: slideInLeft 500ms var(--scottsCurve);
-  animation: slideInLeft 500ms var(--scottsCurve);
+  -webkit-animation: slideInLeft 300ms var(--scottsCurve);
+  -moz-animation: slideInLeft 300ms var(--scottsCurve);
+  animation: slideInLeft 300ms var(--scottsCurve);
 }
 
 .backward-leave {
@@ -430,7 +430,7 @@
   top: 25%;
   left: 25%;
   transform: translate(-50%, -50%) rotate(0deg);
-  -webkit-animation: slideOutRight 500ms var(--scottsCurve);
-  -moz-animation: slideOutRight 500ms var(--scottsCurve);
-  animation: slideOutRight 500ms var(--scottsCurve);
+  -webkit-animation: slideOutRight 300ms var(--scottsCurve);
+  -moz-animation: slideOutRight 300ms var(--scottsCurve);
+  animation: slideOutRight 300ms var(--scottsCurve);
 }
