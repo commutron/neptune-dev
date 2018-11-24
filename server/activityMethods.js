@@ -21,44 +21,34 @@ Meteor.methods({
     const wipBatches = b.filter( x => ( x.finishedAt === false || 
                                           inRange(x.finishedAt) === true ) &&
                                             upTo(x.createdAt) === true);
-    let newTotal = 0;
     // flow counts loop function
-    function flowLoop(now, range, river, items) {
-      const wndw = (t)=>moment(t).isSame(now, range);
+    function flowLoop(river, items) {
       let stepCounts = [];
       if(!river) {
         return [];
       }else{
         const byKey = (t, ky)=> { return ( x => x.key === ky && x.good === true )};
-        const byName = (t, nm)=> { return ( x => x.step === nm && x.type === 'first' && x.good === true )};
         for(let step of river.flow) {
           if(step.type === 'first') {
             null;
           }else{
             let itemCount = 0;
             let unitCount = 0;
-            let itemCountNew = 0;
-            let unitCountNew = 0;
             for(let i of items) {
               const h = i.history;
-              const hNew = h.filter( q => wndw(q.time) === true );
               if(i.finishedAt !== false) {
                 itemCount += 1;
                 unitCount += 1 * i.units;
               }else{
                 h.find( byKey(this, step.key) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
               }
-              hNew.find( byKey(this, step.key) ) ? (itemCountNew += 1, unitCountNew += 1 * i.units ) : null;
             }
             stepCounts.push({
               step: step.step,
               type: step.type,
               itemCount: itemCount,
               unitCount: unitCount,
-              itemsNew: itemCountNew,
-              unitsNew: unitCountNew,
             });
-            newTotal += itemCountNew;
           }
         }
         return stepCounts;
@@ -94,8 +84,8 @@ Meteor.methods({
         altItems = allLiveItems.filter( x => x.alt === 'yes' );
       }
       
-      let regStepCounts = flowLoop(now, range, river, regItems);
-      let altStepCounts = flowLoop(now, range, riverAlt, altItems);
+      let regStepCounts = flowLoop(river, regItems);
+      let altStepCounts = flowLoop(riverAlt, altItems);
       
       let rmaCount = b.items.filter( x => x.rma.length > 0).length;
       
@@ -187,7 +177,6 @@ Meteor.methods({
       outstanding: outstanding,
       today: mainActive,
       ncTypeCounts: ncTypeCounts,
-      newHistoryTotal: newTotal,
       doneBatches: doneBatches
     };
     

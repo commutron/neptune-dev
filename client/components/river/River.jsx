@@ -14,15 +14,23 @@ export default class River extends Component	{
     this.state = {
       lock: true,
       complete: false,
+      undoStepOption: false
     };
     //this.reveal = this.reveal.bind(this);
   }
-
+  
+  tempOpenOption() {
+    this.setState({ undoStepOption : true });
+    Meteor.setTimeout(()=> {
+    	this.setState({ undoStepOption : false });
+    }, 1000*5);
+  }
+  closeOption() {
+    this.setState({ undoStepOption : false });
+  }
 
   render() {
     
-    
-  
     const b = this.props.batchData;
     const i = this.props.itemData;
     const w = this.props.widgetData;
@@ -113,7 +121,11 @@ export default class River extends Component	{
             users={users}
             progCounts={progCounts}
             app={app}
-            showVerify={this.props.showVerify} />
+            showVerify={this.props.showVerify}
+            changeVerify={this.props.changeVerify}
+            undoOption={this.state.undoStepOption}
+            openUndoOption={()=>this.tempOpenOption()}
+            closeUndoOption={()=>this.closeOption()} />
         </div>
         
   		</div>

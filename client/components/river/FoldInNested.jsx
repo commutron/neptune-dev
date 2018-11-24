@@ -1,8 +1,9 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 
-const FoldInNested = ({ id, serial, sKey, step, doneStone, subItems, lock })=> {
-  
+const FoldInNested = ({ id, serial, sKey, step, lock })=> {
+ //doneStone, subItems
+ 
   function passNested(e) {
     e.preventDefault();
     this.goNest.disabled = true;
@@ -24,11 +25,12 @@ const FoldInNested = ({ id, serial, sKey, step, doneStone, subItems, lock })=> {
       <br />
       <p className='bigger centreText up'>{step}</p>
   		<br />
-  		{doneStone ?
+  		{/*doneStone ?
   			<div>
   				<p className='centreText'>Includes: {subItems.toString()}</p>
   			</div>
   		:
+  		*/}
 	  		<form className='centre' onSubmit={(e)=>passNested(e)}>
 			    <input
 			      type='text'
@@ -48,7 +50,7 @@ const FoldInNested = ({ id, serial, sKey, step, doneStone, subItems, lock })=> {
 					  disabled={lock}
 					>{Pref.nest}</button>
 				</form>
-			}
+			{/**/}
 			<br />
     </div>
   );

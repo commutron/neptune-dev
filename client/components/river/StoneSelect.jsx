@@ -4,6 +4,7 @@ import InOutWrap from '/client/components/tinyUi/InOutWrap.jsx';
 import Pref from '/client/global/pref.js';
 
 import Stone from './Stone.jsx';
+import FirstForm from './FirstForm.jsx';
 import FoldInNested from './FoldInNested.jsx';
 import TestFails from './TestFails.jsx';
 import NCTributary from './NCTributary.jsx';
@@ -25,15 +26,17 @@ const StoneSelect = ({
   users,
   progCounts,
   app,
-  showVerify
+  showVerify,
+  changeVerify,
+  undoOption,
+  openUndoOption,
+  closeUndoOption
 })=> {
-  
-  console.log('stoneSelect: ' + showVerify);
   
   const serial = item.serial;
   const history = item.history;
   const finishedAt = item.finishedAt;
-  const subItems = item.subItems;
+  //const subItems = item.subItems;
   const allTrackOption = app.trackOption;
     
   const nc = nonCons.filter( 
@@ -76,20 +79,18 @@ const StoneSelect = ({
     const ncAllClear = ncOutstanding.length === 0;
     const shAllClear = sh.length === 0 || allAnswered === true;
 
-
     if( ( ( flowStep.type === 'first' || flowStep.type === 'build' ) && stepComplete ) 
         || ( stepComplete /*&& ncResolved*/ ) 
       ) {
       null;
     }else{
 
-      const compEntry = iDone.find( sc => sc.key === flowStep.key && sc.good === true);
-      
+      //const compEntry = iDone.find( sc => sc.key === flowStep.key && sc.good === true);
       const fTest = flowStep.type === 'test' ? 
                     iDone.filter( x => x.type === 'test' && x.good === false) : [];
       
       const blockStone = damStep && (!ncAllClear || !shAllClear );
-      const doneStone = stepComplete;
+      //const doneStone = stepComplete;
 	    
 	    Session.set('ncWhere', stepPhase);
 	    Session.set('nowStepKey', flowStep.key);
@@ -98,33 +99,48 @@ const StoneSelect = ({
         <div>
           <div>
 		        <InOutWrap type='stoneTrans'>
-  		        {flowStep.type === 'nest' ?
-  		          <FoldInNested
-                  id={id}
-                  serial={serial}
-                  sKey={flowStep.key}
-                  step={flowStep.step}
-                  doneStone={doneStone}
-                  subItems={subItems}
-                  lock={false} />
-              : 
-  		          <Stone
-    		          key={flowStep.key}
+  		        {showVerify ?
+                <FirstForm
                   id={id}
                   barcode={serial}
-                  sKey={flowStep.key}
-                  step={flowStep.step}
-                  type={flowStep.type}
-                  allItems={allItems}
-                  isAlt={isAlt}
-                  hasAlt={hasAlt}
+                  flowFirsts={flow.filter( x => x.type === 'first' )}
+                  sKey={flowStep.type === 'first' ? flowStep.key : false}
+                  step={flowStep.type === 'first' ? flowStep.step : false }
                   users={users}
-                  methods={app.toolOption}
-                  progCounts={progCounts}
-                  blockStone={blockStone}
-                  doneStone={doneStone}
-                  compEntry={compEntry}
-                  showVerify={showVerify} />
+                  app={app}
+                  changeVerify={changeVerify} />
+  		        : 
+    		        flowStep.type === 'nest' ?
+    		          <FoldInNested
+                    id={id}
+                    serial={serial}
+                    sKey={flowStep.key}
+                    step={flowStep.step}
+                    //doneStone={doneStone}
+                    //subItems={subItems}
+                    lock={false} />
+                : 
+    		          <Stone
+      		          key={flowStep.key}
+                    id={id}
+                    barcode={serial}
+                    sKey={flowStep.key}
+                    step={flowStep.step}
+                    type={flowStep.type}
+                    allItems={allItems}
+                    isAlt={isAlt}
+                    hasAlt={hasAlt}
+                    users={users}
+                    app={app}
+                    progCounts={progCounts}
+                    blockStone={blockStone}
+                    //doneStone={doneStone}
+                    //compEntry={compEntry}
+                    showVerify={showVerify}
+                    changeVerify={changeVerify}
+                    undoOption={undoOption}
+                    openUndoOption={openUndoOption}
+                    closeUndoOption={closeUndoOption} />
   		        }
             </InOutWrap>
             {fTest.length > 0 && 

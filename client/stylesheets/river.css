@@ -1,20 +1,42 @@
 
 /* River */
 .stoneFrame {
-  width: 20vw;
+  max-width: 20vw;
   min-height: 20vw;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
-
+.stoneBase {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-content: center;
+  min-width: 100%;
+  margin: 8px 0;
+  color: var(--asbestos);
+}
+.undoStepWrap {
+  width: 80%;
+  padding: 3px 0 0 20%;
+}
+.undoStepWrap button {
+  line-height: 0.75em;
+  font-size: 1.3rem;
+  color: var(--asbestos);
+}
+.moreStepAction {
+  min-width: 20%;
+  cursor: pointer;
+}
 .stoneRing {
   position: relative;
   z-index: 0;
-  width: 17vw;
-  height: 17vw;
+  max-width: 17vw;
+  height: 18vw;
 }
 .stoneRing .ct-chart {
-  height: 17vw;
+  height: 18vw;
 }
 
 .stone {
@@ -42,6 +64,7 @@
   transition: all 200ms ease-out;
   opacity: 1;
   will-change: transform;
+  cursor: pointer;
 }
 .stone:active {
   filter: blur(5px);
@@ -337,6 +360,7 @@
   background-color: var(--belizeHole);
   border-left: 1px inset rgba(0,0,0,0.1);
 }
+.moreStepAction > .react-contextmenu-wrapper,
 .tribActionExtra > .react-contextmenu-wrapper {
   width: 100%;
   height: 100%;
@@ -363,7 +387,7 @@
 }
 
 .stoneFrame .actionBox {
-  width: 18vw;
+  max-width: 18vw;
 }
 .stoneForm {
   display: flex;
@@ -384,7 +408,7 @@ fieldset.stoneForm {
 .stoneForm select,
 .stoneForm label,
 .stoneForm details {
-  width: 16vw;
+  max-width: 16vw;
   text-align: center;
 }
 
@@ -394,7 +418,7 @@ fieldset.stoneForm {
 
 .stoneForm textarea {
   min-width: 16vw;
-  width: 16vw;
+  max-width: 16vw;
   min-height: 1rem;
   border-color: black;
 }

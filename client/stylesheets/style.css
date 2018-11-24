@@ -49,6 +49,17 @@
   min-height: 2rem;
 }
 
+.textAction {
+  margin: 0px;
+  border: none;
+  padding: 0px;
+  background-color: transparent;
+  cursor: pointer;
+}
+.textAction:hover {
+  text-decoration: underline; 
+}
+
 .navButtonWrap {
   background-color: rgb(25,25,25);
   color: var(--neptuneColor);

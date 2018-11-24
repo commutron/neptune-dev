@@ -1,5 +1,16 @@
 import React, {Component} from 'react';
 
+/*
+<InputMulti
+  id='whoBuilt'
+  onChange={(e)=>this.setWho(e)}
+  options={userOps}
+  defaultEntries={this.state.whoBuilt}
+  label='Who Built'
+  classStyle='blueIn'
+/>
+*/
+          
 export default class InputMulti extends Component	{
   
   constructor() {

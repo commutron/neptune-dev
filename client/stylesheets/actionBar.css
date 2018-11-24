@@ -87,11 +87,11 @@ meteor seems to be handling this */
   overflow: hidden;
 }
 
-input.redIn, input.blueIn, input.orangeIn {
+input.redIn, input.orangeIn {
   background-color: transparent;
   border-bottom-color: var(--clouds);
 }
-select.redIn, select.blueIn, select.orangeIn {
+select.redIn, select.orangeIn {
   background-color: transparent;
   border-color: var(--clouds);
 }
@@ -120,27 +120,12 @@ textarea.redIn:focus {
   margin: 0 10px;
 }
 
-.blueIn, .orangeIn {
+.orangeIn {
   color: white;
 }
-select.blueIn > option {
-  color: black;
-}
-
-.blueIn + label,
 .orangeIn + label {
   font-size: small;
   line-height: 1rem;
-}
-
-input.blueIn:focus {
-  border-bottom-color: var(--peterriver);
-}
-select.blueIn:focus {
-  border-color: var(--peterriver);
-}
-.blueIn:focus + label {
-  color: var(--peterriver);
 }
 
 input.orangeIn:focus {
@@ -156,11 +141,6 @@ input.orangeIn:focus {
   padding: 0 3px;
   border-color: var(--clouds);
 }
-
-.blueIn:focus ~ .inputMultiSelected {
-  border-color: var(--peterriver);
-}
-
 .inputMultiSelected > i {
   position: relative;
   bottom: -5px;

@@ -95,7 +95,13 @@ export class ProWrap extends Component	{
         :
         <section className={topClass}>
           
-          <div className={!riverExpand ? 'proSingle' : cSize > 2 ? 'proDual' : 'proSingle'}>
+          <div 
+            className={
+              !riverExpand ? 'proSingle forceScrollStyle' : 
+              cSize > 2 ? 'proDual forceScrollStyle' : 
+              'proSingle forceScrollStyle'
+            }
+          >
             <div className='proPrime'>
               {React.cloneElement(this.props.children[0],
                 { 
@@ -103,7 +109,8 @@ export class ProWrap extends Component	{
                   flow: path.flow,
                   flowAlt: path.flowAlt,
                   progCounts: path.progCounts,
-                  showVerify: this.state.showVerify
+                  showVerify: this.state.showVerify,
+                  changeVerify: ()=>this.setState({showVerify: !this.state.showVerify })
                 }
               )}
             </div>
@@ -142,6 +149,7 @@ export class ProWrap extends Component	{
             users={this.props.users}
             app={this.props.app}
             action={this.props.action}
+            showVerify={this.state.showVerify}
             changeVerify={()=>this.setState({showVerify: !this.state.showVerify })} />
           
         </section>

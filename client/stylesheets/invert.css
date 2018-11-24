@@ -83,7 +83,8 @@
 .invert .inlineLink {
   color: black;
 }
-.jump {
+.jump,
+.invert .leapText {
   border-bottom-color: black;
 }
 .invert .jump:hover, .invert .jump:focus, .invert .jump:active {
@@ -94,9 +95,6 @@
 }
 .invert .jumpBar:hover, .invert .jumpBar:focus, .invert .jumpBar:active {
   border-bottom-color: #3498db;
-}
-.invert .leapText {
-  border-bottom-color: black;
 }
 .invert .leapText:hover,
 .invert .leapText:focus,
@@ -112,57 +110,42 @@
   background-color: var(--black);
   color: var(--clouds);
 }
-.invert .moveLR {
-  color: black;
-}
-.invert .moveLR:hover, .invert .moveLR:active {
-  color: white;
-  background-color: black;
-}
 .invert .open {
-  color: white;
-}
-.invert .yellowBox > p {
-  color: black;
-}
-.invert .clearWhite:hover,
-.invert .clearGreen:hover,
-.invert .clearBlue:hover,
-.invert .clearRed:hover {
   color: white;
 }
 .invert .clearWhite {
   color: black;
   border-color: black;
 }
-.invert .clearWhite:hover {
-  background-color: black;
+.invert .clearWhite:hover,
+.invert .clearGreen:hover,
+.invert .clearBlue:hover,
+.invert .clearRed:hover,
+.invert .tagAddButton:hover {
+  color: white;
 }
-.invert .cold:hover {
-  color: black;
-}
+.invert .moveLR,
+.invert .yellowBox > p,
+.invert .actionIconText,
+.invert .cold:hover,
 .invert .tagFlag {
   color: black;
 }
+.invert .clearWhite:hover,
 .invert .tagFlag > button:hover {
   background-color: black;
 }
-.invert .tagAddButton:hover {
+.invert .moveLR:hover, .invert .moveLR:active {
   color: white;
+  background-color: black;
 }
 .invert .actionForm .redIn option,
 .invert .actionForm .redIn optgroup {
   color: black;
   background-color: white;
 }
-.invert .actionIconText {
-  color: black;
-}
-.invert input.redIn, .invert input.blueIn {
-  background-color: transparent;
-  border-bottom-color: var(--black);
-}
-.invert select.redIn, .invert select.blueIn {
+.invert input.redIn,
+.invert select.redIn {
   background-color: transparent;
   border-color: var(--black);
 }
@@ -172,40 +155,16 @@
 .invert input.redIn:focus {
   border-bottom-color: red;
 }
-.invert select.redIn:focus {
-  border-color: red;
-}
+.invert select.redIn:focus,
 .invert textarea.redIn:focus {
   border-color: red;
 }
 .invert .redIn:focus + label {
   color: rgb(231,76,60);
 }
-.invert .blueIn {
-  color: black;
-}
-.invert .blueIn + label {
-  font-size: small;
-  line-height: 1rem;
-}
-.invert input.blueIn:focus {
-  border-bottom-color: var(--peterriver);
-}
-.invert select.blueIn:focus {
-  border-color: var(--peterriver);
-}
-.invert .blueIn:focus + label {
-  color: var(--peterriver);
-}
 .invert .inputMultiSelected {
   background-color: white;
   border-color: var(--black);
-}
-.invert .blueIn:focus ~ .inputMultiSelected {
-  border-color: var(--peterriver);
-}
-.invert .dataFlip:before, .invert .dataFlipText {
-  color: black;
 }
 .invert #ncselect + .formBarIcon,
 .invert #ncselect ~ .actionIconText {

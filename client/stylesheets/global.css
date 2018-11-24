@@ -196,6 +196,7 @@ input {
 }
 
 select {
+  -moz-appearance: none;
   background-color: var(--clouds);
   border-color: white;
 }

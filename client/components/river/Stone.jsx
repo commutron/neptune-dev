@@ -4,7 +4,6 @@ import React, {Component} from 'react';
 //import { VelocityComponent } from 'velocity-react';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import Pref from '/client/global/pref.js';
-import FirstForm from './FirstForm.jsx';
 import StoneProgRing from './StoneProgRing.jsx';
 
 export default class Stone extends Component {
@@ -12,8 +11,7 @@ export default class Stone extends Component {
   constructor() {
     super();
     this.state = {
-      lock: true,
-      show: false
+      lock: true
     };
     this.reveal = this.reveal.bind(this);
     this.passS = this.passS.bind(this);
@@ -25,9 +23,10 @@ export default class Stone extends Component {
   shouldComponentUpdate(nextProps, nextState) {
   	if(
   		this.state !== nextState ||
-  		this.props.doneStone !== nextProps.doneStone ||
+  		//this.props.doneStone !== nextProps.doneStone ||
   		this.props.blockStone !== nextProps.blockStone ||
-  		this.props.sKey !== nextProps.sKey
+  		this.props.sKey !== nextProps.sKey ||
+  		(this.props.undoOption === true && nextProps.undoOption === false)
   	) {
     	return true;
   	}else{
@@ -36,12 +35,11 @@ export default class Stone extends Component {
   }
   
   reveal() {
-    this.setState({show: !this.state.show});
-    //document.getElementById('lookup').focus();
+    this.props.changeVerify();
   }
   
   unlock() {
-  	let speed = !Meteor.user().unlockSpeed ? 2000 : Meteor.user().unlockSpeed; 
+  	let speed = !Meteor.user().unlockSpeed ? 4000 : ( Meteor.user().unlockSpeed * 2 ); 
     Meteor.setTimeout(()=> {
     	const inspect = this.props.type === 'inspect';
     	const first = this.props.type === 'first';
@@ -74,6 +72,7 @@ export default class Stone extends Component {
 	    if(error)
 		    console.log(error);
 			if(reply) {
+				this.props.openUndoOption();
 			  document.getElementById('lookup').focus();
 		  }else{
 		    Bert.alert(Pref.blocked, 'danger');
@@ -98,6 +97,7 @@ export default class Stone extends Component {
 		    if(error)
 			    console.log(error);
 				if(reply) {
+					this.props.openUndoOption();
 					pass === false && this.unlock();
 				  document.getElementById('lookup').focus();
 			  }else{
@@ -126,6 +126,7 @@ export default class Stone extends Component {
 		});
 	}
 	
+	/*
 	handleUndoLast() {
 		const id = this.props.id;
 		const bar = this.props.barcode;
@@ -149,13 +150,21 @@ export default class Stone extends Component {
 	  }else{
 	  	Bert.alert(Pref.blocked, 'danger');
 	  }
+	}*/
+	
+	handleStepUndo() {
+		const id = this.props.id;
+		const serial = this.props.barcode;
+		Meteor.call('popHistory', id, serial, ()=>{
+			this.props.closeUndoOption();
+		});
 	}
-
+	
   render() {
 
 		let shape = '';
 		let ripple = '';
-		let lock = this.props.doneStone || this.props.blockStone ? 
+		let lock = /*this.props.doneStone ||*/ this.props.blockStone ? 
 							 true : this.state.lock;
 		let prepend = this.props.type === 'build' || this.props.type === 'first' ?
 		              <label className='big'>{this.props.type}<br /></label> : null;
@@ -184,15 +193,13 @@ export default class Stone extends Component {
     }else{
       null }
     
-    console.log('stone: ' + this.props.showVerify);
-    
-    const topClass = this.props.doneStone ? 'doneStoneMask' :
+    const topClass = /*this.props.doneStone ? 'doneStoneMask' :*/
     								 this.props.blockStone ? 'blockStone' : '';
     const topTitle = topClass !== '' ? Pref.stoneislocked : '';
- 
+		
      return(
-    	<div className={topClass + ' vspace noCopy stoneFrame'} title={topTitle}>
-        {!this.state.show ?
+     	<div className='noCopy'>
+    		<div className={topClass + ' stoneFrame'} title={topTitle}>
         	<StoneProgRing
     				serial={this.props.barcode}
     				allItems={this.props.allItems}
@@ -202,9 +209,6 @@ export default class Stone extends Component {
             step={this.props.step}
             type={this.props.type}
             progCounts={this.props.progCounts}>
-						<ContextMenuTrigger
-							id={this.props.barcode}
-							attributes={ {className:'centre'} }>
 							{this.props.type === 'test' ?
 								<div className='centre stone'>
 									<button
@@ -243,46 +247,41 @@ export default class Stone extends Component {
 									</button>
 								</div>
 							}
-						</ContextMenuTrigger>
 					</StoneProgRing>
-					:
-          <div className='actionBox blue'>
-          	<div className='flexRR'>
-	          	<button
-	          		className='action clear'
-	          		onClick={this.reveal}>
-	          		{Pref.close}
-	          	</button>
-          	</div>
-        		<p className='bigger centreText up'>{this.props.step}</p>
-        		<br />
-            <FirstForm
-              id={this.props.id}
-              barcode={this.props.barcode}
-              sKey={this.props.sKey}
-              step={this.props.step}
-              type={this.props.type}
-              users={this.props.users}
-              methods={this.props.methods} />
-            <br />
-          </div>
-        }
-        {this.props.type === 'first' || this.props.type === 'finish' ? null :
-	        <ContextMenu id={this.props.barcode}>
-	          <MenuItem onClick={()=>this.passS(true, true)} disabled={lock}>
-	            Pass with Comment
-	          </MenuItem>
-	          {this.props.type === 'test' ?
-		          <MenuItem onClick={this.passT.bind(this, true, true, true)} disabled={lock}>
-		            Ship a Failed Test
+				</div>
+				<div className='stoneBase'>
+					<div className='undoStepWrap centre'>
+						{this.props.undoOption ? 
+							<button
+								className='textAction'
+								onClick={()=>this.handleStepUndo()}
+							>undo</button> 
+						: null}
+					</div>
+					<ContextMenuTrigger
+						id={this.props.barcode}
+						attributes={ {className:'moreStepAction centre'} }
+						holdToDisplay={1}
+            renderTag='div'>
+            <i className='fas fa-ellipsis-v fa-fw fa-lg'></i>
+					</ContextMenuTrigger>
+	        {this.props.type === 'first' || this.props.type === 'finish' ? null :
+		        <ContextMenu id={this.props.barcode}>
+		          <MenuItem onClick={()=>this.passS(true, true)} disabled={lock}>
+		            Pass with Comment
 		          </MenuItem>
-	          :null}
-	          {this.props.compEntry &&
-		          <MenuItem onClick={()=>this.handleUndoLast()}>
-		            Undo Completed Step
-		          </MenuItem>}
-	        </ContextMenu>
-	    	}
+		          {this.props.type === 'test' ?
+			          <MenuItem onClick={this.passT.bind(this, true, true, true)} disabled={lock}>
+			            Ship a Failed Test
+			          </MenuItem>
+		          :null}
+		          {/*this.props.compEntry &&
+			          <MenuItem onClick={()=>this.handleUndoLast()}>
+			            Undo Completed Step
+			          </MenuItem>*/}
+		        </ContextMenu>
+		    	}
+	    	</div>
       </div>
     );
   }

@@ -515,6 +515,23 @@ Meteor.methods({
     }
   },
   
+  //  remove a step
+  popHistory(batchId, serial) {
+    if(Roles.userIsInRole(Meteor.userId(), 'active')) {
+      const batch = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': serial});
+      const itemHistory = batch.items.find( x => x.serial === serial).history;
+      const lastEntry = itemHistory[itemHistory.length -1];
+      const timeElapse = moment.duration(moment().diff(moment(lastEntry.time))).asSeconds();
+      if(timeElapse > 0 && timeElapse < 10) {
+        BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': serial}, {
+          $pop : { 'items.$.history': 1 }
+        });
+      }else{
+        null;
+      }
+    }
+  },
+  
 //  remove a step
   pullHistory(batchId, bar, key, time) {
     if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
