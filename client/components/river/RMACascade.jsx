@@ -20,7 +20,7 @@ export default class RMACascade extends Component {
     };
     // enable fall at component load
     Meteor.setTimeout(()=> { // wait for data to be loaded
-      Session.get('nowStep') === 'done' ?
+      Session.get('nowStepKey') === 'c0mp13t3' ?
         this.setState({ fall: true })
         : null;
     }, 100);
@@ -29,7 +29,7 @@ export default class RMACascade extends Component {
   // enable fall at component data change
   componentWillReceiveProps() {
     Meteor.setTimeout(()=> { // wait for data to be loaded
-      Session.get('nowStep') === 'done' ?
+      Session.get('nowStepKey') === 'c0mp13t3' ?
       this.setState({ fall: true }) :
       this.setState({ fall: false});
     }, 100);

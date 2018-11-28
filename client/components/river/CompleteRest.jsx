@@ -12,9 +12,6 @@ const CompleteRest = ({ id, bComplete, sh, serial, history, finishedAt }) => {
   const iDone = history;
 
 // end of flow
-  Session.set('ncWhere', 'done');
-  Session.set('nowStepKey', 'd0n3');
-  Session.set('nowWanchor', '');
   const timelock = moment().diff(moment(finishedAt), 'minutes') > (60 * 24 * 7);
   return (
     <div>

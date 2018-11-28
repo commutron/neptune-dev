@@ -34,7 +34,7 @@ const NCAdd = ({ id, barcode, app })=> {
   }
 
 	let now = Session.get('ncWhere');
-	let lock = now === 'done';
+	let lock = now === 'complete';
 	
   return (
     <form

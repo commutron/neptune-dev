@@ -164,6 +164,9 @@ const StoneSelect = ({
     }
   }
   
+  Session.set('ncWhere', 'complete');
+	Session.set('nowStepKey', 'c0mp13t3');
+  Session.set('nowWanchor', '');
   // Complete
   if(finishedAt !== false) {
     return(

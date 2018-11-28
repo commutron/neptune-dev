@@ -14,7 +14,7 @@ const NonConMiniSatus = ({ noncons, flow, flowAlt, app })=> {
     });
   }
   let leftover = noncons.filter( z => dprt.has(z.where) === false );
-  leftover.length > 0 ? splitByStep.unshift({ 'name': 'before start', 'ncs': leftover.length }) : null;
+  leftover.length > 0 ? splitByStep.unshift({ 'name': 'unknown', 'ncs': leftover.length }) : null;
   
   return(
     <div className='centre'>
