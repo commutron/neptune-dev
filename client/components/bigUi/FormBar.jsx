@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
 
 import NCAdd from '../river/NCAdd.jsx';
+import NCFlood from '../river/NCFlood.jsx';
 import ShortAdd from '../river/ShortAdd.jsx';
 
 // batchData, itemData, app, action
