@@ -7,7 +7,7 @@ import Spin from '../components/uUi/Spin.jsx';
 const InitialSetup = ({ ready, option })=> {
   
   function hndlSet() {
-    Meteor.call('addSetting', (err, reply)=>{
+    Meteor.call('addFirstSetting', (err, reply)=>{
       if (err)
         console.log(err);
       if(reply) {

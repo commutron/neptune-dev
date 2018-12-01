@@ -11,8 +11,8 @@ Meteor.methods({
       Roles.addUsersToRoles(Meteor.userId(), ['active', 'admin']);
       Meteor.users.update(Meteor.userId(), {
         $set: {
-          org: orgName,
-          orgKey: new Meteor.Collection.ObjectID().valueOf(),
+          //org: orgName,
+          //orgKey: new Meteor.Collection.ObjectID().valueOf(),
           autoScan: true,
           unlockSpeed: 2000,
           miniAction: false,

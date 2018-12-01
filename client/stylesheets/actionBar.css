@@ -115,8 +115,8 @@ textarea.redIn:focus {
   color: rgb(231,76,60);
 }
 
-.actionForm > span,
-.actionForm > div {
+.actionForm span,
+.actionForm div {
   margin: 0 10px;
 }
 

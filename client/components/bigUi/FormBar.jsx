@@ -111,7 +111,11 @@ export default class FormBar extends Component	{
                     app={app}
                     doneClose={()=>this.handleDone()} />
                 : null
-              : null
+              : 
+                <NCFlood
+                  id={b._id}
+                  live={b.finishedAt === false}
+                  app={app} />
           : null}
         </div>
         <div className='footRight'>

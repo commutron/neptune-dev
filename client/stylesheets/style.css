@@ -610,6 +610,8 @@ label.qdpplRound {
   text-decoration: none;
 }
 
+.noBorder { border: none; }
+
 .numFont {
   font-family: 'Varela Round';
 }

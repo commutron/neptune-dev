@@ -101,7 +101,7 @@ privlegedRoutes.route('/activate', {
     });
   }
 });
-
+/*
 privlegedRoutes.route('/initialsetup', {
   name: 'initialsetup',
   action() {
@@ -117,7 +117,7 @@ privlegedRoutes.route('/initialsetup', {
     });
   }
 });
-
+*/
 privlegedRoutes.route('/', {
   name: 'home',
   action() {

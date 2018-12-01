@@ -96,6 +96,7 @@ const NCStream = ({ entry, id, end, doFix, doInspect, doReject, doSnooze, doUnSk
 
   const same = entry.fix.who === Meteor.userId();
   const inspector = Roles.userIsInRole(Meteor.userId(), 'inspect');
+  const verifier = Roles.userIsInRole(Meteor.userId(), 'verify');
   const lockI = fixed ? !same && inspector ? false : true : false;
   let skip = entry.skip;
   let style = !skip ? 'cap tribRow tribRed noCopy' : 'cap tribRow yellowList noCopy';
@@ -143,6 +144,10 @@ const NCStream = ({ entry, id, end, doFix, doInspect, doReject, doSnooze, doUnSk
           </ContextMenuTrigger>
         
           <ContextMenu id={entry.key}>
+          {!fixed &&
+            <MenuItem onClick={doInspect} disabled={!verifier}>
+              Inspected, no repair required
+            </MenuItem> }
             <MenuItem onClick={doReject} disabled={lockI || !fixed}>
               {Pref.reject} 
             </MenuItem>      

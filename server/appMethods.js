@@ -8,59 +8,54 @@ Meteor.startup(function () {
 });
 
 Meteor.methods({
-  
-  addSetting() {
-    const orgKey = Meteor.user().orgKey;
-    const orgName = Meteor.user().org;
-    var dbK = AppDB.findOne({orgKey: orgKey});
-    var dbN = AppDB.findOne({org: orgName});
-    if(orgKey) {
-      if(!dbK && !dbN) {
-        AppDB.insert({
-          org: orgName,
-          orgKey: orgKey,
-          orgPIN: '0000',
-          minorPIN: '000',
-          createdAt: new Date(),
-          toolOption: [],
-          trackOption: [],
-          lastTrack: {
-            key: 'f1n15h1t3m5t3p',
-            step: 'finish',
-            type: 'finish',
-            how: 'finish'
-          },
-          countOption: [],
-          nonConOption: [],
-          nonConOptionA: [],
-          nonConOptionB: [],
-          ncScale: {
-            low: Number(5),
-            high: Number(10),
-            max: Number(25)
-          },
-          missingType: 'missing',
-          ancillaryOption: [],
-          tagOption: [],
-          instruct: '',
-          helpDocs: '',
-          timeClock: '',
-          latestSerial: {
-            nineDigit: Number(123456789),
-            tenDigit: Number(1234567890)
-          },
-          ndaMode: false
-        });
-        Roles.addUsersToRoles(Meteor.userId(), ['active', 'admin']);
-        return true;
-      }else{
-        return false;
+  /*
+  addFirstSetting() {
+    const orgKey = new Meteor.Collection.ObjectID().valueOf();
+    AppDB.insert({
+      org: 'crew',
+      orgKey: orgKey,
+      orgPIN: '0000',
+      minorPIN: '000',
+      createdAt: new Date(),
+      toolOption: [],
+      trackOption: [],
+      lastTrack: {
+        key: 'f1n15h1t3m5t3p',
+        step: 'finish',
+        type: 'finish',
+        how: 'finish'
+      },
+      countOption: [],
+      nonConOption: [],
+      nonConOptionA: [],
+      nonConOptionB: [],
+      ncScale: {
+        low: Number(5),
+        high: Number(10),
+        max: Number(25)
+      },
+      missingType: 'missing',
+      ancillaryOption: [],
+      tagOption: [],
+      instruct: '',
+      helpDocs: '',
+      timeClock: '',
+      latestSerial: {
+        nineDigit: Number(123456789),
+        tenDigit: Number(1234567890)
+      },
+      ndaMode: false
+    });
+    Meteor.users.update(Meteor.userId(), {
+      $set: {
+        org: 'crew',
+        orgKey: orgKey
       }
-    }else{
-      return false;
-    }
+    });
+    Roles.addUsersToRoles(Meteor.userId(), ['active', 'admin']);
+    return true;
   },
-  
+  */
 // Clearly this is not secure.
 // The use case of this software is to be used by a single organization,
 // hosted and made available internaly.
