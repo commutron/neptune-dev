@@ -80,7 +80,7 @@ const RMARow = ({ entry, id, assigned, onClick, lock, app })=> {
       <tr>
         <td>{dt.rmaId}</td>
         <td><UserNice id={dt.who} /></td>
-        <td>{moment(dt.time).calendar()}</td>
+        <td>{moment(dt.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</td>
         <td>{dt.quantity === 0 ? 'unlimited' : dt.quantity}</td>
         <td>{assigned}</td>
         <td>{dt.flow.length}</td>

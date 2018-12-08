@@ -219,8 +219,8 @@ export class ShRow extends Component {
           <td className='up'>{dt.partNum}</td>
           <td className='up'>{dt.refs.toString()}</td>
           <td className='cap'>{dt.where}</td>
-          <td>{moment(dt.cTime).calendar()}, <UserNice id={dt.cWho} /></td>
-          <td>{moment(dt.uTime).calendar()}, <UserNice id={dt.uWho} /></td>
+          <td>{moment(dt.cTime).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}, <UserNice id={dt.cWho} /></td>
+          <td>{moment(dt.uTime).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}, <UserNice id={dt.uWho} /></td>
           <td>{actionState}</td>
           <td>{dt.comm}</td>
           <td>

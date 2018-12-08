@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 
 import ModelMedium from '../smallUi/ModelMedium.jsx';
 
@@ -12,12 +12,12 @@ const UndoFinish = ({ id, serial, finishedAt, timelock, noText })=>	{
     Meteor.call('pullFinish', id, serial, override, (error, reply)=>{
       error && console.log(error);
       if(reply) {
-        Bert.alert(Alert.success);
+        toast.success('Saved');
         Meteor.call('pushUndoFinish', id, serial, (error)=>{
           error && console.log(error);
         });
       }else{
-        Bert.alert(Alert.warning);
+        toast.error('Server Error');
       }
     });
   };

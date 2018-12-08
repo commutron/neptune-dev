@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 
-
 export class Text extends Component	{
   // test for micro components but getting the refs doesn't work
   render() {
@@ -16,7 +15,6 @@ export class Text extends Component	{
       );
   }
 }
-
 
 export class Submit extends Component	{
   render() {

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 
 import Model from '../smallUi/Model.jsx';
 
@@ -36,14 +36,14 @@ export default class PanelBreak extends Component	{
             console.log(error);
           if(reply) {
             FlowRouter.go('/data/batch?request=' + batch);
-            Bert.alert(Alert.success);
+            toast.success('Saved');
           }else{
-            Bert.alert(Alert.warning);
+            toast.error('Server Error');
           }
           });
-        }else{Bert.alert(Alert.warning);}
-      }else{Bert.alert(Alert.warning);}
-    }else{Bert.alert(Alert.warning);}
+        }else{toast.error('Error');}
+      }else{toast.error('Error');}
+    }else{toast.error('Error');}
   }
 
   render() {

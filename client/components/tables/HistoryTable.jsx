@@ -65,7 +65,7 @@ const HistoryRow = ({ entry, id, serial, done })=> {
     <tr className='contrastList'>
       <td>{dt.step}</td>
       <td>{dt.type}</td>
-      <td>{moment(dt.time).calendar()}</td>
+      <td>{moment(dt.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</td>
       <td><UserNice id={dt.who} /></td>
       <td>{dt.comm}</td>
       <td>{inspect}</td>

@@ -210,7 +210,7 @@ export default class FlowForm extends Component	{
     const base = this.props.baseline;
     const ops = this.props.options;
     if(base) {
-      baseSet = new Set();
+      let baseSet = new Set();
       for(let t of base) {
         let o = ops.find(x => x.key === t.key);
         o ? o['how'] = t.how : null;

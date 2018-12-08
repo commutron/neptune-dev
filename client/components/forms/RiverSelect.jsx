@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 
 import Model from '../smallUi/Model.jsx';
 
@@ -23,7 +23,7 @@ export default class RiverSelect extends Component	{
       Meteor.call('setRiver', batchID, flow, flowAlt, (error, reply)=>{
         if(error)
           console.log(error);
-        reply ? Bert.alert(Alert.success) : Bert.alert(Alert.warning);
+        reply ? toast.success('Saved') : toast.error('Server Error');
         this.go.disabled = false;
       });
   }

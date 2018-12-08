@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 
 import Model from '../smallUi/Model.jsx';
 
@@ -18,12 +18,12 @@ export default class BlockForm extends Component {
       if(blKey) {
         Meteor.call('editBlockX', batchId, blKey, text, (error, reply)=>{
           error && console.log(error);
-          !reply && Bert.alert(Alert.danger);
+          !reply && toast.error('Server Error');
         });
       }else{
         Meteor.call('addBlockX', batchId, text, (error, reply)=>{
           error && console.log(error);
-          reply ? this.blTxt.value='' : Bert.alert(Alert.danger);
+          reply ? this.blTxt.value='' : toast.error('Server Error');
         });
       }
     }else{
@@ -33,7 +33,7 @@ export default class BlockForm extends Component {
             console.log(error);
           if(reply) {
           }else{
-            Bert.alert(Alert.danger);
+            toast.error('Server Error');
           }
         });
       }else{
@@ -43,7 +43,7 @@ export default class BlockForm extends Component {
           if(reply) {
             this.blTxt.value='';
           }else{
-            Bert.alert(Alert.danger);
+            toast.error('Server Error');
           }
         });
       }
@@ -110,13 +110,13 @@ export class SolveBlock extends Component {
       if(this.props.xBatch) {
         Meteor.call('solveBlockX', id, blKey, act, (error, reply)=> {
           error && console.log(error);
-          reply ? Bert.alert(Alert.success) : Bert.alert(Alert.warning); 
+          reply ? toast.success('Saved') : toast.error('Server Error'); 
   			});
       }else{
         Meteor.call('solveBlock', id, blKey, act, (error, reply)=> {
           if(error)
             console.log(error);
-          reply ? Bert.alert(Alert.success) : Bert.alert(Alert.warning); 
+          reply ? toast.success('Saved') : toast.error('Server Error');
   			});
       }
     }
@@ -148,13 +148,13 @@ export class RemoveBlock extends Component {
 		if(this.props.xBatch) {
       Meteor.call('removeBlockX', id, blKey, (error, reply)=> {
         error && console.log(error);
-        reply ? Bert.alert(Alert.success) : Bert.alert(Alert.warning); 
+        reply ? toast.success('Saved') : toast.error('Server Error');
 			});
   }else{
 			Meteor.call('removeBlock', id, blKey, (error, reply)=> {
         if(error)
           console.log(error);
-        reply ? Bert.alert(Alert.success) : Bert.alert(Alert.warning); 
+        reply ? toast.success('Saved') : toast.error('Server Error');
 			});
     }
   }

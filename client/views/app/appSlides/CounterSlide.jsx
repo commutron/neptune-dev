@@ -1,6 +1,6 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 
 const CounterSlide = ({app})=> {
   
@@ -22,7 +22,7 @@ const CounterSlide = ({app})=> {
         this[rndmKey + 'input'].value = '';
         this[rndmKey + 'type'].value = '';
       }else{
-        Bert.alert(Alert.warning);
+        toast.warning('server error');
       }
     });
   }

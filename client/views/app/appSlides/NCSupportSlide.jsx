@@ -1,6 +1,6 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 import AppSetSimple from '/client/components/forms/AppSetSimple';
 
 const NCSupportSlide = ({app})=> {
@@ -16,22 +16,22 @@ const NCSupportSlide = ({app})=> {
       if(error)
         console.log(error);
       if(reply) {
-        Bert.alert(Alert.success);
+        toast.success('Saved');
       }else{
-        Bert.alert(Alert.danger);
+        toast.error('Server Error');
       }
     });
   }
   
   function ancRemove(name) {
-    Bert.alert(Alert.wait);
+    toast.info('This may take a moment');
     Meteor.call('removeAncOption', name, (error, reply)=>{
       if(error)
         console.log(error);
       if(reply) {
-        Bert.alert(Alert.success);
+        toast.success('Saved');
       }else{
-        Bert.alert(Alert.inUse);
+        toast.warning('Cannot be removed, entry is in use');
       }
     });
   }

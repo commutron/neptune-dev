@@ -17,7 +17,7 @@ const PopGroupWIP = ({ wip })=> {
       });
     }
     
-    const groupLine = Array.from(counts, x => x.value).reduce((x,y)=> x + y) / counts.length;
+    const groupLine = Array.from(counts, x => x.value).reduce((x,y)=> x + y, 0) / counts.length;
     let medianTry = counts[Math.floor(counts.length / 2)];
     let median = !medianTry ? groupLine : medianTry.value;//x.value > ( groupLine % 2 )  
     

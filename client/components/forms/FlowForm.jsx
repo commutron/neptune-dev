@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 
 import Model from '../smallUi/Model.jsx';
 import FlowBuilder from '../bigUi/FlowBuilder.jsx';
@@ -46,12 +46,12 @@ export default class FlowForm extends Component	{
     const editId = edit ? edit.flowKey : false;
     
     if(!flowObj) {
-      Bert.alert(Alert.warning);
+      toast.warning('Cannot Save');
     }else if(editId) {
       Meteor.call('setFlow', widgetId, editId, flowTitle, flowObj, (error)=>{
         if(error)
           console.log(error);
-        Bert.alert(Alert.success);
+        toast.success('Saved');
         this.out.value = 'saved';
         this.setState({ fill: false });
         this.setState({ flow: false });
@@ -60,7 +60,7 @@ export default class FlowForm extends Component	{
       Meteor.call('pushFlow', widgetId, flowTitle, flowObj, (error)=>{
         if(error)
           console.log(error);
-        Bert.alert(Alert.success);
+        toast.success('Saved');
         this.out.value = 'saved';
         this.setState({ fill: false });
         this.setState({ flow: false });
@@ -186,11 +186,11 @@ export class FlowRemove extends Component	{
       if(error)
         console.log(error);
       if(reply === 'inUse') {
-        Bert.alert(Alert.inUse);
+        toast.warning('Cannot be removed, is currently in use');
       }else if(reply) {
-        Bert.alert( Alert.success );
+        toast.success('Saved');
       }else{
-        Bert.alert( Alert.warning );
+        toast.error('Server Error');
       }
     });
   }

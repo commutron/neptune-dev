@@ -40,7 +40,7 @@ export default class NoteLine extends Component	{
           {dt.content}
           <div className='footerBar'>
             {action}
-            <i>{moment(dt.time).calendar()} - <UserName id={dt.who} /></i>
+            <i>{moment(dt.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm a"})} - <UserName id={dt.who} /></i>
           </div>
         </div>
       );
@@ -61,7 +61,7 @@ export default class NoteLine extends Component	{
         {dt.content}
         <div className='footerBar'>
           {action}
-          <i>{moment(dt.time).calendar()} - <UserName id={dt.who} /></i>
+          <i>{moment(dt.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm a"})} - <UserName id={dt.who} /></i>
         </div>
       </fieldset>
     );

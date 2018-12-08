@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import moment from 'moment';
+import { ToastContainer } from 'react-toastify';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 
 import Spin from '../../components/uUi/Spin.jsx';
 import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
@@ -66,6 +67,10 @@ export default class OrgWIP extends Component	{
     return(
       <AnimateWrap type='contentTrans'>
       <div key={0} className='simpleContainer'>
+        <ToastContainer
+          position="top-right"
+          autoClose={10000}
+          newestOnTop />
         <div className='tenHeader'>
           <div className='topBorder'></div>
           <HomeIcon />
@@ -109,7 +114,7 @@ export default class OrgWIP extends Component	{
     );
   }
   componentDidMount() {
-    Bert.alert(Alert.wait);
+    toast.info('This operation may take a moment');
     this.relevant();
     this.interval = setInterval(() => this.relevant(), 1000*60*60);
   }

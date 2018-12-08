@@ -33,8 +33,6 @@ ejson@1.1.0
 email@1.2.3
 es5-shim@4.8.0
 fetch@0.1.0
-fortawesome:fontawesome@4.7.0
-fourseven:scss@4.10.0
 geojson-utils@1.0.10
 hot-code-push@1.0.4
 html-tools@1.0.11
@@ -89,7 +87,6 @@ templating@1.3.2
 templating-compiler@1.3.3
 templating-runtime@1.3.2
 templating-tools@1.1.2
-themeteorchef:bert@2.1.3
 tmeasday:check-npm-versions@0.3.2
 tracker@1.2.0
 ui@1.0.13

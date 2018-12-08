@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 
 import Model from '../smallUi/Model.jsx';
 
@@ -39,9 +39,9 @@ export default class VersionForm extends Component	{
         if(error)
           console.log(error);
         if(reply) {
-          Bert.alert(Alert.success);
+          toast.success('Saved');
         }else{
-          Bert.alert(Alert.warning);
+          toast.error('Server Error');
           this.go.disabled = false;
         }
       });
@@ -50,9 +50,9 @@ export default class VersionForm extends Component	{
         if(error)
           console.log(error);
         if(reply) {
-          Bert.alert(Alert.success);
+          toast.success('Saved');
         }else{
-          Bert.alert(Alert.warning);
+          toast.error('Server Error');
           this.go.disabled = false;
         }
       });
@@ -175,8 +175,6 @@ export default class VersionForm extends Component	{
   }
 }
 
-
-
 export class VersionRemove extends Component	{
   
   remove(e) {
@@ -189,11 +187,11 @@ export class VersionRemove extends Component	{
       if(error)
         console.log(error);
       if(reply === 'inUse') {
-        Bert.alert( Alert.inUse );
+        toast.warning('Cannot be removed, entry is in use');
       }else if(reply) {
-        Bert.alert( Alert.success );
+        toast.success('Saved');
       }else{
-        Bert.alert( 'Rejected by Server', 'danger' );
+        toast.warning('Rejected by Server');
       }
     });
   }

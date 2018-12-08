@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 
 import Model from '../smallUi/Model.jsx';
 
@@ -33,13 +33,13 @@ export default class BatchFormX extends Component	{
       Meteor.call('editBatchX', batchId, batchNum, vKey, salesNum, startDate, endDate, quantity, (error, reply)=>{
         if(error)
           console.log(error);
-          Bert.alert(Alert.warning);
+          toast.error('Server Error');
         if(reply) {
-          Bert.alert(Alert.success);
+          toast.success('Saved');
           //Session.set('now', batchNum);
           FlowRouter.go('/data/batch?request=' + batchNum);
         }else{
-          Bert.alert(Alert.duplicate);
+          toast.warning('Duplicate');
         }
       });
     }
@@ -48,13 +48,13 @@ export default class BatchFormX extends Component	{
       Meteor.call('addBatchX', batchNum, gId, wId, vKey, salesNum, startDate, endDate, quantity, (error, reply)=>{
         if(error)
           console.log(error);
-          Bert.alert(Alert.warning);
+          toast.error('Server Error');
         if(reply) {
-          Bert.alert(Alert.success);
+          toast.success('Saved');
           //Session.set('now', batchNum);
           FlowRouter.go('/data/batch?request=' + batchNum);
         }else{
-          Bert.alert(Alert.duplicate);
+          toast.warning('Duplicate');
         }
       });
     }

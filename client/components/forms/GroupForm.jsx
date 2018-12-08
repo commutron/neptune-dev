@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 
 import Model from '../smallUi/Model.jsx';
 import {Submit} from './Inputs.jsx';
@@ -19,11 +19,11 @@ export default class GroupForm extends Component {
           if(error)
            console.log(error);
           if(reply) {
-            Bert.alert(Alert.success);
+            toast.success('Saved');
             //Session.set('now', groupName);
             FlowRouter.go('/data/group?request=' + groupAlias);
           }else{
-            Bert.alert(Alert.warning);
+            toast.error('Server Error');
           }
         });
       }
@@ -33,11 +33,11 @@ export default class GroupForm extends Component {
           if(error)
             console.log(error);
           if(reply) {
-            Bert.alert(Alert.success);
+            toast.success('Saved');
             //Session.set('now', groupName);
             FlowRouter.go('/data/group?request=' + groupAlias);
           }else{
-            Bert.alert(Alert.warning);
+            toast.error('Server Error');
           }
         });
       }

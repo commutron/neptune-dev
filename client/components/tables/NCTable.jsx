@@ -123,9 +123,9 @@ export class NCRow extends Component {
     const rjc = !dt.reject || dt.reject.length === 0 ? false : true;
     const skp = typeof dt.skip === 'object';
      
-    let fixed = !fx ? '' : <i>{moment(dt.fix.time).calendar()}, <UserNice id={dt.fix.who} /></i>;
-    let inspected = !ins ? '' : <i>{moment(dt.inspect.time).calendar()}, <UserNice id={dt.inspect.who} /></i>;
-    let skipped = !skp ? '' : <i>{moment(dt.skip.time).calendar()}, <UserNice id={dt.skip.who} /></i>;
+    let fixed = !fx ? '' : <i>{moment(dt.fix.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}, <UserNice id={dt.fix.who} /></i>;
+    let inspected = !ins ? '' : <i>{moment(dt.inspect.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}, <UserNice id={dt.inspect.who} /></i>;
+    let skipped = !skp ? '' : <i>{moment(dt.skip.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}, <UserNice id={dt.skip.who} /></i>;
     let snoozed = !dt.snooze ? false : true;
     let comment = !dt.comm ? '' : dt.comm;
     
@@ -228,7 +228,7 @@ export class NCRow extends Component {
           <td className='up'>{dt.ref}</td>
           <td className='cap'>{dt.type}</td>
           <td className='cap'>{dt.where}</td>
-          <td>{moment(dt.time).calendar()}</td>
+          <td>{moment(dt.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</td>
           <td><UserNice id={dt.who} /></td>
           <td>{fixed}</td>
           <td>{inspected}</td>
@@ -252,9 +252,9 @@ export class NCRow extends Component {
               <tr key={index}>
                 <td colSpan='5'></td>
                 <td colSpan='2'>
-                  Attempt: {moment(entry.attemptTime).calendar()}, <UserNice id={entry.attemptWho} />
+                  Attempt: {moment(entry.attemptTime).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}, <UserNice id={entry.attemptWho} />
                   <br />
-                  Reject: {moment(entry.rejectTime).calendar()}, <UserNice id={entry.rejectWho} />
+                  Reject: {moment(entry.rejectTime).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}, <UserNice id={entry.rejectWho} />
                 </td>
                 <td colSpan='3'></td>
               </tr>

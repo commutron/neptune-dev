@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 
 import Model from '../smallUi/Model.jsx';
 
@@ -21,12 +21,12 @@ export default class CounterAssign extends Component	{
     if(typeof wfKey === 'string' && wfGate) {
       Meteor.call('addCounter', batchID, wfKey, wfGate, (error, reply)=>{
         error && console.log(error);
-        reply ? Bert.alert(Alert.success) : Bert.alert(Alert.warning);
+        reply ? toast.success('Saved') : toast.error('Server Error');
         this.go.disabled = false;
         this.choice.value = '';
       });
     }else{
-      Bert.alert(Alert.warning);
+      toast.warning('Cannot Save');
     }
   }
   
@@ -35,9 +35,9 @@ export default class CounterAssign extends Component	{
     Meteor.call('removeCounter', batchID, wfKey, (error, reply)=>{
       error && console.log(error);
       reply ? reply === 'inUse' ?
-      Bert.alert(Alert.inUse) :
-      Bert.alert(Alert.success) : 
-      Bert.alert(Alert.warning);
+      toast.warning('Cannot be removed, is currently in use') :
+      toast.success('Saved') : 
+      toast.error('Server Error');
     });
   }
 

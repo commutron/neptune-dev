@@ -1,19 +1,19 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 import AppSetSimple from '/client/components/forms/AppSetSimple';
 
 const RepeatSlide = ({app})=> {
   
   function reptRemove(key, reason) {
-    Bert.alert(Alert.wait);
+    toast.info('This may take a moment');
     Meteor.call('removeRepeatOption', key, reason, (error, reply)=>{
       if(error)
         console.log(error);
       if(reply) {
-        Bert.alert(Alert.success);
+        toast.success('entry removed');
       }else{
-        Bert.alert(Alert.inUse);
+        toast.warning('Cannot be removed, entry is in use');
       }
     });
   }
@@ -23,9 +23,9 @@ const RepeatSlide = ({app})=> {
       if(error)
         console.log(error);
       if(reply) {
-        Bert.alert(Alert.success);
+        toast.success('entry de-activated');
       }else{
-        Bert.alert(Alert.inUse);
+        toast.warning('Cannot be de-activated, entry is in use');
       }
     });
   }

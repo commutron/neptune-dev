@@ -1,9 +1,9 @@
 import React from 'react';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 
 function brr() {
   Meteor.logoutOtherClients( (error)=>{
-    error ? Bert.alert(Alert.warning) : Bert.alert(Alert.success);
+    error ? toast.error('Server Error') : toast.success('Saved');
   });
   Session.set('loggedIn', true);
 }

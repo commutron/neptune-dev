@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 
 import Model from '../smallUi/Model.jsx';
 import FlowBuilder from '../bigUi/FlowBuilder.jsx';
@@ -61,19 +61,19 @@ export default class RMAForm extends Component {
       Meteor.call('editRMACascade', id, cKey, rmaId, quantity, comm, (error)=>{
         if(error)
           console.log(error);
-        Bert.alert(Alert.success);
+        toast.success('Saved');
         this.out.value = 'saved';
       });
       
     }else{
     
       if(!flowObj) {
-        Bert.alert(Alert.warning);
+        toast.warning('Not saved');
       }else{
         Meteor.call('addRMACascade', id, rmaId, quantity, comm, flowObj, nonConArr, (error)=>{
           if(error)
             console.log(error);
-          Bert.alert(Alert.success);
+          toast.success('Saved');
           this.rmaNum.value = '';
           this.quant.value = '';
           this.comm.value = '';

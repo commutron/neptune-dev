@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 
 import Model from '../smallUi/Model.jsx';
 
@@ -37,11 +37,11 @@ export default class WidgetNewForm extends Component	{
       if(error)
         console.log(error);
       if(reply) {
-        Bert.alert(Alert.success);
+        toast.success('Saved');
         //Session.set('now', newName);
         FlowRouter.go('/data/widget?request=' + newName);
       }else{
-        Bert.alert(Alert.warning);
+        toast.error('Server Error');
         this.go.disabled = false;
       }
     });

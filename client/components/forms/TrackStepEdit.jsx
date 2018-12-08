@@ -1,6 +1,6 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
-import Alert from '/client/global/alert.js';
+//import Pref from '/client/global/pref.js';
+import { toast } from 'react-toastify';
 
 const TrackStepEdit = ({data})=> {
   
@@ -16,9 +16,9 @@ const TrackStepEdit = ({data})=> {
     Meteor.call('editTrackStepOption', opKey, step, type, phase, (error, reply)=>{
       error && console.log(error);
       if(reply) {
-        Bert.alert(Alert.success);
+        toast.success('Saved');
       }else{
-        Bert.alert(Alert.warning);
+        toast.warning('Server Error');
       }
     });
   }

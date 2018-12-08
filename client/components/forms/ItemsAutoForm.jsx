@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 
 import Model from '../smallUi/Model.jsx';
 
@@ -108,14 +108,14 @@ export default class ItemsAutoForm extends Component {
       if(error)
         console.log(error);
       if(reply.success === true) {
-        Bert.alert(Alert.success);
+        toast.success('Saved');
         this.unit.value = this.props.unit;
         this.barNumStart.value = moment().format('YYMMDD');
         this.barNumEnd.value = moment().format('YYMMDD');
         this.setState({work: false});
         this.message.value = 'all created successfully';
       }else{
-        Bert.alert(Alert.caution);
+        toast.warning('Possible problem');
         console.log(reply.message);
         this.setState({work: false});
       }

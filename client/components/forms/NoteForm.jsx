@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 
 import Model from '../smallUi/Model.jsx';
 
@@ -39,7 +39,7 @@ export default class NoteForm extends Component {
       });
     }else{
       console.log('NoteForm component not wired up corectly');
-      Bert.alert(Alert.danger);
+      toast.error('Server Error');
     }
   }
   

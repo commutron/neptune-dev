@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import Pref from '/client/global/pref.js';
-import Alert from '/client/global/alert.js';
+//import Pref from '/client/global/pref.js';
+import { toast } from 'react-toastify';
 
 import Model from '../smallUi/Model.jsx';
 
@@ -20,12 +20,12 @@ export default class Remove extends Component	{
           if(error)
             console.log(error);
           if(reply === 'inUse') {
-            Bert.alert(Alert.inUse);
+            toast.warning('Cannot do this, entry is in use');
           }else if(reply) {
-            Bert.alert( Alert.success );
+            toast.success('Entry removed');
             FlowRouter.go('/data/overview?request=groups');
           }else{
-            Bert.alert( 'Rejected by Server', 'danger' );
+            toast.error('Rejected by Server');
             this.cut.disabled = false;
           }
         });
@@ -34,12 +34,12 @@ export default class Remove extends Component	{
           if(error)
             console.log(error);
           if(reply === 'inUse') {
-            Bert.alert(Alert.inUse);
+            toast.warning('Cannot do this, entry is in use');
           }else if(reply) {
-            Bert.alert( Alert.success );
+            toast.success('Entry removed');
             FlowRouter.go('/data/overview?request=groups');
           }else{
-            Bert.alert( 'Rejected by Server', 'danger' );
+            toast.error('Rejected by Server');
             this.cut.disabled = false;
           }
         });
@@ -48,12 +48,12 @@ export default class Remove extends Component	{
           if(error)
             console.log(error);
           if(reply === 'inUse') {
-            Bert.alert(Alert.inUse);
+            toast.warning('Cannot do this, entry is in use');
           }else if(reply) {
-            Bert.alert( Alert.success );
+            toast.success('Entry removed');
             FlowRouter.go('/data/overview?request=batches');
           }else{
-            Bert.alert( 'Rejected by Server', 'danger' );
+            toast.error('Rejected by Server');
             this.cut.disabled = false;
           }
         });
@@ -62,12 +62,12 @@ export default class Remove extends Component	{
           if(error)
             console.log(error);
           if(reply === 'inUse') {
-            Bert.alert(Alert.inUse);
+            toast.warning('Cannot do this, entry is in use');
           }else if(reply) {
-            Bert.alert( Alert.success );
+            toast.success('Entry removed');
             FlowRouter.go('/data/overview?request=batches');
           }else{
-            Bert.alert( 'Rejected by Server', 'danger' );
+            toast.error('Rejected by Server');
             this.cut.disabled = false;
           }
         });
@@ -76,17 +76,17 @@ export default class Remove extends Component	{
           if(error)
             console.log(error);
           if(reply === 'inUse') {
-            Bert.alert(Alert.inUse);
+            toast.warning('Cannot do this, entry is in use');
           }else if(reply) {
-            Bert.alert( Alert.success );
+            toast.success('Entry removed');
             FlowRouter.go('/data/batch?request=' + this.props.entry.batch);
           }else{
-            Bert.alert( 'Rejected by Server', 'danger' );
+            toast.error('Rejected by Server');
             this.cut.disabled = false;
           }
         });
       }else {
-        Bert.alert( Alert.danger );
+        toast.error('Server Error');
         console.log('this component is not wired properly');
       }
   }

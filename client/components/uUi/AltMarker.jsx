@@ -1,5 +1,5 @@
 import React from 'react';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 
 const handleClick = (id, serial) => {
   let sure = confirm('Change the Flow?');
@@ -7,7 +7,7 @@ const handleClick = (id, serial) => {
     Meteor.call('forkItem', id, serial, false, (error, reply)=>{
       if(error)
       console.log(error);
-    reply ? null : Bert.alert(Alert.warning);
+    reply ? null : toast.error('Server Error');
     });
   }else{null}
 };

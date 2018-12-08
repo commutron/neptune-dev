@@ -1,6 +1,6 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 
 const MethodSlide = ({app, sorted})=> {
   
@@ -20,11 +20,11 @@ const MethodSlide = ({app, sorted})=> {
       if(error)
         console.log(error);
       if(reply) {
-        Bert.alert(Alert.success);
+        toast.success('Saved');
         this.tooltitle.value = '';
         this.corrSteps.value = null;
       }else{
-        Bert.alert(Alert.danger);
+        toast.error('Server Error');
       }
     });
   }

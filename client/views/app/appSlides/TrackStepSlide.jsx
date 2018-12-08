@@ -1,6 +1,6 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 
 import TrackStepEdit from '/client/components/forms/TrackStepEdit.jsx';
 
@@ -22,7 +22,7 @@ const TrackStepSlide = ({app, sorted})=> {
         this[rndmKey + 'type'].value = '';
         this[rndmKey + 'phase'].value = '';
       }else{
-        Bert.alert(Alert.warning);
+        toast.error('Server Error');
       }
     });
   }

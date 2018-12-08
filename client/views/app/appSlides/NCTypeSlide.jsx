@@ -1,19 +1,19 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 import AppSetSimple from '/client/components/forms/AppSetSimple';
 
 const NCTypeSlide = ({app})=> {
   
   function ncRemoveA(key, defect) {
-    Bert.alert(Alert.wait);
+    toast.info('This may take a moment');
     Meteor.call('removePrimaryNCOption', key, defect, (error, reply)=>{
       if(error)
         console.log(error);
       if(reply) {
-        Bert.alert(Alert.success);
+        toast.success('Saved');
       }else{
-        Bert.alert(Alert.inUse);
+        toast.warning('Cannot be removed, is currently in use');
       }
     });
   }
@@ -23,22 +23,22 @@ const NCTypeSlide = ({app})=> {
       if(error)
         console.log(error);
       if(reply) {
-        Bert.alert(Alert.success);
+        toast.success('Saved');
       }else{
-        Bert.alert(Alert.inUse);
+        toast.warning('Cannot be removed, is currently in use');
       }
     });
   }
   
   function ncRemoveB(key, defect) {
-    Bert.alert(Alert.wait);
+    toast.info('This may take a moment');
     Meteor.call('removeSecondaryNCOption', key, defect, (error, reply)=>{
       if(error)
         console.log(error);
       if(reply) {
-        Bert.alert(Alert.success);
+        toast.success('Saved');
       }else{
-        Bert.alert(Alert.inUse);
+        toast.warning('Cannot be removed, is currently in use');
       }
     });
   }
@@ -48,9 +48,9 @@ const NCTypeSlide = ({app})=> {
       if(error)
         console.log(error);
       if(reply) {
-        Bert.alert(Alert.success);
+        toast.success('Saved');
       }else{
-        Bert.alert(Alert.inUse);
+        toast.warning('Cannot be removed, is currently in use');
       }
     });
   }

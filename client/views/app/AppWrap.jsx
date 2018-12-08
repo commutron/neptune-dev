@@ -1,4 +1,5 @@
 import React from 'react';
+import { ToastContainer } from 'react-toastify';
 
 import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
 import AccountsManagePanel from './appPanels/AccountsManagePanel.jsx';
@@ -30,6 +31,10 @@ const AppWrap = ({ users, app })=> {
   
   return(
     <div className='simpleContainer'>
+      <ToastContainer
+        position="top-right"
+        autoClose={10000}
+        newestOnTop />
       <div className='tenHeader'>
         <div className='topBorder' />
         <HomeIcon />
@@ -38,7 +43,6 @@ const AppWrap = ({ users, app })=> {
       </div>
     
       <div className='simpleContent locked'>
-        
         
       {admin ?
           

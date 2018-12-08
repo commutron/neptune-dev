@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
+import { ToastContainer } from 'react-toastify';
 //import Pref from '/client/global/pref.js';
 
 import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
@@ -37,6 +38,10 @@ export const TraverseWrap = ({
 
     return(
       <div className='containerEx'>
+        <ToastContainer
+          position="top-right"
+          autoClose={10000}
+          newestOnTop />
         <div className='tenHeader noPrint'>
           <div className='topBorder' />
           <HomeIcon />

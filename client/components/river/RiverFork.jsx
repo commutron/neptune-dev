@@ -1,12 +1,12 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 
 function activate(id, serial, choice) {
   Meteor.call('forkItem', id, serial, choice, (error, reply)=>{
     if(error)
     console.log(error);
-  reply ? null : Bert.alert(Alert.warning);
+  reply ? null : toast.error('Server Error');
   });
 }
     

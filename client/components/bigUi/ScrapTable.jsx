@@ -95,7 +95,7 @@ const ScrapRow = ({ entry, group, batchNum, widget, barcode })=> (
       />
     </td>
 		<td className='cap'><UserNice id={entry.who} /></td>
-    <td>{moment(entry.time).calendar()}</td>
+    <td>{moment(entry.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm a"})}</td>
     <td>{entry.step}</td>
     <td>{entry.comm}</td>
 	</tr>

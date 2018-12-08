@@ -56,7 +56,7 @@ const EscapeRow = ({ entry, id })=> {
     <tbody>
       <tr>
         <td><UserNice id={dt.who} /></td>
-        <td>{moment(dt.time).calendar()}</td>
+        <td>{moment(dt.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</td>
         <td>{dt.ref}</td>
         <td>{dt.type}</td>
         <td>{dt.quantity}</td>

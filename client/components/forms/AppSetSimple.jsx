@@ -1,5 +1,5 @@
 import React from 'react';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 
 const AppSetSimple = ({title, action, rndmKey})=> {
   
@@ -14,7 +14,7 @@ const AppSetSimple = ({title, action, rndmKey})=> {
         if(reply) {
           this[rndmKey + 'input'].value = '';
         }else{
-          Bert.alert(Alert.warning);
+          toast.warning("server error");
         }
       });
     }else{
@@ -46,4 +46,3 @@ const AppSetSimple = ({title, action, rndmKey})=> {
 };
 
 export default AppSetSimple;
-

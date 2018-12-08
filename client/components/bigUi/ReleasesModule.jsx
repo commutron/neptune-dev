@@ -74,7 +74,7 @@ export const ReleaseNote = ({ id, release, xBatch })=> {
       <ContextMenuTrigger id={id+'release'}>
   			<fieldset className='noteCard'>
           <legend>{releaseType || 'Released to the Floor'}</legend>
-          {moment(release.time).format("ddd, MMM Do YYYY, h:mm a")}
+          {moment(release.time).format("ddd, MMM D /YY, h:mm a")}
           <i> by </i><UserName id={release.who} />
         </fieldset>
       </ContextMenuTrigger>

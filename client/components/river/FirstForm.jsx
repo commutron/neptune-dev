@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
+import { toast } from 'react-toastify';
 //import RoleCheck from '/client/components/utilities/RoleCheck.js';
 import UserNice from '../smallUi/UserNice.jsx';
 import AnimateWrap from '../tinyUi/AnimateWrap.jsx';
@@ -115,7 +116,7 @@ export default class FirstForm extends Component	{
 		    document.getElementById('lookup').focus();
      	  this.props.changeVerify();
 			 }else{
-			   Bert.alert(Pref.blocked, 'danger');
+			   toast.error('Blocked by Server');
 			 }
 		});
 	}

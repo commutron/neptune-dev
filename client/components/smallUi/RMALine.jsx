@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 // import moment from 'moment';
 import Pref from '/client/global/pref.js';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 
 // import UserNice from './UserNice.jsx';
 
@@ -12,7 +12,7 @@ function popRMA(id, bar, rmaId) {
     Meteor.call('unsetRMA', id, bar, rmaId, (error, reply)=>{
       if(error)
         console.log(error);
-      reply ? Bert.alert(Alert.success) : Bert.alert(Alert.warning);
+      reply ? toast.success('Saved') : toast.error('Server Error');
     });
   }else{null}
 }

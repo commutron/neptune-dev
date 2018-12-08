@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
+import { toast } from 'react-toastify';
 import Pref from '/client/global/pref.js';
 import Spin from '../components/uUi/Spin.jsx';
 
@@ -11,9 +12,9 @@ const InitialSetup = ({ ready, option })=> {
       if (err)
         console.log(err);
       if(reply) {
-        Bert.alert('', 'success', 'fixed-top');
+        toast.success('Success');
       }else{
-        Bert.alert('ERROR', 'danger', 'fixed-top');
+        toast.error('ERROR');
       }
     });
   }

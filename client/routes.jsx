@@ -9,12 +9,14 @@ import { LabelLayout } from './layouts/MainLayouts.jsx';
 
 import Login from './views/Login.jsx';
 import ActivateUser from '/client/components/forms/ActivateUser.jsx';
-import InitialSetup from './views/InitialSetup.jsx';
+//import InitialSetup from './views/InitialSetup.jsx';
 
-import ActivityData from './views/activity/ActivityData.jsx';
 import ProdData from './views/production/ProdData.jsx';
+import ActivityData from './views/activity/ActivityData.jsx';
+import WatchDataWrap from './views/watch/WatchDataWrap.jsx';
 import DataData from './views/data/DataData.jsx';
 import CompSearchPanel from './views/data/panels/CompSearchPanel.jsx';
+import ToolboxWrap from './views/toolbox/ToolboxWrap.jsx';
 import AppData from './views/app/AppData.jsx';
 
 import GeneralLabel from './views/paper/GeneralLabel.jsx';
@@ -128,15 +130,6 @@ privlegedRoutes.route('/', {
   }
 });
 
-privlegedRoutes.route('/activity', {
-  name: 'activity',
-  action() {
-    mount(CleanLayout, {
-      content: (<ActivityData />)
-    });
-  }
-});
-
 privlegedRoutes.route('/production', {
   action() {
     mount(CleanLayout, {
@@ -145,10 +138,35 @@ privlegedRoutes.route('/production', {
   }
 });
 
+privlegedRoutes.route('/overview', {
+  name: 'overview',
+  action() {
+    mount(CleanLayout, {
+      content: (<ActivityData />)
+    });
+  }
+});
+
+privlegedRoutes.route('/watch', {
+  action() {
+    mount(CleanLayout, {
+       content: (<WatchDataWrap />)
+    });
+  }
+});
+
 privlegedRoutes.route('/starfish', {
   action() {
     mount(CleanLayout, {
       content: (<CompSearchPanel />)
+    });
+  }
+});
+
+privlegedRoutes.route('/toolbox', {
+  action() {
+    mount(CleanLayout, {
+       content: (<ToolboxWrap />)
     });
   }
 });

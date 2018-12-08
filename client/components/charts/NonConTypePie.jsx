@@ -6,7 +6,7 @@ import fillDonut from 'chartist-plugin-fill-donut';
 
 const NonConTypePie = ({ ncTypes, fullWidth })=> {
   
-  let total = Array.from(ncTypes, x => x.value).reduce((x,y)=> x + y);
+  let total = Array.from(ncTypes, x => x.value).reduce((x,y)=> x + y, 0);
   let ncTypesOrder = ncTypes.sort((a, b)=> { return b.value - a.value });
   
   let mean = Math.floor( total / ncTypes.length );

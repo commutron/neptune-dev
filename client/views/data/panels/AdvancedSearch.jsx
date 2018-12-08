@@ -11,7 +11,7 @@ const AdvancedSearch = ({ groupData, widgetData, batchData, xBatchData, app }) =
   const xActive = xBatchData.filter( x => x.active === true ).length;
   const process = batchData.filter( x => x.finishedAt === false ).length;
   const xProcess = xBatchData.filter( x => x.completed === false ).length;
-  const verAdd = Array.from(widgetData, x => x.versions.length).reduce((x, y) => x + y);
+  const verAdd = Array.from(widgetData, x => x.versions.length).reduce((x, y) => x + y, 0);
 
   return(
     <div className=''>

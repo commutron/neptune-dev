@@ -22,12 +22,12 @@
     "react": "^15.6.2",
     "react-addons-css-transition-group": "^15.6.2",
     "react-addons-pure-render-mixin": "^15.6.2",
-    "react-barcode": "^1.3.4",
     "react-chartist": "^0.13.1",
     "react-chartist-tooltip": "^0.4.1",
     "react-contextmenu": "^2.10.0",
     "react-dom": "^15.6.2",
     "react-mounter": "^1.2.0",
+    "react-toastify": "^4.4.3",
     "react-transition-group": "^1.2.1",
     "velocity-react": "^1.4.1"
   }

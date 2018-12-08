@@ -1,5 +1,6 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
+import { toast } from 'react-toastify';
 
 const NCAdd = ({ id, barcode, app })=> {
 
@@ -19,11 +20,7 @@ const NCAdd = ({ id, barcode, app })=> {
             error && console.log(error);
           });
         }else{
-          Bert.alert({ 
-            title: 'Caution',
-            message: "Can't add '" + ref + "', A referance can only be 8 characters long",
-            type: 'carrot'
-          });
+          toast.warning("Can't add '" + ref + "', A referance can only be 8 characters long");
         }
       }
       this.discStp.value = Session.get('ncWhere');

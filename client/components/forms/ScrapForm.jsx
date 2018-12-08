@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 
 import Model from '../smallUi/Model.jsx';
 
@@ -22,10 +22,10 @@ export default class ScrapForm extends Component {
       if(error)
         console.log(error);
       if(reply) {
-        Bert.alert(Alert.caution);
+        toast.success('Item scrapped');
       }else{
         console.log('BLOCKED BY SERVER METHOD');
-        Bert.alert(Alert.danger);
+        toast.error('Server Error');
       }
     });
   }

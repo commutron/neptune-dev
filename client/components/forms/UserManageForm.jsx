@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 // import { Accounts } from 'meteor/accounts-base'
 import Pref from '/client/global/pref.js';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 
 import Model from '../smallUi/Model.jsx';
 import { AdminUp } from '../forms/AdminForm.jsx';
@@ -18,7 +18,7 @@ export default class UserManageForm extends Component {
       Meteor.call('forcePasswordChange', this.props.id, newPass, (error, reply)=>{
         if(error)
           console.log(error);
-        reply ? Bert.alert(Alert.success) : Bert.alert(Alert.warning);
+        reply ? toast.success('Saved') : toast.error('Server Error');
       });
     }else{
       alert('not allowed');
@@ -32,9 +32,9 @@ export default class UserManageForm extends Component {
       if (err)
         console.log(err);
       if(reply) {
-        Bert.alert(Alert.success);
+        toast.success('Saved');
       }else{
-        Bert.alert(Alert.warning);
+        toast.error('Server Error');
       }
     });
   }
@@ -131,7 +131,7 @@ class SetCheck extends Component	{
       if(error)
         console.log(error);
       if(reply) {
-        Bert.alert(Alert.success);
+        toast.success('Saved');
       }else{
         console.log("BLOCKED BY SERVER");
       }

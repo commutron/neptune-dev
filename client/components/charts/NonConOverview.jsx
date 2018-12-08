@@ -36,7 +36,7 @@ export default class NonConOverview extends Component {
       let leftover = this.props.nonCons.filter( z => dprt.has(z.where) === false );
       leftover.length > 0 ? splitByFirst.unshift({ 'name': 'unknown', 'ncs': leftover }) : null;
     }
-    splitByType = [];
+    let splitByType = [];
     for(let stp of splitByFirst) {
       let type = [];
       for(let n of this.props.ncOp) {

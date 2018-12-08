@@ -1,5 +1,6 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
+import { toast } from 'react-toastify';
 
 const FoldInNested = ({ id, serial, sKey, step, lock })=> {
  //doneStone, subItems
@@ -15,7 +16,7 @@ const FoldInNested = ({ id, serial, sKey, step, lock })=> {
 			  document.getElementById('lookup').focus();
 			  this.nestSerial.value = '';
 		  }else{
-		    Bert.alert(Pref.blocked, 'danger');
+		    toast.error('Server Error');
 		  }
 		});
   }

@@ -24,13 +24,20 @@ const StartView = ({ready, user, org, app}) =>	{
   return(
     <div className='homeNavi'>
       <NavButton title='Production' icon='fa-paper-plane' link='/production' />
-      <NavPlaceholder icon='fab fa-fly' /*title='Activity/Pings'*/ />
-      <NavButton title='Activity' icon='fab fa-wpexplorer' /*title='Observe'*/ trans='flip-h' link='/activity' />
+      {Roles.userIsInRole(Meteor.userId(), 'nightly') ?
+        <NavButton title='Watch' icon='fab fa-wpexplorer' trans='flip-h' link='/watch' />
+      : <NavPlaceholder title='Watch' icon='fab fa-wpexplorer' trans='flip-h' />}
+      
+      <NavButton title='Overview' icon='fab fa-fly' link='/overview' />
       <NavButton title='Explore' icon='fa-rocket' link='/data' />
       
       <NavButton title='Pisces' icon='fa-file-alt' link={app.instruct || ''} blank={true} />
       <NavButton title='Parts Search' icon='fa-microchip' link='/starfish' />
-      <NavPlaceholder icon="fa-unlink" />
+      {/*<NavPlaceholder icon="fa-unlink" />*/}
+      {Roles.userIsInRole(Meteor.userId(), 'admin') ?
+        <NavButton title='Toolbox' icon='fa-toolbox' link='/toolbox' />
+      : <NavPlaceholder title='Toolbox' icon='fa-toolbox'/>}
+      
       {Roles.userIsInRole(Meteor.userId(), 'admin') ?
         <NavButton title='Settings' icon='fa-sliders-h' link='/app' />
       : <NavPlaceholder title='Settings' icon='fa-sliders-h'/>}

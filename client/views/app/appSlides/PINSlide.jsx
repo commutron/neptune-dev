@@ -1,5 +1,5 @@
 import React from 'react';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 
 const PINSlide = ()=> {
   
@@ -14,16 +14,16 @@ const PINSlide = ()=> {
         if(err)
           console.log(err);
         if(reply) {
-          Bert.alert(Alert.success);
+          toast.success('Saved');
           this.oldPin.value = '';
           this.newOne.value = '';
           this.newTwo.value = '';
         }else{
-          Bert.alert(Alert.warning);
+          toast.error('Server Error');
         }
       });
     }else{
-      Bert.alert(Alert.danger);
+      toast.error('Server Error');
     }
   }
   
@@ -50,15 +50,15 @@ const PINSlide = ()=> {
         if(err)
           console.log(err);
         if(reply) {
-          Bert.alert(Alert.success);
+          toast.success('Saved');
           this.newOne.value = '';
           this.newTwo.value = '';
         }else{
-          Bert.alert(Alert.warning);
+          toast.error('Server Error');
         }
       });
     }else{
-      Bert.alert(Alert.danger);
+      toast.error('Server Error');
     }
   }
   

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 
 export default class EmailForm extends Component {
   
@@ -12,7 +12,7 @@ export default class EmailForm extends Component {
     Meteor.call('emailRemove', email, (error, reply)=>{
       if(error)
         console.log(error);
-      reply ? Bert.alert(Alert.success) : Bert.alert(Alert.warning);
+      reply ? toast.success('Email removed') : toast.warning('Could not remove email');
     });
   }
   
@@ -24,7 +24,7 @@ export default class EmailForm extends Component {
       Meteor.call('emailSet', newEmail, (error, reply)=>{
         if(error)
           console.log(error);
-        reply ? Bert.alert(Alert.success) : Bert.alert(Alert.warning);
+        reply ? toast.success('Saved new email') : toast.warning('Could not save new email');
       });
     }else{
       alert('not allowed');

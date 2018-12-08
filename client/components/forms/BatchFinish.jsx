@@ -1,7 +1,6 @@
 import React from 'react';
 //import moment from 'moment';
 import Pref from '/client/global/pref.js';
-//import Alert from '/client/global/alert.js';
 
 import ModelMedium from '../smallUi/ModelMedium.jsx';
 

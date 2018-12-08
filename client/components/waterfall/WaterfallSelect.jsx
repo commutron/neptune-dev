@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 
 import Waterfall from './Waterfall.jsx';
 
@@ -19,7 +19,7 @@ const WaterfallSelect = ({ batchData, app })=> {
     if(batchData.completed === true) {
       Meteor.call('undoFinishBatchX', batchID, override, (error, reply)=>{
         error && console.log(error);
-        reply ? null : Bert.alert(Alert.warning);
+        reply ? null : toast.error('Server Error');
       });
     }
   }

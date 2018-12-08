@@ -65,7 +65,7 @@ export default class ItemsList extends Component	{
   }
 
   advancedStepFilter() {
-    filtrA = [];
+    let filtrA = [];
     for(let z of this.props.batchData.items) {
       let match = false;
       if(this.state.advancedKey == false) {
@@ -79,7 +79,7 @@ export default class ItemsList extends Component	{
   }
   
   advancedTimeFilter() {
-    filtrA = [];
+    let filtrA = [];
     for(let z of this.props.batchData.items) {
       let match = false;
       if(!this.state.advancedTime || this.state.advancedTime === '') {

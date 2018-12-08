@@ -1,19 +1,19 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 import AppSetSimple from '/client/components/forms/AppSetSimple';
 
 const NCLegacySlide = ({app})=> {
   
   function ncRemove(e, name) {
-    Bert.alert(Alert.wait);
+    toast.info('This may take a moment')
     Meteor.call('removeNCOption', name, (error, reply)=>{
       if(error)
         console.log(error);
       if(reply) {
-        Bert.alert(Alert.success);
+        toast.success('NonCon type removed');
       }else{
-        Bert.alert(Alert.inUse);
+        toast.warning('Cannot remove, entry is in use');
       }
     });
   }

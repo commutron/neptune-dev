@@ -1,6 +1,6 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
-import Alert from '/client/global/alert.js';
+import { toast } from 'react-toastify';
 
 const FinishSlide = ({app})=> {
   
@@ -12,9 +12,9 @@ const FinishSlide = ({app})=> {
       if(error)
         console.log(error);
       if(reply) {
-        Bert.alert(Alert.success);
+        toast.success('Saved');
       }else{
-        Bert.alert(Alert.danger);
+        toast.danger('Server Error');
       }
     });
   }

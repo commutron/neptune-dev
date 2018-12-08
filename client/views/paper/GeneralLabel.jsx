@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Barcode from 'react-barcode';
 import moment from 'moment';
 
 function GeneralLabel({ batch, data }) {
