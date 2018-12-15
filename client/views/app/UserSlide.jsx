@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
 
-import AccountsUI from '/client/components/bigUi/AccountsUI.jsx';
 import { AdminDown } from '/client/components/forms/AdminForm.jsx';
 import LogoutOther from '/client/components/uUi/LogoutOther.jsx';
 import { ChangeAutoScan } from '/client/components/forms/UserManageForm.jsx';
@@ -64,7 +63,6 @@ export default class UserSlide extends Component	{
                 <div className='balance'>
       
                   <div className='centre'>
-                    <h2>Logged in as: <AccountsUI /></h2>
                     <p className='clean'>id: {Meteor.user()._id}</p>
                     <p>organization: <i className='greenT'>{Meteor.user().org}</i></p>
                     <p><LogoutOther /></p>

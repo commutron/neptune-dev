@@ -8,7 +8,7 @@ import { CleanLayout } from './layouts/MainLayouts.jsx';
 import { LabelLayout } from './layouts/MainLayouts.jsx';
 
 import Login from './views/Login.jsx';
-import ActivateUser from '/client/components/forms/ActivateUser.jsx';
+import Spin from '/client/components/uUi/Spin.jsx';
 //import InitialSetup from './views/InitialSetup.jsx';
 
 import ProdData from './views/production/ProdData.jsx';
@@ -46,7 +46,7 @@ exposedRoutes.route('/login', {
   action() {
     mount(PublicLayout, {
        content: (<Login />),
-       title: 'User Login'
+       title: 'User Sign In'
     });
   }
 });
@@ -80,13 +80,13 @@ const privlegedRoutes = FlowRouter.group({
   triggersEnter: [
     ()=> {
       let route = FlowRouter.current();
-      if(Meteor.loggingIn() || route.route.name === 'login' || route.route.name === 'activate') {
+      if(Meteor.loggingIn() || route.route.name === 'login' || route.route.name === 'limbo') {
         null;
       }else if(!Meteor.userId()) {
         Session.set('redirectAfterLogin', route.path);
         FlowRouter.go('login');
       }else if(!Roles.userIsInRole(Meteor.userId(), 'active')) {
-        FlowRouter.go('activate');
+        FlowRouter.go('limbo');
       }else{
         Session.set('redirectAfterLogin', route.path);
       }
@@ -94,12 +94,12 @@ const privlegedRoutes = FlowRouter.group({
   ]
 });
 
-privlegedRoutes.route('/activate', {
-  name: 'activate',
+privlegedRoutes.route('/limbo', {
+  name: 'limbo',
   action() {
     mount(PublicLayout, {
-       content: (<ActivateUser />),
-       title: 'User Activation'
+       content: (<Spin color={true} message="Checking user information, this shouldn't take long" />),
+       title: ''
     });
   }
 });

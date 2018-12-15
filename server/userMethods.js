@@ -45,6 +45,42 @@ Meteor.methods({
       }
     }
   },
+  
+  verifyOrgJoin(orgName, pin) {
+    const orgIs = AppDB.findOne({ org: orgName });
+    if(orgIs) {
+      if(orgIs.orgPIN === pin) {
+        return true;
+      }else{
+        return false;
+      }
+    }else{
+      return false;
+    }
+  },
+  joinOrgAtLogin(orgName, pin) {
+    const orgIs = AppDB.findOne({ org: orgName });
+    if(orgIs) {
+      if(orgIs.orgPIN === pin) {
+        Roles.addUsersToRoles(Meteor.userId(), 'active');
+        Meteor.users.update(Meteor.userId(), {
+          $set: {
+            org: orgIs.org,
+            orgKey: orgIs.orgKey,
+            autoScan: true,
+            unlockSpeed: 2000,
+            watchlist: [],
+            inbox: []
+          }
+        });
+        return 'ok';
+      }else{
+        return 'no PIN match';
+      }
+    }else{
+      return 'no org match';
+    }
+  },
 
   adminUpgrade(userId, pin) {
     const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
