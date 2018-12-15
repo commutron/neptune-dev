@@ -1,9 +1,10 @@
 import React from 'react';
 import { ToastContainer } from 'react-toastify';
 
-import AccountsUI from '/client/components/bigUi/AccountsUI.jsx';
+import AccountsUI from '/client/components/bigUi/AccountsUI/AccountsUI.jsx';
 
 const Login = ()=> {
+
   return(
     <div>
       <ToastContainer

@@ -46,7 +46,7 @@ exposedRoutes.route('/login', {
   action() {
     mount(PublicLayout, {
        content: (<Login />),
-       title: 'User Sign In'
+       title: 'Sign In'
     });
   }
 });

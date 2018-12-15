@@ -7,8 +7,10 @@ import LogoutOther from '/client/components/uUi/LogoutOther.jsx';
 import { ChangeAutoScan } from '/client/components/forms/UserManageForm.jsx';
 //import { ChangeMinAction } from '/client/components/forms/UserManageForm.jsx';
 import UserSpeedSet from '/client/components/forms/UserSpeedSet.jsx';
+import PasswordChange from '/client/components/forms/PasswordChange.jsx';
 //import EmailForm from '/client/components/forms/EmailForm.jsx';
 import { PermissionHelp } from '/client/views/app/appPanels/AccountsManagePanel';
+
 
 export default class UserSlide extends Component	{
   
@@ -70,6 +72,7 @@ export default class UserSlide extends Component	{
                     {/*<p><ChangeMinAction /></p>*/}
                     <p><UserSpeedSet /></p>
                     <p>{/*<EmailForm />*/}</p>
+                    <PasswordChange />
                     
                     { admin ?
                     <div>

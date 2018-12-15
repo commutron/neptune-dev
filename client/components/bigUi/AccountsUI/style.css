@@ -1,0 +1,23 @@
+.userFormButtons {
+  width: 240px;
+  height: 32px;
+  margin-top: 0.75rem;
+  font-size: 1rem;
+  text-align: center;
+  border-width: 3px;
+  border-style: solid;
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  
+}
+.userFormButtons:hover {
+  border-bottom-color: var(--silver);
+}
+.loginoutButton {
+  background-color: var(--neptuneColor);
+}
+.createButton {
+  background-color: var(--nephritis);
+}

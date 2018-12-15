@@ -36,10 +36,6 @@ export default class BigPicture extends Component	{
             name={'Active ' + Pref.batch + 's'}
             color='blueT' />
           <NumBox
-            num={now.newHistoryTotal}
-            name='History Record Events'
-            color='blueT' />
-          <NumBox
             num={now.doneBatches}
             name={'finished ' + Pref.batch + 's'}
             color='greenT' />

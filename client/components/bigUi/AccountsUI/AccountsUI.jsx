@@ -3,6 +3,8 @@ import { Accounts } from 'meteor/accounts-base';
 import { toast } from 'react-toastify';
 import Tabs from '/client/components/smallUi/Tabs.jsx';
 
+import style from './style.css';
+
 Accounts.onLogin( ()=>{
 	let redirect = Session.get('redirectAfterLogin');
   if(!redirect || redirect === '/login' || redirect === '/limbo') {
@@ -46,7 +48,7 @@ export default class AccountsUI extends Component {
 	  Meteor.loginWithPassword(user, pass, (error)=>{
 	    if(error) {
 	      console.log(error);
-	      this.setState({loginResult: "Can't find a username with that password"});
+	      this.setState({loginResult: error.reason});
 	    }
 	    if(!redirect || redirect === '/login') {
 	    	this.setState({loginStatus: Meteor.user()});
@@ -103,8 +105,8 @@ export default class AccountsUI extends Component {
 	}
 	render() {
 		
-		let style = {
-			maxWidth: '240px',
+		let sty = {
+			maxWidth: '240px'
 		};
 		
 		return(
@@ -112,11 +114,11 @@ export default class AccountsUI extends Component {
 		  
 		  {this.state.loginStatus ?
         <div>
-        	<p>Signed in as: {this.state.loginStatus.username}</p>
+        	<p className='medBig'>Signed in as: {this.state.loginStatus.username}</p>
         	<p>
         		<button
         			id='logout'
-        			className='action clearWhite wide'
+        			className='userFormButtons loginoutButton'
         			onClick={this.doLogout.bind(this)}
         		>Sign Out</button>
         	</p>
@@ -150,13 +152,13 @@ export default class AccountsUI extends Component {
 	              required />
 	          </p>
 	          <p>
-	            <input
+	            <button
 	              type='submit'
 	              id='loginSubmit'
-	              className='blueBorder blueHover'
-	              value='Sign In' />
+	              className='userFormButtons loginoutButton'
+	             >Sign In</button>
 	          </p>
-	          <p style={style}>{this.state.loginResult}</p>
+	          <p style={sty}>{this.state.loginResult}</p>
 	        </form>
         
 	        <form 
@@ -222,13 +224,13 @@ export default class AccountsUI extends Component {
 	              required />
 	          </p>
 	          <p>
-	            <input
+	            <button
 	              type='submit'
-	              id='loginSubmit'
-	              className='clearGreen greenBorder'
-	              value='Create New User' />
+	              id='createSubmit'
+	              className='userFormButtons createButton'
+	             >Create New User</button>
 	          </p>
-	          <p style={style}>{this.state.newUserResult}</p>
+	          <p style={sty}>{this.state.newUserResult}</p>
 	        </form>
 	      </Tabs>
 		  }

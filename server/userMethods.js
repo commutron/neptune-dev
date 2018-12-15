@@ -1,51 +1,5 @@
 Meteor.methods({
   
-// Clearly this is not secure.
-// The use case of this software is to be used by a single organization,
-// hosted and made available internaly.
-// In this context, the intention of a PIN is to promt behavior.
-// To encourage an interaction between the new user and the org's admin
-  activate(pin, orgName) {
-    const start = Meteor.users.find().fetch().length === 1 ? true : false;
-    if(start && pin === '0000') {
-      Roles.addUsersToRoles(Meteor.userId(), ['active', 'admin']);
-      Meteor.users.update(Meteor.userId(), {
-        $set: {
-          //org: orgName,
-          //orgKey: new Meteor.Collection.ObjectID().valueOf(),
-          autoScan: true,
-          unlockSpeed: 2000,
-          miniAction: false,
-          watchlist: [],
-          inbox: []
-        }
-      });
-      return true;
-    }else{
-      const orgIs = AppDB.findOne({ org: orgName });
-      if(orgIs) {
-        if(orgIs.orgPIN === pin) {
-          Roles.addUsersToRoles(Meteor.userId(), 'active');
-          Meteor.users.update(Meteor.userId(), {
-            $set: {
-              org: orgIs.org,
-              orgKey: orgIs.orgKey,
-              autoScan: true,
-              unlockSpeed: 2000,
-              watchlist: [],
-              inbox: []
-            }
-          });
-          return true;
-        }else{
-          return false;
-        }
-      }else{
-        return false;
-      }
-    }
-  },
-  
   verifyOrgJoin(orgName, pin) {
     const orgIs = AppDB.findOne({ org: orgName });
     if(orgIs) {
@@ -135,7 +89,17 @@ Meteor.methods({
       return false;
     }
   },
-  
+ 
+  selfPasswordChange(newPassword) {
+    const id = Meteor.userId();
+    if(!id) {
+      return false;
+    }else{
+      Accounts.setPassword(id, newPassword, {logout: false});
+      return true;
+    }
+  },
+
   forcePasswordChange(userId, newPassword) {
     const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
     const team = Meteor.users.findOne({_id: userId, orgKey: Meteor.user().orgKey});
