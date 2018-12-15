@@ -1,5 +1,7 @@
 import React from 'react';
 import {mount} from 'react-mounter';
+import { FlowRouterMeta, FlowRouterTitle } from 'meteor/ostrio:flow-router-meta';
+
 import Pref from '/client/global/pref.js';
 
 import { PublicLayout } from './layouts/MainLayouts.jsx';
@@ -239,4 +241,52 @@ privlegedRoutes.route('/data/:view', {
                 )
     });
   },
+});
+
+new FlowRouterMeta(FlowRouter);
+new FlowRouterTitle(FlowRouter);
+
+// Set default JS and CSS for all routes
+FlowRouter.globals.push({
+  title: "neptune",
+  link: {
+    favi: {
+      href: "/logoColorMini.png",
+      sizes: "16x16 32x32 64x64",
+      rel: "icon"
+    },
+    twbs: {
+      rel: 'stylesheet',
+      href: "https://fonts.googleapis.com/css?family=Varela+Round"
+    }
+  },
+  /*
+  script: {
+    twbs: 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'
+  }
+  */
+  meta: {
+    meta00: {
+      charset: "UTF-8"
+    },
+    meta0: {
+      lang: 'en'
+    },
+    meta1: {
+      name: "theme-color",
+      content: "#007fff"
+    },
+    meta2: {
+      name: "mobile-web-app-capable",
+      content: "yes"
+    },
+    meta3: {
+      name: "apple-mobile-web-app-capable" ,
+      content: "yes"
+    },
+    meta4: {
+      name: "viewport",
+      content: "minimum-scale=0.5, maximum-scale=2"
+    }
+  }
 });
