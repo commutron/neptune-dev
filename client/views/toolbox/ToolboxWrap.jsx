@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 
 import Spin from '../../components/uUi/Spin.jsx';
 
@@ -10,6 +10,14 @@ import Slides from '../../components/smallUi/Slides.jsx';
 import DataRepair from './DataRepair.jsx';
 
 class ToolboxWrap extends Component	{
+  
+  showToast() {
+    toast('a default message');
+    toast.info('A blue info message');
+    toast.success('A green info message');
+    toast.warn('A orange warning message');
+    toast.error('A red error message');
+  }
   
   render() {
     
@@ -44,7 +52,8 @@ class ToolboxWrap extends Component	{
             
           <Slides
             menu={[
-              <b><i className='fas fa-wrench fa-fw'></i>  Data Repair</b>
+              <b><i className='fas fa-wrench fa-fw'></i>  Data Repair</b>,
+              <b><i className='fas fa-bell fa-fw'></i>  Toast Test</b>
             ]}>
             
             <DataRepair
@@ -53,7 +62,15 @@ class ToolboxWrap extends Component	{
               bolt={this.props.bolt}
               app={this.props.app}
               users={this.props.users} />
-            <div key={2}><p>other tool</p></div>
+              
+            <div key={2}>
+              <p>
+                <button
+                  className='action clearWhite invert'
+                  onClick={()=>this.showToast()}
+                >Test Toast Notifications</button>
+              </p>
+            </div>
             
           </Slides>
           

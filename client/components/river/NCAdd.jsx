@@ -20,7 +20,9 @@ const NCAdd = ({ id, barcode, app })=> {
             error && console.log(error);
           });
         }else{
-          toast.warning("Can't add '" + ref + "', A referance can only be 8 characters long");
+          toast.warn("Can't add '" + ref + "', A referance can only be 8 characters long", {
+            position: toast.POSITION.BOTTOM_CENTER
+          });
         }
       }
       this.discStp.value = Session.get('ncWhere');
