@@ -1,0 +1,36 @@
+.watchWrap, .watchWrap label, .watchWrap button {
+  height: 2rem;
+  font-size: 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.watchWrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  /*
+  -webkit-width: min-content;
+  -moz-width: min-content;
+  width: min-content;
+  */
+  margin: 0.25rem;
+  border-width: 1px;
+  border-style: solid;
+}
+.watchWrap:hover {
+  background-color: rgba(255,255,255,0.1);
+}
+.watchWrap label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0 0.5rem;
+}
+.watchWrap button {
+  margin: 0 0 0 0.5rem;
+  border: none;
+  background-color: transparent;
+}
+

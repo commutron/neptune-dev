@@ -3,7 +3,7 @@ import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
 
 import { CalcSpin } from '/client/components/uUi/Spin.jsx';
-import ScrapTable from '/client/components/bigUi/ScrapTable.jsx';
+import ScrapTable from '/client/components/tables/ScrapTable.jsx';
 
 export default class ScrapPanel extends Component	{
   

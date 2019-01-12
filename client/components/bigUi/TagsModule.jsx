@@ -77,7 +77,7 @@ export default class TagsModule extends Component	{
 
   render() {
     return (
-      <div className='rowWrap'>
+      <div className='rowWrap vmargin'>
         {this.props.tags.map( (entry, index)=>{
           return(
            <IndieTag

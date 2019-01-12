@@ -337,17 +337,11 @@ main {
   font-size: 1.75rem;
   font-style: normal;
   vertical-align: bottom;
-  border-right: 1px solid rgb(255,255,255);
-  border-right: 1px solid rgba(255,255,255,0.5);
   padding: 1vh 2vw 0 2vw;
   margin: 0;
 }
-
-.titleSection > span:last-child {
-  border-right: none;
-}
 @media screen and (max-width: 1200px){
-  .titleSection span, .titleSection button {
+  .titleSection > span, .titleSection > button {
     font-size: 1.5rem;
     padding: 0.75vh 1.5vw 0 1.5vw;
   }
@@ -485,6 +479,7 @@ main {
 }
 
 .centreText { text-align: center; }
+.leftText { text-align: left !important; }
 .rightText { text-align: right; }
 
 .middle {
@@ -562,6 +557,10 @@ main {
 .wrap { white-space: normal; }
 
 .noWrap { white-space: nowrap; }
+
+.vSpaceGaps {
+  border-bottom: 5vh solid var(--clouds);
+}
 
 .popTbody > tr:first-child > td { 
   border-top: 3px solid rgba(255,255,255,0.5);

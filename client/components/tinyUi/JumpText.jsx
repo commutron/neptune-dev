@@ -19,3 +19,5 @@ const JumpText = ({ title, link, sty })=> {
 };
 
 export default JumpText;
+
+// LEGACY

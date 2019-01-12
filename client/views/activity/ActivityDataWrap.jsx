@@ -8,7 +8,7 @@ import Spin from '../../components/uUi/Spin.jsx';
 import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
 import Slides from '../../components/smallUi/Slides.jsx';
 import RecentPanel from './RecentPanel.jsx';
-import FollowPanel from './FollowPanel.jsx';
+import WatchlistPanel from './WatchlistPanel.jsx';
 
 class WatchDataWrap extends Component	{
   
@@ -35,7 +35,7 @@ class WatchDataWrap extends Component	{
         <div className='tenHeader'>
           <div className='topBorder' />
           <HomeIcon />
-          <div className='frontCenterTitle'>Watch</div>
+          <div className='frontCenterTitle'>Activity</div>
           <div className='rightSpace' />
         </div>
       
@@ -45,8 +45,8 @@ class WatchDataWrap extends Component	{
             
           <Slides
             menu={[
-              <b><i className='fas fa-hourglass-half fa-fw'></i>  Recent</b>,
-              <b><i className='fas fa-history fa-fw'></i>  Following</b>
+              <b><i className='fas fa-history fa-fw'></i>  Recent</b>,
+              <b><i className='far fa-eye fa-fw'></i>  Watchlist</b>
             ]}>
             
             <RecentPanel
@@ -55,11 +55,12 @@ class WatchDataWrap extends Component	{
               bolt={this.props.bolt}
               app={this.props.app}
               users={this.props.users} />
-            <FollowPanel
+            <WatchlistPanel
               key={2}
               orb={this.props.orb}
               bolt={this.props.bolt}
               app={this.props.app}
+              user={this.props.user}
               users={this.props.users} />
             
           </Slides>
@@ -77,7 +78,6 @@ class WatchDataWrap extends Component	{
 export default withTracker( () => {
   let login = Meteor.userId() ? true : false;
   let user = login ? Meteor.user() : false;
-  let name = user ? user.username : false;
   let org = user ? user.org : false;
   let active = login ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   const appSub = login ? Meteor.subscribe('appData') : false;
@@ -94,7 +94,7 @@ export default withTracker( () => {
       ready: appSub.ready(),
       orb: Session.get('now'),
       bolt: Session.get('allData'),
-      user: name,
+      user: user,
       active: active,
       org: org,
       app: AppDB.findOne({org: org}),

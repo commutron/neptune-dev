@@ -24,11 +24,8 @@ const StartView = ({ready, user, org, app}) =>	{
   return(
     <div className='homeNavi'>
       <NavButton title='Production' icon='fa-paper-plane' link='/production' />
-      {Roles.userIsInRole(Meteor.userId(), 'nightly') ?
-        <NavButton title='Watch' icon='fab fa-wpexplorer' trans='flip-h' link='/watch' />
-      : <NavPlaceholder title='Watch' icon='fab fa-wpexplorer' trans='flip-h' />}
-      
       <NavButton title='Overview' icon='fab fa-fly' link='/overview' />
+      <NavButton title='Activity' icon='fab fa-wpexplorer' trans='flip-h' link='/activity' />
       <NavButton title='Explore' icon='fa-rocket' link='/data' />
       
       <NavButton title='Pisces' icon='fa-file-alt' link={app.instruct || ''} blank={true} />

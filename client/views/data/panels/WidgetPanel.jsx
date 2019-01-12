@@ -7,8 +7,9 @@ import Tabs from '/client/components/smallUi/Tabs.jsx';
 import FlowTable from '../../../components/tables/FlowTable.jsx';
 import VersionTable from '../../../components/tables/VersionTable.jsx';
 import NonConMultiBatchBar from '../../../components/charts/NonConMultiBatchBar.jsx';
+//import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
-const WidgetPanel = ({ groupData, widgetData, batchRelated, app })=> {
+const WidgetPanel = ({ groupData, widgetData, batchRelated, app, user })=> {
 
   const g = groupData;
   const w = widgetData;
@@ -21,6 +22,14 @@ const WidgetPanel = ({ groupData, widgetData, batchRelated, app })=> {
       
         <div className='titleSection'>
           <span className='cap'>{w.describe}</span>
+          {/*
+          <span>
+            <WatchButton 
+              list={user.watchlist}
+              type='widget'
+              keyword={w.widget} />
+          </span>
+          */}
         </div>
         
         <div className='space edit'>

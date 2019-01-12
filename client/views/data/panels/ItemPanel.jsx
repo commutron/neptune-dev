@@ -14,6 +14,7 @@ import ShortTable from '../../../components/tables/ShortTable.jsx';
 import RMALine from '../../../components/smallUi/RMALine.jsx';
 import ScrapBox from '../../../components/smallUi/ScrapBox.jsx';
 import SubItemLink from '/client/components/tinyUi/SubItemLink.jsx';
+//import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
 export default class ItemPanel extends Component	{
   //componentWillUnmount() {
@@ -58,6 +59,7 @@ export default class ItemPanel extends Component	{
     const i = this.props.itemData;
     //const w = this.props.widgetData;
     //const g = this.props.groupData;
+    //const user = this.props.user;
     
     //const v = w.versions.find( x => x.versionKey === b.versionKey );
     
@@ -83,6 +85,14 @@ export default class ItemPanel extends Component	{
                 : 
                 <i className='fas fa-sync blueT' title='in progress'></i>
               }
+            </span>
+            <span>
+            {/*
+              <WatchButton 
+                list={user.watchlist}
+                type='item'
+                keyword={`${i.serial}+${b.batch}`} />
+            */}
             </span>
           </div>
         

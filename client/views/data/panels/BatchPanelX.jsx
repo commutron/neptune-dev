@@ -8,6 +8,7 @@ import CreateTag from '/client/components/uUi/CreateTag.jsx';
 import Tabs from '/client/components/smallUi/Tabs.jsx';
 
 import TagsModule from '../../../components/bigUi/TagsModule.jsx';
+import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
 import ReleaseAction from '/client/components/bigUi/ReleasesModule.jsx';
 import { ReleaseNote } from '/client/components/bigUi/ReleasesModule.jsx';
@@ -42,6 +43,7 @@ export default class BatchPanelX extends Component	{
     const b = this.props.batchData;
     const w = this.props.widgetData;
     const g = this.props.groupData;
+    const user = this.props.user;
     
     const end = !b.completed ? moment() : moment(b.completedAt);
     const timeElapse = moment.duration(end.diff(b.salesStart)).asWeeks().toFixed(1);
@@ -100,6 +102,10 @@ export default class BatchPanelX extends Component	{
             
             <div className='oneTwoThreeContainer space'>
               <div className='oneThirdContent min200'>
+                <WatchButton 
+                  list={user.watchlist}
+                  type='batch'
+                  keyword={b.batch} />
                 <TagsModule
                   id={b._id}
                   tags={b.tags}

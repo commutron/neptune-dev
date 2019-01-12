@@ -279,6 +279,7 @@ export default class DataViewOps extends Component	{
                 versionData={version}
                 groupData={group}
                 app={app}
+                user={user}
                 listTitle={true} />
               <ItemsList
                 batchData={hotBatch}
@@ -333,7 +334,8 @@ export default class DataViewOps extends Component	{
               widgetData={widget}
               versionData={version}
               groupData={group} 
-              app={app} />
+              app={app}
+              user={user} />
             <ItemsList
 			        batchData={hotBatch}
 			        widgetData={widget}
@@ -361,7 +363,8 @@ export default class DataViewOps extends Component	{
               widgetData={widget}
               versionData={version}
               groupData={group} 
-              app={app} />
+              app={app}
+              user={user} />
             <div>no items</div>
           </TraverseWrap>
         );
@@ -392,7 +395,8 @@ export default class DataViewOps extends Component	{
               groupData={group}
               widgetData={widgets}
               active={activeWidgets}
-              app={app} />
+              app={app} 
+              user={user} />
           </TraverseWrap>
         );
       }
@@ -424,6 +428,7 @@ export default class DataViewOps extends Component	{
               groupData={group}
               batchRelated={allBatches}
               app={app}
+              user={user}
             />
             <BatchesList
               batchData={allBatches}

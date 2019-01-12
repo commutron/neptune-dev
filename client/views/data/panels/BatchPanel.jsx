@@ -7,7 +7,8 @@ import CreateTag from '/client/components/uUi/CreateTag.jsx';
 //import UserName from '/client/components/uUi/UserName.jsx';
 import Tabs from '/client/components/smallUi/Tabs.jsx';
 
-import TagsModule from '../../../components/bigUi/TagsModule.jsx';
+import TagsModule from '/client/components/bigUi/TagsModule.jsx';
+import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
 import FloorRelease from '/client/components/smallUi/FloorRelease.jsx';
 import { ReleaseNote } from '/client/components/bigUi/ReleasesModule.jsx';
@@ -71,6 +72,7 @@ export default class BatchPanel extends Component	{
     const b = this.props.batchData;
     const w = this.props.widgetData;
     //const g = this.props.groupData;
+    const user = this.props.user;
     
     const end = b.finishedAt !== false ? moment(b.finishedAt) : moment();
     const timeElapse = moment.duration(end.diff(b.start)).asWeeks().toFixed(1);
@@ -153,7 +155,6 @@ export default class BatchPanel extends Component	{
               {!done && allDone && 
                 <BatchFinish batchId={b._id} alreadyDone={done} />}
             </span>
-            
           </div>
           
           <br />
@@ -175,6 +176,11 @@ export default class BatchPanel extends Component	{
             
             <div className='oneTwoThreeContainer space'>
               <div className='oneThirdContent min200'>
+                <WatchButton 
+                  list={user.watchlist}
+                  type='batch'
+                  keyword={b.batch} />
+                  
                 <TagsModule
                   id={b._id}
                   tags={b.tags}

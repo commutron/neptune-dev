@@ -4,6 +4,7 @@ import CreateTag from '/client/components/uUi/CreateTag.jsx';
 import Pref from '/client/global/pref.js';
 import WidgetsDepth from '/client/components/bigUi/WidgetsDepth.jsx';
 import TagsModule from '/client/components/bigUi/TagsModule.jsx';
+//import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
 export default class GroupPanel extends Component	{
 
@@ -14,6 +15,7 @@ export default class GroupPanel extends Component	{
     const allBatch = this.props.allBatch;
     const active = this.props.active;
     const app = this.props.app;
+    //const user = this.props.user;
 
     return (
       <AnimateWrap type='cardTrans'>
@@ -21,6 +23,14 @@ export default class GroupPanel extends Component	{
         
           <div className='titleSection'>
             <span className='cap'>{g.group}</span>
+            {/*
+            <span>
+              <WatchButton 
+                list={user.watchlist}
+                type='group'
+                keyword={g.alias} />
+            </span>
+            */}
           </div>
           
           <div className='space edit'>

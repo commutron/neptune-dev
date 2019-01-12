@@ -5,8 +5,7 @@ const RecentPanel = ({ orb, bolt, app, users })=> {
   
   return (
     <div className='invert'>
-      <h2 className='cap'>recent feed</h2>
-      <p>Hellooooooooo</p>
+      <p>Work in progress. Check back later</p>
       
     </div>
   );

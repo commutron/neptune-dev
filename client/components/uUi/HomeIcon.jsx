@@ -23,8 +23,11 @@ const HomeIcon = () => {
         <MenuItem onClick={()=>FlowRouter.go('/production')}>
           <i className='fas fa-paper-plane fa-fw'></i><i className='noCopy'> Production</i>
         </MenuItem>
+        <MenuItem onClick={()=>FlowRouter.go('/overview')}>
+          <i className='fab fa-fly fa-fw'></i><i className='noCopy'> Overview</i>
+        </MenuItem>
         <MenuItem onClick={()=>FlowRouter.go('/activity')}>
-          <i className='fab fa-wpexplorer fa-fw'></i><i className='noCopy'> Activity</i>
+          <i className='fab fa-wpexplorer fa-fw' data-fa-transform='flip-h'></i><i className='noCopy'> Activity</i>
         </MenuItem>
         <MenuItem onClick={()=>FlowRouter.go('/data')}>
           <i className='fas fa-rocket fa-fw'></i><i className='noCopy'> Explore</i>
@@ -40,11 +43,6 @@ const HomeIcon = () => {
         <MenuItem disabled={true}>
           <i>{user}</i>
         </MenuItem>
-        {/*
-        <MenuItem disabled={true}>
-          <i className='fas fa-bell fa-fw'></i><i className='noCopy'> Notifications</i>
-        </MenuItem>
-        */}
         <MenuItem onClick={()=>Meteor.logout()}>
           <i className='fas fa-sign-out-alt fa-fw'></i><i className='noCopy'> Sign-out</i>
         </MenuItem>

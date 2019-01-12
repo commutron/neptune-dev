@@ -198,5 +198,38 @@ Meteor.methods({
     });
   },
   
+  setWatchlist(type, keyword) {
+    const watching = Meteor.user().watchlist;
+    const double = watching.find( x => x.type === type && x.keyword === keyword);
+    if(!double) {
+      Meteor.users.update(Meteor.userId(), {
+        $push: {
+          watchlist: { 
+            type: type,
+            keyword: keyword,
+            time: new Date(),
+            mute: true
+          }
+        }
+      });
+    }else{
+      Meteor.users.update(Meteor.userId(), {
+        $pull : {
+          watchlist: {type: type, keyword: keyword}
+        }
+      });
+    }
+  },
+  
+  setMuteState(type, keyword, mute) {
+    const change = !mute ? true : false;
+    Meteor.users.update({_id: Meteor.userId(), 'watchlist.type': type, 'watchlist.keyword': keyword}, {
+      $set: {
+        'watchlist.$.mute': change,
+      }
+    });
+  }
+  		
+  		
   
 });

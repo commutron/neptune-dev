@@ -28,3 +28,5 @@ const JumpButton = ({ title, sub, sty, inStyle })=> {
 };
 
 export default JumpButton;
+
+// LEGACY

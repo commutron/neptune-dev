@@ -74,7 +74,7 @@ export default class OrgWIP extends Component	{
         <div className='tenHeader'>
           <div className='topBorder'></div>
           <HomeIcon />
-          <div className='frontCenterTitle'>Activity</div>
+          <div className='frontCenterTitle'>Overview</div>
           <div className='rightSpace'>
             <button
               type='button'
