@@ -35,7 +35,8 @@ Meteor.methods({
         cascade: [],
         blocks: [],
         omitted: [],
-        shortfall: []
+        shortfall: [],
+        events: []
       });
       return true;
     }else{
@@ -65,24 +66,9 @@ Meteor.methods({
       return false;
     }
   },
-  
-  setRiver(batchId, riverId, riverAltId) {
-    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
-        $set : {
-          updatedAt: new Date(),
-  			  updatedWho: Meteor.userId(),
-          river: riverId,
-          riverAlt: riverAltId,
-        }});
-      return true;
-    }else{
-      return false;
-    }
-  },
 
-  deleteBatch(batch, pass) {
-    const doc = BatchDB.findOne({_id: batch._id});
+  deleteBatch(batchId, pass) {
+    const doc = BatchDB.findOne({_id: batchId});
     // if any items have history
     const inUse = doc.items.some( x => x.history.length > 0 ) ? true : false;
     if(!inUse) {
@@ -91,7 +77,7 @@ Meteor.methods({
       const access = doc.orgKey === Meteor.user().orgKey;
       const unlock = lock === pass;
       if(auth && access && unlock) {
-        BatchDB.remove(batch);
+        BatchDB.remove({_id: batchId});
         return true;
       }else{
         return false;
@@ -100,6 +86,20 @@ Meteor.methods({
       return 'inUse';
     }
   },
+  
+  /////////////// Events ///////////////////////
+  
+  setBatchEvent(accessKey, batchId, eventTitle, eventDetail) {
+    BatchDB.update({_id: batchId, orgKey: accessKey}, {
+      $push : { events : { 
+        title: eventTitle,
+        detail: eventDetail,
+        time: new Date()
+      }
+    }});
+  },
+  
+  /////////////////////////////////////////////////
 
   changeStatus(batchId, status) {
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
@@ -149,6 +149,21 @@ Meteor.methods({
     }
   },
   
+  setRiver(batchId, riverId, riverAltId) {
+    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        $set : {
+          updatedAt: new Date(),
+  			  updatedWho: Meteor.userId(),
+          river: riverId,
+          riverAlt: riverAltId,
+        }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
   releaseToFloor(batchId, rDate) {
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
@@ -160,6 +175,13 @@ Meteor.methods({
             who: Meteor.userId()
           }
       }});
+      Meteor.call(
+        'setBatchEvent', 
+        Meteor.user().orgKey, 
+        batchId, 
+        'Floor Release', 
+        `Released from kitting by ${Meteor.user().username}`
+      );
       return true;
     }else{
       return false;
@@ -181,6 +203,8 @@ Meteor.methods({
   },
 
 //// Items \\\\
+  
+  ///// With Duplicate Pre Check //////
   addMultiItems(batchId, barFirst, barLast, unit) {
     
     const barEnd = barLast + 1;
@@ -375,7 +399,7 @@ Meteor.methods({
     }
   },
 
-  addFirst(batchId, bar, key, step, good, whoB, howB, howI, diff, ng) {
+  addFirst(batchId, bar, key, step, good, whoB, howB, howI, diff, ng, firstfirst) {
     if(!Roles.userIsInRole(Meteor.userId(), 'verify')) {
       return false;
     }else{
@@ -396,6 +420,15 @@ Meteor.methods({
             issue: ng
           }
       }}});
+      if(firstfirst === true) {
+        Meteor.call(
+          'setBatchEvent', 
+          Meteor.user().orgKey, 
+          batchId, 
+          'First-off Verification', 
+          `First ${step} first-off recorded by ${Meteor.user().username}`
+        );
+      }
       return true;
     }
   },

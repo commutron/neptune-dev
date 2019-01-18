@@ -197,9 +197,9 @@ export default class FlowForm extends Component	{
           disabled={false}
           onClick={this.sendUp.bind(this)}>Set {Pref.flow}</button>
         <br />
-        <p className='clean'>
-          <i> The Finish Step is added and reordering is locked once the process flow is set.</i>
-          <i> Remove the Finish Step to continue editing.</i>
+        <p>
+          The Finish Step is added and reordering is locked once the process flow is set.
+          Remove the Finish Step to continue editing.
         </p>
       </div>
     </div>

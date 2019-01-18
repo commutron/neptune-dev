@@ -8,13 +8,14 @@ import Spin from '../../components/uUi/Spin.jsx';
 import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
 import Slides from '../../components/smallUi/Slides.jsx';
 import RecentPanel from './RecentPanel.jsx';
+import InboxPanel from './InboxPanel.jsx';
 import WatchlistPanel from './WatchlistPanel.jsx';
 
 class WatchDataWrap extends Component	{
   
   render() {
     
-    if(!this.props.ready || !this.props.app) {
+    if(!this.props.ready || !this.props.readyEvents || !this.props.app) {
       return (
         <div className='centreContainer'>
           <div className='centrecentre'>
@@ -39,14 +40,13 @@ class WatchDataWrap extends Component	{
           <div className='rightSpace' />
         </div>
       
-        <div className='simpleContent locked'>
+        <div className='simpleContent'>
         
-        {admin ?
-            
           <Slides
             menu={[
               <b><i className='fas fa-history fa-fw'></i>  Recent</b>,
-              <b><i className='far fa-eye fa-fw'></i>  Watchlist</b>
+              <b><i className='far fa-eye fa-fw'></i>  Watchlist</b>,
+              <b><i className='fas fa-inbox fa-fw'></i>  Inbox</b>
             ]}>
             
             <RecentPanel
@@ -61,13 +61,17 @@ class WatchDataWrap extends Component	{
               bolt={this.props.bolt}
               app={this.props.app}
               user={this.props.user}
+              users={this.props.users}
+              batchEvents={this.props.batchEvents} />
+            <InboxPanel
+              key={3}
+              orb={this.props.orb}
+              bolt={this.props.bolt}
+              app={this.props.app}
+              user={this.props.user}
               users={this.props.users} />
             
           </Slides>
-          
-        :
-          <p className='medBig centreText'>This page is limited to administrators only</p>
-        }
   				
         </div>
       </div>
@@ -81,6 +85,7 @@ export default withTracker( () => {
   let org = user ? user.org : false;
   let active = login ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   const appSub = login ? Meteor.subscribe('appData') : false;
+  const eventsSub = login ? Meteor.subscribe('eventsData') : false;
   if(!login) {
     return {
       ready: false,
@@ -92,12 +97,14 @@ export default withTracker( () => {
   }else{
     return {
       ready: appSub.ready(),
+      readyEvents: eventsSub.ready(),
       orb: Session.get('now'),
       bolt: Session.get('allData'),
       user: user,
       active: active,
       org: org,
       app: AppDB.findOne({org: org}),
+      batchEvents: BatchDB.find({}).fetch(),
       users: Meteor.users.find({}, {sort: {username:1}}).fetch()
     };
   }

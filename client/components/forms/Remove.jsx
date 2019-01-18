@@ -44,14 +44,14 @@ export default class Remove extends Component	{
           }
         });
       }else if(this.props.action === 'batch') {
-        Meteor.call('deleteBatch', this.props.entry, confirm, (error, reply)=>{
+        Meteor.call('deleteBatch', this.props.entry._id, confirm, (error, reply)=>{
           if(error)
             console.log(error);
           if(reply === 'inUse') {
             toast.warning('Cannot do this, entry is in use');
           }else if(reply) {
-            toast.success('Entry removed');
             FlowRouter.go('/data/overview?request=batches');
+            toast.success('Entry in BatchDB removed');
           }else{
             toast.error('Rejected by Server');
             this.cut.disabled = false;

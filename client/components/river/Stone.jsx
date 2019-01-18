@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
-//require('velocity-animate');
-//require('velocity-animate/velocity.ui');
-//import { VelocityComponent } from 'velocity-react';
+import { toast } from 'react-toastify';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import Pref from '/client/global/pref.js';
 import StoneProgRing from './StoneProgRing.jsx';
@@ -61,6 +59,7 @@ export default class Stone extends Component {
   
   //// Action for standard step
   passS(pass, doComm) {
+  	if(this.state.lock === true) { return false; }
     this.setState({lock: true});
     const id = this.props.id;
     const bar = this.props.barcode;
@@ -75,13 +74,14 @@ export default class Stone extends Component {
 				this.props.openUndoOption();
 			  document.getElementById('lookup').focus();
 		  }else{
-		    Bert.alert(Pref.blocked, 'danger');
+		    toast.error('server error');
 		  }
 		});
   }
   
   //// Action for test step
   passT(pass, doComm, shipFail) {
+  	if(this.state.lock === true) { return false; }
     this.setState({lock: true});
     const id = this.props.id;
     const bar = this.props.barcode;
@@ -109,6 +109,7 @@ export default class Stone extends Component {
 
   //// Action for marking the board as complete
 	finish() {
+		if(this.state.lock === true) { return false; }
 	  this.setState({lock: true});
     const batchId = this.props.id;
 		const barcode = this.props.barcode;

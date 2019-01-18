@@ -40,7 +40,8 @@ Meteor.methods({
         verifications: [],
         nonconformaces: [],
         omitted: [],
-        altered: []
+        altered: [],
+        events: []
       });
       return true;
     }else{

@@ -932,6 +932,15 @@ input.variableInput.biggest {
   width: 32px;
 }
 
+.eventList {
+  list-style-type: square;
+}
+.eventList li {
+  margin: 8px 0;
+}
+.eventListNew {
+  background-color: var(--emeraldfade);
+}
 
 .tagFlag {
   margin: 4px 4px;
@@ -1321,33 +1330,6 @@ input.variableInput.biggest {
   padding-right: 50px;
   padding-left: 100px;
 }
-
-
-/* custom Bert alerts */
-.bert-alert {
-  color: #ecf0f1;
-}
-
-.bert-alert.peterRiver { background: #3498db; }/*blue*/
-
-.bert-alert.emerald { background: #2ecc71; }/*green*/
-
-.bert-alert.alizarin { background: #e74c3c; }/*red*/
-
-.bert-alert.carrot { background: #e67e22; }/*orange*/
-
-.bert-alert.sunFlower { background: var(--sunflower); }/*yellow*/
-
-.bert-alert.tuquoise { background: #1abc9c; }/*teal*/
-
-.bert-alert.amethyst { background: #9b59b6; }/*purple*/
-
-.bert-alert.wetAsphalt { background: #34495e; }/*dark*/
-
-.bert-alert.clouds {
-  background: var(--clouds);
-  color: black;
-}/*light*/
 
 .starfishColour { color: #00bde0; }
 .starfishAccents #pnFindButton {

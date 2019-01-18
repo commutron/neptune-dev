@@ -52,6 +52,18 @@ Meteor.publish('appData', function(){
   }else{null}
 });
 
+Meteor.publish('eventsData', function(){
+  const user = Meteor.users.findOne({_id: this.userId});
+  const orgKey = user ? user.orgKey : false;
+  return [
+    BatchDB.find({orgKey: orgKey}, {
+      fields: {
+          'batch': 1,
+          'events': 1,
+        }}),
+    ];
+});
+
 // Activity
 Meteor.publish('shaddowData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
@@ -143,7 +155,8 @@ Meteor.publish('hotDataPlus', function(batch){
     BatchDB.find({batch: batch, orgKey: orgKey}, {
       fields: {
         'orgKey': 0,
-        'shareKey': 0
+        'shareKey': 0,
+        'events': 0,
       }}),
     XBatchDB.find({batch: batch, orgKey: orgKey}, {
       fields: {
@@ -208,7 +221,8 @@ Meteor.publish('hotDataEx', function(batch){
     BatchDB.find({batch: batch, orgKey: orgKey}, {
       fields: {
         'orgKey': 0,
-        'shareKey': 0
+        'shareKey': 0,
+        'events': 0,
       }}),
     XBatchDB.find({batch: batch, orgKey: orgKey}, {
       fields: {

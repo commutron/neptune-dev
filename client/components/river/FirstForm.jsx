@@ -110,7 +110,9 @@ export default class FirstForm extends Component	{
     const diff = this.state.changes;
     const ng = this.state.ng;
     
-		Meteor.call('addFirst', id, bar, sKey, step, good, whoB, howB, howI, diff, ng, (error, reply)=>{
+    const fresh = !this.props.sKey ? false : true;
+    
+		Meteor.call('addFirst', id, bar, sKey, step, good, whoB, howB, howI, diff, ng, fresh, (error, reply)=>{
 		  error && console.log(error);
 		  if(reply) {
 		    document.getElementById('lookup').focus();

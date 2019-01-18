@@ -1,33 +1,38 @@
 import React from 'react';
 import moment from 'moment';
-//import Pref from '/client/global/pref.js';
+import Pref from '/client/global/pref.js';
 import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 import { MuteButton } from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
-const WatchlistPanel = ({ orb, bolt, app, user, users })=> {
+const WatchlistPanel = ({ orb, bolt, app, user, users, batchEvents })=> {
   
   return (
     <div className='invert'>
       <p>Work in progress.</p>
-      <p>Just bookmarks at the moment but will soon be a feed of activity</p>
-      <p>No notifications yet either</p>
+      <p>Watch a {Pref.batch} to keep up to date with events as they happen</p>
+      <p>No notifications yet though</p>
       
       <table className=' wide cap'>
         {user.watchlist.map( (entry, index)=>{
+          const keyword = entry.keyword.split('+')[0];
           const link = entry.type === 'group' ? 
-                        '/data/group?request=' + entry.keyword.split('+')[0]
+                        '/data/group?request=' + keyword
                       : entry.type === 'widget' ? 
-                        '/data/widget?request=' + entry.keyword.split('+')[0]
+                        '/data/widget?request=' + keyword
                       : entry.type === 'batch' ? 
-                        '/data/batch?request=' + entry.keyword.split('+')[0]
+                        '/data/batch?request=' + keyword
                       : entry.type === 'item' ? 
-                        '/data/batch?request=' + entry.keyword.split('+')[1] + '&specify=' + entry.keyword.split('+')[0]
+                        '/data/batch?request=' + entry.keyword.split('+')[1] + '&specify=' + keyword
                       : '';
+          const batch = entry.type === 'batch' ?
+                          batchEvents.find( x => x.batch === keyword ) 
+                        : [];
+          const events = batch.events || [];
           return(
             <tbody key={index} className='vSpaceGaps'>
               <tr>
-                <td className='noRightBorder'>
-                  <a href={link}>{entry.keyword.split('+')[0]}</a>
+                <td className='noRightBorder medBig'>
+                  <a href={link}>{keyword}</a>
                 </td>
                 <td className='noRightBorder'></td>
                 <td className='noRightBorder'></td>
@@ -40,9 +45,18 @@ const WatchlistPanel = ({ orb, bolt, app, user, users })=> {
               </tr>
               <tr>
                 <td colSpan='5' className='leftText clean'>
-                  <dl>
-                    <dd>Started watching {moment(entry.time).calendar()}</dd>
-                  </dl>
+                  <ul className='eventList'>
+                    {events.map( (entry, index)=>{
+                      const highlight = moment().isSame(entry.time, 'day') ? 'eventListNew' : '';
+                      return(
+                        <li key={index} className={highlight}>
+                          <b>{entry.title}</b>,
+                          <i> {entry.detail}</i>,
+                          <em> {moment(entry.time).calendar()}</em>
+                        </li>
+                    )})}
+                    {/*<dd>Started watching {moment(entry.time).calendar()}</dd>*/}
+                  </ul>
                 </td>
               </tr>
             </tbody>
