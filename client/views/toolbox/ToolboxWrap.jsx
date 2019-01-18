@@ -17,6 +17,8 @@ class ToolboxWrap extends Component	{
     toast.success('A green info message');
     toast.warn('A orange warning message');
     toast.error('A red error message');
+    
+    toast.success('no timeout', { autoClose: false });
   }
   
   render() {
@@ -52,18 +54,11 @@ class ToolboxWrap extends Component	{
             
           <Slides
             menu={[
-              <b><i className='fas fa-wrench fa-fw'></i>  Data Repair</b>,
-              <b><i className='fas fa-bell fa-fw'></i>  Toast Test</b>
+              <b><i className='fas fa-bell fa-fw'></i>  Toast Test</b>,
+              <b><i className='fas fa-wrench fa-fw'></i>  Data Repair</b>
             ]}>
-            
-            <DataRepair
-              key={1}
-              orb={this.props.orb}
-              bolt={this.props.bolt}
-              app={this.props.app}
-              users={this.props.users} />
               
-            <div key={2}>
+            <div key={1}>
               <p>
                 <button
                   className='action clearWhite invert'
@@ -71,6 +66,13 @@ class ToolboxWrap extends Component	{
                 >Test Toast Notifications</button>
               </p>
             </div>
+            
+            <DataRepair
+              key={2}
+              orb={this.props.orb}
+              bolt={this.props.bolt}
+              app={this.props.app}
+              users={this.props.users} />
             
           </Slides>
           

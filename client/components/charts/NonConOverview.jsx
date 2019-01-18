@@ -25,7 +25,10 @@ export default class NonConOverview extends Component {
         });
       }
     }else{
-      const dprt = new Set( Array.from(this.props.flow, x => x.step), Array.from(this.props.flowAlt, x => x.step) );
+      const phases = this.props.app.phases;
+      const dprt = !phases ? 
+                    new Set( Array.from(this.props.flow, x => x.step), Array.from(this.props.flowAlt, x => x.step) )
+                   : new Set(phases);
       for(let stp of dprt) {
         let match = this.props.nonCons.filter( y => y.where === stp );
         splitByFirst.push({
@@ -34,7 +37,7 @@ export default class NonConOverview extends Component {
         });
       }
       let leftover = this.props.nonCons.filter( z => dprt.has(z.where) === false );
-      leftover.length > 0 ? splitByFirst.unshift({ 'name': 'unknown', 'ncs': leftover }) : null;
+      leftover.length > 0 ? splitByFirst.unshift({ 'name': 'other', 'ncs': leftover }) : null;
     }
     let splitByType = [];
     for(let stp of splitByFirst) {

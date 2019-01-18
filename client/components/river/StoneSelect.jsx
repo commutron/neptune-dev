@@ -37,7 +37,7 @@ const StoneSelect = ({
   const history = item.history;
   const finishedAt = item.finishedAt;
   //const subItems = item.subItems;
-  const allTrackOption = app.trackOption;
+  let allTrackOption = [...app.trackOption, app.lastTrack];
     
   const nc = nonCons.filter( 
               x => x.serial === serial && x.inspect === false )

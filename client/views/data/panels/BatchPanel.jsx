@@ -274,7 +274,8 @@ export default class BatchPanel extends Component	{
                   ncOp={a.nonConOption}
                   flow={riverFlow}
                   flowAlt={riverAltFlow}
-                  nonCons={b.nonCon} />
+                  nonCons={b.nonCon}
+                  app={a} />
               </div>
             </div>
             

@@ -46,7 +46,7 @@ const WatchlistPanel = ({ orb, bolt, app, user, users, batchEvents })=> {
               <tr>
                 <td colSpan='5' className='leftText clean'>
                   <ul className='eventList'>
-                    {events.map( (entry, index)=>{
+                    {events.reverse().map( (entry, index)=>{
                       const highlight = moment().isSame(entry.time, 'day') ? 'eventListNew' : '';
                       return(
                         <li key={index} className={highlight}>

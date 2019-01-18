@@ -17,12 +17,14 @@ Meteor.methods({
       orgPIN: '0000',
       minorPIN: '000',
       createdAt: new Date(),
+      phases: [],
       toolOption: [],
       trackOption: [],
       lastTrack: {
         key: 'f1n15h1t3m5t3p',
         step: 'finish',
         type: 'finish',
+        phase: 'finish',
         how: 'finish'
       },
       countOption: [],
@@ -524,5 +526,47 @@ Meteor.methods({
     }
   },
   
+  addPhasesRepair(dprts) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $set : { 
+          phases : dprts
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
   
+  
+  repairNonConsDANGEROUS(oldText, newText, exact) {
+    if(!Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      return false;
+    }else{
+      const allBatches = BatchDB.find({orgKey: Meteor.user().orgKey}).fetch();
+      for(let batch of allBatches) {
+        const batchId = batch._id;
+        const nonCons = batch.nonCon;
+        for(let nc of nonCons) {
+          const where = nc.where;
+          if(!where) {
+            null;
+          }else{
+            const match = !exact ? where.includes(oldText)
+                          : where === oldText;
+            if(!match) {
+              null;
+            }else{
+              BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': nc.key}, {
+          			$set : { 
+          			  'nonCon.$.where': newText
+          			}
+          		});
+            }
+          }
+        }
+      }
+      return true;
+    }
+  }
 });
