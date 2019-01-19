@@ -44,7 +44,7 @@ class WatchDataWrap extends Component	{
         
           <Slides
             menu={[
-              <b><i className='fas fa-history fa-fw'></i>  Recent</b>,
+              <b><i className='fas fa-history fa-fw'></i>  Production Activity</b>,
               <b><i className='far fa-eye fa-fw'></i>  Watchlist</b>,
               <b><i className='fas fa-inbox fa-fw'></i>  Inbox</b>
             ]}>
@@ -54,6 +54,7 @@ class WatchDataWrap extends Component	{
               orb={this.props.orb}
               bolt={this.props.bolt}
               app={this.props.app}
+              user={this.props.user}
               users={this.props.users} />
             <WatchlistPanel
               key={2}

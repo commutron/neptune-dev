@@ -8,12 +8,11 @@ const WatchlistPanel = ({ orb, bolt, app, user, users, batchEvents })=> {
   
   return (
     <div className='invert'>
-      <p>Work in progress.</p>
       <p>Watch a {Pref.batch} to keep up to date with events as they happen</p>
       <p>No notifications yet though</p>
-      
-      <table className=' wide cap'>
-        {user.watchlist.map( (entry, index)=>{
+      <p className='vspace'></p>
+      <table className='wide cap space'>
+        {user.watchlist.reverse().map( (entry, index)=>{
           const keyword = entry.keyword.split('+')[0];
           const link = entry.type === 'group' ? 
                         '/data/group?request=' + keyword
@@ -31,8 +30,8 @@ const WatchlistPanel = ({ orb, bolt, app, user, users, batchEvents })=> {
           return(
             <tbody key={index} className='vSpaceGaps'>
               <tr>
-                <td className='noRightBorder medBig'>
-                  <a href={link}>{keyword}</a>
+                <td className='noRightBorder big'>
+                  <a href={link}><i className='fas fa-rocket fa-fw'></i> {keyword}</a>
                 </td>
                 <td className='noRightBorder'></td>
                 <td className='noRightBorder'></td>

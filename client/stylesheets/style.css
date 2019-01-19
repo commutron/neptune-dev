@@ -60,6 +60,17 @@
   text-decoration: underline; 
 }
 
+.textLinkButton {
+  color: var(--belizeHole);
+  font-size: 1rem;
+  cursor: pointer;
+  margin: 0px;
+  border: none;
+  padding: 0px;
+  background-color: transparent;
+}
+.invert .textLinkButton { color: var(--belizeHole); }
+
 .navButtonWrap {
   background-color: rgb(25,25,25);
   color: var(--neptuneColor);

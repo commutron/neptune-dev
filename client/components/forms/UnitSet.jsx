@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import Model from '../smallUi/Model.jsx';
+import ModelMedium from '../smallUi/ModelMedium.jsx';
 
 export default class UnitSet extends Component	{
   
@@ -30,7 +30,7 @@ export default class UnitSet extends Component	{
     let done = this.props.item.finishedAt !== false;
     
     return(
-      <Model
+      <ModelMedium
         button={Pref.unit + ' set'}
         title={'set ' + Pref.unit}
         color='greenT'
@@ -60,7 +60,7 @@ export default class UnitSet extends Component	{
           />
           <label htmlFor='cln'>{Pref.unit} Quantity</label>
         </p>
-      </Model>
+      </ModelMedium>
       );
   }
 }

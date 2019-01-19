@@ -69,54 +69,46 @@ export default withTracker( () => {
   let hotBatch = false;
   let hotxBatch = false;
   
-  if( coldSub ) 
-  {
-    if( !isNaN(orb) && orb.length === 5 )
-    {
+  if( coldSub ) {
+    
+    if( !isNaN(orb) && orb.length === 5 ) {
       const oneBatch = BatchDB.findOne( { batch: orb } );
       const onexBatch = XBatchDB.findOne( { batch: orb } );
-      if( oneBatch )
-      {
+      
+      if( oneBatch ) {
         hotSub = Meteor.subscribe( 'hotDataPlus', orb );
         hotBatch = oneBatch;
-      }
-      else if(onexBatch)
-      {
+      
+      }else if(onexBatch) {
         hotSub = Meteor.subscribe( 'hotDataPlus', orb );
         hotxBatch = onexBatch;
-      }
-      else
-      {
+      
+      }else{
         null;
       }
     }
-    else if( !isNaN(orb) && orb.length >= 9 && orb.length <= 10 )
-    {
+    else if( !isNaN(orb) && orb.length >= 9 && orb.length <= 10 ) {
+      
   		const itemsBatch = BatchDB.findOne( { 'items.serial': orb } );
-      if( itemsBatch )
-      {
+      
+      if( itemsBatch ) {
         hotSub = Meteor.subscribe( 'hotDataPlus', itemsBatch.batch );
         hotBatch = itemsBatch;
-      }
-      else
-      {
-        Meteor.call( 'serialLookup', orb, ( err, reply )=>
-        {
-          err ? console.log( err ) : null;
+      
+      }else{
+        Meteor.call( 'serialLookup', orb, ( err, reply )=>{
+          err && console.log(err);
           const serverItemsBatch = BatchDB.findOne( { batch: reply } );
           hotSub = Meteor.subscribe( 'hotDataPlus', reply );
           hotBatch = serverItemsBatch;
-        }
-        );
+        });
       }
-    }
-    else
-    {
+    
+    }else{
       null;
     }
-  }
-  else
-  {
+  
+  }else{
     null;
   }
   

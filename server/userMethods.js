@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 Meteor.methods({
   
   verifyOrgJoin(orgName, pin) {
@@ -23,8 +25,9 @@ Meteor.methods({
             orgKey: orgIs.orgKey,
             autoScan: true,
             unlockSpeed: 2000,
+            inbox: [],
             watchlist: [],
-            inbox: []
+            breadcrumbs: []
           }
         });
         return 'ok';
@@ -228,8 +231,43 @@ Meteor.methods({
         'watchlist.$.mute': change,
       }
     });
-  }
+  },
   		
-  		
+  clearBreadcrumbsRepair() {
+    Meteor.users.update(Meteor.userId(), {
+      $set: {
+        breadcrumbs: [],
+      }
+    });
+    return true;
+  },
   
+  dropBreadcrumb(pingId, pingType, pingkeyword) {
+    if(pingkeyword) {
+      const user = Meteor.users.findOne({_id: pingId});
+      const basket = user.breadcrumbs;
+      if(!basket) {
+        // remove after users are updated
+        Meteor.users.update(pingId, {
+          $set: {
+            breadcrumbs: [],
+          }
+        });
+      }else{
+        const lately = basket.find( x => x.keyword === pingkeyword && moment().isSame(x.time, 'day') );
+        if(!lately) {
+          Meteor.users.update(pingId, {
+            $push: { 
+              breadcrumbs: {
+                type: pingType,
+                keyword: pingkeyword,
+                time: new Date()
+              }
+            }
+          });
+        }
+      }
+    }
+  }
+    
 });

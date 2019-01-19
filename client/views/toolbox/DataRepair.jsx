@@ -32,6 +32,13 @@ const DataRepair = ({ orb, bolt, app, users })=> {
     });
   }
   
+  function clearAthing() {
+    Meteor.call('clearBreadcrumbsRepair', (error, reply)=>{
+      error && console.log(error);
+      if(reply) { toast.success('data edit complete', { autoClose: false }); }
+    });
+  }
+  
   return (
     <div className='invert'>
       <h2 className='cap'>NonCon "Where" Data Repair</h2>
@@ -54,13 +61,21 @@ const DataRepair = ({ orb, bolt, app, users })=> {
       </form>
       
       
-      <h2 className='cap'>Add Departments to App collection</h2>
+      <h2 className='cap'>Reset Departments on App collection</h2>
       <p>Only needs to be done once</p>
       
       <button
-        onClick={(e)=>addAthing()}
+        onClick={()=>addAthing()}
         className='action clear blackT'
       >Add</button>
+      
+      <h2 className='cap'>Clear User breadcrumbs</h2>
+      <p>On current logged in user</p>
+      
+      <button
+        onClick={()=>clearAthing()}
+        className='action clear blackT'
+      >Clear</button>
       
     </div>
   );

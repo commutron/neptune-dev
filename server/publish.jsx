@@ -1,4 +1,4 @@
-//import moment from 'moment';
+// import moment from 'moment';
 // Collections \\
 
 AppDB = new Mongo.Collection('appdb');
@@ -147,10 +147,12 @@ Meteor.publish('thinData', function(){
 
 Meteor.publish('hotDataPlus', function(batch){
   const user = Meteor.users.findOne({_id: this.userId});
-  const orgKey = user ? user.orgKey : false;
-  const bWidget = BatchDB.findOne({batch: batch, orgKey: orgKey});
-  const xbWidget = XBatchDB.findOne({batch: batch, orgKey: orgKey});
-  const wID = !bWidget ? !xbWidget ? false : xbWidget.widgetId : bWidget.widgetId;         
+  const valid = user ? true : false;
+  const orgKey = valid ? user.orgKey : false;
+  const bData = BatchDB.findOne({batch: batch, orgKey: orgKey});
+  const xbData = XBatchDB.findOne({batch: batch, orgKey: orgKey});
+  const wID = !bData ? !xbData ? false : xbData.widgetId : bData.widgetId;
+  if(valid) { Meteor.call('dropBreadcrumb', this.userId, 'batch', batch); }
   return [
     BatchDB.find({batch: batch, orgKey: orgKey}, {
       fields: {

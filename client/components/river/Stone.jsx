@@ -67,7 +67,14 @@ export default class Stone extends Component {
 		const step = this.props.step;
     const type = this.props.type;
     const comm = doComm ? prompt('Enter A Comment', '').trim() : '';
-		Meteor.call('addHistory', id, bar, sKey, step, type, comm, pass, (error, reply)=>{
+    
+    const pre = this.props.progCounts;
+    const preTotal = pre.regItems;
+    const preStep = pre.regStepCounts.find( x => x.key === sKey );
+    const preCount = preStep ? preStep.items : undefined;
+    const benchmark = preCount === 0 ? 'first' : preCount === preTotal - 1 ? 'last' : false;              
+    
+		Meteor.call('addHistory', id, bar, sKey, step, type, comm, pass, benchmark, (error, reply)=>{
 	    if(error)
 		    console.log(error);
 			if(reply) {
@@ -90,10 +97,17 @@ export default class Stone extends Component {
     const type = this.props.type;
     const comm = doComm ? prompt('Enter A Comment', '') : '';
     const more = shipFail ? 'ship a failed test' : false;
+    
+    const pre = this.props.progCounts;
+    const preTotal = pre.regItems;
+    const preStep = pre.regStepCounts.find( x => x.key === sKey );
+    const preCount = preStep ? preStep.items : undefined;
+    const benchmark = preCount === 0 ? 'first' : preCount === preTotal - 1 ? 'last' : false;              
+		
     if(pass === false && ( !comm || comm == '' ) ) {
     	this.unlock();
     }else{
-			Meteor.call('addTest', id, bar, sKey, step, type, comm, pass, more, (error, reply)=>{
+			Meteor.call('addTest', id, bar, sKey, step, type, comm, pass, more, benchmark, (error, reply)=>{
 		    if(error)
 			    console.log(error);
 				if(reply) {
@@ -116,7 +130,14 @@ export default class Stone extends Component {
 		const sKey = this.props.sKey;
 		const step = this.props.step;
     const type = this.props.type;
-		Meteor.call('finishItem', batchId, barcode, sKey, step, type, (error, reply)=>{
+    
+    const pre = this.props.progCounts;
+    const preTotal = pre.regItems;
+    const preStep = pre.regStepCounts.find( x => x.key === sKey );
+    const preCount = preStep ? preStep.items : undefined;
+    const benchmark = preCount === 0 ? 'first' : preCount === preTotal - 1 ? 'last' : false;              
+
+		Meteor.call('finishItem', batchId, barcode, sKey, step, type, benchmark, (error, reply)=>{
 		  if(error)
 		    console.log(error);
 		  if(reply) {
@@ -126,32 +147,6 @@ export default class Stone extends Component {
 		  }
 		});
 	}
-	
-	/*
-	handleUndoLast() {
-		const id = this.props.id;
-		const bar = this.props.barcode;
-		const entry = this.props.compEntry;
-	  const flag = entry.key;
-	  const time = entry.time;
-	  let replace = entry;
-	  replace.good = false;
-	  if(entry) {
-		  Meteor.call('pullHistory', id, bar, flag, time, (error, reply)=> {
-		    error && console.log(error);
-		    if(reply) {
-		      Meteor.call('pushHistory', id, bar, replace, (error)=> {
-		        error && console.log(error);
-		        this.unlock();
-		      });
-		    }else{
-		      Bert.alert(Pref.blocked, 'danger');
-		    }
-		  });
-	  }else{
-	  	Bert.alert(Pref.blocked, 'danger');
-	  }
-	}*/
 	
 	handleStepUndo() {
 		const id = this.props.id;

@@ -5,6 +5,8 @@ const InboxPanel = ({ orb, bolt, app, user, users })=> {
   
   return (
     <div className='invert'>
+      <p>No notifications yet though</p>
+      <p className='vspace'></p>
       <table className=' wide cap'>
         {user.inbox.map( (entry, index)=>{
           

@@ -55,7 +55,8 @@ class ToolboxWrap extends Component	{
           <Slides
             menu={[
               <b><i className='fas fa-bell fa-fw'></i>  Toast Test</b>,
-              <b><i className='fas fa-wrench fa-fw'></i>  Data Repair</b>
+              <b><i className='fas fa-wrench fa-fw'></i>  Data Repair</b>,
+              <b><i className='fas fa-life-ring fa-fw'></i>  Legacy Support</b>
             ]}>
               
             <div key={1}>
@@ -73,6 +74,12 @@ class ToolboxWrap extends Component	{
               bolt={this.props.bolt}
               app={this.props.app}
               users={this.props.users} />
+              
+            <div key={3}>
+              <p>
+                determine support needs
+              </p>
+            </div>
             
           </Slides>
           

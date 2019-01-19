@@ -380,7 +380,7 @@ Meteor.methods({
   
   //// history entries
 
-  addHistory(batchId, bar, key, step, type, com, pass) {
+  addHistory(batchId, bar, key, step, type, com, pass, benchmark) {
     if(type === 'inspect' && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
       return false;
     }else{
@@ -395,6 +395,24 @@ Meteor.methods({
           comm : com,
           info: false
       }}});
+      if(benchmark === 'first') {
+        Meteor.call(
+          'setBatchEvent', 
+          Meteor.user().orgKey,
+          batchId, 
+          'Start of Process', 
+          `First ${step} ${type} recorded by ${Meteor.user().username}`
+        );
+      }
+      if(benchmark === 'last') {
+        Meteor.call(
+          'setBatchEvent', 
+          Meteor.user().orgKey, 
+          batchId, 
+          'End of Process', 
+          `Final ${step} ${type} recorded by ${Meteor.user().username}`
+        );
+      }
       return true;
     }
   },
@@ -420,13 +438,22 @@ Meteor.methods({
             issue: ng
           }
       }}});
-      if(firstfirst === true) {
+      if(firstfirst === true && good === false) {
+        Meteor.call(
+          'setBatchEvent', 
+          Meteor.user().orgKey, 
+          batchId, 
+          'NG First-off Verification', 
+          `An unacceptable ${step} first-off recorded by ${Meteor.user().username}`
+        );
+      }
+      if(firstfirst === true && good === true) {
         Meteor.call(
           'setBatchEvent', 
           Meteor.user().orgKey, 
           batchId, 
           'First-off Verification', 
-          `First ${step} first-off recorded by ${Meteor.user().username}`
+          `First good ${step} first-off recorded by ${Meteor.user().username}`
         );
       }
       return true;
@@ -434,7 +461,7 @@ Meteor.methods({
   },
   
   // ship failed test
-  addTest(batchId, bar, key, step, type, com, pass, more) {
+  addTest(batchId, bar, key, step, type, com, pass, more, benchmark) {
     if(type === 'test' && !Roles.userIsInRole(Meteor.userId(), 'test')) {
       return false;
     }else{
@@ -449,6 +476,24 @@ Meteor.methods({
           comm : com,
           info: more
       }}});
+      if(benchmark === 'first' && pass === true) {
+        Meteor.call(
+          'setBatchEvent', 
+          Meteor.user().orgKey,
+          batchId, 
+          'Start of Process', 
+          `First passed ${step} recorded by ${Meteor.user().username}`
+        );
+      }
+      if(benchmark === 'last' && pass === true) {
+        Meteor.call(
+          'setBatchEvent', 
+          Meteor.user().orgKey, 
+          batchId, 
+          'End of Process', 
+          `Final passed ${step} recorded by ${Meteor.user().username}`
+        );
+      }
       return true;
     }
   },
@@ -472,12 +517,32 @@ Meteor.methods({
           'items.$.subItems' : subSerial
         }
       });
+      /*
+      if(benchmark === 'first') {
+        Meteor.call(
+          'setBatchEvent', 
+          Meteor.user().orgKey,
+          batchId, 
+          'Start of Process', 
+          `First ${step} ${type} recorded by ${Meteor.user().username}`
+        );
+      }
+      if(benchmark === 'last') {
+        Meteor.call(
+          'setBatchEvent', 
+          Meteor.user().orgKey, 
+          batchId, 
+          'End of Process', 
+          `Final ${step} ${type} recorded by ${Meteor.user().username}`
+        );
+      }
+      */
       return true;
     }
   },
 
   // finish Item
-  finishItem(batchId, serial, key, step, type) {
+  finishItem(batchId, serial, key, step, type, benchmark) {
     if(!Roles.userIsInRole(Meteor.userId(), 'finish')) {
       return false;
     }else{
@@ -499,6 +564,24 @@ Meteor.methods({
   			  'items.$.finishedWho': Meteor.userId()
   			}
       });
+      if(benchmark === 'first') {
+        Meteor.call(
+          'setBatchEvent', 
+          Meteor.user().orgKey,
+          batchId, 
+          'Start of Process', 
+          `First item recorded as complete by ${Meteor.user().username}`
+        );
+      }
+      if(benchmark === 'last') {
+        Meteor.call(
+          'setBatchEvent', 
+          Meteor.user().orgKey, 
+          batchId, 
+          'End of Process', 
+          `Final item recorded as complete by ${Meteor.user().username}`
+        );
+      }
       Meteor.call('finishBatch', batchId, Meteor.user().orgKey);
   		return true;
     }
