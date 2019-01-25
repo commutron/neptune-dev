@@ -24,7 +24,7 @@ const ReportBasicTable = ({ title, rows })=> {
                 return(
                   <tbody key={index}>
                     <tr>
-                      <td className='bold'>{entry[0]}</td>
+                      <td className='bold noBorder'>{entry[0]}</td>
                       <td className='noBorder'></td>
                     </tr>
                     {entry[1].map( (etr)=>{

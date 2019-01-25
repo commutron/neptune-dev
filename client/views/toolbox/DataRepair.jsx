@@ -14,7 +14,7 @@ const DataRepair = ({ orb, bolt, app, users })=> {
       if(reply) { toast.success('data edit complete', { autoClose: false }); }
     });
   }
-  
+  /*
   function addAthing() {
     const departArray = [
       'surface mount',
@@ -31,11 +31,18 @@ const DataRepair = ({ orb, bolt, app, users })=> {
       if(reply) { toast.success('data edit complete', { autoClose: false }); }
     });
   }
-  
+  */
   function clearAthing() {
     Meteor.call('clearBreadcrumbsRepair', (error, reply)=>{
       error && console.log(error);
       if(reply) { toast.success('data edit complete', { autoClose: false }); }
+    });
+  }
+  
+  function updateAcache() {
+    Meteor.call('FORCEbatchCacheUpdate', (error)=>{
+      error && console.log(error);
+      toast.success('request sent', { autoClose: false });
     });
   }
   
@@ -61,13 +68,11 @@ const DataRepair = ({ orb, bolt, app, users })=> {
       </form>
       
       
-      <h2 className='cap'>Reset Departments on App collection</h2>
-      <p>Only needs to be done once</p>
-      
+      <h2 className='cap'>Force Update batchInfo in ChacheDB</h2>
       <button
-        onClick={()=>addAthing()}
+        onClick={()=>updateAcache()}
         className='action clear blackT'
-      >Add</button>
+      >Force Update</button>
       
       <h2 className='cap'>Clear User breadcrumbs</h2>
       <p>On current logged in user</p>

@@ -508,6 +508,10 @@ main {
 
 .vmargin { margin: 24px 0; }
 
+.line2x { line-height: 2; }
+.line3x { line-height: 3; }
+.line4x { line-height: 4; }
+
 .indent { padding-left: 16px; }
 
 .breath { margin: 0 5px; }

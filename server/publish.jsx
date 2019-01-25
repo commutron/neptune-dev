@@ -9,6 +9,8 @@ XBatchDB = new Mongo.Collection('xbatchdb');
 //ItemDB = new Mongo.Collection('itemdb');// future plans, DO NOT enable
 ArchiveDB = new Mongo.Collection('archivedb');
 
+CacheDB = new Mongo.Collection('cachedb');
+
 Meteor.publish('appData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
@@ -55,12 +57,19 @@ Meteor.publish('appData', function(){
 Meteor.publish('eventsData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
+  Meteor.defer( ()=>{
+    Meteor.call('batchCacheUpdate', orgKey);
+  });
   return [
     BatchDB.find({orgKey: orgKey}, {
       fields: {
-          'batch': 1,
-          'events': 1,
-        }}),
+        'batch': 1,
+        'events': 1,
+      }}),
+    CacheDB.find({orgKey: orgKey}, {
+      fields: {
+        'orgKey': 0
+      }}),
     ];
 });
 

@@ -9,7 +9,7 @@ const ReportRequest = ({
         scrapCheck, setScrap, 
         ncCheck, setNC,
         typeCheck, setType,
-        refCheck, setRef 
+        phaseCheck, setPhase 
 })=> {
 
   return(
@@ -76,10 +76,10 @@ const ReportRequest = ({
           <span>
             <input
               type='checkbox'
-              id='inputRef'
-              onChange={(e)=>setRef(inputRef.value)}
-              checked={refCheck} />
-            <label htmlFor='inputRef'>Ref Breakdown</label>
+              id='inputPhase'
+              onChange={(e)=>setPhase(inputPhase.value)}
+              checked={phaseCheck} />
+            <label htmlFor='inputPhase'>Department Breakdown</label>
           </span>
         </div>
         

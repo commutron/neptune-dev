@@ -62,11 +62,12 @@ function loopItems(items, from, to, getFirst, getTest, getScrap) {
   });
 }
 
-function loopNonCons(nonCons, from, to, optionsLegacy, getNC, getType, getRef) {
+function loopNonCons(nonCons, from, to, optionsLegacy, phases, getNC, getType, getPhase) {
   return new Promise(resolve => {
     const inTime = getNC ? nonCons.filter( x => moment(x.time).isBetween(from, to) ) : [];
     let foundNC = getNC ? inTime.length : false;
     let uniqueSerials = getNC ? [... new Set( Array.from(inTime, x => x.serial ) ) ].length : false;
+    /*
     let refC = getNC && getRef ? inTime.filter( x => x.ref.split('')[0] === 'c' ).length : false;
     let refR = getNC && getRef ? inTime.filter( x => x.ref.split('')[0] === 'r' ).length : false;
     let refU = getNC && getRef ? inTime.filter( x => x.ref.split('')[0] === 'u' ).length : false;
@@ -81,6 +82,7 @@ function loopNonCons(nonCons, from, to, optionsLegacy, getNC, getType, getRef) {
       [ 'Q', refQ ], 
       [ 'PCB', refPCB ] 
     ] : false;
+    */
     let typeBreakdown = getNC && getType ? [] : false;
     if(getNC && getType) {
       for(let ncOp of optionsLegacy) {
@@ -88,7 +90,16 @@ function loopNonCons(nonCons, from, to, optionsLegacy, getNC, getType, getRef) {
         typeBreakdown.push([ ncOp, num ]);
       }
     }else{null}
-    resolve({foundNC, uniqueSerials, refBreakdown, typeBreakdown});
+    
+    let phaseBreakdown = getNC && getPhase ? [] : false;
+    if(getNC && getPhase) {
+      for(let ph of phases) {
+        const num = inTime.filter( x => x.where === ph ).length;
+        phaseBreakdown.push([ ph, num ]);
+      }
+    }else{null}
+    
+    resolve({foundNC, uniqueSerials, typeBreakdown, phaseBreakdown});
   });
 }
 
@@ -97,10 +108,11 @@ function loopNonCons(nonCons, from, to, optionsLegacy, getNC, getType, getRef) {
 
 Meteor.methods({
   
-  buildReport(startDay, endDay, getShort, getFirst, getTest, getScrap, getNC, getType, getRef) {
+  buildReport(startDay, endDay, getShort, getFirst, getTest, getScrap, getNC, getType, getPhase) {
     const orgKey = Meteor.user().orgKey;
     let org = AppDB.findOne({orgKey: Meteor.user().orgKey});
     let optionsLegacy = !org ? [] : org.nonConOption;
+    let phases = !org ? [] : org.phases;
     const from = moment(startDay).startOf('day').format();
     const to = moment(endDay).endOf('day').format();
     
@@ -109,19 +121,17 @@ Meteor.methods({
         batchSlice = await findRelevantBatches(orgKey, from, to);
         batchArange = await loopBatches(batchSlice, from, to, getShort);
         itemStats = await loopItems(batchArange.allItems, from, to, getFirst, getTest, getScrap);
-        nonConStats = await loopNonCons(batchArange.allNonCons, from, to, optionsLegacy, getNC, getType, getRef);
+        nonConStats = await loopNonCons(batchArange.allNonCons, from, to, optionsLegacy, phases, getNC, getType, getPhase);
         const batchInclude = batchSlice.length;
         const itemsInclude = batchArange.allItems.length;
-        const itemsWithPercent = ( ( nonConStats.uniqueSerials / itemsInclude ) * 100 ).toFixed(1) + '%';
+        //const itemsWithPercent = ( ( nonConStats.uniqueSerials / itemsInclude ) * 100 ).toFixed(1) + '%';
         const shortfallCount = batchArange.shortfallCount;
-        return {batchInclude, itemsInclude, itemsWithPercent, shortfallCount, itemStats, nonConStats};
+        return {batchInclude, itemsInclude, shortfallCount, itemStats, nonConStats};
       }catch (err) {
         throw new Meteor.Error(err);
       }
     }
-    
     return getBatches();
-    
   },
   
   

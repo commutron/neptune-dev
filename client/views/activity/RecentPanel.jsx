@@ -2,11 +2,20 @@ import React from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
-const RecentPanel = ({ orb, bolt, app, user, users })=> {
+const RecentPanel = ({ orb, bolt, app, user, users, bCache })=> {
   
   function jumpTo(location) {
     Session.set('now', location);
     FlowRouter.go('/production');
+  }
+  
+  function getInfo(keyword) {
+    Meteor.call('autofillInfo', keyword, (err, re)=>{
+      err && console.log(err);
+      if(re) {
+        return re;
+      }
+    });
   }
   
   const basket = user.breadcrumbs || [];
@@ -16,30 +25,57 @@ const RecentPanel = ({ orb, bolt, app, user, users })=> {
   
   return(
     <div className='invert'>
-      <p>Based on Production searches from the past 30 days</p>
-      <p className='vspace'></p>
+      <div className='rightText'>
+        <p>{user.username}</p>
+        <p>Production search history from the past 30 days</p>
+      </div>
       <table className='wide cap space'>
-        <tbody>
+        
           {limitedTrail.map( (entry, index)=>{
             const keyword = entry.keyword;
             const elink = '/data/batch?request=' + keyword;
-            const highlight = moment().isSame(entry.time, 'day') ? 'eventListNew ' : '';
+            const moreInfo = bCache ? bCache.dataSet.find( x => x.batch === entry.keyword) : false;
+            const what = moreInfo ? moreInfo.isWhat : 'unavailable';
+            if(index === 0 || moment(entry.time).isSame(limitedTrail[index-1].time, 'day') === false) {
+              return(
+                <tbody key={index}>
+                  <tr className='big leftText line4x'>
+                    <th colSpan='4'>{moment(entry.time).format('dddd MMMM Do')}</th>
+                  </tr>
+                  <tr>
+                    <td className='noRightBorder medBig'>{keyword}</td>
+                    <td className='noRightBorder'>{what}</td>
+                    <td className='noRightBorder noCopy'>
+                      <button
+                        onClick={()=>jumpTo(keyword)}
+                        className='textLinkButton'
+                      ><i className='fas fa-paper-plane fa-fw'></i> Production</button>
+                    </td>
+                    <td className='noRightBorder noCopy'>
+                      <a href={elink}><i className='fas fa-rocket fa-fw'></i> Explore</a>
+                    </td>
+                  </tr>
+                </tbody>
+              );
+            }
             return(
-              <tr key={index} className={highlight}>
-                <td className='noRightBorder medBig'>{keyword}</td>
-                <td className='noRightBorder'>{moment(entry.time).format('dddd MMMM Do')}</td>
-                <td className='noRightBorder noCopy'>
-                  <button
-                    onClick={()=>jumpTo(keyword)}
-                    className='textLinkButton'
-                  ><i className='fas fa-paper-plane fa-fw'></i> Production</button>
-                </td>
-                <td className='noRightBorder noCopy'>
-                  <a href={elink}><i className='fas fa-rocket fa-fw'></i> Explore</a>
-                </td>
-              </tr>
-          )})}
-        </tbody>
+              <tbody key={index}>
+                <tr>
+                  <td className='noRightBorder medBig'>{keyword}</td>
+                  <td className='noRightBorder'>{what}</td>
+                  <td className='noRightBorder noCopy'>
+                    <button
+                      onClick={()=>jumpTo(keyword)}
+                      className='textLinkButton'
+                    ><i className='fas fa-paper-plane fa-fw'></i> Production</button>
+                  </td>
+                  <td className='noRightBorder noCopy'>
+                    <a href={elink}><i className='fas fa-rocket fa-fw'></i> Explore</a>
+                  </td>
+                </tr>
+              </tbody>
+            );
+          })}
       </table>
       
     </div>

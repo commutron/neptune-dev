@@ -1,12 +1,59 @@
 import moment from 'moment';
 import timezone from 'moment-timezone';
-
+/*
+function getBatch(batchNum) {  
+  return new Promise(resolve => { 
+    const batch = BatchDB.findOne({batch: batchNum});
+    resolve(batch);
+  });
+}
+function getWidget(widgetId) {  
+  return new Promise(resolve => { 
+    const widget = WidgetDB.findOne({_id: widgetId});
+    resolve(widget);
+  });
+}
+function getVersion(widget, vKey) {  
+  return new Promise(resolve => { 
+    const version = widget.versions.find( x => x.versionKey === vKey);
+    resolve(version);
+  });
+}
+function getGroup(groupId) {  
+  return new Promise(resolve => { 
+    const group = GroupDB.findOne({_id: groupId});
+    resolve(group);
+  });
+}
+*/
+    
 Meteor.methods({
+  
+  getBasicBatchInfo(keyword) {
+    const batch = BatchDB.findOne({batch: keyword});
+    const widget = WidgetDB.findOne({_id: batch.widgetId});
+    const version = widget.versions.find( x => x.versionKey === batch.versionKey);
+    const group = GroupDB.findOne({_id: widget.groupId});
+    const nice = {
+      batch: keyword, 
+      isWhat: `${group.alias.toUpperCase()} ${widget.widget.toUpperCase()} v.${version.version}`
+    };
+    return nice;
+  },
   
   serialLookup(orb) {
     const itemsBatch = BatchDB.findOne({'items.serial': orb});
     const found = itemsBatch ? itemsBatch.batch : false;
     return found;
+  },
+ 
+  autofillInfo(keyword) {
+    const batch = BatchDB.findOne({batch: keyword});
+    const widget = WidgetDB.findOne({_id: batch.widgetId});
+    const version = widget.versions.find( x => x.versionKey === batch.versionKey);
+    const group = GroupDB.findOne({_id: widget.groupId});
+    const niceString = `${group.alias} ${widget.widget} v.${version.version}`;
+    return niceString;
   },
   
   quickVersion(vKey) {

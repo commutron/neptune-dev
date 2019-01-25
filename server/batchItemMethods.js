@@ -175,13 +175,15 @@ Meteor.methods({
             who: Meteor.userId()
           }
       }});
-      Meteor.call(
-        'setBatchEvent', 
-        Meteor.user().orgKey, 
-        batchId, 
-        'Floor Release', 
-        `Released from kitting by ${Meteor.user().username}`
-      );
+      Meteor.defer( ()=>{
+        Meteor.call(
+          'setBatchEvent', 
+          Meteor.user().orgKey, 
+          batchId, 
+          'Floor Release', 
+          `Released from kitting by ${Meteor.user().username}`
+        );
+      });
       return true;
     }else{
       return false;
@@ -395,24 +397,26 @@ Meteor.methods({
           comm : com,
           info: false
       }}});
-      if(benchmark === 'first') {
-        Meteor.call(
-          'setBatchEvent', 
-          Meteor.user().orgKey,
-          batchId, 
-          'Start of Process', 
-          `First ${step} ${type} recorded by ${Meteor.user().username}`
-        );
-      }
-      if(benchmark === 'last') {
-        Meteor.call(
-          'setBatchEvent', 
-          Meteor.user().orgKey, 
-          batchId, 
-          'End of Process', 
-          `Final ${step} ${type} recorded by ${Meteor.user().username}`
-        );
-      }
+      Meteor.defer( ()=>{
+        if(benchmark === 'first') {
+          Meteor.call(
+            'setBatchEvent', 
+            Meteor.user().orgKey,
+            batchId, 
+            'Start of Process', 
+            `First ${step} ${type} recorded by ${Meteor.user().username}`
+          );
+        }
+        if(benchmark === 'last') {
+          Meteor.call(
+            'setBatchEvent', 
+            Meteor.user().orgKey, 
+            batchId, 
+            'End of Process', 
+            `Final ${step} ${type} recorded by ${Meteor.user().username}`
+          );
+        }
+      });
       return true;
     }
   },
@@ -438,24 +442,26 @@ Meteor.methods({
             issue: ng
           }
       }}});
-      if(firstfirst === true && good === false) {
-        Meteor.call(
-          'setBatchEvent', 
-          Meteor.user().orgKey, 
-          batchId, 
-          'NG First-off Verification', 
-          `An unacceptable ${step} first-off recorded by ${Meteor.user().username}`
-        );
-      }
-      if(firstfirst === true && good === true) {
-        Meteor.call(
-          'setBatchEvent', 
-          Meteor.user().orgKey, 
-          batchId, 
-          'First-off Verification', 
-          `First good ${step} first-off recorded by ${Meteor.user().username}`
-        );
-      }
+      Meteor.defer( ()=>{
+        if(firstfirst === true && good === false) {
+          Meteor.call(
+            'setBatchEvent', 
+            Meteor.user().orgKey, 
+            batchId, 
+            'NG First-off Verification', 
+            `An unacceptable ${step} first-off recorded by ${Meteor.user().username}`
+          );
+        }
+        if(firstfirst === true && good === true) {
+          Meteor.call(
+            'setBatchEvent', 
+            Meteor.user().orgKey, 
+            batchId, 
+            'First-off Verification', 
+            `First good ${step} first-off recorded by ${Meteor.user().username}`
+          );
+        }
+      });
       return true;
     }
   },
@@ -476,24 +482,26 @@ Meteor.methods({
           comm : com,
           info: more
       }}});
-      if(benchmark === 'first' && pass === true) {
-        Meteor.call(
-          'setBatchEvent', 
-          Meteor.user().orgKey,
-          batchId, 
-          'Start of Process', 
-          `First passed ${step} recorded by ${Meteor.user().username}`
-        );
-      }
-      if(benchmark === 'last' && pass === true) {
-        Meteor.call(
-          'setBatchEvent', 
-          Meteor.user().orgKey, 
-          batchId, 
-          'End of Process', 
-          `Final passed ${step} recorded by ${Meteor.user().username}`
-        );
-      }
+      Meteor.defer( ()=>{
+        if(benchmark === 'first' && pass === true) {
+          Meteor.call(
+            'setBatchEvent', 
+            Meteor.user().orgKey,
+            batchId, 
+            'Start of Process', 
+            `First passed ${step} recorded by ${Meteor.user().username}`
+          );
+        }
+        if(benchmark === 'last' && pass === true) {
+          Meteor.call(
+            'setBatchEvent', 
+            Meteor.user().orgKey, 
+            batchId, 
+            'End of Process', 
+            `Final passed ${step} recorded by ${Meteor.user().username}`
+          );
+        }
+      });
       return true;
     }
   },
@@ -518,6 +526,7 @@ Meteor.methods({
         }
       });
       /*
+      Meteor.defer( ()=>{
       if(benchmark === 'first') {
         Meteor.call(
           'setBatchEvent', 
@@ -564,25 +573,27 @@ Meteor.methods({
   			  'items.$.finishedWho': Meteor.userId()
   			}
       });
-      if(benchmark === 'first') {
-        Meteor.call(
-          'setBatchEvent', 
-          Meteor.user().orgKey,
-          batchId, 
-          'Start of Process', 
-          `First item recorded as complete by ${Meteor.user().username}`
-        );
-      }
-      if(benchmark === 'last') {
-        Meteor.call(
-          'setBatchEvent', 
-          Meteor.user().orgKey, 
-          batchId, 
-          'End of Process', 
-          `Final item recorded as complete by ${Meteor.user().username}`
-        );
-      }
-      Meteor.call('finishBatch', batchId, Meteor.user().orgKey);
+      Meteor.defer( ()=>{
+        if(benchmark === 'first') {
+          Meteor.call(
+            'setBatchEvent', 
+            Meteor.user().orgKey,
+            batchId, 
+            'Start of Process', 
+            `First item recorded as complete by ${Meteor.user().username}`
+          );
+        }
+        if(benchmark === 'last') {
+          Meteor.call(
+            'setBatchEvent', 
+            Meteor.user().orgKey, 
+            batchId, 
+            'End of Process', 
+            `Final item recorded as complete by ${Meteor.user().username}`
+          );
+        }
+        Meteor.call('finishBatch', batchId, Meteor.user().orgKey);
+      });
   		return true;
     }
   },

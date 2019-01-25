@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 Meteor.startup(function () {  
   // ensureIndex is depreciated 
   // but the new createIndex errors as "not a function"
@@ -526,12 +528,50 @@ Meteor.methods({
     }
   },
   
+  ///////////// CACHES //////////////////
+  FORCEbatchCacheUpdate() {
+    if(Roles.userIsInRole(Meteor.userId(), 'active')) {
+      const key = Meteor.user().orgKey;
+      Meteor.call('batchCacheUpdate', key, true);
+    }
+  },
+    
+  batchCacheUpdate(accessKey, force) {
+    if(typeof accessKey === 'string') {
+      const currentCache = CacheDB.findOne({orgKey: accessKey, dataName:'batchInfo'});
+      if(force || !currentCache || (currentCache && moment().isAfter(currentCache.lastUpdated, 'hour')) ) {
+        const batches = BatchDB.find({orgKey: accessKey}).fetch();
+        const slim = batches.map( x => {
+          return Meteor.call('getBasicBatchInfo', x.batch);
+        });
+        CacheDB.upsert({orgKey: accessKey, dataName: 'batchInfo'}, {
+          $set : { 
+            orgKey: accessKey,
+            lastUpdated: new Date(),
+            dataName: 'batchInfo',
+            dataSet: slim,
+        }});
+      }
+    }
+  },
+  
+  ///////////// Repair \\\\\\\\\\\\\\\\\\\\\
+  /*
   addPhasesRepair(dprts) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $set : { 
           phases : dprts
       }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  */
+  resetCacheDB() {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      CacheDB.remove({orgKey: Meteor.user().orgKey});
       return true;
     }else{
       return false;

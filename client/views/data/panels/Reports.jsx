@@ -21,7 +21,7 @@ export default class Reports extends Component {
       getScrap: true,
       getNC: true,
       getType: true,
-      getRef: true,
+      getPhase: true,
       working: false,
       replyData: false
     };
@@ -44,12 +44,12 @@ export default class Reports extends Component {
       this.setState({getType: false});
     }
   }
-  changeRef() {
-    if(this.state.getRef === false) {
+  changePhase() {
+    if(this.state.getPhase === false) {
       this.setState({getNC: true});
-      this.setState({getRef: true});
+      this.setState({getPhase: true});
     }else{
-      this.setState({getRef: false});
+      this.setState({getPhase: false});
     }
   }
   
@@ -65,7 +65,7 @@ export default class Reports extends Component {
       this.state.getScrap,
       this.state.getNC, 
       this.state.getType,
-      this.state.getRef, 
+      this.state.getPhase, 
     (error, reply)=> {
       error && console.log(error);
       //this.setState({ tops: reply });
@@ -81,14 +81,17 @@ export default class Reports extends Component {
           [ 'Failed Tests', reply.itemStats.testFail ],
           [ 'Part Shortfalls', reply.shortfallCount ],
           [ 'Discovered Non-conformances', reply.nonConStats.foundNC ],
+          [ 'Items with Non-conformances', reply.nonConStats.uniqueSerials ],
+          /*
           [ 'Serial Numbers with Non-conformances', 
             this.state.getNC ?
               [  [ 'Quantity of Items', reply.nonConStats.uniqueSerials ],
                 [ 'Percent of All Items', reply.itemsWithPercent ] ]
             : false
           ],
+          */
           [ 'Non-conformance Types', reply.nonConStats.typeBreakdown ],
-          [ 'Non-conformance Referances', reply.nonConStats.refBreakdown ]
+          [ 'Non-conformance Departments', reply.nonConStats.phaseBreakdown ]
         ];
         this.setState({working: false});
         this.setState({replyData: arrange});
@@ -129,8 +132,8 @@ export default class Reports extends Component {
             setNC={(v)=>this.changeNC(v)}
             typeCheck={this.state.getType}
             setType={(v)=>this.changeType(v)}
-            refCheck={this.state.getRef}
-            setRef={(v)=>this.changeRef(v)} />
+            phaseCheck={this.state.getPhase}
+            setPhase={(v)=>this.changePhase(v)} />
           
           <div className='space'>
             <button 

@@ -55,7 +55,8 @@ class WatchDataWrap extends Component	{
               bolt={this.props.bolt}
               app={this.props.app}
               user={this.props.user}
-              users={this.props.users} />
+              users={this.props.users}
+              bCache={this.props.bCache} />
             <WatchlistPanel
               key={2}
               orb={this.props.orb}
@@ -63,7 +64,8 @@ class WatchDataWrap extends Component	{
               app={this.props.app}
               user={this.props.user}
               users={this.props.users}
-              batchEvents={this.props.batchEvents} />
+              batchEvents={this.props.batchEvents}
+              bCache={this.props.bCache} />
             <InboxPanel
               key={3}
               orb={this.props.orb}
@@ -105,6 +107,7 @@ export default withTracker( () => {
       active: active,
       org: org,
       app: AppDB.findOne({org: org}),
+      bCache: CacheDB.findOne({dataName: 'batchInfo'}),
       batchEvents: BatchDB.find({}).fetch(),
       users: Meteor.users.find({}, {sort: {username:1}}).fetch()
     };
