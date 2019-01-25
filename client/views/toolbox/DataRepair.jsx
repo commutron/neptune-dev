@@ -46,6 +46,13 @@ const DataRepair = ({ orb, bolt, app, users })=> {
     });
   }
   
+  function clearAllWatch() {
+    Meteor.call('clearAllUserWatchlists', (error, reply)=>{
+      error && console.log(error);
+      if(reply) { toast.success('data edit complete', { autoClose: false }); }
+    });
+  }
+  
   return (
     <div className='invert'>
       <h2 className='cap'>NonCon "Where" Data Repair</h2>
@@ -79,6 +86,12 @@ const DataRepair = ({ orb, bolt, app, users })=> {
       
       <button
         onClick={()=>clearAthing()}
+        className='action clear blackT'
+      >Clear</button>
+      
+      <h2 className='cap'>Clear All User Watchlists</h2>
+      <button
+        onClick={()=>clearAllWatch()}
         className='action clear blackT'
       >Clear</button>
       

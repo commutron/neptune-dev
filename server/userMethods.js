@@ -207,7 +207,8 @@ Meteor.methods({
     if(!double) {
       Meteor.users.update(Meteor.userId(), {
         $push: {
-          watchlist: { 
+          watchlist: {
+            watchKey: new Meteor.Collection.ObjectID().valueOf(),
             type: type,
             keyword: keyword,
             time: new Date(),
@@ -224,9 +225,9 @@ Meteor.methods({
     }
   },
   
-  setMuteState(type, keyword, mute) {
+  setMuteState(wKey, mute) {
     const change = !mute ? true : false;
-    Meteor.users.update({_id: Meteor.userId(), 'watchlist.type': type, 'watchlist.keyword': keyword}, {
+    Meteor.users.update({_id: Meteor.userId(), 'watchlist.watchKey': wKey}, {
       $set: {
         'watchlist.$.mute': change,
       }
@@ -240,6 +241,17 @@ Meteor.methods({
       }
     });
     return true;
+  },
+  
+  clearAllUserWatchlists() {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      Meteor.users.update({orgKey: Meteor.user().orgKey}, {
+        $set: {
+          watchlist: [],
+        },
+      },{multi: true});
+      return true;
+    }
   },
   
   dropBreadcrumb(pingId, pingType, pingkeyword) {

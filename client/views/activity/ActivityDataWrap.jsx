@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 
 import Spin from '../../components/uUi/Spin.jsx';
 
@@ -12,6 +12,14 @@ import InboxPanel from './InboxPanel.jsx';
 import WatchlistPanel from './WatchlistPanel.jsx';
 
 class WatchDataWrap extends Component	{
+  
+  /*
+  componentDidUpdate(prevProps) {
+    if (this.props.user.inbox.length > prevProps.user.inbox.length) {
+      toast('new mail');
+    }
+  }
+  */
   
   render() {
     
@@ -25,7 +33,7 @@ class WatchDataWrap extends Component	{
       );
     }
     
-    const admin = Roles.userIsInRole(Meteor.userId(), 'admin');
+    //const admin = Roles.userIsInRole(Meteor.userId(), 'admin');
     
     return (
       <div className='simpleContainer'>

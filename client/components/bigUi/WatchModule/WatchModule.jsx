@@ -9,13 +9,13 @@ function changeWatch(type, keyword) {
   });
 }
 
-function changeMute(type, keyword, mute) {
-  Meteor.call('setMuteState', type, keyword, mute, (error)=>{
+function changeMute(wKey, mute) {
+  Meteor.call('setMuteState', wKey, mute, (error)=>{
     error && console.log(error);
   });
 }
 
-const WatchButton = ({list, type, keyword})=> {
+const WatchButton = ({list, type, keyword, unique})=> {
   
   const watching = list.find( x => x.type === type && x.keyword === keyword);
   
@@ -24,14 +24,14 @@ const WatchButton = ({list, type, keyword})=> {
       {!watching ?
         <label>Watch
           <button
-            key='offButton'
+            key={'offWatchButton' + unique}
             onClick={()=>changeWatch(type, keyword)}
           ><i className="far fa-eye greenT"></i></button>
         </label>
       :
         <label className='on'>Unwatch
           <button
-            key='onButton'
+            key={'onWatchButton' + unique}
             onClick={()=>changeWatch(type, keyword)}
           ><i className="far fa-eye-slash redT"></i></button>
         </label>
@@ -40,22 +40,22 @@ const WatchButton = ({list, type, keyword})=> {
   );
 };
 
-export const MuteButton = ({type, keyword, mute})=> {
+export const MuteButton = ({wKey, mute})=> {
 
   return(
     <span className='watchWrap'>
       {!mute ?
         <label className='on'>Mute
           <button
-            key='onButton'
-            onClick={()=>changeMute(type, keyword, mute)}
+            key={'onMuteButton' + wKey}
+            onClick={()=>changeMute(wKey, mute)}
           ><i className="far fa-bell-slash redT"></i></button>
         </label>
       :
         <label>Notify
           <button
-            key='offButton'
-            onClick={()=>changeMute(type, keyword, mute)}
+            key={'offMuteButton' + wKey}
+            onClick={()=>changeMute(wKey, mute)}
           ><i className="far fa-bell greenT"></i></button>
         </label>
       }

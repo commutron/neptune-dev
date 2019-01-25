@@ -97,6 +97,27 @@ Meteor.methods({
         time: new Date()
       }
     }});
+    try {
+      const batchNum = BatchDB.findOne({_id: batchId, orgKey: accessKey}).batch;
+      Meteor.users.update({
+        orgKey: accessKey,
+        'watchlist.type': 'batch', 
+        'watchlist.keyword': batchNum,
+        'watchlist.mute': false
+      }, {
+        $push : { inbox : {
+          notifyKey: new Meteor.Collection.ObjectID().valueOf(),
+          keyword: batchNum,
+          type: 'batch',
+          title: eventTitle,
+          detail: eventDetail,
+          time: new Date(),
+          unread: true
+        }
+      }});
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
   },
   
   /////////////////////////////////////////////////
@@ -165,23 +186,26 @@ Meteor.methods({
   },
   
   releaseToFloor(batchId, rDate) {
-    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+    const userID = Meteor.userId();
+    if(Roles.userIsInRole(userID, 'run')) {
+      const orgKey = Meteor.user().orgKey;
+      const username = Meteor.user().username;
+      BatchDB.update({_id: batchId, orgKey: orgKey}, {
         $set : {
           updatedAt: new Date(),
-  			  updatedWho: Meteor.userId(),
+  			  updatedWho: userID,
           floorRelease: {
             time: rDate,
-            who: Meteor.userId()
+            who: userID
           }
       }});
       Meteor.defer( ()=>{
         Meteor.call(
           'setBatchEvent', 
-          Meteor.user().orgKey, 
+          orgKey, 
           batchId, 
           'Floor Release', 
-          `Released from kitting by ${Meteor.user().username}`
+          `Released from kitting by ${username}`
         );
       });
       return true;
@@ -386,7 +410,9 @@ Meteor.methods({
     if(type === 'inspect' && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
       return false;
     }else{
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
+      const orgKey = Meteor.user().orgKey;
+      const username = Meteor.user().username;
+      BatchDB.update({_id: batchId, orgKey: orgKey, 'items.serial': bar}, {
         $push : { 'items.$.history': {
           key: key,
           step: step,
@@ -401,19 +427,19 @@ Meteor.methods({
         if(benchmark === 'first') {
           Meteor.call(
             'setBatchEvent', 
-            Meteor.user().orgKey,
+            orgKey,
             batchId, 
             'Start of Process', 
-            `First ${step} ${type} recorded by ${Meteor.user().username}`
+            `First ${step} ${type} recorded by ${username}`
           );
         }
         if(benchmark === 'last') {
           Meteor.call(
             'setBatchEvent', 
-            Meteor.user().orgKey, 
-            batchId, 
+            orgKey, 
+            batchId,
             'End of Process', 
-            `Final ${step} ${type} recorded by ${Meteor.user().username}`
+            `Final ${step} ${type} recorded by ${username}`
           );
         }
       });
@@ -425,7 +451,9 @@ Meteor.methods({
     if(!Roles.userIsInRole(Meteor.userId(), 'verify')) {
       return false;
     }else{
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
+      const orgKey = Meteor.user().orgKey;
+      const username = Meteor.user().username;
+      BatchDB.update({_id: batchId, orgKey: orgKey, 'items.serial': bar}, {
         $push : { 'items.$.history': {
           key: key,
           step: step,
@@ -446,19 +474,19 @@ Meteor.methods({
         if(firstfirst === true && good === false) {
           Meteor.call(
             'setBatchEvent', 
-            Meteor.user().orgKey, 
+            orgKey, 
             batchId, 
             'NG First-off Verification', 
-            `An unacceptable ${step} first-off recorded by ${Meteor.user().username}`
+            `An unacceptable ${step} first-off recorded by ${username}`
           );
         }
         if(firstfirst === true && good === true) {
           Meteor.call(
             'setBatchEvent', 
-            Meteor.user().orgKey, 
+            orgKey, 
             batchId, 
             'First-off Verification', 
-            `First good ${step} first-off recorded by ${Meteor.user().username}`
+            `First good ${step} first-off recorded by ${username}`
           );
         }
       });
@@ -471,7 +499,9 @@ Meteor.methods({
     if(type === 'test' && !Roles.userIsInRole(Meteor.userId(), 'test')) {
       return false;
     }else{
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
+      const orgKey = Meteor.user().orgKey;
+      const username = Meteor.user().username;
+      BatchDB.update({_id: batchId, orgKey: orgKey, 'items.serial': bar}, {
         $push : { 'items.$.history': {
           key: key,
           step: step,
@@ -486,19 +516,19 @@ Meteor.methods({
         if(benchmark === 'first' && pass === true) {
           Meteor.call(
             'setBatchEvent', 
-            Meteor.user().orgKey,
+            orgKey,
             batchId, 
             'Start of Process', 
-            `First passed ${step} recorded by ${Meteor.user().username}`
+            `First passed ${step} recorded by ${username}`
           );
         }
         if(benchmark === 'last' && pass === true) {
           Meteor.call(
             'setBatchEvent', 
-            Meteor.user().orgKey, 
+            orgKey, 
             batchId, 
             'End of Process', 
-            `Final passed ${step} recorded by ${Meteor.user().username}`
+            `Final passed ${step} recorded by ${username}`
           );
         }
       });
@@ -530,19 +560,19 @@ Meteor.methods({
       if(benchmark === 'first') {
         Meteor.call(
           'setBatchEvent', 
-          Meteor.user().orgKey,
+          orgKey,
           batchId, 
           'Start of Process', 
-          `First ${step} ${type} recorded by ${Meteor.user().username}`
+          `First ${step} ${type} recorded by ${username}`
         );
       }
       if(benchmark === 'last') {
         Meteor.call(
           'setBatchEvent', 
-          Meteor.user().orgKey, 
+          orgKey, 
           batchId, 
           'End of Process', 
-          `Final ${step} ${type} recorded by ${Meteor.user().username}`
+          `Final ${step} ${type} recorded by ${username}`
         );
       }
       */
@@ -555,7 +585,9 @@ Meteor.methods({
     if(!Roles.userIsInRole(Meteor.userId(), 'finish')) {
       return false;
     }else{
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': serial}, {
+      const orgKey = Meteor.user().orgKey;
+      const username = Meteor.user().username;
+      BatchDB.update({_id: batchId, orgKey: orgKey, 'items.serial': serial}, {
   			$push : { 
   			  'items.$.history': {
   			    key: key,
@@ -577,22 +609,22 @@ Meteor.methods({
         if(benchmark === 'first') {
           Meteor.call(
             'setBatchEvent', 
-            Meteor.user().orgKey,
+            orgKey,
             batchId, 
             'Start of Process', 
-            `First item recorded as complete by ${Meteor.user().username}`
+            `First item recorded as complete by ${username}`
           );
         }
         if(benchmark === 'last') {
           Meteor.call(
             'setBatchEvent', 
-            Meteor.user().orgKey, 
+            orgKey, 
             batchId, 
             'End of Process', 
-            `Final item recorded as complete by ${Meteor.user().username}`
+            `Final item recorded as complete by ${username}`
           );
         }
-        Meteor.call('finishBatch', batchId, Meteor.user().orgKey);
+        Meteor.call('finishBatch', batchId, orgKey);
       });
   		return true;
     }
@@ -615,8 +647,10 @@ Meteor.methods({
 // Scrap \\
   scrapItem(batchId, bar, step, comm) {
     if(Roles.userIsInRole(Meteor.userId(), 'qa')) {
+      const orgKey = Meteor.user().orgKey;
+      const username = Meteor.user().username;
       // update item
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
+      BatchDB.update({_id: batchId, orgKey: orgKey, 'items.serial': bar}, {
         // scrap entry to history
         $push : { 
   			  'items.$.history': {
@@ -635,6 +669,15 @@ Meteor.methods({
   			  'items.$.finishedAt': new Date(),
   			  'items.$.finishedWho': Meteor.userId()
   			}
+      });
+      Meteor.defer( ()=>{
+        Meteor.call(
+          'setBatchEvent', 
+          orgKey,
+          batchId, 
+          'Item Scrapped', 
+          `Item ${bar} recorded as scrapped by ${username}`
+        );
       });
       return true;
     }else{

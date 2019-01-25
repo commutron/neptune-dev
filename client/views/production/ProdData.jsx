@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
+import { toast } from 'react-toastify';
 //import Pref from '/client/global/pref.js';
 
 import { ScanListenerUtility } from '/client/components/utilities/ScanListener.js';
@@ -9,6 +10,12 @@ import Spin from '/client/components/uUi/Spin.jsx';
 import ProductionFindOps from './ProductionFindOps.jsx';
 
 class ProdData extends Component	{
+  
+  componentDidUpdate(prevProps) {
+    if (this.props.user.inbox.length > prevProps.user.inbox.length) {
+      toast('new mail');
+    }
+  }
 
   render() {
     
