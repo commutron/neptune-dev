@@ -1,0 +1,83 @@
+.scrollWrap {
+  overflow-x: scroll;
+}
+.infoFeed {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  min-width: fit-content;
+}
+.infoBlock {
+  width: 100%;
+  margin: 2vh 0;
+}
+
+.blockTitle {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.blockTitle > div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+}
+.blockTitle > div > div {
+  padding: 1vh 2vw;
+  white-space: pre-wrap;
+}
+
+.leftAnchor {
+  width: 75px;
+  border-right: 1px groove rgba(255,255,255,0.2);
+}
+.rightAnchor {
+  width: 75px;
+  min-height: 40.5px;
+  border-left: 1px groove rgba(255,255,255,0.2);
+}
+
+.create { background-color: rgba(255, 255, 255, 0.1); }
+.inspect { background-color: rgba(46, 204, 113, 0.1); }
+.history { background-color: rgba(52, 152, 219, 0.1); }
+.noncon { background-color: rgba(231, 76, 60, 0.1); }
+.short { background-color: rgba(241, 196, 15, 0.1); }
+.finish { background-color: rgba(155, 89, 182, 0.1); }
+
+.moreInfoList {
+  margin: 0 0 0 75px;
+  list-style: circle;
+}
+.moreInfoList li {
+  padding: 0.25rem 0;
+}
+.moreInfoList li:last-child {
+  padding: 0.25rem 0 0.5rem 0;
+}
+
+.endComment {
+  margin: 0 0 0 75px;
+  padding: 0.25rem 0 0.5rem 40px;
+}
+
+.editStandout {
+  border: 1px solid rgba(255,255,255,0.5);
+  min-height: 40.5px;
+}
+.inlineInput { 
+  width: 12vw;
+  min-height: 40.5px;
+}
+.inlineSelect { 
+  width: 15vw;
+  min-height: 40.5px;
+}
+.inlineButton { 
+  min-width: 15px;
+  margin: 0 5px;
+  font-size: 1rem;
+  min-height: 40.5px;
+}

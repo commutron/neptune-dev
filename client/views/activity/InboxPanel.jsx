@@ -1,5 +1,6 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
+import moment from 'moment';
 
 const InboxPanel = ({ orb, bolt, app, user, users })=> {
   
@@ -14,13 +15,13 @@ const InboxPanel = ({ orb, bolt, app, user, users })=> {
             <tbody key={index} className='vSpaceGaps'>
               <tr>
                 <td className='noRightBorder'>
-                  <a href=''>{/*entry.keyword.split('+')[0]*/}</a>
+                  <a href=''>{entry.keyword.split('+')[0]}</a>
                 </td>
                 <td className='noRightBorder'>
-                  
+                  <b>{entry.title}</b> - {entry.detail}
                 </td>
                 <td>
-                  {moment().calendar()}
+                  {moment(entry.time).calendar()}
                 </td>
               </tr>
             </tbody>

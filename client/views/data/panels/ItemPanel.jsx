@@ -1,15 +1,9 @@
 import React, {Component} from 'react';
-import moment from 'moment';
+//import moment from 'moment';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
 import CreateTag from '/client/components/uUi/CreateTag.jsx';
 
-import UserNice from '../../../components/smallUi/UserNice.jsx';
-
-import Tabs from '/client/components/smallUi/Tabs.jsx';
-
-import NCTable from '../../../components/tables/NCTable.jsx';
-import ShortTable from '../../../components/tables/ShortTable.jsx';
 import ScrapBox from '../../../components/smallUi/ScrapBox.jsx';
 import SubItemLink from '/client/components/tinyUi/SubItemLink.jsx';
 //import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
@@ -35,12 +29,6 @@ export default class ItemPanel extends Component	{
     let relevant = shortfalls.filter( x => x.serial === item.serial);
     return relevant;
   }
-  
-  flowSteps() { // don't really need to send all the steps?
-    let allsteps = Array.from( this.props.app.trackOption, x => x.step + ' ' + x.type );
-    let cleansteps = new Set(allsteps);
-    return [...cleansteps];
-  }
 
   render() {
 
@@ -50,7 +38,6 @@ export default class ItemPanel extends Component	{
     //const w = this.props.widgetData;
     //const g = this.props.groupData;
     //const user = this.props.user;
-    
     //const v = w.versions.find( x => x.versionKey === b.versionKey );
     
     const nc = this.ncData();
@@ -98,49 +85,19 @@ export default class ItemPanel extends Component	{
             
             <br />
             
-            <Tabs
-              tabs={['feed', `${Pref.nonCon}s`, `${Pref.shortfalls}`]}
-              wide={true}
-              stick={false}
-              hold={true}
-              sessionTab='itemExPanelTabs'>
-              
-              <ItemFeed
-                key={1}
-                id={b._id}
-                serial={i.serial}
-                createTime={i.createdAt}
-                createBy={i.createdWho}
-                history={i.history}
-                noncons={nc}
-                shortfalls={sh}
-                rmas={i.rma}
-                allRMA={b.cascade}
-                done={done}
-                app={a} />
+            <ItemFeed
+              id={b._id}
+              serial={i.serial}
+              createTime={i.createdAt}
+              createBy={i.createdWho}
+              history={i.history}
+              noncons={nc}
+              shortfalls={sh}
+              rmas={i.rma}
+              allRMA={b.cascade}
+              done={done}
+              app={a} />
                 
-                
-              <NCTable
-                key={2}
-                id={b._id}
-                serial={i.serial}
-                nc={nc}
-                done={done}
-                multi={false}
-                ncOps={a.nonConOption}
-                flowSteps={this.flowSteps()}
-                app={a} />
-                
-              <ShortTable
-                key={3}
-                id={b._id}
-                serial={i.serial}
-                shortfalls={sh}
-                done={done}
-                app={a} />
-              
-            </Tabs>
-            
             <br />
           </div>
           

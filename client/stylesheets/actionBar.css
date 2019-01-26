@@ -98,7 +98,8 @@ select.redIn, select.orangeIn {
 .redIn {
   color: rgb(231,76,60);
 }
-select.redIn > option {
+select.redIn > option,
+select.orangeIn > option {
   color: black;
 }
 
