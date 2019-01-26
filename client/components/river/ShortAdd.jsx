@@ -11,7 +11,7 @@ const ShortAdd = ({ id, serial, pastPN, pastRF, app, doneClose })=> {
     const refs = this.shRefs.value.trim().toLowerCase()
                   .replace(",", " ").split(/\s* \s*/);
     const comm = this.comm.value.trim();
-    const step = Session.get('nowStep') || 'unavailable';
+    const step = Session.get('ncWhere') || 'unavailable';
     
     //console.log({ id, partNum, refs, serial, step, comm });
     Meteor.call('addShort', id, partNum, refs, serial, step, comm, (error, reply)=>{
@@ -20,7 +20,8 @@ const ShortAdd = ({ id, serial, pastPN, pastRF, app, doneClose })=> {
     });
   }
 
-	let lock = Session.get('nowStep') === 'done';
+	let now = Session.get('ncWhere');
+	let lock = now === 'complete';
 	
   return (
     <form

@@ -30,6 +30,7 @@
   border-bottom-style: solid;
   border-bottom-color: transparent;
   background-color: transparent;
+  cursor: pointer;
 }
 .miniAction:hover {
   opacity: 1;

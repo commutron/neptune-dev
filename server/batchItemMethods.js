@@ -97,6 +97,7 @@ Meteor.methods({
         time: new Date()
       }
     }});
+    /*
     try {
       const batchNum = BatchDB.findOne({_id: batchId, orgKey: accessKey}).batch;
       Meteor.users.update({
@@ -114,10 +115,11 @@ Meteor.methods({
           time: new Date(),
           unread: true
         }
-      }});
+      }},{multi: true});
     }catch (err) {
       throw new Meteor.Error(err);
     }
+    */
   },
   
   /////////////////////////////////////////////////
@@ -1161,11 +1163,11 @@ Meteor.methods({
   },
   
   /// unset an rma on an item
-  unsetRMA(batchId, bar, cKey) {
-    const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar});
-    const outstndng = doc.nonCon.filter( x => x.inspect !== false && x.skip === false );
+  unsetRMA(batchId, serial, cKey) {
+    const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': serial});
+    const outstndng = doc.nonCon.filter( x => x.serial === serial && x.inspect !== false && x.skip === false );
     if(outstndng.length === 0 && Roles.userIsInRole(Meteor.userId(), ['qa', 'remove'])) {
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': serial}, {
         $pull : {
           'items.$.rma': cKey
         }});

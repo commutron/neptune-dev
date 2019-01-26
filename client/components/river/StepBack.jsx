@@ -1,6 +1,6 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
-
+import { toast } from 'react-toastify';
 //// Dangerous Component, use carefully \\\\
 
 function handle(id, bar, entry) {
@@ -17,18 +17,17 @@ function handle(id, bar, entry) {
           console.log(error);
       });
     }else{
-      Bert.alert(Pref.blocked, 'danger');
+      toast.error('Rejected by Server');
     }
   });
 }
         
 const StepBack = ({ id, bar, entry, lock })=> (
   <button
-    className='miniAction redT'
+    className='miniAction'
     onClick={()=>handle(id, bar, entry)}
     disabled={lock}
-    readOnly={true}
-  ><i className='fas fa-times'></i></button>
+  ><i className="fas fa-history fa-lg fa-fw"></i></button>
 );
 
 export default StepBack;

@@ -10,13 +10,13 @@ import Spin from '/client/components/uUi/Spin.jsx';
 import ProductionFindOps from './ProductionFindOps.jsx';
 
 class ProdData extends Component	{
-  
+  /*
   componentDidUpdate(prevProps) {
     if (this.props.user.inbox.length > prevProps.user.inbox.length) {
       toast('new mail');
     }
   }
-
+  */
   render() {
     
     if(
