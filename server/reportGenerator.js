@@ -67,22 +67,6 @@ function loopNonCons(nonCons, from, to, optionsLegacy, phases, getNC, getType, g
     const inTime = getNC ? nonCons.filter( x => moment(x.time).isBetween(from, to) ) : [];
     let foundNC = getNC ? inTime.length : false;
     let uniqueSerials = getNC ? [... new Set( Array.from(inTime, x => x.serial ) ) ].length : false;
-    /*
-    let refC = getNC && getRef ? inTime.filter( x => x.ref.split('')[0] === 'c' ).length : false;
-    let refR = getNC && getRef ? inTime.filter( x => x.ref.split('')[0] === 'r' ).length : false;
-    let refU = getNC && getRef ? inTime.filter( x => x.ref.split('')[0] === 'u' ).length : false;
-    let refQ = getNC && getRef ? inTime.filter( x => x.ref.split('')[0] === 'q' ).length : false;
-    let refPCB = getNC && getRef ? inTime.filter( x => 
-                                    x.ref.includes('pcb') || x.ref.includes('board')
-                                  ).length : false;
-    const refBreakdown = getNC && getRef ? [ 
-      [ 'C', refC ], 
-      [ 'R', refR ], 
-      [ 'U', refU ], 
-      [ 'Q', refQ ], 
-      [ 'PCB', refPCB ] 
-    ] : false;
-    */
     let typeBreakdown = getNC && getType ? [] : false;
     if(getNC && getType) {
       for(let ncOp of optionsLegacy) {

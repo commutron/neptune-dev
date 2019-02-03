@@ -40,7 +40,7 @@ export const TraverseWrap = ({
       <div className='containerEx'>
         <ToastContainer
           position="top-right"
-          autoClose={10000}
+          autoClose={5000}
           newestOnTop />
         <div className='tenHeader noPrint'>
           <div className='topBorder' />

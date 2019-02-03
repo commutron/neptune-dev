@@ -69,7 +69,7 @@ export default class OrgWIP extends Component	{
       <div key={0} className='simpleContainer'>
         <ToastContainer
           position="top-right"
-          autoClose={10000}
+          autoClose={5000}
           newestOnTop />
         <div className='tenHeader'>
           <div className='topBorder'></div>
@@ -114,7 +114,6 @@ export default class OrgWIP extends Component	{
     );
   }
   componentDidMount() {
-    toast.info('This operation may take a moment');
     this.relevant();
     this.interval = setInterval(() => this.relevant(), 1000*60*60);
   }

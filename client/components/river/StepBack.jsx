@@ -24,6 +24,7 @@ function handle(id, bar, entry) {
         
 const StepBack = ({ id, bar, entry, lock })=> (
   <button
+    title="Mark as 'No Good'"
     className='miniAction'
     onClick={()=>handle(id, bar, entry)}
     disabled={lock}

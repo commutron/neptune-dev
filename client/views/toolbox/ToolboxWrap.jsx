@@ -10,7 +10,16 @@ import Slides from '../../components/smallUi/Slides.jsx';
 import DataRepair from './DataRepair.jsx';
 
 class ToolboxWrap extends Component	{
-  
+  /*
+  componentDidUpdate(prevProps) {
+    if(this.props.user.inbox && prevProps.user.inbox) {
+      if(this.props.user.inbox.length > prevProps.user.inbox.length) {
+        const newNotify = this.props.user.inbox[this.props.user.inbox.length-1];
+        toast('✉ ' + newNotify.title, { autoClose: false });
+      }
+    }
+  }
+  */
   showToast() {
     toast('a default message');
     toast.info('A blue info message');
@@ -19,6 +28,13 @@ class ToolboxWrap extends Component	{
     toast.error('A red error message');
     
     toast.success('no timeout', { autoClose: false });
+  }
+  
+  sendAtestNotify(all) {
+    Meteor.call('sendTestMail', all, (error)=>{
+      error && console.log(error);
+      toast.success('message sent');
+    });
   }
   
   render() {
@@ -39,7 +55,7 @@ class ToolboxWrap extends Component	{
       <div className='simpleContainer'>
         <ToastContainer
           position="top-right"
-          autoClose={10000}
+          autoClose={5000}
           newestOnTop />
         <div className='tenHeader'>
           <div className='topBorder' />
@@ -55,6 +71,7 @@ class ToolboxWrap extends Component	{
           <Slides
             menu={[
               <b><i className='fas fa-bell fa-fw'></i>  Toast Test</b>,
+              <b><i className='fas fa-bell fa-fw'></i>  Notify Test</b>,
               <b><i className='fas fa-wrench fa-fw'></i>  Data Repair</b>,
               <b><i className='fas fa-life-ring fa-fw'></i>  Legacy Support</b>
             ]}>
@@ -68,14 +85,29 @@ class ToolboxWrap extends Component	{
               </p>
             </div>
             
+            <div key={2}>
+              <p>
+                <button
+                  className='action clearBlue invert'
+                  onClick={()=>this.sendAtestNotify(false)}
+                >Send Inbox Notification Test to YOURSELF</button>
+              </p>
+              <p>
+                <button
+                  className='action clearBlue invert'
+                  onClick={()=>this.sendAtestNotify(true)}
+                >Send Inbox Notification Test to ALL USERS</button>
+              </p>
+            </div>
+            
             <DataRepair
-              key={2}
+              key={3}
               orb={this.props.orb}
               bolt={this.props.bolt}
               app={this.props.app}
               users={this.props.users} />
               
-            <div key={3}>
+            <div key={4}>
               <p>
                 determine support needs
               </p>
@@ -113,7 +145,8 @@ export default withTracker( () => {
       ready: appSub.ready(),
       orb: Session.get('now'),
       bolt: Session.get('allData'),
-      user: name,
+      username: name,
+      user: user,
       active: active,
       org: org,
       app: AppDB.findOne({org: org}),

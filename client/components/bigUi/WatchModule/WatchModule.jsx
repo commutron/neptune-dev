@@ -8,9 +8,19 @@ function changeWatch(type, keyword) {
     error && console.log(error);
   });
 }
-
 function changeMute(wKey, mute) {
   Meteor.call('setMuteState', wKey, mute, (error)=>{
+    error && console.log(error);
+  });
+}
+
+function changeRead(nKey, read) {
+  Meteor.call('setNotifyAsRead', nKey, read, (error)=>{
+    error && console.log(error);
+  });
+}
+function removeNotify(nKey) {
+  Meteor.call('removeNotify', nKey, (error)=>{
     error && console.log(error);
   });
 }
@@ -59,6 +69,39 @@ export const MuteButton = ({wKey, mute})=> {
           ><i className="far fa-bell greenT"></i></button>
         </label>
       }
+    </span>
+  );
+};
+
+export const UnReadButton = ({nKey, unread})=> {
+
+  return(
+    <span className='notifyWrap'>
+      {!unread ?
+        <button
+          key={'readButton' + nKey}
+          title='read'
+          onClick={()=>changeRead(nKey, unread)}
+        ><i className="far fa-circle greenT"></i></button>
+      :
+        <button
+          key={'unreadButton' + nKey}
+          title='unread'
+          onClick={()=>changeRead(nKey, unread)}
+        ><i className="fas fa-circle greenT"></i></button>
+      }
+    </span>
+  );
+};
+
+export const RemoveNotifyButton = ({nKey})=> {
+  return(
+    <span className='notifyWrap'>
+      <button
+        key={'removeButton' + nKey}
+        title='remove'
+        onClick={()=>removeNotify(nKey)}
+      ><i className="fas fa-times redT"></i></button>
     </span>
   );
 };

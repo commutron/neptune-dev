@@ -34,7 +34,7 @@ const WatchlistPanel = ({ orb, bolt, app, user, users, batchEvents, bCache })=> 
           const batch = entry.type === 'batch' ?
                           batchEvents.find( x => x.batch === keyword ) 
                         : [];
-          const events = batch.events || [];
+          const events = batch ? batch.events || [] : [];
           const orderedEvents = events.sort((t1, t2)=> {
             if (moment(t1.time).isAfter(t2.time)) { return -1 }
             if (moment(t1.time).isBefore(t2.time)) { return 1 }

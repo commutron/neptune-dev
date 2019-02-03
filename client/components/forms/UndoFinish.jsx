@@ -13,9 +13,6 @@ const UndoFinish = ({ id, serial, finishedAt, timelock, noText })=>	{
       error && console.log(error);
       if(reply) {
         toast.success('Saved');
-        Meteor.call('pushUndoFinish', id, serial, (error)=>{
-          error && console.log(error);
-        });
       }else{
         toast.error('Server Error');
       }

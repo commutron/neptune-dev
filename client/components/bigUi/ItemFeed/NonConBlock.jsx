@@ -72,8 +72,8 @@ export default class NonConBlock extends Component {
     const skp = typeof dt.skip === 'object';
     
     const open = dt.inspect === false ?
-                  <i><i className="fas fa-wrench fa-lg fa-fw redT"></i></i> :
-                  <b><i className="fas fa-check-circle fa-lg fa-fw greenT"></i></b>;
+                  <i><i className="fas fa-wrench fa-lg fa-fw redT" title='Awaiting Repair'></i></i> :
+                  <b><i className="fas fa-check-circle fa-lg fa-fw greenT" title='Good'></i></b>;
     
     let fixed = !fx ? '' : <li>Repaired: <UserNice id={dt.fix.who} /> {moment(dt.fix.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</li>;
     let inspected = !ins ? '' : <li>Inspected: <UserNice id={dt.inspect.who} /> {moment(dt.inspect.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</li>;

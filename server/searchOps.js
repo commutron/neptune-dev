@@ -46,16 +46,16 @@ Meteor.methods({
     const found = itemsBatch ? itemsBatch.batch : false;
     return found;
   },
- 
+ /*
   autofillInfo(keyword) {
     const batch = BatchDB.findOne({batch: keyword});
     const widget = WidgetDB.findOne({_id: batch.widgetId});
     const version = widget.versions.find( x => x.versionKey === batch.versionKey);
     const group = GroupDB.findOne({_id: widget.groupId});
-    const niceString = `${group.alias} ${widget.widget} v.${version.version}`;
+    const niceString = `${group.alias.toUpperCase()} ${widget.widget.toUpperCase()} v.${version.version}`;
     return niceString;
   },
-  
+  */
   quickVersion(vKey) {
     const widget = WidgetDB.findOne({'versions.versionKey': vKey});
     const version = widget ? widget.versions.find( x => x.versionKey === vKey) : false;

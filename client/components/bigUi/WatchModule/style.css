@@ -1,4 +1,4 @@
-.watchWrap, .watchWrap label, .watchWrap button {
+.watchWrap, .watchWrap label, .watchWrap button, .notifyWrap {
   height: 2rem;
   font-size: 1rem;
   border-radius: 10px;
@@ -32,5 +32,11 @@
   margin: 0 0 0 0.5rem;
   border: none;
   background-color: transparent;
+}
+
+.notifyWrap button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
 }
 

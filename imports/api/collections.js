@@ -10,6 +10,12 @@ AppDB.deny({
   remove: () => { return true; },
 });
 
+CacheDB.deny({
+  insert: () => { return true; },
+  update: () => { return true; },
+  remove: () => { return true; },
+});
+
 GroupDB.deny({
   insert: () => { return true; },
   update: () => { return true; },

@@ -233,6 +233,22 @@ Meteor.methods({
       }
     });
   },
+  
+  setNotifyAsRead(nKey, read) {
+    const change = !read;
+    Meteor.users.update({_id: Meteor.userId(), 'inbox.notifyKey': nKey}, {
+      $set: {
+        'inbox.$.unread': change,
+      }
+    });
+  },
+  removeNotify(nKey) {
+    Meteor.users.update(Meteor.userId(), {
+      $pull : {
+        inbox: {notifyKey: nKey}
+      }
+    });
+  },
   		
   clearBreadcrumbsRepair() {
     Meteor.users.update(Meteor.userId(), {

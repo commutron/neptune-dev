@@ -9,15 +9,6 @@ const RecentPanel = ({ orb, bolt, app, user, users, bCache })=> {
     FlowRouter.go('/production');
   }
   
-  function getInfo(keyword) {
-    Meteor.call('autofillInfo', keyword, (err, re)=>{
-      err && console.log(err);
-      if(re) {
-        return re;
-      }
-    });
-  }
-  
   const basket = user.breadcrumbs || [];
   const limitedTrail = basket.filter( 
                         x => moment().diff(moment(x.time), 'days') < 31 )

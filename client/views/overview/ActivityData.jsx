@@ -1,11 +1,21 @@
 import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
+import { toast } from 'react-toastify';
 
 import Spin from '../../components/uUi/Spin.jsx';
 import ActivityWrap from './ActivityWrap.jsx';
 
 class View extends Component	{
+  
+  componentDidUpdate(prevProps) {
+    if(this.props.user.inbox && prevProps.user.inbox) {
+      if(this.props.user.inbox.length > prevProps.user.inbox.length) {
+        const newNotify = this.props.user.inbox[this.props.user.inbox.length-1];
+        toast('✉ ' + newNotify.title, { autoClose: false });
+      }
+    }
+  }
   /*
   componentWillUnmount() {
     this.props.sub.stop();
@@ -53,7 +63,8 @@ export default withTracker( () => {
       sub: sub,
       appReady: appSub.ready(),
       ready: sub.ready(),
-      user: name,
+      username: name,
+      user: user,
       org: org,
       app: AppDB.findOne({org: org}),
       group: GroupDB.find().fetch(),

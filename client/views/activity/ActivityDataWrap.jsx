@@ -13,13 +13,14 @@ import WatchlistPanel from './WatchlistPanel.jsx';
 
 class WatchDataWrap extends Component	{
   
-  /*
   componentDidUpdate(prevProps) {
-    if (this.props.user.inbox.length > prevProps.user.inbox.length) {
-      toast('new mail');
+    if(this.props.user.inbox && prevProps.user.inbox) {
+      if(this.props.user.inbox.length > prevProps.user.inbox.length) {
+        const newNotify = this.props.user.inbox[this.props.user.inbox.length-1];
+        toast('✉ ' + newNotify.title, { autoClose: false });
+      }
     }
   }
-  */
   
   render() {
     

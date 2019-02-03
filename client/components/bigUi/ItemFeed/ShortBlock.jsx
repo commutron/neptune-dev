@@ -83,8 +83,8 @@ export default class ShortBlock extends Component {
                         'unknown';
     
     const open = inE === true || reS === true ?
-                  <i><i className="fas fa-check-circle fa-lg fa-fw greenT"></i></i> :
-                  <b><i className="fas fa-wrench fa-lg fa-fw redT"></i></b>;
+                  <i><i className="fas fa-check-circle fa-lg fa-fw greenT" title='Good'></i></i> :
+                  <b><i className="fas fa-wrench fa-lg fa-fw redT" title='Awaiting Repair'></i></b>;
                   
     const editAllow = Roles.userIsInRole(Meteor.userId(), 'verify') && !done;
     const editIndicate = this.state.edit && 'editStandout';     

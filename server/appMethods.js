@@ -7,6 +7,7 @@ Meteor.startup(function () {
   BatchDB._ensureIndex({ batch : 1, 'items.serial' : 1 }, { unique: true });
   GroupDB._ensureIndex({ group : 1 }, { unique: true });
   WidgetDB._ensureIndex({ widget : 1, 'versions.version' : 1 }, { unique: true });
+  CacheDB._ensureIndex({ dataName : 1 }, { unique: true });
 });
 
 Meteor.methods({
@@ -112,31 +113,6 @@ Meteor.methods({
     }
   },
   
-  /*
-  addTrackOption(flatTrack) {
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      
-      const split = flatTrack.split('|');
-      const step = split[0];
-      const type = split[1];
-      const trackObj = 
-      { 
-        'key' : new Meteor.Collection.ObjectID().valueOf(),
-        'step' : step,
-        'type' : type,
-        'how' : false
-      };
-      
-      AppDB.update({orgKey: Meteor.user().orgKey}, {
-        $push : { 
-          trackOption : trackObj
-      }});
-      return true;
-    }else{
-      return false;
-    }
-  },
-  */
   addTrackStepOption(step, type, phase) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {
@@ -525,6 +501,42 @@ Meteor.methods({
       return true;
     }else{
       return false;
+    }
+  },
+  
+  sendTestMail(all) {
+    if(all) {
+      try {
+        Meteor.users.update({ orgKey: Meteor.user().orgKey }, {
+          $push : { inbox : {
+            notifyKey: new Meteor.Collection.ObjectID().valueOf(),
+            keyword: 'Sample',
+            type: 'test',
+            title: 'Sample Notification',
+            detail: 'This is a test',
+            time: new Date(),
+            unread: true
+          }
+        }},{multi: true});
+      }catch (err) {
+        throw new Meteor.Error(err);
+      }
+    }else{
+      try {
+        Meteor.users.update(Meteor.userId(), {
+          $push : { inbox : {
+            notifyKey: new Meteor.Collection.ObjectID().valueOf(),
+            keyword: 'Sample',
+            type: 'test',
+            title: 'Sample Notification',
+            detail: 'This is a test',
+            time: new Date(),
+            unread: true
+          }
+        }});
+      }catch (err) {
+        throw new Meteor.Error(err);
+      }
     }
   },
   

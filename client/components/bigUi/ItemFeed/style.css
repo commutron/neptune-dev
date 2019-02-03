@@ -1,5 +1,5 @@
 .scrollWrap {
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 .infoFeed {
   display: flex;

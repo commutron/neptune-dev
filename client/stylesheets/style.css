@@ -488,6 +488,7 @@ label.qdpplRound {
 
 .white { background-color: var(--clouds); }
 .whiteT { color: white; }
+.cloudsT { color: var(--clouds); }
 
 .clear {
   border: 0.01em solid;

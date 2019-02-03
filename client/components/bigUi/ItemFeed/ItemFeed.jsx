@@ -32,7 +32,7 @@ const ItemFeed = ({
         <div className='infoBlock create'>
           <div className='blockTitle cap'>
             <div>
-              <div className='leftAnchor'><i className="fas fa-plus-circle fa-lg fa-fw greenT"></i></div>
+              <div className='leftAnchor'><i className="fas fa-plus-circle fa-lg fa-fw cloudsT"></i></div>
               <div>serial number created</div>
             </div>
             <div className='rightText'>
@@ -98,8 +98,8 @@ const HistoryBlock = ({entry, id, serial, done})=>{
   const redoButton = <StepBack id={id} bar={serial} entry={entry} lock={!redoAllow} />;
                  
   const good = dt.good ?
-                <i><i className="fas fa-check-circle fa-lg fa-fw greenT"></i></i> :
-                <b><i className="fas fa-times-circle fa-lg fa-fw redT"></i></b>;
+                <i><i className="fas fa-check-circle fa-lg fa-fw greenT" title='Good'></i></i> :
+                <b><i className="fas fa-times-circle fa-lg fa-fw redT" title='No Good'></i></b>;
    
   const infoF = dt.type === 'first' && typeof dt.info === 'object';
   const infoT = dt.type === 'test' && typeof dt.info === 'string';
@@ -128,14 +128,20 @@ const HistoryBlock = ({entry, id, serial, done})=>{
           <div className='rightAnchor'>{redoButton}</div>
         </div>
       </div>
-      {dt.type === 'first' &&
+      {dt.type === 'first' ?
         <ul className='moreInfoList'>
           <li>Inspected: {inspect}</li>
           <li>Built: {builder} with {method}</li>
           {change !== '' && <li>{change}</li>}
           {issue && <li>{issue}</li>}
         </ul>
-      }
+      :
+        dt.type === 'undo' && dt.info.formerWhen && dt.info.formerWho ?
+          <ul className='moreInfoList'>
+            <li>Previously finished: {moment(dt.info.formerWhen).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</li>
+            <li>Previously finished by: <UserNice id={dt.info.formerWho} /></li>
+          </ul>
+      : null}
       {dt.comm !== '' && <p className='endComment'>{dt.comm}</p>}
     </div>
   );

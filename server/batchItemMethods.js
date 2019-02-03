@@ -97,7 +97,6 @@ Meteor.methods({
         time: new Date()
       }
     }});
-    /*
     try {
       const batchNum = BatchDB.findOne({_id: batchId, orgKey: accessKey}).batch;
       Meteor.users.update({
@@ -119,7 +118,6 @@ Meteor.methods({
     }catch (err) {
       throw new Meteor.Error(err);
     }
-    */
   },
   
   /////////////////////////////////////////////////
@@ -738,11 +736,16 @@ Meteor.methods({
       const doc = BatchDB.findOne({_id: batchId});
       const docOpen = doc ? doc.finishedAt === false : false;
       const subDoc = doc ? doc.items.find( x => x.serial === serial ) : false;
-      const inTime = subDoc.finishedAt !== false ? moment().diff(moment(subDoc.finishedAt), 'minutes') < (60 * 24 * 7) : false;
-      const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
-      const orgPIN = org ? org.orgPIN : null;
-      if(doc && docOpen && (inTime || orgPIN === override)) {
-        BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': serial}, {
+      
+      const whenDid = subDoc.finishedAt;
+      const whoDid = subDoc.finishedWho;
+      const inTime = whenDid !== false ? moment().diff(moment(whenDid), 'minutes') < (60 * 24 * 7) : false;
+
+      const accessKey = Meteor.user().orgKey;
+      const org = AppDB.findOne({ orgKey: accessKey });
+      const minorPIN = org ? org.minorPIN : null;
+      if(doc && docOpen && (inTime || minorPIN === override)) {
+        BatchDB.update({_id: batchId, orgKey: accessKey, 'items.serial': serial}, {
           $pull : {
             'items.$.history': { key: 'f1n15h1t3m5t3p' }
           },
@@ -751,29 +754,33 @@ Meteor.methods({
     			  'items.$.finishedWho': false
     			},
         });
-          return true;
+        Meteor.call('pushUndoFinish', batchId, serial, accessKey, whenDid, whoDid);
+        return true;
       }else{
         return false;
       }
     }
   },
-  pushUndoFinish(batchId, serial) {
-    if(Roles.userIsInRole(Meteor.userId(), 'finish')) {
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': serial}, {
+  pushUndoFinish(batchId, serial, accessKey, formerWhen, formerWho) {
+    //if(Roles.userIsInRole(Meteor.userId(), 'finish')) {
+      BatchDB.update({_id: batchId, orgKey: accessKey, 'items.serial': serial}, {
         $push : { 
   			  'items.$.history': {
   			    key: new Meteor.Collection.ObjectID().valueOf(),
-            step: 'undo finish',
+            step: 'finish',
             type: 'undo',
             good: false,
             time: new Date(),
             who: Meteor.userId(),
             comm: '',
-            info: false
+            info: {
+              formerWhen: formerWhen,
+              formerWho: formerWho
+            }
   			  }}});
-    }else{
-      null;
-    }
+    //}else{
+      //null;
+    //}
   },
   
 //// panel break
