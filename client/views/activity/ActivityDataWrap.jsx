@@ -14,17 +14,21 @@ import WatchlistPanel from './WatchlistPanel.jsx';
 class WatchDataWrap extends Component	{
   
   componentDidUpdate(prevProps) {
-    if(this.props.user.inbox && prevProps.user.inbox) {
-      if(this.props.user.inbox.length > prevProps.user.inbox.length) {
-        const newNotify = this.props.user.inbox[this.props.user.inbox.length-1];
-        toast('✉ ' + newNotify.title, { autoClose: false });
+    if(this.props.user) {
+      if(prevProps.user) {
+        if(this.props.user.inbox && prevProps.user.inbox) {
+          if(this.props.user.inbox.length > prevProps.user.inbox.length) {
+            const newNotify = this.props.user.inbox[this.props.user.inbox.length-1];
+            toast('✉ ' + newNotify.title, { autoClose: false });
+          }
+        }
       }
     }
   }
   
   render() {
     
-    if(!this.props.ready || !this.props.readyEvents || !this.props.app) {
+    if(!this.props.ready || !this.props.readyUsers || !this.props.readyEvents || !this.props.app) {
       return (
         <div className='centreContainer'>
           <div className='centrecentre'>
@@ -97,18 +101,24 @@ export default withTracker( () => {
   let org = user ? user.org : false;
   let active = login ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   const appSub = login ? Meteor.subscribe('appData') : false;
+  const usersSub = login ? Meteor.subscribe('usersData') : false;
   const eventsSub = login ? Meteor.subscribe('eventsData') : false;
   if(!login) {
     return {
       ready: false,
+      readyUsers: false,
+      readyEvents: false
     };
   }else if(!active) {
     return {
       ready: false,
+      readyUsers: false,
+      readyEvents: false
     };
   }else{
     return {
       ready: appSub.ready(),
+      readyUsers: usersSub.ready(),
       readyEvents: eventsSub.ready(),
       orb: Session.get('now'),
       bolt: Session.get('allData'),

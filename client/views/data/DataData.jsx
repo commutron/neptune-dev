@@ -10,10 +10,14 @@ import DataViewOps from './DataViewOps.jsx';
 class ExploreView extends Component	{
   
   componentDidUpdate(prevProps) {
-    if(this.props.user.inbox && prevProps.user.inbox) {
-      if(this.props.user.inbox.length > prevProps.user.inbox.length) {
-        const newNotify = this.props.user.inbox[this.props.user.inbox.length-1];
-        toast('✉ ' + newNotify.title, { autoClose: false });
+    if(this.props.user) {
+      if(prevProps.user) {
+        if(this.props.user.inbox && prevProps.user.inbox) {
+          if(this.props.user.inbox.length > prevProps.user.inbox.length) {
+            const newNotify = this.props.user.inbox[this.props.user.inbox.length-1];
+            toast('✉ ' + newNotify.title, { autoClose: false });
+          }
+        }
       }
     }
   }
@@ -22,6 +26,7 @@ class ExploreView extends Component	{
     
     if(
       !this.props.appReady ||
+      !this.props.usersReady ||
       !this.props.coldReady || 
       !this.props.hotReady ||
       !this.props.user ||
@@ -66,6 +71,7 @@ export default withTracker( (props) => {
   let org = user ? user.org : false;
   let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   const appSub = login ? Meteor.subscribe('appData') : false;
+  const usersSub = login ? Meteor.subscribe('usersData') : false;
   const coldSub = login ? Meteor.subscribe('skinnyData') : false;
   
   const batchRequest = props.view === 'batch' ? props.request : false;
@@ -76,12 +82,14 @@ export default withTracker( (props) => {
   if( !login || !active ) {
     return {
       appReady: false,
+      usersReady: false,
       coldReady: false,
       hotReady: false
     };
   }else{
     return {
       appReady: appSub.ready(),
+      usersReady: usersSub.ready(),
       coldReady: coldSub.ready(),
       hotReady: hotSubEx.ready(),
       user: user,

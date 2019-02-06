@@ -12,10 +12,14 @@ import ProductionFindOps from './ProductionFindOps.jsx';
 class ProdData extends Component	{
 
   componentDidUpdate(prevProps) {
-    if(this.props.user.inbox && prevProps.user.inbox) {
-      if(this.props.user.inbox.length > prevProps.user.inbox.length) {
-        const newNotify = this.props.user.inbox[this.props.user.inbox.length-1];
-        toast('✉ ' + newNotify.title, { autoClose: false });
+    if(this.props.user) {
+      if(prevProps.user) {
+        if(this.props.user.inbox && prevProps.user.inbox) {
+          if(this.props.user.inbox.length > prevProps.user.inbox.length) {
+            const newNotify = this.props.user.inbox[this.props.user.inbox.length-1];
+            toast('✉ ' + newNotify.title, { autoClose: false });
+          }
+        }
       }
     }
   }
@@ -24,6 +28,7 @@ class ProdData extends Component	{
     
     if(
        !this.props.appReady ||
+       !this.props.usersReady ||
        !this.props.coldReady || 
        !this.props.hotReady ||
        !this.props.user ||
@@ -73,6 +78,7 @@ export default withTracker( () => {
   let org = user ? user.org : false;
   let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   const appSub = login ? Meteor.subscribe('appData') : false;
+  const usersSub = login ? Meteor.subscribe('usersData') : false;
   const coldSub = login ? Meteor.subscribe('thinData') : false;
 
   let hotSub = Meteor.subscribe('hotDataPlus', false);
@@ -125,18 +131,21 @@ export default withTracker( () => {
   if( !login ) {
     return {
       appReady: false,
+      usersReady: false,
       coldReady: false,
       hotReady: false
     };
   }else if( !active ) {
     return {
       appReady: appSub.ready(),
+      usersReady: usersSub.ready(),
       coldReady: coldSub.ready(), 
       hotReady: hotSub.ready(),
     };
   }else{
     return {
       appReady: appSub.ready(),
+      usersReady: usersSub.ready(),
       coldReady: coldSub.ready(),
       hotReady: hotSub.ready(),
       orb: orb,

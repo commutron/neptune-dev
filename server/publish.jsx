@@ -17,17 +17,27 @@ Meteor.publish('appData', function(){
   const admin = Roles.userIsInRole(this.userId, 'admin');
   if(admin) {
     return [
+      Meteor.users.find({_id: this.userId},
+        {fields: {
+          'services': 0,
+          'orgKey': 0,
+        }}),
       AppDB.find({}, 
         {fields: {
           'orgKey': 0,
           'orgPIN': 0,
           'minorPIN': 0
         }}),
+        /*
       Meteor.users.find({},
         {fields: {
           'services': 0,
           'orgKey': 0,
+          'watchlist': 0,
+          'inbox': 0,
+          'breadcrumbs': 0
         }}),
+        */
       ];
   }else if(!orgKey) {
     return [
@@ -38,17 +48,53 @@ Meteor.publish('appData', function(){
         }}),
       ];
   }else if(user) {
-    return [ 
+    return [
+      Meteor.users.find({_id: this.userId},
+        {fields: {
+          'services': 0,
+          'orgKey': 0,
+        }}),
       AppDB.find({orgKey: orgKey}, 
         {fields: { 
           'orgKey': 0,
           'orgPIN': 0,
           'minorPIN': 0
         }}),
+        /*
       Meteor.users.find({orgKey: orgKey},
         {fields: {
           'services': 0,
           'orgKey': 0,
+          'watchlist': 0,
+          'inbox': 0,
+          'breadcrumbs': 0
+        }}),
+        */
+      ];
+  }else{null}
+});
+
+Meteor.publish('usersData', function(){
+  const user = Meteor.users.findOne({_id: this.userId});
+  const orgKey = user ? user.orgKey : false;
+  const admin = Roles.userIsInRole(this.userId, 'admin');
+  if(admin) {
+    return [
+      Meteor.users.find({},
+        {fields: {
+          'services': 0,
+          'orgKey': 0,
+          'watchlist': 0,
+          'inbox': 0,
+          'breadcrumbs': 0
+        }}),
+      ];
+  }else if(user && orgKey) {
+    return [
+      Meteor.users.find({orgKey: orgKey},
+        {fields: {
+          'username': 1,
+          'org': 1
         }}),
       ];
   }else{null}

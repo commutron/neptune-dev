@@ -11,9 +11,9 @@ import { ChillHome } from '/client/components/tinyUi/Chill.jsx';
 import NavButton from '/client/components/uUi/NavButton.jsx';
 import { NavPlaceholder } from '/client/components/uUi/NavButton.jsx';
 
-const StartView = ({ready, user, org, app}) =>	{
+const StartView = ({ready, readyUsers, user, org, app}) =>	{
     
-  if(!ready || !user || !org || !app) {
+  if(!ready || !readyUsers || !user || !org || !app) {
     return (
       <div className='centreSpash'>
         <Spin color={true} message='Just a moment'/>
@@ -53,14 +53,17 @@ export default withTracker( () => {
   let user = login ? Meteor.user() : false;
   let org = user ? user.org : false;
   const hotSub = login ? Meteor.subscribe('appData') : false;
+  const usersSub = login ? Meteor.subscribe('usersData') : false;
   if(!login) {
     return {
       ready: false,
+      readyUsers: false,
       login: Meteor.userId(),
     };
   }else{
     return {
       ready: hotSub.ready(),
+      readyUsers: usersSub.ready(),
       login: Meteor.userId(),
       user: user,
       org: org,
