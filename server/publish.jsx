@@ -59,7 +59,8 @@ Meteor.publish('usersData', function(){
       Meteor.users.find({orgKey: orgKey},
         {fields: {
           'username': 1,
-          'org': 1
+          'org': 1,
+          'roles': 1
         }}),
       ];
   }else{null}

@@ -4,12 +4,6 @@ import { toast } from 'react-toastify';
 
 const DataRepair = ({ orb, bolt, app, users })=> {
   
-  function changeAPI() {
-    Meteor.call('activeToLiveDANGEROUS', (error, reply)=>{
-      error && console.log(error);
-      if(reply) { toast.success('data edit complete', { autoClose: false }); }
-    });
-  }
   
   function fixAthing(e, oldText, newText, textMatch) {
     e.preventDefault();
@@ -102,13 +96,6 @@ const DataRepair = ({ orb, bolt, app, users })=> {
         className='action clear blackT'
       >Clear</button>
       
-      <br />
-      
-      <h2 className='cap'>"active" to "live"</h2>
-      <button
-        onClick={()=>changeAPI()}
-        className='action clear blackT'
-      >Change API</button>
       
     </div>
   );

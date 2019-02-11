@@ -408,6 +408,7 @@ fieldset.stoneForm {
 .stoneForm select,
 .stoneForm label,
 .stoneForm details {
+  min-width: 16vw;
   max-width: 16vw;
   text-align: center;
 }

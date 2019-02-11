@@ -622,45 +622,6 @@ Meteor.methods({
     }
   },
   
-  activeToLiveDANGEROUS() {
-    if(!Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      return false;
-    }else{
-      const allBatches = BatchDB.find({orgKey: Meteor.user().orgKey}).fetch();
-      const allBatchesX = XBatchDB.find({orgKey: Meteor.user().orgKey}).fetch();
-      for(let batch of allBatches) {
-        const batchId = batch._id;
-        const currActive = batch.active;
-        BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
-    			$set : { 
-    			  live: currActive
-    			}
-    		});
-      }
-      for(let batch of allBatches) {
-        const batchId = batch._id;
-        BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
-    			$unset : { active: "" }
-    		});
-      }
-      for(let batch of allBatchesX) {
-        const batchId = batch._id;
-        const currActive = batch.active;
-        XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
-    			$set : { 
-    			  live: currActive
-    			}
-    		});
-      }
-      for(let batch of allBatchesX) {
-        const batchId = batch._id;
-        XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
-    			$unset : { active: ""	}
-    		});
-      }
-      return true;
-    }
-  },
   
         
         
