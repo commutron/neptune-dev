@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import moment from 'moment';
+import business from 'moment-business';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
 import ProgressCounter from '/client/components/utilities/ProgressCounter.js';
@@ -84,7 +85,7 @@ export default class BatchPanel extends Component	{
                         (timeweeks == 1 ? ', ' : 's, ') + 
                           timedays + ' day' +
                             (timedays == 1 ? '' : 's');
-                 
+    const remain = business.weekDays( moment(), moment(b.end) );             
     const fnsh = b.finishedAt ? end.format("MMMM Do, YYYY h:mm A") : null;
     
     //const v = w.versions.find( x => x.versionKey === b.versionKey );
@@ -109,7 +110,8 @@ export default class BatchPanel extends Component	{
     const progCounts = ProgressCounter(riverFlow, riverAltFlow, b);
     
 
-////////////////////////////////////////
+///////////////////////////////////////
+/*
     const proto = Roles.userIsInRole(Meteor.userId(), 'nightly');
     let allthetimes = [];
     for(let item of b.items) {
@@ -139,7 +141,8 @@ export default class BatchPanel extends Component	{
         });
       }
     }
-/////////////////////////////////////////
+*/
+////////////////////////////////////////
     
     return (
       <AnimateWrap type='cardTrans'>
@@ -147,7 +150,7 @@ export default class BatchPanel extends Component	{
             
           <div className='titleSection'>
             <span>
-              { b.active ? 
+              { b.live ? 
                 <i className='fas fa-sync blueT' title='in progress'></i>
                 :
                 <i className='fa fa-check-circle greenT' title='finished'></i>
@@ -166,7 +169,7 @@ export default class BatchPanel extends Component	{
                 'Progress',
                 `${Pref.nonCon}s`,
                 `${Pref.rma}s`,
-                'proto'
+                //'proto'
               ]
             }
             wide={true}
@@ -193,6 +196,7 @@ export default class BatchPanel extends Component	{
                   <p className='capFL'>{Pref.end}: {moment(b.end).format("MMMM Do, YYYY")}</p>
                   {fnsh !== null && <p>Finished: {fnsh}</p>}
                   <p>{fnsh !== null ? 'Total Time:' : 'Elapsed:'} {elapseNice}</p>
+                  {fnsh !== null ? null : <p>Time Remaining: {remain} weekdays</p> }
                 </fieldset>
                 {b.items.length > 0 &&
                   <fieldset className='noteCard'>
@@ -291,7 +295,7 @@ export default class BatchPanel extends Component	{
               <p>{Pref.escape}s: {b.escaped.length}</p>
             </div>
             
-            {proto ?
+            {/*proto ?
               <div>
                 <ol>
                   {sortedTimes.length === 0 ?
@@ -312,7 +316,7 @@ export default class BatchPanel extends Component	{
                   )})}
                 </ol>
               </div>
-            : <div><p className='centreText'>nothing to see here</p></div> }
+            : <div><p className='centreText'>nothing to see here</p></div> */}
             
           </Tabs>
           

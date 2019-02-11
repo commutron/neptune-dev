@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import { toast } from 'react-toastify';
+//import InboxToast from '/client/components/utilities/InboxToast.js';
 
 import Spin from '../../components/uUi/Spin.jsx';
 import AppWrap from './AppWrap.jsx';
@@ -9,16 +9,7 @@ import AppWrap from './AppWrap.jsx';
 class AppView extends Component	{
   /*
   componentDidUpdate(prevProps) {
-    if(this.props.user) {
-      if(prevProps.user) {
-        if(this.props.user.inbox && prevProps.user.inbox) {
-          if(this.props.user.inbox.length > prevProps.user.inbox.length) {
-            const newNotify = this.props.user.inbox[this.props.user.inbox.length-1];
-            toast('✉ ' + newNotify.title, { autoClose: false });
-          }
-        }
-      }
-    }
+    InboxToast(prevProps, this.props);
   }
   */
   render() {

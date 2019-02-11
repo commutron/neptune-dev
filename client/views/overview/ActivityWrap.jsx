@@ -3,7 +3,6 @@ import moment from 'moment';
 import { ToastContainer } from 'react-toastify';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
-import { toast } from 'react-toastify';
 
 import Spin from '../../components/uUi/Spin.jsx';
 import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
@@ -11,6 +10,9 @@ import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
 import RangeTools from '/client/components/smallUi/RangeTools.jsx';
 import OrgWip from './panels/OrgWIP.jsx';
 import BigPicture from './panels/BigPicture.jsx';
+
+import BatchHeaders from './columns/BatchHeaders.jsx';
+import BatchDetails from './columns/BatchDetails.jsx';
 
 export default class OrgWIP extends Component	{
   componentWillUnmount() {
@@ -86,29 +88,52 @@ export default class OrgWIP extends Component	{
         </div>
       
         <div className='simpleContent'>
-          <RangeTools
-            onChange={(r) => this.timeRange(r)}
-            dfkeyword={this.state.timeRange}
-            update={this.state.time} />
-          <span>
-            <BigPicture
-              g={this.props.g}
-              w={this.props.w}
+          
+          
+          {Roles.userIsInRole(Meteor.userId(), 'nightly') &&
+
+          <div className='overGridFrame'>
+          
+            
+            <BatchHeaders
               b={this.props.b}
-              a={this.props.a}
-              now={this.state.now}
-              wip={this.state.wip}
-              timeRange={this.state.timeRange} />
-          </span>
-          <span>
-            <OrgWip 
-              g={this.props.g}
-              w={this.props.w}
+              bC={this.props.bC} />
+              
+            
+            <BatchDetails
               b={this.props.b}
-              a={this.props.a}
-              wip={this.state.wip} />
-          </span>
+              bC={this.props.bC} />
+              
+          
+          </div>}
+        
+        
+          <div>
+            <RangeTools
+              onChange={(r) => this.timeRange(r)}
+              dfkeyword={this.state.timeRange}
+              update={this.state.time} />
+            <span>
+              <BigPicture
+                g={this.props.g}
+                w={this.props.w}
+                b={this.props.b}
+                a={this.props.a}
+                now={this.state.now}
+                wip={this.state.wip}
+                timeRange={this.state.timeRange} />
+            </span>
+            <span>
+              <OrgWip 
+                g={this.props.g}
+                w={this.props.w}
+                b={this.props.b}
+                a={this.props.a}
+                wip={this.state.wip} />
+            </span>
+          </div>
         </div>
+        
         </div>
       </AnimateWrap>
     );

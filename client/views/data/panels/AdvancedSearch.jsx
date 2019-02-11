@@ -7,8 +7,8 @@ const AdvancedSearch = ({ groupData, widgetData, batchData, xBatchData, app }) =
   
   const total = batchData.length;
   const xTotal = xBatchData.length;
-  const active = batchData.filter( x => x.active === true ).length;
-  const xActive = xBatchData.filter( x => x.active === true ).length;
+  const live = batchData.filter( x => x.live === true ).length;
+  const xlive = xBatchData.filter( x => x.live === true ).length;
   const process = batchData.filter( x => x.finishedAt === false ).length;
   const xProcess = xBatchData.filter( x => x.completed === false ).length;
   const verAdd = Array.from(widgetData, x => x.versions.length).reduce((x, y) => x + y, 0);
@@ -35,8 +35,8 @@ const AdvancedSearch = ({ groupData, widgetData, batchData, xBatchData, app }) =
             name={'Total ' + Pref.batch + 's'}
             color='blueT' />
           <NumBox
-            num={active + xActive}
-            name={'Active ' + Pref.batch + 's'}
+            num={live + xlive}
+            name={'live ' + Pref.batch + 's'}
             color='blueT' />
           <NumBox
             num={process + xProcess}

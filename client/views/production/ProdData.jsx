@@ -1,27 +1,18 @@
 import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import { toast } from 'react-toastify';
 //import Pref from '/client/global/pref.js';
 
 import { ScanListenerUtility } from '/client/components/utilities/ScanListener.js';
 import { ScanListenerOff } from '/client/components/utilities/ScanListener.js';
+import InboxToast from '/client/components/utilities/InboxToast.js';
 import Spin from '/client/components/uUi/Spin.jsx';
 import ProductionFindOps from './ProductionFindOps.jsx';
 
 class ProdData extends Component	{
 
   componentDidUpdate(prevProps) {
-    if(this.props.user) {
-      if(prevProps.user) {
-        if(this.props.user.inbox && prevProps.user.inbox) {
-          if(this.props.user.inbox.length > prevProps.user.inbox.length) {
-            const newNotify = this.props.user.inbox[this.props.user.inbox.length-1];
-            toast('✉ ' + newNotify.title, { autoClose: false });
-          }
-        }
-      }
-    }
+    InboxToast(prevProps, this.props);
   }
 
   render() {
@@ -68,9 +59,6 @@ class ProdData extends Component	{
 }
 
 export default withTracker( () => {
-  
-  const allUsers = Meteor.users.find( {}, { sort: { username: 1 } } ).fetch();
-  const activeUsers = allUsers.filter( x => Roles.userIsInRole(x._id, 'active') === true);
   
   const orb = Session.get('now');
   let login = Meteor.userId() ? true : false;
@@ -152,7 +140,7 @@ export default withTracker( () => {
       anchor: Session.get( 'nowWanchor' ),
       user: user,
       org: org,
-      users: activeUsers,
+      users: Meteor.users.find( {}, { sort: { username: 1 } } ).fetch(),
       app: AppDB.findOne({org: org}),
       allGroup: GroupDB.find( {}, { sort: { group: 1 } } ).fetch(),
       allWidget: WidgetDB.find( {}, { sort: { widget: 1 } } ).fetch(),

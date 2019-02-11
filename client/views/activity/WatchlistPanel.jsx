@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
+import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 import { MuteButton } from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
@@ -19,20 +20,10 @@ const WatchlistPanel = ({ orb, bolt, app, user, users, batchEvents, bCache })=> 
       <p className='vspace'></p>
       <table className='wide cap space'>
         {orderedWatchlist.map( (entry)=>{
-          const keyword = entry.keyword.split('+')[0];
           const moreInfo = bCache ? bCache.dataSet.find( x => x.batch === entry.keyword) : false;
           const what = moreInfo ? moreInfo.isWhat : 'unavailable';
-          const link = entry.type === 'group' ? 
-                        '/data/group?request=' + keyword
-                      : entry.type === 'widget' ? 
-                        '/data/widget?request=' + keyword
-                      : entry.type === 'batch' ? 
-                        '/data/batch?request=' + keyword
-                      : entry.type === 'item' ? 
-                        '/data/batch?request=' + entry.keyword.split('+')[1] + '&specify=' + keyword
-                      : '';
           const batch = entry.type === 'batch' ?
-                          batchEvents.find( x => x.batch === keyword ) 
+                          batchEvents.find( x => x.batch === entry.keyword ) 
                         : [];
           const events = batch ? batch.events || [] : [];
           const orderedEvents = events.sort((t1, t2)=> {
@@ -44,7 +35,7 @@ const WatchlistPanel = ({ orb, bolt, app, user, users, batchEvents, bCache })=> 
             <tbody key={entry.watchKey} className='vSpaceGaps'>
               <tr>
                 <td className='noRightBorder big'>
-                  <a href={link}><i className='fas fa-rocket fa-fw'></i> {keyword}</a>
+                  <ExploreLinkBlock type={entry.type} keyword={entry.keyword} />
                 </td>
                 <td className='noRightBorder'>{what}</td>
                 <td className='noRightBorder'>

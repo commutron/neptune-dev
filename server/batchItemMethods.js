@@ -16,7 +16,7 @@ Meteor.methods({
   			widgetId: widgetId,
   			versionKey: vKey,
         tags: [],
-        active: true,
+        live: true,
         createdAt: new Date(),
         createdWho: Meteor.userId(),
         updatedAt: new Date(),
@@ -128,7 +128,7 @@ Meteor.methods({
   			$set : {
   			  updatedAt: new Date(),
   			  updatedWho: Meteor.userId(),
-  			  active: status
+  			  live: status
       }});
     }else{null}
   },
@@ -638,7 +638,7 @@ Meteor.methods({
     if(doc.finishedAt === false && allDone) {
       BatchDB.update({_id: batchId, orgKey: privateKey}, {
   			$set : { 
-  			  active: false,
+  			  live: false,
   			  finishedAt: new Date()
       }});
     }else{null}
@@ -1091,7 +1091,7 @@ Meteor.methods({
           nonCons: nonConArr
         }},
         $set : {
-  			  active: true
+  			  live: true
         }
       });
       return true;

@@ -24,7 +24,7 @@ export default class BatchesListWide extends Component	{
     
     let blendedList = [];
     for(let b of this.props.batchData){
-      const style = b.active === true ? 'numFont activeMark' : 'numFont gMark';
+      const style = b.live === true ? 'numFont activeMark' : 'numFont gMark';
       const subW = w.find( x => x._id === b.widgetId);
       const subV = subW.versions.find( x => x.versionKey === b.versionKey);
       const subG = g.find( x => x._id === subW.groupId);

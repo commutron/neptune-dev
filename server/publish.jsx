@@ -14,32 +14,7 @@ CacheDB = new Mongo.Collection('cachedb');
 Meteor.publish('appData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  const admin = Roles.userIsInRole(this.userId, 'admin');
-  if(admin) {
-    return [
-      Meteor.users.find({_id: this.userId},
-        {fields: {
-          'services': 0,
-          'orgKey': 0,
-        }}),
-      AppDB.find({}, 
-        {fields: {
-          'orgKey': 0,
-          'orgPIN': 0,
-          'minorPIN': 0
-        }}),
-        /*
-      Meteor.users.find({},
-        {fields: {
-          'services': 0,
-          'orgKey': 0,
-          'watchlist': 0,
-          'inbox': 0,
-          'breadcrumbs': 0
-        }}),
-        */
-      ];
-  }else if(!orgKey) {
+  if(!orgKey) {
     return [
       Meteor.users.find({_id: this.userId},
         {fields: {
@@ -60,16 +35,6 @@ Meteor.publish('appData', function(){
           'orgPIN': 0,
           'minorPIN': 0
         }}),
-        /*
-      Meteor.users.find({orgKey: orgKey},
-        {fields: {
-          'services': 0,
-          'orgKey': 0,
-          'watchlist': 0,
-          'inbox': 0,
-          'breadcrumbs': 0
-        }}),
-        */
       ];
   }else{null}
 });
@@ -119,16 +84,18 @@ Meteor.publish('eventsData', function(){
     ];
 });
 
-// Activity
+// Overview
 Meteor.publish('shaddowData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
+  Meteor.defer( ()=>{
+    Meteor.call('batchCacheUpdate', orgKey);
+  });
   return [
     GroupDB.find({orgKey: orgKey}, {
       fields: {
           'alias': 1,
         }}),
-    
     WidgetDB.find({orgKey: orgKey}, {
       fields: {
           'widget': 1,
@@ -141,7 +108,7 @@ Meteor.publish('shaddowData', function(){
           'batch': 1,
           'widgetId': 1,
           'versionKey': 1,
-          'active': 1,
+          'live': 1,
           'finishedAt': 1,
         }}),
     XBatchDB.find({orgKey: orgKey}, {
@@ -151,10 +118,14 @@ Meteor.publish('shaddowData', function(){
           'groupId': 1,
           'widgetId': 1,
           'versionKey': 1,
-          'active': 1,
+          'live': 1,
           'completed': 1,
           'completedAt': 1,
         }}),
+    CacheDB.find({orgKey: orgKey}, {
+      fields: {
+        'orgKey': 0
+      }}),
     ];
 });
 
@@ -182,7 +153,7 @@ Meteor.publish('thinData', function(){
           'batch': 1,
           'widgetId': 1,
           'versionKey': 1,
-          'active': 1,
+          'live': 1,
           'finishedAt': 1,
         }}),
         
@@ -193,7 +164,7 @@ Meteor.publish('thinData', function(){
           'groupId': 1,
           'widgetId': 1,
           'versionKey': 1,
-          'active': 1,
+          'live': 1,
           'completed': 1,
           'completedAt': 1,
         }})
@@ -250,7 +221,7 @@ Meteor.publish('skinnyData', function(){
           'widgetId': 1,
           'versionKey': 1,
           'tags': 1,
-          'active': 1,
+          'live': 1,
           'salesOrder': 1,
           'finishedAt': 1,
         }}),
@@ -263,7 +234,7 @@ Meteor.publish('skinnyData', function(){
           'widgetId': 1,
           'versionKey': 1,
           'tags': 1,
-          'active': 1,
+          'live': 1,
           'salesOrder': 1,
           'completed': 1,
           'completedAt': 1
@@ -343,7 +314,7 @@ Meteor.publish('compData', function(cNum){
           'versions.version': 1,
           'versions.assembly': 1
         }}),
-    BatchDB.find({orgKey: orgKey, active: true}, {
+    BatchDB.find({orgKey: orgKey, live: true}, {
       sort: {batch:-1},
       fields: {
           'batch': 1,

@@ -31,7 +31,7 @@ export default class Reports extends Component {
     if(this.state.getNC === true) {
       this.setState({getNC: false});
       this.setState({getType: false});
-      this.setState({getRef: false});
+      this.setState({getPhase: false});
     }else{
       this.setState({getNC: true});
     }

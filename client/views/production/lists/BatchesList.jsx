@@ -72,7 +72,7 @@ export default class BatchesList extends Component	{
             onTxtChange={e => this.setTextFilter(e)} />
             
           {sortList.map( (entry, index)=> {
-            const style = entry.active === true ? 
+            const style = entry.live === true ? 
                           'leapBar numFont activeMark' : 
                           'leapBar numFont gMark';
             const subW = w.find( x => x._id === entry.widgetId);

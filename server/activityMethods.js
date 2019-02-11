@@ -3,6 +3,7 @@ import timezone from 'moment-timezone';
 
 Meteor.methods({
   
+  // Depreciated
   
    activitySnapshot(range, clientTZ) {
     

@@ -66,7 +66,7 @@ export default class BatchPanelX extends Component	{
     //const riverTitle = flow ? flow.title : 'not found';
     //const riverFlow = flow ? flow.flow : [];
 
-    const done = b.completed === true && b.active === false; // no more boards if batch is finished
+    const done = b.completed === true && b.live === false; // no more boards if batch is finished
     
     let released = b.releases.find( x => x.type === 'floorRelease');
     
@@ -78,7 +78,7 @@ export default class BatchPanelX extends Component	{
             
           <div className='titleSection'>
             <span>
-              { b.active ? 
+              { b.live ? 
                 <i className='fas fa-sync blueT' title='in progress'></i>
                 :
                 <i className='fa fa-check-circle greenT' title='finished'></i>

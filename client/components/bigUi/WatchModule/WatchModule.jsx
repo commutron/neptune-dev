@@ -82,13 +82,13 @@ export const UnReadButton = ({nKey, unread})=> {
           key={'readButton' + nKey}
           title='read'
           onClick={()=>changeRead(nKey, unread)}
-        ><i className="far fa-circle greenT"></i></button>
+        ><i className="far fa-circle fa-lg greenT"></i></button>
       :
         <button
           key={'unreadButton' + nKey}
           title='unread'
           onClick={()=>changeRead(nKey, unread)}
-        ><i className="fas fa-circle greenT"></i></button>
+        ><i className="fas fa-circle fa-lg greenT"></i></button>
       }
     </span>
   );
@@ -101,7 +101,7 @@ export const RemoveNotifyButton = ({nKey})=> {
         key={'removeButton' + nKey}
         title='remove'
         onClick={()=>removeNotify(nKey)}
-      ><i className="fas fa-times redT"></i></button>
+      ><i className="fas fa-times fa-lg redT"></i></button>
     </span>
   );
 };

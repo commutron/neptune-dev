@@ -75,6 +75,8 @@ export default class ProductionFindOps extends Component	{
     const anchor = this.props.anchor;
     const user = this.props.user;
     const app = this.props.app;
+    const activeUsers = this.props.users.filter( x => Roles.userIsInRole(x._id, 'active') === true);
+  
     const allGroup = this.props.allGroup;
     const allWidget = this.props.allWidget;
     const allBatch = this.props.allBatch;
@@ -203,7 +205,7 @@ export default class ProductionFindOps extends Component	{
             itemSerial={item.serial}
             widgetData={widget}
             versionData={version}
-            users={this.props.users}
+            users={activeUsers}
             app={app}
             actionBar={true}
           >
@@ -211,7 +213,7 @@ export default class ProductionFindOps extends Component	{
               batchData={hotBatch}
               itemData={item}
               widgetData={widget}
-              users={this.props.users}
+              users={activeUsers}
               app={app} />
             <BatchCard
               batchData={hotBatch}

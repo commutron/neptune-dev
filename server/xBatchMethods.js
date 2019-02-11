@@ -23,7 +23,7 @@ Meteor.methods({
         createdWho: Meteor.userId(),
         updatedAt: new Date(),
   			updatedWho: Meteor.userId(),
-  			active: true,
+  			live: true,
   			salesOrder: salesNum,
   			salesStart: sDate,
   			salesEnd: eDate,
@@ -104,7 +104,7 @@ Meteor.methods({
   			$set : {
   			  updatedAt: new Date(),
   			  updatedWho: Meteor.userId(),
-  			  active: status
+  			  live: status
       }});
     }else{null}
   },
@@ -261,7 +261,7 @@ Meteor.methods({
       if(doc && did && noItems) {
         XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
     			$set : { 
-    			  active: false,
+    			  live: false,
     			  completed: true,
     			  completedAt: new Date(),
     			  completedWho: Meteor.userId(),
@@ -282,7 +282,7 @@ Meteor.methods({
       if(doc && (inTime || orgPIN === override)) {
         XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
     			$set : { 
-    			  active: true,
+    			  live: true,
     			  completed: false,
     			  completedAt: false,
     			  completedWho: false,

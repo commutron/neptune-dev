@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import { toast } from 'react-toastify';
+import InboxToast from '/client/components/utilities/InboxToast.js';
 
 import Spin from '../../components/uUi/Spin.jsx';
 import ActivityWrap from './ActivityWrap.jsx';
@@ -9,16 +9,7 @@ import ActivityWrap from './ActivityWrap.jsx';
 class View extends Component	{
   
   componentDidUpdate(prevProps) {
-    if(this.props.user) {
-      if(prevProps.user) {
-        if(this.props.user.inbox && prevProps.user.inbox) {
-          if(this.props.user.inbox.length > prevProps.user.inbox.length) {
-            const newNotify = this.props.user.inbox[this.props.user.inbox.length-1];
-            toast('✉ ' + newNotify.title, { autoClose: false });
-          }
-        }
-      }
-    }
+    InboxToast(prevProps, this.props);
   }
   /*
   componentWillUnmount() {
@@ -43,6 +34,8 @@ class View extends Component	{
         g={this.props.group}
         w={this.props.widget}
         b={this.props.batch}
+        bx={this.props.batchX}
+        bC={this.props.bCache}
         a={this.props.app} />
     );
   }
@@ -76,7 +69,9 @@ export default withTracker( () => {
       app: AppDB.findOne({org: org}),
       group: GroupDB.find().fetch(),
       widget: WidgetDB.find().fetch(),
-      batch: BatchDB.find().fetch()
+      batch: BatchDB.find().fetch(),
+      batchX: XBatchDB.find().fetch(),
+      bCache: CacheDB.findOne({dataName: 'batchInfo'}),
     };
   }
 })(View);

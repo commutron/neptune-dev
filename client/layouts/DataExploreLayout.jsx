@@ -104,12 +104,12 @@ export const TraverseWrap = ({
               !children[1] ?
                 'baseTraverseContainer' : 'traverseContainer'}>
             
-            <section className='traverseContent' style={scrollFix}>
+            <section className='traverseContent forceScrollStyle' style={scrollFix}>
               {children[0] || children}
             </section>
             
             {children[1] &&
-              <aside className='traverseList' style={scrollFix}>
+              <aside className='traverseList forceScrollStyle' style={scrollFix}>
                 {children[1]}
               </aside>}
             

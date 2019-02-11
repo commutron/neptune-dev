@@ -468,7 +468,7 @@ Meteor.methods({
       for(let v of findV) {
         let batches = [];
         if(batchInfo) {
-          const findB = BatchDB.find({active: true, versionKey: v.versionKey}).fetch();
+          const findB = BatchDB.find({live: true, versionKey: v.versionKey}).fetch();
           batches = Array.from(findB, x => { 
                                   countI = 0;
                                   unitInfo ? 

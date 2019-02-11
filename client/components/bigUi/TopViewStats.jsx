@@ -17,8 +17,8 @@ export default class TopViewStats extends Component {
     let groups = this.props.groups;
     let widgets = this.props.widgets;
     let batches = this.props.batches;
-    let active = this.props.active;
-    Meteor.call('topViewStats', users, groups, widgets, batches, active, (error, reply)=> {
+    let live = this.props.live;
+    Meteor.call('topViewStats', users, groups, widgets, batches, live, (error, reply)=> {
       error ? console.log(error) : null;
       this.setState({ counts: reply });
     });
@@ -56,12 +56,12 @@ export default class TopViewStats extends Component {
             num={counts.btchC}
             name={'Total ' + Pref.batch + 's'}
             color='blueT' />}
-        {this.props.active &&
+        {this.props.live &&
           <NumBox
             num={counts.btchLv}
-            name={'Active ' + Pref.batch + 's'}
+            name={'Live ' + Pref.batch + 's'}
             color='blueT' />}
-        {this.props.active &&
+        {this.props.live &&
           <NumBox
             num={counts.btchC - counts.btchLv}
             name={'Finished ' + Pref.batch + 's'}

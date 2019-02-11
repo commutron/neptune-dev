@@ -29,9 +29,9 @@ export default class BatchesList extends Component	{
     
     let basicFilter = 
       f === 'done' ?
-      b.filter( x => x.finishedAt ? x.finishedAt !== false : x.active === false ) :
+      b.filter( x => x.finishedAt ? x.finishedAt !== false : x.live === false ) :
       f === 'inproc' ?
-      b.filter( x => x.finishedAt ? x.finishedAt === false : x.active === true ) :
+      b.filter( x => x.finishedAt ? x.finishedAt === false : x.live === true ) :
       b;
     let showList = basicFilter.filter( 
                     tx => tx.batch.toLowerCase().includes(this.state.textString) === true );
@@ -52,7 +52,7 @@ export default class BatchesList extends Component	{
               onTxtChange={e => this.setTextFilter(e)} />
           </div>  
           {sortList.map( (entry, index)=> {
-            const style = entry.active === true ? 
+            const style = entry.live === true ? 
                           'leapBar numFont activeMark' :
                           'leapBar numFont gMark';
             const subW = w.find( x => x._id === entry.widgetId);
