@@ -4,7 +4,7 @@ import { withTracker } from 'meteor/react-meteor-data';
 import InboxToast from '/client/components/utilities/InboxToast.js';
 
 import Spin from '../../components/uUi/Spin.jsx';
-import ActivityWrap from './ActivityWrap.jsx';
+import OverviewWrap from './OverviewWrap.jsx';
 
 class View extends Component	{
   
@@ -30,7 +30,7 @@ class View extends Component	{
     }
 
     return (
-      <ActivityWrap 
+      <OverviewWrap 
         g={this.props.group}
         w={this.props.widget}
         b={this.props.batch}

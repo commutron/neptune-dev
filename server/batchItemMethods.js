@@ -8,10 +8,11 @@ Meteor.methods({
     const legacyduplicate = BatchDB.findOne({batch: batchNum});
     const duplicateX = XBatchDB.findOne({batch: batchNum});
     const auth = Roles.userIsInRole(Meteor.userId(), 'create');
-    if(auth && !legacyduplicate && !duplicateX && doc.orgKey === Meteor.user().orgKey) {
+    const accessKey = Meteor.user().orgKey;
+    if(auth && !legacyduplicate && !duplicateX && doc.orgKey === accessKey) {
       BatchDB.insert({
   			batch: batchNum,
-  			orgKey: Meteor.user().orgKey,
+  			orgKey: accessKey,
   			shareKey: false,
   			widgetId: widgetId,
   			versionKey: vKey,
@@ -37,6 +38,9 @@ Meteor.methods({
         omitted: [],
         shortfall: [],
         events: []
+      });
+      Meteor.defer( ()=>{
+        Meteor.call('batchCacheUpdate', accessKey, true);
       });
       return true;
     }else{

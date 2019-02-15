@@ -14,7 +14,7 @@ import BigPicture from './panels/BigPicture.jsx';
 import BatchHeaders from './columns/BatchHeaders.jsx';
 import BatchDetails from './columns/BatchDetails.jsx';
 
-export default class OrgWIP extends Component	{
+export default class OverviewWrap extends Component	{
   componentWillUnmount() {
     clearInterval(this.interval);
   }
@@ -26,6 +26,10 @@ export default class OrgWIP extends Component	{
       now: false,
       time: false,
       timeRange: 'day',
+      warmBatches: false,
+      warmStatus: false,
+      coolBatches: false,
+      coolStatus: false
     };
   }
   
@@ -54,7 +58,51 @@ export default class OrgWIP extends Component	{
     });
   }
   
+  fetchInitial() {
+    const batches = this.props.b;
+    const warmBatches = batches.filter( x => typeof x.floorRelease === 'object' );
+    const coolBatches = batches.filter( x => x.floorRelease === false );
+    
+    console.log(warmBatches);
+    //const batchesX = this.props.bx;
+    //const warmBx = batchesX.filter( x => x.releases.find( y => y.type === 'floorRelease') == true );
+    //const warmBx = batchesX.filter( x => x.releases.find( y => y.type === 'floorRelease') != true );
+    
+    let clientTZ = moment.tz.guess();
+    
+    this.setState({
+      warmBatches: warmBatches,
+      coolBatches: coolBatches,
+    });
+    Meteor.call('statusSnapshot', clientTZ, 'warm', (error, reply)=> {
+      error && console.log(error);
+      this.setState({ warmStatus: reply });
+      if(reply) {
+        Meteor.call('statusSnapshot', clientTZ, 'cool', (error, reply)=> {
+          error && console.log(error);
+          this.setState({ coolStatus: reply });
+        });
+      }
+    });         
+          
+    
+    this.setState({
+      now: false,
+      wip: false,
+      time: moment().format()
+    });
+    let range = this.state.timeRange;
+    Meteor.call('activitySnapshot', range, clientTZ, (error, reply)=> {
+      error && console.log(error);
+      this.setState({ now: reply.now, wip: reply.wip });
+    });
+  }
+  
   render() {
+    
+    console.log(this.state.warmStatus);
+    console.log(this.state.coolStatus);
+    
     
     if(!this.state.wip || !this.state.now) {
       return (
@@ -140,6 +188,7 @@ export default class OrgWIP extends Component	{
   }
   componentDidMount() {
     this.relevant();
+    this.fetchInitial();
     this.interval = setInterval(() => this.relevant(), 1000*60*60);
   }
 }

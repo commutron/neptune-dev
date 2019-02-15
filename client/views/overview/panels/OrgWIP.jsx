@@ -24,8 +24,7 @@ const OrgWIP = ({ wip })=> {
                 });
     wipCool = wip.filter( x => 
                             x.active === false && 
-                            (x.floorRelease === undefined || 
-                             typeof x.floorRelease === 'object') );
+                             typeof x.floorRelease === 'object' );
     wipCool.sort((b1, b2)=> {
                   if (b1.batch < b2.batch) { return 1 }
                   if (b1.batch > b2.batch) { return -1 }
@@ -133,8 +132,9 @@ export class StatusRow extends Component	{
               color='redT'
               size='big' />
             <NumStat
-              num={(dt.nonConTotal / dt.itemsTotal).toFixed(1)}
-              name={'nonCons per ' + Pref.item}
+              num={(dt.nonConTotal / dt.hasNonCon).toFixed(1)}
+              //num={(dt.nonConTotal / dt.itemsTotal).toFixed(1)}
+              name={'nonCons per NC' + Pref.item}
               title='mean average'
               color='redT'
               size='big' />

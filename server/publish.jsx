@@ -103,7 +103,7 @@ Meteor.publish('shaddowData', function(){
           'versions.versionKey': 1,
           'versions.version': 1
         }}),
-    BatchDB.find({orgKey: orgKey}, {
+    BatchDB.find({orgKey: orgKey, live: true}, {
       sort: {batch:-1},
       fields: {
           'batch': 1,
@@ -111,8 +111,9 @@ Meteor.publish('shaddowData', function(){
           'versionKey': 1,
           'live': 1,
           'finishedAt': 1,
+          'floorRelease': 1
         }}),
-    XBatchDB.find({orgKey: orgKey}, {
+    XBatchDB.find({orgKey: orgKey, live: true}, {
       sort: {batch:-1},
       fields: {
           'batch': 1,
@@ -122,6 +123,7 @@ Meteor.publish('shaddowData', function(){
           'live': 1,
           'completed': 1,
           'completedAt': 1,
+          'releases': 1
         }}),
     CacheDB.find({orgKey: orgKey}, {
       fields: {

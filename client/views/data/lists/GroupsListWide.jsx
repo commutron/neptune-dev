@@ -18,7 +18,7 @@ export default class GroupsList extends Component	{
   }
   
   groupActive() {
-    let activeBatch = this.props.batchData.filter( x => x.active === true);
+    let activeBatch = this.props.batchData.filter( x => x.live === true);
     
     let activeList = [];
     
@@ -35,7 +35,7 @@ export default class GroupsList extends Component	{
         }
       }
     }
-    const xBatches = this.props.batchDataX.filter( x => x.active === true);
+    const xBatches = this.props.batchDataX.filter( x => x.live === true);
     for(let x of xBatches) { activeList.push(x.groupsId) }
     
     return activeList;

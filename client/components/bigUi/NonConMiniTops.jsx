@@ -24,10 +24,7 @@ export default NonConMiniTops;
 
 
 export const HasNonCon = ({ noncons, items })=> {
-  let hasNonCon = 0;
-  for(let i of items) {
-    noncons.find( n => n.serial === i.serial ) ? hasNonCon += 1 : null;
-  }
+  const hasNonCon = [... new Set( Array.from(noncons, x => { return x.serial }) ) ].length;
   return(
     <NumStat
       num={((hasNonCon / items.length) * 100 ).toFixed(0) + '%'}
@@ -37,14 +34,18 @@ export const HasNonCon = ({ noncons, items })=> {
   );
 };
 
-export const NonConPer = ({ noncons, items })=> (
-  <NumStat
-    num={(noncons.length / items.length).toFixed(1)}
-    name={'nonCons per ' + Pref.item}
-    title='mean average'
-    color='redT'
-    size='bigger' />
-);
+export const NonConPer = ({ noncons, items })=> {
+  const hasNonCon = [... new Set( Array.from(noncons, x => { return x.serial }) ) ].length;
+  return(
+    <NumStat
+      num={(noncons.length / hasNonCon).toFixed(1)}
+      //num={(noncons.length / items.length).toFixed(1)}
+      name={'nonCons per NC ' + Pref.item}
+      title='mean average'
+      color='redT'
+      size='bigger' />
+  );
+};
 
 export const MostNonCon = ({ noncons, app })=> {
   const mostType = ()=> {

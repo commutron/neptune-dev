@@ -14,7 +14,7 @@ import Spin from '/client/components/uUi/Spin.jsx';
 //import InitialSetup from './views/InitialSetup.jsx';
 
 import ProdData from './views/production/ProdData.jsx';
-import ActivityData from './views/overview/ActivityData.jsx';
+import OverviewData from './views/overview/OverviewData.jsx';
 import ActivityDataWrap from './views/activity/ActivityDataWrap.jsx';
 import DataData from './views/data/DataData.jsx';
 import CompSearchPanel from './views/data/panels/CompSearchPanel.jsx';
@@ -146,7 +146,7 @@ privlegedRoutes.route('/overview', {
   name: 'overview',
   action() {
     mount(CleanLayout, {
-      content: (<ActivityData />)
+      content: (<OverviewData />)
     });
   }
 });
