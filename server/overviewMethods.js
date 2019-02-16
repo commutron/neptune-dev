@@ -8,7 +8,7 @@ import business from 'moment-business';
 
 function collectRelevant(accessKey, temp) {
   return new Promise(resolve => {
-    const liveBatches = BatchDB.find({orgKey: accessKey, live: true}).fetch();
+    const liveBatches = BatchDB.find({orgKey: accessKey, live: true},{sort: {batch:-1}}).fetch();
     // get the relevant batches
     if(temp === 'warm') {
       const warmBatches = liveBatches.filter( x => typeof x.floorRelease === 'object' );
@@ -95,7 +95,7 @@ Meteor.methods({
       try {
         relevant = await collectRelevant(accessKey, temp);
         collection = await collectInfo(clientTZ, relevant);
-        return { collection };
+        return collection;
       }catch (err) {
         throw new Meteor.Error(err);
       }

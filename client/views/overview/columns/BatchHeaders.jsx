@@ -4,23 +4,25 @@ import moment from 'moment';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 
 
-const BatchHeaders = ({b, bC})=> {
-
+const BatchHeaders = ({wB, cB, bCache})=> {
 
   return(
     <div className='overGridFixed'>
-      {b.map( (entry, index)=>{
-        const moreInfo = bC ? bC.dataSet.find( x => x.batch === entry.batch) : false;
-        const what = moreInfo ? moreInfo.isWhat : 'unavailable';
-
+      {wB.map( (entry, index)=>{
         return(
-          <div key={`${entry._id}fixed${index}`}>
-            <span className='big'>
-              <ExploreLinkBlock type='batch' keyword={entry.batch} />
-            </span>
-            <span>{what}</span>
-          </div>
+          <BatchHeaderChunk
+            key={`${entry._id}warmfixed${index}`}
+            ck={entry}
+            bCache={bCache} />
               
+      )})}
+      
+      {cB.map( (entry, index)=>{
+        return(
+          <BatchHeaderChunk
+            key={`${entry._id}coolfixed${index}`}
+            ck={entry}
+            bCache={bCache} />
       )})}
     </div>
   
@@ -28,3 +30,18 @@ const BatchHeaders = ({b, bC})=> {
 };
 
 export default BatchHeaders;
+
+const BatchHeaderChunk = ({ck, bCache})=> {
+
+  const moreInfo = bCache ? bCache.dataSet.find( x => x.batch === ck.batch) : false;
+  const what = moreInfo ? moreInfo.isWhat : 'unavailable';
+  
+  return(
+    <div>
+      <div>
+        <ExploreLinkBlock type='batch' keyword={ck.batch} />
+      </div>
+      <div>{what.length <= 30 ? what : what.substring(0, 30) + '...'}</div>
+    </div>
+  );
+};

@@ -12,7 +12,9 @@ const ExploreLinkBlock = ({type, keyword})=>{
                   '/data/batch?request=' + keyword.split('+')[1] + '&specify=' + title
                 : '';
   return(                    
-    <a href={link}><i className='fas fa-rocket fa-fw'></i> {title}</a>
+    <a href={link} className='noWrap'>
+      <i className='fas fa-rocket fa-fw'></i>{title}
+    </a>
   );
 };
 

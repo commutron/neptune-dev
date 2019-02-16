@@ -2,28 +2,22 @@ import React, {Component} from 'react';
 import moment from 'moment';
 
 
-
-const BatchDetails = ({b, bC})=> {
-
-
+const BatchDetails = ({wBs, cBs, bCache})=> {
+    
   return(
     <div className='overGridScroll'>
-      {b.map( (entry, index)=>{
-        
+      {wBs.map( (entry, index)=>{
         return(
-          <div key={`${entry._id}fixed${index}`}>
-                <span>not goin anywhere</span>
-                <span>heres hoping</span>
-                <span>goes as far as it needs to</span>
-                <span>and some more</span>
-                <span>still going</span>
-                <span>this one too</span>
-                <span>sick of typing yet</span>
-                <span>one more</span>
-                <span>last one</span>
-                <span>really the last one</span>
-          </div>
-              
+          <BatchDetailChunk
+            key={`${entry.batchID}warm${index}`}
+            ck={entry} />
+      )})}
+      
+      {cBs.map( (entry, index)=>{
+        return(
+          <BatchDetailChunk 
+            key={`${entry.batchID}cool${index}`}
+            ck={entry} />
       )})}
     </div>
   
@@ -31,3 +25,22 @@ const BatchDetails = ({b, bC})=> {
 };
 
 export default BatchDetails;
+
+
+const BatchDetailChunk = ({ck})=> (
+
+  <div>
+        <span>{ck.salesOrder}</span>
+        <span>{ck.salesEnd}</span>
+        <span>{ck.timeElapse}</span>
+        <span>{ck.weekDaysRemain}</span>
+        <span>{ck.itemQuantity}</span>
+        <span>{ck.percentOfDoneItems}</span>
+        <span>{ck.nonConTotal}</span>
+        <span>{ck.percentOfNCitems}</span>
+        <span>{ck.nonConsPerNCitem}</span>
+        <span>{ck.itemHasRMA}</span>
+        <span>{ck.itemIsScrap}</span>
+        <span>{ck.isActive.toString()}</span>
+  </div>
+);

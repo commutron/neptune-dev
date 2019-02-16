@@ -35,8 +35,8 @@ class View extends Component	{
         w={this.props.widget}
         b={this.props.batch}
         bx={this.props.batchX}
-        bC={this.props.bCache}
-        a={this.props.app} />
+        bCache={this.props.bCache}
+        app={this.props.app} />
     );
   }
 }

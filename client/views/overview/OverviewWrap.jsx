@@ -7,94 +7,53 @@ import Pref from '/client/global/pref.js';
 import Spin from '../../components/uUi/Spin.jsx';
 import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
 
-import RangeTools from '/client/components/smallUi/RangeTools.jsx';
-import OrgWip from './panels/OrgWIP.jsx';
-import BigPicture from './panels/BigPicture.jsx';
+//import RangeTools from '/client/components/smallUi/RangeTools.jsx';
+//import OrgWip from './panels/OrgWIP.jsx';
+//import BigPicture from './panels/BigPicture.jsx';
 
 import BatchHeaders from './columns/BatchHeaders.jsx';
 import BatchDetails from './columns/BatchDetails.jsx';
 
 export default class OverviewWrap extends Component	{
-  componentWillUnmount() {
-    clearInterval(this.interval);
+  componentDidMount() {
+    const clientTZ = moment.tz.guess();
+    this.splitInitial();
+    this.fetchInitial(clientTZ, 'warm', 'warmStatus')
+      .then(this.fetchInitial(clientTZ, 'cool', 'coolStatus'));
   }
   
   constructor() {
     super();
     this.state = {
-      wip: false,
-      now: false,
-      time: false,
-      timeRange: 'day',
       warmBatches: false,
-      warmStatus: false,
+      warmStatus: [],
       coolBatches: false,
-      coolStatus: false
+      coolStatus: []
     };
   }
   
-  timeRange(keyword) {
-    this.setState({
-      timeRange: keyword,
-      now: false,
-      wip: false,
-      time: moment().format()
-    }, ()=>{
-      this.relevant();
+  splitInitial() {
+    return new Promise(() => {
+      const batches = this.props.b;
+      const warmBatches = batches.filter( x => typeof x.floorRelease === 'object' );
+      const coolBatches = batches.filter( x => x.floorRelease === false );
+      console.log(warmBatches);
+      //const batchesX = this.props.bx;
+      //const warmBx = batchesX.filter( x => x.releases.find( y => y.type === 'floorRelease') == true );
+      //const warmBx = batchesX.filter( x => x.releases.find( y => y.type === 'floorRelease') != true );
+      this.setState({
+        warmBatches: warmBatches,
+        coolBatches: coolBatches,
+      });
     });
   }
-  
-  relevant() {
-    this.setState({
-      now: false,
-      wip: false,
-      time: moment().format()
-    });
-    let clientTZ = moment.tz.guess();
-    let range = this.state.timeRange;
-    Meteor.call('activitySnapshot', range, clientTZ, (error, reply)=> {
-      error && console.log(error);
-      this.setState({ now: reply.now, wip: reply.wip });
-    });
-  }
-  
-  fetchInitial() {
-    const batches = this.props.b;
-    const warmBatches = batches.filter( x => typeof x.floorRelease === 'object' );
-    const coolBatches = batches.filter( x => x.floorRelease === false );
     
-    console.log(warmBatches);
-    //const batchesX = this.props.bx;
-    //const warmBx = batchesX.filter( x => x.releases.find( y => y.type === 'floorRelease') == true );
-    //const warmBx = batchesX.filter( x => x.releases.find( y => y.type === 'floorRelease') != true );
-    
-    let clientTZ = moment.tz.guess();
-    
-    this.setState({
-      warmBatches: warmBatches,
-      coolBatches: coolBatches,
-    });
-    Meteor.call('statusSnapshot', clientTZ, 'warm', (error, reply)=> {
-      error && console.log(error);
-      this.setState({ warmStatus: reply });
-      if(reply) {
-        Meteor.call('statusSnapshot', clientTZ, 'cool', (error, reply)=> {
-          error && console.log(error);
-          this.setState({ coolStatus: reply });
-        });
-      }
-    });         
-          
-    
-    this.setState({
-      now: false,
-      wip: false,
-      time: moment().format()
-    });
-    let range = this.state.timeRange;
-    Meteor.call('activitySnapshot', range, clientTZ, (error, reply)=> {
-      error && console.log(error);
-      this.setState({ now: reply.now, wip: reply.wip });
+  fetchInitial(clientTZ, temp, slot) {
+    return new Promise(() => {
+      Meteor.call('statusSnapshot', clientTZ, temp, (error, reply)=> {
+        error && console.log(error);
+        this.setState({ [slot]: reply });
+      });
     });
   }
   
@@ -104,7 +63,7 @@ export default class OverviewWrap extends Component	{
     console.log(this.state.coolStatus);
     
     
-    if(!this.state.wip || !this.state.now) {
+    if(!this.state.warmBatches || !this.state.coolBatches) {
       return (
         <div className='centreContainer'>
           <div className='centrecentre'>
@@ -136,26 +95,43 @@ export default class OverviewWrap extends Component	{
         </div>
       
         <div className='simpleContent'>
-          
-          
-          {Roles.userIsInRole(Meteor.userId(), 'nightly') &&
 
           <div className='overGridFrame'>
-          
             
             <BatchHeaders
-              b={this.props.b}
-              bC={this.props.bC} />
-              
+              key='warm0'
+              wB={this.state.warmBatches}
+              cB={this.state.coolBatches}
+              bCache={this.props.bCache}
+            />
             
             <BatchDetails
-              b={this.props.b}
-              bC={this.props.bC} />
+              key='warm1'
+              wBs={this.state.warmStatus}
+              cBs={this.state.coolStatus}
+              bCache={this.props.bCache}
+            />
               
+          </div>
           
-          </div>}
+          {/*
+          <div className='overGridFrame'>
+            
+            <BatchHeaders
+              key='cool0'
+              b={this.state.coolBatches}
+              bC={this.props.bC}
+            />
+            
+            <BatchDetails
+              key='cool1'
+              b={this.state.coolStatus}
+              bC={this.props.bC}
+            />
+          </div>
+          */}  
         
-        
+        {/*
           <div>
             <RangeTools
               onChange={(r) => this.timeRange(r)}
@@ -180,15 +156,11 @@ export default class OverviewWrap extends Component	{
                 wip={this.state.wip} />
             </span>
           </div>
+          */}
         </div>
         
         </div>
       </AnimateWrap>
     );
-  }
-  componentDidMount() {
-    this.relevant();
-    this.fetchInitial();
-    this.interval = setInterval(() => this.relevant(), 1000*60*60);
   }
 }
