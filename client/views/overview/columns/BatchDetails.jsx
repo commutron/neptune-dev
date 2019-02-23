@@ -6,6 +6,11 @@ const BatchDetails = ({wBs, cBs, bCache})=> {
     
   return(
     <div className='overGridScroll'>
+      <div className='overGridHeaderScroll'>
+        <div>Sales Order</div>
+        <div>Due Date</div>
+      </div>
+            
       {wBs.map( (entry, index)=>{
         return(
           <BatchDetailChunk
@@ -29,7 +34,7 @@ export default BatchDetails;
 
 const BatchDetailChunk = ({ck})=> (
 
-  <div>
+  <div className='overGridRowScroll'>
         <span>{ck.salesOrder}</span>
         <span>{ck.salesEnd}</span>
         <span>{ck.timeElapse}</span>

@@ -689,19 +689,54 @@ main {
   width: auto;
   height: auto;
   grid-template-columns: minmax(min-content, 25vw) auto;
-  grid-template-rows: auto;
+  /*grid-template-rows: minmax(2rem, 3vw) auto;*/
   grid-template-areas: 
     'overFixedArea overScrollArea';
   /*background-color: var(--clouds);*/
 }
+/*
+.overGridHeaderFixed {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0px;
+  background-color: rgb(20,20,20);
+  z-index: 7;
+  border-right: 1px groove rgba(255,255,255,0.3);
+  border-bottom: 1px inset rgba(255,255,255,0.3);
+  display: grid;
+}
+.overGridHeaderFixed {
+  grid-area: overHeadFixedArea;
+  grid-template-columns: 1fr 2fr;
+  place-items: stretch start;
+}
+
+.overGridHeaderScroll {
+  grid-area: overHeadScrollArea;
+  grid-auto-flow: column;
+  grid-auto-columns: 200px;
+  place-items: center;
+}
+*/
+
 .overGridFixed {
   grid-area: overFixedArea;
-  overflow-x: hidden;
+  /*overflow-x: hidden;*/
   display: grid;
   grid-auto-flow: row;
   grid-auto-rows: minmax(5rem, 10vw);
+  position: sticky;
+  left: 0;
+  z-index: 8;
 }
-.overGridFixed > div {
+.overGridHeaderFixed {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0px;
+  background-color: rgb(20,20,20);
+  z-index: 8;
+}
+.overGridHeaderFixed, .overGridRowFixed {
   border-right: 1px groove rgba(255,255,255,0.3);
   border-bottom: 1px inset rgba(255,255,255,0.3);
   display: grid;
@@ -709,15 +744,20 @@ main {
   place-items: stretch start;
   
 }
-.overGridFixed > div > div {
+.overGridHeaderFixed > div,
+.overGridRowFixed > div {
   display: flex;
   align-items: center;
   white-space: nowrap;
   padding: 1vh 1vw;
 }
-.overGridFixed > div > div:first-child {
-  font-size: 1.5rem;
+.overGridHeaderFixed > div:first-child,
+.overGridRowFixed > div:first-child {
+  width: calc(104px + 2vw);
   border-right: 1px groove rgba(255,255,255,0.3);
+}
+.overGridRowFixed > div:first-child {
+  font-size: 1.5rem;
 }
 
 .overGridScroll {
@@ -725,10 +765,18 @@ main {
   display: grid;
   grid-auto-flow: row;
   grid-auto-rows: minmax(5rem, 10vw);
-  overflow-x: auto;
-  overscroll-behavior-x: contain; /* in theory */
+  /*overflow-x: auto;*/
+  /*overscroll-behavior-x: contain; /* in theory */
 }
-.overGridScroll div {
+
+.overGridHeaderScroll {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0px;
+  background-color: rgb(20,20,20);
+  z-index: 7;
+}
+.overGridRowScroll, .overGridHeaderScroll {
   border-top: 1px dashed green;
   border-left: 2px dashed pink;
   border-bottom: 1px dashed green;
@@ -739,7 +787,8 @@ main {
   place-items: center;
 }
 
-.overGridScroll div span,
+.overGridHeaderScroll > div,
+.overGridRowScroll > span,
 .overGridFixed div span {
   border: 1px dotted grey;
   

@@ -95,9 +95,13 @@ export default class OverviewWrap extends Component	{
         </div>
       
         <div className='simpleContent'>
-
+          
+          {Roles.userIsInRole(Meteor.userId(), 'nightly') ?
           <div className='overGridFrame'>
             
+            
+            
+      
             <BatchHeaders
               key='warm0'
               wB={this.state.warmBatches}
@@ -113,6 +117,8 @@ export default class OverviewWrap extends Component	{
             />
               
           </div>
+          
+          : <div><p>Closed for Renovations</p></div>}
           
           {/*
           <div className='overGridFrame'>

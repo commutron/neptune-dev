@@ -8,6 +8,12 @@ const BatchHeaders = ({wB, cB, bCache})=> {
 
   return(
     <div className='overGridFixed'>
+      
+      <div className='overGridHeaderFixed'>
+        <div>Work Order</div>
+        <div>Product</div>
+      </div>
+            
       {wB.map( (entry, index)=>{
         return(
           <BatchHeaderChunk
@@ -37,7 +43,7 @@ const BatchHeaderChunk = ({ck, bCache})=> {
   const what = moreInfo ? moreInfo.isWhat : 'unavailable';
   
   return(
-    <div>
+    <div className='overGridRowFixed'>
       <div>
         <ExploreLinkBlock type='batch' keyword={ck.batch} />
       </div>

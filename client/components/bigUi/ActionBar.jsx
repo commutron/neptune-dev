@@ -63,7 +63,7 @@ const ActionBar = ({batchData, itemData, groupData, widgetData, versionData, app
           end={batchData.end}
           widgetId={batchData.widgetId}
           versions={widgetData.versions}
-          lock={!widgetData.versions || !batchData.active}
+          lock={!widgetData.versions || !batchData.live}
           noText={noText} />
         <MultiItemForm
           id={batchData._id}
@@ -131,7 +131,7 @@ const ActionBar = ({batchData, itemData, groupData, widgetData, versionData, app
           groupId={batchData.groupId}
           widgetId={batchData.widgetId}
           versions={widgetData.versions}
-          lock={!widgetData.versions || !batchData.active}
+          lock={!widgetData.versions || !batchData.live}
           noText={noText} />
         <CounterAssign
           id={batchData._id}
