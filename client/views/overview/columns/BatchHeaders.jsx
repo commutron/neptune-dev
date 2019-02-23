@@ -4,16 +4,27 @@ import moment from 'moment';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 
 
-const BatchHeaders = ({wB, cB, bCache})=> {
+const BatchHeaders = ({hB, lB, cB, bCache})=> {
+  
   
   return(
     <div className='overGridFixed'>
       
-            
-      {wB.map( (entry, index)=>{
+      {hB.map( (entry, index)=>{
         return(
           <BatchHeaderChunk
-            key={`${entry._id}warmfixed${index}`}
+            key={`${entry._id}hotfixed${index}`}
+            source='hot'
+            ck={entry}
+            bCache={bCache} />
+              
+      )})}
+            
+      {lB.map( (entry, index)=>{
+        return(
+          <BatchHeaderChunk
+            key={`${entry._id}lukefixed${index}`}
+            source='luke'
             ck={entry}
             bCache={bCache} />
               
@@ -23,6 +34,7 @@ const BatchHeaders = ({wB, cB, bCache})=> {
         return(
           <BatchHeaderChunk
             key={`${entry._id}coolfixed${index}`}
+            source='cool'
             ck={entry}
             bCache={bCache} />
       )})}
@@ -35,13 +47,13 @@ const BatchHeaders = ({wB, cB, bCache})=> {
 
 export default BatchHeaders;
 
-const BatchHeaderChunk = ({ck, bCache})=> {
+const BatchHeaderChunk = ({ck, source, bCache})=> {
 
   const moreInfo = bCache ? bCache.dataSet.find( x => x.batch === ck.batch) : false;
   const what = moreInfo ? moreInfo.isWhat : 'unavailable';
   
   return(
-    <div className='overGridRowFixed'>
+    <div className='overGridRowFixed' title={source}>
       <div>
         <ExploreLinkBlock type='batch' keyword={ck.batch} wrap={false} />
       </div>

@@ -6,19 +6,46 @@ import business from 'moment-business';
 //const isNow = (t)=>{ return ( moment(t).isSame(now, 'day') ) };
   
 
-function collectRelevant(accessKey, temp) {
+function collectRelevant(accessKey, temp, activeList) {
   return new Promise(resolve => {
     const liveBatches = BatchDB.find({orgKey: accessKey, live: true},{sort: {batch:-1}}).fetch();
     // get the relevant batches
-    if(temp === 'warm') {
-      const warmBatches = liveBatches.filter( x => typeof x.floorRelease === 'object' );
-      resolve(warmBatches);
-    }else if(temp === 'cool') {
+    if(temp === 'cool') {
       const coolBatches = liveBatches.filter( x => x.floorRelease === false );
       resolve(coolBatches);
-    }else{
-      resolve([]);
+    }else if(temp === 'warm') {
+      const warmBatches = liveBatches.filter( x => typeof x.floorRelease === 'object' );
+      resolve(warmBatches);
+    }else if(temp === 'luke') {
+      const warmBatches = liveBatches.filter( x => typeof x.floorRelease === 'object' );
+      const lukeBatches = warmBatches.filter( x => activeList.includes( x.batch ) === false );
+      resolve(lukeBatches);
+    }else if(temp === 'hot') {
+      const hotBatches = liveBatches.filter( x => activeList.includes( x.batch ) === true );
+      resolve(hotBatches);
+    }else {
+      [];
     }
+  });
+}
+
+function collectActive(clientTZ, relevant) {
+  return new Promise(resolve => {
+    const now = moment().tz(clientTZ);
+    let list = [];
+    for(let b of relevant) {
+      // is there new activity today
+      const activeN = (nonCon)=> nonCon.find( n => moment(n.time)
+                                              .isSame(now, 'day') )
+                                                ? true : false;
+      const activeH = (items)=> items.find( i => i.history.find( 
+                                            h => moment(h.time)
+                                              .isSame(now, 'day') ) )
+                                                ? true : false;
+      let isActive = activeN(b.nonCon) || activeH(b.items);
+      isActive === true && list.push(b.batch);
+    }
+    resolve(list);
   });
 }
 
@@ -54,17 +81,8 @@ function collectInfo(clientTZ, relevant) {
       const itemIsScrap = b.items.filter( x => x.history.find( 
                               y => y.type === 'scrap' ) )
                                 .length;
-      // is there new activity today
-      const activeN = (nonCon)=> nonCon.find( n => moment(n.time)
-                                              .isSame(now, 'day') )
-                                                ? true : false;
-      const activeH = (items)=> items.find( i => i.history.find( 
-                                            h => moment(h.time)
-                                              .isSame(now, 'day') ) )
-                                                ? true : false;
-      let isActive = activeN(b.nonCon) || activeH(b.items);
-      
       collection.push({
+        batch: b.batch,
         batchID: b._id,
         salesOrder: b.salesOrder,
         salesEnd: salesEnd.format("MMM Do, YYYY"),
@@ -77,7 +95,6 @@ function collectInfo(clientTZ, relevant) {
         nonConsPerNCitem: isNaN(nonConsPerNCitem) ? '0.0' : nonConsPerNCitem,
         itemHasRMA: itemHasRMA,
         itemIsScrap: itemIsScrap,
-        isActive: isActive
       });
     
     }
@@ -85,15 +102,30 @@ function collectInfo(clientTZ, relevant) {
   });
 }
 
+
 Meteor.methods({
 
 
 //// Basic Status information for WIP Batches \\\\
-  statusSnapshot(clientTZ, temp) {
+  activeCheck(clientTZ) {
+    async function bundleActive(clientTZ) {
+      const accessKey = Meteor.user().orgKey;
+      try {
+        relevant = await collectRelevant(accessKey, 'warm');
+        collection = await collectActive(clientTZ, relevant);
+        return collection;
+      }catch (err) {
+        throw new Meteor.Error(err);
+      }
+    }
+    return bundleActive(clientTZ);
+  },
+  
+  statusSnapshot(clientTZ, temp, activeList) {
     async function bundleStatus(clientTZ) {
       const accessKey = Meteor.user().orgKey;
       try {
-        relevant = await collectRelevant(accessKey, temp);
+        relevant = await collectRelevant(accessKey, temp, activeList);
         collection = await collectInfo(clientTZ, relevant);
         return collection;
       }catch (err) {

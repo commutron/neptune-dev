@@ -17,16 +17,18 @@ import BatchDetails from './columns/BatchDetails.jsx';
 export default class OverviewWrap extends Component	{
   componentDidMount() {
     const clientTZ = moment.tz.guess();
-    this.splitInitial();
-    this.fetchInitial(clientTZ, 'warm', 'warmStatus')
-      .then(this.fetchInitial(clientTZ, 'cool', 'coolStatus'));
+    this.splitInitial()
+      .then(this.sortHot(clientTZ));
   }
   
   constructor() {
     super();
     this.state = {
+      hotBatches: false,
+      hotStatus: [],
       warmBatches: false,
-      warmStatus: [],
+      lukeBatches: false,
+      lukeStatus: [],
       coolBatches: false,
       coolStatus: []
     };
@@ -37,7 +39,6 @@ export default class OverviewWrap extends Component	{
       const batches = this.props.b;
       const warmBatches = batches.filter( x => typeof x.floorRelease === 'object' );
       const coolBatches = batches.filter( x => x.floorRelease === false );
-      console.log(warmBatches);
       //const batchesX = this.props.bx;
       //const warmBx = batchesX.filter( x => x.releases.find( y => y.type === 'floorRelease') == true );
       //const warmBx = batchesX.filter( x => x.releases.find( y => y.type === 'floorRelease') != true );
@@ -47,23 +48,51 @@ export default class OverviewWrap extends Component	{
       });
     });
   }
-    
-  fetchInitial(clientTZ, temp, slot) {
+  
+  sortHot(clientTZ) {
     return new Promise(() => {
-      Meteor.call('statusSnapshot', clientTZ, temp, (error, reply)=> {
+      Meteor.call('activeCheck', clientTZ, (error, reply)=> {
+        error && console.log(error);
+        if(reply) {
+          const warmBatches = this.state.warmBatches;
+          const hot = warmBatches.filter( x => reply.includes( x.batch ) === true );
+          const luke = warmBatches.filter( x => reply.includes( x.batch ) === false );
+          this.setState({
+            hotBatches: hot,
+            lukeBatches: luke,
+          });
+          this.populate(clientTZ, reply);
+        }
+      });
+    });
+  }
+  
+  populate(clientTZ, activeList) {
+    this.fetchInitial(clientTZ, 'hot', 'hotStatus', activeList)
+      .then(this.fetchInitial(clientTZ, 'luke', 'lukeStatus', activeList))
+        .then(this.fetchInitial(clientTZ, 'cool', 'coolStatus', activeList));
+  }
+    
+  fetchInitial(clientTZ, temp, slot, activeList) {
+    return new Promise(() => {
+      Meteor.call('statusSnapshot', clientTZ, temp, activeList, (error, reply)=> {
         error && console.log(error);
         this.setState({ [slot]: reply });
       });
     });
   }
   
+  
   render() {
     
-    console.log(this.state.warmStatus);
-    console.log(this.state.coolStatus);
+    //console.log({hot: this.state.hotBatches});
+    //console.log({hotStuff: this.state.hotStatus});
+    //console.log({luke: this.state.lukeBatches});
+    //console.log({lukeStuff: this.state.lukeStatus});
+    //console.log({coolStuff: this.state.coolStatus});
     
     
-    if(!this.state.warmBatches || !this.state.coolBatches) {
+    if(!this.state.hotBatches || !this.state.warmBatches || !this.state.coolBatches) {
       return (
         <div className='centreContainer'>
           <div className='centrecentre'>
@@ -100,15 +129,17 @@ export default class OverviewWrap extends Component	{
           <div className='overGridFrame'>
       
             <BatchHeaders
-              key='warm0'
-              wB={this.state.warmBatches}
+              key='fancylist0'
+              hB={this.state.hotBatches}
+              lB={this.state.lukeBatches}
               cB={this.state.coolBatches}
               bCache={this.props.bCache}
             />
             
             <BatchDetails
-              key='warm1'
-              wBs={this.state.warmStatus}
+              key='fancylist1'
+              hBs={this.state.hotStatus}
+              lBs={this.state.lukeStatus}
               cBs={this.state.coolStatus}
               bCache={this.props.bCache}
             />

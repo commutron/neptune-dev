@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import moment from 'moment';
 
 
-const BatchDetails = ({wBs, cBs, bCache})=> {
+const BatchDetails = ({hBs, lBs, cBs, bCache})=> {
   
   /*
   let headers = wBs && wBs.length > 0 ? Object.keys(wBs[0]) :
@@ -15,10 +15,19 @@ const BatchDetails = ({wBs, cBs, bCache})=> {
   return(
     <div className='overGridScroll'>
             
-      {wBs.map( (entry, index)=>{
+      {hBs.map( (entry, index)=>{
         return(
           <BatchDetailChunk
-            key={`${entry.batchID}warm${index}`}
+            key={`${entry.batchID}hot${index}`}
+            source='hot'
+            ck={entry} />
+      )})}
+      
+      {lBs.map( (entry, index)=>{
+        return(
+          <BatchDetailChunk
+            key={`${entry.batchID}luke${index}`}
+            source='luke'
             ck={entry} />
       )})}
       
@@ -26,6 +35,7 @@ const BatchDetails = ({wBs, cBs, bCache})=> {
         return(
           <BatchDetailChunk 
             key={`${entry.batchID}cool${index}`}
+            source='cool'
             ck={entry} />
       )})}
       
@@ -37,9 +47,9 @@ const BatchDetails = ({wBs, cBs, bCache})=> {
 export default BatchDetails;
 
 
-const BatchDetailChunk = ({ck})=> (
+const BatchDetailChunk = ({ck, source})=> (
 
-  <div className='overGridRowScroll'>
+  <div className='overGridRowScroll' title={`${ck.batch} = ${source}`}>
         <div>{ck.salesOrder}</div>
         <div>{ck.salesEnd}</div>
         <div>{ck.timeElapse}</div>
@@ -51,6 +61,5 @@ const BatchDetailChunk = ({ck})=> (
         <div>{ck.nonConsPerNCitem}</div>
         <div>{ck.itemHasRMA}</div>
         <div>{ck.itemIsScrap}</div>
-        <div>{ck.isActive.toString()}</div>
   </div>
 );
