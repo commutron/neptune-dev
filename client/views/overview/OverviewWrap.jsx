@@ -98,9 +98,6 @@ export default class OverviewWrap extends Component	{
           
           {Roles.userIsInRole(Meteor.userId(), 'nightly') ?
           <div className='overGridFrame'>
-            
-            
-            
       
             <BatchHeaders
               key='warm0'

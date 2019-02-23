@@ -3,13 +3,17 @@ import moment from 'moment';
 
 
 const BatchDetails = ({wBs, cBs, bCache})=> {
-    
+  
+  /*
+  let headers = wBs && wBs.length > 0 ? Object.keys(wBs[0]) :
+                cBs && cBs.length > 0 ? Object.keys(cBs[0]) :
+                [];
+  headers.length > 0 && headers.shift();
+  console.log(headers);
+  */
+  
   return(
     <div className='overGridScroll'>
-      <div className='overGridHeaderScroll'>
-        <div>Sales Order</div>
-        <div>Due Date</div>
-      </div>
             
       {wBs.map( (entry, index)=>{
         return(
@@ -24,6 +28,7 @@ const BatchDetails = ({wBs, cBs, bCache})=> {
             key={`${entry.batchID}cool${index}`}
             ck={entry} />
       )})}
+      
     </div>
   
   );
@@ -35,17 +40,17 @@ export default BatchDetails;
 const BatchDetailChunk = ({ck})=> (
 
   <div className='overGridRowScroll'>
-        <span>{ck.salesOrder}</span>
-        <span>{ck.salesEnd}</span>
-        <span>{ck.timeElapse}</span>
-        <span>{ck.weekDaysRemain}</span>
-        <span>{ck.itemQuantity}</span>
-        <span>{ck.percentOfDoneItems}</span>
-        <span>{ck.nonConTotal}</span>
-        <span>{ck.percentOfNCitems}</span>
-        <span>{ck.nonConsPerNCitem}</span>
-        <span>{ck.itemHasRMA}</span>
-        <span>{ck.itemIsScrap}</span>
-        <span>{ck.isActive.toString()}</span>
+        <div>{ck.salesOrder}</div>
+        <div>{ck.salesEnd}</div>
+        <div>{ck.timeElapse}</div>
+        <div>{ck.weekDaysRemain}</div>
+        <div>{ck.itemQuantity}</div>
+        <div>{ck.percentOfDoneItems}</div>
+        <div>{ck.nonConTotal}</div>
+        <div>{ck.percentOfNCitems}</div>
+        <div>{ck.nonConsPerNCitem}</div>
+        <div>{ck.itemHasRMA}</div>
+        <div>{ck.itemIsScrap}</div>
+        <div>{ck.isActive.toString()}</div>
   </div>
 );

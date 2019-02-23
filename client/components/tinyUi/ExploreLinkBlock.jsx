@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ExploreLinkBlock = ({type, keyword})=>{
+const ExploreLinkBlock = ({type, keyword, wrap})=>{
   const title = keyword.split('+')[0];
   const link = type === 'group' ? 
                   '/data/group?request=' + title
@@ -11,8 +11,9 @@ const ExploreLinkBlock = ({type, keyword})=>{
                 : type === 'item' ? 
                   '/data/batch?request=' + keyword.split('+')[1] + '&specify=' + title
                 : '';
+  const noWrap = wrap ? '' : 'noWrap';
   return(                    
-    <a href={link} className='noWrap'>
+    <a href={link} className={noWrap}>
       <i className='fas fa-rocket fa-fw'></i>{title}
     </a>
   );

@@ -104,7 +104,7 @@ main {
 
 .simpleContainer {
   display: grid;
-  min-width: 768px;
+  /*min-width: 768px;*/
   min-height: 100%;
   max-height: 100%;
   grid-template-rows: 10vh 90vh;
@@ -689,74 +689,35 @@ main {
   width: auto;
   height: auto;
   grid-template-columns: minmax(min-content, 25vw) auto;
-  /*grid-template-rows: minmax(2rem, 3vw) auto;*/
   grid-template-areas: 
     'overFixedArea overScrollArea';
   /*background-color: var(--clouds);*/
 }
-/*
-.overGridHeaderFixed {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0px;
-  background-color: rgb(20,20,20);
-  z-index: 7;
-  border-right: 1px groove rgba(255,255,255,0.3);
-  border-bottom: 1px inset rgba(255,255,255,0.3);
-  display: grid;
-}
-.overGridHeaderFixed {
-  grid-area: overHeadFixedArea;
-  grid-template-columns: 1fr 2fr;
-  place-items: stretch start;
-}
-
-.overGridHeaderScroll {
-  grid-area: overHeadScrollArea;
-  grid-auto-flow: column;
-  grid-auto-columns: 200px;
-  place-items: center;
-}
-*/
 
 .overGridFixed {
   grid-area: overFixedArea;
-  /*overflow-x: hidden;*/
   display: grid;
   grid-auto-flow: row;
-  grid-auto-rows: minmax(5rem, 10vw);
-  position: sticky;
-  left: 0;
-  z-index: 8;
+  grid-auto-rows: minmax(5rem, 15vh);
+  overflow-x: hidden;
 }
-.overGridHeaderFixed {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0px;
-  background-color: rgb(20,20,20);
-  z-index: 8;
-}
-.overGridHeaderFixed, .overGridRowFixed {
+
+.overGridRowFixed {
   border-right: 1px groove rgba(255,255,255,0.3);
   border-bottom: 1px inset rgba(255,255,255,0.3);
   display: grid;
   grid-template-columns: 1fr 2fr;
   place-items: stretch start;
-  
 }
-.overGridHeaderFixed > div,
+
 .overGridRowFixed > div {
   display: flex;
   align-items: center;
-  white-space: nowrap;
+  /*white-space: nowrap;*/
   padding: 1vh 1vw;
 }
-.overGridHeaderFixed > div:first-child,
 .overGridRowFixed > div:first-child {
-  width: calc(104px + 2vw);
   border-right: 1px groove rgba(255,255,255,0.3);
-}
-.overGridRowFixed > div:first-child {
   font-size: 1.5rem;
 }
 
@@ -764,34 +725,27 @@ main {
   grid-area: overScrollArea;
   display: grid;
   grid-auto-flow: row;
-  grid-auto-rows: minmax(5rem, 10vw);
-  /*overflow-x: auto;*/
-  /*overscroll-behavior-x: contain; /* in theory */
+  grid-auto-rows: minmax(5rem, 15vh);
+  overflow-x: auto;
 }
 
-.overGridHeaderScroll {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0px;
-  background-color: rgb(20,20,20);
-  z-index: 7;
-}
-.overGridRowScroll, .overGridHeaderScroll {
+.overGridRowScroll {
   border-top: 1px dashed green;
   border-left: 2px dashed pink;
   border-bottom: 1px dashed green;
   border-right: 2px dashed green;
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: 200px;
-  place-items: center;
+  grid-auto-columns: 10vmax;
+  place-items: stretch stretch;
 }
 
-.overGridHeaderScroll > div,
-.overGridRowScroll > span,
-.overGridFixed div span {
+.overGridRowScroll > div {
   border: 1px dotted grey;
-  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1vh 1vw;
 }
 
 

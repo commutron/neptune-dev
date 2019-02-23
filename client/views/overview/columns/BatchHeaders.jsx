@@ -5,14 +5,10 @@ import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 
 
 const BatchHeaders = ({wB, cB, bCache})=> {
-
+  
   return(
     <div className='overGridFixed'>
       
-      <div className='overGridHeaderFixed'>
-        <div>Work Order</div>
-        <div>Product</div>
-      </div>
             
       {wB.map( (entry, index)=>{
         return(
@@ -30,6 +26,8 @@ const BatchHeaders = ({wB, cB, bCache})=> {
             ck={entry}
             bCache={bCache} />
       )})}
+      
+      
     </div>
   
   );
@@ -45,9 +43,9 @@ const BatchHeaderChunk = ({ck, bCache})=> {
   return(
     <div className='overGridRowFixed'>
       <div>
-        <ExploreLinkBlock type='batch' keyword={ck.batch} />
+        <ExploreLinkBlock type='batch' keyword={ck.batch} wrap={false} />
       </div>
-      <div>{what.length <= 30 ? what : what.substring(0, 30) + '...'}</div>
+      <div>{what.length <= 50 ? what : what.substring(0, 50) + '...'}</div>
     </div>
   );
 };
