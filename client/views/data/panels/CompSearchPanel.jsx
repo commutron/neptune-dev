@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
 import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
+import { ToastContainer, toast } from 'react-toastify';
 
 export default class CompSearchPanel extends Component	{
   
@@ -38,6 +39,28 @@ export default class CompSearchPanel extends Component	{
       });
     }else{null}
   }
+  
+  dataExport() {
+    toast('request sent, please wait for a download link');
+    Meteor.call('componentExportAll', (error, reply)=>{
+      if(error)
+        return error;
+      if(reply) {
+        const outputLines = reply.join('\n');
+        const outputComma = reply.toString();
+        toast(
+          <a href={`data:text/plain;charset=UTF-8,${outputLines}`}
+          download="all_starfish_parts.txt">Download seperated by new lines</a>
+          , {autoClose: false, closeOnClick: false}
+        );
+        toast(
+          <a href={`data:text/plain;charset=UTF-8,${outputComma}`}
+          download="all_starfish_parts.csv">Download seperated by commas</a>
+          , {autoClose: false, closeOnClick: false}
+        );
+      }
+    });
+  }
 
   render() {
 
@@ -48,11 +71,23 @@ export default class CompSearchPanel extends Component	{
     return (
       <AnimateWrap type='cardTrans'>
         <div key={1} className='simpleContainer'>
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            newestOnTop />
           <div className='tenHeader'>
             <div className='topBorder'></div>
             <HomeIcon />
             <div className='frontCenterTitle invert'>Parts Search</div>
-            <div className='rightSpace invert'></div>
+            {/*<div className='rightSpace invert'></div>*/}
+            <div className='rightSpace invert'>
+              <button
+                type='button'
+                title='Download All Parts'
+                onClick={(e)=>this.dataExport(e)}>
+              <i className='fas fa-download topRightIcon'></i>
+              </button>
+            </div>
           </div>
         
         <div className='simpleContent invert starfishAccents vspace'>

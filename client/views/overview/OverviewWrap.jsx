@@ -16,10 +16,7 @@ import BatchDetails from './columns/BatchDetails.jsx';
 
 export default class OverviewWrap extends Component	{
   componentDidMount() {
-    //this.setState({ loadTime: moment() });
-    const clientTZ = moment.tz.guess();
-    this.splitInitial()
-      .then(this.sortHot(clientTZ));
+    this.dataStart();
     
     this.tickingClock = Meteor.setInterval( ()=>{
       this.setState({ tickingTime: moment() });
@@ -42,6 +39,12 @@ export default class OverviewWrap extends Component	{
       coolBatches: false,
       coolStatus: []
     };
+  }
+  
+  dataStart() {
+    const clientTZ = moment.tz.guess();
+    this.splitInitial()
+      .then(this.sortHot(clientTZ));
   }
   
   splitInitial() {
@@ -80,7 +83,8 @@ export default class OverviewWrap extends Component	{
   populate(clientTZ, activeList) {
     this.fetchInitial(clientTZ, 'hot', 'hotStatus', activeList)
       .then(this.fetchInitial(clientTZ, 'luke', 'lukeStatus', activeList))
-        .then(this.fetchInitial(clientTZ, 'cool', 'coolStatus', activeList));
+        .then(this.fetchInitial(clientTZ, 'cool', 'coolStatus', activeList))
+          .then(this.setState({ loadTime: moment() }));
   }
     
   fetchInitial(clientTZ, temp, slot, activeList) {
@@ -126,17 +130,15 @@ export default class OverviewWrap extends Component	{
           <div className='topBorder'></div>
           <HomeIcon />
           <div className='frontCenterTitle'>Overview</div>
-          <div className='rightSpace' />
-          {/*
+          {/*<div className='rightSpace' />*/}
           <div className='rightSpace'>
             <button
               type='button'
-              title='Auto updates every hour'
-              onClick={(e)=>this.relevant(e)}>
+              title='Refresh Information'
+              onClick={(e)=>this.dataStart(e)}>
             <i className='fas fa-sync-alt topRightIcon'></i>
             </button>
           </div>
-          */}
         </div>
           
         <div className='simpleContent'>

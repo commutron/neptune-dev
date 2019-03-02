@@ -1,6 +1,6 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
-
+import { toast } from 'react-toastify';
 import CreateTag from '/client/components/uUi/CreateTag.jsx';
 
 import VersionForm from '../forms/VersionForm.jsx';
@@ -55,6 +55,28 @@ const VersionRow = ({ widgetData, app, entry })=> {
       });
     }
   }
+  
+  function downloadComp(id, vKey) {
+    Meteor.call('componentExport', id, vKey, (error, reply)=>{
+      if(error)
+        console.log(error);
+      if(reply) {
+        const name = w.widget + "_" + v.version;
+        const outputLines = reply.join('\n');
+        const outputComma = reply.toString();
+        toast(
+          <a href={`data:text/plain;charset=UTF-8,${outputLines}`}
+          download={name + ".txt"}>Download seperated by new lines</a>
+          , {autoClose: false, closeOnClick: false}
+        );
+        toast(
+          <a href={`data:text/plain;charset=UTF-8,${outputComma}`}
+          download={name + ".csv"}>Download seperated by commas</a>
+          , {autoClose: false, closeOnClick: false}
+        );
+      }
+    });
+  }
                   
   return(
     <tbody className={live}>
@@ -103,6 +125,15 @@ const VersionRow = ({ widgetData, app, entry })=> {
         </td>
         <td colSpan='2'>
           <CompForm id={w._id} versionKey={v.versionKey} />
+          <button
+            className='transparent'
+            title='Download Parts List'
+            onClick={()=>downloadComp(w._id, v.versionKey)}>
+            <label className='navIcon actionIconWrap'>
+              <i className='fas fa-download fa-fw'></i>
+              <span className='actionIconText whiteT'>Download</span>
+            </label>
+          </button>
         </td>
       </tr>
       <tr>

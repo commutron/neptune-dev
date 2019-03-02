@@ -495,6 +495,41 @@ Meteor.methods({
       });
     }
     return data;
+  },
+  
+     ///////////////////////////////////////////////////////////////////////////////////
+  
+  // Component Export
+  
+  ///////////////////////////////////////////////////////////////////////////////////
+  
+  componentExportAll() {
+    const widgets = WidgetDB.find({orgKey: Meteor.user().orgKey}).fetch();
+    const data = [];
+    for(let w of widgets) {
+      for(let v of w.versions) {
+        for(let a of v.assembly) {
+          data.push(a.component);
+        }
+      }
+    }
+    const cleanData = [... new Set(data) ].sort();
+    return cleanData;
+  },
+  
+  componentExport(wID, vKey) {
+    const widget = WidgetDB.findOne({_id: wID, orgKey: Meteor.user().orgKey});
+    const data = [];
+    const version = widget ? widget.versions.find( x => x.versionKey === vKey ) : null;
+    if(version) {
+      for(let a of version.assembly) {
+        data.push(a.component);
+      }
+    }
+    let cleanData = [... new Set(data) ].sort();
+    cleanData.unshift(version.version);
+    cleanData.unshift(widget.widget);
+    return cleanData;
   }
   
   
