@@ -16,14 +16,24 @@ import BatchDetails from './columns/BatchDetails.jsx';
 
 export default class OverviewWrap extends Component	{
   componentDidMount() {
+    //this.setState({ loadTime: moment() });
     const clientTZ = moment.tz.guess();
     this.splitInitial()
       .then(this.sortHot(clientTZ));
+    
+    this.tickingClock = Meteor.setInterval( ()=>{
+      this.setState({ tickingTime: moment() });
+    },1000*60);
+  }
+  componentWillUnmount() {
+    Meteor.clearInterval(this.tickingClock);
   }
   
   constructor() {
     super();
     this.state = {
+      loadTime: moment(),
+      tickingTime: moment(),
       hotBatches: false,
       hotStatus: [],
       warmBatches: false,
@@ -91,8 +101,11 @@ export default class OverviewWrap extends Component	{
     //console.log({lukeStuff: this.state.lukeStatus});
     //console.log({coolStuff: this.state.coolStatus});
     
+    const duration = moment.duration(
+      this.state.loadTime.diff(this.state.tickingTime))
+        .humanize();
     
-    if(!this.state.hotBatches || !this.state.warmBatches || !this.state.coolBatches) {
+    if(!this.state.warmBatches) {
       return (
         <div className='centreContainer'>
           <div className='centrecentre'>
@@ -113,6 +126,8 @@ export default class OverviewWrap extends Component	{
           <div className='topBorder'></div>
           <HomeIcon />
           <div className='frontCenterTitle'>Overview</div>
+          <div className='rightSpace' />
+          {/*
           <div className='rightSpace'>
             <button
               type='button'
@@ -121,11 +136,19 @@ export default class OverviewWrap extends Component	{
             <i className='fas fa-sync-alt topRightIcon'></i>
             </button>
           </div>
+          */}
         </div>
-      
-        <div className='simpleContent'>
           
-          {Roles.userIsInRole(Meteor.userId(), 'nightly') ?
+        <div className='simpleContent'>
+        
+          <nav className='stickyBar scrollToNav'>
+            <span><a href="#hotBatch">Active</a></span>
+            <span><a href="#lukewarmBatch">In Progress</a></span>
+            <span><a href="#coolBatch">Pending</a></span>
+            <span className='flexSpace' />
+            <span>Updated {duration} ago</span>
+          </nav>
+          
           <div className='overGridFrame'>
       
             <BatchHeaders
@@ -146,24 +169,6 @@ export default class OverviewWrap extends Component	{
               
           </div>
           
-          : <div><p>Closed for Renovations</p></div>}
-          
-          {/*
-          <div className='overGridFrame'>
-            
-            <BatchHeaders
-              key='cool0'
-              b={this.state.coolBatches}
-              bC={this.props.bC}
-            />
-            
-            <BatchDetails
-              key='cool1'
-              b={this.state.coolStatus}
-              bC={this.props.bC}
-            />
-          </div>
-          */}  
         
         {/*
           <div>

@@ -65,9 +65,9 @@ main {
 .stickyBar {
   position: -webkit-sticky;
   position: sticky;
-  top: 0px;
+  top: 0;
   width: auto;
-  background-color: rgb(20,20,20);
+  background-color: rgb(30,30,30);
   z-index: 7;
 }
 
@@ -119,6 +119,7 @@ main {
 .simpleContent {
   grid-area: simpleContent;
   overflow-y: auto;
+  scroll-behavior: smooth;
 }
 .simpleContent.locked {
   overflow-y: hidden;
@@ -517,6 +518,7 @@ main {
 
 .breath { margin: 0 5px; }
 
+.dropCeiling { margin-top: calc(4vh + 1rem); }
 .overscroll { margin-bottom: 5vh; }
 
 .fill {
@@ -565,6 +567,20 @@ main {
 
 .vSpaceGaps {
   border-bottom: 5vh solid var(--clouds);
+}
+
+.scrollToNav {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin: 1vh 1vw;
+}
+.scrollToNav > span {
+  padding: 1vh 1vw;
+}
+.anchorTarget {
+  position: relative;
+  top: -12vmax;
 }
 
 .popTbody > tr:first-child > td { 
@@ -698,18 +714,29 @@ main {
   grid-area: overFixedArea;
   display: grid;
   grid-auto-flow: row;
-  grid-auto-rows: minmax(5rem, 15vh);
+  grid-auto-rows: minmax(10vmax, 15vh);
   overflow-x: hidden;
 }
-
+.overGridRowFixedHeader {
+  border-bottom: 1px inset rgba(255,255,255,0.3);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.overGridRowFixedHeader > h1 {
+  color: var(--silver);
+  padding: 1vh 2vw;
+  text-transform: capitalize;
+  font-size: 4vh;
+}
 .overGridRowFixed {
-  border-right: 1px groove rgba(255,255,255,0.3);
+  border-right: 1px groove rgba(255,255,255,0.2);
   border-bottom: 1px inset rgba(255,255,255,0.3);
   display: grid;
   grid-template-columns: 1fr 2fr;
   place-items: stretch start;
 }
-
 .overGridRowFixed > div {
   display: flex;
   align-items: center;
@@ -720,32 +747,41 @@ main {
   border-right: 1px groove rgba(255,255,255,0.3);
   font-size: 1.5rem;
 }
+.overGridRowFixed > div:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+}
 
 .overGridScroll {
   grid-area: overScrollArea;
   display: grid;
   grid-auto-flow: row;
-  grid-auto-rows: minmax(5rem, 15vh);
+  grid-auto-rows: minmax(10vmax, 15vh);
   overflow-x: auto;
 }
-
+.overGridRowScrollHeader {
+  border-bottom: 1px inset rgba(255,255,255,0.3);
+}
 .overGridRowScroll {
-  border-top: 1px dashed green;
-  border-left: 2px dashed pink;
-  border-bottom: 1px dashed green;
-  border-right: 2px dashed green;
+  border-left: 0.25vw groove rgba(255,255,255,0.3);
+  border-right: 0.3vw groove rgba(255,255,255,0.3);
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: 10vmax;
+  grid-auto-columns: minmax(10.5vmax, 15.5vh);
   place-items: stretch stretch;
 }
 
 .overGridRowScroll > div {
-  border: 1px dotted grey;
+  border-right: 1px groove rgba(255,255,255,0.2);
+  border-bottom: 1px inset rgba(255,255,255,0.3);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1vh 1vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
 }
 
 

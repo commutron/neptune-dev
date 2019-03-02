@@ -93,6 +93,7 @@ Meteor.publish('shaddowData', function(){
     Meteor.call('batchCacheUpdate', orgKey);
   });
   return [
+    /*
     GroupDB.find({orgKey: orgKey}, {
       fields: {
           'alias': 1,
@@ -103,6 +104,7 @@ Meteor.publish('shaddowData', function(){
           'versions.versionKey': 1,
           'versions.version': 1
         }}),
+    */
     BatchDB.find({orgKey: orgKey, live: true}, {
       sort: {batch:-1},
       fields: {

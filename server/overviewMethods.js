@@ -3,7 +3,7 @@ import timezone from 'moment-timezone';
 import business from 'moment-business';
 
 //const now = moment().tz(clientTZ);
-//const isNow = (t)=>{ return ( moment(t).isSame(now, 'day') ) };
+//const isNow = (t)=>{ return ( now.isSame(moment(t), 'day') ) };
   
 
 function collectRelevant(accessKey, temp, activeList) {
@@ -35,13 +35,17 @@ function collectActive(clientTZ, relevant) {
     let list = [];
     for(let b of relevant) {
       // is there new activity today
-      const activeN = (nonCon)=> nonCon.find( n => moment(n.time)
-                                              .isSame(now, 'day') )
-                                                ? true : false;
-      const activeH = (items)=> items.find( i => i.history.find( 
-                                            h => moment(h.time)
-                                              .isSame(now, 'day') ) )
-                                                ? true : false;
+      const activeN = (nonCon)=> 
+        nonCon.find( 
+          n => now
+            .isSame(moment(n.time), 'day') )
+              ? true : false;
+      const activeH = (items)=> 
+        items.find( 
+          i => i.history.find( 
+            h => now
+              .isSame(moment(h.time), 'day') ) )
+                ? true : false;
       let isActive = activeN(b.nonCon) || activeH(b.items);
       isActive === true && list.push(b.batch);
     }
@@ -61,7 +65,7 @@ function collectInfo(clientTZ, relevant) {
       // how long since start
       const timeElapse = moment.duration(now.diff(b.start)).humanize();
       // how long untill due
-      const timeRemain = !complete ? business.weekDays( now, salesEnd ) : false; 
+      const timeRemain = !complete ? business.weekDays( now, salesEnd ) : 0; 
       // how many items
       const itemQuantity = b.items.length;
       // what percent of items are complete
@@ -87,7 +91,7 @@ function collectInfo(clientTZ, relevant) {
         salesOrder: b.salesOrder,
         salesEnd: salesEnd.format("MMM Do, YYYY"),
         timeElapse: timeElapse,
-        weekDaysRemain: timeRemain + ' weekdays left',
+        weekDaysRemain: timeRemain,
         itemQuantity: itemQuantity,
         percentOfDoneItems: isNaN(percentOfDoneItems) ? '0%' : percentOfDoneItems + '%',
         nonConTotal: b.nonCon.length,

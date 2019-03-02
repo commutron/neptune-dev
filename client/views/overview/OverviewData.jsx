@@ -11,11 +11,6 @@ class View extends Component	{
   componentDidUpdate(prevProps) {
     InboxToast(prevProps, this.props);
   }
-  /*
-  componentWillUnmount() {
-    this.props.sub.stop();
-  }
-  */
   
   render() {
     
@@ -31,8 +26,8 @@ class View extends Component	{
 
     return (
       <OverviewWrap 
-        g={this.props.group}
-        w={this.props.widget}
+        //g={this.props.group}
+        //w={this.props.widget}
         b={this.props.batch}
         bx={this.props.batchX}
         bCache={this.props.bCache}
@@ -67,8 +62,8 @@ export default withTracker( () => {
       user: user,
       org: org,
       app: AppDB.findOne({org: org}),
-      group: GroupDB.find().fetch(),
-      widget: WidgetDB.find().fetch(),
+      //group: GroupDB.find().fetch(),
+      //widget: WidgetDB.find().fetch(),
       batch: BatchDB.find().fetch(),
       batchX: XBatchDB.find().fetch(),
       bCache: CacheDB.findOne({dataName: 'batchInfo'}),
