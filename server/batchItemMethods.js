@@ -397,7 +397,7 @@ Meteor.methods({
   //// unit corection
   setItemUnit(id, bar, unit) {
     const auth = Roles.userIsInRole(Meteor.userId(), 'run');
-    if(auth && unit > 0 && unit < 100) {
+    if(auth && unit > 0 && unit <= 100) {
       BatchDB.update({_id: id, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
         $set : { 
           'items.$.units': Number(unit)
@@ -885,6 +885,7 @@ Meteor.methods({
           reject: [],
           skip: false,
           snooze: false,
+          trash: false,
           comm: ''
       }}});
     }
@@ -980,21 +981,29 @@ Meteor.methods({
     }else{null}
   },
   
-  /*
-  skipNC(batchId, ncKey) {
-    if(Roles.userIsInRole(Meteor.userId(), 'inspect')) {
+  trashNC(batchId, ncKey) {
+    if(Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])) {
   		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
   			$set : {
-  			  'nonCon.$.skip': { 
+  			  'nonCon.$.trash': { 
   			    time: new Date(),
   			    who: Meteor.userId()
-  			  },
-  			  'nonCon.$.snooze': false
+  			  }
   			}
   		});
     }else{null}
   },
-  */
+  
+  unTrashNC(batchId, ncKey) {
+    if(Roles.userIsInRole(Meteor.userId(), 'inspect')) {
+  	  BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+  	    $set : {
+  			  'nonCon.$.trash': false
+  			}
+  	  });
+    }else{null}
+  },
+
   
   autoTrashShortNC(accessKey, batchId, serial, refs) {
     const org = AppDB.findOne({ orgKey: accessKey });
@@ -1038,7 +1047,7 @@ Meteor.methods({
   },
   
   ncRemove(batchId, ncKey, override) {
-    const auth = Roles.userIsInRole(Meteor.userId(), ['remove', 'qa', 'run']);
+    const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
     if(!auth && override === undefined) {
       null;
     }else{

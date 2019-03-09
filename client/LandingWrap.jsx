@@ -12,7 +12,7 @@ import NavButton from '/client/components/uUi/NavButton.jsx';
 import { NavPlaceholder } from '/client/components/uUi/NavButton.jsx';
 
 const StartView = ({ready, readyUsers, user, org, app}) =>	{
-    
+  
   if(!ready || !readyUsers || !user || !org || !app) {
     return (
       <div className='centreSpash'>
@@ -52,17 +52,20 @@ export default withTracker( () => {
   let login = Meteor.userId() ? true : false;
   let user = login ? Meteor.user() : false;
   let org = user ? user.org : false;
-  const hotSub = login ? Meteor.subscribe('appData') : false;
+  const appSub = login ? Meteor.subscribe('appData') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
+  
+  //console.log(Meteor.status());
+  
   if(!login) {
     return {
-      ready: false,
+      ready: appSub.ready(),
       readyUsers: false,
       login: Meteor.userId(),
     };
   }else{
     return {
-      ready: hotSub.ready(),
+      ready: appSub.ready(),
       readyUsers: usersSub.ready(),
       login: Meteor.userId(),
       user: user,

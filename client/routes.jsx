@@ -288,7 +288,7 @@ FlowRouter.globals.push({
     },
     meta4: {
       name: "viewport",
-      content: "minimum-scale=0.5, maximum-scale=2"
+      content: "minimum-scale=0.25, maximum-scale=3"
     }
   }
 });

@@ -9,10 +9,13 @@ Tracker.autorun( ()=> {
   }
 });
 
+/*
 Tracker.autorun( ()=> {
+  console.log('ID: ' + Meteor.userId());
   if(!Meteor.userId()) {
     if(Session.get('loggedIn')) {
       FlowRouter.go(FlowRouter.path('login'));
     }
   }
 });
+*/

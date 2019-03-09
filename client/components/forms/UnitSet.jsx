@@ -58,7 +58,7 @@ export default class UnitSet extends Component	{
             required
             onChange={this.unitSet.bind(this)}
           />
-          <label htmlFor='cln'>{Pref.unit} Quantity</label>
+          <label htmlFor='cln'>{Pref.unit} Quantity <em>max 100</em></label>
         </p>
       </ModelMedium>
       );

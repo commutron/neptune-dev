@@ -121,7 +121,7 @@ export default class OverviewWrap extends Component	{
     
     return(
       <AnimateWrap type='contentTrans'>
-      <div key={0} className='simpleContainer'>
+      <div key={0} className='overviewContainer'>
         <ToastContainer
           position="top-right"
           autoClose={5000}
@@ -141,7 +141,7 @@ export default class OverviewWrap extends Component	{
           </div>
         </div>
           
-        <div className='simpleContent'>
+        <div className='overviewContent' tabIndex='0'>
         
           <nav className='stickyBar scrollToNav'>
             <span><a href="#hotBatch">Active</a></span>
@@ -167,6 +167,7 @@ export default class OverviewWrap extends Component	{
               lBs={this.state.lukeStatus}
               cBs={this.state.coolStatus}
               bCache={this.props.bCache}
+              user={this.props.user}
             />
               
           </div>

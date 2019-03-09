@@ -31,6 +31,7 @@ class View extends Component	{
         b={this.props.batch}
         bx={this.props.batchX}
         bCache={this.props.bCache}
+        user={this.props.user}
         app={this.props.app} />
     );
   }

@@ -20,19 +20,19 @@ main {
 .hidden { display: none; }
 
 .forceScrollStyle::-webkit-scrollbar {
-  width: 0.5vw;
+  width: 0.75vw;
 }
 .forceScrollStyle::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
-  -moz-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
-  box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
-  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 12px rgba(0,0,0,0.5); 
+  -moz-box-shadow: inset 0 0 12px rgba(0,0,0,0.5);
+  box-shadow: inset 0 0 12px rgba(0,0,0,0.5); 
+  border-radius: 5px;
 }
 .forceScrollStyle::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  -webkit-box-shadow: inset 0 0 6px rgb(100,100,100);
-  -moz-box-shadow: inset 0 0 6px rgb(100,100,100);
-  box-shadow: inset 0 0 6px rgb(100,100,100);
+  border-radius: 5px;
+  -webkit-box-shadow: inset 0 0 12px rgb(150,150,150);
+  -moz-box-shadow: inset 0 0 12px rgb(150,150,150);
+  box-shadow: inset 0 0 12px rgb(150,150,150);
 }
 
 .loading {
@@ -65,7 +65,7 @@ main {
 .stickyBar {
   position: -webkit-sticky;
   position: sticky;
-  top: 0;
+  top: 0.5vh;
   width: auto;
   background-color: rgb(30,30,30);
   z-index: 7;
@@ -574,13 +574,17 @@ main {
   flex-direction: row;
   justify-content: flex-start;
   margin: 1vh 1vw;
+  background-color: rgb(25,25,25);
 }
 .scrollToNav > span {
   padding: 1vh 1vw;
 }
+.scrollToNav > span:focus {
+  border: 1px dotted var(--clouds);
+}
 .anchorTarget {
   position: relative;
-  top: -12vmax;
+  top: -5vmax;
 }
 
 .popTbody > tr:first-child > td { 
@@ -698,12 +702,32 @@ main {
   padding: 0px 0px;
 }
 
+/* OverLayout */
+
+.overviewContainer {
+  display: grid;
+  /*min-width: 768px;*/
+  height: 100vh;
+  grid-template-rows: 10vh 90vh;
+  grid-template-columns: 100%;
+  grid-template-areas: 
+    'tenHeader'
+    'overviewContent';
+  overflow-y: hidden !important;
+  overflow-x: hidden !important;
+  /*-webkit-overflow-scrolling: touch;*/
+}
+.overviewContent {
+  grid-area: overviewContent;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  background-color: rgb(30,30,30);
+}
+
 /*OverGrid */
 
 .overGridFrame {
   display: grid;
-  width: auto;
-  height: auto;
   grid-template-columns: minmax(min-content, 25vw) auto;
   grid-template-areas: 
     'overFixedArea overScrollArea';
@@ -714,7 +738,7 @@ main {
   grid-area: overFixedArea;
   display: grid;
   grid-auto-flow: row;
-  grid-auto-rows: minmax(10vmax, 15vh);
+  grid-auto-rows: minmax(10vmax, 10vh);
   overflow-x: hidden;
 }
 .overGridRowFixedHeader {
@@ -728,7 +752,7 @@ main {
   color: var(--silver);
   padding: 1vh 2vw;
   text-transform: capitalize;
-  font-size: 4vh;
+  font-size: 2vmax;
 }
 .overGridRowFixed {
   border-right: 1px groove rgba(255,255,255,0.2);
@@ -757,8 +781,11 @@ main {
   grid-area: overScrollArea;
   display: grid;
   grid-auto-flow: row;
-  grid-auto-rows: minmax(10vmax, 15vh);
-  overflow-x: auto;
+  grid-auto-rows: minmax(10vmax, 10vh);
+  overflow-x: scroll;
+}
+.overGridScroll:focus {
+  background-color: rgb(35,35,35);
 }
 .overGridRowScrollHeader {
   border-bottom: 1px inset rgba(255,255,255,0.3);
@@ -768,7 +795,7 @@ main {
   border-right: 0.3vw groove rgba(255,255,255,0.3);
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: minmax(10.5vmax, 15.5vh);
+  grid-auto-columns: minmax(10.25vmax, 10.25vh);
   place-items: stretch stretch;
 }
 

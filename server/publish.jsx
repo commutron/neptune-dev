@@ -14,7 +14,9 @@ CacheDB = new Mongo.Collection('cachedb');
 Meteor.publish('appData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  if(!orgKey) {
+  if(!this.userId){
+    return this.ready();
+  }else if(!orgKey) {
     return [
       Meteor.users.find({_id: this.userId},
         {fields: {
@@ -36,14 +38,18 @@ Meteor.publish('appData', function(){
           'minorPIN': 0
         }}),
       ];
-  }else{null}
+  }else{
+    return this.ready();
+  }
 });
 
 Meteor.publish('usersData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
   const admin = Roles.userIsInRole(this.userId, 'admin');
-  if(admin) {
+  if(!this.userId){
+    return this.ready();
+  }else if(admin) {
     return [
       Meteor.users.find({},
         {fields: {
@@ -72,17 +78,21 @@ Meteor.publish('eventsData', function(){
   Meteor.defer( ()=>{
     Meteor.call('batchCacheUpdate', orgKey);
   });
-  return [
-    BatchDB.find({orgKey: orgKey}, {
-      fields: {
-        'batch': 1,
-        'events': 1,
-      }}),
-    CacheDB.find({orgKey: orgKey}, {
-      fields: {
-        'orgKey': 0
-      }}),
-    ];
+  if(!this.userId){
+    return this.ready();
+  }else{
+    return [
+      BatchDB.find({orgKey: orgKey}, {
+        fields: {
+          'batch': 1,
+          'events': 1,
+        }}),
+      CacheDB.find({orgKey: orgKey}, {
+        fields: {
+          'orgKey': 0
+        }}),
+      ];
+  }
 });
 
 // Overview
@@ -92,88 +102,96 @@ Meteor.publish('shaddowData', function(){
   Meteor.defer( ()=>{
     Meteor.call('batchCacheUpdate', orgKey);
   });
-  return [
-    /*
-    GroupDB.find({orgKey: orgKey}, {
-      fields: {
-          'alias': 1,
+  if(!this.userId){
+    return this.ready();
+  }else{
+    return [
+      /*
+      GroupDB.find({orgKey: orgKey}, {
+        fields: {
+            'alias': 1,
+          }}),
+      WidgetDB.find({orgKey: orgKey}, {
+        fields: {
+            'widget': 1,
+            'versions.versionKey': 1,
+            'versions.version': 1
+          }}),
+      */
+      BatchDB.find({orgKey: orgKey, live: true}, {
+        sort: {batch:-1},
+        fields: {
+            'batch': 1,
+            'widgetId': 1,
+            'versionKey': 1,
+            'live': 1,
+            'finishedAt': 1,
+            'floorRelease': 1
+          }}),
+      XBatchDB.find({orgKey: orgKey, live: true}, {
+        sort: {batch:-1},
+        fields: {
+            'batch': 1,
+            'groupId': 1,
+            'widgetId': 1,
+            'versionKey': 1,
+            'live': 1,
+            'completed': 1,
+            'completedAt': 1,
+            'releases': 1
+          }}),
+      CacheDB.find({orgKey: orgKey}, {
+        fields: {
+          'orgKey': 0
         }}),
-    WidgetDB.find({orgKey: orgKey}, {
-      fields: {
-          'widget': 1,
-          'versions.versionKey': 1,
-          'versions.version': 1
-        }}),
-    */
-    BatchDB.find({orgKey: orgKey, live: true}, {
-      sort: {batch:-1},
-      fields: {
-          'batch': 1,
-          'widgetId': 1,
-          'versionKey': 1,
-          'live': 1,
-          'finishedAt': 1,
-          'floorRelease': 1
-        }}),
-    XBatchDB.find({orgKey: orgKey, live: true}, {
-      sort: {batch:-1},
-      fields: {
-          'batch': 1,
-          'groupId': 1,
-          'widgetId': 1,
-          'versionKey': 1,
-          'live': 1,
-          'completed': 1,
-          'completedAt': 1,
-          'releases': 1
-        }}),
-    CacheDB.find({orgKey: orgKey}, {
-      fields: {
-        'orgKey': 0
-      }}),
-    ];
+      ];
+  }
 });
 
 // production
 Meteor.publish('thinData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  return [
-    GroupDB.find({orgKey: orgKey}, {
-      fields: {
-          'orgKey': 0,
-          'shareKey': 0,
-        }}),
-    
-    WidgetDB.find({orgKey: orgKey}, {
-      fields: {
-          'widget': 1,
-          'describe': 1,
-          'groupId': 1,
-        }}),
-    
-    BatchDB.find({orgKey: orgKey}, {
-      sort: {batch:-1},
-      fields: {
-          'batch': 1,
-          'widgetId': 1,
-          'versionKey': 1,
-          'live': 1,
-          'finishedAt': 1,
-        }}),
-        
-    XBatchDB.find({orgKey: orgKey}, {
-      sort: {batch:-1},
-      fields: {
-          'batch': 1,
-          'groupId': 1,
-          'widgetId': 1,
-          'versionKey': 1,
-          'live': 1,
-          'completed': 1,
-          'completedAt': 1,
-        }})
-    ];
+  if(!this.userId){
+    return this.ready();
+  }else{
+    return [
+      GroupDB.find({orgKey: orgKey}, {
+        fields: {
+            'orgKey': 0,
+            'shareKey': 0,
+          }}),
+      
+      WidgetDB.find({orgKey: orgKey}, {
+        fields: {
+            'widget': 1,
+            'describe': 1,
+            'groupId': 1,
+          }}),
+      
+      BatchDB.find({orgKey: orgKey}, {
+        sort: {batch:-1},
+        fields: {
+            'batch': 1,
+            'widgetId': 1,
+            'versionKey': 1,
+            'live': 1,
+            'finishedAt': 1,
+          }}),
+          
+      XBatchDB.find({orgKey: orgKey}, {
+        sort: {batch:-1},
+        fields: {
+            'batch': 1,
+            'groupId': 1,
+            'widgetId': 1,
+            'versionKey': 1,
+            'live': 1,
+            'completed': 1,
+            'completedAt': 1,
+          }})
+      ];
+  }
 });
 
 Meteor.publish('hotDataPlus', function(batch){
@@ -184,124 +202,100 @@ Meteor.publish('hotDataPlus', function(batch){
   const xbData = XBatchDB.findOne({batch: batch, orgKey: orgKey});
   const wID = !bData ? !xbData ? false : xbData.widgetId : bData.widgetId;
   if(valid) { Meteor.call('dropBreadcrumb', this.userId, 'batch', batch); }
-  return [
-    BatchDB.find({batch: batch, orgKey: orgKey}, {
-      fields: {
-        'orgKey': 0,
-        'shareKey': 0,
-        'events': 0,
-      }}),
-    XBatchDB.find({batch: batch, orgKey: orgKey}, {
-      fields: {
-        'orgKey': 0,
-        'shareKey': 0
-      }}),
-    WidgetDB.find({_id: wID, orgKey: orgKey}, {
-      fields: {
-        'orgKey': 0
-      }})
-    ];
+  if(!this.userId){
+    return this.ready();
+  }else{
+    return [
+      BatchDB.find({batch: batch, orgKey: orgKey}, {
+        fields: {
+          'orgKey': 0,
+          'shareKey': 0,
+          'events': 0,
+        }}),
+      XBatchDB.find({batch: batch, orgKey: orgKey}, {
+        fields: {
+          'orgKey': 0,
+          'shareKey': 0
+        }}),
+      WidgetDB.find({_id: wID, orgKey: orgKey}, {
+        fields: {
+          'orgKey': 0
+        }})
+      ];
+  }
 });
 
 // Explore
 Meteor.publish('skinnyData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  return [
-    GroupDB.find({orgKey: orgKey}, {
-      fields: {
-          'orgKey': 0,
-          'shareKey': 0,
-        }}),
+  if(!this.userId){
+    return this.ready();
+  }else{
+    return [
+      GroupDB.find({orgKey: orgKey}, {
+        fields: {
+            'orgKey': 0,
+            'shareKey': 0,
+          }}),
+      
+      WidgetDB.find({orgKey: orgKey}, {
+        fields: {
+            'orgKey': 0
+          }}),
+      
+      BatchDB.find({orgKey: orgKey}, {
+        sort: {batch:-1},
+        fields: {
+            'batch': 1,
+            'widgetId': 1,
+            'versionKey': 1,
+            'tags': 1,
+            'live': 1,
+            'salesOrder': 1,
+            'finishedAt': 1,
+          }}),
     
-    WidgetDB.find({orgKey: orgKey}, {
-      fields: {
-          'orgKey': 0
-        }}),
-    
-    BatchDB.find({orgKey: orgKey}, {
-      sort: {batch:-1},
-      fields: {
-          'batch': 1,
-          'widgetId': 1,
-          'versionKey': 1,
-          'tags': 1,
-          'live': 1,
-          'salesOrder': 1,
-          'finishedAt': 1,
-        }}),
-    
-    XBatchDB.find({orgKey: orgKey}, {
-      sort: {batch:-1},
-      fields: {
-          'batch': 1,
-          'groupId': 1,
-          'widgetId': 1,
-          'versionKey': 1,
-          'tags': 1,
-          'live': 1,
-          'salesOrder': 1,
-          'completed': 1,
-          'completedAt': 1
-        }})
-    ];
+      XBatchDB.find({orgKey: orgKey}, {
+        sort: {batch:-1},
+        fields: {
+            'batch': 1,
+            'groupId': 1,
+            'widgetId': 1,
+            'versionKey': 1,
+            'tags': 1,
+            'live': 1,
+            'salesOrder': 1,
+            'completed': 1,
+            'completedAt': 1
+          }})
+      ];
+
+    }
 });
 
 Meteor.publish('hotDataEx', function(batch){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  return [
-    BatchDB.find({batch: batch, orgKey: orgKey}, {
-      fields: {
-        'orgKey': 0,
-        'shareKey': 0,
-        'events': 0,
-      }}),
-    XBatchDB.find({batch: batch, orgKey: orgKey}, {
-      fields: {
-        'orgKey': 0,
-        'shareKey': 0
-      }})
-    ];
+  if(!this.userId){
+    return this.ready();
+  }else{
+    return [
+      BatchDB.find({batch: batch, orgKey: orgKey}, {
+        fields: {
+          'orgKey': 0,
+          'shareKey': 0,
+          'events': 0,
+        }}),
+      XBatchDB.find({batch: batch, orgKey: orgKey}, {
+        fields: {
+          'orgKey': 0,
+          'shareKey': 0
+        }})
+      ];
+  }
 });
 
-/*
-//dashboard
-Meteor.publish('hotData', function(batch){
-  const user = Meteor.users.findOne({_id: this.userId});
-  const orgKey = user ? user.orgKey : false;
-  return [
-    BatchDB.find({batch: batch, orgKey: orgKey}, {
-      fields: {
-        'orgKey': 0,
-        'shareKey': 0
-      }})
-    ];
-});
-*/
-/*
-Meteor.publish('scrapData', function(active) {
-  if(active) {
-    const user = Meteor.users.findOne({_id: this.userId});
-    const orgKey = user ? user.orgKey : false;
-                
-    return [
-          
-      BatchDB.find({orgKey: orgKey, 'items.history.type': 'scrap'}, {
-        fields: {
-          'items.history': 1,
-          'items.serial': 1,
-          'items.finishedAt': 1
-        }})
-              
-      ];
-      
-  }else{
-    return this.ready();
-  }
-    
-});
-*/
 
 /*alternitive components search data
 Meteor.publish('compData', function(cNum){

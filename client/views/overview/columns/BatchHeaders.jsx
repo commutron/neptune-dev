@@ -41,7 +41,8 @@ const BatchHeaders = ({hB, lB, cB, bCache})=> {
               bCache={bCache} />
       )})}
       
-      <div id="coolBatch" className='overGridRowFixedHeader'>
+      <div className='overGridRowFixedHeader'>
+        <span id="coolBatch" className='anchorTarget'></span>
         <h1>Pending</h1>
       </div>
       

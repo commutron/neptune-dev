@@ -40,7 +40,7 @@ const StoneSelect = ({
   let allTrackOption = [...app.trackOption, app.lastTrack];
     
   const nc = nonCons.filter( 
-              x => x.serial === serial && x.inspect === false )
+              x => x.serial === serial && !x.trash && x.inspect === false )
                 .sort((n1, n2)=> {
                   if (n1.ref < n2.ref) { return -1 }
                   if (n1.ref > n2.ref) { return 1 }

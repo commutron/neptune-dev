@@ -2,8 +2,9 @@ import React, {Component} from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import NumStat from '/client/components/uUi/NumStat.jsx';
+import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
-const BatchDetails = ({hBs, lBs, cBs, bCache})=> {
+const BatchDetails = ({hBs, lBs, cBs, bCache, user})=> {
   
   /*
   let headers = wBs && wBs.length > 0 ? Object.keys(wBs[0]) :
@@ -14,7 +15,7 @@ const BatchDetails = ({hBs, lBs, cBs, bCache})=> {
   */
   
   return(
-    <div className='overGridScroll forceScrollStyle'>
+    <div className='overGridScroll' tabIndex='1'>
       
       <div className='overGridRowScrollHeader'></div>
       
@@ -24,7 +25,8 @@ const BatchDetails = ({hBs, lBs, cBs, bCache})=> {
             <BatchDetailChunk
               key={`${entry.batchID}hot${index}`}
               source='hot'
-              ck={entry} />
+              ck={entry}
+              user={user} />
       )})}
       
       <div className='overGridRowScrollHeader'></div>
@@ -35,7 +37,8 @@ const BatchDetails = ({hBs, lBs, cBs, bCache})=> {
             <BatchDetailChunk
               key={`${entry.batchID}luke${index}`}
               source='luke'
-              ck={entry} />
+              ck={entry}
+              user={user} />
       )})}
       
       <div className='overGridRowScrollHeader'></div>
@@ -46,7 +49,8 @@ const BatchDetails = ({hBs, lBs, cBs, bCache})=> {
             <BatchDetailChunk 
               key={`${entry.batchID}cool${index}`}
               source='cool'
-              ck={entry} />
+              ck={entry}
+              user={user} />
       )})}
       
     </div>
@@ -57,7 +61,7 @@ const BatchDetails = ({hBs, lBs, cBs, bCache})=> {
 export default BatchDetails;
 
 
-const BatchDetailChunk = ({ck, source})=> (
+const BatchDetailChunk = ({ck, source, user})=> (
 
   <div className='overGridRowScroll' title={`${ck.batch} = ${source}`}>
     <div><i>SO: {ck.salesOrder}</i></div>
@@ -137,6 +141,13 @@ const BatchDetailChunk = ({ck, source})=> (
         title=''
         color='redT'
         size='big' />
+    </div>
+    <div>
+      <WatchButton 
+        list={user.watchlist}
+        type='batch'
+        keyword={ck.batch}
+        unique={`watch=${ck.batch}`}/>
     </div>
   </div>
 );

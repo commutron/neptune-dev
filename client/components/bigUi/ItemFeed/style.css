@@ -81,3 +81,7 @@
   font-size: 1rem;
   min-height: 40.5px;
 }
+
+.trashStyle {
+  filter: grayscale(0.5);
+}

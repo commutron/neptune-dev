@@ -55,9 +55,9 @@ class ExploreView extends Component	{
 }
 
 export default withTracker( (props) => {
-  
   //const orb = Session.get('now');
   let login = Meteor.userId() ? true : false;
+  
   let user = login ? Meteor.user() : false;
   let org = user ? user.org : false;
   let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
