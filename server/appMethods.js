@@ -3,6 +3,8 @@ import moment from 'moment';
 Meteor.startup(function () {  
   // ensureIndex is depreciated 
   // but the new createIndex errors as "not a function"
+  AppDB._ensureIndex({ org : 1 }, { unique: true });
+  Meteor.users._ensureIndex({ username : 1 }, { unique: true });
   XBatchDB._ensureIndex({ batch : 1 }, { unique: true });
   BatchDB._ensureIndex({ batch : 1, 'items.serial' : 1 }, { unique: true });
   GroupDB._ensureIndex({ group : 1 }, { unique: true });
@@ -564,61 +566,6 @@ Meteor.methods({
             dataSet: slim,
         }});
       }
-    }
-  },
-  
-  ///////////// Repair \\\\\\\\\\\\\\\\\\\\\
-  /*
-  addPhasesRepair(dprts) {
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      AppDB.update({orgKey: Meteor.user().orgKey}, {
-        $set : { 
-          phases : dprts
-      }});
-      return true;
-    }else{
-      return false;
-    }
-  },
-  */
-  resetCacheDB() {
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      CacheDB.remove({orgKey: Meteor.user().orgKey});
-      return true;
-    }else{
-      return false;
-    }
-  },
-  
-  
-  repairNonConsDANGEROUS(oldText, newText, exact) {
-    if(!Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      return false;
-    }else{
-      const allBatches = BatchDB.find({orgKey: Meteor.user().orgKey}).fetch();
-      for(let batch of allBatches) {
-        const batchId = batch._id;
-        const nonCons = batch.nonCon;
-        for(let nc of nonCons) {
-          const where = nc.where;
-          if(!where) {
-            null;
-          }else{
-            const match = !exact ? where.includes(oldText)
-                          : where === oldText;
-            if(!match) {
-              null;
-            }else{
-              BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': nc.key}, {
-          			$set : { 
-          			  'nonCon.$.where': newText
-          			}
-          		});
-            }
-          }
-        }
-      }
-      return true;
     }
   },
   

@@ -33,6 +33,21 @@ class ToolboxWrap extends Component	{
     });
   }
   
+  requestAltFlowInfo() {
+    Meteor.call('altFlowUse', (error, reply)=>{
+      error && console.log(error);
+      toast(<div>
+        Total Batches: {reply.totalAltBatch} <br />
+        Total Items: {reply.totalAltItems} <br />
+        Live Batches: {reply.totalLiveBatch} <br />
+        Live Items: {reply.totalLiveBatchItems} <br />
+        Dormant Batches: {reply.totalDormantBatch} <br />
+        Dormant Items: {reply.totalDormantBatchItems}
+      </div>, { autoClose: false });
+      console.log({ live: reply.aliveBatchInfo, dormant: reply.dormantBatchInfo});
+    });
+  }
+  
   render() {
     
     if(!this.props.ready || !this.props.readyUsers || !this.props.app) {
@@ -106,6 +121,12 @@ class ToolboxWrap extends Component	{
             <div key={4}>
               <p>
                 determine support needs
+              </p>
+              <p>
+                <button
+                  className='action clearBlue invert'
+                  onClick={()=>this.requestAltFlowInfo()}
+                >Info on Alt Flow Use</button>
               </p>
             </div>
             

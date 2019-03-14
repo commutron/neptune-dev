@@ -6,7 +6,6 @@ import Tabs from '/client/components/smallUi/Tabs.jsx';
 import style from './style.css';
 
 Accounts.onLogin( ()=>{
-	Meteor.logoutOtherClients();
 	let redirect = Session.get('redirectAfterLogin');
   if(!redirect || redirect === '/login' || redirect === '/limbo') {
   	null;
@@ -34,8 +33,6 @@ export default class AccountsUI extends Component {
 	}
 	
 	doLogout() {
-		Session.set('loggedIn', false);
-		Meteor.logoutOtherClients();
 		Meteor.logout( ()=>{
 			this.setState({loginStatus: Meteor.user()});
 		});
@@ -51,6 +48,8 @@ export default class AccountsUI extends Component {
 	    if(error) {
 	      console.log(error);
 	      this.setState({loginResult: error.reason});
+	    }else{
+	    	Meteor.logoutOtherClients();
 	    }
 	    if(!redirect || redirect === '/login') {
 	    	this.setState({loginStatus: Meteor.user()});

@@ -105,7 +105,7 @@ Meteor.methods({
   
     ///////////////////////////////////////////////////////////////////////////////////
   
-  // History Rate
+  // History Rate v1
   
   ///////////////////////////////////////////////////////////////////////////////////
   
@@ -170,6 +170,67 @@ Meteor.methods({
     
     return historyPingsOT;
   },
+  
+  
+      ///////////////////////////////////////////////////////////////////////////////////
+  
+    // History Rate v2
+  
+  ///////////////////////////////////////////////////////////////////////////////////
+  
+  noAltHistoryRate(start, end, flowData, itemData, clientTZ) {
+    //const b = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
+    //const itemData = b ? b.items : [];
+    const flowKeys = Array.from( 
+                      flowData.filter( x => x.type !== 'first'), 
+                        x => x.key );
+    const outScrap = (itms)=> { return ( 
+                                  itms.filter( 
+                                    x => x.history.filter( 
+                                      y => y.type === 'scrap' )
+                                        .length === 0 ) ) };
+    const items = outScrap(itemData); // without scraps
+    
+    const totalSteps = flowKeys.length * items.length;
+    
+    let now = moment().tz(clientTZ);
+    const endDay = end !== false ? moment(end).endOf('day') : now.clone().endOf('day');
+    const startDay = moment(start).tz(clientTZ).endOf('day');
+    const howManyDays = endDay.diff(startDay, 'day') + 1;
+    
+    function historyPings(items, flowKeys, totalSteps, day) {
+      let count = 0;
+      for(let ky of flowKeys) {
+        const ping = items.filter( 
+                      x => x.history.find( 
+                        y => y.key === ky &&
+                             y.good === true &&
+                             moment(y.time).isSameOrBefore(day) ) );
+        count += ping.length;
+      }
+      const remain = totalSteps - count;
+      return remain;
+    }
+    
+    let historyPingsOT = [];
+    for(let i = 0; i < howManyDays; i++) {
+      const day = startDay.clone().add(i, 'day');
+      const historyCount = historyPings(items, flowKeys, totalSteps, day);
+
+      historyPingsOT.push({
+        meta: day.format('MMM.D'), 
+        value: historyCount
+      });
+    }
+    
+    return historyPingsOT;
+  },
+  
+      /////////////////////////////////////////////////////////////////////////
+  
+    // First Firsts
+  
+  ///////////////////////////////////////////////////////////////////////////
   
   firstFirst(batchId, clientTZ) {
     const b = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});

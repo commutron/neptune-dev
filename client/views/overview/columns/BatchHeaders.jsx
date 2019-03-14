@@ -21,7 +21,6 @@ const BatchHeaders = ({hB, lB, cB, bCache})=> {
           return(
             <BatchHeaderChunk
               key={`${entry._id}hotfixed${index}`}
-              source='hot'
               ck={entry}
               bCache={bCache} />
       )})}
@@ -36,7 +35,6 @@ const BatchHeaders = ({hB, lB, cB, bCache})=> {
           return(
             <BatchHeaderChunk
               key={`${entry._id}lukefixed${index}`}
-              source='lukewarm'
               ck={entry}
               bCache={bCache} />
       )})}
@@ -51,7 +49,6 @@ const BatchHeaders = ({hB, lB, cB, bCache})=> {
           return(
             <BatchHeaderChunk
               key={`${entry._id}coolfixed${index}`}
-              source='cool'
               ck={entry}
               bCache={bCache} />
       )})}
@@ -70,7 +67,7 @@ const BatchHeaderChunk = ({ck, source, bCache})=> {
   const what = moreInfo ? moreInfo.isWhat : 'unavailable';
   
   return(
-    <div className='overGridRowFixed' title={source}>
+    <div className='overGridRowFixed'>
       <div>
         <ExploreLinkBlock type='batch' keyword={ck.batch} wrap={false} />
       </div>

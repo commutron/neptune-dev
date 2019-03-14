@@ -3,6 +3,7 @@ import Pref from '/client/global/pref.js';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 
 const HomeIcon = () => {
+  //console.log(Meteor.status());
   const user = Meteor.user() ? 'Signed in as: ' + Meteor.user().username : '';
   return(
     <div className='homeIcon'>

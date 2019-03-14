@@ -292,3 +292,35 @@ FlowRouter.globals.push({
     }
   }
 });
+
+// Background Connections
+
+var disconnectTimer = null;
+
+Meteor.startup(disconnectIfHidden);
+
+document.addEventListener('visibilitychange', disconnectIfHidden);
+
+function disconnectIfHidden() {
+  removeDisconnectTimeout();
+
+  if(document.hidden) {
+    createDisconnectTimeout();
+  }else {
+    Meteor.reconnect();
+  }
+}
+
+function createDisconnectTimeout() {
+  removeDisconnectTimeout();
+
+  disconnectTimer = setTimeout(function () {
+    Meteor.disconnect();
+  },1000 * 60);
+}
+
+function removeDisconnectTimeout() {
+  if(disconnectTimer) {
+    clearTimeout(disconnectTimer);
+  }
+}

@@ -2,7 +2,7 @@ import moment from 'moment';
 import { Accounts } from 'meteor/accounts-base';
 
 Accounts.config({ 
-  loginExpirationInDays: 1
+  loginExpirationInDays: 0.54
 });
 
 Meteor.methods({

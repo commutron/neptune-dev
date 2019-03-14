@@ -19,7 +19,7 @@ import RiverSatus from '../../../components/smallUi/RiverStatus.jsx';
 //import FirstsOverview from '/client/components/bigUi/FirstsOverview.jsx';
 import FirstsTimeline from '/client/components/bigUi/FirstsTimeline.jsx';
 import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
-import ProgBurndown from '/client/components/charts/ProgBurndown.jsx';
+import ProgLayerBurndown from '/client/components/charts/ProgLayerBurndown.jsx';
 import NonConOverview from '../../../components/charts/NonConOverview.jsx';
 import NonConRate from '../../../components/charts/NonConRate.jsx';
 import { HasNonCon } from '../../../components/bigUi/NonConMiniTops.jsx';
@@ -244,7 +244,7 @@ export default class BatchPanel extends Component	{
                 </div>
                 
                 <div className='threeThirdsContent wide'>
-                  <ProgBurndown
+                  <ProgLayerBurndown
                     id={b._id}
                     start={b.start}
                     floorRelease={b.floorRelease}

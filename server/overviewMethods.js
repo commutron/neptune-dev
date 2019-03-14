@@ -53,7 +53,7 @@ function collectActive(clientTZ, relevant) {
   });
 }
 
-function collectInfo(clientTZ, relevant) {
+function collectInfo(clientTZ, temp, relevant) {
   return new Promise(resolve => {
     const now = moment().tz(clientTZ);
     let collection = [];
@@ -69,22 +69,29 @@ function collectInfo(clientTZ, relevant) {
       // how many items
       const itemQuantity = b.items.length;
       // what percent of items are complete
-      const percentOfDoneItems = (( b.items.filter( x => x.finishedAt !== false )
-                                  .length / itemQuantity) * 100 ).toFixed(0);
+      const percentOfDoneItems = temp === 'cool' ? 0 : 
+        (( b.items.filter( x => x.finishedAt !== false )
+          .length / itemQuantity) * 100 ).toFixed(0);
       // how many nonCons
-      const nonConTotal = b.nonCon.length;
+      const nonConTotal = temp === 'cool' ? 0 : 
+        b.nonCon.length;
       // how many items have nonCons
-      const hasNonCon = [... new Set( Array.from(b.nonCon, x => { return x.serial }) ) ].length;
+      const hasNonCon = temp === 'cool' ? 0 :
+        [... new Set( Array.from(b.nonCon, x => { return x.serial }) ) ].length;
       // what percent of items have nonCons
-      const percentOfNCitems = ((hasNonCon / itemQuantity) * 100 ).toFixed(0);
+      const percentOfNCitems = temp === 'cool' ? 0 :
+        ((hasNonCon / itemQuantity) * 100 ).toFixed(0);
       // mean number of nonCons on items that have nonCons
-      const nonConsPerNCitem = (nonConTotal / hasNonCon).toFixed(1);
+      const nonConsPerNCitem = temp === 'cool' ? 0 :
+        (nonConTotal / hasNonCon).toFixed(1);
       // how many items with RMA
-      let itemHasRMA = b.items.filter( x => x.rma.length > 0).length;
+      let itemHasRMA = temp === 'cool' ? 0 :
+        b.items.filter( x => x.rma.length > 0).length;
       // how many items are scrapped
-      const itemIsScrap = b.items.filter( x => x.history.find( 
-                              y => y.type === 'scrap' ) )
-                                .length;
+      const itemIsScrap = temp === 'cool' ? 0 :
+        b.items.filter( x => x.history.find( 
+                          y => y.type === 'scrap' ) )
+                            .length;
       collection.push({
         batch: b.batch,
         batchID: b._id,
@@ -130,7 +137,7 @@ Meteor.methods({
       const accessKey = Meteor.user().orgKey;
       try {
         relevant = await collectRelevant(accessKey, temp, activeList);
-        collection = await collectInfo(clientTZ, relevant);
+        collection = await collectInfo(clientTZ, temp, relevant);
         return collection;
       }catch (err) {
         throw new Meteor.Error(err);

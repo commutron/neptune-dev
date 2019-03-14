@@ -6,7 +6,7 @@ import { withTracker } from 'meteor/react-meteor-data';
 import Spin from '/client/components/uUi/Spin.jsx';
 
 import UserSlide from '/client/views/app/UserSlide.jsx';
-import { ChillHome } from '/client/components/tinyUi/Chill.jsx';
+import HomeLogout from '/client/components/tinyUi/HomeLogout.jsx';
 //import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
 import NavButton from '/client/components/uUi/NavButton.jsx';
 import { NavPlaceholder } from '/client/components/uUi/NavButton.jsx';
@@ -42,7 +42,7 @@ const StartView = ({ready, readyUsers, user, org, app}) =>	{
       <NavButton title='Help' icon='fa-question' link={app.help || ''} blank={true} />
       <NavButton title='Time Clock' icon='fa-clock' link={app.timeClock || ''} blank={true} />
       <UserSlide user={user} app={app} />
-      <ChillHome currentUser={user.username} />
+      <HomeLogout currentUser={user.username} />
     
     </div>
   );

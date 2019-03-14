@@ -24,7 +24,6 @@ const BatchDetails = ({hBs, lBs, cBs, bCache, user})=> {
           return(
             <BatchDetailChunk
               key={`${entry.batchID}hot${index}`}
-              source='hot'
               ck={entry}
               user={user} />
       )})}
@@ -36,7 +35,6 @@ const BatchDetails = ({hBs, lBs, cBs, bCache, user})=> {
           return(
             <BatchDetailChunk
               key={`${entry.batchID}luke${index}`}
-              source='luke'
               ck={entry}
               user={user} />
       )})}
@@ -48,7 +46,6 @@ const BatchDetails = ({hBs, lBs, cBs, bCache, user})=> {
           return(
             <BatchDetailChunk 
               key={`${entry.batchID}cool${index}`}
-              source='cool'
               ck={entry}
               user={user} />
       )})}
@@ -61,9 +58,9 @@ const BatchDetails = ({hBs, lBs, cBs, bCache, user})=> {
 export default BatchDetails;
 
 
-const BatchDetailChunk = ({ck, source, user})=> (
+const BatchDetailChunk = ({ck, user})=> (
 
-  <div className='overGridRowScroll' title={`${ck.batch} = ${source}`}>
+  <div className='overGridRowScroll'>
     <div><i>SO: {ck.salesOrder}</i></div>
     <div><i>Created {ck.timeElapse} ago</i></div>
     <div><i>Due {ck.salesEnd}</i></div>
