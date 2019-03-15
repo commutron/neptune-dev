@@ -27,7 +27,7 @@ export default class ProgLayerBurndown extends Component {
       error && console.log(error);
       this.setState({ first: reply });
     });
-    Meteor.call('noAltHistoryRate', start, end, flowData, itemData, clientTZ, (error, reply)=> {
+    Meteor.call('layeredHistoryRate', start, end, flowData, itemData, clientTZ, (error, reply)=> {
       error ? console.log(error) : null;
       this.setState({ counts: reply });
     });
@@ -36,6 +36,7 @@ export default class ProgLayerBurndown extends Component {
   render () {
     
     const counts = this.state.counts;
+    const labels = !counts || counts[0].data;
     const flR = !this.props.floorRelease ? null : 
       moment(this.props.floorRelease.time);
     const frst = this.state.first;
@@ -47,8 +48,8 @@ export default class ProgLayerBurndown extends Component {
     }
     
     let data = {
-      series: [counts],
-      labels: counts
+      series: counts,
+      labels: labels
     };
     
     let options = {
@@ -56,31 +57,32 @@ export default class ProgLayerBurndown extends Component {
       height: 300,
       showArea: true,
       showLine: true,
-      //showPoint: false,
+      showPoint: false,
+      lineSmooth: Chartist.Interpolation.step(),
       axisY: {
         low: 0,
         onlyInteger: true,
-        showLabel: false,
+        //showLabel: false,
         showGrid: false
       },
       axisX: {
         labelOffset: {x:-20, y: 0},
         divisor: 7,
         labelInterpolationFnc: function(value, index) {
-          let scale = counts.length < 7 ?
+          let scale = labels.length < 7 ?
                       1 :
-                      counts.length < 30 ?
+                      labels.length < 30 ?
                       7 :
-                      counts.length < 60 ?
+                      labels.length < 60 ?
                       14 :
                       30;
           return value.meta == flR ? 'Floor Release ' + value.meta :
                  moment(value.meta, 'MMM.D').isSame(moment(frst, 'MMM.D hh:mm a'), 'day') ? value.meta:
-                 index === counts.length - 5 ? null :
-                 index === counts.length - 4 ? null :
-                 index === counts.length - 3 ? null :
-                 index === counts.length - 2 ? null :
-                 index === counts.length - 1 ? value.meta :
+                 index === labels.length - 5 ? null :
+                 index === labels.length - 4 ? null :
+                 index === labels.length - 3 ? null :
+                 index === labels.length - 2 ? null :
+                 index === labels.length - 1 ? value.meta :
                  index % scale === 0 ? value.meta : null;
         },
         scaleMinSpace: 25
@@ -91,11 +93,13 @@ export default class ProgLayerBurndown extends Component {
         bottom: 10,
         left: 0
       },
+      /*
       plugins: [
         Chartist.plugins.tooltip({
           appendToBody: true
         }),
       ]
+      */
     };
     
     return(

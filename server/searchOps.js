@@ -105,125 +105,70 @@ Meteor.methods({
   
     ///////////////////////////////////////////////////////////////////////////////////
   
-  // History Rate v1
+   // Layered History Rate
   
   ///////////////////////////////////////////////////////////////////////////////////
   
-  historyRate(start, end, flowData, flowAltData, itemData, clientTZ) {
-    //const b = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
-    //const itemData = b ? b.items : [];
-    const flowKeys = Array.from( 
-                      flowData.filter( x => x.type !== 'first'), 
-                        x => x.key );
-    const altKeys = Array.from( 
-                      flowAltData.filter( x => x.type !== 'first'), 
-                        x => x.key );
-    const outScrap = (itms)=> { return ( 
-                                  itms.filter( 
-                                    x => x.history.filter( 
-                                      y => y.type === 'scrap' )
-                                        .length === 0 ) ) };
-    const allItems = outScrap(itemData); // split flows, filter scraps
-    let regItems = allItems;
-    let altItems = [];
-      
-    if(altKeys.length === 0) {
-      null;
-    }else{
-      regItems = allItems.filter( x => x.alt === 'no' || x.alt === false );
-      altItems = allItems.filter( x => x.alt === 'yes' );
-    }
-    
-    const totalRegSteps = flowKeys.length * regItems.length;
-    const totalAltSteps = altKeys.length * altItems.length;
-    
+  layeredHistoryRate(start, end, flowData, itemData, clientTZ) {
     let now = moment().tz(clientTZ);
     const endDay = end !== false ? moment(end).endOf('day') : now.clone().endOf('day');
     const startDay = moment(start).tz(clientTZ).endOf('day');
     const howManyDays = endDay.diff(startDay, 'day') + 1;
     
-    function historyPings(regItems, flowKeys, totalSteps, day) {
-      let count = 0;
-      for(let ky of flowKeys) {
-        const ping = regItems.filter( 
-                      x => x.history.find( 
-                        y => y.key === ky &&
-                             y.good === true &&
-                             moment(y.time).isSameOrBefore(day) ) );
-        count += ping.length;
-      }
-      const remain = totalSteps - count;
-      return remain;
-    }
-    
-    let historyPingsOT = [];
-    for(let i = 0; i < howManyDays; i++) {
-      const day = startDay.clone().add(i, 'day');
-      const historyCountR = historyPings(regItems, flowKeys, totalRegSteps, day);
-      const historyCountA = historyPings(altItems, altKeys, totalAltSteps, day);
-
-      historyPingsOT.push({
-        meta: day.format('MMM.D'), 
-        value: historyCountR + historyCountA
-      });
-    }
-    
-    return historyPingsOT;
-  },
-  
-  
-      ///////////////////////////////////////////////////////////////////////////////////
-  
-    // History Rate v2
-  
-  ///////////////////////////////////////////////////////////////////////////////////
-  
-  noAltHistoryRate(start, end, flowData, itemData, clientTZ) {
     //const b = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
     //const itemData = b ? b.items : [];
+    // + Alt handling
     const flowKeys = Array.from( 
                       flowData.filter( x => x.type !== 'first'), 
                         x => x.key );
+
     const outScrap = (itms)=> { return ( 
                                   itms.filter( 
                                     x => x.history.filter( 
                                       y => y.type === 'scrap' )
                                         .length === 0 ) ) };
     const items = outScrap(itemData); // without scraps
+    const totalItems = items.length;
     
-    const totalSteps = flowKeys.length * items.length;
+    const allItemHistory = Array.from( items, 
+                              x => x.history.filter( 
+                                y => y.type !== 'first' && y.good === true) );
+    const historyFlat = [].concat(...allItemHistory);
     
-    let now = moment().tz(clientTZ);
-    const endDay = end !== false ? moment(end).endOf('day') : now.clone().endOf('day');
-    const startDay = moment(start).tz(clientTZ).endOf('day');
-    const howManyDays = endDay.diff(startDay, 'day') + 1;
     
-    function historyPings(items, flowKeys, totalSteps, day) {
-      let count = 0;
-      for(let ky of flowKeys) {
-        const ping = items.filter( 
-                      x => x.history.find( 
-                        y => y.key === ky &&
-                             y.good === true &&
-                             moment(y.time).isSameOrBefore(day) ) );
-        count += ping.length;
-      }
-      const remain = totalSteps - count;
+    function historyPings(history, totalItems, flowKey, day) {
+      const pings = history.filter( 
+                      y => y.key === flowKey &&
+                       moment(y.time).isSameOrBefore(day)
+                    ).length;
+      const remain = totalItems - pings;
       return remain;
     }
     
-    let historyPingsOT = [];
-    for(let i = 0; i < howManyDays; i++) {
-      const day = startDay.clone().add(i, 'day');
-      const historyCount = historyPings(items, flowKeys, totalSteps, day);
-
-      historyPingsOT.push({
-        meta: day.format('MMM.D'), 
-        value: historyCount
+    function loopDays(historyFlat, totalItems, startDay, howManyDays, flowKey) {
+      let historyRemainOverTime = [];
+      for(let i = 0; i < howManyDays; i++) {
+        const day = startDay.clone().add(i, 'day');
+        const historyRemain = historyPings(historyFlat, totalItems, flowKey, day);
+        
+        historyRemainOverTime.push({
+          meta: day.format('MMM.D'), 
+          value: historyRemain
+        });
+      }
+      return historyRemainOverTime;
+    }
+    
+    let flowSeries = [];
+    for(let flowKey of flowKeys) {
+      const dayCounts = loopDays(historyFlat, totalItems, startDay, howManyDays, flowKey);
+      flowSeries.push({
+        name: flowKey,
+        data: dayCounts
       });
     }
     
-    return historyPingsOT;
+    return flowSeries;
   },
   
       /////////////////////////////////////////////////////////////////////////

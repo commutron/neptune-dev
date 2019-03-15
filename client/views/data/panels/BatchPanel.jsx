@@ -250,9 +250,23 @@ export default class BatchPanel extends Component	{
                     floorRelease={b.floorRelease}
                     end={b.finishedAt}
                     flowData={riverFlow}
-                    flowAltData={riverAltFlow}
-                    itemData={b.items}
+                    itemData={b.items.filter( x => x.alt === 'no' || x.alt === false )}
                     title='Progress Burndown' />
+                  
+                  {b.riverAlt !== false &&  
+                    <ProgLayerBurndown
+                      id={b._id}
+                      start={b.start}
+                      floorRelease={b.floorRelease}
+                      end={b.finishedAt}
+                      flowData={riverAltFlow}
+                      itemData={b.items.filter( x => x.alt === 'yes' )}
+                      title='Alt Progress Burndown' />}
+                  
+                  <p>
+                    A step that was added mid-run might not reach zero because 
+                    finished items would have skipped recording that step.
+                  </p>
                 </div>
               </div>
           

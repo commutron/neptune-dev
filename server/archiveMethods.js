@@ -1,9 +1,10 @@
+/*
+
 Meteor.methods({
   
   
   //// THIS IS ALL VERY OUT OF DATE \\\\
   
-  /*
   //// Batches Archive \\\\
 
   ArchiveDB = {
@@ -44,8 +45,6 @@ Meteor.methods({
   };
 
    
-  
-*/
 
   //// Archive \\\\
   addYear(year) {
@@ -283,6 +282,7 @@ Meteor.methods({
     }else{null}
   },
   
-  
 
 });
+
+*/
