@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Chartist from 'chartist';
 import ChartistGraph from 'react-chartist';
-import Tooltip from 'chartist-plugin-tooltips';
+//import Tooltip from 'chartist-plugin-tooltips';
 import moment from 'moment';
 import timezone from 'moment-timezone';
 import { CalcSpin } from '/client/components/uUi/Spin.jsx';
@@ -12,6 +12,7 @@ export default class ProgLayerBurndown extends Component {
     super();
     this.state = {
       counts: false,
+      labels: false,
       first: false
     };
   }
@@ -20,7 +21,6 @@ export default class ProgLayerBurndown extends Component {
     const start = this.props.start;
     const end = this.props.end;
     const flowData = this.props.flowData;
-    //const flowAltData = this.props.flowAltData;
     const itemData = this.props.itemData;
     let clientTZ = moment.tz.guess();
     Meteor.call('firstFirst', this.props.id, clientTZ, (error, reply)=> {
@@ -29,19 +29,20 @@ export default class ProgLayerBurndown extends Component {
     });
     Meteor.call('layeredHistoryRate', start, end, flowData, itemData, clientTZ, (error, reply)=> {
       error ? console.log(error) : null;
-      this.setState({ counts: reply });
+      this.setState({ counts: reply.flowSeries, labels: reply.timeLabels });
     });
   }
   
   render () {
     
     const counts = this.state.counts;
-    const labels = !counts || counts[0].data;
+    const labels = this.state.labels;
+    
     const flR = !this.props.floorRelease ? null : 
       moment(this.props.floorRelease.time);
     const frst = this.state.first;
 
-    if(!counts || !frst) {
+    if(!counts || !labels || !frst) {
       return(
         <CalcSpin />
       );
@@ -54,43 +55,54 @@ export default class ProgLayerBurndown extends Component {
     
     let options = {
       fullWidth: true,
-      height: 300,
+      height: 350,
       showArea: true,
       showLine: true,
       showPoint: false,
       lineSmooth: Chartist.Interpolation.step(),
       axisY: {
+        labelOffset: {x:0, y: 10},
         low: 0,
         onlyInteger: true,
-        //showLabel: false,
-        showGrid: false
+        showLabel: true,
+        showGrid: true,
       },
       axisX: {
         labelOffset: {x:-20, y: 0},
-        divisor: 7,
+        //divisor: 7,
         labelInterpolationFnc: function(value, index) {
           let scale = labels.length < 7 ?
                       1 :
                       labels.length < 30 ?
-                      7 :
+                      4 :
                       labels.length < 60 ?
-                      14 :
-                      30;
-          return value.meta == flR ? 'Floor Release ' + value.meta :
-                 moment(value.meta, 'MMM.D').isSame(moment(frst, 'MMM.D hh:mm a'), 'day') ? value.meta:
+                      8 :
+                      labels.length < 90 ?
+                      12 :
+                      labels.length < 120 ?
+                      24 :
+                      36;
+                  //moment(value).isSame(moment(flR), 'day') ? 
+                 //moment(value).format('MMM.D') :
+          return moment(value).isSame(moment(frst), 'day') ? 
+                 moment(value).format('MMM.D') :
+                 index === 0 ? null :
                  index === labels.length - 5 ? null :
                  index === labels.length - 4 ? null :
                  index === labels.length - 3 ? null :
                  index === labels.length - 2 ? null :
-                 index === labels.length - 1 ? value.meta :
-                 index % scale === 0 ? value.meta : null;
+                 index === labels.length - 1 ? 
+                 moment(value).format('MMM.D') :
+                 index % scale === 0 ? 
+                 moment(value).format('MMM.D') : 
+                 null;
         },
         scaleMinSpace: 25
       },
       chartPadding: {
         top: 20,
         right: 40,
-        bottom: 10,
+        bottom: 0,
         left: 0
       },
       /*
@@ -103,7 +115,7 @@ export default class ProgLayerBurndown extends Component {
     };
     
     return(
-      <span className='rateFill'>
+      <span className='burndownFill'>
         <div className='wide balance cap'>
           <i className='blueT'>{this.props.title}</i>
         </div>

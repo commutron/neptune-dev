@@ -1,5 +1,7 @@
 import moment from 'moment';
 import timezone from 'moment-timezone';
+import business from 'moment-business';
+
 /*
 function getBatch(batchNum) {  
   return new Promise(resolve => { 
@@ -147,14 +149,16 @@ Meteor.methods({
     
     function loopDays(historyFlat, totalItems, startDay, howManyDays, flowKey) {
       let historyRemainOverTime = [];
+      
       for(let i = 0; i < howManyDays; i++) {
         const day = startDay.clone().add(i, 'day');
-        const historyRemain = historyPings(historyFlat, totalItems, flowKey, day);
         
-        historyRemainOverTime.push({
-          meta: day.format('MMM.D'), 
-          value: historyRemain
-        });
+        if(business.isWeekDay(day)) {
+          const historyRemain = historyPings(historyFlat, totalItems, flowKey, day);
+          historyRemainOverTime.push(historyRemain);
+
+          if(historyRemain === 0) { break }
+        }
       }
       return historyRemainOverTime;
     }
@@ -168,7 +172,15 @@ Meteor.methods({
       });
     }
     
-    return flowSeries;
+    let timeLabels = [];
+    for(let i = 0; i < howManyDays; i++) {
+      const day = startDay.clone().add(i, 'day');
+      if(business.isWeekDay(day)) {
+        timeLabels.push(day.format() );
+      }
+    }
+    
+    return {flowSeries, timeLabels};
   },
   
       /////////////////////////////////////////////////////////////////////////
@@ -190,7 +202,7 @@ Meteor.methods({
         }
       }
     }
-    return first.tz(clientTZ).format('MMM.D hh:mm a');
+    return first.tz(clientTZ).format();
   },
   
       ///////////////////////////////////////////////////////////////////////////////////

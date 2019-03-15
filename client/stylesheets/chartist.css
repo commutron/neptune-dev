@@ -835,3 +835,12 @@
 }
 .miniStack .ct-grid-background {
   fill: var(--black); }
+  
+.burndownFill .ct-area {
+  fill: var(--peterriver);
+  fill-opacity: 0.05;
+}
+.burndownFill .ct-line {
+  stroke: var(--peterriverfade);
+  stroke-width: 2px;
+}

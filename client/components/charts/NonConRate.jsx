@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Chartist from 'chartist';
 import ChartistGraph from 'react-chartist';
-import Tooltip from 'chartist-plugin-tooltips';
+//import Tooltip from 'chartist-plugin-tooltips';
 import { CalcSpin } from '/client/components/uUi/Spin.jsx';
 
 export default class NonConRate extends Component {
@@ -79,16 +79,17 @@ export default class NonConRate extends Component {
         bottom: 0,
         left: 0
       },
+      /*
       plugins: [
         Chartist.plugins.tooltip({
           appendToBody: true
         }),
       ],
+      */
     };
     
     return(
       <span>
-        
         <div>
           <ChartistGraph data={data} options={options} type={'Line'} />
         </div>
