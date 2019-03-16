@@ -627,7 +627,7 @@ label.qdpplRound {
 .noRightBorder { border-right: none; }
 
 .numFont {
-  font-family: 'Varela Round';
+  font-family: 'VarelaLocal';
 }
 
 .low { text-transform: lowercase; }
@@ -1325,7 +1325,7 @@ input.variableInput.biggest {
 }
 
 .reportTable {
-  font-family: 'Varela Round';
+  font-family: 'VarelaLocal';
   max-width: 750px;
   background-color: white;
 }

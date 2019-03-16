@@ -7,7 +7,7 @@ import Tabs from '../../../components/smallUi/Tabs.jsx';
 //import JumpText from '../../../components/tinyUi/JumpText.jsx';
 import FloorRelease from '/client/components/smallUi/FloorRelease.jsx';
 import { ReleaseNote } from '/client/components/bigUi/ReleasesModule.jsx';
-import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
+import StepsProgress from '../../../components/bigUi/StepsProgress/StepsProgress.jsx';
 import NonConMiniSatus from '/client/components/charts/NonConMiniStatus.jsx';
 import TagsModule from '../../../components/bigUi/TagsModule.jsx';
 import NoteLine from '../../../components/smallUi/NoteLine.jsx';

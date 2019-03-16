@@ -257,10 +257,6 @@ FlowRouter.globals.push({
       sizes: "16x16 32x32 64x64",
       rel: "icon"
     },
-    twbs: {
-      rel: 'stylesheet',
-      href: "https://fonts.googleapis.com/css?family=Varela+Round"
-    }
   },
   /*
   script: {

@@ -43,13 +43,16 @@ export default class NonConOverview extends Component {
     for(let stp of splitByFirst) {
       let type = [];
       for(let n of this.props.ncOp) {
-        let match = stp.ncs.filter( x => x.type === n );
-        type.push({
-          'value': match.length,
-          'meta': stp.name
-        });
+        let match = stp.ncs.filter( x => x.type === n ).length;
+          type.push({
+            'value': match,
+            'meta': n
+          });
       }
-      splitByType.push(type); 
+      splitByType.push({
+        'value': type,
+        'meta': stp.name
+      });
     }
     return splitByType;
   }
@@ -72,14 +75,15 @@ export default class NonConOverview extends Component {
         </p>
         <NonConTypeChart
           counts={counts}
-          labels={this.props.ncOp}
           stack={true} />
       </div>
     );
   }
 }
 
-export const NonConTypeChart = ({ counts, labels, stack })=> {
+export const NonConTypeChart = ({ counts, stack })=> {
+
+  const labels = !counts[0] ? [] :  Array.from(counts[0].value, x => x.meta);
 
   let heightCalc = (labels.length * 75) + (counts.length * 15);
   

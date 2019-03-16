@@ -219,13 +219,10 @@ Meteor.methods({
     function ncCounter(ncArray, ncOptions) {
       let ncCounts = [];
       for(let ncType of ncOptions) {
-        const typeCount = relevantNC(ncArray, ncType);
+        const typeCount = ncArray.filter( x => x.type === ncType ).length;
         ncCounts.push({meta: ncType, value: typeCount});
       }
       return ncCounts;
-    }
-    function relevantNC(ncArray, ncType) {
-      return ncArray.filter( x => x.type === ncType ).length;
     }
     const ncOptions = Array.isArray(nonConOptions) ? nonConOptions : findOptions();
     const ncArray = Array.isArray(nonConArray) ? nonConArray : [];

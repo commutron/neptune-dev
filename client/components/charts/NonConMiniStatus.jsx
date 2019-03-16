@@ -1,5 +1,5 @@
 import React from 'react';
-import MiniMeter from './MiniMeter.jsx';
+import MiniMeter from './MiniScales/MiniMeter.jsx';
 
 const NonConMiniSatus = ({ noncons, flow, flowAlt, app })=> {
   

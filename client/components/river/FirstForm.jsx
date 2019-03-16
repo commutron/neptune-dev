@@ -139,14 +139,14 @@ export default class FirstForm extends Component	{
           	<div className='flexRR'>
 	          	<button
 	          		className='action clear'
-	          		onClick={()=>this.props.changeVerify()}>
+	          		onClick={()=>this.props.changeVerify(false)}>
 	          		{Pref.close}
 	          	</button>
           	</div>
         		<p className='bigger centreText up'>
-        		  {this.props.step ? this.props.step : 'Repeat'}</p>
+        		  {this.props.optionVerify ? 'Repeat' : this.props.step ? this.props.step : ''}</p>
         		<br />
-            {!this.props.sKey ?
+            {this.props.optionVerify || !this.props.sKey ?
               <fieldset className='stoneForm'>
                 <p>
                   <select

@@ -21,7 +21,7 @@ export default class Stone extends Component {
   shouldComponentUpdate(nextProps, nextState) {
   	if(
   		this.state !== nextState ||
-  		//this.props.doneStone !== nextProps.doneStone ||
+  		this.props.doneStone !== nextProps.doneStone ||
   		this.props.blockStone !== nextProps.blockStone ||
   		this.props.sKey !== nextProps.sKey ||
   		(this.props.undoOption === true && nextProps.undoOption === false)
@@ -33,7 +33,7 @@ export default class Stone extends Component {
   }
   
   reveal() {
-    this.props.changeVerify();
+    this.props.changeVerify(false);
   }
   
   unlock() {
@@ -70,7 +70,7 @@ export default class Stone extends Component {
     
     const pre = this.props.progCounts;
     const preTotal = pre.regItems;
-    const preStep = pre.regStepCounts.find( x => x.key === sKey );
+    const preStep = pre.regStepData.find( x => x.key === sKey );
     const preCount = preStep ? preStep.items : undefined;
     const benchmark = preCount === 0 ? 'first' : preCount === preTotal - 1 ? 'last' : false;              
     
@@ -100,7 +100,7 @@ export default class Stone extends Component {
     
     const pre = this.props.progCounts;
     const preTotal = pre.regItems;
-    const preStep = pre.regStepCounts.find( x => x.key === sKey );
+    const preStep = pre.regStepData.find( x => x.key === sKey );
     const preCount = preStep ? preStep.items : undefined;
     const benchmark = preCount === 0 ? 'first' : preCount === preTotal - 1 ? 'last' : false;              
 		
@@ -133,7 +133,7 @@ export default class Stone extends Component {
     
     const pre = this.props.progCounts;
     const preTotal = pre.regItems;
-    const preStep = pre.regStepCounts.find( x => x.key === sKey );
+    const preStep = pre.regStepData.find( x => x.key === sKey );
     const preCount = preStep ? preStep.items : undefined;
     const benchmark = preCount === 0 ? 'first' : preCount === preTotal - 1 ? 'last' : false;              
 
@@ -160,7 +160,7 @@ export default class Stone extends Component {
 
 		let shape = '';
 		let ripple = '';
-		let lock = /*this.props.doneStone ||*/ this.props.blockStone ? 
+		let lock = this.props.doneStone || this.props.blockStone ? 
 							 true : this.state.lock;
 		let prepend = this.props.type === 'build' || this.props.type === 'first' ?
 		              <label className='big'>{this.props.type}<br /></label> : null;
@@ -189,7 +189,7 @@ export default class Stone extends Component {
     }else{
       null }
     
-    const topClass = /*this.props.doneStone ? 'doneStoneMask' :*/
+    const topClass = this.props.doneStone ? 'doneStoneMask' :
     								 this.props.blockStone ? 'blockStone' : '';
     const topTitle = topClass !== '' ? Pref.stoneislocked : '';
 		

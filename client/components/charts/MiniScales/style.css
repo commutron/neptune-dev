@@ -1,0 +1,32 @@
+.miniScale meter {
+  -webkit-appearance: meter; /* Reset appearance */
+  -moz-appearance: meterbar;
+  appearance: meter;
+  border: none;
+}
+.miniScale meter::-webkit-meter-optimum-value {
+  background: none;
+  background-color: var(--sunflower);
+  color: var(--nephritis);
+}
+.miniScale meter::-moz-meter-optimum {
+  background: none;
+  background-color: var(--sunflower);
+  color: var(--nephritis);
+}
+.miniScale meter::-webkit-meter-suboptimum-value {
+  background: none;
+  background-color: var(--carrot);
+}
+.miniScale meter::-moz-meter-sub-optimum {
+  background: none;
+  background-color: var(--carrot);
+}
+.miniScale meter::-webkit-meter-even-less-good-value {
+  background: none;
+  background-color: var(--pomegranate);
+}
+.miniScale meter::-moz-meter-meter-sub-sub-optimum {
+  background: none;
+  background-color: var(--pomegranate);
+}

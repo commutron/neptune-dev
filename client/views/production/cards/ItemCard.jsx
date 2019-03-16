@@ -59,6 +59,7 @@ export default class ItemCard extends Component	{
             flowAlt={flowAlt}
             progCounts={progCounts}
             showVerify={this.props.showVerify}
+            optionVerify={this.props.optionVerify}
             changeVerify={this.props.changeVerify} />
   			</div>
 			</AnimateWrap>

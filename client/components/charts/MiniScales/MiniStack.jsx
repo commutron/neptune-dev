@@ -1,4 +1,5 @@
 import React from 'react';
+import './style.css';
 import Chartist from 'chartist';
 import ChartistGraph from 'react-chartist';
 import Tooltip from 'chartist-plugin-tooltips';
@@ -52,7 +53,7 @@ const MiniStack = ({ title, count, countNew, total })=> {
   };
     
   return(
-    <div className='wide miniStack meterprogStack'>
+    <div className='wide miniScale miniStack meterprogStack'>
       <p style={name} className='cap'>{title}</p>
       <ChartistGraph data={data} options={options} type={'Bar'} />
       <p style={num} className='numFont'>{v}/{total}</p>

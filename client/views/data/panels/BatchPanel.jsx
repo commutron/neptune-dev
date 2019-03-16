@@ -18,7 +18,7 @@ import BlockList from '../../../components/bigUi/BlockList.jsx';
 import RiverSatus from '../../../components/smallUi/RiverStatus.jsx';
 //import FirstsOverview from '/client/components/bigUi/FirstsOverview.jsx';
 import FirstsTimeline from '/client/components/bigUi/FirstsTimeline.jsx';
-import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
+import StepsProgress from '../../../components/bigUi/StepsProgress/StepsProgress.jsx';
 import ProgLayerBurndown from '/client/components/charts/ProgLayerBurndown.jsx';
 import NonConOverview from '../../../components/charts/NonConOverview.jsx';
 import NonConRate from '../../../components/charts/NonConRate.jsx';
@@ -219,31 +219,18 @@ export default class BatchPanel extends Component	{
             </div>
           
             
-              <div className='oneTwoThreeContainer space'>
-                <div className='oneThirdContent min200'>
-                  <RiverSatus
-                    items={b.items.length}
-                    river={b.river}
-                    riverTitle={riverTitle}
-                    riverFlow={riverFlow}
-                    riverAlt={b.riverAlt}
-                    riverAltTitle={riverAltTitle}
-                    riverAltFlow={riverAltFlow} />
-                  {/*<hr />
-                  <FirstsOverview
-                    doneFirsts={filter.fList}
-                    flow={riverFlow}
-                    flowAlt={riverAltFlow} />*/}
-                </div>
+              <div className='space'>
               
-                <div className='twoThirdsContent'>
+                <div className='vmargin space'>
                   <StepsProgress
                     mini={true}
                     expand={true}
-                    progCounts={progCounts} />
+                    progCounts={progCounts}
+                    riverTitle={riverTitle}
+                    riverAltTitle={riverAltTitle} />
                 </div>
                 
-                <div className='threeThirdsContent wide'>
+                <div className='dropCeiling vmargin space'>
                   <ProgLayerBurndown
                     id={b._id}
                     start={b.start}

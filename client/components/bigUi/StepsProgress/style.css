@@ -1,0 +1,43 @@
+.meterTrinary {
+  padding: 5px;
+  width: 100%;
+}
+.meterTrinary p { 
+  margin: 0; 
+  font-size: 15px;
+  letter-spacing: 1px;
+}
+.meterTrinary p:last-child { text-align: right }
+
+.meterTrinary meter {
+  width: 100%;
+  height: 12px;
+  border: none;
+}
+.meterTrinary meter::-webkit-meter-bar {
+  width: 100%;
+  height: 12px;
+  -webkit-appearance: none; /* Reset appearance */
+  -moz-appearance: none;
+  appearance: none;
+  background: none;
+  background-color: var(--clouds);
+  box-shadow: none;
+}
+.meterTrinary meter::-webkit-meter-optimum-value {
+  background: none;
+  background-color: rgb(42,111,77);
+}
+.meterTrinary meter::-moz-meter-optimum {
+  background: none;
+  background-color: rgb(42,111,77);
+}
+.meterTrinary meter::-webkit-meter-suboptimum-value {
+  background: none;
+  background-color: var(--orange);
+}
+.meterTrinary meter::-moz-meter-sub-optimum {
+  background: none;
+  background-color: var(--orange);
+}
+

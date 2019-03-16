@@ -29,8 +29,8 @@ export default class StepsProgress extends Component	{
                         pre.altItems :
                         pre.regItems;
       const preCount = this.props.isAlt ?
-                        pre.altStepCounts.find( x => x.key === sKey ) :
-                        pre.regStepCounts.find( x => x.key === sKey );
+                        pre.altStepData.find( x => x.key === sKey ) :
+                        pre.regStepData.find( x => x.key === sKey );
       const preDoneNum = preCount ? preCount.items : 0;
       const preRemain = preTotal - preDoneNum;
       preFetch = {preDoneNum, preRemain};

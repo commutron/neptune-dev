@@ -4,6 +4,10 @@ import { NonConTypeChart } from '/client/components/charts/NonConOverview.jsx';
 
 export default class NonConMultiBatchBar extends Component {
   
+  componentDidMount() {
+    this.loop();
+  }
+  
   constructor() {
     super();
     this.state = {
@@ -13,8 +17,7 @@ export default class NonConMultiBatchBar extends Component {
   
   loop() {
     Meteor.call('nonConBatchesTypes', this.props.batchIDs, (error, reply)=>{
-      if(error)
-        console.log(error);
+      error && console.log(error);
       this.setState({ counts: reply });
     });
   }
@@ -28,17 +31,11 @@ export default class NonConMultiBatchBar extends Component {
         <CalcSpin />
       );
     }
-
-    const labels = !counts[0] ? [] :  Array.from(counts[0].value, x => x.meta);
     
     return(
       <NonConTypeChart
         counts={counts}
-        labels={labels}
         stack={false} />
     );
-  }
-  componentDidMount() {
-    this.loop();
   }
 }

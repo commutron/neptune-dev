@@ -14,9 +14,18 @@ export class ProWrap extends Component	{
     super();
     this.state = {
       expand: false,
-      showVerify: false
+      showVerify: false,
+      optionVerify: false
     };
+    this.handleVerify = this.handleVerify.bind(this);
     this.handleExpand = this.handleExpand.bind(this);
+  }
+  
+  handleVerify(value) {
+    this.setState({
+      showVerify: !this.state.showVerify, 
+      optionVerify: value 
+    });
   }
   
   handleExpand() {
@@ -115,7 +124,8 @@ export class ProWrap extends Component	{
                   flowAlt: path.flowAlt,
                   progCounts: path.progCounts,
                   showVerify: this.state.showVerify,
-                  changeVerify: ()=>this.setState({showVerify: !this.state.showVerify })
+                  optionVerify: this.state.optionVerify,
+                  changeVerify: (q)=>this.handleVerify(q)
                 }
               )}
             </div>
@@ -155,7 +165,7 @@ export class ProWrap extends Component	{
             app={this.props.app}
             action={this.props.action}
             showVerify={this.state.showVerify}
-            changeVerify={()=>this.setState({showVerify: !this.state.showVerify })} />
+            changeVerify={(q)=>this.handleVerify(q)} />
           
         </section>
         }

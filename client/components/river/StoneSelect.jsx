@@ -27,6 +27,7 @@ const StoneSelect = ({
   progCounts,
   app,
   showVerify,
+  optionVerify,
   changeVerify,
   undoOption,
   openUndoOption,
@@ -70,8 +71,8 @@ const StoneSelect = ({
       :
       iDone.find(ip => ip.key === flowStep.key && ip.good === true);
     
-    //const ncFromHere = ncOutstanding.filter( x => x.where === stepPhase );
-    //const ncResolved = ncFromHere.length === 0;
+    const ncFromHere = ncOutstanding.filter( x => x.where === stepPhase );
+    const ncResolved = ncFromHere.length === 0;
     //console.log(stepMatch, ncResolved);
     
     const damStep = flowStep.type === 'test' || flowStep.type === 'finish';
@@ -80,17 +81,17 @@ const StoneSelect = ({
     const shAllClear = sh.length === 0 || allAnswered === true;
 
     if( ( ( flowStep.type === 'first' || flowStep.type === 'build' ) && stepComplete ) 
-        || ( stepComplete /*&& ncResolved*/ ) 
+        || ( stepComplete && ncResolved ) 
       ) {
       null;
     }else{
 
-      //const compEntry = iDone.find( sc => sc.key === flowStep.key && sc.good === true);
+      const compEntry = iDone.find( sc => sc.key === flowStep.key && sc.good === true);
       const fTest = flowStep.type === 'test' ? 
                     iDone.filter( x => x.type === 'test' && x.good === false) : [];
       
       const blockStone = damStep && (!ncAllClear || !shAllClear );
-      //const doneStone = stepComplete;
+      const doneStone = stepComplete;
 	    
 	    Session.set('ncWhere', stepPhase);
 	    Session.set('nowStepKey', flowStep.key);
@@ -108,6 +109,7 @@ const StoneSelect = ({
                   step={flowStep.type === 'first' ? flowStep.step : false }
                   users={users}
                   app={app}
+                  optionVerify={optionVerify}
                   changeVerify={changeVerify} />
   		        : 
     		        flowStep.type === 'nest' ?
@@ -116,7 +118,7 @@ const StoneSelect = ({
                     serial={serial}
                     sKey={flowStep.key}
                     step={flowStep.step}
-                    //doneStone={doneStone}
+                    doneStone={doneStone}
                     //subItems={subItems}
                     lock={false} />
                 : 
@@ -134,8 +136,8 @@ const StoneSelect = ({
                     app={app}
                     progCounts={progCounts}
                     blockStone={blockStone}
-                    //doneStone={doneStone}
-                    //compEntry={compEntry}
+                    doneStone={doneStone}
+                    compEntry={compEntry}
                     showVerify={showVerify}
                     changeVerify={changeVerify}
                     undoOption={undoOption}

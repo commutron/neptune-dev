@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import UserName from '/client/components/uUi/UserName.jsx';
-import MiniBar from '/client/components/charts/MiniBar.jsx';
+import MiniBar from '/client/components/charts/MiniScales/MiniBar.jsx';
 
 const WaterfallTimeline = ({ waterfalls, quantity, app })=> (
   <div className='wide'>

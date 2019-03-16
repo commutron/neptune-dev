@@ -9,7 +9,7 @@
   outline: none;/*This is of course awfull*/
 }
 body {
-  font-family: 'NunitoLocal', 'Varela Round', sans-serif;
+  font-family: 'NunitoLocal', 'VarelaLocal', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: greyscale;
 }
@@ -17,6 +17,12 @@ body {
 @font-face {
   font-family: 'NunitoLocal';
   src: url('/fonts/Nunito-Regular.ttf')  format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'VarelaLocal';
+  src: url('/fonts/VarelaRound-Regular.ttf')  format('truetype');
   font-weight: normal;
   font-style: normal;
 }
@@ -335,38 +341,7 @@ progress {
   border: 0;
 }
 
-meter {
-  -webkit-appearance: meter; /* Reset appearance */
-  -moz-appearance: meterbar;
-  appearance: meter;
-  border: none;
-}
-meter::-webkit-meter-optimum-value {
-  background: none;
-  background-color: var(--sunflower);
-  color: var(--nephritis);
-}
-meter::-moz-meter-optimum {
-  background: none;
-  background-color: var(--sunflower);
-  color: var(--nephritis);
-}
-meter::-webkit-meter-suboptimum-value {
-  background: none;
-  background-color: var(--carrot);
-}
-meter::-moz-meter-sub-optimum {
-  background: none;
-  background-color: var(--carrot);
-}
-meter::-webkit-meter-even-less-good-value {
-  background: none;
-  background-color: var(--pomegranate);
-}
-meter::-moz-meter-meter-sub-sub-optimum {
-  background: none;
-  background-color: var(--pomegranate);
-}
+
 
 table {
   border-collapse: collapse;

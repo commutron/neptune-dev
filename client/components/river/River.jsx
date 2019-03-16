@@ -122,6 +122,7 @@ export default class River extends Component	{
             progCounts={progCounts}
             app={app}
             showVerify={this.props.showVerify}
+            optionVerify={this.props.optionVerify}
             changeVerify={this.props.changeVerify}
             undoOption={this.state.undoStepOption}
             openUndoOption={()=>this.tempOpenOption()}
