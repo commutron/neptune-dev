@@ -100,8 +100,8 @@ export default class FirstForm extends Component	{
     const id = this.props.id;
     const bar = this.props.barcode;
     
-    const sKey = this.props.sKey ? this.props.sKey : this.state.stepKey;
-		const step = this.props.step ? this.props.step : this.state.stepName;
+    const sKey = !this.props.optionVerify ? this.props.sKey : this.state.stepKey;
+		const step = !this.props.optionVerify ? this.props.step : this.state.stepName;
       
     const howI = this.state.howI ? this.state.howI : 'manual';
     const whoB = [...this.state.whoB];
@@ -110,7 +110,7 @@ export default class FirstForm extends Component	{
     const diff = this.state.changes;
     const ng = this.state.ng;
     
-    const fresh = !this.props.sKey ? false : true;
+    const fresh = this.props.optionVerify || !this.props.sKey ? false : true;
     
 		Meteor.call('addFirst', id, bar, sKey, step, good, whoB, howB, howI, diff, ng, fresh, (error, reply)=>{
 		  error && console.log(error);

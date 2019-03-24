@@ -1,9 +1,11 @@
 import moment from 'moment';
 import { Accounts } from 'meteor/accounts-base';
 
+/*
 Accounts.config({ 
   loginExpirationInDays: 0.54
 });
+*/
 
 Meteor.methods({
   
@@ -272,6 +274,19 @@ Meteor.methods({
         },
       },{multi: true});
       return true;
+    }
+  },
+  
+  logLog(login) {
+    if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
+      const inout = !login ? 'logout' : 'login';
+      const time = moment().format();
+      const logString = inout + ': ' + time;
+      Meteor.users.update(Meteor.userId(), {
+        $push: {
+          loginLog: logString,
+        }
+      });
     }
   },
   

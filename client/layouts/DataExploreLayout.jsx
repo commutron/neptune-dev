@@ -26,6 +26,10 @@ export const TraverseWrap = ({
 }) =>	{
   
   function goPro(location) {
+    if(batchData) {
+      let el = document.getElementById('exItemList');
+      Session.set('itemListScrollPos', {b: batchData.batch, num: el.scrollTop});
+    }
     Session.set('now', location);
     FlowRouter.go('/production');
   }
@@ -109,7 +113,7 @@ export const TraverseWrap = ({
             </section>
             
             {children[1] &&
-              <aside className='traverseList forceScrollStyle' style={scrollFix}>
+              <aside className='traverseList forceScrollStyle' style={scrollFix} id='exItemList'>
                 {children[1]}
               </aside>}
             

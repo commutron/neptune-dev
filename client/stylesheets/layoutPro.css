@@ -41,9 +41,6 @@
   grid-template-areas: 
     'proLeft proInstruct'
     'formFooter formFooter';
-  -webkit-transition: all 150ms ease-in-out;
-  -moz-transition: all 150ms ease-in-out;
-  -o-transition: all 150ms ease-in-out;
   transition: all 150ms ease-in-out;
 }
 .proNarrow {
@@ -73,16 +70,12 @@
   height: 100%;
   grid-area: proInstruct;
   background-color: var(--clouds);
-  -moz-box-shadow: var(--dropShadow2);
-  -webkit-box-shadow: var(--dropShadow2);
   box-shadow: var(--dropShadow2);
 }
 
 .proActionForm {
   grid-area: formFooter;
   background-color: rgb(25,25,25);
-  -webkit-box-shadow: 0 0 15px 0.5px rgb(0,0,0);
-  -moz-box-shadow:    0 0 15px 0.5px rgb(0,0,0);
   box-shadow:         0 0 15px 0.5px rgb(0,0,0);
   width: 100%;
   min-width: 768px;
@@ -126,9 +119,6 @@
 }
 .riverShrinkToggle {
   left: 40vw;
-  -moz-transform: scaleX(-1);
-  -o-transform: scaleX(-1);
-  -webkit-transform: scaleX(-1);
   transform: scaleX(-1);
 }
 .riverExpandToggle:hover, .riverShrinkToggle:hover {

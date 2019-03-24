@@ -36,6 +36,7 @@ export default class ProgLayerBurndown extends Component {
   render () {
     
     const counts = this.state.counts;
+    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(counts);
     const labels = this.state.labels;
     
     const flR = !this.props.floorRelease ? null : 

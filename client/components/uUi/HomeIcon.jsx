@@ -3,6 +3,17 @@ import Pref from '/client/global/pref.js';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 
 const HomeIcon = () => {
+  
+  function doLogout() {
+    if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
+  		Meteor.call('logLog', false, ()=>{
+  			Meteor.logout();
+  		});
+    }else{
+      Meteor.logout();
+    }
+	}
+	
   //console.log(Meteor.status());
   const user = Meteor.user() ? 'Signed in as: ' + Meteor.user().username : '';
   return(
@@ -44,7 +55,7 @@ const HomeIcon = () => {
         <MenuItem disabled={true}>
           <i>{user}</i>
         </MenuItem>
-        <MenuItem onClick={()=>Meteor.logout()}>
+        <MenuItem onClick={()=>doLogout()}>
           <i className='fas fa-sign-out-alt fa-fw'></i><i className='noCopy'> Sign-out</i>
         </MenuItem>
       </ContextMenu>

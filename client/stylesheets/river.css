@@ -58,9 +58,6 @@
   background-origin: content-box;
   background-size: 110%;
   border-radius: 50%;
-  -webkit-transition: all 200ms ease-out;
-  -moz-transition: all 200ms ease-out;
-  -o-transition: all 200ms ease-out;
   transition: all 200ms ease-out;
   opacity: 1;
   will-change: transform;
@@ -88,9 +85,6 @@
 
 .doneStoneMask, .blockStone {
   position: relative;
-  -webkit-transition: all 200ms ease-out;
-  -moz-transition: all 200ms ease-out;
-  -o-transition: all 200ms ease-out;
   transition: all 200ms ease-out;
 }
 
@@ -120,8 +114,6 @@
   z-index: 3;
   transform: translate(0, -50%) rotate(0deg);
   background-color: var(--pomegranatefade);
-  -moz-box-shadow: var(--dropShadow1);
-  -webkit-box-shadow: var(--dropShadow1);
   box-shadow: var(--dropShadow1);
 }
 
@@ -133,8 +125,6 @@
   background-size: 80%;
   background-repeat: no-repeat;
   font-size: calc(0.5rem + 1vw);
-  -moz-box-shadow: var(--dropShadow1);
-  -webkit-box-shadow: var(--dropShadow1);
   box-shadow: var(--dropShadow1);
 }
 
@@ -379,10 +369,6 @@
   backface-visibility: hidden;
   width: 80%;
   height: auto;
-  -webkit-transform: translate(0%, 20%);
-  -moz-transform: translate(0%, 20%);
-  -o-transform: translate(0%, 20%);
-  -ms-transform: translate(0%, 20%);
   transform: translate(0%, 20%);
 }
 

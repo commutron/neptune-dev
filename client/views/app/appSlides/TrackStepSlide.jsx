@@ -82,7 +82,7 @@ const TrackStepSlide = ({app, sorted})=> {
       <ul>
         {sorted.map( (entry, index)=>{
           return ( 
-            <TrackStepEdit key={index} data={entry} />
+            <TrackStepEdit key={rndmKey + index + entry.key} data={entry} />
         )})}
       </ul>
     </div>

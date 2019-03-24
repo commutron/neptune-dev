@@ -24,8 +24,6 @@
 .contentAreaEx {
   grid-area: contentArea;
   overflow-y: auto;
-  -moz-box-shadow: var(--dropShadowLeft0);
-  -webkit-box-shadow: var(--dropShadowLeft0);
   box-shadow: var(--dropShadowLeft0);
 }
 
@@ -144,9 +142,6 @@
   background-color: transparent;
   overflow: hidden;
   white-space: nowrap;
-  -webkit-transition: all 150ms ease-in-out;
-  -moz-transition: all 150ms ease-in-out;
-  -o-transition: all 150ms ease-in-out;
   transition: all 150ms ease-in-out;
 }
 .cookie {
@@ -180,9 +175,6 @@
 	transform: rotate(45deg);
 	vertical-align: top;
 	width: 12vh;
-	-webkit-transition: all 150ms ease-in-out;
-  -moz-transition: all 150ms ease-in-out;
-  -o-transition: all 150ms ease-in-out;
   transition: all 150ms ease-in-out;
 }
 .cookieCrumb:hover, .cookieCrumb:active {
@@ -227,8 +219,6 @@
 .taskLink:hover, .taskLink:active, .onTL {
   color: rgb(25,25,25);
   background-color: var(--silver);
-  -moz-box-shadow: var(--dropShadow00);
-  -webkit-box-shadow: var(--dropShadow00);
   box-shadow: var(--dropShadow00);
 }
 

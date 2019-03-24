@@ -4,10 +4,6 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  -webkit-transform: translate3d(0, 0, 0);
-  -moz-transform: translate3d(0, 0, 0);
-  -o-transform: translate3d(0, 0, 0);
-  -ms-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
 
@@ -23,14 +19,10 @@ main {
   width: 0.75vw;
 }
 .forceScrollStyle::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 12px rgba(0,0,0,0.5); 
-  -moz-box-shadow: inset 0 0 12px rgba(0,0,0,0.5);
   box-shadow: inset 0 0 12px rgba(0,0,0,0.5); 
   
 }
 .forceScrollStyle::-webkit-scrollbar-thumb {
-  -webkit-box-shadow: inset 0 0 12px rgba(0,0,0,0.5); 
-  -moz-box-shadow: inset 0 0 12px rgba(0,0,0,0.5);
   box-shadow: inset 0 0 12px rgba(0,0,0,0.5); 
   background-color: rgb(100,100,100);
 }
@@ -251,8 +243,6 @@ main {
   background-color: var(--clouds);
   overflow-y: auto;
   color: black;
-  -moz-box-shadow: var(--dropShadowLeft1);
-  -webkit-box-shadow: var(--dropShadowLeft1);
   box-shadow: var(--dropShadowLeft1);
   padding: 5vh 5vw;
 }
@@ -273,8 +263,6 @@ main {
   width: 100%;
   color: rgb(35,35,35);
   background-color: var(--silver);
-  -moz-box-shadow: var(--dropShadow00);
-  -webkit-box-shadow: var(--dropShadow00);
   box-shadow: var(--dropShadow00);
 }
 .slideMenuButton:disabled {
@@ -306,9 +294,7 @@ main {
   margin: 25px auto 25px auto;
   overflow-x: hidden;
   overflow-y: hidden;
-  -webkit-box-shadow: 0 0 20px 1px rgb(0,0,0);
-  -moz-box-shadow:    0 0 20px 1px rgb(0,0,0);
-  box-shadow:         0 0 20px 1px rgb(0,0,0);
+  box-shadow: 0 0 20px 1px rgb(0,0,0);
 }
 
 .section {
@@ -402,8 +388,6 @@ main {
   position: relative;
   z-index: 10;
   border: 1px solid rgb(0,0,0);
-  -webkit-box-shadow: 0 0 100px 500px rgba(0,0,0,0.5);
-  -moz-box-shadow:    0 0 100px 500px rgba(0,0,0,0.5);
   box-shadow:         0 0 100px 500px rgba(0,0,0,0.5);
 }
 .popupHead, .medModelHead {

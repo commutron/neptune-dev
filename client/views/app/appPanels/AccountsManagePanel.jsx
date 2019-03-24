@@ -7,6 +7,7 @@ import RemoveUser from '/client/components/forms/RemoveUser.jsx';
 const AccountsManagePanel = ({ users })=> {
     
   const roles = [
+    'debug',
     'nightly',
     'qa',
     'remove',

@@ -18,6 +18,12 @@ export default class ItemsList extends Component	{
     };
   }
   
+  componentDidMount() {
+    let el = document.getElementById('exItemList');
+    const pos = Session.get('itemListScrollPos');
+    if(this.props.batchData.batch === pos.b) { el.scrollTop = pos.num || 0 }
+  }
+  
   setFilter(rule) {
     this.setState({ filter: rule });
   }
@@ -146,9 +152,9 @@ export default class ItemsList extends Component	{
                       stepFilter.filter( z => matchTime.includes(z.serial) === true );
                       
     let showListOrder = timeFilter.sort( (x,y)=> x.serial - y.serial);
-
+{/*<AnimateWrap type='cardTrans'>*/}
     return (
-      <AnimateWrap type='cardTrans'>
+      
         <div className='' key={1}>
           <div className='stickyBar'>
             <FilterItems
@@ -175,7 +181,7 @@ export default class ItemsList extends Component	{
               );
           })}
   			</div>
-			</AnimateWrap>
+			
     );
   }
 }

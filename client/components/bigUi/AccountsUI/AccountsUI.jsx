@@ -7,7 +7,8 @@ import style from './style.css';
 
 Accounts.onLogin( ()=>{
 	let redirect = Session.get('redirectAfterLogin');
-  if(!redirect || redirect === '/login' || redirect === '/limbo') {
+	!redirect ? redirect = '/' : null;
+  if(redirect === '/login' || redirect === '/limbo') {
   	null;
   }else {
     FlowRouter.go(redirect);
@@ -33,9 +34,17 @@ export default class AccountsUI extends Component {
 	}
 	
 	doLogout() {
-		Meteor.logout( ()=>{
-			this.setState({loginStatus: Meteor.user()});
-		});
+		if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
+			Meteor.call('logLog', false, ()=>{
+				Meteor.logout( ()=>{
+					this.setState({loginStatus: Meteor.user()});
+				});
+			});
+		}else{
+			Meteor.logout( ()=>{
+				this.setState({loginStatus: Meteor.user()});
+			});
+		}
 	}
 	
 	doLogin(e) {
@@ -50,6 +59,7 @@ export default class AccountsUI extends Component {
 	      this.setState({loginResult: error.reason});
 	    }else{
 	    	Meteor.logoutOtherClients();
+	    	Meteor.call('logLog', true);
 	    }
 	    if(!redirect || redirect === '/login') {
 	    	this.setState({loginStatus: Meteor.user()});

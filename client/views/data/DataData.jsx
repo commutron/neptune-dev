@@ -10,6 +10,9 @@ import DataViewOps from './DataViewOps.jsx';
 class ExploreView extends Component	{
   
   componentDidUpdate(prevProps) {
+    if(prevProps.request !== this.props.request) {
+      Session.set('itemListScrollPos', {b: false, num: 0});
+    }
     InboxToast(prevProps, this.props);
   }
   

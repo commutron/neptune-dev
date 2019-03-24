@@ -1,7 +1,5 @@
 .waterfallSelector details {
   height: 3vw;
-  -webkit-box-shadow: none; 
-  -moz-box-shadow: none;
   box-shadow: none;
 }
 .waterfallSelector details[open] {

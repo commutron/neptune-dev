@@ -83,8 +83,6 @@
 
 .navButtonWrap a,
 .navButtonWrap button {
-  -moz-box-shadow: var(--dropShadow00);
-  -webkit-box-shadow: var(--dropShadow00);
   box-shadow: var(--dropShadow00);
 }
 .navButtonWrap a,
@@ -184,8 +182,6 @@
   overflow: hidden;
   word-break: break-all;
   word-wrap: break-word;
-  -moz-box-shadow: var(--dropShadow00);
-  -webkit-box-shadow: var(--dropShadow00);
   box-shadow: var(--dropShadow00);
 }
 .leapRow > span {
@@ -279,25 +275,15 @@ label.qdpplRound {
 }
 
 .actionBox {
-  -moz-box-shadow:    0 0.75em 1em -0.5em rgba(0,0,0,0.2),
-                      0 -0.75em 1em -0.5em rgba(0,0,0,0.2);
-  -webkit-box-shadow: 0 0.75em 1em -0.5em rgba(0,0,0,0.2),
-                      0 -0.75em 1em -0.5em rgba(0,0,0,0.2);
-  box-shadow:         0 0.75em 1em -0.5em rgba(0,0,0,0.2),
-                      0 -0.75em 1em -0.5em rgba(0,0,0,0.2);
+  box-shadow: 0 0.75em 1em -0.5em rgba(0,0,0,0.2),
+              0 -0.75em 1em -0.5em rgba(0,0,0,0.2);
 }
 
 .pop {
-  -moz-box-shadow: var(--dropShadow1);
-  -webkit-box-shadow: var(--dropShadow1);
   box-shadow: var(--dropShadow1);
 }
 
 .popBlue {
-  -moz-box-shadow: 0 10px 30px rgba(52, 152, 219, 0.30), 
-                   0 0 10px rgba(52, 152, 219, 0.22);
-  -webkit-box-shadow: 0 10px 30px rgba(52, 152, 219, 0.30), 
-                      0 0 10px rgba(52, 152, 219, 0.22);
   box-shadow: 0 10px 30px rgba(52, 152, 219, 0.30), 
               0 0 10px rgba(52, 152, 219, 0.22);
 }
@@ -641,7 +627,6 @@ label.qdpplRound {
 
 .smaller { font-size: smaller; }
 .small {
-  /*font-family: 'Open Sans', sans-serif;*/
   font-size: small;
 }
 
@@ -1007,9 +992,6 @@ input.variableInput.biggest {
   height: 20px;
   font-size: 1.5rem;
   border-radius: 50%;
-  -webkit-transition: all 150ms ease-in-out;
-  -moz-transition: all 150ms ease-in-out;
-  -o-transition: all 150ms ease-in-out;
   transition: all 150ms ease-in-out;
 }
 .tagAddButton:hover {
@@ -1080,8 +1062,6 @@ input.variableInput.biggest {
   align-items: center;
   font-size: 1rem;
   background-color: rgba(5,5,5,0.8);
-  -moz-box-shadow: 0 10px 30px rgba(0, 0, 0, 0.30);
-  -webkit-box-shadow: 0 10px 30px rgba(0, 0, 0, 0.30);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.30);
 }
 
