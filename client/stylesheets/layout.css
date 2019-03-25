@@ -54,6 +54,16 @@ main {
           filter: drop-shadow( -5px -5px 5px #000 );
 }
 
+.debugWarningLight {
+  background-color: red !important;
+  animation: blinker 3s ease-in-out infinite;
+}
+@keyframes blinker {
+  50% {
+    opacity: 0.6;
+  }
+}
+
 .stickyBar {
   position: -webkit-sticky;
   position: sticky;

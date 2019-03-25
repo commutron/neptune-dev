@@ -320,3 +320,24 @@ function removeDisconnectTimeout() {
     clearTimeout(disconnectTimer);
   }
 }
+
+Accounts.onLogin( ()=>{
+	let redirect = Session.get('redirectAfterLogin');
+	!redirect ? redirect = '/' : null;
+  if(redirect === '/login' || redirect === '/limbo') {
+  	null;
+  }else {
+    FlowRouter.go(redirect);
+  }
+  if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
+  	const agent = window.navigator.userAgent;
+  	const sessionID = Meteor.connection._lastSessionId;
+  	Meteor.call('logLogInOut', true, agent, sessionID);
+    alert('Your account is in debug mode. \n Your activity may be monitored and recorded. \n See your Neptune administrator for more information');
+	}
+});
+
+Accounts.onLogout( ()=>{
+  Session.set('redirectAfterLogin', FlowRouter.current().path);
+  FlowRouter.go('login');
+});

@@ -2,23 +2,17 @@ import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import React from 'react';
 
-Accounts.onLogout( ()=>{
-  Session.set('redirectAfterLogin', FlowRouter.current().path);
-  FlowRouter.go('login');
-});
-
 const HomeLogout = ({ currentUser })=> {
-  
-  function doLogout() {
-    if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
-  		Meteor.call('logLog', false, ()=>{
-  			Meteor.logout();
-  		});
-    }else{
-      Meteor.logout();
-    }
+
+	function doLogout() {
+		if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
+	  const sessionID = Meteor.connection._lastSessionId;
+	  const agent = window.navigator.userAgent;
+		Meteor.call('logLogInOut', false, agent, sessionID);
+	  }
+		Meteor.logout();
 	}
-	
+  
 	return(
     <span className='navButtonWrap' title={'Sign Out\n' + currentUser}>
       <button
@@ -32,6 +26,6 @@ const HomeLogout = ({ currentUser })=> {
       </button>
     </span>
   );
-}
+};
 
 export default HomeLogout;

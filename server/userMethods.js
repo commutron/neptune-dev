@@ -277,16 +277,19 @@ Meteor.methods({
     }
   },
   
-  logLog(login) {
+  logLogInOut(login, agent, sessionID) {
     if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
       const inout = !login ? 'logout' : 'login';
       const time = moment().format();
-      const logString = inout + ': ' + time;
+      const logString = `${inout}: ${time} ${agent} ${sessionID}`;
+      console.log(logString);
+      /*
       Meteor.users.update(Meteor.userId(), {
         $push: {
-          loginLog: logString,
+          usageLog: logString,
         }
       });
+      */
     }
   },
   

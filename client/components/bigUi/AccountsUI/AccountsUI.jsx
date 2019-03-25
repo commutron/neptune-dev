@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import Tabs from '/client/components/smallUi/Tabs.jsx';
 
 import style from './style.css';
-
+/*
 Accounts.onLogin( ()=>{
 	let redirect = Session.get('redirectAfterLogin');
 	!redirect ? redirect = '/' : null;
@@ -13,8 +13,13 @@ Accounts.onLogin( ()=>{
   }else {
     FlowRouter.go(redirect);
   }
-});
-
+  if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
+  	const agent = window.navigator.userAgent;
+  	Meteor.call('logLog', true, agent);
+    alert('Your account is in debug mode. \n Your activity may be monitored and recorded. \n See your Neptune administrator for more information');
+	}
+ });
+*/
 export default class AccountsUI extends Component {
 	
 	constructor() {
@@ -35,16 +40,13 @@ export default class AccountsUI extends Component {
 	
 	doLogout() {
 		if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
-			Meteor.call('logLog', false, ()=>{
-				Meteor.logout( ()=>{
-					this.setState({loginStatus: Meteor.user()});
-				});
-			});
-		}else{
-			Meteor.logout( ()=>{
-				this.setState({loginStatus: Meteor.user()});
-			});
-		}
+	  	const sessionID = Meteor.connection._lastSessionId;
+	  	const agent = window.navigator.userAgent;
+			Meteor.call('logLogInOut', false, agent, sessionID);
+	  }
+		Meteor.logout( ()=>{
+			this.setState({loginStatus: Meteor.user()});
+		});
 	}
 	
 	doLogin(e) {
@@ -59,7 +61,6 @@ export default class AccountsUI extends Component {
 	      this.setState({loginResult: error.reason});
 	    }else{
 	    	Meteor.logoutOtherClients();
-	    	Meteor.call('logLog', true);
 	    }
 	    if(!redirect || redirect === '/login') {
 	    	this.setState({loginStatus: Meteor.user()});

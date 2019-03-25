@@ -30,6 +30,7 @@ Meteor.publish('appData', function(){
         {fields: {
           'services': 0,
           'orgKey': 0,
+          'usageLog': 0
         }}),
       AppDB.find({orgKey: orgKey}, 
         {fields: { 
