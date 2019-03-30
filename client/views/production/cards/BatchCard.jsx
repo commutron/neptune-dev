@@ -83,7 +83,7 @@ export default class BatchCard extends Component	{
               </div>
               
               <div className='space cap'>
-                <StepsProgress progCounts={progCounts} />
+                <StepsProgress progCounts={progCounts} truncate={true} />
               </div>
               
               <div className='space'>

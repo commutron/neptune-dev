@@ -124,7 +124,7 @@ export default class OverviewWrap extends Component	{
       <div key={0} className='overviewContainer'>
         <ToastContainer
           position="top-right"
-          autoClose={5000}
+          autoClose={2500}
           newestOnTop />
         <div className='tenHeader'>
           <div className='topBorder'></div>

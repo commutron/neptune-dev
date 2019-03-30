@@ -1,9 +1,10 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
-
+import ErrorCatch from '/client/components/utilities/ErrorCatch.jsx';
 import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
 
 export const PublicLayout = ({content, title}) => (
+  <ErrorCatch>
   <div className='simpleContainer'>
     <div className='tenHeader'>
       <div className='topBorder' />
@@ -17,9 +18,11 @@ export const PublicLayout = ({content, title}) => (
       {content}
     </div>
   </div>
+  </ErrorCatch>
 );
 
 export const SplashLayout = ({content, title}) => (
+  <ErrorCatch>
   <div className='splashContainer'>
     <div className='tenHeader'>
       <div className='topBorder' />
@@ -31,11 +34,13 @@ export const SplashLayout = ({content, title}) => (
     </div>
     {content}
   </div>
+  </ErrorCatch>
 );
 
 export const CleanLayout = ({content}) => ( content );
 
 export const LabelLayout = ({content}) => (
+  <ErrorCatch>
   <div className='simpleContainer'>
     <div className='tenHeader noPrint'>
       <div className='topBorder' />
@@ -57,6 +62,7 @@ export const LabelLayout = ({content}) => (
       </div>
     </div>
   </div>
+  </ErrorCatch>
 );
 
     

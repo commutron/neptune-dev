@@ -323,8 +323,7 @@ function removeDisconnectTimeout() {
 
 Accounts.onLogin( ()=>{
 	let redirect = Session.get('redirectAfterLogin');
-	!redirect ? redirect = '/' : null;
-  if(redirect === '/login' || redirect === '/limbo') {
+  if(!redirect || redirect === '/login' || redirect === '/limbo') {
   	null;
   }else {
     FlowRouter.go(redirect);

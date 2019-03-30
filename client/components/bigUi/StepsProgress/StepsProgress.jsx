@@ -86,7 +86,8 @@ export default class StepsProgress extends Component	{
                     key={rndmKeyR}
                     step={entry.step}
                     gFirst={entry.goodFirst}
-                    ngFirst={entry.ngFirst} />
+                    ngFirst={entry.ngFirst}
+                    truncate={this.props.truncate} />
                 );
               }else{
                 let count = calcItem ? entry.items : entry.units;
@@ -117,7 +118,8 @@ export default class StepsProgress extends Component	{
                       key={rndmKeyR}
                       step={entry.step}
                       gFirst={entry.goodFirst}
-                      ngFirst={entry.ngFirst} />
+                      ngFirst={entry.ngFirst}
+                      truncate={this.props.truncate} />
                   );
                 }else{
                   let count = calcItem ? entry.items : entry.units;
@@ -141,7 +143,7 @@ export default class StepsProgress extends Component	{
   }
 }
 
-const StepRateDisplay = ({step, gFirst, ngFirst })=> {
+const StepRateDisplay = ({step, gFirst, ngFirst, truncate})=> {
   
   const name = gFirst === true ? 'Good' :
                 ngFirst === true ? 'No Good' :
@@ -149,9 +151,10 @@ const StepRateDisplay = ({step, gFirst, ngFirst })=> {
   const value = gFirst === true ? 10 :
                 ngFirst === true ? 5 :
                 0;
+  const hidden = truncate && gFirst === true ? 'hide' : '';
   
   return(
-    <div className='wide meterTrinary'>
+    <div className={`wide meterTrinary ${hidden}`}>
       <p className='cap'>{step} first</p>
       <meter
         value={value}

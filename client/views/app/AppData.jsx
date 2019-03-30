@@ -14,7 +14,12 @@ class AppView extends Component	{
   */
   render() {
     
-    if(!this.props.ready || !this.props.readyUsers || !this.props.app) {
+    if(
+      !this.props.ready || 
+      !this.props.readyUsers || 
+      !this.props.readyDebug || 
+      !this.props.app
+    ) {
       return (
         <div className='centreContainer'>
           <div className='centrecentre'>
@@ -29,7 +34,7 @@ class AppView extends Component	{
         orb={this.props.orb}
         bolt={this.props.bolt}
         app={this.props.app}
-        users={this.props.users} 
+        users={this.props.users}
       />
     );
   }
@@ -43,20 +48,24 @@ export default withTracker( () => {
   let active = login ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   const appSub = login ? Meteor.subscribe('appData') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
+  const usersDebugSub = login ? Meteor.subscribe('usersDataDebug') : false;
   if(!login) {
     return {
       ready: false,
-      readyUsers: false
+      readyUsers: false,
+      readyDebug: false
     };
   }else if(!active) {
     return {
       ready: false,
-      readyUsers: false
+      readyUsers: false,
+      readyDebug: false
     };
   }else{
     return {
       ready: appSub.ready(),
       readyUsers: usersSub.ready(),
+      readyDebug: usersDebugSub.ready(),
       orb: Session.get('now'),
       bolt: Session.get('allData'),
       username: name,

@@ -211,7 +211,7 @@ export default class MultiItemForm extends Component {
             <p className='centre'>
               <button
                 ref={(i)=> this.go = i}
-                disabled='true'
+                disabled={true}
                 className='action clearGreen'
                 type='submit'
               >Add</button>

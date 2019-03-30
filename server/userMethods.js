@@ -1,11 +1,9 @@
 import moment from 'moment';
 import { Accounts } from 'meteor/accounts-base';
 
-/*
 Accounts.config({ 
   loginExpirationInDays: 0.54
 });
-*/
 
 Meteor.methods({
   
@@ -277,19 +275,27 @@ Meteor.methods({
     }
   },
   
+  clearNonDebugUserUsageLogs() {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      Meteor.users.update({ roles: { $not: { $in: ["debug"] } } }, {
+        $set: {
+          usageLog: [],
+        },
+      },{multi: true});
+      return true;
+    }
+  },
+  
   logLogInOut(login, agent, sessionID) {
     if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
       const inout = !login ? 'logout' : 'login';
       const time = moment().format();
       const logString = `${inout}: ${time} ${agent} ${sessionID}`;
-      console.log(logString);
-      /*
       Meteor.users.update(Meteor.userId(), {
         $push: {
           usageLog: logString,
         }
       });
-      */
     }
   },
   
@@ -319,6 +325,22 @@ Meteor.methods({
         }
       }
     }
-  }
+  },
+  
+  logReactError(sessionID, errorType, info) {
+    try {
+      if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
+        const time = moment().format();
+        const logString = `Error, Type: ${errorType}, ${time}, username: ${Meteor.user().username} session: ${sessionID}, ${info}`;
+        Meteor.users.update(Meteor.userId(), {
+          $push: {
+            usageLog: logString,
+          }
+        });
+      }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
     
 });

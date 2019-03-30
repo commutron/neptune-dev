@@ -33,12 +33,6 @@ const DataRepair = ({ orb, bolt, app, users })=> {
     });
   }
   */
-  function clearAthing() {
-    Meteor.call('clearBreadcrumbsRepair', (error, reply)=>{
-      error && console.log(error);
-      if(reply) { toast.success('data edit complete', { autoClose: false }); }
-    });
-  }
   
   function updateAcache() {
     Meteor.call('FORCEbatchCacheUpdate', (error)=>{
@@ -81,14 +75,6 @@ const DataRepair = ({ orb, bolt, app, users })=> {
         onClick={()=>updateAcache()}
         className='action clear blackT'
       >Force Update</button>
-      
-      <h2 className='cap'>Clear User breadcrumbs</h2>
-      <p>On current logged in user</p>
-      
-      <button
-        onClick={()=>clearAthing()}
-        className='action clear blackT'
-      >Clear</button>
       
       <h2 className='cap'>Clear All User Watchlists</h2>
       <button

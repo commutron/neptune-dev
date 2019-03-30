@@ -545,7 +545,7 @@ Meteor.methods({
     cleanData.unshift(version.version);
     cleanData.unshift(widget.widget);
     return cleanData;
-  }
-  
+  },
+
   
 });

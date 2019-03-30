@@ -27,6 +27,7 @@ specify: this.props.specify
 */
 
 export default class DataViewOps extends Component	{
+  
   /*
   linkedBatch(wId, vKey) {
     return this.props.allBatch.find(x => x.widgetId === wId, x => x.versionKey === vKey);

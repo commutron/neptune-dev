@@ -48,6 +48,19 @@ class ToolboxWrap extends Component	{
     });
   }
   
+  clearUserLogs() {
+    Meteor.call('clearNonDebugUserUsageLogs', (error)=>{
+      error && console.log(error);
+      toast.success('request sent');
+    });
+  }
+  clearthisUserCrumbs() {
+    Meteor.call('clearBreadcrumbsRepair', (error, reply)=>{
+      error && console.log(error);
+      if(reply) { toast.success('data edit complete', { autoClose: false }); }
+    });
+  }
+  
   render() {
     
     if(!this.props.ready || !this.props.readyUsers || !this.props.app) {
@@ -84,6 +97,7 @@ class ToolboxWrap extends Component	{
               <b><i className='fas fa-bell fa-fw'></i>  Toast Test</b>,
               <b><i className='fas fa-bell fa-fw'></i>  Notify Test</b>,
               <b><i className='fas fa-wrench fa-fw'></i>  Data Repair</b>,
+              <b><i className='fas fa-user-shield fa-fw'></i>  Privacy</b>,
               <b><i className='fas fa-life-ring fa-fw'></i>  Legacy Support</b>
             ]}>
               
@@ -111,14 +125,33 @@ class ToolboxWrap extends Component	{
               </p>
             </div>
             
-            <DataRepair
-              key={3}
-              orb={this.props.orb}
-              bolt={this.props.bolt}
-              app={this.props.app}
-              users={this.props.users} />
+            <div>
+              <DataRepair
+                key={3}
+                orb={this.props.orb}
+                bolt={this.props.bolt}
+                app={this.props.app}
+                users={this.props.users} />
+              </div>
               
             <div key={4}>
+              <p>
+                <button
+                  className='action clearBlue invert'
+                  onClick={()=>this.clearUserLogs()}
+                >Clear Usage Logs of users with "debug" turned OFF</button>
+              </p>
+              <hr />
+              <p>
+                <em>On current logged in user</em><br />
+                <button
+                  onClick={()=>this.clearthisUserCrumbs()}
+                  className='action clearBlue invert'
+                >Clear Your breadcrumbs</button>
+              </p>
+            </div>
+              
+            <div key={5}>
               <p>
                 determine support needs
               </p>

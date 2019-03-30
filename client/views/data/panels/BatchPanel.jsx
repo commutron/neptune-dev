@@ -223,11 +223,10 @@ export default class BatchPanel extends Component	{
               
                 <div className='vmargin space'>
                   <StepsProgress
-                    mini={true}
-                    expand={true}
                     progCounts={progCounts}
                     riverTitle={riverTitle}
-                    riverAltTitle={riverAltTitle} />
+                    riverAltTitle={riverAltTitle}
+                    truncate={false} />
                 </div>
                 
                 <div className='dropCeiling vmargin space'>

@@ -5,7 +5,7 @@
     "start": "meteor run"
   },
   "dependencies": {
-    "@babel/runtime": "^7.3.4",
+    "@babel/runtime": "^7.4.2",
     "@fortawesome/react-fontawesome": "0.0.18",
     "babel-runtime": "^6.26.0",
     "bcrypt": "^1.0.3",
@@ -19,19 +19,18 @@
     "moment-business": "^3.0.1",
     "moment-timezone": "^0.5.23",
     "prop-types": "^15.7.2",
-    "react": "^15.6.2",
-    "react-addons-css-transition-group": "^15.6.2",
+    "react": "^16.8.6",
     "react-addons-pure-render-mixin": "^15.6.2",
     "react-chartist": "^0.13.3",
     "react-chartist-tooltip": "^0.4.1",
-    "react-contextmenu": "^2.10.0",
-    "react-dom": "^15.6.2",
+    "react-contextmenu": "^2.11.0",
+    "react-dom": "^16.8.6",
     "react-fontawesome": "^1.6.1",
     "react-mounter": "^1.2.0",
     "react-toastify": "^4.5.2",
     "react-transition-group": "^1.2.1"
   },
   "devDependencies": {
-    "@fortawesome/fontawesome-free": "^5.7.2"
+    "@fortawesome/fontawesome-free": "^5.8.1"
   }
 }

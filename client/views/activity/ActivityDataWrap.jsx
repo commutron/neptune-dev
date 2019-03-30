@@ -36,7 +36,7 @@ class WatchDataWrap extends Component	{
       <div className='simpleContainer'>
         <ToastContainer
           position="top-right"
-          autoClose={10000}
+          autoClose={2500}
           newestOnTop />
         <div className='tenHeader'>
           <div className='topBorder' />

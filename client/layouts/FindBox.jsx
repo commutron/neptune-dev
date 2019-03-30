@@ -29,9 +29,9 @@ const FindBox = ({ orb, user, append })=> {
         className='up numFont'
         placeholder={last}
         disabled={lock}
-        autoCorrect={false}
-        autoCapitalize={false}
-        spellCheck={false}
+        autoCorrect='false'
+        autoCapitalize='false'
+        spellCheck='false'
       />
     </form>
   );

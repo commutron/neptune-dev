@@ -542,6 +542,21 @@ Meteor.methods({
     }
   },
   
+  sendErrorMail(errorTitle, errorTime, errorUser, errorMessage) {
+    Meteor.users.update({ roles: { $in: ["admin"] } }, {
+        $push : { inbox : {
+          notifyKey: new Meteor.Collection.ObjectID().valueOf(),
+          keyword: 'Error',
+          type: 'ERROR',
+          title: errorTitle,
+          detail: `${errorTime}, ${errorUser}, ${errorMessage}`,
+          time: new Date(),
+          unread: true
+        }
+      }},{multi: true});
+      
+  },
+  
   ///////////// CACHES //////////////////
   FORCEbatchCacheUpdate() {
     if(Roles.userIsInRole(Meteor.userId(), 'active')) {

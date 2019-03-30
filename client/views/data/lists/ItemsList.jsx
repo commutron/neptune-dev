@@ -20,7 +20,7 @@ export default class ItemsList extends Component	{
   
   componentDidMount() {
     let el = document.getElementById('exItemList');
-    const pos = Session.get('itemListScrollPos');
+    const pos = Session.get('itemListScrollPos') || {b: false, num: 0};
     if(this.props.batchData.batch === pos.b) { el.scrollTop = pos.num || 0 }
   }
   

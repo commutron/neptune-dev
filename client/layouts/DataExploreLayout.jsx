@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
 import { ToastContainer } from 'react-toastify';
 //import Pref from '/client/global/pref.js';
+import ErrorCatch from '/client/components/utilities/ErrorCatch.jsx';
 
 import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
 import TaskBar from './TaskBar.jsx';
@@ -41,10 +42,11 @@ export const TraverseWrap = ({
     const invert = invertColor ? 'invert' : '';
 
     return(
+      <ErrorCatch>
       <div className='containerEx'>
         <ToastContainer
           position="top-right"
-          autoClose={5000}
+          autoClose={2500}
           newestOnTop />
         <div className='tenHeader noPrint'>
           <div className='topBorder' />
@@ -134,5 +136,6 @@ export const TraverseWrap = ({
         </section>
         
       </div>
+      </ErrorCatch>
     );
   };

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
+import ErrorCatch from '/client/components/utilities/ErrorCatch.jsx';
 import { ToastContainer } from 'react-toastify';
 //import Pref from '/client/global/pref.js';
 
@@ -81,10 +82,11 @@ export class ProWrap extends Component	{
     let toggleClass = !riverExpand ? 'riverExpandToggle' : 'riverShrinkToggle';
     
     return(
+      <ErrorCatch>
       <div className='containerPro'>
         <ToastContainer
           position="top-right"
-          autoClose={5000}
+          autoClose={2500}
           newestOnTop />
         <div className='tenHeader'>
           <div className='topBorder' />
@@ -170,6 +172,7 @@ export class ProWrap extends Component	{
         </section>
         }
       </div>
+      </ErrorCatch>
     );
   }
   componentDidMount() {

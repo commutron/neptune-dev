@@ -69,4 +69,12 @@
   header, h1, header nav, footer, img {
   display: none;
   }
+  .alwaysPrint {
+    display: block !important;
+    visibility: visible !important;
+  }
+  .errorReport {
+    background-color: white;
+    color: black;
+  }
 }

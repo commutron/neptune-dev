@@ -64,6 +64,39 @@ main {
   }
 }
 
+.errorReport {
+  margin: 10vh auto;
+  width: 50vmax;
+  font-size: 1.5rem;
+  color: white;
+}
+.errorReport p {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-family: sans-serif;
+  padding: 0.5vh 0;
+}
+.errorReport button {
+  font-size: 1.25rem;
+}
+.errorReport a:hover, .errorReport button:hover {
+  text-decoration: underline;
+}
+.errorReport details {
+  box-shadow: none;
+  letter-spacing: 2px;
+  font-family: monospace;
+  font-size: 1.2rem;
+  line-height: 1.5rem;
+}
+.errorReport summary {
+  padding: 0.5vh 0;
+  font-size: 0.9rem;
+  font-family: sans-serif;
+  text-transform: none;
+  cursor: pointer
+}
+
 .stickyBar {
   position: -webkit-sticky;
   position: sticky;

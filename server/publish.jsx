@@ -56,6 +56,7 @@ Meteor.publish('usersData', function(){
         {fields: {
           'services': 0,
           'orgKey': 0,
+          'usageLog': 0,
           'watchlist': 0,
           'inbox': 0,
           'breadcrumbs': 0
@@ -71,6 +72,26 @@ Meteor.publish('usersData', function(){
         }}),
       ];
   }else{null}
+});
+
+Meteor.publish('usersDataDebug', function(){
+  const user = Meteor.users.findOne({_id: this.userId});
+  const orgKey = user ? user.orgKey : false;
+  const admin = Roles.userIsInRole(this.userId, 'admin');
+  if(!this.userId || !admin){
+    return this.ready();
+  }else{
+    return [
+      Meteor.users.find({ orgKey: orgKey, roles: { $in: ["debug"] } },
+        {fields: {
+          'services': 1,
+          'usageLog': 1,
+          'watchlist': 1,
+          'inbox': 1,
+          'breadcrumbs': 1
+        }}),
+      ];
+  }
 });
 
 Meteor.publish('eventsData', function(){
