@@ -270,25 +270,22 @@ hr {
 }
 
 details {
-  line-height: 1.25em;
-  font-size: 1em;
+  line-height: 1.25rem;
+  font-size: 1rem;
 	border: 0;
   margin: 0;
   padding: 0;
   text-transform: capitalize;
-  -moz-box-shadow:    inset 0 -1em 1em -0.5em rgb(48,48,48);
-  -webkit-box-shadow: inset 0 -1em 1em -0.5em rgb(48,48,48);
   box-shadow: 0 0 5px 0px rgba(0,0,0,0.75);
   cursor: default;
 }
 details[open] summary {
   opacity: 1;
 }
-
 summary {
   margin: 0;
   padding: 1vh 1vw;
-  cursor: default;
+  cursor: pointer;
 }
 
 input::-webkit-inner-spin-button {

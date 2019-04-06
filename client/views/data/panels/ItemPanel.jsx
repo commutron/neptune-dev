@@ -8,7 +8,7 @@ import ScrapBox from '../../../components/smallUi/ScrapBox.jsx';
 import SubItemLink from '/client/components/tinyUi/SubItemLink.jsx';
 //import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
-import ItemFeed from '../../../components/bigUi/ItemFeed/ItemFeed.jsx';
+import ItemFeed from '/client/components/bigUi/ItemFeed/ItemFeed.jsx';
 
 export default class ItemPanel extends Component	{
   //componentWillUnmount() {
@@ -87,6 +87,7 @@ export default class ItemPanel extends Component	{
             
             <ItemFeed
               id={b._id}
+              batch={b.batch}
               serial={i.serial}
               createTime={i.createdAt}
               createBy={i.createdWho}

@@ -7,31 +7,21 @@ import ProgressCounter from '/client/components/utilities/ProgressCounter.js';
 import CreateTag from '/client/components/uUi/CreateTag.jsx';
 //import UserName from '/client/components/uUi/UserName.jsx';
 import Tabs from '/client/components/smallUi/Tabs.jsx';
+import InfoTab from './InfoTab.jsx';
 
-import TagsModule from '/client/components/bigUi/TagsModule.jsx';
-import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
-
-import FloorRelease from '/client/components/smallUi/FloorRelease.jsx';
-import { ReleaseNote } from '/client/components/bigUi/ReleasesModule.jsx';
-import NoteLine from '../../../components/smallUi/NoteLine.jsx';
-import BlockList from '../../../components/bigUi/BlockList.jsx';
-import RiverSatus from '../../../components/smallUi/RiverStatus.jsx';
-//import FirstsOverview from '/client/components/bigUi/FirstsOverview.jsx';
 import FirstsTimeline from '/client/components/bigUi/FirstsTimeline.jsx';
-import StepsProgress from '../../../components/bigUi/StepsProgress/StepsProgress.jsx';
+import StepsProgress from '/client/components/bigUi/StepsProgress/StepsProgress.jsx';
 import ProgLayerBurndown from '/client/components/charts/ProgLayerBurndown.jsx';
-import NonConOverview from '../../../components/charts/NonConOverview.jsx';
-import NonConRate from '../../../components/charts/NonConRate.jsx';
-import { HasNonCon } from '../../../components/bigUi/NonConMiniTops.jsx';
-import { NonConPer } from '../../../components/bigUi/NonConMiniTops.jsx';
-import { MostNonCon } from '../../../components/bigUi/NonConMiniTops.jsx';
-import { TodayNonCon } from '../../../components/bigUi/NonConMiniTops.jsx';
-import { LeftFxNonCon } from '../../../components/bigUi/NonConMiniTops.jsx';
-import { LeftInNonCon } from '../../../components/bigUi/NonConMiniTops.jsx';
-import NonConPie from '../../../components/charts/NonConPie.jsx';
-import RMATable from '../../../components/tables/RMATable.jsx';
-
-import BatchFinish from '/client/components/forms/BatchFinish.jsx';
+import NonConOverview from '/client/components/charts/NonConOverview.jsx';
+import NonConRate from '/client/components/charts/NonConRate.jsx';
+import { HasNonCon } from '/client/components/bigUi/NonConMiniTops.jsx';
+import { NonConPer } from '/client/components/bigUi/NonConMiniTops.jsx';
+import { MostNonCon } from '/client/components/bigUi/NonConMiniTops.jsx';
+import { TodayNonCon } from '/client/components/bigUi/NonConMiniTops.jsx';
+import { LeftFxNonCon } from '/client/components/bigUi/NonConMiniTops.jsx';
+import { LeftInNonCon } from '/client/components/bigUi/NonConMiniTops.jsx';
+import NonConPie from '/client/components/charts/NonConPie.jsx';
+import RMATable from '/client/components/tables/RMATable.jsx';
 
 // props
 /// batchData
@@ -43,7 +33,7 @@ export default class BatchPanel extends Component	{
   
   filter() {
     const data = this.props.batchData.items;
-    let fList = [];
+    let verifyList = [];
     let rmaList = [];
     data.map( (item)=>{
       if(item.rma.length > 0) {
@@ -55,16 +45,13 @@ export default class BatchPanel extends Component	{
       for(let v of item.history) {
         // firsts
         v.type === 'first' ? 
-          fList.push({
-            bar: item.serial,
-            fKey: v.key,
-            step: v.step,
-            time: v.time,
-            good: v.good
+          verifyList.push({
+            serial: item.serial,
+            rec: v
           }) : null;
       }
      });
-     return {fList: fList, rmaList: rmaList};
+     return {verifyList: verifyList, rmaList: rmaList};
   }
 
   render() {
@@ -73,20 +60,7 @@ export default class BatchPanel extends Component	{
     const b = this.props.batchData;
     const w = this.props.widgetData;
     //const g = this.props.groupData;
-    const user = this.props.user;
-    
-    const end = b.finishedAt !== false ? moment(b.finishedAt) : moment();
-    const timeElapse = moment.duration(end.diff(b.start)).asWeeks().toFixed(1);
-    
-    const timeasweeks = timeElapse.split('.');
-    const timeweeks = timeasweeks[0];
-    const timedays = moment.duration(timeasweeks[1] * 0.1, 'weeks').asDays().toFixed(0);
-    const elapseNice = timeweeks + ' week' + 
-                        (timeweeks == 1 ? ', ' : 's, ') + 
-                          timedays + ' day' +
-                            (timedays == 1 ? '' : 's');
-    const remain = business.weekDays( moment(), moment(b.end) );             
-    const fnsh = b.finishedAt ? end.format("MMMM Do, YYYY h:mm A") : null;
+    //const user = this.props.user;
     
     //const v = w.versions.find( x => x.versionKey === b.versionKey );
     
@@ -100,12 +74,6 @@ export default class BatchPanel extends Component	{
     const done = b.finishedAt !== false; // no more boards if batch is finished
     const allDone = b.items.every( x => x.finishedAt !== false );
 
-    let released = b.floorRelease === undefined ? undefined : 
-                    b.floorRelease === false ? false :
-                    typeof b.floorRelease === 'object';
-                    
-    const itemsOrder = b.items.sort( (x,y)=> x.serial - y.serial);
-    
     const filter = this.filter();
     const progCounts = ProgressCounter(riverFlow, riverAltFlow, b);
     
@@ -147,25 +115,12 @@ export default class BatchPanel extends Component	{
     return (
       <AnimateWrap type='cardTrans'>
         <div className='section' key={b.batch}>
-            
-          <div className='titleSection'>
-            <span>
-              { b.live ? 
-                <i className='fas fa-sync blueT' title='in progress'></i>
-                :
-                <i className='fa fa-check-circle greenT' title='finished'></i>
-              }
-              {!done && allDone && 
-                <BatchFinish batchId={b._id} alreadyDone={done} />}
-            </span>
-          </div>
-          
-          <br />
           
           <Tabs
             tabs={
               [
                 'Info',
+                'First-offs',
                 'Progress',
                 `${Pref.nonCon}s`,
                 `${Pref.rma}s`,
@@ -177,85 +132,68 @@ export default class BatchPanel extends Component	{
             hold={true}
             sessionTab='batchExPanelTabs'>
             
-            <div className='oneTwoThreeContainer space'>
-              <div className='oneThirdContent min200'>
-                <WatchButton 
-                  list={user.watchlist}
-                  type='batch'
-                  keyword={b.batch} />
-                  
-                <TagsModule
-                  id={b._id}
-                  tags={b.tags}
-                  vKey={false}
-                  tagOps={a.tagOption} />
-                <fieldset className='noteCard'>
-                  <legend>Time Range</legend>
-                  <p className='capFL'>{Pref.salesOrder}: {b.salesOrder || 'not available'}</p>
-                  <p className='capFL'>{Pref.start}: {moment(b.start).format("MMMM Do, YYYY")}</p>
-                  <p className='capFL'>{Pref.end}: {moment(b.end).format("MMMM Do, YYYY")}</p>
-                  {fnsh !== null && <p>Finished: {fnsh}</p>}
-                  <p>{fnsh !== null ? 'Total Time:' : 'Elapsed:'} {elapseNice}</p>
-                  {fnsh !== null ? null : <p>Time Remaining: {remain} weekdays</p> }
-                </fieldset>
-                {b.items.length > 0 &&
-                  <fieldset className='noteCard'>
-                    <legend>Serial Range</legend>
-                    <i className='numFont'>{itemsOrder[0].serial} - {itemsOrder[itemsOrder.length-1].serial}</i>
-                  </fieldset>}
-                {released === undefined ? null :
-                  released === true ?
-                    <ReleaseNote id={b._id} release={b.floorRelease} />
-                  : <FloorRelease id={b._id} /> }
-                <NoteLine entry={b.notes} id={b._id} widgetKey={false}  />
-                <BlockList id={b._id} data={b.blocks} lock={done} expand={true} />
-              </div>
-              <div className='twoThirdsContent'>
-                <FirstsTimeline
-                  id={b._id}
-                  batch={b.batch}
-                  doneFirsts={filter.fList} />
-              </div>
+            <InfoTab 
+              a={this.props.app}
+              b={this.props.batchData}
+              user={this.props.user}
+              done={done}
+              allDone={allDone} />
+            
+            <div className='space'>
+              <FirstsTimeline
+                id={b._id}
+                batch={b.batch}
+                verifyList={filter.verifyList}
+                doneBatch={done} />
             </div>
           
+            <div className='space'>
             
-              <div className='space'>
-              
-                <div className='vmargin space'>
-                  <StepsProgress
-                    progCounts={progCounts}
-                    riverTitle={riverTitle}
-                    riverAltTitle={riverAltTitle}
-                    truncate={false} />
-                </div>
+              <div className='vmargin space'>
+                <StepsProgress
+                  progCounts={progCounts}
+                  riverTitle={riverTitle}
+                  riverAltTitle={riverAltTitle}
+                  truncate={false} />
+              </div>
                 
-                <div className='dropCeiling vmargin space'>
+              <div className='dropCeiling vmargin space'>
+                <ProgLayerBurndown
+                  id={b._id}
+                  start={b.start}
+                  floorRelease={b.floorRelease}
+                  end={b.finishedAt}
+                  flowData={riverFlow}
+                  itemData={b.items.filter( x => x.alt === 'no' || x.alt === false )}
+                  title='Progress Burndown' />
+                
+                {b.riverAlt !== false &&  
                   <ProgLayerBurndown
                     id={b._id}
                     start={b.start}
                     floorRelease={b.floorRelease}
                     end={b.finishedAt}
-                    flowData={riverFlow}
-                    itemData={b.items.filter( x => x.alt === 'no' || x.alt === false )}
-                    title='Progress Burndown' />
-                  
-                  {b.riverAlt !== false &&  
-                    <ProgLayerBurndown
-                      id={b._id}
-                      start={b.start}
-                      floorRelease={b.floorRelease}
-                      end={b.finishedAt}
-                      flowData={riverAltFlow}
-                      itemData={b.items.filter( x => x.alt === 'yes' )}
-                      title='Alt Progress Burndown' />}
-                  
-                  <p>
+                    flowData={riverAltFlow}
+                    itemData={b.items.filter( x => x.alt === 'yes' )}
+                    title='Alt Progress Burndown' />}
+              
+                <details className='footnotes'>
+                  <summary>Chart Details</summary>
+                  <p className='footnote'>
+                    The X axis is the number of serialized items remaining.
+                  </p>
+                  <p className='footnote'>
+                    The Y axis starts with the batch creation date and ends with 
+                    either today or the batch complete day. Weekends are skipped 
+                    entirely.
+                  </p>
+                  <p className='footnote'>
                     A step that was added mid-run might not reach zero because 
                     finished items would have skipped recording that step.
                   </p>
-                </div>
+                </details>
               </div>
-          
+            </div>
             
             <div className='vFrameContainer space'>
               <div className='avOneContent min300 centreSelf'>

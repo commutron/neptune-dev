@@ -4,6 +4,7 @@ import Pref from '/client/global/pref.js';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 import { MuteButton } from '/client/components/bigUi/WatchModule/WatchModule.jsx';
+import EventsList from '/client/components/smallUi/EventsList.jsx';
 
 const WatchlistPanel = ({ orb, bolt, app, user, users, batchEvents, bCache })=> {
   
@@ -25,12 +26,7 @@ const WatchlistPanel = ({ orb, bolt, app, user, users, batchEvents, bCache })=> 
           const batch = entry.type === 'batch' ?
                           batchEvents.find( x => x.batch === entry.keyword ) 
                         : [];
-          const events = batch ? batch.events || [] : [];
-          const orderedEvents = events.sort((t1, t2)=> {
-            if (moment(t1.time).isAfter(t2.time)) { return -1 }
-            if (moment(t1.time).isBefore(t2.time)) { return 1 }
-            return 0;
-          });
+          
           return(
             <tbody key={entry.watchKey} className='vSpaceGaps'>
               <tr>
@@ -53,17 +49,7 @@ const WatchlistPanel = ({ orb, bolt, app, user, users, batchEvents, bCache })=> 
               </tr>
               <tr>
                 <td colSpan='5' className='leftText clean'>
-                  <ul className='eventList'>
-                    {orderedEvents.map( (entry, index)=>{
-                      const highlight = moment().isSame(entry.time, 'day') ? 'eventListNew' : '';
-                      return(
-                        <li key={entry.time.toISOString()+index} className={highlight}>
-                          <b>{entry.title}</b>,
-                          <i> {entry.detail}</i>,
-                          <em> {moment(entry.time).calendar()}</em>
-                        </li>
-                    )})}
-                  </ul>
+                  <EventsList events={batch ? batch.events || [] : []} />
                 </td>
               </tr>
             </tbody>

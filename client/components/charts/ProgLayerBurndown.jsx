@@ -73,7 +73,7 @@ export default class ProgLayerBurndown extends Component {
         //divisor: 7,
         labelInterpolationFnc: function(value, index) {
           let scale = labels.length < 7 ?
-                      1 :
+                      2 :
                       labels.length < 30 ?
                       4 :
                       labels.length < 60 ?

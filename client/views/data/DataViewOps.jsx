@@ -11,7 +11,7 @@ import AllGroups from './panels/AllGroups.jsx';
 import AllBatches from './panels/AllBatches.jsx';
 
 import ItemPanel from './panels/ItemPanel.jsx';
-import BatchPanel from './panels/BatchPanel.jsx';
+import BatchPanel from './panels/BatchPanel/BatchPanel.jsx';
 import BatchPanelX from './panels/BatchPanelX.jsx';
 import WidgetPanel from './panels/WidgetPanel.jsx';
 import GroupPanel from './panels/GroupPanel.jsx';

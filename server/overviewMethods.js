@@ -145,12 +145,20 @@ Meteor.methods({
     }
     return bundleStatus(clientTZ, temp);
   }
- 
- 
- 
- 
-
-  
-  
   
 });
+
+/*
+  let ncTypeCounts = [];
+    for(let ncType of aNCOps) {
+      let typNum = 0;
+      for(let t of batchesNC) {
+        let nw = t.nonCon.filter(
+                  x => x.type === ncType &&
+                    moment(x.time)
+                      .isBetween(sRange, eRange) );
+        typNum += nw.length;
+      }
+      ncTypeCounts.push({meta: ncType, value: typNum});
+    }
+*/

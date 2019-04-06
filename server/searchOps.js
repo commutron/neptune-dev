@@ -113,9 +113,11 @@ Meteor.methods({
   
   layeredHistoryRate(start, end, flowData, itemData, clientTZ) {
     let now = moment().tz(clientTZ);
-    const endDay = end !== false ? moment(end).endOf('day') : now.clone().endOf('day');
+    const endDay = end !== false ? 
+      moment(end).endOf('day').add(2, 'd') : 
+      now.clone().endOf('day').add(1, 'd');
     const startDay = moment(start).tz(clientTZ).endOf('day');
-    const howManyDays = endDay.diff(startDay, 'day') + 1;
+    const howManyDays = endDay.diff(startDay, 'day');
     
     //const b = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
     //const itemData = b ? b.items : [];

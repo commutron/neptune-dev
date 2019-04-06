@@ -1,36 +1,32 @@
 import React from 'react';
 import moment from 'moment';
+import { HistoryBlock } from '/client/components/bigUi/ItemFeed/ItemFeed.jsx';
 
-const FirstsTimeline = ({ id, batch, doneFirsts })=> {
-   let sortedFirst = doneFirsts.sort((x, y)=> {
-                      if (moment(x.time).isBefore(y.time)) { return -1 }
-                      if (moment(y.time).isBefore(x.time)) { return 1 }
+const FirstsTimeline = ({ id, batch, verifyList, doneBatch })=> {
+
+  let sortedVerify = verifyList.sort((x, y)=> {
+                      if (moment(x.rec.time).isBefore(y.rec.time)) { return -1 }
+                      if (moment(y.rec.time).isBefore(x.rec.time)) { return 1 }
                       return 0;
                     });
                     
   return(
-    <div className='wide centre'>
-      <h3>Process First-Offs</h3>
-      <div className='timelineList forceScrollStyle'>
-        {sortedFirst.map( (dt, index)=>{
-          let color = dt.good !== false ? 'good' : 'bad';
-          return(
-            <div key={index} className='timelineWrap'>
-              <dl className={'timelineItem ' + color}>
-                <dt className='timelineItemTitle'>{moment(dt.time).format("MMM Do, YYYY, h:mm a")}</dt>
-                <dd className='timelineItemBody cap'>
-                  {dt.step} <i className='breath'></i>
-                  <button
-                    className='leapText'
-                    onClick={()=>FlowRouter.go('/data/batch?request=' + batch + '&specify=' + dt.bar)}
-                  >{dt.bar}</button>
-                </dd>
-              </dl>
-            </div>
-        )})}
-        <div className='timelineEnd'></div>
+    <div className='scrollWrap'>
+      <div className='infoFeed'>
+        <p>Combined timeline of First-Off Verifications</p>
+        {sortedVerify.map( (dt, ix)=>{
+          return( 
+            <HistoryBlock
+              key={dt.rec.key+ix}
+              entry={dt.rec}
+              id={id}
+              batch={batch}
+              serial={dt.serial}
+              done={doneBatch}
+              showHeader={true} /> 
+          )})
+        }
       </div>
-      <div className='timelineListFooter centre'><i className='fas fa-chevron-down fa-lg fa-fw blueT'></i></div>
     </div>
   );
 };

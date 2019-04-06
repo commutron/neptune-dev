@@ -7,10 +7,6 @@ import Pref from '/client/global/pref.js';
 import Spin from '../../components/uUi/Spin.jsx';
 import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
 
-//import RangeTools from '/client/components/smallUi/RangeTools.jsx';
-//import OrgWip from './panels/OrgWIP.jsx';
-//import BigPicture from './panels/BigPicture.jsx';
-
 import BatchHeaders from './columns/BatchHeaders.jsx';
 import BatchDetails from './columns/BatchDetails.jsx';
 
@@ -96,6 +92,13 @@ export default class OverviewWrap extends Component	{
     });
   }
   
+  /*
+  .sort((b1, b2)=> {
+    if (b1.batch < b2.batch) { return 1 }
+    if (b1.batch > b2.batch) { return -1 }
+    return 0;
+  });
+  */
   
   render() {
     
@@ -130,7 +133,6 @@ export default class OverviewWrap extends Component	{
           <div className='topBorder'></div>
           <HomeIcon />
           <div className='frontCenterTitle'>Overview</div>
-          {/*<div className='rightSpace' />*/}
           <div className='rightSpace'>
             <button
               type='button'
@@ -140,17 +142,17 @@ export default class OverviewWrap extends Component	{
             </button>
           </div>
         </div>
-          
-        <div className='overviewContent' tabIndex='0'>
         
-          <nav className='stickyBar scrollToNav'>
-            <span><a href="#hotBatch">Active</a></span>
-            <span><a href="#lukewarmBatch">In Progress</a></span>
-            <span><a href="#coolBatch">Pending</a></span>
-            <span className='flexSpace' />
-            <span>Updated {duration} ago</span>
-          </nav>
+        <nav className='scrollToNav overviewNav'>
+          <span><a href="#hotBatch">Active</a></span>
+          <span><a href="#lukewarmBatch">In Progress</a></span>
+          <span><a href="#coolBatch">Pending</a></span>
+          <span className='flexSpace' />
+          <span>Updated {duration} ago</span>
+        </nav>
           
+        <div className='overviewContent forceScrollStyle' tabIndex='0'>
+        
           <div className='overGridFrame'>
       
             <BatchHeaders
@@ -171,34 +173,6 @@ export default class OverviewWrap extends Component	{
             />
               
           </div>
-          
-        
-        {/*
-          <div>
-            <RangeTools
-              onChange={(r) => this.timeRange(r)}
-              dfkeyword={this.state.timeRange}
-              update={this.state.time} />
-            <span>
-              <BigPicture
-                g={this.props.g}
-                w={this.props.w}
-                b={this.props.b}
-                a={this.props.a}
-                now={this.state.now}
-                wip={this.state.wip}
-                timeRange={this.state.timeRange} />
-            </span>
-            <span>
-              <OrgWip 
-                g={this.props.g}
-                w={this.props.w}
-                b={this.props.b}
-                a={this.props.a}
-                wip={this.state.wip} />
-            </span>
-          </div>
-          */}
         </div>
         
         </div>

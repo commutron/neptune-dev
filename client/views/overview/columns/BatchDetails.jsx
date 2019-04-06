@@ -61,6 +61,8 @@ export default BatchDetails;
 const BatchDetailChunk = ({ck, user})=> (
 
   <div className='overGridRowScroll'>
+    {Roles.userIsInRole(Meteor.userId(), 'debug') && 
+      <div><b>{ck.batch}</b></div> }
     <div><i>SO: {ck.salesOrder}</i></div>
     <div><i>Created {ck.timeElapse} ago</i></div>
     <div><i>Due {ck.salesEnd}</i></div>
@@ -144,7 +146,8 @@ const BatchDetailChunk = ({ck, user})=> (
         list={user.watchlist}
         type='batch'
         keyword={ck.batch}
-        unique={`watch=${ck.batch}`}/>
+        unique={`watch=${ck.batch}`}
+        iconOnly={true} />
     </div>
   </div>
 );

@@ -791,16 +791,6 @@ input.variableInput.biggest {
   text-transform: uppercase;
 }
 
-.noteCard {
-  margin-top: 8px;
-  margin-bottom: 16px;
-  border-top: 1px dotted var(--peterriver);
-  border-right: none;
-  border-bottom: none;
-  border-left: none;
-  padding: 8px 0;
-}
-
 .blockerList {
   width: 100%;
   margin: 10px 0;
@@ -953,23 +943,14 @@ input.variableInput.biggest {
   
 }
 .tagFlag > button {
-  position: relative;
-  width: 14px;
-  height: 14px;
+  vertical-align: top;
+  height: 1rem;
+  width: 1rem;
   margin: 0px 0px 0px 5px;
   padding: 1px;
   border-radius: 50%;
   background-color: transparent;
   font-size: 0.8rem;
-  vertical-align: auto;
-}
-.tagFlag > button:after {
-  content: "\f00d";
-  font-family: FontAwesome;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 .tagFlag > button:hover {
   background-color: white;
@@ -977,9 +958,6 @@ input.variableInput.biggest {
 }
 .tagFlag > button:disabled {
   margin: 0px 0px 0px -10px;
-}
-.tagFlag > button:disabled:after {
-  display: none;
 }
 
 .tagAddButton {
@@ -1194,8 +1172,6 @@ input.variableInput.biggest {
 .timelineList {
   margin: 10px;
   width: 90%;
-  height: 50vh;
-  overflow-y: auto;
   display: grid;
   grid-auto-columns: 50% 50%;
   grid-auto-rows: 125px;

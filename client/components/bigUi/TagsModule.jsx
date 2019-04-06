@@ -77,7 +77,7 @@ export default class TagsModule extends Component	{
 
   render() {
     return (
-      <div className='rowWrap vmargin'>
+      <div className='rowWrap vmarginhalf'>
         {this.props.tags.map( (entry, index)=>{
           return(
            <IndieTag
@@ -94,7 +94,7 @@ export default class TagsModule extends Component	{
           </ContextMenuTrigger>
         :null}
         
-        <ContextMenu id={this.props.id}>
+        <ContextMenu id={this.props.id} className='noCopy'>
           {!this.props.tagOps ? null :
             this.props.tagOps.map( (entry, index)=>{
               return(
@@ -120,7 +120,7 @@ const IndieTag = ({ tagText, removeTag }) => (
     <i>{tagText}</i>
     <button
       onClick={removeTag}
-      disabled={!Roles.userIsInRole(Meteor.userId(), 'run')}>
-    </button>
+      disabled={!Roles.userIsInRole(Meteor.userId(), 'run')}
+    ><i className='fas fa-times'></i></button>
   </span>
 );

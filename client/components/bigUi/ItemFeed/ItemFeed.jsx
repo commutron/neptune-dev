@@ -10,7 +10,7 @@ import ShortBlock from './ShortBlock';
 import RmaBlock from './RmaBlock';
 
 const ItemFeed = ({ 
-  id, serial,
+  id, batch, serial,
   createTime, createBy,
   history, noncons, shortfalls,
   rmas, allRMA,
@@ -50,8 +50,10 @@ const ItemFeed = ({
                 key={dt.key+ix}
                 entry={dt}
                 id={id}
+                batch={batch}
                 serial={serial}
-                done={done} /> 
+                done={done}
+                showHeader={false} /> 
             );
           }
           if(dt.ref) {
@@ -90,7 +92,7 @@ const ItemFeed = ({
 export default ItemFeed;
 
 
-const HistoryBlock = ({entry, id, serial, done})=>{
+export const HistoryBlock = ({entry, id, batch, serial, done, showHeader})=>{
   
   let dt = entry;
   
@@ -116,6 +118,13 @@ const HistoryBlock = ({entry, id, serial, done})=>{
    
   return(
     <div className={`infoBlock ${colour}`}>
+      {showHeader &&
+        <div className='blockHeader'>
+          <button
+            className='textAction numFont med'
+            onClick={()=>FlowRouter.go('/data/batch?request=' + batch + '&specify=' + serial)}
+          >{serial}</button>
+        </div>}
       <div className='blockTitle cap'>
         <div>
           <div className='leftAnchor'>{good}</div>

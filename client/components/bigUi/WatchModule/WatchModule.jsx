@@ -25,21 +25,21 @@ function removeNotify(nKey) {
   });
 }
 
-const WatchButton = ({list, type, keyword, unique})=> {
+const WatchButton = ({list, type, keyword, unique, iconOnly})=> {
   
   const watching = list.find( x => x.type === type && x.keyword === keyword);
   
   return(
     <span className='watchWrap'>
       {!watching ?
-        <label>Watch
+        <label>{iconOnly ? null : 'Watch'}
           <button
             key={'offWatchButton' + unique}
             onClick={()=>changeWatch(type, keyword)}
           ><i className="far fa-eye greenT"></i></button>
         </label>
       :
-        <label className='on'>Unwatch
+        <label className='on'>{iconOnly ? null : 'Unwatch'}
           <button
             key={'onWatchButton' + unique}
             onClick={()=>changeWatch(type, keyword)}

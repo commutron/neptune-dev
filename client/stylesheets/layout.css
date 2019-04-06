@@ -19,8 +19,7 @@ main {
   width: 0.75vw;
 }
 .forceScrollStyle::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 12px rgba(0,0,0,0.5); 
-  
+  background-color: rgb(27,27,27);
 }
 .forceScrollStyle::-webkit-scrollbar-thumb {
   box-shadow: inset 0 0 12px rgba(0,0,0,0.5); 
@@ -536,6 +535,7 @@ main {
 .vspace { padding: 24px 0; }
 
 .vmargin { margin: 24px 0; }
+.vmarginhalf { margin: 12px 0; }
 
 .line2x { line-height: 2; }
 .line3x { line-height: 3; }
@@ -548,6 +548,26 @@ main {
 .dropCeiling { margin-top: calc(4vh + 1rem); }
 .overscroll { margin-bottom: 5vh; }
 
+.noteCard {
+  margin: 16px 0;
+  border-top: 1px dotted var(--peterriver);
+  border-right: none;
+  border-bottom: none;
+  border-left: none;
+  padding: 8px 0;
+}
+
+.footnotes {
+  box-shadow: none;
+  font-size: small;
+  text-transform: none;
+  margin: 0 3vw;
+}
+.footnote {
+  margin: 0.5vh 3vw;
+  display: list-item;
+  list-style: lower-roman;
+}
 .fill {
   margin: 0;
   padding: 0;
@@ -600,15 +620,17 @@ main {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  margin: 1vh 1vw;
+  align-items: center;
   background-color: rgb(25,25,25);
 }
 .scrollToNav > span {
-  padding: 1vh 1vw;
+  padding: 0 1vw;
+  font-size: 2vh;
 }
 .scrollToNav > span:focus {
   border: 1px dotted var(--clouds);
 }
+
 .anchorTarget {
   position: relative;
   top: -5vmax;
@@ -735,20 +757,25 @@ main {
   display: grid;
   /*min-width: 768px;*/
   height: 100vh;
-  grid-template-rows: 10vh 90vh;
+  grid-template-rows: 10vh 3vh 87vh;
   grid-template-columns: 100%;
   grid-template-areas: 
     'tenHeader'
+    'overviewNav'
     'overviewContent';
   overflow-y: hidden !important;
   overflow-x: hidden !important;
   /*-webkit-overflow-scrolling: touch;*/
 }
+.overviewNav {
+  grid-area: overviewNav;
+  background-color: rgb(27,27,27);
+}
 .overviewContent {
   grid-area: overviewContent;
-  overflow-y: auto;
-  scroll-behavior: smooth;
   background-color: rgb(30,30,30);
+  overflow-y: scroll;
+  scroll-behavior: smooth;
 }
 
 /*OverGrid */
@@ -765,7 +792,7 @@ main {
   grid-area: overFixedArea;
   display: grid;
   grid-auto-flow: row;
-  grid-auto-rows: minmax(10vmax, 10vh);
+  grid-auto-rows: 14vh;
   overflow-x: hidden;
 }
 .overGridRowFixedHeader {
@@ -779,7 +806,7 @@ main {
   color: var(--silver);
   padding: 1vh 2vw;
   text-transform: capitalize;
-  font-size: 2vmax;
+  font-size: 5vh;
 }
 .overGridRowFixed {
   border-right: 1px groove rgba(255,255,255,0.2);
@@ -796,19 +823,20 @@ main {
 }
 .overGridRowFixed > div:first-child {
   border-right: 1px groove rgba(255,255,255,0.3);
-  font-size: 1.5rem;
+  font-size: 3vh;
 }
 .overGridRowFixed > div:last-child {
   overflow: hidden;
   text-overflow: ellipsis;
   word-break: break-all;
+  font-size: 2.5vh
 }
 
 .overGridScroll {
   grid-area: overScrollArea;
   display: grid;
   grid-auto-flow: row;
-  grid-auto-rows: minmax(10vmax, 10vh);
+  grid-auto-rows: 14vh;
   overflow-x: scroll;
 }
 .overGridScroll:focus {
@@ -822,7 +850,7 @@ main {
   border-right: 0.3vw groove rgba(255,255,255,0.3);
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: minmax(10.25vmax, 10.25vh);
+  grid-auto-columns: 14.5vh;
   place-items: stretch stretch;
 }
 
@@ -834,10 +862,23 @@ main {
   justify-content: center;
   padding: 1vh 1vw;
   overflow: hidden;
+  font-size: 2.25vh;
+  line-height: 2.5vh;
   text-overflow: ellipsis;
   text-align: center;
 }
-
+.overGridRowScroll .big {
+  font-size: 3vh;
+}
+.overGridRowScroll .watchWrap,
+.overGridRowScroll .watchWrap label {
+  height: 4vh;
+  align-items: baseline;
+}
+.overGridRowScroll .watchWrap button {
+  margin: 0;
+  font-size: 3vh;
+}
 
 /*.twoSqIcons { width: 80px; }*/
 

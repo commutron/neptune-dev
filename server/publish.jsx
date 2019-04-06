@@ -307,7 +307,6 @@ Meteor.publish('hotDataEx', function(batch){
         fields: {
           'orgKey': 0,
           'shareKey': 0,
-          'events': 0,
         }}),
       XBatchDB.find({batch: batch, orgKey: orgKey}, {
         fields: {

@@ -4,6 +4,13 @@ import ChartistGraph from 'react-chartist';
 import fillDonut from 'chartist-plugin-fill-donut';
 import Tooltip from 'chartist-plugin-tooltips';
 
+/*
+<ProgPie
+  key={rndmKey}
+  title={title}
+  count={count}
+  total={totalCount} />
+*/
 export default class ProgPie extends Component {
   
   render () {

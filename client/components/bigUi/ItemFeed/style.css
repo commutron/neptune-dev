@@ -12,6 +12,9 @@
   margin: 2vh 0;
 }
 
+.blockHeader {
+  padding: 1vh 2vw; 
+}
 .blockTitle {
   display: flex;
   flex-direction: row;
