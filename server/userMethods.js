@@ -316,9 +316,12 @@ Meteor.methods({
           Meteor.users.update(pingId, {
             $push: { 
               breadcrumbs: {
-                type: pingType,
-                keyword: pingkeyword,
-                time: new Date()
+                $each: [{
+                  type: pingType,
+                  keyword: pingkeyword,
+                  time: new Date()
+                }],
+                $slice: -100
               }
             }
           });

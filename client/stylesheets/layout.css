@@ -204,6 +204,7 @@ main {
     'homeIcon frontCenter rightSpace';
   overflow-x: hidden;
   overflow-y: hidden;
+  z-index: 7;
 }
 .topBorder {
   grid-area: topBorder;
@@ -213,6 +214,7 @@ main {
   grid-area: homeIcon;
   background-color: var(--neptuneColor);
   padding-bottom: 1vh;
+  z-index: 7;
 }
 .frontCenterTitle {
   grid-area: frontCenter;
@@ -529,6 +531,8 @@ main {
   justify-content: center;
   width: 100%;
 }
+
+.space3v { padding: 3vh 3vw; }
 
 .space { padding: 24px; }
 

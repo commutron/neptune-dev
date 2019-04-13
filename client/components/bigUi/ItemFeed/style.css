@@ -6,6 +6,7 @@
   flex-direction: column;
   flex-wrap: nowrap;
   min-width: fit-content;
+  margin: 0 4vw;
 }
 .infoBlock {
   width: 100%;
@@ -33,12 +34,15 @@
   white-space: pre-wrap;
 }
 
-.leftAnchor {
+.leftAnchor, .rightAnchor {
   width: 75px;
+  display: flex;
+  justify-content: center;
+}
+.leftAnchor {
   border-right: 1px groove rgba(255,255,255,0.2);
 }
 .rightAnchor {
-  width: 75px;
   min-height: 40.5px;
   border-left: 1px groove rgba(255,255,255,0.2);
 }

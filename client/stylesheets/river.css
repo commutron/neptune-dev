@@ -1,8 +1,8 @@
 
 /* River */
 .stoneFrame {
-  max-width: 20vw;
-  min-height: 20vw;
+  max-width: 20vmax;
+  min-height: 20vmax;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -32,11 +32,11 @@
 .stoneRing {
   position: relative;
   z-index: 0;
-  max-width: 17vw;
-  height: 18vw;
+  max-width: 17vmax;
+  height: 18vmax;
 }
 .stoneRing .ct-chart {
-  height: 18vw;
+  height: 18vmax;
 }
 
 .stone {
@@ -47,9 +47,9 @@
 	z-index: 1;
 	margin: 0;
   border: 10px solid transparent;
-  width: 14vw;
-  height: 14vw;
-  font-size: calc(0.5rem + 1.5vw);
+  width: 14vmax;
+  height: 14vmax;
+  font-size: calc(0.5rem + 1.5vmax);
   text-shadow: 0 0 10px #000;
 	text-transform: uppercase;
   color: white;
@@ -69,7 +69,7 @@
 .stone label {
   width: 100%;
   padding: 10px 0 0 0;
-  font-size: calc(0.5rem + 1vw);
+  font-size: calc(0.5rem + 1vmax);
 }
 .stone br {
   margin: 0;
@@ -101,7 +101,7 @@
 }
 .doneStoneMask:before {
   content: 	"\002714";
-  font-size: calc(3rem + 8vw);
+  font-size: calc(3rem + 8vmax);
   left: 50%;
   transform: translate(-50%, -50%) rotate(0deg);
   filter: opacity(0.2);
@@ -109,7 +109,7 @@
 
 .blockStone:before {
   content: 'All nonconformances and shortages need to be resolved before this next step';
-  font-size: calc(0.5rem + 1vw);
+  font-size: calc(0.5rem + 1vmax);
   left: 0;
   z-index: 3;
   transform: translate(0, -50%) rotate(0deg);
@@ -118,13 +118,13 @@
 }
 
 .crackedTop, .crackedBot {
-  width: 14vw;
-  height: 7vw;
+  width: 14vmax;
+  height: 7vmax;
   z-index: 2;
   background-position: top;
   background-size: 80%;
   background-repeat: no-repeat;
-  font-size: calc(0.5rem + 1vw);
+  font-size: calc(0.5rem + 1vmax);
   box-shadow: var(--dropShadow1);
 }
 
@@ -373,7 +373,7 @@
 }
 
 .stoneFrame .actionBox {
-  max-width: 18vw;
+  max-width: 18vmax;
 }
 .stoneForm {
   display: flex;
@@ -387,16 +387,15 @@ fieldset.stoneForm {
   border-right: none;
   border-bottom: none;
   border-left: none;
-  padding: 48px 1vw;
+  padding: 48px 1vmax;
 }
 
 .stoneForm input[type='text'],
 .stoneForm select,
 .stoneForm label,
 .stoneForm details {
-  min-width: 16vw;
-  max-width: 16vw;
-  text-align: center;
+  min-width: 16vmax;
+  max-width: 16vmax;
 }
 
 .stoneForm label {
@@ -404,8 +403,8 @@ fieldset.stoneForm {
 }
 
 .stoneForm textarea {
-  min-width: 16vw;
-  max-width: 16vw;
+  min-width: 16vmax;
+  max-width: 16vmax;
   min-height: 1rem;
   border-color: black;
 }

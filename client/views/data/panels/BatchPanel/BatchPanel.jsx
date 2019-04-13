@@ -8,10 +8,9 @@ import CreateTag from '/client/components/uUi/CreateTag.jsx';
 //import UserName from '/client/components/uUi/UserName.jsx';
 import Tabs from '/client/components/smallUi/Tabs.jsx';
 import InfoTab from './InfoTab.jsx';
+import TimeTab from './TimeTab.jsx';
 
 import FirstsTimeline from '/client/components/bigUi/FirstsTimeline.jsx';
-import StepsProgress from '/client/components/bigUi/StepsProgress/StepsProgress.jsx';
-import ProgLayerBurndown from '/client/components/charts/ProgLayerBurndown.jsx';
 import NonConOverview from '/client/components/charts/NonConOverview.jsx';
 import NonConRate from '/client/components/charts/NonConRate.jsx';
 import { HasNonCon } from '/client/components/bigUi/NonConMiniTops.jsx';
@@ -77,41 +76,6 @@ export default class BatchPanel extends Component	{
     const filter = this.filter();
     const progCounts = ProgressCounter(riverFlow, riverAltFlow, b);
     
-
-///////////////////////////////////////
-/*
-    const proto = Roles.userIsInRole(Meteor.userId(), 'nightly');
-    let allthetimes = [];
-    for(let item of b.items) {
-      for(let entry of item.history) {
-        if(entry.type === 'inspect' && entry.good === true) {
-          allthetimes.push({
-            key: entry.key,
-            step: entry.step,
-            time: entry.time,
-            who: entry.who,
-          });
-        }
-      }
-    }
-    const cronoTimes = allthetimes.sort((x1, x2)=> {
-                        if (x1.time < x2.time) { return -1 }
-                        if (x1.time > x2.time) { return 1 }
-                        return 0;
-                      });
-    let sortedTimes = [];
-    for(let step of riverFlow) {
-      if(step.type === 'inspect') {
-        const thesetimes = cronoTimes.filter( x => x.key === step.key );
-        sortedTimes.push({
-          step: step.step,
-          entries: thesetimes
-        });
-      }
-    }
-*/
-////////////////////////////////////////
-    
     return (
       <AnimateWrap type='cardTrans'>
         <div className='section' key={b.batch}>
@@ -121,10 +85,9 @@ export default class BatchPanel extends Component	{
               [
                 'Info',
                 'First-offs',
-                'Progress',
+                'Timeline',
                 `${Pref.nonCon}s`,
-                `${Pref.rma}s`,
-                //'proto'
+                `${Pref.rma}s`
               ]
             }
             wide={true}
@@ -137,63 +100,28 @@ export default class BatchPanel extends Component	{
               b={this.props.batchData}
               user={this.props.user}
               done={done}
-              allDone={allDone} />
+              allDone={allDone}
+              progCounts={progCounts}
+              riverTitle={riverTitle}
+              riverAltTitle={riverAltTitle} />
             
-            <div className='space'>
+            <div className='space3v'>
               <FirstsTimeline
                 id={b._id}
                 batch={b.batch}
                 verifyList={filter.verifyList}
                 doneBatch={done} />
             </div>
-          
-            <div className='space'>
             
-              <div className='vmargin space'>
-                <StepsProgress
-                  progCounts={progCounts}
-                  riverTitle={riverTitle}
-                  riverAltTitle={riverAltTitle}
-                  truncate={false} />
-              </div>
-                
-              <div className='dropCeiling vmargin space'>
-                <ProgLayerBurndown
-                  id={b._id}
-                  start={b.start}
-                  floorRelease={b.floorRelease}
-                  end={b.finishedAt}
-                  flowData={riverFlow}
-                  itemData={b.items.filter( x => x.alt === 'no' || x.alt === false )}
-                  title='Progress Burndown' />
-                
-                {b.riverAlt !== false &&  
-                  <ProgLayerBurndown
-                    id={b._id}
-                    start={b.start}
-                    floorRelease={b.floorRelease}
-                    end={b.finishedAt}
-                    flowData={riverAltFlow}
-                    itemData={b.items.filter( x => x.alt === 'yes' )}
-                    title='Alt Progress Burndown' />}
-              
-                <details className='footnotes'>
-                  <summary>Chart Details</summary>
-                  <p className='footnote'>
-                    The X axis is the number of serialized items remaining.
-                  </p>
-                  <p className='footnote'>
-                    The Y axis starts with the batch creation date and ends with 
-                    either today or the batch complete day. Weekends are skipped 
-                    entirely.
-                  </p>
-                  <p className='footnote'>
-                    A step that was added mid-run might not reach zero because 
-                    finished items would have skipped recording that step.
-                  </p>
-                </details>
-              </div>
-            </div>
+            <TimeTab 
+              a={this.props.app}
+              b={this.props.batchData}
+              user={this.props.user}
+              done={done}
+              allDone={allDone}
+              riverFlow={riverFlow}
+              riverAltFlow={riverAltFlow} />
+
             
             <div className='vFrameContainer space'>
               <div className='avOneContent min300 centreSelf'>
@@ -232,29 +160,6 @@ export default class BatchPanel extends Component	{
                 app={a} />
               <p>{Pref.escape}s: {b.escaped.length}</p>
             </div>
-            
-            {/*proto ?
-              <div>
-                <ol>
-                  {sortedTimes.length === 0 ?
-                  <p className='centreText'>no inspections</p>
-                  :
-                  sortedTimes.map( (step, index)=>{
-                    return(
-                      <ol key={index}>
-                        <b>{step.step} inspect</b>
-                        {step.entries.map( (ding, inx)=>{
-                          return(
-                            <li key={inx}>
-                              - {ding.time.toString()} - 
-                              - {ding.who.slice(0, 3).toLowerCase()}
-                            </li> );
-                        })}
-                      </ol>
-                  )})}
-                </ol>
-              </div>
-            : <div><p className='centreText'>nothing to see here</p></div> */}
             
           </Tabs>
           

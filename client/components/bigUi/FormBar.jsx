@@ -59,8 +59,8 @@ export default class FormBar extends Component	{
                 name='formbarselect'
                 className='radioIcon'
                 ref={(i)=>this.ncSlct = i}
-                onChange={()=>this.setState({ show: 'NC' })}
-                defaultChecked />
+                checked={this.state.show === 'NC'}
+                onChange={()=>this.setState({ show: 'NC' })} />
               <i className='fas fa-stop-circle formBarIcon'></i>
               <span className='actionIconText'>{Pref.nonCon}</span>
             </label>
@@ -70,6 +70,7 @@ export default class FormBar extends Component	{
                 id='shortselect'
                 name='formbarselect'
                 className='radioIcon'
+                checked={this.state.show === 'S'}
                 onChange={()=>this.setState({ show: 'S' })} />
               <i className='fas fa-pause-circle formBarIcon'></i>
               <span className='actionIconText'>Shortfall</span>

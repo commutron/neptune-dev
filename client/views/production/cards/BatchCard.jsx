@@ -38,6 +38,17 @@ export default class BatchCard extends Component	{
     let released = b.floorRelease === undefined ? undefined : 
                     b.floorRelease === false ? false :
                     typeof b.floorRelease === 'object';
+  
+    let tabOps = [
+      <i className='fas fa-info-circle fa-fw' data-fa-transform='down-2' title='Info'></i>, 
+      <i className='fas fa-tasks fa-fw' data-fa-transform='down-2' title='Progress'></i>
+    ];
+    if(Roles.userIsInRole(Meteor.userId(), 'nightly')) {
+      tabOps.push(<i 
+        className='fas fa-thumbs-down fa-fw' 
+        data-fa-transform='down-2' 
+        title='NonConformances'></i>);
+    }
 
     return(
       <AnimateWrap type='cardTrans'>
@@ -58,16 +69,12 @@ export default class BatchCard extends Component	{
             </h2>}
           
             <Tabs
-              tabs={[
-                <i className='fas fa-info-circle fa-fw' data-fa-transform='down-2' title='Info'></i>, 
-                <i className='fas fa-tasks fa-fw' data-fa-transform='down-2' title='Progress'></i>, 
-                <i className='fas fa-thumbs-down fa-fw' data-fa-transform='down-2' title='NonConformances'></i>
-              ]}
+              tabs={tabOps}
               names={false}
               wide={true}
               stick={false}
               hold={true}
-              sessionTab='batchExPanelTabs'>
+              sessionTab='batchProPanelTabs'>
               
               <div className='space cap'>
                 <TagsModule
@@ -86,6 +93,7 @@ export default class BatchCard extends Component	{
                 <StepsProgress progCounts={progCounts} truncate={true} />
               </div>
               
+              {Roles.userIsInRole(Meteor.userId(), 'inspect') &&
               <div className='space'>
                 <NonConMiniSatus
                   noncons={b.nonCon}
@@ -93,7 +101,7 @@ export default class BatchCard extends Component	{
                   flowAlt={flowAlt}
                   user={u}
                   app={a} />
-              </div>
+              </div>}
               
             </Tabs>
   				

@@ -10,9 +10,14 @@ import FloorRelease from '/client/components/smallUi/FloorRelease.jsx';
 import { ReleaseNote } from '/client/components/bigUi/ReleasesModule.jsx';
 import NoteLine from '/client/components/smallUi/NoteLine.jsx';
 import BlockList from '/client/components/bigUi/BlockList.jsx';
+import StepsProgress from '/client/components/bigUi/StepsProgress/StepsProgress.jsx';
 import EventsList from '/client/components/smallUi/EventsList.jsx';
 
-const InfoTab = ({a, b, user, done, allDone}) =>	{
+const InfoTab = ({
+  a, b, user, 
+  done, allDone, 
+  progCounts, riverTitle, riverAltTitle
+}) =>	{
   
   const end = b.finishedAt !== false ? moment(b.finishedAt) : moment();
   const timeElapse = moment.duration(end.diff(b.start)).asWeeks().toFixed(1);
@@ -34,7 +39,7 @@ const InfoTab = ({a, b, user, done, allDone}) =>	{
   const itemsOrder = b.items.sort( (x,y)=> x.serial - y.serial);
 
   return(
-    <div className='oneTwoThreeContainer space'>
+    <div className='oneTwoThreeContainer'>
       <div className='oneThirdContent min200'>
       
         <div className='vmarginhalf centreText line2x'>
@@ -83,8 +88,15 @@ const InfoTab = ({a, b, user, done, allDone}) =>	{
       </div>
               
       <div className='twoThirdsContent'>
-        <h3 className='centreText'>Events</h3>          
-        <EventsList events={b.events} />
+        
+          <StepsProgress
+            progCounts={progCounts}
+            riverTitle={riverTitle}
+            riverAltTitle={riverAltTitle}
+            truncate={false} />
+          <h3 className='centreText'>Events</h3>          
+          <EventsList events={b.events} />
+        
       </div>
 
     </div>

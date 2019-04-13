@@ -73,7 +73,7 @@ export default class StepsProgress extends Component	{
           :null}
         </div>
         <div>
-          <div className='centreRow vspace'>
+          <div className='centreRow'>
           {!this.props.riverTitle ? null :
             <span className='small cap wellSpacedLine wide'>
               <i>{Pref.buildFlow}: {this.props.riverTitle || ''}</i>

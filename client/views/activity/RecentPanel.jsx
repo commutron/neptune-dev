@@ -17,8 +17,7 @@ const RecentPanel = ({ orb, bolt, app, user, users, bCache })=> {
   return(
     <div className='invert'>
       <div className='rightText'>
-        <p>{user.username}</p>
-        <p>Production search history from the past 30 days</p>
+        <p>{user.username}'s last 100 {Pref.batches} viewed in Production</p>
       </div>
       <table className='wide cap space'>
         

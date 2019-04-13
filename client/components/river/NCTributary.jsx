@@ -124,7 +124,7 @@ const NCStream = ({ entry, id, end, doFix, doInspect, doReject, doSnooze, doUnSk
                 readOnly={true}
                 onClick={doInspect}
                 disabled={lockI}>
-              <i className='fas fa-check fa-lg'></i><br />{smple ? null : 'OK'}</button>
+              <img src='/inspectMini.svg' className='pebbleSVG' /><br />{smple ? null : 'OK'}</button>
           :
               <button
                 ref={(i)=> this.fixline = i}

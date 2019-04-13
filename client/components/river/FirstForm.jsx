@@ -128,8 +128,8 @@ export default class FirstForm extends Component	{
     
     let secondOpinion = this.state.whoB.has(Meteor.userId()) ? true : false;
     
-    const stepKey = this.props.sKey ? this.props.sKey : this.state.stepKey;
-    const stepName = this.props.step ? this.props.step : this.state.stepName;
+    const stepKey = this.props.optionVerify ? this.state.stepKey : this.props.sKey;
+    const stepName = this.props.optionVerify ? this.state.stepName : this.props.step;
     
     return(
       <AnimateWrap type='contentTrans'>

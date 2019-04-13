@@ -89,9 +89,10 @@
 .vFrameContainer {
   display: grid;
   grid-template-rows: auto auto;
-  grid-column-gap: 24px;
-  grid-row-gap: 24px;
+  grid-column-gap: 3vw;
+  grid-row-gap: 3vh;
   justify-items: stretch;
+  padding: 3vh 3vw;
 }
 .oneTwoThreeContainer {
   grid-template-columns: 1fr 1fr 1fr;
@@ -214,7 +215,7 @@
   margin: 10px 0 5px 0;
 }
 .taskLink:disabled {
-  color: black;
+  color: var(--silverfade);
 }
 .taskLink:hover, .taskLink:active, .onTL {
   color: rgb(25,25,25);
