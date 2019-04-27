@@ -46,8 +46,20 @@ export default class OverviewWrap extends Component	{
   splitInitial() {
     return new Promise(() => {
       const batches = this.props.b;
-      const warmBatches = batches.filter( x => typeof x.floorRelease === 'object' );
-      const coolBatches = batches.filter( x => x.floorRelease === false );
+      let warmBatches = [];
+      let coolBatches = [];
+      if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
+        const orderedBatches = batches.sort((b1, b2)=> {
+          if (b1.batch < b2.batch) { return 1 }
+          if (b1.batch > b2.batch) { return -1 }
+          return 0;
+        });
+        warmBatches = orderedBatches.filter( x => typeof x.floorRelease === 'object' );
+        coolBatches = orderedBatches.filter( x => x.floorRelease === false );
+      }else{
+        warmBatches = batches.filter( x => typeof x.floorRelease === 'object' );
+        coolBatches = batches.filter( x => x.floorRelease === false );
+      }
       //const batchesX = this.props.bx;
       //const warmBx = batchesX.filter( x => x.releases.find( y => y.type === 'floorRelease') == true );
       //const warmBx = batchesX.filter( x => x.releases.find( y => y.type === 'floorRelease') != true );
@@ -146,7 +158,7 @@ export default class OverviewWrap extends Component	{
         <nav className='scrollToNav overviewNav'>
           <span><a href="#hotBatch">Active</a></span>
           <span><a href="#lukewarmBatch">In Progress</a></span>
-          <span><a href="#coolBatch">Pending</a></span>
+          <span><a href="#coolBatch">In Kitting</a></span>
           <span className='flexSpace' />
           <span>Updated {duration} ago</span>
         </nav>
@@ -170,6 +182,7 @@ export default class OverviewWrap extends Component	{
               cBs={this.state.coolStatus}
               bCache={this.props.bCache}
               user={this.props.user}
+              app={this.props.app}
             />
               
           </div>

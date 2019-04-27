@@ -2,9 +2,10 @@ import React, {Component} from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import NumStat from '/client/components/uUi/NumStat.jsx';
+import BinaryStat from '/client/components/uUi/BinaryStat.jsx';
 import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
-const BatchDetails = ({hBs, lBs, cBs, bCache, user})=> {
+const BatchDetails = ({hBs, lBs, cBs, bCache, user, app})=> {
   
   /*
   let headers = wBs && wBs.length > 0 ? Object.keys(wBs[0]) :
@@ -25,7 +26,9 @@ const BatchDetails = ({hBs, lBs, cBs, bCache, user})=> {
             <BatchDetailChunk
               key={`${entry.batchID}hot${index}`}
               ck={entry}
-              user={user} />
+              warm={true}
+              user={user}
+              app={app} />
       )})}
       
       <div className='overGridRowScrollHeader'></div>
@@ -36,7 +39,9 @@ const BatchDetails = ({hBs, lBs, cBs, bCache, user})=> {
             <BatchDetailChunk
               key={`${entry.batchID}luke${index}`}
               ck={entry}
-              user={user} />
+              warm={true}
+              user={user}
+              app={app} />
       )})}
       
       <div className='overGridRowScrollHeader'></div>
@@ -47,7 +52,9 @@ const BatchDetails = ({hBs, lBs, cBs, bCache, user})=> {
             <BatchDetailChunk 
               key={`${entry.batchID}cool${index}`}
               ck={entry}
-              user={user} />
+              warm={false}
+              user={user}
+              app={app} />
       )})}
       
     </div>
@@ -58,7 +65,7 @@ const BatchDetails = ({hBs, lBs, cBs, bCache, user})=> {
 export default BatchDetails;
 
 
-const BatchDetailChunk = ({ck, user})=> (
+const BatchDetailChunk = ({ck, warm, user, app})=> (
 
   <div className='overGridRowScroll'>
     {Roles.userIsInRole(Meteor.userId(), 'debug') && 
@@ -94,9 +101,21 @@ const BatchDetailChunk = ({ck, user})=> (
         size='big' />
     </div>
     <div>
+      <BinaryStat
+        good={ck.riverChosen}
+        name='Flow Assigned'
+        title='A Process Flow has been assigned'
+        size='big' />
+    </div>
+    {Roles.userIsInRole(Meteor.userId(), 'nightly') &&
+      <PhaseProgress
+        batchID={ck.batchID}
+        warm={warm}
+        app={app} />}
+    <div>
       <NumStat
         num={ck.percentOfDoneItems}
-        name='Boards Complete'
+        name='Complete'
         title=''
         color='greenT'
         size='big' />
@@ -112,7 +131,7 @@ const BatchDetailChunk = ({ck, user})=> (
     <div>
       <NumStat
         num={ck.percentOfNCitems}
-        name='of boards have noncons'
+        name='of Items have noncons'
         title=''
         color='redT'
         size='big' />
@@ -120,7 +139,7 @@ const BatchDetailChunk = ({ck, user})=> (
     <div>
       <NumStat
         num={ck.nonConsPerNCitem}
-        name='Average Noncons Per Board'
+        name='Mean Noncons Per Item'
         title='mean average'
         color='redT'
         size='big' />
@@ -151,3 +170,82 @@ const BatchDetailChunk = ({ck, user})=> (
     </div>
   </div>
 );
+
+class PhaseProgress extends React.PureComponent {
+  
+  constructor() {
+    super();
+    this.state = {
+      progData: false
+    };
+  }
+  
+  componentDidMount() {
+    Meteor.call('phaseProgress', this.props.batchID, (error, reply)=>{
+      error && console.log(error);
+      this.setState({ progData: reply });
+    });
+  }
+  
+  render() {
+    
+    const app = this.props.app;
+    const dt = this.state.progData;
+    
+    Roles.userIsInRole(Meteor.userId(), 'debug') &&
+      console.log(this.state.progData);
+    
+    if(!this.props.warm || !dt) {
+      return(
+        <React.Fragment>
+          {app.phases.map( (phase, index)=>{
+            if(phase !== 'finish' && phase !== 'shipping') {
+              return(
+                <div key={this.props.bID + phase + index + 'z'}>
+                  <i className='fade small'>{phase}</i>
+                </div>
+            )}})}
+        </React.Fragment>
+      );
+    }
+    
+    if(dt.batchID === this.props.batchID) {
+      return(
+        <React.Fragment>
+          {dt.phaseSets.map( (phase, index)=>{
+            if(phase.steps.length === 0) {
+              return(
+                <div key={this.props.bID + phase + index + 'x'}>
+                 <i className='fade small'>{phase.phase}</i>
+                </div>
+              );
+            }else{
+              return(
+                <div key={this.props.bID + phase + index + 'g'}>
+                  <NumStat
+                    num={ ( phase.count / 
+                        (dt.totalItems * phase.steps.length) 
+                          * 100 
+                      ).toFixed(0) + '%'
+                    }
+                    name={phase.phase}
+                    title=''
+                    color='greenT'
+                    size='big' />
+              </div>
+          )}})}
+        </React.Fragment>
+      );
+    }
+      
+    return(
+      <React.Fragment>
+        {app.phases.map( (phase, index)=>{
+          if(phase !== 'finish' && phase !== 'shipping') {
+            return(
+              <div key={app._id + phase + index + 'ng'}></div>
+          )}})}
+      </React.Fragment>
+    );
+  }
+}

@@ -81,8 +81,8 @@ function outScrap(items) {
 }
     
 function ProgressCounter(flow, flowAlt, batchData) {
-  const rSteps = flow.filter( r => r.type !== 'first' );
-  const aSteps = flowAlt.filter( a => a.type !== 'first' );
+  //const rSteps = flow.filter( r => r.type !== 'first' );
+  //const aSteps = flowAlt.filter( a => a.type !== 'first' );
   
   const allItems = batchData.items;
   

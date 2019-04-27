@@ -68,6 +68,8 @@ function collectInfo(clientTZ, temp, relevant) {
       const timeRemain = !complete ? business.weekDays( now, salesEnd ) : 0; 
       // how many items
       const itemQuantity = b.items.length;
+      // River Setup
+      const riverChosen = b.river !== false;
       // what percent of items are complete
       const percentOfDoneItems = temp === 'cool' ? 0 : 
         (( b.items.filter( x => x.finishedAt !== false )
@@ -99,6 +101,7 @@ function collectInfo(clientTZ, temp, relevant) {
         salesEnd: salesEnd.format("MMM Do, YYYY"),
         timeElapse: timeElapse,
         weekDaysRemain: timeRemain,
+        riverChosen: riverChosen,
         itemQuantity: itemQuantity,
         percentOfDoneItems: isNaN(percentOfDoneItems) ? '0%' : percentOfDoneItems + '%',
         nonConTotal: b.nonCon.length,
@@ -110,6 +113,58 @@ function collectInfo(clientTZ, temp, relevant) {
     
     }
     resolve(collection);
+  });
+}
+
+
+function collectProgress(privateKey, batchID) {
+  return new Promise(resolve => {
+    let collection = false;
+    const batch = BatchDB.findOne({_id: batchID});
+    if(!batch) {
+      resolve(collection);
+    }else{
+      const app = AppDB.findOne({orgKey: privateKey});
+      const docW = WidgetDB.findOne({_id: batch.widgetId});
+      const flow = docW.flows.find( x => x.flowKey === batch.river );
+      const riverFlow = flow ? flow.flow : [];
+      
+      let phaseSets = [];
+      for(let phase of app.phases) {
+        if(phase === 'finish' || phase === 'shipping' ) { null }else{
+          const steps = riverFlow.filter( x => x.phase === phase && x.type !== 'first' );
+          phaseSets.push({
+            phase: phase,
+            steps: steps,
+            count: 0 
+          });
+        }
+      }
+      
+      const doneItems = batch.items.filter( x => x.finishedAt !== false ).length;
+      const wipItems = batch.items.filter( 
+                        x => x.finishedAt === false ); // not done
+      const wipItemHistory = Array.from( wipItems, 
+                              x => x.history.filter( 
+                                y => y.type !== 'first' && y.good === true) );
+      const historyFlat = [].concat(...wipItemHistory);
+
+      phaseSets.map( (phet, index)=> {
+        for(let stp of phet.steps) {
+          const wipTally = historyFlat.filter( x => x.key === stp.key ).length;
+          phaseSets[index].count = phet.count + doneItems + wipTally;
+        }
+      });
+ 
+      collection = {
+        batch: batch.batch,
+        batchID: batch._id,
+        totalItems: batch.items.length,
+        phaseSets: phaseSets,
+      };
+      
+      resolve(collection);
+    }
   });
 }
 
@@ -144,8 +199,20 @@ Meteor.methods({
       }
     }
     return bundleStatus(clientTZ, temp);
-  }
+  },
   
+  phaseProgress(batchID) {
+    async function bundleProgress(batchID) {
+      const accessKey = Meteor.user().orgKey;
+      try {
+        bundle = await collectProgress(accessKey, batchID);
+        return bundle;
+      }catch (err) {
+        throw new Meteor.Error(err);
+      }
+    }
+    return bundleProgress(batchID);
+  }
 });
 
 /*

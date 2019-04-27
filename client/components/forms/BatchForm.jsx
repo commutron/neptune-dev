@@ -28,9 +28,10 @@ export default class BatchForm extends Component	{
 
     function edit(batchId, batchNum, vKey, salesNum, startDate, endDate) {
       Meteor.call('editBatch', batchId, batchNum, vKey, salesNum, startDate, endDate, (error, reply)=>{
-        if(error)
+        if(error) {
           console.log(error);
           toast.error('Server Error');
+        }
         if(reply) {
           toast.success('Saved');
           //Session.set('now', batchNum);
@@ -43,9 +44,10 @@ export default class BatchForm extends Component	{
 
     function create(batchNum, wId, vKey, salesNum, startDate, endDate) {
       Meteor.call('addBatch', batchNum, wId, vKey, salesNum, startDate, endDate, (error, reply)=>{
-        if(error)
+        if(error) {
           console.log(error);
           toast.error('Server Error');
+        }
         if(reply) {
           toast.success('Saved');
           //Session.set('now', batchNum);
@@ -114,7 +116,7 @@ export default class BatchForm extends Component	{
               inputMode='numeric'
               defaultValue={eNum}
               placeholder='17947'
-              autoFocus='true'
+              autoFocus={true}
               required />
             <label htmlFor='oNum'>{Pref.batch} number</label>
           </p>

@@ -5,7 +5,7 @@
     "start": "meteor run"
   },
   "dependencies": {
-    "@babel/runtime": "^7.4.2",
+    "@babel/runtime": "^7.4.3",
     "@fortawesome/react-fontawesome": "0.0.18",
     "babel-runtime": "^6.26.0",
     "bcrypt": "^1.0.3",

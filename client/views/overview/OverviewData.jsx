@@ -65,7 +65,7 @@ export default withTracker( () => {
       app: AppDB.findOne({org: org}),
       //group: GroupDB.find().fetch(),
       //widget: WidgetDB.find().fetch(),
-      batch: BatchDB.find().fetch(),
+      batch: BatchDB.find({},{sort: {batch:-1}}).fetch(),
       batchX: XBatchDB.find().fetch(),
       bCache: CacheDB.findOne({dataName: 'batchInfo'}),
     };

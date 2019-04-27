@@ -759,7 +759,6 @@ main {
 
 .overviewContainer {
   display: grid;
-  /*min-width: 768px;*/
   height: 100vh;
   grid-template-rows: 10vh 3vh 87vh;
   grid-template-columns: 100%;
@@ -786,7 +785,7 @@ main {
 
 .overGridFrame {
   display: grid;
-  grid-template-columns: minmax(min-content, 25vw) auto;
+  grid-template-columns: minmax(min-content, 30vw) auto;
   grid-template-areas: 
     'overFixedArea overScrollArea';
   /*background-color: var(--clouds);*/
@@ -796,7 +795,7 @@ main {
   grid-area: overFixedArea;
   display: grid;
   grid-auto-flow: row;
-  grid-auto-rows: 14vh;
+  grid-auto-rows: 10.5vh;
   overflow-x: hidden;
 }
 .overGridRowFixedHeader {
@@ -810,7 +809,7 @@ main {
   color: var(--silver);
   padding: 1vh 2vw;
   text-transform: capitalize;
-  font-size: 5vh;
+  font-size: 3vh;
 }
 .overGridRowFixed {
   border-right: 1px groove rgba(255,255,255,0.2);
@@ -827,20 +826,20 @@ main {
 }
 .overGridRowFixed > div:first-child {
   border-right: 1px groove rgba(255,255,255,0.3);
-  font-size: 3vh;
+  font-size: 2.5vh;
 }
 .overGridRowFixed > div:last-child {
   overflow: hidden;
   text-overflow: ellipsis;
   word-break: break-all;
-  font-size: 2.5vh
+  font-size: 1.75vh
 }
 
 .overGridScroll {
   grid-area: overScrollArea;
   display: grid;
   grid-auto-flow: row;
-  grid-auto-rows: 14vh;
+  grid-auto-rows: 10.5vh;
   overflow-x: scroll;
 }
 .overGridScroll:focus {
@@ -854,7 +853,7 @@ main {
   border-right: 0.3vw groove rgba(255,255,255,0.3);
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: 14.5vh;
+  grid-auto-columns: 11.5vh;
   place-items: stretch stretch;
 }
 
@@ -866,22 +865,26 @@ main {
   justify-content: center;
   padding: 1vh 1vw;
   overflow: hidden;
-  font-size: 2.25vh;
-  line-height: 2.5vh;
+  font-size: 1.5vh;
+  line-height: 2vh;
   text-overflow: ellipsis;
   text-align: center;
 }
 .overGridRowScroll .big {
-  font-size: 3vh;
+  font-size: 2vh;
+}
+.overGridRowScroll .small {
+  font-size: 1vh;
 }
 .overGridRowScroll .watchWrap,
 .overGridRowScroll .watchWrap label {
-  height: 4vh;
+  height: 3vh;
   align-items: baseline;
 }
 .overGridRowScroll .watchWrap button {
   margin: 0;
-  font-size: 3vh;
+  height: 3vh;
+  font-size: 2vh;
 }
 
 /*.twoSqIcons { width: 80px; }*/
