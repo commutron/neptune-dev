@@ -1,335 +1,219 @@
 .countFillWhite0 {
-  background-image: -webkit-linear-gradient(transparent 100%, var(--clouds));
-  background-image: -moz-linear-gradient(transparent 100%, var(--clouds));
-  background-image: -o-linear-gradient(transparent 100%, var(--clouds));
   background-image: linear-gradient(transparent 100%, var(--clouds));
 }
 .countFillWhite10 {
-  background-image: -webkit-linear-gradient(transparent 90%, var(--clouds));
-  background-image: -moz-linear-gradient(transparent 90%, var(--clouds));
-  background-image: -o-linear-gradient(transparent 90%, var(--clouds));
   background-image: linear-gradient(transparent 90%, var(--clouds));
 }
 .countFillWhite20 {
-  background-image: -webkit-linear-gradient(transparent 80%, var(--clouds));
-  background-image: -moz-linear-gradient(transparent 80%, var(--clouds));
-  background-image: -o-linear-gradient(transparent 80%, var(--clouds));
   background-image: linear-gradient(transparent 80%, var(--clouds));
 }
 .countFillWhite30 {
-  background-image: -webkit-linear-gradient(transparent 70%, var(--clouds));
-  background-image: -moz-linear-gradient(transparent 70%, var(--clouds));
-  background-image: -o-linear-gradient(transparent 70%, var(--clouds));
   background-image: linear-gradient(transparent 70%, var(--clouds));
 }
 .countFillWhite40 {
-  background-image: -webkit-linear-gradient(transparent 60%, var(--clouds));
-  background-image: -moz-linear-gradient(transparent 60%, var(--clouds));
-  background-image: -o-linear-gradient(transparent 60%, var(--clouds));
   background-image: linear-gradient(transparent 60%, var(--clouds));
 }
 .countFillWhite50 {
-  background-image: -webkit-linear-gradient(transparent 50%, var(--clouds));
-  background-image: -moz-linear-gradient(transparent 50%, var(--clouds));
-  background-image: -o-linear-gradient(transparent 50%, var(--clouds));
   background-image: linear-gradient(transparent 50%, var(--clouds));
 }
 .countFillWhite60 {
-  background-image: -webkit-linear-gradient(transparent 40%, var(--clouds));
-  background-image: -moz-linear-gradient(transparent 40%, var(--clouds));
-  background-image: -o-linear-gradient(transparent 40%, var(--clouds));
   background-image: linear-gradient(transparent 40%, var(--clouds));
 }
 .countFillWhite70 {
-  background-image: -webkit-linear-gradient(transparent 30%, var(--clouds));
-  background-image: -moz-linear-gradient(transparent 30%, var(--clouds));
-  background-image: -o-linear-gradient(transparent 30%, var(--clouds));
   background-image: linear-gradient(transparent 30%, var(--clouds));
 }
 .countFillWhite80 {
-  background-image: -webkit-linear-gradient(transparent 20%, var(--clouds));
-  background-image: -moz-linear-gradient(transparent 20%, var(--clouds));
-  background-image: -o-linear-gradient(transparent 20%, var(--clouds));
   background-image: linear-gradient(transparent 20%, var(--clouds));
 }
 .countFillWhite90 {
-  background-image: -webkit-linear-gradient(transparent 10%, var(--clouds));
-  background-image: -moz-linear-gradient(transparent 10%, var(--clouds));
-  background-image: -o-linear-gradient(transparent 10%, var(--clouds));
   background-image: linear-gradient(transparent 10%, var(--clouds));
 }
 .countFillWhite100 {
-  background-image: -webkit-linear-gradient(var(--clouds) 0%, var(--clouds));
-  background-image: -moz-linear-gradient(var(--clouds) 0%, var(--clouds));
-  background-image: -o-linear-gradient(var(--clouds) 0%, var(--clouds));
   background-image: linear-gradient(var(--clouds) 0%, var(--clouds));
 }
 
 .countFillBlue0 {
-  background-image: -webkit-linear-gradient(transparent 100%, var(--belizeHole));
-  background-image: -moz-linear-gradient(transparent 100%, var(--belizeHole));
-  background-image: -o-linear-gradient(transparent 100%, var(--belizeHole));
   background-image: linear-gradient(transparent 100%, var(--belizeHole));
 }
 .countFillBlue10 {
-  background-image: -webkit-linear-gradient(transparent 90%, var(--belizeHole));
-  background-image: -moz-linear-gradient(transparent 90%, var(--belizeHole));
-  background-image: -o-linear-gradient(transparent 90%, var(--belizeHole));
   background-image: linear-gradient(transparent 90%, var(--belizeHole));
 }
 .countFillBlue20 {
-  background-image: -webkit-linear-gradient(transparent 80%, var(--belizeHole));
-  background-image: -moz-linear-gradient(transparent 80%, var(--belizeHole));
-  background-image: -o-linear-gradient(transparent 80%, var(--belizeHole));
   background-image: linear-gradient(transparent 80%, var(--belizeHole));
 }
 .countFillBlue30 {
-  background-image: -webkit-linear-gradient(transparent 70%, var(--belizeHole));
-  background-image: -moz-linear-gradient(transparent 70%, var(--belizeHole));
-  background-image: -o-linear-gradient(transparent 70%, var(--belizeHole));
   background-image: linear-gradient(transparent 70%, var(--belizeHole));
 }
 .countFillBlue40 {
-  background-image: -webkit-linear-gradient(transparent 60%, var(--belizeHole));
-  background-image: -moz-linear-gradient(transparent 60%, var(--belizeHole));
-  background-image: -o-linear-gradient(transparent 60%, var(--belizeHole));
   background-image: linear-gradient(transparent 60%, var(--belizeHole));
 }
 .countFillBlue50 {
-  background-image: -webkit-linear-gradient(transparent 50%, var(--belizeHole));
-  background-image: -moz-linear-gradient(transparent 50%, var(--belizeHole));
-  background-image: -o-linear-gradient(transparent 50%, var(--belizeHole));
   background-image: linear-gradient(transparent 50%, var(--belizeHole));
 }
 .countFillBlue60 {
-  background-image: -webkit-linear-gradient(transparent 40%, var(--belizeHole));
-  background-image: -moz-linear-gradient(transparent 40%, var(--belizeHole));
-  background-image: -o-linear-gradient(transparent 40%, var(--belizeHole));
   background-image: linear-gradient(transparent 40%, var(--belizeHole));
 }
 .countFillBlue70 {
-  background-image: -webkit-linear-gradient(transparent 30%, var(--belizeHole));
-  background-image: -moz-linear-gradient(transparent 30%, var(--belizeHole));
-  background-image: -o-linear-gradient(transparent 30%, var(--belizeHole));
   background-image: linear-gradient(transparent 30%, var(--belizeHole));
 }
 .countFillBlue80 {
-  background-image: -webkit-linear-gradient(transparent 20%, var(--belizeHole));
-  background-image: -moz-linear-gradient(transparent 20%, var(--belizeHole));
-  background-image: -o-linear-gradient(transparent 20%, var(--belizeHole));
   background-image: linear-gradient(transparent 20%, var(--belizeHole));
 }
 .countFillBlue90 {
-  background-image: -webkit-linear-gradient(transparent 10%, var(--belizeHole));
-  background-image: -moz-linear-gradient(transparent 10%, var(--belizeHole));
-  background-image: -o-linear-gradient(transparent 10%, var(--belizeHole));
   background-image: linear-gradient(transparent 10%, var(--belizeHole));
 }
 .countFillBlue100 {
-  background-image: -webkit-linear-gradient(var(--belizeHole) 0%, var(--belizeHole));
-  background-image: -moz-linear-gradient(var(--belizeHole) 0%, var(--belizeHole));
-  background-image: -o-linear-gradient(var(--belizeHole) 0%, var(--belizeHole));
   background-image: linear-gradient(var(--belizeHole) 0%, var(--belizeHole));
 }
 
 .countFillGreen0 {
-  background-image: -webkit-linear-gradient(transparent 100%, var(--nephritis));
-  background-image: -moz-linear-gradient(transparent 100%, var(--nephritis));
-  background-image: -o-linear-gradient(transparent 100%, var(--nephritis));
   background-image: linear-gradient(transparent 100%, var(--nephritis));
 }
 .countFillGreen10 {
-  background-image: -webkit-linear-gradient(transparent 90%, var(--nephritis));
-  background-image: -moz-linear-gradient(transparent 90%, var(--nephritis));
-  background-image: -o-linear-gradient(transparent 90%, var(--nephritis));
   background-image: linear-gradient(transparent 90%, var(--nephritis));
 }
 .countFillGreen20 {
-  background-image: -webkit-linear-gradient(transparent 80%, var(--nephritis));
-  background-image: -moz-linear-gradient(transparent 80%, var(--nephritis));
-  background-image: -o-linear-gradient(transparent 80%, var(--nephritis));
   background-image: linear-gradient(transparent 80%, var(--nephritis));
 }
 .countFillGreen30 {
-  background-image: -webkit-linear-gradient(transparent 70%, var(--nephritis));
-  background-image: -moz-linear-gradient(transparent 70%, var(--nephritis));
-  background-image: -o-linear-gradient(transparent 70%, var(--nephritis));
   background-image: linear-gradient(transparent 70%, var(--nephritis));
 }
 .countFillGreen40 {
-  background-image: -webkit-linear-gradient(transparent 60%, var(--nephritis));
-  background-image: -moz-linear-gradient(transparent 60%, var(--nephritis));
-  background-image: -o-linear-gradient(transparent 60%, var(--nephritis));
   background-image: linear-gradient(transparent 60%, var(--nephritis));
 }
 .countFillGreen50 {
-  background-image: -webkit-linear-gradient(transparent 50%, var(--nephritis));
-  background-image: -moz-linear-gradient(transparent 50%, var(--nephritis));
-  background-image: -o-linear-gradient(transparent 50%, var(--nephritis));
   background-image: linear-gradient(transparent 50%, var(--nephritis));
 }
 .countFillGreen60 {
-  background-image: -webkit-linear-gradient(transparent 40%, var(--nephritis));
-  background-image: -moz-linear-gradient(transparent 40%, var(--nephritis));
-  background-image: -o-linear-gradient(transparent 40%, var(--nephritis));
   background-image: linear-gradient(transparent 40%, var(--nephritis));
 }
 .countFillGreen70 {
-  background-image: -webkit-linear-gradient(transparent 30%, var(--nephritis));
-  background-image: -moz-linear-gradient(transparent 30%, var(--nephritis));
-  background-image: -o-linear-gradient(transparent 30%, var(--nephritis));
   background-image: linear-gradient(transparent 30%, var(--nephritis));
 }
 .countFillGreen80 {
-  background-image: -webkit-linear-gradient(transparent 20%, var(--nephritis));
-  background-image: -moz-linear-gradient(transparent 20%, var(--nephritis));
-  background-image: -o-linear-gradient(transparent 20%, var(--nephritis));
   background-image: linear-gradient(transparent 20%, var(--nephritis));
 }
 .countFillGreen90 {
-  background-image: -webkit-linear-gradient(transparent 10%, var(--nephritis));
-  background-image: -moz-linear-gradient(transparent 10%, var(--nephritis));
-  background-image: -o-linear-gradient(transparent 10%, var(--nephritis));
   background-image: linear-gradient(transparent 10%, var(--nephritis));
 }
 .countFillGreen100 {
-  background-image: -webkit-linear-gradient(var(--nephritis) 0%, var(--nephritis));
-  background-image: -moz-linear-gradient(var(--nephritis) 0%, var(--nephritis));
-  background-image: -o-linear-gradient(var(--nephritis) 0%, var(--nephritis));
   background-image: linear-gradient(var(--nephritis) 0%, var(--nephritis));
 }
 
 .countFillTeal0 {
-  background-image: -webkit-linear-gradient(transparent 100%, var(--greenSea));
-  background-image: -moz-linear-gradient(transparent 100%, var(--greenSea));
-  background-image: -o-linear-gradient(transparent 100%, var(--greenSea));
   background-image: linear-gradient(transparent 100%, var(--greenSea));
 }
 .countFillTeal10 {
-  background-image: -webkit-linear-gradient(transparent 90%, var(--greenSea));
-  background-image: -moz-linear-gradient(transparent 90%, var(--greenSea));
-  background-image: -o-linear-gradient(transparent 90%, var(--greenSea));
   background-image: linear-gradient(transparent 90%, var(--greenSea));
 }
 .countFillTeal20 {
-  background-image: -webkit-linear-gradient(transparent 80%, var(--greenSea));
-  background-image: -moz-linear-gradient(transparent 80%, var(--greenSea));
-  background-image: -o-linear-gradient(transparent 80%, var(--greenSea));
   background-image: linear-gradient(transparent 80%, var(--greenSea));
 }
 .countFillTeal30 {
-  background-image: -webkit-linear-gradient(transparent 70%, var(--greenSea));
-  background-image: -moz-linear-gradient(transparent 70%, var(--greenSea));
-  background-image: -o-linear-gradient(transparent 70%, var(--greenSea));
   background-image: linear-gradient(transparent 70%, var(--greenSea));
 }
 .countFillTeal40 {
-  background-image: -webkit-linear-gradient(transparent 60%, var(--greenSea));
-  background-image: -moz-linear-gradient(transparent 60%, var(--greenSea));
-  background-image: -o-linear-gradient(transparent 60%, var(--greenSea));
   background-image: linear-gradient(transparent 60%, var(--greenSea));
 }
 .countFillTeal50 {
-  background-image: -webkit-linear-gradient(transparent 50%, var(--greenSea));
-  background-image: -moz-linear-gradient(transparent 50%, var(--greenSea));
-  background-image: -o-linear-gradient(transparent 50%, var(--greenSea));
   background-image: linear-gradient(transparent 50%, var(--greenSea));
 }
 .countFillTeal60 {
-  background-image: -webkit-linear-gradient(transparent 40%, var(--greenSea));
-  background-image: -moz-linear-gradient(transparent 40%, var(--greenSea));
-  background-image: -o-linear-gradient(transparent 40%, var(--greenSea));
   background-image: linear-gradient(transparent 40%, var(--greenSea));
 }
 .countFillTeal70 {
-  background-image: -webkit-linear-gradient(transparent 30%, var(--greenSea));
-  background-image: -moz-linear-gradient(transparent 30%, var(--greenSea));
-  background-image: -o-linear-gradient(transparent 30%, var(--greenSea));
   background-image: linear-gradient(transparent 30%, var(--greenSea));
 }
 .countFillTeal80 {
-  background-image: -webkit-linear-gradient(transparent 20%, var(--greenSea));
-  background-image: -moz-linear-gradient(transparent 20%, var(--greenSea));
-  background-image: -o-linear-gradient(transparent 20%, var(--greenSea));
   background-image: linear-gradient(transparent 20%, var(--greenSea));
 }
 .countFillTeal90 {
-  background-image: -webkit-linear-gradient(transparent 10%, var(--greenSea));
-  background-image: -moz-linear-gradient(transparent 10%, var(--greenSea));
-  background-image: -o-linear-gradient(transparent 10%, var(--greenSea));
   background-image: linear-gradient(transparent 10%, var(--greenSea));
 }
 .countFillTeal100 {
-  background-image: -webkit-linear-gradient(var(--greenSea) 0%, var(--greenSea));
-  background-image: -moz-linear-gradient(var(--greenSea) 0%, var(--greenSea));
-  background-image: -o-linear-gradient(var(--greenSea) 0%, var(--greenSea));
   background-image: linear-gradient(var(--greenSea) 0%, var(--greenSea));
 }
 
 .countFillPurple0 {
-  background-image: -webkit-linear-gradient(transparent 100%, var(--wisteria));
-  background-image: -moz-linear-gradient(transparent 100%, var(--wisteria));
-  background-image: -o-linear-gradient(transparent 100%, var(--wisteria));
   background-image: linear-gradient(transparent 100%, var(--wisteria));
 }
 .countFillPurple10 {
-  background-image: -webkit-linear-gradient(transparent 90%, var(--wisteria));
-  background-image: -moz-linear-gradient(transparent 90%, var(--wisteria));
-  background-image: -o-linear-gradient(transparent 90%, var(--wisteria));
   background-image: linear-gradient(transparent 90%, var(--wisteria));
 }
 .countFillPurple20 {
-  background-image: -webkit-linear-gradient(transparent 80%, var(--wisteria));
-  background-image: -moz-linear-gradient(transparent 80%, var(--wisteria));
-  background-image: -o-linear-gradient(transparent 80%, var(--wisteria));
   background-image: linear-gradient(transparent 80%, var(--wisteria));
 }
 .countFillPurple30 {
-  background-image: -webkit-linear-gradient(transparent 70%, var(--wisteria));
-  background-image: -moz-linear-gradient(transparent 70%, var(--wisteria));
-  background-image: -o-linear-gradient(transparent 70%, var(--wisteria));
   background-image: linear-gradient(transparent 70%, var(--wisteria));
 }
 .countFillPurple40 {
-  background-image: -webkit-linear-gradient(transparent 60%, var(--wisteria));
-  background-image: -moz-linear-gradient(transparent 60%, var(--wisteria));
-  background-image: -o-linear-gradient(transparent 60%, var(--wisteria));
   background-image: linear-gradient(transparent 60%, var(--wisteria));
 }
 .countFillPurple50 {
-  background-image: -webkit-linear-gradient(transparent 50%, var(--wisteria));
-  background-image: -moz-linear-gradient(transparent 50%, var(--wisteria));
-  background-image: -o-linear-gradient(transparent 50%, var(--wisteria));
   background-image: linear-gradient(transparent 50%, var(--wisteria));
 }
 .countFillPurple60 {
-  background-image: -webkit-linear-gradient(transparent 40%, var(--wisteria));
-  background-image: -moz-linear-gradient(transparent 40%, var(--wisteria));
-  background-image: -o-linear-gradient(transparent 40%, var(--wisteria));
   background-image: linear-gradient(transparent 40%, var(--wisteria));
 }
 .countFillPurple70 {
-  background-image: -webkit-linear-gradient(transparent 30%, var(--wisteria));
-  background-image: -moz-linear-gradient(transparent 30%, var(--wisteria));
-  background-image: -o-linear-gradient(transparent 30%, var(--wisteria));
   background-image: linear-gradient(transparent 30%, var(--wisteria));
 }
 .countFillPurple80 {
-  background-image: -webkit-linear-gradient(transparent 20%, var(--wisteria));
-  background-image: -moz-linear-gradient(transparent 20%, var(--wisteria));
-  background-image: -o-linear-gradient(transparent 20%, var(--wisteria));
   background-image: linear-gradient(transparent 20%, var(--wisteria));
 }
 .countFillPurple90 {
-  background-image: -webkit-linear-gradient(transparent 10%, var(--wisteria));
-  background-image: -moz-linear-gradient(transparent 10%, var(--wisteria));
-  background-image: -o-linear-gradient(transparent 10%, var(--wisteria));
   background-image: linear-gradient(transparent 10%, var(--wisteria));
 }
 .countFillPurple100 {
-  background-image: -webkit-linear-gradient(var(--wisteria) 0%, var(--wisteria));
-  background-image: -moz-linear-gradient(var(--wisteria) 0%, var(--wisteria));
-  background-image: -o-linear-gradient(var(--wisteria) 0%, var(--wisteria));
   background-image: linear-gradient(var(--wisteria) 0%, var(--wisteria));
+}
+
+.fillRight0 {
+  background-color: transparent;
+  text-shadow: rgba(0,0,0,0.3) 0.03rem 0.03rem;
+}
+.fillRight5 {
+  background-image: linear-gradient(to right, var(--emeraldfrosted) 5%, transparent 10%);
+  text-shadow: rgba(0,0,0,0.3) 0.03rem 0.03rem
+}
+.fillRight10 {
+  background-image: linear-gradient(to right, var(--emeraldfrosted) 10%, transparent 15%);
+  text-shadow: rgba(0,0,0,0.3) 0.03rem 0.03rem
+}
+.fillRight20 {
+  background-image: linear-gradient(to right, var(--emeraldfrosted) 20%, transparent 25%);
+  text-shadow: rgba(0,0,0,0.3) 0.03rem 0.03rem
+}
+.fillRight30 {
+  background-image: linear-gradient(to right, var(--emeraldfrosted) 30%, transparent 35%);
+  text-shadow: rgba(0,0,0,0.3) 0.03rem 0.03rem
+}
+.fillRight40 {
+  background-image: linear-gradient(to right, var(--emeraldfrosted) 40%, transparent 45%);
+  text-shadow: rgba(0,0,0,0.3) 0.03rem 0.03rem
+}
+.fillRight50 {
+  background-image: linear-gradient(to right, var(--emeraldfrosted) 50%, transparent 55%);
+  text-shadow: rgba(0,0,0,0.3) 0.03rem 0.03rem
+}
+.fillRight60 {
+  background-image: linear-gradient(to right, var(--emeraldfrosted) 60%, transparent 65%);
+  text-shadow: rgba(0,0,0,0.3) 0.03rem 0.03rem
+}
+.fillRight70 {
+  background-image: linear-gradient(to right, var(--emeraldfrosted) 70%, transparent 75%);
+  text-shadow: rgba(0,0,0,0.3) 0.03rem 0.03rem
+}
+.fillRight80 {
+  background-image: linear-gradient(to right, var(--emeraldfrosted) 80%, transparent 85%);
+  text-shadow: rgba(0,0,0,0.3) 0.03rem 0.03rem
+}
+.fillRight90 {
+  background-image: linear-gradient(to right, var(--emeraldfrosted) 90%, transparent 95%);
+  text-shadow: rgba(0,0,0,0.3) 0.03rem 0.03rem
+}
+.fillRight100 {
+  background-color: var(--emeraldfrosted);
+  text-shadow: rgba(0,0,0,0.3) 0.03rem 0.03rem
 }
 

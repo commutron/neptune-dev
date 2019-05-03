@@ -5,6 +5,8 @@
   --turquoisefade: rgba(26, 188, 156, 0.5);
   --greenSea: rgb(22, 160, 133);
   --emerald: rgb(46, 204, 113); /* light green */
+  --emeraldfrosted: rgba(46, 204, 113, 0.8);
+  --emeraldtrans: rgba(46, 204, 113, 0.4);
   --emeraldfade: rgba(46, 204, 113, 0.1);
   --nephritis: rgb(39, 174, 96); /* dark green */
   --nephritisfade: rgba(39, 174, 96, 0.5); /* dark green fade */

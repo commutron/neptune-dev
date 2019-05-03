@@ -647,6 +647,8 @@ label.qdpplRound {
 .fade { opacity: 0.6; }
 .fadeMore { opacity: 0.3; }
 
+.popText { text-shadow: rgb(20,20,20) 1px 1px;}
+
 .wordBr {
   word-break: break-all;
   word-wrap: break-word;

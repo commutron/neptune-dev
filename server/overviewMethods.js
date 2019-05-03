@@ -131,14 +131,12 @@ function collectProgress(privateKey, batchID) {
       
       let phaseSets = [];
       for(let phase of app.phases) {
-        if(phase === 'finish' || phase === 'shipping' ) { null }else{
-          const steps = riverFlow.filter( x => x.phase === phase && x.type !== 'first' );
-          phaseSets.push({
-            phase: phase,
-            steps: steps,
-            count: 0 
-          });
-        }
+        const steps = riverFlow.filter( x => x.phase === phase && x.type !== 'first' );
+        phaseSets.push({
+          phase: phase,
+          steps: steps,
+          count: 0 
+        });
       }
       
       const doneItems = batch.items.filter( x => x.finishedAt !== false ).length;

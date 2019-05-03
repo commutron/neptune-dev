@@ -68,6 +68,7 @@ class Pref {
     this.buildStep = 'build process';
     this.trackFirst = 'first-off';
     this.trackLast =  'finish';
+    this.isDone = 'complete';
     this.good = 'accept';
     this.ng = 'ng';
     this.builder = 'builder';

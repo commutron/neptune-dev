@@ -629,7 +629,7 @@ main {
 }
 .scrollToNav > span {
   padding: 0 1vw;
-  font-size: 2vh;
+  font-size: 1.75vh;
 }
 .scrollToNav > span:focus {
   border: 1px dotted var(--clouds);
@@ -858,8 +858,8 @@ main {
 }
 
 .overGridRowScroll > div {
-  border-right: 1px groove rgba(255,255,255,0.2);
-  border-bottom: 1px inset rgba(255,255,255,0.3);
+  border-right: 1px groove rgb(175,175,175);
+  border-bottom: 1px groove rgb(190,190,190);
   display: flex;
   align-items: center;
   justify-content: center;

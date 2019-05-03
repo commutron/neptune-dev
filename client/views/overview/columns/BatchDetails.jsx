@@ -112,14 +112,16 @@ const BatchDetailChunk = ({ck, warm, user, app})=> (
         batchID={ck.batchID}
         warm={warm}
         app={app} />}
-    <div>
-      <NumStat
-        num={ck.percentOfDoneItems}
-        name='Complete'
-        title=''
-        color='greenT'
-        size='big' />
-    </div>
+    {!Roles.userIsInRole(Meteor.userId(), 'nightly') ||
+      Roles.userIsInRole(Meteor.userId(), 'debug') &&
+      <div>
+        <NumStat
+          num={ck.percentOfDoneItems}
+          name='Complete'
+          title=''
+          color='greenT'
+          size='big' />
+      </div>}
     <div>
       <NumStat
         num={ck.nonConTotal}
@@ -199,12 +201,11 @@ class PhaseProgress extends React.PureComponent {
       return(
         <React.Fragment>
           {app.phases.map( (phase, index)=>{
-            if(phase !== 'finish' && phase !== 'shipping') {
-              return(
-                <div key={this.props.bID + phase + index + 'z'}>
-                  <i className='fade small'>{phase}</i>
-                </div>
-            )}})}
+            return(
+              <div key={this.props.bID + phase + index + 'z'}>
+                <i className='fade small'>{phase}</i>
+              </div>
+          )})}
         </React.Fragment>
       );
     }
@@ -220,17 +221,32 @@ class PhaseProgress extends React.PureComponent {
                 </div>
               );
             }else{
+              const calNum = ( 
+                phase.count / (dt.totalItems * phase.steps.length) 
+                  * 100 ).toFixed(0);
+              let fadeTick = calNum == 0 ? '0' :
+                   calNum < 10 ? '5' :
+                   calNum < 20 ? '10' :
+                   calNum < 30 ? '20' :
+                   calNum < 40 ? '30' :
+                   calNum < 50 ? '40' :
+                   calNum < 60 ? '50' :
+                   calNum < 70 ? '60' :
+                   calNum < 80 ? '70' :
+                   calNum < 90 ? '80' :
+                   calNum < 100 ? '90' :
+                   '100';
+              let niceName = phase.phase === 'finish' ?
+                              Pref.isDone : phase.phase;
               return(
-                <div key={this.props.bID + phase + index + 'g'}>
+                <div 
+                  key={this.props.bID + phase + index + 'g'} 
+                  className={'fillRight' + fadeTick}>
                   <NumStat
-                    num={ ( phase.count / 
-                        (dt.totalItems * phase.steps.length) 
-                          * 100 
-                      ).toFixed(0) + '%'
-                    }
-                    name={phase.phase}
+                    num={ calNum + '%' }
+                    name={niceName}
                     title=''
-                    color='greenT'
+                    color='whiteT'
                     size='big' />
               </div>
           )}})}
@@ -241,10 +257,9 @@ class PhaseProgress extends React.PureComponent {
     return(
       <React.Fragment>
         {app.phases.map( (phase, index)=>{
-          if(phase !== 'finish' && phase !== 'shipping') {
-            return(
-              <div key={app._id + phase + index + 'ng'}></div>
-          )}})}
+          return(
+            <div key={app._id + phase + index + 'ng'}></div>
+        )})}
       </React.Fragment>
     );
   }
