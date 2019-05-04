@@ -35,6 +35,12 @@ const TrackStepSlide = ({app, sorted})=> {
         <i> Entries are case sensitive, smt =/= SMT.</i>
         <i> Capitalizing is unnecessary in most cases and only recommended for abbreviations.</i>
       </p>
+      <p>
+        <i className='fas fa-exclamation-circle'></i>
+        <i>{` Changing a step's ${Pref.phase} only affects the step for the future.`}</i>
+        <i>{` It does not affect current ${Pref.flow}s.`}</i>
+        <i>{` ${Pref.flow}s. will update when re-saved`}</i>
+      </p>
           
       <h2 className='cap'>{Pref.trackProcess} Steps</h2>
       <i>Options for tracked and controlled steps</i>
@@ -57,16 +63,13 @@ const TrackStepSlide = ({app, sorted})=> {
             <option value='nest'>nest</option>
           </select>
         </label>
-        <label htmlFor={rndmKey + 'type'}>Department<br />
+        <label htmlFor={rndmKey + 'type'}>{Pref.phase}<br />
           <select id={rndmKey + 'phase'} required >
             <option></option>
-            <option value='surface mount'>Surface Mount</option>
-            <option value='through hole'>Through Hole</option>
-            <option value='selective solder'>Selective Solder</option>
-            <option value='wave solder'>Wave Solder</option>
-            <option value='testing'>Testing</option>
-            <option value='conformal coat'>Conformal Coat</option>
-            <option value='shipping'>Shipping</option>
+            {app.phases.map( (entry, index)=>{
+              return( 
+                <option key={index} value={entry}>{entry}</option>
+            )})}
           </select>
         </label>
         <label htmlFor={rndmKey + 'add'}><br />
@@ -81,8 +84,11 @@ const TrackStepSlide = ({app, sorted})=> {
         
       <ul>
         {sorted.map( (entry, index)=>{
-          return ( 
-            <TrackStepEdit key={rndmKey + index + entry.key} data={entry} />
+          return( 
+            <TrackStepEdit 
+              key={rndmKey + index + entry.key} 
+              app={app} 
+              data={entry} />
         )})}
       </ul>
     </div>

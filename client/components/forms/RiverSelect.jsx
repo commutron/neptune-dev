@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import Model from '../smallUi/Model.jsx';
+import ModelMedium from '../smallUi/ModelMedium.jsx';
 
 // props
 /// id={b._id}
@@ -31,7 +31,7 @@ export default class RiverSelect extends Component	{
 
   render() {
     return (
-      <Model
+      <ModelMedium
         button={Pref.flow}
         title={'select ' + Pref.flow}
         color='greenT'
@@ -71,7 +71,7 @@ export default class RiverSelect extends Component	{
             className='action clearGreen'
           >Save</button>
         </form>
-      </Model>
+      </ModelMedium>
     );
   }
 }

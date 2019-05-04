@@ -473,16 +473,18 @@ main {
 .medModel {
   margin: 25vh auto 25vh auto;
   padding: 15px 25px 0 25px;
+  min-width: fit-content;
   max-width: 50%;
   height: 50vh;
 }
 .medModelHead {
-  height: 40px;
-  font-size: 1.5rem;
+  height: 5vh;
+  font-size: 3vh;
   font-weight: 600;
+  white-space: nowrap;
 }
 .medModelContent {
-  height: calc(50vh - 30px - 40px);
+  height: calc(50vh - 30px - 5vh);
 }
 
 .centre {

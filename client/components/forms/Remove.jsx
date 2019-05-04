@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 //import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import Model from '../smallUi/Model.jsx';
+import ModelMedium from '../smallUi/ModelMedium.jsx';
 
 // requires Data
 // action : a string to determine which method to use
@@ -98,7 +98,7 @@ export default class Remove extends Component	{
     const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
 
     return (
-      <Model
+      <ModelMedium
         button='Delete'
         title={'delete "' + title + '" from database'}
         color='redT'
@@ -117,7 +117,7 @@ export default class Remove extends Component	{
               type='text'
               ref={(i)=> this.confirm = i}
               placeholder={check}
-              autoFocus='true'
+              autoFocus={true}
               className='noCopy redIn'
               required />
             <button
@@ -128,7 +128,7 @@ export default class Remove extends Component	{
           </form>
           <br />
         </div>
-      </Model>
+      </ModelMedium>
     );
   }
 }

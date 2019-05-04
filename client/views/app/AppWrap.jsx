@@ -6,6 +6,7 @@ import AccountsManagePanel from './appPanels/AccountsManagePanel.jsx';
 
 import Slides from '../../components/smallUi/Slides.jsx';
 
+import PhasesSlide from './appSlides/PhasesSlide.jsx';
 import TrackStepSlide from './appSlides/TrackStepSlide.jsx';
 import CounterSlide from './appSlides/CounterSlide.jsx';
 import FinishSlide from './appSlides/FinishSlide.jsx';
@@ -49,9 +50,9 @@ const AppWrap = ({ users, app })=> {
         <Slides
           menu={[
             <b><i className='fas fa-users fa-fw'></i>   User Permissions</b>,
+            <b><i className='fas fa-route fa-fw'></i>   Phases</b>,
             <b><i className='fas fa-shoe-prints fa-fw'></i>   Track Steps</b>,
             <b><i className='fas fa-stopwatch fa-fw'></i>   Counter Steps</b>,
-            <b><i className='fas fa-flag-checkered fa-fw'></i>   Finish Step</b>,
             <b><i className='fas fa-wrench fa-fw'></i>   Verify Methods</b>,
             <b><i className='fas fa-redo fa-fw'></i>   Verify Repeat</b>,
             <b><i className='fas fa-bug fa-fw'></i>   Legacy NonCons</b>,
@@ -65,9 +66,9 @@ const AppWrap = ({ users, app })=> {
           
           <AccountsManagePanel key={1} users={users} />
           
-          <TrackStepSlide key={2} app={app} sorted={sortedTrackOptions} />
-          <CounterSlide key={3} app={app} />
-          <FinishSlide key={4} app={app} />
+          <PhasesSlide key={2} app={app} />
+          <TrackStepSlide key={3} app={app} sorted={sortedTrackOptions} />
+          <CounterSlide key={4} app={app} />
           <MethodSlide key={5} app={app} sorted={sortedTrackOptions} />
           <RepeatSlide key={6} app={app} />
           <NCLegacySlide key={7} app={app} />

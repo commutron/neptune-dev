@@ -2,7 +2,7 @@ import React from 'react';
 //import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-const TrackStepEdit = ({data})=> {
+const TrackStepEdit = ({app, data})=> {
   
   const opKey = data.key;
   
@@ -44,15 +44,15 @@ const TrackStepEdit = ({data})=> {
           </select>
         </label>
         <label htmlFor={opKey + 'type'}><br />
-          <select id={opKey + 'phase'} defaultValue={data.phase || null} required >
+          <select
+            id={opKey + 'phase'}
+            defaultValue={data.phase || null} 
+            required >
             <option></option>
-            <option value='surface mount'>Surface Mount</option>
-            <option value='through hole'>Through Hole</option>
-            <option value='selective solder'>Selective Solder</option>
-            <option value='wave solder'>Wave Solder</option>
-            <option value='testing'>Testing</option>
-            <option value='conformal coat'>Conformal Coat</option>
-            <option value='shipping'>Shipping</option>
+            {app.phases.map( (entry, index)=>{
+              return( 
+                <option key={index} value={entry}>{entry}</option>
+            )})}
           </select>
         </label>
         <label htmlFor={opKey + 'edit'}><br />

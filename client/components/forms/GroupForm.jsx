@@ -77,7 +77,7 @@ export default class GroupForm extends Component {
               ref={(i)=> this.gName = i}
               defaultValue={orName}
               placeholder='ie. Trailer Safegaurd'
-              autoFocus='true'
+              autoFocus={true}
               required />
             <label htmlFor='newName'>Full Name</label>
           </p>

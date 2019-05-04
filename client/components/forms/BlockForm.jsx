@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import Model from '../smallUi/Model.jsx';
+import ModelMedium from '../smallUi/ModelMedium.jsx';
 
 export default class BlockForm extends Component {
 
@@ -58,8 +58,8 @@ export default class BlockForm extends Component {
     const bttn = edit ? 'edit' : 'Add ' + Pref.block;
     const title = edit ? 'edit ' + Pref.block : 'add ' + Pref.block;
 
-    return (
-      <Model
+    return(
+      <ModelMedium
         button={bttn}
         title={title}
         color='yellowT'
@@ -68,15 +68,17 @@ export default class BlockForm extends Component {
         lock={!Roles.userIsInRole(Meteor.userId(), 'run') || this.props.lock}
         noText={this.props.noText}>
         <div>
-          <form className='centre centreTrue' onSubmit={this.addBlock.bind(this)}>
+          <form className='centre' onSubmit={this.addBlock.bind(this)}>
             <p>
               <textarea
                 type='text'
                 id='blk'
                 ref={(i)=> this.blTxt = i}
+                cols='30'
+                rows='6'
                 placeholder='110072 short 25pcs'
                 defaultValue={eTx}
-                autoFocus='true'
+                autoFocus={true}
                 required>
               </textarea>
               <label htmlFor='blk'>Describe the Impediment</label>
@@ -91,7 +93,7 @@ export default class BlockForm extends Component {
           </form>
           <br />
         </div>
-      </Model>
+      </ModelMedium>
     );
   }
 }

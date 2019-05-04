@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import Model from '../smallUi/Model.jsx';
+import ModelMedium from '../smallUi/ModelMedium.jsx';
 
 // required data
 //// Order Data or Customer Data as props.data
@@ -58,7 +58,7 @@ export default class NoteForm extends Component {
                    !Roles.userIsInRole(Meteor.userId(), 'edit');
 
     return (
-      <Model
+      <ModelMedium
         button=''
         title={choose + ' notes'}
         color='blueT'
@@ -74,11 +74,11 @@ export default class NoteForm extends Component {
             <textarea
               id='con'
               ref={(i)=> this.mess = i}
-              cols='40'
-              rows='10'
+              cols='30'
+              rows='6'
               placeholder='comments, alerts, messages'
               defaultValue={now}
-              autoFocus='true'></textarea>
+              autoFocus={true}></textarea>
             <label htmlFor='con'>Note</label>
           </p>
           <p>
@@ -91,7 +91,7 @@ export default class NoteForm extends Component {
           <br />
           <p><output ref={(i)=> this.out = i} value='' /></p>
         </form>
-      </Model>
+      </ModelMedium>
     );
   }
 }

@@ -38,8 +38,9 @@ const FlowTable = ({ id, flows, app })=> {
               <table style={sty}>
                 <thead className='cap'>
                   <tr>
+                    <th>step</th>
                     <th>type</th>
-      							<th>step</th>
+      							<th>{Pref.phase}</th>
       							<th>{Pref.instruct} title</th>
                   </tr>
                 </thead>
@@ -61,8 +62,9 @@ const FlowTable = ({ id, flows, app })=> {
 
 const FlowRow = ({ step })=> (
   <tr>
-    <td>{step.type}</td>
     <td>{step.step}</td>
+    <td>{step.type}</td>
+    <td>{step.phase}</td>
     <td>{step.how}</td>
   </tr>
 );

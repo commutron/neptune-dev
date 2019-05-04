@@ -4,14 +4,12 @@ import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
 import Tabs from '../../../components/smallUi/Tabs.jsx';
 
+import GeneralChunk from '/client/views/data/panels/BatchPanel/GeneralChunk.jsx';
 //import JumpText from '../../../components/tinyUi/JumpText.jsx';
 import FloorRelease from '/client/components/smallUi/FloorRelease.jsx';
-import { ReleaseNote } from '/client/components/bigUi/ReleasesModule.jsx';
 import StepsProgress from '../../../components/bigUi/StepsProgress/StepsProgress.jsx';
 import NonConMiniSatus from '/client/components/charts/NonConMiniStatus.jsx';
-import TagsModule from '../../../components/bigUi/TagsModule.jsx';
-import NoteLine from '../../../components/smallUi/NoteLine.jsx';
-import BlockList from '../../../components/bigUi/BlockList.jsx';
+
 
 export default class BatchCard extends Component	{
   
@@ -38,7 +36,7 @@ export default class BatchCard extends Component	{
     let released = b.floorRelease === undefined ? undefined : 
                     b.floorRelease === false ? false :
                     typeof b.floorRelease === 'object';
-  
+    
     let tabOps = [
       <i className='fas fa-info-circle fa-fw' data-fa-transform='down-2' title='Info'></i>, 
       <i className='fas fa-tasks fa-fw' data-fa-transform='down-2' title='Progress'></i>
@@ -77,16 +75,7 @@ export default class BatchCard extends Component	{
               sessionTab='batchProPanelTabs'>
               
               <div className='space cap'>
-                <TagsModule
-                  id={b._id}
-                  tags={b.tags}
-                  vKey={false}
-                  tagOps={a.tagOption} />
-                <br />
-                {released === true && 
-                  <ReleaseNote id={b._id} release={b.floorRelease} />}
-                <NoteLine entry={b.notes} id={b._id} versionKey={false} />
-                <BlockList id={b._id} data={b.blocks} lock={done} expand={false} />
+                <GeneralChunk a={a} b={b} done={done} expand={false} />
               </div>
               
               <div className='space cap'>

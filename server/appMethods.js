@@ -22,7 +22,7 @@ Meteor.methods({
       orgPIN: '0000',
       minorPIN: '000',
       createdAt: new Date(),
-      phases: [],
+      phases: ['finish'],
       toolOption: [],
       trackOption: [],
       lastTrack: {
@@ -110,6 +110,51 @@ Meteor.methods({
           minorPIN : newPIN
       }});
       return true;
+    }else{
+      return false;
+    }
+  },
+  
+  
+  // / / / / / / / / / / / / / / / 
+  
+  // Phases
+  addPhaseOption(value) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      try{
+        AppDB.update({orgKey: Meteor.user().orgKey}, {
+          $push : { 
+            phases : {
+              $each: [ value ],
+              $position: -1
+           }
+        }});
+        return true;
+      }catch (err) {
+        throw new Meteor.Error(err);
+      }
+    }else{
+      return false;
+    }
+  },
+  
+  removePhaseOption(value) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      try{
+        const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
+        const used = appDoc.trackOption.find( x => x.phase === value );
+        if(!used && value !== 'finish') {
+          AppDB.update({orgKey: Meteor.user().orgKey}, {
+            $pull : { 
+              phases : value
+          }});
+          return true;
+        }else{
+          return false;
+        }
+      }catch (err) {
+        throw new Meteor.Error(err);
+      }
     }else{
       return false;
     }

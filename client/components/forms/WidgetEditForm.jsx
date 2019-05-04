@@ -48,7 +48,7 @@ export default class WidgetEditForm extends Component	{
               ref={(i)=> this.nwNm = i}
               defaultValue={now.widget}
               placeholder='ID ie. A4-R-0221'
-              autoFocus='true'
+              autoFocus={true}
               required />
             <label htmlFor='widgetId'>{Pref.widget} ID</label>
           </p>

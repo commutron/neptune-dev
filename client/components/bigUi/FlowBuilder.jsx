@@ -155,6 +155,9 @@ export default class FlowForm extends Component	{
                     {entry.type}
                   </div>
                   <div>
+                    {entry.phase}
+                  </div>
+                  <div>
                     {entry.how}
                   </div>
                   <div>
