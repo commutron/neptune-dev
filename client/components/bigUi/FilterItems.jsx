@@ -3,96 +3,89 @@ import React from 'react';
 const FilterItems = ({ 
   advancedList,
   total,
-  onClick,
-  onStepChange,
+  selectedKeyword,
+  selectedToggle,
+  onKeywordChange,
   onTimeChange,
-  onTxtChange,
-  disableTime
+  onNotChange,
+  disableTime,
 })=>	{
 
-  function changeBasicFilter() {
-    onClick(this.basic.value);
-  }
-  function changeStepFilter() {
-    onStepChange(this.step.value);
+  function changeKeywordFilter() {
+    onKeywordChange(this.keyword.value);
   }
   function changeTimeFilter() {
     onTimeChange(this.day.value);
   }
-  function changeTextFilter() {
-    onTxtChange(this.text.value);
+  function changeNotFilter() {
+    onNotChange(this.toggle.checked);
   }
     
   return(
-    <details className='fltrs noCopy'>
-      <summary className='fltrs'>
-        <span>
-          <i className='fas fa-filter fa-fw'></i>
-          <i className='med'>Filter</i>
-        </span>
-        <span className='rAlign'>
-          <i className='fas fa-chevron-down fa-fw'></i>
-        </span>
-      </summary>
-      
+    <div className='itmFltrBlock noCopy'>
+    
       <div>
-        <label className='fltrsInput'>
-          <i className='fas fa-font fa-fw'></i>
+        <label htmlFor='notToggle' className='onoffFilter'>
           <input
-            type='search'
-            ref={(i)=>this.text = i}
-            onChange={(e)=>changeTextFilter(e)} />
+            type='checkbox'
+            id='notToggle'
+            ref={(i)=>this.toggle = i}
+            onChange={(e)=>changeNotFilter(e)}
+            checked={selectedToggle} />
+          {!selectedToggle ?
+            <b id='itmTglOFF'><i className='fas fa-filter fa-lg fa-fw'></i></b> :
+            <span id='itmTglON' className="fa-layers fa-fw">
+              <i className='fas fa-filter fa-lg fa-fw'></i>
+              <i className="fas fa-ban fa-2x fa-fw redT"></i>
+            </span>}
         </label>
-        <label className='fltrsInput'>
-          <i className='fas fa-map-marker-alt fa-fw'></i>
-          <select
-            ref={(i)=> this.basic = i}
-            onChange={(e)=>changeBasicFilter(e)}>
-            <option value='all'>All</option>
-            <option value='done'>Finished</option>
-            <option value='inproc'>In Progress</option>
-            <option value='alt'>On Alt Flow</option>
-            <option value='firsts'>First Offs</option>
-            <option value='noncons'>With NonCons</option>
-            <option value='shortfalls'>With Shortfalls</option>
-            <option value='rma'>With an RMA</option>
-            <option value='scrap'>Scrapped</option>
-          </select>
-        </label>
-      </div>
-        
-      <div>
-        <label className='fltrsInput'>
-          <i className='fas fa-history fa-fw'></i>
-          <select
-            ref={(i)=> this.step = i}
-            onChange={(e)=>changeStepFilter(e)}>
-            <option value={false}>Any</option>
+        <select
+          ref={(i)=>this.keyword = i}
+          onChange={(e)=>changeKeywordFilter(e)}>
+          <option value={false} label='' />
+          <optgroup label='Categories'>
+            <option value='Complete' label='Complete' />
+            <option value='In Progress' label='In Progress' />
+            <option value='Alternative' label='Alternative Flow' />
+            <option value='First Offs' label='First Offs' />
+            <option value='Nonconformances' label='Nonconformances' />
+            <option value='Shortfalls' label='Shortfalls' />
+            <option value='RMA' label='RMA' />
+            <option value='Scrap' label='Scrap' />
+          </optgroup>
+          <optgroup label='Steps'>
             {advancedList.map( (entry, index)=>{
               return(
                 <option
                   key={index}
-                  value={entry.key}
+                  value={'@' + entry.key}
                 >{entry.step === entry.type ? 
                   entry.step : 
                   entry.step + ' ' + entry.type}
                 </option>
               );
             })}
-          </select>
-        </label>
-        <label className='fltrsInput'>
-          <i className='far fa-calendar-alt fa-fw'></i>
-          <input
-            type='date'
-            ref={(i)=>this.day = i}
-            onChange={(e)=>changeTimeFilter(e)}
-            disabled={disableTime} />
-        </label>
-        </div>
+          </optgroup>
+        </select>
+      </div>
+      
+      <div>
+        <span className='itmFltrStatic'>
+          <i className='far fa-calendar-alt fa-lg fa-fw'></i>
+        </span>
+        <input
+          type='date'
+          ref={(i)=>this.day = i}
+          onChange={(e)=>changeTimeFilter(e)}
+          disabled={
+            disableTime || 
+            selectedKeyword === 'alternative' ||
+            selectedKeyword === 'rma'
+          } />
+      </div>
         
       <p className='centreText'>Total: {total}</p>
-    </details>
+    </div>
   );
 };
 

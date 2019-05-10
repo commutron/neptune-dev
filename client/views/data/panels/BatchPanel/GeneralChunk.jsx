@@ -48,7 +48,10 @@ const GeneralChunk = ({
         <p className='capFL'>{Pref.end}: {moment(b.end).format("MMMM Do, YYYY")}</p>
         {fnsh !== null && <p>Finished: {fnsh}</p>}
         <p>{fnsh !== null ? 'Total Time:' : 'Elapsed:'} {elapseNice}</p>
-        {fnsh !== null ? null : <p>Time Remaining: {remain} weekdays</p> }
+        {fnsh !== null ? null : 
+          <p>Time Remaining: 
+            <i className={remain < 0 ? 'yellowT' : ''}> {remain}</i> weekdays
+          </p> }
       </fieldset>
       {b.items.length > 0 &&
         <fieldset className='noteCard'>

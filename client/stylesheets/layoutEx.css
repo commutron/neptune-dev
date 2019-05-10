@@ -36,7 +36,7 @@
   -webkit-overflow-scrolling: touch;
 }
 .traverseContainer {
-  grid-template-columns: auto calc(20vmin + 5vw);
+  grid-template-columns: auto minmax(calc(20vmin + 5vw), 200px);
 }
 .baseContainer, .baseTraverseContainer {
   grid-template-columns: auto;
@@ -246,5 +246,39 @@
 
 .indexCard {
   background-color: rgb(25,25,25);
+}
+
+.itmFltrBlock {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  background-color: rgb(30,30,30);
+  z-index: 8;
+}
+.itmFltrBlock > div {
+  width: 200px;
+}
+.itmFltrBlock input, .itmFltrBlock select {
+  height: 1.25rem;
+  width: 155px;
+  font-size: 0.9rem;
+  margin: 5px;
+}
+.itmFltrStatic {
+  display: inline-block;
+  width: 33px;
+}
+#itmTglON, #itmTglOFF {
+  display: inline-block;
+  width: 33px;
+  cursor: pointer;
+}
+.onoffFilter > input {
+  display: none;
 }
 

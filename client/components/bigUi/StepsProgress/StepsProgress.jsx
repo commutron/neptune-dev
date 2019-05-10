@@ -115,7 +115,7 @@ export default class StepsProgress extends Component	{
                 if(entry.obj === 'ping') {
                   return(
                     <StepRateDisplay
-                      key={rndmKeyR}
+                      key={rndmKeyA}
                       step={entry.step}
                       gFirst={entry.goodFirst}
                       ngFirst={entry.ngFirst}

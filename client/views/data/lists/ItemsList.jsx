@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
-import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 
 import LeapButton from '/client/components/tinyUi/LeapButton.jsx';
 import FilterItems from '../../../components/bigUi/FilterItems.jsx';
@@ -11,47 +10,25 @@ export default class ItemsList extends Component	{
   constructor() {
     super();
     this.state = {
-      filter: false,
-      advancedKey: false,
-      advancedTime: false,
-      textString: ''
+      keyword: false,
+      timeModifyer: false,
+      notModifyer: false
     };
   }
   
+  // Set scroll position from stored
   componentDidMount() {
     let el = document.getElementById('exItemList');
     const pos = Session.get('itemListScrollPos') || {b: false, num: 0};
     if(this.props.batchData.batch === pos.b) { el.scrollTop = pos.num || 0 }
   }
   
-  setFilter(rule) {
-    this.setState({ filter: rule });
-  }
-  setStepFilter(rule) {
-    let realRule = rule === 'false' ? false : rule;
-    this.setState({ advancedKey: realRule });
-  }
-  setTimeFilter(rule) {
-    this.setState({ advancedTime: rule });
-  }
-  setTextFilter(rule) {
-    this.setState({ textString: rule.toLowerCase() });
-  }
+  // update filter state
+  setKeywordFilter(keyword) { this.setState({ keyword: keyword.toLowerCase() }); }
+  setTimeFilter(rule) { this.setState({ timeModifyer: rule }); }
+  setToggle(rule) { this.setState({ notModifyer: rule }); }
   
-  scraps() {
-    const b = this.props.batchData;
-    let scList = [];
-    if(b) {
-      b.items.map( (entry)=>{
-        // check for scrap items
-        for(let v of entry.history) {
-          v.type === 'scrap' ? scList.push(entry.serial) : null;
-        }
-      });
-      return scList;
-    }else{null}
-  }
-  
+  // get flow steps for menu
   flowSteps() {
     let flow = this.props.widgetData.flows.find( x => x.flowKey === this.props.batchData.river );
     let flowAlt = this.props.widgetData.flows.find( x => x.flowKey === this.props.batchData.riverAlt );
@@ -66,110 +43,292 @@ export default class ItemsList extends Component	{
         steps.has({key: as.key}) ? null : steps.add(as);
       }
     }else{null}
-    let niceSteps = [...steps].filter( ( v, indx, slf ) => slf.findIndex( x => x.key === v.key ) === indx);
+    let niceSteps = [...steps]
+    // remove duplicate 'finish' step
+      .filter( ( v, indx, slf ) => slf.findIndex( x => x.key === v.key ) === indx);
     return niceSteps;
   }
 
-  advancedStepFilter() {
-    let filtrA = [];
-    for(let z of this.props.batchData.items) {
-      let match = false;
-      if(this.state.advancedKey == false) {
-        match = true;
+  // Sort Filters
+  fDone(items, timeMod, notMod) {
+    if(!timeMod || timeMod === '') {
+      if(notMod === true) {
+        return items.filter( x => x.finishedAt === false );
       }else{
-        match = z.history.find( x => x.key === this.state.advancedKey );
+        return items.filter( x => x.finishedAt !== false );
       }
-      !match ? null : filtrA.push(z.serial);
+    }else{
+      if(notMod === true) {
+        return items.filter( x => x.finishedAt === false ||
+                !moment(moment(x.finishedAt).format('YYYY-MM-DD'))
+                  .isSame(timeMod, 'day') );
+      }else{
+        return items.filter( x => x.finishedAt !== false &&
+                moment(moment(x.finishedAt).format('YYYY-MM-DD'))
+                  .isSame(timeMod, 'day') );
+      }
     }
-    return filtrA;
   }
   
-  advancedTimeFilter() {
-    let filtrA = [];
-    for(let z of this.props.batchData.items) {
-      let match = false;
-      if(!this.state.advancedTime || this.state.advancedTime === '') {
-        match = true;
-      }else if(this.state.filter === 'noncons') {
-        match = this.props.batchData.nonCon.find( x => x.serial === z.serial &&
-                  moment(moment(x.time).format('YYYY-MM-DD'))
-                    .isSame(this.state.advancedTime, 'day') === true );
+  fInproc(items, timeMod, notMod) {
+    if(!timeMod || timeMod === '') {
+      if(notMod === true) {
+        return items.filter( x => x.finishedAt !== false );
       }else{
-        match = z.history.find( x =>
-                  moment(moment(x.time).format('YYYY-MM-DD'))
-                    .isSame(this.state.advancedTime, 'day') === true );
+        return items.filter( x => x.finishedAt === false );
       }
-      !match ? null : filtrA.push(z.serial);
+    }else{
+      if(notMod === true) {
+        return items.filter( x => x.finishedAt !== false ||
+                moment(moment(x.createdAt).format('YYYY-MM-DD'))
+                  .isAfter(timeMod, 'day') );
+      }else{
+        return items.filter( x => x.finishedAt === false &&
+                moment(moment(x.createdAt).format('YYYY-MM-DD'))
+                  .isSameOrBefore(timeMod, 'day') );
+      }
     }
-    return filtrA;
+  }
+  
+  fFirsts(items, timeMod, notMod) {
+    let filtered = [];
+    if(!timeMod || timeMod === '') {
+      if(notMod === true) {
+        filtered = items.filter( 
+                    x => x.history.filter( y => y.type === 'first' )
+                      .length === 0 );
+      }else{
+        filtered = items.filter( 
+                  x => x.history.filter( y => y.type === 'first' )
+                    .length > 0 );
+      }
+    }else{
+      if(notMod === true) {
+        filtered = items.filter( 
+                    x => x.history.filter( y => y.type === 'first' &&
+                      moment(moment(y.time).format('YYYY-MM-DD'))
+                        .isSame(timeMod, 'day') )
+                      .length === 0 );
+      }else{
+        filtered = items.filter( 
+                  x => x.history.filter( y => y.type === 'first' &&
+                    moment(moment(y.time).format('YYYY-MM-DD'))
+                      .isSame(timeMod, 'day') )
+                    .length > 0 );
+      }
+    }
+    return filtered; 
+  }
+  
+  fNoncons(items, nonCon, timeMod, notMod) {
+    let filtered = [];
+    if(!timeMod || timeMod === '') {
+      if(notMod === true) {
+        filtered = items.filter( 
+                    x => nonCon.filter( y => y.serial === x.serial )
+                      .length === 0 );
+      }else{
+        filtered = items.filter( 
+                  x => nonCon.filter( y => y.serial === x.serial )
+                    .length > 0 );
+      }
+    }else{
+      if(notMod === true) {
+        filtered = items.filter( 
+                    x => nonCon.filter( y => y.serial === x.serial &&
+                      moment(moment(y.time).format('YYYY-MM-DD'))
+                        .isSame(timeMod, 'day') )
+                      .length === 0 );
+      }else{
+        filtered = items.filter(
+                  x => nonCon.filter( y => y.serial === x.serial &&
+                    moment(moment(y.time).format('YYYY-MM-DD'))
+                      .isSame(timeMod, 'day') )
+                    .length > 0 );
+      }
+    }
+    return filtered;
+  }
+  
+  fShortfalls(items, short, timeMod, notMod) {
+    let filtered = [];
+    if(!timeMod || timeMod === '') {
+      if(notMod === true) {
+        filtered = items.filter( 
+                    x => short.filter( y => y.serial === x.serial )
+                      .length === 0 );
+      }else{
+        filtered = items.filter( 
+                  x => short.filter( y => y.serial === x.serial )
+                    .length > 0 );
+      }
+    }else{
+      if(notMod === true) {
+        filtered = items.filter( 
+                    x => short.filter( y => y.serial === x.serial &&
+                      moment(moment(y.cTime).format('YYYY-MM-DD'))
+                        .isSame(timeMod, 'day') )
+                      .length === 0 );
+      }else{
+        filtered = items.filter(
+                  x => short.filter( y => y.serial === x.serial &&
+                    moment(moment(y.cTime).format('YYYY-MM-DD'))
+                      .isSame(timeMod, 'day') )
+                    .length > 0 );
+      }
+    }
+    return filtered;
+  }
+  
+  fAlt(items, notMod) {
+    if(notMod === true) {
+      return items.filter( x => x.alt === 'no' );
+    }else{
+      return items.filter( x => x.alt === 'yes' );
+    }
+  }
+  
+  fRma(items, notMod) {
+    if(notMod === true) {
+      return items.filter( x => x.rma.length === 0);
+    }else{
+      return items.filter( x => x.rma.length > 0);
+    }
+  }
+  
+  fScrap(items, timeMod, notMod) {
+    let scrapList = [];
+    items.map( (entry)=>{
+      for(let v of entry.history) {
+        v.type === 'scrap' ? scrapList.push(entry.serial) : null;
+      }
+    });
+    let iList = [];
+    if(!timeMod || timeMod === '') {
+      if(notMod === true) {
+        iList = items.filter( 
+                    x => x.history.filter( y => y.type === 'scrap' )
+                      .length === 0 );
+      }else{
+        iList = items.filter( 
+                  x => x.history.filter( y => y.type === 'scrap' )
+                    .length > 0 );
+      }
+    }else{
+      if(notMod === true) {
+        iList = items.filter( 
+                    x => x.history.filter( y => y.type === 'scrap' &&
+                      moment(moment(y.time).format('YYYY-MM-DD'))
+                        .isSame(timeMod, 'day') )
+                      .length === 0 );
+      }else{
+        iList = items.filter( 
+                  x => x.history.filter( y => y.type === 'scrap' &&
+                    moment(moment(y.time).format('YYYY-MM-DD'))
+                      .isSame(timeMod, 'day') )
+                    .length > 0 );
+      }
+    }
+    return { scrapList, iList };
+  }
+  
+  
+  fStep(items, flowKey, timeMod, notMod) {
+    const key = flowKey.slice(1);
+    let filtered = [];
+    if(!flowKey) {
+      filtered = items;
+    }else if(!timeMod || timeMod === '') {
+      if(notMod === true) {
+        filtered = items.filter( 
+                    x => x.history.filter( y => y.key === key )
+                      .length === 0 );
+      }else{
+        filtered = items.filter( 
+                  x => x.history.filter( y => y.key === key )
+                    .length > 0 );
+      }
+    }else{
+      if(notMod === true) {
+        filtered = items.filter( 
+                    x => x.history.filter( y => y.key === key &&
+                      moment(moment(y.time).format('YYYY-MM-DD'))
+                        .isSame(timeMod, 'day') )
+                      .length === 0 );
+      }else{
+        filtered = items.filter( 
+                  x => x.history.filter( y => y.key === key &&
+                    moment(moment(y.time).format('YYYY-MM-DD'))
+                      .isSame(timeMod, 'day') )
+                    .length > 0 );
+      }
+    }
+    return filtered;                                 
   }
   
   render() {
     
-    const filter = this.state.filter;
-    const advancedKey = this.state.advancedKey;
-    const advancedTime = this.state.advancedTime;
-    const textString = this.state.textString;
+    const kywrd = this.state.keyword;
+    const timeModifyer = this.state.timeModifyer;
+    const notModifyer = this.state.notModifyer;
+    
+    {Roles.userIsInRole(Meteor.userId(), 'debug') &&
+      console.log({ kywrd, timeModifyer, notModifyer });}
       
     const b = this.props.batchData;
+    const nonCon = b.nonCon;
     const short = b.shortfall || [];
     
-    const scrap = b ? this.scraps() : [];
+    const scrap = b ? this.fScrap(b.items, timeModifyer, notModifyer) : 
+                      { scrapList: [], iList: [] };
     
     const steps = this.flowSteps();
     
-    const matchStep = this.advancedStepFilter();
-    
-    const matchTime = this.advancedTimeFilter();
-    
-    const f = filter;
-    let preFilter = 
-      f === 'done' ?
-      b.items.filter( x => x.finishedAt !== false ) :
-      f === 'inproc' ?
-      b.items.filter( x => x.finishedAt === false ) :
-      f === 'firsts' ?
-      b.items.filter( x => x.history.find( y => y.type === 'first') ) :
-      f === 'noncons' ?
-      b.items.filter( x => b.nonCon.find( y => y.serial === x.serial ) )  :
-      f === 'shortfalls' ?
-      b.items.filter( x => short.find( y => y.serial === x.serial ) )  :
-      f === 'alt' ?
-      b.items.filter( x => x.alt === 'yes' ) :
-      f === 'rma' ?
-      b.items.filter( x => x.rma.length > 0) :
-      f === 'scrap' ?
-      b.items.filter( x => scrap.includes(x.serial) === true ) :
+    ////////////////////////////////
+    let filteredList = 
+      !kywrd ?
+        b.items :
+      kywrd.startsWith('@') ?
+        this.fStep(b.items, kywrd, timeModifyer, notModifyer) :
+      kywrd === 'complete' ?
+        this.fDone(b.items, timeModifyer, notModifyer) :
+      kywrd === 'in progress' ?
+        this.fInproc(b.items, timeModifyer, notModifyer) :
+      kywrd === 'first offs' ?
+        this.fFirsts(b.items, timeModifyer, notModifyer) :
+      kywrd === 'nonconformances' ?
+        this.fNoncons(b.items, nonCon, timeModifyer, notModifyer) :
+      kywrd === 'shortfalls' ?
+        this.fShortfalls(b.items, short, timeModifyer, notModifyer) :
+      kywrd === 'alternative' ?
+        this.fAlt(b.items, notModifyer) :
+      kywrd === 'rma' ?
+        this.fRma(b.items, notModifyer) :
+      kywrd === 'scrap' ? 
+        scrap.iList :
+      //kywrd === typeof 'String' ?
+        //b.items.filter( tx => tx.serial.toLowerCase().includes(textString) === true ) :
       b.items;
+    /////////////////////////////////////
     
-    let textFilter = preFilter.filter( 
-                      tx => tx.serial.toLowerCase().includes(textString) === true );
-                      
-    let stepFilter = advancedKey == false ? textFilter :
-                      textFilter.filter( z => matchStep.includes(z.serial) === true );
-                         
-    let timeFilter = !advancedTime || advancedTime == '' ? stepFilter :
-                      stepFilter.filter( z => matchTime.includes(z.serial) === true );
-                      
-    let showListOrder = timeFilter.sort( (x,y)=> x.serial - y.serial);
-{/*<AnimateWrap type='cardTrans'>*/}
+    let showListOrder = filteredList.sort( (x,y)=> x.serial - y.serial);
+
     return (
       
         <div className='' key={1}>
-          <div className='stickyBar'>
-            <FilterItems
-              title={b.batch}
-              total={showListOrder.length}
-              advancedList={steps}
-              onClick={e => this.setFilter(e)}
-              onStepChange={e => this.setStepFilter(e)}
-              onTimeChange={e => this.setTimeFilter(e)}
-              onTxtChange={e => this.setTextFilter(e)} />
-          </div>
+          <FilterItems
+            title={b.batch}
+            total={showListOrder.length}
+            advancedList={steps}
+            selectedKeyword={kywrd}
+            selectedToggle={notModifyer}
+            onKeywordChange={e => this.setKeywordFilter(e)}
+            onTimeChange={e => this.setTimeFilter(e)}
+            onNotChange={e => this.setToggle(e)} />
           {showListOrder.map( (entry, index)=> {
             let style = entry.history.length === 0 ? 'leapBar numFont' :
                         entry.finishedAt === false ? 'leapBar numFont activeMark' : 
-                        scrap.includes(entry.serial) ? 'leapBar numFont ngMark' : 'leapBar numFont gMark';
+                        scrap.scrapList.includes(entry.serial) ? 'leapBar numFont ngMark' : 'leapBar numFont gMark';
               return (
                 <LeapButton
                   key={index} 

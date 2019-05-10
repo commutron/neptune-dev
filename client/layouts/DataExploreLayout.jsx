@@ -36,7 +36,7 @@ export const TraverseWrap = ({
   }
     
     let scrollFix = {
-      overflowY: 'auto'
+      overflowY: 'scroll'
     };
     
     const invert = invertColor ? 'invert' : '';

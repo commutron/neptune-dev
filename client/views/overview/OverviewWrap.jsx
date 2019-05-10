@@ -103,14 +103,7 @@ export default class OverviewWrap extends Component	{
       });
     });
   }
-  
-  /*
-  .sort((b1, b2)=> {
-    if (b1.batch < b2.batch) { return 1 }
-    if (b1.batch > b2.batch) { return -1 }
-    return 0;
-  });
-  */
+
   
   render() {
     

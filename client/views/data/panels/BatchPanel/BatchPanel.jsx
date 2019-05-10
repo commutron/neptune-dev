@@ -84,8 +84,8 @@ export default class BatchPanel extends Component	{
             tabs={
               [
                 'Info',
-                'First-offs',
                 'Timeline',
+                'First-offs',
                 `${Pref.nonCon}s`,
                 `${Pref.rma}s`
               ]
@@ -105,14 +105,6 @@ export default class BatchPanel extends Component	{
               riverTitle={riverTitle}
               riverAltTitle={riverAltTitle} />
             
-            <div className='space3v'>
-              <FirstsTimeline
-                id={b._id}
-                batch={b.batch}
-                verifyList={filter.verifyList}
-                doneBatch={done} />
-            </div>
-            
             <TimeTab 
               a={this.props.app}
               b={this.props.batchData}
@@ -121,7 +113,14 @@ export default class BatchPanel extends Component	{
               allDone={allDone}
               riverFlow={riverFlow}
               riverAltFlow={riverAltFlow} />
-
+              
+            <div className='space3v'>
+              <FirstsTimeline
+                id={b._id}
+                batch={b.batch}
+                verifyList={filter.verifyList}
+                doneBatch={done} />
+            </div>
             
             <div className='vFrameContainer space'>
               <div className='avOneContent min300 centreSelf'>

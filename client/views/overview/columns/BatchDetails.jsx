@@ -7,14 +7,6 @@ import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
 const BatchDetails = ({hBs, lBs, cBs, bCache, user, app})=> {
   
-  /*
-  let headers = wBs && wBs.length > 0 ? Object.keys(wBs[0]) :
-                cBs && cBs.length > 0 ? Object.keys(cBs[0]) :
-                [];
-  headers.length > 0 && headers.shift();
-  console.log(headers);
-  */
-  
   return(
     <div className='overGridScroll' tabIndex='1'>
       
@@ -107,13 +99,11 @@ const BatchDetailChunk = ({ck, warm, user, app})=> (
         title='A Process Flow has been assigned'
         size='big' />
     </div>
-    {Roles.userIsInRole(Meteor.userId(), 'nightly') &&
-      <PhaseProgress
-        batchID={ck.batchID}
-        warm={warm}
-        app={app} />}
-    {!Roles.userIsInRole(Meteor.userId(), 'nightly') ||
-      Roles.userIsInRole(Meteor.userId(), 'debug') &&
+    <PhaseProgress
+      batchID={ck.batchID}
+      warm={warm}
+      app={app} />
+    {Roles.userIsInRole(Meteor.userId(), 'debug') &&
       <div>
         <NumStat
           num={ck.percentOfDoneItems}

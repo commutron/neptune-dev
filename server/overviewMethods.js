@@ -29,12 +29,23 @@ function collectRelevant(accessKey, temp, activeList) {
   });
 }
 
-function collectActive(clientTZ, relevant) {
+function collectActive(accessKey, clientTZ, relevant) {
   return new Promise(resolve => {
     const now = moment().tz(clientTZ);
+    const users = Meteor.users.find({
+      orgKey: accessKey, roles: 'active', breadcrumbs: { $exists: true }
+    }).fetch();
+    
     let list = [];
     for(let b of relevant) {
-      // is there new activity today
+      // has it been touched in 'production'
+      let isActive = users.find( 
+        x => x.breadcrumbs.find( 
+          y => y.keyword === b.batch && now.isSame(moment(y.time), 'day')
+        )
+      ) ? true : false;
+      /*
+      // is there new noncons or history today
       const activeN = (nonCon)=> 
         nonCon.find( 
           n => now
@@ -47,6 +58,7 @@ function collectActive(clientTZ, relevant) {
               .isSame(moment(h.time), 'day') ) )
                 ? true : false;
       let isActive = activeN(b.nonCon) || activeH(b.items);
+      */
       isActive === true && list.push(b.batch);
     }
     resolve(list);
@@ -176,7 +188,7 @@ Meteor.methods({
       const accessKey = Meteor.user().orgKey;
       try {
         relevant = await collectRelevant(accessKey, 'warm');
-        collection = await collectActive(clientTZ, relevant);
+        collection = await collectActive(accessKey, clientTZ, relevant);
         return collection;
       }catch (err) {
         throw new Meteor.Error(err);
