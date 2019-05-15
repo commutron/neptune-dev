@@ -31,9 +31,11 @@ export default class NonConBlock extends Component {
     const ref = this.ncRef.value.trim().toLowerCase();
     const type = this.ncType.value;
     const where = this.ncWhere.value;
-    if(this.props.entry.ref !== ref || 
-       this.props.entry.type !== type ||
-       this.props.entry.where !== where) {  
+    if( typeof ref !== 'string' || ref.length < 1  ) {
+      null;
+    }else if(this.props.entry.ref !== ref || 
+             this.props.entry.type !== type ||
+             this.props.entry.where !== where) {  
       Meteor.call('editNC', id, serial, ncKey, ref, type, where, (error)=> {
         error && console.log(error);
   			this.setState({ edit: false });
@@ -123,6 +125,7 @@ export default class NonConBlock extends Component {
                 id='ncR'
                 className='redIn up inlineInput'
                 defaultValue={dt.ref}
+                required={true}
               />
               <select 
                 ref={(i)=> this.ncType = i}

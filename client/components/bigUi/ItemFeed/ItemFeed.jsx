@@ -44,7 +44,7 @@ const ItemFeed = ({
         </div>
         
         {ordered.map( (dt, ix)=>{
-          if(dt.step) {
+          if(typeof dt.step === 'string') {
             return( 
               <HistoryBlock
                 key={dt.key+ix}
@@ -55,8 +55,7 @@ const ItemFeed = ({
                 done={done}
                 showHeader={false} /> 
             );
-          }
-          if(dt.ref) {
+          }else if(typeof dt.ref === 'string') {
             return( 
               <NonConBlock
                 key={dt.key+ix}
@@ -66,15 +65,18 @@ const ItemFeed = ({
                 done={done}
                 app={app} /> 
             );
+          }else if(typeof dt.ref === 'string') {
+            return( 
+              <ShortBlock
+                key={dt.key+ix}
+                entry={dt}
+                id={id}
+                serial={serial}
+                done={done} /> 
+            );
+          }else{
+            null;
           }
-          return( 
-            <ShortBlock
-              key={dt.key+ix}
-              entry={dt}
-              id={id}
-              serial={serial}
-              done={done} /> 
-          );
         })}
         
         {rmas.length > 0 &&
