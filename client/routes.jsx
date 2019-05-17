@@ -108,14 +108,12 @@ privlegedRoutes.route('/limbo', {
   }
 });
 /*
-privlegedRoutes.route('/initialsetup', {
+exposedRoutes.route('/initialsetup', {
   name: 'initialsetup',
   action() {
     mount(PublicLayout, {
        content: (
         <div>
-          <Login />
-          <hr />
           <InitialSetup />
         </div>
       ),

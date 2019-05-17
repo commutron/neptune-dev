@@ -19,6 +19,15 @@ const InitialSetup = ({ ready, option })=> {
     });
   }
   
+  function hndlFirstUser() {
+    let options = {username: 'devMaster', password: 'firefly'};
+    	Accounts.createUser(options, (error)=>{
+    		if(error) {
+    			console.log(error);
+    		}
+    	});
+  }
+  
   if( !ready ) {
     return(
       <Spin />
@@ -33,10 +42,15 @@ const InitialSetup = ({ ready, option })=> {
   
   return(
     <div className='space'>
-      <div className='centre'>
+      <div className=''>
+        <button
+          className='clear whiteT'
+          onClick={()=>hndlFirstUser()}
+        >First User</button>
+        <br /><br /><br /><br /><br />  
         <form onSubmit={()=>hndlSet()}>
           <button
-            className='stone clear'
+            className='clear whiteT'
           >Setup</button>
         </form>
       </div>
@@ -50,14 +64,9 @@ export default withTracker( () => {
   let login = Meteor.userId() ? true : false;
   let user = login ? Meteor.user() : false;
   let org = user ? user.org : false;
-  let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
+  //let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
      
-    if( !login || !active ) {
-      return {
-        ready: false,
-        option: false,
-      };
-    }else if(!org) {
+    if(!org) {
       if(Pref.InitialAppSetup) {
         return {
           ready: true,
