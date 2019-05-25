@@ -36,7 +36,7 @@ const FilterItems = ({
             <b id='itmTglOFF'><i className='fas fa-filter fa-lg fa-fw'></i></b> :
             <span id='itmTglON' className="fa-layers fa-fw">
               <i className='fas fa-filter fa-lg fa-fw'></i>
-              <i className="fas fa-ban fa-2x fa-fw redT"></i>
+              <i className="fas fa-ban fa-2x fa-fw redT" data-fa-transform="left-2"></i>
             </span>}
         </label>
         <select

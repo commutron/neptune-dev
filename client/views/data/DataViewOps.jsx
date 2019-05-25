@@ -9,6 +9,7 @@ import AdvancedSearch from './panels/AdvancedSearch.jsx';
 import Reports from './panels/Reports.jsx';
 import AllGroups from './panels/AllGroups.jsx';
 import AllBatches from './panels/AllBatches.jsx';
+import Calendar from './panels/Calendar.jsx';
 
 import ItemPanel from './panels/ItemPanel.jsx';
 import BatchPanel from './panels/BatchPanel/BatchPanel.jsx';
@@ -135,6 +136,28 @@ export default class DataViewOps extends Component	{
             xBatchData={allXBatch}
             widgetData={allWidget}
             groupData={allGroup} 
+            app={app} />
+        </TraverseWrap>
+      );
+    }
+    
+    if(view === 'calendar') {
+      Session.set('nowBatch', false);
+      return (
+        <TraverseWrap
+		      batchData={false}
+          widgetData={false}
+          versionData={false}
+          groupData={false}
+          user={user}
+          app={app}
+          title='Calendar'
+          subLink={subLink}
+          action={false}
+          base={true}
+          invertColor={true}
+        >
+          <Calendar
             app={app} />
         </TraverseWrap>
       );

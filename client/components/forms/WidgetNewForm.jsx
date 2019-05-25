@@ -16,11 +16,6 @@ export default class WidgetNewForm extends Component	{
    };
   }
 
-//// This is not functioning. Gets blocked for security \\\\
-  pullOver() {
-    this.setState({instruct: document.getElementById('instruct').contentWindow.location.href});
-  }
-
   save(e) {
     e.preventDefault();
     this.go.disabled = true;
@@ -133,9 +128,6 @@ export default class WidgetNewForm extends Component	{
             src={this.props.rootWI}
             height='600'
             width='100%' />
-          <br />
-          <button className='smallAction clear' onClick={this.pullOver}>use this page</button>
-          <i className='redT'>blocked for security</i>
         </div>
 
       </div>

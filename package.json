@@ -5,7 +5,7 @@
     "start": "meteor run"
   },
   "dependencies": {
-    "@babel/runtime": "^7.4.3",
+    "@babel/runtime": "^7.4.4",
     "@fortawesome/react-fontawesome": "0.0.18",
     "babel-runtime": "^6.26.0",
     "bcrypt": "^1.0.3",
@@ -17,10 +17,11 @@
     "meteor-node-stubs": "^0.4.1",
     "moment": "^2.24.0",
     "moment-business": "^3.0.1",
-    "moment-timezone": "^0.5.23",
+    "moment-timezone": "^0.5.25",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-addons-pure-render-mixin": "^15.6.2",
+    "react-big-calendar": "^0.21.0",
     "react-chartist": "^0.13.3",
     "react-chartist-tooltip": "^0.4.1",
     "react-contextmenu": "^2.11.0",
@@ -31,6 +32,6 @@
     "react-transition-group": "^1.2.1"
   },
   "devDependencies": {
-    "@fortawesome/fontawesome-free": "^5.8.1"
+    "@fortawesome/fontawesome-free": "^5.8.2"
   }
 }
