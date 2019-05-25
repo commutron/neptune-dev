@@ -9,17 +9,9 @@ import CreateTag from '/client/components/uUi/CreateTag.jsx';
 import Tabs from '/client/components/smallUi/Tabs.jsx';
 import InfoTab from './InfoTab.jsx';
 import TimeTab from './TimeTab.jsx';
+import NCTab from './NCTab.jsx';
 
 import FirstsTimeline from '/client/components/bigUi/FirstsTimeline.jsx';
-import NonConOverview from '/client/components/charts/NonConOverview.jsx';
-import NonConRate from '/client/components/charts/NonConRate.jsx';
-import { HasNonCon } from '/client/components/bigUi/NonConMiniTops.jsx';
-import { NonConPer } from '/client/components/bigUi/NonConMiniTops.jsx';
-import { MostNonCon } from '/client/components/bigUi/NonConMiniTops.jsx';
-import { TodayNonCon } from '/client/components/bigUi/NonConMiniTops.jsx';
-import { LeftFxNonCon } from '/client/components/bigUi/NonConMiniTops.jsx';
-import { LeftInNonCon } from '/client/components/bigUi/NonConMiniTops.jsx';
-import NonConPie from '/client/components/charts/NonConPie.jsx';
 import RMATable from '/client/components/tables/RMATable.jsx';
 
 // props
@@ -122,31 +114,11 @@ export default class BatchPanel extends Component	{
                 doneBatch={done} />
             </div>
             
-            <div className='vFrameContainer space'>
-              <div className='avOneContent min300 centreSelf'>
-                <div className='wide centreRow'>
-                  <HasNonCon noncons={b.nonCon} items={b.items} />
-                  <NonConPer noncons={b.nonCon} items={b.items} />
-                  <MostNonCon noncons={b.nonCon} app={a} />
-                  <TodayNonCon noncons={b.nonCon} />
-                  <LeftFxNonCon noncons={b.nonCon} />
-                  <LeftInNonCon noncons={b.nonCon} />
-                </div>
-                <NonConPie nonCons={b.nonCon} />
-              </div>
-              <div className='avTwoContent'>
-                <p className='wide centreText'>NonCon Rate</p>
-                <NonConRate batches={[b.batch]} />
-              </div>
-              <div className='avThreeContent'>
-                <NonConOverview
-                  ncOp={a.nonConOption}
-                  flow={riverFlow}
-                  flowAlt={riverAltFlow}
-                  nonCons={b.nonCon}
-                  app={a} />
-              </div>
-            </div>
+            <NCTab 
+              a={this.props.app}
+              b={this.props.batchData}
+              riverFlow={riverFlow}
+              riverAltFlow={riverAltFlow} />
             
             <div>
               <RMATable

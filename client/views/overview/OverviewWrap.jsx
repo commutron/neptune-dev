@@ -35,6 +35,9 @@ export default class OverviewWrap extends Component	{
       coolBatches: false,
       coolStatus: []
     };
+    this.hotheader = React.createRef();
+    this.lukeheader = React.createRef();
+    this.coolheader = React.createRef();
   }
   
   dataStart() {
@@ -152,6 +155,29 @@ export default class OverviewWrap extends Component	{
           <span><a href="#hotBatch">Active</a></span>
           <span><a href="#lukewarmBatch">In Progress</a></span>
           <span><a href="#coolBatch">In Kitting</a></span>
+          
+          {Roles.userIsInRole(Meteor.userId(), 'nightly') &&
+            <span>
+              <span>
+                <button 
+                  className='textLinkButton'
+                  onClick={()=>window.scrollTo(0, this.hotheader.current.offsetTop)}
+                >Active</button>
+              </span>
+              <span>
+                <button 
+                  className='textLinkButton'
+                  onClick={()=>window.scrollTo(0, this.lukeheader.current.offsetTop)}
+                >In Progress</button>
+              </span>
+              <span>
+                <button 
+                  className='textLinkButton'
+                  onClick={()=>window.scrollTo(0, this.coolheader.current.offsetTop)}
+                >In Kitting</button>
+              </span>
+            </span>}
+          
           <span className='flexSpace' />
           <span>Updated {duration} ago</span>
         </nav>
@@ -166,6 +192,9 @@ export default class OverviewWrap extends Component	{
               lB={this.state.lukeBatches}
               cB={this.state.coolBatches}
               bCache={this.props.bCache}
+              hotheader={this.hotheader}
+              lukeheader={this.lukeheader}
+              coolheader={this.coolheader}
             />
             
             <BatchDetails

@@ -1,6 +1,5 @@
 import { Meteor } from 'meteor/meteor';
 
-
 //// Preferences singleton class \\\\
 
 let instance = null;

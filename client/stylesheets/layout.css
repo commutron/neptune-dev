@@ -629,11 +629,11 @@ main {
   align-items: center;
   background-color: rgb(25,25,25);
 }
-.scrollToNav > span {
+.scrollToNav span {
   padding: 0 1vw;
   font-size: 1.75vh;
 }
-.scrollToNav > span:focus {
+.scrollToNav span:focus {
   border: 1px dotted var(--clouds);
 }
 

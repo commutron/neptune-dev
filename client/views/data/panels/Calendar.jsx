@@ -61,7 +61,7 @@ const Calendar = ({ eventsSubReady, allBatch, bCache, app }) => {
           selectable='ignoreEvents'
           startAccessor="start"
           endAccessor="end"
-          style={{ height: "80vh", width: "80vw" }}
+          style={{ height: '80vh', width: '80vw' }}
         />
     
       </div>
