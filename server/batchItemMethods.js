@@ -1047,7 +1047,7 @@ Meteor.methods({
   },
   
   ncRemove(batchId, ncKey, override) {
-    const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
+    const auth = Roles.userIsInRole(Meteor.userId(), ['remove', 'qa']);
     if(!auth && override === undefined) {
       null;
     }else{

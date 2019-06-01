@@ -46,14 +46,7 @@ const NCTributary = ({ id, serial, nonCons, sType })=> {
         console.log(error);
 		});
   }
-  /*
-  function handleSkip(ncKey, serial) {
-    Meteor.call('skipNC', id, serial, ncKey, (error)=> {
-			if(error)
-        console.log(error);
-		});
-	}
-  */
+  
   function handleComment(ncKey, com) {
     Meteor.call('commentNC', id, ncKey, com, (error)=> {
       if(error)
@@ -77,7 +70,6 @@ const NCTributary = ({ id, serial, nonCons, sType })=> {
             doReject={()=> handleReject(entry.key, entry.fix.time, entry.fix.who)}
             doSnooze={()=> handleSnooze(entry.key)}
             doUnSkip={()=> handleUnSkip(entry.key)}
-            //doSkip={()=> handleSkip(entry.key)}
             doComment={(e)=> handleComment(entry.key, e)}
           />
         )})}
@@ -149,19 +141,16 @@ const NCStream = ({ entry, id, end, doFix, doInspect, doReject, doSnooze, doUnSk
               Inspected, no repair required
             </MenuItem> }
             <MenuItem onClick={doReject} disabled={lockI || !fixed}>
-              {Pref.reject} 
+              {Pref.reject}
             </MenuItem>      
             <MenuItem onClick={doSnooze} disabled={skip !== false || end}>
-              Snooze
+              Snooze, repair later
             </MenuItem>
-            {/*<MenuItem onClick={doSkip} disabled={skip !== false && !entry.snooze}>
-              Skip
-            </MenuItem>*/}
             <MenuItem onClick={doUnSkip} disabled={!skip}>
-              Wake Up
+              Wake Up, repair now
             </MenuItem>
             <MenuItem onClick={this.comment.bind(this)}>
-              Comment
+              Add Comment
             </MenuItem>
           </ContextMenu>
         </div>

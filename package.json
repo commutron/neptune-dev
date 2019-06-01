@@ -14,6 +14,7 @@
     "chartist-plugin-fill-donut": "^0.1.4",
     "chartist-plugin-tooltips": "0.0.17",
     "create-react-class": "^15.6.3",
+    "ee-first": "^1.1.1",
     "fixed-data-table": "^0.6.5",
     "meteor-node-stubs": "^0.4.1",
     "moment": "^2.24.0",

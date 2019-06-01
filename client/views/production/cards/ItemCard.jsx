@@ -25,7 +25,8 @@ export default class ItemCard extends Component	{
     const progCounts = this.props.progCounts;
     
     if(!b.river) {
-      Session.set('nowStep', 'unavailable');
+      Session.set('ncWhere', Pref.outOfFlow);
+	    Session.set('nowStepKey', undefined);
       return (
         <AnimateWrap type='cardTrans'>
           <div className='section sidebar centre centreText big' key={i.serial}>

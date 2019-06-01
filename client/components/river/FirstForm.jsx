@@ -186,26 +186,28 @@ export default class FirstForm extends Component	{
       
             {stepName && stepName.toLowerCase().includes('smt') ?
               <fieldset className='stoneForm'>
-                <span className='balance'>
-                  <input
-                    id='manualInspect'
-                    type='radio'
-                    name='howInspect'
-                    onChange={this.eyes.bind(this)} />
-                  <label htmlFor='manualInspect' className='roundActionIcon dbblRound onblueHover'>
-                    <i className="fas fa-eye fa-3x"></i>
-                    <br /><i className='medBig'>Manual</i>
-                  </label>
-                  <input
-                    id='aoiInspect'
-                    type='radio'
-                    name='howInspect'
-                    onChange={this.auto.bind(this)} />
-                  <label htmlFor='aoiInspect' className='roundActionIcon dbblRound onblueHover'>
-                    <i className="fas fa-camera fa-3x"></i>
-                    <br /><i className='medBig'>AOI</i>
-                  </label>
-                </span>
+                <p>
+                  <span className='centreRow'>
+                    <input
+                      id='manualInspect'
+                      type='radio'
+                      name='howInspect'
+                      onChange={this.eyes.bind(this)} />
+                    <label htmlFor='manualInspect' className='roundActionIcon dbblRound onblueHover'>
+                      <i className="fas fa-eye fa-3x"></i>
+                      <br /><i className='medBig'>Manual</i>
+                    </label>
+                    <input
+                      id='aoiInspect'
+                      type='radio'
+                      name='howInspect'
+                      onChange={this.auto.bind(this)} />
+                    <label htmlFor='aoiInspect' className='roundActionIcon dbblRound onblueHover'>
+                      <i className="fas fa-camera fa-3x"></i>
+                      <br /><i className='medBig'>AOI</i>
+                    </label>
+                  </span>
+                </p>
               </fieldset>
             : null}
 

@@ -394,7 +394,7 @@ fieldset.stoneForm {
 .stoneForm select,
 .stoneForm label,
 .stoneForm details {
-  min-width: 16vmax;
+  
   max-width: 16vmax;
 }
 

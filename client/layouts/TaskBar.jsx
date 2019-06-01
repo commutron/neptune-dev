@@ -26,7 +26,7 @@ const TaskBar = ({ subLink }) => {
       ><i className='fas fa-cubes'></i></button>
       
       <button
-        title='Calendar'
+        title='Events Calendar'
         className={subLink === 'calendarundefined' ? 'taskLink onTL' : 'taskLink'}
         onClick={()=>FlowRouter.go('/data/calendar')}
       ><i className='far fa-calendar-alt'></i></button>

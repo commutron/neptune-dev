@@ -106,7 +106,7 @@ export const TraverseWrap = ({
         <section className={'contentAreaEx ' + invert}>
           <div 
             className={
-              base ? 'baseConainer' :
+              base ? 'baseContainer' :
               !children[1] ?
                 'baseTraverseContainer' : 'traverseContainer'}>
             

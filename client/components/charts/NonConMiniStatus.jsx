@@ -1,6 +1,16 @@
 import React from 'react';
 import MiniMeter from './MiniScales/MiniMeter.jsx';
 
+// DEPRECIATED \\
+
+/*
+<NonConMiniSatus
+  noncons={b.nonCon} array
+  flow={flow} array
+  flowAlt={flowAlt} array
+  app={a} /> cursor
+*/
+
 const NonConMiniSatus = ({ noncons, flow, flowAlt, app })=> {
   
   let dprt = new Set( Array.from(flow, x => x.step), Array.from(flowAlt, x => x.step) );

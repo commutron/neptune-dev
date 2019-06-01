@@ -12,7 +12,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '1.15.1';
+    this.neptuneVersion = '1.16.1';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -81,6 +81,7 @@ class Pref {
     this.gComm = 'general comments';
     this.nest = 'nest';
     this.stoneislocked = 'locked. \n unable to proceed';
+    this.outOfFlow = 'out of flow';
     // bad tracking
     this.fixFlow = 'repair process';
     this.fixStep = 'repair step';
@@ -88,7 +89,7 @@ class Pref {
     this.nonConRef = 'reference';
     this.nonConType = 'defect';
     this.repair = 'repair';
-    this.reject = 'reject repair';
+    this.reject = 're-attempt repair';
     this.skip = 'skip';
     this.skipDescribe = 'Ship With Defect';
     this.snooze = 'snooze';
@@ -127,6 +128,12 @@ class Pref {
     this.counter = 'counter';
     this.count = 'tick';
     this.counts = 'ticks';
+    
+    //global time
+    this.statisticalStartHour = 6; // 6am
+    this.statisticalEndHour = 20; // 8pm
+    //this.minWorkDayStartTime
+    //this.maxWorkDayEndTime
   }
 }
 

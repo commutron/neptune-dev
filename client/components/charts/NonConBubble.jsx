@@ -11,7 +11,7 @@ export default class NonConBubble extends Component {
           id: "basic-bar",
         },
         xaxis: {
-          categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
+          categories: this.props.ncOp
         },
         theme: {
           monochrome: {
@@ -27,14 +27,44 @@ export default class NonConBubble extends Component {
       },
       series: [
         {
-          name: "series-1",
-          data: [30, 40, 45, 50, 49, 60, 70, 91]
+          name: "",
+          data: []
         }
       ]
     };
   }
+  
+  componentDidMount() {
+    const nonConOptions = this.props.ncOp || [];
+    
+    const nonConArray = this.props.nonCons || [];
+    const nonConArrayClean = nonConArray.filter( x => !x.trash );
+    
+    function ncCounter(ncArray, ncOptions) {
+      let ncCounts = [];
+      //let ncLabels = [];
+      for(let ncType of ncOptions) {
+        const typeCount = ncArray.filter( x => x.type === ncType ).length;
+        ncCounts.push(typeCount);
+        //ncLabels.push(ncType);
+      }
+      return ncCounts;
+    }
+    
+    try{
+      let calc = ncCounter(nonConArrayClean, nonConOptions);
+      this.setState({
+        series: [
+          { data: calc }
+        ],
+      });
+    }catch(err) {
+      console.log(err);
+    }
+  }
 
   render() {
+    
     return (
       <div className='wide'>
         <Chart

@@ -8,7 +8,6 @@ import GeneralChunk from '/client/views/data/panels/BatchPanel/GeneralChunk.jsx'
 //import JumpText from '../../../components/tinyUi/JumpText.jsx';
 import FloorRelease from '/client/components/smallUi/FloorRelease.jsx';
 import StepsProgress from '../../../components/bigUi/StepsProgress/StepsProgress.jsx';
-import NonConMiniSatus from '/client/components/charts/NonConMiniStatus.jsx';
 
 
 export default class BatchCard extends Component	{
@@ -41,12 +40,7 @@ export default class BatchCard extends Component	{
       <i className='fas fa-info-circle fa-fw' data-fa-transform='down-2' title='Info'></i>, 
       <i className='fas fa-tasks fa-fw' data-fa-transform='down-2' title='Progress'></i>
     ];
-    if(Roles.userIsInRole(Meteor.userId(), 'nightly')) {
-      tabOps.push(<i 
-        className='fas fa-thumbs-down fa-fw' 
-        data-fa-transform='down-2' 
-        title='NonConformances'></i>);
-    }
+
 
     return(
       <AnimateWrap type='cardTrans'>
@@ -81,16 +75,6 @@ export default class BatchCard extends Component	{
               <div className='space cap'>
                 <StepsProgress progCounts={progCounts} truncate={true} />
               </div>
-              
-              {Roles.userIsInRole(Meteor.userId(), 'inspect') &&
-              <div className='space'>
-                <NonConMiniSatus
-                  noncons={b.nonCon}
-                  flow={flow}
-                  flowAlt={flowAlt}
-                  user={u}
-                  app={a} />
-              </div>}
               
             </Tabs>
   				

@@ -3,7 +3,14 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 const NCAdd = ({ id, barcode, app })=> {
-
+  
+  function handleCheck(e) {
+    const list = app.nonConOption;
+    let match = list.find( x => x === e.target.value);
+    let message = !match ? 'please choose from the list' : '';
+    e.target.setCustomValidity(message);
+  }
+  
   function handleNC(e, andFix) {
     e.preventDefault();
     const type = this.ncType.value.trim().toLowerCase();
@@ -41,46 +48,73 @@ const NCAdd = ({ id, barcode, app })=> {
       onSubmit={(e)=>handleNC(e, false)}>
     
     <span>
-      <select
+      <input
         id='discStp'
         className='cap redIn'
+        list='ncWhereList'
         defaultValue={now}
-        disabled={lock}
-        required>
-        <optgroup label='auto'>
-          <option value={now} className='nowUp'>{now}</option>
-        </optgroup>
-        <optgroup label={Pref.ancillary}>
-          {app.ancillaryOption.map( (entry, index)=>{
-            return (
-              <option key={index} value={entry}>{entry}</option>
-              );
-          })}
-        </optgroup>
-      </select>
+        disabled={lock || !Roles.userIsInRole(Meteor.userId(), 'qa')}
+        required />
+        <label htmlFor='discStp'>{Pref.phase}</label>
+        <datalist id='ncWhereList'>
+          <optgroup label='auto'>
+            <option value={now} className='nowUp'>{now}</option>
+          </optgroup>
+          <optgroup label={Pref.ancillary}>
+            {app.ancillaryOption.map( (entry, index)=>{
+              return (
+                <option key={index} value={entry}>{entry}</option>
+                );
+            })}
+          </optgroup>
+        </datalist>
     </span>
     <span>
       <input
         type='text'
         id='ncRefs'
         className='redIn up'
-        placeholder={Pref.nonConRef}
+        placeholder='R1 C122 X_8'
         disabled={lock}
         required />
+      <label htmlFor='ncRefs'>{Pref.nonConRef}</label>
     </span>
-    <span>
-      <select 
-        id='ncType'
-        className='cap redIn'
-        disabled={lock}
-        required >
-        {app.nonConOption.map( (entry, index)=>{
-          return ( 
-            <option key={index} value={entry}>{index + 1}. {entry}</option>
-            );
-        })}
-      </select>
-    </span>  
+    {Roles.userIsInRole(Meteor.userId(), 'nightly') ?
+      <span>
+        <input 
+          id='ncType'
+          className='cap redIn'
+          type='search'
+          placeholder='Type'
+          list='ncTypeList'
+          disabled={lock}
+          onInput={(e)=>handleCheck(e)}
+          required />
+          <label htmlFor='ncType'>{Pref.nonConType}</label>
+          <datalist id='ncTypeList'>
+            {app.nonConOption.map( (entry, index)=>{
+              return ( 
+                <option key={index} value={entry}>{index + 1}. {entry}</option>
+              );
+            })}
+          </datalist>
+        </span>
+      :
+        <span>
+          <select 
+            id='ncType'
+            className='cap redIn'
+            disabled={lock}
+            required >
+            {app.nonConOption.map( (entry, index)=>{
+              return ( 
+                <option key={index} value={entry}>{index + 1}. {entry}</option>
+                );
+            })}
+          </select>
+          <label htmlFor='ncType'>{Pref.nonConType}</label>
+        </span>
+      }
       <button
         type='submit'
         id='go'

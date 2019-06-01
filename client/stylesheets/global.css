@@ -26,6 +26,7 @@ body {
   font-weight: normal;
   font-style: normal;
 }
+
 /*
 ::-webkit-scrollbar {
   width: 8px;
@@ -206,6 +207,10 @@ select {
   background-color: var(--clouds);
   border-color: white;
 }
+option, optgroup {
+  color: black;
+  background-color: white;
+}
 
 textarea {
   min-width: 20rem;
@@ -290,6 +295,9 @@ summary {
 
 input::-webkit-inner-spin-button {
   display: none;
+}
+input[type='search']::-webkit-search-cancel-button {
+  background-color: pink;
 }
 
 img {

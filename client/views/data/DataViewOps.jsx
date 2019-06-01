@@ -151,7 +151,7 @@ export default class DataViewOps extends Component	{
           groupData={false}
           user={user}
           app={app}
-          title='Calendar'
+          title='Events Calendar'
           subLink={subLink}
           action={false}
           base={true}

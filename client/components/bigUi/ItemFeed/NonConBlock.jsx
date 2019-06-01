@@ -14,6 +14,7 @@ export default class NonConBlock extends Component {
       edit: false
    };
     this.edit = this.edit.bind(this);
+    this.handleCheck = this.handleCheck.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleReInspect = this.handleReInspect.bind(this);
     this.handleTrash = this.handleTrash.bind(this);
@@ -24,15 +25,26 @@ export default class NonConBlock extends Component {
     this.setState({ edit: !this.state.edit });
   }
   
+  handleCheck(target) {
+    const list = this.props.app.nonConOption;
+    let match = list.find( x => x === target.value);
+    let message = !match ? 'please choose from the list' : '';
+    target.setCustomValidity(message);
+    return !match ? false : true;
+  }
   handleChange() {
 		const id = this.props.id;
 		const serial = this.props.serial;
     const ncKey = this.props.entry.key;
     const ref = this.ncRef.value.trim().toLowerCase();
-    const type = this.ncType.value;
-    const where = this.ncWhere.value;
-    if( typeof ref !== 'string' || ref.length < 1  ) {
-      null;
+    const type = this.ncType.value.trim().toLowerCase();
+    const where = this.ncWhere.value.trim().toLowerCase();
+    const tgood = this.handleCheck(this.ncType);
+    
+    if( typeof ref !== 'string' || ref.length < 1 ||  !tgood || where.length < 1 ) {
+      this.ncRef.reportValidity();
+      this.ncType.reportValidity();
+      this.ncWhere.reportValidity();
     }else if(this.props.entry.ref !== ref || 
              this.props.entry.type !== type ||
              this.props.entry.where !== where) {  
@@ -79,7 +91,7 @@ export default class NonConBlock extends Component {
     if(yes) {
       const id = this.props.id;
       const ncKey = this.props.entry.key;
-      const override = !Roles.userIsInRole(Meteor.userId(), 'remove') ? 
+      const override = !Roles.userIsInRole(Meteor.userId(), ['remove', 'qa']) ? 
                         prompt("Enter PIN to override", "") : false;
       Meteor.call('ncRemove', id, ncKey, override, (error)=>{
         error && console.log(error);
@@ -92,6 +104,7 @@ export default class NonConBlock extends Component {
     
     const done = this.props.done;
     const dt = this.props.entry;
+    const app = this.props.app;
                    
     const fx = typeof dt.fix === 'object';
     const ins = typeof dt.inspect === 'object';
@@ -124,29 +137,64 @@ export default class NonConBlock extends Component {
                 ref={(i)=> this.ncRef = i}
                 id='ncR'
                 className='redIn up inlineInput'
+                min={1}
                 defaultValue={dt.ref}
-                required={true}
-              />
-              <select 
-                ref={(i)=> this.ncType = i}
-                id='ncT'
-                className='redIn cap inlineSelect'
-                defaultValue={dt.type}
-                required>
-                {this.props.app.nonConOption.map( (entry, index)=>{
-                  return( <option key={index} value={entry}>{entry}</option> );
-                  })}
-              </select>
-              <select 
+                required />
+              {Roles.userIsInRole(Meteor.userId(), 'nightly') ?
+                <span>
+                  <input 
+                    ref={(i)=> this.ncType = i}
+                    id='ncT'
+                    className='redIn cap inlineSelect'
+                    type='search'
+                    defaultValue={dt.type}
+                    placeholder='Type'
+                    list='ncTypeList'
+                    onInput={(e)=>this.handleCheck(e.target)}
+                    required />
+                    <datalist id='ncTypeList'>
+                      {app.nonConOption.map( (entry, index)=>{
+                        return ( 
+                          <option key={index} value={entry}>{entry}</option>
+                        );
+                      })}
+                    </datalist>
+                </span>
+              :
+                <select 
+                  ref={(i)=> this.ncType = i}
+                  id='ncT'
+                  className='redIn cap inlineSelect'
+                  defaultValue={dt.type}
+                  required>
+                  {app.nonConOption.map( (entry, index)=>{
+                    return( <option key={index} value={entry}>{entry}</option> );
+                    })}
+                </select>
+              }
+              <input 
                 ref={(i)=> this.ncWhere = i}
                 id='ncW'
                 className='redIn cap inlineSelect'
-                defaultValue={dt.where.toLowerCase() || ''}
-                required>
-                {this.props.app.phases.map( (entry, index)=>{
-                  return( <option key={index} value={entry.toLowerCase()}>{entry}</option> );
-                  })}
-              </select>
+                list='ncWhereList'
+                defaultValue={dt.where || ''}
+                disabled={!Roles.userIsInRole(Meteor.userId(), ['run', 'edit', 'qa'])}
+                required />
+                <datalist id='ncWhereList'>
+                  <option value={dt.where || ''}>{dt.where || ''}</option>
+                  <optgroup label={Pref.phases}>
+                    {this.props.app.phases.map( (entry, index)=>{
+                      return( <option key={index} value={entry}>{entry}</option> );
+                    })}
+                  </optgroup>
+                  <optgroup label={Pref.ancillary}>
+                    {app.ancillaryOption.map( (entry, index)=>{
+                      return (
+                        <option key={index} value={entry}>{entry}</option>
+                        );
+                    })}
+                  </optgroup>
+                </datalist>
             </div>
           :
             <div>
@@ -172,17 +220,17 @@ export default class NonConBlock extends Component {
                   className='miniAction yellowT inlineButton'
                   disabled={!Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])}
                   onClick={this.handleTrash}
-                >Trash</button>
+                >Disable</button>
               :
                 <button
                   className='miniAction yellowT inlineButton'
                   disabled={!Roles.userIsInRole(Meteor.userId(), 'inspect')}
                   onClick={this.handleUnTrash}
-                >Undo Trash</button>
+                >Enable</button>
               }
               <button
                 className='miniAction redT inlineButton'
-                disabled={!Roles.userIsInRole(Meteor.userId(), ['remove', 'run', 'qa'])}
+                disabled={!Roles.userIsInRole(Meteor.userId(), ['remove', 'qa'])}
                 onClick={this.popNC}
               >Remove</button>
               <button

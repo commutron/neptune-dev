@@ -41,7 +41,7 @@ const ShortAdd = ({ id, serial, pastPN, pastRF, app, doneClose })=> {
           placeholder='13-bC_047'
           disabled={lock}
           required />
-        <label htmlFor='shRefs'>Part Number</label>
+        <label htmlFor='partNum'>Part Number</label>
       </span>
       <span>
         <datalist id='pastRFlist'>

@@ -55,6 +55,10 @@ meteor seems to be handling this */
   text-decoration: underline;
 }
 
+.actionForm span,
+.actionForm div {
+  margin: 0 10px;
+}
 .actionForm input,
 .actionForm select, 
 .actionForm datalist {
@@ -85,6 +89,14 @@ meteor seems to be handling this */
   letter-spacing: 1px;
   overflow: hidden;
 }
+.redIn, .orangeIn {
+  color: white;
+}
+.redIn + label,
+.orangeIn + label {
+  font-size: small;
+  line-height: 1rem;
+}
 
 input.redIn, input.orangeIn {
   background-color: transparent;
@@ -95,37 +107,24 @@ select.redIn, select.orangeIn {
   border-color: var(--clouds);
 }
 
-.redIn {
-  color: rgb(231,76,60);
-}
 select.redIn > option,
 select.orangeIn > option {
   color: black;
 }
-
+/*
+.redIn {
+  color: var(--alizarin);
+}
+*/
 input.redIn:focus {
-  border-bottom-color: red;
+  border-bottom-color: var(--alizarin);
 }
 select.redIn:focus, 
 textarea.redIn:focus {
-  border-color: red;
+  border-color: var(--alizarin);
 }
-
 .redIn:focus + label {
-  color: rgb(231,76,60);
-}
-
-.actionForm span,
-.actionForm div {
-  margin: 0 10px;
-}
-
-.orangeIn {
-  color: white;
-}
-.orangeIn + label {
-  font-size: small;
-  line-height: 1rem;
+  color: var(--alizarin);
 }
 
 input.orangeIn:focus {
