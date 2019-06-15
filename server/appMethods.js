@@ -7,7 +7,7 @@ Meteor.startup(function () {
   AppDB._ensureIndex({ org : 1 }, { unique: true });
   Meteor.users._ensureIndex({ username : 1 }, { unique: true });
   XBatchDB._ensureIndex({ batch : 1 }, { unique: true });
-  BatchDB._ensureIndex({ batch : 1, 'items.serial' : 1 }, { unique: true });
+  BatchDB._ensureIndex({ batch : 1, 'items.serial' : 'text' }, { unique: true });
   GroupDB._ensureIndex({ group : 1 }, { unique: true });
   WidgetDB._ensureIndex({ widget : 1, 'versions.version' : 1 }, { unique: true });
   CacheDB._ensureIndex({ dataName : 1 }, { unique: true });

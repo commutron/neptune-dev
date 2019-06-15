@@ -24,7 +24,7 @@
 .contentAreaEx {
   grid-area: contentArea;
   overflow-y: auto;
-  box-shadow: var(--dropShadowLeft0);
+  box-shadow: var(--dropShadowLeft1);
 }
 
 .baseContainer,

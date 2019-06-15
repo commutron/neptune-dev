@@ -48,6 +48,28 @@ Meteor.methods({
     const found = itemsBatch ? itemsBatch.batch : false;
     return found;
   },
+  
+  serialLookupPartial(orb) {
+    const bCache = CacheDB.findOne({orgKey: Meteor.user().orgKey, dataName: 'batchInfo'});
+    const itemsBatch = BatchDB.find({
+      "items.serial": { $regex: new RegExp( orb ) }
+    }).fetch();
+    const single = itemsBatch.length === 1;
+    const exact = !single ? false : 
+      itemsBatch[0].items.find( x => x.serial === orb ) ? true : false;
+    //const results = Array.from(itemsBatch, x => x.batch);
+    const results = [];
+    for(let iB of itemsBatch) {
+      let fill = bCache.dataSet.find( x => x.batch === iB.batch);
+      results.push({
+        batch: iB.batch, 
+        meta: !fill ? undefined : fill.isWhat,
+      });
+    }
+      
+    return { results, exact };
+  },
+  
  /*
   autofillInfo(keyword) {
     const batch = BatchDB.findOne({batch: keyword});

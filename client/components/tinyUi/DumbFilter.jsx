@@ -9,7 +9,7 @@ const DumbFilter = ({ id, size, onTxtChange, labelText, list })=>	{
   return(
     <div className='centre noCopy'>
       <p className=''>
-        <label className={'variableInput ' + size}>
+        <label className={'blackT variableInput ' + size}>
           <i className={size + ' fas fa-filter fa-fw' || 'med fas fa-filter fa-fw'}></i>
         </label>
         <input

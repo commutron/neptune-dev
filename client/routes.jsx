@@ -255,6 +255,10 @@ FlowRouter.globals.push({
       sizes: "16x16 32x32 64x64",
       rel: "icon"
     },
+    manifest: {
+      href: "/manifestPW.json",
+      rel: "manifest",
+    },
   },
   /*
   script: {

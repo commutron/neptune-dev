@@ -119,6 +119,9 @@ select.orangeIn > option {
 input.redIn:focus {
   border-bottom-color: var(--alizarin);
 }
+input.redIn:invalid {
+  text-decoration: overline wavy var(--pomegranate);
+}
 select.redIn:focus, 
 textarea.redIn:focus {
   border-color: var(--alizarin);
@@ -129,6 +132,9 @@ textarea.redIn:focus {
 
 input.orangeIn:focus {
   border-bottom-color: var(--orange);
+}
+input.orangeIn:invalid {
+  text-decoration: overline wavy var(--pomegranate);
 }
 .orangeIn:focus + label {
   color: var(--orange);

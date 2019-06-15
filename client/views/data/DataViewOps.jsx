@@ -5,10 +5,11 @@ import { TraverseWrap } from '/client/layouts/DataExploreLayout.jsx';
 
 import SearchHelp from './SearchHelp.jsx';
 
-import AdvancedSearch from './panels/AdvancedSearch.jsx';
+import ExploreLanding from './panels/ExploreLanding.jsx';
 import Reports from './panels/Reports.jsx';
 import AllGroups from './panels/AllGroups.jsx';
 import AllBatches from './panels/AllBatches.jsx';
+import AllItems from './panels/AllItems.jsx';
 import Calendar from './panels/Calendar.jsx';
 
 import ItemPanel from './panels/ItemPanel.jsx';
@@ -130,8 +131,9 @@ export default class DataViewOps extends Component	{
           subLink={subLink}
           action={false}
           base={true}
+          invertColor={true}
         >
-          <AdvancedSearch
+          <ExploreLanding
             batchData={allBatch}
             xBatchData={allXBatch}
             widgetData={allWidget}
@@ -203,6 +205,7 @@ export default class DataViewOps extends Component	{
             subLink={subLink}
             action='newGroup'
             base={true}
+            invertColor={true}
           >
             <AllGroups
               batchData={allBatch}
@@ -225,6 +228,7 @@ export default class DataViewOps extends Component	{
             subLink={subLink}
             action={false}
             base={true}
+            invertColor={true}
           >
             <AllBatches
               batchData={allBatch}
@@ -233,6 +237,29 @@ export default class DataViewOps extends Component	{
               allWidget={allWidget}
               allBatch={allBatch}
               allXBatch={allXBatch}
+              app={app} />
+          </TraverseWrap>
+        );
+      }else if(request === 'items') {
+        return(
+          <TraverseWrap
+			      batchData={false}
+            widgetData={false}
+            versionData={false}
+            groupData={false}
+            user={user}
+            app={app}
+            title={Pref.items + ' Overview'}
+            subLink={subLink}
+            action={false}
+            base={true}
+            invertColor={true}
+          >
+            <AllItems
+              batchData={allBatch}
+              xBatchData={allXBatch}
+              widgetData={allWidget}
+              groupData={allGroup} 
               app={app} />
           </TraverseWrap>
         );
@@ -415,6 +442,7 @@ export default class DataViewOps extends Component	{
             subLink={subLink}
             action='group'
             base={false}
+            invertColor={true}
           >
             <GroupPanel
               groupData={group}

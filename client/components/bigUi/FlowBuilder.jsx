@@ -136,8 +136,7 @@ export default class FlowForm extends Component	{
               <input
                 type='text'
                 ref={(i)=> this.wika = i}
-                id='winstruct'
-                placeholder='surface_mount' />
+                id='winstruct' />
               <label htmlFor='winstruct'>Instruction Section</label>
             </p>
           </form>

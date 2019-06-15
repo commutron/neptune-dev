@@ -19,7 +19,9 @@
 }
 .loginoutButton {
   background-color: var(--neptuneColor);
+  color: white;
 }
 .createButton {
   background-color: var(--nephritis);
+  color: white;
 }

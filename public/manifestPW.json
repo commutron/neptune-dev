@@ -1,6 +1,11 @@
 {
+  "name": "Neptune",
   "short_name": "neptune",
-  "name": "neptune",
+  "theme_color": "#007fff",
+  "background_color": "#000000",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
   "icons": [
     {
       "src": "logoColorMini.png",
@@ -16,11 +21,11 @@
       "src": "logoColorMini.png",
       "type": "image/png",
       "sizes": "192x192"
+    },
+    {
+    "src": "logoColorMini.png",
+    "type": "image/png",
+    "sizes": "512x512"
     }
-  ],
-  "start_url": "/",
-  "display": "standalone",
-  "orientation": "landscape"
-  "background_color": "#007fff",
-  "theme_color": "#007fff",
+  ]
 }

@@ -62,13 +62,13 @@ export default class GroupsList extends Component	{
           
             <div className=''>
               <DumbFilter
-                size='big'
+                size='bigger'
                 onTxtChange={e => this.setTextFilter(e)}
-                labelText='Filter searches all text, not case-sensitve.' />
+                labelText='Filter by any text, not case-sensitve.' />
             </div>  
           
             {sortList.map( (entry, index)=> {
-              let ac = a.includes(entry._id) ? 'leapBar activeMark' : 'leapBar';
+              let ac = a.includes(entry._id) ? 'activeMark' : '';
               return (
                 <LeapRow
                   key={index}

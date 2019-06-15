@@ -3,7 +3,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import NumBox from '/client/components/uUi/NumBox.jsx';
 
-const AdvancedSearch = ({ groupData, widgetData, batchData, xBatchData, app }) => {
+const ExploreLanding = ({ groupData, widgetData, batchData, xBatchData, app }) => {
   
   const total = batchData.length;
   const xTotal = xBatchData.length;
@@ -48,21 +48,9 @@ const AdvancedSearch = ({ groupData, widgetData, batchData, xBatchData, app }) =
             color='greenT' />
         </div>
         
-        <p><i className='biggest'>~</i></p>
-        
-        <div className='balance'>
-          <label className='listSortInput'>
-            <input
-              type='search'
-              id='advSearch'
-              placeholder='coming soon'
-              disabled={true}/>
-            <br />Advanced Search
-          </label>
-        </div>
       </div>
     </div>
   );
 };
 
-export default AdvancedSearch;
+export default ExploreLanding;

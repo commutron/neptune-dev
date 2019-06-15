@@ -49,10 +49,12 @@ export default class ErrorCatch extends Component	{
           </p>
           <details>
             <summary>Read the boring details</summary>
+            <div className='clean'>
               <em>{this.state.errorHeader}</em><br />
               {this.state.errorTime}<br />
               username {Meteor.user().username}<br />
               {this.state.errorInfo}
+            </div>
           </details>
         </div>
       );

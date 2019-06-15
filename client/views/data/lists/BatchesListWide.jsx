@@ -62,9 +62,9 @@ export default class BatchesListWide extends Component	{
             <div className=''>
               <DumbFilter
                 id='batchOverview'
-                size='big'
+                size='bigger'
                 onTxtChange={e => this.setTextFilter(e)}
-                labelText='Filter searches all columns, not case-sensitve.'
+                labelText='Filter any text, not case-sensitve.'
                 list={this.props.app.tagOption} />
             </div>
 

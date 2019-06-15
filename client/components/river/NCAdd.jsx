@@ -94,7 +94,7 @@ const NCAdd = ({ id, barcode, app })=> {
           <datalist id='ncTypeList'>
             {app.nonConOption.map( (entry, index)=>{
               return ( 
-                <option key={index} value={entry}>{index + 1}. {entry}</option>
+                <option key={index} data-id={index + 1 + '.'} value={entry}>{index + 1}. {entry}</option>
               );
             })}
           </datalist>
