@@ -35,7 +35,7 @@ const RmaBlock = ({ id, serial, iRMA, allRMA })=>{
           <div key={entry} className='infoBlock noncon'>
             <div className='blockTitle cap'>
               <div>
-                <div className='leftAnchor'><i className="fas fa-exchange-alt fa-lg fa-fw orangeT" title='Return'></i></div>
+                <div className='leftAnchor'><i className="fas fa-exchange-alt fa-lg fa-fw iWarn" title='Return'></i></div>
                 <div>RMA {dts.name}</div>
                 <div>Steps: {Array.from(dts.steps, x => x.step).toString()}</div>
               </div>

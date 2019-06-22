@@ -95,7 +95,7 @@ input[type='reset'] {
   border: 0;
   border-color: white;
   padding: 0;
-  color: white;
+  /*color: white;*/
   text-indent: 0;
   -webkit-user-select: none;
   -khtml-user-select: none;

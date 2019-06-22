@@ -4,8 +4,8 @@ import UserName from '/client/components/uUi/UserName.jsx';
 
 const CreateTag = ({ when, who, whenNew, whoNew }) => (
   <p className='clean small fadeMore'>
-    Created {moment(when).format('MMMM Do YYYY, h:mm:ss a')} by <UserName id={who} />; 
-    Last updated {moment(whenNew).format('MMMM Do YYYY, h:mm:ss a')} by <UserName id={whoNew} />
+    Created {moment(when).format("YYYY/MM/DD, kk:mm:ss")} by <UserName id={who} />; 
+    Last updated {moment(whenNew).format("YYYY/MM/DD, kk:mm:ss")} by <UserName id={whoNew} />
   </p>
 );
 

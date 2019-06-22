@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
+import './style.css';
 
 export default class Tabs extends Component	{
   
@@ -27,7 +28,7 @@ export default class Tabs extends Component	{
       <div>
         <div className={stick}>
           {tabs.map( (entry, index)=>{
-            let clss =  show === index ? 'action cap tabOn' : 'action cap tabOff';
+            let clss =  show === index ? 'tabOn' : 'tabOff';
             return (
               <button
                 key={index}

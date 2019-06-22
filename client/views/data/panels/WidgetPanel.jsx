@@ -2,7 +2,7 @@ import React from 'react';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
 import CreateTag from '/client/components/uUi/CreateTag.jsx';
-import Tabs from '/client/components/smallUi/Tabs.jsx';
+import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 
 import FlowTable from '../../../components/tables/FlowTable.jsx';
 import VersionTable from '../../../components/tables/VersionTable.jsx';

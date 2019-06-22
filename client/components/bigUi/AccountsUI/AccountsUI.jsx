@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import { Accounts } from 'meteor/accounts-base';
 import { toast } from 'react-toastify';
-import Tabs from '/client/components/smallUi/Tabs.jsx';
+import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 
-import style from './style.css';
+import './style.css';
 /*
 Accounts.onLogin( ()=>{
 	let redirect = Session.get('redirectAfterLogin');

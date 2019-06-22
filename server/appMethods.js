@@ -35,8 +35,7 @@ Meteor.methods({
       },
       countOption: [],
       nonConOption: [],
-      nonConOptionA: [],
-      nonConOptionB: [],
+      nonConTypeLists: [],
       ncScale: {
         low: Number(5),
         high: Number(10),
@@ -357,7 +356,108 @@ Meteor.methods({
     }
   },
   
-  // Smarter NonCon Types
+// Smarter NonCon Types
+
+  updateToNewNonConScheme() {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      const doc = AppDB.findOne({orgKey: Meteor.user().orgKey});
+      const docReady = !doc.nonConTypeLists ? false : true;
+      if(!docReady) {
+        AppDB.update({orgKey: Meteor.user().orgKey}, {
+          $set : { 
+            nonConTypeLists : []
+        }});
+        return true;
+      }else{
+        return true;
+      }
+    }else{
+      return false;
+    }
+  },
+  
+  addNonConTypeList(inputValue) {
+    try{
+      const newListName = inputValue.toLowerCase().trim();
+      if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+        const doc = AppDB.findOne({orgKey: Meteor.user().orgKey});
+        const duplicate = doc.nonConTypeLists.find(
+          x => x.listName === newListName );
+        if(!duplicate) {
+          AppDB.update({orgKey: Meteor.user().orgKey}, {
+            $push : { 
+              nonConTypeLists : { 
+                key : new Meteor.Collection.ObjectID().valueOf(),
+                listName : newListName,
+                typeList : []
+              }
+          }});
+          return { pass: true, message: '' };
+        }else{
+          return { pass: false, message: 'duplicate name' };
+        }
+      }else{
+        return { pass: false, message: 'insufficient permission' };
+      }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  
+  /*
+  nonConTypeLists
+  }
+  addNonConType(defect) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      const doc = AppDB.findOne({orgKey: Meteor.user().orgKey});
+      const sequence = !doc || !doc.nonConOptionA ? 1 : doc.nonConOptionA.length;
+      const code = sequence < 10 ? `a0${sequence}` : `a${sequence}`;
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $push : { 
+          nonConOptionA : { 
+            key : new Meteor.Collection.ObjectID().valueOf(),
+            defectCode : code,
+            defectText : defect,
+            live : true
+          }
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  dormantPrimaryNCOption(key, make) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey, 'nonConOptionA.key': key}, {
+        $set : { 
+          'nonConOptionA.$.live' : make
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  removePrimaryNCOption(badKey, defect) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      const usedLegacy = BatchDB.findOne({orgKey: Meteor.user().orgKey, 'nonCon.type': defect});
+      const usedX = XBatchDB.findOne({orgKey: Meteor.user().orgKey, 'nonconformaces.type': defect});
+      if(!usedLegacy && !usedX) {
+        AppDB.update({orgKey: Meteor.user().orgKey}, {
+          $pull : { 
+            nonConOptionA : { key : badKey }
+        }});
+        return true;
+      }else{
+        return false;
+      }
+    }else{
+      return false;
+    }
+  },
+  */
+  
+  // Temp NonCon Types
   addPrimaryNCOption(defect) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {

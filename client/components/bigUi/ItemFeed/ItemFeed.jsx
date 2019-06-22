@@ -32,7 +32,7 @@ const ItemFeed = ({
         <div className='infoBlock create'>
           <div className='blockTitle cap'>
             <div>
-              <div className='leftAnchor'><i className="fas fa-plus-circle fa-lg fa-fw cloudsT"></i></div>
+              <div className='leftAnchor'><i className="fas fa-plus-circle fa-lg fa-fw iPlain"></i></div>
               <div>serial number created</div>
             </div>
             <div className='rightText'>
@@ -101,9 +101,9 @@ export const HistoryBlock = ({entry, id, batch, serial, done, showHeader})=>{
   const redoAllow = Roles.userIsInRole(Meteor.userId(), 'edit') && !done && dt.good === true;
   const redoButton = <StepBack id={id} bar={serial} entry={entry} lock={!redoAllow} />;
                  
-  const good = dt.good ?
-                <i><i className="fas fa-check-circle fa-lg fa-fw greenT" title='Good'></i></i> :
-                <b><i className="fas fa-times-circle fa-lg fa-fw redT" title='No Good'></i></b>;
+  const indictor = dt.good ?
+                <i><i className="fas fa-check-circle fa-lg fa-fw iG" title='Good'></i></i> :
+                <b><i className="fas fa-times-circle fa-lg fa-fw iNG" title='No Good'></i></b>;
    
   const infoF = dt.type === 'first' && typeof dt.info === 'object';
   const infoT = dt.type === 'test' && typeof dt.info === 'string';
@@ -129,7 +129,7 @@ export const HistoryBlock = ({entry, id, batch, serial, done, showHeader})=>{
         </div>}
       <div className='blockTitle cap'>
         <div>
-          <div className='leftAnchor'>{good}</div>
+          <div className='leftAnchor'>{indictor}</div>
           <div>{dt.step}</div>
           <div>{dt.type}</div>
         </div>

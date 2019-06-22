@@ -70,7 +70,6 @@
   padding: 0px;
   background-color: transparent;
 }
-.invert .textLinkButton { color: var(--belizeHole); }
 
 .navButtonWrap {
   background-color: rgb(25,25,25);
@@ -256,23 +255,6 @@ label.qdpplRound {
 .activeMark { border-left-color: var(--belizeHole); }
 .gMark { border-left-color: var(--nephritis); }
 .ngMark { border-left-color: var(--pomegranate); }
-
-.tabOn, .tabOff {
-  font-weight: 400;
-}
-.tabOn {
-	background-color: var(--wetasphalt);
-  border-bottom: 2px solid var(--silver);
-}
-.tabOff {
-	background-color: var(--midnightblue);
-	border-bottom: 2px solid transparent;
-}
-.tabOff:hover {
-	background-color: var(--wetasphalt);
-}
-
-.tabBody { overflow-x: auto; }
 
 .open {
   color: black;

@@ -13,9 +13,9 @@
   margin: 2vh 0;
 }
 
-.blockHeader {
-  padding: 1vh 2vw; 
-}
+.blockHeader { padding: 1vh 2vw; }
+.blockHeader  button {  color: white; }
+
 .blockTitle {
   display: flex;
   flex-direction: row;
@@ -39,20 +39,24 @@
   display: flex;
   justify-content: center;
 }
-.leftAnchor {
-  border-right: 1px groove rgba(255,255,255,0.2);
-}
+.leftAnchor {border-right: 1px groove rgba(255,255,255,0.2); }
+.leftAnchor .iPlain { color: var(--clouds); }
+.leftAnchor .iG { color: var(--emerald); }
+.leftAnchor .iWarn { color: var(--carrot); }
+.leftAnchor .iNG { color: var(--alizarin); }
+
 .rightAnchor {
   min-height: 40.5px;
   border-left: 1px groove rgba(255,255,255,0.2);
 }
+.rightAnchor button { color: white; }
 
-.create { background-color: rgba(255, 255, 255, 0.1); }
-.inspect { background-color: rgba(46, 204, 113, 0.1); }
-.history { background-color: rgba(52, 152, 219, 0.1); }
-.noncon { background-color: rgba(231, 76, 60, 0.1); }
-.short { background-color: rgba(241, 196, 15, 0.1); }
-.finish { background-color: rgba(155, 89, 182, 0.1); }
+.create { background-color: rgba(255, 255, 255, 0.2); }
+.inspect { background-color: rgba(46, 204, 113, 0.2); }
+.history { background-color: rgba(52, 152, 219, 0.2); }
+.noncon { background-color: rgba(231, 76, 60, 0.2); }
+.short { background-color: rgba(241, 196, 15, 0.2); }
+.finish { background-color: rgba(155, 89, 182, 0.2); }
 
 .moreInfoList {
   margin: 0 0 0 75px;

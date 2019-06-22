@@ -114,10 +114,10 @@ export default class NonConBlock extends Component {
     const trashed = !dt.trash ? false : typeof dt.trash === 'object';
     const tSty = trashed ? 'trashStyle' : '';
     const open = trashed ?
-                 <pre><i className="far fa-trash-alt fa-lg fa-fw whiteT" title='Trashed'></i></pre> :
+                 <pre><i className="far fa-trash-alt fa-lg fa-fw" title='Trashed'></i></pre> :
                  dt.inspect === false ?
-                  <i><i className="fas fa-wrench fa-lg fa-fw redT" title='Awaiting Repair'></i></i> :
-                  <b><i className="fas fa-check-circle fa-lg fa-fw greenT" title='Good'></i></b>;
+                  <i><i className="fas fa-wrench fa-lg fa-fw iNG" title='Awaiting Repair'></i></i> :
+                  <b><i className="fas fa-check-circle fa-lg fa-fw iG" title='Good'></i></b>;
     
     let fixed = !fx ? '' : <li>Repaired: <UserNice id={dt.fix.who} /> {moment(dt.fix.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</li>;
     let inspected = !ins ? '' : <li>Inspected: <UserNice id={dt.inspect.who} /> {moment(dt.inspect.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</li>;

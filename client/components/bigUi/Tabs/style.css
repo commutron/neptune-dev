@@ -1,0 +1,22 @@
+.tabBody { overflow-x: auto; }
+.tabOn, .tabOff {
+  padding: 0 10px;
+  min-height: 2.5rem;
+  line-height: 2em;
+  font-size: medium;
+  color: white;
+  letter-spacing: 1px;
+	text-transform: capitalize;
+	overflow: hidden;
+}
+.tabOn {
+	background-color: var(--wetasphalt);
+  border-bottom: 3px solid var(--silver);
+}
+.tabOff {
+	background-color: var(--midnightblue);
+	border-bottom: 3px solid transparent;
+}
+.tabOff:hover {
+	background-color: var(--wetasphalt);
+}

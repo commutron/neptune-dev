@@ -11,7 +11,21 @@ export default class NonConBubble extends Component {
           id: "basic-bar",
         },
         xaxis: {
-          categories: this.props.ncOp
+          categories: this.props.ncOp,
+          tickAmount: 10,
+          type: 'category',
+          labels: {
+            rotate: 0,
+          },
+        },
+        dataLabels: {
+          enabled: false
+        },
+        fill: {
+          type: 'solid',
+        },
+        title: {
+          text: 'Bubble Chart'
         },
         theme: {
           monochrome: {
@@ -45,7 +59,11 @@ export default class NonConBubble extends Component {
       //let ncLabels = [];
       for(let ncType of ncOptions) {
         const typeCount = ncArray.filter( x => x.type === ncType ).length;
-        ncCounts.push(typeCount);
+        ncCounts.push({
+          x: ncType,
+          y: 10,
+          z: typeCount
+        });
         //ncLabels.push(ncType);
       }
       return ncCounts;
@@ -54,9 +72,10 @@ export default class NonConBubble extends Component {
     try{
       let calc = ncCounter(nonConArrayClean, nonConOptions);
       this.setState({
-        series: [
-          { data: calc }
-        ],
+        series: [{ 
+          name: 'Legacy types',
+          data: calc
+        }],
       });
     }catch(err) {
       console.log(err);
@@ -70,7 +89,7 @@ export default class NonConBubble extends Component {
         <Chart
           options={this.state.options}
           series={this.state.series}
-          type="bar"
+          type="bubble"
           width='90%'
         />
       </div>

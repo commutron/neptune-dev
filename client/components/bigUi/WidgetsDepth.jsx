@@ -45,7 +45,7 @@ export default class WidgetsDepth extends Component	{
           <div className='tableList'>
             {w.length < 1 ? <p>no {Pref.widget}s created</p> : null}
               { showList.map( (entry, index)=> {
-              let ac = active.includes(entry._id) ? 'leapBar activeMark' : 'leapBar';
+              let ac = active.includes(entry._id) ? 'activeMark' : '';
                 return(
                   <WidgetIndexCard key={index} data={entry} barStyle={ac} />
               )})}

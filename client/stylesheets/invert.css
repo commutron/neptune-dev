@@ -21,7 +21,7 @@
 .invert input[type='submit'],
 .invert input[type='reset'] {
   border-color: black;
-  color: black;
+  /*color: black;*/
 }
 .invert button:hover {
   border-color: transparent;
@@ -119,6 +119,7 @@
   background-color: var(--black);
   color: var(--clouds);
 }
+.invert .textLinkButton { color: var(--belizeHole); }
 .invert .open {
   color: white;
 }
@@ -135,7 +136,7 @@
 }
 .invert .moveLR,
 .invert .yellowBox > p,
-.invert .actionIconText,
+/*.invert .actionIconText,*/
 .invert .cold:hover,
 .invert .tagFlag {
   color: black;
