@@ -8,15 +8,29 @@ export default class NonConBubble extends Component {
     this.state = {
       options: {
         chart: {
-          id: "basic-bar",
+          id: "legacyHeatMap",
         },
         xaxis: {
           categories: this.props.ncOp,
-          tickAmount: 10,
           type: 'category',
           labels: {
-            rotate: 0,
+            rotate: -45,
+            rotateAlways: true,
+            hideOverlappingLabels: true,
+            //trim: false,
+            minHeight: 100,
+            maxHeight: 200,
           },
+        },
+        yaxis: {
+          show: true,
+          decimalsInFloat: 1,
+          labels: {
+            formatter: val => val.toFixed(1)
+          },
+        },
+        heatmap: {
+          distributed: true
         },
         dataLabels: {
           enabled: false
@@ -25,13 +39,13 @@ export default class NonConBubble extends Component {
           type: 'solid',
         },
         title: {
-          text: 'Bubble Chart'
+          text: 'Heat Map'
         },
         theme: {
           monochrome: {
             enabled: true,
             color: '#FF0000',
-            shadeTo: 'light',
+            shadeTo: 'dark',
             shadeIntensity: 0.65
           }
         },
@@ -54,28 +68,50 @@ export default class NonConBubble extends Component {
     const nonConArray = this.props.nonCons || [];
     const nonConArrayClean = nonConArray.filter( x => !x.trash );
     
-    function ncCounter(ncArray, ncOptions) {
-      let ncCounts = [];
-      //let ncLabels = [];
-      for(let ncType of ncOptions) {
-        const typeCount = ncArray.filter( x => x.type === ncType ).length;
-        ncCounts.push({
-          x: ncType,
-          y: 10,
-          z: typeCount
+    function ncCounter(ncArray, ncOptions, appPhases) {
+      
+      let splitByPhase = [];
+      
+      const phasesSet = new Set(appPhases);
+      for(let phase of phasesSet) {
+        let match = ncArray.filter( y => y.where === phase );
+        splitByPhase.push({
+          'phase': phase,
+          'pNC': match
         });
-        //ncLabels.push(ncType);
       }
-      return ncCounts;
+      let leftover = ncArray.filter( z => phasesSet.has(z.where) === false );
+      splitByPhase.unshift({ 'phase': 'other', 'pNC': leftover });
+      
+      console.log(splitByPhase);
+      
+      let ncPhaseSeries = [];
+      
+      for(let ncSet of splitByPhase) {
+        //let ncLabels = [];
+        let ncCounts = [];
+        for(let ncType of ncOptions) {
+          const typeCount = ncSet.pNC.filter( x => x.type === ncType ).length;
+          ncCounts.push({
+            x: ncType,
+            y: typeCount
+          });
+          //ncLabels.push(ncType);
+        }
+        ncPhaseSeries.push({ 
+          name: ncSet.phase,
+          data: ncCounts
+        });
+      }
+      
+      return ncPhaseSeries;
     }
     
     try{
-      let calc = ncCounter(nonConArrayClean, nonConOptions);
+      const appPhases = this.props.app.phases;
+      let calc = ncCounter(nonConArrayClean, nonConOptions, appPhases);
       this.setState({
-        series: [{ 
-          name: 'Legacy types',
-          data: calc
-        }],
+        series: calc,
       });
     }catch(err) {
       console.log(err);
@@ -84,12 +120,14 @@ export default class NonConBubble extends Component {
 
   render() {
     
+    console.log(this.state.series);
+    
     return (
       <div className='wide'>
         <Chart
           options={this.state.options}
           series={this.state.series}
-          type="bubble"
+          type="heatmap"
           width='90%'
         />
       </div>
