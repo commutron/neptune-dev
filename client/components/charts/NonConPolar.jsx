@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 import ReactDOM from 'react-dom';
 import { 
-  VictoryScatter, 
+  VictoryScatter,
   VictoryChart, 
-  VictoryAxis, 
+  VictoryPolarAxis,
   VictoryTooltip
 } from 'victory';
 //import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
 
-export default class NonConBubble extends Component {
+export default class NonConPolar extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -47,13 +47,13 @@ export default class NonConBubble extends Component {
       for(let ncSet of splitByPhase) {
         for(let ncType of ncOptions) {
           const typeCount = ncSet.pNC.filter( x => x.type === ncType ).length;
-          if(typeCount > 0) {
+          //if(typeCount > 0) {
             ncCounts.push({
-              x: ncSet.phase,
-              y: ncType,
-              z: typeCount
+              x: ncType,
+              y: typeCount,
+              label: ncSet.phase
             });
-          }
+          //}
         }
       }
       return ncCounts;
@@ -62,7 +62,7 @@ export default class NonConBubble extends Component {
     try{
       const appPhases = this.props.app.phases;
       let calc = ncCounter(nonConArrayClean, nonConOptions, appPhases);
-      const qu = Array.from(calc, x => x.z);
+      const qu = Array.from(calc, x => x.y);
       const max = Math.max(...qu);
       const min = Math.min(...qu);
       this.setState({
@@ -78,27 +78,40 @@ export default class NonConBubble extends Component {
           
   render() {
     
-    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(this.state.series);
-    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(this.state.max, this.state.min);
+    //Roles.userIsInRole(Meteor.userId(), 'debug') && 
+    console.log(this.state.series);
+    //Roles.userIsInRole(Meteor.userId(), 'debug') &&
+    console.log(this.state.max, this.state.min);
     
     return(
       <div className='invert chartNoHeightContain'>
       <VictoryChart
+        polar
         theme={Theme.NeptuneVictory}
-        domainPadding={20}
-      >
-        <VictoryAxis />
-        <VictoryAxis 
-          dependentAxis
-          //fixLabelOverlap={true} 
-        />
+        domainPadding={0}
+        style={{padding: { top: 50, right: 50, bottom: 50, left: 50 }}}
+      > 
+      <VictoryPolarAxis dependentAxis
+        //style={{ axis: { stroke: "none" } }}
+        tickFormat={(t) => Math.round(t)}
+        
+      />
+      <VictoryPolarAxis
+        style={{ 
+          ticks: {
+            fill: "transparent",
+            size: 5,
+            stroke: "grey",
+          }}}
+      />
+        
         <VictoryScatter
           data={this.state.series}
-          domain={{z: [this.state.min, this.state.max]}}
-          bubbleProperty="z"
-          maxBubbleSize={this.state.max * 3}
-          minBubbleSize={this.state.min * 3}
-          labels={(d) => `Quantity: ${d.z}`}
+          //domain={{x: [this.state.min, this.state.max]}}
+          //bubbleProperty="z"
+          // maxBubbleSize={this.state.max * 3}
+          // minBubbleSize={this.state.min * 3}
+          labels={(d) => d.label}
           labelComponent={
             <VictoryTooltip />}
         />

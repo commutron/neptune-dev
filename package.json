@@ -32,7 +32,8 @@
     "react-fontawesome": "^1.6.1",
     "react-mounter": "^1.2.0",
     "react-toastify": "^4.5.2",
-    "react-transition-group": "^1.2.1"
+    "react-transition-group": "^1.2.1",
+    "victory": "^32.3.0"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.8.2"

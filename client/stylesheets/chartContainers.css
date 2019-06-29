@@ -51,14 +51,6 @@
   justify-content: center;
 }
 
-.apexcharts-canvas {
-  margin: 0 auto;
+.chartNoHeightContain {
+  height: auto;
 }
-.apexcharts-menu.open {
-  background-color: var(--silver);
-}
-/*
-.apexcharts-svg {
-  
-}
-*/

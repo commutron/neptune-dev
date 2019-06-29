@@ -93,7 +93,7 @@ const StoneSelect = ({
       const blockStone = damStep && (!ncAllClear || !shAllClear );
       const doneStone = stepComplete;
 	    
-	    Session.set('ncWhere', stepPhase);
+	    Session.set('ncWhere', stepPhase.toLowerCase());
 	    Session.set('nowStepKey', flowStep.key);
       Session.set('nowWanchor', flowStep.how);
 	    return (

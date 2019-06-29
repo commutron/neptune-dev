@@ -14,7 +14,7 @@ const NCAdd = ({ id, barcode, app })=> {
   function handleNC(e, andFix) {
     e.preventDefault();
     const type = this.ncType.value.trim().toLowerCase();
-    const where = this.discStp.value.trim().toLowerCase();
+    const where = Session.get('ncWhere') || "";
     
     const refEntry = this.ncRefs.value.trim().toLowerCase();
     const refSplit = refEntry.split(/\s* \s*/);
@@ -32,7 +32,6 @@ const NCAdd = ({ id, barcode, app })=> {
           });
         }
       }
-      this.discStp.value = Session.get('ncWhere');
       this.ncRefs.value = '';
       const findBox = document.getElementById('lookup');
       findBox.focus();
@@ -42,33 +41,14 @@ const NCAdd = ({ id, barcode, app })=> {
 	let now = Session.get('ncWhere');
 	let lock = now === 'complete';
 	
+	const ncTypesCombo = Array.from(app.nonConTypeLists, x => x.typeList);
+	const ncTypesComboFlat = [].concat(...ncTypesCombo);
+	
   return (
     <form
       className='actionForm'
       onSubmit={(e)=>handleNC(e, false)}>
     
-    <span>
-      <input
-        id='discStp'
-        className='cap redIn'
-        list='ncWhereList'
-        defaultValue={now}
-        disabled={lock || !Roles.userIsInRole(Meteor.userId(), 'qa')}
-        required />
-        <label htmlFor='discStp'>{Pref.phase}</label>
-        <datalist id='ncWhereList'>
-          <optgroup label='auto'>
-            <option value={now} className='nowUp'>{now}</option>
-          </optgroup>
-          <optgroup label={Pref.ancillary}>
-            {app.ancillaryOption.map( (entry, index)=>{
-              return (
-                <option key={index} value={entry}>{entry}</option>
-                );
-            })}
-          </optgroup>
-        </datalist>
-    </span>
     <span>
       <input
         type='text'
@@ -94,9 +74,19 @@ const NCAdd = ({ id, barcode, app })=> {
           <datalist id='ncTypeList'>
             {app.nonConOption.map( (entry, index)=>{
               return ( 
-                <option key={index} data-id={index + 1 + '.'} value={entry}>{index + 1}. {entry}</option>
+                <option key={index} data-id={index + 1 + '.'} value={entry}>{index + 1}</option>
               );
             })}
+            {ncTypesComboFlat.map( (entry, index)=>{
+              if(entry.live === true) {
+                return ( 
+                  <option 
+                    key={index}
+                    data-id={entry.key}
+                    value={entry.typeText}
+                  >{entry.typeCode}</option>
+                );
+            }})}
           </datalist>
         </span>
       :

@@ -67,8 +67,8 @@ export default class NonConBlock extends Component {
   handleTrash() {
     const id = this.props.id;
     const ncKey = this.props.entry.key;
-    if(!Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])) {
-      toast.warning('"Run" or "QA" permission is needed skip a nonconformance');
+    if(!Roles.userIsInRole(Meteor.userId(), 'verify')) {
+      toast.warning("'First-off' permission is needed skip a nonconformance");
     }else{
       Meteor.call('trashNC', id, ncKey, (error)=> {
   			error && console.log(error);
@@ -87,7 +87,7 @@ export default class NonConBlock extends Component {
   }
   
   popNC() {
-    const yes = window.confirm('Are you sure you want to remove this ' + Pref.nonCon);
+    const yes = window.confirm('Are you sure you want to permanently delete this ' + Pref.nonCon);
     if(yes) {
       const id = this.props.id;
       const ncKey = this.props.entry.key;
@@ -218,21 +218,21 @@ export default class NonConBlock extends Component {
               {!trashed ?
                 <button
                   className='miniAction yellowT inlineButton'
-                  disabled={!Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])}
+                  disabled={!Roles.userIsInRole(Meteor.userId(), 'verify')}
                   onClick={this.handleTrash}
-                >Disable</button>
+                >Remove</button>
               :
                 <button
                   className='miniAction yellowT inlineButton'
                   disabled={!Roles.userIsInRole(Meteor.userId(), 'inspect')}
                   onClick={this.handleUnTrash}
-                >Enable</button>
+                >Restore</button>
               }
               <button
                 className='miniAction redT inlineButton'
                 disabled={!Roles.userIsInRole(Meteor.userId(), ['remove', 'qa'])}
                 onClick={this.popNC}
-              >Remove</button>
+              >Delete</button>
               <button
                 className='miniAction greenT inlineButton'
                 onClick={this.handleChange}

@@ -982,7 +982,7 @@ Meteor.methods({
   },
   
   trashNC(batchId, ncKey) {
-    if(Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])) {
+    if(Roles.userIsInRole(Meteor.userId(), 'verify')) {
   		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
   			$set : {
   			  'nonCon.$.trash': { 
