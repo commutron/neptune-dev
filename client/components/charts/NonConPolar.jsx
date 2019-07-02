@@ -14,7 +14,7 @@ export default class NonConPolar extends Component {
     super(props);
     this.state = {
       series: [],
-      max: 0,
+      max: 1,
       min: 0
     };
   }
@@ -30,13 +30,15 @@ export default class NonConPolar extends Component {
       let splitByPhase = [];
       
       const phasesSet = new Set(appPhases);
-      for(let phase of phasesSet) {
+      const symOp = ["square", "triangleUp", "triangleDown", "diamond", "plus", "minus", "star"];
+      [...phasesSet].map( (phase, index)=>{
         let match = ncArray.filter( y => y.where === phase );
         splitByPhase.push({
           'phase': phase,
-          'pNC': match
+          'pNC': match,
+          'sym': symOp[index] || "circle"
         });
-      }
+      });
       let leftover = ncArray.filter( z => phasesSet.has(z.where) === false );
       splitByPhase.unshift({ 'phase': 'other', 'pNC': leftover });
       
@@ -51,7 +53,8 @@ export default class NonConPolar extends Component {
             ncCounts.push({
               x: ncType,
               y: typeCount,
-              label: ncSet.phase
+              label: ncSet.phase,
+              symbol: ncSet.sym
             });
           //}
         }
@@ -75,7 +78,6 @@ export default class NonConPolar extends Component {
     }
   }
           
-          
   render() {
     
     //Roles.userIsInRole(Meteor.userId(), 'debug') && 
@@ -87,27 +89,20 @@ export default class NonConPolar extends Component {
       <div className='invert chartNoHeightContain'>
       <VictoryChart
         polar
+        height={400}
         theme={Theme.NeptuneVictory}
-        domainPadding={0}
-        style={{padding: { top: 50, right: 50, bottom: 50, left: 50 }}}
+        domainPadding={10}
+        padding={75}
       > 
       <VictoryPolarAxis dependentAxis
         //style={{ axis: { stroke: "none" } }}
         tickFormat={(t) => Math.round(t)}
-        
       />
-      <VictoryPolarAxis
-        style={{ 
-          ticks: {
-            fill: "transparent",
-            size: 5,
-            stroke: "grey",
-          }}}
-      />
+      <VictoryPolarAxis />
         
         <VictoryScatter
           data={this.state.series}
-          //domain={{x: [this.state.min, this.state.max]}}
+          domain={{y: [this.state.min, this.state.max]}}
           //bubbleProperty="z"
           // maxBubbleSize={this.state.max * 3}
           // minBubbleSize={this.state.min * 3}

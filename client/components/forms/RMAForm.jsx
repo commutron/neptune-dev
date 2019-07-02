@@ -18,6 +18,12 @@ export default class RMAForm extends Component {
     };
   }
   
+  componentDidMount() {
+    if(!this.props.edit) { null }else{
+      this.setState({flow: true, 'nonCons': this.props.edit.nonCons });
+    }
+  }
+  
   setFlow(recSet) {
     let input = recSet;
     if(!input) {
@@ -58,7 +64,7 @@ export default class RMAForm extends Component {
     const comm = this.comm.value.trim().toLowerCase();
     
     if(cKey) {
-      Meteor.call('editRMACascade', id, cKey, rmaId, quantity, comm, (error)=>{
+      Meteor.call('editRMACascade', id, cKey, rmaId, quantity, comm, nonConArr, (error)=>{
         if(error)
           console.log(error);
         toast.success('Saved');
@@ -78,7 +84,7 @@ export default class RMAForm extends Component {
           this.quant.value = '';
           this.comm.value = '';
           this.out.value = 'saved';
-          this.setState({ flow: false });
+          this.setState({ flow: false, nonCons: [] });
         });
       }
     }
@@ -104,7 +110,7 @@ export default class RMAForm extends Component {
         color='orangeT'
         icon='fa-exchange-alt'
         smIcon={this.props.small}
-        lock={!Roles.userIsInRole(Meteor.userId(), ['qa'])}
+        lock={!Roles.userIsInRole(Meteor.userId(), 'qa')}
         noText={this.props.noText}>
         <div className='space'>
           <form
@@ -222,9 +228,5 @@ export default class RMAForm extends Component {
         </div>
       </Model>
     );
-  }
-  
-  componentDidMount() {
-    this.props.edit ? this.setState({ flow: true }) : null;
   }
 }

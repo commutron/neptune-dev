@@ -1084,7 +1084,7 @@ Meteor.methods({
   addRMACascade(batchId, rmaId, qua, com, flowObj, nonConArr) {
     const doc = BatchDB.findOne({_id: batchId});
     const dupe = doc.cascade.find( x => x.rmaId === rmaId );
-    const auth = Roles.userIsInRole(Meteor.userId(), ['qa']);
+    const auth = Roles.userIsInRole(Meteor.userId(), 'qa');
     if(auth && !dupe) {
       
       for( let obj of flowObj ) {
@@ -1114,17 +1114,18 @@ Meteor.methods({
   },
     
 /// editing an RMA Cascade
-  editRMACascade(batchId, cKey, rmaId, qua, com) {
+  editRMACascade(batchId, cKey, rmaId, qua, com, nonConArr) {
     const doc = BatchDB.findOne({_id: batchId});
     let dupe = doc.cascade.find( x => x.rmaId === rmaId );
     dupe ? dupe.rmaId === rmaId ? dupe = false : null : null;
-    const auth = Roles.userIsInRole(Meteor.userId(), ['edit', 'qa']);
+    const auth = Roles.userIsInRole(Meteor.userId(), 'qa');
     if(auth && !dupe) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'cascade.key': cKey}, {
         $set : {
           'cascade.$.rmaId': rmaId,
           'cascade.$.quantity': qua,
-          'cascade.$.comm': com
+          'cascade.$.comm': com,
+          'cascade.$.nonCons': nonConArr
         }
       });
       return true;

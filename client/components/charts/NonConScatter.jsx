@@ -89,7 +89,7 @@ export default class NonConScatter extends Component {
         theme={Theme.NeptuneVictory}
         domainPadding={20}
       >
-        <VictoryAxis />
+        <VictoryAxis tickFormat={(t) => Math.round(t)} />
         <VictoryAxis dependentAxis />
         <VictoryScatter
           data={this.state.series}

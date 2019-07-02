@@ -10,7 +10,7 @@ import RMAForm from '/client/components/forms/RMAForm.jsx';
 
 export default class RMATable extends Component	{
   
-  pullRMA(cKey) {
+  pullRMA(e, cKey) {
     let check = 'Are you sure you want to remove this ' + Pref.rmaProcess;
     const yes = window.confirm(check);
     if(yes) {
@@ -46,13 +46,14 @@ export default class RMATable extends Component	{
           </thead>
           {data.map( (entry)=>{
             let started = this.props.inUse.includes(entry.key);
+            Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(started);
             return (
               <RMARow
                 key={entry.key}
                 entry={entry}
                 id={this.props.id}
                 assigned={this.props.items.filter(x => x.rma.includes(entry.key)).length}
-                onClick={()=>this.pullRMA.bind(this, entry.key)}
+                onRemove={(e)=>this.pullRMA(e, entry.key)}
                 lock={started}
                 app={this.props.app} />
             );
@@ -60,9 +61,9 @@ export default class RMATable extends Component	{
         </table>
         :
         <div className='centreText fade'>
-            <i className='fas fa-smile fa-3x' aria-hidden="true"></i>
-            <p className='big'>no {Pref.nonCon}s</p>
-          </div>
+          <i className='fas fa-smile fa-3x' aria-hidden="true"></i>
+          <p className='big'>no {Pref.nonCon}s</p>
+        </div>
         }
       </div>
     );
@@ -72,7 +73,7 @@ export default class RMATable extends Component	{
 
 
 
-const RMARow = ({ entry, id, assigned, onClick, lock, app })=> {
+const RMARow = ({ entry, id, assigned, onRemove, lock, app })=> {
   let dt = entry;
   
   return(
@@ -92,7 +93,7 @@ const RMARow = ({ entry, id, assigned, onClick, lock, app })=> {
         </td>
         <td>{dt.comm}</td>
         <td>
-          {Roles.userIsInRole(Meteor.userId(), ['qa', 'edit']) &&
+          {Roles.userIsInRole(Meteor.userId(), 'qa') &&
             <RMAForm
               id={id}
               edit={dt}
@@ -105,7 +106,7 @@ const RMARow = ({ entry, id, assigned, onClick, lock, app })=> {
             <button
               title='Remove'
               className='miniAction redT'
-              onClick={()=>onClick}
+              onClick={()=>onRemove()}
               readOnly={true}
             ><i className='fas fa-times fa-fw'></i></button>
           :null}
