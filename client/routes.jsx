@@ -15,10 +15,9 @@ import Spin from '/client/components/uUi/Spin.jsx';
 
 import ProdData from './views/production/ProdData.jsx';
 import OverviewData from './views/overview/OverviewData.jsx';
-import ActivityDataWrap from './views/activity/ActivityDataWrap.jsx';
+import UserDataWrap from './views/user/UserDataWrap.jsx';
 import DataData from './views/data/DataData.jsx';
 import CompSearchPanel from './views/data/panels/CompSearchPanel.jsx';
-import ToolboxWrap from './views/toolbox/ToolboxWrap.jsx';
 import AppData from './views/app/AppData.jsx';
 
 import GeneralLabel from './views/paper/GeneralLabel.jsx';
@@ -149,10 +148,10 @@ privlegedRoutes.route('/overview', {
   }
 });
 
-privlegedRoutes.route('/activity', {
+privlegedRoutes.route('/user', {
   action() {
     mount(CleanLayout, {
-       content: (<ActivityDataWrap />)
+       content: (<UserDataWrap />)
     });
   }
 });
@@ -164,15 +163,15 @@ privlegedRoutes.route('/starfish', {
     });
   }
 });
-
-privlegedRoutes.route('/toolbox', {
+/*
+privlegedRoutes.route('/!!!!!!!!', {
   action() {
     mount(CleanLayout, {
-       content: (<ToolboxWrap />)
+       content: ( !!!!!!!!!!!!! )
     });
   }
 });
-
+*/
 privlegedRoutes.route('/app', {
   action() {
     mount(CleanLayout, {

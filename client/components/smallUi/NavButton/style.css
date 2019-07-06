@@ -1,0 +1,46 @@
+.navButtonWrap {
+  background-color: rgb(25,25,25);
+  color: var(--neptuneColor);
+}
+.navButtonWrap:hover {
+  background-color: var(--neptuneColor);
+  color: rgb(25,25,25);
+}
+
+.navButtonWrap a,
+.navButtonWrap button {
+  box-shadow: var(--dropShadow00);
+}
+.navButtonWrap a,
+.navButtonWrap button,
+.navButtonPlaceHolder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.navButtonWrap button {
+  cursor: pointer;
+}
+.navButtonIcon {
+  margin: 1vh 0 0 0;
+  font-size: 9vh;
+  color: var(--neptuneColor);
+}
+.navButtonText {
+  margin: 1vh 0 0 0;
+  font-size: 3vh;
+  text-align: center;
+  color: var(--neptuneColor);
+}
+.navButtonWrap:hover .navButtonIcon,
+.navButtonWrap:hover .navButtonText {
+  color: rgb(30,30,30);
+}
+.navButtonPlaceHolder {
+  background-color: rgb(30,30,30);
+  filter: grayscale(100%) opacity(0.1);
+}

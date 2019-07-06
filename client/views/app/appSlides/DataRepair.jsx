@@ -1,8 +1,8 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
+//import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-const DataRepair = ({ orb, bolt, app, users })=> {
+const DataRepair = ({ app, users })=> {
   
   
   function fixAthing(e, oldText, newText, textMatch) {
@@ -65,6 +65,19 @@ const DataRepair = ({ orb, bolt, app, users })=> {
     });
   }
   
+  function clearUserLogs() {
+    Meteor.call('clearNonDebugUserUsageLogs', (error)=>{
+      error && console.log(error);
+      toast.success('request sent');
+    });
+  }
+  function clearthisUserCrumbs() {
+    Meteor.call('clearBreadcrumbsRepair', (error, reply)=>{
+      error && console.log(error);
+      if(reply) { toast.success('data edit complete', { autoClose: false }); }
+    });
+  }
+  
   return (
     <div className='invert'>
       <h2 className='cap'>NonCon "Where" Data Repair</h2>
@@ -120,6 +133,26 @@ const DataRepair = ({ orb, bolt, app, users })=> {
           >Change</button>
         </label>
       </form>
+      
+      <hr />
+      
+      <div>
+        <p><b><i className='fas fa-user-shield fa-fw'></i>  Privacy</b></p>
+        <p>
+          <button
+            className='action clearBlue invert'
+            onClick={()=>clearUserLogs()}
+          >Clear Usage Logs of users with "debug" turned OFF</button>
+        </p>
+        <hr />
+        <p>
+          <em>On current logged in user</em><br />
+          <button
+            onClick={()=>clearthisUserCrumbs()}
+            className='action clearBlue invert'
+          >Clear Your breadcrumbs</button>
+        </p>
+      </div>
     </div>
   );
 };

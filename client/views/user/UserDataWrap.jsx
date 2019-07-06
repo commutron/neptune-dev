@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import { ToastContainer, toast } from 'react-toastify';
 import InboxToast from '/client/components/utilities/InboxToast.js';
-
+import Pref from '/client/global/pref.js';
 import Spin from '../../components/uUi/Spin.jsx';
 
 import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
@@ -12,7 +12,14 @@ import RecentPanel from './RecentPanel.jsx';
 import InboxPanel from './InboxPanel.jsx';
 import WatchlistPanel from './WatchlistPanel.jsx';
 
-class WatchDataWrap extends Component	{
+import { AdminDown } from '/client/components/forms/AdminForm.jsx';
+import { ChangeAutoScan } from '/client/components/forms/UserManageForm.jsx';
+import UserSpeedSet from '/client/components/forms/UserSpeedSet.jsx';
+import PasswordChange from '/client/components/forms/PasswordChange.jsx';
+import { PermissionHelp } from '/client/views/app/appPanels/AccountsManagePanel';
+
+
+class UserDataWrap extends Component	{
   
   componentDidUpdate(prevProps) {
     InboxToast(prevProps, this.props);
@@ -30,7 +37,7 @@ class WatchDataWrap extends Component	{
       );
     }
     
-    //const admin = Roles.userIsInRole(Meteor.userId(), 'admin');
+    const admin = Roles.userIsInRole(Meteor.userId(), 'admin');
     
     return (
       <div className='simpleContainer'>
@@ -41,7 +48,7 @@ class WatchDataWrap extends Component	{
         <div className='tenHeader'>
           <div className='topBorder' />
           <HomeIcon />
-          <div className='frontCenterTitle'>Activity</div>
+          <div className='frontCenterTitle'>{this.props.user.username || "User"}</div>
           <div className='rightSpace' />
         </div>
       
@@ -49,13 +56,37 @@ class WatchDataWrap extends Component	{
         
           <Slides
             menu={[
+              <b><i className='fas fa-id-card fa-fw'></i>  Preferences</b>,
               <b><i className='fas fa-history fa-fw'></i>  Production Activity</b>,
               <b><i className='far fa-eye fa-fw'></i>  Watchlist</b>,
               <b><i className='fas fa-inbox fa-fw'></i>  Inbox</b>
             ]}>
             
+            <div key={1} className='balance'>
+      
+              <div className='centre'>
+                <p className='clean'>username: {this.props.user.username}</p>
+                <p className='clean'>id: {Meteor.user()._id}</p>
+                <p>organization: <i className='greenT'>{Meteor.user().org}</i></p>
+                <hr />
+                <p><ChangeAutoScan /></p>
+                <hr />
+                <p><UserSpeedSet /></p>
+                <hr />
+                <PasswordChange />
+                <hr />
+                { admin ?
+                <div>
+                  <AdminDown />
+                </div>
+              : null }
+              
+              </div>
+              <PermissionHelp roles={Meteor.user().roles} admin={admin} />
+            </div>
+              
             <RecentPanel
-              key={1}
+              key={2}
               orb={this.props.orb}
               bolt={this.props.bolt}
               app={this.props.app}
@@ -63,7 +94,7 @@ class WatchDataWrap extends Component	{
               users={this.props.users}
               bCache={this.props.bCache} />
             <WatchlistPanel
-              key={2}
+              key={3}
               orb={this.props.orb}
               bolt={this.props.bolt}
               app={this.props.app}
@@ -72,7 +103,7 @@ class WatchDataWrap extends Component	{
               batchEvents={this.props.batchEvents}
               bCache={this.props.bCache} />
             <InboxPanel
-              key={3}
+              key={4}
               orb={this.props.orb}
               bolt={this.props.bolt}
               app={this.props.app}
@@ -123,4 +154,4 @@ export default withTracker( () => {
       users: Meteor.users.find({}, {sort: {username:1}}).fetch()
     };
   }
-})(WatchDataWrap);
+})(UserDataWrap);

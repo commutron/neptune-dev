@@ -1,15 +1,14 @@
-import React, {Component} from 'react';
+import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 //import Pref from '/client/global/pref.js';
 
 import Spin from '/client/components/uUi/Spin.jsx';
 
-import UserSlide from '/client/views/app/UserSlide.jsx';
 import HomeLogout from '/client/components/tinyUi/HomeLogout.jsx';
 //import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
-import NavButton from '/client/components/uUi/NavButton.jsx';
-import { NavPlaceholder } from '/client/components/uUi/NavButton.jsx';
+import NavButton from '/client/components/smallUi/NavButton/NavButton.jsx';
+import { NavPlaceholder } from '/client/components/smallUi/NavButton/NavButton.jsx';
 
 const StartView = ({ready, readyUsers, user, org, app}) =>	{
   
@@ -24,24 +23,21 @@ const StartView = ({ready, readyUsers, user, org, app}) =>	{
   return(
     <div className='homeNavi'>
       <NavButton title='Production' icon='fa-paper-plane' link='/production' />
-      <NavButton title='Overview' icon='fab fa-fly' link='/overview' />
-      <NavButton title='Activity' icon='fab fa-wpexplorer' trans='flip-h' link='/activity' />
+      <NavPlaceholder title='Plan' icon="fas fa-map-marked-alt" />
+      <NavButton title='Overview' icon="fas fa-globe" link='/overview' />
       <NavButton title='Explore' icon='fa-rocket' link='/data' />
       
       <NavButton title='Pisces' icon='fa-file-alt' link={app.instruct || ''} blank={true} />
       <NavButton title='Parts Search' icon='fa-microchip' link='/starfish' />
-      {/*<NavPlaceholder icon="fa-unlink" />*/}
-      {Roles.userIsInRole(Meteor.userId(), 'admin') ?
-        <NavButton title='Toolbox' icon='fa-toolbox' link='/toolbox' />
-      : <NavPlaceholder title='Toolbox' icon='fa-toolbox'/>}
+      <NavPlaceholder icon="fas fa-unlink" />
       
       {Roles.userIsInRole(Meteor.userId(), 'admin') ?
         <NavButton title='Settings' icon='fa-sliders-h' link='/app' />
-      : <NavPlaceholder title='Settings' icon='fa-sliders-h'/>}
+      : <NavPlaceholder title='Settings' icon='fas fa-sliders-h'/>}
       
       <NavButton title='Help' icon='fa-question' link={app.help || ''} blank={true} />
       <NavButton title='Time Clock' icon='fa-clock' link={app.timeClock || ''} blank={true} />
-      <UserSlide user={user} app={app} />
+      <NavButton title={user.username} icon='fa-user-astronaut' link='/user' />
       <HomeLogout currentUser={user.username} />
     
     </div>
