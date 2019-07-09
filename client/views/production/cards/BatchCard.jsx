@@ -7,6 +7,7 @@ import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 import GeneralChunk from '/client/views/data/panels/BatchPanel/GeneralChunk.jsx';
 //import JumpText from '../../../components/tinyUi/JumpText.jsx';
 import FloorRelease from '/client/components/smallUi/FloorRelease.jsx';
+import TideControl from '/client/components/tide/TideControl/TideControl.jsx';
 import StepsProgress from '../../../components/bigUi/StepsProgress/StepsProgress.jsx';
 
 
@@ -19,6 +20,7 @@ export default class BatchCard extends Component	{
     const w = this.props.widgetData;
     //const g = this.props.groupData;
     const u = this.props.user;
+    const et = !u.engaged ? false : u.engaged.tKey;
     const a = this.props.app;
     
     const flow = this.props.flow;
@@ -45,6 +47,8 @@ export default class BatchCard extends Component	{
     return(
       <AnimateWrap type='cardTrans'>
         <div className='sidebar' key={b.batch}>
+          
+          <TideControl batchId={b._id} tKey={et} lock={false} />
           
           {iready ?
             <h2 className='actionBox centreText yellow'>

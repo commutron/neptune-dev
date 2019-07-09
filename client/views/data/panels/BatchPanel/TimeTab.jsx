@@ -93,7 +93,27 @@ const TimeTab = ({
           </p>
         </details>
       </div>
-              
+      
+      <div className='vmargin space'>
+                
+        <ul>
+          {!b.tide ?
+            <p className='centreText'>strt/stop not enabled</p>
+            :
+            b.tide.map( (mov, index)=>{
+              return(
+                <li key={index}>
+                  - <b>{mov.tKey}</b>
+                  - {mov.who.slice(0, 3).toLowerCase()}
+                  - {mov.startTime.toString()}
+                  - {mov.stopTime && mov.stopTime.toString()}
+                </li>
+            )})}
+          </ul>
+                
+                
+      </div>
+      
               
         {proto ?
         <div>

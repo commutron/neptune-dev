@@ -31,6 +31,7 @@ Meteor.methods({
         riverAlt: false,
         floorRelease: false,
         items: [],
+        tide: [],
         nonCon: [],
         escaped: [],
         cascade: [],
@@ -231,6 +232,53 @@ Meteor.methods({
       return false;
     }
   },
+  
+//// Tide \\\\\
+
+  startTideTask(batchId) {
+    try {
+      if(!Roles.userIsInRole(Meteor.userId(), 'active')) { null }else{
+        const newTkey = new Meteor.Collection.ObjectID().valueOf();
+        BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+          $push : { tide: { 
+            tKey: newTkey,
+            who: Meteor.userId(),
+            startTime: new Date(),
+            stopTime: false
+        }}});
+        Meteor.users.update(Meteor.userId(), {
+          $set: {
+            engaged: {
+              task: 'PRO',
+              tKey: newTkey
+            }
+          }
+        });
+      }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  stopTideTask(batchId, tKey) {
+ //   try {
+      const doc = BatchDB.findOne({_id: batchId, 'tide.tKey': tKey });
+      const sub = doc && doc.tide.find( x => x.tKey === tKey && x.who === Meteor.userId() );
+      if(!sub) { null }else{
+        BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'tide.tKey': tKey}, {
+          $set : { 
+            'tide.$.stopTime' : new Date()
+        }});
+        Meteor.users.update(Meteor.userId(), {
+          $set: {
+            engaged: false
+          }
+        });
+      }
+    // }catch (err) {
+    //   throw new Meteor.Error(err);
+    // }
+  },
+
 
 //// Items \\\\
   
