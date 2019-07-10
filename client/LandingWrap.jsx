@@ -8,6 +8,8 @@ import Spin from '/client/components/uUi/Spin.jsx';
 import HomeLogout from '/client/components/tinyUi/HomeLogout.jsx';
 //import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
 import NavButton from '/client/components/smallUi/NavButton/NavButton.jsx';
+//import { NavButtonShell } from '/client/components/smallUi/NavButton/NavButton.jsx';
+import { NavPlaceholderShell } from '/client/components/smallUi/NavButton/NavButton.jsx';
 import { NavPlaceholder } from '/client/components/smallUi/NavButton/NavButton.jsx';
 
 const StartView = ({ready, readyUsers, user, org, app}) =>	{
@@ -29,15 +31,21 @@ const StartView = ({ready, readyUsers, user, org, app}) =>	{
       
       <NavButton title='Pisces' icon='fa-file-alt' link={app.instruct || ''} blank={true} />
       <NavButton title='Parts Search' icon='fa-microchip' link='/starfish' />
-      <NavPlaceholder icon="fas fa-unlink" />
-      
+      <NavPlaceholderShell title='People' link=''
+        icon={
+          <span className="fa-stack fa-fw navButtonIcon navButtonLayerCorrect">
+            <i className="fas fa-user-astronaut fa-stack-1x" data-fa-transform="shrink-5 left-10 down-1"></i>
+            <i className="fas fa-user-astronaut fa-stack-1x"></i>
+            <i className="fas fa-user-astronaut fa-stack-1x" data-fa-transform="shrink-5 right-10 down-1"></i>
+          </span>
+        } />
       {Roles.userIsInRole(Meteor.userId(), 'admin') ?
         <NavButton title='Settings' icon='fa-sliders-h' link='/app' />
       : <NavPlaceholder title='Settings' icon='fas fa-sliders-h'/>}
       
       <NavButton title='Help' icon='fa-question' link={app.help || ''} blank={true} />
       <NavButton title='Time Clock' icon='fa-clock' link={app.timeClock || ''} blank={true} />
-      <NavButton title={user.username} icon='fa-user-astronaut' link='/user' />
+      <NavButton title={user.username} icon='fa-user-astronaut fa-flip-horizontal' link='/user' />
       <HomeLogout currentUser={user.username} />
     
     </div>

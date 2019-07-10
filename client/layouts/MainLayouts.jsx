@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import ErrorCatch from '/client/components/utilities/ErrorCatch.jsx';
 import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
+import TideFollow from '/client/components/tide/TideFollow.jsx';
 
 export const PublicLayout = ({content, title}) => (
   <ErrorCatch>
@@ -12,7 +13,8 @@ export const PublicLayout = ({content, title}) => (
       <div className='frontCenterTitle'>
         {title}
       </div>
-      <div className='rightSpace' />
+      <div className='auxRight' />
+      <div className='proRight' />
     </div>
     <div className='simpleContent'>
       {content}
@@ -30,7 +32,8 @@ export const SplashLayout = ({content, title}) => (
       <div className='frontCenterTitle'>
         {title}
       </div>
-      <div className='rightSpace' />
+      <div className='auxRight' />
+      <TideFollow />
     </div>
     {content}
   </div>
@@ -48,7 +51,8 @@ export const LabelLayout = ({content}) => (
       <div className='frontCenterTitle'>
         Print Label
       </div>
-      <div className='rightSpace' />
+      <div className='auxRight' />
+      <TideFollow />
     </div>
     <div className='simpleContent'>
       <div className='wide noPrint'>

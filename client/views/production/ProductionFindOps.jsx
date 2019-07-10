@@ -149,6 +149,7 @@ export default class ProductionFindOps extends Component	{
 			      batchData={hotBatch}
 			      widgetData={widget}
             versionData={version}
+            user={user}
             app={app}
             action='batchBuild'
             actionBar={true}
@@ -172,6 +173,7 @@ export default class ProductionFindOps extends Component	{
 			      batchData={hotxBatch}
 			      widgetData={widget}
             versionData={version}
+            user={user}
             app={app}
             action='xBatchBuild'
             actionBar={true}
@@ -205,6 +207,7 @@ export default class ProductionFindOps extends Component	{
             itemSerial={item.serial}
             widgetData={widget}
             versionData={version}
+            user={user}
             users={activeUsers}
             app={app}
             actionBar={true}

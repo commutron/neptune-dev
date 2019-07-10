@@ -332,14 +332,13 @@
   height: 100%;
 }
 .tribActionMain > button {
-  cursor: pointer;
-}
-.tribActionMain > button {
   border: none;
   line-height: 1.5rem;
   font-size: 0.9rem;
   width: 100%;
   height: 100%;
+  color: white;
+  cursor: pointer;
 	text-transform: uppercase;
 	vertical-align: middle;
   transition: all 200ms ease-out;

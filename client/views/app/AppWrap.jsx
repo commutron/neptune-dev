@@ -2,6 +2,7 @@ import React from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 
 import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
+import TideFollow from '/client/components/tide/TideFollow.jsx';
 import AccountsManagePanel from './appPanels/AccountsManagePanel.jsx';
 
 import Slides from '../../components/smallUi/Slides.jsx';
@@ -71,7 +72,8 @@ const AppWrap = ({ users, app })=> {
         <div className='topBorder' />
         <HomeIcon />
         <div className='frontCenterTitle'>Settings</div>
-        <div className='rightSpace' />
+        <div className='auxRight' />
+        <TideFollow />
       </div>
     
       <div className='simpleContent locked'>

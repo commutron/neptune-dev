@@ -83,8 +83,10 @@
   opacity: 1;
 }
 
+.tenHeader.invert,
 .frontCenterTitle.invert,
-.rightSpace.invert {
+.auxRight.invert,
+.proRight.invert {
   background-color: var(--clouds);
   color: var(--black);
 }

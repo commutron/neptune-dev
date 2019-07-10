@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
 import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
+import TideFollow from '/client/components/tide/TideFollow.jsx';
 import { ToastContainer, toast } from 'react-toastify';
 
 export default class CompSearchPanel extends Component	{
@@ -75,19 +76,19 @@ export default class CompSearchPanel extends Component	{
             position="top-right"
             autoClose={5000}
             newestOnTop />
-          <div className='tenHeader'>
+          <div className='tenHeader invert'>
             <div className='topBorder'></div>
             <HomeIcon />
             <div className='frontCenterTitle invert'>Parts Search</div>
-            {/*<div className='rightSpace invert'></div>*/}
-            <div className='rightSpace invert'>
+            <div className='auxRight invert'>
               <button
                 type='button'
                 title='Download All Parts'
                 onClick={(e)=>this.dataExport(e)}>
-              <i className='fas fa-download topRightIcon'></i>
+              <i className='fas fa-download primeRightIcon'></i>
               </button>
             </div>
+            <TideFollow invertColor={true} />
           </div>
         
         <div className='simpleContent invert starfishAccents vspace'>

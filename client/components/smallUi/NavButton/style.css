@@ -44,3 +44,6 @@
   background-color: rgb(30,30,30);
   filter: grayscale(100%) opacity(0.1);
 }
+.navButtonLayerCorrect {
+  height: 1em;
+}

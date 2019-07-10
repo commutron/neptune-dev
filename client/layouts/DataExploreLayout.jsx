@@ -5,6 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import ErrorCatch from '/client/components/utilities/ErrorCatch.jsx';
 
 import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
+import TideFollow from '/client/components/tide/TideFollow.jsx';
 import TaskBar from './TaskBar.jsx';
 import ActionBar from '/client/components/bigUi/ActionBar.jsx';
 import CookieBar from './CookieBar.jsx';
@@ -65,26 +66,26 @@ export const TraverseWrap = ({
               miniAction={false} />
           }
           
-          <div className='rightSpace'>
+          <div className='auxRight'>
             {itemData ? 
               <button 
                 title='View this in production'
                 onClick={()=>goPro(itemData.serial)}>
-                <i className='fas fa-paper-plane topRightIcon' data-fa-transform='left-1'></i>
+                <i className='fas fa-paper-plane primeRightIcon' data-fa-transform='left-1'></i>
               </button>
             :
              batchData ? 
               <button 
                 title='View this in production'
                 onClick={()=>goPro(batchData.batch)}>
-                <i className='fas fa-paper-plane topRightIcon' data-fa-transform='left-1'></i>
+                <i className='fas fa-paper-plane primeRightIcon' data-fa-transform='left-1'></i>
               </button>
             :
              groupData ? 
               <button 
                 title='View this in production'
                 onClick={()=>goPro(groupData.alias)}>
-                <i className='fas fa-paper-plane topRightIcon' data-fa-transform='left-1'></i>
+                <i className='fas fa-paper-plane primeRightIcon' data-fa-transform='left-1'></i>
               </button>
             :
              action === 'newGroup' ?
@@ -97,6 +98,8 @@ export const TraverseWrap = ({
                 primeTopRight={true} />
             :null}
           </div>
+          
+        <TideFollow />
         
         </div>
         <aside className='taskBarEx noPrint'>

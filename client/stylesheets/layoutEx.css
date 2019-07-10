@@ -126,7 +126,7 @@
 .avThreeContent { grid-area: avThree; }
 
 .cookieRow {
-  grid-area: frontCenter;
+  grid-area: auxLeft / auxLeft / frontCenter / frontCenter;
   background-color: rgb(25,25,25);
   display: flex;
   flex-direction: row;
@@ -273,6 +273,8 @@
   font-size: 0.9rem;
   margin: 5px;
 }
+.itmFltrBlock select,
+.itmFltrBlock optgroup,
 .itmFltrBlock option {
   background-color: white;
   color: black;

@@ -31,6 +31,16 @@ function getGroup(groupId) {
     
 Meteor.methods({
   
+  engagedState() {
+    const eg = Meteor.user().engaged;
+    if(!eg) {
+      return false;
+    }else{
+      const batch = BatchDB.findOne({'tide.tKey': eg.tKey, 'tide.who': Meteor.userId()});
+      return batch.batch || false;
+    }
+  },
+  
   getBasicBatchInfo(keyword) {
     const batch = BatchDB.findOne({batch: keyword});
     const widget = WidgetDB.findOne({_id: batch.widgetId});

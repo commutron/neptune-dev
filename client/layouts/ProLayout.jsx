@@ -5,6 +5,8 @@ import { ToastContainer } from 'react-toastify';
 //import Pref from '/client/global/pref.js';
 
 import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
+import TideControl from '/client/components/tide/TideControl/TideControl.jsx';
+import TideFollow from '/client/components/tide/TideFollow.jsx';
 import FindBox from './FindBox.jsx';
 import FormBar from '/client/components/bigUi/FormBar.jsx';
 import ProgressCounter from '/client/components/utilities/ProgressCounter.js';
@@ -59,6 +61,9 @@ export class ProWrap extends Component	{
       overflowY: 'auto'
     };
     
+    const u = this.props.user;
+    const et = !u || !u.engaged ? false : u.engaged.tKey;
+    
     const gAlias = this.props.groupAlias;
     const bData = this.props.batchData;
     const iS = this.props.itemSerial;
@@ -91,17 +96,22 @@ export class ProWrap extends Component	{
         <div className='tenHeader'>
           <div className='topBorder' />
           <HomeIcon />
+          {bData && 
+            <div className='auxLeft'>
+              <TideControl batch={bData} tKey={et} lock={false} />
+            </div>}
           <div className='frontCenterTitle'>
             <FindBox append={append} />
           </div>
-          <div className='rightSpace'>
+          <div className='auxRight'>
             <button
               id='exBatch'
               title='View this in explore'
               onClick={()=>FlowRouter.go(exploreLink)}>
-              <i className='fas fa-rocket topRightIcon' data-fa-transform='left-1'></i>
+              <i className='fas fa-rocket primeRightIcon' data-fa-transform='left-1'></i>
             </button>
           </div>
+          <TideFollow proRoute={true} />
         </div>
         
         {this.props.standAlone ?
@@ -154,7 +164,7 @@ export class ProWrap extends Component	{
             <i className='fas fa-sort fa-2x' data-fa-transform='rotate-90'></i>
           </button>
             
-          <div className='proRight' style={scrollFix}>
+          <div className='proInstruct' style={scrollFix}>
             {this.props.children[this.props.children.length - 1]}
           </div>
   

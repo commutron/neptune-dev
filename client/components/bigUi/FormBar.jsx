@@ -49,7 +49,7 @@ export default class FormBar extends Component	{
                 checked={this.props.showVerify}
                 onChange={()=>this.props.changeVerify(true)}
                 disabled={!Roles.userIsInRole(Meteor.userId(), 'verify')} />
-              <i className='fas fa-play-circle formBarIcon'></i>
+              <i className='fas fa-thumbs-up formBarIcon'></i>
               <span className='actionIconText'>First</span>
             </label> }
             <label htmlFor='ncselect' className='formBarToggle'>
@@ -61,7 +61,7 @@ export default class FormBar extends Component	{
                 ref={(i)=>this.ncSlct = i}
                 checked={this.state.show === 'NC'}
                 onChange={()=>this.setState({ show: 'NC' })} />
-              <i className='fas fa-stop-circle formBarIcon'></i>
+              <i className='fas fa-bug formBarIcon'></i>
               <span className='actionIconText'>{Pref.nonCon}</span>
             </label>
             <label htmlFor='shortselect' className='formBarToggle'>
@@ -72,7 +72,7 @@ export default class FormBar extends Component	{
                 className='radioIcon'
                 checked={this.state.show === 'S'}
                 onChange={()=>this.setState({ show: 'S' })} />
-              <i className='fas fa-pause-circle formBarIcon'></i>
+              <i className='fas fa-exclamation-circle formBarIcon' data-fa-transform="down-1"></i>
               <span className='actionIconText'>Shortfall</span>
             </label>
           </div>

@@ -66,6 +66,7 @@ class Pref {
     this.buildFlowAlt = 'alt process flow';
     this.phase = 'phase';
     this.phases = 'phases';
+    this.engaged = 'engaged';
     this.buildStep = 'build process';
     this.trackFirst = 'first-off';
     this.trackLast =  'finish';

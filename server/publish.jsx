@@ -29,8 +29,7 @@ Meteor.publish('appData', function(){
       Meteor.users.find({_id: this.userId},
         {fields: {
           'services': 0,
-          'orgKey': 0,
-          'usageLog': 0
+          'orgKey': 0
         }}),
       AppDB.find({orgKey: orgKey}, 
         {fields: { 
@@ -68,7 +67,8 @@ Meteor.publish('usersData', function(){
         {fields: {
           'username': 1,
           'org': 1,
-          'roles': 1
+          'roles': 1,
+          //'engaged': 1
         }}),
       ];
   }else{null}
@@ -88,7 +88,8 @@ Meteor.publish('usersDataDebug', function(){
           'usageLog': 1,
           'watchlist': 1,
           'inbox': 1,
-          'breadcrumbs': 1
+          'breadcrumbs': 1,
+          'engaged': 1
         }}),
       ];
   }

@@ -1,14 +1,19 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
-
+import './style.css';
         
-const TideControl = ({ batchId, tKey, lock })=> {
+const TideControl = ({ batch, tKey })=> {
   
-  console.log({ batchId, tKey, lock });
+  const tide = batch.tide;
+  const currentLive = tide ?
+    tide.find( x => x.tKey === tKey && x.who === Meteor.userId() )
+    : false;
+  
+  //console.log({ tKey, currentLive });
   
   function handleStart() {
-    Meteor.call('startTideTask', batchId, (error)=> {
+    Meteor.call('startTideTask', batch._id, (error)=> {
       if(error) {
         console.log(error);
         toast.error('Rejected by Server');
@@ -16,7 +21,7 @@ const TideControl = ({ batchId, tKey, lock })=> {
     });
   }
   function handleStop() {
-    Meteor.call('stopTideTask', batchId, tKey, (error)=> {
+    Meteor.call('stopTideTask', batch._id, tKey, (error)=> {
       if(error) {
         console.log(error);
         toast.error('Rejected by Server');
@@ -25,23 +30,29 @@ const TideControl = ({ batchId, tKey, lock })=> {
   }
 
   if(tKey) {
+    if(!currentLive) {
+      return null;
+    }else{
+      return(
+        <button
+          title={`STOP ${Pref.batch}`}
+          className='tideOut'
+          onClick={()=>handleStop()}
+          disabled={false}
+        ><b><i className="far fa-stop-circle tideIcon"></i></b>
+        <br />STOP</button>
+    )}
+  }else{
     return(
       <button
-        title="STOP"
-        className='action'
-        onClick={()=>handleStop()}
-        disabled={lock}
-      ><i className="fas fa-history fa-lg fa-fw"></i>STOP</button>
-  )}
-  
-  return(
-    <button
-      title="START"
-      className='action'
-      onClick={()=>handleStart()}
-      disabled={lock}
-    ><i className="fas fa-history fa-lg fa-fw"></i>START</button>
-  );
+        title={`START ${Pref.batch}`}
+        className='tideIn'
+        onClick={()=>handleStart()}
+        disabled={false}
+      ><i><i className="far fa-play-circle tideIcon"></i></i>
+      <br />START</button>
+    );
+  }
 };
 
 export default TideControl;

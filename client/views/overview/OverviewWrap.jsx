@@ -6,6 +6,7 @@ import Pref from '/client/global/pref.js';
 
 import Spin from '../../components/uUi/Spin.jsx';
 import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
+import TideFollow from '/client/components/tide/TideFollow.jsx';
 
 import BatchHeaders from './columns/BatchHeaders.jsx';
 import BatchDetails from './columns/BatchDetails.jsx';
@@ -141,14 +142,15 @@ export default class OverviewWrap extends Component	{
           <div className='topBorder'></div>
           <HomeIcon />
           <div className='frontCenterTitle'>Overview</div>
-          <div className='rightSpace'>
+          <div className='auxRight'>
             <button
               type='button'
               title='Refresh Information'
               onClick={(e)=>this.dataStart(e)}>
-            <i className='fas fa-sync-alt topRightIcon'></i>
+            <i className='fas fa-sync-alt primeRightIcon'></i>
             </button>
           </div>
+          <TideFollow />
         </div>
         
         <nav className='scrollToNav overviewNav'>

@@ -7,6 +7,7 @@ import Pref from '/client/global/pref.js';
 import Spin from '../../components/uUi/Spin.jsx';
 
 import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
+import TideFollow from '/client/components/tide/TideFollow.jsx';
 import Slides from '../../components/smallUi/Slides.jsx';
 import RecentPanel from './RecentPanel.jsx';
 import InboxPanel from './InboxPanel.jsx';
@@ -49,7 +50,8 @@ class UserDataWrap extends Component	{
           <div className='topBorder' />
           <HomeIcon />
           <div className='frontCenterTitle'>{this.props.user.username || "User"}</div>
-          <div className='rightSpace' />
+          <div className='auxRight' />
+          <TideFollow />
         </div>
       
         <div className='simpleContent'>

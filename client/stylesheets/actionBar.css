@@ -35,7 +35,10 @@ meteor seems to be handling this */
   padding: 0;
   width: 100%;
 }
-
+.actionForm fieldset {
+  margin: 0;
+  padding: 0;
+}
 .actionIconWrap {
   margin: 0 0.5rem;
 }
@@ -88,6 +91,7 @@ meteor seems to be handling this */
   word-break: keep-all;
   letter-spacing: 1px;
   overflow: hidden;
+  /*align-self: center;*/
 }
 .redIn, .orangeIn {
   color: white;
