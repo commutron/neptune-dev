@@ -24,6 +24,11 @@ export class ProWrap extends Component	{
     this.handleExpand = this.handleExpand.bind(this);
   }
   
+  componentDidMount() {
+    const open = Session.get('riverExpand');
+    !open ? null : this.setState({ expand: true });
+  }
+  
   handleVerify(value) {
     this.setState({
       showVerify: !this.state.showVerify, 
@@ -62,12 +67,16 @@ export class ProWrap extends Component	{
     };
     
     const u = this.props.user;
-    const et = !u || !u.engaged ? false : u.engaged.tKey;
-    
     const gAlias = this.props.groupAlias;
     const bData = this.props.batchData;
     const iS = this.props.itemSerial;
     const append = bData && iS ? bData.batch : null;
+    
+    const et = !u || !u.engaged ? false : u.engaged.tKey;
+    const tide = !bData || !bData.tide ? [] : bData.tide;
+    const currentLive = tide.find( 
+      x => x.tKey === et && x.who === Meteor.userId() 
+    );
     
     const exploreLink = iS && bData ?
                         '/data/batch?request=' + bData.batch + '&specify=' + iS :
@@ -83,8 +92,6 @@ export class ProWrap extends Component	{
     const cSize = this.props.children.length;
     
     let riverExpand = this.state.expand;
-    let topClass = !riverExpand ? 'proNarrow' : 'proWide';
-    let toggleClass = !riverExpand ? 'riverExpandToggle' : 'riverShrinkToggle';
     
     return(
       <ErrorCatch>
@@ -98,7 +105,10 @@ export class ProWrap extends Component	{
           <HomeIcon />
           {bData && 
             <div className='auxLeft'>
-              <TideControl batch={bData} tKey={et} />
+              <TideControl 
+                batchID={bData._id} 
+                tideKey={et} 
+                currentLive={currentLive} />
             </div>}
           <div className='frontCenterTitle'>
             <FindBox append={append} />
@@ -119,7 +129,7 @@ export class ProWrap extends Component	{
             {this.props.children}
           </div>
         :
-        <section className={topClass}>
+        <section className={!riverExpand ? 'proNarrow' : 'proWide'}>
           
           <div 
             className={
@@ -131,7 +141,7 @@ export class ProWrap extends Component	{
             <div className='proPrime'>
               {React.cloneElement(this.props.children[0],
                 { 
-                  //expand: this.state.expand,
+                  currentLive: currentLive,
                   flow: path.flow,
                   flowAlt: path.flowAlt,
                   progCounts: path.progCounts,
@@ -146,7 +156,7 @@ export class ProWrap extends Component	{
               <div className='proExpand'>
                 {React.cloneElement(this.props.children[1],
                   { 
-                    //expand: this.state.expand,
+                    currentLive: currentLive,
                     flow: path.flow,
                     flowAlt: path.flowAlt,
                     progCounts: path.progCounts
@@ -159,7 +169,7 @@ export class ProWrap extends Component	{
         
           <button
             type='button'
-            className={toggleClass}
+            className={!riverExpand ? 'riverExpandToggle' : 'riverShrinkToggle'}
             onClick={()=>this.handleExpand()}>
             <i className='fas fa-sort fa-2x' data-fa-transform='rotate-90'></i>
           </button>
@@ -170,6 +180,7 @@ export class ProWrap extends Component	{
   
           <FormBar
             batchData={this.props.batchData}
+            currentLive={currentLive}
             itemData={this.props.itemData}
             widgetData={this.props.widgetData}
             versionData={this.props.versionData}
@@ -184,9 +195,5 @@ export class ProWrap extends Component	{
       </div>
       </ErrorCatch>
     );
-  }
-  componentDidMount() {
-    const open = Session.get('riverExpand');
-    !open ? null : this.setState({ expand: true });
   }
 }

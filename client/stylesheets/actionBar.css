@@ -9,23 +9,21 @@ meteor seems to be handling this */
   z-index: 8;
 }
 
-.footLeft {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  min-height: 32px;
-  padding: 0 0 0 5px;
-}
-
 .footCent {
   flex-grow: 2;
 }
-
-.footRight {
+.footLeft, .footRight {
   display: flex;
+  align-items: center;
+}
+.footLeft {
+  justify-content: flex-start;
+  padding: 0 0 0 5px;
+  min-height: 32px;
+}
+.footRight {
   justify-content: flex-end;
   padding: 0 5px 0 0;
-  align-content: center;
 }
 
 .actionForm {

@@ -5,12 +5,16 @@ import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 const HomeIcon = () => {
 	
 	function doLogout() {
-		if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
-	  const sessionID = Meteor.connection._lastSessionId;
-	  const agent = window.navigator.userAgent;
-  	Meteor.call('logLogInOut', false, agent, sessionID);
+	  const tideOut = !Meteor.user().engaged ? true : 
+	    confirm(`You are currently ${Pref.engaged} with a ${Pref.batch}`);
+		if(tideOut) {
+		  if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
+    	  const sessionID = Meteor.connection._lastSessionId;
+    	  const agent = window.navigator.userAgent;
+      	Meteor.call('logLogInOut', false, agent, sessionID);
+  	  }
+		  Meteor.logout();
 	  }
-		Meteor.logout();
 	}
 	
   //console.log(Meteor.status());

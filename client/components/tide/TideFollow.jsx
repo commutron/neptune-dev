@@ -1,59 +1,45 @@
-import React, {PureComponent} from 'react';
+import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-export default class TideFollow extends PureComponent {
-	_isMounted = false;
-	
-	constructor() {
-		super();
-		this.state = {
-			engaged: false
-		};
-	}
-	
-	componentDidMount() {
-	  this._isMounted = true;
-	  Meteor.call('engagedState', (err, rtn)=>{
+const TideFollow = ({ proRoute, invertColor })=> {
+  
+  const [engaged, doEngage] = useState(false);
+  
+  useEffect(() => {
+    Meteor.call('engagedState', (err, rtn)=>{
 	    err && console.log(err);
-	     if(this._isMounted) {
-	       this.setState({ engaged : rtn });
-	     }
+	    doEngage(rtn);
 	  });
-	  if(!this.props.proRoute) {
-  	  this.tickingClock = Meteor.setInterval( ()=>{
+	  loopClock = Meteor.setInterval( ()=>{
+      if(!proRoute && engaged) {
         toast.dismiss();
         toast(<i>⏰ Remember, you are still {Pref.engaged} with a {Pref.batch}. 
-          <a onClick={()=>this.go()}>Go back there now</a></i>, { 
+          <a onClick={()=>go()}>Go back there now</a></i>, { 
           autoClose: false
         });
-      },1000*60*15);
-	  }
-	}
-  componentWillUnmount() {
-    this._isMounted = false;
-    if(!this.props.proRoute) { 
-      Meteor.clearInterval(this.tickingClock);
-    }
-  }
-	
-	go() {
-	  Session.set('now', this.state.engaged);
+      }
+    },1000*60*15);
+    return () => { Meteor.clearInterval(this.loopClock); };
+  });
+  
+	const go = ()=> {
+	  Session.set('now', engaged);
     FlowRouter.go('/production');
-	}
-	
-	render() {
-    return(
-      <div className={`proRight ${this.props.invertColor ? 'invert' : ''}`}>
-        <button 
-          title={!this.state.engaged ?
-            `Not currently engaged in a ${Pref.batch}` : 
-            `Escape Hatch \nto engaged ${Pref.batch}: ${this.state.engaged}`}
-          onClick={()=>this.go()}
-          disabled={!this.state.engaged}
-        ><i className='fas fa-parachute-box primeRightIcon'></i>
-        </button>
-      </div>
-    );
-  }
-}
+	};
+
+  return(
+    <div className={`proRight ${invertColor ? 'invert' : ''}`}>
+      <button 
+        title={!engaged ?
+          `Not currently engaged in a ${Pref.batch}` : 
+          `Escape Hatch \nto engaged ${Pref.batch}: ${engaged}`}
+        onClick={()=>go()}
+        disabled={!engaged}
+      ><i className='fas fa-parachute-box primeRightIcon'></i>
+      </button>
+    </div>
+  );
+};
+
+export default TideFollow;

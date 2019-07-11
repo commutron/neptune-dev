@@ -1,23 +1,15 @@
-import React, { useState /*, useEffect*/ } from 'react';
+import React, { useState } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 import './style.css';
         
-const TideControl = ({ batch, tKey })=> {
+const TideControl = ({ batchID, tideKey, currentLive })=> {
   
   const [lock, setLock] = useState(false);
-  // useEffect(() => {
-  //   console.log({lock});
-  // });
-  
-  const tide = batch.tide;
-  const currentLive = tide ?
-    tide.find( x => x.tKey === tKey && x.who === Meteor.userId() )
-    : false;
   
   function handleStart() {
     setLock(true);
-    Meteor.call('startTideTask', batch._id, (error)=> {
+    Meteor.call('startTideTask', batchID, (error)=> {
       if(error) {
         console.log(error);
         toast.error('Rejected by Server');
@@ -28,7 +20,7 @@ const TideControl = ({ batch, tKey })=> {
   }
   function handleStop() {
     setLock(true);
-    Meteor.call('stopTideTask', batch._id, tKey, (error)=> {
+    Meteor.call('stopTideTask', batchID, tideKey, (error)=> {
       if(error) {
         console.log(error);
         toast.error('Rejected by Server');
@@ -38,7 +30,7 @@ const TideControl = ({ batch, tKey })=> {
     });
   }
 
-  if(tKey) {
+  if(tideKey) {
     if(!currentLive) {
       return null;
     }else{

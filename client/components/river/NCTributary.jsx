@@ -4,7 +4,7 @@ import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import InOutWrap from '/client/components/tinyUi/InOutWrap.jsx';
 import Pref from '/client/global/pref.js';
 
-const NCTributary = ({ id, serial, nonCons, sType })=> {
+const NCTributary = ({ id, serial, currentLive, nonCons, sType })=> {
 
   function handleFix(ncKey) {
     Meteor.call('fixNC', id, ncKey, (error)=> {
@@ -64,6 +64,7 @@ const NCTributary = ({ id, serial, nonCons, sType })=> {
             key={entry.key}
             entry={entry}
             id={id}
+            currentLive={currentLive}
             end={sType === 'finish'}
             doFix={()=> handleFix(entry.key)}
             doInspect={()=> handleInspect(entry.key)}
@@ -77,7 +78,12 @@ const NCTributary = ({ id, serial, nonCons, sType })=> {
   );
 };
 
-const NCStream = ({ entry, id, end, doFix, doInspect, doReject, doSnooze, doUnSkip, doComment })=>{
+const NCStream = ({ 
+  entry, id,
+  currentLive,
+  end, 
+  doFix, doInspect, doReject, doSnooze, doUnSkip, doComment 
+})=>{
   
   comment = ()=> {
     let val = window.prompt('Add a comment');
@@ -130,6 +136,7 @@ const NCStream = ({ entry, id, end, doFix, doInspect, doReject, doSnooze, doUnSk
         <div className='tribActionExtra'>
           <ContextMenuTrigger
             id={entry.key}
+            disable={!currentLive}
             holdToDisplay={1}
             renderTag='span'>
             <i className='fas fa-ellipsis-v fa-fw fa-lg'></i>

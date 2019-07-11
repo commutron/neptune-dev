@@ -38,28 +38,21 @@ function collectActive(accessKey, clientTZ, relevant) {
     
     let list = [];
     for(let b of relevant) {
-      // has it been touched in 'production'
-      let isActive = users.find( 
-        x => x.breadcrumbs.find( 
-          y => y.keyword === b.batch && now.isSame(moment(y.time), 'day')
-        )
-      ) ? true : false;
-      /*
-      // is there new noncons or history today
-      const activeN = (nonCon)=> 
-        nonCon.find( 
-          n => now
-            .isSame(moment(n.time), 'day') )
-              ? true : false;
-      const activeH = (items)=> 
-        items.find( 
-          i => i.history.find( 
-            h => now
-              .isSame(moment(h.time), 'day') ) )
-                ? true : false;
-      let isActive = activeN(b.nonCon) || activeH(b.items);
-      */
-      isActive === true && list.push(b.batch);
+      const tide = b.tide;
+      if(!tide) {
+        // has it been touched in 'production'
+        let isActive = users.find( 
+          x => x.breadcrumbs.find( 
+            y => y.keyword === b.batch && now.isSame(moment(y.time), 'day')
+          )
+        ) ? true : false;
+        isActive === true && list.push(b.batch);
+      }else{
+        let isActive = tide.find( 
+          x => now.isSame(moment(x.startTime), 'day')
+        ) ? true : false;
+        isActive === true && list.push(b.batch);
+      }
     }
     resolve(list);
   });

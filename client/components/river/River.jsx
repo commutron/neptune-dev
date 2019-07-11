@@ -117,7 +117,7 @@ export default class River extends Component	{
             nonCons={b.nonCon}
             sh={sh}
             item={i}
-            //regRun={i.finishedAt === false}
+            currentLive={this.props.currentLive}
             users={users}
             progCounts={progCounts}
             app={app}

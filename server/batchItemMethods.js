@@ -260,7 +260,7 @@ Meteor.methods({
     }
   },
   stopTideTask(batchId, tKey) {
- //   try {
+    try {
       const doc = BatchDB.findOne({_id: batchId, 'tide.tKey': tKey });
       const sub = doc && doc.tide.find( x => x.tKey === tKey && x.who === Meteor.userId() );
       if(!sub) { null }else{
@@ -274,9 +274,9 @@ Meteor.methods({
           }
         });
       }
-    // }catch (err) {
-    //   throw new Meteor.Error(err);
-    // }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
   },
 
 

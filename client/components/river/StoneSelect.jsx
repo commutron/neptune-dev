@@ -22,7 +22,7 @@ const StoneSelect = ({
   nonCons,
   sh,
   item,
-  //regRun,
+  currentLive,
   users,
   progCounts,
   app,
@@ -129,6 +129,7 @@ const StoneSelect = ({
                     sKey={flowStep.key}
                     step={flowStep.step}
                     type={flowStep.type}
+                    currentLive={currentLive}
                     allItems={allItems}
                     isAlt={isAlt}
                     hasAlt={hasAlt}
@@ -154,11 +155,13 @@ const StoneSelect = ({
             <NCTributary
       			  id={id}
       			  serial={serial}
+      			  currentLive={currentLive}
       			  nonCons={nc}
       			  sType={flowStep.type} />
             <Shortfalls
       			  id={id}
       			  shortfalls={sh}
+      			  currentLive={currentLive}
       			  lock={finishedAt !== false} />
           </div>
   			</div>

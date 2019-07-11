@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
+import TideLock from '/client/components/tide/TideLock.jsx';
 
 import NCAdd from '../river/NCAdd.jsx';
 import NCFlood from '../river/NCFlood.jsx';
@@ -36,6 +37,7 @@ export default class FormBar extends Component	{
     const pastRF = b.shortfall ? [...new Set( Array.from(b.shortfall, x => x.refs.toString() ) )] : [];
     
     return(
+      <TideLock currentLive={this.props.currentLive} message={true}>
       <div className='proActionForm'>
         {showX || showlegacyItem ?
           <div className='footLeft'>
@@ -117,9 +119,9 @@ export default class FormBar extends Component	{
                   app={app} />
           : null}
         </div>
-        <div className='footRight'>
-        </div>
+        <div className='footRight'></div>
       </div>
+      </TideLock>
     );
   }
 }

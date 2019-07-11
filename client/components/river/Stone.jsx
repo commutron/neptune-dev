@@ -21,6 +21,7 @@ export default class Stone extends Component {
   shouldComponentUpdate(nextProps, nextState) {
   	if(
   		this.state !== nextState ||
+  		this.props.currentLive !== nextProps.currentLive ||
   		this.props.doneStone !== nextProps.doneStone ||
   		this.props.blockStone !== nextProps.blockStone ||
   		this.props.sKey !== nextProps.sKey ||
@@ -257,6 +258,7 @@ export default class Stone extends Component {
 					<ContextMenuTrigger
 						id={this.props.barcode}
 						attributes={ {className:'moreStepAction centre'} }
+						disable={!this.props.currentLive}
 						holdToDisplay={1}
             renderTag='div'>
             <i className='fas fa-ellipsis-v fa-fw fa-lg'></i>

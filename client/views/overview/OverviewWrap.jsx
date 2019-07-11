@@ -52,18 +52,18 @@ export default class OverviewWrap extends Component	{
       const batches = this.props.b;
       let warmBatches = [];
       let coolBatches = [];
-      if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
-        const orderedBatches = batches.sort((b1, b2)=> {
-          if (b1.batch < b2.batch) { return 1 }
-          if (b1.batch > b2.batch) { return -1 }
-          return 0;
-        });
-        warmBatches = orderedBatches.filter( x => typeof x.floorRelease === 'object' );
-        coolBatches = orderedBatches.filter( x => x.floorRelease === false );
-      }else{
+      // if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
+      //   const orderedBatches = batches.sort((b1, b2)=> {
+      //     if (b1.batch < b2.batch) { return 1 }
+      //     if (b1.batch > b2.batch) { return -1 }
+      //     return 0;
+      //   });
+      //   warmBatches = orderedBatches.filter( x => typeof x.floorRelease === 'object' );
+      //   coolBatches = orderedBatches.filter( x => x.floorRelease === false );
+      // }else{
         warmBatches = batches.filter( x => typeof x.floorRelease === 'object' );
         coolBatches = batches.filter( x => x.floorRelease === false );
-      }
+      //}
       //const batchesX = this.props.bx;
       //const warmBx = batchesX.filter( x => x.releases.find( y => y.type === 'floorRelease') == true );
       //const warmBx = batchesX.filter( x => x.releases.find( y => y.type === 'floorRelease') != true );

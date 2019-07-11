@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
+import TideLock from '/client/components/tide/TideLock.jsx';
 import Pref from '/client/global/pref.js';
 
 import River from '../../../components/river/River.jsx';
@@ -50,18 +51,22 @@ export default class ItemCard extends Component	{
               <ScrapBox entry={scrap} />
             </div>
           }
-          <River
-            itemData={i}
-            batchData={b}
-            widgetData={w}
-            app={this.props.app}
-            users={this.props.users}
-            flow={flow}
-            flowAlt={flowAlt}
-            progCounts={progCounts}
-            showVerify={this.props.showVerify}
-            optionVerify={this.props.optionVerify}
-            changeVerify={this.props.changeVerify} />
+          
+          <TideLock currentLive={this.props.currentLive}>
+            <River
+              itemData={i}
+              batchData={b}
+              widgetData={w}
+              app={this.props.app}
+              users={this.props.users}
+              currentLive={this.props.currentLive}
+              flow={flow}
+              flowAlt={flowAlt}
+              progCounts={progCounts}
+              showVerify={this.props.showVerify}
+              optionVerify={this.props.optionVerify}
+              changeVerify={this.props.changeVerify} />
+          </TideLock>
   			</div>
 			</AnimateWrap>
     );

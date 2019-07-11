@@ -1,16 +1,21 @@
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import React from 'react';
+import Pref from '/client/global/pref.js';
 
 const HomeLogout = ({ currentUser })=> {
 
 	function doLogout() {
-		if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
-	  const sessionID = Meteor.connection._lastSessionId;
-	  const agent = window.navigator.userAgent;
-		Meteor.call('logLogInOut', false, agent, sessionID);
+	  const tideOut = !Meteor.user().engaged ? true : 
+	    confirm(`You are currently ${Pref.engaged} with a ${Pref.batch}`);
+		if(tideOut) {
+		  if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
+    	  const sessionID = Meteor.connection._lastSessionId;
+    	  const agent = window.navigator.userAgent;
+      	Meteor.call('logLogInOut', false, agent, sessionID);
+  	  }
+		  Meteor.logout();
 	  }
-		Meteor.logout();
 	}
   
 	return(
