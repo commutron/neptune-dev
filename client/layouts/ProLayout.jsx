@@ -98,7 +98,7 @@ export class ProWrap extends Component	{
           <HomeIcon />
           {bData && 
             <div className='auxLeft'>
-              <TideControl batch={bData} tKey={et} lock={false} />
+              <TideControl batch={bData} tKey={et} />
             </div>}
           <div className='frontCenterTitle'>
             <FindBox append={append} />

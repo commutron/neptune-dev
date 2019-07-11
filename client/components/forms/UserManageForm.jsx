@@ -65,13 +65,21 @@ export default class UserManageForm extends Component {
             <br />
             <ul>
               {roles.map( (entry, index)=>{
-                return(
-                  <SetCheck
-                    key={index}
-                    user={this.props.id}
-                    role={entry}
-                  />
-                )})}
+                if(entry === 'peopleSuper') {
+                  return(
+                    <SetCheckSuper
+                      key={index}
+                      user={this.props.id}
+                      role={entry}
+                    />
+                )}else{
+                  return(
+                    <SetCheck
+                      key={index}
+                      user={this.props.id}
+                      role={entry}
+                    />
+                )}})}
             </ul>
           </fieldset>
         
@@ -121,6 +129,41 @@ export default class UserManageForm extends Component {
       );
   }
 }
+
+
+const SetCheckSuper = ({user, role})=>	{
+  const check = Roles.userIsInRole(user, role);
+  
+  function changeSuper() {
+    const flip = check ? 'superUserDisable' : 'superUserEnable';
+    Meteor.call(flip, user, role, (error, reply)=>{
+      if(error)
+        console.log(error);
+      if(reply) {
+        toast.success('Saved');
+      }else{
+        toast(`NOT ALLOWED. This requires authorization, \n 
+                an admin cannot assign themselves a "super" permission \n
+                and only one user can have a "super" permission at a time`, 
+          { autoClose: false });
+        console.log("BLOCKED BY SERVER");
+      }
+    });
+  }
+  return(
+    <li>
+      <input
+        type='checkbox'
+        id={role}
+        title="only one user can have a 'super' permission at a time"
+        defaultChecked={check}
+        onChange={()=>changeSuper()}
+        readOnly />
+      <label htmlFor={role}>{role}*</label>
+      <br />
+    </li>
+  );
+};
 
 class SetCheck extends Component	{
   

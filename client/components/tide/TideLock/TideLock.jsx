@@ -1,39 +1,30 @@
-import React, { useState /*, useEffect*/ } from 'react';
+import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 import './style.css';
         
 const TideControl = ({ batch, tKey })=> {
   
-  const [lock, setLock] = useState(false);
-  // useEffect(() => {
-  //   console.log({lock});
-  // });
-  
   const tide = batch.tide;
   const currentLive = tide ?
     tide.find( x => x.tKey === tKey && x.who === Meteor.userId() )
     : false;
   
+  //console.log({ tKey, currentLive });
+  
   function handleStart() {
-    setLock(true);
     Meteor.call('startTideTask', batch._id, (error)=> {
       if(error) {
         console.log(error);
         toast.error('Rejected by Server');
-      }else{
-        setLock(false);
       }
     });
   }
   function handleStop() {
-    setLock(true);
     Meteor.call('stopTideTask', batch._id, tKey, (error)=> {
       if(error) {
         console.log(error);
         toast.error('Rejected by Server');
-      }else{
-        setLock(false);
       }
     });
   }
@@ -47,7 +38,7 @@ const TideControl = ({ batch, tKey })=> {
           title={`STOP ${Pref.batch}`}
           className='tideOut'
           onClick={()=>handleStop()}
-          disabled={lock}
+          disabled={false}
         ><b><i className="far fa-stop-circle tideIcon"></i></b>
         <br />STOP</button>
     )}
@@ -57,7 +48,7 @@ const TideControl = ({ batch, tKey })=> {
         title={`START ${Pref.batch}`}
         className='tideIn'
         onClick={()=>handleStart()}
-        disabled={lock}
+        disabled={false}
       ><i><i className="far fa-play-circle tideIcon"></i></i>
       <br />START</button>
     );

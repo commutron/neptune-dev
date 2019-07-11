@@ -48,7 +48,7 @@ export default class TideFollow extends PureComponent {
         <button 
           title={!this.state.engaged ?
             `Not currently engaged in a ${Pref.batch}` : 
-            `Escape Hatch \ngo back to engaged ${Pref.batch}`}
+            `Escape Hatch \nto engaged ${Pref.batch}: ${this.state.engaged}`}
           onClick={()=>this.go()}
           disabled={!this.state.engaged}
         ><i className='fas fa-parachute-box primeRightIcon'></i>

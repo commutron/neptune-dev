@@ -4,6 +4,7 @@ import business from 'moment-business';
 import Pref from '/client/global/pref.js';
 
 import ProgLayerBurndown from '/client/components/charts/ProgLayerBurndown.jsx';
+import { AnonyUser } from '/client/components/smallUi/UserNice.jsx';
 
 const TimeTab = ({
   a, b, user, 
@@ -104,7 +105,7 @@ const TimeTab = ({
               return(
                 <li key={index}>
                   - <b>{mov.tKey}</b>
-                  - {mov.who.slice(0, 3).toLowerCase()}
+                  - <AnonyUser id={mov.who} />
                   - {mov.startTime.toString()}
                   - {mov.stopTime && mov.stopTime.toString()}
                 </li>

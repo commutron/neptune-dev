@@ -9,6 +9,7 @@ const AccountsManagePanel = ({ users })=> {
   const roles = [
     'debug',
     'nightly',
+    'peopleSuper',
     'qa',
     'remove',
     'create',
@@ -74,7 +75,41 @@ export const PermissionHelp = ({ roles, admin })=> {
           </ul>
         </ul>
       : null}
-        
+      
+      {r.includes('debug') ?
+        <ul>
+          <li><b>Debug</b></li>
+          <li><em>Should ONLY be used for finding and fixing problems in the software</em></li>
+          <li><em>RESPECT USER PRIVACY</em></li>
+          <ul>
+            <li>Records information on your activity</li>
+            <li>Allows Admins to view private information about your account and activity</li>
+            <li>Logs meta data to your browsers console</li>
+          </ul>
+        </ul>
+      : null}
+      
+      {r.includes('nightly') ?
+        <ul>
+          <li><b>Nightly</b></li>
+          <ul>
+            <li>Veiw and Use features that are under development</li>
+          </ul>
+        </ul>
+      : null}
+      
+      {r.includes('peopleSuper') ?
+        <ul>
+          <li><b>People Super</b></li>
+          <li><em>Can ONLY be enabled on ONE user</em></li>
+          <li><em>RESPECT USER PRIVACY</em></li>
+          <ul>
+            <li>View information about individuals production performance</li>
+            <li>Turns off the anonymous filter</li>
+          </ul>
+        </ul>
+      : null}
+      
       {r.includes('qa') ?
         <ul>
           <li><b>QA</b></li>

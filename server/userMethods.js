@@ -71,6 +71,28 @@ Meteor.methods({
     }
   },
   
+  superUserEnable(userId, role) {
+    const admin = Roles.userIsInRole(Meteor.userId(), 'admin');
+    const existOne = Meteor.users.find({orgKey: Meteor.user().orgKey, roles: role}).fetch();
+    const notSelf = Meteor.userId() !== userId;
+    if(admin === true && existOne.length === 0 && notSelf === true) {
+      Roles.addUsersToRoles(userId, role);
+      return true;
+    }else{
+      return false;
+    }
+  },
+  superUserDisable(userId, role) {
+    const admin = Roles.userIsInRole(Meteor.userId(), 'admin');
+    const isSelf = Meteor.userId() === userId;
+    if(admin || isSelf) {
+      Roles.removeUsersFromRoles(userId, role);
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
   // ability to kick a user out of an org
   removeFromOrg(badUserId, pin) {
     const adminPower = Roles.userIsInRole(Meteor.userId(), 'admin');
@@ -152,8 +174,9 @@ Meteor.methods({
   permissionSet(user, role) {
     const dev = Roles.userIsInRole(Meteor.userId(), 'devMaster');
     const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
+    const open = role !== 'peopleSuper';
     const team = Meteor.users.findOne({_id: user, orgKey: Meteor.user().orgKey});
-    if(dev || auth && team) {
+    if(open && ( dev || auth && team )) {
       Roles.addUsersToRoles(user, role);
       return true;
     }else{
@@ -164,11 +187,11 @@ Meteor.methods({
   permissionUnset(user, role) {
     const dev = Roles.userIsInRole(Meteor.userId(), 'devMaster');
     const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
+    const open = role !== 'peopleSuper';
     const team = Meteor.users.findOne({_id: user, orgKey: Meteor.user().orgKey});
-    
     if(role === 'active' && user === Meteor.userId()) {
       return false;
-    }else if(dev || auth && team) {
+    }else if(open && ( dev || auth && team )) {
       Roles.removeUsersFromRoles(user, role);
       return true;
     }else{
