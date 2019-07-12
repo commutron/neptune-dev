@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
-import UserName from '/client/components/uUi/UserName.jsx';
+import UserNice from '/client/components/smallUi/UserNice.jsx';
 
 const ReleaseAction = ({ id, rType })=> {
   
@@ -75,7 +75,7 @@ export const ReleaseNote = ({ id, release, xBatch })=> {
   			<fieldset className='noteCard'>
           <legend>{releaseType || 'Released to the Floor'}</legend>
           {moment(release.time).format("ddd, MMM D /YY, h:mm a")}
-          <i> by </i><UserName id={release.who} />
+          <i> by <UserNice id={release.who} /></i>
         </fieldset>
       </ContextMenuTrigger>
       <ContextMenu id={id+'release'}>

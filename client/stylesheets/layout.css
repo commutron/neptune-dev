@@ -687,7 +687,7 @@ input.variableInput.biggest {
 
 .anchorTarget {
   position: relative;
-  top: -5vmax;
+  top: 0;
 }
 
 .popTbody > tr:first-child > td { 
@@ -818,7 +818,6 @@ input.variableInput.biggest {
     'overviewContent';
   overflow-y: hidden !important;
   overflow-x: hidden !important;
-  /*-webkit-overflow-scrolling: touch;*/
 }
 .overviewNav {
   grid-area: overviewNav;

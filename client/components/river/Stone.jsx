@@ -67,7 +67,11 @@ export default class Stone extends Component {
     const sKey = this.props.sKey;
 		const step = this.props.step;
     const type = this.props.type;
-    const comm = doComm ? prompt('Enter A Comment', '').trim() : '';
+    
+    let comm = '';
+    let comPrompt = doComm ? prompt('Enter A Comment', '') : false;
+    comPrompt ? comm = comPrompt : null;
+    if(doComm && !comPrompt) { this.unlock(); return false; }
     
     const pre = this.props.progCounts;
     const preTotal = pre.regItems;
@@ -96,7 +100,12 @@ export default class Stone extends Component {
     const sKey = this.props.sKey;
 		const step = this.props.step;
     const type = this.props.type;
-    const comm = doComm ? prompt('Enter A Comment', '') : '';
+    
+    let comm = '';
+    let comPrompt = doComm ? prompt('Enter A Comment', '') : false;
+    comPrompt ? comm = comPrompt : null;
+    if(doComm && !comPrompt) { this.unlock(); return false; }
+    
     const more = shipFail ? 'ship a failed test' : false;
     
     const pre = this.props.progCounts;
@@ -116,7 +125,7 @@ export default class Stone extends Component {
 					pass === false && this.unlock();
 				  document.getElementById('lookup').focus();
 			  }else{
-			    Bert.alert(Pref.blocked, 'danger');
+			    toast.error(Pref.blocked);
 			  }
 			});
     }
@@ -144,7 +153,7 @@ export default class Stone extends Component {
 		  if(reply) {
 		    document.getElementById('lookup').focus();
 		  }else{
-		    Bert.alert(Pref.blocked, 'danger');
+		    toast.error(Pref.blocked);
 		  }
 		});
 	}
@@ -255,15 +264,16 @@ export default class Stone extends Component {
 							>undo</button> 
 						: null}
 					</div>
+					{this.props.type === 'first' || this.props.type === 'finish' ? null :
 					<ContextMenuTrigger
 						id={this.props.barcode}
 						attributes={ {className:'moreStepAction centre'} }
-						disable={!this.props.currentLive}
+						disable={!this.props.currentLive }
 						holdToDisplay={1}
             renderTag='div'>
-            <i className='fas fa-ellipsis-v fa-fw fa-lg'></i>
+            <i className='fas fa-comment fa-fw fa-lg'></i>
 					</ContextMenuTrigger>
-	        {this.props.type === 'first' || this.props.type === 'finish' ? null :
+					}
 		        <ContextMenu id={this.props.barcode}>
 		          <MenuItem onClick={()=>this.passS(true, true)} disabled={lock}>
 		            Pass with Comment
@@ -278,7 +288,6 @@ export default class Stone extends Component {
 			            Undo Completed Step
 			          </MenuItem>*/}
 		        </ContextMenu>
-		    	}
 	    	</div>
       </div>
     );

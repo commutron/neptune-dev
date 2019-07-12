@@ -97,17 +97,16 @@ const TimeTab = ({
       
       <div className='vmargin space'>
                 
-        <ul>
+        <ul className='numFont'>
           {!b.tide ?
-            <p className='centreText'>strt/stop not enabled</p>
+            <p className='centreText'>start/stop not enabled</p>
             :
             b.tide.map( (mov, index)=>{
               return(
-                <li key={index}>
-                  - <b>{mov.tKey}</b>
-                  - <AnonyUser id={mov.who} />
-                  - {mov.startTime.toString()}
-                  - {mov.stopTime && mov.stopTime.toString()}
+                <li key={index} title={mov.tKey}>
+                  <AnonyUser id={mov.who} />
+                  - {moment(mov.startTime).format()}
+                  - {mov.stopTime && moment(mov.stopTime).format()}
                 </li>
             )})}
           </ul>

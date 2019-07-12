@@ -5,11 +5,11 @@
     "start": "meteor run"
   },
   "dependencies": {
-    "@babel/runtime": "^7.4.4",
+    "@babel/runtime": "^7.5.4",
     "@fortawesome/react-fontawesome": "0.0.18",
     "babel-runtime": "^6.26.0",
     "bcrypt": "^1.0.3",
-    "chartist": "^0.11.0",
+    "chartist": "^0.11.3",
     "chartist-plugin-fill-donut": "^0.1.4",
     "chartist-plugin-tooltips": "0.0.17",
     "create-react-class": "^15.6.3",
@@ -18,7 +18,7 @@
     "meteor-node-stubs": "^0.4.1",
     "moment": "^2.24.0",
     "moment-business": "^3.0.1",
-    "moment-timezone": "^0.5.25",
+    "moment-timezone": "^0.5.26",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-addons-pure-render-mixin": "^15.6.2",
@@ -31,7 +31,7 @@
     "react-mounter": "^1.2.0",
     "react-toastify": "^4.5.2",
     "react-transition-group": "^1.2.1",
-    "victory": "^32.3.0"
+    "victory": "^32.3.3"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.9.0"

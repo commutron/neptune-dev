@@ -34,6 +34,7 @@ Meteor.methods({
   			serialize: false,
   			river: false,
   			waterfall: [],
+  			tide: [],
   			rapids: [],
   			blocks: [],
         releases: [],

@@ -109,6 +109,7 @@ Meteor.publish('eventsData', function(){
         fields: {
           'batch': 1,
           'events': 1,
+          'tide': 1
         }}),
       CacheDB.find({orgKey: orgKey}, {
         fields: {
@@ -129,40 +130,28 @@ Meteor.publish('shaddowData', function(){
     return this.ready();
   }else{
     return [
-      /*
-      GroupDB.find({orgKey: orgKey}, {
-        fields: {
-            'alias': 1,
-          }}),
-      WidgetDB.find({orgKey: orgKey}, {
-        fields: {
-            'widget': 1,
-            'versions.versionKey': 1,
-            'versions.version': 1
-          }}),
-      */
       BatchDB.find({orgKey: orgKey, live: true}, {
         sort: {batch:-1},
         fields: {
-            'batch': 1,
-            'widgetId': 1,
-            'versionKey': 1,
-            'live': 1,
-            'finishedAt': 1,
-            'floorRelease': 1
-          }}),
+          'batch': 1,
+          'widgetId': 1,
+          'versionKey': 1,
+          'live': 1,
+          'finishedAt': 1,
+          'floorRelease': 1
+        }}),
       XBatchDB.find({orgKey: orgKey, live: true}, {
         sort: {batch:-1},
         fields: {
-            'batch': 1,
-            'groupId': 1,
-            'widgetId': 1,
-            'versionKey': 1,
-            'live': 1,
-            'completed': 1,
-            'completedAt': 1,
-            'releases': 1
-          }}),
+          'batch': 1,
+          'groupId': 1,
+          'widgetId': 1,
+          'versionKey': 1,
+          'live': 1,
+          'completed': 1,
+          'completedAt': 1,
+          'releases': 1
+        }}),
       CacheDB.find({orgKey: orgKey}, {
         fields: {
           'orgKey': 0
@@ -181,38 +170,38 @@ Meteor.publish('thinData', function(){
     return [
       GroupDB.find({orgKey: orgKey}, {
         fields: {
-            'orgKey': 0,
-            'shareKey': 0,
-          }}),
+          'orgKey': 0,
+          'shareKey': 0,
+        }}),
       
       WidgetDB.find({orgKey: orgKey}, {
         fields: {
-            'widget': 1,
-            'describe': 1,
-            'groupId': 1,
-          }}),
+          'widget': 1,
+          'describe': 1,
+          'groupId': 1,
+        }}),
       
       BatchDB.find({orgKey: orgKey}, {
         sort: {batch:-1},
         fields: {
-            'batch': 1,
-            'widgetId': 1,
-            'versionKey': 1,
-            'live': 1,
-            'finishedAt': 1,
-          }}),
+          'batch': 1,
+          'widgetId': 1,
+          'versionKey': 1,
+          'live': 1,
+          'finishedAt': 1,
+        }}),
           
       XBatchDB.find({orgKey: orgKey}, {
         sort: {batch:-1},
         fields: {
-            'batch': 1,
-            'groupId': 1,
-            'widgetId': 1,
-            'versionKey': 1,
-            'live': 1,
-            'completed': 1,
-            'completedAt': 1,
-          }})
+          'batch': 1,
+          'groupId': 1,
+          'widgetId': 1,
+          'versionKey': 1,
+          'live': 1,
+          'completed': 1,
+          'completedAt': 1,
+        }})
       ];
   }
 });

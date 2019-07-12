@@ -12,7 +12,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '1.17.3';
+    this.neptuneVersion = '1.18.0';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -56,8 +56,8 @@ class Pref {
     this.test = 'tester';
     this.create = 'creator';
     this.salesOrder = 'sales order';
-    this.start = 'start sales order';
-    this.end = 'fulfill sales order';
+    this.start = 'sales order start';
+    this.end = 'sales order fulfill';
     this.tag = 'flag';
     this.comp = 'part';
     // build tracking

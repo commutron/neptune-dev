@@ -1,5 +1,3 @@
-import React from 'react';
-
 function find(id) {
   const user = Meteor.users.findOne({_id : id});
   let nice = 'not found';
@@ -8,7 +6,7 @@ function find(id) {
 }
     
 const UserName = ({ id }) => (
-  <i className='cap'>{find(id)}</i>
+  find(id)
 );
 
 export default UserName;

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import moment from 'moment';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
-import TideLock from '/client/components/tide/TideLock.jsx';
+//import TideLock from '/client/components/tide/TideLock.jsx';
 import Pref from '/client/global/pref.js';
 import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 
@@ -46,7 +46,7 @@ export default class BatchCard extends Component	{
     return(
       <AnimateWrap type='cardTrans'>
         <div className='sidebar' key={b.batch}>
-          <TideLock currentLive={this.props.currentLive}>
+          {/*<TideLock currentLive={this.props.currentLive}></TideLock>*/}
             {iready ?
               <h2 className='actionBox centreText yellow'>
                 No {Pref.itemSerial}s created
@@ -60,7 +60,6 @@ export default class BatchCard extends Component	{
               <h2 className='actionBox centreText green'>
                 Finished: {moment(b.finishedAt).calendar()}
               </h2>}
-          </TideLock>
           
             <Tabs
               tabs={tabOps}

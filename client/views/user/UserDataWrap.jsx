@@ -58,13 +58,38 @@ class UserDataWrap extends Component	{
         
           <Slides
             menu={[
-              <b><i className='fas fa-id-card fa-fw'></i>  Preferences</b>,
               <b><i className='fas fa-history fa-fw'></i>  Production Activity</b>,
               <b><i className='far fa-eye fa-fw'></i>  Watchlist</b>,
-              <b><i className='fas fa-inbox fa-fw'></i>  Inbox</b>
+              <b><i className='fas fa-inbox fa-fw'></i>  Inbox</b>,
+              <b><i className='fas fa-id-card fa-fw'></i>  Preferences</b>
             ]}>
             
-            <div key={1} className='balance'>
+            <RecentPanel
+              key={1}
+              orb={this.props.orb}
+              bolt={this.props.bolt}
+              app={this.props.app}
+              user={this.props.user}
+              users={this.props.users}
+              bCache={this.props.bCache} />
+            <WatchlistPanel
+              key={2}
+              orb={this.props.orb}
+              bolt={this.props.bolt}
+              app={this.props.app}
+              user={this.props.user}
+              users={this.props.users}
+              batchEvents={this.props.batchEvents}
+              bCache={this.props.bCache} />
+            <InboxPanel
+              key={3}
+              orb={this.props.orb}
+              bolt={this.props.bolt}
+              app={this.props.app}
+              user={this.props.user}
+              users={this.props.users} />
+              
+            <div key={4} className='balance'>
       
               <div className='centre'>
                 <p className='clean'>username: {this.props.user.username}</p>
@@ -86,31 +111,6 @@ class UserDataWrap extends Component	{
               </div>
               <PermissionHelp roles={Meteor.user().roles} admin={admin} />
             </div>
-              
-            <RecentPanel
-              key={2}
-              orb={this.props.orb}
-              bolt={this.props.bolt}
-              app={this.props.app}
-              user={this.props.user}
-              users={this.props.users}
-              bCache={this.props.bCache} />
-            <WatchlistPanel
-              key={3}
-              orb={this.props.orb}
-              bolt={this.props.bolt}
-              app={this.props.app}
-              user={this.props.user}
-              users={this.props.users}
-              batchEvents={this.props.batchEvents}
-              bCache={this.props.bCache} />
-            <InboxPanel
-              key={4}
-              orb={this.props.orb}
-              bolt={this.props.bolt}
-              app={this.props.app}
-              user={this.props.user}
-              users={this.props.users} />
             
           </Slides>
   				

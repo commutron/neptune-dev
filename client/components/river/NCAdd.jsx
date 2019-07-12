@@ -4,9 +4,13 @@ import { toast } from 'react-toastify';
 
 const NCAdd = ({ id, barcode, app })=> {
   
+  const ncTypesCombo = Array.from(app.nonConTypeLists, x => x.typeList);
+	const ncTypesComboFlat = [].concat(...ncTypesCombo);
+  const flatCheckList = [...app.nonConOption,
+  	    ...Array.from(ncTypesComboFlat, x => x.live === true && x.typeText)];
+  	    
   function handleCheck(e) {
-    const list = app.nonConOption;
-    let match = list.find( x => x === e.target.value);
+    let match = flatCheckList.find( x => x === e.target.value);
     let message = !match ? 'please choose from the list' : '';
     e.target.setCustomValidity(message);
   }
@@ -41,9 +45,6 @@ const NCAdd = ({ id, barcode, app })=> {
 	let now = Session.get('ncWhere');
 	let lock = now === 'complete';
 	
-	const ncTypesCombo = Array.from(app.nonConTypeLists, x => x.typeList);
-	const ncTypesComboFlat = [].concat(...ncTypesCombo);
-	
   return (
     <form
       className='actionForm'
@@ -63,7 +64,7 @@ const NCAdd = ({ id, barcode, app })=> {
       <span>
         <input 
           id='ncType'
-          className='cap redIn'
+          className='redIn'
           type='search'
           placeholder='Type'
           list='ncTypeList'
@@ -74,7 +75,11 @@ const NCAdd = ({ id, barcode, app })=> {
           <datalist id='ncTypeList'>
             {app.nonConOption.map( (entry, index)=>{
               return ( 
-                <option key={index} data-id={index + 1 + '.'} value={entry}>{index + 1}</option>
+                <option
+                  key={index}
+                  data-id={index + 1 + '.'}
+                  value={entry}
+                >{index + 1}</option>
               );
             })}
             {ncTypesComboFlat.map( (entry, index)=>{

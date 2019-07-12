@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
+import UserNice from '/client/components/smallUi/UserNice.jsx';
 import { toast } from 'react-toastify';
 
 const TideFollow = ({ proRoute, invertColor })=> {
@@ -14,7 +15,8 @@ const TideFollow = ({ proRoute, invertColor })=> {
 	  loopClock = Meteor.setInterval( ()=>{
       if(!proRoute && engaged) {
         toast.dismiss();
-        toast(<i>⏰ Remember, you are still {Pref.engaged} with a {Pref.batch}. 
+        toast(<i>⏰ Remember <UserNice id={Meteor.userId()} />,
+          you are still {Pref.engaged} with a {Pref.batch}. 
           <a onClick={()=>go()}>Go back there now</a></i>, { 
           autoClose: false
         });

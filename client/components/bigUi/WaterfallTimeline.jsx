@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
-import UserName from '/client/components/uUi/UserName.jsx';
+import UserNice from '/client/components/smallUi/UserNice.jsx';
 import MiniBar from '/client/components/charts/MiniScales/MiniBar.jsx';
 
 const WaterfallTimeline = ({ waterfalls, quantity, app })=> (
@@ -48,7 +48,7 @@ const WaterfallTimeline = ({ waterfalls, quantity, app })=> (
             return(
               <dd key={index}>
                 <b className={tickColor}>{tickSymbol}</b>
-                {moment(dt.time).format('YYYY ddd MMM DD hh:mm:ss.SS A')}, <UserName id={dt.who} />
+                {moment(dt.time).format('YYYY ddd MMM DD hh:mm:ss.SS A')}, <UserNice id={dt.who} />
               </dd>
           )})}
           </dl>

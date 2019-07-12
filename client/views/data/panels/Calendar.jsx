@@ -37,7 +37,21 @@ const Calendar = ({ eventsSubReady, allBatch, bCache, app }) => {
     }
     return eventsFormat;
   });
-  const eventList = [].concat(...newEventsMap);
+  const newTideMap = allBatch.map( (entry, index)=> {
+    let tidesSource = entry.tide || [];
+    let tidesFormat = [];
+    for(let td of tidesSource) {
+      const stopTime = !td.stopTime ? new Date() : td.stopTime;
+      tidesFormat.push({
+        id : Math.random().toString(36).substr(2, 5),
+        title : `${entry.batch}`,
+        start : td.startTime,
+        end : stopTime,
+      });
+    }
+    return tidesFormat;
+  });
+  const taskList = [].concat(...newEventsMap,...newTideMap);
   
   return(
     <div className='overscroll'>
@@ -45,7 +59,7 @@ const Calendar = ({ eventsSubReady, allBatch, bCache, app }) => {
    
         <p></p>
         <BigCalendar
-          events={eventList}
+          events={taskList}
           localizer={localizer}
           defaultDate={new Date()}
           defaultView='month'

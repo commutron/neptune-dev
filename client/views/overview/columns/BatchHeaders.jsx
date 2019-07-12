@@ -5,16 +5,13 @@ import Pref from '/client/global/pref.js';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 
 
-const BatchHeaders = ({hB, lB, cB, bCache, hotheader, lukeheader, coolheader})=> {
+const BatchHeaders = ({hB, lB, cB, bCache })=> {
   
   return(
     <div className='overGridFixed'>
       
-      <div className='overGridRowFixedHeader' ref={hotheader}>
-        <span id="hotBatch"
-        // className='anchorTarget'
-        ></span>
-        <h1>Active{/*Pref.batches*/}</h1>
+      <div id="hotBatch" className='overGridRowFixedHeader'>
+        <h1>Active <sup>{hB.length}</sup></h1>
       </div>
       
       {!hB ? null :
@@ -26,11 +23,8 @@ const BatchHeaders = ({hB, lB, cB, bCache, hotheader, lukeheader, coolheader})=>
               bCache={bCache} />
       )})}
       
-      <div className='overGridRowFixedHeader' ref={lukeheader}>
-        <span id="lukewarmBatch" 
-        // className='anchorTarget'
-        ></span>
-        <h1>In Progress</h1>
+      <div id="lukewarmBatch" className='overGridRowFixedHeader'>
+        <h1>In Progress <sup>{lB.length}</sup></h1>
       </div>
             
       {!lB ? null :
@@ -42,11 +36,8 @@ const BatchHeaders = ({hB, lB, cB, bCache, hotheader, lukeheader, coolheader})=>
               bCache={bCache} />
       )})}
       
-      <div className='overGridRowFixedHeader' ref={coolheader}>
-        <span id="coolBatch"
-        // className='anchorTarget'
-        ></span>
-        <h1>In Kitting</h1>
+      <div id="coolBatch" className='overGridRowFixedHeader'>
+        <h1>In Kitting <sup>{cB.length}</sup></h1>
       </div>
       
       {!cB ? null :

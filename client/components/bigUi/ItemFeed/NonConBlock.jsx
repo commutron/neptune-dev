@@ -25,9 +25,13 @@ export default class NonConBlock extends Component {
     this.setState({ edit: !this.state.edit });
   }
   
-  handleCheck(target) {
-    const list = this.props.app.nonConOption;
-    let match = list.find( x => x === target.value);
+  handleCheck(target, dflt) {
+    const ncTypesCombo = Array.from(this.props.app.nonConTypeLists, x => x.typeList);
+	  const ncTypesComboFlat = [].concat(...ncTypesCombo);
+	  const flatCheckList = [...this.props.app.nonConOption,
+	    ...Array.from(ncTypesComboFlat, x => x.live === true && x.typeText)];
+
+    let match = target.value === dflt || flatCheckList.find( x => x === target.value);
     let message = !match ? 'please choose from the list' : '';
     target.setCustomValidity(message);
     return !match ? false : true;
@@ -39,7 +43,7 @@ export default class NonConBlock extends Component {
     const ref = this.ncRef.value.trim().toLowerCase();
     const type = this.ncType.value.trim().toLowerCase();
     const where = this.ncWhere.value.trim().toLowerCase();
-    const tgood = this.handleCheck(this.ncType);
+    const tgood = this.handleCheck(this.ncType, this.props.entry.type);
     
     if( typeof ref !== 'string' || ref.length < 1 ||  !tgood || where.length < 1 ) {
       this.ncRef.reportValidity();
@@ -126,7 +130,11 @@ export default class NonConBlock extends Component {
     let inTrash = !trashed ? '' : <li>Trashed: <UserNice id={dt.trash.who} /> {moment(dt.trash.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</li>;
 
     const editAllow = Roles.userIsInRole(Meteor.userId(), 'inspect') && !done;
-    const editIndicate = this.state.edit && 'editStandout';     
+    const editIndicate = this.state.edit && 'editStandout';
+    
+    const ncTypesCombo = Array.from(this.props.app.nonConTypeLists, x => x.typeList);
+	  const ncTypesComboFlat = [].concat(...ncTypesCombo);
+	  
     return(
       <div className={`infoBlock noncon ${editIndicate} ${tSty}`}>
         <div className='blockTitle cap'>
@@ -145,19 +153,33 @@ export default class NonConBlock extends Component {
                   <input 
                     ref={(i)=> this.ncType = i}
                     id='ncT'
-                    className='redIn cap inlineSelect'
+                    className='redIn inlineSelect'
                     type='search'
                     defaultValue={dt.type}
                     placeholder='Type'
                     list='ncTypeList'
-                    onInput={(e)=>this.handleCheck(e.target)}
+                    onInput={(e)=>this.handleCheck(e.target, dt.type)}
                     required />
                     <datalist id='ncTypeList'>
                       {app.nonConOption.map( (entry, index)=>{
                         return ( 
-                          <option key={index} value={entry}>{entry}</option>
+                          <option
+                            key={index}
+                            data-id={index + 1 + '.'} 
+                            value={entry}
+                          >{index + 1}</option>
                         );
                       })}
+                      {ncTypesComboFlat.map( (entry, index)=>{
+                        if(entry.live === true) {
+                          return ( 
+                            <option 
+                              key={index}
+                              data-id={entry.key}
+                              value={entry.typeText}
+                            >{entry.typeCode}</option>
+                          );
+                      }})}
                     </datalist>
                 </span>
               :
@@ -175,7 +197,7 @@ export default class NonConBlock extends Component {
               <input 
                 ref={(i)=> this.ncWhere = i}
                 id='ncW'
-                className='redIn cap inlineSelect'
+                className='redIn inlineSelect'
                 list='ncWhereList'
                 defaultValue={dt.where || ''}
                 disabled={!Roles.userIsInRole(Meteor.userId(), ['run', 'edit', 'qa'])}
@@ -200,8 +222,8 @@ export default class NonConBlock extends Component {
             <div>
               <div className='leftAnchor'>{open}</div>
               <div className='up'>{dt.ref}</div>
-              <div className='cap'>{dt.type}</div>
-              <div className='cap'>{dt.where}</div>
+              <div className=''>{dt.type}</div>
+              <div className=''>{dt.where}</div>
             </div>
           }
           {this.state.edit === true ?

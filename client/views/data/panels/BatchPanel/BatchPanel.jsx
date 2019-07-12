@@ -5,7 +5,6 @@ import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
 import ProgressCounter from '/client/components/utilities/ProgressCounter.js';
 import CreateTag from '/client/components/uUi/CreateTag.jsx';
-//import UserName from '/client/components/uUi/UserName.jsx';
 import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 import InfoTab from './InfoTab.jsx';
 import TimeTab from './TimeTab.jsx';

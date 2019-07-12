@@ -103,15 +103,6 @@ const BatchDetailChunk = ({ck, warm, user, app})=> (
       batchID={ck.batchID}
       warm={warm}
       app={app} />
-    {Roles.userIsInRole(Meteor.userId(), 'debug') &&
-      <div>
-        <NumStat
-          num={ck.percentOfDoneItems}
-          name='Complete'
-          title=''
-          color='greenT'
-          size='big' />
-      </div>}
     <div>
       <NumStat
         num={ck.nonConTotal}

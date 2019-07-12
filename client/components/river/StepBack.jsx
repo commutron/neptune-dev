@@ -24,11 +24,11 @@ function handle(id, bar, entry) {
         
 const StepBack = ({ id, bar, entry, lock })=> (
   <button
-    title="Mark as 'No Good'"
+    title="'No Good', Undo Step"
     className='miniAction'
     onClick={()=>handle(id, bar, entry)}
     disabled={lock}
-  ><i className="fas fa-history fa-lg fa-fw"></i></button>
+  ><i className="fas fa-undo fa-lg fa-fw"></i></button>
 );
 
 export default StepBack;

@@ -8,7 +8,6 @@
   align-content: center;
   overflow-y: hidden !important;
   overflow-x: hidden !important;
-  -webkit-overflow-scrolling: touch;
 }
 
 .taskBarEx {
@@ -34,7 +33,6 @@
   align-content: center;
   overflow-y: hidden !important;
   overflow-x: hidden !important;
-  -webkit-overflow-scrolling: touch;
 }
 .traverseContainer {
   grid-template-columns: auto minmax(calc(20vmin + 5vw), calc(200px + 5vw));

@@ -17,8 +17,8 @@ function collectRelevant(accessKey, temp, activeList) {
       const warmBatches = liveBatches.filter( x => typeof x.floorRelease === 'object' );
       resolve(warmBatches);
     }else if(temp === 'luke') {
-      const warmBatches = liveBatches.filter( x => typeof x.floorRelease === 'object' );
-      const lukeBatches = warmBatches.filter( x => activeList.includes( x.batch ) === false );
+      const lukeBatches = liveBatches.filter( x => 
+        typeof x.floorRelease === 'object' && activeList.includes( x.batch ) === false);
       resolve(lukeBatches);
     }else if(temp === 'hot') {
       const hotBatches = liveBatches.filter( x => activeList.includes( x.batch ) === true );
@@ -76,9 +76,9 @@ function collectInfo(clientTZ, temp, relevant) {
       // River Setup
       const riverChosen = b.river !== false;
       // what percent of items are complete
-      const percentOfDoneItems = temp === 'cool' ? 0 : 
-        (( b.items.filter( x => x.finishedAt !== false )
-          .length / itemQuantity) * 100 ).toFixed(0);
+      // const percentOfDoneItems = temp === 'cool' ? 0 : 
+      //   (( b.items.filter( x => x.finishedAt !== false )
+      //     .length / itemQuantity) * 100 ).toFixed(0);
       // how many nonCons
       const nonConTotal = temp === 'cool' ? 0 : 
         b.nonCon.length;
@@ -108,7 +108,6 @@ function collectInfo(clientTZ, temp, relevant) {
         weekDaysRemain: timeRemain,
         riverChosen: riverChosen,
         itemQuantity: itemQuantity,
-        percentOfDoneItems: isNaN(percentOfDoneItems) ? '0%' : percentOfDoneItems + '%',
         nonConTotal: b.nonCon.length,
         percentOfNCitems: isNaN(percentOfNCitems) ? '0%' : percentOfNCitems + '%',
         nonConsPerNCitem: isNaN(nonConsPerNCitem) ? '0.0' : nonConsPerNCitem,
