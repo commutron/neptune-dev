@@ -353,6 +353,34 @@ Meteor.methods({
     }
   },
   
+  fetchSelfTideActivity(weekNum) {
+    try {
+      const getWeek = weekNum || moment().week();
+      
+      const allTouched = BatchDB.find({
+        orgKey: Meteor.user().orgKey, 
+        'tide.who': Meteor.userId()
+      }).fetch();
+      
+      let slimTideWeek = [];
+      for(let btch of allTouched) {
+        const yourWeek = !btch.tide ? [] : btch.tide.filter( x => 
+          x.who === Meteor.userId() && moment(x.startTime).week() === getWeek);
+        for(let blck of yourWeek) {  
+          slimTideWeek.push({
+            batch: btch.batch,
+            tKey: blck.tKey,
+            startTime: blck.startTime,
+            stopTime: blck.stopTime
+          });
+        }
+      }
+      return slimTideWeek;
+    }catch(err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  
   logReactError(sessionID, errorType, info) {
     try {
       if(Roles.userIsInRole(Meteor.userId(), 'debug')) {

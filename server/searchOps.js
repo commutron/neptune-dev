@@ -305,7 +305,7 @@ Meteor.methods({
     // Best and Worst batches by nonconformance
   
   ///////////////////////////////////////////////////////////////////////////////////
-  
+  /*
   BestWorstStats(best, worst, start, end, newOnly) {
     
     const allBatches = BatchDB.find({orgKey: Meteor.user().orgKey}).fetch();
@@ -326,11 +326,11 @@ Meteor.methods({
     const relevantBatches = allBatches.filter( x => 
                               ( x.floorRelease === undefined || x.floorRelease === true) &&
                               inWindow(x.finishedAt, x.createdAt) === true );
-    /*  limit Low batches to only finished                       
-    const doneBatches = allBatches.filter( x => 
-                          x.finishedAt !== false &&
-                          moment(x.finishedAt).isBetween(from, to) === true );
-    */                          
+    //  limit Low batches to only finished                       
+    // const doneBatches = allBatches.filter( x => 
+    //                       x.finishedAt !== false &&
+    //                       moment(x.finishedAt).isBetween(from, to) === true );
+    //                          
     const relevantNC = (ncArray)=>
                         !newOnly ? ncArray :
                         ncArray.filter( x => moment(x.time).isBetween(from, to) );
@@ -369,14 +369,14 @@ Meteor.methods({
       bestNC, worstNC
     };
   },
-  
+  */
   
   ///////////////////////////////////////////////////////////////////////////////////
   
     // Ranked Widgets by nonconformance
   
   ///////////////////////////////////////////////////////////////////////////////////
-  
+  /*
   BestWorstWidgetsStats() {
     
     function countWidgetNonCons(allWidgets) {
@@ -412,7 +412,7 @@ Meteor.methods({
     
     return getStats();
   },
-  
+  */
   ///////////////////////////////////////////////////////////////////////////////////
   
   // nonCon Rate

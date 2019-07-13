@@ -43,7 +43,7 @@ const Calendar = ({ eventsSubReady, allBatch, bCache, app }) => {
     for(let td of tidesSource) {
       const stopTime = !td.stopTime ? new Date() : td.stopTime;
       tidesFormat.push({
-        id : Math.random().toString(36).substr(2, 5),
+        id : td.tKey,
         title : `${entry.batch}`,
         start : td.startTime,
         end : stopTime,

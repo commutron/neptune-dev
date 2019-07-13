@@ -9,6 +9,7 @@ import Spin from '../../components/uUi/Spin.jsx';
 import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
 import Slides from '../../components/smallUi/Slides.jsx';
+import ActivityPanel from './ActivityPanel.jsx';
 import RecentPanel from './RecentPanel.jsx';
 import InboxPanel from './InboxPanel.jsx';
 import WatchlistPanel from './WatchlistPanel.jsx';
@@ -59,12 +60,13 @@ class UserDataWrap extends Component	{
           <Slides
             menu={[
               <b><i className='fas fa-history fa-fw'></i>  Production Activity</b>,
+              <b><i className='fas fa-search fa-fw'></i>  Search History</b>,
               <b><i className='far fa-eye fa-fw'></i>  Watchlist</b>,
               <b><i className='fas fa-inbox fa-fw'></i>  Inbox</b>,
               <b><i className='fas fa-id-card fa-fw'></i>  Preferences</b>
             ]}>
             
-            <RecentPanel
+            <ActivityPanel
               key={1}
               orb={this.props.orb}
               bolt={this.props.bolt}
@@ -72,8 +74,16 @@ class UserDataWrap extends Component	{
               user={this.props.user}
               users={this.props.users}
               bCache={this.props.bCache} />
-            <WatchlistPanel
+            <RecentPanel
               key={2}
+              orb={this.props.orb}
+              bolt={this.props.bolt}
+              app={this.props.app}
+              user={this.props.user}
+              users={this.props.users}
+              bCache={this.props.bCache} />
+            <WatchlistPanel
+              key={3}
               orb={this.props.orb}
               bolt={this.props.bolt}
               app={this.props.app}
@@ -82,7 +92,7 @@ class UserDataWrap extends Component	{
               batchEvents={this.props.batchEvents}
               bCache={this.props.bCache} />
             <InboxPanel
-              key={3}
+              key={4}
               orb={this.props.orb}
               bolt={this.props.bolt}
               app={this.props.app}
