@@ -353,10 +353,11 @@ Meteor.methods({
     }
   },
   
-  fetchSelfTideActivity(weekNum) {
+  fetchSelfTideActivity(yearNum, weekNum) {
     try {
+      const getYear = yearNum || moment().weekYear();
       const getWeek = weekNum || moment().week();
-      
+
       const allTouched = BatchDB.find({
         orgKey: Meteor.user().orgKey, 
         'tide.who': Meteor.userId()
@@ -365,7 +366,9 @@ Meteor.methods({
       let slimTideWeek = [];
       for(let btch of allTouched) {
         const yourWeek = !btch.tide ? [] : btch.tide.filter( x => 
-          x.who === Meteor.userId() && moment(x.startTime).week() === getWeek);
+          x.who === Meteor.userId() && 
+          moment(x.startTime).weekYear() === getYear && 
+          moment(x.startTime).week() === getWeek);
         for(let blck of yourWeek) {  
           slimTideWeek.push({
             batch: btch.batch,

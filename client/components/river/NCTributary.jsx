@@ -95,7 +95,7 @@ const NCStream = ({
   const same = entry.fix.who === Meteor.userId();
   const inspector = Roles.userIsInRole(Meteor.userId(), 'inspect');
   const verifier = Roles.userIsInRole(Meteor.userId(), 'verify');
-  const lockI = fixed ? !same && inspector ? false : true : false;
+  const lockI = !currentLive || fixed ? !same && inspector ? false : true : false;
   let skip = entry.skip;
   let style = !skip ? 'cap tribRow tribRed noCopy' : 'cap tribRow yellowList noCopy';
 
@@ -104,7 +104,7 @@ const NCStream = ({
   return(
     <div className={style} >
       <div className='tribInfo' title={entry.comm}>
-        <div className='up numFont'>{entry.ref}</div>
+        <div className='up numFont'>{entry.ref} {entry.comm !== '' && <i className='far fa-comment'></i>}</div>
         <div>{entry.type}</div>
       </div>
       <div className='tribAction'>
@@ -129,7 +129,7 @@ const NCStream = ({
                 className='riverInfo'
                 readOnly={true}
                 onClick={doFix}
-                disabled={false}>
+                disabled={!currentLive}>
               <img src='/repair.svg' className='pebbleSVG' /><br />{smple ? null : 'Repaired'}</button>
           }
         </div>
@@ -157,7 +157,7 @@ const NCStream = ({
               Wake Up, repair now
             </MenuItem>
             <MenuItem onClick={this.comment.bind(this)}>
-              Add Comment
+              {entry.comm !== '' ? 'Change' : 'Add'} Comment
             </MenuItem>
           </ContextMenu>
         </div>

@@ -5,6 +5,10 @@ import Spin from '/client/components/uUi/Spin.jsx';
 
 const ActivityPanel = ({ orb, bolt, app, user, users, bCache })=> {
   
+  const [yearOps, setYearOps] = useState([]);
+  const [weekOps, setWeekOps] = useState([]);
+  
+  const [yearNum, setYearNum] = useState(moment().weekYear());
   const [weekNum, setWeekNum] = useState(moment().week());
   const [weekData, setWeekData] = useState(false);
   
@@ -15,7 +19,7 @@ const ActivityPanel = ({ orb, bolt, app, user, users, bCache })=> {
   
   function getData() {
     if(!weekData) {
-      Meteor.call('fetchSelfTideActivity', weekNum, (err, rtn)=>{
+      Meteor.call('fetchSelfTideActivity', yearNum, weekNum, (err, rtn)=>{
   	    err && console.log(err);
   	    const cronoTimes = rtn.sort((x1, x2)=> {
                             if (x1.startTime < x2.startTime) { return 1 }
@@ -31,6 +35,29 @@ const ActivityPanel = ({ orb, bolt, app, user, users, bCache })=> {
     Roles.userIsInRole(Meteor.userId(), ['admin', 'debug']) && console.log(weekData);
   });
   
+  useEffect(() => {
+    const firstYear = moment(app.createdAt).year();
+    const thisYear = moment().year();
+    let yearList = [thisYear];
+    do {
+      const newYear = thisYear - 1;
+      yearList.push(newYear);
+    } while (yearList[yearList.length-1] > firstYear);
+    setYearOps(yearList);
+    setOptions(thisYear);
+  }, []);
+  
+  function setOptions(year) {
+    setYearNum(year);
+    const weeksinyear = moment(year, 'YYYY').weeksInYear();
+    
+    let weekList = [];
+    for(let w = 1; w <= weeksinyear; w++) {
+      weekList.push(w);
+    }
+    setWeekOps(weekList);
+  }
+  
   if( !weekData ) {
     return(
       <div className='centreContainer'>
@@ -41,10 +68,31 @@ const ActivityPanel = ({ orb, bolt, app, user, users, bCache })=> {
     );
   }
   
+  // console.log(yearNum);
+  // console.log(weekNum);
+
   return(
     <div className='invert'>
       <div className=''>
         <p>This weeks logged time. Durations are rounded to the nearest minute</p>
+      </div>
+      <div className=''>
+        {/*<p>
+          <label>
+            <select onChange={(e)=>setOptions(e.target.value)}>
+              {yearOps.map( (et, ix)=>{
+                return( <option key={ix}>{et}</option> );
+              })}
+            </select>
+          </label>
+          <label>
+            <select onChange={(e)=>setWeekNum(e.target.value)} defaultValue={weekNum}>
+              {weekOps.map( (et, ix)=>{
+                return( <option key={ix}>{et}</option> );
+              })}
+            </select>
+          </label>
+        </p>*/}
       </div>
       <table className='wide cap space'>
         <tbody key={00}>

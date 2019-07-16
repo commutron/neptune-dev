@@ -44,7 +44,9 @@ export default class Stone extends Component {
     	const first = this.props.type === 'first';
     	const test = this.props.type === 'test';
     	const finish = this.props.type === 'finish';
-    	if(inspect && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
+    	if(!this.props.currentLive) {
+    		null;
+    	}else if(inspect && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
     		null;
     	}else if(first && !Roles.userIsInRole(Meteor.userId(), 'verify')) {
     		null;

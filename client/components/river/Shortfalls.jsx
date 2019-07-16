@@ -52,7 +52,7 @@ const ShortLine = ({ entry, doSet, currentLive, lock })=>{
   return(
     <div className={'shortRow noCopy ' + actionColor }>
       <div className='tribInfo' title={entry.comm}>
-        <div className='up numFont'>{entry.partNum}</div>
+        <div className='up numFont'>{entry.partNum} {entry.comm !== '' && <i className='far fa-comment'></i>}</div>
         <div className='up'>{entry.refs.toString()}</div>
       </div>
       <div className='tribAction'>
