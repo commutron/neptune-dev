@@ -4,6 +4,13 @@ import { toast } from 'react-toastify';
 
 const DataRepair = ({ app, users })=> {
   
+  function fixFor18() {
+    Meteor.call('fixBreaking18Data', (error, reply)=>{
+      error && console.log(error);
+      if(reply) { toast.success('data edit complete', { autoClose: false }); }
+    });
+  }
+  
   
   function fixAthing(e, oldText, newText, textMatch) {
     e.preventDefault();
@@ -99,6 +106,16 @@ const DataRepair = ({ app, users })=> {
         >fix</button>
       </form>
       
+      <br />
+      <hr />
+      <h2 className='cap'>Breaking Changes</h2>
+      <button
+        onClick={()=>fixFor18()}
+        className='action clear blackT'
+        disabled={app.tideWall !== undefined}
+      >fix v1.18.1 breaking changes</button>
+      <hr />
+      <br />
       
       <h2 className='cap'>Force Update batchInfo in ChacheDB</h2>
       <button

@@ -32,13 +32,12 @@ export default class MultiItemForm extends Component {
     const unit = this.unit.value.trim();
     
     const floor = this.state.digits === 10 ? // simplify after appDB is updated
-                  !this.props.app.latestSerial ? 10 :
-                    !this.props.app.latestSerial.tenDigit ? 10 : 
-                      this.props.app.latestSerial.tenDigit
+                    this.props.app.latestSerial.tenDigit
                   :
-                  !this.props.app.latestSerial ? 9 :
-                    !this.props.app.latestSerial.nineDigit ? 9 :
-                      this.props.app.latestSerial.nineDigit;
+                  this.state.digits === 9 ? // simplify after appDB is updated
+                    this.props.app.latestSerial.nineDigit
+                  :
+                  this.props.app.latestSerial.eightDigit;
     
     let first = parseInt(barStart, 10);
     let last = parseInt(barEnd, 10);
@@ -56,7 +55,7 @@ export default class MultiItemForm extends Component {
       &&
       count > 0
       &&
-      count <= 1000
+      count < 1001
       &&
       unit <= 250
     ) {
@@ -136,6 +135,16 @@ export default class MultiItemForm extends Component {
           <form onSubmit={this.addItem} autoComplete='off'>
             <p>
               <input
+                type='radio'
+                ref={(i)=> this.eightDigit = i}
+                id='eight'
+                name='digit'
+                defaultChecked={false}
+                onChange={this.setDigit.bind(this, 8)}
+                required />
+              <label htmlFor='eight' className='beside'>8 digits</label>
+            <br />
+            <input
                 type='radio'
                 ref={(i)=> this.nineDigit = i}
                 id='nine'

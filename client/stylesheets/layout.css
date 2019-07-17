@@ -293,7 +293,7 @@ main {
 .slidesLayout {
   display: grid;
   grid-template-rows: 90vh;
-  grid-template-columns: minmax(min-content, 20vw) 1fr;
+  grid-template-columns: minmax(min-content, 15vw) 1fr;
   grid-template-areas: 
     'slidemenu slidearea';
   width: 100%;
@@ -642,6 +642,20 @@ main {
 
 .vSpaceGaps {
   border-bottom: 5vh solid var(--clouds);
+}
+
+.bttnTXTbttn {
+  font-size: 2.5rem;
+  vertical-align: middle;
+}
+.BTTNtxtBTTN {
+  line-height: 1rem;
+  font-size: medium;
+  letter-spacing: 1px;
+  min-width: 2rem;
+	height: 2rem;
+	padding: 0 10px;
+  cursor: pointer;
 }
 
 input.variableInput.med { 

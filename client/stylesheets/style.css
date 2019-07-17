@@ -457,6 +457,19 @@ label.qdpplRound {
 .clearWhite:hover {
   background-color: white;
 }
+.clearBlack {
+  color: var(--blackT);
+  border-color: var(--blackT);
+  background-color: transparent;
+}
+.clearBlack:hover {
+  color: var(--clouds);
+  background-color: var(--blackT);
+}
+.clearBlack:disabled {
+  color: var(--concrete);
+  border-color: var(--concrete);
+}
 
 .clearGreen,
 .invert .clearGreen{

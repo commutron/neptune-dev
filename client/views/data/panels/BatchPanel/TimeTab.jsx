@@ -45,16 +45,42 @@ const TimeTab = ({
     }
 ////////////////////////////////////////
 
-
+  const totalST = ()=> {
+    let total = 0;
+    if(!b.tide) {
+      null;
+    }else{
+      for(let bl of b.tide) {
+        if(!bl.stopTime) {
+          null;
+        }else{
+          const mStart = moment(bl.startTime);
+          const mStop = moment(bl.stopTime);
+          const block = Math.round( 
+            moment.duration(mStop.diff(mStart)).asMinutes() );
+          total = total + block;
+        }
+      }
+    }
+    return total;
+  };
+  const totalMinutes = totalST();
+  
   return(
     <div className='space3v'>
       <div className='vmargin space'>
-                
-                
-                
-                
-                
-                
+        
+        <div className='big'>        
+          <p className='medBig'>Total time recorded with Start-Stop:</p>
+          <p>sum of time blocks, each rounded to their nearest minute</p> 
+          <hr />
+          <p><span className='bigger'>{totalMinutes}</span> minutes</p>
+          <p>or</p>
+          <p><span className='bigger'>{moment.duration(totalMinutes, "minutes").asHours()}</span> hours</p>
+          <p>or</p>
+          <p><span className='bigger'>approx. {moment.duration(totalMinutes, "minutes").humanize()}</span></p>
+        </div>
+
                 
       </div>
         
@@ -102,11 +128,14 @@ const TimeTab = ({
             <p className='centreText'>start/stop not enabled</p>
             :
             b.tide.map( (mov, index)=>{
+              const mStart = moment(mov.startTime);
+              const mStop = mov.stopTime ? moment(mov.stopTime) : false;
               return(
                 <li key={index} title={mov.tKey}>
                   <AnonyUser id={mov.who} />
-                  - {moment(mov.startTime).format()}
-                  - {mov.stopTime && moment(mov.stopTime).format()}
+                  - {moment(mStart).format()}
+                  - {mStop && moment(mStop).format()}
+                  - {mStop ? Math.round( moment.duration(mStop.diff(mStart)).asMinutes() ) : '_'} minutes
                 </li>
             )})}
           </ul>
@@ -129,7 +158,7 @@ const TimeTab = ({
                     return(
                       <li key={inx}>
                         - {ding.time.toString()} - 
-                        - {ding.who.slice(0, 3).toLowerCase()}
+                        - <AnonyUser id={ding.who} />
                       </li> );
                   })}
                 </ol>

@@ -8,7 +8,7 @@
 .containerPro {
   display: grid;
   grid-template-rows: 10vh 90vh;
-  grid-template-columns: 20vw 1fr;
+  grid-template-columns: 22vw 1fr;
   grid-template-areas: 
     "tenHeader tenHeader"
     "proContent proContent";
@@ -44,10 +44,10 @@
   transition: all 150ms ease-in-out;
 }
 .proNarrow {
-  grid-template-columns: 20vmax 1fr;
+  grid-template-columns: 22vmax 1fr;
 }
 .proWide {
-  grid-template-columns: 40vmax 1fr;
+  grid-template-columns: 44vmax 1fr;
 }
 
 
@@ -115,10 +115,10 @@
   color: var(--clouds);
 }
 .riverExpandToggle {
-  left: 20vmax;
+  left: 22vmax;
 }
 .riverShrinkToggle {
-  left: 40vmax;
+  left: 44vmax;
 }
 .riverExpandToggle:hover, .riverShrinkToggle:hover {
   opacity: 1;

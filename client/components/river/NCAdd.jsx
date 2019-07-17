@@ -26,7 +26,7 @@ const NCAdd = ({ id, barcode, app })=> {
     if(refSplit.length > 0 && refSplit[0] !== '') {
       for(let ref of refSplit) {
         ref = ref.replace(",", "");
-        if(ref.length < 9) {
+        if(ref.length < 8) {
           Meteor.call('addNC', id, barcode, ref, type, where, andFix, (error)=>{
             error && console.log(error);
           });

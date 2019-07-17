@@ -91,7 +91,7 @@ export default withTracker( () => {
         null;
       }
     }
-    else if( !isNaN(orb) && orb.length >= 9 && orb.length <= 10 ) {
+    else if( !isNaN(orb) && orb.length >= 8 && orb.length <= 10 ) {
       
   		const itemsBatch = BatchDB.findOne( { 'items.serial': orb } );
       

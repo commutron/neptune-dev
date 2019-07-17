@@ -78,7 +78,7 @@ export default class SerialLookup extends PureComponent {
               cTwo={re[0].meta}
               cThree={this.state.searchText}
               sty='greenB'
-              address={'/data/batch?request=' + re[0].batch}
+              address={'/data/batch?request=' + re[0].batch + '&specify=' + this.state.searchText}
             />
           </div>
         :

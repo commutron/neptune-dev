@@ -357,7 +357,7 @@ Meteor.methods({
     try {
       const getYear = yearNum || moment().weekYear();
       const getWeek = weekNum || moment().week();
-
+      
       const allTouched = BatchDB.find({
         orgKey: Meteor.user().orgKey, 
         'tide.who': Meteor.userId()

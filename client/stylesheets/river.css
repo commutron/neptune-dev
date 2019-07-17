@@ -1,8 +1,8 @@
 
 /* River */
 .stoneFrame {
-  max-width: 20vmax;
-  min-height: 20vmax;
+  max-width: 22vmax;
+  min-height: 22vmax;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -32,11 +32,11 @@
 .stoneRing {
   position: relative;
   z-index: 0;
-  max-width: 17vmax;
-  height: 18vmax;
+  max-width: 19vmax;
+  height: 20vmax;
 }
 .stoneRing .ct-chart {
-  height: 18vmax;
+  height: 20vmax;
 }
 
 .stone {
@@ -47,8 +47,8 @@
 	z-index: 1;
 	margin: 0;
   border: 10px solid transparent;
-  width: 14vmax;
-  height: 14vmax;
+  width: 16vmax;
+  height: 16vmax;
   font-size: calc(0.5rem + 1.5vmax);
   text-shadow: 0 0 10px #000;
 	text-transform: uppercase;
@@ -118,13 +118,14 @@
 }
 
 .crackedTop, .crackedBot {
-  width: 14vmax;
-  height: 7vmax;
+  width: 16vmax;
+  height: 8vmax;
   z-index: 2;
   background-position: top;
   background-size: 80%;
   background-repeat: no-repeat;
   font-size: calc(0.5rem + 1vmax);
+  color: white;
   box-shadow: var(--dropShadow1);
 }
 
@@ -372,7 +373,7 @@
 }
 
 .stoneFrame .actionBox {
-  max-width: 18vmax;
+  max-width: 20vmax;
 }
 .stoneForm {
   display: flex;
@@ -394,7 +395,7 @@ fieldset.stoneForm {
 .stoneForm label,
 .stoneForm details {
   
-  max-width: 16vmax;
+  max-width: 18vmax;
 }
 
 .stoneForm label {
@@ -402,8 +403,8 @@ fieldset.stoneForm {
 }
 
 .stoneForm textarea {
-  min-width: 16vmax;
-  max-width: 16vmax;
+  min-width: 18vmax;
+  max-width: 18vmax;
   min-height: 1rem;
   border-color: black;
 }

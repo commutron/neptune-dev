@@ -290,7 +290,9 @@ Meteor.methods({
     const appSetting = AppDB.findOne({orgKey: Meteor.user().orgKey});
     const floor = barFirst.toString().length === 10 ?
                   appSetting.latestSerial.tenDigit :
-                  appSetting.latestSerial.nineDigit;
+                  barFirst.toString().length === 9 ?
+                  appSetting.latestSerial.nineDigit :
+                  appSetting.latestSerial.eightDigit;
     
     if(
       !isNaN(barFirst)
@@ -301,7 +303,7 @@ Meteor.methods({
       &&
       barFirst < barEnd
       &&
-      barEnd - barFirst <= 1000
+      barEnd - barFirst < 1001
       &&
       unit > 0
       &&
@@ -358,7 +360,12 @@ Meteor.methods({
       			  updatedWho: Meteor.userId()
             }});
           if(barLast > floor) {
-            if(barLast < 999999999 ) {
+            if(barLast < 88888888 ) {
+              AppDB.update({orgKey: Meteor.user().orgKey}, {
+                $set : {
+                  'latestSerial.eightDigit': Number(barLast)
+                }});
+            }else if(barLast < 999999999 ) {
               AppDB.update({orgKey: Meteor.user().orgKey}, {
                 $set : {
                   'latestSerial.nineDigit': Number(barLast)

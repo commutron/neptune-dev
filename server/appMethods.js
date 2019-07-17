@@ -48,6 +48,7 @@ Meteor.methods({
       helpDocs: '',
       timeClock: '',
       latestSerial: {
+        eightDigit: Number(12345678),
         nineDigit: Number(123456789),
         tenDigit: Number(1234567890)
       },
@@ -714,6 +715,17 @@ Meteor.methods({
   },
   
   
-        
+  fixBreaking18Data() {
+    try {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $set : {
+          'latestSerial.eightDigit': Number(12345678),
+          tideWall: new Date(),
+        }});
+      return true;
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  }
         
 });

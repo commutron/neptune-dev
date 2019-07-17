@@ -299,7 +299,8 @@ export default class NonConBlock extends Component {
           : null}
           {inTrash}
         </ul>
-        {dt.comm !== '' && <p className='endComment'>{dt.comm}</p>}
+        {dt.comm !== '' && <p className='endComment'><i className='far fa-comment'></i> {dt.comm}</p>}
+
       </div>
     );
   }

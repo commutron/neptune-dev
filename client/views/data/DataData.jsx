@@ -105,7 +105,7 @@ export default withTracker( (props) => {
 
     /*
     // Out of context serial search
-    if( !isNaN(orb) && orb.length >= 9 && orb.length <= 10 ) {
+    if( !isNaN(orb) && orb.length >= 8 && orb.length <= 10 ) {
   		const itemsBatch = BatchDB.findOne( { 'items.serial': orb } );
       if( itemsBatch ) {
         hotSub = Meteor.subscribe( 'hotData', itemsBatch.batch );
