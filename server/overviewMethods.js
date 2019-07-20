@@ -31,29 +31,18 @@ function collectRelevant(accessKey, temp, activeList) {
 
 function collectActive(accessKey, clientTZ, relevant) {
   return new Promise(resolve => {
-    const now = moment().tz(clientTZ);
-    const users = Meteor.users.find({
-      orgKey: accessKey, roles: 'active', breadcrumbs: { $exists: true }
-    }).fetch();
     
+    const now = moment().tz(clientTZ);
     let list = [];
+    
     for(let b of relevant) {
-      const tide = b.tide;
-      if(!tide) {
-        // has it been touched in 'production'
-        let isActive = users.find( 
-          x => x.breadcrumbs.find( 
-            y => y.keyword === b.batch && now.isSame(moment(y.time), 'day')
-          )
-        ) ? true : false;
-        isActive === true && list.push(b.batch);
-      }else{
-        let isActive = tide.find( 
-          x => now.isSame(moment(x.startTime), 'day')
-        ) ? true : false;
-        isActive === true && list.push(b.batch);
-      }
+      const tide = b.tide || [];
+      let isActive = tide.find( x => 
+        now.isSame(moment(x.startTime), 'day')
+      ) ? true : false;
+      isActive === true && list.push(b.batch);
     }
+    
     resolve(list);
   });
 }

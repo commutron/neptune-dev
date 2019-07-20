@@ -27,6 +27,7 @@
     "react-chartist-tooltip": "^0.4.1",
     "react-contextmenu": "^2.11.0",
     "react-dom": "^16.8.6",
+    "react-flatpickr": "^3.9.0",
     "react-fontawesome": "^1.6.1",
     "react-mounter": "^1.2.0",
     "react-toastify": "^4.5.2",

@@ -46,39 +46,46 @@ const TimeTab = ({
 ////////////////////////////////////////
 
   const totalST = ()=> {
-    let total = 0;
+    let totalTime = 0;
+    let totalPeople = new Set();
     if(!b.tide) {
       null;
     }else{
       for(let bl of b.tide) {
-        if(!bl.stopTime) {
-          null;
-        }else{
-          const mStart = moment(bl.startTime);
-          const mStop = moment(bl.stopTime);
-          const block = Math.round( 
-            moment.duration(mStop.diff(mStart)).asMinutes() );
-          total = total + block;
-        }
+        const mStart = moment(bl.startTime);
+        const mStop = !bl.stopTime ? moment() : moment(bl.stopTime);
+        const block = Math.round( 
+          moment.duration(mStop.diff(mStart)).asMinutes() );
+        totalTime = totalTime + block;
+        totalPeople.add(bl.who);
       }
     }
-    return total;
+    return { totalTime, totalPeople };
   };
-  const totalMinutes = totalST();
+  const totals = totalST();
+  const totalMinutes = totals.totalTime;
+  const totalPeople = [...totals.totalPeople];
   
   return(
     <div className='space3v'>
       <div className='vmargin space'>
         
-        <div className='big'>        
+        <div className='big'>     
           <p className='medBig'>Total time recorded with Start-Stop:</p>
-          <p>sum of time blocks, each rounded to their nearest minute</p> 
+          <p>sum of time blocks, each rounded to their nearest minute</p>
+          {!moment(b.createdAt).isAfter(a.tideWall) && 
+            <p className='orangeT'>{` ** This ${Pref.batch} was created before \n
+              Start-Stop was enacted. Total may not be acurate`} 
+            </p>}
           <hr />
           <p><span className='bigger'>{totalMinutes}</span> minutes</p>
           <p>or</p>
           <p><span className='bigger'>{moment.duration(totalMinutes, "minutes").asHours()}</span> hours</p>
-          <p>or</p>
-          <p><span className='bigger'>approx. {moment.duration(totalMinutes, "minutes").humanize()}</span></p>
+          <p>with</p>
+          <p>
+            <span className='bigger'>{totalPeople.length}</span> 
+            {totalPeople.length === 1 ? ' person' : ' people'}
+          </p>
         </div>
 
                 
@@ -129,13 +136,13 @@ const TimeTab = ({
             :
             b.tide.map( (mov, index)=>{
               const mStart = moment(mov.startTime);
-              const mStop = mov.stopTime ? moment(mov.stopTime) : false;
+              const mStop = mov.stopTime ? moment(mov.stopTime) : moment();
               return(
                 <li key={index} title={mov.tKey}>
                   <AnonyUser id={mov.who} />
                   - {moment(mStart).format()}
-                  - {mStop && moment(mStop).format()}
-                  - {mStop ? Math.round( moment.duration(mStop.diff(mStart)).asMinutes() ) : '_'} minutes
+                  - {moment(mStop).format()}
+                  - {Math.round( moment.duration(mStop.diff(mStart)).asMinutes() )} minutes
                 </li>
             )})}
           </ul>

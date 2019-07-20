@@ -1,3 +1,4 @@
+import { Random } from 'meteor/random'
 import moment from 'moment';
 
 
@@ -714,18 +715,20 @@ Meteor.methods({
     }
   },
   
-  
-  fixBreaking18Data() {
+  /*
+  backdateTideWall() {
     try {
+      const oldDate = moment().subtract(2, 'weeks');
+      const replaceDate = oldDate.toISOString();
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $set : {
-          'latestSerial.eightDigit': Number(12345678),
-          tideWall: new Date(),
+          tideWall: replaceDate,
         }});
       return true;
     }catch (err) {
       throw new Meteor.Error(err);
     }
   }
+  */
         
 });

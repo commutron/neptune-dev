@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { CalcSpin } from '/client/components/uUi/Spin.jsx';
+import WeekBrowse from '/client/components/bigUi/WeekBrowse/WeekBrowse.jsx';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
+import Flatpickr from 'react-flatpickr';
+import 'flatpickr/dist/themes/airbnb.css';
 
 const ActivityPanel = ({ orb, bolt, app, user, users, bCache })=> {
   
@@ -75,41 +78,13 @@ const ActivityPanel = ({ orb, bolt, app, user, users, bCache })=> {
   return(
     <div className='invert overscroll'>
       <div className='med line3x'>
-        <p>
-          <label>
-            <button 
-              title='First'
-              className='BTTNtxtBTTN clear clearBlack'
-              onClick={()=>tickWeek(false)} 
-              disabled={backwardLock}
-            ><i className="fas fa-angle-double-left fa-lg fa-fw"></i></button>
-          </label>
-          <label>
-            <button 
-              title='Previous'
-              className='BTTNtxtBTTN clear clearBlack'
-              onClick={()=>tickWeek('down')} 
-              disabled={backwardLock}
-            ><i className="fas fa-angle-left fa-lg fa-fw"></i></button>
-          </label>
-          <span className='bttnTXTbttn numFont'> {yearNum}<sub>w</sub>{weekNum} </span>
-          <label>
-            <button 
-              title='Next'
-              className='BTTNtxtBTTN clear clearBlack'
-              onClick={()=>tickWeek('up')} 
-              disabled={forwardLock}
-            ><i className="fas fa-angle-right fa-lg fa-fw"></i></button>
-          </label>
-          <label>
-            <button 
-              title='This week'
-              className='BTTNtxtBTTN clear clearBlack'
-              onClick={()=>tickWeek('now')} 
-              disabled={forwardLock}
-            ><i className="fas fa-angle-double-right fa-lg fa-fw"></i></button>
-          </label>
-        </p>
+        <WeekBrowse
+          weekNum={weekNum}
+          yearNum={yearNum}
+          tickWeek={(i)=>tickWeek(i)}
+          backwardLock={backwardLock}
+          forwardLock={forwardLock}
+        />
       </div>
       {!weekData ?
         <CalcSpin />
@@ -142,65 +117,23 @@ const ActivityPanel = ({ orb, bolt, app, user, users, bCache })=> {
                   <tr className='big leftText line4x'>
                     <th colSpan='5'>{moment(blk.startTime).format('dddd MMMM Do')}</th>
                   </tr>
-                  <tr>
-                    <td className='noRightBorder medBig'>
-                      <ExploreLinkBlock type='batch' keyword={keyword} />
-                    </td>
-                    {/*<td className='noRightBorder medBig numFont'>{keyword}</td>*/}
-                    <td className='noRightBorder'>{what}</td>
-                    <td className='noRightBorder numFont'>
-                      <i className="fas fa-play fa-fw fa-xs greenT"></i> {mStart.format('hh:mm A')}
-                    </td>
-                    <td className='noRightBorder numFont'>
-                      <i className="fas fa-stop fa-fw fa-xs redT"></i> {mStop ? mStop.format('hh:mm A') : '__:__ __'}
-                    </td>
-                    <td className='noRightBorder clean numFont'>
-                      {mStop ? Math.round( moment.duration(mStop.diff(mStart)).asMinutes() ) : '_'} minutes
-                    </td>
-                    {/*
-                    <td className='noRightBorder noCopy'>
-                      <button
-                        onClick={()=>jumpTo(keyword)}
-                        className='textLinkButton'
-                      ><i className='fas fa-paper-plane fa-fw'></i></button>
-                    </td>
-                    <td className='noRightBorder noCopy'>
-                      <a href={elink}><i className='fas fa-rocket fa-fw'></i></a>
-                    </td>
-                    */}
-                  </tr>
+                  <TideBlockRow
+                    batch={keyword}
+                    describe={what}
+                    tideKey={blk.tKey}
+                    mStart={mStart}
+                    mStop={mStop} />
                 </tbody>
               );
             }
             return(
               <tbody key={blk.tKey}>
-                <tr>
-                  <td className='noRightBorder medBig'>
-                    <ExploreLinkBlock type='batch' keyword={keyword} />
-                  </td>
-                    {/*<td className='noRightBorder medBig numFont'>{keyword}</td>*/}
-                  <td className='noRightBorder'>{what}</td>
-                  <td className='noRightBorder numFont'>
-                    <i className="fas fa-play fa-fw fa-xs greenT"></i> {mStart.format('hh:mm A')}
-                  </td>
-                  <td className='noRightBorder numFont'>
-                    <i className="fas fa-stop fa-fw fa-xs redT"></i> {mStop ? mStop.format('hh:mm A') : '__:__ __'}
-                  </td>
-                  <td className='noRightBorder clean numFont'>
-                    {mStop ? Math.round( moment.duration(mStop.diff(mStart)).asMinutes() ) : '_'} minutes
-                  </td>
-                  {/*
-                  <td className='noRightBorder noCopy'>
-                    <button
-                      onClick={()=>jumpTo(keyword)}
-                      className='textLinkButton'
-                    ><i className='fas fa-paper-plane fa-fw'></i></button>
-                  </td>
-                  <td className='noRightBorder noCopy'>
-                    <a href={elink}><i className='fas fa-rocket fa-fw'></i></a>
-                  </td>
-                  */}
-                </tr>
+                <TideBlockRow
+                  batch={keyword}
+                  describe={what}
+                  tideKey={blk.tKey}
+                  mStart={mStart}
+                  mStop={mStop} />
               </tbody>
             );
           })
@@ -215,3 +148,67 @@ const ActivityPanel = ({ orb, bolt, app, user, users, bCache })=> {
 };
 
 export default ActivityPanel;
+
+
+
+const TideBlockRow = ({ batch, describe, tideKey, mStart, mStop })=> {
+  
+  const [edit, enableEdit] = useState(false);
+  
+    return(
+      <tr>
+        <td className='noRightBorder medBig'>
+          <ExploreLinkBlock type='batch' keyword={batch} />
+        </td>
+        <td className='noRightBorder'>{describe}</td>
+        <td className='noRightBorder numFont'>
+          <i className="fas fa-play fa-fw fa-xs greenT"></i>
+            {!edit ? 
+              <i> {mStart.format('hh:mm A')}</i> :
+              <Flatpickr
+                value={moment(mStart).format()}
+                onClose={(e)=>console.log(e)} 
+                options={{
+                  dateFormat: "Y-m-dTG:i:s",
+                  defaultDate: moment(mStart).format("YYYY-m-dThh:mm:ss"),
+                  minuteIncrement: 1,
+                  //noCalendar: true,
+                  enableTime: true,
+                  time_24hr: false,
+                  altInput: true,
+                  altFormat: "G:i K",
+                }}
+              />}
+        </td>
+        <td className='noRightBorder numFont'>
+          <i className="fas fa-stop fa-fw fa-xs redT"></i>
+          {!edit ? mStop ? 
+            <i> {mStop.format('hh:mm A')}</i> : 
+            <i> __:__ __</i>
+            : mStop ?
+            <Flatpickr
+              value={moment(mStop).format()}
+              onClose={(e)=>console.log(e)} 
+              options={{
+                dateFormat: "Y-m-dTG:i:s",
+                defaultDate: moment(mStop).format("YYYY-m-dThh:mm:ss"),
+                minuteIncrement: 1,
+                //noCalendar: true,
+                enableTime: true,
+                time_24hr: false,
+                altInput: true,
+                altFormat: "G:i K",
+              }}
+            />
+            :  <i> __:__ __</i>}
+        </td>
+        
+        <td className='noRightBorder clean numFont'>
+          {mStop ? Math.round( moment.duration(mStop.diff(mStart)).asMinutes() ) : '_'} minutes
+        </td>
+        <td className='noRightBorder clean numFont'>
+          <button onClick={()=>enableEdit(!edit)}>{edit ? 'save' : 'edit'}</button>
+        </td>
+    </tr>
+  );
+};
