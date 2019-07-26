@@ -7,24 +7,28 @@
 }
 .tideIcon {
   padding: 0.5vh;
-  font-size: 6vh;
+  font-size: 2.5vh;
   border-radius: 50%;
 }
 
-.tideIn {
+.tideIn, .tideOut {
   background-color: rgb(25,25,25);
-  color: var(--emerald);
+  color: var(--asbestos);
 }
+
+.tideIn .tideIndicate { color: var(--pomegranate); }
 .tideIn:hover {
   background-color: var(--emerald);
   color: rgb(25,25,25);
 }
 
-.tideOut {
-  background-color: rgb(25,25,25);
-  color: var(--alizarin);
-}
+.tideOut .tideIndicate { color: var(--emerald); }
 .tideOut:hover {
   background-color: var(--alizarin);
+  color: rgb(25,25,25);
+}
+
+.tideIn:hover .tideIndicate,
+.tideOut:hover .tideIndicate { 
   color: rgb(25,25,25);
 }

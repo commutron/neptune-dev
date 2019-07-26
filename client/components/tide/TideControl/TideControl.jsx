@@ -40,7 +40,13 @@ const TideControl = ({ batchID, tideKey, currentLive })=> {
           className='tideOut'
           onClick={()=>handleStop()}
           disabled={lock}
-        ><b><i className="far fa-stop-circle tideIcon"></i></b>
+        >
+        <em>
+          <span className="fa-stack fa-fw tideIcon">
+            <i className="fas fa-circle-notch fa-stack-2x fa-spin tideIndicate"></i>
+            <i className="fas fa-stop fa-stack-1x" data-fa-transform="shrink-1"></i>
+          </span> 
+        </em>
         <br />STOP</button>
     )}
   }else{
@@ -50,7 +56,13 @@ const TideControl = ({ batchID, tideKey, currentLive })=> {
         className='tideIn'
         onClick={()=>handleStart()}
         disabled={lock}
-      ><i><i className="far fa-play-circle tideIcon"></i></i>
+      >
+      <b>
+        <span className="fa-stack fa-fw tideIcon">
+          <i className="fas fa-circle-notch fa-stack-2x tideIndicate"></i>
+          <i className="fas fa-play fa-stack-1x" data-fa-transform="shrink-1 right-2"></i>
+        </span>
+      </b>
       <br />START</button>
     );
   }

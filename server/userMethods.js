@@ -384,6 +384,56 @@ Meteor.methods({
     }
   },
   
+  editTideTimeBlock(batch, tideKey, newStart, newStop) {
+    try {
+      const doc = BatchDB.findOne({ batch: batch, 'tide.tKey': tideKey });
+      const sub = doc && doc.tide.find( x => x.tKey === tideKey && x.who === Meteor.userId() );
+      
+      if(!sub || !newStart || !newStop) {
+        return false;
+      }else{
+        BatchDB.update({ batch: batch, orgKey: Meteor.user().orgKey, 'tide.tKey': tideKey}, {
+          $set : { 
+            'tide.$.startTime' : newStart,
+            'tide.$.stopTime' : newStop
+        }});
+        return true;
+      }
+      
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  
+  splitTideTimeBlock(batch, tideKey, newSplit, stopTime) {
+    // try {
+      const doc = BatchDB.findOne({ batch: batch, 'tide.tKey': tideKey });
+      const sub = doc && doc.tide.find( x => x.tKey === tideKey && x.who === Meteor.userId() );
+      
+      if(!sub || !newSplit || !stopTime) {
+        return false;
+      }else{
+        BatchDB.update({ batch: batch, orgKey: Meteor.user().orgKey, 'tide.tKey': tideKey}, {
+          $set : { 
+            'tide.$.stopTime' : newSplit
+        }});
+        const newTkey = new Meteor.Collection.ObjectID().valueOf();
+        BatchDB.update({ batch: batch, orgKey: Meteor.user().orgKey, 'tide.tKey': tideKey}, {
+          $push : { tide: { 
+            tKey: newTkey,
+            who: Meteor.userId(),
+            startTime: newSplit,
+            stopTime: stopTime
+        }}});
+        return true;
+      }
+      
+    // }catch (err) {
+    //   throw new Meteor.Error(err);
+    // }
+  },
+
+  
   logReactError(sessionID, errorType, info) {
     try {
       if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
