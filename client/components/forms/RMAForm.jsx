@@ -155,6 +155,7 @@ export default class RMAForm extends Component {
         {!this.props.edit ?
         
           <FlowBuilder
+            app={this.props.app}
             options={this.props.options.filter( x => x.type !== 'first')}
             end={this.props.end}
             baseline={false}

@@ -2,13 +2,17 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-const NCAdd = ({ id, barcode, app })=> {
+const NCAdd = ({ id, barcode, app, ncListKeys })=> {
   
-  const ncTypesCombo = Array.from(app.nonConTypeLists, x => x.typeList);
+  const asignedNCLists = app.nonConTypeLists.filter( 
+    x => ncListKeys.find( y => y === x.key ) ? true : false );
+  
+  const ncTypesCombo = Array.from(asignedNCLists, x => x.typeList);
 	const ncTypesComboFlat = [].concat(...ncTypesCombo);
-  const flatCheckList = [...app.nonConOption,
-  	    ...Array.from(ncTypesComboFlat, x => x.live === true && x.typeText)];
-  	    
+  const flatCheckList = ncTypesComboFlat.length > 0 ?
+    Array.from(ncTypesComboFlat, x => x.live === true && x.typeText)
+    : app.nonConOption;
+  
   function handleCheck(e) {
     let match = flatCheckList.find( x => x === e.target.value);
     let message = !match ? 'please choose from the list' : '';
@@ -73,25 +77,27 @@ const NCAdd = ({ id, barcode, app })=> {
           required />
           <label htmlFor='ncType'>{Pref.nonConType}</label>
           <datalist id='ncTypeList'>
-            {app.nonConOption.map( (entry, index)=>{
-              return ( 
-                <option
-                  key={index}
-                  data-id={index + 1 + '.'}
-                  value={entry}
-                >{index + 1}</option>
-              );
-            })}
-            {ncTypesComboFlat.map( (entry, index)=>{
-              if(entry.live === true) {
+            {ncTypesComboFlat.length > 0 ?
+              ncTypesComboFlat.map( (entry, index)=>{
+                if(entry.live === true) {
+                  return ( 
+                    <option 
+                      key={index}
+                      data-id={entry.key}
+                      value={entry.typeText}
+                    >{entry.typeCode}</option>
+                  );
+              }})
+            :
+              app.nonConOption.map( (entry, index)=>{
                 return ( 
-                  <option 
+                  <option
                     key={index}
-                    data-id={entry.key}
-                    value={entry.typeText}
-                  >{entry.typeCode}</option>
+                    data-id={index + 1 + '.'}
+                    value={entry}
+                  >{index + 1}</option>
                 );
-            }})}
+              })}
           </datalist>
         </span>
       :

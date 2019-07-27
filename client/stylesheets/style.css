@@ -674,6 +674,11 @@ label.qdpplRound {
   display: none;
 }
 
+.bigCheck { 
+  width: 1.5rem;
+  vertical-align: middle;
+}
+
 .grid {
   display: table;
   width: 100%;

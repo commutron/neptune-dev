@@ -9,7 +9,7 @@ const WikiOps = ({ wi, root, anchor, full })=> {
   let goto = wi;
   
   !goto || goto === 'home' || goto === 'none' ? goto = root : null;
-  anchor ? goto = goto + '#' + anchor : null;
+  //anchor ? goto = goto + '#' + anchor : null;
 
   return(
     <WikiFrame go={goto} full={full} />

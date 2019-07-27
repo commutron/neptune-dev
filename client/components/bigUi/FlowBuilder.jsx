@@ -5,11 +5,12 @@ import Pref from '/client/global/pref.js';
 /// options = buildStep options from the app settings
 /// end = lastStep from app settings
 
-export default class FlowForm extends Component	{
+export default class FlowBuilder extends Component	{
 
   constructor() {
     super();
     this.state = {
+      phaseSelect: false,
       steps: new Set(),
    };
     this.removeOne = this.removeOne.bind(this);
@@ -23,20 +24,20 @@ export default class FlowForm extends Component	{
     // Unlock save button
     this.props.onClick([...list]);
   }
+  
+  changePhase(e) {
+    const phase = e.target.value;
+    this.setState({ phaseSelect : phase });
+  }
 
   addStep(e) {
     e.preventDefault();
     let list = this.state.steps; // steps set from state
     const sk = this.rStep.value; // key of the selected step
     const step = this.props.options.find( x => x.key === sk ); // the step object
-    let h = this.wika.value.trim().toLowerCase(); // instruction title
-    
-    // get rid of propblem characters
-    h = h.replace(" ", "_");
-    h = h.replace("/", "_");
-    
+   
     // set how key in the track object
-    step['how'] = h;
+    step['how'] = '';
     
     // take off the end finish step
     list.delete(this.props.end);
@@ -48,7 +49,6 @@ export default class FlowForm extends Component	{
     
     // clear form
     this.rStep.value = '';
-    this.wika.value = '';
     
     // lock save button
     this.props.onClick(false);
@@ -114,16 +114,35 @@ export default class FlowForm extends Component	{
                       if (t1.step > t2.step) { return 1 }
                       return 0;
                     });
+    const phasedOps = this.state.phaseSelect === 'other' ?
+      options.filter( x => !x.phase || x.phase === '') :
+      options.filter( x => x.phase === this.state.phaseSelect);
 
     return (
       <div className='split'>
         <div className='min350 max400'>
+          <p>
+            <label htmlFor='phasefltr' className='inlineForm'><br />
+              <select id='phasefltr' onChange={(e)=>this.changePhase(e)} className='cap'>
+                <option value='other'>No Phase</option>
+                {this.props.app.phases.map( (entry, index)=>{
+                  return( 
+                    <option 
+                      key={index+'ph'} 
+                      value={entry}
+                    >{entry}</option>
+                )})}
+              </select>
+            </label>
+            <i className='breath'></i>
+            <label htmlFor='phasefltr'>{Pref.phase}</label>
+          </p>
           <form onSubmit={this.addStep.bind(this)}>
             <p >
               <label htmlFor='rteps' className='inlineForm'><br />
                 <select id='rteps' ref={(i)=> this.rStep = i} className='cap' required>
                   <option value=''></option>
-                  {options.map( (entry, index)=>{
+                  {phasedOps.map( (entry, index)=>{
                     return ( <option key={index} value={entry.key}>{entry.step + ' - ' + entry.type}</option> );
                   })}
                 </select>
@@ -131,13 +150,6 @@ export default class FlowForm extends Component	{
               </label>
               <i className='breath'></i>
               <label htmlFor='rteps'>Tracking Step</label>
-            </p>
-            <p>
-              <input
-                type='text'
-                ref={(i)=> this.wika = i}
-                id='winstruct' />
-              <label htmlFor='winstruct'>Instruction Section</label>
             </p>
           </form>
         </div>
@@ -155,9 +167,6 @@ export default class FlowForm extends Component	{
                   </div>
                   <div>
                     {entry.phase}
-                  </div>
-                  <div>
-                    {entry.how}
                   </div>
                   <div>
                     <button

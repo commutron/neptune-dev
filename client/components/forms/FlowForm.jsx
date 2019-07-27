@@ -18,7 +18,8 @@ export default class FlowForm extends Component	{
     this.state = {
       fill: false,
       warn: false,
-      flow: false
+      flow: false,
+      ncList: []
    };
   }
   
@@ -31,12 +32,25 @@ export default class FlowForm extends Component	{
     }
   }
   
+  setNCList(e) {
+    let input = e.target.value;
+    let tempList = this.state.ncList;
+    let ncOn = tempList.find( x => x === input );
+    if(ncOn) { 
+      tempList.pop(input);
+    }else{
+      tempList.push(input);
+    }
+    this.setState({ ncList : tempList });
+  }
+  
   
   save(e) {
     e.preventDefault();
     this.go.disabled = true;
     const widgetId = this.props.id;
     const flowObj = this.state.flow;
+    const ncLists = this.state.ncList;
     
     const flowTitle = this.title.value.trim().toLowerCase();
     
@@ -48,22 +62,20 @@ export default class FlowForm extends Component	{
     if(!flowObj) {
       toast.warning('Cannot Save');
     }else if(editId) {
-      Meteor.call('setFlow', widgetId, editId, flowTitle, flowObj, (error)=>{
+      Meteor.call('setBasicPlusFlow', widgetId, editId, flowTitle, flowObj, ncLists, (error)=>{
         if(error)
           console.log(error);
         toast.success('Saved');
         this.out.value = 'saved';
-        this.setState({ fill: false });
-        this.setState({ flow: false });
+        this.setState({ fill: false, flow: false, ncList: [] });
       });
     }else{
-      Meteor.call('pushFlow', widgetId, flowTitle, flowObj, (error)=>{
+      Meteor.call('pushBasicPlusFlow', widgetId, flowTitle, flowObj, ncLists, (error)=>{
         if(error)
           console.log(error);
         toast.success('Saved');
         this.out.value = 'saved';
-        this.setState({ fill: false });
-        this.setState({ flow: false });
+        this.setState({ fill: false, flow: false, ncList: [] });
       });
     }
   }
@@ -81,7 +93,8 @@ export default class FlowForm extends Component	{
         if(error)
           console.log(error);
         this.setState({ warn: reply});
-        this.setState({ fill: optn.flowKey});
+        this.setState({ fill: optn.flowKey });
+        optn.type === 'plus' && this.setState({ ncList: optn.ncLists });
       });
     }
   }
@@ -147,12 +160,34 @@ export default class FlowForm extends Component	{
           
           <hr />
           
+          <h2 className='cap'>{Pref.flow}</h2>
+          
           <FlowBuilder
-            options={this.props.options}
-            end={this.props.end}
+            app={this.props.app}
+            options={this.props.app.trackOption}
+            end={this.props.app.lastTrack}
             baseline={eF}
             onClick={e => this.setFlow(e)} />
             
+          <hr />
+          
+          <h2 className='cap'>{Pref.nonCon} lists</h2>
+          
+          <div>
+            {this.props.app.nonConTypeLists.map( (entry, index)=>{
+              let ncOn = this.state.ncList.find( x => x === entry.key );
+              return(
+              <label key={entry.key+index}>
+                <input 
+                  type='checkbox'
+                  className='bigCheck'
+                  value={entry.key}
+                  onChange={(e)=>this.setNCList(e)}
+                  defaultChecked={ncOn} />
+                {entry.listPrefix}. {entry.listName}</label>
+            )})}
+          </div>
+          
           <hr />
   
           <div className='space centre'>
@@ -179,10 +214,10 @@ export default class FlowForm extends Component	{
 }
 
 
-export class FlowRemove extends Component	{
+export const FlowRemove = ({ id, fKey })=>	{
   
-  pull() {
-    Meteor.call('pullFlow', this.props.id, this.props.fKey, (error, reply)=>{
+  function pull() {
+    Meteor.call('pullFlow', id, fKey, (error, reply)=>{
       if(error)
         console.log(error);
       if(reply === 'inUse') {
@@ -194,22 +229,19 @@ export class FlowRemove extends Component	{
       }
     });
   }
-  
-  render() {
     
-    return(
-      <span>
-        <button
-          title='delete process flow *if not in use'
-          className='transparent'
-          onClick={this.pull.bind(this)}
-          disabled={!Roles.userIsInRole(Meteor.userId(), 'edit')}>
-          <label className='navIcon actionIconWrap'>
-            <i className={'fas fa-trash fa-1x redT'} aria-hidden='true'></i>
-            <span className={'actionIconText redT'}>Delete</span>
-          </label>
-        </button>
-      </span>
-    );
-  }
-}
+  return(
+    <span>
+      <button
+        title='delete process flow *if not in use'
+        className='transparent'
+        onClick={()=>pull()}
+        disabled={!Roles.userIsInRole(Meteor.userId(), 'edit')}>
+        <label className='navIcon actionIconWrap'>
+          <i className={'fas fa-trash fa-1x redT'}></i>
+          <span className={'actionIconText redT'}>Delete</span>
+        </label>
+      </button>
+    </span>
+  );
+};

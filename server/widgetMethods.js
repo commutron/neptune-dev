@@ -162,16 +162,18 @@ Meteor.methods({
   },
 
 // new
-  pushFlow(widgetId, flowTitle, flowObj) {
-    if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
+  pushBasicPlusFlow(widgetId, flowTitle, flowObj, ncLists) {
+    const exdt = Array.isArray(ncLists);
+    if(Roles.userIsInRole(Meteor.userId(), 'edit') && exdt === true) {
       WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey}, {
         $push : {
           flows: 
           {
             flowKey: new Meteor.Collection.ObjectID().valueOf(),
   				  title: flowTitle,
-  				  type: 'basic',
-            flow: flowObj
+  				  type: 'plus',
+            flow: flowObj,
+            ncLists: ncLists
           }
       }});
       return true;
@@ -196,12 +198,15 @@ Meteor.methods({
     */
 
 // edit 
-  setFlow(widgetId, editId, flowTitle, flowObj) {
-    if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
+  setBasicPlusFlow(widgetId, editId, flowTitle, flowObj, ncLists) {
+    const exdt = Array.isArray(ncLists);
+    if(Roles.userIsInRole(Meteor.userId(), 'edit') && exdt === true) {
       WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'flows.flowKey': editId}, {
         $set : {
           'flows.$.title': flowTitle,
-          'flows.$.flow': flowObj
+          'flows.$.type': 'plus',
+          'flows.$.flow': flowObj,
+          'flows.$.ncLists': ncLists
       }});
       return true;
     }else{

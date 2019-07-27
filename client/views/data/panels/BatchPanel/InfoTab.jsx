@@ -20,13 +20,14 @@ const InfoTab = ({
       <div className='oneThirdContent min200'>
       
         <div className='vmarginhalf centreText line2x'>
-          { b.live ? 
-            <i className='fas fa-sync blueT fa-2x' title='in progress'></i>
-            :
-            <i className='fa fa-check-circle greenT fa-2x' title='finished'></i>
+          { b.live &&
+            <b><i className='fas fa-sync blueT fa-2x' title='Live'></i></b>
           }
-          {!done && allDone && 
-            <BatchFinish batchId={b._id} alreadyDone={done} />}
+          <BatchFinish 
+            batchId={b._id} 
+            finished={done} 
+            allFinished={allDone}
+            live={b.live} />
         </div>
         
         <div className='vmargin'>

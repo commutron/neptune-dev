@@ -36,6 +36,8 @@ export default class FormBar extends Component	{
     const pastPN = b.shortfall ? [...new Set( Array.from(b.shortfall, x => x.partNum ) )] : [];
     const pastRF = b.shortfall ? [...new Set( Array.from(b.shortfall, x => x.refs.toString() ) )] : [];
     
+    const ncListKeys = this.props.ncListKeys.flat();
+    
     return(
       <TideLock currentLive={this.props.currentLive} message={true}>
       <div className='proActionForm'>
@@ -102,7 +104,8 @@ export default class FormBar extends Component	{
                   <NCAdd 
                     id={b._id}
                     barcode={i.serial}
-                    app={app} />
+                    app={app}
+                    ncListKeys={ncListKeys} />
                 : this.state.show === 'S' ?
                   <ShortAdd
                     id={b._id}
@@ -116,7 +119,8 @@ export default class FormBar extends Component	{
                 <NCFlood
                   id={b._id}
                   live={b.finishedAt === false}
-                  app={app} />
+                  app={app}
+                  ncListKeys={ncListKeys} />
           : null}
         </div>
         <div className='footRight'></div>

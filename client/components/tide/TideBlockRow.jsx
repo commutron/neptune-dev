@@ -92,7 +92,7 @@ const TideBlockRow = ({
             <button
               className='miniAction'
               onClick={()=>chooseSplit(true)}
-            ><i className="fas fa-cut"></i></button>
+            ><i className="fas fa-cut"></i> cut</button>
           }
         </td>
         <td className='noRightBorder numFont centreText'>
@@ -126,13 +126,13 @@ const TideBlockRow = ({
               <button
                 className='miniAction'
                 onClick={()=>saveTemp()}
-              >save</button>
+              ><i className="fas fa-check"></i> save</button>
             </td>
             <td className='noRightBorder centreText'>
               <button
                 className='miniAction'
                 onClick={!doSplit ? ()=>editMode(false) : ()=>chooseSplit(false)}
-              >cancel</button>
+              ><b><i className="fas fa-times"></i></b> cancel</button>
             </td>
           </Fragment>
         :
@@ -145,7 +145,7 @@ const TideBlockRow = ({
                 className='miniAction'
                 onClick={()=>editMode(true)}
                 disabled={!mStop}
-              >edit</button>
+              ><em><i className="far fa-edit"></i></em> edit</button>
             </td>
           </Fragment>
         }

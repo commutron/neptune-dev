@@ -47,17 +47,24 @@ export class ProWrap extends Component	{
     const w = this.props.widgetData;
     let flow = [];
     let flowAlt = [];
+    let ncListKeys = [];
     let progCounts = false;
     if( b && w ) {
       const river = w.flows.find( x => x.flowKey === b.river);
       const riverAlt = w.flows.find( x => x.flowKey === b.riverAlt );
-      flow = river ? river.flow : [];
-      flowAlt = riverAlt ? riverAlt.flow : [];
+      if(river) {
+        flow = river.flow;
+        river.type === 'plus' && ncListKeys.push(river.ncLists);
+      }
+      if(riverAlt) {
+        flowAlt = riverAlt.flow;
+        riverAlt.type === 'plus' && ncListKeys.push(riverAlt.ncLists);
+      }
       if(this.props.action !== 'xBatchBuild') {
         progCounts = ProgressCounter(flow, flowAlt, b);
       }
     }
-    return { flow, flowAlt, progCounts };
+    return { flow, flowAlt, ncListKeys, progCounts };
   }
   
   render() {
@@ -87,7 +94,8 @@ export class ProWrap extends Component	{
                         '/data/overview?request=batches';
                         
                         
-    const path = !bData ? { flow: [], flowAlt: [], progCounts: false } : this.getFlows();
+    const path = !bData ? { flow: [], flowAlt: [], ncListKeys: [], progCounts: false } 
+                        : this.getFlows();
 
     const cSize = this.props.children.length;
     
@@ -186,6 +194,7 @@ export class ProWrap extends Component	{
             versionData={this.props.versionData}
             users={this.props.users}
             app={this.props.app}
+            ncListKeys={path.ncListKeys}
             action={this.props.action}
             showVerify={this.state.showVerify}
             changeVerify={(q)=>this.handleVerify(q)} />

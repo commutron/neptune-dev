@@ -703,6 +703,17 @@ Meteor.methods({
     }else{null}
   },
   
+  // Clear / Undo finish Batch
+  undoFinishBatch(batchId) {
+    if( Roles.userIsInRole(Meteor.userId(), 'admin') ) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+  			$set : { 
+  			  live: true,
+  			  finishedAt: false
+      }});
+    }else{null}
+  },
+  
 // Scrap \\
   scrapItem(batchId, bar, step, comm) {
     if(Roles.userIsInRole(Meteor.userId(), 'qa')) {

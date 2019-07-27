@@ -183,8 +183,7 @@ const ActionBar = ({batchData, itemData, groupData, widgetData, versionData, app
             id={widgetData._id}
             edit={false}
             existFlows={widgetData.flows}
-            options={app.trackOption}
-            end={app.lastTrack}
+            app={app}
             noText={noText} />
           <BatchForm
             batchId={false}
