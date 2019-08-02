@@ -303,6 +303,7 @@ Meteor.methods({
       Meteor.users.update({ roles: { $not: { $in: ["debug"] } } }, {
         $set: {
           usageLog: [],
+          breadcrumbs: []
         },
       },{multi: true});
       return true;
@@ -322,12 +323,13 @@ Meteor.methods({
     }
   },
   
+  //if(valid) { Meteor.call('dropBreadcrumb', this.userId, 'batch', batch); }
+  /*
   dropBreadcrumb(pingId, pingType, pingkeyword) {
     if(pingkeyword) {
       const user = Meteor.users.findOne({_id: pingId});
       const basket = user.breadcrumbs;
       if(!basket) {
-        // remove after users are updated
         Meteor.users.update(pingId, {
           $set: {
             breadcrumbs: [],
@@ -352,6 +354,7 @@ Meteor.methods({
       }
     }
   },
+  */
   
   fetchSelfTideActivity(yearNum, weekNum) {
     try {
@@ -406,7 +409,7 @@ Meteor.methods({
   },
   
   splitTideTimeBlock(batch, tideKey, newSplit, stopTime) {
-    // try {
+    try {
       const doc = BatchDB.findOne({ batch: batch, 'tide.tKey': tideKey });
       const sub = doc && doc.tide.find( x => x.tKey === tideKey && x.who === Meteor.userId() );
       
@@ -427,10 +430,9 @@ Meteor.methods({
         }}});
         return true;
       }
-      
-    // }catch (err) {
-    //   throw new Meteor.Error(err);
-    // }
+    }catch (err) {
+       throw new Meteor.Error(err);
+    }
   },
 
   

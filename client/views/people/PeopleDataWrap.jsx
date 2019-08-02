@@ -3,21 +3,18 @@ import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import { ToastContainer } from 'react-toastify';
 import InboxToast from '/client/components/utilities/InboxToast.js';
-//import Pref from '/client/global/pref.js';
+import Pref from '/client/global/pref.js';
 import Spin from '../../components/uUi/Spin.jsx';
 
 import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
 import Slides from '../../components/smallUi/Slides.jsx';
-import ActivityPanel from './ActivityPanel.jsx';
-import InboxPanel from './InboxPanel.jsx';
-import WatchlistPanel from './WatchlistPanel.jsx';
-import PrivacyPanel from './PrivacyPanel.jsx';
 
-import { AdminDown } from '/client/components/forms/AdminForm.jsx';
-import { ChangeAutoScan } from '/client/components/forms/UserManageForm.jsx';
-import UserSpeedSet from '/client/components/forms/UserSpeedSet.jsx';
-import PasswordChange from '/client/components/forms/PasswordChange.jsx';
+import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
+import ActivityPanel from './ActivityPanel.jsx';
+//import PrivacyPanel from './PrivacyPanel.jsx';
+
+
 import { PermissionHelp } from '/client/views/app/appPanels/AccountsManagePanel';
 
 const usePrevious = (value)=> {
@@ -28,7 +25,7 @@ const usePrevious = (value)=> {
   return ref.current;
 };
 
-const UserDataWrap = (props)=> {
+const PeopleDataWrap = (props)=> {
   
   const prevProps = usePrevious(props);
     useEffect( ()=>{
@@ -56,7 +53,7 @@ const UserDataWrap = (props)=> {
       <div className='tenHeader'>
         <div className='topBorder' />
         <HomeIcon />
-        <div className='frontCenterTitle'>{props.user.username || "User"}</div>
+        <div className='frontCenterTitle'>People</div>
         <div className='auxRight' />
         <TideFollow />
       </div>
@@ -65,13 +62,22 @@ const UserDataWrap = (props)=> {
       
         <Slides
           menu={[
+            <b><i className='fas fa-satellite-dish fa-fw'></i>  Current</b>,
             <b><i className='fas fa-history fa-fw'></i>  Production Activity</b>,
-            <b><i className='far fa-eye fa-fw'></i>  Watchlist</b>,
-            <b><i className='fas fa-inbox fa-fw'></i>  Inbox</b>,
-            <b><i className='fas fa-id-card fa-fw'></i>  Preferences</b>,
-            <b><i className='fas fa-user-shield fa-fw'></i>  Privacy</b>,
+            <b><i className='fas fa-user-lock fa-fw'></i>  Permissions</b>,
           ]}>
-            
+          
+          
+          <div key={0}>
+          
+          <NumStatRing
+            num={25} 
+            name='Currently Engaged' 
+            title={`Number of people currently \n engaged with ${Pref.batches}`} />
+          
+          
+          </div>
+          
           <ActivityPanel
             key={1}
             orb={props.orb}
@@ -80,54 +86,12 @@ const UserDataWrap = (props)=> {
             user={props.user}
             users={props.users}
             bCache={props.bCache} />
-          <WatchlistPanel
-            key={2}
-            orb={props.orb}
-            bolt={props.bolt}
-            app={props.app}
-            user={props.user}
-            users={props.users}
-            batchEvents={props.batchEvents}
-            bCache={props.bCache} />
-          <InboxPanel
-            key={3}
-            orb={props.orb}
-            bolt={props.bolt}
-            app={props.app}
-            user={props.user}
-            users={props.users} />
+          
             
-          <div key={4} className='balance'>
-      
-            <div className='centre'>
-              <p className='clean'>username: {props.user.username}</p>
-              <p className='clean'>id: {Meteor.user()._id}</p>
-              <p>organization: <i className='greenT'>{Meteor.user().org}</i></p>
-              <hr />
-              <p><ChangeAutoScan /></p>
-              <hr />
-              <p><UserSpeedSet /></p>
-              <hr />
-              <PasswordChange />
-              <hr />
-              { admin ?
-              <div>
-                <AdminDown />
-              </div>
-            : null }
-            
-            </div>
-            <PermissionHelp roles={Meteor.user().roles} admin={admin} />
+          <div key={4}>
+            <PermissionHelp roles={Pref.roles} admin={false} />
           </div>
           
-          <PrivacyPanel
-            key={5}
-            orb={props.orb}
-            bolt={props.bolt}
-            app={props.app}
-            user={props.user}
-            users={props.users}
-            bCache={props.bCache} />
           
         </Slides>
 				
@@ -172,4 +136,4 @@ export default withTracker( () => {
       users: Meteor.users.find({}, {sort: {username:1}}).fetch()
     };
   }
-})(UserDataWrap);
+})(PeopleDataWrap);

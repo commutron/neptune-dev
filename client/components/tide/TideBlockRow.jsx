@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
-
+import { toast } from 'react-toastify';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
@@ -9,20 +9,32 @@ import 'flatpickr/dist/themes/airbnb.css';
 const TideBlockRow = ({ 
   batch, describe, tideKey, startTime, stopTime,
   lastStop, nextStart,
-  editKey, editMode, 
+  editKey, editMode,
+  splitKey, splitMode,
   setEdit, setSplit
 })=> {
   
-  const editOn = tideKey === editKey; 
+  const editOn = tideKey === editKey;
+  const splitOn = tideKey === splitKey; 
   
   const [ tempStart, setTempStart ] = useState(false);
   const [ tempStop, setTempStop ] = useState(false);
-  const [ doSplit, chooseSplit ] = useState(false);
   const [ tempSplit, setTempSplit ] = useState(false);
   
+  function safeCancel() {
+    !splitOn ? editMode(false) : splitMode(false);
+    setTempStart(false);
+    setTempStop(false);
+  }
+  
   function saveTemp() {
-    if(doSplit && tempSplit) {
-      setSplit({batch, tideKey, tempSplit, stopTime});
+    if(splitOn && tempSplit) {
+      setSplit({batch, tideKey, tempSplit, startTime, stopTime});
+    }else if(splitOn) {
+      toast.info("no changes, not saved", {
+        autoClose: 1000*10
+      });
+      editMode(false);
     }else{
       const newStart = tempStart || [startTime];
       const newStop = tempStop || [stopTime];
@@ -36,9 +48,10 @@ const TideBlockRow = ({
   const absoluteMin = !lastStop || !moment(lastStop).isAfter(moment(startTime).startOf('day')) ?
     moment(startTime).startOf('day').format() : lastStop;
     
-  const absoluteMax = !nextStart && !moment().isAfter(moment(stopTime), 'day') ? moment().format() :
-    !nextStart || moment(nextStart).isAfter(moment(stopTime).endOf('day')) ?
-      moment(stopTime).endOf('day').format() : nextStart;
+  const absoluteMax = !mStop ? moment().format() : 
+    !nextStart && !moment().isAfter(mStop, 'day') ? moment().format() :
+      !nextStart || moment(nextStart).isAfter(moment(stopTime).endOf('day')) ?
+        moment(stopTime).endOf('day').format() : nextStart;
   
   
     return(
@@ -49,7 +62,7 @@ const TideBlockRow = ({
         <td className='noRightBorder'>{describe}</td>
         <td className='noRightBorder numFont centreText'>
           <i className="fas fa-play fa-fw fa-xs greenT"></i>
-            {!editOn || doSplit ? ////////////////////////////////////// START
+            {!editOn || splitOn ? ////////////////////////////////////// START
               <i> {mStart.format('hh:mm A')}</i> :
               <Flatpickr
                 value={moment(mStart).format()}
@@ -58,7 +71,9 @@ const TideBlockRow = ({
                   dateFormat: "Y-m-dTG:i:s",
                   defaultDate: moment(mStart).format("YYYY-m-dThh:mm:ss"),
                   minDate: absoluteMin,
-                  maxDate: tempStop[0] || stopTime,
+                  maxDate: tempStop[0] ? 
+                    moment(tempStop[0]).subtract(1, 'm').format() :
+                    moment(stopTime).subtract(1, 'm').format(),
                   minuteIncrement: 1,
                   noCalendar: true,
                   enableTime: true,
@@ -71,16 +86,16 @@ const TideBlockRow = ({
         <td className='noRightBorder centreText'>
           {!editOn ?
             <em><i className="fas fa-long-arrow-alt-right"></i></em>
-          : doSplit ? ///////////////////////////////////////////////// SPLIT
+          : splitOn ? ///////////////////////////////////////////////// SPLIT
             <Flatpickr
-              value={moment(mStop).format()}
+              value={mStop.clone().subtract(1, 'm').format()}
               onClose={(e)=>setTempSplit(e)} 
               options={{
                 dateFormat: "Y-m-dTG:i:s",
-                defaultDate: moment(mStop).format("YYYY-m-dThh:mm:ss"),
-                minDate: startTime,
-                maxDate: stopTime,
-                minuteIncrement: 5,
+                defaultDate: mStop.clone().subtract(1, 'm').format("YYYY-m-dThh:mm:ss"),
+                minDate: moment(startTime).add(1, 'm').format(),
+                maxDate: mStop.clone().subtract(1, 'm').format(),
+                minuteIncrement: 1,
                 noCalendar: mStop.isAfter(mStart, 'day') === false,
                 enableTime: true,
                 time_24hr: false,
@@ -91,23 +106,26 @@ const TideBlockRow = ({
           :
             <button
               className='miniAction'
-              onClick={()=>chooseSplit(true)}
+              onClick={()=>splitMode(true)}
+              disabled={mStop.diff(mStart, 'minutes') < 2}
             ><i className="fas fa-cut"></i> cut</button>
           }
         </td>
         <td className='noRightBorder numFont centreText'>
           <i className="fas fa-stop fa-fw fa-xs redT"></i>
-          {!editOn || doSplit ? mStop ? ///////////////////////////////// STOP
-            <i> {mStop.format('hh:mm A')}</i> : 
-            <i> __:__ __</i>
-            : mStop ?
+          {!mStop ? <i> __:__ __</i> :
+            !editOn || splitOn ? /////////////////////////////////////// STOP
+            <i> {mStop.format('hh:mm A')}</i>
+            :
             <Flatpickr
-              value={moment(mStop).format()}
+              value={mStop.format()}
               onClose={(e)=>setTempStop(e)} 
               options={{
                 dateFormat: "Y-m-dTG:i:s",
-                defaultDate: moment(mStop).format("YYYY-m-dThh:mm:ss"),
-                minDate: tempStart[0] || startTime,
+                defaultDate: mStop.format("YYYY-m-dThh:mm:ss"),
+                minDate: tempStart[0] ? 
+                          moment(tempStart[0]).add(1, 'm').format() : 
+                          moment(startTime).add(1, 'm').format(),
                 maxDate: absoluteMax,
                 minuteIncrement: 1,
                 noCalendar: mStop.isAfter(mStart, 'day') === false,
@@ -117,7 +135,7 @@ const TideBlockRow = ({
                 altFormat: "G:i K",
               }}
             />
-            :  <i> __:__ __</i>}
+            }
         </td>
         
         {editOn ?
@@ -131,7 +149,7 @@ const TideBlockRow = ({
             <td className='noRightBorder centreText'>
               <button
                 className='miniAction'
-                onClick={!doSplit ? ()=>editMode(false) : ()=>chooseSplit(false)}
+                onClick={()=>safeCancel()}
               ><b><i className="fas fa-times"></i></b> cancel</button>
             </td>
           </Fragment>
@@ -144,7 +162,7 @@ const TideBlockRow = ({
               <button
                 className='miniAction'
                 onClick={()=>editMode(true)}
-                disabled={!mStop}
+                disabled={!mStop || mStop.diff(mStart, 'minutes') <= 0.5}
               ><em><i className="far fa-edit"></i></em> edit</button>
             </td>
           </Fragment>

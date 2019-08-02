@@ -15,6 +15,7 @@ import Spin from '/client/components/uUi/Spin.jsx';
 
 import ProdData from './views/production/ProdData.jsx';
 import OverviewData from './views/overview/OverviewData.jsx';
+import PeopleDataWrap from './views/people/PeopleDataWrap.jsx';
 import UserDataWrap from './views/user/UserDataWrap.jsx';
 import DataData from './views/data/DataData.jsx';
 import CompSearchPanel from './views/data/panels/CompSearchPanel.jsx';
@@ -144,6 +145,14 @@ privlegedRoutes.route('/overview', {
   action() {
     mount(CleanLayout, {
       content: (<OverviewData />)
+    });
+  }
+});
+
+privlegedRoutes.route('/people', {
+  action() {
+    mount(CleanLayout, {
+       content: (<PeopleDataWrap />)
     });
   }
 });

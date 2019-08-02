@@ -54,3 +54,30 @@
 .chartNoHeightContain {
   height: auto;
 }
+.chart20Contain {
+  width: 20vmax;
+  padding: 5vmax 5vmax;
+}
+.chart30Contain {
+  width: 30vh;
+  height: 30vh;
+  padding: 1vmax 1vmax;
+}
+.chart30Contain .pieCore { font-size: 12vh; }
+.chart30Contain p { font-size: 3vh; }
+
+.chart40Contain {
+  width: 40vmax;
+  padding: 1vmax 1vmax;
+}
+.chart40Contain .pieCore { font-size: 15vh; }
+
+.pieRing {
+  position: relative;
+}
+.pieCore {
+  position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%) rotate(0deg);
+}

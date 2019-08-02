@@ -12,10 +12,26 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '1.18.3';
+    this.neptuneVersion = '1.19.0';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
+    
+    this.roles = [
+      'debug',
+      'nightly',
+      'peopleSuper',
+      'qa',
+      'remove',
+      'create',
+      'edit',
+      'run',
+      'finish',
+      'test',
+      'verify',
+      'inspect',
+      'active'
+    ];
     // app navigation
     this.post = 'record';
     this.close = 'X';

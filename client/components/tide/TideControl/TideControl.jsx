@@ -14,6 +14,7 @@ const TideControl = ({ batchID, tideKey, currentLive })=> {
         console.log(error);
         toast.error('Rejected by Server');
       }else{
+        document.getElementById('lookup').focus();
         setLock(false);
       }
     });
@@ -25,6 +26,7 @@ const TideControl = ({ batchID, tideKey, currentLive })=> {
         console.log(error);
         toast.error('Rejected by Server');
       }else{
+        document.getElementById('lookup').focus();
         setLock(false);
       }
     });

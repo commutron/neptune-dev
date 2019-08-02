@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import TideBlockRow from '/client/components/tide/TideBlockRow.jsx';
@@ -6,7 +6,12 @@ import TideBlockRow from '/client/components/tide/TideBlockRow.jsx';
 
 const TideEditWrap = ({ weekData, bCache, updateData })=> {
   
-  const [ editKey, enableEdit ] = useState(false);
+  const [ doEditKey, enableEdit ] = useState(false);
+  const [ doSplitKey, enableSplit ] = useState(false);
+  
+  useEffect(()=> {
+    enableSplit(false);
+  }, [doEditKey]);
   
   function editBlock(e) {
     enableEdit(false);
@@ -71,8 +76,10 @@ const TideEditWrap = ({ weekData, bCache, updateData })=> {
                 stopTime={blk.stopTime}
                 lastStop={lastStop}
                 nextStart={nextStart}
-                editKey={editKey} 
-                editMode={(e)=>enableEdit(e ? blk.tKey : false)} 
+                editKey={doEditKey}
+                editMode={(e)=>enableEdit(e ? blk.tKey : false)}
+                splitKey={doSplitKey}
+                splitMode={(e)=>enableSplit(e ? blk.tKey : false)}
                 setEdit={(e)=>editBlock(e)}
                 setSplit={(e)=>splitBlock(e)} />
             </Fragment>
@@ -88,8 +95,10 @@ const TideEditWrap = ({ weekData, bCache, updateData })=> {
               stopTime={blk.stopTime}
               lastStop={lastStop}
               nextStart={nextStart}
-              editKey={editKey} 
+              editKey={doEditKey} 
               editMode={(e)=>enableEdit(e ? blk.tKey : false)}
+              splitKey={doSplitKey}
+              splitMode={(e)=>enableSplit(e ? blk.tKey : false)}
               setEdit={(e)=>editBlock(e)}
               setSplit={(e)=>splitBlock(e)} />
           );

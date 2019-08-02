@@ -6,21 +6,7 @@ import RemoveUser from '/client/components/forms/RemoveUser.jsx';
 
 const AccountsManagePanel = ({ users })=> {
     
-  const roles = [
-    'debug',
-    'nightly',
-    'peopleSuper',
-    'qa',
-    'remove',
-    'create',
-    'edit',
-    'run',
-    'finish',
-    'test',
-    'verify',
-    'inspect',
-    'active'
-    ];
+  const roles = Pref.roles;
   
   return (
     <div className='section'>

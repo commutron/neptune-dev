@@ -78,12 +78,6 @@ const DataRepair = ({ app, users })=> {
       toast.success('request sent');
     });
   }
-  function clearthisUserCrumbs() {
-    Meteor.call('clearBreadcrumbsRepair', (error, reply)=>{
-      error && console.log(error);
-      if(reply) { toast.success('data edit complete', { autoClose: false }); }
-    });
-  }
   
   return (
     <div className='invert'>
@@ -158,15 +152,7 @@ const DataRepair = ({ app, users })=> {
           <button
             className='action clearBlue invert'
             onClick={()=>clearUserLogs()}
-          >Clear Usage Logs of users with "debug" turned OFF</button>
-        </p>
-        <hr />
-        <p>
-          <em>On current logged in user</em><br />
-          <button
-            onClick={()=>clearthisUserCrumbs()}
-            className='action clearBlue invert'
-          >Clear Your breadcrumbs</button>
+          >Clear `Usage Logs` and `Breadcrubs` of users with "debug" turned OFF</button>
         </p>
       </div>
     </div>

@@ -68,7 +68,7 @@ Meteor.publish('usersData', function(){
           'username': 1,
           'org': 1,
           'roles': 1,
-          //'engaged': 1
+          'engaged': 1
         }}),
       ];
   }else{null}
@@ -213,7 +213,6 @@ Meteor.publish('hotDataPlus', function(batch){
   const bData = BatchDB.findOne({batch: batch, orgKey: orgKey});
   const xbData = XBatchDB.findOne({batch: batch, orgKey: orgKey});
   const wID = !bData ? !xbData ? false : xbData.widgetId : bData.widgetId;
-  if(valid) { Meteor.call('dropBreadcrumb', this.userId, 'batch', batch); }
   if(!this.userId){
     return this.ready();
   }else{
