@@ -55,22 +55,26 @@
   height: auto;
 }
 .chart20Contain {
-  width: 20vmax;
-  padding: 5vmax 5vmax;
+  width: 20vw;
+  padding: 1vmax;
 }
+.chart20Contain .pieCore { font-size: 8vw; }
+.chart20Contain p { font-size: 2vw; }
+
 .chart30Contain {
-  width: 30vh;
-  height: 30vh;
-  padding: 1vmax 1vmax;
+  width: 30vw;
+  height: 30vw;
+  padding: 1vmax;
 }
-.chart30Contain .pieCore { font-size: 12vh; }
-.chart30Contain p { font-size: 3vh; }
+.chart30Contain .pieCore { font-size: 12vw; }
+.chart30Contain p { font-size: 3vw; }
 
 .chart40Contain {
-  width: 40vmax;
-  padding: 1vmax 1vmax;
+  width: 40vw;
+  padding: 1vmax;
 }
 .chart40Contain .pieCore { font-size: 15vh; }
+.chart40Contain p { font-size: 3vw; }
 
 .pieRing {
   position: relative;

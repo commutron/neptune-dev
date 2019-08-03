@@ -8,15 +8,33 @@
   letter-spacing: 1px;
 	text-transform: capitalize;
 	overflow: hidden;
+	border-bottom-width: 3px;
+	border-bottom-style: solid;
 }
+.invert .tabOn, .invert .tabOff {
+  color: black;
+}
+
 .tabOn {
 	background-color: var(--wetasphalt);
-  border-bottom: 3px solid var(--silver);
+  border-bottom-color: var(--silver);
 }
+.invert .tabOn {
+	background-color: var(--asbestosfade);
+  border-bottom-color: var(--asbestos);
+}
+
 .tabOff {
 	background-color: var(--midnightblue);
-	border-bottom: 3px solid transparent;
+	border-bottom-color: transparent;
+}
+.invert .tabOff {
+	background-color: var(--concretefade);
+	border-bottom-color: transparent;
 }
 .tabOff:hover {
 	background-color: var(--wetasphalt);
+}
+.invert .tabOff:hover {
+	background-color: var(--asbestosfade);
 }

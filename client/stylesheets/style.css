@@ -197,6 +197,8 @@ label.qdpplRound {
   font-size: 2rem;
 }
 
+.buttonLayerCorrect { height: 1em; }
+
 .moveLR {
   color: white;
 }
@@ -582,21 +584,6 @@ label.qdpplRound {
 .smCap { font-variant: small-caps; }
 
 .up { text-transform: uppercase; }
-
-.smaller { font-size: smaller; }
-.small {
-  font-size: small;
-}
-
-.med { font-size: 1rem; }
-
-.medBig { font-size: 1.2rem; }
-
-.big { font-size: 1.5rem; }
-
-.bigger { font-size: 1.75rem; }
-
-.biggest { font-size: 2rem; }
 
 .bold { font-weight: 600; }
 

@@ -10,10 +10,8 @@ import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
 import Slides from '../../components/smallUi/Slides.jsx';
 
-import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
 import ActivityPanel from './ActivityPanel.jsx';
-//import PrivacyPanel from './PrivacyPanel.jsx';
-
+import DashSlide from './DashSlide/DashSlide.jsx';
 
 import { PermissionHelp } from '/client/views/app/appPanels/AccountsManagePanel';
 
@@ -42,7 +40,7 @@ const PeopleDataWrap = (props)=> {
     );
   }
     
-  const admin = Roles.userIsInRole(Meteor.userId(), 'admin');
+  // const admin = Roles.userIsInRole(Meteor.userId(), 'admin');
   
   return (
     <div className='simpleContainer'>
@@ -68,20 +66,16 @@ const PeopleDataWrap = (props)=> {
           ]}>
           
           
-          <div key={0}>
-          
-          <NumStatRing
-            num={25} 
-            name='Currently Engaged' 
-            title={`Number of people currently \n engaged with ${Pref.batches}`} />
-          
-          
-          </div>
+          <DashSlide
+            key={0}
+            app={props.app}
+            user={props.user}
+            users={props.users}
+            batchEvents={props.batchEvents}
+            bCache={props.bCache} />
           
           <ActivityPanel
             key={1}
-            orb={props.orb}
-            bolt={props.bolt}
             app={props.app}
             user={props.user}
             users={props.users}
@@ -125,15 +119,13 @@ export default withTracker( () => {
       ready: appSub.ready(),
       readyUsers: usersSub.ready(),
       readyEvents: eventsSub.ready(),
-      orb: Session.get('now'),
-      bolt: Session.get('allData'),
       user: user,
       active: active,
       org: org,
       app: AppDB.findOne({org: org}),
       bCache: CacheDB.findOne({dataName: 'batchInfo'}),
       batchEvents: BatchDB.find({}).fetch(),
-      users: Meteor.users.find({}, {sort: {username:1}}).fetch()
+      users: Meteor.users.find({}, { sort: { username: 1 } } ).fetch()
     };
   }
 })(PeopleDataWrap);

@@ -32,8 +32,9 @@
   --clouds: rgb(236, 240, 241); /*off white */
   --cloudsfade: rgba(236, 240, 241, 0.5);
   --concrete: rgb(149, 165, 166);
-  --wetasphalt: rgb(52, 73, 94);
-  --midnightblue: rgb(44, 62, 80);
+  --concretefade: rgba(149, 165, 166, 0.5);
+  --wetasphalt: rgb(52, 73, 94); /* lighter grey-blue */
+  --midnightblue: rgb(44, 62, 80); /* darker grey-blue */
   --asbestos: rgb(127, 140, 141); /* gray */
   --asbestosfade: rgb(127, 140, 141, 0.5);
   

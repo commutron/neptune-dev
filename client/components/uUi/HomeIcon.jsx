@@ -48,6 +48,9 @@ const HomeIcon = () => {
         <MenuItem onClick={()=>FlowRouter.go('/data')}>
           <i className='fas fa-rocket fa-fw'></i><i className='noCopy'> Explore</i>
         </MenuItem>
+        <MenuItem onClick={()=>FlowRouter.go('/people')}>
+          <i className='fas fa-user-astronaut fa-fw'></i><i className='noCopy'> People</i>
+        </MenuItem>
         {/*<MenuItem onClick={()=>FlowRouter.go('/starfish')}>
           <i className='fas fa-microchip fa-fw'></i><i className='noCopy'> Parts Search</i>
         </MenuItem>*/}

@@ -644,6 +644,21 @@ main {
   border-bottom: 5vh solid var(--clouds);
 }
 
+.smaller { font-size: smaller; }
+.small { font-size: small; }
+
+.med { font-size: 1rem; }
+
+.medBig { font-size: 1.2rem; }
+
+.big { font-size: 1.5rem; }
+
+.bigger { font-size: 1.75rem; }
+
+.biggest { font-size: 2rem; }
+
+.scaleBig { font-size: 2vh; }
+
 input.variableInput.med { 
   font-size: 1rem;
   height: 32px;

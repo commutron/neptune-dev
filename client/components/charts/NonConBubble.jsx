@@ -96,8 +96,8 @@ export default class NonConBubble extends Component {
           data={this.state.series}
           domain={{z: [this.state.min, this.state.max]}}
           bubbleProperty="z"
-          maxBubbleSize={this.state.max * 3}
-          minBubbleSize={this.state.min * 3}
+          maxBubbleSize={this.state.max}
+          minBubbleSize={this.state.min}
           labels={(d) => `Quantity: ${d.z}`}
           labelComponent={
             <VictoryTooltip />}
