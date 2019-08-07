@@ -9,7 +9,7 @@ import PeoplePanel from './PeoplePanel.jsx';
 
 const DashSlide = ({ app, user, users, batchEvents, bCache })=> {
   
-  const liveUsers = users.filter( x => x.roles.includes('active') && !x.roles.includes('readOnly') );
+  const liveUsers = users.filter( x => Roles.userIsInRole(x._id, 'active') && !Roles.userIsInRole(x._id, 'readOnly') );
   const eUsers = liveUsers.filter( x => x.engaged );
   const userArr = [eUsers.length, ( liveUsers.length - eUsers.length ) ];
   const styleArr = Array.from(eUsers, (arr)=> { return {x: 1, y: 1} } );
@@ -19,14 +19,15 @@ const DashSlide = ({ app, user, users, batchEvents, bCache })=> {
       y => y.tide && y.tide.find(  z => z.tKey === x.engaged.tKey )
     )
   );
-  
-  const qBatches = eBatches.reduce( (allBatch, batch)=> { 
-    if (batch in allBatch) { allBatch[batch.batch]++; }
-    else { allBatch[batch.batch] = 1; } 
+
+  const qBatches = eBatches.reduce( (allBatch, batch, index, array)=> { 
+    if (!allBatch[batch.batch]) { 
+      allBatch[batch.batch] = 1; }
+    else { 
+      allBatch[batch.batch]++; } 
     return allBatch;
   }, {});
-  
-  
+
   const itrNums = Object.entries(qBatches);
   const itrXY = Array.from(itrNums, (arr)=> { return {x: arr[0], y: arr[1]} } );
   
