@@ -12,13 +12,14 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '1.19.1';
+    this.neptuneVersion = '1.19.3';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
     
     this.roles = [
       'debug',
+      'readOnly',
       'nightly',
       'peopleSuper',
       'qa',
@@ -76,6 +77,9 @@ class Pref {
     this.end = 'sales order fulfill';
     this.tag = 'flag';
     this.comp = 'part';
+    this.kit = 'kit';
+    this.release = 'release';
+    this.ship = 'ship';
     // build tracking
     this.flow = 'process flow';
     this.buildFlow = 'main process flow';

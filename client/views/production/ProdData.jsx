@@ -64,7 +64,8 @@ export default withTracker( () => {
   let login = Meteor.userId() ? true : false;
   let user = login ? Meteor.user() : false;
   let org = user ? user.org : false;
-  let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
+  let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') &&
+    !Roles.userIsInRole(Meteor.userId(), 'readOnly') : false;
   const appSub = login ? Meteor.subscribe('appData') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
   const coldSub = login ? Meteor.subscribe('thinData') : false;
@@ -124,6 +125,7 @@ export default withTracker( () => {
       hotReady: false
     };
   }else if( !active ) {
+    Roles.userIsInRole(Meteor.userId(), 'readOnly') && FlowRouter.go('/');
     return {
       appReady: appSub.ready(),
       usersReady: usersSub.ready(),

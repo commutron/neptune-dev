@@ -39,7 +39,8 @@ const HomeIcon = () => {
           <i>Status: {Meteor.status().status}</i>
         </MenuItem>
         {Meteor.userId() ? <React.Fragment>
-        <MenuItem onClick={()=>FlowRouter.go('/production')}>
+        <MenuItem onClick={()=>FlowRouter.go('/production')}
+          disabled={Roles.userIsInRole(Meteor.userId(), 'readOnly')}>
           <i className='fas fa-paper-plane fa-fw'></i><i className='noCopy'> Production</i>
         </MenuItem>
         <MenuItem onClick={()=>FlowRouter.go('/overview')}>

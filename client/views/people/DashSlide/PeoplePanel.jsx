@@ -46,7 +46,13 @@ const PeoplePanel = ({ app, eUsers, eBatches, bCache })=> {
                 <td className='noRightBorder'>{entry.batch}</td>
                 <td className='noRightBorder'>{what}</td>
                 <td className='noRightBorder centreText'>
-                  <i className="fas fa-play fa-fw fa-xs greenT"></i>
+                  {moment(entry.tideBlock.startTime).isSameOrBefore(moment().startOf('day')) ?
+                    <em title='Time has been running for more than a day'>
+                      <i className="fas fa-exclamation-triangle fa-fw fa-xs yellowT"></i>
+                    </em> :
+                    <b title='Start Time'>
+                      <i className="fas fa-play fa-fw fa-xs greenT"></i>
+                    </b> }
                   <i> {moment(entry.tideBlock.startTime).format('hh:mm A')}</i>
                 </td>
               </tr>

@@ -186,6 +186,7 @@ export default class FlowForm extends Component	{
                   defaultChecked={ncOn} />
                 {entry.listPrefix}. {entry.listName}</label>
             )})}
+            <p><em>If none are chosen the Legacy List will be used</em></p>
           </div>
           
           <hr />

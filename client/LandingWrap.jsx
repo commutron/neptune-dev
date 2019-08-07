@@ -24,7 +24,9 @@ const StartView = ({ready, readyUsers, user, org, app}) =>	{
   
   return(
     <div className='homeNavi'>
-      <NavButton title='Production' icon='fa-paper-plane' link='/production' />
+      {Roles.userIsInRole(Meteor.userId(), 'readOnly') ?
+        <NavPlaceholder title='Production' icon="fas fa-paper-plane" /> :
+        <NavButton title='Production' icon='fa-paper-plane' link='/production' /> }
       <NavPlaceholder title='' icon="fas fa-map" />
       <NavButton title='Overview' icon="fas fa-globe" link='/overview' />
       <NavButton title='Explore' icon='fa-rocket' link='/data' />

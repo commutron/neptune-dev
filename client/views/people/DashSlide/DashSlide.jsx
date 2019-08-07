@@ -9,19 +9,23 @@ import PeoplePanel from './PeoplePanel.jsx';
 
 const DashSlide = ({ app, user, users, batchEvents, bCache })=> {
   
-  const eUsers = users.filter( x => x.engaged );
+  const liveUsers = users.filter( x => x.roles.includes('active') && !x.roles.includes('readOnly') );
+  const eUsers = liveUsers.filter( x => x.engaged );
+  const userArr = [eUsers.length, ( liveUsers.length - eUsers.length ) ];
   const styleArr = Array.from(eUsers, (arr)=> { return {x: 1, y: 1} } );
 
   const eBatches = Array.from(eUsers,
     x => batchEvents.find( 
-      y => y.tide.find(  z => z.tKey === x.engaged.tKey )
+      y => y.tide && y.tide.find(  z => z.tKey === x.engaged.tKey )
     )
   );
+  
   const qBatches = eBatches.reduce( (allBatch, batch)=> { 
-    if (batch.batch in allBatch) { allBatch[batch.batch]++; }
+    if (batch in allBatch) { allBatch[batch.batch]++; }
     else { allBatch[batch.batch] = 1; } 
     return allBatch;
   }, {});
+  
   
   const itrNums = Object.entries(qBatches);
   const itrXY = Array.from(itrNums, (arr)=> { return {x: arr[0], y: arr[1]} } );
@@ -40,17 +44,17 @@ const DashSlide = ({ app, user, users, batchEvents, bCache })=> {
             
         <NumStatRing
           total={eUsers.length}
-          nums={styleArr}
-          name='People Are Engaged' 
-          title={`${eUsers.length} people currently\nengaged with ${Pref.batches}`} 
+          nums={userArr}
+          name={`People Are ${Pref.engaged}`} 
+          title={`${eUsers.length} people currently\n${Pref.engaged} with ${Pref.batches}`} 
           colour='blue'
         />
         
         <NumStatRing
           total={itrNums.length}
           nums={itrXY}
-          name={`${Pref.batches} Are Engaged` } 
-          title={`${itrNums.length} ${Pref.batches} currently\nengaged by people`} 
+          name={`${Pref.batches} Are ${Pref.engaged}`} 
+          title={`${itrNums.length} ${Pref.batches} currently\n${Pref.engaged} by people`} 
           colour='blue'
         />
         
@@ -75,6 +79,7 @@ const DashSlide = ({ app, user, users, batchEvents, bCache })=> {
           
           <PeoplePanel
             app={app}
+            liveUsers={liveUsers}
             eUsers={eUsers}
             eBatches={eBatches}
             bCache={bCache} />

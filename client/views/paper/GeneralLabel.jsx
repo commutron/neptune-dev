@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
+import Pref from '/client/global/pref.js';
 
 function GeneralLabel({ batch, data }) {
   return(
@@ -23,15 +24,15 @@ function GeneralLabel({ batch, data }) {
         </div>
         <div className='centreRow'>
           <div className='centreText'>
-            <i className='psm'>Ready by</i><br />
+            <i className='psm'>{Pref.kit} by</i><br />
             <i><input className='plg' defaultValue='?' maxLength='14' /></i>
           </div>
           <div className='centreText'>
-            <i className='psm'>Start by</i><br />
+            <i className='psm'>{Pref.release} by</i><br />
             <i><input className='plg' defaultValue='?' maxLength='14' /></i>
           </div>
           <div className='centreText'>
-            <i className='psm'>Ship by</i><br />
+            <i className='psm'>{Pref.ship} by</i><br />
             <i>
               <input 
                 className='plg'

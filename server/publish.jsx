@@ -105,7 +105,7 @@ Meteor.publish('eventsData', function(){
     return this.ready();
   }else{
     return [
-      BatchDB.find({orgKey: orgKey}, {
+      BatchDB.find({orgKey: orgKey, events: { $exists: true } }, {
         fields: {
           'batch': 1,
           'events': 1,
@@ -115,7 +115,7 @@ Meteor.publish('eventsData', function(){
         fields: {
           'orgKey': 0
         }}),
-      ];
+    ];
   }
 });
 
