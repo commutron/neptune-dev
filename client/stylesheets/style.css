@@ -21,6 +21,19 @@
   min-width: 2rem;
 	height: 2rem;
 	padding: 0 10px;
+	cursor: pointer;
+}
+
+.blendAction {
+  letter-spacing: 1px;
+	font-size: 1.5vw;
+  width: 2.5vw;
+  height: 2.5vw;
+	padding: 0;
+	cursor: pointer;
+}
+.blendAction:focus, .blendAction:active {
+  outline: dotted;
 }
 
 .miniAction {
@@ -531,6 +544,10 @@ label.qdpplRound {
 .clearPurple:hover,
 .invert .clearPurple:hover {
   background-color: var(--amethyst);
+}
+
+.activeIndicator:focus, .activeIndicator:active {
+  outline: dotted;  
 }
 
 .borderWhite { border-color: var(--clouds); }

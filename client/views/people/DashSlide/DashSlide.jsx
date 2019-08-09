@@ -1,30 +1,66 @@
-import React from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 //import { toast } from 'react-toastify';
 import Pref from '/client/global/pref.js';
-import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
+//import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 
 import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
 import PeoplePanel from './PeoplePanel.jsx';
 
 
-const DashSlide = ({ app, user, users, batchEvents, bCache })=> {
+const DashSlide = ({ app, user, users, batches, bCache })=> {
+  
+  const [ update, forceUpdate] = useState(false);
+  const [ userPhases, setUserPhases ] = useState({});
+  const [ pList, setPhaseList ] = useState([]);
+  const [ phasesXY, setPhasesXY ] = useState([]);
+  
+  
+  const updatePhases = (uID, newPhase)=>{
+    let currPhases = userPhases;
+    currPhases[uID] = newPhase;
+    setUserPhases(currPhases);
+    const smpList = _.values(currPhases);
+    setPhaseList(smpList);
+  };
+  const removePhaser = (uID)=>{
+    //console.log('tryRemove');
+    let currPhases = userPhases;
+    //delete currPhases.uID;
+    const lessPhases = _.omit(currPhases, uID);
+    setUserPhases(lessPhases);
+    const smpList = _.values(lessPhases);
+    setPhaseList(smpList);
+  };
+  
+  useLayoutEffect( ()=>{
+    const pQuant = pList.reduce( (allPhase, phase)=> { 
+    !phase ||
+      phase in allPhase ? allPhase[phase]++ : allPhase[phase] = 1;
+    return allPhase;
+    }, {});
+    const pItr = Object.entries(pQuant);
+    const pXY = Array.from(pItr, (arr)=> { return {x: arr[0], y: arr[1]} } );
+    setPhasesXY(pXY);
+    
+  }, [pList]);
+  
   
   const liveUsers = users.filter( x => Roles.userIsInRole(x._id, 'active') && !Roles.userIsInRole(x._id, 'readOnly') );
   const eUsers = liveUsers.filter( x => x.engaged );
-  const userArr = [eUsers.length, ( liveUsers.length - eUsers.length ) ];
+  const dUsers = liveUsers.filter( x => !x.engaged );
+  const userArr = [eUsers.length, dUsers.length ];
   const styleArr = Array.from(eUsers, (arr)=> { return {x: 1, y: 1} } );
 
   const eBatches = Array.from(eUsers,
-    x => batchEvents.find( 
+    x => batches.find( 
       y => y.tide && y.tide.find(  z => z.tKey === x.engaged.tKey )
     )
   );
 
   const qBatches = eBatches.reduce( (allBatch, batch, index, array)=> { 
-    if (!allBatch[batch.batch]) { 
-      allBatch[batch.batch] = 1; }
-    else { 
-      allBatch[batch.batch]++; } 
+    const objkey = batch.batch;
+    !objkey ||
+      objkey in allBatch ? allBatch[objkey]++ : allBatch[objkey] = 1;
     return allBatch;
   }, {});
 
@@ -39,8 +75,16 @@ const DashSlide = ({ app, user, users, batchEvents, bCache })=> {
 
   return(
     <div className='invert overscroll'>
-     
-     
+      
+      <p className='rightText nomargin'>
+        <button
+          title='refresh data'
+          className='blendAction transparent grayT'
+          onClick={()=>forceUpdate(!update)}>
+          <i className="fas fa-sync-alt"></i>
+        </button>
+      </p>
+      
       <div className='balance'>
             
         <NumStatRing
@@ -52,44 +96,35 @@ const DashSlide = ({ app, user, users, batchEvents, bCache })=> {
         />
         
         <NumStatRing
-          total={itrNums.length}
-          nums={itrXY}
-          name={`${Pref.batches} Are ${Pref.engaged}`} 
-          title={`${itrNums.length} ${Pref.batches} currently\n${Pref.engaged} by people`} 
+          total={phasesXY.length}
+          nums={phasesXY}
+          name={`${Pref.phases} Are ${Pref.engaged}`} 
+          title={`People currently ${Pref.engaged} in\n${phasesXY.length} ${Pref.phases}`} 
           colour='blue'
         />
         
         <NumStatRing
-          total='??'
-          nums={styleArr}
-          name='_______ ____' 
-          title={`${1} extra \n but blank data`} 
-          colour='false'
+          total={itrXY.length}
+          nums={itrXY}
+          name={`${Pref.batches} Are ${Pref.engaged}`} 
+          title={`${itrXY.length} ${Pref.batches} currently\n${Pref.engaged} by people`} 
+          colour='blue'
         />
             
       </div>
     
       <div className='wide'>
-        <Tabs
-          tabs={ [ 'People', 'Events', 'other' ] }
-          wide={true}
-          stick={false}
-          hold={true}
-          sessionTab='peopleDashPanelTabs'
-        >
+         
+        <PeoplePanel
+          app={app}
+          eUsers={eUsers}
+          dUsers={dUsers}
+          eBatches={eBatches}
+          bCache={bCache}
+          updatePhases={(id, ph)=>updatePhases(id, ph)}
+          removePhaser={(id)=>removePhaser(id)}
+          update={update} />
           
-          <PeoplePanel
-            app={app}
-            liveUsers={liveUsers}
-            eUsers={eUsers}
-            eBatches={eBatches}
-            bCache={bCache} />
-          
-          <div></div>
-           
-          <div></div>
-            
-        </Tabs>
       </div>    
           
     </div>

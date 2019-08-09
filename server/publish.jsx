@@ -109,6 +109,27 @@ Meteor.publish('eventsData', function(){
         fields: {
           'batch': 1,
           'events': 1,
+        }}),
+      CacheDB.find({orgKey: orgKey}, {
+        fields: {
+          'orgKey': 0
+        }}),
+    ];
+  }
+});
+Meteor.publish('tideData', function(){
+  const user = Meteor.users.findOne({_id: this.userId});
+  const orgKey = user ? user.orgKey : false;
+  Meteor.defer( ()=>{
+    Meteor.call('batchCacheUpdate', orgKey);
+  });
+  if(!this.userId){
+    return this.ready();
+  }else{
+    return [
+      BatchDB.find({orgKey: orgKey, tide: { $exists: true } }, {
+        fields: {
+          'batch': 1,
           'tide': 1
         }}),
       CacheDB.find({orgKey: orgKey}, {

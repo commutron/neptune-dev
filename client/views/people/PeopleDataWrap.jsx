@@ -30,7 +30,7 @@ const PeopleDataWrap = (props)=> {
       prevProps && InboxToast(prevProps, props);
     });
     
-  if(!props.ready || !props.readyUsers || !props.readyEvents || !props.app) {
+  if(!props.ready || !props.readyUsers || !props.readyTides || !props.app) {
     return (
       <div className='centreContainer'>
         <div className='centrecentre'>
@@ -71,7 +71,7 @@ const PeopleDataWrap = (props)=> {
             app={props.app}
             user={props.user}
             users={props.users}
-            batchEvents={props.batchEvents}
+            batches={props.batches}
             bCache={props.bCache} />
           
           <ActivityPanel
@@ -101,30 +101,30 @@ export default withTracker( () => {
   let active = login ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   const appSub = login ? Meteor.subscribe('appData') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
-  const eventsSub = login ? Meteor.subscribe('eventsData') : false;
+  const tidesSub = login ? Meteor.subscribe('tideData') : false;
   if(!login) {
     return {
       ready: false,
       readyUsers: false,
-      readyEvents: false
+      readyTides: false
     };
   }else if(!active) {
     return {
       ready: false,
       readyUsers: false,
-      readyEvents: false
+      readyTides: false
     };
   }else{
     return {
       ready: appSub.ready(),
       readyUsers: usersSub.ready(),
-      readyEvents: eventsSub.ready(),
+      readyTides: tidesSub.ready(),
       user: user,
       active: active,
       org: org,
       app: AppDB.findOne({org: org}),
       bCache: CacheDB.findOne({dataName: 'batchInfo'}),
-      batchEvents: BatchDB.find({}).fetch(),
+      batches: BatchDB.find({}).fetch(),
       users: Meteor.users.find({}, { sort: { username: 1 } } ).fetch()
     };
   }

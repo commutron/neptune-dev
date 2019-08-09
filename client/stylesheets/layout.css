@@ -557,13 +557,13 @@ main {
 }
 
 .space3v { padding: 3vh 3vw; }
-
 .space { padding: 24px; }
-
 .vspace { padding: 24px 0; }
+.nospace { padding: 0; }
 
 .vmargin { margin: 24px 0; }
 .vmarginhalf { margin: 12px 0; }
+.nomargin { margin: 0; }
 
 .line2x { line-height: 2; }
 .line3x { line-height: 3; }
@@ -657,7 +657,6 @@ main {
 
 .biggest { font-size: 2rem; }
 
-.scaleBig { font-size: 2vh; }
 
 input.variableInput.med { 
   font-size: 1rem;

@@ -35,7 +35,12 @@ const UserDataWrap = (props)=> {
       prevProps && InboxToast(prevProps, props);
     });
     
-  if(!props.ready || !props.readyUsers || !props.readyEvents || !props.app) {
+  if(
+    !props.ready || 
+    !props.readyUsers || 
+    !props.readyEvents ||
+    !props.app
+  ) {
     return (
       <div className='centreContainer'>
         <div className='centrecentre'>
@@ -87,7 +92,7 @@ const UserDataWrap = (props)=> {
             app={props.app}
             user={props.user}
             users={props.users}
-            batchEvents={props.batchEvents}
+            batchEvents={props.batches}
             bCache={props.bCache} />
           <InboxPanel
             key={3}
@@ -168,7 +173,7 @@ export default withTracker( () => {
       org: org,
       app: AppDB.findOne({org: org}),
       bCache: CacheDB.findOne({dataName: 'batchInfo'}),
-      batchEvents: BatchDB.find({}).fetch(),
+      batches: BatchDB.find({}).fetch(),
       users: Meteor.users.find({}, {sort: {username:1}}).fetch()
     };
   }

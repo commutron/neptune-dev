@@ -72,7 +72,7 @@ const ActivityPanel = ({ orb, bolt, app, user, users, bCache })=> {
 
   return(
     <div className='invert overscroll'>
-      <div className='med line3x'>
+      <div className='med line2x'>
         <WeekBrowse
           weekNum={weekNum}
           yearNum={yearNum}

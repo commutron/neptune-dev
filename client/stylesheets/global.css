@@ -362,6 +362,6 @@ td:last-child, th:last-child {
   td {
     font-size: 1rem;
     line-height: 1.5rem;
-    text-indent: 0.25rem;
+    /*text-indent: 0.25rem;*/
   }
 }
