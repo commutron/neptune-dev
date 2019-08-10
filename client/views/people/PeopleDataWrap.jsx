@@ -61,7 +61,7 @@ const PeopleDataWrap = (props)=> {
         <Slides
           menu={[
             <b><i className='fas fa-satellite-dish fa-fw'></i>  Current</b>,
-            <b><i className='fas fa-history fa-fw'></i>  Production Activity</b>,
+            /*<b><i className='fas fa-history fa-fw'></i>  Production Activity</b>,*/
             <b><i className='fas fa-user-lock fa-fw'></i>  Permissions</b>,
           ]}>
           
@@ -74,13 +74,14 @@ const PeopleDataWrap = (props)=> {
             batches={props.batches}
             bCache={props.bCache} />
           
+          {/*
           <ActivityPanel
             key={1}
             app={props.app}
             user={props.user}
             users={props.users}
             bCache={props.bCache} />
-          
+          */}
             
           <div key={4}>
             <PermissionHelp roles={Pref.roles} admin={false} />

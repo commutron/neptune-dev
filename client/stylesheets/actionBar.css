@@ -34,8 +34,12 @@ meteor seems to be handling this */
   width: 100%;
 }
 .actionForm fieldset {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
   margin: 0;
   padding: 0;
+  width: 100%;
 }
 .actionIconWrap {
   margin: 0 0.5rem;

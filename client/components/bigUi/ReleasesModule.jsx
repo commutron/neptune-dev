@@ -3,38 +3,43 @@ import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
+import Flatpickr from 'react-flatpickr';
+import 'flatpickr/dist/themes/airbnb.css';
 
 const ReleaseAction = ({ id, rType })=> {
   
   function handleRelease(e) {
     e.preventDefault();
-    const date = e.target.rdate.value;
-    const time = e.target.rtime.value;
-    const datetime = date + 'T' + time;
+    const datetime = e.target.rDateTime.value;
     Meteor.call('addRelease', id, rType, datetime, (err)=>{
       err && console.log(err);
     });
   }
+  
   let sty = {
     padding: '10px',
     borderWidth: '3px'
   };
+  
   const releaseType = rType === 'floorRelease' ? 'the floor' : null;
   
   return(
     <div className='wide actionBox greenBorder' style={sty}>
       <form onSubmit={(e)=>handleRelease(e)} className='centre listSortInput'>
         <p className='centreText big cap greenT'>Release {Pref.xBatch} to {releaseType || 'the floor'}</p>
-        <input
-          type='date'
-          id='rdate'
-          defaultValue={moment().format('YYYY-MM-DD')}
-          required />
-        <input
-          type='time'
-          id='rtime'
-          defaultValue={moment().format('HH:mm')}
-          required />
+          <Flatpickr
+            id='rDateTime'
+            value={moment().format()}
+            options={{
+              defaultDate: moment().format(),
+              maxDate: moment().format(),
+              minuteIncrement: 1,
+              enableTime: true,
+              time_24hr: false,
+              altInput: true,
+              altFormat: "Y-m-d G:i K",
+            }}
+          />
         <p>
           <button
             type='submit'

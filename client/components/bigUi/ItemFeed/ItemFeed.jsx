@@ -12,7 +12,9 @@ import RmaBlock from './RmaBlock';
 const ItemFeed = ({ 
   id, batch, serial,
   createTime, createBy,
-  history, noncons, shortfalls,
+  history, 
+  noncons, ncListKeys,
+  shortfalls,
   rmas, allRMA,
   done,
   app 
@@ -25,6 +27,14 @@ const ItemFeed = ({
             if (moment(t1.time || t1.cTime).isBefore(t2.time || t2.cTime)) { return -1 }
             return 0;
           });
+  
+  const ncTypesComboFlat = ()=> {
+    const asignedNCLists = app.nonConTypeLists.filter( 
+      x => ncListKeys.find( y => y === x.key ) ? true : false );
+    const ncTypesCombo = Array.from(asignedNCLists, x => x.typeList);
+  	const ncTCF = [].concat(...ncTypesCombo);
+  	return ncTCF;
+  };
   
   return(
     <div className='scrollWrap'>
@@ -63,7 +73,8 @@ const ItemFeed = ({
                 id={id}
                 serial={serial}
                 done={done}
-                app={app} /> 
+                app={app}
+                ncTypesComboFlat={ncTypesComboFlat()} /> 
             );
           }else if(typeof dt.ref === 'string') {
             return( 

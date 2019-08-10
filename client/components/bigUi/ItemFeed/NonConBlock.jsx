@@ -26,11 +26,11 @@ export default class NonConBlock extends Component {
   }
   
   handleCheck(target, dflt) {
-    const ncTypesCombo = Array.from(this.props.app.nonConTypeLists, x => x.typeList);
-	  const ncTypesComboFlat = [].concat(...ncTypesCombo);
-	  const flatCheckList = [...this.props.app.nonConOption,
-	    ...Array.from(ncTypesComboFlat, x => x.live === true && x.typeText)];
-
+  	const ncTypesComboFlat = this.props.ncTypesComboFlat;
+    const flatCheckList = ncTypesComboFlat.length > 0 ?
+      Array.from(ncTypesComboFlat, x => x.live === true && x.typeText)
+      : this.props.app.nonConOption;
+  
     let match = target.value === dflt || flatCheckList.find( x => x === target.value);
     let message = !match ? 'please choose from the list' : '';
     target.setCustomValidity(message);
@@ -132,8 +132,7 @@ export default class NonConBlock extends Component {
     const editAllow = Roles.userIsInRole(Meteor.userId(), 'inspect') && !done;
     const editIndicate = this.state.edit && 'editStandout';
     
-    const ncTypesCombo = Array.from(this.props.app.nonConTypeLists, x => x.typeList);
-	  const ncTypesComboFlat = [].concat(...ncTypesCombo);
+    const ncTypesComboFlat = this.props.ncTypesComboFlat;
 	  
     return(
       <div className={`infoBlock noncon ${editIndicate} ${tSty}`}>
@@ -161,25 +160,27 @@ export default class NonConBlock extends Component {
                     onInput={(e)=>this.handleCheck(e.target, dt.type)}
                     required />
                     <datalist id='ncTypeList'>
-                      {app.nonConOption.map( (entry, index)=>{
-                        return ( 
-                          <option
-                            key={index}
-                            data-id={index + 1 + '.'} 
-                            value={entry}
-                          >{index + 1}</option>
-                        );
-                      })}
-                      {ncTypesComboFlat.map( (entry, index)=>{
-                        if(entry.live === true) {
+                      {ncTypesComboFlat.length > 0 ?
+                        ncTypesComboFlat.map( (entry, index)=>{
+                          if(entry.live === true) {
+                            return ( 
+                              <option 
+                                key={index}
+                                data-id={entry.key}
+                                value={entry.typeText}
+                              >{entry.typeCode}</option>
+                            );
+                        }})
+                      :
+                        app.nonConOption.map( (entry, index)=>{
                           return ( 
-                            <option 
+                            <option
                               key={index}
-                              data-id={entry.key}
-                              value={entry.typeText}
-                            >{entry.typeCode}</option>
+                              data-id={index + 1 + '.'}
+                              value={entry}
+                            >{index + 1}</option>
                           );
-                      }})}
+                        })}
                     </datalist>
                 </span>
               :

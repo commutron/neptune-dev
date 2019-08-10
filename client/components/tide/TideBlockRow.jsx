@@ -60,7 +60,7 @@ const TideBlockRow = ({
           <ExploreLinkBlock type='batch' keyword={batch} />
         </td>
         <td className='noRightBorder'>{describe}</td>
-        <td className='noRightBorder numFont centreText'>
+        <td className='noRightBorder numFont centreText timeInputs'>
           <i className="fas fa-play fa-fw fa-xs greenT"></i>
             {!editOn || splitOn ? ////////////////////////////////////// START
               <i> {mStart.format('hh:mm A')}</i> :
@@ -83,7 +83,7 @@ const TideBlockRow = ({
                 }}
               />}
         </td>
-        <td className='noRightBorder centreText'>
+        <td className='noRightBorder centreText timeInputs'>
           {!editOn ?
             <em><i className="fas fa-long-arrow-alt-right"></i></em>
           : splitOn ? ///////////////////////////////////////////////// SPLIT
@@ -111,7 +111,7 @@ const TideBlockRow = ({
             ><i className="fas fa-cut"></i> cut</button>
           }
         </td>
-        <td className='noRightBorder numFont centreText'>
+        <td className='noRightBorder numFont centreText timeInputs'>
           <i className="fas fa-stop fa-fw fa-xs redT"></i>
           {!mStop ? <i> __:__ __</i> :
             !editOn || splitOn ? /////////////////////////////////////// STOP

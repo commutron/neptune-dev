@@ -1,8 +1,23 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 
-const NCFlood = ({ id, live, app })=> {
-
+const NCFlood = ({ id, live, app, ncListKeys })=> {
+  
+  const asignedNCLists = app.nonConTypeLists.filter( 
+    x => ncListKeys.find( y => y === x.key ) ? true : false );
+  
+  const ncTypesCombo = Array.from(asignedNCLists, x => x.typeList);
+	const ncTypesComboFlat = [].concat(...ncTypesCombo);
+  const flatCheckList = ncTypesComboFlat.length > 0 ?
+    Array.from(ncTypesComboFlat, x => x.live === true && x.typeText)
+    : app.nonConOption;
+  
+  function handleCheck(e) {
+    let match = flatCheckList.find( x => x === e.target.value);
+    let message = !match ? 'please choose from the list' : '';
+    e.target.setCustomValidity(message);
+  }
+  
   function handleFloodNC(e) {
     this.go.disabled = true;
     e.preventDefault();
@@ -14,7 +29,7 @@ const NCFlood = ({ id, live, app })=> {
     if(refSplit.length > 0 && refSplit[0] !== '') {
       for(let ref of refSplit) {
         ref = ref.replace(",", "");
-        if(ref.length < 9) {
+        if(ref.length < 8) {
           Meteor.call('floodNC', id, ref, type, (error)=>{
             error && console.log(error);
           });
@@ -41,12 +56,12 @@ const NCFlood = ({ id, live, app })=> {
 	let lock = !live;
 	
   return (
-    <form
-      className='actionForm'
-      onSubmit={(e)=>handleFloodNC(e)}>
-      <fieldset
+    <fieldset
         disabled={!Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])}
-        className='noBorder'>
+        className='noBorder nomargin nospace'>
+      <form
+        className='actionForm'
+        onSubmit={(e)=>handleFloodNC(e)}>
         <span>
           <input
             type='text'
@@ -55,28 +70,51 @@ const NCFlood = ({ id, live, app })=> {
             placeholder={Pref.nonConRef}
             disabled={lock}
             required />
+          <label htmlFor='ncRefs'>{Pref.nonConRef}</label>
         </span>
         <span>
-          <select 
+          <input 
             id='ncType'
-            className='cap redIn'
+            className='redIn'
+            type='search'
+            placeholder='Type'
+            list='ncTypeList'
             disabled={lock}
-            required >
-            {app.nonConOption.map( (entry, index)=>{
-              return ( 
-                <option key={index} value={entry}>{index + 1}. {entry}</option>
+            onInput={(e)=>handleCheck(e)}
+            required />
+          <label htmlFor='ncType'>{Pref.nonConType}</label>
+          <datalist id='ncTypeList'>
+            {ncTypesComboFlat.length > 0 ?
+              ncTypesComboFlat.map( (entry, index)=>{
+                if(entry.live === true) {
+                  return ( 
+                    <option 
+                      key={index}
+                      data-id={entry.key}
+                      value={entry.typeText}
+                    >{entry.typeCode}</option>
+                  );
+              }})
+            :
+              app.nonConOption.map( (entry, index)=>{
+                return ( 
+                  <option
+                    key={index}
+                    data-id={index + 1 + '.'}
+                    value={entry}
+                  >{index + 1}</option>
                 );
-            })}
-          </select>
-        </span>  
+              })}
+          </datalist>
+        </span>
           <button
             type='submit'
             id='go'
             disabled={lock}
             className='smallAction clearRed bold'
           >Record On All WIP</button>
-      </fieldset>
-    </form>
+      </form>
+    </fieldset>
   );
 };
 
