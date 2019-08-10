@@ -5,10 +5,11 @@ import moment from 'moment';
 Meteor.methods({
   
   phaseBestGuess(uID, batchNum, tideStart, tideStop) {
-    // try{
+    try{
       const tStop = tideStop ? tideStop : new Date();
       const batch = BatchDB.findOne({ orgKey: Meteor.user().orgKey, batch: batchNum });
       const app = AppDB.findOne({ orgKey: Meteor.user().orgKey});
+      const phaseDB = [...app.trackOption,app.lastTrack];
       
       const itemHistory = Array.from( batch.items, 
                               x => x.history.filter( y =>
@@ -16,33 +17,16 @@ Meteor.methods({
                                 ( y.who === uID || 
                                 ( y.type === 'first' && y.info.builder.includes(uID) ) ) ) );
       const historyFlat = [].concat(...itemHistory);
+  
       const cronoHistory = historyFlat.sort((x1, x2)=> {
                             if (x1.time < x2.time) { return 1 }
                             if (x1.time > x2.time) { return -1 }
                             return 0;
                           });
-      const latestKey = cronoHistory.length > 0 ?
-        cronoHistory[0].key : null;
-      const phasefromHistory = latestKey ? 
-        latestKey === 'f1n15h1t3m5t3p' ? 'finish' :
-        app.trackOption.find( x => x.key === latestKey ).phase : null;
+      const phasefromHistory = cronoHistory.length > 0 ?
+        phaseDB.find( x => x.key === cronoHistory[0].key ).phase : null;
       
       
-      /*
-      const inItems = batch.items.filter( x => x.history.find( y => 
-        new Date(y.time) > new Date(tideStart) && 
-        y.who === uID ) ? true : false );
-      const inHistory = inItems.history
-      
-      
-      const theItem
-      const inBatchhistory = !inBhis ? false : true;
-      
-      const inBhisFb = batch.items.find( x => x.history.find( y => 
-        new Date(y.time) > new Date(tideStart) && 
-        ( y.type === 'first' && y.info.builder.includes(uID) ) ) ? true : false );
-      const inBatchhistoryFirstbuilder = !inBhisFb ? false : true;
-      */
       /*
       const inBncN = batch.nonCon.find({ 
         'nonCon.time': {"$gte": new Date( isoDate )},
@@ -71,9 +55,9 @@ Meteor.methods({
         //inBatchnonconFix, 
         // inBatchnonconInspect 
 
-    // }catch(err) {
-    //   throw new Meteor.Error(err);
-    // }
+    }catch(err) {
+      throw new Meteor.Error(err);
+    }
   }
   
   
@@ -132,5 +116,24 @@ Meteor.methods({
   
   */
   
+  
+  /// Given history flat -> outputs step keys with quantity of each ///
+  /*
+    const stepsArr = Array.from(historyFlat, st => st.key );
+      
+    const stepsReduced = stepsArr.reduce( (allSteps, step)=> { 
+      step in allSteps ? allSteps[step]++ : allSteps[step] = 1;
+      return allSteps;
+    }, {});
+  
+    const stepQu = Object.entries(stepsReduced)
+      .reduce( (result, val)=> {
+        result.push( { ph: val[0], qu: val[1] } );
+        return result;
+      }, []);
+      
+    console.log(stepQu);
+  */
+  ///////////////////////////////////////////////////////////////
   
 });

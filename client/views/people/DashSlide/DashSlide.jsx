@@ -23,13 +23,17 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
     setPhaseList(smpList);
   };
   const removePhaser = (uID)=>{
-    //console.log('tryRemove');
     let currPhases = userPhases;
-    //delete currPhases.uID;
     const lessPhases = _.omit(currPhases, uID);
     setUserPhases(lessPhases);
     const smpList = _.values(lessPhases);
     setPhaseList(smpList);
+  };
+  
+  const obj2xy = (obj) => {
+    const itr = Object.entries(obj);
+    const xy = Array.from(itr, (arr)=> { return {x: arr[0], y: arr[1]} } );
+    return xy;
   };
   
   useLayoutEffect( ()=>{
@@ -38,18 +42,15 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
       phase in allPhase ? allPhase[phase]++ : allPhase[phase] = 1;
     return allPhase;
     }, {});
-    const pItr = Object.entries(pQuant);
-    const pXY = Array.from(pItr, (arr)=> { return {x: arr[0], y: arr[1]} } );
+    const pXY = obj2xy(pQuant);
     setPhasesXY(pXY);
-    
   }, [pList]);
   
-  
-  const liveUsers = users.filter( x => Roles.userIsInRole(x._id, 'active') && !Roles.userIsInRole(x._id, 'readOnly') );
+  const liveUsers = users.filter( x => Roles.userIsInRole(x._id, 'active') && 
+                                      !Roles.userIsInRole(x._id, 'readOnly') );
   const eUsers = liveUsers.filter( x => x.engaged );
   const dUsers = liveUsers.filter( x => !x.engaged );
   const userArr = [eUsers.length, dUsers.length ];
-  const styleArr = Array.from(eUsers, (arr)=> { return {x: 1, y: 1} } );
 
   const eBatches = Array.from(eUsers,
     x => batches.find( 
@@ -63,14 +64,10 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
       objkey in allBatch ? allBatch[objkey]++ : allBatch[objkey] = 1;
     return allBatch;
   }, {});
-
-  const itrNums = Object.entries(qBatches);
-  const itrXY = Array.from(itrNums, (arr)=> { return {x: arr[0], y: arr[1]} } );
+  const itrXY = obj2xy(qBatches);
   
-  Roles.userIsInRole(Meteor.userId(), 'debug') && 
-    console.log({eUsers,styleArr,eBatches});
-  Roles.userIsInRole(Meteor.userId(), 'debug') && 
-    console.log({qBatches,itrNums,itrXY});
+  Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({eUsers,eBatches});
+  Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({qBatches,itrXY});
   
 
   return(
