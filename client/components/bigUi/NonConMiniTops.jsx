@@ -5,17 +5,17 @@ import NumStat from '/client/components/uUi/NumStat.jsx';
 
 const NonConMiniTops = ({ noncons, items, user, app })=> (
   <div className='centre'>
-    <HasNonCon noncons={noncons} items={items} />
+    <HasNonCon noncons={ncG} items={items} />
     
-    <NonConPer noncons={noncons} items={items} />
+    <NonConPer noncons={ncG} items={items} />
 
-    <MostNonCon noncons={noncons} app={app} />
+    <MostNonCon noncons={ncG} app={app} />
     
-    <TodayNonCon noncons={noncons} />
+    <TodayNonCon noncons={ncG} />
     
-    <LeftFxNonCon noncons={noncons} />
+    <LeftFxNonCon noncons={ncG} />
     
-    <LeftInNonCon noncons={noncons} />
+    <LeftInNonCon noncons={ncG} />
     
     {/*<UserNonCon noncons={noncons} user={user} />*/}
   </div>
@@ -24,7 +24,8 @@ export default NonConMiniTops;
 
 
 export const HasNonCon = ({ noncons, items })=> {
-  const hasNonCon = [... new Set( Array.from(noncons, x => { return x.serial }) ) ].length;
+  const ncG = noncons.filter( n => !n.trash );
+  const hasNonCon = [... new Set( Array.from(ncG, x => { return x.serial }) ) ].length;
   return(
     <NumStat
       num={((hasNonCon / items.length) * 100 ).toFixed(0) + '%'}
@@ -35,11 +36,12 @@ export const HasNonCon = ({ noncons, items })=> {
 };
 
 export const NonConPer = ({ noncons, items })=> {
-  const hasNonCon = [... new Set( Array.from(noncons, x => { return x.serial }) ) ].length;
+  const ncG = noncons.filter( n => !n.trash );
+  const hasNonCon = [... new Set( Array.from(ncG, x => { return x.serial }) ) ].length;
   return(
     <NumStat
-      num={(noncons.length / hasNonCon).toFixed(1)}
-      //num={(noncons.length / items.length).toFixed(1)}
+      num={(ncG.length / hasNonCon).toFixed(1)}
+      //num={(ncG.length / items.length).toFixed(1)}
       name={'nonCons per NC ' + Pref.item}
       title='mean average'
       color='redT'
@@ -48,10 +50,11 @@ export const NonConPer = ({ noncons, items })=> {
 };
 
 export const MostNonCon = ({ noncons, app })=> {
+  const ncG = noncons.filter( n => !n.trash );
   const mostType = ()=> {
     let types = [];
     for(let t of app.nonConOption) {
-      types.push( noncons.filter( x => x.type === t ).length );
+      types.push( ncG.filter( x => x.type === t ).length );
     }
     const indexOfMax = types.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
     return indexOfMax;
@@ -67,8 +70,9 @@ export const MostNonCon = ({ noncons, app })=> {
 };
 
 export const TodayNonCon = ({ noncons })=> {
+  const ncG = noncons.filter( n => !n.trash );
   const now = moment().format();
-  const foundToday = noncons.filter( x => 
+  const foundToday = ncG.filter( x => 
     moment(x.time).isSame(now, 'day') === true ).length;
   return(
     <NumStat
@@ -81,7 +85,8 @@ export const TodayNonCon = ({ noncons })=> {
 };
 
 export const LeftFxNonCon = ({ noncons })=> {
-  const leftToFix = noncons.filter( x => 
+  const ncG = noncons.filter( n => !n.trash );
+  const leftToFix = ncG.filter( x => 
     x.fix === false && 
       ( x.skip === false || x.snooze === true )
     ).length;
@@ -96,7 +101,8 @@ export const LeftFxNonCon = ({ noncons })=> {
 };
 
 export const LeftInNonCon = ({ noncons })=> {
-  const leftToInspect = noncons.filter( x => 
+  const ncG = noncons.filter( n => !n.trash );
+  const leftToInspect = ncG.filter( x => 
     x.inspect === false && 
       ( x.skip === false || x.snooze === true )
     ).length;
@@ -110,11 +116,14 @@ export const LeftInNonCon = ({ noncons })=> {
   );
 };
 
-export const UserNonCon = ({ noncons, user })=> (
-  <NumStat
-    num={noncons.filter( x => x.who === user._id ).length}
-    name={'Recorded by ' + user.username.split('.')[0]}
-    title='no blame'
-    color='redT'
-    size='bigger' />
-);
+export const UserNonCon = ({ noncons, user })=> {
+  const ncG = noncons.filter( n => !n.trash );
+  return(
+    <NumStat
+      num={ncG.filter( x => x.who === user._id ).length}
+      name={'Recorded by ' + user.username.split('.')[0]}
+      title='no blame'
+      color='redT'
+      size='bigger' />
+  );
+};

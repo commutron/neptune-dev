@@ -15,7 +15,7 @@ export default class NonConMultiBatchBar extends Component {
     };
   }
   
-  loop() {
+  loop() { // const ncOn = this.props.nonCons.filter( n => !n.trash );
     Meteor.call('nonConBatchesTypes', this.props.batchIDs, (error, reply)=>{
       error && console.log(error);
       this.setState({ counts: reply });

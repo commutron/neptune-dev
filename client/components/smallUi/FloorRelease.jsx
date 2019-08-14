@@ -8,7 +8,7 @@ const FloorRelease = ({ id })=> {
   
   function handleRelease(e) {
     e.preventDefault();
-    const datetime = e.target.rDateTime.value;
+    const datetime = e.target.rDateTime.value || moment().format();
     Meteor.call('releaseToFloor', id, datetime, (err)=>{
       if(err)
         console.log(err);

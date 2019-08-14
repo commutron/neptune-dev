@@ -893,6 +893,7 @@ label.qdpplRound {
   padding: 1px;
   border-radius: 50%;
   background-color: transparent;
+  color: white;
   font-size: 0.8rem;
 }
 .tagFlag > button:hover {

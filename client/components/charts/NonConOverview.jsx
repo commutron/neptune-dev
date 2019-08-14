@@ -14,11 +14,13 @@ export default class NonConOverview extends Component {
   }
   
   ncCounts() {
+    const ncOn = this.props.nonCons.filter( n => !n.trash );
+    
     let splitByFirst = [];
     if(this.state.stackFilter === 'ref') {
-      const uniqueRefs = new Set( Array.from(this.props.nonCons, x => x.ref) );
+      const uniqueRefs = new Set( Array.from(ncOn, x => x.ref) );
       for(let ref of uniqueRefs) {
-        let match = this.props.nonCons.filter( y => y.ref === ref );
+        let match = ncOn.filter( y => y.ref === ref );
         splitByFirst.push({
           'name': ref,
           'ncs': match
@@ -30,13 +32,13 @@ export default class NonConOverview extends Component {
                     new Set( Array.from(this.props.flow, x => x.step), Array.from(this.props.flowAlt, x => x.step) )
                    : new Set(phases);
       for(let stp of dprt) {
-        let match = this.props.nonCons.filter( y => y.where === stp );
+        let match = ncOn.filter( y => y.where === stp );
         splitByFirst.push({
           'name': stp,
           'ncs': match
         });
       }
-      let leftover = this.props.nonCons.filter( z => dprt.has(z.where) === false );
+      let leftover = ncOn.filter( z => dprt.has(z.where) === false );
       leftover.length > 0 ? splitByFirst.unshift({ 'name': 'other', 'ncs': leftover }) : null;
     }
     let splitByType = [];

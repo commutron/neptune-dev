@@ -46,7 +46,7 @@ const BatchFinish = ({ batchId, finished, allFinished, live })=>	{
     return(
       <div>
         <p className='cap'>
-          <i className='fa fa-check-circle greenT fa-2x'></i> {Pref.batch} is Finished
+          <i><i className='fa fa-check-circle greenT fa-2x'></i></i> {Pref.batch} is Finished
         </p>
         <p>
         <button
@@ -63,7 +63,7 @@ const BatchFinish = ({ batchId, finished, allFinished, live })=>	{
     return(
       <div>
         <p className='cap'>
-          <i className='fa fa-check-circle greenT fa-2x'></i> {Pref.batch} is Finished
+          <b><i className='fa fa-check-circle greenT fa-2x'></i></b> {Pref.batch} is Finished
         </p>
       </div>
     );

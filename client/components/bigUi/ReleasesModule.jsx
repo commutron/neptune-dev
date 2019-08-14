@@ -10,7 +10,7 @@ const ReleaseAction = ({ id, rType })=> {
   
   function handleRelease(e) {
     e.preventDefault();
-    const datetime = e.target.rDateTime.value;
+    const datetime = e.target.rDateTime.value || moment().format();
     Meteor.call('addRelease', id, rType, datetime, (err)=>{
       err && console.log(err);
     });

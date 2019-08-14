@@ -20,8 +20,14 @@
 .loginoutButton {
   background-color: var(--neptuneColor);
   color: white;
+  min-width: 100%;
+  width: 100%;
+  max-width: 100%;
 }
 .createButton {
   background-color: var(--nephritis);
   color: white;
+  min-width: 100%;
+  width: 100%;
+  max-width: 100%;
 }

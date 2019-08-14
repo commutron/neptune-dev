@@ -34,7 +34,7 @@ const TimeTab = ({
                         return 0;
                       });
     let sortedTimes = [];
-    for(let step of riverFlow) {
+    for(let step of riverFlow || []) {
       if(step.type === 'inspect') {
         const thesetimes = cronoTimes.filter( x => x.key === step.key );
         sortedTimes.push({
@@ -80,7 +80,7 @@ const TimeTab = ({
           <hr />
           <p><span className='bigger'>{totalMinutes}</span> minutes</p>
           <p>or</p>
-          <p><span className='bigger'>{moment.duration(totalMinutes, "minutes").asHours()}</span> hours</p>
+          <p><span className='bigger'>{moment.duration(totalMinutes, "minutes").asHours().toFixed(2, 10)}</span> hours</p>
           <p>with</p>
           <p>
             <span className='bigger'>{totalPeople.length}</span> 
@@ -97,7 +97,7 @@ const TimeTab = ({
           start={b.start}
           floorRelease={b.floorRelease}
           end={b.finishedAt}
-          flowData={riverFlow}
+          flowData={riverFlow || []}
           itemData={b.items.filter( x => x.alt === 'no' || x.alt === false )}
           title='Progress Burndown' />
                 
@@ -107,7 +107,7 @@ const TimeTab = ({
             start={b.start}
             floorRelease={b.floorRelease}
             end={b.finishedAt}
-            flowData={riverAltFlow}
+            flowData={riverAltFlow || []}
             itemData={b.items.filter( x => x.alt === 'yes' )}
             title='Alt Progress Burndown' />}
               

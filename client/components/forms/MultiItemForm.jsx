@@ -23,6 +23,7 @@ export default class MultiItemForm extends Component {
   }
   
   setDigit(num) {
+    console.log(num);
     this.setState({ digits: num });
   }
 
@@ -139,7 +140,7 @@ export default class MultiItemForm extends Component {
                 ref={(i)=> this.eightDigit = i}
                 id='eight'
                 name='digit'
-                defaultChecked={false}
+                defaultChecked={dig === 8}
                 onChange={this.setDigit.bind(this, 8)}
                 required />
               <label htmlFor='eight' className='beside'>8 digits</label>
@@ -149,7 +150,7 @@ export default class MultiItemForm extends Component {
                 ref={(i)=> this.nineDigit = i}
                 id='nine'
                 name='digit'
-                defaultChecked={false}
+                defaultChecked={dig === 9}
                 onChange={this.setDigit.bind(this, 9)}
                 required />
               <label htmlFor='nine' className='beside'>9 digits</label>
@@ -159,7 +160,7 @@ export default class MultiItemForm extends Component {
                 ref={(i)=> this.tenDigit = i}
                 id='ten'
                 name='digit'
-                defaultChecked={true}
+                defaultChecked={dig === 10}
                 onChange={this.setDigit.bind(this, 10)}
                 required />
               <label htmlFor='ten' className='beside'>10 digits</label>

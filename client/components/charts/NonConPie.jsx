@@ -7,22 +7,22 @@ import fillDonut from 'chartist-plugin-fill-donut';
 export default class NonConPie extends Component {
   
   splitStatus() {
-    const nc = this.props.nonCons;
     let none = 0;
     let fix = 0;
     let done = 0;
     let snooze = 0;
     let skip = 0;
     
-    none = nc.filter( n => n.fix === false && n.inspect === false && n.skip === false ).length;
-    fix = nc.filter( n => n.fix !== false && n.inspect === false && n.skip === false ).length;
-    done = nc.filter( n => n.fix !== false && n.inspect !== false && n.skip === false ).length;
-    snooze = nc.filter( n => n.skip !== false && ( n.snooze === true || n.comm === 'sn00ze' ) ).length;
-    skip = nc.filter( n => n.inspect === false && n.skip !== false && ( n.snooze === false || n.comm !== 'sn00ze' ) ).length;
+    const ncG = this.props.nonCons.filter( n => !n.trash );
+    none = ncG.filter( n => n.fix === false && n.inspect === false && n.skip === false ).length;
+    fix = ncG.filter( n => n.fix !== false && n.inspect === false && n.skip === false ).length;
+    done = ncG.filter( n => n.fix !== false && n.inspect !== false && n.skip === false ).length;
+    snooze = ncG.filter( n => n.skip !== false && ( n.snooze === true || n.comm === 'sn00ze' ) ).length;
+    skip = ncG.filter( n => n.inspect === false && n.skip !== false && ( n.snooze === false || n.comm !== 'sn00ze' ) ).length;
 
     return [
-      {'value': none, 'meta': 'To Fix'},
-      {'value': fix, 'meta': 'To Inspect'},
+      {'value': none, 'meta': 'Awaiting Repair'},
+      {'value': fix, 'meta': 'Awaiting Inspection'},
       {'value': done, 'meta': 'Resolved'},
       {'value': snooze, 'meta': 'Snoozing'},
       {'value': skip, 'meta': 'Skipped' }
@@ -30,11 +30,13 @@ export default class NonConPie extends Component {
   }
     
   render () {
+    
+    const ncG = this.props.nonCons.filter( n => !n.trash );
 
     let counts = this.splitStatus();
     
     let ttl = '<span class="centre smCap"><i class="big redT numFont">' + 
-                this.props.nonCons.length + 
+                ncG.length + 
                   '</i><i>Total</i></span>';
     
     let data = {

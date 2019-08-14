@@ -38,13 +38,13 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
   
   useLayoutEffect( ()=>{
     const pQuant = pList.reduce( (allPhase, phase)=> { 
-    !phase ||
+    phase &&
       phase in allPhase ? allPhase[phase]++ : allPhase[phase] = 1;
     return allPhase;
     }, {});
     const pXY = obj2xy(pQuant);
     setPhasesXY(pXY);
-  }, [pList]);
+  }, [users, pList]);
   
   const liveUsers = users.filter( x => Roles.userIsInRole(x._id, 'active') && 
                                       !Roles.userIsInRole(x._id, 'readOnly') );
@@ -59,8 +59,8 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
   );
 
   const qBatches = eBatches.reduce( (allBatch, batch, index, array)=> { 
-    const objkey = batch.batch;
-    !objkey ||
+    const objkey = batch.batch || false;
+    objkey &&
       objkey in allBatch ? allBatch[objkey]++ : allBatch[objkey] = 1;
     return allBatch;
   }, {});
