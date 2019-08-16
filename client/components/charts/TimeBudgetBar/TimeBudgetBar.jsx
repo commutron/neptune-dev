@@ -6,6 +6,8 @@ import Theme from '/client/global/themeV.js';
 
 const TimeBudgetBar = ({ title, a, b, c})=> {
   
+  const B = a === 0 && b === 0 && c === 0 ? 1 : b;
+  
   return(
     <div className='invert' className='noCopy' title={title}>
     
@@ -21,7 +23,7 @@ const TimeBudgetBar = ({ title, a, b, c})=> {
           barWidth={40}
         />
         <VictoryBar
-          data={[{x: "a", y: b} ]}
+          data={[{x: "a", y: B} ]}
           barWidth={40}
         />
         <VictoryBar

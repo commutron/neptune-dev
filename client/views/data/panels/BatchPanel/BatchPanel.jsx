@@ -74,11 +74,9 @@ const BatchPanel = (props)=> {
 
     const a = props.app;
     const b = props.batchData;
-    //const w = this.props.widgetData;
-    //const g = this.props.groupData;
-    //const user = this.props.user;
-    
-    //const v = w.versions.find( x => x.versionKey === b.versionKey );
+    const w = props.widgetData;
+    const v = w.versions.find( x => x.versionKey === b.versionKey );
+    //const g = props.groupData;
     
     const done = b.finishedAt !== false; // no more boards if batch is finished
     const allDone = b.items.every( x => x.finishedAt !== false );
@@ -124,7 +122,9 @@ const BatchPanel = (props)=> {
           <TimeTab 
             a={props.app}
             b={props.batchData}
+            v={v}
             user={props.user}
+            totalUnits={path.progCounts.totalRegUnits + path.progCounts.totalAltUnits}
             done={done}
             allDone={allDone}
             riverFlow={path.riverFlow}

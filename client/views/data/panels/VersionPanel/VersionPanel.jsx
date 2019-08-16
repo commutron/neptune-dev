@@ -1,10 +1,16 @@
 import React from 'react';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
+import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
 import CreateTag from '/client/components/uUi/CreateTag.jsx';
 import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 import TagsModule from '/client/components/bigUi/TagsModule.jsx';
+import { 
+  VersionQuoteTimeUpgrade,
+  VersionQuoteBaseline,
+  VersionQuoteScalePer
+} from '/client/components/forms/VersionQuoteTime.jsx';
 import NoteLine from '/client/components/smallUi/NoteLine.jsx';
 //import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
@@ -60,6 +66,12 @@ const VersionPanel = ({
     });
   }
   
+  const qtReady = v.quoteTimeBasline && v.quoteTimeScale;
+  const qTB = qtReady && v.quoteTimeBasline.length > 0 ? 
+                v.quoteTimeBasline[0] : false;
+  const qTS = qtReady && v.quoteTimeScale.length > 0 ? 
+                v.quoteTimeScale[0] : false;
+  
   return (
     <AnimateWrap type='cardTrans'>
       <div className='section'>
@@ -71,31 +83,56 @@ const VersionPanel = ({
           hold={true}
           sessionTab='versionExPanelTabs'>
           
-          <div className='oneTwoThreeContainer'>
-            <div className='oneThirdContent'>
+          <div>
+            <div className='oneTwoThreeContainer'>
+              <div className='oneThirdContent'>
+                
+                <p>Status: <i className='big'>{v.live ? 'Live' : 'Archived'}</i></p>
               
-              <p>Status: <i className='big'>{v.live ? 'Live' : 'Archived'}</i></p>
-            
-              <TagsModule
-                id={w._id}
-                tags={v.tags}
-                vKey={v.versionKey}
-                tagOps={a.tagOption} />
+                <TagsModule
+                  id={w._id}
+                  tags={v.tags}
+                  vKey={v.versionKey}
+                  tagOps={a.tagOption} />
+                
+                <p>
+                  <a className='clean wordBr' href={v.wiki} target='_blank'>{v.wiki}</a>
+                </p>
+                
+                <p className='numFont'>default units: {v.units}</p>
+                
+              </div>
               
-              <p>
-                <a className='clean wordBr' href={v.wiki} target='_blank'>{v.wiki}</a>
-              </p>
+              <div className='twoThirdsContent'>
+                <NoteLine
+                  entry={v.notes}
+                  id={w._id}
+                  versionKey={v.versionKey}
+                  plain={false}
+                  small={false} />
+              </div>
               
-              <p className='numFont'>default units: {v.units}</p>
             </div>
               
-            <div className='twoThirdsContent'>
-              <NoteLine
-                entry={v.notes}
-                id={w._id}
-                versionKey={v.versionKey}
-                plain={false}
-                small={false} />
+            <div className='wide'>
+              
+              {!qtReady ?
+                <VersionQuoteTimeUpgrade wID={w._id} vKey={v.versionKey} />
+              :
+                <div>
+                
+                  <p>Baseline Quote Time: <i className='numFont medBig'>{qTB && qTB.timeAsMinutes}</i>
+                    <em className='small'> {qTB && moment(qTB.updatedAt).calendar()}</em>
+                  </p>
+                  <VersionQuoteBaseline wID={w._id} vKey={v.versionKey} />
+                  
+                  <p>Scale (per item) Quote Time: <i className='numFont medBig'>{qTS && qTS.timeAsMinutes}</i>
+                    <em className='small'> {qTS && moment(qTS.updatedAt).calendar()}</em>
+                  </p>
+                  <VersionQuoteScalePer wID={w._id} vKey={v.versionKey} />
+                  
+                </div>
+              }
             </div>
             
             

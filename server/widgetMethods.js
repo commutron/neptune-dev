@@ -291,6 +291,67 @@ Meteor.methods({
     }
   },
   
+  // Quoted Time Budget \\
+  
+  // setup quote time keys
+  addQuoteTime(widgetId, vKey) {
+    try{
+      if(Roles.userIsInRole(Meteor.userId(), ['sales', 'edit'])) {
+        WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.versionKey': vKey}, {
+          $set : { 
+            'versions.$.quoteTimeBasline': [],
+            'versions.$.quoteTimeScale': []
+          }});
+      }else{
+        null;
+      }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  // push basline, starting block of time
+  pushBaselineTime(widgetId, vKey, qTimeBase) {
+    try{
+      if(Roles.userIsInRole(Meteor.userId(), ['sales', 'edit'])) {
+        WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.versionKey': vKey}, {
+          $push : { 
+            'versions.$.quoteTimeBasline': {
+              $each: [ {
+                updatedAt: new Date(),
+                timeAsMinutes: Number(qTimeBase)
+              } ],
+              $position: 0
+            }
+          }});
+      }else{
+        null;
+      }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  // push scale, per item time
+  pushScaleTime(widgetId, vKey, qTimeScale) {
+    try{
+      if(Roles.userIsInRole(Meteor.userId(), ['sales', 'edit'])) {
+        WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.versionKey': vKey}, {
+          $push : { 
+            'versions.$.quoteTimeScale': {
+              $each: [ {
+                updatedAt: new Date(),
+                timeAsMinutes: Number(qTimeScale)
+              } ],
+              $position: 0
+            }
+          }});
+      }else{
+        null;
+      }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  
   // needs testing
     /*
     assembly: [

@@ -684,6 +684,19 @@ input.variableInput.biggest {
   width: 272px;
 }
 
+input.numberSet {
+  width: 6ch;
+  height: 2rem;
+  line-height: 1.1;
+  font-size: 1rem;
+}
+button.numberSet {
+  height: 2rem;
+  min-height: 2rem;
+  line-height: 1.1;
+  font-size: 0.9rem;
+}
+
 .actionBox .flatpickr-input ~ .form-control {
   width: 100%;
   font-size: 1.25rem;

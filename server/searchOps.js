@@ -32,7 +32,8 @@ function getGroup(groupId) {
 Meteor.methods({
   
   engagedState() {
-    const eg = Meteor.user().engaged;
+    const user = Meteor.user();
+    const eg = user && user.engaged;
     if(!eg) {
       return false;
     }else{

@@ -22,6 +22,7 @@ class Pref {
       'readOnly',
       'nightly',
       'peopleSuper',
+      'sales',
       'qa',
       'remove',
       'create',
