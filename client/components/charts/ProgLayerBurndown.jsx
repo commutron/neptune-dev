@@ -33,6 +33,9 @@ export default class ProgLayerBurndown extends Component {
     });
   }
   
+  componentDidMount() {
+    this.counts();
+  }
   render () {
     
     const counts = this.state.counts;
@@ -129,7 +132,23 @@ export default class ProgLayerBurndown extends Component {
       </span>
     );
   }
-  componentDidMount() {
-    this.counts();
-  }
 }
+
+
+export const ProgLayerBurndownExplain = ()=>(
+  <details className='footnotes'>
+    <summary>Chart Details</summary>
+    <p className='footnote'>
+      The X axis is the number of serialized items remaining.
+    </p>
+    <p className='footnote'>
+      The Y axis starts with the batch creation date and ends with 
+      either today or the batch complete day. Weekends are skipped 
+      entirely.
+    </p>
+    <p className='footnote'>
+      A step that was added mid-run might not reach zero because 
+      finished items would have skipped recording that step.
+    </p>
+  </details>
+);

@@ -97,8 +97,7 @@ export default class GroupForm extends Component {
               id='newWiki'
               ref={(i)=> this.gWiki = i}
               defaultValue={orWiki}
-              placeholder='http://192.168.1.68/dokuwiki'
-              required />
+              placeholder='http://192.168.1.68/pisces' />
             <label htmlFor='newAlias' className='cap'>{Pref.group} {Pref.instruct} index</label>
           </p>
           <br />

@@ -7,7 +7,6 @@ import GeneralChunk from './GeneralChunk.jsx';
 import BatchFinish from '/client/components/forms/BatchFinish.jsx';
 import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 import StepsProgress from '/client/components/bigUi/StepsProgress/StepsProgress.jsx';
-import EventsList from '/client/components/smallUi/EventsList.jsx';
 
 const InfoTab = ({
   a, b, user, 
@@ -48,8 +47,6 @@ const InfoTab = ({
             riverTitle={riverTitle}
             riverAltTitle={riverAltTitle}
             truncate={false} />
-          <h3 className='centreText'>Events</h3>          
-          <EventsList events={b.events} />
         
       </div>
 

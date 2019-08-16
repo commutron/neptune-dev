@@ -15,17 +15,6 @@
 .invert a:active {
   border: 1px dotted black;
 }
-.invert button,
-.invert button span,
-.invert button label,
-.invert input[type='submit'],
-.invert input[type='reset'] {
-  border-color: black;
-  /*color: black;*/
-}
-.invert button:hover {
-  border-color: transparent;
-}
 .invert input[type='reset']:hover {
   color: white;
   background-color: black;
@@ -42,9 +31,6 @@
 }
 .invert form:focus {
   border-color: rgb(28,117,188);
-}
-.invert fieldset {
-  border-color: black;
 }
 .invert input, .invert select, .invert textarea,
 .invert input {
@@ -115,11 +101,12 @@
 }
 .invert .leapBar {
 	color: var(--black);
-  border-left-color: black;
+	border-top-color: var(--silverfade);
+  border-bottom-color: var(--silverfade);
+  background-color: transparent;
 }
 .invert .leapBar:hover, .invert .leapBar:focus, .invert .leapBar:active {
-  background-color: var(--black);
-  color: var(--clouds);
+  background-color: var(--silverfade);
 }
 .invert .textLinkButton { color: var(--belizeHole); }
 .invert .open {
@@ -139,12 +126,10 @@
 .invert .moveLR,
 .invert .yellowBox > p,
 /*.invert .actionIconText,*/
-.invert .cold:hover,
-.invert .tagFlag {
+.invert .cold:hover {
   color: black;
 }
-.invert .clearWhite:hover,
-.invert .tagFlag > button:hover {
+.invert .clearWhite:hover {
   background-color: black;
 }
 .invert .moveLR:hover, .invert .moveLR:active {
@@ -195,6 +180,21 @@
 .invert #firstselect:checked + .formBarIcon {
   background-color: var(--peterriver);
   color: white;
+}
+.invert .stickyBar {
+	color: var(--black);
+  background-color: transparent;
+}
+.invert .fltrs {
+	color: var(--black);
+  background-color: transparent;
+}
+.invert details {
+  box-shadow: none;
+}
+
+.invert .ct-label {
+  color: black;
 }
 /*
 .contrastList:nth-child(odd) {

@@ -54,6 +54,14 @@
 .chartNoHeightContain {
   height: auto;
 }
+
+.chart10Contain {
+  width: 10vw;
+  padding: 1vmax;
+}
+.chart10Contain .pieCore { font-size: 6vw; }
+.chart10Contain p { font-size: 1vw; }
+
 .chart20Contain {
   width: 20vw;
   padding: 1vmax;

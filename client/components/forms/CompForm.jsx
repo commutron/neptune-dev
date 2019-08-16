@@ -34,7 +34,7 @@ export default class CompForm extends Component	{
         title={'Add ' + Pref.comp + 's'}
         color='greenT'
         icon='fa-microchip'
-        smIcon={true}
+        smIcon={this.props.smIcon}
         lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit'])}>
         <form id='new' className='centre' onSubmit={this.addParts.bind(this)}>
           <p>Add multiple {Pref.comp}s seperated by pipe, space or new line</p>
@@ -44,7 +44,7 @@ export default class CompForm extends Component	{
               ref={(i)=> this.parts = i}
               cols='40'
               rows='15'
-              autoFocus='true'></textarea>
+              autoFocus={true}></textarea>
             <label htmlFor='pnum'>{Pref.comp} Numbers</label>
           </p>
           <p>

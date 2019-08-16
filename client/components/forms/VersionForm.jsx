@@ -59,7 +59,7 @@ export default class VersionForm extends Component	{
     const app = this.props.app;
     
     let e = this.props.version;
-    let name = e ? 'edit' : 'new ' + Pref.version;
+    let name = e ? `edit ${Pref.version}` : `new ${Pref.version}`;
     let eV = e ? e.version : null;
     let eU = e ? e.units : null;
     let eL = e ? e.live : null;
@@ -132,7 +132,7 @@ export default class VersionForm extends Component	{
                 ref={(i)=> this.wiki = i}
                 defaultValue={instruct}
                 placeholder='Full Address'
-                required />{/*this.state.instruct*/}
+                 />{/*this.state.instruct*/}
               <label htmlFor='wikdress'>Work Instructions</label>
             </p>
             <br />

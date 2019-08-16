@@ -18,12 +18,20 @@ import ScrapForm from '../forms/ScrapForm.jsx';
 
 import WidgetEditForm from '../forms/WidgetEditForm.jsx';
 import VersionForm from '../forms/VersionForm.jsx';
+import { VersionRemove } from '../forms/VersionForm.jsx';
+import CompForm from '../forms/CompForm.jsx';
 import FlowForm from '../forms/FlowForm.jsx';
 
 import GroupForm from '../forms/GroupForm.jsx';
 import WidgetNewForm from '../forms/WidgetNewForm.jsx';
 
-const ActionBar = ({batchData, itemData, groupData, widgetData, versionData, app, action, noText})=> (
+const ActionBar = ({
+  batchData, itemData, 
+  groupData, 
+  widgetData, versionData, 
+  app, action, noText
+})=> (
+  
   <div className='actionBar'>
     <div className='footLeft'>
     { 
@@ -167,6 +175,49 @@ const ActionBar = ({batchData, itemData, groupData, widgetData, versionData, app
           lock={batchData.completed === true}
           noText={noText} />
       </div>
+      :
+        action === 'version' ?
+        <div>
+          <VersionForm
+            widgetData={widgetData}
+            version={versionData}
+            app={app}
+            rootWI={versionData.wiki}
+            small={false} />
+          <CompForm 
+            id={widgetData._id} 
+            versionKey={versionData.versionKey} />
+          <VersionRemove
+            widgetId={widgetData._id}
+            versionKey={versionData.versionKey}
+            lock={versionData.createdAt.toISOString()}
+            small={false} />
+          {/*
+          <BatchForm
+            batchId={false}
+            batchNow='new'
+            versionNow='new'
+            start={false}
+            end={false}
+            widgetId={widgetData._id}
+            versions={widgetData.versions}
+            lock={!widgetData.versions}
+            noText={noText} />
+          <BatchFormX
+            batchId={false}
+            batchNow='new'
+            versionNow='new'
+            salesOrder={false}
+            start={false}
+            end={false}
+            quantity={false}
+            groupId={groupData._id}
+            widgetId={widgetData._id}
+            versions={widgetData.versions}
+            lock={!widgetData.versions}
+            noText={noText} />
+            */}
+        </div>
       :
       action === 'widget' ?
         <div>

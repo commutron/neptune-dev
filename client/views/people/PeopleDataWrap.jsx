@@ -10,7 +10,7 @@ import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
 import Slides from '../../components/smallUi/Slides.jsx';
 
-import ActivityPanel from './ActivityPanel.jsx';
+//import ActivityPanel from './ActivityPanel.jsx';
 import DashSlide from './DashSlide/DashSlide.jsx';
 
 import { PermissionHelp } from '/client/views/app/appPanels/AccountsManagePanel';

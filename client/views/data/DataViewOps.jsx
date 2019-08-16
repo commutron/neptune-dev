@@ -16,6 +16,7 @@ import ItemPanel from './panels/ItemPanel.jsx';
 import BatchPanel from './panels/BatchPanel/BatchPanel.jsx';
 import BatchPanelX from './panels/BatchPanelX.jsx';
 import WidgetPanel from './panels/WidgetPanel.jsx';
+import VersionPanel from './panels/VersionPanel/VersionPanel.jsx';
 import GroupPanel from './panels/GroupPanel.jsx';
 import ScrapPanel from './panels/ScrapPanel.jsx';
 
@@ -96,8 +97,8 @@ export default class DataViewOps extends Component	{
     return this.props.allWidget.filter(x => x.groupId === gId);
   }
   
-  versionData(versions, vKey) {
-    return versions.find(x => x.versionKey === vKey);
+  versionData(versions, vKeum) {
+    return versions.find( x => x.versionKey === vKeum || x.version === vKeum );
   }
 
   render () {
@@ -454,7 +455,45 @@ export default class DataViewOps extends Component	{
         );
       }
     }
-
+  // Version  
+    if(view === 'widget' && specify) {
+      let widget = this.getWidget(request);
+      let version = this.versionData(widget.versions, specify);
+      if(widget) {
+        Session.set('nowBatch', false);
+        let group = this.linkedGroup(widget.groupId);
+        let allWidgets = this.groupWidgets(widget.groupId);
+        let allBatches = this.allLinkedBatches(widget._id);
+        return (
+          <TraverseWrap
+            batchData={false}
+            itemData={false}
+            widgetData={widget}
+            versionData={version}
+            groupData={group}
+            user={user}
+            app={app}
+            title='Version'
+            subLink={subLink}
+            action='version'
+            invertColor={true}
+          >
+            <VersionPanel
+              versionData={version}
+              widgetData={widget}
+              groupData={group}
+              batchRelated={allBatches}
+              app={app}
+              user={user}
+            />
+            <BatchesList
+              batchData={allBatches}
+              versionData={version}
+              widgetData={allWidgets} />
+          </TraverseWrap>
+        );
+      }
+    }
   // Widget
     if(view === 'widget') {
       const widget = this.getWidget(request);
@@ -475,6 +514,7 @@ export default class DataViewOps extends Component	{
             title='Widget'
             subLink={subLink}
             action='widget'
+            invertColor={true}
           >
             <WidgetPanel
               widgetData={widget}

@@ -25,9 +25,9 @@ const BatchPanel = (props)=> {
     const b = props.batchData;
     const w = props.widgetData;
     let riverTitle = 'not found';
-    let flow = [];
+    let riverFlow = [];
     let riverAltTitle = 'not found';
-    let flowAlt = [];
+    let riverFlowAlt = [];
     let ncListKeys = [];
     let progCounts = false;
     if( b && w ) {
@@ -35,17 +35,17 @@ const BatchPanel = (props)=> {
       const riverAlt = w.flows.find( x => x.flowKey === b.riverAlt );
       if(river) {
         riverTitle = river.title;
-        flow = river.flow;
+        riverFlow = river.flow;
         river.type === 'plus' && ncListKeys.push(river.ncLists);
       }
       if(riverAlt) {
         riverAltTitle = riverAlt.title;
-        flowAlt = riverAlt.flow;
+        riverFlowAlt = riverAlt.flow;
         riverAlt.type === 'plus' && ncListKeys.push(riverAlt.ncLists);
       }
-      progCounts = ProgressCounter(flow, flowAlt, b);
+      progCounts = ProgressCounter(riverFlow, riverFlowAlt, b);
     }
-    return { riverTitle, flow, riverAltTitle, flowAlt, ncListKeys, progCounts };
+    return { riverTitle, riverFlow, riverAltTitle, riverFlowAlt, ncListKeys, progCounts };
   }
   
   function filterSpecial() {
@@ -86,8 +86,8 @@ const BatchPanel = (props)=> {
     const filter = filterSpecial();
     
     const path = !b ? 
-      { riverTitle: 'not found', flow: [], 
-        riverAltTitle: 'not found', flowAlt: [], 
+      { riverTitle: 'not found', riverFlow: [], 
+        riverAltTitle: 'not found', riverFlowAlt: [], 
         ncListKeys: [], progCounts: false 
       } : getFlows();
                         

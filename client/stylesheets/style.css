@@ -125,7 +125,9 @@
 
 .leapBar {
 	border-top: 1px inset transparent;
-	border-bottom: 1px inset var(--black);
+	border-bottom-width: 1px;
+  border-bottom-style: inset;
+  border-bottom-color: var(--black);
   border-left-width: 5px;
   border-left-style: solid;
   border-left-color: white;

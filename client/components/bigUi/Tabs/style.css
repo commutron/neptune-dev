@@ -20,7 +20,7 @@
   border-bottom-color: var(--silver);
 }
 .invert .tabOn {
-	background-color: var(--asbestosfade);
+	background-color: var(--concretefade);
   border-bottom-color: var(--asbestos);
 }
 
@@ -29,12 +29,12 @@
 	border-bottom-color: transparent;
 }
 .invert .tabOff {
-	background-color: var(--concretefade);
+	background-color: var(--asbestosfade);
 	border-bottom-color: transparent;
 }
 .tabOff:hover {
 	background-color: var(--wetasphalt);
 }
 .invert .tabOff:hover {
-	background-color: var(--asbestosfade);
+	background-color: var(--concretefade);
 }
