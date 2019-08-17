@@ -1,7 +1,19 @@
 import moment from 'moment';
-import timezone from 'moment-timezone';
 import business from 'moment-business';
+import 'moment-timezone';
+import 'moment-business-time';
 
+moment.updateLocale('en', {
+  workinghours: {
+      0: null,
+      1: ['07:00:00', '16:30:00'],
+      2: ['07:00:00', '16:30:00'],
+      3: ['07:00:00', '16:30:00'],
+      4: ['07:00:00', '16:30:00'],
+      5: ['07:00:00', '12:00:00'],
+      6: null
+  }// including lunch breaks!
+});
 //const now = moment().tz(clientTZ);
 //const isNow = (t)=>{ return ( now.isSame(moment(t), 'day') ) };
   
@@ -88,6 +100,10 @@ function collectInfo(clientTZ, temp, relevant) {
         b.items.filter( x => x.history.find( 
                           y => y.type === 'scrap' ) )
                             .length;
+                            
+      // Dumb diff to ship Priority // minus ship days correct
+      const workTimeToShip = salesEnd.workingDiff(moment(), 'minutes');
+        
       collection.push({
         batch: b.batch,
         batchID: b._id,
@@ -102,6 +118,7 @@ function collectInfo(clientTZ, temp, relevant) {
         nonConsPerNCitem: isNaN(nonConsPerNCitem) ? '0.0' : nonConsPerNCitem,
         itemHasRMA: itemHasRMA,
         itemIsScrap: itemIsScrap,
+        workTimeToShip: workTimeToShip
       });
     
     }

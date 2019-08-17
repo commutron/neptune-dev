@@ -143,6 +143,16 @@ const BatchDetailChunk = ({ck, warm, user, app})=> (
         color='redT'
         size='big' />
     </div>
+    {Roles.userIsInRole(Meteor.userId(), 'nightly') && ck.workTimeToShip &&
+      <div>
+        <NumStat
+          num={ck.workTimeToShip}
+          name='Priority'
+          title={`diff from now to ship date\nLower the number = the higher the priority`}
+          color={ck.workTimeToShip < 0 ? 'yellowT' : 'whiteT'}
+          size='big' />
+      </div>
+    }
     <div>
       <WatchButton 
         list={user.watchlist}
