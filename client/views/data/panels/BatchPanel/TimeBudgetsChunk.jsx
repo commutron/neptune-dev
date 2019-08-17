@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
-import business from 'moment-business';
+import 'moment-business';
+import 'moment-timezone';
 import Pref from '/client/global/pref.js';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 
@@ -11,6 +12,15 @@ const TimeBudgetsChunk = ({
   totalUnits,
 }) =>	{
 
+  if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
+    const clientTZ = moment.tz.guess();
+    Meteor.call('getDistanceFromFulfill', b.batch, clientTZ, (err, re)=>{
+      err && console.log(err);
+      re && console.log(re);
+    });
+  }
+  
+  
   const totalST = ()=> {
     let totalTime = 0;
     let totalPeople = new Set();
