@@ -4,8 +4,8 @@ import { toast } from 'react-toastify';
 
 const DataRepair = ({ app, users })=> {
   
-  // function fixTide() {
-  //   Meteor.call('backdateTideWall', (error, reply)=>{
+  // function fixDataKey() {
+  //   Meteor.call('dataFIXquoteBaseline', (error, reply)=>{
   //     error && console.log(error);
   //     if(reply) { toast.success('data edit complete', { autoClose: false }); }
   //   });
@@ -99,17 +99,17 @@ const DataRepair = ({ app, users })=> {
           className='action clear blackT'
         >fix</button>
       </form>
-      {/*
-      <br />
+      
+      {/*<br />
       <hr />
-      <h2 className='cap'>Backdate</h2>
+      <h2 className='cap'>Fix Proto Key</h2>
       <button
-        onClick={()=>fixTide()}
-        className='action clear blackT'
-      >backdate tide</button>
+        onClick={()=>fixDataKey()}
+        className='action clear blackT orangeHover'
+      >Fix Basline Time Key</button>
       <hr />
-      <br />
-      */}
+      <br />*/}
+      
       <h2 className='cap'>Force Update batchInfo in ChacheDB</h2>
       <button
         onClick={()=>updateAcache()}

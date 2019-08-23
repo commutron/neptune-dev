@@ -2,6 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
+import './style';
 
 import Waterfall from './Waterfall.jsx';
 
@@ -41,7 +42,7 @@ const WaterfallSelect = ({ batchData, app })=> {
         0;
         const clear = total >= batchData.quantity;
         allTotal.push(clear);
-        const type = app.countOption.find( x => x.key === entry.wfKey ).type;
+        const type = entry.type || app.countOption.find( x => x.key === entry.wfKey ).type;
         //let bannerColor = 'blue';
         let borderColor = 'borderBlue';
         let fadeColor = 'Blue';
@@ -67,7 +68,7 @@ const WaterfallSelect = ({ batchData, app })=> {
         const bannerColor = fadeColor.toLowerCase();
         return(
           <details key={entry.wfKey} className='waterfallWrap'>
-            <summary className={'waterfallTitle ' + bannerColor}>{entry.gate}</summary>
+            <summary className={'waterfallTitle ' + bannerColor}>{entry.gate} {type}</summary>
             <Waterfall
               id={batchData._id}
               fall={entry}

@@ -31,51 +31,6 @@ export const VersionQuoteTimeUpgrade = ({ wID, vKey })=>	{
   );
 };
 
-
-export const VersionQuoteBaseline = ({ wID, vKey })=>	{
-  
-  const auth = Roles.userIsInRole(Meteor.userId(), ['sales', 'edit']);
-  
-  const addBaseline = (e)=> {
-    e.preventDefault();
-    const baseTime = e.target.base.value;
-    if(auth) {
-      Meteor.call('pushBaselineTime', wID, vKey, baseTime, (error)=>{
-        if(error) {
-          console.log(error);
-          toast.error('Server Error');
-        }
-      });
-      e.target.base.value = '';
-    }else{ toast.error('NO Permission'); }
-  };
-  
-  return(
-    <form className='inlineForm' onSubmit={(e)=>addBaseline(e)}>
-      <input
-        type='number'
-        id='base'
-        title={`update baseline quote\ntime in minutes`}
-        className='numberSet numFont'
-        pattern='[00000-99999]*'
-        maxLength='5'
-        minLength='1'
-        max='10000'
-        min='1'
-        inputMode='numeric'
-        disabled={!auth}
-        required
-      />
-      <button
-        type='submit'
-        id='gobase'
-        className='action greenHover numberSet'
-        disabled={!auth}
-      >Update</button>
-    </form>
-  );
-};
-
 export const VersionQuoteScalePer = ({ wID, vKey })=>	{
   
   const auth = Roles.userIsInRole(Meteor.userId(), ['sales', 'edit']);

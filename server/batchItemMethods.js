@@ -832,7 +832,8 @@ Meteor.methods({
     }
   },
   pushUndoFinish(batchId, serial, accessKey, formerWhen, formerWho) {
-    //if(Roles.userIsInRole(Meteor.userId(), 'finish')) {
+    const orgValid = AppDB.findOne({ orgKey: accessKey });
+    if(orgValid) {
       BatchDB.update({_id: batchId, orgKey: accessKey, 'items.serial': serial}, {
         $push : { 
   			  'items.$.history': {
@@ -848,9 +849,9 @@ Meteor.methods({
               formerWho: formerWho
             }
   			  }}});
-    //}else{
-      //null;
-    //}
+    }else{
+      null;
+    }
   },
   
 //// panel break

@@ -76,7 +76,7 @@ const ItemFeed = ({
                 app={app}
                 ncTypesComboFlat={ncTypesComboFlat()} /> 
             );
-          }else if(typeof dt.ref === 'string') {
+          }else if(Array.isArray(dt.refs) === true) {
             return( 
               <ShortBlock
                 key={dt.key+ix}

@@ -67,6 +67,7 @@ export default class ShortBlock extends Component {
     }else{this.setState({ edit: false })}
   }
   
+  
   render() {
     
     const dt = this.props.entry;

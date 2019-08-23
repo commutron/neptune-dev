@@ -116,7 +116,8 @@ export class ProWrap extends Component	{
               <TideControl 
                 batchID={bData._id} 
                 tideKey={et} 
-                currentLive={currentLive} />
+                currentLive={currentLive}
+                tideLockOut={this.props.tideLockOut} />
             </div>}
           <div className='frontCenterTitle'>
             <FindBox append={append} />

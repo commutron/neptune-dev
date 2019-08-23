@@ -56,7 +56,7 @@ const ActionBar = ({
           title={itemData.serial}
           check={itemData.createdAt.toISOString()}
           entry={batchData}
-          lock={batchData.finishedAt !== false}
+          lockOut={batchData.finishedAt !== false}
           noText={noText} />
       </div>
 		:
@@ -122,7 +122,7 @@ const ActionBar = ({
           title={batchData.batch}
           check={batchData.createdAt.toISOString()}
           entry={batchData}
-          lock={batchData.finishedAt !== false}
+          lockOut={batchData.finishedAt !== false}
           noText={noText} />
       </div>
       :
@@ -172,15 +172,15 @@ const ActionBar = ({
           title={batchData.batch}
           check={batchData.createdAt.toISOString()}
           entry={batchData}
-          lock={batchData.completed === true}
+          lockOut={batchData.completed === true}
           noText={noText} />
       </div>
       :
-        action === 'version' ?
+        action === 'version' && versionData ?
         <div>
           <VersionForm
             widgetData={widgetData}
-            version={versionData}
+            versionData={versionData}
             app={app}
             rootWI={versionData.wiki}
             small={false} />

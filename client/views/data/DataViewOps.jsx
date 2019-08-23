@@ -459,7 +459,7 @@ export default class DataViewOps extends Component	{
     if(view === 'widget' && specify) {
       let widget = this.getWidget(request);
       let version = this.versionData(widget.versions, specify);
-      if(widget) {
+      if(widget && version) {
         Session.set('nowBatch', false);
         let group = this.linkedGroup(widget.groupId);
         let allWidgets = this.groupWidgets(widget.groupId);

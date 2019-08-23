@@ -175,13 +175,14 @@ Meteor.methods({
 
   //// Waterfall
   
-  addCounter(batchId, wfKey, gate) {
+  addCounter(batchId, wfKey, gate, type) {
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
       XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $push : { 
           waterfall: {
             wfKey: wfKey,
             gate: gate,
+            type: type,
             counts: []
           }
       }});

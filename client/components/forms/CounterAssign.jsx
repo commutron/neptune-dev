@@ -18,8 +18,9 @@ export default class CounterAssign extends Component	{
     let wfKey = this.choice.value;
     const option = this.props.app.countOption.find( x => x.key === wfKey);
     const wfGate = option ? option.gate : null;
+    const wfType = option ? option.type : null;
     if(typeof wfKey === 'string' && wfGate) {
-      Meteor.call('addCounter', batchID, wfKey, wfGate, (error, reply)=>{
+      Meteor.call('addCounter', batchID, wfKey, wfGate, wfType, (error, reply)=>{
         error && console.log(error);
         reply ? toast.success('Saved') : toast.error('Server Error');
         this.go.disabled = false;
@@ -67,7 +68,7 @@ export default class CounterAssign extends Component	{
                     key={entry.key} 
                     value={entry.key}
                     disabled={opLock}
-                  >{entry.gate}</option>
+                  >{entry.gate} - {entry.type}</option>
                  );
               })}
               </select>
@@ -90,7 +91,7 @@ export default class CounterAssign extends Component	{
               return (                 
                 <div key={entry.wfKey}>                      
                   <div>
-                    {entry.gate}
+                    {entry.gate} - {entry.type}
                   </div>
                   <div>
                     <button

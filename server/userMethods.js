@@ -434,7 +434,32 @@ Meteor.methods({
        throw new Meteor.Error(err);
     }
   },
-
+  
+  forceStopUserTide(userID) {
+    try {
+      const user = Meteor.users.findOne({_id: userID, orgKey: Meteor.user().orgKey});
+      if(user) {
+        if(user.tide !== false) {
+          const tKey = user.engaged.tKey;
+          const doc = BatchDB.findOne({ orgKey: Meteor.user().orgKey, 'tide.tKey': tKey });
+          const sub = doc && doc.tide.find( x => x.tKey === tideKey );
+          if(doc && sub) {
+            BatchDB.update({ orgKey: Meteor.user().orgKey, 'tide.tKey': tKey}, {
+              $set : { 
+                'tide.$.stopTime' : new Date()
+            }});
+          }else{null}
+          Meteor.users.update(userID, {
+            $set: {
+              engaged: false
+            }
+          });
+        }
+      }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
   
   logReactError(sessionID, errorType, info) {
     try {

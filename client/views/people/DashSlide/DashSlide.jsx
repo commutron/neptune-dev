@@ -31,9 +31,13 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
   };
   
   const obj2xy = (obj) => {
-    const itr = Object.entries(obj);
-    const xy = Array.from(itr, (arr)=> { return {x: arr[0], y: arr[1]} } );
-    return xy;
+      if( typeof obj === 'object' ) {
+      const itr = Object.entries(obj);
+      const xy = Array.from(itr, (arr)=> { return {x: arr[0], y: arr[1]} } );
+      return xy;
+    }else{
+      return [];
+    }
   };
   
   useLayoutEffect( ()=>{
@@ -53,20 +57,22 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
   const userArr = [eUsers.length, dUsers.length ];
 
   const eBatches = Array.from(eUsers,
-    x => batches.find( 
-      y => y.tide && y.tide.find(  z => z.tKey === x.engaged.tKey )
+    x => batches.find(
+      y => y && y.tide.find(
+        z => z.tKey === x.engaged.tKey )
     )
   );
+  
+  Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({eUsers,eBatches});
 
   const qBatches = eBatches.reduce( (allBatch, batch, index, array)=> { 
-    const objkey = batch.batch || false;
+    const objkey = !batch ? false : batch.batch;
     objkey &&
       objkey in allBatch ? allBatch[objkey]++ : allBatch[objkey] = 1;
     return allBatch;
   }, {});
   const itrXY = obj2xy(qBatches);
   
-  Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({eUsers,eBatches});
   Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({qBatches,itrXY});
   
 

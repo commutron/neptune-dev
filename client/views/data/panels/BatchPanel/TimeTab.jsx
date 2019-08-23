@@ -6,7 +6,7 @@ import 'moment-timezone';
 
 import ProgLayerBurndown, { ProgLayerBurndownExplain } from '/client/components/charts/ProgLayerBurndown.jsx';
 import EventsList from '/client/components/smallUi/EventsList.jsx';
-import TimeBudgetsChunk, { TimeBudgetsChunkFALLBACK } from './TimeBudgetsChunk.jsx';
+import TimeBudgetsChunk from './TimeBudgetsChunk.jsx';
 import TimeBlocksRaw from './TimeBlocksRaw.jsx';
 
 const TimeTab = ({
@@ -54,15 +54,11 @@ const TimeTab = ({
   return(
     <div className='space3v'>
     
-    {!proto ?
-      <TimeBudgetsChunkFALLBACK a={a} b={b} v={v} />
-    :
       <TimeBudgetsChunk
         a={a}
         b={b}
         v={v}
         totalUnits={totalUnits} />
-    }
         
       <div className='dropCeiling vmargin space'>
         <ProgLayerBurndown

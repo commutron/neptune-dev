@@ -3,7 +3,7 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 import './style.css';
         
-const TideControl = ({ batchID, tideKey, currentLive })=> {
+const TideControl = ({ batchID, tideKey, currentLive, tideLockOut })=> {
   
   const [lock, setLock] = useState(false);
   
@@ -57,7 +57,7 @@ const TideControl = ({ batchID, tideKey, currentLive })=> {
         title={`START ${Pref.batch}`}
         className='tideIn'
         onClick={()=>handleStart()}
-        disabled={lock}
+        disabled={lock || tideLockOut}
       >
       <b>
         <span className="fa-stack fa-fw tideIcon">

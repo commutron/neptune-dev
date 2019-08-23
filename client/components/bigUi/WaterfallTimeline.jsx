@@ -11,7 +11,7 @@ const WaterfallTimeline = ({ waterfalls, quantity, app })=> (
       Array.from(entry.counts, x => x.tick).reduce((x,y)=> x + y) :
       0;
       
-      const type = app.countOption.find( x => x.key === entry.wfKey ).type;
+      const type = entry.type || app.countOption.find( x => x.key === entry.wfKey ).type;
       let borderColor = 'borderBlue';
       let barColor = 'proBlue';
       //// Style the Stone Accordingly \\\\

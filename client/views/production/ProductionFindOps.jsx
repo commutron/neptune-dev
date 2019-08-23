@@ -177,6 +177,7 @@ export default class ProductionFindOps extends Component	{
             app={app}
             action='xBatchBuild'
             actionBar={true}
+            tideLockOut={true}
           >
             <XBatchCard
               batchData={hotxBatch}

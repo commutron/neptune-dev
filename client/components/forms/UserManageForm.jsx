@@ -25,6 +25,15 @@ export default class UserManageForm extends Component {
     }
   }
   
+  forceTideStop() {
+    if( Roles.userIsInRole(Meteor.userId(), 'admin') ) {
+      Meteor.call('forceStopUserTide', this.props.id, (error, reply)=>{
+        if(error)
+          console.log(error);
+      });
+    }
+  }
+  
   hndlRemove() {
     const user = this.props.id;
     const pin = this.pIn.value;
@@ -84,6 +93,14 @@ export default class UserManageForm extends Component {
           </fieldset>
         
           <div>
+          
+            <div>
+              <button
+                className='smallAction clear redT'
+                onClick={this.forceTideStop.bind(this)}
+                disabled={!Roles.userIsInRole(Meteor.userId(), 'admin')}
+              >Force Tide Stop</button>
+            </div>
           
             <AdminUp userId={this.props.id} />
             <br />

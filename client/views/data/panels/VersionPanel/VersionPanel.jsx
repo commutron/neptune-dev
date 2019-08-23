@@ -8,7 +8,6 @@ import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 import TagsModule from '/client/components/bigUi/TagsModule.jsx';
 import { 
   VersionQuoteTimeUpgrade,
-  VersionQuoteBaseline,
   VersionQuoteScalePer
 } from '/client/components/forms/VersionQuoteTime.jsx';
 import NoteLine from '/client/components/smallUi/NoteLine.jsx';
@@ -66,9 +65,7 @@ const VersionPanel = ({
     });
   }
   
-  const qtReady = v.quoteTimeBasline && v.quoteTimeScale;
-  const qTB = qtReady && v.quoteTimeBasline.length > 0 ? 
-                v.quoteTimeBasline[0] : false;
+  const qtReady = !v.quoteTimeBasline && v.quoteTimeScale;
   const qTS = qtReady && v.quoteTimeScale.length > 0 ? 
                 v.quoteTimeScale[0] : false;
   
@@ -120,17 +117,10 @@ const VersionPanel = ({
                 <VersionQuoteTimeUpgrade wID={w._id} vKey={v.versionKey} />
               :
                 <div>
-                
-                  <p>Baseline Quote Time: <i className='numFont medBig'>{qTB && qTB.timeAsMinutes}</i>
-                    <em className='small'> {qTB && moment(qTB.updatedAt).calendar()}</em>
-                  </p>
-                  <VersionQuoteBaseline wID={w._id} vKey={v.versionKey} />
-                  
-                  <p>Scale (per item) Quote Time: <i className='numFont medBig'>{qTS && qTS.timeAsMinutes}</i>
+                  <p>Quote Time (minutes per item): <i className='numFont medBig'>{qTS && qTS.timeAsMinutes}</i>
                     <em className='small'> {qTS && moment(qTS.updatedAt).calendar()}</em>
                   </p>
                   <VersionQuoteScalePer wID={w._id} vKey={v.versionKey} />
-                  
                 </div>
               }
             </div>

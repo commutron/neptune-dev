@@ -299,29 +299,11 @@ Meteor.methods({
       if(Roles.userIsInRole(Meteor.userId(), ['sales', 'edit'])) {
         WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.versionKey': vKey}, {
           $set : { 
-            'versions.$.quoteTimeBasline': [],
             'versions.$.quoteTimeScale': []
           }});
-      }else{
-        null;
-      }
-    }catch (err) {
-      throw new Meteor.Error(err);
-    }
-  },
-  // push basline, starting block of time
-  pushBaselineTime(widgetId, vKey, qTimeBase) {
-    try{
-      if(Roles.userIsInRole(Meteor.userId(), ['sales', 'edit'])) {
         WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.versionKey': vKey}, {
-          $push : { 
-            'versions.$.quoteTimeBasline': {
-              $each: [ {
-                updatedAt: new Date(),
-                timeAsMinutes: Number(qTimeBase)
-              } ],
-              $position: 0
-            }
+          $unset : { 
+            'versions.$.quoteTimeBasline': ""
           }});
       }else{
         null;

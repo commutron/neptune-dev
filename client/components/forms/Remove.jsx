@@ -95,7 +95,7 @@ export default class Remove extends Component	{
 
     let title = this.props.title;
     let check = this.props.check.split('T')[0];
-    const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
+    const auth = Roles.userIsInRole(Meteor.userId(), 'remove') && !this.props.lockOut;
 
     return (
       <ModelMedium

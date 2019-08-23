@@ -11,7 +11,7 @@ moment.updateLocale('en', {
       4: ['07:00:00', '16:30:00'],
       5: ['07:00:00', '12:00:00'],
       6: null
-  }// including lunch breaks!
+  }// including lunch / breaks!
 });
 
 function unitTotalCount(items) {
@@ -24,22 +24,25 @@ function unitTotalCount(items) {
 
 function versionQuoteTime(version, totalUnits) {
   
-  const qtReady = version.quoteTimeBasline && version.quoteTimeScale;
+  const qtReady = version.quoteTimeScale;
   
   if(!qtReady) {
     return undefined;
   }else{
     const tU = !totalUnits ? 0 : totalUnits;
-  
-    const qTB = version.quoteTimeBasline.length > 0 ? 
-                version.quoteTimeBasline[0].timeAsMinutes : 0;
-    const qTS = version.quoteTimeScale.length > 0 ? 
-                version.quoteTimeScale[0].timeAsMinutes : 0;
-    const qTBS = qTB + ( qTS * tU );
-    if( !qTBS || typeof qTBS !== 'number' || qTBS === 0 ) {
+    
+    const qtRelevant = qtReady && b.finishedAt !== false ?
+    v.quoteTimeScale.filter( x => moment(x.updatedAt).isSameOrBefore(b.finishedAt) )
+    : v.quoteTimeScale;
+    
+    const qTS = qtReady && qtRelevant.length > 0 ? 
+                qtRelevant[0].timeAsMinutes : 0;
+                
+    const qTSU = qTS * tU;
+    if( !qTSU || typeof qTSU !== 'number' || qTSU === 0 ) {
       return false;
     }else{
-      return qTBS;
+      return qTSU;
     }
   }
 }

@@ -21,7 +21,7 @@ export default class VersionForm extends Component	{
     this.go.disabled = true;
     const wId = this.props.widgetData._id;
     
-    const edit = this.props.version;
+    const edit = this.props.versionData;
     const vKey = edit ? edit.versionKey : false;
     
     const version = this.rev.value.trim();
@@ -35,6 +35,7 @@ export default class VersionForm extends Component	{
           console.log(error);
         if(reply) {
           toast.success('Saved');
+          FlowRouter.go('/data/widget?request=' + this.props.widgetData.widget + '&specify=' + version);
         }else{
           toast.error('Server Error');
           this.go.disabled = false;
@@ -58,14 +59,13 @@ export default class VersionForm extends Component	{
     
     const app = this.props.app;
     
-    let e = this.props.version;
+    let e = this.props.versionData;
     let name = e ? `edit ${Pref.version}` : `new ${Pref.version}`;
     let eV = e ? e.version : null;
     let eU = e ? e.units : null;
     let eL = e ? e.live : null;
     
-    const w = this.props.widgetData;
-    const instruct = w.versions.length > 0 ? w.versions[w.versions.length -1].wiki : app.instruct;
+    const instruct = !e ? app.instruct : e.wiki;
 
     return (
       <Model

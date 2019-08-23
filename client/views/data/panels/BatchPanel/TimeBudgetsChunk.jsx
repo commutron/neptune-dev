@@ -41,17 +41,19 @@ const TimeBudgetsChunk = ({
   const totalsCalc = totalST();
   const asHours = (mnts) => moment.duration(mnts, "minutes").asHours().toFixed(1, 10);
   
-  
-  const qtReady = v.quoteTimeBasline && v.quoteTimeScale;
   const tU = !totalUnits ? 0 : totalUnits;
   
-  const qTB = qtReady && v.quoteTimeBasline.length > 0 ? 
-                v.quoteTimeBasline[0].timeAsMinutes : 0;
-  const qTS = qtReady && v.quoteTimeScale.length > 0 ? 
-                v.quoteTimeScale[0].timeAsMinutes : 0;
-  let qTBS = qTB + ( qTS * tU );
+  const qtReady = v.quoteTimeScale;
   
-  const totalQuoteMinutes = qTBS || 0;
+  const qtRelevant = qtReady && b.finishedAt !== false ?
+    v.quoteTimeScale.filter( x => moment(x.updatedAt).isSameOrBefore(b.finishedAt) )
+    : v.quoteTimeScale;
+    
+  const qTS = qtReady && qtRelevant.length > 0 ? 
+                qtRelevant[0].timeAsMinutes : 0;
+  let qTSU = qTS * tU;
+  
+  const totalQuoteMinutes = qTSU || 0;
   const totalQuoteAsHours = asHours(totalQuoteMinutes);
   
   const totalTideMinutes = totalsCalc.totalTime;
@@ -129,13 +131,14 @@ const TimeBudgetsChunk = ({
       <details className='footnotes'>
         <summary>Calculation Details</summary>
         <p className='footnote'>
-          Quoted times are set minutes.
+          {`Quoted time is the latest available time set
+           --before the ${Pref.batch} is finished--`} 
         </p>
         <p className='footnote'>
           Logged time is recorded to the second and is displayed to the nearest minute.
         </p>
         <p className='footnote'>
-          minutes_quoted = quote_time_basline + ( quote_time_scale * total_units )
+          minutes_quoted = quote_time_scale({qTS}) * total_units({tU})
         </p>
       </details>
       
@@ -145,77 +148,3 @@ const TimeBudgetsChunk = ({
 };
 
 export default TimeBudgetsChunk;
-
-
-/////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
-
-export const TimeBudgetsChunkFALLBACK = ({ a, b, v }) =>	{
-
-  const totalST = ()=> {
-    let totalTime = 0;
-    let totalPeople = new Set();
-    if(!b.tide) {
-      null;
-    }else{
-      for(let bl of b.tide) {
-        const mStart = moment(bl.startTime);
-        const mStop = !bl.stopTime ? moment() : moment(bl.stopTime);
-        const block = Math.round( 
-          moment.duration(mStop.diff(mStart)).asMinutes() );
-        totalTime = totalTime + block;
-        totalPeople.add(bl.who);
-      }
-    }
-    return { totalTime, totalPeople };
-  };
-  const totalsCalc = totalST();
-  const asHours = (mnts) => moment.duration(mnts, "minutes").asHours().toFixed(1, 10);
-  
-  const totalTideMinutes = totalsCalc.totalTime;
-  const totalTideAsHours = asHours(totalTideMinutes);
-  
-  const totalPeople = [...totalsCalc.totalPeople];
-  const tP = totalPeople.length;
-  
-  return(
-    <div className=''>
-      <div className='vmargin space aFrameContainer'>
-        
-        <div className='avOneContent big'>
-          <p className='medBig'>Total time recorded with Start-Stop:</p>
-          <p>sum of time blocks, each rounded to their nearest minute</p>
-          {!moment(b.createdAt).isAfter(a.tideWall) && 
-            <p className='orangeT'>{` ** This ${Pref.batch} was created before \n
-              Start-Stop was enacted. Totals may not be acurate`} 
-            </p>}
-          <hr />
-        </div>
-        
-        <div className='avTwoContent numFont'>
-          <p 
-            className='bigger' 
-            title={`${totalTideMinutes} minutes\n(aka ${totalTideAsHours} hours)\nLogged`}
-          >{totalTideMinutes} <i className='med'>minutes logged</i>
-          </p>
-        </div>
-
-        <div className='avThreeContent numFont'>
-          <p>
-            <span className='bigger'>{tP}</span> 
-            {tP === 1 ? ' person' : ' people'}
-          </p>
-        </div>
-      </div>
-    </div>  
-  );
-};
-
-
-
-
-
-
-
-
-

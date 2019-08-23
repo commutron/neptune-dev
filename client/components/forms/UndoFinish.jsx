@@ -8,7 +8,7 @@ import ModelMedium from '../smallUi/ModelMedium.jsx';
 const UndoFinish = ({ id, serial, finishedAt, timelock, noText })=>	{
   
   const handleUndo = ()=> {
-    const override = timelock ? prompt("Enter PIN to override", "") : false;
+    const override = timelock ? prompt("Enter minor PIN to override", "") : false;
     Meteor.call('pullFinish', id, serial, override, (error, reply)=>{
       error && console.log(error);
       if(reply) {
