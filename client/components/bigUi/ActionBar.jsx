@@ -187,16 +187,10 @@ const ActionBar = ({
           <CompForm 
             id={widgetData._id} 
             versionKey={versionData.versionKey} />
-          <VersionRemove
-            widgetId={widgetData._id}
-            versionKey={versionData.versionKey}
-            lock={versionData.createdAt.toISOString()}
-            small={false} />
-          {/*
           <BatchForm
             batchId={false}
             batchNow='new'
-            versionNow='new'
+            versionNow={versionData.versionKey}
             start={false}
             end={false}
             widgetId={widgetData._id}
@@ -206,7 +200,7 @@ const ActionBar = ({
           <BatchFormX
             batchId={false}
             batchNow='new'
-            versionNow='new'
+            versionNow={versionData.versionKey}
             salesOrder={false}
             start={false}
             end={false}
@@ -216,7 +210,11 @@ const ActionBar = ({
             versions={widgetData.versions}
             lock={!widgetData.versions}
             noText={noText} />
-            */}
+          <VersionRemove
+            widgetId={widgetData._id}
+            versionKey={versionData.versionKey}
+            lock={versionData.createdAt.toISOString()}
+            small={false} />
         </div>
       :
       action === 'widget' ?
@@ -239,7 +237,7 @@ const ActionBar = ({
           <BatchForm
             batchId={false}
             batchNow='new'
-            versionNow='new'
+            versionNow={false}
             start={false}
             end={false}
             widgetId={widgetData._id}
@@ -249,7 +247,7 @@ const ActionBar = ({
           <BatchFormX
             batchId={false}
             batchNow='new'
-            versionNow='new'
+            versionNow={false}
             salesOrder={false}
             start={false}
             end={false}

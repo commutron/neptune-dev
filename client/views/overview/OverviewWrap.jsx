@@ -28,13 +28,14 @@ export default class OverviewWrap extends Component	{
     this.state = {
       loadTime: moment(),
       tickingTime: moment(),
+      sortBy: 'batch',
       hotBatches: false,
-      hotStatus: [],
+      // hotStatus: [],
       warmBatches: false,
       lukeBatches: false,
-      lukeStatus: [],
+      // lukeStatus: [],
       coolBatches: false,
-      coolStatus: []
+      // coolStatus: []
     };
   }
   
@@ -44,23 +45,44 @@ export default class OverviewWrap extends Component	{
       .then(this.sortHot(clientTZ));
   }
   
+  changeSort(e) {
+    const sort = e.target.value;
+    this.setState({ sortBy: sort }, ()=>{
+      this.dataStart();    
+    });
+  }
+  
   splitInitial() {
     return new Promise(() => {
       const batches = this.props.b;
       let warmBatches = [];
       let coolBatches = [];
-      // if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
-      //   const orderedBatches = batches.sort((b1, b2)=> {
-      //     if (b1.batch < b2.batch) { return 1 }
-      //     if (b1.batch > b2.batch) { return -1 }
-      //     return 0;
-      //   });
-      //   warmBatches = orderedBatches.filter( x => typeof x.floorRelease === 'object' );
-      //   coolBatches = orderedBatches.filter( x => x.floorRelease === false );
-      // }else{
-        warmBatches = batches.filter( x => typeof x.floorRelease === 'object' );
-        coolBatches = batches.filter( x => x.floorRelease === false );
-      //}
+      
+      let orderedBatches = batches;
+      
+      if(this.state.sortBy === 'sales') {
+        orderedBatches = batches.sort((b1, b2)=> {
+          if (b1.salesOrder < b2.salesOrder) { return 1 }
+          if (b1.salesOrder > b2.salesOrder) { return -1 }
+          return 0;
+        });
+      }else if( this.state.sortBy === 'due') {
+        orderedBatches = batches.sort((b1, b2)=> {
+          if (b1.end < b2.end) { return -1 }
+          if (b1.end > b2.end) { return 1 }
+          return 0;
+        });
+      }else{
+        orderedBatches = batches.sort((b1, b2)=> {
+          if (b1.batch < b2.batch) { return 1 }
+          if (b1.batch > b2.batch) { return -1 }
+          return 0;
+        });
+      }
+        
+        warmBatches = orderedBatches.filter( x => typeof x.floorRelease === 'object' );
+        coolBatches = orderedBatches.filter( x => x.floorRelease === false );
+      
       //const batchesX = this.props.bx;
       //const warmBx = batchesX.filter( x => x.releases.find( y => y.type === 'floorRelease') == true );
       //const warmBx = batchesX.filter( x => x.releases.find( y => y.type === 'floorRelease') != true );
@@ -72,8 +94,9 @@ export default class OverviewWrap extends Component	{
   }
   
   sortHot(clientTZ) {
+    const sortBy = this.state.sortBy;
     return new Promise(() => {
-      Meteor.call('activeCheck', clientTZ, (error, reply)=> {
+      Meteor.call('activeCheck', clientTZ, sortBy, (error, reply)=> {
         error && console.log(error);
         if(reply) {
           const warmBatches = this.state.warmBatches;
@@ -83,28 +106,27 @@ export default class OverviewWrap extends Component	{
             hotBatches: hot,
             lukeBatches: luke,
           });
-          this.populate(clientTZ, reply);
+          //this.populate(clientTZ, reply, sortBy);
         }
       });
     });
   }
-  
-  populate(clientTZ, activeList) {
-    this.fetchInitial(clientTZ, 'hot', 'hotStatus', activeList)
-      .then(this.fetchInitial(clientTZ, 'luke', 'lukeStatus', activeList))
-        .then(this.fetchInitial(clientTZ, 'cool', 'coolStatus', activeList))
+  /*
+  populate(clientTZ, activeList, sortBy) {
+    this.fetchInitial(clientTZ, 'hot', 'hotStatus', activeList, sortBy)
+      .then(this.fetchInitial(clientTZ, 'luke', 'lukeStatus', activeList, sortBy))
+        .then(this.fetchInitial(clientTZ, 'cool', 'coolStatus', activeList, sortBy))
           .then(this.setState({ loadTime: moment() }));
   }
-    
-  fetchInitial(clientTZ, temp, slot, activeList) {
+  fetchInitial(clientTZ, temp, slot, activeList, sortBy) {
     return new Promise(() => {
-      Meteor.call('statusSnapshot', clientTZ, temp, activeList, (error, reply)=> {
+      Meteor.call('statusSnapshot', clientTZ, temp, activeList, sortBy, (error, reply)=> {
         error && console.log(error);
         this.setState({ [slot]: reply });
       });
     });
   }
-  
+  */
   render() {
     
     //console.log({hot: this.state.hotBatches});
@@ -150,14 +172,19 @@ export default class OverviewWrap extends Component	{
         </div>
         
         <nav className='scrollToNav overviewNav'>
-          {Roles.userIsInRole(Meteor.userId(), 'debug') &&
-          <React.Fragment>
-            <span><a href='#hotBatch'>Active</a></span>
-            <span><a href='#lukewarmBatch'>In Progress</a></span>
-            <span><a href='#coolBatch'>In Kitting</a></span>
-          </React.Fragment>}
-          
-          <span>Sorted by {Pref.batch}, high to low</span>
+          <span>
+            <i>sort by: </i>
+            <select
+              id='sortSelect'
+              title='Change List Order'
+              className='overlistSort'
+              defaultValue={this.state.sortBy}
+              onClick={(e)=>this.changeSort(e)}>
+              <option value='batch'>{Pref.batch}</option>
+              <option value='sales'>{Pref.salesOrder}</option>
+              <option value='due'>{Pref.end}</option>
+            </select>
+          </span>
           <span className='flexSpace' />
           <span>Updated {duration} ago</span>
         </nav>
@@ -176,9 +203,9 @@ export default class OverviewWrap extends Component	{
             
             <BatchDetails
               key='fancylist1'
-              hBs={this.state.hotStatus}
-              lBs={this.state.lukeStatus}
-              cBs={this.state.coolStatus}
+              hB={this.state.hotBatches}
+              lB={this.state.lukeBatches}
+              cB={this.state.coolBatches}
               bCache={this.props.bCache}
               user={this.props.user}
               app={this.props.app}

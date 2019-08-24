@@ -10,17 +10,7 @@ const FilterActive = ({ title, open, done, total, onClick, onTxtChange })=>	{
   }
   
   return(
-    <details className='fltrs noCopy' open={open}>
-      <summary className='fltrs'>
-        <span>
-          <i className='fas fa-filter fa-fw'></i>
-          <i className='med'>Filter</i>
-        </span>
-        <span className='rAlign'>
-          <i className='fas fa-chevron-down fa-fw'></i>
-        </span>
-      </summary>
-      
+    <div className='fltrs noCopy'>
       <div>
         <label className='fltrsInput'>
           <i className='fas fa-font fa-fw'></i>
@@ -42,10 +32,9 @@ const FilterActive = ({ title, open, done, total, onClick, onTxtChange })=>	{
         </label>
       </div>
           
-      <p className='centreText'>Total: {total}</p>
+      <div className='wide centreText'>Total: {total}</div>
       
-    </details>
-    
+    </div>
   );
 };
   

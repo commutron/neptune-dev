@@ -22,7 +22,7 @@ function unitTotalCount(items) {
   return totalUnits;
 }
 
-function versionQuoteTime(version, totalUnits) {
+function versionQuoteTime(version, totalUnits, finishedAt) {
   
   const qtReady = version.quoteTimeScale;
   
@@ -31,9 +31,9 @@ function versionQuoteTime(version, totalUnits) {
   }else{
     const tU = !totalUnits ? 0 : totalUnits;
     
-    const qtRelevant = qtReady && b.finishedAt !== false ?
-    v.quoteTimeScale.filter( x => moment(x.updatedAt).isSameOrBefore(b.finishedAt) )
-    : v.quoteTimeScale;
+    const qtRelevant = qtReady && finishedAt !== false ?
+    version.quoteTimeScale.filter( x => moment(x.updatedAt).isSameOrBefore(finishedAt) )
+    : version.quoteTimeScale;
     
     const qTS = qtReady && qtRelevant.length > 0 ? 
                 qtRelevant[0].timeAsMinutes : 0;
@@ -72,7 +72,7 @@ function batchTideTime(batchTide) {
 Meteor.methods({
   
   getDistanceFromFulfill(batchNum, clientTZ) {
-    // try{
+    try{
       // const app = AppDB.findOne({ orgKey: Meteor.user().orgKey});
       const nowClient = moment().tz(clientTZ);
       const nCnice = nowClient.format();
@@ -91,7 +91,7 @@ Meteor.methods({
       }else{
         const totalUnits = unitTotalCount(batch.items);
         
-        const totalQuoteMinutes = versionQuoteTime(version, totalUnits);
+        const totalQuoteMinutes = versionQuoteTime(version, totalUnits, batch.finishedAt);
         
         const totalTideMinutes = batchTideTime(batch.tide);
         
@@ -126,9 +126,9 @@ Meteor.methods({
         };
       }
       
-    // }catch(err) {
-    //   throw new Meteor.Error(err);
-    // }
+    }catch(err) {
+      throw new Meteor.Error(err);
+    }
   }
   
 });

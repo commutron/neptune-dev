@@ -157,8 +157,10 @@ Meteor.publish('shaddowData', function(){
           'batch': 1,
           'widgetId': 1,
           'versionKey': 1,
-          'live': 1,
+          //'live': 1,
           'finishedAt': 1,
+          'salesOrder': 1,
+          'end': 1,
           'floorRelease': 1
         }}),
       XBatchDB.find({orgKey: orgKey, live: true}, {
@@ -168,7 +170,9 @@ Meteor.publish('shaddowData', function(){
           'groupId': 1,
           'widgetId': 1,
           'versionKey': 1,
-          'live': 1,
+          //'live': 1,
+          'salesOrder': 1,
+          'salesEnd': 1,
           'completed': 1,
           'completedAt': 1,
           'releases': 1

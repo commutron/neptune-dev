@@ -75,7 +75,7 @@ export default class BatchFormX extends Component	{
     let eNum = ex === 'new' ? '' : ex;
     
     const exV = this.props.versionNow;
-    let eVer = exV === 'new' ? '' : exV;
+    let eVer = !exV ? '' : exV;
     
     let eSO = this.props.salesOrder || '';
     let eS = this.props.start || moment().format('YYYY-MM-DD');
@@ -118,7 +118,7 @@ export default class BatchFormX extends Component	{
               inputMode='numeric'
               defaultValue={eNum}
               placeholder='17947'
-              autoFocus='true'
+              autoFocus={true}
               required />
             <label htmlFor='oNum'>{Pref.xBatch} number</label>
           </p>

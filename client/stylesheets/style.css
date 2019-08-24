@@ -115,9 +115,7 @@
   min-height: 32px;
   font-size: 1rem;
   font-size: calc(1.1rem - 0.1vw);
-  /*letter-spacing: 1px;*/
   font-weight: 400;
-	margin: 0;
 	padding: 12px 6px;
 	padding: calc(1em - 0.1vw) calc(1em - 0.1vw);
   cursor: pointer;
@@ -548,6 +546,9 @@ label.qdpplRound {
   background-color: var(--amethyst);
 }
 
+.moreEphasis {
+  border: 0.5vh #720300 dashed !important;
+}
 .activeIndicator:focus, .activeIndicator:active {
   outline: dotted;  
 }

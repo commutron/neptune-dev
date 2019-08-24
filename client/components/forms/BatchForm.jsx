@@ -74,7 +74,7 @@ export default class BatchForm extends Component	{
     let eNum = ex === 'new' ? '' : ex;
     
     const exV = this.props.versionNow;
-    let eVer = exV === 'new' ? '' : exV;
+    let eVer = !exV ? '' : exV;
     
     let eSO = this.props.salesOrder || '';
     let eS = this.props.start ? this.props.start : moment().format('YYYY-MM-DD');

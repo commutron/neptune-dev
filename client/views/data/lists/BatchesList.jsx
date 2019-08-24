@@ -1,73 +1,68 @@
-import React, {Component} from 'react';
-import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
+import React, { useState, useEffect } from 'react';
 
 import LeapButton from '/client/components/tinyUi/LeapButton.jsx';
-import FilterActive from '../../../components/bigUi/FilterActive.jsx';
+import FilterActive from '/client/components/bigUi/FilterActive.jsx';
 
-export default class BatchesList extends Component	{
+const BatchesList = (props)=> {
   
-  constructor() {
-    super();
-    this.state = {
-      filter: false,
-      textString: ''
-    };
-  }
+  const [ filter, filterSet ] = useState(false);
+  const [ textString, textSet ] = useState('');
+  const [ list, listSet ] = useState([]);
   
-  setFilter(rule) {
-    this.setState({ filter: rule });
-  }
-  setTextFilter(rule) {
-    this.setState({ textString: rule.toLowerCase() });
-  }
-
-  render() {
+  const setFilter = (rule)=> {
+    filterSet( rule );
+  };
+  const setTextFilter = (rule)=> {
+    textSet( rule.toLowerCase() );
+  };
     
-    const b = this.props.batchData;
-    const w = this.props.widgetData;
-    const f = this.state.filter;
-    
+  const b = props.batchData;
+  const w = props.widgetData;
+   
+  useEffect( ()=> { 
     let basicFilter = 
-      f === 'done' ?
+      filter === 'done' ?
       b.filter( x => x.finishedAt ? x.finishedAt !== false : x.live === false ) :
-      f === 'inproc' ?
+      filter === 'inproc' ?
       b.filter( x => x.finishedAt ? x.finishedAt === false : x.live === true ) :
       b;
     let showList = basicFilter.filter( 
-                    tx => tx.batch.toLowerCase().includes(this.state.textString) === true );
+                    tx => tx.batch.toLowerCase().includes(textString) === true );
     let sortList = showList.sort((b1, b2)=> {
                 if (b1.batch < b2.batch) { return 1 }
                 if (b1.batch > b2.batch) { return -1 }
                 return 0;
               });
-    return (
-      <AnimateWrap type='cardTrans'>
-        <div className='' key={1}>
-          <div className='stickyBar'>
-            <FilterActive
-              title={b.batch}
-              done='Finished'
-              total={showList.length}
-              onClick={e => this.setFilter(e)}
-              onTxtChange={e => this.setTextFilter(e)} />
-          </div>  
-          {sortList.map( (entry, index)=> {
-            const style = entry.live === true ? 
-                          'leapBar numFont activeMark' :
-                          'leapBar numFont gMark';
-            const subW = w.find( x => x._id === entry.widgetId);
-            const subV = subW.versions.find( x => x.versionKey === entry.versionKey);
-              return (
-                <LeapButton
-                  key={index}
-                  title={entry.batch} 
-                  sub={<i><i className='up'>{subW.widget}</i> v.{subV.version}</i>}
-                  sty={style}
-                  address={'/data/batch?request=' + entry.batch}
-                />
-          )})}
-  			</div>
-			</AnimateWrap>
-    );
-  }
-}
+    listSet(sortList);
+  }, [ props, filter, textString ]);
+            
+  return (
+    <div className='' key={1}>
+      <div className='stickyBar'>
+        <FilterActive
+          title={b.batch}
+          done='Finished'
+          total={list.length}
+          onClick={(e)=>setFilter(e)}
+          onTxtChange={(e)=>setTextFilter(e)} />
+      </div>  
+      {list.map( (entry, index)=> {
+        const style = entry.live === true ? 
+                      'leapBar numFont activeMark' :
+                      'leapBar numFont gMark';
+        const subW = w.find( x => x._id === entry.widgetId);
+        const subV = subW.versions.find( x => x.versionKey === entry.versionKey);
+          return (
+            <LeapButton
+              key={index}
+              title={entry.batch} 
+              sub={<i><i className='up'>{subW.widget}</i> v.{subV.version}</i>}
+              sty={style}
+              address={'/data/batch?request=' + entry.batch}
+            />
+      )})}
+		</div>
+  );
+};
+
+export default BatchesList;

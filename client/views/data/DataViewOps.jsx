@@ -42,6 +42,12 @@ export default class DataViewOps extends Component	{
     return [...xBatches, ...legacyBatches ];
   }
   
+  verLinkedBatches(vKey) {
+    const xBatches = this.props.allXBatch.filter(x => x.versionKey === vKey);
+    const legacyBatches = this.props.allBatch.filter(x => x.versionKey === vKey);
+    return [...xBatches, ...legacyBatches ];
+  }
+  
   groupActiveWidgets(gId) {
     let widgetsList = this.props.allWidget.filter(x => x.groupId === gId);
     let xActive = this.props.allXBatch.filter( b => b.completed === false);
@@ -463,7 +469,7 @@ export default class DataViewOps extends Component	{
         Session.set('nowBatch', false);
         let group = this.linkedGroup(widget.groupId);
         let allWidgets = this.groupWidgets(widget.groupId);
-        let allBatches = this.allLinkedBatches(widget._id);
+        let allBatches = this.verLinkedBatches(version.versionKey);
         return (
           <TraverseWrap
             batchData={false}

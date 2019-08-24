@@ -1,51 +1,60 @@
-import React, {Component} from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import NumStat from '/client/components/uUi/NumStat.jsx';
+import PrioritySquare from '/client/components/tinyUi/PrioritySquare.jsx';
 import BinaryStat from '/client/components/uUi/BinaryStat.jsx';
 import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
-const BatchDetails = ({hBs, lBs, cBs, bCache, user, app})=> {
+const BatchDetails = ({hB, lB, cB, hBs, lBs, cBs, bCache, user, app})=> {
+  
+  const clientTZ = moment.tz.guess();
   
   return(
     <div className='overGridScroll' tabIndex='1'>
       
       <div className='overGridRowScrollHeader'></div>
       
-      {!hBs ? null :
-        hBs.map( (entry, index)=>{
+      {!hB ? null :
+        hB.map( (entry, index)=>{
           return(
             <BatchDetailChunk
               key={`${entry.batchID}hot${index}`}
+              sindex={index}
               ck={entry}
               warm={true}
               user={user}
+              clientTZ={clientTZ}
               app={app} />
       )})}
       
       <div className='overGridRowScrollHeader'></div>
       
-      {!lBs ? null :
-        lBs.map( (entry, index)=>{
+      {!lB ? null :
+        lB.map( (entry, index)=>{
           return(
             <BatchDetailChunk
               key={`${entry.batchID}luke${index}`}
+              sindex={index}
               ck={entry}
               warm={true}
               user={user}
+              clientTZ={clientTZ}
               app={app} />
       )})}
       
       <div className='overGridRowScrollHeader'></div>
       
-      {!cBs ? null :
-        cBs.map( (entry, index)=>{
+      {!cB ? null :
+        cB.map( (entry, index)=>{
           return(
             <BatchDetailChunk 
               key={`${entry.batchID}cool${index}`}
+              sindex={index}
               ck={entry}
               warm={false}
               user={user}
+              clientTZ={clientTZ}
               app={app} />
       )})}
       
@@ -57,102 +66,29 @@ const BatchDetails = ({hBs, lBs, cBs, bCache, user, app})=> {
 export default BatchDetails;
 
 
-const BatchDetailChunk = ({ck, warm, user, app})=> (
+const BatchDetailChunk = ({ sindex, ck, warm, user, clientTZ, app})=> (
 
   <div className='overGridRowScroll'>
-    {Roles.userIsInRole(Meteor.userId(), 'debug') && 
+    {Roles.userIsInRole(Meteor.userId(), ['nightly', 'debug']) && 
       <div><b>{ck.batch}</b></div> }
     <div><i>SO: {ck.salesOrder}</i></div>
-    <div><i>Created {ck.timeElapse} ago</i></div>
-    <div><i>Due {ck.salesEnd}</i></div>
-    <div>
-      <NumStat
-        num={
-          ck.weekDaysRemain < 0 ? 
-            ck.weekDaysRemain * -1 :
-            ck.weekDaysRemain
-        }
-        name={
-          ck.weekDaysRemain < 0 ? 
-            ck.weekDaysRemain === -1 ?
-              'Weekday Overdue' :
-              'Weekdays Overdue' : 
-                ck.weekDaysRemain === 1 ?
-                  'Weekday Remaining' :
-                  'Weekdays Remaining'}
-        title=''
-        color={ck.weekDaysRemain < 0 ? 'yellowT' : 'blueT'}
-        size='big' />
-    </div>
-    <div>
-      <NumStat
-        num={ck.itemQuantity}
-        name='Total Boards'
-        title=''
-        color='blueT'
-        size='big' />
-    </div>
-    <div>
-      <BinaryStat
-        good={ck.riverChosen}
-        name='Flow Assigned'
-        title='A Process Flow has been assigned'
-        size='big' />
-    </div>
+    <div><i>Due {moment(ck.end).format("MMM Do, YYYY")}</i></div>
+    
+    <BatchTopStatus
+      batchID={ck._id}
+      clientTZ={clientTZ}
+      app={app} />
+    
     <PhaseProgress
-      batchID={ck.batchID}
+      batchID={ck._id}
       warm={warm}
       app={app} />
-    <div>
-      <NumStat
-        num={ck.nonConTotal}
-        name='Total Noncons'
-        title=''
-        color='redT'
-        size='big' />
-    </div>
-    <div>
-      <NumStat
-        num={ck.percentOfNCitems}
-        name='of Items have noncons'
-        title=''
-        color='redT'
-        size='big' />
-    </div>
-    <div>
-      <NumStat
-        num={ck.nonConsPerNCitem}
-        name='Mean Noncons Per Item'
-        title='mean average'
-        color='redT'
-        size='big' />
-    </div>
-    <div>
-      <NumStat
-        num={ck.itemHasRMA}
-        name='RMA Boards'
-        title=''
-        color='redT'
-        size='big' />
-      </div>
-    <div>
-      <NumStat
-        num={ck.itemIsScrap}
-        name='Scrap Boards'
-        title=''
-        color='redT'
-        size='big' />
-    </div>
-    {Roles.userIsInRole(Meteor.userId(), 'nightly') &&
-      <div>
-        <NumStat
-          num={ck.workTimeToShip || 0}
-          name='Priority'
-          title={`diff from now to ship date\nLower the number = the higher the priority`}
-          color={!ck.workTimeToShip ? '' : ck.workTimeToShip < 0 ? 'yellowT' : 'whiteT'}
-          size='big' />
-      </div>
-    }
+      
+    <NonConCounts
+      batchID={ck._id}
+      warm={warm}
+      app={app} />
+      
     <div>
       <WatchButton 
         list={user.watchlist}
@@ -164,94 +100,249 @@ const BatchDetailChunk = ({ck, warm, user, app})=> (
   </div>
 );
 
-class PhaseProgress extends React.PureComponent {
+const BatchTopStatus = ({ batchID, clientTZ, app })=> {
   
-  constructor() {
-    super();
-    this.state = {
-      progData: false
-    };
-  }
+  const [ stData, setStatus ] = useState(false);
   
-  componentDidMount() {
-    Meteor.call('phaseProgress', this.props.batchID, (error, reply)=>{
+  useEffect( ()=> {
+    const doProto = Roles.userIsInRole(Meteor.userId(), 'nightly');
+    Meteor.call('overviewBatchStatus', batchID, clientTZ, doProto, (error, reply)=>{
       error && console.log(error);
-      this.setState({ progData: reply });
+      if( reply ) { 
+        setStatus( reply );
+        Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(stData);
+      }
     });
-  }
+  }, [batchID]);
   
-  render() {
+  const dt = stData;
+   
+   
+  if( dt && dt.batchID === batchID ) {
     
-    const app = this.props.app;
-    const dt = this.state.progData;
-    
+    const bffrTime = dt.estEnd2fillBuffer;
+    const overQuote = dt.overQuote;
     Roles.userIsInRole(Meteor.userId(), 'debug') &&
-      console.log(this.state.progData);
+      console.log({batchID, bffrTime, overQuote});
     
-    if(!this.props.warm || !dt) {
-      return(
-        <React.Fragment>
-          {app.phases.map( (phase, index)=>{
-            return(
-              <div key={this.props.bID + phase + index + 'z'}>
-                <i className='fade small'>{phase}</i>
-              </div>
-          )})}
-        </React.Fragment>
-      );
-    }
-    
-    if(dt.batchID === this.props.batchID) {
-      return(
-        <React.Fragment>
-          {dt.phaseSets.map( (phase, index)=>{
-            if(phase.steps.length === 0) {
-              return(
-                <div key={this.props.bID + phase + index + 'x'}>
-                 <i className='fade small'>{phase.phase}</i>
-                </div>
-              );
-            }else{
-              const calNum = ( 
-                phase.count / (dt.totalItems * phase.steps.length) 
-                  * 100 ).toFixed(0);
-              let fadeTick = calNum == 0 ? '0' :
-                   calNum < 10 ? '5' :
-                   calNum < 20 ? '10' :
-                   calNum < 30 ? '20' :
-                   calNum < 40 ? '30' :
-                   calNum < 50 ? '40' :
-                   calNum < 60 ? '50' :
-                   calNum < 70 ? '60' :
-                   calNum < 80 ? '70' :
-                   calNum < 90 ? '80' :
-                   calNum < 100 ? '90' :
-                   '100';
-              let niceName = phase.phase === 'finish' ?
-                              Pref.isDone : phase.phase;
-              return(
-                <div 
-                  key={this.props.bID + phase + index + 'g'} 
-                  className={'fillRight' + fadeTick}>
-                  <NumStat
-                    num={ calNum + '%' }
-                    name={niceName}
-                    title=''
-                    color='whiteT'
-                    size='big' />
-              </div>
-          )}})}
-        </React.Fragment>
-      );
-    }
-      
     return(
-      <React.Fragment>
-        {app.phases.map( (phase, index)=>{
-          return(
-            <div key={app._id + phase + index + 'ng'}></div>
-        )})}
-      </React.Fragment>
+      <Fragment>
+        <div><i>Created {dt.timeElapse} ago</i></div>
+        <div>
+          <NumStat
+            num={
+              dt.weekDaysRemain < 0 ? 
+                dt.weekDaysRemain * -1 :
+                dt.weekDaysRemain
+            }
+            name={
+              dt.weekDaysRemain < 0 ? 
+                dt.weekDaysRemain === -1 ?
+                  'Weekday Overdue' :
+                  'Weekdays Overdue' : 
+                    dt.weekDaysRemain === 1 ?
+                      'Weekday Remaining' :
+                      'Weekdays Remaining'}
+            title=''
+            color={dt.weekDaysRemain < 0 ? 'yellowT' : 'blueT'}
+            size='big' />
+        </div>
+        
+      {Roles.userIsInRole(Meteor.userId(), 'nightly') &&
+        <PrioritySquare
+          bffrTime={bffrTime}
+          overQuote={overQuote} />
+      }
+    
+        <div>
+          <NumStat
+            num={dt.itemQuantity}
+            name='Total Boards'
+            title=''
+            color='blueT'
+            size='big' />
+        </div>
+        <div>
+          <BinaryStat
+            good={dt.riverChosen}
+            name='Flow Assigned'
+            title='A Process Flow has been assigned'
+            size='big' />
+        </div>
+      </Fragment>
     );
   }
-}
+  
+  const placeholderStatus = Roles.userIsInRole(Meteor.userId(), 'nightly') ?
+    ['duration', 'remaining', 'proto rank', '# of items', 'flow'] :
+    ['duration', 'remaining', '# of items', 'flow'];
+    
+  return(
+    <Fragment>
+      {placeholderStatus
+        .map( (st, index)=>{
+          return(
+            <div key={batchID + st + index + 'x'}>
+              <i className='fade small'>{st}</i>
+            </div>
+      )})}
+    </Fragment>
+  );
+};
+
+/////////////////////////////////////////////
+
+const PhaseProgress = ({ batchID, warm, app })=> {
+  
+  const [ progData, setProg ] = useState(false);
+  
+  useEffect( ()=> {
+    Meteor.call('phaseProgress', batchID, (error, reply)=>{
+      error && console.log(error);
+      if( reply ) { 
+        setProg( reply );
+        Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(progData);
+      }
+    });
+  }, [batchID]);
+  
+  const dt = progData;
+    
+ 
+  if(warm !== false && dt && dt.batchID === batchID) {
+    return(
+      <Fragment>
+        {dt.phaseSets.map( (phase, index)=>{
+          if(phase.steps.length === 0) {
+            return(
+              <div key={batchID + phase + index + 'x'}>
+               <i className='fade small'>{phase.phase}</i>
+              </div>
+            );
+          }else{
+            const calNum = ( 
+              phase.count / (dt.totalItems * phase.steps.length) 
+                * 100 ).toFixed(0);
+            Roles.userIsInRole(Meteor.userId(), 'debug') && 
+              console.log(`${dt.batch} ${phase.phase} calNum: ${calNum}`);
+            let fadeTick = calNum == 0 ? '0' :
+                 calNum < 10 ? '5' :
+                 calNum < 20 ? '10' :
+                 calNum < 30 ? '20' :
+                 calNum < 40 ? '30' :
+                 calNum < 50 ? '40' :
+                 calNum < 60 ? '50' :
+                 calNum < 70 ? '60' :
+                 calNum < 80 ? '70' :
+                 calNum < 90 ? '80' :
+                 calNum < 100 ? '90' :
+                 '100';
+            let niceName = phase.phase === 'finish' ?
+                            Pref.isDone : phase.phase;
+            return(
+              <div 
+                key={batchID + phase + index + 'g'} 
+                className={'fillRight' + fadeTick}>
+                <NumStat
+                  num={ calNum + '%' }
+                  name={niceName}
+                  title=''
+                  color='whiteT'
+                  size='big' />
+            </div>
+        )}})}
+      </Fragment>
+    );
+  }
+  
+  return(
+    <Fragment>
+      {app.phases.map( (phase, index)=>{
+        return(
+          <div key={batchID + phase + index + 'z'}>
+            <i className='fade small'>{phase}</i>
+          </div>
+      )})}
+    </Fragment>
+  );    
+};
+
+
+////////////////////////////////////
+
+const NonConCounts = ({ batchID, warm, app })=> {
+  
+  const [ ncData, setNC ] = useState(false);
+  
+  useEffect( ()=> {
+    const temp = !warm ? 'cool' : 'warm';
+    Meteor.call('nonconQuickStats', batchID, temp, (error, reply)=>{
+      error && console.log(error);
+      if( reply ) { 
+        setNC( reply );
+        Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(ncData);
+      }
+    });
+  }, [batchID]);
+  
+  const dt = ncData;
+    
+  if(warm !== false && dt && dt.batchID === batchID) {
+    return(
+      <Fragment>
+        <div>
+          <NumStat
+            num={dt.nonConTotal}
+            name='Total Noncons'
+            title=''
+            color='redT'
+            size='big' />
+          </div>
+          <div>
+            <NumStat
+              num={dt.nonConLeft}
+              name='Unresolved Noncons'
+              title=''
+              color='orangeT'
+              size='big' />
+          </div>
+          <div>
+            <NumStat
+              num={dt.percentOfNCitems}
+              name='of Items have noncons'
+              title=''
+              color='redT'
+              size='big' />
+          </div>
+          <div>
+            <NumStat
+              num={dt.itemIsScrap}
+              name='Scrap Boards'
+              title=''
+              color='redT'
+              size='big' />
+          </div>
+          <div>
+            <NumStat
+              num={dt.itemHasRMA}
+              name='RMA Boards'
+              title=''
+              color='redT'
+              size='big' />
+          </div>
+      </Fragment>
+    );
+  }
+  
+  return(
+    <Fragment>
+      {['total nc', 'unresolved nc', '% of items', 'scrap', 'rma']
+        .map( (nc, index)=>{
+          return(
+            <div key={batchID + nc + index + 'x'}>
+              <i className='fade small'>{nc}</i>
+            </div>
+      )})}
+    </Fragment>
+  );
+};

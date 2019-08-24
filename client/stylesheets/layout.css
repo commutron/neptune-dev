@@ -99,7 +99,6 @@ main {
 .stickyBar {
   position: -webkit-sticky;
   position: sticky;
-  top: 0.5vh;
   width: auto;
   background-color: rgb(30,30,30);
   z-index: 7;
@@ -556,6 +555,7 @@ main {
   width: 100%;
 }
 
+.space2vsq { padding: 2vh; }
 .space3v { padding: 3vh 3vw; }
 .space { padding: 24px; }
 .vspace { padding: 24px 0; }
@@ -867,6 +867,20 @@ button.numberSet {
   background-color: rgb(30,30,30);
   overflow-y: scroll;
   scroll-behavior: smooth;
+}
+
+.overlistSort {
+  min-height: calc(2vh);
+  height: 3vh;
+  font-size: 1rem;
+  line-height: 1.1;
+  width: 12ch;
+  background-color: transparent;
+  border-color: transparent;
+  color: white;
+}
+.overlistSort option {
+  color: black;
 }
 
 /*OverGrid */

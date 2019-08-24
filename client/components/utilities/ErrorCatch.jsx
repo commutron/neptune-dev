@@ -33,6 +33,7 @@ export default class ErrorCatch extends Component	{
       Meteor.user().username,
       this.state.errorInfo
     );
+    alert('Thank you for helping make Neptune better');
   }
 
   render() {

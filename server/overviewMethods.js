@@ -16,11 +16,64 @@ moment.updateLocale('en', {
 });
 //const now = moment().tz(clientTZ);
 //const isNow = (t)=>{ return ( now.isSame(moment(t), 'day') ) };
-  
 
-function collectRelevant(accessKey, temp, activeList) {
+function unitTotalCount(items) {
+  let totalUnits = 0;
+  for(let i of items) {
+    totalUnits += i.units;
+  }
+  return totalUnits;
+}
+
+function getQuoteTime(qtReady, totalUnits, finishedAt) {
+  
+  const qt = !qtReady ? [] : qtReady;
+  const tU = !totalUnits ? 0 : totalUnits;
+    
+  const qtRelevant = qt && finishedAt !== false ?
+    qt.filter( x => moment(x.updatedAt).isSameOrBefore(finishedAt) )
+    : qt;
+    
+  const qTS = qt && qtRelevant.length > 0 ? 
+              qtRelevant[0].timeAsMinutes : 0;
+              
+  const qTSU = qTS * tU;
+  if( !qTSU || typeof qTSU !== 'number' || qTSU === 0 ) {
+    return false;
+  }else{
+    return qTSU;
+  }
+}
+
+function batchTideTime(batchTide) {
+    
+  if(!batchTide) {
+    return undefined;
+  }else{
+    let tideTime = 0;
+    for(let bl of batchTide) {
+      const mStart = moment(bl.startTime);
+      const mStop = !bl.stopTime ? moment() : moment(bl.stopTime);
+      const block = moment.duration(mStop.diff(mStart)).asMinutes();
+      tideTime = tideTime + block;
+    }
+    //console.log(tideTime);
+    if( !tideTime || typeof tideTime !== 'number' ) {
+      return false;
+    }else{
+      return tideTime.toFixed(2, 10);
+    }
+  }
+}
+
+function collectRelevant(accessKey, temp, activeList, sortBy) {
   return new Promise(resolve => {
-    const liveBatches = BatchDB.find({orgKey: accessKey, live: true},{sort: {batch:-1}}).fetch();
+    const liveBatches = 
+      sortBy === 'sales' ?
+        BatchDB.find({orgKey: accessKey, live: true},{sort: {salesOrder:-1}}).fetch() :
+      sortBy === 'due' ?
+        BatchDB.find({orgKey: accessKey, live: true},{sort: {end:-1}}).fetch() :
+      BatchDB.find({orgKey: accessKey, live: true},{sort: {batch:-1}}).fetch();
     // get the relevant batches
     if(temp === 'cool') {
       const coolBatches = liveBatches.filter( x => x.floorRelease === false );
@@ -58,7 +111,7 @@ function collectActive(accessKey, clientTZ, relevant) {
     resolve(list);
   });
 }
-
+/*
 function collectInfo(clientTZ, temp, relevant) {
   return new Promise(resolve => {
     const now = moment().tz(clientTZ);
@@ -80,29 +133,6 @@ function collectInfo(clientTZ, temp, relevant) {
       // const percentOfDoneItems = temp === 'cool' ? 0 : 
       //   (( b.items.filter( x => x.finishedAt !== false )
       //     .length / itemQuantity) * 100 ).toFixed(0);
-      // how many nonCons
-      const nonConTotal = temp === 'cool' ? 0 : 
-        b.nonCon.length;
-      // how many items have nonCons
-      const hasNonCon = temp === 'cool' ? 0 :
-        [... new Set( Array.from(b.nonCon, x => { return x.serial }) ) ].length;
-      // what percent of items have nonCons
-      const percentOfNCitems = temp === 'cool' ? 0 :
-        ((hasNonCon / itemQuantity) * 100 ).toFixed(0);
-      // mean number of nonCons on items that have nonCons
-      const nonConsPerNCitem = temp === 'cool' ? 0 :
-        (nonConTotal / hasNonCon).toFixed(1);
-      // how many items with RMA
-      let itemHasRMA = temp === 'cool' ? 0 :
-        b.items.filter( x => x.rma.length > 0).length;
-      // how many items are scrapped
-      const itemIsScrap = temp === 'cool' ? 0 :
-        b.items.filter( x => x.history.find( 
-                          y => y.type === 'scrap' ) )
-                            .length;
-                            
-      // Dumb diff to ship Priority // minus ship days correct
-      const workTimeToShip = salesEnd.workingDiff(moment(), 'minutes');
         
       collection.push({
         batch: b.batch,
@@ -113,16 +143,83 @@ function collectInfo(clientTZ, temp, relevant) {
         weekDaysRemain: timeRemain,
         riverChosen: riverChosen,
         itemQuantity: itemQuantity,
-        nonConTotal: b.nonCon.length,
-        percentOfNCitems: isNaN(percentOfNCitems) ? '0%' : percentOfNCitems + '%',
-        nonConsPerNCitem: isNaN(nonConsPerNCitem) ? '0.0' : nonConsPerNCitem,
-        itemHasRMA: itemHasRMA,
-        itemIsScrap: itemIsScrap,
-        workTimeToShip: workTimeToShip
       });
     
     }
     resolve(collection);
+  });
+}
+*/
+function collectStatus(privateKey, batchID, clientTZ, doProto) {
+  return new Promise(resolve => {
+    let collection = false;
+    const b = BatchDB.findOne({_id: batchID});
+    if(!b) {
+      resolve(collection);
+    }else{
+      const now = moment().tz(clientTZ);
+      // is it done
+      const complete = b.finishedAt !== false;
+      // when is it due
+      const salesEnd = moment(b.end);
+      // how long since start
+      const timeElapse = moment.duration(now.diff(b.start)).humanize();
+      // how long untill due
+      const timeRemain = !complete ? business.weekDays( now, salesEnd ) : 0; 
+      // how many items
+      const itemQuantity = b.items.length;
+      // River Setup
+      const riverChosen = b.river !== false;
+      // what percent of items are complete
+      // const percentOfDoneItems = temp === 'cool' ? 0 : 
+      //   (( b.items.filter( x => x.finishedAt !== false )
+      //     .length / itemQuantity) * 100 ).toFixed(0);
+      
+      //////////////////////////////////
+      
+      const widget = WidgetDB.findOne({ orgKey: Meteor.user().orgKey, _id: b.widgetId});
+      const version = widget.versions.find( x => x.versionKey === b.versionKey );
+      const qtReady = version.quoteTimeScale;
+      
+      let estEnd2fillBuffer = 0;
+      let overQuote = false;
+      
+      if(qtReady && doProto) {
+        const totalUnits = unitTotalCount(b.items);
+        
+        const totalQuoteMinutes = getQuoteTime(qtReady, totalUnits, b.finishedAt);
+        
+        const totalTideMinutes = batchTideTime(b.tide);
+        
+        const quote2tide = totalQuoteMinutes - totalTideMinutes;
+        const q2tNice = Math.abs(quote2tide);
+  
+        const estComplete = moment().addWorkingTime(q2tNice, 'minutes');
+        
+        const fulfill = moment(b.end);
+        const buffer = fulfill.workingDiff(estComplete, 'minutes');
+        
+        estEnd2fillBuffer = buffer || 0;
+        overQuote = quote2tide < 0 ? true : false;
+      }
+        
+        
+      // Dumb diff to ship Priority // minus ship days correct
+      // const workTimeToShip = salesEnd.workingDiff(moment(), 'minutes');
+        
+      collection = {
+        batch: b.batch,
+        batchID: b._id,
+        timeElapse: timeElapse,
+        weekDaysRemain: timeRemain,
+        riverChosen: riverChosen,
+        itemQuantity: itemQuantity,
+        estEnd2fillBuffer: estEnd2fillBuffer,
+        overQuote: overQuote
+      };
+      
+      resolve(collection);
+    }
   });
 }
 
@@ -177,15 +274,63 @@ function collectProgress(privateKey, batchID) {
 }
 
 
+function collectNonCon(privateKey, batchID, temp) {
+  return new Promise(resolve => {
+    let collection = false;
+    const b = BatchDB.findOne({_id: batchID});
+    if(!b) {
+      resolve(collection);
+    }else{
+      const itemQuantity = b.items.length;
+      // nonCon relevant
+      const rNC = b.nonCon.filter( n => !n.trash );
+      // how many nonCons
+      const nonConTotal = temp === 'cool' ? 0 : 
+        rNC.length;
+      // how many are unresolved  
+      const nonConLeft = rNC.filter( x => 
+        x.inspect === false && ( x.skip === false || x.snooze === true )
+      ).length;
+      // how many items have nonCons
+      const hasNonCon = temp === 'cool' ? 0 :
+        [... new Set( Array.from(rNC, x => { return x.serial }) ) ].length;
+      // what percent of items have nonCons
+      const percentOfNCitems = temp === 'cool' ? 0 :
+        ((hasNonCon / itemQuantity) * 100 ).toFixed(0);
+      // how many items are scrapped
+      const itemIsScrap = temp === 'cool' ? 0 :
+        b.items.filter( x => x.history.find( 
+                          y => y.type === 'scrap' && y.good === true ) )
+                            .length;
+      // how many items with RMA
+      let itemHasRMA = temp === 'cool' ? 0 :
+        b.items.filter( x => x.rma.length > 0).length;
+ 
+      collection = {
+        batch: b.batch,
+        batchID: b._id,
+        nonConTotal: nonConTotal,
+        nonConLeft: nonConLeft,
+        percentOfNCitems: isNaN(percentOfNCitems) ? '0%' : percentOfNCitems + '%',
+        itemIsScrap: itemIsScrap,
+        itemHasRMA: itemHasRMA
+      };
+      
+      resolve(collection);
+    }
+  });
+}
+
+
 Meteor.methods({
 
 
 //// Basic Status information for WIP Batches \\\\
-  activeCheck(clientTZ) {
+  activeCheck(clientTZ, sortBy) {
     async function bundleActive(clientTZ) {
       const accessKey = Meteor.user().orgKey;
       try {
-        relevant = await collectRelevant(accessKey, 'warm');
+        relevant = await collectRelevant(accessKey, 'warm', false, sortBy);
         collection = await collectActive(accessKey, clientTZ, relevant);
         return collection;
       }catch (err) {
@@ -194,12 +339,12 @@ Meteor.methods({
     }
     return bundleActive(clientTZ);
   },
-  
-  statusSnapshot(clientTZ, temp, activeList) {
+  /*
+  statusSnapshot(clientTZ, temp, activeList, sortBy) {
     async function bundleStatus(clientTZ) {
       const accessKey = Meteor.user().orgKey;
       try {
-        relevant = await collectRelevant(accessKey, temp, activeList);
+        relevant = await collectRelevant(accessKey, temp, activeList, sortBy);
         collection = await collectInfo(clientTZ, temp, relevant);
         return collection;
       }catch (err) {
@@ -207,6 +352,19 @@ Meteor.methods({
       }
     }
     return bundleStatus(clientTZ, temp);
+  },
+  */
+  overviewBatchStatus(batchID, clientTZ, doProto) {
+    async function bundleProgress(batchID) {
+      const accessKey = Meteor.user().orgKey;
+      try {
+        bundle = await collectStatus(accessKey, batchID, clientTZ, doProto);
+        return bundle;
+      }catch (err) {
+        throw new Meteor.Error(err);
+      }
+    }
+    return bundleProgress(batchID);
   },
   
   phaseProgress(batchID) {
@@ -220,20 +378,20 @@ Meteor.methods({
       }
     }
     return bundleProgress(batchID);
-  }
-});
-
-/*
-  let ncTypeCounts = [];
-    for(let ncType of aNCOps) {
-      let typNum = 0;
-      for(let t of batchesNC) {
-        let nw = t.nonCon.filter(
-                  x => x.type === ncType &&
-                    moment(x.time)
-                      .isBetween(sRange, eRange) );
-        typNum += nw.length;
+  },
+  
+  nonconQuickStats(batchID, temp) {
+    async function bundleNonCon(batchID) {
+      const accessKey = Meteor.user().orgKey;
+      try {
+        bundle = await collectNonCon(accessKey, batchID, temp);
+        return bundle;
+      }catch (err) {
+        throw new Meteor.Error(err);
       }
-      ncTypeCounts.push({meta: ncType, value: typNum});
     }
-*/
+    return bundleNonCon(batchID);
+  }
+  
+  
+});

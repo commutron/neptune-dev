@@ -17,7 +17,7 @@ const VersionList = ({ versionData, widgetData, app })=>	{
       <div className='space'>
         {v.length < 1 ? <p>no {Pref.version}s created</p> : null}
         {v.map( (entry, index)=> {
-          let ac = entry.live ? 'activeMark' : '';
+          let ac = entry.live ? 'activeMark vmarginhalf' : 'vmarginhalf';
           return(
             <VersionIndexCard 
               key={entry.versionKey} 
