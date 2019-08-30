@@ -27,6 +27,15 @@ function getGroup(groupId) {
     resolve(group);
   });
 }
+
+function unitTotalCount(items) {
+  let totalUnits = 0;
+  for(let i of items) {
+    totalUnits += i.units;
+  }
+  return totalUnits;
+}
+
 */
     
 Meteor.methods({

@@ -685,16 +685,19 @@ input.variableInput.biggest {
 }
 
 input.numberSet {
-  width: 6ch;
+  width: 7ch;
   height: 2rem;
   line-height: 1.1;
   font-size: 1rem;
+  border: 1px solid black;
 }
 button.numberSet {
   height: 2rem;
   min-height: 2rem;
   line-height: 1.1;
   font-size: 0.9rem;
+  border: 1px solid black;
+  text-transform: none;
 }
 
 .actionBox .flatpickr-input ~ .form-control {

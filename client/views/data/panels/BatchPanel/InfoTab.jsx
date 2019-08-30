@@ -4,6 +4,7 @@ import business from 'moment-business';
 import Pref from '/client/global/pref.js';
 
 import GeneralChunk from './GeneralChunk.jsx';
+import PrioritySquare from '/client/components/bigUi/PrioritySquare.jsx';
 import BatchFinish from '/client/components/forms/BatchFinish.jsx';
 import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 import StepsProgress from '/client/components/bigUi/StepsProgress/StepsProgress.jsx';
@@ -19,14 +20,23 @@ const InfoTab = ({
       <div className='oneThirdContent min200'>
       
         <div className='vmarginhalf centreText line2x'>
-          { b.live &&
-            <b><i className='fas fa-sync blueT fa-2x' title='Live'></i></b>
-          }
-          <BatchFinish 
-            batchId={b._id} 
-            finished={done} 
-            allFinished={allDone}
-            live={b.live} />
+          
+          
+            
+            { b.live &&
+              <div className='centreRow balance'>
+                <PrioritySquare
+                  batchID={b._id}
+                  app={a} />
+                <b><i className='fas fa-sync blueT fa-2x' title='Live'></i></b>
+              </div>
+            }
+            <BatchFinish 
+              batchId={b._id} 
+              finished={done} 
+              allFinished={allDone}
+              live={b.live} />
+          
         </div>
         
         <div className='vmargin'>

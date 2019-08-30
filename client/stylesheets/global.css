@@ -86,6 +86,7 @@ input[type='reset'] {
   -ms-user-select: none;
   -o-user-select: none;
   user-select: none;
+  cursor: pointer;
 }
 button:disabled, button:disabled:hover, button:disabled span, button:disabled label {
   opacity: 0.5;

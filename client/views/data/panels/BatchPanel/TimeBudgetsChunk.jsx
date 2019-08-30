@@ -5,21 +5,13 @@ import 'moment-timezone';
 import Pref from '/client/global/pref.js';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 
+import { TimeBudgetUpgrade, WholeTimeBudget } from '/client/components/forms/QuoteTimeBudget.jsx';
 import TimeBudgetBar from '/client/components/charts/TimeBudgetBar/TimeBudgetBar.jsx';
 
 const TimeBudgetsChunk = ({
   a, b, v,
   totalUnits,
 }) =>	{
-
-  if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
-    const clientTZ = moment.tz.guess();
-    Meteor.call('getDistanceFromFulfill', b.batch, clientTZ, (err, re)=>{
-      err && console.log(err);
-      re && console.log(re);
-    });
-  }
-  
   
   const totalST = ()=> {
     let totalTime = 0;
@@ -39,21 +31,13 @@ const TimeBudgetsChunk = ({
     return { totalTime, totalPeople };
   };
   const totalsCalc = totalST();
-  const asHours = (mnts) => moment.duration(mnts, "minutes").asHours().toFixed(1, 10);
+  const asHours = (mnts) => moment.duration(mnts, "minutes").asHours().toFixed(2, 10);
+
+  const qtBready = !b.quoteTimeBudget ? false : true;
+  const qtB = qtBready && b.quoteTimeBudget.length > 0 ? 
+                b.quoteTimeBudget[0].timeAsMinutes : 0;
   
-  const tU = !totalUnits ? 0 : totalUnits;
-  
-  const qtReady = v.quoteTimeScale;
-  
-  const qtRelevant = qtReady && b.finishedAt !== false ?
-    v.quoteTimeScale.filter( x => moment(x.updatedAt).isSameOrBefore(b.finishedAt) )
-    : v.quoteTimeScale;
-    
-  const qTS = qtReady && qtRelevant.length > 0 ? 
-                qtRelevant[0].timeAsMinutes : 0;
-  let qTSU = qTS * tU;
-  
-  const totalQuoteMinutes = qTSU || 0;
+  const totalQuoteMinutes = qtB || 0;
   const totalQuoteAsHours = asHours(totalQuoteMinutes);
   
   const totalTideMinutes = totalsCalc.totalTime;
@@ -78,6 +62,7 @@ const TimeBudgetsChunk = ({
 
   const totalPeople = [...totalsCalc.totalPeople];
   const tP = totalPeople.length;
+
   
   return(
     <div className=''>
@@ -110,6 +95,11 @@ const TimeBudgetsChunk = ({
             title={`${bufferNice} minutes\n(aka ${bufferAsHours} hours)\n${bufferMessage}`}
           >{bufferNice} <i className='med'>minutes {bufferMessage}</i>
           </p>
+          
+          {!qtBready ? <TimeBudgetUpgrade bID={b._id} /> :
+            <WholeTimeBudget bID={b._id} /> }
+          
+          
         </div>
         
         <div className='avThreeContent numFont'>
@@ -138,7 +128,7 @@ const TimeBudgetsChunk = ({
           Logged time is recorded to the second and is displayed to the nearest minute.
         </p>
         <p className='footnote'>
-          minutes_quoted = quote_time_scale({qTS}) * total_units({tU})
+          minutes_quoted = {qtB}
         </p>
       </details>
       

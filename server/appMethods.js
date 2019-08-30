@@ -389,29 +389,6 @@ Meteor.methods({
   },
   
 // Smarter NonCon Types
-
-  // remove after transistion
-  updateToNewNonConScheme() {
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      const doc = AppDB.findOne({orgKey: Meteor.user().orgKey});
-      const docReady = !doc.nonConTypeLists ? false : true;
-      if(!docReady || doc.nonConOptionA || doc.nonConOptionB) {
-        AppDB.update({orgKey: Meteor.user().orgKey}, {
-          $set : { 
-            nonConTypeLists : []
-        }});
-        AppDB.update({orgKey: Meteor.user().orgKey}, {
-          $unset : { nonConOptionA : "" } });
-        AppDB.update({orgKey: Meteor.user().orgKey}, {
-          $unset : { nonConOptionB : "" } });
-        return true;
-      }else{
-        return true;
-      }
-    }else{
-      return false;
-    }
-  },
   
   addNonConTypeList(inputValue, inputPrefix) {
     try{

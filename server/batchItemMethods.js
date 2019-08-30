@@ -26,6 +26,7 @@ Meteor.methods({
   			salesOrder: salesNum,
   			start: sDate,
   			end: eDate,
+  			quoteTimeBudget: [],
   			notes: false,
         river: false,
         riverAlt: false,
@@ -172,6 +173,43 @@ Meteor.methods({
       return true;
     }else{
       return false;
+    }
+  },
+  
+// setup quote time key
+  upBatchTimeBudget(batchId) {
+    try{
+      if(Roles.userIsInRole(Meteor.userId(), ['sales', 'edit'])) {
+        BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+          $set : { 
+            'quoteTimeBudget': []
+          }});
+      }else{
+        null;
+      }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  // push time budget, whole time for batch
+  pushBatchTimeBudget(batchId, qTime) {
+    try{
+      if(Roles.userIsInRole(Meteor.userId(), ['sales', 'edit'])) {
+        BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+          $push : { 
+            'quoteTimeBudget': {
+              $each: [ {
+                updatedAt: new Date(),
+                timeAsMinutes: Number(qTime)
+              } ],
+              $position: 0
+            }
+          }});
+      }else{
+        null;
+      }
+    }catch (err) {
+      throw new Meteor.Error(err);
     }
   },
   

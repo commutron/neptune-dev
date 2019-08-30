@@ -2,7 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import NumStat from '/client/components/uUi/NumStat.jsx';
-import PrioritySquare from '/client/components/tinyUi/PrioritySquare.jsx';
+import PrioritySquare from '/client/components/bigUi/PrioritySquare.jsx';
 import BinaryStat from '/client/components/uUi/BinaryStat.jsx';
 import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
@@ -68,8 +68,8 @@ export default BatchDetails;
 
 const BatchDetailChunk = ({ sindex, ck, warm, user, clientTZ, app})=> (
 
-  <div className='overGridRowScroll'>
-    {Roles.userIsInRole(Meteor.userId(), ['nightly', 'debug']) && 
+  <div className='overGridRowScroll' title={ck.batch}>
+    {Roles.userIsInRole(Meteor.userId(), 'debug') && 
       <div><b>{ck.batch}</b></div> }
     <div><i>SO: {ck.salesOrder}</i></div>
     <div><i>Due {moment(ck.end).format("MMM Do, YYYY")}</i></div>
@@ -120,11 +120,6 @@ const BatchTopStatus = ({ batchID, clientTZ, app })=> {
    
   if( dt && dt.batchID === batchID ) {
     
-    const bffrTime = dt.estEnd2fillBuffer;
-    const overQuote = dt.overQuote;
-    Roles.userIsInRole(Meteor.userId(), 'debug') &&
-      console.log({batchID, bffrTime, overQuote});
-    
     return(
       <Fragment>
         <div><i>Created {dt.timeElapse} ago</i></div>
@@ -148,11 +143,9 @@ const BatchTopStatus = ({ batchID, clientTZ, app })=> {
             size='big' />
         </div>
         
-      {Roles.userIsInRole(Meteor.userId(), 'nightly') &&
         <PrioritySquare
-          bffrTime={bffrTime}
-          overQuote={overQuote} />
-      }
+          batchID={batchID}
+          app={app} />
     
         <div>
           <NumStat
@@ -173,13 +166,9 @@ const BatchTopStatus = ({ batchID, clientTZ, app })=> {
     );
   }
   
-  const placeholderStatus = Roles.userIsInRole(Meteor.userId(), 'nightly') ?
-    ['duration', 'remaining', 'proto rank', '# of items', 'flow'] :
-    ['duration', 'remaining', '# of items', 'flow'];
-    
   return(
     <Fragment>
-      {placeholderStatus
+      {['duration', 'remaining', 'priority', '# of items', 'flow']
         .map( (st, index)=>{
           return(
             <div key={batchID + st + index + 'x'}>

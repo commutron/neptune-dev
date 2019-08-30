@@ -17,34 +17,6 @@ moment.updateLocale('en', {
 //const now = moment().tz(clientTZ);
 //const isNow = (t)=>{ return ( now.isSame(moment(t), 'day') ) };
 
-function unitTotalCount(items) {
-  let totalUnits = 0;
-  for(let i of items) {
-    totalUnits += i.units;
-  }
-  return totalUnits;
-}
-
-function getQuoteTime(qtReady, totalUnits, finishedAt) {
-  
-  const qt = !qtReady ? [] : qtReady;
-  const tU = !totalUnits ? 0 : totalUnits;
-    
-  const qtRelevant = qt && finishedAt !== false ?
-    qt.filter( x => moment(x.updatedAt).isSameOrBefore(finishedAt) )
-    : qt;
-    
-  const qTS = qt && qtRelevant.length > 0 ? 
-              qtRelevant[0].timeAsMinutes : 0;
-              
-  const qTSU = qTS * tU;
-  if( !qTSU || typeof qTSU !== 'number' || qTSU === 0 ) {
-    return false;
-  }else{
-    return qTSU;
-  }
-}
-
 function batchTideTime(batchTide) {
     
   if(!batchTide) {
@@ -111,46 +83,9 @@ function collectActive(accessKey, clientTZ, relevant) {
     resolve(list);
   });
 }
-/*
-function collectInfo(clientTZ, temp, relevant) {
-  return new Promise(resolve => {
-    const now = moment().tz(clientTZ);
-    let collection = [];
-    for(let b of relevant) {
-      // is it done
-      const complete = b.finishedAt !== false;
-      // when is it due
-      const salesEnd = moment(b.end);
-      // how long since start
-      const timeElapse = moment.duration(now.diff(b.start)).humanize();
-      // how long untill due
-      const timeRemain = !complete ? business.weekDays( now, salesEnd ) : 0; 
-      // how many items
-      const itemQuantity = b.items.length;
-      // River Setup
-      const riverChosen = b.river !== false;
-      // what percent of items are complete
-      // const percentOfDoneItems = temp === 'cool' ? 0 : 
-      //   (( b.items.filter( x => x.finishedAt !== false )
-      //     .length / itemQuantity) * 100 ).toFixed(0);
-        
-      collection.push({
-        batch: b.batch,
-        batchID: b._id,
-        salesOrder: b.salesOrder,
-        salesEnd: salesEnd.format("MMM Do, YYYY"),
-        timeElapse: timeElapse,
-        weekDaysRemain: timeRemain,
-        riverChosen: riverChosen,
-        itemQuantity: itemQuantity,
-      });
-    
-    }
-    resolve(collection);
-  });
-}
-*/
-function collectStatus(privateKey, batchID, clientTZ, doProto) {
+
+
+function collectStatus(privateKey, batchID, clientTZ) {
   return new Promise(resolve => {
     let collection = false;
     const b = BatchDB.findOne({_id: batchID});
@@ -176,18 +111,39 @@ function collectStatus(privateKey, batchID, clientTZ, doProto) {
       //     .length / itemQuantity) * 100 ).toFixed(0);
       
       //////////////////////////////////
+     
+      collection = {
+        batch: b.batch,
+        batchID: b._id,
+        timeElapse: timeElapse,
+        weekDaysRemain: timeRemain,
+        riverChosen: riverChosen,
+        itemQuantity: itemQuantity,
+      };
       
-      const widget = WidgetDB.findOne({ orgKey: Meteor.user().orgKey, _id: b.widgetId});
-      const version = widget.versions.find( x => x.versionKey === b.versionKey );
-      const qtReady = version.quoteTimeScale;
+      resolve(collection);
+    }
+  });
+}
+
+function collectPriority(privateKey, batchID) {
+  return new Promise(resolve => {
+    let collection = false;
+    const b = BatchDB.findOne({_id: batchID});
+    if(!b) {
+      resolve(collection);
+    }else{
       
-      let estEnd2fillBuffer = 0;
+      const qtBready = !b.quoteTimeBudget ? false : true;
+      
+      let estEnd2fillBuffer = false;
       let overQuote = false;
       
-      if(qtReady && doProto) {
-        const totalUnits = unitTotalCount(b.items);
+      if(qtBready) {
+        const qtB = qtBready && b.quoteTimeBudget.length > 0 ? 
+                    b.quoteTimeBudget[0].timeAsMinutes : 0;
         
-        const totalQuoteMinutes = getQuoteTime(qtReady, totalUnits, b.finishedAt);
+        const totalQuoteMinutes = qtB || 0;
         
         const totalTideMinutes = batchTideTime(b.tide);
         
@@ -202,18 +158,10 @@ function collectStatus(privateKey, batchID, clientTZ, doProto) {
         estEnd2fillBuffer = buffer || 0;
         overQuote = quote2tide < 0 ? true : false;
       }
-        
-        
-      // Dumb diff to ship Priority // minus ship days correct
-      // const workTimeToShip = salesEnd.workingDiff(moment(), 'minutes');
-        
+     
       collection = {
         batch: b.batch,
         batchID: b._id,
-        timeElapse: timeElapse,
-        weekDaysRemain: timeRemain,
-        riverChosen: riverChosen,
-        itemQuantity: itemQuantity,
         estEnd2fillBuffer: estEnd2fillBuffer,
         overQuote: overQuote
       };
@@ -339,32 +287,31 @@ Meteor.methods({
     }
     return bundleActive(clientTZ);
   },
-  /*
-  statusSnapshot(clientTZ, temp, activeList, sortBy) {
-    async function bundleStatus(clientTZ) {
-      const accessKey = Meteor.user().orgKey;
-      try {
-        relevant = await collectRelevant(accessKey, temp, activeList, sortBy);
-        collection = await collectInfo(clientTZ, temp, relevant);
-        return collection;
-      }catch (err) {
-        throw new Meteor.Error(err);
-      }
-    }
-    return bundleStatus(clientTZ, temp);
-  },
-  */
-  overviewBatchStatus(batchID, clientTZ, doProto) {
+  
+  overviewBatchStatus(batchID, clientTZ) {
     async function bundleProgress(batchID) {
       const accessKey = Meteor.user().orgKey;
       try {
-        bundle = await collectStatus(accessKey, batchID, clientTZ, doProto);
+        bundle = await collectStatus(accessKey, batchID, clientTZ);
         return bundle;
       }catch (err) {
         throw new Meteor.Error(err);
       }
     }
     return bundleProgress(batchID);
+  },
+  
+  priorityRank(batchID) {
+    async function bundlePriority(batchID) {
+      const accessKey = Meteor.user().orgKey;
+      try {
+        bundle = await collectPriority(accessKey, batchID);
+        return bundle;
+      }catch (err) {
+        throw new Meteor.Error(err);
+      }
+    }
+    return bundlePriority(batchID);
   },
   
   phaseProgress(batchID) {

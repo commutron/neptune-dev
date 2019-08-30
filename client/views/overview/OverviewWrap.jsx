@@ -30,12 +30,9 @@ export default class OverviewWrap extends Component	{
       tickingTime: moment(),
       sortBy: 'batch',
       hotBatches: false,
-      // hotStatus: [],
       warmBatches: false,
       lukeBatches: false,
-      // lukeStatus: [],
       coolBatches: false,
-      // coolStatus: []
     };
   }
   
@@ -105,28 +102,13 @@ export default class OverviewWrap extends Component	{
           this.setState({
             hotBatches: hot,
             lukeBatches: luke,
+            loadTime: moment()
           });
-          //this.populate(clientTZ, reply, sortBy);
         }
       });
     });
   }
-  /*
-  populate(clientTZ, activeList, sortBy) {
-    this.fetchInitial(clientTZ, 'hot', 'hotStatus', activeList, sortBy)
-      .then(this.fetchInitial(clientTZ, 'luke', 'lukeStatus', activeList, sortBy))
-        .then(this.fetchInitial(clientTZ, 'cool', 'coolStatus', activeList, sortBy))
-          .then(this.setState({ loadTime: moment() }));
-  }
-  fetchInitial(clientTZ, temp, slot, activeList, sortBy) {
-    return new Promise(() => {
-      Meteor.call('statusSnapshot', clientTZ, temp, activeList, sortBy, (error, reply)=> {
-        error && console.log(error);
-        this.setState({ [slot]: reply });
-      });
-    });
-  }
-  */
+
   render() {
     
     //console.log({hot: this.state.hotBatches});

@@ -107,7 +107,7 @@ const BatchPanel = (props)=> {
           wide={true}
           stick={false}
           hold={true}
-          sessionTab='batchExPanelTabs'>
+          sessionTab='batchPanelTabs'>
           
           <InfoTab 
             a={props.app}

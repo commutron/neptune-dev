@@ -1,20 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import './style.css';
 
 const Tabs = ({ tabs, names, wide, stick, hold, sessionTab, children })=> {
   
-  const [ sect, setSect ] = useState(0);
+  const [ sect, setSect ] = useState( Session.get(sessionTab) || 0 );
 
-  useEffect( ()=>{
-    if(!hold) { 
-      null;
-    }else{
-      const holder = Session.get(sessionTab);
-      !holder ? null : setSect( holder );
-    }
-  }, []);
-  
   function handleClick(clk) {
     setSect(clk);
     !hold ? null : Session.set(sessionTab, clk);

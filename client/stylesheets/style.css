@@ -21,7 +21,6 @@
   min-width: 2rem;
 	height: 2rem;
 	padding: 0 10px;
-	cursor: pointer;
 }
 
 .blendAction {
@@ -30,7 +29,6 @@
   width: 2.5vw;
   height: 2.5vw;
 	padding: 0;
-	cursor: pointer;
 }
 .blendAction:focus, .blendAction:active {
   outline: dotted;
@@ -43,7 +41,6 @@
   border-bottom-style: solid;
   border-bottom-color: transparent;
   background-color: transparent;
-  cursor: pointer;
 }
 .miniAction:hover {
   opacity: 1;
@@ -262,12 +259,12 @@ label.qdpplRound {
 }
 .greenHover,
 .invert .greenHover {
-	color: var(--emerald);
+	color: var(--black);
 	background-color: var(--clouds);
 }
 .greenHover:hover,
 .invert .greenHover:hover {
-  color: var(--clouds);
+  color: var(--black);
 	background-color: var(--emerald);
 }
 .greenHover:disabled:hover,
@@ -582,6 +579,10 @@ label.qdpplRound {
 .proPurple::-webkit-progress-value { background-color: var(--wisteria); }
 .proPurple::-moz-progress-bar { background-color: var(--wisteria); }
 
+.pScale1 { background-color: var(--pomegranate); }
+.pScale2 { background-color: var(--carrot); }
+.pScale3 { background-color: var(--sunflower); }
+.pScale4 { background-color: var(--peterriver); }
 
 .clean {
   font-style: normal;

@@ -1,37 +1,32 @@
-import React, {Component} from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
+//import Pref from '/client/global/pref.js';
 
 import LeapButton from '/client/components/tinyUi/LeapButton.jsx';
-import FilterItems from '../../../components/bigUi/FilterItems.jsx';
+import FilterItems from '/client/components/bigUi/FilterItems.jsx';
 
-export default class ItemsList extends Component	{
+const ItemsList = (props)=> {
   
-  constructor() {
-    super();
-    this.state = {
-      keyword: false,
-      timeModifyer: false,
-      notModifyer: false
-    };
-  }
+  const [ stateList, setList ] = useState([]);
+  const [ keyword, setKeyword ] = useState(false);
+  const [ timeModifyer, setTime ] = useState(false);
+  const [ notModifyer, setMod ] = useState(false);
   
-  // Set scroll position from stored
-  componentDidMount() {
+  useEffect( ()=> {
     let el = document.getElementById('exItemList');
     const pos = Session.get('itemListScrollPos') || {b: false, num: 0};
-    if(this.props.batchData.batch === pos.b) { el.scrollTop = pos.num || 0 }
-  }
+    if(props.batchData.batch === pos.b) { el.scrollTop = pos.num || 0 }
+  }, []);
   
   // update filter state
-  setKeywordFilter(keyword) { this.setState({ keyword: keyword.toLowerCase() }); }
-  setTimeFilter(rule) { this.setState({ timeModifyer: rule }); }
-  setToggle(rule) { this.setState({ notModifyer: rule }); }
+  function setKeywordFilter(keyword) { setKeyword( keyword.toLowerCase() ); }
+  function setTimeFilter(rule) { setTime( rule ); }
+  function setToggle(rule) { setMod( rule ); }
   
   // get flow steps for menu
-  flowSteps() {
-    let flow = this.props.widgetData.flows.find( x => x.flowKey === this.props.batchData.river );
-    let flowAlt = this.props.widgetData.flows.find( x => x.flowKey === this.props.batchData.riverAlt );
+  function flowSteps() {
+    let flow = props.widgetData.flows.find( x => x.flowKey === props.batchData.river );
+    let flowAlt = props.widgetData.flows.find( x => x.flowKey === props.batchData.riverAlt );
     let steps = new Set();
     if(flow) {
       for(let s of flow.flow) {
@@ -50,7 +45,7 @@ export default class ItemsList extends Component	{
   }
 
   // Sort Filters
-  fDone(items, timeMod, notMod) {
+  function fDone(items, timeMod, notMod) {
     if(!timeMod || timeMod === '') {
       if(notMod === true) {
         return items.filter( x => x.finishedAt === false );
@@ -70,7 +65,7 @@ export default class ItemsList extends Component	{
     }
   }
   
-  fInproc(items, timeMod, notMod) {
+  function fInproc(items, timeMod, notMod) {
     if(!timeMod || timeMod === '') {
       if(notMod === true) {
         return items.filter( x => x.finishedAt !== false );
@@ -90,7 +85,7 @@ export default class ItemsList extends Component	{
     }
   }
   
-  fFirsts(items, timeMod, notMod) {
+  function fFirsts(items, timeMod, notMod) {
     let filtered = [];
     if(!timeMod || timeMod === '') {
       if(notMod === true) {
@@ -120,7 +115,7 @@ export default class ItemsList extends Component	{
     return filtered; 
   }
   
-  fNoncons(items, nonCon, timeMod, notMod) {
+  function fNoncons(items, nonCon, timeMod, notMod) {
     let filtered = [];
     if(!timeMod || timeMod === '') {
       if(notMod === true) {
@@ -150,7 +145,7 @@ export default class ItemsList extends Component	{
     return filtered;
   }
   
-  fShortfalls(items, short, timeMod, notMod) {
+  function fShortfalls(items, short, timeMod, notMod) {
     let filtered = [];
     if(!timeMod || timeMod === '') {
       if(notMod === true) {
@@ -180,7 +175,7 @@ export default class ItemsList extends Component	{
     return filtered;
   }
   
-  fAlt(items, notMod) {
+  function fAlt(items, notMod) {
     if(notMod === true) {
       return items.filter( x => x.alt === 'no' );
     }else{
@@ -188,7 +183,7 @@ export default class ItemsList extends Component	{
     }
   }
   
-  fRma(items, notMod) {
+  function fRma(items, notMod) {
     if(notMod === true) {
       return items.filter( x => x.rma.length === 0);
     }else{
@@ -196,7 +191,7 @@ export default class ItemsList extends Component	{
     }
   }
   
-  fScrap(items, timeMod, notMod) {
+  function fScrap(items, timeMod, notMod) {
     let scrapList = [];
     items.map( (entry)=>{
       for(let v of entry.history) {
@@ -233,7 +228,7 @@ export default class ItemsList extends Component	{
   }
   
   
-  fStep(items, flowKey, timeMod, notMod) {
+  function fStep(items, flowKey, timeMod, notMod) {
     const key = flowKey.slice(1);
     let filtered = [];
     if(!flowKey) {
@@ -241,23 +236,23 @@ export default class ItemsList extends Component	{
     }else if(!timeMod || timeMod === '') {
       if(notMod === true) {
         filtered = items.filter( 
-                    x => x.history.filter( y => y.key === key )
+                    x => x.history.filter( y => y.key === key && y.good === true )
                       .length === 0 );
       }else{
         filtered = items.filter( 
-                  x => x.history.filter( y => y.key === key )
+                  x => x.history.filter( y => y.key === key && y.good === true )
                     .length > 0 );
       }
     }else{
       if(notMod === true) {
         filtered = items.filter( 
-                    x => x.history.filter( y => y.key === key &&
+                    x => x.history.filter( y => y.key === key && y.good === true &&
                       moment(moment(y.time).format('YYYY-MM-DD'))
                         .isSame(timeMod, 'day') )
                       .length === 0 );
       }else{
         filtered = items.filter( 
-                  x => x.history.filter( y => y.key === key &&
+                  x => x.history.filter( y => y.key === key && y.good === true &&
                     moment(moment(y.time).format('YYYY-MM-DD'))
                       .isSame(timeMod, 'day') )
                     .length > 0 );
@@ -265,82 +260,79 @@ export default class ItemsList extends Component	{
     }
     return filtered;                                 
   }
+    
+  const b = props.batchData;
+  const nonCon = b.nonCon;
+  const short = b.shortfall || [];
   
-  render() {
+  const scrap = b ? fScrap(b.items, timeModifyer, notModifyer) : 
+                    { scrapList: [], iList: [] };
+  
+  const steps = flowSteps();
+   
+  useEffect( ()=> { 
+    const K = keyword;
     
-    const kywrd = this.state.keyword;
-    const timeModifyer = this.state.timeModifyer;
-    const notModifyer = this.state.notModifyer;
+    Roles.userIsInRole(Meteor.userId(), 'debug') &&
+      console.log({ K, timeModifyer, notModifyer });
     
-    {Roles.userIsInRole(Meteor.userId(), 'debug') &&
-      console.log({ kywrd, timeModifyer, notModifyer });}
-      
-    const b = this.props.batchData;
-    const nonCon = b.nonCon;
-    const short = b.shortfall || [];
-    
-    const scrap = b ? this.fScrap(b.items, timeModifyer, notModifyer) : 
-                      { scrapList: [], iList: [] };
-    
-    const steps = this.flowSteps();
-    
-    ////////////////////////////////
     let filteredList = 
-      !kywrd ?
-        b.items :
-      kywrd.startsWith('@') ?
-        this.fStep(b.items, kywrd, timeModifyer, notModifyer) :
-      kywrd === 'complete' ?
-        this.fDone(b.items, timeModifyer, notModifyer) :
-      kywrd === 'in progress' ?
-        this.fInproc(b.items, timeModifyer, notModifyer) :
-      kywrd === 'first offs' ?
-        this.fFirsts(b.items, timeModifyer, notModifyer) :
-      kywrd === 'nonconformances' ?
-        this.fNoncons(b.items, nonCon, timeModifyer, notModifyer) :
-      kywrd === 'shortfalls' ?
-        this.fShortfalls(b.items, short, timeModifyer, notModifyer) :
-      kywrd === 'alternative' ?
-        this.fAlt(b.items, notModifyer) :
-      kywrd === 'rma' ?
-        this.fRma(b.items, notModifyer) :
-      kywrd === 'scrap' ? 
-        scrap.iList :
-      //kywrd === typeof 'String' ?
-        //b.items.filter( tx => tx.serial.toLowerCase().includes(textString) === true ) :
-      b.items;
-    /////////////////////////////////////
-    
-    let showListOrder = filteredList.sort( (x,y)=> x.serial - y.serial);
+    !K ?
+      b.items :
+    K.startsWith('@') ?
+      fStep(b.items, K, timeModifyer, notModifyer) :
+    K === 'complete' ?
+      fDone(b.items, timeModifyer, notModifyer) :
+    K === 'in progress' ?
+      fInproc(b.items, timeModifyer, notModifyer) :
+    K === 'first offs' ?
+      fFirsts(b.items, timeModifyer, notModifyer) :
+    K === 'nonconformances' ?
+      fNoncons(b.items, nonCon, timeModifyer, notModifyer) :
+    K === 'shortfalls' ?
+      fShortfalls(b.items, short, timeModifyer, notModifyer) :
+    K === 'alternative' ?
+      fAlt(b.items, notModifyer) :
+    K === 'rma' ?
+      fRma(b.items, notModifyer) :
+    K === 'scrap' ? 
+      scrap.iList :
+    b.items;
 
-    return (
-      
-        <div className='' key={1}>
-          <FilterItems
-            title={b.batch}
-            total={showListOrder.length}
-            advancedList={steps}
-            selectedKeyword={kywrd}
-            selectedToggle={notModifyer}
-            onKeywordChange={e => this.setKeywordFilter(e)}
-            onTimeChange={e => this.setTimeFilter(e)}
-            onNotChange={e => this.setToggle(e)} />
-          {showListOrder.map( (entry, index)=> {
-            let style = entry.history.length === 0 ? 'leapBar numFont' :
-                        entry.finishedAt === false ? 'leapBar numFont activeMark' : 
-                        scrap.scrapList.includes(entry.serial) ? 'leapBar numFont ngMark' : 'leapBar numFont gMark';
-              return (
-                <LeapButton
-                  key={index} 
-                  title={entry.serial} 
-                  sub='' 
-                  sty={style}
-                  address={'/data/batch?request=' + b.batch + '&specify=' + entry.serial}
-                />
-              );
-          })}
-  			</div>
-			
-    );
-  }
-}
+    let showListOrder = filteredList.sort( (x,y)=> x.serial - y.serial);
+    
+    setList(showListOrder);
+  }, [ keyword, timeModifyer, notModifyer ]);
+
+  return (
+    
+      <div className='' key={1}>
+        <FilterItems
+          title={b.batch}
+          total={stateList.length}
+          advancedList={steps}
+          selectedKeyword={keyword}
+          selectedToggle={notModifyer}
+          onKeywordChange={e => setKeywordFilter(e)}
+          onTimeChange={e => setTimeFilter(e)}
+          onNotChange={e => setToggle(e)} />
+        {stateList.map( (entry, index)=> {
+          let style = entry.history.length === 0 ? 'leapBar numFont' :
+                      entry.finishedAt === false ? 'leapBar numFont activeMark' : 
+                      scrap.scrapList.includes(entry.serial) ? 'leapBar numFont ngMark' : 'leapBar numFont gMark';
+            return (
+              <LeapButton
+                key={index} 
+                title={entry.serial} 
+                sub='' 
+                sty={style}
+                address={'/data/batch?request=' + b.batch + '&specify=' + entry.serial}
+              />
+            );
+        })}
+			</div>
+		
+  );
+};
+
+export default ItemsList;

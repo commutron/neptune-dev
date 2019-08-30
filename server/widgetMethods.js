@@ -293,17 +293,12 @@ Meteor.methods({
   
   // Quoted Time Budget \\
   
-  // setup quote time keys
-  addQuoteTime(widgetId, vKey) {
+  clearQuoteTime(widgetId, vKey) {
     try{
       if(Roles.userIsInRole(Meteor.userId(), ['sales', 'edit'])) {
-        WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.versionKey': vKey}, {
-          $set : { 
-            'versions.$.quoteTimeScale': []
-          }});
         WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.versionKey': vKey}, {
           $unset : { 
-            'versions.$.quoteTimeBasline': ""
+            'versions.$.quoteTimeScale': ""
           }});
       }else{
         null;
@@ -312,27 +307,7 @@ Meteor.methods({
       throw new Meteor.Error(err);
     }
   },
-  // push scale, per item time
-  pushScaleTime(widgetId, vKey, qTimeScale) {
-    try{
-      if(Roles.userIsInRole(Meteor.userId(), ['sales', 'edit'])) {
-        WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.versionKey': vKey}, {
-          $push : { 
-            'versions.$.quoteTimeScale': {
-              $each: [ {
-                updatedAt: new Date(),
-                timeAsMinutes: Number(qTimeScale)
-              } ],
-              $position: 0
-            }
-          }});
-      }else{
-        null;
-      }
-    }catch (err) {
-      throw new Meteor.Error(err);
-    }
-  },
+
   
   // needs testing
     /*
