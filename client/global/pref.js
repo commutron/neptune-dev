@@ -76,6 +76,7 @@ class Pref {
     this.salesOrder = 'sales order';
     this.start = 'start date';
     this.end = 'fulfill date';
+    this.timeBudget = 'time budget';
     this.tag = 'flag';
     this.comp = 'part';
     this.kit = 'kit';

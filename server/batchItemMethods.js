@@ -3,7 +3,7 @@ import moment from 'moment';
 Meteor.methods({
 
 //// Batches \\\\
-  addBatch(batchNum, widgetId, vKey, salesNum, sDate, eDate) {
+  addBatch(batchNum, widgetId, vKey, salesNum, sDate, eDate, qTime) {
     const doc = WidgetDB.findOne({_id: widgetId});
     const legacyduplicate = BatchDB.findOne({batch: batchNum});
     const duplicateX = XBatchDB.findOne({batch: batchNum});
@@ -26,7 +26,10 @@ Meteor.methods({
   			salesOrder: salesNum,
   			start: sDate,
   			end: eDate,
-  			quoteTimeBudget: [],
+  			quoteTimeBudget: [{
+          updatedAt: new Date(),
+          timeAsMinutes: Number(qTime)
+        }],
   			notes: false,
         river: false,
         riverAlt: false,
@@ -39,7 +42,8 @@ Meteor.methods({
         blocks: [],
         omitted: [],
         shortfall: [],
-        events: []
+        altered: [],
+        events: [],
       });
       Meteor.defer( ()=>{
         Meteor.call('batchCacheUpdate', accessKey, true);
@@ -50,7 +54,7 @@ Meteor.methods({
     }
   },
   
-  editBatch(batchId, newBatchNum, vKey, salesNum, sDate, eDate) {
+  editBatch(batchId, newBatchNum, vKey, salesNum, sDate) {
     const doc = BatchDB.findOne({_id: batchId});
     let legacyduplicate = BatchDB.findOne({batch: newBatchNum});
     let duplicateX = XBatchDB.findOne({batch: newBatchNum});
@@ -63,9 +67,33 @@ Meteor.methods({
           versionKey: vKey,
           salesOrder: salesNum,
           start: sDate,
-  			  end: eDate,
   			  updatedAt: new Date(),
   			  updatedWho: Meteor.userId()
+        }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  alterBatchFulfill(batchId, oldDate, newDate, reason) {
+    
+    const auth = Roles.userIsInRole(Meteor.userId(), ['edit', 'sales']);
+    if(auth) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        $set : {
+          end: newDate,
+        }});
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        $push : {
+          altered: {
+            changeDate: new Date(),
+            changeWho: Meteor.userId(),
+            changeReason: reason,
+            changeKey: 'end',
+            oldValue: oldDate,
+            newValue: newDate
+          }
         }});
       return true;
     }else{

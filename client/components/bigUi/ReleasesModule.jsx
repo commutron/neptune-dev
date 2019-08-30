@@ -26,28 +26,27 @@ const ReleaseAction = ({ id, rType })=> {
   return(
     <div className='wide actionBox greenBorder' style={sty}>
       <form onSubmit={(e)=>handleRelease(e)} className='centre listSortInput'>
-        <p className='centreText big cap greenT'>Release {Pref.xBatch} to {releaseType || 'the floor'}</p>
-          <Flatpickr
-            id='rDateTime'
-            value={moment().format()}
-            options={{
-              defaultDate: moment().format(),
-              maxDate: moment().format(),
-              minuteIncrement: 1,
-              enableTime: true,
-              time_24hr: false,
-              altInput: true,
-              altFormat: "Y-m-d G:i K",
-            }}
-          />
+        <Flatpickr
+          id='rDateTime'
+          value={moment().format()}
+          options={{
+            defaultDate: moment().format(),
+            maxDate: moment().format(),
+            minuteIncrement: 1,
+            enableTime: true,
+            time_24hr: false,
+            altInput: true,
+            altFormat: "Y-m-d G:i K",
+          }}
+        />
         <p>
           <button
             type='submit'
             title={`Release ${Pref.batch} to the floor`}
-            className='roundActionIcon dbblRound clearGreen cap'
+            className='action clearGreen centreText bigger cap'
             style={sty}
             disabled={!Roles.userIsInRole(Meteor.userId(), 'run')}
-          ><i className='fas fa-play fa-2x'></i></button>
+          >Release {Pref.xBatch} to {releaseType || 'the floor'}</button>
         </p>
       </form>
     </div>

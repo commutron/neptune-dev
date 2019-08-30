@@ -5,7 +5,7 @@ import moment from 'moment';
 import LeapButton from '/client/components/tinyUi/LeapButton.jsx';
 import FilterItems from '/client/components/bigUi/FilterItems.jsx';
 
-const ItemsList = (props)=> {
+const ItemsList = ({ batchData, widgetData })=> {
   
   const [ stateList, setList ] = useState([]);
   const [ keyword, setKeyword ] = useState(false);
@@ -15,7 +15,7 @@ const ItemsList = (props)=> {
   useEffect( ()=> {
     let el = document.getElementById('exItemList');
     const pos = Session.get('itemListScrollPos') || {b: false, num: 0};
-    if(props.batchData.batch === pos.b) { el.scrollTop = pos.num || 0 }
+    if(batchData.batch === pos.b) { el.scrollTop = pos.num || 0 }
   }, []);
   
   // update filter state
@@ -25,8 +25,8 @@ const ItemsList = (props)=> {
   
   // get flow steps for menu
   function flowSteps() {
-    let flow = props.widgetData.flows.find( x => x.flowKey === props.batchData.river );
-    let flowAlt = props.widgetData.flows.find( x => x.flowKey === props.batchData.riverAlt );
+    let flow = widgetData.flows.find( x => x.flowKey === batchData.river );
+    let flowAlt = widgetData.flows.find( x => x.flowKey === batchData.riverAlt );
     let steps = new Set();
     if(flow) {
       for(let s of flow.flow) {
@@ -261,7 +261,7 @@ const ItemsList = (props)=> {
     return filtered;                                 
   }
     
-  const b = props.batchData;
+  const b = batchData;
   const nonCon = b.nonCon;
   const short = b.shortfall || [];
   
@@ -302,7 +302,7 @@ const ItemsList = (props)=> {
     let showListOrder = filteredList.sort( (x,y)=> x.serial - y.serial);
     
     setList(showListOrder);
-  }, [ keyword, timeModifyer, notModifyer ]);
+  }, [ batchData, keyword, timeModifyer, notModifyer ]);
 
   return (
     

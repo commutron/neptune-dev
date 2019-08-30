@@ -3,7 +3,8 @@ import moment from 'moment';
 
 import ActionLink from '/client/components/uUi/ActionLink.jsx';
 import BlockForm from '../forms/BlockForm.jsx';
-import BatchForm from '../forms/BatchForm.jsx';
+import BatchCreate from '../forms/BatchCreate.jsx';
+import BatchEdit from '../forms/BatchEdit.jsx';
 import BatchFormX from '../forms/BatchFormX.jsx';
 import MultiItemForm from '../forms/MultiItemForm.jsx';
 import RiverSelect from '../forms/RiverSelect.jsx';
@@ -62,14 +63,14 @@ const ActionBar = ({
 		:
     action === 'batch' ?
       <div>
-        <BatchForm
+        <BatchEdit
           batchId={batchData._id}
           batchNow={batchData.batch}
           versionNow={batchData.versionKey}
           salesOrder={batchData.salesOrder || ''}
           start={batchData.start}
           end={batchData.end}
-          widgetId={batchData.widgetId}
+          quoteTimeBudget={batchData.quoteTimeBudget}
           versions={widgetData.versions}
           lock={!widgetData.versions || !batchData.live}
           noText={noText} />
@@ -187,12 +188,8 @@ const ActionBar = ({
           <CompForm 
             id={widgetData._id} 
             versionKey={versionData.versionKey} />
-          <BatchForm
-            batchId={false}
-            batchNow='new'
+          <BatchCreate
             versionNow={versionData.versionKey}
-            start={false}
-            end={false}
             widgetId={widgetData._id}
             versions={widgetData.versions}
             lock={!widgetData.versions}
@@ -234,12 +231,8 @@ const ActionBar = ({
             existFlows={widgetData.flows}
             app={app}
             noText={noText} />
-          <BatchForm
-            batchId={false}
-            batchNow='new'
+          <BatchCreate
             versionNow={false}
-            start={false}
-            end={false}
             widgetId={widgetData._id}
             versions={widgetData.versions}
             lock={!widgetData.versions}

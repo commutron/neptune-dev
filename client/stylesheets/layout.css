@@ -570,6 +570,7 @@ main {
 .line4x { line-height: 4; }
 
 .indent { padding-left: 16px; }
+.indenText { text-indent: 0.75ch; }
 
 .breath { margin: 0 5px; }
 
@@ -583,6 +584,9 @@ main {
   border-bottom: none;
   border-left: none;
   padding: 8px 0;
+}
+.noteCard > p {
+  margin-bottom: 20px;
 }
 
 .footnotes {
@@ -683,20 +687,20 @@ input.variableInput.biggest {
   height: 64px;
   width: 272px;
 }
+input.miniIn7 { width: 7ch; }
 
-input.numberSet {
-  width: 7ch;
+.numberSet {
   height: 2rem;
   line-height: 1.1;
-  font-size: 1rem;
   border: 1px solid black;
+  font-family: 'VarelaLocal';
+}
+input.numberSet:focus, input.numberSet:active {
+  border-color: var(--neptuneColor);
 }
 button.numberSet {
-  height: 2rem;
   min-height: 2rem;
-  line-height: 1.1;
   font-size: 0.9rem;
-  border: 1px solid black;
   text-transform: none;
 }
 

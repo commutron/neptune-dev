@@ -35,7 +35,7 @@
   overflow-x: hidden !important;
 }
 .traverseContainer {
-  grid-template-columns: auto minmax(calc(20vmin + 5vw), calc(200px + 5vw));
+  grid-template-columns: auto calc(200px + 3vw);
 }
 .baseContainer, .baseTraverseContainer {
   grid-template-columns: auto;
@@ -91,7 +91,7 @@
 .vFrameContainer {
   display: grid;
   grid-template-rows: auto auto;
-  grid-column-gap: 3vw;
+  grid-column-gap: 5vw;
   grid-row-gap: 3vh;
   justify-items: stretch;
   padding: 3vh 3vw;

@@ -83,7 +83,7 @@ const TimeBudgetsChunk = ({
           <p
             className='bigger' 
             title={`${totalQuoteMinutes} minutes\n(aka ${totalQuoteAsHours} hours)\nQuoted`}
-          >{totalQuoteMinutes} <i className='med'>minutes quoted</i>
+          >{totalQuoteMinutes} <i className='med'>minutes budgeted</i>
           </p>
           <p 
             className='bigger' 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 import './style.css';
@@ -6,6 +6,16 @@ import './style.css';
 const TideControl = ({ batchID, tideKey, currentLive, tideLockOut })=> {
   
   const [lock, setLock] = useState(false);
+  
+  useEffect(() => {
+	  lockTimer = Meteor.setTimeout( ()=>{
+      if(lock === true) {
+        setLock(false);
+      }
+    },3000);
+    return () => { Meteor.clearInterval(this.lockTimer); };
+  }, [lock]);
+  
   
   function handleStart() {
     setLock(true);
@@ -15,7 +25,6 @@ const TideControl = ({ batchID, tideKey, currentLive, tideLockOut })=> {
         toast.error('Rejected by Server');
       }else{
         document.getElementById('lookup').focus();
-        setLock(false);
       }
     });
   }
@@ -27,7 +36,6 @@ const TideControl = ({ batchID, tideKey, currentLive, tideLockOut })=> {
         toast.error('Rejected by Server');
       }else{
         document.getElementById('lookup').focus();
-        setLock(false);
       }
     });
   }

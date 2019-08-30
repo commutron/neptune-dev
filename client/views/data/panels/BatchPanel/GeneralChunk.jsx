@@ -4,10 +4,10 @@ import business from 'moment-business';
 import Pref from '/client/global/pref.js';
 
 import TagsModule from '/client/components/bigUi/TagsModule.jsx';
-import FloorRelease from '/client/components/smallUi/FloorRelease.jsx';
 import { ReleaseNote } from '/client/components/bigUi/ReleasesModule.jsx';
 import NoteLine from '/client/components/smallUi/NoteLine.jsx';
 import BlockList from '/client/components/bigUi/BlockList.jsx';
+import { AlterFulfill } from '/client/components/forms/BatchAlter.jsx';
 
 const GeneralChunk = ({
   a, b, 
@@ -43,25 +43,40 @@ const GeneralChunk = ({
 
       <fieldset className='noteCard'>
         <legend>Time Range</legend>
+        
         <p className='capFL'>{Pref.salesOrder}: {b.salesOrder || 'not available'}</p>
+        
         <p className='capFL'>{Pref.start}: {moment(b.start).format("MMMM Do, YYYY")}</p>
-        <p className='capFL'>{Pref.end}: {moment(b.end).format("MMMM Do, YYYY")}</p>
+        
+        <p className='capFL'>{Pref.end}: {moment(b.end).format("MMMM Do, YYYY")}
+          <AlterFulfill
+            batchId={b._id}
+            end={b.end} 
+            lock={b.finishedAt !== false} />
+        </p>
+        
         {fnsh !== null && <p>Finished: {fnsh}</p>}
+        
         <p>{fnsh !== null ? 'Total Time:' : 'Elapsed:'} {elapseNice}</p>
+        
         {fnsh !== null ? null : 
           <p>Time Remaining: 
             <i className={remain < 0 ? 'yellowT' : ''}> {remain}</i> weekdays
           </p> }
+      
       </fieldset>
+      
       {b.items.length > 0 &&
         <fieldset className='noteCard'>
           <legend>Serial Range</legend>
           <i className='numFont'>{itemsOrder[0].serial} - {itemsOrder[itemsOrder.length-1].serial}</i>
         </fieldset>}
+      
       {released === undefined ? null :
-        released === true ?
+        released === true &&
           <ReleaseNote id={b._id} release={b.floorRelease} />
-        : !expand ? null : <FloorRelease id={b._id} /> }
+      }
+      
       <NoteLine entry={b.notes} id={b._id} widgetKey={false}  />
       <BlockList id={b._id} data={b.blocks} lock={done} expand={expand} />
 

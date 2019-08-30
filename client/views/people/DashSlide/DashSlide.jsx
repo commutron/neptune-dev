@@ -58,7 +58,7 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
 
   const eBatches = Array.from(eUsers,
     x => batches.find(
-      y => y && y.tide.find(
+      y => y.tide && y.tide.find(
         z => z.tKey === x.engaged.tKey )
     )
   );

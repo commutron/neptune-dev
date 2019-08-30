@@ -50,8 +50,6 @@ export default class RiverSelect extends Component	{
             </select>
             <label htmlFor='fch'>Enable {Pref.buildFlow}</label>
           </p>
-          <br />
-          <br />
           <p>
             <select id='fch' ref={(i)=> this.choiceAlt = i} defaultValue={this.props.riverAlt}>
             <option value={false}></option>

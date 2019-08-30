@@ -7,6 +7,7 @@ import GeneralChunk from './GeneralChunk.jsx';
 import PrioritySquare from '/client/components/bigUi/PrioritySquare.jsx';
 import BatchFinish from '/client/components/forms/BatchFinish.jsx';
 import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
+import FloorRelease from '/client/components/smallUi/FloorRelease.jsx';
 import StepsProgress from '/client/components/bigUi/StepsProgress/StepsProgress.jsx';
 
 const InfoTab = ({
@@ -52,11 +53,13 @@ const InfoTab = ({
               
       <div className='twoThirdsContent'>
         
-          <StepsProgress
-            progCounts={progCounts}
-            riverTitle={riverTitle}
-            riverAltTitle={riverAltTitle}
-            truncate={false} />
+        <FloorRelease id={b._id} />
+        
+        <StepsProgress
+          progCounts={progCounts}
+          riverTitle={riverTitle}
+          riverAltTitle={riverAltTitle}
+          truncate={false} />
         
       </div>
 
