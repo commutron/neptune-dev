@@ -48,12 +48,13 @@ const GeneralChunk = ({
         
         <p className='capFL'>{Pref.start}: {moment(b.start).format("MMMM Do, YYYY")}</p>
         
-        <p className='capFL'>{Pref.end}: {moment(b.end).format("MMMM Do, YYYY")}
+        <div className='cap'>{Pref.end}: {moment(b.end).format("MMMM Do, YYYY")}
           <AlterFulfill
             batchId={b._id}
-            end={b.end} 
+            end={b.end}
+            app={a}
             lock={b.finishedAt !== false} />
-        </p>
+        </div>
         
         {fnsh !== null && <p>Finished: {fnsh}</p>}
         

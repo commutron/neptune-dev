@@ -30,13 +30,30 @@ export default class ItemCard extends Component	{
 	    Session.set('nowStepKey', undefined);
       return (
         <AnimateWrap type='cardTrans'>
-          <div className='section sidebar centre centreText big' key={i.serial}>
-            <br />
-            <i className="fas fa-exclamation-circle fa-5x redT"></i>
-            <br />
-            <p>
+          <div className='section sidebar centre centreText' key={i.serial}>
+            <p><i className="fas fa-exclamation-circle fa-5x redT"></i></p>
+            <p className='medBig'>
               This {Pref.batch} does not have a {Pref.flow}
             </p>
+            <br />
+          </div>
+        </AnimateWrap>
+        );
+    }
+    
+    if(b.floorRelease === false) {
+      Session.set('ncWhere', Pref.outOfFlow);
+	    Session.set('nowStepKey', undefined);
+      return (
+        <AnimateWrap type='cardTrans'>
+          <div className='section sidebar centre centreText space' key={i.serial}>
+            <p><i className="fas fa-exclamation-triangle fa-5x orangeT"></i></p>
+            <p className='medBig'>
+              This {Pref.batch} has not been released from Kitting
+            </p>
+            <p><em>
+              "Release to the Floor" must be recorded
+            </em></p>
             <br />
           </div>
         </AnimateWrap>

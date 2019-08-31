@@ -28,10 +28,10 @@ export default class BatchCard extends Component	{
     
     const progCounts = this.props.progCounts;
 
-    let iready = b.items.length === 0;
+    let iNoready = b.items.length === 0;
     
     let warn = b.blocks.filter( x => x.solve === false ).length;
-    iready ? warn++ : null;
+    iNoready ? warn++ : null;
     
     let released = b.floorRelease === undefined ? undefined : 
                     b.floorRelease === false ? false :
@@ -42,19 +42,22 @@ export default class BatchCard extends Component	{
       <i className='fas fa-tasks fa-fw' data-fa-transform='down-2' title='Progress'></i>
     ];
 
-
     return(
       <AnimateWrap type='cardTrans'>
         <div className='sidebar' key={b.batch}>
           {/*<TideLock currentLive={this.props.currentLive}></TideLock>*/}
-            {iready ?
-              <h2 className='actionBox centreText yellow'>
-                No {Pref.itemSerial}s created
-              </h2>
-            :
-              released === undefined || released === true ? null :
-                <FloorRelease id={b._id} />
+            {iNoready &&
+              <div className='centre centreText space'>
+                <p><i className="fas fa-exclamation-triangle fa-4x orangeT"></i></p>
+                <p className='medBig'>
+                  No {Pref.itemSerial}s created
+                </p>
+                <br />
+              </div>
             }
+            
+            {released === undefined || released === true ? null :
+              <FloorRelease id={b._id} />}
             
             {b.finishedAt !== false &&
               <h2 className='actionBox centreText green'>

@@ -586,7 +586,10 @@ main {
   padding: 8px 0;
 }
 .noteCard > p {
-  margin-bottom: 20px;
+  margin-top: 20px;
+}
+.noteCard > div {
+  margin: 20px 0 10px 0;
 }
 
 .footnotes {
@@ -603,6 +606,12 @@ main {
 .fill {
   margin: 0;
   padding: 0;
+}
+
+.beside {
+  display: flex;
+  align-content: center;
+  align-items: center;
 }
 
 .comfort {
@@ -702,6 +711,27 @@ button.numberSet {
   min-height: 2rem;
   font-size: 0.9rem;
   text-transform: none;
+}
+
+.inlineRadio {
+  height: 1.5rem;
+}
+.inlineCheckbox {
+  height: 2rem;
+  width: 1.5rem;
+}
+.mockInputBox, .mockInputBoxOFF {
+  width: 15rem;
+  min-height: 2rem;
+  max-height: 2rem;
+  line-height: 1.1;
+}
+.mockInputBox {
+  border: 1px solid black;
+}
+.mockInputBoxOFF {
+  border: 1px dotted black;
+  background-color: rgb(235,235,228);
 }
 
 .actionBox .flatpickr-input ~ .form-control {

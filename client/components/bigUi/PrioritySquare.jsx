@@ -37,11 +37,17 @@ const PrioritySquare = ({ batchID, app })=> {
       );
     }
     
+    const pScl = !app.priorityScale ? {
+      low: 6600,
+      high: 2200,
+      max: 0,
+    } : app.priorityScale;
+    
     const priorityCode = 
-      bffrTime > 2200*3 ? 'p4' :
-        bffrTime > 2200 ? 'p3' : 
-          bffrTime > 0 ? 'p2' :
-            bffrTime <= 0 ? 'p1' :
+      bffrTime > pScl.low ? 'p4' :
+        bffrTime > pScl.high ? 'p3' : 
+          bffrTime > pScl.max ? 'p2' :
+            bffrTime <= pScl.max ? 'p1' :
             'p0';
     const priorityClass = 
       priorityCode === 'p1' ? 'pScale1' :

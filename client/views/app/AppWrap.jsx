@@ -11,11 +11,11 @@ import PhasesSlide from './appSlides/PhasesSlide.jsx';
 import TrackStepSlide from './appSlides/TrackStepSlide.jsx';
 import CounterSlide from './appSlides/CounterSlide.jsx';
 import MethodSlide from './appSlides/MethodSlide.jsx';
-import RepeatSlide from './appSlides/RepeatSlide.jsx';
+import ReasonsSlide from './appSlides/ReasonsSlide.jsx';
 import NCLegacySlide from './appSlides/NCLegacySlide.jsx';
 import NCTypeSlide from './appSlides/NCTypeSlide.jsx';
 import NCSupportSlide from './appSlides/NCSupportSlide.jsx';
-import SerialSlide from './appSlides/SerialSlide.jsx';
+import ScalesSlide from './appSlides/ScalesSlide.jsx';
 import TagSlide from './appSlides/TagSlide.jsx';
 import AddressSlide from './appSlides/AddressSlide.jsx';
 import PINSlide from './appSlides/PINSlide.jsx';
@@ -87,11 +87,11 @@ const AppWrap = ({ users, app })=> {
             <b><i className='fas fa-shoe-prints fa-fw'></i>   Track Steps</b>,
             <b><i className='fas fa-stopwatch fa-fw'></i>   Counter Steps</b>,
             <b><i className='fas fa-wrench fa-fw'></i>   Verify Methods</b>,
-            <b><i className='fas fa-redo fa-fw'></i>   Verify Repeat</b>,
+            <b><i className='fas fa-dice fa-fw'></i>   Reasons Options</b>,
             <b><i className='fas fa-bug fa-fw'></i>   Legacy NonCons</b>,
             <b><i className='fas fa-bug fa-fw'></i>   NonCon Types</b>,
             <b><i className='fas fa-bug fa-fw'></i>   NonCon Support</b>,
-            <b><i className='fas fa-qrcode fa-fw'></i>   Serial Numbers</b>,
+            <b><i className='fas fa-ruler-horizontal fa-fw'></i>   Scales</b>,
             <b><i className='fas fa-tag fa-fw'></i>   Tags</b>,
             <b><i className='fas fa-link fa-fw'></i>   Addresses</b>,
             <b><i className='fas fa-key fa-fw'></i>   PINs</b>,//13
@@ -106,11 +106,11 @@ const AppWrap = ({ users, app })=> {
           <TrackStepSlide key={3} app={app} sorted={sortedTrackOptions} />
           <CounterSlide key={4} app={app} />
           <MethodSlide key={5} app={app} sorted={sortedTrackOptions} />
-          <RepeatSlide key={6} app={app} />
+          <ReasonsSlide key={6} app={app} />
           <NCLegacySlide key={7} app={app} />
           <NCTypeSlide key={8} app={app} />
           <NCSupportSlide key={9} app={app} />
-          <SerialSlide key={10} app={app} />
+          <ScalesSlide key={10} app={app} />
           <TagSlide key={11} app={app} />
           <AddressSlide key={12} app={app} />
           <PINSlide key={13} />

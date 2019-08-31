@@ -96,9 +96,10 @@ const TimeBudgetsChunk = ({
           >{bufferNice} <i className='med'>minutes {bufferMessage}</i>
           </p>
           
-          {!qtBready ? <TimeBudgetUpgrade bID={b._id} /> :
-            <WholeTimeBudget bID={b._id} /> }
-          
+          <div className='vmargin'>
+            {!qtBready ? <TimeBudgetUpgrade bID={b._id} /> :
+              <WholeTimeBudget bID={b._id} /> }
+          </div>
           
         </div>
         

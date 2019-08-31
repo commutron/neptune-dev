@@ -287,6 +287,22 @@ Meteor.methods({
     }
   },
   
+  setPriorityScale(chill, warm, hot) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $set : { 
+          priorityScale : {
+            low: Number(chill),
+            high: Number(warm),
+            max: Number(hot),
+          }
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
   // new tool option
   addToolOp(title, forStep) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
@@ -311,7 +327,7 @@ Meteor.methods({
       return false;
     }
   },
-  
+
 ////// Repeat First / Verify Reason
   addRepeatOption(reason) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
@@ -352,6 +368,31 @@ Meteor.methods({
       }else{
         return false;
       }
+    }else{
+      return false;
+    }
+  },
+  ////////////
+  
+////// Alter Fulfill Reason
+  addAlterFulfillOption(reason) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $push : { 
+          alterFulfillReasons : reason
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  removeAlterFulfillOption(badReason) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $pull : { 
+          alterFulfillReasons : badReason
+      }});
+      return true;
     }else{
       return false;
     }

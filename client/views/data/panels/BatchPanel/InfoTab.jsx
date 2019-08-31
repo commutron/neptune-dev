@@ -16,13 +16,15 @@ const InfoTab = ({
   progCounts, riverTitle, riverAltTitle,
 }) =>	{
 
+  let released = b.floorRelease === undefined ? undefined : 
+                  b.floorRelease === false ? false :
+                  typeof b.floorRelease === 'object';
+                  
   return(
     <div className='oneTwoThreeContainer'>
       <div className='oneThirdContent min200'>
       
         <div className='vmarginhalf centreText line2x'>
-          
-          
             
             { b.live &&
               <div className='centreRow balance'>
@@ -53,7 +55,9 @@ const InfoTab = ({
               
       <div className='twoThirdsContent'>
         
-        <FloorRelease id={b._id} />
+        {released === undefined ? null :
+          released === false && 
+            <FloorRelease id={b._id} />}
         
         <StepsProgress
           progCounts={progCounts}

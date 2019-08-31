@@ -140,8 +140,37 @@ const BatchEdit = ({
             required 
           /></label>
         </div>
-        <p><i>are you sure?</i></p>
-        <button type='submit' className='action clear greenHover'>Save</button>
+        <div className='centreRow vmargin fade'>
+          <label htmlFor='qUnum' className='breath'>Quantity<br />
+          <input
+            type='number'
+            id='qUnum'
+            className='numberSet indenText'
+            maxLength='5'
+            minLength='1'
+            placeholder=''
+            disabled={true}
+            //required
+          /></label>
+          <label className='breath'>Serialize<br />
+            <label htmlFor='srlz' className='beside mockInputBoxOFF'>
+            <input
+              type='checkbox'
+              id='srlz'
+              title='for future release'
+              className='indenText inlineCheckbox'
+              defaultChecked={true}
+              disabled={true}
+              //required 
+            /><i className='medBig'>Use {Pref.itemSerial} numbers</i></label>
+          </label>
+        </div>
+        <div className='vmargin'>
+          <button 
+            type='submit' 
+            className='action clear greenHover'
+          >Save</button>
+        </div>
       </form>
     </Model>
   );

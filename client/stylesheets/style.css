@@ -819,6 +819,14 @@ label.qdpplRound {
   background-color: #c0392b;
 }
 
+.progMockMeter {
+  display: inline-block;
+  min-width: 80.62px;
+  width: 80.62px;
+  min-height: 16px;
+  height: 16px;
+}
+
 .stepList,
 .gateList {
   display: table;

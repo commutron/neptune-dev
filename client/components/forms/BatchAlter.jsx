@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 //import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
@@ -12,15 +12,16 @@ import ModelMedium from '../smallUi/ModelMedium.jsx';
 /// versions={w.versions}
 /// lock={!w.versions}
 
-export const AlterFulfill = ({ batchId, end, lock })=> {
+export const AlterFulfill = ({ batchId, end, app, lock })=> {
+
+  const [ reasonState, reasonSet ] = useState(false);
 
   function save(e) {
     e.preventDefault();
     
     const endDate = e.target.eDate.value;
-    const reason = e.target.resn.value;
-
-    Meteor.call('alterBatchFulfill', batchId, end, endDate, reason, (error, reply)=>{
+    
+    Meteor.call('alterBatchFulfill', batchId, end, endDate, reasonState, (error, reply)=>{
       if(error) {
         console.log(error);
         toast.error('Server Error');
@@ -38,22 +39,30 @@ export const AlterFulfill = ({ batchId, end, lock })=> {
       button={'Alter ' + Pref.end}
       title={`Alter ${Pref.batch} ${Pref.end}`}
       color='blueT'
-      icon='fa-clock'
+      icon='fa-calendar-alt'
       smIcon={true}
       lock={!Roles.userIsInRole(Meteor.userId(), ['edit', 'sales']) || lock}
       noText={true}>
       <form className='centre' onSubmit={(e)=>save(e)}>
-        <p>
-          <label htmlFor='resn'>Reason for Change</label><br />
-          <select
-            id='resn'
-            className='numberSet'
-            required>
-            <option value='Error Correction'>Error Correction</option>
-            <option value='Customer Request'>Customer Request</option>
-            <option value='Resource Shortage'>Resource Shortage</option>
-          </select>
-        </p>
+        <div className='centreRow'>
+          {app.alterFulfillReasons && 
+            app.alterFulfillReasons.map( (entry, index)=>{
+              return(
+                <label 
+                  key={index}
+                  htmlFor={entry+index} 
+                  className='beside breath'>
+                  <input
+                    type='radio'
+                    id={entry+index}
+                    name='rsn'
+                    className='inlineRadio cap'
+                    defaultChecked={reasonState === entry}
+                    onChange={()=>reasonSet(entry)}
+                    required 
+                />{entry}</label>
+          )})}
+        </div>
         <p>
           <label htmlFor='eDate' className='breath'>{Pref.end}<br />
           <input
