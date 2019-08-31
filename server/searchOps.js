@@ -249,6 +249,46 @@ Meteor.methods({
     return first.tz(clientTZ).format();
   },
   
+  
+  ///////////////////////////////////////////////////////////////////////////////////
+  
+    // Counts Of Batches Tide Time
+  
+  ///////////////////////////////////////////////////////////////////////////////////
+  countMultiBatchTideTimes(batchIDs) {
+  
+    let batchTides = [];
+    
+    const totalST = (batch)=> {
+      let totalTime = 0;
+      if(!batch.tide) {
+        null;
+      }else{
+        for(let bl of batch.tide) {
+          const mStart = moment(bl.startTime);
+          const mStop = !bl.stopTime ? moment() : moment(bl.stopTime);
+          const block = Math.round( 
+            moment.duration(mStop.diff(mStart)).asMinutes() );
+          totalTime = totalTime + block;
+        }
+        batchTides.push({
+          x: batch.batch,
+          y: totalTime
+        });
+      }
+    };
+  
+    for(let batchID of batchIDs) {
+      let batch = BatchDB.findOne({_id: batchID});
+      if(!batch) { null }else{ totalST(batch) }
+    }
+    
+    return batchTides;
+    
+  },
+  
+  
+  
       ///////////////////////////////////////////////////////////////////////////////////
   
     // Counts Of Each NonConformance Type

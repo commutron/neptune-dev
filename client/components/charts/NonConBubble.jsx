@@ -4,7 +4,8 @@ import {
   VictoryScatter, 
   VictoryChart, 
   VictoryAxis, 
-  VictoryTooltip
+  VictoryTooltip,
+  VictoryClipContainer
 } from 'victory';
 //import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
@@ -99,6 +100,7 @@ export default class NonConBubble extends Component {
           maxBubbleSize={this.state.max}
           minBubbleSize={this.state.min}
           labels={(d) => `Quantity: ${d.z}`}
+          groupComponent={<VictoryClipContainer/>}
           labelComponent={
             <VictoryTooltip />}
         />
