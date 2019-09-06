@@ -274,7 +274,7 @@
 .itmFltrBlock select,
 .itmFltrBlock optgroup,
 .itmFltrBlock option {
-  background-color: white;
+  /*background-color: white;*/
   color: black;
 }
 .itmFltrStatic {

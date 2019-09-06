@@ -6,27 +6,28 @@ import {
   VictoryBar, 
   VictoryChart, 
   VictoryAxis,
-  VictoryLabel
+  VictoryLabel,
+  VictoryStack
 } from 'victory';
 //import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
 
 const TideMultiBatchBar = ({ batchIDs, app })=> {
   
-  const [ batchTides, storeTides ] = useState(false);
+  const [ batchTimes, storeTimes ] = useState(false);
   
   useEffect( ()=>{
     const flipBatchIDs = batchIDs.reverse();
     Meteor.call('countMultiBatchTideTimes', flipBatchIDs, (error, reply)=>{
       error && console.log(error);
-      storeTides( reply );
+      storeTimes( reply );
     });
   }, []);
   
   const asHours = (mnts) => moment.duration(mnts, "minutes").asHours().toFixed(2, 10);
 
   
-  if(!batchTides) {
+  if(!batchTimes) {
     return(
       <CalcSpin />
     );
@@ -37,19 +38,39 @@ const TideMultiBatchBar = ({ batchIDs, app })=> {
       <VictoryChart
         theme={Theme.NeptuneVictory}
         padding={{top: 25, right: 50, bottom: 25, left: 50}}
+        domainPadding={{x: 10, y: 40}}
+        height={50 + ( batchTimes.batchTides.length * 25 )}
       >
         <VictoryAxis 
           dependentAxis 
-          tickFormat={(t) => asHours(t)}
+          tickFormat={(t) => Math.round( asHours(t) )}
         />
         <VictoryAxis />
-        <VictoryBar
-          data={batchTides}
-          horizontal={true}
-          labels={(l) => asHours(l.y)}
-          style={{ labels: { fill: "dimgray" } }}
-          labelComponent={<VictoryLabel />}
-        />
+        <VictoryStack
+          theme={Theme.NeptuneVictory}
+            colorScale={["rgb(52, 152, 219)", "rgb(149, 165, 166)", "rgb(241, 196, 15)"]}
+            horizontal={true}
+            padding={0}
+          >
+            <VictoryBar
+              data={batchTimes.batchTides}
+              horizontal={true}
+              labels={(l) => asHours(l.y)}
+              style={{ labels: { fill: "dimgray" } }}
+              labelComponent={<VictoryLabel />}
+              barWidth={12}
+            />
+            <VictoryBar
+              data={batchTimes.batchLeftBuffer}
+              horizontal={true}
+              barWidth={12}
+            />
+            <VictoryBar
+              data={batchTimes.batchOverBuffer}
+              horizontal={true}
+              barWidth={12}
+            />
+        </VictoryStack>
         </VictoryChart>
         <div className='centreText small'>Duration in Hours</div>
       </div>

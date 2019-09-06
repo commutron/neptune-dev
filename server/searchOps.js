@@ -258,11 +258,15 @@ Meteor.methods({
   countMultiBatchTideTimes(batchIDs) {
   
     let batchTides = [];
+    let batchLeftBuffer = [];
+    let batchOverBuffer = [];
     
     const totalST = (batch)=> {
       let totalTime = 0;
       if(!batch.tide) {
-        null;
+        batchTides.push({ x: batch.batch, y: 0 });
+        batchLeftBuffer.push({ x: batch.batch, y: 0 });
+        batchOverBuffer.push({ x: batch.batch, y: 0 });
       }else{
         for(let bl of batch.tide) {
           const mStart = moment(bl.startTime);
@@ -271,19 +275,43 @@ Meteor.methods({
             moment.duration(mStop.diff(mStart)).asMinutes() );
           totalTime = totalTime + block;
         }
+        
+        const qtBready = !batch.quoteTimeBudget ? false : true;
+        const qtB = qtBready && batch.quoteTimeBudget.length > 0 ? 
+          batch.quoteTimeBudget[0].timeAsMinutes : 0;
+        const totalQuoteMinutes = qtB || 0;
+        const quote2tide = totalQuoteMinutes - totalTime;
+        const bufferNice = Math.abs(quote2tide);
+  
+        const totalLeftMinutes = quote2tide < 0 ? 0 : bufferNice;
+        const totalOverMinutes = quote2tide < 0 ? bufferNice : 0;
+  
         batchTides.push({
           x: batch.batch,
           y: totalTime
+        });
+        batchLeftBuffer.push({
+          x: batch.batch,
+          y: totalLeftMinutes
+        });
+        batchOverBuffer.push({
+          x: batch.batch,
+          y: totalOverMinutes
         });
       }
     };
   
     for(let batchID of batchIDs) {
       let batch = BatchDB.findOne({_id: batchID});
-      if(!batch) { null }else{ totalST(batch) }
+      if(!batch) {
+        let xbatch = XBatchDB.findOne({_id: batchID});
+        let batchNum = !xbatch ? batchID.slice(0,5) : xbatch.batch;
+        batchTides.push({ x: batchNum, y: 0 });
+        batchLeftBuffer.push({ x: batchNum, y: 0 });
+        batchOverBuffer.push({ x: batchNum, y: 0 });
+      }else{ totalST(batch) }
     }
-    
-    return batchTides;
+    return { batchTides, batchLeftBuffer, batchOverBuffer };
     
   },
   

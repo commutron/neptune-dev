@@ -330,6 +330,7 @@ export default class DataViewOps extends Component	{
               title='Item'
               subLink={subLink}
               action='item'
+              //invertColor={true}
             >
               <ItemPanel
                 batchData={hotBatch}
@@ -387,6 +388,7 @@ export default class DataViewOps extends Component	{
             title='Batch'
             subLink={subLink}
             action='batch'
+            //invertColor={true}
           >
             <BatchPanel
               batchData={hotBatch}
@@ -416,6 +418,7 @@ export default class DataViewOps extends Component	{
             title='Batch+'
             subLink={subLink}
             action='xbatch'
+            //invertColor={true}
           >
             <BatchPanelX
               batchData={hotXBatch}

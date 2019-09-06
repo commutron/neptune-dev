@@ -27,34 +27,35 @@ Meteor.methods({
         phaseDB.find( x => x.key === cronoHistory[0].key ).phase : null;
       
       
+      
+      const inBncN = batch.nonCon.filter( x =>
+        x.time > tideStart && x.time < tStop && x.who === uID );
+      const cronoNC = inBncN.sort((x1, x2)=> {
+                            if (x1.time < x2.time) { return 1 }
+                            if (x1.time > x2.time) { return -1 }
+                            return 0;
+                          });
+      const phasefromNC = cronoNC.length > 0 ?
+        phaseDB.find( x => x.phase === cronoNC[0].where ).phase : null;
+      
       /*
-      const inBncN = batch.nonCon.find({ 
-        'nonCon.time': {"$gte": new Date( isoDate )},
-        'nonCon.who': uID
-      }).fetch();
-      const inBatchnonconNew = inBncN.length > 0 ? true : false;
+      const inBncF = batch.filter( x =>
+        x.fix !== false && x.fix.time > tideStart && x.fix.time < tStop && x.fix.who === uID );
       
-      const inBncF = batch.find({ 
-        'nonCon.fix.time': {"$gte": new Date( isoDate )},
-        'nonCon.fix.who': uID
-      });
-      const inBatchnonconFix = inBncF.length > 0 ? true : false;
+      const inBncI = batch.filter( x =>
+        x.inspect !== false && x.inspect.time > tideStart && x.inspect.time < tStop && x.inspect.who === uID );
       
-      const inBncI = batch.find({ 
-        'nonCon.inspect.time': {"$gte": new Date( isoDate )},
-        'nonCon.inspect.who': uID
-      }).fetch();
-      const inBatchnonconInspect = inBncI.length > 0 ? true : false;
+      const anyNC = [...inBncN, inBncF, inBncI ] 
+      console.log(anyNC);
       */
+      
       if(phasefromHistory) {
         return [ 'fromHistory', phasefromHistory ];
+      }else if(phasefromNC) {
+        return [ 'fromNC', phasefromNC ];
       }else{
         return false;
       }
-        //inBatchnonconNew, 
-        //inBatchnonconFix, 
-        // inBatchnonconInspect 
-
     }catch(err) {
       throw new Meteor.Error(err);
     }

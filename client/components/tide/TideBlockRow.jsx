@@ -3,11 +3,13 @@ import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
+import { AnonyUser } from '/client/components/smallUi/UserNice.jsx';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
 
 const TideBlockRow = ({ 
-  batch, describe, tideKey, startTime, stopTime,
+  batch, describe, tideKey, tideWho, allUsers,
+  startTime, stopTime,
   lastStop, nextStart,
   editKey, editMode,
   splitKey, splitMode,
@@ -45,17 +47,21 @@ const TideBlockRow = ({
   const mStart = moment(startTime);
   const mStop = stopTime ? moment(stopTime) : false;
   
-  const absoluteMin = !lastStop || !moment(lastStop).isAfter(moment(startTime).startOf('day')) ?
+  const absoluteMin = allUsers ? moment(startTime).startOf('day').format() :
+  !lastStop || !moment(lastStop).isAfter(moment(startTime).startOf('day')) ?
     moment(startTime).startOf('day').format() : lastStop;
     
-  const absoluteMax = !mStop ? moment().format() : 
+  const absoluteMax = allUsers ? moment(stopTime).endOf('day').format() :
+  !mStop ? moment().format() : 
     !nextStart && !moment().isAfter(mStop, 'day') ? moment().format() :
       !nextStart || moment(nextStart).isAfter(moment(stopTime).endOf('day')) ?
         moment(stopTime).endOf('day').format() : nextStart;
   
+  const editAuth = !allUsers || Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
   
     return(
       <tr className={editOn ? 'pop' : ''}>
+        {allUsers && tideWho && <td className='noRightBorder'><AnonyUser id={tideWho} /></td>}
         <td className='noRightBorder medBig'>
           <ExploreLinkBlock type='batch' keyword={batch} />
         </td>
@@ -162,7 +168,7 @@ const TideBlockRow = ({
               <button
                 className='miniAction'
                 onClick={()=>editMode(true)}
-                disabled={!mStop || mStop.diff(mStart, 'minutes') <= 0.5}
+                disabled={!editAuth || !mStop || mStop.diff(mStart, 'minutes') <= 0.5}
               ><em><i className="far fa-edit"></i></em> edit</button>
             </td>
           </Fragment>

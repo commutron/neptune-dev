@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 import TideBlockRow from '/client/components/tide/TideBlockRow.jsx';
 
 
-const TideEditWrap = ({ weekData, bCache, updateData })=> {
+const TideEditWrap = ({ weekData, bCache, updateData, allUsers })=> {
   
   const [ doEditKey, enableEdit ] = useState(false);
   const [ doSplitKey, enableSplit ] = useState(false);
@@ -65,13 +65,15 @@ const TideEditWrap = ({ weekData, bCache, updateData })=> {
           return(
             <Fragment key={index}>
               <tr key={blk.startTime.toISOString()} className='big leftText line4x'>
-                <th colSpan='5'>{moment(blk.startTime).format('dddd MMMM Do')}</th>
+                <th colSpan={!allUsers ? '5' : '6'}>{moment(blk.startTime).format('dddd MMMM Do')}</th>
               </tr>
               <TideBlockRow
                 key={blk.tKey}
                 batch={keyword}
                 describe={what}
                 tideKey={blk.tKey}
+                tideWho={blk.who}
+                allUsers={allUsers}
                 startTime={blk.startTime}
                 stopTime={blk.stopTime}
                 lastStop={lastStop}
@@ -91,6 +93,8 @@ const TideEditWrap = ({ weekData, bCache, updateData })=> {
               batch={keyword}
               describe={what}
               tideKey={blk.tKey}
+              tideWho={blk.who}
+              allUsers={allUsers}
               startTime={blk.startTime}
               stopTime={blk.stopTime}
               lastStop={lastStop}

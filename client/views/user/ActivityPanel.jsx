@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import timezone from 'moment-timezone';
-import Pref from '/client/global/pref.js';
+import 'moment-timezone';
+//import Pref from '/client/global/pref.js';
 import { CalcSpin } from '/client/components/uUi/Spin.jsx';
 import WeekBrowse from '/client/components/bigUi/WeekBrowse/WeekBrowse.jsx';
 import TideEditWrap from '/client/components/tide/TideEditWrap.jsx';
@@ -100,7 +100,11 @@ const ActivityPanel = ({ orb, bolt, app, user, users, bCache })=> {
             <th></th>
           </tr>
         </tbody>
-        <TideEditWrap weekData={weekData} bCache={bCache} updateData={()=>getData(false)} />
+        <TideEditWrap 
+          weekData={weekData} 
+          bCache={bCache} 
+          updateData={()=>getData(false)}
+          allUsers={false} />
       </table>
       }
       <div>

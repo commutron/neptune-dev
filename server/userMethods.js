@@ -1,4 +1,5 @@
 import moment from 'moment';
+import timezone from 'moment-timezone';
 import { Accounts } from 'meteor/accounts-base';
 
 Accounts.config({ 
@@ -356,6 +357,39 @@ Meteor.methods({
   },
   */
   
+  fetchOrgTideActivity(dateString, clientTZ) {
+    try {
+      const localDate = moment.tz(dateString, clientTZ);
+      
+      const getYear = localDate.year();
+      const getDay = localDate.dayOfYear();
+      
+      const allTouched = BatchDB.find({
+        orgKey: Meteor.user().orgKey, 
+        //'tide.startTime': { $gte: new Date(localDate.format('YYYY-MM-DD')) }
+      }).fetch();
+      
+      let slimTideDay = [];
+      for(let btch of allTouched) {
+        const theDay = !btch.tide ? [] : btch.tide.filter( x => 
+          moment.tz(x.startTime, clientTZ).year() === getYear && 
+          moment.tz(x.startTime, clientTZ).dayOfYear() === getDay);
+        for(let blck of theDay) {  
+          slimTideDay.push({
+            batch: btch.batch,
+            tKey: blck.tKey,
+            who: blck.who,
+            startTime: blck.startTime,
+            stopTime: blck.stopTime
+          });
+        }
+      }
+      return slimTideDay;
+    }catch(err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  
   fetchSelfTideActivity(yearNum, weekNum) {
     try {
       const getYear = yearNum || moment().weekYear();
@@ -390,17 +424,22 @@ Meteor.methods({
   editTideTimeBlock(batch, tideKey, newStart, newStop) {
     try {
       const doc = BatchDB.findOne({ batch: batch, 'tide.tKey': tideKey });
-      const sub = doc && doc.tide.find( x => x.tKey === tideKey && x.who === Meteor.userId() );
+      const sub = doc && doc.tide.find( x => x.tKey === tideKey );
       
       if(!sub || !newStart || !newStop) {
         return false;
       }else{
-        BatchDB.update({ batch: batch, orgKey: Meteor.user().orgKey, 'tide.tKey': tideKey}, {
-          $set : { 
-            'tide.$.startTime' : newStart,
-            'tide.$.stopTime' : newStop
-        }});
-        return true;
+        const auth = sub.who === Meteor.userId() || Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
+        if(!auth) {
+          return false;
+        }else{
+          BatchDB.update({ batch: batch, orgKey: Meteor.user().orgKey, 'tide.tKey': tideKey}, {
+            $set : { 
+              'tide.$.startTime' : newStart,
+              'tide.$.stopTime' : newStop
+          }});
+          return true;
+        }
       }
       
     }catch (err) {
@@ -411,24 +450,29 @@ Meteor.methods({
   splitTideTimeBlock(batch, tideKey, newSplit, stopTime) {
     try {
       const doc = BatchDB.findOne({ batch: batch, 'tide.tKey': tideKey });
-      const sub = doc && doc.tide.find( x => x.tKey === tideKey && x.who === Meteor.userId() );
+      const sub = doc && doc.tide.find( x => x.tKey === tideKey );
       
       if(!sub || !newSplit || !stopTime) {
         return false;
       }else{
-        BatchDB.update({ batch: batch, orgKey: Meteor.user().orgKey, 'tide.tKey': tideKey}, {
-          $set : { 
-            'tide.$.stopTime' : newSplit
-        }});
-        const newTkey = new Meteor.Collection.ObjectID().valueOf();
-        BatchDB.update({ batch: batch, orgKey: Meteor.user().orgKey, 'tide.tKey': tideKey}, {
-          $push : { tide: { 
-            tKey: newTkey,
-            who: Meteor.userId(),
-            startTime: newSplit,
-            stopTime: stopTime
-        }}});
-        return true;
+        const auth = sub.who === Meteor.userId() || Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
+        if(!auth) {
+          return false;
+        }else{
+          BatchDB.update({ batch: batch, orgKey: Meteor.user().orgKey, 'tide.tKey': tideKey}, {
+            $set : { 
+              'tide.$.stopTime' : newSplit
+          }});
+          const newTkey = new Meteor.Collection.ObjectID().valueOf();
+          BatchDB.update({ batch: batch, orgKey: Meteor.user().orgKey, 'tide.tKey': tideKey}, {
+            $push : { tide: { 
+              tKey: newTkey,
+              who: sub.who,
+              startTime: newSplit,
+              stopTime: stopTime
+          }}});
+          return true;
+        }
       }
     }catch (err) {
        throw new Meteor.Error(err);
