@@ -14,6 +14,12 @@ moment.updateLocale('en', {
       6: null
   }// including lunch breaks!
 });
+
+// moment.defineLocale('en-foo', {
+//   parentLocale: 'en',
+//   /* */
+// });
+
 //const now = moment().tz(clientTZ);
 //const isNow = (t)=>{ return ( now.isSame(moment(t), 'day') ) };
 
@@ -126,7 +132,7 @@ function collectStatus(privateKey, batchID, clientTZ) {
   });
 }
 
-function collectPriority(privateKey, batchID) {
+function collectPriority(privateKey, batchID, clientTZ) {
   return new Promise(resolve => {
     let collection = false;
     const b = BatchDB.findOne({_id: batchID});
@@ -152,7 +158,14 @@ function collectPriority(privateKey, batchID) {
   
         const estComplete = moment().addWorkingTime(q2tNice, 'minutes');
         
-        const fulfill = moment(b.end);
+        const prevShipDay = moment(b.end).tz(clientTZ).locale('shipDays', {
+          workinghours: { 0: null, 1: null,
+            2: ['07:00:00', '14:00:00'], 3: null, 4: ['07:00:00', '14:00:00'],
+            5: null, 6: null }
+        }).lastWorkingDay().nextWorkingTime();
+        
+        const fulfill = prevShipDay || moment(b.end).tz(clientTZ);
+        
         const buffer = fulfill.workingDiff(estComplete, 'minutes');
         
         estEnd2fillBuffer = buffer || 0;
@@ -301,17 +314,17 @@ Meteor.methods({
     return bundleProgress(batchID);
   },
   
-  priorityRank(batchID) {
-    async function bundlePriority(batchID) {
+  priorityRank(batchID, clientTZ) {
+    async function bundlePriority(batchID, clientTZ) {
       const accessKey = Meteor.user().orgKey;
       try {
-        bundle = await collectPriority(accessKey, batchID);
+        bundle = await collectPriority(accessKey, batchID, clientTZ);
         return bundle;
       }catch (err) {
         throw new Meteor.Error(err);
       }
     }
-    return bundlePriority(batchID);
+    return bundlePriority(batchID, clientTZ);
   },
   
   phaseProgress(batchID) {

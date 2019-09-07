@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import moment from 'moment';
+import 'moment-timezone';
 import NumStat from '/client/components/uUi/NumStat.jsx';
 
 const PrioritySquare = ({ batchID, app })=> {
@@ -6,7 +8,8 @@ const PrioritySquare = ({ batchID, app })=> {
   const [ ptData, setPriority ] = useState(false);
   
   useEffect( ()=> {
-    Meteor.call('priorityRank', batchID, (error, reply)=>{
+    const clientTZ = moment.tz.guess();
+    Meteor.call('priorityRank', batchID, clientTZ, (error, reply)=>{
       error && console.log(error);
       if( reply ) { 
         setPriority( reply );

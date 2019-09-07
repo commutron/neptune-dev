@@ -17,6 +17,10 @@ const TimeBudgetBar = ({ title, a, b, c})=> {
         horizontal={true}
         padding={0}
         height={45}
+        animate={{
+          duration: 500,
+          onLoad: { duration: 250 }
+        }}
       >
         <VictoryBar 
           data={[{x: "a", y: a}]}

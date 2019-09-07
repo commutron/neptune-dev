@@ -17,7 +17,7 @@ const TideMultiBatchBar = ({ batchIDs, app })=> {
   const [ batchTimes, storeTimes ] = useState(false);
   
   useEffect( ()=>{
-    const flipBatchIDs = batchIDs.reverse();
+    const flipBatchIDs = batchIDs.reduce((ary, ele) => {ary.unshift(ele); return ary}, []);
     Meteor.call('countMultiBatchTideTimes', flipBatchIDs, (error, reply)=>{
       error && console.log(error);
       storeTimes( reply );
@@ -37,7 +37,7 @@ const TideMultiBatchBar = ({ batchIDs, app })=> {
     <div className='invert chartNoHeightContain'>
       <VictoryChart
         theme={Theme.NeptuneVictory}
-        padding={{top: 25, right: 50, bottom: 25, left: 50}}
+        padding={{top: 25, right: 25, bottom: 25, left: 50}}
         domainPadding={{x: 10, y: 40}}
         height={50 + ( batchTimes.batchTides.length * 25 )}
       >
@@ -51,6 +51,10 @@ const TideMultiBatchBar = ({ batchIDs, app })=> {
             colorScale={["rgb(52, 152, 219)", "rgb(149, 165, 166)", "rgb(241, 196, 15)"]}
             horizontal={true}
             padding={0}
+            animate={{
+              duration: 500,
+              onLoad: { duration: 250 }
+            }}
           >
             <VictoryBar
               data={batchTimes.batchTides}

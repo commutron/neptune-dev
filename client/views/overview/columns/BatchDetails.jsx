@@ -105,8 +105,7 @@ const BatchTopStatus = ({ batchID, clientTZ, app })=> {
   const [ stData, setStatus ] = useState(false);
   
   useEffect( ()=> {
-    const doProto = Roles.userIsInRole(Meteor.userId(), 'nightly');
-    Meteor.call('overviewBatchStatus', batchID, clientTZ, doProto, (error, reply)=>{
+    Meteor.call('overviewBatchStatus', batchID, clientTZ, (error, reply)=>{
       error && console.log(error);
       if( reply ) { 
         setStatus( reply );

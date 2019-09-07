@@ -110,6 +110,7 @@ class Pref {
     this.fixFlow = 'repair process';
     this.fixStep = 'repair step';
     this.nonCon = 'nonCon';
+    this.nonCons = 'nonconformaces';
     this.nonConRef = 'reference';
     this.nonConType = 'defect';
     this.repair = 'repair';

@@ -69,6 +69,14 @@
 .chart20Contain .pieCore { font-size: 8vw; }
 .chart20Contain p { font-size: 2vw; }
 
+.chart25Contain {
+  width: 25vw;
+  padding: 1vmax;
+}
+.chart25Contain .pieCore { font-size: 10vw; }
+.chart25Contain p { font-size: 2.5vw; }
+
+
 .chart30Contain {
   width: 30vw;
   height: 30vw;
