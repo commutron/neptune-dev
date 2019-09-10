@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {CSSTransitionGroup} from 'react-transition-group';
 
 const AnimateWrap = ({ children, type, el })=> (

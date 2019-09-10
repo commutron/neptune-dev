@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
@@ -8,13 +8,13 @@ import RMAForm from '/client/components/forms/RMAForm.jsx';
 // requires data
 // rma array
 
-export default class RMATable extends Component	{
+const RMATable = (props)=> {
   
-  pullRMA(e, cKey) {
+  function pullRMA(e, cKey) {
     let check = 'Are you sure you want to remove this ' + Pref.rmaProcess;
     const yes = window.confirm(check);
     if(yes) {
-      const id = this.props.id;
+      const id = props.id;
       Meteor.call('pullRMACascade', id, cKey, (error)=>{
         if(error)
           console.log(error);
@@ -22,58 +22,58 @@ export default class RMATable extends Component	{
     }else{null}
   }
 
-  render() {
-    
-    const data = this.props.data;
 
-    return (
-      <div>
-        {data.length > 0 ?
-        <table className='wide'>
-          <thead className='red cap'>
-            <tr>
-              <th>RMA</th>
-  						<th>who</th>
-  						<th>time</th>
-              <th>required</th>
-              <th>assigned</th>
-              <th>steps</th>
-              <th>auto NonCons</th>
-              <th>comment</th>
-              <th></th>
-              <th></th>
-            </tr>
-          </thead>
-          {data.map( (entry)=>{
-            let started = this.props.inUse.includes(entry.key);
-            Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(started);
-            return (
-              <RMARow
-                key={entry.key}
-                entry={entry}
-                id={this.props.id}
-                assigned={this.props.items.filter(x => x.rma.includes(entry.key)).length}
-                onRemove={(e)=>this.pullRMA(e, entry.key)}
-                lock={started}
-                app={this.props.app} />
-            );
-          })}
-        </table>
-        :
-        <div className='centreText fade'>
-          <i className='fas fa-smile fa-3x' aria-hidden="true"></i>
-          <p className='big'>no {Pref.nonCon}s</p>
-        </div>
-        }
+  const data = props.data;
+
+  return (
+    <div>
+      {data.length > 0 ?
+      <table className='wide'>
+        <thead className='red cap'>
+          <tr>
+            <th>RMA</th>
+						<th>who</th>
+						<th>time</th>
+            <th>required</th>
+            <th>assigned</th>
+            <th>steps</th>
+            <th>auto NonCons</th>
+            <th>comment</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        {data.map( (entry)=>{
+          let started = props.inUse.includes(entry.key);
+          Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(started);
+          return (
+            <RMARow
+              key={entry.key}
+              entry={entry}
+              id={props.id}
+              assigned={props.items.filter(x => x.rma.includes(entry.key)).length}
+              onRemove={(e)=>pullRMA(e, entry.key)}
+              lock={started}
+              app={props.app} />
+          );
+        })}
+      </table>
+      :
+      <div className='centreText fade'>
+        <i className='fas fa-smile fa-3x'></i>
+        <p className='big'>no {Pref.nonCon}s</p>
       </div>
-    );
-  }
-}
+      }
+    </div>
+  );
+};
 
+export default RMATable;
 
 
 
 const RMARow = ({ entry, id, assigned, onRemove, lock, app })=> {
+  
   let dt = entry;
   
   return(

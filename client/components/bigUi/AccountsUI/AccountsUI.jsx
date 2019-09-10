@@ -20,6 +20,9 @@ Accounts.onLogin( ()=>{
 	}
  });
 */
+
+// Keeping "Component" for async
+
 export default class AccountsUI extends Component {
 	
 	constructor() {
