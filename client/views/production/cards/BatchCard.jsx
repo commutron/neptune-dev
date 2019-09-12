@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import moment from 'moment';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 //import TideLock from '/client/components/tide/TideLock.jsx';
@@ -10,82 +10,80 @@ import GeneralChunk from '/client/views/data/panels/BatchPanel/GeneralChunk.jsx'
 import FloorRelease from '/client/components/smallUi/FloorRelease.jsx';
 import StepsProgress from '../../../components/bigUi/StepsProgress/StepsProgress.jsx';
 
+const BatchCard = (props)=> {
 
-export default class BatchCard extends Component	{
+  const b = props.batchData;
+  const iS = props.itemSerial;
+  const w = props.widgetData;
+  //const g = this.props.groupData;
+  const u = props.user;
+  const a = props.app;
   
-  render() {
+  const flow = props.flow;
+  const flowAlt = props.flowAlt;
+  const done = b.finishedAt !== false;
+  
+  const progCounts = props.progCounts;
 
-    const b = this.props.batchData;
-    const iS = this.props.itemSerial;
-    const w = this.props.widgetData;
-    //const g = this.props.groupData;
-    const u = this.props.user;
-    const a = this.props.app;
-    
-    const flow = this.props.flow;
-    const flowAlt = this.props.flowAlt;
-    const done = b.finishedAt !== false;
-    
-    const progCounts = this.props.progCounts;
+  let iNoready = b.items.length === 0;
+  
+  let warn = b.blocks.filter( x => x.solve === false ).length;
+  iNoready ? warn++ : null;
+  
+  let released = b.floorRelease === undefined ? undefined : 
+                  b.floorRelease === false ? false :
+                  typeof b.floorRelease === 'object';
+  
+  let tabOps = [
+    <i className='fas fa-info-circle fa-fw' data-fa-transform='down-2' title='Info'></i>, 
+    <i className='fas fa-tasks fa-fw' data-fa-transform='down-2' title='Progress'></i>
+  ];
 
-    let iNoready = b.items.length === 0;
-    
-    let warn = b.blocks.filter( x => x.solve === false ).length;
-    iNoready ? warn++ : null;
-    
-    let released = b.floorRelease === undefined ? undefined : 
-                    b.floorRelease === false ? false :
-                    typeof b.floorRelease === 'object';
-    
-    let tabOps = [
-      <i className='fas fa-info-circle fa-fw' data-fa-transform='down-2' title='Info'></i>, 
-      <i className='fas fa-tasks fa-fw' data-fa-transform='down-2' title='Progress'></i>
-    ];
-
-    return(
-      <AnimateWrap type='cardTrans'>
-        <div className='sidebar' key={b.batch}>
-          {/*<TideLock currentLive={this.props.currentLive}></TideLock>*/}
-            {iNoready &&
-              <div className='centre centreText space'>
-                <p><i className="fas fa-exclamation-triangle fa-4x orangeT"></i></p>
-                <p className='medBig'>
-                  No {Pref.itemSerial}s created
-                </p>
-                <br />
-              </div>
-            }
-            
-            {released === undefined || released === true ? null :
-              <FloorRelease id={b._id} />}
-            
-            {b.finishedAt !== false &&
-              <h2 className='actionBox centreText green'>
-                Finished: {moment(b.finishedAt).calendar()}
-              </h2>}
+  return(
+    <AnimateWrap type='cardTrans'>
+      <div className='sidebar' key={b.batch}>
+        {/*<TideLock currentLive={this.props.currentLive}></TideLock>*/}
+          {iNoready &&
+            <div className='centre centreText space'>
+              <p><i className="fas fa-exclamation-triangle fa-4x orangeT"></i></p>
+              <p className='medBig'>
+                No {Pref.itemSerial}s created
+              </p>
+              <br />
+            </div>
+          }
           
-            <Tabs
-              tabs={tabOps}
-              names={false}
-              wide={true}
-              stick={false}
-              hold={true}
-              sessionTab='batchProPanelTabs'>
-              
-              <div className='space cap'>
-                <GeneralChunk a={a} b={b} done={done} expand={false} />
-              </div>
-              
-              <div className='space cap'>
-                <StepsProgress progCounts={progCounts} truncate={true} />
-              </div>
-              
-            </Tabs>
-  				
-  			<br />
-  
-  			</div>
-			</AnimateWrap>
-    );
-  }
-}
+          {released === undefined || released === true ? null :
+            <FloorRelease id={b._id} />}
+          
+          {b.finishedAt !== false &&
+            <h2 className='actionBox centreText green'>
+              Finished: {moment(b.finishedAt).calendar()}
+            </h2>}
+        
+          <Tabs
+            tabs={tabOps}
+            names={false}
+            wide={true}
+            stick={false}
+            hold={true}
+            sessionTab='batchProPanelTabs'>
+            
+            <div className='space cap'>
+              <GeneralChunk a={a} b={b} done={done} expand={false} />
+            </div>
+            
+            <div className='space cap'>
+              <StepsProgress progCounts={progCounts} truncate={true} />
+            </div>
+            
+          </Tabs>
+				
+			<br />
+
+			</div>
+		</AnimateWrap>
+  );
+};
+
+export default BatchCard;

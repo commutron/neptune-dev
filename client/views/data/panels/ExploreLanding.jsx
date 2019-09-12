@@ -56,35 +56,42 @@ const ExploreLanding = ({ groupData, widgetData, batchData, xBatchData, app }) =
             <TrendLine 
               title={`new ${Pref.batches}`}
               statType='newBatch'
+              cycleCount={10}
               lineColor='rgb(52, 152, 219)' />
             <TrendBar
               title={`completed ${Pref.batches}`}
-              statType='doneBatch' />
+              statType='doneBatch'
+              cycleCount={10} />
             <TrendLine 
               title={`completed ${Pref.items}`}
               statType='doneItem'
+              cycleCount={10}
               lineColor='rgb(46, 204, 113)' />
           </div>
           
           <div className='centreRow'>  
             <TrendLine 
               title={`discovered ${Pref.nonCons}`}
-              statType='newNC' 
+              statType='newNC'
+              cycleCount={10}
               lineColor='rgb(231, 76, 60)' />
             <TrendLine 
               title={`discovered ${Pref.shortfall}s`}
-              statType='newSH' 
+              statType='newSH'
+              cycleCount={10}
               lineColor='rgb(230, 126, 34)' />
             <TrendLine 
               title='scrapped items'
-              statType='scrapItem' 
+              statType='scrapItem'
+              cycleCount={10}
               lineColor='rgb(192, 57, 43)' />
           </div>
         
           <details className='footnotes'>
             <summary>Chart Details</summary>
             <p className='footnote'>
-              Trends include six (6) weeks, including the current week. 
+              Trends include {10} weeks, including the current week. 
+              Displayed left to right as past to current.
             </p>
             <p className='footnote'>
               Completed on time {Pref.batches} are indicated in green.

@@ -4,19 +4,19 @@ import 'moment-timezone';
 import 'moment-business-time';
 
 
-  function weekRanges(clientTZ, counter) {
+  function weekRanges(clientTZ, counter, cycles) {
     const nowLocal = moment().tz(clientTZ);
     
     let countArray = [];
-    for(let w = 0; w < 6; w++) {
+    for(let w = 0; w < cycles; w++) {
     
       const loopBack = nowLocal.clone().subtract(w, 'week'); 
      
-      const rangeStart = loopBack.clone().startOf('week').format();
-      const rangeEnd = loopBack.clone().endOf('week').format();
+      const rangeStart = loopBack.clone().startOf('week').toISOString();
+      const rangeEnd = loopBack.clone().endOf('week').toISOString();
       
       const quantity = counter(rangeStart, rangeEnd);
-      countArray.unshift({ x:6-w, y:quantity });
+      countArray.unshift({ x:cycles-w, y:quantity });
     }
     
     return countArray;
@@ -93,14 +93,15 @@ import 'moment-business-time';
     
     const generalFind = BatchDB.find({
       orgKey: Meteor.user().orgKey, 
-      'items.finishedAt': { 
+      items: { $elemMatch: { finishedAt: {
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
-      }
+      }}}
     }).fetch();
     
     for(let gf of generalFind) {
       const thisDI = gf.items.filter( x =>
+        x.finishedAt !== false &&
         moment(x.finishedAt).isSame(rangeStart, 'week')
       );
       
@@ -115,10 +116,10 @@ import 'moment-business-time';
     
     const generalFind = BatchDB.find({
       orgKey: Meteor.user().orgKey, 
-      'nonCon.time': { 
+      nonCon: { $elemMatch: { time: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
-      }
+      }}}
     }).fetch();
     for(let gf of generalFind) {
       const thisNC = gf.nonCon.filter( 
@@ -144,10 +145,10 @@ import 'moment-business-time';
     
     const generalFind = BatchDB.find({
       orgKey: Meteor.user().orgKey, 
-      'shortfall.cTime': { 
+      shortfall: { $elemMatch: { cTime: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
-      }
+      }}}
     }).fetch();
     for(let gf of generalFind) {
       const thisSH = gf.shortfall.filter( 
@@ -173,10 +174,10 @@ import 'moment-business-time';
     
     const generalFind = BatchDB.find({
       orgKey: Meteor.user().orgKey, 
-      'items.finishedAt': { 
+      items: { $elemMatch: { finishedAt: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
-      }
+      }}}
     }).fetch();
     
     for(let gf of generalFind) {
@@ -195,7 +196,7 @@ import 'moment-business-time';
 Meteor.methods({
   
   
-  sixWeekRate(clientTZ, stat) {
+  cycleWeekRate(clientTZ, stat, cycles) {
     try {
       let loop = false;
       
@@ -217,10 +218,10 @@ Meteor.methods({
         null;
       }
       
-      if(!loop) {
+      if( !loop || typeof cycles !== 'number' ) {
         return false;
       }else{
-        const runCounter = weekRanges(clientTZ, loop);
+        const runCounter = weekRanges(clientTZ, loop, cycles);
         return runCounter;
       }
     }catch(err) {

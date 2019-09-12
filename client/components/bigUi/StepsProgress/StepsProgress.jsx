@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 //import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import './style.css';
-//import ProgPie from '/client/components/charts/ProgPie.jsx';
-//import MiniBar from '/client/components/charts/MiniBar.jsx';
+
 import MiniStack from '/client/components/charts/MiniScales/MiniStack.jsx';
 import NumBox from '/client/components/uUi/NumBox.jsx';
 // requires 
@@ -14,7 +13,6 @@ import NumBox from '/client/components/uUi/NumBox.jsx';
 const StepsProgress  = ({ progCounts, riverTitle, riverAltTitle, truncate })=> {
   
   const [ countCalc, countSet ] = useState('item');
-    
 
   const dt = progCounts;
   const regDt = dt.regStepData;
@@ -169,7 +167,6 @@ const StepTallyDisplay = ({step, type, count, countNew, total })=> {
                 type === 'test' ?
                 step :
                 step + ' ' + type;
-
   return(
     <MiniStack
       title={title}
