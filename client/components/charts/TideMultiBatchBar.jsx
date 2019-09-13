@@ -7,6 +7,7 @@ import {
   VictoryChart, 
   VictoryAxis,
   VictoryLabel,
+  VictoryTooltip,
   VictoryStack
 } from 'victory';
 //import Pref from '/client/global/pref.js';
@@ -48,14 +49,14 @@ const TideMultiBatchBar = ({ batchIDs, app })=> {
         <VictoryAxis />
         <VictoryStack
           theme={Theme.NeptuneVictory}
-            colorScale={["rgb(52, 152, 219)", "rgb(149, 165, 166)", "rgb(241, 196, 15)"]}
-            horizontal={true}
-            padding={0}
-            animate={{
-              duration: 500,
-              onLoad: { duration: 250 }
-            }}
-          >
+          colorScale={["rgb(52, 152, 219)", "rgb(149, 165, 166)", "rgb(241, 196, 15)"]}
+          horizontal={true}
+          padding={0}
+          animate={{
+            duration: 500,
+            onLoad: { duration: 250 }
+          }}
+        >
             <VictoryBar
               data={batchTimes.batchTides}
               horizontal={true}
@@ -67,11 +68,29 @@ const TideMultiBatchBar = ({ batchIDs, app })=> {
             <VictoryBar
               data={batchTimes.batchLeftBuffer}
               horizontal={true}
+              labels={(l) => `${asHours(l.y)} Under`}
+              style={{ labels: { fill: "dimgray" } }}
+              labelComponent={
+                <VictoryTooltip 
+                  orientation='top'
+                  dx={-10}
+                  dy={10} 
+                />
+              }
               barWidth={12}
             />
             <VictoryBar
               data={batchTimes.batchOverBuffer}
               horizontal={true}
+              labels={(l) => `${asHours(l.y)} Over`}
+              style={{ labels: { fill: "dimgray" } }}
+              labelComponent={
+                <VictoryTooltip 
+                  orientation='top'
+                  dx={-10}
+                  dy={10} 
+                />
+              }
               barWidth={12}
             />
         </VictoryStack>

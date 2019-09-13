@@ -55,12 +55,26 @@
   height: auto;
 }
 
+.chart5Contain {
+  width: 5vw;
+  padding: 1vmax;
+}
+.chart5Contain .pieCore { font-size: 1vw; }
+.chart5Contain p { font-size: 1vw; }
+
 .chart10Contain {
   width: 10vw;
   padding: 1vmax;
 }
-.chart10Contain .pieCore { font-size: 6vw; }
+.chart10Contain .pieCore { font-size: 3vw; }
 .chart10Contain p { font-size: 1vw; }
+
+.chart15Contain {
+  width: 15vw;
+  padding: 1vmax;
+}
+.chart15Contain .pieCore { font-size: 5vw; }
+.chart15Contain p { font-size: 1.5vw; }
 
 .chart20Contain {
   width: 20vw;

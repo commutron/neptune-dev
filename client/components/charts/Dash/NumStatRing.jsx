@@ -11,7 +11,7 @@ const NumStatRing = ({ total, nums, name, title, colour})=> {
     colour === 'green' ? ["#2ecc71","#22f97c","#02d85b","#4fff98","#028237"] :
     colour === 'red' ? ["#e74c46","#a30500","#720300","#8c0c08","#9b0500"] :
     null;
-    
+    console.log(nums);
   return(
     <div className='invert' className='chart20Contain noCopy' title={title}>
       <div className='pieRing'>

@@ -11,7 +11,7 @@ import { MostNonCon } from '/client/components/bigUi/NonConMiniTops.jsx';
 import { TodayNonCon } from '/client/components/bigUi/NonConMiniTops.jsx';
 import { LeftFxNonCon } from '/client/components/bigUi/NonConMiniTops.jsx';
 import { LeftInNonCon } from '/client/components/bigUi/NonConMiniTops.jsx';
-import NonConPie from '/client/components/charts/NonConPie.jsx';
+import NonConStatusPie from '/client/components/charts/NonCon/NonConStatusPie.jsx';
 import NonConBubble from '/client/components/charts/NonConBubble.jsx';
 import NonConScatter from '/client/components/charts/NonConScatter.jsx';
 import NonConPolar from '/client/components/charts/NonConPolar.jsx';
@@ -32,7 +32,7 @@ const NCTab = ({
           <LeftFxNonCon noncons={b.nonCon} />
           <LeftInNonCon noncons={b.nonCon} />
         </div>
-        <NonConPie nonCons={b.nonCon} />
+        <NonConStatusPie nonCons={b.nonCon} />
       </div>
       <div className='avTwoContent'>
         <p className='wide centreText'>NonCon Rate</p>

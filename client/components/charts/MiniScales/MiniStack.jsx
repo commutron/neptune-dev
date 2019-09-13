@@ -4,7 +4,7 @@ import './style.css';
 // import ChartistGraph from 'react-chartist';
 // import Tooltip from 'chartist-plugin-tooltips';
 
-import { VictoryBar, VictoryStack } from 'victory';
+import { VictoryBar, VictoryStack, VictoryTooltip } from 'victory';
 //import Pref from '/client/global/pref.js';
 
 const MiniStack = ({ title, count, countNew, total })=> {
@@ -65,12 +65,18 @@ const MiniStack = ({ title, count, countNew, total })=> {
         horizontal={true}
         padding={0}
         height={12}
-        horizontal={true}
       >
         <VictoryBar 
           data={dataArr[0]}
           barWidth={20}
-          height={12}
+          labels={dataArr[0]}
+          labelComponent={
+            <VictoryTooltip 
+              orientation='top'
+              dx={-10}
+              dy={10}
+            />
+          }
           // animate={{
           //   duration: 500,
           //   onLoad: { duration: 250 }
@@ -79,7 +85,14 @@ const MiniStack = ({ title, count, countNew, total })=> {
         <VictoryBar
           data={dataArr[1]}
           barWidth={20}
-          height={12}
+          labels={dataArr[1]}
+          labelComponent={
+            <VictoryTooltip 
+              orientation='top'
+              dx={-10}
+              dy={10}
+            />
+          }
           // animate={{
           //   duration: 500,
           //   onLoad: { duration: 250 }
@@ -88,7 +101,15 @@ const MiniStack = ({ title, count, countNew, total })=> {
         <VictoryBar
           data={dataArr[2]}
           barWidth={20}
-          height={12}
+          labels={dataArr[2]}
+          style={ { height: '20px' } }
+          labelComponent={
+            <VictoryTooltip 
+              orientation='top' 
+              dx={-10}
+              dy={10}
+            />
+          }
           // animate={{
           //   duration: 500,
           //   onLoad: { duration: 250 }
