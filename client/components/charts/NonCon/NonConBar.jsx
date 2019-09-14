@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from 'react-dom';
 import { 
-  VictoryScatter, 
+  VictoryBar, 
   VictoryChart, 
-  VictoryAxis, 
+  VictoryAxis,
+  VictoryLabel,
   VictoryTooltip,
-  VictoryClipContainer
+  VictoryStack
 } from 'victory';
 //import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
 
-const NonConBubble = ({ ncOp, flow, flowAlt, nonCons, app })=> {
+const NonConBar = ({ ncOp, flow, flowAlt, nonCons, app })=> {
   
-  const [ series, seriesSet ] = useState([]);
-    
+  const [ series, seriesSet ] = useState([ [] ]);
   
   useEffect( ()=> {
     const nonConOptions = ncOp || [];
@@ -41,16 +41,18 @@ const NonConBubble = ({ ncOp, flow, flowAlt, nonCons, app })=> {
       let ncCounts = [];
       
       for(let ncSet of splitByPhase) {
+        let ncPhase = [];
         for(let ncType of ncOptions) {
           const typeCount = ncSet.pNC.filter( x => x.type === ncType ).length;
           if(typeCount > 0) {
-            ncCounts.push({
-              x: ncSet.phase,
-              y: ncType,
-              z: typeCount
+            ncPhase.push({
+              y: typeCount,
+              x: ncType,
+              label: ncSet.phase
             });
           }
         }
+        ncCounts.push(ncPhase);
       }
       return ncCounts;
     }
@@ -58,30 +60,26 @@ const NonConBubble = ({ ncOp, flow, flowAlt, nonCons, app })=> {
     try{
       const appPhases = app.phases;
       let calc = ncCounter(nonConArrayClean, nonConOptions, appPhases);
-      // const qu = Array.from(calc, x => x.z);
-      // const max = Math.max(...qu);
-      // const min = Math.min(...qu);
-      seriesSet(calc);
-      // this.setState({
-      //   max: max,
-      //   min: min
-      // });
+      seriesSet( calc );
     }catch(err) {
       console.log(err);
     }
   }, []);
           
-
-    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(series);
+    
+    Roles.userIsInRole(Meteor.userId(), 'debug') && 
+      console.log(series);
     
   return(
     <div className='invert chartNoHeightContain'>
       <VictoryChart
         theme={Theme.NeptuneVictory}
-        padding={{top: 20, right: 20, bottom: 20, left: 120}}
-        domainPadding={25}
+        padding={{top: 20, right: 50, bottom: 20, left: 120}}
+        domainPadding={{x: 10, y: 40}}
       >
         <VictoryAxis
+          dependentAxis
+          tickFormat={(t) => Math.round(t)}
           style={ {
             // axis: { stroke: 'grey' },
             // grid: { stroke: '#5c5c5c' },
@@ -92,7 +90,6 @@ const NonConBubble = ({ ncOp, flow, flowAlt, nonCons, app })=> {
           } }
         />
         <VictoryAxis 
-          dependentAxis
           //fixLabelOverlap={true} 
           style={ {
             // axis: { stroke: 'grey' },
@@ -103,26 +100,38 @@ const NonConBubble = ({ ncOp, flow, flowAlt, nonCons, app })=> {
               fontSize: '8px' }
           } }
         />
-        <VictoryScatter
-          data={series}
-          // domain={{z: [this.state.min, this.state.max]}}
-          bubbleProperty="z"
-          // maxBubbleSize={this.state.max}
-          // minBubbleSize={this.state.min}
-          labels={(d) => `Quantity: ${d.z}`}
-          groupComponent={<VictoryClipContainer/>}
-          labelComponent={
-            <VictoryTooltip />}
-          style={ {
-            data: { 
-              fill: 'rgba(231,76,60,0.2)',
-              stroke: 'rgb(100,100,100)',
-              strokeWidth: 1
-          } } }
-        />
+        <VictoryStack
+          theme={Theme.NeptuneVictory}
+          colorScale={[
+            "rgb(52, 152, 219)", 
+            "rgb(149, 165, 166)", 
+            "rgb(241, 196, 15)"
+          ]}
+          horizontal={true}
+          padding={0}
+          // animate={{
+          //   duration: 500,
+          //   onLoad: { duration: 250 }
+          // }}
+        >
+        
+        {series.map( (entry, index)=>{
+          if(entry.length > 0) {
+            return(
+              <VictoryBar
+                key={index}
+                horizontal={true}
+                data={entry}
+                labels={(d) => `${d.label}`}
+                labelComponent={
+                  <VictoryTooltip />}
+              />
+          )}
+        })}
+        </VictoryStack>
       </VictoryChart>
     </div>
   );
 };
 
-export default NonConBubble;
+export default NonConBar;

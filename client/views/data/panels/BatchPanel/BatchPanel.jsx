@@ -143,7 +143,7 @@ const BatchPanel = (props)=> {
             b={props.batchData}
             riverFlow={path.riverFlow}
             riverAltFlow={path.riverAltFlow}
-            ncListKeys={path.ncListKeys} />
+            ncListKeys={path.ncListKeys.flat()} />
           
           <div>
             <RMATable

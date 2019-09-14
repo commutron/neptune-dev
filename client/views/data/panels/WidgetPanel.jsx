@@ -6,7 +6,7 @@ import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 
 import VersionList from '../lists/VersionList.jsx';
 import FlowTable from '../../../components/tables/FlowTable.jsx';
-import TideMultiBatchBar from '../../../components/charts/TideMultiBatchBar.jsx';
+import TideMultiBatchBar from '../../../components/charts/Tides/TideMultiBatchBar.jsx';
 import NonConMultiBatchBar from '../../../components/charts/NonConMultiBatchBar.jsx';
 //import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 

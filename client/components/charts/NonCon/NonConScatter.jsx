@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from 'react-dom';
 import { 
   VictoryScatter, 
@@ -9,20 +9,14 @@ import {
 //import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
 
-export default class NonConScatter extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      series: [],
-      max: 0,
-      min: 0
-    };
-  }
+const NonConScatter = ({ ncOp, flow, flowAlt, nonCons, app })=> {
   
-  componentDidMount() {
-    const nonConOptions = this.props.ncOp || [];
+  const [ series, seriesSet ] = useState([]);
+  
+  useEffect( ()=> {
+    const nonConOptions = ncOp || [];
     
-    const nonConArray = this.props.nonCons || [];
+    const nonConArray = nonCons || [];
     const nonConArrayClean = nonConArray.filter( x => !x.trash );
     
     function ncCounter(ncArray, ncOptions, appPhases) {
@@ -50,8 +44,8 @@ export default class NonConScatter extends Component {
           if(typeCount > 0) {
             ncCounts.push({
               x: typeCount,
-              y: ncSet.phase,
-              label: ncType
+              y: ncType,
+              label: ncSet.phase
             });
           }
         }
@@ -60,49 +54,57 @@ export default class NonConScatter extends Component {
     }
     
     try{
-      const appPhases = this.props.app.phases;
+      const appPhases = app.phases;
       let calc = ncCounter(nonConArrayClean, nonConOptions, appPhases);
-      const qu = Array.from(calc, x => x.x);
-      const max = Math.max(...qu);
-      const min = Math.min(...qu);
-      this.setState({
-        series: calc,
-        max: max,
-        min: min
-      });
+      seriesSet( calc );
     }catch(err) {
       console.log(err);
     }
-  }
+  }, []);
           
-          
-  render() {
     
-    //Roles.userIsInRole(Meteor.userId(), 'debug') && 
-    console.log(this.state.series);
-    //Roles.userIsInRole(Meteor.userId(), 'debug') &&
-    console.log(this.state.max, this.state.min);
+    Roles.userIsInRole(Meteor.userId(), 'debug') && 
+      console.log(series);
     
-    return(
-      <div className='invert chartNoHeightContain'>
+  return(
+    <div className='invert chartNoHeightContain'>
       <VictoryChart
         theme={Theme.NeptuneVictory}
-        domainPadding={20}
+        padding={{top: 20, right: 20, bottom: 20, left: 120}}
+        domainPadding={25}
       >
-        <VictoryAxis tickFormat={(t) => Math.round(t)} />
-        <VictoryAxis dependentAxis />
+        <VictoryAxis
+          tickFormat={(t) => Math.round(t)}
+          style={ {
+            // axis: { stroke: 'grey' },
+            // grid: { stroke: '#5c5c5c' },
+            // ticks: { stroke: '#5c5c5c' },
+            tickLabels: { 
+              // fill: 'lightgrey', 
+              fontSize: '8px' }
+          } }
+        />
+        <VictoryAxis 
+          dependentAxis
+          //fixLabelOverlap={true} 
+          style={ {
+            // axis: { stroke: 'grey' },
+            // grid: { stroke: '#5c5c5c' },
+            // ticks: { stroke: '#5c5c5c' },
+            tickLabels: { 
+              // fill: 'lightgrey', 
+              fontSize: '8px' }
+          } }
+        />
         <VictoryScatter
-          data={this.state.series}
-          //domain={{x: [this.state.min, this.state.max]}}
-          //bubbleProperty="z"
-          // maxBubbleSize={this.state.max * 3}
-          // minBubbleSize={this.state.min * 3}
+          data={series}
           labels={(d) => d.label}
           labelComponent={
             <VictoryTooltip />}
         />
       </VictoryChart>
-      </div>
-    );
-  }
-}
+    </div>
+  );
+};
+
+export default NonConScatter;

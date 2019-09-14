@@ -23,7 +23,7 @@ const TideMultiBatchBar = ({ batchIDs, app })=> {
       error && console.log(error);
       storeTimes( reply );
     });
-  }, []);
+  }, [batchIDs]);
   
   const asHours = (mnts) => moment.duration(mnts, "minutes").asHours().toFixed(2, 10);
 

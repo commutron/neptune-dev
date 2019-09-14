@@ -6,7 +6,7 @@ import Pref from '/client/global/pref.js';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 
 import { TimeBudgetUpgrade, WholeTimeBudget } from '/client/components/forms/QuoteTimeBudget.jsx';
-import TimeBudgetBar from '/client/components/charts/TimeBudgetBar/TimeBudgetBar.jsx';
+import TimeBudgetBar from '/client/components/charts/Tides/TimeBudgetBar.jsx';
 
 const TimeBudgetsChunk = ({
   a, b, v,

@@ -508,8 +508,8 @@ Meteor.methods({
                         x => moment(x.time)
                           .isSameOrBefore(qDay, 'day') );
         let ncPack = {
-          'value': relevant.length,
-          'meta': moment(qDay).format('MMM.D')
+          'x': new Date(qDay),
+          'y': relevant.length
         };
         return ncPack;
       }
@@ -519,15 +519,16 @@ Meteor.methods({
       const range = end.diff(begin, 'day') + 2;
       
       let nonconSet = [];
-      let labelSet = [];
+      // let labelSet = [];
       for(let i = 0; i < range; i++) {
         let qDay = begin.clone().add(i, 'day').format();
         
         let ncCount = recordedNC(theseNC, qDay);
-        nonconSet.push(ncCount.value);
-        labelSet.push(ncCount.meta);
+        nonconSet.push(ncCount);
+        // labelSet.push(ncCount.meta);
       }
-      return { counts: nonconSet, labels: labelSet };
+      // return { counts: nonconSet, labels: labelSet };
+      return nonconSet;
     }
     
     nonconCollection = [];
@@ -538,15 +539,16 @@ Meteor.methods({
       }else{null}
     }
     
-    const allCounts = Array.from( nonconCollection, x => x.counts );
+    // const allCounts = Array.from( nonconCollection, x => x.counts );
     
-    let buildLabels = [];
-    let combine = Array.from( nonconCollection, x => x.labels );
-    combine.forEach( x => x.forEach( y => buildLabels.push(y) ) );
+    // let buildLabels = [];
+    // let combine = Array.from( nonconCollection, x => x.labels );
+    // combine.forEach( x => x.forEach( y => buildLabels.push(y) ) );
     
-    let allLabels = [... new Set( buildLabels ) ];
+    // let allLabels = [... new Set( buildLabels ) ];
     
-    return { counts: allCounts, labels: allLabels };
+    // return { counts: allCounts, labels: allLabels };
+    return nonconCollection;
   },
   
   

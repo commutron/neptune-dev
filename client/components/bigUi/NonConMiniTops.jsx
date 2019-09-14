@@ -87,7 +87,7 @@ export const TodayNonCon = ({ noncons })=> {
 export const LeftFxNonCon = ({ noncons })=> {
   const ncG = noncons.filter( n => !n.trash );
   const leftToFix = ncG.filter( x => 
-    x.fix === false && 
+    x.fix === false && x.inspect === false &&
       ( x.skip === false || x.snooze === true )
     ).length;
   return(

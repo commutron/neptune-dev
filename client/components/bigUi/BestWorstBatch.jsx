@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
-import moment from 'moment';
+// import moment from 'moment';
 import { CalcSpin } from '/client/components/uUi/Spin.jsx';
 import DateRangeSelect from '/client/components/smallUi/DateRangeSelect.jsx';
 import LeapText from '/client/components/tinyUi/LeapText.jsx';
-import NonConTypePie from '/client/components/charts/NonConTypePie.jsx';
 
 const BestWorstBatch = ({ groupData, widgetData, app, widgetSort })=> (
   <div>
@@ -61,7 +60,7 @@ class BestWorstContent extends Component {
         :
           <div className='wide centre'>
           
-            <NonConTypePie ncTypes={this.state.tops.ncTypeCounts} fullWidth={false} />
+            {/*NonConTypePie ncTypes={this.state.tops.ncTypeCounts} */}
             
             <div className='wide max1200 balance'>
           
