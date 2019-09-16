@@ -199,7 +199,10 @@ Meteor.methods({
         
         if(business.isWeekDay(day)) {
           const historyRemain = historyPings(historyFlat, totalItems, flowKey, day);
-          historyRemainOverTime.push(historyRemain);
+          historyRemainOverTime.push({
+            x: new Date( day.format() ),
+            y: historyRemain
+          });
 
           if(historyRemain === 0) { break }
         }
@@ -216,6 +219,7 @@ Meteor.methods({
       });
     }
     
+    /*
     let timeLabels = [];
     for(let i = 0; i < howManyDays; i++) {
       const day = startDay.clone().add(i, 'day');
@@ -223,8 +227,8 @@ Meteor.methods({
         timeLabels.push(day.format() );
       }
     }
-    
-    return {flowSeries, timeLabels};
+    */
+    return flowSeries;
   },
   
       /////////////////////////////////////////////////////////////////////////

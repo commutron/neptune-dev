@@ -54,7 +54,7 @@ const NonConRate = ({ batches, title, lineColor })=> {
             style={{ 
               data: { 
                 stroke: lineColor || 'black',
-                strokeWidth: '4px'
+                strokeWidth: '2px'
               },
             }}
             animate={{

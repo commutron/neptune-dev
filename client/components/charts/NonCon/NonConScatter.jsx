@@ -22,17 +22,19 @@ const NonConScatter = ({ ncOp, flow, flowAlt, nonCons, app })=> {
     function ncCounter(ncArray, ncOptions, appPhases) {
       
       let splitByPhase = [];
+      const symOp = ["square", "triangleUp", "triangleDown", "diamond", "plus", "minus", "star"];
       
       const phasesSet = new Set(appPhases);
-      for(let phase of phasesSet) {
+      [...phasesSet].map( (phase, index)=>{
         let match = ncArray.filter( y => y.where === phase );
         splitByPhase.push({
           'phase': phase,
-          'pNC': match
+          'pNC': match,
+          'sym': symOp[index] || "circle"
         });
-      }
+      });
       let leftover = ncArray.filter( z => phasesSet.has(z.where) === false );
-      splitByPhase.unshift({ 'phase': 'other', 'pNC': leftover });
+      splitByPhase.unshift({ 'phase': 'other', 'pNC': leftover, 'sym': "circle" });
       
       Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(splitByPhase);
       
@@ -45,7 +47,8 @@ const NonConScatter = ({ ncOp, flow, flowAlt, nonCons, app })=> {
             ncCounts.push({
               x: typeCount,
               y: ncType,
-              label: ncSet.phase
+              label: ncSet.phase,
+              symbol: ncSet.sym
             });
           }
         }
@@ -65,7 +68,7 @@ const NonConScatter = ({ ncOp, flow, flowAlt, nonCons, app })=> {
     
     Roles.userIsInRole(Meteor.userId(), 'debug') && 
       console.log(series);
-    
+  
   return(
     <div className='invert chartNoHeightContain'>
       <VictoryChart
@@ -101,6 +104,7 @@ const NonConScatter = ({ ncOp, flow, flowAlt, nonCons, app })=> {
           labels={(d) => d.label}
           labelComponent={
             <VictoryTooltip />}
+          size={5}
         />
       </VictoryChart>
     </div>

@@ -1,138 +1,109 @@
-import React, {Component} from 'react';
-import Chartist from 'chartist';
-import ChartistGraph from 'react-chartist';
-//import Tooltip from 'chartist-plugin-tooltips';
+import React, { useState, useEffect } from 'react';
+import { VictoryChart, VictoryAxis, VictoryStack, VictoryArea } from 'victory';
+import Theme from '/client/global/themeV.js';
+
 import moment from 'moment';
-import timezone from 'moment-timezone';
+import 'moment-timezone';
 import { CalcSpin } from '/client/components/uUi/Spin.jsx';
 
-export default class ProgLayerBurndown extends Component {
+const ProgLayerBurndown = ({ id, start, floorRelease, end, flowData, itemData, title })=> {
   
-  constructor() {
-    super();
-    this.state = {
-      counts: false,
-      labels: false,
-      first: false
-    };
-  }
+  const [ countState, countSet ] = useState( false );
+  const [ firstState, firstSet ] = useState( false );
   
-  counts() {
-    const start = this.props.start;
-    const end = this.props.end;
-    const flowData = this.props.flowData;
-    const itemData = this.props.itemData;
+  useEffect( ()=> {
     let clientTZ = moment.tz.guess();
-    Meteor.call('firstFirst', this.props.id, clientTZ, (error, reply)=> {
+    Meteor.call('firstFirst', id, clientTZ, (error, reply)=> {
       error && console.log(error);
-      this.setState({ first: reply });
+      reply && firstSet( reply );
     });
     Meteor.call('layeredHistoryRate', start, end, flowData, itemData, clientTZ, (error, reply)=> {
-      error ? console.log(error) : null;
-      this.setState({ counts: reply.flowSeries, labels: reply.timeLabels });
+      error && console.log(error);
+      reply && countSet( reply );
     });
-  }
+  }, []);
   
-  componentDidMount() {
-    this.counts();
-  }
-  render () {
     
-    const counts = this.state.counts;
-    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(counts);
-    const labels = this.state.labels;
-    
-    const flR = !this.props.floorRelease ? null : 
-      moment(this.props.floorRelease.time);
-    const frst = this.state.first;
+  Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(countState);
+  
+  const flR = !floorRelease ? null : 
+    moment(floorRelease.time);
 
-    if(!counts || !labels || !frst) {
-      return(
-        <CalcSpin />
-      );
-    }
-    
-    let data = {
-      series: counts,
-      labels: labels
-    };
-    
-    let options = {
-      fullWidth: true,
-      height: 350,
-      showArea: true,
-      showLine: true,
-      showPoint: false,
-      lineSmooth: Chartist.Interpolation.step(),
-      axisY: {
-        labelOffset: {x:0, y: 10},
-        low: 0,
-        onlyInteger: true,
-        showLabel: true,
-        showGrid: true,
-      },
-      axisX: {
-        labelOffset: {x:-20, y: 0},
-        //divisor: 7,
-        labelInterpolationFnc: function(value, index) {
-          let scale = labels.length < 7 ?
-                      2 :
-                      labels.length < 30 ?
-                      4 :
-                      labels.length < 60 ?
-                      8 :
-                      labels.length < 90 ?
-                      12 :
-                      labels.length < 120 ?
-                      24 :
-                      36;
-                  //moment(value).isSame(moment(flR), 'day') ? 
-                 //moment(value).format('MMM.D') :
-          return moment(value).isSame(moment(frst), 'day') ? 
-                 moment(value).format('MMM.D') :
-                 index === 0 ? null :
-                 index === labels.length - 5 ? null :
-                 index === labels.length - 4 ? null :
-                 index === labels.length - 3 ? null :
-                 index === labels.length - 2 ? null :
-                 index === labels.length - 1 ? 
-                 moment(value).format('MMM.D') :
-                 index % scale === 0 ? 
-                 moment(value).format('MMM.D') : 
-                 null;
-        },
-        scaleMinSpace: 25
-      },
-      chartPadding: {
-        top: 20,
-        right: 40,
-        bottom: 0,
-        left: 0
-      },
-      /*
-      plugins: [
-        Chartist.plugins.tooltip({
-          appendToBody: true
-        }),
-      ]
-      */
-    };
-    
+  if(!countState || !firstState) {
     return(
-      <span className='burndownFill'>
-        <div className='wide balance cap'>
-          <i className='blueT'>{this.props.title}</i>
-        </div>
-        <div>
-          <ChartistGraph
-            data={data}
-            options={options}
-            type={'Line'} />
-        </div>
-      </span>
+      <CalcSpin />
     );
   }
-}
+   
+    
+  return(
+    <span className='burndownFill centre'>
+      <div className='wide balance cap'>
+      
+        <VictoryChart
+          theme={Theme.NeptuneVictory}
+          padding={{top: 25, right: 40, bottom: 25, left: 40}}
+          scale={{x: "time", y: "linear"}}
+          height={200}
+          width={400}
+        >
+          <VictoryAxis 
+            style={ {
+              axis: { stroke: 'grey' },
+              grid: { stroke: '#5c5c5c' },
+              ticks: { stroke: '#5c5c5c' },
+              tickLabels: { fill: 'lightgrey', fontSize: '6px' }
+            } }
+          />
+          <VictoryAxis
+            dependentAxis
+            tickFormat={(l)=> l.toFixed(0,10)}
+            style={ {
+              axis: { stroke: 'grey' },
+              grid: { stroke: '#5c5c5c' },
+              ticks: { stroke: '#5c5c5c' },
+              tickLabels: { fill: 'lightgrey', fontSize: '4px' }
+            } }
+          />
+          
+        <VictoryStack
+          theme={Theme.NeptuneVictory}
+          padding={0}
+        >
+        
+        {countState.map( (entry, index)=>{
+          return(
+            <VictoryArea
+              key={index+entry.name}
+              data={entry.data}
+              style={{ 
+                data: { 
+                  stroke: 'rgb(41, 128, 185)',
+                  strokeWidth: '1px',
+                  fill: 'rgba(41, 128, 185, 0.2)'
+                },
+              }}
+              animate={{
+                duration: 2000,
+                onLoad: { duration: 1000 }
+              }}
+            />
+          )}
+        )}
+        </VictoryStack>
+        
+        
+        
+        </VictoryChart>
+        
+        <div className='centreText smCap'>{title}</div>
+        
+      </div>
+    </span>
+  );
+};
+
+export default ProgLayerBurndown;
 
 
 export const ProgLayerBurndownExplain = ()=>(

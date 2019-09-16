@@ -10,10 +10,11 @@ import {
 } from 'victory';
 //import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
+import { CalcSpin } from '/client/components/uUi/Spin.jsx';
 
 const NonConBar = ({ ncOp, flow, flowAlt, nonCons, app })=> {
   
-  const [ series, seriesSet ] = useState([ [] ]);
+  const [ series, seriesSet ] = useState( false );
   
   useEffect( ()=> {
     const nonConOptions = ncOp || [];
@@ -33,17 +34,18 @@ const NonConBar = ({ ncOp, flow, flowAlt, nonCons, app })=> {
           'pNC': match
         });
       }
-      let leftover = ncArray.filter( z => phasesSet.has(z.where) === false );
+      let leftover = ncArray.filter( z => phasesSet.has(z.where) === false ) || [];
       splitByPhase.unshift({ 'phase': 'other', 'pNC': leftover });
       
-      Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(splitByPhase);
+      Roles.userIsInRole(Meteor.userId(), 'debug') && 
+        console.log(splitByPhase);
       
       let ncCounts = [];
       
       for(let ncSet of splitByPhase) {
         let ncPhase = [];
         for(let ncType of ncOptions) {
-          const typeCount = ncSet.pNC.filter( x => x.type === ncType ).length;
+          const typeCount = ncSet.pNC.filter( x => x.type === ncType ).length || 0;
           if(typeCount > 0) {
             ncPhase.push({
               y: typeCount,
@@ -69,7 +71,13 @@ const NonConBar = ({ ncOp, flow, flowAlt, nonCons, app })=> {
     
     Roles.userIsInRole(Meteor.userId(), 'debug') && 
       console.log(series);
-    
+  
+  if(!series) {
+    return(
+      <CalcSpin />
+    );
+  }
+  
   return(
     <div className='invert chartNoHeightContain'>
       <VictoryChart
@@ -102,11 +110,7 @@ const NonConBar = ({ ncOp, flow, flowAlt, nonCons, app })=> {
         />
         <VictoryStack
           theme={Theme.NeptuneVictory}
-          colorScale={[
-            "rgb(52, 152, 219)", 
-            "rgb(149, 165, 166)", 
-            "rgb(241, 196, 15)"
-          ]}
+          colorScale='heatmap'
           horizontal={true}
           padding={0}
           // animate={{
@@ -119,10 +123,10 @@ const NonConBar = ({ ncOp, flow, flowAlt, nonCons, app })=> {
           if(entry.length > 0) {
             return(
               <VictoryBar
-                key={index}
-                horizontal={true}
+                key={index+entry.label}
+                // horizontal={true}
                 data={entry}
-                labels={(d) => `${d.label}`}
+                labels={(l) => `${l.label}`}
                 labelComponent={
                   <VictoryTooltip />}
               />
