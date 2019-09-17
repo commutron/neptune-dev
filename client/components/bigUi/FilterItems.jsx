@@ -42,10 +42,9 @@ const FilterItems = ({
         <select
           ref={(i)=>this.keyword = i}
           onChange={(e)=>changeKeywordFilter(e)}>
-          <optgroup label=''>
+          
             <option value={false} label='' />
-          </optgroup>
-          <optgroup label='Categories'>
+          
             <option value='Complete' label='Complete' />
             <option value='In Progress' label='In Progress' />
             <option value='Alternative' label='Alternative Flow' />
@@ -54,7 +53,7 @@ const FilterItems = ({
             <option value='Shortfalls' label='Shortfalls' />
             <option value='RMA' label='RMA' />
             <option value='Scrap' label='Scrap' />
-          </optgroup>
+         
           <optgroup label='Steps'>
             {advancedList.map( (entry, index)=>{
               return(

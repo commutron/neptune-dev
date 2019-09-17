@@ -47,7 +47,7 @@ const NonConScatter = ({ ncOp, flow, flowAlt, nonCons, app })=> {
             ncCounts.push({
               x: typeCount,
               y: ncType,
-              label: ncSet.phase,
+              l: ncSet.phase,
               symbol: ncSet.sym
             });
           }
@@ -75,6 +75,7 @@ const NonConScatter = ({ ncOp, flow, flowAlt, nonCons, app })=> {
         theme={Theme.NeptuneVictory}
         padding={{top: 20, right: 20, bottom: 20, left: 120}}
         domainPadding={25}
+        height={25 + ( series.length * 15 )}
       >
         <VictoryAxis
           tickFormat={(t) => Math.round(t)}
@@ -84,7 +85,7 @@ const NonConScatter = ({ ncOp, flow, flowAlt, nonCons, app })=> {
             // ticks: { stroke: '#5c5c5c' },
             tickLabels: { 
               // fill: 'lightgrey', 
-              fontSize: '8px' }
+              fontSize: '5px' }
           } }
         />
         <VictoryAxis 
@@ -96,15 +97,19 @@ const NonConScatter = ({ ncOp, flow, flowAlt, nonCons, app })=> {
             // ticks: { stroke: '#5c5c5c' },
             tickLabels: { 
               // fill: 'lightgrey', 
-              fontSize: '8px' }
+              fontSize: '6px' }
           } }
         />
         <VictoryScatter
           data={series}
-          labels={(d) => d.label}
+          labels={(d) => `${d.l} \n ${d.y} \n ${d.x}`}
           labelComponent={
             <VictoryTooltip />}
-          size={5}
+          style={ {
+            labels: { 
+              padding: 2,
+          } } }
+          size={4}
         />
       </VictoryChart>
     </div>

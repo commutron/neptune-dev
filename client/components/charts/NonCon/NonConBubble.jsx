@@ -58,14 +58,7 @@ const NonConBubble = ({ ncOp, flow, flowAlt, nonCons, app })=> {
     try{
       const appPhases = app.phases;
       let calc = ncCounter(nonConArrayClean, nonConOptions, appPhases);
-      // const qu = Array.from(calc, x => x.z);
-      // const max = Math.max(...qu);
-      // const min = Math.min(...qu);
       seriesSet(calc);
-      // this.setState({
-      //   max: max,
-      //   min: min
-      // });
     }catch(err) {
       console.log(err);
     }
@@ -80,6 +73,7 @@ const NonConBubble = ({ ncOp, flow, flowAlt, nonCons, app })=> {
         theme={Theme.NeptuneVictory}
         padding={{top: 20, right: 20, bottom: 20, left: 120}}
         domainPadding={25}
+        height={25 + ( series.length * 15 )}
       >
         <VictoryAxis
           style={ {
@@ -88,7 +82,7 @@ const NonConBubble = ({ ncOp, flow, flowAlt, nonCons, app })=> {
             // ticks: { stroke: '#5c5c5c' },
             tickLabels: { 
               // fill: 'lightgrey', 
-              fontSize: '8px' }
+              fontSize: '6px' }
           } }
         />
         <VictoryAxis 
@@ -100,23 +94,20 @@ const NonConBubble = ({ ncOp, flow, flowAlt, nonCons, app })=> {
             // ticks: { stroke: '#5c5c5c' },
             tickLabels: { 
               // fill: 'lightgrey', 
-              fontSize: '8px' }
+              fontSize: '6px' }
           } }
         />
         <VictoryScatter
           data={series}
-          // domain={{z: [this.state.min, this.state.max]}}
           bubbleProperty="z"
-          // maxBubbleSize={this.state.max}
-          // minBubbleSize={this.state.min}
           labels={(d) => `Quantity: ${d.z}`}
-          groupComponent={<VictoryClipContainer/>}
           labelComponent={
             <VictoryTooltip />}
+          groupComponent={<VictoryClipContainer/>}
           style={ {
             data: { 
-              fill: 'rgba(231,76,60,0.2)',
-              stroke: 'rgb(100,100,100)',
+              fill: 'rgba(231,76,60,0.5)',
+              stroke: 'rgb(50,50,50)',
               strokeWidth: 1
           } } }
         />

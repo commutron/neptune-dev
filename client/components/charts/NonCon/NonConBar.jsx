@@ -79,33 +79,34 @@ const NonConBar = ({ ncOp, flow, flowAlt, nonCons, app })=> {
   }
   
   return(
-    <div className='invert chartNoHeightContain'>
+    <div className='chartNoHeightContain'>
       <VictoryChart
         theme={Theme.NeptuneVictory}
         padding={{top: 20, right: 50, bottom: 20, left: 120}}
         domainPadding={{x: 10, y: 40}}
+        height={25 + ( series.length * 15 )}
       >
         <VictoryAxis
           dependentAxis
           tickFormat={(t) => Math.round(t)}
           style={ {
-            // axis: { stroke: 'grey' },
-            // grid: { stroke: '#5c5c5c' },
-            // ticks: { stroke: '#5c5c5c' },
+            axis: { stroke: 'grey' },
+            grid: { stroke: '#5c5c5c' },
+            ticks: { stroke: '#5c5c5c' },
             tickLabels: { 
-              // fill: 'lightgrey', 
-              fontSize: '8px' }
+              fill: 'lightgrey', 
+              fontSize: '5px' }
           } }
         />
         <VictoryAxis 
           //fixLabelOverlap={true} 
           style={ {
-            // axis: { stroke: 'grey' },
-            // grid: { stroke: '#5c5c5c' },
-            // ticks: { stroke: '#5c5c5c' },
+            axis: { stroke: 'grey' },
+            grid: { stroke: '#5c5c5c' },
+            ticks: { stroke: '#5c5c5c' },
             tickLabels: { 
-              // fill: 'lightgrey', 
-              fontSize: '8px' }
+              fill: 'lightgrey', 
+              fontSize: '6px' }
           } }
         />
         <VictoryStack
@@ -124,7 +125,6 @@ const NonConBar = ({ ncOp, flow, flowAlt, nonCons, app })=> {
             return(
               <VictoryBar
                 key={index+entry.label}
-                // horizontal={true}
                 data={entry}
                 labels={(l) => `${l.label}`}
                 labelComponent={

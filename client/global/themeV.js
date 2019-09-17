@@ -36,7 +36,7 @@ const baseLabelStyles = {
   fontFamily: sansSerif,
   fontSize,
   letterSpacing,
-  padding: 5,
+  padding: 2,
   fill: charcoal,
   stroke: "transparent"
 };
@@ -240,7 +240,7 @@ class Theme {
       ),
       tooltip: {
         style: assign({}, centeredLabelStyles, {
-          padding: 2,
+          padding: 1,
           pointerEvents: "none",
         }),
         flyoutStyle: {

@@ -326,17 +326,28 @@ Meteor.methods({
     // Counts Of Each NonConformance Type
   
   ///////////////////////////////////////////////////////////////////////////////////
-  countNonConTypes(nonConArray, nonConOptions) {
+  countNonConTypes(batch, nonConArray, nonConOptions) {
     function findOptions() {
       let org = AppDB.findOne({orgKey: Meteor.user().orgKey});
-      let options = !org ? [] : org.nonConOption;
-      return options;
+      if(!org) {
+        return [];
+      }else{
+        const ncTypesCombo = Array.from(org.nonConTypeLists, x => x.typeList);
+  	    const ncTCF = [].concat(...ncTypesCombo,...org.nonConOption);
+  	
+    	  const flatTypeList = Array.from(ncTCF, x => 
+    	    typeof x === 'string' ? x : 
+    	    x.live === true && x.typeText
+    	  );
+        return flatTypeList;
+      }
     }
+    
     function ncCounter(ncArray, ncOptions) {
       let ncCounts = [];
       for(let ncType of ncOptions) {
-        const typeCount = ncArray.filter( x => x.type === ncType ).length;
-        ncCounts.push({meta: ncType, value: typeCount});
+        const typeCount = ncArray.filter( n => n.type === ncType && !n.trash ).length;
+        ncCounts.push({x: ncType, y: typeCount, l: batch});
       }
       return ncCounts;
     }
@@ -361,8 +372,8 @@ Meteor.methods({
     
     nonconCollection = [];
     for(let b of allBatch) {
-      let counts = Meteor.call('countNonConTypes', b.nonCon, false);
-      nonconCollection.push({meta: b.batch, value: counts});
+      let counts = Meteor.call('countNonConTypes', b.batch, b.nonCon, false);
+      nonconCollection.push(counts);
     }
     
     return nonconCollection;

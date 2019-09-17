@@ -129,7 +129,7 @@ const TimeBudgetsChunk = ({
           Logged time is recorded to the second and is displayed to the nearest minute.
         </p>
         <p className='footnote'>
-          minutes_quoted = {qtB}
+          Update quoted time budget in hours to 2 decimal places. minutes_quoted = {qtB}
         </p>
       </details>
       

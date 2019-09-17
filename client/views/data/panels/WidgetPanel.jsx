@@ -5,9 +5,9 @@ import CreateTag from '/client/components/uUi/CreateTag.jsx';
 import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 
 import VersionList from '../lists/VersionList.jsx';
-import FlowTable from '../../../components/tables/FlowTable.jsx';
-import TideMultiBatchBar from '../../../components/charts/Tides/TideMultiBatchBar.jsx';
-import NonConMultiBatchBar from '../../../components/charts/NonConMultiBatchBar.jsx';
+import FlowTable from '/client/components/tables/FlowTable.jsx';
+import TideMultiBatchBar from '/client/components/charts/Tides/TideMultiBatchBar.jsx';
+import NonConMultiBatchBar from '/client/components/charts/NonCon/NonConMultiBatchBar.jsx';
 //import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
 const WidgetPanel = ({ groupData, widgetData, batchRelated, app, user })=> {

@@ -25,8 +25,8 @@ const NonConSatusPie = ({ nonCons })=> {
     countSet(counts);
     
     let labels = [ 
-      `${none} Awaiting Repair`, 
-      `${fix} Awaiting Inspection`, 
+      `${none} Awaiting \n Repair`, 
+      `${fix} Awaiting \n Inspection`, 
       `${done} Resolved`, 
       `${snooze} Snoozing`, 
       `${skip} Skipped` 
@@ -50,7 +50,7 @@ const NonConSatusPie = ({ nonCons })=> {
             labels={labelState}
             labelComponent={
               <VictoryTooltip 
-                style={{ fontSize: '50px' }}
+                style={{ fontSize: '40px' }}
               />
             }
           />

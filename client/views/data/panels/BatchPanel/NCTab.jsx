@@ -12,7 +12,7 @@ import { TodayNonCon } from '/client/components/bigUi/NonConMiniTops.jsx';
 import { LeftFxNonCon } from '/client/components/bigUi/NonConMiniTops.jsx';
 import { LeftInNonCon } from '/client/components/bigUi/NonConMiniTops.jsx';
 import NonConStatusPie from '/client/components/charts/NonCon/NonConStatusPie.jsx';
-import NonConBubble from '/client/components/charts/NonConBubble.jsx';
+import NonConBubble from '/client/components/charts/NonCon/NonConBubble.jsx';
 import NonConScatter from '/client/components/charts/NonCon/NonConScatter.jsx';
 import NonConBar from '/client/components/charts/NonCon/NonConBar.jsx';
 
@@ -63,15 +63,25 @@ const NCTab = ({
           
       </div>
       <div className='avThreeContent'>
-        <NonConOverview
-          // ncOp={a.nonConOption}
+      
+        <NonConBar
           ncOp={ncOptions}
           flow={riverFlow}
           flowAlt={riverAltFlow}
           nonCons={b.nonCon}
           app={a} />
-          
-        <p></p>
+        
+        <br />  
+        {Roles.userIsInRole(Meteor.userId(), 'qa') &&    
+          // DEPRECIATED
+          <NonConOverview
+            ncOp={ncOptions}
+            flow={riverFlow}
+            flowAlt={riverAltFlow}
+            nonCons={b.nonCon}
+            app={a} />
+        }
+        <br />
         
         {Roles.userIsInRole(Meteor.userId(), 'nightly') &&
           <NonConBubble
@@ -86,17 +96,6 @@ const NCTab = ({
         
         {Roles.userIsInRole(Meteor.userId(), 'nightly') &&
           <NonConScatter
-            ncOp={ncOptions}
-            flow={riverFlow}
-            flowAlt={riverAltFlow}
-            nonCons={b.nonCon}
-            app={a} />
-        }
-        
-        <br />
-        
-        {Roles.userIsInRole(Meteor.userId(), 'nightly') &&
-          <NonConBar
             ncOp={ncOptions}
             flow={riverFlow}
             flowAlt={riverAltFlow}
