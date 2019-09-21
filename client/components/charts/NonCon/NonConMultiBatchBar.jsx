@@ -32,9 +32,9 @@ const NonConMultiBatchBar = ({ batchIDs })=> {
     <div className='chartNoHeightContain'>
       <VictoryChart
         theme={Theme.NeptuneVictory}
-        padding={{top: 20, right: 50, bottom: 20, left: 120}}
+        padding={{top: 20, right: 20, bottom: 20, left: 120}}
         domainPadding={{x: 10, y: 40}}
-        height={50 + ( seriesState.length * 30 )}
+        height={50 + ( seriesState.length * 35 )}
       >
         <VictoryAxis
           dependentAxis
@@ -73,7 +73,9 @@ const NonConMultiBatchBar = ({ batchIDs })=> {
                 data={entry}
                 labels={(d) => `${d.l} \n ${d.x} \n ${d.y}`}
                 labelComponent={
-                  <VictoryTooltip />}
+                  <VictoryTooltip
+                    style={{ fontSize: '7px', padding: 2 }}
+                  />}
               />
           )}
         })}

@@ -261,6 +261,7 @@ Meteor.methods({
   ///////////////////////////////////////////////////////////////////////////////////
   countMultiBatchTideTimes(batchIDs) {
   
+    let batchQT = [];
     let batchTides = [];
     let batchLeftBuffer = [];
     let batchOverBuffer = [];
@@ -289,7 +290,8 @@ Meteor.methods({
   
         const totalLeftMinutes = quote2tide < 0 ? 0 : bufferNice;
         const totalOverMinutes = quote2tide < 0 ? bufferNice : 0;
-  
+        
+        batchQT.push(totalQuoteMinutes);
         batchTides.push({
           x: batch.batch,
           y: totalTime
@@ -310,12 +312,18 @@ Meteor.methods({
       if(!batch) {
         let xbatch = XBatchDB.findOne({_id: batchID});
         let batchNum = !xbatch ? batchID.slice(0,5) : xbatch.batch;
+        batchQT.push(0);
         batchTides.push({ x: batchNum, y: 0 });
         batchLeftBuffer.push({ x: batchNum, y: 0 });
         batchOverBuffer.push({ x: batchNum, y: 0 });
       }else{ totalST(batch) }
     }
-    return { batchTides, batchLeftBuffer, batchOverBuffer };
+    return { 
+      batchQT,
+      batchTides, 
+      batchLeftBuffer, 
+      batchOverBuffer
+    };
     
   },
   

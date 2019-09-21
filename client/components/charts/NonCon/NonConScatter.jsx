@@ -70,21 +70,21 @@ const NonConScatter = ({ ncOp, flow, flowAlt, nonCons, app })=> {
       console.log(series);
   
   return(
-    <div className='invert chartNoHeightContain'>
+    <div className='chartNoHeightContain'>
       <VictoryChart
         theme={Theme.NeptuneVictory}
-        padding={{top: 20, right: 20, bottom: 20, left: 120}}
+        padding={{top: 20, right: 20, bottom: 20, left: 100}}
         domainPadding={25}
         height={25 + ( series.length * 15 )}
       >
         <VictoryAxis
           tickFormat={(t) => Math.round(t)}
           style={ {
-            // axis: { stroke: 'grey' },
-            // grid: { stroke: '#5c5c5c' },
-            // ticks: { stroke: '#5c5c5c' },
+            axis: { stroke: 'grey' },
+            grid: { stroke: '#5c5c5c' },
+            ticks: { stroke: '#5c5c5c' },
             tickLabels: { 
-              // fill: 'lightgrey', 
+              fill: 'lightgrey', 
               fontSize: '5px' }
           } }
         />
@@ -92,11 +92,11 @@ const NonConScatter = ({ ncOp, flow, flowAlt, nonCons, app })=> {
           dependentAxis
           //fixLabelOverlap={true} 
           style={ {
-            // axis: { stroke: 'grey' },
-            // grid: { stroke: '#5c5c5c' },
-            // ticks: { stroke: '#5c5c5c' },
+            axis: { stroke: 'grey' },
+            grid: { stroke: '#5c5c5c' },
+            ticks: { stroke: '#5c5c5c' },
             tickLabels: { 
-              // fill: 'lightgrey', 
+              fill: 'lightgrey', 
               fontSize: '6px' }
           } }
         />
@@ -104,11 +104,19 @@ const NonConScatter = ({ ncOp, flow, flowAlt, nonCons, app })=> {
           data={series}
           labels={(d) => `${d.l} \n ${d.y} \n ${d.x}`}
           labelComponent={
-            <VictoryTooltip />}
-          style={ {
+            <VictoryTooltip
+              style={{ fontSize: '7px' }}
+            />}
+          style={{
+            data: { 
+              fill: 'rgba(231,76,60,0.6)',
+              stroke: 'rgb(50,50,50)',
+              strokeWidth: 1
+            },
             labels: { 
               padding: 2,
-          } } }
+            } 
+          }}
           size={4}
         />
       </VictoryChart>

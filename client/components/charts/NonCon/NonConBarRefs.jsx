@@ -1,20 +1,18 @@
-import React, { useState, useEffect } from "react";
-import ReactDOM from 'react-dom';
+import React, { useState, useEffect } from 'react';
 import { 
-  VictoryBar, 
+  VictoryStack,
+  VictoryBar,
   VictoryChart, 
-  VictoryAxis,
-  VictoryLabel,
-  VictoryTooltip,
-  VictoryStack
+  VictoryAxis, 
+  VictoryTooltip
 } from 'victory';
 //import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
 import { CalcSpin } from '/client/components/uUi/Spin.jsx';
 
-const NonConBar = ({ ncOp, flow, flowAlt, nonCons, app })=> {
+const NonConBarRefs = ({ ncOp, flow, flowAlt, nonCons, app })=> {
   
-  const [ series, seriesSet ] = useState( false );
+  const [ series, seriesSet ] = useState([]);
   
   useEffect( ()=> {
     const nonConOptions = ncOp || [];
@@ -22,69 +20,62 @@ const NonConBar = ({ ncOp, flow, flowAlt, nonCons, app })=> {
     const nonConArray = nonCons || [];
     const nonConArrayClean = nonConArray.filter( x => !x.trash );
     
-    function ncCounter(ncArray, ncOptions, appPhases) {
-      
-      let splitByPhase = [];
-      
-      const phasesSet = new Set(appPhases);
-      for(let phase of phasesSet) {
-        let match = ncArray.filter( y => y.where === phase );
-        splitByPhase.push({
-          'phase': phase,
-          'pNC': match
+    function ncCounter(ncArray, ncOptions) {
+    
+      let splitByRef = [];
+  
+      const uniqueRefs = new Set( Array.from(ncArray, x => x.ref) );
+      for(let ref of uniqueRefs) {
+        let match = ncArray.filter( y => y.ref === ref );
+        splitByRef.push({
+          'name': ref,
+          'ncs': match
         });
       }
-      let leftover = ncArray.filter( z => phasesSet.has(z.where) === false ) || [];
-      splitByPhase.unshift({ 'phase': 'other', 'pNC': leftover });
-      
-      Roles.userIsInRole(Meteor.userId(), 'debug') && 
-        console.log(splitByPhase);
-      
-      let ncCounts = [];
-      
-      for(let ncSet of splitByPhase) {
-        let ncPhase = [];
-        for(let ncType of ncOptions) {
-          const typeCount = ncSet.pNC.filter( x => x.type === ncType ).length || 0;
+    
+      let splitByType = [];
+      for(let ref of splitByRef) {
+        let type = [];
+        for(let n of ncOptions) {
+          let typeCount = ref.ncs.filter( x => x.type === n ).length;
           if(typeCount > 0) {
-            ncPhase.push({
+            type.push({
+              x: n,
               y: typeCount,
-              x: ncType,
-              label: ncSet.phase
+              l: ref.name,
             });
           }
         }
-        ncCounts.push(ncPhase);
+        splitByType.push(type);
       }
-      return ncCounts;
+      return splitByType;
     }
-    
+  
     try{
-      const appPhases = app.phases;
-      let calc = ncCounter(nonConArrayClean, nonConOptions, appPhases);
+      let calc = ncCounter(nonConArrayClean, nonConOptions);
       seriesSet( calc );
     }catch(err) {
       console.log(err);
     }
   }, []);
-          
-    
+
     Roles.userIsInRole(Meteor.userId(), 'debug') && 
       console.log(series);
-  
+
   if(!series) {
     return(
       <CalcSpin />
     );
   }
-  
+
   return(
     <div className='chartNoHeightContain'>
+
       <VictoryChart
         theme={Theme.NeptuneVictory}
         padding={{top: 20, right: 20, bottom: 20, left: 100}}
         domainPadding={{x: 10, y: 40}}
-        height={25 + ( series.length * 15 )}
+        height={10 + ( series.length * 5 )}
       >
         <VictoryAxis
           dependentAxis
@@ -124,20 +115,25 @@ const NonConBar = ({ ncOp, flow, flowAlt, nonCons, app })=> {
           if(entry.length > 0) {
             return(
               <VictoryBar
-                key={index+entry.label}
+                key={index+entry.l}
                 data={entry}
-                labels={(l) => `${l.label}`}
+                labels={(l) => `${l.l}`}
                 labelComponent={
                   <VictoryTooltip
                     style={{ fontSize: '7px', padding: 2 }}
                   />}
+                barWidth={10}
               />
           )}
         })}
         </VictoryStack>
       </VictoryChart>
+      
+      
+      <p className='centreText small'>Defect Type and Reference</p>
+      
     </div>
   );
 };
 
-export default NonConBar;
+export default NonConBarRefs;

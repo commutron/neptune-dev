@@ -25,7 +25,7 @@ const TideMultiBatchBar = ({ batchIDs, app })=> {
     });
   }, [batchIDs]);
   
-  const asHours = (mnts) => moment.duration(mnts, "minutes").asHours().toFixed(2, 10);
+  const asHours = (mnts) => moment.duration(mnts, "minutes").asHours().toFixed(1, 10);
 
   
   if(!batchTimes) {
@@ -40,7 +40,7 @@ const TideMultiBatchBar = ({ batchIDs, app })=> {
         theme={Theme.NeptuneVictory}
         padding={{top: 25, right: 25, bottom: 25, left: 50}}
         domainPadding={{x: 10, y: 40}}
-        height={50 + ( batchTimes.batchTides.length * 25 )}
+        height={50 + ( batchTimes.batchTides.length * 35 )}
       >
         <VictoryAxis 
           dependentAxis 
@@ -60,37 +60,34 @@ const TideMultiBatchBar = ({ batchIDs, app })=> {
             <VictoryBar
               data={batchTimes.batchTides}
               horizontal={true}
-              labels={(l) => asHours(l.y)}
-              style={{ labels: { fill: "dimgray" } }}
-              labelComponent={<VictoryLabel />}
+              labels={(l) => `${asHours(l.y)} logged`}
+              style={{ labels: {   fontSize: '7px' } }}
+              labelComponent={
+                <VictoryLabel
+                  verticalAnchor="end"
+                />}
               barWidth={12}
             />
             <VictoryBar
               data={batchTimes.batchLeftBuffer}
               horizontal={true}
-              labels={(l) => `${asHours(l.y)} Under`}
-              style={{ labels: { fill: "dimgray" } }}
+              labels={(l) => l.y > 0 ? `${asHours(l.y)} Remaining` : null}
+              style={{ labels: { fill: "#969696",  fontSize: '7px' } }}
               labelComponent={
-                <VictoryTooltip 
-                  orientation='top'
-                  dx={-10}
-                  dy={10} 
-                />
-              }
+                <VictoryLabel
+                  verticalAnchor="start"
+                />}
               barWidth={12}
             />
             <VictoryBar
               data={batchTimes.batchOverBuffer}
               horizontal={true}
-              labels={(l) => `${asHours(l.y)} Over`}
-              style={{ labels: { fill: "dimgray" } }}
+              labels={(l) => l.y > 0 ? `${asHours(l.y)} Over` : null}
+              style={{ labels: { fill: "dimgrey",  fontSize: '7px' } }}
               labelComponent={
-                <VictoryTooltip 
-                  orientation='top'
-                  dx={-10}
-                  dy={10} 
-                />
-              }
+                <VictoryLabel
+                  verticalAnchor="start"
+                />}
               barWidth={12}
             />
         </VictoryStack>

@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from "react";
-import ReactDOM from 'react-dom';
+import React, { useState, useEffect } from 'react';
 import { 
-  VictoryBar, 
+  VictoryClipContainer,
+  VictoryStack,
+  VictoryScatter, 
+  VictoryBar,
   VictoryChart, 
-  VictoryAxis,
-  VictoryLabel,
-  VictoryTooltip,
-  VictoryStack
+  VictoryAxis, 
+  VictoryTooltip
 } from 'victory';
 //import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
 import { CalcSpin } from '/client/components/uUi/Spin.jsx';
 
-const NonConBar = ({ ncOp, flow, flowAlt, nonCons, app })=> {
+const NonConScatterRefs = ({ ncOp, flow, flowAlt, nonCons, app })=> {
   
-  const [ series, seriesSet ] = useState( false );
+  const [ series, seriesSet ] = useState([]);
   
-  useEffect( ()=> {
+    useEffect( ()=> {
     const nonConOptions = ncOp || [];
     
     const nonConArray = nonCons || [];
@@ -27,34 +27,31 @@ const NonConBar = ({ ncOp, flow, flowAlt, nonCons, app })=> {
       let splitByPhase = [];
       
       const phasesSet = new Set(appPhases);
-      for(let phase of phasesSet) {
+      [...phasesSet].map( (phase, index)=>{
         let match = ncArray.filter( y => y.where === phase );
         splitByPhase.push({
           'phase': phase,
-          'pNC': match
+          'pNC': match,
         });
-      }
-      let leftover = ncArray.filter( z => phasesSet.has(z.where) === false ) || [];
+      });
+      let leftover = ncArray.filter( z => phasesSet.has(z.where) === false );
       splitByPhase.unshift({ 'phase': 'other', 'pNC': leftover });
       
-      Roles.userIsInRole(Meteor.userId(), 'debug') && 
-        console.log(splitByPhase);
+      Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(splitByPhase);
       
       let ncCounts = [];
       
       for(let ncSet of splitByPhase) {
-        let ncPhase = [];
         for(let ncType of ncOptions) {
-          const typeCount = ncSet.pNC.filter( x => x.type === ncType ).length || 0;
+          const typeCount = ncSet.pNC.filter( x => x.type === ncType ).length;
           if(typeCount > 0) {
-            ncPhase.push({
-              y: typeCount,
-              x: ncType,
-              label: ncSet.phase
+            ncCounts.push({
+              x: typeCount,
+              y: ncType,
+              l: ncSet.phase,
             });
           }
         }
-        ncCounts.push(ncPhase);
       }
       return ncCounts;
     }
@@ -67,27 +64,27 @@ const NonConBar = ({ ncOp, flow, flowAlt, nonCons, app })=> {
       console.log(err);
     }
   }, []);
-          
-    
-    Roles.userIsInRole(Meteor.userId(), 'debug') && 
+
+    // Roles.userIsInRole(Meteor.userId(), 'debug') && 
       console.log(series);
-  
+
   if(!series) {
     return(
       <CalcSpin />
     );
   }
-  
+
   return(
     <div className='chartNoHeightContain'>
+      <p className='centreText'>Defect Type and Reference</p>
+  
       <VictoryChart
         theme={Theme.NeptuneVictory}
         padding={{top: 20, right: 20, bottom: 20, left: 100}}
-        domainPadding={{x: 10, y: 40}}
+        domainPadding={25}
         height={25 + ( series.length * 15 )}
       >
         <VictoryAxis
-          dependentAxis
           tickFormat={(t) => Math.round(t)}
           style={ {
             axis: { stroke: 'grey' },
@@ -99,6 +96,7 @@ const NonConBar = ({ ncOp, flow, flowAlt, nonCons, app })=> {
           } }
         />
         <VictoryAxis 
+          dependentAxis
           //fixLabelOverlap={true} 
           style={ {
             axis: { stroke: 'grey' },
@@ -109,35 +107,30 @@ const NonConBar = ({ ncOp, flow, flowAlt, nonCons, app })=> {
               fontSize: '6px' }
           } }
         />
-        <VictoryStack
-          theme={Theme.NeptuneVictory}
-          colorScale='heatmap'
-          horizontal={true}
-          padding={0}
-          // animate={{
-          //   duration: 500,
-          //   onLoad: { duration: 250 }
-          // }}
-        >
-        
-        {series.map( (entry, index)=>{
-          if(entry.length > 0) {
-            return(
-              <VictoryBar
-                key={index+entry.label}
-                data={entry}
-                labels={(l) => `${l.label}`}
-                labelComponent={
-                  <VictoryTooltip
-                    style={{ fontSize: '7px', padding: 2 }}
-                  />}
-              />
-          )}
-        })}
-        </VictoryStack>
+        <VictoryScatter
+          data={series}
+          labels={(d) => `${d.l} \n ${d.y} \n ${d.x}`}
+          labelComponent={
+            <VictoryTooltip
+              style={{ fontSize: '7px' }}
+            />}
+          style={{
+            data: { 
+              fill: 'rgba(231,76,60,0.6)',
+              stroke: 'rgb(50,50,50)',
+              strokeWidth: 1
+            },
+            labels: { 
+              padding: 2,
+            } 
+          }}
+          size={4}
+        />
       </VictoryChart>
+      
+      
     </div>
   );
 };
 
-export default NonConBar;
+export default NonConScatterRefs;

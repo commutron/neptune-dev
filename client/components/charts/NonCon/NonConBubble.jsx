@@ -68,20 +68,20 @@ const NonConBubble = ({ ncOp, flow, flowAlt, nonCons, app })=> {
     Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(series);
     
   return(
-    <div className='invert chartNoHeightContain'>
+    <div className='chartNoHeightContain'>
       <VictoryChart
         theme={Theme.NeptuneVictory}
-        padding={{top: 20, right: 20, bottom: 20, left: 120}}
+        padding={{top: 20, right: 20, bottom: 20, left: 100}}
         domainPadding={25}
         height={25 + ( series.length * 15 )}
       >
         <VictoryAxis
           style={ {
-            // axis: { stroke: 'grey' },
-            // grid: { stroke: '#5c5c5c' },
-            // ticks: { stroke: '#5c5c5c' },
+            axis: { stroke: 'grey' },
+            grid: { stroke: '#5c5c5c' },
+            ticks: { stroke: '#5c5c5c' },
             tickLabels: { 
-              // fill: 'lightgrey', 
+              fill: 'lightgrey', 
               fontSize: '6px' }
           } }
         />
@@ -89,11 +89,11 @@ const NonConBubble = ({ ncOp, flow, flowAlt, nonCons, app })=> {
           dependentAxis
           //fixLabelOverlap={true} 
           style={ {
-            // axis: { stroke: 'grey' },
-            // grid: { stroke: '#5c5c5c' },
-            // ticks: { stroke: '#5c5c5c' },
+            axis: { stroke: 'grey' },
+            grid: { stroke: '#5c5c5c' },
+            ticks: { stroke: '#5c5c5c' },
             tickLabels: { 
-              // fill: 'lightgrey', 
+              fill: 'lightgrey', 
               fontSize: '6px' }
           } }
         />
@@ -102,11 +102,13 @@ const NonConBubble = ({ ncOp, flow, flowAlt, nonCons, app })=> {
           bubbleProperty="z"
           labels={(d) => `Quantity: ${d.z}`}
           labelComponent={
-            <VictoryTooltip />}
+            <VictoryTooltip 
+              style={{ fontSize: '7px' }}
+            />}
           groupComponent={<VictoryClipContainer/>}
           style={ {
             data: { 
-              fill: 'rgba(231,76,60,0.5)',
+              fill: 'rgba(231,76,60,0.6)',
               stroke: 'rgb(50,50,50)',
               strokeWidth: 1
           } } }

@@ -3,7 +3,6 @@ import React from 'react';
 // import business from 'moment-business';
 // import Pref from '/client/global/pref.js';
 
-import NonConOverview from '/client/components/charts/NonConOverview.jsx';
 import NonConRate from '/client/components/charts/NonCon/NonConRate.jsx';
 import { HasNonCon } from '/client/components/bigUi/NonConMiniTops.jsx';
 import { NonConPer } from '/client/components/bigUi/NonConMiniTops.jsx';
@@ -15,6 +14,7 @@ import NonConStatusPie from '/client/components/charts/NonCon/NonConStatusPie.js
 import NonConBubble from '/client/components/charts/NonCon/NonConBubble.jsx';
 import NonConScatter from '/client/components/charts/NonCon/NonConScatter.jsx';
 import NonConBar from '/client/components/charts/NonCon/NonConBar.jsx';
+import NonConBarRefs from '/client/components/charts/NonCon/NonConBarRefs.jsx';
 
 const NCTab = ({
   a, b,
@@ -71,16 +71,6 @@ const NCTab = ({
           nonCons={b.nonCon}
           app={a} />
         
-        <br />  
-        {Roles.userIsInRole(Meteor.userId(), 'qa') &&    
-          // DEPRECIATED
-          <NonConOverview
-            ncOp={ncOptions}
-            flow={riverFlow}
-            flowAlt={riverAltFlow}
-            nonCons={b.nonCon}
-            app={a} />
-        }
         <br />
         
         {Roles.userIsInRole(Meteor.userId(), 'nightly') &&
@@ -103,6 +93,15 @@ const NCTab = ({
             app={a} />
         }
         
+        <br />
+        
+        <NonConBarRefs
+          ncOp={ncOptions}
+          flow={riverFlow}
+          flowAlt={riverAltFlow}
+          nonCons={b.nonCon}
+          app={a} />
+          
       </div>
     </div>
     
