@@ -32,11 +32,11 @@
 .stoneRing {
   position: relative;
   z-index: 0;
-  max-width: 19vmax;
-  height: 20vmax;
+  max-width: 18vmax;
+  height: 18vmax;
 }
-.stoneRing .ct-chart {
-  height: 20vmax;
+.stoneRing {
+  height: 18vmax;
 }
 
 .stone {

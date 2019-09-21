@@ -1,302 +1,291 @@
-import React, {Component} from 'react';
+import React, { useState } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 //import RoleCheck from '/client/components/utilities/RoleCheck.js';
 import UserNice from '../smallUi/UserNice.jsx';
 import AnimateWrap from '../tinyUi/AnimateWrap.jsx';
 
-// id={this.props.id}
-// barcode={this.props.barcode}
-// sKey={thhis.props.sKey}
-// step={this.props.step}
-// users={this.props.users}
-// methods={this.props.methods}
+const FirstForm = ({ 
+  id, barcode, 
+  sKey, step, 
+  flowFirsts, 
+  optionVerify, changeVerify,
+  app, users, methods
+})=> {
 
-export default class FirstForm extends Component	{
-
-  constructor() {
-    super();
-    this.state = {
-      stepKey: false,
-      stepName: false,
-      changes: '',
-      howI: false,
-      whoB: new Set(),
-      howB: false,
-      good: true,
-      ng: false,
-    };
-    this.up = this.up.bind(this);
-    this.down = this.down.bind(this);
-  }
+  const [ refreshState, refreshSet ] = useState(0);
   
-  setStep() {
+  const [ stepKeyState, stepKeySet ] = useState(false);
+  const [ stepNameState, stepNameSet ] = useState(false);
+  const [ changesState, changesSet ] = useState( "" );
+  const [ howIState, howISet ] = useState(false);
+  const [ whoBState, whoBSet ] = useState( new Set() );
+  const [ howBState, howBSet ] = useState(false);
+  const [ goodState, goodSet ] = useState(true);
+  const [ ngState, ngSet ] = useState(false);
+  
+  function setStep() {
     const stepKey = this.repeatStep.value;
-    const stepName = this.props.flowFirsts.find( x => x.key === stepKey ).step;
+    const stepName = flowFirsts.find( x => x.key === stepKey ).step;
     if(!stepKey) {
       null;
     }else{
-      this.setState({ stepKey: stepKey });
-      this.setState({ stepName: stepName });
+      stepKeySet( stepKey );
+      stepNameSet( stepName );
       !stepName.toLowerCase().includes('smt') ? 
-        null :
-          this.setState({ howInspect: 'auto' });
+        null : howISet( 'auto' );
     }
   }
   
-  setChanges() {
+  function setChanges() {
     !this.change.value ? null :
-    this.setState({ changes: this.change.value.trim().toLowerCase() });
+    changesSet( this.change.value.trim().toLowerCase() );
   }
   
-  auto() {
-    this.setState({ howI: 'auto' });
+  function auto() {
+    howISet( 'auto' );
   }
-  eyes() {
-    this.setState({ howI: 'manual' });
+  function eyes() {
+    howISet( 'manual' );
   }
 
 // step 1
-  up() {
-    let who = this.state.whoB;
+  function up() {
+    let whoNew = whoBState;
     let val = this.user.value;
-    who.add(val);
-    this.setState({ whoB: who });
+    whoNew.add(val);
+    whoBSet( whoNew );
+    refreshSet(refreshState+1);
     this.user.value = '';
   }
   
-  down(entry) {
-    let who = this.state.whoB;
-    who.delete(entry);
-    this.setState({ whoB: who });
+  function down(entry) {
+    let whoNew = whoBState;
+    whoNew.delete(entry);
+    whoBSet( whoNew );
+    refreshSet(refreshState+1);
   }
 
 // step 2
-  tool() {
+  function tool() {
     let val = this.methodB.value.trim().toLowerCase();
     val === 'false' ? val = false : null;
-    this.setState({ howB: val });
+    howBSet( val );
   }
 
 // step 3
-  flaw() {
+  function flaw() {
     let val = this.issue.value.trim().toLowerCase();
     if(!val) {
       null;
     }else{
-      this.setState({ ng: val });
+      ngSet( val );
     }
   }
   
-  notgood() {
+  function notgood() {
     this.goBad.disabled = true;
-    this.setState({ good: false }, ()=>{
-      this.pass();
-    });
+    goodSet( false );
+    pass();
   }
   
-  pass() {
+  function pass() {
     this.go.disabled = true;
-    const id = this.props.id;
-    const bar = this.props.barcode;
     
-    const sKey = !this.props.optionVerify ? this.props.sKey : this.state.stepKey;
-		const step = !this.props.optionVerify ? this.props.step : this.state.stepName;
+    const stepKey = !optionVerify ? sKey : stepKeyState;
+		const stepName = !optionVerify ? step : stepNameState;
       
-    const howI = this.state.howI ? this.state.howI : 'manual';
-    const whoB = [...this.state.whoB];
-    const howB = this.state.howB;
-    const good = this.state.good;
-    const diff = this.state.changes;
-    const ng = this.state.ng;
+    const howI = howIState ? howIState : 'manual';
+    const whoB = [...whoBState];
+    const howB = howBState;
+    const good = goodState;
+    const diff = changesState;
+    const ng = ngState;
     
-    const fresh = this.props.optionVerify || !this.props.sKey ? false : true;
+    const fresh = optionVerify || !sKey ? false : true;
     
-		Meteor.call('addFirst', id, bar, sKey, step, good, whoB, howB, howI, diff, ng, fresh, (error, reply)=>{
+		Meteor.call('addFirst', 
+		  id, barcode, stepKey, stepName, 
+		  good, whoB, howB, howI, 
+		  diff, ng, fresh, 
+		(error, reply)=>{
 		  error && console.log(error);
 		  if(reply) {
 		    document.getElementById('lookup').focus();
-     	  this.props.changeVerify();
+     	  changeVerify();
 			 }else{
 			   toast.error('Blocked by Server');
 			 }
 		});
 	}
-
-
-  render() {
     
-    let secondOpinion = this.state.whoB.has(Meteor.userId()) ? true : false;
-    
-    const stepKey = this.props.optionVerify ? this.state.stepKey : this.props.sKey;
-    const stepName = this.props.optionVerify ? this.state.stepName : this.props.step;
-    
-    return(
-      <AnimateWrap type='contentTrans'>
+  let secondOpinion = whoBState.has(Meteor.userId()) ? true : false;
+  
+  const stepKey = optionVerify ? stepKeyState : sKey;
+  const stepName = optionVerify ? stepNameState : step;
+  
+  return(
+    <AnimateWrap type='contentTrans'>
       
-        <div className='vspace noCopy stoneFrame'>
-          <div className='actionBox blue'>
-          	<div className='flexRR'>
-	          	<button
-	          		className='action clear'
-	          		onClick={()=>this.props.changeVerify(false)}>
-	          		{Pref.close}
-	          	</button>
-          	</div>
-        		<p className='bigger centreText up'>
-        		  {this.props.optionVerify ? 'Repeat' : this.props.step ? this.props.step : ''}</p>
-        		<br />
-            {this.props.optionVerify || !this.props.sKey ?
-              <fieldset className='stoneForm'>
-                <p>
-                  <select
-                    id='whatfirst'
-                    className='cap'
-                    ref={(i)=> this.repeatStep = i}
-                    onChange={this.setStep.bind(this)}
-                    defaultValue={this.state.stepKey}
-                    required>
-                      <option></option>
-                      {this.props.flowFirsts.map( (dt)=>{
-                        return (
-                          <option key={dt.key} value={dt.key}>{dt.step}</option>
-                      )})}
-                  </select>
-                  <label htmlFor='whatfirst'>Repeat First-off</label>
-                </p>
-                <p>
-                  <datalist id='commonReasons'>
-                    {this.props.app.repeatOption.map( (entry)=>{
-                      if(entry.live === true) {
-                        return( 
-                          <option key={entry.key} value={entry.reason}>{entry.reason}</option> 
-                    )}})}
-                  </datalist>
-                  <input
-            		    type='text'
-            		    id='proC'
-            		    list='commonReasons'
-            		    ref={(i)=> this.change = i}
-            		    onChange={this.setChanges.bind(this)}
-            		    defaultValue={this.state.changes} />
-                  <label htmlFor='proC'>Process Changes</label>
-                </p>
-              </fieldset>
-            : null }
-      
-            {stepName && stepName.toLowerCase().includes('smt') ?
-              <fieldset className='stoneForm'>
-                <p>
-                  <span className='centreRow'>
-                    <input
-                      id='manualInspect'
-                      type='radio'
-                      name='howInspect'
-                      onChange={this.eyes.bind(this)} />
-                    <label htmlFor='manualInspect' className='roundActionIcon dbblRound onblueHover'>
-                      <i className="fas fa-eye fa-3x"></i>
-                      <br /><i className='medBig'>Manual</i>
-                    </label>
-                    <input
-                      id='aoiInspect'
-                      type='radio'
-                      name='howInspect'
-                      onChange={this.auto.bind(this)} />
-                    <label htmlFor='aoiInspect' className='roundActionIcon dbblRound onblueHover'>
-                      <i className="fas fa-camera fa-3x"></i>
-                      <br /><i className='medBig'>AOI</i>
-                    </label>
-                  </span>
-                </p>
-              </fieldset>
-            : null}
-
+      <div className='vspace noCopy stoneFrame'>
+        <div className='actionBox blue'>
+        	<div className='flexRR'>
+          	<button
+          		className='action clear'
+          		onClick={()=>changeVerify(false)}>
+          		{Pref.close}
+          	</button>
+        	</div>
+      		<p className='bigger centreText up'>
+      		  {optionVerify ? 'Repeat' : step ? step : ''}</p>
+      		<br />
+          {optionVerify || !sKey ?
             <fieldset className='stoneForm'>
               <p>
                 <select
-                  id='wuilt'
+                  id='repeatStep'
                   className='cap'
-                  ref={(i)=> this.user = i}
-                  onChange={this.up.bind(this)}>
-                  <option></option>
-                  {this.props.users.map( (entry, index)=>{
-                    return( <option key={index} value={entry._id}>{entry.username}</option> );
-                  })}
-                </select>
-                <label htmlFor='wuilt'>{Pref.builder}</label>
-              </p>
-              {[...this.state.whoB].map( (entry, index)=>{
-                return(
-                  <i className='tempTag medBig' key={index}>
-                    <button
-                      type='button'
-                      name={entry}
-                      ref={(i)=> this.ex = i}
-                      className='miniAction big redT'
-                      onClick={()=>this.down(entry)}
-                    ><i className="fas fa-times"></i>
-                    </button>  <UserNice id={entry} />
-                  </i>
-              )})}
-            </fieldset>
-
-            <fieldset className='stoneForm'>
-              <p>
-                <select
-                  id='mthb'
-                  className='cap'
-                  ref={(i)=> this.methodB = i}
-                  onChange={this.tool.bind(this)}
+                  onChange={(e)=>setStep(e)}
+                  defaultValue={stepKeyState}
                   required>
-                  <option value={false}></option>
-                  {this.props.app.toolOption.map( (entry, index)=>{
-                    if(entry.forSteps.includes(stepKey)) {
-                      return ( <option key={index} value={entry.title}>{entry.title}</option> );
-                    }else{null}
-                  })}
-                </select>
-                <label htmlFor='mthb'>{Pref.method}</label>
+                  <option></option>
+                  {flowFirsts.map( (dt)=>{
+                    return (
+                      <option key={dt.key} value={dt.key}>{dt.step}</option>
+                  )})}
+              </select>
+                <label htmlFor='repeatStep'>Repeat First-off</label>
+              </p>
+              <p>
+                <datalist id='commonReasons'>
+                  {app.repeatOption.map( (entry)=>{
+                    if(entry.live === true) {
+                      return( 
+                        <option key={entry.key} value={entry.reason}>{entry.reason}</option> 
+                  )}})}
+                </datalist>
+                <input
+          		    type='text'
+          		    id='change'
+          		    list='commonReasons'
+          		    onChange={(e)=>setChanges(e)}
+          		    defaultValue={changesState} />
+                <label htmlFor='change'>Process Changes</label>
               </p>
             </fieldset>
-    
-            <fieldset className='stoneForm' disabled={this.state.whoB.size === 0 || this.state.howB === false}>
+          : null }
+      
+          {stepName && stepName.toLowerCase().includes('smt') ?
+            <fieldset className='stoneForm'>
               <p>
-                <span className='balance'>
-                  <button
-                    type='button'
-                    title='No Good, repeat First-Off'
-                    className='roundActionIcon dbblRound firstBad'
-                    ref={(i)=> this.goBad = i}
-                    disabled={false}
-                    onClick={this.notgood.bind(this)}>
-                    <i className="fas fa-times fa-4x"></i>
-                  </button>
-                  <button
-                    type='button'
-                    title='OK First-Off, continue process'
-                    className='roundActionIcon dbblRound firstBetter'
-                    ref={(i)=> this.go = i}
-                    disabled={secondOpinion}
-                    onClick={this.pass.bind(this)}>
-                    <i className="fas fa-check fa-4x"></i>
-                  </button>
+                <span className='centreRow'>
+                  <input
+                    id='manualInspect'
+                    type='radio'
+                    name='howInspect'
+                    onChange={()=>eyes()} />
+                  <label htmlFor='manualInspect' className='roundActionIcon dbblRound onblueHover'>
+                    <i className="fas fa-eye fa-3x"></i>
+                    <br /><i className='medBig'>Manual</i>
+                  </label>
+                  <input
+                    id='aoiInspect'
+                    type='radio'
+                    name='howInspect'
+                    onChange={()=>auto()} />
+                  <label htmlFor='aoiInspect' className='roundActionIcon dbblRound onblueHover'>
+                    <i className="fas fa-camera fa-3x"></i>
+                    <br /><i className='medBig'>AOI</i>
+                  </label>
                 </span>
               </p>
-              <p>
-                <textarea
-        			    type='text'
-        			    id='oIss'
-        			    ref={(i)=> this.issue = i}
-        			    onChange={this.flaw.bind(this)}></textarea>
-        			  <label htmlFor='oIss'>{Pref.outIssue}</label>
-        			</p>
-        		</fieldset>
-            <br />
-          </div>
-        </div>
-      
-      </AnimateWrap>
-    );
-  }
-}
+            </fieldset>
+          : null}
 
+          <fieldset className='stoneForm'>
+            <p>
+              <select
+                id='user'
+                className='cap'
+                onChange={(e)=>up(e)}>
+                <option></option>
+                {users.map( (entry, index)=>{
+                  return( <option key={index} value={entry._id}>{entry.username}</option> );
+                })}
+              </select>
+              <label htmlFor='user'>{Pref.builder}</label>
+            </p>
+            {[...whoBState].map( (entry, index)=>{
+              return(
+                <i className='tempTag medBig' key={index}>
+                  <button
+                    type='button'
+                    name={entry}
+                    id='ex'
+                    className='miniAction big redT'
+                    onClick={(e)=>down(entry)}
+                  ><i className="fas fa-times"></i>
+                  </button>  <UserNice id={entry} />
+                </i>
+            )})}
+          </fieldset>
+
+          <fieldset className='stoneForm'>
+            <p>
+              <select
+                id='methodB'
+                className='cap'
+                onChange={(e)=>tool(e)}
+                required>
+                <option value={false}></option>
+                {app.toolOption.map( (entry, index)=>{
+                  if(entry.forSteps.includes(stepKey)) {
+                    return ( <option key={index} value={entry.title}>{entry.title}</option> );
+                  }else{null}
+                })}
+              </select>
+              <label htmlFor='methodB'>{Pref.method}</label>
+            </p>
+          </fieldset>
+    
+          <fieldset className='stoneForm' disabled={whoBState.size === 0 || howBState === false}>
+            <p>
+              <span className='balance'>
+                <button
+                  type='button'
+                  title='No Good, repeat First-Off'
+                  className='roundActionIcon dbblRound firstBad'
+                  id='goBad'
+                  disabled={false}
+                  onClick={(e)=>notgood(e)}>
+                  <i className="fas fa-times fa-4x"></i>
+                </button>
+                <button
+                  type='button'
+                  title='OK First-Off, continue process'
+                  className='roundActionIcon dbblRound firstBetter'
+                  id='go'
+                  disabled={secondOpinion}
+                  onClick={(e)=>pass(e)}>
+                  <i className="fas fa-check fa-4x"></i>
+                </button>
+              </span>
+            </p>
+            <p>
+              <textarea
+      			    type='text'
+      			    id='issue'
+      			    onChange={(e)=>flaw(e)}>
+      			  </textarea>
+      			  <label htmlFor='issue'>{Pref.outIssue}</label>
+      			</p>
+      		</fieldset>
+          <br />
+        </div>
+      </div>
+    
+    </AnimateWrap>
+  );
+};
+
+export default FirstForm;

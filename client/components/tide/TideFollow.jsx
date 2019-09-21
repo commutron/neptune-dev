@@ -22,8 +22,8 @@ const TideFollow = ({ proRoute, invertColor })=> {
         });
       }
     },1000*60*15);
-    return () => { Meteor.clearInterval(this.loopClock); };
-  });
+    return () => { Meteor.clearInterval(loopClock); };
+  }, [proRoute]);
   
 	const go = ()=> {
 	  Session.set('now', engaged);

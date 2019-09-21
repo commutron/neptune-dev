@@ -53,38 +53,46 @@ const ExploreLanding = ({ groupData, widgetData, batchData, xBatchData, app }) =
         <div className='vspace wide'>
           
           <div className='centreRow'>
+            
             <TrendLine 
               title={`new ${Pref.batches}`}
               statType='newBatch'
               cycleCount={10}
               lineColor='rgb(52, 152, 219)' />
-            <TrendBar
-              title={`completed ${Pref.batches}`}
-              statType='doneBatch'
-              cycleCount={10} />
+            
             <TrendLine 
-              title={`completed ${Pref.items}`}
-              statType='doneItem'
+              title='new items'
+              statType='newItem'
               cycleCount={10}
-              lineColor='rgb(46, 204, 113)' />
-          </div>
-          
-          <div className='centreRow'>  
-            <TrendLine 
-              title={`discovered ${Pref.nonCons}`}
-              statType='newNC'
-              cycleCount={10}
-              lineColor='rgb(231, 76, 60)' />
+              lineColor='rgb(52, 152, 219)' />
+              
             <TrendLine 
               title={`discovered ${Pref.shortfall}s`}
               statType='newSH'
               cycleCount={10}
               lineColor='rgb(230, 126, 34)' />
+              
+          </div>    
+          
+          <div className='centreRow'>
+          
+            <TrendBar
+              title={`completed ${Pref.batches}`}
+              statType='doneBatch'
+              cycleCount={10} />
+              
             <TrendLine 
-              title='scrapped items'
-              statType='scrapItem'
+              title={`completed ${Pref.items}`}
+              statType='doneItem'
               cycleCount={10}
-              lineColor='rgb(192, 57, 43)' />
+              lineColor='rgb(46, 204, 113)' />
+              
+            <TrendLine 
+              title={`discovered ${Pref.nonCons}`}
+              statType='newNC'
+              cycleCount={10}
+              lineColor='rgb(231, 76, 60)' />
+            
           </div>
         
           <details className='footnotes'>

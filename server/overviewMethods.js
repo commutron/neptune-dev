@@ -160,9 +160,9 @@ function collectPriority(privateKey, batchID, clientTZ) {
         
         const prevShipDay = moment(b.end).tz(clientTZ).locale('shipDays', {
           workinghours: { 0: null, 1: null,
-            2: ['07:00:00', '14:00:00'], 3: null, 4: ['07:00:00', '14:00:00'],
+            2: ['11:00:00', '11:00:00'], 3: null, 4: ['11:00:00', '11:00:00'],
             5: null, 6: null }
-        }).lastWorkingDay().nextWorkingTime();
+        }).lastWorkingTime();
         
         const fulfill = prevShipDay || moment(b.end).tz(clientTZ);
         

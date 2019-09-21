@@ -1,94 +1,68 @@
-import React, {Component} from 'react';
-import Pref from '/client/global/pref.js';
-import Chartist from 'chartist';
-import ChartistGraph from 'react-chartist';
-//import Tooltip from 'chartist-plugin-tooltips';
+import React, { useState, useEffect } from 'react';
+import { VictoryPie } from 'victory';
 
-export default class StepsProgress extends Component	{
+const StoneProgRing = ({ sKey, step, type, progCounts, isAlt, children })=> {
   
-  constructor() {
-    super();
-    this.state = {
-      countDone: 0,
-      countRemain: 0
-    };
-  }
+  const [ countDone, doneSet ] = useState(0);
+  const [ countRemain, remainSet ] = useState(0);
   
-  count() {
-    const sKey = this.props.sKey;
-    //const step = this.props.step;
-    const type = this.props.type;
-    
-    const pre = this.props.progCounts;
+  function count() {
+    const pre = progCounts;
     let preFetch = false;
     
     if(type === 'first') {
       null;
     }else{
-      const preTotal = this.props.isAlt ?
+      const preTotal = isAlt ?
                         pre.altItems :
                         pre.regItems;
-      const preCount = this.props.isAlt ?
+      const preCount = isAlt ?
                         pre.altStepData.find( x => x.key === sKey ) :
                         pre.regStepData.find( x => x.key === sKey );
       const preDoneNum = preCount ? preCount.items : 0;
       const preRemain = preTotal - preDoneNum;
       preFetch = {preDoneNum, preRemain};
  
-      this.setState({ countDone: preFetch.preDoneNum });
-      this.setState({ countRemain: preFetch.preRemain });
+      doneSet( preFetch.preDoneNum );
+      remainSet( preFetch.preRemain );
     }
   }
   
-  render() {
+  useEffect( ()=>{
+    count();
+  }, [sKey, progCounts]);
     
-    if(this.props.type === 'first') {
-      
-      return(
-        <span className='stoneRing centre'>
-          <div>
-            {this.props.children}
-          </div>
-        </span>
-      );
-    }
-    
-    const done = this.state.countDone;
-    const remain = this.state.countRemain;
-
-    let data = {
-      series: [done, remain],
-    };
-    
-    let options = {
-      width: '100%',
-      showLabel: false,
-      donut: true,
-      donutWidth: 5,
-      startAngle: 0,
-    };
-    
-    let wake = 'stoneRing centre glowgreen';
-    if(this.props.type === 'build'){
-			wake = 'stoneRing centre glowblue';
-    }else if(this.props.type === 'checkpoint'){
-			wake = 'stoneRing centre glowwhite';
-    }else if(this.props.type === 'test'){
-			wake = 'stoneRing centre glowteal';
-    }else if(this.props.type === 'finish'){
-			wake = 'stoneRing centre glowpurple';
-    }else{
-      null }
-    
+  if(type === 'first') {
     return(
-      <span className={wake}>
-        <ChartistGraph data={data} options={options} type={'Pie'}>
-          {this.props.children}
-        </ChartistGraph>
+      <span className='stoneRing centre'>
+        <div>
+          {children}
+        </div>
       </span>
     );
   }
-  componentDidMount() {
-    this.count();
-  }
-}
+    
+    const color0 = 'rgb(60,60,60)';
+    const color1 =
+      type === 'build' ? 'rgb(41, 128, 185)' :
+      type === 'checkpoint' ? 'rgb(127, 140, 141)' :
+      type === 'test' ? 'rgb(22, 160, 133)' :
+      type === 'finish' ? 'rgb(142, 68, 173)' :
+      'rgb(39, 174, 96)';
+    
+  return(
+    <span className='stoneRing centre'>
+      <VictoryPie
+        colorScale={ [ color1, color0 ] }
+        padAngle={0}
+        padding={0}
+        innerRadius={190}
+        data={ [ countDone, countRemain ] }
+        labels={(l)=>null}
+      />
+      <span className='pieCore numFont'>{children}</span> 
+    </span>
+  );
+};
+
+export default StoneProgRing;

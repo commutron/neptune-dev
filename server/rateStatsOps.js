@@ -87,6 +87,29 @@ import 'moment-business-time';
     return [ doneOnTime + doneOnTimeX, doneLate + doneLateX ];
   }
   
+  function countNewItem(rangeStart, rangeEnd) {
+    
+    let diCount = 0;
+    
+    const generalFind = BatchDB.find({
+      orgKey: Meteor.user().orgKey, 
+      items: { $elemMatch: { createdAt: {
+        $gte: new Date(rangeStart),
+        $lte: new Date(rangeEnd) 
+      }}}
+    }).fetch();
+    
+    for(let gf of generalFind) {
+      const thisDI = gf.items.filter( x =>
+        x.finishedAt !== false &&
+        moment(x.createdAt).isSame(rangeStart, 'week')
+      );
+      
+      diCount = diCount + thisDI.length;   
+    }
+    return diCount;
+  }
+  
   function countDoneItem(rangeStart, rangeEnd) {
     
     let diCount = 0;
@@ -206,6 +229,8 @@ Meteor.methods({
         loop = countNewBatch;
       }else if( stat === 'doneBatch' ) {
         loop = countDoneBatch;
+      }else if( stat === 'newItem' ) {
+        loop = countNewItem;
       }else if( stat === 'doneItem' ) {
         loop = countDoneItem;
       }else if( stat === 'newNC' ) {

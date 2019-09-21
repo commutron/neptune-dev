@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 
 import RMAFall from './RMAFall.jsx';
@@ -10,63 +10,50 @@ import RMAFall from './RMAFall.jsx';
 /// cascadeData={b.cascade} // all cascades
 /// rmaList={i.rma}
 
-export default class RMACascade extends Component {
+const RMACascade = (props)=> {
   
-  // bit ridiculous this needs state to work
-  constructor() {
-    super();
-    this.state = {
-      fall: false
-    };
-    // enable fall at component load
+  const [ fall, fallSet ] = useState(false);
+
+  useEffect( ()=> {
     Meteor.setTimeout(()=> { // wait for data to be loaded
       Session.get('nowStepKey') === 'c0mp13t3' ?
-        this.setState({ fall: true })
-        : null;
+        fallSet( true ) :
+        fallSet( false );
     }, 100);
-  }
-  
-  // enable fall at component data change
-  componentWillReceiveProps() {
-    Meteor.setTimeout(()=> { // wait for data to be loaded
-      Session.get('nowStepKey') === 'c0mp13t3' ?
-      this.setState({ fall: true }) :
-      this.setState({ fall: false});
-    }, 100);
-  }
-  
-  render() {
-    return (
-      <div className='wide'>
-        {this.state.fall ?
-        // RMA activating available after current RMAs are finished
-          <RMAFall
-            id={this.props.id}
-            cascadeData={this.props.cascadeData}
-            barcode={this.props.barcode}
-            rma={this.props.rmaList}
-            allItems={this.props.allItems} />
-        :null}
-        {this.props.rma.map( (entry, index)=>{
-        // list rmas active on this item  
-          if(index == this.props.rma.length - 1) {
-          // current rma is bold
-            return(
-              <div key={index} className='bleed cap fadeRed centre'>
-                <b>RMA: {entry.rmaId}, {moment(entry.time).calendar()}</b>
-                {/*<p>{entry.comm}</p>*/}
-              </div>
-              );
-          }else{
-          // previous rmas are italic
-            return(
-              <div key={index} className='bleed cap fadeRed centre'>
-                <i>RMA: {entry.rmaId}, {moment(entry.time).calendar()}</i>
-              </div>
-              );
-          }})
-        }
-      </div>
-    );
-  }
-}
+  }, [props]);
+
+  return (
+    <div className='wide'>
+      {fall ?
+      // RMA activating available after current RMAs are finished
+        <RMAFall
+          id={props.id}
+          cascadeData={props.cascadeData}
+          barcode={props.barcode}
+          rma={props.rmaList}
+          allItems={props.allItems} />
+      :null}
+      {props.rma.map( (entry, index)=>{
+      // list rmas active on this item  
+        if(index == props.rma.length - 1) {
+        // current rma is bold
+          return(
+            <div key={index} className='bleed cap fadeRed centre'>
+              <b>RMA: {entry.rmaId}, {moment(entry.time).calendar()}</b>
+              {/*<p>{entry.comm}</p>*/}
+            </div>
+            );
+        }else{
+        // previous rmas are italic
+          return(
+            <div key={index} className='bleed cap fadeRed centre'>
+              <i>RMA: {entry.rmaId}, {moment(entry.time).calendar()}</i>
+            </div>
+            );
+        }})
+      }
+    </div>
+  );
+};
+
+export default RMACascade;

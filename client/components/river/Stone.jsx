@@ -1,91 +1,84 @@
-import React, {Component} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import Pref from '/client/global/pref.js';
 import StoneProgRing from './StoneProgRing.jsx';
 
-export default class Stone extends Component {
+function useInterval(callback, delay) {
+  const savedCallback = useRef();
+  // Remember the latest callback.
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  // Set up the interval.
+  useEffect(() => {
+    function tick() {
+      savedCallback.current();
+    }
+    if (delay !== null) {
+      let id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
+}
+
+const Stone = ({
+	key, id, barcode,
+	sKey, step, type,
+	currentLive, allItems,
+	isAlt, hasAlt,
+	users, app,
+	progCounts,
+	blockStone, doneStone, compEntry,
+	showVerify, changeVerify, undoOption,
+	openUndoOption, closeUndoOption
+})=> {
+	
+  const [ lockState, lockSet ] = useState( true );
   
-  constructor() {
-    super();
-    this.state = {
-      lock: true
-    };
-    this.reveal = this.reveal.bind(this);
-    this.passS = this.passS.bind(this);
-    this.passT = this.passT.bind(this);
-    this.finish = this.finish.bind(this);
-  }
-  
-  // removes excessive re-renders
-  shouldComponentUpdate(nextProps, nextState) {
-  	if(
-  		this.state !== nextState ||
-  		this.props.currentLive !== nextProps.currentLive ||
-  		this.props.doneStone !== nextProps.doneStone ||
-  		this.props.blockStone !== nextProps.blockStone ||
-  		this.props.sKey !== nextProps.sKey ||
-  		(this.props.undoOption === true && nextProps.undoOption === false)
-  	) {
-    	return true;
+  let speed = !Meteor.user().unlockSpeed ? 4000 : ( Meteor.user().unlockSpeed * 2 );
+  	
+  useInterval( ()=> {
+  	if(!currentLive) {
+  		null;
+  	}else if(type === 'inspect' && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
+  		null;
+  	}else if(type === 'first' && !Roles.userIsInRole(Meteor.userId(), 'verify')) {
+  		null;
+  	}else if(type === 'test' && !Roles.userIsInRole(Meteor.userId(), 'test')) {
+  		null;
+  	}else if(type === 'finish' && !Roles.userIsInRole(Meteor.userId(), 'finish')) {
+  		null;
   	}else{
-  		return false;
+		  lockSet( false );
   	}
+  }, speed);
+
+  function reveal() {
+    changeVerify(false);
   }
-  
-  reveal() {
-    this.props.changeVerify(false);
-  }
-  
-  unlock() {
-  	let speed = !Meteor.user().unlockSpeed ? 4000 : ( Meteor.user().unlockSpeed * 2 ); 
-    Meteor.setTimeout(()=> {
-    	const inspect = this.props.type === 'inspect';
-    	const first = this.props.type === 'first';
-    	const test = this.props.type === 'test';
-    	const finish = this.props.type === 'finish';
-    	if(!this.props.currentLive) {
-    		null;
-    	}else if(inspect && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
-    		null;
-    	}else if(first && !Roles.userIsInRole(Meteor.userId(), 'verify')) {
-    		null;
-    	}else if(test && !Roles.userIsInRole(Meteor.userId(), 'test')) {
-    		null;
-    	}else if(finish && !Roles.userIsInRole(Meteor.userId(), 'finish')) {
-    		null;
-    	}else{
-  		  this.setState({lock: false});
-    	}
-    }, speed);
-  }
-  
   //// Action for standard step
-  passS(pass, doComm) {
-  	if(this.state.lock === true) { return false; }
-    this.setState({lock: true});
-    const id = this.props.id;
-    const bar = this.props.barcode;
-    const sKey = this.props.sKey;
-		const step = this.props.step;
-    const type = this.props.type;
-    
+  function passS(pass, doComm) {
+  	if(lockState === true) { return false; }
+    lockSet( true );
+
     let comm = '';
     let comPrompt = doComm ? prompt('Enter A Comment', '') : false;
     comPrompt ? comm = comPrompt : null;
-    if(doComm && !comPrompt) { this.unlock(); return false; }
+    // if(doComm && !comPrompt) { unlock(); return false; }
     
-    const pre = this.props.progCounts;
+    const pre = progCounts;
     const preTotal = pre.regItems;
     const preStep = pre.regStepData.find( x => x.key === sKey );
     const preCount = preStep ? preStep.items : undefined;
     const benchmark = preCount === 0 ? 'first' : preCount === preTotal - 1 ? 'last' : false;              
     
-		Meteor.call('addHistory', id, bar, sKey, step, type, comm, pass, benchmark, (error, reply)=>{
+		Meteor.call('addHistory', id, barcode, sKey, step, type, comm, pass, benchmark, (error, reply)=>{
 	    if(error)
 		    console.log(error);
 			if(reply) {
-				this.props.openUndoOption();
+				openUndoOption();
 			  document.getElementById('lookup').focus();
 		  }else{
 		    toast.error('server error');
@@ -94,37 +87,33 @@ export default class Stone extends Component {
   }
   
   //// Action for test step
-  passT(pass, doComm, shipFail) {
-  	if(this.state.lock === true) { return false; }
-    this.setState({lock: true});
-    const id = this.props.id;
-    const bar = this.props.barcode;
-    const sKey = this.props.sKey;
-		const step = this.props.step;
-    const type = this.props.type;
+  function passT(pass, doComm, shipFail) {
+  	if(lockState === true) { return false; }
+    lockSet( true );
     
     let comm = '';
     let comPrompt = doComm ? prompt('Enter A Comment', '') : false;
     comPrompt ? comm = comPrompt : null;
-    if(doComm && !comPrompt) { this.unlock(); return false; }
+    // if(doComm && !comPrompt) { unlock(); return false; }
     
     const more = shipFail ? 'ship a failed test' : false;
     
-    const pre = this.props.progCounts;
+    const pre = progCounts;
     const preTotal = pre.regItems;
     const preStep = pre.regStepData.find( x => x.key === sKey );
     const preCount = preStep ? preStep.items : undefined;
     const benchmark = preCount === 0 ? 'first' : preCount === preTotal - 1 ? 'last' : false;              
 		
     if(pass === false && ( !comm || comm == '' ) ) {
-    	this.unlock();
+    	// unlock();
+    	null;
     }else{
-			Meteor.call('addTest', id, bar, sKey, step, type, comm, pass, more, benchmark, (error, reply)=>{
+			Meteor.call('addTest', id, barcode, sKey, step, type, comm, pass, more, benchmark, (error, reply)=>{
 		    if(error)
 			    console.log(error);
 				if(reply) {
-					this.props.openUndoOption();
-					pass === false && this.unlock();
+					openUndoOption();
+					// pass === false && unlock();
 				  document.getElementById('lookup').focus();
 			  }else{
 			    toast.error(Pref.blocked);
@@ -134,16 +123,12 @@ export default class Stone extends Component {
   }
 
   //// Action for marking the board as complete
-	finish() {
-		if(this.state.lock === true) { return false; }
-	  this.setState({lock: true});
-    const batchId = this.props.id;
-		const barcode = this.props.barcode;
-		const sKey = this.props.sKey;
-		const step = this.props.step;
-    const type = this.props.type;
-    
-    const pre = this.props.progCounts;
+	function finish() {
+		if(lockState === true) { return false; }
+	  lockSet( true );
+    const batchId = id;
+
+    const pre = progCounts;
     const preTotal = pre.regItems;
     const preStep = pre.regStepData.find( x => x.key === sKey );
     const preCount = preStep ? preStep.items : undefined;
@@ -160,141 +145,155 @@ export default class Stone extends Component {
 		});
 	}
 	
-	handleStepUndo() {
-		const id = this.props.id;
-		const serial = this.props.barcode;
-		Meteor.call('popHistory', id, serial, ()=>{
-			this.props.closeUndoOption();
+	function handleStepUndo() {
+		Meteor.call('popHistory', id, barcode, ()=>{
+			closeUndoOption();
 		});
 	}
 	
-  render() {
 
-		let shape = '';
-		let ripple = '';
-		let lock = this.props.doneStone || this.props.blockStone ? 
-							 true : this.state.lock;
-		let prepend = this.props.type === 'build' || this.props.type === 'first' ?
-		              <label className='big'>{this.props.type}<br /></label> : null;
-		let apend = this.props.type === 'inspect' ?
-		              <label className='big'><br />{this.props.type}</label> : null;
+	let shape = '';
+	let ripple = '';
+	let locked = doneStone || blockStone ? 
+						 true : lockState;
+	let prepend = type === 'build' || type === 'first' ?
+	              <label className='big'>{type}<br /></label> : null;
+	let apend = type === 'inspect' ?
+	              <label className='big'><br />{type}</label> : null;
 
 	//// Style the Stone Accordingly \\\\
-		if(this.props.type === 'first'){
-			shape = 'stone iFirst';
-			ripple = this.reveal;
-		}else if(this.props.type === 'inspect'){
-			shape = 'stone iCheck';
-			ripple = ()=>this.passS(true, false);
-    }else if(this.props.type === 'build'){
-			shape = 'stone iBuild';
-			ripple = ()=>this.passS(true, false);
-    }else if(this.props.type === 'checkpoint'){
-			shape = 'stone iPoint';
-			ripple = ()=>this.passS(true, false);
-    }else if(this.props.type === 'test'){
-			shape = 'crackedTop iTest';
-			ripple = ()=>this.passT(true, false, false);
-    }else if(this.props.type === 'finish'){
-			shape = 'stone iFinish';
-			ripple = this.finish;
-    }else{
-      null }
+	if(type === 'first'){
+		shape = 'stone iFirst';
+		ripple = ()=>reveal();
+	}else if(type === 'inspect'){
+		shape = 'stone iCheck';
+		ripple = ()=>passS(true, false);
+  }else if(type === 'build'){
+		shape = 'stone iBuild';
+		ripple = ()=>passS(true, false);
+  }else if(type === 'checkpoint'){
+		shape = 'stone iPoint';
+		ripple = ()=>passS(true, false);
+  }else if(type === 'test'){
+		shape = 'crackedTop iTest';
+		ripple = ()=>passT(true, false, false);
+  }else if(type === 'finish'){
+		shape = 'stone iFinish';
+		ripple = ()=>finish();
+  }else{
+    null }
     
-    const topClass = this.props.doneStone ? 'doneStoneMask' :
-    								 this.props.blockStone ? 'blockStone' : '';
-    const topTitle = topClass !== '' ? Pref.stoneislocked : '';
-		
-     return(
-     	<div className='noCopy'>
-    		<div className={topClass + ' stoneFrame'} title={topTitle}>
-        	<StoneProgRing
-    				serial={this.props.barcode}
-    				allItems={this.props.allItems}
-    				isAlt={this.props.isAlt}
-    				hasAlt={this.props.hasAlt}
-    				sKey={this.props.sKey}
-            step={this.props.step}
-            type={this.props.type}
-            progCounts={this.props.progCounts}>
-							{this.props.type === 'test' ?
-								<div className='centre stone'>
-									<button
-					      	  className={shape}
-					  				name={this.props.step + ' fail'}
-					  				ref={(i)=> this.stonefail = i}
-					  				onClick={ripple}
-					  				tabIndex={-1}
-					  				disabled={lock}>
-					  				Pass
-					  				<label className=''><br />{this.props.step}</label>
-									</button>
-									<button
-					      	  className='crackedBot'
-					  				name={this.props.step + ' fail'}
-					  				ref={(i)=> this.stonefail = i}
-					  				onClick={this.passT.bind(this, false, true, false)}
-					  				tabIndex={-1}
-					  				disabled={lock}>
-					  				Fail
-					  				<label className=''><br />{this.props.step}</label>
-									</button>
-								</div>
-							:
-								<div className='centre'>
-					      	<button
-					      	  className={shape}
-					  				name={this.props.step}
-					  				ref={(i)=> this.stone = i}
-					  				onClick={ripple}
-					  				tabIndex={-1}
-					  				disabled={lock}>
-					  				{prepend}
-										<i>{this.props.step}</i>
-										{apend}
-									</button>
-								</div>
-							}
-					</StoneProgRing>
+  const topClass = doneStone ? 'doneStoneMask' :
+  								 blockStone ? 'blockStone' : '';
+  const topTitle = topClass !== '' ? Pref.stoneislocked : '';
+	
+  return(
+   	<div className='noCopy'>
+  		<div className={topClass + ' stoneFrame'} title={topTitle}>
+      	<StoneProgRing
+  				serial={barcode}
+  				allItems={allItems}
+  				isAlt={isAlt}
+  				hasAlt={hasAlt}
+  				sKey={sKey}
+          step={step}
+          type={type}
+          progCounts={progCounts}>
+						{type === 'test' ?
+							<div className='centre stone'>
+								<button
+				      	  className={shape}
+				  				name={step + ' pass'}
+				  				id='stonepassButton'
+				  				onClick={ripple}
+				  				tabIndex={-1}
+				  				disabled={locked}>
+				  				Pass
+				  				<label className=''><br />{step}</label>
+								</button>
+								<button
+				      	  className='crackedBot'
+				  				name={step + ' fail'}
+				  				id='stonefailButton'
+				  				onClick={()=>passT(false, true, false)}
+				  				tabIndex={-1}
+				  				disabled={locked}>
+				  				Fail
+				  				<label className=''><br />{step}</label>
+								</button>
+							</div>
+						:
+							<div className='centre'>
+				      	<button
+				      	  className={shape}
+				  				name={step}
+				  				id='stoneButton'
+				  				onClick={ripple}
+				  				tabIndex={-1}
+				  				disabled={locked}>
+				  				{prepend}
+									<i>{step}</i>
+									{apend}
+								</button>
+							</div>
+						}
+				</StoneProgRing>
+			</div>
+			<div className='stoneBase'>
+				<div className='undoStepWrap centre'>
+					{undoOption ? 
+						<button
+							className='textAction'
+							onClick={(e)=>handleStepUndo(e)}
+						>undo</button> 
+					: null}
 				</div>
-				<div className='stoneBase'>
-					<div className='undoStepWrap centre'>
-						{this.props.undoOption ? 
-							<button
-								className='textAction'
-								onClick={()=>this.handleStepUndo()}
-							>undo</button> 
-						: null}
-					</div>
-					{this.props.type === 'first' || this.props.type === 'finish' ? null :
+				{type === 'first' || type === 'finish' ? null :
 					<ContextMenuTrigger
-						id={this.props.barcode}
+						id={barcode}
 						attributes={ {className:'moreStepAction centre'} }
-						disable={!this.props.currentLive }
+						disable={!currentLive }
 						holdToDisplay={1}
             renderTag='div'>
             <i className='fas fa-comment fa-fw fa-lg'></i>
 					</ContextMenuTrigger>
-					}
-		        <ContextMenu id={this.props.barcode}>
-		          <MenuItem onClick={()=>this.passS(true, true)} disabled={lock}>
-		            Pass with Comment
-		          </MenuItem>
-		          {this.props.type === 'test' ?
-			          <MenuItem onClick={this.passT.bind(this, true, true, true)} disabled={lock}>
-			            Ship a Failed Test
-			          </MenuItem>
-		          :null}
-		          {/*this.props.compEntry &&
-			          <MenuItem onClick={()=>this.handleUndoLast()}>
-			            Undo Completed Step
-			          </MenuItem>*/}
-		        </ContextMenu>
-	    	</div>
-      </div>
-    );
-  }
-  componentDidMount() {
-    this.unlock();
-  }
+				}
+	        <ContextMenu id={barcode}>
+	          <MenuItem onClick={()=>passS(true, true)} disabled={locked}>
+	            Pass with Comment
+	          </MenuItem>
+          {type === 'test' ?
+	          <MenuItem onClick={()=>passT(true, true, true)} disabled={locked}>
+	            Ship a Failed Test
+	          </MenuItem>
+          :null}
+          {/*this.props.compEntry &&
+	          <MenuItem onClick={()=>this.handleUndoLast()}>
+	            Undo Completed Step
+	          </MenuItem>*/}
+        </ContextMenu>
+    	</div>
+    </div>
+  );
+};
+
+function areEqual(prevProps, nextProps) {
+	if(
+		prevProps.currentLive !== nextProps.currentLive ||
+		prevProps.doneStone !== nextProps.doneStone ||
+		prevProps.blockStone !== nextProps.blockStone ||
+		prevProps.sKey !== nextProps.sKey ||
+		(prevProps.undoOption === true && nextProps.undoOption === false)
+	) {
+  	return false;
+	}else{
+		return true;
+	}
+  /*
+  return true if passing nextProps to render would return
+  the same result as passing prevProps to render,
+  otherwise return false
+  */
 }
+
+export default React.memo(Stone, areEqual);
