@@ -13,7 +13,7 @@ const TideBlockRow = ({
   lastStop, nextStart,
   editKey, editMode,
   splitKey, splitMode,
-  setEdit, setSplit
+  setEdit, setEnd, setSplit
 })=> {
   
   const editOn = tideKey === editKey;
@@ -43,7 +43,7 @@ const TideBlockRow = ({
       setEdit({batch, tideKey, newStart, newStop});
     }
   }
-  
+ 
   const mStart = moment(startTime);
   const mStop = stopTime ? moment(stopTime) : false;
   
@@ -57,7 +57,10 @@ const TideBlockRow = ({
       !nextStart || moment(nextStart).isAfter(moment(stopTime).endOf('day')) ?
         moment(stopTime).endOf('day').format() : nextStart;
   
-  const editAuth = !allUsers || Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
+  const editSelf = tideWho === Meteor.userId();
+  const editAuth = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
+  const zeroed = mStop && mStop.diff(mStart, 'minutes') <= 0.5 ? true : false;
+  const staticFormat = Roles.userIsInRole(Meteor.userId(), 'debug') ? 'hh:mm:ss A' : 'hh:mm A'
   
     return(
       <tr className={editOn ? 'pop' : ''}>
@@ -69,7 +72,7 @@ const TideBlockRow = ({
         <td className='noRightBorder numFont centreText timeInputs'>
           <i className="fas fa-play fa-fw fa-xs greenT"></i>
             {!editOn || splitOn ? ////////////////////////////////////// START
-              <i> {mStart.format('hh:mm A')}</i> :
+              <i> {mStart.format(staticFormat)}</i> :
               <Flatpickr
                 value={moment(mStart).format()}
                 onClose={(e)=>setTempStart(e)} 
@@ -78,8 +81,8 @@ const TideBlockRow = ({
                   defaultDate: moment(mStart).format("YYYY-m-dThh:mm:ss"),
                   minDate: absoluteMin,
                   maxDate: tempStop[0] ? 
-                    moment(tempStop[0]).subtract(1, 'm').format() :
-                    moment(stopTime).subtract(1, 'm').format(),
+                    moment(tempStop[0]).startOf('minute').format() :
+                    moment(stopTime).startOf('minute').format(),
                   minuteIncrement: 1,
                   noCalendar: true,
                   enableTime: true,
@@ -99,8 +102,8 @@ const TideBlockRow = ({
               options={{
                 dateFormat: "Y-m-dTG:i:s",
                 defaultDate: mStop.clone().subtract(1, 'm').format("YYYY-m-dThh:mm:ss"),
-                minDate: moment(startTime).add(1, 'm').format(),
-                maxDate: mStop.clone().subtract(1, 'm').format(),
+                minDate: moment(startTime).endOf('minute').format(),
+                maxDate: mStop.clone().startOf('minute').format(),
                 minuteIncrement: 1,
                 noCalendar: mStop.isAfter(mStart, 'day') === false,
                 enableTime: true,
@@ -121,7 +124,7 @@ const TideBlockRow = ({
           <i className="fas fa-stop fa-fw fa-xs redT"></i>
           {!mStop ? <i> __:__ __</i> :
             !editOn || splitOn ? /////////////////////////////////////// STOP
-            <i> {mStop.format('hh:mm A')}</i>
+            <i> {mStop.format(staticFormat)}</i>
             :
             <Flatpickr
               value={mStop.format()}
@@ -130,8 +133,8 @@ const TideBlockRow = ({
                 dateFormat: "Y-m-dTG:i:s",
                 defaultDate: mStop.format("YYYY-m-dThh:mm:ss"),
                 minDate: tempStart[0] ? 
-                          moment(tempStart[0]).add(1, 'm').format() : 
-                          moment(startTime).add(1, 'm').format(),
+                          moment(tempStart[0]).endOf('minute').format() : 
+                          moment(startTime).endOf('minute').format(),
                 maxDate: absoluteMax,
                 minuteIncrement: 1,
                 noCalendar: mStop.isAfter(mStart, 'day') === false,
@@ -165,11 +168,19 @@ const TideBlockRow = ({
               {mStop ? Math.round( moment.duration(mStop.diff(mStart)).asMinutes() ) : '_'} minutes
             </td>
             <td className='noRightBorder centreText'>
+            {editAuth && !mStop ?
+              <button
+                className='miniAction'
+                onClick={()=>setEnd({batch, tideKey})}
+                disabled={!editAuth}
+              ><em><i className="far fa-edit"></i></em> stop</button>
+            :
               <button
                 className='miniAction'
                 onClick={()=>editMode(true)}
-                disabled={!editAuth || !mStop || mStop.diff(mStart, 'minutes') <= 0.5}
+                disabled={zeroed ? true : editAuth ? false : !editSelf || !mStop ? true : false}
               ><em><i className="far fa-edit"></i></em> edit</button>
+            }
             </td>
           </Fragment>
         }

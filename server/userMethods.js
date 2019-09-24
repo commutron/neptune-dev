@@ -75,8 +75,7 @@ Meteor.methods({
   superUserEnable(userId, role) {
     const admin = Roles.userIsInRole(Meteor.userId(), 'admin');
     const existOne = Meteor.users.find({orgKey: Meteor.user().orgKey, roles: role}).fetch();
-    const notSelf = Meteor.userId() !== userId;
-    if(admin === true && existOne.length === 0 && notSelf === true) {
+    if(admin === true && existOne.length === 0 ) {
       Roles.addUsersToRoles(userId, role);
       return true;
     }else{
@@ -447,6 +446,36 @@ Meteor.methods({
     }
   },
   
+  stopTideTimeBlock(batch, tideKey) {
+    try {
+      const doc = BatchDB.findOne({ batch: batch, 'tide.tKey': tideKey });
+      const sub = doc && doc.tide.find( x => x.tKey === tideKey );
+      
+      if( !sub || sub.stopTime !== false ) {
+        return false;
+      }else{
+        const auth = sub.who === Meteor.userId() || Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
+        if(!auth) {
+          return false;
+        }else{
+          BatchDB.update({ batch: batch, orgKey: Meteor.user().orgKey, 'tide.tKey': tideKey}, {
+            $set : { 
+              'tide.$.stopTime' : new Date()
+          }});
+          Meteor.users.update(sub.who, {
+            $set: {
+              engaged: false
+            }
+          });
+          return true;
+        }
+      }
+      
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  
   splitTideTimeBlock(batch, tideKey, newSplit, stopTime) {
     try {
       const doc = BatchDB.findOne({ batch: batch, 'tide.tKey': tideKey });
@@ -476,32 +505,6 @@ Meteor.methods({
       }
     }catch (err) {
        throw new Meteor.Error(err);
-    }
-  },
-  
-  forceStopUserTide(userID) {
-    try {
-      const user = Meteor.users.findOne({_id: userID, orgKey: Meteor.user().orgKey});
-      if(user) {
-        if(user.tide !== false) {
-          const tKey = user.engaged.tKey;
-          const doc = BatchDB.findOne({ orgKey: Meteor.user().orgKey, 'tide.tKey': tKey });
-          const sub = doc && doc.tide.find( x => x.tKey === tideKey );
-          if(doc && sub) {
-            BatchDB.update({ orgKey: Meteor.user().orgKey, 'tide.tKey': tKey}, {
-              $set : { 
-                'tide.$.stopTime' : new Date()
-            }});
-          }else{null}
-          Meteor.users.update(userID, {
-            $set: {
-              engaged: false
-            }
-          });
-        }
-      }
-    }catch (err) {
-      throw new Meteor.Error(err);
     }
   },
   

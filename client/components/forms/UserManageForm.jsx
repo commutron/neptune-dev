@@ -25,15 +25,6 @@ export default class UserManageForm extends Component {
     }
   }
   
-  forceTideStop() {
-    if( Roles.userIsInRole(Meteor.userId(), 'admin') ) {
-      Meteor.call('forceStopUserTide', this.props.id, (error, reply)=>{
-        if(error)
-          console.log(error);
-      });
-    }
-  }
-  
   hndlRemove() {
     const user = this.props.id;
     const pin = this.pIn.value;
@@ -94,14 +85,6 @@ export default class UserManageForm extends Component {
         
           <div>
           
-            <div>
-              <button
-                className='smallAction clear redT'
-                onClick={this.forceTideStop.bind(this)}
-                disabled={!Roles.userIsInRole(Meteor.userId(), 'admin')}
-              >Force Tide Stop</button>
-            </div>
-          
             <AdminUp userId={this.props.id} />
             <br />
             {!admin ?
@@ -160,8 +143,7 @@ const SetCheckSuper = ({user, role})=>	{
         toast.success('Saved');
       }else{
         toast(`NOT ALLOWED. This requires authorization, \n 
-                an admin cannot assign themselves a "super" permission \n
-                and only one user can have a "super" permission at a time`, 
+                only one user can have a "super" permission at a time`, 
           { autoClose: false });
         console.log("BLOCKED BY SERVER");
       }
@@ -182,12 +164,12 @@ const SetCheckSuper = ({user, role})=>	{
   );
 };
 
-class SetCheck extends Component	{
+const SetCheck = ({user, role})=>	{
+  const check = Roles.userIsInRole(user, role);
   
-  change() {
-    const check = Roles.userIsInRole(this.props.user, this.props.role);
+  function change() {
     const flip = check ? 'permissionUnset' : 'permissionSet';
-    Meteor.call(flip, this.props.user, this.props.role, (error, reply)=>{
+    Meteor.call(flip, user, role, (error, reply)=>{
       if(error)
         console.log(error);
       if(reply) {
@@ -198,28 +180,24 @@ class SetCheck extends Component	{
     });
   }
   
-  render() {
+  const lockout = role === 'active' && 
+                  user === Meteor.userId() ?
+                  true : false;
     
-    const check = Roles.userIsInRole(this.props.user, this.props.role);
-    const lockout = this.props.role === 'active' && 
-                    this.props.user === Meteor.userId() ?
-                    true : false;
-    
-    return(
-      <li>
-        <input
-          type='checkbox'
-          id={this.props.role}
-          defaultChecked={check}
-          onChange={this.change.bind(this)}
-          readOnly 
-          disabled={lockout} />
-        <label htmlFor={this.props.role}>{this.props.role}</label>
-        <br />
-      </li>
-      );
-  }
-}
+  return(
+    <li>
+      <input
+        type='checkbox'
+        id={role}
+        defaultChecked={check}
+        onChange={()=>change()}
+        readOnly 
+        disabled={lockout} />
+      <label htmlFor={role}>{role}</label>
+      <br />
+    </li>
+  );
+};
 
 export const ChangeAutoScan = ()=> {
   function handle() {

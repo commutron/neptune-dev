@@ -31,6 +31,21 @@ const TideEditWrap = ({ weekData, bCache, updateData, allUsers })=> {
       });
     }
   }
+  function endBlock(e) {
+    const batch = e.batch;
+    const tideKey = e.tideKey;
+
+    if(!batch || !tideKey) { 
+      console.log([{batch, tideKey, newSplit, stopTime}, 'data issue no call']);
+    }else{
+      Meteor.call('stopTideTimeBlock', batch, tideKey, (err, asw)=>{
+        err && console.log(err);
+        if(asw === true) {
+          updateData();
+        }
+      });
+    }
+  }
   function splitBlock(e) {
     enableEdit(false);
     const batch = e.batch;
@@ -83,6 +98,7 @@ const TideEditWrap = ({ weekData, bCache, updateData, allUsers })=> {
                 splitKey={doSplitKey}
                 splitMode={(e)=>enableSplit(e ? blk.tKey : false)}
                 setEdit={(e)=>editBlock(e)}
+                setEnd={(e)=>endBlock(e)}
                 setSplit={(e)=>splitBlock(e)} />
             </Fragment>
           );
@@ -104,6 +120,7 @@ const TideEditWrap = ({ weekData, bCache, updateData, allUsers })=> {
               splitKey={doSplitKey}
               splitMode={(e)=>enableSplit(e ? blk.tKey : false)}
               setEdit={(e)=>editBlock(e)}
+              setEnd={(e)=>endBlock(e)}
               setSplit={(e)=>splitBlock(e)} />
           );
         }
