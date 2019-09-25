@@ -60,7 +60,7 @@ const TideBlockRow = ({
   const editSelf = tideWho === Meteor.userId();
   const editAuth = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
   const zeroed = mStop && mStop.diff(mStart, 'minutes') <= 0.5 ? true : false;
-  const staticFormat = Roles.userIsInRole(Meteor.userId(), 'debug') ? 'hh:mm:ss A' : 'hh:mm A'
+  const staticFormat = Roles.userIsInRole(Meteor.userId(), 'debug') ? 'hh:mm:ss A' : 'hh:mm A';
   
     return(
       <tr className={editOn ? 'pop' : ''}>
@@ -168,7 +168,7 @@ const TideBlockRow = ({
               {mStop ? Math.round( moment.duration(mStop.diff(mStart)).asMinutes() ) : '_'} minutes
             </td>
             <td className='noRightBorder centreText'>
-            {editAuth && !mStop ?
+            {!mStop ?
               <button
                 className='miniAction'
                 onClick={()=>setEnd({batch, tideKey})}
@@ -178,7 +178,7 @@ const TideBlockRow = ({
               <button
                 className='miniAction'
                 onClick={()=>editMode(true)}
-                disabled={zeroed ? true : editAuth ? false : !editSelf || !mStop ? true : false}
+                disabled={zeroed || ( !editSelf && !editAuth )}
               ><em><i className="far fa-edit"></i></em> edit</button>
             }
             </td>

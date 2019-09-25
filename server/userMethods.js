@@ -409,6 +409,7 @@ Meteor.methods({
           slimTideWeek.push({
             batch: btch.batch,
             tKey: blck.tKey,
+            who: blck.who,
             startTime: blck.startTime,
             stopTime: blck.stopTime
           });
