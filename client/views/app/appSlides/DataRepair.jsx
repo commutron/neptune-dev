@@ -1,5 +1,7 @@
 import React from 'react';
 //import Pref from '/client/global/pref.js';
+import moment from 'moment';
+import 'moment-timezone';
 import { toast } from 'react-toastify';
 
 const DataRepair = ({ app, users })=> {
@@ -58,8 +60,9 @@ const DataRepair = ({ app, users })=> {
   }
   */
   
-  function updateAcache() {
-    Meteor.call('FORCEbatchCacheUpdate', (error)=>{
+  function updateCaches() {
+    const clientTZ = moment.tz.guess();
+    Meteor.call('FORCEcacheUpdate', clientTZ, (error)=>{
       error && console.log(error);
       toast.success('request sent', { autoClose: false });
     });
@@ -110,11 +113,11 @@ const DataRepair = ({ app, users })=> {
       <hr />
       <br />*/}
       
-      <h2 className='cap'>Force Update batchInfo in ChacheDB</h2>
+      <h2 className='cap'>Force Update ChacheDB</h2>
       <button
-        onClick={()=>updateAcache()}
+        onClick={()=>updateCaches()}
         className='action clear blackT'
-      >Force Update</button>
+      >Force Update Cache</button>
       
       <h2 className='cap'>Clear All User Watchlists</h2>
       <button

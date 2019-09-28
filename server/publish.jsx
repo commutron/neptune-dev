@@ -117,11 +117,14 @@ Meteor.publish('eventsData', function(){
     ];
   }
 });
-Meteor.publish('tideData', function(){
+Meteor.publish('tideData', function(clientTZ){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
   Meteor.defer( ()=>{
     Meteor.call('batchCacheUpdate', orgKey);
+  });
+  Meteor.defer( ()=>{
+    Meteor.call('priorityCacheUpdate', orgKey, clientTZ);
   });
   if(!this.userId){
     return this.ready();
@@ -141,11 +144,14 @@ Meteor.publish('tideData', function(){
 });
 
 // Overview
-Meteor.publish('shaddowData', function(){
+Meteor.publish('shaddowData', function(clientTZ){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
   Meteor.defer( ()=>{
     Meteor.call('batchCacheUpdate', orgKey);
+  });
+  Meteor.defer( ()=>{
+    Meteor.call('priorityCacheUpdate', orgKey, clientTZ);
   });
   if(!this.userId){
     return this.ready();

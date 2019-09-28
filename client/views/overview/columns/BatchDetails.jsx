@@ -1,12 +1,19 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import moment from 'moment';
+import 'moment-timezone';
 import Pref from '/client/global/pref.js';
 import NumStat from '/client/components/uUi/NumStat.jsx';
-import PrioritySquare from '/client/components/bigUi/PrioritySquare.jsx';
+import PrioritySquareData from '/client/components/bigUi/PrioritySquare.jsx';
+import { PrioritySquare } from '/client/components/bigUi/PrioritySquare.jsx';
 import BinaryStat from '/client/components/uUi/BinaryStat.jsx';
 import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
-const BatchDetails = ({hB, lB, cB, hBs, lBs, cBs, bCache, user, app})=> {
+const BatchDetails = ({
+  hB, lB, cB, 
+  hBs, lBs, cBs, 
+  bCache, pCache, 
+  user, app
+})=> {
   
   const clientTZ = moment.tz.guess();
   
@@ -25,6 +32,7 @@ const BatchDetails = ({hB, lB, cB, hBs, lBs, cBs, bCache, user, app})=> {
               warm={true}
               user={user}
               clientTZ={clientTZ}
+              pCache={pCache}
               app={app} />
       )})}
       
@@ -40,6 +48,7 @@ const BatchDetails = ({hB, lB, cB, hBs, lBs, cBs, bCache, user, app})=> {
               warm={true}
               user={user}
               clientTZ={clientTZ}
+              pCache={pCache}
               app={app} />
       )})}
       
@@ -55,6 +64,7 @@ const BatchDetails = ({hB, lB, cB, hBs, lBs, cBs, bCache, user, app})=> {
               warm={false}
               user={user}
               clientTZ={clientTZ}
+              pCache={pCache}
               app={app} />
       )})}
       
@@ -66,7 +76,7 @@ const BatchDetails = ({hB, lB, cB, hBs, lBs, cBs, bCache, user, app})=> {
 export default BatchDetails;
 
 
-const BatchDetailChunk = ({ sindex, ck, warm, user, clientTZ, app})=> (
+const BatchDetailChunk = ({ sindex, ck, warm, user, clientTZ, pCache, app})=> (
 
   <div className='overGridRowScroll' title={ck.batch}>
     {Roles.userIsInRole(Meteor.userId(), 'debug') && 
@@ -77,6 +87,7 @@ const BatchDetailChunk = ({ sindex, ck, warm, user, clientTZ, app})=> (
     <BatchTopStatus
       batchID={ck._id}
       clientTZ={clientTZ}
+      pCache={pCache}
       app={app} />
     
     <PhaseProgress
@@ -100,7 +111,7 @@ const BatchDetailChunk = ({ sindex, ck, warm, user, clientTZ, app})=> (
   </div>
 );
 
-const BatchTopStatus = ({ batchID, clientTZ, app })=> {
+const BatchTopStatus = ({ batchID, clientTZ, pCache, app })=> {
   
   const [ stData, setStatus ] = useState(false);
   
@@ -115,7 +126,7 @@ const BatchTopStatus = ({ batchID, clientTZ, app })=> {
   }, [batchID]);
   
   const dt = stData;
-   
+  const pt = pCache.dataSet.find( x => x.batchID === batchID );
    
   if( dt && dt.batchID === batchID ) {
     
@@ -124,11 +135,7 @@ const BatchTopStatus = ({ batchID, clientTZ, app })=> {
         <div><i>Created {dt.timeElapse} ago</i></div>
         <div>
           <NumStat
-            num={
-              dt.weekDaysRemain < 0 ? 
-                dt.weekDaysRemain * -1 :
-                dt.weekDaysRemain
-            }
+            num={ Math.abs(dt.weekDaysRemain) }
             name={
               dt.weekDaysRemain < 0 ? 
                 dt.weekDaysRemain === -1 ?
@@ -142,9 +149,16 @@ const BatchTopStatus = ({ batchID, clientTZ, app })=> {
             size='big' />
         </div>
         
-        <PrioritySquare
-          batchID={batchID}
-          app={app} />
+        {!pt ?
+          <PrioritySquareData
+            batchID={batchID}
+            app={app} />
+        :
+          <PrioritySquare
+            batchID={batchID}
+            ptData={pt}
+            app={app} />
+        }
     
         <div>
           <NumStat
@@ -208,9 +222,9 @@ const PhaseProgress = ({ batchID, warm, app })=> {
               </div>
             );
           }else{
-            const calNum = ( 
+            const calNum = Math.floor( ( 
               phase.count / (dt.totalItems * phase.steps.length) 
-                * 100 ).toFixed(0);
+                * 100 ) );
             Roles.userIsInRole(Meteor.userId(), 'debug') && 
               console.log(`${dt.batch} ${phase.phase} calNum: ${calNum}`);
             let fadeTick = calNum == 0 ? '0' :
@@ -234,7 +248,7 @@ const PhaseProgress = ({ batchID, warm, app })=> {
                 <NumStat
                   num={ calNum + '%' }
                   name={niceName}
-                  title=''
+                  title={`all clear: ${phase.allClear}`}
                   color='whiteT'
                   size='big' />
             </div>

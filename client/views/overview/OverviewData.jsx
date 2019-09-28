@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
+import moment from 'moment';
+import 'moment-timezone';
 import InboxToast from '/client/components/utilities/InboxToast.js';
 
 import Spin from '../../components/uUi/Spin.jsx';
@@ -31,6 +33,7 @@ class View extends Component	{
         b={this.props.batch}
         bx={this.props.batchX}
         bCache={this.props.bCache}
+        pCache={this.props.pCache}
         user={this.props.user}
         app={this.props.app} />
     );
@@ -43,9 +46,10 @@ export default withTracker( () => {
   let name = user ? user.username : false;
   let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   let org = user ? user.org : false;
+  const clientTZ = moment.tz.guess();
   const appSub = login ? Meteor.subscribe('appData') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
-  const sub = login ? Meteor.subscribe('shaddowData') : false;
+  const sub = login ? Meteor.subscribe('shaddowData', clientTZ) : false;
   if(!login || !active) {
     return {
       appReady: false,
@@ -68,6 +72,7 @@ export default withTracker( () => {
       batch: BatchDB.find({},{sort: {batch:-1}}).fetch(),
       batchX: XBatchDB.find().fetch(),
       bCache: CacheDB.findOne({dataName: 'batchInfo'}),
+      pCache: CacheDB.findOne({dataName: 'priorityRank'}),
     };
   }
 })(View);

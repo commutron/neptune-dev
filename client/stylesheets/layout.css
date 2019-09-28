@@ -585,11 +585,16 @@ main {
   border-left: none;
   padding: 8px 0;
 }
+.noteCard > i {
+  padding-left: 8px;
+}
 .noteCard > p {
   margin-top: 20px;
+  padding-left: 8px;
 }
 .noteCard > div {
   margin: 20px 0 10px 0;
+  padding-left: 8px;
 }
 
 .footnotes {

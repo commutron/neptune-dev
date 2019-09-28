@@ -3,8 +3,8 @@ import moment from 'moment';
 import 'moment-timezone';
 import NumStat from '/client/components/uUi/NumStat.jsx';
 
-const PrioritySquare = ({ batchID, app })=> {
-  
+const PrioritySquareData = ({ batchID, app })=> {
+
   const [ ptData, setPriority ] = useState(false);
   
   useEffect( ()=> {
@@ -18,14 +18,29 @@ const PrioritySquare = ({ batchID, app })=> {
     });
   }, [batchID]);
   
+  return( 
+    <PrioritySquare 
+      batchID={batchID} 
+      ptData={ptData} 
+      app={app} /> 
+  );
+};
+
+export default PrioritySquareData;
+
+///////////////////////////////////////////////////////////////////////////////
+
+export const PrioritySquare = ({ batchID, ptData, app })=> {
+  
   const pt = ptData;
    
   if( pt && pt.batchID === batchID ) {
     
+    const q2t = pt.quote2tide;
     const bffrTime = pt.estEnd2fillBuffer;
-    const overQuote = pt.overQuote;
+    const overQuote = q2t < 0;
     Roles.userIsInRole(Meteor.userId(), 'debug') &&
-      console.log({batchID, bffrTime, overQuote});
+      console.log({batchID, bffrTime, q2t});
   
     if(!bffrTime) {
       return(
@@ -64,7 +79,7 @@ const PrioritySquare = ({ batchID, app })=> {
       <div className={`${priorityClass} ${overQuote ? 'moreEphasis' : ''}`}>
         <NumStat
           num={pLabel}
-          name=''
+          name={Math.round( ( bffrTime / 1000 ) )}
           title={`Priority Code "${priorityCode}" \n${overQuote ? 'Over Quote' : ''}`}
           color='whiteT'
           size='big' />
@@ -83,5 +98,3 @@ const PrioritySquare = ({ batchID, app })=> {
     </div>
   );
 };
-
-export default PrioritySquare;

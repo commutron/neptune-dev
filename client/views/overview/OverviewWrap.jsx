@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import moment from 'moment';
 import { ToastContainer } from 'react-toastify';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
@@ -11,59 +11,74 @@ import TideFollow from '/client/components/tide/TideFollow.jsx';
 import BatchHeaders from './columns/BatchHeaders.jsx';
 import BatchDetails from './columns/BatchDetails.jsx';
 
-export default class OverviewWrap extends Component	{
-  componentDidMount() {
-    this.dataStart();
+function useInterval(callback, delay) {
+  const savedCallback = useRef();
+  // Remember the latest callback.
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  // Set up the interval.
+  useEffect(() => {
+    function tick() {
+      savedCallback.current();
+    }
+    if (delay !== null) {
+      let id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
+}
+
+const OverviewWrap = (props)=> {
+
+  const [ loadTime, loadTimeSet ] = useState( moment() );
+  const [ tickingTime, tickingTimeSet ] = useState( moment() );
+  const [ sortBy, sortBySet ] = useState('batch');
+  const [ hotState, hotSet ] = useState(false);
+  const [ warmState, warmSet ] = useState(false);
+  const [ lukeState, lukeSet ] = useState(false);
+  const [ coolState, coolSet ] = useState(false);
+  
+  useEffect( ()=> {
+    splitInitial();
+  }, [sortBy, loadTime]);
+  
+  useEffect( ()=> {
+    if(warmState) {
+      sortHot();
+    }
+  }, [warmState]);
     
-    this.tickingClock = Meteor.setInterval( ()=>{
-      this.setState({ tickingTime: moment() });
-    },1000*60);
-  }
-  componentWillUnmount() {
-    Meteor.clearInterval(this.tickingClock);
-  }
+  useInterval( ()=> {
+    tickingTimeSet( moment() );
+  },1000*60);
   
-  constructor() {
-    super();
-    this.state = {
-      loadTime: moment(),
-      tickingTime: moment(),
-      sortBy: 'batch',
-      hotBatches: false,
-      warmBatches: false,
-      lukeBatches: false,
-      coolBatches: false,
-    };
-  }
-  
-  dataStart() {
-    const clientTZ = moment.tz.guess();
-    this.splitInitial()
-      .then(this.sortHot(clientTZ));
-  }
-  
-  changeSort(e) {
+  function changeSort(e) {
     const sort = e.target.value;
-    this.setState({ sortBy: sort }, ()=>{
-      this.dataStart();    
-    });
+    sortBySet( sort );
   }
   
-  splitInitial() {
-    return new Promise(() => {
-      const batches = this.props.b;
+  function forceRefresh() {
+    loadTimeSet( false );
+    loadTimeSet( moment() );
+  }
+  
+  function splitInitial() {
+    return new Promise((resolve) => {
+      const batches = props.b;
       let warmBatches = [];
       let coolBatches = [];
       
       let orderedBatches = batches;
       
-      if(this.state.sortBy === 'sales') {
+      if(sortBy === 'sales') {
         orderedBatches = batches.sort((b1, b2)=> {
           if (b1.salesOrder < b2.salesOrder) { return 1 }
           if (b1.salesOrder > b2.salesOrder) { return -1 }
           return 0;
         });
-      }else if( this.state.sortBy === 'due') {
+      }else if( sortBy === 'due') {
         orderedBatches = batches.sort((b1, b2)=> {
           if (b1.end < b2.end) { return -1 }
           if (b1.end > b2.end) { return 1 }
@@ -76,40 +91,31 @@ export default class OverviewWrap extends Component	{
           return 0;
         });
       }
-        
-        warmBatches = orderedBatches.filter( x => typeof x.floorRelease === 'object' );
-        coolBatches = orderedBatches.filter( x => x.floorRelease === false );
+      
+      warmBatches = orderedBatches.filter( x => typeof x.floorRelease === 'object' );
+      coolBatches = orderedBatches.filter( x => x.floorRelease === false );
       
       //const batchesX = this.props.bx;
       //const warmBx = batchesX.filter( x => x.releases.find( y => y.type === 'floorRelease') == true );
       //const warmBx = batchesX.filter( x => x.releases.find( y => y.type === 'floorRelease') != true );
-      this.setState({
-        warmBatches: warmBatches,
-        coolBatches: coolBatches,
-      });
+      
+      warmSet( warmBatches );
+      coolSet( coolBatches );
     });
   }
   
-  sortHot(clientTZ) {
-    const sortBy = this.state.sortBy;
-    return new Promise(() => {
-      Meteor.call('activeCheck', clientTZ, sortBy, (error, reply)=> {
-        error && console.log(error);
-        if(reply) {
-          const warmBatches = this.state.warmBatches;
-          const hot = warmBatches.filter( x => reply.includes( x.batch ) === true );
-          const luke = warmBatches.filter( x => reply.includes( x.batch ) === false );
-          this.setState({
-            hotBatches: hot,
-            lukeBatches: luke,
-            loadTime: moment()
-          });
-        }
-      });
+  function sortHot() {
+    const clientTZ = moment.tz.guess();
+    Meteor.call('activeCheck', clientTZ, sortBy, (error, reply)=> {
+      error && console.log(error);
+      if(reply) {
+        const hot = warmState.filter( x => reply.includes( x.batch ) === true );
+        const luke = warmState.filter( x => reply.includes( x.batch ) === false );
+        hotSet( hot );
+        lukeSet( luke );
+      }
     });
   }
-
-  render() {
     
     //console.log({hot: this.state.hotBatches});
     //console.log({hotStuff: this.state.hotStatus});
@@ -117,22 +123,22 @@ export default class OverviewWrap extends Component	{
     //console.log({lukeStuff: this.state.lukeStatus});
     //console.log({coolStuff: this.state.coolStatus});
     
-    const duration = moment.duration(
-      this.state.loadTime.diff(this.state.tickingTime))
-        .humanize();
-    
-    if(!this.state.warmBatches) {
-      return (
-        <div className='centreContainer'>
-          <div className='centrecentre'>
-            <Spin />
-          </div>
+  const duration = moment.duration(
+    loadTime.diff(tickingTime))
+      .humanize();
+  
+  if(!warmState) {
+    return (
+      <div className='centreContainer'>
+        <div className='centrecentre'>
+          <Spin />
         </div>
-      );
-    }
+      </div>
+    );
+  }
     
-    return(
-      <AnimateWrap type='contentTrans'>
+  return(
+    <AnimateWrap type='contentTrans'>
       <div key={0} className='overviewContainer'>
         <ToastContainer
           position="top-right"
@@ -146,7 +152,7 @@ export default class OverviewWrap extends Component	{
             <button
               type='button'
               title='Refresh Information'
-              onClick={(e)=>this.dataStart(e)}>
+              onClick={(e)=>forceRefresh()}>
             <i className='fas fa-sync-alt primeRightIcon'></i>
             </button>
           </div>
@@ -160,8 +166,8 @@ export default class OverviewWrap extends Component	{
               id='sortSelect'
               title='Change List Order'
               className='overlistSort'
-              defaultValue={this.state.sortBy}
-              onClick={(e)=>this.changeSort(e)}>
+              defaultValue={sortBy}
+              onClick={(e)=>changeSort(e)}>
               <option value='batch'>{Pref.batch}</option>
               <option value='sales'>{Pref.salesOrder}</option>
               <option value='due'>{Pref.end}</option>
@@ -177,27 +183,29 @@ export default class OverviewWrap extends Component	{
       
             <BatchHeaders
               key='fancylist0'
-              hB={this.state.hotBatches}
-              lB={this.state.lukeBatches}
-              cB={this.state.coolBatches}
-              bCache={this.props.bCache}
+              hB={hotState}
+              lB={lukeState}
+              cB={coolState}
+              bCache={props.bCache}
             />
             
             <BatchDetails
               key='fancylist1'
-              hB={this.state.hotBatches}
-              lB={this.state.lukeBatches}
-              cB={this.state.coolBatches}
-              bCache={this.props.bCache}
-              user={this.props.user}
-              app={this.props.app}
+              hB={hotState}
+              lB={lukeState}
+              cB={coolState}
+              bCache={props.bCache}
+              pCache={props.pCache}
+              user={props.user}
+              app={props.app}
             />
               
           </div>
         </div>
         
-        </div>
-      </AnimateWrap>
-    );
-  }
-}
+      </div>
+    </AnimateWrap>
+  );
+};
+
+export default OverviewWrap;

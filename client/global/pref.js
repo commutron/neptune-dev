@@ -12,7 +12,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '1.21.6';
+    this.neptuneVersion = '1.21.7';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';

@@ -364,8 +364,11 @@ Meteor.methods({
       const getDay = localDate.dayOfYear();
       
       const allTouched = BatchDB.find({
-        orgKey: Meteor.user().orgKey, 
-        //'tide.startTime': { $gte: new Date(localDate.format('YYYY-MM-DD')) }
+        orgKey: Meteor.user().orgKey,
+        tide: { $elemMatch: { startTime: {
+        $gte: new Date(localDate.startOf('day').format()),
+        $lte: new Date(localDate.endOf('day').format())
+      }}}
       }).fetch();
       
       let slimTideDay = [];

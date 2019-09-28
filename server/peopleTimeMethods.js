@@ -9,7 +9,7 @@ Meteor.methods({
       const tStop = tideStop ? tideStop : new Date();
       const batch = BatchDB.findOne({ orgKey: Meteor.user().orgKey, batch: batchNum });
       const app = AppDB.findOne({ orgKey: Meteor.user().orgKey});
-      const phaseDB = [...app.trackOption,app.lastTrack];
+      const phaseDB = [...app.trackOption, app.lastTrack];
       
       const itemHistory = Array.from( batch.items, 
                               x => x.history.filter( y =>
@@ -24,8 +24,8 @@ Meteor.methods({
                             return 0;
                           });
       const phasefromHistory = cronoHistory.length > 0 ?
-        phaseDB.find( x => x.key === cronoHistory[0].key ).phase : null;
-      
+        phaseDB.find( x => x.key === cronoHistory[0].key ) : null;
+      const historyPhase = phasefromHistory ? phasefromHistory.phase : null;
       
       
       const inBncN = batch.nonCon.filter( x =>
@@ -36,7 +36,8 @@ Meteor.methods({
                             return 0;
                           });
       const phasefromNC = cronoNC.length > 0 ?
-        phaseDB.find( x => x.phase === cronoNC[0].where ).phase : null;
+        phaseDB.find( x => x.phase === cronoNC[0].where ) : null;
+      const ncPhase = phasefromNC ? phasefromNC.phase : null;
       
       /*
       const inBncF = batch.filter( x =>
@@ -50,9 +51,9 @@ Meteor.methods({
       */
       
       if(phasefromHistory) {
-        return [ 'fromHistory', phasefromHistory ];
+        return [ 'fromHistory', historyPhase ];
       }else if(phasefromNC) {
-        return [ 'fromNC', phasefromNC ];
+        return [ 'fromNC', ncPhase ];
       }else{
         return false;
       }

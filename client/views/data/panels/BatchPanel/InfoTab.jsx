@@ -4,7 +4,7 @@ import business from 'moment-business';
 import Pref from '/client/global/pref.js';
 
 import GeneralChunk from './GeneralChunk.jsx';
-import PrioritySquare from '/client/components/bigUi/PrioritySquare.jsx';
+import PrioritySquareData from '/client/components/bigUi/PrioritySquare.jsx';
 import BatchFinish from '/client/components/forms/BatchFinish.jsx';
 import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 import FloorRelease from '/client/components/smallUi/FloorRelease.jsx';
@@ -28,7 +28,7 @@ const InfoTab = ({
             
             { b.live &&
               <div className='centreRow balance'>
-                <PrioritySquare
+                <PrioritySquareData
                   batchID={b._id}
                   app={a} />
                 <b><i className='fas fa-sync blueT fa-2x' title='Live'></i></b>

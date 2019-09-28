@@ -708,10 +708,11 @@ Meteor.methods({
 
   
   ///////////// CACHES //////////////////
-  FORCEbatchCacheUpdate() {
+  FORCEcacheUpdate(clientTZ) {
     if(Roles.userIsInRole(Meteor.userId(), 'active')) {
       const key = Meteor.user().orgKey;
       Meteor.call('batchCacheUpdate', key, true);
+      Meteor.call('priorityCacheUpdate', key, clientTZ, true);
     }
   },
     
@@ -728,6 +729,25 @@ Meteor.methods({
             orgKey: accessKey,
             lastUpdated: new Date(),
             dataName: 'batchInfo',
+            dataSet: slim,
+        }});
+      }
+    }
+  },
+  
+  priorityCacheUpdate(accessKey, clientTZ, force) {
+    if(typeof accessKey === 'string') {
+      const currentCache = CacheDB.findOne({orgKey: accessKey, dataName:'priorityRank'});
+      if(force || !currentCache || (currentCache && moment().isAfter(currentCache.lastUpdated, 'hour')) ) {
+        const batches = BatchDB.find({orgKey: accessKey}).fetch();
+        const slim = batches.map( x => {
+          return Meteor.call('priorityRank', x._id, clientTZ, accessKey);
+        });
+        CacheDB.upsert({orgKey: accessKey, dataName: 'priorityRank'}, {
+          $set : { 
+            orgKey: accessKey,
+            lastUpdated: new Date(),
+            dataName: 'priorityRank',
             dataSet: slim,
         }});
       }

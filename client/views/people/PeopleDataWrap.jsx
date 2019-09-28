@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
+import moment from 'moment';
+import 'moment-timezone';
 import { ToastContainer } from 'react-toastify';
 import InboxToast from '/client/components/utilities/InboxToast.js';
 import Pref from '/client/global/pref.js';
@@ -99,10 +101,11 @@ export default withTracker( () => {
   let login = Meteor.userId() ? true : false;
   let user = login ? Meteor.user() : false;
   let org = user ? user.org : false;
+  const clientTZ = moment.tz.guess();
   let active = login ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   const appSub = login ? Meteor.subscribe('appData') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
-  const tidesSub = login ? Meteor.subscribe('tideData') : false;
+  const tidesSub = login ? Meteor.subscribe('tideData', clientTZ) : false;
   if(!login) {
     return {
       ready: false,
@@ -125,6 +128,7 @@ export default withTracker( () => {
       org: org,
       app: AppDB.findOne({org: org}),
       bCache: CacheDB.findOne({dataName: 'batchInfo'}),
+      // pCache: CacheDB.findOne({dataName: 'priorityRank'}),
       batches: BatchDB.find({}).fetch(),
       users: Meteor.users.find({}, { sort: { username: 1 } } ).fetch()
     };

@@ -12,13 +12,17 @@ moment.updateLocale('en', {
       4: ['07:00:00', '16:30:00'],
       5: ['07:00:00', '12:00:00'],
       6: null
+  },// including lunch breaks!
+  shippinghours: {
+      0: null,
+      1: null,
+      2: ['11:00:00', '11:30:00'],
+      3: null,
+      4: ['11:00:00', '11:30:00'],
+      5: null,
+      6: null
   }// including lunch breaks!
 });
-
-// moment.defineLocale('en-foo', {
-//   parentLocale: 'en',
-//   /* */
-// });
 
 //const now = moment().tz(clientTZ);
 //const isNow = (t)=>{ return ( now.isSame(moment(t), 'day') ) };
@@ -101,12 +105,15 @@ function collectStatus(privateKey, batchID, clientTZ) {
       const now = moment().tz(clientTZ);
       // is it done
       const complete = b.finishedAt !== false;
+      // when did it start
+      const salesStart = moment.tz(b.start, clientTZ);
       // when is it due
-      const salesEnd = moment(b.end);
+      const salesEnd = moment.tz(b.end, clientTZ);
       // how long since start
-      const timeElapse = moment.duration(now.diff(b.start)).humanize();
+      const timeElapse = moment.duration(now.diff(salesStart)).humanize();
       // how long untill due
-      const timeRemain = !complete ? business.weekDays( now, salesEnd ) : 0; 
+      const timeRemain = !complete ? business.weekDays( now, salesEnd ) : 0;
+      // const timeRemain = !complete ? salesEnd.workingDiff(now, 'days') : 0;
       // how many items
       const itemQuantity = b.items.length;
       // River Setup
@@ -142,8 +149,13 @@ function collectPriority(privateKey, batchID, clientTZ) {
       
       const qtBready = !b.quoteTimeBudget ? false : true;
       
+      const endDay = moment.tz(b.end, clientTZ);
+
+      const shipTime = endDay.isShipDay() ? 
+        endDay.nextShippingTime() : endDay.lastShippingTime();
+        
+      let quote2tide = false;
       let estEnd2fillBuffer = false;
-      let overQuote = false;
       
       if(qtBready) {
         const qtB = qtBready && b.quoteTimeBudget.length > 0 ? 
@@ -153,30 +165,24 @@ function collectPriority(privateKey, batchID, clientTZ) {
         
         const totalTideMinutes = batchTideTime(b.tide);
         
-        const quote2tide = totalQuoteMinutes - totalTideMinutes;
-        const q2tNice = Math.abs(quote2tide);
-  
-        const estComplete = moment().addWorkingTime(q2tNice, 'minutes');
+        quote2tide = totalQuoteMinutes - totalTideMinutes;
+        const overQuote = quote2tide < 0 ? true : false;
+        const q2tNice = overQuote ? 0 : quote2tide;
         
-        const prevShipDay = moment(b.end).tz(clientTZ).locale('shipDays', {
-          workinghours: { 0: null, 1: null,
-            2: ['11:00:00', '11:00:00'], 3: null, 4: ['11:00:00', '11:00:00'],
-            5: null, 6: null }
-        }).lastWorkingTime();
+        const now = moment().tz(clientTZ);
+        const estComplete = now.addWorkingTime(q2tNice, 'minutes');
         
-        const fulfill = prevShipDay || moment(b.end).tz(clientTZ);
-        
-        const buffer = fulfill.workingDiff(estComplete, 'minutes');
+        const buffer = shipTime.workingDiff(estComplete, 'minutes');
         
         estEnd2fillBuffer = buffer || 0;
-        overQuote = quote2tide < 0 ? true : false;
       }
      
       collection = {
         batch: b.batch,
         batchID: b._id,
+        quote2tide: quote2tide,
         estEnd2fillBuffer: estEnd2fillBuffer,
-        overQuote: overQuote
+        shipTime: shipTime.format()
       };
       
       resolve(collection);
@@ -203,7 +209,8 @@ function collectProgress(privateKey, batchID) {
         phaseSets.push({
           phase: phase,
           steps: steps,
-          count: 0 
+          count: 0,
+          allClear: false
         });
       }
       
@@ -217,6 +224,12 @@ function collectProgress(privateKey, batchID) {
 
       phaseSets.map( (phet, index)=> {
         for(let stp of phet.steps) {
+          // extra calculation for testing purposes
+          const wipDone = batch.items.every( 
+              x => x.history.includes( 
+                y => y.key === stp.key && y.good === true ) );
+          phaseSets[index].allClear = wipDone;
+            
           const wipTally = historyFlat.filter( x => x.key === stp.key ).length;
           phaseSets[index].count = phet.count + doneItems + wipTally;
         }
@@ -314,9 +327,9 @@ Meteor.methods({
     return bundleProgress(batchID);
   },
   
-  priorityRank(batchID, clientTZ) {
+  priorityRank(batchID, clientTZ, serverAccessKey) {
     async function bundlePriority(batchID, clientTZ) {
-      const accessKey = Meteor.user().orgKey;
+      const accessKey = serverAccessKey || Meteor.user().orgKey;
       try {
         bundle = await collectPriority(accessKey, batchID, clientTZ);
         return bundle;

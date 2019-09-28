@@ -14,7 +14,7 @@ const NumStatRing = ({ total, nums, name, title, colour})=> {
     Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(nums);
     
   return(
-    <div className='invert' className='chart20Contain noCopy' title={title}>
+    <div className='invert' className='chart15Contain noCopy' title={title}>
       <div className='pieRing'>
         <VictoryPie
           theme={Theme.NeptuneVictory}

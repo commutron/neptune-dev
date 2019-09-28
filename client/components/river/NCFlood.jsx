@@ -1,5 +1,6 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
+import { toast } from 'react-toastify';
 
 const NCFlood = ({ id, live, app, ncListKeys })=> {
   
@@ -34,19 +35,15 @@ const NCFlood = ({ id, live, app, ncListKeys })=> {
             error && console.log(error);
           });
         }else{
-          Bert.alert({ 
-            title: 'Caution',
-            message: "Can't add '" + ref + "', A referance can only be 8 characters long",
-            type: 'carrot'
+          toast.warn("Can't add '" + ref + "', A referance can only be 8 characters long", {
+            position: toast.POSITION.BOTTOM_CENTER
           });
         }
       }
       this.ncRefs.value = '';
       this.go.disabled = false;
-      Bert.alert({ 
-        title: 'Recording Complete',
-        message: "NonConformance has been added to all Work In Progress items",
-        type: 'emerald'
+      toast.success("NonConformance has been added to all Work In Progress items", {
+        position: toast.POSITION.BOTTOM_CENTER
       });
       const findBox = document.getElementById('lookup');
       findBox.focus();

@@ -12,7 +12,6 @@ import { LeftFxNonCon } from '/client/components/bigUi/NonConMiniTops.jsx';
 import { LeftInNonCon } from '/client/components/bigUi/NonConMiniTops.jsx';
 import NonConStatusPie from '/client/components/charts/NonCon/NonConStatusPie.jsx';
 import NonConBubble from '/client/components/charts/NonCon/NonConBubble.jsx';
-import NonConScatter from '/client/components/charts/NonCon/NonConScatter.jsx';
 import NonConBar from '/client/components/charts/NonCon/NonConBar.jsx';
 import NonConBarRefs from '/client/components/charts/NonCon/NonConBarRefs.jsx';
 
@@ -75,17 +74,6 @@ const NCTab = ({
         
         {Roles.userIsInRole(Meteor.userId(), 'nightly') &&
           <NonConBubble
-            ncOp={ncOptions}
-            flow={riverFlow}
-            flowAlt={riverAltFlow}
-            nonCons={b.nonCon}
-            app={a} />
-        }
-        
-        <br />
-        
-        {Roles.userIsInRole(Meteor.userId(), 'nightly') &&
-          <NonConScatter
             ncOp={ncOptions}
             flow={riverFlow}
             flowAlt={riverAltFlow}
