@@ -1,11 +1,11 @@
 import React from 'react';
-import moment from 'moment';
+// import moment from 'moment';
 import 'moment-business';
 import 'moment-timezone';
 //import Pref from '/client/global/pref.js';
 
-import ProgLayerBurndown, { ProgLayerBurndownExplain } from '/client/components/charts/ProgLayerBurndown.jsx';
-import EventsList from '/client/components/smallUi/EventsList.jsx';
+import ProgLayerBurndown, { ProgLayerBurndownExplain } 
+  from '/client/components/charts/ProgLayerBurndown.jsx';
 import TimeBudgetsChunk from './TimeBudgetsChunk.jsx';
 import TimeBlocksRaw from './TimeBlocksRaw.jsx';
 
@@ -81,11 +81,6 @@ const TimeTab = ({
             title='Alt Progress Burndown' />}
               
         <ProgLayerBurndownExplain />
-      </div>
-      
-      <div className='dropCeiling vmargin space'>
-        <h3 className='centreText'>Events</h3>  
-        <EventsList events={b.events} />
       </div>
       
       {proto &&

@@ -262,8 +262,9 @@ main {
   height: 100%;
 }
 .homeIconLogo {
-  width: 7vh;
-  height: 7vh
+  width: 100%;
+  height: 100%;
+  padding: 1vh;
 }
 .homeIconLogo:hover, .homeIconLogo:active {
   animation: spinAround 2s infinite linear;
@@ -576,6 +577,8 @@ main {
 
 .dropCeiling { margin-top: calc(4vh + 1rem); }
 .overscroll { margin-bottom: 5vh; }
+
+
 
 .noteCard {
   margin: 16px 0;
@@ -945,7 +948,7 @@ button.numberSet {
   overflow-x: hidden;
 }
 .overGridRowFixedHeader {
-  border-bottom: 1px inset rgba(255,255,255,0.3);
+  border-bottom: 1px outset rgba(255,255,255,0.3);
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -958,8 +961,8 @@ button.numberSet {
   font-size: 3vh;
 }
 .overGridRowFixed {
-  border-right: 1px groove rgba(255,255,255,0.2);
-  border-bottom: 1px inset rgba(255,255,255,0.3);
+  border-right: 1px outset rgba(255,255,255,0.2);
+  border-bottom: 1px outset rgba(255,255,255,0.3);
   display: grid;
   grid-template-columns: 1fr 2fr;
   place-items: stretch start;
@@ -971,7 +974,7 @@ button.numberSet {
   padding: 1vh 1vw;
 }
 .overGridRowFixed > div:first-child {
-  border-right: 1px groove rgba(255,255,255,0.3);
+  border-right: 1px outset rgba(255,255,255,0.3);
   font-size: 2.5vh;
 }
 .overGridRowFixed > div:last-child {
@@ -992,7 +995,7 @@ button.numberSet {
   background-color: rgb(35,35,35);
 }
 .overGridRowScrollHeader {
-  border-bottom: 1px inset rgba(255,255,255,0.3);
+  border-bottom: 1px outset rgba(255,255,255,0.3);
 }
 .overGridRowScroll {
   border-left: 0.25vw groove rgba(255,255,255,0.3);
@@ -1003,9 +1006,7 @@ button.numberSet {
   place-items: stretch stretch;
 }
 
-.overGridRowScroll > div {
-  border-right: 1px groove rgb(175,175,175);
-  border-bottom: 1px groove rgb(190,190,190);
+.overGridRowScroll > div, .statusBlock {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1015,6 +1016,10 @@ button.numberSet {
   line-height: 2vh;
   text-overflow: ellipsis;
   text-align: center;
+}
+.overGridRowScroll > div {
+  border-right: 1px outset rgb(175,175,175);
+  border-bottom: 1px outset rgb(190,190,190);
 }
 .overGridRowScroll .big {
   font-size: 2vh;

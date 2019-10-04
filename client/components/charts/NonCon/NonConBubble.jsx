@@ -7,7 +7,7 @@ import {
   VictoryTooltip,
   VictoryClipContainer
 } from 'victory';
-//import Pref from '/client/global/pref.js';
+import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
 
 const NonConBubble = ({ ncOp, nonCons, app })=> {
@@ -112,6 +112,9 @@ const NonConBubble = ({ ncOp, nonCons, app })=> {
           } } }
         />
       </VictoryChart>
+      
+      <p className='centreText small cap'>Defect Type and {Pref.phase} as Buubles</p>
+      
     </div>
   );
 };

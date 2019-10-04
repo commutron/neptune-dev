@@ -58,6 +58,8 @@
 .short { background-color: rgba(243, 156, 18, 0.2); }
 .finish { background-color: rgba(155, 89, 182, 0.2); }
 
+.genericEvent { background-color: var(--midnightbluefade); }
+
 .moreInfoList {
   margin: 0 0 0 75px;
   list-style: circle;

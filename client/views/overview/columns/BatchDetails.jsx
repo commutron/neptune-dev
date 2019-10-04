@@ -132,7 +132,7 @@ const BatchTopStatus = ({ batchID, clientTZ, pCache, app })=> {
     
     return(
       <Fragment>
-        <div><i>Created {dt.timeElapse} ago</i></div>
+        {/*<div><i>Created {dt.timeElapse} ago</i></div>*/}
         <div>
           <NumStat
             num={ Math.abs(dt.weekDaysRemain) }
@@ -181,7 +181,7 @@ const BatchTopStatus = ({ batchID, clientTZ, pCache, app })=> {
   
   return(
     <Fragment>
-      {['duration', 'remaining', 'priority', '# of items', 'flow']
+      {[/*'duration',*/ 'remaining', 'priority', '# of items', 'flow']
         .map( (st, index)=>{
           return(
             <div key={batchID + st + index + 'x'}>

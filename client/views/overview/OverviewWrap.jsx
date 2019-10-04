@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import moment from 'moment';
+import 'moment-timezone';
 import { ToastContainer } from 'react-toastify';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
@@ -62,6 +63,8 @@ const OverviewWrap = (props)=> {
   function forceRefresh() {
     loadTimeSet( false );
     loadTimeSet( moment() );
+    const clientTZ = moment.tz.guess();
+    Meteor.call('FORCEcacheUpdate', clientTZ);
   }
   
   function splitInitial() {
@@ -72,7 +75,19 @@ const OverviewWrap = (props)=> {
       
       let orderedBatches = batches;
       
-      if(sortBy === 'sales') {
+      if(sortBy === 'priority') {
+        orderedBatches = batches.sort((b1, b2)=> {
+          const pB1 = props.pCache.dataSet.find( x => x.batchID === b1._id);
+          const pB1bf = pB1 ? pB1.estEnd2fillBuffer : 0;
+          const pB2 = props.pCache.dataSet.find( x => x.batchID === b2._id);
+          const pB2bf = pB2 ? pB2.estEnd2fillBuffer : 0;
+          
+          if (pB1bf < pB2bf) { return -1 }
+          if (pB1bf > pB2bf) { return 1 }
+          return 0;
+        });
+        
+      }else if(sortBy === 'sales') {
         orderedBatches = batches.sort((b1, b2)=> {
           if (b1.salesOrder < b2.salesOrder) { return 1 }
           if (b1.salesOrder > b2.salesOrder) { return -1 }
@@ -171,6 +186,8 @@ const OverviewWrap = (props)=> {
               <option value='batch'>{Pref.batch}</option>
               <option value='sales'>{Pref.salesOrder}</option>
               <option value='due'>{Pref.end}</option>
+              {Roles.userIsInRole(Meteor.userId(), 'nightly') &&
+                <option value='priority'>priority</option>}
             </select>
           </span>
           <span className='flexSpace' />

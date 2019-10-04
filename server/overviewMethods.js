@@ -106,11 +106,11 @@ function collectStatus(privateKey, batchID, clientTZ) {
       // is it done
       const complete = b.finishedAt !== false;
       // when did it start
-      const salesStart = moment.tz(b.start, clientTZ);
+      // const salesStart = moment.tz(b.start, clientTZ);
       // when is it due
       const salesEnd = moment.tz(b.end, clientTZ);
       // how long since start
-      const timeElapse = moment.duration(now.diff(salesStart)).humanize();
+      // const timeElapse = moment.duration(now.diff(salesStart)).humanize();
       // how long untill due
       const timeRemain = !complete ? business.weekDays( now, salesEnd ) : 0;
       // const timeRemain = !complete ? salesEnd.workingDiff(now, 'days') : 0;
@@ -128,7 +128,7 @@ function collectStatus(privateKey, batchID, clientTZ) {
       collection = {
         batch: b.batch,
         batchID: b._id,
-        timeElapse: timeElapse,
+        // timeElapse: timeElapse,
         weekDaysRemain: timeRemain,
         riverChosen: riverChosen,
         itemQuantity: itemQuantity,
@@ -149,8 +149,10 @@ function collectPriority(privateKey, batchID, clientTZ) {
       
       const qtBready = !b.quoteTimeBudget ? false : true;
       
+      const now = moment().tz(clientTZ);
       const endDay = moment.tz(b.end, clientTZ);
-
+      const lateLate = now.isAfter(endDay);
+      
       const shipTime = endDay.isShipDay() ? 
         endDay.nextShippingTime() : endDay.lastShippingTime();
         
@@ -169,8 +171,7 @@ function collectPriority(privateKey, batchID, clientTZ) {
         const overQuote = quote2tide < 0 ? true : false;
         const q2tNice = overQuote ? 0 : quote2tide;
         
-        const now = moment().tz(clientTZ);
-        const estComplete = now.addWorkingTime(q2tNice, 'minutes');
+        const estComplete = now.clone().addWorkingTime(q2tNice, 'minutes');
         
         const buffer = shipTime.workingDiff(estComplete, 'minutes');
         
@@ -182,7 +183,8 @@ function collectPriority(privateKey, batchID, clientTZ) {
         batchID: b._id,
         quote2tide: quote2tide,
         estEnd2fillBuffer: estEnd2fillBuffer,
-        shipTime: shipTime.format()
+        shipTime: shipTime.format(),
+        lateLate: lateLate
       };
       
       resolve(collection);

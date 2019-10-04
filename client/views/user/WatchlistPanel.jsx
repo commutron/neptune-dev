@@ -4,7 +4,8 @@ import Pref from '/client/global/pref.js';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 import { MuteButton } from '/client/components/bigUi/WatchModule/WatchModule.jsx';
-import EventsList from '/client/components/smallUi/EventsList.jsx';
+import EventsTimeline from '/client/components/bigUi/BatchFeed/EventsTimeline.jsx';
+
 
 const WatchlistPanel = ({ orb, bolt, app, user, users, batchEvents, bCache })=> {
   
@@ -49,7 +50,14 @@ const WatchlistPanel = ({ orb, bolt, app, user, users, batchEvents, bCache })=> 
               </tr>
               <tr>
                 <td colSpan='5' className='leftText clean'>
-                  <EventsList events={batch ? batch.events || [] : []} />
+                  
+                  <EventsTimeline
+                    id={null}
+                    batch={batch}
+                    verifyList={[]}
+                    eventList={batch ? batch.events || [] : []}
+                    doneBatch={false} />
+              
                 </td>
               </tr>
             </tbody>

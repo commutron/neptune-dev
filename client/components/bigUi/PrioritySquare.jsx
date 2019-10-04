@@ -40,7 +40,7 @@ export const PrioritySquare = ({ batchID, ptData, app })=> {
     const bffrTime = pt.estEnd2fillBuffer;
     const overQuote = q2t < 0;
     Roles.userIsInRole(Meteor.userId(), 'debug') &&
-      console.log({batchID, bffrTime, q2t});
+      console.log({pt, batchID, bffrTime, q2t});
   
     if(!bffrTime) {
       return(
@@ -61,27 +61,33 @@ export const PrioritySquare = ({ batchID, ptData, app })=> {
       max: 0,
     } : app.priorityScale;
     
-    const priorityCode = 
-      bffrTime > pScl.low ? 'p4' :
-        bffrTime > pScl.high ? 'p3' : 
-          bffrTime > pScl.max ? 'p2' :
-            bffrTime <= pScl.max ? 'p1' :
+    const priorityRank = 
+      bffrTime > pScl.low ? 'low' :
+        bffrTime > pScl.high ? 'medium' : 
+          bffrTime > pScl.max ? 'high' :
+            bffrTime <= pScl.max ? 'severe' :
             'p0';
     const priorityClass = 
-      priorityCode === 'p1' ? 'pScale1' :
-      priorityCode === 'p2' ? 'pScale2' :
-      priorityCode === 'p3' ? 'pScale3' : 
+      priorityRank === 'severe' ? 'pScale1' :
+      priorityRank === 'high' ? 'pScale2' :
+      priorityRank === 'medium' ? 'pScale3' : 
       'pScale4';
+    const overClass = overQuote ? 'moreEphasis' : '';
     const pLabel = 
-      <i>{priorityCode.split("")[0]}<b>{priorityCode.split("")[1]}</b></i>;
+      <b>{priorityRank}</b>;
+    const subLabel = pt.lateLate ? 'Is Late' :
+      bffrTime < 0 ? 'Estimated Late' :
+      Math.round( ( bffrTime / 100 ) );
     
     return(
-      <div className={`${priorityClass} ${overQuote ? 'moreEphasis' : ''}`}>
+      <div className={`blackT smCap big ${priorityClass} ${overClass}`}>
         <NumStat
           num={pLabel}
-          name={Math.round( ( bffrTime / 100 ) )}
-          title={`Priority Code "${priorityCode}" \n${overQuote ? 'Over Quote' : ''}`}
-          color='whiteT'
+          name={subLabel}
+          title={
+            `Priority Rank "${priorityRank}" \nbuffer: ${bffrTime} minutes\n${overQuote ? 'Over Quote' : ''}`
+          }
+          color='blackT'
           size='big' />
       </div>
     );

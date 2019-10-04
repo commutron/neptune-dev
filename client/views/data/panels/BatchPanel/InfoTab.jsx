@@ -28,9 +28,11 @@ const InfoTab = ({
             
             { b.live &&
               <div className='centreRow balance'>
-                <PrioritySquareData
-                  batchID={b._id}
-                  app={a} />
+                <div className='statusBlock'>
+                  <PrioritySquareData
+                    batchID={b._id}
+                    app={a} />
+                </div>
                 <b><i className='fas fa-sync blueT fa-2x' title='Live'></i></b>
               </div>
             }

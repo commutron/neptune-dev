@@ -10,7 +10,7 @@ import InfoTab from './InfoTab.jsx';
 import TimeTab from './TimeTab.jsx';
 import NCTab from './NCTab.jsx';
 
-import FirstsTimeline from '/client/components/bigUi/FirstsTimeline.jsx';
+import EventsTimeline from '/client/components/bigUi/BatchFeed/EventsTimeline.jsx';
 import RMATable from '/client/components/tables/RMATable.jsx';
 
 // props
@@ -61,11 +61,10 @@ const BatchPanel = (props)=> {
       // check history for...
       for(let v of item.history) {
         // firsts
-        v.type === 'first' ? 
-          verifyList.push({
-            serial: item.serial,
-            rec: v
-          }) : null;
+        if(v.type === 'first') {
+          v.serial = item.serial;
+          verifyList.push( v );
+        }
       }
      });
      return {verifyList: verifyList, rmaList: rmaList};
@@ -98,8 +97,8 @@ const BatchPanel = (props)=> {
           tabs={
             [
               'Info',
-              'Timeline',
-              'First-offs',
+              'Time',
+              'Events',
               `${Pref.nonCon}s`,
               `${Pref.rma}s`
             ]
@@ -131,10 +130,11 @@ const BatchPanel = (props)=> {
             riverAltFlow={path.riverAltFlow} />
             
           <div className='space3v'>
-            <FirstsTimeline
+            <EventsTimeline
               id={b._id}
               batch={b.batch}
               verifyList={filter.verifyList}
+              eventList={b.events}
               doneBatch={done} />
           </div>
           
