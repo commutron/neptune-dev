@@ -38,3 +38,26 @@
 .invert .tabOff:hover {
 	background-color: var(--concretefade);
 }
+
+.litetabOn, 
+.litetabOff {
+  padding: 5px;
+  line-height: 1.5;
+  font-size: medium;
+  color: black;
+  letter-spacing: 1px;
+	text-transform: capitalize;
+	overflow: hidden;
+	border: 0.5px solid rgb(0,0,0);
+}
+
+.litetabOn {
+	background-color: var(--asbestos);
+}
+
+.litetabOff {
+	background-color: var(--asbestosfade);
+}
+.litetabOff:hover {
+	background-color: var(--asbestos);
+}

@@ -12,7 +12,7 @@ const NonConSatusPie = ({ nonCons })=> {
     'Resolved', 'Snoozing', 'Skipped' ] );
   
   useEffect( ()=>{
-    const ncG = nonCons.filter( n => !n.trash );
+    const ncG = nonCons;
     totalSet(ncG.length);
 
     none = ncG.filter( n => n.fix === false && n.inspect === false && n.skip === false ).length;
@@ -38,7 +38,7 @@ const NonConSatusPie = ({ nonCons })=> {
   
   return (
     <div className='centre'>
-      <div className='chart15Contain noCopy'>
+      <div className='chart15Contain chart15sq noCopy'>
         <div className='pieRing'>
           <VictoryPie
             theme={Theme.NeptuneVictory}

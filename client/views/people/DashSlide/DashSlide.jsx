@@ -56,6 +56,7 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
   const dUsers = liveUsers.filter( x => !x.engaged );
   const userArr = [eUsers.length, dUsers.length ];
 
+// underscore ??
   const eBatches = Array.from(eUsers,
     x => batches.find(
       y => y && y.tide && y.tide.find(

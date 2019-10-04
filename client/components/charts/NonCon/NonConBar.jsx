@@ -4,49 +4,45 @@ import {
   VictoryBar, 
   VictoryChart, 
   VictoryAxis,
-  VictoryLabel,
   VictoryTooltip,
   VictoryStack
 } from 'victory';
 //import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
-import { CalcSpin } from '/client/components/uUi/Spin.jsx';
 
-const NonConBar = ({ ncOp, flow, flowAlt, nonCons, app })=> {
+const NonConBar = ({ ncOp, nonCons, app })=> {
   
-  const [ series, seriesSet ] = useState( false );
+  const [ series, seriesSet ] = useState([]);
+  const [ typeNum, typeNumSet ] = useState(1);
   
   useEffect( ()=> {
     const nonConOptions = ncOp || [];
     
-    const nonConArray = nonCons || [];
-    const nonConArrayClean = nonConArray.filter( x => !x.trash );
-    
     function ncCounter(ncArray, ncOptions, appPhases) {
-      
-      let splitByPhase = [];
-      
+    
       const phasesSet = new Set(appPhases);
-      for(let phase of phasesSet) {
+      
+      const splitByPhase = [...phasesSet].map( (phase, index)=> {
         let match = ncArray.filter( y => y.where === phase );
-        splitByPhase.push({
+        return{
           'phase': phase,
           'pNC': match
-        });
-      }
+        };
+      });
       let leftover = ncArray.filter( z => phasesSet.has(z.where) === false ) || [];
       splitByPhase.unshift({ 'phase': 'other', 'pNC': leftover });
       
-      Roles.userIsInRole(Meteor.userId(), 'debug') && 
-        console.log(splitByPhase);
       
+      Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(splitByPhase);
+
       let ncCounts = [];
-      
+      let typeSet = new Set();
       for(let ncSet of splitByPhase) {
         let ncPhase = [];
         for(let ncType of ncOptions) {
           const typeCount = ncSet.pNC.filter( x => x.type === ncType ).length || 0;
           if(typeCount > 0) {
+            typeSet.add(ncType);
             ncPhase.push({
               y: typeCount,
               x: ncType,
@@ -56,12 +52,13 @@ const NonConBar = ({ ncOp, flow, flowAlt, nonCons, app })=> {
         }
         ncCounts.push(ncPhase);
       }
+      typeNumSet([...typeSet].length);
       return ncCounts;
     }
     
     try{
       const appPhases = app.phases;
-      let calc = ncCounter(nonConArrayClean, nonConOptions, appPhases);
+      let calc = ncCounter(nonCons, nonConOptions, appPhases);
       seriesSet( calc );
     }catch(err) {
       console.log(err);
@@ -69,22 +66,15 @@ const NonConBar = ({ ncOp, flow, flowAlt, nonCons, app })=> {
   }, []);
           
     
-    Roles.userIsInRole(Meteor.userId(), 'debug') && 
-      console.log(series);
-  
-  if(!series) {
-    return(
-      <CalcSpin />
-    );
-  }
+    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({series, typeNum});
   
   return(
     <div className='chartNoHeightContain'>
       <VictoryChart
         theme={Theme.NeptuneVictory}
-        padding={{top: 20, right: 20, bottom: 20, left: 100}}
-        domainPadding={{x: 10, y: 40}}
-        height={25 + ( series.length * 15 )}
+        padding={{top: 10, right: 20, bottom: 20, left: 100}}
+        domainPadding={20}
+        height={50 + ( typeNum * 15 )}
       >
         <VictoryAxis
           dependentAxis
@@ -129,7 +119,8 @@ const NonConBar = ({ ncOp, flow, flowAlt, nonCons, app })=> {
                 labels={(l) => `${l.label}`}
                 labelComponent={
                   <VictoryTooltip
-                    style={{ fontSize: '7px', padding: 2 }}
+                    orientation='top'
+                    style={{ fontSize: '8px', padding: 4 }}
                   />}
               />
           )}

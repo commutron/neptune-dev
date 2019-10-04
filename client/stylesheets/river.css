@@ -1,4 +1,3 @@
-
 /* River */
 .stoneFrame {
   max-width: 22vmax;
@@ -32,10 +31,7 @@
 .stoneRing {
   position: relative;
   z-index: 0;
-  max-width: 18vmax;
-  height: 18vmax;
-}
-.stoneRing {
+  width: 18vmax;
   height: 18vmax;
 }
 

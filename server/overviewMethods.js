@@ -16,9 +16,9 @@ moment.updateLocale('en', {
   shippinghours: {
       0: null,
       1: null,
-      2: ['11:00:00', '11:30:00'],
+      2: ['11:30:00', '11:30:00'],
       3: null,
-      4: ['11:00:00', '11:30:00'],
+      4: ['11:30:00', '11:30:00'],
       5: null,
       6: null
   }// including lunch breaks!
@@ -226,7 +226,7 @@ function collectProgress(privateKey, batchID) {
         for(let stp of phet.steps) {
           // extra calculation for testing purposes
           const wipDone = batch.items.every( 
-              x => x.history.includes( 
+              x => x.history.find( 
                 y => y.key === stp.key && y.good === true ) );
           phaseSets[index].allClear = wipDone;
             

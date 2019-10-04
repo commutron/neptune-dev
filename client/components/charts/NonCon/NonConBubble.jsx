@@ -10,40 +10,37 @@ import {
 //import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
 
-const NonConBubble = ({ ncOp, flow, flowAlt, nonCons, app })=> {
+const NonConBubble = ({ ncOp, nonCons, app })=> {
   
   const [ series, seriesSet ] = useState([]);
-    
+  const [ typeNum, typeNumSet ] = useState(1);
   
   useEffect( ()=> {
     const nonConOptions = ncOp || [];
     
-    const nonConArray = nonCons || [];
-    const nonConArrayClean = nonConArray.filter( x => !x.trash );
-    
     function ncCounter(ncArray, ncOptions, appPhases) {
-      
-      let splitByPhase = [];
-      
+    
       const phasesSet = new Set(appPhases);
-      for(let phase of phasesSet) {
+      
+      const splitByPhase = [...phasesSet].map( (phase, index)=> {
         let match = ncArray.filter( y => y.where === phase );
-        splitByPhase.push({
+        return{
           'phase': phase,
           'pNC': match
-        });
-      }
+        };
+      });
       let leftover = ncArray.filter( z => phasesSet.has(z.where) === false );
       splitByPhase.unshift({ 'phase': 'other', 'pNC': leftover });
       
       Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(splitByPhase);
       
       let ncCounts = [];
-      
+      let typeSet = new Set();
       for(let ncSet of splitByPhase) {
         for(let ncType of ncOptions) {
           const typeCount = ncSet.pNC.filter( x => x.type === ncType ).length;
           if(typeCount > 0) {
+            typeSet.add(ncType);
             ncCounts.push({
               x: ncSet.phase,
               y: ncType,
@@ -52,12 +49,13 @@ const NonConBubble = ({ ncOp, flow, flowAlt, nonCons, app })=> {
           }
         }
       }
+      typeNumSet([...typeSet].length);
       return ncCounts;
     }
     
     try{
       const appPhases = app.phases;
-      let calc = ncCounter(nonConArrayClean, nonConOptions, appPhases);
+      let calc = ncCounter(nonCons, nonConOptions, appPhases);
       seriesSet(calc);
     }catch(err) {
       console.log(err);
@@ -65,15 +63,15 @@ const NonConBubble = ({ ncOp, flow, flowAlt, nonCons, app })=> {
   }, []);
           
 
-    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(series);
+    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({series, typeNum});
     
   return(
     <div className='chartNoHeightContain'>
       <VictoryChart
         theme={Theme.NeptuneVictory}
-        padding={{top: 20, right: 20, bottom: 20, left: 100}}
-        domainPadding={25}
-        height={25 + ( series.length * 15 )}
+        padding={{top: 10, right: 20, bottom: 20, left: 100}}
+        domainPadding={20}
+        height={50 + ( typeNum * 15 )}
       >
         <VictoryAxis
           style={ {

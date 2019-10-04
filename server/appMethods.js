@@ -739,7 +739,7 @@ Meteor.methods({
     if(typeof accessKey === 'string') {
       const currentCache = CacheDB.findOne({orgKey: accessKey, dataName:'priorityRank'});
       if(force || !currentCache || (currentCache && moment().isAfter(currentCache.lastUpdated, 'hour')) ) {
-        const batches = BatchDB.find({orgKey: accessKey}).fetch();
+        const batches = BatchDB.find({orgKey: accessKey, live: true}).fetch();
         const slim = batches.map( x => {
           return Meteor.call('priorityRank', x._id, clientTZ, accessKey);
         });

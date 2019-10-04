@@ -13,24 +13,40 @@ const TimeBudgetsChunk = ({
   totalUnits,
 }) =>	{
   
-  const totalST = ()=> {
+  const totalSTbyPeople = ()=> {
     let totalTime = 0;
-    let totalPeople = new Set();
+    let peopleTime = [];
+    let usersNice = [];
     if(!b.tide) {
       null;
     }else{
-      for(let bl of b.tide) {
-        const mStart = moment(bl.startTime);
-        const mStop = !bl.stopTime ? moment() : moment(bl.stopTime);
-        const block = Math.round( 
-          moment.duration(mStop.diff(mStart)).asMinutes() );
-        totalTime = totalTime + block;
-        totalPeople.add(bl.who);
+      const usersGrab = Array.from(b.tide, x => x.who );
+      usersNice = [...new Set(usersGrab)];
+      
+      for(let ul of usersNice) {
+        let userTime = 0;
+        const userTide = b.tide.filter( x => x.who === ul );
+        for(let bl of userTide) {
+          const mStart = moment(bl.startTime);
+          const mStop = !bl.stopTime ? moment() : moment(bl.stopTime);
+          const block = Math.round( 
+            moment.duration(mStop.diff(mStart)).asMinutes() );
+          totalTime = totalTime + block;
+          userTime = userTime + block;
+        }
+        peopleTime.push({
+          uID: ul,
+          uTime: userTime
+        });
       }
     }
-    return { totalTime, totalPeople };
+    return { totalTime, peopleTime };
   };
-  const totalsCalc = totalST();
+  
+  const proto = Roles.userIsInRole(Meteor.userId(), 'nightly');
+  
+  const totalsCalc = proto ? totalSTbyPeople() : undefined;
+
   const asHours = (mnts) => moment.duration(mnts, "minutes").asHours().toFixed(2, 10);
 
   const qtBready = !b.quoteTimeBudget ? false : true;
@@ -60,7 +76,7 @@ const TimeBudgetsChunk = ({
     totalOverMinutes
   });
 
-  const totalPeople = [...totalsCalc.totalPeople];
+  const totalPeople = totalsCalc.peopleTime;
   const tP = totalPeople.length;
 
   
@@ -69,31 +85,28 @@ const TimeBudgetsChunk = ({
       <div className='space aFrameContainer'>
         
         <div className='avOneContent big'>
-          <p className='medBig'>Total time recorded with Start-Stop:</p>
-          <p>sum of time blocks, each rounded to their nearest minute</p>
           {!moment(b.createdAt).isAfter(a.tideWall) && 
             <p className='orangeT'>{` ** This ${Pref.batch} was created before \n
               Start-Stop was enacted. Totals may not be acurate`} 
             </p>}
-          <hr />
         </div>
         
         <div className='avTwoContent numFont'>
           <TimeBudgetBar a={totalTideMinutes} b={totalLeftMinutes} c={totalOverMinutes} />
           <p
             className='bigger' 
-            title={`${totalQuoteMinutes} minutes\n(aka ${totalQuoteAsHours} hours)\nQuoted`}
-          >{totalQuoteMinutes} <i className='med'>minutes budgeted</i>
+            title={`${Math.round(totalQuoteMinutes)} minutes\nQuoted`}
+          >{totalQuoteAsHours} <i className='med'>hours budgeted</i>
           </p>
           <p 
             className='bigger' 
-            title={`${totalTideMinutes} minutes\n(aka ${totalTideAsHours} hours)\nLogged`}
-          >{totalTideMinutes} <i className='med'>minutes logged</i>
+            title={`${Math.round(totalTideMinutes)} minutes\nLogged`}
+          >{totalTideAsHours} <i className='med'>hours logged</i>
           </p>
           <p 
             className='bigger' 
-            title={`${bufferNice} minutes\n(aka ${bufferAsHours} hours)\n${bufferMessage}`}
-          >{bufferNice} <i className='med'>minutes {bufferMessage}</i>
+            title={`${Math.round(bufferNice)} minutes\n${bufferMessage}`}
+          >{bufferAsHours} <i className='med'>hours {bufferMessage}</i>
           </p>
           
           <div className='vmargin'>
@@ -111,7 +124,13 @@ const TimeBudgetsChunk = ({
           </p>
           <ul>
             {totalPeople.map((per, ix)=>{
-              return( <li key={ix}><UserNice id={per} /></li> );
+              return( 
+                <li 
+                  key={ix}
+                  title={`${per.uTime} minutes`}
+                ><i className='big'><UserNice id={per.uID} /></i>
+                <i className='grayT'> {asHours(per.uTime)} hours</i></li> 
+              );
             })}
           </ul>
         </div>
@@ -121,6 +140,8 @@ const TimeBudgetsChunk = ({
       
       <details className='footnotes'>
         <summary>Calculation Details</summary>
+        <p>Total time recorded with Start-Stop</p>
+        <p className='footnote'>Sum of time blocks are each rounded to their nearest minute</p>
         <p className='footnote'>
           {`Quoted time is the latest available time set
            --before the ${Pref.batch} is finished--`} 

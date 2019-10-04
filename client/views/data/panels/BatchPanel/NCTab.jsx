@@ -11,6 +11,7 @@ import { TodayNonCon } from '/client/components/bigUi/NonConMiniTops.jsx';
 import { LeftFxNonCon } from '/client/components/bigUi/NonConMiniTops.jsx';
 import { LeftInNonCon } from '/client/components/bigUi/NonConMiniTops.jsx';
 import NonConStatusPie from '/client/components/charts/NonCon/NonConStatusPie.jsx';
+import TabsLite from '/client/components/bigUi/Tabs/TabsLite.jsx';
 import NonConBubble from '/client/components/charts/NonCon/NonConBubble.jsx';
 import NonConBar from '/client/components/charts/NonCon/NonConBar.jsx';
 import NonConBarRefs from '/client/components/charts/NonCon/NonConBarRefs.jsx';
@@ -35,17 +36,20 @@ const NCTab = ({
     return flatTypeList;
   };
   const ncOptions = ncTypesComboFlat();
+  
+  const nonConArray = b.nonCon || [];
+  const nonConArrayClean = nonConArray.filter( x => !x.trash );
 
   return(
-    <div className='vFrameContainer space'>
-      <div className='avOneContent min300 centreSelf'>
+    <div className='oneTwoThreeContainer space'>
+      <div className='oneThirdContent min300 centreSelf'>
         <div className='wide centreRow'>  
           <TodayNonCon noncons={b.nonCon} />
           <LeftFxNonCon noncons={b.nonCon} />
           <LeftInNonCon noncons={b.nonCon} />
         </div>
         
-        <NonConStatusPie nonCons={b.nonCon} />
+        <NonConStatusPie nonCons={nonConArrayClean} />
         
         <div className='wide centreRow'>
           <HasNonCon noncons={b.nonCon} items={b.items} />
@@ -53,7 +57,7 @@ const NCTab = ({
           <MostNonCon noncons={b.nonCon} app={a} />
         </div>
       </div>
-      <div className='avTwoContent'>
+      <div className='twoThirdsContent'>
       
         <NonConRate 
           batches={[b.batch]}
@@ -61,35 +65,36 @@ const NCTab = ({
           lineColor='rgb(231, 76, 60)' />
           
       </div>
-      <div className='avThreeContent'>
-      
-        <NonConBar
-          ncOp={ncOptions}
-          flow={riverFlow}
-          flowAlt={riverAltFlow}
-          nonCons={b.nonCon}
-          app={a} />
+      <div className='threeThirdsContent'>
         
-        <br />
+        <TabsLite 
+          tabs={ [ 
+            <i className="fas fa-chart-bar fa-lg fa-fw"></i>,
+            <i className="fas fa-braille fa-lg fa-fw"></i>,
+            <i className="fas fa-chess-board fa-lg fa-fw"></i>,
+          ] }
+          names={[ 
+            'type bars', 'type bubbles', 'referance bars' 
+          ]}>
+          
+          <NonConBar
+            ncOp={ncOptions}
+            nonCons={nonConArrayClean}
+            app={a} />
         
-        {Roles.userIsInRole(Meteor.userId(), 'nightly') &&
           <NonConBubble
+            ncOp={ncOptions}
+            nonCons={nonConArrayClean}
+            app={a} />
+        
+          <NonConBarRefs
             ncOp={ncOptions}
             flow={riverFlow}
             flowAlt={riverAltFlow}
-            nonCons={b.nonCon}
+            nonCons={nonConArrayClean}
             app={a} />
-        }
-        
-        <br />
-        
-        <NonConBarRefs
-          ncOp={ncOptions}
-          flow={riverFlow}
-          flowAlt={riverAltFlow}
-          nonCons={b.nonCon}
-          app={a} />
-          
+         
+        </TabsLite>
       </div>
     </div>
     

@@ -28,7 +28,7 @@ const NonConRate = ({ batches, title, lineColor })=> {
           theme={Theme.NeptuneVictory}
           padding={{top: 25, right: 40, bottom: 25, left: 40}}
           scale={{x: "time", y: "linear"}}
-          height={400}
+          height={300}
         >
           <VictoryAxis 
             style={ {

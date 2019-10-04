@@ -79,7 +79,7 @@ export const PrioritySquare = ({ batchID, ptData, app })=> {
       <div className={`${priorityClass} ${overQuote ? 'moreEphasis' : ''}`}>
         <NumStat
           num={pLabel}
-          name={Math.round( ( bffrTime / 1000 ) )}
+          name={Math.round( ( bffrTime / 100 ) )}
           title={`Priority Code "${priorityCode}" \n${overQuote ? 'Over Quote' : ''}`}
           color='whiteT'
           size='big' />

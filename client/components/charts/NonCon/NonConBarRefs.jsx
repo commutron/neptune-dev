@@ -10,72 +10,61 @@ import {
 import Theme from '/client/global/themeV.js';
 import { CalcSpin } from '/client/components/uUi/Spin.jsx';
 
-const NonConBarRefs = ({ ncOp, flow, flowAlt, nonCons, app })=> {
+const NonConBarRefs = ({ ncOp, nonCons, app })=> {
   
   const [ series, seriesSet ] = useState([]);
+  const [ typeNum, typeNumSet ] = useState(false);
   
   useEffect( ()=> {
+    const uniqueRefs =  new Set( Array.from(nonCons, x => x.ref) );
+    
+    const splitByRef = [...uniqueRefs].map( (ref, index)=> {
+      let match = nonCons.filter( y => y.ref === ref );
+      return{
+        'name': ref,
+        'ncs': match
+      };
+    });
+    
     const nonConOptions = ncOp || [];
     
-    const nonConArray = nonCons || [];
-    const nonConArrayClean = nonConArray.filter( x => !x.trash );
-    
-    function ncCounter(ncArray, ncOptions) {
-    
-      let splitByRef = [];
-  
-      const uniqueRefs = new Set( Array.from(ncArray, x => x.ref) );
-      for(let ref of uniqueRefs) {
-        let match = ncArray.filter( y => y.ref === ref );
-        splitByRef.push({
-          'name': ref,
-          'ncs': match
-        });
-      }
-    
-      let splitByType = [];
-      for(let ref of splitByRef) {
-        let type = [];
-        for(let n of ncOptions) {
-          let typeCount = ref.ncs.filter( x => x.type === n ).length;
-          if(typeCount > 0) {
-            type.push({
-              x: n,
-              y: typeCount,
-              l: ref.name,
-            });
-          }
+    let splitByType = [];
+    let typeSet = new Set();
+    for(let ref of splitByRef) {
+      let type = [];
+      for(let n of nonConOptions) {
+        const typeCount = ref.ncs.filter( x => x.type === n ).length;
+        if(typeCount > 0) {
+          typeSet.add(n);
+          type.push({
+            x: n,
+            y: typeCount,
+            l: ref.name,
+          });
         }
-        splitByType.push(type);
       }
-      return splitByType;
+      splitByType.push(type);
     }
-  
-    try{
-      let calc = ncCounter(nonConArrayClean, nonConOptions);
-      seriesSet( calc );
-    }catch(err) {
-      console.log(err);
-    }
+    typeNumSet([...typeSet].length);
+    seriesSet( splitByType );
   }, []);
 
-    Roles.userIsInRole(Meteor.userId(), 'debug') && 
-      console.log(series);
+    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({series, typeNum});
 
-  if(!series) {
+  if(!typeNum) {
     return(
       <CalcSpin />
     );
   }
-
+  
   return(
     <div className='chartNoHeightContain'>
 
       <VictoryChart
         theme={Theme.NeptuneVictory}
-        padding={{top: 20, right: 20, bottom: 20, left: 100}}
-        domainPadding={{x: 10, y: 40}}
-        height={10 + ( series.length * 5 )}
+        padding={{top: 10, right: 20, bottom: 20, left: 100}}
+        domainPadding={20}
+        height={50 + ( typeNum * 15 )}
       >
         <VictoryAxis
           dependentAxis
@@ -120,9 +109,10 @@ const NonConBarRefs = ({ ncOp, flow, flowAlt, nonCons, app })=> {
                 labels={(l) => `${l.l}`}
                 labelComponent={
                   <VictoryTooltip
-                    style={{ fontSize: '7px', padding: 2 }}
+                    orientation='top'
+                    style={{ fontSize: '8px', padding: 4 }}
                   />}
-                barWidth={10}
+                barWidth={5}
               />
           )}
         })}

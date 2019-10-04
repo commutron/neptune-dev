@@ -21,7 +21,7 @@ moment.updateLocale('en', {
       6: null
   },// including lunch breaks!
   shippinghours: { 0: null, 1: null,
-    2: ['11:00:00', '11:30:00'], 3: null, 4: ['11:00:00', '11:30:00'],
+    2: ['11:30:00', '11:30:00'], 3: null, 4: ['11:30:00', '11:30:00'],
   5: null, 6: null }
 });
 
