@@ -2,6 +2,23 @@ import moment from 'moment';
 import timezone from 'moment-timezone';
 import business from 'moment-business';
 
+
+export function whatIsBatch(keyword) {
+  const batch = BatchDB.findOne({batch: keyword});
+  const widget = WidgetDB.findOne({_id: batch.widgetId});
+  const version = widget.versions.find( x => x.versionKey === batch.versionKey);
+  const group = GroupDB.findOne({_id: widget.groupId});
+  const nice = `${group.alias.toUpperCase()} ${widget.widget.toUpperCase()} v.${version.version}`;
+  return nice;
+}
+export function whatIsBatchX(keyword) {
+  const batch = XBatchDB.findOne({batch: keyword});
+  const widget = WidgetDB.findOne({_id: batch.widgetId});
+  const version = widget.versions.find( x => x.versionKey === batch.versionKey);
+  const group = GroupDB.findOne({_id: batch.groupId});
+  const nice = `${group.alias.toUpperCase()} ${widget.widget.toUpperCase()} v.${version.version}`;
+  return nice;
+}
 /*
 function getBatch(batchNum) {  
   return new Promise(resolve => { 
@@ -52,15 +69,11 @@ Meteor.methods({
   },
   
   getBasicBatchInfo(keyword) {
-    const batch = BatchDB.findOne({batch: keyword});
-    const widget = WidgetDB.findOne({_id: batch.widgetId});
-    const version = widget.versions.find( x => x.versionKey === batch.versionKey);
-    const group = GroupDB.findOne({_id: widget.groupId});
-    const nice = {
+    const niceObj = {
       batch: keyword, 
-      isWhat: `${group.alias.toUpperCase()} ${widget.widget.toUpperCase()} v.${version.version}`
+      isWhat: whatIsBatch(keyword)
     };
-    return nice;
+    return niceObj;
   },
   
   serialLookup(orb) {

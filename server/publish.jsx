@@ -188,7 +188,7 @@ Meteor.publish('shaddowData', function(clientTZ){
           'orgKey': 0
         }}),
       ];
-  }
+    }
 });
 
 // production
@@ -268,9 +268,15 @@ Meteor.publish('hotDataPlus', function(batch){
 });
 
 // Explore
-Meteor.publish('skinnyData', function(){
+Meteor.publish('skinnyData', function(clientTZ){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
+  Meteor.defer( ()=>{
+    Meteor.call('batchCacheUpdate', orgKey);
+  });
+  Meteor.defer( ()=>{
+    Meteor.call('priorityCacheUpdate', orgKey, clientTZ);
+  });
   if(!this.userId){
     return this.ready();
   }else{
@@ -310,9 +316,13 @@ Meteor.publish('skinnyData', function(){
             'salesOrder': 1,
             'completed': 1,
             'completedAt': 1
-          }})
+          }}),
+          
+      CacheDB.find({orgKey: orgKey}, {
+        fields: {
+          'orgKey': 0
+        }}),
       ];
-
     }
 });
 

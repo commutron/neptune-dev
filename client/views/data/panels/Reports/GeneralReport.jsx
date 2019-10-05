@@ -5,7 +5,7 @@ import { CalcSpin } from '/client/components/uUi/Spin.jsx';
 //import BestWorstBatch from '/client/components/bigUi/BestWorstBatch.jsx';
 // import PopularWidget from '/client/components/charts/PopularWidget.jsx'; 
 import ReportRequest from '/client/components/forms/ReportRequest.jsx'; 
-import ReportBasicTable from '/client/components/tables/ReportBasicTable.jsx'; 
+import ReportStatsTable from '/client/components/tables/ReportStatsTable.jsx'; 
 
 export default class Reports extends Component {
   
@@ -115,6 +115,7 @@ export default class Reports extends Component {
       <div className='overscroll'>
         <div className='centre wide space noPrint'>
         
+          
           <h2>Generate Basic Report</h2>
           
           <ReportRequest 
@@ -151,7 +152,10 @@ export default class Reports extends Component {
             <CalcSpin />
           </div>
         :
-          <ReportBasicTable title='Basic Report' rows={this.state.replyData} />
+          <ReportStatsTable 
+            title='basic report' 
+            dateString={`${this.state.start}to${this.state.end}`}
+            rows={this.state.replyData} />
         }
         
       

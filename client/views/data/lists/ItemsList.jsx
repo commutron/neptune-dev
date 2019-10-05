@@ -195,7 +195,8 @@ const ItemsList = ({ batchData, widgetData })=> {
     let scrapList = [];
     items.map( (entry)=>{
       for(let v of entry.history) {
-        v.type === 'scrap' ? scrapList.push(entry.serial) : null;
+        v.type === 'scrap' && v.good === true ? 
+        scrapList.push(entry.serial) : null;
       }
     });
     let iList = [];

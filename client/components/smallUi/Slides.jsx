@@ -13,7 +13,7 @@ const Slides = (props)=> {
     
   return (
     <div className='slidesLayout'>
-      <div className='slidesMenu'>
+      <div className='slidesMenu noPrint'>
         {menu.map( (entry, index)=>{
           let clss =  show === index ? 'slideMenuButton slideOn' : 'slideMenuButton slideOff';
           return (

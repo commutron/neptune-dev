@@ -9,76 +9,40 @@ import TideEditWrap from '/client/components/tide/TideEditWrap.jsx';
 
 const ActivityPanel = ({ orb, bolt, app, user, users, bCache })=> {
   
-  const [yearNum, setYearNum] = useState(moment().weekYear());
-  const [weekNum, setWeekNum] = useState(moment().week());
-  const [backwardLock, setBacklock] = useState(false);
-  const [forwardLock, setForlock] = useState(true);
-  
+  const [weekChoice, setWeekChoice] = useState(false);
   const [weekData, setWeekData] = useState(false);
   
   function getData(fresh) {
     fresh && setWeekData(false);
-    Meteor.call('fetchSelfTideActivity', yearNum, weekNum, (err, rtn)=>{
-	    err && console.log(err);
-	    const cronoTimes = rtn.sort((x1, x2)=> {
-                          if (x1.startTime < x2.startTime) { return 1 }
-                          if (x1.startTime > x2.startTime) { return -1 }
-                          return 0;
-                        });
-      setWeekData(cronoTimes);
-	  });
-  }
-  
-  useEffect(() => {
-    getData(true);
-    yearNum === moment().weekYear() && weekNum === moment().week() ?
-      setForlock(true) : setForlock(false);
-    yearNum === moment(app.tideWall || app.createdAt).weekYear() && 
-    weekNum === moment(app.tideWall || app.createdAt).week() ?
-      setBacklock(true) : setBacklock(false);
-    
-    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(weekData);
-  }, [yearNum, weekNum]);
-  
-  function tickWeek(direction) {
-    const yearNow = yearNum;
-    const weekNow = weekNum;
-    
-    if( direction === 'down' ) {
-      if( weekNow > 1 ) {
-        setWeekNum( weekNow - 1 );
-      }else{
-        setYearNum( yearNow - 1 );
-        setWeekNum( moment(yearNow - 1, 'YYYY').weeksInYear() );
-      }
-    }else if( direction === 'up') {
-      if( weekNow < moment(yearNow, 'YYYY').weeksInYear() ) {
-        setWeekNum( weekNow + 1 );
-      }else{
-        setYearNum( yearNow + 1 );
-        setWeekNum( 1 );
-      }
-    }else if( direction === 'now') {
-      setYearNum(moment().weekYear());
-      setWeekNum(moment().week());
-    }else{
-      setYearNum(moment(app.tideWall || app.createdAt).weekYear());
-      setWeekNum(moment(app.tideWall || app.createdAt).week());
+    if(weekChoice) {
+      const yearNum = weekChoice.yearNum;
+      const weekNum = weekChoice.weekNum;
+      Meteor.call('fetchSelfTideActivity', yearNum, weekNum, (err, rtn)=>{
+  	    err && console.log(err);
+  	    const cronoTimes = rtn.sort((x1, x2)=> {
+                            if (x1.startTime < x2.startTime) { return 1 }
+                            if (x1.startTime > x2.startTime) { return -1 }
+                            return 0;
+                          });
+        setWeekData(cronoTimes);
+  	  });
     }
   }
   
-  // console.log(yearNum);
-  // console.log(weekNum);
-
+  function getBack(response) {
+    setWeekChoice(response);
+  }
+  
+  useEffect( ()=>{
+    getData(true);
+  }, [weekChoice]);
+    
   return(
     <div className='invert overscroll'>
       <div className='med line2x'>
         <WeekBrowse
-          weekNum={weekNum}
-          yearNum={yearNum}
-          tickWeek={(i)=>tickWeek(i)}
-          backwardLock={backwardLock}
-          forwardLock={forwardLock}
+          sendUp={(i)=>getBack(i)}
+          app={app}
         />
       </div>
       {!weekData ?

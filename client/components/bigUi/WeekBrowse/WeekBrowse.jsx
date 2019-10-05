@@ -1,7 +1,56 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import moment from 'moment';
+import 'moment-timezone';
 import "./style.css";
 
-const WeekBrowse = ({ yearNum, weekNum, tickWeek, backwardLock, forwardLock })=> (
+const WeekBrowse = ({ sendUp, app })=> {
+  
+  const [yearNum, setYearNum] = useState(moment().weekYear());
+  const [weekNum, setWeekNum] = useState(moment().week());
+  const [backwardLock, setBacklock] = useState(false);
+  const [forwardLock, setForlock] = useState(true);
+  
+  function tickWeek(direction) {
+    const yearNow = yearNum;
+    const weekNow = weekNum;
+    
+    if( direction === 'down' ) {
+      if( weekNow > 1 ) {
+        setWeekNum( weekNow - 1 );
+      }else{
+        setYearNum( yearNow - 1 );
+        setWeekNum( moment(yearNow - 1, 'YYYY').weeksInYear() );
+      }
+    }else if( direction === 'up') {
+      if( weekNow < moment(yearNow, 'YYYY').weeksInYear() ) {
+        setWeekNum( weekNow + 1 );
+      }else{
+        setYearNum( yearNow + 1 );
+        setWeekNum( 1 );
+      }
+    }else if( direction === 'now') {
+      setYearNum(moment().weekYear());
+      setWeekNum(moment().week());
+    }else{
+      setYearNum(moment(app.tideWall || app.createdAt).weekYear());
+      setWeekNum(moment(app.tideWall || app.createdAt).week());
+    }
+  }
+  
+  useEffect(() => {
+    yearNum === moment().weekYear() && weekNum === moment().week() ?
+      setForlock(true) : setForlock(false);
+    yearNum === moment(app.tideWall || app.createdAt).weekYear() && 
+    weekNum === moment(app.tideWall || app.createdAt).week() ?
+      setBacklock(true) : setBacklock(false);
+  
+    sendUp({ yearNum, weekNum });
+    
+    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(weekData);
+  }, [yearNum, weekNum]);
+  
+  
+  return(
 
   <p>
     <label>
@@ -39,5 +88,6 @@ const WeekBrowse = ({ yearNum, weekNum, tickWeek, backwardLock, forwardLock })=>
     </label>
   </p>
 );
+};
         
 export default WeekBrowse;

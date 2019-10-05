@@ -1236,24 +1236,20 @@ label.qdpplRound {
   line-height: 1.75em;
 }
 
-.reportTable {
-  font-family: 'VarelaLocal';
-  max-width: 750px;
-  background-color: white;
+.chartTableAction {
+  padding: 5px;
+  height: 2rem;
+  font-size: medium;
+  color: black;
+  letter-spacing: 1px;
+	text-transform: capitalize;
+	overflow: hidden;
+	border: 0.5px solid rgba(0,0,0,0.3);
+	background-color: var(--asbestosfade);
 }
-.reportTable td:last-child {
-  text-align: right;
-  border-left-width: 0px;
-  border-left-color: transparent;
-  border-left-style: hidden;
-}
-.reportTable td {
-  padding-right: 50px;
-  padding-left: 50px;
-}
-.reportTable .indent {
-  padding-right: 50px;
-  padding-left: 100px;
+.chartTableAction:hover,
+.chartTableAction:active {
+	background-color: var(--asbestos);
 }
 
 .starfishColour { color: #00bde0; }

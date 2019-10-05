@@ -27,7 +27,7 @@ moment.updateLocale('en', {
 //const now = moment().tz(clientTZ);
 //const isNow = (t)=>{ return ( now.isSame(moment(t), 'day') ) };
 
-function batchTideTime(batchTide) {
+export function batchTideTime(batchTide) {
     
   if(!batchTide) {
     return undefined;

@@ -1,7 +1,6 @@
 import { Random } from 'meteor/random'
 import moment from 'moment';
 
-
 Meteor.startup(function () {  
   // ensureIndex is depreciated 
   // but the new createIndex errors as "not a function"

@@ -1,0 +1,34 @@
+.reportReceipt {
+  font-family: 'VarelaLocal';
+  max-width: 500px;
+  background-color: white;
+}
+.reportReceipt td:last-child {
+  text-align: right;
+  border-left-width: 0px;
+  border-left-color: transparent;
+  border-left-style: hidden;
+}
+.reportReceipt td {
+  padding-right: 50px;
+  padding-left: 50px;
+}
+.reportReceipt .indent {
+  padding-right: 50px;
+  padding-left: 100px;
+}
+
+.reportTable {
+  font-family: 'VarelaLocal';
+  background-color: white;
+}
+.reportTable th {
+  height: 4rem;
+}
+.reportTable th,
+.reportTable td {
+  font-size: 0.9rem;
+  text-align: center;
+  padding-right: 1ch;
+  padding-left: 1ch;
+}

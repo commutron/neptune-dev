@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
+import moment from 'moment';
+import 'moment-timezone';
 import InboxToast from '/client/components/utilities/InboxToast.js';
 //import Pref from '/client/global/pref.js';
 
@@ -64,9 +66,10 @@ export default withTracker( (props) => {
   let user = login ? Meteor.user() : false;
   let org = user ? user.org : false;
   let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
+  const clientTZ = moment.tz.guess();
   const appSub = login ? Meteor.subscribe('appData') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
-  const coldSub = login ? Meteor.subscribe('skinnyData') : false;
+  const coldSub = login ? Meteor.subscribe('skinnyData', clientTZ) : false;
   
   const batchRequest = props.view === 'batch' ? props.request : false;
   let hotSubEx = Meteor.subscribe('hotDataEx', batchRequest);

@@ -6,7 +6,7 @@ import { TraverseWrap } from '/client/layouts/DataExploreLayout.jsx';
 import SearchHelp from './SearchHelp.jsx';
 
 import ExploreLanding from './panels/ExploreLanding.jsx';
-import Reports from './panels/Reports.jsx';
+import ReportsWrap from './panels/Reports/ReportsWrap.jsx';
 import AllGroups from './panels/AllGroups.jsx';
 import AllBatches from './panels/AllBatches.jsx';
 import AllItems from './panels/AllItems.jsx';
@@ -22,7 +22,7 @@ import ScrapPanel from './panels/ScrapPanel.jsx';
 
 import BatchesList from './lists/BatchesList.jsx';
 import ItemsList from './lists/ItemsList.jsx';
-import WidgetsList from './lists/WidgetsList.jsx';
+// import WidgetsList from './lists/WidgetsList.jsx';
 /*
 view: this.props.view,
 request: this.props.request,
@@ -188,7 +188,7 @@ export default class DataViewOps extends Component	{
           base={true}
           invertColor={true}
         >
-          <Reports
+          <ReportsWrap
             batchData={allBatch}
             widgetData={allWidget}
             groupData={allGroup} 
