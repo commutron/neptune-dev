@@ -60,9 +60,10 @@ const CompletedReport = ({ batchData, widgetData, groupData, app })=> {
         typeof x === 'number' && arr + x, 0);
         
       const quantitiesNC = Array.from(wd, x => x[4] );
-      const ncAvg = quantitiesNC.reduce( (arr, x)=>
+      const ncAverage = quantitiesNC.reduce( (arr, x)=>
         typeof x === 'number' && arr + x, 0) / itmQu;
-        
+      const ncAvg = isNaN(ncAverage) ? 0.0 : ncAverage.toFixed(3, 10);
+      
       const early = wd.filter( x => x[7].includes('early') ).length;
       const onTime = wd.filter( x => x[7].includes('on time') ).length;
       const late = wd.filter( x => x[7].includes('late') ).length;
@@ -75,8 +76,8 @@ const CompletedReport = ({ batchData, widgetData, groupData, app })=> {
         ['Completed ' + Pref.batches, woTotal ],
         ['Unique ' + Pref.widgets, wdgUnique ],
         ['Unique Sales Orders', slsUnique ],
-        ['Unique Serialized Items', itmQu ],
-        ['NonCons per Tracked Items', ncAvg ],
+        ['Unique Tracked Items', itmQu ],
+        ['Average NonCon Rate', ncAvg ],
         ['Fulfilled Early', early ],
         ['Fulfilled On Time', onTime ],
         ['Fulfilled Late', late ],

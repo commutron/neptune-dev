@@ -151,7 +151,7 @@ function collectPriority(privateKey, batchID, clientTZ) {
       
       const now = moment().tz(clientTZ);
       const endDay = moment.tz(b.end, clientTZ);
-      const lateLate = now.isAfter(endDay);
+      const lateLate = now.clone().isAfter(endDay);
       
       const shipTime = endDay.isShipDay() ? 
         endDay.nextShippingTime() : endDay.lastShippingTime();
@@ -268,7 +268,7 @@ function collectNonCon(privateKey, batchID, temp) {
         x.inspect === false && ( x.skip === false || x.snooze === true )
       ).length;
       // nc rate
-      const ncRate = nonConTotal / itemQuantity;
+      const ncRate = ( nonConTotal / itemQuantity ).toFixed(1, 10);
       // how many items have nonCons
       const hasNonCon = temp === 'cool' ? 0 :
         [... new Set( Array.from(rNC, x => { return x.serial }) ) ].length;

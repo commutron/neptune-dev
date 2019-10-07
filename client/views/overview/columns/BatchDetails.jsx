@@ -313,7 +313,7 @@ const NonConCounts = ({ batchID, warm, app })=> {
               num={dt.nonConRate}
               name='Noncons per Item'
               title=''
-              color='orangeT'
+              color='redT'
               size='big' />
           </div>
           <div>
