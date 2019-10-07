@@ -68,6 +68,8 @@ moment.updateLocale('en', {
       const describe = whatIsBatch(batchNum);
       const salesOrder = gf.salesOrder;
       const itemQuantity = gf.items.length;
+      const ncQuantity = gf.nonCon.filter( n => !n.trash );
+      const ncRate = ncQuantity / itemQuantity;
       const salesEnd = moment(gf.end).tz(clientTZ).format('L');
       const finishedAt = moment(gf.finishedAt).tz(clientTZ).format('L');
       // duration between finish and fulfill
@@ -86,7 +88,7 @@ moment.updateLocale('en', {
       
       batchMetrics.push([
         batchNum, describe, 
-        salesOrder, itemQuantity,
+        salesOrder, itemQuantity, ncRate,
         salesEnd, finishedAt, 
         onTime, overQuote
       ]);
@@ -104,7 +106,9 @@ moment.updateLocale('en', {
       const batchNum = gf.batch;
       const describe = whatIsBatchX(batchNum);
       const salesOrder = gf.salesOrder;
-      const itemQuantity = 0;
+      const itemQuantity = gf.quantity;
+      const ncQuantity = gf.nonconformaces.length;
+      const ncRate = ncQuantity / itemQuantity;
       const salesEnd = moment(gf.salesEnd).tz(clientTZ).format('L');
       const completedAt = moment(gf.completedAt).tz(clientTZ).format('L');
       // duration between finish and fulfill
@@ -124,7 +128,7 @@ moment.updateLocale('en', {
       
       batchMetrics.push([
         batchNum, describe, 
-        salesOrder, itemQuantity,
+        salesOrder, itemQuantity, ncRate,
         salesEnd, completedAt, 
         onTime, overQuote
       ]);

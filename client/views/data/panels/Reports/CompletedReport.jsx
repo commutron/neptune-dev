@@ -30,7 +30,7 @@ const CompletedReport = ({ batchData, widgetData, groupData, app })=> {
                           });
         cronoTimes.unshift([
           Pref.batch, 'description', 
-          'sales order', 'serialized items',
+          'sales order', 'tracked items', 'nonCon rate',
           'due', 'complete', 
           'delivery', 'quote'
         ]);     
@@ -55,23 +55,28 @@ const CompletedReport = ({ batchData, widgetData, groupData, app })=> {
       const wdgUnique = new Set( Array.from(wd, x => x[1] ) ).size -1;
       const slsUnique = new Set( Array.from(wd, x => x[2] ) ).size -1;
       
-      const quantities = Array.from(wd, x => x[3] );
-      const srlQu = quantities.reduce( (arr, x)=>
+      const quantitiesI = Array.from(wd, x => x[3] );
+      const itmQu = quantitiesI.reduce( (arr, x)=>
         typeof x === 'number' && arr + x, 0);
         
-      const early = wd.filter( x => x[6].includes('early') ).length;
-      const onTime = wd.filter( x => x[6].includes('on time') ).length;
-      const late = wd.filter( x => x[6].includes('late') ).length;
+      const quantitiesNC = Array.from(wd, x => x[4] );
+      const ncAvg = quantitiesNC.reduce( (arr, x)=>
+        typeof x === 'number' && arr + x, 0) / itmQu;
+        
+      const early = wd.filter( x => x[7].includes('early') ).length;
+      const onTime = wd.filter( x => x[7].includes('on time') ).length;
+      const late = wd.filter( x => x[7].includes('late') ).length;
       
-      const under = wd.filter( x => x[7].includes('under') ).length;
-      const over = wd.filter( x => x[7].includes('over') ).length;
-      const na = wd.filter( x => x[7].includes('n/a') ).length;
+      const under = wd.filter( x => x[8].includes('under') ).length;
+      const over = wd.filter( x => x[8].includes('over') ).length;
+      const na = wd.filter( x => x[8].includes('n/a') ).length;
       
       let arrange = [
         ['Completed ' + Pref.batches, woTotal ],
         ['Unique ' + Pref.widgets, wdgUnique ],
         ['Unique Sales Orders', slsUnique ],
-        ['Unique Serialized Items', srlQu ],
+        ['Unique Serialized Items', itmQu ],
+        ['NonCons per Tracked Items', ncAvg ],
         ['Fulfilled Early', early ],
         ['Fulfilled On Time', onTime ],
         ['Fulfilled Late', late ],

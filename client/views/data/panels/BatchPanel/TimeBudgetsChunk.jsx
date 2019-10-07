@@ -43,9 +43,9 @@ const TimeBudgetsChunk = ({
     return { totalTime, peopleTime };
   };
   
-  const proto = Roles.userIsInRole(Meteor.userId(), 'nightly');
+  //const proto = Roles.userIsInRole(Meteor.userId(), 'nightly');
   
-  const totalsCalc = proto ? totalSTbyPeople() : undefined;
+  const totalsCalc = totalSTbyPeople();
 
   const asHours = (mnts) => moment.duration(mnts, "minutes").asHours().toFixed(2, 10);
 

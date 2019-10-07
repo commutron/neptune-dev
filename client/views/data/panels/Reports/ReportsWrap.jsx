@@ -13,18 +13,18 @@ const ReportsWrap = ({ batchData, widgetData, groupData, app })=> (
       
     <Slides
       menu={[
-        <b><i className='fas fa-umbrella fa-fw'></i>   General</b>,
         <b><i className='fas fa-flag-checkered fa-fw'></i>   Completed</b>,
+        <b><i className='fas fa-umbrella fa-fw'></i>   General</b>,
        
       ]}>
       
-      <GeneralReport
+      <CompletedReport
         batchData={batchData}
         widgetData={widgetData}
         groupData={groupData} 
         app={app} />
-      
-      <CompletedReport
+        
+      <GeneralReport
         batchData={batchData}
         widgetData={widgetData}
         groupData={groupData} 

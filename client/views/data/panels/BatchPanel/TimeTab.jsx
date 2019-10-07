@@ -17,6 +17,7 @@ const TimeTab = ({
 }) =>	{
 
   const proto = Roles.userIsInRole(Meteor.userId(), 'nightly');
+  const pSup = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
 
 ///////////////////////////////////////
     let allthetimes = [];
@@ -83,7 +84,7 @@ const TimeTab = ({
         <ProgLayerBurndownExplain />
       </div>
       
-      {proto &&
+      {( pSup || proto ) &&
         <div className='vmargin space'>
           <TimeBlocksRaw tide={b.tide} />
         </div>

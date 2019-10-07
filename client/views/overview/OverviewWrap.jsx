@@ -186,8 +186,7 @@ const OverviewWrap = (props)=> {
               <option value='batch'>{Pref.batch}</option>
               <option value='sales'>{Pref.salesOrder}</option>
               <option value='due'>{Pref.end}</option>
-              {Roles.userIsInRole(Meteor.userId(), 'nightly') &&
-                <option value='priority'>priority</option>}
+              <option value='priority'>priority</option>
             </select>
           </span>
           <span className='flexSpace' />

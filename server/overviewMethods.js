@@ -267,6 +267,8 @@ function collectNonCon(privateKey, batchID, temp) {
       const nonConLeft = rNC.filter( x => 
         x.inspect === false && ( x.skip === false || x.snooze === true )
       ).length;
+      // nc rate
+      const ncRate = nonConTotal / itemQuantity;
       // how many items have nonCons
       const hasNonCon = temp === 'cool' ? 0 :
         [... new Set( Array.from(rNC, x => { return x.serial }) ) ].length;
@@ -286,6 +288,7 @@ function collectNonCon(privateKey, batchID, temp) {
         batch: b.batch,
         batchID: b._id,
         nonConTotal: nonConTotal,
+        nonConRate: ncRate,
         nonConLeft: nonConLeft,
         percentOfNCitems: isNaN(percentOfNCitems) ? '0%' : percentOfNCitems + '%',
         itemIsScrap: itemIsScrap,

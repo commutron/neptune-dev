@@ -310,6 +310,14 @@ const NonConCounts = ({ batchID, warm, app })=> {
           </div>
           <div>
             <NumStat
+              num={dt.nonConRate}
+              name='Noncons per Item'
+              title=''
+              color='orangeT'
+              size='big' />
+          </div>
+          <div>
+            <NumStat
               num={dt.percentOfNCitems}
               name='of Items have noncons'
               title=''
@@ -338,7 +346,7 @@ const NonConCounts = ({ batchID, warm, app })=> {
   
   return(
     <Fragment>
-      {['total nc', 'unresolved nc', '% of items', 'scrap', 'rma']
+      {['total nc', 'unresolved nc', 'per item', '% of items', 'scrap', 'rma']
         .map( (nc, index)=>{
           return(
             <div key={batchID + nc + index + 'x'}>
