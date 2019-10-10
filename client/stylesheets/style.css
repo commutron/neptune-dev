@@ -1124,7 +1124,7 @@ label.qdpplRound {
   border-color: rgba(0,0,0,0.2);
 }
 
-/* timeline */
+/* timeline
 .timelineList {
   margin: 10px;
   width: 90%;
@@ -1200,6 +1200,7 @@ label.qdpplRound {
   height: 10px;
   width: 100%;
 }
+*/
 
 .waterfallHistory {
   margin: 2vh 0;
@@ -1235,6 +1236,21 @@ label.qdpplRound {
   font-size: 1em;
   line-height: 1.75em;
 }
+
+.liteToolOn, 
+.liteToolOff {
+  padding: 5px;
+  line-height: 1.5;
+  font-size: medium;
+  color: black;
+  letter-spacing: 1px;
+	text-transform: capitalize;
+	overflow: hidden;
+	border: 0.5px solid rgb(0,0,0);
+}
+.liteToolOn { background-color: var(--asbestos); }
+.liteToolOff { background-color: var(--asbestosfade); }
+.liteToolOff:hover { background-color: var(--asbestos); }
 
 .chartTableAction {
   padding: 5px;

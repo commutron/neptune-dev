@@ -61,8 +61,8 @@ const CompletedReport = ({ batchData, widgetData, groupData, app })=> {
         
       const quantitiesNC = Array.from(wd, x => x[4] );
       const ncAverage = quantitiesNC.reduce( (arr, x)=>
-        typeof x === 'number' && arr + x, 0) / itmQu;
-      const ncAvg = isNaN(ncAverage) ? 0.0 : ncAverage.toFixed(3, 10);
+        typeof x === 'number' && arr + x, 0) / woTotal;
+      const ncAvg = isNaN(ncAverage) ? 0.0 : ncAverage.toFixed(1, 10);
       
       const early = wd.filter( x => x[7].includes('early') ).length;
       const onTime = wd.filter( x => x[7].includes('on time') ).length;

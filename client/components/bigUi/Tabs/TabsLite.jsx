@@ -9,7 +9,7 @@ const TabsLite = ({ tabs, names, children })=> {
     <div>
       <div className='liteTabs flexRR'>
         {tabs.map( (entry, index)=>{
-          let clss =  show === index ? 'litetabOn' : 'litetabOff';
+          let clss =  show === index ? 'liteToolOn' : 'liteToolOff';
           return (
             <button
               key={index}

@@ -257,13 +257,11 @@ main {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.homeIconLink {
-  width: 100%;
-  height: 100%;
+.homeIconLink, .homeIconLogo {
+  width: 10vh;
+  height: 10vh;
 }
 .homeIconLogo {
-  width: 100%;
-  height: 100%;
   padding: 1vh;
 }
 .homeIconLogo:hover, .homeIconLogo:active {
@@ -674,6 +672,8 @@ main {
 
 .big { font-size: 1.5rem; }
 
+.bigbig { font-size: 1.65rem; }
+
 .bigger { font-size: 1.75rem; }
 
 .biggest { font-size: 2rem; }
@@ -905,9 +905,13 @@ button.numberSet {
   overflow-y: hidden !important;
   overflow-x: hidden !important;
 }
-.overviewNav {
+.overviewNav { /* depreciate */
   grid-area: overviewNav;
   background-color: rgb(27,27,27);
+}
+.overviewToolbar {
+  grid-area: overviewNav;
+  background-color: rgb(50,50,50);
 }
 .overviewContent {
   grid-area: overviewContent;
@@ -926,6 +930,17 @@ button.numberSet {
   border-color: transparent;
   color: white;
 }
+.overToolSort {
+  min-height: calc(2vh);
+  /*height: 3vh;
+  font-size: 1rem;
+  line-height: 1.1;*/
+  text-indent: 0px;
+  width: 12.5ch;
+  /*background-color: transparent;
+  border-color: transparent;
+  color: white;*/
+}
 .overlistSort option {
   color: black;
 }
@@ -934,7 +949,7 @@ button.numberSet {
 
 .overGridFrame {
   display: grid;
-  grid-template-columns: minmax(min-content, 30vw) auto;
+  grid-template-columns: minmax(min-content, 25vw) auto;
   grid-template-areas: 
     'overFixedArea overScrollArea';
   /*background-color: var(--clouds);*/

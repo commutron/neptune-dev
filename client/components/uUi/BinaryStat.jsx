@@ -15,11 +15,11 @@ import React from 'react';
     wordWrap: 'keep-all'
   };
  
-const BinaryStat = ({ good, name, title, size }) => {
+const BinaryStat = ({ good, name, title, size, onIcon, offIcon }) => {
   if(good == true) {
     return(
       <div style={sty} title={title}>
-        <i className={"far fa-check-square greenT " + size}></i>
+        <i className={`${onIcon || 'fas fa-circle'} greenT ${size}`}></i>
         <br />
         <i style={sSty}>{name}</i>
       </div>
@@ -27,7 +27,7 @@ const BinaryStat = ({ good, name, title, size }) => {
   }else{
     return(
       <div style={sty} title={title}>
-        <i className={"far fa-times-circle yellowT " + size}></i>
+        <i className={`${offIcon || 'far fa-circle'} grayT ${size}`}></i>
         <br />
         <i style={sSty}>{name}</i>
       </div>

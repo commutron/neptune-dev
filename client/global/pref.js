@@ -12,7 +12,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '1.22.1';
+    this.neptuneVersion = '1.22.2';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -80,6 +80,7 @@ class Pref {
     this.tag = 'flag';
     this.comp = 'part';
     this.kit = 'kit';
+    this.kitting = 'kitting';
     this.release = 'release';
     this.ship = 'ship';
     // build tracking
@@ -155,6 +156,7 @@ class Pref {
     this.counts = 'ticks';
     
     //global time
+    this.tide = 'start-stop';
     this.statisticalStartHour = 6; // 6am
     this.statisticalEndHour = 20; // 8pm
     //this.minWorkDayStartTime

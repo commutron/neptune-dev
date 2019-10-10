@@ -118,6 +118,11 @@ function collectStatus(privateKey, batchID, clientTZ) {
       const itemQuantity = b.items.length;
       // River Setup
       const riverChosen = b.river !== false;
+      // indie active check
+      const tide = b.tide || [];
+      const isActive = tide.find( x => 
+        now.isSame(moment(x.startTime).tz(clientTZ), 'day')
+      ) ? true : false;
       // what percent of items are complete
       // const percentOfDoneItems = temp === 'cool' ? 0 : 
       //   (( b.items.filter( x => x.finishedAt !== false )
@@ -130,8 +135,9 @@ function collectStatus(privateKey, batchID, clientTZ) {
         batchID: b._id,
         // timeElapse: timeElapse,
         weekDaysRemain: timeRemain,
-        riverChosen: riverChosen,
         itemQuantity: itemQuantity,
+        riverChosen: riverChosen,
+        isActive: isActive
       };
       
       resolve(collection);
