@@ -1100,6 +1100,10 @@ label.qdpplRound {
   font-size: 2em;
 }
 
+.spin2 {
+  animation: spinAround 2s infinite linear;
+}
+
 .searchResult {
   max-width: 500px;
   text-align: center;
@@ -1250,7 +1254,7 @@ label.qdpplRound {
 }
 .liteToolOn { background-color: var(--asbestos); }
 .liteToolOff { background-color: var(--asbestosfade); }
-.liteToolOff:hover { background-color: var(--asbestos); }
+.liteToolOff:active { background-color: var(--asbestos); }
 
 .chartTableAction {
   padding: 5px;

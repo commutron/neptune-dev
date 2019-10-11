@@ -21,7 +21,7 @@ const BinaryStat = ({ good, name, title, size, onIcon, offIcon }) => {
       <div style={sty} title={title}>
         <i className={`${onIcon || 'fas fa-circle'} greenT ${size}`}></i>
         <br />
-        <i style={sSty}>{name}</i>
+        <i style={sSty} className='label'>{name}</i>
       </div>
     );
   }else{
@@ -29,7 +29,7 @@ const BinaryStat = ({ good, name, title, size, onIcon, offIcon }) => {
       <div style={sty} title={title}>
         <i className={`${offIcon || 'far fa-circle'} grayT ${size}`}></i>
         <br />
-        <i style={sSty}>{name}</i>
+        <i style={sSty} className='label'>{name}</i>
       </div>
     );
   }

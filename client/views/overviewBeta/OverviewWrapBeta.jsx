@@ -33,10 +33,11 @@ function useInterval(callback, delay) {
 
 const OverviewWrap = ({ b, bx, bCache, pCache, user, clientTZ, app })=> {
 
-  const [ working, workingSet ] = useState( true );
+  const [ working, workingSet ] = useState( false );
   const [ loadTime, loadTimeSet ] = useState( moment() );
   const [ tickingTime, tickingTimeSet ] = useState( moment() );
   const [ sortBy, sortBySet ] = useState('batch');
+  const [ dense, denseSet ] = useState(true);
   const [ liveState, liveSet ] = useState(false);
   
   useEffect( ()=> {
@@ -53,9 +54,12 @@ const OverviewWrap = ({ b, bx, bCache, pCache, user, clientTZ, app })=> {
   }
   
   function forceRefresh() {
+    workingSet( true );
     loadTimeSet( false );
     loadTimeSet( moment() );
-    Meteor.call('FORCEcacheUpdate', clientTZ);
+    Meteor.call('FORCEcacheUpdate', clientTZ, ()=>{
+      workingSet( false );
+    });
   }
   
   function sortInitial() {
@@ -101,16 +105,17 @@ const OverviewWrap = ({ b, bx, bCache, pCache, user, clientTZ, app })=> {
       }
       
       liveSet( orderedBatches );
-      
     });
   }
    
   const duration = moment.duration(
     loadTime.diff(tickingTime))
       .humanize();
+      
+  
   
   if(!liveState) {
-    return (
+    return(
       <div className='centreContainer'>
         <div className='centrecentre'>
           <Spin />
@@ -134,7 +139,7 @@ const OverviewWrap = ({ b, bx, bCache, pCache, user, clientTZ, app })=> {
             <button
               type='button'
               title='Refresh Information'
-              className={working ? 'spin' : ''}
+              className={working ? 'spin2' : ''}
               onClick={(e)=>forceRefresh()}>
             <i className='fas fa-sync-alt primeRightIcon'></i>
             </button>
@@ -157,18 +162,29 @@ const OverviewWrap = ({ b, bx, bCache, pCache, user, clientTZ, app })=> {
               <option value='priority'>priority</option>
             </select>
           </span>
+          
+          <span>
+            <button
+              key='denseOnOff'
+              title='toggle dense view'
+              onClick={()=>denseSet(!dense)}
+              className={dense ? 'liteToolOn' : 'liteToolOff'}
+            >mini</button>
+          </span>
+          
           <span className='flexSpace' />
           <span>Updated {duration} ago</span>
         </nav>
           
         <div className='overviewContent forceScrollStyle' tabIndex='0'>
         
-          <div className='overGridFrame'>
+          <div className={`overGridFrame ${dense ? 'dense' : ''}`}>
       
             <BatchHeaders
               key='fancylist0'
               oB={liveState}
               bCache={bCache}
+              dense={dense}
             />
             
             <BatchDetails
@@ -179,6 +195,7 @@ const OverviewWrap = ({ b, bx, bCache, pCache, user, clientTZ, app })=> {
               user={user}
               clientTZ={clientTZ}
               app={app}
+              dense={dense}
             />
               
           </div>

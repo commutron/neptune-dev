@@ -140,7 +140,6 @@ const TimeBudgetsChunk = ({
       
       <details className='footnotes'>
         <summary>Calculation Details</summary>
-        <p>Total time recorded with Start-Stop</p>
         <p className='footnote'>Sum of time blocks are each rounded to their nearest minute</p>
         <p className='footnote'>
           {`Quoted time is the latest available time set

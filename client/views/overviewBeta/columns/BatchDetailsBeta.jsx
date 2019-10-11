@@ -10,13 +10,28 @@ import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 const BatchDetails = ({
   oB,
   bCache, pCache, 
-  user, clientTZ, app
+  user, clientTZ, app, dense
 })=> {
   
+  const statusCols = ['remaining', 'priority', 'items quantity', 'flow', 'released', 'active'];
+  const ncCols = ['NC total', 'NC unresolved', 'NC per item', '% of NC items', 'scrap', 'RMA'];
+  
   return(
-    <div className='overGridScroll' tabIndex='1'>
+    <div className={`overGridScroll ${dense ? 'dense' : ''}`} tabIndex='1'>
       
       <div className='overGridRowScrollHeader'></div>
+      
+      {!dense ? null :
+        <div className='overGridRowScroll'>
+          {['SO', 'due',...statusCols,...app.phases,...ncCols, 'watch']
+            .map( (entry, index)=>{
+              return(
+                <div key={entry+index}>
+                  <i className='cap ovColhead'>{entry}</i>
+                </div>
+        )})}
+        </div>
+      }
       
       {!oB ? null :
         oB.map( (entry, index)=>{
@@ -28,7 +43,9 @@ const BatchDetails = ({
               user={user}
               clientTZ={clientTZ}
               pCache={pCache}
-              app={app} />
+              app={app}
+              statusCols={statusCols}
+              ncCols={ncCols} />
       )})}
       
     </div>
@@ -38,25 +55,34 @@ const BatchDetails = ({
 export default BatchDetails;
 
 
-const BatchDetailChunk = ({ sindex, ck, user, clientTZ, pCache, app})=> {
+const BatchDetailChunk = ({ sindex, ck, user, clientTZ, pCache, app, statusCols, ncCols})=> {
   
   const releasedToFloor = Array.isArray(ck.releases) ?
     ck.releases.findIndex( x => x.type === 'floorRelease') >= 0 :
     typeof ck.floorRelease === 'object';
-
+  
+  const dueDate = moment(ck.salesEnd || ck.end);
+  const adaptDate = dueDate.isAfter(moment(), 'year') ?
+                    "MMM Do, YYYY" : "MMM Do";
+  
   return(
     <div className='overGridRowScroll' title={ck.batch}>
       {Roles.userIsInRole(Meteor.userId(), 'debug') && 
         <div><b>{ck.batch}</b></div> }
-      <div><i>SO: {ck.salesOrder}</i></div>
-      <div><i>Due {moment(ck.salesEnd || ck.end).format("MMM Do, YYYY")}</i></div>
+      <div>
+        <i><i className='label'>SO:<br /></i>{ck.salesOrder}</i>
+      </div>
+      <div>
+        <i><i className='label'>Due:<br /></i>{dueDate.format(adaptDate)}</i>
+      </div>
       
       <BatchTopStatus
         batchID={ck._id}
         releasedToFloor={releasedToFloor}
         clientTZ={clientTZ}
         pCache={pCache}
-        app={app} />
+        app={app}
+        statusCols={statusCols} />
     
       <PhaseProgress
         batchID={ck._id}
@@ -66,7 +92,8 @@ const BatchDetailChunk = ({ sindex, ck, user, clientTZ, pCache, app})=> {
       <NonConCounts
         batchID={ck._id}
         releasedToFloor={releasedToFloor}
-        app={app} />
+        app={app}
+        ncCols={ncCols} />
         
       <div>
         <WatchButton 
@@ -80,7 +107,7 @@ const BatchDetailChunk = ({ sindex, ck, user, clientTZ, pCache, app})=> {
   );
 };
 
-const BatchTopStatus = ({ batchID, releasedToFloor, clientTZ, pCache, app })=> {
+const BatchTopStatus = ({ batchID, releasedToFloor, clientTZ, pCache, app, statusCols })=> {
   
   const [ stData, setStatus ] = useState(false);
   
@@ -141,7 +168,7 @@ const BatchTopStatus = ({ batchID, releasedToFloor, clientTZ, pCache, app })=> {
           <BinaryStat
             good={dt.riverChosen}
             name='Flow'
-            title='A Process Flow has been assigned'
+            title='Has had a Process Flow assigned'
             size=''
             onIcon='far fa-check-circle fa-2x' 
             offIcon='far fa-times-circle fa-2x' />
@@ -159,11 +186,11 @@ const BatchTopStatus = ({ batchID, releasedToFloor, clientTZ, pCache, app })=> {
           <BinaryStat
             good={dt.isActive}
             name='Active'
-            title={`Has been ${Pref.tide} activity today`}
+            title={`Has had ${Pref.tide} activity today`}
             size=''
             onIcon='fas fa-running fa-2x' 
             offIcon='far fa-pause-circle fa-2x' />
-            {/*onIcon='fas fa-shoe-prints' />*/}
+            {/*fas fa-shoe-prints*/}
         </div>
       </Fragment>
     );
@@ -171,12 +198,11 @@ const BatchTopStatus = ({ batchID, releasedToFloor, clientTZ, pCache, app })=> {
   
   return(
     <Fragment>
-      {[/*'duration',*/ 'remaining', 'priority', '# of items', 'flow', 'released', 'active']
-        .map( (st, index)=>{
-          return(
-            <div key={batchID + st + index + 'x'}>
-              <i className='fade small'>{st}</i>
-            </div>
+      {statusCols.map( (st, index)=>{
+        return(
+          <div key={batchID + st + index + 'x'}>
+            <i className='fade small label'>{st}</i>
+          </div>
       )})}
     </Fragment>
   );
@@ -199,7 +225,6 @@ const PhaseProgress = ({ batchID, releasedToFloor, app })=> {
   }, [batchID]);
   
   const dt = progData;
-    
  
   if(releasedToFloor !== false && dt && dt.batchID === batchID) {
     return(
@@ -208,7 +233,7 @@ const PhaseProgress = ({ batchID, releasedToFloor, app })=> {
           if(phase.steps.length === 0) {
             return(
               <div key={batchID + phase + index + 'x'}>
-               <i className='fade small'>{phase.phase}</i>
+               <i className='fade small label'>{phase.phase}</i>
               </div>
             );
           }else{
@@ -252,7 +277,7 @@ const PhaseProgress = ({ batchID, releasedToFloor, app })=> {
       {app.phases.map( (phase, index)=>{
         return(
           <div key={batchID + phase + index + 'z'}>
-            <i className='fade small'>{phase}</i>
+            <i className='fade small label'>{phase}</i>
           </div>
       )})}
     </Fragment>
@@ -262,7 +287,7 @@ const PhaseProgress = ({ batchID, releasedToFloor, app })=> {
 
 ////////////////////////////////////
 
-const NonConCounts = ({ batchID, releasedToFloor, app })=> {
+const NonConCounts = ({ batchID, releasedToFloor, app, ncCols })=> {
   
   const [ ncData, setNC ] = useState(false);
   
@@ -337,12 +362,11 @@ const NonConCounts = ({ batchID, releasedToFloor, app })=> {
   
   return(
     <Fragment>
-      {['total nc', 'unresolved nc', 'per item', '% of items', 'scrap', 'rma']
-        .map( (nc, index)=>{
-          return(
-            <div key={batchID + nc + index + 'x'}>
-              <i className='fade small'>{nc}</i>
-            </div>
+      {ncCols.map( (nc, index)=>{
+        return(
+          <div key={batchID + nc + index + 'x'}>
+            <i className='fade small label'>{nc}</i>
+          </div>
       )})}
     </Fragment>
   );

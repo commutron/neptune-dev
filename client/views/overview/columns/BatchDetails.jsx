@@ -173,7 +173,9 @@ const BatchTopStatus = ({ batchID, clientTZ, pCache, app })=> {
             good={dt.riverChosen}
             name='Flow Assigned'
             title='A Process Flow has been assigned'
-            size='big' />
+            size='big' 
+            onIcon='far fa-check-circle fa-2x' 
+            offIcon='far fa-times-circle fa-2x' />
         </div>
       </Fragment>
     );

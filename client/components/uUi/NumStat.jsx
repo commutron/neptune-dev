@@ -24,7 +24,7 @@ const NumStat = ({ num, name, title, color, size }) => (
   <div style={sty} title={title}>
     <i style={bSty} className={color + ' numFont ' + size}>{num}</i>
     <br />
-    <i style={sSty}>{name}</i>
+    <i style={sSty} className='label'>{name}</i>
   </div>
 );
 
