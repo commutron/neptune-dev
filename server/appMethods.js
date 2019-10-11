@@ -720,7 +720,8 @@ Meteor.methods({
       const currentCache = CacheDB.findOne({orgKey: accessKey, dataName:'batchInfo'});
       if(force || !currentCache || (currentCache && moment().isAfter(currentCache.lastUpdated, 'hour')) ) {
         const batches = BatchDB.find({orgKey: accessKey}).fetch();
-        const slim = batches.map( x => {
+        const batchesX = XBatchDB.find({orgKey: accessKey}).fetch();
+        const slim = [...batches,...batchesX].map( x => {
           return Meteor.call('getBasicBatchInfo', x.batch);
         });
         CacheDB.upsert({orgKey: accessKey, dataName: 'batchInfo'}, {

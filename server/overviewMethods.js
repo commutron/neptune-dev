@@ -98,26 +98,38 @@ function collectActive(accessKey, clientTZ, relevant) {
 function collectStatus(privateKey, batchID, clientTZ) {
   return new Promise(resolve => {
     let collection = false;
-    const b = BatchDB.findOne({_id: batchID});
-    if(!b) {
+    
+    const bx = XBatchDB.findOne({_id: batchID});
+    const b = !bx ? BatchDB.findOne({_id: batchID}) : {};
+    
+    const now = moment().tz(clientTZ);
+    
+    if(bx) {
+      let complete = bx.completed; // is it done
+      let salesEnd = moment.tz(bx.salesEnd, clientTZ); // when is it due
+      let timeRemain = !complete ? 
+        business.weekDays( now, salesEnd ) : 0; // how long until due
+      
+      collection = {
+        batch: bx.batch,
+        batchID: bx._id,
+        weekDaysRemain: timeRemain,
+        itemQuantity: bx.quantity,
+        riverChosen: false,
+        isActive: false
+      };
+      
       resolve(collection);
-    }else{
-      const now = moment().tz(clientTZ);
-      // is it done
-      const complete = b.finishedAt !== false;
-      // when did it start
-      // const salesStart = moment.tz(b.start, clientTZ);
-      // when is it due
-      const salesEnd = moment.tz(b.end, clientTZ);
-      // how long since start
-      // const timeElapse = moment.duration(now.diff(salesStart)).humanize();
-      // how long untill due
-      const timeRemain = !complete ? business.weekDays( now, salesEnd ) : 0;
+      
+    }else if(b) {
+      let complete = b.finishedAt !== false; // is it done
+      let salesEnd = moment.tz(b.end, clientTZ); // when is it due
+      let timeRemain = !complete ? 
+        business.weekDays( now, salesEnd ) : 0; // how long until due
       // const timeRemain = !complete ? salesEnd.workingDiff(now, 'days') : 0;
-      // how many items
-      const itemQuantity = b.items.length;
-      // River Setup
-      const riverChosen = b.river !== false;
+      
+      let itemQuantity = b.items.length; // how many items
+      const riverChosen = b.river !== false; // River Setup
       // indie active check
       const tide = b.tide || [];
       const isActive = tide.find( x => 
@@ -127,9 +139,7 @@ function collectStatus(privateKey, batchID, clientTZ) {
       // const percentOfDoneItems = temp === 'cool' ? 0 : 
       //   (( b.items.filter( x => x.finishedAt !== false )
       //     .length / itemQuantity) * 100 ).toFixed(0);
-      
-      //////////////////////////////////
-     
+
       collection = {
         batch: b.batch,
         batchID: b._id,
@@ -140,6 +150,9 @@ function collectStatus(privateKey, batchID, clientTZ) {
         isActive: isActive
       };
       
+      resolve(collection);
+      
+    }else{
       resolve(collection);
     }
   });

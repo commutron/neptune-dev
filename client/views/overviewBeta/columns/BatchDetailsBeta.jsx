@@ -1,6 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import moment from 'moment';
-import 'moment-timezone';
 import Pref from '/client/global/pref.js';
 import NumStat from '/client/components/uUi/NumStat.jsx';
 import PrioritySquareData from '/client/components/bigUi/PrioritySquare.jsx';
@@ -9,59 +8,23 @@ import BinaryStat from '/client/components/uUi/BinaryStat.jsx';
 import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
 const BatchDetails = ({
-  hB, lB, cB, 
-  hBs, lBs, cBs, 
+  oB,
   bCache, pCache, 
-  user, app
+  user, clientTZ, app
 })=> {
-  
-  const clientTZ = moment.tz.guess();
   
   return(
     <div className='overGridScroll' tabIndex='1'>
       
       <div className='overGridRowScrollHeader'></div>
       
-      {!hB ? null :
-        hB.map( (entry, index)=>{
+      {!oB ? null :
+        oB.map( (entry, index)=>{
           return(
             <BatchDetailChunk
-              key={`${entry.batchID}hot${index}`}
+              key={`${entry.batchID}live${index}`}
               sindex={index}
               ck={entry}
-              warm={true}
-              user={user}
-              clientTZ={clientTZ}
-              pCache={pCache}
-              app={app} />
-      )})}
-      
-      <div className='overGridRowScrollHeader'></div>
-      
-      {!lB ? null :
-        lB.map( (entry, index)=>{
-          return(
-            <BatchDetailChunk
-              key={`${entry.batchID}luke${index}`}
-              sindex={index}
-              ck={entry}
-              warm={true}
-              user={user}
-              clientTZ={clientTZ}
-              pCache={pCache}
-              app={app} />
-      )})}
-      
-      <div className='overGridRowScrollHeader'></div>
-      
-      {!cB ? null :
-        cB.map( (entry, index)=>{
-          return(
-            <BatchDetailChunk 
-              key={`${entry.batchID}cool${index}`}
-              sindex={index}
-              ck={entry}
-              warm={false}
               user={user}
               clientTZ={clientTZ}
               pCache={pCache}
@@ -69,52 +32,55 @@ const BatchDetails = ({
       )})}
       
     </div>
-  
   );
 };
 
 export default BatchDetails;
 
 
-const BatchDetailChunk = ({ sindex, ck, warm, user, clientTZ, pCache, app})=> {
+const BatchDetailChunk = ({ sindex, ck, user, clientTZ, pCache, app})=> {
   
+  const releasedToFloor = Array.isArray(ck.releases) ?
+    ck.releases.findIndex( x => x.type === 'floorRelease') >= 0 :
+    typeof ck.floorRelease === 'object';
+
   return(
-
-  <div className='overGridRowScroll' title={ck.batch}>
-    {Roles.userIsInRole(Meteor.userId(), 'debug') && 
-      <div><b>{ck.batch}</b></div> }
-    <div><i>SO: {ck.salesOrder}</i></div>
-    <div><i>Due {moment(ck.end).format("MMM Do, YYYY")}</i></div>
-    
-    <BatchTopStatus
-      batchID={ck._id}
-      batchData={ck}
-      clientTZ={clientTZ}
-      pCache={pCache}
-      app={app} />
-    
-    <PhaseProgress
-      batchID={ck._id}
-      warm={warm}
-      app={app} />
+    <div className='overGridRowScroll' title={ck.batch}>
+      {Roles.userIsInRole(Meteor.userId(), 'debug') && 
+        <div><b>{ck.batch}</b></div> }
+      <div><i>SO: {ck.salesOrder}</i></div>
+      <div><i>Due {moment(ck.salesEnd || ck.end).format("MMM Do, YYYY")}</i></div>
       
-    <NonConCounts
-      batchID={ck._id}
-      warm={warm}
-      app={app} />
-      
-    <div>
-      <WatchButton 
-        list={user.watchlist}
-        type='batch'
-        keyword={ck.batch}
-        unique={`watch=${ck.batch}`}
-        iconOnly={true} />
+      <BatchTopStatus
+        batchID={ck._id}
+        releasedToFloor={releasedToFloor}
+        clientTZ={clientTZ}
+        pCache={pCache}
+        app={app} />
+    
+      <PhaseProgress
+        batchID={ck._id}
+        releasedToFloor={releasedToFloor}
+        app={app} />
+        
+      <NonConCounts
+        batchID={ck._id}
+        releasedToFloor={releasedToFloor}
+        app={app} />
+        
+      <div>
+        <WatchButton 
+          list={user.watchlist}
+          type='batch'
+          keyword={ck.batch}
+          unique={`watch=${ck.batch}`}
+          iconOnly={true} />
+      </div>
     </div>
-  </div>
-)};
+  );
+};
 
-const BatchTopStatus = ({ batchID, batchData, clientTZ, pCache, app })=> {
+const BatchTopStatus = ({ batchID, releasedToFloor, clientTZ, pCache, app })=> {
   
   const [ stData, setStatus ] = useState(false);
   
@@ -127,9 +93,6 @@ const BatchTopStatus = ({ batchID, batchData, clientTZ, pCache, app })=> {
       }
     });
   }, [batchID]);
-  
-  const ck = batchData;
-  const releasedToFloor = typeof ck.floorRelease === 'object';
   
   const dt = stData;
   const pt = pCache.dataSet.find( x => x.batchID === batchID );
@@ -172,7 +135,7 @@ const BatchTopStatus = ({ batchID, batchData, clientTZ, pCache, app })=> {
             name='Total Boards'
             title=''
             color='blueT'
-            size='medBig' />
+            size='big' />
         </div>
         <div>
           <BinaryStat
@@ -199,7 +162,7 @@ const BatchTopStatus = ({ batchID, batchData, clientTZ, pCache, app })=> {
             title={`Has been ${Pref.tide} activity today`}
             size=''
             onIcon='fas fa-running fa-2x' 
-            offIcon='fas fa-hourglass-half fa-2x' />
+            offIcon='far fa-pause-circle fa-2x' />
             {/*onIcon='fas fa-shoe-prints' />*/}
         </div>
       </Fragment>
@@ -208,7 +171,7 @@ const BatchTopStatus = ({ batchID, batchData, clientTZ, pCache, app })=> {
   
   return(
     <Fragment>
-      {[/*'duration',*/ 'remaining', 'priority', '# of items', 'flow']
+      {[/*'duration',*/ 'remaining', 'priority', '# of items', 'flow', 'released', 'active']
         .map( (st, index)=>{
           return(
             <div key={batchID + st + index + 'x'}>
@@ -221,7 +184,7 @@ const BatchTopStatus = ({ batchID, batchData, clientTZ, pCache, app })=> {
 
 /////////////////////////////////////////////
 
-const PhaseProgress = ({ batchID, warm, app })=> {
+const PhaseProgress = ({ batchID, releasedToFloor, app })=> {
   
   const [ progData, setProg ] = useState(false);
   
@@ -238,7 +201,7 @@ const PhaseProgress = ({ batchID, warm, app })=> {
   const dt = progData;
     
  
-  if(warm !== false && dt && dt.batchID === batchID) {
+  if(releasedToFloor !== false && dt && dt.batchID === batchID) {
     return(
       <Fragment>
         {dt.phaseSets.map( (phase, index)=>{
@@ -299,24 +262,25 @@ const PhaseProgress = ({ batchID, warm, app })=> {
 
 ////////////////////////////////////
 
-const NonConCounts = ({ batchID, warm, app })=> {
+const NonConCounts = ({ batchID, releasedToFloor, app })=> {
   
   const [ ncData, setNC ] = useState(false);
   
   useEffect( ()=> {
-    const temp = !warm ? 'cool' : 'warm';
-    Meteor.call('nonconQuickStats', batchID, temp, (error, reply)=>{
-      error && console.log(error);
-      if( reply ) { 
-        setNC( reply );
-        Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(ncData);
-      }
-    });
+    if(!releasedToFloor) { null }else{
+      Meteor.call('nonconQuickStats', batchID, 'warm', (error, reply)=>{
+        error && console.log(error);
+        if( reply ) { 
+          setNC( reply );
+          Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(ncData);
+        }
+      });
+    }
   }, [batchID]);
   
   const dt = ncData;
     
-  if(warm !== false && dt && dt.batchID === batchID) {
+  if(releasedToFloor && dt && dt.batchID === batchID) {
     return(
       <Fragment>
         <div>

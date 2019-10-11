@@ -31,27 +31,18 @@ function useInterval(callback, delay) {
   }, [delay]);
 }
 
-const OverviewWrap = ({ b, bx, bCache, pCache, user, app })=> {
+const OverviewWrap = ({ b, bx, bCache, pCache, user, clientTZ, app })=> {
 
-  const [ working, workingSet ] = useState( false );
+  const [ working, workingSet ] = useState( true );
   const [ loadTime, loadTimeSet ] = useState( moment() );
   const [ tickingTime, tickingTimeSet ] = useState( moment() );
   const [ sortBy, sortBySet ] = useState('batch');
-  const [ hotState, hotSet ] = useState(false);
-  const [ warmState, warmSet ] = useState(false);
-  const [ lukeState, lukeSet ] = useState(false);
-  const [ coolState, coolSet ] = useState(false);
+  const [ liveState, liveSet ] = useState(false);
   
   useEffect( ()=> {
-    splitInitial();
+    sortInitial();
   }, [sortBy, loadTime]);
-  
-  useEffect( ()=> {
-    if(warmState) {
-      sortHot();
-    }
-  }, [warmState]);
-    
+
   useInterval( ()=> {
     tickingTimeSet( moment() );
   },1000*60);
@@ -64,20 +55,19 @@ const OverviewWrap = ({ b, bx, bCache, pCache, user, app })=> {
   function forceRefresh() {
     loadTimeSet( false );
     loadTimeSet( moment() );
-    const clientTZ = moment.tz.guess();
     Meteor.call('FORCEcacheUpdate', clientTZ);
   }
   
-  function splitInitial() {
+  function sortInitial() {
     return new Promise((resolve) => {
       const batches = b;
-      let warmBatches = [];
-      let coolBatches = [];
+      const batchesX = bx;
       
-      let orderedBatches = batches;
+      let liveBatches = [...batches,...batchesX];
+      let orderedBatches = liveBatches;
       
       if(sortBy === 'priority') {
-        orderedBatches = batches.sort((b1, b2)=> {
+        orderedBatches = liveBatches.sort((b1, b2)=> {
           const pB1 = pCache.dataSet.find( x => x.batchID === b1._id);
           const pB1bf = pB1 ? pB1.estEnd2fillBuffer : 0;
           const pB2 = pCache.dataSet.find( x => x.batchID === b2._id);
@@ -89,61 +79,37 @@ const OverviewWrap = ({ b, bx, bCache, pCache, user, app })=> {
         });
         
       }else if(sortBy === 'sales') {
-        orderedBatches = batches.sort((b1, b2)=> {
+        orderedBatches = liveBatches.sort((b1, b2)=> {
           if (b1.salesOrder < b2.salesOrder) { return 1 }
           if (b1.salesOrder > b2.salesOrder) { return -1 }
           return 0;
         });
       }else if( sortBy === 'due') {
-        orderedBatches = batches.sort((b1, b2)=> {
-          if (b1.end < b2.end) { return -1 }
-          if (b1.end > b2.end) { return 1 }
+        orderedBatches = liveBatches.sort((b1, b2)=> {
+          let endDate1 = b1.salesEnd || b1.end;
+          let endDate2 = b2.salesEnd || b2.end;
+          if (endDate1 < endDate2) { return -1 }
+          if (endDate1 > endDate2) { return 1 }
           return 0;
         });
       }else{
-        orderedBatches = batches.sort((b1, b2)=> {
+        orderedBatches = liveBatches.sort((b1, b2)=> {
           if (b1.batch < b2.batch) { return 1 }
           if (b1.batch > b2.batch) { return -1 }
           return 0;
         });
       }
       
-      warmBatches = orderedBatches.filter( x => typeof x.floorRelease === 'object' );
-      coolBatches = orderedBatches.filter( x => x.floorRelease === false );
+      liveSet( orderedBatches );
       
-      //const batchesX = bx;
-      //const warmBx = batchesX.filter( x => x.releases.find( y => y.type === 'floorRelease') == true );
-      //const warmBx = batchesX.filter( x => x.releases.find( y => y.type === 'floorRelease') != true );
-      
-      warmSet( warmBatches );
-      coolSet( coolBatches );
     });
   }
-  
-  function sortHot() {
-    const clientTZ = moment.tz.guess();
-    Meteor.call('activeCheck', clientTZ, sortBy, (error, reply)=> {
-      error && console.log(error);
-      if(reply) {
-        const hot = warmState.filter( x => reply.includes( x.batch ) === true );
-        const luke = warmState.filter( x => reply.includes( x.batch ) === false );
-        hotSet( hot );
-        lukeSet( luke );
-      }
-    });
-  }
-    
-    //console.log({hot: this.state.hotBatches});
-    //console.log({hotStuff: this.state.hotStatus});
-    //console.log({luke: this.state.lukeBatches});
-    //console.log({lukeStuff: this.state.lukeStatus});
-    //console.log({coolStuff: this.state.coolStatus});
-    
+   
   const duration = moment.duration(
     loadTime.diff(tickingTime))
       .humanize();
   
-  if(!warmState) {
+  if(!liveState) {
     return (
       <div className='centreContainer'>
         <div className='centrecentre'>
@@ -178,7 +144,7 @@ const OverviewWrap = ({ b, bx, bCache, pCache, user, app })=> {
         
         <nav className='scrollToNav overviewToolbar'>
           <span>
-            <i>sort by: </i>
+            <i>sort by:</i>
             <select
               id='sortSelect'
               title='Change List Order'
@@ -201,20 +167,17 @@ const OverviewWrap = ({ b, bx, bCache, pCache, user, app })=> {
       
             <BatchHeaders
               key='fancylist0'
-              hB={hotState}
-              lB={lukeState}
-              cB={coolState}
+              oB={liveState}
               bCache={bCache}
             />
             
             <BatchDetails
               key='fancylist1'
-              hB={hotState}
-              lB={lukeState}
-              cB={coolState}
+              oB={liveState}
               bCache={bCache}
               pCache={pCache}
               user={user}
+              clientTZ={clientTZ}
               app={app}
             />
               

@@ -5,11 +5,15 @@ import business from 'moment-business';
 
 export function whatIsBatch(keyword) {
   const batch = BatchDB.findOne({batch: keyword});
-  const widget = WidgetDB.findOne({_id: batch.widgetId});
-  const version = widget.versions.find( x => x.versionKey === batch.versionKey);
-  const group = GroupDB.findOne({_id: widget.groupId});
-  const nice = `${group.alias.toUpperCase()} ${widget.widget.toUpperCase()} v.${version.version}`;
-  return nice;
+  if(!batch) {
+    return false;
+  }else{
+    const widget = WidgetDB.findOne({_id: batch.widgetId});
+    const version = widget.versions.find( x => x.versionKey === batch.versionKey);
+    const group = GroupDB.findOne({_id: widget.groupId});
+    const nice = `${group.alias.toUpperCase()} ${widget.widget.toUpperCase()} v.${version.version}`;
+    return nice;
+  }
 }
 export function whatIsBatchX(keyword) {
   const batch = XBatchDB.findOne({batch: keyword});
@@ -69,9 +73,10 @@ Meteor.methods({
   },
   
   getBasicBatchInfo(keyword) {
+    const niceString = whatIsBatch(keyword) || whatIsBatchX(keyword);
     const niceObj = {
       batch: keyword, 
-      isWhat: whatIsBatch(keyword)
+      isWhat: niceString
     };
     return niceObj;
   },

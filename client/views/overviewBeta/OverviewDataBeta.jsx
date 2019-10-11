@@ -1,48 +1,49 @@
-import React, {Component} from 'react';
+import React, { useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import moment from 'moment';
 import 'moment-timezone';
-import InboxToast from '/client/components/utilities/InboxToast.js';
+import InboxToastPop from '/client/components/utilities/InboxToastPop.js';
+import usePrevious from '/client/components/utilities/usePreviousHook.js';
 
 import Spin from '../../components/uUi/Spin.jsx';
 import OverviewWrap from './OverviewWrapBeta.jsx';
 
-class View extends Component	{
+const View = ({
+  login, sub, appReady, readyUsers, ready, 
+  username, user, clientTZ, org, app, 
+  batch, batchX, bCache, pCache 
+})=> {
   
-  componentDidUpdate(prevProps) {
-    InboxToast(prevProps, this.props);
-  }
+  const prevUser = usePrevious(user);
+  useLayoutEffect( ()=>{
+    InboxToastPop(prevUser, user);
+  }, [user]);
   
-  render() {
     
-    if(!this.props.appReady || 
-       !this.props.readyUsers || 
-       !this.props.ready || 
-       !this.props.app
-      ) {
-      return (
-        <div className='centreContainer'>
-          <div className='centrecentre'>
-            <Spin />
-          </div>
-        </div>
-      );
-    }
-
+  if( !appReady || !readyUsers || !ready || !app ) {
     return (
-      <OverviewWrap 
-        //g={this.props.group}
-        //w={this.props.widget}
-        b={this.props.batch}
-        bx={this.props.batchX}
-        bCache={this.props.bCache}
-        pCache={this.props.pCache}
-        user={this.props.user}
-        app={this.props.app} />
+      <div className='centreContainer'>
+        <div className='centrecentre'>
+          <Spin />
+        </div>
+      </div>
     );
   }
-}
+
+  return(
+    <OverviewWrap 
+      b={batch}
+      bx={batchX}
+      bCache={bCache}
+      pCache={pCache}
+      user={user}
+      app={app}
+      clientTZ={clientTZ} />
+  );
+};
+
+
 
 export default withTracker( () => {
   let login = Meteor.userId() ? true : false;
@@ -70,10 +71,9 @@ export default withTracker( () => {
       username: name,
       user: user,
       org: org,
+      clientTZ: clientTZ,
       app: AppDB.findOne({org: org}),
-      //group: GroupDB.find().fetch(),
-      //widget: WidgetDB.find().fetch(),
-      batch: BatchDB.find({},{sort: {batch:-1}}).fetch(),
+      batch: BatchDB.find().fetch(),
       batchX: XBatchDB.find().fetch(),
       bCache: CacheDB.findOne({dataName: 'batchInfo'}),
       pCache: CacheDB.findOne({dataName: 'priorityRank'}),
