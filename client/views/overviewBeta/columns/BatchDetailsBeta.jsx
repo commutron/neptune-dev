@@ -14,14 +14,16 @@ const BatchDetails = ({
 })=> {
   
   const statusCols = ['remaining', 'priority', 'items quantity', 'flow', 'released', 'active'];
-  const ncCols = ['NC total', 'NC unresolved', 'NC per item', '% of NC items', 'scrap', 'RMA'];
+  const ncCols = ['NC total', 'NC unresolved', 'NC per item', 'NC items', 'scrap', 'RMA'];
   
   return(
     <div className={`overGridScroll ${dense ? 'dense' : ''}`} tabIndex='1'>
       
-      <div className='overGridRowScrollHeader'></div>
       
-      {!dense ? null :
+      
+      {!dense ? 
+        <div className='overGridRowScrollHeader'></div>
+      :
         <div className='overGridRowScroll'>
           {['SO', 'due',...statusCols,...app.phases,...ncCols, 'watch']
             .map( (entry, index)=>{
@@ -45,7 +47,8 @@ const BatchDetails = ({
               pCache={pCache}
               app={app}
               statusCols={statusCols}
-              ncCols={ncCols} />
+              ncCols={ncCols}
+              dense={dense} />
       )})}
       
     </div>
@@ -55,7 +58,10 @@ const BatchDetails = ({
 export default BatchDetails;
 
 
-const BatchDetailChunk = ({ sindex, ck, user, clientTZ, pCache, app, statusCols, ncCols})=> {
+const BatchDetailChunk = ({ 
+  sindex, ck, user, clientTZ, pCache, app, 
+  statusCols, ncCols, dense
+})=> {
   
   const releasedToFloor = Array.isArray(ck.releases) ?
     ck.releases.findIndex( x => x.type === 'floorRelease') >= 0 :
@@ -82,7 +88,8 @@ const BatchDetailChunk = ({ sindex, ck, user, clientTZ, pCache, app, statusCols,
         clientTZ={clientTZ}
         pCache={pCache}
         app={app}
-        statusCols={statusCols} />
+        statusCols={statusCols}
+        dense={dense} />
     
       <PhaseProgress
         batchID={ck._id}
@@ -107,7 +114,10 @@ const BatchDetailChunk = ({ sindex, ck, user, clientTZ, pCache, app, statusCols,
   );
 };
 
-const BatchTopStatus = ({ batchID, releasedToFloor, clientTZ, pCache, app, statusCols })=> {
+const BatchTopStatus = ({ 
+  batchID, releasedToFloor, clientTZ, pCache, app, 
+  statusCols, dense
+})=> {
   
   const [ stData, setStatus ] = useState(false);
   
@@ -131,7 +141,7 @@ const BatchTopStatus = ({ batchID, releasedToFloor, clientTZ, pCache, app, statu
         {/*<div><i>Created {dt.timeElapse} ago</i></div>*/}
         <div>
           <NumStat
-            num={ Math.abs(dt.weekDaysRemain) }
+            num={ dense ? dt.weekDaysRemain : Math.abs(dt.weekDaysRemain) }
             name={
               dt.weekDaysRemain < 0 ? 
                 dt.weekDaysRemain === -1 ?
@@ -188,9 +198,8 @@ const BatchTopStatus = ({ batchID, releasedToFloor, clientTZ, pCache, app, statu
             name='Active'
             title={`Has had ${Pref.tide} activity today`}
             size=''
-            onIcon='fas fa-running fa-2x' 
+            onIcon='fas fa-shoe-prints fa-2x' 
             offIcon='far fa-pause-circle fa-2x' />
-            {/*fas fa-shoe-prints*/}
         </div>
       </Fragment>
     );
@@ -311,32 +320,32 @@ const NonConCounts = ({ batchID, releasedToFloor, app, ncCols })=> {
         <div>
           <NumStat
             num={dt.nonConTotal}
-            name='Total Noncons'
-            title=''
+            name='NC Total'
+            title='Total Noncons'
             color='redT'
             size='big' />
           </div>
           <div>
             <NumStat
               num={dt.nonConLeft}
-              name='Unresolved Noncons'
-              title=''
+              name='NC Unresolved'
+              title='Unresolved Noncons'
               color='orangeT'
               size='big' />
           </div>
           <div>
             <NumStat
               num={dt.nonConRate}
-              name='Noncons per Item'
-              title=''
+              name='NC per Item'
+              title='Rate of Noncons per Item'
               color='redT'
               size='big' />
           </div>
           <div>
             <NumStat
               num={dt.percentOfNCitems}
-              name='of Items have noncons'
-              title=''
+              name='NC Items'
+              title='Percent of Items with Noncons'
               color='redT'
               size='big' />
           </div>

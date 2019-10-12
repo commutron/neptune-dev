@@ -31,7 +31,7 @@ const CompletedReport = ({ batchData, widgetData, groupData, app })=> {
         cronoTimes.unshift([
           Pref.batch, 'description', 
           'sales order', 'tracked items', 'nonCon rate',
-          'due', 'complete', 
+          'due', 'complete', 'moved fulfill', 
           'delivery', 'quote'
         ]);     
         setWeekData(cronoTimes);
@@ -64,13 +64,18 @@ const CompletedReport = ({ batchData, widgetData, groupData, app })=> {
         typeof x === 'number' && arr + x, 0) / woTotal;
       const ncAvg = isNaN(ncAverage) ? 0.0 : ncAverage.toFixed(1, 10);
       
-      const early = wd.filter( x => x[7].includes('early') ).length;
-      const onTime = wd.filter( x => x[7].includes('on time') ).length;
-      const late = wd.filter( x => x[7].includes('late') ).length;
+      const endAlters = Array.from(wd, x => x[7] );
+      const alterAvg = endAlters.reduce( (arr, x)=>
+        typeof x === 'number' && arr + x, 0) / woTotal;
+      const alAvg = isNaN(alterAvg) ? 0.0 : alterAvg.toFixed(1, 10);
       
-      const under = wd.filter( x => x[8].includes('under') ).length;
-      const over = wd.filter( x => x[8].includes('over') ).length;
-      const na = wd.filter( x => x[8].includes('n/a') ).length;
+      const early = wd.filter( x => x[8].includes('early') ).length;
+      const onTime = wd.filter( x => x[8].includes('on time') ).length;
+      const late = wd.filter( x => x[8].includes('late') ).length;
+      
+      const under = wd.filter( x => x[9].includes('under') ).length;
+      const over = wd.filter( x => x[9].includes('over') ).length;
+      const na = wd.filter( x => x[9].includes('n/a') ).length;
       
       let arrange = [
         ['Completed ' + Pref.batches, woTotal ],
@@ -81,6 +86,7 @@ const CompletedReport = ({ batchData, widgetData, groupData, app })=> {
         ['Fulfilled Early', early ],
         ['Fulfilled On Time', onTime ],
         ['Fulfilled Late', late ],
+        ['Average Moved Fulfill', alAvg ],
         ['Under Quote', under ],
         ['Over Quote', over ],
         ['Quote Times Unavailable', na ],

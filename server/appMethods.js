@@ -712,6 +712,8 @@ Meteor.methods({
       const key = Meteor.user().orgKey;
       Meteor.call('batchCacheUpdate', key, true);
       Meteor.call('priorityCacheUpdate', key, clientTZ, true);
+      if( Roles.userIsInRole(Meteor.userId(), 'nightly') ) {
+        Meteor.call('phaseCacheUpdate', key, true); }
     }
   },
     
@@ -748,6 +750,32 @@ Meteor.methods({
             orgKey: accessKey,
             lastUpdated: new Date(),
             dataName: 'priorityRank',
+            dataSet: slim,
+        }});
+      }
+    }
+  },
+  
+  phaseCacheUpdate(accessKey, force) {
+    if(typeof accessKey === 'string') {
+    // const currentCache = CacheDB.findOne({orgKey: accessKey, dataName:'phaseCondition'});
+    // if(force || !currentCache || (currentCache && moment().isAfter(currentCache.lastUpdated, 'hour')) ) {
+      const hourAgo = moment().subtract(1, 'hour').toISOString();
+      const currentCache = CacheDB.findOne({
+        orgKey: accessKey, 
+        lastUpdated: { $lte: new Date(hourAgo) },
+        dataName:'phaseCondition'});
+      
+      if( force || !currentCache ) {
+        const batches = BatchDB.find({orgKey: accessKey, live: true}).fetch();
+        const slim = batches.map( x => {
+          return Meteor.call('phaseCondition', x._id, accessKey);
+        });
+        CacheDB.upsert({orgKey: accessKey, dataName: 'phaseCondition'}, {
+          $set : { 
+            orgKey: accessKey,
+            lastUpdated: new Date(),
+            dataName: 'phaseCondition',
             dataSet: slim,
         }});
       }

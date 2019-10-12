@@ -70,6 +70,8 @@ moment.updateLocale('en', {
       const itemQuantity = gf.items.length;
       const ncQuantity = gf.nonCon.filter( n => !n.trash ).length;
       const ncRate = ( ncQuantity / itemQuantity ).toFixed(1, 10);
+      const endAlter = !gf.altered ? 'n/a' :
+        gf.altered.filter( a => a.changeKey === 'end' ).length;
       const salesEnd = moment(gf.end).tz(clientTZ).format('L');
       const finishedAt = moment(gf.finishedAt).tz(clientTZ).format('L');
       // duration between finish and fulfill
@@ -89,7 +91,7 @@ moment.updateLocale('en', {
       batchMetrics.push([
         batchNum, describe, 
         salesOrder, itemQuantity, ncRate,
-        salesEnd, finishedAt, 
+        salesEnd, finishedAt, endAlter,
         onTime, overQuote
       ]);
     }
@@ -109,6 +111,7 @@ moment.updateLocale('en', {
       const itemQuantity = gf.quantity;
       const ncQuantity = gf.nonconformaces.length;
       const ncRate = ( ncQuantity / itemQuantity ).toFixed(1, 10);
+      const endAlter = gf.altered.filter( a => a.changeKey === 'salesEnd' ).length;
       const salesEnd = moment(gf.salesEnd).tz(clientTZ).format('L');
       const completedAt = moment(gf.completedAt).tz(clientTZ).format('L');
       // duration between finish and fulfill
@@ -129,7 +132,7 @@ moment.updateLocale('en', {
       batchMetrics.push([
         batchNum, describe, 
         salesOrder, itemQuantity, ncRate,
-        salesEnd, completedAt, 
+        salesEnd, completedAt, endAlter, 
         onTime, overQuote
       ]);
     }

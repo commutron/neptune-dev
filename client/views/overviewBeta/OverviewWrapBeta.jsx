@@ -36,8 +36,8 @@ const OverviewWrap = ({ b, bx, bCache, pCache, user, clientTZ, app })=> {
   const [ working, workingSet ] = useState( false );
   const [ loadTime, loadTimeSet ] = useState( moment() );
   const [ tickingTime, tickingTimeSet ] = useState( moment() );
-  const [ sortBy, sortBySet ] = useState('batch');
-  const [ dense, denseSet ] = useState(true);
+  const [ sortBy, sortBySet ] = useState('priority');
+  const [ dense, denseSet ] = useState(0);
   const [ liveState, liveSet ] = useState(false);
   
   useEffect( ()=> {
@@ -112,7 +112,9 @@ const OverviewWrap = ({ b, bx, bCache, pCache, user, clientTZ, app })=> {
     loadTime.diff(tickingTime))
       .humanize();
       
-  
+  const density = dense === 1 ? 'compact' :
+                  dense === 2 ? 'minifyed' :
+                  '';
   
   if(!liveState) {
     return(
@@ -149,27 +151,39 @@ const OverviewWrap = ({ b, bx, bCache, pCache, user, clientTZ, app })=> {
         
         <nav className='scrollToNav overviewToolbar'>
           <span>
-            <i>sort by:</i>
+            <i className='fas fa-sort-amount-down fa-fw grayT'></i>
             <select
               id='sortSelect'
               title='Change List Order'
-              className='overToolSort liteToolOff'
+              className='overToolSort liteToolOn'
               defaultValue={sortBy}
               onClick={(e)=>changeSort(e)}>
+              <option value='priority'>priority</option>
               <option value='batch'>{Pref.batch}</option>
               <option value='sales'>{Pref.salesOrder}</option>
               <option value='due'>{Pref.end}</option>
-              <option value='priority'>priority</option>
             </select>
           </span>
           
           <span>
             <button
-              key='denseOnOff'
-              title='toggle dense view'
-              onClick={()=>denseSet(!dense)}
-              className={dense ? 'liteToolOn' : 'liteToolOff'}
-            >mini</button>
+              key='denseOff'
+              title='Comfort Layout'
+              onClick={()=>denseSet(0)}
+              className={dense === 0 ? 'liteToolOn' : 'liteToolOff'}
+            ><i className='fas fa-expand-arrows-alt fa-fw'></i></button>
+            <button
+              key='compactOn'
+              title='Compact Layout'
+              onClick={()=>denseSet(1)}
+              className={dense === 1 ? 'liteToolOn' : 'liteToolOff'}
+            ><i className='fas fa-compress fa-fw'></i></button>
+            <button
+              key='miniOn'
+              title='Minifyed Layout'
+              onClick={()=>denseSet(2)}
+              className={dense === 2 ? 'liteToolOn' : 'liteToolOff'}
+            ><i className='fas fa-compress-arrows-alt fa-fw'></i></button>
           </span>
           
           <span className='flexSpace' />
@@ -178,13 +192,13 @@ const OverviewWrap = ({ b, bx, bCache, pCache, user, clientTZ, app })=> {
           
         <div className='overviewContent forceScrollStyle' tabIndex='0'>
         
-          <div className={`overGridFrame ${dense ? 'dense' : ''}`}>
+          <div className={`overGridFrame ${density}`}>
       
             <BatchHeaders
               key='fancylist0'
               oB={liveState}
               bCache={bCache}
-              dense={dense}
+              dense={dense > 1}
             />
             
             <BatchDetails
@@ -195,7 +209,7 @@ const OverviewWrap = ({ b, bx, bCache, pCache, user, clientTZ, app })=> {
               user={user}
               clientTZ={clientTZ}
               app={app}
-              dense={dense}
+              dense={dense > 1}
             />
               
           </div>

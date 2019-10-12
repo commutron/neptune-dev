@@ -8,7 +8,7 @@ import 'flatpickr/dist/themes/airbnb.css';
 import TideEditWrap from '/client/components/tide/TideEditWrap.jsx';
 
 
-const ActivityPanel = ({ orb, bolt, app, user, users, bCache })=> {
+const ActivitySlide = ({ orb, bolt, app, user, users, bCache })=> {
   
   const clientTZ = moment.tz.guess();
   const [dateString, setDateString] = useState(moment().format('YYYY-MM-DD'));
@@ -90,4 +90,4 @@ const ActivityPanel = ({ orb, bolt, app, user, users, bCache })=> {
   );
 };
 
-export default ActivityPanel;
+export default ActivitySlide;

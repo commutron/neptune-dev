@@ -48,8 +48,65 @@ export function batchTideTime(batchTide) {
   }
 }
 
-function collectRelevant(accessKey, temp, activeList, sortBy) {
+function collectPhaseCondition(privateKey, batchID) {
   return new Promise(resolve => {
+    let collection = false;
+    const batch = BatchDB.findOne({_id: batchID});
+    if(!batch) {
+      resolve(collection);
+    }else{
+      const app = AppDB.findOne({orgKey: privateKey});
+      const docW = WidgetDB.findOne({_id: batch.widgetId});
+      const flow = docW.flows.find( x => x.flowKey === batch.river );
+      const riverFlow = flow ? flow.flow : [];
+      const rNC = batch.nonCon.filter( n => 
+        !n.trash && n.inspect === false && n.skip === false );
+      
+      let phaseSets = [];
+      for(let phase of app.phases) {
+        const steps = riverFlow.filter( x => x.phase === phase && x.type !== 'first' );
+        phaseSets.push({
+          phase: phase,
+          steps: steps,
+          condition: false
+        });
+      }
+      
+      phaseSets.map( (phet, index)=> {
+        for(let stp of phet.steps) {
+        // const stp = phet.steps[phet.steps.length-1];
+        
+          const wipDone = batch.items.every( 
+            x => x.history.find( 
+              y => ( y.key === stp.key && y.good === true ) ||
+                   ( y.type === 'scrap' && y.good === true ) 
+          ) );
+          
+          const nonConLeft = rNC.filter( x => 
+            x.where === stp.phase ).length;
+          
+          let condition = !wipDone ? 'stepRemain' :
+                          nonConLeft > 0 ? 'ncRemain' :
+                          'allClear';
+                       
+          phaseSets[index].condition = condition;
+        
+        }
+      });
+ 
+      collection = {
+        batch: batch.batch,
+        batchID: batch._id,
+        phaseSets: phaseSets,
+      };
+      
+      resolve(collection);
+    }
+  });
+}
+
+function collectRelevant(accessKey, temp, activeList, sortBy) {
+  return new Promise(resolve => { // DEPRECIATE
     const liveBatches = 
       sortBy === 'sales' ?
         BatchDB.find({orgKey: accessKey, live: true},{sort: {salesOrder:-1}}).fetch() :
@@ -77,7 +134,7 @@ function collectRelevant(accessKey, temp, activeList, sortBy) {
 }
 
 function collectActive(accessKey, clientTZ, relevant) {
-  return new Promise(resolve => {
+  return new Promise(resolve => { // DEPRECIATE
     
     const now = moment().tz(clientTZ);
     let list = [];
@@ -245,12 +302,12 @@ function collectProgress(privateKey, batchID) {
 
       phaseSets.map( (phet, index)=> {
         for(let stp of phet.steps) {
-          // extra calculation for testing purposes
+        //// extra calculation for testing purposes
           const wipDone = batch.items.every( 
               x => x.history.find( 
                 y => y.key === stp.key && y.good === true ) );
           phaseSets[index].allClear = wipDone;
-            
+        ////
           const wipTally = historyFlat.filter( x => x.key === stp.key ).length;
           phaseSets[index].count = phet.count + doneItems + wipTally;
         }
@@ -377,6 +434,19 @@ Meteor.methods({
     return bundleProgress(batchID);
   },
   
+  phaseCondition(batchID, serverAccessKey) {
+    async function bundleCondition(batchID) {
+      const accessKey = serverAccessKey || Meteor.user().orgKey;
+      try {
+        bundle = await collectPhaseCondition(accessKey, batchID);
+        return bundle;
+      }catch (err) {
+        throw new Meteor.Error(err);
+      }
+    }
+    return bundleCondition(batchID);
+  },
+  
   nonconQuickStats(batchID, temp) {
     async function bundleNonCon(batchID) {
       const accessKey = Meteor.user().orgKey;
@@ -389,6 +459,5 @@ Meteor.methods({
     }
     return bundleNonCon(batchID);
   }
-  
   
 });

@@ -59,15 +59,16 @@
 .finish { background-color: rgba(155, 89, 182, 0.2); }
 
 .genericEvent { background-color: var(--midnightbluefade); }
+.alterEvent { background-color: var(--wetasphaltfade); }
 
 .moreInfoList {
   margin: 0 0 0 75px;
   list-style: circle;
 }
-.moreInfoList li {
+.moreInfoList li, .moreInfoList dd {
   padding: 0.25rem 0;
 }
-.moreInfoList li:last-child {
+.moreInfoList li:last-child, .moreInfoList dd:last-child {
   padding: 0.25rem 0 0.5rem 0;
 }
 

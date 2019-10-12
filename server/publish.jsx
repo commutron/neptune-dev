@@ -120,12 +120,9 @@ Meteor.publish('eventsData', function(){
 Meteor.publish('tideData', function(clientTZ){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  Meteor.defer( ()=>{
-    Meteor.call('batchCacheUpdate', orgKey);
-  });
-  Meteor.defer( ()=>{
-    Meteor.call('priorityCacheUpdate', orgKey, clientTZ);
-  });
+  Meteor.defer( ()=>{ Meteor.call('batchCacheUpdate', orgKey); });
+  Meteor.defer( ()=>{ Meteor.call('priorityCacheUpdate', orgKey, clientTZ); });
+  // Meteor.defer( ()=>{ Meteor.call('phaseCacheUpdate', orgKey); });
   if(!this.userId){
     return this.ready();
   }else{
@@ -147,12 +144,10 @@ Meteor.publish('tideData', function(clientTZ){
 Meteor.publish('shaddowData', function(clientTZ){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  Meteor.defer( ()=>{
-    Meteor.call('batchCacheUpdate', orgKey);
-  });
-  Meteor.defer( ()=>{
-    Meteor.call('priorityCacheUpdate', orgKey, clientTZ);
-  });
+  Meteor.defer( ()=>{ Meteor.call('batchCacheUpdate', orgKey); });
+  Meteor.defer( ()=>{ Meteor.call('priorityCacheUpdate', orgKey, clientTZ); });
+  if( Roles.userIsInRole(this.userId, 'nightly') ) {
+    Meteor.defer( ()=>{ Meteor.call('phaseCacheUpdate', orgKey); }); }
   if(!this.userId){
     return this.ready();
   }else{
@@ -161,9 +156,9 @@ Meteor.publish('shaddowData', function(clientTZ){
         sort: {batch:-1},
         fields: {
           'batch': 1,
-          'widgetId': 1,
-          'versionKey': 1,
-          //'live': 1,
+          //'widgetId': 1,
+          //'versionKey': 1,
+          'live': 1,
           'finishedAt': 1,
           'salesOrder': 1,
           'end': 1,
@@ -173,14 +168,14 @@ Meteor.publish('shaddowData', function(clientTZ){
         sort: {batch:-1},
         fields: {
           'batch': 1,
-          'groupId': 1,
-          'widgetId': 1,
-          'versionKey': 1,
-          //'live': 1,
+          //'groupId': 1,
+          //'widgetId': 1,
+          //'versionKey': 1,
+          'live': 1,
           'salesOrder': 1,
           'salesEnd': 1,
           'completed': 1,
-          'completedAt': 1,
+          //'completedAt': 1,
           'releases': 1
         }}),
       CacheDB.find({orgKey: orgKey}, {
@@ -271,12 +266,9 @@ Meteor.publish('hotDataPlus', function(batch){
 Meteor.publish('skinnyData', function(clientTZ){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  Meteor.defer( ()=>{
-    Meteor.call('batchCacheUpdate', orgKey);
-  });
-  Meteor.defer( ()=>{
-    Meteor.call('priorityCacheUpdate', orgKey, clientTZ);
-  });
+  Meteor.defer( ()=>{ Meteor.call('batchCacheUpdate', orgKey); });
+  Meteor.defer( ()=>{ Meteor.call('priorityCacheUpdate', orgKey, clientTZ); });
+  // Meteor.defer( ()=>{ Meteor.call('phaseCacheUpdate', orgKey); });
   if(!this.userId){
     return this.ready();
   }else{
@@ -374,103 +366,3 @@ Meteor.publish('compData', function(cNum){
 });
 */
   
-/*
-// somethings missing, its not adding the information from widgetDB but
-// it is resending the whole groupDB
-// including orgKey and shareKey
-
-Meteor.publish('groupwidgetData', function() {
-  const user = Meteor.users.findOne({_id: this.userId});
-  const orgKey = user ? user.orgKey : false;
-  
-  var sub = this, widgetHandles = [], groupHandle = null;
-
-  // send over the top two comments attached to a single post
-  function publishGroupWidgets(groupId) {
-    var widgetsCursor = WidgetDB.find({groupId: groupId, orgKey: orgKey});
-    widgetHandles[groupId] = 
-      Meteor.Collection._publishCursor(widgetsCursor, sub, 'widget');
-  }
-
-  groupHandle = GroupDB.find({}).observeChanges({
-    added: function(id, group) {
-      publishGroupWidgets(group._id);
-      sub.added('groupdb', id, group);
-    },
-    changed: function(id, fields) {
-      sub.changed('groupdb', id, fields);
-    },
-    removed: function(id) {
-      // stop observing changes on the post's comments
-      widgetHandles[id] && widgetHandles[id].stop();
-      // delete the post
-      sub.removed('groupdb', id);
-    }
-  });
-
-  sub.ready();
-
-  // make sure we clean everything up (note `_publishCursor`
-  //   does this for us with the comment observers)
-  sub.onStop(function() { groupHandle.stop(); });
-});
-
-*/
-/////////////////////////////////////////////////////////////////
-  
-// diagnose data for development
-/*
-Meteor.publish('allData', function(dev){
-  if(dev) {
-    return [
-      GroupDB.find(),
-      WidgetDB.find(),
-      BatchDB.find(),
-      ArchiveDB.find()
-      ];
-  }else{
-    return this.ready();
-  }
-});
-*/
-
-
-//////////////////////////////////////////////////////////////
-
-/*
-
-// Publish the current size of a collection.
-Meteor.publish('WIPData', function (roomId) {
-  const user = Meteor.users.findOne({_id: this.userId});
-  const orgKey = user ? user.orgKey : false;
-    
-  let count = 0;
-  let initializing = true;
-  // `observeChanges` only returns after the initial `added` callbacks have run.
-  // Until then, we don't want to send a lot of `changed` messages—hence
-  // tracking the `initializing` state.
-  const handle = BatchDB.find({ orgKey: orgKey }).observeChanges({
-    added: (id) => {
-      count += 1;
-      if (!initializing) {
-        this.changed('counts', {}, { count });
-      }
-    },
-    removed: (id) => {
-      count -= 1;
-      this.changed('counts', {}, { count });
-    }
-    // We don't care about `changed` events.
-  });
-  // Instead, we'll send one `added` message right after `observeChanges` has
-  // returned, and mark the subscription as ready.
-  initializing = false;
-  this.added('counts', roomId, { count });
-  this.ready();
-  // Stop observing the cursor when the client unsubscribes. Stopping a
-  // subscription automatically takes care of sending the client any `removed`
-  // messages.
-  this.onStop(() => handle.stop());
-});
-
-*/

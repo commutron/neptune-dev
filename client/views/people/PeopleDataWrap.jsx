@@ -13,8 +13,9 @@ import TideFollow from '/client/components/tide/TideFollow.jsx';
 import Slides from '../../components/smallUi/Slides.jsx';
 
 //import ActivityPanel from '/client/views/user/ActivityPanel.jsx';
-import ActivityPanel from './ActivityPanel.jsx';
+import ActivitySlide from './ActivitySlide.jsx';
 import DashSlide from './DashSlide/DashSlide.jsx';
+import GuessSlide from './GuessSlide.jsx';
 
 import { PermissionHelp } from '/client/views/app/appPanels/AccountsManagePanel';
 
@@ -44,6 +45,7 @@ const PeopleDataWrap = (props)=> {
   }
     
   // const admin = Roles.userIsInRole(Meteor.userId(), 'admin');
+  const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
   
   return (
     <div className='simpleContainer'>
@@ -66,6 +68,8 @@ const PeopleDataWrap = (props)=> {
             <b><i className='fas fa-satellite-dish fa-fw'></i>  Current</b>,
             <b><i className='fas fa-history fa-fw'></i>  Production Activity</b>,
             <b><i className='fas fa-user-lock fa-fw'></i>  Permissions</b>,
+            
+            isNightly && <b><i className='fas fa-meteor fa-fw'></i>  Guess Work</b>
           ]}>
           
           
@@ -77,7 +81,7 @@ const PeopleDataWrap = (props)=> {
             batches={props.batches}
             bCache={props.bCache} />
           
-          <ActivityPanel
+          <ActivitySlide
             key={1}
             app={props.app}
             user={props.user}
@@ -85,10 +89,18 @@ const PeopleDataWrap = (props)=> {
             bCache={props.bCache}
             allUsers={true} />
             
-          <div key={4}>
+          <div key={2}>
             <PermissionHelp roles={Pref.roles} admin={false} />
           </div>
           
+          {isNightly &&
+            <GuessSlide
+              key={3}
+              app={props.app}
+              user={props.user}
+              users={props.users}
+              pCache={props.pCache} />
+          }
           
         </Slides>
 				
@@ -128,7 +140,7 @@ export default withTracker( () => {
       org: org,
       app: AppDB.findOne({org: org}),
       bCache: CacheDB.findOne({dataName: 'batchInfo'}),
-      // pCache: CacheDB.findOne({dataName: 'priorityRank'}),
+      pCache: CacheDB.findOne({dataName: 'priorityRank'}),
       batches: BatchDB.find({}).fetch(),
       users: Meteor.users.find({}, { sort: { username: 1 } } ).fetch()
     };

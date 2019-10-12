@@ -3,7 +3,7 @@ import Pref from '/client/global/pref.js';
 
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 
-const BatchHeaders = ({ oB, bCache, dense })=> {
+const BatchHeaders = ({ oB, bCache })=> {
   
   return(
     <div className='overGridFixed'>
@@ -12,9 +12,6 @@ const BatchHeaders = ({ oB, bCache, dense })=> {
         <h1>All Live <sup>{oB.length}</sup></h1>
       </div>
       
-      {!dense ? null :
-        <div className='overGridRowFixedHeader'></div>}
-            
       {!oB ? null :
         oB.map( (entry, index)=>{
           return(

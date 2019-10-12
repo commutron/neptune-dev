@@ -12,7 +12,8 @@ import OverviewWrap from './OverviewWrapBeta.jsx';
 const View = ({
   login, sub, appReady, readyUsers, ready, 
   username, user, clientTZ, org, app, 
-  batch, batchX, bCache, pCache 
+  batch, batchX, 
+  bCache, pCache, cCache
 })=> {
   
   const prevUser = usePrevious(user);
@@ -37,6 +38,7 @@ const View = ({
       bx={batchX}
       bCache={bCache}
       pCache={pCache}
+      cCache={cCache}
       user={user}
       app={app}
       clientTZ={clientTZ} />
@@ -73,10 +75,11 @@ export default withTracker( () => {
       org: org,
       clientTZ: clientTZ,
       app: AppDB.findOne({org: org}),
-      batch: BatchDB.find().fetch(),
-      batchX: XBatchDB.find().fetch(),
+      batch: BatchDB.find({live: true}).fetch(),
+      batchX: XBatchDB.find({live: true}).fetch(),
       bCache: CacheDB.findOne({dataName: 'batchInfo'}),
       pCache: CacheDB.findOne({dataName: 'priorityRank'}),
+      cCache: CacheDB.findOne({dataName: 'phaseCondition'}),
     };
   }
 })(View);

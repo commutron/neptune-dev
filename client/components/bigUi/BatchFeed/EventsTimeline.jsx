@@ -2,12 +2,15 @@ import React from 'react';
 import moment from 'moment';
 import '/client/components/bigUi/ItemFeed/style.css';
 import { HistoryBlock } from '/client/components/bigUi/ItemFeed/ItemFeed.jsx';
+import UserNice from '/client/components/smallUi/UserNice.jsx';
 
-const EventsTimeline = ({ id, batch, verifyList, eventList, doneBatch })=> {
+const EventsTimeline = ({ id, batch, verifyList, eventList, alterList, doneBatch })=> {
 
-  let sortedList = [...verifyList, ...eventList].sort((x, y)=> {
-                      if (moment(x.time).isBefore(y.time)) { return -1 }
-                      if (moment(y.time).isBefore(x.time)) { return 1 }
+  let sortedList = [...verifyList, ...eventList, ...alterList].sort((x, y)=> {
+                      let timeX = x.time || x.changeDate;
+                      let timeY = y.time || y.changeDate;
+                      if (moment(timeX).isBefore(timeY)) { return -1 }
+                      if (moment(timeY).isBefore(timeX)) { return 1 }
                       return 0;
                     });
                     
@@ -17,13 +20,7 @@ const EventsTimeline = ({ id, batch, verifyList, eventList, doneBatch })=> {
         {verifyList.length > 0 && eventList.length > 0 &&
           <p>Combined timeline of Events and First-Off Verifications</p>}
         {sortedList.map( (dt, ix)=>{
-          if(!dt.key) {
-            return( 
-              <EventBlock
-                key={dt.time.toISOString()+ix}
-                dt={dt} /> 
-            );
-          }else{
+          if(dt.key) {
             return( 
               <HistoryBlock
                 key={dt.time.toISOString()+ix}
@@ -34,6 +31,18 @@ const EventsTimeline = ({ id, batch, verifyList, eventList, doneBatch })=> {
                 done={doneBatch}
                 showHeader={true} /> 
             );
+          }else if( typeof dt.changeKey === 'string' ) {
+            return( 
+              <AlterBlock
+                key={dt.changeDate.toISOString()+ix}
+                dt={dt} /> 
+            );
+          }else{
+            return( 
+              <EventBlock
+                key={dt.time.toISOString()+ix}
+                dt={dt} /> 
+            );
           }
         })}
       </div>
@@ -43,6 +52,39 @@ const EventsTimeline = ({ id, batch, verifyList, eventList, doneBatch })=> {
 
 export default EventsTimeline;
 
+
+const AlterBlock = ({ dt })=>{
+
+  return(
+    <div className='infoBlock alterEvent'>
+      
+      <div className='blockTitle cap'>
+        <div>
+          <div className='leftAnchor'>
+            <i className="fas fa-eraser fa-lg fa-fw iG"></i>
+          </div>
+          
+          <div>Altered: <em className='clean'>"{dt.changeKey}"</em></div>
+          <div>for {dt.changeReason}</div>
+          
+          
+        </div>
+        
+        <div className='rightText'>
+          <div><UserNice id={dt.changeWho} /></div>
+          <div>{moment(dt.changeDate).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</div>
+          <div className='rightAnchor'></div>
+        </div>
+        
+      </div>
+      
+      <div className='moreInfoList'>
+        <dd>{dt.oldValue} <i className="fas fa-arrow-right fa-fw"></i> {dt.newValue}</dd>
+      </div>
+      
+    </div>
+  );
+};
 
 const EventBlock = ({ dt })=>{
 

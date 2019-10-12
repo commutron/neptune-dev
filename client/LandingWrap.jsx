@@ -22,13 +22,17 @@ const StartView = ({ready, readyUsers, user, org, app}) =>	{
     );
   }
   
+  const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
+  const isReadOnly = Roles.userIsInRole(Meteor.userId(), 'readOnly');
+  const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
+  
   return(
     <div className='homeNavi'>
-      {Roles.userIsInRole(Meteor.userId(), 'readOnly') ?
+      {isReadOnly ?
         <NavPlaceholder title='Production' icon="fas fa-paper-plane" /> :
         <NavButton title='Production' icon='fa-paper-plane' link='/production' /> }
       <NavPlaceholder title='' icon="fas fa-map" />
-      <NavButton title='Overview' icon="fas fa-globe" link='/overview' />
+      <NavButton title='Overview' icon={`fas ${isNightly?'fa-meteor':'fa-globe'}`} link='/overview' />
       <NavButton title='Explore' icon='fa-rocket' link='/data' />
       
       <NavButton title='Pisces' icon='fa-file-alt' link={app.instruct || ''} blank={true} />
@@ -41,7 +45,7 @@ const StartView = ({ready, readyUsers, user, org, app}) =>	{
             <i className="fas fa-user-astronaut fa-stack-1x" data-fa-transform="shrink-5 right-10 down-1"></i>
           </span>
         } />
-      {Roles.userIsInRole(Meteor.userId(), 'admin') ?
+      {isAdmin ?
         <NavButton title='Settings' icon='fa-sliders-h' link='/app' />
       : <NavPlaceholder title='Settings' icon='fas fa-sliders-h'/>}
       
