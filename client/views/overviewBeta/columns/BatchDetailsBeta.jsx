@@ -14,7 +14,7 @@ const BatchDetails = ({
 })=> {
   
   const statusCols = ['remaining', 'priority', 'items quantity', 'flow', 'released', 'active'];
-  const ncCols = ['NC total', 'NC unresolved', 'NC per item', 'NC items', 'scrap', 'RMA'];
+  const ncCols = ['NC total', 'NC remain', 'NC per item', 'NC items', 'scrap', 'RMA'];
   
   return(
     <div className={`overGridScroll ${dense ? 'dense' : ''}`} tabIndex='1'>
@@ -272,7 +272,7 @@ const PhaseProgress = ({ batchID, releasedToFloor, app })=> {
                 <NumStat
                   num={ calNum + '%' }
                   name={niceName}
-                  title={`all clear: ${phase.allClear}`}
+                  title={`Steps: ${phase.steps.length}`}
                   color='whiteT'
                   size='big' />
             </div>
@@ -328,7 +328,7 @@ const NonConCounts = ({ batchID, releasedToFloor, app, ncCols })=> {
           <div>
             <NumStat
               num={dt.nonConLeft}
-              name='NC Unresolved'
+              name='NC Remain'
               title='Unresolved Noncons'
               color='orangeT'
               size='big' />

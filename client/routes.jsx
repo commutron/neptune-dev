@@ -326,7 +326,7 @@ function createDisconnectTimeout() {
 
   disconnectTimer = setTimeout(function () {
     Meteor.disconnect();
-  },1000 * 60);
+  },1000 * 60 * 5);
 }
 
 function removeDisconnectTimeout() {

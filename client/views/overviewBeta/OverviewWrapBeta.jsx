@@ -31,11 +31,12 @@ function useInterval(callback, delay) {
   }, [delay]);
 }
 
-const OverviewWrap = ({ b, bx, bCache, pCache, user, clientTZ, app })=> {
+const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> {
 
   const [ working, workingSet ] = useState( false );
   const [ loadTime, loadTimeSet ] = useState( moment() );
   const [ tickingTime, tickingTimeSet ] = useState( moment() );
+  const [ filterBy, filterBySet ] = useState('surface mount');
   const [ sortBy, sortBySet ] = useState('priority');
   const [ dense, denseSet ] = useState(0);
   const [ liveState, liveSet ] = useState(false);
@@ -68,15 +69,37 @@ const OverviewWrap = ({ b, bx, bCache, pCache, user, clientTZ, app })=> {
       const batchesX = bx;
       
       let liveBatches = [...batches,...batchesX];
+      
+      let filteredBatches = filterBy === false ? liveBatches :
+        liveBatches.filter( bx => {
+          const cB = cCache.dataSet.find( x => x.batchID === bx._id);
+          const cP = cB && cB.phaseSets.find( x => x.phase === filterBy );
+          const con = cP && cP.condition;
+          
+          console.log(`${bx.batch}: ${con}`);
+          
+          if(con) {
+            return bx;
+          }
+          
+          
+          
+        });
+      console.log(filteredBatches);
+      
+      
+      
+      
       let orderedBatches = liveBatches;
       
       if(sortBy === 'priority') {
         orderedBatches = liveBatches.sort((b1, b2)=> {
           const pB1 = pCache.dataSet.find( x => x.batchID === b1._id);
-          const pB1bf = pB1 ? pB1.estEnd2fillBuffer : 0;
+          const pB1bf = pB1 ? pB1.estEnd2fillBuffer : null;
           const pB2 = pCache.dataSet.find( x => x.batchID === b2._id);
-          const pB2bf = pB2 ? pB2.estEnd2fillBuffer : 0;
+          const pB2bf = pB2 ? pB2.estEnd2fillBuffer : null;
           
+          if (!pB1bf) { return 1 }
           if (pB1bf < pB2bf) { return -1 }
           if (pB1bf > pB2bf) { return 1 }
           return 0;
@@ -149,7 +172,7 @@ const OverviewWrap = ({ b, bx, bCache, pCache, user, clientTZ, app })=> {
           <TideFollow />
         </div>
         
-        <nav className='scrollToNav overviewToolbar'>
+        <nav className='overviewToolbar'>
           <span>
             <i className='fas fa-sort-amount-down fa-fw grayT'></i>
             <select

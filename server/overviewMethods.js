@@ -61,7 +61,9 @@ function collectPhaseCondition(privateKey, batchID) {
       const riverFlow = flow ? flow.flow : [];
       const rNC = batch.nonCon.filter( n => 
         !n.trash && n.inspect === false && n.skip === false );
-      
+      const released = typeof batch.floorRelease === 'object';
+      let potential = released;
+
       let phaseSets = [];
       for(let phase of app.phases) {
         const steps = riverFlow.filter( x => x.phase === phase && x.type !== 'first' );
@@ -73,24 +75,39 @@ function collectPhaseCondition(privateKey, batchID) {
       }
       
       phaseSets.map( (phet, index)=> {
-        for(let stp of phet.steps) {
-        // const stp = phet.steps[phet.steps.length-1];
-        
-          const wipDone = batch.items.every( 
+        if(phet.steps.length === 0) {
+          null;//phaseSets[index].condition = false;
+        }else if(!potential) {
+          phaseSets[index].condition = 'onHold';
+        }else{
+          const lastIndex = phet.steps.length > 1 ? phet.steps.length -1 : 0; 
+          const stp = phet.steps[lastIndex];
+          //for(let stp of phet.steps) {
+          
+          const wipStart = batch.items.some( 
             x => x.history.find( 
-              y => ( y.key === stp.key && y.good === true ) ||
-                   ( y.type === 'scrap' && y.good === true ) 
+              y => y.key === stp.key
           ) );
           
-          const nonConLeft = rNC.filter( x => 
-            x.where === stp.phase ).length;
-          
-          let condition = !wipDone ? 'stepRemain' :
-                          nonConLeft > 0 ? 'ncRemain' :
-                          'allClear';
-                       
-          phaseSets[index].condition = condition;
-        
+          if( wipStart === false ) {
+            phaseSets[index].condition = 'allRemain';
+            potential = false;
+          }else{
+            
+            const wipDone = batch.items.every( 
+              x => x.history.find( 
+                y => ( y.key === stp.key && y.good === true ) ||
+                     ( y.type === 'scrap' && y.good === true ) 
+            ) );
+            const nonConLeft = rNC.filter( x => 
+              x.where === stp.phase ).length;
+            
+            let condition = !wipDone ? 'stepRemain' :
+                            nonConLeft > 0 ? 'ncRemain' :
+                            'allClear';
+                         
+            phaseSets[index].condition = condition;
+          }
         }
       });
  
@@ -251,7 +268,7 @@ function collectPriority(privateKey, batchID, clientTZ) {
         
         const buffer = shipTime.workingDiff(estComplete, 'minutes');
         
-        estEnd2fillBuffer = buffer || 0;
+        estEnd2fillBuffer = buffer || null;
       }
      
       collection = {
@@ -288,7 +305,6 @@ function collectProgress(privateKey, batchID) {
           phase: phase,
           steps: steps,
           count: 0,
-          allClear: false
         });
       }
       
@@ -302,12 +318,6 @@ function collectProgress(privateKey, batchID) {
 
       phaseSets.map( (phet, index)=> {
         for(let stp of phet.steps) {
-        //// extra calculation for testing purposes
-          const wipDone = batch.items.every( 
-              x => x.history.find( 
-                y => y.key === stp.key && y.good === true ) );
-          phaseSets[index].allClear = wipDone;
-        ////
           const wipTally = historyFlat.filter( x => x.key === stp.key ).length;
           phaseSets[index].count = phet.count + doneItems + wipTally;
         }

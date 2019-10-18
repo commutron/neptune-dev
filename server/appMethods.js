@@ -763,9 +763,9 @@ Meteor.methods({
       const hourAgo = moment().subtract(1, 'hour').toISOString();
       const currentCache = CacheDB.findOne({
         orgKey: accessKey, 
-        lastUpdated: { $lte: new Date(hourAgo) },
+        lastUpdated: { $gte: new Date(hourAgo) },
         dataName:'phaseCondition'});
-      
+
       if( force || !currentCache ) {
         const batches = BatchDB.find({orgKey: accessKey, live: true}).fetch();
         const slim = batches.map( x => {

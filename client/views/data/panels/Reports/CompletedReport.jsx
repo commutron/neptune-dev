@@ -59,14 +59,17 @@ const CompletedReport = ({ batchData, widgetData, groupData, app })=> {
       const itmQu = quantitiesI.reduce( (arr, x)=>
         typeof x === 'number' && arr + x, 0);
         
-      const quantitiesNC = Array.from(wd, x => x[4] );
-      const ncAverage = quantitiesNC.reduce( (arr, x)=>
-        typeof x === 'number' && arr + x, 0) / woTotal;
+      const quantitiesNC = Array.from(wd, x => { return parseFloat(x[4]) } )
+                            .filter( x => isNaN(x) === false );
+      console.log(quantitiesNC);
+      const ncAverage = quantitiesNC.reduce( (arr, x)=> arr + x, 0) 
+                          / quantitiesNC.length;
       const ncAvg = isNaN(ncAverage) ? 0.0 : ncAverage.toFixed(1, 10);
-      
-      const endAlters = Array.from(wd, x => x[7] );
-      const alterAvg = endAlters.reduce( (arr, x)=>
-        typeof x === 'number' && arr + x, 0) / woTotal;
+       
+      const endAlters = Array.from(wd, x => x[7] )
+                         .filter( x => typeof x === 'number' );
+      const alterAvg = endAlters.reduce( (arr, x)=> arr + x, 0) 
+                        / endAlters.length;
       const alAvg = isNaN(alterAvg) ? 0.0 : alterAvg.toFixed(1, 10);
       
       const early = wd.filter( x => x[8].includes('early') ).length;

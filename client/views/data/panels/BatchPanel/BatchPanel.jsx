@@ -134,8 +134,9 @@ const BatchPanel = (props)=> {
               id={b._id}
               batch={b.batch}
               verifyList={filter.verifyList}
-              eventList={b.events}
-              alterList={b.altered}
+              eventList={b.events || []}
+              alterList={b.altered || []}
+              quoteList={b.quoteTimeBudget || []}
               doneBatch={done} />
           </div>
           

@@ -19,8 +19,20 @@
 .overviewToolbar {
   grid-area: overviewNav;
   background-color: rgb(50,50,50);
-  font-size: 0.9rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
 }
+.overviewToolbar span {
+  padding: 0 1vw;
+  font-size: 1.5vh;
+}
+.overviewToolbar span:focus {
+  border: 1px dotted var(--clouds);
+}
+
 .overviewContent {
   grid-area: overviewContent;
   background-color: rgb(30,30,30);

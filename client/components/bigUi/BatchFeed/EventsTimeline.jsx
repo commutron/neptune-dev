@@ -4,11 +4,12 @@ import '/client/components/bigUi/ItemFeed/style.css';
 import { HistoryBlock } from '/client/components/bigUi/ItemFeed/ItemFeed.jsx';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 
-const EventsTimeline = ({ id, batch, verifyList, eventList, alterList, doneBatch })=> {
-
-  let sortedList = [...verifyList, ...eventList, ...alterList].sort((x, y)=> {
-                      let timeX = x.time || x.changeDate;
-                      let timeY = y.time || y.changeDate;
+const EventsTimeline = ({ id, batch, verifyList, eventList, alterList, quoteList, doneBatch })=> {
+  
+  
+  let sortedList = [...verifyList, ...eventList, ...alterList, ...quoteList].sort((x, y)=> {
+                      let timeX = x.time || x.changeDate || x.updatedAt;
+                      let timeY = y.time || y.changeDate || y.updatedAt;
                       if (moment(timeX).isBefore(timeY)) { return -1 }
                       if (moment(timeY).isBefore(timeX)) { return 1 }
                       return 0;
@@ -35,6 +36,12 @@ const EventsTimeline = ({ id, batch, verifyList, eventList, alterList, doneBatch
             return( 
               <AlterBlock
                 key={dt.changeDate.toISOString()+ix}
+                dt={dt} /> 
+            );
+          }else if( typeof dt.timeAsMinutes === 'number' ) {
+            return( 
+              <QuoteBlock
+                key={dt.updatedAt.toISOString()+ix}
                 dt={dt} /> 
             );
           }else{
@@ -82,6 +89,27 @@ const AlterBlock = ({ dt })=>{
         <dd>{dt.oldValue} <i className="fas fa-arrow-right fa-fw"></i> {dt.newValue}</dd>
       </div>
       
+    </div>
+  );
+};
+
+const QuoteBlock = ({ dt })=>{
+
+  return(
+    <div className='infoBlock alterEvent'>
+      <div className='blockTitle cap'>
+        <div>
+          <div className='leftAnchor'>
+            <i className="fas fa-hourglass-start fa-lg fa-fw iG"></i>
+          </div>
+          <div>Quote Time set to {dt.timeAsMinutes} minutes</div> 
+          <div>({moment.duration(dt.timeAsMinutes, "minutes").asHours().toFixed(2, 10)} hours)</div>
+        </div>
+        <div className='rightText'>
+          <div>{moment(dt.updatedAt).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</div>
+          <div className='rightAnchor'></div>
+        </div>
+      </div>
     </div>
   );
 };

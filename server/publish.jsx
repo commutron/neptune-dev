@@ -146,8 +146,7 @@ Meteor.publish('shaddowData', function(clientTZ){
   const orgKey = user ? user.orgKey : false;
   Meteor.defer( ()=>{ Meteor.call('batchCacheUpdate', orgKey); });
   Meteor.defer( ()=>{ Meteor.call('priorityCacheUpdate', orgKey, clientTZ); });
-  if( Roles.userIsInRole(this.userId, 'nightly') ) {
-    Meteor.defer( ()=>{ Meteor.call('phaseCacheUpdate', orgKey); }); }
+  Meteor.defer( ()=>{ Meteor.call('phaseCacheUpdate', orgKey); });
   if(!this.userId){
     return this.ready();
   }else{
