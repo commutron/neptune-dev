@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useLayoutEffect, useRef} from 'react';
 import moment from 'moment';
 import 'moment-timezone';
 import { ToastContainer } from 'react-toastify';
@@ -36,18 +36,24 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
   const [ working, workingSet ] = useState( false );
   const [ loadTime, loadTimeSet ] = useState( moment() );
   const [ tickingTime, tickingTimeSet ] = useState( moment() );
-  const [ filterBy, filterBySet ] = useState('surface mount');
+  const [ filterBy, filterBySet ] = useState(false);
   const [ sortBy, sortBySet ] = useState('priority');
   const [ dense, denseSet ] = useState(0);
   const [ liveState, liveSet ] = useState(false);
   
   useEffect( ()=> {
     sortInitial();
-  }, [sortBy, loadTime]);
+  }, [filterBy, sortBy, loadTime]);
 
   useInterval( ()=> {
     tickingTimeSet( moment() );
   },1000*60);
+  
+  function changeFilter(e) {
+    const value = e.target.value;
+    const filter = value === 'false' ? false : value;
+    filterBySet( filter );
+  }
   
   function changeSort(e) {
     const sort = e.target.value;
@@ -71,6 +77,24 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
       let liveBatches = [...batches,...batchesX];
       
       let filteredBatches = filterBy === false ? liveBatches :
+        filterBy === Pref.kitting ? 
+        liveBatches.filter( bx => {
+          const releasedToFloor = Array.isArray(bx.releases) ?
+            bx.releases.findIndex( x => x.type === 'floorRelease') >= 0 :
+            typeof bx.floorRelease === 'object';
+          if(!releasedToFloor) {
+            return bx;
+          }
+        }) :
+        filterBy === Pref.released ? 
+        liveBatches.filter( bx => {
+          const releasedToFloor = Array.isArray(bx.releases) ?
+            bx.releases.findIndex( x => x.type === 'floorRelease') >= 0 :
+            typeof bx.floorRelease === 'object';
+          if(releasedToFloor) {
+            return bx;
+          }
+        }) :
         liveBatches.filter( bx => {
           const cB = cCache.dataSet.find( x => x.batchID === bx._id);
           const cP = cB && cB.phaseSets.find( x => x.phase === filterBy );
@@ -78,22 +102,15 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
           
           console.log(`${bx.batch}: ${con}`);
           
-          if(con) {
+          if(con && con !== 'onHold') {
             return bx;
           }
-          
-          
-          
         });
-      console.log(filteredBatches);
       
-      
-      
-      
-      let orderedBatches = liveBatches;
+      let orderedBatches = filteredBatches;
       
       if(sortBy === 'priority') {
-        orderedBatches = liveBatches.sort((b1, b2)=> {
+        orderedBatches = filteredBatches.sort((b1, b2)=> {
           const pB1 = pCache.dataSet.find( x => x.batchID === b1._id);
           const pB1bf = pB1 ? pB1.estEnd2fillBuffer : null;
           const pB2 = pCache.dataSet.find( x => x.batchID === b2._id);
@@ -106,13 +123,13 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
         });
         
       }else if(sortBy === 'sales') {
-        orderedBatches = liveBatches.sort((b1, b2)=> {
-          if (b1.salesOrder < b2.salesOrder) { return 1 }
-          if (b1.salesOrder > b2.salesOrder) { return -1 }
+        orderedBatches = filteredBatches.sort((b1, b2)=> {
+          if (b1.salesOrder < b2.salesOrder) { return -1 }
+          if (b1.salesOrder > b2.salesOrder) { return 1 }
           return 0;
         });
       }else if( sortBy === 'due') {
-        orderedBatches = liveBatches.sort((b1, b2)=> {
+        orderedBatches = filteredBatches.sort((b1, b2)=> {
           let endDate1 = b1.salesEnd || b1.end;
           let endDate2 = b2.salesEnd || b2.end;
           if (endDate1 < endDate2) { return -1 }
@@ -120,7 +137,7 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
           return 0;
         });
       }else{
-        orderedBatches = liveBatches.sort((b1, b2)=> {
+        orderedBatches = filteredBatches.sort((b1, b2)=> {
           if (b1.batch < b2.batch) { return 1 }
           if (b1.batch > b2.batch) { return -1 }
           return 0;
@@ -174,13 +191,31 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
         
         <nav className='overviewToolbar'>
           <span>
+            <i className='fas fa-filter fa-fw grayT'></i>
+            <select
+              id='filterSelect'
+              title={`Change ${Pref.phase} Filter`}
+              className='overToolSort liteToolOn'
+              defaultValue={filterBy}
+              onChange={(e)=>changeFilter(e)}>
+              <option value={false}>All</option>
+              <option value={Pref.kitting} className='cap'>{Pref.kitting}</option>
+              <option value={Pref.released} className='cap'>{Pref.released}</option>
+              {app.phases.map( (ph, ix)=> {
+                return(
+                  <option key={ph+ix} value={ph}>{ph}</option>
+              )})}
+            </select>
+          </span>
+          
+          <span>
             <i className='fas fa-sort-amount-down fa-fw grayT'></i>
             <select
               id='sortSelect'
               title='Change List Order'
               className='overToolSort liteToolOn'
               defaultValue={sortBy}
-              onClick={(e)=>changeSort(e)}>
+              onChange={(e)=>changeSort(e)}>
               <option value='priority'>priority</option>
               <option value='batch'>{Pref.batch}</option>
               <option value='sales'>{Pref.salesOrder}</option>
@@ -221,7 +256,7 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
               key='fancylist0'
               oB={liveState}
               bCache={bCache}
-              dense={dense > 1}
+              title={filterBy || 'All Live'}
             />
             
             <BatchDetails

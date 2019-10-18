@@ -82,6 +82,7 @@ class Pref {
     this.kit = 'kit';
     this.kitting = 'kitting';
     this.release = 'release';
+    this.released = 'released';
     this.ship = 'ship';
     // build tracking
     this.flow = 'process flow';

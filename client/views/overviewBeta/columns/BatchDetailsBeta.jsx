@@ -19,8 +19,6 @@ const BatchDetails = ({
   return(
     <div className={`overGridScroll ${dense ? 'dense' : ''}`} tabIndex='1'>
       
-      
-      
       {!dense ? 
         <div className='overGridRowScrollHeader'></div>
       :
