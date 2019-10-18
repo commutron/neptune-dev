@@ -25,13 +25,12 @@
   justify-content: flex-start;
   align-items: center;
 }
-.overviewToolbar span {
-  padding: 0 1vw;
-  font-size: 1.5vh;
+.overviewToolbar span,
+.overviewToolbar select,
+.overviewToolbar button {
+  font-size: 1.7vh;
 }
-.overviewToolbar span:focus {
-  border: 1px dotted var(--clouds);
-}
+.overviewToolbar span { padding: 0 1vw; }
 
 .overviewContent {
   grid-area: overviewContent;

@@ -12,12 +12,6 @@ const ItemsList = ({ batchData, widgetData })=> {
   const [ timeModifyer, setTime ] = useState(false);
   const [ notModifyer, setMod ] = useState(false);
   
-  useEffect( ()=> {
-    let el = document.getElementById('exItemList');
-    const pos = Session.get('itemListScrollPos') || {b: false, num: 0};
-    if(batchData.batch === pos.b) { el.scrollTop = pos.num || 0 }
-  }, []);
-  
   // update filter state
   function setKeywordFilter(keyword) { setKeyword( keyword.toLowerCase() ); }
   function setTimeFilter(rule) { setTime( rule ); }
@@ -304,9 +298,8 @@ const ItemsList = ({ batchData, widgetData })=> {
     
     setList(showListOrder);
   }, [ batchData, keyword, timeModifyer, notModifyer ]);
-
-  return (
-    
+  
+  return(
       <div className='' key={1}>
         <FilterItems
           title={b.batch}

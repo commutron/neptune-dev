@@ -1,62 +1,69 @@
-import React, {Component} from 'react';
+import React, { useEffect, useLayoutEffect} from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 //import Pref from '/client/global/pref.js';
 
 import { ScanListenerUtility } from '/client/components/utilities/ScanListener.js';
 import { ScanListenerOff } from '/client/components/utilities/ScanListener.js';
-import InboxToast from '/client/components/utilities/InboxToast.js';
+import InboxToastPop from '/client/components/utilities/InboxToastPop.js';
+import usePrevious from '/client/components/utilities/usePreviousHook.js';
+
 import Spin from '/client/components/uUi/Spin.jsx';
 import ProductionFindOps from './ProductionFindOps.jsx';
 
-class ProdData extends Component	{
+const ProdData = ({
+  appReady, usersReady, coldReady, hotReady, // subs
+  orb, anchor, user, org, users, app, // self 
+  allGroup, allWidget, allBatch, allxBatch,  // customer data
+  hotBatch, hotxBatch // working data
+})=> {
 
-  componentDidUpdate(prevProps) {
-    InboxToast(prevProps, this.props);
-  }
+  const prevUser = usePrevious(user);
+  useLayoutEffect( ()=>{
+    InboxToastPop(prevUser, user);
+  }, [user]);
+  
+  useEffect( ()=> {
+    ScanListenerUtility(user);
+    return ScanListenerOff();
+  }, []);
+  
 
-  render() {
-    
-    if(
-       !this.props.appReady ||
-       !this.props.usersReady ||
-       !this.props.coldReady || 
-       !this.props.hotReady ||
-       !this.props.user ||
-       !this.props.app
-      ) {
-      return (
-        <div className='centreContainer'>
-          <div className='centrecentre'>
-            <Spin />
-          </div>
-        </div>
-      );
-    }
-    
-    ScanListenerUtility(this.props.user);
-    
+  if(
+     !appReady ||
+     !usersReady ||
+     !coldReady || 
+     !hotReady ||
+     !user ||
+     !app
+    ) {
     return (
-      <ProductionFindOps
-        orb={this.props.orb}
-        anchor={this.props.anchor}
-        user={this.props.user}
-        org={this.props.org}
-        users={this.props.users}
-        app={this.props.app}
-        allGroup={this.props.allGroup}
-        allWidget={this.props.allWidget}
-        allBatch={this.props.allBatch}
-        allxBatch={this.props.allxBatch}
-        hotBatch={this.props.hotBatch}
-        hotxBatch={this.props.hotxBatch}
-      />
+      <div className='centreContainer'>
+        <div className='centrecentre'>
+          <Spin />
+        </div>
+      </div>
     );
   }
-  componentWillUnmount() {
-    ScanListenerOff();
-  }
-}
+    
+  return (
+    <ProductionFindOps
+      orb={orb}
+      anchor={anchor}
+      user={user}
+      org={org}
+      users={users}
+      app={app}
+      allGroup={allGroup}
+      allWidget={allWidget}
+      allBatch={allBatch}
+      allxBatch={allxBatch}
+      hotBatch={hotBatch}
+      hotxBatch={hotxBatch}
+    />
+  );
+};
+
 
 export default withTracker( () => {
   

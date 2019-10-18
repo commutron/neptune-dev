@@ -57,19 +57,19 @@ const ExploreLanding = ({ groupData, widgetData, batchData, xBatchData, app }) =
             <TrendLine 
               title={`new ${Pref.batches}`}
               statType='newBatch'
-              cycleCount={10}
+              cycleCount={6}
               lineColor='rgb(52, 152, 219)' />
             
             <TrendLine 
               title='new items'
               statType='newItem'
-              cycleCount={10}
+              cycleCount={6}
               lineColor='rgb(52, 152, 219)' />
               
             <TrendLine 
               title={`discovered ${Pref.shortfall}s`}
               statType='newSH'
-              cycleCount={10}
+              cycleCount={6}
               lineColor='rgb(230, 126, 34)' />
               
           </div>    
@@ -79,18 +79,18 @@ const ExploreLanding = ({ groupData, widgetData, batchData, xBatchData, app }) =
             <TrendBar
               title={`completed ${Pref.batches}`}
               statType='doneBatch'
-              cycleCount={10} />
+              cycleCount={6} />
               
             <TrendLine 
               title={`completed ${Pref.items}`}
               statType='doneItem'
-              cycleCount={10}
+              cycleCount={6}
               lineColor='rgb(46, 204, 113)' />
               
             <TrendLine 
               title={`discovered ${Pref.nonCons}`}
               statType='newNC'
-              cycleCount={10}
+              cycleCount={6}
               lineColor='rgb(231, 76, 60)' />
             
           </div>
@@ -98,7 +98,7 @@ const ExploreLanding = ({ groupData, widgetData, batchData, xBatchData, app }) =
           <details className='footnotes'>
             <summary>Chart Details</summary>
             <p className='footnote'>
-              Trends include {10} weeks, including the current week. 
+              Trends include {6} weeks, including the current week. 
               Displayed left to right as past to current.
             </p>
             <p className='footnote'>

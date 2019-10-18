@@ -1,44 +1,49 @@
-import React, {Component} from 'react';
+import React, { useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import moment from 'moment';
 import 'moment-timezone';
-import InboxToast from '/client/components/utilities/InboxToast.js';
+import InboxToastPop from '/client/components/utilities/InboxToastPop.js';
+import usePrevious from '/client/components/utilities/usePreviousHook.js';
 
 import Spin from '../../components/uUi/Spin.jsx';
 import OverviewWrap from './OverviewWrap.jsx';
 
-class View extends Component	{
+const View = ({
+  appReady, readyUsers, ready, // subs
+  username, user, org, app, // self
+  group, widget, batch, batchX, // working data
+  bCache, pCache // caches
+})=> {
   
-  componentDidUpdate(prevProps) {
-    InboxToast(prevProps, this.props);
-  }
+  const prevUser = usePrevious(user);
+  useLayoutEffect( ()=>{
+    InboxToastPop(prevUser, user);
+  }, [user]);
   
-  render() {
     
-    if(!this.props.appReady || !this.props.readyUsers || !this.props.ready || !this.props.app) {
-      return (
-        <div className='centreContainer'>
-          <div className='centrecentre'>
-            <Spin />
-          </div>
-        </div>
-      );
-    }
-
+  if(!appReady || !readyUsers || !ready || !app) {
     return (
-      <OverviewWrap 
-        //g={this.props.group}
-        //w={this.props.widget}
-        b={this.props.batch}
-        bx={this.props.batchX}
-        bCache={this.props.bCache}
-        pCache={this.props.pCache}
-        user={this.props.user}
-        app={this.props.app} />
+      <div className='centreContainer'>
+        <div className='centrecentre'>
+          <Spin />
+        </div>
+      </div>
     );
   }
-}
+
+  return (
+    <OverviewWrap 
+      //g={group}
+      //w={widget}
+      b={batch}
+      bx={batchX}
+      bCache={bCache}
+      pCache={pCache}
+      user={user}
+      app={app} />
+  );
+};
 
 export default withTracker( () => {
   let login = Meteor.userId() ? true : false;

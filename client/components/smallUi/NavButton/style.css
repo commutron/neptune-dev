@@ -27,7 +27,7 @@
 }
 .navButtonIcon {
   margin: 1vh 0 0 0;
-  font-size: 9vh;
+  font-size: 6vmax;
   color: var(--neptuneColor);
 }
 .navButtonText {

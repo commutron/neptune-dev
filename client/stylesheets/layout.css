@@ -313,7 +313,7 @@ main {
 .slideMenuButton {
   width: 100%;
   min-height: 6vh;
-  padding: 0 2vw;
+  padding: 0 2vw 0 1vw;
   font-size: 2vh;
   color: var(--silver);
   background-color: transparent;
@@ -322,15 +322,18 @@ main {
   text-align: left;
   white-space: nowrap;
 }
-.slideMenuButton:hover, .slideMenuButton:active, 
+.slideMenuButton:hover, 
+.slideMenuButton:active, 
 .slideMenuButton.slideOn {
   width: 100%;
   color: rgb(35,35,35);
   background-color: var(--silver);
   box-shadow: var(--dropShadow00);
 }
-.slideMenuButton:disabled {
-  color: black;
+.slideMenuButton:disabled:hover {
+  color: var(--silver);
+  background-color: transparent;
+  box-shadow: none;
 }
 
 /* ////////////////////////// */
@@ -556,6 +559,7 @@ main {
 
 .space2vsq { padding: 2vh; }
 .space3v { padding: 3vh 3vw; }
+.space36v { padding: 3vh 6vw; }
 .space { padding: 24px; }
 .vspace { padding: 24px 0; }
 .nospace { padding: 0; }

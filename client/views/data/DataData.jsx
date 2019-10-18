@@ -1,63 +1,71 @@
-import React, {Component} from 'react';
+import React, { useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import moment from 'moment';
 import 'moment-timezone';
-import InboxToast from '/client/components/utilities/InboxToast.js';
+import InboxToastPop from '/client/components/utilities/InboxToastPop.js';
+import usePrevious from '/client/components/utilities/usePreviousHook.js';
+
 //import Pref from '/client/global/pref.js';
 
 import Spin from '../../components/uUi/Spin.jsx';
 import DataViewOps from './DataViewOps.jsx';
 
-class ExploreView extends Component	{
+const ExploreView = ({
+  appReady, usersReady, coldReady, hotReady, // subs
+  user, org, users, app, // self
+  allGroup, allWidget, allBatch, allXBatch, // customers
+  hotBatch, hotXBatch, // relevant
+  view, request, specify, subLink // routing
+})=> {
   
-  componentDidUpdate(prevProps) {
-    if(prevProps.request !== this.props.request) {
+  const prevRequest = usePrevious(request);
+  const prevUser = usePrevious(user);
+  useLayoutEffect( ()=>{
+    if(prevRequest !== request) {
       Session.set('itemListScrollPos', {b: false, num: 0});
     }
-    InboxToast(prevProps, this.props);
-  }
+    InboxToastPop(prevUser, user);
+  }, [user]);
   
-  render() {
     
-    if(
-      !this.props.appReady ||
-      !this.props.usersReady ||
-      !this.props.coldReady || 
-      !this.props.hotReady ||
-      !this.props.user ||
-      !this.props.app 
-    ) {
-      return(
-        <div className='centreContainer'>
-          <div className='centrecentre'>
-            <Spin />
-          </div>
+  if(
+    !appReady ||
+    !usersReady ||
+    !coldReady || 
+    !hotReady ||
+    !user ||
+    !app 
+  ) {
+    return(
+      <div className='centreContainer'>
+        <div className='centrecentre'>
+          <Spin />
         </div>
-      );
-    }
-    
-    return (
-      <DataViewOps
-        //orb={this.props.orb}
-        user={this.props.user}
-        org={this.props.org}
-        users={this.props.users}
-        app={this.props.app}
-        allGroup={this.props.allGroup}
-        allWidget={this.props.allWidget}
-        allBatch={this.props.allBatch}
-        allXBatch={this.props.allXBatch}
-        hotBatch={this.props.hotBatch}
-        hotXBatch={this.props.hotXBatch}
-        view={this.props.view}
-        request={this.props.request}
-        specify={this.props.specify}
-        subLink={this.props.subLink}
-      />
+      </div>
     );
   }
-}
+    
+  return (
+    <DataViewOps
+      //orb={orb}
+      user={user}
+      org={org}
+      users={users}
+      app={app}
+      allGroup={allGroup}
+      allWidget={allWidget}
+      allBatch={allBatch}
+      allXBatch={allXBatch}
+      hotBatch={hotBatch}
+      hotXBatch={hotXBatch}
+      view={view}
+      request={request}
+      specify={specify}
+      subLink={subLink}
+    />
+  );
+};
 
 export default withTracker( (props) => {
   //const orb = Session.get('now');

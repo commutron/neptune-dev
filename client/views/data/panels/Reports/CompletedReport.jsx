@@ -61,7 +61,7 @@ const CompletedReport = ({ batchData, widgetData, groupData, app })=> {
         
       const quantitiesNC = Array.from(wd, x => { return parseFloat(x[4]) } )
                             .filter( x => isNaN(x) === false );
-      console.log(quantitiesNC);
+
       const ncAverage = quantitiesNC.reduce( (arr, x)=> arr + x, 0) 
                           / quantitiesNC.length;
       const ncAvg = isNaN(ncAverage) ? 0.0 : ncAverage.toFixed(1, 10);

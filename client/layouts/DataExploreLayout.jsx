@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { ToastContainer } from 'react-toastify';
 //import Pref from '/client/global/pref.js';
@@ -25,13 +25,22 @@ export const TraverseWrap = ({
   base,
   invertColor,
   children
-}) =>	{
+})=>	{
+  
+  // useEffect( ()=> {
+  //   if(batchData) {
+  //     let el = document.getElementById('exItemList');
+  //     const pos = Session.get('itemListScrollPos') || {b: false, num: 0};
+  //     console.log(pos);
+  //     if(batchData.batch === pos.b) { el.scrollTop = pos.num || 0 }
+  //   }
+  // }, [batchData]);
   
   function goPro(location) {
-    if(batchData) {
-      let el = document.getElementById('exItemList');
-      Session.set('itemListScrollPos', {b: batchData.batch, num: el.scrollTop});
-    }
+    // if(batchData) {
+    //   let el = document.getElementById('exItemList');
+    //   Session.set('itemListScrollPos', {b: batchData.batch, num: el.scrollTop});
+    // }
     Session.set('now', location);
     FlowRouter.go('/production');
   }

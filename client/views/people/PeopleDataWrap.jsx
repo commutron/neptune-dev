@@ -1,10 +1,12 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useLayoutEffect, } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import moment from 'moment';
 import 'moment-timezone';
 import { ToastContainer } from 'react-toastify';
-import InboxToast from '/client/components/utilities/InboxToast.js';
+import InboxToastPop from '/client/components/utilities/InboxToastPop.js';
+import usePrevious from '/client/components/utilities/usePreviousHook.js';
+
 import Pref from '/client/global/pref.js';
 import Spin from '../../components/uUi/Spin.jsx';
 
@@ -15,26 +17,26 @@ import Slides from '../../components/smallUi/Slides.jsx';
 //import ActivityPanel from '/client/views/user/ActivityPanel.jsx';
 import ActivitySlide from './ActivitySlide.jsx';
 import DashSlide from './DashSlide/DashSlide.jsx';
+import AccountsManagePanel from './AccountsManagePanel.jsx';
+
 import GuessSlide from './GuessSlide.jsx';
 
 import { PermissionHelp } from '/client/views/app/appPanels/AccountsManagePanel';
 
-const usePrevious = (value)=> {
-  const ref = useRef();
-  useEffect(() => {
-    ref.current = value;
-  });
-  return ref.current;
-};
-
-const PeopleDataWrap = (props)=> {
+const PeopleDataWrap = ({
+  ready, readyUsers, readyTides, // subs
+  user, active, org, app, // self
+  bCache, pCache, // caches
+  batches, users // working data
+})=> {
   
-  const prevProps = usePrevious(props);
-    useEffect( ()=>{
-      prevProps && InboxToast(prevProps, props);
-    });
+  const prevUser = usePrevious(user);
+  useLayoutEffect( ()=>{
+    InboxToastPop(prevUser, user);
+  }, [user]);
     
-  if(!props.ready || !props.readyUsers || !props.readyTides || !props.app) {
+    
+  if(!ready || !readyUsers || !readyTides || !app) {
     return (
       <div className='centreContainer'>
         <div className='centrecentre'>
@@ -44,7 +46,7 @@ const PeopleDataWrap = (props)=> {
     );
   }
     
-  // const admin = Roles.userIsInRole(Meteor.userId(), 'admin');
+  const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
   const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
   
   return (
@@ -68,38 +70,41 @@ const PeopleDataWrap = (props)=> {
             <b><i className='fas fa-satellite-dish fa-fw'></i>  Current</b>,
             <b><i className='fas fa-history fa-fw'></i>  Production Activity</b>,
             <b><i className='fas fa-user-lock fa-fw'></i>  Permissions</b>,
-            
-            isNightly && <b><i className='fas fa-meteor fa-fw'></i>  Guess Work</b>
-          ]}>
-          
+            <b><i className='fas fa-users-cog fa-fw'></i>   Account Manager</b>,
+            <b><i className='fas fa-meteor fa-fw'></i>  Guess Work</b>
+          ]}
+          disable={[false, false, false, !isAdmin, !isNightly]}>
           
           <DashSlide
             key={0}
-            app={props.app}
-            user={props.user}
-            users={props.users}
-            batches={props.batches}
-            bCache={props.bCache} />
+            app={app}
+            user={user}
+            users={users}
+            batches={batches}
+            bCache={bCache} />
           
           <ActivitySlide
             key={1}
-            app={props.app}
-            user={props.user}
-            users={props.users}
-            bCache={props.bCache}
+            app={app}
+            user={user}
+            users={users}
+            bCache={bCache}
             allUsers={true} />
             
           <div key={2}>
             <PermissionHelp roles={Pref.roles} admin={false} />
           </div>
           
+          {isAdmin &&
+            <AccountsManagePanel key={3} users={users} /> }
+          
           {isNightly &&
             <GuessSlide
-              key={3}
-              app={props.app}
-              user={props.user}
-              users={props.users}
-              pCache={props.pCache} />
+              key={4}
+              app={app}
+              user={user}
+              users={users}
+              pCache={pCache} />
           }
           
         </Slides>

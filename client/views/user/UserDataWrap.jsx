@@ -1,8 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import { ToastContainer } from 'react-toastify';
-import InboxToast from '/client/components/utilities/InboxToast.js';
+import InboxToastPop from '/client/components/utilities/InboxToastPop.js';
+import usePrevious from '/client/components/utilities/usePreviousHook.js';
+
 //import Pref from '/client/global/pref.js';
 import Spin from '../../components/uUi/Spin.jsx';
 
@@ -20,26 +22,24 @@ import UserSpeedSet from '/client/components/forms/UserSpeedSet.jsx';
 import PasswordChange from '/client/components/forms/PasswordChange.jsx';
 import { PermissionHelp } from '/client/views/app/appPanels/AccountsManagePanel';
 
-const usePrevious = (value)=> {
-  const ref = useRef();
-  useEffect(() => {
-    ref.current = value;
-  });
-  return ref.current;
-};
-
-const UserDataWrap = (props)=> {
+const UserDataWrap = ({
+  ready, readyUsers, readyEvents, // subs
+  orb, bolt, // meta
+  user, active, org, app, // self
+  bCache, batches, users // working data
+})=> {
   
-  const prevProps = usePrevious(props);
-    useEffect( ()=>{
-      prevProps && InboxToast(prevProps, props);
-    });
+  const prevUser = usePrevious(user);
+  useLayoutEffect( ()=>{
+    InboxToastPop(prevUser, user);
+  }, [user]);
+  
     
   if(
-    !props.ready || 
-    !props.readyUsers || 
-    !props.readyEvents ||
-    !props.app
+    !ready || 
+    !readyUsers || 
+    !readyEvents ||
+    !app
   ) {
     return (
       <div className='centreContainer'>
@@ -61,7 +61,7 @@ const UserDataWrap = (props)=> {
       <div className='tenHeader'>
         <div className='topBorder' />
         <HomeIcon />
-        <div className='frontCenterTitle'>{props.user.username || "User"}</div>
+        <div className='frontCenterTitle'>{user.username || "User"}</div>
         <div className='auxRight' />
         <TideFollow />
       </div>
@@ -79,33 +79,33 @@ const UserDataWrap = (props)=> {
             
           <ActivityPanel
             key={1}
-            orb={props.orb}
-            bolt={props.bolt}
-            app={props.app}
-            user={props.user}
-            users={props.users}
-            bCache={props.bCache} />
+            orb={orb}
+            bolt={bolt}
+            app={app}
+            user={user}
+            users={users}
+            bCache={bCache} />
           <WatchlistPanel
             key={2}
-            orb={props.orb}
-            bolt={props.bolt}
-            app={props.app}
-            user={props.user}
-            users={props.users}
-            batchEvents={props.batches}
-            bCache={props.bCache} />
+            orb={orb}
+            bolt={bolt}
+            app={app}
+            user={user}
+            users={users}
+            batchEvents={batches}
+            bCache={bCache} />
           <InboxPanel
             key={3}
-            orb={props.orb}
-            bolt={props.bolt}
-            app={props.app}
-            user={props.user}
-            users={props.users} />
+            orb={orb}
+            bolt={bolt}
+            app={app}
+            user={user}
+            users={users} />
             
           <div key={4} className='balance'>
       
             <div className='centre'>
-              <p className='clean'>username: {props.user.username}</p>
+              <p className='clean'>username: {user.username}</p>
               <p className='clean'>id: {Meteor.user()._id}</p>
               <p>organization: <i className='greenT'>{Meteor.user().org}</i></p>
               <hr />
@@ -127,12 +127,12 @@ const UserDataWrap = (props)=> {
           
           <PrivacyPanel
             key={5}
-            orb={props.orb}
-            bolt={props.bolt}
-            app={props.app}
-            user={props.user}
-            users={props.users}
-            bCache={props.bCache} />
+            orb={orb}
+            bolt={bolt}
+            app={app}
+            user={user}
+            users={users}
+            bCache={bCache} />
           
         </Slides>
 				

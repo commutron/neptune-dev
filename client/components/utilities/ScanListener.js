@@ -46,21 +46,21 @@ export function ScanListenerUtility(user) {
   window.addEventListener('visibilitychange', reFocus);
   window.addEventListener('focus', reFocus);
   
-  //navigator.usb ? console.log('WebUSB IS supported') : console.log('WebUSB NOT supported');
+  navigator.usb ? console.log('WebUSB IS supported') : 
+                  console.log('WebUSB NOT supported');
     
-  //Meteor.setTimeout( ()=>{
-    const autoScan = user.autoScan;
-    if(autoScan === undefined) {
-      const check = window.confirm('Would you like to use a barcode scanner from anywhere in this window?');
-      Meteor.call('setAutoScan', check, (error)=> error && console.log(error));
-    }else if(autoScan === false) {
-      null;//console.log('auto window scanning OFF');
-    }else{
-      //console.log('auto window scanning ON');
-      window.addEventListener('keydown', onPress);
-      window.addEventListener('message', onMessage);
-    }
-  //},250);
+  const autoScan = user.autoScan;
+  // if(autoScan === undefined) {
+  //   const check = window.confirm('Would you like to use a barcode scanner from anywhere in this window?');
+  //   Meteor.call('setAutoScan', check, (error)=> error && console.log(error));
+  
+  if(autoScan === false) {
+    null;// console.log('auto window scanning OFF');
+  }else{
+    // console.log('auto window scanning ON');
+    window.addEventListener('keydown', onPress);
+    window.addEventListener('message', onMessage);
+  }
 
 }
 

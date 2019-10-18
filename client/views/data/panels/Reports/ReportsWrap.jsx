@@ -1,6 +1,6 @@
 import React from 'react';
 // import Pref from '/client/global/pref.js';
-import Slides from '/client/components/smallUi/Slides.jsx';
+import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 
 //import BestWorstBatch from '/client/components/bigUi/BestWorstBatch.jsx';
 // import PopularWidget from '/client/components/charts/PopularWidget.jsx'; 
@@ -9,14 +9,17 @@ import CompletedReport from './CompletedReport.jsx';
 
 const ReportsWrap = ({ batchData, widgetData, groupData, app })=> (
   
-  <div>
-      
-    <Slides
-      menu={[
-        <b><i className='fas fa-flag-checkered fa-fw'></i>   Completed</b>,
-        <b><i className='fas fa-umbrella fa-fw'></i>   General</b>,
-       
-      ]}>
+  <div className='space36v'>
+    
+    <Tabs
+      tabs={[
+        <b><i className='fas fa-flag-checkered fa-fw'></i> Completed</b>,
+        <b><i className='fas fa-umbrella fa-fw'></i> General</b>,
+      ]}
+      wide={false}
+      stick={false}
+      hold={true}
+      sessionTab='reportExPanelTabs'>
       
       <CompletedReport
         batchData={batchData}
@@ -30,7 +33,7 @@ const ReportsWrap = ({ batchData, widgetData, groupData, app })=> (
         groupData={groupData} 
         app={app} />
         
-    </Slides> 
+    </Tabs> 
   </div>
 );
   

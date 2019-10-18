@@ -95,6 +95,9 @@ const AlterBlock = ({ dt })=>{
 
 const QuoteBlock = ({ dt })=>{
 
+  const hoursDur = moment.duration(dt.timeAsMinutes, "minutes")
+                    .asHours().toFixed(2, 10);
+  
   return(
     <div className='infoBlock alterEvent'>
       <div className='blockTitle cap'>
@@ -102,8 +105,8 @@ const QuoteBlock = ({ dt })=>{
           <div className='leftAnchor'>
             <i className="fas fa-hourglass-start fa-lg fa-fw iG"></i>
           </div>
-          <div>Quote Time set to {dt.timeAsMinutes} minutes</div> 
-          <div>({moment.duration(dt.timeAsMinutes, "minutes").asHours().toFixed(2, 10)} hours)</div>
+          <div>Quote Time set to {hoursDur} hours</div> 
+          <div>({dt.timeAsMinutes} minutes)</div>
         </div>
         <div className='rightText'>
           <div>{moment(dt.updatedAt).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</div>

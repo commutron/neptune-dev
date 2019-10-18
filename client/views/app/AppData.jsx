@@ -1,44 +1,49 @@
-import React, {Component} from 'react';
+import React, { useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-//import InboxToast from '/client/components/utilities/InboxToast.js';
+import InboxToastPop from '/client/components/utilities/InboxToastPop.js';
+import usePrevious from '/client/components/utilities/usePreviousHook.js';
+
 
 import Spin from '../../components/uUi/Spin.jsx';
 import AppWrap from './AppWrap.jsx';
 
-class AppView extends Component	{
-  /*
-  componentDidUpdate(prevProps) {
-    InboxToast(prevProps, this.props);
-  }
-  */
-  render() {
-    
-    if(
-      !this.props.ready || 
-      !this.props.readyUsers || 
-      !this.props.readyDebug || 
-      !this.props.app
-    ) {
-      return (
-        <div className='centreContainer'>
-          <div className='centrecentre'>
-            <Spin />
-          </div>
-        </div>
-      );
-    }
-    
+const AppView = ({
+  ready, readyUsers, readyDebug, // subs
+  orb, bolt, // meta
+  username, user, active, org, app, users // self
+})=> {
+  
+  const prevUser = usePrevious(user);
+  useLayoutEffect( ()=>{
+    InboxToastPop(prevUser, user);
+  }, [user]);
+  
+   
+  if(
+    !ready || 
+    !readyUsers || 
+    !readyDebug || 
+    !app
+  ) {
     return (
-      <AppWrap
-        orb={this.props.orb}
-        bolt={this.props.bolt}
-        app={this.props.app}
-        users={this.props.users}
-      />
+      <div className='centreContainer'>
+        <div className='centrecentre'>
+          <Spin />
+        </div>
+      </div>
     );
   }
-}
+    
+  return (
+    <AppWrap
+      orb={orb}
+      bolt={bolt}
+      app={app}
+      users={users}
+    />
+  );
+};
 
 export default withTracker( () => {
   let login = Meteor.userId() ? true : false;
