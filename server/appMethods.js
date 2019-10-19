@@ -719,8 +719,13 @@ Meteor.methods({
     
   batchCacheUpdate(accessKey, force) {
     if(typeof accessKey === 'string') {
-      const currentCache = CacheDB.findOne({orgKey: accessKey, dataName:'batchInfo'});
-      if(force || !currentCache || (currentCache && moment().isAfter(currentCache.lastUpdated, 'hour')) ) {
+      const timeOut = moment().subtract(2, 'hours').toISOString();
+      const currentCache = CacheDB.findOne({
+        orgKey: accessKey, 
+        lastUpdated: { $gte: new Date(timeOut) },
+        dataName:'batchInfo'});
+      
+      if(force || !currentCache ) {
         const batches = BatchDB.find({orgKey: accessKey}).fetch();
         const batchesX = XBatchDB.find({orgKey: accessKey}).fetch();
         const slim = [...batches,...batchesX].map( x => {
@@ -739,8 +744,13 @@ Meteor.methods({
   
   priorityCacheUpdate(accessKey, clientTZ, force) {
     if(typeof accessKey === 'string') {
-      const currentCache = CacheDB.findOne({orgKey: accessKey, dataName:'priorityRank'});
-      if(force || !currentCache || (currentCache && moment().isAfter(currentCache.lastUpdated, 'hour')) ) {
+      const timeOut = moment().subtract(1, 'hours').toISOString();
+      const currentCache = CacheDB.findOne({
+        orgKey: accessKey, 
+        lastUpdated: { $gte: new Date(timeOut) },
+        dataName:'priorityRank'});
+      
+      if(force || !currentCache ) {
         const batches = BatchDB.find({orgKey: accessKey, live: true}).fetch();
         const slim = batches.map( x => {
           return Meteor.call('priorityRank', x._id, clientTZ, accessKey);
@@ -758,12 +768,10 @@ Meteor.methods({
   
   phaseCacheUpdate(accessKey, force) {
     if(typeof accessKey === 'string') {
-    // const currentCache = CacheDB.findOne({orgKey: accessKey, dataName:'phaseCondition'});
-    // if(force || !currentCache || (currentCache && moment().isAfter(currentCache.lastUpdated, 'hour')) ) {
-      const hourAgo = moment().subtract(1, 'hour').toISOString();
+      const timeOut = moment().subtract(30, 'minutes').toISOString();
       const currentCache = CacheDB.findOne({
         orgKey: accessKey, 
-        lastUpdated: { $gte: new Date(hourAgo) },
+        lastUpdated: { $gte: new Date(timeOut) },
         dataName:'phaseCondition'});
 
       if( force || !currentCache ) {

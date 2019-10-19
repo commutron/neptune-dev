@@ -21,7 +21,7 @@ moment.updateLocale('en', {
       4: ['11:30:00', '11:30:00'],
       5: null,
       6: null
-  }// including lunch breaks!
+  }
 });
 
 //const now = moment().tz(clientTZ);
@@ -59,62 +59,66 @@ function collectPhaseCondition(privateKey, batchID) {
       const docW = WidgetDB.findOne({_id: batch.widgetId});
       const flow = docW.flows.find( x => x.flowKey === batch.river );
       const riverFlow = flow ? flow.flow : [];
+      
       const rNC = batch.nonCon.filter( n => 
         !n.trash && n.inspect === false && n.skip === false );
       const released = typeof batch.floorRelease === 'object';
-      let potential = released;
-
-      let phaseSets = [];
-      for(let phase of app.phases) {
-        const steps = riverFlow.filter( x => x.phase === phase && x.type !== 'first' );
-        phaseSets.push({
-          phase: phase,
-          steps: steps,
-          condition: false
-        });
-      }
+      let previous = released;
       
-      phaseSets.map( (phet, index)=> {
-        if(phet.steps.length === 0) {
-          null;//phaseSets[index].condition = false;
-        }else if(!potential) {
-          phaseSets[index].condition = 'onHold';
+      let progSteps = riverFlow.filter( x => x.type !== 'first' );
+      progSteps.map( (step, index)=> {
+        if(!previous) {
+          progSteps[index].condition = 'onHold';
         }else{
-          const lastIndex = phet.steps.length > 1 ? phet.steps.length -1 : 0; 
-          const stp = phet.steps[lastIndex];
-          //for(let stp of phet.steps) {
           
           const wipStart = batch.items.some( 
             x => x.history.find( 
-              y => y.key === stp.key
+              y => y.key === step.key && y.good === true
           ) );
           
           if( wipStart === false ) {
-            phaseSets[index].condition = 'allRemain';
-            potential = false;
+            progSteps[index].condition = 'canStart';
+            previous = false;
           }else{
             
             const wipDone = batch.items.every( 
               x => x.history.find( 
-                y => ( y.key === stp.key && y.good === true ) ||
+                y => ( y.key === step.key && y.good === true ) ||
                      ( y.type === 'scrap' && y.good === true ) 
             ) );
-            const nonConLeft = rNC.filter( x => 
-              x.where === stp.phase ).length;
             
-            let condition = !wipDone ? 'stepRemain' :
-                            nonConLeft > 0 ? 'ncRemain' :
-                            'allClear';
+            let condition = !wipDone ? 'stepRemain' : 'allClear';
                          
-            phaseSets[index].condition = condition;
+            progSteps[index].condition = condition;
           }
         }
       });
+      
+      let phaseSets = [];
+      for(let phase of app.phases) {
+        const phaseSteps = progSteps.filter( x => x.phase === phase );
+        const conArr = Array.from(phaseSteps, x => x.condition );
+        const nonConLeft = phase === 'finish' ? rNC.length :
+                            rNC.filter( x => x.where === phase ).length;
+            
+        const phaseCon = phaseSteps.length === 0 ? false :
+          conArr.includes('canStart') ||
+          conArr.includes('stepRemain') ||
+          nonConLeft > 0 ?
+          'open' : 
+          'closed';
+          
+        phaseSets.push({
+          phase: phase,
+          condition: phaseCon
+        });
+      }
  
       collection = {
         batch: batch.batch,
         batchID: batch._id,
-        phaseSets: phaseSets,
+        stepSets: progSteps, // only need for debug
+        phaseSets: phaseSets
       };
       
       resolve(collection);

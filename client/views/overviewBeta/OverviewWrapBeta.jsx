@@ -36,14 +36,16 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
   const [ working, workingSet ] = useState( false );
   const [ loadTime, loadTimeSet ] = useState( moment() );
   const [ tickingTime, tickingTimeSet ] = useState( moment() );
-  const [ filterBy, filterBySet ] = useState(false);
-  const [ sortBy, sortBySet ] = useState('priority');
-  const [ dense, denseSet ] = useState(0);
-  const [ liveState, liveSet ] = useState(false);
+  
+  const [ filterBy, filterBySet ] = useState( false );
+  const [ sortBy, sortBySet ] = useState( 'priority' );
+  const [ dense, denseSet ] = useState( 0 );
+  
+  const [ liveState, liveSet ] = useState( false );
   
   useEffect( ()=> {
     sortInitial();
-  }, [filterBy, sortBy, loadTime]);
+  }, [filterBy, sortBy]);
 
   useInterval( ()=> {
     tickingTimeSet( moment() );
@@ -62,9 +64,10 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
   
   function forceRefresh() {
     workingSet( true );
-    loadTimeSet( false );
-    loadTimeSet( moment() );
+    liveSet( false );
     Meteor.call('FORCEcacheUpdate', clientTZ, ()=>{
+      sortInitial();
+      loadTimeSet( moment() );
       workingSet( false );
     });
   }
@@ -100,9 +103,9 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
           const cP = cB && cB.phaseSets.find( x => x.phase === filterBy );
           const con = cP && cP.condition;
           
-          console.log(`${bx.batch}: ${con}`);
+          Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(`${bx.batch}: ${con}`);
           
-          if(con && con !== 'onHold') {
+          if(con && con === 'open') {
             return bx;
           }
         });
@@ -155,16 +158,6 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
   const density = dense === 1 ? 'compact' :
                   dense === 2 ? 'minifyed' :
                   '';
-  
-  if(!liveState) {
-    return(
-      <div className='centreContainer'>
-        <div className='centrecentre'>
-          <Spin />
-        </div>
-      </div>
-    );
-  }
     
   return(
     <AnimateWrap type='contentTrans'>
@@ -180,7 +173,7 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
           <div className='auxRight'>
             <button
               type='button'
-              title='Refresh Information'
+              title='Refresh Data'
               className={working ? 'spin2' : ''}
               onClick={(e)=>forceRefresh()}>
             <i className='fas fa-sync-alt primeRightIcon'></i>
@@ -247,9 +240,15 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
           <span className='flexSpace' />
           <span>Updated {duration} ago</span>
         </nav>
-          
+      
+      {!liveState ?
+        <div className='centreContainer'>
+          <div className='centrecentre'>
+            <Spin />
+          </div>
+        </div>
+      :
         <div className='overviewContent forceScrollStyle' tabIndex='0'>
-        
           <div className={`overGridFrame ${density}`}>
       
             <BatchHeaders
@@ -272,6 +271,7 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
               
           </div>
         </div>
+      }
         
       </div>
     </AnimateWrap>

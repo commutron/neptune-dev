@@ -70,10 +70,10 @@ const BatchDetailChunk = ({
                     "MMM Do, YYYY" : "MMM Do";
   
   return(
-    <div className='overGridRowScroll' title={ck.batch}>
+    <div className='overGridRowScroll'>
       {Roles.userIsInRole(Meteor.userId(), 'debug') && 
         <div><b>{ck.batch}</b></div> }
-      <div>
+      <div title={ck.batch}>
         <i><i className='label'>SO:<br /></i>{ck.salesOrder}</i>
       </div>
       <div>

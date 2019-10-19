@@ -27,10 +27,11 @@
 }
 .overviewToolbar span,
 .overviewToolbar select,
-.overviewToolbar button {
+.overviewToolbar button { 
   font-size: 1.7vh;
 }
 .overviewToolbar span { padding: 0 1vw; }
+.overviewToolbar select { cursor: pointer; }
 
 .overviewContent {
   grid-area: overviewContent;

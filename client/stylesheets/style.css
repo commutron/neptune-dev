@@ -1252,7 +1252,9 @@ label.qdpplRound {
 	overflow: hidden;
 	border: 0.5px solid rgb(0,0,0);
 }
-.liteToolOn { background-color: var(--asbestos); }
+.liteToolOn { 
+  background-color: var(--asbestos);
+  cursor: default; }
 .liteToolOff { background-color: var(--asbestosfade); }
 .liteToolOff:active { background-color: var(--asbestos); }
 
