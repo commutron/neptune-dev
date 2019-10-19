@@ -253,13 +253,15 @@ Meteor.methods({
     const split = flatOp.split('|');
     const gate = split[0];
     const type = split[1];
+    const phase = split[2];
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $push : { 
           countOption : { 
             key : new Meteor.Collection.ObjectID().valueOf(),
             gate : gate,
-            type : type
+            type : type,
+            phase : phase
           }
       }});
       return true;
@@ -776,7 +778,8 @@ Meteor.methods({
 
       if( force || !currentCache ) {
         const batches = BatchDB.find({orgKey: accessKey, live: true}).fetch();
-        const slim = batches.map( x => {
+        const batchesX = XBatchDB.find({orgKey: accessKey, live: true}).fetch();
+        const slim = [...batches,...batchesX].map( x => {
           return Meteor.call('phaseCondition', x._id, accessKey);
         });
         CacheDB.upsert({orgKey: accessKey, dataName: 'phaseCondition'}, {

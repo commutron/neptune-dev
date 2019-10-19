@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import moment from 'moment';
@@ -17,11 +17,9 @@ import Slides from '../../components/smallUi/Slides.jsx';
 //import ActivityPanel from '/client/views/user/ActivityPanel.jsx';
 import ActivitySlide from './ActivitySlide.jsx';
 import DashSlide from './DashSlide/DashSlide.jsx';
-import AccountsManagePanel from './AccountsManagePanel.jsx';
+import AccountsManagePanel, { PermissionHelp } from './AccountsManagePanel.jsx';
 
 import GuessSlide from './GuessSlide.jsx';
-
-import { PermissionHelp } from '/client/views/app/appPanels/AccountsManagePanel';
 
 const PeopleDataWrap = ({
   ready, readyUsers, readyTides, // subs

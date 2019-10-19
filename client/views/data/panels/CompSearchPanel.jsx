@@ -1,47 +1,39 @@
-import React, {Component} from 'react';
+import React, { useState } from 'react';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
 import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
 import { ToastContainer, toast } from 'react-toastify';
 
-export default class CompSearchPanel extends Component	{
+const CompSearchPanel = (props)=> {
   
-  constructor() {
-    super();
-    this.state = {
-      bChk: true,
-      uChk: false,
-      thing: false,
-      results: []
-    };
+  const [ bChk, setB ] = useState(true);
+  const [ uChk, setU ] = useState(false);
+  const [ thing, setThing ] = useState(false);
+  const [ results, setResults ] = useState([]);
+  
+  function thisThing(e) {
+    setThing( [] );
+    const num = this.pnFind.value.trim().toLowerCase();
+    setThing( num );
   }
   
-  thisThing(value) {
-    this.setState({ results : [] });
-    const num = value.trim().toLowerCase();
-    this.setState({ thing: num });
-  }
-  
-  lookup(e) {
+  function lookup(e) {
     e.preventDefault();
-    if(this.state.thing !== false) {
-      const thing = this.state.thing;
-      const bChk = this.state.bChk;
-      const uChk = this.state.uChk;
+    if(thing !== false) {
       Meteor.call('componentFind', thing, bChk, uChk, (error, reply)=>{
         if(error)
           return error;
         if(reply.length > 0) {
-          this.setState({ results: reply });
+          setResults( reply );
         }else{
-          this.setState({ results: false });
+          setResults( false );
         }
       });
     }else{null}
   }
   
-  dataExport() {
+  function dataExport() {
     toast('request sent, please wait for a download link');
     Meteor.call('componentExportAll', (error, reply)=>{
       if(error)
@@ -63,133 +55,131 @@ export default class CompSearchPanel extends Component	{
     });
   }
 
-  render() {
+  let r = results;
+  let w = 0;
+  r && r.length > 0 ? r.forEach( x => x.vrsns.forEach( y => w += y.btchs.length ) ) : null;
 
-    let r = this.state.results;
-    let w = 0;
-    r && r.length > 0 ? r.forEach( x => x.vrsns.forEach( y => w += y.btchs.length ) ) : null;
-
-    return (
-      <AnimateWrap type='cardTrans'>
-        <div key={1} className='simpleContainer'>
-          <ToastContainer
-            position="top-right"
-            autoClose={5000}
-            newestOnTop />
-          <div className='tenHeader invert'>
-            <div className='topBorder'></div>
-            <HomeIcon />
-            <div className='frontCenterTitle invert'>Parts Search</div>
-            <div className='auxRight invert'>
+  return (
+    <AnimateWrap type='cardTrans'>
+      <div key={1} className='simpleContainer'>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          newestOnTop />
+        <div className='tenHeader invert'>
+          <div className='topBorder'></div>
+          <HomeIcon />
+          <div className='frontCenterTitle invert'>Parts Search</div>
+          <div className='auxRight invert'>
+            <button
+              type='button'
+              title='Download All Parts'
+              onClick={(e)=>dataExport(e)}>
+            <i className='fas fa-download primeRightIcon'></i>
+            </button>
+          </div>
+          <TideFollow invertColor={true} />
+        </div>
+      
+      <div className='simpleContent invert starfishAccents vspace'>
+        <div className='centre space'>
+          <form
+            className='inlineForm'
+            onSubmit={(e)=>lookup(e)}>
+            <label>
+              <input
+                type='search'
+                id='pnFind'
+                className='up'
+                onChange={(e)=>thisThing(e)}
+                autoFocus
+              />
+            </label>
+            <label>
               <button
-                type='button'
-                title='Download All Parts'
-                onClick={(e)=>this.dataExport(e)}>
-              <i className='fas fa-download primeRightIcon'></i>
-              </button>
-            </div>
-            <TideFollow invertColor={true} />
+                type='submit'
+                id='pnFindButton'
+                aria-label='search button'
+                className='smallAction clear'
+              ><i className='fas fa-search'></i></button>
+            </label>
+          </form>
+          <div className='balance'>
+            <br />
+            <span>
+              <input
+                type='checkbox'
+                id='bc'
+                defaultChecked={bChk}
+                onChange={()=>setB(!bChk)}
+              />
+              <label htmlFor='bc'>{Pref.batch} Info</label>
+            </span>
+            <span>
+              <input
+                type='checkbox'
+                id='uc'
+                defaultChecked={uChk}
+                onChange={()=>setU(!uChk)}
+              />
+              <label htmlFor='uc'>{Pref.unit}s Quantity</label>
+            </span>
           </div>
+        </div>
         
-        <div className='simpleContent invert starfishAccents vspace'>
-          <div className='centre space'>
-            <form
-              className='inlineForm'
-              onSubmit={(e)=>this.lookup(e)}>
-              <label>
-                <input
-                  type='search'
-                  id='pnFind'
-                  className='up'
-                  ref={(i)=>this.pn = i}
-                  onChange={()=> this.thisThing(this.pn.value)}
-                  autoFocus
-                />
-              </label>
-              <label>
-                <button
-                  type='submit'
-                  id='pnFindButton'
-                  aria-label='search button'
-                  className='smallAction clear'
-                ><i className='fas fa-search'></i></button>
-              </label>
-            </form>
-            <div className='balance'>
-              <br />
-              <span>
-                <input
-                  type='checkbox'
-                  id='bc'
-                  defaultChecked={true}
-                  onChange={()=>this.setState({bChk: !this.state.bChk})}
-                />
-                <label htmlFor='bc'>{Pref.batch} Info</label>
-              </span>
-              <span>
-                <input
-                  type='checkbox'
-                  id='uc'
-                  defaultChecked={false}
-                  onChange={()=>this.setState({uChk: !this.state.uChk})}
-                />
-                <label htmlFor='uc'>{Pref.unit}s Quantity</label>
-              </span>
-            </div>
+        <div className='centre space'>
+          <div className='balance min400 cap'>
+            <i>{Pref.widget}s: {r ? r.length : 0}</i>
+            <i>{Pref.batch}s: {w}</i>
           </div>
-          
-          <div className='centre space'>
-            <div className='balance min400 cap'>
-              <i>{Pref.widget}s: {r ? r.length : 0}</i>
-              <i>{Pref.batch}s: {w}</i>
-            </div>
+        </div>
+        
+        <hr />
+        
+        {!r ?
+          <div className='space'>
+            <p className='centreText'><em>Nothing Found</em></p>
           </div>
-          
-          <hr />
-          
-          {!r ?
-            <div className='space'>
-              <p className='centreText'><em>Nothing Found</em></p>
-            </div>
-          :
-            <div className='centre space'>
-              <table className='wide searchResult'>
-                {r.map((entry, index)=>{
-                  return(
-                    <tbody key={index}>
-                      <tr className='cap'>
-                        <td colSpan='2'>
-                          {entry.grp} {entry.dsc}
-                        </td>
-                      </tr>
-                      
-                      {entry.vrsns.map((e)=>{
-                        return(
-                          <tr key={e.vKey}>
-                            <td className='up'>
-                              {entry.wdgt}{e.ver}
-                            </td>
-                            <td>
-                            {e.btchs.map((b)=>{
-                              return(
-                                <div key={b.btch + e.vKey} className='mockTableRow'>
-                                  <div className='mockTableCell'>{b.btch}</div>
-                                  {b.cnt > 0 ?
-                                    <div className='mockTableCell'>{b.cnt} boards</div>
-                                  :null}
-                                </div>
-                            )})}
-                            </td>
-                          </tr>
-                      )})}
-                    </tbody>
-                )})}
-              </table>
-            </div>
-          }
-        </div>
-        </div>
-      </AnimateWrap>
-    );
-  }
-}
+        :
+          <div className='centre space'>
+            <table className='wide searchResult'>
+              {r.map((entry, index)=>{
+                return(
+                  <tbody key={index}>
+                    <tr className='cap'>
+                      <td colSpan='2'>
+                        {entry.grp} {entry.dsc}
+                      </td>
+                    </tr>
+                    
+                    {entry.vrsns.map((e)=>{
+                      return(
+                        <tr key={e.vKey}>
+                          <td className='up'>
+                            {entry.wdgt}{e.ver}
+                          </td>
+                          <td>
+                          {e.btchs.map((b)=>{
+                            return(
+                              <div key={b.btch + e.vKey} className='mockTableRow'>
+                                <div className='mockTableCell'>{b.btch}</div>
+                                {b.cnt > 0 ?
+                                  <div className='mockTableCell'>{b.cnt} boards</div>
+                                :null}
+                              </div>
+                          )})}
+                          </td>
+                        </tr>
+                    )})}
+                  </tbody>
+              )})}
+            </table>
+          </div>
+        }
+      </div>
+      </div>
+    </AnimateWrap>
+  );
+};
+
+export default CompSearchPanel;

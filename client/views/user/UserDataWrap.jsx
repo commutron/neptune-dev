@@ -20,7 +20,7 @@ import { AdminDown } from '/client/components/forms/AdminForm.jsx';
 import { ChangeAutoScan } from '/client/components/forms/UserManageForm.jsx';
 import UserSpeedSet from '/client/components/forms/UserSpeedSet.jsx';
 import PasswordChange from '/client/components/forms/PasswordChange.jsx';
-import { PermissionHelp } from '/client/views/app/appPanels/AccountsManagePanel';
+import { PermissionHelp } from '/client/views/people/AccountsManagePanel';
 
 const UserDataWrap = ({
   ready, readyUsers, readyEvents, // subs

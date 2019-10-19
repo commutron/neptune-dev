@@ -1,16 +1,15 @@
-import React, {Component} from 'react';
+import React from 'react';
 import Pref from '/client/global/pref.js';
 
 import Model from '../smallUi/Model.jsx';
 
-export default class CompForm extends Component	{
+const CompForm = ({ id, versionKey, smIcon })=> {
   
-  addParts(e) {
+  function addParts(e) {
     e.preventDefault();
     this.go.disabled = true;
     
-    const id = this.props.id;
-    const vKey = this.props.versionKey;
+    const vKey = versionKey;
     const allNums = this.parts.value.trim().toLowerCase();
     
     const alterOne = allNums.replace(/\s* \s*/gi, "|");// spaces
@@ -27,35 +26,34 @@ export default class CompForm extends Component	{
     });
   }
   
-  render() {
-    return (
-      <Model
-        button={'Add ' + Pref.comp + 's'}
-        title={'Add ' + Pref.comp + 's'}
-        color='greenT'
-        icon='fa-microchip'
-        smIcon={this.props.smIcon}
-        lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit'])}>
-        <form id='new' className='centre' onSubmit={this.addParts.bind(this)}>
-          <p>Add multiple {Pref.comp}s seperated by pipe, space or new line</p>
-          <p>
-            <textarea
-              id='pnum'
-              ref={(i)=> this.parts = i}
-              cols='40'
-              rows='15'
-              autoFocus={true}></textarea>
-            <label htmlFor='pnum'>{Pref.comp} Numbers</label>
-          </p>
-          <p>
-            <button
-              ref={(i)=> this.go = i}
-              disabled={false}
-              className='action clearGreen'
-              type='submit'>Add</button>
-          </p>
-        </form>
-      </Model>
-    );
-  }
-}
+  return (
+    <Model
+      button={'Add ' + Pref.comp + 's'}
+      title={'Add ' + Pref.comp + 's'}
+      color='greenT'
+      icon='fa-microchip'
+      smIcon={smIcon}
+      lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit'])}>
+      <form id='new' className='centre' onSubmit={(e)=>addParts(e)}>
+        <p>Add multiple {Pref.comp}s seperated by pipe, space or new line</p>
+        <p>
+          <textarea
+            id='parts'
+            cols='40'
+            rows='15'
+            autoFocus={true}></textarea>
+          <label htmlFor='parts'>{Pref.comp} Numbers</label>
+        </p>
+        <p>
+          <button
+            id='go'
+            disabled={false}
+            className='action clearGreen'
+            type='submit'>Add</button>
+        </p>
+      </form>
+    </Model>
+  );
+};
+
+export default CompForm;

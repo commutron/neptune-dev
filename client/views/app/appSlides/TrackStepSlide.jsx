@@ -63,7 +63,7 @@ const TrackStepSlide = ({app, sorted})=> {
             <option value='nest'>nest</option>
           </select>
         </label>
-        <label htmlFor={rndmKey + 'type'}>{Pref.phase}<br />
+        <label htmlFor={rndmKey + 'phase'}>{Pref.phase}<br />
           <select id={rndmKey + 'phase'} required >
             <option></option>
             {app.phases.map( (entry, index)=>{

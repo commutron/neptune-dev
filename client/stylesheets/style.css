@@ -397,6 +397,8 @@ label.qdpplRound {
   background-color: var(--orange);
 }
 
+.trueyellowT { color: var(--sunflower); }
+
 .teal { background-color: rgb(26,188,156); }
 .tealT { color: rgb(26,188,156); }
 
@@ -612,6 +614,7 @@ label.qdpplRound {
 
 .fade { opacity: 0.6; }
 .fadeMore { opacity: 0.3; }
+.noFade, .noFade button:disabled { opacity: 1 !important; }
 
 .popText { text-shadow: rgb(20,20,20) 1px 1px;}
 

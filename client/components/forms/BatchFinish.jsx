@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 
 import ModelMedium from '../smallUi/ModelMedium.jsx';
 
-const BatchFinish = ({ batchId, finished, allFinished, live })=>	{
+const BatchFinish = ({ batchId, finished, finishedAt, allFinished, live })=>	{
   
   const handleFinish = ()=> {
     Meteor.call('finishBatch', batchId, false, (error)=>{
@@ -12,10 +12,18 @@ const BatchFinish = ({ batchId, finished, allFinished, live })=>	{
     });
   };
   const handleUndoFinish = ()=> {
-    Meteor.call('undoFinishBatch', batchId, false, (error)=>{
+    Meteor.call('undoFinishBatch', batchId, finishedAt, (error)=>{
       error && console.log(error);
     });
   };
+  
+  const handleLive = (change)=> {
+    Meteor.call('changeStatus', batchId, change, (error)=>{
+      error && console.log(error);
+    });
+  };
+  
+  const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
   const auth = Roles.userIsInRole(Meteor.userId(), 'finish') && !finished;
   
   if(!finished && allFinished) {
@@ -42,29 +50,42 @@ const BatchFinish = ({ batchId, finished, allFinished, live })=>	{
     );
   }
   
-  if(finished && Roles.userIsInRole(Meteor.userId(), 'admin') ) {
-    return(
-      <div>
-        <p className='cap'>
-          <i><i className='fa fa-check-circle greenT fa-2x'></i></i> {Pref.batch} is Finished
-        </p>
-        <p>
-        <button
-          id='isDone'
-          className='action greenHover'
-          onClick={()=>handleUndoFinish()}
-        >Clear Finish Date and Reopen</button>
-        </p>
-      </div>
-    );
-  }
-  
   if(finished) {
     return(
       <div>
-        <p className='cap'>
-          <b><i className='fa fa-check-circle greenT fa-2x'></i></b> {Pref.batch} is Finished
+        <p className='cap middle'>
+          <button
+            id='isDone'
+            title={`Clear Finish Date\n & Reopen`}
+            className='miniAction noFade medBig'
+            onClick={()=>handleUndoFinish()}
+            disabled={!isAdmin}
+          ><i className='fas fa-check-circle greenT fa-2x fa-fw'></i>
+          </button>   {Pref.batch} is Finished
         </p>
+        {!live ?
+          <p className='cap middle'>
+            <button
+              id='isDone'
+              title='Turn ON'
+              className='miniAction noFade medBig'
+              onClick={()=>handleLive(true)}
+              disabled={!isAdmin}
+            ><i><i className='far fa-lightbulb grayT fa-2x fa-fw'></i></i>
+            </button>   {Pref.batch} is {Pref.notlive}
+          </p>
+        :
+          <p className='cap middle'>
+            <button
+              id='isDone'
+              title='Turn OFF'
+              className='miniAction noFade medBig'
+              onClick={()=>handleLive(false)}
+              disabled={!isAdmin}
+            ><b><i className='fas fa-lightbulb trueyellowT fa-2x fa-fw'></i></b>
+            </button>   {Pref.batch} is {Pref.live}
+          </p>
+        }
       </div>
     );
   }

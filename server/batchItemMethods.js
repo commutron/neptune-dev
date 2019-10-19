@@ -770,13 +770,24 @@ Meteor.methods({
   },
   
   // Clear / Undo finish Batch
-  undoFinishBatch(batchId) {
+  undoFinishBatch(batchId, oldDate) {
     if( Roles.userIsInRole(Meteor.userId(), 'admin') ) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
   			$set : { 
   			  live: true,
   			  finishedAt: false
-      }});
+        },
+        $push : {
+          altered: {
+            changeDate: new Date(),
+            changeWho: Meteor.userId(),
+            changeReason: 'user discretion',
+            changeKey: 'finishedAt',
+            oldValue: oldDate,
+            newValue: 'false'
+          }
+        }
+      });
     }else{null}
   },
   

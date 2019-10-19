@@ -33,12 +33,13 @@ const InfoTab = ({
                     batchID={b._id}
                     app={a} />
                 </div>
-                <b><i className='fas fa-sync blueT fa-2x' title='Live'></i></b>
+                <b><i className='fas fa-lightbulb trueyellowT fa-3x' title='Live'></i></b>
               </div>
             }
             <BatchFinish 
               batchId={b._id} 
-              finished={done} 
+              finished={done}
+              finishedAt={b.finishedAt} 
               allFinished={allDone}
               live={b.live} />
           

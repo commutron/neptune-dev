@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-const CounterSlide = ({app})=> {
+const CounterSlide = ({ app })=> {
   
   const rndmKey = Math.random().toString(36).substr(2, 5);
   
@@ -12,8 +12,9 @@ const CounterSlide = ({app})=> {
     let newOp = this[rndmKey + 'input'].value.trim();
     newOp = newOp.replace("|", "-");
     let type = this[rndmKey + 'type'].value.trim();
+    let phase = this[rndmKey + 'phase'].value.trim();
     
-    const newSet = newOp + '|' + type;
+    const newSet = newOp + '|' + type + '|' + phase;
     
     Meteor.call('addCountOption', newSet, (error, reply)=>{
       if(error)
@@ -21,6 +22,7 @@ const CounterSlide = ({app})=> {
       if(reply) {
         this[rndmKey + 'input'].value = '';
         this[rndmKey + 'type'].value = '';
+        this[rndmKey + 'phase'].value = '';
       }else{
         toast.warning('server error');
       }
@@ -56,6 +58,15 @@ const CounterSlide = ({app})=> {
             <option value='finish'>finish</option>
           </select>
         </label>
+        <label htmlFor={rndmKey + 'phase'}>{Pref.phase}<br />
+          <select id={rndmKey + 'phase'} required >
+            <option></option>
+            {app.phases.map( (entry, index)=>{
+              return( 
+                <option key={index} value={entry}>{entry}</option>
+            )})}
+          </select>
+        </label>
         <label htmlFor={rndmKey + 'add'}><br />
           <button
             type='submit'
@@ -68,7 +79,9 @@ const CounterSlide = ({app})=> {
         
       <ul>
         {app.countOption && app.countOption.map( (entry, index)=>{
-          return ( <li key={index}>{entry.gate} - {entry.type}</li> );
+          return( 
+            <li key={index}>{entry.gate} - {entry.type} - {entry.phase || 'n/a'}</li> 
+          );
         })}
       </ul>
     </div>

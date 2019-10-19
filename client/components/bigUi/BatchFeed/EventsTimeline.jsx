@@ -86,7 +86,7 @@ const AlterBlock = ({ dt })=>{
       </div>
       
       <div className='moreInfoList'>
-        <dd>{dt.oldValue} <i className="fas fa-arrow-right fa-fw"></i> {dt.newValue}</dd>
+        <dd>{dt.oldValue.toLocaleString()} <i className="fas fa-arrow-right fa-fw"></i> {dt.newValue.toLocaleString()}</dd>
       </div>
       
     </div>

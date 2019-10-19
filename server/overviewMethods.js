@@ -51,11 +51,63 @@ export function batchTideTime(batchTide) {
 function collectPhaseCondition(privateKey, batchID) {
   return new Promise(resolve => {
     let collection = false;
+    const app = AppDB.findOne({orgKey: privateKey});
+    const batchX = XBatchDB.findOne({_id: batchID});
     const batch = BatchDB.findOne({_id: batchID});
-    if(!batch) {
+    if(batchX) {
+      const quantity = batchX.quantity;
+      const waterfall = batchX.waterfall;
+      const released = batchX.releases.findIndex( x => x.type === 'floorRelease') >= 0;
+      let previous = released;
+      
+      let progSteps = waterfall;
+      progSteps.map( (step, index)=> {
+        if(!previous) {
+          progSteps[index].condition = 'onHold';
+        }else{
+          
+          const wfCount = step.counts.length === 0 ? 0 :
+            Array.from(step.counts, x => x.tick).reduce((x,y)=> x + y);
+          
+          if( wfCount <= 0 ) {
+            progSteps[index].condition = 'canStart';
+            previous = false;
+          }else{
+            
+            let condition = wfCount < quantity ? 
+                            'stepRemain' : 'allClear';
+                         
+            progSteps[index].condition = condition;
+          }
+        }
+      });
+      
+      let phaseSets = [];
+      for(let phase of app.phases) {
+        const phaseSteps = progSteps.filter( x => x.phase === phase );
+        const conArr = Array.from(phaseSteps, x => x.condition );
+           
+        const phaseCon = phaseSteps.length === 0 ? false :
+          conArr.includes('canStart') ||
+          conArr.includes('stepRemain') ?
+          'open' : 
+          'closed';
+          
+        phaseSets.push({
+          phase: phase,
+          condition: phaseCon
+        });
+      }
+ 
+      collection = {
+        batch: batchX.batch,
+        batchID: batchX._id,
+        stepSets: progSteps, // only need for debug
+        phaseSets: phaseSets
+      };
+      
       resolve(collection);
-    }else{
-      const app = AppDB.findOne({orgKey: privateKey});
+    }else if(batch) {
       const docW = WidgetDB.findOne({_id: batch.widgetId});
       const flow = docW.flows.find( x => x.flowKey === batch.river );
       const riverFlow = flow ? flow.flow : [];
@@ -82,7 +134,7 @@ function collectPhaseCondition(privateKey, batchID) {
           }else{
             
             const wipDone = batch.items.every( 
-              x => x.history.find( 
+              x => x.finishedAt !== false || x.history.find( 
                 y => ( y.key === step.key && y.good === true ) ||
                      ( y.type === 'scrap' && y.good === true ) 
             ) );
@@ -121,6 +173,8 @@ function collectPhaseCondition(privateKey, batchID) {
         phaseSets: phaseSets
       };
       
+      resolve(collection);
+    }else{
       resolve(collection);
     }
   });
@@ -323,7 +377,7 @@ function collectProgress(privateKey, batchID) {
       phaseSets.map( (phet, index)=> {
         for(let stp of phet.steps) {
           const wipTally = historyFlat.filter( x => x.key === stp.key ).length;
-          phaseSets[index].count = phet.count + doneItems + wipTally;
+          phaseSets[index].count = phet.count + ( doneItems + wipTally );
         }
       });
  
