@@ -15,6 +15,7 @@ import Remove from '../forms/Remove.jsx';
 
 import UnitSet from '../forms/UnitSet.jsx';
 import PanelBreak from '../forms/PanelBreak.jsx';
+import ItemIncompleteForm from '../forms/ItemIncompleteForm.jsx';
 import ScrapForm from '../forms/ScrapForm.jsx';
 
 import WidgetEditForm from '../forms/WidgetEditForm.jsx';
@@ -47,7 +48,12 @@ const ActionBar = ({
           batch={batchData.batch}
     	    item={itemData}
     	    noText={noText} />
-        <ScrapForm
+        <ItemIncompleteForm
+	        id={batchData._id}
+	        item={itemData}
+	        app={app}
+	        noText={noText} />
+	      <ScrapForm
 	        id={batchData._id}
 	        item={itemData}
 	        anc={app.ancillaryOption}

@@ -204,7 +204,7 @@ Meteor.methods({
     }
   },
   
-// setup quote time key
+// setup quote time key // LEGACY SUPPORT
   upBatchTimeBudget(batchId) {
     try{
       if(Roles.userIsInRole(Meteor.userId(), ['sales', 'edit'])) {
@@ -222,7 +222,7 @@ Meteor.methods({
   // push time budget, whole time for batch
   pushBatchTimeBudget(batchId, qTime) {
     try{
-      if(Roles.userIsInRole(Meteor.userId(), ['sales', 'edit'])) {
+      if(Roles.userIsInRole(Meteor.userId(), ['sales', 'run', 'edit'])) {
         BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
           $push : { 
             'quoteTimeBudget': {
@@ -369,15 +369,15 @@ Meteor.methods({
       &&
       barFirst < barEnd
       &&
-      barEnd - barFirst < 1001
+      ( barEnd - barFirst ) <= 9999
       &&
-      unit > 0
+      unit >= 1
       &&
-      unit <= 250
+      unit <= 999
       ) {
         const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
         const open = doc.finishedAt === false;
-        const auth = Roles.userIsInRole(Meteor.userId(), 'run');
+        const auth = Roles.userIsInRole(Meteor.userId(), 'create');
         
         const dupeCheck = (barFirst, barEnd, floor) => {
           let clear = true;
@@ -517,8 +517,8 @@ Meteor.methods({
   
   //// unit corection
   setItemUnit(id, bar, unit) {
-    const auth = Roles.userIsInRole(Meteor.userId(), 'run');
-    if(auth && unit > 0 && unit <= 100) {
+    const auth = Roles.userIsInRole(Meteor.userId(), ['edit', 'run']);
+    if(auth && unit >= 1 && unit <= 999) {
       BatchDB.update({_id: id, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
         $set : { 
           'items.$.units': Number(unit)
@@ -771,7 +771,7 @@ Meteor.methods({
   
   // Clear / Undo finish Batch
   undoFinishBatch(batchId, oldDate) {
-    if( Roles.userIsInRole(Meteor.userId(), 'admin') ) {
+    if( Roles.userIsInRole(Meteor.userId(), 'run') ) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
   			$set : { 
   			  live: true,
@@ -832,6 +832,47 @@ Meteor.methods({
     }
   },
   
+// Close an incomplete item \\
+  finishIncompleteItem(batchId, bar, comm) {
+    if(Roles.userIsInRole(Meteor.userId(), ['qa', 'run'])) {
+      const orgKey = Meteor.user().orgKey;
+      const username = Meteor.user().username;
+      // update item
+      BatchDB.update({_id: batchId, orgKey: orgKey, 'items.serial': bar}, {
+        // scrap entry to history
+        $push : { 
+  			  'items.$.history': {
+  			    key: 'f1n15h1t3m5t3p',
+            step: 'finish incomplete',
+            type: 'finish',
+            good: true,
+            time: new Date(),
+            who: Meteor.userId(),
+            comm: comm,
+            info: false
+  			  }
+  			},
+  			// finish item
+  			$set : { 
+  			  'items.$.finishedAt': new Date(),
+  			  'items.$.finishedWho': Meteor.userId()
+  			}
+      });
+      Meteor.defer( ()=>{
+        Meteor.call(
+          'setBatchEvent', 
+          orgKey,
+          batchId, 
+          'Item Finished Incomplete', 
+          `Item ${bar} recorded as finished by ${username}`
+        );
+      });
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
   //  remove a step
   popHistory(batchId, serial) {
     if(Roles.userIsInRole(Meteor.userId(), 'active')) {
@@ -851,7 +892,7 @@ Meteor.methods({
   
 //  remove a step
   pullHistory(batchId, bar, key, time) {
-    if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
+    if(Roles.userIsInRole(Meteor.userId(), ['edit', 'run'])) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
         $pull : {
           'items.$.history': {key: key, time: time}

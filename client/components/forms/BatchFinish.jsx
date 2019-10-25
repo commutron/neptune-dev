@@ -23,8 +23,8 @@ const BatchFinish = ({ batchId, finished, finishedAt, allFinished, live })=>	{
     });
   };
   
-  const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
-  const auth = Roles.userIsInRole(Meteor.userId(), 'finish') && !finished;
+  const isRun = Roles.userIsInRole(Meteor.userId(), 'run');
+  const auth = isRun && !finished;
   
   if(!finished && allFinished) {
     return(
@@ -59,7 +59,7 @@ const BatchFinish = ({ batchId, finished, finishedAt, allFinished, live })=>	{
             title={`Clear Finish Date\n & Reopen`}
             className='miniAction noFade medBig'
             onClick={()=>handleUndoFinish()}
-            disabled={!isAdmin}
+            disabled={!isRun}
           ><i className='fas fa-check-circle greenT fa-2x fa-fw'></i>
           </button>   {Pref.batch} is Finished
         </p>
@@ -70,7 +70,7 @@ const BatchFinish = ({ batchId, finished, finishedAt, allFinished, live })=>	{
               title='Turn ON'
               className='miniAction noFade medBig'
               onClick={()=>handleLive(true)}
-              disabled={!isAdmin}
+              disabled={!isRun}
             ><i><i className='far fa-lightbulb grayT fa-2x fa-fw'></i></i>
             </button>   {Pref.batch} is {Pref.notlive}
           </p>
@@ -81,7 +81,7 @@ const BatchFinish = ({ batchId, finished, finishedAt, allFinished, live })=>	{
               title='Turn OFF'
               className='miniAction noFade medBig'
               onClick={()=>handleLive(false)}
-              disabled={!isAdmin}
+              disabled={!isRun}
             ><b><i className='fas fa-lightbulb trueyellowT fa-2x fa-fw'></i></b>
             </button>   {Pref.batch} is {Pref.live}
           </p>

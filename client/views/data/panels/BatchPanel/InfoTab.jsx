@@ -33,7 +33,6 @@ const InfoTab = ({
                     batchID={b._id}
                     app={a} />
                 </div>
-                <b><i className='fas fa-lightbulb trueyellowT fa-3x' title='Live'></i></b>
               </div>
             }
             <BatchFinish 

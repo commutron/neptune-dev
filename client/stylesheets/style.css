@@ -344,13 +344,13 @@ label.qdpplRound {
 .orangeT { color: var(--carrot); }
 .orangeHover,
 .invert .orangeHover {
-	color: var(--orange);
+	color: var(--carrot);
 	background-color: var(--clouds);
 }
 .orangeHover:hover,
 .invert .orangeHover:hover {
   color: var(--clouds);
-	background-color: var(--orange);
+	background-color: var(--carrot);
 }
 .orangeHover:disabled:hover,
 .invert .orangeHover:disabled:hover {
@@ -360,8 +360,6 @@ label.qdpplRound {
 .orangeBorder { 
   background-color: transparent;
 	border: 3px solid var(--carrot);
-	box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2),
-	      inset 0 0 .1em .1em rgba(43,43,43,0.2);
 }
 
 .darkOrange { background-color:  var(--pumpkin); }
@@ -523,6 +521,7 @@ label.qdpplRound {
 .clearOrange:hover,
 .invert .clearOrange:hover {
   background-color: var(--orange);
+  color: black;
 }
 
 .clearTeal,

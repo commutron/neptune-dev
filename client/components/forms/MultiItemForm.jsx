@@ -54,11 +54,11 @@ export default class MultiItemForm extends Component {
       //&&
       !isNaN(count)
       &&
-      count > 0
+      count >= 1
       &&
-      count < 1001
+      count <= 9999
       &&
-      unit <= 250
+      unit <= 999
     ) {
         valid = true;
       }
@@ -119,7 +119,7 @@ export default class MultiItemForm extends Component {
 
   render() {
     
-    const auth = Roles.userIsInRole(Meteor.userId(), 'run');
+    const auth = Roles.userIsInRole(Meteor.userId(), 'create');
     const dig = this.state.digits;
     const today = moment().format('YYMMDD');
     let iconSty = this.state.work ? 'workIcon' : 'transparent';

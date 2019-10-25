@@ -714,8 +714,7 @@ Meteor.methods({
       const key = Meteor.user().orgKey;
       Meteor.call('batchCacheUpdate', key, true);
       Meteor.call('priorityCacheUpdate', key, clientTZ, true);
-      if( Roles.userIsInRole(Meteor.userId(), 'nightly') ) {
-        Meteor.call('phaseCacheUpdate', key, true); }
+      Meteor.call('phaseCacheUpdate', key, true);
     }
   },
     

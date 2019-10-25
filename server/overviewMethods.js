@@ -181,53 +181,6 @@ function collectPhaseCondition(privateKey, batchID) {
   });
 }
 
-function collectRelevant(accessKey, temp, activeList, sortBy) {
-  return new Promise(resolve => { // DEPRECIATE
-    const liveBatches = 
-      sortBy === 'sales' ?
-        BatchDB.find({orgKey: accessKey, live: true},{sort: {salesOrder:-1}}).fetch() :
-      sortBy === 'due' ?
-        BatchDB.find({orgKey: accessKey, live: true},{sort: {end:-1}}).fetch() :
-      BatchDB.find({orgKey: accessKey, live: true},{sort: {batch:-1}}).fetch();
-    // get the relevant batches
-    if(temp === 'cool') {
-      const coolBatches = liveBatches.filter( x => x.floorRelease === false );
-      resolve(coolBatches);
-    }else if(temp === 'warm') {
-      const warmBatches = liveBatches.filter( x => typeof x.floorRelease === 'object' );
-      resolve(warmBatches);
-    }else if(temp === 'luke') {
-      const lukeBatches = liveBatches.filter( x => 
-        typeof x.floorRelease === 'object' && activeList.includes( x.batch ) === false);
-      resolve(lukeBatches);
-    }else if(temp === 'hot') {
-      const hotBatches = liveBatches.filter( x => activeList.includes( x.batch ) === true );
-      resolve(hotBatches);
-    }else {
-      [];
-    }
-  });
-}
-
-function collectActive(accessKey, clientTZ, relevant) {
-  return new Promise(resolve => { // DEPRECIATE
-    
-    const now = moment().tz(clientTZ);
-    let list = [];
-    
-    for(let b of relevant) {
-      const tide = b.tide || [];
-      let isActive = tide.find( x => 
-        now.isSame(moment(x.startTime), 'day')
-      ) ? true : false;
-      isActive === true && list.push(b.batch);
-    }
-    
-    resolve(list);
-  });
-}
-
-
 function collectStatus(privateKey, batchID, clientTZ) {
   return new Promise(resolve => {
     let collection = false;
@@ -452,22 +405,6 @@ function collectNonCon(privateKey, batchID, temp) {
 
 
 Meteor.methods({
-
-
-//// Basic Status information for WIP Batches \\\\
-  activeCheck(clientTZ, sortBy) {
-    async function bundleActive(clientTZ) {
-      const accessKey = Meteor.user().orgKey;
-      try {
-        relevant = await collectRelevant(accessKey, 'warm', false, sortBy);
-        collection = await collectActive(accessKey, clientTZ, relevant);
-        return collection;
-      }catch (err) {
-        throw new Meteor.Error(err);
-      }
-    }
-    return bundleActive(clientTZ);
-  },
   
   overviewBatchStatus(batchID, clientTZ) {
     async function bundleProgress(batchID) {
