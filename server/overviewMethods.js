@@ -102,7 +102,7 @@ function collectPhaseCondition(privateKey, batchID) {
       collection = {
         batch: batchX.batch,
         batchID: batchX._id,
-        stepSets: progSteps, // only need for debug
+        // stepSets: progSteps, // only need for debug
         phaseSets: phaseSets
       };
       
@@ -117,7 +117,7 @@ function collectPhaseCondition(privateKey, batchID) {
       const released = typeof batch.floorRelease === 'object';
       let previous = released;
       
-      let progSteps = riverFlow.filter( x => x.type !== 'first' );
+      let progSteps = riverFlow;//.filter( x => x.type !== 'first' );
       progSteps.map( (step, index)=> {
         if(!previous) {
           progSteps[index].condition = 'onHold';
@@ -131,13 +131,14 @@ function collectPhaseCondition(privateKey, batchID) {
           if( wipStart === false ) {
             progSteps[index].condition = 'canStart';
             previous = false;
+          }else if(step.type === 'first') {
+            progSteps[index].condition = 'allClear';
           }else{
             
             const wipDone = batch.items.every( 
               x => x.finishedAt !== false || x.history.find( 
-                y => ( y.key === step.key && y.good === true ) ||
-                     ( y.type === 'scrap' && y.good === true ) 
-            ) );
+                y => ( y.key === step.key && y.good === true ) )
+            );
             
             let condition = !wipDone ? 'stepRemain' : 'allClear';
                          
@@ -169,7 +170,7 @@ function collectPhaseCondition(privateKey, batchID) {
       collection = {
         batch: batch.batch,
         batchID: batch._id,
-        stepSets: progSteps, // only need for debug
+        // stepSets: progSteps, // only need for debug
         phaseSets: phaseSets
       };
       
@@ -355,14 +356,19 @@ function collectProgress(privateKey, batchID) {
       const docW = WidgetDB.findOne({_id: batch.widgetId});
       const flow = docW.flows.find( x => x.flowKey === batch.river );
       const riverFlow = flow ? flow.flow : [];
+      const rNC = batch.nonCon.filter( n => 
+        !n.trash && n.inspect === false && n.skip === false );
       
       let phaseSets = [];
       for(let phase of app.phases) {
         const steps = riverFlow.filter( x => x.phase === phase && x.type !== 'first' );
+        const nonConLeft = phase === 'finish' ? rNC.length > 0 :
+                            rNC.filter( x => x.where === phase ).length > 0;
         phaseSets.push({
           phase: phase,
           steps: steps,
           count: 0,
+          ncLeft: nonConLeft
         });
       }
       

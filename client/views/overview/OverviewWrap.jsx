@@ -31,29 +31,32 @@ function useInterval(callback, delay) {
   }, [delay]);
 }
 
-const OverviewWrap = (props)=> {
+const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> {
 
+  const [ working, workingSet ] = useState( false );
   const [ loadTime, loadTimeSet ] = useState( moment() );
   const [ tickingTime, tickingTimeSet ] = useState( moment() );
-  const [ sortBy, sortBySet ] = useState('batch');
-  const [ hotState, hotSet ] = useState(false);
-  const [ warmState, warmSet ] = useState(false);
-  const [ lukeState, lukeSet ] = useState(false);
-  const [ coolState, coolSet ] = useState(false);
+  
+  const [ filterBy, filterBySet ] = useState( false );
+  const [ sortBy, sortBySet ] = useState( 'priority' );
+  const [ dense, denseSet ] = useState( 0 );
+  
+  const [ liveState, liveSet ] = useState( false );
   
   useEffect( ()=> {
-    splitInitial();
-  }, [sortBy, loadTime]);
-  
-  useEffect( ()=> {
-    if(warmState) {
-      sortHot();
-    }
-  }, [warmState]);
-    
+    workingSet( true );
+    sortInitial();
+  }, [filterBy, sortBy]);
+
   useInterval( ()=> {
     tickingTimeSet( moment() );
   },1000*60);
+  
+  function changeFilter(e) {
+    const value = e.target.value;
+    const filter = value === 'false' ? false : value;
+    filterBySet( filter );
+  }
   
   function changeSort(e) {
     const sort = e.target.value;
@@ -61,96 +64,103 @@ const OverviewWrap = (props)=> {
   }
   
   function forceRefresh() {
-    loadTimeSet( false );
-    loadTimeSet( moment() );
-    const clientTZ = moment.tz.guess();
-    Meteor.call('FORCEcacheUpdate', clientTZ);
+    workingSet( true );
+    liveSet( false );
+    Meteor.call('FORCEcacheUpdate', clientTZ, ()=>{
+      sortInitial();
+      loadTimeSet( moment() );
+      workingSet( false );
+    });
   }
   
-  function splitInitial() {
+  function sortInitial() {
     return new Promise((resolve) => {
-      const batches = props.b;
-      let warmBatches = [];
-      let coolBatches = [];
+      const batches = b;
+      const batchesX = bx;
       
-      let orderedBatches = batches;
+      let liveBatches = [...batches,...batchesX];
+      
+      let filteredBatches = filterBy === false ? liveBatches :
+        filterBy === Pref.kitting ? 
+        liveBatches.filter( bx => {
+          const releasedToFloor = Array.isArray(bx.releases) ?
+            bx.releases.findIndex( x => x.type === 'floorRelease') >= 0 :
+            typeof bx.floorRelease === 'object';
+          if(!releasedToFloor) {
+            return bx;
+          }
+        }) :
+        filterBy === Pref.released ? 
+        liveBatches.filter( bx => {
+          const releasedToFloor = Array.isArray(bx.releases) ?
+            bx.releases.findIndex( x => x.type === 'floorRelease') >= 0 :
+            typeof bx.floorRelease === 'object';
+          if(releasedToFloor) {
+            return bx;
+          }
+        }) :
+        liveBatches.filter( bx => {
+          const cB = cCache.dataSet.find( x => x.batchID === bx._id);
+          const cP = cB && cB.phaseSets.find( x => x.phase === filterBy );
+          const con = cP && cP.condition;
+          
+          Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(`${bx.batch}: ${con}`);
+          
+          if(con && con === 'open') {
+            return bx;
+          }
+        });
+      
+      let orderedBatches = filteredBatches;
       
       if(sortBy === 'priority') {
-        orderedBatches = batches.sort((b1, b2)=> {
-          const pB1 = props.pCache.dataSet.find( x => x.batchID === b1._id);
-          const pB1bf = pB1 ? pB1.estEnd2fillBuffer : 0;
-          const pB2 = props.pCache.dataSet.find( x => x.batchID === b2._id);
-          const pB2bf = pB2 ? pB2.estEnd2fillBuffer : 0;
+        orderedBatches = filteredBatches.sort((b1, b2)=> {
+          const pB1 = pCache.dataSet.find( x => x.batchID === b1._id);
+          const pB1bf = pB1 ? pB1.estEnd2fillBuffer : null;
+          const pB2 = pCache.dataSet.find( x => x.batchID === b2._id);
+          const pB2bf = pB2 ? pB2.estEnd2fillBuffer : null;
           
+          if (!pB1bf) { return 1 }
+          if (!pB2bf) { return -1 }
           if (pB1bf < pB2bf) { return -1 }
           if (pB1bf > pB2bf) { return 1 }
           return 0;
         });
         
       }else if(sortBy === 'sales') {
-        orderedBatches = batches.sort((b1, b2)=> {
-          if (b1.salesOrder < b2.salesOrder) { return 1 }
-          if (b1.salesOrder > b2.salesOrder) { return -1 }
+        orderedBatches = filteredBatches.sort((b1, b2)=> {
+          if (b1.salesOrder < b2.salesOrder) { return -1 }
+          if (b1.salesOrder > b2.salesOrder) { return 1 }
           return 0;
         });
       }else if( sortBy === 'due') {
-        orderedBatches = batches.sort((b1, b2)=> {
-          if (b1.end < b2.end) { return -1 }
-          if (b1.end > b2.end) { return 1 }
+        orderedBatches = filteredBatches.sort((b1, b2)=> {
+          let endDate1 = b1.salesEnd || b1.end;
+          let endDate2 = b2.salesEnd || b2.end;
+          if (endDate1 < endDate2) { return -1 }
+          if (endDate1 > endDate2) { return 1 }
           return 0;
         });
       }else{
-        orderedBatches = batches.sort((b1, b2)=> {
+        orderedBatches = filteredBatches.sort((b1, b2)=> {
           if (b1.batch < b2.batch) { return 1 }
           if (b1.batch > b2.batch) { return -1 }
           return 0;
         });
       }
       
-      warmBatches = orderedBatches.filter( x => typeof x.floorRelease === 'object' );
-      coolBatches = orderedBatches.filter( x => x.floorRelease === false );
-      
-      //const batchesX = this.props.bx;
-      //const warmBx = batchesX.filter( x => x.releases.find( y => y.type === 'floorRelease') == true );
-      //const warmBx = batchesX.filter( x => x.releases.find( y => y.type === 'floorRelease') != true );
-      
-      warmSet( warmBatches );
-      coolSet( coolBatches );
+      liveSet( orderedBatches );
+      workingSet( false );
     });
   }
-  
-  function sortHot() {
-    const clientTZ = moment.tz.guess();
-    Meteor.call('activeCheck', clientTZ, sortBy, (error, reply)=> {
-      error && console.log(error);
-      if(reply) {
-        const hot = warmState.filter( x => reply.includes( x.batch ) === true );
-        const luke = warmState.filter( x => reply.includes( x.batch ) === false );
-        hotSet( hot );
-        lukeSet( luke );
-      }
-    });
-  }
-    
-    //console.log({hot: this.state.hotBatches});
-    //console.log({hotStuff: this.state.hotStatus});
-    //console.log({luke: this.state.lukeBatches});
-    //console.log({lukeStuff: this.state.lukeStatus});
-    //console.log({coolStuff: this.state.coolStatus});
-    
+   
   const duration = moment.duration(
     loadTime.diff(tickingTime))
       .humanize();
-  
-  if(!warmState) {
-    return (
-      <div className='centreContainer'>
-        <div className='centrecentre'>
-          <Spin />
-        </div>
-      </div>
-    );
-  }
+      
+  const density = dense === 1 ? 'compact' :
+                  dense === 2 ? 'minifyed' :
+                  '';
     
   return(
     <AnimateWrap type='contentTrans'>
@@ -166,7 +176,8 @@ const OverviewWrap = (props)=> {
           <div className='auxRight'>
             <button
               type='button'
-              title='Refresh Information'
+              title='Refresh Data'
+              className={working ? 'spin2' : ''}
               onClick={(e)=>forceRefresh()}>
             <i className='fas fa-sync-alt primeRightIcon'></i>
             </button>
@@ -174,51 +185,97 @@ const OverviewWrap = (props)=> {
           <TideFollow />
         </div>
         
-        <nav className='scrollToNav overviewNav'>
+        <nav className='overviewToolbar'>
           <span>
-            <i>sort by: </i>
+            <i className='fas fa-filter fa-fw grayT'></i>
+            <select
+              id='filterSelect'
+              title={`Change ${Pref.phase} Filter`}
+              className='overToolSort liteToolOn'
+              defaultValue={filterBy}
+              onChange={(e)=>changeFilter(e)}>
+              <option value={false}>All</option>
+              <option value={Pref.kitting} className='cap'>{Pref.kitting}</option>
+              <option value={Pref.released} className='cap'>{Pref.released}</option>
+              {app.phases.map( (ph, ix)=> {
+                return(
+                  <option key={ph+ix} value={ph}>{ph}</option>
+              )})}
+            </select>
+          </span>
+          
+          <span>
+            <i className='fas fa-sort-amount-down fa-fw grayT'></i>
             <select
               id='sortSelect'
               title='Change List Order'
-              className='overlistSort'
+              className='overToolSort liteToolOn'
               defaultValue={sortBy}
-              onClick={(e)=>changeSort(e)}>
+              onChange={(e)=>changeSort(e)}>
+              <option value='priority'>priority</option>
               <option value='batch'>{Pref.batch}</option>
               <option value='sales'>{Pref.salesOrder}</option>
               <option value='due'>{Pref.end}</option>
-              <option value='priority'>priority</option>
             </select>
           </span>
+          
+          <span>
+            <button
+              key='denseOff'
+              title='Comfort Layout'
+              onClick={()=>denseSet(0)}
+              className={dense === 0 ? 'liteToolOn' : 'liteToolOff'}
+            ><i className='fas fa-expand-arrows-alt fa-fw'></i></button>
+            <button
+              key='compactOn'
+              title='Compact Layout'
+              onClick={()=>denseSet(1)}
+              className={dense === 1 ? 'liteToolOn' : 'liteToolOff'}
+            ><i className='fas fa-compress fa-fw'></i></button>
+            <button
+              key='miniOn'
+              title='Minifyed Layout'
+              onClick={()=>denseSet(2)}
+              className={dense === 2 ? 'liteToolOn' : 'liteToolOff'}
+            ><i className='fas fa-compress-arrows-alt fa-fw'></i></button>
+          </span>
+          
           <span className='flexSpace' />
           <span>Updated {duration} ago</span>
         </nav>
-          
+      
         <div className='overviewContent forceScrollStyle' tabIndex='0'>
-        
-          <div className='overGridFrame'>
+          
+        {!liveState ?
+          <div className='centreContainer'>
+            <div className='centrecentre'>
+              <Spin />
+            </div>
+          </div>
+        :  
+          <div className={`overGridFrame ${density}`}>
       
             <BatchHeaders
               key='fancylist0'
-              hB={hotState}
-              lB={lukeState}
-              cB={coolState}
-              bCache={props.bCache}
+              oB={liveState}
+              bCache={bCache}
+              title={filterBy || 'All Live'}
             />
             
             <BatchDetails
               key='fancylist1'
-              hB={hotState}
-              lB={lukeState}
-              cB={coolState}
-              bCache={props.bCache}
-              pCache={props.pCache}
-              user={props.user}
-              app={props.app}
+              oB={liveState}
+              bCache={bCache}
+              pCache={pCache}
+              user={user}
+              clientTZ={clientTZ}
+              app={app}
+              dense={dense > 1}
             />
               
           </div>
+        }  
         </div>
-        
       </div>
     </AnimateWrap>
   );

@@ -15,7 +15,6 @@ import Spin from '/client/components/uUi/Spin.jsx';
 
 import ProdData from './views/production/ProdData.jsx';
 import OverviewData from './views/overview/OverviewData.jsx';
-import OverviewDataBeta from './views/overviewBeta/OverviewDataBeta.jsx';
 
 import PeopleDataWrap from './views/people/PeopleDataWrap.jsx';
 import UserDataWrap from './views/user/UserDataWrap.jsx';
@@ -146,9 +145,7 @@ privlegedRoutes.route('/overview', {
   name: 'overview',
   action() {
     mount(CleanLayout, {
-      content: (
-        !Roles.userIsInRole(Meteor.userId(), 'nightly') ?
-        <OverviewData /> : <OverviewDataBeta /> )
+      content: ( <OverviewData /> )
     });
   }
 });

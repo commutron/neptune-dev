@@ -10,10 +10,10 @@ import Spin from '../../components/uUi/Spin.jsx';
 import OverviewWrap from './OverviewWrap.jsx';
 
 const View = ({
-  appReady, readyUsers, ready, // subs
-  username, user, org, app, // self
-  group, widget, batch, batchX, // working data
-  bCache, pCache // caches
+  login, sub, appReady, readyUsers, ready, 
+  username, user, clientTZ, org, app, 
+  batch, batchX, 
+  bCache, pCache, cCache
 })=> {
   
   const prevUser = usePrevious(user);
@@ -22,7 +22,7 @@ const View = ({
   }, [user]);
   
     
-  if(!appReady || !readyUsers || !ready || !app) {
+  if( !appReady || !readyUsers || !ready || !app ) {
     return (
       <div className='centreContainer'>
         <div className='centrecentre'>
@@ -32,18 +32,20 @@ const View = ({
     );
   }
 
-  return (
+  return(
     <OverviewWrap 
-      //g={group}
-      //w={widget}
       b={batch}
       bx={batchX}
       bCache={bCache}
       pCache={pCache}
+      cCache={cCache}
       user={user}
-      app={app} />
+      app={app}
+      clientTZ={clientTZ} />
   );
 };
+
+
 
 export default withTracker( () => {
   let login = Meteor.userId() ? true : false;
@@ -71,13 +73,13 @@ export default withTracker( () => {
       username: name,
       user: user,
       org: org,
+      clientTZ: clientTZ,
       app: AppDB.findOne({org: org}),
-      //group: GroupDB.find().fetch(),
-      //widget: WidgetDB.find().fetch(),
-      batch: BatchDB.find({},{sort: {batch:-1}}).fetch(),
-      batchX: XBatchDB.find().fetch(),
+      batch: BatchDB.find({live: true}).fetch(),
+      batchX: XBatchDB.find({live: true}).fetch(),
       bCache: CacheDB.findOne({dataName: 'batchInfo'}),
       pCache: CacheDB.findOne({dataName: 'priorityRank'}),
+      cCache: CacheDB.findOne({dataName: 'phaseCondition'}),
     };
   }
 })(View);

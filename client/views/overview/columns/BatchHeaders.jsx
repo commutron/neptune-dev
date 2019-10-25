@@ -1,54 +1,25 @@
 import React from 'react';
-import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 
-
-const BatchHeaders = ({hB, lB, cB, bCache })=> {
+const BatchHeaders = ({ oB, bCache, title })=> {
   
   return(
     <div className='overGridFixed'>
-      
-      <div id="hotBatch" className='overGridRowFixedHeader'>
-        <h1>Active <sup>{hB.length}</sup></h1>
+        
+      <div id="allLiveBatch" className='overGridRowFixedHeader'>
+        <h1>{title} <sup>{oB.length}</sup></h1>
       </div>
       
-      {!hB ? null :
-        hB.map( (entry, index)=>{
+      {!oB ? null :
+        oB.map( (entry, index)=>{
           return(
             <BatchHeaderChunk
-              key={`${entry._id}hotfixed${index}`}
+              key={`${entry._id}livefixed${index}`}
               ck={entry}
               bCache={bCache} />
       )})}
-      
-      <div id="lukewarmBatch" className='overGridRowFixedHeader'>
-        <h1>In Progress <sup>{lB.length}</sup></h1>
-      </div>
-            
-      {!lB ? null :
-        lB.map( (entry, index)=>{
-          return(
-            <BatchHeaderChunk
-              key={`${entry._id}lukefixed${index}`}
-              ck={entry}
-              bCache={bCache} />
-      )})}
-      
-      <div id="coolBatch" className='overGridRowFixedHeader'>
-        <h1>In Kitting <sup>{cB.length}</sup></h1>
-      </div>
-      
-      {!cB ? null :
-        cB.map( (entry, index)=>{
-          return(
-            <BatchHeaderChunk
-              key={`${entry._id}coolfixed${index}`}
-              ck={entry}
-              bCache={bCache} />
-      )})}
-      
       
     </div>
   
