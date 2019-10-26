@@ -108,16 +108,6 @@ Meteor.methods({
     return { results, exact };
   },
   
- /*
-  autofillInfo(keyword) {
-    const batch = BatchDB.findOne({batch: keyword});
-    const widget = WidgetDB.findOne({_id: batch.widgetId});
-    const version = widget.versions.find( x => x.versionKey === batch.versionKey);
-    const group = GroupDB.findOne({_id: widget.groupId});
-    const niceString = `${group.alias.toUpperCase()} ${widget.widget.toUpperCase()} v.${version.version}`;
-    return niceString;
-  },
-  */
   quickVersion(vKey) {
     const widget = WidgetDB.findOne({'versions.versionKey': vKey});
     const version = widget ? widget.versions.find( x => x.versionKey === vKey) : false;
@@ -237,15 +227,6 @@ Meteor.methods({
       });
     }
     
-    /*
-    let timeLabels = [];
-    for(let i = 0; i < howManyDays; i++) {
-      const day = startDay.clone().add(i, 'day');
-      if(business.isWeekDay(day)) {
-        timeLabels.push(day.format() );
-      }
-    }
-    */
     return flowSeries;
   },
   
@@ -560,15 +541,12 @@ Meteor.methods({
       const range = end.diff(begin, 'day') + 2;
       
       let nonconSet = [];
-      // let labelSet = [];
       for(let i = 0; i < range; i++) {
         let qDay = begin.clone().add(i, 'day').format();
         
         let ncCount = recordedNC(theseNC, qDay);
         nonconSet.push(ncCount);
-        // labelSet.push(ncCount.meta);
       }
-      // return { counts: nonconSet, labels: labelSet };
       return nonconSet;
     }
     
@@ -580,15 +558,6 @@ Meteor.methods({
       }else{null}
     }
     
-    // const allCounts = Array.from( nonconCollection, x => x.counts );
-    
-    // let buildLabels = [];
-    // let combine = Array.from( nonconCollection, x => x.labels );
-    // combine.forEach( x => x.forEach( y => buildLabels.push(y) ) );
-    
-    // let allLabels = [... new Set( buildLabels ) ];
-    
-    // return { counts: allCounts, labels: allLabels };
     return nonconCollection;
   },
   
@@ -610,7 +579,7 @@ Meteor.methods({
       const g = GroupDB.findOne({_id: w.groupId});
       const items = b.items.filter( 
                       x => x.history.find( 
-                        y => y.type === 'scrap' ) );
+                        y => y.type === 'scrap' && y.good === true ) );
       compactData.push({
         batch: b.batch,
         widget: w.widget,

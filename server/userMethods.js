@@ -146,7 +146,7 @@ Meteor.methods({
   deleteUserForever(userId, pin) {
     const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
     const user = Meteor.users.findOne({_id: userId});
-    const orgless = user.orgKey === false;
+    //const orgless = user.orgKey === false;
     const inactive = !Roles.userIsInRole(userId, 'active');
     const admin = Roles.userIsInRole(userId, 'admin');
     const self = Meteor.userId() === userId;
@@ -155,15 +155,13 @@ Meteor.methods({
     const orgPIN = org ? org.orgPIN : null;
     const dbblCheck = orgPIN === pin;
 
-    if(auth && orgless && inactive && !admin && !self && dbblCheck) {
+    if(user && auth && inactive && !admin && !self && dbblCheck) {
       Meteor.users.remove(userId);
       return true;
     }else{
       return false;
     }
   },
-  
-  // need to finish email handling \\
   
   // emailRemove(email) {
   // Accounts.removeEmail(Meteor.userId(), email)
@@ -322,39 +320,6 @@ Meteor.methods({
       });
     }
   },
-  
-  //if(valid) { Meteor.call('dropBreadcrumb', this.userId, 'batch', batch); }
-  /*
-  dropBreadcrumb(pingId, pingType, pingkeyword) {
-    if(pingkeyword) {
-      const user = Meteor.users.findOne({_id: pingId});
-      const basket = user.breadcrumbs;
-      if(!basket) {
-        Meteor.users.update(pingId, {
-          $set: {
-            breadcrumbs: [],
-          }
-        });
-      }else{
-        const lately = basket.find( x => x.keyword === pingkeyword && moment().isSame(x.time, 'day') );
-        if(!lately) {
-          Meteor.users.update(pingId, {
-            $push: { 
-              breadcrumbs: {
-                $each: [{
-                  type: pingType,
-                  keyword: pingkeyword,
-                  time: new Date()
-                }],
-                $slice: -100
-              }
-            }
-          });
-        }
-      }
-    }
-  },
-  */
   
   fetchOrgTideActivity(dateString, clientTZ) {
     try {
@@ -516,7 +481,9 @@ Meteor.methods({
     try {
       if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
         const time = moment().format();
-        const logString = `Error, Type: ${errorType}, ${time}, username: ${Meteor.user().username} session: ${sessionID}, ${info}`;
+        const logString = `Error, Type: ${errorType}, ${time}, 
+                            username: ${Meteor.user().username} 
+                              session: ${sessionID}, ${info}`;
         Meteor.users.update(Meteor.userId(), {
           $push: {
             usageLog: logString,

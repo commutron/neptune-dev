@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import moment from 'moment';
+import 'moment-timezone';
 import Pref from '/client/global/pref.js';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 
@@ -32,9 +34,9 @@ const PeoplePanel = ({
     setChunks(nmrlChunks);
   }, [eUsers, update]);
   
-  Roles.userIsInRole(Meteor.userId(), 'debug') && 
-    console.log(userChunks);
-   
+  Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(userChunks);
+  
+  const clientTZ = moment.tz.guess();
    
   return(
     <div>
@@ -52,7 +54,8 @@ const PeoplePanel = ({
                 app={app}
                 updatePhases={(id, ph)=>updatePhases(id, ph)}
                 removePhaser={(id)=>removePhaser(id)}
-                update={update} />
+                update={update}
+                clientTZ={clientTZ} />
           )})}
         </tbody>
       </table>
@@ -65,7 +68,10 @@ const PeoplePanel = ({
           {dUsers.map( (entry, index)=>{
             return(
               <tr key={entry._id} className='leftText line2x'>
-                <td colSpan='4' className='noRightBorder medBig'><UserNice id={entry._id} /></td>
+                <td 
+                  colSpan='4' 
+                  className='noRightBorder medBig'
+                ><UserNice id={entry._id} /></td>
               </tr>
           )})}
         </tbody>

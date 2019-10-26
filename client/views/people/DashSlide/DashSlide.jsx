@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 //import { toast } from 'react-toastify';
 import Pref from '/client/global/pref.js';
 //import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
@@ -22,16 +22,19 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
     const smpList = _.values(currPhases);
     setPhaseList(smpList);
   };
+  
   const removePhaser = (uID)=>{
+    const indexes = Object.keys(app.phases);
+    const rmvKeys = Array.from(indexes, x => uID+x ); 
     let currPhases = userPhases;
-    const lessPhases = _.omit(currPhases, uID);
+    const lessPhases = _.omit(currPhases, rmvKeys);
     setUserPhases(lessPhases);
     const smpList = _.values(lessPhases);
     setPhaseList(smpList);
   };
   
   const obj2xy = (obj) => {
-      if( typeof obj === 'object' ) {
+    if( typeof obj === 'object' ) {
       const itr = Object.entries(obj);
       const xy = Array.from(itr, (arr)=> { return {x: arr[0], y: arr[1]} } );
       return xy;
@@ -40,7 +43,7 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
     }
   };
   
-  useLayoutEffect( ()=>{
+  useEffect( ()=>{
     const pQuant = pList.reduce( (allPhase, phase)=> { 
     phase &&
       phase in allPhase ? allPhase[phase]++ : allPhase[phase] = 1;
@@ -56,13 +59,14 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
   const dUsers = liveUsers.filter( x => !x.engaged );
   const userArr = [eUsers.length, dUsers.length ];
 
-// underscore ??
-  const eBatches = Array.from(eUsers,
-    x => batches.find(
-      y => y && y.tide && y.tide.find(
-        z => z.tKey === x.engaged.tKey )
-    )
-  );
+  const tideBatches = batches.filter( x => Array.isArray(x.tide) === true );
+  const eBatches = eUsers.map( (user, index)=>{
+    const acBatch = tideBatches.find( y =>
+      y.tide.find( z => z.tKey === user.engaged.tKey ) );
+    if(acBatch) {
+      return acBatch;
+    }  
+  });
   
   Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({eUsers,eBatches});
 

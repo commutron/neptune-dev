@@ -7,6 +7,7 @@ import { ToastContainer } from 'react-toastify';
 import InboxToastPop from '/client/components/utilities/InboxToastPop.js';
 import usePrevious from '/client/components/utilities/usePreviousHook.js';
 
+import ErrorCatch from '/client/components/utilities/ErrorCatch.jsx';
 import Pref from '/client/global/pref.js';
 import Spin from '../../components/uUi/Spin.jsx';
 
@@ -47,7 +48,8 @@ const PeopleDataWrap = ({
   const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
   const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
   
-  return (
+  return(
+    <ErrorCatch>
     <div className='simpleContainer'>
       <ToastContainer
         position="top-right"
@@ -109,6 +111,7 @@ const PeopleDataWrap = ({
 				
       </div>
     </div>
+    </ErrorCatch>
   );
 };
 

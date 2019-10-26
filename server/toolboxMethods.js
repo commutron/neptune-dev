@@ -14,7 +14,6 @@ Meteor.methods({
       return false;
     }
   },
-  */
   resetCacheDB() {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       CacheDB.remove({orgKey: Meteor.user().orgKey});
@@ -23,6 +22,7 @@ Meteor.methods({
       return false;
     }
   },
+  */
   
   
   repairNonConsDANGEROUS(oldText, newText, exact) {

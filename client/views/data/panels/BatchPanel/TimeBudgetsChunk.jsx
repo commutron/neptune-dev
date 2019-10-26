@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import moment from 'moment';
 import business from 'moment-business';
 import 'moment-timezone';
@@ -10,8 +10,18 @@ import TimeBudgetBar from '/client/components/charts/Tides/TimeBudgetBar.jsx';
 
 const TimeBudgetsChunk = ({
   a, b, v,
-  totalUnits,
+  totalUnits, clientTZ
 }) =>	{
+  
+  useEffect( ()=>{
+    if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
+      Meteor.call('assemblePhaseTime', b._id, clientTZ, (err, reply)=>{
+        err && console.log(err);
+        reply && console.log(reply);
+      });
+    }
+  }, []);
+  
   
   const totalSTbyPeople = ()=> {
     let totalTime = 0;

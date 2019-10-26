@@ -1,5 +1,5 @@
 import React from 'react';
-// import moment from 'moment';
+import moment from 'moment';
 import 'moment-business';
 import 'moment-timezone';
 //import Pref from '/client/global/pref.js';
@@ -16,6 +16,8 @@ const TimeTab = ({
   riverFlow, riverAltFlow
 }) =>	{
 
+  const clientTZ = moment.tz.guess();
+  
   const proto = Roles.userIsInRole(Meteor.userId(), 'nightly');
   const pSup = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
 
@@ -59,7 +61,8 @@ const TimeTab = ({
         a={a}
         b={b}
         v={v}
-        totalUnits={totalUnits} />
+        totalUnits={totalUnits}
+        clientTZ={clientTZ} />
         
       <div className='dropCeiling vmargin space'>
         <ProgLayerBurndown
@@ -86,7 +89,7 @@ const TimeTab = ({
       
       {( pSup || proto ) &&
         <div className='vmargin space'>
-          <TimeBlocksRaw tide={b.tide} />
+          <TimeBlocksRaw batch={b.batch} tide={b.tide} clientTZ={clientTZ} />
         </div>
       }
               
@@ -95,22 +98,3 @@ const TimeTab = ({
 };
 
 export default TimeTab;
-
-
-/*<div>
-  <ol>
-    {sortedTimes.map( (step, index)=>{
-      return(
-        <ol key={index}>
-          <b>{step.step} inspect</b>
-          {step.entries.map( (ding, inx)=>{
-            return(
-              <li key={inx}>
-                - {ding.time.toString()} - 
-                - <AnonyUser id={ding.who} />
-              </li> 
-          )})}
-        </ol>
-    )})}
-  </ol>
-</div>*/

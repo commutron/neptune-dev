@@ -7,7 +7,7 @@ import UserNice from '/client/components/smallUi/UserNice.jsx';
 
 const PersonChunk = ({ 
   userChunk, bCache, app, 
-  updatePhases, removePhaser, update
+  updatePhases, removePhaser, update, clientTZ
 })=> {
   
   const uC = userChunk;
@@ -19,6 +19,8 @@ const PersonChunk = ({
     userChunk.uID, 
     userChunk.batch,
     userChunk.tideBlock.startTime,
+    false,
+    clientTZ,
     (err, asw)=>{
       err && console.log(err);
       asw && setGuess(asw);
@@ -26,15 +28,16 @@ const PersonChunk = ({
   }, [userChunk.batch, update]);
   
   useEffect( ()=>{
-    phaseGuess && updatePhases(userChunk.uID, phaseGuess[1]);
+    if(phaseGuess) {
+      phaseGuess[1].forEach( (gu, ix) => updatePhases(userChunk.uID+ix, gu) );
+    }
   }, [phaseGuess]);
   
   useEffect( ()=>{
     return ()=>removePhaser(userChunk.uID);
   }, []);
   
-  Roles.userIsInRole(Meteor.userId(), 'debug') && 
-    console.log(phaseGuess);
+  Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(phaseGuess);
   
   const moreInfo = bCache ? bCache.dataSet.find( x => x.batch === uC.batch) : false;
   const what = moreInfo ? moreInfo.isWhat : 'unavailable';
@@ -44,10 +47,9 @@ const PersonChunk = ({
       <td className='noRightBorder medBig'><UserNice id={uC.uID} /></td>
       <td className='noRightBorder'>
         {!phaseGuess ? 
-          <i className='clean small'>unknown</i> : 
-          phaseGuess[1] === 'finish' ? 
-            app.lastTrack.step :
-            phaseGuess[1]
+          <i className='clean small'>unknown</i> 
+        : 
+          phaseGuess[1].join(', ')
         }
       </td>
       <td className='noRightBorder'>{uC.batch}</td>
@@ -56,10 +58,12 @@ const PersonChunk = ({
         {moment(uC.tideBlock.startTime).isSameOrBefore(moment().startOf('day')) ?
           <em title='Time has been running for more than a day'>
             <i className="fas fa-exclamation-triangle fa-fw fa-xs yellowT"></i>
-          </em> :
+          </em> 
+        :
           <b title='Start Time'>
             <i className="fas fa-play fa-fw fa-xs greenT"></i>
-          </b> }
+          </b>
+        }
         <i> {moment(uC.tideBlock.startTime).format('hh:mm A')}</i>
       </td>
     </tr>

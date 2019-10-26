@@ -45,14 +45,14 @@ export const TraverseWrap = ({
     FlowRouter.go('/production');
   }
     
-    let scrollFix = {
-      overflowY: 'scroll'
-    };
-    
-    const invert = invertColor ? 'invert' : '';
+  let scrollFix = {
+    overflowY: 'scroll'
+  };
+  
+  const invert = invertColor ? 'invert' : '';
 
-    return(
-      <ErrorCatch>
+  return(
+    <ErrorCatch>
       <div className='containerEx'>
         <ToastContainer
           position="top-right"
@@ -148,6 +148,6 @@ export const TraverseWrap = ({
         </section>
         
       </div>
-      </ErrorCatch>
-    );
-  };
+    </ErrorCatch>
+  );
+};
