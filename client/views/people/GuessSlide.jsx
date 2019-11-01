@@ -55,7 +55,7 @@ const GuessSlide = ({ app, user, users, pCache })=> {
   
   
   return(
-    <div>
+    <div className='space5x5'>
       <dl>
         {!numState ? 'sure' :
           numState.map( (entry, index)=>{

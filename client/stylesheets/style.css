@@ -611,6 +611,8 @@ label.qdpplRound {
 
 .letterSpaced { letter-spacing: 2px; }
 
+.strike { text-decoration: line-through; }
+
 .fade { opacity: 0.6; }
 .fadeMore { opacity: 0.3; }
 .noFade, .noFade button:disabled { opacity: 1 !important; }
@@ -1129,84 +1131,6 @@ label.qdpplRound {
   border-color: black;
   border-color: rgba(0,0,0,0.2);
 }
-
-/* timeline
-.timelineList {
-  margin: 10px;
-  width: 90%;
-  display: grid;
-  grid-auto-columns: 50% 50%;
-  grid-auto-rows: 125px;
-  align-items: stretch;
-}
-.timelineWrap {
-  display: flex;
-}
-.timelineItem {
-  margin: 5px;
-  min-width: 15ch;
-  max-width: 75ch;
-  min-height: 40px;
-}
-.timelineWrap:nth-child(odd) {
-  grid-column: 1;
-  justify-self: end;
-  border-right: 3px solid var(--peterriver);
-}
-.timelineWrap:nth-child(even) {
-  grid-column: 2;
-  justify-self: start;
-  border-left: 3px solid var(--peterriver);
-}
-.timelineWrap:nth-child(odd) .timelineItem {
-  align-self:  flex-start;
-}
-.timelineWrap:nth-child(even) .timelineItem {
-  align-self: flex-end;
-}
-.timelineWrap:nth-child(odd):after {
-  content: "";
-  display: inline-block;
-  position: relative;
-  top: 30px;
-  left: 0px;
-  height: 5px;
-  width: 20px;
-  border-bottom: 5px solid var(--peterriver);
-}
-.timelineWrap:nth-child(even):before {
-  content: "";
-  display: inline-block;
-  position: relative;
-  top: 80px;
-  left: 0px;
-  height: 5px;
-  width: 20px;
-  border-bottom: 5px solid var(--peterriver);
-}
-.timelineItemTitle {
-  padding: 5px 10px 5px 10px;
-}
-.timelineItemBody {
-  margin-left: 10px;
-  padding: 5px 10px 10px 10px;
-}
-
-.timelineItem.good .timelineItemTitle { 
-  background-color: var(--nephritis) }
-.timelineItem.fine .timelineItemTitle { 
-  background-color: var(--orange) }
-.timelineItem.bad .timelineItemTitle { 
-  background-color: var(--pomegranate) }
-.timelineItem.good { background-color: var(--nephritisfade) }
-.timelineItem.fine { background-color: var(--orangefade) }
-.timelineItem.bad { background-color: var(--pomegranatefade) }
-
-.timelineListFooter {
-  height: 10px;
-  width: 100%;
-}
-*/
 
 .waterfallHistory {
   margin: 2vh 0;

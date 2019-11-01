@@ -1,23 +1,21 @@
-import React, {Component} from 'react';
+import React from 'react';
 // import { Accounts } from 'meteor/accounts-base'
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import Model from '../smallUi/Model.jsx';
 import { AdminUp } from '../forms/AdminForm.jsx';
 
-export default class UserManageForm extends Component {
+const UserManageForm = (props)=> {
   
-  forcePassword(e) {
+  function forcePassword(e) {
     e.preventDefault();
     const check = window.confirm('Are you sure you to change this users password?');
     const newPass = prompt('New Password', '');
     const newConfirm = prompt('New Password Again', '');
-    const self = Meteor.userId() === this.props.id;
+    const self = Meteor.userId() === props.id;
     if(check && !self && newPass === newConfirm) {
-      Meteor.call('forcePasswordChange', this.props.id, newPass, (error, reply)=>{
-        if(error)
-          console.log(error);
+      Meteor.call('forcePasswordChange', props.id, newPass, (error, reply)=>{
+        error && console.log(error);
         reply ? toast.success('Saved') : toast.error('Server Error');
       });
     }else{
@@ -25,113 +23,101 @@ export default class UserManageForm extends Component {
     }
   }
   
-  hndlRemove() {
-    const user = this.props.id;
-    const pin = this.pIn.value;
+  function hndlRemove(e) {
+    const user = props.id;
+    const pin = this.pInNum.value;
     Meteor.call('removeFromOrg', user, pin, (err, reply)=>{
-      if (err)
-        console.log(err);
-      if(reply) {
-        toast.success('Saved');
-      }else{
-        toast.error('Server Error');
-      }
+      err && console.log(err);
+      reply ? toast.success('Saved') : toast.error('Server Error');
     });
   }
 
-  render() {
-    
-    const active = Roles.userIsInRole(this.props.id, 'active') ? 'blackT' : 'blackT fade';
-    const admin = Roles.userIsInRole(this.props.id, 'admin');
-    const adminFlag = admin ? Pref.admin : '';
-                     
-    const roles = this.props.roles;
+    //const active = Roles.userIsInRole(props.id, 'active') ? 'blackT' : 'blackT fade';
+  const admin = Roles.userIsInRole(props.id, 'admin');
+  const adminFlag = admin ? Pref.admin : '';
+                   
+  const roles = props.roles;
 
-    return (
-      <Model
-        button={<i className='big'>{this.props.name}</i>}
-        title={this.props.name + "'s account permissions"}
-        color={active}
-        icon='hide'>
-        <h2 className='low'>{this.props.name}</h2>
-        <p className='clean'>id: {this.props.id}</p>
-        <p className='blueT'>{adminFlag}</p>
-        <p>organization: <i className='greenT'>{this.props.org}</i></p>
-        <br />
-        
-        <div className='balance'>
-          <fieldset className='min300'>
-            <legend>Permissions</legend>
-            <br />
-            <ul>
-              {roles.map( (entry, index)=>{
-                if(entry === 'peopleSuper') {
-                  return(
-                    <SetCheckSuper
-                      key={index}
-                      user={this.props.id}
-                      role={entry}
-                    />
-                )}else{
-                  return(
-                    <SetCheck
-                      key={index}
-                      user={this.props.id}
-                      role={entry}
-                    />
-                )}})}
-            </ul>
-          </fieldset>
-        
-          <div>
-          
-            <AdminUp userId={this.props.id} />
-            <br />
-            {!admin ?
-              <fieldset>
-                <legend>Forgot Password</legend>
-                <button
-                  className='smallAction clear redT'
-                  onClick={this.forcePassword.bind(this)}
-                >Change Password</button>
-              </fieldset>
-            :null}
-        
-            {this.props.org && this.props.id !== Meteor.userId() ?
-              // leaving an org is undesirable
-              <fieldset>
-                <legend>Remove from organization</legend>
-                <input
-                    type='password'
-                    ref={(i)=> this.pIn = i}
-                    id='pInNum'
-                    pattern='[0000-9999]*'
-                    maxLength='4'
-                    minLength='4'
-                    cols='4'
-                    placeholder='Admin PIN'
-                    inputMode='numeric'
-                    autoComplete='new-password'
-                    required
+  return(
+    <div>
+      
+      <h3>Username: <i className='biggest'>{props.name}</i></h3>
+      <h3 className='clean'>ID: {props.id}</h3>
+      <p className='blueT'>{adminFlag}</p>
+      <p>organization: <i className='greenT'>{props.org}</i></p>
+      
+      <div className=''>
+        <fieldset className=''>
+          <legend>Account Permissions</legend>
+          <br />
+          <ul>
+            {roles.map( (entry, index)=>{
+              if(entry === 'peopleSuper') {
+                return(
+                  <SetCheckSuper
+                    key={index}
+                    user={props.id}
+                    role={entry}
                   />
-                <button 
-                  onClick={this.hndlRemove.bind(this)}
-                  className='smallAction red'
-                  >Remove from Organization: "{this.props.org}"
-                </button>
-              </fieldset>
-            : null}
-            
-          </div>
-        </div>
-      </Model>
+              )}else{
+                return(
+                  <SetCheck
+                    key={index}
+                    user={props.id}
+                    role={entry}
+                  />
+              )}})}
+          </ul>
+        </fieldset>
+      
+        <div>
+        
+          <AdminUp userId={props.id} />
+          <br />
+          {!admin ?
+            <fieldset>
+              <legend>Forgot Password</legend>
+              <button
+                className='smallAction clear redT'
+                onClick={(e)=>forcePassword(e)}
+              >Change Password</button>
+            </fieldset>
+          :null}
+      
+          {props.org && props.id !== Meteor.userId() ?
+            // leaving an org is undesirable
+            <fieldset>
+              <legend>Remove from organization</legend>
+              <input
+                type='password'
+                id='pInNum'
+                pattern='[0000-9999]*'
+                maxLength='4'
+                minLength='4'
+                cols='4'
+                placeholder='Admin PIN'
+                inputMode='numeric'
+                autoComplete='new-password'
+                required
+              />
+              <button 
+                onClick={(e)=>hndlRemove(e)}
+                className='smallAction red'
+                >Remove from Organization: "{props.org}"
+              </button>
+            </fieldset>
+          : null}
           
-      );
-  }
-}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default UserManageForm;
 
 
-const SetCheckSuper = ({user, role})=>	{
+const SetCheckSuper = ({ user, role })=>	{
   const check = Roles.userIsInRole(user, role);
   
   function changeSuper() {
@@ -164,7 +150,7 @@ const SetCheckSuper = ({user, role})=>	{
   );
 };
 
-const SetCheck = ({user, role})=>	{
+const SetCheck = ({ user, role })=> {
   const check = Roles.userIsInRole(user, role);
   
   function change() {

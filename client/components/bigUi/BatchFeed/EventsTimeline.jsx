@@ -6,8 +6,12 @@ import UserNice from '/client/components/smallUi/UserNice.jsx';
 
 const EventsTimeline = ({ id, batch, verifyList, eventList, alterList, quoteList, doneBatch })=> {
   
+  const vL = verifyList || [];
+  const eL = eventList || [];
+  const aL = alterList || [];
+  const qL = quoteList || [];
   
-  let sortedList = [...verifyList, ...eventList, ...alterList, ...quoteList].sort((x, y)=> {
+  let sortedList = [...vL, ...eL, ...aL, ...qL].sort((x, y)=> {
                       let timeX = x.time || x.changeDate || x.updatedAt;
                       let timeY = y.time || y.changeDate || y.updatedAt;
                       if (moment(timeX).isBefore(timeY)) { return -1 }
@@ -18,7 +22,7 @@ const EventsTimeline = ({ id, batch, verifyList, eventList, alterList, quoteList
   return(
     <div className='scrollWrap'>
       <div className='infoFeed'>
-        {verifyList.length > 0 && eventList.length > 0 &&
+        {vL.length > 0 && eL.length > 0 &&
           <p>Combined timeline of Events and First-Off Verifications</p>}
         {sortedList.map( (dt, ix)=>{
           if(dt.key) {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Slides = ({ menu, disable, children })=> {
+const Slides = ({ menu, disable, extraClass, children })=> {
   
   const [ section, setSection ] = useState(0);
   
@@ -11,7 +11,7 @@ const Slides = ({ menu, disable, children })=> {
   let show = section;
   const dA = Array.isArray(disable) ? disable : [];
     
-  return (
+  return(
     <div className='slidesLayout'>
       <div className='slidesMenu noPrint'>
         {menu.map( (entry, index)=>{
@@ -27,7 +27,7 @@ const Slides = ({ menu, disable, children })=> {
             >{entry}</button>
         )})}
       </div>
-      <div className='slidesSlide'>
+      <div className={`slidesSlide ${extraClass || ''}`}>
 
         {children[show]}
       

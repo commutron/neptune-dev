@@ -19,12 +19,14 @@ const PeoplePanel = ({
       const batchMatch = eBatches.find( 
         x => x.tide.find(  y => y.tKey === u.engaged.tKey ) 
       );
-      const uTide = batchMatch.tide.find(  y => y.tKey === u.engaged.tKey );
-      chunks.push({
-        uID: u._id,
-        batch: batchMatch.batch,
-        tideBlock: uTide,
-      });
+      const uTide = batchMatch && batchMatch.tide.find(  y => y.tKey === u.engaged.tKey );
+      if(uTide) {
+        chunks.push({
+          uID: u._id,
+          batch: batchMatch.batch,
+          tideBlock: uTide,
+        });
+      }
     }
     const nmrlChunks = chunks.sort((x1, x2)=> {
       if (x1.batch < x2.batch) { return 1 }
@@ -34,7 +36,7 @@ const PeoplePanel = ({
     setChunks(nmrlChunks);
   }, [eUsers, update]);
   
-  Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(userChunks);
+  Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({userChunks});
   
   const clientTZ = moment.tz.guess();
    

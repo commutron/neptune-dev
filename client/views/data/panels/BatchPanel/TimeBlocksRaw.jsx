@@ -1,25 +1,62 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 // import 'moment-timezone';
+import Pref from '/client/global/pref.js';
 import { AnonyUser } from '/client/components/smallUi/UserNice.jsx';
 
-const TimeBlocksRaw = ({ batch, tide, clientTZ })=> (
-  <dl className='numFont'>
-  {!tide ?
-    <p className='centreText'>start/stop not enabled</p>
-    :
-    tide.map( (mov, index)=>{
-      return(
-        <RawBlock key={index} tB={mov} batch={batch} clientTZ={clientTZ} />
-    )})}
-  </dl>
-);
+const TimeBlocksRaw = ({ batch, tide, clientTZ })=> {
+  
+  const isDebug = Roles.userIsInRole(Meteor.userId(), 'debug');
+  
+  const [ showZero, showZeroSet ] = useState(isDebug);
+  
+  return(
+    <div>
+      <table className='numFont wide'>
+        <tbody>
+        {!tide ?
+          <p className='centreText'>start/stop not enabled</p>
+          :
+          tide.map( (mov, index)=>{
+            return(
+              <RawBlock
+                key={index} 
+                tB={mov} 
+                batch={batch} 
+                clientTZ={clientTZ}
+                isDebug={isDebug}
+                showZero={showZero} />
+          )})}
+        </tbody>
+      </table>
+      
+      <details className='footnotes'>
+        <summary>Analysis Details</summary>
+        <p className='footnote'>Date-Time is recorded to the millisecond.</p>
+        <p className='footnote'>
+          Time and Durations are displayed as rounded to the nearest minute.
+        </p>
+        <p className='footnote'>
+          <label className='beside'>show zero durations
+          <input
+            type='checkbox'
+            defaultChecked={showZero}
+            onChange={()=>showZeroSet(!showZero)} 
+          /></label>
+        </p>
+        <p className='footnote'>
+          The experimental {Pref.phase} attribution is derived from related records.
+        </p>
+      </details>
+    </div>
+  );
+};
 
 export default TimeBlocksRaw;
 
 
 
-const RawBlock = ({ tB, batch, clientTZ })=> {
+const RawBlock = ({ tB, batch, clientTZ, isDebug, showZero })=> {
   
   const [ phGuess, setGuess ] = useState(false);
   
@@ -35,14 +72,20 @@ const RawBlock = ({ tB, batch, clientTZ })=> {
   
   const mStart = moment(tB.startTime);
   const mStop = tB.stopTime ? moment(tB.stopTime) : moment();
+  const durr = Math.round( moment.duration(mStop.diff(mStart)).asMinutes() );
+  
+  if(!showZero && durr === 0) {
+    return null;
+  }
   
   return(
-    <p title={tB.tKey}>
-        <AnonyUser id={tB.who} />
-        - {mStart.format('YYYY/MM/DD-kk:mm')}
-        -to-{mStop.format('YYYY/MM/DD-kk:mm')}
-        - {Math.round( moment.duration(mStop.diff(mStart)).asMinutes() )} minutes
-        - {phGuess ? `${phGuess[1].join(', ')} (${phGuess[0]})` : '....'}
-    </p>
+    <tr title={tB.tKey}>
+      <td><AnonyUser id={tB.who} /></td>
+      <td>{mStart.format('YYYY/MM/DD-kk:mm')}</td>
+      <td>{mStop.format('YYYY/MM/DD-kk:mm')}</td>
+      <td>{durr} minutes</td>
+      <td>{phGuess && phGuess[1].join(', ') }</td>
+      {isDebug && <td>{phGuess ? phGuess[0] : '....'}</td>}
+    </tr>
   );
 };

@@ -97,7 +97,8 @@ const AppWrap = ({ users, app })=> {
             <b><i className='fas fa-wrench fa-fw'></i>  Data Repair</b>,//12
             <b><i className='fas fa-bell fa-fw'></i>  Test Alerts</b>,//13
             <b><i className='fas fa-life-ring fa-fw'></i>  Legacy Support</b>//14
-          ]}>
+          ]}
+          extraClass='space5x5'>
           
           <PhasesSlide key={0} app={app} />
           <TrackStepSlide key={1} app={app} sorted={sortedTrackOptions} />

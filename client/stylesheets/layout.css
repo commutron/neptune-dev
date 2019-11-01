@@ -55,11 +55,11 @@ main {
 
 .debugWarningLight {
   background-color: red !important;
-  animation: blinker 3s ease-in-out infinite;
+  animation: blinker 5s ease-in-out infinite;
 }
 @keyframes blinker {
   50% {
-    opacity: 0.6;
+    opacity: 0.5;
   }
 }
 
@@ -288,53 +288,100 @@ main {
   place-items: stretch stretch;
 }
 
-.slidesLayout {
+.slidesLayout, .slidesNestedLayout {
   display: grid;
   grid-template-rows: 90vh;
   grid-template-columns: minmax(min-content, 15vw) 1fr;
-  grid-template-areas: 
-    'slidemenu slidearea';
   width: 100%;
   height: calc(100% - 10vh);
 }
-.slidesMenu {
-  grid-area: slidemenu;
-  background-color: rgb(35,35,35);
-  overflow-y: auto;
+.slidesLayout {
+  grid-template-areas: 
+    'slidemenu slidearea';
 }
-.slidesSlide {
+.slidesNestedLayout {
+  grid-template-areas: 
+    'slidesubmenu slidesubarea';
+}
+
+.slidesSlide, .slidesNestedSlide {
   grid-area: slidearea;
   background-color: var(--clouds);
   overflow-y: auto;
   color: black;
   box-shadow: var(--dropShadowLeft1);
+}
+.slidesSlide, .slidesNestedSlide {
+  grid-area: slidearea;
+  box-shadow: var(--dropShadowLeft1);
+}
+.slidesNestedSlide {
+  grid-area: slidesubarea;
+  box-shadow: var(--dropShadowLeft0);
   padding: 5vh 5vw;
 }
-.slideMenuButton {
+
+.slidesMenu, .slidesNestedMenu {
+  overflow-y: auto;
+}
+
+.slidesMenu {
+  grid-area: slidemenu;
+  background-color: rgb(35,35,35);
+}
+.slidesNestedMenu {
+  grid-area: slidesubmenu;
+  background-color: var(--silverfade);
+/*background-color: var(--asbestos); };*/
+}
+
+.slideMenuButton, .slideNestedMenuButton {
   width: 100%;
   min-height: 6vh;
   padding: 0 2vw 0 1vw;
   font-size: 2vh;
-  color: var(--silver);
   background-color: transparent;
   border-bottom: 1px solid black;
   cursor: pointer;
   text-align: left;
   white-space: nowrap;
 }
+.slideMenuButton {
+  color: var(--silver);
+}
+.slideNestedMenuButton {
+  color: rgb(35,35,35);
+  border-color: var(--asbestosfade);
+}
+
 .slideMenuButton:hover, 
 .slideMenuButton:active, 
-.slideMenuButton.slideOn {
+.slideMenuButton.slideOn,
+.slideNestedMenuButton:hover, 
+.slideNestedMenuButton:active, 
+.slideNestedMenuButton.slideOn {
   width: 100%;
   color: rgb(35,35,35);
   background-color: var(--silver);
+}
+.slideMenuButton:hover, 
+.slideMenuButton:active, 
+.slideMenuButton.slideOn {
   box-shadow: var(--dropShadow00);
 }
-.slideMenuButton:disabled:hover {
+.slideNestedMenuButton:hover, 
+.slideNestedMenuButton:active, 
+.slideNestedMenuButton.slideOn {
+  box-shadow: none;
+}
+
+.slideMenuButton:disabled:hover,
+.slideNestedMenuButton:disabled:hover {
   color: var(--silver);
   background-color: transparent;
   box-shadow: none;
 }
+
 
 /* ////////////////////////// */
 
@@ -557,6 +604,7 @@ main {
   width: 100%;
 }
 
+.space5x5 { padding: 5vh 5vw; }
 .space2vsq { padding: 2vh; }
 .space3v { padding: 3vh 3vw; }
 .space36v { padding: 3vh 6vw; }

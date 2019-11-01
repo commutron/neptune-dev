@@ -44,7 +44,6 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
   const [ liveState, liveSet ] = useState( false );
   
   useEffect( ()=> {
-    workingSet( true );
     sortInitial();
   }, [filterBy, sortBy]);
 
@@ -150,7 +149,6 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
       }
       
       liveSet( orderedBatches );
-      workingSet( false );
     });
   }
    

@@ -46,7 +46,7 @@ const WeekBrowse = ({ sendUp, app })=> {
   
     sendUp({ yearNum, weekNum });
     
-    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(weekData);
+    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({ yearNum, weekNum });
   }, [yearNum, weekNum]);
   
   

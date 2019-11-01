@@ -1,6 +1,8 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 
+import SlidesNested from '/client/components/smallUi/SlidesNested.jsx';
+
 import UserManageForm from '/client/components/forms/UserManageForm.jsx';
 import RemoveUser from '/client/components/forms/RemoveUser.jsx';
 
@@ -8,45 +10,45 @@ const AccountsManagePanel = ({ users })=> {
     
   const roles = Pref.roles;
   
+  let usersMenu = users.map( (entry)=>{
+    const clss = !Roles.userIsInRole(entry._id, 'active') ? 'strike fade' : '';
+    return <b className={clss}>{entry.username}</b>;
+  });
+  
   return (
-    <div className='section'>
-      <div className='space balance'>
-        <div>
-          <h2>User Accounts Permissions</h2>
-            <ul>
-              {users.map( (entry)=>{
-                return (
-                  <li key={entry._id}>
-                    <UserManageForm
-                      id={entry._id}
-                      name={entry.username}
-                      org={entry.org}
-                      roles={roles}
-                    />
-                    {!Roles.userIsInRole(entry._id, 'active') &&
-                      entry._id !== Meteor.userId() &&
-                      !entry.org ?
-                        <RemoveUser userID={entry._id} />
-                    :null}
-                    <br />
-                    <br />
-                  </li>
-                  );
-              })}
-            </ul>
+    <SlidesNested
+      menuTitle='User Accounts'
+      menu={usersMenu}
+      topPage={
+        <div key={000}>
+          <h1>Accounts Manager</h1>
         </div>
-        <div>
-          <PermissionHelp roles={roles} admin={true} />
-        </div>
-      </div>
-    </div>
+      }>
+        
+      {users.map( (entry, index)=>{
+        return (
+          <div key={index+entry._id}>
+            <UserManageForm
+              id={entry._id}
+              name={entry.username}
+              org={entry.org}
+              roles={roles}
+            />
+            {!Roles.userIsInRole(entry._id, 'active') &&
+              entry._id !== Meteor.userId() &&
+              !entry.org ?
+                <RemoveUser userID={entry._id} />
+            :null}
+          </div>
+      )})}
+    </SlidesNested>
   );
 };
 
 export const PermissionHelp = ({ roles, admin })=> {
   let r = roles;
   return(
-    <div>
+    <div className='space5x5'>
     
       <h2>Available Permissions</h2>
       

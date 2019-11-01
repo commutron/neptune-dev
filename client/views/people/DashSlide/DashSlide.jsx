@@ -10,6 +10,8 @@ import PeoplePanel from './PeoplePanel.jsx';
 const DashSlide = ({ app, user, users, batches, bCache })=> {
   
   const [ update, forceUpdate] = useState(false);
+  const [ eBatchesState, eBatchesSet ] = useState([]);
+  const [ xyBatchState, xyBatchSet ] = useState([]);
   const [ userPhases, setUserPhases ] = useState({});
   const [ pList, setPhaseList ] = useState([]);
   const [ phasesXY, setPhasesXY ] = useState([]);
@@ -59,30 +61,36 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
   const dUsers = liveUsers.filter( x => !x.engaged );
   const userArr = [eUsers.length, dUsers.length ];
 
+  Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({eUsers});
+  
   const tideBatches = batches.filter( x => Array.isArray(x.tide) === true );
-  const eBatches = eUsers.map( (user, index)=>{
-    const acBatch = tideBatches.find( y =>
-      y.tide.find( z => z.tKey === user.engaged.tKey ) );
-    if(acBatch) {
-      return acBatch;
-    }  
+  
+  useEffect( ()=>{
+    const eBatches = eUsers.map( (user, index)=>{
+      const acBatch = tideBatches.find( y =>
+        y.tide.find( z => z.tKey === user.engaged.tKey ) );
+      if(acBatch) {
+        return acBatch;
+      }  
+    });
+    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({eBatches});
+    eBatchesSet(eBatches);
+    
+    const qBatches = eBatches.reduce( (allBatch, batch, index, array)=> { 
+      const objkey = !batch ? false : batch.batch;
+      objkey &&
+        objkey in allBatch ? allBatch[objkey]++ : allBatch[objkey] = 1;
+      return allBatch;
+    }, {});
+    const itrXY = obj2xy(qBatches);
+  
+    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({qBatches,itrXY});
+    xyBatchSet(itrXY);
   });
-  
-  Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({eUsers,eBatches});
-
-  const qBatches = eBatches.reduce( (allBatch, batch, index, array)=> { 
-    const objkey = !batch ? false : batch.batch;
-    objkey &&
-      objkey in allBatch ? allBatch[objkey]++ : allBatch[objkey] = 1;
-    return allBatch;
-  }, {});
-  const itrXY = obj2xy(qBatches);
-  
-  Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({qBatches,itrXY});
   
 
   return(
-    <div className='invert overscroll'>
+    <div className='space5x5 invert overscroll'>
       
       <p className='rightText nomargin'>
         <button
@@ -112,10 +120,10 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
         />
         
         <NumStatRing
-          total={itrXY.length}
-          nums={itrXY}
+          total={xyBatchState.length}
+          nums={xyBatchState}
           name={`${Pref.batches} Are ${Pref.engaged}`} 
-          title={`${itrXY.length} ${Pref.batches} currently\n${Pref.engaged} by people`} 
+          title={`${xyBatchState.length} ${Pref.batches} currently\n${Pref.engaged} by people`} 
           colour='blue'
         />
             
@@ -127,7 +135,7 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
           app={app}
           eUsers={eUsers}
           dUsers={dUsers}
-          eBatches={eBatches}
+          eBatches={eBatchesState}
           bCache={bCache}
           updatePhases={(id, ph)=>updatePhases(id, ph)}
           removePhaser={(id)=>removePhaser(id)}

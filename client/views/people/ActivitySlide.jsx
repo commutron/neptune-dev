@@ -40,7 +40,7 @@ const ActivitySlide = ({ orb, bolt, app, user, users, bCache })=> {
   let minDate = moment(app.tideWall || app.createdAt).format('YYYY-MM-DD');
 
   return(
-    <div className='invert overscroll'>
+    <div className='space5x5 invert overscroll'>
       <div className='line2x'>
         <Flatpickr
           value={moment().format('YYYY-MM-DD')}

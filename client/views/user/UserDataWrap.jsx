@@ -75,7 +75,8 @@ const UserDataWrap = ({
             <b><i className='fas fa-inbox fa-fw'></i>  Inbox</b>,
             <b><i className='fas fa-id-card fa-fw'></i>  Preferences</b>,
             <b><i className='fas fa-user-shield fa-fw'></i>  Privacy</b>,
-          ]}>
+          ]}
+          extraClass='space5x5'>
             
           <ActivityPanel
             key={1}

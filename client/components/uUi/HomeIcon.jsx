@@ -22,11 +22,11 @@ const HomeIcon = () => {
   const warningLight = Roles.userIsInRole(Meteor.userId(), 'debug') ? 'debugWarningLight' : '';
   
   return(
-    <div className={'homeIcon ' + warningLight}>
+    <div className={'homeIcon '}>
       <ContextMenuTrigger
 				id='absoluteHome01'>
 							
-      <a className='homeIconLink' href='/' title='Home'>
+      <a className={'homeIconLink ' + warningLight} href='/' title='Home'>
         <img
           src='/neptune-logo-white.svg'
           className='homeIconLogo' />
