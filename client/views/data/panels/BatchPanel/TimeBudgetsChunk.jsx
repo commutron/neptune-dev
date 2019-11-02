@@ -1,23 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import business from 'moment-business';
 import 'moment-timezone';
 import Pref from '/client/global/pref.js';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
-
+import { CalcSpin } from '/client/components/uUi/Spin.jsx';
 import { TimeBudgetUpgrade, WholeTimeBudget } from '/client/components/forms/QuoteTimeBudget.jsx';
 import TimeBudgetBar from '/client/components/charts/Tides/TimeBudgetBar.jsx';
+import TimeSplitBar from '/client/components/charts/Tides/TimeSplitBar.jsx';
 
 const TimeBudgetsChunk = ({
   a, b, v,
   totalUnits, clientTZ
 }) =>	{
   
+  const [ phaseTime, phaseTimeSet ] = useState([]);
+  
   useEffect( ()=>{
-    if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
+    if(Roles.userIsInRole(Meteor.userId(), 'nightly')) {
       Meteor.call('assemblePhaseTime', b._id, clientTZ, (err, reply)=>{
         err && console.log(err);
-        reply && console.log(reply);
+        reply && phaseTimeSet( reply );
       });
     }
   }, []);
@@ -53,7 +56,7 @@ const TimeBudgetsChunk = ({
     return { totalTime, peopleTime };
   };
   
-  //const proto = Roles.userIsInRole(Meteor.userId(), 'nightly');
+  const proto = Roles.userIsInRole(Meteor.userId(), 'nightly');
   
   const totalsCalc = totalSTbyPeople();
 
@@ -92,16 +95,17 @@ const TimeBudgetsChunk = ({
   
   return(
     <div className=''>
-      <div className='space aFrameContainer'>
+    
+      <div className='big'>
+        {!moment(b.createdAt).isAfter(a.tideWall) && 
+          <p className='orangeT'>{` ** This ${Pref.batch} was created before \n
+            Start-Stop was enacted. Totals may not be acurate`} 
+          </p>}
+      </div>
         
-        <div className='avOneContent big'>
-          {!moment(b.createdAt).isAfter(a.tideWall) && 
-            <p className='orangeT'>{` ** This ${Pref.batch} was created before \n
-              Start-Stop was enacted. Totals may not be acurate`} 
-            </p>}
-        </div>
+      <div className='space containerE' /*aFrameContainer'*/>
         
-        <div className='avTwoContent numFont'>
+        <div className='oneEcontent numFont'>
           <TimeBudgetBar a={totalTideMinutes} b={totalLeftMinutes} c={totalOverMinutes} />
           <p
             className='bigger' 
@@ -126,24 +130,53 @@ const TimeBudgetsChunk = ({
           
         </div>
         
-        <div className='avThreeContent numFont'>
+        <div className='twoEcontent numFont'>
           <TimeBudgetBar a={tP} b={0} c={0} />
           <p>
             <span className='bigger'>{tP}</span> 
             {tP === 1 ? ' person' : ' people'}
           </p>
-          <ul>
+          <dl>
             {totalPeople.map((per, ix)=>{
               return( 
-                <li 
+                <dt 
                   key={ix}
                   title={`${per.uTime} minutes`}
                 ><i className='big'><UserNice id={per.uID} /></i>
-                <i className='grayT'> {asHours(per.uTime)} hours</i></li> 
+                <i className='grayT'> {asHours(per.uTime)} hours</i></dt> 
               );
             })}
-          </ul>
+          </dl>
+          
         </div>
+        
+        <div className='threeEcontent numFont'>
+          
+          {proto ?
+            phaseTime.length === 0 ?
+              <CalcSpin />
+            :
+              <div>
+                <TimeSplitBar
+                  title={`${Pref.phase}s`}
+                  nums={phaseTime}
+                  colour='pale' />
+                <dl>
+                  {phaseTime.map((ph, ix)=>{
+                    return( 
+                      <dt
+                        key={ix}
+                        title={`${ph.y} minutes`}
+                      ><i className='big'>{ph.x}</i>
+                      <i className='grayT'> {asHours(ph.y)} hours</i></dt> 
+                    );
+                  })}
+                </dl>
+              </div>
+          : <div></div>}
+        
+        </div>
+        
 
       </div>
         

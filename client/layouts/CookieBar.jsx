@@ -10,7 +10,7 @@ const CookieBar = ({ groupData, widgetData, versionData, batchData, itemData, ap
         <span className='cookieCrumb'>
           <button 
             className='cookie up numFont'
-            onClick={()=>FlowRouter.go('/data/group?request=' + groupData.alias)}>
+            onClick={()=>FlowRouter.go('/data/overview?request=groups&specify=' + groupData.alias)}>
             {groupData.alias.length < 10 ? 
               groupData.alias :
               groupData.alias.substring(0, 9) + '...'}

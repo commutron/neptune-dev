@@ -110,7 +110,10 @@ const GeneralChunk = ({
       
       {released === undefined ? null :
         released === true &&
-          <ReleaseNote id={b._id} release={b.floorRelease} />
+          <ReleaseNote 
+            id={b._id} 
+            release={b.floorRelease} 
+            lockout={b.finishedAt !== false} />
       }
       
       <NoteLine entry={b.notes} id={b._id} widgetKey={false}  />

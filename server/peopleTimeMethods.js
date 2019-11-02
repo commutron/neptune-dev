@@ -23,7 +23,8 @@ Meteor.methods({
         return obj ? obj.phase : null;
       };
       const uniqPhases = _.uniq( Array.from(uniqKeys, x => key2phase(x) ) );
-      const cleanResult = uniqPhases.length > 0 ? uniqPhases : false;
+      const cleanResult = uniqPhases.length > 0 &&
+                          uniqPhases[0] !== null ? uniqPhases : false;
       
       return cleanResult;
     }
@@ -228,6 +229,7 @@ Meteor.methods({
   
   assemblePhaseTime(batchID, clientTZ) {
     const accessKey = Meteor.user().orgKey;
+    const app = AppDB.findOne({ orgKey: accessKey});
     const batch = BatchDB.findOne({_id: batchID, orgKey: accessKey});
     if( batch && Array.isArray(batch.tide) ) {  
       const slim = batch.tide.map( x => {
@@ -240,7 +242,31 @@ Meteor.methods({
           duration: dur
         };
       });
-      return slim;
+      
+      let slimTimes = [];
+      for(let ph of app.phases) {
+        let phDurr = 0;
+        for(let t of slim) {
+          if( t.phaseGuess && t.phaseGuess[1].includes(ph) ) {
+            phDurr = phDurr + t.duration;
+          }
+        }
+        slimTimes.push({
+          x: ph,
+          y: phDurr
+        });
+      }
+      // let xDurr = 0;
+      // for(let t of slim) {
+      //   if( t.phaseGuess === false ) {
+      //     xDurr = xDurr + t.duration;
+      //   }
+      // }
+      // slimTimes.push({
+      //   x: 'unknown',
+      //   y: xDurr
+      // });
+      return slimTimes;
     }else{
       return false;
     }

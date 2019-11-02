@@ -7,7 +7,7 @@ import SearchHelp from './SearchHelp.jsx';
 
 import ExploreLanding from './panels/ExploreLanding.jsx';
 import ReportsWrap from './panels/Reports/ReportsWrap.jsx';
-import AllGroups from './panels/AllGroups.jsx';
+import AllGroups from './panels/AllGroups/AllGroups.jsx';
 import AllBatches from './panels/AllBatches.jsx';
 import AllItems from './panels/AllItems.jsx';
 import Calendar from './panels/Calendar.jsx';
@@ -17,7 +17,6 @@ import BatchPanel from './panels/BatchPanel/BatchPanel.jsx';
 import BatchPanelX from './panels/BatchPanelX.jsx';
 import WidgetPanel from './panels/WidgetPanel.jsx';
 import VersionPanel from './panels/VersionPanel/VersionPanel.jsx';
-import GroupPanel from './panels/GroupPanel.jsx';
 import ScrapPanel from './panels/ScrapPanel.jsx';
 
 import BatchesList from './lists/BatchesList.jsx';
@@ -46,18 +45,6 @@ export default class DataViewOps extends Component	{
     const xBatches = this.props.allXBatch.filter(x => x.versionKey === vKey);
     const legacyBatches = this.props.allBatch.filter(x => x.versionKey === vKey);
     return [...xBatches, ...legacyBatches ];
-  }
-  
-  groupActiveWidgets(gId) {
-    let widgetsList = this.props.allWidget.filter(x => x.groupId === gId);
-    let xActive = this.props.allXBatch.filter( b => b.completed === false);
-    let legacyActive = this.props.allBatch.filter( b => b.finishedAt === false);
-    const activeBatch = [...xActive, ...legacyActive ];
-    
-    const hasBatch = (id)=> activeBatch.find( b => b.widgetId === id) ? true : false;
-    let activeWidgets = widgetsList.filter( w => hasBatch(w._id) == true );
-    const activeList = Array.from(activeWidgets, w => w._id);
-    return activeList;
   }
   
   itemData(items, bar) {
@@ -219,7 +206,8 @@ export default class DataViewOps extends Component	{
               batchDataX={allXBatch}
               widgetData={allWidget}
               groupData={allGroup} 
-              app={app} />
+              app={app}
+              specify={specify} />
           </TraverseWrap>
         );
       }else if(request === 'batches') {
@@ -256,7 +244,7 @@ export default class DataViewOps extends Component	{
             groupData={false}
             user={user}
             app={app}
-            title={Pref.items + ' Overview'}
+            title={Pref.items + ' Search'}
             subLink={subLink}
             action={false}
             base={true}
@@ -433,37 +421,6 @@ export default class DataViewOps extends Component	{
       }
     }
 
-  // Group
-    if(view === 'group') {
-      const group = this.getGroup(request);
-      if(group) {
-        let widgets = this.groupWidgets(group._id);
-        let activeWidgets = this.groupActiveWidgets(group._id);
-        return (
-          <TraverseWrap
-            batchData={false}
-            itemData={false}
-            widgetData={false}
-            versionData={false}
-            groupData={group}
-            user={user}
-            app={app}
-            title='Group'
-            subLink={subLink}
-            action='group'
-            base={false}
-            invertColor={true}
-          >
-            <GroupPanel
-              groupData={group}
-              widgetData={widgets}
-              active={activeWidgets}
-              app={app} 
-              user={user} />
-          </TraverseWrap>
-        );
-      }
-    }
   // Version  
     if(view === 'widget' && specify) {
       let widget = this.getWidget(request);

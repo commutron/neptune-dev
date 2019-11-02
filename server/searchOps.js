@@ -141,14 +141,10 @@ Meteor.methods({
     const batches = BatchDB.find({orgKey: Meteor.user().orgKey, widgetId: wID}).fetch();
     const batchesX = XBatchDB.find({orgKey: Meteor.user().orgKey, widgetId: wID}).fetch();
     const batchInfo = Array.from(batches, x => { return { 
-      start: x.start,
-      finish: x.finishedAt,
       items: x.items.length,
       nonCons: x.nonCon.length,
     }});
     const batchInfoX = Array.from(batchesX, x => { return { 
-      start: x.salesStart,
-      complete: x.completedAt,
       quantity: x.quantity,
       nonCons: x.nonconformaces.length,
     }});
@@ -567,7 +563,7 @@ Meteor.methods({
   // Scrap Items
   
   ///////////////////////////////////////////////////////////////////////////////////
-  
+ 
   scrapItems() {
     const batchWithScrap = BatchDB.find({
                             orgKey: Meteor.user().orgKey,
@@ -578,14 +574,21 @@ Meteor.methods({
       const w = WidgetDB.findOne({_id: b.widgetId});
       const g = GroupDB.findOne({_id: w.groupId});
       const items = b.items.filter( 
-                      x => x.history.find( 
-                        y => y.type === 'scrap' && y.good === true ) );
-      compactData.push({
-        batch: b.batch,
-        widget: w.widget,
-        group: g.alias,
-        items: items
-      });
+                      x => x.history.find( y => 
+                        y.type === 'scrap' && 
+                        y.good === true ) );
+      for(let i of items) {
+        const scEntry = i.history.find( y => 
+                          y.type === 'scrap' && 
+                          y.good === true );
+        compactData.push({
+          batch: b.batch,
+          widget: w.widget,
+          group: g.alias,
+          serial: i.serial,
+          scEntry: scEntry
+        });
+      }
     }
     return compactData;
   },

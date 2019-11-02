@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
 
-const SlidesNested = ({ menuTitle, menu, disable, extraClass, topPage, children })=> {
+const SlidesNested = ({ 
+  menuTitle, menu, 
+  disable, extraClass, 
+  topPage, defaultSlide,
+  children
+})=> {
   
-  const [ section, setSection ] = useState(menuTitle ? false : 0);
+  const df = defaultSlide === undefined ? menuTitle ? false : 0 : defaultSlide;
+
+  const [ section, setSection ] = useState( df );
   
   const handleClick = (clk)=> {
     setSection(clk);

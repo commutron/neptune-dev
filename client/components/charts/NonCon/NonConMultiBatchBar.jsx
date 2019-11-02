@@ -28,13 +28,16 @@ const NonConMultiBatchBar = ({ batchIDs })=> {
     );
   }
   
+  const typeCount = seriesState[0] ?
+    seriesState[0].length : seriesState.length;
+  
   return(
     <div className='chartNoHeightContain'>
       <VictoryChart
         theme={Theme.NeptuneVictory}
         padding={{top: 20, right: 20, bottom: 20, left: 120}}
         domainPadding={{x: 10, y: 40}}
-        height={50 + ( seriesState.length * 35 )}
+        height={50 + ( typeCount * 15 )}
       >
         <VictoryAxis
           dependentAxis

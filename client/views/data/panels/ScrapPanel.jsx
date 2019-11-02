@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
-import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 
 import { CalcSpin } from '/client/components/uUi/Spin.jsx';
-import ScrapTable from '/client/components/tables/ScrapTable.jsx';
+import ScrapTableAll from '/client/components/tables/ScrapTableAll.jsx';
 
 const ScrapPanel = (props)=> {
   
@@ -21,20 +21,21 @@ const ScrapPanel = (props)=> {
       <CalcSpin />
     );
   }
+  
+  const sortList = scraps.sort((s1, s2)=> {
+                    if (s1.scEntry.time < s2.scEntry.time) { return -1 }
+                    if (s1.scEntry.time > s2.scEntry.time) { return 1 }
+                    return 0;
+                  });
 
-  return (
+  return(
     <AnimateWrap type='cardTrans'>
-      <div className='section' key={1}>
+      <div className='section overscroll' key={1}>
         <div className='space'>
-          <h1 className='cap'>{Pref.scrap} {Pref.item}s</h1>
-          <hr />
 
-          <ScrapTable batchData={scraps} />
+          <ScrapTableAll scrapData={sortList} />
 
-		    <br />
-        <hr />
         </div>
-        <br />
       </div>
     </AnimateWrap>
   );

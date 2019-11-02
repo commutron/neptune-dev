@@ -186,13 +186,6 @@
 .compact .overGridScroll { grid-auto-rows: 7.5vh; }
 
 
-/*.compact .overGridRowFixed > div:first-child { font-size: 1.75vh; }*/
-/*.compact .overGridRowFixed > div:last-child { font-size: 1.25vh; }*/
-
- 
-
-
-
 /* dense minifyed layout */
 .overGridFrame.minifyed {
   grid-template-columns: minmax(min-content, 20vw) auto; }

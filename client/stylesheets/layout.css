@@ -474,7 +474,7 @@ main {
 }
 
 .tableList {
-  min-width: calc(90vw - 10vh);
+  min-width: calc(75vw - 10vh - 0.75vw);
   display: table;
 }
 .tableList > div,
@@ -602,6 +602,10 @@ main {
   display: flex;
   justify-content: center;
   width: 100%;
+}
+
+.lastSpanRight span:last-child {
+ justify-self: right;
 }
 
 .space5x5 { padding: 5vh 5vw; }
@@ -836,7 +840,7 @@ button.numberSet {
   padding-bottom: 50px;
   border-right: none;
 }
-
+/* still using?? */
 .wipCol {
   display: flex;
   flex-direction: row;

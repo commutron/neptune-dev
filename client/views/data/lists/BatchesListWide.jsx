@@ -57,7 +57,7 @@ export default class BatchesListWide extends Component	{
               });
     return(
       <AnimateWrap type='cardTrans'>
-        <div className='centre space' key={1}>
+        <div className='centre' key={1}>
           <div className='tableList'>
             <div className=''>
               <DumbFilter
@@ -79,7 +79,7 @@ export default class BatchesListWide extends Component	{
                     cThree={entry.groupAlias.toUpperCase()}
                     cFour={entry.widget.toUpperCase() + ' v.' + entry.version}
                     cFive={tags}
-                    sty={entry.highlight}
+                    sty={entry.highlight + ' lastSpanRight'}
                     address={'/data/batch?request=' + entry.batchNumber}
                   />
             )})}

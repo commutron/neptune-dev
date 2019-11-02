@@ -127,7 +127,7 @@ export default class BatchPanelX extends Component	{
                     id={b._id}
                     release={released}
                     xBatch={true}
-                    expand={true} />
+                    lockout={b.completed} />
                 }
               </div>
               <div className='twoThirdsContent'>

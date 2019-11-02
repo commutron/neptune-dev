@@ -5,7 +5,7 @@ import Pref from '/client/global/pref.js';
 import LeapText from '../tinyUi/LeapText.jsx';
 import UserNice from '../smallUi/UserNice.jsx';
 
-const ScrapTable = ({ batchData })=> (
+const ScrapTableAll = ({ scrapData })=> (
   <div>
     <table className='wide'>
       <thead className='fadeRed cap'>
@@ -20,49 +20,24 @@ const ScrapTable = ({ batchData })=> (
           <th>comment</th>
         </tr>
       </thead>
-      {batchData.map( (entry, index)=>{
+      <tbody>
+      {scrapData.map( (sc, index)=>{
         return (
-          <ScrapGroup key={index} batchData={entry} />
+          <ScrapRow 
+            key={sc.scEntry.key+index}
+            entry={sc.scEntry}
+            group={sc.group}
+            batchNum={sc.batch}
+            widget={sc.widget}
+            barcode={sc.serial} />
         );
       })}
+      </tbody>
     </table>
   </div>
 );
 
-
-// Single batchData
-const ScrapGroup = ({ batchData })=> {
-  let b = batchData;
-  let i = b.items;
-  let sc = [];
-  if(i != undefined) {
-    i.map( (entry)=>{
-      // check history for...
-      for(let value of entry.history) {
-        // scraps
-        if(value.type === 'scrap') {
-          sc.push([entry.serial, value]);
-        // other
-        }else{null}
-      }
-    });
-  }else{null}
-  return(
-    <tbody>
-      {sc.map( (entry, index)=>{
-        return (
-          <ScrapRow 
-            key={index}
-            entry={entry[1]}
-            group={b.group}
-            batchNum={b.batch}
-            widget={b.widget}
-            barcode={entry[0]} />
-          );
-      })}
-    </tbody>
-  );
-};
+export default ScrapTableAll;
 
 const ScrapRow = ({ entry, group, batchNum, widget, barcode })=> (
 	<tr>
@@ -84,7 +59,7 @@ const ScrapRow = ({ entry, group, batchNum, widget, barcode })=> (
       <LeapText
         title={group} 
         sty={false}
-        address={'/data/group?request=' + group}
+        address={'/data/overview?request=groups&specify=' + group}
       />
     </td>
     <td>
@@ -100,5 +75,3 @@ const ScrapRow = ({ entry, group, batchNum, widget, barcode })=> (
     <td>{entry.comm}</td>
 	</tr>
 );
-
-export default ScrapTable;

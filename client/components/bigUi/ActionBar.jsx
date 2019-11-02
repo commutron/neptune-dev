@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment';
+//import moment from 'moment';
 
 import ActionLink from '/client/components/uUi/ActionLink.jsx';
 import BlockForm from '../forms/BlockForm.jsx';
@@ -23,9 +23,6 @@ import VersionForm from '../forms/VersionForm.jsx';
 import { VersionRemove } from '../forms/VersionForm.jsx';
 import CompForm from '../forms/CompForm.jsx';
 import FlowForm from '../forms/FlowForm.jsx';
-
-import GroupForm from '../forms/GroupForm.jsx';
-import WidgetNewForm from '../forms/WidgetNewForm.jsx';
 
 const ActionBar = ({
   batchData, itemData, 
@@ -261,28 +258,6 @@ const ActionBar = ({
             title={widgetData.widget}
             check={widgetData.createdAt.toISOString()}
             entry={widgetData._id}
-            noText={noText} />
-        </div>
-      :
-      action === 'group' ?
-        <div>
-          <GroupForm
-            id={groupData._id}
-            name={groupData.group}
-            alias={groupData.alias}
-            wiki={groupData.wiki}
-            noText={noText}
-            primeTopRight={false} />
-          <WidgetNewForm
-            groupId={groupData._id}
-            end={app.lastTrack} 
-            rootWI={app.instruct}
-            noText={noText} />
-          <Remove
-            action='group'
-            title={groupData.group}
-            check={groupData.createdAt.toISOString()}
-            entry={groupData._id}
             noText={noText} />
         </div>
       : null

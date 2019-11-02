@@ -54,7 +54,7 @@ const ReleaseAction = ({ id, rType })=> {
 };
 export default ReleaseAction;
 
-export const ReleaseNote = ({ id, release, xBatch })=> {
+export const ReleaseNote = ({ id, release, xBatch, lockout })=> {
   
   function handleCancel() {
     if(xBatch) {
@@ -75,7 +75,7 @@ export const ReleaseNote = ({ id, release, xBatch })=> {
                       
   return(
     <div className='noCopy'>
-      <ContextMenuTrigger id={id+'release'}>
+      <ContextMenuTrigger id={id+'release'} disable={lockout}>
   			<fieldset className='noteCard'>
           <legend>{releaseType || 'Released to the Floor'}</legend>
           <p>{moment(release.time).format("ddd, MMM D /YY, h:mm a")}
