@@ -78,140 +78,134 @@ Meteor.methods({
         }else{
           
           const released = typeof batch.floorRelease === 'object';
-          const beforeRelease = !released || moment(tideStop)
-                                  .isBefore(batch.floorRelease.time); 
+          const startBeforeRelease = !released || 
+                                      moment(tideStop)
+                                        .isBefore(batch.floorRelease.time) || 
+                                          moment(tideStart)
+                                            .isBefore(batch.floorRelease.time); 
           
-          if(beforeRelease) {
-            return [ 'fromPreRelease', ['pre release / kitting'] ];
+          if(startBeforeRelease) {
+            return [ 'fromOverRelease', ['kitting / prep'] ];
           }else{
+              
+            const finished = batch.finishedAt !== false;
+            const afterFinish = finished && moment(tideStart)
+                                  .isAfter(moment(batch.finishedAt) );
             
-            const released = typeof batch.floorRelease === 'object';
-            const startBeforeRelease = !released || moment(tideStart)
-                                        .isBefore(batch.floorRelease.time);
-            
-            if(startBeforeRelease) {
-              return [ 'fromOverRelease', ['kitting / prep'] ];
+            if(afterFinish) {
+              return [ 'fromAfterFinish', ['after finish'] ];
             }else{
+          
+              const cCache = CacheDB.findOne({dataName: 'phaseCondition'});
+              const cB = cCache && cCache.dataSet.find( x => x.batch === batchNum );
+              const openPhases = cB && cB.phaseSets.filter( x => x.condition === 'open' );
               
-              const finished = batch.finishedAt !== false;
-              const afterFinish = finished && moment(tideStart)
-                                    .isAfter(moment(batch.finishedAt) );
-              
-              if(afterFinish) {
-                return [ 'fromAfterFinish', ['after finish'] ];
+              if( !tideStop && openPhases && openPhases.length === 1 ) {
+                return [ 'fromOnlyOpen', [openPhases[0].phase] ];
               }else{
-          
-                const cCache = CacheDB.findOne({dataName: 'phaseCondition'});
-                const cB = cCache && cCache.dataSet.find( x => x.batch === batchNum );
-                const openPhases = cB && cB.phaseSets.filter( x => x.condition === 'open' );
+        
+                const itemHistorySh = Array.from( batch.items, 
+                              x => x.history.filter( y =>
+                                moment(y.time).tz(clientTZ)
+                                  .isSame(moment(tStop).tz(clientTZ), 'hour') && 
+                                y.who === uID ) );
+                const phaseFromHourStep = deriveHistory(itemHistorySh);
                 
-                if( !tideStop && openPhases && openPhases.length === 1 ) {
-                  return [ 'fromOnlyOpen', [openPhases[0].phase] ];
+                if(phaseFromHourStep) {
+                  return [ 'fromHourStep', phaseFromHourStep ];
                 }else{
-          
-                  const itemHistorySh = Array.from( batch.items, 
-                                x => x.history.filter( y =>
-                                  moment(y.time).tz(clientTZ)
-                                    .isSame(moment(tStop).tz(clientTZ), 'hour') && 
-                                  y.who === uID ) );
-                  const phaseFromHourStep = deriveHistory(itemHistorySh);
+            
+                  const itemHistoryFh = Array.from( batch.items,
+                                      x => x.history.filter( y =>
+                                        y.type === 'first' && 
+                                        moment(y.time).tz(clientTZ)
+                                          .isSame(moment(tideStart).tz(clientTZ), 'hour') &&
+                                        y.info.builder.includes(uID) ) );
+                  const phaseFromHourFirst = deriveHistory(itemHistoryFh);
                   
-                  if(phaseFromHourStep) {
-                    return [ 'fromHourStep', phaseFromHourStep ];
+                  if(phaseFromHourFirst) {
+                    return [ 'fromHourFirst', phaseFromHourFirst ];
                   }else{
-            
-                    const itemHistoryFh = Array.from( batch.items,
-                                        x => x.history.filter( y =>
-                                          y.type === 'first' && 
-                                          moment(y.time).tz(clientTZ)
-                                            .isSame(moment(tideStart).tz(clientTZ), 'hour') &&
-                                          y.info.builder.includes(uID) ) );
-                    const phaseFromHourFirst = deriveHistory(itemHistoryFh);
-                    
-                    if(phaseFromHourFirst) {
-                      return [ 'fromHourFirst', phaseFromHourFirst ];
-                    }else{
           
-                      const itemHistorySd = Array.from( batch.items, 
-                                    x => x.history.filter( y =>
-                                      moment(y.time).tz(clientTZ)
-                                        .isSame(moment(tStop).tz(clientTZ), 'day') && 
-                                      y.who === uID ) );
-                      const phaseFromDayStep = deriveHistory(itemHistorySd);
-                      
-                      if(phaseFromDayStep) {
-                        return [ 'fromDayStep', phaseFromDayStep ];
-                      }else{
-            
-                        const itemHistoryFd = Array.from( batch.items,
-                                            x => x.history.filter( y =>
-                                              y.type === 'first' && 
-                                              moment(y.time).tz(clientTZ)
-                                                .isSame(moment(tideStart).tz(clientTZ), 'day') &&
-                                              y.info.builder.includes(uID) ) );
-                        const phaseFromDayFirst = deriveHistory(itemHistoryFd);
-                        
-                        if(phaseFromDayFirst) {
-                          return [ 'fromDayFirst', phaseFromDayFirst ];
-                        }else{
+                    const itemHistorySd = Array.from( batch.items, 
+                                  x => x.history.filter( y =>
+                                    moment(y.time).tz(clientTZ)
+                                      .isSame(moment(tStop).tz(clientTZ), 'day') && 
+                                    y.who === uID ) );
+                    const phaseFromDayStep = deriveHistory(itemHistorySd);
                     
+                    if(phaseFromDayStep) {
+                      return [ 'fromDayStep', phaseFromDayStep ];
+                    }else{
+            
+                      const itemHistoryFd = Array.from( batch.items,
+                                          x => x.history.filter( y =>
+                                            y.type === 'first' && 
+                                            moment(y.time).tz(clientTZ)
+                                              .isSame(moment(tideStart).tz(clientTZ), 'day') &&
+                                            y.info.builder.includes(uID) ) );
+                      const phaseFromDayFirst = deriveHistory(itemHistoryFd);
+                      
+                      if(phaseFromDayFirst) {
+                        return [ 'fromDayFirst', phaseFromDayFirst ];
+                      }else{
+                    
+                        const docW = WidgetDB.findOne({_id: batch.widgetId});
+                        const flow = docW.flows.find( x => x.flowKey === batch.river );
+                        const riverFlow = flow ? flow.flow : [];
+                        
+                        let nextFirstPhase = false;
+                        for(const rvrstp of riverFlow) {
+                          if(rvrstp.type === 'first') {
+                            const pastFirst = batch.items.some( 
+                                                x => x.history.find( y => 
+                                                  y.key === rvrstp.key && 
+                                                  y.good === true &&
+                                                  y.time < tideStart ) );
+                            const futureFirst = batch.items.some( 
+                                                x => x.history.find( y => 
+                                                  y.key === rvrstp.key && 
+                                                  y.time > tideStart &&
+                                                  y.info.builder.includes(uID) ) );
+                            
+                            const prep = pastFirst === false && futureFirst === true;
+                            if(prep) {
+                              nextFirstPhase = rvrstp.phase;
+                              break;
+                            }
+                          }
+                        }
+                          
+                        if(nextFirstPhase) {
+                          return [ 'fromNextFirst', [`${nextFirstPhase} prep`] ];
+                        }else{
+                          
                           const docW = WidgetDB.findOne({_id: batch.widgetId});
                           const flow = docW.flows.find( x => x.flowKey === batch.river );
                           const riverFlow = flow ? flow.flow : [];
                           
-                          let nextFirstPhase = false;
+                          let riverSatus = [];
                           for(const rvrstp of riverFlow) {
-                            if(rvrstp.type === 'first') {
-                              const pastFirst = batch.items.some( 
-                                                  x => x.history.find( y => 
-                                                    y.key === rvrstp.key && 
-                                                    y.good === true &&
-                                                    y.time < tideStart ) );
-                              const futureFirst = batch.items.some( 
-                                                  x => x.history.find( y => 
-                                                    y.key === rvrstp.key && 
-                                                    y.time > tideStart &&
-                                                    y.info.builder.includes(uID) ) );
-                              
-                              const prep = pastFirst === false && futureFirst === true;
-                              if(prep) {
-                                nextFirstPhase = rvrstp.phase;
-                                break;
-                              }
+                            if(rvrstp.type !== 'first') {
+                              const done100 = batch.items.every( 
+                                                x => x.history.find( y =>
+                                                  y.key === rvrstp.key &&
+                                                  y.good === true &&
+                                                  y.time < tideStart ) );
+                              riverSatus.push(done100);
+                            }else{
+                              riverSatus.push(null);
                             }
                           }
-                          
-                          if(nextFirstPhase) {
-                            return [ 'fromNextFirst', [`${nextFirstPhase} prep`] ];
+                          const nextIndex = riverSatus.indexOf(false);
+                          let nextIncompletePhase = nextIndex >= 0 ? 
+                                                      riverFlow[nextIndex].phase : null;
+                                                      
+                          if(nextIncompletePhase) {
+                            return [ 'fromNextIncomplete', [`${nextIncompletePhase}`] ];
                           }else{
-                            
-                            const docW = WidgetDB.findOne({_id: batch.widgetId});
-                            const flow = docW.flows.find( x => x.flowKey === batch.river );
-                            const riverFlow = flow ? flow.flow : [];
-                            
-                            let riverSatus = [];
-                            for(const rvrstp of riverFlow) {
-                              if(rvrstp.type !== 'first') {
-                                const done100 = batch.items.every( 
-                                                  x => x.history.find( y =>
-                                                    y.key === rvrstp.key &&
-                                                    y.good === true &&
-                                                    y.time < tideStart ) );
-                                riverSatus.push(done100);
-                              }else{
-                                riverSatus.push(null);
-                              }
-                            }
-                            const nextIndex = riverSatus.indexOf(false);
-                            let nextIncompletePhase = nextIndex >= 0 ? 
-                                                        riverFlow[nextIndex].phase : null;
-                                                        
-                            if(nextIncompletePhase) {
-                              return [ 'fromNextIncomplete', [`${nextIncompletePhase}`] ];
-                            }else{
     
-                              return false;
-                            }
+                            return false;
                           }
                         }
                       }
@@ -247,8 +241,11 @@ Meteor.methods({
       for(let ph of app.phases) {
         let phDurr = 0;
         for(let t of slim) {
-          if( t.phaseGuess && t.phaseGuess[1].includes(ph) ) {
-            phDurr = phDurr + t.duration;
+          if( Array.isArray(t.phaseGuess) &&
+              ( t.phaseGuess[1].includes( ph ) ) || 
+              ( t.phaseGuess[1].includes( ph + ' prep') ) 
+            ) {
+            phDurr = phDurr + ( t.duration / t.phaseGuess[1].length );
           }
         }
         slimTimes.push({
@@ -256,16 +253,24 @@ Meteor.methods({
           y: phDurr
         });
       }
-      // let xDurr = 0;
-      // for(let t of slim) {
-      //   if( t.phaseGuess === false ) {
-      //     xDurr = xDurr + t.duration;
-      //   }
-      // }
-      // slimTimes.push({
-      //   x: 'unknown',
-      //   y: xDurr
-      // });
+      let aDurr = 0;
+      let zDurr = 0;
+      let xDurr = 0;
+      for(let t of slim) {
+        if( !t.phaseGuess ) {
+          xDurr = xDurr + t.duration;
+        }else if( t.phaseGuess[1].includes( 'kitting / prep' ) ) {
+          aDurr = aDurr + t.duration;
+        }else if( t.phaseGuess[1].includes( 'after finish' ) ) {
+          zDurr = zDurr + t.duration;
+        }else{
+          null;
+        }
+      }
+      slimTimes.unshift({ x: 'kitting', y: aDurr });
+      slimTimes.push({ x: 'after finish', y: zDurr });
+      slimTimes.push({ x: 'unknown', y: xDurr });
+      
       return slimTimes;
     }else{
       return false;

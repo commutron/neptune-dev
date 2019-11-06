@@ -90,7 +90,7 @@ export default class GroupsList extends Component	{
                 title={entry.group}
                 sub=''
                 sty={ac}
-                address={'/data/group?request=' + entry.alias}
+                address={'/data/overview?request=groups&specify=' + entry.alias}
               />
             )})}
   			</div>

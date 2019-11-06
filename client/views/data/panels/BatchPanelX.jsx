@@ -58,7 +58,7 @@ export default class BatchPanelX extends Component	{
                  
     const cmplt = b.completedAt ? end.format("MMMM Do, YYYY") : null;
     
-    const v = w.versions.find( x => x.versionKey === b.versionKey );
+    // const v = w.versions.find( x => x.versionKey === b.versionKey );
     
     //const flow = w.flows.find( x => x.flowKey === b.river );
     //const flowAlt = w.flows.find( x => x.flowKey === b.riverAlt );
@@ -127,7 +127,7 @@ export default class BatchPanelX extends Component	{
                     id={b._id}
                     release={released}
                     xBatch={true}
-                    lockout={b.completed} />
+                    lockout={!b.live} />
                 }
               </div>
               <div className='twoThirdsContent'>

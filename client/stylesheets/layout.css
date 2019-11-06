@@ -311,13 +311,11 @@ main {
   color: black;
   box-shadow: var(--dropShadowLeft1);
 }
-.slidesSlide, .slidesNestedSlide {
+.slidesSlide {
   grid-area: slidearea;
-  box-shadow: var(--dropShadowLeft1);
 }
 .slidesNestedSlide {
   grid-area: slidesubarea;
-  box-shadow: var(--dropShadowLeft0);
   padding: 5vh 5vw;
 }
 
@@ -332,6 +330,7 @@ main {
 .slidesNestedMenu {
   grid-area: slidesubmenu;
   background-color: var(--silverfade);
+  box-shadow: var(--dropShadowLeft1);
 /*background-color: var(--asbestos); };*/
 }
 
@@ -659,6 +658,7 @@ main {
   font-size: small;
   text-transform: none;
   margin: 0 3vw;
+  max-width: 800px;
 }
 .footnote {
   margin: 0.5vh 3vw;

@@ -113,7 +113,7 @@ const GeneralChunk = ({
           <ReleaseNote 
             id={b._id} 
             release={b.floorRelease} 
-            lockout={b.finishedAt !== false} />
+            lockout={!b.live} />
       }
       
       <NoteLine entry={b.notes} id={b._id} widgetKey={false}  />

@@ -891,7 +891,7 @@ label.qdpplRound {
 
 .tagFlag {
   margin: 4px 4px;
-  padding: 2px 5px 2px 5px;
+  padding: 2px 5px 2px 10px;
   border: 0.5px solid white;
   border-radius: 5px;
   background-color: var(--belizeHole);
@@ -915,9 +915,6 @@ label.qdpplRound {
 .tagFlag > button:hover {
   background-color: white;
   color: var(--belizeHole);
-}
-.tagFlag > button:disabled {
-  margin: 0px 0px 0px -10px;
 }
 
 .tagAddButton {

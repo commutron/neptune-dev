@@ -14,15 +14,13 @@ const TimeBudgetsChunk = ({
   totalUnits, clientTZ
 }) =>	{
   
-  const [ phaseTime, phaseTimeSet ] = useState([]);
+  const [ phaseTime, phaseTimeSet ] = useState(false);
   
   useEffect( ()=>{
-    if(Roles.userIsInRole(Meteor.userId(), 'nightly')) {
-      Meteor.call('assemblePhaseTime', b._id, clientTZ, (err, reply)=>{
-        err && console.log(err);
-        reply && phaseTimeSet( reply );
-      });
-    }
+    Meteor.call('assemblePhaseTime', b._id, clientTZ, (err, reply)=>{
+      err && console.log(err);
+      reply && phaseTimeSet( reply );
+    });
   }, []);
   
   
@@ -56,7 +54,7 @@ const TimeBudgetsChunk = ({
     return { totalTime, peopleTime };
   };
   
-  const proto = Roles.userIsInRole(Meteor.userId(), 'nightly');
+  // const proto = Roles.userIsInRole(Meteor.userId(), 'nightly');
   
   const totalsCalc = totalSTbyPeople();
 
@@ -132,10 +130,10 @@ const TimeBudgetsChunk = ({
         
         <div className='twoEcontent numFont'>
           <TimeBudgetBar a={tP} b={0} c={0} />
-          <p>
+          {/*<p>
             <span className='bigger'>{tP}</span> 
             {tP === 1 ? ' person' : ' people'}
-          </p>
+          </p>*/}
           <dl>
             {totalPeople.map((per, ix)=>{
               return( 
@@ -152,28 +150,30 @@ const TimeBudgetsChunk = ({
         
         <div className='threeEcontent numFont'>
           
-          {proto ?
+          {!phaseTime ?
+            <CalcSpin />
+          :
             phaseTime.length === 0 ?
-              <CalcSpin />
+              <div className='small'>n/a</div>
             :
               <div>
                 <TimeSplitBar
                   title={`${Pref.phase}s`}
                   nums={phaseTime}
-                  colour='pale' />
+                  colour='blue' />
                 <dl>
                   {phaseTime.map((ph, ix)=>{
-                    return( 
-                      <dt
-                        key={ix}
-                        title={`${ph.y} minutes`}
-                      ><i className='big'>{ph.x}</i>
-                      <i className='grayT'> {asHours(ph.y)} hours</i></dt> 
-                    );
-                  })}
+                    if(ph.y > 0) {
+                      return( 
+                        <dt
+                          key={ix}
+                          title={`${Math.round(ph.y)} minutes`}
+                        ><i className='big cap'>{ph.x}</i>
+                        <i className='grayT'> {asHours(ph.y)} hours</i></dt> 
+                  )}})}
                 </dl>
               </div>
-          : <div></div>}
+            }
         
         </div>
         
@@ -193,6 +193,11 @@ const TimeBudgetsChunk = ({
         </p>
         <p className='footnote'>
           Update quoted time budget in hours to 2 decimal places. minutes_quoted = {qtB}
+        </p>
+        <p className='footnote'>
+          {Pref.phase} time is not logged but derived. If a block of time is attributed 
+          to multiple {Pref.phase}s then the time block is divided by the number of {Pref.phase}s 
+          ( minutes / list length ).
         </p>
       </details>
       

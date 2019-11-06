@@ -87,11 +87,9 @@ const TimeTab = ({
         <ProgLayerBurndownExplain />
       </div>
       
-      {( pSup || proto ) &&
-        <div className='vmargin space'>
-          <TimeBlocksRaw batch={b.batch} tide={b.tide} clientTZ={clientTZ} />
-        </div>
-      }
+      <div className='vmargin space'>
+        <TimeBlocksRaw batch={b.batch} tide={b.tide} clientTZ={clientTZ} />
+      </div>
               
     </div>  
   );

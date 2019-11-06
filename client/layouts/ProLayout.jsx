@@ -90,7 +90,7 @@ export class ProWrap extends Component	{
                         bData ?
                         '/data/batch?request=' + bData.batch :
                         gAlias ?
-                        '/data/group?request=' + gAlias :
+                        '/data/overview?request=groups&specify=' + gAlias :
                         '/data/overview?request=batches';
                         
                         

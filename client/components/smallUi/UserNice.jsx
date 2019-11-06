@@ -12,7 +12,6 @@ const UserNice = ({ id })=> {
 export default UserNice;
 
 export const AnonyUser = ({ id })=> {
-  const adminDebug = Roles.userIsInRole(Meteor.userId(), ['admin', 'debug']);
   const peopleSuper = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
   const isSelf = id === Meteor.userId();
   
@@ -23,17 +22,13 @@ export const AnonyUser = ({ id })=> {
     return (
       <i className='cap'>{nice}</i>
     );
-  }else if(adminDebug) {
+  }else{
     const dateString = new Date().toISOString();
     const mod = parseInt(dateString.slice(-6, -5), 10);
     const isID = typeof id === 'string';
     const rndm = isID ? id.substr(mod, 2) : false;
     return (
       <i className='up'>{rndm}</i>
-    );
-  }else{
-    return (
-      <i>___</i>
     );
   }
 };
