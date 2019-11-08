@@ -136,14 +136,14 @@ const TimeBudgetsChunk = ({
           </p>*/}
           <dl>
             {totalPeople.map((per, ix)=>{
-              return( 
-                <dt 
-                  key={ix}
-                  title={`${per.uTime} minutes`}
-                ><i className='big'><UserNice id={per.uID} /></i>
-                <i className='grayT'> {asHours(per.uTime)} hours</i></dt> 
-              );
-            })}
+              if(per.uTime > 0) {
+                return( 
+                  <dt 
+                    key={ix}
+                    title={`${per.uTime} minutes`}
+                  ><i className='big'><UserNice id={per.uID} /></i>
+                  <i className='grayT'> {asHours(per.uTime)} hours</i></dt> 
+            )}})}
           </dl>
           
         </div>

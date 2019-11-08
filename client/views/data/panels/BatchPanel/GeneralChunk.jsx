@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import business from 'moment-business';
-import 'moment-business-time';
+import 'moment-business-time-ship';
 import Pref from '/client/global/pref.js';
 
 import TagsModule from '/client/components/bigUi/TagsModule.jsx';

@@ -1,7 +1,7 @@
 import moment from 'moment';
 import business from 'moment-business';
 import 'moment-timezone';
-import 'moment-business-time';
+import 'moment-business-time-ship';
 
 import { batchTideTime } from './overviewMethods.js';
 import { whatIsBatch, whatIsBatchX } from './searchOps.js';

@@ -18,10 +18,11 @@ const TimeTab = ({
 
   const clientTZ = moment.tz.guess();
   
-  const proto = Roles.userIsInRole(Meteor.userId(), 'nightly');
-  const pSup = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
+  // const proto = Roles.userIsInRole(Meteor.userId(), 'nightly');
+  // const pSup = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
 
-///////////////////////////////////////
+//////////////////////////////////////
+/*
     let allthetimes = [];
     if(proto) {
       for(let item of b.items) {
@@ -52,7 +53,8 @@ const TimeTab = ({
         }
       }
     }
-////////////////////////////////////////
+*/
+///////////////////////////////////////
   
   return(
     <div className='space3v'>
