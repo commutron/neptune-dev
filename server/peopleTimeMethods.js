@@ -79,7 +79,7 @@ Meteor.methods({
           
           const released = typeof batch.floorRelease === 'object';
           const startBeforeRelease = !released || 
-                                      moment(tideStop)
+                                      moment(tStop)
                                         .isBefore(batch.floorRelease.time) || 
                                           moment(tideStart)
                                             .isBefore(batch.floorRelease.time); 
@@ -180,33 +180,33 @@ Meteor.methods({
                           return [ 'fromNextFirst', [`${nextFirstPhase} prep`] ];
                         }else{
                           
-                          const docW = WidgetDB.findOne({_id: batch.widgetId});
-                          const flow = docW.flows.find( x => x.flowKey === batch.river );
-                          const riverFlow = flow ? flow.flow : [];
+                          // const docW = WidgetDB.findOne({_id: batch.widgetId});
+                          // const flow = docW.flows.find( x => x.flowKey === batch.river );
+                          // const riverFlow = flow ? flow.flow : [];
                           
-                          let riverSatus = [];
-                          for(const rvrstp of riverFlow) {
-                            if(rvrstp.type !== 'first') {
-                              const done100 = batch.items.every( 
-                                                x => x.history.find( y =>
-                                                  y.key === rvrstp.key &&
-                                                  y.good === true &&
-                                                  y.time < tideStart ) );
-                              riverSatus.push(done100);
-                            }else{
-                              riverSatus.push(null);
-                            }
-                          }
-                          const nextIndex = riverSatus.indexOf(false);
-                          let nextIncompletePhase = nextIndex >= 0 ? 
-                                                      riverFlow[nextIndex].phase : null;
+                          // let riverSatus = [];
+                          // for(const rvrstp of riverFlow) {
+                          //   if(rvrstp.type !== 'first') {
+                          //     const done100 = batch.items.every( 
+                          //                       x => x.history.find( y =>
+                          //                         y.key === rvrstp.key &&
+                          //                         y.good === true &&
+                          //                         y.time < tideStart ) );
+                          //     riverSatus.push(done100);
+                          //   }else{
+                          //     riverSatus.push(null);
+                          //   }
+                          // }
+                          // const nextIndex = riverSatus.indexOf(false);
+                          // let nextIncompletePhase = nextIndex >= 0 ? 
+                          //                             riverFlow[nextIndex].phase : null;
                                                       
-                          if(nextIncompletePhase) {
-                            return [ 'fromNextIncomplete', [`${nextIncompletePhase}`] ];
-                          }else{
+                          // if(nextIncompletePhase) {
+                          //   return [ 'fromNextIncomplete', [`${nextIncompletePhase}`] ];
+                          // }else{
     
                             return false;
-                          }
+                          // }
                         }
                       }
                     }
@@ -241,11 +241,11 @@ Meteor.methods({
       for(let ph of app.phases) {
         let phDurr = 0;
         for(let t of slim) {
-          if( Array.isArray(t.phaseGuess) &&
-              ( t.phaseGuess[1].includes( ph ) ) || 
-              ( t.phaseGuess[1].includes( ph + ' prep') ) 
-            ) {
-            phDurr = phDurr + ( t.duration / t.phaseGuess[1].length );
+          if( Array.isArray(t.phaseGuess) ) {
+            if( t.phaseGuess[1].includes( ph ) || 
+                t.phaseGuess[1].includes( ph + ' prep' ) ) {
+              phDurr = phDurr + ( t.duration / t.phaseGuess[1].length );
+            }
           }
         }
         slimTimes.push({

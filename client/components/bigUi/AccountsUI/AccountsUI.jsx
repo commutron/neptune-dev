@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { useState } from 'react';
 import { Accounts } from 'meteor/accounts-base';
 import { toast } from 'react-toastify';
 import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
@@ -21,77 +21,71 @@ Accounts.onLogin( ()=>{
  });
 */
 
-// Keeping "Component" for async
-
-export default class AccountsUI extends Component {
+const AccountsUI = (props)=> {
 	
-	constructor() {
-		super();
-		this.state = {
-			loginStatus: Meteor.user(),
-			loginUsername: false,
-			loginPassword: false,
-			newUsername: false,
-			choicePassword: false,
-			confirmPassword: false,
-			organizationName: false,
-			orgPin: false,
-			loginResult: '',
-			newUserResult: ''
-		};
-	}
+	const [ loginStatusState, loginStatusSet ] = useState( Meteor.user() );
+	const [ loginUsernameState, loginUsernameSet ] = useState( false );
+	const [ loginPasswordState, loginPasswordSet ] = useState( false );
+	const [ newUsernameState, newUsernameSet ] = useState( false );
+	const [ choicePasswordState, choicePasswordSet ] = useState( false );
+	const [ confirmPasswordState, confirmPasswordSet ] = useState( false );
+	const [ organizationNameState, organizationNameSet ] = useState( false );
+	const [ orgPinState, orgPinSet ] = useState( false );
+	const [ loginResultState, loginResultSet ] = useState( '' );
+	const [ newUserResultState, newUserResultSet ] = useState( '' );
 	
-	doLogout() {
+	
+	function doLogout() {
 		if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
 	  	const sessionID = Meteor.connection._lastSessionId;
 	  	const agent = window.navigator.userAgent;
 			Meteor.call('logLogInOut', false, agent, sessionID);
 	  }
 		Meteor.logout( ()=>{
-			this.setState({loginStatus: Meteor.user()});
+			loginStatusSet( Meteor.user() );
 		});
 	}
 	
-	doLogin(e) {
+	function doLogin(e) {
 	  e.preventDefault();
-	  const user = this.state.loginUsername;
-	  const pass = this.state.loginPassword;
+	  const user = loginUsernameState;
+	  const pass = loginPasswordState;
 		const redirect = Session.get('redirectAfterLogin');
 	  
 	  Meteor.loginWithPassword(user, pass, (error)=>{
 	    if(error) {
 	      console.log(error);
-	      this.setState({loginResult: error.reason});
+	      loginResultSet( error.reason );
 	    }else{
 	    	Meteor.logoutOtherClients();
 	    }
 	    if(!redirect || redirect === '/login') {
-	    	this.setState({loginStatus: Meteor.user()});
-	    	!error && this.setState({loginResult: ''});
+	    	loginStatusSet( Meteor.user() );
+	    	!error && loginResultSet( '' );
 	    }
 	  });
 	}
 
-	doNew(e) {
+	function doNew(e) {
 	  e.preventDefault();
-	  const user = this.state.newUsername;
-	  const passChoice = this.state.choicePassword;
-	  const passConfirm = this.state.confirmPassword;
-	  const orgName = this.state.organizationName;
-	  const orgPIN = this.state.orgPin;
+	  const user = newUsernameState;
+	  const passChoice = choicePasswordState;
+	  const passConfirm = confirmPasswordState;
+	  const orgName = organizationNameState;
+	  const orgPIN = orgPinState;
 	  
 	  if(passChoice === passConfirm) {
 	    Meteor.call('verifyOrgJoin', orgName, orgPIN, (error, reply)=>{
 	      if(error)
 	        console.log(error);
 	      if(reply) {
-	      	this.setState({newUserResult: ""});
+	      	newUserResultSet( "" );
 	      	let options = {username: user, password: passChoice};
 	      	Accounts.createUser(options, (error)=>{
 	      		if(error) {
 	      			console.log(error);
 	      			toast.error('the server says no');
-	      			this.setState({newUserResult: error.reason});
+	      			newUserResultSet( error.reason );
 	      		}else{
 	      			Meteor.call('joinOrgAtLogin', orgName, orgPIN, (error, reply)=>{
 	      				if(error)
@@ -104,37 +98,34 @@ export default class AccountsUI extends Component {
 	      			});
 	      			const redirect = Session.get('redirectAfterLogin');
 	      			if(!redirect || redirect === '/login') {
-					    	this.setState({loginStatus: Meteor.user()});
+					    	loginStatusSet( Meteor.user() );
 					    }
 	      		}
 	      	});
 		    }else{
 		    	toast.error('the server says no');
-		    	this.setState({newUserResult: "Can't find an organization with that PIN"});
+		    	newUserResultSet( "Can't find an organization with that PIN" );
 		    }
 	    });
 	  }else{
 	    toast.warning("the client says no match");
-	    this.setState({newUserResult: "the password fields don't match, try typing them in again"});
+	    newUserResultSet( "the password fields don't match, try typing them in again" );
 	  }
 	}
-	render() {
 		
-		let sty = {
-			maxWidth: '240px'
-		};
+	let sty = { maxWidth: '240px' };
 		
-		return(
-			<div>
+	return(
+		<div>
 		  
-		  {this.state.loginStatus ?
+		  {loginStatusState ?
         <div>
-        	<p className='medBig'>Signed in as: {this.state.loginStatus.username}</p>
+        	<p className='medBig'>Signed in as: {loginStatusState.username}</p>
         	<p>
         		<button
         			id='logout'
         			className='userFormButtons loginoutButton'
-        			onClick={this.doLogout.bind(this)}
+        			onClick={(e)=>doLogout(e)}
         		>Sign Out</button>
         	</p>
         </div>
@@ -144,7 +135,7 @@ export default class AccountsUI extends Component {
         	names={true}
         	wide={true}>
 	        <form 
-	          onSubmit={this.doLogin.bind(this)}>
+	          onSubmit={(e)=>doLogin(e)}>
 	          <input type='hidden' value='autocompleteFix' autoComplete="new-password" />
 	          <p>
 	            <label htmlFor='loginUsername'>Username</label>
@@ -152,7 +143,7 @@ export default class AccountsUI extends Component {
 	            <input
 	              type='text'
 	              id='loginUsername'
-	              onChange={()=>this.setState({loginUsername: loginUsername.value})}
+	              onChange={()=>loginUsernameSet(loginUsername.value)}
 	              placeholder='username'
 	              required />
 	          </p>
@@ -162,7 +153,7 @@ export default class AccountsUI extends Component {
 	            <input
 	              type='password' 
 	              id='loginPassword'
-	              onChange={()=>this.setState({loginPassword: loginPassword.value})}
+	              onChange={()=>loginPasswordSet( loginPassword.value )}
 	              placeholder='password'
 	              required />
 	          </p>
@@ -173,11 +164,11 @@ export default class AccountsUI extends Component {
 	              className='userFormButtons loginoutButton'
 	             >Sign In</button>
 	          </p>
-	          <p style={sty}>{this.state.loginResult}</p>
+	          <p style={sty}>{loginResultState}</p>
 	        </form>
         
 	        <form 
-	          onSubmit={this.doNew.bind(this)}>
+	          onSubmit={(e)=>doNew(e)}>
 	          <input type='hidden' value='autocompleteFix' autoComplete='off' />
 	          <p>
 	            <label htmlFor='newUsername'>Username</label>
@@ -185,7 +176,7 @@ export default class AccountsUI extends Component {
 	            <input
 	              type='text'
 	              id='newUsername'
-	              onChange={()=>this.setState({newUsername: newUsername.value})}
+	              onChange={()=>newUsernameSet( newUsername.value )}
 	              placeholder='username'
 	              required
 	              autoComplete="username" />
@@ -196,7 +187,7 @@ export default class AccountsUI extends Component {
 	            <input
 	              type='password'
 	              id='choicePassword'
-	              onChange={()=>this.setState({choicePassword: choicePassword.value})}
+	              onChange={()=>choicePasswordSet( choicePassword.value )}
 	              placeholder='password'
 	              required
 	              autoComplete="new-password" />
@@ -207,7 +198,7 @@ export default class AccountsUI extends Component {
 	            <input
 	              type='password'
 	              id='confirmPassword'
-	              onChange={()=>this.setState({confirmPassword: confirmPassword.value})}
+	              onChange={()=>confirmPasswordSet( confirmPassword.value )}
 	              placeholder='password'
 	              required
 	              autoComplete="new-password" />
@@ -218,7 +209,7 @@ export default class AccountsUI extends Component {
 	            <input
 	              type='text' 
 	              id='organizationName'
-	              onChange={()=>this.setState({organizationName: organizationName.value})}
+	              onChange={()=>organizationNameSet( organizationName.value )}
 	              placeholder='Organization'
 	              required />
 	          </p>
@@ -228,7 +219,7 @@ export default class AccountsUI extends Component {
 	            <input
 	              type='password'
 	              id='orgPin'
-	              onChange={()=>this.setState({orgPin: orgPin.value})}
+	              onChange={()=>orgPinSet( orgPin.value )}
 	              pattern='[0000-9999]*'
 	              maxLength='4'
 	              minLength='4'
@@ -245,11 +236,12 @@ export default class AccountsUI extends Component {
 	              className='userFormButtons createButton'
 	             >Create New User</button>
 	          </p>
-	          <p style={sty}>{this.state.newUserResult}</p>
+	          <p style={sty}>{newUserResultState}</p>
 	        </form>
 	      </Tabs>
 		  }
-      </div>
-		);
-	}
-}
+    </div>
+	);
+};
+
+export default AccountsUI;

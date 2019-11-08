@@ -17,7 +17,7 @@ const BatchDetails = ({
   const ncCols = ['NC total', 'NC remain', 'NC per item', 'NC items', 'scrap', 'RMA'];
   
   return(
-    <div className={`overGridScroll ${dense ? 'dense' : ''}`} tabIndex='1'>
+    <div className={`overGridScroll forceScrollStyle ${dense ? 'dense' : ''}`} tabIndex='1'>
       
       {!dense ? 
         <div className='overGridRowScrollHeader'></div>

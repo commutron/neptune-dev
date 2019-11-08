@@ -1,5 +1,5 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 
@@ -9,7 +9,7 @@ const BatchHeaders = ({ oB, bCache, title })=> {
     <div className='overGridFixed'>
         
       <div id="allLiveBatch" className='overGridRowFixedHeader'>
-        <h1>{title} <sup>{oB.length}</sup></h1>
+        <span>{title} <sup>{oB.length}</sup></span>
       </div>
       
       {!oB ? null :

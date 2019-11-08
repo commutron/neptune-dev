@@ -8,7 +8,7 @@ import ScrapBox from '../../../components/smallUi/ScrapBox.jsx';
 
 export default class ItemCard extends Component	{
   
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.props.itemData.serial !== nextProps.itemData.serial ?
       this.forceUpdate() : null;
   }

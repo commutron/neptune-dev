@@ -89,11 +89,12 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.overGridRowFixedHeader > h1 {
+.overGridRowFixedHeader > span {
   color: var(--silver);
   padding: 1vh 2vw;
   text-transform: capitalize;
   font-size: 3vh;
+  font-weight: 600;
 }
 .overGridRowFixed {
   border-right: 1px outset rgba(255,255,255,0.2);
@@ -191,6 +192,10 @@
   grid-template-columns: minmax(min-content, 20vw) auto; }
   
 .minifyed .label { display: none; }
+
+.minifyed .overGridRowFixedHeader > span {
+  font-size: 2vh;
+}
 
 .minifyed .overGridFixed { grid-auto-rows: 5vh; }
 .minifyed .overGridScroll { grid-auto-rows: 5vh; }

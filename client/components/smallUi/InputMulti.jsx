@@ -21,7 +21,7 @@ export default class InputMulti extends Component	{
     this.handle = this.handle.bind(this);
   }
   
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     for(let df of this.props.defaultEntries) {
       this.state.choice.add(df);
     }

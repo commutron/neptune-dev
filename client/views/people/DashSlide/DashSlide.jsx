@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 //import { toast } from 'react-toastify';
 import Pref from '/client/global/pref.js';
 //import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
@@ -12,6 +12,8 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
   const [ update, forceUpdate] = useState(false);
   const [ eBatchesState, eBatchesSet ] = useState([]);
   const [ xyBatchState, xyBatchSet ] = useState([]);
+  const [ eUsersState, eUsersSet ] = useState([]);
+  const [ dUsersState, dUsersSet ] = useState([]);
   const [ userPhases, setUserPhases ] = useState({});
   const [ pList, setPhaseList ] = useState([]);
   const [ phasesXY, setPhasesXY ] = useState([]);
@@ -46,26 +48,17 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
   };
   
   useEffect( ()=>{
-    const pQuant = pList.reduce( (allPhase, phase)=> { 
-    phase &&
-      phase in allPhase ? allPhase[phase]++ : allPhase[phase] = 1;
-    return allPhase;
-    }, {});
-    const pXY = obj2xy(pQuant);
-    setPhasesXY(pXY);
-  }, [users, pList]);
-  
-  const liveUsers = users.filter( x => Roles.userIsInRole(x._id, 'active') && 
-                                      !Roles.userIsInRole(x._id, 'readOnly') );
-  const eUsers = liveUsers.filter( x => x.engaged );
-  const dUsers = liveUsers.filter( x => !x.engaged );
-  const userArr = [eUsers.length, dUsers.length ];
+    const liveUsers = users.filter( x => Roles.userIsInRole(x._id, 'active') && 
+                                        !Roles.userIsInRole(x._id, 'readOnly') );
+    const eUsers = liveUsers.filter( x => x.engaged );
+    eUsersSet( eUsers );
+    const dUsers = liveUsers.filter( x => !x.engaged );
+    dUsersSet( dUsers );
+    
+    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({eUsers});
 
-  Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({eUsers});
-  
-  const tideBatches = batches.filter( x => Array.isArray(x.tide) === true );
-  
-  useEffect( ()=>{
+    const tideBatches = batches.filter( x => Array.isArray(x.tide) === true );
+    
     const eBatches = eUsers.map( (user, index)=>{
       const acBatch = tideBatches.find( y =>
         y.tide.find( z => z.tKey === user.engaged.tKey ) );
@@ -75,18 +68,35 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
     });
     Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({eBatches});
     eBatchesSet(eBatches);
-    
-    const qBatches = eBatches.reduce( (allBatch, batch, index, array)=> { 
+  },[batches, users]);
+  
+  useEffect( ()=>{
+    const qBatches = eBatchesState.reduce( (allBatch, batch, index, array)=> { 
       const objkey = !batch ? false : batch.batch;
       objkey &&
         objkey in allBatch ? allBatch[objkey]++ : allBatch[objkey] = 1;
       return allBatch;
     }, {});
-    const itrXY = obj2xy(qBatches);
+    const qBatchesClean = _.omit(qBatches, (value, key, object)=> {
+      return value === false;
+    });
+    const itrXY = obj2xy(qBatchesClean);
   
-    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({qBatches,itrXY});
+    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({qBatchesClean, itrXY});
     xyBatchSet(itrXY);
-  });
+  }, [eBatchesState]);
+  
+  
+  useEffect( ()=>{
+    const pQuant = pList.reduce( (allPhase, phase)=> { 
+    phase &&
+      phase in allPhase ? allPhase[phase]++ : allPhase[phase] = 1;
+    return allPhase;
+    }, {});
+    const pXY = obj2xy(pQuant);
+    setPhasesXY(pXY);
+  }, [pList]);
+  
   
 
   return(
@@ -104,10 +114,10 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
       <div className='balance'>
             
         <NumStatRing
-          total={eUsers.length}
-          nums={userArr}
+          total={eUsersState.length}
+          nums={[eUsersState.length, dUsersState.length ]}
           name={`People Are ${Pref.engaged}`} 
-          title={`${eUsers.length} people currently\n${Pref.engaged} with ${Pref.batches}`} 
+          title={`${eUsersState.length} people currently\n${Pref.engaged} with ${Pref.batches}`} 
           colour='blue'
         />
         
@@ -133,8 +143,8 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
          
         <PeoplePanel
           app={app}
-          eUsers={eUsers}
-          dUsers={dUsers}
+          eUsers={eUsersState}
+          dUsers={dUsersState}
           eBatches={eBatchesState}
           bCache={bCache}
           updatePhases={(id, ph)=>updatePhases(id, ph)}
