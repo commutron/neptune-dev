@@ -145,7 +145,7 @@ moment.updateLocale('en', {
   
   
   reportOnCompleted(clientTZ, yearNum, weekNum) {
-    // try {
+    try {
       
       // const nowLocal = moment().tz(clientTZ);
       const requestLocal = moment().tz(clientTZ).set({'year': yearNum, 'week': weekNum});
@@ -158,9 +158,9 @@ moment.updateLocale('en', {
       
       return weekDoneAnalysis(clientTZ, rangeStart, rangeEnd);
 
-    // }catch(err) {
-    //   throw new Meteor.Error(err);
-    // }
+    }catch(err) {
+      throw new Meteor.Error(err);
+    }
   }
   
 

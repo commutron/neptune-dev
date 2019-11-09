@@ -25,7 +25,7 @@ const StartView = ({ready, readyUsers, user, org, app}) =>	{
   
   const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
   const isReadOnly = Roles.userIsInRole(Meteor.userId(), 'readOnly');
-  // const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
+  const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
   // ${isNightly?'fa-meteor'
   
   return(
@@ -33,7 +33,10 @@ const StartView = ({ready, readyUsers, user, org, app}) =>	{
       {isReadOnly ?
         <NavPlaceholder title='Production' icon="fas fa-paper-plane" /> :
         <NavButton title='Production' icon='fa-paper-plane' link='/production' /> }
-      <NavPlaceholder title='' icon="fas fa-map" />
+      {isAdmin && isNightly ?
+        <NavButton title='Agenda' icon='fa-meteor' link='/agenda' />
+      : <NavPlaceholder title='' icon="fas fa-map" />}
+      
       <NavButton title='Overview' icon='fas fa-globe' link='/overview' />
       <NavButton title='Explore' icon='fa-rocket' link='/data' />
       

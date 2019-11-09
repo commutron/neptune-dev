@@ -13,6 +13,14 @@ const DataRepair = ({ app, users })=> {
   //   });
   // }
   
+  function fixDuplicateSerial(e, batchText, serialNum, dateStamp) {
+    e.preventDefault();
+    Meteor.call('dataFIXduplicateserial', batchText, serialNum, dateStamp, (error, reply)=>{
+      error && console.log(error);
+      if(reply) { toast.success('data edit complete', { autoClose: false }); }
+    });
+  }
+  
   
   function fixAthing(e, oldText, newText, textMatch) {
     e.preventDefault();
@@ -103,6 +111,25 @@ const DataRepair = ({ app, users })=> {
         >fix</button>
       </form>
       
+      <hr />
+      
+      <div className='vspace'>
+      <h2 className='cap'>Force Delete Serial Number</h2>
+      <form onSubmit={(e)=>fixDuplicateSerial(e, batchText.value, serialText.value, dateText.value)}>
+        <p>Batch: <input id='batchText' /></p>
+        <br /><br />
+        <p>Serial: <input id='serialText' /></p>
+        <br /><br />
+        <p>ISODate: <input id='dateText' /></p>
+        <br /><br />
+        <button
+          type='submit'
+          className='action clear blackT'
+        >fix duplicate serial</button>
+      </form>
+      </div>
+      
+      <hr />
       {/*<br />
       <hr />
       <h2 className='cap'>Fix Proto Key</h2>
@@ -119,11 +146,15 @@ const DataRepair = ({ app, users })=> {
         className='action clear blackT'
       >Force Update Cache</button>
       
+      <hr />
+      
       <h2 className='cap'>Clear All User Watchlists</h2>
       <button
         onClick={()=>clearAllWatch()}
         className='action clear blackT'
       >Clear</button>
+      
+      <hr />
       
       <form 
         id='ph001form'

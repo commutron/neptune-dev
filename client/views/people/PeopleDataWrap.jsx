@@ -15,12 +15,10 @@ import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
 import Slides from '../../components/smallUi/Slides.jsx';
 
-//import ActivityPanel from '/client/views/user/ActivityPanel.jsx';
-import ActivitySlide from './ActivitySlide.jsx';
 import DashSlide from './DashSlide/DashSlide.jsx';
+import ActivitySlide from './ActivitySlide.jsx';
+import ScheduleSlide from './ScheduleSlide.jsx';
 import AccountsManagePanel, { PermissionHelp } from './AccountsManagePanel.jsx';
-
-import GuessSlide from './GuessSlide.jsx';
 
 const PeopleDataWrap = ({
   ready, readyUsers, readyTides, // subs
@@ -69,11 +67,11 @@ const PeopleDataWrap = ({
           menu={[
             <b><i className='fas fa-satellite-dish fa-fw'></i>  Current</b>,
             <b><i className='fas fa-history fa-fw'></i>  Production Activity</b>,
+            <b><i className='far fa-calendar-alt fa-fw'></i>  Work Schedule</b>,
             <b><i className='fas fa-user-lock fa-fw'></i>  Permissions</b>,
             <b><i className='fas fa-users-cog fa-fw'></i>   Account Manager</b>,
-            <b><i className='fas fa-meteor fa-fw'></i>  Guess Work</b>
           ]}
-          disable={[false, false, false, !isAdmin, !isNightly]}>
+          disable={[false, false, !isNightly, false, !isAdmin]}>
           
           <DashSlide
             key={0}
@@ -90,22 +88,22 @@ const PeopleDataWrap = ({
             users={users}
             bCache={bCache}
             allUsers={true} />
-            
-          <div key={2}>
-            <PermissionHelp roles={Pref.roles} admin={false} />
-          </div>
-          
-          {isAdmin &&
-            <AccountsManagePanel key={3} users={users} /> }
           
           {isNightly &&
-            <GuessSlide
-              key={4}
+            <ScheduleSlide
+              key={2}
               app={app}
               user={user}
               users={users}
               pCache={pCache} />
           }
+          
+          <div key={3}>
+            <PermissionHelp roles={Pref.roles} admin={false} />
+          </div>
+          
+          {isAdmin &&
+            <AccountsManagePanel key={4} users={users} /> }
           
         </Slides>
 				

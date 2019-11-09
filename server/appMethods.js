@@ -52,7 +52,8 @@ Meteor.methods({
         nineDigit: Number(123456789),
         tenDigit: Number(1234567890)
       },
-      ndaMode: false
+      ndaMode: false,
+      nonWorkDays: []
     });
     Meteor.users.update(Meteor.userId(), {
       $set: {
@@ -655,6 +656,50 @@ Meteor.methods({
       return false;
     }
   },
+  
+  ////// no work days
+  addNonWorkDay(newDay) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $addToSet : { 
+          nonWorkDays : newDay
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  removeNonWorkDay(badDay) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $pull : { 
+          nonWorkDays : badDay
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  resetNonWorkDay() {
+    try {
+      if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+        AppDB.update({orgKey: Meteor.user().orgKey}, {
+          $set : {
+            nonWorkDays: [],
+          }});
+        return true;
+      }else{
+        return false;
+      }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+
+  ////////////
+  
+  // Testing Functions //
   
   sendTestMail(all) {
     if(all) {

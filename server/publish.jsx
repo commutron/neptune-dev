@@ -140,7 +140,7 @@ Meteor.publish('tideData', function(clientTZ){
   }
 });
 
-// Overview
+// Overview & Agenda
 Meteor.publish('shaddowData', function(clientTZ){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;

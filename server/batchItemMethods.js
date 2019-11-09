@@ -395,6 +395,9 @@ Meteor.methods({
           }else{
             null;
           }
+          let barcodeOne = barFirst.toString();
+          let narrowDuplicate = BatchDB.findOne({ 'items.serial': barcodeOne });
+          if(narrowDuplicate) { clear = false }
           return clear;
         };
         
@@ -501,6 +504,31 @@ Meteor.methods({
       return 'inUse';
     }
   },
+  
+  // fix delete \\
+  dataFIXduplicateserial(batchNum, serialNum, dateStamp) {
+  
+    const doc = BatchDB.findOne({batch: batchNum});
+    const subDocMatch = doc && doc.items.find( x => 
+      x.serial === serialNum && x.createdAt.toISOString() === dateStamp );
+    if(subDocMatch) {
+      const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
+      if(auth) {
+    		BatchDB.update({batch: batchNum}, {
+          $pull : { items: { 
+            serial: serialNum, 
+            createdAt: new Date(dateStamp) 
+          }
+        }});
+        return true;
+      }else{
+        return false;
+      }
+    }else{
+      return false;
+    }
+  },
+  
   
   //// fork, use alternative flow
   forkItem(id, bar, choice) {
