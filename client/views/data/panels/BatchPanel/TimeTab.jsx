@@ -1,6 +1,5 @@
 import React from 'react';
 import moment from 'moment';
-import 'moment-business';
 import 'moment-timezone';
 //import Pref from '/client/global/pref.js';
 

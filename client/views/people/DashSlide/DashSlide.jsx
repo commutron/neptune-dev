@@ -78,7 +78,7 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
       return allBatch;
     }, {});
     const qBatchesClean = _.omit(qBatches, (value, key, object)=> {
-      return value === false;
+      return key == false;
     });
     const itrXY = obj2xy(qBatchesClean);
   

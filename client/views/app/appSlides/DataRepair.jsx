@@ -13,13 +13,13 @@ const DataRepair = ({ app, users })=> {
   //   });
   // }
   
-  function fixDuplicateSerial(e, batchText, serialNum, dateStamp) {
-    e.preventDefault();
-    Meteor.call('dataFIXduplicateserial', batchText, serialNum, dateStamp, (error, reply)=>{
-      error && console.log(error);
-      if(reply) { toast.success('data edit complete', { autoClose: false }); }
-    });
-  }
+  // function fixDuplicateSerial(e, batchText, serialNum, dateStamp) {
+  //   e.preventDefault();
+  //   Meteor.call('dataFIXduplicateserial', batchText, serialNum, dateStamp, (error, reply)=>{
+  //     error && console.log(error);
+  //     if(reply) { toast.success('data edit complete', { autoClose: false }); }
+  //   });
+  // }
   
   
   function fixAthing(e, oldText, newText, textMatch) {
@@ -112,7 +112,7 @@ const DataRepair = ({ app, users })=> {
       </form>
       
       <hr />
-      
+      {/*
       <div className='vspace'>
       <h2 className='cap'>Force Delete Serial Number</h2>
       <form onSubmit={(e)=>fixDuplicateSerial(e, batchText.value, serialText.value, dateText.value)}>
@@ -128,7 +128,7 @@ const DataRepair = ({ app, users })=> {
         >fix duplicate serial</button>
       </form>
       </div>
-      
+      */}
       <hr />
       {/*<br />
       <hr />

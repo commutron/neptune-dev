@@ -1,6 +1,5 @@
 import React from 'react';
 import moment from 'moment';
-import business from 'moment-business';
 import 'moment-business-time-ship';
 import Pref from '/client/global/pref.js';
 
@@ -30,6 +29,13 @@ const GeneralChunk = ({
   done, expand
 }) =>	{
   
+  const nonWorkDays = a.nonWorkDays;
+  if( Array.isArray(nonWorkDays) ) {  
+    moment.updateLocale('en', {
+      holidays: nonWorkDays
+    });
+  }
+    
   const qtB = b.quoteTimeBudget && b.quoteTimeBudget.length > 0 ? 
                 b.quoteTimeBudget[0].timeAsMinutes : 0;
   const qtHours = moment.duration(qtB, "minutes").asHours().toFixed(2, 10);
@@ -43,12 +49,14 @@ const GeneralChunk = ({
                       (timeweeks == 1 ? ', ' : 's, ') + 
                         timedays + ' day' +
                           (timedays == 1 ? '' : 's');
-  const remain = business.weekDays( moment(), moment(b.end) );             
+  
   const fnsh = b.finishedAt ? end.format("MMMM Do, YYYY h:mm A") : null;
 
   const endDay = moment(b.end);
   const shipTime = endDay.isShipDay() ? 
     endDay.nextShippingTime() : endDay.lastShippingTime();
+  
+  const remain = shipTime.workingDiff(moment(), 'days');
         
   let released = b.floorRelease === undefined ? undefined : 
                   b.floorRelease === false ? false :

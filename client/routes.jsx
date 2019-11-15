@@ -349,7 +349,9 @@ Accounts.onLogin( ()=>{
   }else {
     FlowRouter.go(redirect);
   }
-  if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
+  if(Roles.userIsInRole(Meteor.userId(), 'debug') && 
+    !Roles.userIsInRole(Meteor.userId(), 'admin')
+  ) {
   	const agent = window.navigator.userAgent;
   	const sessionID = Meteor.connection._lastSessionId;
   	Meteor.call('logLogInOut', true, agent, sessionID);

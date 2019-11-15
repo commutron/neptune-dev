@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 import { AnonyUser } from '/client/components/smallUi/UserNice.jsx';

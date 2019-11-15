@@ -188,17 +188,31 @@ function collectStatus(privateKey, batchID, clientTZ) {
     const bx = XBatchDB.findOne({_id: batchID});
     const b = !bx ? BatchDB.findOne({_id: batchID}) : {};
     
+    const app = AppDB.findOne({orgKey: privateKey});
+    const nonWorkDays = app.nonWorkDays;
+    if( Array.isArray(nonWorkDays) ) {  
+      moment.updateLocale('en', {
+        holidays: nonWorkDays
+      });
+    }
+    
     const now = moment().tz(clientTZ);
     
     if(bx) {
       let complete = bx.completed; // is it done
-      let salesEnd = moment.tz(bx.salesEnd, clientTZ); // when is it due
-      let timeRemain = !complete ? 
-        business.weekDays( now, salesEnd ) : 0; // how long until due
+      
+      const localEnd = moment.tz(bx.salesEnd, clientTZ);
+      const shipDue = localEnd.isShipDay() ?
+                        localEnd.clone().nextShippingTime() :
+                        localEnd.clone().lastShippingTime();
+      
+      const timeRemain = !complete ?  // duration between now and ship due
+        shipDue.workingDiff(now, 'days') : 0;
       
       collection = {
         batch: bx.batch,
         batchID: bx._id,
+        shipDue: shipDue.format(),
         weekDaysRemain: timeRemain,
         itemQuantity: bx.quantity,
         riverChosen: false,
@@ -209,10 +223,14 @@ function collectStatus(privateKey, batchID, clientTZ) {
       
     }else if(b) {
       let complete = b.finishedAt !== false; // is it done
-      let salesEnd = moment.tz(b.end, clientTZ); // when is it due
-      let timeRemain = !complete ? 
-        business.weekDays( now, salesEnd ) : 0; // how long until due
-      // const timeRemain = !complete ? salesEnd.workingDiff(now, 'days') : 0;
+      
+      const localEnd = moment.tz(b.end, clientTZ); // when is it due
+      const shipDue = localEnd.isShipDay() ?
+                        localEnd.clone().nextShippingTime() :
+                        localEnd.clone().lastShippingTime();
+      
+      const timeRemain = !complete ?  // duration between now and ship due
+        shipDue.workingDiff(now, 'days') : 0;
       
       let itemQuantity = b.items.length; // how many items
       const riverChosen = b.river !== false; // River Setup
@@ -229,7 +247,7 @@ function collectStatus(privateKey, batchID, clientTZ) {
       collection = {
         batch: b.batch,
         batchID: b._id,
-        // timeElapse: timeElapse,
+        shipDue: shipDue.format(),
         weekDaysRemain: timeRemain,
         itemQuantity: itemQuantity,
         riverChosen: riverChosen,
@@ -248,6 +266,13 @@ function collectPriority(privateKey, batchID, clientTZ) {
   return new Promise(resolve => {
     let collection = false;
     const b = BatchDB.findOne({_id: batchID});
+    const app = AppDB.findOne({orgKey: privateKey});
+    const nonWorkDays = app.nonWorkDays;
+    if( Array.isArray(nonWorkDays) ) {  
+      moment.updateLocale('en', {
+        holidays: nonWorkDays
+      });
+    }
     if(!b) {
       resolve(collection);
     }else{

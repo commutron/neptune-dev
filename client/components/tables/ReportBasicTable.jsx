@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import './style.css';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 import { toast } from 'react-toastify';
@@ -62,6 +63,12 @@ const ReportBasicTable = ({ title, dateString, rows })=> {
                               <ExploreLinkBlock 
                                 type='batch'
                                 keyword={sub} />
+                            </td>
+                          );
+                        }else if (moment(sub, moment.ISO_8601).isValid()){
+                          return(
+                            <td key={ix+rndm}>
+                              {moment(sub).format('llll')}
                             </td>
                           );
                         }else{

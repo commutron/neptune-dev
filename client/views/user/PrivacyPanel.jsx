@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 const PrivacyPanel = ({ orb, bolt, app, user, users, bCache })=> {

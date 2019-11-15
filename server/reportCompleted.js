@@ -1,5 +1,4 @@
 import moment from 'moment';
-import business from 'moment-business';
 import 'moment-timezone';
 import 'moment-business-time-ship';
 
@@ -52,7 +51,15 @@ moment.updateLocale('en', {
     const asHours = (mnts) => 
       moment.duration(mnts, "minutes")
         .asHours().toFixed(2, 10);
-
+    
+    const app = AppDB.findOne({orgKey: Meteor.user().orgKey});
+    const nonWorkDays = app.nonWorkDays;
+    if( Array.isArray(nonWorkDays) ) {  
+      moment.updateLocale('en', {
+        holidays: nonWorkDays
+      });
+    }
+      
     let batchMetrics = [];
     
     const generalFind = BatchDB.find({
@@ -63,6 +70,8 @@ moment.updateLocale('en', {
       }
     }).fetch();
     
+    //console.log(clientTZ);
+    
     for(let gf of generalFind) {
       const batchNum = gf.batch;
       const describe = whatIsBatch(batchNum);
@@ -72,11 +81,20 @@ moment.updateLocale('en', {
       const ncRate = ( ncQuantity / itemQuantity ).toFixed(1, 10);
       const endAlter = !gf.altered ? 'n/a' :
         gf.altered.filter( a => a.changeKey === 'end' ).length;
-      const salesEnd = moment(gf.end).tz(clientTZ).format('L');
-      const finishedAt = moment(gf.finishedAt).tz(clientTZ).format('L');
+      
+      const localEnd = moment.tz(gf.end, clientTZ);
+      
+      const salesEnd = localEnd.isWorkingDay() ?
+                        localEnd.clone().nextWorkingTime().format() :
+                        localEnd.clone().lastWorkingTime().format();
+      const shipDue = localEnd.isShipDay() ?
+                        localEnd.clone().nextShippingTime().format() :
+                        localEnd.clone().lastShippingTime().format();
+      
+      const localFinish = moment(gf.finishedAt).tz(clientTZ).format();
+      
       // duration between finish and fulfill
-      const buffer = moment(gf.finishedAt)
-                      .workingDiff(gf.end, 'days');
+      const buffer = moment(localFinish).workingDiff(shipDue, 'days');
       const onTime = buffer === 0 ? 'on time' :
                       buffer < 0 ? `${Math.abs(buffer)} days early` :  
                       `${Math.abs(buffer)} days late`;
@@ -91,7 +109,7 @@ moment.updateLocale('en', {
       batchMetrics.push([
         batchNum, describe, 
         salesOrder, itemQuantity, ncRate,
-        salesEnd, finishedAt, endAlter,
+        salesEnd, shipDue, localFinish, endAlter,
         onTime, overQuote
       ]);
     }
@@ -112,11 +130,20 @@ moment.updateLocale('en', {
       const ncQuantity = gf.nonconformaces.length;
       const ncRate = ( ncQuantity / itemQuantity ).toFixed(1, 10);
       const endAlter = gf.altered.filter( a => a.changeKey === 'salesEnd' ).length;
-      const salesEnd = moment(gf.salesEnd).tz(clientTZ).format('L');
-      const completedAt = moment(gf.completedAt).tz(clientTZ).format('L');
+      
+      const localEnd = moment.tz(gf.salesEnd, clientTZ);
+      
+      const salesEnd = localEnd.isWorkingDay() ?
+                        localEnd.clone().nextWorkingTime().format() :
+                        localEnd.clone().lastWorkingTime().format();
+      const shipDue = localEnd.isShipDay() ?
+                        localEnd.clone().nextShippingTime().format() :
+                        localEnd.clone().lastShippingTime().format();
+      
+      const localComplete = moment(gf.completedAt).tz(clientTZ).format();
+      
       // duration between finish and fulfill
-      const buffer = moment(gf.completedAt)
-                      .workingDiff(gf.salesEnd, 'days');
+      const buffer = moment(localComplete).workingDiff(shipDue, 'days');
       const onTime = buffer === 0 ? 'on time' :
                       buffer < 0 ? `${Math.abs(buffer)} days early` :  
                       `${Math.abs(buffer)} days late`;
@@ -132,7 +159,7 @@ moment.updateLocale('en', {
       batchMetrics.push([
         batchNum, describe, 
         salesOrder, itemQuantity, ncRate,
-        salesEnd, completedAt, endAlter, 
+        salesEnd, shipDue, localComplete, endAlter,
         onTime, overQuote
       ]);
     }

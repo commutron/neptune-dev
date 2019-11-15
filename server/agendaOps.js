@@ -31,6 +31,14 @@ moment.updateLocale('en', {
 
 Meteor.methods({
   
+  // const app = AppDB.findOne({orgKey: Meteor.user().orgKey});
+  //   const nonWorkDays = app.nonWorkDays;
+  //   if( Array.isArray(nonWorkDays) ) {  
+  //     moment.updateLocale('en', {
+  //       holidays: nonWorkDays
+  //     });
+  //   }
+  
   
   
   

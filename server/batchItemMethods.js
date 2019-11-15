@@ -506,6 +506,7 @@ Meteor.methods({
   },
   
   // fix delete \\
+  /*
   dataFIXduplicateserial(batchNum, serialNum, dateStamp) {
   
     const doc = BatchDB.findOne({batch: batchNum});
@@ -528,6 +529,7 @@ Meteor.methods({
       return false;
     }
   },
+  */
   
   
   //// fork, use alternative flow

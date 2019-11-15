@@ -68,6 +68,13 @@ const AgendaWrap = ({
   const [ numState, numSet ] = useState(false);
   
   useEffect( ()=> {
+    const nonWorkDays = app.nonWorkDays;
+    if( Array.isArray(nonWorkDays) ) {  
+      moment.updateLocale('en', {
+        holidays: nonWorkDays
+      });
+    }
+    
     const q2tArr = Array.from(pCache.dataSet, 
       x => x.quote2tide > 0 && x.quote2tide );
     const q2tTotal = q2tArr.reduce( 

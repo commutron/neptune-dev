@@ -7,7 +7,7 @@ import {
   VictoryChart, 
   VictoryAxis,
   VictoryLabel,
-  VictoryTooltip,
+  // VictoryTooltip,
   VictoryStack
 } from 'victory';
 //import Pref from '/client/global/pref.js';

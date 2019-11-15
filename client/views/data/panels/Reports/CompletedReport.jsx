@@ -20,7 +20,7 @@ const CompletedReport = ({ batchData, widgetData, groupData, app })=> {
       const yearNum = weekChoice.yearNum;
       const weekNum = weekChoice.weekNum;
       const clientTZ = moment.tz.guess();
-      
+
       Meteor.call('reportOnCompleted', clientTZ, yearNum, weekNum, (err, rtn)=>{
   	    err && console.log(err);
   	    let cronoTimes = rtn.sort((x1, x2)=> {
@@ -31,7 +31,7 @@ const CompletedReport = ({ batchData, widgetData, groupData, app })=> {
         cronoTimes.unshift([
           Pref.batch, 'description', 
           'sales order', 'tracked items', 'nonCon rate',
-          'due', 'complete', 'moved fulfill', 
+          'fulfill due', 'ship due', 'complete', 'moved fulfill', 
           'delivery', 'quote'
         ]);     
         setWeekData(cronoTimes);
@@ -66,19 +66,19 @@ const CompletedReport = ({ batchData, widgetData, groupData, app })=> {
                           / quantitiesNC.length;
       const ncAvg = isNaN(ncAverage) ? 0.0 : ncAverage.toFixed(1, 10);
        
-      const endAlters = Array.from(wd, x => x[7] )
+      const endAlters = Array.from(wd, x => x[8] )
                          .filter( x => typeof x === 'number' );
       const alterAvg = endAlters.reduce( (arr, x)=> arr + x, 0) 
                         / endAlters.length;
       const alAvg = isNaN(alterAvg) ? 0.0 : alterAvg.toFixed(1, 10);
       
-      const early = wd.filter( x => x[8].includes('early') ).length;
-      const onTime = wd.filter( x => x[8].includes('on time') ).length;
-      const late = wd.filter( x => x[8].includes('late') ).length;
+      const early = wd.filter( x => x[9].includes('early') ).length;
+      const onTime = wd.filter( x => x[9].includes('on time') ).length;
+      const late = wd.filter( x => x[9].includes('late') ).length;
       
-      const under = wd.filter( x => x[9].includes('under') ).length;
-      const over = wd.filter( x => x[9].includes('over') ).length;
-      const na = wd.filter( x => x[9].includes('n/a') ).length;
+      const under = wd.filter( x => x[10].includes('under') ).length;
+      const over = wd.filter( x => x[10].includes('over') ).length;
+      const na = wd.filter( x => x[10].includes('n/a') ).length;
       
       let arrange = [
         ['Completed ' + Pref.batches, woTotal ],

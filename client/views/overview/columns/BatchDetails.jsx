@@ -23,7 +23,7 @@ const BatchDetails = ({
         <div className='overGridRowScrollHeader'></div>
       :
         <div className='overGridRowScroll'>
-          {['SO', 'due',...statusCols,...app.phases,...ncCols, 'watch']
+          {['SO', 'fulfill', 'ship', ...statusCols,...app.phases,...ncCols, 'watch']
             .map( (entry, index)=>{
               return(
                 <div key={entry+index}>
@@ -77,7 +77,7 @@ const BatchDetailChunk = ({
         <i><i className='label'>SO:<br /></i>{ck.salesOrder}</i>
       </div>
       <div>
-        <i><i className='label'>Due:<br /></i>{dueDate.format(adaptDate)}</i>
+        <i><i className='label'>Fulfill:<br /></i>{dueDate.format(adaptDate)}</i>
       </div>
       
       <BatchTopStatus
@@ -134,9 +134,15 @@ const BatchTopStatus = ({
    
   if( dt && dt.batchID === batchID ) {
     
+    const dueDateShip = moment(dt.shipDue);
+    const adaptDate = dueDateShip.isAfter(moment(), 'year') ?
+                        "MMM Do, YYYY" : "MMM Do";
+    
     return(
       <Fragment>
-        {/*<div><i>Created {dt.timeElapse} ago</i></div>*/}
+        <div>
+          <i><i className='label'>Ship:<br /></i>{dueDateShip.format(adaptDate)}</i>
+        </div>
         <div>
           <NumStat
             num={ dense ? dt.weekDaysRemain : Math.abs(dt.weekDaysRemain) }

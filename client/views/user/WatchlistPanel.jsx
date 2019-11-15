@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment';
+// import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
