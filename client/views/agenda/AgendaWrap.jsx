@@ -1,7 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import moment from 'moment';
 import 'moment-timezone';
-import 'moment-business-time-ship';
 import { ToastContainer } from 'react-toastify';
 import Pref from '/client/global/pref.js';
 
@@ -9,26 +8,10 @@ import Spin from '../../components/uUi/Spin.jsx';
 import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
 
-moment.updateLocale('en', {
-  workinghours: {
-      0: null,
-      1: ['07:00:00', '16:30:00'],
-      2: ['07:00:00', '16:30:00'],
-      3: ['07:00:00', '16:30:00'],
-      4: ['07:00:00', '16:30:00'],
-      5: ['07:00:00', '12:00:00'],
-      6: null
-  },// including lunch breaks!
-  shippinghours: {
-      0: null,
-      1: null,
-      2: ['11:30:00', '11:30:00'],
-      3: null,
-      4: ['11:30:00', '11:30:00'],
-      5: null,
-      6: null
-  }// including lunch breaks!
-});
+import PriorityList from './cards/PriorityList';
+import ShipDates from './cards/ShipDates';
+import ShipWindows from './cards/ShipWindows';
+
 
 function useInterval(callback, delay) {
   const savedCallback = useRef();
@@ -68,12 +51,6 @@ const AgendaWrap = ({
   const [ numState, numSet ] = useState(false);
   
   useEffect( ()=> {
-    const nonWorkDays = app.nonWorkDays;
-    if( Array.isArray(nonWorkDays) ) {  
-      moment.updateLocale('en', {
-        holidays: nonWorkDays
-      });
-    }
     
     const q2tArr = Array.from(pCache.dataSet, 
       x => x.quote2tide > 0 && x.quote2tide );
@@ -82,17 +59,17 @@ const AgendaWrap = ({
       
     const howManyHours = moment.duration(q2tTotal, "minutes")
                           .asHours().toFixed(2, 10);
-    
-    // not really, cause that would be one person
-    const noMoreDate = moment().addWorkingTime(q2tTotal, 'minutes');
-    
-    const howManyDays = noMoreDate.workingDiff(moment(), 'days');
+                          
+    const now = moment();
+    const in100 = now.clone().add(100, 'd');
+    const noDays = app.nonWorkDays;
+    const noDays100 = noDays.filter( x => moment(x).isBetween(now, in100, null, '[)'));
+    const noNice = noDays100.join(', ');
     
     numSet([
       ['q2tTotal', q2tTotal],
       ['howManyHours', howManyHours], 
-      ['noMoreDate', noMoreDate.format()], 
-      ['howManyDays', howManyDays] 
+      ['holidaysInNext100Days', noNice], 
     ]);
   }, []);
   
@@ -131,8 +108,6 @@ const AgendaWrap = ({
 
       //const cB = cCache.dataSet.find( x => x.batchID === bx._id);
       //const cP = cB && cB.phaseSets.find( x => x.phase === filterBy );
-      
-        
       
       let orderedBatches = liveBatches.sort((b1, b2)=> {
         const pB1 = pCache.dataSet.find( x => x.batchID === b1._id);
@@ -236,26 +211,31 @@ const AgendaWrap = ({
           </div>
         </div>
       :  
-        <div className={` ${density}`}>
-    
-          {/*
-            key='fancylist1'
-            oB={liveState}
-            bCache={bCache}
-            pCache={pCache}
-            user={user}
-            clientTZ={clientTZ}
-            app={app}
-            dense={dense > 1}
-          />*/}
-          
-          <dl>
-            {!numState ? 'sure' :
-              numState.map( (entry, index)=>{
-              return(
-                <dd key={index}>{entry[0]}: {entry[1]}</dd>
-            )})}
-          </dl>
+        <div className={`balance numFont letterSpaced overscroll ${density}`}>
+            
+          <ShipWindows 
+            pCache={pCache.dataSet}
+            app={app} />
+           
+          <div className='max400 space'>
+            <h3>Other</h3>
+            <h5></h5>
+            <dl>
+              {!numState ? 'sure' :
+                numState.map( (entry, index)=>{
+                return(
+                  <dd key={index}>{entry[0]}: {entry[1]}</dd>
+              )})}
+            </dl>
+          </div>
+
+          <PriorityList 
+            pCache={pCache.dataSet}
+            app={app} />
+
+          <ShipDates 
+            pCache={pCache.dataSet}
+            app={app} />
             
         </div>
       }  

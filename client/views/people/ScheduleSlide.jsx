@@ -3,31 +3,11 @@ import moment from 'moment';
 // import business from 'moment-business';
 import 'moment-timezone';
 import 'moment-business-time-ship';
+import '/client/components/utilities/ShipTime.js';
 import { toast } from 'react-toastify';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
 //import Pref from '/client/global/pref.js';
-
-moment.updateLocale('en', {
-  workinghours: {
-      0: null,
-      1: ['07:00:00', '16:30:00'],
-      2: ['07:00:00', '16:30:00'],
-      3: ['07:00:00', '16:30:00'],
-      4: ['07:00:00', '16:30:00'],
-      5: ['07:00:00', '12:00:00'],
-      6: null
-  },// including lunch breaks!
-  shippinghours: {
-      0: null,
-      1: null,
-      2: ['11:30:00', '11:30:00'],
-      3: null,
-      4: ['11:30:00', '11:30:00'],
-      5: null,
-      6: null
-  }// including lunch breaks!
-});
 
 // const clientTZ = moment.tz.guess();
 

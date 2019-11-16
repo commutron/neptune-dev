@@ -957,7 +957,8 @@ Meteor.methods({
       
       const whenDid = subDoc.finishedAt;
       const whoDid = subDoc.finishedWho;
-      const inTime = whenDid !== false ? moment().diff(moment(whenDid), 'minutes') < (60 * 24 * 7) : false;
+      const inTime = whenDid !== false ? 
+        moment().diff(moment(whenDid), 'minutes') < (60 * 24 * 7) : false;
 
       const accessKey = Meteor.user().orgKey;
       const org = AppDB.findOne({ orgKey: accessKey });

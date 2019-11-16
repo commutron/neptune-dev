@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 
 import ModelMedium from '../smallUi/ModelMedium.jsx';
 
-const UndoFinish = ({ id, serial, finishedAt, timelock, noText })=>	{
+const UndoFinish = ({ id, finishedAtB, serial, finishedAtI, timelock, noText })=>	{
   
   const handleUndo = ()=> {
     const override = timelock ? prompt("Enter minor PIN to override", "") : false;
@@ -19,21 +19,24 @@ const UndoFinish = ({ id, serial, finishedAt, timelock, noText })=>	{
     });
   };
   
-  const auth = Roles.userIsInRole(Meteor.userId(), 'finish') && finishedAt !== false;
+  const auth = Roles.userIsInRole(Meteor.userId(), 'finish') && 
+    finishedAtB === false && finishedAtI !== false;
+  
+  const icon = finishedAtB === false ? 'fa-backward' : 'fa-lock';
   
   return(
     <ModelMedium
       button='Undo Finish'
       title={'Undo Finish and Reactivate ' + Pref.item}
       color='yellowT'
-      icon='fa-backward'
+      icon={icon}
       lock={!auth}
       noText={noText}>
       <div>
         <p className='centreText'>After one week, reactivating an {Pref.item} requires an override</p>
         <p className='centreText'>After the {Pref.batch} is finished, {Pref.items} are locked and cannot be changed</p>
         <p className='centreText'>
-          <i>This {Pref.item} was finished <b>{moment(finishedAt).fromNow()}</b></i>
+          <i>This {Pref.item} was finished <b>{moment(finishedAtI).fromNow()}</b></i>
         </p>
         <p className='centre'>
           <button

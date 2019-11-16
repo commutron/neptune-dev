@@ -1,4 +1,5 @@
 import React from 'react';
+// import React, { useState, useEffect } from 'react';
 // import moment from 'moment';
 // import Pref from '/client/global/pref.js';
 
@@ -15,6 +16,28 @@ const InfoTab = ({
   progCounts, riverTitle, riverAltTitle,
 }) =>	{
 
+  // const [ phasePercent, phasePercentSet ] = useState([]);
+  
+  // useEffect( ()=> {
+  //   Meteor.call('phaseProgress', b._id, (err, re)=>{
+  //     err && console.log(err);    
+  //     if(re) {
+  //       const smplePhPro = Array.from(re.phaseSets, x => {
+  //         let calc = Math.floor( ( x.count / (re.totalItems * x.steps.length) 
+  //           * 100 ) );
+  //         return {
+  //           phase: x.phase,
+  //           progPer: calc,
+  //           nc: x.ncLeft
+  //         };
+  //       });
+  //       phasePercentSet( smplePhPro );
+  //     }
+  //   });
+  // }, []);
+  
+  // console.log(phasePercent);
+  
   let released = b.floorRelease === undefined ? undefined : 
                   b.floorRelease === false ? false :
                   typeof b.floorRelease === 'object';

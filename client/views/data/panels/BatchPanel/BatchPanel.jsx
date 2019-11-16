@@ -1,6 +1,5 @@
 import React from 'react';
 import moment from 'moment';
-import business from 'moment-business';
 import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
 import ProgressCounter from '/client/components/utilities/ProgressCounter.js';

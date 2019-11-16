@@ -14,7 +14,6 @@
     "fixed-data-table": "^0.6.5",
     "meteor-node-stubs": "^0.4.1",
     "moment": "^2.24.0",
-    "moment-business": "^3.0.1",
     "moment-business-time-ship": "git+https://github.com/mattandwhatnot/moment-business-time-ship.git",
     "moment-timezone": "^0.5.27",
     "prop-types": "^15.7.2",

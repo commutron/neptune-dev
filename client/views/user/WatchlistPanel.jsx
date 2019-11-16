@@ -50,14 +50,15 @@ const WatchlistPanel = ({ orb, bolt, app, user, users, batchEvents, bCache })=> 
               </tr>
               <tr>
                 <td colSpan='5' className='leftText clean'>
-                  
-                  <EventsTimeline
-                    id={null}
-                    batch={batch}
-                    verifyList={[]}
-                    eventList={batch ? batch.events || [] : []}
-                    doneBatch={false} />
-              
+                  <details className='dropEvents'>
+                    <summary>Events</summary>
+                    <EventsTimeline
+                      id={null}
+                      batch={batch}
+                      verifyList={[]}
+                      eventList={batch ? batch.events || [] : []}
+                      doneBatch={false} />
+                    </details>
                 </td>
               </tr>
             </tbody>

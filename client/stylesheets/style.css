@@ -1197,6 +1197,13 @@ label.qdpplRound {
 	background-color: var(--asbestos);
 }
 
+.dropEvents {
+  border: 1px solid var(--asbestosfade);
+}
+details[open].dropEvents summary {
+  border-bottom: 1px solid var(--asbestosfade);
+}
+
 .starfishColour { color: #00bde0; }
 .starfishAccents #pnFindButton {
   color: #00bde0;

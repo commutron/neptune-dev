@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 
+// Component Remains, no hook replacement for "componentDidCatch"
+// as of november 2019
+
 export default class ErrorCatch extends Component	{
   
   constructor() {

@@ -1,7 +1,18 @@
 import moment from 'moment';
 import timezone from 'moment-timezone';
-import business from 'moment-business';
+import 'moment-business-time-ship';
 
+moment.updateLocale('en', {
+  workinghours: {
+      0: null,
+      1: ['07:00:00', '16:30:00'],
+      2: ['07:00:00', '16:30:00'],
+      3: ['07:00:00', '16:30:00'],
+      4: ['07:00:00', '16:30:00'],
+      5: ['07:00:00', '12:00:00'],
+      6: null
+  },// including lunch breaks!
+});
 
 export function whatIsBatch(keyword) {
   const batch = BatchDB.findOne({batch: keyword});
@@ -201,7 +212,7 @@ Meteor.methods({
       for(let i = 0; i < howManyDays; i++) {
         const day = startDay.clone().add(i, 'day');
         
-        if(business.isWeekDay(day)) {
+        if(day.isWorkingDay()) {
           const historyRemain = historyPings(historyFlat, totalItems, flowKey, day);
           historyRemainOverTime.push({
             x: new Date( day.format() ),

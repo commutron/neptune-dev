@@ -1,5 +1,4 @@
 import moment from 'moment';
-import business from 'moment-business';
 import 'moment-timezone';
 import 'moment-business-time-ship';
 
@@ -284,7 +283,8 @@ function collectPriority(privateKey, batchID, clientTZ) {
       const lateLate = now.clone().isAfter(endDay);
       
       const shipTime = endDay.isShipDay() ? 
-        endDay.nextShippingTime() : endDay.lastShippingTime();
+                        endDay.clone().nextShippingTime() : 
+                        endDay.clone().lastShippingTime();
         
       let quote2tide = false;
       let estEnd2fillBuffer = false;

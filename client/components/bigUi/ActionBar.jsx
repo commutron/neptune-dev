@@ -1,5 +1,5 @@
 import React from 'react';
-//import moment from 'moment';
+import moment from 'moment';
 
 import ActionLink from '/client/components/uUi/ActionLink.jsx';
 import BlockForm from '../forms/BlockForm.jsx';
@@ -15,6 +15,7 @@ import Remove from '../forms/Remove.jsx';
 
 import UnitSet from '../forms/UnitSet.jsx';
 import PanelBreak from '../forms/PanelBreak.jsx';
+import UndoFinish from '/client/components/forms/UndoFinish.jsx';
 import ItemIncompleteForm from '../forms/ItemIncompleteForm.jsx';
 import ScrapForm from '../forms/ScrapForm.jsx';
 
@@ -44,6 +45,16 @@ const ActionBar = ({
           id={batchData._id}
           batch={batchData.batch}
     	    item={itemData}
+    	    noText={noText} />
+        <UndoFinish
+    	    id={batchData._id}
+    	    finishedAtB={batchData.finishedAt}
+    	    serial={itemData.serial}
+    	    finishedAtI={itemData.finishedAt}
+    	    timelock={
+    	      moment().diff(moment(itemData.finishedAt), 'minutes') 
+    	      > (60 * 24 * 7)
+    	    }
     	    noText={noText} />
         <ItemIncompleteForm
 	        id={batchData._id}

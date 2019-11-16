@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import 'moment-business-time-ship';
+import '/client/components/utilities/ShipTime.js';
 import Pref from '/client/global/pref.js';
 
 import TagsModule from '/client/components/bigUi/TagsModule.jsx';
@@ -8,21 +9,6 @@ import { ReleaseNote } from '/client/components/bigUi/ReleasesModule.jsx';
 import NoteLine from '/client/components/smallUi/NoteLine.jsx';
 import BlockList from '/client/components/bigUi/BlockList.jsx';
 import { AlterFulfill } from '/client/components/forms/BatchAlter.jsx';
-
-moment.updateLocale('en', {
-  workinghours: {
-      0: null,
-      1: ['07:00:00', '16:30:00'],
-      2: ['07:00:00', '16:30:00'],
-      3: ['07:00:00', '16:30:00'],
-      4: ['07:00:00', '16:30:00'],
-      5: ['07:00:00', '12:00:00'],
-      6: null
-  },// including lunch breaks!
-  shippinghours: { 0: null, 1: null,
-    2: ['11:30:00', '11:30:00'], 3: null, 4: ['11:30:00', '11:30:00'],
-  5: null, 6: null }
-});
 
 const GeneralChunk = ({
   a, b, 
