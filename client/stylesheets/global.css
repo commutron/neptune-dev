@@ -287,11 +287,12 @@ summary {
   padding: 1vh 1vw;
   cursor: pointer;
 }
+/*
 details:focus-within {
   outline-style: dotted;
   outline-width: thick;
 }
-
+*/
 input::-webkit-inner-spin-button {
   display: none;
 }

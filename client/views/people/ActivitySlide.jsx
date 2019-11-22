@@ -5,6 +5,7 @@ import 'moment-timezone';
 import { CalcSpin } from '/client/components/uUi/Spin.jsx';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
+import TideSpanTotal from '/client/components/tide/TideSpanTotal.jsx';
 import TideEditWrap from '/client/components/tide/TideEditWrap.jsx';
 
 
@@ -41,20 +42,27 @@ const ActivitySlide = ({ orb, bolt, app, user, users, bCache })=> {
 
   return(
     <div className='space5x5 invert overscroll'>
-      <div className='line2x'>
-        <Flatpickr
-          value={moment().format('YYYY-MM-DD')}
-          onChange={(e)=>setDay(e)} 
-          options={{
-            dateFormat: "Y-m-d",
-            defaultDate: moment().format("YYYY-MM-DD"),
-            minDate: minDate,
-            maxDate: moment().format("YYYY-MM-DD"),
-            altInput: true,
-            altFormat: "F J",
-          }} />
-          <br />
-          <span className='biggester breath numFont'> {moment.tz(dateString, clientTZ).year()}<sub>d</sub>{moment.tz(dateString, clientTZ).dayOfYear()} </span>
+      <div className='med vbreak comfort middle'>
+        <div className='line2x'>
+          <Flatpickr
+            value={moment().format('YYYY-MM-DD')}
+            onChange={(e)=>setDay(e)} 
+            options={{
+              dateFormat: "Y-m-d",
+              defaultDate: moment().format("YYYY-MM-DD"),
+              minDate: minDate,
+              maxDate: moment().format("YYYY-MM-DD"),
+              altInput: true,
+              altFormat: "F J",
+            }} />
+            <br />
+            <span className='biggester breath numFont'> {moment.tz(dateString, clientTZ).year()}<sub>d</sub>{moment.tz(dateString, clientTZ).dayOfYear()} </span>
+        </div>
+      
+        <TideSpanTotal 
+          tideTimes={dayData || []}
+          showUser={true} />
+      
       </div>
       {!dayData ?
         <CalcSpin />

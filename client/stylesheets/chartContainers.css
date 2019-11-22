@@ -66,8 +66,8 @@
   width: 10vw;
   padding: 1vmax;
 }
-.chart10Contain .pieCore { font-size: 3vw; }
-.chart10Contain p { font-size: 1vw; }
+.chart10Contain .pieCore { font-size: 2.5vw; }
+.chart10Contain p { font-size: 1.25vw; margin: 5px 0; }
 
 .chart15Contain {
   width: 15vw;

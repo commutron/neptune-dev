@@ -20,8 +20,8 @@ import React from 'react';
     wordWrap: 'keep-all'
   };
  
-const NumStat = ({ num, name, title, color, size }) => (
-  <div style={sty} title={title}>
+const NumStat = ({ num, name, title, color, size, moreClass }) => (
+  <div style={sty} title={title} className={moreClass || ''}>
     <i style={bSty} className={color + ' numFont ' + size}>{num}</i>
     <br />
     <i style={sSty} className='label'>{name}</i>

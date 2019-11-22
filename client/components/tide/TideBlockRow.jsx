@@ -165,7 +165,7 @@ const TideBlockRow = ({
         :
           <Fragment>
             <td className='noRightBorder clean numFont'>
-              {mStop ? Math.round( moment.duration(mStop.diff(mStart)).asMinutes() ) : '_'} minutes
+              {mStop ? Math.round( moment.duration(mStop.diff(mStart)).asMinutes() ) : '...'} minutes
             </td>
             <td className='noRightBorder centreText'>
             {!mStop ?

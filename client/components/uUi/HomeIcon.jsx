@@ -64,7 +64,7 @@ const HomeIcon = () => {
           <i>User: {user}</i>
         </MenuItem>
           <MenuItem onClick={()=>FlowRouter.go('/user')}>
-            <i className='fas fa-user-astronaut fa-flip-horizontal fa-fw'></i><i className='noCopy'> Activity</i>
+            <i className='fas fa-user-astronaut fa-flip-horizontal fa-fw'></i><i className='noCopy'> Account</i>
           </MenuItem>
         <MenuItem onClick={()=>doLogout()}>
           <i className='fas fa-sign-out-alt fa-fw'></i><i className='noCopy'> Sign-out</i>

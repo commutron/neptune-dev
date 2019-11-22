@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 //import Pref from '/client/global/pref.js';
 //import moment from 'moment';
 

@@ -4,17 +4,22 @@ import { VictoryPie } from 'victory';
 //import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
 
-const NumStatRing = ({ total, nums, name, title, colour})=> {
+const NumStatRing = ({ total, nums, name, title, colour, maxSize })=> {
   
   const colours =
     colour === 'blue' ? ["#4181cb","#044289","#499eff","#0579ff","#7b9dc4"] :
+    colour === 'blueBi' ? [ "rgb(52, 152, 219)", "rgba(41, 128, 185, 0.5)" ] :
     colour === 'green' ? ["#2ecc71","#22f97c","#02d85b","#4fff98","#028237"] :
+    colour === 'greenBi' ? [ "rgb(46, 204, 113)", "rgba(39, 174, 96, 0.5)" ]:
     colour === 'red' ? ["#e74c46","#a30500","#720300","#8c0c08","#9b0500"] :
     null;
-    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(nums);
-    
+  
+  Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(nums);
+  
+  const contain = maxSize || 'chart15Contain';
+  
   return(
-    <div className='invert' className='chart15Contain noCopy' title={title}>
+    <div className='invert' className={`${contain} noCopy`} title={title}>
       <div className='pieRing'>
         <VictoryPie
           theme={Theme.NeptuneVictory}

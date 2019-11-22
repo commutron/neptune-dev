@@ -4,8 +4,8 @@ import 'moment-timezone';
 //import Pref from '/client/global/pref.js';
 import { CalcSpin } from '/client/components/uUi/Spin.jsx';
 import WeekBrowse from '/client/components/bigUi/WeekBrowse/WeekBrowse.jsx';
+import TideSpanTotal from '/client/components/tide/TideSpanTotal.jsx';
 import TideEditWrap from '/client/components/tide/TideEditWrap.jsx';
-
 
 const ActivityPanel = ({ orb, bolt, app, user, users, bCache })=> {
   
@@ -39,11 +39,13 @@ const ActivityPanel = ({ orb, bolt, app, user, users, bCache })=> {
     
   return(
     <div className='invert overscroll'>
-      <div className='med line2x'>
+      <div className='med vbreak comfort middle'>
         <WeekBrowse
           sendUp={(i)=>getBack(i)}
           app={app}
         />
+        
+        <TideSpanTotal tideTimes={weekData || []} />
       </div>
       {!weekData ?
         <CalcSpin />

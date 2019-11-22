@@ -116,7 +116,7 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
         <NumStatRing
           total={eUsersState.length}
           nums={[eUsersState.length, dUsersState.length ]}
-          name={`People Are ${Pref.engaged}`} 
+          name={`${eUsersState.length == 1 ? 'Person Is' : 'People Are'} ${Pref.engaged}`} 
           title={`${eUsersState.length} people currently\n${Pref.engaged} with ${Pref.batches}`} 
           colour='blue'
         />
@@ -124,7 +124,7 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
         <NumStatRing
           total={phasesXY.length}
           nums={phasesXY}
-          name={`${Pref.phases} Are ${Pref.engaged}`} 
+          name={`${phasesXY.length == 1 ? `${Pref.phase} Is` : `${Pref.phases} Are`} ${Pref.engaged}`} 
           title={`People currently ${Pref.engaged} in\n${phasesXY.length} ${Pref.phases}`} 
           colour='blue'
         />
@@ -132,7 +132,7 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
         <NumStatRing
           total={xyBatchState.length}
           nums={xyBatchState}
-          name={`${Pref.batches} Are ${Pref.engaged}`} 
+          name={`${xyBatchState.length == 1 ? `${Pref.batch} Is` : `${Pref.batches} Are`} ${Pref.engaged}`}
           title={`${xyBatchState.length} ${Pref.batches} currently\n${Pref.engaged} by people`} 
           colour='blue'
         />

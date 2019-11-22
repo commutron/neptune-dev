@@ -609,10 +609,12 @@ main {
 
 .space5x5 { padding: 5vh 5vw; }
 .space2vsq { padding: 2vh; }
+.space1v { padding: 1vmax; }
 .space3v { padding: 3vh 3vw; }
 .space36v { padding: 3vh 6vw; }
 .space { padding: 24px; }
 .vspace { padding: 24px 0; }
+.vbreak { padding: 0 0 48px 0; }
 .nospace { padding: 0; }
 
 .vmargin { margin: 24px 0; }
