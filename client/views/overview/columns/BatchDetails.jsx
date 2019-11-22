@@ -149,11 +149,11 @@ const BatchTopStatus = ({
             name={
               dt.weekDaysRemain < 0 ? 
                 dt.weekDaysRemain === -1 ?
-                  'Weekday Overdue' :
-                  'Weekdays Overdue' : 
+                  'Workday Overdue' :
+                  'Workdays Overdue' : 
                     dt.weekDaysRemain === 1 ?
-                      'Weekday Remaining' :
-                      'Weekdays Remaining'}
+                      'Workday Remaining' :
+                      'Workdays Remaining'}
             title=''
             color={dt.weekDaysRemain < 0 ? 'yellowT' : 'blueT'}
             size='big' />

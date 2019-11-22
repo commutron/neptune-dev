@@ -29,12 +29,9 @@ const GeneralChunk = ({
   const end = b.finishedAt !== false ? moment(b.finishedAt) : moment();
   const timeElapse = moment.duration(end.diff(b.start)).asWeeks().toFixed(1);
   const timeasweeks = timeElapse.split('.');
-  const timeweeks = timeasweeks[0];
-  const timedays = moment.duration(timeasweeks[1] * 0.1, 'weeks').asDays().toFixed(0);
-  const elapseNice = timeweeks + ' week' + 
-                      (timeweeks == 1 ? ', ' : 's, ') + 
-                        timedays + ' day' +
-                          (timedays == 1 ? '' : 's');
+  const tw = timeasweeks[0];
+  const td = moment.duration(timeasweeks[1] * 0.1, 'weeks').asDays().toFixed(0);
+  const elapseNice = `${tw} week${tw == 1 ? '' : 's'}, ${td} day${td == 1 ? '' : 's'}`;
   
   const fnsh = b.finishedAt ? end.format("MMMM Do, YYYY h:mm A") : null;
 
@@ -91,7 +88,7 @@ const GeneralChunk = ({
         
         {fnsh !== null ? null : 
           <p>Time Remaining: 
-            <i className={remain < 0 ? 'yellowT' : ''}> {remain}</i> weekdays
+            <i className={remain < 0 ? 'yellowT' : ''}> {remain}</i> workdays
           </p> }
       
       </fieldset>

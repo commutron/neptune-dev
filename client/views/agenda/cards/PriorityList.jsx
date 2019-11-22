@@ -26,9 +26,11 @@ const PriorityList = ({ pCache, app })=> {
       <h5>batch, bffr, remain</h5>
       <ol>
       {orderedState.map( (e, ix)=>{
-        return(
-          <li key={ix}>{e.batch} = {e.estEnd2fillBuffer.toFixed(2, 10)} / {e.quote2tide} min</li>
-      )})}
+        if( typeof e === "object" ) {
+          return(
+            <li key={ix}>{e.batch} = {e.estEnd2fillBuffer} / {e.quote2tide} min</li>
+          );
+      }})}
       </ol>
     </div>
   );

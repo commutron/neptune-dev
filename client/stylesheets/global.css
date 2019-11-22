@@ -24,7 +24,6 @@ body {
 }
 
 
-
 @font-face {
   font-family: 'NunitoLocal';
   src: url('/fonts/Nunito-Regular.ttf')  format('truetype');
@@ -71,12 +70,13 @@ a {
 a:link, a:visited {
   text-decoration: none;
 }
-
-a:active {
-  border: 1px dotted white;
-  opacity: 0.9;
+/*
+a:focus, a:active,
+button:focus, button:active {
+  outline-style: dotted;
+  outline-width: thick;
 }
-
+*/
 button,
 button span,
 button label,
@@ -287,6 +287,10 @@ summary {
   padding: 1vh 1vw;
   cursor: pointer;
 }
+details:focus-within {
+  outline-style: dotted;
+  outline-width: thick;
+}
 
 input::-webkit-inner-spin-button {
   display: none;
@@ -340,8 +344,6 @@ progress {
   background: #ecf0f1;
   border: 0;
 }
-
-
 
 table {
   border-collapse: collapse;

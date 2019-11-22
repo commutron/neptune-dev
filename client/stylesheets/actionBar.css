@@ -74,6 +74,10 @@ meteor seems to be handling this */
   height: 1.75rem;
   letter-spacing: 1.5px;
 }
+.actionForm option {
+  min-width: 125px;
+  max-width: 250px;
+}
 .actionForm label {
   min-width: 125px;
   max-width: 200px;
@@ -145,7 +149,7 @@ input.orangeIn:invalid {
 .orangeIn:focus + label {
   color: var(--orange);
 }
-
+/*
 .inputMultiSelected {
   background-color: transparent;
   border: 1px solid transparent;
@@ -156,7 +160,7 @@ input.orangeIn:invalid {
   position: relative;
   bottom: -5px;
 }
-
+*/
 .formBarToggle {
   display: flex;
   flex-direction: column;

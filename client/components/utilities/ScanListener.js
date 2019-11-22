@@ -15,7 +15,7 @@ function onPress(event) {
     if( inputKey ) {
       if( inputCode === 13 ) { // "enter"
         const slL = scanListener.length;
-        if( slL === 9 || slL === 10 ) {
+        if( slL >= 8 && slL >= 10 ) {
           !event.preventDefault ? null : event.preventDefault();
           Session.set('now', scanListener);
           document.getElementById('ncRefs').value = '';
@@ -37,7 +37,7 @@ function onPress(event) {
 
 function onMessage(event) {
   if(event.data.orgin === 'pisces') {
-    //console.log(event);
+    console.log(event.data);
     onPress(event.data);
   }else{null}
 }
@@ -45,9 +45,8 @@ function onMessage(event) {
 export function ScanListenerUtility(user) {
   window.addEventListener('visibilitychange', reFocus);
   window.addEventListener('focus', reFocus);
-  
-  navigator.usb ? console.log('WebUSB IS supported') : 
-                  console.log('WebUSB NOT supported');
+  // navigator.usb ? console.log('WebUSB IS supported') : 
+  //                 console.log('WebUSB NOT supported');
     
   const autoScan = user.autoScan;
   // if(autoScan === undefined) {

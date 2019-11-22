@@ -35,7 +35,7 @@ const NCFlood = ({ id, live, app, ncListKeys })=> {
             error && console.log(error);
           });
         }else{
-          toast.warn("Can't add '" + ref + "', A referance can only be 8 characters long", {
+          toast.warn("Can't add '" + ref + "', A referance can only be 7 characters long", {
             position: toast.POSITION.BOTTOM_CENTER
           });
         }
@@ -45,8 +45,8 @@ const NCFlood = ({ id, live, app, ncListKeys })=> {
       toast.success("NonConformance has been added to all Work In Progress items", {
         position: toast.POSITION.BOTTOM_CENTER
       });
-      const findBox = document.getElementById('lookup');
-      findBox.focus();
+      // const findBox = document.getElementById('lookup');
+      // findBox.focus();
     }else{null}
   }
 

@@ -85,7 +85,7 @@ moment.updateLocale('en', {
       const localEnd = moment.tz(gf.end, clientTZ);
       
       const salesEnd = localEnd.isWorkingDay() ?
-                        localEnd.clone().nextWorkingTime().format() :
+                        localEnd.clone().endOf('day').lastWorkingTime().format() :
                         localEnd.clone().lastWorkingTime().format();
       const shipDue = localEnd.isShipDay() ?
                         localEnd.clone().nextShippingTime().format() :

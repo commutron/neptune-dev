@@ -25,6 +25,12 @@
 .navButtonWrap button {
   cursor: pointer;
 }
+
+.navButtonWrap:focus-within {
+  outline-color: var(--neptuneColor);
+  outline-style: dotted;
+  outline-width: thick;
+}
 .navButtonIcon {
   margin: 1vh 0 0 0;
   font-size: 6vmax;

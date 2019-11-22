@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, Fragment} from 'react';
 import moment from 'moment';
 import 'moment-timezone';
 import { ToastContainer } from 'react-toastify';
@@ -41,12 +41,8 @@ const AgendaWrap = ({
   const [ working, workingSet ] = useState( false );
   const [ loadTime, loadTimeSet ] = useState( moment() );
   const [ tickingTime, tickingTimeSet ] = useState( moment() );
-  
-  const [ filterBy, filterBySet ] = useState( false );
 
   const [ dense, denseSet ] = useState( 0 );
-  
-  const [ liveState, liveSet ] = useState( false );
   
   const [ numState, numSet ] = useState(false);
   
@@ -64,65 +60,25 @@ const AgendaWrap = ({
     const in100 = now.clone().add(100, 'd');
     const noDays = app.nonWorkDays;
     const noDays100 = noDays.filter( x => moment(x).isBetween(now, in100, null, '[)'));
-    const noNice = noDays100.join(', ');
     
     numSet([
       ['q2tTotal', q2tTotal],
-      ['howManyHours', howManyHours], 
-      ['holidaysInNext100Days', noNice], 
+      ['howManyHours', howManyHours],
+      ['100daysFromNow', in100.calendar()],
+      ['holidaysInNext100Days', noDays100], 
     ]);
   }, []);
-  
-  useEffect( ()=> {
-    sortInitial();
-  }, [filterBy]);
 
   useInterval( ()=> {
     tickingTimeSet( moment() );
   },1000*60);
   
-  function changeFilter(e) {
-    const value = e.target.value;
-    const filter = value === 'false' ? false : value;
-    filterBySet( filter );
-  }
   
   function forceRefresh() {
     workingSet( true );
-    liveSet( false );
     Meteor.call('FORCEcacheUpdate', clientTZ, ()=>{
-      sortInitial();
       loadTimeSet( moment() );
       workingSet( false );
-    });
-  }
-  
-  function sortInitial() {
-    return new Promise((resolve) => {
-      
-      let liveBatches = [...batches,...batchesX];
-      
-      // const releasedToFloor = Array.isArray(bx.releases) ?
-      //   bx.releases.findIndex( x => x.type === 'floorRelease') >= 0 :
-      //   typeof bx.floorRelease === 'object';
-
-      //const cB = cCache.dataSet.find( x => x.batchID === bx._id);
-      //const cP = cB && cB.phaseSets.find( x => x.phase === filterBy );
-      
-      let orderedBatches = liveBatches.sort((b1, b2)=> {
-        const pB1 = pCache.dataSet.find( x => x.batchID === b1._id);
-        const pB1bf = pB1 ? pB1.estEnd2fillBuffer : null;
-        const pB2 = pCache.dataSet.find( x => x.batchID === b2._id);
-        const pB2bf = pB2 ? pB2.estEnd2fillBuffer : null;
-        
-        if (!pB1bf) { return 1 }
-        if (!pB2bf) { return -1 }
-        if (pB1bf < pB2bf) { return -1 }
-        if (pB1bf > pB2bf) { return 1 }
-        return 0;
-      });
-      
-      liveSet( orderedBatches );
     });
   }
    
@@ -157,26 +113,7 @@ const AgendaWrap = ({
       </div>
         
       <nav className='overviewToolbar'>
-        <span>
-          <i className='fas fa-filter fa-fw grayT'></i>
-          <select
-            id='filterSelect'
-            title={`Change ${Pref.phase} Filter`}
-            className='overToolSort liteToolOn'
-            defaultValue={filterBy}
-            onChange={(e)=>changeFilter(e)}>
-            <option value={false}>All</option>
-            <option value={Pref.kitting} className='cap'>{Pref.kitting}</option>
-            <option value={Pref.released} className='cap'>{Pref.released}</option>
-            {app.phases.map( (ph, ix)=> {
-              return(
-                <option key={ph+ix} value={ph}>{ph}</option>
-            )})}
-          </select>
-        </span>
-          
-          
-          
+        {/*  
         <span>
           <button
             key='denseOff'
@@ -197,35 +134,38 @@ const AgendaWrap = ({
             className={dense === 2 ? 'liteToolOn' : 'liteToolOff'}
           ><i className='fas fa-compress-arrows-alt fa-fw'></i></button>
         </span>
-        
+        */}
         <span className='flexSpace' />
         <span>Updated {duration} ago</span>
       </nav>
     
       <div className='overviewContent forceScrollStyle' tabIndex='0'>
         
-      {!liveState ?
-        <div className='centreContainer'>
-          <div className='centrecentre'>
-            <Spin />
-          </div>
-        </div>
-      :  
-        <div className={`balance numFont letterSpaced overscroll ${density}`}>
+      <div className={`balance numFont letterSpaced overscroll ${density}`}>
             
           <ShipWindows 
             pCache={pCache.dataSet}
             app={app} />
            
-          <div className='max400 space'>
-            <h3>Other</h3>
+          <div className='max400 space line2x'>
+            <h3>High Level</h3>
             <h5></h5>
             <dl>
-              {!numState ? 'sure' :
+              {!numState ? '...' :
                 numState.map( (entry, index)=>{
-                return(
-                  <dd key={index}>{entry[0]}: {entry[1]}</dd>
-              )})}
+                if( Array.isArray(entry[1]) ) {
+                  return(
+                    <Fragment key={index}>
+                      <dt>{entry[0]}:</dt>
+                      {entry[1].map( (d, ix)=>( <dd key={ix}>{d}</dd> ))}
+                    </Fragment>
+                  );
+                }else{
+                  return(
+                    <dt key={index}>{entry[0]}: {entry[1]}</dt>
+                  );
+                }
+              })}
             </dl>
           </div>
 
@@ -238,7 +178,6 @@ const AgendaWrap = ({
             app={app} />
             
         </div>
-      }  
       </div>
     </div>
   );

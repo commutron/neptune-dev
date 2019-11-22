@@ -35,14 +35,14 @@ const NCAdd = ({ id, barcode, app, ncListKeys })=> {
             error && console.log(error);
           });
         }else{
-          toast.warn("Can't add '" + ref + "', A referance can only be 8 characters long", {
+          toast.warn("Can't add '" + ref + "', A referance can only be 7 characters long", {
             position: toast.POSITION.BOTTOM_CENTER
           });
         }
       }
       this.ncRefs.value = '';
-      const findBox = document.getElementById('lookup');
-      findBox.focus();
+      // const findBox = document.getElementById('lookup');
+      // findBox.focus();
     }else{null}
   }
 
