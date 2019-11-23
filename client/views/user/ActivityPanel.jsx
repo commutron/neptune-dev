@@ -45,7 +45,12 @@ const ActivityPanel = ({ orb, bolt, app, user, users, bCache })=> {
           app={app}
         />
         
-        <TideSpanTotal tideTimes={weekData || []} />
+        <TideSpanTotal 
+          tideTimes={weekData || []}
+          timeSpan='week'
+          dateTime={moment(`${weekChoice.yearNum}-${weekChoice.weekNum}`, 'gggg-ww').format()}
+          app={app} />
+          
       </div>
       {!weekData ?
         <CalcSpin />

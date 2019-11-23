@@ -34,8 +34,8 @@ const StartView = ({ready, readyUsers, user, org, app}) =>	{
         <NavPlaceholder title='Production' icon="fas fa-paper-plane" /> :
         <NavButton title='Production' icon='fa-paper-plane' link='/production' /> }
       {isNightly ?
-        <NavButton title='Agenda' icon='fa-meteor' link='/agenda' />
-      : <NavPlaceholder title='Agenda' icon="fas fa-meteor" />}
+        <NavButton title='Agenda' icon='fa-meteor' link='/agenda' tag='ALPHA' />
+      : <NavPlaceholder title='Agenda' icon="fas fa-meteor" tag='ALPHA' />}
       
       <NavButton title='Overview' icon='fas fa-globe' link='/overview' />
       <NavButton title='Explore' icon='fa-rocket' link='/data' />

@@ -154,6 +154,29 @@ Meteor.methods({
     }
   },
   
+  sendNotifyForBatch(accessKey, batchNum, eventTitle, eventDetail) {
+    try {
+      Meteor.users.update({
+        orgKey: accessKey,
+        'watchlist.type': 'batch', 
+        'watchlist.keyword': batchNum,
+        'watchlist.mute': false
+      }, {
+        $push : { inbox : {
+          notifyKey: new Meteor.Collection.ObjectID().valueOf(),
+          keyword: batchNum,
+          type: 'batch',
+          title: eventTitle,
+          detail: eventDetail,
+          time: new Date(),
+          unread: true
+        }
+      }},{multi: true});
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  
   /////////////////////////////////////////////////
 
   changeStatus(batchId, status) {
@@ -301,11 +324,13 @@ Meteor.methods({
   
 //// Tide \\\\\
 
-  startTideTask(batchId) {
+  startTideTask(batchId, accessKey) {
     try {
-      if(!Roles.userIsInRole(Meteor.userId(), 'active')) { null }else{
+      const orgKey = accessKey || Meteor.user().orgKey;
+      const doc = BatchDB.findOne({ _id: batchId, orgKey: orgKey });
+      if(!doc || !Roles.userIsInRole(Meteor.userId(), 'active')) { null }else{
         const newTkey = new Meteor.Collection.ObjectID().valueOf();
-        BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        BatchDB.update({ _id: batchId }, {
           $push : { tide: { 
             tKey: newTkey,
             who: Meteor.userId(),
@@ -318,6 +343,18 @@ Meteor.methods({
               task: 'PRO',
               tKey: newTkey
             }
+          }
+        });
+        Meteor.defer( ()=>{
+          const sameDay = doc.tide.find( x => moment(x.startTime).isSame(moment(), 'day') );
+          if(!sameDay) {
+            Meteor.call(
+              'sendNotifyForBatch',
+              orgKey, 
+              doc.batch,
+              `${doc.batch} Start`,
+              `First activity of the day`
+            );
           }
         });
       }
@@ -343,6 +380,32 @@ Meteor.methods({
     }catch (err) {
       throw new Meteor.Error(err);
     }
+  },
+  
+  switchTideTask(tideKey, newbatchID) {
+    const accessKey = Meteor.user().orgKey;
+      
+    const stopFirst = (tideKey, accessKey)=> {
+      return new Promise(function(resolve, reject) {
+        const batch = BatchDB.findOne({ 'tide.tKey': tideKey });
+        const batchID = batch._id || false;
+        if(batchID) {
+          BatchDB.update({_id: batchID, orgKey: accessKey, 'tide.tKey': tideKey}, {
+            $set : { 
+              'tide.$.stopTime' : new Date()
+          }});
+          resolve('Success');
+        }else{
+          reject('fail');
+        }
+      });
+    };
+    
+    const startSecond = (newbatchID, accessKey)=> {
+      Meteor.call('startTideTask', newbatchID, accessKey);
+    };
+    
+    stopFirst(tideKey, accessKey).then(startSecond(newbatchID, accessKey));
   },
 
 

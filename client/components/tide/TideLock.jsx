@@ -8,6 +8,8 @@ const TideLock = ({ currentLive, classSty, children, message })=> {
       toast(`Read Only. Click 'START' to unlock \n
              (you can only be ${Pref.engaged} \n
              with one ${Pref.batch} at a time). \n
+             Click 'SWITCH' to stop your current ${Pref.batch} \n
+             and start this ${Pref.batch}. \n
              * If ${Pref.batch} is a "Batch+" ignore this message`, 
         {
           autoClose: false,

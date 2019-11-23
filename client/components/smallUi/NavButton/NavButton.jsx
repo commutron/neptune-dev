@@ -1,12 +1,13 @@
 import React from 'react';
 import './style';
 
-const NavButton = ({ title, icon, link, blank }) => (
+const NavButton = ({ title, icon, link, blank, tag }) => (
   <span className='navButtonWrap'>
     <a href={link || ''} target={blank ? '_blank' : ''}>
       <i
         className={'fas ' + (icon || 'fa-unlink') + ' fa-fw navButtonIcon'}></i>
-      <i className='navButtonText'>{title || ''}</i>
+      <i className='navButtonText'
+      >{title || ''}{tag && <sup className='med monoFont'>{tag}</sup>}</i>
     </a>
   </span>
 );
@@ -22,12 +23,13 @@ export const NavButtonShell = ({ title, icon, link, blank }) => (
   </span>
 );
 
-export const NavPlaceholder = ({ title, icon }) => (
+export const NavPlaceholder = ({ title, icon, tag }) => (
   <span>
     <div className='navButtonPlaceHolder'>
       <i 
         className={(icon || 'fas fa-unlink') + ' fa-fw navButtonIcon'}></i>
-      <i className='navButtonText'>{title || ''}</i>
+      <i className='navButtonText'
+      >{title || ''}{tag && <sup className='med monoFont'>{tag}</sup>}</i>
     </div>
   </span>
 );

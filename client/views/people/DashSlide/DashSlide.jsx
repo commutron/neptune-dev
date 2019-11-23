@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 //import { toast } from 'react-toastify';
 import Pref from '/client/global/pref.js';
 //import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
-
 import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
 import PeoplePanel from './PeoplePanel.jsx';
 
@@ -17,7 +16,7 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
   const [ userPhases, setUserPhases ] = useState({});
   const [ pList, setPhaseList ] = useState([]);
   const [ phasesXY, setPhasesXY ] = useState([]);
-  
+  const [ maxHours, maxHoursSet ] = useState(0);
   
   const updatePhases = (uID, newPhase)=>{
     let currPhases = userPhases;
@@ -149,7 +148,8 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
           bCache={bCache}
           updatePhases={(id, ph)=>updatePhases(id, ph)}
           removePhaser={(id)=>removePhaser(id)}
-          update={update} />
+          update={update} 
+          potentialTime={maxHours * eUsersState.length} />
           
       </div>    
           

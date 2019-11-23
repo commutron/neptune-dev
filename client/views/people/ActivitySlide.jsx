@@ -61,7 +61,10 @@ const ActivitySlide = ({ orb, bolt, app, user, users, bCache })=> {
       
         <TideSpanTotal 
           tideTimes={dayData || []}
-          showUser={true} />
+          timeSpan='day'
+          dateTime={moment(dateString, 'YYYY-MM-DD').format()}
+          showUser={true}
+          app={app} />
       
       </div>
       {!dayData ?

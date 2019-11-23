@@ -39,10 +39,35 @@ const TideControl = ({ batchID, tideKey, currentLive, tideLockOut })=> {
       }
     });
   }
+  
+  function handleSwitch() {
+    setLock(true);
+    Meteor.call('switchTideTask', tideKey, batchID, (error)=> {
+      if(error) {
+        console.log(error);
+        toast.error('Rejected by Server');
+      }else{
+        document.getElementById('lookup').focus();
+      }
+    });
+  }
 
   if(tideKey) {
     if(!currentLive) {
-      return null;
+      return(
+        <button
+          title={`Switch to ${Pref.batch}`}
+          className='tideFlip'
+          onClick={()=>handleSwitch()}
+        >
+        <i>
+          <span className="fa-stack fa-fw tideIcon">
+            <i className="far fa-circle fa-stack-2x tideIndicate"></i>
+            <i className="fas fa-exchange-alt fa-stack-1x" data-fa-transform="shrink-1"></i>
+          </span> 
+        </i>
+        <br />SWITCH</button>
+      );
     }else{
       return(
         <button

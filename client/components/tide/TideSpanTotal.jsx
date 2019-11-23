@@ -1,15 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import 'moment-timezone';
+import { TimeInWeek, TimeInDay } from '/client/components/utilities/WorkTimeCalc.js';
 import Pref from '/client/global/pref.js';
 import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
 
 
-const TideSpanTotal = ({ tideTimes, showUser })=> {
+const TideSpanTotal = ({ tideTimes, timeSpan, dateTime, showUser, app })=> {
   
   const [ userTotal, userSet ] = useState(0);
   const [ batchTotal, batchSet ] = useState([]);
   const [ durrTotal, durrSet ] = useState(0);
+  const [ maxHours, maxHoursSet ] = useState(0);
+  
+  useEffect( ()=> {
+    if(timeSpan === 'week') {
+      const weekHours = TimeInWeek( app.nonWorkDays, dateTime );
+      maxHoursSet(weekHours);
+    }else if(timeSpan === 'day') {
+      const dayHours = TimeInDay( app.nonWorkDays, dateTime );
+      maxHoursSet(dayHours);
+    }else{
+      null;
+    }
+  }, [dateTime]);
+  
   
   useEffect( ()=> {
     const unqUsers = new Set( Array.from(tideTimes, x => x.who ) ).size;
@@ -39,6 +53,8 @@ const TideSpanTotal = ({ tideTimes, showUser })=> {
     durrSet(dTotalNice);
     
   }, [tideTimes]);
+    
+  const calcEx = showUser ? ` (people x ${maxHours})` : '';
   
   return(
     <div className='balance middle'>
@@ -63,9 +79,9 @@ const TideSpanTotal = ({ tideTimes, showUser })=> {
       
       <NumStatRing
         total={durrTotal}
-        nums={[ durrTotal, ((userTotal * 40) - durrTotal) ]}
+        nums={[ durrTotal, ((userTotal * maxHours) - durrTotal) ]}
         name='Total Hours'
-        title={`total of durations in hours \nout of ${userTotal * 40} (people * 40)`}
+        title={`total of durations in hours \nout of ${userTotal * maxHours}${calcEx}`}
         colour='blueBi'
         maxSize='chart10Contain'
       />

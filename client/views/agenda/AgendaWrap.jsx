@@ -99,7 +99,7 @@ const AgendaWrap = ({
       <div className='tenHeader'>
         <div className='topBorder'></div>
         <HomeIcon />
-        <div className='frontCenterTitle'>Agenda Alpha</div>
+        <div className='frontCenterTitle'>Agenda<sup className='big monoFont'>ALPHA</sup></div>
         <div className='auxRight'>
           <button
             type='button'

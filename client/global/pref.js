@@ -12,7 +12,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '1.23.5';
+    this.neptuneVersion = '1.24.0';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -91,8 +91,8 @@ class Pref {
     this.buildFlowAlt = 'alt process flow';
     this.phase = 'department';
     this.phases = 'departments';
-    this.engaged = 'engaged';
-    this.engagedNot = 'dormant';
+    this.engaged = 'active';
+    this.engagedNot = 'not active';
     this.buildStep = 'build process';
     this.trackFirst = 'first-off';
     this.trackLast =  'finish';

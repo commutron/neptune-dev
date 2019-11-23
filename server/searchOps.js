@@ -78,7 +78,7 @@ Meteor.methods({
     if(!eg) {
       return false;
     }else{
-      const batch = BatchDB.findOne({'tide.tKey': eg.tKey, 'tide.who': Meteor.userId()});
+      const batch = BatchDB.findOne({ 'tide.tKey': eg.tKey });
       return batch.batch || false;
     }
   },
