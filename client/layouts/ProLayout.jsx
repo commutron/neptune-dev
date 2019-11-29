@@ -194,6 +194,7 @@ export class ProWrap extends Component	{
             widgetData={this.props.widgetData}
             versionData={this.props.versionData}
             users={this.props.users}
+            user={this.props.user}
             app={this.props.app}
             ncListKeys={path.ncListKeys}
             action={this.props.action}

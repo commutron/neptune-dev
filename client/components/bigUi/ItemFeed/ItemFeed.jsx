@@ -17,7 +17,7 @@ const ItemFeed = ({
   shortfalls,
   rmas, allRMA,
   done,
-  app 
+  user, app 
 })=> {
   
   const assembly = [...history, ...noncons, ...shortfalls];
@@ -73,6 +73,7 @@ const ItemFeed = ({
                 id={id}
                 serial={serial}
                 done={done}
+                user={user}
                 app={app}
                 ncTypesComboFlat={ncTypesComboFlat()} /> 
             );

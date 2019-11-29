@@ -56,7 +56,8 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
     
     Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({eUsers});
 
-    const tideBatches = batches.filter( x => Array.isArray(x.tide) === true );
+    const tideBatches = batches.filter( x => 
+      typeof x === 'object' && Array.isArray(x.tide) );
     
     const eBatches = eUsers.map( (user, index)=>{
       const acBatch = tideBatches.find( y =>
@@ -65,7 +66,7 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
         return acBatch;
       }  
     });
-    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({eBatches});
+    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({tideBatches, eBatches});
     eBatchesSet(eBatches);
   },[batches, users]);
   

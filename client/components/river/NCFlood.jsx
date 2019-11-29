@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-const NCFlood = ({ id, live, app, ncListKeys })=> {
+const NCFlood = ({ id, live, user, app, ncListKeys })=> {
   
   const asignedNCLists = app.nonConTypeLists.filter( 
     x => ncListKeys.find( y => y === x.key ) ? true : false );
@@ -22,7 +22,7 @@ const NCFlood = ({ id, live, app, ncListKeys })=> {
   function handleFloodNC(e) {
     this.go.disabled = true;
     e.preventDefault();
-    const type = this.ncType.value.trim().toLowerCase();
+    const type = this.ncType.value.trim();
     
     const refEntry = this.ncRefs.value.trim().toLowerCase();
     const refSplit = refEntry.split(/\s* \s*/);
@@ -34,20 +34,24 @@ const NCFlood = ({ id, live, app, ncListKeys })=> {
           Meteor.call('floodNC', id, ref, type, (error)=>{
             error && console.log(error);
           });
+          this.ncRefs.value = '';
+          toast.success("NonConformance has been added to all Work In Progress items", {
+            position: toast.POSITION.BOTTOM_CENTER,
+            autoClose: 10000,
+            closeOnClick: false
+          });
         }else{
           toast.warn("Can't add '" + ref + "', A referance can only be 7 characters long", {
-            position: toast.POSITION.BOTTOM_CENTER
+            position: toast.POSITION.BOTTOM_CENTER,
+            autoClose: 10000,
+            closeOnClick: false
           });
         }
       }
-      this.ncRefs.value = '';
-      this.go.disabled = false;
-      toast.success("NonConformance has been added to all Work In Progress items", {
-        position: toast.POSITION.BOTTOM_CENTER
-      });
       // const findBox = document.getElementById('lookup');
       // findBox.focus();
     }else{null}
+    this.go.disabled = false;
   }
 
 	let lock = !live;
@@ -89,7 +93,7 @@ const NCFlood = ({ id, live, app, ncListKeys })=> {
                       key={index}
                       data-id={entry.key}
                       value={entry.typeText}
-                    >{entry.typeCode}</option>
+                    >{user.showNCcodes && entry.typeCode}</option>
                   );
               }})
             :

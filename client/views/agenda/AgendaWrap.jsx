@@ -48,11 +48,9 @@ const AgendaWrap = ({
   
   useEffect( ()=> {
     
-    const q2tArr = Array.from(pCache.dataSet, 
-      x => x.quote2tide > 0 && x.quote2tide );
-    const q2tTotal = q2tArr.reduce( 
-      (arr, x)=> typeof x === 'number' && arr + x, 0 );
-      
+    const q2tArr = Array.from(pCache.dataSet, x => 
+                      typeof x.quote2tide === 'number' && x.quote2tide );
+    const q2tTotal = q2tArr.reduce( (arr, x)=> x > 0 ? arr + x : arr, 0 );
     const howManyHours = moment.duration(q2tTotal, "minutes")
                           .asHours().toFixed(2, 10);
                           
@@ -62,12 +60,12 @@ const AgendaWrap = ({
     const noDays100 = noDays.filter( x => moment(x).isBetween(now, in100, null, '[)'));
     
     numSet([
-      ['q2tTotal', q2tTotal],
+      ['q2tTotal', q2tTotal.toFixed(2, 10)],
       ['howManyHours', howManyHours],
       ['100daysFromNow', in100.calendar()],
       ['holidaysInNext100Days', noDays100], 
     ]);
-  }, []);
+  }, [pCache, workingSet, app]);
 
   useInterval( ()=> {
     tickingTimeSet( moment() );

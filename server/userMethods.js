@@ -217,6 +217,16 @@ Meteor.methods({
     return true;
   },
   
+  setUserNCcodes() {
+    const curr = Meteor.user().showNCcodes;
+    const change = !curr ? true : false;
+    Meteor.users.update(Meteor.userId(), {
+      $set: {
+        showNCcodes: change,
+      }
+    });
+  },
+  
   setMinAction() {
     const curr = Meteor.user().miniAction;
     const change = !curr ? true : false;

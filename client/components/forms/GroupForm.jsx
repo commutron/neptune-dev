@@ -1,15 +1,15 @@
-import React, {Component} from 'react';
+import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 import Model from '../smallUi/Model.jsx';
 import {Submit} from './Inputs.jsx';
 
-export default class GroupForm extends Component {
+const GroupForm = (props)=> {
 
-    createCustomer(e) {
+    function createCustomer(e) {
       e.preventDefault();
-      const groupId = this.props.id;
+      const groupId = props.id;
       const groupName = this.gName.value.trim();
       const groupAlias = this.gAlias.value.trim().toLowerCase();
       const groupWiki = this.gWiki.value.trim();
@@ -17,11 +17,10 @@ export default class GroupForm extends Component {
       function create(groupName, groupAlias, groupWiki) {
         Meteor.call('addGroup', groupName, groupAlias, groupWiki, (error, reply)=>{
           if(error)
-           console.log(error);
+            console.log(error);
           if(reply) {
             toast.success('Saved');
-            //Session.set('now', groupName);
-            FlowRouter.go('/data/group?request=' + groupAlias);
+            FlowRouter.go('/data/overview?request=groups&specify=' + groupAlias);
           }else{
             toast.error('Server Error');
           }
@@ -34,8 +33,7 @@ export default class GroupForm extends Component {
             console.log(error);
           if(reply) {
             toast.success('Saved');
-            //Session.set('now', groupName);
-            FlowRouter.go('/data/group?request=' + groupAlias);
+            FlowRouter.go('/data/overview?request=groups&specify=' + groupAlias);
           }else{
             toast.error('Server Error');
           }
@@ -43,67 +41,62 @@ export default class GroupForm extends Component {
       }
       
       /////////Selection/////////
-      if(this.props.name === false) {
+      if(props.name === false) {
         create(groupName, groupAlias, groupWiki);
       }else{
         edit(groupId, groupName, groupAlias, groupWiki);
       }
       
     }
-  
-
-  render() {
     
-    const orName = this.props.name ? this.props.name : '';
-    const orAlias = this.props.alias ? this.props.alias : '';
-    const orWiki = this.props.wiki ? this.props.wiki : '';
-    const bttn = this.props.name ? 'edit ' + Pref.group : 'new';
-    const title = this.props.name ? 'edit' : 'create new';
+  const orName = props.name ? props.name : '';
+  const orAlias = props.alias ? props.alias : '';
+  const orWiki = props.wiki ? props.wiki : '';
+  const bttn = props.name ? 'edit ' + Pref.group : 'new';
+  const title = props.name ? 'edit' : 'create new';
 
-    return (
-      <Model
-        button={bttn}
-        title={title + ' ' + Pref.group}
-        color='greenT'
-        icon='fa-users'
-        lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit'])}
-        noText={this.props.noText}
-        primeTopRight={this.props.primeTopRight}>
-        <form id='new' className='centre' onSubmit={this.createCustomer.bind(this)}>
-          <p>
-            <input
-              type='text'
-              id='newName'
-              ref={(i)=> this.gName = i}
-              defaultValue={orName}
-              placeholder='ie. Trailer Safegaurd'
-              autoFocus={true}
-              required />
-            <label htmlFor='newName'>Full Name</label>
-          </p>
-          <p>
-            <input
-              type='text'
-              id='newAlias'
-              ref={(i)=> this.gAlias = i}
-              defaultValue={orAlias}
-              placeholder='ie. TSG'
-              required />
-            <label htmlFor='newAlias'>Abbreviation / Alias</label>
-          </p>
-          <p>
-            <input
-              type='url'
-              id='newWiki'
-              ref={(i)=> this.gWiki = i}
-              defaultValue={orWiki}
-              placeholder='http://192.168.1.68/pisces' />
-            <label htmlFor='newAlias' className='cap'>{Pref.group} {Pref.instruct} index</label>
-          </p>
-          <br />
-          <Submit name={title} type='action' />
-        </form>
-      </Model>
-    );
-  }
-}
+  return(
+    <Model
+      button={bttn}
+      title={title + ' ' + Pref.group}
+      color='greenT'
+      icon='fa-users'
+      lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit'])}
+      noText={props.noText}
+      primeTopRight={props.primeTopRight}>
+      <form id='new' className='centre' onSubmit={(e)=>createCustomer(e)}>
+        <p>
+          <input
+            type='text'
+            id='gName'
+            defaultValue={orName}
+            placeholder='ie. Trailer Safegaurd'
+            autoFocus={true}
+            required />
+          <label htmlFor='gName'>Full Name</label>
+        </p>
+        <p>
+          <input
+            type='text'
+            id='gAlias'
+            defaultValue={orAlias}
+            placeholder='ie. TSG'
+            required />
+          <label htmlFor='gAlias'>Abbreviation / Alias</label>
+        </p>
+        <p>
+          <input
+            type='url'
+            id='gWiki'
+            defaultValue={orWiki}
+            placeholder='http://192.168.1.68/pisces' />
+          <label htmlFor='gWiki' className='cap'>{Pref.group} {Pref.instruct} index</label>
+        </p>
+        <br />
+        <Submit name={title} type='action' />
+      </form>
+    </Model>
+  );
+};
+
+export default GroupForm;

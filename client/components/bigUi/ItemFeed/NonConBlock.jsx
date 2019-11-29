@@ -31,7 +31,8 @@ export default class NonConBlock extends Component {
       Array.from(ncTypesComboFlat, x => x.live === true && x.typeText)
       : this.props.app.nonConOption;
   
-    let match = target.value === dflt || flatCheckList.find( x => x === target.value);
+    let match = target.value === dflt || 
+                flatCheckList.find( x => x === target.value);
     let message = !match ? 'please choose from the list' : '';
     target.setCustomValidity(message);
     return !match ? false : true;
@@ -41,7 +42,7 @@ export default class NonConBlock extends Component {
 		const serial = this.props.serial;
     const ncKey = this.props.entry.key;
     const ref = this.ncRef.value.trim().toLowerCase();
-    const type = this.ncType.value.trim().toLowerCase();
+    const type = this.ncType.value.trim();
     const where = this.ncWhere.value.trim().toLowerCase();
     const tgood = this.handleCheck(this.ncType, this.props.entry.type);
     
@@ -168,7 +169,7 @@ export default class NonConBlock extends Component {
                                 key={index}
                                 data-id={entry.key}
                                 value={entry.typeText}
-                              >{entry.typeCode}</option>
+                              >{this.props.user.showNCcodes && entry.typeCode}</option>
                             );
                         }})
                       :

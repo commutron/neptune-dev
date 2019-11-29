@@ -18,6 +18,7 @@ import PrivacyPanel from './PrivacyPanel.jsx';
 
 import { AdminDown } from '/client/components/forms/AdminForm.jsx';
 import { ChangeAutoScan } from '/client/components/forms/UserManageForm.jsx';
+import { ChangeNCcodes } from '/client/components/forms/UserManageForm.jsx';
 import UserSpeedSet from '/client/components/forms/UserSpeedSet.jsx';
 import PasswordChange from '/client/components/forms/PasswordChange.jsx';
 import { PermissionHelp } from '/client/views/people/AccountsManagePanel';
@@ -103,24 +104,26 @@ const UserDataWrap = ({
             user={user}
             users={users} />
             
-          <div key={4} className='balance'>
+          <div key={4} className='comfort'>
       
-            <div className='centre'>
+            <div className=''>
               <p className='clean'>username: {user.username}</p>
               <p className='clean'>id: {Meteor.user()._id}</p>
               <p>organization: <i className='greenT'>{Meteor.user().org}</i></p>
               <hr />
-              <p><ChangeAutoScan /></p>
+              <fieldset>
+                <p><ChangeAutoScan /></p>
+                <hr/>
+                <p><ChangeNCcodes /></p>
+                <hr />
+                <p><UserSpeedSet /></p>
+              </fieldset>
               <hr />
-              <p><UserSpeedSet /></p>
-              <hr />
-              <PasswordChange />
-              <hr />
-              { admin ?
-              <div>
-                <AdminDown />
-              </div>
-            : null }
+              <fieldset>
+                <PasswordChange />
+                <hr />
+                { admin ? <AdminDown /> : null }
+              </fieldset>
             
             </div>
             <PermissionHelp roles={Meteor.user().roles} admin={admin} />

@@ -22,6 +22,7 @@ const FormBar = (props)=> {
   //const w = props.widgetData;
   //const v = props.versionData;
   //const users = props.users;
+  const user = props.user;
   const app = props.app;
     
   const showX = b && props.action === 'xBatchBuild' && b.completed === false;
@@ -97,6 +98,7 @@ const FormBar = (props)=> {
                 <NCAdd 
                   id={b._id}
                   barcode={i.serial}
+                  user={user}
                   app={app}
                   ncListKeys={ncListKeys} />
               : show === 'S' ?
@@ -112,6 +114,7 @@ const FormBar = (props)=> {
               <NCFlood
                 id={b._id}
                 live={b.finishedAt === false}
+                user={user}
                 app={app}
                 ncListKeys={ncListKeys} />
         : null}

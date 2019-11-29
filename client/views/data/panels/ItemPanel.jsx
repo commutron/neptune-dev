@@ -49,7 +49,7 @@ const ItemPanel = (props)=>	{
   const i = props.itemData;
   //const w = this.props.widgetData;
   //const g = this.props.groupData;
-  //const user = this.props.user;
+  const user = props.user;
   //const v = w.versions.find( x => x.versionKey === b.versionKey );
   
   const nc = ncData();
@@ -113,6 +113,7 @@ const ItemPanel = (props)=>	{
             rmas={i.rma}
             allRMA={b.cascade}
             done={done}
+            user={user}
             app={a} />
               
           <br />

@@ -6,6 +6,11 @@ import React from 'react';
     margin: '0 5px',
     maxWidth: '200px'
   };
+  const styBig = {
+    display: 'block',
+    padding: '10px',
+    margin: '10px 5px',
+  };
   const bSty = {
     fontSize: '2em'
   };
@@ -17,8 +22,8 @@ import React from 'react';
     wordWrap: 'keep-all'
   };
  
-const NumLine = ({ num, name, color }) => (
-  <div style={sty}>
+const NumLine = ({ num, name, color, big }) => (
+  <div style={big ? styBig : sty}>
     <i style={bSty} className={color + ' numFont'}>{num}</i>
     <i style={sSty}> {name}</i>
   </div>

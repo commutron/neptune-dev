@@ -192,13 +192,34 @@ export const ChangeAutoScan = ()=> {
         console.log(error);
     });
   }
-  let current = Meteor.user().autoScan ? 'OFF' : 'ON';
-  let color = Meteor.user().autoScan ? 'clearRed' : 'clearGreen';
+  let current = Meteor.user().autoScan ? 'ON' : 'OFF';
+  let color = Meteor.user().autoScan ? 'clearGreen' : 'clearRed';
   return(
-    <button
-      className={'action clean ' + color}
-      onClick={()=>handle()}
-    >Turn Auto Scan {current}</button>
+    <p>Auto Scan 
+      <button
+        className={'action clean ' + color}
+        onClick={()=>handle()}
+      >{current}</button>
+    </p>
+  );
+};
+
+export const ChangeNCcodes = ()=> {
+  function handle() {
+    Meteor.call('setUserNCcodes', (error)=>{
+      if(error)
+        console.log(error);
+    });
+  }
+  let current = Meteor.user().showNCcodes ? 'ON' : 'OFF';
+  let color = Meteor.user().showNCcodes ? 'clearGreen' : 'clearRed';
+  return(
+    <p>Use {Pref.nonCon} codes 
+      <button
+        className={'action clean ' + color}
+        onClick={()=>handle()}
+      >{current}</button>
+    </p>
   );
 };
 

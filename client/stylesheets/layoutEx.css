@@ -294,12 +294,7 @@
   font-size: 0.9rem;
   margin: 5px;
 }
-.itmFltrBlock select,
-.itmFltrBlock optgroup,
-.itmFltrBlock option {
-  /*background-color: white;*/
-  color: black;
-}
+
 .itmFltrStatic {
   display: inline-block;
   width: 33px;

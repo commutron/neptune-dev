@@ -33,8 +33,8 @@ const ShipWindows = ({ pCache, app })=> {
   }
   const lateCatch = next100Days[0];
   const lateBatch = pCache.filter( x => moment(x.shipTime).isBefore(lateCatch, 'day') );
-  const lateTimeArr = Array.from(lateBatch, x => x.quote2tide > 0 && x.quote2tide );
-  const lateTimeTotal = lateTimeArr.reduce( (arr, x)=> typeof x === 'number' && arr + x, 0 );
+  const lateTimeArr = Array.from(lateBatch, x => typeof x.quote2tide === 'number' && x.quote2tide );
+  const lateTimeTotal = lateTimeArr.reduce( (arr, x)=> x > 0 ? arr + x : arr, 0 );
           
   return(
     <div className='wide max600 space line2x'>
@@ -48,9 +48,9 @@ const ShipWindows = ({ pCache, app })=> {
         {next100Days.map( (e, ix)=>{
           const shipIn = pCache.filter( x => moment(x.shipTime).isSame(e, 'day') );
           const reTimeArr = Array.from(shipIn, 
-            x => x.quote2tide > 0 && x.quote2tide );
+            x => typeof x.quote2tide === 'number' && x.quote2tide );
           const reTimeTotal = reTimeArr.reduce( 
-            (arr, x)=> typeof x === 'number' && arr + x, 0 );
+            (arr, x)=> x > 0 ? arr + x : arr, 0 );
         
           return(
             <Fragment key={ix}>

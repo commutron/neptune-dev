@@ -5,6 +5,10 @@ import SlidesNested from '/client/components/smallUi/SlidesNested.jsx';
 
 import UserManageForm from '/client/components/forms/UserManageForm.jsx';
 import RemoveUser from '/client/components/forms/RemoveUser.jsx';
+import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
+import NumBox from '/client/components/uUi/NumBox.jsx';
+import NumLine from '/client/components/uUi/NumLine.jsx';
+
 
 const AccountsManagePanel = ({ users })=> {
     
@@ -20,9 +24,7 @@ const AccountsManagePanel = ({ users })=> {
       menuTitle='User Accounts'
       menu={usersMenu}
       topPage={
-        <div key={000}>
-          <h1>Accounts Manager</h1>
-        </div>
+        <AccountsTop users={users} key={000} />
       }>
         
       {users.map( (entry, index)=>{
@@ -124,7 +126,12 @@ export const PermissionHelp = ({ roles, admin })=> {
         <ul>
           <li><b>Create</b></li>
           <ul>
-            <li>Create a new {Pref.group}, {Pref.widget} or {Pref.version}</li>
+            <li>Create a new {Pref.group}</li>
+            <li>Create a new {Pref.widget} notes</li>
+            <li>Create a new {Pref.version}</li>
+            <li>Create a new {Pref.batch}</li>
+            <li>Create a new batch+</li>
+            <li>Create new {Pref.itemSerial}s</li>
           </ul>
         </ul>
       : null}
@@ -150,7 +157,6 @@ export const PermissionHelp = ({ roles, admin })=> {
             <li>Edit {Pref.batch} name or dates</li>
             <li>Add or Remove {Pref.tag}s</li>
             <li>Edit {Pref.batch} notes</li>
-            <li>Create new {Pref.itemSerial}s</li>
             <li>Change {Pref.unit}</li>
             <li>Set a {Pref.batch} {Pref.flow}</li>
             <li>Add {Pref.block}s</li>
@@ -222,3 +228,56 @@ export const PermissionHelp = ({ roles, admin })=> {
 };
 
 export default AccountsManagePanel;
+
+const AccountsTop = ({ users })=> {
+  
+  const all = users.length;
+  const active = users.filter( x => Roles.userIsInRole(x._id, 'active') ).length;
+  const nightly = users.filter( x => Roles.userIsInRole(x._id, 'nightly') ).length;
+  const debug = users.filter( x => Roles.userIsInRole(x._id, 'debug') ).length;
+  const readOnly = users.filter( x => Roles.userIsInRole(x._id, 'readOnly') ).length;
+  
+  const pSup = users.find( x => Roles.userIsInRole(x._id, 'peopleSuper') );
+  const peopleSuper = pSup ? pSup.username : 'not set';
+  
+  return(
+    <div className='splitReverse'>
+        
+      <div className='bigger'>
+        <NumLine
+          num={peopleSuper}
+          name='is the People Super'
+          color='blueT'
+          big={true} />
+          
+        <NumLine
+          num={nightly}
+          name='can access Nightly features'
+          color='tealT'
+          big={true} />
+          
+        <NumLine
+          num={debug}
+          name='have Debug reporting'
+          color='redT'
+          big={true} />
+        
+        <NumLine
+          num={readOnly}
+          name='are limited to Read Only'
+          color='grayT'
+          big={true} />
+      </div>
+        
+      <NumStatRing
+        total={active}
+        nums={[ active, ( all - active ) ]}
+        name='Active Users'
+        title={`${active} active users,\n${( all - active )} inactive users`}
+        colour='blueBi'
+        maxSize='chart20Contain'
+      />
+      
+    </div>
+  );
+};

@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-const NCAdd = ({ id, barcode, app, ncListKeys })=> {
+const NCAdd = ({ id, barcode, user, app, ncListKeys })=> {
   
   const asignedNCLists = app.nonConTypeLists.filter( 
     x => ncListKeys.find( y => y === x.key ) ? true : false );
@@ -13,21 +13,24 @@ const NCAdd = ({ id, barcode, app, ncListKeys })=> {
     Array.from(ncTypesComboFlat, x => x.live === true && x.typeText)
     : app.nonConOption;
   
-  function handleCheck(e) {
-    let match = flatCheckList.find( x => x === e.target.value);
+  function handleCheck(target) {
+    let match = flatCheckList.find( x => x === target.value);
     let message = !match ? 'please choose from the list' : '';
-    e.target.setCustomValidity(message);
+    target.setCustomValidity(message);
+    return !match ? false : true;
   }
   
   function handleNC(e, andFix) {
     e.preventDefault();
-    const type = this.ncType.value.trim().toLowerCase();
+    const type = this.ncType.value.trim();
+    const tgood = handleCheck(this.ncType);
+    
     const where = Session.get('ncWhere') || "";
     
     const refEntry = this.ncRefs.value.trim().toLowerCase();
     const refSplit = refEntry.split(/\s* \s*/);
     
-    if(refSplit.length > 0 && refSplit[0] !== '') {
+    if(tgood && refSplit.length > 0 && refSplit[0] !== '') {
       for(let ref of refSplit) {
         ref = ref.replace(",", "");
         if(ref.length < 8) {
@@ -36,14 +39,19 @@ const NCAdd = ({ id, barcode, app, ncListKeys })=> {
           });
         }else{
           toast.warn("Can't add '" + ref + "', A referance can only be 7 characters long", {
-            position: toast.POSITION.BOTTOM_CENTER
+            position: toast.POSITION.BOTTOM_CENTER,
+            autoClose: 10000,
+            closeOnClick: false
           });
         }
       }
       this.ncRefs.value = '';
       // const findBox = document.getElementById('lookup');
       // findBox.focus();
-    }else{null}
+    }else{
+      this.ncRef.reportValidity();
+      this.ncType.reportValidity();
+    }
   }
 
 	let now = Session.get('ncWhere');
@@ -73,7 +81,7 @@ const NCAdd = ({ id, barcode, app, ncListKeys })=> {
           placeholder='Type'
           list='ncTypeList'
           disabled={lock}
-          onInput={(e)=>handleCheck(e)}
+          onInput={(e)=>handleCheck(e.target)}
           required />
           <label htmlFor='ncType'>{Pref.nonConType}</label>
           <datalist id='ncTypeList'>
@@ -85,7 +93,7 @@ const NCAdd = ({ id, barcode, app, ncListKeys })=> {
                       key={index}
                       data-id={entry.key}
                       value={entry.typeText}
-                    >{entry.typeCode}</option>
+                    >{user.showNCcodes && entry.typeCode}</option>
                   );
               }})
             :

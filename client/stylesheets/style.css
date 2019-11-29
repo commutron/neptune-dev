@@ -989,6 +989,7 @@ label.qdpplRound {
 
 .radioIcon { display: none; }
 
+/*
 .rangeTools {
   width: 100%;
   height: 32px;
@@ -1022,6 +1023,7 @@ label.qdpplRound {
   background-color: var(--clouds);
   color: black;
 }
+*/
 .uniSelect:after {
   content: "\f078";
   font-family: FontAwesome;

@@ -196,7 +196,7 @@ input {
   border-bottom-color: white;
   border-left-color: transparent;
 }
-
+/*
 select {
   -moz-appearance: none;
   background-color: var(--clouds);
@@ -205,6 +205,11 @@ select {
 option, optgroup {
   color: black;
   background-color: white;
+  white-space: nowrap;
+}
+*/
+option {
+  min-width: fit-content;
 }
 
 textarea {
