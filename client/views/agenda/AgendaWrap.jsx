@@ -57,7 +57,16 @@ const AgendaWrap = ({
     const now = moment();
     const in100 = now.clone().add(100, 'd');
     const noDays = app.nonWorkDays;
-    const noDays100 = noDays.filter( x => moment(x).isBetween(now, in100, null, '[)'));
+    const noDays100 = noDays.filter( x => {
+      if(x.substring(0, 1) === '*') {
+        const wildA = x.replace('*', now.year()); 
+        const wildB = x.replace('*', in100.year());
+        return moment(wildA).isBetween(now, in100, null, '[)') ||
+                moment(wildB).isBetween(now, in100, null, '[)');
+      }else{
+        return moment(x).isBetween(now, in100, null, '[)');
+      }
+    });
     
     numSet([
       ['q2tTotal', q2tTotal.toFixed(2, 10)],

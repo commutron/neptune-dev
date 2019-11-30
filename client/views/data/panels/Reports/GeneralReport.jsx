@@ -2,8 +2,6 @@ import { Meteor } from 'meteor/meteor';
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
 import { CalcSpin } from '/client/components/uUi/Spin.jsx';
-//import BestWorstBatch from '/client/components/bigUi/BestWorstBatch.jsx';
-// import PopularWidget from '/client/components/charts/PopularWidget.jsx'; 
 import ReportRequest from '/client/components/forms/ReportRequest.jsx'; 
 import ReportStatsTable from '/client/components/tables/ReportStatsTable.jsx'; 
 
@@ -15,10 +13,6 @@ export default class Reports extends Component {
       //tops: false,
       start: false,
       end: false,
-      getShort: true, 
-      getFirst: true,
-      getTest: true,
-      getScrap: true,
       getNC: true,
       getType: true,
       getPhase: true,
@@ -58,11 +52,7 @@ export default class Reports extends Component {
     this.setState({replyData: false});
     Meteor.call('buildReport', 
       this.state.start, 
-      this.state.end, 
-      this.state.getShort, 
-      this.state.getFirst, 
-      this.state.getTest,
-      this.state.getScrap,
+      this.state.end,
       this.state.getNC, 
       this.state.getType,
       this.state.getPhase, 
@@ -121,14 +111,6 @@ export default class Reports extends Component {
           <ReportRequest 
             setFrom={(v)=>this.setState({start: v})}
             setTo={(v)=>this.setState({end: v})}
-            shortCheck={this.state.getShort}
-            setShort={(v)=>this.setState({getShort: !this.state.getShort})}
-            firstCheck={this.state.getFirst}
-            setFirst={(v)=>this.setState({getFirst: !this.state.getFirst})}
-            testCheck={this.state.getTest}
-            setTest={(v)=>this.setState({getTest: !this.state.getTest})}
-            scrapCheck={this.state.getScrap}
-            setScrap={(v)=>this.setState({getScrap: !this.state.getScrap})}
             ncCheck={this.state.getNC}
             setNC={(v)=>this.changeNC(v)}
             typeCheck={this.state.getType}
@@ -157,16 +139,6 @@ export default class Reports extends Component {
             dateString={`${this.state.start}to${this.state.end}`}
             rows={this.state.replyData} />
         }
-        
-      
-        {/*<PopularWidget groupData={groupData} widgetData={widgetData} />*/}
-        
-        {/*
-        <BestWorstBatch
-          groupData={groupData}
-          widgetData={widgetData} 
-          app={app} />
-        */}  
             
       </div>
     );

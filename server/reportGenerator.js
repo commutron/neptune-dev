@@ -14,21 +14,19 @@ function findRelevantBatches(orgKey, from, to) {
   });
 }
 
-function loopBatches(batches, from, to, getShort) {
+function loopBatches(batches, from, to) {
   return new Promise(resolve => {
     let allItems = [];
     let allNonCons = [];
-    let shortfallCount = getShort ? 0 : false;
+    let shortfallCount = 0;
     for(let b of batches) {
-      if(getShort) {
-        const inTimeShort = !b.shortfall ? [] : b.shortfall.filter( x => moment(x.cTime).isBetween(from, to) );
-        const shortfallUnique = [...new Set(
-                                  Array.from(
-                                    inTimeShort, 
-                                      x => x.partNum ) 
-                                ) ];
-        shortfallCount += shortfallUnique.length;
-      }else{null}
+      const inTimeShort = !b.shortfall ? [] : b.shortfall.filter( x => moment(x.cTime).isBetween(from, to) );
+      const shortfallUnique = [...new Set(
+                                Array.from(
+                                  inTimeShort, 
+                                    x => x.partNum ) 
+                              ) ];
+      shortfallCount += shortfallUnique.length;
       allNonCons.push(...b.nonCon);
       allItems.push(...b.items);
     }
@@ -36,26 +34,23 @@ function loopBatches(batches, from, to, getShort) {
   });
 }
 
-function loopItems(items, from, to, getFirst, getTest, getScrap) {
+function loopItems(items, from, to ) {
   return new Promise(resolve => {
     let finishedItems = 0;
-    let firstPass = getFirst ? 0 : false;
-    let firstFail = getFirst ? 0 : false;
-    let testFail = getTest ? 0 : false;
-    let scraps = getScrap ? 0 : false;
+    let firstPass = 0;
+    let firstFail = 0;
+    let testFail = 0;
+    let scraps = 0;
     for(let i of items) {
-      if(i.finishedAt !== false && moment(i.finishedAt).isBetween(from, to) ) { finishedItems += 1 }
+      if(i.finishedAt !== false && moment(i.finishedAt).isBetween(from, to) ) { 
+        finishedItems += 1;
+      }
       const inTime = i.history.filter( x => moment(x.time).isBetween(from, to) );
-      if(getFirst) {
-        firstPass += inTime.filter( x => x.type === 'first' && x.good !== false ).length;
-        firstFail += inTime.filter( x => x.type === 'first' && x.good === false ).length;
-      }else{null}
-      if(getTest) {
-        testFail += inTime.filter( x => x.type === 'test' && x.good === false ).length;
-      }else{null}
-      if(getScrap) {
-        scraps += inTime.filter( x => x.type === 'scrap' && x.good === true ).length;
-      }else{null}
+      
+      firstPass += inTime.filter( x => x.type === 'first' && x.good !== false ).length;
+      firstFail += inTime.filter( x => x.type === 'first' && x.good === false ).length;
+      testFail += inTime.filter( x => x.type === 'test' && x.good === false ).length;
+      scraps += inTime.filter( x => x.type === 'scrap' && x.good === true ).length;
     }
     
     resolve({finishedItems, firstPass, firstFail, testFail, scraps});
@@ -92,7 +87,7 @@ function loopNonCons(nonCons, from, to, optionsLegacy, phases, getNC, getType, g
 
 Meteor.methods({
   
-  buildReport(startDay, endDay, getShort, getFirst, getTest, getScrap, getNC, getType, getPhase) {
+  buildReport(startDay, endDay, getNC, getType, getPhase) {
     const orgKey = Meteor.user().orgKey;
     let org = AppDB.findOne({orgKey: Meteor.user().orgKey});
     let optionsLegacy = !org ? [] : org.nonConOption;
@@ -103,8 +98,8 @@ Meteor.methods({
     async function getBatches() {
       try {
         batchSlice = await findRelevantBatches(orgKey, from, to);
-        batchArange = await loopBatches(batchSlice, from, to, getShort);
-        itemStats = await loopItems(batchArange.allItems, from, to, getFirst, getTest, getScrap);
+        batchArange = await loopBatches(batchSlice, from, to);
+        itemStats = await loopItems(batchArange.allItems, from, to);
         nonConStats = await loopNonCons(batchArange.allNonCons, from, to, optionsLegacy, phases, getNC, getType, getPhase);
         const batchInclude = batchSlice.length;
         const itemsInclude = batchArange.allItems.length;

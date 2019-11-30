@@ -3,7 +3,7 @@ import 'moment-timezone';
 // import 'moment-business-time-ship';
 
 
-  function weekRanges(clientTZ, counter, cycles) {
+  function weekRanges(accessKey, clientTZ, counter, cycles) {
     const nowLocal = moment().tz(clientTZ);
     
     let countArray = [];
@@ -14,24 +14,24 @@ import 'moment-timezone';
       const rangeStart = loopBack.clone().startOf('week').toISOString();
       const rangeEnd = loopBack.clone().endOf('week').toISOString();
       
-      const quantity = counter(rangeStart, rangeEnd);
+      const quantity = counter(accessKey, rangeStart, rangeEnd);
       countArray.unshift({ x:cycles-w, y:quantity });
     }
     
     return countArray;
   }
   
-  function countNewBatch(rangeStart, rangeEnd) {
+  export function countNewBatch(accessKey, rangeStart, rangeEnd) {
     
     const generalFind = BatchDB.find({
-      orgKey: Meteor.user().orgKey, 
+      orgKey: accessKey, 
       createdAt: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
       }
     }).fetch();
     const generalFindX = XBatchDB.find({
-      orgKey: Meteor.user().orgKey, 
+      orgKey: accessKey, 
       createdAt: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
@@ -41,13 +41,13 @@ import 'moment-timezone';
     return generalFind.length + generalFindX.length;
   }
   
-  function countDoneBatch(rangeStart, rangeEnd) {
+  export function countDoneBatch(accessKey, rangeStart, rangeEnd) {
     
     let doneOnTime = 0;
     let doneLate = 0;
     
     const generalFind = BatchDB.find({
-      orgKey: Meteor.user().orgKey, 
+      orgKey: accessKey, 
       finishedAt: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
@@ -67,7 +67,7 @@ import 'moment-timezone';
     let doneLateX = 0;
     
     const generalFindX = XBatchDB.find({
-      orgKey: Meteor.user().orgKey, 
+      orgKey: accessKey, 
       completedAt: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
@@ -86,12 +86,12 @@ import 'moment-timezone';
     return [ doneOnTime + doneOnTimeX, doneLate + doneLateX ];
   }
   
-  function countNewItem(rangeStart, rangeEnd) {
+  export function countNewItem(accessKey, rangeStart, rangeEnd) {
     
     let diCount = 0;
     
     const generalFind = BatchDB.find({
-      orgKey: Meteor.user().orgKey, 
+      orgKey: accessKey, 
       items: { $elemMatch: { createdAt: {
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
@@ -100,8 +100,7 @@ import 'moment-timezone';
     
     for(let gf of generalFind) {
       const thisDI = gf.items.filter( x =>
-        x.finishedAt !== false &&
-        moment(x.createdAt).isSame(rangeStart, 'week')
+        moment(x.createdAt).isBetween(rangeStart, rangeEnd)
       );
       
       diCount = diCount + thisDI.length;   
@@ -109,12 +108,12 @@ import 'moment-timezone';
     return diCount;
   }
   
-  function countDoneItem(rangeStart, rangeEnd) {
+  export function countDoneItem(accessKey, rangeStart, rangeEnd) {
     
     let diCount = 0;
     
     const generalFind = BatchDB.find({
-      orgKey: Meteor.user().orgKey, 
+      orgKey: accessKey, 
       items: { $elemMatch: { finishedAt: {
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
@@ -124,7 +123,7 @@ import 'moment-timezone';
     for(let gf of generalFind) {
       const thisDI = gf.items.filter( x =>
         x.finishedAt !== false &&
-        moment(x.finishedAt).isSame(rangeStart, 'week')
+        moment(x.finishedAt).isBetween(rangeStart, rangeEnd)
       );
       
       diCount = diCount + thisDI.length;   
@@ -132,12 +131,12 @@ import 'moment-timezone';
     return diCount;
   }
   
-  function countNewNC(rangeStart, rangeEnd) {
+  export function countNewNC(accessKey, rangeStart, rangeEnd) {
     
     let ncCount = 0;
     
     const generalFind = BatchDB.find({
-      orgKey: Meteor.user().orgKey, 
+      orgKey: accessKey, 
       nonCon: { $elemMatch: { time: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
@@ -145,13 +144,13 @@ import 'moment-timezone';
     }).fetch();
     for(let gf of generalFind) {
       const thisNC = gf.nonCon.filter( 
-        x => moment(x.time).isSame(rangeStart, 'week') 
+        x => moment(x.time).isBetween(rangeStart, rangeEnd) 
       );
       ncCount = ncCount + thisNC.length;   
     }
     /*
     const generalFindX = XBatchDB.find({
-      orgKey: Meteor.user().orgKey, 
+      orgKey: accessKey, 
       'nonconformaces.time': { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
@@ -161,12 +160,12 @@ import 'moment-timezone';
     return ncCount;
   }
   
-  function countNewSH(rangeStart, rangeEnd) {
+  export function countNewSH(accessKey, rangeStart, rangeEnd) {
     
     let shCount = 0;
     
     const generalFind = BatchDB.find({
-      orgKey: Meteor.user().orgKey, 
+      orgKey: accessKey, 
       shortfall: { $elemMatch: { cTime: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
@@ -174,13 +173,13 @@ import 'moment-timezone';
     }).fetch();
     for(let gf of generalFind) {
       const thisSH = gf.shortfall.filter( 
-        x => moment(x.cTime).isSame(rangeStart, 'week') 
+        x => moment(x.cTime).isBetween(rangeStart, rangeEnd) 
       );
       shCount = shCount + thisSH.length;   
     }
     /*
     const generalFindX = XBatchDB.find({
-      orgKey: Meteor.user().orgKey, 
+      orgKey: accessKey, 
       'omitted.time': { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
@@ -190,12 +189,12 @@ import 'moment-timezone';
     return shCount;
   }
   
-  function countScrap(rangeStart, rangeEnd) {
+  export function countScrap(accessKey, rangeStart, rangeEnd) {
     
     let scCount = 0;
     
     const generalFind = BatchDB.find({
-      orgKey: Meteor.user().orgKey, 
+      orgKey: accessKey, 
       items: { $elemMatch: { finishedAt: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
@@ -205,7 +204,7 @@ import 'moment-timezone';
     for(let gf of generalFind) {
       const thisSC = gf.items.filter( x =>
         x.history.find( y =>
-          moment(y.time).isSame(rangeStart, 'week') &&
+          moment(y.time).isBetween(rangeStart, rangeEnd) &&
           y.type === 'scrap' && y.good === true )
       );
       
@@ -245,7 +244,8 @@ Meteor.methods({
       if( !loop || typeof cycles !== 'number' ) {
         return false;
       }else{
-        const runCounter = weekRanges(clientTZ, loop, cycles);
+        const accessKey = Meteor.user().orgKey;
+        const runCounter = weekRanges(accessKey, clientTZ, loop, cycles);
         return runCounter;
       }
     }catch(err) {
