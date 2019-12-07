@@ -13,7 +13,7 @@ import Theme from '/client/global/themeV.js';
 
 // statType // 'newBatch', 'doneBatch', 'newNC', 'newSH'
 
-const TrendLine = ({ title, statType, cycleCount, lineColor })=>{
+const TrendLine = ({ title, statType, cycleCount, cycleBracket, lineColor })=>{
   
   const blank =  [ {x:1,y:0} ];
   //const blank = Array(cycleCount);
@@ -21,7 +21,7 @@ const TrendLine = ({ title, statType, cycleCount, lineColor })=>{
   
   useEffect( ()=>{
     const clientTZ = moment.tz.guess();
-    Meteor.call('cycleWeekRate', clientTZ, statType, cycleCount, (err, re)=>{
+    Meteor.call('cycleWeekRate', clientTZ, statType, cycleCount, cycleBracket, (err, re)=>{
       err && console.log(err);
       re && dataSet(re);
     });

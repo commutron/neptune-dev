@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import LeapButton from '/client/components/tinyUi/LeapButton.jsx';
 import FilterActive from '/client/components/bigUi/FilterActive.jsx';
 
-const BatchesList = (props)=> {
+const BatchesList = ({ batchData, widgetData })=> {
   
   const [ filter, filterSet ] = useState(false);
   const [ textString, textSet ] = useState('');
@@ -16,8 +16,8 @@ const BatchesList = (props)=> {
     textSet( rule.toLowerCase() );
   };
     
-  const b = props.batchData;
-  const w = props.widgetData;
+  const b = batchData;
+  const w = widgetData;
    
   useEffect( ()=> { 
     let basicFilter = 
@@ -34,7 +34,7 @@ const BatchesList = (props)=> {
                 return 0;
               });
     listSet(sortList);
-  }, [ props, filter, textString ]);
+  }, [ filter, textString ]);
             
   return (
     <div className='' key={1}>

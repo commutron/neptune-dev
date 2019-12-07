@@ -40,53 +40,53 @@ const BatchCard = ({
   ];
 
   return(
-      <div className='sidebar' key={b.batch}>
-        {/*<TideLock currentLive={currentLive}></TideLock>*/}
-          {iNoready &&
-            <div className='centre centreText space'>
-              <p><i className="fas fa-exclamation-triangle fa-4x orangeT"></i></p>
-              <p className='medBig'>
-                No {Pref.itemSerial}s created
-              </p>
-              <br />
-            </div>
-          }
-          
-          {released === undefined || released === true ? null :
-            <FloorRelease id={b._id} />}
-          
-          {b.finishedAt !== false &&
-            <h2 className='actionBox centreText green'>
-              Finished: {moment(b.finishedAt).calendar()}
-            </h2>}
+    <div className='sidebar' key={b.batch}>
+      {/*<TideLock currentLive={currentLive}></TideLock>*/}
+        {iNoready &&
+          <div className='centre centreText space'>
+            <p><i className="fas fa-exclamation-triangle fa-4x orangeT"></i></p>
+            <p className='medBig'>
+              No {Pref.itemSerial}s created
+            </p>
+            <br />
+          </div>
+        }
         
-          <Tabs
-            tabs={tabOps}
-            names={false}
-            wide={true}
-            stick={false}
-            hold={true}
-            sessionTab='batchProPanelTabs'>
-            
-            <div className='space cap'>
-              <GeneralChunk a={a} b={b} done={done} expand={false} />
-            </div>
-            
-            <div className='space cap'>
-              {progCounts && 
-                <StepsProgress 
-                  progCounts={progCounts}
-                  riverTitle=''
-                  riverAltTitle=''
-                  truncate={true} />
-              }
-            </div>
-            
-          </Tabs>
-				
-			<br />
+        {released === undefined || released === true ? null :
+          <FloorRelease id={b._id} />}
+        
+        {b.finishedAt !== false &&
+          <h2 className='actionBox centreText green'>
+            Finished: {moment(b.finishedAt).calendar()}
+          </h2>}
+      
+        <Tabs
+          tabs={tabOps}
+          names={false}
+          wide={true}
+          stick={false}
+          hold={true}
+          sessionTab='batchProPanelTabs'>
+          
+          <div className='space cap'>
+            <GeneralChunk a={a} b={b} done={done} expand={false} />
+          </div>
+          
+          <div className='space cap'>
+            {progCounts && 
+              <StepsProgress 
+                progCounts={progCounts}
+                riverTitle=''
+                riverAltTitle=''
+                truncate={true} />
+            }
+          </div>
+          
+        </Tabs>
+			
+		<br />
 
-			</div>
+		</div>
   );
 };
 

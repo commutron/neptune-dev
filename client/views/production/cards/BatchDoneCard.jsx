@@ -1,40 +1,37 @@
-import React, {Component} from 'react';
+import React from 'react';
 
-import JumpText from '../../../components/tinyUi/JumpText.jsx';
+import JumpText from '/client/components/tinyUi/JumpText.jsx';
 // import StatsSimple from '../../../components/smallUi/StatsSimple.jsx';
 
-//////////// component is for an obsolete structure. should be rewriten
+const BatchDoneCard = ({ group, widgetData, batchData })=> {
 
-export default class BatchDoneCard extends Component {
+  let w = widgetData;
+  let b = batchData;
 
-  render() {
+  return(
+    <div className='card' key={1}>
+      <div className='space'>
+        <h1>{b.batch}</h1>
+        <h3>
+          <JumpText title={group} link={group} />
+          <JumpText title={w.widget} link={w.widget} />
+        </h3>
+        <p>tags:</p>
+        <br />
 
-    let w = this.props.widgetData;
-    let b = this.props.batchData;
+        <div className='centre greenT big'>
+          <i className='clean'>{b.finishedAt.toLocaleString()}</i>
+          <progress className='prog' value='1' max='1'></progress>
+          <i className='clean'>Tracked Items: {b.items}</i>
+          <i className='clean'>Tracked Steps: {b.steps}</i>
+          <i className='clean'>Total Units: {b.units}</i>
+        </div>
 
-    return (
-        <div className='card' key={1}>
-          <div className='space'>
-            <h1>{b.batch}</h1>
-            <h3>
-              <JumpText title={this.props.group} link={this.props.group} />
-              <JumpText title={w.widget} link={w.widget} />
-            </h3>
-            <p>tags:</p>
-            <br />
+        {/*<StatsSimple report={b} />*/}
+
+      </div>
+		</div>
+  );
+};
   
-            <div className='centre greenT big'>
-              <i className='clean'>{b.finishedAt.toLocaleString()}</i>
-              <progress className='prog' value='1' max='1'></progress>
-              <i className='clean'>Tracked Items: {b.items}</i>
-              <i className='clean'>Tracked Steps: {b.steps}</i>
-              <i className='clean'>Total Units: {b.units}</i>
-            </div>
-  
-            {/*<StatsSimple report={b} />*/}
-  
-          </div>
-  			</div>
-    );
-  }
-}
+export default BatchDoneCard;

@@ -10,7 +10,7 @@ const StoneProgRing = ({ sKey, step, type, progCounts, isAlt, children })=> {
     const pre = progCounts;
     let preFetch = false;
     
-    if(type === 'first') {
+    if(!pre || type === 'first') {
       null;
     }else{
       const preTotal = isAlt ?

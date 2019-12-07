@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const SlidesNested = ({ 
   menuTitle, menu, 
-  disable, extraClass, 
+  disable, disableAll, extraClass, 
   topPage, defaultSlide,
   children
 })=> {
@@ -16,8 +16,16 @@ const SlidesNested = ({
   };
 
   let show = section;
-  const dA = Array.isArray(disable) ? disable : [];
-    
+  let dA = [];
+  
+  if(Array.isArray(disable)) {
+    dA = disable;
+  }else if(disableAll) {
+    for(let i = 0; i <= children.length; i++) {
+      dA.push(true);
+    }
+  }else{null}
+  
   return(
     <div className='slidesNestedLayout'>
       <div className='slidesNestedMenu noPrint'>
@@ -30,6 +38,7 @@ const SlidesNested = ({
                 'slideNestedMenuButton cap slideOn' : 
                 'slideNestedMenuButton cap slideOff'
             }
+            disabled={dA[0]}
           ><div className='wide centreText'><b>{menuTitle}</b></div></button>}
           
         {menu.map( (entry, index)=>{
@@ -41,7 +50,7 @@ const SlidesNested = ({
               key={index}
               onClick={()=>handleClick(index)}
               className={clss}
-              disabled={dA[index]}
+              disabled={dA[index+1]}
             >{entry}</button>
         )})}
       </div>

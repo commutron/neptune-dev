@@ -10,9 +10,9 @@ import { ReleaseNote } from '/client/components/bigUi/ReleasesModule.jsx';
 //import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
 //import NonConMiniSatus from '/client/components/charts/NonConMiniStatus.jsx';
 //import NonConMiniTops from '/client/components/bigUi/NonConMiniTops.jsx';
-import TagsModule from '../../../components/bigUi/TagsModule.jsx';
-import NoteLine from '../../../components/smallUi/NoteLine.jsx';
-import BlockList from '../../../components/bigUi/BlockList.jsx';
+import TagsModule from '/client/components/bigUi/TagsModule.jsx';
+import NoteLine from '/client/components/smallUi/NoteLine.jsx';
+import BlockList from '/client/components/bigUi/BlockList.jsx';
 
 const BatchCardX = ({ 
   itemSerial, batchData, widgetData, groupData, 

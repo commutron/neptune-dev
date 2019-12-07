@@ -64,6 +64,9 @@ const ScheduleSlide = ({ app, user, users, pCache })=> {
     });
   }
   
+  const nWD = app.nonWorkDays || [];
+  const sortList = nWD.sort();
+  
   return(
     <div className='space5x5'>
       
@@ -106,12 +109,9 @@ const ScheduleSlide = ({ app, user, users, pCache })=> {
       
       <div className='vspace balance'>
         <ul>
-        {app.nonWorkDays ?
-          app.nonWorkDays.map( (e, i)=>{
+        {sortList.map( (e, i)=>{
             return( <li key={i}>{e}</li> );
           })
-          :
-          <li>not setup</li>
         }
         </ul>
       

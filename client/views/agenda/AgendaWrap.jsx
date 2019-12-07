@@ -72,7 +72,7 @@ const AgendaWrap = ({
       ['q2tTotal', q2tTotal.toFixed(2, 10)],
       ['howManyHours', howManyHours],
       ['100daysFromNow', in100.calendar()],
-      ['holidaysInNext100Days', noDays100], 
+      ['nonWorkDaysInNext100Days', noDays100.sort()], 
     ]);
   }, [pCache, workingSet, app]);
 

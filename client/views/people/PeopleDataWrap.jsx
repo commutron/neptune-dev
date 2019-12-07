@@ -45,6 +45,7 @@ const PeopleDataWrap = ({
     
   const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
   const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
+  const isPeopleSuper = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
   
   return(
     <ErrorCatch>
@@ -71,7 +72,7 @@ const PeopleDataWrap = ({
             <b><i className='fas fa-user-lock fa-fw'></i>  Permissions</b>,
             <b><i className='fas fa-users-cog fa-fw'></i>   Account Manager</b>,
           ]}
-          disable={[false, false, !isNightly, false, !isAdmin]}>
+          disable={[false, false, !isNightly, false, (!isAdmin && !isPeopleSuper)]}>
           
           <DashSlide
             key={0}
@@ -102,8 +103,9 @@ const PeopleDataWrap = ({
             <PermissionHelp roles={Pref.roles} admin={false} />
           </div>
           
-          {isAdmin &&
-            <AccountsManagePanel key={4} users={users} /> }
+          {isAdmin || isPeopleSuper ?
+            <AccountsManagePanel key={4} users={users} />
+          : null }
           
         </Slides>
 				

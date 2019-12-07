@@ -58,18 +58,21 @@ const ExploreLanding = ({ groupData, widgetData, batchData, xBatchData, app }) =
               title={`new ${Pref.batches}`}
               statType='newBatch'
               cycleCount={6}
+              cycleBracket='week'
               lineColor='rgb(52, 152, 219)' />
             
             <TrendLine 
               title='new items'
               statType='newItem'
               cycleCount={6}
+              cycleBracket='week'
               lineColor='rgb(52, 152, 219)' />
               
             <TrendLine 
               title={`discovered ${Pref.shortfall}s`}
               statType='newSH'
               cycleCount={6}
+              cycleBracket='week'
               lineColor='rgb(230, 126, 34)' />
               
           </div>    
@@ -79,18 +82,21 @@ const ExploreLanding = ({ groupData, widgetData, batchData, xBatchData, app }) =
             <TrendBar
               title={`completed ${Pref.batches}`}
               statType='doneBatch'
-              cycleCount={6} />
+              cycleCount={6}
+              cycleBracket='week' />
               
             <TrendLine 
               title={`completed ${Pref.items}`}
               statType='doneItem'
               cycleCount={6}
+              cycleBracket='week'
               lineColor='rgb(46, 204, 113)' />
               
             <TrendLine 
               title={`discovered ${Pref.nonCons}`}
               statType='newNC'
               cycleCount={6}
+              cycleBracket='week'
               lineColor='rgb(231, 76, 60)' />
             
           </div>
@@ -99,7 +105,7 @@ const ExploreLanding = ({ groupData, widgetData, batchData, xBatchData, app }) =
             <summary>Chart Details</summary>
             <p className='footnote'>
               Trends include {6} weeks, including the current week. 
-              Displayed left to right as past to current.
+              Read left to right as past to current.
             </p>
             <p className='footnote'>
               Completed on time {Pref.batches} are indicated in green.

@@ -14,7 +14,7 @@ import Theme from '/client/global/themeV.js';
 
 // statType // doneBatch'
 
-const TrendBar = ({ title, statType, cycleCount })=>{
+const TrendBar = ({ title, statType, cycleCount, cycleBracket })=>{
 
   const blank =  [ {x:1,y:0} ];
   // const blank = Array(cycleCount);
@@ -23,7 +23,7 @@ const TrendBar = ({ title, statType, cycleCount })=>{
   
   useEffect( ()=>{
     const clientTZ = moment.tz.guess();
-    Meteor.call('cycleWeekRate', clientTZ, statType, cycleCount, (err, re)=>{
+    Meteor.call('cycleWeekRate', clientTZ, statType, cycleCount, cycleBracket, (err, re)=>{
       err && console.log(err);
       const barOne = Array.from(re, w => { return { x: w.x, y: w.y[0] } } );
       const barTwo = Array.from(re, w => { return { x: w.x, y: w.y[1] } } );

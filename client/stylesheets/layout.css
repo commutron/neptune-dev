@@ -566,6 +566,14 @@ main {
   padding: 0;
 }
 
+.centreColumn {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap-reverse;
+  align-items: center;
+  padding: 0;
+}
+
 .centreRow {
   display: flex;
   flex-direction: row;
@@ -573,7 +581,7 @@ main {
   justify-content: center;
   align-items: center;
 }
-.centreRow span { margin: 0 10px; }
+.centreRow > span { margin: 0 10px; }
 
 .centreTrue {
   position: absolute;

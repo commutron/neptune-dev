@@ -53,65 +53,6 @@ export const itemsWithPromise = (accessKey, rangeStart, rangeEnd, historyType)=>
   });
 };
 
-export const newGroupPromise = (accessKey, rangeStart, rangeEnd)=> {
-  return new Promise(function(resolve) {
-    const groupFind = GroupDB.find({
-      orgKey: accessKey, 
-      createdAt: { 
-        $gte: new Date(rangeStart),
-        $lte: new Date(rangeEnd) 
-      }
-    }).fetch();
-    resolve(groupFind.length);
-  });
-};
-
-export const newWidgetPromise = (accessKey, rangeStart, rangeEnd)=> {
-  return new Promise(function(resolve) {
-    const widgetFind = WidgetDB.find({
-      orgKey: accessKey, 
-      createdAt: { 
-        $gte: new Date(rangeStart),
-        $lte: new Date(rangeEnd) 
-      }
-    }).fetch();
-    resolve(widgetFind.length);
-  });
-};
-
-export const newVersionPromise = (accessKey, rangeStart, rangeEnd)=> {
-  return new Promise(function(resolve) {
-    const widgetFind = WidgetDB.find({
-      orgKey: accessKey, 
-      createdAt: { 
-        $lte: new Date(rangeEnd) 
-      }
-    }).fetch();
-    
-    let vCount = 0;
-    for(let wf of widgetFind) {
-      const thisV = wf.versions.filter( x =>
-        moment(x.createdAt).isBetween(rangeStart, rangeEnd)
-      );
-      vCount = vCount + thisV.length;   
-    }
-    resolve(vCount);
-  });
-};
-
-export const newUserPromise = (accessKey, rangeStart, rangeEnd)=> {
-  return new Promise(function(resolve) {
-    const userFind = Meteor.users.find({
-      orgKey: accessKey, 
-      createdAt: { 
-        $gte: new Date(rangeStart),
-        $lte: new Date(rangeEnd) 
-      }
-    }).fetch();
-    resolve(userFind.length);
-  });
-};
-
 
 export const totalTideTimePromise = (accessKey, rangeStart, rangeEnd)=> {
   return new Promise(function(resolve) { // bigInt ????

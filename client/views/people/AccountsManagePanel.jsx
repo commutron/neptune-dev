@@ -6,8 +6,8 @@ import SlidesNested from '/client/components/smallUi/SlidesNested.jsx';
 import UserManageForm from '/client/components/forms/UserManageForm.jsx';
 import RemoveUser from '/client/components/forms/RemoveUser.jsx';
 import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
-import NumBox from '/client/components/uUi/NumBox.jsx';
 import NumLine from '/client/components/uUi/NumLine.jsx';
+import TrendLine from '/client/components/charts/Trends/TrendLine.jsx';
 
 
 const AccountsManagePanel = ({ users })=> {
@@ -19,30 +19,38 @@ const AccountsManagePanel = ({ users })=> {
     return <b className={clss}>{entry.username}</b>;
   });
   
+  const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
+  
   return (
     <SlidesNested
       menuTitle='User Accounts'
       menu={usersMenu}
+      disableAll={!isAdmin}
       topPage={
         <AccountsTop users={users} key={000} />
       }>
         
       {users.map( (entry, index)=>{
-        return (
-          <div key={index+entry._id}>
-            <UserManageForm
-              id={entry._id}
-              name={entry.username}
-              org={entry.org}
-              roles={roles}
-            />
-            {!Roles.userIsInRole(entry._id, 'active') &&
-              entry._id !== Meteor.userId() &&
-              !entry.org ?
-                <RemoveUser userID={entry._id} />
-            :null}
-          </div>
-      )})}
+        if(isAdmin) {
+          return(
+            <div key={index+entry._id}>
+              <UserManageForm
+                id={entry._id}
+                name={entry.username}
+                org={entry.org}
+                roles={roles}
+              />
+              {!Roles.userIsInRole(entry._id, 'active') &&
+                entry._id !== Meteor.userId() &&
+                !entry.org ?
+                  <RemoveUser userID={entry._id} />
+              :null}
+            </div>
+          );
+        }else{
+          return <div className='centreText'>Permission Denied</div>;
+        }
+      })}
     </SlidesNested>
   );
 };
@@ -268,15 +276,25 @@ const AccountsTop = ({ users })=> {
           color='grayT'
           big={true} />
       </div>
+      
+      <div className='centre'>
+      
+        <NumStatRing
+          total={active}
+          nums={[ active, ( all - active ) ]}
+          name='Active Users'
+          title={`${active} active users,\n${( all - active )} inactive users`}
+          colour='blueBi'
+          maxSize='chart15Contain'
+        />
         
-      <NumStatRing
-        total={active}
-        nums={[ active, ( all - active ) ]}
-        name='Active Users'
-        title={`${active} active users,\n${( all - active )} inactive users`}
-        colour='blueBi'
-        maxSize='chart20Contain'
-      />
+        <TrendLine 
+          title='new users'
+          statType='newUser'
+          cycleCount={12}
+          cycleBracket='month'
+          lineColor='rgb(52, 152, 219)' />
+      </div>
       
     </div>
   );

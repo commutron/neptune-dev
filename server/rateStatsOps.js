@@ -3,16 +3,16 @@ import 'moment-timezone';
 // import 'moment-business-time-ship';
 
 
-  function weekRanges(accessKey, clientTZ, counter, cycles) {
+  function timeRanges(accessKey, clientTZ, counter, cycles, bracket) {
     const nowLocal = moment().tz(clientTZ);
     
     let countArray = [];
     for(let w = 0; w < cycles; w++) {
     
-      const loopBack = nowLocal.clone().subtract(w, 'week'); 
+      const loopBack = nowLocal.clone().subtract(w, bracket); 
      
-      const rangeStart = loopBack.clone().startOf('week').toISOString();
-      const rangeEnd = loopBack.clone().endOf('week').toISOString();
+      const rangeStart = loopBack.clone().startOf(bracket).toISOString();
+      const rangeEnd = loopBack.clone().endOf(bracket).toISOString();
       
       const quantity = counter(accessKey, rangeStart, rangeEnd);
       countArray.unshift({ x:cycles-w, y:quantity });
@@ -21,6 +21,57 @@ import 'moment-timezone';
     return countArray;
   }
   
+  export function countNewUser(accessKey, rangeStart, rangeEnd) {
+    const userFind = Meteor.users.find({
+      orgKey: accessKey, 
+      createdAt: { 
+        $gte: new Date(rangeStart),
+        $lte: new Date(rangeEnd) 
+      }
+    }).fetch();
+    return userFind.length;
+  }
+
+  export function countNewGroup(accessKey, rangeStart, rangeEnd) {
+    const groupFind = GroupDB.find({
+      orgKey: accessKey, 
+      createdAt: { 
+        $gte: new Date(rangeStart),
+        $lte: new Date(rangeEnd) 
+      }
+    }).fetch();
+    return groupFind.length;
+  }
+
+  export function countNewWidget(accessKey, rangeStart, rangeEnd) {
+    const widgetFind = WidgetDB.find({
+      orgKey: accessKey, 
+      createdAt: { 
+        $gte: new Date(rangeStart),
+        $lte: new Date(rangeEnd) 
+      }
+    }).fetch();
+    return widgetFind.length;
+  }
+
+  export function countNewVersion(accessKey, rangeStart, rangeEnd) {
+    const widgetFind = WidgetDB.find({
+      orgKey: accessKey, 
+      createdAt: { 
+        $lte: new Date(rangeEnd) 
+      }
+    }).fetch();
+    
+    let vCount = 0;
+    for(let wf of widgetFind) {
+      const thisV = wf.versions.filter( x =>
+        moment(x.createdAt).isBetween(rangeStart, rangeEnd)
+      );
+      vCount = vCount + thisV.length;   
+    }
+    return vCount;
+  }
+
   export function countNewBatch(accessKey, rangeStart, rangeEnd) {
     
     const generalFind = BatchDB.find({
@@ -217,12 +268,20 @@ import 'moment-timezone';
 Meteor.methods({
   
   
-  cycleWeekRate(clientTZ, stat, cycles) {
+  cycleWeekRate(clientTZ, stat, cycles, bracket) {////
     try {
       let loop = false;
       
       if( !stat || typeof stat !== 'string' ) {
         null;
+      }else if( stat === 'newUser' ) {
+        loop = countNewUser;
+      }else if( stat === 'newGroup' ) {
+        loop = countNewGroup;
+      }else if( stat === 'newWidget' ) {
+        loop = countNewWidget;
+      }else if( stat === 'newVersion' ) {
+        loop = countNewVersion;
       }else if( stat === 'newBatch' ) {
         loop = countNewBatch;
       }else if( stat === 'doneBatch' ) {
@@ -245,7 +304,7 @@ Meteor.methods({
         return false;
       }else{
         const accessKey = Meteor.user().orgKey;
-        const runCounter = weekRanges(accessKey, clientTZ, loop, cycles);
+        const runCounter = timeRanges(accessKey, clientTZ, loop, cycles, bracket);
         return runCounter;
       }
     }catch(err) {
