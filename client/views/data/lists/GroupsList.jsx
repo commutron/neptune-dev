@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 
 import LeapButton from '/client/components/tinyUi/LeapButton.jsx';
 import FilterActive from '../../../components/bigUi/FilterActive.jsx';
@@ -71,30 +70,28 @@ export default class GroupsList extends Component	{
                     return 0;
                   });
                   
-    return (
-      <AnimateWrap type='cardTrans'>
-        <div className='' key={1}>
-          <div className='stickyBar'>
-            <FilterActive
-              title={g.alias}
-              done='Inactive'
-              total={showList.length}
-              onClick={e => this.setFilter(e)}
-              onTxtChange={e => this.setTextFilter(e)} />
-          </div>  
-          { sortList.map( (entry, index)=> {
-            let ac = a.includes(entry._id) ? 'leapBar activeMark' : 'leapBar';
-            return (
-              <LeapButton
-                key={index}
-                title={entry.group}
-                sub=''
-                sty={ac}
-                address={'/data/overview?request=groups&specify=' + entry.alias}
-              />
-            )})}
-  			</div>
-			</AnimateWrap>
+    return(
+      <div className='' key={1}>
+        <div className='stickyBar'>
+          <FilterActive
+            title={g.alias}
+            done='Inactive'
+            total={showList.length}
+            onClick={e => this.setFilter(e)}
+            onTxtChange={e => this.setTextFilter(e)} />
+        </div>  
+        { sortList.map( (entry, index)=> {
+          let ac = a.includes(entry._id) ? 'leapBar activeMark' : 'leapBar';
+          return (
+            <LeapButton
+              key={index}
+              title={entry.group}
+              sub=''
+              sty={ac}
+              address={'/data/overview?request=groups&specify=' + entry.alias}
+            />
+          )})}
+			</div>
     );
   }
 }

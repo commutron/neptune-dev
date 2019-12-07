@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 //import Pref from '/client/global/pref.js';
 
 // requires
@@ -35,7 +34,7 @@ const Model = (props)=>	{
       </button>
     
     {show &&
-      <AnimateWrap type='modelTrans' el='span'>
+      <span>
         <div className='overlay invert' key={1}>
           <div className='popup'>
             <div className='popupHead'>
@@ -55,7 +54,7 @@ const Model = (props)=>	{
             </div>
           </div>
         </div>
-      </AnimateWrap>
+      </span>
     }
     </span>
   );

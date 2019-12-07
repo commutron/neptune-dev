@@ -1,6 +1,5 @@
 import React from 'react';
-import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
-import moment from 'moment';
+// import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
 import CreateTag from '/client/components/uUi/CreateTag.jsx';
@@ -64,99 +63,97 @@ const VersionPanel = ({
   
   const qtON = v.quoteTimeScale;
   
-  return (
-    <AnimateWrap type='cardTrans'>
-      <div className='section'>
+  return(
+    <div className='section'>
             
-        <Tabs
-          tabs={[Pref.version + 's', 'Components']}
-          wide={true}
-          stick={false}
-          hold={true}
-          sessionTab='versionExPanelTabs'>
-          
-          <div>
-            <div className='oneTwoThreeContainer'>
-              <div className='oneThirdContent'>
-                
-                <p>Status: <i className='big'>{v.live ? 'Live' : 'Archived'}</i></p>
+      <Tabs
+        tabs={[Pref.version + 's', 'Components']}
+        wide={true}
+        stick={false}
+        hold={true}
+        sessionTab='versionExPanelTabs'>
+        
+        <div>
+          <div className='oneTwoThreeContainer'>
+            <div className='oneThirdContent'>
               
-                <TagsModule
-                  id={w._id}
-                  tags={v.tags}
-                  vKey={v.versionKey}
-                  tagOps={a.tagOption} />
-                
-                <p>
-                  <a className='clean wordBr' href={v.wiki} target='_blank'>{v.wiki}</a>
-                </p>
-                
-                <p className='numFont'>default units: {v.units}</p>
-                
-              </div>
+              <p>Status: <i className='big'>{v.live ? 'Live' : 'Archived'}</i></p>
+            
+              <TagsModule
+                id={w._id}
+                tags={v.tags}
+                vKey={v.versionKey}
+                tagOps={a.tagOption} />
               
-              <div className='twoThirdsContent'>
-                <NoteLine
-                  entry={v.notes}
-                  id={w._id}
-                  versionKey={v.versionKey}
-                  plain={false}
-                  small={false} />
-              </div>
+              <p>
+                <a className='clean wordBr' href={v.wiki} target='_blank'>{v.wiki}</a>
+              </p>
+              
+              <p className='numFont'>default units: {v.units}</p>
               
             </div>
-              
-            <div className='wide'>
-              {/*// Cleanup Function - Limited Use */}
-              {!qtON ?
-                <i>quote time is no longer saved to the version</i>
-                :
-                <VersionQuoteTimeClear wID={w._id} vKey={v.versionKey} />
-              }
+            
+            <div className='twoThirdsContent'>
+              <NoteLine
+                entry={v.notes}
+                id={w._id}
+                versionKey={v.versionKey}
+                plain={false}
+                small={false} />
             </div>
             
-            
           </div>
-            
-          
-          <div className='space'>
-            <h3>{Pref.comp}s: {v.assembly.length}</h3>
-            <dl>
-              {vAssmbl.map((entry, index)=>{
-                return(
-                  <dt key={index} className='letterSpaced'>
-                    {entry.component}
-                    <button
-                      className='miniAction redT'
-                      onClick={()=>removeComp(w._id, v.versionKey, entry.component)}
-                      disabled={!Roles.userIsInRole(Meteor.userId(), 'remove')}>
-                    <i className='fas fa-times fa-fw'></i></button>
-                  </dt>
-              )})}
-            </dl>
-            <br />
-            <button
-              className='transparent'
-              title='Download Parts List'
-              onClick={()=>downloadComp(w._id, v.versionKey)}>
-              <label className='navIcon actionIconWrap'>
-                <i className='fas fa-download fa-fw'></i>
-                <span className='actionIconText blackT'>Download</span>
-              </label>
-            </button>
+              
+          <div className='wide'>
+            {/*// Cleanup Function - Limited Use */}
+            {!qtON ?
+              <i>quote time is no longer saved to the version</i>
+              :
+              <VersionQuoteTimeClear wID={w._id} vKey={v.versionKey} />
+            }
           </div>
           
-        </Tabs>
-  
+          
+        </div>
+          
+        
+        <div className='space'>
+          <h3>{Pref.comp}s: {v.assembly.length}</h3>
+          <dl>
+            {vAssmbl.map((entry, index)=>{
+              return(
+                <dt key={index} className='letterSpaced'>
+                  {entry.component}
+                  <button
+                    className='miniAction redT'
+                    onClick={()=>removeComp(w._id, v.versionKey, entry.component)}
+                    disabled={!Roles.userIsInRole(Meteor.userId(), 'remove')}>
+                  <i className='fas fa-times fa-fw'></i></button>
+                </dt>
+            )})}
+          </dl>
+          <br />
+          <button
+            className='transparent'
+            title='Download Parts List'
+            onClick={()=>downloadComp(w._id, v.versionKey)}>
+            <label className='navIcon actionIconWrap'>
+              <i className='fas fa-download fa-fw'></i>
+              <span className='actionIconText blackT'>Download</span>
+            </label>
+          </button>
+        </div>
+        
+      </Tabs>
 
-        <CreateTag
-          when={v.createdAt}
-          who={v.createdWho}
-          whenNew={v.updatedAt}
-          whoNew={v.updatedWho}
-          dbKey={v.versionKey} />
-      </div>
-    </AnimateWrap>
+
+      <CreateTag
+        when={v.createdAt}
+        who={v.createdWho}
+        whenNew={v.updatedAt}
+        whoNew={v.updatedWho}
+        dbKey={v.versionKey} />
+    </div>
   );
 };
 

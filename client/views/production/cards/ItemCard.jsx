@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import TideLock from '/client/components/tide/TideLock.jsx';
 import Pref from '/client/global/pref.js';
 
@@ -29,7 +28,6 @@ export default class ItemCard extends Component	{
       Session.set('ncWhere', Pref.outOfFlow);
 	    Session.set('nowStepKey', undefined);
       return (
-        <AnimateWrap type='cardTrans'>
           <div className='section sidebar centre centreText' key={i.serial}>
             <p><i className="fas fa-exclamation-circle fa-5x redT"></i></p>
             <p className='medBig'>
@@ -37,7 +35,6 @@ export default class ItemCard extends Component	{
             </p>
             <br />
           </div>
-        </AnimateWrap>
         );
     }
     
@@ -45,7 +42,6 @@ export default class ItemCard extends Component	{
       Session.set('ncWhere', Pref.outOfFlow);
 	    Session.set('nowStepKey', undefined);
       return (
-        <AnimateWrap type='cardTrans'>
           <div className='section sidebar centre centreText space' key={i.serial}>
             <p><i className="fas fa-exclamation-triangle fa-5x orangeT"></i></p>
             <p className='medBig'>
@@ -56,12 +52,11 @@ export default class ItemCard extends Component	{
             </em></p>
             <br />
           </div>
-        </AnimateWrap>
+        
         );
     }
 
     return (
-      <AnimateWrap type='cardTrans'>
         <div key={i.serial}>
           {scrap &&
             <div className='section sidebar' key={i.serial}>
@@ -85,7 +80,6 @@ export default class ItemCard extends Component	{
               changeVerify={this.props.changeVerify} />
           </TideLock>
   			</div>
-			</AnimateWrap>
     );
   }
 }

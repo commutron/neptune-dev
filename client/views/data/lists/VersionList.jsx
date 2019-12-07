@@ -1,7 +1,6 @@
 import React from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
-import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import LeapRow from '/client/components/tinyUi/LeapRow.jsx';
 
 const VersionList = ({ versionData, widgetData, app })=>	{
@@ -12,21 +11,19 @@ const VersionList = ({ versionData, widgetData, app })=>	{
           return 0;
         });
   
-  return (
-    <AnimateWrap type='cardTrans'>
-      <div className='space'>
-        {v.length < 1 ? <p>no {Pref.version}s created</p> : null}
-        {v.map( (entry, index)=> {
-          let ac = entry.live ? 'activeMark vmarginhalf' : 'vmarginhalf';
-          return(
-            <VersionIndexCard 
-              key={entry.versionKey} 
-              widget={widgetData.widget} 
-              version={entry} 
-              barStyle={ac} />
-        )})}
-      </div>
-    </AnimateWrap>
+  return(
+    <div className='space'>
+      {v.length < 1 ? <p>no {Pref.version}s created</p> : null}
+      {v.map( (entry, index)=> {
+        let ac = entry.live ? 'activeMark vmarginhalf' : 'vmarginhalf';
+        return(
+          <VersionIndexCard 
+            key={entry.versionKey} 
+            widget={widgetData.widget} 
+            version={entry} 
+            barStyle={ac} />
+      )})}
+    </div>
   ); 
 };
 

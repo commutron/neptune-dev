@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 // import Pref from '/client/global/pref.js';
 
 import { CalcSpin } from '/client/components/uUi/Spin.jsx';
@@ -29,15 +28,13 @@ const ScrapPanel = (props)=> {
                   });
 
   return(
-    <AnimateWrap type='cardTrans'>
-      <div className='section overscroll' key={1}>
-        <div className='space'>
+    <div className='section overscroll' key={1}>
+      <div className='space'>
 
-          <ScrapTableAll scrapData={sortList} />
+        <ScrapTableAll scrapData={sortList} />
 
-        </div>
       </div>
-    </AnimateWrap>
+    </div>
   );
 };
 

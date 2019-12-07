@@ -2,7 +2,6 @@ import React, {useState, useEffect, useRef} from 'react';
 import moment from 'moment';
 import 'moment-timezone';
 import { ToastContainer } from 'react-toastify';
-import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
 
 import Spin from '../../components/uUi/Spin.jsx';
@@ -161,121 +160,119 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
                   '';
     
   return(
-    <AnimateWrap type='contentTrans'>
-      <div key={0} className='overviewContainer'>
-        <ToastContainer
-          position="top-right"
-          autoClose={2500}
-          newestOnTop />
-        <div className='tenHeader'>
-          <div className='topBorder'></div>
-          <HomeIcon />
-          <div className='frontCenterTitle'>Overview</div>
-          <div className='auxRight'>
-            <button
-              type='button'
-              title='Refresh Data'
-              className={working ? 'spin2' : ''}
-              onClick={(e)=>forceRefresh()}>
-            <i className='fas fa-sync-alt primeRightIcon'></i>
-            </button>
-          </div>
-          <TideFollow />
+    <div key={0} className='overviewContainer'>
+      <ToastContainer
+        position="top-right"
+        autoClose={2500}
+        newestOnTop />
+      <div className='tenHeader'>
+        <div className='topBorder'></div>
+        <HomeIcon />
+        <div className='frontCenterTitle'>Overview</div>
+        <div className='auxRight'>
+          <button
+            type='button'
+            title='Refresh Data'
+            className={working ? 'spin2' : ''}
+            onClick={(e)=>forceRefresh()}>
+          <i className='fas fa-sync-alt primeRightIcon'></i>
+          </button>
         </div>
-        
-        <nav className='overviewToolbar'>
-          <span>
-            <i className='fas fa-filter fa-fw grayT'></i>
-            <select
-              id='filterSelect'
-              title={`Change ${Pref.phase} Filter`}
-              className='overToolSort liteToolOn'
-              defaultValue={filterBy}
-              onChange={(e)=>changeFilter(e)}>
-              <option value={false}>All</option>
-              <option value={Pref.kitting} className='cap'>{Pref.kitting}</option>
-              <option value={Pref.released} className='cap'>{Pref.released}</option>
-              {app.phases.map( (ph, ix)=> {
-                return(
-                  <option key={ph+ix} value={ph}>{ph}</option>
-              )})}
-            </select>
-          </span>
-          
-          <span>
-            <i className='fas fa-sort-amount-down fa-fw grayT'></i>
-            <select
-              id='sortSelect'
-              title='Change List Order'
-              className='overToolSort liteToolOn'
-              defaultValue={sortBy}
-              onChange={(e)=>changeSort(e)}>
-              <option value='priority'>priority</option>
-              <option value='batch'>{Pref.batch}</option>
-              <option value='sales'>{Pref.salesOrder}</option>
-              <option value='due'>{Pref.end}</option>
-            </select>
-          </span>
-          
-          <span>
-            <button
-              key='denseOff'
-              title='Comfort Layout'
-              onClick={()=>denseSet(0)}
-              className={dense === 0 ? 'liteToolOn' : 'liteToolOff'}
-            ><i className='fas fa-expand-arrows-alt fa-fw'></i></button>
-            <button
-              key='compactOn'
-              title='Compact Layout'
-              onClick={()=>denseSet(1)}
-              className={dense === 1 ? 'liteToolOn' : 'liteToolOff'}
-            ><i className='fas fa-compress fa-fw'></i></button>
-            <button
-              key='miniOn'
-              title='Minifyed Layout'
-              onClick={()=>denseSet(2)}
-              className={dense === 2 ? 'liteToolOn' : 'liteToolOff'}
-            ><i className='fas fa-compress-arrows-alt fa-fw'></i></button>
-          </span>
-          
-          <span className='flexSpace' />
-          <span>Updated {duration} ago</span>
-        </nav>
-      
-        <div className='overviewContent forceScrollStyle' tabIndex='0'>
-          
-        {!liveState ?
-          <div className='centreContainer'>
-            <div className='centrecentre'>
-              <Spin />
-            </div>
-          </div>
-        :  
-          <div className={`overGridFrame ${density}`}>
-      
-            <BatchHeaders
-              key='fancylist0'
-              oB={liveState}
-              bCache={bCache}
-              title={filterBy || 'All Live'}
-            />
-            
-            <BatchDetails
-              key='fancylist1'
-              oB={liveState}
-              bCache={bCache}
-              pCache={pCache}
-              user={user}
-              clientTZ={clientTZ}
-              app={app}
-              dense={dense > 1}
-            />
-              
-          </div>
-        }  
-        </div>
+        <TideFollow />
       </div>
-    </AnimateWrap>
+      
+      <nav className='overviewToolbar'>
+        <span>
+          <i className='fas fa-filter fa-fw grayT'></i>
+          <select
+            id='filterSelect'
+            title={`Change ${Pref.phase} Filter`}
+            className='overToolSort liteToolOn'
+            defaultValue={filterBy}
+            onChange={(e)=>changeFilter(e)}>
+            <option value={false}>All</option>
+            <option value={Pref.kitting} className='cap'>{Pref.kitting}</option>
+            <option value={Pref.released} className='cap'>{Pref.released}</option>
+            {app.phases.map( (ph, ix)=> {
+              return(
+                <option key={ph+ix} value={ph}>{ph}</option>
+            )})}
+          </select>
+        </span>
+        
+        <span>
+          <i className='fas fa-sort-amount-down fa-fw grayT'></i>
+          <select
+            id='sortSelect'
+            title='Change List Order'
+            className='overToolSort liteToolOn'
+            defaultValue={sortBy}
+            onChange={(e)=>changeSort(e)}>
+            <option value='priority'>priority</option>
+            <option value='batch'>{Pref.batch}</option>
+            <option value='sales'>{Pref.salesOrder}</option>
+            <option value='due'>{Pref.end}</option>
+          </select>
+        </span>
+        
+        <span>
+          <button
+            key='denseOff'
+            title='Comfort Layout'
+            onClick={()=>denseSet(0)}
+            className={dense === 0 ? 'liteToolOn' : 'liteToolOff'}
+          ><i className='fas fa-expand-arrows-alt fa-fw'></i></button>
+          <button
+            key='compactOn'
+            title='Compact Layout'
+            onClick={()=>denseSet(1)}
+            className={dense === 1 ? 'liteToolOn' : 'liteToolOff'}
+          ><i className='fas fa-compress fa-fw'></i></button>
+          <button
+            key='miniOn'
+            title='Minifyed Layout'
+            onClick={()=>denseSet(2)}
+            className={dense === 2 ? 'liteToolOn' : 'liteToolOff'}
+          ><i className='fas fa-compress-arrows-alt fa-fw'></i></button>
+        </span>
+        
+        <span className='flexSpace' />
+        <span>Updated {duration} ago</span>
+      </nav>
+    
+      <div className='overviewContent forceScrollStyle' tabIndex='0'>
+        
+      {!liveState ?
+        <div className='centreContainer'>
+          <div className='centrecentre'>
+            <Spin />
+          </div>
+        </div>
+      :  
+        <div className={`overGridFrame ${density}`}>
+    
+          <BatchHeaders
+            key='fancylist0'
+            oB={liveState}
+            bCache={bCache}
+            title={filterBy || 'All Live'}
+          />
+          
+          <BatchDetails
+            key='fancylist1'
+            oB={liveState}
+            bCache={bCache}
+            pCache={pCache}
+            user={user}
+            clientTZ={clientTZ}
+            app={app}
+            dense={dense > 1}
+          />
+            
+        </div>
+      }  
+      </div>
+    </div>
   );
 };
 

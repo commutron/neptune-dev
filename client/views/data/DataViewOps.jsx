@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import Pref from '/client/global/pref.js';
 
 import { TraverseWrap } from '/client/layouts/DataExploreLayout.jsx';
@@ -22,98 +22,158 @@ import ScrapPanel from './panels/ScrapPanel.jsx';
 import BatchesList from './lists/BatchesList.jsx';
 import ItemsList from './lists/ItemsList.jsx';
 // import WidgetsList from './lists/WidgetsList.jsx';
-/*
-view: this.props.view,
-request: this.props.request,
-specify: this.props.specify
-*/
 
-export default class DataViewOps extends Component	{
+const DataViewOps = ({ 
+  allXBatch, allBatch, 
+  allGroup, allWidget,
+  user, app,
+  hotBatch, hotXBatch,
+  view, request, specify,
+  subLink, orb
+})=> {
   
   /*
-  linkedBatch(wId, vKey) {
-    return this.props.allBatch.find(x => x.widgetId === wId, x => x.versionKey === vKey);
+  lfunction inkedBatch(wId, vKey) {
+    return allBatch.find(x => x.widgetId === wId, x => x.versionKey === vKey);
   }
   */
-  allLinkedBatches(wId) {
-    const xBatches = this.props.allXBatch.filter(x => x.widgetId === wId);
-    const legacyBatches = this.props.allBatch.filter(x => x.widgetId === wId);
+  function allLinkedBatches(wId) {
+    const xBatches = allXBatch.filter(x => x.widgetId === wId);
+    const legacyBatches = allBatch.filter(x => x.widgetId === wId);
     return [...xBatches, ...legacyBatches ];
   }
   
-  verLinkedBatches(vKey) {
-    const xBatches = this.props.allXBatch.filter(x => x.versionKey === vKey);
-    const legacyBatches = this.props.allBatch.filter(x => x.versionKey === vKey);
+  function verLinkedBatches(vKey) {
+    const xBatches = allXBatch.filter(x => x.versionKey === vKey);
+    const legacyBatches = allBatch.filter(x => x.versionKey === vKey);
     return [...xBatches, ...legacyBatches ];
   }
   
-  itemData(items, bar) {
+  function itemData(items, bar) {
     return items.find(x => x.serial === bar);
   }
 
-  getGroup(request) {
-    return this.props.allGroup
-            .find( x => 
-              x._id === request || 
-              x.alias === request || 
-              x.group === request );
-  }
+  // function getGroup(request) {
+  //   return allGroup
+  //           .find( x => 
+  //             x._id === request || 
+  //             x.alias === request || 
+  //             x.group === request );
+  // }
   
-  group() {
-    return this.props.allGroup.find(x => x.group === this.props.orb);
-  }
+  // function group() {
+  //   return allGroup.find(x => x.group === orb);
+  // }
 
-  groupAlias() {
-    return this.props.allGroup.find(x => x.alias === this.props.orb);
+  // function groupAlias() {
+  //   return allGroup.find(x => x.alias === orb);
+  // }
+  
+  function linkedGroup(gId) {
+    return allGroup.find(x => x._id === gId);
   }
   
-  linkedGroup(gId) {
-    return this.props.allGroup.find(x => x._id === gId);
-  }
-  
-  getWidget(request) {
-    return this.props.allWidget
+  function getWidget(request) {
+    return allWidget
             .find( x => 
               x._id === request || 
               x.widget === request );
   }
   
-  widget() {
-    return this.props.allWidget.find(x => x.widget === this.props.orb);
+  // function widget() {
+  //   return allWidget.find(x => x.widget === orb);
+  // }
+  
+  function linkedWidget(wId) {
+    return allWidget.find(x => x._id === wId);
   }
   
-  linkedWidget(wId) {
-    return this.props.allWidget.find(x => x._id === wId);
+  function groupWidgets(gId) {
+    return allWidget.filter(x => x.groupId === gId);
   }
   
-  groupWidgets(gId) {
-    return this.props.allWidget.filter(x => x.groupId === gId);
-  }
-  
-  versionData(versions, vKeum) {
+  function versionData(versions, vKeum) {
     return versions.find( x => x.versionKey === vKeum || x.version === vKeum );
   }
 
-  render () {
-
-    const orb = this.props.orb;
-    const user = this.props.user;
-    const app = this.props.app;
-    const allGroup = this.props.allGroup;
-    const allWidget = this.props.allWidget;
-    const allBatch = this.props.allBatch;
-    const allXBatch = this.props.allXBatch;
-    const hotBatch = this.props.hotBatch;
-    const hotXBatch = this.props.hotXBatch;
+ 
+  if(!view) {
+    Session.set('nowBatch', false);
+    return (
+      <TraverseWrap
+	      batchData={false}
+        widgetData={false}
+        versionData={false}
+        groupData={false}
+        user={user}
+        app={app}
+        title='Explore'
+        subLink={subLink}
+        action={false}
+        base={true}
+        invertColor={true}
+      >
+        <ExploreLanding
+          batchData={allBatch}
+          xBatchData={allXBatch}
+          widgetData={allWidget}
+          groupData={allGroup} 
+          app={app} />
+      </TraverseWrap>
+    );
+  }
     
-    const view = this.props.view;
-    const request = this.props.request;
-    const specify = this.props.specify;
-    const subLink = this.props.subLink;
+  if(view === 'calendar') {
+    Session.set('nowBatch', false);
+    return (
+      <TraverseWrap
+	      batchData={false}
+        widgetData={false}
+        versionData={false}
+        groupData={false}
+        user={user}
+        app={app}
+        title='Events Calendar'
+        subLink={subLink}
+        action={false}
+        base={true}
+        invertColor={true}
+      >
+        <Calendar
+          app={app} />
+      </TraverseWrap>
+    );
+  }
     
-    if(!view) {
-      Session.set('nowBatch', false);
-      return (
+  if(view === 'reports') {
+    Session.set('nowBatch', false);
+    return (
+      <TraverseWrap
+	      batchData={false}
+        widgetData={false}
+        versionData={false}
+        groupData={false}
+        user={user}
+        app={app}
+        title='Reports'
+        subLink={subLink}
+        action={false}
+        base={true}
+        invertColor={true}
+      >
+        <ReportsWrap
+          batchData={allBatch}
+          widgetData={allWidget}
+          groupData={allGroup} 
+          app={app} />
+      </TraverseWrap>
+    );
+  }
+    
+  if(view === 'overview') {
+    Session.set('nowBatch', false);
+    if(request === 'groups') {
+      return(
         <TraverseWrap
 		      batchData={false}
           widgetData={false}
@@ -121,13 +181,62 @@ export default class DataViewOps extends Component	{
           groupData={false}
           user={user}
           app={app}
-          title='Explore'
+          title={Pref.groups + ' Overview'}
+          subLink={subLink}
+          action='newGroup'
+          base={true}
+          invertColor={true}
+        >
+          <AllGroups
+            batchData={allBatch}
+            batchDataX={allXBatch}
+            widgetData={allWidget}
+            groupData={allGroup} 
+            app={app}
+            specify={specify} />
+        </TraverseWrap>
+      );
+    }else if(request === 'batches') {
+      return(
+        <TraverseWrap
+		      batchData={false}
+          widgetData={false}
+          versionData={false}
+          groupData={false}
+          user={user}
+          app={app}
+          title={Pref.batches + ' Overview'}
           subLink={subLink}
           action={false}
           base={true}
           invertColor={true}
         >
-          <ExploreLanding
+          <AllBatches
+            batchData={allBatch}
+            widgetData={allWidget}
+            groupData={allGroup}
+            allWidget={allWidget}
+            allBatch={allBatch}
+            allXBatch={allXBatch}
+            app={app} />
+        </TraverseWrap>
+      );
+    }else if(request === 'items') {
+      return(
+        <TraverseWrap
+		      batchData={false}
+          widgetData={false}
+          versionData={false}
+          groupData={false}
+          user={user}
+          app={app}
+          title={Pref.items + ' Search'}
+          subLink={subLink}
+          action={false}
+          base={true}
+          invertColor={true}
+        >
+          <AllItems
             batchData={allBatch}
             xBatchData={allXBatch}
             widgetData={allWidget}
@@ -135,11 +244,8 @@ export default class DataViewOps extends Component	{
             app={app} />
         </TraverseWrap>
       );
-    }
-    
-    if(view === 'calendar') {
-      Session.set('nowBatch', false);
-      return (
+    }else if(request === 'scraps') {
+      return(
         <TraverseWrap
 		      batchData={false}
           widgetData={false}
@@ -147,21 +253,17 @@ export default class DataViewOps extends Component	{
           groupData={false}
           user={user}
           app={app}
-          title='Events Calendar'
+          title='Scraps Overview'
           subLink={subLink}
           action={false}
           base={true}
           invertColor={true}
         >
-          <Calendar
-            app={app} />
+          <ScrapPanel batchData={allBatch} />
         </TraverseWrap>
       );
-    }
-    
-    if(view === 'reports') {
-      Session.set('nowBatch', false);
-      return (
+    }else{
+      return(
         <TraverseWrap
 		      batchData={false}
           widgetData={false}
@@ -169,111 +271,54 @@ export default class DataViewOps extends Component	{
           groupData={false}
           user={user}
           app={app}
-          title='Reports'
+          title=''
           subLink={subLink}
           action={false}
           base={true}
-          invertColor={true}
         >
-          <ReportsWrap
-            batchData={allBatch}
-            widgetData={allWidget}
-            groupData={allGroup} 
-            app={app} />
+          <div className='centre'>
+            <p>remember the cant</p>
+          </div>
         </TraverseWrap>
       );
     }
+  }
     
-    if(view === 'overview') {
-      Session.set('nowBatch', false);
-      if(request === 'groups') {
-        return(
+// Item
+	if(view === 'batch' && specify) {
+    if(hotBatch) {
+      let item = itemData(hotBatch.items, specify);
+      let widget = linkedWidget(hotBatch.widgetId);
+      let version = versionData(widget.versions, hotBatch.versionKey);
+      let group = linkedGroup(widget.groupId);
+      if(item && widget && version && group) {
+        return (
           <TraverseWrap
-			      batchData={false}
-            widgetData={false}
-            versionData={false}
-            groupData={false}
+            batchData={hotBatch}
+            itemData={item}
+            widgetData={widget}
+            versionData={version}
+            groupData={group}
             user={user}
             app={app}
-            title={Pref.groups + ' Overview'}
+            title='Item'
             subLink={subLink}
-            action='newGroup'
-            base={true}
-            invertColor={true}
+            action='item'
+            //invertColor={true}
           >
-            <AllGroups
-              batchData={allBatch}
-              batchDataX={allXBatch}
-              widgetData={allWidget}
-              groupData={allGroup} 
+            <ItemPanel
+              batchData={hotBatch}
+              itemData={item}
+              widgetData={widget}
+              versionData={version}
+              groupData={group}
               app={app}
-              specify={specify} />
-          </TraverseWrap>
-        );
-      }else if(request === 'batches') {
-        return(
-          <TraverseWrap
-			      batchData={false}
-            widgetData={false}
-            versionData={false}
-            groupData={false}
-            user={user}
-            app={app}
-            title={Pref.batches + ' Overview'}
-            subLink={subLink}
-            action={false}
-            base={true}
-            invertColor={true}
-          >
-            <AllBatches
-              batchData={allBatch}
-              widgetData={allWidget}
-              groupData={allGroup}
-              allWidget={allWidget}
-              allBatch={allBatch}
-              allXBatch={allXBatch}
-              app={app} />
-          </TraverseWrap>
-        );
-      }else if(request === 'items') {
-        return(
-          <TraverseWrap
-			      batchData={false}
-            widgetData={false}
-            versionData={false}
-            groupData={false}
-            user={user}
-            app={app}
-            title={Pref.items + ' Search'}
-            subLink={subLink}
-            action={false}
-            base={true}
-            invertColor={true}
-          >
-            <AllItems
-              batchData={allBatch}
-              xBatchData={allXBatch}
-              widgetData={allWidget}
-              groupData={allGroup} 
-              app={app} />
-          </TraverseWrap>
-        );
-      }else if(request === 'scraps') {
-        return(
-          <TraverseWrap
-  		      batchData={false}
-            widgetData={false}
-            versionData={false}
-            groupData={false}
-            user={user}
-            app={app}
-            title='Scraps Overview'
-            subLink={subLink}
-            action={false}
-            base={true}
-            invertColor={true}
-          >
-            <ScrapPanel batchData={allBatch} />
+              user={user}
+              listTitle={true} />
+            <ItemsList
+              batchData={hotBatch}
+              widgetData={widget}
+              tide={orb} />
           </TraverseWrap>
         );
       }else{
@@ -285,239 +330,181 @@ export default class DataViewOps extends Component	{
             groupData={false}
             user={user}
             app={app}
-            title=''
+            title='!!!'
             subLink={subLink}
             action={false}
             base={true}
           >
-            <div className='centre'>
-              <p>remember the cant</p>
+            <div className='centre wide'>
+              <p className='big'>Data Does Not Exist</p>
             </div>
+            <div></div>
           </TraverseWrap>
         );
       }
     }
-    
-  // Item
-		if(view === 'batch' && specify) {
-      if(hotBatch) {
-        let item = this.itemData(hotBatch.items, specify);
-        let widget = this.linkedWidget(hotBatch.widgetId);
-        let version = this.versionData(widget.versions, hotBatch.versionKey);
-        let group = this.linkedGroup(widget.groupId);
-        if(item && widget && version && group) {
-          return (
-            <TraverseWrap
-              batchData={hotBatch}
-              itemData={item}
-              widgetData={widget}
-              versionData={version}
-              groupData={group}
-              user={user}
-              app={app}
-              title='Item'
-              subLink={subLink}
-              action='item'
-              //invertColor={true}
-            >
-              <ItemPanel
-                batchData={hotBatch}
-                itemData={item}
-                widgetData={widget}
-                versionData={version}
-                groupData={group}
-                app={app}
-                user={user}
-                listTitle={true} />
-              <ItemsList
-                batchData={hotBatch}
-                widgetData={widget}
-                tide={orb} />
-            </TraverseWrap>
-          );
-        }else{
-          return(
-            <TraverseWrap
-    		      batchData={false}
-              widgetData={false}
-              versionData={false}
-              groupData={false}
-              user={user}
-              app={app}
-              title='!!!'
-              subLink={subLink}
-              action={false}
-              base={true}
-            >
-              <div className='centre wide'>
-                <p className='big'>Data Does Not Exist</p>
-              </div>
-              <div></div>
-            </TraverseWrap>
-          );
-        }
-      }
-    }
-
-  // Batch
-    if(view === 'batch') {
-      if(hotBatch) {
-        let widget = this.linkedWidget(hotBatch.widgetId);
-        let version = this.versionData(widget.versions, hotBatch.versionKey);
-        let group = this.linkedGroup(widget.groupId);
-        return (
-			    <TraverseWrap
-			      batchData={hotBatch}
-            widgetData={widget}
-            versionData={version}
-            groupData={group}
-            user={user}
-            app={app}
-            title='Batch'
-            subLink={subLink}
-            action='batch'
-            //invertColor={true}
-          >
-            <BatchPanel
-              batchData={hotBatch}
-              widgetData={widget}
-              versionData={version}
-              groupData={group} 
-              app={app}
-              user={user} />
-            <ItemsList
-			        batchData={hotBatch}
-			        widgetData={widget}
-			        tide={orb} />
-          </TraverseWrap>
-        );
-      }else if(hotXBatch) {
-        let widget = this.linkedWidget(hotXBatch.widgetId);
-        let version = this.versionData(widget.versions, hotXBatch.versionKey);
-        let group = this.linkedGroup(hotXBatch.groupId);
-        return (
-			    <TraverseWrap
-			      batchData={hotXBatch}
-            widgetData={widget}
-            versionData={version}
-            groupData={group}
-            user={user}
-            app={app}
-            title='Batch+'
-            subLink={subLink}
-            action='xbatch'
-            //invertColor={true}
-          >
-            <BatchPanelX
-              batchData={hotXBatch}
-              widgetData={widget}
-              versionData={version}
-              groupData={group} 
-              app={app}
-              user={user} />
-            <div>no items</div>
-          </TraverseWrap>
-        );
-      }
-    }
-
-  // Version  
-    if(view === 'widget' && specify) {
-      let widget = this.getWidget(request);
-      let version = this.versionData(widget.versions, specify);
-      if(widget && version) {
-        Session.set('nowBatch', false);
-        let group = this.linkedGroup(widget.groupId);
-        let allWidgets = this.groupWidgets(widget.groupId);
-        let allBatches = this.verLinkedBatches(version.versionKey);
-        return (
-          <TraverseWrap
-            batchData={false}
-            itemData={false}
-            widgetData={widget}
-            versionData={version}
-            groupData={group}
-            user={user}
-            app={app}
-            title='Version'
-            subLink={subLink}
-            action='version'
-            invertColor={true}
-          >
-            <VersionPanel
-              versionData={version}
-              widgetData={widget}
-              groupData={group}
-              batchRelated={allBatches}
-              app={app}
-              user={user}
-            />
-            <BatchesList
-              batchData={allBatches}
-              versionData={version}
-              widgetData={allWidgets} />
-          </TraverseWrap>
-        );
-      }
-    }
-  // Widget
-    if(view === 'widget') {
-      const widget = this.getWidget(request);
-      if(widget) {
-        Session.set('nowBatch', false);
-        let group = this.linkedGroup(widget.groupId);
-        let allWidgets = this.groupWidgets(widget.groupId);
-        let allBatches = this.allLinkedBatches(widget._id);
-        return (
-          <TraverseWrap
-            batchData={false}
-            itemData={false}
-            widgetData={widget}
-            versionData={false}
-            groupData={group}
-            user={user}
-            app={app}
-            title='Widget'
-            subLink={subLink}
-            action='widget'
-            invertColor={true}
-          >
-            <WidgetPanel
-              widgetData={widget}
-              groupData={group}
-              batchRelated={allBatches}
-              app={app}
-              user={user}
-            />
-            <BatchesList
-              batchData={allBatches}
-              widgetData={allWidgets} />
-          </TraverseWrap>
-        );
-      }
-    }
-    
-    Session.set('nowBatch', false);
-		return (
-		  <TraverseWrap
-	      batchData={false}
-        widgetData={false}
-        versionData={false}
-        groupData={false}
-        user={user}
-        app={app}
-        title='???'
-        subLink={subLink}
-        action={false}
-        base={true}
-      >
-        <div className='centre wide'>
-          <p className='biggest'>¯\_(ツ)_/¯</p>
-          <br />
-          <SearchHelp />
-        </div>
-        <div></div>
-      </TraverseWrap>
-    );
   }
-}
+
+// Batch
+  if(view === 'batch') {
+    if(hotBatch) {
+      let widget = linkedWidget(hotBatch.widgetId);
+      let version = versionData(widget.versions, hotBatch.versionKey);
+      let group = linkedGroup(widget.groupId);
+      return (
+		    <TraverseWrap
+		      batchData={hotBatch}
+          widgetData={widget}
+          versionData={version}
+          groupData={group}
+          user={user}
+          app={app}
+          title='Batch'
+          subLink={subLink}
+          action='batch'
+          //invertColor={true}
+        >
+          <BatchPanel
+            batchData={hotBatch}
+            widgetData={widget}
+            versionData={version}
+            groupData={group} 
+            app={app}
+            user={user} />
+          <ItemsList
+		        batchData={hotBatch}
+		        widgetData={widget}
+		        tide={orb} />
+        </TraverseWrap>
+      );
+    }else if(hotXBatch) {
+      let widget = linkedWidget(hotXBatch.widgetId);
+      let version = versionData(widget.versions, hotXBatch.versionKey);
+      let group = linkedGroup(hotXBatch.groupId);
+      return (
+		    <TraverseWrap
+		      batchData={hotXBatch}
+          widgetData={widget}
+          versionData={version}
+          groupData={group}
+          user={user}
+          app={app}
+          title='Batch+'
+          subLink={subLink}
+          action='xbatch'
+          //invertColor={true}
+        >
+          <BatchPanelX
+            batchData={hotXBatch}
+            widgetData={widget}
+            versionData={version}
+            groupData={group} 
+            app={app}
+            user={user} />
+          <div>no items</div>
+        </TraverseWrap>
+      );
+    }
+  }
+
+// Version  
+  if(view === 'widget' && specify) {
+    let widget = getWidget(request);
+    let version = versionData(widget.versions, specify);
+    if(widget && version) {
+      Session.set('nowBatch', false);
+      let group = linkedGroup(widget.groupId);
+      let allWidgets = groupWidgets(widget.groupId);
+      let allBatches = verLinkedBatches(version.versionKey);
+      return (
+        <TraverseWrap
+          batchData={false}
+          itemData={false}
+          widgetData={widget}
+          versionData={version}
+          groupData={group}
+          user={user}
+          app={app}
+          title='Version'
+          subLink={subLink}
+          action='version'
+          invertColor={true}
+        >
+          <VersionPanel
+            versionData={version}
+            widgetData={widget}
+            groupData={group}
+            batchRelated={allBatches}
+            app={app}
+            user={user}
+          />
+          <BatchesList
+            batchData={allBatches}
+            versionData={version}
+            widgetData={allWidgets} />
+        </TraverseWrap>
+      );
+    }
+  }
+// Widget
+  if(view === 'widget') {
+    const widget = getWidget(request);
+    if(widget) {
+      Session.set('nowBatch', false);
+      let group = linkedGroup(widget.groupId);
+      let allWidgets = groupWidgets(widget.groupId);
+      let allBatches = allLinkedBatches(widget._id);
+      return(
+        <TraverseWrap
+          batchData={false}
+          itemData={false}
+          widgetData={widget}
+          versionData={false}
+          groupData={group}
+          user={user}
+          app={app}
+          title='Widget'
+          subLink={subLink}
+          action='widget'
+          invertColor={true}
+        >
+          <WidgetPanel
+            widgetData={widget}
+            groupData={group}
+            batchRelated={allBatches}
+            app={app}
+            user={user}
+          />
+          <BatchesList
+            batchData={allBatches}
+            widgetData={allWidgets} />
+        </TraverseWrap>
+      );
+    }
+  }
+    
+  Session.set('nowBatch', false);
+	return(
+	  <TraverseWrap
+      batchData={false}
+      widgetData={false}
+      versionData={false}
+      groupData={false}
+      user={user}
+      app={app}
+      title='???'
+      subLink={subLink}
+      action={false}
+      base={true}
+    >
+      <div className='centre wide'>
+        <p className='biggest'>¯\_(ツ)_/¯</p>
+        <br />
+        <SearchHelp />
+      </div>
+      <div></div>
+    </TraverseWrap>
+  );
+};
+
+export default DataViewOps;

@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 
 import JumpText from '../../../components/tinyUi/JumpText.jsx';
 // import StatsSimple from '../../../components/smallUi/StatsSimple.jsx';
@@ -14,7 +13,6 @@ export default class BatchDoneCard extends Component {
     let b = this.props.batchData;
 
     return (
-      <AnimateWrap type='cardTrans'>
         <div className='card' key={1}>
           <div className='space'>
             <h1>{b.batch}</h1>
@@ -37,7 +35,6 @@ export default class BatchDoneCard extends Component {
   
           </div>
   			</div>
-			</AnimateWrap>
     );
   }
 }

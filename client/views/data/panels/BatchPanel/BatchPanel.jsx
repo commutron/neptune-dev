@@ -1,6 +1,5 @@
 import React from 'react';
-import moment from 'moment';
-import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
+// import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import ProgressCounter from '/client/components/utilities/ProgressCounter.js';
 import CreateTag from '/client/components/uUi/CreateTag.jsx';
@@ -89,85 +88,83 @@ const BatchPanel = (props)=> {
                         
 
   return(
-    <AnimateWrap type='cardTrans'>
-      <div className='section' key={b.batch}>
+    <div className='section' key={b.batch}>
+      
+      <Tabs
+        tabs={
+          [
+            'Info',
+            'Time',
+            'Events',
+            `${Pref.nonCon}s`,
+            `${Pref.rma}s`
+          ]
+        }
+        wide={true}
+        stick={false}
+        hold={true}
+        sessionTab='batchPanelTabs'>
         
-        <Tabs
-          tabs={
-            [
-              'Info',
-              'Time',
-              'Events',
-              `${Pref.nonCon}s`,
-              `${Pref.rma}s`
-            ]
-          }
-          wide={true}
-          stick={false}
-          hold={true}
-          sessionTab='batchPanelTabs'>
+        <InfoTab 
+          a={props.app}
+          b={props.batchData}
+          user={props.user}
+          done={done}
+          allDone={allDone}
+          progCounts={path.progCounts}
+          riverTitle={path.riverTitle}
+          riverAltTitle={path.riverAltTitle} />
+      
+        <TimeTab 
+          a={props.app}
+          b={props.batchData}
+          v={v}
+          user={props.user}
+          totalUnits={path.progCounts.totalRegUnits + path.progCounts.totalAltUnits}
+          done={done}
+          allDone={allDone}
+          riverFlow={path.riverFlow}
+          riverAltFlow={path.riverAltFlow} />
           
-          <InfoTab 
-            a={props.app}
-            b={props.batchData}
-            user={props.user}
-            done={done}
-            allDone={allDone}
-            progCounts={path.progCounts}
-            riverTitle={path.riverTitle}
-            riverAltTitle={path.riverAltTitle} />
+        <div className='space3v'>
+          <EventsTimeline
+            id={b._id}
+            batch={b.batch}
+            verifyList={filter.verifyList}
+            eventList={b.events || []}
+            alterList={b.altered || []}
+            quoteList={b.quoteTimeBudget || []}
+            doneBatch={done} />
+        </div>
         
-          <TimeTab 
-            a={props.app}
-            b={props.batchData}
-            v={v}
-            user={props.user}
-            totalUnits={path.progCounts.totalRegUnits + path.progCounts.totalAltUnits}
-            done={done}
-            allDone={allDone}
-            riverFlow={path.riverFlow}
-            riverAltFlow={path.riverAltFlow} />
-            
-          <div className='space3v'>
-            <EventsTimeline
-              id={b._id}
-              batch={b.batch}
-              verifyList={filter.verifyList}
-              eventList={b.events || []}
-              alterList={b.altered || []}
-              quoteList={b.quoteTimeBudget || []}
-              doneBatch={done} />
-          </div>
-          
-          <NCTab 
-            a={props.app}
-            b={props.batchData}
-            riverFlow={path.riverFlow}
-            riverAltFlow={path.riverAltFlow}
-            ncListKeys={path.ncListKeys.flat()} />
-          
-          <div>
-            <RMATable
-              id={b._id}
-              data={b.cascade}
-              items={b.items}
-              options={a.trackOption}
-              end={a.lastTrack}
-              inUse={filter.rmaList}
-              app={a} />
-            <p>{Pref.escape}s: {b.escaped.length}</p>
-          </div>
-          
-        </Tabs>
+        <NCTab 
+          a={props.app}
+          b={props.batchData}
+          riverFlow={path.riverFlow}
+          riverAltFlow={path.riverAltFlow}
+          ncListKeys={path.ncListKeys.flat()} />
         
-        <CreateTag
-          when={b.createdAt}
-          who={b.createdWho}
-          whenNew={b.updatedAt}
-          whoNew={b.updatedWho}
-          dbKey={b._id} />
-      </div>
-    </AnimateWrap>
+        <div>
+          <RMATable
+            id={b._id}
+            data={b.cascade}
+            items={b.items}
+            options={a.trackOption}
+            end={a.lastTrack}
+            inUse={filter.rmaList}
+            app={a} />
+          <p>{Pref.escape}s: {b.escaped.length}</p>
+        </div>
+        
+      </Tabs>
+      
+      <CreateTag
+        when={b.createdAt}
+        who={b.createdWho}
+        whenNew={b.updatedAt}
+        whoNew={b.updatedWho}
+        dbKey={b._id} />
+    </div>
   );
 };
 

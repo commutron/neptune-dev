@@ -45,6 +45,8 @@ const ProdData = ({
       </div>
     );
   }
+  
+  const activeUsers = users.filter( x => Roles.userIsInRole(x._id, 'active') === true);
     
   return (
     <ProductionFindOps
@@ -52,7 +54,7 @@ const ProdData = ({
       anchor={anchor}
       user={user}
       org={org}
-      users={users}
+      activeUsers={activeUsers}
       app={app}
       allGroup={allGroup}
       allWidget={allWidget}

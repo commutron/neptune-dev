@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
-import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import { CalcSpin } from '/client/components/uUi/Spin.jsx';
 import DumbFilter from '/client/components/tinyUi/DumbFilter.jsx';
 import LeapRow from '/client/components/tinyUi/LeapRow.jsx';
@@ -26,27 +25,25 @@ const WidgetsDepth = ({ groupAlias, widgetData, active })=> {
           tx.describe.toLowerCase().includes(textString) === true);
 
   return(
-    <AnimateWrap type='cardTrans'>
-      <div className='' key={1}>
-        <DumbFilter
-          size='big'
-          onTxtChange={(e)=>setTextFilter(e)}
-          labelText='Filter searches id and description, not case-sensitve.' />
-        
-        <div className='tableList'>
-          {w.length < 1 ? <p>no {Pref.widget}s created</p> : null}
-            { showList.map( (entry, index)=> {
-            let ac = active.includes(entry._id) ? 'activeMark' : '';
-              return(
-                <WidgetIndexCard 
-                  key={index} 
-                  data={entry} 
-                  barStyle={ac} />
-            )})}
-        </div>
-        
+    <div className='' key={1}>
+      <DumbFilter
+        size='big'
+        onTxtChange={(e)=>setTextFilter(e)}
+        labelText='Filter searches id and description, not case-sensitve.' />
+      
+      <div className='tableList'>
+        {w.length < 1 ? <p>no {Pref.widget}s created</p> : null}
+          { showList.map( (entry, index)=> {
+          let ac = active.includes(entry._id) ? 'activeMark' : '';
+            return(
+              <WidgetIndexCard 
+                key={index} 
+                data={entry} 
+                barStyle={ac} />
+          )})}
       </div>
-    </AnimateWrap>
+      
+    </div>
   ); 
 };
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import moment from 'moment';
-import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 //import TideLock from '/client/components/tide/TideLock.jsx';
 import Pref from '/client/global/pref.js';
 import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
@@ -10,20 +9,21 @@ import GeneralChunk from '/client/views/data/panels/BatchPanel/GeneralChunk.jsx'
 import FloorRelease from '/client/components/smallUi/FloorRelease.jsx';
 import StepsProgress from '../../../components/bigUi/StepsProgress/StepsProgress.jsx';
 
-const BatchCard = (props)=> {
+const BatchCard = ({ 
+  batchData, itemSerial, widgetData, groupData, 
+  user, app,
+  flow, flowAlt, progCounts,
+  currentLive
+})=> {
 
-  const b = props.batchData;
-  const iS = props.itemSerial;
-  const w = props.widgetData;
-  //const g = this.props.groupData;
-  const u = props.user;
-  const a = props.app;
+  const b = batchData;
+  // const iS = itemSerial;
+  // const w = widgetData;
+  //const g = groupData;
+  // const u = user;
+  const a = app;
   
-  const flow = props.flow;
-  const flowAlt = props.flowAlt;
   const done = b.finishedAt !== false;
-  
-  const progCounts = props.progCounts;
 
   let iNoready = b.items.length === 0;
   
@@ -40,9 +40,8 @@ const BatchCard = (props)=> {
   ];
 
   return(
-    <AnimateWrap type='cardTrans'>
       <div className='sidebar' key={b.batch}>
-        {/*<TideLock currentLive={this.props.currentLive}></TideLock>*/}
+        {/*<TideLock currentLive={currentLive}></TideLock>*/}
           {iNoready &&
             <div className='centre centreText space'>
               <p><i className="fas fa-exclamation-triangle fa-4x orangeT"></i></p>
@@ -74,7 +73,13 @@ const BatchCard = (props)=> {
             </div>
             
             <div className='space cap'>
-              <StepsProgress progCounts={progCounts} truncate={true} />
+              {progCounts && 
+                <StepsProgress 
+                  progCounts={progCounts}
+                  riverTitle=''
+                  riverAltTitle=''
+                  truncate={true} />
+              }
             </div>
             
           </Tabs>
@@ -82,7 +87,6 @@ const BatchCard = (props)=> {
 			<br />
 
 			</div>
-		</AnimateWrap>
   );
 };
 

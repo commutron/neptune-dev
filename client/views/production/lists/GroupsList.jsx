@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 
 import JumpButton from '../../../components/tinyUi/JumpButton.jsx';
 import FilterActive from '../../../components/bigUi/FilterActive.jsx';
@@ -64,29 +63,27 @@ export default class GroupsList extends Component	{
                     return 0;
                   });
 
-    return (
-      <AnimateWrap type='cardTrans'>
-        <div className='section sidebar' key={1}>
-        
-          <FilterActive
-            title={g.alias}
-            done='Inactive'
-            total={showList.length}
-            onClick={e => this.setFilter(e)}
-            onTxtChange={e => this.setTextFilter(e)} />
-            
-          { sortList.map( (entry)=> {
-            let ac = a.includes(entry._id) ? 'leapBar activeMark' : 'leapBar';
-            return (
-              <JumpButton
-                key={entry._id}
-                title={entry.alias}
-                sub=''
-                sty={ac}
-              />
-            )})}
-  			</div>
-			</AnimateWrap>
+    return(
+      <div className='section sidebar' key={1}>
+      
+        <FilterActive
+          title={g.alias}
+          done='Inactive'
+          total={showList.length}
+          onClick={e => this.setFilter(e)}
+          onTxtChange={e => this.setTextFilter(e)} />
+          
+        { sortList.map( (entry)=> {
+          let ac = a.includes(entry._id) ? 'leapBar activeMark' : 'leapBar';
+          return (
+            <JumpButton
+              key={entry._id}
+              title={entry.alias}
+              sub=''
+              sty={ac}
+            />
+          )})}
+			</div>
     );
   }
 }

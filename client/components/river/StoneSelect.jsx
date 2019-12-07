@@ -1,7 +1,7 @@
 import React from 'react';
-import moment from 'moment';
+// import moment from 'moment';
 import InOutWrap from '/client/components/tinyUi/InOutWrap.jsx';
-import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 
 import Stone from './Stone.jsx';
 import FirstForm from './FirstForm.jsx';
@@ -96,7 +96,7 @@ const StoneSelect = ({
 	    Session.set('ncWhere', stepPhase.toLowerCase());
 	    Session.set('nowStepKey', flowStep.key);
       Session.set('nowWanchor', flowStep.how);
-	    return (
+	    return(
         <div>
           <div>
 		        <InOutWrap type='stoneTrans'>
@@ -186,6 +186,8 @@ const StoneSelect = ({
       </InOutWrap>
     );
   }
+  
+  return(null);
 };
   
 export default StoneSelect;

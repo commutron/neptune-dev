@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 
 import LeapRow from '/client/components/tinyUi/LeapRow.jsx';
 import DumbFilter from '/client/components/tinyUi/DumbFilter.jsx';
@@ -56,37 +55,35 @@ export default class BatchesListWide extends Component	{
                 return 0;
               });
     return(
-      <AnimateWrap type='cardTrans'>
-        <div className='centre' key={1}>
-          <div className='tableList'>
-            <div className=''>
-              <DumbFilter
-                id='batchOverview'
-                size='bigger'
-                onTxtChange={e => this.setTextFilter(e)}
-                labelText='Filter any text, not case-sensitve.'
-                list={this.props.app.tagOption} />
-            </div>
-
-            {sortList.map( (entry, index)=> {
-              const tags = entry.tags.map( (et, ix)=>{
-                return(<span key={ix} className='tagFlag'><i>{et}</i></span>)});
-                return (
-                  <LeapRow
-                    key={index}
-                    title={entry.batchNumber.toUpperCase()}
-                    cTwo={<i><i className='smaller'>so: </i>{entry.salesNumber.toUpperCase()}</i>}
-                    cThree={entry.groupAlias.toUpperCase()}
-                    cFour={entry.widget.toUpperCase() + ' v.' + entry.version}
-                    cFive={tags}
-                    sty={entry.highlight + ' lastSpanRight'}
-                    address={'/data/batch?request=' + entry.batchNumber}
-                  />
-            )})}
-          
+      <div className='centre' key={1}>
+        <div className='tableList'>
+          <div className=''>
+            <DumbFilter
+              id='batchOverview'
+              size='bigger'
+              onTxtChange={e => this.setTextFilter(e)}
+              labelText='Filter any text, not case-sensitve.'
+              list={this.props.app.tagOption} />
           </div>
-  			</div>
-			</AnimateWrap>
+
+          {sortList.map( (entry, index)=> {
+            const tags = entry.tags.map( (et, ix)=>{
+              return(<span key={ix} className='tagFlag'><i>{et}</i></span>)});
+              return (
+                <LeapRow
+                  key={index}
+                  title={entry.batchNumber.toUpperCase()}
+                  cTwo={<i><i className='smaller'>so: </i>{entry.salesNumber.toUpperCase()}</i>}
+                  cThree={entry.groupAlias.toUpperCase()}
+                  cFour={entry.widget.toUpperCase() + ' v.' + entry.version}
+                  cFive={tags}
+                  sty={entry.highlight + ' lastSpanRight'}
+                  address={'/data/batch?request=' + entry.batchNumber}
+                />
+          )})}
+        
+        </div>
+			</div>
     );
   }
 }

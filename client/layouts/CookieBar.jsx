@@ -1,8 +1,12 @@
-import { Meteor } from 'meteor/meteor';
 import React from 'react';
-//import ActionBar from '/client/components/bigUi/ActionBar.jsx';
 
-const CookieBar = ({ groupData, widgetData, versionData, batchData, itemData, app, action, miniAction }) => {
+const CookieBar = ({ 
+  groupData, 
+  widgetData, versionData, 
+  batchData, itemData, 
+  app, 
+  action, miniAction
+}) => {
   
   return(
     <div className='cookieRow'>

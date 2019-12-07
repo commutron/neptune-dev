@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 
 import JumpText from '../../../components/tinyUi/JumpText.jsx';
 
@@ -22,7 +21,6 @@ export default class WidgetCard extends Component {
               });
 
     return (
-      <AnimateWrap type='cardTrans'>
         <div className='section sidebar' key={w.widget}>
           <div className='space'>
             <JumpText title={g.alias} link={g.alias} />
@@ -53,7 +51,6 @@ export default class WidgetCard extends Component {
               widgetData={[w]} />
               
         </div>
-      </AnimateWrap>
     );
   }
 }

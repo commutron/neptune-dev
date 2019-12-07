@@ -1,6 +1,5 @@
 import React from 'react';
 //import moment from 'moment';
-import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import Pref from '/client/global/pref.js';
 import CreateTag from '/client/components/uUi/CreateTag.jsx';
 
@@ -62,71 +61,69 @@ const ItemPanel = (props)=>	{
   const path = !b ? { ncListKeys: [] } : getFlows();
 
 
-  return (
-    <AnimateWrap type='cardTrans'>
-      <div className='section' key={i.serial}>
+  return(
+    <div className='section' key={i.serial}>
+    
+      <div className='titleSection'>
+        <span>Units: {i.units}</span>
+        <span>
+          { !start ?
+            <i className='fas fa-hourglass-start' title='unstarted'></i>
+            :
+            done ? 
+            <i className='fas fa-check-circle greenT' title='finished'></i>
+            : 
+            <i className='fas fa-sync blueT' title='in progress'></i>
+          }
+        </span>
+        <span>
+        {/*
+          <WatchButton 
+            list={user.watchlist}
+            type='item'
+            keyword={`${i.serial}+${b.batch}`} />
+        */}
+        </span>
+      </div>
       
-        <div className='titleSection'>
-          <span>Units: {i.units}</span>
-          <span>
-            { !start ?
-              <i className='fas fa-hourglass-start' title='unstarted'></i>
-              :
-              done ? 
-              <i className='fas fa-check-circle greenT' title='finished'></i>
-              : 
-              <i className='fas fa-sync blueT' title='in progress'></i>
-            }
-          </span>
-          <span>
-          {/*
-            <WatchButton 
-              list={user.watchlist}
-              type='item'
-              keyword={`${i.serial}+${b.batch}`} />
-          */}
-          </span>
-        </div>
+      <div className='space'>
+        { i.subItems.length > 0 && 
+          <p> 
+            <i>Nested sub {Pref.item}s: </i>
+            {i.subItems.map((ent, inx)=> { 
+              return( <i key={inx}><SubItemLink serial={ent} />, </i> ) } ) }
+          </p>}
+        { i.panelCode !== false && <p>Panel: {i.panelCode}</p> }
+        {scrap && <ScrapBox entry={scrap} />}
         
-        <div className='space'>
-          { i.subItems.length > 0 && 
-            <p> 
-              <i>Nested sub {Pref.item}s: </i>
-              {i.subItems.map((ent, inx)=> { 
-                return( <i key={inx}><SubItemLink serial={ent} />, </i> ) } ) }
-            </p>}
-          { i.panelCode !== false && <p>Panel: {i.panelCode}</p> }
-          {scrap && <ScrapBox entry={scrap} />}
-          
-          <br />
-          
-          <ItemFeed
-            id={b._id}
-            batch={b.batch}
-            serial={i.serial}
-            createTime={i.createdAt}
-            createBy={i.createdWho}
-            history={i.history}
-            noncons={nc}
-            ncListKeys={path.ncListKeys.flat()}
-            shortfalls={sh}
-            rmas={i.rma}
-            allRMA={b.cascade}
-            done={done}
-            user={user}
-            app={a} />
-              
-          <br />
-        </div>
+        <br />
         
-        <CreateTag
-          when={i.createdAt}
-          who={i.createdWho}
-          whenNew={i.createdAt}
-          whoNew={i.createdWho}
-          dbKey={i.serial} />
-			</div>
-		</AnimateWrap>
+        <ItemFeed
+          id={b._id}
+          batch={b.batch}
+          serial={i.serial}
+          createTime={i.createdAt}
+          createBy={i.createdWho}
+          history={i.history}
+          noncons={nc}
+          ncListKeys={path.ncListKeys.flat()}
+          shortfalls={sh}
+          rmas={i.rma}
+          allRMA={b.cascade}
+          done={done}
+          user={user}
+          app={a} />
+            
+        <br />
+      </div>
+      
+      <CreateTag
+        when={i.createdAt}
+        who={i.createdWho}
+        whenNew={i.createdAt}
+        whoNew={i.createdWho}
+        dbKey={i.serial} />
+		</div>
   );
 };
 

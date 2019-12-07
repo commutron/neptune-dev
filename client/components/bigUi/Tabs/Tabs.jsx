@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import AnimateWrap from '/client/components/tinyUi/AnimateWrap.jsx';
 import './style.css';
 
 const Tabs = ({ tabs, names, wide, stick, hold, sessionTab, children })=> {
@@ -29,13 +28,11 @@ const Tabs = ({ tabs, names, wide, stick, hold, sessionTab, children })=> {
             >{entry} {names && names[index]}</button>
         )})}
       </div>
-      <AnimateWrap type='cardTrans'>
-        <div className='tabBody'>
+      <div className='tabBody'>
 
-          {children[show]}
-        
-        </div>
-      </AnimateWrap>
+        {children[show]}
+      
+      </div>
     </div>
   );
 };

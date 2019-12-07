@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import ErrorCatch from '/client/components/utilities/ErrorCatch.jsx';
 import { ToastContainer } from 'react-toastify';
@@ -11,98 +11,96 @@ import FindBox from './FindBox.jsx';
 import FormBar from '/client/components/bigUi/FormBar.jsx';
 import ProgressCounter from '/client/components/utilities/ProgressCounter.js';
 
-export class ProWrap extends Component	{
+export const ProWrap = ({ 
+  itemSerial, itemData, batchData, widgetData, versionData, groupAlias, 
+  user, users, app,
+  action, tideLockOut, standAlone,
+  children
+})=> {
   
-  constructor() {
-    super();
-    this.state = {
-      expand: false,
-      showVerify: false,
-      optionVerify: false
-    };
-    this.handleVerify = this.handleVerify.bind(this);
-    this.handleExpand = this.handleExpand.bind(this);
-  }
+  const [ expand, expandSet ] = useState(false);
+  const [ showVerify, showVerifySet ] = useState(false);
+  const [ optionVerify, optionVerifySet ] = useState(false);
   
-  componentDidMount() {
-    const open = Session.get('riverExpand');
-    !open ? null : this.setState({ expand: true });
-  }
-  
-  handleVerify(value) {
-    this.setState({
-      showVerify: !this.state.showVerify, 
-      optionVerify: value 
-    });
-  }
-  
-  handleExpand() {
-    const openState = this.state.expand;
-    this.setState({ expand: !openState });
-    Session.set( 'riverExpand', !openState );
-  }
-  
-  getFlows() {
-    const b = this.props.batchData;
-    const w = this.props.widgetData;
-    let flow = [];
-    let flowAlt = [];
-    let ncListKeys = [];
-    let progCounts = false;
+  const [ flow, flowSet ] = useState([]);
+  const [ flowAlt, flowAltSet ] = useState([]);
+  const [ ncListKeys, ncListKeysSet ] = useState([]);
+  const [ progCounts, progCountsSet ] = useState(false);
+
+
+  useLayoutEffect( ()=> {
+    !Session.get('riverExpand') ? null : expandSet( true );
+    
+    const b = batchData;
+    const w = widgetData;
+    let getFlow = [];
+    let getFlowAlt = [];
+    let getNCListKeys = [];
+    let getProgCounts = false;
     if( b && w ) {
       const river = w.flows.find( x => x.flowKey === b.river);
       const riverAlt = w.flows.find( x => x.flowKey === b.riverAlt );
       if(river) {
-        flow = river.flow;
-        river.type === 'plus' && ncListKeys.push(river.ncLists);
+        getFlow = river.flow;
+        river.type === 'plus' && getNCListKeys.push(river.ncLists);
       }
       if(riverAlt) {
-        flowAlt = riverAlt.flow;
-        riverAlt.type === 'plus' && ncListKeys.push(riverAlt.ncLists);
+        getFlowAlt = riverAlt.flow;
+        riverAlt.type === 'plus' && getNCListKeys.push(riverAlt.ncLists);
       }
-      if(this.props.action !== 'xBatchBuild') {
-        progCounts = ProgressCounter(flow, flowAlt, b);
+      if(action !== 'xBatchBuild') {
+        getProgCounts = ProgressCounter(getFlow, getFlowAlt, b);
       }
     }
-    return { flow, flowAlt, ncListKeys, progCounts };
+    flowSet(getFlow);
+    flowAltSet(getFlowAlt);
+    ncListKeysSet(getNCListKeys);
+    progCountsSet(getProgCounts);
+    
+  }, [batchData, widgetData]);
+  
+  
+  function handleVerify(value) {
+    showVerifySet( !showVerify ); 
+    optionVerifySet( value );
   }
   
-  render() {
+  function handleExpand() {
+    const openState = expand;
+    expandSet( !openState );
+    Session.set( 'riverExpand', !openState );
+  }
     
-    let scrollFix = {
-      overflowY: 'auto'
-    };
+  let scrollFix = {
+    overflowY: 'auto'
+  };
+  
+  const u = user;
+  const gAlias = groupAlias;
+  const bData = batchData;
+  const iS = itemSerial;
+  const append = bData && iS ? bData.batch : null;
+  
+  const et = !u || !u.engaged ? false : u.engaged.tKey;
+  const tide = !bData || !bData.tide ? [] : bData.tide;
+  const currentLive = tide.find( 
+    x => x.tKey === et && x.who === Meteor.userId() 
+  );
     
-    const u = this.props.user;
-    const gAlias = this.props.groupAlias;
-    const bData = this.props.batchData;
-    const iS = this.props.itemSerial;
-    const append = bData && iS ? bData.batch : null;
-    
-    const et = !u || !u.engaged ? false : u.engaged.tKey;
-    const tide = !bData || !bData.tide ? [] : bData.tide;
-    const currentLive = tide.find( 
-      x => x.tKey === et && x.who === Meteor.userId() 
-    );
-    
-    const exploreLink = iS && bData ?
-                        '/data/batch?request=' + bData.batch + '&specify=' + iS :
-                        bData ?
-                        '/data/batch?request=' + bData.batch :
-                        gAlias ?
-                        '/data/overview?request=groups&specify=' + gAlias :
-                        '/data/overview?request=batches';
-                        
-                        
-    const path = !bData ? { flow: [], flowAlt: [], ncListKeys: [], progCounts: false } 
-                        : this.getFlows();
+  const exploreLink = iS && bData ?
+                      '/data/batch?request=' + bData.batch + '&specify=' + iS :
+                      bData ?
+                      '/data/batch?request=' + bData.batch :
+                      gAlias ?
+                      '/data/overview?request=groups&specify=' + gAlias :
+                      '/data/overview?request=batches';
 
-    const cSize = this.props.children.length;
+  const cSize = children.length;
+  
+  let riverExpand = expand;
     
-    let riverExpand = this.state.expand;
-    
-    return(
-      <ErrorCatch>
+  return(
+    <ErrorCatch>
       <div className='containerPro'>
         <ToastContainer
           position="top-right"
@@ -117,7 +115,7 @@ export class ProWrap extends Component	{
                 batchID={bData._id} 
                 tideKey={et} 
                 currentLive={currentLive}
-                tideLockOut={this.props.tideLockOut} />
+                tideLockOut={tideLockOut} />
             </div>}
           <div className='frontCenterTitle'>
             <FindBox append={append} />
@@ -133,9 +131,9 @@ export class ProWrap extends Component	{
           <TideFollow proRoute={true} />
         </div>
         
-        {this.props.standAlone ?
+        {standAlone ?
           <div className='proFull'>
-            {this.props.children}
+            {children}
           </div>
         :
         <section className={!riverExpand ? 'proNarrow' : 'proWide'}>
@@ -148,27 +146,27 @@ export class ProWrap extends Component	{
             }
           >
             <div className='proPrime'>
-              {React.cloneElement(this.props.children[0],
+              {React.cloneElement(children[0],
                 { 
                   currentLive: currentLive,
-                  flow: path.flow,
-                  flowAlt: path.flowAlt,
-                  progCounts: path.progCounts,
-                  showVerify: this.state.showVerify,
-                  optionVerify: this.state.optionVerify,
-                  changeVerify: (q)=>this.handleVerify(q)
+                  flow: flow,
+                  flowAlt: flowAlt,
+                  progCounts: progCounts,
+                  showVerify: showVerify,
+                  optionVerify: optionVerify,
+                  changeVerify: (q)=>handleVerify(q)
                 }
               )}
             </div>
             
             {cSize > 2 && riverExpand ?
               <div className='proExpand'>
-                {React.cloneElement(this.props.children[1],
+                {React.cloneElement(children[1],
                   { 
                     currentLive: currentLive,
-                    flow: path.flow,
-                    flowAlt: path.flowAlt,
-                    progCounts: path.progCounts
+                    flow: flow,
+                    flowAlt: flowAlt,
+                    progCounts: progCounts
                   }
                 )}
               </div>
@@ -179,32 +177,31 @@ export class ProWrap extends Component	{
           <button
             type='button'
             className={!riverExpand ? 'riverExpandToggle' : 'riverShrinkToggle'}
-            onClick={()=>this.handleExpand()}>
+            onClick={()=>handleExpand()}>
             <i className='fas fa-sort fa-2x' data-fa-transform='rotate-90'></i>
           </button>
             
           <div className='proInstruct' style={scrollFix}>
-            {this.props.children[this.props.children.length - 1]}
+            {children[cSize - 1]}
           </div>
   
           <FormBar
-            batchData={this.props.batchData}
+            batchData={batchData}
             currentLive={currentLive}
-            itemData={this.props.itemData}
-            widgetData={this.props.widgetData}
-            versionData={this.props.versionData}
-            users={this.props.users}
-            user={this.props.user}
-            app={this.props.app}
-            ncListKeys={path.ncListKeys}
-            action={this.props.action}
-            showVerify={this.state.showVerify}
-            changeVerify={(q)=>this.handleVerify(q)} />
+            itemData={itemData}
+            widgetData={widgetData}
+            versionData={versionData}
+            users={users}
+            user={user}
+            app={app}
+            ncListKeys={ncListKeys}
+            action={action}
+            showVerify={showVerify}
+            changeVerify={(q)=>handleVerify(q)} />
           
         </section>
         }
       </div>
-      </ErrorCatch>
-    );
-  }
-}
+    </ErrorCatch>
+  );
+};
