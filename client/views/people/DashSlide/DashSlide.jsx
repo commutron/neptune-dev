@@ -57,11 +57,11 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
     Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({eUsers});
 
     const tideBatches = batches.filter( x => 
-      typeof x === 'object' && Array.isArray(x.tide) );
+      typeof x === 'object' && Array.isArray(x && x.tide) );
     
     const eBatches = eUsers.map( (user, index)=>{
       const acBatch = tideBatches.find( y =>
-        y.tide.find( z => z.tKey === user.engaged.tKey ) );
+        y.tide && y.tide.find( z => z.tKey === user.engaged.tKey ) );
       if(acBatch) {
         return acBatch;
       }  

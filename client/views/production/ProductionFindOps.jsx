@@ -132,7 +132,7 @@ const ProductionFindOps = ({
 // Batch
   if(!isNaN(orb) && orb.length === 5) {
     if(hotBatch) {
-      let widget =  linkedWidget(hotBatch.widgetId);
+      let widget = linkedWidget(hotBatch.widgetId);
       let version = versionData(widget.versions, hotBatch.versionKey);
       let group = linkedGroup(widget.groupId);
       return (

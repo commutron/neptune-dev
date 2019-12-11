@@ -6,9 +6,12 @@ import NCAdd from '../river/NCAdd.jsx';
 import NCFlood from '../river/NCFlood.jsx';
 import ShortAdd from '../river/ShortAdd.jsx';
 
-// batchData, itemData, app, action
-
-const FormBar = (props)=> {
+const FormBar = ({ 
+  batchData, itemData, widgetData, versionData, 
+  currentLive, ncListKeys, 
+  action, showVerify, changeVerify, 
+  user, users, app 
+})=> {
   
   const [ show, showSet ] = useState('NC');
   
@@ -17,36 +20,31 @@ const FormBar = (props)=> {
     this.ncselect.checked = true;
   }
   
-  const b = props.batchData;
-  const i = props.itemData;
-  //const w = props.widgetData;
-  //const v = props.versionData;
-  //const users = props.users;
-  const user = props.user;
-  const app = props.app;
+  const b = batchData;
+  const i = itemData;
     
-  const showX = b && props.action === 'xBatchBuild' && b.completed === false;
+  const showX = b && action === 'xBatchBuild' && b.completed === false;
   const showlegacyItem = (b && i) && !(b.finishedAt !== false || i.finishedAt !== false );
     
-  const pastPN = b.shortfall ? [...new Set( Array.from(b.shortfall, x => x.partNum ) )] : [];
-  const pastRF = b.shortfall ? [...new Set( Array.from(b.shortfall, x => x.refs.toString() ) )] : [];
+  const pastPN = b && b.shortfall ? [...new Set( Array.from(b.shortfall, x => x.partNum ) )] : [];
+  const pastRF = b && b.shortfall ? [...new Set( Array.from(b.shortfall, x => x.refs.toString() ) )] : [];
     
-  const ncListKeys = props.ncListKeys.flat();
+  const ncListKeysFlat = ncListKeys.flat();
     
   return(
-    <TideLock currentLive={props.currentLive} message={true}>
+    <TideLock currentLive={currentLive} message={true}>
     <div className='proActionForm'>
       {showX || showlegacyItem ?
         <div className='footLeft'>
-        {props.action === 'xBatchBuild' ? null :
+        {action === 'xBatchBuild' ? null :
           <label htmlFor='firstselect' className='formBarToggle'>
             <input
               type='checkbox'
               id='firstselect'
               name='toggleFirst'
               className='radioIcon'
-              checked={props.showVerify}
-              onChange={()=>props.changeVerify(true)}
+              checked={showVerify}
+              onChange={()=>changeVerify(true)}
               disabled={!Roles.userIsInRole(Meteor.userId(), 'verify')} />
             <i className='fas fa-thumbs-up formBarIcon'></i>
             <span className='actionIconText'>First</span>
@@ -77,7 +75,7 @@ const FormBar = (props)=> {
       : null}
       <div className='footCent'>
         {b ?
-          props.action === 'xBatchBuild' ?
+          action === 'xBatchBuild' ?
             show === 'NC' ?
               //<NCAdd 
                 //id={b._id}
@@ -100,7 +98,7 @@ const FormBar = (props)=> {
                   barcode={i.serial}
                   user={user}
                   app={app}
-                  ncListKeys={ncListKeys} />
+                  ncListKeys={ncListKeysFlat} />
               : show === 'S' ?
                 <ShortAdd
                   id={b._id}
@@ -116,7 +114,7 @@ const FormBar = (props)=> {
                 live={b.finishedAt === false}
                 user={user}
                 app={app}
-                ncListKeys={ncListKeys} />
+                ncListKeys={ncListKeysFlat} />
         : null}
       </div>
       <div className='footRight'></div>

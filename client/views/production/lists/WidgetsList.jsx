@@ -6,7 +6,7 @@ import FilterActive from '../../../components/bigUi/FilterActive.jsx';
 
 const WidgetsList = ({ active, widgetData, groupAlias })=> {
   
-  const [ filter, filterSet ] = useState(false);
+  const [ filterState, filterSet ] = useState(false);
   const [ textString, textStringSet ] = useState('');
   const [ showListState, showListSet ] = useState(widgetData);
   
@@ -15,25 +15,24 @@ const WidgetsList = ({ active, widgetData, groupAlias })=> {
   }
   
   useEffect( ()=> {
-    const a = active;
     const w = widgetData.sort((w1, w2)=> {
                 if (w1.widget < w2.widget) { return -1 }
                 if (w1.widget > w2.widget) { return 1 }
                 return 0;
               });
-    const f = filter;
+    const f = filterState;
   
     let basicFilter = 
       f === 'done' ?
-      w.filter( x => a.includes(x._id) === false ) :
+      w.filter( x => active.includes(x._id) === false ) :
       f === 'inproc' ?
-      w.filter( x => a.includes(x._id) !== false ) :
+      w.filter( x => active.includes(x._id) !== false ) :
       w;
     let showList = basicFilter.filter( 
       tx => tx.widget.toLowerCase().includes(textString) === true ||
             tx.describe.toLowerCase().includes(textString) === true);
     showListSet(showList);
-  }, [active, filter, textString]);
+  }, [active, filterState, textString]);
   
   
   return(
@@ -48,7 +47,7 @@ const WidgetsList = ({ active, widgetData, groupAlias })=> {
         
       {widgetData.length < 1 ? <p>no {Pref.widget}s created</p> : null}
         {showListState.map( (entry, index)=> {
-        let ac = a.includes(entry._id) ? 'leapBar activeMark' : 'leapBar';
+        let ac = active.includes(entry._id) ? 'leapBar activeMark' : 'leapBar';
           return (
             <LeapButton
               key={index}

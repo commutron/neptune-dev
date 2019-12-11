@@ -5,7 +5,7 @@ import FilterActive from '/client/components/bigUi/FilterActive.jsx';
 
 const GroupsList = ({ groupData, widgetData, batchData })=> {
   
-  const [ filter, filterSet ] = useState( false );
+  const [ filterState, filterSet ] = useState( false );
   const [ textString, textStringSet ] = useState( '' );
   const [ activeListState, activeListSet ] = useState( [] );
   const [ showListState, showListSet ] = useState( groupData );
@@ -41,14 +41,14 @@ const GroupsList = ({ groupData, widgetData, batchData })=> {
   useEffect( ()=> {
     
     const g = groupData;
-    const a = activeListState;
-    const f = filter;
+    const aL = activeListState;
+    const f = filterState;
     
     let basicFilter = 
       f === 'done' ?
-      g.filter( x => a.includes(x._id) === false ) :
+      g.filter( x => aL.includes(x._id) === false ) :
       f === 'inproc' ?
-      g.filter( x => a.includes(x._id) !== false ) :
+      g.filter( x => aL.includes(x._id) !== false ) :
       g;
     let showList = basicFilter.filter( 
       tx => tx.group.toLowerCase().includes(textString) === true ||
@@ -60,20 +60,20 @@ const GroupsList = ({ groupData, widgetData, batchData })=> {
                     return 0;
                   });
     showListSet(sortList);
-  }, [ groupData, filter, textString ]);
+  }, [ groupData, filterState, textString ]);
 
   return(
     <div className='section sidebar' key={1}>
     
       <FilterActive
-        title={g.alias}
+        title={groupData.alias}
         done='Inactive'
         total={showListState.length}
         onClick={e => setFilter(e)}
         onTxtChange={e => setTextFilter(e)} />
         
-      { sortListState.map( (entry)=> {
-        let ac = a.includes(entry._id) ? 'leapBar activeMark' : 'leapBar';
+      { showListState.map( (entry)=> {
+        let ac = activeListState.includes(entry._id) ? 'leapBar activeMark' : 'leapBar';
         return (
           <JumpButton
             key={entry._id}
