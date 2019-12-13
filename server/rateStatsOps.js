@@ -240,6 +240,29 @@ import 'moment-timezone';
     return shCount;
   }
   
+  export function countTestFail(accessKey, rangeStart, rangeEnd) {
+    
+    let tfCount = 0;
+    
+    const generalFind = BatchDB.find({
+      orgKey: accessKey, 
+      items: { $elemMatch: { createdAt: { 
+        $lte: new Date(rangeEnd) 
+      }}}
+    }).fetch();
+    
+    for(let gf of generalFind) {
+      const thisTF = gf.items.filter( x =>
+        x.history.find( y =>
+          moment(y.time).isBetween(rangeStart, rangeEnd) &&
+          y.type === 'test' && y.good === false )
+      );
+      
+      tfCount = tfCount + thisTF.length;   
+    }
+    return tfCount;
+  }
+  
   export function countScrap(accessKey, rangeStart, rangeEnd) {
     
     let scCount = 0;
@@ -294,6 +317,8 @@ Meteor.methods({
         loop = countNewNC;
       }else if( stat === 'newSH' ) {
         loop = countNewSH;
+      }else if( stat === 'failItem' ) {
+        loop = countTestFail;
       }else if( stat === 'scrapItem' ) {
         loop = countScrap;
       }else{

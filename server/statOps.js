@@ -30,9 +30,9 @@ function countItemsWith(accessKey, rangeStart, rangeEnd, historyType) {
   
   const generalFind = BatchDB.find({
     orgKey: accessKey, 
-    items: { createdAt: { 
+    items: { $elemMatch: { createdAt: {
       $lte: new Date(rangeEnd) 
-    }}
+    }}}
   }).fetch();
   
   for(let gf of generalFind) {
@@ -41,7 +41,6 @@ function countItemsWith(accessKey, rangeStart, rangeEnd, historyType) {
         moment(y.time).isBetween(rangeStart, rangeEnd) &&
         y.type === historyType && y.good === true )
     );
-    
     itemCount = itemCount + theseItems.length;   
   }
   return itemCount;

@@ -55,34 +55,39 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
     dUsersSet( dUsers );
     
     Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({eUsers});
-
-    const tideBatches = batches.filter( x => 
-      typeof x === 'object' && Array.isArray(x && x.tide) );
-    
-    const eBatches = eUsers.map( (user, index)=>{
-      const acBatch = tideBatches.find( y =>
-        y.tide && y.tide.find( z => z.tKey === user.engaged.tKey ) );
-      if(acBatch) {
-        return acBatch;
-      }  
-    });
-    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({tideBatches, eBatches});
-    eBatchesSet(eBatches);
+    try {
+      const tideBatches = batches.filter( x => 
+        typeof x === 'object' && Array.isArray(x && x.tide) );
+      
+      const eBatches = eUsers.map( (user, index)=>{
+        const acBatch = tideBatches.find( y =>
+          y.tide && y.tide.find( z => z.tKey === user.engaged.tKey ) );
+        if(acBatch) {
+          return acBatch;
+        }  
+      });
+      Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({tideBatches, eBatches});
+      eBatchesSet(eBatches);
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
   },[batches, users]);
   
   useEffect( ()=>{
-    const qBatches = eBatchesState.reduce( (allBatch, batch, index, array)=> { 
-      const objkey = !batch ? false : batch.batch;
-      objkey &&
-        objkey in allBatch ? allBatch[objkey]++ : allBatch[objkey] = 1;
-      return allBatch;
-    }, {});
-    const qBatchesClean = _.omit(qBatches, (value, key, object)=> {
-      return key == false;
-    });
-    const itrXY = obj2xy(qBatchesClean);
+    const qBatches = _.countBy(eBatchesState, x => x.batch);
+    const itrXY = obj2xy(qBatches);
   
-    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({qBatchesClean, itrXY});
+    // let QqBatches = eBatchesState.reduce( (allBatch, batch, index, array)=> { 
+    //   const objkey = !batch ? false : batch.batch;
+    //   objkey &&
+    //     objkey in allBatch ? allBatch[objkey]++ : allBatch[objkey] = 1;
+    //   return allBatch;
+    // }, {});
+    // const qBatchesClean = _.omit(QqBatches, (value, key, object)=> {
+    //   return key == false;
+    // });
+    
+    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({qBatches, itrXY});
     xyBatchSet(itrXY);
   }, [eBatchesState]);
   

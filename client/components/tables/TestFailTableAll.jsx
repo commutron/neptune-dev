@@ -5,54 +5,42 @@ import Pref from '/client/global/pref.js';
 import { LeapTextLink } from '../tinyUi/LeapText.jsx';
 import UserNice from '../smallUi/UserNice.jsx';
 
-const ScrapTableAll = ({ scrapData })=> (
+const TestFailTableAll = ({ failData })=> (
   <div>
     <table className='wide'>
       <thead className='fadeRed cap'>
         <tr>
           <th>{Pref.batch}</th>
-          <th>{Pref.item}</th>
           <th>{Pref.group}</th>
           <th>{Pref.widget}</th>
-					<th>who</th>
-					<th>when</th>
-					<th>where</th>
-          <th>comment</th>
+          <th>{Pref.item}</th>
         </tr>
       </thead>
-      <tbody>
-      {scrapData.map( (sc, index)=>{
+      {failData.map( (tf, index)=>{
         return (
-          <ScrapRow 
-            key={sc.scEntry.key+index}
-            entry={sc.scEntry}
-            group={sc.group}
-            batchNum={sc.batch}
-            widget={sc.widget}
-            barcode={sc.serial} />
+          <FailRow 
+            key={tf.tfEntries[0].key+index}
+            entries={tf.tfEntries}
+            group={tf.group}
+            batchNum={tf.batch}
+            widget={tf.widget}
+            barcode={tf.serial} />
         );
       })}
-      </tbody>
     </table>
   </div>
 );
 
-export default ScrapTableAll;
+export default TestFailTableAll;
 
-const ScrapRow = ({ entry, group, batchNum, widget, barcode })=> (
+const FailRow = ({ entries, group, batchNum, widget, barcode })=> (
+	<tbody>
 	<tr>
     <td>
       <LeapTextLink
         title={batchNum} 
         sty='numFont noWrap blackT'
         address={'/data/batch?request=' + batchNum}
-      />
-    </td>
-    <td>
-      <LeapTextLink
-        title={barcode} 
-        sty='numFont noWrap blackT'
-        address={'/data/batch?request=' + batchNum + '&specify=' + barcode}
       />
     </td>
     <td>
@@ -69,9 +57,23 @@ const ScrapRow = ({ entry, group, batchNum, widget, barcode })=> (
         address={'/data/widget?request=' + widget}
       />
     </td>
-		<td className='cap'><UserNice id={entry.who} /></td>
-    <td>{moment(entry.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm a"})}</td>
-    <td>{entry.step}</td>
-    <td>{entry.comm}</td>
-	</tr>
+    <td>
+      <LeapTextLink
+        title={barcode} 
+        sty='numFont noWrap blackT'
+        address={'/data/batch?request=' + batchNum + '&specify=' + barcode}
+      />
+    </td>
+  </tr>
+  {entries.map( (e, ix)=>{
+    return(
+      <tr key={ix+e.serial}>
+        <td colSpan={3}></td>
+    		<td colSpan={1}>
+    		  <dd>{moment(e.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm a"})} by <UserNice id={e.who} /></dd>
+          <dd>{e.comm}</dd>
+        </td>
+    	</tr>
+  )})}
+	</tbody>
 );

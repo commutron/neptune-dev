@@ -604,6 +604,42 @@ Meteor.methods({
     return compactData;
   },
   
+   ///////////////////////////////////////////////////////////////////////////////////
+  
+  // Test Fail Items
+  
+  ///////////////////////////////////////////////////////////////////////////////////
+ 
+  testFailItems() {
+    const batchWithTest = BatchDB.find({
+                            orgKey: Meteor.user().orgKey,
+                            'items.history.type': 'test',
+                            'items.history.good': false
+                          }).fetch();
+    let compactData = [];
+    for(let b of batchWithTest) {
+      const w = WidgetDB.findOne({_id: b.widgetId});
+      const g = GroupDB.findOne({_id: w.groupId});
+      const items = b.items.filter( 
+                      x => x.history.find( y => 
+                        y.type === 'test' && 
+                        y.good === false ) );
+      for(let i of items) {
+        const tfEntries = i.history.filter( y => 
+                          y.type === 'test' && 
+                          y.good === false );
+        compactData.push({
+          batch: b.batch,
+          widget: w.widget,
+          group: g.alias,
+          serial: i.serial,
+          tfEntries: tfEntries
+        });
+      }
+    }
+    return compactData;
+  },
+  
   
    ///////////////////////////////////////////////////////////////////////////////////
   

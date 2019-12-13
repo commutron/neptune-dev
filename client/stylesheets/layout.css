@@ -983,4 +983,7 @@ button.numberSet {
 .min300 { min-width: 300px; }
 .min200 { min-width: 200px; }
 
+.maxW70 { max-width: 70vw; }
+.maxW50 { max-width: 50vw; }
+.maxW30 { max-width: 30vw; }
 .flxGrow { flex-grow: 2; }

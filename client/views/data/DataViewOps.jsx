@@ -17,6 +17,7 @@ import BatchPanel from './panels/BatchPanel/BatchPanel.jsx';
 import BatchPanelX from './panels/BatchPanelX.jsx';
 import WidgetPanel from './panels/WidgetPanel.jsx';
 import VersionPanel from './panels/VersionPanel/VersionPanel.jsx';
+import TestFailPanel from './panels/TestFailPanel.jsx';
 import ScrapPanel from './panels/ScrapPanel.jsx';
 
 import BatchesList from './lists/BatchesList.jsx';
@@ -242,6 +243,24 @@ const DataViewOps = ({
             widgetData={allWidget}
             groupData={allGroup} 
             app={app} />
+        </TraverseWrap>
+      );
+    }else if(request === 'testfail') {
+      return(
+        <TraverseWrap
+		      batchData={false}
+          widgetData={false}
+          versionData={false}
+          groupData={false}
+          user={user}
+          app={app}
+          title='Test Fail Overview'
+          subLink={subLink}
+          action={false}
+          base={true}
+          invertColor={true}
+        >
+          <TestFailPanel batchData={allBatch} />
         </TraverseWrap>
       );
     }else if(request === 'scraps') {

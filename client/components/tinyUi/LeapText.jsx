@@ -12,3 +12,10 @@ const LeapText = ({ title, sty, address })=> {
 };
 
 export default LeapText;
+
+export const LeapTextLink = ({ title, sty, address })=> {
+  let cssStyle = sty ? 'leapText ' + sty : 'leapText';
+  return (
+    <a className={cssStyle} href={address}>{title}</a>
+  );
+};

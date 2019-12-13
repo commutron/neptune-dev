@@ -11,10 +11,17 @@ import React from 'react';
     padding: '10px',
     margin: '10px 5px',
   };
+  const styInline = {
+    display: 'inline-block',
+    padding: '1px',
+    margin: '5px 0px',
+  };
   const bSty = {
     fontSize: '2em'
   };
-  
+  const mSty = {
+    fontSize: '1.5em'
+  };
   const sSty = {
     fontSize: '1em',
     textTransform: 'capitalize',
@@ -22,11 +29,33 @@ import React from 'react';
     wordWrap: 'keep-all'
   };
  
-const NumLine = ({ num, name, color, big }) => (
-  <div style={big ? styBig : sty}>
+const NumLine = ({ 
+  num, name, 
+  color, big, inline, 
+}) => (
+  <div style={inline ? styInline : big ? styBig : sty}>
     <i style={bSty} className={color + ' numFont'}>{num}</i>
     <i style={sSty}> {name}</i>
   </div>
 );
 
 export default NumLine;
+
+
+export const StatLine = ({ 
+  num, name, 
+  color, big, inline, 
+  preNum, preText, 
+  postNum, postText
+}) => (
+  <div style={inline ? styInline : big ? styBig : sty}>
+    {preNum && <i style={mSty} className={color + ' numFont'}>{preNum}</i>}
+    {preText && <i style={sSty}> {preText}</i>}
+    
+    <div style={bSty} className={color + ' numFont'}>{num}</div>
+    <i style={sSty}> {name}</i>
+    
+    {postNum && <i style={mSty} className={color + ' numFont'}>{postNum}</i>}
+    {postText && <i style={sSty}> {postText}</i>}
+  </div>
+);

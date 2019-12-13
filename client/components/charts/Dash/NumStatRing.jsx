@@ -12,6 +12,8 @@ const NumStatRing = ({ total, nums, name, title, colour, maxSize })=> {
     colour === 'green' ? ["#2ecc71","#22f97c","#02d85b","#4fff98","#028237"] :
     colour === 'greenBi' ? [ "rgb(46, 204, 113)", "rgba(39, 174, 96, 0.5)" ]:
     colour === 'red' ? ["#e74c46","#a30500","#720300","#8c0c08","#9b0500"] :
+    colour === 'redBi' ? [ "rgb(231, 76, 60)", "rgba(39, 174, 96, 0.5)" ]:
+    colour === 'orangeBi' ? [ "rgb(230, 126, 34)", "rgba(39, 174, 96, 0.5)" ]:
     null;
   
   Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(nums);

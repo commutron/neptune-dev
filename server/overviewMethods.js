@@ -206,13 +206,16 @@ function collectStatus(privateKey, batchID, clientTZ) {
                         localEnd.clone().lastShippingTime();
       
       const timeRemain = !complete ?  // duration between now and ship due
-        shipDue.workingDiff(now, 'days') : 0;
+        shipDue.workingDiff(now, 'day', true) : 0;
+      const timeRemainClean = 
+        ( Math.floor(timeRemain) || Math.ceil(timeRemain) ) === 0 ? 
+          timeRemain.toFixed(1, 10) : timeRemain.toFixed(0, 10);
       
       collection = {
         batch: bx.batch,
         batchID: bx._id,
         shipDue: shipDue.format(),
-        weekDaysRemain: timeRemain,
+        weekDaysRemain: timeRemainClean,
         itemQuantity: bx.quantity,
         riverChosen: false,
         isActive: false
@@ -229,8 +232,11 @@ function collectStatus(privateKey, batchID, clientTZ) {
                         localEnd.clone().lastShippingTime();
       
       const timeRemain = !complete ?  // duration between now and ship due
-        shipDue.workingDiff(now, 'days') : 0;
-      
+        shipDue.workingDiff(now, 'day', true) : 0;
+      const timeRemainClean = 
+        ( Math.floor(timeRemain) || Math.ceil(timeRemain) ) === 0 ? 
+          timeRemain.toFixed(1, 10) : timeRemain.toFixed(0, 10);
+          
       let itemQuantity = b.items.length; // how many items
       const riverChosen = b.river !== false; // River Setup
       // indie active check
@@ -247,7 +253,7 @@ function collectStatus(privateKey, batchID, clientTZ) {
         batch: b.batch,
         batchID: b._id,
         shipDue: shipDue.format(),
-        weekDaysRemain: timeRemain,
+        weekDaysRemain: timeRemainClean,
         itemQuantity: itemQuantity,
         riverChosen: riverChosen,
         isActive: isActive
