@@ -128,7 +128,7 @@ class Pref {
     this.scrap = 'scrap';
     this.Scrap = 'Scrap';
     this.scraps = 'scraps';
-    this.scrp = 's'; // scrap shortcut
+    this.scrapped = 'scrapped';
     // rma
     this.rma = 'RMA';
     this.rmaProcess = 'RMA process';

@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 
 const TestFails = ({ fails })=> {
-  const dt = fails.reverse();
+  const dt = fails.sort();
   let styD = {
     paddingLeft: '10px',
     paddingBottom: '5px',

@@ -613,6 +613,7 @@ Meteor.methods({
   testFailItems() {
     const batchWithTest = BatchDB.find({
                             orgKey: Meteor.user().orgKey,
+                            // live: true,
                             'items.history.type': 'test',
                             'items.history.good': false
                           }).fetch();
@@ -620,14 +621,23 @@ Meteor.methods({
     for(let b of batchWithTest) {
       const w = WidgetDB.findOne({_id: b.widgetId});
       const g = GroupDB.findOne({_id: w.groupId});
-      const items = b.items.filter( 
-                      x => x.history.find( y => 
-                        y.type === 'test' && 
-                        y.good === false ) );
+      const items = b.items.filter( x => {
+        let fail = x.history.find( y => y.type === 'test' && y.good === false );
+        if(fail) {
+          let passAfter = x.history.find( y => y.key === fail.key && y.good === true );
+          let scrapped = x.history.find( y => y.type === 'scrap' && y.good === true );
+          if(!passAfter && !scrapped) {
+            return true;
+          }else{
+            return false;
+          }
+        }else{
+          return false;
+        }
+      });
       for(let i of items) {
         const tfEntries = i.history.filter( y => 
-                          y.type === 'test' && 
-                          y.good === false );
+                            y.type === 'test' && y.good === false );
         compactData.push({
           batch: b.batch,
           widget: w.widget,

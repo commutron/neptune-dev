@@ -286,6 +286,7 @@ const AccountsTop = ({ users })=> {
           title={`${active} active users,\n${( all - active )} inactive users`}
           colour='blueBi'
           maxSize='chart15Contain'
+          noGap={all - active === 0}
         />
         
         <TrendLine 

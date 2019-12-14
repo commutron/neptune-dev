@@ -7,7 +7,7 @@ import UserNice from '../smallUi/UserNice.jsx';
 
 const TestFailTableAll = ({ failData })=> (
   <div>
-    <table className='wide'>
+    <table className='wide overviewTable subrows'>
       <thead className='fadeRed cap'>
         <tr>
           <th>{Pref.batch}</th>

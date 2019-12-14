@@ -95,7 +95,6 @@
   font-size: 1rem;
   min-width: 1rem;
 	min-height: 1rem;
-	margin: 0 5px;
 	text-transform: uppercase;
 	background-color: transparent;
   border: 1px solid transparent;
@@ -324,6 +323,7 @@ label.qdpplRound {
 .red { background-color: var(--alizarin); }
 .darkRed { background-color: var(--pomegranate); }
 .redT { color: var(--alizarin); }
+.darkRedT { color: var(--pomegranate); }
 .redHover,
 .invert .redHover {
 	color: var(--alizarin);
@@ -1204,6 +1204,17 @@ label.qdpplRound {
 }
 details[open].dropEvents summary {
   border-bottom: 1px solid var(--asbestosfade);
+}
+
+.overviewTable th { text-align: left; }
+.overviewTable tr:nth-child(even) { 
+  background-color: var(--contrast); 
+}
+.overviewTable.subrows tr:nth-child(even) { 
+  background-color: transparent; 
+}
+.overviewTable.subrows tbody:nth-child(odd) { 
+  background-color: var(--contrast);
 }
 
 .starfishColour { color: #00bde0; }

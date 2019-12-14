@@ -7,15 +7,15 @@ import UserNice from '../smallUi/UserNice.jsx';
 
 const ScrapTableAll = ({ scrapData })=> (
   <div>
-    <table className='wide'>
+    <table className='wide overviewTable'>
       <thead className='fadeRed cap'>
         <tr>
           <th>{Pref.batch}</th>
           <th>{Pref.item}</th>
           <th>{Pref.group}</th>
           <th>{Pref.widget}</th>
-					<th>who</th>
 					<th>when</th>
+					<th>who</th>
 					<th>where</th>
           <th>comment</th>
         </tr>
@@ -69,8 +69,8 @@ const ScrapRow = ({ entry, group, batchNum, widget, barcode })=> (
         address={'/data/widget?request=' + widget}
       />
     </td>
-		<td className='cap'><UserNice id={entry.who} /></td>
     <td>{moment(entry.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm a"})}</td>
+    <td className='cap'><UserNice id={entry.who} /></td>
     <td>{entry.step}</td>
     <td>{entry.comm}</td>
 	</tr>
