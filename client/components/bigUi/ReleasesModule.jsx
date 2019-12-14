@@ -74,7 +74,7 @@ export const ReleaseNote = ({ id, release, xBatch, lockout })=> {
                       'Released to the Floor' : 'Released';
                       
   return(
-    <div className='noCopy'>
+    <div className='noCopy' title='right-click to cancel'>
       <ContextMenuTrigger id={id+'release'} disable={lockout}>
   			<fieldset className='noteCard'>
           <legend>{releaseType || 'Released to the Floor'}</legend>

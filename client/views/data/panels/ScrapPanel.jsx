@@ -66,7 +66,7 @@ const ScrapPanel = (props)=> {
             
             <StatLine
               num={mostCleanW}
-              name={`${mostW.length > 1 ? 'are' : 'is'} most with `}
+              name={`${mostW.length > 1 ? 'are' : 'is'} the most with `}
               postNum={maxW}
               postText={mostW.length > 1 ? Pref.scraps +' each' : Pref.scraps}
               color='redT up'

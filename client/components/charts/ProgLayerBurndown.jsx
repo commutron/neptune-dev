@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { VictoryChart, VictoryAxis, VictoryStack, VictoryArea } from 'victory';
+import { VictoryChart, VictoryAxis, VictoryArea } from 'victory';
 import Theme from '/client/global/themeV.js';
 
 import moment from 'moment';
@@ -65,22 +65,18 @@ const ProgLayerBurndown = ({ id, start, floorRelease, end, flowData, itemData, t
               tickLabels: { fill: 'lightgrey', fontSize: '4px' }
             } }
           />
-          
-        <VictoryStack
-          theme={Theme.NeptuneVictory}
-          padding={0}
-        >
         
         {countState.map( (entry, index)=>{
           return(
             <VictoryArea
               key={index+entry.name}
               data={entry.data}
+              
               style={{ 
                 data: { 
                   stroke: 'rgb(41, 128, 185)',
                   strokeWidth: '1px',
-                  fill: 'rgba(41, 128, 185, 0.2)'
+                  fill: 'rgba(41, 128, 185, 0.1)'
                 },
               }}
               animate={{
@@ -90,9 +86,6 @@ const ProgLayerBurndown = ({ id, start, floorRelease, end, flowData, itemData, t
             />
           )}
         )}
-        </VictoryStack>
-        
-        
         
         </VictoryChart>
         

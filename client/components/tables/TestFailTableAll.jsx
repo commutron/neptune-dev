@@ -5,6 +5,8 @@ import Pref from '/client/global/pref.js';
 import { LeapTextLink } from '../tinyUi/LeapText.jsx';
 import UserNice from '../smallUi/UserNice.jsx';
 
+import './style.css';
+
 const TestFailTableAll = ({ failData })=> (
   <div>
     <table className='wide overviewTable subrows'>
@@ -67,7 +69,7 @@ const FailRow = ({ entries, group, batchNum, widget, barcode })=> (
   </tr>
   {entries.map( (e, ix)=>{
     return(
-      <tr key={ix+e.serial}>
+      <tr key={ix+e.serial+e.time.toISOString()}>
         <td colSpan={3}></td>
     		<td colSpan={1}>
     		  <dd>{moment(e.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm a"})} by <UserNice id={e.who} /></dd>

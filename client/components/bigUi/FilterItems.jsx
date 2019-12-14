@@ -20,6 +20,8 @@ const FilterItems = ({
   function changeNotFilter() {
     onNotChange(this.toggle.checked);
   }
+  
+  const styfix = { color: 'black' };
     
   return(
     <div className='itmFltrBlock noCopy'>
@@ -43,7 +45,7 @@ const FilterItems = ({
           ref={(i)=>this.keyword = i}
           onChange={(e)=>changeKeywordFilter(e)}>
           <option value={false} label='' />
-          <optgroup label='Categories'>
+          <optgroup label='Categories' style={styfix}>
             <option value='Complete' label='Complete' />
             <option value='In Progress' label='In Progress' />
             <option value='Alternative' label='Alternative Flow' />

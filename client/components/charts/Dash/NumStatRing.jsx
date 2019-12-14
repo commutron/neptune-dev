@@ -26,7 +26,7 @@ const NumStatRing = ({ total, nums, name, title, colour, maxSize, noGap })=> {
         <VictoryPie
           theme={Theme.NeptuneVictory}
           colorScale={colours}
-          padAngle={noGap ? false : 3}
+          padAngle={noGap ? 0 : 3}
           padding={0}
           innerRadius={160}
           data={nums}

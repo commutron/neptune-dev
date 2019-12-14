@@ -33,8 +33,7 @@ function useInterval(callback, delay) {
 }
 
 const AgendaWrap = ({ 
-  batches, batchesX, 
-  bCache, pCache, cCache, 
+  bCache, pCache, cCache, zCache,
   user, clientTZ, app 
 })=> {
 
@@ -152,6 +151,7 @@ const AgendaWrap = ({
             
           <ShipWindows 
             pCache={pCache.dataSet}
+            zCache={zCache.dataSet}
             app={app} />
            
           <div className='max400 space line2x'>

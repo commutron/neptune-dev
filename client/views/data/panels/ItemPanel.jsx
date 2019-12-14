@@ -94,7 +94,12 @@ const ItemPanel = (props)=>	{
               return( <i key={inx}><SubItemLink serial={ent} />, </i> ) } ) }
           </p>}
         { i.panelCode !== false && <p>Panel: {i.panelCode}</p> }
-        {scrap && <ScrapBox entry={scrap} />}
+        {scrap && 
+          <ScrapBox 
+            id={b._id} 
+            serial={i.serial} 
+            entry={scrap}
+            eX={b.finishedAt !== false && b.live} />}
         
         <br />
         

@@ -199,7 +199,7 @@ Meteor.methods({
     
     function historyPings(history, totalItems, flowKey, day) {
       const pings = history.filter( 
-                      y => y.key === flowKey &&
+                      y => y.key === flowKey && y.good === true &&
                        moment(y.time).isSameOrBefore(day)
                     ).length;
       const remain = totalItems - pings;
@@ -216,7 +216,7 @@ Meteor.methods({
           const historyRemain = historyPings(historyFlat, totalItems, flowKey, day);
           historyRemainOverTime.push({
             x: new Date( day.format() ),
-            y: historyRemain
+            y: historyRemain,
           });
 
           if(historyRemain === 0) { break }
@@ -625,8 +625,8 @@ Meteor.methods({
         let fail = x.history.find( y => y.type === 'test' && y.good === false );
         if(fail) {
           let passAfter = x.history.find( y => y.key === fail.key && y.good === true );
-          let scrapped = x.history.find( y => y.type === 'scrap' && y.good === true );
-          if(!passAfter && !scrapped) {
+          let finished = x.finishedAt !== false;
+          if(!passAfter && !finished) {
             return true;
           }else{
             return false;

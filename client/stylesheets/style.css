@@ -1206,17 +1206,6 @@ details[open].dropEvents summary {
   border-bottom: 1px solid var(--asbestosfade);
 }
 
-.overviewTable th { text-align: left; }
-.overviewTable tr:nth-child(even) { 
-  background-color: var(--contrast); 
-}
-.overviewTable.subrows tr:nth-child(even) { 
-  background-color: transparent; 
-}
-.overviewTable.subrows tbody:nth-child(odd) { 
-  background-color: var(--contrast);
-}
-
 .starfishColour { color: #00bde0; }
 .starfishAccents #pnFindButton {
   color: #00bde0;

@@ -10,9 +10,10 @@ import Spin from '../../components/uUi/Spin.jsx';
 import OverviewWrap from './OverviewWrap.jsx';
 
 const View = ({
-  login, sub, appReady, readyUsers, ready, 
+  login,
+  appReady, readyUsers, ready, readyC, 
   username, user, clientTZ, org, app, 
-  batch, batchX, 
+  batch, batchX,
   bCache, pCache, cCache
 })=> {
   
@@ -22,7 +23,7 @@ const View = ({
   }, [user]);
   
     
-  if( !appReady || !readyUsers || !ready || !app ) {
+  if( !appReady || !readyUsers || !ready || !readyC || !app ) {
     return (
       <div className='centreContainer'>
         <div className='centrecentre'>
@@ -57,6 +58,7 @@ export default withTracker( () => {
   const appSub = login ? Meteor.subscribe('appData') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
   const sub = login ? Meteor.subscribe('shaddowData', clientTZ) : false;
+  const subC = login ? Meteor.subscribe('cacheData', clientTZ) : false;
   if(!login || !active) {
     return {
       appReady: false,
@@ -67,9 +69,11 @@ export default withTracker( () => {
     return {
       login: Meteor.userId(),
       sub: sub,
+      subC: subC,
       appReady: appSub.ready(),
       readyUsers: usersSub.ready(),
       ready: sub.ready(),
+      readyC: subC.ready(),
       username: name,
       user: user,
       org: org,

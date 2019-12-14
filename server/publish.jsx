@@ -140,13 +140,30 @@ Meteor.publish('tideData', function(clientTZ){
   }
 });
 
-// Overview & Agenda
-Meteor.publish('shaddowData', function(clientTZ){
+// Agenda
+Meteor.publish('cacheData', function(clientTZ){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
   Meteor.defer( ()=>{ Meteor.call('batchCacheUpdate', orgKey); });
   Meteor.defer( ()=>{ Meteor.call('priorityCacheUpdate', orgKey, clientTZ); });
   Meteor.defer( ()=>{ Meteor.call('phaseCacheUpdate', orgKey); });
+  Meteor.defer( ()=>{ Meteor.call('completeCacheUpdate', orgKey); });
+  if(!this.userId){
+    return this.ready();
+  }else{
+    return [
+      CacheDB.find({orgKey: orgKey}, {
+        fields: {
+          'orgKey': 0
+        }}),
+      ];
+    }
+});
+
+// Overview
+Meteor.publish('shaddowData', function(clientTZ){
+  const user = Meteor.users.findOne({_id: this.userId});
+  const orgKey = user ? user.orgKey : false;
   if(!this.userId){
     return this.ready();
   }else{
@@ -176,11 +193,7 @@ Meteor.publish('shaddowData', function(clientTZ){
           'completed': 1,
           //'completedAt': 1,
           'releases': 1
-        }}),
-      CacheDB.find({orgKey: orgKey}, {
-        fields: {
-          'orgKey': 0
-        }}),
+        }})
       ];
     }
 });

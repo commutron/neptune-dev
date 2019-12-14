@@ -760,6 +760,7 @@ Meteor.methods({
       Meteor.call('batchCacheUpdate', key, true);
       Meteor.call('priorityCacheUpdate', key, clientTZ, true);
       Meteor.call('phaseCacheUpdate', key, true);
+      Meteor.call('completeCacheUpdate', key, true);
     }
   },
     
@@ -831,6 +832,53 @@ Meteor.methods({
             orgKey: accessKey,
             lastUpdated: new Date(),
             dataName: 'phaseCondition',
+            dataSet: slim,
+        }});
+      }
+    }
+  },
+  
+  completeCacheUpdate(accessKey, force) {
+    if(typeof accessKey === 'string') {
+      const timeOut = moment().subtract(60, 'minutes').toISOString();
+      const currentCache = CacheDB.findOne({
+        orgKey: accessKey, 
+        lastUpdated: { $gte: new Date(timeOut) },
+        dataName:'completeBatch'});
+
+      if( force || !currentCache ) {
+        const batches = BatchDB.find({orgKey: accessKey, live: false}).fetch();
+        const slimL = batches.map( x => {
+          return {
+            batchNum: x.batch,
+            widgetID: x.widgetId,
+            versionKey: x.versionKey,
+            salesOrder: x.salesOrder,
+            salesEnd: x.end,
+            completedAt: x.finishedAt,
+            quantity: x.items.length,
+            serialize: true
+          };
+        });
+        const batchesX = XBatchDB.find({orgKey: accessKey, completed: true}).fetch();
+        const slimX = batchesX.map( x => {
+          return {
+            batchNum: x.batch,
+            widgetID: x.widgetId,
+            versionKey: x.versionKey,
+            salesOrder: x.salesOrder,
+            salesEnd: x.salesEnd,
+            completedAt: x.completedAt,
+            quantity: x.quantity,
+            serialize: x.serialize
+          };
+        });
+        const slim = [...slimL,...slimX];
+        CacheDB.upsert({orgKey: accessKey, dataName: 'completeBatch'}, {
+          $set : { 
+            orgKey: accessKey,
+            lastUpdated: new Date(),
+            dataName: 'completeBatch',
             dataSet: slim,
         }});
       }

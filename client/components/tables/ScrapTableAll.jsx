@@ -5,6 +5,8 @@ import Pref from '/client/global/pref.js';
 import { LeapTextLink } from '../tinyUi/LeapText.jsx';
 import UserNice from '../smallUi/UserNice.jsx';
 
+import './style.css';
+
 const ScrapTableAll = ({ scrapData })=> (
   <div>
     <table className='wide overviewTable'>

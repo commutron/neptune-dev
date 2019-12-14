@@ -12,8 +12,7 @@ import AgendaWrap from './AgendaWrap.jsx';
 const View = ({
   login, sub, appReady, readyUsers, ready, 
   username, user, clientTZ, org, app, 
-  batch, batchX, 
-  bCache, pCache, cCache
+  bCache, pCache, cCache, zCache
 })=> {
   
   const prevUser = usePrevious(user);
@@ -34,11 +33,10 @@ const View = ({
 
   return(
     <AgendaWrap 
-      batches={batch}
-      batchesX={batchX}
       bCache={bCache}
       pCache={pCache}
       cCache={cCache}
+      zCache={zCache}
       user={user}
       app={app}
       clientTZ={clientTZ} />
@@ -56,7 +54,7 @@ export default withTracker( () => {
   const clientTZ = moment.tz.guess();
   const appSub = login ? Meteor.subscribe('appData') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
-  const sub = login ? Meteor.subscribe('shaddowData', clientTZ) : false;
+  const sub = login ? Meteor.subscribe('cacheData', clientTZ) : false;
   if(!login || !active) {
     return {
       appReady: false,
@@ -75,11 +73,10 @@ export default withTracker( () => {
       org: org,
       clientTZ: clientTZ,
       app: AppDB.findOne({org: org}),
-      batch: BatchDB.find({live: true}).fetch(),
-      batchX: XBatchDB.find({live: true}).fetch(),
       bCache: CacheDB.findOne({dataName: 'batchInfo'}),
       pCache: CacheDB.findOne({dataName: 'priorityRank'}),
       cCache: CacheDB.findOne({dataName: 'phaseCondition'}),
+      zCache: CacheDB.findOne({dataName: 'completeBatch'}),
     };
   }
 })(View);

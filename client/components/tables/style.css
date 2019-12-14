@@ -32,3 +32,14 @@
   padding-right: 1ch;
   padding-left: 1ch;
 }
+
+.overviewTable th { text-align: left; }
+.overviewTable tr:nth-child(even) { 
+  background-color: var(--contrast); 
+}
+.overviewTable.subrows tr:nth-child(even) { 
+  background-color: transparent; 
+}
+.overviewTable.subrows tbody:nth-child(odd) { 
+  background-color: var(--contrast);
+}

@@ -27,7 +27,8 @@ const ItemIncompleteForm = ({ id, item, app, noText })=> {
     }
   }
 		
-	let done = item.finishedAt !== false;
+	let done = item.finishedAt !== false &&
+	  item.history.find( x => x.key === 'f1n15h1t3m5t3p' );
   	
 	return (
 	  <ModelMedium
