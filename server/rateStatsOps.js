@@ -246,8 +246,12 @@ import 'moment-timezone';
     
     const generalFind = BatchDB.find({
       orgKey: accessKey, 
-      items: { $elemMatch: { createdAt: { 
-        $lte: new Date(rangeEnd) 
+      items: { $elemMatch: { 
+        createdAt: { 
+          $lte: new Date(rangeEnd) 
+        }, 
+        finishedAt: { 
+          $gte: new Date(rangeStart) 
       }}}
     }).fetch();
     
@@ -264,7 +268,7 @@ import 'moment-timezone';
   }
   
   export function countScrap(accessKey, rangeStart, rangeEnd) {
-    
+
     let scCount = 0;
     
     const generalFind = BatchDB.find({

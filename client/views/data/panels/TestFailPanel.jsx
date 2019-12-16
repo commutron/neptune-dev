@@ -74,12 +74,15 @@ const TestFailPanel = (props)=> {
           
           <div className='centreRow middle'>
             
-            <TrendLine 
-              title='failed items over last 12 months'
-              statType='failItem'
-              cycleCount={12}
-              cycleBracket='month'
-              lineColor='rgb(192, 57, 43)' />
+            {Roles.userIsInRole(Meteor.userId(), 'nightly') &&
+             Roles.userIsInRole(Meteor.userId(), 'admin') ?
+              <TrendLine 
+                title='failed items over last 12 weeks'
+                statType='failItem'
+                cycleCount={12}
+                cycleBracket='week'
+                lineColor='rgb(192, 57, 43)' />
+            : <div>Rate Chart WIP</div>}
           
             <NumStatRing
               total={fails.length}

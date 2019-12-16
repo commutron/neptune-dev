@@ -76,10 +76,10 @@ const ScrapPanel = (props)=> {
           <div className='centreRow middle'>
             
             <TrendLine 
-              title={`${Pref.scrapped} items over last 12 months`}
+              title={`${Pref.scrapped} items over last 12 weeks`}
               statType='scrapItem'
               cycleCount={12}
-              cycleBracket='month'
+              cycleBracket='week'
               lineColor='rgb(231, 76, 60)' />
           
             <NumStatRing
