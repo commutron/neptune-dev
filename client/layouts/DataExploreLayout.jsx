@@ -22,6 +22,7 @@ export const TraverseWrap = ({
   subLink,
   action,
   base,
+  beta,
   invertColor,
   children
 })=>	{
@@ -61,7 +62,8 @@ export const TraverseWrap = ({
           <div className='topBorder' />
           <HomeIcon />
           {base ? 
-            <div className='frontCenterTitle cap'>{title}</div>
+            <div className='frontCenterTitle cap'>{title}
+            {beta && <sup className='big monoFont'>BETA</sup>}</div>
           :
             <CookieBar
               batchData={batchData}

@@ -6,19 +6,27 @@ import 'moment-timezone';
   function timeRanges(accessKey, clientTZ, counter, cycles, bracket) {
     const nowLocal = moment().tz(clientTZ);
     
-    let countArray = [];
-    for(let w = 0; w < cycles; w++) {
-    
-      const loopBack = nowLocal.clone().subtract(w, bracket); 
-     
-      const rangeStart = loopBack.clone().startOf(bracket).toISOString();
-      const rangeEnd = loopBack.clone().endOf(bracket).toISOString();
+    async function runLoop() {
+      let countArray = [];
+      for(let w = 0; w < cycles; w++) {
       
-      const quantity = counter(accessKey, rangeStart, rangeEnd);
-      countArray.unshift({ x:cycles-w, y:quantity });
+        const loopBack = nowLocal.clone().subtract(w, bracket); 
+       
+        const rangeStart = loopBack.clone().startOf(bracket).toISOString();
+        const rangeEnd = loopBack.clone().endOf(bracket).toISOString();
+        
+        
+        quantity = await new Promise(function(resolve) {
+          const fetch = counter(accessKey, rangeStart, rangeEnd);
+          resolve(fetch);
+        });
+        countArray.unshift({ x:cycles-w, y:quantity });
+      }
+      return countArray;
     }
+      
+      return runLoop();
     
-    return countArray;
   }
   
   export function countNewUser(accessKey, rangeStart, rangeEnd) {
@@ -241,7 +249,6 @@ import 'moment-timezone';
   }
   
   export function countTestFail(accessKey, rangeStart, rangeEnd) {
-    
     let tfCount = 0;
     
     const generalFind = BatchDB.find({
@@ -333,8 +340,7 @@ Meteor.methods({
         return false;
       }else{
         const accessKey = Meteor.user().orgKey;
-        const runCounter = timeRanges(accessKey, clientTZ, loop, cycles, bracket);
-        return runCounter;
+        return timeRanges(accessKey, clientTZ, loop, cycles, bracket);
       }
     }catch(err) {
       throw new Meteor.Error(err);

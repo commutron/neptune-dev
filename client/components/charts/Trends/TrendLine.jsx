@@ -12,19 +12,23 @@ import Theme from '/client/global/themeV.js';
 
 // statType // 'newBatch', 'doneBatch', 'newNC', 'newSH'
 
-const TrendLine = ({ title, statType, cycleCount, cycleBracket, lineColor })=>{
+const TrendLine = ({ 
+  title, statType, 
+  cycleCount, cycleBracket,
+  lineColor
+})=>{
   
   const blank =  [ {x:1,y:0} ];
   //const blank = Array(cycleCount);
   const [ data, dataSet ] = useState( blank );
-  
+
   useEffect( ()=>{
     const clientTZ = moment.tz.guess();
     Meteor.call('cycleWeekRate', clientTZ, statType, cycleCount, cycleBracket, (err, re)=>{
       err && console.log(err);
       re && dataSet(re);
     });
-  }, []);
+  }, [cycleCount, cycleBracket]);
   
   return(
     <div className='chart20Contain'>

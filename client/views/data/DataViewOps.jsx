@@ -257,10 +257,11 @@ const DataViewOps = ({
           title='Test Fail Overview'
           subLink={subLink}
           action={false}
+          beta={true}
           base={true}
           invertColor={true}
         >
-          <TestFailPanel batchData={allBatch} />
+          <TestFailPanel batchData={allBatch} app={app} />
         </TraverseWrap>
       );
     }else if(request === 'scraps') {
@@ -278,7 +279,7 @@ const DataViewOps = ({
           base={true}
           invertColor={true}
         >
-          <ScrapPanel batchData={allBatch} />
+          <ScrapPanel batchData={allBatch} app={app} />
         </TraverseWrap>
       );
     }else{
