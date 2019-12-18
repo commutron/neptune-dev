@@ -32,28 +32,30 @@ const Stone = ({
 	progCounts,
 	blockStone, doneStone, compEntry,
 	showVerify, changeVerify, undoOption,
-	openUndoOption, closeUndoOption
+	openUndoOption, closeUndoOption,
+	riverLockState, riverLockSet
 })=> {
 	
   const [ lockState, lockSet ] = useState( true );
+  const [ workingState, workingSet ] = useState( false );
   
   let speed = !Meteor.user().unlockSpeed ? 4000 : ( Meteor.user().unlockSpeed * 2 );
-  	
-  useInterval( ()=> {
-  	if(!currentLive) {
-  		null;
-  	}else if(type === 'inspect' && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
-  		null;
-  	}else if(type === 'first' && !Roles.userIsInRole(Meteor.userId(), 'verify')) {
-  		null;
-  	}else if(type === 'test' && !Roles.userIsInRole(Meteor.userId(), 'test')) {
-  		null;
-  	}else if(type === 'finish' && !Roles.userIsInRole(Meteor.userId(), 'finish')) {
-  		null;
-  	}else{
-		  lockSet( false );
-  	}
-  }, speed);
+
+	  useInterval( ()=> {
+	  	if(!currentLive) {
+	  		null;
+	  	}else if(type === 'inspect' && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
+	  		null;
+	  	}else if(type === 'first' && !Roles.userIsInRole(Meteor.userId(), 'verify')) {
+	  		null;
+	  	}else if(type === 'test' && !Roles.userIsInRole(Meteor.userId(), 'test')) {
+	  		null;
+	  	}else if(type === 'finish' && !Roles.userIsInRole(Meteor.userId(), 'finish')) {
+	  		null;
+	  	}else{
+			  lockSet( false );
+	  	}
+	  }, riverLockState === true ? null : riverLockState === 'slow' ? speed * 5 : speed);
 
   function reveal() {
     changeVerify(false);
@@ -62,7 +64,9 @@ const Stone = ({
   function passS(pass, doComm) {
   	if(lockState === true) { return false; }
     lockSet( true );
-
+		riverLockSet( true );
+		workingSet( true );
+		
     let comm = '';
     let comPrompt = doComm ? prompt('Enter A Comment', '') : false;
     comPrompt ? comm = comPrompt : null;
@@ -78,6 +82,8 @@ const Stone = ({
 	    if(error)
 		    console.log(error);
 			if(reply) {
+				riverLockSet( 'slow' );
+				workingSet( false );
 				openUndoOption();
 			  document.getElementById('lookup').focus();
 		  }else{
@@ -90,6 +96,8 @@ const Stone = ({
   function passT(pass, doComm, shipFail) {
   	if(lockState === true) { return false; }
     lockSet( true );
+    riverLockSet( true );
+    workingSet( true );
     
     let comm = '';
     let comPrompt = doComm ? prompt('Enter A Comment', '') : false;
@@ -112,6 +120,8 @@ const Stone = ({
 		    if(error)
 			    console.log(error);
 				if(reply) {
+					riverLockSet( 'slow' );
+					workingSet( false );
 					openUndoOption();
 					// pass === false && unlock();
 				  document.getElementById('lookup').focus();
@@ -126,6 +136,9 @@ const Stone = ({
 	function finish() {
 		if(lockState === true) { return false; }
 	  lockSet( true );
+	  riverLockSet( true );
+	  workingSet( true );
+	  
     const batchId = id;
 
     const pre = progCounts;
@@ -138,6 +151,8 @@ const Stone = ({
 		  if(error)
 		    console.log(error);
 		  if(reply) {
+		  	riverLockSet( 'slow' );
+		  	workingSet( false );
 		    document.getElementById('lookup').focus();
 		  }else{
 		    toast.error(Pref.blocked);
@@ -198,7 +213,8 @@ const Stone = ({
   				sKey={sKey}
           step={step}
           type={type}
-          progCounts={progCounts}>
+          progCounts={progCounts}
+          workingState={workingState}>
 						{type === 'test' ?
 							<div className='centre stone'>
 								<button

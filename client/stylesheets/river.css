@@ -34,6 +34,9 @@
   width: 18vmax;
   height: 18vmax;
 }
+.spinOuterSVG svg {
+  animation: spinAround 10s infinite linear;
+}
 
 .stone {
 	position: absolute;
@@ -46,7 +49,8 @@
   width: 16vmax;
   height: 16vmax;
   font-size: calc(0.5rem + 1.5vmax);
-  text-shadow: 0 0 10px #000;
+  font-weight: bolder;
+  text-shadow: 0 0 15px #000;
 	text-transform: uppercase;
   color: white;
   background-position: 50% 50%;

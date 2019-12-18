@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { VictoryPie } from 'victory';
 
-const StoneProgRing = ({ sKey, step, type, progCounts, isAlt, children })=> {
+const StoneProgRing = ({ sKey, step, type, progCounts, isAlt, workingState, children })=> {
   
   const [ countDone, doneSet ] = useState(0);
   const [ countRemain, remainSet ] = useState(0);
@@ -51,7 +51,7 @@ const StoneProgRing = ({ sKey, step, type, progCounts, isAlt, children })=> {
       'rgb(39, 174, 96)';
     
   return(
-    <span className='stoneRing centre'>
+    <span className={`stoneRing centre ${workingState ? 'spinOuterSVG' : ''}`}>
       <VictoryPie
         colorScale={ [ color1, color0 ] }
         padAngle={0}

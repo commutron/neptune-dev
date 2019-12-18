@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 // import moment from 'moment';
 import InOutWrap from '/client/components/tinyUi/InOutWrap.jsx';
 // import Pref from '/client/global/pref.js';
@@ -33,6 +33,8 @@ const StoneSelect = ({
   openUndoOption,
   closeUndoOption
 })=> {
+  
+  const [ riverLockState, riverLockSet ] = useState( false );
   
   const serial = item.serial;
   const history = item.history;
@@ -143,7 +145,9 @@ const StoneSelect = ({
                     changeVerify={changeVerify}
                     undoOption={undoOption}
                     openUndoOption={openUndoOption}
-                    closeUndoOption={closeUndoOption} />
+                    closeUndoOption={closeUndoOption}
+                    riverLockState={riverLockState}
+                    riverLockSet={(e)=>riverLockSet(e)} />
   		        }
             </InOutWrap>
             {fTest.length > 0 && 
