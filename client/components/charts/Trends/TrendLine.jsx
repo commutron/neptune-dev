@@ -13,22 +13,27 @@ import Theme from '/client/global/themeV.js';
 // statType // 'newBatch', 'doneBatch', 'newNC', 'newSH'
 
 const TrendLine = ({ 
-  title, statType, 
+  title, localXY,
+  statType, 
   cycleCount, cycleBracket,
   lineColor
 })=>{
   
-  const blank =  [ {x:1,y:0} ];
-  //const blank = Array(cycleCount);
+  const blank = [ {x:1,y:0} ];
+  // const blank = Array(cycleCount);
   const [ data, dataSet ] = useState( blank );
 
   useEffect( ()=>{
-    const clientTZ = moment.tz.guess();
-    Meteor.call('cycleWeekRate', clientTZ, statType, cycleCount, cycleBracket, (err, re)=>{
-      err && console.log(err);
-      re && dataSet(re);
-    });
-  }, [cycleCount, cycleBracket]);
+    if(localXY && Array.isArray(localXY)) {
+      dataSet(localXY);
+    }else{
+      const clientTZ = moment.tz.guess();
+      Meteor.call('cycleWeekRate', clientTZ, statType, cycleCount, cycleBracket, (err, re)=>{
+        err && console.log(err);
+        re && dataSet(re);
+      });
+    }
+  }, [localXY, cycleCount, cycleBracket]);
   
   return(
     <div className='chart20Contain'>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // import moment from 'moment';
 import InOutWrap from '/client/components/tinyUi/InOutWrap.jsx';
 // import Pref from '/client/global/pref.js';
@@ -34,7 +34,12 @@ const StoneSelect = ({
   closeUndoOption
 })=> {
   
-  const [ riverLockState, riverLockSet ] = useState( false );
+  const [ riverFlowState, riverFlowStateSet ] = useState( true );
+  
+  useEffect( ()=>{
+    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(riverFlowState);
+  }, [riverFlowState]);
+  
   
   const serial = item.serial;
   const history = item.history;
@@ -146,8 +151,8 @@ const StoneSelect = ({
                     undoOption={undoOption}
                     openUndoOption={openUndoOption}
                     closeUndoOption={closeUndoOption}
-                    riverLockState={riverLockState}
-                    riverLockSet={(e)=>riverLockSet(e)} />
+                    riverFlowState={riverFlowState}
+                    riverFlowStateSet={(e)=>riverFlowStateSet(e)} />
   		        }
             </InOutWrap>
             {fTest.length > 0 && 

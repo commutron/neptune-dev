@@ -33,6 +33,18 @@ const PhasesSlide = ({app})=> {
     });
   }
   
+  function handleLocking() {
+    const type = this[rndmKey2 + 'trkCntrl'].value;
+    Meteor.call('setLockType', type, (error, reply)=>{
+      error && console.log(error);
+      if(reply) {
+        toast.success('Saved');
+      }else{
+        toast.danger('Server Error');
+      }
+    });
+  }
+  
   let lt = app.lastTrack;
   let df = lt.step + '|' + lt.type + '|' + lt.how;
   
@@ -84,6 +96,31 @@ const PhasesSlide = ({app})=> {
         </label>
       
       </div>
+      
+      
+      <hr />
+      
+      <h2><i className='fas fa-unlock fa-fw'></i> River Locking</h2>
+      <div>
+      
+        <i>the type of lock-unlock behavior of river</i>
+        <label htmlFor={rndmKey2 + 'trkCntrl'}><br />
+          <select
+            id={rndmKey2 + 'trkCntrl'}
+            onChange={(e)=>handleLocking(e)}
+            defaultValue={app.lockType}
+            required
+          >
+            <option value={false}></option>
+            <option value='timer'>Timer Only</option>
+            <option value='timerVar'>Timer with Variable Speed</option>
+            <option value='confirm'>Confirm from Server</option>
+            <option value='confirmVar'>Confirm from Server with Variable Speed</option>
+          </select>
+        </label>
+      
+      </div>
+      
     </div>
   );
 };

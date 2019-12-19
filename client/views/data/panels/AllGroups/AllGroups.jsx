@@ -17,7 +17,7 @@ const AllGroups = ({
                     return 0;
                   });
   const menuList = sortList.map( (entry, index)=> {
-                    return <b>{entry.alias.toUpperCase()}</b>;
+                    return entry.alias;
                   });
   
   const defaultSlide = specify ? 
@@ -34,7 +34,8 @@ const AllGroups = ({
           batchDataX={batchDataX}
           widgetData={widgetData} />
       }
-      defaultSlide={defaultSlide}>
+      defaultSlide={defaultSlide}
+      textStyle='up'>
     
       {sortList.map( (entry, index)=> {
         let widgetsList = widgetData.filter(x => x.groupId === entry._id);

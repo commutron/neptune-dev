@@ -4,7 +4,7 @@ import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import Pref from '/client/global/pref.js';
 import StoneProgRing from './StoneProgRing.jsx';
 
-function useInterval(callback, delay) {
+function useTimeOut(callback, delay) {
   const savedCallback = useRef();
   // Remember the latest callback.
   useEffect(() => {
@@ -13,12 +13,14 @@ function useInterval(callback, delay) {
 
   // Set up the interval.
   useEffect(() => {
+  	Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({delay});
+  	
     function tick() {
       savedCallback.current();
     }
     if (delay !== null) {
-      let id = setInterval(tick, delay);
-      return () => clearInterval(id);
+      let id = Meteor.setTimeout(tick, delay);
+      return () => Meteor.clearTimeout(id);
     }
   }, [delay]);
 }
@@ -33,30 +35,58 @@ const Stone = ({
 	blockStone, doneStone, compEntry,
 	showVerify, changeVerify, undoOption,
 	openUndoOption, closeUndoOption,
-	riverLockState, riverLockSet
+	riverFlowState, riverFlowStateSet
 })=> {
 	
   const [ lockState, lockSet ] = useState( true );
   const [ workingState, workingSet ] = useState( false );
   
+  useEffect( ()=>{ 
+    
+    
+    //return ()=> riverFlowStateSet( true ); // reset on unmount 
+  }, []);
+ 
+	useEffect( ()=>{ // reset on unmount 
+    if(doneStone || blockStone) {
+    	lockSet( true );
+    }
+  }, [doneStone, blockStone]);
+ 
   let speed = !Meteor.user().unlockSpeed ? 4000 : ( Meteor.user().unlockSpeed * 2 );
 
-	  useInterval( ()=> {
-	  	if(!currentLive) {
-	  		null;
-	  	}else if(type === 'inspect' && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
-	  		null;
-	  	}else if(type === 'first' && !Roles.userIsInRole(Meteor.userId(), 'verify')) {
-	  		null;
-	  	}else if(type === 'test' && !Roles.userIsInRole(Meteor.userId(), 'test')) {
-	  		null;
-	  	}else if(type === 'finish' && !Roles.userIsInRole(Meteor.userId(), 'finish')) {
-	  		null;
-	  	}else{
-			  lockSet( false );
-	  	}
-	  }, riverLockState === true ? null : riverLockState === 'slow' ? speed * 5 : speed);
+	function unlockAllow() {
+		Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({riverFlowState});
+  	if(!currentLive) {
+  		null;
+  	}else if(doneStone || blockStone) {
+  		null;
+  	}else if(type === 'inspect' && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
+  		null;
+  	}else if(type === 'first' && !Roles.userIsInRole(Meteor.userId(), 'verify')) {
+  		null;
+  	}else if(type === 'test' && !Roles.userIsInRole(Meteor.userId(), 'test')) {
+  		null;
+  	}else if(type === 'finish' && !Roles.userIsInRole(Meteor.userId(), 'finish')) {
+  		null;
+  	}else{
+		  lockSet( false );
+  	}
+	}
 
+	const speedVar = riverFlowState === 'slow' ? ( speed * 5 ) : speed;
+	const confirmLock = !riverFlowState ? null : speed;
+	const confirmLockVar = !riverFlowState ? null : riverFlowState === 'slow' ? ( speed * 3 ) : speed;
+ 
+	const timeOutCntrl = !app.lockType || app.lockType === 'timer' ? speed :
+																				app.lockType === 'timerVar' ? speedVar :
+																				app.lockType === 'confirm' ? confirmLock :
+																				app.lockType === 'confirmVar' ? confirmLockVar :
+																				0;
+	
+  useTimeOut( unlockAllow, timeOutCntrl );
+  
+  
   function reveal() {
     changeVerify(false);
   }
@@ -64,7 +94,7 @@ const Stone = ({
   function passS(pass, doComm) {
   	if(lockState === true) { return false; }
     lockSet( true );
-		riverLockSet( true );
+		riverFlowStateSet( false );
 		workingSet( true );
 		
     let comm = '';
@@ -81,8 +111,8 @@ const Stone = ({
 		Meteor.call('addHistory', id, barcode, sKey, step, type, comm, pass, benchmark, (error, reply)=>{
 	    if(error)
 		    console.log(error);
-			if(reply) {
-				riverLockSet( 'slow' );
+			if(reply === true) {
+				riverFlowStateSet( 'slow' );
 				workingSet( false );
 				openUndoOption();
 			  document.getElementById('lookup').focus();
@@ -96,7 +126,7 @@ const Stone = ({
   function passT(pass, doComm, shipFail) {
   	if(lockState === true) { return false; }
     lockSet( true );
-    riverLockSet( true );
+    riverFlowStateSet( false );
     workingSet( true );
     
     let comm = '';
@@ -119,8 +149,8 @@ const Stone = ({
 			Meteor.call('addTest', id, barcode, sKey, step, type, comm, pass, more, benchmark, (error, reply)=>{
 		    if(error)
 			    console.log(error);
-				if(reply) {
-					riverLockSet( 'slow' );
+				if(reply === true) {
+					riverFlowStateSet( 'slow' );
 					workingSet( false );
 					openUndoOption();
 					// pass === false && unlock();
@@ -136,7 +166,7 @@ const Stone = ({
 	function finish() {
 		if(lockState === true) { return false; }
 	  lockSet( true );
-	  riverLockSet( true );
+	  riverFlowStateSet( false );
 	  workingSet( true );
 	  
     const batchId = id;
@@ -150,9 +180,9 @@ const Stone = ({
 		Meteor.call('finishItem', batchId, barcode, sKey, step, type, benchmark, (error, reply)=>{
 		  if(error)
 		    console.log(error);
-		  if(reply) {
-		  	riverLockSet( 'slow' );
-		  	workingSet( false );
+		  if(reply === true) {
+		  	//riverFlowStateSet( 'slow' );
+		  	//workingSet( false );
 		    document.getElementById('lookup').focus();
 		  }else{
 		    toast.error(Pref.blocked);
@@ -169,8 +199,7 @@ const Stone = ({
 
 	let shape = '';
 	let ripple = '';
-	let locked = doneStone || blockStone ? 
-						 true : lockState;
+	
 	let prepend = type === 'build' || type === 'first' ?
 	              <label className='big'>{type}<br /></label> : null;
 	let apend = type === 'inspect' ?
@@ -223,7 +252,7 @@ const Stone = ({
 				  				id='stonepassButton'
 				  				onClick={ripple}
 				  				tabIndex={-1}
-				  				disabled={locked}>
+				  				disabled={lockState}>
 				  				Pass
 				  				<label className=''><br />{step}</label>
 								</button>
@@ -233,7 +262,7 @@ const Stone = ({
 				  				id='stonefailButton'
 				  				onClick={()=>passT(false, true, false)}
 				  				tabIndex={-1}
-				  				disabled={locked}>
+				  				disabled={lockState}>
 				  				Fail
 				  				<label className=''><br />{step}</label>
 								</button>
@@ -246,7 +275,7 @@ const Stone = ({
 				  				id='stoneButton'
 				  				onClick={ripple}
 				  				tabIndex={-1}
-				  				disabled={locked}>
+				  				disabled={lockState}>
 				  				{prepend}
 									<i>{step}</i>
 									{apend}
@@ -275,18 +304,14 @@ const Stone = ({
 					</ContextMenuTrigger>
 				}
 	        <ContextMenu id={barcode}>
-	          <MenuItem onClick={()=>passS(true, true)} disabled={locked}>
+	          <MenuItem onClick={()=>passS(true, true)} disabled={lockState}>
 	            Pass with Comment
 	          </MenuItem>
           {type === 'test' ?
-	          <MenuItem onClick={()=>passT(true, true, true)} disabled={locked}>
+	          <MenuItem onClick={()=>passT(true, true, true)} disabled={lockState}>
 	            Ship a Failed Test
 	          </MenuItem>
           :null}
-          {/*this.props.compEntry &&
-	          <MenuItem onClick={()=>this.handleUndoLast()}>
-	            Undo Completed Step
-	          </MenuItem>*/}
         </ContextMenu>
     	</div>
     </div>

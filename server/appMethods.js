@@ -271,6 +271,25 @@ Meteor.methods({
     }
   },
   
+  ////////// Lock Unlock control type ////////////////
+  
+  setLockType(lockVal) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      
+      const lockType = typeof lockVal === 'string' ? lockVal : 'timer';
+      
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $set : { 
+          lockType : lockType
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  //////////////////////////////////
+  
 // set last serial
   setlastestSerial(serialNine, serialTen) {
     const auth = Roles.userIsInRole(Meteor.userId(), 'admin');

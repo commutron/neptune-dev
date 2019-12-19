@@ -9,6 +9,16 @@ import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
 import TrendLine from '/client/components/charts/Trends/TrendLine.jsx';
 import ScrapTableAll from '/client/components/tables/ScrapTableAll.jsx';
 
+import { timeRanges } from '/client/components/utilities/CycleCalc';
+
+function countScrap(collected, rangeStart, rangeEnd) {
+
+  let scCount = collected.filter( x =>
+    moment(x.scEntry.time).isBetween(rangeStart, rangeEnd)
+  ).length;
+  
+  return scCount;
+}
 
 const ScrapPanel = ({ batchData, app })=> {
   
@@ -17,6 +27,7 @@ const ScrapPanel = ({ batchData, app })=> {
   const [ cycleBracket, cycleBracketSet ] = useState('week');
   
   const [ workingList, workingListSet ] = useState([]);
+  const [ workingRate, workingRateSet ] = useState([ {x:1,y:0} ]);
   
   useEffect( ()=> {
     Meteor.call('scrapItems', (error, reply)=> {
@@ -32,7 +43,7 @@ const ScrapPanel = ({ batchData, app })=> {
     if(scraps) {
       const chunk = scraps.filter( x => moment(x.scEntry.time)
                                           .isAfter(rangeStart) );
-      
+
       const sortList = chunk.sort((s1, s2)=> {
                     if (s1.scEntry.time < s2.scEntry.time) { return 1 }
                     if (s1.scEntry.time > s2.scEntry.time) { return -1 }
@@ -43,6 +54,13 @@ const ScrapPanel = ({ batchData, app })=> {
     }
                     
   }, [scraps, cycleCount, cycleBracket]);
+  
+  useEffect( ()=>{
+    if(scraps) {
+      const xy = timeRanges(workingList, countScrap, cycleCount, cycleBracket);
+      workingRateSet(xy);
+    }
+  }, [workingList]);
   
   if(!scraps) {
     return(
@@ -114,7 +132,7 @@ const ScrapPanel = ({ batchData, app })=> {
             
             <TrendLine 
               title={`${Pref.scrapped} ${Pref.items} over last ${cycleCount} ${cycleBracket}s`}
-              statType='scrapItem'
+              localXY={workingRate}
               cycleCount={cycleCount}
               cycleBracket={cycleBracket}
               lineColor='rgb(231, 76, 60)' />

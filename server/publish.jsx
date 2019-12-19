@@ -208,8 +208,9 @@ Meteor.publish('thinData', function(){
     return [
       GroupDB.find({orgKey: orgKey}, {
         fields: {
-          'orgKey': 0,
-          'shareKey': 0,
+          'group': 1,
+          'alias': 1,
+          'wiki' : 1
         }}),
       
       WidgetDB.find({orgKey: orgKey}, {
@@ -287,14 +288,15 @@ Meteor.publish('skinnyData', function(clientTZ){
     return [
       GroupDB.find({orgKey: orgKey}, {
         fields: {
-            'orgKey': 0,
-            'shareKey': 0,
-          }}),
-      
+          'group': 1,
+          'alias': 1
+          // 'orgKey': 0,
+          // 'shareKey': 0,
+        }}),
       WidgetDB.find({orgKey: orgKey}, {
         fields: {
-            'orgKey': 0
-          }}),
+          'orgKey': 0
+        }}),
       
       BatchDB.find({orgKey: orgKey}, {
         sort: {batch:-1},
@@ -330,24 +332,35 @@ Meteor.publish('skinnyData', function(clientTZ){
     }
 });
 
-Meteor.publish('hotDataEx', function(batch){
+Meteor.publish('hotDataEx', function(dataRequest){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
+  
   if(!this.userId){
     return this.ready();
   }else{
-    return [
-      BatchDB.find({batch: batch, orgKey: orgKey}, {
+    if( dataRequest === 'groups' ) {
+      return [
+        GroupDB.find({orgKey: orgKey}, {
         fields: {
-          'orgKey': 0,
-          'shareKey': 0,
+            'orgKey': 0,
+            'shareKey': 0,
         }}),
-      XBatchDB.find({batch: batch, orgKey: orgKey}, {
-        fields: {
-          'orgKey': 0,
-          'shareKey': 0
+      ];
+    }else {
+      return [
+        BatchDB.find({batch: dataRequest, orgKey: orgKey}, {
+          fields: {
+            'orgKey': 0,
+            'shareKey': 0,
+          }}),
+        XBatchDB.find({batch: dataRequest, orgKey: orgKey}, {
+          fields: {
+            'orgKey': 0,
+            'shareKey': 0
         }})
       ];
+    }
   }
 });
 

@@ -74,8 +74,12 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
   },[batches, users]);
   
   useEffect( ()=>{
-    const qBatches = _.countBy(eBatchesState, x => x.batch);
-    const itrXY = obj2xy(qBatches);
+    const qBatches = _.countBy(eBatchesState, x => x && x.batch);
+    const qBatchesClean = _.omit(qBatches, (value, key, object)=> {
+      return key == false;
+    });
+    
+    const itrXY = obj2xy(qBatchesClean);
   
     // let QqBatches = eBatchesState.reduce( (allBatch, batch, index, array)=> { 
     //   const objkey = !batch ? false : batch.batch;
@@ -83,9 +87,7 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
     //     objkey in allBatch ? allBatch[objkey]++ : allBatch[objkey] = 1;
     //   return allBatch;
     // }, {});
-    // const qBatchesClean = _.omit(QqBatches, (value, key, object)=> {
-    //   return key == false;
-    // });
+    
     
     Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({qBatches, itrXY});
     xyBatchSet(itrXY);

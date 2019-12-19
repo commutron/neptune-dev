@@ -4,16 +4,13 @@ const SlidesNested = ({
   menuTitle, menu, 
   disable, disableAll, extraClass, 
   topPage, defaultSlide,
+  textStyle,
   children
 })=> {
   
   const df = defaultSlide === undefined ? menuTitle ? false : 0 : defaultSlide;
 
   const [ section, setSection ] = useState( df );
-  
-  const handleClick = (clk)=> {
-    setSection(clk);
-  };
 
   let show = section;
   let dA = [];
@@ -32,7 +29,7 @@ const SlidesNested = ({
         {menuTitle &&
           <button
             key={'0x0'}
-            onClick={()=>handleClick(false)}
+            onClick={()=>setSection(false)}
             className={
               show === false ? 
                 'slideNestedMenuButton cap slideOn' : 
@@ -43,15 +40,15 @@ const SlidesNested = ({
           
         {menu.map( (entry, index)=>{
           let clss =  show === index ? 
-                      'slideNestedMenuButton cap slideOn' : 
-                      'slideNestedMenuButton cap slideOff';
+                      'slideNestedMenuButton slideOn' : 
+                      'slideNestedMenuButton slideOff';
           return (
             <button
               key={index}
-              onClick={()=>handleClick(index)}
-              className={clss}
+              onClick={()=>setSection(index)}
+              className={`${clss} ${textStyle || 'cap'}`}
               disabled={dA[index+1]}
-            >{entry}</button>
+            ><b>{entry}</b></button>
         )})}
       </div>
       <div className={`slidesNestedSlide ${extraClass || ''}`}>

@@ -7,7 +7,7 @@ import InboxToastPop from '/client/components/utilities/InboxToastPop.js';
 import usePrevious from '/client/components/utilities/usePreviousHook.js';
 
 //import Pref from '/client/global/pref.js';
-
+import { TraverseWrap } from '/client/layouts/DataExploreLayout.jsx';
 import Spin from '../../components/uUi/Spin.jsx';
 import DataViewOps from './DataViewOps.jsx';
 
@@ -38,12 +38,30 @@ const ExploreView = ({
     !app 
   ) {
     return(
+      <TraverseWrap
+        batchData={false}
+        widgetData={false}
+        versionData={false}
+        groupData={false}
+        user={false}
+        app={false}
+        title={false}
+        subLink={subLink}
+        action={false}
+        base={true}
+        invertColor={true}
+    >
+      <div className='centre wide'>
+        <Spin />
+      </div>
+    </TraverseWrap>
+  );
+    /*
       <div className='centreContainer'>
         <div className='centrecentre'>
           <Spin />
         </div>
-      </div>
-    );
+      </div>*/
   }
     
   return (
@@ -67,7 +85,7 @@ const ExploreView = ({
   );
 };
 
-export default withTracker( (props) => {
+export default withTracker( ({ view, request, specify }) => {
   //const orb = Session.get('now');
   let login = Meteor.userId() ? true : false;
   
@@ -78,11 +96,10 @@ export default withTracker( (props) => {
   const appSub = login ? Meteor.subscribe('appData') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
   const coldSub = login ? Meteor.subscribe('skinnyData', clientTZ) : false;
-  
-  const batchRequest = props.view === 'batch' ? props.request : false;
-  let hotSubEx = Meteor.subscribe('hotDataEx', batchRequest);
-  let hotBatch = BatchDB.findOne( { batch: batchRequest } ) || false;
-  let hotXBatch = XBatchDB.findOne( { batch: batchRequest } ) || false;
+                      
+  let hotSubEx = Meteor.subscribe('hotDataEx', request);
+  let hotBatch = BatchDB.findOne( { batch: request } ) || false;
+  let hotXBatch = XBatchDB.findOne( { batch: request } ) || false;
 
   if( !login || !active ) {
     return {
@@ -107,9 +124,9 @@ export default withTracker( (props) => {
       allXBatch: XBatchDB.find( {}, { sort: { batch: -1 } } ).fetch(),
       hotBatch: hotBatch,
       hotXBatch: hotXBatch,
-      view: props.view,
-      request: props.request,
-      specify: props.specify
+      view: view,
+      request: request,
+      specify: specify
     };
   }
 })(ExploreView);
