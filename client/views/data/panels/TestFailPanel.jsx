@@ -9,6 +9,18 @@ import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
 import TrendLine from '/client/components/charts/Trends/TrendLine.jsx';
 import TestFailTableAll from '/client/components/tables/TestFailTableAll.jsx';
 
+import { timeRanges } from '/client/components/utilities/CycleCalc';
+
+function countFail(collected, rangeStart, rangeEnd) {
+
+  let tfCount = collected.filter( x =>
+    x.tfEntries.some( y =>
+      moment(y.time).isBetween(rangeStart, rangeEnd) 
+    ) === true
+  ).length;
+  
+  return tfCount;
+}
 
 const TestFailPanel = ({ batchData, app })=> {
   
@@ -17,6 +29,7 @@ const TestFailPanel = ({ batchData, app })=> {
   const [ cycleBracket, cycleBracketSet ] = useState('week');
   
   const [ workingList, workingListSet ] = useState([]);
+  const [ workingRate, workingRateSet ] = useState([ {x:1,y:0} ]);
   
   useEffect( ()=> {
     Meteor.call('testFailItems', (error, reply)=> {
@@ -44,6 +57,12 @@ const TestFailPanel = ({ batchData, app })=> {
                     
   }, [fails, cycleCount, cycleBracket]);
   
+  useEffect( ()=>{
+    if(fails) {
+      const xy = timeRanges(workingList, countFail, cycleCount, cycleBracket);
+      workingRateSet(xy);
+    }
+  }, [workingList, cycleCount, cycleBracket]);
   
   if(!fails) {
     return(
@@ -55,22 +74,25 @@ const TestFailPanel = ({ batchData, app })=> {
     );
   }
   
+  const zeroState = workingList.length === 0 ? true : false;
+  
   const rankList = _.countBy(workingList, x => x.group);
   const max = _.max(rankList);
   const most = Object.entries(rankList)
                 .map( x => x[1] === max && x[0])
                   .filter( x => x !== false);
-  const mostClean = most.length > 1 ? most.join(' & ') : most[0];
+  const mostClean = most.length > 1 ? most.join(' & ') : 
+                    most[0];
   
   const rankListW = _.countBy(workingList, x => x.widget);
   const maxW = _.max(rankListW);
   const mostW = Object.entries(rankListW)
                 .map( x => x[1] === maxW && x[0])
                   .filter( x => x !== false);
-  const mostCleanW = mostW.length > 1 ? mostW.join(' & ') : mostW[0];
+  const mostCleanW = mostW.length > 1 ? mostW.join(' & ') : 
+                     mostW[0];
   
-  const isAuth = Roles.userIsInRole(Meteor.userId(), 'nightly') &&
-                  Roles.userIsInRole(Meteor.userId(), 'admin');
+  
   return(
     <div className='section overscroll' key={1}>
       <div className='space'>
@@ -95,42 +117,42 @@ const TestFailPanel = ({ batchData, app })=> {
             </p>
           </details>
           
-          {isAuth ?
-              <TimeWindower 
-                app={app} 
-                changeCount={(e)=>cycleCountSet(e)}
-                changeBracket={(e)=>cycleBracketSet(e)} />
-            : <div></div>}
+            <TimeWindower 
+              app={app} 
+              changeCount={(e)=>cycleCountSet(e)}
+              changeBracket={(e)=>cycleBracketSet(e)} />
+            
         </div>
           
         <div className='comfort vbreak'>
           
-          <div className='medBig maxW50'>
-            <StatLine
-              num={mostClean}
-              name={`${most.length > 1 ? 'have' : 'has'} the most with `}
-              postNum={max}
-              postText={most.length > 1 ? Pref.items +' each' : Pref.items}
-              color='darkRedT up'
-              big={true} />
-            <StatLine
-              num={mostCleanW}
-              name={`${mostW.length > 1 ? 'are' : 'is'} the most with `}
-              postNum={maxW}
-              postText={mostW.length > 1 ? Pref.items +' each' : Pref.items}
-              color='darkRedT up'
-              big={true} />
-          </div>
+          {!zeroState ?
+            <div className='medBig maxW50'>
+              <StatLine
+                num={mostClean}
+                name={`${most.length > 1 ? 'have' : 'has'} the most with `}
+                postNum={max}
+                postText={most.length > 1 ? Pref.items +' each' : Pref.items}
+                color='darkRedT up'
+                big={true} />
+              <StatLine
+                num={mostCleanW}
+                name={`${mostW.length > 1 ? 'are' : 'is'} the most with `}
+                postNum={maxW}
+                postText={mostW.length > 1 ? Pref.items +' each' : Pref.items}
+                color='darkRedT up'
+                big={true} />
+            </div>
+          : <div></div>}
           
           <div className='centreRow middle'>
             
-            {isAuth &&
-              <TrendLine 
-                title={`failed ${Pref.items} items over last ${cycleCount} ${cycleBracket}s`}
-                statType='failItem'
-                cycleCount={cycleCount}
-                cycleBracket={cycleBracket}
-                lineColor='rgb(192, 57, 43)' />}
+            <TrendLine 
+              title={`failed ${Pref.items} items over last ${cycleCount} ${cycleBracket}s`}
+              localXY={workingRate}
+              cycleCount={cycleCount}
+              cycleBracket={cycleBracket}
+              lineColor='rgb(192, 57, 43)' />
           
             <NumStatRing
               total={workingList.length}

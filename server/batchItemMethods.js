@@ -323,7 +323,7 @@ Meteor.methods({
   },
   
 //// Tide \\\\\
-
+  
   startTideTask(batchId, accessKey) {
     try {
       const orgKey = accessKey || Meteor.user().orgKey;
@@ -357,6 +357,7 @@ Meteor.methods({
             );
           }
         });
+        return true;
       }
     }catch (err) {
       throw new Meteor.Error(err);
@@ -376,6 +377,7 @@ Meteor.methods({
             engaged: false
           }
         });
+        return true;
       }
     }catch (err) {
       throw new Meteor.Error(err);
@@ -383,29 +385,34 @@ Meteor.methods({
   },
   
   switchTideTask(tideKey, newbatchID) {
-    const accessKey = Meteor.user().orgKey;
+    try {
+      const accessKey = Meteor.user().orgKey;
       
-    const stopFirst = (tideKey, accessKey)=> {
-      return new Promise(function(resolve, reject) {
-        const batch = BatchDB.findOne({ 'tide.tKey': tideKey });
-        const batchID = batch._id || false;
-        if(batchID) {
-          BatchDB.update({_id: batchID, orgKey: accessKey, 'tide.tKey': tideKey}, {
-            $set : { 
-              'tide.$.stopTime' : new Date()
-          }});
-          resolve('Success');
-        }else{
-          reject('fail');
-        }
-      });
-    };
-    
-    const startSecond = (newbatchID, accessKey)=> {
-      Meteor.call('startTideTask', newbatchID, accessKey);
-    };
-    
-    stopFirst(tideKey, accessKey).then(startSecond(newbatchID, accessKey));
+      const stopFirst = (tideKey, accessKey)=> {
+        return new Promise(function(resolve, reject) {
+          const batch = BatchDB.findOne({ 'tide.tKey': tideKey });
+          const batchID = batch._id || false;
+          if(batchID) {
+            BatchDB.update({_id: batchID, orgKey: accessKey, 'tide.tKey': tideKey}, {
+              $set : { 
+                'tide.$.stopTime' : new Date()
+            }});
+            resolve('Success');
+          }else{
+            reject('fail');
+          }
+        });
+      };
+      
+      const startSecond = (newbatchID, accessKey)=> {
+        Meteor.call('startTideTask', newbatchID, accessKey);
+      };
+      
+      stopFirst(tideKey, accessKey).then(startSecond(newbatchID, accessKey));
+      return true;
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
   },
 
 

@@ -1,29 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import Pref from '/client/global/pref.js';
 import StoneProgRing from './StoneProgRing.jsx';
 
-function useTimeOut(callback, delay) {
-  const savedCallback = useRef();
-  // Remember the latest callback.
-  useEffect(() => {
-    savedCallback.current = callback;
-  }, [callback]);
-
-  // Set up the interval.
-  useEffect(() => {
-  	Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({delay});
-  	
-    function tick() {
-      savedCallback.current();
-    }
-    if (delay !== null) {
-      let id = Meteor.setTimeout(tick, delay);
-      return () => Meteor.clearTimeout(id);
-    }
-  }, [delay]);
-}
+import useTimeOut from '/client/components/utilities/useTimeOutHook.js';
 
 const Stone = ({
 	key, id, barcode,
@@ -40,27 +21,13 @@ const Stone = ({
 	
   const [ lockState, lockSet ] = useState( true );
   const [ workingState, workingSet ] = useState( false );
-  
-  useEffect( ()=>{ 
-    
-    
-    //return ()=> riverFlowStateSet( true ); // reset on unmount 
-  }, []);
- 
-	useEffect( ()=>{ // reset on unmount 
-    if(doneStone || blockStone) {
-    	lockSet( true );
-    }
-  }, [doneStone, blockStone]);
- 
-  let speed = !Meteor.user().unlockSpeed ? 4000 : ( Meteor.user().unlockSpeed * 2 );
 
 	function unlockAllow() {
 		Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({riverFlowState});
   	if(!currentLive) {
   		null;
-  	}else if(doneStone || blockStone) {
-  		null;
+  	// }else if(doneStone || blockStone) {
+  	// 	null;
   	}else if(type === 'inspect' && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
   		null;
   	}else if(type === 'first' && !Roles.userIsInRole(Meteor.userId(), 'verify')) {
@@ -73,18 +40,22 @@ const Stone = ({
 		  lockSet( false );
   	}
 	}
-
-	const speedVar = riverFlowState === 'slow' ? ( speed * 5 ) : speed;
+	
+	const speed = !Meteor.user().unlockSpeed ? 
+									4000 : ( Meteor.user().unlockSpeed * 2 );
+	
+  const speedVar = riverFlowState === 'slow' ? ( speed * 6 ) : speed;
 	const confirmLock = !riverFlowState ? null : speed;
-	const confirmLockVar = !riverFlowState ? null : riverFlowState === 'slow' ? ( speed * 3 ) : speed;
- 
+	const confirmLockVar = !riverFlowState ? null : 
+													riverFlowState === 'slow' ? ( speed * 6 ) : speed;
+
 	const timeOutCntrl = !app.lockType || app.lockType === 'timer' ? speed :
 																				app.lockType === 'timerVar' ? speedVar :
 																				app.lockType === 'confirm' ? confirmLock :
 																				app.lockType === 'confirmVar' ? confirmLockVar :
 																				0;
 	
-  useTimeOut( unlockAllow, timeOutCntrl );
+	useTimeOut( unlockAllow, timeOutCntrl );
   
   
   function reveal() {
@@ -230,6 +201,8 @@ const Stone = ({
   const topClass = doneStone ? 'doneStoneMask' :
   								 blockStone ? 'blockStone' : '';
   const topTitle = topClass !== '' ? Pref.stoneislocked : '';
+  
+  const lockout = lockState || blockStone || doneStone;
 	
   return(
    	<div className='noCopy'>
@@ -252,7 +225,7 @@ const Stone = ({
 				  				id='stonepassButton'
 				  				onClick={ripple}
 				  				tabIndex={-1}
-				  				disabled={lockState}>
+				  				disabled={lockout}>
 				  				Pass
 				  				<label className=''><br />{step}</label>
 								</button>
@@ -262,7 +235,7 @@ const Stone = ({
 				  				id='stonefailButton'
 				  				onClick={()=>passT(false, true, false)}
 				  				tabIndex={-1}
-				  				disabled={lockState}>
+				  				disabled={lockout}>
 				  				Fail
 				  				<label className=''><br />{step}</label>
 								</button>
@@ -275,7 +248,7 @@ const Stone = ({
 				  				id='stoneButton'
 				  				onClick={ripple}
 				  				tabIndex={-1}
-				  				disabled={lockState}>
+				  				disabled={lockout}>
 				  				{prepend}
 									<i>{step}</i>
 									{apend}
@@ -304,11 +277,11 @@ const Stone = ({
 					</ContextMenuTrigger>
 				}
 	        <ContextMenu id={barcode}>
-	          <MenuItem onClick={()=>passS(true, true)} disabled={lockState}>
+	          <MenuItem onClick={()=>passS(true, true)} disabled={lockout}>
 	            Pass with Comment
 	          </MenuItem>
           {type === 'test' ?
-	          <MenuItem onClick={()=>passT(true, true, true)} disabled={lockState}>
+	          <MenuItem onClick={()=>passT(true, true, true)} disabled={lockout}>
 	            Ship a Failed Test
 	          </MenuItem>
           :null}

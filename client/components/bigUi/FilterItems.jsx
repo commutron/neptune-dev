@@ -20,8 +20,6 @@ const FilterItems = ({
   function changeNotFilter() {
     onNotChange(this.toggle.checked);
   }
-  
-  const styfix = { color: 'black' };
     
   return(
     <div className='itmFltrBlock noCopy'>
@@ -45,15 +43,15 @@ const FilterItems = ({
           ref={(i)=>this.keyword = i}
           onChange={(e)=>changeKeywordFilter(e)}>
           <option value={false} label='' />
-          <optgroup label='Categories' style={styfix}>
-            <option value='Complete' label='Complete' />
-            <option value='In Progress' label='In Progress' />
-            <option value='Alternative' label='Alternative Flow' />
-            <option value='First Offs' label='First Offs' />
-            <option value='Nonconformances' label='Nonconformances' />
-            <option value='Shortfalls' label='Shortfalls' />
-            <option value='RMA' label='RMA' />
-            <option value='Scrap' label='Scrap' />
+          <optgroup label='Categories'>
+            <option value='Complete'>Complete</option>
+            <option value='In Progress'>In Progress</option>
+            <option value='Alternative'>Alternative Flow</option>
+            <option value='First Offs'>First Offs</option>
+            <option value='Nonconformances'>Nonconformances</option>
+            <option value='Shortfalls'>Shortfalls</option>
+            <option value='RMA'>RMA</option>
+            <option value='Scrap'>Scrap</option>
           </optgroup>
           <optgroup label='Steps'>
             {advancedList.map( (entry, index)=>{

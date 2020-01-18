@@ -678,7 +678,7 @@ Meteor.methods({
   
   ////// no work days
   addNonWorkDay(newDay) {
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+    if(Roles.userIsInRole(Meteor.userId(), ['admin', 'peopleSuper'])) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $addToSet : { 
           nonWorkDays : newDay
@@ -689,7 +689,7 @@ Meteor.methods({
     }
   },
   removeNonWorkDay(badDay) {
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+    if(Roles.userIsInRole(Meteor.userId(), ['admin', 'peopleSuper'])) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $pull : { 
           nonWorkDays : badDay
@@ -702,7 +702,7 @@ Meteor.methods({
   
   resetNonWorkDay() {
     try {
-      if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      if(Roles.userIsInRole(Meteor.userId(), ['admin', 'peopleSuper'])) {
         AppDB.update({orgKey: Meteor.user().orgKey}, {
           $set : {
             nonWorkDays: [],

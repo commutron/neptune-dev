@@ -12,7 +12,7 @@ import ScrapTableAll from '/client/components/tables/ScrapTableAll.jsx';
 import { timeRanges } from '/client/components/utilities/CycleCalc';
 
 function countScrap(collected, rangeStart, rangeEnd) {
-
+  
   let scCount = collected.filter( x =>
     moment(x.scEntry.time).isBetween(rangeStart, rangeEnd)
   ).length;
@@ -72,19 +72,23 @@ const ScrapPanel = ({ batchData, app })=> {
     );
   }
   
+  const zeroState = workingList.length === 0 ? true : false;
+  
   const rankList = _.countBy(workingList, x => x.group);
   const max = _.max(rankList);
   const most = Object.entries(rankList)
                 .map( x => x[1] === max && x[0])
                   .filter( x => x !== false);
-  const mostClean = most.length > 1 ? most.join(' & ') : most[0];
+  const mostClean = most.length > 1 ? most.join(' & ') : 
+                    most[0];
   
   const rankListW = _.countBy(workingList, x => x.widget);
   const maxW = _.max(rankListW);
   const mostW = Object.entries(rankListW)
                 .map( x => x[1] === maxW && x[0])
                   .filter( x => x !== false);
-  const mostCleanW = mostW.length > 1 ? mostW.join(' & ') : mostW[0];
+  const mostCleanW = mostW.length > 1 ? mostW.join(' & ') : 
+                     mostW[0];
                       
   return(
     <div className='section overscroll' key={1}>
@@ -110,23 +114,25 @@ const ScrapPanel = ({ batchData, app })=> {
         
         <div className='comfort vbreak'>
           
-          <div className='medBig maxW50'>
-            <StatLine
-              num={mostClean}
-              name={`${most.length > 1 ? 'have' : 'has'} the most with `}
-              postNum={max}
-              postText={most.length > 1 ? Pref.scraps +' each' : Pref.scraps}
-              color='redT up'
-              big={true} />
-            
-            <StatLine
-              num={mostCleanW}
-              name={`${mostW.length > 1 ? 'are' : 'is'} the most with `}
-              postNum={maxW}
-              postText={mostW.length > 1 ? Pref.scraps +' each' : Pref.scraps}
-              color='redT up'
-              big={true} />
-          </div>
+          {!zeroState ?
+            <div className='medBig maxW50'>
+              <StatLine
+                num={mostClean}
+                name={`${most.length > 1 ? 'have' : 'has'} the most with `}
+                postNum={max}
+                postText={most.length > 1 ? Pref.scraps +' each' : Pref.scraps}
+                color='redT up'
+                big={true} />
+              
+              <StatLine
+                num={mostCleanW}
+                name={`${mostW.length > 1 ? 'are' : 'is'} the most with `}
+                postNum={maxW}
+                postText={mostW.length > 1 ? Pref.scraps +' each' : Pref.scraps}
+                color='redT up'
+                big={true} />
+            </div>
+          : <div></div>}
           
           <div className='centreRow middle'>
             

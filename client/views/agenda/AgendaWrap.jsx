@@ -2,9 +2,9 @@ import React, {useState, useEffect, useRef, Fragment} from 'react';
 import moment from 'moment';
 import 'moment-timezone';
 import { ToastContainer } from 'react-toastify';
-import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 
-import Spin from '../../components/uUi/Spin.jsx';
+// import Spin from '../../components/uUi/Spin.jsx';
 import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
 
@@ -65,13 +65,15 @@ const AgendaWrap = ({
       }else{
         return moment(x).isBetween(now, in100, null, '[)');
       }
-    });
+    }).sort();
+    const noDays100Nice = Array.from(noDays100, x =>
+      moment(x).format("dddd, MMMM Do YYYY") );
     
     numSet([
       ['q2tTotal', q2tTotal.toFixed(2, 10)],
       ['howManyHours', howManyHours],
       ['100daysFromNow', in100.calendar()],
-      ['nonWorkDaysInNext100Days', noDays100.sort()], 
+      ['nonWorkDaysInNext100Days', noDays100Nice], 
     ]);
   }, [pCache, workingSet, app]);
 

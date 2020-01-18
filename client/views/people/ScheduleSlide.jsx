@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
 // import business from 'moment-business';
 import 'moment-timezone';
@@ -45,20 +45,20 @@ const ScheduleSlide = ({ app, user, users, pCache })=> {
   
   function handleAdd(wild) {
     const newDate = !wild ? dateState : wildState;
-    Meteor.call('addNonWorkDay', newDate, (re, err)=>{
+    Meteor.call('addNonWorkDay', newDate, (err, re)=>{
       err && console.log(err);
       console.log(re);
     });
   }
   function handleRemove(wild) {
     const badDate = !wild ? dateState : wildState;
-    Meteor.call('removeNonWorkDay', badDate, (re, err)=>{
+    Meteor.call('removeNonWorkDay', badDate, (err, re)=>{
       err && console.log(err);
       console.log(re);
     });
   }
   function handleReset() {
-    Meteor.call('resetNonWorkDay', (re, err)=>{
+    Meteor.call('resetNonWorkDay', (err, re)=>{
       err && console.log(err);
       console.log(re);
     });
@@ -66,6 +66,10 @@ const ScheduleSlide = ({ app, user, users, pCache })=> {
   
   const nWD = app.nonWorkDays || [];
   const sortList = nWD.sort();
+  
+  const isAuth = Roles.userIsInRole(Meteor.userId(), 'admin') ||
+                 Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
+
   
   return(
     <div className='space5x5'>
@@ -80,18 +84,21 @@ const ScheduleSlide = ({ app, user, users, pCache })=> {
           
         <button 
           className='action'
-          onClick={()=>handleTest()}>Test {dateState}</button>
+          onClick={()=>handleTest()}
+          disabled={!isAuth}>Test {dateState}</button>
       </div>
       
       <div className='vspace balance'>
         
         <button 
           className='action'
-          onClick={()=>handleAdd(false)}>Add {dateState}</button>
+          onClick={()=>handleAdd(false)}
+          disabled={!isAuth}>Add {dateState}</button>
         
         <button
           className='action'
-          onClick={()=>handleRemove(false)}>Remove {dateState}</button>
+          onClick={()=>handleRemove(false)}
+          disabled={!isAuth}>Remove {dateState}</button>
         
       </div>
       
@@ -99,11 +106,13 @@ const ScheduleSlide = ({ app, user, users, pCache })=> {
           
         <button 
           className='action'
-          onClick={()=>handleAdd(true)}>Add {wildState}</button>
+          onClick={()=>handleAdd(true)}
+          disabled={!isAuth}>Add {wildState}</button>
         
         <button
           className='action'
-          onClick={()=>handleRemove(true)}>Remove {wildState}</button>
+          onClick={()=>handleRemove(true)}
+          disabled={!isAuth}>Remove {wildState}</button>
         
       </div>
       
@@ -117,7 +126,8 @@ const ScheduleSlide = ({ app, user, users, pCache })=> {
       
         <button
           className='action'
-          onClick={()=>handleReset()}>RESET ALL</button>
+          onClick={()=>handleReset()}
+          disabled={!isAuth}>RESET ALL</button>
       </div>
     </div>
   );

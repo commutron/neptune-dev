@@ -7,34 +7,38 @@ const TideControl = ({ batchID, tideKey, currentLive, tideLockOut })=> {
   
   const [lock, setLock] = useState(false);
   
-  useEffect(() => {
-	  lockTimer = Meteor.setTimeout( ()=>{
-      if(lock === true) {
-        setLock(false);
-      }
-    },3000);
-    return () => { Meteor.clearInterval(this.lockTimer); };
-  }, [lock]);
+  function timerUnlock() {
+	  return Meteor.setTimeout( ()=>{
+      setLock(false);
+    },5000);
+  }
   
+  useEffect(() => {
+    return () => { Meteor.clearInterval(timerUnlock); };
+  }, []);
   
   function handleStart() {
     setLock(true);
-    Meteor.call('startTideTask', batchID, (error)=> {
+    Meteor.call('startTideTask', batchID, (error, reply)=> {
       if(error) {
         console.log(error);
         toast.error('Rejected by Server');
-      }else{
+      }
+      if(reply) {
+        timerUnlock();
         document.getElementById('lookup').focus();
       }
     });
   }
   function handleStop() {
     setLock(true);
-    Meteor.call('stopTideTask', batchID, tideKey, (error)=> {
+    Meteor.call('stopTideTask', batchID, tideKey, (error, reply)=> {
       if(error) {
         console.log(error);
         toast.error('Rejected by Server');
-      }else{
+      }
+      if(reply) {
+        timerUnlock();
         document.getElementById('lookup').focus();
       }
     });
@@ -42,11 +46,13 @@ const TideControl = ({ batchID, tideKey, currentLive, tideLockOut })=> {
   
   function handleSwitch() {
     setLock(true);
-    Meteor.call('switchTideTask', tideKey, batchID, (error)=> {
+    Meteor.call('switchTideTask', tideKey, batchID, (error, reply)=> {
       if(error) {
         console.log(error);
         toast.error('Rejected by Server');
-      }else{
+      }
+      if(reply) {
+        timerUnlock();
         document.getElementById('lookup').focus();
       }
     });

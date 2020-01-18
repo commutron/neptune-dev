@@ -177,7 +177,7 @@
   font-size: 2vh;
 }
 
-.ovColhead { color: white; font-size-adjust: 2; }
+.ovColhead { color: white; }
 
 /* dense compact layout */
 .overGridFrame.compact {
