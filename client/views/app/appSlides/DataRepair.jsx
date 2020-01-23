@@ -72,7 +72,7 @@ const DataRepair = ({ app, users })=> {
     const clientTZ = moment.tz.guess();
     Meteor.call('FORCEcacheUpdate', clientTZ, (error)=>{
       error && console.log(error);
-      toast.success('request sent', { autoClose: false });
+      toast.success('method called', { autoClose: false });
     });
   }
   
@@ -144,7 +144,7 @@ const DataRepair = ({ app, users })=> {
       <button
         onClick={()=>updateCaches()}
         className='action clear blackT'
-      >Force Update Cache</button>
+      >Force Update All Caches</button>
       
       <hr />
       

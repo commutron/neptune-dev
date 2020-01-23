@@ -17,7 +17,7 @@ const PeoplePanel = ({
     let chunks = [];
     for( let u of eUsers ) {
       const batchMatch = eBatches.find( 
-        x => x.tide && x.tide.find(  y => y.tKey === u.engaged.tKey ) 
+        x => x.tide && x.tide.find(  y => y.tKey === u.engaged.tKey ) //NO
       );
       const uTide = batchMatch && batchMatch.tide.find(  y => y.tKey === u.engaged.tKey );
       if(uTide) {

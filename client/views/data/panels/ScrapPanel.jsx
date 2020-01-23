@@ -22,9 +22,13 @@ function countScrap(collected, rangeStart, rangeEnd) {
 
 const ScrapPanel = ({ batchData, app })=> {
   
+  const sessionSticky = 'scrapOverview';
+  const ss = Session.get(sessionSticky) || '2,week';
+  const selection = ss.split(',');
+  
   const [ scraps, scrapsSet ] = useState(false);
-  const [ cycleCount, cycleCountSet ] = useState(2);
-  const [ cycleBracket, cycleBracketSet ] = useState('week');
+  const [ cycleCount, cycleCountSet ] = useState( Math.abs(selection[0]) || 2);
+  const [ cycleBracket, cycleBracketSet ] = useState( selection[1] || 'week');
   
   const [ workingList, workingListSet ] = useState([]);
   const [ workingRate, workingRateSet ] = useState([ {x:1,y:0} ]);
@@ -109,7 +113,10 @@ const ScrapPanel = ({ batchData, app })=> {
           <TimeWindower 
             app={app} 
             changeCount={(e)=>cycleCountSet(e)}
-            changeBracket={(e)=>cycleBracketSet(e)} />
+            changeBracket={(e)=>cycleBracketSet(e)}
+            stickyValue={cycleCount+','+cycleBracket}
+            sessionSticky={sessionSticky} />
+              
         </div>
         
         <div className='comfort vbreak'>

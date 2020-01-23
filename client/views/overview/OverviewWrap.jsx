@@ -32,19 +32,25 @@ function useInterval(callback, delay) {
 
 const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> {
 
+  const sessionSticky = 'overviewOverview';
+  
   const [ working, workingSet ] = useState( false );
   const [ loadTime, loadTimeSet ] = useState( moment() );
   const [ tickingTime, tickingTimeSet ] = useState( moment() );
   
-  const [ filterBy, filterBySet ] = useState( false );
-  const [ sortBy, sortBySet ] = useState( 'priority' );
-  const [ dense, denseSet ] = useState( 0 );
+  const [ filterBy, filterBySet ] = useState( Session.get(sessionSticky+'filter') || false );
+  const [ sortBy, sortBySet ] = useState( Session.get(sessionSticky+'sort') || 'priority' );
+  const [ dense, denseSet ] = useState( Session.get(sessionSticky+'dense') || 0 );
   
   const [ liveState, liveSet ] = useState( false );
   
   useEffect( ()=> {
     sortInitial();
   }, [filterBy, sortBy]);
+  
+  useEffect( ()=> {
+    Session.set(sessionSticky+'dense', dense);
+  }, [dense]);
 
   useInterval( ()=> {
     tickingTimeSet( moment() );
@@ -54,17 +60,19 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
     const value = e.target.value;
     const filter = value === 'false' ? false : value;
     filterBySet( filter );
+    Session.set(sessionSticky+'filter', filter);
   }
   
   function changeSort(e) {
     const sort = e.target.value;
     sortBySet( sort );
+    Session.set(sessionSticky+'sort', sort);
   }
   
-  function forceRefresh() {
+  function requestRefresh() {
     workingSet( true );
     liveSet( false );
-    Meteor.call('FORCEcacheUpdate', clientTZ, ()=>{
+    Meteor.call('REQUESTcacheUpdate', clientTZ, true, true, true, false, ()=>{
       sortInitial();
       loadTimeSet( moment() );
       workingSet( false );
@@ -174,7 +182,7 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
             type='button'
             title='Refresh Data'
             className={working ? 'spin2' : ''}
-            onClick={(e)=>forceRefresh()}>
+            onClick={(e)=>requestRefresh()}>
           <i className='fas fa-sync-alt primeRightIcon'></i>
           </button>
         </div>

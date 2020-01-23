@@ -70,13 +70,16 @@ Meteor.methods({
   			  updatedAt: new Date(),
   			  updatedWho: Meteor.userId()
         }});
+      Meteor.defer( ()=>{
+        Meteor.call('batchCacheUpdate', accessKey, true);
+      });
       return true;
     }else{
       return false;
     }
   },
   
-  alterBatchFulfill(batchId, oldDate, newDate, reason) {
+  alterBatchFulfill(batchId, oldDate, newDate, reason, clientTZ) {
     
     const auth = Roles.userIsInRole(Meteor.userId(), ['edit', 'sales']);
     if(auth) {
@@ -95,6 +98,9 @@ Meteor.methods({
             newValue: newDate
           }
         }});
+      Meteor.defer( ()=>{
+        Meteor.call('priorityCacheUpdate', accessKey, clientTZ, true);
+      });
       return true;
     }else{
       return false;
@@ -243,7 +249,7 @@ Meteor.methods({
     }
   },
   // push time budget, whole time for batch
-  pushBatchTimeBudget(batchId, qTime) {
+  pushBatchTimeBudget(batchId, qTime, clientTZ) {
     try{
       if(Roles.userIsInRole(Meteor.userId(), ['sales', 'run', 'edit'])) {
         BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
@@ -256,6 +262,9 @@ Meteor.methods({
               $position: 0
             }
           }});
+        Meteor.defer( ()=>{
+          Meteor.call('priorityCacheUpdate', accessKey, clientTZ, true);
+        });
       }else{
         null;
       }

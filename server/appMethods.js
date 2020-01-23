@@ -782,10 +782,24 @@ Meteor.methods({
       Meteor.call('completeCacheUpdate', key, true);
     }
   },
+  
+  REQUESTcacheUpdate(clientTZ, batchUp, priorityUp, phaseUp, compUp) {
+    if(Roles.userIsInRole(Meteor.userId(), 'active')) {
+      const key = Meteor.user().orgKey;
+      batchUp && Meteor.defer( ()=>{
+        Meteor.call('batchCacheUpdate', key, false) });
+      priorityUp && Meteor.defer( ()=>{
+        Meteor.call('priorityCacheUpdate', key, clientTZ, false) });
+      phaseUp && Meteor.defer( ()=>{
+        Meteor.call('phaseCacheUpdate', key, false) });
+      compUp && Meteor.defer( ()=>{
+        Meteor.call('completeCacheUpdate', key, false) });
+    }
+  },
     
   batchCacheUpdate(accessKey, force) {
     if(typeof accessKey === 'string') {
-      const timeOut = moment().subtract(2, 'hours').toISOString();
+      const timeOut = moment().subtract(12, 'hours').toISOString();
       const currentCache = CacheDB.findOne({
         orgKey: accessKey, 
         lastUpdated: { $gte: new Date(timeOut) },
@@ -810,7 +824,7 @@ Meteor.methods({
   
   priorityCacheUpdate(accessKey, clientTZ, force) {
     if(typeof accessKey === 'string') {
-      const timeOut = moment().subtract(1, 'hours').toISOString();
+      const timeOut = moment().subtract(15, 'minutes').toISOString();
       const currentCache = CacheDB.findOne({
         orgKey: accessKey, 
         lastUpdated: { $gte: new Date(timeOut) },

@@ -7,15 +7,26 @@ import FilterItems from '/client/components/bigUi/FilterItems.jsx';
 
 const ItemsList = ({ batchData, widgetData })=> {
   
-  const [ stateList, setList ] = useState([]);
-  const [ keyword, setKeyword ] = useState(false);
-  const [ timeModifyer, setTime ] = useState(false);
-  const [ notModifyer, setMod ] = useState(false);
+  const sessionSticky = batchData.batch + 'batchItemFilter' ;
   
+  const [ stateList, setList ] = useState([]);
+  const [ keyword, setKeyword ] = useState( Session.get(sessionSticky+'keyword') || false);
+  const [ timeModifyer, setTime ] = useState( Session.get(sessionSticky+'time') || false);
+  const [ notModifyer, setMod ] = useState( Session.get(sessionSticky+'toggle') || false);
+
   // update filter state
-  function setKeywordFilter(keyword) { setKeyword( keyword.toLowerCase() ); }
-  function setTimeFilter(rule) { setTime( rule ); }
-  function setToggle(rule) { setMod( rule ); }
+  function setKeywordFilter(keyword) {
+    setKeyword( keyword );
+    Session.set((sessionSticky+'keyword'), keyword);
+  }
+  function setTimeFilter(rule) { 
+    setTime( rule );
+    Session.set((sessionSticky+'time'), rule);
+  }
+  function setToggle(rule) { 
+    setMod( rule );
+    Session.set((sessionSticky+'toggle'), rule);
+  }
   
   // get flow steps for menu
   function flowSteps() {
@@ -306,6 +317,7 @@ const ItemsList = ({ batchData, widgetData })=> {
           total={stateList.length}
           advancedList={steps}
           selectedKeyword={keyword}
+          selectedTime={timeModifyer}
           selectedToggle={notModifyer}
           onKeywordChange={e => setKeywordFilter(e)}
           onTimeChange={e => setTimeFilter(e)}

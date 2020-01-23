@@ -48,8 +48,8 @@ const RmaBlock = ({ id, serial, iRMA, allRMA })=>{
                     ><i className='fas fa-times fa-lg fa-fw'></i></button>
                 </div>
               </div>
-              {dts.comment !== '' && <p className='endComment'>{dts.comment}</p>}
             </div>
+            {dts.comment !== '' && <p className='endComment'>{dts.comment}</p>}
           </div>
       )})}
     </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-//import moment from 'moment';
+import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
@@ -20,8 +20,9 @@ export const AlterFulfill = ({ batchId, end, app, lock })=> {
     e.preventDefault();
     
     const endDate = e.target.eDate.value;
+    const clientTZ = moment.tz.guess();
     
-    Meteor.call('alterBatchFulfill', batchId, end, endDate, reasonState, (error, reply)=>{
+    Meteor.call('alterBatchFulfill', batchId, end, endDate, reasonState, clientTZ, (error, reply)=>{
       if(error) {
         console.log(error);
         toast.error('Server Error');

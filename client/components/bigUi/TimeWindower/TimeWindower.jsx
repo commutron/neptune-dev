@@ -3,13 +3,13 @@ import Pref from '/client/global/pref.js';
 import moment from 'moment';
 
 
-
-const TimeWindower = ({ app, changeCount, changeBracket })=>{
+const TimeWindower = ({ app, changeCount, changeBracket, stickyValue, sessionSticky })=>{
   
   function handleRange(e) {
     const selection = e.split(',');
     changeCount(Math.abs(selection[0]));
     changeBracket(selection[1]);
+    Session.set(sessionSticky, e);
   }
   
   const floorDate = moment(app.createdAt);
@@ -21,12 +21,8 @@ const TimeWindower = ({ app, changeCount, changeBracket })=>{
     return mostMax;
   }, [floorDate] );
   
-  const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
-  const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
-  const auth = isNightly && isAdmin;
-  
-  const maxWeekOption = <option value={maxWeek+',week'} disabled={!auth}>{maxWeek}(max) Weeks</option>;
-  const maxMonthOption = <option value={maxMonth+',month'} disabled={!auth}>{maxMonth}(max) Months</option>;
+  const maxWeekOption = <option value={maxWeek+',week'}>{maxWeek}(max) Weeks</option>;
+  const maxMonthOption = <option value={maxMonth+',month'}>{maxMonth}(max) Months</option>;
 
   return(
     <nav>
@@ -36,7 +32,7 @@ const TimeWindower = ({ app, changeCount, changeBracket })=>{
           id='rangeSelect'
           title={`Change ${Pref.phase} Filter`}
           className='overToolSort liteToolOn'
-          defaultValue='2,week'
+          defaultValue={stickyValue}
           onChange={(e)=>handleRange(e.target.value)}>
           <option value={'2,week'}>2 Weeks</option>
           {maxWeek < 6 ? maxWeekOption : 
@@ -47,14 +43,14 @@ const TimeWindower = ({ app, changeCount, changeBracket })=>{
           {maxWeek < 6 ? maxMonthOption : 
             <option value='6,month'>6 Months</option>}
           {maxMonth > 6 && maxMonth < 12 ? maxMonthOption :
-            <option value='12,month' disabled={!auth}>12 Months</option>}
+            <option value='12,month'>12 Months</option>}
           {maxMonth > 12 && maxMonth < 18 ? maxMonthOption :
-            <option value={'18,month'} disabled={!auth}>18 Months</option>}
+            <option value={'18,month'}>18 Months</option>}
           {maxMonth > 18 && maxMonth < 24 ? maxMonthOption :
-            <option value={'24,month'} disabled={!auth}>24 Months</option>}
+            <option value={'24,month'}>24 Months</option>}
             
           {maxYear < 2 ? null : 
-            <option value={maxYear+',year'} disabled={!auth}>{maxYear}(max) Years</option>}
+            <option value={maxYear+',year'}>{maxYear}(max) Years</option>}
         </select>
       </span>
     </nav>

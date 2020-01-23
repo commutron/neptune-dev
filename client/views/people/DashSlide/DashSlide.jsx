@@ -61,7 +61,7 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
       
       const eBatches = eUsers.map( (user, index)=>{
         const acBatch = tideBatches.find( y =>
-          y.tide && y.tide.find( z => z.tKey === user.engaged.tKey ) );
+          y.tide && y.tide.find( z => z.tKey === user.engaged.tKey ) ); // MAYBE?
         if(acBatch) {
           return acBatch;
         }  

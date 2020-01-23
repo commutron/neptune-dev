@@ -40,8 +40,9 @@ export const WholeTimeBudget = ({ bID })=>	{
     const inHours = parseFloat( e.target.hourNum.value );
     const inMinutes = moment.duration(inHours, 'hours').asMinutes();
     //const niceMinutes = Math.round(inMinutes);
+    const clientTZ = moment.tz.guess();
     if(auth) {
-      Meteor.call('pushBatchTimeBudget', bID, inMinutes, (error)=>{
+      Meteor.call('pushBatchTimeBudget', bID, inMinutes, clientTZ, (error)=>{
         if(error) {
           console.log(error);
           toast.error('Server Error');

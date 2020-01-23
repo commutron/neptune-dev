@@ -82,9 +82,9 @@ const AgendaWrap = ({
   },1000*60);
   
   
-  function forceRefresh() {
+  function requestRefresh() {
     workingSet( true );
-    Meteor.call('FORCEcacheUpdate', clientTZ, ()=>{
+    Meteor.call('REQUESTcacheUpdate', clientTZ, true, true, true, true, ()=>{
       loadTimeSet( moment() );
       workingSet( false );
     });
@@ -113,7 +113,7 @@ const AgendaWrap = ({
             type='button'
             title='Refresh Data'
             className={working ? 'spin2' : ''}
-            onClick={(e)=>forceRefresh()}>
+            onClick={(e)=>requestRefresh()}>
           <i className='fas fa-sync-alt primeRightIcon'></i>
           </button>
         </div>
