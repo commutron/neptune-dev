@@ -8,7 +8,7 @@
     "@babel/runtime": "^7.8.3",
     "@fortawesome/react-fontawesome": "0.0.18",
     "babel-runtime": "^6.26.0",
-    "bcrypt": "^1.0.3",
+    "bcrypt": "^3.0.7",
     "create-react-class": "^15.6.3",
     "ee-first": "^1.1.1",
     "fixed-data-table": "^0.6.5",
@@ -17,11 +17,11 @@
     "moment-business-time-ship": "git+https://github.com/mattandwhatnot/moment-business-time-ship.git",
     "moment-timezone": "^0.5.27",
     "prop-types": "^15.7.2",
-    "react": "^16.11.0",
+    "react": "^16.12.0",
     "react-addons-pure-render-mixin": "^15.6.2",
     "react-big-calendar": "^0.21.0",
     "react-contextmenu": "^2.13.0",
-    "react-dom": "^16.11.0",
+    "react-dom": "^16.12.0",
     "react-flatpickr": "^3.9.1",
     "react-fontawesome": "^1.7.1",
     "react-mounter": "^1.2.0",
@@ -30,6 +30,6 @@
     "victory": "^32.3.7"
   },
   "devDependencies": {
-    "@fortawesome/fontawesome-free": "^5.11.2"
+    "@fortawesome/fontawesome-free": "^5.12.0"
   }
 }

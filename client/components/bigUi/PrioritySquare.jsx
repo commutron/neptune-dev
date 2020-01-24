@@ -3,20 +3,20 @@ import moment from 'moment';
 import 'moment-timezone';
 import NumStat from '/client/components/uUi/NumStat.jsx';
 
-const PrioritySquareData = ({ batchID, app })=> {
+const PrioritySquareData = ({ batchID, app, dbDay, mockDay })=> {
 
   const [ ptData, setPriority ] = useState(false);
   
   useEffect( ()=> {
     const clientTZ = moment.tz.guess();
-    Meteor.call('priorityRank', batchID, clientTZ, (error, reply)=>{
+    Meteor.call('priorityRank', batchID, clientTZ, false, mockDay, (error, reply)=>{
       error && console.log(error);
       if( reply ) { 
         setPriority( reply );
         Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(ptData);
       }
     });
-  }, [batchID]);
+  }, [batchID, dbDay, mockDay]);
   
   return( 
     <PrioritySquare 

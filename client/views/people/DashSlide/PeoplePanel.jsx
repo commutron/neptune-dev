@@ -34,7 +34,7 @@ const PeoplePanel = ({
       return 0;
     });
     setChunks(nmrlChunks);
-  }, [eUsers, update]);
+  }, [eUsers, eBatches, update]);
   
   Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({userChunks});
   

@@ -55,22 +55,23 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
     dUsersSet( dUsers );
     
     Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({eUsers});
-    try {
-      const tideBatches = batches.filter( x => 
-        typeof x === 'object' && Array.isArray(x.tide) === true );
-      
-      const eBatches = eUsers.map( (user, index)=>{
-        const acBatch = tideBatches.find( y =>
-          y.tide && y.tide.find( z => z.tKey === user.engaged.tKey ) ); // MAYBE?
-        if(acBatch) {
-          return acBatch;
-        }  
-      });
-      Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({tideBatches, eBatches});
-      eBatchesSet(eBatches);
-    }catch (err) {
-      throw new Meteor.Error(err);
-    }
+
+    const tideBatches = batches.filter( x => 
+      typeof x === 'object' && Array.isArray(x.tide) === true );
+    
+    const eBatches = eUsers.map( (user, index)=>{
+      const acBatch = tideBatches.find( y =>
+        y.tide && y.tide.find( z => z.tKey === user.engaged.tKey ) ); // MAYBE?
+      if(acBatch) {
+        return acBatch;
+      }  
+    });
+    const eBatchesClean = _.omit(eBatches, (value, key, object)=> {
+      return key == false;
+    });
+    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({tideBatches, eBatchesClean});
+    eBatchesSet(eBatchesClean);
+    
   },[batches, users]);
   
   useEffect( ()=>{

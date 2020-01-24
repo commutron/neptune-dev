@@ -1,30 +1,24 @@
-import React, {Component} from 'react';
+import React, { useState } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 import Model from '../smallUi/Model.jsx';
 
-export default class PanelBreak extends Component	{
+const PanelBreak = (props)=> {
   
-  constructor() {
-    super();
-    this.state = {
-      newSerials: []
-    };
-  }
+  const [ newSerials, newSerialsSet ] = useState([]);
   
-  setSerials() {
+  function setSerials(e) {
     const srlInput = this.serials.value.trim().replace(",", " ");
     let cutInput = srlInput.split(/\s* \s*/gi);
-    this.setState({ newSerials: cutInput });
+    newSerialsSet( cutInput );
   }
   
-  splitApart(e) {
+  function splitApart(e) {
     e.preventDefault();
-    const id = this.props.id;
-    const batch = this.props.batch;
-    const serial = this.props.item.serial;
-    const newSerials = this.state.newSerials;
+    const id = props.id;
+    const batch = props.batch;
+    const serial = props.item.serial;
     
     if(newSerials.length > 0) {
       let overlap = newSerials.find( x => x === serial);
@@ -45,61 +39,59 @@ export default class PanelBreak extends Component	{
       }else{toast.error('Error');}
     }else{toast.error('Error');}
   }
+      	    
+  const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
+  let done = props.item.finishedAt !== false;
 
-  render() {
-        	    
-    const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
-    let done = this.props.item.finishedAt !== false;
-
-    return(
-      <Model
-        button='Split Panel'
-        title='Split Panel Into Its Units'
-        color='yellowT'
-        icon='fa-cut'
-        lock={done || this.props.item.units < 2 || !auth}
-        noText={this.props.noText}>
-        <p className='medBig space'>
-          <b>Transform this item into new individual units</b><br />
-          <i>New Items are created with a copy of this item's history</i><br />
-          <i>NonConformances WILL BE LOST</i><br />
-          <i>The new serial numbers are NOT checked for duplicates</i><br />
-          <i>The highest serial number is NOT saved in the app settings</i><br />
-          <i>The original IS deleted</i><br />
-        </p>
-        <br />
-        <form
-          className='centre'
-          onSubmit={this.splitApart.bind(this)}>
-          <div className='balance'>
-            <p>
-              <textarea
-                id='serials'
-                ref={(i)=> this.serials = i}
-                onChange={this.setSerials.bind(this)}
-                cols='5'
-                rows='5'
-                defaultValue=''
-                autoFocus={true}></textarea>
-              <label htmlFor='con'>New serials for each new item</label>
-              <br />
-              <em>{this.props.item.units} numbers, seperated by a space</em>
-            </p>
-            <ol className='medBig'>
-              {this.state.newSerials.map( (entry, index)=>{
-                return( <li key={index}>{entry}</li> );
-              })}
-            </ol>
-          </div>
+  return(
+    <Model
+      button='Split Panel'
+      title='Split Panel Into Its Units'
+      color='yellowT'
+      icon='fa-cut'
+      lock={done || props.item.units < 2 || !auth}
+      noText={props.noText}>
+      <p className='medBig space'>
+        <b>Transform this item into new individual units</b><br />
+        <i>New Items are created with a copy of this item's history</i><br />
+        <i>NonConformances WILL BE LOST</i><br />
+        <i>The new serial numbers are NOT checked for duplicates</i><br />
+        <i>The highest serial number is NOT saved in the app settings</i><br />
+        <i>The original IS deleted</i><br />
+      </p>
+      <br />
+      <form
+        className='centre'
+        onSubmit={(e)=>splitApart(e)}>
+        <div className='balance'>
           <p>
-            <button
-              ref={(i)=> this.go = i}
-              disabled={this.state.newSerials.length !== this.props.item.units}
-              className='action clearGreen'
-              type='submit'>Split</button>
+            <textarea
+              id='serials'
+              onChange={(e)=>setSerials(e)}
+              cols='5'
+              rows='5'
+              defaultValue=''
+              autoFocus={true}></textarea>
+            <label htmlFor='con'>New serials for each new item</label>
+            <br />
+            <em>{props.item.units} numbers, seperated by a space</em>
           </p>
-        </form>
-      </Model>
-    );
-  }
-}
+          <ol className='medBig'>
+            {newSerials.map( (entry, index)=>{
+              return( <li key={index}>{entry}</li> );
+            })}
+          </ol>
+        </div>
+        <p>
+          <button
+            id='go'
+            disabled={newSerials.length !== props.item.units}
+            className='action clearGreen'
+            type='submit'>Split</button>
+        </p>
+      </form>
+    </Model>
+  );
+};
+
+export default PanelBreak;

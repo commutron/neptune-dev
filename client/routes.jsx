@@ -201,35 +201,34 @@ privlegedRoutes.route('/app', {
 });
 
 privlegedRoutes.route('/print/generallabel/:batch', {
-    action: function(params, queryParams) {
-      if(queryParams !== null && typeof queryParams === 'object') {
-        const request = Object.keys(queryParams);
-        if(
-          request.includes('group') &&
-          request.includes('widget') &&
-          request.includes('ver') &&
-          request.includes('desc') &&
-          request.includes('sales') &&
-          request.includes('fulfill') &&
-          request.includes('quant')
-        ) {
-          mount(LabelLayout, {
-            content: (<GeneralLabel batch={params.batch} data={queryParams} />)
-          });
-        }else{
-          mount(SplashLayout, {
-            content: (<p>Cannot Generate this page. Incomplete information</p>),
-            title: 'Error'
-          });
-        }
+  action: function(params, queryParams) {
+    if(queryParams !== null && typeof queryParams === 'object') {
+      const request = Object.keys(queryParams);
+      if(
+        request.includes('group') &&
+        request.includes('widget') &&
+        request.includes('ver') &&
+        request.includes('desc') &&
+        request.includes('sales') &&
+        request.includes('quant')
+      ) {
+        mount(LabelLayout, {
+          content: (<GeneralLabel batch={params.batch} data={queryParams} />)
+        });
       }else{
         mount(SplashLayout, {
-          content: (<p>Page Not Found</p>),
-          title: '404'
+          content: (<p>Cannot Generate this page. Incomplete information</p>),
+          title: 'Error'
         });
       }
-    },
-    name: 'print'
+    }else{
+      mount(SplashLayout, {
+        content: (<p>Page Not Found</p>),
+        title: '404'
+      });
+    }
+  },
+  name: 'print'
 });
 
 

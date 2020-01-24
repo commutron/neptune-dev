@@ -267,7 +267,7 @@ function collectStatus(privateKey, batchID, clientTZ) {
   });
 }
 
-function collectPriority(privateKey, batchID, clientTZ) {
+function collectPriority(privateKey, batchID, clientTZ, mockDay) {
   return new Promise(resolve => {
     let collection = false;
     const b = BatchDB.findOne({_id: batchID});
@@ -285,7 +285,8 @@ function collectPriority(privateKey, batchID, clientTZ) {
       const qtBready = !b.quoteTimeBudget ? false : true;
       
       const now = moment().tz(clientTZ);
-      const endDay = moment.tz(b.end, clientTZ);
+      const future = mockDay ? mockDay : b.end;
+      const endDay = moment.tz(future, clientTZ);
       const lateLate = now.clone().isAfter(endDay);
       
       const shipTime = endDay.isShipDay() ? 
@@ -450,17 +451,17 @@ Meteor.methods({
     return bundleProgress(batchID);
   },
   
-  priorityRank(batchID, clientTZ, serverAccessKey) {
-    async function bundlePriority(batchID, clientTZ) {
+  priorityRank(batchID, clientTZ, serverAccessKey, mockDay) {
+    async function bundlePriority() {//batchID, clientTZ, mockDay) {
       const accessKey = serverAccessKey || Meteor.user().orgKey;
       try {
-        bundle = await collectPriority(accessKey, batchID, clientTZ);
+        bundle = await collectPriority(accessKey, batchID, clientTZ, mockDay);
         return bundle;
       }catch (err) {
         throw new Meteor.Error(err);
       }
     }
-    return bundlePriority(batchID, clientTZ);
+    return bundlePriority();//batchID, clientTZ, mockDay);
   },
   
   phaseProgress(batchID) {

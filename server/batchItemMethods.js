@@ -55,13 +55,14 @@ Meteor.methods({
   },
   
   editBatch(batchId, newBatchNum, vKey, salesNum, sDate) {
+    const accessKey = Meteor.user().orgKey;
     const doc = BatchDB.findOne({_id: batchId});
     let legacyduplicate = BatchDB.findOne({batch: newBatchNum});
     let duplicateX = XBatchDB.findOne({batch: newBatchNum});
     doc.batch === newBatchNum ? legacyduplicate = false : null;
     const auth = Roles.userIsInRole(Meteor.userId(), 'edit');
-    if(auth && !legacyduplicate && !duplicateX && doc.orgKey === Meteor.user().orgKey) {
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+    if(auth && !legacyduplicate && !duplicateX && doc.orgKey === accessKey) {
+      BatchDB.update({_id: batchId, orgKey: accessKey}, {
         $set : {
           batch: newBatchNum,
           versionKey: vKey,
@@ -80,14 +81,14 @@ Meteor.methods({
   },
   
   alterBatchFulfill(batchId, oldDate, newDate, reason, clientTZ) {
-    
+    const accessKey = Meteor.user().orgKey;
     const auth = Roles.userIsInRole(Meteor.userId(), ['edit', 'sales']);
     if(auth) {
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+      BatchDB.update({_id: batchId, orgKey: accessKey}, {
         $set : {
           end: newDate,
         }});
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+      BatchDB.update({_id: batchId, orgKey: accessKey}, {
         $push : {
           altered: {
             changeDate: new Date(),

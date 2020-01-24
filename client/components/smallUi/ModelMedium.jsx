@@ -49,7 +49,11 @@ const ModelMedium = (props)=> {
               ><i className='fas fa-times fa-lg'></i></button>
             </div>
             <div className='medModelContent centre'>
-              {props.children}
+              {React.cloneElement(props.children,
+                { 
+                  autoClose: ()=>reveal()
+                }
+              )}
             </div>
           </div>
         </div>

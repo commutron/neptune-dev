@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
@@ -8,34 +8,70 @@ import ModelMedium from '../smallUi/ModelMedium.jsx';
 //// Order Data or Customer Data as props.data
 //// widget key as props.widgetKey
 //// type as props.type === batch || widget
-export default class NoteForm extends Component {
 
-	saveNote(e) {
+const NotePopup = ({ id, versionKey, xBatch, content, small })=> {
+  
+  const choose = versionKey ? Pref.widget : Pref.batch;
+  const unlock = !versionKey ? 
+                 !Roles.userIsInRole(Meteor.userId(), 'run') : 
+                 !Roles.userIsInRole(Meteor.userId(), 'edit');
+  
+  return(               
+    <ModelMedium
+      button=''
+      title={choose + ' notes'}
+      color='blueT'
+      icon='fa-edit'
+      smIcon={small}
+      lock={unlock}>
+      <NoteForm 
+        id={id}
+        versionKey={versionKey}
+        xBatch={xBatch}
+        content={content} />
+    </ModelMedium>
+  );
+};
+        
+const NoteForm = ({ id, versionKey, xBatch, content, autoClose })=> {
+
+	function saveNote(e) {
     e.preventDefault();
     this.go.disabled = true;
-    const id = this.props.id;
-    const versionKey = this.props.versionKey;
     const content = this.mess.value.trim();
     const choose = versionKey ? true : false;
 
     if(!choose) {
-      if(this.props.xBatch) {
-        Meteor.call('setBatchNoteX', id, content, (error)=>{
+      if(xBatch) {
+        Meteor.call('setBatchNoteX', id, content, (error, reply)=>{
           error && console.log(error);
-          this.out.value = 'saved';
+          if(reply) {
+            toast.success('Saved');
+            autoClose();
+          }else{
+            toast.error('NOT saved, Server Error');
+          }
         });
       }else{
-        Meteor.call('setBatchNote', id, content, (error)=>{
-          if(error)
-            console.log(error);
-          this.out.value = 'saved';
+        Meteor.call('setBatchNote', id, content, (error, reply)=>{
+          error && console.log(error);
+          if(reply) {
+            toast.success('Saved');
+            autoClose();
+          }else{
+            toast.error('NOT saved, Server Error');
+          }
         });
       }
     }else if(choose) {
-      Meteor.call('setVersionNote', id, versionKey, content, (error)=>{
-        if(error)
-          console.log(error);
-        this.out.value = 'saved';
+      Meteor.call('setVersionNote', id, versionKey, content, (error, reply)=>{
+        error && console.log(error);
+        if(reply) {
+          toast.success('Saved');
+          autoClose();
+        }else{
+          toast.error('NOT saved, Server Error');
+        }
       });
     }else{
       console.log('NoteForm component not wired up corectly');
@@ -43,55 +79,37 @@ export default class NoteForm extends Component {
     }
   }
   
-  goOp() {
+  function goOp(e) {
     this.go.disabled = false;
-    this.out.value = '';
   }
   
+  const now = content ? content : '';
 
-  render() {
-    
-    const now = this.props.content ? this.props.content : '';
-    const choose = this.props.versionKey ? Pref.widget : Pref.batch;
-    const unlock = !this.props.versionKey ? 
-                   !Roles.userIsInRole(Meteor.userId(), 'run') : 
-                   !Roles.userIsInRole(Meteor.userId(), 'edit');
+  return(
+    <form
+      className='centre'
+      onSubmit={(e)=>saveNote(e)}
+      onChange={(e)=>goOp(e)}>
+      <br />
+      <p>
+        <textarea
+          id='mess'
+          cols='30'
+          rows='6'
+          placeholder='comments, alerts, messages'
+          defaultValue={now}
+          autoFocus={true}></textarea>
+        <label htmlFor='mess'>Note</label>
+      </p>
+      <p>
+        <button
+          id='go'
+          disabled={true}
+          className='action clearGreen'
+          type='submit'>Save</button>
+      </p>
+    </form>
+  );
+};
 
-    return (
-      <ModelMedium
-        button=''
-        title={choose + ' notes'}
-        color='blueT'
-        icon='fa-edit'
-        smIcon={this.props.small}
-        lock={unlock}>
-        <form
-          className='centre'
-          onSubmit={this.saveNote.bind(this)}
-          onChange={this.goOp.bind(this)}>
-          <br />
-          <p>
-            <textarea
-              id='con'
-              ref={(i)=> this.mess = i}
-              cols='30'
-              rows='6'
-              placeholder='comments, alerts, messages'
-              defaultValue={now}
-              autoFocus={true}></textarea>
-            <label htmlFor='con'>Note</label>
-          </p>
-          <p>
-            <button
-              ref={(i)=> this.go = i}
-              disabled={true}
-              className='action clearGreen'
-              type='submit'>Save</button>
-          </p>
-          <br />
-          <p><output ref={(i)=> this.out = i} value='' /></p>
-        </form>
-      </ModelMedium>
-    );
-  }
-}
+export default NotePopup;

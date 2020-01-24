@@ -34,7 +34,7 @@ const BatchesList = ({ batchData, widgetData })=> {
                 return 0;
               });
     listSet(sortList);
-  }, [ filter, textString ]);
+  }, [ batchData, filter, textString ]);
             
   return (
     <div className='' key={1}>

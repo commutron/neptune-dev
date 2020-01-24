@@ -4,6 +4,7 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 import ModelMedium from '../smallUi/ModelMedium.jsx';
+import PrioritySquareData from '/client/components/bigUi/PrioritySquare.jsx';
 
 // required data
 /// batchId={b._id}
@@ -12,70 +13,86 @@ import ModelMedium from '../smallUi/ModelMedium.jsx';
 /// versions={w.versions}
 /// lock={!w.versions}
 
-export const AlterFulfill = ({ batchId, end, app, lock })=> {
+export const AlterFulfill = ({ batchId, end, app, lock })=> (
+  <ModelMedium
+    button={'Alter ' + Pref.end}
+    title={`Alter ${Pref.batch} ${Pref.end}`}
+    color='blueT'
+    icon='fa-calendar-alt'
+    smIcon={true}
+    lock={!Roles.userIsInRole(Meteor.userId(), ['edit', 'sales']) || lock}
+    noText={true}>
+    <AlterFulfillForm
+      batchId={batchId}
+      end={end}
+      app={app} />
+  </ModelMedium>
+);
+
+
+const AlterFulfillForm = ({ batchId, end, app, autoClose })=> {
 
   const [ reasonState, reasonSet ] = useState(false);
-
+  const [ endDateState, endDateSet ] = useState( end );
+  
   function save(e) {
     e.preventDefault();
     
-    const endDate = e.target.eDate.value;
     const clientTZ = moment.tz.guess();
     
-    Meteor.call('alterBatchFulfill', batchId, end, endDate, reasonState, clientTZ, (error, reply)=>{
+    Meteor.call('alterBatchFulfill', batchId, end, endDateState, reasonState, clientTZ, (error, reply)=>{
       if(error) {
         console.log(error);
         toast.error('Server Error');
       }
       if(reply) {
         toast.success('Saved');
+        autoClose();
       }else{
         toast.warning('Not Saved');
       }
     });
   }
     
-  return (
-    <ModelMedium
-      button={'Alter ' + Pref.end}
-      title={`Alter ${Pref.batch} ${Pref.end}`}
-      color='blueT'
-      icon='fa-calendar-alt'
-      smIcon={true}
-      lock={!Roles.userIsInRole(Meteor.userId(), ['edit', 'sales']) || lock}
-      noText={true}>
-      <form className='centre' onSubmit={(e)=>save(e)}>
-        <div className='centreRow'>
-          {app.alterFulfillReasons && 
-            app.alterFulfillReasons.map( (entry, index)=>{
-              return(
-                <label 
-                  key={index}
-                  htmlFor={entry+index} 
-                  className='beside breath'>
-                  <input
-                    type='radio'
-                    id={entry+index}
-                    name='rsn'
-                    className='inlineRadio cap'
-                    defaultChecked={reasonState === entry}
-                    onChange={()=>reasonSet(entry)}
-                    required 
-                />{entry}</label>
-          )})}
-        </div>
-        <p>
-          <label htmlFor='eDate' className='breath'>{Pref.end}<br />
-          <input
-            type='date'
-            id='eDate'
-            className='numberSet'
-            defaultValue={end}
-            required 
-          /></label>
-        </p>
-        <p><button type='submit' className='action clear greenHover'>Save</button></p>
-      </form>
-    </ModelMedium>
+  return(
+    <form className='centre' onSubmit={(e)=>save(e)}>
+      <div className='centreRow'>
+        {app.alterFulfillReasons && 
+          app.alterFulfillReasons.map( (entry, index)=>{
+            return(
+              <label 
+                key={index}
+                htmlFor={entry+index} 
+                className='beside breath'>
+                <input
+                  type='radio'
+                  id={entry+index}
+                  name='rsn'
+                  className='inlineRadio cap'
+                  defaultChecked={reasonState === entry}
+                  onChange={()=>reasonSet(entry)}
+                  required 
+              />{entry}</label>
+        )})}
+      </div>
+      <p>
+        <label htmlFor='eDate' className='breath'>{Pref.end}<br />
+        <input
+          type='date'
+          id='eDate'
+          className='numberSet'
+          defaultValue={end}
+          onChange={(e)=>endDateSet(e.target.value)}
+          required 
+        /></label>
+        <button type='submit' className='action clear greenHover'>Save</button>
+      </p>
+      <p>
+        <PrioritySquareData
+          batchID={batchId}
+          app={app}
+          mockDay={endDateState} />
+      </p>
+    </form>
   );
 };

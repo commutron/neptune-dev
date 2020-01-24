@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
@@ -7,35 +7,29 @@ import Model from '../smallUi/Model.jsx';
 // requires
 // widgetData={widgetData} end={a.lastTrack} rootWI={a.instruct}
 
-export default class VersionForm extends Component	{
+const VersionForm = (props)=> {
 
-  constructor() {
-    super();
-    this.state = {
-      instruct: '...'
-   };
-  }
+  // const [ instructState, instructSet ] = useState( '...' );
 
-  save(e) {
+  function save(e) {
     e.preventDefault();
     this.go.disabled = true;
-    const wId = this.props.widgetData._id;
+    const wId = props.widgetData._id;
     
-    const edit = this.props.versionData;
+    const edit = props.versionData;
     const vKey = edit ? edit.versionKey : false;
     
     const version = this.rev.value.trim();
     const live = this.live ? this.live.checked : false;
-    const wiki = this.wiki.value.trim().toLowerCase();
+    const wiki = this.wikdress.value.trim().toLowerCase();
     const unit = this.unit.value.trim();
     
     if(edit) {
       Meteor.call('editVersion', wId, vKey, version, live, wiki, unit, (error, reply)=>{
-        if(error)
-          console.log(error);
+        error && console.log(error);
         if(reply) {
           toast.success('Saved');
-          FlowRouter.go('/data/widget?request=' + this.props.widgetData.widget + '&specify=' + version);
+          FlowRouter.go('/data/widget?request=' + props.widgetData.widget + '&specify=' + version);
         }else{
           toast.error('Server Error');
           this.go.disabled = false;
@@ -43,8 +37,7 @@ export default class VersionForm extends Component	{
       });
     }else{
       Meteor.call('addVersion', wId, version, wiki, unit, (error, reply)=>{
-        if(error)
-          console.log(error);
+        error && console.log(error);
         if(reply) {
           toast.success('Saved');
         }else{
@@ -54,38 +47,37 @@ export default class VersionForm extends Component	{
       });
     }
   }
+    
+  const app = props.app;
+  
+  let e = props.versionData;
+  let name = e ? `edit ${Pref.version}` : `new ${Pref.version}`;
+  let eV = e ? e.version : null;
+  let eU = e ? e.units : null;
+  let eL = e ? e.live : null;
+  
+  const instruct = !e ? app.instruct : e.wiki;
 
-  render() {
-    
-    const app = this.props.app;
-    
-    let e = this.props.versionData;
-    let name = e ? `edit ${Pref.version}` : `new ${Pref.version}`;
-    let eV = e ? e.version : null;
-    let eU = e ? e.units : null;
-    let eL = e ? e.live : null;
-    
-    const instruct = !e ? app.instruct : e.wiki;
-
-    return (
-      <Model
-        button={name}
-        title={name}
-        color='greenT'
-        icon='fa-cube fa-rotate-90'
-        smIcon={this.props.small}
-        lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit'])}
-        noText={this.props.noText}>
+  return (
+    <Model
+      button={name}
+      title={name}
+      color='greenT'
+      icon='fa-cube fa-rotate-90'
+      smIcon={props.small}
+      lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit'])}
+      noText={props.noText}>
 
       <div className='split'>
-
+  
         <div className='half space edit'>
-          <form onSubmit={this.save.bind(this)}>
+          <form onSubmit={(e)=>save(e)}>
             <p>
               <input
                 type='text'
                 id='widgetId'
-                defaultValue={this.props.widgetData.widget}
+                defaultValue={props.widgetData.widget}
+                className='wide'
                 disabled={true} />
               <label htmlFor='widgetId'>{Pref.widget} ID</label>
             </p>
@@ -93,26 +85,26 @@ export default class VersionForm extends Component	{
               <input
                 type='text'
                 id='prodiption'
-                defaultValue={this.props.widgetData.describe}
+                defaultValue={props.widgetData.describe}
+                className='wide'
                 disabled={true} />
               <label htmlFor='prodiption'>{Pref.widget} Description</label>
             </p>
             <p>
               <input
                 type='text'
-                ref={(i)=> this.rev = i}
-                id='rv'
+                id='rev'
                 defaultValue={eV}
                 placeholder='1a'
                 inputMode='numeric'
+                className='wide'
                 required />
-              <label htmlFor='rv'>Version</label>
+              <label htmlFor='rev'>Version</label>
             </p>
             <p>
               <input
                 type='number'
-                ref={(i)=> this.unit = i}
-                id='cln'
+                id='unit'
                 pattern='[0-999]*'
                 maxLength='3'
                 minLength='1'
@@ -121,18 +113,18 @@ export default class VersionForm extends Component	{
                 defaultValue={eU}
                 placeholder='1-100'
                 inputMode='numeric'
+                className='wide'
                 required />
-              <label htmlFor='cln'>{Pref.unit} Quantity</label>
+              <label htmlFor='unit'>{Pref.unit} Quantity</label>
             </p>
             <hr />
             <p>
               <input
                 type='url'
                 id='wikdress'
-                ref={(i)=> this.wiki = i}
                 defaultValue={instruct}
                 placeholder='Full Address'
-                 />{/*this.state.instruct*/}
+                className='wide' />{/*instructState*/}
               <label htmlFor='wikdress'>Work Instructions</label>
             </p>
             <br />
@@ -140,20 +132,20 @@ export default class VersionForm extends Component	{
               <fieldset>
                 <input
                   type='checkbox'
-                  ref={(i)=> this.live = i}
+                  id='live'
                   defaultChecked={eL} />
-                <label htmlFor='actv'>{Pref.live} {Pref.widget}</label>
+                <label htmlFor='live'>{Pref.live} {Pref.widget}</label>
               </fieldset>
             : null}
             <br />
             <button
               type='submit'
               className='action clearGreen'
-              ref={(i) => this.go = i}
+              id='go'
               disabled={false}>SAVE</button>
           </form>
         </div>
-
+  
         <div className='half'>
           <iframe
             id='instructMini'
@@ -161,24 +153,24 @@ export default class VersionForm extends Component	{
             height='600'
             width='100%' />
         </div>
-
+        
       </div>
     </Model>
-    );
-  }
-}
+  );
+};
 
-export class VersionRemove extends Component	{
+export default VersionForm;
+
+export const VersionRemove = (props)=> {
   
-  remove(e) {
+  function remove(e) {
     e.preventDefault();
-    const wId = this.props.widgetId;
-    const vKey = this.props.versionKey;
+    const wId = props.widgetId;
+    const vKey = props.versionKey;
     const confirm = this.confirm.value.trim();
     
     Meteor.call('deleteVersion', wId, vKey, confirm, (error, reply)=>{
-      if(error)
-        console.log(error);
+      error && console.log(error);
       if(reply === 'inUse') {
         toast.warning('Cannot be removed, entry is in use');
       }else if(reply) {
@@ -188,36 +180,33 @@ export class VersionRemove extends Component	{
       }
     });
   }
-  
-  render() {
     
-    return(
-      <Model
-        button='Delete'
-        title={'Delete ' + Pref.version}
-        color='redT'
-        icon='fa-minus-circle'
-        smIcon={this.props.small}
-        lock={!Roles.userIsInRole(Meteor.userId(), 'remove')}>
-        
-        <div className='centre'>
-          <p>To remove enter:</p>
-          <p className='noCopy'>{this.props.lock}</p>
-          <br />
-          <form className='inlineForm' onSubmit={this.remove.bind(this)}>
-            <input 
-              type='text' 
-              className='noCopy' 
-              ref={(i)=> this.confirm = i}
-              placeholder={this.props.lock} />
-            <button
-              type='submit'
-              ref={(i)=> this.cut = i}
-              className='smallAction clear redT'
-            >delete</button>
-          </form>
-        </div>
-      </Model>
-    );
-  }
-}
+  return(
+    <Model
+      button='Delete'
+      title={'Delete ' + Pref.version}
+      color='redT'
+      icon='fa-minus-circle'
+      smIcon={props.small}
+      lock={!Roles.userIsInRole(Meteor.userId(), 'remove')}>
+      
+      <div className='centre'>
+        <p>To remove enter:</p>
+        <p className='noCopy'>{props.lock}</p>
+        <br />
+        <form className='inlineForm' onSubmit={(e)=>remove(e)}>
+          <input 
+            type='text' 
+            className='noCopy' 
+            id='confirm'
+            placeholder={props.lock} />
+          <button
+            type='submit'
+            id='cut'
+            className='smallAction clear redT'
+          >Delete</button>
+        </form>
+      </div>
+    </Model>
+  );
+};

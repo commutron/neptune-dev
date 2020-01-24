@@ -1,16 +1,14 @@
-import React, {Component} from 'react';
+import React from 'react';
 
-export default class RemoveUser extends Component {
+const RemoveUser = ({ userID })=> {
   
-  deleteForever() {
+  function deleteForever(e) {
     const check = window.confirm('Delete this User Forever??');
-    const userID = this.props.userID;
     const self = Meteor.userId() === userID;
     const pin = prompt("Enter PIN", "");
     if(check && !self && pin !== undefined) {
       Meteor.call('deleteUserForever', userID, pin, (error, reply)=>{
-        if(error)
-          console.log(error);
+        error && console.log(error);
         reply ? alert('Account Deleted') : alert('not allowed');
       });
     }else{
@@ -18,17 +16,17 @@ export default class RemoveUser extends Component {
     }
   }
 
-  render () {
-    return (
-      <div>
-        <p>
-          <button
-            type='button'
-            className='miniAction red'
-            onClick={this.deleteForever.bind(this)}
-          >Delete User Account</button>
-        </p>
-      </div>
-    );
-  }
-}
+  return(
+    <div>
+      <p>
+        <button
+          type='button'
+          className='miniAction red'
+          onClick={()=>deleteForever(e)}
+        >Delete User Account</button>
+      </p>
+    </div>
+  );
+};
+
+export default RemoveUser;

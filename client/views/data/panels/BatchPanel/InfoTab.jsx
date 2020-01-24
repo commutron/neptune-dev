@@ -53,7 +53,8 @@ const InfoTab = ({
                 <div className='statusBlock'>
                   <PrioritySquareData
                     batchID={b._id}
-                    app={a} />
+                    app={a}
+                    dbDay={b.end} />
                 </div>
               </div>
             }
