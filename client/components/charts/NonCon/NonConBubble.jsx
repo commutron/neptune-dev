@@ -80,7 +80,7 @@ const NonConBubble = ({ ncOp, nonCons, app })=> {
             ticks: { stroke: '#5c5c5c' },
             tickLabels: { 
               fill: 'lightgrey', 
-              fontSize: '6px' }
+              fontSize: '7px' }
           } }
         />
         <VictoryAxis 
@@ -92,7 +92,7 @@ const NonConBubble = ({ ncOp, nonCons, app })=> {
             ticks: { stroke: '#5c5c5c' },
             tickLabels: { 
               fill: 'lightgrey', 
-              fontSize: '6px' }
+              fontSize: '7px' }
           } }
         />
         <VictoryScatter
@@ -113,7 +113,7 @@ const NonConBubble = ({ ncOp, nonCons, app })=> {
         />
       </VictoryChart>
       
-      <p className='centreText small cap'>Defect Type and {Pref.phase} as Buubles</p>
+      <p className='centreText small cap'>Defect Type and {Pref.phase} as Bubbles</p>
       
     </div>
   );

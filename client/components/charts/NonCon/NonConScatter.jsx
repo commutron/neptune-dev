@@ -89,7 +89,7 @@ const NonConScatter = ({ ncOp, flow, flowAlt, nonCons, app })=> {
             ticks: { stroke: '#5c5c5c' },
             tickLabels: { 
               fill: 'lightgrey', 
-              fontSize: '5px' }
+              fontSize: '7px' }
           } }
         />
         <VictoryAxis 
@@ -101,7 +101,7 @@ const NonConScatter = ({ ncOp, flow, flowAlt, nonCons, app })=> {
             ticks: { stroke: '#5c5c5c' },
             tickLabels: { 
               fill: 'lightgrey', 
-              fontSize: '6px' }
+              fontSize: '7px' }
           } }
         />
         <VictoryScatter

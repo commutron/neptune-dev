@@ -583,6 +583,8 @@ main {
 }
 .centreRow > span { margin: 0 10px; }
 
+.topLine > div { align-self: flex-start; }
+
 .centreTrue {
   position: absolute;
   top: 50%;

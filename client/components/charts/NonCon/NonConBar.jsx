@@ -85,7 +85,7 @@ const NonConBar = ({ ncOp, nonCons, app })=> {
             ticks: { stroke: '#5c5c5c' },
             tickLabels: { 
               fill: 'lightgrey', 
-              fontSize: '5px' }
+              fontSize: '7px' }
           } }
         />
         <VictoryAxis 
@@ -96,7 +96,7 @@ const NonConBar = ({ ncOp, nonCons, app })=> {
             ticks: { stroke: '#5c5c5c' },
             tickLabels: { 
               fill: 'lightgrey', 
-              fontSize: '6px' }
+              fontSize: '7px' }
           } }
         />
         <VictoryStack
@@ -120,7 +120,7 @@ const NonConBar = ({ ncOp, nonCons, app })=> {
                 labelComponent={
                   <VictoryTooltip
                     orientation='top'
-                    style={{ fontSize: '8px', padding: 4 }}
+                    style={{ fontSize: '7px', padding: 4 }}
                   />}
               />
           )}

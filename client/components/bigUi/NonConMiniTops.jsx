@@ -37,12 +37,10 @@ export const HasNonCon = ({ noncons, items })=> {
 
 export const NonConPer = ({ noncons, items })=> {
   const ncG = noncons.filter( n => !n.trash );
-  const hasNonCon = [... new Set( Array.from(ncG, x => { return x.serial }) ) ].length;
   return(
     <NumStat
-      num={(ncG.length / hasNonCon).toFixed(1)}
-      //num={(ncG.length / items.length).toFixed(1)}
-      name={'nonCons per NC ' + Pref.item}
+      num={(ncG.length / items.length).toFixed(1, 10)}
+      name={'nonCons per ' + Pref.item}
       title='mean average'
       color='redT'
       size='bigger' />

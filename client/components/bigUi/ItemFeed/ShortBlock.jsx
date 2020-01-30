@@ -116,7 +116,6 @@ export default class ShortBlock extends Component {
                 <option value={Pref.shortagePending}>{Pref.shortagePending}</option>
                 <option value={Pref.doOmit}>{Pref.doOmit}</option>
                 <option value={Pref.shortageWaiting}>{Pref.shortageWaiting}</option>
-                <option value={Pref.notResolved}>{Pref.notResolved}</option>
                 <option value={Pref.isResolved}>{Pref.isResolved}</option>
               </select>
               <input

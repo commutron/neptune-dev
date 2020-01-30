@@ -96,8 +96,8 @@ const BatchPanel = (props)=> {
             'Info',
             'Time',
             'Events',
-            `${Pref.nonCon}s`,
-            `${Pref.rma}s`
+            `Problems`,
+            `Returns`
           ]
         }
         wide={true}

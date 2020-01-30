@@ -59,18 +59,24 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
     const tideBatches = batches.filter( x => 
       typeof x === 'object' && Array.isArray(x.tide) === true );
     
-    const eBatches = eUsers.map( (user, index)=>{
+    // const eBatches = eUsers.map( (user, index)=>{
+    //   const acBatch = tideBatches.find( y =>
+    //     y.tide && y.tide.find( z => z.tKey === user.engaged.tKey ) ); // MAYBE?
+    //   if(acBatch) {
+    //     return acBatch;
+    //   }  
+    // });
+    const eBatches = eUsers.reduce( (result, user)=> {
       const acBatch = tideBatches.find( y =>
-        y.tide && y.tide.find( z => z.tKey === user.engaged.tKey ) ); // MAYBE?
+        y.tide.find( z => z.tKey === user.engaged.tKey ) );
       if(acBatch) {
-        return acBatch;
-      }  
-    });
-    const eBatchesClean = _.omit(eBatches, (value, key, object)=> {
-      return key == false;
-    });
-    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({tideBatches, eBatchesClean});
-    eBatchesSet(eBatchesClean);
+        result.push(acBatch);
+      }
+      return result;
+    }, []);
+    
+    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({tideBatches, eBatches});
+    eBatchesSet(eBatches);
     
   },[batches, users]);
   

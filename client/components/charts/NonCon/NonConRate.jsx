@@ -22,52 +22,51 @@ const NonConRate = ({ batches, title, lineColor })=> {
   }
   
   return(
-    <span>
-      <div>
-        <VictoryChart
-          theme={Theme.NeptuneVictory}
-          padding={{top: 25, right: 40, bottom: 25, left: 40}}
-          scale={{x: "time", y: "linear"}}
-          height={300}
-        >
-          <VictoryAxis 
-            style={ {
-              axis: { stroke: 'grey' },
-              grid: { stroke: '#5c5c5c' },
-              ticks: { stroke: '#5c5c5c' },
-              tickLabels: { fill: 'lightgrey', fontSize: '12px' }
-            } }
-          />
-          <VictoryAxis
-            dependentAxis
-            tickFormat={(l)=> l.toFixed(0,10)}
-            style={ {
-              axis: { stroke: 'grey' },
-              grid: { stroke: '#5c5c5c' },
-              ticks: { stroke: '#5c5c5c' },
-              tickLabels: { fill: 'lightgrey', fontSize: '12px' }
-            } }
-          />
-          
-          <VictoryLine
-            data={ratesC}
-            style={{ 
-              data: { 
-                stroke: lineColor || 'black',
-                strokeWidth: '2px'
-              },
-            }}
-            animate={{
-              duration: 2000,
-              onLoad: { duration: 1000 }
-            }}
-          />
-        </VictoryChart>
+    <div className='chartNoHeightContain'>
+      <VictoryChart
+        theme={Theme.NeptuneVictory}
+        padding={{top: 10, right: 20, bottom: 20, left: 50}}
+        domainPadding={20}
+        scale={{x: "time", y: "linear"}}
+        height={200}
+      >
+        <VictoryAxis 
+          style={ {
+            axis: { stroke: 'grey' },
+            grid: { stroke: '#5c5c5c' },
+            ticks: { stroke: '#5c5c5c' },
+            tickLabels: { fill: 'lightgrey', fontSize: '7px' }
+          } }
+        />
+        <VictoryAxis
+          dependentAxis
+          tickFormat={(l)=> l.toFixed(0,10)}
+          style={ {
+            axis: { stroke: 'grey' },
+            grid: { stroke: '#5c5c5c' },
+            ticks: { stroke: '#5c5c5c' },
+            tickLabels: { fill: 'lightgrey', fontSize: '7px' }
+          } }
+        />
         
-        <div className='centreText smCap'>{title}</div>
-        
-      </div>
-    </span>
+        <VictoryLine
+          data={ratesC}
+          style={{ 
+            data: { 
+              stroke: lineColor || 'black',
+              strokeWidth: '2px'
+            },
+          }}
+          // animate={{
+          //   duration: 2000,
+          //   onLoad: { duration: 1000 }
+          // }}
+        />
+      </VictoryChart>
+      
+      <p className='centreText small cap'>{title}</p>
+      
+    </div>
   );
 };
 

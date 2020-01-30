@@ -65,7 +65,7 @@ export default class BlockForm extends Component {
         color='yellowT'
         icon='fa-exclamation-triangle'
         smIcon={this.props.smIcon}
-        lock={!Roles.userIsInRole(Meteor.userId(), 'run') || this.props.lock}
+        lock={!Roles.userIsInRole(Meteor.userId(), 'nightly'/*'run'*/) || this.props.lock}
         noText={this.props.noText}>
         <div>
           <form className='centre' onSubmit={this.addBlock.bind(this)}>
