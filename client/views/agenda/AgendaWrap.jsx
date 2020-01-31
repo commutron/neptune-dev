@@ -5,7 +5,7 @@ import { ToastContainer } from 'react-toastify';
 // import Pref from '/client/global/pref.js';
 
 // import Spin from '../../components/uUi/Spin.jsx';
-import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
+import HomeIcon from '/client/layouts/HomeIcon.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
 
 import PriorityList from './cards/PriorityList';

@@ -16,6 +16,7 @@ ddp-client@2.3.3
 ddp-common@1.4.0
 ddp-rate-limiter@1.0.7
 ddp-server@2.3.0
+deps@1.0.12
 diff-sequence@1.1.1
 dynamic-import@0.5.1
 ecmascript@0.14.1
@@ -39,6 +40,7 @@ localstorage@1.2.0
 logging@1.1.20
 meteor@1.9.3
 meteor-base@1.4.0
+meteorhacks:subs-manager@1.6.4
 minifier-css@1.5.0
 minifier-js@2.6.0
 minimongo@1.4.5

@@ -3,7 +3,7 @@ import moment from 'moment';
 import 'moment-timezone';
 import NumStat from '/client/components/uUi/NumStat.jsx';
 
-const PrioritySquareData = ({ batchID, app, dbDay, mockDay })=> {
+const PrioritySquareData = ({ batchID, app, dbDay, mockDay, altNumber })=> {
 
   const [ ptData, setPriority ] = useState(false);
   
@@ -21,7 +21,8 @@ const PrioritySquareData = ({ batchID, app, dbDay, mockDay })=> {
   return( 
     <PrioritySquare 
       batchID={batchID} 
-      ptData={ptData} 
+      ptData={ptData}
+      altNumber={altNumber}
       app={app} /> 
   );
 };
@@ -30,9 +31,11 @@ export default PrioritySquareData;
 
 ///////////////////////////////////////////////////////////////////////////////
 
-export const PrioritySquare = ({ batchID, ptData, app })=> {
+export const PrioritySquare = ({ batchID, ptData, altNumber, app })=> {
   
   const pt = ptData;
+  
+  const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
    
   if( pt && pt.batchID === batchID ) {
     
@@ -83,7 +86,7 @@ export const PrioritySquare = ({ batchID, ptData, app })=> {
       <div className={`blackT smCap big ${priorityClass} ${overClass}`}>
         <NumStat
           num={pLabel}
-          name={subLabel}
+          name={`${subLabel}${isNightly ? ` (${altNumber})` : ''}`}
           title={
             `Priority Rank "${priorityRank}" \nbuffer: ${bffrTime} minutes\n${overQuote ? 'Over Quote' : ''}`
           }

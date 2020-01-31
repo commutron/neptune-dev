@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast, ToastContainer } from 'react-toastify';
 
-import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
+import HomeIcon from '/client/layouts/HomeIcon.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
 
 import Slides from '../../components/smallUi/Slides.jsx';

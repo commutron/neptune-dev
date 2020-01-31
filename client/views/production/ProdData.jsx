@@ -12,7 +12,7 @@ import Spin from '/client/components/uUi/Spin.jsx';
 import ProductionFindOps from './ProductionFindOps.jsx';
 
 const ProdData = ({
-  appReady, usersReady, coldReady, hotReady, // subs
+  /*appReady,*/ usersReady, coldReady, hotReady, // subs
   orb, anchor, user, org, users, app, // self 
   allGroup, allWidget, allBatch, allxBatch,  // customer data
   hotBatch, hotxBatch // working data
@@ -30,14 +30,14 @@ const ProdData = ({
   
 
   if(
-     !appReady ||
+     /*!appReady ||*/
      !usersReady ||
      !coldReady || 
      !hotReady ||
      !user ||
      !app
     ) {
-    return (
+    return(
       <div className='centreContainer'>
         <div className='centrecentre'>
           <Spin />
@@ -75,7 +75,7 @@ export default withTracker( () => {
   let org = user ? user.org : false;
   let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') &&
     !Roles.userIsInRole(Meteor.userId(), 'readOnly') : false;
-  const appSub = login ? Meteor.subscribe('appData') : false;
+  // const appSub = login ? Meteor.subscribe('appData') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
   const coldSub = login ? Meteor.subscribe('thinData') : false;
 
@@ -128,7 +128,7 @@ export default withTracker( () => {
   
   if( !login ) {
     return {
-      appReady: false,
+      // appReady: false,
       usersReady: false,
       coldReady: false,
       hotReady: false
@@ -136,14 +136,14 @@ export default withTracker( () => {
   }else if( !active ) {
     Roles.userIsInRole(Meteor.userId(), 'readOnly') && FlowRouter.go('/');
     return {
-      appReady: appSub.ready(),
+      // appReady: appSub.ready(),
       usersReady: usersSub.ready(),
       coldReady: coldSub.ready(), 
       hotReady: hotSub.ready(),
     };
   }else{
     return {
-      appReady: appSub.ready(),
+      // appReady: appSub.ready(),
       usersReady: usersSub.ready(),
       coldReady: coldSub.ready(),
       hotReady: hotSub.ready(),

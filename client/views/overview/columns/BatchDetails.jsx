@@ -38,7 +38,7 @@ const BatchDetails = ({
           return(
             <BatchDetailChunk
               key={`${entry.batchID}live${index}`}
-              sindex={index}
+              rowIndex={index}
               ck={entry}
               user={user}
               clientTZ={clientTZ}
@@ -57,7 +57,7 @@ export default BatchDetails;
 
 
 const BatchDetailChunk = ({ 
-  sindex, ck, user, clientTZ, pCache, app, 
+  rowIndex, ck, user, clientTZ, pCache, app, 
   statusCols, ncCols, dense
 })=> {
   
@@ -81,6 +81,7 @@ const BatchDetailChunk = ({
       </div>
       
       <BatchTopStatus
+        rowIndex={rowIndex}
         batchID={ck._id}
         releasedToFloor={releasedToFloor}
         clientTZ={clientTZ}
@@ -113,7 +114,7 @@ const BatchDetailChunk = ({
 };
 
 const BatchTopStatus = ({ 
-  batchID, releasedToFloor, clientTZ, pCache, app, 
+  rowIndex, batchID, releasedToFloor, clientTZ, pCache, app, 
   statusCols, dense
 })=> {
   
@@ -162,11 +163,13 @@ const BatchTopStatus = ({
         {!pt ?
           <PrioritySquareData
             batchID={batchID}
+            altNumber={rowIndex+1}
             app={app} />
         :
           <PrioritySquare
             batchID={batchID}
             ptData={pt}
+            altNumber={rowIndex+1}
             app={app} />
         }
     

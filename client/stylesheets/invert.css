@@ -15,6 +15,14 @@
   scrollbar-color: var(--asbestosfade) var(--silver);
 }
 
+.invert .liteToolOn,
+.invert .liteToolOff { 
+  border-color: rgb(227,231,232);
+}
+.invert .liteToolOn { background-color: var(--clouds); }
+.invert .liteToolOff { background-color: var(--silverfade); }
+.invert .liteToolOff:active { background-color: var(--clouds); }
+
 .invert a:active {
   border: 1px dotted black;
 }
@@ -198,6 +206,10 @@
 
 .invert .ct-label {
   color: black;
+}
+
+.invert .whiteT {
+  color: var(--blackT);
 }
 /*
 .contrastList:nth-child(odd) {

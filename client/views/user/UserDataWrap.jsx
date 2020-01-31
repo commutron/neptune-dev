@@ -8,7 +8,7 @@ import usePrevious from '/client/components/utilities/usePreviousHook.js';
 //import Pref from '/client/global/pref.js';
 import Spin from '../../components/uUi/Spin.jsx';
 
-import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
+import HomeIcon from '/client/layouts/HomeIcon.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
 import Slides from '../../components/smallUi/Slides.jsx';
 import ActivityPanel from './ActivityPanel.jsx';
@@ -24,7 +24,7 @@ import PasswordChange from '/client/components/forms/PasswordChange.jsx';
 import { PermissionHelp } from '/client/views/people/AccountsManagePanel';
 
 const UserDataWrap = ({
-  ready, readyUsers, readyEvents, // subs
+  /*ready,*/ readyUsers, readyEvents, // subs
   orb, bolt, // meta
   user, active, org, app, // self
   bCache, batches, users // working data
@@ -37,7 +37,7 @@ const UserDataWrap = ({
   
     
   if(
-    !ready || 
+    /*!ready ||*/ 
     !readyUsers || 
     !readyEvents ||
     !app
@@ -150,24 +150,24 @@ export default withTracker( () => {
   let user = login ? Meteor.user() : false;
   let org = user ? user.org : false;
   let active = login ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
-  const appSub = login ? Meteor.subscribe('appData') : false;
+  // const appSub = login ? Meteor.subscribe('appData') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
   const eventsSub = login ? Meteor.subscribe('eventsData') : false;
   if(!login) {
     return {
-      ready: false,
+      // ready: false,
       readyUsers: false,
       readyEvents: false
     };
   }else if(!active) {
     return {
-      ready: false,
+      // ready: false,
       readyUsers: false,
       readyEvents: false
     };
   }else{
     return {
-      ready: appSub.ready(),
+      // ready: appSub.ready(),
       readyUsers: usersSub.ready(),
       readyEvents: eventsSub.ready(),
       orb: Session.get('now'),

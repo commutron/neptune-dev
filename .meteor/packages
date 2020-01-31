@@ -28,3 +28,4 @@ kadira:flow-router
 underscore@1.0.10
 fourseven:scss
 react-meteor-data
+meteorhacks:subs-manager

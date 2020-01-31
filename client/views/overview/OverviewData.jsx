@@ -11,7 +11,7 @@ import OverviewWrap from './OverviewWrap.jsx';
 
 const View = ({
   login,
-  appReady, readyUsers, ready, readyC, 
+  /*appReady,*/ readyUsers, ready, readyC, 
   username, user, clientTZ, org, app, 
   batch, batchX,
   bCache, pCache, cCache
@@ -23,7 +23,7 @@ const View = ({
   }, [user]);
   
     
-  if( !appReady || !readyUsers || !ready || !readyC || !app ) {
+  if(/*!appReady ||*/ !readyUsers || !ready || !readyC || !app ) {
     return (
       <div className='centreContainer'>
         <div className='centrecentre'>
@@ -55,13 +55,13 @@ export default withTracker( () => {
   let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   let org = user ? user.org : false;
   const clientTZ = moment.tz.guess();
-  const appSub = login ? Meteor.subscribe('appData') : false;
+  // const appSub = login ? Meteor.subscribe('appData') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
   const sub = login ? Meteor.subscribe('shaddowData', clientTZ) : false;
   const subC = login ? Meteor.subscribe('cacheData', clientTZ) : false;
   if(!login || !active) {
     return {
-      appReady: false,
+      // appReady: false,
       readyUsers: false,
       ready: false
     };
@@ -70,7 +70,7 @@ export default withTracker( () => {
       login: Meteor.userId(),
       sub: sub,
       subC: subC,
-      appReady: appSub.ready(),
+      // appReady: appSub.ready(),
       readyUsers: usersSub.ready(),
       ready: sub.ready(),
       readyC: subC.ready(),

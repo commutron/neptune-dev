@@ -12,10 +12,7 @@
   overflow-y: hidden !important;
   overflow-x: hidden !important;
 }
-.overviewNav { /* depreciate */
-  grid-area: overviewNav;
-  background-color: rgb(27,27,27);
-}
+
 .overviewToolbar {
   grid-area: overviewNav;
   background-color: rgb(50,50,50);
@@ -154,8 +151,8 @@
   text-align: center;
 }
 .overGridRowScroll > div {
-  border-right: 1px outset rgb(175,175,175);
-  border-bottom: 1px outset rgb(190,190,190);
+  border-right: 1px outset rgba(255,255,255,0.2);
+  border-bottom: 1px outset rgba(255,255,255,0.3);
 }
 .overGridRowScroll > div.redRight {
   border-right: 1vh outset var(--alizarin); 
@@ -224,3 +221,26 @@
   height: 2vh; }
 .minifyed .overGridRowScroll .watchWrap button {
   height: 2vh; font-size: 1.5vh; }
+  
+
+.lightTheme .overviewToolbar {
+  background-color: var(--silverfade);
+}
+.lightTheme .tenHeader,
+.lightTheme .frontCenterTitle,
+.lightTheme .auxRight,
+.lightTheme .proRight {
+  background-color: var(--cloudstrans);
+  color: var(--blackT); 
+}
+.lightTheme .overviewContent,
+.lightTheme .overGridFrame { 
+  background-color: var(--clouds);
+}
+.lightTheme .overGridScroll:focus { 
+  background-color: var(--cloudstrans); 
+}
+.lightTheme .overGridRowFixedHeader > span,
+.lightTheme .ovColhead { 
+  color: var(--blackT); 
+}

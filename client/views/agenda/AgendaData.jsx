@@ -10,7 +10,7 @@ import Spin from '../../components/uUi/Spin.jsx';
 import AgendaWrap from './AgendaWrap.jsx';
 
 const View = ({
-  login, sub, appReady, readyUsers, ready, 
+  login, sub, /*appReady,*/ readyUsers, ready, 
   username, user, clientTZ, org, app, 
   bCache, pCache, cCache, zCache
 })=> {
@@ -21,7 +21,7 @@ const View = ({
   }, [user]);
   
     
-  if( !appReady || !readyUsers || !ready || !app ) {
+  if( /*!appReady ||*/ !readyUsers || !ready || !app ) {
     return (
       <div className='centreContainer'>
         <div className='centrecentre'>
@@ -52,12 +52,12 @@ export default withTracker( () => {
   let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   let org = user ? user.org : false;
   const clientTZ = moment.tz.guess();
-  const appSub = login ? Meteor.subscribe('appData') : false;
+  // const appSub = login ? Meteor.subscribe('appData') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
   const sub = login ? Meteor.subscribe('cacheData', clientTZ) : false;
   if(!login || !active) {
     return {
-      appReady: false,
+      // appReady: false,
       readyUsers: false,
       ready: false
     };
@@ -65,7 +65,7 @@ export default withTracker( () => {
     return {
       login: Meteor.userId(),
       sub: sub,
-      appReady: appSub.ready(),
+      // appReady: appSub.ready(),
       readyUsers: usersSub.ready(),
       ready: sub.ready(),
       username: name,

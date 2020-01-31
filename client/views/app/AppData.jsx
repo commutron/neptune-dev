@@ -9,7 +9,7 @@ import Spin from '../../components/uUi/Spin.jsx';
 import AppWrap from './AppWrap.jsx';
 
 const AppView = ({
-  ready, readyUsers, readyDebug, // subs
+  /*ready,*/ readyUsers, readyDebug, // subs
   orb, bolt, // meta
   username, user, active, org, app, users // self
 })=> {
@@ -20,12 +20,7 @@ const AppView = ({
   }, [user]);
   
    
-  if(
-    !ready || 
-    !readyUsers || 
-    !readyDebug || 
-    !app
-  ) {
+  if(/*!ready ||*/ !readyUsers || !readyDebug || !app ) {
     return (
       <div className='centreContainer'>
         <div className='centrecentre'>
@@ -51,24 +46,24 @@ export default withTracker( () => {
   let name = user ? user.username : false;
   let org = user ? user.org : false;
   let active = login ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
-  const appSub = login ? Meteor.subscribe('appData') : false;
+  // const appSub = login ? Meteor.subscribe('appData') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
   const usersDebugSub = login ? Meteor.subscribe('usersDataDebug') : false;
   if(!login) {
     return {
-      ready: false,
+      // ready: false,
       readyUsers: false,
       readyDebug: false
     };
   }else if(!active) {
     return {
-      ready: false,
+      // ready: false,
       readyUsers: false,
       readyDebug: false
     };
   }else{
     return {
-      ready: appSub.ready(),
+      // ready: appSub.ready(),
       readyUsers: usersSub.ready(),
       readyDebug: usersDebugSub.ready(),
       orb: Session.get('now'),

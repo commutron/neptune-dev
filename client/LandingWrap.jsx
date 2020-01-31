@@ -7,7 +7,6 @@ import { withTracker } from 'meteor/react-meteor-data';
 import Spin from '/client/components/uUi/Spin.jsx';
 
 import HomeLogout from '/client/components/tinyUi/HomeLogout.jsx';
-//import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
 import NavButton from '/client/components/smallUi/NavButton/NavButton.jsx';
 import { NavButtonShell } from '/client/components/smallUi/NavButton/NavButton.jsx';
 //import { NavPlaceholderShell } from '/client/components/smallUi/NavButton/NavButton.jsx';
@@ -15,7 +14,9 @@ import { NavPlaceholder } from '/client/components/smallUi/NavButton/NavButton.j
 
 const StartView = ({ready, readyUsers, user, org, app}) =>	{
   
-  if(!ready || !readyUsers || !user || !org || !app) {
+  if(
+    // !ready || 
+    !readyUsers || !user || !org || !app) {
     return (
       <div className='centreSpash'>
         <Spin color={true} message='Just a moment'/>
@@ -71,20 +72,20 @@ export default withTracker( () => {
   let login = Meteor.userId() ? true : false;
   let user = login ? Meteor.user() : false;
   let org = user ? user.org : false;
-  const appSub = login ? Meteor.subscribe('appData') : false;
+  // const appSub = login ? Meteor.subscribe('appData') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
   
   //console.log(Meteor.status());
   
   if(!login) {
     return {
-      ready: appSub.ready(),
+      // ready: appSub.ready(),
       readyUsers: false,
       login: Meteor.userId(),
     };
   }else{
     return {
-      ready: appSub.ready(),
+      // ready: appSub.ready(),
       readyUsers: usersSub.ready(),
       login: Meteor.userId(),
       user: user,

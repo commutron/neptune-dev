@@ -5,7 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import Pref from '/client/global/pref.js';
 
 import Spin from '../../components/uUi/Spin.jsx';
-import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
+import HomeIcon from '/client/layouts/HomeIcon.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
 
 import BatchHeaders from './columns/BatchHeaders.jsx';
@@ -41,6 +41,7 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
   const [ filterBy, filterBySet ] = useState( Session.get(sessionSticky+'filter') || false );
   const [ sortBy, sortBySet ] = useState( Session.get(sessionSticky+'sort') || 'priority' );
   const [ dense, denseSet ] = useState( Session.get(sessionSticky+'dense') || 0 );
+  const [ light, themeSet ] = useState( Session.get(sessionSticky+'lightTheme') || false );
   
   const [ liveState, liveSet ] = useState( false );
   
@@ -51,6 +52,10 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
   useEffect( ()=> {
     Session.set(sessionSticky+'dense', dense);
   }, [dense]);
+  
+  useEffect( ()=> {
+    Session.set(sessionSticky+'lightTheme', light);
+  }, [light]);
 
   useInterval( ()=> {
     tickingTimeSet( moment() );
@@ -166,9 +171,11 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
   const density = dense === 1 ? 'compact' :
                   dense === 2 ? 'minifyed' :
                   '';
+                  
+  const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
     
   return(
-    <div key={0} className='overviewContainer'>
+    <div key={0} className={`overviewContainer ${light === true ? 'lightTheme invert' : ''}`}>
       <ToastContainer
         position="top-right"
         autoClose={2500}
@@ -243,6 +250,23 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
             className={dense === 2 ? 'liteToolOn' : 'liteToolOff'}
           ><i className='fas fa-compress-arrows-alt fa-fw'></i></button>
         </span>
+        
+        {isNightly ?
+          <span>
+            <button
+              key='darkOn'
+              title='Dark Theme'
+              onClick={()=>themeSet(false)}
+              className={light === false ? 'liteToolOn' : 'liteToolOff'}
+            ><i className='fas fa-moon fa-fw'></i></button>
+            <button
+              key='lightOn'
+              title='Light Theme'
+              onClick={()=>themeSet(true)}
+              className={light === true ? 'liteToolOn' : 'liteToolOff'}
+            ><i className='fas fa-sun fa-fw'></i></button>
+          </span>
+        : null}
         
         <span className='flexSpace' />
         <span>Updated {duration} ago</span>

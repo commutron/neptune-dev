@@ -82,6 +82,8 @@ exposedRoutes.route('/meta', {
   }
 });
 
+AppSub = new SubsManager();
+
 const privlegedRoutes = FlowRouter.group({
   triggersEnter: [
     ()=> {
@@ -97,8 +99,12 @@ const privlegedRoutes = FlowRouter.group({
         Session.set('redirectAfterLogin', route.path);
       }
     }
-  ]
+  ],
+  subscriptions: function(params, queryParams) {
+    this.register('routerSub', AppSub.subscribe('appData'));
+  }
 });
+
 
 privlegedRoutes.route('/limbo', {
   name: 'limbo',
@@ -274,7 +280,7 @@ FlowRouter.globals.push({
       rel: "icon"
     },
     manifest: {
-      href: "/manifestPW.json",
+      href: "/pwa_manifest.json",
       rel: "manifest",
     },
   },

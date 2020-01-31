@@ -11,7 +11,7 @@ import ErrorCatch from '/client/components/utilities/ErrorCatch.jsx';
 import Pref from '/client/global/pref.js';
 import Spin from '../../components/uUi/Spin.jsx';
 
-import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
+import HomeIcon from '/client/layouts/HomeIcon.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
 import Slides from '../../components/smallUi/Slides.jsx';
 
@@ -33,7 +33,9 @@ const PeopleDataWrap = ({
   }, [user]);
     
     
-  if(!ready || !readyUsers || !readyTides || !app) {
+  if(
+    // !ready || 
+    !readyUsers || !readyTides || !app) {
     return (
       <div className='centreContainer'>
         <div className='centrecentre'>
@@ -121,24 +123,24 @@ export default withTracker( () => {
   let org = user ? user.org : false;
   const clientTZ = moment.tz.guess();
   let active = login ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
-  const appSub = login ? Meteor.subscribe('appData') : false;
+  //const appSub = login ? Meteor.subscribe('appData') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
   const tidesSub = login ? Meteor.subscribe('tideData', clientTZ) : false;
   if(!login) {
     return {
-      ready: false,
+      // ready: false,
       readyUsers: false,
       readyTides: false
     };
   }else if(!active) {
     return {
-      ready: false,
+      // ready: false,
       readyUsers: false,
       readyTides: false
     };
   }else{
     return {
-      ready: appSub.ready(),
+      //ready: appSub.ready(),
       readyUsers: usersSub.ready(),
       readyTides: tidesSub.ready(),
       user: user,

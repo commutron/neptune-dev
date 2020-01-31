@@ -201,6 +201,13 @@ main {
   color: var(--silverfade);
   /*animation: none;*/
 }
+.invert button .primeRightIcon {
+  color: var(--blackT);
+}
+.invert button:disabled .primeRightIcon {
+  background-color: transparent;
+  color: var(--concrete);
+}
 
 /* home / landing page */
 

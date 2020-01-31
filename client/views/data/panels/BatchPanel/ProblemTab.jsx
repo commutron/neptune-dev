@@ -1,6 +1,6 @@
 import React from 'react';
 // import moment from 'moment';
-// import Pref from '/client/global/pref.js';
+import Pref from '/client/global/pref.js';
 
 import NonConRate from '/client/components/charts/NonCon/NonConRate.jsx';
 import { HasNonCon } from '/client/components/bigUi/NonConMiniTops.jsx';
@@ -18,7 +18,7 @@ import NonConBubble from '/client/components/charts/NonCon/NonConBubble.jsx';
 import NonConBar from '/client/components/charts/NonCon/NonConBar.jsx';
 import NonConBarRefs from '/client/components/charts/NonCon/NonConBarRefs.jsx';
 
-const NCTab = ({
+const ProblemTab = ({
   a, b,
   riverFlow, riverAltFlow,
   ncListKeys
@@ -68,45 +68,50 @@ const NCTab = ({
           
       </div>
       <div className='avThreeContent'>
-        
-        <TabsLite 
-          tabs={ [ 
-            <i className="fas fa-braille fa-lg fa-fw"></i>,
-            <i className="fas fa-chart-bar fa-lg fa-fw"></i>,
-            <i className="fas fa-chess-board fa-lg fa-fw"></i>,
-            <i className="fas fa-chart-area fa-lg fa-fw"></i>
-          ] }
-          names={[ 
-            'type bubbles', 'type bars', 'referance bars', 'recorded rate'
-          ]}>
-          
-          <NonConBubble
-            ncOp={ncOptions}
-            nonCons={nonConArrayClean}
-            app={a} />
+        {nonConArrayClean.length > 0 ?
+          <TabsLite 
+            tabs={ [ 
+              <i className="fas fa-braille fa-lg fa-fw"></i>,
+              <i className="fas fa-chart-bar fa-lg fa-fw"></i>,
+              <i className="fas fa-chess-board fa-lg fa-fw"></i>,
+              <i className="fas fa-chart-area fa-lg fa-fw"></i>
+            ] }
+            names={[ 
+              'type bubbles', 'type bars', 'referance bars', 'recorded rate'
+            ]}>
             
-          <NonConBar
-            ncOp={ncOptions}
-            nonCons={nonConArrayClean}
-            app={a} />
-        
-          <NonConBarRefs
-            ncOp={ncOptions}
-            flow={riverFlow}
-            flowAlt={riverAltFlow}
-            nonCons={nonConArrayClean}
-            app={a} />
-         
-          <NonConRate 
-            batches={[b.batch]}
-            title='NonCon Rate'
-            lineColor='rgb(231, 76, 60)' />
+            <NonConBubble
+              ncOp={ncOptions}
+              nonCons={nonConArrayClean}
+              app={a} />
+              
+            <NonConBar
+              ncOp={ncOptions}
+              nonCons={nonConArrayClean}
+              app={a} />
           
-        </TabsLite>
+            <NonConBarRefs
+              ncOp={ncOptions}
+              flow={riverFlow}
+              flowAlt={riverAltFlow}
+              nonCons={nonConArrayClean}
+              app={a} />
+           
+            <NonConRate 
+              batches={[b.batch]}
+              title='NonCon Rate'
+              lineColor='rgb(231, 76, 60)' />
+            
+          </TabsLite>
+        :
+          <div className='centreText fade'>
+            <i className='fas fa-smile-beam fa-3x'></i>
+            <p className='big cap'>no {Pref.nonCons}</p>
+          </div>}
       </div>
     </div>
     
   );
 };
 
-export default NCTab;
+export default ProblemTab;

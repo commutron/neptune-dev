@@ -252,8 +252,9 @@ Meteor.methods({
   // push time budget, whole time for batch
   pushBatchTimeBudget(batchId, qTime, clientTZ) {
     try{
+      const accessKey = Meteor.user().orgKey;
       if(Roles.userIsInRole(Meteor.userId(), ['sales', 'run', 'edit'])) {
-        BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        BatchDB.update({_id: batchId, orgKey: accessKey}, {
           $push : { 
             'quoteTimeBudget': {
               $each: [ {

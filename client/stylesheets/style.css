@@ -1175,7 +1175,9 @@ label.qdpplRound {
   letter-spacing: 1px;
 	text-transform: capitalize;
 	overflow: hidden;
-	border: 0.5px solid rgb(0,0,0);
+	border-width: 0.5px;
+	border-style: solid;
+	border-color: rgb(0,0,0);
 }
 .liteToolOn { 
   background-color: var(--asbestos);

@@ -6,22 +6,17 @@ import CreateTag from '/client/components/uUi/CreateTag.jsx';
 import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 import InfoTab from './InfoTab.jsx';
 import TimeTab from './TimeTab.jsx';
-import NCTab from './NCTab.jsx';
+import ProblemTab from './ProblemTab.jsx';
 
 import EventsTimeline from '/client/components/bigUi/BatchFeed/EventsTimeline.jsx';
 import RMATable from '/client/components/tables/RMATable.jsx';
 
-// props
-/// batchData
-/// widgetData 
-/// groupData
-/// app
 
-const BatchPanel = (props)=> {
+const BatchPanel = ({ batchData, widgetData, user, app })=> {
   
   function getFlows() {
-    const b = props.batchData;
-    const w = props.widgetData;
+    const b = batchData;
+    const w = widgetData;
     let riverTitle = 'not found';
     let riverFlow = [];
     let riverAltTitle = 'not found';
@@ -47,7 +42,7 @@ const BatchPanel = (props)=> {
   }
   
   function filterSpecial() {
-    const data = props.batchData.items;
+    const data = batchData.items;
     let verifyList = [];
     let rmaList = [];
     data.map( (item)=>{
@@ -69,11 +64,10 @@ const BatchPanel = (props)=> {
   }
 
 
-    const a = props.app;
-    const b = props.batchData;
-    const w = props.widgetData;
+    const a = app;
+    const b = batchData;
+    const w = widgetData;
     const v = w.versions.find( x => x.versionKey === b.versionKey );
-    //const g = props.groupData;
     
     const done = b.finishedAt !== false; // no more boards if batch is finished
     const allDone = b.items.every( x => x.finishedAt !== false );
@@ -106,9 +100,9 @@ const BatchPanel = (props)=> {
         sessionTab='batchPanelTabs'>
         
         <InfoTab 
-          a={props.app}
-          b={props.batchData}
-          user={props.user}
+          a={app}
+          b={batchData}
+          user={user}
           done={done}
           allDone={allDone}
           progCounts={path.progCounts}
@@ -116,10 +110,10 @@ const BatchPanel = (props)=> {
           riverAltTitle={path.riverAltTitle} />
       
         <TimeTab 
-          a={props.app}
-          b={props.batchData}
+          a={app}
+          b={batchData}
           v={v}
-          user={props.user}
+          user={user}
           totalUnits={path.progCounts.totalRegUnits + path.progCounts.totalAltUnits}
           done={done}
           allDone={allDone}
@@ -137,9 +131,9 @@ const BatchPanel = (props)=> {
             doneBatch={done} />
         </div>
         
-        <NCTab 
-          a={props.app}
-          b={props.batchData}
+        <ProblemTab 
+          a={app}
+          b={batchData}
           riverFlow={path.riverFlow}
           riverAltFlow={path.riverAltFlow}
           ncListKeys={path.ncListKeys.flat()} />

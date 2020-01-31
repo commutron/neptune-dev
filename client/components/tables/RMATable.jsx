@@ -61,7 +61,7 @@ const RMATable = (props)=> {
       :
       <div className='centreText fade'>
         <i className='fas fa-smile fa-3x'></i>
-        <p className='big'>no {Pref.nonCon}s</p>
+        <p className='big'>no {Pref.rma}s</p>
       </div>
       }
     </div>

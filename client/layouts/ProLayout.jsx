@@ -4,7 +4,7 @@ import ErrorCatch from '/client/components/utilities/ErrorCatch.jsx';
 import { ToastContainer } from 'react-toastify';
 //import Pref from '/client/global/pref.js';
 
-import HomeIcon from '/client/components/uUi/HomeIcon.jsx';
+import HomeIcon from '/client/layouts/HomeIcon.jsx';
 import TideControl from '/client/components/tide/TideControl/TideControl.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
 import FindBox from './FindBox.jsx';

@@ -12,7 +12,7 @@ import Spin from '../../components/uUi/Spin.jsx';
 import DataViewOps from './DataViewOps.jsx';
 
 const ExploreView = ({
-  appReady, usersReady, coldReady, hotReady, // subs
+  /*appReady,*/ usersReady, coldReady, hotReady, // subs
   user, org, users, app, // self
   allGroup, allWidget, allBatch, allXBatch, // customers
   hotBatch, hotXBatch, // relevant
@@ -30,7 +30,7 @@ const ExploreView = ({
   
     
   if(
-    !appReady ||
+    /*!appReady ||*/
     !usersReady ||
     !coldReady || 
     !hotReady ||
@@ -50,21 +50,15 @@ const ExploreView = ({
         action={false}
         base={true}
         invertColor={true}
-    >
-      <div className='centre wide'>
-        <Spin />
-      </div>
-    </TraverseWrap>
-  );
-    /*
-      <div className='centreContainer'>
-        <div className='centrecentre'>
+      >
+        <div className='centre wide'>
           <Spin />
         </div>
-      </div>*/
+      </TraverseWrap>
+    );
   }
     
-  return (
+  return(
     <DataViewOps
       //orb={orb}
       user={user}
@@ -93,7 +87,7 @@ export default withTracker( ({ view, request, specify }) => {
   let org = user ? user.org : false;
   let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   const clientTZ = moment.tz.guess();
-  const appSub = login ? Meteor.subscribe('appData') : false;
+  // const appSub = login ? Meteor.subscribe('appData') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
   const coldSub = login ? Meteor.subscribe('skinnyData', clientTZ) : false;
                       
@@ -103,14 +97,14 @@ export default withTracker( ({ view, request, specify }) => {
 
   if( !login || !active ) {
     return {
-      appReady: false,
+      // appReady: false,
       usersReady: false,
       coldReady: false,
       hotReady: false
     };
   }else{
     return {
-      appReady: appSub.ready(),
+      // appReady: appSub.ready(),
       usersReady: usersSub.ready(),
       coldReady: coldSub.ready(),
       hotReady: hotSubEx.ready(),
