@@ -5,7 +5,6 @@ import '/client/components/utilities/ShipTime.js';
 import Pref from '/client/global/pref.js';
 
 import TagsModule from '/client/components/bigUi/TagsModule.jsx';
-import { ReleaseNote } from '/client/components/bigUi/ReleasesModule.jsx';
 import NoteLine from '/client/components/smallUi/NoteLine.jsx';
 import BlockList from '/client/components/bigUi/BlockList.jsx';
 import { AlterFulfill } from '/client/components/forms/BatchAlter.jsx';
@@ -98,14 +97,6 @@ const GeneralChunk = ({
           <legend>Serial Range</legend>
           <p className='numFont'>{itemsOrder[0].serial} - {itemsOrder[itemsOrder.length-1].serial}</p>
         </fieldset>}
-      
-      {released === undefined ? null :
-        released === true &&
-          <ReleaseNote 
-            id={b._id} 
-            release={b.floorRelease} 
-            lockout={!b.live} />
-      }
       
       <NoteLine entry={b.notes} id={b._id} widgetKey={false}  />
       <BlockList id={b._id} data={b.blocks} lock={done} expand={expand} />

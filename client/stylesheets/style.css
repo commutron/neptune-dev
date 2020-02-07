@@ -50,6 +50,16 @@
   outline: 1px dotted;
 }
 
+.hoverAction {
+  cursor: pointer;
+}
+.hoverAction:hover, .hoverAction:focus-within {
+  outline-color: var(--neptuneColor);
+  outline-style: dotted;
+  outline-width: thick;
+  outline-offset: -0.5vmax;
+}
+
 .mini15x {
   min-width: 1.5rem;
   min-height: 1.5rem;
@@ -227,11 +237,6 @@ label.qdpplRound {
   background-color: rgba(255,255,255,0);
   border: none;
   box-shadow: none;
-}
-
-.actionBox {
-  box-shadow: 0 0.75em 1em -0.5em rgba(0,0,0,0.2),
-              0 -0.75em 1em -0.5em rgba(0,0,0,0.2);
 }
 
 .pop {

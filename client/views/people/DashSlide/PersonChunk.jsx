@@ -25,17 +25,18 @@ const PersonChunk = ({
       err && console.log(err);
       asw && setGuess(asw);
     });
-  }, [userChunk.batch, update]);
+  }, [userChunk, update]);
   
   useEffect( ()=>{
     if(phaseGuess) {
       phaseGuess[1].forEach( (gu, ix) => updatePhases(userChunk.uID+ix, gu) );
     }
+    return ()=>removePhaser(userChunk.uID);
   }, [phaseGuess]);
   
-  useEffect( ()=>{
-    return ()=>removePhaser(userChunk.uID);
-  }, []);
+  // useEffect( ()=>{
+  //   return ()=>removePhaser(userChunk.uID);
+  // }, []);
   
   Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(phaseGuess);
   

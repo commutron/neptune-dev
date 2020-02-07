@@ -669,14 +669,14 @@ Meteor.methods({
         if(batchInfo) {
           const findB = BatchDB.find({live: true, versionKey: v.versionKey}).fetch();
           batches = Array.from(findB, x => { 
-                                  countI = 0;
-                                  unitInfo ? 
-                                    x.items.forEach( y => countI += y.units )
-                                  : null;
-                                  return {
-                                    btch: x.batch,
-                                    cnt: countI
-                                } } );
+                      countI = 0;
+                      unitInfo ? 
+                        x.items.forEach( y => countI += y.units )
+                      : null;
+                      return {
+                        btch: x.batch,
+                        cnt: countI
+                    } } );
         }else{null}
         versions.push({ 
           vKey: v.versionKey,

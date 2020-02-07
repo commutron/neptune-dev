@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
@@ -8,47 +8,56 @@ import 'flatpickr/dist/themes/airbnb.css';
 
 const ReleaseAction = ({ id, rType })=> {
   
-  function handleRelease(e) {
-    e.preventDefault();
-    const datetime = e.target.rDateTime.value || moment().format();
-    Meteor.call('addRelease', id, rType, datetime, (err)=>{
+  const [ datetime, datetimeSet ] = useState( moment().format() );
+  
+  function handleDatetime(e) {
+    const input = this.rDateTime.value;
+    datetimeSet( input );
+  }
+  
+  function handleRelease(e, caution) {
+    Meteor.call('addRelease', id, rType, datetime, caution, (err)=>{
       err && console.log(err);
     });
   }
   
   let sty = {
     padding: '10px',
-    borderWidth: '3px'
   };
   
   const releaseType = rType === 'floorRelease' ? 'the floor' : null;
   
   return(
-    <div className='wide actionBox greenBorder' style={sty}>
-      <form onSubmit={(e)=>handleRelease(e)} className='centre listSortInput'>
-        <Flatpickr
-          id='rDateTime'
-          value={moment().format()}
-          options={{
-            defaultDate: moment().format(),
-            maxDate: moment().format(),
-            minuteIncrement: 1,
-            enableTime: true,
-            time_24hr: false,
-            altInput: true,
-            altFormat: "Y-m-d G:i K",
-          }}
-        />
-        <p>
-          <button
-            type='submit'
-            title={`Release ${Pref.batch} to the floor`}
-            className='action clearGreen centreText bigger cap'
-            style={sty}
-            disabled={!Roles.userIsInRole(Meteor.userId(), 'run')}
-          >Release {Pref.xBatch} to {releaseType || 'the floor'}</button>
-        </p>
-      </form>
+    <div className='actionBox centre greenBorder listSortInput' style={sty}>
+      <Flatpickr
+        id='rDateTime'
+        value={datetime}
+        onChange={(e)=>handleDatetime(e)}
+        options={{
+          defaultDate: datetime,
+          maxDate: moment().format(),
+          minuteIncrement: 1,
+          enableTime: true,
+          time_24hr: false,
+          altInput: true,
+          altFormat: "Y-m-d G:i K",
+        }}
+      />
+      <p>
+        <button
+          onClick={(e)=>handleRelease(e, false)}
+          title={`Release ${Pref.xBatch} to the floor`}
+          className='action clearGreen centreText bigger cap'
+          style={sty}
+          disabled={!Roles.userIsInRole(Meteor.userId(), 'run')}
+        >Release {Pref.xBatch} to {releaseType || 'the floor'}</button>
+      </p>
+      <button
+        onClick={(e)=>handleRelease(e, Pref.shortfall)}
+        title={`Release ${Pref.batch} to the floor`}
+        className='smallAction clearOrange medBig cap'
+        disabled={!Roles.userIsInRole(Meteor.userId(), 'run')}
+      >release with {Pref.shortfall}</button>
     </div>
   );
 };
@@ -57,18 +66,10 @@ export default ReleaseAction;
 export const ReleaseNote = ({ id, release, xBatch, lockout })=> {
   
   function handleCancel() {
-    if(xBatch) {
-      const rType = release.type;
-      Meteor.call('cancelRelease', id, rType, (err)=>{
-        if(err)
-          console.log(err);
-      });
-    }else{
-      Meteor.call('cancelFloorRelease', id, (err)=>{
-        if(err)
-          console.log(err);
-      });
-    }
+    const rType = release.type;
+    Meteor.call('cancelRelease', id, rType, (err)=>{
+      err && console.log(err);
+    });
   }
   const releaseType = release.type === 'floorRelease' ?
                       'Released to the Floor' : 'Released';
@@ -77,9 +78,12 @@ export const ReleaseNote = ({ id, release, xBatch, lockout })=> {
     <div className='noCopy' title='right-click to cancel'>
       <ContextMenuTrigger id={id+'release'} disable={lockout}>
   			<fieldset className='noteCard'>
-          <legend>{releaseType || 'Released to the Floor'}</legend>
+          <legend>{releaseType}</legend>
           <p>{moment(release.time).format("ddd, MMM D /YY, h:mm a")}
           <i> by <UserNice id={release.who} /></i></p>
+          {release.caution ?
+            <p>Caution: {release.caution}</p>
+          : null}
         </fieldset>
       </ContextMenuTrigger>
       <ContextMenu id={id+'release'}>
@@ -90,5 +94,76 @@ export const ReleaseNote = ({ id, release, xBatch, lockout })=> {
 	      </MenuItem>
 	    </ContextMenu>
 	  </div>
+  );
+};
+
+export const FloorReleaseWrapper = ({ 
+  id, batchNum, released, lockout, 
+  isX, children
+})=> {
+  
+  function handleRelease(e, caution) {
+    const datetime = moment().format();
+    if(isX) {
+      Meteor.call('addRelease', id, 'floorRelease', datetime, caution, (err)=>{
+        err && console.log(err);
+      });
+    }else{
+      Meteor.call('releaseToFloor', id, datetime, caution, (err)=>{
+        err && console.log(err);
+      });
+    }
+  }
+  
+  function handleCancel() {
+    if(isX) {
+      Meteor.call('cancelRelease', id, 'floorRelease', (err)=>{
+        err && console.log(err);
+      });
+    }else{
+      Meteor.call('cancelFloorRelease', id, (err)=>{
+        err && console.log(err);
+      });
+    }
+  }
+  
+  const isAuth = Roles.userIsInRole(Meteor.userId(), 'run');
+  const extraClass = isAuth ? 'noCopy hoverAction' : 'noCopy';
+  const out = released === true;
+                      
+  return(
+    <React.Fragment>
+      <ContextMenuTrigger 
+        id={id+'release'}
+        disable={!isAuth}
+        renderTag='div'
+        holdToDisplay={1}
+        attributes={ {className: extraClass} }>
+  			{children}
+      </ContextMenuTrigger>
+      <ContextMenu 
+        id={id+'release'} 
+        className='cap noCopy'
+        hideOnLeave={true}>
+        <MenuItem disabled={true}>
+          <em>{Pref.batch} {batchNum}{lockout && ' is complete'}</em>
+        </MenuItem>
+	      <MenuItem
+	        onClick={(e)=>handleRelease(e, false)}
+	        disabled={out || lockout}>
+	        Release to the floor 
+	      </MenuItem>
+	      <MenuItem
+	        onClick={(e)=>handleRelease(e, Pref.shortfall)}
+	        disabled={out || lockout}>
+	        release with {Pref.shortfall}
+	      </MenuItem>
+	      <MenuItem
+	        onClick={()=>handleCancel()} 
+	        disabled={!out || lockout}>
+	        Cancel Release
+	      </MenuItem>
+	    </ContextMenu>
+	  </React.Fragment>
   );
 };

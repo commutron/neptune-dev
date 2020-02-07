@@ -123,7 +123,8 @@ const BatchPanel = ({ batchData, widgetData, user, app })=> {
         <div className='space3v'>
           <EventsTimeline
             id={b._id}
-            batch={b.batch}
+            batchData={batchData}
+            releaseList={b.floorRelease ? [b.floorRelease] : []}
             verifyList={filter.verifyList}
             eventList={b.events || []}
             alterList={b.altered || []}

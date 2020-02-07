@@ -255,7 +255,7 @@
   background-image: url(inspect.svg);
   background-color: var(--wisteria);
 }
-.iFinish:hover, .iCheck:active {
+.iFinish:hover, .iFinish:active {
   background-color: var(--amethyst);
 }
 

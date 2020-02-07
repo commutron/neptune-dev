@@ -5,6 +5,7 @@ import './style.css';
 
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 import StepBack from '/client/components/river/StepBack.jsx';
+import CreateBlock from './CreateBlock';
 import NonConBlock from './NonConBlock';
 import ShortBlock from './ShortBlock';
 import RmaBlock from './RmaBlock';
@@ -39,19 +40,11 @@ const ItemFeed = ({
   return(
     <div className='scrollWrap'>
       <div className='infoFeed'>
-        <div className='infoBlock create'>
-          <div className='blockTitle cap'>
-            <div>
-              <div className='leftAnchor'><i className="fas fa-plus-circle fa-lg fa-fw iPlain"></i></div>
-              <div>serial number created</div>
-            </div>
-            <div className='rightText'>
-              <div><UserNice id={createBy} /></div>
-              <div>{moment(createTime).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</div>
-              <div className='rightAnchor'></div>
-            </div>
-          </div>
-        </div>
+      
+        <CreateBlock
+          title='serial number created'
+          user={createBy}
+          datetime={createTime} />
         
         {ordered.map( (dt, ix)=>{
           if(typeof dt.step === 'string') {

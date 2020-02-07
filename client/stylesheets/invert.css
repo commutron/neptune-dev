@@ -1,4 +1,9 @@
-/* Invert Rules */
+/* 
+@media (prefers-color-scheme: no-preference / light / dark) {
+  
+}
+
+Invert Rules */
 .invert {
   background-color: var(--clouds);
   color: black;
@@ -19,9 +24,9 @@
 .invert .liteToolOff { 
   border-color: rgb(227,231,232);
 }
-.invert .liteToolOn { background-color: var(--clouds); }
+.invert .liteToolOn { background-color: var(--cloudstrans); }
 .invert .liteToolOff { background-color: var(--silverfade); }
-.invert .liteToolOff:active { background-color: var(--clouds); }
+.invert .liteToolOff:active { background-color: var(--cloudstrans); }
 
 .invert a:active {
   border: 1px dotted black;

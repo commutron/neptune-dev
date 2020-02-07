@@ -4,6 +4,13 @@ import HomeIcon from '/client/layouts/HomeIcon.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
 import { ToastContainer, toast } from 'react-toastify';
 
+    
+    // const vaugeWidgets = WidgetDB.find({'versions.assembly.component':
+    //   { $regex: new RegExp( num ) }
+    // }).fetch();
+    
+    
+    
 const CompSearchPanel = (props)=> {
   
   const [ bChk, setB ] = useState(true);

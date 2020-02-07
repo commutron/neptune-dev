@@ -23,6 +23,7 @@ const NCAdd = ({ id, barcode, user, app, ncListKeys })=> {
   function handleNC(e, andFix) {
     e.preventDefault();
     const type = this.ncType.value.trim();
+    
     const tgood = handleCheck(this.ncType);
     
     const where = Session.get('ncWhere') || "";
@@ -85,27 +86,29 @@ const NCAdd = ({ id, barcode, user, app, ncListKeys })=> {
           required />
           <label htmlFor='ncType'>{Pref.nonConType}</label>
           <datalist id='ncTypeList'>
+            <optgroup>
             {ncTypesComboFlat.length > 0 ?
               ncTypesComboFlat.map( (entry, index)=>{
                 if(entry.live === true) {
+                  let cd = user.showNCcodes ? `${entry.typeCode}. ` : '';
                   return ( 
                     <option 
-                      key={index}
-                      data-id={entry.key}
+                      key={entry.key}
                       value={entry.typeText}
-                    >{user.showNCcodes && entry.typeCode}</option>
+                      label={cd + entry.typeText}
+                    />
                   );
               }})
             :
               app.nonConOption.map( (entry, index)=>{
                 return ( 
                   <option
-                    key={index}
-                    data-id={index + 1 + '.'}
+                    key={index + 1 + '.'}
                     value={entry}
-                  >{index + 1}</option>
+                  >{user.showNCcodes && `${index + 1}. `}{entry}</option>
                 );
               })}
+              </optgroup>
           </datalist>
         </span>
       :

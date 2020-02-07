@@ -3,7 +3,7 @@ import moment from 'moment';
 Meteor.methods({
 
 //// Batches \\\\
-  addBatch(batchNum, widgetId, vKey, salesNum, sDate, eDate, qTime) {
+  addBatch(batchNum, widgetId, vKey, salesNum, sDate, eDate, qTime, clientTZ) {
     const doc = WidgetDB.findOne({_id: widgetId});
     const legacyduplicate = BatchDB.findOne({batch: batchNum});
     const duplicateX = XBatchDB.findOne({batch: batchNum});
@@ -47,6 +47,7 @@ Meteor.methods({
       });
       Meteor.defer( ()=>{
         Meteor.call('batchCacheUpdate', accessKey, true);
+        Meteor.call('priorityCacheUpdate', accessKey, clientTZ, true);
       });
       return true;
     }else{
@@ -290,29 +291,20 @@ Meteor.methods({
     }
   },
   
-  releaseToFloor(batchId, rDate) {
+  releaseToFloor(batchId, rDate, caution) {
     const userID = Meteor.userId();
     if(Roles.userIsInRole(userID, 'run')) {
       const orgKey = Meteor.user().orgKey;
-      const username = Meteor.user().username;
       BatchDB.update({_id: batchId, orgKey: orgKey}, {
         $set : {
           updatedAt: new Date(),
   			  updatedWho: userID,
           floorRelease: {
             time: rDate,
-            who: userID
+            who: userID,
+            caution: caution
           }
       }});
-      Meteor.defer( ()=>{
-        Meteor.call(
-          'setBatchEvent', 
-          orgKey, 
-          batchId, 
-          'Floor Release', 
-          `Released from kitting by ${username}`
-        );
-      });
       return true;
     }else{
       return false;

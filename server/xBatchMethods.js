@@ -151,13 +151,14 @@ Meteor.methods({
     }
   },
   
-  addRelease(batchId, rType, rDate) {
+  addRelease(batchId, rType, rDate, caution) {
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
       XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $push : { releases: {
             type: rType,
             time: rDate,
-            who: Meteor.userId()
+            who: Meteor.userId(),
+            caution: caution
           }
       }});
       return true;

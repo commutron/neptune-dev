@@ -47,7 +47,7 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
   
   useEffect( ()=> {
     sortInitial();
-  }, [filterBy, sortBy]);
+  }, [b, bx, filterBy, sortBy]);
   
   useEffect( ()=> {
     Session.set(sessionSticky+'dense', dense);
@@ -251,22 +251,20 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
           ><i className='fas fa-compress-arrows-alt fa-fw'></i></button>
         </span>
         
-        {isNightly ?
-          <span>
-            <button
-              key='darkOn'
-              title='Dark Theme'
-              onClick={()=>themeSet(false)}
-              className={light === false ? 'liteToolOn' : 'liteToolOff'}
-            ><i className='fas fa-moon fa-fw'></i></button>
-            <button
-              key='lightOn'
-              title='Light Theme'
-              onClick={()=>themeSet(true)}
-              className={light === true ? 'liteToolOn' : 'liteToolOff'}
-            ><i className='fas fa-sun fa-fw'></i></button>
-          </span>
-        : null}
+        <span>
+          <button
+            key='darkOn'
+            title='Dark Theme'
+            onClick={()=>themeSet(false)}
+            className={light === false ? 'liteToolOn' : 'liteToolOff'}
+          ><i className='fas fa-moon fa-fw'></i></button>
+          <button
+            key='lightOn'
+            title='Light Theme'
+            onClick={()=>themeSet(true)}
+            className={light === true ? 'liteToolOn' : 'liteToolOff'}
+          ><i className='fas fa-sun fa-fw'></i></button>
+        </span>
         
         <span className='flexSpace' />
         <span>Updated {duration} ago</span>

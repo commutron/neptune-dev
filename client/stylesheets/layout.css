@@ -831,7 +831,7 @@ button.numberSet {
 }
 
 .actionBox .flatpickr-input ~ .form-control {
-  width: 100%;
+  max-width: 100%;
   font-size: 1.25rem;
   text-indent: 0rem;
 }

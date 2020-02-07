@@ -3,7 +3,7 @@
 .overviewContainer {
   display: grid;
   height: 100vh;
-  grid-template-rows: 10vh 3vh 87vh;
+  grid-template-rows: 10vh 3vh 1fr;/*87vh*/
   grid-template-columns: 100%;
   grid-template-areas: 
     'tenHeader'
@@ -34,7 +34,6 @@
   grid-area: overviewContent;
   background-color: rgb(30,30,30);
   overflow-y: scroll;
-  scroll-behavior: smooth;
 }
 
 .overlistSort {
@@ -49,14 +48,12 @@
 }
 .overToolSort {
   min-height: 2vh;
-  /*height: 3vh;*/
-  /*line-height: 1.1;*/
   text-indent: 0px;
   width: 12.5ch;
   width: min-content;
-  /*background-color: transparent;
-  border-color: transparent;
-  color: white;*/
+}
+.overToolSort button {
+  padding: 0 5px;
 }
 .overlistSort option {
   color: black;
@@ -69,7 +66,6 @@
   grid-template-columns: minmax(min-content, 25vw) auto;
   grid-template-areas: 
     'overFixedArea overScrollArea';
-  /*background-color: var(--clouds);*/
 }
 
 .overGridFixed {
@@ -124,8 +120,13 @@
   grid-auto-rows: 10vh;
   overflow-x: scroll;
 }
+
 .overGridScroll:focus {
-  background-color: rgb(35,35,35);
+  outline-color: var(--neptuneColor);
+  outline-style: dotted;
+  outline-width: thick;
+  outline-offset: -0.25vmax;
+  
 }
 .overGridRowScrollHeader {
   border-bottom: 1px outset rgba(255,255,255,0.3);
@@ -226,19 +227,17 @@
 .lightTheme .overviewToolbar {
   background-color: var(--silverfade);
 }
+
 .lightTheme .tenHeader,
 .lightTheme .frontCenterTitle,
 .lightTheme .auxRight,
 .lightTheme .proRight {
-  background-color: var(--cloudstrans);
+  background-color: var(--clouds);
   color: var(--blackT); 
 }
 .lightTheme .overviewContent,
 .lightTheme .overGridFrame { 
   background-color: var(--clouds);
-}
-.lightTheme .overGridScroll:focus { 
-  background-color: var(--cloudstrans); 
 }
 .lightTheme .overGridRowFixedHeader > span,
 .lightTheme .ovColhead { 

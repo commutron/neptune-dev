@@ -95,7 +95,6 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
     //   return allBatch;
     // }, {});
     
-    
     Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({qBatches, itrXY});
     xyBatchSet(itrXY);
   }, [eBatchesState]);
@@ -103,9 +102,9 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
   
   useEffect( ()=>{
     const pQuant = pList.reduce( (allPhase, phase)=> { 
-    phase &&
-      phase in allPhase ? allPhase[phase]++ : allPhase[phase] = 1;
-    return allPhase;
+      phase &&
+        phase in allPhase ? allPhase[phase]++ : allPhase[phase] = 1;
+      return allPhase;
     }, {});
     const pXY = obj2xy(pQuant);
     setPhasesXY(pXY);

@@ -4,7 +4,8 @@ import Pref from '/client/global/pref.js';
 import NumStat from '/client/components/uUi/NumStat.jsx';
 import PrioritySquareData from '/client/components/bigUi/PrioritySquare.jsx';
 import { PrioritySquare } from '/client/components/bigUi/PrioritySquare.jsx';
-import BinaryStat from '/client/components/uUi/BinaryStat.jsx';
+import TrinaryStat from '/client/components/uUi/TrinaryStat.jsx';
+import { FloorReleaseWrapper } from '/client/components/bigUi/ReleasesModule.jsx';
 import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
 const BatchDetails = ({
@@ -61,13 +62,20 @@ const BatchDetailChunk = ({
   statusCols, ncCols, dense
 })=> {
   
-  const releasedToFloor = Array.isArray(ck.releases) ?
+  const isX = ck.completed === undefined ? false : true;
+  const isDone = isX ? ck.completed : ck.finishedAt !== false;
+  
+  const releasedToFloor = isX ? //Array.isArray(ck.releases) ?
     ck.releases.findIndex( x => x.type === 'floorRelease') >= 0 :
     typeof ck.floorRelease === 'object';
+  const floorRelease = !releasedToFloor ? false :
+    ck.floorRelease || ck.releases.find( x => x.type === 'floorRelease');
   
   const dueDate = moment(ck.salesEnd || ck.end);
   const adaptDate = dueDate.isAfter(moment(), 'year') ?
                     "MMM Do, YYYY" : "MMM Do";
+  
+  const isRO = Roles.userIsInRole(Meteor.userId(), 'readOnly');
   
   return(
     <div className='overGridRowScroll'>
@@ -83,12 +91,16 @@ const BatchDetailChunk = ({
       <BatchTopStatus
         rowIndex={rowIndex}
         batchID={ck._id}
+        isX={isX}
+        isDone={isDone}
         releasedToFloor={releasedToFloor}
+        floorRelease={floorRelease}
         clientTZ={clientTZ}
         pCache={pCache}
         app={app}
         statusCols={statusCols}
-        dense={dense} />
+        dense={dense}
+        isRO={isRO} />
     
       <PhaseProgress
         batchID={ck._id}
@@ -114,8 +126,10 @@ const BatchDetailChunk = ({
 };
 
 const BatchTopStatus = ({ 
-  rowIndex, batchID, releasedToFloor, clientTZ, pCache, app, 
-  statusCols, dense
+  rowIndex, batchID, isX, isDone,
+  releasedToFloor, floorRelease,
+  clientTZ, pCache, app, 
+  statusCols, dense, isRO
 })=> {
   
   const [ stData, setStatus ] = useState(false);
@@ -182,26 +196,32 @@ const BatchTopStatus = ({
             size='big' />
         </div>
         <div>
-          <BinaryStat
-            good={dt.riverChosen}
+          <TrinaryStat
+            status={dt.riverChosen ? true : null}
             name='Flow'
             title='Has had a Process Flow assigned'
             size=''
             onIcon='far fa-check-circle fa-2x' 
             offIcon='far fa-times-circle fa-2x' />
         </div>
-        <div>
-          <BinaryStat
-            good={releasedToFloor}
+        
+        <FloorReleaseWrapper
+          id={batchID}
+          batchNum={dt.batch}
+          released={floorRelease !== false}
+          lockout={isDone || isRO}
+          isX={isX}>
+          <TrinaryStat
+            status={releasedToFloor ? !floorRelease.caution ? true : false : null}
             name='Released'
             title={`Has been released from ${Pref.kitting}`}
             size=''
             onIcon='fas fa-flag fa-2x'
             offIcon='far fa-flag fa-2x' />
-        </div>
+        </FloorReleaseWrapper>
         <div>
-          <BinaryStat
-            good={dt.isActive}
+          <TrinaryStat
+            status={dt.isActive ? true : null}
             name='Active'
             title={`Has had ${Pref.tide} activity today`}
             size=''

@@ -21,6 +21,9 @@ body {
   body {
     font-weight: lighter !important;
   }
+  select {
+    height: auto;
+  }
 }
 
 

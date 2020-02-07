@@ -27,8 +27,10 @@ const BatchCreate = ({ widgetId, versionNow, versions, lock, noText })=> {
     const inHours = parseFloat( e.target.hourNum.value );
     const inMinutes = moment.duration(inHours, 'hours').asMinutes();
 
+    const clientTZ = moment.tz.guess();
+    
     Meteor.call('addBatch', 
-      batchNum, wId, vKey, salesNum, startDate, endDate, inMinutes, 
+      batchNum, wId, vKey, salesNum, startDate, endDate, inMinutes, clientTZ,
       (error, reply)=>{
         if(error) {
           console.log(error);
