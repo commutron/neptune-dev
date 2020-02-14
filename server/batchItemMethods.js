@@ -325,6 +325,20 @@ Meteor.methods({
     }
   },
   
+  cautionFlipFloorRelease(batchId, caution) {
+    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        $set : {
+          updatedAt: new Date(),
+  			  updatedWho: Meteor.userId(),
+          'floorRelease.caution': caution
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
 //// Tide \\\\\
   
   startTideTask(batchId, accessKey) {
@@ -366,20 +380,39 @@ Meteor.methods({
       throw new Meteor.Error(err);
     }
   },
-  stopTideTask(batchId, tKey) {
+  
+  stopTideTask(batchId, tideKey) {
     try {
-      const doc = BatchDB.findOne({_id: batchId, 'tide.tKey': tKey });
-      const sub = doc && doc.tide.find( x => x.tKey === tKey && x.who === Meteor.userId() );
+      const accessKey = Meteor.user().orgKey;
+      const doc = BatchDB.findOne({_id: batchId, 'tide.tKey': tideKey });
+      const sub = doc && doc.tide.find( x => x.tKey === tideKey && x.who === Meteor.userId() );
       if(!sub) { null }else{
-        BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'tide.tKey': tKey}, {
-          $set : { 
-            'tide.$.stopTime' : new Date()
-        }});
-        Meteor.users.update(Meteor.userId(), {
-          $set: {
-            engaged: false
-          }
-        });
+        
+        const stopBatchFirst = (tideKey, accessKey)=> {
+          return new Promise(function(resolve, reject) {
+            const batch = BatchDB.findOne({ 'tide.tKey': tideKey });
+            const batchID = batch._id || false;
+            if(batchID) {
+              BatchDB.update({_id: batchId, orgKey: accessKey, 'tide.tKey': tideKey}, {
+                $set : { 
+                  'tide.$.stopTime' : new Date()
+              }});
+              resolve('Success');
+            }else{
+              reject('fail');
+            }
+          });
+        };
+        
+        const stopUserSecond = ()=> {
+          Meteor.users.update(Meteor.userId(), {
+            $set: {
+              engaged: false
+            }
+          });
+        };
+      
+        stopBatchFirst(tideKey, accessKey).then(stopUserSecond());
         return true;
       }
     }catch (err) {

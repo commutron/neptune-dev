@@ -57,7 +57,7 @@
   outline-color: var(--neptuneColor);
   outline-style: dotted;
   outline-width: thick;
-  outline-offset: -0.5vmax;
+  outline-offset: -0.25vmax;
 }
 
 .mini15x {
@@ -1049,37 +1049,14 @@ label.qdpplRound {
 .miniDateRange span {
   margin: 3px;
 }
-/*
-.miniDateRange select,
-.miniDateRange input[type='date'],
-.miniDateRange button {
-  font-size: 1.1rem;
-  border: 1px solid rgba(255,255,255,0.5);
-  background-color: transparent;
-  color: white;
-}
-*/
+
 .miniDateRange select,
 .miniDateRange input[type='date'] {
   /*min-height: 24px;*/
   line-height: 1.2rem;
   text-indent: 3px;
 }
-/*
-.miniDateRange select,
-.miniDateRange button{
-  height: 24px;
-}
-.miniDateRange select {
-  width: 248px;
-}
-.miniDateRange option {
-  color: black;
-}
-.miniDateRange input[type='date'] {
-  width: 136px;
-}
-*/
+
 .miniDateRange input[type='date']::-webkit-clear-button {
   display: none;
 }
@@ -1173,7 +1150,8 @@ label.qdpplRound {
 
 .liteToolOn, 
 .liteToolOff {
-  padding: 5px;
+  min-height: 3vh;
+  padding: 0 5px;
   line-height: 1.5;
   font-size: medium;
   color: black;
@@ -1185,10 +1163,10 @@ label.qdpplRound {
 	border-color: rgb(0,0,0);
 }
 .liteToolOn { 
-  background-color: var(--asbestos);
+  background-color: var(--navIndicatorB);
   cursor: default; }
-.liteToolOff { background-color: var(--asbestosfade); }
-.liteToolOff:active { background-color: var(--asbestos); }
+.liteToolOff { background-color: var(--navIndicatorA); }
+.liteToolOff:active { background-color: var(--navIndicatorB); }
 
 .chartTableAction {
   padding: 5px;
@@ -1217,12 +1195,12 @@ details[open].dropEvents summary {
 .starfishAccents #pnFindButton {
   color: #00bde0;
   background-color: white;
-  border-color: #00bde0;
+  border: 1px solid #00bde0;
+  height: 100%;
 }
 .starfishAccents #pnFindButton:hover {
   color: white;
   background-color: #00bde0;
-  border-color: #00bde0;
 }
 /*
 .starfishAccents #pnFind::-webkit-search-cancel-button {
@@ -1230,7 +1208,7 @@ details[open].dropEvents summary {
 }
 */
 .starfishAccents #pnFind {
-  border-color: black;
+  border-color: #00bde0;
   border-right-color: transparent;
   letter-spacing: 1px;
   -webkit-appearance: none;

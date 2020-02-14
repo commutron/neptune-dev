@@ -9,7 +9,7 @@ const NonConSatusPie = ({ nonCons })=> {
   const [ countState, countSet ] = useState( [0,0,0,0,0] );
   const [ labelState, labelSet ] = useState( [ 
     'Awaiting Repair', 'Awaiting Inspection', 
-    'Resolved', 'Snoozing', 'Skipped' ] );
+    'Resolved', 'Skipped/Snoozing' ] );
   
   useEffect( ()=>{
     const ncG = nonCons;
@@ -18,23 +18,21 @@ const NonConSatusPie = ({ nonCons })=> {
     const none = ncG.filter( n => n.fix === false && n.inspect === false && n.skip === false ).length;
     const fix = ncG.filter( n => n.fix !== false && n.inspect === false && n.skip === false ).length;
     const done = ncG.filter( n => n.inspect !== false && n.skip === false ).length;
-    const snooze = ncG.filter( n => n.skip !== false && ( n.snooze === true || n.comm === 'sn00ze' ) ).length;
-    const skip = ncG.filter( n => n.inspect === false && n.skip !== false && ( n.snooze === false || n.comm !== 'sn00ze' ) ).length;
+    const skip = ncG.filter( n => n.inspect === false && ( n.skip !== false || n.snooze === true || n.comm === 'sn00ze' ) ).length;
 
-    const counts = [ none, fix, done, snooze, skip ];
+    const counts = [ none, fix, done, skip ];
     countSet(counts);
     
     let labels = [ 
       `${none} Awaiting \n Repair`, 
       `${fix} Awaiting \n Inspection`, 
       `${done} Resolved`, 
-      `${snooze} Snoozing`, 
-      `${skip} Skipped` 
+      `${skip} Skipped/Snoozing` 
     ];
     labelSet(labels);
   }, [nonCons]);
   
-  let colours = ['#e74c3c', '#e67e22', '#2ecc71', '#f39c12', '#f1c40f'];
+  let colours = ['#e74c3c', '#e67e22', '#2ecc71', '#f1c40f'];
   
   return (
     <div className='centre'>

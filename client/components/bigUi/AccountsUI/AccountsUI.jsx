@@ -4,22 +4,6 @@ import { toast } from 'react-toastify';
 import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 
 import './style.css';
-/*
-Accounts.onLogin( ()=>{
-	let redirect = Session.get('redirectAfterLogin');
-	!redirect ? redirect = '/' : null;
-  if(redirect === '/login' || redirect === '/limbo') {
-  	null;
-  }else {
-    FlowRouter.go(redirect);
-  }
-  if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
-  	const agent = window.navigator.userAgent;
-  	Meteor.call('logLog', true, agent);
-    alert('Your account is in debug mode. \n Your activity may be monitored and recorded. \n See your Neptune administrator for more information');
-	}
- });
-*/
 
 const AccountsUI = (props)=> {
 	

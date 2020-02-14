@@ -1,25 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import HomeIcon from '/client/layouts/HomeIcon.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
 import { ToastContainer, toast } from 'react-toastify';
 
     
-    // const vaugeWidgets = WidgetDB.find({'versions.assembly.component':
-    //   { $regex: new RegExp( num ) }
-    // }).fetch();
-    
-    
-    
-const CompSearchPanel = (props)=> {
+const CompSearchWrap = ({ plCache, user, app, clientTZ })=> {
   
   const [ bChk, setB ] = useState(true);
   const [ uChk, setU ] = useState(false);
   const [ thing, setThing ] = useState(false);
   const [ results, setResults ] = useState([]);
   
+  const [ autocompState, autocompSet ] = useState([]);
+  
+  useEffect( ()=>{
+    if(thing.length >= 5) {
+      const opList = plCache.filter( x => x.startsWith( thing ) );
+      autocompSet( opList );
+    }else{
+      autocompSet( [] );
+    }
+  }, [thing]);
+  
   function thisThing(e) {
-    setThing( [] );
+    setThing( false );
     const num = this.pnFind.value.trim().toLowerCase();
     setThing( num );
   }
@@ -60,6 +65,15 @@ const CompSearchPanel = (props)=> {
       }
     });
   }
+  
+  function requestRefresh(e) {
+    this.cachePLupdate.disabled = true;
+    toast('request sent, this will take time');
+    Meteor.call('partslistCacheUpdate', (error)=>{
+      if(error)
+        return error;
+    });
+  }
 
   let r = results;
   let w = 0;
@@ -74,13 +88,23 @@ const CompSearchPanel = (props)=> {
       <div className='tenHeader invert'>
         <div className='topBorder'></div>
         <HomeIcon />
-        <div className='frontCenterTitle invert'>Parts Search</div>
-        <div className='auxRight invert'>
+        <div className='auxLeft invert'>
           <button
             type='button'
             title='Download All Parts'
             onClick={(e)=>dataExport(e)}>
           <i className='fas fa-download primeRightIcon'></i>
+          </button>
+        </div>
+        <div className='frontCenterTitle invert'>Parts Search</div>
+        <div className='auxRight invert'>
+          <button
+            id='cachePLupdate'
+            type='button'
+            title='Refresh Autocomplete'
+            onClick={(e)=>requestRefresh(e)}
+            disabled={!Roles.userIsInRole(Meteor.userId(), 'nightly')}>
+          <i className='fas fa-sync-alt primeRightIcon'></i>
           </button>
         </div>
         <TideFollow invertColor={true} />
@@ -91,24 +115,36 @@ const CompSearchPanel = (props)=> {
         <form
           className='inlineForm'
           onSubmit={(e)=>lookup(e)}>
-          <label>
+          <label className='variableInput bigger'>
             <input
               type='search'
               id='pnFind'
-              className='up'
+              list='plList'
+              minLength='5'
+              className='variableInput bigger dbbleWide up'
+              disabled={false}
               onChange={(e)=>thisThing(e)}
-              autoFocus
-            />
+              autoFocus={true} />
           </label>
-          <label>
+          <label className='variableInput bigger'>
             <button
               type='submit'
               id='pnFindButton'
-              aria-label='search button'
-              className='smallAction clear'
-            ><i className='fas fa-search'></i></button>
+              title='search button'
+              className='smallAction'
+            ><i className='bigger fas fa-search fa-fw'></i></button>
           </label>
+          <datalist id='plList'>
+            {autocompState.map( (entry, index)=>{
+              return( 
+                <option key={index}>{entry.toUpperCase()}</option>
+            )})}
+          </datalist>
         </form>
+        
+        
+        
+        
         <div className='balance'>
           <br />
           <span>
@@ -186,4 +222,4 @@ const CompSearchPanel = (props)=> {
   );
 };
 
-export default CompSearchPanel;
+export default CompSearchWrap;

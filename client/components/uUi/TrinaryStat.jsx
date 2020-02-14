@@ -17,12 +17,12 @@ import React from 'react';
  
 const TrinaryStat = ({ status, name, title, size, onIcon, offIcon }) => {
   
-  const color = status === true ? 'greenT' : 'yellowT';
-  
   const iconState = status === null ?
-    <i><i className={`${offIcon || 'far fa-circle'} grayT ${size}`}></i></i>
+    <em><i className={`${offIcon || 'far fa-circle'} grayT ${size}`}></i></em>
+    : status === false ?
+    <b><i className={`${onIcon || 'fas fa-circle'} yellowT ${size}`}></i></b>
     :
-    <b><i className={`${onIcon || 'fas fa-circle'} ${color} ${size}`}></i></b>;
+    <i><i className={`${onIcon || 'fas fa-circle'} greenT ${size}`}></i></i>;
     
   return(
     <div style={sty} title={title}>

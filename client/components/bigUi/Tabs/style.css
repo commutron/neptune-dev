@@ -8,13 +8,11 @@
   letter-spacing: 1px;
 	text-transform: capitalize;
 	overflow: hidden;
-	border-bottom-width: 3px;
-	border-bottom-style: solid;
 }
 .invert .tabOn, .invert .tabOff {
   color: black;
 }
-
+/*
 .tabOn {
 	background-color: var(--wetasphalt);
   border-bottom-color: var(--silver);
@@ -37,4 +35,22 @@
 }
 .invert .tabOff:hover {
 	background-color: var(--concretefade);
+}
+*/
+
+.tabOn {
+	background-color: var(--navIndicatorB);
+  /*border-bottom-color: var(--silver);*/
+  box-shadow: var(--navIndicatorOut);
+}
+
+
+.tabOff {
+	background-color: var(--navIndicatorA);
+	/*border-bottom-color: transparent;*/
+	box-shadow: var(--navIndicatorIn);
+}
+
+.tabOff:hover {
+	background-color: var(--navIndicatorB);
 }

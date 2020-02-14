@@ -16,17 +16,18 @@ main {
 .hidden { display: none; }
 
 .forceScrollStyle::-webkit-scrollbar {
-  width: 0.75vw;
+  width: 1vmax;
 }
 .forceScrollStyle::-webkit-scrollbar-track {
-  background-color: rgb(27,27,27);
+  box-shadow: inset 0 0 3px rgba(0,0,0,0.2); 
+  background-color: var(--navIndicatorA);
 }
 .forceScrollStyle::-webkit-scrollbar-thumb {
-  box-shadow: inset 0 0 12px rgba(0,0,0,0.5); 
-  background-color: rgb(100,100,100);
+  box-shadow: inset 0 0 3px rgba(0,0,0,0.2);
+  background-color: var(--navIndicatorB);
 }
 .forceScrollStyle {
-  scrollbar-color: rgb(27,27,27) rgb(100,100,100);
+  scrollbar-color: var(--navIndicatorA) var(--navIndicatorB);
 }
 
 .loading {
@@ -172,7 +173,8 @@ main {
   /*animation: blinker 100ms ease infinite;*/
 }
 
-.auxRight > button, 
+.auxLeft > button,
+.auxRight > button,
 .proRight > button {
   width: 100%;
   height: 100%;
@@ -766,6 +768,7 @@ main {
 
 .biggester { font-size: 2.5rem; }
 
+.dbbleWide { min-width: 30vw; }
 
 input.variableInput.med { 
   font-size: 1rem;

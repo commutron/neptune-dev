@@ -177,6 +177,18 @@ Meteor.methods({
       return false;
     }
   },
+  
+  cautionFlipRelease(batchId, rType, caution) {
+    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+      XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'releases.type': rType}, {
+        $set : {
+          'releases.$.caution': caution
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
 
   //// Waterfall
   

@@ -55,6 +55,8 @@ const ProblemTab = ({
         </div>
         
       </div>
+      
+      {b.shortfall &&
       <div className='avTwoContent'>
         <p className='centreText small'>Shortfalls</p>
         <div className='wide balance topLine'>  
@@ -65,8 +67,9 @@ const ProblemTab = ({
           
           <ShortfallStatusPie shortfalls={b.shortfall} />
         </div>
-          
       </div>
+      }
+      
       <div className='avThreeContent'>
         {nonConArrayClean.length > 0 ?
           <TabsLite 

@@ -98,9 +98,12 @@ export const ReleaseNote = ({ id, release, xBatch, lockout })=> {
 };
 
 export const FloorReleaseWrapper = ({ 
-  id, batchNum, released, lockout, 
+  id, batchNum, releasedBool, releaseObj, lockout, 
   isX, children
 })=> {
+  
+  const out = releasedBool === true;
+  const cautionState = out ? releaseObj.caution ? true : false : false;
   
   function handleRelease(e, caution) {
     const datetime = moment().format();
@@ -127,9 +130,21 @@ export const FloorReleaseWrapper = ({
     }
   }
   
+  function handleCautionFlip() {
+    const newCaution = cautionState ? false : Pref.shortfall;
+    if(isX) {
+      Meteor.call('cautionFlipRelease', id, 'floorRelease', newCaution, (err)=>{
+        err && console.log(err);
+      });
+    }else{
+      Meteor.call('cautionFlipFloorRelease', id, newCaution, (err)=>{
+        err && console.log(err);
+      });
+    }
+  }
+  
   const isAuth = Roles.userIsInRole(Meteor.userId(), 'run');
   const extraClass = isAuth ? 'noCopy hoverAction' : 'noCopy';
-  const out = released === true;
                       
   return(
     <React.Fragment>
@@ -138,7 +153,7 @@ export const FloorReleaseWrapper = ({
         disable={!isAuth}
         renderTag='div'
         holdToDisplay={1}
-        attributes={ {className: extraClass} }>
+        attributes={ {className: extraClass } }>
   			{children}
       </ContextMenuTrigger>
       <ContextMenu 
@@ -157,6 +172,11 @@ export const FloorReleaseWrapper = ({
 	        onClick={(e)=>handleRelease(e, Pref.shortfall)}
 	        disabled={out || lockout}>
 	        release with {Pref.shortfall}
+	      </MenuItem>
+	      <MenuItem
+	        onClick={(e)=>handleCautionFlip(e)}
+	        disabled={!out || lockout}>
+	        {!out ? 'Change' : cautionState ? 'Disable' : 'Enable'} {Pref.shortfall} caution
 	      </MenuItem>
 	      <MenuItem
 	        onClick={()=>handleCancel()} 

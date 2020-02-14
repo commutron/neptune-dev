@@ -10,7 +10,6 @@ import { CleanLayout } from './layouts/MainLayouts.jsx';
 import { LabelLayout } from './layouts/MainLayouts.jsx';
 
 import Login from './views/Login.jsx';
-import Spin from '/client/components/uUi/Spin.jsx';
 //import InitialSetup from './views/InitialSetup.jsx';
 
 import ProdData from './views/production/ProdData.jsx';
@@ -20,7 +19,7 @@ import OverviewData from './views/overview/OverviewData.jsx';
 import PeopleDataWrap from './views/people/PeopleDataWrap.jsx';
 import UserDataWrap from './views/user/UserDataWrap.jsx';
 import DataData from './views/data/DataData.jsx';
-import CompSearchPanel from './views/data/panels/CompSearchPanel.jsx';
+import CompSearchData from './views/compSearch/CompSearchData.jsx';
 import AppData from './views/app/AppData.jsx';
 
 import GeneralLabel from './views/paper/GeneralLabel.jsx';
@@ -88,13 +87,11 @@ const privlegedRoutes = FlowRouter.group({
   triggersEnter: [
     ()=> {
       let route = FlowRouter.current();
-      if(Meteor.loggingIn() || route.route.name === 'login' || route.route.name === 'limbo') {
+      if(Meteor.loggingIn() || route.route.name === 'login') {
         null;
       }else if(!Meteor.userId()) {
         Session.set('redirectAfterLogin', route.path);
         FlowRouter.go('login');
-      }else if(!Roles.userIsInRole(Meteor.userId(), 'active')) {
-        FlowRouter.go('limbo');
       }else{
         Session.set('redirectAfterLogin', route.path);
       }
@@ -105,16 +102,6 @@ const privlegedRoutes = FlowRouter.group({
   }
 });
 
-
-privlegedRoutes.route('/limbo', {
-  name: 'limbo',
-  action() {
-    mount(PublicLayout, {
-       content: (<Spin color={true} message="Checking user information, this shouldn't take long" />),
-       title: ''
-    });
-  }
-});
 /*
 exposedRoutes.route('/initialsetup', {
   name: 'initialsetup',
@@ -185,7 +172,7 @@ privlegedRoutes.route('/user', {
 privlegedRoutes.route('/starfish', {
   action() {
     mount(CleanLayout, {
-      content: (<CompSearchPanel />)
+      content: (<CompSearchData />)
     });
   }
 });
@@ -349,11 +336,12 @@ function removeDisconnectTimeout() {
 
 Accounts.onLogin( ()=>{
 	let redirect = Session.get('redirectAfterLogin');
-  if(!redirect || redirect === '/login' || redirect === '/limbo') {
+  if(!redirect || redirect === '/login') {
   	null;
   }else {
     FlowRouter.go(redirect);
   }
+  
   if(Roles.userIsInRole(Meteor.userId(), 'debug') && 
     !Roles.userIsInRole(Meteor.userId(), 'admin')
   ) {

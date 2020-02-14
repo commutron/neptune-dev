@@ -151,7 +151,8 @@ Meteor.methods({
   
   
   // a cache for a plain list of all part numbers for autocomplete
-  partslistCacheUpdate(accessKey) {
+  partslistCacheUpdate(internalKey) {
+    const accessKey = internalKey || Meteor.user().orgKey;
     
     const widgets = WidgetDB.find({orgKey: accessKey, 'versions.live': true}).fetch();
     
@@ -164,10 +165,10 @@ Meteor.methods({
         allParts.push(parts);
       }
     }
-    
-    const allPartsClean = [...new Set(allParts) ];
+    const allPartsFlat = [].concat(...allParts);
+    const allPartsClean = [...new Set(allPartsFlat) ];
       
-    CacheDB.upsert({orgKey: accessKey, dataName: 'completeBatch'}, {
+    CacheDB.upsert({orgKey: accessKey, dataName: 'partslist'}, {
       $set : {
         orgKey: accessKey,
         lastUpdated: new Date(),

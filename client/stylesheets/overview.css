@@ -37,7 +37,6 @@
 }
 
 .overlistSort {
-  min-height: calc(2vh);
   height: 3vh;
   font-size: 1rem;
   line-height: 1.1;
@@ -47,14 +46,12 @@
   color: white;
 }
 .overToolSort {
-  min-height: 2vh;
+  height: 3vh;
   text-indent: 0px;
   width: 12.5ch;
   width: min-content;
 }
-.overToolSort button {
-  padding: 0 5px;
-}
+
 .overlistSort option {
   color: black;
 }
@@ -76,7 +73,7 @@
   overflow-x: hidden;
 }
 .overGridRowFixedHeader {
-  border-bottom: 1px outset rgba(255,255,255,0.3);
+  border-bottom: 1px outset rgba(255,255,255,0.4);
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -90,8 +87,8 @@
   font-weight: 600;
 }
 .overGridRowFixed {
-  border-right: 1px outset rgba(255,255,255,0.2);
-  border-bottom: 1px outset rgba(255,255,255,0.3);
+  border-right: 1px outset rgba(255,255,255,0.3);
+  border-bottom: 1px outset rgba(255,255,255,0.4);
   display: grid;
   grid-template-columns: 1fr 2fr;
   place-items: stretch start;
@@ -103,7 +100,7 @@
   padding: 1vh 1vw;
 }
 .overGridRowFixed > div:first-child {
-  border-right: 1px outset rgba(255,255,255,0.3);
+  border-right: 1px outset rgba(255,255,255,0.4);
   font-size: 2.5vh;
 }
 .overGridRowFixed > div:last-child {
@@ -129,11 +126,11 @@
   
 }
 .overGridRowScrollHeader {
-  border-bottom: 1px outset rgba(255,255,255,0.3);
+  border-bottom: 1px outset rgba(255,255,255,0.4);
 }
 .overGridRowScroll {
-  border-left: 0.25vw groove rgba(255,255,255,0.3);
-  border-right: 0.3vw groove rgba(255,255,255,0.3);
+  border-left: 0.25vw groove rgba(255,255,255,0.4);
+  border-right: 0.3vw groove rgba(255,255,255,0.4);
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: 11vh;
@@ -152,8 +149,8 @@
   text-align: center;
 }
 .overGridRowScroll > div {
-  border-right: 1px outset rgba(255,255,255,0.2);
-  border-bottom: 1px outset rgba(255,255,255,0.3);
+  border-right: 1px outset rgba(255,255,255,0.3);
+  border-bottom: 1px outset rgba(255,255,255,0.4);
 }
 .overGridRowScroll > div.redRight {
   border-right: 1vh outset var(--alizarin); 
@@ -225,7 +222,7 @@
   
 
 .lightTheme .overviewToolbar {
-  background-color: var(--silverfade);
+  background-color: var(--silver);
 }
 
 .lightTheme .tenHeader,

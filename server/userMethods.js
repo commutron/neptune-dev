@@ -6,6 +6,14 @@ Accounts.config({
   loginExpirationInDays: 0.54
 });
 
+Accounts.validateLoginAttempt(function(attempt) {
+  if(!Roles.userIsInRole(attempt.user._id, 'active')) {
+    attempt.allowed = false;
+    throw new Meteor.Error(403, "User account is inactive");
+  }
+  return true;
+});
+
 Meteor.methods({
   
   verifyOrgJoin(orgName, pin) {

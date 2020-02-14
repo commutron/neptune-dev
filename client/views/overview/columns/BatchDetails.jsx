@@ -208,7 +208,8 @@ const BatchTopStatus = ({
         <FloorReleaseWrapper
           id={batchID}
           batchNum={dt.batch}
-          released={floorRelease !== false}
+          releasedBool={releasedToFloor}
+          releaseObj={floorRelease}
           lockout={isDone || isRO}
           isX={isX}>
           <TrinaryStat
