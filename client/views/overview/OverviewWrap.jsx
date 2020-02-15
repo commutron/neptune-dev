@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useLayoutEffect, useRef} from 'react';
 import moment from 'moment';
 import 'moment-timezone';
 import { ToastContainer } from 'react-toastify';
@@ -45,7 +45,7 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
   
   const [ liveState, liveSet ] = useState( false );
   
-  useEffect( ()=> {
+  useLayoutEffect( ()=> {
     sortInitial();
   }, [b, bx, filterBy, sortBy]);
   
@@ -91,8 +91,10 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
       
       let liveBatches = [...batches,...batchesX];
       
-      let filteredBatches = filterBy === false ? liveBatches :
-        filterBy === Pref.kitting ? 
+      let filteredBatches = filterBy === false ? 
+        liveBatches 
+        :
+        filterBy === 'KITTING' ? 
         liveBatches.filter( bx => {
           const releasedToFloor = Array.isArray(bx.releases) ?
             bx.releases.findIndex( x => x.type === 'floorRelease') >= 0 :
@@ -100,7 +102,8 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
           if(!releasedToFloor) {
             return bx;
           }
-        }) :
+        }) 
+        :
         filterBy === Pref.released ? 
         liveBatches.filter( bx => {
           const releasedToFloor = Array.isArray(bx.releases) ?
@@ -109,7 +112,8 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
           if(releasedToFloor) {
             return bx;
           }
-        }) :
+        }) 
+        :
         liveBatches.filter( bx => {
           const cB = cCache.dataSet.find( x => x.batchID === bx._id);
           const cP = cB && cB.phaseSets.find( x => x.phase === filterBy );
@@ -198,7 +202,7 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
       
       <nav className='overviewToolbar'>
         <span>
-          <i className='fas fa-filter fa-fw grayT'></i>
+          <i className='fas fa-filter fa-fw darkgrayT'></i>
           <select
             id='filterSelect'
             title={`Change ${Pref.phase} Filter`}
@@ -206,7 +210,7 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
             defaultValue={filterBy}
             onChange={(e)=>changeFilter(e)}>
             <option value={false}>All</option>
-            <option value={Pref.kitting} className='cap'>{Pref.kitting}</option>
+            <option value='KITTING' className='cap'>{Pref.kitting}</option>
             <option value={Pref.released} className='cap'>{Pref.released}</option>
             {app.phases.map( (ph, ix)=> {
               return(
@@ -216,7 +220,7 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
         </span>
         
         <span>
-          <i className='fas fa-sort-amount-down fa-fw grayT'></i>
+          <i className='fas fa-sort-amount-down fa-fw darkgrayT'></i>
           <select
             id='sortSelect'
             title='Change List Order'
@@ -267,7 +271,7 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
         </span>
         
         <span className='flexSpace' />
-        <span>Updated {duration} ago</span>
+        <span className='darkgrayT'>Updated {duration} ago</span>
       </nav>
     
       <div className='overviewContent forceScrollStyle' tabIndex='0'>
@@ -285,7 +289,11 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
             key='fancylist0'
             oB={liveState}
             bCache={bCache}
-            title={filterBy || 'All Live'}
+            title={
+              !filterBy ? 'All Live' :
+              filterBy === 'KITTING' ? Pref.kitting : 
+              filterBy
+            }
           />
           
           <BatchDetails
@@ -297,6 +305,8 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
             clientTZ={clientTZ}
             app={app}
             dense={dense > 1}
+            kittingArea={filterBy === 'KITTING'}
+            releasedArea={filterBy !== false && filterBy !== 'KITTING'}
           />
             
         </div>

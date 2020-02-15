@@ -32,11 +32,11 @@ const UserManageForm = (props)=> {
     });
   }
 
-    //const active = Roles.userIsInRole(props.id, 'active') ? 'blackT' : 'blackT fade';
   const admin = Roles.userIsInRole(props.id, 'admin');
   const adminFlag = admin ? Pref.admin : '';
                    
-  const roles = props.roles;
+  const auths = props.auths;
+  const areas = props.areas;
 
   return(
     <div>
@@ -51,7 +51,7 @@ const UserManageForm = (props)=> {
           <legend>Account Permissions</legend>
           <br />
           <ul>
-            {roles.map( (entry, index)=>{
+            {auths.map( (entry, index)=>{
               if(entry === 'peopleSuper') {
                 return(
                   <SetCheckSuper
@@ -67,6 +67,21 @@ const UserManageForm = (props)=> {
                     role={entry}
                   />
               )}})}
+          </ul>
+        </fieldset>
+        
+        <fieldset className=''>
+          <legend>Job Areas</legend>
+          <br />
+          <ul>
+            {areas.map( (entry, index)=>{
+              return(
+                <SetCheck
+                  key={index}
+                  user={props.id}
+                  role={entry}
+                />
+              )})}
           </ul>
         </fieldset>
       

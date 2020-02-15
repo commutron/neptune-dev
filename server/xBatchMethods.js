@@ -152,7 +152,7 @@ Meteor.methods({
   },
   
   addRelease(batchId, rType, rDate, caution) {
-    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+    if(Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])) {
       XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $push : { releases: {
             type: rType,
@@ -168,7 +168,7 @@ Meteor.methods({
   },
   
   cancelRelease(batchId, rType) {
-    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+    if(Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])) {
       XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'releases.type': rType}, {
         $pull : { releases: { type: rType }
       }});
@@ -179,7 +179,7 @@ Meteor.methods({
   },
   
   cautionFlipRelease(batchId, rType, caution) {
-    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+    if(Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])) {
       XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'releases.type': rType}, {
         $set : {
           'releases.$.caution': caution

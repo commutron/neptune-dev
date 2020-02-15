@@ -190,7 +190,7 @@ const ReleaseBlock = ({ id, done, dt })=>{
 	            title='Cancel Release'
               className='miniAction'
               onClick={()=>handleCancel()} 
-              disabled={done || !Roles.userIsInRole(Meteor.userId(), 'run')}
+              disabled={done || !Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])}
               readOnly={true}>
               <i className='fas fa-undo-alt fa-lg fa-fw'></i>
             </button>

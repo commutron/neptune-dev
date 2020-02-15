@@ -293,7 +293,7 @@ Meteor.methods({
   
   releaseToFloor(batchId, rDate, caution) {
     const userID = Meteor.userId();
-    if(Roles.userIsInRole(userID, 'run')) {
+    if(Roles.userIsInRole(userID, ['run', 'kitting'])) {
       const orgKey = Meteor.user().orgKey;
       BatchDB.update({_id: batchId, orgKey: orgKey}, {
         $set : {
@@ -312,7 +312,7 @@ Meteor.methods({
   },
   
   cancelFloorRelease(batchId) {
-    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+    if(Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $set : {
           updatedAt: new Date(),
@@ -326,7 +326,7 @@ Meteor.methods({
   },
   
   cautionFlipFloorRelease(batchId, caution) {
-    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+    if(Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $set : {
           updatedAt: new Date(),

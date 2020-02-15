@@ -11,8 +11,9 @@ import TrendLine from '/client/components/charts/Trends/TrendLine.jsx';
 
 
 const AccountsManagePanel = ({ users })=> {
-    
-  const roles = Pref.roles;
+  
+  const auths = Pref.auths;
+  const areas = Pref.areas;
   
   let usersMenu = users.map( (entry)=>{
     const clss = !Roles.userIsInRole(entry._id, 'active') ? 'strike fade' : '';
@@ -38,7 +39,8 @@ const AccountsManagePanel = ({ users })=> {
                 id={entry._id}
                 name={entry.username}
                 org={entry.org}
-                roles={roles}
+                auths={auths}
+                areas={areas}
               />
               {!Roles.userIsInRole(entry._id, 'active') &&
                 entry._id !== Meteor.userId() &&
@@ -55,8 +57,10 @@ const AccountsManagePanel = ({ users })=> {
   );
 };
 
-export const PermissionHelp = ({ roles, admin })=> {
-  let r = roles;
+export const PermissionHelp = ({ auths, admin })=> {
+  
+  const r = auths;
+  
   return(
     <div className='space5x5'>
     

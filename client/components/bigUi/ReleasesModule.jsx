@@ -49,14 +49,14 @@ const ReleaseAction = ({ id, rType })=> {
           title={`Release ${Pref.xBatch} to the floor`}
           className='action clearGreen centreText bigger cap'
           style={sty}
-          disabled={!Roles.userIsInRole(Meteor.userId(), 'run')}
+          disabled={!Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])}
         >Release {Pref.xBatch} to {releaseType || 'the floor'}</button>
       </p>
       <button
         onClick={(e)=>handleRelease(e, Pref.shortfall)}
         title={`Release ${Pref.batch} to the floor`}
         className='smallAction clearOrange medBig cap'
-        disabled={!Roles.userIsInRole(Meteor.userId(), 'run')}
+        disabled={!Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])}
       >release with {Pref.shortfall}</button>
     </div>
   );
@@ -89,7 +89,7 @@ export const ReleaseNote = ({ id, release, xBatch, lockout })=> {
       <ContextMenu id={id+'release'}>
 	      <MenuItem
 	        onClick={()=>handleCancel()} 
-	        disabled={!Roles.userIsInRole(Meteor.userId(), 'run')}>
+	        disabled={!Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])}>
 	        Cancel Release
 	      </MenuItem>
 	    </ContextMenu>
@@ -143,7 +143,7 @@ export const FloorReleaseWrapper = ({
     }
   }
   
-  const isAuth = Roles.userIsInRole(Meteor.userId(), 'run');
+  const isAuth = Roles.userIsInRole(Meteor.userId(), ['run', 'kitting']);
   const extraClass = isAuth ? 'noCopy hoverAction' : 'noCopy';
                       
   return(

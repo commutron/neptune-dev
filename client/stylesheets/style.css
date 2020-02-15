@@ -417,6 +417,7 @@ label.qdpplRound {
 .wetasphalt { background-color: var(--wetasphalt); }
 
 .grayT { color: var(--concrete); }
+.darkgrayT { color: var(--asbestos); }
 
 .black { background-color: var(--black); }
 .blackT { color: var(--blackT); }

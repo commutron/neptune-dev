@@ -17,12 +17,12 @@ class Pref {
 
     this.prefName = 'default';
     
-    this.roles = [
+    // Roles
+    this.auths = [
       'debug',
       'readOnly',
       'nightly',
       'peopleSuper',
-      'sales',
       'qa',
       'remove',
       'create',
@@ -33,6 +33,11 @@ class Pref {
       'verify',
       'inspect',
       'active'
+    ];
+    this.areas = [
+      'sales',
+      'kitting'
+      
     ];
     // app navigation
     this.post = 'record';

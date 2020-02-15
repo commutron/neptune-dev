@@ -102,7 +102,7 @@ const PeopleDataWrap = ({
           }
           
           <div key={3}>
-            <PermissionHelp roles={Pref.roles} admin={false} />
+            <PermissionHelp auths={Pref.auths} admin={false} />
           </div>
           
           {isAdmin || isPeopleSuper ?

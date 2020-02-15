@@ -126,7 +126,7 @@ const UserDataWrap = ({
               </fieldset>
             
             </div>
-            <PermissionHelp roles={Meteor.user().roles} admin={admin} />
+            <PermissionHelp auths={Meteor.user().roles} admin={admin} />
           </div>
           
           <PrivacyPanel

@@ -45,14 +45,14 @@ const FloorRelease = ({ id })=> {
           title={`Release ${Pref.batch} to the floor`}
           className='action clearGreen centreText bigger cap'
           style={sty}
-          disabled={!Roles.userIsInRole(Meteor.userId(), 'run')}
+          disabled={!Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])}
         >Release {Pref.batch} to the floor</button>
       </p>
       <button
         onClick={(e)=>handleRelease(e, Pref.shortfall)}
         title={`Release ${Pref.batch} to the floor`}
         className='smallAction clearOrange cap'
-        disabled={!Roles.userIsInRole(Meteor.userId(), 'run')}
+        disabled={!Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])}
       >release with {Pref.shortfall}</button>
     </div>
   );

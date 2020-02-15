@@ -1,21 +1,29 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment } from 'react';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
-import NumStat from '/client/components/uUi/NumStat.jsx';
-import PrioritySquareData from '/client/components/bigUi/PrioritySquare.jsx';
-import { PrioritySquare } from '/client/components/bigUi/PrioritySquare.jsx';
-import TrinaryStat from '/client/components/uUi/TrinaryStat.jsx';
-import { FloorReleaseWrapper } from '/client/components/bigUi/ReleasesModule.jsx';
+// import Pref from '/client/global/pref.js';
 import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
+
+import BatchTopStatus from './BatchTopStatus.jsx';
+import KittingChecks from './KittingChecks.jsx';
+import PhaseProgress from './PhaseProgress.jsx';
+import NonConCounts from './NonConCounts.jsx';
 
 const BatchDetails = ({
   oB,
   bCache, pCache, 
-  user, clientTZ, app, dense
+  user, clientTZ, app, dense,
+  kittingArea, releasedArea
 })=> {
   
-  const statusCols = ['remaining', 'priority', 'items quantity', 'flow', 'released', 'active'];
+  const statusCols = ['remaining', 'priority', 'items quantity', 'active'];
+  const kitCols = ['1', '2', '3', 'flow', 'released'];
   const ncCols = ['NC total', 'NC remain', 'NC per item', 'NC items', 'scrap', 'RMA'];
+  
+  const fullHead = ['SO', 'fulfill', 'ship',...statusCols,...kitCols,...app.phases,...ncCols, 'watch'];
+  const kitHead = ['SO', 'fulfill', 'ship',...statusCols, ...kitCols, 'watch'];
+  const relHead = ['SO', 'fulfill', 'ship',...statusCols,...app.phases,...ncCols, 'watch'];
+  
+  const headersArr = kittingArea ? kitHead : releasedArea ? relHead : fullHead;
   
   return(
     <div className={`overGridScroll forceScrollStyle ${dense ? 'dense' : ''}`} tabIndex='1'>
@@ -24,12 +32,11 @@ const BatchDetails = ({
         <div className='overGridRowScrollHeader'></div>
       :
         <div className='overGridRowScroll'>
-          {['SO', 'fulfill', 'ship', ...statusCols,...app.phases,...ncCols, 'watch']
-            .map( (entry, index)=>{
-              return(
-                <div key={entry+index}>
-                  <i className='cap ovColhead'>{entry}</i>
-                </div>
+          {headersArr.map( (entry, index)=>{
+            return(
+              <div key={entry+index}>
+                <i className='cap ovColhead'>{entry}</i>
+              </div>
         )})}
         </div>
       }
@@ -40,14 +47,17 @@ const BatchDetails = ({
             <BatchDetailChunk
               key={`${entry.batchID}live${index}`}
               rowIndex={index}
-              ck={entry}
+              oB={entry}
               user={user}
               clientTZ={clientTZ}
               pCache={pCache}
               app={app}
               statusCols={statusCols}
+              kitCols={kitCols}
               ncCols={ncCols}
-              dense={dense} />
+              dense={dense}
+              kittingArea={kittingArea}
+              releasedArea={releasedArea} />
       )})}
       
     </div>
@@ -58,20 +68,21 @@ export default BatchDetails;
 
 
 const BatchDetailChunk = ({ 
-  rowIndex, ck, user, clientTZ, pCache, app, 
-  statusCols, ncCols, dense
+  rowIndex, oB, user, clientTZ, pCache, app, 
+  statusCols, kitCols, ncCols, dense,
+  kittingArea, releasedArea
 })=> {
   
-  const isX = ck.completed === undefined ? false : true;
-  const isDone = isX ? ck.completed : ck.finishedAt !== false;
+  const isX = oB.completed === undefined ? false : true;
+  const isDone = isX ? oB.completed : oB.finishedAt !== false;
   
-  const releasedToFloor = isX ? //Array.isArray(ck.releases) ?
-    ck.releases.findIndex( x => x.type === 'floorRelease') >= 0 :
-    typeof ck.floorRelease === 'object';
+  const releasedToFloor = isX ? //Array.isArray(oB.releases) ?
+    oB.releases.findIndex( x => x.type === 'floorRelease') >= 0 :
+    typeof oB.floorRelease === 'object';
   const floorRelease = !releasedToFloor ? false :
-    ck.floorRelease || ck.releases.find( x => x.type === 'floorRelease');
+    oB.floorRelease || oB.releases.find( x => x.type === 'floorRelease');
   
-  const dueDate = moment(ck.salesEnd || ck.end);
+  const dueDate = moment(oB.salesEnd || oB.end);
   const adaptDate = dueDate.isAfter(moment(), 'year') ?
                     "MMM Do, YYYY" : "MMM Do";
   
@@ -80,9 +91,9 @@ const BatchDetailChunk = ({
   return(
     <div className='overGridRowScroll'>
       {Roles.userIsInRole(Meteor.userId(), 'debug') && 
-        <div><b>{ck.batch}</b></div> }
-      <div title={ck.batch}>
-        <i><i className='label'>SO:<br /></i>{ck.salesOrder}</i>
+        <div><b>{oB.batch}</b></div> }
+      <div title={oB.batch}>
+        <i><i className='label'>SO:<br /></i>{oB.salesOrder}</i>
       </div>
       <div>
         <i><i className='label'>Fulfill:<br /></i>{dueDate.format(adaptDate)}</i>
@@ -90,7 +101,17 @@ const BatchDetailChunk = ({
       
       <BatchTopStatus
         rowIndex={rowIndex}
-        batchID={ck._id}
+        batchID={oB._id}
+        clientTZ={clientTZ}
+        pCache={pCache}
+        app={app}
+        statusCols={statusCols}
+        dense={dense} />
+    
+    {!releasedArea &&
+      <KittingChecks
+        batchID={oB._id}
+        batchNum={oB.batch}
         isX={isX}
         isDone={isDone}
         releasedToFloor={releasedToFloor}
@@ -98,314 +119,33 @@ const BatchDetailChunk = ({
         clientTZ={clientTZ}
         pCache={pCache}
         app={app}
-        statusCols={statusCols}
+        kitCols={kitCols}
         dense={dense}
-        isRO={isRO} />
+        isRO={isRO} />}
+        
+    {!kittingArea &&
+      <Fragment>
+        <PhaseProgress
+          batchID={oB._id}
+          releasedToFloor={releasedToFloor}
+          app={app} />
+          
+        <NonConCounts
+          batchID={oB._id}
+          releasedToFloor={releasedToFloor}
+          app={app}
+          ncCols={ncCols} />
+      </Fragment>
+    }
     
-      <PhaseProgress
-        batchID={ck._id}
-        releasedToFloor={releasedToFloor}
-        app={app} />
-        
-      <NonConCounts
-        batchID={ck._id}
-        releasedToFloor={releasedToFloor}
-        app={app}
-        ncCols={ncCols} />
-        
       <div>
         <WatchButton 
           list={user.watchlist}
           type='batch'
-          keyword={ck.batch}
-          unique={`watch=${ck.batch}`}
+          keyword={oB.batch}
+          unique={`watch=${oB.batch}`}
           iconOnly={true} />
       </div>
     </div>
-  );
-};
-
-const BatchTopStatus = ({ 
-  rowIndex, batchID, isX, isDone,
-  releasedToFloor, floorRelease,
-  clientTZ, pCache, app, 
-  statusCols, dense, isRO
-})=> {
-  
-  const [ stData, setStatus ] = useState(false);
-  
-  useEffect( ()=> {
-    Meteor.call('overviewBatchStatus', batchID, clientTZ, (error, reply)=>{
-      error && console.log(error);
-      if( reply ) { 
-        setStatus( reply );
-        Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(stData);
-      }
-    });
-  }, [batchID]);
-  
-  const dt = stData;
-  const pt = pCache.dataSet.find( x => x.batchID === batchID );
-   
-  if( dt && dt.batchID === batchID ) {
-    
-    const dueDateShip = moment(dt.shipDue);
-    const adaptDate = dueDateShip.isAfter(moment(), 'year') ?
-                        "MMM Do, YYYY" : "MMM Do";
-    
-    return(
-      <Fragment>
-        <div>
-          <i><i className='label'>Ship:<br /></i>{dueDateShip.format(adaptDate)}</i>
-        </div>
-        <div>
-          <NumStat
-            num={ dense ? dt.weekDaysRemain : Math.abs(dt.weekDaysRemain) }
-            name={
-              dt.weekDaysRemain < 0 ? 
-                dt.weekDaysRemain === -1 ?
-                  'Workday Overdue' :
-                  'Workdays Overdue' : 
-                    dt.weekDaysRemain === 1 ?
-                      'Workday Remaining' :
-                      'Workdays Remaining'}
-            title=''
-            color={dt.weekDaysRemain < 0 ? 'yellowT' : 'blueT'}
-            size='big' />
-        </div>
-        
-        {!pt ?
-          <PrioritySquareData
-            batchID={batchID}
-            altNumber={rowIndex+1}
-            app={app} />
-        :
-          <PrioritySquare
-            batchID={batchID}
-            ptData={pt}
-            altNumber={rowIndex+1}
-            app={app} />
-        }
-    
-        <div>
-          <NumStat
-            num={dt.itemQuantity}
-            name='Total Boards'
-            title=''
-            color='blueT'
-            size='big' />
-        </div>
-        <div>
-          <TrinaryStat
-            status={dt.riverChosen ? true : null}
-            name='Flow'
-            title='Has had a Process Flow assigned'
-            size=''
-            onIcon='far fa-check-circle fa-2x' 
-            offIcon='far fa-times-circle fa-2x' />
-        </div>
-        
-        <FloorReleaseWrapper
-          id={batchID}
-          batchNum={dt.batch}
-          releasedBool={releasedToFloor}
-          releaseObj={floorRelease}
-          lockout={isDone || isRO}
-          isX={isX}>
-          <TrinaryStat
-            status={releasedToFloor ? !floorRelease.caution ? true : false : null}
-            name='Released'
-            title={`Has been released from ${Pref.kitting}`}
-            size=''
-            onIcon='fas fa-flag fa-2x'
-            offIcon='far fa-flag fa-2x' />
-        </FloorReleaseWrapper>
-        <div>
-          <TrinaryStat
-            status={dt.isActive ? true : null}
-            name='Active'
-            title={`Has had ${Pref.tide} activity today`}
-            size=''
-            onIcon='fas fa-shoe-prints fa-2x' 
-            offIcon='far fa-pause-circle fa-2x' />
-        </div>
-      </Fragment>
-    );
-  }
-  
-  return(
-    <Fragment>
-      {statusCols.map( (st, index)=>{
-        return(
-          <div key={batchID + st + index + 'x'}>
-            <i className='fade small label'>{st}</i>
-          </div>
-      )})}
-    </Fragment>
-  );
-};
-
-/////////////////////////////////////////////
-
-const PhaseProgress = ({ batchID, releasedToFloor, app })=> {
-  
-  const [ progData, setProg ] = useState(false);
-  
-  useEffect( ()=> {
-    Meteor.call('phaseProgress', batchID, (error, reply)=>{
-      error && console.log(error);
-      if( reply ) { 
-        setProg( reply );
-        Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(progData);
-      }
-    });
-  }, [batchID]);
-  
-  const dt = progData;
- 
-  if(releasedToFloor !== false && dt && dt.batchID === batchID) {
-    return(
-      <Fragment>
-        {dt.phaseSets.map( (phase, index)=>{
-          if(phase.steps.length === 0) {
-            return(
-              <div key={batchID + phase + index + 'x'}>
-               <i className='fade small label'>{phase.phase}</i>
-              </div>
-            );
-          }else{
-            const calNum = Math.floor( ( 
-              phase.count / (dt.totalItems * phase.steps.length) 
-                * 100 ) );
-            Roles.userIsInRole(Meteor.userId(), 'debug') && 
-              console.log(`${dt.batch} ${phase.phase} calNum: ${calNum}`);
-            let fadeTick = calNum == 0 ? '0' :
-                 calNum < 10 ? '5' :
-                 calNum < 20 ? '10' :
-                 calNum < 30 ? '20' :
-                 calNum < 40 ? '30' :
-                 calNum < 50 ? '40' :
-                 calNum < 60 ? '50' :
-                 calNum < 70 ? '60' :
-                 calNum < 80 ? '70' :
-                 calNum < 90 ? '80' :
-                 calNum < 100 ? '90' :
-                 '100';
-            let redLine = calNum >= 100 && phase.ncLeft ? ' redRight' : '';
-            let niceName = phase.phase === 'finish' ?
-                            Pref.isDone : phase.phase;
-            return(
-              <div 
-                key={batchID + phase + index + 'g'} 
-                className={'fillRight' + fadeTick + redLine}>
-                <NumStat
-                  num={`${calNum}%`}
-                  name={niceName}
-                  title={`Steps: ${phase.steps.length}`}
-                  color='whiteT'
-                  size='big' />
-            </div>
-        )}})}
-      </Fragment>
-    );
-  }
-  
-  return(
-    <Fragment>
-      {app.phases.map( (phase, index)=>{
-        return(
-          <div key={batchID + phase + index + 'z'}>
-            <i className='fade small label'>{phase}</i>
-          </div>
-      )})}
-    </Fragment>
-  );    
-};
-
-
-////////////////////////////////////
-
-const NonConCounts = ({ batchID, releasedToFloor, app, ncCols })=> {
-  
-  const [ ncData, setNC ] = useState(false);
-  
-  useEffect( ()=> {
-    if(!releasedToFloor) { null }else{
-      Meteor.call('nonconQuickStats', batchID, 'warm', (error, reply)=>{
-        error && console.log(error);
-        if( reply ) { 
-          setNC( reply );
-          Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(ncData);
-        }
-      });
-    }
-  }, [batchID]);
-  
-  const dt = ncData;
-    
-  if(releasedToFloor && dt && dt.batchID === batchID) {
-    return(
-      <Fragment>
-        <div>
-          <NumStat
-            num={dt.nonConTotal}
-            name='NC Total'
-            title='Total Noncons'
-            color='redT'
-            size='big' />
-          </div>
-          <div>
-            <NumStat
-              num={dt.nonConLeft}
-              name='NC Remain'
-              title='Unresolved Noncons'
-              color='orangeT'
-              size='big' />
-          </div>
-          <div>
-            <NumStat
-              num={dt.nonConRate}
-              name='NC per Item'
-              title='Rate of Noncons per Item'
-              color='redT'
-              size='big' />
-          </div>
-          <div>
-            <NumStat
-              num={dt.percentOfNCitems}
-              name='NC Items'
-              title='Percent of Items with Noncons'
-              color='redT'
-              size='big' />
-          </div>
-          <div>
-            <NumStat
-              num={dt.itemIsScrap}
-              name='Scrap Boards'
-              title=''
-              color='redT'
-              size='big' />
-          </div>
-          <div>
-            <NumStat
-              num={dt.itemHasRMA}
-              name='RMA Boards'
-              title=''
-              color='redT'
-              size='big' />
-          </div>
-      </Fragment>
-    );
-  }
-  
-  return(
-    <Fragment>
-      {ncCols.map( (nc, index)=>{
-        return(
-          <div key={batchID + nc + index + 'x'}>
-            <i className='fade small label'>{nc}</i>
-          </div>
-      )})}
-    </Fragment>
   );
 };

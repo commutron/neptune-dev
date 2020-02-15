@@ -217,7 +217,6 @@ function collectStatus(privateKey, batchID, clientTZ) {
         shipDue: shipDue.format(),
         weekDaysRemain: timeRemainClean,
         itemQuantity: bx.quantity,
-        riverChosen: false,
         isActive: false
       };
       
@@ -238,7 +237,6 @@ function collectStatus(privateKey, batchID, clientTZ) {
           timeRemain.toFixed(1, 10) : timeRemain.toFixed(0, 10);
           
       let itemQuantity = b.items.length; // how many items
-      const riverChosen = b.river !== false; // River Setup
       // indie active check
       const tide = b.tide || [];
       const isActive = tide.find( x => 
@@ -255,14 +253,50 @@ function collectStatus(privateKey, batchID, clientTZ) {
         shipDue: shipDue.format(),
         weekDaysRemain: timeRemainClean,
         itemQuantity: itemQuantity,
-        riverChosen: riverChosen,
         isActive: isActive
+      };
+
+      resolve(collection);
+      
+    }else{
+      resolve(false);
+    }
+  });
+}
+
+function collectKitting(privateKey, batchID, clientTZ) {
+  return new Promise(resolve => {
+    let collection = false;
+    
+    const bx = XBatchDB.findOne({_id: batchID});
+    const b = !bx ? BatchDB.findOne({_id: batchID}) : {};
+    
+    // const app = AppDB.findOne({orgKey: privateKey});
+    
+    if(bx) {
+      
+      collection = {
+        batch: bx.batch,
+        batchID: bx._id,
+        riverChosen: null,
       };
       
       resolve(collection);
       
-    }else{
+    }else if(b) {
+      
+      const riverChosen = b.river !== false; // River Setup
+      
+      collection = {
+        batch: b.batch,
+        batchID: b._id,
+        riverChosen: riverChosen,
+      };
+
       resolve(collection);
+      
+    }else{
+      resolve(false);
     }
   });
 }
@@ -443,6 +477,19 @@ Meteor.methods({
       const accessKey = Meteor.user().orgKey;
       try {
         bundle = await collectStatus(accessKey, batchID, clientTZ);
+        return bundle;
+      }catch (err) {
+        throw new Meteor.Error(err);
+      }
+    }
+    return bundleProgress(batchID);
+  },
+  
+  overviewKittingStatus(batchID, clientTZ) {
+    async function bundleProgress(batchID) {
+      const accessKey = Meteor.user().orgKey;
+      try {
+        bundle = await collectKitting(accessKey, batchID, clientTZ);
         return bundle;
       }catch (err) {
         throw new Meteor.Error(err);

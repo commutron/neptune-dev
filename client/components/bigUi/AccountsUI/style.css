@@ -1,33 +1,39 @@
 .userFormButtons {
-  width: 240px;
   height: 32px;
+  min-width: 100%;
+  width: 100%;
+  max-width: 100%;
   margin-top: 0.75rem;
-  font-size: 1rem;
+  font-size: medium;
+  color: white;
   text-align: center;
-  border-width: 3px;
-  border-style: solid;
-  border-top-color: transparent;
-  border-right-color: transparent;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
+  letter-spacing: 2px;
+  text-shadow: 0 0 5px black;
+  box-shadow: var(--navIndicatorOut);
   cursor: pointer;
-}
-.userFormButtons:hover,
-.userFormButtons:focus,
-.userFormButtons:active {
-  border-bottom-color: var(--silver);
 }
 .loginoutButton {
   background-color: var(--neptuneColor);
-  color: white;
-  min-width: 100%;
-  width: 100%;
-  max-width: 100%;
 }
+.loginoutButton:hover, 
+.loginoutButton:focus, 
+.loginoutButton:active {
+  outline-style: hidden;
+  outline-color: transparent;
+  box-shadow: 
+    0 0 0 3px rgb(35,35,35),
+    0 0 0 5px var(--belizeHole);
+}
+
 .createButton {
   background-color: var(--nephritis);
-  color: white;
-  min-width: 100%;
-  width: 100%;
-  max-width: 100%;
+}
+.createButton:hover, 
+.createButton:focus, 
+.createButton:active {
+  outline-style: hidden;
+  outline-color: transparent;
+  box-shadow: 
+    0 0 0 3px rgb(35,35,35),
+    0 0 0 5px var(--emerald);
 }

@@ -234,7 +234,7 @@
 }
 .lightTheme .overviewContent,
 .lightTheme .overGridFrame { 
-  background-color: var(--clouds);
+  background-color: whitesmoke;
 }
 .lightTheme .overGridRowFixedHeader > span,
 .lightTheme .ovColhead { 
