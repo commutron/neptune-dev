@@ -644,7 +644,7 @@ main {
 .space36v { padding: 3vh 6vw; }
 .space { padding: 24px; }
 .vspace { padding: 24px 0; }
-.vbreak { padding: 0 0 48px 0; }
+.vbreak { padding: 0 0 24px 0; }
 .nospace { padding: 0; }
 
 .vmargin { margin: 24px 0; }

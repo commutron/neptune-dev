@@ -17,10 +17,10 @@
   grid-area: overviewNav;
   background-color: rgb(50,50,50);
   display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
+  flex-flow: row wrap;
   justify-content: flex-start;
   align-items: center;
+  
 }
 .overviewToolbar span,
 .overviewToolbar select,
@@ -28,7 +28,10 @@
   font-size: 1.7vh;
 }
 .overviewToolbar span { padding: 0 1vw; }
-.overviewToolbar select { cursor: pointer; }
+.overviewToolbar select { 
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  cursor: pointer; }
 
 .overviewContent {
   grid-area: overviewContent;
@@ -222,7 +225,7 @@
   
 
 .lightTheme .overviewToolbar {
-  background-color: var(--silver);
+  background-color: var(--silverfade);
 }
 
 .lightTheme .tenHeader,

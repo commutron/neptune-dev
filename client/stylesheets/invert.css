@@ -11,7 +11,8 @@ Invert Rules */
 
 .invert .liteToolOn,
 .invert .liteToolOff { 
-  border-color: rgb(227,231,232);
+	border-right-color: rgb(227,231,232);
+	border-left-color: rgb(227,231,232);
 }
 
 .invert a:active {

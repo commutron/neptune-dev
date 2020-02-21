@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
-import moment from 'moment';
-// import Pref from '/client/global/pref.js';
+// import moment from 'moment';
+import Pref from '/client/global/pref.js';
 import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
 import BatchTopStatus from './BatchTopStatus.jsx';
@@ -18,10 +18,10 @@ const BatchDetails = ({
   const statusCols = ['remaining', 'priority', 'items quantity', 'active'];
   const kitCols = ['1', '2', '3', 'flow', 'released'];
   const ncCols = ['NC total', 'NC remain', 'NC per item', 'NC items', 'scrap', 'RMA'];
-  
-  const fullHead = ['SO', 'fulfill', 'ship',...statusCols,...kitCols,...app.phases,...ncCols, 'watch'];
-  const kitHead = ['SO', 'fulfill', 'ship',...statusCols, ...kitCols, 'watch'];
-  const relHead = ['SO', 'fulfill', 'ship',...statusCols,...app.phases,...ncCols, 'watch'];
+  // due == 'fulfill', 'ship'
+  const fullHead = ['SO', 'due',...statusCols,...kitCols,...app.phases,...ncCols, 'watch'];
+  const kitHead = ['SO', 'due',...statusCols, ...kitCols, 'watch'];
+  const relHead = ['SO', 'due',...statusCols,...app.phases,...ncCols, 'watch'];
   
   const headersArr = kittingArea ? kitHead : releasedArea ? relHead : fullHead;
   
@@ -81,27 +81,27 @@ const BatchDetailChunk = ({
     typeof oB.floorRelease === 'object';
   const floorRelease = !releasedToFloor ? false :
     oB.floorRelease || oB.releases.find( x => x.type === 'floorRelease');
-  
+  /*
   const dueDate = moment(oB.salesEnd || oB.end);
   const adaptDate = dueDate.isAfter(moment(), 'year') ?
                     "MMM Do, YYYY" : "MMM Do";
-  
+  */
   const isRO = Roles.userIsInRole(Meteor.userId(), 'readOnly');
   
   return(
     <div className='overGridRowScroll'>
-      {Roles.userIsInRole(Meteor.userId(), 'debug') && 
-        <div><b>{oB.batch}</b></div> }
-      <div title={oB.batch}>
-        <i><i className='label'>SO:<br /></i>{oB.salesOrder}</i>
-      </div>
       <div>
-        <i><i className='label'>Fulfill:<br /></i>{dueDate.format(adaptDate)}</i>
+        <i><i className='label' title={Pref.salesOrder}
+          >{Pref.SO}:<br /></i>{oB.salesOrder}</i>
       </div>
+      {/*<div>
+        <i><i className='label'>Fulfill:<br /></i>{dueDate.format(adaptDate)}</i>
+      </div>*/}
       
       <BatchTopStatus
         rowIndex={rowIndex}
         batchID={oB._id}
+        dueDate={oB.salesEnd || oB.end}
         clientTZ={clientTZ}
         pCache={pCache}
         app={app}
@@ -146,6 +146,10 @@ const BatchDetailChunk = ({
           unique={`watch=${oB.batch}`}
           iconOnly={true} />
       </div>
+      
+      {Roles.userIsInRole(Meteor.userId(), 'debug') && 
+        <div><b>{oB.batch}</b></div> }
+        
     </div>
   );
 };

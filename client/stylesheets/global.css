@@ -84,7 +84,8 @@ button,
 button span,
 button label,
 input[type='submit'],
-input[type='reset'] {
+input[type='reset'],
+input[type='checkbox'] {
  	-webkit-transition: all 150ms ease-in-out;
   -moz-transition: all 150ms ease-in-out;
   -o-transition: all 150ms ease-in-out;

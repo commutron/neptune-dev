@@ -47,9 +47,10 @@
   --blackFade: rgba(5,5,5,0.5);
   
   --contrast: rgba(150,150,150,0.1);
+
+  --navIndicatorA: rgba(127, 140, 141, 0.2);
+  --navIndicatorB: rgba(127, 140, 141, 0.5);
   
-  --navIndicatorA: rgba(44, 62, 80, 0.2);
-  --navIndicatorB: rgba(52, 73, 94, 0.5);
   --navIndicatorIn: inset 0 0 3px rgba(0,0,0,0.2);
   --navIndicatorOut: 0 0 3px rgba(0,0,0,0.2);
   

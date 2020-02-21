@@ -31,13 +31,13 @@ const BatchTopStatus = ({
   if( dt && dt.batchID === batchID ) {
     
     const dueDateShip = moment(dt.shipDue);
-    const adaptDate = dueDateShip.isAfter(moment(), 'year') ?
-                        "MMM Do, YYYY" : "MMM Do";
+    const adaptDateShip = dueDateShip.isAfter(moment(), 'year') ?
+                            "MMM Do, YYYY" : "MMM Do";
     
     return(
       <Fragment>
         <div>
-          <i><i className='label'>Ship:<br /></i>{dueDateShip.format(adaptDate)}</i>
+          <i><i className='label'>Due:<br /></i>{dueDateShip.format(adaptDateShip)}</i>
         </div>
         <div>
           <NumStat

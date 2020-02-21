@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js'
 import '/client/components/bigUi/ItemFeed/style.css';
@@ -13,13 +13,30 @@ const EventsTimeline = ({
   doneBatch 
 })=> {
   
-  const rL = releaseList || [];
-  const vL = verifyList || [];
-  const eL = eventList || [];
-  const aL = alterList || [];
-  const qL = quoteList || [];
+  const [ incList, incListSet ] = useState( [] );
   
-  let sortedList = [...rL, ...vL, ...eL, ...aL, ...qL].sort((x, y)=> {
+  const [ incRelease, releaseSet ] = useState( true );
+  const [ incVerify, verifySet ] = useState( true );
+  const [ incEvent, eventSet ] = useState( true );
+  const [ incAlter, alterSet ] = useState( true );
+  const [ incQuote, quoteSet ] = useState( true );
+  
+  useEffect( ()=>{
+    const rL = incRelease ? releaseList || [] : [];
+    const vL = incVerify ? verifyList || [] : [];
+    const eL = incEvent ? eventList || [] : [];
+    const aL = incAlter ? alterList || [] : [];
+    const qL = incQuote ? quoteList || [] : [];
+    const fn = batchData.finishedAt !== false ? 
+                [{ complete: true, time: batchData.finishedAt }] : [];
+    
+    const concatPings = [...rL, ...vL, ...eL, ...aL, ...qL, ...fn];
+    
+    incListSet(concatPings);
+    
+  }, [incRelease, incVerify, incEvent, incAlter, incQuote]);
+  
+  let sortedList = incList.sort((x, y)=> {
     let timeX = x.time || x.changeDate || x.updatedAt;
     let timeY = y.time || y.changeDate || y.updatedAt;
     if (moment(timeX).isBefore(timeY)) { return -1 }
@@ -30,8 +47,48 @@ const EventsTimeline = ({
   return(
     <div className='scrollWrap'>
       <div className='infoFeed'>
-        {vL.length > 0 && eL.length > 0 &&
-          <p>Combined timeline of Events and First-Off Verifications</p>}
+        <div className='comfort uiCheck vbreak'>
+          <span>
+            <input
+              type='checkbox'
+              id='inputRel'
+              onChange={(e)=>releaseSet(!incRelease)}
+              defaultChecked={incRelease} />
+            <label htmlFor='inputRel'>Releases</label>
+          </span>
+          <span>
+            <input
+              type='checkbox'
+              id='inputVer'
+              onChange={(e)=>verifySet(!incVerify)}
+              defaultChecked={incVerify} />
+            <label htmlFor='inputVer'>{Pref.trackFirst}s</label>
+          </span>
+          <span>
+            <input
+              type='checkbox'
+              id='inputEvt'
+              onChange={(e)=>eventSet(!incEvent)}
+              defaultChecked={incEvent} />
+            <label htmlFor='inputEvt'>Events</label>
+          </span>
+          <span>
+            <input
+              type='checkbox'
+              id='inputAlt'
+              onChange={(e)=>alterSet(!incAlter)}
+              defaultChecked={incAlter} />
+            <label htmlFor='inputAlt'>Alters</label>
+          </span>
+          <span>
+            <input
+              type='checkbox'
+              id='inputQut'
+              onChange={(e)=>quoteSet(!incQuote)}
+              defaultChecked={incQuote} />
+            <label htmlFor='inputQut'>Quotes</label>
+          </span>
+        </div>
           
         <CreateBlock
           title={`${Pref.batch} created`}
@@ -68,7 +125,7 @@ const EventsTimeline = ({
                 key={dt.time.toISOString()+ix}
                 dt={dt} /> 
             );
-          }else{
+          }else if( typeof dt.who === 'string' ) {
             return( 
               <ReleaseBlock
                 key={dt.time+ix}
@@ -76,8 +133,18 @@ const EventsTimeline = ({
                 done={doneBatch}
                 dt={dt} /> 
             );
+          }else if( typeof dt.complete === 'boolean' ) {
+            return( 
+              <CompleteBlock
+                key={'completefinish'+ix}
+                title={`${Pref.batch} complete`}
+                datetime={dt.time} />
+            );
+          }else{
+            return( null );
           }
         })}
+          
       </div>
     </div>
   );
@@ -200,3 +267,20 @@ const ReleaseBlock = ({ id, done, dt })=>{
     </div>
   );
 };
+
+
+const CompleteBlock = ({ title, datetime })=> (
+  
+  <div className='infoBlock finish'>
+    <div className='blockTitle cap'>
+      <div>
+        <div className='leftAnchor'><i className="fas fa-flag-checkered fa-lg fa-fw iPlain"></i></div>
+        <div>{title}</div>
+      </div>
+      <div className='rightText'>
+        <div>{moment(datetime).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</div>
+        <div className='rightAnchor'></div>
+      </div>
+    </div>
+  </div>
+);
