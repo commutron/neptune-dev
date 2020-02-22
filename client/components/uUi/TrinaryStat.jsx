@@ -18,7 +18,7 @@ import React from 'react';
 const TrinaryStat = ({ status, name, title, size, onIcon, offIcon }) => {
   
   const iconState = status === null ?
-    <em><i className={`${offIcon || 'far fa-circle'} grayT ${size}`}></i></em>
+    <em><i className={`${offIcon || 'far fa-circle'} grayT fade ${size}`}></i></em>
     : status === false ?
     <b><i className={`${onIcon || 'fas fa-circle'} yellowT ${size}`}></i></b>
     :

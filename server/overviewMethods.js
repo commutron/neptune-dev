@@ -113,7 +113,14 @@ function collectPhaseCondition(privateKey, batchID) {
       
       const rNC = batch.nonCon.filter( n => 
         !n.trash && n.inspect === false && n.skip === false );
-      const released = typeof batch.floorRelease === 'object';
+      
+      // BREAKING CHANGE
+      const legacy = batch.releases === undefined;
+      const released = legacy ?
+              typeof batch.floorRelease === 'object'
+            : 
+              batch.releases.findIndex( x => x.type === 'floorRelease') >= 0;
+      //
       let previous = released;
       
       let progSteps = riverFlow;//.filter( x => x.type !== 'first' );

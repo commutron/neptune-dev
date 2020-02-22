@@ -12,7 +12,7 @@ import Spin from '/client/components/uUi/Spin.jsx';
 import ProductionFindOps from './ProductionFindOps.jsx';
 
 const ProdData = ({
-  /*appReady,*/ usersReady, coldReady, hotReady, // subs
+  usersReady, coldReady, hotReady, // subs
   orb, anchor, user, org, users, app, // self 
   allGroup, allWidget, allBatch, allxBatch,  // customer data
   hotBatch, hotxBatch // working data
@@ -24,13 +24,14 @@ const ProdData = ({
   }, [user]);
   
   useEffect( ()=> {
-    ScanListenerUtility(user);
+    if(user) {
+      ScanListenerUtility(user);
+    }
     return ScanListenerOff();
   }, []);
   
 
   if(
-     /*!appReady ||*/
      !usersReady ||
      !coldReady || 
      !hotReady ||
@@ -73,9 +74,7 @@ export default withTracker( () => {
   let login = Meteor.userId() ? true : false;
   let user = login ? Meteor.user() : false;
   let org = user ? user.org : false;
-  let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') &&
-    !Roles.userIsInRole(Meteor.userId(), 'readOnly') : false;
-  // const appSub = login ? Meteor.subscribe('appData') : false;
+  let readOnly = user ? Roles.userIsInRole(Meteor.userId(), 'readOnly') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
   const coldSub = login ? Meteor.subscribe('thinData') : false;
 
@@ -128,22 +127,19 @@ export default withTracker( () => {
   
   if( !login ) {
     return {
-      // appReady: false,
       usersReady: false,
       coldReady: false,
       hotReady: false
     };
-  }else if( !active ) {
-    Roles.userIsInRole(Meteor.userId(), 'readOnly') && FlowRouter.go('/');
+  }else if( readOnly ) {
+    FlowRouter.go('/');
     return {
-      // appReady: appSub.ready(),
       usersReady: usersSub.ready(),
       coldReady: coldSub.ready(), 
       hotReady: hotSub.ready(),
     };
   }else{
     return {
-      // appReady: appSub.ready(),
       usersReady: usersSub.ready(),
       coldReady: coldSub.ready(),
       hotReady: hotSub.ready(),

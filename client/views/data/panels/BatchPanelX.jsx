@@ -111,7 +111,12 @@ const BatchPanelX = ({ batchData, widgetData, groupData, user, app })=> {
               <p>{cmplt !== null ? 'Total Time:' : 'Elapsed:'} {elapseNice}</p>
             </fieldset>
             {!released ?
-              <ReleaseAction id={b._id} rType='floorRelease' />
+              <ReleaseAction 
+                id={b._id} 
+                rType='floorRelease'
+                actionText='release'
+                contextText='to the floor'
+                isX={true} />
               :
               <ReleaseNote
                 id={b._id}

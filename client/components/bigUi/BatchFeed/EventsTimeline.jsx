@@ -34,7 +34,10 @@ const EventsTimeline = ({
     
     incListSet(concatPings);
     
-  }, [incRelease, incVerify, incEvent, incAlter, incQuote]);
+  }, [
+    releaseList, verifyList, eventList, alterList, quoteList,
+    incRelease, incVerify, incEvent, incAlter, incQuote
+  ]);
   
   let sortedList = incList.sort((x, y)=> {
     let timeX = x.time || x.changeDate || x.updatedAt;
@@ -48,15 +51,15 @@ const EventsTimeline = ({
     <div className='scrollWrap'>
       <div className='infoFeed'>
         <div className='comfort uiCheck vbreak'>
-          <span>
+          <span title='releases and clearances'>
             <input
               type='checkbox'
               id='inputRel'
               onChange={(e)=>releaseSet(!incRelease)}
               defaultChecked={incRelease} />
-            <label htmlFor='inputRel'>Releases</label>
+            <label htmlFor='inputRel'>Green-Lights</label>
           </span>
-          <span>
+          <span title={`${Pref.trackFirst} verifications`}>
             <input
               type='checkbox'
               id='inputVer'
@@ -64,7 +67,7 @@ const EventsTimeline = ({
               defaultChecked={incVerify} />
             <label htmlFor='inputVer'>{Pref.trackFirst}s</label>
           </span>
-          <span>
+          <span title='general and benchmark events'>
             <input
               type='checkbox'
               id='inputEvt'
@@ -72,7 +75,7 @@ const EventsTimeline = ({
               defaultChecked={incEvent} />
             <label htmlFor='inputEvt'>Events</label>
           </span>
-          <span>
+          <span title='top-level alterations'>
             <input
               type='checkbox'
               id='inputAlt'
@@ -80,7 +83,7 @@ const EventsTimeline = ({
               defaultChecked={incAlter} />
             <label htmlFor='inputAlt'>Alters</label>
           </span>
-          <span>
+          <span title={`quote ${Pref.timeBudget} changes`}>
             <input
               type='checkbox'
               id='inputQut'
@@ -131,7 +134,8 @@ const EventsTimeline = ({
                 key={dt.time+ix}
                 id={id}
                 done={doneBatch}
-                dt={dt} /> 
+                dt={dt}
+                icon={dt.type === 'floorRelease' && 'fas fa-flag'} /> 
             );
           }else if( typeof dt.complete === 'boolean' ) {
             return( 
@@ -157,7 +161,6 @@ const AlterBlock = ({ dt })=>{
 
   return(
     <div className='infoBlock alterEvent'>
-      
       <div className='blockTitle cap'>
         <div>
           <div className='leftAnchor'>
@@ -166,7 +169,6 @@ const AlterBlock = ({ dt })=>{
           
           <div>Altered: <em className='clean'>"{dt.changeKey}"</em></div>
           <div>for {dt.changeReason}</div>
-          
           
         </div>
         
@@ -181,7 +183,6 @@ const AlterBlock = ({ dt })=>{
       <div className='moreInfoList'>
         <dd>{dt.oldValue.toLocaleString()} <i className="fas fa-arrow-right fa-fw"></i> {dt.newValue.toLocaleString()}</dd>
       </div>
-      
     </div>
   );
 };
@@ -230,10 +231,29 @@ const EventBlock = ({ dt })=>{
   );
 };
 
-const ReleaseBlock = ({ id, done, dt })=>{
+const ReleaseBlock = ({ id, done, dt, icon })=>{
+
+  // const actionString = aK = 'floorRelease' ? 'Released to the Floor' :
+  //                           'smtKitRelease' ? 'Cleared for SMT' :
+  //                           'thKitRelease' ? 'Cleared for Through Hole' :
+  //                           'pcbKitRelease' ? 'Cleared for PCBs' :
+  //                           'Released';
+  const aK = dt.type;
+  
+  let actionString = aK === 'floorRelease' ? 
+                      'Released to the Floor' : 'Released';
+  for(let cl of Pref.clearencesArray) {
+    if( aK === cl.keyword ) {
+      actionString = `${cl.post} ${cl.link} ${cl.context}`;
+      break;
+    }
+  }
   
   function handleCancel() {
-    Meteor.call('cancelFloorRelease', id, (err)=>{
+    // Meteor.call('cancelFloorRelease', id, (err)=>{
+    //   err && console.log(err);
+    // }); // DEPRECIATED
+    Meteor.call('cancelReleaseLEGACY', id, aK, (err)=>{
       err && console.log(err);
     });
   }
@@ -243,9 +263,9 @@ const ReleaseBlock = ({ id, done, dt })=>{
       <div className='blockTitle cap'>
         <div>
           <div className={`leftAnchor ${dt.caution ? 'yellowT' : 'greenT'}`}>
-            <i className="fas fa-flag fa-lg fa-fw"></i>
+            <i className={`${icon || 'fas fa-check-square'} fa-lg fa-fw`}></i>
           </div>
-          <div>Released to the Floor by <UserNice id={dt.who} /></div>
+          <div>{actionString} by <UserNice id={dt.who} /></div>
           {dt.caution ?
             <div>Caution: {dt.caution}</div>
           : null}
@@ -254,7 +274,7 @@ const ReleaseBlock = ({ id, done, dt })=>{
           <div>{moment(dt.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</div>
           <div className='rightAnchor'>
 	          <button
-	            title='Cancel Release'
+	            title='Cancel'
               className='miniAction'
               onClick={()=>handleCancel()} 
               disabled={done || !Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])}

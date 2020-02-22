@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
 
-const FloorRelease = ({ id })=> {
+const FloorRelease = ({ id })=> { // DEPRECIATED
   
   const [ datetime, datetimeSet ] = useState( moment().format() );
   

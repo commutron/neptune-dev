@@ -430,7 +430,7 @@ Meteor.methods({
       moment(finishedAt).isBetween(from, to) :
       moment(createdAt).isBefore(to);
       
-    const relevantBatches = allBatches.filter( x => 
+    const relevantBatches = allBatches.filter( x => // "floorRelease" has been DEPRECIATED
                               ( x.floorRelease === undefined || x.floorRelease === true) &&
                               inWindow(x.finishedAt, x.createdAt) === true );
     //  limit Low batches to only finished                       

@@ -178,7 +178,8 @@ Meteor.publish('shaddowData', function(clientTZ){
           'finishedAt': 1,
           'salesOrder': 1,
           'end': 1,
-          'floorRelease': 1
+          'floorRelease': 1, // DEPRECIATE
+          'releases': 1
         }}),
       XBatchDB.find({orgKey: orgKey, live: true}, {
         sort: {batch:-1},

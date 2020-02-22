@@ -5,13 +5,13 @@ import NumStat from '/client/components/uUi/NumStat.jsx';
 // import PrioritySquareData from '/client/components/bigUi/PrioritySquare.jsx';
 // import { PrioritySquare } from '/client/components/bigUi/PrioritySquare.jsx';
 import TrinaryStat from '/client/components/uUi/TrinaryStat.jsx';
-import { FloorReleaseWrapper } from '/client/components/bigUi/ReleasesModule.jsx';
+import { ReleaseWrapper } from '/client/components/bigUi/ReleasesModule.jsx';
 
 
 const KittingChecks = ({ 
   batchID, batchNum, 
   isX, isDone,
-  releasedToFloor, floorRelease,
+  releasedToFloor, releases,
   clientTZ, pCache, app, 
   kitCols, dense, isRO
 })=> {
@@ -30,39 +30,40 @@ const KittingChecks = ({
   
   const dt = stData;
   // const pt = pCache.dataSet.find( x => x.batchID === batchID );
-   
-  if( dt && dt.batchID === batchID ) {
     
+  if( dt && dt.batchID === batchID && Array.isArray(releases) ) {
+    
+    const floorRelease = !releasedToFloor ? false :
+      releases.find( x => x.type === 'floorRelease');
     
     return(
       <Fragment>
-
-        <div>
-          <NumStat
-            num={ '--' }
-            name={'-'}
-            title=''
-            color={'darkgrayT'}
-            size='big' />
-        </div>
         
-        <div>
-          <NumStat
-            num={ '--' }
-            name={'-'}
-            title=''
-            color={'darkgrayT'}
-            size='big' />
-        </div>
-        
-        <div>
-          <NumStat
-            num={ '--' }
-            name={'-'}
-            title=''
-            color={'darkgrayT'}
-            size='big' />
-        </div>
+        {Pref.clearencesArray.map( (ent, ix)=>{
+          const releasedBool = releases.findIndex( x => x.type === ent.keyword) >= 0;
+          const releaseObj = releases.find( x => x.type === ent.keyword);
+          return(
+            <ReleaseWrapper
+              key={batchID+ent.keyword+ix}
+              id={batchID}
+              batchNum={batchNum}
+              releasedBool={releasedBool}
+              releaseObj={releaseObj}
+              actionKeyword={ent.keyword}
+              actionText={ent.pre}
+              contextText={`${ent.link} ${ent.context}`}
+              lockout={isDone || isRO}
+              isX={isX}>
+              <TrinaryStat
+                status={releasedBool ? !releaseObj.caution ? true : false : null}
+                name={ent.context}
+                title={`Has been ${ent.post} ${ent.link} ${ent.context}`}
+                size=''
+                onIcon='fas fa-check-square fa-2x'
+                offIcon='far fa-check-square fa-2x' 
+              />
+            </ReleaseWrapper>
+        )})}
         
         <div>
           <TrinaryStat
@@ -74,11 +75,14 @@ const KittingChecks = ({
             offIcon='far fa-times-circle fa-2x' />
         </div>
         
-        <FloorReleaseWrapper
+        <ReleaseWrapper
           id={batchID}
           batchNum={batchNum}
           releasedBool={releasedToFloor}
           releaseObj={floorRelease}
+          actionKeyword='floorRelease'
+          actionText='release'
+          contextText='to the floor'
           lockout={isDone || isRO}
           isX={isX}>
           <TrinaryStat
@@ -88,7 +92,7 @@ const KittingChecks = ({
             size=''
             onIcon='fas fa-flag fa-2x'
             offIcon='far fa-flag fa-2x' />
-        </FloorReleaseWrapper>
+        </ReleaseWrapper>
         
       </Fragment>
     );

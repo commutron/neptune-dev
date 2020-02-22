@@ -12,7 +12,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '1.27.3';
+    this.neptuneVersion = '1.28.0';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -169,6 +169,25 @@ class Pref {
     this.statisticalEndHour = 20; // 8pm
     //this.minWorkDayStartTime
     //this.maxWorkDayEndTime
+    
+    // clearences, additional releases
+    this.clearencesArray = [
+      { keyword: 'smtKitRelease', 
+        pre: 'Clear',
+        post: 'Cleared',
+        link: 'for',
+        context: 'SMT' },
+      { keyword: 'thKitRelease', 
+        pre: 'Clear',
+        post: 'Cleared',
+        link: 'for',
+        context: 'Thru-Hole' },
+      { keyword: 'pcbKitRelease',
+        pre: 'Clear',
+        post: 'Cleared',
+        link: 'for',
+        context: 'PCBs' }
+    ];
   }
 }
 

@@ -6,7 +6,9 @@ import UserNice from '/client/components/smallUi/UserNice.jsx';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
 
-const ReleaseAction = ({ id, rType })=> {
+const ReleaseAction = ({ 
+  id, rType, actionText, contextText, isX
+})=> {
   
   const [ datetime, datetimeSet ] = useState( moment().format() );
   
@@ -16,16 +18,20 @@ const ReleaseAction = ({ id, rType })=> {
   }
   
   function handleRelease(e, caution) {
-    Meteor.call('addRelease', id, rType, datetime, caution, (err)=>{
-      err && console.log(err);
-    });
+    if(isX) {
+      Meteor.call('addRelease', id, rType, datetime, caution, (err)=>{
+        err && console.log(err);
+      });
+    }else{
+      Meteor.call('addReleaseLEGACY', id, rType, datetime, caution, (err)=>{
+        err && console.log(err);
+      });
+    }
   }
   
   let sty = {
     padding: '10px',
   };
-  
-  const releaseType = rType === 'floorRelease' ? 'the floor' : null;
   
   return(
     <div className='actionBox centre greenBorder listSortInput' style={sty}>
@@ -50,14 +56,14 @@ const ReleaseAction = ({ id, rType })=> {
           className='action clearGreen centreText bigger cap'
           style={sty}
           disabled={!Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])}
-        >Release {Pref.xBatch} to {releaseType || 'the floor'}</button>
+        >{actionText} {contextText}</button>
       </p>
       <button
         onClick={(e)=>handleRelease(e, Pref.shortfall)}
         title={`Release ${Pref.batch} to the floor`}
         className='smallAction clearOrange medBig cap'
         disabled={!Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])}
-      >release with {Pref.shortfall}</button>
+      >{actionText} with {Pref.shortfall}</button>
     </div>
   );
 };
@@ -97,9 +103,11 @@ export const ReleaseNote = ({ id, release, xBatch, lockout })=> {
   );
 };
 
-export const FloorReleaseWrapper = ({ 
-  id, batchNum, releasedBool, releaseObj, lockout, 
-  isX, children
+export const ReleaseWrapper = ({ 
+  id, batchNum, 
+  releasedBool, releaseObj, 
+  actionKeyword, actionText, contextText,
+  lockout, isX, children
 })=> {
   
   const out = releasedBool === true;
@@ -108,38 +116,56 @@ export const FloorReleaseWrapper = ({
   function handleRelease(e, caution) {
     const datetime = moment().format();
     if(isX) {
-      Meteor.call('addRelease', id, 'floorRelease', datetime, caution, (err)=>{
+      Meteor.call('addRelease', id, actionKeyword, datetime, caution, (err)=>{
         err && console.log(err);
       });
     }else{
-      Meteor.call('releaseToFloor', id, datetime, caution, (err)=>{
-        err && console.log(err);
-      });
+      // if(actionKeyword === 'floorRelease') {
+      //   Meteor.call('releaseToFloor', id, datetime, caution, (err)=>{
+      //     err && console.log(err);
+      //   }); // DEPRECIATED
+      // }else{
+        Meteor.call('addReleaseLEGACY', id, actionKeyword, datetime, caution, (err)=>{
+          err && console.log(err);
+        });
+      // }
     }
   }
   
   function handleCancel() {
     if(isX) {
-      Meteor.call('cancelRelease', id, 'floorRelease', (err)=>{
+      Meteor.call('cancelRelease', id, actionKeyword, (err)=>{
         err && console.log(err);
       });
     }else{
-      Meteor.call('cancelFloorRelease', id, (err)=>{
-        err && console.log(err);
-      });
+      // if(actionKeyword === 'floorRelease') {
+      //   Meteor.call('cancelFloorRelease', id, (err)=>{
+      //     err && console.log(err);
+      //   }); // DEPRECIATED
+      // }else{
+        Meteor.call('cancelReleaseLEGACY', id, actionKeyword, (err)=>{
+          err && console.log(err);
+        });
+      // }
     }
   }
   
   function handleCautionFlip() {
     const newCaution = cautionState ? false : Pref.shortfall;
     if(isX) {
-      Meteor.call('cautionFlipRelease', id, 'floorRelease', newCaution, (err)=>{
+      Meteor.call('cautionFlipRelease', id, actionKeyword, newCaution, (err)=>{
         err && console.log(err);
       });
     }else{
-      Meteor.call('cautionFlipFloorRelease', id, newCaution, (err)=>{
-        err && console.log(err);
-      });
+      // if(actionKeyword === 'floorRelease') {
+      //   Meteor.call('cautionFlipFloorRelease', id, newCaution, (err)=>{
+      //     err && console.log(err);
+      //   }); // DEPRECIATED
+      // }else{
+        Meteor.call('cautionFlipReleaseLEGACY', id, actionKeyword, newCaution, (err)=>{
+          err && console.log(err);
+        });
+      // }
     }
   }
   
@@ -149,7 +175,7 @@ export const FloorReleaseWrapper = ({
   return(
     <React.Fragment>
       <ContextMenuTrigger 
-        id={id+'release'}
+        id={id+'release'+actionKeyword}
         disable={!isAuth}
         renderTag='div'
         holdToDisplay={1}
@@ -157,7 +183,7 @@ export const FloorReleaseWrapper = ({
   			{children}
       </ContextMenuTrigger>
       <ContextMenu 
-        id={id+'release'} 
+        id={id+'release'+actionKeyword} 
         className='cap noCopy'
         hideOnLeave={true}>
         <MenuItem disabled={true}>
@@ -165,13 +191,13 @@ export const FloorReleaseWrapper = ({
         </MenuItem>
 	      <MenuItem
 	        onClick={(e)=>handleRelease(e, false)}
-	        disabled={out || lockout}>
-	        Release to the floor 
+	        disabled={out || lockout}
+	        >{actionText} {contextText}
 	      </MenuItem>
 	      <MenuItem
 	        onClick={(e)=>handleRelease(e, Pref.shortfall)}
-	        disabled={out || lockout}>
-	        release with {Pref.shortfall}
+	        disabled={out || lockout}
+	        >{actionText} with {Pref.shortfall}
 	      </MenuItem>
 	      <MenuItem
 	        onClick={(e)=>handleCautionFlip(e)}
@@ -180,8 +206,8 @@ export const FloorReleaseWrapper = ({
 	      </MenuItem>
 	      <MenuItem
 	        onClick={()=>handleCancel()} 
-	        disabled={!out || lockout}>
-	        Cancel Release
+	        disabled={!out || lockout}
+	        >Cancel {actionText}
 	      </MenuItem>
 	    </ContextMenu>
 	  </React.Fragment>

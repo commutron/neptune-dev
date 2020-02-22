@@ -128,6 +128,7 @@ privlegedRoutes.route('/', {
 });
 
 privlegedRoutes.route('/production', {
+  name: 'production',
   action() {
     mount(CleanLayout, {
       content: (<ProdData />)

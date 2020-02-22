@@ -16,7 +16,8 @@ const BatchDetails = ({
 })=> {
   
   const statusCols = ['remaining', 'priority', 'items quantity', 'active'];
-  const kitCols = ['1', '2', '3', 'flow', 'released'];
+  const clearCols = Array.from(Pref.clearencesArray, x => x.context );
+  const kitCols = [...clearCols, 'flow', 'released'];
   const ncCols = ['NC total', 'NC remain', 'NC per item', 'NC items', 'scrap', 'RMA'];
   // due == 'fulfill', 'ship'
   const fullHead = ['SO', 'due',...statusCols,...kitCols,...app.phases,...ncCols, 'watch'];
@@ -76,11 +77,9 @@ const BatchDetailChunk = ({
   const isX = oB.completed === undefined ? false : true;
   const isDone = isX ? oB.completed : oB.finishedAt !== false;
   
-  const releasedToFloor = isX ? //Array.isArray(oB.releases) ?
-    oB.releases.findIndex( x => x.type === 'floorRelease') >= 0 :
-    typeof oB.floorRelease === 'object';
-  const floorRelease = !releasedToFloor ? false :
-    oB.floorRelease || oB.releases.find( x => x.type === 'floorRelease');
+  const releasedToFloor = oB.releases === undefined ?
+    typeof oB.floorRelease === 'object' :
+    oB.releases.findIndex( x => x.type === 'floorRelease') >= 0;
   /*
   const dueDate = moment(oB.salesEnd || oB.end);
   const adaptDate = dueDate.isAfter(moment(), 'year') ?
@@ -115,7 +114,7 @@ const BatchDetailChunk = ({
         isX={isX}
         isDone={isDone}
         releasedToFloor={releasedToFloor}
-        floorRelease={floorRelease}
+        releases={oB.releases}
         clientTZ={clientTZ}
         pCache={pCache}
         app={app}

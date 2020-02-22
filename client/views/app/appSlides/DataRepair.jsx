@@ -21,6 +21,12 @@ const DataRepair = ({ app, users })=> {
   //   });
   // }
   
+  function handleReleaseUpgrade() {
+    Meteor.call('dataUPGRADEreleases', (error, reply)=>{
+      error && console.log(error);
+      if(reply) { toast.success('data edit complete', { autoClose: false }); }
+    });
+  }
   
   function fixAthing(e, oldText, newText, textMatch) {
     e.preventDefault();
@@ -139,6 +145,16 @@ const DataRepair = ({ app, users })=> {
       >Fix Basline Time Key</button>
       <hr />
       <br />*/}
+      
+    <br />
+      <hr />
+      <h2 className='cap'>Fix Proto Key</h2>
+      <button
+        onClick={()=>handleReleaseUpgrade()}
+        className='action clear blackT orangeHover'
+      >UPGRADE All Batch Releases</button>
+    <hr />
+    <br />
       
       <h2 className='cap'>Force Update ChacheDB</h2>
       <button

@@ -40,6 +40,7 @@ Meteor.methods({
         escaped: [],
         cascade: [],
         blocks: [],
+        releases: [],
         omitted: [],
         shortfall: [],
         altered: [],
@@ -291,6 +292,7 @@ Meteor.methods({
     }
   },
   
+  /* // // DEPRECIATED \\ \\ \\
   releaseToFloor(batchId, rDate, caution) {
     const userID = Meteor.userId();
     if(Roles.userIsInRole(userID, ['run', 'kitting'])) {
@@ -332,6 +334,46 @@ Meteor.methods({
           updatedAt: new Date(),
   			  updatedWho: Meteor.userId(),
           'floorRelease.caution': caution
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  */
+  
+  addReleaseLEGACY(batchId, rType, rDate, caution) {
+    if(Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        $push : { releases: {
+            type: rType,
+            time: rDate,
+            who: Meteor.userId(),
+            caution: caution
+          }
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  cancelReleaseLEGACY(batchId, rType) {
+    if(Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'releases.type': rType}, {
+        $pull : { releases: { type: rType }
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  cautionFlipReleaseLEGACY(batchId, rType, caution) {
+    if(Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'releases.type': rType}, {
+        $set : {
+          'releases.$.caution': caution
       }});
       return true;
     }else{
@@ -1519,7 +1561,7 @@ Meteor.methods({
       return false;
     }
   },
-
+  
   //// Blockers \\\\
   addBlock(batchId, blockTxt) {
     if(Meteor.userId()) {
@@ -1762,4 +1804,49 @@ Meteor.methods({
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
+  dataUPGRADEreleases() {
+    const alldocs = BatchDB.find({orgKey: Meteor.user().orgKey}).fetch();
+    
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      for( let doc of alldocs ) {
+        const relLEGACY = doc.floorRelease;
+        if(typeof relLEGACY === 'object') {
+          BatchDB.update({_id: doc._id}, {
+            $set : {
+              releases: [ {
+                type: 'floorRelease',
+                time: relLEGACY.time,
+                who: relLEGACY.who,
+                caution: relLEGACY.caution || false
+              } ]
+          }});
+        }else{
+          BatchDB.update({_id: doc._id}, {
+            $set : {
+              releases: []
+          }});
+        }
+      }
+        return true;
+    }else{
+      return false;
+    }
+  },
+  /*
+  clearLEGACYreleasesScheme(widgetId, vKey) {
+    try{
+      if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+        BatchDB.update({orgKey: Meteor.user().orgKey}, {
+          $unset : { 
+            'floorRelease': ""
+          }},{multi: true});
+      }else{
+        null;
+      }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  */
+  
 });

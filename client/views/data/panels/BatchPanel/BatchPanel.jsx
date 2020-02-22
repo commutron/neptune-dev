@@ -124,7 +124,8 @@ const BatchPanel = ({ batchData, widgetData, user, app })=> {
           <EventsTimeline
             id={b._id}
             batchData={batchData}
-            releaseList={b.floorRelease ? [b.floorRelease] : []}
+            releaseList={b.releases || []}
+            releaseLegacy={b.floorRelease ? [b.floorRelease] : []} // DEPRECIATED
             verifyList={filter.verifyList}
             eventList={b.events || []}
             alterList={b.altered || []}

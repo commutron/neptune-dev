@@ -50,6 +50,7 @@ export const TraverseWrap = ({
   };
 
   const invert = invertColor ? 'invert' : '';
+  const isRO = Roles.userIsInRole(Meteor.userId(), 'readOnly');
 
   return(
     <ErrorCatch>
@@ -77,7 +78,9 @@ export const TraverseWrap = ({
           }
           
           <div className='auxRight'>
-            {itemData ? 
+            {isRO ? null 
+            :
+             itemData ? 
               <button 
                 title='View this in production'
                 onClick={()=>goPro(itemData.serial)}>

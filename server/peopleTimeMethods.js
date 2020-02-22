@@ -77,12 +77,23 @@ Meteor.methods({
           return [ 'fromNC', phasefromNC ];
         }else{
           
-          const released = typeof batch.floorRelease === 'object';
+          // BREAKING CHANGE
+          const legacy = batch.releases === undefined;
+          const released = legacy ?
+                  typeof batch.floorRelease === 'object'
+                : 
+                  batch.releases.findIndex( x => x.type === 'floorRelease') >= 0;
+          
+          const floorRelease = legacy ? 
+                  batch.floorRelease 
+                :
+                  batch.releases.find( x => x.type === 'floorRelease');
+          //
           const startBeforeRelease = !released || 
                                       moment(tStop)
-                                        .isBefore(batch.floorRelease.time) || 
+                                        .isBefore(floorRelease.time) || 
                                           moment(tideStart)
-                                            .isBefore(batch.floorRelease.time); 
+                                            .isBefore(floorRelease.time); 
           
           if(startBeforeRelease) {
             return [ 'fromOverRelease', ['kitting / prep'] ];
