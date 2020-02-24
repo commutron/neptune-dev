@@ -22,7 +22,7 @@ const DataRepair = ({ app, users })=> {
   // }
   
   function handleReleaseUpgrade() {
-    Meteor.call('dataUPGRADEreleases', (error, reply)=>{
+    Meteor.call('clearLEGACYreleasesScheme', (error, reply)=>{
       error && console.log(error);
       if(reply) { toast.success('data edit complete', { autoClose: false }); }
     });
@@ -152,7 +152,7 @@ const DataRepair = ({ app, users })=> {
       <button
         onClick={()=>handleReleaseUpgrade()}
         className='action clear blackT orangeHover'
-      >UPGRADE All Batch Releases</button>
+      >Clear LEGACY releases Scheme</button>
     <hr />
     <br />
       

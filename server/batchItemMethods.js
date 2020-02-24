@@ -33,7 +33,6 @@ Meteor.methods({
   			notes: false,
         river: false,
         riverAlt: false,
-        floorRelease: false,
         tide: [],
         items: [],
         nonCon: [],
@@ -1800,53 +1799,7 @@ Meteor.methods({
         return false;
       }
     }
-  },
-
-  //////////////////////////////////////////////////////////////////////////////////////////////////
-
-  dataUPGRADEreleases() {
-    const alldocs = BatchDB.find({orgKey: Meteor.user().orgKey}).fetch();
-    
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      for( let doc of alldocs ) {
-        const relLEGACY = doc.floorRelease;
-        if(typeof relLEGACY === 'object') {
-          BatchDB.update({_id: doc._id}, {
-            $set : {
-              releases: [ {
-                type: 'floorRelease',
-                time: relLEGACY.time,
-                who: relLEGACY.who,
-                caution: relLEGACY.caution || false
-              } ]
-          }});
-        }else{
-          BatchDB.update({_id: doc._id}, {
-            $set : {
-              releases: []
-          }});
-        }
-      }
-        return true;
-    }else{
-      return false;
-    }
-  },
-  /*
-  clearLEGACYreleasesScheme(widgetId, vKey) {
-    try{
-      if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-        BatchDB.update({orgKey: Meteor.user().orgKey}, {
-          $unset : { 
-            'floorRelease': ""
-          }},{multi: true});
-      }else{
-        null;
-      }
-    }catch (err) {
-      throw new Meteor.Error(err);
-    }
-  },
-  */
+  }
+  
   
 });

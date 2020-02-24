@@ -33,7 +33,7 @@ const View = ({
 
   return(
     <CompSearchWrap 
-      plCache={plCache.dataSet || []}
+      plCache={plCache ? plCache.dataSet : []}
       user={user}
       app={app}
       clientTZ={clientTZ} />
