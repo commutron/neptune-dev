@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 import NumStat from '/client/components/uUi/NumStat.jsx';
 import PrioritySquareData from '/client/components/bigUi/PrioritySquare.jsx';
 import { PrioritySquare } from '/client/components/bigUi/PrioritySquare.jsx';
-import TrinaryStat from '/client/components/uUi/TrinaryStat.jsx';
+// import TrinaryStat from '/client/components/uUi/TrinaryStat.jsx';
 
 
 const BatchTopStatus = ({ 
@@ -77,6 +77,7 @@ const BatchTopStatus = ({
             size='big' />
         </div>
         
+        {/*
         <div>
           <TrinaryStat
             status={dt.isActive ? true : null}
@@ -86,7 +87,7 @@ const BatchTopStatus = ({
             onIcon='fas fa-shoe-prints fa-2x' 
             offIcon='far fa-pause-circle fa-2x' />
         </div>
-        
+        */}
       </Fragment>
     );
   }

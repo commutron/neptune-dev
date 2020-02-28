@@ -56,7 +56,6 @@
 .hoverAction:hover, .hoverAction:focus-within {
   outline-color: var(--neptuneColor);
   outline-style: dotted;
-  outline-width: thick;
   outline-offset: -0.25vmax;
 }
 

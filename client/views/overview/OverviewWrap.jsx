@@ -176,7 +176,7 @@ const OverviewWrap = ({ b, bx, bCache, pCache, cCache, user, clientTZ, app })=> 
                   dense === 2 ? 'minifyed' :
                   '';
                   
-  const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
+  // const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
     
   return(
     <div key={0} className={`overviewContainer ${light === true ? 'lightTheme invert' : ''}`}>

@@ -15,14 +15,15 @@ const BatchDetails = ({
   kittingArea, releasedArea
 })=> {
   
-  const statusCols = ['remaining', 'priority', 'items quantity', 'active'];
+  const statusCols = ['remaining', 'priority', 'items quantity'];
   const clearCols = Array.from(Pref.clearencesArray, x => x.context );
   const kitCols = [...clearCols, 'flow', 'released'];
+  const progCols = ['active',...app.phases];
   const ncCols = ['NC total', 'NC remain', 'NC per item', 'NC items', 'scrap', 'RMA'];
   // due == 'fulfill', 'ship'
-  const fullHead = ['SO', 'due',...statusCols,...kitCols,...app.phases,...ncCols, 'watch'];
+  const fullHead = ['SO', 'due',...statusCols,...kitCols,...progCols,...ncCols, 'watch'];
   const kitHead = ['SO', 'due',...statusCols, ...kitCols, 'watch'];
-  const relHead = ['SO', 'due',...statusCols,...app.phases,...ncCols, 'watch'];
+  const relHead = ['SO', 'due',...statusCols,...progCols,...ncCols, 'watch'];
   
   const headersArr = kittingArea ? kitHead : releasedArea ? relHead : fullHead;
   
@@ -55,6 +56,7 @@ const BatchDetails = ({
               app={app}
               statusCols={statusCols}
               kitCols={kitCols}
+              progCols={progCols}
               ncCols={ncCols}
               dense={dense}
               kittingArea={kittingArea}
@@ -70,16 +72,15 @@ export default BatchDetails;
 
 const BatchDetailChunk = ({ 
   rowIndex, oB, user, clientTZ, pCache, app, 
-  statusCols, kitCols, ncCols, dense,
+  statusCols, kitCols, progCols, ncCols, dense,
   kittingArea, releasedArea
 })=> {
   
   const isX = oB.completed === undefined ? false : true;
   const isDone = isX ? oB.completed : oB.finishedAt !== false;
   
-  const releasedToFloor = oB.releases === undefined ?
-    typeof oB.floorRelease === 'object' :
-    oB.releases.findIndex( x => x.type === 'floorRelease') >= 0;
+  const releasedToFloor = oB.releases.findIndex( 
+                            x => x.type === 'floorRelease') >= 0;
   /*
   const dueDate = moment(oB.salesEnd || oB.end);
   const adaptDate = dueDate.isAfter(moment(), 'year') ?
@@ -127,6 +128,8 @@ const BatchDetailChunk = ({
         <PhaseProgress
           batchID={oB._id}
           releasedToFloor={releasedToFloor}
+          progCols={progCols}
+          clientTZ={clientTZ}
           app={app} />
           
         <NonConCounts

@@ -77,18 +77,9 @@ Meteor.methods({
           return [ 'fromNC', phasefromNC ];
         }else{
           
-          // BREAKING CHANGE
-          const legacy = batch.releases === undefined;
-          const released = legacy ?
-                  typeof batch.floorRelease === 'object'
-                : 
-                  batch.releases.findIndex( x => x.type === 'floorRelease') >= 0;
-          
-          const floorRelease = legacy ? 
-                  batch.floorRelease 
-                :
-                  batch.releases.find( x => x.type === 'floorRelease');
-          //
+          const released = batch.releases.findIndex( x => x.type === 'floorRelease') >= 0;
+          const floorRelease = batch.releases.find( x => x.type === 'floorRelease');
+
           const startBeforeRelease = !released || 
                                       moment(tStop)
                                         .isBefore(floorRelease.time) || 

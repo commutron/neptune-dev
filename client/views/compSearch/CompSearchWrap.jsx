@@ -9,22 +9,22 @@ const CompSearchWrap = ({ plCache, user, app, clientTZ })=> {
   
   const [ bChk, setB ] = useState(true);
   const [ uChk, setU ] = useState(false);
-  const [ thing, setThing ] = useState(false);
+  const [ thing, setThing ] = useState("");
   const [ results, setResults ] = useState([]);
   
-  const [ autocompState, autocompSet ] = useState([]);
+  const [ autocompState, autocompSet ] = useState( [] );
   
   useEffect( ()=>{
-    if(thing.length >= 5) {
+    if(thing.length >= 4) {
       const opList = plCache.filter( x => x.startsWith( thing ) );
       autocompSet( opList );
-    }else{
+    }
+    else{
       autocompSet( [] );
     }
   }, [thing]);
   
   function thisThing(e) {
-    setThing( false );
     const num = this.pnFind.value.trim().toLowerCase();
     setThing( num );
   }
@@ -120,12 +120,21 @@ const CompSearchWrap = ({ plCache, user, app, clientTZ })=> {
               type='search'
               id='pnFind'
               list='plList'
-              minLength='5'
+              minLength='4'
               className='variableInput bigger dbbleWide up'
               disabled={false}
               onChange={(e)=>thisThing(e)}
-              autoFocus={true} />
+              autoFocus={true}
+              autoComplete={navigator.userAgent.includes('Firefox/') ? "off" : ""}
+              // ^^^ workaround for persistent bug in desktop Firefox ^^^
+            />
           </label>
+          <datalist id='plList'>
+            {autocompState.map( (entry, index)=>{
+              return( 
+                <option key={index+'Y'+entry}>{entry.toUpperCase()}</option>
+            )})}
+          </datalist>
           <label className='variableInput bigger'>
             <button
               type='submit'
@@ -134,12 +143,6 @@ const CompSearchWrap = ({ plCache, user, app, clientTZ })=> {
               className='smallAction'
             ><i className='bigger fas fa-search fa-fw'></i></button>
           </label>
-          <datalist id='plList'>
-            {autocompState.map( (entry, index)=>{
-              return( 
-                <option key={index}>{entry.toUpperCase()}</option>
-            )})}
-          </datalist>
         </form>
         
         

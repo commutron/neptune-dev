@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 
 const ScalesSlide = ({app})=> {
   
+  const dfEight = app.latestSerial.eightDigit;
   const dfNine = app.latestSerial.nineDigit;
   const dfTen = app.latestSerial.tenDigit;
   
@@ -15,15 +16,18 @@ const ScalesSlide = ({app})=> {
   
   function handle(e) {
     e.preventDefault();
+    const serialEight = this.srlEight.value;
     const serialNine = this.srlNine.value;
     const serialTen = this.srlTen.value;
-    Meteor.call('setlastestSerial', serialNine, serialTen, (error, reply)=>{
-      if(error)
+    Meteor.call('setlastestSerial', serialEight, serialNine, serialTen, (error, reply)=>{
+      if(error) {
         console.log(error);
+        toast.error('Server Error');
+      }
       if(reply) {
         toast.success('Saved');
       }else{
-        toast.error('Server Error');
+        toast.error('Not Valid Numbers');
       }
     });
   }
@@ -58,21 +62,34 @@ const ScalesSlide = ({app})=> {
               
     <label htmlFor='scaleForm'>Manualy Override Last Serial</label>
     <form onSubmit={(e)=>handle(e)}>
+      <label htmlFor='srlEight'>
+        <span style={ldBox}>8 </span>
+        <input
+          id='srlEight'
+          type='text'
+          maxLength={8}
+          minLength={8}
+          pattern='[00000000-99999999]*'
+          inputMode='numeric'
+          defaultValue={dfEight}
+          required />
+      </label>
+      <br />
       <label htmlFor='srlNine'>
-        <span style={ldBox}>9</span>
+        <span style={ldBox}>9 </span>
         <input
           id='srlNine'
           type='text'
           maxLength={9}
           minLength={9}
-          pattern='[0000000000-9999999999]*'
+          pattern='[000000000-999999999]*'
           inputMode='numeric'
           defaultValue={dfNine}
           required />
       </label>
       <br />
       <label htmlFor='srlNine'>
-        <div style={ldBox}>10</div>
+        <span style={ldBox}>10 </span>
         <input
           id='srlTen'
           type='text'

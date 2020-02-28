@@ -40,10 +40,6 @@ const GeneralChunk = ({
   
   const remain = shipTime.workingDiff(moment(), 'days');
         
-  let released = b.floorRelease === undefined ? undefined : 
-                  b.floorRelease === false ? false :
-                  typeof b.floorRelease === 'object';
-                    
   const itemsOrder = b.items.sort( (x,y)=> x.serial - y.serial);
 
   return(

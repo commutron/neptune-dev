@@ -15,14 +15,14 @@ import React from 'react';
     wordWrap: 'keep-all'
   };
  
-const TrinaryStat = ({ status, name, title, size, onIcon, offIcon }) => {
+const TrinaryStat = ({ status, name, title, size, onIcon, midIcon, offIcon }) => {
   
   const iconState = status === null ?
-    <em><i className={`${offIcon || 'far fa-circle'} grayT fade ${size}`}></i></em>
+    <em><i className={`${offIcon || 'far fa-circle grayT'} fade ${size}`}></i></em>
     : status === false ?
-    <b><i className={`${onIcon || 'fas fa-circle'} yellowT ${size}`}></i></b>
+    <b><i className={`${midIcon || 'fas fa-circle yellowT'} ${size}`}></i></b>
     :
-    <i><i className={`${onIcon || 'fas fa-circle'} greenT ${size}`}></i></i>;
+    <i><i className={`${onIcon || 'fas fa-circle greenT'} ${size}`}></i></i>;
     
   return(
     <div style={sty} title={title}>

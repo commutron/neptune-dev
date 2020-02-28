@@ -34,21 +34,22 @@ const WatchButton = ({list, type, keyword, unique, iconOnly})=> {
       {!watching ?
         <label 
           title='Start Watching'
-        >{iconOnly ? null : 'Watch'}
+          className='offWatchButton'
+        >{iconOnly ? null : 'Watching'}
           <button
             key={'offWatchButton' + unique}
             onClick={()=>changeWatch(type, keyword)}
-          ><i className="far fa-eye greenT"></i></button>
+          ><i className='far fa-eye-slash fa-lg grayT'></i></button>
         </label>
       :
         <label 
-          className='on'
+          className='on onWatchButton'
           title='Stop Watching'
-        >{iconOnly ? null : 'Unwatch'}
+        >{iconOnly ? null : 'Watching'}
           <button
             key={'onWatchButton' + unique}
             onClick={()=>changeWatch(type, keyword)}
-          ><i className="far fa-eye-slash redT"></i></button>
+          ><i className='far fa-eye fa-lg greenT'></i></button>
         </label>
       }
     </span>
@@ -60,18 +61,22 @@ export const MuteButton = ({wKey, mute})=> {
   return(
     <span className='watchWrap'>
       {!mute ?
-        <label className='on'>Mute
+        <label
+          title='Turn OFF notifications'
+          className='on onMuteButton'>Notify
           <button
             key={'onMuteButton' + wKey}
             onClick={()=>changeMute(wKey, mute)}
-          ><i className="far fa-bell-slash redT"></i></button>
+          ><i className='far fa-bell fa-lg greenT'></i></button>
         </label>
       :
-        <label>Notify
+        <label
+          title='Turn ON notifications'
+          className='offMuteButton'>Notify
           <button
             key={'offMuteButton' + wKey}
             onClick={()=>changeMute(wKey, mute)}
-          ><i className="far fa-bell greenT"></i></button>
+          ><i className='far fa-bell-slash fa-lg grayT'></i></button>
         </label>
       }
     </span>

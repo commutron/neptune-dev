@@ -291,14 +291,19 @@ Meteor.methods({
   //////////////////////////////////
   
 // set last serial
-  setlastestSerial(serialNine, serialTen) {
+  setlastestSerial(serialEight, serialNine, serialTen) {
     const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
-    const validNums = !isNaN(serialNine) && !isNaN(serialTen) ? true : false;
+    const validNums = !isNaN(serialEight) && 
+                      !isNaN(serialNine) && 
+                      !isNaN(serialTen) 
+                      ? true : false;
+    const validE = serialEight.length === 8;
     const validN = serialNine.length === 9;
     const validT = serialTen.length === 10;
-    if(auth && validNums && validN && validT) {
+    if(auth && validNums && validE && validN && validT) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $set : { 
+          'latestSerial.eightDigit': Number(serialEight),
           'latestSerial.nineDigit': Number(serialNine),
           'latestSerial.tenDigit': Number(serialTen)
       }});

@@ -173,19 +173,19 @@ class Pref {
     // clearences, additional releases
     this.clearencesArray = [
       { keyword: 'smtKitRelease', 
-        pre: 'Clear',
-        post: 'Cleared',
+        pre: 'Ready',
+        post: 'Ready',
         link: 'for',
         context: 'SMT' },
       { keyword: 'thKitRelease', 
-        pre: 'Clear',
-        post: 'Cleared',
+        pre: 'Ready',
+        post: 'Ready',
         link: 'for',
         context: 'Thru-Hole' },
       { keyword: 'pcbKitRelease',
-        pre: 'Clear',
-        post: 'Cleared',
-        link: 'for',
+        pre: 'Ready',
+        post: 'Ready',
+        link: '',
         context: 'PCBs' }
     ];
   }

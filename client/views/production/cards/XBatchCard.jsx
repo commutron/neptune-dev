@@ -6,7 +6,6 @@ import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 //import JumpText from '../../../components/tinyUi/JumpText.jsx';
 import WaterfallSelect from '/client/components/waterfall/WaterfallSelect.jsx';
 import ReleaseAction from '/client/components/bigUi/ReleasesModule.jsx';
-import { ReleaseNote } from '/client/components/bigUi/ReleasesModule.jsx';
 //import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
 //import NonConMiniSatus from '/client/components/charts/NonConMiniStatus.jsx';
 //import NonConMiniTops from '/client/components/bigUi/NonConMiniTops.jsx';
@@ -61,12 +60,6 @@ const BatchCardX = ({
               vKey={false}
               tagOps={a.tagOption} />
             <br />
-            {released &&
-              <ReleaseNote
-                id={b._id}
-                release={released}
-                xBatch={true}
-                expand={expand} />}
             <NoteLine entry={b.notes} id={b._id} xbatch={true} versionKey={false} />
             <BlockList id={b._id} data={b.blocks} xbatch={true} lock={done} expand={expand} />
           </div>

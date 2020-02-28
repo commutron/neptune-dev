@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
-import UserNice from '/client/components/smallUi/UserNice.jsx';
+// import UserNice from '/client/components/smallUi/UserNice.jsx';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
 
@@ -69,49 +69,17 @@ const ReleaseAction = ({
 };
 export default ReleaseAction;
 
-export const ReleaseNote = ({ id, release, xBatch, lockout })=> {
-  
-  function handleCancel() {
-    const rType = release.type;
-    Meteor.call('cancelRelease', id, rType, (err)=>{
-      err && console.log(err);
-    });
-  }
-  const releaseType = release.type === 'floorRelease' ?
-                      'Released to the Floor' : 'Released';
-                      
-  return(
-    <div className='noCopy' title='right-click to cancel'>
-      <ContextMenuTrigger id={id+'release'} disable={lockout}>
-  			<fieldset className='noteCard'>
-          <legend>{releaseType}</legend>
-          <p>{moment(release.time).format("ddd, MMM D /YY, h:mm a")}
-          <i> by <UserNice id={release.who} /></i></p>
-          {release.caution ?
-            <p>Caution: {release.caution}</p>
-          : null}
-        </fieldset>
-      </ContextMenuTrigger>
-      <ContextMenu id={id+'release'}>
-	      <MenuItem
-	        onClick={()=>handleCancel()} 
-	        disabled={!Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])}>
-	        Cancel Release
-	      </MenuItem>
-	    </ContextMenu>
-	  </div>
-  );
-};
 
 export const ReleaseWrapper = ({ 
   id, batchNum, 
   releasedBool, releaseObj, 
-  actionKeyword, actionText, contextText,
+  actionKeyword, actionText, 
+  holdText, unholdText, undoText, contextText,
   lockout, isX, children
 })=> {
   
-  const out = releasedBool === true;
-  const cautionState = out ? releaseObj.caution ? true : false : false;
+  const clear = releasedBool === true;
+  const cautionState = clear ? releaseObj.caution ? true : false : false;
   
   function handleRelease(e, caution) {
     const datetime = moment().format();
@@ -120,15 +88,9 @@ export const ReleaseWrapper = ({
         err && console.log(err);
       });
     }else{
-      // if(actionKeyword === 'floorRelease') {
-      //   Meteor.call('releaseToFloor', id, datetime, caution, (err)=>{
-      //     err && console.log(err);
-      //   }); // DEPRECIATED
-      // }else{
         Meteor.call('addReleaseLEGACY', id, actionKeyword, datetime, caution, (err)=>{
           err && console.log(err);
         });
-      // }
     }
   }
   
@@ -138,15 +100,9 @@ export const ReleaseWrapper = ({
         err && console.log(err);
       });
     }else{
-      // if(actionKeyword === 'floorRelease') {
-      //   Meteor.call('cancelFloorRelease', id, (err)=>{
-      //     err && console.log(err);
-      //   }); // DEPRECIATED
-      // }else{
-        Meteor.call('cancelReleaseLEGACY', id, actionKeyword, (err)=>{
-          err && console.log(err);
-        });
-      // }
+      Meteor.call('cancelReleaseLEGACY', id, actionKeyword, (err)=>{
+        err && console.log(err);
+      });
     }
   }
   
@@ -157,15 +113,9 @@ export const ReleaseWrapper = ({
         err && console.log(err);
       });
     }else{
-      // if(actionKeyword === 'floorRelease') {
-      //   Meteor.call('cautionFlipFloorRelease', id, newCaution, (err)=>{
-      //     err && console.log(err);
-      //   }); // DEPRECIATED
-      // }else{
-        Meteor.call('cautionFlipReleaseLEGACY', id, actionKeyword, newCaution, (err)=>{
-          err && console.log(err);
-        });
-      // }
+      Meteor.call('cautionFlipReleaseLEGACY', id, actionKeyword, newCaution, (err)=>{
+        err && console.log(err);
+      });
     }
   }
   
@@ -173,7 +123,7 @@ export const ReleaseWrapper = ({
   const extraClass = isAuth ? 'noCopy hoverAction' : 'noCopy';
                       
   return(
-    <React.Fragment>
+    <Fragment>
       <ContextMenuTrigger 
         id={id+'release'+actionKeyword}
         disable={!isAuth}
@@ -189,27 +139,57 @@ export const ReleaseWrapper = ({
         <MenuItem disabled={true}>
           <em>{Pref.batch} {batchNum}{lockout && ' is complete'}</em>
         </MenuItem>
-	      <MenuItem
-	        onClick={(e)=>handleRelease(e, false)}
-	        disabled={out || lockout}
-	        >{actionText} {contextText}
-	      </MenuItem>
+        
+        {!clear &&
+  	      <MenuItem
+  	        onClick={(e)=>handleRelease(e, false)}
+  	        disabled={lockout}
+  	        >{actionText} {contextText}
+  	      </MenuItem>
+  	    }
+  	    
+  	    {clear &&
+  	      <MenuItem
+  	        onClick={(e)=>handleCautionFlip(e)}
+  	        disabled={lockout}>
+  	        {cautionState ? unholdText : holdText}
+  	      </MenuItem>
+  	    }
+  	    
+  	    {!clear &&
+  	      <MenuItem
+  	        onClick={(e)=>handleRelease(e, Pref.shortfall)}
+  	        disabled={lockout}
+  	        >{holdText}
+  	      </MenuItem>
+  	    }
+  	    
+  	    {clear &&
+  	      <MenuItem
+  	        onClick={()=>handleCancel()} 
+  	        disabled={lockout}
+  	        >{undoText}
+  	      </MenuItem>
+  	    }
+  	    {/*
 	      <MenuItem
 	        onClick={(e)=>handleRelease(e, Pref.shortfall)}
-	        disabled={out || lockout}
-	        >{actionText} with {Pref.shortfall}
+	        disabled={clear || lockout}
+	        >{holdText} with {Pref.shortfall}
 	      </MenuItem>
 	      <MenuItem
 	        onClick={(e)=>handleCautionFlip(e)}
-	        disabled={!out || lockout}>
-	        {!out ? 'Change' : cautionState ? 'Disable' : 'Enable'} {Pref.shortfall} caution
+	        disabled={!clear || lockout}>
+	        {!clear ? 'Change' : cautionState ? 'Disable' : 'Enable'} {Pref.shortfall} caution
 	      </MenuItem>
 	      <MenuItem
 	        onClick={()=>handleCancel()} 
-	        disabled={!out || lockout}
+	        disabled={!clear || lockout}
 	        >Cancel {actionText}
 	      </MenuItem>
+	      */}
+	      
 	    </ContextMenu>
-	  </React.Fragment>
+	  </Fragment>
   );
 };

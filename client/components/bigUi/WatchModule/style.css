@@ -1,6 +1,5 @@
 .watchWrap, .watchWrap label, .watchWrap button, .notifyWrap {
   height: 2rem;
-  font-size: 1rem;
   border-radius: 10px;
   cursor: pointer;
 }
@@ -15,8 +14,7 @@
   width: min-content;
   */
   margin: 0.25rem;
-  border-width: 1px;
-  border-style: solid;
+  
 }
 .watchWrap:hover {
   background-color: rgba(255,255,255,0.1);
@@ -27,6 +25,8 @@
   justify-content: center;
   width: 100%;
   padding: 0 0.5rem;
+  border-width: 1px;
+  border-style: solid;
 }
 .watchWrap button {
   margin: 0 0 0 0.5rem;
@@ -38,5 +38,14 @@
   border: none;
   background-color: transparent;
   cursor: pointer;
+}
+
+.onWatchButton:hover, .onWatchButton:active,
+.onMuteButton:hover, .onMuteButton:active {
+  border-color: var(--alizarin);
+}
+.offWatchButton:hover, .offWatchButton:active,
+.offMuteButton:hover, .offMuteButton:active {
+  border-color: var(--emerald);
 }
 

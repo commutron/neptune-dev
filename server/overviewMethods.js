@@ -114,13 +114,7 @@ function collectPhaseCondition(privateKey, batchID) {
       const rNC = batch.nonCon.filter( n => 
         !n.trash && n.inspect === false && n.skip === false );
       
-      // BREAKING CHANGE
-      const legacy = batch.releases === undefined;
-      const released = legacy ?
-              typeof batch.floorRelease === 'object'
-            : 
-              batch.releases.findIndex( x => x.type === 'floorRelease') >= 0;
-      //
+      const released = batch.releases.findIndex( x => x.type === 'floorRelease') >= 0;
       let previous = released;
       
       let progSteps = riverFlow;//.filter( x => x.type !== 'first' );
@@ -224,7 +218,7 @@ function collectStatus(privateKey, batchID, clientTZ) {
         shipDue: shipDue.format(),
         weekDaysRemain: timeRemainClean,
         itemQuantity: bx.quantity,
-        isActive: false
+        // isActive: false
       };
       
       resolve(collection);
@@ -245,10 +239,10 @@ function collectStatus(privateKey, batchID, clientTZ) {
           
       let itemQuantity = b.items.length; // how many items
       // indie active check
-      const tide = b.tide || [];
-      const isActive = tide.find( x => 
-        now.isSame(moment(x.startTime).tz(clientTZ), 'day')
-      ) ? true : false;
+      // const tide = b.tide || [];
+      // const isActive = tide.find( x => 
+      //   now.isSame(moment(x.startTime).tz(clientTZ), 'day')
+      // ) ? true : false;
       // what percent of items are complete
       // const percentOfDoneItems = temp === 'cool' ? 0 : 
       //   (( b.items.filter( x => x.finishedAt !== false )
@@ -260,7 +254,7 @@ function collectStatus(privateKey, batchID, clientTZ) {
         shipDue: shipDue.format(),
         weekDaysRemain: timeRemainClean,
         itemQuantity: itemQuantity,
-        isActive: isActive
+        // isActive: isActive
       };
 
       resolve(collection);
@@ -371,21 +365,49 @@ function collectPriority(privateKey, batchID, clientTZ, mockDay) {
 }
 
 
-function collectProgress(privateKey, batchID) {
+function collectProgress(privateKey, batchID, clientTZ) {
   return new Promise(resolve => {
-    let collection = false;
+    const app = AppDB.findOne({orgKey: privateKey});
+    const bx = XBatchDB.findOne({_id: batchID});
     const batch = BatchDB.findOne({_id: batchID});
-    if(!batch) {
+    
+    let collection = false;
+    let phaseSets = [];
+    
+    if(bx) {
+      
+      for(let phase of app.phases) {
+        phaseSets.push({
+          phase: phase,
+          steps: [],
+          count: 0,
+          ncLeft: false
+        });
+      }
+      
+      collection = {
+        batch: bx.batch,
+        batchID: bx._id,
+        totalItems: bx.quantity,
+        isActive: null,
+        phaseSets: phaseSets,
+      };
       resolve(collection);
-    }else{
-      const app = AppDB.findOne({orgKey: privateKey});
+    
+    }else if(batch) {
       const docW = WidgetDB.findOne({_id: batch.widgetId});
       const flow = docW.flows.find( x => x.flowKey === batch.river );
       const riverFlow = flow ? flow.flow : [];
+      
+      const now = moment().tz(clientTZ);
+      const tide = batch.tide || [];
+      const isActive = tide.find( x => 
+        now.isSame(moment(x.startTime).tz(clientTZ), 'day')
+      ) ? true : false;
+      
       const rNC = batch.nonCon.filter( n => 
         !n.trash && n.inspect === false && n.skip === false );
       
-      let phaseSets = [];
       for(let phase of app.phases) {
         const steps = riverFlow.filter( x => x.phase === phase && x.type !== 'first' );
         const nonConLeft = phase === 'finish' ? rNC.length > 0 :
@@ -417,9 +439,12 @@ function collectProgress(privateKey, batchID) {
         batch: batch.batch,
         batchID: batch._id,
         totalItems: batch.items.length,
+        isActive: isActive,
         phaseSets: phaseSets,
       };
+      resolve(collection);
       
+    }else{
       resolve(collection);
     }
   });
@@ -518,11 +543,11 @@ Meteor.methods({
     return bundlePriority();//batchID, clientTZ, mockDay);
   },
   
-  phaseProgress(batchID) {
+  phaseProgress(batchID, clientTZ) {
     async function bundleProgress(batchID) {
       const accessKey = Meteor.user().orgKey;
       try {
-        bundle = await collectProgress(accessKey, batchID);
+        bundle = await collectProgress(accessKey, batchID, clientTZ);
         return bundle;
       }catch (err) {
         throw new Meteor.Error(err);

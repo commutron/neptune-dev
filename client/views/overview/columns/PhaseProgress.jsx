@@ -2,14 +2,14 @@ import React, { Fragment, useState, useEffect } from 'react';
 // import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import NumStat from '/client/components/uUi/NumStat.jsx';
+import TrinaryStat from '/client/components/uUi/TrinaryStat.jsx';
 
-
-const PhaseProgress = ({ batchID, releasedToFloor, app })=> {
+const PhaseProgress = ({ batchID, releasedToFloor, progCols, clientTZ, app })=> {
   
   const [ progData, setProg ] = useState(false);
   
   useEffect( ()=> {
-    Meteor.call('phaseProgress', batchID, (error, reply)=>{
+    Meteor.call('phaseProgress', batchID, clientTZ, (error, reply)=>{
       error && console.log(error);
       if( reply ) { 
         setProg( reply );
@@ -23,6 +23,16 @@ const PhaseProgress = ({ batchID, releasedToFloor, app })=> {
   if(releasedToFloor !== false && dt && dt.batchID === batchID) {
     return(
       <Fragment>
+        <div>
+          <TrinaryStat
+            status={dt.isActive ? true : null}
+            name='Active'
+            title={`Has had ${Pref.tide} activity today`}
+            size=''
+            onIcon='fas fa-shoe-prints fa-2x greenT'
+            offIcon='far fa-pause-circle fa-2x grayT' />
+        </div>
+
         {dt.phaseSets.map( (phase, index)=>{
           if(phase.steps.length === 0) {
             return(
@@ -69,7 +79,7 @@ const PhaseProgress = ({ batchID, releasedToFloor, app })=> {
   
   return(
     <Fragment>
-      {app.phases.map( (phase, index)=>{
+      {progCols.map( (phase, index)=>{
         return(
           <div key={batchID + phase + index + 'z'}>
             <i className='fade small label'>{phase}</i>

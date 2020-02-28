@@ -21,13 +21,6 @@ const DataRepair = ({ app, users })=> {
   //   });
   // }
   
-  function handleReleaseUpgrade() {
-    Meteor.call('clearLEGACYreleasesScheme', (error, reply)=>{
-      error && console.log(error);
-      if(reply) { toast.success('data edit complete', { autoClose: false }); }
-    });
-  }
-  
   function fixAthing(e, oldText, newText, textMatch) {
     e.preventDefault();
     
@@ -146,15 +139,7 @@ const DataRepair = ({ app, users })=> {
       <hr />
       <br />*/}
       
-    <br />
-      <hr />
-      <h2 className='cap'>Fix Proto Key</h2>
-      <button
-        onClick={()=>handleReleaseUpgrade()}
-        className='action clear blackT orangeHover'
-      >Clear LEGACY releases Scheme</button>
-    <hr />
-    <br />
+    
       
       <h2 className='cap'>Force Update ChacheDB</h2>
       <button

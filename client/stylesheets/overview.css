@@ -164,15 +164,13 @@
 .overGridRowScroll .small {
   font-size: 1vh;
 }
-.overGridRowScroll .watchWrap,
-.overGridRowScroll .watchWrap label {
+.overGridRowScroll .watchWrap {
   height: 3vh;
   align-items: baseline;
 }
 .overGridRowScroll .watchWrap button {
   margin: 0;
   height: 3vh;
-  font-size: 2vh;
 }
 
 .ovColhead { color: white; }
@@ -219,9 +217,9 @@
 
 .minifyed .overGridRowScroll .watchWrap,
 .minifyed .overGridRowScroll .watchWrap label {
-  height: 2vh; }
+  height: 1.5rem; }
 .minifyed .overGridRowScroll .watchWrap button {
-  height: 2vh; font-size: 1.5vh; }
+  height: 2rem; font-size: 1.5vh; }
   
 
 .lightTheme .overviewToolbar {

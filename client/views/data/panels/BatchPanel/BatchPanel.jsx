@@ -125,7 +125,6 @@ const BatchPanel = ({ batchData, widgetData, user, app })=> {
             id={b._id}
             batchData={batchData}
             releaseList={b.releases || []}
-            releaseLegacy={b.floorRelease ? [b.floorRelease] : []} // DEPRECIATED
             verifyList={filter.verifyList}
             eventList={b.events || []}
             alterList={b.altered || []}

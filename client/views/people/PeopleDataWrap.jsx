@@ -33,9 +33,7 @@ const PeopleDataWrap = ({
   }, [user]);
     
     
-  if(
-    // !ready || 
-    !readyUsers || !readyTides || !app) {
+  if( !readyUsers || !readyTides || !app) {
     return (
       <div className='centreContainer'>
         <div className='centrecentre'>
@@ -48,6 +46,7 @@ const PeopleDataWrap = ({
   const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
   const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
   const isPeopleSuper = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
+  const antiAuth = !isAdmin && !isPeopleSuper;
   
   return(
     <ErrorCatch>
@@ -74,7 +73,7 @@ const PeopleDataWrap = ({
             <b><i className='fas fa-user-lock fa-fw'></i>  Permissions</b>,
             <b><i className='fas fa-users-cog fa-fw'></i>   Account Manager</b>,
           ]}
-          disable={[false, false, !isNightly, false, (!isAdmin && !isPeopleSuper)]}>
+          disable={[false, false, antiAuth, false, antiAuth]}>
           
           <DashSlide
             key={0}
@@ -123,24 +122,20 @@ export default withTracker( () => {
   let org = user ? user.org : false;
   const clientTZ = moment.tz.guess();
   let active = login ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
-  //const appSub = login ? Meteor.subscribe('appData') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
   const tidesSub = login ? Meteor.subscribe('tideData', clientTZ) : false;
   if(!login) {
     return {
-      // ready: false,
       readyUsers: false,
       readyTides: false
     };
   }else if(!active) {
     return {
-      // ready: false,
       readyUsers: false,
       readyTides: false
     };
   }else{
     return {
-      //ready: appSub.ready(),
       readyUsers: usersSub.ready(),
       readyTides: tidesSub.ready(),
       user: user,

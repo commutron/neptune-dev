@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
-import NumStat from '/client/components/uUi/NumStat.jsx';
+// import NumStat from '/client/components/uUi/NumStat.jsx';
 // import PrioritySquareData from '/client/components/bigUi/PrioritySquare.jsx';
 // import { PrioritySquare } from '/client/components/bigUi/PrioritySquare.jsx';
 import TrinaryStat from '/client/components/uUi/TrinaryStat.jsx';
@@ -51,16 +51,20 @@ const KittingChecks = ({
               releaseObj={releaseObj}
               actionKeyword={ent.keyword}
               actionText={ent.pre}
+              holdText={`Mark with ${Pref.shortfall}`}
+              unholdText={`${ent.pre} without ${Pref.shortfall}`}
+              undoText='Clear'
               contextText={`${ent.link} ${ent.context}`}
               lockout={isDone || isRO}
               isX={isX}>
               <TrinaryStat
                 status={releasedBool ? !releaseObj.caution ? true : false : null}
                 name={ent.context}
-                title={`Has been ${ent.post} ${ent.link} ${ent.context}`}
+                title={`${ent.post} ${ent.link} ${ent.context}`}
                 size=''
-                onIcon='fas fa-check-square fa-2x'
-                offIcon='far fa-check-square fa-2x' 
+                onIcon='fas fa-check-square fa-2x greenT'
+                midIcon='far fa-minus-square fa-2x yellowT'
+                offIcon='far fa-check-square fa-2x grayT' 
               />
             </ReleaseWrapper>
         )})}
@@ -69,10 +73,10 @@ const KittingChecks = ({
           <TrinaryStat
             status={dt.riverChosen}
             name='Flow'
-            title='Has had a Process Flow assigned'
+            title='Process Flow Assignment'
             size=''
-            onIcon='far fa-check-circle fa-2x' 
-            offIcon='far fa-times-circle fa-2x' />
+            onIcon='far fa-check-circle fa-2x greenT' 
+            midIcon='far fa-times-circle fa-2x grayT' />
         </div>
         
         <ReleaseWrapper
@@ -81,17 +85,21 @@ const KittingChecks = ({
           releasedBool={releasedToFloor}
           releaseObj={floorRelease}
           actionKeyword='floorRelease'
-          actionText='release'
+          actionText='Released'
+          holdText={`Released with ${Pref.shortfall}`}
+          unholdText={`Released without ${Pref.shortfall}`}
+          undoText='Cancel Release'
           contextText='to the floor'
           lockout={isDone || isRO}
           isX={isX}>
           <TrinaryStat
             status={releasedToFloor ? !floorRelease.caution ? true : false : null}
             name='Released'
-            title={`Has been released from ${Pref.kitting}`}
+            title={`Released from ${Pref.kitting}`}
             size=''
-            onIcon='fas fa-flag fa-2x'
-            offIcon='far fa-flag fa-2x' />
+            onIcon='fas fa-flag fa-2x greenT'
+            midIcon='fas fa-flag fa-2x yellowT'
+            offIcon='far fa-flag fa-2x grayT' />
         </ReleaseWrapper>
         
       </Fragment>

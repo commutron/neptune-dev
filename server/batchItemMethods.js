@@ -40,7 +40,6 @@ Meteor.methods({
         cascade: [],
         blocks: [],
         releases: [],
-        omitted: [],
         shortfall: [],
         altered: [],
         events: [],
@@ -291,56 +290,6 @@ Meteor.methods({
     }
   },
   
-  /* // // DEPRECIATED \\ \\ \\
-  releaseToFloor(batchId, rDate, caution) {
-    const userID = Meteor.userId();
-    if(Roles.userIsInRole(userID, ['run', 'kitting'])) {
-      const orgKey = Meteor.user().orgKey;
-      BatchDB.update({_id: batchId, orgKey: orgKey}, {
-        $set : {
-          updatedAt: new Date(),
-  			  updatedWho: userID,
-          floorRelease: {
-            time: rDate,
-            who: userID,
-            caution: caution
-          }
-      }});
-      return true;
-    }else{
-      return false;
-    }
-  },
-  
-  cancelFloorRelease(batchId) {
-    if(Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])) {
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
-        $set : {
-          updatedAt: new Date(),
-  			  updatedWho: Meteor.userId(),
-          floorRelease: false
-      }});
-      return true;
-    }else{
-      return false;
-    }
-  },
-  
-  cautionFlipFloorRelease(batchId, caution) {
-    if(Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])) {
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
-        $set : {
-          updatedAt: new Date(),
-  			  updatedWho: Meteor.userId(),
-          'floorRelease.caution': caution
-      }});
-      return true;
-    }else{
-      return false;
-    }
-  },
-  */
-  
   addReleaseLEGACY(batchId, rType, rDate, caution) {
     if(Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
@@ -377,118 +326,6 @@ Meteor.methods({
       return true;
     }else{
       return false;
-    }
-  },
-  
-//// Tide \\\\\
-  
-  startTideTask(batchId, accessKey) {
-    try {
-      const orgKey = accessKey || Meteor.user().orgKey;
-      const doc = BatchDB.findOne({ _id: batchId, orgKey: orgKey });
-      if(!doc || !Roles.userIsInRole(Meteor.userId(), 'active')) { null }else{
-        const newTkey = new Meteor.Collection.ObjectID().valueOf();
-        BatchDB.update({ _id: batchId }, {
-          $push : { tide: { 
-            tKey: newTkey,
-            who: Meteor.userId(),
-            startTime: new Date(),
-            stopTime: false
-        }}});
-        Meteor.users.update(Meteor.userId(), {
-          $set: {
-            engaged: {
-              task: 'PRO',
-              tKey: newTkey
-            }
-          }
-        });
-        Meteor.defer( ()=>{
-          const sameDay = doc.tide.find( x => moment(x.startTime).isSame(moment(), 'day') );
-          if(!sameDay) {
-            Meteor.call(
-              'sendNotifyForBatch',
-              orgKey, 
-              doc.batch,
-              `${doc.batch} Start`,
-              `First activity of the day`
-            );
-          }
-        });
-        return true;
-      }
-    }catch (err) {
-      throw new Meteor.Error(err);
-    }
-  },
-  
-  stopTideTask(batchId, tideKey) {
-    try {
-      const accessKey = Meteor.user().orgKey;
-      const doc = BatchDB.findOne({_id: batchId, 'tide.tKey': tideKey });
-      const sub = doc && doc.tide.find( x => x.tKey === tideKey && x.who === Meteor.userId() );
-      if(!sub) { null }else{
-        
-        const stopBatchFirst = (tideKey, accessKey)=> {
-          return new Promise(function(resolve, reject) {
-            const batch = BatchDB.findOne({ 'tide.tKey': tideKey });
-            const batchID = batch._id || false;
-            if(batchID) {
-              BatchDB.update({_id: batchId, orgKey: accessKey, 'tide.tKey': tideKey}, {
-                $set : { 
-                  'tide.$.stopTime' : new Date()
-              }});
-              resolve('Success');
-            }else{
-              reject('fail');
-            }
-          });
-        };
-        
-        const stopUserSecond = ()=> {
-          Meteor.users.update(Meteor.userId(), {
-            $set: {
-              engaged: false
-            }
-          });
-        };
-      
-        stopBatchFirst(tideKey, accessKey).then(stopUserSecond());
-        return true;
-      }
-    }catch (err) {
-      throw new Meteor.Error(err);
-    }
-  },
-  
-  switchTideTask(tideKey, newbatchID) {
-    try {
-      const accessKey = Meteor.user().orgKey;
-      
-      const stopFirst = (tideKey, accessKey)=> {
-        return new Promise(function(resolve, reject) {
-          const batch = BatchDB.findOne({ 'tide.tKey': tideKey });
-          const batchID = batch._id || false;
-          if(batchID) {
-            BatchDB.update({_id: batchID, orgKey: accessKey, 'tide.tKey': tideKey}, {
-              $set : { 
-                'tide.$.stopTime' : new Date()
-            }});
-            resolve('Success');
-          }else{
-            reject('fail');
-          }
-        });
-      };
-      
-      const startSecond = (newbatchID, accessKey)=> {
-        Meteor.call('startTideTask', newbatchID, accessKey);
-      };
-      
-      stopFirst(tideKey, accessKey).then(startSecond(newbatchID, accessKey));
-      return true;
-    }catch (err) {
-      throw new Meteor.Error(err);
     }
   },
 
@@ -1625,81 +1462,6 @@ Meteor.methods({
   },
   
   //// Shortages \\\\
-  
-  // Omitted // Wide Shortage
-  
-  addOmit(batchId, partNum, refs, inEffect, comm) {
-    if(!Roles.userIsInRole(Meteor.userId(), 'run')) { null }else{
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
-        $push : { omitted: {
-          key: new Meteor.Collection.ObjectID().valueOf(), // id of the shortage entry
-          partNum: partNum || '', // short part number
-          refs: refs || [], // referances on the widget
-          cTime: new Date(), // Object
-          cWho: Meteor.userId(), // Object
-          uTime: new Date(), // Object
-          uWho: Meteor.userId(), // Object
-          inEffect: inEffect || null, // Boolean or Null
-          reSolve: null, // Boolean or Null
-          comm: comm || '' // comments
-      }}});
-    }
-  },
-  
-  editOmit(batchId, omKey, partNum, refs, inEffect, reSolve, comm) {
-    if(!Roles.userIsInRole(Meteor.userId(), 'run')) { null }else{
-      const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
-      const prevOm = doc && doc.omitted.find( x => x.key === omKey );
-      let pn = partNum;
-      let rf = refs;
-      let ef = inEffect;
-      let sv = reSolve;
-      let cm = comm;
-      if(!prevOm) { null }else{
-        pn = !partNum || partNum === '' && prevOM.partNum;
-        rf = !refs || refs === [] || refs === '' && prevOM.refs; 
-        ef = inEffect === undefined && prevOM.inEffect;
-        sv = reSolve === undefined && prevOM.reSolve;
-        cm = !comm || comm === '' && prevOM.comm; 
-      }
-		  BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'omitted.key': omKey}, {
-  			$set : { 
-  			  'omitted.$.partNum': pn || '',
-  			  'omitted.$.refs': rf || [],
-  			  'omitted.$.uTime': new Date(),
-          'omitted.$.uWho': Meteor.userId(),
-          'omitted.$.inEffect': ef || null,
-          'omitted.$.reSolve': sv || null,
-  			  'omitted.$.comm': cm || ''
-  			}
-  		});
-    }
-  },
-  
-  setOmit(batchId, omKey, inEffect, reSolve) {
-    if(!Roles.userIsInRole(Meteor.userId(), 'run')) { null }else{
-		  BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'omitted.key': omKey}, {
-  			$set : {
-  			  'omitted.$.uTime': new Date(),
-          'omitted.$.uWho': Meteor.userId(),
-          'omitted.$.inEffect': inEffect || null,
-          'omitted.$.reSolve': reSolve || null,
-  			}
-  		});
-    }
-  },
-  
-  removeOmit(batchId, omKey) {
-    if(!Roles.userIsInRole(Meteor.userId(), 'run')) { 
-      return false;
-    }else{
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'omitted.key': omKey}, {
-        $pull : { omitted: {key: omKey}
-      }});
-      return true;
-    }
-  },
-  
   // Shortfall // Narrow Shortage
   
   addShort(batchId, partNum, refs, serial, step, comm) {

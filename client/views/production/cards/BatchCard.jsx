@@ -6,7 +6,7 @@ import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 
 import GeneralChunk from '/client/views/data/panels/BatchPanel/GeneralChunk.jsx';
 //import JumpText from '../../../components/tinyUi/JumpText.jsx';
-import FloorRelease from '/client/components/smallUi/FloorRelease.jsx';
+import ReleaseAction from '/client/components/bigUi/ReleasesModule.jsx';
 import StepsProgress from '../../../components/bigUi/StepsProgress/StepsProgress.jsx';
 
 const BatchCard = ({ 
@@ -30,9 +30,7 @@ const BatchCard = ({
   let warn = b.blocks.filter( x => x.solve === false ).length;
   iNoready ? warn++ : null;
   
-  let released = b.floorRelease === undefined ? undefined : 
-                  b.floorRelease === false ? false :
-                  typeof b.floorRelease === 'object';
+  let released = b.releases.findIndex( x => x.type === 'floorRelease') >= 0;
   
   let tabOps = [
     <i className='fas fa-info-circle fa-fw' data-fa-transform='down-2' title='Info'></i>, 
@@ -52,9 +50,14 @@ const BatchCard = ({
           </div>
         }
         
-        {released === undefined || released === true ? null :
-          <FloorRelease id={b._id} />}
-        
+        {!released && 
+          <ReleaseAction 
+            id={b._id} 
+            rType='floorRelease'
+            actionText='release'
+            contextText='to the floor'
+            isX={false} />}
+            
         {b.finishedAt !== false &&
           <h2 className='actionBox centreText green'>
             Finished: {moment(b.finishedAt).calendar()}

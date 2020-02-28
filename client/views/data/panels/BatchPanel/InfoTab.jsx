@@ -7,7 +7,6 @@ import GeneralChunk from './GeneralChunk.jsx';
 import PrioritySquareData from '/client/components/bigUi/PrioritySquare.jsx';
 import BatchFinish from '/client/components/forms/BatchFinish.jsx';
 import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
-//import FloorRelease from '/client/components/smallUi/FloorRelease.jsx';
 import ReleaseAction from '/client/components/bigUi/ReleasesModule.jsx';
 import StepsProgress from '/client/components/bigUi/StepsProgress/StepsProgress.jsx';
 
@@ -38,21 +37,8 @@ const InfoTab = ({
   // }, []);
   // console.log(phasePercent);
   
-  /* // BREAKING CHANGE
-  let released = b.floorRelease === undefined ? undefined : 
-                  b.floorRelease === false ? false :
-                  typeof b.floorRelease === 'object';
-  */               
-  const legacy = b.releases === undefined;
-  const released = legacy ?
-          b.floorRelease === undefined ? 
-            undefined 
-          :
-            typeof b.floorRelease === 'object'
-        : 
-          b.releases.findIndex( x => x.type === 'floorRelease') >= 0;
-  // //       
-                  
+  const released = b.releases.findIndex( x => x.type === 'floorRelease') >= 0;
+
   return(
     <div className='oneTwoThreeContainer'>
       <div className='oneThirdContent min200'>
@@ -91,14 +77,13 @@ const InfoTab = ({
               
       <div className='twoThirdsContent'>
         
-        {released === undefined ? null :
-          released === false && 
-            <ReleaseAction 
-              id={b._id} 
-              rType='floorRelease'
-              actionText='release'
-              contextText='to the floor'
-              isX={false} />}
+        {!released && 
+          <ReleaseAction 
+            id={b._id} 
+            rType='floorRelease'
+            actionText='release'
+            contextText='to the floor'
+            isX={false} />}
         
         <StepsProgress
           progCounts={progCounts}

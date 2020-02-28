@@ -10,10 +10,11 @@ import TagsModule from '/client/components/bigUi/TagsModule.jsx';
 import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
 import ReleaseAction from '/client/components/bigUi/ReleasesModule.jsx';
-import { ReleaseNote } from '/client/components/bigUi/ReleasesModule.jsx';
 import NoteLine from '/client/components/smallUi/NoteLine.jsx';
 import BlockList from '/client/components/bigUi/BlockList.jsx';
 import WaterfallTimeline from '/client/components/bigUi/WaterfallTimeline.jsx';
+
+import XBatchTimeline from '/client/components/bigUi/BatchFeed/XBatchTimeline.jsx';
 
 //import RiverSatus from '../../../components/smallUi/RiverStatus.jsx';
 //import FirstsOverview from '/client/components/bigUi/FirstsOverview.jsx';
@@ -83,6 +84,7 @@ const BatchPanelX = ({ batchData, widgetData, groupData, user, app })=> {
           [
             'Info',
             'Progress',
+            'Timeline'
           ]
         }
         wide={true}
@@ -110,19 +112,13 @@ const BatchPanelX = ({ batchData, widgetData, groupData, user, app })=> {
               {cmplt !== null && <p>Completed: {cmplt}</p>}
               <p>{cmplt !== null ? 'Total Time:' : 'Elapsed:'} {elapseNice}</p>
             </fieldset>
-            {!released ?
+            {!released &&
               <ReleaseAction 
                 id={b._id} 
                 rType='floorRelease'
                 actionText='release'
                 contextText='to the floor'
                 isX={true} />
-              :
-              <ReleaseNote
-                id={b._id}
-                release={released}
-                xBatch={true}
-                lockout={!b.live} />
             }
           </div>
           <div className='twoThirdsContent'>
@@ -132,26 +128,38 @@ const BatchPanelX = ({ batchData, widgetData, groupData, user, app })=> {
         </div>
       
         
-          <div className='oneTwoThreeContainer space'>
-            <div className='oneThirdContent min200'>
-              {/*
-              <FirstsOverview
-                doneFirsts={filter.fList}
-                flow={riverFlow}
-                flowAlt={riverAltFlow} />*/}
-            </div>
-          
-            <div className='twoThirdsContent'>
-              
-            </div>
-            
-            <div className='threeThirdsContent wide'>
-              <WaterfallTimeline
-                waterfalls={b.waterfall}
-                quantity={b.quantity}
-                app={a} />
-            </div>
+        <div className='oneTwoThreeContainer space'>
+          <div className='oneThirdContent min200'>
+            {/*
+            <FirstsOverview
+              doneFirsts={filter.fList}
+              flow={riverFlow}
+              flowAlt={riverAltFlow} />*/}
           </div>
+        
+          <div className='twoThirdsContent'>
+            
+          </div>
+          
+          <div className='threeThirdsContent wide'>
+            <WaterfallTimeline
+              waterfalls={b.waterfall}
+              quantity={b.quantity}
+              app={a} />
+          </div>
+        </div>
+        
+        <div className='space3v'>
+          <XBatchTimeline
+            id={b._id}
+            batchData={b}
+            releaseList={b.releases || []}
+            verifyList={[]}//filter.verifyList}
+            eventList={b.events || []}
+            alterList={b.altered || []}
+            quoteList={[]}//b.quoteTimeBudget || []}
+            doneBatch={done} />
+        </div>
         
       </Tabs>
       

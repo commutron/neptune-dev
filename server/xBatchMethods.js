@@ -41,7 +41,6 @@ Meteor.methods({
         releases: [],
         verifications: [],
         nonconformaces: [],
-        omitted: [],
         altered: [],
         events: []
       });
@@ -427,80 +426,6 @@ Meteor.methods({
   
   //// Shortages \\\\
   
-  // Omitted // Wide Shortage
-  /*
-  addOmitSimple(batchId, partNum, refs, inEffect, comm) {
-    if(!Roles.userIsInRole(Meteor.userId(), 'run')) { null }else{
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
-        $push : { omitted: {
-          key: new Meteor.Collection.ObjectID().valueOf(), // id of the shortage entry
-          partNum: partNum || '', // short part number
-          refs: refs || [], // referances on the widget
-          cTime: new Date(), // Object
-          cWho: Meteor.userId(), // Object
-          uTime: new Date(), // Object
-          uWho: Meteor.userId(), // Object
-          inEffect: inEffect || null, // Boolean or Null
-          reSolve: null, // Boolean or Null
-          comm: comm || '' // comments
-      }}});
-    }
-  },
-  
-  editOmitSimple(batchId, omKey, partNum, refs, inEffect, reSolve, comm) {
-    if(!Roles.userIsInRole(Meteor.userId(), 'run')) { null }else{
-      const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
-      const prevOm = doc && doc.omitted.find( x => x.key === omKey );
-      let pn = partNum;
-      let rf = refs;
-      let ef = inEffect;
-      let sv = reSolve;
-      let cm = comm;
-      if(!prevOm) { null }else{
-        pn = !partNum || partNum === '' && prevOM.partNum;
-        rf = !refs || refs === [] || refs === '' && prevOM.refs; 
-        ef = inEffect === undefined && prevOM.inEffect;
-        sv = reSolve === undefined && prevOM.reSolve;
-        cm = !comm || comm === '' && prevOM.comm; 
-      }
-		  BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'omitted.key': omKey}, {
-  			$set : { 
-  			  'omitted.$.partNum': pn || '',
-  			  'omitted.$.refs': rf || [],
-  			  'omitted.$.uTime': new Date(),
-          'omitted.$.uWho': Meteor.userId(),
-          'omitted.$.inEffect': ef || null,
-          'omitted.$.reSolve': sv || null,
-  			  'omitted.$.comm': cm || ''
-  			}
-  		});
-    }
-  },
-  
-  setOmitSimple(batchId, omKey, inEffect, reSolve) {
-    if(!Roles.userIsInRole(Meteor.userId(), 'run')) { null }else{
-		  BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'omitted.key': omKey}, {
-  			$set : {
-  			  'omitted.$.uTime': new Date(),
-          'omitted.$.uWho': Meteor.userId(),
-          'omitted.$.inEffect': inEffect || null,
-          'omitted.$.reSolve': reSolve || null,
-  			}
-  		});
-    }
-  },
-  
-  removeOmitSimple(batchId, omKey) {
-    if(!Roles.userIsInRole(Meteor.userId(), 'run')) { 
-      return false;
-    }else{
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'omitted.key': omKey}, {
-        $pull : { omitted: {key: omKey}
-      }});
-      return true;
-    }
-  },
-  */
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
