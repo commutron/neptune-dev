@@ -3,6 +3,8 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 import AppSetSimple from '/client/components/forms/AppSetSimple';
 
+import ArrayBuilder from '/client/components/bigUi/ArrayBuilder/PhaseBuilder.jsx';
+
 const PhasesSlide = ({app})=> {
   
   const rndmKey1 = Math.random().toString(36).substr(2, 5);
@@ -58,7 +60,13 @@ const PhasesSlide = ({app})=> {
         <i> Entries are case sensitive, smt =/= SMT.</i>
         <i> Capitalizing is unnecessary in most cases and only recommended for abbreviations.</i>
       </p>
-        
+      
+      <hr />
+      
+      <ArrayBuilder app={app} />
+      
+      <hr />
+      
       <AppSetSimple
         title={Pref.phase}
         action='addPhaseOption'

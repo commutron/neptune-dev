@@ -2,7 +2,9 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import Model from '../smallUi/Model.jsx';
+import './style.css';
+
+import Model from '/client/components/smallUi/Model.jsx';
 
 // props
 /// id={b._id}

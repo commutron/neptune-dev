@@ -8,7 +8,7 @@ import BatchEdit from '../forms/BatchEdit.jsx';
 import BatchFormX from '../forms/BatchFormX.jsx';
 import MultiItemForm from '../forms/MultiItemForm.jsx';
 import RiverSelect from '../forms/RiverSelect.jsx';
-import CounterAssign from '../forms/CounterAssign.jsx';
+import CounterAssign from '/client/components/bigUi/ArrayBuilder/CounterAssign.jsx';
 import NCEscape from '../forms/NCEscape.jsx';
 import RMAForm from '../forms/RMAForm.jsx';
 import Remove from '../forms/Remove.jsx';

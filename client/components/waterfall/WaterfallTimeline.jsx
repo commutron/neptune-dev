@@ -4,6 +4,8 @@ import Pref from '/client/global/pref.js';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 import MiniBar from '/client/components/charts/MiniScales/MiniBar.jsx';
 
+import './style.css';
+
 const WaterfallTimeline = ({ waterfalls, quantity, app })=> (
   <div className='wide'>
     {waterfalls.map( (entry)=>{

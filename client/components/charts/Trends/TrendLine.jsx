@@ -30,6 +30,8 @@ const TrendLine = ({
       const clientTZ = moment.tz.guess();
       Meteor.call('cycleWeekRate', clientTZ, statType, cycleCount, cycleBracket, (err, re)=>{
         err && console.log(err);
+        Roles.userIsInRole(Meteor.userId(), 'debug') && 
+          console.log(`${title}: ${JSON.stringify(re)}`);
         re && dataSet(re);
       });
     }

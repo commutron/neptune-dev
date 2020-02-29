@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
 
+import './style.css';
+
 // props
 /// options = buildStep options from the app settings
 /// end = lastStep from app settings

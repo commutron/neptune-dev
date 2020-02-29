@@ -25,6 +25,8 @@ const TrendBar = ({ title, statType, cycleCount, cycleBracket })=>{
     const clientTZ = moment.tz.guess();
     Meteor.call('cycleWeekRate', clientTZ, statType, cycleCount, cycleBracket, (err, re)=>{
       err && console.log(err);
+      Roles.userIsInRole(Meteor.userId(), 'debug') && 
+        console.log(`${title}: ${JSON.stringify(re)}`);
       const barOne = Array.from(re, w => { return { x: w.x, y: w.y[0] } } );
       const barTwo = Array.from(re, w => { return { x: w.x, y: w.y[1] } } );
       dataGSet(barOne);

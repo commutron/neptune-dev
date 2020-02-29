@@ -836,53 +836,6 @@ label.qdpplRound {
   height: 16px;
 }
 
-.stepList,
-.gateList {
-  display: table;
-  text-align: center;
-  background-color: var(--silver);
-  color: black;
-}
-.stepList > div, 
-.gateList > div {
-  display: table-row;
-  border-bottom: 1px solid var(--blackFade);
-}
-.stepList > div:last-child,
-.gateList > div:last-child {
-  border-bottom: none
-}
-.stepList > div > div,
-.gateList > div > div {
-  display: table-cell;
-  border-right: 1px solid var(--blackFade);
-  vertical-align: middle;
-  padding: 0px 3px;
-}
-.stepList > div > div:last-child,
-.gateList > div > div:last-child {
-  border-right: none;
-  margin: 0px;
-  padding: 0px 0px;
-  white-space: nowrap;
-  text-indent: 0px;
-  background-color: var(--clouds);
-}
-
-.stepList {
-  width: 100%;  
-}
-.stepList > div > div:last-child {
-  width: 96px;
-}
-
-.gateList {
-  width: 50%;
-  margin: 0 auto;
-}
-.gateList > div > div:last-child {
-  width: 32px;
-}
 
 .eventList {
   list-style-type: square;
@@ -1111,41 +1064,6 @@ label.qdpplRound {
 .searchResult .mockTableRow {
   border-color: black;
   border-color: rgba(0,0,0,0.2);
-}
-
-.waterfallHistory {
-  margin: 2vh 0;
-  border-width: 2px;
-  border-style: solid;
-  padding-bottom: 1vh;
-}
-.waterfallHistory summary {
-  display: flex;
-  align-items: center;
-}
-.waterfallHistory summary .meterprogStack {
-  display: inline-block;
-}
-.waterfallHistory summary::-webkit-details-marker {
-  display: none;
-}
-
-.waterfallTimeline dd {
-  margin: 0 3vw;
-  padding: 0.5em 0;
-  letter-spacing: 1px;
-  vertical-align: middle;
-}
-.waterfallTimeline dd:nth-child(odd) {
-  background-color: rgba(50,50,50,0.3);
-}
-.waterfallTimeline b {
-  font-size: 1.75em;
-  padding: 0 20px;
-}
-.waterfallTimeline b.small {
-  font-size: 1em;
-  line-height: 1.75em;
 }
 
 .liteToolOn, 

@@ -72,17 +72,6 @@ function unitTotalCount(items) {
     
 Meteor.methods({
   
-  engagedState() {
-    const user = Meteor.user();
-    const eg = user && user.engaged;
-    if(!eg) {
-      return false;
-    }else{
-      const batch = BatchDB.findOne({ 'tide.tKey': eg.tKey });
-      return batch.batch || false;
-    }
-  },
-  
   getBasicBatchInfo(keyword) {
     const niceString = whatIsBatch(keyword) || whatIsBatchX(keyword);
     const niceObj = {

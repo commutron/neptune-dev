@@ -113,9 +113,9 @@ import 'moment-timezone';
       }
     }).fetch();
     for(let gf of generalFind) {
-      if( moment(gf.finishedAt).isSameOrBefore(gf.end) ) {
+      if( moment(gf.finishedAt).isSameOrBefore(moment(gf.end), 'day') ) {
         doneOnTime++;
-      }else if( moment(gf.finishedAt).isAfter(gf.end) ) {
+      }else if( moment(gf.finishedAt).isAfter(moment(gf.end), 'day') ) {
         doneLate++;
       }else{
         null;
@@ -132,10 +132,10 @@ import 'moment-timezone';
         $lte: new Date(rangeEnd) 
       }
     }).fetch();
-    for(let gf of generalFindX) {
-      if( moment(gf.completedAt).isSameOrBefore(gf.salesEnd) ) {
+    for(let gfx of generalFindX) {
+      if( moment(gfx.completedAt).isSameOrBefore(moment(gfx.salesEnd), 'day') ) {
         doneOnTimeX++;
-      }else if( moment(gf.completedAt).isAfter(gf.salesEnd) ) {
+      }else if( moment(gfx.completedAt).isAfter(moment(gfx.salesEnd), 'day') ) {
         doneLateX++;
       }else{
         null;

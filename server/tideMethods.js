@@ -4,12 +4,27 @@ Meteor.methods({
 
 
 //// Tide \\\\\
+
+  engagedState() {
+    const user = Meteor.user();
+    const eg = user && user.engaged;
+    if(!eg) {
+      return false;
+    }else{
+      const batch = BatchDB.findOne({ 'tide.tKey': eg.tKey });
+      return batch.batch || false;
+    }
+  },
   
   startTideTask(batchId, accessKey) {
     try {
       const orgKey = accessKey || Meteor.user().orgKey;
       const doc = BatchDB.findOne({ _id: batchId, orgKey: orgKey });
-      if(!doc || !Roles.userIsInRole(Meteor.userId(), 'active')) { null }else{
+      const user = Meteor.user();
+      const spinning = user && user.engaged;
+      if(!doc || spinning || !Roles.userIsInRole(Meteor.userId(), 'active')) { 
+        null;
+      }else{
         const newTkey = new Meteor.Collection.ObjectID().valueOf();
         BatchDB.update({ _id: batchId }, {
           $push : { tide: { 
@@ -26,6 +41,30 @@ Meteor.methods({
             }
           }
         });
+        /* Async this??
+        const startBatchFirst = (tideKey, accessKey)=> {
+          return new Promise(function(resolve, reject) {
+            BatchDB.update({ _id: batchId }, {
+              $push : { tide: { 
+                tKey: newTkey,
+                who: Meteor.userId(),
+                startTime: new Date(),
+                stopTime: false
+            }}});
+          });
+        };
+        const startUserSecond = ()=> {
+          Meteor.users.update(Meteor.userId(), {
+            $set: {
+              engaged: {
+                task: 'PRO',
+                tKey: newTkey
+              }
+            }
+          });
+        };
+        stopBatchFirst(tideKey, accessKey).then(stopUserSecond());
+        */
         Meteor.defer( ()=>{
           const sameDay = doc.tide.find( x => moment(x.startTime).isSame(moment(), 'day') );
           if(!sameDay) {

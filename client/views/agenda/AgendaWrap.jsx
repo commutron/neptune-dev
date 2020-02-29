@@ -41,7 +41,7 @@ const AgendaWrap = ({
   const [ loadTime, loadTimeSet ] = useState( moment() );
   const [ tickingTime, tickingTimeSet ] = useState( moment() );
 
-  const [ dense, denseSet ] = useState( 0 );
+  // const [ dense, denseSet ] = useState( 0 );
   
   const [ numState, numSet ] = useState(false);
   
@@ -94,9 +94,9 @@ const AgendaWrap = ({
     loadTime.diff(tickingTime))
       .humanize();
       
-  const density = dense === 1 ? 'compact' :
-                  dense === 2 ? 'minifyed' :
-                  '';
+  // const density = dense === 1 ? 'compact' :
+  //                 dense === 2 ? 'minifyed' :
+  //                 '';
     
   return(
     <div key={0} className='overviewContainer'>
@@ -149,7 +149,7 @@ const AgendaWrap = ({
     
       <div className='overviewContent forceScrollStyle' tabIndex='0'>
         
-      <div className={`balance numFont letterSpaced overscroll ${density}`}>
+      <div className='balance numFont letterSpaced overscroll'>
             
           <ShipWindows 
             pCache={pCache.dataSet}
@@ -177,7 +177,7 @@ const AgendaWrap = ({
               })}
             </dl>
           </div>
-
+        {/*
           <PriorityList 
             pCache={pCache.dataSet}
             app={app} />
@@ -185,7 +185,7 @@ const AgendaWrap = ({
           <ShipDates 
             pCache={pCache.dataSet}
             app={app} />
-            
+        */}   
         </div>
       </div>
     </div>

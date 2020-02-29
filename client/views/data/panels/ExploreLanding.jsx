@@ -15,6 +15,9 @@ const ExploreLanding = ({ groupData, widgetData, batchData, xBatchData, app }) =
   const xProcess = xBatchData.filter( x => x.completed === false ).length;
   const verAdd = Array.from(widgetData, x => x.versions.length).reduce((x, y) => x + y, 0);
   
+  
+  const isDebug = Roles.userIsInRole(Meteor.userId(), 'debug');
+  
   return(
     <div className=''>
       <div className='centre wide'>
@@ -57,21 +60,21 @@ const ExploreLanding = ({ groupData, widgetData, batchData, xBatchData, app }) =
             <TrendLine 
               title={`new ${Pref.batches}`}
               statType='newBatch'
-              cycleCount={6}
+              cycleCount={isDebug ? 12 : 4}
               cycleBracket='week'
               lineColor='rgb(52, 152, 219)' />
             
             <TrendLine 
               title='new items'
               statType='newItem'
-              cycleCount={6}
+              cycleCount={isDebug ? 12 : 4}
               cycleBracket='week'
               lineColor='rgb(52, 152, 219)' />
               
             <TrendLine 
               title={`discovered ${Pref.shortfall}s`}
               statType='newSH'
-              cycleCount={6}
+              cycleCount={isDebug ? 12 : 4}
               cycleBracket='week'
               lineColor='rgb(230, 126, 34)' />
               
@@ -82,20 +85,20 @@ const ExploreLanding = ({ groupData, widgetData, batchData, xBatchData, app }) =
             <TrendBar
               title={`completed ${Pref.batches}`}
               statType='doneBatch'
-              cycleCount={6}
+              cycleCount={isDebug ? 12 : 4}
               cycleBracket='week' />
               
             <TrendLine 
               title={`completed ${Pref.items}`}
               statType='doneItem'
-              cycleCount={6}
+              cycleCount={isDebug ? 12 : 4}
               cycleBracket='week'
               lineColor='rgb(46, 204, 113)' />
               
             <TrendLine 
               title={`discovered ${Pref.nonCons}`}
               statType='newNC'
-              cycleCount={6}
+              cycleCount={isDebug ? 12 : 4}
               cycleBracket='week'
               lineColor='rgb(231, 76, 60)' />
             
@@ -104,7 +107,7 @@ const ExploreLanding = ({ groupData, widgetData, batchData, xBatchData, app }) =
           <details className='footnotes'>
             <summary>Chart Details</summary>
             <p className='footnote'>
-              Trends include {6} weeks, including the current week. 
+              Trends include {isDebug ? 12 : 4} weeks, including the current week. 
               Read left to right as past to current.
             </p>
             <p className='footnote'>

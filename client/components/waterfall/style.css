@@ -110,3 +110,37 @@
   font-size: calc(2rem + 2vw);
 }  
 
+.waterfallHistory {
+  margin: 2vh 0;
+  border-width: 2px;
+  border-style: solid;
+  padding-bottom: 1vh;
+}
+.waterfallHistory summary {
+  display: flex;
+  align-items: center;
+}
+.waterfallHistory summary .meterprogStack {
+  display: inline-block;
+}
+.waterfallHistory summary::-webkit-details-marker {
+  display: none;
+}
+
+.waterfallTimeline dd {
+  margin: 0 3vw;
+  padding: 0.5em 0;
+  letter-spacing: 1px;
+  vertical-align: middle;
+}
+.waterfallTimeline dd:nth-child(odd) {
+  background-color: rgba(50,50,50,0.3);
+}
+.waterfallTimeline b {
+  font-size: 1.75em;
+  padding: 0 20px;
+}
+.waterfallTimeline b.small {
+  font-size: 1em;
+  line-height: 1.75em;
+}

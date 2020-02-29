@@ -3,8 +3,7 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 import Model from '../smallUi/Model.jsx';
-import FlowBuilder from '../bigUi/FlowBuilder.jsx';
-
+import FlowBuilder from '/client/components/bigUi/ArrayBuilder/FlowBuilder.jsx';
 // requires
 // id = widget ID
 // existFlows = existing flows

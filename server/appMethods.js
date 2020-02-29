@@ -170,12 +170,25 @@ Meteor.methods({
     }
   },
   
+  canPhaseRemove(value) {
+    try{
+      const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
+      const used = appDoc.trackOption.find( x => x.phase === value );
+      if(!used && value !== 'finish') {
+        return true;
+      }else{
+        return false;
+      }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  
   removePhaseOption(value) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       try{
-        const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
-        const used = appDoc.trackOption.find( x => x.phase === value );
-        if(!used && value !== 'finish') {
+        const isFree = Meteor.call('canPhaseRemove');
+        if(isFree) {
           AppDB.update({orgKey: Meteor.user().orgKey}, {
             $pull : { 
               phases : value

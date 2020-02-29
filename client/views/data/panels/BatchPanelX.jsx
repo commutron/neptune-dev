@@ -12,7 +12,7 @@ import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 import ReleaseAction from '/client/components/bigUi/ReleasesModule.jsx';
 import NoteLine from '/client/components/smallUi/NoteLine.jsx';
 import BlockList from '/client/components/bigUi/BlockList.jsx';
-import WaterfallTimeline from '/client/components/bigUi/WaterfallTimeline.jsx';
+import WaterfallTimeline from '/client/components/waterfall/WaterfallTimeline.jsx';
 
 import XBatchTimeline from '/client/components/bigUi/BatchFeed/XBatchTimeline.jsx';
 

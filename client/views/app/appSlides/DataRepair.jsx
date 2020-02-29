@@ -32,22 +32,6 @@ const DataRepair = ({ app, users })=> {
     });
   }
   
-  function reorderPhaseOp(e) {
-    e.preventDefault();
-    const list = this.ph001input.value.trim();
-    const listAsArray = list.split(',');
-    const listAsArrayClean = [...listAsArray.map( (ent, ix)=>{ return ent.toLowerCase().trim(); }) ];
-    console.log(listAsArrayClean);
-    Meteor.call('reorderPhaseOptions', listAsArrayClean, (error, reply)=>{
-      if(error)
-        console.log(error);
-      if(reply) {
-        toast.success('good');
-      }else{
-        toast.warning('no good');
-      }
-    });
-  }
   /*
   function addAthing() {
     const departArray = [
@@ -154,30 +138,6 @@ const DataRepair = ({ app, users })=> {
         onClick={()=>clearAllWatch()}
         className='action clear blackT'
       >Clear</button>
-      
-      <hr />
-      
-      <form 
-        id='ph001form'
-        onSubmit={(e)=>reorderPhaseOp(e)}
-        className='inlineForm'>
-        <label htmlFor='ph001input'>New List<br />
-          <input
-            type='text'
-            id='ph001input'
-            placeholder='surface mount, through hole ...'
-            required
-          />
-        </label>
-        <label htmlFor='ph001go'><br />
-          <button
-            type='submit'
-            id='ph001go'
-            className='smallAction clearGreen'
-            disabled={false}
-          >Change</button>
-        </label>
-      </form>
       
       <hr />
       
