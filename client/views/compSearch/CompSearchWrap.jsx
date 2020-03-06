@@ -101,10 +101,10 @@ const CompSearchWrap = ({ plCache, user, app, clientTZ })=> {
           <button
             id='cachePLupdate'
             type='button'
-            title='Refresh Autocomplete'
+            title='Rebuild Autocomplete'
             onClick={(e)=>requestRefresh(e)}
-            disabled={!Roles.userIsInRole(Meteor.userId(), 'nightly')}>
-          <i className='fas fa-sync-alt primeRightIcon'></i>
+            disabled={!Roles.userIsInRole(Meteor.userId(), 'admin')}>
+          <i className='fas fa-cogs fa-fw primeRightIcon'></i>
           </button>
         </div>
         <TideFollow invertColor={true} />

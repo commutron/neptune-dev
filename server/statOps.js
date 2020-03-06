@@ -45,6 +45,7 @@ function countItemsWith(accessKey, rangeStart, rangeEnd, historyType) {
   }
   return itemCount;
 }
+
 export const itemsWithPromise = (accessKey, rangeStart, rangeEnd, historyType)=> {
   return new Promise(function(resolve) {
     const fetch = countItemsWith(accessKey, rangeStart, rangeEnd, historyType);
@@ -85,3 +86,37 @@ export const totalTideTimePromise = (accessKey, rangeStart, rangeEnd)=> {
     resolve(totalCount);
   });
 };
+
+
+
+
+Meteor.methods({
+
+  topViewStats(u, g, w, b, a) {
+    const usrC = u ? Meteor.users.find({orgKey: Meteor.user().orgKey}).fetch().length : 0;
+    const grpC = g ? GroupDB.find({orgKey: Meteor.user().orgKey}).fetch().length : 0;
+    const wdgtC = w ? WidgetDB.find({orgKey: Meteor.user().orgKey}).fetch().length : 0;
+    const btch = b ? BatchDB.find({orgKey: Meteor.user().orgKey}).fetch() : [];
+    const btchC = b ? btch.length : 0;
+    const btchLv = a ? btch.filter( x => x.finishedAt === false ).length : 0;
+    return {
+      usrC, grpC, wdgtC, btchC, btchLv
+    };
+  },
+  
+  widgetTops(wID) {
+    const batches = BatchDB.find({orgKey: Meteor.user().orgKey, widgetId: wID}).fetch();
+    const batchesX = XBatchDB.find({orgKey: Meteor.user().orgKey, widgetId: wID}).fetch();
+    const batchInfo = Array.from(batches, x => { return { 
+      items: x.items.length,
+      nonCons: x.nonCon.length,
+    }});
+    const batchInfoX = Array.from(batchesX, x => { return { 
+      quantity: x.quantity,
+      nonCons: x.nonconformaces.length,
+    }});
+    return { batchInfo, batchInfoX };
+  }
+  
+  
+});

@@ -37,7 +37,7 @@ Meteor.methods({
       // console.log(requestLocal);
       
     async function analyzeMonth() {
-      // try {
+      try {
         newBatch = await promiser(countNewBatch, accessKey, rangeStart, rangeEnd);
         doneBatches = await promiser(countDoneBatch, accessKey, rangeStart, rangeEnd);
         let doneBatchOnTime = doneBatches[0];
@@ -66,9 +66,9 @@ Meteor.methods({
           newGroup, newWidget, newVersion, newUser,
           tttMinutes, tttHours
         };
-      // }catch (err) {
-      //   throw new Meteor.Error(err);
-      // }
+      }catch (err) {
+        throw new Meteor.Error(err);
+      }
     }
     return analyzeMonth();
 

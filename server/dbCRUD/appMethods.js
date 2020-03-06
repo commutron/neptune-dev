@@ -732,76 +732,7 @@ Meteor.methods({
     }catch (err) {
       throw new Meteor.Error(err);
     }
-  },
-
-  ////////////
-  
-  // Testing Functions //
-  
-  sendTestMail(all) {
-    if(all) {
-      try {
-        Meteor.users.update({ orgKey: Meteor.user().orgKey }, {
-          $push : { inbox : {
-            notifyKey: new Meteor.Collection.ObjectID().valueOf(),
-            keyword: 'Sample',
-            type: 'test',
-            title: 'Sample Notification',
-            detail: 'This is a test',
-            time: new Date(),
-            unread: true
-          }
-        }},{multi: true});
-      }catch (err) {
-        throw new Meteor.Error(err);
-      }
-    }else{
-      try {
-        Meteor.users.update(Meteor.userId(), {
-          $push : { inbox : {
-            notifyKey: new Meteor.Collection.ObjectID().valueOf(),
-            keyword: 'Sample',
-            type: 'test',
-            title: 'Sample Notification',
-            detail: 'This is a test',
-            time: new Date(),
-            unread: true
-          }
-        }});
-      }catch (err) {
-        throw new Meteor.Error(err);
-      }
-    }
-  },
-  
-  sendErrorMail(errorTitle, errorTime, errorUser, errorMessage) {
-    Meteor.users.update({ roles: { $in: ["admin"] } }, {
-        $push : { inbox : {
-          notifyKey: new Meteor.Collection.ObjectID().valueOf(),
-          keyword: 'Error',
-          type: 'ERROR',
-          title: errorTitle,
-          detail: `${errorTime}, ${errorUser}, ${errorMessage}`,
-          time: new Date(),
-          unread: true
-        }
-      }},{multi: true});
-      
-  },
-  /*
-  backdateTideWall() {
-    try {
-      const oldDate = moment().subtract(2, 'weeks');
-      const replaceDate = oldDate.toISOString();
-      AppDB.update({orgKey: Meteor.user().orgKey}, {
-        $set : {
-          tideWall: replaceDate,
-        }});
-      return true;
-    }catch (err) {
-      throw new Meteor.Error(err);
-    }
   }
-  */
+  
         
 });
