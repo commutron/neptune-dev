@@ -4,7 +4,8 @@ import React from 'react';
 // import Pref from '/client/global/pref.js';
 
 import GeneralChunk from './GeneralChunk.jsx';
-import PrioritySquareData from '/client/components/bigUi/PrioritySquare.jsx';
+import PrioritySquareData from '/client/components/bigUi/PrioritySquare';
+import TideActivityData from '/client/components/tide/TideActivity';
 import BatchFinish from '/client/components/forms/BatchFinish.jsx';
 import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 import ReleaseAction from '/client/components/bigUi/ReleasesModule.jsx';
@@ -52,6 +53,11 @@ const InfoTab = ({
                     batchID={b._id}
                     app={a}
                     dbDay={b.end} />
+                </div>
+                <div className='statusBlock'>
+                  <TideActivityData
+                    batchID={b._id}
+                    app={a} />
                 </div>
               </div>
             }

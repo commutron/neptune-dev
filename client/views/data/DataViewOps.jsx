@@ -33,11 +33,6 @@ const DataViewOps = ({
   subLink, orb
 })=> {
   
-  /*
-  lfunction inkedBatch(wId, vKey) {
-    return allBatch.find(x => x.widgetId === wId, x => x.versionKey === vKey);
-  }
-  */
   function allLinkedBatches(wId) {
     const xBatches = allXBatch.filter(x => x.widgetId === wId);
     const legacyBatches = allBatch.filter(x => x.widgetId === wId);
@@ -53,22 +48,6 @@ const DataViewOps = ({
   function itemData(items, bar) {
     return items.find(x => x.serial === bar);
   }
-
-  // function getGroup(request) {
-  //   return allGroup
-  //           .find( x => 
-  //             x._id === request || 
-  //             x.alias === request || 
-  //             x.group === request );
-  // }
-  
-  // function group() {
-  //   return allGroup.find(x => x.group === orb);
-  // }
-
-  // function groupAlias() {
-  //   return allGroup.find(x => x.alias === orb);
-  // }
   
   function linkedGroup(gId) {
     return allGroup.find(x => x._id === gId);
@@ -80,10 +59,6 @@ const DataViewOps = ({
               x._id === request || 
               x.widget === request );
   }
-  
-  // function widget() {
-  //   return allWidget.find(x => x.widget === orb);
-  // }
   
   function linkedWidget(wId) {
     return allWidget.find(x => x._id === wId);

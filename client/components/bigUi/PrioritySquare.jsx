@@ -36,14 +36,14 @@ export const PrioritySquare = ({ batchID, ptData, altNumber, app })=> {
   const pt = ptData;
   
   const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
-   
+  const isDebug = Roles.userIsInRole(Meteor.userId(), 'debug');
+  
   if( pt && pt.batchID === batchID ) {
     
     const q2t = pt.quote2tide;
     const bffrTime = pt.estEnd2fillBuffer;
     const overQuote = q2t < 0;
-    Roles.userIsInRole(Meteor.userId(), 'debug') &&
-      console.log({pt, batchID, bffrTime, q2t});
+    isDebug && console.log({pt, batchID, bffrTime, q2t});
   
     if(!bffrTime) {
       return(
@@ -51,7 +51,7 @@ export const PrioritySquare = ({ batchID, ptData, altNumber, app })=> {
           <NumStat
             num='n/a'
             name=''
-            title='priority unavailable'
+            title='priority rank unavailable'
             color='fade'
             size='big' />
         </div>
@@ -82,14 +82,21 @@ export const PrioritySquare = ({ batchID, ptData, altNumber, app })=> {
       bffrTime < 0 ? 'Estimated Late' :
       Math.round( ( bffrTime / 100 ) );
     
+    const ovrTxt = overQuote ? 'Over Quote' : 'Under Quote';
+    const prTxt = `Priority Rank "${priorityRank}"`;
+    const bffTxt = `buffer: ${bffrTime} minutes`;
+    const treTxt = `timeRemain: ${q2t} minutes`;
+    
+    const title = `${prTxt}\n${ovrTxt}`;
+    const debugTitle = `${prTxt}"\n${bffTxt}\n${ovrTxt}\n${treTxt}`;
+    
     return(
       <div className={`blackT smCap big ${priorityClass} ${overClass}`}>
         <NumStat
           num={pLabel}
-          name={`${subLabel}${isNightly ? ` (${altNumber})` : ''}`}
-          title={
-            `Priority Rank "${priorityRank}" \nbuffer: ${bffrTime} minutes\n${overQuote ? 'Over Quote' : ''}`
-          }
+          name={subLabel}
+          // name={`${subLabel}${isNightly ? ` (${altNumber})` : ''}`}
+          title={isDebug ? debugTitle : title}
           color='blackT'
           size='big' />
       </div>
@@ -101,7 +108,7 @@ export const PrioritySquare = ({ batchID, ptData, altNumber, app })=> {
       <NumStat
         num='?'
         name=''
-        title='priority unknown'
+        title='priority rank unknown'
         color='fade'
         size='big' />
     </div>

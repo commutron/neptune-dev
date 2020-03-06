@@ -95,12 +95,11 @@ Meteor.publish('usersDataDebug', function(){
   }
 });
 
+// Calendar
 Meteor.publish('eventsData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  Meteor.defer( ()=>{
-    Meteor.call('batchCacheUpdate', orgKey);
-  });
+  Meteor.defer( ()=>{ Meteor.call('batchCacheUpdate', orgKey); });
   if(!this.userId){
     return this.ready();
   }else{
@@ -117,6 +116,7 @@ Meteor.publish('eventsData', function(){
     ];
   }
 });
+
 Meteor.publish('tideData', function(clientTZ){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
@@ -140,12 +140,13 @@ Meteor.publish('tideData', function(clientTZ){
   }
 });
 
-// Agenda
+// Overview & Agenda
 Meteor.publish('cacheData', function(clientTZ){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
   Meteor.defer( ()=>{ Meteor.call('batchCacheUpdate', orgKey); });
   Meteor.defer( ()=>{ Meteor.call('priorityCacheUpdate', orgKey, clientTZ); });
+  Meteor.defer( ()=>{ Meteor.call('activityCacheUpdate', orgKey, clientTZ); });
   Meteor.defer( ()=>{ Meteor.call('phaseCacheUpdate', orgKey); });
   Meteor.defer( ()=>{ Meteor.call('completeCacheUpdate', orgKey); });
   if(!this.userId){
@@ -178,7 +179,6 @@ Meteor.publish('shaddowData', function(clientTZ){
           'finishedAt': 1,
           'salesOrder': 1,
           'end': 1,
-          'floorRelease': 1, // DEPRECIATE
           'releases': 1
         }}),
       XBatchDB.find({orgKey: orgKey, live: true}, {
@@ -280,8 +280,8 @@ Meteor.publish('hotDataPlus', function(batch){
 Meteor.publish('skinnyData', function(clientTZ){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  Meteor.defer( ()=>{ Meteor.call('batchCacheUpdate', orgKey); });
-  Meteor.defer( ()=>{ Meteor.call('priorityCacheUpdate', orgKey, clientTZ); });
+  // Meteor.defer( ()=>{ Meteor.call('batchCacheUpdate', orgKey); });
+  // Meteor.defer( ()=>{ Meteor.call('priorityCacheUpdate', orgKey, clientTZ); });
   // Meteor.defer( ()=>{ Meteor.call('phaseCacheUpdate', orgKey); });
   if(!this.userId){
     return this.ready();
@@ -296,7 +296,10 @@ Meteor.publish('skinnyData', function(clientTZ){
         }}),
       WidgetDB.find({orgKey: orgKey}, {
         fields: {
-          'orgKey': 0
+          'widget': 1,
+          'describe': 1,
+          'groupId': 1,
+          'versions': 1,
         }}),
       
       BatchDB.find({orgKey: orgKey}, {
@@ -325,18 +328,32 @@ Meteor.publish('skinnyData', function(clientTZ){
             'completedAt': 1
           }}),
           
-      CacheDB.find({orgKey: orgKey}, {
-        fields: {
-          'orgKey': 0
-        }}),
+      // CacheDB.find({orgKey: orgKey}, {
+      //   fields: {
+      //     'orgKey': 0
+      // }}),
       ];
     }
 });
 
-Meteor.publish('hotDataEx', function(dataRequest){
+Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
   
+  
+  let hothotWidget = hotWidget || false;
+  
+  if(!hothotWidget) {
+    const hotBatchXBatch = BatchDB.findOne({ batch: dataRequest }) ||
+                           XBatchDB.findOne({ batch: dataRequest });
+    if(hotBatchXBatch) {
+      const maybe = WidgetDB.findOne({ _id: hotBatchXBatch.widgetId });
+      if(maybe) {
+        hothotWidget = maybe.widget;
+      }
+    }
+  }
+                    
   if(!this.userId){
     return this.ready();
   }else{
@@ -350,6 +367,10 @@ Meteor.publish('hotDataEx', function(dataRequest){
       ];
     }else {
       return [
+        WidgetDB.find({widget: hothotWidget, orgKey: orgKey}, {
+          fields: {
+            'orgKey': 0,
+          }}),
         BatchDB.find({batch: dataRequest, orgKey: orgKey}, {
           fields: {
             'orgKey': 0,
@@ -364,31 +385,4 @@ Meteor.publish('hotDataEx', function(dataRequest){
     }
   }
 });
-
-
-/*alternitive components search data
-Meteor.publish('compData', function(cNum){
-  const user = Meteor.users.findOne({_id: this.userId});
-  const orgKey = user ? user.orgKey : false;
-  return [
-    GroupDB.find({orgKey: orgKey}, {
-      fields: {
-          'alias': 1,
-        }}),
-    WidgetDB.find({orgKey: orgKey, 'versions.assembly.component': cNum}, {
-      fields: {
-          'widget': 1,
-          'versions.versionKey': 1,
-          'versions.version': 1,
-          'versions.assembly': 1
-        }}),
-    BatchDB.find({orgKey: orgKey, live: true}, {
-      sort: {batch:-1},
-      fields: {
-          'batch': 1,
-          'versionKey': 1,
-      }})
-    ];
-});
-*/
   

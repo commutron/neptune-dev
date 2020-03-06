@@ -32,7 +32,7 @@ const TideControl = ({ batchID, tideKey, currentLive, tideLockOut })=> {
   }
   function handleStop() {
     setLock(true);
-    Meteor.call('stopTideTask', batchID, tideKey, (error, reply)=> {
+    Meteor.call('stopTideTask', tideKey, (error, reply)=> {
       if(error) {
         console.log(error);
         toast.error('Rejected by Server');

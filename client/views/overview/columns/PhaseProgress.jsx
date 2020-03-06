@@ -2,9 +2,12 @@ import React, { Fragment, useState, useEffect } from 'react';
 // import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import NumStat from '/client/components/uUi/NumStat.jsx';
-import TrinaryStat from '/client/components/uUi/TrinaryStat.jsx';
 
-const PhaseProgress = ({ batchID, releasedToFloor, progCols, clientTZ, app })=> {
+const PhaseProgress = ({ 
+  batchID, releasedToFloor,
+  progCols, clientTZ, 
+  app
+})=> {
   
   const [ progData, setProg ] = useState(false);
   
@@ -23,15 +26,6 @@ const PhaseProgress = ({ batchID, releasedToFloor, progCols, clientTZ, app })=> 
   if(releasedToFloor !== false && dt && dt.batchID === batchID) {
     return(
       <Fragment>
-        <div>
-          <TrinaryStat
-            status={dt.isActive ? true : null}
-            name='Active'
-            title={`Has had ${Pref.tide} activity today`}
-            size=''
-            onIcon='fas fa-shoe-prints fa-2x greenT'
-            offIcon='far fa-pause-circle fa-2x grayT' />
-        </div>
 
         {dt.phaseSets.map( (phase, index)=>{
           if(phase.steps.length === 0) {

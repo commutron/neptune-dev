@@ -10,9 +10,9 @@ import Spin from '../../components/uUi/Spin.jsx';
 import AgendaWrap from './AgendaWrap.jsx';
 
 const View = ({
-  login, sub, /*appReady,*/ readyUsers, ready, 
+  login, sub, readyUsers, ready, 
   username, user, clientTZ, org, app, 
-  bCache, pCache, cCache, zCache
+  bCache, pCache, phCache, zCache
 })=> {
   
   const prevUser = usePrevious(user);
@@ -21,7 +21,7 @@ const View = ({
   }, [user]);
   
     
-  if( /*!appReady ||*/ !readyUsers || !ready || !app ) {
+  if( !readyUsers || !ready || !app ) {
     return (
       <div className='centreContainer'>
         <div className='centrecentre'>
@@ -35,7 +35,7 @@ const View = ({
     <AgendaWrap 
       bCache={bCache}
       pCache={pCache}
-      cCache={cCache}
+      phCache={phCache}
       zCache={zCache}
       user={user}
       app={app}
@@ -75,7 +75,7 @@ export default withTracker( () => {
       app: AppDB.findOne({org: org}),
       bCache: CacheDB.findOne({dataName: 'batchInfo'}),
       pCache: CacheDB.findOne({dataName: 'priorityRank'}),
-      cCache: CacheDB.findOne({dataName: 'phaseCondition'}),
+      phCache: CacheDB.findOne({dataName: 'phaseCondition'}),
       zCache: CacheDB.findOne({dataName: 'completeBatch'}),
     };
   }

@@ -12,7 +12,7 @@ import Spin from '../../components/uUi/Spin.jsx';
 import DataViewOps from './DataViewOps.jsx';
 
 const ExploreView = ({
-  /*appReady,*/ usersReady, coldReady, hotReady, // subs
+  usersReady, coldReady, hotReady, // subs
   user, org, users, app, // self
   allGroup, allWidget, allBatch, allXBatch, // customers
   hotBatch, hotXBatch, // relevant
@@ -30,7 +30,6 @@ const ExploreView = ({
   
     
   if(
-    /*!appReady ||*/
     !usersReady ||
     !coldReady || 
     !hotReady ||
@@ -60,7 +59,6 @@ const ExploreView = ({
     
   return(
     <DataViewOps
-      //orb={orb}
       user={user}
       org={org}
       users={users}
@@ -87,24 +85,23 @@ export default withTracker( ({ view, request, specify }) => {
   let org = user ? user.org : false;
   let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   const clientTZ = moment.tz.guess();
-  // const appSub = login ? Meteor.subscribe('appData') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
   const coldSub = login ? Meteor.subscribe('skinnyData', clientTZ) : false;
-                      
-  let hotSubEx = Meteor.subscribe('hotDataEx', request);
-  let hotBatch = BatchDB.findOne( { batch: request } ) || false;
-  let hotXBatch = XBatchDB.findOne( { batch: request } ) || false;
+  
+  const hotBatch = BatchDB.findOne({ batch: request }) || false;
+  const hotXBatch = XBatchDB.findOne({ batch: request }) || false;
+  const hotWidget = view === 'widget' ? request : false;
+  
+  const hotSubEx = Meteor.subscribe('hotDataEx', request, hotWidget);
 
   if( !login || !active ) {
     return {
-      // appReady: false,
       usersReady: false,
       coldReady: false,
       hotReady: false
     };
   }else{
     return {
-      // appReady: appSub.ready(),
       usersReady: usersSub.ready(),
       coldReady: coldSub.ready(),
       hotReady: hotSubEx.ready(),
@@ -124,21 +121,3 @@ export default withTracker( ({ view, request, specify }) => {
     };
   }
 })(ExploreView);
-
-    /*
-    // Out of context serial search
-    if( !isNaN(orb) && orb.length >= 8 && orb.length <= 10 ) {
-  		const itemsBatch = BatchDB.findOne( { 'items.serial': orb } );
-      if( itemsBatch ) {
-        hotSub = Meteor.subscribe( 'hotData', itemsBatch.batch );
-        hotBatch = itemsBatch;
-      }else{
-        Meteor.call( 'serialLookup', orb, ( err, reply )=>{
-          err ? console.log( err ) : null;
-          const serverItemsBatch = BatchDB.findOne( { batch: reply } );
-          hotSub = Meteor.subscribe( 'hotData', reply );
-          hotBatch = serverItemsBatch;
-        });
-      }
-    }
-    */

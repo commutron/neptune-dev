@@ -241,3 +241,21 @@
 .lightTheme .ovColhead { 
   color: var(--blackT); 
 }
+
+.statusBlock {
+  max-width: 105px;
+}
+
+.infoSquareOuter {
+  display: inline-block;
+  text-align: center;
+  margin: 5px;
+}
+  
+.infoSquareLabel {
+  font-size: smaller;
+  vertical-align: top;
+  text-transform: capitalize;
+  word-break: keep-all;
+  word-wrap: normal;
+}

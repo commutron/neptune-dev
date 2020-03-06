@@ -8,8 +8,8 @@ import { ToastContainer } from 'react-toastify';
 import HomeIcon from '/client/layouts/HomeIcon.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
 
-import PriorityList from './cards/PriorityList';
-import ShipDates from './cards/ShipDates';
+// import PriorityList from './cards/PriorityList';
+// import ShipDates from './cards/ShipDates';
 import ShipWindows from './cards/ShipWindows';
 
 
@@ -33,7 +33,7 @@ function useInterval(callback, delay) {
 }
 
 const AgendaWrap = ({ 
-  bCache, pCache, cCache, zCache,
+  bCache, pCache, zCache,
   user, clientTZ, app 
 })=> {
 
@@ -84,7 +84,8 @@ const AgendaWrap = ({
   
   function requestRefresh() {
     workingSet( true );
-    Meteor.call('REQUESTcacheUpdate', clientTZ, true, true, true, true, ()=>{
+    // batchUp, priorityUp, activityUp, phaseUp, compUp
+    Meteor.call('REQUESTcacheUpdate', clientTZ, true, true, ()=>{
       loadTimeSet( moment() );
       workingSet( false );
     });

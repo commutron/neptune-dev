@@ -87,12 +87,12 @@ const AlterFulfillForm = ({ batchId, end, app, autoClose })=> {
         /></label>
         <button type='submit' className='action clear greenHover'>Save</button>
       </p>
-      <p>
+      <div className='vmarginhalf'>
         <PrioritySquareData
           batchID={batchId}
           app={app}
           mockDay={endDateState} />
-      </p>
+      </div>
     </form>
   );
 };

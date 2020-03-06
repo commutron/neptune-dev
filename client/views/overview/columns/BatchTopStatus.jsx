@@ -55,18 +55,11 @@ const BatchTopStatus = ({
             size='big' />
         </div>
         
-        {!pt ?
-          <PrioritySquareData
-            batchID={batchID}
-            altNumber={rowIndex+1}
-            app={app} />
-        :
-          <PrioritySquare
-            batchID={batchID}
-            ptData={pt}
-            altNumber={rowIndex+1}
-            app={app} />
-        }
+        <PrioritySquare
+          batchID={batchID}
+          ptData={pt}
+          altNumber={rowIndex+1}
+          app={app} />
         
         <div>
           <NumStat

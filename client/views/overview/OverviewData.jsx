@@ -11,10 +11,10 @@ import OverviewWrap from './OverviewWrap.jsx';
 
 const View = ({
   login,
-  /*appReady,*/ readyUsers, ready, readyC, 
+  readyUsers, ready, readyC, 
   username, user, clientTZ, org, app, 
   batch, batchX,
-  bCache, pCache, cCache
+  bCache, pCache, acCache, phCache
 })=> {
   
   const prevUser = usePrevious(user);
@@ -23,7 +23,7 @@ const View = ({
   }, [user]);
   
     
-  if(/*!appReady ||*/ !readyUsers || !ready || !readyC || !app ) {
+  if( !readyUsers || !ready || !readyC || !app ) {
     return (
       <div className='centreContainer'>
         <div className='centrecentre'>
@@ -39,7 +39,8 @@ const View = ({
       bx={batchX}
       bCache={bCache}
       pCache={pCache}
-      cCache={cCache}
+      acCache={acCache}
+      phCache={phCache}
       user={user}
       app={app}
       clientTZ={clientTZ} />
@@ -55,13 +56,11 @@ export default withTracker( () => {
   let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   let org = user ? user.org : false;
   const clientTZ = moment.tz.guess();
-  // const appSub = login ? Meteor.subscribe('appData') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
   const sub = login ? Meteor.subscribe('shaddowData', clientTZ) : false;
   const subC = login ? Meteor.subscribe('cacheData', clientTZ) : false;
   if(!login || !active) {
     return {
-      // appReady: false,
       readyUsers: false,
       ready: false
     };
@@ -70,7 +69,6 @@ export default withTracker( () => {
       login: Meteor.userId(),
       sub: sub,
       subC: subC,
-      // appReady: appSub.ready(),
       readyUsers: usersSub.ready(),
       ready: sub.ready(),
       readyC: subC.ready(),
@@ -83,7 +81,8 @@ export default withTracker( () => {
       batchX: XBatchDB.find({live: true}).fetch(),
       bCache: CacheDB.findOne({dataName: 'batchInfo'}),
       pCache: CacheDB.findOne({dataName: 'priorityRank'}),
-      cCache: CacheDB.findOne({dataName: 'phaseCondition'}),
+      acCache: CacheDB.findOne({dataName: 'activityLevel'}),
+      phCache: CacheDB.findOne({dataName: 'phaseCondition'}),
     };
   }
 })(View);

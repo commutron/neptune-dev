@@ -9,18 +9,21 @@ Meteor.methods({
       const key = Meteor.user().orgKey;
       Meteor.call('batchCacheUpdate', key, true);
       Meteor.call('priorityCacheUpdate', key, clientTZ, true);
+      Meteor.call('activityCacheUpdate', key, clientTZ, true);
       Meteor.call('phaseCacheUpdate', key, true);
       Meteor.call('completeCacheUpdate', key, true);
     }
   },
   
-  REQUESTcacheUpdate(clientTZ, batchUp, priorityUp, phaseUp, compUp) {
+  REQUESTcacheUpdate(clientTZ, batchUp, priorityUp, activityUp, phaseUp, compUp) {
     if(Roles.userIsInRole(Meteor.userId(), 'active')) {
       const key = Meteor.user().orgKey;
       batchUp && Meteor.defer( ()=>{
         Meteor.call('batchCacheUpdate', key, false) });
       priorityUp && Meteor.defer( ()=>{
         Meteor.call('priorityCacheUpdate', key, clientTZ, false) });
+      activityUp && Meteor.defer( ()=>{
+        Meteor.call('activityCacheUpdate', key, clientTZ, false) });
       phaseUp && Meteor.defer( ()=>{
         Meteor.call('phaseCacheUpdate', key, false) });
       compUp && Meteor.defer( ()=>{
@@ -71,6 +74,31 @@ Meteor.methods({
             orgKey: accessKey,
             lastUpdated: new Date(),
             dataName: 'priorityRank',
+            dataSet: slim,
+        }});
+      }
+    }
+  },
+  
+  activityCacheUpdate(accessKey, clientTZ, force) {
+    if(typeof accessKey === 'string') {
+      const timeOut = moment().subtract(5, 'minutes').toISOString();
+      const currentCache = CacheDB.findOne({
+        orgKey: accessKey, 
+        lastUpdated: { $gte: new Date(timeOut) },
+        dataName:'activityLevel'});
+      
+      if(force || !currentCache ) {
+        const batches = BatchDB.find({orgKey: accessKey}).fetch();
+        const batchesX = XBatchDB.find({orgKey: accessKey}).fetch();
+        const slim = [...batches,...batchesX].map( x => {
+          return Meteor.call('tideActivityLevel', x._id, clientTZ, accessKey);
+        });
+        CacheDB.upsert({orgKey: accessKey, dataName: 'activityLevel'}, {
+          $set : { 
+            orgKey: accessKey,
+            lastUpdated: new Date(),
+            dataName: 'activityLevel',
             dataSet: slim,
         }});
       }

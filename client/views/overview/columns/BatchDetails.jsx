@@ -5,12 +5,13 @@ import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
 import BatchTopStatus from './BatchTopStatus.jsx';
 import KittingChecks from './KittingChecks.jsx';
+import { TideActivitySquare } from '/client/components/tide/TideActivity';
 import PhaseProgress from './PhaseProgress.jsx';
 import NonConCounts from './NonConCounts.jsx';
 
 const BatchDetails = ({
   oB,
-  bCache, pCache, 
+  bCache, pCache, acCache,
   user, clientTZ, app, dense,
   kittingArea, releasedArea
 })=> {
@@ -18,12 +19,12 @@ const BatchDetails = ({
   const statusCols = ['remaining', 'priority', 'items quantity'];
   const clearCols = Array.from(Pref.clearencesArray, x => x.context );
   const kitCols = [...clearCols, 'flow', 'released'];
-  const progCols = ['active',...app.phases];
+  const progCols = app.phases;
   const ncCols = ['NC total', 'NC remain', 'NC per item', 'NC items', 'scrap', 'RMA'];
   // due == 'fulfill', 'ship'
-  const fullHead = ['SO', 'due',...statusCols,...kitCols,...progCols,...ncCols, 'watch'];
-  const kitHead = ['SO', 'due',...statusCols, ...kitCols, 'watch'];
-  const relHead = ['SO', 'due',...statusCols,...progCols,...ncCols, 'watch'];
+  const fullHead = ['SO','due',...statusCols,...kitCols,'active',...progCols,...ncCols,'watch'];
+  const kitHead = ['SO','due',...statusCols, ...kitCols,'active','watch'];
+  const relHead = ['SO','due',...statusCols,'active',...progCols,...ncCols,'watch'];
   
   const headersArr = kittingArea ? kitHead : releasedArea ? relHead : fullHead;
   
@@ -53,6 +54,7 @@ const BatchDetails = ({
               user={user}
               clientTZ={clientTZ}
               pCache={pCache}
+              acCache={acCache}
               app={app}
               statusCols={statusCols}
               kitCols={kitCols}
@@ -71,7 +73,8 @@ export default BatchDetails;
 
 
 const BatchDetailChunk = ({ 
-  rowIndex, oB, user, clientTZ, pCache, app, 
+  rowIndex, oB, user, clientTZ, 
+  pCache, acCache, app, 
   statusCols, kitCols, progCols, ncCols, dense,
   kittingArea, releasedArea
 })=> {
@@ -81,6 +84,8 @@ const BatchDetailChunk = ({
   
   const releasedToFloor = oB.releases.findIndex( 
                             x => x.type === 'floorRelease') >= 0;
+  
+  const ac = acCache.dataSet.find( x => x.batchID === oB._id );
   /*
   const dueDate = moment(oB.salesEnd || oB.end);
   const adaptDate = dueDate.isAfter(moment(), 'year') ?
@@ -122,7 +127,14 @@ const BatchDetailChunk = ({
         kitCols={kitCols}
         dense={dense}
         isRO={isRO} />}
-        
+    
+      <div>
+        <TideActivitySquare 
+          batchID={oB._id} 
+          acData={ac}
+          app={app} />
+      </div>
+      
     {!kittingArea &&
       <Fragment>
         <PhaseProgress
