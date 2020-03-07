@@ -29,7 +29,8 @@ const ActionBar = ({
   batchData, itemData, 
   groupData, 
   widgetData, versionData, 
-  app, action, noText
+  app, action, noText,
+  ncTypesCombo
 })=> (
   
   <div className='actionBar'>
@@ -122,15 +123,17 @@ const ActionBar = ({
           noText={noText} />
         <RMAForm
           id={batchData._id}
-          edit={false}
-          options={app.trackOption}
+          editObj={false}
+          trackOptions={app.trackOption}
           end={app.lastTrack}
           app={app}
-          noText={noText} />
+          noText={noText}
+          ncTypesCombo={ncTypesCombo || []} />
         <NCEscape
           id={batchData._id}
           nons={app.nonConOption}
-          noText={noText} />
+          noText={noText}
+          ncTypesCombo={ncTypesCombo || []} />
         <Remove
           action='batch'
           title={batchData.batch}

@@ -20,14 +20,13 @@ const NonConMultiBatchBar = ({ batchIDs })=> {
       reply && seriesSet(reply);
     });
   }, [batchIDs]);
-  
 
   if(!seriesState) {
     return(
       <CalcSpin />
     );
   }
-  
+
   const typeCount = seriesState[0] ?
     seriesState[0].length : seriesState.length;
   

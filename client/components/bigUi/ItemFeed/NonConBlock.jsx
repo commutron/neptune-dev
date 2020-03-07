@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
 import './style.css';
 import Pref from '/client/global/pref.js';
@@ -6,30 +6,21 @@ import { toast } from 'react-toastify';
 
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 
-export default class NonConBlock extends Component {
+const NonConBlock = ({
+  entry, id, serial,
+  done, user, app, ncTypesCombo
+})=> {
   
-  constructor() {
-    super();
-    this.state = {
-      edit: false
-   };
-    this.edit = this.edit.bind(this);
-    this.handleCheck = this.handleCheck.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleReInspect = this.handleReInspect.bind(this);
-    this.handleTrash = this.handleTrash.bind(this);
-    this.handleUnTrash = this.handleUnTrash.bind(this);
-    this.popNC = this.popNC.bind(this);
-  }
-  edit() {
-    this.setState({ edit: !this.state.edit });
+  const [ editState, editSet ] = useState(false);
+  
+  function edit() {
+    editSet(!editState);
   }
   
-  handleCheck(target, dflt) {
-  	const ncTypesComboFlat = this.props.ncTypesComboFlat;
-    const flatCheckList = ncTypesComboFlat.length > 0 ?
-      Array.from(ncTypesComboFlat, x => x.live === true && x.typeText)
-      : this.props.app.nonConOption;
+  function handleCheck(target, dflt) {
+    const flatCheckList = ncTypesCombo.length > 0 ?
+      Array.from(ncTypesCombo, x => x.live === true && x.typeText)
+      : app.nonConOption;
   
     let match = target.value === dflt || 
                 flatCheckList.find( x => x === target.value);
@@ -37,188 +28,163 @@ export default class NonConBlock extends Component {
     target.setCustomValidity(message);
     return !match ? false : true;
   }
-  handleChange() {
-		const id = this.props.id;
-		const serial = this.props.serial;
-    const ncKey = this.props.entry.key;
+  
+  function handleChange(e) {
+    const ncKey = entry.key;
     const ref = this.ncRef.value.trim().toLowerCase();
     const type = this.ncType.value.trim();
     const where = this.ncWhere.value.trim().toLowerCase();
-    const tgood = this.handleCheck(this.ncType, this.props.entry.type);
+    const tgood = handleCheck(this.ncType, entry.type);
     
     if( typeof ref !== 'string' || ref.length < 1 ||  !tgood || where.length < 1 ) {
       this.ncRef.reportValidity();
       this.ncType.reportValidity();
       this.ncWhere.reportValidity();
-    }else if(this.props.entry.ref !== ref || 
-             this.props.entry.type !== type ||
-             this.props.entry.where !== where) {  
+    }else if(entry.ref !== ref || 
+             entry.type !== type ||
+             entry.where !== where) {  
       Meteor.call('editNC', id, serial, ncKey, ref, type, where, (error)=> {
         error && console.log(error);
-  			this.setState({ edit: false });
+  			editSet(false);
   		});
-    }else{this.setState({ edit: false })}
+    }else{editSet(false)}
   }
   
-  handleReInspect() {
-    const id = this.props.id;
-    const ncKey = this.props.entry.key;
+  function handleReInspect(e) {
+    const ncKey = entry.key;
     Meteor.call('reInspectNC', id, ncKey, (error)=> {
 			error && console.log(error);
-			this.edit();
+			edit();
 		});
   }
   
-  handleTrash() {
-    const id = this.props.id;
-    const ncKey = this.props.entry.key;
+  function handleTrash(e) {
+    const ncKey = entry.key;
     if(!Roles.userIsInRole(Meteor.userId(), 'verify')) {
       toast.warning("'First-off' permission is needed skip a nonconformance");
     }else{
       Meteor.call('trashNC', id, ncKey, (error)=> {
   			error && console.log(error);
-  			this.edit();
+  			edit();
   		});
     }
   }
   
-  handleUnTrash() {
-    const id = this.props.id;
-    const ncKey = this.props.entry.key;
+  function handleUnTrash(e) {
+    const ncKey = entry.key;
     Meteor.call('unTrashNC', id, ncKey, (error)=> {
 			error && console.log(error);
 			this.edit();
 		});
   }
   
-  popNC() {
+  function popNC(e) {
     const yes = window.confirm('Are you sure you want to permanently delete this ' + Pref.nonCon);
     if(yes) {
-      const id = this.props.id;
-      const ncKey = this.props.entry.key;
+      const ncKey = entry.key;
       const override = !Roles.userIsInRole(Meteor.userId(), ['remove', 'qa']) ? 
                         prompt("Enter PIN to override", "") : false;
       Meteor.call('ncRemove', id, ncKey, override, (error)=>{
         error && console.log(error);
-        this.setState({ edit: false });
+        editSet(false);
       });
-    }else{this.setState({ edit: false })}
+    }else{editSet(false)}
   }
-  
-  render() {
     
-    const done = this.props.done;
-    const dt = this.props.entry;
-    const app = this.props.app;
+  const dt = entry;
                    
-    const fx = typeof dt.fix === 'object';
-    const ins = typeof dt.inspect === 'object';
-    const rjc = !dt.reject || dt.reject.length === 0 ? false : true;
-    const skp = typeof dt.skip === 'object';
-    
-    const trashed = !dt.trash ? false : typeof dt.trash === 'object';
-    const tSty = trashed ? 'trashStyle' : '';
-    const open = trashed ?
-                 <pre><i className="far fa-trash-alt fa-lg fa-fw" title='Trashed'></i></pre> :
-                 dt.inspect === false ?
-                  <i><i className="fas fa-wrench fa-lg fa-fw iNG" title='Awaiting Repair'></i></i> :
-                  <b><i className="fas fa-check-circle fa-lg fa-fw iG" title='Good'></i></b>;
-    
-    let fixed = !fx ? '' : <li>Repaired: <UserNice id={dt.fix.who} /> {moment(dt.fix.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</li>;
-    let inspected = !ins ? '' : <li>Inspected: <UserNice id={dt.inspect.who} /> {moment(dt.inspect.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</li>;
-    let skipped = !skp ? '' : <li>Skipped: <UserNice id={dt.skip.who} /> {moment(dt.skip.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</li>;
-    let snoozed = !dt.snooze ? false : true;
-    let inTrash = !trashed ? '' : <li>Trashed: <UserNice id={dt.trash.who} /> {moment(dt.trash.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</li>;
+  const fx = typeof dt.fix === 'object';
+  const ins = typeof dt.inspect === 'object';
+  const rjc = !dt.reject || dt.reject.length === 0 ? false : true;
+  const skp = typeof dt.skip === 'object';
+  
+  const trashed = !dt.trash ? false : typeof dt.trash === 'object';
+  const tSty = trashed ? 'trashStyle' : '';
+  const open = trashed ?
+               <pre><i className="far fa-trash-alt fa-lg fa-fw" title='Trashed'></i></pre> :
+               dt.inspect === false ?
+                <i><i className="fas fa-wrench fa-lg fa-fw iNG" title='Awaiting Repair'></i></i> :
+                <b><i className="fas fa-check-circle fa-lg fa-fw iG" title='Good'></i></b>;
+  
+  let fixed = !fx ? '' : <li>Repaired: <UserNice id={dt.fix.who} /> {moment(dt.fix.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</li>;
+  let inspected = !ins ? '' : <li>Inspected: <UserNice id={dt.inspect.who} /> {moment(dt.inspect.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</li>;
+  let skipped = !skp ? '' : <li>Skipped: <UserNice id={dt.skip.who} /> {moment(dt.skip.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</li>;
+  let snoozed = !dt.snooze ? false : true;
+  let inTrash = !trashed ? '' : <li>Trashed: <UserNice id={dt.trash.who} /> {moment(dt.trash.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</li>;
 
-    const editAllow = Roles.userIsInRole(Meteor.userId(), 'inspect') && !done;
-    const editIndicate = this.state.edit && 'editStandout';
-    
-    const ncTypesComboFlat = this.props.ncTypesComboFlat;
+  const editAllow = Roles.userIsInRole(Meteor.userId(), 'inspect') && !done;
+  const editIndicate = editState && 'editStandout';
+
 	  
-    return(
-      <div className={`infoBlock noncon ${editIndicate} ${tSty}`}>
-        <div className='blockTitle cap'>
-          {this.state.edit === true ?
-            <div>
-              <input
-                type='text'
-                ref={(i)=> this.ncRef = i}
-                id='ncR'
-                className='redIn up inlineInput'
-                min={1}
-                defaultValue={dt.ref}
-                required />
-              {Roles.userIsInRole(Meteor.userId(), 'nightly') ?
-                <span>
-                  <input 
-                    ref={(i)=> this.ncType = i}
-                    id='ncT'
-                    className='redIn inlineSelect'
-                    type='search'
-                    defaultValue={dt.type}
-                    placeholder='Type'
-                    list='ncTypeList'
-                    onInput={(e)=>this.handleCheck(e.target, dt.type)}
-                    required />
-                    <datalist id='ncTypeList'>
-                      {ncTypesComboFlat.length > 0 ?
-                        ncTypesComboFlat.map( (entry, index)=>{
-                          if(entry.live === true) {
-                            return ( 
-                              <option 
-                                key={index}
-                                data-id={entry.key}
-                                value={entry.typeText}
-                              >{this.props.user.showNCcodes && entry.typeCode}</option>
-                            );
-                        }})
-                      :
-                        app.nonConOption.map( (entry, index)=>{
-                          return ( 
-                            <option
-                              key={index}
-                              data-id={index + 1 + '.'}
-                              value={entry}
-                            >{index + 1}</option>
-                          );
-                        })}
-                    </datalist>
-                </span>
-              :
-                <select 
-                  ref={(i)=> this.ncType = i}
-                  id='ncT'
-                  className='redIn cap inlineSelect'
+  return(
+    <div className={`infoBlock noncon ${editIndicate} ${tSty}`}>
+      <div className='blockTitle cap'>
+        {editState === true ?
+          <div>
+            <input
+              type='text'
+              id='ncRef'
+              className='redIn up inlineInput'
+              min={1}
+              defaultValue={dt.ref}
+              required />
+            {Roles.userIsInRole(Meteor.userId(), 'nightly') ?
+              <span>
+                <input 
+                  id='ncType'
+                  className='redIn inlineSelect'
+                  type='search'
                   defaultValue={dt.type}
-                  required>
-                  {app.nonConOption.map( (entry, index)=>{
+                  placeholder='Type'
+                  list='ncTypeList'
+                  onInput={(e)=>handleCheck(e.target, dt.type)}
+                  required
+                  disabled={ncTypesCombo.length < 1}/>
+                  <datalist id='ncTypeList'>
+                    {ncTypesCombo.map( (entry, index)=>{
+                      if(entry.live === true) {
+                        return ( 
+                          <option 
+                            key={index}
+                            data-id={entry.key}
+                            value={entry.typeText}
+                          >{user.showNCcodes && entry.typeCode}</option>
+                    )}})}
+                  </datalist>
+              </span>
+            :
+              <select 
+                id='ncType'
+                className='redIn cap inlineSelect'
+                defaultValue={dt.type}
+                required>
+                {app.nonConOption.map( (entry, index)=>{
+                  return( <option key={index} value={entry}>{entry}</option> );
+                  })}
+              </select>
+            }
+            <input 
+              id='ncWhere'
+              className='redIn inlineSelect'
+              list='ncWhereList'
+              defaultValue={dt.where || ''}
+              disabled={!Roles.userIsInRole(Meteor.userId(), ['run', 'edit', 'qa'])}
+              required />
+              <datalist id='ncWhereList'>
+                <option value={dt.where || ''}>{dt.where || ''}</option>
+                <optgroup label={Pref.phases}>
+                  {app.phases.map( (entry, index)=>{
                     return( <option key={index} value={entry}>{entry}</option> );
-                    })}
-                </select>
-              }
-              <input 
-                ref={(i)=> this.ncWhere = i}
-                id='ncW'
-                className='redIn inlineSelect'
-                list='ncWhereList'
-                defaultValue={dt.where || ''}
-                disabled={!Roles.userIsInRole(Meteor.userId(), ['run', 'edit', 'qa'])}
-                required />
-                <datalist id='ncWhereList'>
-                  <option value={dt.where || ''}>{dt.where || ''}</option>
-                  <optgroup label={Pref.phases}>
-                    {this.props.app.phases.map( (entry, index)=>{
-                      return( <option key={index} value={entry}>{entry}</option> );
-                    })}
-                  </optgroup>
-                  <optgroup label={Pref.ancillary}>
-                    {app.ancillaryOption.map( (entry, index)=>{
-                      return (
-                        <option key={index} value={entry}>{entry}</option>
-                        );
-                    })}
-                  </optgroup>
-                </datalist>
+                  })}
+                </optgroup>
+                <optgroup label={Pref.ancillary}>
+                  {app.ancillaryOption.map( (entry, index)=>{
+                    return (
+                      <option key={index} value={entry}>{entry}</option>
+                      );
+                  })}
+                </optgroup>
+              </datalist>
             </div>
           :
             <div>
@@ -228,12 +194,12 @@ export default class NonConBlock extends Component {
               <div className=''>{dt.where}</div>
             </div>
           }
-          {this.state.edit === true ?
+          {editState === true ?
             <div className='rightText'>
               {ins ?
                 <button
                   className='miniAction yellowT inlineButton'
-                  onClick={this.handleReInspect}
+                  onClick={(e)=>handleReInspect(e)}
                   disabled={done}>
                   <i className='fas fa-redo fa-lg'></i>
                   <i className='med'> ReInspect</i>
@@ -243,27 +209,27 @@ export default class NonConBlock extends Component {
                 <button
                   className='miniAction yellowT inlineButton'
                   disabled={!Roles.userIsInRole(Meteor.userId(), 'verify')}
-                  onClick={this.handleTrash}
+                  onClick={(e)=>handleTrash(e)}
                 >Remove</button>
               :
                 <button
                   className='miniAction yellowT inlineButton'
                   disabled={!Roles.userIsInRole(Meteor.userId(), 'inspect')}
-                  onClick={this.handleUnTrash}
+                  onClick={(e)=>handleUnTrash(e)}
                 >Restore</button>
               }
               <button
                 className='miniAction redT inlineButton'
                 disabled={!Roles.userIsInRole(Meteor.userId(), ['remove', 'qa'])}
-                onClick={this.popNC}
+                onClick={(e)=>popNC(e)}
               >Delete</button>
               <button
                 className='miniAction greenT inlineButton'
-                onClick={this.handleChange}
+                onClick={(e)=>handleChange(e)}
               >Save</button>
               <button
                 className='miniAction inlineButton'
-                onClick={this.edit}
+                onClick={()=>edit()}
               >Cancel</button>
             </div>
           :
@@ -273,7 +239,7 @@ export default class NonConBlock extends Component {
               <div className='rightAnchor'>
                 <button
                   className='miniAction'
-                  onClick={this.edit}
+                  onClick={()=>edit()}
                   disabled={!editAllow}
                   readOnly={true}>
                   <i className='fas fa-edit fa-lg fa-fw'></i>
@@ -282,28 +248,29 @@ export default class NonConBlock extends Component {
             </div>
           }
         </div>
-        <ul className='moreInfoList'>
-          {fixed}
-          {inspected}
-          {snoozed && <li>Snoozed</li>}
-          {skipped}
-          {rjc ?
-            dt.reject.map( (entry, index)=>{
-              return(
-                <ul key={index}>
-                  <li colSpan='2'>
-                    Attempt: <UserNice id={entry.attemptWho} /> {moment(entry.attemptTime).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}
-                    <br />
-                    Reject: <UserNice id={entry.rejectWho} /> {moment(entry.rejectTime).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}
-                  </li>
-                </ul>
-              )})
-          : null}
-          {inTrash}
-        </ul>
-        {dt.comm !== '' && <p className='endComment'><i className='far fa-comment'></i> {dt.comm}</p>}
+      <ul className='moreInfoList'>
+        {fixed}
+        {inspected}
+        {snoozed && <li>Snoozed</li>}
+        {skipped}
+        {rjc ?
+          dt.reject.map( (entry, index)=>{
+            return(
+              <ul key={index}>
+                <li colSpan='2'>
+                  Attempt: <UserNice id={entry.attemptWho} /> {moment(entry.attemptTime).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}
+                  <br />
+                  Reject: <UserNice id={entry.rejectWho} /> {moment(entry.rejectTime).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}
+                </li>
+              </ul>
+            )})
+        : null}
+        {inTrash}
+      </ul>
+      {dt.comm !== '' && <p className='endComment'><i className='far fa-comment'></i> {dt.comm}</p>}
 
-      </div>
-    );
-  }
-}
+    </div>
+  );
+};
+  
+export default NonConBlock;

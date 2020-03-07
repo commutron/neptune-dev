@@ -14,7 +14,7 @@ const ItemFeed = ({
   id, batch, serial,
   createTime, createBy,
   history, 
-  noncons, ncListKeys,
+  noncons, ncTypesCombo,
   shortfalls,
   rmas, allRMA,
   done,
@@ -28,14 +28,6 @@ const ItemFeed = ({
             if (moment(t1.time || t1.cTime).isBefore(t2.time || t2.cTime)) { return -1 }
             return 0;
           });
-  
-  const ncTypesComboFlat = ()=> {
-    const asignedNCLists = app.nonConTypeLists.filter( 
-      x => ncListKeys.find( y => y === x.key ) ? true : false );
-    const ncTypesCombo = Array.from(asignedNCLists, x => x.typeList);
-  	const ncTCF = [].concat(...ncTypesCombo);
-  	return ncTCF;
-  };
   
   return(
     <div className='scrollWrap'>
@@ -68,7 +60,7 @@ const ItemFeed = ({
                 done={done}
                 user={user}
                 app={app}
-                ncTypesComboFlat={ncTypesComboFlat()} /> 
+                ncTypesCombo={ncTypesCombo} />
             );
           }else if(Array.isArray(dt.refs) === true) {
             return( 

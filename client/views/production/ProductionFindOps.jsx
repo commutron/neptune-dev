@@ -23,13 +23,13 @@ const ProductionFindOps = ({
   orb, anchor
 })=> {
   
-  function linkedBatch(wId, vKey) {
-    return allBatch.find(x => x.widgetId === wId, x => x.versionKey === vKey);
-  }
+  // function linkedBatch(wId, vKey) {
+  //   return allBatch.find(x => x.widgetId === wId, x => x.versionKey === vKey);
+  // }
   
-  function allLinkedBatches(wId) {
-    return allBatch.filter(x => x.widgetId === wId);
-  }
+  // function allLinkedBatches(wId) {
+  //   return allBatch.filter(x => x.widgetId === wId);
+  // }
   
   function groupActiveWidgets(gId) {
     let widgetsList = allWidget.filter(x => x.groupId === gId);
@@ -59,9 +59,9 @@ const ProductionFindOps = ({
     return allGroup.find(x => x._id === gId);
   }
   
-  function widget() {
-    return allWidget.find(x => x.widget === orb);
-  }
+  // function widget() {
+  //   return allWidget.find(x => x.widget === orb);
+  // }
   
   function linkedWidget(wId) {
     return allWidget.find(x => x._id === wId);

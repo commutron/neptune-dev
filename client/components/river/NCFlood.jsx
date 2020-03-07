@@ -82,30 +82,23 @@ const NCFlood = ({ id, live, user, app, ncListKeys })=> {
             list='ncTypeList'
             disabled={lock}
             onInput={(e)=>handleCheck(e)}
-            required />
+            required
+            disabled={ncTypesComboFlat.length < 1}
+            autoComplete={navigator.userAgent.includes('Firefox/') ? "off" : ""}
+              // ^^^ workaround for persistent bug in desktop Firefox ^^^
+          />
           <label htmlFor='ncType'>{Pref.nonConType}</label>
           <datalist id='ncTypeList'>
-            {ncTypesComboFlat.length > 0 ?
-              ncTypesComboFlat.map( (entry, index)=>{
-                if(entry.live === true) {
-                  return ( 
-                    <option 
-                      key={index}
-                      data-id={entry.key}
-                      value={entry.typeText}
-                    >{user.showNCcodes && entry.typeCode}</option>
-                  );
-              }})
-            :
-              app.nonConOption.map( (entry, index)=>{
+            {ncTypesComboFlat.map( (entry, index)=>{
+              if(entry.live === true) {
                 return ( 
-                  <option
+                  <option 
                     key={index}
-                    data-id={index + 1 + '.'}
-                    value={entry}
-                  >{index + 1}</option>
+                    data-id={entry.key}
+                    value={entry.typeText}
+                  >{user.showNCcodes && entry.typeCode}</option>
                 );
-              })}
+            }})}
           </datalist>
         </span>
           <button

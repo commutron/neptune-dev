@@ -9,46 +9,33 @@ import SubItemLink from '/client/components/tinyUi/SubItemLink.jsx';
 
 import ItemFeed from '/client/components/bigUi/ItemFeed/ItemFeed.jsx';
 
-const ItemPanel = (props)=>	{
+const ItemPanel = ({ 
+  batchData, itemData,
+  widgetData, versionData, groupData, 
+  app, user, 
+  listTitle, flowData
+})=>	{
   
   function ncData() {
-    const batch = props.batchData;
-    const item = props.itemData;
+    const batch = batchData;
+    const item = itemData;
     let relevant = batch.nonCon.filter( x => x.serial === item.serial);
     return relevant;
   }
   
   function shData() {
-    const batch = props.batchData;
-    const item = props.itemData;
+    const batch = batchData;
+    const item = itemData;
     const shortfalls = batch.shortfall || [];
     let relevant = shortfalls.filter( x => x.serial === item.serial);
     return relevant;
   }
-  
-  function getFlows() {
-    const b = props.batchData;
-    const w = props.widgetData;
-    let ncListKeys = [];
-    if( b && w ) {
-      const river = w.flows.find( x => x.flowKey === b.river);
-      const riverAlt = w.flows.find( x => x.flowKey === b.riverAlt );
-      if(river) {
-        river.type === 'plus' && ncListKeys.push(river.ncLists);
-      }
-      if(riverAlt) {
-        riverAlt.type === 'plus' && ncListKeys.push(riverAlt.ncLists);
-      }
-    }
-    return { ncListKeys };
-  }
 
-  const a = props.app;
-  const b = props.batchData;
-  const i = props.itemData;
-  //const w = this.props.widgetData;
-  //const g = this.props.groupData;
-  const user = props.user;
+  const a = app;
+  const b = batchData;
+  const i = itemData;
+  //const w = widgetData;
+  //const g = groupData;
   //const v = w.versions.find( x => x.versionKey === b.versionKey );
   
   const nc = ncData();
@@ -58,9 +45,6 @@ const ItemPanel = (props)=>	{
   const done = i.finishedAt !== false;
   const scrap = i.history.find(x => x.type === 'scrap' && x.good === true);
   
-  const path = !b ? { ncListKeys: [] } : getFlows();
-
-
   return(
     <div className='section' key={i.serial}>
     
@@ -111,7 +95,7 @@ const ItemPanel = (props)=>	{
           createBy={i.createdWho}
           history={i.history}
           noncons={nc}
-          ncListKeys={path.ncListKeys.flat()}
+          ncTypesCombo={flowData && flowData.ncTypesComboFlat}
           shortfalls={sh}
           rmas={i.rma}
           allRMA={b.cascade}

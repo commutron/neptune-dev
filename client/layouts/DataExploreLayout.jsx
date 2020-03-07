@@ -18,6 +18,7 @@ export const TraverseWrap = ({
   groupData,
   user,
   app,
+  flowData,
   title,
   subLink,
   action,
@@ -51,7 +52,7 @@ export const TraverseWrap = ({
 
   const invert = invertColor ? 'invert' : '';
   const isRO = Roles.userIsInRole(Meteor.userId(), 'readOnly');
-
+  
   return(
     <ErrorCatch>
       <div className='containerEx'>
@@ -135,7 +136,8 @@ export const TraverseWrap = ({
                   widgetData={widgetData}
                   versionData={versionData}
                   app={app}
-                  action={action} />
+                  action={action}
+                  ncTypesCombo={flowData && flowData.ncTypesComboFlat} />
               </div>}
               
           </div>

@@ -21,23 +21,13 @@ import NonConBarRefs from '/client/components/charts/NonCon/NonConBarRefs.jsx';
 const ProblemTab = ({
   a, b,
   riverFlow, riverAltFlow,
-  ncListKeys
+  ncTypesCombo
 }) =>	{
   
-  const ncTypesComboFlat = ()=> {
-    const asignedNCLists = a.nonConTypeLists.filter( 
-      x => ncListKeys.find( y => y === x.key ) ? true : false );
-    const ncTypesCombo = Array.from(asignedNCLists, x => x.typeList);
-  	const ncTCF = [].concat(...ncTypesCombo,...a.nonConOption);
-  	
-  	const flatTypeList = Array.from(ncTCF, x => 
-  	  typeof x === 'string' ? x : x.typeText
-  	);
-      
-    return flatTypeList;
-  };
-  const ncOptions = ncTypesComboFlat();
-  
+  const flatTypeList = Array.from(ncTypesCombo, x => 
+	  typeof x === 'string' ? x : x.typeText
+	);
+	
   const nonConArray = b.nonCon || [];
   const nonConArrayClean = nonConArray.filter( x => !x.trash );
 
@@ -84,17 +74,17 @@ const ProblemTab = ({
             ]}>
             
             <NonConBubble
-              ncOp={ncOptions}
+              ncOp={flatTypeList}
               nonCons={nonConArrayClean}
               app={a} />
               
             <NonConBar
-              ncOp={ncOptions}
+              ncOp={flatTypeList}
               nonCons={nonConArrayClean}
               app={a} />
           
             <NonConBarRefs
-              ncOp={ncOptions}
+              ncOp={flatTypeList}
               flow={riverFlow}
               flowAlt={riverAltFlow}
               nonCons={nonConArrayClean}

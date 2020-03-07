@@ -108,7 +108,9 @@ Meteor.methods({
     	    typeof x === 'string' ? x : 
     	    x.live === true && x.typeText
     	  );
-        return flatTypeList;
+    	  const flatTypeListClean = flatTypeList.filter( x => x !== false);
+    	 // const flatTypeListClean = _.without(flatTypeList, false);
+        return flatTypeListClean;
       }
     }
     

@@ -53,6 +53,7 @@ const RMATable = (props)=> {
               id={props.id}
               assigned={props.items.filter(x => x.rma.includes(entry.key)).length}
               onRemove={(e)=>pullRMA(e, entry.key)}
+              ncTypesCombo={props.ncTypesCombo}
               lock={started}
               app={props.app} />
           );
@@ -72,7 +73,7 @@ export default RMATable;
 
 
 
-const RMARow = ({ entry, id, assigned, onRemove, lock, app })=> {
+const RMARow = ({ entry, id, assigned, onRemove, ncTypesCombo, lock, app })=> {
   
   let dt = entry;
   
@@ -96,9 +97,10 @@ const RMARow = ({ entry, id, assigned, onRemove, lock, app })=> {
           {Roles.userIsInRole(Meteor.userId(), 'qa') &&
             <RMAForm
               id={id}
-              edit={dt}
+              editObj={dt}
               small={true}
-              app={app} />
+              app={app}
+              ncTypesCombo={ncTypesCombo} />
           }
         </td>
         <td>

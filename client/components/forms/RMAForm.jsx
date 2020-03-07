@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
@@ -8,56 +8,74 @@ import FlowBuilder from '/client/components/bigUi/ArrayBuilder/FlowBuilder.jsx';
 // id
 // barcode
 
-export default class RMAForm extends Component {
+const RMAForm = ({ 
+  id, editObj, trackOptions, end, app, 
+  noText, small,
+  ncTypesCombo 
+})=> {
   
-  constructor() {
-    super();
-    this.state = {
-      flow: false,
-      nonCons: []
-    };
-  }
+  const [ flowState, flowSet ] = useState(false);
+  const [ nonConsState, nonConsSet ] = useState([]);
+
   
-  componentDidMount() {
-    if(!this.props.edit) { null }else{
-      this.setState({flow: true, 'nonCons': this.props.edit.nonCons });
+  useEffect( ()=>{
+    if(!editObj) { null }else{
+      flowSet(true);
+      nonConsSet(editObj.nonCons);
     }
+  }, []);
+
+
+  const flatCheckList = ncTypesCombo.length > 0 ?
+    Array.from(ncTypesCombo, x => x.live === true && x.typeText)
+    : app.nonConOption;
+  
+  function handleCheck(e) {
+    let match = flatCheckList.find( x => x === e.target.value);
+    let message = !match ? 'please choose from the list' : '';
+    e.target.setCustomValidity(message);
   }
   
-  setFlow(recSet) {
+  
+  function setFlow(recSet) {
     let input = recSet;
     if(!input) {
-      this.setState({ flow: false });
+      flowSet(false);
     }else{
-      this.setState({ flow: [...input] });
+      flowSet([...input]);
     }
   }
   
-  handleNC() {
+  function handleNC(e) {
     const type = this.ncType.value.trim().toLowerCase();
+    let match = flatCheckList.find( x => x === type);
+    if(match) {
+      const refEntry = this.ncRefs.value.trim().toLowerCase();
+      const refSplit = refEntry.split(/\s* \s*/);
+      
+      let allNonCons = [...nonConsState];
+      
+      if(refSplit.length > 0 && refSplit[0] !== '') {
+        for(let ref of refSplit) {
+          ref = ref.replace(",", "");
+          let ncObj = {'ref': ref, 'type': type};
+          allNonCons.push(ncObj);
+        }
+        nonConsSet(allNonCons);
+        this.ncRefs.value = '';
+      }else{null}
+    }else{
+      this.ncType.setCustomValidity('invalid type');
+    }
     
-    const refEntry = this.ncRefs.value.trim().toLowerCase();
-    const refSplit = refEntry.split(/\s* \s*/);
-    
-    let allNonCons = this.state.nonCons;
-    
-    if(refSplit.length > 0 && refSplit[0] !== '') {
-      for(let ref of refSplit) {
-        ref = ref.replace(",", "");
-        allNonCons.push({ref: ref, type: type});
-      }
-      this.setState({'nonCons': allNonCons });
-      this.ncRefs.value = '';
-    }else{null}
   }
   
-  save(e) {
+  function save(e) {
     e.preventDefault();
-    this.go.disabled = true;
-    const cKey = this.props.edit.key;
-    const id = this.props.id;
-    const flowObj = this.state.flow;
-    const nonConArr = this.state.nonCons;
+    this.rmaGo.disabled = true;
+    const cKey = editObj.key;
+    const flowObj = flowState;
+    const nonConArr = nonConsState;
     
     const rmaId = this.rmaNum.value.trim().toLowerCase();
     const quantity = this.quant.value.trim().toLowerCase();
@@ -68,7 +86,7 @@ export default class RMAForm extends Component {
         if(error)
           console.log(error);
         toast.success('Saved');
-        this.out.value = 'saved';
+        this.rmaOut.value = 'saved';
       });
       
     }else{
@@ -83,151 +101,154 @@ export default class RMAForm extends Component {
           this.rmaNum.value = '';
           this.quant.value = '';
           this.comm.value = '';
-          this.out.value = 'saved';
-          this.setState({ flow: false, nonCons: [] });
+          this.rmaOut.value = 'saved';
+          flowSet(false);
+          nonConsSet([]);
         });
       }
     }
   }
   
-  clean() {
-    this.out.value = '';
+  function clean(e) {
+    this.rmaOut.value = '';
   }
-
-  render () {
+  
+  const edit = editObj ? editObj : false;
+  const numE = edit ? edit.rmaId : '';
+  const quE = edit ? edit.quantity : '';
+  const quC = edit ? edit.comm : '';
+  const title = edit ? 'edit ' + Pref.rmaProcess : 'create ' + Pref.rmaProcess;
+  const bttn = edit ? 'edit' : Pref.rmaProcess;
     
-    const edit = this.props.edit ? this.props.edit : false;
-    const numE = edit ? edit.rmaId : '';
-    const quE = edit ? edit.quantity : '';
-    const quC = edit ? edit.comm : '';
-    const title = edit ? 'edit ' + Pref.rmaProcess : 'create ' + Pref.rmaProcess;
-    const bttn = edit ? 'edit' : Pref.rmaProcess;
-    
-    return (
-      <Model
-        button={bttn}
-        title={title}
-        color='orangeT'
-        icon='fa-exchange-alt'
-        smIcon={this.props.small}
-        lock={!Roles.userIsInRole(Meteor.userId(), 'qa')}
-        noText={this.props.noText}>
-        <div className='space'>
-          <form
-            id='rmaSave'
-            className='centre'
-            onSubmit={this.save.bind(this)}
-            onChange={this.clean.bind(this)}
-          >
-            <p>
-              <input
-                type='text'
-                id='rum'
-                ref={(i)=> this.rmaNum = i}
-                defaultValue={numE}
-                placeholder='RMA Number'
-                required />
-              <label htmlFor='rum'>RMA number</label>
-            </p>
-            <p>
-              <input
-                type='number'
-                id='qu'
-                ref={(i)=> this.quant = i}
-                defaultValue={quE}
-                placeholder='0 is infinite' />
-              <label htmlFor='qu'>Quantity</label>
-            </p>
-            <p>
-              <input
-                type='text'
-                id='comm'
-                ref={(i)=> this.comm = i}
-                defaultValue={quC}
-                placeholder='other details' />
-              <label htmlFor='comm'>Comment</label>
-            </p>
-          </form>
-        </div>
-        
-        <hr />
-        
-        {!this.props.edit ?
-        
-          <FlowBuilder
-            app={this.props.app}
-            options={this.props.options.filter( x => x.type !== 'first')}
-            end={this.props.end}
-            baseline={false}
-            onClick={e => this.setFlow(e)} />
-            
-        : <p>{Pref.flow} is locked</p>}
-          
-        <hr />
-        
-        <div className='centre'>
-        
-          <p><em>{Pref.nonCon}s to be attached automatically to every activated {Pref.item}</em></p>
-          
-          <br />
-        
-          <div className='inlineForm'>
-      
+  return (
+    <Model
+      button={bttn}
+      title={title}
+      color='orangeT'
+      icon='fa-exchange-alt'
+      smIcon={small}
+      lock={!Roles.userIsInRole(Meteor.userId(), 'qa')}
+      noText={noText}>
+      <div className='space'>
+        <form
+          id='rmaSave'
+          className='centre'
+          onSubmit={(e)=>save(e)}
+          onChange={(e)=>clean(e)}
+        >
+          <p>
             <input
               type='text'
-              id='ncRefs'
-              ref={(i)=> this.ncRefs = i}
-              className='redIn up'
-              placeholder={Pref.nonConRef} />
-        
-            <select 
-              id='ncType'
-              ref={(i)=> this.ncType = i}
-              className='cap redIn'>
-              {this.props.app.nonConOption.map( (entry, index)=>{
-                return ( 
-                  <option key={index} value={entry}>{index + 1}. {entry}</option>
+              id='rmaNum'
+              defaultValue={numE}
+              placeholder='RMA Number'
+              required />
+            <label htmlFor='rmaNum'>RMA number</label>
+          </p>
+          <p>
+            <input
+              type='number'
+              id='quant'
+              defaultValue={quE}
+              placeholder='0 is infinite' />
+            <label htmlFor='quant'>Quantity</label>
+          </p>
+          <p>
+            <input
+              type='text'
+              id='comm'
+              defaultValue={quC}
+              placeholder='other details' />
+            <label htmlFor='comm'>Comment</label>
+          </p>
+          
+          <p><em>automatic {Pref.nonCon}s on every activated {Pref.item}</em></p>
+          
+          <div className='inlineForm'>
+    
+          <input
+            type='text'
+            id='ncRefs'
+            className='redIn up'
+            placeholder={Pref.nonConRef} />
+          
+          <input 
+            id='ncType'
+            className='redIn'
+            type='search'
+            placeholder='Type'
+            list='ncTypeList'
+            onInput={(e)=>handleCheck(e)}
+            disabled={ncTypesCombo.length < 1}
+            autoComplete={navigator.userAgent.includes('Firefox/') ? "off" : ""}
+              // ^^^ workaround for persistent bug in desktop Firefox ^^^
+          />
+          <datalist id='ncTypeList'>
+            {ncTypesCombo.map( (entry, index)=>{
+                if(entry.live === true) {
+                  return ( 
+                    <option 
+                      key={index}
+                      data-id={entry.key}
+                      value={entry.typeText}
+                    >{entry.typeCode}</option>
                   );
-              })}
-            </select>
-        
-            <button
-              type='button'
-              id='addNC'
-              onClick={(e)=>this.handleNC(e)}
-              disabled={false}
-              className='smallAction clearRed'
-            >Add</button>
+              }})
+            }
+          </datalist>
           
-          </div>
-          
-          <br />
-          
-          <div>
-            <dl>
-              {this.state.nonCons.map( (entry, index)=>{
-                return(
-                  <dt key={index}>{entry.ref} - {entry.type}</dt>
-              )})}
-            </dl>
-          </div>
-              
-      
-        </div>
-
-        <hr />
-        
-        <div className='space centre'>
           <button
-            type='submit'
-            ref={(i)=> this.go = i}
-            disabled={!this.state.flow}
-            form='rmaSave'
-            className='action clearGreen'>SAVE</button>
-          <p><output ref={(i)=> this.out = i} /></p>
-          <br />
+            type='button'
+            id='addNC'
+            onClick={(e)=>handleNC(e)}
+            disabled={false}
+            className='smallAction clearRed'
+          >Add</button>
+        
         </div>
-      </Model>
-    );
-  }
-}
+        
+        </form>
+      </div>
+      
+      <div className='centre'>
+        <dl>
+          {nonConsState.map( (entry, index)=>{
+            return(
+              <dt key={index}>{entry.ref} - {entry.type}</dt>
+          )})}
+        </dl>
+      </div>
+      
+      <br />
+      
+      <hr />
+        
+      {!editObj ?
+      
+        <FlowBuilder
+          app={app}
+          options={trackOptions.filter( x => x.type !== 'first')}
+          end={end}
+          baseline={false}
+          onClick={(e)=>setFlow(e)} />
+          
+      : <p>{Pref.flow} is locked</p>}
+
+
+      <hr />
+      
+      <div className='space centre'>
+        <button
+          type='submit'
+          id='rmaGo'
+          disabled={!flowState}
+          form='rmaSave'
+          className='action clearGreen'>SAVE</button>
+        <p><output id='rmaOut' /></p>
+        <br />
+      </div>
+    </Model>
+  );
+};
+
+export default RMAForm;

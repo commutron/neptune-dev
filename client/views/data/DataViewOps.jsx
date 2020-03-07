@@ -24,6 +24,10 @@ import BatchesList from './lists/BatchesList.jsx';
 import ItemsList from './lists/ItemsList.jsx';
 // import WidgetsList from './lists/WidgetsList.jsx';
 
+import ProgressCounter from '/client/components/utilities/ProgressCounter.js';
+import NonConOptionMerge from '/client/components/utilities/NonConOptionMerge.js';
+
+
 const DataViewOps = ({ 
   allXBatch, allBatch, 
   allGroup, allWidget,
@@ -70,6 +74,51 @@ const DataViewOps = ({
   
   function versionData(versions, vKeum) {
     return versions.find( x => x.versionKey === vKeum || x.version === vKeum );
+  }
+  
+  function getFlowData(batchData, widgetData, appData) {
+    let riverTitle = 'not found';
+    let riverFlow = [];
+    let riverAltTitle = 'not found';
+    let riverFlowAlt = [];
+    let ncListKeys = [];
+    let ncTypesComboFlat = [];
+    let progCounts = false;
+    if( widgetData && batchData ) {
+      
+      const getRiverFirst = (w, b)=> {
+        return new Promise(function(resolve) {
+          const river = w.flows.find( x => x.flowKey === b.river);
+          const riverAlt = w.flows.find( x => x.flowKey === b.riverAlt );
+          if(river) {
+            riverTitle = river.title;
+            riverFlow = river.flow;
+            river.type === 'plus' && ncListKeys.push(river.ncLists);
+          }
+          if(riverAlt) {
+            riverAltTitle = riverAlt.title;
+            riverFlowAlt = riverAlt.flow;
+            riverAlt.type === 'plus' && ncListKeys.push(riverAlt.ncLists);
+          }
+          resolve('Success');
+        });
+      };
+      
+      const generateSecond = (w, b, app)=> {
+        progCounts = ProgressCounter(riverFlow, riverFlowAlt, b);
+        
+        ncTypesComboFlat = NonConOptionMerge(ncListKeys, app);
+      };
+
+      getRiverFirst(widgetData, batchData)
+        .then(generateSecond(widgetData, batchData, appData));
+        
+    }
+    return {
+      riverTitle, riverFlow, 
+      riverAltTitle, riverFlowAlt, 
+      ncTypesComboFlat, progCounts 
+    };
   }
 
  
@@ -286,6 +335,7 @@ const DataViewOps = ({
       let widget = linkedWidget(hotBatch.widgetId);
       let version = versionData(widget.versions, hotBatch.versionKey);
       let group = linkedGroup(widget.groupId);
+      let flowData = getFlowData(hotBatch, widget, app);
       if(item && widget && version && group) {
         return (
           <TraverseWrap
@@ -309,7 +359,8 @@ const DataViewOps = ({
               groupData={group}
               app={app}
               user={user}
-              listTitle={true} />
+              listTitle={true}
+              flowData={flowData} />
             <ItemsList
               batchData={hotBatch}
               widgetData={widget}
@@ -346,6 +397,7 @@ const DataViewOps = ({
       let widget = linkedWidget(hotBatch.widgetId);
       let version = versionData(widget.versions, hotBatch.versionKey);
       let group = linkedGroup(widget.groupId);
+      let flowData = getFlowData(hotBatch, widget, app);
       return (
 		    <TraverseWrap
 		      batchData={hotBatch}
@@ -354,6 +406,7 @@ const DataViewOps = ({
           groupData={group}
           user={user}
           app={app}
+          flowData={flowData}
           title='Batch'
           subLink={subLink}
           action='batch'
@@ -365,7 +418,8 @@ const DataViewOps = ({
             versionData={version}
             groupData={group} 
             app={app}
-            user={user} />
+            user={user}
+            flowData={flowData} />
           <ItemsList
 		        batchData={hotBatch}
 		        widgetData={widget}

@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 // import moment from 'moment';
 import Pref from '/client/global/pref.js';
-import ProgressCounter from '/client/components/utilities/ProgressCounter.js';
 import CreateTag from '/client/components/uUi/CreateTag.jsx';
 import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 import InfoTab from './InfoTab.jsx';
@@ -12,36 +11,12 @@ import EventsTimeline from '/client/components/bigUi/BatchFeed/EventsTimeline.js
 import RMATable from '/client/components/tables/RMATable.jsx';
 
 
-const BatchPanel = ({ batchData, widgetData, user, app })=> {
+const BatchPanel = ({ batchData, widgetData, user, app, flowData })=> {
   
-  function getFlows() {
-    const b = batchData;
-    const w = widgetData;
-    let riverTitle = 'not found';
-    let riverFlow = [];
-    let riverAltTitle = 'not found';
-    let riverFlowAlt = [];
-    let ncListKeys = [];
-    let progCounts = false;
-    if( b && w ) {
-      const river = w.flows.find( x => x.flowKey === b.river);
-      const riverAlt = w.flows.find( x => x.flowKey === b.riverAlt );
-      if(river) {
-        riverTitle = river.title;
-        riverFlow = river.flow;
-        river.type === 'plus' && ncListKeys.push(river.ncLists);
-      }
-      if(riverAlt) {
-        riverAltTitle = riverAlt.title;
-        riverFlowAlt = riverAlt.flow;
-        riverAlt.type === 'plus' && ncListKeys.push(riverAlt.ncLists);
-      }
-      progCounts = ProgressCounter(riverFlow, riverFlowAlt, b);
-    }
-    return { riverTitle, riverFlow, riverAltTitle, riverFlowAlt, ncListKeys, progCounts };
-  }
+  const [ verifyListState, verifyListSet ] = useState([]);
+  const [ rmaListState, rmaListSet ] = useState([]);
   
-  function filterSpecial() {
+  useEffect( ()=>{
     const data = batchData.items;
     let verifyList = [];
     let rmaList = [];
@@ -60,26 +35,19 @@ const BatchPanel = ({ batchData, widgetData, user, app })=> {
         }
       }
      });
-     return {verifyList: verifyList, rmaList: rmaList};
-  }
+     verifyListSet(verifyList);
+     rmaListSet(rmaList);
+  }, [batchData]);
 
-
-    const a = app;
-    const b = batchData;
-    const w = widgetData;
-    const v = w.versions.find( x => x.versionKey === b.versionKey );
+  const a = app;
+  const b = batchData;
+  const w = widgetData;
+  const v = w.versions.find( x => x.versionKey === b.versionKey );
+  
+  const done = b.finishedAt !== false; // no more boards if batch is finished
+  const allDone = b.items.every( x => x.finishedAt !== false );
     
-    const done = b.finishedAt !== false; // no more boards if batch is finished
-    const allDone = b.items.every( x => x.finishedAt !== false );
-
-    const filter = filterSpecial();
-    
-    const path = !b ? 
-      { riverTitle: 'not found', riverFlow: [], 
-        riverAltTitle: 'not found', riverFlowAlt: [], 
-        ncListKeys: [], progCounts: false 
-      } : getFlows();
-                        
+  Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(JSON.stringify(flowData));
 
   return(
     <div className='section' key={b.batch}>
@@ -105,27 +73,27 @@ const BatchPanel = ({ batchData, widgetData, user, app })=> {
           user={user}
           done={done}
           allDone={allDone}
-          progCounts={path.progCounts}
-          riverTitle={path.riverTitle}
-          riverAltTitle={path.riverAltTitle} />
+          progCounts={flowData.progCounts}
+          riverTitle={flowData.riverTitle}
+          riverAltTitle={flowData.riverAltTitle} />
       
         <TimeTab 
           a={app}
           b={batchData}
           v={v}
           user={user}
-          totalUnits={path.progCounts.totalRegUnits + path.progCounts.totalAltUnits}
+          totalUnits={flowData.progCounts.totalRegUnits + flowData.progCounts.totalAltUnits}
           done={done}
           allDone={allDone}
-          riverFlow={path.riverFlow}
-          riverAltFlow={path.riverAltFlow} />
+          riverFlow={flowData.riverFlow}
+          riverAltFlow={flowData.riverAltFlow} />
           
         <div className='space3v'>
           <EventsTimeline
             id={b._id}
             batchData={batchData}
             releaseList={b.releases || []}
-            verifyList={filter.verifyList}
+            verifyList={verifyListState}
             eventList={b.events || []}
             alterList={b.altered || []}
             quoteList={b.quoteTimeBudget || []}
@@ -135,9 +103,9 @@ const BatchPanel = ({ batchData, widgetData, user, app })=> {
         <ProblemTab 
           a={app}
           b={batchData}
-          riverFlow={path.riverFlow}
-          riverAltFlow={path.riverAltFlow}
-          ncListKeys={path.ncListKeys.flat()} />
+          riverFlow={flowData.riverFlow}
+          riverAltFlow={flowData.riverAltFlow}
+          ncTypesCombo={flowData.ncTypesComboFlat} />
         
         <div>
           <RMATable
@@ -146,7 +114,8 @@ const BatchPanel = ({ batchData, widgetData, user, app })=> {
             items={b.items}
             options={a.trackOption}
             end={a.lastTrack}
-            inUse={filter.rmaList}
+            inUse={rmaListState}
+            ncTypesCombo={flowData.ncTypesComboFlat}
             app={a} />
           <p>{Pref.escape}s: {b.escaped.length}</p>
         </div>
