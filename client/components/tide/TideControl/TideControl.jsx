@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 import './style.css';
         
 const TideControl = ({ batchID, tideKey, currentLive, tideLockOut })=> {
   
+  const thingMounted = useRef(true);
+  const [serverResponse, setResponse] = useState(0);
   const [lock, setLock] = useState(false);
   
-  function timerUnlock() {
-	  return Meteor.setTimeout( ()=>{
-      setLock(false);
-    },5000);
-  }
-  
   useEffect(() => {
-    return () => { Meteor.clearInterval(timerUnlock); };
-  }, []);
+    const timer = Meteor.setTimeout( ()=>{ setLock(false); },5000);
+    return () => { 
+      Meteor.clearTimeout(timer);
+      thingMounted.current = false;
+    };
+  }, [serverResponse]);
   
   function handleStart() {
     setLock(true);
@@ -24,9 +24,11 @@ const TideControl = ({ batchID, tideKey, currentLive, tideLockOut })=> {
         console.log(error);
         toast.error('Rejected by Server');
       }
-      if(reply) {
-        timerUnlock();
-        document.getElementById('lookup').focus();
+      if(reply === true) {
+        if(thingMounted.current) {
+          setResponse(serverResponse + 1);
+          document.getElementById('lookup').focus();
+        }
       }
     });
   }
@@ -37,9 +39,11 @@ const TideControl = ({ batchID, tideKey, currentLive, tideLockOut })=> {
         console.log(error);
         toast.error('Rejected by Server');
       }
-      if(reply) {
-        timerUnlock();
-        document.getElementById('lookup').focus();
+      if(reply === true) {
+        if(thingMounted.current) {
+          setResponse(serverResponse + 1);
+          document.getElementById('lookup').focus();
+        }
       }
     });
   }
@@ -51,9 +55,11 @@ const TideControl = ({ batchID, tideKey, currentLive, tideLockOut })=> {
         console.log(error);
         toast.error('Rejected by Server');
       }
-      if(reply) {
-        timerUnlock();
-        document.getElementById('lookup').focus();
+      if(reply === true) {
+        if(thingMounted.current) {
+          setResponse(serverResponse + 1);
+          document.getElementById('lookup').focus();
+        }
       }
     });
   }

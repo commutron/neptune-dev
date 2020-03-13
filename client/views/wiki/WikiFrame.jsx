@@ -1,6 +1,6 @@
 import React from 'react';
 
-const WikiFrame = ({ go, full })=> {
+const WikiFrame = ({ go, full, anchor })=> {
   let sty = {
     width: '100%',
     minHeight: '99%',
@@ -17,6 +17,7 @@ const WikiFrame = ({ go, full })=> {
       id='instruct'
       style={sty}
       src={go}
+      data-hashbrown={anchor}
       //height={( (document.body.scrollHeight - document.body.scrollTop) - correct ) +'px'}
       allowFullScreen
     />

@@ -8,14 +8,6 @@ function collectActivtyLevel(privateKey, batchID, clientTZ) {
     
     const now = moment().tz(clientTZ);
     
-    const durrCheck = (time, unit, bar)=> {
-      if(!time) { return false }else{
-        return moment.duration(
-                now.diff(moment(time).tz(clientTZ)))
-                  .as(unit) < bar;
-      }
-    };
-    
     const peopleCount = (filtered)=> new Set( 
       Array.from(filtered, y => y.who ) 
     ).size;
@@ -29,8 +21,6 @@ function collectActivtyLevel(privateKey, batchID, clientTZ) {
         isActive: {
           isNow: 0,
           hasHour: 0,
-          hasRecent: 0,
-          hasShift: 0,
           hasDay: 0,
           hasNone: true
         }
@@ -44,18 +34,17 @@ function collectActivtyLevel(privateKey, batchID, clientTZ) {
       const yNow = tide.filter( x => x.stopTime === false );
       const isNow = peopleCount(yNow);
       
-      const yHour = tide.filter( x => durrCheck(x.stopTime, 'hours', 1) );
+      const allStopped = tide.filter( x => x.stopTime !== false );
+      
+      const yHour = allStopped.filter( x => moment.duration(
+                                        now.diff(moment(x.stopTime).tz(clientTZ)))
+                                          .as('hours') < 1 );
       const hasHour = peopleCount(yHour);
       
-      const yRecent = tide.filter( x => durrCheck(x.stopTime, 'hours', 4) );
-      const hasRecent = peopleCount(yRecent);
-      
-      const yShift = tide.filter( x => durrCheck(x.stopTime, 'hours', 12) );
-      const hasShift = peopleCount(yShift);
-      
-      const yDay = tide.filter( x => durrCheck(x.stopTime, 'hours', 24) );
+      const yDay = allStopped.filter( x => now.isSame(
+                                      moment(x.stopTime).tz(clientTZ)
+                                      , 'day') );
       const hasDay = peopleCount(yDay);
-      
  
       collection = {
         batch: batch.batch,
@@ -63,8 +52,6 @@ function collectActivtyLevel(privateKey, batchID, clientTZ) {
         isActive: {
           isNow: isNow,
           hasHour: hasHour,
-          hasRecent: hasRecent,
-          hasShift: hasShift,
           hasDay: hasDay,
           hasNone: tide.length === 0
         }

@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 // import Pref from '/client/global/pref.js';
 import moment from 'moment';
 import 'moment-timezone';
@@ -16,6 +16,7 @@ import Theme from '/client/global/themeV.js';
 
 const TrendBar = ({ title, statType, cycleCount, cycleBracket })=>{
 
+  const thingMounted = useRef(true);
   const blank =  [ {x:1,y:0} ];
   // const blank = Array(cycleCount);
   const [ dataG, dataGSet ] = useState( blank );
@@ -25,13 +26,18 @@ const TrendBar = ({ title, statType, cycleCount, cycleBracket })=>{
     const clientTZ = moment.tz.guess();
     Meteor.call('cycleWeekRate', clientTZ, statType, cycleCount, cycleBracket, (err, re)=>{
       err && console.log(err);
-      Roles.userIsInRole(Meteor.userId(), 'debug') && 
-        console.log(`${title}: ${JSON.stringify(re)}`);
-      const barOne = Array.from(re, w => { return { x: w.x, y: w.y[0] } } );
-      const barTwo = Array.from(re, w => { return { x: w.x, y: w.y[1] } } );
-      dataGSet(barOne);
-      dataNGSet(barTwo);
+      if(re) {
+        if(thingMounted.current) {
+          Roles.userIsInRole(Meteor.userId(), 'debug') && 
+            console.log(`${title}: ${JSON.stringify(re)}`);
+          const barOne = Array.from(re, w => { return { x: w.x, y: w.y[0] } } );
+          const barTwo = Array.from(re, w => { return { x: w.x, y: w.y[1] } } );
+          dataGSet(barOne);
+          dataNGSet(barTwo);
+        }
+      }
     });
+    return () => { thingMounted.current = false };
   }, []);
   
   return(

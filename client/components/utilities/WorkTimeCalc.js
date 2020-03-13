@@ -9,8 +9,7 @@ export function TimeInWeek( nonWorkDays, weekStart ) {
       holidays: nonWorkDays
     });
   }
-  
-  if(moment(weekStart).isValid()) {
+  if(moment(weekStart, ["YYYY", moment.ISO_8601]).isValid()) {
   
     const begin = moment(weekStart).startOf('day').format(); 
 
@@ -40,7 +39,7 @@ export function TimeInDay( nonWorkDays, dayStart ) {
     });
   }
   
-  if(moment(dayStart).isValid()) {
+  if(moment(dayStart, ["YYYY", moment.ISO_8601]).isValid()) {
   
     const begin = moment(dayStart).startOf('day').format(); 
     const end = moment(dayStart).endOf('day').format();

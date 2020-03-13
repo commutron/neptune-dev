@@ -4,15 +4,14 @@ import WikiFrame from './WikiFrame';
 
 const WikiOps = ({ wi, root, anchor, full })=> {
   
-  //console.log(anchor);
+  const address = !wi || wi === 'home' || wi === 'none' ?
+                    root : wi;
   
-  let goto = wi;
+  const goString = !anchor || anchor === "" ? 
+                    address : `${address}#${anchor}`;
   
-  !goto || goto === 'home' || goto === 'none' ? goto = root : null;
-  //anchor ? goto = goto + '#' + anchor : null;
-
   return(
-    <WikiFrame go={goto} full={full} />
+    <WikiFrame go={goString} full={full} anchor={anchor} />
   );
 };
 

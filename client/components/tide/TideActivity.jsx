@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 // import Pref from '/client/global/pref.js';
 import moment from 'moment';
 import 'moment-timezone';
 
 const TideActivityData = ({ batchID, app })=> {
 
+  const thingMounted = useRef(true);
   const [ acData, setPriority ] = useState(false);
   
   useEffect( ()=> {
@@ -12,10 +13,11 @@ const TideActivityData = ({ batchID, app })=> {
     Meteor.call('tideActivityLevel', batchID, clientTZ, (error, reply)=>{
       error && console.log(error);
       if( reply ) { 
-        setPriority( reply );
+        if(thingMounted.current) { setPriority( reply ); }
         Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(reply);
       }
     });
+    return () => { thingMounted.current = false };
   }, [batchID]);
   
   return(
@@ -43,7 +45,7 @@ export const TideActivitySquare = ({ batchID, acData, app })=> {
                    !ac.hasNone ? 'still' : false;
     
     const movedClass = ac.hasHour > 0 ? 'greenT' : 
-                       ac.hasShift > 0 ? 'greenT fadeMore' :
+                       ac.hasDay > 0 ? 'greenT fadeMore' :
                        'grayT fadeMore';
     
     Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({ac});
@@ -60,13 +62,11 @@ export const TideActivitySquare = ({ batchID, acData, app })=> {
     const noun = (num)=> num === 1 ? 'person' : 'people';
     
     const nTxt = `Active Now: ${ac.isNow} ${noun(ac.isNow)}`;
-    const joiner = `Other Activity:\nin the last`;
-    const hTxt = `   hour: ${ac.hasHour} ${noun(ac.hasHour)}`;
-    const rTxt = `   four hours: ${ac.hasRecent} ${noun(ac.hasRecent)}`;
-    const sTxt = `   twelve hours: ${ac.hasShift} ${noun(ac.hasShift)}`;
-    const dTxt = `   twenty-four hours: ${ac.hasDay} ${noun(ac.hasDay)}`;
+    const joiner = `Other Activity:`;
+    const hTxt = `   in the last hour: ${ac.hasHour} ${noun(ac.hasHour)}`;
+    const dTxt = `   sometime today: ${ac.hasDay} ${noun(ac.hasDay)}`;
     
-    const title = `${nTxt}\n${joiner}\n${hTxt}\n${rTxt}\n${sTxt}\n${dTxt}`;
+    const title = `${nTxt}\n${joiner}\n${hTxt}\n${dTxt}`;
 
     return(
       <div title={title}>

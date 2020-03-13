@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
 import NumStat from '/client/components/uUi/NumStat.jsx';
 
 const PrioritySquareData = ({ batchID, app, dbDay, mockDay, altNumber })=> {
-
+  
+  const thingMounted = useRef(true);
   const [ ptData, setPriority ] = useState(false);
   
   useEffect( ()=> {
@@ -12,10 +13,11 @@ const PrioritySquareData = ({ batchID, app, dbDay, mockDay, altNumber })=> {
     Meteor.call('priorityRank', batchID, clientTZ, false, mockDay, (error, reply)=>{
       error && console.log(error);
       if( reply ) { 
-        setPriority( reply );
+        if(thingMounted.current) { setPriority( reply ); }
         Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(ptData);
       }
     });
+    return () => { thingMounted.current = false };
   }, [batchID, dbDay, mockDay]);
   
   return( 

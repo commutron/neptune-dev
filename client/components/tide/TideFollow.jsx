@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 import { toast } from 'react-toastify';
 
 const TideFollow = ({ proRoute, invertColor })=> {
   
+  const thingMounted = useRef(true);
   const [engaged, doEngage] = useState(false);
   
   useEffect(() => {
     Meteor.call('engagedState', (err, rtn)=>{
 	    err && console.log(err);
-	    doEngage(rtn);
+	    rtn && thingMounted.current && doEngage(rtn);
 	  });
 	  loopClock = Meteor.setInterval( ()=>{
       if(!proRoute && engaged) {
@@ -22,7 +23,9 @@ const TideFollow = ({ proRoute, invertColor })=> {
         });
       }
     },1000*60*15);
-    return () => { Meteor.clearInterval(loopClock); };
+    return () => { 
+        thingMounted.current = false;
+        Meteor.clearInterval(loopClock); };
   }, [proRoute]);
   
 	const go = ()=> {

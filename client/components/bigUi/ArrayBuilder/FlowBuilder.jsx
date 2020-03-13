@@ -36,10 +36,11 @@ export default class FlowBuilder extends Component	{
     e.preventDefault();
     let list = this.state.steps; // steps set from state
     const sk = this.rStep.value; // key of the selected step
+    const hw = this.rHow.value; // key of the selected step
     const step = this.props.options.find( x => x.key === sk ); // the step object
    
     // set how key in the track object
-    step['how'] = '';
+    step['how'] = hw;
     
     // take off the end finish step
     list.delete(this.props.end);
@@ -148,6 +149,12 @@ export default class FlowBuilder extends Component	{
                     return ( <option key={index} value={entry.key}>{entry.step + ' - ' + entry.type}</option> );
                   })}
                 </select>
+              </label>
+              <label htmlFor='rthow' className='inlineForm'><br />
+                <input 
+                  id='rthow'
+                  type='text'
+                  ref={(i)=> this.rHow = i} /> 
                 <button type='submit' className='smallAction clearWhite'>Add</button>
               </label>
               <i className='breath'></i>
@@ -169,6 +176,9 @@ export default class FlowBuilder extends Component	{
                   </div>
                   <div>
                     {entry.phase}
+                  </div>
+                  <div>
+                    {entry.how}
                   </div>
                   <div>
                     <button

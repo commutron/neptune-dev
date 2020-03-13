@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 // import Pref from '/client/global/pref.js';
 import moment from 'moment';
 import 'moment-timezone';
@@ -19,6 +19,7 @@ const TrendLine = ({
   lineColor
 })=>{
   
+  const thingMounted = useRef(true);
   const blank = [ {x:1,y:0} ];
   // const blank = Array(cycleCount);
   const [ data, dataSet ] = useState( blank );
@@ -32,9 +33,10 @@ const TrendLine = ({
         err && console.log(err);
         Roles.userIsInRole(Meteor.userId(), 'debug') && 
           console.log(`${title}: ${JSON.stringify(re)}`);
-        re && dataSet(re);
+        re && thingMounted.current && dataSet(re);
       });
     }
+    return () => { thingMounted.current = false };
   }, [localXY, cycleCount, cycleBracket]);
   
   return(

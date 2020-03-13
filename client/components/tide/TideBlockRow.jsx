@@ -45,17 +45,17 @@ const TideBlockRow = ({
   }
  
   const mStart = moment(startTime);
-  const mStop = stopTime ? moment(stopTime) : false;
+  const mStop = stopTime ? moment(stopTime) : moment();
   
   const absoluteMin = allUsers ? moment(startTime).startOf('day').format() :
   !lastStop || !moment(lastStop).isAfter(moment(startTime).startOf('day')) ?
     moment(startTime).startOf('day').format() : lastStop;
     
-  const absoluteMax = allUsers ? moment(stopTime).endOf('day').format() :
+  const absoluteMax = allUsers ? moment(mStop).endOf('day').format() :
   !mStop ? moment().format() : 
     !nextStart && !moment().isAfter(mStop, 'day') ? moment().format() :
-      !nextStart || moment(nextStart).isAfter(moment(stopTime).endOf('day')) ?
-        moment(stopTime).endOf('day').format() : nextStart;
+      !nextStart || moment(nextStart).isAfter(moment(mStop).endOf('day')) ?
+        moment(mStop).endOf('day').format() : nextStart;
   
   const editSelf = tideWho === Meteor.userId();
   const editAuth = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
@@ -82,7 +82,7 @@ const TideBlockRow = ({
                   minDate: absoluteMin,
                   maxDate: tempStop[0] ? 
                     moment(tempStop[0]).startOf('minute').format() :
-                    moment(stopTime).startOf('minute').format(),
+                    moment(mStop).startOf('minute').format(),
                   minuteIncrement: 1,
                   noCalendar: true,
                   enableTime: true,
