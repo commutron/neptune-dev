@@ -52,11 +52,6 @@ const CookieBar = ({
       {itemData && 
         <span className='cookieCrumb'>
           <span className='crumb'></span>
-          <button 
-            className='cookie numFont'
-            onClick={()=>FlowRouter.go('/data/batch?request=' + batchData.batch + '&specify=' + itemData.serial)}>
-            {itemData.serial}
-          </button>
         </span>}
      
     </div>

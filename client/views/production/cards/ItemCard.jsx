@@ -41,7 +41,7 @@ import ScrapBox from '/client/components/smallUi/ScrapBox.jsx';
 const ItemCard = ({
   itemContext, batchData, itemData, widgetData, 
   users, app,
-  currentLive, flow, flowAlt, progCounts,
+  currentLive, flow, flowAlt, floorReleased, progCounts,
   showVerify, optionVerify, changeVerify
 })=> {
 
@@ -65,7 +65,7 @@ const ItemCard = ({
     );
   }
     
-  if(b.floorRelease === false) {
+  if(floorReleased === false) {
     Session.set('ncWhere', Pref.outOfFlow);
     Session.set('nowStepKey', undefined);
     return(

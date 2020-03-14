@@ -7,7 +7,7 @@ import ErrorCatch from '/client/components/utilities/ErrorCatch.jsx';
 import HomeIcon from '/client/layouts/HomeIcon.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
 import TaskBar from './TaskBar.jsx';
-import ActionBar from '/client/components/bigUi/ActionBar.jsx';
+import ActionBar from '/client/components/bigUi/ToolBar/ActionBar.jsx';
 import CookieBar from './CookieBar.jsx';
 
 export const TraverseWrap = ({
@@ -136,6 +136,7 @@ export const TraverseWrap = ({
                   widgetData={widgetData}
                   versionData={versionData}
                   app={app}
+                  user={user}
                   action={action}
                   ncTypesCombo={flowData && flowData.ncTypesComboFlat} />
               </div>}

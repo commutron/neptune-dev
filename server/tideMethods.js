@@ -181,13 +181,16 @@ Meteor.methods({
       };
       
       const startSecond = (nbID, aKey)=> {
-        Meteor.call('startTideTask', nbID, aKey);
+        Meteor.call('startTideTask', nbID, aKey, (err, re)=>{
+          err && new Meteor.Error(err);
+          return true;
+        });
       };
       
       stopFirst(tideKey, accessKey).then(startSecond(newbatchID, accessKey));
-      return true;
-    }catch (err) {
-      throw new Meteor.Error(err);
+
+    }catch (error) {
+      throw new Meteor.Error(error);
     }
   },
   

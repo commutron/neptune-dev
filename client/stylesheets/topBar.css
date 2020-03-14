@@ -15,17 +15,16 @@
   border-radius: 0%;
   -webkit-appearance: none;
   -moz-appearance: none;
+  word-break: normal;
 }
 
-/*
-#lookup:focus {
-	color: white;
-	background: rgb(25,25,25);
-  outline: none;
-  border-color: var(--neptuneColor);
-  box-shadow: 0 0 .2em .2em rgba(43,43,43,0.3);
+@media screen and (max-width: 885px){
+  #lookup { font-size: 4vh; }
 }
-*/
+@media screen and (max-width: 785px){
+  #lookup { font-size: 3vh; }
+}
+
 #lookup::selection {
 	color: white;
 	background: rgb(30,30,30);
@@ -95,13 +94,13 @@ input::-webkit-calendar-picker-indicator {
 .primeNav .login-link-text {
   color: black;
 }
-
+/*
 #dtToggle, #ikyToggle, #timeToggle, #exitToggle {
   display: none;
 }
 
 #boltSwitch, #snapSwitch, #timeSwitch, #exitSwitch {
-  /*cursor: pointer;*/
+  cursor: pointer;
   transition: 0.4s cubic-bezier(0.2, 0.6, 0.3, 1.1);
 }
 
@@ -114,4 +113,6 @@ input::-webkit-calendar-picker-indicator {
   display: block;
   white-space: nowrap;
 }
+
+*/
 

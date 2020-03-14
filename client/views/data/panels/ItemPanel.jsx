@@ -48,29 +48,27 @@ const ItemPanel = ({
   return(
     <div className='section' key={i.serial}>
     
-      <div className='titleSection'>
-        <span>Units: {i.units}</span>
-        <span>
-          { !start ?
-            <i className='fas fa-hourglass-start' title='unstarted'></i>
-            :
-            done ? 
-            <i className='fas fa-check-circle greenT' title='finished'></i>
-            : 
-            <i className='fas fa-sync blueT' title='in progress'></i>
-          }
-        </span>
-        <span>
-        {/*
-          <WatchButton 
-            list={user.watchlist}
-            type='item'
-            keyword={`${i.serial}+${b.batch}`} />
-        */}
-        </span>
+      <div className='balance'>
+        <div className='numFont space2v'>
+          <div className='cap biggest'>{i.serial}</div>
+        </div>
+        <div className='titleSection space2v'>
+          <span>Units: {i.units}</span>
+          <span>
+            { !start ?
+              <i className='fas fa-hourglass-start' title='unstarted'></i>
+              :
+              done ? 
+              <i className='fas fa-check-circle greenT' title='finished'></i>
+              : 
+              <i className='fas fa-sync blueT' title='in progress'></i>
+            }
+          </span>
+        </div>
+        
       </div>
       
-      <div className='space'>
+      <div className='uspace'>
         { i.subItems.length > 0 && 
           <p> 
             <i>Nested sub {Pref.item}s: </i>

@@ -1,6 +1,3 @@
-/* @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
-meteor seems to be handling this */
-
 .actionBar {
   display: flex;
   flex-direction: row;
@@ -26,80 +23,12 @@ meteor seems to be handling this */
   padding: 0 5px 0 0;
 }
 
-.actionForm {
-  display: flex;
-  justify-content: center;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-}
-.actionForm fieldset {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-}
-.actionIconWrap {
-  margin: 0 0.5rem;
-}
-
-.actionIconText {
-  color: white;
-  font-size: small;
-  text-transform: capitalize;
-  line-height: 1rem;
-  display: block;
-  white-space: nowrap;
-  border-bottom-style: hidden;
-  text-decoration: none;
-}
-
-.actionIconWrap:hover .actionIconText {
-  text-decoration: underline;
-}
-
-.actionForm span,
-.actionForm div {
-  margin: 0 10px;
-}
-.actionForm input,
-.actionForm select, 
-.actionForm datalist {
-  line-height: 1.5rem;
-  font-size: 1rem;
-  min-width: 125px;
-  max-width: 250px;
-  height: 1.75rem;
-  letter-spacing: 1.5px;
-}
-.actionForm option {
-  min-width: 125px;
-  max-width: 250px;
-}
-
-.actionForm label {
-  min-width: 125px;
-  max-width: 200px;
-  letter-spacing: 1.5px;
-}
-
 .actionForm .redIn option,
 .actionForm .redIn optgroup {
   color: black;
   background-color: white;
 }
 
-.actionForm > button {
-  margin: 0 5px;
-  font-size: medium;
-  text-transform: capitalize; 
-  word-break: keep-all;
-  letter-spacing: 1px;
-  overflow: hidden;
-  /*align-self: center;*/
-}
 .redIn, .orangeIn {
   color: white;
 }
@@ -122,11 +51,7 @@ select.redIn > option,
 select.orangeIn > option {
   color: black;
 }
-/*
-.redIn {
-  color: var(--alizarin);
-}
-*/
+
 input.redIn:focus {
   border-bottom-color: var(--alizarin);
 }
@@ -150,18 +75,7 @@ input.orangeIn:invalid {
 .orangeIn:focus + label {
   color: var(--orange);
 }
-/*
-.inputMultiSelected {
-  background-color: transparent;
-  border: 1px solid transparent;
-  padding: 0 3px;
-  border-color: var(--clouds);
-}
-.inputMultiSelected > i {
-  position: relative;
-  bottom: -5px;
-}
-*/
+
 .formBarToggle {
   display: flex;
   flex-direction: column;
@@ -178,6 +92,7 @@ input.orangeIn:invalid {
   font-size: 2rem;
   border-radius: 50%;
 }
+
 #ncselect + .formBarIcon,
 #ncselect ~ .actionIconText {
   color: var(--alizarin);
@@ -226,4 +141,3 @@ input.orangeIn:invalid {
     max-width: 175px;
   }
 }
-

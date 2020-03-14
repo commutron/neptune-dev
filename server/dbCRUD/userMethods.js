@@ -235,6 +235,16 @@ Meteor.methods({
     });
   },
   
+  setUserNCselection() {
+    const curr = Meteor.user().typeNCselection;
+    const change = !curr ? true : false;
+    Meteor.users.update(Meteor.userId(), {
+      $set: {
+        typeNCselection: change,
+      }
+    });
+  },
+  
   setMinAction() {
     const curr = Meteor.user().miniAction;
     const change = !curr ? true : false;

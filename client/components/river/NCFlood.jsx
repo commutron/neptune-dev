@@ -2,18 +2,13 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-const NCFlood = ({ id, live, user, app, ncListKeys })=> {
-  
-  const asignedNCLists = app.nonConTypeLists.filter( 
-    x => ncListKeys.find( y => y === x.key ) ? true : false );
-  
-  const ncTypesCombo = Array.from(asignedNCLists, x => x.typeList);
-	const ncTypesComboFlat = [].concat(...ncTypesCombo);
-  const flatCheckList = ncTypesComboFlat.length > 0 ?
-    Array.from(ncTypesComboFlat, x => x.live === true && x.typeText)
-    : app.nonConOption;
+const NCFlood = ({ id, live, user, app, ncTypesCombo })=> {
   
   function handleCheck(e) {
+    const flatCheckList = ncTypesCombo.length > 0 ?
+      Array.from(ncTypesCombo, x => x.live === true && x.typeText)
+      : app.nonConOption;
+  
     let match = flatCheckList.find( x => x === e.target.value);
     let message = !match ? 'please choose from the list' : '';
     e.target.setCustomValidity(message);
@@ -73,34 +68,74 @@ const NCFlood = ({ id, live, user, app, ncListKeys })=> {
             required />
           <label htmlFor='ncRefs'>{Pref.nonConRef}</label>
         </span>
-        <span>
-          <input 
-            id='ncType'
-            className='redIn'
-            type='search'
-            placeholder='Type'
-            list='ncTypeList'
-            disabled={lock}
-            onInput={(e)=>handleCheck(e)}
-            required
-            disabled={ncTypesComboFlat.length < 1}
-            autoComplete={navigator.userAgent.includes('Firefox/') ? "off" : ""}
-              // ^^^ workaround for persistent bug in desktop Firefox ^^^
-          />
-          <label htmlFor='ncType'>{Pref.nonConType}</label>
-          <datalist id='ncTypeList'>
-            {ncTypesComboFlat.map( (entry, index)=>{
-              if(entry.live === true) {
+        {user.typeNCselection ?
+          <span>
+            <input 
+              id='ncType'
+              className='redIn'
+              type='search'
+              placeholder='Type'
+              list='ncTypeList'
+              onInput={(e)=>handleCheck(e)}
+              required
+              disabled={lock || ncTypesCombo.length < 1}
+              autoComplete={navigator.userAgent.includes('Firefox/') ? "off" : ""}
+                // ^^^ workaround for persistent bug in desktop Firefox ^^^
+            />
+            <label htmlFor='ncType'>{Pref.nonConType}</label>
+            <datalist id='ncTypeList'>
+              {ncTypesCombo.map( (entry, index)=>{
+                if(!entry.key) {
+                  return ( 
+                    <option 
+                      key={index} 
+                      value={entry}
+                    >{index + 1}. {entry}</option>
+                  );
+                }else if(entry.live === true) {
+                  let cd = user.showNCcodes ? `${entry.typeCode}. ` : '';
+                  return ( 
+                    <option 
+                      key={index}
+                      data-id={entry.key}
+                      value={entry.typeText}
+                      label={cd + entry.typeText}
+                    />
+                  );
+              }})}
+            </datalist>
+          </span>
+        :
+          <span>
+            <select 
+              id='ncType'
+              className='redIn'
+              required
+              disabled={lock || ncTypesCombo.length < 1}
+            >
+            {ncTypesCombo.map( (entry, index)=>{
+              if(!entry.key) {
                 return ( 
                   <option 
-                    key={index}
+                    key={index} 
+                    value={entry}
+                  >{index + 1}. {entry}</option>
+                );
+              }else if(entry.live === true) {
+                let cd = user.showNCcodes ? `${entry.typeCode}. ` : '';
+                return ( 
+                  <option 
+                    key={entry.key}
                     data-id={entry.key}
                     value={entry.typeText}
-                  >{user.showNCcodes && entry.typeCode}</option>
+                    label={cd + entry.typeText}
+                  />
                 );
             }})}
-          </datalist>
-        </span>
+            </select>
+            <label htmlFor='ncType'>{Pref.nonConType}</label>
+          </span>
+        }
           <button
             type='submit'
             id='go'

@@ -12,8 +12,8 @@ import StepsProgress from '../../../components/bigUi/StepsProgress/StepsProgress
 const BatchCard = ({ 
   batchData, itemSerial, widgetData, groupData, 
   user, app,
-  flow, flowAlt, progCounts,
-  currentLive
+  flow, flowAlt, floorReleased,
+  progCounts, currentLive
 })=> {
 
   const b = batchData;
@@ -29,8 +29,6 @@ const BatchCard = ({
   
   let warn = b.blocks.filter( x => x.solve === false ).length;
   iNoready ? warn++ : null;
-  
-  let released = b.releases.findIndex( x => x.type === 'floorRelease') >= 0;
   
   let tabOps = [
     <i className='fas fa-info-circle fa-fw' data-fa-transform='down-2' title='Info'></i>, 
@@ -50,7 +48,7 @@ const BatchCard = ({
           </div>
         }
         
-        {!released && 
+        {!floorReleased && 
           <ReleaseAction 
             id={b._id} 
             rType='floorRelease'

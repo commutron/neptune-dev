@@ -238,6 +238,25 @@ export const ChangeNCcodes = ()=> {
   );
 };
 
+export const ChangeNCselection = ()=> {
+  function handle() {
+    Meteor.call('setUserNCselection', (error)=>{
+      if(error)
+        console.log(error);
+    });
+  }
+  let current = Meteor.user().typeNCselection ? 'ON' : 'OFF';
+  let color = Meteor.user().typeNCselection ? 'clearGreen' : 'clearRed';
+  return(
+    <p>Type search {Pref.nonCon} list 
+      <button
+        className={'action clean ' + color}
+        onClick={()=>handle()}
+      >{current}</button>
+    </p>
+  );
+};
+
 export const ChangeMinAction = ()=> {
   function handle() {
     Meteor.call('setMinAction', (error)=>{

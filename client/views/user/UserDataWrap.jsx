@@ -19,6 +19,7 @@ import PrivacyPanel from './PrivacyPanel.jsx';
 import { AdminDown } from '/client/components/forms/AdminForm.jsx';
 import { ChangeAutoScan } from '/client/components/forms/UserManageForm.jsx';
 import { ChangeNCcodes } from '/client/components/forms/UserManageForm.jsx';
+import { ChangeNCselection } from '/client/components/forms/UserManageForm.jsx';
 import UserSpeedSet from '/client/components/forms/UserSpeedSet.jsx';
 import PasswordChange from '/client/components/forms/PasswordChange.jsx';
 import { PermissionHelp } from '/client/views/people/AccountsManagePanel';
@@ -112,11 +113,13 @@ const UserDataWrap = ({
               <p>organization: <i className='greenT'>{Meteor.user().org}</i></p>
               <hr />
               <fieldset>
-                <p><ChangeAutoScan /></p>
+                <ChangeAutoScan />
                 <hr/>
-                <p><ChangeNCcodes /></p>
+                <ChangeNCcodes />
                 <hr />
-                <p><UserSpeedSet /></p>
+                <ChangeNCselection />
+                <hr />
+                <UserSpeedSet />
               </fieldset>
               <hr />
               <fieldset>

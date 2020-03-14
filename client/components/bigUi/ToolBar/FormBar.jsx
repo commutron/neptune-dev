@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
+import './style.css';
 import Pref from '/client/global/pref.js';
 import TideLock from '/client/components/tide/TideLock.jsx';
 
-import NCAdd from '../river/NCAdd.jsx';
-import NCFlood from '../river/NCFlood.jsx';
-import ShortAdd from '../river/ShortAdd.jsx';
+import NCAdd from '/client/components/river/NCAdd.jsx';
+import NCFlood from '/client/components/river/NCFlood.jsx';
+import ShortAdd from '/client/components/river/ShortAdd.jsx';
 
 const FormBar = ({ 
   batchData, itemData, widgetData, versionData, 
-  currentLive, ncListKeys, 
+  currentLive, ncTypesCombo, 
   action, showVerify, changeVerify, 
   user, users, app 
 })=> {
@@ -28,8 +29,6 @@ const FormBar = ({
     
   const pastPN = b && b.shortfall ? [...new Set( Array.from(b.shortfall, x => x.partNum ) )] : [];
   const pastRF = b && b.shortfall ? [...new Set( Array.from(b.shortfall, x => x.refs.toString() ) )] : [];
-    
-  const ncListKeysFlat = ncListKeys.flat();
     
   return(
     <TideLock currentLive={currentLive} message={true}>
@@ -80,7 +79,8 @@ const FormBar = ({
               //<NCAdd 
                 //id={b._id}
                 //barcode={i.serial}
-                //app={app} />
+                //app={app}
+                //ncTypesCombo={ncTypesCombo} />
               <p className='centreText'>Batch NC form <em>in development</em></p>
             : show === 'S' ?
               //<ShortAdd
@@ -98,7 +98,7 @@ const FormBar = ({
                   barcode={i.serial}
                   user={user}
                   app={app}
-                  ncListKeys={ncListKeysFlat} />
+                  ncTypesCombo={ncTypesCombo} />
               : show === 'S' ?
                 <ShortAdd
                   id={b._id}
@@ -114,7 +114,7 @@ const FormBar = ({
                 live={b.finishedAt === false}
                 user={user}
                 app={app}
-                ncListKeys={ncListKeysFlat} />
+                ncTypesCombo={ncTypesCombo} />
         : null}
       </div>
       <div className='footRight'></div>

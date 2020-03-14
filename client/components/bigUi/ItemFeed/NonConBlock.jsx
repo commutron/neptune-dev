@@ -129,6 +129,7 @@ const NonConBlock = ({
               defaultValue={dt.ref}
               required />
             {Roles.userIsInRole(Meteor.userId(), 'nightly') ?
+              user.typeNCselection ?
               <span>
                 <input 
                   id='ncType'
@@ -139,18 +140,57 @@ const NonConBlock = ({
                   list='ncTypeList'
                   onInput={(e)=>handleCheck(e.target, dt.type)}
                   required
+                  autoComplete={navigator.userAgent.includes('Firefox/') ? "off" : ""}
                   disabled={ncTypesCombo.length < 1}/>
                   <datalist id='ncTypeList'>
                     {ncTypesCombo.map( (entry, index)=>{
-                      if(entry.live === true) {
+                      if(!entry.key) {
+                        return ( 
+                          <option 
+                            key={index} 
+                            value={entry}
+                          >{index + 1}. {entry}</option>
+                        );
+                      }else if(entry.live === true) {
+                        let cd = user.showNCcodes ? `${entry.typeCode}. ` : '';
                         return ( 
                           <option 
                             key={index}
                             data-id={entry.key}
                             value={entry.typeText}
-                          >{user.showNCcodes && entry.typeCode}</option>
+                            label={cd + entry.typeText}
+                          />
                     )}})}
                   </datalist>
+              </span>
+              :
+              <span>
+                <select 
+                  id='ncType'
+                  className='redIn'
+                  required
+                  disabled={ncTypesCombo.length < 1}
+                >
+                {ncTypesCombo.map( (entry, index)=>{
+                  if(!entry.key) {
+                    return ( 
+                      <option 
+                        key={index} 
+                        value={entry}
+                      >{entry}</option>
+                    );
+                  }else if(entry.live === true) {
+                    let cd = user.showNCcodes ? `${entry.typeCode}. ` : '';
+                    return ( 
+                      <option 
+                        key={entry.key}
+                        data-id={entry.key}
+                        value={entry.typeText}
+                        label={cd + entry.typeText}
+                      />
+                    );
+                }})}
+                </select>
               </span>
             :
               <select 

@@ -438,7 +438,7 @@ main {
 }
 
 .titleSection {
-  width: 100%;
+  max-width: 100%;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -450,13 +450,11 @@ main {
   font-size: 1.75rem;
   font-style: normal;
   vertical-align: bottom;
-  padding: 1vh 2vw 0 2vw;
-  margin: 0;
+  margin: 0 10px;
 }
 @media screen and (max-width: 1200px){
   .titleSection > span, .titleSection > button {
     font-size: 1.5rem;
-    padding: 0.75vh 1.5vw 0 1.5vw;
   }
 }
 
@@ -640,10 +638,13 @@ main {
 .space5x5 { padding: 5vh 5vw; }
 .space2vsq { padding: 2vh; }
 .space1v { padding: 1vmax; }
+.space2v { padding: 2vh 2vw; }
 .space3v { padding: 3vh 3vw; }
 .space36v { padding: 3vh 6vw; }
 .space { padding: 24px; }
 .vspace { padding: 24px 0; }
+.nspace { padding: 1vh 2vw 0 2vw; }
+.uspace { padding: 0 2vw 1vh 2vw; }
 .vbreak { padding: 0 0 24px 0; }
 .nospace { padding: 0; }
 

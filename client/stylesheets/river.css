@@ -1,7 +1,7 @@
 /* River */
 .stoneFrame {
-  max-width: 22vmax;
-  min-height: 22vmax;
+  max-width: 20vmax;
+  min-height: 20vmax;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -118,8 +118,8 @@
 }
 
 .crackedTop, .crackedBot {
-  width: 16vmax;
-  height: 8vmax;
+  width: 15vmax;
+  height: 7.5vmax;
   z-index: 2;
   background-position: top;
   background-size: 80%;

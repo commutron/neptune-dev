@@ -1,35 +1,37 @@
 import React from 'react';
+import './style.css';
 import moment from 'moment';
 
 import ActionLink from '/client/components/uUi/ActionLink.jsx';
-import BlockForm from '../forms/BlockForm.jsx';
-import BatchCreate from '../forms/BatchCreate.jsx';
-import BatchEdit from '../forms/BatchEdit.jsx';
-import BatchFormX from '../forms/BatchFormX.jsx';
-import MultiItemForm from '../forms/MultiItemForm.jsx';
-import RiverSelect from '../forms/RiverSelect.jsx';
+import BlockForm from '/client/components/forms/BlockForm.jsx';
+import BatchCreate from '/client/components/forms/BatchCreate.jsx';
+import BatchEdit from '/client/components/forms/BatchEdit.jsx';
+import BatchFormX from '/client/components/forms/BatchFormX.jsx';
+import MultiItemForm from '/client/components/forms/MultiItemForm.jsx';
+import RiverSelect from '/client/components/forms/RiverSelect.jsx';
 import CounterAssign from '/client/components/bigUi/ArrayBuilder/CounterAssign.jsx';
-import NCEscape from '../forms/NCEscape.jsx';
-import RMAForm from '../forms/RMAForm.jsx';
-import Remove from '../forms/Remove.jsx';
+import NCEscape from '/client/components/forms/NCEscape.jsx';
+import RMAForm from '/client/components/forms/RMAForm.jsx';
+import Remove from '/client/components/forms/Remove.jsx';
 
-import UnitSet from '../forms/UnitSet.jsx';
-import PanelBreak from '../forms/PanelBreak.jsx';
+import UnitSet from '/client/components/forms/UnitSet.jsx';
+import PanelBreak from '/client/components/forms/PanelBreak.jsx';
 import UndoFinish from '/client/components/forms/UndoFinish.jsx';
-import ItemIncompleteForm from '../forms/ItemIncompleteForm.jsx';
-import ScrapForm from '../forms/ScrapForm.jsx';
+import ItemIncompleteForm from '/client/components/forms/ItemIncompleteForm.jsx';
+import ScrapForm from '/client/components/forms/ScrapForm.jsx';
 
-import WidgetEditForm from '../forms/WidgetEditForm.jsx';
-import VersionForm from '../forms/VersionForm.jsx';
-import { VersionRemove } from '../forms/VersionForm.jsx';
-import CompForm from '../forms/CompForm.jsx';
-import FlowForm from '../forms/FlowForm.jsx';
+import WidgetEditForm from '/client/components/forms/WidgetEditForm.jsx';
+import VersionForm from '/client/components/forms/VersionForm.jsx';
+import { VersionRemove } from '/client/components/forms/VersionForm.jsx';
+import CompForm from '/client/components/forms/CompForm.jsx';
+import FlowForm from '/client/components/forms/FlowForm.jsx';
 
 const ActionBar = ({
   batchData, itemData, 
   groupData, 
   widgetData, versionData, 
-  app, action, noText,
+  app, user,
+  action, noText,
   ncTypesCombo
 })=> (
   
@@ -127,10 +129,12 @@ const ActionBar = ({
           trackOptions={app.trackOption}
           end={app.lastTrack}
           app={app}
+          user={user}
           noText={noText}
           ncTypesCombo={ncTypesCombo || []} />
         <NCEscape
           id={batchData._id}
+          user={user}
           nons={app.nonConOption}
           noText={noText}
           ncTypesCombo={ncTypesCombo || []} />

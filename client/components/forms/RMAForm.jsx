@@ -9,7 +9,8 @@ import FlowBuilder from '/client/components/bigUi/ArrayBuilder/FlowBuilder.jsx';
 // barcode
 
 const RMAForm = ({ 
-  id, editObj, trackOptions, end, app, 
+  id, editObj, trackOptions, end,
+  app, user,
   noText, small,
   ncTypesCombo 
 })=> {
@@ -172,6 +173,8 @@ const RMAForm = ({
             className='redIn up'
             placeholder={Pref.nonConRef} />
           
+          {user.typeNCselection ?
+          <span>
           <input 
             id='ncType'
             className='redIn'
@@ -185,17 +188,57 @@ const RMAForm = ({
           />
           <datalist id='ncTypeList'>
             {ncTypesCombo.map( (entry, index)=>{
-                if(entry.live === true) {
-                  return ( 
-                    <option 
-                      key={index}
-                      data-id={entry.key}
-                      value={entry.typeText}
-                    >{entry.typeCode}</option>
-                  );
+              if(!entry.key) {
+                return ( 
+                  <option 
+                    key={index} 
+                    value={entry}
+                  >{index + 1}. {entry}</option>
+                );
+              }else if(entry.live === true) {
+                let cd = user.showNCcodes ? `${entry.typeCode}. ` : '';
+                return( 
+                  <option 
+                    key={index}
+                    data-id={entry.key}
+                    value={entry.typeText}
+                  label={cd + entry.typeText}
+                />
+                );
               }})
             }
           </datalist>
+          </span>
+          :
+          <span>
+            <select 
+              id='ncType'
+              className='redIn'
+              required
+              disabled={ncTypesCombo.length < 1}
+            >
+            {ncTypesCombo.map( (entry, index)=>{
+              if(!entry.key) {
+                return ( 
+                  <option 
+                    key={index} 
+                    value={entry}
+                  >{index + 1}. {entry}</option>
+                );
+              }else if(entry.live === true) {
+                let cd = user.showNCcodes ? `${entry.typeCode}. ` : '';
+                return ( 
+                  <option 
+                    key={entry.key}
+                    data-id={entry.key}
+                    value={entry.typeText}
+                    label={cd + entry.typeText}
+                  />
+                );
+            }})}
+            </select>
+          </span>
+        }
           
           <button
             type='button'

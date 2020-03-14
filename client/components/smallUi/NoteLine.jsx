@@ -12,19 +12,19 @@ import NoteForm from '../forms/NoteForm';
 
 //<NoteLine entry={version.notes} id={w._id} versionKey={w.versionKey} />
 
-const NoteLine = (props)=> {
+const NoteLine = ({ id, versionKey, xBatch, entry, plain })=> {
 
-  let dt = props.entry;
-  const action = props.id && Roles.userIsInRole(Meteor.userId(), ['edit', 'run']) ? 
+  let dt = entry;
+  const action = id && Roles.userIsInRole(Meteor.userId(), ['edit', 'run']) ? 
                  <NoteForm
-                   id={props.id}
-                   versionKey={props.versionKey}
+                   id={id}
+                   versionKey={versionKey}
                    content={dt.content}
-                   xBatch={props.xBatch}
+                   xBatch={xBatch}
                    small={true} /> : 
                  null;
   
-  if(props.plain && !dt.content) {
+  if(plain && !dt.content) {
     return (
       <div className='noteCard'>
         {action}
@@ -32,7 +32,7 @@ const NoteLine = (props)=> {
     );
   }
     
-  if(props.plain) {
+  if(plain) {
     return (
       <div className='noteCard'>
         {dt.content}
@@ -46,7 +46,7 @@ const NoteLine = (props)=> {
     
   if(!dt.content) {
     return (
-      <fieldset className='noteCard low'>
+      <fieldset className='noteCard'>
         <legend className='cap'>notes</legend>
         {action}
       </fieldset>
@@ -54,7 +54,7 @@ const NoteLine = (props)=> {
   }
     
   return (
-    <fieldset className='noteCard low'>
+    <fieldset className='noteCard'>
       <legend className='cap'>notes</legend>
       {dt.content}
       <div className='footerBar'>

@@ -2,18 +2,13 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-const NCAdd = ({ id, barcode, user, app, ncListKeys })=> {
-  
-  const asignedNCLists = app.nonConTypeLists.filter( 
-    x => ncListKeys.find( y => y === x.key ) ? true : false );
-  
-  const ncTypesCombo = Array.from(asignedNCLists, x => x.typeList);
-	const ncTypesComboFlat = [].concat(...ncTypesCombo);
-  const flatCheckList = ncTypesComboFlat.length > 0 ?
-    Array.from(ncTypesComboFlat, x => x.live === true && x.typeText)
-    : app.nonConOption;
+const NCAdd = ({ id, barcode, user, app, ncTypesCombo })=> {
   
   function handleCheck(target) {
+    const flatCheckList = ncTypesCombo.length > 0 ?
+      Array.from(ncTypesCombo, x => x.live === true && x.typeText)
+      : app.nonConOption;
+  
     let match = flatCheckList.find( x => x === target.value);
     let message = !match ? 'please choose from the list' : '';
     target.setCustomValidity(message);
@@ -74,6 +69,7 @@ const NCAdd = ({ id, barcode, user, app, ncListKeys })=> {
       <label htmlFor='ncRefs'>{Pref.nonConRef}</label>
     </span>
     {Roles.userIsInRole(Meteor.userId(), 'nightly') ?
+      user.typeNCselection ?
       <span>
         <input 
           id='ncType'
@@ -81,35 +77,63 @@ const NCAdd = ({ id, barcode, user, app, ncListKeys })=> {
           type='search'
           placeholder='Type'
           list='ncTypeList'
-          disabled={lock}
           onInput={(e)=>handleCheck(e.target)}
-          required />
+          required
+          disabled={lock || ncTypesCombo.length < 1}
+          autoComplete={navigator.userAgent.includes('Firefox/') ? "off" : ""}
+        />
           <label htmlFor='ncType'>{Pref.nonConType}</label>
           <datalist id='ncTypeList'>
-            <optgroup>
-            {ncTypesComboFlat.length > 0 ?
-              ncTypesComboFlat.map( (entry, index)=>{
-                if(entry.live === true) {
-                  let cd = user.showNCcodes ? `${entry.typeCode}. ` : '';
-                  return ( 
-                    <option 
-                      key={entry.key}
-                      value={entry.typeText}
-                      label={cd + entry.typeText}
-                    />
-                  );
-              }})
-            :
-              app.nonConOption.map( (entry, index)=>{
+            {ncTypesCombo.map( (entry, index)=>{
+              if(!entry.key) {
                 return ( 
-                  <option
-                    key={index + 1 + '.'}
+                  <option 
+                    key={index} 
                     value={entry}
-                  >{user.showNCcodes && `${index + 1}. `}{entry}</option>
+                  >{index + 1}. {entry}</option>
                 );
-              })}
-              </optgroup>
+              }else if(entry.live === true) {
+                let cd = user.showNCcodes ? `${entry.typeCode}. ` : '';
+                return ( 
+                  <option 
+                    key={entry.key}
+                    data-id={entry.key}
+                    value={entry.typeText}
+                    label={cd + entry.typeText}
+                  />
+                );
+            }})}
           </datalist>
+        </span>
+        :
+        <span>
+          <select 
+            id='ncType'
+            className='redIn'
+            required
+            disabled={lock || ncTypesCombo.length < 1}
+          >
+          {ncTypesCombo.map( (entry, index)=>{
+              if(!entry.key) {
+                return ( 
+                  <option 
+                    key={index} 
+                    value={entry}
+                  >{index + 1}. {entry}</option>
+                );
+              }else if(entry.live === true) {
+                let cd = user.showNCcodes ? `${entry.typeCode}. ` : '';
+                return ( 
+                  <option 
+                    key={entry.key}
+                    data-id={entry.key}
+                    value={entry.typeText}
+                    label={cd + entry.typeText}
+                  />
+                );
+          }})}
+          </select>
+          <label htmlFor='ncType'>{Pref.nonConType}</label>
         </span>
       :
         <span>

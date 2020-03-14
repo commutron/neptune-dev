@@ -45,7 +45,7 @@ const TideBlockRow = ({
   }
  
   const mStart = moment(startTime);
-  const mStop = stopTime ? moment(stopTime) : moment();
+  const mStop = stopTime ? moment(stopTime) : false;// this is what is causing the warning
   
   const absoluteMin = allUsers ? moment(startTime).startOf('day').format() :
   !lastStop || !moment(lastStop).isAfter(moment(startTime).startOf('day')) ?
@@ -79,7 +79,8 @@ const TideBlockRow = ({
                 options={{
                   dateFormat: "Y-m-dTG:i:s",
                   defaultDate: moment(mStart).format("YYYY-m-dThh:mm:ss"),
-                  minDate: absoluteMin,
+                  // minDate: absoluteMin,
+                  minDate: moment(absoluteMin).startOf('minute').format(),
                   maxDate: tempStop[0] ? 
                     moment(tempStop[0]).startOf('minute').format() :
                     moment(mStop).startOf('minute').format(),

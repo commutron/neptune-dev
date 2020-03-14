@@ -8,8 +8,9 @@ import HomeIcon from '/client/layouts/HomeIcon.jsx';
 import TideControl from '/client/components/tide/TideControl/TideControl.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
 import FindBox from './FindBox.jsx';
-import FormBar from '/client/components/bigUi/FormBar.jsx';
+import FormBar from '/client/components/bigUi/ToolBar/FormBar.jsx';
 import ProgressCounter from '/client/components/utilities/ProgressCounter.js';
+import NonConOptionMerge from '/client/components/utilities/NonConOptionMerge.js';
 
 export const ProWrap = ({ 
   itemSerial, itemData, batchData, widgetData, versionData, groupAlias, 
@@ -24,7 +25,8 @@ export const ProWrap = ({
   
   const [ flow, flowSet ] = useState([]);
   const [ flowAlt, flowAltSet ] = useState([]);
-  const [ ncListKeys, ncListKeysSet ] = useState([]);
+  const [ floorReleased, floorReleaseSet ] = useState(false);
+  const [ ncTypesComboFlat, ncTypesComboSet ] = useState([]);
   const [ progCounts, progCountsSet ] = useState(false);
 
 
@@ -35,7 +37,9 @@ export const ProWrap = ({
     const w = widgetData;
     let getFlow = [];
     let getFlowAlt = [];
+    let getFlRel = false;
     let getNCListKeys = [];
+    let getNCTypesCombo = [];
     let getProgCounts = false;
     if( b && w ) {
       const river = w.flows.find( x => x.flowKey === b.river);
@@ -48,13 +52,17 @@ export const ProWrap = ({
         getFlowAlt = riverAlt.flow;
         riverAlt.type === 'plus' && getNCListKeys.push(riverAlt.ncLists);
       }
+      getFlRel = b.releases.findIndex( x => x.type === 'floorRelease') >= 0;
       if(action !== 'xBatchBuild') {
         getProgCounts = ProgressCounter(getFlow, getFlowAlt, b);
       }
+      getNCTypesCombo = NonConOptionMerge(getNCListKeys, app);
+
     }
     flowSet(getFlow);
     flowAltSet(getFlowAlt);
-    ncListKeysSet(getNCListKeys);
+    floorReleaseSet(getFlRel);
+    ncTypesComboSet(getNCTypesCombo);
     progCountsSet(getProgCounts);
     
   }, [batchData, widgetData]);
@@ -151,6 +159,7 @@ export const ProWrap = ({
                   currentLive: currentLive,
                   flow: flow,
                   flowAlt: flowAlt,
+                  floorReleased: floorReleased,
                   progCounts: progCounts,
                   showVerify: showVerify,
                   optionVerify: optionVerify,
@@ -166,6 +175,7 @@ export const ProWrap = ({
                     currentLive: currentLive,
                     flow: flow,
                     flowAlt: flowAlt,
+                    floorReleased: floorReleased,
                     progCounts: progCounts
                   }
                 )}
@@ -194,7 +204,7 @@ export const ProWrap = ({
             users={users}
             user={user}
             app={app}
-            ncListKeys={ncListKeys}
+            ncTypesCombo={ncTypesComboFlat}
             action={action}
             showVerify={showVerify}
             changeVerify={(q)=>handleVerify(q)} />
