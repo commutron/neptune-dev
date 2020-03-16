@@ -27,9 +27,8 @@ const RMAForm = ({
   }, []);
 
 
-  const flatCheckList = ncTypesCombo.length > 0 ?
-    Array.from(ncTypesCombo, x => x.live === true && x.typeText)
-    : app.nonConOption;
+  const flatCheckList = Array.from(ncTypesCombo, x => 
+                                  x.key ? x.live === true && x.typeText : x);
   
   function handleCheck(e) {
     let match = flatCheckList.find( x => x === e.target.value);
@@ -49,8 +48,11 @@ const RMAForm = ({
   
   function handleNC(e) {
     const type = this.ncType.value.trim().toLowerCase();
-    let match = flatCheckList.find( x => x === type);
-    if(match) {
+    
+    const tgood = Roles.userIsInRole(Meteor.userId(), 'nightly') ?
+                    flatCheckList.find( x => x === type) : true;
+    
+    if(tgood) {
       const refEntry = this.ncRefs.value.trim().toLowerCase();
       const refSplit = refEntry.split(/\s* \s*/);
       

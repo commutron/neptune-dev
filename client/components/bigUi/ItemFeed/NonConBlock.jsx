@@ -18,9 +18,8 @@ const NonConBlock = ({
   }
   
   function handleCheck(target, dflt) {
-    const flatCheckList = ncTypesCombo.length > 0 ?
-      Array.from(ncTypesCombo, x => x.live === true && x.typeText)
-      : app.nonConOption;
+    const flatCheckList = Array.from(ncTypesCombo, x => 
+                                  x.key ? x.live === true && x.typeText : x);
   
     let match = target.value === dflt || 
                 flatCheckList.find( x => x === target.value);
@@ -34,7 +33,9 @@ const NonConBlock = ({
     const ref = this.ncRef.value.trim().toLowerCase();
     const type = this.ncType.value.trim();
     const where = this.ncWhere.value.trim().toLowerCase();
-    const tgood = handleCheck(this.ncType, entry.type);
+    
+    const tgood = Roles.userIsInRole(Meteor.userId(), 'nightly') ?
+                    handleCheck(this.ncType, entry.type) : true;
     
     if( typeof ref !== 'string' || ref.length < 1 ||  !tgood || where.length < 1 ) {
       this.ncRef.reportValidity();

@@ -5,9 +5,8 @@ import { toast } from 'react-toastify';
 const NCFlood = ({ id, live, user, app, ncTypesCombo })=> {
   
   function handleCheck(e) {
-    const flatCheckList = ncTypesCombo.length > 0 ?
-      Array.from(ncTypesCombo, x => x.live === true && x.typeText)
-      : app.nonConOption;
+    const flatCheckList = Array.from(ncTypesCombo, x => 
+                                  x.key ? x.live === true && x.typeText : x);
   
     let match = flatCheckList.find( x => x === e.target.value);
     let message = !match ? 'please choose from the list' : '';
@@ -21,6 +20,9 @@ const NCFlood = ({ id, live, user, app, ncTypesCombo })=> {
     
     const refEntry = this.ncRefs.value.trim().toLowerCase();
     const refSplit = refEntry.split(/\s* \s*/);
+    
+    // tgood check
+    
     
     if(refSplit.length > 0 && refSplit[0] !== '') {
       for(let ref of refSplit) {

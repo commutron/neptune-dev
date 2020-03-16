@@ -5,10 +5,9 @@ import { toast } from 'react-toastify';
 const NCAdd = ({ id, barcode, user, app, ncTypesCombo })=> {
   
   function handleCheck(target) {
-    const flatCheckList = ncTypesCombo.length > 0 ?
-      Array.from(ncTypesCombo, x => x.live === true && x.typeText)
-      : app.nonConOption;
-  
+    const flatCheckList = Array.from(ncTypesCombo, x => 
+                                  x.key ? x.live === true && x.typeText : x);
+
     let match = flatCheckList.find( x => x === target.value);
     let message = !match ? 'please choose from the list' : '';
     target.setCustomValidity(message);
@@ -19,7 +18,8 @@ const NCAdd = ({ id, barcode, user, app, ncTypesCombo })=> {
     e.preventDefault();
     const type = this.ncType.value.trim();
     
-    const tgood = handleCheck(this.ncType);
+    const tgood = Roles.userIsInRole(Meteor.userId(), 'nightly') ?
+                    handleCheck(this.ncType) : true;
     
     const where = Session.get('ncWhere') || "";
     
@@ -45,7 +45,7 @@ const NCAdd = ({ id, barcode, user, app, ncTypesCombo })=> {
       // const findBox = document.getElementById('lookup');
       // findBox.focus();
     }else{
-      this.ncRef.reportValidity();
+      this.ncRefs.reportValidity();
       this.ncType.reportValidity();
     }
   }
