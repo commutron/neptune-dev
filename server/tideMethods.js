@@ -64,6 +64,19 @@ function collectActivtyLevel(privateKey, batchID, clientTZ) {
   });
 }
 
+function slimBlockReturnData(batch, thePeriod) {
+  let slimBlock = [];
+  for(let blck of thePeriod) {  
+    slimBlock.push({
+      batch: batch,
+      tKey: blck.tKey,
+      who: blck.who,
+      startTime: blck.startTime,
+      stopTime: blck.stopTime
+    });
+  }
+  return slimBlock;     
+}
 
 Meteor.methods({
 
@@ -229,54 +242,59 @@ Meteor.methods({
       }}}
       }).fetch();
       
-      let slimTideDay = [];
+      let slimTideCollection = [];
       for(let btch of allTouched) {
         const theDay = !btch.tide ? [] : btch.tide.filter( x => 
           moment.tz(x.startTime, clientTZ).year() === getYear && 
           moment.tz(x.startTime, clientTZ).dayOfYear() === getDay);
-        for(let blck of theDay) {  
-          slimTideDay.push({
-            batch: btch.batch,
-            tKey: blck.tKey,
-            who: blck.who,
-            startTime: blck.startTime,
-            stopTime: blck.stopTime
-          });
-        }
+        
+        slimTideCollection.push(
+          slimBlockReturnData(btch.batch, theDay)
+        );
       }
-      return slimTideDay;
+      return [].concat(...slimTideCollection);
     }catch(err) {
       throw new Meteor.Error(err);
     }
   },
   
-  fetchSelfTideActivity(yearNum, weekNum) {
+  fetchWeekTideActivity(yearNum, weekNum, clientTZ, allOrg) {
     try {
       const getYear = yearNum || moment().weekYear();
       const getWeek = weekNum || moment().week();
       
-      const allTouched = BatchDB.find({
-        orgKey: Meteor.user().orgKey, 
-        'tide.who': Meteor.userId()
-      }).fetch();
+      const pinDate = moment.tz(clientTZ).year(getYear).week(getWeek);
       
-      let slimTideWeek = [];
+      const allTouched = !allOrg ?
+        BatchDB.find({
+          orgKey: Meteor.user().orgKey, 
+          tide: { $elemMatch: { startTime: {
+            $gte: new Date(pinDate.startOf('week').format()),
+            $lte: new Date(pinDate.endOf('week').format())
+          }}},
+          'tide.who': Meteor.userId()
+        }).fetch()
+        :
+        BatchDB.find({
+          orgKey: Meteor.user().orgKey,
+          tide: { $elemMatch: { startTime: {
+            $gte: new Date(pinDate.startOf('week').format()),
+            $lte: new Date(pinDate.endOf('week').format())
+          }}},
+        }).fetch();
+      
+      let slimTideCollection = [];
       for(let btch of allTouched) {
         const yourWeek = !btch.tide ? [] : btch.tide.filter( x => 
-          x.who === Meteor.userId() && 
+          (allOrg || x.who === Meteor.userId() ) && 
           moment(x.startTime).weekYear() === getYear && 
           moment(x.startTime).week() === getWeek);
-        for(let blck of yourWeek) {  
-          slimTideWeek.push({
-            batch: btch.batch,
-            tKey: blck.tKey,
-            who: blck.who,
-            startTime: blck.startTime,
-            stopTime: blck.stopTime
-          });
-        }
+          
+        slimTideCollection.push(
+          slimBlockReturnData(btch.batch, yourWeek)
+        );
       }
-      return slimTideWeek;
+      return [].concat(...slimTideCollection);
     }catch(err) {
       throw new Meteor.Error(err);
     }

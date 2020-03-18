@@ -15,9 +15,11 @@ const ActivityPanel = ({ orb, bolt, app, user, users, bCache })=> {
   function getData(fresh) {
     fresh && setWeekData(false);
     if(weekChoice) {
+      const clientTZ = moment.tz.guess();
       const yearNum = weekChoice.yearNum;
       const weekNum = weekChoice.weekNum;
-      Meteor.call('fetchSelfTideActivity', yearNum, weekNum, (err, rtn)=>{
+      Meteor.call('fetchWeekTideActivity', yearNum, weekNum, clientTZ, false,
+      (err, rtn)=>{
   	    err && console.log(err);
   	    const cronoTimes = rtn.sort((x1, x2)=> {
                             if (x1.startTime < x2.startTime) { return 1 }

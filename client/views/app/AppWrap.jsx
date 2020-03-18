@@ -18,6 +18,7 @@ import NCSupportSlide from './appSlides/NCSupportSlide.jsx';
 import ScalesSlide from './appSlides/ScalesSlide.jsx';
 import TagSlide from './appSlides/TagSlide.jsx';
 import AddressSlide from './appSlides/AddressSlide.jsx';
+import ToastSlide from './appSlides/ToastSlide.jsx';
 import PINSlide from './appSlides/PINSlide.jsx';
 
 import DataRepair from './appSlides/DataRepair.jsx';
@@ -36,21 +37,6 @@ const AppWrap = ({ users, app })=> {
         Dormant Items: {reply.totalDormantBatchItems}
       </div>, { autoClose: false });
       console.log({ live: reply.aliveBatchInfo, dormant: reply.dormantBatchInfo});
-    });
-  }
-  function showToast() {
-    toast('a default message');
-    toast.info('A blue info message');
-    toast.success('A green info message');
-    toast.warn('A orange warning message');
-    toast.error('A red error message');
-    
-    toast.success('no timeout', { autoClose: false });
-  }
-  function sendAtestNotify(all) {
-    Meteor.call('sendTestMail', all, (error)=>{
-      error && console.log(error);
-      toast.success('message sent');
     });
   }
   
@@ -113,26 +99,7 @@ const AppWrap = ({ users, app })=> {
           <AddressSlide key={10} app={app} />
           <PINSlide key={11} />
           <DataRepair key={12} app={app} users={users} />
-          <div key={13}>
-            <p>
-              <button
-                className='action clearBlue invert'
-                onClick={()=>showToast()}
-              >Test Toast Notifications</button>
-            </p>
-            <p>
-              <button
-                className='action clearBlue invert'
-                onClick={()=>sendAtestNotify(false)}
-              >Send Inbox Notification Test to YOURSELF</button>
-            </p>
-            <p>
-              <button
-                className='action clearBlue invert'
-                onClick={()=>sendAtestNotify(true)}
-              >Send Inbox Notification Test to ALL USERS</button>
-            </p>
-          </div>
+          <ToastSlide key={13} />
           <div key={14}>
             <p>determine support needs</p>
             <p>

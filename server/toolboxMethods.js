@@ -6,16 +6,18 @@ Meteor.methods({
   
   // Testing Functions //
   
-  sendTestMail(all) {
+  sendTestMail(all, title, message) {
+    const mssgTitle = title || 'Sample Notification';
+    const mssgDetail = message || 'This is a test';
     if(all) {
       try {
         Meteor.users.update({ orgKey: Meteor.user().orgKey }, {
           $push : { inbox : {
             notifyKey: new Meteor.Collection.ObjectID().valueOf(),
-            keyword: 'Sample',
-            type: 'test',
-            title: 'Sample Notification',
-            detail: 'This is a test',
+            keyword: 'General',
+            type: 'general',
+            title: mssgTitle,
+            detail: mssgDetail,
             time: new Date(),
             unread: true
           }
@@ -28,10 +30,10 @@ Meteor.methods({
         Meteor.users.update(Meteor.userId(), {
           $push : { inbox : {
             notifyKey: new Meteor.Collection.ObjectID().valueOf(),
-            keyword: 'Sample',
-            type: 'test',
-            title: 'Sample Notification',
-            detail: 'This is a test',
+            keyword: 'General',
+            type: 'general',
+            title: mssgTitle,
+            detail: mssgDetail,
             time: new Date(),
             unread: true
           }

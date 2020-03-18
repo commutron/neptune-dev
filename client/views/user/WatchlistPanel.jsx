@@ -18,7 +18,6 @@ const WatchlistPanel = ({ orb, bolt, app, user, users, batchEvents, bCache })=> 
   return (
     <div className='invert'>
       <p>Watch a {Pref.batch} to keep up to date with events as they happen</p>
-      <p>No notifications yet though</p>
       <p className='vspace'></p>
       <table className='wide cap space'>
         {orderedWatchlist.map( (entry)=>{

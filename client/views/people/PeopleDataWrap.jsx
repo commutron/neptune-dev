@@ -16,6 +16,7 @@ import TideFollow from '/client/components/tide/TideFollow.jsx';
 import Slides from '../../components/smallUi/Slides.jsx';
 
 import DashSlide from './DashSlide/DashSlide.jsx';
+import PerformanceSlide from './PerformanceSlide.jsx';
 import ActivitySlide from './ActivitySlide.jsx';
 import ScheduleSlide from './ScheduleSlide.jsx';
 import AccountsManagePanel, { PermissionHelp } from './AccountsManagePanel.jsx';
@@ -31,7 +32,8 @@ const PeopleDataWrap = ({
   useLayoutEffect( ()=>{
     InboxToastPop(prevUser, user);
   }, [user]);
-    
+   
+  const clientTZ = moment.tz.guess(); 
     
   if( !readyUsers || !readyTides || !app) {
     return (
@@ -44,7 +46,7 @@ const PeopleDataWrap = ({
   }
     
   const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
-  const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
+  // const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
   const isPeopleSuper = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
   const antiAuth = !isAdmin && !isPeopleSuper;
   
@@ -67,14 +69,28 @@ const PeopleDataWrap = ({
       
         <Slides
           menu={[
+            
+            <b><i className='fas fa-tachometer-alt fa-fw'></i>  Performance</b>,
+            
             <b><i className='fas fa-satellite-dish fa-fw'></i>  Current</b>,
+            
             <b><i className='fas fa-history fa-fw'></i>  Production Activity</b>,
             <b><i className='far fa-calendar-alt fa-fw'></i>  Work Schedule</b>,
             <b><i className='fas fa-user-lock fa-fw'></i>  Permissions</b>,
             <b><i className='fas fa-users-cog fa-fw'></i>   Account Manager</b>,
           ]}
-          disable={[false, false, antiAuth, false, antiAuth]}>
+          disable={[false, false, antiAuth, antiAuth, false, antiAuth]}>
           
+          
+          <PerformanceSlide
+            key={1}
+            app={app}
+            user={user}
+            users={users}
+            bCache={bCache}
+            clientTZ={clientTZ} />
+            
+            
           <DashSlide
             key={0}
             app={app}
@@ -83,29 +99,32 @@ const PeopleDataWrap = ({
             batches={batches}
             bCache={bCache} />
           
+          
+            
           <ActivitySlide
-            key={1}
+            key={2}
             app={app}
             user={user}
             users={users}
             bCache={bCache}
+            clientTZ={clientTZ}
             allUsers={true} />
           
-          {isNightly &&
+          {!antiAuth &&
             <ScheduleSlide
-              key={2}
+              key={4}
               app={app}
               user={user}
               users={users}
               pCache={pCache} />
           }
           
-          <div key={3}>
+          <div key={5}>
             <PermissionHelp auths={Pref.auths} admin={false} />
           </div>
           
           {isAdmin || isPeopleSuper ?
-            <AccountsManagePanel key={4} users={users} />
+            <AccountsManagePanel key={6} users={users} />
           : null }
           
         </Slides>

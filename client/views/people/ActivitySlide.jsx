@@ -9,9 +9,8 @@ import TideSpanTotal from '/client/components/tide/TideSpanTotal.jsx';
 import TideEditWrap from '/client/components/tide/TideEditWrap.jsx';
 
 
-const ActivitySlide = ({ orb, bolt, app, user, users, bCache })=> {
+const ActivitySlide = ({ orb, bolt, app, user, users, bCache, clientTZ })=> {
   
-  const clientTZ = moment.tz.guess();
   const [dateString, setDateString] = useState(moment().format('YYYY-MM-DD'));
   const [dayData, setDayData] = useState(false);
   
