@@ -1,34 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import { TimeInWeek, TimeInDay } from '/client/components/utilities/WorkTimeCalc.js';
+import { TimeInWeek } from '/client/components/utilities/WorkTimeCalc.js';
 import Pref from '/client/global/pref.js';
 import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
 
 
-const TideSpanTotal = ({ tideTimes, timeSpan, dateTime, showUser, app })=> {
+const TideWeekMini = ({ tideTimes, dateTime, app })=> {
   
-  const [ userTotal, userSet ] = useState(0);
   const [ batchTotal, batchSet ] = useState([]);
   const [ durrTotal, durrSet ] = useState(0);
   const [ maxHours, maxHoursSet ] = useState(0);
   
   useEffect( ()=> {
-    if(timeSpan === 'week') {
-      const weekHours = TimeInWeek( app.nonWorkDays, dateTime );
-      maxHoursSet(weekHours);
-    }else if(timeSpan === 'day') {
-      const dayHours = TimeInDay( app.nonWorkDays, dateTime );
-      maxHoursSet(dayHours);
-    }else{
-      null;
-    }
+    const weekHours = TimeInWeek( app.nonWorkDays, dateTime );
+    maxHoursSet(weekHours);
   }, [dateTime]);
   
   
   useEffect( ()=> {
-    const unqUsers = new Set( Array.from(tideTimes, x => x.who ) ).size;
-    userSet(unqUsers);
-    
     const qBatches = tideTimes.reduce( (allBatch, batch, index, array)=> { 
       const objkey = !batch ? false : batch.batch;
       objkey &&
@@ -53,20 +42,9 @@ const TideSpanTotal = ({ tideTimes, timeSpan, dateTime, showUser, app })=> {
     durrSet(dTotalNice);
     
   }, [tideTimes]);
-    
-  const calcEx = showUser ? ` (people x ${maxHours})` : '';
   
   return(
     <div className='balance middle'>
-      
-      {showUser &&
-        <NumStatRing
-          total={userTotal}
-          nums={[1]}
-          name={userTotal == 1 ? 'Person' : 'People'}
-          title={`how many different people`}
-          maxSize='chart10Contain'
-        />}
       
       <NumStatRing
         total={batchTotal.length}
@@ -79,9 +57,9 @@ const TideSpanTotal = ({ tideTimes, timeSpan, dateTime, showUser, app })=> {
       
       <NumStatRing
         total={durrTotal}
-        nums={[ durrTotal, ((userTotal * maxHours) - durrTotal) ]}
+        nums={[ durrTotal, ((maxHours) - durrTotal) ]}
         name='Total Hours'
-        title={`total of durations in hours \nout of ${userTotal * maxHours}${calcEx}`}
+        title={`total of durations in hours \nout of ${maxHours}`}
         colour='blueBi'
         maxSize='chart10Contain'
       />
@@ -90,4 +68,4 @@ const TideSpanTotal = ({ tideTimes, timeSpan, dateTime, showUser, app })=> {
   );
 };
 
-export default TideSpanTotal;
+export default TideWeekMini;

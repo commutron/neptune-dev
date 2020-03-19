@@ -17,7 +17,7 @@ import Slides from '../../components/smallUi/Slides.jsx';
 
 import DashSlide from './DashSlide/DashSlide.jsx';
 import PerformanceSlide from './PerformanceSlide.jsx';
-import ActivitySlide from './ActivitySlide.jsx';
+import HistorySlide from './HistorySlide.jsx';
 import ScheduleSlide from './ScheduleSlide.jsx';
 import AccountsManagePanel, { PermissionHelp } from './AccountsManagePanel.jsx';
 
@@ -70,11 +70,11 @@ const PeopleDataWrap = ({
         <Slides
           menu={[
             
-            <b><i className='fas fa-tachometer-alt fa-fw'></i>  Performance</b>,
+            <b><i className='fas fa-tachometer-alt fa-fw'></i>  Weekly Metrics</b>,
             
             <b><i className='fas fa-satellite-dish fa-fw'></i>  Current</b>,
             
-            <b><i className='fas fa-history fa-fw'></i>  Production Activity</b>,
+            <b><i className='fas fa-history fa-fw'></i>  Daily History</b>,
             <b><i className='far fa-calendar-alt fa-fw'></i>  Work Schedule</b>,
             <b><i className='fas fa-user-lock fa-fw'></i>  Permissions</b>,
             <b><i className='fas fa-users-cog fa-fw'></i>   Account Manager</b>,
@@ -101,7 +101,7 @@ const PeopleDataWrap = ({
           
           
             
-          <ActivitySlide
+          <HistorySlide
             key={2}
             app={app}
             user={user}
@@ -124,7 +124,11 @@ const PeopleDataWrap = ({
           </div>
           
           {isAdmin || isPeopleSuper ?
-            <AccountsManagePanel key={6} users={users} />
+            <AccountsManagePanel 
+              key={6} 
+              app={app}
+              users={users}
+              bCache={bCache} />
           : null }
           
         </Slides>

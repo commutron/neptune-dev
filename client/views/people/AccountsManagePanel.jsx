@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import Pref from '/client/global/pref.js';
 
 import SlidesNested from '/client/components/smallUi/SlidesNested.jsx';
 
-import UserManageForm from '/client/components/forms/UserManageForm.jsx';
 import RemoveUser from '/client/components/forms/RemoveUser.jsx';
 import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
 import NumLine from '/client/components/uUi/NumLine.jsx';
 import TrendLine from '/client/components/charts/Trends/TrendLine.jsx';
 
+import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
+import ActivityPanel from '/client/views/user/ActivityPanel.jsx';
+import UserManageForm from '/client/components/forms/UserManageForm.jsx';
 
-const AccountsManagePanel = ({ users })=> {
+const AccountsManagePanel = ({ app, users, bCache })=> {
   
   const auths = Pref.auths;
   const areas = Pref.areas;
@@ -21,36 +23,58 @@ const AccountsManagePanel = ({ users })=> {
   });
   
   const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
+  const isPeopleSuper = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
+  const noAccess = <div className='centreText'>Permission Denied</div>;
   
   return (
     <SlidesNested
       menuTitle='User Accounts'
       menu={usersMenu}
-      disableAll={!isAdmin}
+      disableAll={!isAdmin && !isPeopleSuper}
       topPage={
         <AccountsTop users={users} key={000} />
       }>
         
       {users.map( (entry, index)=>{
-        if(isAdmin) {
+        if(isAdmin || isPeopleSuper) {
           return(
-            <div key={index+entry._id}>
-              <UserManageForm
-                id={entry._id}
-                name={entry.username}
-                org={entry.org}
-                auths={auths}
-                areas={areas}
-              />
-              {!Roles.userIsInRole(entry._id, 'active') &&
-                entry._id !== Meteor.userId() &&
-                !entry.org ?
-                  <RemoveUser userID={entry._id} />
-              :null}
+            <div key={index+entry._id} className='invert'>
+              <Tabs
+                tabs={['Times', 'Access']}
+                wide={false}
+                hold={false}
+                disable={[ (!isPeopleSuper && !isAdmin), !isAdmin]}>
+                
+                <ActivityPanel
+                  key={0}
+                  app={app}
+                  user={entry}
+                  users={users}
+                  bCache={bCache} />
+            
+                <div key={1}>
+                {isAdmin ?
+                  <Fragment>
+                    <UserManageForm
+                      id={entry._id}
+                      name={entry.username}
+                      org={entry.org}
+                      auths={auths}
+                      areas={areas}
+                    />
+                    {!Roles.userIsInRole(entry._id, 'active') &&
+                      entry._id !== Meteor.userId() &&
+                      !entry.org ?
+                        <RemoveUser userID={entry._id} />
+                    :null}
+                  </Fragment>
+                : noAccess}
+                </div>
+              </Tabs>
             </div>
           );
         }else{
-          return <div className='centreText'>Permission Denied</div>;
+          return noAccess;
         }
       })}
     </SlidesNested>

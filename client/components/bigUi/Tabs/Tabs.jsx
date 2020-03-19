@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './style.css';
 
-const Tabs = ({ tabs, names, wide, stick, hold, sessionTab, children })=> {
+const Tabs = ({ tabs, names, wide, stick, hold, sessionTab, disable, children })=> {
   
   const [ sect, setSect ] = useState( Session.get(sessionTab) || 0 );
 
@@ -13,7 +13,8 @@ const Tabs = ({ tabs, names, wide, stick, hold, sessionTab, children })=> {
   let show = sect;
   const sticky = stick ? 'stickyBar' : '';
   const styl = wide ? { width: 100 / tabs.length + '%'} : null;
-    
+  const dA = Array.isArray(disable) ? disable : [];
+  
   return (
     <div>
       <div className={sticky}>
@@ -25,6 +26,7 @@ const Tabs = ({ tabs, names, wide, stick, hold, sessionTab, children })=> {
               onClick={()=>handleClick(index)}
               className={clss}
               style={styl}
+              disabled={dA[index]}
             >{entry} {names && names[index]}</button>
         )})}
       </div>

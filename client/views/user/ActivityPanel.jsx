@@ -4,10 +4,10 @@ import 'moment-timezone';
 //import Pref from '/client/global/pref.js';
 import { CalcSpin } from '/client/components/uUi/Spin.jsx';
 import WeekBrowse from '/client/components/bigUi/WeekBrowse/WeekBrowse.jsx';
-import TideSpanTotal from '/client/components/tide/TideSpanTotal.jsx';
+import TideWeekMini from '/client/components/charts/Tides/TideWeekMini.jsx';
 import TideEditWrap from '/client/components/tide/TideEditWrap.jsx';
 
-const ActivityPanel = ({ orb, bolt, app, user, users, bCache })=> {
+const ActivityPanel = ({ app, user, users, bCache })=> {
   
   const [weekChoice, setWeekChoice] = useState(false);
   const [weekData, setWeekData] = useState(false);
@@ -18,7 +18,8 @@ const ActivityPanel = ({ orb, bolt, app, user, users, bCache })=> {
       const clientTZ = moment.tz.guess();
       const yearNum = weekChoice.yearNum;
       const weekNum = weekChoice.weekNum;
-      Meteor.call('fetchWeekTideActivity', yearNum, weekNum, clientTZ, false,
+      const userID = user._id;
+      Meteor.call('fetchWeekTideActivity', yearNum, weekNum, clientTZ, false, userID,
       (err, rtn)=>{
   	    err && console.log(err);
   	    const cronoTimes = rtn.sort((x1, x2)=> {
@@ -47,9 +48,8 @@ const ActivityPanel = ({ orb, bolt, app, user, users, bCache })=> {
           app={app}
         />
         
-        <TideSpanTotal 
+        <TideWeekMini
           tideTimes={weekData || []}
-          timeSpan='week'
           dateTime={moment(`${weekChoice.yearNum}-${weekChoice.weekNum}`, 'gggg-ww').format()}
           app={app} />
           
@@ -76,8 +76,7 @@ const ActivityPanel = ({ orb, bolt, app, user, users, bCache })=> {
         <TideEditWrap 
           weekData={weekData} 
           bCache={bCache} 
-          updateData={()=>getData(false)}
-          allUsers={false} />
+          updateData={()=>getData(false)} />
       </table>
       }
       <div>

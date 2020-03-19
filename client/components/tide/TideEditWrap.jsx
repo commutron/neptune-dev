@@ -4,7 +4,7 @@ import moment from 'moment';
 import TideBlockRow from '/client/components/tide/TideBlockRow.jsx';
 
 
-const TideEditWrap = ({ weekData, bCache, updateData, allUsers })=> {
+const TideEditWrap = ({ weekData, bCache, updateData })=> {
   
   const [ doEditKey, enableEdit ] = useState(false);
   const [ doSplitKey, enableSplit ] = useState(false);
@@ -36,7 +36,7 @@ const TideEditWrap = ({ weekData, bCache, updateData, allUsers })=> {
     const tideKey = e.tideKey;
 
     if(!batch || !tideKey) { 
-      console.log([{batch, tideKey, newSplit, stopTime}, 'data issue no call']);
+      console.log([{batch, tideKey}, 'data issue no call']);
     }else{
       Meteor.call('stopTideTimeBlock', batch, tideKey, (err, asw)=>{
         err && console.log(err);
@@ -78,9 +78,9 @@ const TideEditWrap = ({ weekData, bCache, updateData, allUsers })=> {
         
         if(index === 0 || moment(blk.startTime).isSame(lastStart, 'day') === false) {
           return(
-            <Fragment key={index}>
+            <Fragment key={index+blk.tKey}>
               <tr key={blk.startTime.toISOString()} className='big leftText line4x'>
-                <th colSpan={!allUsers ? '5' : '6'}>{moment(blk.startTime).format('dddd MMMM Do')}</th>
+                <th colSpan='5'>{moment(blk.startTime).format('dddd MMMM Do')}</th>
               </tr>
               <TideBlockRow
                 key={blk.tKey}
@@ -88,7 +88,6 @@ const TideEditWrap = ({ weekData, bCache, updateData, allUsers })=> {
                 describe={what}
                 tideKey={blk.tKey}
                 tideWho={blk.who}
-                allUsers={allUsers}
                 startTime={blk.startTime}
                 stopTime={blk.stopTime}
                 lastStop={lastStop}
@@ -110,7 +109,6 @@ const TideEditWrap = ({ weekData, bCache, updateData, allUsers })=> {
               describe={what}
               tideKey={blk.tKey}
               tideWho={blk.who}
-              allUsers={allUsers}
               startTime={blk.startTime}
               stopTime={blk.stopTime}
               lastStop={lastStop}

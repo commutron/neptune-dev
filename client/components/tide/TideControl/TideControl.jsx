@@ -1,3 +1,4 @@
+import { Random } from 'meteor/random'
 import React, { useRef, useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
@@ -6,27 +7,38 @@ import './style.css';
 const TideControl = ({ batchID, tideKey, currentLive, tideLockOut })=> {
   
   const thingMounted = useRef(true);
-  const [serverResponse, setResponse] = useState(0);
+  const [actionID, setActionID] = useState( Random.id() );
   const [lock, setLock] = useState(false);
   
+  // useEffect(() => {
+  //   const timer = Meteor.setTimeout( ()=>{ setLock(false); },5000);
+  //   return () => { 
+  //     Meteor.clearTimeout(timer);
+  //     thingMounted.current = false;
+  //   };
+  // }, [actionID]);
+  
+  const timer = ()=> Meteor.setTimeout( ()=>{ setLock(false); },5000);
+  
   useEffect(() => {
-    const timer = Meteor.setTimeout( ()=>{ setLock(false); },5000);
-    return () => { 
-      Meteor.clearTimeout(timer);
+    return () => {
       thingMounted.current = false;
+      Meteor.clearTimeout(timer);
     };
-  }, [serverResponse]);
+  }, []);
   
   function handleStart() {
     setLock(true);
-    Meteor.call('startTideTask', batchID, (error, reply)=> {
+    let newRndm = actionID;
+    Meteor.call('startTideTask', batchID, null, newRndm, (error, reply)=> {
       if(error) {
         console.log(error);
         toast.error('Rejected by Server');
       }
       if(reply === true) {
         if(thingMounted.current) {
-          setResponse(serverResponse + 1);
+          setActionID(Random.id());
+          timer();
           document.getElementById('lookup').focus();
         }
       }
@@ -41,7 +53,8 @@ const TideControl = ({ batchID, tideKey, currentLive, tideLockOut })=> {
       }
       if(reply === true) {
         if(thingMounted.current) {
-          setResponse(serverResponse + 1);
+          setActionID(Random.id());
+          timer();
           document.getElementById('lookup').focus();
         }
       }
@@ -50,14 +63,16 @@ const TideControl = ({ batchID, tideKey, currentLive, tideLockOut })=> {
   
   function handleSwitch() {
     setLock(true);
-    Meteor.call('switchTideTask', tideKey, batchID, (error, reply)=> {
+    let newRndm = actionID;
+    Meteor.call('switchTideTask', tideKey, batchID, newRndm, (error, reply)=> {
       if(error) {
         console.log(error);
         toast.error('Rejected by Server');
       }
       if(reply === true) {
         if(thingMounted.current) {
-          setResponse(serverResponse + 1);
+          setActionID(Random.id());
+          timer();
           document.getElementById('lookup').focus();
         }
       }
@@ -71,6 +86,7 @@ const TideControl = ({ batchID, tideKey, currentLive, tideLockOut })=> {
           title={`Switch to ${Pref.batch}`}
           className='tideFlip'
           onClick={()=>handleSwitch()}
+          disabled={lock}
         >
         <i>
           <span className="fa-stack fa-fw tideIcon">

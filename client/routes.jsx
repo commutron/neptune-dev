@@ -177,15 +177,7 @@ privlegedRoutes.route('/starfish', {
     });
   }
 });
-/*
-privlegedRoutes.route('/!!!!!!!!', {
-  action() {
-    mount(CleanLayout, {
-       content: ( !!!!!!!!!!!!! )
-    });
-  }
-});
-*/
+
 privlegedRoutes.route('/app', {
   action() {
     mount(CleanLayout, {

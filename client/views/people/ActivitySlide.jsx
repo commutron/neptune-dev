@@ -5,9 +5,15 @@ import 'moment-timezone';
 import { CalcSpin } from '/client/components/uUi/Spin.jsx';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
-import TideSpanTotal from '/client/components/tide/TideSpanTotal.jsx';
+import TideDayMini from '/client/components/charts/Tides/TideDayMini.jsx';
 import TideEditWrap from '/client/components/tide/TideEditWrap.jsx';
 
+
+////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+//// HIBERNATE - not in use but valuable to keep \\\\\\\\\\\\
+
+/////////  Good for single day tide fetch  \\\\\\\\\\\\\\\\\\
 
 const ActivitySlide = ({ orb, bolt, app, user, users, bCache, clientTZ })=> {
   
@@ -58,7 +64,7 @@ const ActivitySlide = ({ orb, bolt, app, user, users, bCache, clientTZ })=> {
             <span className='biggester breath numFont'> {moment.tz(dateString, clientTZ).year()}<sub>d</sub>{moment.tz(dateString, clientTZ).dayOfYear()} </span>
         </div>
       
-        <TideSpanTotal 
+        <TideDayMini 
           tideTimes={dayData || []}
           timeSpan='day'
           dateTime={moment(dateString, 'YYYY-MM-DD').format()}
@@ -89,7 +95,8 @@ const ActivitySlide = ({ orb, bolt, app, user, users, bCache, clientTZ })=> {
           weekData={dayData} 
           bCache={bCache} 
           updateData={()=>getData(false)}
-          allUsers={true} />
+          //allUsers={true} 
+        />
       </table>
       }
       <div>

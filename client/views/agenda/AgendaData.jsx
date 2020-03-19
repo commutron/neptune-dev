@@ -31,15 +31,33 @@ const View = ({
     );
   }
 
+  const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
+  const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
+  const isSales = Roles.userIsInRole(Meteor.userId(), 'sales');
+  const isPeople = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
+  const isPreview = isAdmin || isNightly || isSales || isPeople;
+  
+  if(isPreview) {
+    return(
+      <AgendaWrap 
+        bCache={bCache}
+        pCache={pCache}
+        phCache={phCache}
+        zCache={zCache}
+        user={user}
+        app={app}
+        clientTZ={clientTZ} />
+    );
+  }
+  
   return(
-    <AgendaWrap 
-      bCache={bCache}
-      pCache={pCache}
-      phCache={phCache}
-      zCache={zCache}
-      user={user}
-      app={app}
-      clientTZ={clientTZ} />
+    <div className='centre middle'>
+      <p className='medBig centreText'>This ALPHA page is limited to early access users only</p>
+      <button
+        className='smallAction clear whiteT'
+        onClick={()=> window.history.back()}
+      ><i className='fas fa-arrow-circle-left fa-lg'></i> Go Back</button>
+    </div>
   );
 };
 

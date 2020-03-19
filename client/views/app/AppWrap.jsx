@@ -40,8 +40,6 @@ const AppWrap = ({ users, app })=> {
     });
   }
   
-  const admin = Roles.userIsInRole(Meteor.userId(), 'admin');
-  
   const sortedTrackOptions = app.trackOption.sort((t1, t2)=> {
                               if (t1.step < t2.step) { return -1 }
                               if (t1.step > t2.step) { return 1 }
@@ -63,8 +61,6 @@ const AppWrap = ({ users, app })=> {
       </div>
     
       <div className='simpleContent locked'>
-        
-      {admin ?
           
         <Slides
           menu={[
@@ -111,12 +107,6 @@ const AppWrap = ({ users, app })=> {
           </div>
           
         </Slides>
-        
-        :
-        
-          <p className='medBig centreText'>This page is limited to administrators only</p>
-        
-      }
 				
       </div>
     </div>

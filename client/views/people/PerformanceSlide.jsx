@@ -3,7 +3,7 @@ import moment from 'moment';
 import 'moment-timezone';
 // import { CalcSpin } from '/client/components/uUi/Spin.jsx';
 import WeekBrowse from '/client/components/bigUi/WeekBrowse/WeekBrowse.jsx';
-import TideSpanTotal from '/client/components/tide/TideSpanTotal.jsx';
+import TideWeekMini from '/client/components/charts/Tides/TideWeekMini.jsx';
 import TideWeekPolar from '/client/components/charts/Tides/TideWeekPolar.jsx';
 
 
@@ -17,7 +17,7 @@ const PerformanceSlide = ({ app, user, users, bCache, clientTZ })=> {
     if(weekChoice) {
       const yearNum = weekChoice.yearNum;
       const weekNum = weekChoice.weekNum;
-      Meteor.call('fetchWeekTideActivity', yearNum, weekNum, clientTZ, true, 
+      Meteor.call('fetchWeekTideActivity', yearNum, weekNum, clientTZ, true, false, 
       (err, rtn)=>{
   	    err && console.log(err);
   	    const cronoTimes = rtn.sort((x1, x2)=> {
@@ -47,7 +47,7 @@ const PerformanceSlide = ({ app, user, users, bCache, clientTZ })=> {
         />
         
         
-        <TideSpanTotal 
+        <TideWeekMini
           tideTimes={weekData || []}
           timeSpan='week'
           dateTime={moment(`${weekChoice.yearNum}-${weekChoice.weekNum}`, 'gggg-ww').format()}

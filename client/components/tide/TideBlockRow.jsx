@@ -8,7 +8,7 @@ import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
 
 const TideBlockRow = ({ 
-  batch, describe, tideKey, tideWho, allUsers,
+  batch, describe, tideKey, tideWho,
   startTime, stopTime,
   lastStop, nextStart,
   editKey, editMode,
@@ -47,11 +47,11 @@ const TideBlockRow = ({
   const mStart = moment(startTime);
   const mStop = stopTime ? moment(stopTime) : false;// this is what is causing the warning
   
-  const absoluteMin = allUsers ? moment(startTime).startOf('day').format() :
+  const absoluteMin = /*allUsers ? moment(startTime).startOf('day').format() :*/
   !lastStop || !moment(lastStop).isAfter(moment(startTime).startOf('day')) ?
     moment(startTime).startOf('day').format() : lastStop;
     
-  const absoluteMax = allUsers ? moment(mStop).endOf('day').format() :
+  const absoluteMax = /*allUsers ? moment(mStop).endOf('day').format() :*/
   !mStop ? moment().format() : 
     !nextStart && !moment().isAfter(mStop, 'day') ? moment().format() :
       !nextStart || moment(nextStart).isAfter(moment(mStop).endOf('day')) ?
@@ -64,7 +64,7 @@ const TideBlockRow = ({
   
     return(
       <tr className={editOn ? 'pop' : ''}>
-        {allUsers && tideWho && <td className='noRightBorder'><AnonyUser id={tideWho} /></td>}
+        {/*allUsers && tideWho && <td className='noRightBorder'><AnonyUser id={tideWho} /></td>*/}
         <td className='noRightBorder medBig'>
           <ExploreLinkBlock type='batch' keyword={batch} />
         </td>

@@ -41,10 +41,10 @@ const UserManageForm = (props)=> {
   return(
     <div>
       
-      <h3>Username: <i className='biggest'>{props.name}</i></h3>
+      <h3>Username: {props.name}</h3>
       <h3 className='clean'>ID: {props.id}</h3>
-      <p className='blueT'>{adminFlag}</p>
-      <p>organization: <i className='greenT'>{props.org}</i></p>
+      <h3 className='blueT'>{adminFlag}</h3>
+      <h3>organization: <i className='greenT'>{props.org}</i></h3>
       
       <div className=''>
         <fieldset className=''>
