@@ -82,15 +82,15 @@ Meteor.methods({
   
   activityCacheUpdate(accessKey, clientTZ, force) {
     if(typeof accessKey === 'string') {
-      const timeOut = moment().subtract(5, 'minutes').toISOString();
+      const timeOut = moment().subtract(1, 'minutes').toISOString();
       const currentCache = CacheDB.findOne({
         orgKey: accessKey, 
         lastUpdated: { $gte: new Date(timeOut) },
         dataName:'activityLevel'});
       
       if(force || !currentCache ) {
-        const batches = BatchDB.find({orgKey: accessKey}).fetch();
-        const batchesX = XBatchDB.find({orgKey: accessKey}).fetch();
+        const batches = BatchDB.find({orgKey: accessKey, live: true}).fetch();
+        const batchesX = XBatchDB.find({orgKey: accessKey, live: true}).fetch();
         const slim = [...batches,...batchesX].map( x => {
           return Meteor.call('tideActivityLevel', x._id, clientTZ, accessKey);
         });

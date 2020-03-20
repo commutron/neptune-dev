@@ -4,7 +4,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import NumStat from '/client/components/uUi/NumStat.jsx';
 
 
-const NonConCounts = ({ batchID, releasedToFloor, app, ncCols })=> {
+const NonConCounts = ({ batchID, releasedToFloor, app, isDebug, ncCols })=> {
   
   const [ ncData, setNC ] = useState(false);
   
@@ -14,7 +14,7 @@ const NonConCounts = ({ batchID, releasedToFloor, app, ncCols })=> {
         error && console.log(error);
         if( reply ) { 
           setNC( reply );
-          Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(ncData);
+          isDebug && console.log(ncData);
         }
       });
     }

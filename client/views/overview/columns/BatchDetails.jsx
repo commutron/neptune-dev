@@ -12,8 +12,8 @@ import NonConCounts from './NonConCounts.jsx';
 const BatchDetails = ({
   oB,
   bCache, pCache, acCache,
-  user, clientTZ, app, dense,
-  kittingArea, releasedArea
+  user, clientTZ, app, isDebug,
+  dense, kittingArea, releasedArea
 })=> {
   
   const statusCols = ['due', 'remaining', 'priority', 'items quantity'];
@@ -56,6 +56,7 @@ const BatchDetails = ({
               pCache={pCache}
               acCache={acCache}
               app={app}
+              isDebug={isDebug}
               statusCols={statusCols}
               kitCols={kitCols}
               progCols={progCols}
@@ -74,7 +75,7 @@ export default BatchDetails;
 
 const BatchDetailChunk = ({ 
   rowIndex, oB, user, clientTZ, 
-  pCache, acCache, app, 
+  pCache, acCache, app, isDebug,
   statusCols, kitCols, progCols, ncCols, dense,
   kittingArea, releasedArea
 })=> {
@@ -110,6 +111,7 @@ const BatchDetailChunk = ({
         clientTZ={clientTZ}
         pCache={pCache}
         app={app}
+        isDebug={isDebug}
         statusCols={statusCols}
         dense={dense} />
     
@@ -126,7 +128,8 @@ const BatchDetailChunk = ({
         app={app}
         kitCols={kitCols}
         dense={dense}
-        isRO={isRO} />}
+        isRO={isRO}
+        isDebug={isDebug} />}
     
       <div>
         <TideActivitySquare 
@@ -142,13 +145,15 @@ const BatchDetailChunk = ({
           releasedToFloor={releasedToFloor}
           progCols={progCols}
           clientTZ={clientTZ}
-          app={app} />
+          app={app}
+          isDebug={isDebug} />
           
         <NonConCounts
           batchID={oB._id}
           releasedToFloor={releasedToFloor}
           app={app}
-          ncCols={ncCols} />
+          ncCols={ncCols}
+          isDebug={isDebug} />
       </Fragment>
     }
     

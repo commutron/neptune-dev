@@ -412,11 +412,16 @@ function collectProgress(privateKey, batchID, clientTZ) {
         const steps = riverFlow.filter( x => x.phase === phase && x.type !== 'first' );
         const nonConLeft = phase === 'finish' ? rNC.length > 0 :
                             rNC.filter( x => x.where === phase ).length > 0;
+        const shortLeft = batch.shortfall.filter( s => 
+                          s.inEffect !== true && s.reSolve !== true 
+                        ).length > 0;
+    
         phaseSets.push({
           phase: phase,
           steps: steps,
           count: 0,
-          ncLeft: nonConLeft
+          ncLeft: nonConLeft,
+          shLeft: shortLeft
         });
       }
       

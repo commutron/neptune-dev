@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect, useRef } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 // import NumStat from '/client/components/uUi/NumStat.jsx';
@@ -12,18 +12,23 @@ const KittingChecks = ({
   batchID, batchNum, 
   isX, isDone,
   releasedToFloor, releases,
-  clientTZ, pCache, app, 
+  clientTZ, pCache, app, isDebug,
   kitCols, dense, isRO
 })=> {
   
+  const thingMounted = useRef(true);
   const [ stData, setStatus ] = useState(false);
+  
+  useEffect( ()=> { 
+    return () => { thingMounted.current = false; };
+  }, []);
   
   useEffect( ()=> {
     Meteor.call('overviewKittingStatus', batchID, clientTZ, (error, reply)=>{
       error && console.log(error);
       if( reply ) { 
-        setStatus( reply );
-        Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(stData);
+        thingMounted.current && setStatus( reply );
+        isDebug && console.log(stData);
       }
     });
   }, [batchID]);

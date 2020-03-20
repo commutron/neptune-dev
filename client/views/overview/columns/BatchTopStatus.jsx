@@ -1,15 +1,15 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 import NumStat from '/client/components/uUi/NumStat.jsx';
-import PrioritySquareData from '/client/components/bigUi/PrioritySquare.jsx';
+// import PrioritySquareData from '/client/components/bigUi/PrioritySquare.jsx';
 import { PrioritySquare } from '/client/components/bigUi/PrioritySquare.jsx';
 // import TrinaryStat from '/client/components/uUi/TrinaryStat.jsx';
 
 
 const BatchTopStatus = ({ 
   rowIndex, batchID,
-  clientTZ, pCache, app, 
+  clientTZ, pCache, app, isDebug,
   statusCols, dense
 })=> {
   
@@ -20,7 +20,7 @@ const BatchTopStatus = ({
       error && console.log(error);
       if( reply ) { 
         setStatus( reply );
-        Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(stData);
+        isDebug && console.log(stData);
       }
     });
   }, [batchID]);

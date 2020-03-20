@@ -12,7 +12,7 @@ import OverviewWrap from './OverviewWrap.jsx';
 const View = ({
   login,
   readyUsers, ready, readyC, 
-  username, user, clientTZ, org, app, 
+  username, user, clientTZ, org, app, isDebug,
   batch, batchX,
   bCache, pCache, acCache, phCache
 })=> {
@@ -54,6 +54,7 @@ export default withTracker( () => {
   let user = login ? Meteor.user() : false;
   let name = user ? user.username : false;
   let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
+  let isDebug = user ? Roles.userIsInRole(Meteor.userId(), 'debug') : false;
   let org = user ? user.org : false;
   const clientTZ = moment.tz.guess();
   const usersSub = login ? Meteor.subscribe('usersData') : false;
@@ -74,6 +75,7 @@ export default withTracker( () => {
       readyC: subC.ready(),
       username: name,
       user: user,
+      isDebug: isDebug,
       org: org,
       clientTZ: clientTZ,
       app: AppDB.findOne({org: org}),

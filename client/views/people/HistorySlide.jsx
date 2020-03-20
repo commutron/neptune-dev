@@ -10,7 +10,7 @@ import TideDayMini from '/client/components/charts/Tides/TideDayMini.jsx';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 import { AnonyUser } from '/client/components/smallUi/UserNice.jsx';
 
-const HistorySlide = ({ orb, bolt, app, user, users, bCache, clientTZ })=> {
+const HistorySlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
   
   const [dateString, setDateString] = useState(moment().format('YYYY-MM-DD'));
   const [dayData, setDayData] = useState(false);
@@ -30,7 +30,7 @@ const HistorySlide = ({ orb, bolt, app, user, users, bCache, clientTZ })=> {
   
   useEffect(() => {
     getData();
-    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(dayData);
+    isDebug && console.log(dayData);
   }, [dateString]);
   
   function setDay(input) {
@@ -98,7 +98,7 @@ const HistorySlide = ({ orb, bolt, app, user, users, bCache, clientTZ })=> {
           
           if(index === 0 || moment(blk.startTime).isSame(lastStart, 'hour') === false) {
             return(
-              <Fragment key={index}>
+              <Fragment key={blk.tKey+index}>
                 <tr key={blk.startTime.toISOString()} className='big leftText line4x'>
                   <th colSpan='4'>{moment(blk.startTime).format('h:mm A')}</th>
                 </tr>

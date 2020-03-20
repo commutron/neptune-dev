@@ -19,9 +19,14 @@ export function TimeInWeek( nonWorkDays, weekStart ) {
       const dayStart = moment(begin).add(n, 'd');
       const dayEnd = moment(begin).add(n, 'd').endOf('day');
       const dayTotal = dayEnd.workingDiff(dayStart, 'hours', true);
-
-      const workTime = dayTotal <= 5 ? dayTotal :
-        moment.duration(dayTotal, 'hours').subtract(45, 'minutes').asHours();
+      
+      const lunchTime = dayTotal <= 5 ? 0 : 45;
+      const breakTime = dayTotal <= 5 ? 15 : 30;
+      const idleTime = lunchTime + breakTime + 15;
+      const minusTime = dayTotal < idleTime ? 0 : idleTime;
+      
+      const workTime = moment.duration(dayTotal, 'hours')
+                        .subtract(minusTime, 'minutes').asHours();
       
       weekTotal = weekTotal + workTime;
     }
@@ -43,12 +48,16 @@ export function TimeInDay( nonWorkDays, dayStart ) {
   
     const begin = moment(dayStart).startOf('day').format(); 
     const end = moment(dayStart).endOf('day').format();
-    
     const dayTotal = moment(end).workingDiff(begin, 'hours', true);
     
-    const workTime = dayTotal <= 5 ? dayTotal :
-      moment.duration(dayTotal, 'hours').subtract(45, 'minutes').asHours();
+    const lunchTime = dayTotal <= 5 ? 0 : 45;
+    const breakTime = dayTotal <= 5 ? 15 : 30;
+    const idleTime = lunchTime + breakTime + 15;
+    const minusTime = dayTotal < idleTime ? 0 : idleTime;
     
+    const workTime = moment.duration(dayTotal, 'hours')
+                      .subtract(minusTime, 'minutes').asHours();
+                      
     return workTime;
   }else{
     return 0;

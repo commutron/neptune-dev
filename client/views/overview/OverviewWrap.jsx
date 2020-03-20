@@ -13,7 +13,10 @@ import BatchHeaders from './columns/BatchHeaders';
 import BatchDetails from './columns/BatchDetails';
 
 
-const OverviewWrap = ({ b, bx, bCache, pCache, acCache, phCache, user, clientTZ, app })=> {
+const OverviewWrap = ({ 
+  b, bx, bCache, pCache, acCache, phCache, 
+  user, clientTZ, app, isDebug
+})=> {
 
   const sessionSticky = 'overviewOverview';
   
@@ -98,7 +101,7 @@ const OverviewWrap = ({ b, bx, bCache, pCache, acCache, phCache, user, clientTZ,
           const cP = cB && cB.phaseSets.find( x => x.phase === filterBy );
           const con = cP && cP.condition;
           
-          Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(`${bx.batch}: ${con}`);
+          isDebug && console.log(`${bx.batch}: ${con}`);
           
           if(con && con === 'open') {
             return bx;
@@ -219,6 +222,7 @@ const OverviewWrap = ({ b, bx, bCache, pCache, acCache, phCache, user, clientTZ,
             user={user}
             clientTZ={clientTZ}
             app={app}
+            isDebug={isDebug}
             dense={dense > 1}
             kittingArea={filterBy === 'KITTING'}
             releasedArea={filterBy !== false && filterBy !== 'KITTING'}

@@ -155,8 +155,12 @@
   border-right: 1px outset rgba(255,255,255,0.3);
   border-bottom: 1px outset rgba(255,255,255,0.4);
 }
+
 .overGridRowScroll > div.redRight {
-  border-right: 1vh outset var(--alizarin); 
+  border-right: 0.5vh outset var(--alizarin); 
+}
+.overGridRowScroll > div.yellowLeft {
+  border-left: 0.5vh outset var(--orange); 
 }
 .overGridRowScroll .big {
   font-size: 2vh;

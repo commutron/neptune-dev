@@ -23,7 +23,7 @@ import AccountsManagePanel, { PermissionHelp } from './AccountsManagePanel.jsx';
 
 const PeopleDataWrap = ({
   ready, readyUsers, readyTides, // subs
-  user, active, org, app, // self
+  user, active, isDebug, org, app, // self
   bCache, pCache, // caches
   batches, users // working data
 })=> {
@@ -69,66 +69,63 @@ const PeopleDataWrap = ({
       
         <Slides
           menu={[
-            
-            <b><i className='fas fa-tachometer-alt fa-fw'></i>  Weekly Metrics</b>,
-            
             <b><i className='fas fa-satellite-dish fa-fw'></i>  Current</b>,
-            
             <b><i className='fas fa-history fa-fw'></i>  Daily History</b>,
+            <b><i className='fas fa-tachometer-alt fa-fw'></i>  Weekly Metrics</b>,
             <b><i className='far fa-calendar-alt fa-fw'></i>  Work Schedule</b>,
             <b><i className='fas fa-user-lock fa-fw'></i>  Permissions</b>,
             <b><i className='fas fa-users-cog fa-fw'></i>   Account Manager</b>,
           ]}
           disable={[false, false, antiAuth, antiAuth, false, antiAuth]}>
           
-          
-          <PerformanceSlide
-            key={1}
-            app={app}
-            user={user}
-            users={users}
-            bCache={bCache}
-            clientTZ={clientTZ} />
-            
-            
           <DashSlide
             key={0}
             app={app}
             user={user}
             users={users}
             batches={batches}
-            bCache={bCache} />
-          
-          
+            bCache={bCache}
+            isDebug={isDebug} />
             
           <HistorySlide
+            key={1}
+            app={app}
+            user={user}
+            users={users}
+            bCache={bCache}
+            clientTZ={clientTZ}
+            allUsers={true}
+            isDebug={isDebug} />
+          
+          <PerformanceSlide
             key={2}
             app={app}
             user={user}
             users={users}
             bCache={bCache}
             clientTZ={clientTZ}
-            allUsers={true} />
-          
+            isDebug={isDebug} />
+            
           {!antiAuth &&
             <ScheduleSlide
-              key={4}
+              key={3}
               app={app}
               user={user}
               users={users}
               pCache={pCache} />
           }
           
-          <div key={5}>
+          <div key={4}>
             <PermissionHelp auths={Pref.auths} admin={false} />
           </div>
           
           {isAdmin || isPeopleSuper ?
             <AccountsManagePanel 
-              key={6} 
+              key={5} 
               app={app}
               users={users}
-              bCache={bCache} />
+              bCache={bCache}
+              isDebug={isDebug} />
           : null }
           
         </Slides>
@@ -145,6 +142,7 @@ export default withTracker( () => {
   let org = user ? user.org : false;
   const clientTZ = moment.tz.guess();
   let active = login ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
+  const isDebug = login ? Roles.userIsInRole(Meteor.userId(), 'debug') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
   const tidesSub = login ? Meteor.subscribe('tideData', clientTZ) : false;
   if(!login) {
@@ -163,6 +161,7 @@ export default withTracker( () => {
       readyTides: tidesSub.ready(),
       user: user,
       active: active,
+      isDebug: isDebug,
       org: org,
       app: AppDB.findOne({org: org}),
       bCache: CacheDB.findOne({dataName: 'batchInfo'}),

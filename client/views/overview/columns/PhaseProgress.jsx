@@ -6,7 +6,7 @@ import NumStat from '/client/components/uUi/NumStat.jsx';
 const PhaseProgress = ({ 
   batchID, releasedToFloor,
   progCols, clientTZ, 
-  app
+  app, isDebug
 })=> {
   
   const [ progData, setProg ] = useState(false);
@@ -16,7 +16,7 @@ const PhaseProgress = ({
       error && console.log(error);
       if( reply ) { 
         setProg( reply );
-        Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(progData);
+        isDebug && console.log(progData);
       }
     });
   }, [batchID]);
@@ -38,8 +38,7 @@ const PhaseProgress = ({
             const calNum = Math.floor( ( 
               phase.count / (dt.totalItems * phase.steps.length) 
                 * 100 ) );
-            Roles.userIsInRole(Meteor.userId(), 'debug') && 
-              console.log(`${dt.batch} ${phase.phase} calNum: ${calNum}`);
+            isDebug && console.log(`${dt.batch} ${phase.phase} calNum: ${calNum}`);
             let fadeTick = calNum == 0 ? '0' :
                  calNum < 10 ? '5' :
                  calNum < 20 ? '10' :
@@ -53,12 +52,13 @@ const PhaseProgress = ({
                  calNum < 100 ? '90' :
                  '100';
             let redLine = calNum >= 100 && phase.ncLeft ? ' redRight' : '';
+            let yellLine = calNum < 100 && phase.shLeft ? ' yellowLeft' : '';
             let niceName = phase.phase === 'finish' ?
                             Pref.isDone : phase.phase;
             return(
               <div 
                 key={batchID + phase + index + 'g'} 
-                className={'fillRight' + fadeTick + redLine}>
+                className={'fillRight' + fadeTick + redLine + yellLine}>
                 <NumStat
                   num={`${calNum}%`}
                   name={niceName}

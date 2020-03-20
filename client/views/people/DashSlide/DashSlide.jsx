@@ -6,7 +6,7 @@ import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
 import PeoplePanel from './PeoplePanel.jsx';
 
 
-const DashSlide = ({ app, user, users, batches, bCache })=> {
+const DashSlide = ({ app, user, users, batches, bCache, isDebug })=> {
   
   const [ update, forceUpdate] = useState(false);
   const [ eBatchesState, eBatchesSet ] = useState([]);
@@ -54,18 +54,11 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
     const dUsers = liveUsers.filter( x => !x.engaged );
     dUsersSet( dUsers );
     
-    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({eUsers});
+    isDebug && console.log({eUsers});
 
     const tideBatches = batches.filter( x => 
       typeof x === 'object' && Array.isArray(x.tide) === true );
     
-    // const eBatches = eUsers.map( (user, index)=>{
-    //   const acBatch = tideBatches.find( y =>
-    //     y.tide && y.tide.find( z => z.tKey === user.engaged.tKey ) ); // MAYBE?
-    //   if(acBatch) {
-    //     return acBatch;
-    //   }  
-    // });
     const eBatches = eUsers.reduce( (result, user)=> {
       const acBatch = tideBatches.find( y =>
         y.tide.find( z => z.tKey === user.engaged.tKey ) );
@@ -75,7 +68,7 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
       return result;
     }, []);
     
-    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({tideBatches, eBatches});
+    isDebug && console.log({tideBatches, eBatches});
     eBatchesSet(eBatches);
     
   },[batches, users]);
@@ -95,7 +88,7 @@ const DashSlide = ({ app, user, users, batches, bCache })=> {
     //   return allBatch;
     // }, {});
     
-    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({qBatches, itrXY});
+    isDebug && console.log({qBatches, itrXY});
     xyBatchSet(itrXY);
   }, [eBatchesState]);
   
