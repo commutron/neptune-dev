@@ -9,7 +9,7 @@ import { LeapTextLink } from '/client/components/tinyUi/LeapText.jsx';
 
 const asHours = (min) => moment.duration(min, "minutes").asHours().toFixed(2, 10);
 
-const ShipWindows = ({ pCache, zCache, app })=> {
+const ShipWindows = ({ bCache, pCache, zCache, app })=> {
 
   const nonWorkDays = app.nonWorkDays;
   if( Array.isArray(nonWorkDays) ) {  
@@ -46,7 +46,7 @@ const ShipWindows = ({ pCache, zCache, app })=> {
       <dl>
         <dt title='0'>Missed Ship Date (before {lateCatch.format('dddd MMM DD')})</dt>
         <dt> -> A debt of {asHours(lateTimeTotal)} hours total remain</dt>
-          <BatchListPending batchList={lateBatch} />
+          <BatchListPending batchList={lateBatch} bCache={bCache} />
           
         {next100Days.map( (e, ix)=>{
           const shipIn = pCache.filter( x => moment(x.shipTime).isSame(e, 'day') );
@@ -61,13 +61,13 @@ const ShipWindows = ({ pCache, zCache, app })=> {
               endDay.nextShippingTime() : endDay.lastShippingTime();
             if(moment(shipTime).isSame(e, 'day')) { return true }
           });
-        
+
           return(
             <Fragment key={ix}>
               <dt title={`ship day ${ix+1}`}>{e.format('dddd MMM DD')}
               {reTimeTotal > 0 && <i> -> {asHours(reTimeTotal)} hours total remain</i>}</dt>
-              <BatchListComplete batchList={early} />
-              <BatchListPending batchList={shipIn} />
+              <BatchListComplete batchList={early} bCache={bCache} />
+              <BatchListPending batchList={shipIn} bCache={bCache} />
             </Fragment>
           );
         })}
@@ -78,12 +78,14 @@ const ShipWindows = ({ pCache, zCache, app })=> {
 
 export default ShipWindows;
 
-const BatchListComplete = ({ batchList })=> (
+const BatchListComplete = ({ batchList, bCache })=> (
   <div>
     {Array.isArray(batchList) && batchList.length > 0 ?
       batchList.map( (b, ix)=>{
+        const moreInfo = bCache ? bCache.find( x => x.batch === b.batchNum) : false;
+        const what = moreInfo ? moreInfo.isWhat : 'unavailable';
         return(
-          <dd key={ix+'z'} className='fade cap'>
+          <dd key={ix+'z'} className='fade cap' title={what}>
           <LeapTextLink
             title={b.batchNum} 
             sty='numFont whiteT'
@@ -96,17 +98,19 @@ const BatchListComplete = ({ batchList })=> (
   </div> 
 );
 
-const BatchListPending = ({ batchList })=> (
+const BatchListPending = ({ batchList, bCache })=> (
   <div>
     {Array.isArray(batchList) && batchList.length > 0 ?
       batchList.map( (b, ix)=>{
+        const moreInfo = bCache ? bCache.find( x => x.batch === b.batch) : false;
+        const what = moreInfo ? moreInfo.isWhat : 'unavailable';
         const q2t = b.quote2tide;
         const q2tStatus = q2t === false ? 'Time Not Tracked' :
           q2t > 0 ? 
             `${asHours(q2t)} hours remain` :
             'Over-Quote, remaining time unknown';
         return(
-          <dd key={ix} title={`${q2t} minutes`} className='fade'>
+          <dd key={ix} title={`${what}, ${q2t} minutes`} className='fade'>
           <LeapTextLink
             title={b.batch} 
             sty='numFont whiteT'

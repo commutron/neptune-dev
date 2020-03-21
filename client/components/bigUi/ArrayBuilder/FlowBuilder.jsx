@@ -122,10 +122,10 @@ export default class FlowBuilder extends Component	{
       options.filter( x => x.phase === this.state.phaseSelect);
 
     return (
-      <div className='split'>
-        <div className='min350 max400'>
+      <div className=''>
+        <div className='space'>
           <p>
-            <label htmlFor='phasefltr' className='inlineForm'><br />
+            <label htmlFor='phasefltr'>{Pref.phase}<br />
               <select id='phasefltr' onChange={(e)=>this.changePhase(e)} className='cap'>
                 <option value='other'>No Phase</option>
                 {this.props.app.phases.map( (entry, index)=>{
@@ -137,12 +137,13 @@ export default class FlowBuilder extends Component	{
                 )})}
               </select>
             </label>
-            <i className='breath'></i>
-            <label htmlFor='phasefltr'>{Pref.phase}</label>
           </p>
           <form onSubmit={this.addStep.bind(this)}>
-            <p >
-              <label htmlFor='rteps' className='inlineForm'><br />
+            <p>
+              <label 
+                htmlFor='rteps' 
+                className=''
+              >Tracking Step<br />
                 <select id='rteps' ref={(i)=> this.rStep = i} className='cap' required>
                   <option value=''></option>
                   {phasedOps.map( (entry, index)=>{
@@ -150,19 +151,25 @@ export default class FlowBuilder extends Component	{
                   })}
                 </select>
               </label>
-              <label htmlFor='rthow' className='inlineForm'><br />
+            </p>
+            <p>
+              <label 
+                htmlFor='rteps' 
+                className=''
+              >{Pref.instruct} anchor<br />
                 <input 
                   id='rthow'
                   type='text'
+                  className='dbbleWide'
                   ref={(i)=> this.rHow = i} /> 
-                <button type='submit' className='smallAction clearWhite'>Add</button>
+                <button
+                  type='submit' 
+                  className='smallAction clearWhite'
+                >Add</button>
               </label>
-              <i className='breath'></i>
-              <label htmlFor='rteps'>Tracking Step</label>
             </p>
           </form>
         </div>
-        <span className='breath'></span>
         <div className='wide'>
           <div className='stepList'>
             { steps.map( (entry, index)=> {  

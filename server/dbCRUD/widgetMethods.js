@@ -162,8 +162,10 @@ Meteor.methods({
   },
 
 // new
-  pushBasicPlusFlow(widgetId, flowTitle, flowObj, ncLists) {
+  pushBasicPlusFlow(widgetId, flowTitle, ncLists) {
     const exdt = Array.isArray(ncLists);
+    const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
+    const endTrack = appDoc.lastTrack;
     if(Roles.userIsInRole(Meteor.userId(), 'edit') && exdt === true) {
       WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey}, {
         $push : {
@@ -172,7 +174,7 @@ Meteor.methods({
             flowKey: new Meteor.Collection.ObjectID().valueOf(),
   				  title: flowTitle,
   				  type: 'plus',
-            flow: flowObj,
+            flow: [endTrack],
             ncLists: ncLists
           }
       }});
@@ -198,17 +200,69 @@ Meteor.methods({
     */
 
 // edit 
-  setBasicPlusFlow(widgetId, editId, flowTitle, flowObj, ncLists) {
+  setBasicPlusFlowHead(widgetId, editId, flowTitle, ncLists) {
     const exdt = Array.isArray(ncLists);
     if(Roles.userIsInRole(Meteor.userId(), 'edit') && exdt === true) {
       WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'flows.flowKey': editId}, {
         $set : {
           'flows.$.title': flowTitle,
           'flows.$.type': 'plus',
-          'flows.$.flow': flowObj,
           'flows.$.ncLists': ncLists
       }});
       return true;
+    }else{
+      return false;
+    }
+  },
+  
+  setBasicPlusFlowRoute(widgetId, editId, flowObj) {
+    if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
+      WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'flows.flowKey': editId}, {
+        $set : {
+          'flows.$.flow': flowObj,
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  rebuildWidgetFlows(widgetId) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      
+      const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
+      const options = appDoc.trackOption;
+      const endTrack = appDoc.lastTrack;
+      
+      const doc = WidgetDB.findOne({_id: widgetId});
+      if(doc) {
+        for( let flow of doc.flows) {
+          const editKey = flow.flowKey;
+          const oldFlow = flow.flow;
+          
+          let baseSet = new Set();
+          for(let t of oldFlow) {
+            let o = options.find(x => x.key === t.key);
+            o ? o['how'] = t.how : null;
+            o ? baseSet.add(o) : null;
+          }
+          baseSet.add(endTrack);
+          
+          const newFlowObj = [...baseSet];
+    
+          WidgetDB.update({
+            _id: widgetId, 
+            orgKey: Meteor.user().orgKey, 
+            'flows.flowKey': editKey
+          }, {
+            $set : {
+              'flows.$.flow': newFlowObj,
+          }});
+        }
+        return true;
+      }else{
+        return true;
+      }
     }else{
       return false;
     }
@@ -288,23 +342,6 @@ Meteor.methods({
         }});
     }else{
       null;
-    }
-  },
-  
-  // Quoted Time Budget \\
-  
-  clearQuoteTime(widgetId, vKey) {
-    try{
-      if(Roles.userIsInRole(Meteor.userId(), ['sales', 'edit'])) {
-        WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.versionKey': vKey}, {
-          $unset : { 
-            'versions.$.quoteTimeScale': ""
-          }});
-      }else{
-        null;
-      }
-    }catch (err) {
-      throw new Meteor.Error(err);
     }
   },
 

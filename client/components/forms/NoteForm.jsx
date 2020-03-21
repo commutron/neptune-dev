@@ -33,7 +33,7 @@ const NotePopup = ({ id, versionKey, xBatch, content, small })=> {
   );
 };
         
-const NoteForm = ({ id, versionKey, xBatch, content, autoClose })=> {
+const NoteForm = ({ id, versionKey, xBatch, content, selfclose })=> {
 
 	function saveNote(e) {
     e.preventDefault();
@@ -47,7 +47,7 @@ const NoteForm = ({ id, versionKey, xBatch, content, autoClose })=> {
           error && console.log(error);
           if(reply) {
             toast.success('Saved');
-            autoClose();
+            selfclose();
           }else{
             toast.error('NOT saved, Server Error');
           }
@@ -57,7 +57,7 @@ const NoteForm = ({ id, versionKey, xBatch, content, autoClose })=> {
           error && console.log(error);
           if(reply) {
             toast.success('Saved');
-            autoClose();
+            selfclose();
           }else{
             toast.error('NOT saved, Server Error');
           }
@@ -68,7 +68,7 @@ const NoteForm = ({ id, versionKey, xBatch, content, autoClose })=> {
         error && console.log(error);
         if(reply) {
           toast.success('Saved');
-          autoClose();
+          selfclose();
         }else{
           toast.error('NOT saved, Server Error');
         }

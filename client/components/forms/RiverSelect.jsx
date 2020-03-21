@@ -21,7 +21,7 @@ const RiverSelect = ({ id, widget, river, riverAlt, lock, noText })=> (
 );
       
       
-const RiverSelectForm = ({ id, widget, river, riverAlt, autoClose })=> {
+const RiverSelectForm = ({ id, widget, river, riverAlt, selfclose })=> {
 
   function save(e) {
     e.preventDefault();
@@ -36,7 +36,7 @@ const RiverSelectForm = ({ id, widget, river, riverAlt, autoClose })=> {
         error && console.log(error);
         if(reply) {
           toast.success('Saved');
-          autoClose();
+          selfclose();
         }else{
           toast.error('Server Error');
           this.go.disabled = false;

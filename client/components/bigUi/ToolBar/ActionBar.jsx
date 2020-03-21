@@ -24,7 +24,7 @@ import WidgetEditForm from '/client/components/forms/WidgetEditForm.jsx';
 import VersionForm from '/client/components/forms/VersionForm.jsx';
 import { VersionRemove } from '/client/components/forms/VersionForm.jsx';
 import CompForm from '/client/components/forms/CompForm.jsx';
-import FlowForm from '/client/components/forms/FlowForm.jsx';
+import FlowFormHead from '/client/components/forms/FlowFormHead.jsx';
 
 const ActionBar = ({
   batchData, itemData, 
@@ -244,7 +244,7 @@ const ActionBar = ({
             version={false}
             app={app}
             noText={noText} />
-          <FlowForm
+          <FlowFormHead
             id={widgetData._id}
             edit={false}
             existFlows={widgetData.flows}

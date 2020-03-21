@@ -129,10 +129,6 @@ const TimeBudgetsChunk = ({
         
         <div className='twoEcontent numFont'>
           <TimeBudgetBar a={tP} b={0} c={0} />
-          {/*<p>
-            <span className='bigger'>{tP}</span> 
-            {tP === 1 ? ' person' : ' people'}
-          </p>*/}
           <dl>
             {totalPeople.map((per, ix)=>{
               if(per.uTime > 0) {
@@ -140,6 +136,7 @@ const TimeBudgetsChunk = ({
                   <dt 
                     key={ix}
                     title={`${per.uTime} minutes`}
+                    className='comfort middle'
                   ><i className='big'><UserNice id={per.uID} /></i>
                   <i className='grayT'> {asHours(per.uTime)} hours</i></dt> 
             )}})}
@@ -167,6 +164,7 @@ const TimeBudgetsChunk = ({
                         <dt
                           key={ix}
                           title={`${Math.round(ph.y)} minutes`}
+                          className='comfort middle'
                         ><i className='big cap'>{ph.x}</i>
                         <i className='grayT'> {asHours(ph.y)} hours</i></dt> 
                   )}})}
@@ -184,20 +182,19 @@ const TimeBudgetsChunk = ({
         <summary>Calculation Details</summary>
         <p className='footnote'>Sum of time blocks are each rounded to their nearest minute</p>
         <p className='footnote'>
-          {`Quoted time is the latest available time set
-           --before the ${Pref.batch} is finished--`} 
-        </p>
-        <p className='footnote'>
           Logged time is recorded to the second and is displayed to the nearest minute.
         </p>
         <p className='footnote'>
-          Update quoted time budget in hours to 2 decimal places. minutes_quoted = {qtB}
+          Update quoted time budget in hours to 2 decimal places.
         </p>
         <p className='footnote'>
           {Pref.phase} time is not logged but derived. If a block of time is attributed 
-          to multiple {Pref.phase}s then the time block is divided by the number of {Pref.phase}s 
-          ( minutes / list length ).
+          to multiple {Pref.phase}s then the time block is divided by the number of {Pref.phase}s.
         </p>
+        <dl className='monoFont'>
+          <dd>minutes_quoted = {qtB}</dd>
+          <dd>minutes / list length</dd>
+        </dl>
       </details>
       
               

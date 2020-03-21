@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 //import Pref from '/client/global/pref.js';
 
-// requires
-//button
-//title
-//color // css class
-//lock
-//children
-
-const ModelMedium = (props)=> {
+const ModelMedium = ({ 
+  button, title, 
+  icon, color, noText, smIcon, 
+  lock, children 
+})=> {
   
   const [ show, showChange ] = useState(false);
   
@@ -16,19 +13,18 @@ const ModelMedium = (props)=> {
     showChange( !show );
   };
     
-  const noText = props.noText;
-  let iSize = props.smIcon ? ' fa-1x ' : ' fa-lg ';
+  let iSize = smIcon ? ' fa-1x ' : ' fa-lg ';
   
   return (
     <span>
       <button
-        title={props.title}
+        title={title}
         className='transparent'
         onClick={()=>reveal()}
-        disabled={props.lock}>
+        disabled={lock}>
         <label className='navIcon actionIconWrap'>
-          <i className={'fas ' + props.icon + iSize + props.color}></i>
-          {!noText && <span className={'actionIconText ' + props.color}>{props.button}</span>}
+          <i className={'fas ' + icon + iSize + color}></i>
+          {!noText && <span className={'actionIconText ' + color}>{button}</span>}
         </label>
       </button>
       
@@ -38,9 +34,9 @@ const ModelMedium = (props)=> {
           <div className='medModel'>
             <div className='medModelHead'>
               <span>
-                <i className={'fas ' + props.icon + ' fa-lg ' + props.color}></i>
+                <i className={'fas ' + icon + ' fa-lg ' + color}></i>
                 <i className='breath'></i>
-                {props.title}
+                {title}
               </span>
               <button
                 className='action clearRed rAlign'
@@ -49,9 +45,9 @@ const ModelMedium = (props)=> {
               ><i className='fas fa-times fa-lg'></i></button>
             </div>
             <div className='medModelContent centre'>
-              {React.cloneElement(props.children,
+              {React.cloneElement(children,
                 { 
-                  autoClose: ()=>reveal()
+                  selfclose: ()=>reveal()
                 }
               )}
             </div>

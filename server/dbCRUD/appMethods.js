@@ -229,7 +229,7 @@ Meteor.methods({
         $set : { 
           'trackOption.$.step' : step,
           'trackOption.$.type' : type,
-          'trackOption.$.phase' : phase,
+          'trackOption.$.phase' : phase
           }
       });
       return true;
@@ -238,20 +238,15 @@ Meteor.methods({
     }
   },
   
-  endTrack(flatLast) {
+  endTrack(lastStep, lastHow) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      
-      const split = flatLast.split('|');
-      const step = split[0];
-      const type = split[1];
-      const how = split[2];
       const trackObj = 
       { 
         'key' : 'f1n15h1t3m5t3p',
-        'step' : step,
-        'type' : type,
+        'step' : lastStep,
+        'type' : 'finish',
         'phase' : 'finish',
-        'how' : how
+        'how' : lastHow
       };
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $set : { 

@@ -22,9 +22,11 @@ const PhasesSlide = ({app})=> {
     });
   }
   
-  function endTrack() {
-    const last = this[rndmKey2 + 'dnTrk'].value;
-    Meteor.call('endTrack', last, (error, reply)=>{
+  function endTrack(e) {
+    e.preventDefault();
+    const lastS = this[rndmKey2 + 'dnTrkStep'].value;
+    const lastH = this[rndmKey2 + 'dnTrkHow'].value;
+    Meteor.call('endTrack', lastS, lastH, (error, reply)=>{
       if(error)
         console.log(error);
       if(reply) {
@@ -48,7 +50,8 @@ const PhasesSlide = ({app})=> {
   }
   
   let lt = app.lastTrack;
-  let df = lt.step + '|' + lt.type + '|' + lt.how;
+  let dfStep = lt.step;
+  let dfHow = lt.how;
   
   return (
     <div className='invert'>
@@ -91,16 +94,23 @@ const PhasesSlide = ({app})=> {
       
         <i>the step that marks a {Pref.item} as finished</i>
         <label htmlFor={rndmKey2 + 'dnTrk'}><br />
-          <select
-            id={rndmKey2 + 'dnTrk'}
-            onChange={(e)=>endTrack(e)}
-            defaultValue={df}
-            required
-          >
-            <option value='finish|finish|finish'>Finish</option>
-            <option value='pack|finish|pack'>Pack</option>
-            <option value='ship|finish|ship'>Ship</option>
-          </select>
+          <form onSubmit={(e)=>endTrack(e)} className='inlineForm'>
+            <select
+              id={rndmKey2 + 'dnTrkStep'}
+              defaultValue={dfStep}
+              required
+            >
+              <option value='finish'>Finish</option>
+              <option value='pack'>Pack</option>
+              <option value='pack-ship'>Pack & Ship</option>
+            </select>
+            <input 
+              id={rndmKey2 + 'dnTrkHow'}
+              type='text'
+              defaultValue={dfHow} />
+            <button type='submit' className='action clearGreen'
+            >Save</button>
+          </form>
         </label>
       
       </div>

@@ -5,7 +5,6 @@ import Pref from '/client/global/pref.js';
 import CreateTag from '/client/components/uUi/CreateTag.jsx';
 import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 import TagsModule from '/client/components/bigUi/TagsModule.jsx';
-import { VersionQuoteTimeClear } from '/client/components/forms/VersionQuoteTime.jsx';
 import NoteLine from '/client/components/smallUi/NoteLine.jsx';
 //import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
@@ -61,8 +60,6 @@ const VersionPanel = ({
     });
   }
   
-  const qtON = v.quoteTimeScale;
-  
   return(
     <div className='section'>
             
@@ -103,16 +100,6 @@ const VersionPanel = ({
             </div>
             
           </div>
-              
-          <div className='wide'>
-            {/*// Cleanup Function - Limited Use */}
-            {!qtON ?
-              <i>quote time is no longer saved to the version</i>
-              :
-              <VersionQuoteTimeClear wID={w._id} vKey={v.versionKey} />
-            }
-          </div>
-          
           
         </div>
           

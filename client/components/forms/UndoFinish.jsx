@@ -30,7 +30,7 @@ const UndoFinish = ({ id, finishedAtB, serial, finishedAtI, timelock, noText })=
   );
 };
 
-const UndoFinishForm = ({ id, finishedAtB, serial, finishedAtI, timelock, autoClose })=> {
+const UndoFinishForm = ({ id, finishedAtB, serial, finishedAtI, timelock, selfclose })=> {
   
   const handleUndo = ()=> {
     const override = timelock ? prompt("Enter minor PIN to override", "") : false;
@@ -38,7 +38,7 @@ const UndoFinishForm = ({ id, finishedAtB, serial, finishedAtI, timelock, autoCl
       error && console.log(error);
       if(reply) {
         toast.success('Saved');
-        autoClose();
+        selfclose();
       }else{
         toast.error('Server Error');
       }

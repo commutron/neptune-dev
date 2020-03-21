@@ -19,41 +19,6 @@ const TimeTab = ({
   
   // const proto = Roles.userIsInRole(Meteor.userId(), 'nightly');
   // const pSup = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
-
-//////////////////////////////////////
-/*
-    let allthetimes = [];
-    if(proto) {
-      for(let item of b.items) {
-        for(let entry of item.history) {
-          if(entry.type === 'inspect' && entry.good === true) {
-            allthetimes.push({
-              key: entry.key,
-              step: entry.step,
-              time: entry.time,
-              who: entry.who,
-            });
-          }
-        }
-      }
-      const cronoTimes = allthetimes.sort((x1, x2)=> {
-                          if (x1.time < x2.time) { return -1 }
-                          if (x1.time > x2.time) { return 1 }
-                          return 0;
-                        });
-      let sortedTimes = [];
-      for(let step of riverFlow || []) {
-        if(step.type === 'inspect') {
-          const thesetimes = cronoTimes.filter( x => x.key === step.key );
-          sortedTimes.push({
-            step: step.step,
-            entries: thesetimes
-          });
-        }
-      }
-    }
-*/
-///////////////////////////////////////
   
   return(
     <div className='space3v'>

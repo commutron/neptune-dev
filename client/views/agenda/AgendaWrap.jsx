@@ -40,8 +40,6 @@ const AgendaWrap = ({
   const [ working, workingSet ] = useState( false );
   const [ loadTime, loadTimeSet ] = useState( moment() );
   const [ tickingTime, tickingTimeSet ] = useState( moment() );
-
-  // const [ dense, denseSet ] = useState( 0 );
   
   const [ numState, numSet ] = useState(false);
   
@@ -94,10 +92,6 @@ const AgendaWrap = ({
   const duration = moment.duration(
     loadTime.diff(tickingTime))
       .humanize();
-      
-  // const density = dense === 1 ? 'compact' :
-  //                 dense === 2 ? 'minifyed' :
-  //                 '';
     
   return(
     <div key={0} className='overviewContainer'>
@@ -122,28 +116,6 @@ const AgendaWrap = ({
       </div>
         
       <nav className='overviewToolbar'>
-        {/*  
-        <span>
-          <button
-            key='denseOff'
-            title='Comfort Layout'
-            onClick={()=>denseSet(0)}
-            className={dense === 0 ? 'liteToolOn' : 'liteToolOff'}
-          ><i className='fas fa-expand-arrows-alt fa-fw'></i></button>
-          <button
-            key='compactOn'
-            title='Compact Layout'
-            onClick={()=>denseSet(1)}
-            className={dense === 1 ? 'liteToolOn' : 'liteToolOff'}
-          ><i className='fas fa-compress fa-fw'></i></button>
-          <button
-            key='miniOn'
-            title='Minifyed Layout'
-            onClick={()=>denseSet(2)}
-            className={dense === 2 ? 'liteToolOn' : 'liteToolOff'}
-          ><i className='fas fa-compress-arrows-alt fa-fw'></i></button>
-        </span>
-        */}
         <span className='flexSpace' />
         <span>Updated {duration} ago</span>
       </nav>
@@ -153,6 +125,7 @@ const AgendaWrap = ({
       <div className='balance numFont letterSpaced overscroll'>
             
           <ShipWindows 
+            bCache={bCache.dataSet}
             pCache={pCache.dataSet}
             zCache={zCache.dataSet}
             app={app} />

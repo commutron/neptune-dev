@@ -770,6 +770,7 @@ main {
 .biggester { font-size: 2.5rem; }
 
 .dbbleWide { min-width: 30vw; }
+.inlineForm > input[type='text'].dbbleWide { width: 30vw; }
 
 input.variableInput.med { 
   font-size: 1rem;
