@@ -41,7 +41,7 @@ const TideFollow = ({ proRoute, invertColor })=> {
           `Escape Hatch \nto engaged ${Pref.batch}: ${engaged}`}
         onClick={()=>go()}
         disabled={!engaged}
-      ><i className='fas fa-parachute-box primeRightIcon'></i>
+      ><i className='fas fa-street-view primeRightIcon' data-fa-transform='up-1'></i>
       </button>
     </div>
   );

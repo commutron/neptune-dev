@@ -35,9 +35,11 @@ const NotePopup = ({ id, versionKey, xBatch, content, small })=> {
         
 const NoteForm = ({ id, versionKey, xBatch, content, selfclose })=> {
 
+  const rndmKey = Math.random().toString(36).substr(2, 5);
+  
 	function saveNote(e) {
     e.preventDefault();
-    this.go.disabled = true;
+    this[`${rndmKey}go`].disabled = true;
     const content = this.mess.value.trim();
     const choose = versionKey ? true : false;
 
@@ -80,7 +82,7 @@ const NoteForm = ({ id, versionKey, xBatch, content, selfclose })=> {
   }
   
   function goOp(e) {
-    this.go.disabled = false;
+    this[`${rndmKey}go`].disabled = false;
   }
   
   const now = content ? content : '';
@@ -103,7 +105,7 @@ const NoteForm = ({ id, versionKey, xBatch, content, selfclose })=> {
       </p>
       <p>
         <button
-          id='go'
+          id={`${rndmKey}go`}
           disabled={true}
           className='action clearGreen'
           type='submit'>Save</button>

@@ -17,8 +17,8 @@ const TaskBar = ({ subLink }) => {
         title={Pref.Group + 's'}
         className={subLink === 'overviewgroups' ? 'taskLink onTL' : 'taskLink'}
         onClick={()=>FlowRouter.go('/data/overview?request=groups')}
-      ><i className='fas fa-users'></i></button>
-      
+      ><i className='fas fa-industry'></i></button>
+
       <button
         title={Pref.Batch + 's'}
         className={subLink === 'overviewbatches' ? 'taskLink onTL' : 'taskLink'}

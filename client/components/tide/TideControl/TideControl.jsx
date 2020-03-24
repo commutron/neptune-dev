@@ -18,7 +18,11 @@ const TideControl = ({ batchID, tideKey, currentLive, tideLockOut })=> {
   //   };
   // }, [actionID]);
   
-  const timer = ()=> Meteor.setTimeout( ()=>{ setLock(false); },5000);
+  const timer = ()=> Meteor.setTimeout( ()=>{ 
+    if(thingMounted.current) {
+      setLock(false); 
+    }
+  },5000);
   
   useEffect(() => {
     return () => {
