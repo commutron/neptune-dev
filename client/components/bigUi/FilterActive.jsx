@@ -10,8 +10,8 @@ const FilterActive = ({ title, open, done, total, onClick, onTxtChange })=>	{
   }
   
   return(
-    <div className='fltrs noCopy'>
-      <div>
+    <div className='itmFltrBlock noCopy'>
+      <div className=''>
         <label className='fltrsInput'>
           <i className='fas fa-font fa-fw'></i>
           <input
@@ -32,7 +32,7 @@ const FilterActive = ({ title, open, done, total, onClick, onTxtChange })=>	{
         </label>
       </div>
           
-      <div className='wide centreText'>Total: {total}</div>
+      <p className='centreText'>Total: {total}</p>
       
     </div>
   );

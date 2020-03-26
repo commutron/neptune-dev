@@ -7,7 +7,7 @@ import BlockForm from '/client/components/forms/BlockForm.jsx';
 import BatchCreate from '/client/components/forms/BatchCreate.jsx';
 import BatchEdit from '/client/components/forms/BatchEdit.jsx';
 import BatchFormX from '/client/components/forms/BatchFormX.jsx';
-import MultiItemForm from '/client/components/forms/MultiItemForm.jsx';
+import ItemSerialsWrap from '/client/components/forms/ItemSerials/ItemSerialsWrap.jsx';
 import RiverSelect from '/client/components/forms/RiverSelect.jsx';
 import CounterAssign from '/client/components/bigUi/ArrayBuilder/CounterAssign.jsx';
 import NCEscape from '/client/components/forms/NCEscape.jsx';
@@ -91,7 +91,7 @@ const ActionBar = ({
           versions={widgetData.versions}
           lock={!widgetData.versions || !batchData.live}
           noText={noText} />
-        <MultiItemForm
+        <ItemSerialsWrap
           id={batchData._id}
           items={batchData.items}
           more={batchData.finishedAt === false}

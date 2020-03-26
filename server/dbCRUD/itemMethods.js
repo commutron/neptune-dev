@@ -137,6 +137,69 @@ Meteor.methods({
         }
       }
     },
+    
+  addYearWeekPanelItems(batchId, serialArr) {
+    this.unblock();
+    
+    if(Roles.userIsInRole(Meteor.userId(), 'create')) {
+    
+      if(Array.isArray(serialArr) && serialArr.length > 0) {
+        const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
+        const open = doc.finishedAt === false;
+        
+        if(open) {
+          
+          let badBarcodes = [];
+          
+          for( let serialTry of serialArr ) {
+            let duplicate = BatchDB.findOne({ 'items.serial': serialTry });
+            
+            if(!duplicate) {
+              
+              BatchDB.update({_id: batchId}, {
+                $push : { items : {
+                  serial: serialTry,
+                  createdAt: new Date(),
+                  createdWho: Meteor.userId(),
+                  finishedAt: false,
+                  finishedWho: false,
+                  units: Number(1),
+                  panel: false,
+                  panelCode: false,
+                  subItems: [],
+                  history: [],
+                  alt: false,
+                  rma: []
+              }}});
+              
+            }else{
+              badBarcodes.push(serialTry);
+            }
+          }
+        
+          BatchDB.update({_id: batchId}, {
+            $set : {
+              updatedAt: new Date(),
+      			  updatedWho: Meteor.userId()
+            }});
+            
+          return {
+            success: true,
+            dupes: badBarcodes
+          };
+            
+        }else{
+          return false;
+        }
+        
+      }else{
+        return false;
+      }
+    }else{
+      return false;
+    }
+  },
+  
   
 // delete \\
   deleteItem(batchId, bar, pass) {

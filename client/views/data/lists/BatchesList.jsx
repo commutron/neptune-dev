@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 
 import LeapButton from '/client/components/tinyUi/LeapButton.jsx';
 import FilterActive from '/client/components/bigUi/FilterActive.jsx';
@@ -37,15 +37,15 @@ const BatchesList = ({ batchData, widgetData })=> {
   }, [ batchData, filter, textString ]);
             
   return (
-    <div className='' key={1}>
-      <div className='stickyBar'>
+    <Fragment>
+      
         <FilterActive
           title={b.batch}
           done='Finished'
           total={list.length}
           onClick={(e)=>setFilter(e)}
           onTxtChange={(e)=>setTextFilter(e)} />
-      </div>  
+     
       {list.map( (entry, index)=> {
         const style = entry.live === true ? 
                       'leapBar numFont activeMark' :
@@ -61,7 +61,8 @@ const BatchesList = ({ batchData, widgetData })=> {
               address={'/data/batch?request=' + entry.batch}
             />
       )})}
-		</div>
+      
+		</Fragment>
   );
 };
 

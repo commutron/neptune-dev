@@ -13,7 +13,7 @@ import DataViewOps from './DataViewOps.jsx';
 
 const ExploreView = ({
   usersReady, coldReady, hotReady, // subs
-  user, org, users, app, // self
+  user, isDebug, org, users, app, // self
   allGroup, allWidget, allBatch, allXBatch, // customers
   hotBatch, hotXBatch, // relevant
   view, request, specify, subLink // routing
@@ -60,6 +60,7 @@ const ExploreView = ({
   return(
     <DataViewOps
       user={user}
+      isDebug={isDebug}
       org={org}
       users={users}
       app={app}
@@ -84,6 +85,7 @@ export default withTracker( ({ view, request, specify }) => {
   let user = login ? Meteor.user() : false;
   let org = user ? user.org : false;
   let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
+  const isDebug = user ? Roles.userIsInRole(Meteor.userId(), 'debug') : false;
   const clientTZ = moment.tz.guess();
   const usersSub = login ? Meteor.subscribe('usersData') : false;
   const coldSub = login ? Meteor.subscribe('skinnyData', clientTZ) : false;
@@ -108,6 +110,7 @@ export default withTracker( ({ view, request, specify }) => {
       user: user,
       org: org,
       users: Meteor.users.find( {}, { sort: { username: 1 } } ).fetch(),
+      isDebug: isDebug,
       app: AppDB.findOne({org: org}),
       allGroup: GroupDB.find( {}, { sort: { group: 1 } } ).fetch(),
       allWidget: WidgetDB.find( {}, { sort: { widget: 1 } } ).fetch(),

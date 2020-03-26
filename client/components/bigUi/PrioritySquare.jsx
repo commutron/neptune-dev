@@ -3,7 +3,7 @@ import moment from 'moment';
 import 'moment-timezone';
 import NumStat from '/client/components/uUi/NumStat.jsx';
 
-const PrioritySquareData = ({ batchID, app, dbDay, mockDay, altNumber })=> {
+const PrioritySquareData = ({ batchID, app, dbDay, mockDay, altNumber, isDebug })=> {
   
   const thingMounted = useRef(true);
   const [ ptData, setPriority ] = useState(false);
@@ -14,7 +14,7 @@ const PrioritySquareData = ({ batchID, app, dbDay, mockDay, altNumber })=> {
       error && console.log(error);
       if( reply ) { 
         if(thingMounted.current) { setPriority( reply ); }
-        Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(ptData);
+        isDebug && console.log(ptData);
       }
     });
     return () => { thingMounted.current = false };
@@ -25,7 +25,8 @@ const PrioritySquareData = ({ batchID, app, dbDay, mockDay, altNumber })=> {
       batchID={batchID} 
       ptData={ptData}
       altNumber={altNumber}
-      app={app} /> 
+      app={app}
+      isDebug={isDebug} /> 
   );
 };
 
@@ -33,12 +34,9 @@ export default PrioritySquareData;
 
 ///////////////////////////////////////////////////////////////////////////////
 
-export const PrioritySquare = ({ batchID, ptData, altNumber, app })=> {
+export const PrioritySquare = ({ batchID, ptData, altNumber, app, isDebug })=> {
   
   const pt = ptData;
-  
-  const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
-  const isDebug = Roles.userIsInRole(Meteor.userId(), 'debug');
   
   if( pt && pt.batchID === batchID ) {
     
@@ -51,7 +49,7 @@ export const PrioritySquare = ({ batchID, ptData, altNumber, app })=> {
       return(
         <div>
           <NumStat
-            num='n/a'
+            num={<i className='bigger bold'>X</i>}
             name=''
             title='priority rank unavailable'
             color='fade'
@@ -108,7 +106,7 @@ export const PrioritySquare = ({ batchID, ptData, altNumber, app })=> {
   return(
     <div>
       <NumStat
-        num='?'
+        num={<i className='bigger bold'>?</i>}
         name=''
         title='priority rank unknown'
         color='fade'

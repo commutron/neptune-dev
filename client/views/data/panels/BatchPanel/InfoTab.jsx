@@ -12,7 +12,7 @@ import ReleaseAction from '/client/components/bigUi/ReleasesModule.jsx';
 import StepsProgress from '/client/components/bigUi/StepsProgress/StepsProgress.jsx';
 
 const InfoTab = ({
-  a, b, user, 
+  a, b, user, isDebug,
   done, allDone, 
   progCounts, riverTitle, riverAltTitle,
 }) =>	{
@@ -52,7 +52,8 @@ const InfoTab = ({
                   <PrioritySquareData
                     batchID={b._id}
                     app={a}
-                    dbDay={b.end} />
+                    dbDay={b.end}
+                    isDebug={isDebug} />
                 </div>
                 <div className='statusBlock'>
                   <TideActivityData

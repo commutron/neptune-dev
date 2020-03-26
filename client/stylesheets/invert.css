@@ -192,6 +192,9 @@ Invert Rules */
 	color: var(--black);
   background-color: transparent;
 }
+.invert .itmFltrBlock {
+  background-color: var(--cloudstrans);
+}
 .invert details {
   box-shadow: none;
 }

@@ -15,6 +15,9 @@ main {
 
 .hidden { display: none; }
 
+.forceScroll {
+  overflow-y: auto;
+}
 .forceScrollStyle::-webkit-scrollbar {
   width: 1vmax;
 }
@@ -104,7 +107,7 @@ main {
   position: -webkit-sticky;
   position: sticky;
   width: auto;
-  background-color: rgb(30,30,30);
+  background-color: rgba(30,30,30,0.5);
   z-index: 7;
 }
 

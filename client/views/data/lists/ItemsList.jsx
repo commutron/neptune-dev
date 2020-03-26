@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import moment from 'moment';
 //import Pref from '/client/global/pref.js';
 
 import LeapButton from '/client/components/tinyUi/LeapButton.jsx';
 import FilterItems from '/client/components/bigUi/FilterItems.jsx';
 
-const ItemsList = ({ batchData, widgetData })=> {
+const ItemsList = ({ 
+  batchData, widgetData, flowData,
+  orb, isDebug
+})=> {
   
   const sessionSticky = batchData.batch + 'batchItemFilter' ;
   
@@ -30,16 +33,14 @@ const ItemsList = ({ batchData, widgetData })=> {
   
   // get flow steps for menu
   function flowSteps() {
-    let flow = widgetData.flows.find( x => x.flowKey === batchData.river );
-    let flowAlt = widgetData.flows.find( x => x.flowKey === batchData.riverAlt );
     let steps = new Set();
-    if(flow) {
-      for(let s of flow.flow) {
+    if(flowData.riverFlow) {
+      for(let s of flowData.riverFlow) {
         steps.add(s);
       }
     }else{null}
-    if(flowAlt) {
-      for(let as of flowAlt.flow) {
+    if(flowData.riverFlowAlt) {
+      for(let as of flowData.riverFlowAlt) {
         steps.has({key: as.key}) ? null : steps.add(as);
       }
     }else{null}
@@ -279,8 +280,7 @@ const ItemsList = ({ batchData, widgetData })=> {
   useEffect( ()=> { 
     const K = keyword;
     
-    Roles.userIsInRole(Meteor.userId(), 'debug') &&
-      console.log({ K, timeModifyer, notModifyer });
+    isDebug && console.log({ K, timeModifyer, notModifyer });
     
     let filteredList = 
     !K ?
@@ -311,33 +311,32 @@ const ItemsList = ({ batchData, widgetData })=> {
   }, [ batchData, keyword, timeModifyer, notModifyer ]);
   
   return(
-      <div className='' key={1}>
-        <FilterItems
-          title={b.batch}
-          total={stateList.length}
-          advancedList={steps}
-          selectedKeyword={keyword}
-          selectedTime={timeModifyer}
-          selectedToggle={notModifyer}
-          onKeywordChange={e => setKeywordFilter(e)}
-          onTimeChange={e => setTimeFilter(e)}
-          onNotChange={e => setToggle(e)} />
-        {stateList.map( (entry, index)=> {
-          let style = entry.history.length === 0 ? 'leapBar numFont' :
-                      entry.finishedAt === false ? 'leapBar numFont activeMark' : 
-                      scrap.scrapList.includes(entry.serial) ? 'leapBar numFont ngMark' : 'leapBar numFont gMark';
-            return (
-              <LeapButton
-                key={index} 
-                title={entry.serial} 
-                sub='' 
-                sty={style}
-                address={'/data/batch?request=' + b.batch + '&specify=' + entry.serial}
-              />
-            );
-        })}
-			</div>
-		
+    <Fragment>
+      <FilterItems
+        title={b.batch}
+        total={stateList.length}
+        advancedList={steps}
+        selectedKeyword={keyword}
+        selectedTime={timeModifyer}
+        selectedToggle={notModifyer}
+        onKeywordChange={e => setKeywordFilter(e)}
+        onTimeChange={e => setTimeFilter(e)}
+        onNotChange={e => setToggle(e)} />
+      {stateList.map( (entry, index)=> {
+        let style = entry.history.length === 0 ? 'leapBar numFont' :
+                    entry.finishedAt === false ? 'leapBar numFont activeMark' : 
+                    scrap.scrapList.includes(entry.serial) ? 'leapBar numFont ngMark' : 'leapBar numFont gMark';
+          return (
+            <LeapButton
+              key={index} 
+              title={entry.serial} 
+              sub='' 
+              sty={style}
+              address={'/data/batch?request=' + b.batch + '&specify=' + entry.serial}
+            />
+          );
+      })}
+		</Fragment>
   );
 };
 

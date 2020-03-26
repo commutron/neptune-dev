@@ -45,10 +45,6 @@ export const TraverseWrap = ({
     Session.set('now', location);
     FlowRouter.go('/production');
   }
-    
-  let scrollFix = {
-    overflowY: 'scroll'
-  };
 
   const invert = invertColor ? 'invert' : '';
   const isRO = Roles.userIsInRole(Meteor.userId(), 'readOnly');
@@ -111,19 +107,22 @@ export const TraverseWrap = ({
           <TaskBar subLink={subLink} />
         </aside>
         
-        <section className={'contentAreaEx ' + invert}>
+        <div className={'contentAreaEx ' + invert}>
           <div 
             className={
               base ? 'baseContainer' :
               !children[1] ?
                 'baseTraverseContainer' : 'traverseContainer'}>
             
-            <section className='traverseContent forceScrollStyle' style={scrollFix}>
+            <div className='traverseContent forceScroll forceScrollStyle' >
               {children[0] || children}
-            </section>
+            </div>
             
             {children[1] &&
-              <aside className='traverseList forceScrollStyle' style={scrollFix} id='exItemList'>
+              <aside 
+                className='traverseList forceScroll forceScrollStyle' 
+                id='exItemList'
+              >
                 {children[1]}
               </aside>}
             
@@ -143,7 +142,7 @@ export const TraverseWrap = ({
               
           </div>
           
-        </section>
+        </div>
         
       </div>
     </ErrorCatch>

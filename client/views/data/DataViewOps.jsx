@@ -31,7 +31,7 @@ import NonConOptionMerge from '/client/components/utilities/NonConOptionMerge.js
 const DataViewOps = ({ 
   allXBatch, allBatch, 
   allGroup, allWidget,
-  user, app,
+  user, isDebug, app, users,
   hotBatch, hotXBatch,
   view, request, specify,
   subLink, orb
@@ -364,7 +364,9 @@ const DataViewOps = ({
             <ItemsList
               batchData={hotBatch}
               widgetData={widget}
-              tide={orb} />
+              flowData={flowData}
+              orb={orb}
+              isDebug={isDebug} />
           </TraverseWrap>
         );
       }else{
@@ -419,11 +421,14 @@ const DataViewOps = ({
             groupData={group} 
             app={app}
             user={user}
+            isDebug={isDebug}
             flowData={flowData} />
           <ItemsList
 		        batchData={hotBatch}
 		        widgetData={widget}
-		        tide={orb} />
+		        flowData={flowData}
+		        orb={orb}
+		        isDebug={isDebug} />
         </TraverseWrap>
       );
     }else if(hotXBatch) {

@@ -17,7 +17,7 @@ const Tabs = ({ tabs, names, wide, stick, hold, sessionTab, disable, children })
   
   return (
     <div>
-      <div className={sticky}>
+      <div className={`tabNav ${sticky}`}>
         {tabs.map( (entry, index)=>{
           let clss =  show === index ? 'tabOn' : 'tabOff';
           return (

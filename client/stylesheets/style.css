@@ -894,14 +894,14 @@ label.qdpplRound {
 
 .tempTag { margin: 0 7px 0 0; }
 
-/* Filter Tools */
+/* Filter Tools 
 .fltrs summary {
   height: 32px;
   padding: 0 5px;
 }
 .fltrs summary::-webkit-details-marker {
   display: none;
-  -moz-display: block;/*maybe*/
+  -moz-display: block;
 }
 
 .fltrs input[type='checkbox'], .fltrs input[type='radio'] {
@@ -909,6 +909,7 @@ label.qdpplRound {
   width: 100%;
   min-height: 1rem;
 }
+*/
 
 .fltrsInput {
   width: 100%;

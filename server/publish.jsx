@@ -364,6 +364,10 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
             'orgKey': 0,
             'shareKey': 0,
         }}),
+        WidgetDB.find({orgKey: orgKey}, {
+        fields: {
+          'createdAt': 1
+        }}),
       ];
     }else {
       return [

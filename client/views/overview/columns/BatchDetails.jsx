@@ -16,7 +16,7 @@ const BatchDetails = ({
   dense, kittingArea, releasedArea
 })=> {
   
-  const statusCols = ['due', 'remaining', 'priority', 'items quantity'];
+  const statusCols = ['remaining workdays', 'priority rank', 'items quantity'];
   const clearCols = Array.from(Pref.clearencesArray, x => x.context );
   const kitCols = [...clearCols, 'flow', 'released'];
   const progCols = app.phases;

@@ -1,3 +1,4 @@
+.tabNav { display: flex; }
 .tabBody { overflow-x: auto; }
 .tabOn, .tabOff {
   padding: 0 10px;

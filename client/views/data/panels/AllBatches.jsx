@@ -6,7 +6,7 @@ import BatchesListWide from '../lists/BatchesListWide.jsx';
 const AllBatches = ({ groupData, widgetData, allWidget, batchData, allBatch, allXBatch, app }) => {
   
   return(
-    <div className='overscroll'>
+    <section className='overscroll'>
       <div className='centre'>
         
         <BatchesListWide
@@ -17,7 +17,7 @@ const AllBatches = ({ groupData, widgetData, allWidget, batchData, allBatch, all
           
       </div>
 
-    </div>
+    </section>
   );
 };
 

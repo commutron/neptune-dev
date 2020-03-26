@@ -10,6 +10,7 @@ Meteor.methods({
     const auth = Roles.userIsInRole(Meteor.userId(), 'create');
     const accessKey = Meteor.user().orgKey;
     if(auth && !legacyduplicate && !duplicateX && doc.orgKey === accessKey) {
+      const qTimeNum = qTime ? Number(qTime) : false;
       BatchDB.insert({
   			batch: batchNum,
   			orgKey: accessKey,
@@ -28,7 +29,7 @@ Meteor.methods({
   			end: eDate,
   			quoteTimeBudget: [{
           updatedAt: new Date(),
-          timeAsMinutes: Number(qTime)
+          timeAsMinutes: qTimeNum
         }],
   			notes: false,
         river: false,

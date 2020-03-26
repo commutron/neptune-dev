@@ -51,7 +51,7 @@ const SlidesNested = ({
             ><b>{entry}</b></button>
         )})}
       </div>
-      <div className={`slidesNestedSlide ${extraClass || ''}`}>
+      <section className={`slidesNestedSlide forceScrollStyle ${extraClass || ''}`}>
         
         {show === false ?
           topPage
@@ -59,7 +59,7 @@ const SlidesNested = ({
           children[show]
         }
       
-      </div>
+      </section>
     </div>
   );
 };

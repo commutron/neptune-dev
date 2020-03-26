@@ -11,7 +11,7 @@ import EventsTimeline from '/client/components/bigUi/BatchFeed/EventsTimeline.js
 import RMATable from '/client/components/tables/RMATable.jsx';
 
 
-const BatchPanel = ({ batchData, widgetData, user, app, flowData })=> {
+const BatchPanel = ({ batchData, widgetData, user, isDebug, app, flowData })=> {
   
   const [ verifyListState, verifyListSet ] = useState([]);
   const [ rmaListState, rmaListSet ] = useState([]);
@@ -47,7 +47,7 @@ const BatchPanel = ({ batchData, widgetData, user, app, flowData })=> {
   const done = b.finishedAt !== false; // no more boards if batch is finished
   const allDone = b.items.every( x => x.finishedAt !== false );
     
-  Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(JSON.stringify(flowData));
+  isDebug && console.log(JSON.stringify(flowData));
 
   return(
     <div className='section' key={b.batch}>
@@ -71,6 +71,7 @@ const BatchPanel = ({ batchData, widgetData, user, app, flowData })=> {
           a={app}
           b={batchData}
           user={user}
+          isDebug={isDebug}
           done={done}
           allDone={allDone}
           progCounts={flowData.progCounts}

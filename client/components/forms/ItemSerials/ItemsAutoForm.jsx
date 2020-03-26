@@ -3,14 +3,18 @@ import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import Model from '../smallUi/Model.jsx';
+import Model from '/client/components/smallUi/Model.jsx';
 
 // required data
 //// batch id as props.id
 /// items array as props.items
 /// props.more as true or false
 
-export default class MultiItemForm extends Component {
+////////////                \\\\\\\\\
+/////////// work in progress \\\\\\\\\
+//////////                    \\\\\\\\\\
+
+export default class ItemsAutoForm extends Component {
   
   constructor() {
     super();
@@ -23,7 +27,6 @@ export default class MultiItemForm extends Component {
   }
   
   setDigit(num) {
-    console.log(num);
     this.setState({ digits: num });
   }
 
@@ -33,12 +36,13 @@ export default class MultiItemForm extends Component {
     const unit = this.unit.value.trim();
     
     const floor = this.state.digits === 10 ? // simplify after appDB is updated
-                    this.props.app.latestSerial.tenDigit
+                  !this.props.app.latestSerial ? 10 :
+                    !this.props.app.latestSerial.tenDigit ? 10 : 
+                      this.props.app.latestSerial.tenDigit
                   :
-                  this.state.digits === 9 ? // simplify after appDB is updated
-                    this.props.app.latestSerial.nineDigit
-                  :
-                  this.props.app.latestSerial.eightDigit;
+                  !this.props.app.latestSerial ? 9 :
+                    !this.props.app.latestSerial.nineDigit ? 9 :
+                      this.props.app.latestSerial.nineDigit;
     
     let first = parseInt(barStart, 10);
     let last = parseInt(barEnd, 10);
@@ -50,15 +54,15 @@ export default class MultiItemForm extends Component {
     let valid = false;
     
     if(
-      //first > floor
-      //&&
+      first > floor
+      &&
       !isNaN(count)
       &&
-      count >= 1
+      count > 0
       &&
-      count <= 9999
+      count <= 1000
       &&
-      unit <= 999
+      unit <= 250
     ) {
         valid = true;
       }
@@ -73,14 +77,16 @@ export default class MultiItemForm extends Component {
     }else{
       this.go.disabled = true;
     }
-    first <= floor ? 
-      this.floorCheck.value = 'Please begin above ' + floor : 
-      this.floorCheck.value = '';
-    // display quantity
-    let quantity = isNaN(count) ? 'Not a number' : 
-                   count < 1 ? 'Invalid Range' :
-                   count + ' ' + Pref.item + '(s)';
-    this.message.value = quantity;
+    
+    if(first <= floor) {
+      this.message.value = 'Please begin above ' + floor;
+    }else{
+      // display quantity
+      let quantity = isNaN(count) ? 'Not a number' : 
+                     count < 1 ? 'Invalid Range' :
+                     count + ' ' + Pref.item + '(s)';
+      this.message.value = quantity;
+    }
   }
 
 	addItem(e) {
@@ -109,8 +115,7 @@ export default class MultiItemForm extends Component {
         this.setState({work: false});
         this.message.value = 'all created successfully';
       }else{
-        toast.warning('There was a problem...');
-        this.message.value = reply.message;
+        toast.warning('Possible problem');
         console.log(reply.message);
         this.setState({work: false});
       }
@@ -119,7 +124,7 @@ export default class MultiItemForm extends Component {
 
   render() {
     
-    const auth = Roles.userIsInRole(Meteor.userId(), 'create');
+    const auth = Roles.userIsInRole(Meteor.userId(), 'run');
     const dig = this.state.digits;
     const today = moment().format('YYMMDD');
     let iconSty = this.state.work ? 'workIcon' : 'transparent';
@@ -130,27 +135,16 @@ export default class MultiItemForm extends Component {
         title={'add ' + Pref.item + ' ' + Pref.itemSerial + ' numbers'}
         color='greenT'
         icon={'fa-' + Pref.serialType}
-        lock={!auth || !this.props.more}
-        noText={this.props.noText}>
+        lock={!auth || !this.props.more} >
         <div className='centre'>
           <form onSubmit={this.addItem} autoComplete='off'>
             <p>
               <input
                 type='radio'
-                ref={(i)=> this.eightDigit = i}
-                id='eight'
-                name='digit'
-                defaultChecked={dig === 8}
-                onChange={this.setDigit.bind(this, 8)}
-                required />
-              <label htmlFor='eight' className='beside'>8 digits</label>
-            <br />
-            <input
-                type='radio'
                 ref={(i)=> this.nineDigit = i}
                 id='nine'
                 name='digit'
-                defaultChecked={dig === 9}
+                defaultChecked={false}
                 onChange={this.setDigit.bind(this, 9)}
                 required />
               <label htmlFor='nine' className='beside'>9 digits</label>
@@ -160,7 +154,7 @@ export default class MultiItemForm extends Component {
                 ref={(i)=> this.tenDigit = i}
                 id='ten'
                 name='digit'
-                defaultChecked={dig === 10}
+                defaultChecked={true}
                 onChange={this.setDigit.bind(this, 10)}
                 required />
               <label htmlFor='ten' className='beside'>10 digits</label>
@@ -214,14 +208,13 @@ export default class MultiItemForm extends Component {
             <br />
             <div className='centre'>
               <i className={iconSty}></i>
-              <output ref={(i)=> this.floorCheck = i} value='' />
               <output ref={(i)=> this.message = i} value='' />
             </div>
             <br />
             <p className='centre'>
               <button
                 ref={(i)=> this.go = i}
-                disabled={true}
+                disabled='true'
                 className='action clearGreen'
                 type='submit'
               >Add</button>

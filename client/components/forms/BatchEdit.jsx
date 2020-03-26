@@ -34,8 +34,6 @@ const BatchEdit = ({
           toast.error('Server Error');
         }
         if(reply) {
-          toast.success('Saved');
-          //Session.set('now', batchNum);
           FlowRouter.go('/data/batch?request=' + batchNum);
         }else{
           toast.warning('Duplicate');

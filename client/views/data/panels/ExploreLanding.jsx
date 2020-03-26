@@ -19,7 +19,7 @@ const ExploreLanding = ({ groupData, widgetData, batchData, xBatchData, app }) =
   const isDebug = Roles.userIsInRole(Meteor.userId(), 'debug');
   
   return(
-    <div className=''>
+    <section>
       <div className='centre wide'>
         
         <div className='centreRow'>
@@ -119,7 +119,7 @@ const ExploreLanding = ({ groupData, widgetData, batchData, xBatchData, app }) =
         </div>
         
       </div>
-    </div>
+    </section>
   );
 };
 

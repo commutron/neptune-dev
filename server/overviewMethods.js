@@ -332,22 +332,23 @@ function collectPriority(privateKey, batchID, clientTZ, mockDay) {
       let estEnd2fillBuffer = false;
       
       if(qtBready) {
-        const qtB = qtBready && b.quoteTimeBudget.length > 0 ? 
+        const qtB = b.quoteTimeBudget.length > 0 ? 
                     b.quoteTimeBudget[0].timeAsMinutes : 0;
         
-        const totalQuoteMinutes = qtB || 0;
-        
-        const totalTideMinutes = batchTideTime(b.tide);
-        
-        quote2tide = totalQuoteMinutes - totalTideMinutes;
-        const overQuote = quote2tide < 0 ? true : false;
-        const q2tNice = overQuote ? 0 : quote2tide;
-        
-        const estComplete = now.clone().addWorkingTime(q2tNice, 'minutes');
-        
-        const buffer = shipTime.workingDiff(estComplete, 'minutes');
-        
-        estEnd2fillBuffer = buffer || null;
+        const totalQuoteMinutes = qtB;
+        if(totalQuoteMinutes) {
+          const totalTideMinutes = batchTideTime(b.tide);
+          
+          quote2tide = totalQuoteMinutes - totalTideMinutes;
+          const overQuote = quote2tide < 0 ? true : false;
+          const q2tNice = overQuote ? 0 : quote2tide;
+          
+          const estComplete = now.clone().addWorkingTime(q2tNice, 'minutes');
+          
+          const buffer = shipTime.workingDiff(estComplete, 'minutes');
+          
+          estEnd2fillBuffer = buffer || null;
+        }
       }
      
       collection = {

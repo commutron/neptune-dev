@@ -24,27 +24,27 @@ const BatchCreate = ({ widgetId, versionNow, versions, lock, noText })=> {
     const salesNum = e.target.soNum.value.trim().toLowerCase();
     const startDate = e.target.sDate.value;
     const endDate = e.target.eDate.value;
-    const inHours = parseFloat( e.target.hourNum.value );
+    
+    const quoteTimeInput = e.target.hourNum.value;
+    const inHours = parseFloat( quoteTimeInput );
     const inMinutes = moment.duration(inHours, 'hours').asMinutes();
+    const quoteTime = isNaN(inMinutes) ? false : inMinutes;
 
     const clientTZ = moment.tz.guess();
     
     Meteor.call('addBatch', 
-      batchNum, wId, vKey, salesNum, startDate, endDate, inMinutes, clientTZ,
+      batchNum, wId, vKey, salesNum, startDate, endDate, quoteTime, clientTZ,
       (error, reply)=>{
         if(error) {
           console.log(error);
           toast.error('Server Error');
         }
         if(reply) {
-          toast.success('Saved');
-          //Session.set('now', batchNum);
           FlowRouter.go('/data/batch?request=' + batchNum);
         }else{
           toast.warning('Duplicate');
         }
     });
-
   }
     
   let eVer = !versionNow ? '' : versionNow;
@@ -103,7 +103,7 @@ const BatchCreate = ({ widgetId, versionNow, versions, lock, noText })=> {
             placeholder='179470b'
             required
           /></label>
-          <label htmlFor='hourNum' className='breath'>{Pref.timeBudget}<br />
+          <label htmlFor='hourNum' className='breath'>{Pref.timeBudget} (in hours)<br />
           <input
             type='number'
             id='hourNum'
@@ -117,7 +117,7 @@ const BatchCreate = ({ widgetId, versionNow, versions, lock, noText })=> {
             step=".01"
             inputMode='numeric'
             placeholder='54.07'
-            required 
+            // required 
           /></label>
         </div>
         <div className='centreRow vmargin'>
