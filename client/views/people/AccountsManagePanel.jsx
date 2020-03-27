@@ -12,7 +12,9 @@ import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 import ActivityPanel from '/client/views/user/ActivityPanel.jsx';
 import UserManageForm from '/client/components/forms/UserManageForm.jsx';
 
-const AccountsManagePanel = ({ app, users, bCache })=> {
+import { ForceStopEngage } from '/client/views/app/appSlides/DataRepair.jsx';
+
+const AccountsManagePanel = ({ app, users, bCache, isDebug })=> {
   
   const auths = Pref.auths;
   const areas = Pref.areas;
@@ -66,6 +68,13 @@ const AccountsManagePanel = ({ app, users, bCache })=> {
                       entry._id !== Meteor.userId() &&
                       !entry.org ?
                         <RemoveUser userID={entry._id} />
+                    :null}
+                    
+                    {isAdmin && isDebug ?
+                      <ForceStopEngage 
+                        userID={entry._id}
+                        isAdmin={isAdmin}
+                        isDebug={isDebug} />
                     :null}
                   </Fragment>
                 : noAccess}

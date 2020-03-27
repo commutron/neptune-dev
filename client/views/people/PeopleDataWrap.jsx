@@ -76,7 +76,7 @@ const PeopleDataWrap = ({
             <b><i className='fas fa-user-lock fa-fw'></i>  Permissions</b>,
             <b><i className='fas fa-users-cog fa-fw'></i>   Account Manager</b>,
           ]}
-          disable={[false, false, antiAuth, antiAuth, false, antiAuth]}>
+          disable={[false, false, false, antiAuth, false, antiAuth]}>
           
           <DashSlide
             key={0}

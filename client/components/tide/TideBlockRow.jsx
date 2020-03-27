@@ -8,14 +8,19 @@ import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
 
 const TideBlockRow = ({ 
-  batch, describe, tideKey, tideWho,
-  startTime, stopTime,
+  batch, describe, tideObj,
+  // startTime, stopTime,
   lastStop, nextStart,
   editKey, editMode,
   splitKey, splitMode,
   setEdit, setEnd, setSplit
 })=> {
   
+  const tideKey = tideObj.tKey;
+  const tideWho = tideObj.who;
+  const startTime = tideObj.startTime;
+  const stopTime = tideObj.stopTime;
+                
   const editOn = tideKey === editKey;
   const splitOn = tideKey === splitKey; 
   
@@ -57,10 +62,13 @@ const TideBlockRow = ({
       !nextStart || moment(nextStart).isAfter(moment(mStop).endOf('day')) ?
         moment(mStop).endOf('day').format() : nextStart;
   
+  const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
+  const isDebug = Roles.userIsInRole(Meteor.userId(), 'debug');
+  
   const editSelf = tideWho === Meteor.userId();
   const editAuth = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
   const zeroed = mStop && mStop.diff(mStart, 'minutes') <= 0.5 ? true : false;
-  const staticFormat = Roles.userIsInRole(Meteor.userId(), 'debug') ? 'hh:mm:ss A' : 'hh:mm A';
+  const staticFormat = isDebug ? 'hh:mm:ss A' : 'hh:mm A';
   
     return(
       <tr className={editOn ? 'pop' : ''}>

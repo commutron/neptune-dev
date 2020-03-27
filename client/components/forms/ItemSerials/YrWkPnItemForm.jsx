@@ -54,6 +54,8 @@ const YrWkPnItemForm = ({ id, items, more, unit, app, noText })=> {
     
     previewSet(tryData);
     
+    this.goYrWkSave.disabled = false;
+    
     Roles.userIsInRole(Meteor.userId(), 'debug') &&
       console.log({ 
         year_week, itemPerVal, panelQuVal,
@@ -64,6 +66,7 @@ const YrWkPnItemForm = ({ id, items, more, unit, app, noText })=> {
 	
 	function handleAdd(e) {
     if(previewData.length > 0) {
+      this.goYrWkSave.disabled = true;
       Meteor.call('addYearWeekPanelItems', id, previewData, (error, reply)=>{
         if(error)
           console.log(error);
@@ -86,8 +89,7 @@ const YrWkPnItemForm = ({ id, items, more, unit, app, noText })=> {
                             previewData.slice(-5) : [];
     
   return(
-    <div>
-      <div className='balance'>
+    <div className='comfort'>
         <form onSubmit={(e)=>handleCheck(e)} autoComplete='off'>
           <p>
             <input
@@ -168,8 +170,6 @@ const YrWkPnItemForm = ({ id, items, more, unit, app, noText })=> {
             <label htmlFor='quantDigits'>Number of panels</label>
           </p>
           
-          <br />
-          
           <p className='centre'>
             <button
               id='goYrWk'
@@ -179,23 +179,20 @@ const YrWkPnItemForm = ({ id, items, more, unit, app, noText })=> {
             >Check</button>
           </p>
         </form>
-        <div className='space'>
-          <dl>
-            <dt>{previewData.length} {Pref.itemSerial}s</dt>
-            {previewListStart.map( (ent, ix)=>{
-              return(<dd key={ix+'s'}>{ent}</dd>);
-            })}
-            <dd>{previewJoin}</dd>
-            <dd>{previewJoin}</dd>
-            {previewListEnd.map( (ent, ix)=>{
-              return(<dd key={ix+'e'}>{ent}</dd>);
-            })}
-          </dl>
         
-        </div>
-      </div>
+      <div className='centre space'>
+        <dl>
+          <dt>{previewData.length} {Pref.itemSerial}s</dt>
+          {previewListStart.map( (ent, ix)=>{
+            return(<dd key={ix+'s'}>{ent}</dd>);
+          })}
+          <dd>{previewJoin}</dd>
+          <dd>{previewJoin}</dd>
+          {previewListEnd.map( (ent, ix)=>{
+            return(<dd key={ix+'e'}>{ent}</dd>);
+          })}
+        </dl>
       
-      <div>
         <p className='centreText'><em>duplicate checking is done on the server</em></p>
         <p className='centre'>
           <button

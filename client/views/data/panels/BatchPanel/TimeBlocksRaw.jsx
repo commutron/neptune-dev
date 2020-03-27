@@ -3,9 +3,11 @@ import moment from 'moment';
 // import 'moment-timezone';
 import Pref from '/client/global/pref.js';
 import { AnonyUser } from '/client/components/smallUi/UserNice.jsx';
+import { ForceRemoveTideBlock } from '/client/views/app/appSlides/DataRepair.jsx';
 
 const TimeBlocksRaw = ({ batch, tide, clientTZ })=> {
   
+  const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
   const isDebug = Roles.userIsInRole(Meteor.userId(), 'debug');
   
   const [ showZero, showZeroSet ] = useState(isDebug);
@@ -29,6 +31,13 @@ const TimeBlocksRaw = ({ batch, tide, clientTZ })=> {
           )})}
         </tbody>
       </table>
+      
+      {isAdmin && isDebug &&
+        <ForceRemoveTideBlock 
+          batch={batch}
+          isAdmin={isAdmin}
+          isDebug={isDebug} />
+      }
       
       <details className='footnotes'>
         <summary>Analysis Details</summary>

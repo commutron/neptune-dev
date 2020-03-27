@@ -155,3 +155,48 @@ const DataRepair = ({ app, users })=> {
 };
 
 export default DataRepair;
+
+
+
+export const ForceStopEngage = ({ userID, isAdmin, isDebug })=> {
+  
+  function handle() {
+    Meteor.call('errorFixForceClearEngage', userID, (error)=>{
+      error && console.log(error);
+    });
+  }
+  
+  if(isAdmin && isDebug) {
+    return(
+      <button
+        className='action clearRed'
+        onClick={(e)=>handle(e)}
+      >Force Clear Engaged</button>
+    );
+  }
+  
+  return(null);
+};
+
+export const ForceRemoveTideBlock = ({ batch, isAdmin, isDebug })=> {
+  
+  function handle(e) {
+    this.doFORCEremoveTide.disabled = true;
+    Meteor.call('errorFixDeleteTideTimeBlock', batch, (error)=>{
+      error && console.log(error);
+    });
+  }
+  
+  if(isAdmin && isDebug) {
+    return(
+      <button
+        id='doFORCEremoveTide'
+        disabled={false}
+        className='smallAction clearRed'
+        onClick={(e)=>handle(e)}
+      >Force Pop Last Tide Block</button>
+    );
+  }
+  
+  return(null);
+};
