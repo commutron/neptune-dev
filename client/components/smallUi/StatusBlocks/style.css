@@ -1,0 +1,14 @@
+.pScale1 { background-color: var(--pomegranate); }
+.pScale2 { background-color: var(--carrot); }
+.pScale3 { background-color: var(--sunflower); }
+.pScale4 { background-color: var(--peterriver); }
+
+.moreEphasis {
+  border: 0.5vh #720300 dashed !important;
+}
+
+
+.agScale1 { background-color: #AF0E36; }
+.agScale2 { background-color: #DD1F4E; }
+.agScale3 { background-color: #F4426E; }
+.agScale4 { background-color: #EDADC7; }

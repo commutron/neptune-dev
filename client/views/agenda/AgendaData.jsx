@@ -11,8 +11,9 @@ import AgendaWrap from './AgendaWrap.jsx';
 
 const View = ({
   login, sub, readyUsers, ready, 
-  username, user, clientTZ, org, app, 
-  bCache, pCache, phCache, zCache
+  username, user, clientTZ, org, app,
+  isNightly,
+  bCache, pCache, agCache, phCache, zCache
 })=> {
   
   const prevUser = usePrevious(user);
@@ -32,7 +33,6 @@ const View = ({
   }
 
   const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
-  const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
   const isSales = Roles.userIsInRole(Meteor.userId(), 'sales');
   const isPeople = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
   const isPreview = isAdmin || isNightly || isSales || isPeople;
@@ -42,11 +42,13 @@ const View = ({
       <AgendaWrap 
         bCache={bCache}
         pCache={pCache}
+        agCache={agCache}
         phCache={phCache}
         zCache={zCache}
         user={user}
         app={app}
-        clientTZ={clientTZ} />
+        clientTZ={clientTZ}
+        isNightly={isNightly} />
     );
   }
   
@@ -68,6 +70,7 @@ export default withTracker( () => {
   let user = login ? Meteor.user() : false;
   let name = user ? user.username : false;
   let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
+  const isNightly = user ? Roles.userIsInRole(Meteor.userId(), 'nightly') : false;
   let org = user ? user.org : false;
   const clientTZ = moment.tz.guess();
   // const appSub = login ? Meteor.subscribe('appData') : false;
@@ -90,9 +93,11 @@ export default withTracker( () => {
       user: user,
       org: org,
       clientTZ: clientTZ,
+      isNightly: isNightly,
       app: AppDB.findOne({org: org}),
       bCache: CacheDB.findOne({dataName: 'batchInfo'}),
       pCache: CacheDB.findOne({dataName: 'priorityRank'}),
+      agCache: CacheDB.findOne({dataName: 'agendaOrder'}),
       phCache: CacheDB.findOne({dataName: 'phaseCondition'}),
       zCache: CacheDB.findOne({dataName: 'completeBatch'}),
     };

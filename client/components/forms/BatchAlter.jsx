@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 import ModelMedium from '../smallUi/ModelMedium.jsx';
-import PrioritySquareData from '/client/components/bigUi/PrioritySquare.jsx';
+import PrioritySquareData from '/client/components/smallUi/StatusBlocks/PrioritySquare.jsx';
 
 // required data
 /// batchId={b._id}
@@ -30,7 +30,7 @@ export const AlterFulfill = ({ batchId, end, app, lock })=> (
 );
 
 
-const AlterFulfillForm = ({ batchId, end, app, autoClose })=> {
+const AlterFulfillForm = ({ batchId, end, app, selfclose })=> {
 
   const [ reasonState, reasonSet ] = useState(false);
   const [ endDateState, endDateSet ] = useState( end );
@@ -47,7 +47,7 @@ const AlterFulfillForm = ({ batchId, end, app, autoClose })=> {
       }
       if(reply) {
         toast.success('Saved');
-        autoClose();
+        selfclose();
       }else{
         toast.warning('Not Saved');
       }

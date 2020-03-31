@@ -15,13 +15,15 @@ Meteor.methods({
     }
   },
   
-  REQUESTcacheUpdate(clientTZ, batchUp, priorityUp, activityUp, phaseUp, compUp) {
+  REQUESTcacheUpdate(clientTZ, batchUp, priorityUp, agendaUp, activityUp, phaseUp, compUp) {
     if(Roles.userIsInRole(Meteor.userId(), 'active')) {
       const key = Meteor.user().orgKey;
       batchUp && Meteor.defer( ()=>{
         Meteor.call('batchCacheUpdate', key, false) });
       priorityUp && Meteor.defer( ()=>{
         Meteor.call('priorityCacheUpdate', key, clientTZ, false) });
+      agendaUp && Meteor.defer( ()=>{
+        Meteor.call('agendaCacheUpdate', key, clientTZ, false) });
       activityUp && Meteor.defer( ()=>{
         Meteor.call('activityCacheUpdate', key, clientTZ, false) });
       phaseUp && Meteor.defer( ()=>{
@@ -51,6 +53,8 @@ Meteor.methods({
             lastUpdated: new Date(),
             dataName: 'batchInfo',
             dataSet: slim,
+            assembled: true,
+            minified: true
         }});
       }
     }
@@ -75,6 +79,39 @@ Meteor.methods({
             lastUpdated: new Date(),
             dataName: 'priorityRank',
             dataSet: slim,
+            assembled: true,
+            minified: false
+        }});
+      }
+    }
+  },
+  
+  agendaCacheUpdate(accessKey, clientTZ, force) {
+    if(typeof accessKey === 'string') {
+      const timeOut = moment().subtract(2, 'minutes').toISOString();
+      const currentCache = CacheDB.findOne({
+        orgKey: accessKey, 
+        lastUpdated: { $gte: new Date(timeOut) },
+        dataName:'agendaOrder'});
+      
+      if(force || !currentCache ) {
+        const batches = BatchDB.find({orgKey: accessKey, live: true}).fetch();
+        const slim = batches.map( x => {
+          return Meteor.call('agendaOrder', x._id, clientTZ, accessKey);
+        });
+        const slimSort = slim.sort((a1, a2)=> {
+          if (a1.commenceDT < a2.commenceDT) { return -1 }
+          if (a1.commenceDT > a2.commenceDT) { return 1 }
+          return 0;
+        });
+        CacheDB.upsert({orgKey: accessKey, dataName: 'agendaOrder'}, {
+          $set : { 
+            orgKey: accessKey,
+            lastUpdated: new Date(),
+            dataName: 'agendaOrder',
+            dataSet: slimSort,
+            assembled: true,
+            minified: false
         }});
       }
     }
@@ -100,6 +137,8 @@ Meteor.methods({
             lastUpdated: new Date(),
             dataName: 'activityLevel',
             dataSet: slim,
+            assembled: true,
+            minified: false
         }});
       }
     }
@@ -125,6 +164,8 @@ Meteor.methods({
             lastUpdated: new Date(),
             dataName: 'phaseCondition',
             dataSet: slim,
+            assembled: true,
+            minified: false
         }});
       }
     }
@@ -172,6 +213,8 @@ Meteor.methods({
             lastUpdated: new Date(),
             dataName: 'completeBatch',
             dataSet: slim,
+            assembled: true,
+            minified: false
         }});
       }
     }
@@ -202,6 +245,8 @@ Meteor.methods({
         lastUpdated: new Date(),
         dataName: 'partslist',
         dataSet: allPartsClean,
+        assembled: false,
+        minified: true
     }});
       
             

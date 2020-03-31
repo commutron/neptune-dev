@@ -5,7 +5,7 @@ import TideFollow from '/client/components/tide/TideFollow.jsx';
 import { ToastContainer, toast } from 'react-toastify';
 
     
-const CompSearchWrap = ({ plCache, user, app, clientTZ })=> {
+const CompSearchWrap = ({ plCache, user, app })=> {
   
   const [ bChk, setB ] = useState(true);
   const [ uChk, setU ] = useState(false);

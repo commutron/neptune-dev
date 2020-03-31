@@ -28,6 +28,12 @@ const TideFollow = ({ proRoute, invertColor })=> {
         Meteor.clearInterval(loopClock); };
   }, [proRoute]);
   
+  // useEffect(() => {
+  //   return () => { 
+  //     thingMounted.current = false;
+  //     Meteor.clearInterval(loopClock); };
+  // }, []);
+  
 	const go = ()=> {
 	  Session.set('now', engaged);
     FlowRouter.go('/production');

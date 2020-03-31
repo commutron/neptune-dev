@@ -11,7 +11,7 @@ import { AlterFulfill } from '/client/components/forms/BatchAlter.jsx';
 
 const GeneralChunk = ({
   a, b, 
-  done, expand
+  done, expand, isDebug
 }) =>	{
   
   const nonWorkDays = a.nonWorkDays;
@@ -70,7 +70,8 @@ const GeneralChunk = ({
             batchId={b._id}
             end={b.end}
             app={a}
-            lock={b.finishedAt !== false} />
+            lock={b.finishedAt !== false}
+            isDebug={isDebug} />
         </div>
         
         {fnsh !== null ?

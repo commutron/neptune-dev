@@ -132,7 +132,7 @@ Meteor.publish('tideData', function(clientTZ){
           'batch': 1,
           'tide': 1
         }}),
-      CacheDB.find({orgKey: orgKey}, {
+      CacheDB.find({orgKey: orgKey, assembled: true}, {
         fields: {
           'orgKey': 0
         }}),
@@ -146,6 +146,7 @@ Meteor.publish('cacheData', function(clientTZ){
   const orgKey = user ? user.orgKey : false;
   Meteor.defer( ()=>{ Meteor.call('batchCacheUpdate', orgKey); });
   Meteor.defer( ()=>{ Meteor.call('priorityCacheUpdate', orgKey, clientTZ); });
+  // Meteor.defer( ()=>{ Meteor.call('agendaCacheUpdate', orgKey, clientTZ); });
   Meteor.defer( ()=>{ Meteor.call('activityCacheUpdate', orgKey, clientTZ); });
   Meteor.defer( ()=>{ Meteor.call('phaseCacheUpdate', orgKey); });
   Meteor.defer( ()=>{ Meteor.call('completeCacheUpdate', orgKey); });
@@ -153,9 +154,31 @@ Meteor.publish('cacheData', function(clientTZ){
     return this.ready();
   }else{
     return [
-      CacheDB.find({orgKey: orgKey}, {
+      CacheDB.find({orgKey: orgKey, assembled: true}, {
         fields: {
-          'orgKey': 0
+          'orgKey': 0,
+          'assembled' : 0,
+          'minified': 0
+        }}),
+      ];
+    }
+});
+
+// Parts
+Meteor.publish('partsCacheData', function(){
+  const user = Meteor.users.findOne({_id: this.userId});
+  const orgKey = user ? user.orgKey : false;
+  Meteor.defer( ()=>{ Meteor.call('batchCacheUpdate', orgKey); });
+  // Meteor.defer( ()=>{ Meteor.call('partslistCacheUpdate', orgKey); });
+  if(!this.userId){
+    return this.ready();
+  }else{
+    return [
+      CacheDB.find({orgKey: orgKey, minified: true}, {
+        fields: {
+          'orgKey': 0,
+          'assembled' : 0,
+          'minified': 0
         }}),
       ];
     }

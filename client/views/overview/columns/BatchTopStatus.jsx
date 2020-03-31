@@ -3,13 +3,15 @@ import moment from 'moment';
 // import Pref from '/client/global/pref.js';
 import NumStat from '/client/components/uUi/NumStat.jsx';
 // import PrioritySquareData from '/client/components/bigUi/PrioritySquare.jsx';
-import { PrioritySquare } from '/client/components/bigUi/PrioritySquare.jsx';
+import { PrioritySquare } from '/client/components/smallUi/StatusBlocks/PrioritySquare.jsx';
+import { PositionSquare } from '/client/components/smallUi/StatusBlocks/PositionSquare.jsx';
 // import TrinaryStat from '/client/components/uUi/TrinaryStat.jsx';
 
 
 const BatchTopStatus = ({ 
   rowIndex, batchID,
-  clientTZ, pCache, app, isDebug,
+  clientTZ, pCache, agCache, app,
+  isDebug, isNightly,
   statusCols, dense
 })=> {
   
@@ -27,6 +29,9 @@ const BatchTopStatus = ({
   
   const dt = stData;
   const pt = pCache.dataSet.find( x => x.batchID === batchID );
+  
+  const pos = !isNightly ? null :
+    agCache.dataSet.find( x => x.batchID === batchID );
    
   if( dt && dt.batchID === batchID ) {
     
@@ -60,6 +65,14 @@ const BatchTopStatus = ({
           ptData={pt}
           altNumber={rowIndex+1}
           app={app} />
+          
+        {isNightly &&
+          <PositionSquare
+            batchID={batchID}
+            posData={pos}
+            altNumber={rowIndex+1+"pos"}
+            app={app} />
+        }
         
         <div>
           <NumStat

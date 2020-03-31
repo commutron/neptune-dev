@@ -51,9 +51,9 @@ const PerformanceSlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
       const pinDate = moment().year(weekChoice.yearNum).week(weekChoice.weekNum);
       
       const start = pinDate.clone().startOf('week');
-      const startCorrect = start.isWorkingDay() ? start : start.add(1, 'day');
+      const startCorrect = start.isWorkingDay() ? start : start.clone().add(1, 'day');
       const end = pinDate.clone().endOf('week');
-      const endCorrect = end.isWorkingDay() ? end : end.subtract(1, 'day');
+      const endCorrect = end.isWorkingDay() ? end : end.clone().subtract(1, 'day');
       
       const from = startCorrect.day() === 0 ? 0 : 1;
       const to = endCorrect.day() === 6 ? 7 : 6;
@@ -77,8 +77,8 @@ const PerformanceSlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
   }, [weekData]);
   
   
-  const niceS = weekStart ? moment(weekStart).format('MMMM Do') : '';
-  const niceP = weekEnd ? moment(weekEnd).format('MMMM Do') : '';
+  const niceS = weekStart ? weekStart.format('MMMM Do') : '';
+  const niceP = weekEnd ? weekEnd.format('MMMM Do') : '';
 
   return(
     <div className='space5x5 invert overscroll'>

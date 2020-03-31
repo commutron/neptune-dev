@@ -33,10 +33,10 @@ function useInterval(callback, delay) {
 }
 
 const AgendaWrap = ({ 
-  bCache, pCache, zCache,
-  user, clientTZ, app 
+  bCache, pCache, agCache, zCache,
+  user, clientTZ, app, isNightly
 })=> {
-
+  
   const [ working, workingSet ] = useState( false );
   const [ loadTime, loadTimeSet ] = useState( moment() );
   const [ tickingTime, tickingTimeSet ] = useState( moment() );
@@ -82,8 +82,14 @@ const AgendaWrap = ({
   
   function requestRefresh() {
     workingSet( true );
-    // batchUp, priorityUp, activityUp, phaseUp, compUp
-    Meteor.call('REQUESTcacheUpdate', clientTZ, true, true, ()=>{
+    Meteor.call('REQUESTcacheUpdate', clientTZ, 
+      true, // batchUp
+      true, // priorityUp
+      isNightly, // agendaUp
+      false, // activityUp
+      false, // phaseUp
+      false, // compUp
+    ()=>{
       loadTimeSet( moment() );
       workingSet( false );
     });
@@ -159,8 +165,15 @@ const AgendaWrap = ({
           <ShipDates 
             pCache={pCache.dataSet}
             app={app} />
-        */}   
+        */}
         </div>
+        
+        <hr />
+        
+        {isNightly &&
+          <i>timeline</i>
+        }
+        
       </div>
     </div>
   );

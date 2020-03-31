@@ -12,9 +12,10 @@ import OverviewWrap from './OverviewWrap.jsx';
 const View = ({
   login,
   readyUsers, ready, readyC, 
-  username, user, clientTZ, org, app, isDebug,
+  username, user, clientTZ, org, app,
+  isDebug, isNightly,
   batch, batchX,
-  bCache, pCache, acCache, phCache
+  bCache, pCache, agCache, acCache, phCache
 })=> {
   
   const prevUser = usePrevious(user);
@@ -39,11 +40,14 @@ const View = ({
       bx={batchX}
       bCache={bCache}
       pCache={pCache}
+      agCache={agCache}
       acCache={acCache}
       phCache={phCache}
       user={user}
       app={app}
-      clientTZ={clientTZ} />
+      clientTZ={clientTZ}
+      isDebug={isDebug}
+      isNightly={isNightly} />
   );
 };
 
@@ -55,6 +59,7 @@ export default withTracker( () => {
   let name = user ? user.username : false;
   let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   let isDebug = user ? Roles.userIsInRole(Meteor.userId(), 'debug') : false;
+  const isNightly = user ? Roles.userIsInRole(Meteor.userId(), 'nightly') : false;
   let org = user ? user.org : false;
   const clientTZ = moment.tz.guess();
   const usersSub = login ? Meteor.subscribe('usersData') : false;
@@ -76,6 +81,7 @@ export default withTracker( () => {
       username: name,
       user: user,
       isDebug: isDebug,
+      isNightly: isNightly,
       org: org,
       clientTZ: clientTZ,
       app: AppDB.findOne({org: org}),
@@ -83,6 +89,7 @@ export default withTracker( () => {
       batchX: XBatchDB.find({live: true}).fetch(),
       bCache: CacheDB.findOne({dataName: 'batchInfo'}),
       pCache: CacheDB.findOne({dataName: 'priorityRank'}),
+      agCache: CacheDB.findOne({dataName: 'agendaOrder'}),
       acCache: CacheDB.findOne({dataName: 'activityLevel'}),
       phCache: CacheDB.findOne({dataName: 'phaseCondition'}),
     };

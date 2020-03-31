@@ -549,9 +549,6 @@ label.qdpplRound {
   background-color: var(--amethyst);
 }
 
-.moreEphasis {
-  border: 0.5vh #720300 dashed !important;
-}
 .activeIndicator:focus, .activeIndicator:active {
   outline: dotted;  
 }
@@ -584,11 +581,6 @@ label.qdpplRound {
 
 .proPurple::-webkit-progress-value { background-color: var(--wisteria); }
 .proPurple::-moz-progress-bar { background-color: var(--wisteria); }
-
-.pScale1 { background-color: var(--pomegranate); }
-.pScale2 { background-color: var(--carrot); }
-.pScale3 { background-color: var(--sunflower); }
-.pScale4 { background-color: var(--peterriver); }
 
 .clean {
   font-style: normal;

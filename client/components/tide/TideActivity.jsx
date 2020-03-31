@@ -17,8 +17,11 @@ const TideActivityData = ({ batchID, app })=> {
         Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(reply);
       }
     });
-    return () => { thingMounted.current = false };
   }, [batchID]);
+  
+  useEffect( ()=> {
+    return () => { thingMounted.current = false };
+  }, []);
   
   return(
     <TideActivitySquare 

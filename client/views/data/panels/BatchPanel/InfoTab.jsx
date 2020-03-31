@@ -4,7 +4,7 @@ import React from 'react';
 // import Pref from '/client/global/pref.js';
 
 import GeneralChunk from './GeneralChunk.jsx';
-import PrioritySquareData from '/client/components/bigUi/PrioritySquare';
+import PrioritySquareData from '/client/components/smallUi/StatusBlocks/PrioritySquare';
 import TideActivityData from '/client/components/tide/TideActivity';
 import BatchFinish from '/client/components/forms/BatchFinish.jsx';
 import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
@@ -78,7 +78,12 @@ const InfoTab = ({
             keyword={b.batch} />
         </div>
         
-        <GeneralChunk a={a} b={b} done={done} expand={true} />
+        <GeneralChunk 
+          a={a} 
+          b={b}
+          done={done}
+          expand={true} 
+          isDebug={isDebug} />
 
       </div>
               

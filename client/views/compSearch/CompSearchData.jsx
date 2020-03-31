@@ -1,8 +1,6 @@
 import React, { useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import moment from 'moment';
-import 'moment-timezone';
 import InboxToastPop from '/client/components/utilities/InboxToastPop.js';
 import usePrevious from '/client/components/utilities/usePreviousHook.js';
 
@@ -11,7 +9,7 @@ import CompSearchWrap from './CompSearchWrap.jsx';
 
 const View = ({
   login, sub, ready, 
-  username, user, clientTZ, org, app,
+  username, user, org, app,
   plCache
 })=> {
   
@@ -35,8 +33,7 @@ const View = ({
     <CompSearchWrap 
       plCache={plCache ? plCache.dataSet : []}
       user={user}
-      app={app}
-      clientTZ={clientTZ} />
+      app={app} />
   );
 };
 
@@ -47,8 +44,7 @@ export default withTracker( () => {
   let user = login ? Meteor.user() : false;
   let name = user ? user.username : false;
   let org = user ? user.org : false;
-  const clientTZ = moment.tz.guess();
-  const sub = login ? Meteor.subscribe('cacheData', clientTZ) : false;
+  const sub = login ? Meteor.subscribe('partsCacheData') : false;
   if(!login) {
     return {
       ready: false
@@ -61,7 +57,6 @@ export default withTracker( () => {
       username: name,
       user: user,
       org: org,
-      clientTZ: clientTZ,
       app: AppDB.findOne({org: org}),
       plCache: CacheDB.findOne({dataName: 'partslist'})
     };

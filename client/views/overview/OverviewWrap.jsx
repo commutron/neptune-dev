@@ -14,10 +14,10 @@ import BatchDetails from './columns/BatchDetails';
 
 
 const OverviewWrap = ({ 
-  b, bx, bCache, pCache, acCache, phCache, 
-  user, clientTZ, app, isDebug
+  b, bx, bCache, pCache, agCache, acCache, phCache, 
+  user, clientTZ, app, isDebug, isNightly
 })=> {
-
+  
   const sessionSticky = 'overviewOverview';
   
   const [ working, workingSet ] = useState( false );
@@ -58,8 +58,14 @@ const OverviewWrap = ({
   function requestRefresh() {
     workingSet( true );
     liveSet( false );
-    // batchUp, priorityUp, activityUp, phaseUp, compUp
-    Meteor.call('REQUESTcacheUpdate', clientTZ, true, true, true, true, false, ()=>{
+    Meteor.call('REQUESTcacheUpdate', clientTZ, 
+      true, // batchUp
+      true, // priorityUp
+      isNightly, // agendaUp
+      true, // activityUp
+      true, // phaseUp
+      false, // compUp
+    ()=>{
       sortInitial();
       loadTimeSet( moment() );
       workingSet( false );
@@ -218,11 +224,13 @@ const OverviewWrap = ({
             oB={liveState}
             bCache={bCache}
             pCache={pCache}
+            agCache={agCache}
             acCache={acCache}
             user={user}
             clientTZ={clientTZ}
             app={app}
             isDebug={isDebug}
+            isNightly={isNightly}
             dense={dense > 1}
             kittingArea={filterBy === 'KITTING'}
             releasedArea={filterBy !== false && filterBy !== 'KITTING'}

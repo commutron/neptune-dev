@@ -11,12 +11,15 @@ import NonConCounts from './NonConCounts.jsx';
 
 const BatchDetails = ({
   oB,
-  bCache, pCache, acCache,
-  user, clientTZ, app, isDebug,
+  bCache, pCache, agCache, acCache,
+  user, clientTZ, app, isDebug, isNightly,
   dense, kittingArea, releasedArea
 })=> {
   
-  const statusCols = ['remaining workdays', 'priority rank', 'items quantity'];
+  const statusCols = isNightly ?
+    ['remaining workdays', 'priority rank', 'agenda position', 'items quantity'] :
+    ['remaining workdays', 'priority rank', 'items quantity'];
+  
   const clearCols = Array.from(Pref.clearencesArray, x => x.context );
   const kitCols = [...clearCols, 'flow', 'released'];
   const progCols = app.phases;
@@ -54,9 +57,11 @@ const BatchDetails = ({
               user={user}
               clientTZ={clientTZ}
               pCache={pCache}
+              agCache={agCache}
               acCache={acCache}
               app={app}
               isDebug={isDebug}
+              isNightly={isNightly}
               statusCols={statusCols}
               kitCols={kitCols}
               progCols={progCols}
@@ -75,7 +80,8 @@ export default BatchDetails;
 
 const BatchDetailChunk = ({ 
   rowIndex, oB, user, clientTZ, 
-  pCache, acCache, app, isDebug,
+  pCache, agCache, acCache, app, 
+  isDebug, isNightly,
   statusCols, kitCols, progCols, ncCols, dense,
   kittingArea, releasedArea
 })=> {
@@ -110,8 +116,10 @@ const BatchDetailChunk = ({
         dueDate={oB.salesEnd || oB.end}
         clientTZ={clientTZ}
         pCache={pCache}
+        agCache={agCache}
         app={app}
         isDebug={isDebug}
+        isNightly={isNightly}
         statusCols={statusCols}
         dense={dense} />
     

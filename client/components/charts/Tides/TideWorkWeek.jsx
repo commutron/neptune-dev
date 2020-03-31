@@ -31,7 +31,8 @@ const TideWorkWeek = ({
       
       for(const [index, day] of weekdays.entries()) {
         const dateTime = weekStart.clone().add(index, 'day').format();
-        if( weekEnd.add(1, 'day').isSame(dateTime, 'day') ) {
+        //if( weekEnd.add(1, 'day').isSame(dateTime, 'day') ) {
+        if( weekEnd.isBefore(dateTime, 'day') ) {
           break;
         }else{
           const dayHours = TimeInDay( app.nonWorkDays, dateTime );

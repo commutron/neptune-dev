@@ -3,47 +3,52 @@ import moment from 'moment';
 import 'moment-timezone';
 import NumStat from '/client/components/uUi/NumStat.jsx';
 
-const PrioritySquareData = ({ batchID, app, dbDay, mockDay, altNumber, isDebug })=> {
+import './style';
+
+const PositionSquareData = ({ batchID, app, dbDay, mockDay, altNumber, isDebug })=> {
   
   const thingMounted = useRef(true);
-  const [ ptData, setPriority ] = useState(false);
+  const [ posData, setPosition ] = useState(false);
   
   useEffect( ()=> {
     const clientTZ = moment.tz.guess();
-    Meteor.call('priorityRank', batchID, clientTZ, false, mockDay, (error, reply)=>{
+    Meteor.call('agendaOrder', batchID, clientTZ, false, mockDay, (error, reply)=>{
       error && console.log(error);
       if( reply ) { 
-        if(thingMounted.current) { setPriority( reply ); }
-        isDebug && console.log(ptData);
+        if(thingMounted.current) { setPosition( reply ); }
+        isDebug && console.log(posData);
       }
     });
-    return () => { thingMounted.current = false };
   }, [batchID, dbDay, mockDay]);
   
+  useEffect( ()=> {
+    return () => { thingMounted.current = false };
+  }, []);
+  
   return( 
-    <PrioritySquare 
+    <PositionSquare 
       batchID={batchID} 
-      ptData={ptData}
+      posData={posData}
       altNumber={altNumber}
       app={app}
       isDebug={isDebug} /> 
   );
 };
 
-export default PrioritySquareData;
+export default PositionSquareData;
 
 ///////////////////////////////////////////////////////////////////////////////
 
-export const PrioritySquare = ({ batchID, ptData, altNumber, app, isDebug })=> {
+export const PositionSquare = ({ batchID, posData, altNumber, app, isDebug })=> {
   
-  const pt = ptData;
+  const pos = posData;
   
-  if( pt && pt.batchID === batchID ) {
+  if( pos && pos.batchID === batchID ) {
     
-    const q2t = pt.quote2tide;
-    const bffrTime = pt.estEnd2fillBuffer;
+    const q2t = pos.quote2tide;
+    const bffrTime = pos.estEnd2fillBuffer;
     const overQuote = q2t < 0;
-    isDebug && console.log({pt, batchID, bffrTime, q2t});
+    isDebug && console.log({pos, batchID, bffrTime, q2t});
   
     if(!bffrTime) {
       return(
@@ -68,17 +73,17 @@ export const PrioritySquare = ({ batchID, ptData, altNumber, app, isDebug })=> {
       bffrTime > pScl.low ? 'low' :
         bffrTime > pScl.high ? 'medium' : 
           bffrTime > pScl.max ? 'high' :
-            bffrTime <= pScl.max ? 'severe' :
+            bffrTime <= pScl.max ? 'urgent' :
             'p0';
     const priorityClass = 
-      priorityRank === 'severe' ? 'pScale1' :
-      priorityRank === 'high' ? 'pScale2' :
-      priorityRank === 'medium' ? 'pScale3' : 
-      'pScale4';
+      priorityRank === 'urgent' ? 'agScale1' :
+      priorityRank === 'high' ? 'agScale2' :
+      priorityRank === 'medium' ? 'agScale3' : 
+      'agScale4';
     const overClass = overQuote ? 'moreEphasis' : '';
     const pLabel = 
       <b>{priorityRank}</b>;
-    const subLabel = pt.lateLate ? 'Is Late' :
+    const subLabel = pos.lateLate ? 'Is Late' :
       bffrTime < 0 ? 'Estimated Late' :
       Math.round( ( bffrTime / 100 ) );
     
