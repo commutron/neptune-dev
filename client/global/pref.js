@@ -92,11 +92,16 @@ class Pref {
     this.released = 'released';
     this.ship = 'ship';
     // build tracking
+    this.branch = 'branch';
+    this.branches = 'branches';
+    
+    this.phase = 'phase';
+    this.phases = 'phases';
+    
     this.flow = 'process flow';
     this.buildFlow = 'main process flow';
     this.buildFlowAlt = 'alt process flow';
-    this.phase = 'department';
-    this.phases = 'departments';
+    
     this.engaged = 'active';
     this.engagedNot = 'not active';
     this.buildStep = 'build process';

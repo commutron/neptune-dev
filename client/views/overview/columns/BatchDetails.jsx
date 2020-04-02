@@ -17,17 +17,17 @@ const BatchDetails = ({
 })=> {
   
   const statusCols = isNightly ?
-    ['remaining workdays', 'priority rank', 'agenda position', 'items quantity'] :
-    ['remaining workdays', 'priority rank', 'items quantity'];
+    ['due', 'remaining workdays', 'priority rank', 'agenda position', 'items quantity'] :
+    ['due', 'remaining workdays', 'priority rank', 'items quantity'];
   
   const clearCols = Array.from(Pref.clearencesArray, x => x.context );
   const kitCols = [...clearCols, 'flow', 'released'];
   const progCols = app.phases;
   const ncCols = ['NC total', 'NC remain', 'NC per item', 'NC items', 'scrap', 'RMA'];
   // due == 'fulfill', 'ship'
-  const fullHead = ['SO','due',...statusCols,...kitCols,'active',...progCols,...ncCols,'watch'];
-  const kitHead = ['SO','due',...statusCols, ...kitCols,'active','watch'];
-  const relHead = ['SO','due',...statusCols,'active',...progCols,...ncCols,'watch'];
+  const fullHead = ['SO',...statusCols,...kitCols,'active',...progCols,...ncCols,'watch'];
+  const kitHead = ['SO',...statusCols, ...kitCols,'active','watch'];
+  const relHead = ['SO',...statusCols,'active',...progCols,...ncCols,'watch'];
   
   const headersArr = kittingArea ? kitHead : releasedArea ? relHead : fullHead;
   
@@ -174,8 +174,7 @@ const BatchDetailChunk = ({
           iconOnly={true} />
       </div>
       
-      {Roles.userIsInRole(Meteor.userId(), 'debug') && 
-        <div><b>{oB.batch}</b></div> }
+      {isDebug && <div><b>{oB.batch}</b></div> }
         
     </div>
   );

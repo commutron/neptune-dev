@@ -35,11 +35,12 @@ const PhaseProgress = ({
               </div>
             );
           }else{
-            const calNum = Math.floor( ( 
-              phase.count / (dt.totalItems * phase.steps.length) 
-                * 100 ) );
+            const calPer = ( phase.count / (dt.totalItems * phase.steps.length) ) * 100;
+            const calNum = calPer > 0 && calPer < 1 ? 
+                            calPer.toPrecision(1) : Math.floor( calPer );
             isDebug && console.log(`${dt.batch} ${phase.phase} calNum: ${calNum}`);
             let fadeTick = calNum == 0 ? '0' :
+                 calNum < 2 ? '1' :
                  calNum < 10 ? '5' :
                  calNum < 20 ? '10' :
                  calNum < 30 ? '20' :

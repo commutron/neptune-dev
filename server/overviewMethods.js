@@ -208,9 +208,8 @@ function collectStatus(privateKey, batchID, clientTZ) {
       
       const timeRemain = !complete ?  // duration between now and ship due
         shipDue.workingDiff(now, 'day', true) : 0;
-      const timeRemainClean = 
-        ( Math.floor(timeRemain) || Math.ceil(timeRemain) ) === 0 ? 
-          timeRemain.toFixed(1, 10) : timeRemain.toFixed(0, 10);
+      const timeRemainClean = timeRemain > -1 && timeRemain < 1 ? 
+          timeRemain.toPrecision(1) : Math.round(timeRemain);
       
       collection = {
         batch: bx.batch,
@@ -218,7 +217,6 @@ function collectStatus(privateKey, batchID, clientTZ) {
         shipDue: shipDue.format(),
         weekDaysRemain: timeRemainClean,
         itemQuantity: bx.quantity,
-        // isActive: false
       };
       
       resolve(collection);
@@ -233,28 +231,17 @@ function collectStatus(privateKey, batchID, clientTZ) {
       
       const timeRemain = !complete ?  // duration between now and ship due
         shipDue.workingDiff(now, 'day', true) : 0;
-      const timeRemainClean = 
-        ( Math.floor(timeRemain) || Math.ceil(timeRemain) ) === 0 ? 
-          timeRemain.toFixed(1, 10) : timeRemain.toFixed(0, 10);
-          
+      const timeRemainClean = timeRemain > -1 && timeRemain < 1 ? 
+          timeRemain.toPrecision(1) : Math.round(timeRemain);
+         
       let itemQuantity = b.items.length; // how many items
-      // indie active check
-      // const tide = b.tide || [];
-      // const isActive = tide.find( x => 
-      //   now.isSame(moment(x.startTime).tz(clientTZ), 'day')
-      // ) ? true : false;
-      // what percent of items are complete
-      // const percentOfDoneItems = temp === 'cool' ? 0 : 
-      //   (( b.items.filter( x => x.finishedAt !== false )
-      //     .length / itemQuantity) * 100 ).toFixed(0);
-
+      
       collection = {
         batch: b.batch,
         batchID: b._id,
         shipDue: shipDue.format(),
         weekDaysRemain: timeRemainClean,
         itemQuantity: itemQuantity,
-        // isActive: isActive
       };
 
       resolve(collection);

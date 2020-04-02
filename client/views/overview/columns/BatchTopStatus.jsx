@@ -38,7 +38,7 @@ const BatchTopStatus = ({
     const dueDateShip = moment(dt.shipDue);
     const adaptDateShip = dueDateShip.isAfter(moment(), 'year') ?
                             "MMM Do, YYYY" : "MMM Do";
-    
+
     return(
       <Fragment>
         <div>
@@ -83,17 +83,6 @@ const BatchTopStatus = ({
             size='big' />
         </div>
         
-        {/*
-        <div>
-          <TrinaryStat
-            status={dt.isActive ? true : null}
-            name='Active'
-            title={`Has had ${Pref.tide} activity today`}
-            size=''
-            onIcon='fas fa-shoe-prints fa-2x' 
-            offIcon='far fa-pause-circle fa-2x' />
-        </div>
-        */}
       </Fragment>
     );
   }

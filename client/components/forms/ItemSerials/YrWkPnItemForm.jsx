@@ -67,14 +67,15 @@ const YrWkPnItemForm = ({ id, items, more, unit, app, noText })=> {
 	function handleAdd(e) {
     if(previewData.length > 0) {
       this.goYrWkSave.disabled = true;
+      toast.warn('Please Wait For Confirmation...');
       Meteor.call('addYearWeekPanelItems', id, previewData, (error, reply)=>{
         if(error)
           console.log(error);
         if(reply.success === true) {
-          toast.success('Saved');
+          toast.success('Serials Created Successfully');
           resultSet(reply.dupes);
         }else{
-          toast.warning('There was a problem...');
+          toast.error('There was a problem...');
         }
       });
     }
@@ -200,7 +201,7 @@ const YrWkPnItemForm = ({ id, items, more, unit, app, noText })=> {
             disabled={previewData.length === 0}
             className='action clearGreen'
             onClick={(e)=>handleAdd(e)}
-          >ADD</button>
+          >Create</button>
         </p>
         <p>{resultMess && resultMess.length > 0 ? 'DUPLICATES' : ''}</p>
         <p>{resultMess ? resultMess.toString() : ''}</p>

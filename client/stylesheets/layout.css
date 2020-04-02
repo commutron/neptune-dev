@@ -772,6 +772,9 @@ main {
 
 .biggester { font-size: 2.5rem; }
 
+.vbig { font-size: 2vh; }
+.vbigger { font-size: 3vh; }
+
 .dbbleWide { min-width: 30vw; }
 .inlineForm > input[type='text'].dbbleWide { width: 30vw; }
 

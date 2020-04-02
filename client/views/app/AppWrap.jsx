@@ -7,7 +7,9 @@ import TideFollow from '/client/components/tide/TideFollow.jsx';
 
 import Slides from '../../components/smallUi/Slides.jsx';
 
+import BranchesSlide from './appSlides/BranchesSlide.jsx';
 import PhasesSlide from './appSlides/PhasesSlide.jsx';
+import BehaviorSlide from './appSlides/BehaviorSlide.jsx';
 import TrackStepSlide from './appSlides/TrackStepSlide.jsx';
 import CounterSlide from './appSlides/CounterSlide.jsx';
 import MethodSlide from './appSlides/MethodSlide.jsx';
@@ -64,10 +66,12 @@ const AppWrap = ({ users, app })=> {
           
         <Slides
           menu={[
-            <b><i className='fas fa-route fa-fw'></i>   {Pref.phases}</b>,
+            <b><i className='fas fa-code-branch fa-fw'></i>   {Pref.branches}</b>,
+            <b><i className='fas fa-stream fa-fw yellowT'></i>   {Pref.phases}</b>,
+            <b><i className='fas fa-wave-square fa-fw'></i>   Steps Behavior</b>,
             <b><i className='fas fa-shoe-prints fa-fw'></i>   Track Steps</b>,
             <b><i className='fas fa-stopwatch fa-fw'></i>   Counter Steps</b>,
-            <b><i className='fas fa-wrench fa-fw'></i>   Verify Methods</b>,
+            <b><i className='fas fa-wrench fa-fw yellowT'></i>   Verify Methods</b>,
             <b><i className='fas fa-dice fa-fw'></i>   Reasons Options</b>,
             <b><i className='fas fa-bug fa-fw'></i>   Legacy NonCons</b>,
             <b><i className='fas fa-bug fa-fw'></i>   NonCon Types</b>,
@@ -76,13 +80,15 @@ const AppWrap = ({ users, app })=> {
             <b><i className='fas fa-tag fa-fw'></i>   Tags</b>,
             <b><i className='fas fa-link fa-fw'></i>   Addresses</b>,
             <b><i className='fas fa-key fa-fw'></i>   PINs</b>,//11
-            <b><i className='fas fa-wrench fa-fw'></i>  Data Repair</b>,//12
+            <b><i className='fas fa-toolbox fa-fw'></i>  Data Repair</b>,//12
             <b><i className='fas fa-bell fa-fw'></i>  Test Alerts</b>,//13
             <b><i className='fas fa-life-ring fa-fw'></i>  Legacy Support</b>//14
           ]}
           extraClass='space5x5'>
           
-          <PhasesSlide key={0} app={app} />
+          <BranchesSlide key={000} app={app} />
+          <PhasesSlide key={00} app={app} />
+          <BehaviorSlide key={0} app={app} />
           <TrackStepSlide key={1} app={app} sorted={sortedTrackOptions} />
           <CounterSlide key={2} app={app} />
           <MethodSlide key={3} app={app} sorted={sortedTrackOptions} />

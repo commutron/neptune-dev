@@ -3,14 +3,14 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 import AppSetSimple from '/client/components/forms/AppSetSimple';
 
-import ArrayBuilder from '/client/components/bigUi/ArrayBuilder/PhaseBuilder.jsx';
+import BranchBuilder from '/client/components/bigUi/ArrayBuilder/BranchBuilder.jsx';
 
 const PhasesSlide = ({app})=> {
   
   const rndmKey1 = Math.random().toString(36).substr(2, 5);
 
-  function removePhaseOp(e, name) {
-    Meteor.call('removePhaseOption', name, (error, reply)=>{
+  function removeBranchOp(e, name) {
+    Meteor.call('removeBranchOption', name, (error, reply)=>{
       if(error)
         console.log(error);
       if(reply) {
@@ -20,12 +20,13 @@ const PhasesSlide = ({app})=> {
       }
     });
   }
+
   
   return (
     <div className='invert'>
       
-      <h2 className='cap'><i className='fas fa-route fa-fw'></i> {Pref.phases}</h2>
-      <p>Options for Phase / Department / Tracking Catagory</p>
+      <h2 className='cap'><i className='fas fa-code-branch fa-fw'></i> {Pref.branches}</h2>
+      <p>Options for Branch / Department / Tracking Catagory</p>
       <p>
         <i className='fas fa-exclamation-circle'></i>
         <i> Entries are case sensitive, smt =/= SMT.</i>
@@ -34,23 +35,23 @@ const PhasesSlide = ({app})=> {
       
       <hr />
       
-      <ArrayBuilder app={app} />
+      <BranchBuilder app={app} />
       
       <hr />
       
       <AppSetSimple
-        title={Pref.phase}
-        action='addPhaseOption'
+        title={Pref.branch}
+        action='addBranchOption'
         rndmKey={rndmKey1} />
       <ol>
-        {app.phases.map( (entry, index)=>{
+        {app.branches && app.branches.map( (entry, index)=>{
           return( 
             <li key={rndmKey1 + index + entry.key}>
               <i>{entry}</i>
               {entry !== 'finish' &&
                 <button 
                   className='miniAction redT'
-                  onClick={(e)=>removePhaseOp(e, entry)}
+                  onClick={(e)=>removeBranchOp(e, entry)}
                 ><i className='fas fa-times fa-fw'></i></button>}
             </li>
         )})}

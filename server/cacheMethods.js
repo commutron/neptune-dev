@@ -88,7 +88,7 @@ Meteor.methods({
   
   agendaCacheUpdate(accessKey, clientTZ, force) {
     if(typeof accessKey === 'string') {
-      const timeOut = moment().subtract(2, 'minutes').toISOString();
+      const timeOut = moment().subtract(20, 'minutes').toISOString();
       const currentCache = CacheDB.findOne({
         orgKey: accessKey, 
         lastUpdated: { $gte: new Date(timeOut) },
@@ -146,7 +146,7 @@ Meteor.methods({
   
   phaseCacheUpdate(accessKey, force) {
     if(typeof accessKey === 'string') {
-      const timeOut = moment().subtract(30, 'minutes').toISOString();
+      const timeOut = moment().subtract(15, 'minutes').toISOString();
       const currentCache = CacheDB.findOne({
         orgKey: accessKey, 
         lastUpdated: { $gte: new Date(timeOut) },

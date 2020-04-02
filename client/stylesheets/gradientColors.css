@@ -172,6 +172,10 @@
   background-color: transparent;
   text-shadow: rgba(0,0,0,0.3) 0.03rem 0.03rem;
 }
+.fillRight1 {
+  background-image: linear-gradient(to right, var(--emeraldfrosted) 1%, transparent 5%);
+  text-shadow: rgba(0,0,0,0.3) 0.03rem 0.03rem
+}
 .fillRight5 {
   background-image: linear-gradient(to right, var(--emeraldfrosted) 5%, transparent 10%);
   text-shadow: rgba(0,0,0,0.3) 0.03rem 0.03rem

@@ -38,8 +38,10 @@ const GeneralChunk = ({
   const shipTime = endDay.isShipDay() ? 
     endDay.nextShippingTime() : endDay.lastShippingTime();
   
-  const remain = shipTime.workingDiff(moment(), 'days');
-        
+  const remain = shipTime.workingDiff(moment(), 'days', true);
+  const remainClean = remain > -1 && remain < 1 ? 
+          remain.toPrecision(1) : Math.round(remain);
+          
   const itemsOrder = b.items.sort( (x,y)=> x.serial - y.serial);
 
   return(
@@ -84,7 +86,7 @@ const GeneralChunk = ({
         
         {fnsh !== null ? null : 
           <p>Time Remaining: 
-            <i className={remain < 0 ? 'yellowT' : ''}> {remain}</i> workdays
+            <i className={remainClean < 0 ? 'yellowT' : ''}> {remainClean}</i> workdays
           </p> }
       
       </fieldset>

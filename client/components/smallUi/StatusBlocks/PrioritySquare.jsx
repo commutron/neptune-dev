@@ -54,11 +54,11 @@ export const PrioritySquare = ({ batchID, ptData, altNumber, app, isDebug })=> {
       return(
         <div>
           <NumStat
-            num={<i className='bigger bold'>X</i>}
+            num='X'
             name=''
             title='priority rank unavailable'
             color='fade'
-            size='big' />
+            size='vbigger bold' />
         </div>
       );
     }
@@ -73,21 +73,23 @@ export const PrioritySquare = ({ batchID, ptData, altNumber, app, isDebug })=> {
       bffrTime > pScl.low ? 'low' :
         bffrTime > pScl.high ? 'medium' : 
           bffrTime > pScl.max ? 'high' :
-            bffrTime <= pScl.max ? 'severe' :
+            bffrTime <= pScl.max ? pt.lateLate ? 'severe' : 'urgent' :
             'p0';
     const priorityClass = 
-      priorityRank === 'severe' ? 'pScale1' :
+      priorityRank === 'severe' ? 'pScale0' :
+      priorityRank === 'urgent' ? 'pScale1' :
       priorityRank === 'high' ? 'pScale2' :
       priorityRank === 'medium' ? 'pScale3' : 
       'pScale4';
-    const overClass = overQuote ? 'moreEphasis' : '';
+    
     const pLabel = 
       <b>{priorityRank}</b>;
     const subLabel = pt.lateLate ? 'Is Late' :
-      bffrTime < 0 ? 'Estimated Late' :
-      Math.round( ( bffrTime / 100 ) );
-    
+      bffrTime < 0 ? 'Estimated Late' : Math.round( ( bffrTime / 100 ) );
+      
+    const overClass = overQuote ? 'moreEphasis' : '';
     const ovrTxt = overQuote ? 'Over Quote' : 'Under Quote';
+    
     const prTxt = `Priority Rank "${priorityRank}"`;
     const bffTxt = `buffer: ${bffrTime} minutes`;
     const treTxt = `timeRemain: ${q2t} minutes`;
@@ -111,11 +113,11 @@ export const PrioritySquare = ({ batchID, ptData, altNumber, app, isDebug })=> {
   return(
     <div>
       <NumStat
-        num={<i className='bigger bold'>?</i>}
+        num='?'
         name=''
         title='priority rank unknown'
         color='fade'
-        size='big' />
+        size='vbigger bold' />
     </div>
   );
 };

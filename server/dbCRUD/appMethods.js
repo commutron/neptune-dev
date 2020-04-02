@@ -23,14 +23,29 @@ Meteor.methods({
       orgPIN: '0000',
       minorPIN: '000',
       createdAt: new Date(),
-      phases: ['finish'],
+      // phases: ['finish'],
+      branches: [
+        {
+          brKey: 't3rm1n2t1ng8r2nch',
+          branch: 'complete',
+          common: 'done',
+          position: Number(0),
+          open: true,
+          reqClearance: false,
+          reqConsumable: false,
+          reqProblemDam: true,
+          reqUserLock: true,
+          buildMethods: [],
+          inspectMethods: [],
+        }
+      ],
       toolOption: [],
       trackOption: [],
       lastTrack: {
         key: 'f1n15h1t3m5t3p',
         step: 'finish',
         type: 'finish',
-        phase: 'finish',
+        branch: 't3rm1n2t1ng8r2nch',
         how: 'finish'
       },
       countOption: [],
@@ -119,18 +134,58 @@ Meteor.methods({
   
   
   // / / / / / / / / / / / / / / / 
+        
+        
+  // Branches  UNTESTED
   
-  // Phases
-  addPhaseOption(value) {
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+  UPGRADEorgBranches() {
+    const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
+    const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
+    if(appDoc && auth && !appDoc.branches) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $set : {
+          branches : [
+            {
+              brKey: 't3rm1n2t1ng8r2nch',
+              branch: 'complete',
+              common: 'done',
+              position: Number(0),
+              open: true,
+              reqClearance: false,
+              reqConsumable: false,
+              reqProblemDam: true,
+              reqUserLock: true,
+              buildMethods: [],
+              inspectMethods: [],
+            }
+          ]
+      }});
+      return true;
+    }
+    return false;
+  },
+  
+  
+  addBranchOption(nameVal, commonVal, posVal) {
+    const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
+    if(appDoc && Roles.userIsInRole(Meteor.userId(), 'admin')) {
       try{
-        const cleanValue = value.toLowerCase().trim();
+        const nextPos = appDoc.batches.length;
         AppDB.update({orgKey: Meteor.user().orgKey}, {
           $push : { 
-            phases : {
-              $each: [ cleanValue ],
-              $position: -1
-           }
+            branches : {
+              brKey: new Meteor.Collection.ObjectID().valueOf(),
+              branch: nameVal,
+              common: commonVal,
+              position: Number(nextPos),
+              open: true,
+              reqClearance: clrVal,
+              reqConsumable: false,
+              reqProblemDam: prbVal,
+              reqUserLock: usrVal,
+              buildMethods: [],
+              inspectMethods: [],
+            }
         }});
         return true;
       }catch (err) {
@@ -141,22 +196,69 @@ Meteor.methods({
     }
   },
   
-  reorderPhaseOptions(newOrder) {
+  editBranchConfig(key, commonVal, clrVal, prbVal, usrVal, bMthdArr, iMthdArr) {
+    const chB = Array.isArray(bMthdArr);
+    const chI = Array.isArray(iMthdArr);
+    
+    if(chB && chI && Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey, 'branches.brKey': key}, {
+        $set : { 
+          'branches.$.common': commonVal,
+          // 'branches.$.position': Number(brPos)
+          // 'branches.$.open': true,
+          'branches.$.reqClearance': clrVal,
+          // 'branches.$.reqConsumable': false,
+          'branches.$.reqProblemDam': prbVal,
+          'branches.$.reqUserLock': usrVal,
+          'branches.$.buildMethods': bMthdArr,
+          'branches.$.inspectMethods': iMthdArr
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  reSetBranchOrder(newOrderArr) { // UNTESTED
+    const goodArr = Array.isArray(newOrderArr);
+
+    if(goodArr && Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      for(let br of newOrderArr) {
+        const brK = br.brKey;
+        const brPos = br.position;
+        AppDB.update({orgKey: Meteor.user().orgKey, 'branches.brKey': brK}, {
+          $set : { 
+            'branches.$.position': Number(brPos)
+        }});
+      }
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  canBranchRemove(keyCheck) { // UNTESTED
+    try{
+      const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
+      const used = appDoc.trackOption.find( x => x.branch === keyCheck );
+      if(!used && keyCheck !== 't3rm1n2t1ng8r2nch') {
+        return true;
+      }else{
+        return false;
+      }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  
+  removeBranchOption(badBrKey) { // UNTESTED
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       try{
-        const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
-        const currentList = appDoc.phases;
-        let allExist = true;
-        for(let op of newOrder) {
-          let exist = currentList.find( x => x.toLowerCase() === op ) ? true : false;
-          !exist ? allExist = false : null;
-        }
-        newOrder[newOrder.length - 1] === 'finish' ? null : allExist = false;
-        
-        if(allExist === true) {
+        const isFree = Meteor.call('canPhaseRemove', badBrKey);
+        if(isFree) {
           AppDB.update({orgKey: Meteor.user().orgKey}, {
-            $set : { 
-              phases : newOrder
+            $pull : { 
+              branches : { brKey : badBrKey }
           }});
           return true;
         }else{
@@ -169,6 +271,8 @@ Meteor.methods({
       return false;
     }
   },
+  
+  // Depreciated Phase
   
   canPhaseRemove(value) {
     try{
@@ -205,7 +309,7 @@ Meteor.methods({
     }
   },
   
-  addTrackStepOption(step, type, phase) {
+  addTrackStepOption(step, type, branch) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $push : { 
@@ -213,7 +317,7 @@ Meteor.methods({
             'key' : new Meteor.Collection.ObjectID().valueOf(),
             'step' : step,
             'type' : type,
-            'phase' : phase,
+            'branch' : branch,
             'how' : false
           }
       }});
@@ -223,13 +327,13 @@ Meteor.methods({
     }
   },
   
-  editTrackStepOption(opKey, step, type, phase) {
+  editTrackStepOption(opKey, step, type, branch) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       AppDB.update({orgKey: Meteor.user().orgKey, 'trackOption.key' : opKey}, {
         $set : { 
           'trackOption.$.step' : step,
           'trackOption.$.type' : type,
-          'trackOption.$.phase' : phase
+          'trackOption.$.branch' : branch
           }
       });
       return true;
@@ -245,7 +349,7 @@ Meteor.methods({
         'key' : 'f1n15h1t3m5t3p',
         'step' : lastStep,
         'type' : 'finish',
-        'phase' : 'finish',
+        'branch': 't3rm1n2t1ng8r2nch',
         'how' : lastHow
       };
       AppDB.update({orgKey: Meteor.user().orgKey}, {
@@ -262,7 +366,7 @@ Meteor.methods({
     const split = flatOp.split('|');
     const gate = split[0];
     const type = split[1];
-    const phase = split[2];
+    const branch = split[2];
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $push : { 
@@ -270,7 +374,7 @@ Meteor.methods({
             key : new Meteor.Collection.ObjectID().valueOf(),
             gate : gate,
             type : type,
-            phase : phase
+            branch : branch
           }
       }});
       return true;
@@ -729,5 +833,6 @@ Meteor.methods({
     }
   }
   
+
         
 });

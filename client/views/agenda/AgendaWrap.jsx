@@ -11,7 +11,7 @@ import TideFollow from '/client/components/tide/TideFollow.jsx';
 // import PriorityList from './cards/PriorityList';
 // import ShipDates from './cards/ShipDates';
 import ShipWindows from './cards/ShipWindows';
-
+import ElNino from './ElNino.jsx';
 
 function useInterval(callback, delay) {
   const savedCallback = useRef();
@@ -128,6 +128,21 @@ const AgendaWrap = ({
     
       <div className='overviewContent forceScrollStyle' tabIndex='0'>
         
+        
+        {isNightly &&
+          <ElNino
+            bCache={bCache}
+            pCache={pCache}
+            agCache={agCache}
+            zCache={zCache}
+            user={user}
+            clientTZ={clientTZ}
+            app={app}
+            isNightly={isNightly} />
+        }
+        
+        
+        
       <div className='balance numFont letterSpaced overscroll'>
             
           <ShipWindows 
@@ -167,12 +182,6 @@ const AgendaWrap = ({
             app={app} />
         */}
         </div>
-        
-        <hr />
-        
-        {isNightly &&
-          <i>timeline</i>
-        }
         
       </div>
     </div>
