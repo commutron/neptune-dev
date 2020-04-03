@@ -55,7 +55,7 @@ const RiverSelectForm = ({ id, widget, river, riverAlt, selfclose })=> {
            );
         })}
         </select>
-        <label htmlFor='choice'>Enable {Pref.buildFlow}</label>
+        <label htmlFor='choice'>Select {Pref.buildFlow}</label>
       </p>
       <p>
         <select id='choiceAlt' defaultValue={riverAlt}>
@@ -66,7 +66,7 @@ const RiverSelectForm = ({ id, widget, river, riverAlt, selfclose })=> {
            );
         })}
         </select>
-        <label htmlFor='choiceAlt'>Enable <em>optional</em> {Pref.buildFlowAlt} if needed</label>
+        <label htmlFor='choiceAlt'>Enable <em>optional</em> {Pref.buildFlowAlt}</label>
       </p>
       <br />
       <button

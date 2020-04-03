@@ -58,7 +58,7 @@ export const WholeTimeBudget = ({ bID })=>	{
         type='number'
         id='hourNum'
         title={`update quoted time budget\n in hours to 2 decimal places`}
-        className='numberSet miniIn7'
+        className='numberSet miniIn8'
         pattern="^\d*(\.\d{0,2})?$"
         maxLength='6'
         minLength='1'
@@ -72,7 +72,7 @@ export const WholeTimeBudget = ({ bID })=>	{
       <button
         type='submit'
         id='goscale'
-        className='action greenHover numberSet minIn7'
+        className='action clearGreen numberSet minIn7'
         disabled={!auth}
       >Update {Pref.timeBudget}</button>
     </form>

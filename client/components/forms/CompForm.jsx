@@ -41,7 +41,8 @@ const CompForm = ({ id, versionKey, smIcon })=> {
             id='parts'
             cols='40'
             rows='15'
-            autoFocus={true}></textarea>
+            autoFocus={true}
+            required></textarea>
           <label htmlFor='parts'>{Pref.comp} Numbers</label>
         </p>
         <p>

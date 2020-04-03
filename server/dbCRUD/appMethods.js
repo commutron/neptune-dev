@@ -136,7 +136,7 @@ Meteor.methods({
   // / / / / / / / / / / / / / / / 
         
         
-  // Branches  UNTESTED
+  // Branches
   
   UPGRADEorgBranches() {
     const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
@@ -166,11 +166,11 @@ Meteor.methods({
   },
   
   
-  addBranchOption(nameVal, commonVal, posVal) {
+  addBranchOption(nameVal, commonVal) {
     const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
     if(appDoc && Roles.userIsInRole(Meteor.userId(), 'admin')) {
       try{
-        const nextPos = appDoc.batches.length;
+        const nextPos = appDoc.branches.length;
         AppDB.update({orgKey: Meteor.user().orgKey}, {
           $push : { 
             branches : {
@@ -179,10 +179,10 @@ Meteor.methods({
               common: commonVal,
               position: Number(nextPos),
               open: true,
-              reqClearance: clrVal,
+              reqClearance: false,
               reqConsumable: false,
-              reqProblemDam: prbVal,
-              reqUserLock: usrVal,
+              reqProblemDam: false,
+              reqUserLock: false,
               buildMethods: [],
               inspectMethods: [],
             }
@@ -196,7 +196,7 @@ Meteor.methods({
     }
   },
   
-  editBranchConfig(key, commonVal, clrVal, prbVal, usrVal, bMthdArr, iMthdArr) {
+  editBranchConfig(key, posVal, commonVal, opVal, clrVal, prbVal, usrVal, bMthdArr, iMthdArr) {
     const chB = Array.isArray(bMthdArr);
     const chI = Array.isArray(iMthdArr);
     
@@ -204,8 +204,8 @@ Meteor.methods({
       AppDB.update({orgKey: Meteor.user().orgKey, 'branches.brKey': key}, {
         $set : { 
           'branches.$.common': commonVal,
-          // 'branches.$.position': Number(brPos)
-          // 'branches.$.open': true,
+          'branches.$.position': Number(posVal),
+          'branches.$.open': opVal,
           'branches.$.reqClearance': clrVal,
           // 'branches.$.reqConsumable': false,
           'branches.$.reqProblemDam': prbVal,
@@ -219,7 +219,7 @@ Meteor.methods({
     }
   },
   
-  reSetBranchOrder(newOrderArr) { // UNTESTED
+  /*reSetBranchOrder(newOrderArr) { // UNUSED and UNTESTED
     const goodArr = Array.isArray(newOrderArr);
 
     if(goodArr && Roles.userIsInRole(Meteor.userId(), 'admin')) {
@@ -235,12 +235,12 @@ Meteor.methods({
     }else{
       return false;
     }
-  },
+  },*/
   
-  canBranchRemove(keyCheck) { // UNTESTED
+  canBranchRemove(keyCheck) {
     try{
       const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
-      const used = appDoc.trackOption.find( x => x.branch === keyCheck );
+      const used = appDoc.trackOption.find( x => x.branch && x.branch === keyCheck );
       if(!used && keyCheck !== 't3rm1n2t1ng8r2nch') {
         return true;
       }else{
@@ -251,10 +251,10 @@ Meteor.methods({
     }
   },
   
-  removeBranchOption(badBrKey) { // UNTESTED
+  removeBranchOption(badBrKey) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       try{
-        const isFree = Meteor.call('canPhaseRemove', badBrKey);
+        const isFree = Meteor.call('canBranchRemove', badBrKey);
         if(isFree) {
           AppDB.update({orgKey: Meteor.user().orgKey}, {
             $pull : { 

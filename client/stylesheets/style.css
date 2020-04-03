@@ -80,6 +80,15 @@
   text-decoration: underline; 
 }
 
+.tableAction {
+  min-width: 1.75rem;
+  max-width: 10ch;
+  height: 1.5rem;
+}
+.tableAction.narrow {
+  max-width: 4ch;
+}
+
 .textLinkButton {
   color: var(--belizeHole);
   font-size: 1rem;
@@ -262,12 +271,12 @@ label.qdpplRound {
 }
 .greenHover,
 .invert .greenHover {
-	color: var(--black);
-	background-color: var(--clouds);
+	color: var(--emerald);
+	background-color: transparent;
 }
 .greenHover:hover,
 .invert .greenHover:hover {
-  color: var(--black);
+  color: var(--clouds);
 	background-color: var(--emerald);
 }
 .greenHover:disabled:hover,

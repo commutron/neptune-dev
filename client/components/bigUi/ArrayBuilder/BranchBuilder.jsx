@@ -1,123 +1,299 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 import './style.css';
 
-const BranchBuilder = ({ app, lockout })=> {
+const BranchBuilder = ({ app, isDebug, lockout })=> {
   
-  const defaultBranches = app.branches || [];
-  
-  const [ phasesState, phasesSet ] = useState( new Set( defaultBranches ) );
-  
+  const branches = app.branches || [];
+  const branchesSort = branches.sort((b1, b2)=> {
+          if (b1.position < b2.position) { return 1 }
+          if (b1.position > b2.position) { return -1 }
+          return 0;
+        });
+
   // useLayoutEffect( ()=>{
   // }, []);
-  
-  function handleSave(e) {
-    const list = phasesState;
-    const listAsArray = [...list];
-
-    Meteor.call('reorderPhaseOptions', listAsArray, (error, reply)=>{
-      error && console.log(error);
-      if(reply) {
-        toast.success('good');
-      }else{
-        toast.warning('no good');
-      }
-    });
-  }
-
-  function handleRemovePhaseOp(entry) { //removePhaseOption   canPhaseRemove
-    const current = phasesState;
-    const nope = entry;
-    // take off selected step
-    current.delete(nope);
-    phasesSet( current );
-    /*
-    Meteor.call('removePhaseOption', name, (error, reply)=>{
-      error && console.log(error);
-      if(reply) {
-        toast.success(`${Pref.phase} removed`);
-      }else{
-        toast.warning(`Cannot remove, ${Pref.phase} is in use`);
-      }
-    });
-    */
-  }
-  
-  function moveUp(obj, indx) {
-    let newList = [...phasesState];
-    if(indx === 0) {
-      null;
-    }else{
-      newList.splice(indx, 1);
-      newList.splice(indx - 1, 0, obj);
-    }
-    phasesSet( new Set(newList) );
-  }
-  
-  function moveDown(obj, indx) {
-    let newList = [...phasesState];
-    if(indx === newList.length - 1) {
-      null;
-    }else{
-      newList.splice(indx, 1);
-      newList.splice(indx + 1, 0, obj);
-    }
-    phasesSet( new Set(newList) );
-  }
-    
-
-  const phasesAppArr = app.phases;
-  let phasesStateArr = [...phasesState];
-    
     
   return(
     <div className=''>
       <div className='stepList'>
-        {phasesStateArr.map( (entry, index)=> {  
+        <BranchHeadRow />
+        {branchesSort.map( (br, index)=> {  
           return (                 
-            <div key={index+entry}>                      
-              <div>
-                {entry}
-              </div>
-              <div>
-                <button
-                  type='button'
-                  name='Move Up'
-                  id='movePhUp'
-                  className='smallAction blueHover'
-                  onClick={()=>moveUp(entry, index)}
-                  disabled={lockout || index === 0}
-                ><i className='fas fa-arrow-up'></i></button>
-                <button
-                  type='button'
-                  name='Move Down'
-                  id='movePhDown'
-                  className='smallAction blueHover'
-                  onClick={()=>moveDown(entry, index)}
-                  disabled={lockout || index === phasesStateArr.length - 1}
-                ><i className='fas fa-arrow-down'></i></button>
-                <button
-                  type='button'
-                  name='Remove'
-                  id='removePh'
-                  className='smallAction redHover'
-                  onClick={()=>handleRemovePhaseOp(entry)}
-                  disabled={true}
-                ><i className='fas fa-times'></i></button>
-              </div>
-            </div>
+            <BranchEditRow 
+              key={index+br.brKey} 
+              branch={br}
+              isDebug={isDebug} />                      
         )})}
       </div>
-      <br />
-      <button
-        value={phasesStateArr}
-        className='smallAction clearGreen up'
-        disabled={false}
-        onClick={(e)=>handleSave(e)}>Save Phase List</button>
     </div>
   );
 };
 
 export default BranchBuilder;
+
+const BranchHeadRow = ()=> (                 
+  <div className='bold'>                      
+    <div>Position</div>
+    <div>Name</div>
+    <div>Common</div>
+    <div>Open</div>
+    <div>Clear</div>
+    <div>Consume</div>
+    <div>Dam</div>
+    <div>User</div>
+    <div>Build</div>
+    <div>Inspect</div>
+    <div></div>
+  </div>
+);
+
+const BranchEditRow = ({ branch, isDebug, lockout })=> {
+  
+  const br = branch;
+  const id = br.brKey;
+  
+  const [ posState, posSet ] = useState(br.position);
+  const [ comState, comSet ] = useState(br.common);
+  const [ openState, openSet ] = useState(br.open);
+  const [ clearState, clearSet ] = useState(br.reqClearance);
+  const [ consumeState, consumeSet ] = useState(br.reqConsumable);
+  const [ damState, damSet ] = useState(br.reqProblemDam);
+  const [ uLockState, uLockSet ] = useState(br.reqUserLock);
+  const [ buildState, buildSet ] = useState(br.buildMethods);
+  const [ inspectState, inspectSet ] = useState(br.inspectMethods);
+  
+  // useEffect( ()=>{
+  //   if(
+  //     posState != br.position ||
+  //     comState != br.common ||
+  //     openState != br.open || 
+  //     clearState != br.reqClearance ||
+  //     damState != br.reqProblemDam ||
+  //     uLockState != br.reqUserLock ||
+  //     buildState != br.buildMethods ||
+  //     inspectState != br.inspectMethods
+  //   ) {
+  //     this[id+'sv'].disabled = false;
+  //   }
+  // }, [
+  //   posState, comState, openState, 
+  //   clearState, damState, uLockState, 
+  //   buildState, inspectState
+  // ]);
+  
+  function handleMulti(val, goes) {
+    const textVal = val;
+    const arrVal = textVal.split(",");
+    
+    let cleanArr = [];
+    for( let mth of arrVal ) {
+      const cln = mth.trim();
+      if(cln !== "") {
+        cleanArr.push(cln);
+      }
+    }
+    if(goes === 'build') {
+      buildSet(cleanArr);
+    }else{
+      inspectSet(cleanArr);
+    }
+  }
+  
+  function handleCancel(e) {
+    posSet(br.position);
+    comSet(br.common);
+    openSet(br.open);
+    clearSet(br.reqClearance);
+    // consumeSet(br.reqConsumable);
+    damSet(br.reqProblemDam);
+    uLockSet(br.reqUserLock);
+    buildSet(br.buildMethods);
+    this[id+'tpBldMth'].value = br.buildMethods.join(", ");
+    inspectSet(br.inspectMethods);
+    this[id+'tpIspMth'].value = br.inspectMethods.join(", ");
+  }
+  
+  function handleSaveBranch() {
+    Meteor.call('editBranchConfig', 
+                  id,
+                  posState,
+                  comState,
+                  openState,
+                  clearState,
+                  damState,
+                  uLockState,
+                  buildState,
+                  inspectState,
+      (error, reply)=>{
+        error && console.log(error);
+        if(reply) {
+          toast.success('good');
+        }else{
+          toast.error('no good');
+        }
+    });
+  }
+  
+  function handleDeleteBranch() {
+    Meteor.call('removeBranchOption', id, (error, reply)=>{
+      error && console.log(error);
+      if(reply) {
+        toast.success('good');
+      }else{
+        toast.error('no good');
+      }
+    });
+  }
+  
+  //console.log({posState, comState, openState, clearState, damState, uLockState});
+  
+  return(                 
+    <div>
+      <div>
+        <input
+          type='number'
+          title='Position'
+          id={id+'chPos'}
+          className='tableAction narrow blueHover'
+          pattern='[0-99]*'
+          maxLength='2'
+          minLength='1'
+          max={99}
+          min={0}
+          inputMode='numeric'
+          value={posState}
+          onChange={(e)=>posSet(e.target.value)}
+          disabled={lockout}
+          required
+        />
+      </div>
+      <div>
+        {br.branch}
+      </div>
+      <div>
+        <input
+          type='text'
+          title='Common'
+          id={id+'chCom'}
+          className='tableAction blueHover'
+          value={comState}
+          onChange={(e)=>comSet(e.target.value)}
+          disabled={lockout}
+          required
+        />
+      </div>
+      <div>
+        <input
+          type='checkbox'
+          title='Open'
+          id={id+'chkOpen'}
+          className='tableAction blueHover'
+          checked={openState}
+          onChange={(e)=>openSet(e.target.checked)}
+          disabled={lockout}
+          // required
+        />
+      </div>
+      <div>
+        <input
+          type='checkbox'
+          title='Require Kit Clearance'
+          id={id+'chkClear'}
+          className='tableAction blueHover'
+          checked={clearState}
+          onChange={(e)=>clearSet(e.target.checked)}
+          disabled={lockout}
+          // required
+        />
+      </div>
+      <div>
+        <input
+          type='checkbox'
+          title='Require Consumable Tracing'
+          id={id+'chkConsume'}
+          className='tableAction blueHover'
+          checked={consumeState}
+          onChange={(e)=>consumeSet(e.target.checked)}
+          disabled={true || lockout}
+          // required
+        />
+      </div>
+      <div>
+        <input
+          type='checkbox'
+          title='Require Problem Dam'
+          id={id+'chkProbDam'}
+          className='tableAction blueHover'
+          checked={damState}
+          onChange={(e)=>damSet(e.target.checked)}
+          disabled={lockout}
+          // required
+        />
+      </div>
+      <div>
+        <input
+          type='checkbox'
+          title='Require User Locking'
+          id={id+'chkUsrLck'}
+          className='tableAction blueHover'
+          checked={uLockState}
+          onChange={(e)=>uLockSet(e.target.checked)}
+          disabled={lockout}
+          // required
+        />
+      </div>
+      <div>
+        <textarea
+          title='Build Methods'
+          id={id+'tpBldMth'}
+          className='tableAction'
+          defaultValue={br.buildMethods.join(", ")}
+          onChange={(e)=>handleMulti(e.target.value, 'build')}
+          disabled={lockout}
+          required
+        ></textarea>
+      </div>
+      <div>
+        <textarea
+          title='Inpection Methods'
+          id={id+'tpIspMth'}
+          className='tableAction'
+          defaultValue={br.inspectMethods.join(", ")}
+          onChange={(e)=>handleMulti(e.target.value, 'inspect')}
+          disabled={lockout}
+          required
+        ></textarea>
+      </div>
+      <div>
+        <button
+          type='button'
+          title='Delete (requires debug)'
+          id={id+'rmv'}
+          className='smallAction redHover'
+          onClick={(e)=>handleDeleteBranch(e)}
+          disabled={!isDebug}
+        ><i className='fas fa-trash'></i></button>
+        <button
+          type='button'
+          title='Cancel/Reset'
+          id={id+'cncl'}
+          className='smallAction blueHover'
+          onClick={(e)=>handleCancel(e)}
+          disabled={lockout}
+        ><i className='fas fa-ban'></i></button>
+        <button
+          type='button'
+          title='Save'
+          id={id+'sv'}
+          className='smallAction greenHover'
+          onClick={()=>handleSaveBranch()}
+          disabled={false}
+        ><i className='fas fa-check'></i></button>
+      </div>
+    </div>
+  );
+};
+

@@ -71,7 +71,8 @@ const PanelBreak = (props)=> {
               cols='5'
               rows='5'
               defaultValue=''
-              autoFocus={true}></textarea>
+              autoFocus={true}
+              required></textarea>
             <label htmlFor='con'>New serials for each new item</label>
             <br />
             <em>{props.item.units} numbers, seperated by a space</em>

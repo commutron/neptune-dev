@@ -152,8 +152,9 @@ const RMAForm = ({
             <input
               type='number'
               id='quant'
-              defaultValue={quE}
-              placeholder='0 is infinite' />
+              defaultValue={quE || 0}
+              placeholder='0 is infinite' 
+              required />
             <label htmlFor='quant'>Quantity</label>
           </p>
           <p>

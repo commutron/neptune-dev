@@ -4,7 +4,28 @@ import { toast } from 'react-toastify';
 
 import ModelMedium from '../smallUi/ModelMedium.jsx';
 
-const UnitSet = ({ id, item, noText })=> {
+const UnitSetWrapper = ({ id, item, noText })=> {
+        	    
+  const auth = Roles.userIsInRole(Meteor.userId(), ['edit', 'run']);
+    
+  return(
+    <ModelMedium
+      button={Pref.unit + ' set'}
+      title={'set ' + Pref.unit}
+      color='greenT'
+      icon='fa-th'
+      lock={!auth}
+      noText={noText}>
+      <UnitSet
+        id={id}
+        item={item} />
+    </ModelMedium>
+  );
+};
+
+export default UnitSetWrapper;
+      
+const UnitSet = ({ id, item, selfclose })=> {
   
   function unitSet(e) {
     const bar = item.serial;
@@ -23,18 +44,10 @@ const UnitSet = ({ id, item, noText })=> {
     }else{null}
   }
         	    
-  const auth = Roles.userIsInRole(Meteor.userId(), ['edit', 'run']);
   let done = item.finishedAt !== false;
     
   return(
-    <ModelMedium
-      button={Pref.unit + ' set'}
-      title={'set ' + Pref.unit}
-      color='greenT'
-      icon='fa-th'
-      lock={!auth}
-      noText={noText}>
-      <p className='centre centreTrue'>
+    <p className='centre centreTrue'>
       {done &&
         <b className='big'>
           This serial number is finished, are you sure you want to adjust how many units were included under this serial?
@@ -56,8 +69,5 @@ const UnitSet = ({ id, item, noText })=> {
       />
       <label htmlFor='unit'>{Pref.unit} Quantity <em>max 999</em></label>
     </p>
-  </ModelMedium>
   );
 };
-
-export default UnitSet;

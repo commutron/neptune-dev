@@ -11,7 +11,8 @@ import AppWrap from './AppWrap.jsx';
 const AppView = ({
   readyUsers, readyDebug, // subs
   orb, bolt, // meta
-  username, user, active, org, app, users // self
+  username, user, active, isAdmin, isDebug, // self
+  org, app, users // org
 })=> {
   
   const prevUser = usePrevious(user);
@@ -30,13 +31,13 @@ const AppView = ({
     );
   }
   
-  const admin = Roles.userIsInRole(Meteor.userId(), 'admin');
-  
-  if(admin) {
+  if(isAdmin) {
     return(
       <AppWrap
         orb={orb}
         bolt={bolt}
+        isAdmin={isAdmin}
+        isDebug={isDebug}
         app={app}
         users={users}
       />
@@ -60,6 +61,8 @@ export default withTracker( () => {
   let name = user ? user.username : false;
   let org = user ? user.org : false;
   let active = login ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
+  const isAdmin = login ? Roles.userIsInRole(Meteor.userId(), 'admin') : false;
+  const isDebug = login ? Roles.userIsInRole(Meteor.userId(), 'debug') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
   const usersDebugSub = login ? Meteor.subscribe('usersDataDebug') : false;
   if(!login) {
@@ -81,6 +84,8 @@ export default withTracker( () => {
       username: name,
       user: user,
       active: active,
+      isAdmin: isAdmin,
+      isDebug: isDebug,
       org: org,
       app: AppDB.findOne({org: org}),
       users: Meteor.users.find({}, {sort: {username:1}}).fetch()

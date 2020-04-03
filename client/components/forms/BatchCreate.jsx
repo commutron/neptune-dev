@@ -74,7 +74,7 @@ const BatchCreate = ({ widgetId, versionNow, versions, lock, noText })=> {
                 )}})}
           </select>
         </p>
-        <div className='vmargin'>
+        <p>
           <label htmlFor='oNum' className='breath'>{Pref.batch} number<br />
           <input
             type='number'
@@ -91,7 +91,7 @@ const BatchCreate = ({ widgetId, versionNow, versions, lock, noText })=> {
             autoFocus={true}
             required 
           /></label>
-        </div>
+        </p>
         <div className='centreRow vmargin'>
           <label htmlFor='soNum' className='breath'>{Pref.salesOrder}<br />
           <input

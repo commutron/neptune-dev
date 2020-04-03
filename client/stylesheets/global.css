@@ -103,7 +103,10 @@ input[type='checkbox'] {
   user-select: none;
   cursor: pointer;
 }
-button:disabled, button:disabled:hover, button:disabled span, button:disabled label {
+button:disabled, 
+button:disabled:hover, 
+button:disabled span, 
+button:disabled label {
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -178,9 +181,14 @@ input, select, textarea {
   font-size: 1.2rem;
   text-indent: 0.25rem;
   border-width: 1px;
-  border-style: solid;
+  border-style: dashed;
   border-bottom-color: white;
   border-radius: 0px;
+}
+input:required, 
+select:required, 
+textarea:required{
+  border-style: solid;
 }
 
 input:invalid, select:invalid, textarea:invalid {
@@ -230,7 +238,10 @@ textarea:focus, textarea:active {
   border-color: var(--neptuneColor);
 }
 
-input:disabled, textarea:disabled, select:disabled, datalist:disabled {
+input:disabled, 
+textarea:disabled, 
+select:disabled, 
+datalist:disabled {
   border-style: dotted;
   cursor: not-allowed;
   opacity: 0.8;
@@ -302,7 +313,12 @@ details:focus-within {
   outline-width: thick;
 }
 */
-input::-webkit-inner-spin-button {
+input::-webkit-inner-spin-button,
+input::-webkit-outer-spin-button {
+  opacity: 1;
+}
+input[type='date']::-webkit-inner-spin-button,
+input[type='date']::-webkit-outer-spin-button {
   display: none;
 }
 input[type='search']::-webkit-search-cancel-button {

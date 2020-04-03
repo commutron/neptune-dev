@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
@@ -89,16 +89,16 @@ const FlowFormHead = ({ id, existFlows, preFill, app, selfclose })=> {
     }
   }
   
-  useEffect( ()=> {
+  useLayoutEffect( ()=> {
     const optn = preFill;
     if(!optn) {
       fillSet(false);
     }else{
+      fillSet(optn.flowKey);
+      optn.type === 'plus' && ncListSet(optn.ncLists);
       Meteor.call('activeFlowCheck', optn.flowKey, (error, reply)=>{
         error && console.log(error);
         warnSet(reply);
-        fillSet(optn.flowKey);
-        optn.type === 'plus' && ncListSet(optn.ncLists);
       });
     }
   }, []);
@@ -110,7 +110,7 @@ const FlowFormHead = ({ id, existFlows, preFill, app, selfclose })=> {
 
   return (
       <div>
-        <div className='space'>
+        <div className=''>
           <form
             id='flowSave'
             className='centre'
@@ -131,6 +131,7 @@ const FlowFormHead = ({ id, existFlows, preFill, app, selfclose })=> {
                 <p>something</p>}
             </div>
           : null}
+            <em className='small'>duplicate {Pref.flow} names are ill advised but not blocked</em>
             <p>
               <input
                 type='text'
@@ -140,7 +141,6 @@ const FlowFormHead = ({ id, existFlows, preFill, app, selfclose })=> {
                 required />
               <label htmlFor='flwttl'>{Pref.flow} title</label>
             </p>
-            <i className='small'>duplicate {Pref.flow} names are discouraged but not blocked</i>
           </form>
         </div>
         

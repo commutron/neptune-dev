@@ -87,11 +87,14 @@ const YrWkPnItemForm = ({ id, items, more, unit, app, noText })=> {
   const previewJoin = previewData.length > 20 ? '............' : '';
   
   const previewListEnd = previewData.length > 20 ?
-                            previewData.slice(-5) : [];
+                            previewData.slice(-3) : [];
     
   return(
-    <div className='comfort'>
-        <form onSubmit={(e)=>handleCheck(e)} autoComplete='off'>
+    <div className='balance'>
+        <form 
+          className='fill'
+          onSubmit={(e)=>handleCheck(e)} 
+          autoComplete='off'>
           <p>
             <input
               type='number'
@@ -181,19 +184,17 @@ const YrWkPnItemForm = ({ id, items, more, unit, app, noText })=> {
           </p>
         </form>
         
-      <div className='centre space'>
-        <dl>
-          <dt>{previewData.length} {Pref.itemSerial}s</dt>
+      <div className='centre vspace'>
+        <dl className='numFont letterSpaced noindent'>
           {previewListStart.map( (ent, ix)=>{
             return(<dd key={ix+'s'}>{ent}</dd>);
           })}
-          <dd>{previewJoin}</dd>
           <dd>{previewJoin}</dd>
           {previewListEnd.map( (ent, ix)=>{
             return(<dd key={ix+'e'}>{ent}</dd>);
           })}
         </dl>
-      
+        <p className='medBig'><i className='numFont big'>{previewData.length}</i> {Pref.itemSerial}s</p>
         <p className='centreText'><em>duplicate checking is done on the server</em></p>
         <p className='centre'>
           <button
@@ -204,7 +205,7 @@ const YrWkPnItemForm = ({ id, items, more, unit, app, noText })=> {
           >Create</button>
         </p>
         <p>{resultMess && resultMess.length > 0 ? 'DUPLICATES' : ''}</p>
-        <p>{resultMess ? resultMess.toString() : ''}</p>
+        <p>{resultMess ? resultMess.join(', ') : ''}</p>
       </div>
     </div>
   );

@@ -148,14 +148,17 @@ const BatchFormX = (props)=> {
         </p>
         <p>
           <input
-            type='text'
+            type='number'
             id='quant'
             pattern='[00000-99999]*'
             maxLength='5'
             minLength='1'
+            max={99999}
+            min={0}
             inputMode='numeric'
             defaultValue={eQ}
-            placeholder='10000' />
+            placeholder='10000'
+            required />
           <label htmlFor='quant'>Quantity</label>
         </p>
         <br />

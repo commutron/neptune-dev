@@ -11,7 +11,8 @@ const UserSpeedSet = ()=> {
       <select
         ref={(i)=> this.speed = i}
         onChange={()=> updateSpeed(speed.value)}
-        defaultValue={current}>
+        defaultValue={current}
+        required>
         <option value={500}>Very Fast</option>
         <option value={1000}>Fast</option>
         <option value={1500}>Medium</option>

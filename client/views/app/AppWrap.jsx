@@ -25,7 +25,7 @@ import PINSlide from './appSlides/PINSlide.jsx';
 
 import DataRepair from './appSlides/DataRepair.jsx';
 
-const AppWrap = ({ users, app })=> {
+const AppWrap = ({ isAdmin, isDebug, users, app })=> {
   
   function requestAltFlowInfo() {
     Meteor.call('altFlowUse', (error, reply)=>{
@@ -86,7 +86,7 @@ const AppWrap = ({ users, app })=> {
           ]}
           extraClass='space5x5'>
           
-          <BranchesSlide key={000} app={app} />
+          <BranchesSlide key={000} app={app} isDebug={isDebug} />
           <PhasesSlide key={00} app={app} />
           <BehaviorSlide key={0} app={app} />
           <TrackStepSlide key={1} app={app} sorted={sortedTrackOptions} />

@@ -655,6 +655,12 @@ main {
 .vmarginhalf { margin: 12px 0; }
 .nomargin { margin: 0; }
 
+.noindent,
+.noindent > dd {
+  margin-left: 0px;
+  text-indent: 0;
+}
+
 .line2x { line-height: 2; }
 .line3x { line-height: 3; }
 .line4x { line-height: 4; }
@@ -803,12 +809,12 @@ input.variableInput.biggest {
   height: 64px;
   width: 272px;
 }
-input.miniIn7 { width: 7ch; }
+input.miniIn6 { width: 6ch; }
+input.miniIn8 { width: 8ch; }
 
 .numberSet {
   height: 2rem;
   line-height: 1.1;
-  border: 1px solid black;
   font-family: 'VarelaLocal';
 }
 input.numberSet:focus, input.numberSet:active {

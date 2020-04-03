@@ -8,7 +8,7 @@ export const Text = (props)=> (
     name={props.namE}
     placeholder={props.placE}
     defaultValue={props.defaulT}
-    
+    required
   />
 );
 

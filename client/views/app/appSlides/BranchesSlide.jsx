@@ -1,24 +1,37 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
-import AppSetSimple from '/client/components/forms/AppSetSimple';
 
 import BranchBuilder from '/client/components/bigUi/ArrayBuilder/BranchBuilder.jsx';
 
-const PhasesSlide = ({app})=> {
-  
-  const rndmKey1 = Math.random().toString(36).substr(2, 5);
+const BranchesSlide = ({ app, isAdmin, isDebug })=> {
 
-  function removeBranchOp(e, name) {
-    Meteor.call('removeBranchOption', name, (error, reply)=>{
-      if(error)
-        console.log(error);
+  function handleBranchUpgrade() {
+    Meteor.call('UPGRADEorgBranches', (error, reply)=>{
+      error && console.log(error);
       if(reply) {
-        toast.success(`${Pref.phase} removed`);
+        toast.success(`upgraded`);
       }else{
-        toast.warning(`Cannot remove, ${Pref.phase} is in use`);
+        toast.error('not possible');
       }
     });
+  }
+  
+  function handleBranchAdd(e) {
+    e.preventDefault();
+    this.nwBgo.disabled = true;
+    const nameVal = this.newBrchNm.value;
+    const commonVal = this.newBrchCmn.value;
+    if( typeof nameVal === 'string' && typeof commonVal === 'string' ) {
+      Meteor.call('addBranchOption', nameVal, commonVal, (error, reply)=>{
+        error && console.log(error);
+        if(reply) {
+          this.nwBgo.disabled = false;
+          this.newBrchNm.value = '';
+          this.newBrchCmn.value = '';
+        }
+      });
+    }
   }
 
   
@@ -32,33 +45,49 @@ const PhasesSlide = ({app})=> {
         <i> Entries are case sensitive, smt =/= SMT.</i>
         <i> Capitalizing is unnecessary in most cases and only recommended for abbreviations.</i>
       </p>
+      <p>
+        <i className='fas fa-exclamation-circle'></i>
+        <i> Text Areas allow for multiple entries by seperating by a comma ","</i>
+      </p>
+      
+      {!app.branches &&
+        <button 
+          className='action blueHover'
+          onClick={(e)=>handleBranchUpgrade()}
+        >Upgrade DB for Batches</button>}
+      
+      <BranchBuilder app={app} isDebug={isDebug} />
       
       <hr />
       
-      <BranchBuilder app={app} />
-      
-      <hr />
-      
-      <AppSetSimple
-        title={Pref.branch}
-        action='addBranchOption'
-        rndmKey={rndmKey1} />
-      <ol>
-        {app.branches && app.branches.map( (entry, index)=>{
-          return( 
-            <li key={rndmKey1 + index + entry.key}>
-              <i>{entry}</i>
-              {entry !== 'finish' &&
-                <button 
-                  className='miniAction redT'
-                  onClick={(e)=>removeBranchOp(e, entry)}
-                ><i className='fas fa-times fa-fw'></i></button>}
-            </li>
-        )})}
-      </ol>
+      <h3>Add New Branch</h3>
+      <form onSubmit={(e)=>handleBranchAdd(e)}>
+        <p>
+          <label htmlFor='newBrchNm'>Branch Name</label><br />
+          <input
+            type='text'
+            id='newBrchNm'
+            required />
+        </p>
+        <p>
+          <label htmlFor='newBrchCmn'>Branch Common</label><br />
+          <input
+            type='text'
+            id='newBrchCmn'
+            required />
+        </p>
+        <p>
+          <button
+            type='submit'
+            id='nwBgo'
+            className='action clearGreen'
+            disabled={false}
+          >Add</button>
+        </p>
+      </form>
       
     </div>
   );
 };
 
-export default PhasesSlide;
+export default BranchesSlide;

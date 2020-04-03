@@ -126,7 +126,11 @@ export default class FlowBuilder extends Component	{
         <div className='space'>
           <p>
             <label htmlFor='phasefltr'>{Pref.phase}<br />
-              <select id='phasefltr' onChange={(e)=>this.changePhase(e)} className='cap'>
+              <select 
+                id='phasefltr' 
+                onChange={(e)=>this.changePhase(e)} 
+                className='cap'
+                required>
                 <option value='other'>No Phase</option>
                 {this.props.app.phases.map( (entry, index)=>{
                   return( 
