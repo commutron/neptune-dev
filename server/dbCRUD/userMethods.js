@@ -1,6 +1,7 @@
 import moment from 'moment';
 import timezone from 'moment-timezone';
 import { Accounts } from 'meteor/accounts-base';
+import Config from '/server/hardConfig.js';
 
 Accounts.config({ 
   loginExpirationInDays: 0.54
@@ -82,8 +83,9 @@ Meteor.methods({
   
   superUserEnable(userId, role) {
     const admin = Roles.userIsInRole(Meteor.userId(), 'admin');
-    const existOne = Meteor.users.find({orgKey: Meteor.user().orgKey, roles: role}).fetch();
-    if(admin === true && existOne.length === 0 ) {
+    const exist = Meteor.users.find({orgKey: Meteor.user().orgKey, roles: role}).fetch();
+    const allow = Config.allowedSupers || 1;
+    if(admin === true && exist.length < allow ) {
       Roles.addUsersToRoles(userId, role);
       return true;
     }else{
@@ -296,6 +298,13 @@ Meteor.methods({
       }
     });
   },
+  setReadToast(uID, nKey) {
+    Meteor.users.update({_id: uID, 'inbox.notifyKey': nKey}, {
+      $set: {
+        'inbox.$.unread': false,
+      }
+    });
+  },
   removeNotify(nKey) {
     Meteor.users.update(Meteor.userId(), {
       $pull : {
@@ -366,5 +375,26 @@ Meteor.methods({
       throw new Meteor.Error(err);
     }
   },
+  
+  sendUserDM(userID, title, message) {
+    const mssgTitle = title || 'Sample Notification';
+    const mssgDetail = message || 'This is a test';
+    try {
+      Meteor.users.update(userID, {
+        $push : { inbox : {
+          notifyKey: new Meteor.Collection.ObjectID().valueOf(),
+          keyword: 'direct',
+          type: 'direct',
+          title: mssgTitle,
+          detail: mssgDetail,
+          time: new Date(),
+          unread: true
+        }
+      }});
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  }
+  
     
 });

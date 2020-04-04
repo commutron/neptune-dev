@@ -672,6 +672,7 @@ main {
 
 .dropCeiling { margin-top: calc(4vh + 1rem); }
 .overscroll { margin-bottom: 5vh; }
+.overscroll2x { margin-bottom: 10vh; }
 
 
 

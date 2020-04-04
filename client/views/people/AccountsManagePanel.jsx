@@ -11,6 +11,8 @@ import TrendLine from '/client/components/charts/Trends/TrendLine.jsx';
 import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 import ActivityPanel from '/client/views/user/ActivityPanel.jsx';
 import UserManageForm from '/client/components/forms/UserManageForm.jsx';
+import UserDMForm from '/client/components/forms/UserDMForm.jsx';
+
 
 import { ForceStopEngage } from '/client/views/app/appSlides/DataRepair.jsx';
 
@@ -19,7 +21,15 @@ const AccountsManagePanel = ({ app, users, bCache, isDebug })=> {
   const auths = Pref.auths;
   const areas = Pref.areas;
   
-  let usersMenu = users.map( (entry)=>{
+  const usersSort = users.sort((u1, u2)=> {
+          if (!Roles.userIsInRole(u1._id, 'active')) { return 1 }
+          if (!Roles.userIsInRole(u2._id, 'active')) { return -1 }
+          if (u1.username < u2.username) { return -1 }
+          if (u1.username > u2.username) { return 1 }
+          return 0;
+        });
+  
+  let usersMenu = usersSort.map( (entry)=>{
     const clss = !Roles.userIsInRole(entry._id, 'active') ? 'strike fade' : '';
     return <b className={clss}>{entry.username}</b>;
   });
@@ -34,27 +44,35 @@ const AccountsManagePanel = ({ app, users, bCache, isDebug })=> {
       menu={usersMenu}
       disableAll={!isAdmin && !isPeopleSuper}
       topPage={
-        <AccountsTop users={users} key={000} />
+        <AccountsTop users={usersSort} key={000} />
       }>
         
-      {users.map( (entry, index)=>{
+      {usersSort.map( (entry, index)=>{
         if(isAdmin || isPeopleSuper) {
           return(
             <div key={index+entry._id} className='invert'>
               <Tabs
-                tabs={['Times', 'Access']}
+                tabs={[
+                  <b><i className='far fa-clock fa-fw'></i>   Time</b>,
+                  <b><i className='far fa-envelope fa-fw'></i>  Message</b>,
+                  <b><i className='fas fa-key fa-fw'></i>  Access</b>,
+                ]}
                 wide={false}
                 hold={false}
-                disable={[ (!isPeopleSuper && !isAdmin), !isAdmin]}>
+                disable={[ (!isPeopleSuper && !isAdmin), !isAdmin, !isAdmin]}>
                 
                 <ActivityPanel
                   key={0}
                   app={app}
                   user={entry}
-                  users={users}
+                  users={usersSort}
                   bCache={bCache} />
-            
-                <div key={1}>
+                
+                <div key={1} className='vspace'>
+                  <UserDMForm userID={entry._id} />
+                </div>
+                
+                <div key={2}>
                 {isAdmin ?
                   <Fragment>
                     <UserManageForm
@@ -79,6 +97,7 @@ const AccountsManagePanel = ({ app, users, bCache, isDebug })=> {
                   </Fragment>
                 : noAccess}
                 </div>
+
               </Tabs>
             </div>
           );
@@ -282,16 +301,18 @@ const AccountsTop = ({ users })=> {
   const debug = users.filter( x => Roles.userIsInRole(x._id, 'debug') ).length;
   const readOnly = users.filter( x => Roles.userIsInRole(x._id, 'readOnly') ).length;
   
-  const pSup = users.find( x => Roles.userIsInRole(x._id, 'peopleSuper') );
-  const peopleSuper = pSup ? pSup.username : 'not set';
+  const pSup = users.filter( x => Roles.userIsInRole(x._id, 'peopleSuper') );
+  const pSupNames = Array.from(pSup, x => x.username );
+  const pSupNamesNice = pSupNames.length > 0 ? pSupNames.join(" & ") : 'no one';
+  const pMulti = pSupNames.length < 2;
   
   return(
     <div className='splitReverse'>
         
       <div className='bigger'>
         <NumLine
-          num={peopleSuper}
-          name='is the People Super'
+          num={pSupNamesNice}
+          name={`${pMulti ? 'is the' : 'are'} People Super${pMulti ? '' : 's'}`}
           color='blueT'
           big={true} />
           
@@ -303,7 +324,7 @@ const AccountsTop = ({ users })=> {
           
         <NumLine
           num={debug}
-          name='have Debug reporting'
+          name={`${debug === 1 ? 'has' : 'have'} Debug reporting`}
           color='redT'
           big={true} />
         

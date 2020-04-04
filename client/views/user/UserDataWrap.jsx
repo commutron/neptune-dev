@@ -2,8 +2,7 @@ import React, { useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import { ToastContainer } from 'react-toastify';
-import InboxToastPop from '/client/components/utilities/InboxToastPop.js';
-import usePrevious from '/client/components/utilities/usePreviousHook.js';
+import { UnreadInboxToastPop } from '/client/components/utilities/InboxToastPop.js';
 
 //import Pref from '/client/global/pref.js';
 import Spin from '../../components/uUi/Spin.jsx';
@@ -31,11 +30,9 @@ const UserDataWrap = ({
   bCache, batches, users // working data
 })=> {
   
-  const prevUser = usePrevious(user);
   useLayoutEffect( ()=>{
-    InboxToastPop(prevUser, user);
-  }, [user]);
-  
+    UnreadInboxToastPop(user);
+  }, []);
     
   if(
     /*!ready ||*/ 

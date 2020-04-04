@@ -67,12 +67,19 @@ const YrWkPnItemForm = ({ id, items, more, unit, app, noText })=> {
 	function handleAdd(e) {
     if(previewData.length > 0) {
       this.goYrWkSave.disabled = true;
-      toast.warn('Please Wait For Confirmation...');
+      toast.warn('Please Wait For Confirmation...', {
+          toastId: ( previewData[0] + 'pOp' ),
+          autoClose: false
+        });
       Meteor.call('addYearWeekPanelItems', id, previewData, (error, reply)=>{
         if(error)
           console.log(error);
         if(reply.success === true) {
-          toast.success('Serials Created Successfully');
+          toast.update(( previewData[0] + 'pOp' ), {
+            render: "Serials Created Successfully",
+            type: toast.TYPE.SUCCESS,
+            autoClose: 3000
+          });
           resultSet(reply.dupes);
         }else{
           toast.error('There was a problem...');

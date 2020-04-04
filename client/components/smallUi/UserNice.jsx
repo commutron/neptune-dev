@@ -1,4 +1,5 @@
 import React from 'react';
+import Pref from '/client/global/pref.js';
 
 const UserNice = ({ id })=> {
   const name = Meteor.users.findOne({_id : id});
@@ -12,10 +13,10 @@ const UserNice = ({ id })=> {
 export default UserNice;
 
 export const AnonyUser = ({ id })=> {
-  const peopleSuper = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
   const isSelf = id === Meteor.userId();
+  const peopleSuper = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
   
-  if(peopleSuper || isSelf) {
+  if(Pref.userTimePublic || isSelf || peopleSuper) {
     const name = Meteor.users.findOne({_id : id});
     let nice = 'not found';
     name ? nice = name.username : false;

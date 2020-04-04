@@ -4,6 +4,8 @@ import ErrorCatch from '/client/components/utilities/ErrorCatch.jsx';
 import HomeIcon from '/client/layouts/HomeIcon.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
 
+import { ToastContainer } from 'react-toastify';
+
 export const PublicLayout = ({content, title}) => (
   <ErrorCatch>
   <div className='simpleContainer'>
@@ -26,6 +28,10 @@ export const PublicLayout = ({content, title}) => (
 export const SplashLayout = ({content, title}) => (
   <ErrorCatch>
   <div className='splashContainer'>
+    <ToastContainer
+      position="top-right"
+      autoClose={2500}
+      newestOnTop />
     <div className='tenHeader'>
       <div className='topBorder' />
       <HomeIcon />

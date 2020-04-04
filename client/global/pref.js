@@ -12,7 +12,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '1.30.1';
+    this.neptuneVersion = '1.31.0';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -39,6 +39,9 @@ class Pref {
       'kitting'
       
     ];
+    
+    this.userTimePublic = true;
+    
     // app navigation
     this.post = 'record';
     this.close = 'X';

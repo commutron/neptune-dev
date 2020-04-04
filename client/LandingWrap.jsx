@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 //import Pref from '/client/global/pref.js';
-// import InboxToastPop from '/client/components/utilities/InboxToastPop.js';
-// import usePrevious from '/client/components/utilities/usePreviousHook.js';
+import { UnreadInboxToastPop } from '/client/components/utilities/InboxToastPop.js';
 import Spin from '/client/components/uUi/Spin.jsx';
 
 import HomeLogout from '/client/components/tinyUi/HomeLogout.jsx';
@@ -14,9 +13,11 @@ import { NavPlaceholder } from '/client/components/smallUi/NavButton/NavButton.j
 
 const StartView = ({ready, readyUsers, user, org, app}) =>	{
   
-  if(
-    // !ready || 
-    !readyUsers || !user || !org || !app) {
+  useLayoutEffect( ()=>{
+    UnreadInboxToastPop(user);
+  }, []);
+  
+  if( !readyUsers || !user || !org || !app ) {
     return (
       <div className='centreSpash'>
         <Spin color={true} message='Just a moment'/>
@@ -79,13 +80,11 @@ export default withTracker( () => {
   
   if(!login) {
     return {
-      // ready: appSub.ready(),
       readyUsers: false,
       login: Meteor.userId(),
     };
   }else{
     return {
-      // ready: appSub.ready(),
       readyUsers: usersSub.ready(),
       login: Meteor.userId(),
       user: user,

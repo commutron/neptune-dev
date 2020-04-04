@@ -21,6 +21,8 @@ const PerformanceSlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
   const [userList, setUserList] = useState([]);
   const [batchList, setBatchList] = useState([]);
   
+  const [ selectDayState, selectDaySet ] = useState(false);
+  
   const alldays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   
   function getData(fresh) {
@@ -47,6 +49,7 @@ const PerformanceSlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
   
   useLayoutEffect( ()=>{
     getData(true);
+    selectDaySet(false);
     if(weekChoice) {
       const pinDate = moment().year(weekChoice.yearNum).week(weekChoice.weekNum);
       
@@ -67,21 +70,25 @@ const PerformanceSlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
   
   useLayoutEffect( ()=>{
     const tideTime = weekData || [];
+    const ttDay = selectDayState && 
+      alldays.findIndex( x => x === selectDayState);
+    const dayFiltered = !ttDay ? tideTime :
+      tideTime.filter( x => moment(x.startTime).day() === ttDay );
     
-    const unqUsers = new Set( Array.from(tideTime, x => x.who ) );
+    const unqUsers = new Set( Array.from(dayFiltered, x => x.who ) );
     setUserList([...unqUsers]);
     
-    const unqBatches = new Set( Array.from(tideTime, x => x.batch ) );
+    const unqBatches = new Set( Array.from(dayFiltered, x => x.batch ) );
     setBatchList([...unqBatches].sort());
     
-  }, [weekData]);
+  }, [weekData, selectDayState]);
   
   
   const niceS = weekStart ? weekStart.format('MMMM Do') : '';
   const niceP = weekEnd ? weekEnd.format('MMMM Do') : '';
 
   return(
-    <div className='space5x5 invert overscroll'>
+    <div className='space5x5 invert overscroll2x'>
       <div className='med vbreak comfort middle'>
         <WeekBrowse
           sendUp={(i)=>getBack(i)}
@@ -89,7 +96,7 @@ const PerformanceSlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
         />
         
         {weekStart &&
-        <div className='centreRow'>
+        <div className='centreRow' onClick={()=>selectDaySet(false)}>
           <h2>{niceS}</h2>
           <em> <i className="fas fa-long-arrow-alt-right fa-2x fa-fw"></i> </em>
           <h2>{niceP}</h2>
@@ -109,11 +116,12 @@ const PerformanceSlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
             weekdays={weekDays}
             app={app}
             users={users}
-            isDebug={isDebug} />
+            isDebug={isDebug}
+            selectDayUP={(v)=>selectDaySet(v)} />
           
           <div className='balance dropCeiling'>
             <dl>
-              <dt>User List ({userList.length})</dt>
+              <dt>User List ({userList.length}) [{selectDayState || 'Week'}]</dt>
               {userList.map( (ent, ix)=>{
                 return(
                   <dd key={ent+ix}>
@@ -123,7 +131,7 @@ const PerformanceSlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
             </dl>
               
             <dl>
-              <dt>{Pref.Batch} List ({batchList.length})</dt>
+              <dt>{Pref.Batch} List ({batchList.length}) [{selectDayState || 'Week'}]</dt>
               {batchList.map( (ent, ix)=>{
                 const moreInfo = bCache ? bCache.dataSet.find( x => x.batch === ent) : false;
                 const what = moreInfo ? moreInfo.isWhat : 'unavailable';

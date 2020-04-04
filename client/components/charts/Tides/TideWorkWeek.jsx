@@ -12,16 +12,17 @@ import Theme from '/client/global/themeV.js';
 
 const TideWorkWeek = ({ 
   tideTimes, weekStart, weekEnd, weekdays,
-  app, users, isDebug })=> {
+  app, users, isDebug, selectDayUP
+})=> {
   
   const [ dayhoursNum, dayhoursSet ] = useState([0, 0, 0, 0, 0]);
   const [ workhoursNum, workhoursSet ] = useState([0, 0, 0, 0, 0]);
-  const [ hoursMaxNum, hoursMaxSet ] = useState([0, 0, 0, 0, 0]);
+  // const [ hoursMaxNum, hoursMaxSet ] = useState([0, 0, 0, 0, 0]);
   const [ topDayHours, topDayHoursSet ] = useState(50);
   
-  const liveUsers = users.filter( x => Roles.userIsInRole(x._id, 'active') && 
-                                       !Roles.userIsInRole(x._id, 'readOnly') 
-                                      ).length;
+  // const liveUsers = users.filter( x => Roles.userIsInRole(x._id, 'active') && 
+  //                                     !Roles.userIsInRole(x._id, 'readOnly') 
+  //                                     ).length;
     
   useLayoutEffect( ()=> {
     
@@ -50,7 +51,7 @@ const TideWorkWeek = ({
             day: day,
             hoursDay: dayHours * unqUsers,
             hoursRec: dTotalNice,
-            hoursMax: dayHours * liveUsers
+            // hoursMax: dayHours * liveUsers
           });
         }
       }
@@ -61,25 +62,24 @@ const TideWorkWeek = ({
       workhoursSet(Array.from(workDays, x => { 
         return { 'x': x.day, 'y': x.hoursRec } } )
       );
-      hoursMaxSet( Array.from(workDays, x => { 
-        return { 'x': x.day, 'y': x.hoursMax } } )
-      );
+      // hoursMaxSet( Array.from(workDays, x => { 
+      //   return { 'x': x.day, 'y': x.hoursMax } } )
+      // );
       
       const dht = Array.from(workDays, x => x.hoursDay );
       const whr = Array.from(workDays, x => x.hoursRec.toString() );
-      const dhm = Array.from(workDays, x => x.hoursMax );
-      topDayHoursSet( Math.max(...dht,...whr,...dhm) );
+      // const dhm = Array.from(workDays, x => x.hoursMax );
+      topDayHoursSet( Math.max(...dht,...whr) );
     
       isDebug && console.log({workDays});
     }
   }, [tideTimes, weekStart, weekEnd]);
 
  
-  isDebug && console.log({dayhoursNum, workhoursNum, hoursMaxNum, topDayHours});
-  
+  isDebug && console.log({dayhoursNum, workhoursNum, topDayHours});
   
   return(
-    <div className='vbreak'>
+    <div className=''>
       
     <VictoryChart 
       theme={Theme.NeptuneVictory}
@@ -93,14 +93,14 @@ const TideWorkWeek = ({
       //   }}
     >
     
-    <VictoryAxis  />
+    <VictoryAxis />
         
     <VictoryGroup
       categories={{ x: weekdays }}
       minDomain={{ y: 0 }}
       maxDomain={{ y: topDayHours }}>
     
-      <VictoryArea
+      {/*<VictoryArea
         data={hoursMaxNum}
         style={{ 
           data: { 
@@ -114,7 +114,7 @@ const TideWorkWeek = ({
             style={{ fill: 'darkgray' }} 
             renderInPortal />
         }
-      />
+      />*/}
       
       <VictoryArea
         data={dayhoursNum}
@@ -147,6 +147,26 @@ const TideWorkWeek = ({
             style={{ fill: 'black' }} 
             renderInPortal />
         }
+        events={[
+          {
+            target: "data",
+            eventHandlers: {
+              onClick: () => {
+                return [{
+                  target: "labels",
+                  mutation: (props) => {
+                    const hours = props.datum.y;
+                    const day = props.datum.x;
+                    selectDayUP(day);
+                    let other = moment.duration(hours, 'hours').asMinutes();
+                    return props.text === other + ' min' ?
+                      null : { text: other + ' min' };
+                  }
+                }];
+              }
+            }
+          }
+        ]}
       />
       
     </VictoryGroup>
@@ -155,10 +175,10 @@ const TideWorkWeek = ({
    
       <details className='footnotes'>
         <summary>Chart Details</summary>
+        {/*<p className='footnote'>
+          Max Line is the MAX hours available of all <em>active</em> users ({liveUsers})</p>*/}
         <p className='footnote'>
-          Upper Line is the MAX hours available of all <em>active</em> users ({liveUsers})</p>
-        <p className='footnote'>
-          Lower Line is the TOP hours of that days <em>engaged</em> users</p>
+          Upper Line is the TOP hours of that days <em>engaged</em> users</p>
         <p className='footnote'>
           Bar is the Recorded hours of that days <em>engaged</em> users</p>
         <p className='footnote'>Corrected for idle minutes.</p>
