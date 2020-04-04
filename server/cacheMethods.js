@@ -9,6 +9,7 @@ Meteor.methods({
       const key = Meteor.user().orgKey;
       Meteor.call('batchCacheUpdate', key, true);
       Meteor.call('priorityCacheUpdate', key, clientTZ, true);
+      Meteor.call('agendaCacheUpdate', key, clientTZ, true);
       Meteor.call('activityCacheUpdate', key, clientTZ, true);
       Meteor.call('phaseCacheUpdate', key, true);
       Meteor.call('completeCacheUpdate', key, true);

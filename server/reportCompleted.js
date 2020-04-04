@@ -94,9 +94,11 @@ moment.updateLocale('en', {
       const localFinish = moment(gf.finishedAt).tz(clientTZ).format();
       
       // duration between finish and fulfill
-      const buffer = moment(localFinish).workingDiff(shipDue, 'days');
+      const buffer = moment(localFinish).workingDiff(shipDue, 'days', true);
       const onTime = buffer === 0 ? 'on time' :
                       buffer < 0 ? `${Math.abs(buffer)} days early` :  
+                      buffer < 1 ?
+                      `${buffer.toPrecision(1)} days late` :
                       `${Math.abs(buffer)} days late`;
       
       // check for over quote
