@@ -49,6 +49,8 @@ export const TraverseWrap = ({
   const invert = invertColor ? 'invert' : '';
   const isRO = Roles.userIsInRole(Meteor.userId(), 'readOnly');
   
+  let toProIcon = 'fas fa-paper-plane primeRightIcon';
+  
   return(
     <ErrorCatch>
       <div className='containerEx'>
@@ -81,21 +83,21 @@ export const TraverseWrap = ({
               <button 
                 title='View this in production'
                 onClick={()=>goPro(itemData.serial)}>
-                <i className='fas fa-paper-plane primeRightIcon' data-fa-transform='left-1'></i>
+                <i className={toProIcon} data-fa-transform='left-1'></i>
               </button>
             :
              batchData ? 
               <button 
                 title='View this in production'
                 onClick={()=>goPro(batchData.batch)}>
-                <i className='fas fa-paper-plane primeRightIcon' data-fa-transform='left-1'></i>
+                <i className={toProIcon} data-fa-transform='left-1'></i>
               </button>
             :
              groupData ? 
               <button 
                 title='View this in production'
                 onClick={()=>goPro(groupData.alias)}>
-                <i className='fas fa-paper-plane primeRightIcon' data-fa-transform='left-1'></i>
+                <i className={toProIcon} data-fa-transform='left-1'></i>
               </button>
             :null}
           </div>

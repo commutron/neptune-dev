@@ -44,7 +44,13 @@ FlowRouter.notFound = {
   }
 };
 
-const exposedRoutes = FlowRouter.group({});
+LoginSub = new SubsManager();
+
+const exposedRoutes = FlowRouter.group({
+  subscriptions: function(params, queryParams) {
+    this.register('routerSub', LoginSub.subscribe('loginData'));
+  }
+});
 
 exposedRoutes.route('/login', {
   name: 'login',

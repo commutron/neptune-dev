@@ -10,6 +10,7 @@ import TideFollow from '/client/components/tide/TideFollow.jsx';
 
 // import PriorityList from './cards/PriorityList';
 // import ShipDates from './cards/ShipDates';
+import TotalInQu from './cards/TotalInQu';
 import ShipWindows from './cards/ShipWindows';
 import ElNino from './ElNino.jsx';
 
@@ -33,7 +34,7 @@ function useInterval(callback, delay) {
 }
 
 const AgendaWrap = ({ 
-  bCache, pCache, agCache, zCache,
+  bCache, pCache, agCache, phCache, zCache,
   user, clientTZ, app, isNightly
 })=> {
   
@@ -44,12 +45,6 @@ const AgendaWrap = ({
   const [ numState, numSet ] = useState(false);
   
   useEffect( ()=> {
-    
-    const q2tArr = Array.from(pCache.dataSet, x => 
-                      typeof x.quote2tide === 'number' && x.quote2tide );
-    const q2tTotal = q2tArr.reduce( (arr, x)=> x > 0 ? arr + x : arr, 0 );
-    const howManyHours = moment.duration(q2tTotal, "minutes")
-                          .asHours().toFixed(2, 10);
                           
     const now = moment();
     const in100 = now.clone().add(100, 'd');
@@ -68,8 +63,6 @@ const AgendaWrap = ({
       moment(x).format("dddd, MMMM Do YYYY") );
     
     numSet([
-      ['q2tTotal', q2tTotal.toFixed(2, 10)],
-      ['howManyHours', howManyHours],
       ['100daysFromNow', in100.calendar()],
       ['nonWorkDaysInNext100Days', noDays100Nice], 
     ]);
@@ -151,9 +144,13 @@ const AgendaWrap = ({
             zCache={zCache.dataSet}
             app={app} />
            
+          <TotalInQu
+            pCache={pCache}
+            phCache={phCache}
+            app={app} />
+            
           <div className='max400 space line2x'>
-            <h3>High Level</h3>
-            <h5></h5>
+            <h3>Time Span</h3>
             <dl>
               {!numState ? '...' :
                 numState.map( (entry, index)=>{

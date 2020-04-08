@@ -1,3 +1,4 @@
+import React from 'react';
 import { toast } from 'react-toastify';
 
 export default function InboxToastPop(prevUser, currUser) {
@@ -22,9 +23,13 @@ export function UnreadInboxToastPop(currUser) {
       for( let inbox of currUser.inbox ) {
         if(inbox.unread) {
           const nKey = inbox.notifyKey;
-          toast(`${String.fromCodePoint(0x1F4EC)} ${inbox.title}: ${inbox.detail}`, {
+          toast(
+            <div>
+              <i className="fas fa-envelope-open-text fa-lg fa-fw"></i>  <b>{inbox.title}</b><br />
+              <p>{inbox.detail}</p>
+            </div>, {
             autoClose: false,
-            onClose: ()=>{ Meteor.call('setReadToast', uID, nKey) }
+            onClose: ()=>{ Meteor.call('setReadToast', uID, nKey) },
           } );
         }
       }

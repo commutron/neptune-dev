@@ -20,14 +20,14 @@ export function TimeInWeek( nonWorkDays, weekStart ) {
       const dayEnd = moment(begin).add(n, 'd').endOf('day');
       const dayTotal = dayEnd.workingDiff(dayStart, 'hours', true);
       
-      const lunchTime = dayTotal <= 5 ? 0 : 45;
-      const breakTime = dayTotal <= 5 ? 15 : 30;
-      const idleTime = lunchTime + breakTime + 15;
-      const minusTime = dayTotal < idleTime ? 0 : idleTime;
-      
+      const lunchTime = dayTotal <= 5 ? 0 : 45; // << hard coded 45min lunch
+      const breakTime = dayTotal <= 5 ? 15 : 30; // << hard coded 15min breaks
+      const idleTime = lunchTime + breakTime + 15; // << hard coded common idle
+      const minusTime = dayTotal === 0 || ( dayTotal * 60 ) < idleTime ? 0 : idleTime;
+        
       const workTime = moment.duration(dayTotal, 'hours')
                         .subtract(minusTime, 'minutes').asHours();
-      
+
       weekTotal = weekTotal + workTime;
     }
     return weekTotal;
@@ -49,11 +49,11 @@ export function TimeInDay( nonWorkDays, dayStart ) {
     const begin = moment(dayStart).startOf('day').format(); 
     const end = moment(dayStart).endOf('day').format();
     const dayTotal = moment(end).workingDiff(begin, 'hours', true);
-    
-    const lunchTime = dayTotal <= 5 ? 0 : 45;
-    const breakTime = dayTotal <= 5 ? 15 : 30;
-    const idleTime = lunchTime + breakTime + 15;
-    const minusTime = dayTotal < idleTime ? 0 : idleTime;
+
+    const lunchTime = dayTotal <= 5 ? 0 : 45; // << hard coded 45min lunch
+    const breakTime = dayTotal <= 5 ? 15 : 30; // << hard coded 15min breaks
+    const idleTime = lunchTime + breakTime + 15; // << hard coded common idle
+    const minusTime = dayTotal === 0 || ( dayTotal * 60 ) < idleTime ? 0 : idleTime;
     
     const workTime = moment.duration(dayTotal, 'hours')
                       .subtract(minusTime, 'minutes').asHours();
@@ -63,7 +63,7 @@ export function TimeInDay( nonWorkDays, dayStart ) {
     return 0;
   }
 }
-
+/*
 export function TimeRemainDay( nonWorkDays, dayTime ) {
   if( Array.isArray(nonWorkDays) ) {  
     moment.updateLocale('en', {
@@ -77,17 +77,20 @@ export function TimeRemainDay( nonWorkDays, dayTime ) {
     
     const dayTotal = end.workingDiff(dayTime, 'hours', true);
     
-    const workTime = dayTotal >= 5.75 ?
-        moment.duration(dayTotal, 'hours').subtract(45, 'minutes').asHours() :
-      dayTotal >= 5.5 ?
-        moment.duration(dayTotal, 'hours').subtract(30, 'minutes').asHours() :
-      dayTotal >= 5.25 ?
-        moment.duration(dayTotal, 'hours').subtract(15, 'minutes').asHours() :
-      dayTotal;
-    const workTimeNice = workTime.toFixed(2, 10);
+    const lunchTime = dayTotal >= 5.75 ? 45 : 
+                      dayTotal >= 5.5 ? 30 : 
+                      dayTotal >= 5.25 ? 15 : 0;
+                      
+    const breakTime = dayTotal <= 6 ? 15 : 30; // fuzzy
+
+    const idleTime = lunchTime + breakTime + 15;
+    const minusTime = dayTotal === 0 || ( dayTotal * 60 ) < idleTime ? 0 : idleTime;
     
-    return workTimeNice;
+    const workTime = moment.duration(dayTotal, 'hours')
+                      .subtract(minusTime, 'minutes').asHours();
+    
+    return workTime;
   }else{
     return 0;
   }
-}
+}*/

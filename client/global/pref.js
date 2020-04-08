@@ -12,7 +12,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '1.31.1';
+    this.neptuneVersion = '1.31.2';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -48,9 +48,9 @@ class Pref {
     this.office = 'office';
     this.floor = 'floor';
     this.instruct = 'instructions';
-    this.docs = 'pisces';
+    this.docs = 'Pisces';
     this.helpDocs = 'help';
-    this.timeClock = 'time clock';
+    this.timeClock = 'Fishbowl';
     this.user = 'employees';
     // terminology
     this.admin = 'org admin';

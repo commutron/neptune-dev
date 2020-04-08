@@ -22,10 +22,10 @@ const AccountsManagePanel = ({ app, users, bCache, isDebug })=> {
   const areas = Pref.areas;
   
   const usersSort = users.sort((user1, user2)=> {
-          let u1 = user1.toLowerCase();
-          let u2 = user2.toLowerCase();
-          if (!Roles.userIsInRole(u1._id, 'active')) { return 1 }
-          if (!Roles.userIsInRole(u2._id, 'active')) { return -1 }
+          let u1 = user1.username.charAt(0).toLowerCase();
+          let u2 = user2.username.charAt(0).toLowerCase();
+          if (!Roles.userIsInRole(user1._id, 'active')) { return 1 }
+          if (!Roles.userIsInRole(user2._id, 'active')) { return -1 }
           if (u1.username < u2.username) { return -1 }
           if (u1.username > u2.username) { return 1 }
           return 0;

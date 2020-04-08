@@ -45,6 +45,7 @@ const TideWorkWeek = ({
             let durr = moment.duration(mStop.diff(x.startTime)).asHours();
             return arr + durr }, 0 );
           const dTotalNice = Math.round((dTotal + Number.EPSILON) * 100) / 100;
+                                        // exactly rounding to 2 decimal points
           const unqUsers = new Set( Array.from(tideTime, x => x.who ) ).size;
           
           workDays.push({

@@ -11,6 +11,25 @@ ArchiveDB = new Mongo.Collection('archivedb');
 
 CacheDB = new Mongo.Collection('cachedb');
 
+Meteor.publish('loginData', function(){
+  const user = Meteor.users.findOne({_id: this.userId});
+  const orgKey = user ? user.orgKey : false;
+  if(this.userId && orgKey){
+    return [
+      Meteor.users.find({_id: this.userId},
+        {fields: {
+          'username': 1,
+        }}),
+      AppDB.find({orgKey: orgKey}, 
+        {fields: { 
+          'timeClock': 1
+        }}),
+      ];
+  }else{
+    return this.ready();
+  }
+});
+
 Meteor.publish('appData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;

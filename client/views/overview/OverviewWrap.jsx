@@ -125,6 +125,8 @@ const OverviewWrap = ({
           
           if (!pB1bf) { return 1 }
           if (!pB2bf) { return -1 }
+          if (pB1.lateLate) { return -1 }
+          if (pB2.lateLate) { return 1 }
           if (pB1bf < pB2bf) { return -1 }
           if (pB1bf > pB2bf) { return 1 }
           return 0;

@@ -5,17 +5,6 @@ import { toast } from 'react-toastify';
 import BranchBuilder from '/client/components/bigUi/ArrayBuilder/BranchBuilder.jsx';
 
 const BranchesSlide = ({ app, isAdmin, isDebug })=> {
-
-  function handleBranchUpgrade() {
-    Meteor.call('UPGRADEorgBranches', (error, reply)=>{
-      error && console.log(error);
-      if(reply) {
-        toast.success(`upgraded`);
-      }else{
-        toast.error('not possible');
-      }
-    });
-  }
   
   function handleBranchAdd(e) {
     e.preventDefault();
@@ -49,12 +38,6 @@ const BranchesSlide = ({ app, isAdmin, isDebug })=> {
         <i className='fas fa-exclamation-circle'></i>
         <i> Text Areas allow for multiple entries by seperating by a comma ","</i>
       </p>
-      
-      {!app.branches &&
-        <button 
-          className='action blueHover'
-          onClick={(e)=>handleBranchUpgrade()}
-        >Upgrade DB for Batches</button>}
       
       <BranchBuilder app={app} isDebug={isDebug} />
       

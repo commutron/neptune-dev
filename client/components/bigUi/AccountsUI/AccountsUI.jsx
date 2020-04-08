@@ -5,9 +5,8 @@ import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 
 import './style.css';
 
-const AccountsUI = (props)=> {
+const AccountsUI = ({ login, uID, username })=> {
 	
-	const [ loginStatusState, loginStatusSet ] = useState( Meteor.user() );
 	const [ loginUsernameState, loginUsernameSet ] = useState( false );
 	const [ loginPasswordState, loginPasswordSet ] = useState( false );
 	const [ newUsernameState, newUsernameSet ] = useState( false );
@@ -18,16 +17,13 @@ const AccountsUI = (props)=> {
 	const [ loginResultState, loginResultSet ] = useState( '' );
 	const [ newUserResultState, newUserResultSet ] = useState( '' );
 	
-	
 	function doLogout() {
 		if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
 	  	const sessionID = Meteor.connection._lastSessionId;
 	  	const agent = window.navigator.userAgent;
 			Meteor.call('logLogInOut', false, agent, sessionID);
 	  }
-		Meteor.logout( ()=>{
-			loginStatusSet( Meteor.user() );
-		});
+		Meteor.logout();//()=>{	});
 	}
 	
 	function doLogin(e) {
@@ -44,7 +40,6 @@ const AccountsUI = (props)=> {
 	    	Meteor.logoutOtherClients();
 	    }
 	    if(!redirect || redirect === '/login') {
-	    	loginStatusSet( Meteor.user() );
 	    	!error && loginResultSet( '' );
 	    }
 	  });
@@ -82,7 +77,7 @@ const AccountsUI = (props)=> {
 	      			});
 	      			const redirect = Session.get('redirectAfterLogin');
 	      			if(!redirect || redirect === '/login') {
-					    	loginStatusSet( Meteor.user() );
+					    	loginStatusSet( Meteor.userId() );
 					    }
 	      		}
 	      	});
@@ -100,11 +95,11 @@ const AccountsUI = (props)=> {
 	let sty = { maxWidth: '240px' };
 		
 	return(
-		<div>
+		<div className='loginCard'>
 		  
-		  {loginStatusState ?
+		  {login && uID && username ?
         <div>
-        	<p className='medBig'>Signed in as: {loginStatusState.username}</p>
+        	<p className='medBig'>Signed in as: {username}</p>
         	<p>
         		<button
         			id='logout'

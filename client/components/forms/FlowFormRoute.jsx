@@ -2,16 +2,45 @@ import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import Model from '../smallUi/Model.jsx';
+import ModelLarge from '../smallUi/ModelLarge.jsx';
 import FlowBuilder from '/client/components/bigUi/ArrayBuilder/FlowBuilder.jsx';
 // requires
 // id = widget ID
 // existFlows = existing flows
 
-const FlowFormRoute = ({ 
+const FlowFormRouteWrapper = ({ 
   id, app,
   existFlows, edit, preFill,
   small, noText, lock
+})=> {
+  const name = edit ? 'Edit' : 'New Flow';
+  return(
+    <ModelLarge
+      button={name}
+      title={`${name} ${Pref.flow}`}
+      color='greenT'
+      icon='fa-stream'
+      smIcon={small}
+      lock={!Roles.userIsInRole(Meteor.userId(), 'edit') || lock}
+      noText={noText}
+    >
+      <FlowFormRoute
+        id={id}
+        app={app}
+        existFlows={existFlows}
+        edit={edit}
+        preFill={preFill}
+      />
+    </ModelLarge>
+  );
+};
+
+export default FlowFormRouteWrapper;
+  
+const FlowFormRoute = ({ 
+  id, app,
+  existFlows, edit, preFill,
+  selfclose
 })=> {
 
   const [ fill, fillSet ] = useState(false);
@@ -45,8 +74,7 @@ const FlowFormRoute = ({
         if(error)
           console.log(error);
         toast.success('Saved');
-        fillSet(false);
-        flowSet(false);
+        selfclose();
       });
     }else{
       toast.warning('Error, key not found');
@@ -58,10 +86,10 @@ const FlowFormRoute = ({
     if(!optn) {
       fillSet(false);
     }else{
+      fillSet(optn.flowKey);
       Meteor.call('activeFlowCheck', optn.flowKey, (error, reply)=>{
         error && console.log(error);
         warnSet(reply);
-        fillSet(optn.flowKey);
       });
     }
   }, []);
@@ -72,64 +100,49 @@ const FlowFormRoute = ({
   
   const eN = e ? e.title : '';
   const eF = e ? e.flow : false;
-  
-  const name = edit ? 'Edit' : 'New Flow';
 
-  return (
-    <Model
-      button={name}
-      title={`${name} ${Pref.flow}`}
-      color='greenT'
-      icon='fa-stream'
-      smIcon={small}
-      lock={!Roles.userIsInRole(Meteor.userId(), 'edit') || lock}
-      noText={noText}>
-  
-      <div>
-        <form
-          id='flowSave'
-          className=''
-          onSubmit={(e)=>save(e)}
-        >
-        {warn ?
-          <div className='centre'>
-            <p><b>{eN}</b> is in used by</p>
-            {warn === 'liveRiver' ?
-              <h3>An Active {Pref.batch} as the {Pref.buildFlow}</h3>
-            : warn === 'liveAlt' ?
-              <h3>An Active {Pref.batch} as the {Pref.buildFlowAlt}</h3>
-            : warn === 'liveAlt' ?
-              <h3>An Inactive {Pref.batch} as the {Pref.buildFlow}</h3>
-            : warn === 'liveAlt' ?
-              <h3>An Inactive {Pref.batch} as the {Pref.buildFlowAlt}</h3>
-            :
-              <p>something</p>}
-          </div>
-        : null}
-        </form>
-        
-        <FlowBuilder
-          app={app}
-          options={app.trackOption}
-          end={app.lastTrack}
-          baseline={eF}
-          onClick={(e)=>setFlow(e)} />
-          
-        <hr />
-
-        <div className='space centre'>
-          <button
-            type='submit'
-            id='go'
-            disabled={!flow}
-            form='flowSave'
-            className='action clearGreen'>SAVE</button>
-          <br />
+  return(
+    <div>
+      <form
+        id='flowSave'
+        className=''
+        onSubmit={(e)=>save(e)}
+      >
+      {warn ?
+        <div className='centre'>
+          <p><b>{eN}</b> is in used by</p>
+          {warn === 'liveRiver' ?
+            <h3>An Active {Pref.batch} as the {Pref.buildFlow}</h3>
+          : warn === 'liveAlt' ?
+            <h3>An Active {Pref.batch} as the {Pref.buildFlowAlt}</h3>
+          : warn === 'liveAlt' ?
+            <h3>An Inactive {Pref.batch} as the {Pref.buildFlow}</h3>
+          : warn === 'liveAlt' ?
+            <h3>An Inactive {Pref.batch} as the {Pref.buildFlowAlt}</h3>
+          :
+            <p>something</p>}
         </div>
-      </div>
+      : null}
+      </form>
       
-    </Model>
+      <FlowBuilder
+        app={app}
+        options={app.trackOption}
+        end={app.lastTrack}
+        baseline={eF}
+        onClick={(e)=>setFlow(e)} />
+        
+      <hr />
+
+      <div className='space centre'>
+        <button
+          type='submit'
+          id='go'
+          disabled={!flow}
+          form='flowSave'
+          className='action clearGreen'>SAVE</button>
+        <br />
+      </div>
+    </div>
   );
 };
-  
-export default FlowFormRoute;

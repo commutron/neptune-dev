@@ -95,11 +95,11 @@ moment.updateLocale('en', {
       
       // duration between finish and fulfill
       const buffer = moment(localFinish).workingDiff(shipDue, 'days', true);
-      const onTime = buffer === 0 ? 'on time' :
-                      buffer < 0 ? `${Math.abs(buffer)} days early` :  
-                      buffer < 1 ?
-                      `${buffer.toPrecision(1)} days late` :
-                      `${Math.abs(buffer)} days late`;
+      const bffr = buffer > 0 && buffer < 1 ? buffer.toPrecision(1) :
+                                               Math.round(buffer);
+      const onTime = bffr === 0 ? 'on time' :
+                      bffr < 1 ? `${Math.abs(bffr)} days early` :  
+                       `${Math.abs(bffr)} days late`;
       
       // check for over quote
       const quote2tide = checkTimeBudget(gf.tide, gf.quoteTimeBudget);

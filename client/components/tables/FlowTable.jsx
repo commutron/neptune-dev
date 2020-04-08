@@ -67,7 +67,7 @@ const FlowTable = ({ id, flows, app })=> {
                   <tr className='line3x'>
                     <th>step</th>
                     <th>type</th>
-      							<th>{Pref.phase}</th>
+      							<th>{Pref.branch}</th>
       							<th>{Pref.instruct} anchor</th>
                   </tr>
                 </thead>
@@ -76,6 +76,7 @@ const FlowTable = ({ id, flows, app })=> {
                     return (
                       <FlowRow
                         key={step.key}
+                        app={app}
                         step={step} />
                     )})}
                   <tr>
@@ -106,13 +107,17 @@ const FlowTable = ({ id, flows, app })=> {
   );
 };
 
-const FlowRow = ({ step })=> (
-  <tr>
-    <td>{step.step}</td>
-    <td>{step.type}</td>
-    <td>{step.phase}</td>
-    <td>{step.how}</td>
-  </tr>
-);
+const FlowRow = ({ app, step })=> {
+  const branch = app.branches.find( x => x.brKey === step.branchKey );
+  const niceBr =  branch ? branch.branch : '';
+  return(
+    <tr>
+      <td>{step.step}</td>
+      <td>{step.type}</td>
+      <td>{niceBr}</td>
+      <td>{step.how}</td>
+    </tr>
+  );
+};
 
 export default FlowTable;

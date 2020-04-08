@@ -1,3 +1,8 @@
+.loginCard {
+  min-height: 300px;
+  margin: 5vh 0 0 0;
+}
+
 .userFormButtons {
   height: 32px;
   min-width: 100%;

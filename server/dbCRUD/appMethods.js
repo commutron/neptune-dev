@@ -138,34 +138,6 @@ Meteor.methods({
         
   // Branches
   
-  UPGRADEorgBranches() {
-    const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
-    const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
-    if(appDoc && auth && !appDoc.branches) {
-      AppDB.update({orgKey: Meteor.user().orgKey}, {
-        $set : {
-          branches : [
-            {
-              brKey: 't3rm1n2t1ng8r2nch',
-              branch: 'complete',
-              common: 'done',
-              position: Number(0),
-              open: true,
-              reqClearance: false,
-              reqConsumable: false,
-              reqProblemDam: true,
-              reqUserLock: true,
-              buildMethods: [],
-              inspectMethods: [],
-            }
-          ]
-      }});
-      return true;
-    }
-    return false;
-  },
-  
-  
   addBranchOption(nameVal, commonVal) {
     const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
     if(appDoc && Roles.userIsInRole(Meteor.userId(), 'admin')) {
@@ -240,7 +212,7 @@ Meteor.methods({
   canBranchRemove(keyCheck) {
     try{
       const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
-      const used = appDoc.trackOption.find( x => x.branch && x.branch === keyCheck );
+      const used = appDoc.trackOption.find( x => x.branchKey && x.branchKey === keyCheck );
       if(!used && keyCheck !== 't3rm1n2t1ng8r2nch') {
         return true;
       }else{
@@ -317,7 +289,7 @@ Meteor.methods({
             'key' : new Meteor.Collection.ObjectID().valueOf(),
             'step' : step,
             'type' : type,
-            'branch' : branch,
+            'branchKey' : branch,
             'how' : false
           }
       }});
@@ -333,7 +305,7 @@ Meteor.methods({
         $set : { 
           'trackOption.$.step' : step,
           'trackOption.$.type' : type,
-          'trackOption.$.branch' : branch
+          'trackOption.$.branchKey' : branch
           }
       });
       return true;
@@ -349,7 +321,7 @@ Meteor.methods({
         'key' : 'f1n15h1t3m5t3p',
         'step' : lastStep,
         'type' : 'finish',
-        'branch': 't3rm1n2t1ng8r2nch',
+        'branchKey': 't3rm1n2t1ng8r2nch',
         'how' : lastHow
       };
       AppDB.update({orgKey: Meteor.user().orgKey}, {
@@ -374,7 +346,7 @@ Meteor.methods({
             key : new Meteor.Collection.ObjectID().valueOf(),
             gate : gate,
             type : type,
-            branch : branch
+            branchKey : branch
           }
       }});
       return true;

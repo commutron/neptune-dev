@@ -7,20 +7,25 @@ import TrackStepEdit from '/client/components/forms/TrackStepEdit.jsx';
 const TrackStepSlide = ({app, sorted})=> {
   
   const rndmKey = Math.random().toString(36).substr(2, 5);
+  const branchesSort = app.branches.sort((b1, b2)=> {
+          if (b1.position < b2.position) { return 1 }
+          if (b1.position > b2.position) { return -1 }
+          return 0;
+        });
   
   function addTrackOp(e) {
     e.preventDefault();
     
     let newOp = this[rndmKey + 'input'].value.trim();
     let type = this[rndmKey + 'type'].value.trim();
-    let phase = this[rndmKey + 'phase'].value.trim();
+    let branch = this[rndmKey + 'branch'].value.trim();
     
-    Meteor.call('addTrackStepOption', newOp, type, phase, (error, reply)=>{
+    Meteor.call('addTrackStepOption', newOp, type, branch, (error, reply)=>{
       error && console.log(error);
       if(reply) {
         this[rndmKey + 'input'].value = '';
         this[rndmKey + 'type'].value = '';
-        this[rndmKey + 'phase'].value = '';
+        this[rndmKey + 'branch'].value = '';
       }else{
         toast.error('Server Error');
       }
@@ -44,50 +49,58 @@ const TrackStepSlide = ({app, sorted})=> {
           
       <h2 className='cap'>{Pref.trackProcess} Steps</h2>
       <i>Options for tracked and controlled steps</i>
-      <form onSubmit={(e)=>addTrackOp(e)} className='inlineForm'>
-        <label htmlFor={rndmKey + 'form'}>step<br />
-          <input
-            type='text'
-            id={rndmKey + 'input'}
-            required
-          />
-        </label>
-        <label htmlFor={rndmKey + 'type'}>Type<br />
-          <select id={rndmKey + 'type'} required >
-            <option></option>
-            <option value='first'>first</option>
-            <option value='build'>build</option>
-            <option value='inspect'>inspect</option>
-            <option value='test'>test</option>
-            <option value='checkpoint'>checkpoint</option>
-            <option value='nest'>nest</option>
-          </select>
-        </label>
-        <label htmlFor={rndmKey + 'phase'}>{Pref.phase}<br />
-          <select id={rndmKey + 'phase'} required >
-            <option></option>
-            {app.phases.map( (entry, index)=>{
-              return( 
-                <option key={index} value={entry}>{entry}</option>
-            )})}
-          </select>
-        </label>
-        <label htmlFor={rndmKey + 'add'}><br />
-          <button
-            type='submit'
-            id={rndmKey + 'add'}
-            className='smallAction clearGreen'
-            disabled={false}
-          >Add New</button>
-        </label>
-      </form>
-        
+      
       <ul>
+        <form onSubmit={(e)=>addTrackOp(e)} className='inlineForm'>
+          <label htmlFor={rndmKey + 'form'}>step<br />
+            <input
+              type='text'
+              id={rndmKey + 'input'}
+              required
+            />
+          </label>
+          <label htmlFor={rndmKey + 'type'}>Type<br />
+            <select 
+              id={rndmKey + 'type'}
+              className='tableAction'
+              required
+            >
+              <option></option>
+              <option value='first'>first</option>
+              <option value='build'>build</option>
+              <option value='inspect'>inspect</option>
+              <option value='test'>test</option>
+              <option value='checkpoint'>checkpoint</option>
+              <option value='nest'>nest</option>
+            </select>
+          </label>
+          <label htmlFor={rndmKey + 'branch'}>{Pref.branch}<br />
+            <select id={rndmKey + 'branch'} required >
+              <option></option>
+              {branchesSort.map( (entry, index)=>{
+                return( 
+                  <option key={index} value={entry.brKey}>{entry.branch}</option>
+              )})}
+            </select>
+          </label>
+          <label htmlFor={rndmKey + 'add'}><br />
+            <button
+              type='submit'
+              id={rndmKey + 'add'}
+              className='smallAction clearGreen'
+              disabled={false}
+            >Add New</button>
+          </label>
+        </form>
+        
+        <hr />
+      
         {sorted.map( (entry, index)=>{
           return( 
             <TrackStepEdit 
               key={rndmKey + index + entry.key} 
-              app={app} 
+              app={app}
+              branchesSort={branchesSort}
               data={entry} />
         )})}
       </ul>

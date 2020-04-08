@@ -68,8 +68,8 @@ const PeopleDataWrap = ({
       <div className='simpleContent'>
       
         <Slides
-          menu={[
-            <b><i className='fas fa-satellite-dish fa-fw'></i>  Current</b>,
+          menu={[           // satellite-dish
+            <b><i className='fas fa-walking fa-fw'></i>  Current</b>,
             <b><i className='fas fa-history fa-fw'></i>  Daily History</b>,
             <b><i className='fas fa-tachometer-alt fa-fw'></i>  Weekly Metrics</b>,
             <b><i className='far fa-calendar-alt fa-fw'></i>  Work Schedule</b>,
