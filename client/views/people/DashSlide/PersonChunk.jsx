@@ -7,15 +7,16 @@ import UserNice from '/client/components/smallUi/UserNice.jsx';
 
 const PersonChunk = ({ 
   userChunk, bCache, app, 
-  updatePhases, removePhaser, update, clientTZ
+  updateBranches, removeBranch, update, 
+  isDebug, clientTZ
 })=> {
   
   const uC = userChunk;
   
-  const [ phaseGuess, setGuess ] = useState(false);
+  const [ branchGuess, setGuess ] = useState(false);
   
   useEffect( ()=>{
-    Meteor.call('phaseBestGuess', 
+    Meteor.call('branchBestGuess', 
     userChunk.uID, 
     userChunk.batch,
     userChunk.tideBlock.startTime,
@@ -28,17 +29,17 @@ const PersonChunk = ({
   }, [userChunk, update]);
   
   useEffect( ()=>{
-    if(phaseGuess) {
-      phaseGuess[1].forEach( (gu, ix) => updatePhases(userChunk.uID+ix, gu) );
-    }
-    return ()=>removePhaser(userChunk.uID);
-  }, [phaseGuess]);
+    if(branchGuess) {
+      branchGuess[1].forEach( (gu, ix) => updateBranches(userChunk.uID+ix, gu) );
+    }               // with index appended to set multiple branch per person
+    //return ()=>removeBranch(userChunk.uID);
+  }, [branchGuess]);
   
-  // useEffect( ()=>{
-  //   return ()=>removePhaser(userChunk.uID);
-  // }, []);
+  useEffect( ()=>{
+    return ()=>removeBranch(userChunk.uID);
+  }, []);
   
-  Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(phaseGuess);
+  isDebug && console.log(branchGuess);
   
   const moreInfo = bCache ? bCache.dataSet.find( x => x.batch === uC.batch) : false;
   const what = moreInfo ? moreInfo.isWhat : 'unavailable';
@@ -47,10 +48,10 @@ const PersonChunk = ({
     <tr className='leftText line2x numFont'>
       <td className='noRightBorder medBig'><UserNice id={uC.uID} /></td>
       <td className='noRightBorder'>
-        {!phaseGuess ? 
+        {!branchGuess ? 
           <i className='clean small'>unknown</i> 
         : 
-          phaseGuess[1].join(', ')
+          branchGuess[1].join(', ')
         }
       </td>
       <td className='noRightBorder'>{uC.batch}</td>

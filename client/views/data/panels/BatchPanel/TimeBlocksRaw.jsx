@@ -5,10 +5,9 @@ import Pref from '/client/global/pref.js';
 import { AnonyUser } from '/client/components/smallUi/UserNice.jsx';
 import { ForceRemoveTideBlock } from '/client/views/app/appSlides/DataRepair.jsx';
 
-const TimeBlocksRaw = ({ batch, tide, clientTZ })=> {
+const TimeBlocksRaw = ({ batch, tide, clientTZ, isDebug })=> {
   
   const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
-  const isDebug = Roles.userIsInRole(Meteor.userId(), 'debug');
   
   const [ showZero, showZeroSet ] = useState(isDebug);
   
@@ -67,10 +66,10 @@ export default TimeBlocksRaw;
 
 const RawBlock = ({ tB, batch, clientTZ, isDebug, showZero })=> {
   
-  const [ phGuess, setGuess ] = useState(false);
+  const [ brGuess, setGuess ] = useState(false);
   
   useEffect( ()=>{
-    Meteor.call('phaseBestGuess', tB.who, batch, tB.startTime, tB.stopTime, clientTZ,
+    Meteor.call('branchBestGuess', tB.who, batch, tB.startTime, tB.stopTime, clientTZ,
     (err, asw)=>{
       err && console.log(err);
       if(asw) {
@@ -93,8 +92,8 @@ const RawBlock = ({ tB, batch, clientTZ, isDebug, showZero })=> {
       <td>{mStart.format('YYYY/MM/DD-kk:mm')}</td>
       <td>{mStop.format('YYYY/MM/DD-kk:mm')}</td>
       <td>{durr} minutes</td>
-      <td>{phGuess && phGuess[1].join(', ') }</td>
-      {isDebug && <td>{phGuess ? phGuess[0] : '....'}</td>}
+      <td>{brGuess && brGuess[1].join(', ') }</td>
+      {isDebug && <td>{brGuess ? brGuess[0] : '....'}</td>}
     </tr>
   );
 };

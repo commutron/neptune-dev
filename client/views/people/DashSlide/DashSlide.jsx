@@ -9,31 +9,34 @@ import PeoplePanel from './PeoplePanel.jsx';
 const DashSlide = ({ app, user, users, batches, bCache, isDebug })=> {
   
   const [ update, forceUpdate] = useState(false);
+  
   const [ eBatchesState, eBatchesSet ] = useState([]);
   const [ xyBatchState, xyBatchSet ] = useState([]);
+  
   const [ eUsersState, eUsersSet ] = useState([]);
   const [ dUsersState, dUsersSet ] = useState([]);
-  const [ userPhases, setUserPhases ] = useState({});
-  const [ pList, setPhaseList ] = useState([]);
-  const [ phasesXY, setPhasesXY ] = useState([]);
-  const [ maxHours, maxHoursSet ] = useState(0);
   
-  const updatePhases = (uID, newPhase)=>{
-    let currPhases = userPhases;
-    currPhases[uID] = newPhase;
-    setUserPhases(currPhases);
-    const smpList = _.values(currPhases);
-    setPhaseList(smpList);
+  const [ userBranches, setUserBranches ] = useState({});
+  const [ brList, setBranchList ] = useState([]);
+  const [ branchesXY, setBranchesXY ] = useState([]);
+  
+  const updateBranches = (uID, newBranch)=>{
+    let currBranches = userBranches;
+    currBranches[uID] = newBranch;
+    setUserBranches(currBranches);
+    const smpList = _.values(currBranches);
+    setBranchList(smpList);
   };
   
-  const removePhaser = (uID)=>{
-    const indexes = Object.keys(app.phases);
-    const rmvKeys = Array.from(indexes, x => uID+x ); 
-    let currPhases = userPhases;
-    const lessPhases = _.omit(currPhases, rmvKeys);
-    setUserPhases(lessPhases);
-    const smpList = _.values(lessPhases);
-    setPhaseList(smpList);
+  const removeBranch = (uID)=>{
+    const indexes = Object.keys(app.branches); // just a list of [0,1,2...]
+    const rmvKeys = Array.from(indexes, x => uID+x ); // person in multiple
+    
+    let currBranches = userBranches;
+    const lessBranch = _.omit(currBranches, rmvKeys);
+    setUserBranches(lessBranch);
+    const smpList = _.values(lessBranch);
+    setBranchList(smpList);
   };
   
   const obj2xy = (obj) => {
@@ -80,13 +83,6 @@ const DashSlide = ({ app, user, users, batches, bCache, isDebug })=> {
     });
     
     const itrXY = obj2xy(qBatchesClean);
-  
-    // let QqBatches = eBatchesState.reduce( (allBatch, batch, index, array)=> { 
-    //   const objkey = !batch ? false : batch.batch;
-    //   objkey &&
-    //     objkey in allBatch ? allBatch[objkey]++ : allBatch[objkey] = 1;
-    //   return allBatch;
-    // }, {});
     
     isDebug && console.log({qBatches, itrXY});
     xyBatchSet(itrXY);
@@ -94,15 +90,15 @@ const DashSlide = ({ app, user, users, batches, bCache, isDebug })=> {
   
   
   useEffect( ()=>{
-    const pQuant = pList.reduce( (allPhase, phase)=> { 
-      phase &&
-        phase in allPhase ? allPhase[phase]++ : allPhase[phase] = 1;
-      return allPhase;
-    }, {});
-    const pXY = obj2xy(pQuant);
-    setPhasesXY(pXY);
-  }, [pList]);
-  
+    const qBranch = _.countBy(brList, x => x);
+    const qBranchClean = _.omit(qBranch, (value, key, object)=> {
+      return key == false;
+    });
+
+    const brXY = obj2xy(qBranchClean);
+    
+    setBranchesXY(brXY);
+  }, [brList]);
   
 
   return(
@@ -128,10 +124,10 @@ const DashSlide = ({ app, user, users, batches, bCache, isDebug })=> {
         />
         
         <NumStatRing
-          total={phasesXY.length}
-          nums={phasesXY}
-          name={`${phasesXY.length == 1 ? `${Pref.phase} Is` : `${Pref.phases} Are`} ${Pref.engaged}`} 
-          title={`People currently ${Pref.engaged} in\n${phasesXY.length} ${Pref.phases}`} 
+          total={branchesXY.length}
+          nums={branchesXY}
+          name={`${branchesXY.length == 1 ? `${Pref.branch} Is` : `${Pref.branches} Are`} ${Pref.engaged}`} 
+          title={`People currently ${Pref.engaged} in\n${branchesXY.length} ${Pref.branches}`} 
           colour='blue'
         />
         
@@ -153,10 +149,10 @@ const DashSlide = ({ app, user, users, batches, bCache, isDebug })=> {
           dUsers={dUsersState}
           eBatches={eBatchesState}
           bCache={bCache}
-          updatePhases={(id, ph)=>updatePhases(id, ph)}
-          removePhaser={(id)=>removePhaser(id)}
-          update={update} 
-          potentialTime={maxHours * eUsersState.length} />
+          updateBranches={(id, br)=>updateBranches(id, br)}
+          removeBranch={(id)=>removeBranch(id)}
+          update={update}
+          isDebug={isDebug} />
           
       </div>    
           

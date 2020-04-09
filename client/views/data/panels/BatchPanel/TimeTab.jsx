@@ -9,7 +9,8 @@ import TimeBudgetsChunk from './TimeBudgetsChunk.jsx';
 import TimeBlocksRaw from './TimeBlocksRaw.jsx';
 
 const TimeTab = ({
-  a, b, v, user,
+  a, b, v, 
+  user, isDebug,
   totalUnits,
   done, allDone,
   riverFlow, riverAltFlow
@@ -28,7 +29,8 @@ const TimeTab = ({
         b={b}
         v={v}
         totalUnits={totalUnits}
-        clientTZ={clientTZ} />
+        clientTZ={clientTZ}
+        isDebug={isDebug} />
         
       <div className='dropCeiling vmargin space'>
         <ProgLayerBurndown
@@ -54,7 +56,11 @@ const TimeTab = ({
       </div>
       
       <div className='vmargin space'>
-        <TimeBlocksRaw batch={b.batch} tide={b.tide} clientTZ={clientTZ} />
+        <TimeBlocksRaw 
+          batch={b.batch} 
+          tide={b.tide} 
+          clientTZ={clientTZ}
+          isDebug={isDebug} />
       </div>
               
     </div>  

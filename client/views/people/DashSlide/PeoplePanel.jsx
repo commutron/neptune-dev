@@ -8,7 +8,7 @@ import PersonChunk from './PersonChunk.jsx';
 
 const PeoplePanel = ({ 
   app, eUsers, dUsers, eBatches, bCache, 
-  updatePhases, removePhaser, update 
+  updateBranches, removeBranch, update, isDebug
 })=> {
   
   const [ userChunks, setChunks ] = useState([]);
@@ -36,7 +36,7 @@ const PeoplePanel = ({
     setChunks(nmrlChunks);
   }, [eUsers, eBatches, update]);
   
-  Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({userChunks});
+  isDebug && console.log({userChunks});
   
   const clientTZ = moment.tz.guess();
    
@@ -54,9 +54,10 @@ const PeoplePanel = ({
                 userChunk={entry}
                 bCache={bCache}
                 app={app}
-                updatePhases={(id, ph)=>updatePhases(id, ph)}
-                removePhaser={(id)=>removePhaser(id)}
+                updateBranches={(id, ph)=>updateBranches(id, ph)}
+                removeBranch={(id)=>removeBranch(id)}
                 update={update}
+                isDebug={isDebug}
                 clientTZ={clientTZ} />
           )})}
         </tbody>

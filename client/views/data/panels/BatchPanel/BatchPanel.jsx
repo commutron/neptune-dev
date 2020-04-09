@@ -83,6 +83,7 @@ const BatchPanel = ({ batchData, widgetData, user, isDebug, app, flowData })=> {
           b={batchData}
           v={v}
           user={user}
+          isDebug={isDebug}
           totalUnits={flowData.progCounts.totalRegUnits + flowData.progCounts.totalAltUnits}
           done={done}
           allDone={allDone}
