@@ -191,7 +191,7 @@ Meteor.methods({
 
   //// Waterfall
   
-  addCounter(batchId, wfKey, gate, type, phase) {
+  addCounter(batchId, wfKey, gate, type, wfBranch) {
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
       XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
         $push : { 
@@ -199,7 +199,8 @@ Meteor.methods({
             wfKey: wfKey,
             gate: gate,
             type: type,
-            phase: phase,
+            action: 'clicker',// "slider", "timer", "stopwatch"
+            branchKey: wfBranch,
             counts: []
           }
       }});
@@ -227,7 +228,7 @@ Meteor.methods({
     }
   },
   
-  //// counter entries
+  //// counter entries \\\\ // meteor.apply( noRetry ) ????
   
   metaCounter(batchId, wfKey, meta) {
     if(!Roles.userIsInRole(Meteor.userId(), 'active')) {

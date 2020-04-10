@@ -59,6 +59,13 @@ const DataRepair = ({ app, users })=> {
     });
   }
   
+  function clearAllCaches() {
+    Meteor.call('resetALLCacheDB', (error)=>{
+      error && console.log(error);
+      toast.success('method called', { autoClose: false });
+    });
+  }
+  
   function clearAllWatch() {
     Meteor.call('clearAllUserWatchlists', (error, reply)=>{
       error && console.log(error);
@@ -125,7 +132,15 @@ const DataRepair = ({ app, users })=> {
       
     
       
-      <h2 className='cap'>Force Update ChacheDB</h2>
+      <h2 className='cap'>Delete all CacheDB Entries</h2>
+      <button
+        onClick={()=>clearAllCaches()}
+        className='action clear redT'
+      >Delete All Caches</button>
+      
+      <hr />
+      
+      <h2 className='cap'>Force Update CacheDB Entries</h2>
       <button
         onClick={()=>updateCaches()}
         className='action clear blackT'

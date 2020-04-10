@@ -1,63 +1,89 @@
-import { Random } from 'meteor/random'
+// import { Random } from 'meteor/random'
 import moment from 'moment';
 
+
+export function batchCacheUpdate(accessKey, force) {
+  if(typeof accessKey === 'string') {
+    const timeOut = moment().subtract(12, 'hours').toISOString();
+    const currentCache = CacheDB.findOne({
+      orgKey: accessKey, 
+      lastUpdated: { $gte: new Date(timeOut) },
+      dataName:'batchInfo'});
+    
+    if(force || !currentCache ) {
+      const batches = BatchDB.find({orgKey: accessKey}).fetch();
+      const batchesX = XBatchDB.find({orgKey: accessKey}).fetch();
+      const slim = [...batches,...batchesX].map( x => {
+        return Meteor.call('getBasicBatchInfo', x.batch);
+      });
+      CacheDB.upsert({orgKey: accessKey, dataName: 'batchInfo'}, {
+        $set : { 
+          orgKey: accessKey,
+          lastUpdated: new Date(),
+          dataName: 'batchInfo',
+          dataSet: slim,
+          assembled: true,
+          minified: true
+      }});
+    }
+  }
+}
+
+export function branchConCacheUpdate(accessKey, force) {
+  if(typeof accessKey === 'string') {
+    const timeOut = moment().subtract(15, 'minutes').toISOString();
+    const currentCache = CacheDB.findOne({
+      orgKey: accessKey, 
+      lastUpdated: { $gte: new Date(timeOut) },
+      dataName:'branchCondition'});
+
+    if( force || !currentCache ) {
+      const batches = BatchDB.find({orgKey: accessKey, live: true}).fetch();
+      const batchesX = XBatchDB.find({orgKey: accessKey, live: true}).fetch();
+      const slim = [...batches,...batchesX].map( x => {
+        return Meteor.call('branchCondition', x._id, accessKey);
+      });
+      CacheDB.upsert({orgKey: accessKey, dataName: 'branchCondition'}, {
+        $set : { 
+          orgKey: accessKey,
+          lastUpdated: new Date(),
+          dataName: 'branchCondition',
+          dataSet: slim,
+          assembled: true,
+          minified: false
+      }});
+    }
+  }
+}
+  
+  
 Meteor.methods({
 
 ///////////// CACHES //////////////////
   FORCEcacheUpdate(clientTZ) {
     if(Roles.userIsInRole(Meteor.userId(), 'active')) {
       const key = Meteor.user().orgKey;
-      Meteor.call('batchCacheUpdate', key, true);
+      batchCacheUpdate(key, true);
       Meteor.call('priorityCacheUpdate', key, clientTZ, true);
-      Meteor.call('agendaCacheUpdate', key, clientTZ, true);
       Meteor.call('activityCacheUpdate', key, clientTZ, true);
-      Meteor.call('phaseCacheUpdate', key, true);
+      branchConCacheUpdate(key, true);
       Meteor.call('completeCacheUpdate', key, true);
     }
   },
   
-  REQUESTcacheUpdate(clientTZ, batchUp, priorityUp, agendaUp, activityUp, phaseUp, compUp) {
+  REQUESTcacheUpdate(clientTZ, batchUp, priorityUp, activityUp, branchConUp, compUp) {
     if(Roles.userIsInRole(Meteor.userId(), 'active')) {
       const key = Meteor.user().orgKey;
       batchUp && Meteor.defer( ()=>{
-        Meteor.call('batchCacheUpdate', key, false) });
+        batchCacheUpdate(key, false) });
       priorityUp && Meteor.defer( ()=>{
         Meteor.call('priorityCacheUpdate', key, clientTZ, false) });
-      agendaUp && Meteor.defer( ()=>{
-        Meteor.call('agendaCacheUpdate', key, clientTZ, false) });
       activityUp && Meteor.defer( ()=>{
         Meteor.call('activityCacheUpdate', key, clientTZ, false) });
-      phaseUp && Meteor.defer( ()=>{
-        Meteor.call('phaseCacheUpdate', key, false) });
+      branchConUp && Meteor.defer( ()=>{
+        branchConCacheUpdate(key, false) });
       compUp && Meteor.defer( ()=>{
         Meteor.call('completeCacheUpdate', key, false) });
-    }
-  },
-    
-  batchCacheUpdate(accessKey, force) {
-    if(typeof accessKey === 'string') {
-      const timeOut = moment().subtract(12, 'hours').toISOString();
-      const currentCache = CacheDB.findOne({
-        orgKey: accessKey, 
-        lastUpdated: { $gte: new Date(timeOut) },
-        dataName:'batchInfo'});
-      
-      if(force || !currentCache ) {
-        const batches = BatchDB.find({orgKey: accessKey}).fetch();
-        const batchesX = XBatchDB.find({orgKey: accessKey}).fetch();
-        const slim = [...batches,...batchesX].map( x => {
-          return Meteor.call('getBasicBatchInfo', x.batch);
-        });
-        CacheDB.upsert({orgKey: accessKey, dataName: 'batchInfo'}, {
-          $set : { 
-            orgKey: accessKey,
-            lastUpdated: new Date(),
-            dataName: 'batchInfo',
-            dataSet: slim,
-            assembled: true,
-            minified: true
-        }});
-      }
     }
   },
   
@@ -74,42 +100,22 @@ Meteor.methods({
         const slim = batches.map( x => {
           return Meteor.call('priorityRank', x._id, clientTZ, accessKey);
         });
+        const slimSort = slim.sort((pB1, pB2)=> { // insert a master index~
+          const pB1ffr = pB1.estEnd2fillBuffer;
+          const pB2ffr = pB2.estEnd2fillBuffer;
+          if (!pB1ffr) { return 1 }
+          if (!pB2ffr) { return -1 }
+          if (pB1.lateLate) { return -1 }
+          if (pB2.lateLate) { return 1 }
+          if (pB1ffr < pB2ffr) { return -1 }
+          if (pB1ffr > pB2ffr) { return 1 }
+          return 0;
+        });
         CacheDB.upsert({orgKey: accessKey, dataName: 'priorityRank'}, {
           $set : { 
             orgKey: accessKey,
             lastUpdated: new Date(),
             dataName: 'priorityRank',
-            dataSet: slim,
-            assembled: true,
-            minified: false
-        }});
-      }
-    }
-  },
-  
-  agendaCacheUpdate(accessKey, clientTZ, force) {
-    if(typeof accessKey === 'string') {
-      const timeOut = moment().subtract(20, 'minutes').toISOString();
-      const currentCache = CacheDB.findOne({
-        orgKey: accessKey, 
-        lastUpdated: { $gte: new Date(timeOut) },
-        dataName:'agendaOrder'});
-      
-      if(force || !currentCache ) {
-        const batches = BatchDB.find({orgKey: accessKey, live: true}).fetch();
-        const slim = batches.map( x => {
-          return Meteor.call('agendaOrder', x._id, clientTZ, accessKey);
-        });
-        const slimSort = slim.sort((a1, a2)=> {
-          if (a1.commenceDT < a2.commenceDT) { return -1 }
-          if (a1.commenceDT > a2.commenceDT) { return 1 }
-          return 0;
-        });
-        CacheDB.upsert({orgKey: accessKey, dataName: 'agendaOrder'}, {
-          $set : { 
-            orgKey: accessKey,
-            lastUpdated: new Date(),
-            dataName: 'agendaOrder',
             dataSet: slimSort,
             assembled: true,
             minified: false
@@ -145,32 +151,7 @@ Meteor.methods({
     }
   },
   
-  phaseCacheUpdate(accessKey, force) {
-    if(typeof accessKey === 'string') {
-      const timeOut = moment().subtract(15, 'minutes').toISOString();
-      const currentCache = CacheDB.findOne({
-        orgKey: accessKey, 
-        lastUpdated: { $gte: new Date(timeOut) },
-        dataName:'phaseCondition'});
-
-      if( force || !currentCache ) {
-        const batches = BatchDB.find({orgKey: accessKey, live: true}).fetch();
-        const batchesX = XBatchDB.find({orgKey: accessKey, live: true}).fetch();
-        const slim = [...batches,...batchesX].map( x => {
-          return Meteor.call('phaseCondition', x._id, accessKey);
-        });
-        CacheDB.upsert({orgKey: accessKey, dataName: 'phaseCondition'}, {
-          $set : { 
-            orgKey: accessKey,
-            lastUpdated: new Date(),
-            dataName: 'phaseCondition',
-            dataSet: slim,
-            assembled: true,
-            minified: false
-        }});
-      }
-    }
-  },
+  //CacheDB.remove({orgKey: accessKey, dataName: 'phaseCondition'}
   
   completeCacheUpdate(accessKey, force) {
     if(typeof accessKey === 'string') {

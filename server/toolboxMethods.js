@@ -88,7 +88,26 @@ Meteor.methods({
       return false;
     }
   },
-  resetCacheDB() {
+  */
+  
+  /*
+  UNSETphaseArray() {
+    try{
+      if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+        AppDB.update({orgKey: Meteor.user().orgKey}, {
+          $unset : { 
+            'phases': ""
+          }})//,{multi: true});
+      }else{
+        null;
+      }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  */
+  
+  resetALLCacheDB() {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       CacheDB.remove({orgKey: Meteor.user().orgKey});
       return true;
@@ -96,7 +115,6 @@ Meteor.methods({
       return false;
     }
   },
-  */
   
   
   repairNonConsDANGEROUS(oldText, newText, exact) {

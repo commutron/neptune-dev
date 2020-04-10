@@ -13,7 +13,7 @@ const View = ({
   login, sub, readyUsers, ready, 
   username, user, clientTZ, org, app,
   isNightly,
-  bCache, pCache, agCache, phCache, zCache
+  bCache, pCache, brCache, zCache
 })=> {
   
   const prevUser = usePrevious(user);
@@ -42,8 +42,7 @@ const View = ({
       <AgendaWrap 
         bCache={bCache}
         pCache={pCache}
-        agCache={agCache}
-        phCache={phCache}
+        brCache={brCache}
         zCache={zCache}
         user={user}
         app={app}
@@ -97,8 +96,7 @@ export default withTracker( () => {
       app: AppDB.findOne({org: org}),
       bCache: CacheDB.findOne({dataName: 'batchInfo'}),
       pCache: CacheDB.findOne({dataName: 'priorityRank'}),
-      agCache: CacheDB.findOne({dataName: 'agendaOrder'}),
-      phCache: CacheDB.findOne({dataName: 'phaseCondition'}),
+      brCache: CacheDB.findOne({dataName: 'branchCondition'}),
       zCache: CacheDB.findOne({dataName: 'completeBatch'}),
     };
   }

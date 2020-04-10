@@ -6,23 +6,22 @@ import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 import BatchTopStatus from './BatchTopStatus.jsx';
 import KittingChecks from './KittingChecks.jsx';
 import { TideActivitySquare } from '/client/components/tide/TideActivity';
-import PhaseProgress from './PhaseProgress.jsx';
+import BranchProgress from './BranchProgress.jsx';
 import NonConCounts from './NonConCounts.jsx';
 
 const BatchDetails = ({
   oB,
-  bCache, pCache, agCache, acCache,
-  user, clientTZ, app, isDebug, isNightly,
+  bCache, pCache, acCache,
+  user, clientTZ, app, branchesSort,
+  isDebug, isNightly,
   dense, kittingArea, releasedArea
 })=> {
   
-  const statusCols = isNightly ?
-    ['due', 'remaining workdays', 'priority rank', 'agenda position', 'items quantity'] :
-    ['due', 'remaining workdays', 'priority rank', 'items quantity'];
+  const statusCols = ['due', 'remaining workdays', 'priority rank', 'items quantity'];
   
   const clearCols = Array.from(Pref.clearencesArray, x => x.context );
   const kitCols = [...clearCols, 'flow', 'released'];
-  const progCols = app.phases;
+  const progCols = Array.from(branchesSort, x => x.common);
   const ncCols = ['NC total', 'NC remain', 'NC per item', 'NC items', 'scrap', 'RMA'];
   // due == 'fulfill', 'ship'
   const fullHead = ['SO',...statusCols,...kitCols,'active',...progCols,...ncCols,'watch'];
@@ -57,7 +56,6 @@ const BatchDetails = ({
               user={user}
               clientTZ={clientTZ}
               pCache={pCache}
-              agCache={agCache}
               acCache={acCache}
               app={app}
               isDebug={isDebug}
@@ -80,7 +78,7 @@ export default BatchDetails;
 
 const BatchDetailChunk = ({ 
   rowIndex, oB, user, clientTZ, 
-  pCache, agCache, acCache, app, 
+  pCache, acCache, app, 
   isDebug, isNightly,
   statusCols, kitCols, progCols, ncCols, dense,
   kittingArea, releasedArea
@@ -116,7 +114,6 @@ const BatchDetailChunk = ({
         dueDate={oB.salesEnd || oB.end}
         clientTZ={clientTZ}
         pCache={pCache}
-        agCache={agCache}
         app={app}
         isDebug={isDebug}
         isNightly={isNightly}
@@ -148,7 +145,7 @@ const BatchDetailChunk = ({
       
     {!kittingArea &&
       <Fragment>
-        <PhaseProgress
+        <BranchProgress
           batchID={oB._id}
           releasedToFloor={releasedToFloor}
           progCols={progCols}

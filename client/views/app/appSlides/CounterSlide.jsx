@@ -6,15 +6,15 @@ const CounterSlide = ({ app })=> {
   
   const rndmKey = Math.random().toString(36).substr(2, 5);
   
-  function addTrackOp(e) {
+  function addCountTrackOp(e) {
     e.preventDefault();
     
     let newOp = this[rndmKey + 'input'].value.trim();
     newOp = newOp.replace("|", "-");
     let type = this[rndmKey + 'type'].value.trim();
-    let phase = this[rndmKey + 'phase'].value.trim();
+    let branch = this[rndmKey + 'branch'].value.trim();
     
-    const newSet = newOp + '|' + type + '|' + phase;
+    const newSet = newOp + '|' + type + '|' + branch;
     
     Meteor.call('addCountOption', newSet, (error, reply)=>{
       if(error)
@@ -22,7 +22,7 @@ const CounterSlide = ({ app })=> {
       if(reply) {
         this[rndmKey + 'input'].value = '';
         this[rndmKey + 'type'].value = '';
-        this[rndmKey + 'phase'].value = '';
+        this[rndmKey + 'branch'].value = '';
       }else{
         toast.warning('server error');
       }
@@ -40,7 +40,7 @@ const CounterSlide = ({ app })=> {
           
       <h2 className='cap'>{Pref.counter} gates</h2>
       <i>Options for counters</i>
-      <form onSubmit={(e)=>addTrackOp(e)} className='inlineForm'>
+      <form onSubmit={(e)=>addCountTrackOp(e)} className='inlineForm'>
         <label htmlFor={rndmKey + 'form'}>gate<br />
           <input
             type='text'
@@ -49,7 +49,11 @@ const CounterSlide = ({ app })=> {
           />
         </label>
         <label htmlFor={rndmKey + 'type'}>Type<br />
-          <select id={rndmKey + 'type'} required >
+          <select 
+            id={rndmKey + 'type'}
+            className='tableAction'
+            required
+          >
             <option></option>
             <option value='build'>build</option>
             <option value='inspect'>inspect</option>
@@ -58,12 +62,12 @@ const CounterSlide = ({ app })=> {
             <option value='finish'>finish</option>
           </select>
         </label>
-        <label htmlFor={rndmKey + 'phase'}>{Pref.phase}<br />
-          <select id={rndmKey + 'phase'} required >
+        <label htmlFor={rndmKey + 'branch'}>{Pref.branch}<br />
+          <select id={rndmKey + 'branch'} required >
             <option></option>
-            {app.phases.map( (entry, index)=>{
+            {app.branches.map( (entry, index)=>{
               return( 
-                <option key={index} value={entry}>{entry}</option>
+                <option key={index} value={entry.brKey}>{entry.branch}</option>
             )})}
           </select>
         </label>
@@ -79,8 +83,10 @@ const CounterSlide = ({ app })=> {
         
       <ul>
         {app.countOption && app.countOption.map( (entry, index)=>{
+          const branchObj = app.branches.find( y => y.brKey === entry.branchKey );
+          const branchName = branchObj ? branchObj.branch : 'n/a';
           return( 
-            <li key={index}>{entry.gate} - {entry.type} - {entry.phase || 'n/a'}</li> 
+            <li key={index}>{entry.gate} - {entry.type} - {branchName}</li> 
           );
         })}
       </ul>

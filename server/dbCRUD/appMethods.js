@@ -244,43 +244,6 @@ Meteor.methods({
     }
   },
   
-  // Depreciated Phase
-  
-  canPhaseRemove(value) {
-    try{
-      const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
-      const used = appDoc.trackOption.find( x => x.phase === value );
-      if(!used && value !== 'finish') {
-        return true;
-      }else{
-        return false;
-      }
-    }catch (err) {
-      throw new Meteor.Error(err);
-    }
-  },
-  
-  removePhaseOption(value) {
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      try{
-        const isFree = Meteor.call('canPhaseRemove');
-        if(isFree) {
-          AppDB.update({orgKey: Meteor.user().orgKey}, {
-            $pull : { 
-              phases : value
-          }});
-          return true;
-        }else{
-          return false;
-        }
-      }catch (err) {
-        throw new Meteor.Error(err);
-      }
-    }else{
-      return false;
-    }
-  },
-  
   addTrackStepOption(step, type, branch) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {
@@ -354,7 +317,22 @@ Meteor.methods({
       return false;
     }
   },
-  
+  /*
+  editCountOption(opKey, branch) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey, 'countOption.key' : opKey}, {
+        $set : { 
+          // 'countOption.$.gate' : step,
+          // 'countOption.$.type' : type,
+          'countOption.$.branchKey' : branch
+          }
+      });
+      return true;
+    }else{
+      return false;
+    }
+  },
+  */
   ////////// Lock Unlock control type ////////////////
   
   setLockType(lockVal) {

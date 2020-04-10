@@ -34,7 +34,7 @@ function useInterval(callback, delay) {
 }
 
 const AgendaWrap = ({ 
-  bCache, pCache, agCache, phCache, zCache,
+  bCache, pCache, brCache, zCache,
   user, clientTZ, app, isNightly
 })=> {
   
@@ -78,7 +78,6 @@ const AgendaWrap = ({
     Meteor.call('REQUESTcacheUpdate', clientTZ, 
       true, // batchUp
       true, // priorityUp
-      isNightly, // agendaUp
       false, // activityUp
       false, // phaseUp
       false, // compUp
@@ -126,7 +125,6 @@ const AgendaWrap = ({
           <ElNino
             bCache={bCache}
             pCache={pCache}
-            agCache={agCache}
             zCache={zCache}
             user={user}
             clientTZ={clientTZ}
@@ -146,7 +144,7 @@ const AgendaWrap = ({
            
           <TotalInQu
             pCache={pCache}
-            phCache={phCache}
+            brCache={brCache}
             app={app} />
             
           <div className='max400 space line2x'>

@@ -14,7 +14,7 @@ import BatchDetails from './columns/BatchDetails';
 
 
 const OverviewWrap = ({ 
-  b, bx, bCache, pCache, agCache, acCache, phCache, 
+  b, bx, bCache, pCache, acCache, brCache, 
   user, clientTZ, app, isDebug, isNightly
 })=> {
   
@@ -61,9 +61,8 @@ const OverviewWrap = ({
     Meteor.call('REQUESTcacheUpdate', clientTZ, 
       true, // batchUp
       true, // priorityUp
-      isNightly, // agendaUp
       true, // activityUp
-      true, // phaseUp
+      true, // branchConUp
       false, // compUp
     ()=>{
       sortInitial();
@@ -103,8 +102,8 @@ const OverviewWrap = ({
         }) 
         :
         liveBatches.filter( bx => {
-          const cB = phCache.dataSet.find( x => x.batchID === bx._id);
-          const cP = cB && cB.phaseSets.find( x => x.phase === filterBy );
+          const cB = brCache.dataSet.find( x => x.batchID === bx._id);
+          const cP = cB && cB.branchSets.find( x => x.branch === filterBy );
           const con = cP && cP.condition;
           
           isDebug && console.log(`${bx.batch}: ${con}`);
@@ -161,7 +160,12 @@ const OverviewWrap = ({
   const density = dense === 1 ? 'compact' :
                   dense === 2 ? 'minifyed' :
                   '';
-                  
+  
+  const branchesSort = app.branches.sort((b1, b2)=> {
+          if (b1.position < b2.position) { return 1 }
+          if (b1.position > b2.position) { return -1 }
+          return 0;
+        });               
   // const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
     
   return(
@@ -188,6 +192,7 @@ const OverviewWrap = ({
       
       <OverviewTools
         app={app}
+        branchesSort={branchesSort}
         loadTimeUP={loadTime}
         filterByUP={filterBy}
         sortByUP={sortBy}
@@ -226,11 +231,11 @@ const OverviewWrap = ({
             oB={liveState}
             bCache={bCache}
             pCache={pCache}
-            agCache={agCache}
             acCache={acCache}
             user={user}
             clientTZ={clientTZ}
             app={app}
+            branchesSort={branchesSort}
             isDebug={isDebug}
             isNightly={isNightly}
             dense={dense > 1}

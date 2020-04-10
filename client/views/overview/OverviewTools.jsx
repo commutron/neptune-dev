@@ -23,7 +23,7 @@ function useInterval(callback, delay) {
 }
 
 const OverviewTools = ({
-  app, loadTimeUP,
+  app, branchesSort, loadTimeUP,
   filterByUP, sortByUP, denseUP, lightUP,
   changeFilterUP, changeSortUP, denseSetUP, themeSetUP
 })=> {
@@ -37,23 +37,23 @@ const OverviewTools = ({
   const duration = moment.duration(
     loadTimeUP.diff(tickingTime))
       .humanize();
-
+        
   return(
     <nav className='overviewToolbar'>
       <span>
         <i className='fas fa-filter fa-fw darkgrayT'></i>
         <select
           id='filterSelect'
-          title={`Change ${Pref.phase} Filter`}
+          title={`Change ${Pref.branch} Filter`}
           className='overToolSort liteToolOn'
           defaultValue={filterByUP}
           onChange={(e)=>changeFilterUP(e)}>
           <option value={false}>All</option>
           <option value='KITTING' className='cap'>{Pref.kitting}</option>
           <option value={Pref.released} className='cap'>{Pref.released}</option>
-          {app.phases.map( (ph, ix)=> {
+          {branchesSort.map( (br, ix)=> {
             return(
-              <option key={ph+ix} value={ph}>{ph}</option>
+              <option key={br.brKey+ix} value={br.branch}>{br.branch}</option>
           )})}
         </select>
       </span>
@@ -79,20 +79,22 @@ const OverviewTools = ({
           title='Comfort Layout'
           onClick={()=>denseSetUP(0)}
           className={denseUP === 0 ? 'liteToolOn' : 'liteToolOff'}
-        ><i className='fas fa-expand-arrows-alt fa-fw'></i></button>
+        ><i className='fas fa-expand fa-fw'></i></button>
+        {/*                fa-expand-arrows-alt
         <button
           key='compactOn'
           title='Compact Layout'
           onClick={()=>denseSetUP(1)}
           className={denseUP === 1 ? 'liteToolOn' : 'liteToolOff'}
         ><i className='fas fa-compress fa-fw'></i></button>
+        */}
         <button
           key='miniOn'
           title='Minifyed Layout'
           onClick={()=>denseSetUP(2)}
           className={denseUP === 2 ? 'liteToolOn' : 'liteToolOff'}
-        ><i className='fas fa-compress-arrows-alt fa-fw'></i></button>
-      </span>
+        ><i className='fas fa-compress fa-fw'></i></button>
+      </span>        {/*fa-compress-arrows-alt*/}
       
       <span>
         <button

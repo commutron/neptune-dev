@@ -15,7 +15,7 @@ const View = ({
   username, user, clientTZ, org, app,
   isDebug, isNightly,
   batch, batchX,
-  bCache, pCache, agCache, acCache, phCache
+  bCache, pCache, acCache, brCache
 })=> {
   
   const prevUser = usePrevious(user);
@@ -40,9 +40,8 @@ const View = ({
       bx={batchX}
       bCache={bCache}
       pCache={pCache}
-      agCache={agCache}
       acCache={acCache}
-      phCache={phCache}
+      brCache={brCache}
       user={user}
       app={app}
       clientTZ={clientTZ}
@@ -89,9 +88,8 @@ export default withTracker( () => {
       batchX: XBatchDB.find({live: true}).fetch(),
       bCache: CacheDB.findOne({dataName: 'batchInfo'}),
       pCache: CacheDB.findOne({dataName: 'priorityRank'}),
-      agCache: CacheDB.findOne({dataName: 'agendaOrder'}),
       acCache: CacheDB.findOne({dataName: 'activityLevel'}),
-      phCache: CacheDB.findOne({dataName: 'phaseCondition'}),
+      brCache: CacheDB.findOne({dataName: 'branchCondition'}),
     };
   }
 })(View);

@@ -155,17 +155,11 @@ Meteor.methods({
                     
                   if( !tideStop ) {
                     
-                    const cCache = CacheDB.findOne({dataName: 'phaseCondition'});
-                    const cB = cCache && cCache.dataSet.find( x => x.batch === batchNum );
-                    const openPhases = cB && cB.phaseSets.filter( x => x.condition === 'open' );
-                    const fromOnlyOpen = openPhases && openPhases.length === 1 ?
-                                          openPhases[0].phase : false;
-                                          
-                    // const brCache = CacheDB.findOne({dataName: 'branchCondition'});
-                    // const cB = cCache && brCache.dataSet.find( x => x.batch === batchNum );
-                    // const openBranches = cB && cB.branchSets.filter( x => x.condition === 'open' );
-                    // const fromOnlyOpen = openBranches && openBranches.length === 1 ?
-                    //                       openBranches[0].branchName : false;
+                    const brCache = CacheDB.findOne({dataName: 'branchCondition'});
+                    const cB = cCache && brCache.dataSet.find( x => x.batch === batchNum );
+                    const openBranches = cB && cB.branchSets.filter( x => x.condition === 'open' );
+                    const fromOnlyOpen = openBranches && openBranches.length === 1 ?
+                                          openBranches[0].branchName : false;
                                           
                     if(fromOnlyOpen) {
                       return [ 'fromOnlyOpen', fromOnlyOpen ];
@@ -222,48 +216,57 @@ Meteor.methods({
     }
   },
   
-  // still phase
+
   assembleBranchTime(batchID, clientTZ) {
     const accessKey = Meteor.user().orgKey;
     const app = AppDB.findOne({ orgKey: accessKey});
+    const branchesSort = app.branches.sort((b1, b2)=> {
+          if (b1.position < b2.position) { return 1 }
+          if (b1.position > b2.position) { return -1 }
+          return 0;
+        });
     const batch = BatchDB.findOne({_id: batchID, orgKey: accessKey});
     if( batch && Array.isArray(batch.tide) ) {  
       const slim = batch.tide.map( x => {
-        const dt = Meteor.call('branchBestGuess', x.who, batch.batch, x.startTime, x.stopTime, clientTZ, accessKey);
+        const dt = Meteor.call('branchBestGuess', 
+                    x.who, batch.batch, 
+                    x.startTime, x.stopTime, 
+                    clientTZ, accessKey
+                  );
         const mStart = moment(x.startTime);
         const mStop = !x.stopTime ? moment() : moment(x.stopTime);
         const dur = moment.duration(mStop.diff(mStart)).asMinutes();
         return {
-          phaseGuess: dt,
+          branchGuess: dt,
           duration: dur
         };
       });
       
       let slimTimes = [];
-      for(let ph of app.phases) {
-        let phDurr = 0;
+      for(let br of branchesSort) {
+        let brDurr = 0;
         for(let t of slim) {
-          if( Array.isArray(t.phaseGuess) ) {
-            if( t.phaseGuess[1].includes( ph ) || 
-                t.phaseGuess[1].includes( ph + ' prep' ) ) {
-              phDurr = phDurr + ( t.duration / t.phaseGuess[1].length );
+          if( Array.isArray(t.branchGuess) ) {
+            if( t.branchGuess[1].includes( br.branch ) || 
+                t.branchGuess[1].includes( br.branch + ' prep' ) ) {
+              brDurr = brDurr + ( t.duration / t.branchGuess[1].length );
             }
           }
         }
         slimTimes.push({
-          x: ph,
-          y: phDurr
+          x: br.branch,
+          y: brDurr
         });
       }
       let aDurr = 0;
       let zDurr = 0;
       let xDurr = 0;
       for(let t of slim) {
-        if( !t.phaseGuess ) {
+        if( !t.branchGuess ) {
           xDurr = xDurr + t.duration;
-        }else if( t.phaseGuess[1].includes( 'kitting / prep' ) ) {
+        }else if( t.branchGuess[1].includes( 'kitting / prep' ) ) {
           aDurr = aDurr + t.duration;
-        }else if( t.phaseGuess[1].includes( 'after finish' ) ) {
+        }else if( t.branchGuess[1].includes( 'after finish' ) ) {
           zDurr = zDurr + t.duration;
         }else{
           null;

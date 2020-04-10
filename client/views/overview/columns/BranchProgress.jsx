@@ -3,7 +3,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import NumStat from '/client/components/uUi/NumStat.jsx';
 
-const PhaseProgress = ({ 
+const BranchProgress = ({ 
   batchID, releasedToFloor,
   progCols, clientTZ, 
   app, isDebug
@@ -12,7 +12,7 @@ const PhaseProgress = ({
   const [ progData, setProg ] = useState(false);
   
   useEffect( ()=> {
-    Meteor.call('phaseProgress', batchID, clientTZ, (error, reply)=>{
+    Meteor.call('branchProgress', batchID, clientTZ, (error, reply)=>{
       error && console.log(error);
       if( reply ) { 
         setProg( reply );
@@ -27,18 +27,18 @@ const PhaseProgress = ({
     return(
       <Fragment>
 
-        {dt.phaseSets.map( (phase, index)=>{
-          if(phase.steps.length === 0) {
+        {dt.branchSets.map( (branch, index)=>{
+          if(branch.steps.length === 0) {
             return(
-              <div key={batchID + phase + index + 'x'}>
-               <i className='fade small label'>{phase.phase}</i>
+              <div key={batchID + branch + index + 'x'}>
+               <i className='fade small label'>{branch.branch}</i>
               </div>
             );
           }else{
-            const calPer = ( phase.count / (dt.totalItems * phase.steps.length) ) * 100;
+            const calPer = ( branch.count / (dt.totalItems * branch.steps.length) ) * 100;
             const calNum = calPer > 0 && calPer < 1 ? 
                             calPer.toPrecision(1) : Math.floor( calPer );
-            isDebug && console.log(`${dt.batch} ${phase.phase} calNum: ${calNum}`);
+            isDebug && console.log(`${dt.batch} ${branch.branch} calNum: ${calNum}`);
             let fadeTick = calNum == 0 ? '0' :
                  calNum < 2 ? '1' :
                  calNum < 10 ? '5' :
@@ -52,18 +52,17 @@ const PhaseProgress = ({
                  calNum < 90 ? '80' :
                  calNum < 100 ? '90' :
                  '100';
-            let redLine = calNum >= 100 && phase.ncLeft ? ' redRight' : '';
-            let yellLine = calNum < 100 && phase.shLeft ? ' yellowLeft' : '';
-            let niceName = phase.phase === 'finish' ?
-                            Pref.isDone : phase.phase;
+            let redLine = calNum >= 100 && branch.ncLeft ? ' redRight' : '';
+            let yellLine = calNum < 100 && branch.shLeft ? ' yellowLeft' : '';
+            let niceName = branch.branch;
             return(
               <div 
-                key={batchID + phase + index + 'g'} 
+                key={batchID + branch + index + 'g'} 
                 className={'fillRight' + fadeTick + redLine + yellLine}>
                 <NumStat
                   num={`${calNum}%`}
                   name={niceName}
-                  title={`Steps: ${phase.steps.length}`}
+                  title={`Steps: ${branch.steps.length}`}
                   color='whiteT'
                   size='big' />
             </div>
@@ -74,14 +73,14 @@ const PhaseProgress = ({
   
   return(
     <Fragment>
-      {progCols.map( (phase, index)=>{
+      {progCols.map( (branch, index)=>{
         return(
-          <div key={batchID + phase + index + 'z'}>
-            <i className='fade small label'>{phase}</i>
+          <div key={batchID + branch + index + 'z'}>
+            <i className='fade small label'>{branch}</i>
           </div>
       )})}
     </Fragment>
   );    
 };
 
-export default PhaseProgress;
+export default BranchProgress;

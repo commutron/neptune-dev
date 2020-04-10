@@ -4,7 +4,7 @@ import 'moment-timezone';
 // import Pref from '/client/global/pref.js';
 
 const TotalInQu = ({ 
-  pCache, agCache, phCache, zCache,
+  pCache, brCache, zCache,
   app, isNightly
 })=> {
  
@@ -24,18 +24,18 @@ const TotalInQu = ({
   }
     
   useEffect( ()=> {
-    const phData = phCache.dataSet;
+    const brData = brCache.dataSet;
     
     const pData = pCache.dataSet;
     
     let kitTime = [];
     let openTime = [];
     for( let pB of pData) {
-      let rel = phData.find( y => y.batchID === pB.batchID );
+      let rel = brData.find( y => y.batchID === pB.batchID );
       if(!rel) {
         break;
       }else{
-        let bar = rel.phaseSets.every( z => z.condition === false );
+        let bar = rel.branchSets.every( z => z.condition === false );
         if(bar) {
           kitTime.push(pB);
         }else{
@@ -58,7 +58,7 @@ const TotalInQu = ({
       ['In Kitting', kitMinutes, kitHours],
       ['Released', openMinutes, openHours],
     ]);
-  }, [pCache, phCache, app]);
+  }, [pCache, brCache, app]);
 
   return(
     <div className='max400 space line2x'>

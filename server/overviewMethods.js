@@ -47,12 +47,14 @@ export function batchTideTime(batchTide) {
   }
 }
 
-function collectPhaseCondition(privateKey, batchID) {
+function collectBranchCondition(privateKey, batchID) {
   return new Promise(resolve => {
     let collection = false;
     const app = AppDB.findOne({orgKey: privateKey});
     const batchX = XBatchDB.findOne({_id: batchID});
     const batch = BatchDB.findOne({_id: batchID});
+    const branches = app.branches;
+    
     if(batchX) {
       const quantity = batchX.quantity;
       const waterfall = batchX.waterfall;
@@ -81,20 +83,21 @@ function collectPhaseCondition(privateKey, batchID) {
         }
       });
       
-      let phaseSets = [];
-      for(let phase of app.phases) {
-        const phaseSteps = progSteps.filter( x => x.phase === phase );
-        const conArr = Array.from(phaseSteps, x => x.condition );
+      let branchSets = [];
+      for(let branch of branches) {
+        const branchSteps = progSteps.filter( x => x.branchKey === branch.brKey );
+        const conArr = Array.from(branchSteps, x => x.condition );
            
-        const phaseCon = phaseSteps.length === 0 ? false :
+        const branchCon = branchSteps.length === 0 ? false :
           conArr.includes('canStart') ||
           conArr.includes('stepRemain') ?
           'open' : 
           'closed';
           
-        phaseSets.push({
-          phase: phase,
-          condition: phaseCon
+        branchSets.push({
+          brKey: branch.brKey,
+          branch: branch.branch,
+          condition: branchCon
         });
       }
  
@@ -102,7 +105,7 @@ function collectPhaseCondition(privateKey, batchID) {
         batch: batchX.batch,
         batchID: batchX._id,
         // stepSets: progSteps, // only need for debug
-        phaseSets: phaseSets
+        branchSets: branchSets
       };
       
       resolve(collection);
@@ -117,7 +120,7 @@ function collectPhaseCondition(privateKey, batchID) {
       const released = batch.releases.findIndex( x => x.type === 'floorRelease') >= 0;
       let previous = released;
       
-      let progSteps = riverFlow;//.filter( x => x.type !== 'first' );
+      let progSteps = riverFlow;
       progSteps.map( (step, index)=> {
         if(!previous) {
           progSteps[index].condition = 'onHold';
@@ -147,31 +150,32 @@ function collectPhaseCondition(privateKey, batchID) {
         }
       });
       
-      let phaseSets = [];
-      for(let phase of app.phases) {
-        const phaseSteps = progSteps.filter( x => x.phase === phase );
-        const conArr = Array.from(phaseSteps, x => x.condition );
-        const nonConLeft = phase === 'finish' ? rNC.length :
-                            rNC.filter( x => x.where === phase ).length;
+      let branchSets = [];
+      for(let branch of branches) {
+        const branchSteps = progSteps.filter( x => x.branchKey === branch.brKey );
+        const conArr = Array.from(branchSteps, x => x.condition );
+        const nonConLeft = branch.brKey === 't3rm1n2t1ng8r2nch' ? rNC.length :
+                            rNC.filter( x => x.where === branch.branch ).length;
             
-        const phaseCon = phaseSteps.length === 0 ? false :
+        const branchCon = branchSteps.length === 0 ? false :
           conArr.includes('canStart') ||
           conArr.includes('stepRemain') ||
           nonConLeft > 0 ?
           'open' : 
           'closed';
           
-        phaseSets.push({
-          phase: phase,
-          condition: phaseCon
+        branchSets.push({
+          brKey: branch.brKey,
+          branch: branch.branch,
+          condition: branchCon
         });
       }
  
       collection = {
         batch: batch.batch,
         batchID: batch._id,
-        // stepSets: progSteps, // only need for debug
-        phaseSets: phaseSets
+        // branchSets: progSteps, // only need for debug
+        branchSets: branchSets
       };
       
       resolve(collection);
@@ -198,13 +202,18 @@ function collectStatus(privateKey, batchID, clientTZ) {
     
     const now = moment().tz(clientTZ);
     
+    const findShipDay = (endDateTime) => {
+      const localEnd = moment.tz(endDateTime, clientTZ);
+      const shipDue = localEnd.isShipDay() ?
+                      localEnd.clone().nextShippingTime() :
+                      localEnd.clone().lastShippingTime();
+      return shipDue;
+    };
+    
     if(bx) {
       let complete = bx.completed; // is it done
       
-      const localEnd = moment.tz(bx.salesEnd, clientTZ);
-      const shipDue = localEnd.isShipDay() ?
-                        localEnd.clone().nextShippingTime() :
-                        localEnd.clone().lastShippingTime();
+      const shipDue = findShipDay(bx.salesEnd);
       
       const timeRemain = !complete ?  // duration between now and ship due
         shipDue.workingDiff(now, 'day', true) : 0;
@@ -224,10 +233,7 @@ function collectStatus(privateKey, batchID, clientTZ) {
     }else if(b) {
       let complete = b.finishedAt !== false; // is it done
       
-      const localEnd = moment.tz(b.end, clientTZ); // when is it due
-      const shipDue = localEnd.isShipDay() ?
-                        localEnd.clone().nextShippingTime() :
-                        localEnd.clone().lastShippingTime();
+      const shipDue = findShipDay(b.end);
       
       const timeRemain = !complete ?  // duration between now and ship due
         shipDue.workingDiff(now, 'day', true) : 0;
@@ -315,9 +321,6 @@ function collectPriority(privateKey, batchID, clientTZ, mockDay) {
                         endDay.clone().nextShippingTime() : 
                         endDay.clone().lastShippingTime();
         
-      let quote2tide = false;
-      let estEnd2fillBuffer = false;
-      
       if(qtBready) {
         const qtB = b.quoteTimeBudget.length > 0 ? 
                     b.quoteTimeBudget[0].timeAsMinutes : 0;
@@ -326,26 +329,33 @@ function collectPriority(privateKey, batchID, clientTZ, mockDay) {
         if(totalQuoteMinutes) {
           const totalTideMinutes = batchTideTime(b.tide);
           
-          quote2tide = totalQuoteMinutes - totalTideMinutes;
+          const quote2tide = totalQuoteMinutes - totalTideMinutes;
           const overQuote = quote2tide < 0 ? true : false;
           const q2tNice = overQuote ? 0 : quote2tide;
+                                                        // insert additional ship bumper
+          const estConclude = shipTime;//shipTime.clone().subtractWorkingTime(0, 'hours');
+          const estCommence = estConclude.clone().subtractWorkingTime(q2tNice, 'minutes');
           
-          const estComplete = now.clone().addWorkingTime(q2tNice, 'minutes');
+          const estSoonest = now.clone().addWorkingTime(q2tNice, 'minutes');
+
+          const buffer = estConclude.workingDiff(estSoonest, 'minutes');
+          // or for same result = estCommence.workingDiff(now, 'minutes');
           
-          const buffer = shipTime.workingDiff(estComplete, 'minutes');
-          
-          estEnd2fillBuffer = buffer || null;
+          const estEnd2fillBuffer = buffer || null;
+        
+          collection = {
+            batch: b.batch,
+            batchID: b._id,
+            quote2tide: quote2tide,
+            estSoonest: estSoonest.format(),
+            commenceDT: estCommence.format(),
+            concludeDT: estConclude.format(),
+            estEnd2fillBuffer: estEnd2fillBuffer,
+            shipTime: shipTime.format(),
+            lateLate: lateLate
+          };
         }
       }
-     
-      collection = {
-        batch: b.batch,
-        batchID: b._id,
-        quote2tide: quote2tide,
-        estEnd2fillBuffer: estEnd2fillBuffer,
-        shipTime: shipTime.format(),
-        lateLate: lateLate
-      };
       
       resolve(collection);
     }
@@ -356,17 +366,23 @@ function collectPriority(privateKey, batchID, clientTZ, mockDay) {
 function collectProgress(privateKey, batchID, clientTZ) {
   return new Promise(resolve => {
     const app = AppDB.findOne({orgKey: privateKey});
+    const branchesSort = app.branches.sort((b1, b2)=> {
+          if (b1.position < b2.position) { return 1 }
+          if (b1.position > b2.position) { return -1 }
+          return 0;
+        }); 
+        
     const bx = XBatchDB.findOne({_id: batchID});
     const batch = BatchDB.findOne({_id: batchID});
     
     let collection = false;
-    let phaseSets = [];
+    let branchSets = [];
     
     if(bx) {
       
-      for(let phase of app.phases) {
-        phaseSets.push({
-          phase: phase,
+      for(let branch of branchesSort) {
+        branchSets.push({
+          branch: branch.branch,
           steps: [],
           count: 0,
           ncLeft: false
@@ -378,7 +394,7 @@ function collectProgress(privateKey, batchID, clientTZ) {
         batchID: bx._id,
         totalItems: bx.quantity,
         isActive: null,
-        phaseSets: phaseSets,
+        branchSets: branchSets,
       };
       resolve(collection);
     
@@ -396,16 +412,16 @@ function collectProgress(privateKey, batchID, clientTZ) {
       const rNC = batch.nonCon.filter( n => 
         !n.trash && n.inspect === false && n.skip === false );
       
-      for(let phase of app.phases) {
-        const steps = riverFlow.filter( x => x.phase === phase && x.type !== 'first' );
-        const nonConLeft = phase === 'finish' ? rNC.length > 0 :
-                            rNC.filter( x => x.where === phase ).length > 0;
+      for(let branch of branchesSort) {
+        const steps = riverFlow.filter( x => x.branchKey === branch.brKey && x.type !== 'first' );
+        const nonConLeft = branch.brKey === 't3rm1n2t1ng8r2nch' ? rNC.length > 0 :
+                            rNC.filter( x => x.where === branch.branch ).length > 0;
         const shortLeft = batch.shortfall.filter( s => 
                           s.inEffect !== true && s.reSolve !== true 
                         ).length > 0;
     
-        phaseSets.push({
-          phase: phase,
+        branchSets.push({
+          branch: branch.branch,
           steps: steps,
           count: 0,
           ncLeft: nonConLeft,
@@ -421,10 +437,10 @@ function collectProgress(privateKey, batchID, clientTZ) {
                                 y => y.type !== 'first' && y.good === true) );
       const historyFlat = [].concat(...wipItemHistory);
 
-      phaseSets.map( (phet, index)=> {
-        for(let stp of phet.steps) {
+      branchSets.map( (brSet, index)=> {
+        for(let stp of brSet.steps) {
           const wipTally = historyFlat.filter( x => x.key === stp.key ).length;
-          phaseSets[index].count = phet.count + ( doneItems + wipTally );
+          branchSets[index].count = brSet.count + ( doneItems + wipTally );
         }
       });
  
@@ -433,7 +449,7 @@ function collectProgress(privateKey, batchID, clientTZ) {
         batchID: batch._id,
         totalItems: batch.items.length,
         isActive: isActive,
-        phaseSets: phaseSets,
+        branchSets: branchSets,
       };
       resolve(collection);
       
@@ -536,7 +552,7 @@ Meteor.methods({
     return bundlePriority();//batchID, clientTZ, mockDay);
   },
   
-  phaseProgress(batchID, clientTZ) {
+  branchProgress(batchID, clientTZ) {
     async function bundleProgress(batchID) {
       const accessKey = Meteor.user().orgKey;
       try {
@@ -549,11 +565,11 @@ Meteor.methods({
     return bundleProgress(batchID);
   },
   
-  phaseCondition(batchID, serverAccessKey) {
+  branchCondition(batchID, serverAccessKey) {
     async function bundleCondition(batchID) {
       const accessKey = serverAccessKey || Meteor.user().orgKey;
       try {
-        bundle = await collectPhaseCondition(accessKey, batchID);
+        bundle = await collectBranchCondition(accessKey, batchID);
         return bundle;
       }catch (err) {
         throw new Meteor.Error(err);

@@ -21,9 +21,9 @@ const CounterAssign = ({ id, app, lock, noText, waterfall })=> {
     const option = app.countOption.find( x => x.key === wfKey);
     const wfGate = option ? option.gate : null;
     const wfType = option ? option.type : null;
-    const wfPhase = option ? option.phase : null;
+    const wfBranch = option ? option.branchKey : null;
     if(typeof wfKey === 'string' && wfGate) {
-      Meteor.call('addCounter', batchID, wfKey, wfGate, wfType, wfPhase, (error, reply)=>{
+      Meteor.call('addCounter', batchID, wfKey, wfGate, wfType, wfBranch, (error, reply)=>{
         error && console.log(error);
         reply ? toast.success('Saved') : toast.error('Server Error');
         this.go.disabled = false;
@@ -64,12 +64,14 @@ const CounterAssign = ({ id, app, lock, noText, waterfall })=> {
             <option></option>
             {cOp.map( (entry)=>{
               let opLock = waterfall.find( x => x.wfKey === entry.key);
+              const branchObj = app.branches.find( y => y.brKey === entry.branchKey );
+              const branchName = branchObj ? branchObj.branch : 'n/a';
               return(
                 <option 
                   key={entry.key} 
                   value={entry.key}
                   disabled={opLock}
-                >{entry.gate} - {entry.type} - {entry.phase || 'n/a'}</option>
+                >{entry.gate} - {entry.type} - {branchName}</option>
                );
             })}
             </select>
@@ -88,11 +90,13 @@ const CounterAssign = ({ id, app, lock, noText, waterfall })=> {
         <p className='centreText'>Saved, assigned counters.</p>
         <p className='centreText'>To preserve important data, only unstarted counters can be removed</p> 
         <div className='gateList'>
-          {waterfall.map( (entry, index)=> {  
+          {waterfall.map( (entry, index)=> {
+            const branchObj = app.branches.find( y => y.brKey === entry.branchKey );
+            const branchName = branchObj ? branchObj.branch : 'n/a';
             return (                 
               <div key={entry.wfKey}>                      
                 <div>
-                  {entry.gate} - {entry.type} - {entry.phase || 'n/a'}
+                  {entry.gate} - {entry.type} - {branchName}
                 </div>
                 <div>
                   <button

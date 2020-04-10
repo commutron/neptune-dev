@@ -39,7 +39,10 @@ export default PrioritySquareData;
 
 ///////////////////////////////////////////////////////////////////////////////
 
-export const PrioritySquare = ({ batchID, ptData, altNumber, app, isDebug })=> {
+export const PrioritySquare = ({ 
+  batchID, ptData, pIndex, 
+  altNumber, app, isDebug 
+})=> {
   
   const pt = ptData;
   
@@ -49,7 +52,7 @@ export const PrioritySquare = ({ batchID, ptData, altNumber, app, isDebug })=> {
     const bffrTime = pt.estEnd2fillBuffer;
     const overQuote = q2t < 0;
     isDebug && console.log({pt, batchID, bffrTime, q2t});
-  
+
     if(!bffrTime) {
       return(
         <div>
@@ -74,7 +77,7 @@ export const PrioritySquare = ({ batchID, ptData, altNumber, app, isDebug })=> {
         bffrTime > pScl.high ? 'medium' : 
           bffrTime > pScl.max ? 'high' :
             bffrTime <= pScl.max ? pt.lateLate ? 'severe' : 'urgent' :
-            'p0';
+            'pX';
     const priorityClass = 
       priorityRank === 'severe' ? 'pScale0' :
       priorityRank === 'urgent' ? 'pScale1' :
@@ -93,9 +96,10 @@ export const PrioritySquare = ({ batchID, ptData, altNumber, app, isDebug })=> {
     const prTxt = `Priority Rank "${priorityRank}"`;
     const bffTxt = `buffer: ${bffrTime} minutes`;
     const treTxt = `timeRemain: ${q2t} minutes`;
+    const inxTxt = `cacheSortIndex: ${pIndex}`;
     
     const title = `${prTxt}\n${ovrTxt}`;
-    const debugTitle = `${prTxt}"\n${bffTxt}\n${ovrTxt}\n${treTxt}`;
+    const debugTitle = `${prTxt}"\n${bffTxt}\n${ovrTxt}\n${treTxt}\n${inxTxt}`;
     
     return(
       <div className={`blackT smCap big ${priorityClass} ${overClass}`}>

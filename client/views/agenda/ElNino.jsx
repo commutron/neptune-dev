@@ -3,7 +3,7 @@ import moment from 'moment';
 import 'moment-timezone';
 
 const ElNino = ({ 
-  bCache, pCache, agCache, zCache,
+  bCache, pCache, zCache,
   user, clientTZ, app, isNightly
 })=> {
   
