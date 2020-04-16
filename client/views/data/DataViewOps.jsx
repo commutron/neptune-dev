@@ -143,7 +143,8 @@ const DataViewOps = ({
           xBatchData={allXBatch}
           widgetData={allWidget}
           groupData={allGroup} 
-          app={app} />
+          app={app}
+          isDebug={isDebug} />
       </TraverseWrap>
     );
   }

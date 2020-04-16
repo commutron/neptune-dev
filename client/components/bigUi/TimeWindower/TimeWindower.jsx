@@ -33,7 +33,8 @@ const TimeWindower = ({ app, changeCount, changeBracket, stickyValue, sessionSti
           title={`Change ${Pref.phase} Filter`}
           className='overToolSort liteToolOn'
           defaultValue={stickyValue}
-          onChange={(e)=>handleRange(e.target.value)}>
+          onChange={(e)=>handleRange(e.target.value)}
+          required>
           <option value={'2,week'}>2 Weeks</option>
           {maxWeek < 6 ? maxWeekOption : 
             <option value={'6,week'}>6 Weeks</option>}

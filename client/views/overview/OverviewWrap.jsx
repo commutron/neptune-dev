@@ -116,7 +116,18 @@ const OverviewWrap = ({
       let orderedBatches = filteredBatches;
       
       if(sortBy === 'priority') {
+        const pData = pCache.dataSet;
         orderedBatches = filteredBatches.sort((b1, b2)=> {
+          const pIX1 = pData.findIndex( x => x.batchID === b1._id );
+          const pB1bf = pIX1 >= 0 ? pIX1+1 : null;
+          const pIX2 = pData.findIndex( x => x.batchID === b2._id );
+          const pB2bf = pIX2 >= 0 ? pIX2+1 : null;
+          if (!pB1bf) { return 1 }
+          if (!pB2bf) { return -1 }
+          if (pB1bf < pB2bf) { return -1 }
+          if (pB1bf > pB2bf) { return 1 }
+          return 0;
+          /*
           const pB1 = pCache.dataSet.find( x => x.batchID === b1._id);
           const pB1bf = pB1 ? pB1.estEnd2fillBuffer : null;
           const pB2 = pCache.dataSet.find( x => x.batchID === b2._id);
@@ -128,7 +139,7 @@ const OverviewWrap = ({
           if (pB2.lateLate) { return 1 }
           if (pB1bf < pB2bf) { return -1 }
           if (pB1bf > pB2bf) { return 1 }
-          return 0;
+          return 0;*/
         });
         
       }else if(sortBy === 'sales') {

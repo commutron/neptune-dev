@@ -8,6 +8,9 @@ const DumbFilter = ({ id, size, onTxtChange, labelText, list })=>	{
   
   return(
     <div className='centre noCopy'>
+      <p className='med nomargin'>
+        <i>{labelText}</i>
+      </p>
       <p className=''>
         <label className={'blackT variableInput ' + size}>
           <i className={size + ' fas fa-filter fa-fw' || 'med fas fa-filter fa-fw'}></i>
@@ -20,7 +23,8 @@ const DumbFilter = ({ id, size, onTxtChange, labelText, list })=>	{
           ref={(i)=>this.text = i}
           onChange={(e)=>changeTextFilter(e)}
           autoFocus={true}
-          disabled={!onTxtChange} />
+          disabled={!onTxtChange} 
+          required />
         <datalist id='shortcuts'>
           {list && list.map( (entry, index)=>{
             return ( 
@@ -28,9 +32,7 @@ const DumbFilter = ({ id, size, onTxtChange, labelText, list })=>	{
           )})}
         </datalist>
       </p>
-      <p className='med'>
-        <i>{labelText}</i>
-      </p>
+      
     </div>
     
   );

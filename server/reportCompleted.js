@@ -2,50 +2,35 @@ import moment from 'moment';
 import 'moment-timezone';
 import 'moment-business-time-ship';
 
-import { batchTideTime } from './overviewMethods.js';
+import { checkTimeBudget } from './tideMethods.js';
 import { whatIsBatch, whatIsBatchX } from './searchOps.js';
 
+import Config from '/server/hardConfig.js';
+
 moment.updateLocale('en', {
-  workinghours: {
-      0: null,
-      1: ['07:00:00', '16:30:00'],
-      2: ['07:00:00', '16:30:00'],
-      3: ['07:00:00', '16:30:00'],
-      4: ['07:00:00', '16:30:00'],
-      5: ['07:00:00', '12:00:00'],
-      6: null
-  },// including lunch breaks!
-  shippinghours: {
-      0: null,
-      1: null,
-      2: ['11:30:00', '11:30:00'],
-      3: null,
-      4: ['11:30:00', '11:30:00'],
-      5: null,
-      6: null
-  }// including lunch breaks!
+  workinghours: Config.workingHours,
+  shippinghours: Config.shippingHours
 });
 
-  function checkTimeBudget(tide, quoteTimeBudget) {
-    
-    const qtBready = !quoteTimeBudget ? false : true;
-    
-    let quote2tide = null;
-    
-    if(qtBready) {
-      const qtB = qtBready && quoteTimeBudget.length > 0 ? 
-                  quoteTimeBudget[0].timeAsMinutes : 0;
-      
-      const totalQuoteMinutes = qtB || 0;
-      
-      const totalTideMinutes = batchTideTime(tide);
-      
-      quote2tide = totalQuoteMinutes - totalTideMinutes;
-    }
-    
-    return quote2tide;
-  }
+  function deliveryState(wasDue, didEnd) {
+    const isLate = moment(didEnd).isAfter(wasDue);
+    const hourGap = moment(wasDue).workingDiff(didEnd, 'hours');
+    const dayGap = moment(wasDue).workingDiff(didEnd, 'days', true);
 
+    const hrGp = Math.abs(hourGap);
+    const hourS = hrGp > 1 ? 'hours' : 'hour';
+    const dyGp = Math.abs( Math.round(dayGap) );
+    const dayS = dyGp > 1 ? 'days' : 'day';
+    
+    const gapZone = ( !isLate || hrGp < Config.shipLateAllow ) ?
+                      hrGp < Config.maxShift ?   // ON TIME
+                        'on time' : `${dyGp} ${dayS} early` 
+                      : 
+                      hrGp < Config.maxShift ?  // LATE
+                      `${hrGp} ${hourS} late` : `${dyGp} ${dayS} late`;
+    return gapZone;
+  }
+  
   function weekDoneAnalysis(clientTZ, rangeStart, rangeEnd) {
     
     const asHours = (mnts) => 
@@ -94,12 +79,7 @@ moment.updateLocale('en', {
       const localFinish = moment(gf.finishedAt).tz(clientTZ).format();
       
       // duration between finish and fulfill
-      const buffer = moment(localFinish).workingDiff(shipDue, 'days', true);
-      const bffr = buffer > 0 && buffer < 1 ? buffer.toPrecision(1) :
-                                               Math.round(buffer);
-      const onTime = bffr === 0 ? 'on time' :
-                      bffr < 1 ? `${Math.abs(bffr)} days early` :  
-                       `${Math.abs(bffr)} days late`;
+      const onTime = deliveryState(shipDue, localFinish);
       
       // check for over quote
       const quote2tide = checkTimeBudget(gf.tide, gf.quoteTimeBudget);
@@ -144,11 +124,8 @@ moment.updateLocale('en', {
       
       const localComplete = moment(gf.completedAt).tz(clientTZ).format();
       
-      // duration between finish and fulfill
-      const buffer = moment(localComplete).workingDiff(shipDue, 'days');
-      const onTime = buffer === 0 ? 'on time' :
-                      buffer < 0 ? `${Math.abs(buffer)} days early` :  
-                      `${Math.abs(buffer)} days late`;
+      // duration between complete and fulfill
+      const onTime = deliveryState(shipDue, localComplete);
       
       // check for over quote
       // const quote2tide = checkTimeBudget(gf.tide, gf.quoteTimeBudget);

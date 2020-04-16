@@ -19,5 +19,11 @@ moment.updateLocale('en', {
       4: ['11:30:00', '11:30:00'],
       5: null,
       6: null
-  }// including lunch breaks!
+    }// including lunch breaks!
 });
+
+// Use as import at top:
+// import '/client/components/utilities/ShipTime.js';
+
+// This is somwhat flawed 
+// as it needs to be in sync with the server

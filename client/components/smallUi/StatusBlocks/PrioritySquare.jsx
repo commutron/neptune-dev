@@ -1,11 +1,15 @@
 import React, { useRef, useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
+import { min2hr } from '/client/components/utilities/Convert.js';
 import NumStat from '/client/components/uUi/NumStat.jsx';
 
 import './style';
 
-const PrioritySquareData = ({ batchID, app, dbDay, mockDay, altNumber, isDebug })=> {
+const PrioritySquareData = ({ 
+  batchID, app, dbDay, mockDay, 
+  altNumber, isDebug, showExtra
+})=> {
   
   const thingMounted = useRef(true);
   const [ ptData, setPriority ] = useState(false);
@@ -31,7 +35,8 @@ const PrioritySquareData = ({ batchID, app, dbDay, mockDay, altNumber, isDebug }
       ptData={ptData}
       altNumber={altNumber}
       app={app}
-      isDebug={isDebug} /> 
+      isDebug={isDebug}
+      showExtra={showExtra} /> 
   );
 };
 
@@ -41,7 +46,7 @@ export default PrioritySquareData;
 
 export const PrioritySquare = ({ 
   batchID, ptData, pIndex, 
-  altNumber, app, isDebug 
+  altNumber, app, isDebug, showExtra
 })=> {
   
   const pt = ptData;
@@ -66,6 +71,9 @@ export const PrioritySquare = ({
       );
     }
     
+    const baseClass = 'blackT smCap big';
+    const extraClass = showExtra ? 'centre' : '';
+    
     const pScl = !app.priorityScale ? {
       low: 6600,
       high: 2200,
@@ -85,8 +93,9 @@ export const PrioritySquare = ({
       priorityRank === 'medium' ? 'pScale3' : 
       'pScale4';
     
+    const pIXnum = isNaN(pIndex) ? 'x' : pIndex + 1;
     const pLabel = 
-      <b>{priorityRank}</b>;
+      <b>{isDebug ? `${priorityRank}_${pIXnum}` : priorityRank}</b>;
     const subLabel = pt.lateLate ? 'Is Late' :
       bffrTime < 0 ? 'Estimated Late' : Math.round( ( bffrTime / 100 ) );
       
@@ -95,14 +104,14 @@ export const PrioritySquare = ({
     
     const prTxt = `Priority Rank "${priorityRank}"`;
     const bffTxt = `buffer: ${bffrTime} minutes`;
-    const treTxt = `timeRemain: ${q2t} minutes`;
-    const inxTxt = `cacheSortIndex: ${pIndex}`;
+    const treTxt = `Quote Time Remaining: ${min2hr(q2t)} hours`;
+    const inxTxt = `cacheSortIndex: ${pIXnum}`;
     
-    const title = `${prTxt}\n${ovrTxt}`;
-    const debugTitle = `${prTxt}"\n${bffTxt}\n${ovrTxt}\n${treTxt}\n${inxTxt}`;
+    const title = `${prTxt}\n${treTxt}\n${ovrTxt}`;
+    const debugTitle = `${prTxt}\n${bffTxt}\n${ovrTxt}\n${treTxt}\n${inxTxt}`;
     
     return(
-      <div className={`blackT smCap big ${priorityClass} ${overClass}`}>
+      <div className={`${baseClass} ${extraClass} ${priorityClass} ${overClass}`}>
         <NumStat
           num={pLabel}
           name={subLabel}
@@ -110,6 +119,12 @@ export const PrioritySquare = ({
           title={isDebug ? debugTitle : title}
           color='blackT'
           size='big' />
+        {showExtra ? 
+          <dl className='med clean noindent espace'>
+            <dd>{treTxt}</dd>
+            <dd>Last Available Ship Day: {moment(pt.concludeDT).format("ddd, MMM Do")}</dd>
+            <dd>Soonest Complete: {moment(pt.estSoonest).format("ddd, MMM Do, h:mm a")}</dd>
+          </dl> : null}
       </div>
     );
   }

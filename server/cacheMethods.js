@@ -1,5 +1,46 @@
 // import { Random } from 'meteor/random'
 import moment from 'moment';
+import 'moment-timezone';
+import 'moment-business-time-ship';
+
+import Config from '/server/hardConfig.js';
+
+moment.updateLocale('en', {
+  workinghours: Config.workingHours,
+  shippinghours: Config.shippingHours
+});
+
+    
+  function distTime(clientTZ, bSalesStart, bSalesEnd, bComplete, qtB, bTide) {
+  
+    const localEnd = moment.tz(bSalesEnd, clientTZ);
+    const shipDue = localEnd.isShipDay() ?
+                      localEnd.clone().nextShippingTime().format() :
+                      localEnd.clone().lastShippingTime().format();
+    const didEnd = moment(bComplete).tz(clientTZ).format();
+      
+    const gapSale2Ship = moment(shipDue).workingDiff(bSalesStart, 'minutes');
+    const gapSale2End = moment(didEnd).workingDiff(bSalesStart, 'minutes');
+    
+    const tideBegin = bTide && bTide.length > 0 ? bTide[0] : null;
+    const beginTime = tideBegin ? tideBegin.startTime : null;
+    
+    const tideDone = bTide && bTide.length > 0 ? bTide[bTide.length-1] : null;
+    const doneTime = tideDone ? tideDone.stopTime : null;
+    
+    const gapBegin2Done = beginTime && doneTime ?
+                            moment(doneTime).workingDiff(beginTime, 'minutes')
+                          : null;
+  
+    const quoteTotal = !qtB || qtB.length === 0 ? null :
+                          Math.round( qtB[0].timeAsMinutes );
+                          
+    const trialObj = { gapSale2Ship, gapSale2End, gapBegin2Done, quoteTotal };
+    
+    return trialObj;
+  }
+  
+    
 
 
 export function batchCacheUpdate(accessKey, force) {
@@ -56,7 +97,53 @@ export function branchConCacheUpdate(accessKey, force) {
   }
 }
   
-  
+function minifyComplete(accessKey, clientTZ) {
+  const app = AppDB.findOne({orgKey: accessKey});
+  const nonWorkDays = app.nonWorkDays;
+  if( Array.isArray(nonWorkDays) ) {  
+    moment.updateLocale('en', {
+      holidays: nonWorkDays
+    });
+  }
+    
+  const batches = BatchDB.find({orgKey: accessKey, live: false}).fetch();
+  const slimL = batches.map( x => {
+    const testTheTime = distTime(
+      clientTZ, x.start, x.end, x.finishedAt, 
+      x.quoteTimeBudget, x.tide
+    );
+    return {
+      batchNum: x.batch,
+      widgetID: x.widgetId,
+      versionKey: x.versionKey,
+      salesOrder: x.salesOrder,
+      salesEnd: x.end,
+      completedAt: x.finishedAt,
+      quantity: x.items.length,
+      serialize: true,
+      testTheTime: testTheTime
+    };
+  });
+  const batchesX = XBatchDB.find({orgKey: accessKey, completed: true}).fetch();
+  const slimX = batchesX.map( x => {
+    const testTheTime = false;
+    return {
+      batchNum: x.batch,
+      widgetID: x.widgetId,
+      versionKey: x.versionKey,
+      salesOrder: x.salesOrder,
+      salesEnd: x.salesEnd,
+      completedAt: x.completedAt,
+      quantity: x.quantity,
+      serialize: x.serialize,
+      testTheTime: testTheTime
+    };
+  });
+  const slim = [...slimL,...slimX];
+  return slim;
+}
+
+
 Meteor.methods({
 
 ///////////// CACHES //////////////////
@@ -67,7 +154,7 @@ Meteor.methods({
       Meteor.call('priorityCacheUpdate', key, clientTZ, true);
       Meteor.call('activityCacheUpdate', key, clientTZ, true);
       branchConCacheUpdate(key, true);
-      Meteor.call('completeCacheUpdate', key, true);
+      Meteor.call('completeCacheUpdate', key, clientTZ, true);
     }
   },
   
@@ -83,7 +170,7 @@ Meteor.methods({
       branchConUp && Meteor.defer( ()=>{
         branchConCacheUpdate(key, false) });
       compUp && Meteor.defer( ()=>{
-        Meteor.call('completeCacheUpdate', key, false) });
+        Meteor.call('completeCacheUpdate', key, clientTZ, false) });
     }
   },
   
@@ -111,6 +198,12 @@ Meteor.methods({
           if (pB1ffr > pB2ffr) { return 1 }
           return 0;
         });
+        // const shaddowPriority = {
+        //   lastUpdated: new Date(),
+        //   ranking: Array.from(slimSort, (x, ix) =>  {
+        //             return { batch: x.batch, pIX: ix } })
+        // };
+        // console.log(shaddowPriority);
         CacheDB.upsert({orgKey: accessKey, dataName: 'priorityRank'}, {
           $set : { 
             orgKey: accessKey,
@@ -153,7 +246,8 @@ Meteor.methods({
   
   //CacheDB.remove({orgKey: accessKey, dataName: 'phaseCondition'}
   
-  completeCacheUpdate(accessKey, force) {
+  completeCacheUpdate(accessKey, clientTZ, force) {
+    this.unblock();
     if(typeof accessKey === 'string') {
       const timeOut = moment().subtract(60, 'minutes').toISOString();
       const currentCache = CacheDB.findOne({
@@ -162,33 +256,7 @@ Meteor.methods({
         dataName:'completeBatch'});
 
       if( force || !currentCache ) {
-        const batches = BatchDB.find({orgKey: accessKey, live: false}).fetch();
-        const slimL = batches.map( x => {
-          return {
-            batchNum: x.batch,
-            widgetID: x.widgetId,
-            versionKey: x.versionKey,
-            salesOrder: x.salesOrder,
-            salesEnd: x.end,
-            completedAt: x.finishedAt,
-            quantity: x.items.length,
-            serialize: true
-          };
-        });
-        const batchesX = XBatchDB.find({orgKey: accessKey, completed: true}).fetch();
-        const slimX = batchesX.map( x => {
-          return {
-            batchNum: x.batch,
-            widgetID: x.widgetId,
-            versionKey: x.versionKey,
-            salesOrder: x.salesOrder,
-            salesEnd: x.salesEnd,
-            completedAt: x.completedAt,
-            quantity: x.quantity,
-            serialize: x.serialize
-          };
-        });
-        const slim = [...slimL,...slimX];
+        const slim = minifyComplete(accessKey, clientTZ);
         CacheDB.upsert({orgKey: accessKey, dataName: 'completeBatch'}, {
           $set : { 
             orgKey: accessKey,

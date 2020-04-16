@@ -91,7 +91,8 @@ const AlterFulfillForm = ({ batchId, end, app, selfclose })=> {
         <PrioritySquareData
           batchID={batchId}
           app={app}
-          mockDay={endDateState} />
+          mockDay={endDateState}
+          showExtra={true} />
       </div>
     </form>
   );

@@ -4,6 +4,8 @@ import 'moment-business-time-ship';
 import '/client/components/utilities/ShipTime.js';
 import Pref from '/client/global/pref.js';
 
+import { min2hr } from '/client/components/utilities/Convert.js';
+
 import TagsModule from '/client/components/bigUi/TagsModule.jsx';
 import NoteLine from '/client/components/smallUi/NoteLine.jsx';
 import BlockList from '/client/components/bigUi/BlockList.jsx';
@@ -23,7 +25,7 @@ const GeneralChunk = ({
     
   const qtB = b.quoteTimeBudget && b.quoteTimeBudget.length > 0 ? 
                 b.quoteTimeBudget[0].timeAsMinutes : 0;
-  const qtHours = moment.duration(qtB, "minutes").asHours().toFixed(2, 10);
+  const qtHours = min2hr(qtB);
   
   const end = b.finishedAt !== false ? moment(b.finishedAt) : moment();
   const timeElapse = moment.duration(end.diff(b.start)).asWeeks().toFixed(1);
@@ -41,7 +43,7 @@ const GeneralChunk = ({
   const remain = shipTime.workingDiff(moment(), 'days', true);
   const remainClean = remain > -1 && remain < 1 ? 
           remain.toPrecision(1) : Math.round(remain);
-          
+  
   const itemsOrder = b.items.sort( (x,y)=> x.serial - y.serial);
 
   return(

@@ -127,6 +127,7 @@ const CompSearchWrap = ({ plCache, user, app })=> {
               autoFocus={true}
               autoComplete={navigator.userAgent.includes('Firefox/') ? "off" : ""}
               // ^^^ workaround for persistent bug in desktop Firefox ^^^
+              required
             />
           </label>
           <datalist id='plList'>

@@ -47,14 +47,6 @@ const StartView = ({ready, readyUsers, user, org, app}) =>	{
             link='/production' /> }
         
         <NavButton title='Overview' icon='fas fa-globe' link='/overview' />
-        <NavButton title='Explore' icon='fa-rocket' link='/data' />
-        <NavButton title={user.username} icon='fa-user-astronaut fa-flip-horizontal' link='/user' />
-        
-        <NavButton title='Parts Search' icon='fa-microchip' link='/starfish' />
-        
-        {isPreview ?
-          <NavButton title='Agenda' icon='fa-meteor' link='/agenda' tag='ALPHA' />
-        : <NavPlaceholder title='Agenda' icon="fas fa-meteor" tag='ALPHA' />}
         
         <NavButtonShell title='People' link='/people'
           icon={
@@ -64,6 +56,16 @@ const StartView = ({ready, readyUsers, user, org, app}) =>	{
               <i className="fas fa-user-astronaut fa-stack-1x" data-fa-transform="shrink-5 right-10 down-1"></i>
             </span>
           } />
+          
+        <NavButton title='Explore' icon='fa-rocket' link='/data' />
+        
+        <NavButton title='Parts Search' icon='fa-microchip' link='/starfish' />
+        
+        {isPreview ?
+          <NavButton title='Agenda' icon='fa-meteor' link='/agenda' tag='ALPHA' />
+        : <NavPlaceholder title='Agenda' icon="fas fa-meteor" tag='ALPHA' />}
+        
+        <NavButton title={user.username} icon='fa-user-astronaut fa-flip-horizontal' link='/user' />
         
         {!app.timeClock || app.timeClock.trim() === '' ?  
           <NavPlaceholder 

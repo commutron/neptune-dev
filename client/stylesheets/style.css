@@ -595,6 +595,7 @@ label.qdpplRound {
   font-style: normal;
   text-transform: none;
   text-decoration: none;
+  font-variant: normal;
 }
 
 .noBorder { border: none; }

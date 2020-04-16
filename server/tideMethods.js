@@ -1,6 +1,46 @@
 import moment from 'moment';
 
+export function batchTideTime(batchTide) {
+    
+  if(!batchTide) {
+    return undefined;
+  }else{
+    let tideTime = 0;
+    for(let bl of batchTide) {
+      const mStart = moment(bl.startTime);
+      const mStop = !bl.stopTime ? moment() : moment(bl.stopTime);
+      const block = moment.duration(mStop.diff(mStart)).asMinutes();
+      tideTime = tideTime + block;
+    }
+    //console.log(tideTime);
+    if( !tideTime || typeof tideTime !== 'number' ) {
+      return false;
+    }else{
+      return tideTime.toFixed(2, 10);
+    }
+  }
+}
 
+export function checkTimeBudget(tide, quoteTimeBudget) {
+    
+  const qtBready = !quoteTimeBudget ? false : true;
+  
+  let quote2tide = null;
+  
+  if(qtBready) {
+    const qtB = qtBready && quoteTimeBudget.length > 0 ? 
+                quoteTimeBudget[0].timeAsMinutes : 0;
+    
+    const totalQuoteMinutes = qtB || 0;
+    
+    const totalTideMinutes = batchTideTime(tide);
+    
+    quote2tide = totalQuoteMinutes - totalTideMinutes;
+  }
+  
+  return quote2tide;
+}
+  
 function collectActivtyLevel(privateKey, batchID, clientTZ) {
   return new Promise(resolve => {
     const bx = XBatchDB.findOne({_id: batchID});

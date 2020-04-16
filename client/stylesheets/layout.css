@@ -111,14 +111,6 @@ main {
   z-index: 7;
 }
 
-.lAlign { float: left; }
-.rAlign { float: right; }
-
-.flexRR {
-  display: flex;
-  flex-direction: row-reverse;
-}
-
 .flexSpace { flex-grow: 2; }
 
 .centreSelf { align-self: center; }
@@ -284,14 +276,20 @@ main {
 }
 .auxLeft { grid-area: auxLeft; }
 
-.homeNavi {
-  grid-area: splashContent;
+.homeNavi, .homeNaviMini {
   display: grid;
-  grid-template-rows: 20vh 20vh 20vh;
-  grid-template-columns: repeat(4, 20vw);
   grid-gap: 1vh 1vw;
   place-self: center center;
   place-items: stretch stretch;
+}
+.homeNavi {
+  grid-area: splashContent;
+  grid-template-rows: 20vh 20vh 20vh;
+  grid-template-columns: repeat(4, 20vw);
+}
+.homeNaviMini {
+  grid-template-rows: 20vh;
+  grid-template-columns: repeat(2, 20vw);
 }
 
 .centreSpash {
@@ -634,6 +632,14 @@ main {
   width: 100%;
 }
 
+.lAlign { float: left; }
+.rAlign { float: right; }
+
+.flexRR {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
 .lastSpanRight span:last-child {
  justify-self: right;
 }
@@ -645,6 +651,7 @@ main {
 .space3v { padding: 3vh 3vw; }
 .space36v { padding: 3vh 6vw; }
 .space { padding: 24px; }
+.espace { padding: 0.5rem; }
 .vspace { padding: 24px 0; }
 .nspace { padding: 1vh 2vw 0 2vw; }
 .uspace { padding: 0 2vw 1vh 2vw; }

@@ -31,8 +31,7 @@ const Login = ({ login, uID, username, timeClock })=> {
           uID={uID}
           username={username} />
       
-        <div className='homeNavi'>
-          <div></div>
+        <div className='homeNaviMini'>
 
           {!login ?
             <NavPlaceholder 
@@ -53,7 +52,6 @@ const Login = ({ login, uID, username, timeClock })=> {
               link={timeClock} 
               blank={true} /> }
            
-          <div></div>
         </div>
     
       </div>

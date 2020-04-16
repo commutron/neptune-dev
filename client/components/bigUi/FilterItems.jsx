@@ -45,7 +45,8 @@ const FilterItems = ({
         <select
           ref={(i)=>this.keyword = i}
           defaultValue={selectedKeyword}
-          onChange={(e)=>changeKeywordFilter(e)}>
+          onChange={(e)=>changeKeywordFilter(e)}
+          required>
           <option value={false} label='' />
           <optgroup label='Categories'>
             <option value='complete'>Complete</option>

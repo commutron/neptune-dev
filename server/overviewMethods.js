@@ -2,50 +2,17 @@ import moment from 'moment';
 import 'moment-timezone';
 import 'moment-business-time-ship';
 
+import Config from '/server/hardConfig.js';
+
+import { batchTideTime } from './tideMethods.js';
+
 moment.updateLocale('en', {
-  workinghours: {
-      0: null,
-      1: ['07:00:00', '16:30:00'],
-      2: ['07:00:00', '16:30:00'],
-      3: ['07:00:00', '16:30:00'],
-      4: ['07:00:00', '16:30:00'],
-      5: ['07:00:00', '12:00:00'],
-      6: null
-  },// including lunch breaks!
-  shippinghours: {
-      0: null,
-      1: null,
-      2: ['11:30:00', '11:30:00'],
-      3: null,
-      4: ['11:30:00', '11:30:00'],
-      5: null,
-      6: null
-  }
+  workinghours: Config.workingHours,
+  shippinghours: Config.shippingHours
 });
 
 //const now = moment().tz(clientTZ);
 //const isNow = (t)=>{ return ( now.isSame(moment(t), 'day') ) };
-
-export function batchTideTime(batchTide) {
-    
-  if(!batchTide) {
-    return undefined;
-  }else{
-    let tideTime = 0;
-    for(let bl of batchTide) {
-      const mStart = moment(bl.startTime);
-      const mStop = !bl.stopTime ? moment() : moment(bl.stopTime);
-      const block = moment.duration(mStop.diff(mStart)).asMinutes();
-      tideTime = tideTime + block;
-    }
-    //console.log(tideTime);
-    if( !tideTime || typeof tideTime !== 'number' ) {
-      return false;
-    }else{
-      return tideTime.toFixed(2, 10);
-    }
-  }
-}
 
 function collectBranchCondition(privateKey, batchID) {
   return new Promise(resolve => {

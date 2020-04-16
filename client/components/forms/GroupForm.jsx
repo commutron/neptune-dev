@@ -6,7 +6,7 @@ import ModelMedium from '../smallUi/ModelMedium.jsx';
 import {Submit} from './Inputs.jsx';
 
 const GroupFormWrapper = ({ id, name, alias, wiki, noText, primeTopRight })=> {
-  const bttn = name ? 'edit ' + Pref.group : 'new';
+  const bttn = name ? `edit ${Pref.group}` : `new ${Pref.group}`;
   const title = name ? 'edit' : 'create new';
   
   return(

@@ -45,10 +45,11 @@ const GroupLanding = ({
   app
 })=> {
   
+  const verAdd = Array.from(widgetData, x => x.versions.length).reduce((x, y) => x + y, 0);
+
   const xyG = timeRanges(groupData, countNewGroup, 12, 'month');
   const xyW = timeRanges(widgetData, countNewWidget, 12, 'month');
   const xyV = timeRanges(widgetData, countNewVersion, 12, 'month');
-  
   
   return(
     <div className='overscroll'>
@@ -68,6 +69,14 @@ const GroupLanding = ({
           <NumBox
             num={groupData.length}
             name={Pref.group + 's'}
+            color='blueT' />
+          <NumBox
+            num={widgetData.length}
+            name={Pref.widget + 's'}
+            color='blueT' />
+          <NumBox
+            num={verAdd}
+            name={Pref.version + 's'}
             color='blueT' />
         </div>
       </div>

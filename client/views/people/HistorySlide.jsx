@@ -46,7 +46,8 @@ const HistorySlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
         <div className='line2x'>
           <Flatpickr
             value={moment().format('YYYY-MM-DD')}
-            onChange={(e)=>setDay(e)} 
+            onChange={(e)=>setDay(e)}
+            required
             options={{
               dateFormat: "Y-m-d",
               defaultDate: moment().format("YYYY-MM-DD"),

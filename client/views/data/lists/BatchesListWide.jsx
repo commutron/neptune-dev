@@ -5,6 +5,8 @@ import DumbFilter from '/client/components/tinyUi/DumbFilter.jsx';
 
 const BatchesListWide = ({ batchData, widgetData, groupData, app }) => {
   
+  const [ allState, allSet ] = useState(false);
+  
   const [ textString, textStringSet ] = useState( '' );
   const [ showListState, showListSet ] = useState( [] );
 
@@ -16,10 +18,9 @@ const BatchesListWide = ({ batchData, widgetData, groupData, app }) => {
     
     const w = widgetData;
     const g = groupData;
-    
+    //const bDt = allState ? batchData : batchData.filter( x => x.live === true);
     let blendedList = [];
     for(let b of batchData){
-      const style = b.live === true ? 'numFont activeMark' : 'numFont gMark';
       const subW = w.find( x => x._id === b.widgetId);
       const subV = subW.versions.find( x => x.versionKey === b.versionKey);
       const subG = g.find( x => x._id === subW.groupId);
@@ -30,7 +31,7 @@ const BatchesListWide = ({ batchData, widgetData, groupData, app }) => {
         widget: subW.widget, 
         version: subV.version,
         tags: b.tags,
-        highlight: style
+        live: b.live
       });
     }
     
@@ -54,31 +55,45 @@ const BatchesListWide = ({ batchData, widgetData, groupData, app }) => {
   return(
     <div className='centre' key={1}>
       <div className='tableList'>
-        <div className=''>
+        <div>
           <DumbFilter
             id='batchOverview'
             size='bigger'
             onTxtChange={e => setTextFilter(e)}
             labelText='Filter any text, not case-sensitve.'
             list={app.tagOption} />
+          <div className='centre'>
+            <label className='inlineForm medBig'>
+              <input
+                type='checkbox'
+                title='Show Complete'
+                id='chkAll'
+                className='tableAction'
+                checked={allState}
+                onChange={(e)=>allSet(e.target.checked)}
+            />Show Complete</label>
+          </div>
         </div>
 
         {showListState.map( (entry, index)=> {
           const tags = entry.tags.map( (et, ix)=>{
-            return(<span key={ix} className='tagFlag'><i>{et}</i></span>)});
-            return (
+            return(<span key={ix} className='tagFlag'><i>{et}</i></span>);
+          });
+          if(!allState && !entry.live) { return null }else{
+            const sty = !entry.live ? 'numFont gMark' : 'numFont activeMark';
+            return(
               <LeapRow
-                key={index}
+                key={"wo"+index}
                 title={entry.batchNumber.toUpperCase()}
                 cTwo={<i><i className='smaller'>so: </i>{entry.salesNumber.toUpperCase()}</i>}
                 cThree={entry.groupAlias.toUpperCase()}
                 cFour={entry.widget.toUpperCase() + ' v.' + entry.version}
                 cFive={tags}
-                sty={entry.highlight + ' lastSpanRight'}
+                sty={`${sty} lastSpanRight`}
                 address={'/data/batch?request=' + entry.batchNumber}
               />
-        )})}
-      
+        )}})}
+
       </div>
 		</div>
   );
