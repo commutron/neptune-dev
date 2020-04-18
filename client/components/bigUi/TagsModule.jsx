@@ -7,37 +7,29 @@ import Pref from '/client/global/pref.js';
 // Batch ._id as "id"
 // flags array as "tags"
 
-const TagsModule = (props)=>	{
+const TagsModule = ({ id, group, vKey, xBatch, tags, tagOps })=>	{
 
   function addTag(tag) {
     const cleanTag = !tag ? false : tag.trim();
-    if(!cleanTag || cleanTag == '' || props.tags.includes(cleanTag)) {
+    if(!cleanTag || cleanTag == '' || tags.includes(cleanTag)) {
       null;
     }else{
-      if(!props.vKey) {
-        if(!props.group) {
-          if(props.xBatch) {
-            Meteor.call('pushBTagX', props.id, cleanTag, (error)=>{
-              if(error)
-                console.log(error);
-            });
-          }else{
-            Meteor.call('pushBTag', props.id, cleanTag, (error)=>{
-              if(error)
-                console.log(error);
-            });
-          }
-        }else{
-          Meteor.call('pushGTag', props.id, cleanTag, (error)=>{
-            if(error)
-              console.log(error);
-          });
-        }
+      if(typeof vKey === 'string') {
+        Meteor.call('pushWTag', id, vKey, cleanTag, (err)=>{
+          err && console.log(err);
+        });
+      }else if(group) {
+        Meteor.call('pushGTag', id, cleanTag, (err)=>{
+          err && console.log(err);
+        });
+      }else if(xBatch) {
+        Meteor.call('pushBTagX', id, cleanTag, (err)=>{
+          err && console.log(err);
+        });
       }else{
-        Meteor.call('pushWTag', props.id, props.vKey, cleanTag, (error)=>{
-        if(error)
-          console.log(error);
-      });
+        Meteor.call('pushBTag', id, cleanTag, (err)=>{
+          err && console.log(err);
+        });
       }
     }
   }
@@ -47,60 +39,56 @@ const TagsModule = (props)=>	{
     if(!yes) {
       null;
     }else{
-      if(!props.vKey) {
-        if(!props.group) {
-          if(props.xBatch) {
-            Meteor.call('pullBTagX', props.id, tag, (error)=>{
-              if(error)
-                console.log(error);
-            });
-          }else{
-            Meteor.call('pullBTag', props.id, tag, (error)=>{
-              if(error)
-                console.log(error);
-            });
-          }
-        }else{
-          Meteor.call('pullGTag', props.id, tag, (error)=>{
-            if(error)
-              console.log(error);
-          });
-        }
+      if(typeof vKey === 'string') {
+        Meteor.call('pullWTag', id, vKey, tag, (err)=>{
+          err && console.log(err);
+        });
+      }else if(group) {
+        Meteor.call('pullGTag', id, tag, (err)=>{
+          err && console.log(err);
+        });
+      }else if(xBatch) {
+        Meteor.call('pullBTagX', id, tag, (err)=>{
+          err && console.log(err);
+        });
       }else{
-        Meteor.call('pullWTag', props.id, props.vKey, tag, (error)=>{
-          if(error)
-            console.log(error);
-        });  
+        Meteor.call('pullBTag', id, tag, (err)=>{
+          err && console.log(err);
+        });
       }
     }
   }
-
+  
+  const auth = Roles.userIsInRole(Meteor.userId(), 'run');
+  const currTags = tags || [];
+  
   return (
     <div className='rowWrap vmarginhalf'>
-      {props.tags.map( (entry, index)=>{
+      {currTags.map( (entry, index)=>{
         return(
-         <IndieTag
-          key={index}
-          tagText={entry}
-          removeTag={()=>removeTag(entry)} />
+          <IndieTag
+            key={index}
+            tagText={entry}
+            removeTag={()=>removeTag(entry)} 
+            lock={!auth} />
       )})}
-      {Roles.userIsInRole(Meteor.userId(), 'run') ?
+      {auth ?
         <ContextMenuTrigger
-          id={props.id}
+          id={id+'tagnew'}
           holdToDisplay={1}
           renderTag='span'>
-          <i className='fas fa-plus tagAddButton'></i>
+          <i className='fas fa-plus-circle tagAddButton'></i>
         </ContextMenuTrigger>
       :null}
       
-      <ContextMenu id={props.id} className='noCopy'>
-        {!props.tagOps ? null :
-          props.tagOps.map( (entry, index)=>{
+      <ContextMenu id={id+'tagnew'} className='noCopy'>
+        {!tagOps ? null :
+          tagOps.map( (entry, index)=>{
             return(
               <MenuItem
                 key={index}
                 onClick={()=>addTag(entry)}
-                disabled={props.tags.includes(entry)}>
+                disabled={tags.includes(entry)}>
                 {entry}
               </MenuItem>
         )})}
@@ -115,12 +103,12 @@ const TagsModule = (props)=>	{
 
 export default TagsModule;
 
-const IndieTag = ({ tagText, removeTag }) => (
-  <span className='tagFlag'>
+const IndieTag = ({ tagText, removeTag, lock }) => (
+  <div className='tagFlag'>
     <i>{tagText}</i>
     <button
       onClick={removeTag}
-      disabled={!Roles.userIsInRole(Meteor.userId(), 'run')}
-    ><i className='fas fa-times'></i></button>
-  </span>
+      disabled={lock}
+    ><i className='fas fa-times' data-fa-transform='up-2'></i></button>
+  </div>
 );

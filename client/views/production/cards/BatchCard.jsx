@@ -11,7 +11,7 @@ import StepsProgress from '../../../components/bigUi/StepsProgress/StepsProgress
 
 const BatchCard = ({ 
   batchData, itemSerial, widgetData, groupData, 
-  user, app,
+  user, app, brancheS,
   flow, flowAlt, floorReleased,
   progCounts, currentLive
 })=> {

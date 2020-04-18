@@ -51,7 +51,7 @@ const NCAdd = ({ id, barcode, user, app, ncTypesCombo })=> {
   }
 
 	let now = Session.get('ncWhere');
-	let lock = now === 'complete';
+	let lock = now === 'isC0mpl3t3d';
 	
   return (
     <form

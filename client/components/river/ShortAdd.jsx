@@ -11,17 +11,17 @@ const ShortAdd = ({ id, serial, pastPN, pastRF, app, doneClose })=> {
     const refs = this.shRefs.value.trim().toLowerCase()
                   .replace(",", " ").split(/\s* \s*/);
     const comm = this.comm.value.trim();
-    const step = Session.get('ncWhere') || 'unavailable';
+    const where = Session.get('ncWhere') || 'unavailable';
     
     //console.log({ id, partNum, refs, serial, step, comm });
-    Meteor.call('addShort', id, partNum, refs, serial, step, comm, (error, reply)=>{
+    Meteor.call('addShort', id, partNum, refs, serial, where, comm, (error, reply)=>{
       error && console.log(error);
       doneClose();
     });
   }
 
 	let now = Session.get('ncWhere');
-	let lock = now === 'complete';
+	let lock = now === 'isC0mpl3t3d';
 	
   return (
     <form

@@ -176,7 +176,7 @@ Meteor.publish('cacheData', function(clientTZ){
   Meteor.defer( ()=>{ Meteor.call('priorityCacheUpdate', orgKey, clientTZ); });
   Meteor.defer( ()=>{ Meteor.call('activityCacheUpdate', orgKey, clientTZ); });
   Meteor.defer( ()=>{ branchConCacheUpdate(orgKey) });
-  Meteor.defer( ()=>{ Meteor.call('completeCacheUpdate', orgKey); });
+  Meteor.defer( ()=>{ Meteor.call('completeCacheUpdate', orgKey, clientTZ); });
   if(!this.userId){
     return this.ready();
   }else{

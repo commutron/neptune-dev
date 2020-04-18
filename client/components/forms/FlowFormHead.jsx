@@ -12,7 +12,7 @@ import ModelMedium from '/client/components/smallUi/ModelMedium.jsx';
 const FlowFormHeadWrapper = ({
   id, app,
   existFlows, edit, preFill, 
-  small, noText, lock
+  noText, lock
 })=> {
   const name = edit ? 'Edit' : 'New Flow';
   
@@ -22,7 +22,6 @@ const FlowFormHeadWrapper = ({
       title={name}
       color='greenT'
       icon='fa-project-diagram'
-      smIcon={small}
       lock={!Roles.userIsInRole(Meteor.userId(), 'edit') || lock}
       noText={noText}
     >
@@ -203,7 +202,7 @@ export const FlowRemove = ({ id, fKey })=>	{
         onClick={()=>pull()}
         disabled={!Roles.userIsInRole(Meteor.userId(), 'edit')}>
         <label className='navIcon actionIconWrap'>
-          <i className={'fas fa-trash fa-1x redT'}></i>
+          <i className={'fas fa-minus-circle fa-lg fa-fw redT'}></i>
           <span className={'actionIconText redT'}>Delete</span>
         </label>
       </button>

@@ -37,7 +37,7 @@
 .proNarrow, .proWide {
   grid-area: proContent;
   display: grid;
-  grid-template-rows: calc(90vh - 60px) 60px;
+  grid-template-rows: calc(90vh - 70px) 70px;
   grid-template-areas: 
     'proLeft proInstruct'
     'formFooter formFooter';
@@ -79,7 +79,7 @@
   box-shadow:         0 0 15px 0.5px rgb(0,0,0);
   width: 100vw;
   min-width: 768px;
-  height: 60px;
+  height: 70px;
   z-index: 8;
   display: flex;
   flex-direction: row;

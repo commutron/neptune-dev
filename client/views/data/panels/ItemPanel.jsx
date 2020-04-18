@@ -94,6 +94,7 @@ const ItemPanel = ({
           history={i.history}
           noncons={nc}
           ncTypesCombo={flowData && flowData.ncTypesComboFlat}
+          brancheS={flowData.branchesSort}
           shortfalls={sh}
           rmas={i.rma}
           allRMA={b.cascade}

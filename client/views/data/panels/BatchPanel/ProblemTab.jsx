@@ -21,7 +21,8 @@ import NonConBarRefs from '/client/components/charts/NonCon/NonConBarRefs.jsx';
 const ProblemTab = ({
   a, b,
   riverFlow, riverAltFlow,
-  ncTypesCombo
+  ncTypesCombo, brancheS,
+  isDebug
 }) =>	{
   
   const flatTypeList = Array.from(ncTypesCombo, x => 
@@ -76,19 +77,22 @@ const ProblemTab = ({
             <NonConBubble
               ncOp={flatTypeList}
               nonCons={nonConArrayClean}
-              app={a} />
+              app={a}
+              isDebug={isDebug} />
               
             <NonConBar
               ncOp={flatTypeList}
               nonCons={nonConArrayClean}
-              app={a} />
+              app={a}
+              isDebug={isDebug} />
           
             <NonConBarRefs
               ncOp={flatTypeList}
               flow={riverFlow}
               flowAlt={riverAltFlow}
               nonCons={nonConArrayClean}
-              app={a} />
+              app={a}
+              isDebug={isDebug} />
            
             <NonConRate 
               batches={[b.batch]}

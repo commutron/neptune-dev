@@ -23,6 +23,7 @@ const StoneSelect = ({
   sh,
   item,
   currentLive,
+  brancheS,
   users,
   progCounts,
   app,
@@ -69,7 +70,9 @@ const StoneSelect = ({
   
   for(let flowStep of flow) {
     const coreStep = allTrackOption.find( t => t.key === flowStep.key);
-    const stepPhase = !coreStep || !coreStep.phase ? flowStep.step : coreStep.phase;
+    const brKey = coreStep && coreStep.branchKey;
+    const stepBranch = !brKey ? flowStep.step : 
+                        brancheS.find( b => b.brKey === brKey ).branch;
 
     const first = flowStep.type === 'first';
 
@@ -78,7 +81,7 @@ const StoneSelect = ({
       :
       iDone.find(ip => ip.key === flowStep.key && ip.good === true);
     
-    const ncFromHere = ncOutstanding.filter( x => x.where === stepPhase );
+    const ncFromHere = ncOutstanding.filter( x => x.where === stepBranch );
     const ncResolved = ncFromHere.length === 0;
     //console.log(stepMatch, ncResolved);
     
@@ -97,10 +100,10 @@ const StoneSelect = ({
       const fTest = flowStep.type === 'test' ? 
                     iDone.filter( x => x.type === 'test' && x.good === false) : [];
       
-      const blockStone = damStep && (!ncAllClear || !shAllClear );
-      const doneStone = stepComplete;
+      const blockStone = damStep && (!ncAllClear || !shAllClear ) ? true : false;
+      const doneStone = stepComplete || false;
 	    
-	    Session.set('ncWhere', stepPhase.toLowerCase());
+	    Session.set('ncWhere', stepBranch);
 	    Session.set('nowStepKey', flowStep.key);
       Session.set('nowWanchor', flowStep.how);
 	    return(
@@ -178,7 +181,7 @@ const StoneSelect = ({
     }
   }
   
-  Session.set('ncWhere', 'complete');
+  Session.set('ncWhere', 'isC0mpl3t3d');
 	Session.set('nowStepKey', 'c0mp13t3');
   Session.set('nowWanchor', '');
   // Complete

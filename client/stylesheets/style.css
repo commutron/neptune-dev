@@ -2,84 +2,6 @@
   font-family: monospace;  
 }
 
-.action {
-  line-height: 2em;
-  font-size: medium;
-  font-weight: 600;
-  letter-spacing: 1px;
-  /*min-width: 2.5rem;*/
-	min-height: 2.5rem;
-	padding: 0 10px;
-	text-transform: uppercase;
-	overflow: hidden;
-}
-
-.smallAction {
-  line-height: 1rem;
-  font-size: medium;
-  letter-spacing: 1px;
-  min-width: 2rem;
-	height: 2rem;
-	padding: 0 10px;
-}
-
-.blendAction {
-  letter-spacing: 1px;
-	font-size: 1.5vw;
-  width: 2.5vw;
-  height: 2.5vw;
-	padding: 0;
-}
-.blendAction:focus, .blendAction:active {
-  outline: dotted;
-}
-
-.miniAction {
-  min-width: 1rem;
-  min-height: 1rem;
-  border-width: 1px;
-  border-bottom-style: solid;
-  border-bottom-color: transparent;
-  background-color: transparent;
-}
-.miniAction:hover {
-  opacity: 1;
-  border-bottom-color: inherit;
-}
-.miniAction:focus {
-  outline: 1px dotted;
-}
-
-.hoverAction {
-  cursor: pointer;
-}
-.hoverAction:hover, .hoverAction:focus-within {
-  outline-color: var(--neptuneColor);
-  outline-style: dotted;
-  outline-offset: -0.25vmax;
-}
-
-.mini15x {
-  min-width: 1.5rem;
-  min-height: 1.5rem;
-}
-
-.mini2x {
-  min-width: 2rem;
-  min-height: 2rem;
-}
-
-.textAction {
-  margin: 0px;
-  border: none;
-  padding: 0px;
-  background-color: transparent;
-  cursor: pointer;
-}
-.textAction:hover {
-  text-decoration: underline; 
-}
-
 .tableAction {
   min-width: 1.75rem;
   max-width: 10ch;
@@ -88,143 +10,6 @@
 .tableAction.narrow {
   max-width: 4ch;
 }
-
-.textLinkButton {
-  color: var(--belizeHole);
-  font-size: 1rem;
-  cursor: pointer;
-  margin: 0px;
-  border: none;
-  padding: 0px;
-  background-color: transparent;
-}
-
-.inlineLink {
-  color: white;
-  background-color: transparent;
-  border: none;
-  font-size: 1rem;
-}
-.inlineLink:hover {
-  text-decoration: underline;
-}
-
-.leapText {
-  font-size: 1rem;
-  min-width: 1rem;
-	min-height: 1rem;
-	text-transform: uppercase;
-	background-color: transparent;
-  border: 1px solid transparent;
-  border-bottom-color: white;
-  word-break: break-all;
-}
-.leapText:hover, .leapText:focus, .leapText:active {
-  color: var(--peterriver);
-  border-bottom-color: var(--peterriver);
-}
-
-.leapBar, .leapRow {
-  width: 100%;
-  min-height: 32px;
-  font-size: 1rem;
-  font-size: calc(1.1rem - 0.1vw);
-  font-weight: 400;
-	padding: 12px 6px;
-	padding: calc(1em - 0.1vw) calc(1em - 0.1vw);
-  cursor: pointer;
-}
-
-.leapBar {
-	border-top: 1px inset transparent;
-	border-bottom-width: 1px;
-  border-bottom-style: outset;
-  border-bottom-color: var(--silverfade);
-  border-left-width: 5px;
-  border-left-style: solid;
-  border-left-color: white;
-  background-color: rgb(25,25,25);
-	color: var(--clouds);
-  word-break: keep-all;
-  word-wrap: normal;
-}
-
-.leapRow {
-  display: grid;
-  grid-template-columns: 15vw repeat(auto-fit, minmax(100px, 1fr));
-	grid-gap: 0px 16px;
-	align-items: center;
-	border: none;
-  border-left-width: 8px;
-  border-left-style: solid;
-  border-left-color: white;
-  background-color: white;
-	color: var(--black);
-  overflow: hidden;
-  word-break: break-all;
-  word-wrap: break-word;
-  box-shadow: none;
-}
-.leapRow > span {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  font-size: 1.25rem;
-}
-.leapRow > span:first-child {
- font-size: 1.75rem;
- justify-self: center;
-}
-.leapRow.centreText > span {
-  justify-self: center;
-}
-
-.leapBar:hover, .leapBar:focus, .leapBar:active {
-  background-color: var(--clouds);
-  color: var(--black);
-}
-.leapRow:hover, .leapRow:focus, .leapRow:active {
-  box-shadow: var(--dropShadow00);
-}
-
-.roundActionIcon {
-  display: block;
-  width: 2.5rem;
-  height: 2.5rem;
-  padding: 5px;
-  border-radius: 50%;
-  background-color: transparent;
-  text-align: center;
-}
-
-.dbblRound {
-  width: 5rem;
-  height: 5rem;
-}
-label.dbblRound {
-  width: 6rem;
-  height: 6rem;
-}
-.trpplRound {
-  width: 7.5rem;
-  height: 7.5rem;
-}
-label.trpplRound {
-  width: 8.5rem;
-  height: 8.5rem;
-}
-.qdpplRound {
-  width: 10rem;
-  height: 10rem;
-  font-size: 2rem;
-}
-label.qdpplRound {
-  width: 11rem;
-  height: 11rem;
-  font-size: 2rem;
-}
-
-.buttonLayerCorrect { height: 1em; }
 
 .moveLR {
   color: white;
@@ -698,31 +483,6 @@ label.qdpplRound {
   vertical-align: middle;
 }
 
-.grid {
-  display: table;
-  width: 100%;
-  justify-content: center;
-  border-collapse: collapse;
-}
-.gridRow {
-	display: table-row;
-	border-bottom: 1px solid rgba(0,0,0,0.2);
-}
-.gridCell {
-	display: table-cell;
-	text-align: center;
-	vertical-align: middle;
-	padding: 0;
-  word-break: break-word;/*weird no standerd thing but it works*/
-  word-wrap: break-word;
-}
-.openGridCell {
-	display: table-cell;
-  border-bottom: 0.1em solid rgba(255,255,255,0.3);
-	vertical-align: middle;
-	padding: 2px 2px 2px 2px;
-}
-
 .contrastList:nth-child(odd) {
   background-color: rgba(50,50,50,0.3);
 }
@@ -850,22 +610,23 @@ label.qdpplRound {
 }
 
 .tagFlag {
-  margin: 4px 4px;
-  padding: 2px 5px 2px 10px;
+  display: flex;
+  align-items: center;
+  margin: 2px;
+  padding: 3px 5px 3px 5px;
   border: 0.5px solid white;
-  border-radius: 5px;
+  border-radius: 1px 25px 25px 1px;
   background-color: var(--belizeHole);
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: white;
   word-break: keep-all;
   word-wrap: normal;
   
 }
 .tagFlag > button {
-  vertical-align: top;
   height: 1rem;
   width: 1rem;
-  margin: 0px 0px 0px 5px;
+  margin-left: 5px;
   padding: 1px;
   border-radius: 50%;
   background-color: transparent;
@@ -879,15 +640,15 @@ label.qdpplRound {
 
 .tagAddButton {
   display: inline-block;
-  margin: 0px 5px;
+  margin: 10px;
   padding: 2px;
   vertical-align: middle;
   color: var(--belizeHole);
   background-color: transparent;
-  height: 20px;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   border-radius: 50%;
   transition: all 150ms ease-in-out;
+  cursor: pointer;
 }
 .tagAddButton:hover {
   color: black;
@@ -895,23 +656,6 @@ label.qdpplRound {
 }
 
 .tempTag { margin: 0 7px 0 0; }
-
-/* Filter Tools 
-.fltrs summary {
-  height: 32px;
-  padding: 0 5px;
-}
-.fltrs summary::-webkit-details-marker {
-  display: none;
-  -moz-display: block;
-}
-
-.fltrs input[type='checkbox'], .fltrs input[type='radio'] {
-  margin: 0;
-  width: 100%;
-  min-height: 1rem;
-}
-*/
 
 .fltrsInput {
   width: 100%;
@@ -1153,7 +897,7 @@ details[open].dropEvents summary {
 }
 .starfishAccents #pnFind:focus {
   border-color: #00bde0;
-  border-right-color: transparent;
+  border-right-width: 0px;
 }
 .starfishAccents input[type='checkbox'] + label,
 .starfishAccents input[type='radio'] + label {

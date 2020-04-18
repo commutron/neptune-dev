@@ -110,6 +110,7 @@ const River = (props)=> {
           sh={sh}
           item={i}
           currentLive={props.currentLive}
+          brancheS={props.brancheS}
           users={users}
           progCounts={progCounts}
           app={app}

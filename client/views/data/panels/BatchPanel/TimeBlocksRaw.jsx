@@ -53,7 +53,7 @@ const TimeBlocksRaw = ({ batch, tide, clientTZ, isDebug })=> {
           /></label>
         </p>
         <p className='footnote'>
-          The experimental {Pref.phase} attribution is derived from related records.
+          The {Pref.branch} attribution is derived from related records.
         </p>
       </details>
     </div>

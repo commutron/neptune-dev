@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 //import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
@@ -9,16 +9,42 @@ import ModelMedium from '../smallUi/ModelMedium.jsx';
 // title : a string of the thing you want to delete
 // check : a string for a conformation
 // entry : the object to be deleted
-export default class Remove extends Component	{
+
+const RemoveWrapper = ({ action, entry, title, check, noText, lockOut })=> {
   
-  remove(e) {
+  const auth = Roles.userIsInRole(Meteor.userId(), 'remove') && !lockOut;
+  
+  return(
+    <ModelMedium
+      button='Delete'
+      title={`delete "${title}" permanently`}
+      color='redT'
+      icon='fa-minus-circle'
+      lock={!auth}
+      noText={noText}
+    >
+      <Remove
+        action={action}
+        entry={entry}
+        title={title}
+        check={check}
+      />
+    </ModelMedium>
+  );   
+};
+
+export default RemoveWrapper;  
+      
+const Remove = ({ action, entry, title, check })=> {
+  
+  function handleRemove(e) {
     e.preventDefault();
-    this.cut.disabled = true;
-    const confirm = this.confirm.value.trim();
-      if(this.props.action === 'group') {
-        Meteor.call('deleteGroup', this.props.entry, confirm, (error, reply)=>{
-          if(error)
-            console.log(error);
+    this.cutGo.disabled = true;
+    const confirm = this.confirmInput.value.trim();
+    switch(action) {
+      case 'group':
+        Meteor.call('deleteGroup', entry, confirm, (err, reply)=>{
+          err && console.log(err);
           if(reply === 'inUse') {
             toast.warning('Cannot do this, entry is in use');
           }else if(reply) {
@@ -26,13 +52,13 @@ export default class Remove extends Component	{
             FlowRouter.go('/data/overview?request=groups');
           }else{
             toast.error('Rejected by Server');
-            this.cut.disabled = false;
+            this.cutGo.disabled = false;
           }
         });
-      }else if(this.props.action === 'widget') {
-        Meteor.call('deleteWidget', this.props.entry, confirm, (error, reply)=>{
-          if(error)
-            console.log(error);
+        break;
+      case 'widget':
+        Meteor.call('deleteWidget', entry, confirm, (err, reply)=>{
+          err && console.log(err);
           if(reply === 'inUse') {
             toast.warning('Cannot do this, entry is in use');
           }else if(reply) {
@@ -40,13 +66,13 @@ export default class Remove extends Component	{
             FlowRouter.go('/data/overview?request=groups');
           }else{
             toast.error('Rejected by Server');
-            this.cut.disabled = false;
+            this.cutGo.disabled = false;
           }
         });
-      }else if(this.props.action === 'batch') {
-        Meteor.call('deleteBatch', this.props.entry._id, confirm, (error, reply)=>{
-          if(error)
-            console.log(error);
+        break;
+      case 'batch':
+        Meteor.call('deleteBatch', entry._id, confirm, (err, reply)=>{
+          err && console.log(err);
           if(reply === 'inUse') {
             toast.warning('Cannot do this, entry is in use');
           }else if(reply) {
@@ -54,13 +80,13 @@ export default class Remove extends Component	{
             toast.success('Entry in BatchDB removed');
           }else{
             toast.error('Rejected by Server');
-            this.cut.disabled = false;
+            this.cutGo.disabled = false;
           }
         });
-      }else if(this.props.action === 'xbatch') {
-        Meteor.call('deleteBatchX', this.props.entry, confirm, (error, reply)=>{
-          if(error)
-            console.log(error);
+        break;
+      case 'xbatch':
+        Meteor.call('deleteBatchX', entry, confirm, (err, reply)=>{
+          err && console.log(err);
           if(reply === 'inUse') {
             toast.warning('Cannot do this, entry is in use');
           }else if(reply) {
@@ -68,67 +94,55 @@ export default class Remove extends Component	{
             FlowRouter.go('/data/overview?request=batches');
           }else{
             toast.error('Rejected by Server');
-            this.cut.disabled = false;
+            this.cutGo.disabled = false;
           }
         });
-      }else if(this.props.action === 'item') {
-        Meteor.call('deleteItem', this.props.entry._id, this.props.title, confirm, (error, reply)=>{
-          if(error)
-            console.log(error);
+        break;
+      case 'item':
+        Meteor.call('deleteItem', entry._id, title, confirm, (err, reply)=>{
+          err && console.log(err);
           if(reply === 'inUse') {
             toast.warning('Cannot do this, entry is in use');
           }else if(reply) {
             toast.success('Entry removed');
-            FlowRouter.go('/data/batch?request=' + this.props.entry.batch);
+            FlowRouter.go('/data/batch?request=' + entry.batch);
           }else{
             toast.error('Rejected by Server');
-            this.cut.disabled = false;
+            this.cutGo.disabled = false;
           }
         });
-      }else {
+        break;
+      default:
         toast.error('Server Error');
         console.log('this component is not wired properly');
-      }
+    }
   }
+  
+  let checkshort = check.split('T')[0];
 
-  render() {
-
-    let title = this.props.title;
-    let check = this.props.check.split('T')[0];
-    const auth = Roles.userIsInRole(Meteor.userId(), 'remove') && !this.props.lockOut;
-
-    return (
-      <ModelMedium
-        button='Delete'
-        title={'delete "' + title + '" from database'}
-        color='redT'
-        icon='fa-minus-circle'
-        lock={!auth}
-        noText={this.props.noText}>
-        <div className='actionBox redT'>
-          <br />
-          <p>Are you sure you want to try to delete "{title}"?</p>
-          <p>This cannot be undone and could cause unexpected consequences.</p>
-          <br />
-          <p>Enter "<i className='noCopy'>{check + ' '}</i>" to confirm.</p>
-          <br />
-          <form onSubmit={this.remove.bind(this)} className='inlineForm'>
-            <input
-              type='text'
-              ref={(i)=> this.confirm = i}
-              placeholder={check}
-              autoFocus={true}
-              className='noCopy redIn'
-              required />
-            <button
-              className='smallAction clearRed'
-              type='submit'
-              ref={(i)=> this.cut = i}
-              disabled={false}>DELETE</button>
-          </form>
-          <br />
-        </div>
-      </ModelMedium>
-    );
-  }
-}
+  return(
+    <div className='actionBox redT'>
+      <br />
+      <p>Are you sure you want to try to delete "{title}"?</p>
+      <p>This cannot be undone and could cause unexpected consequences.</p>
+      <br />
+      <p>Enter "<i className='noCopy'>{checkshort + ' '}</i>" to confirm.</p>
+      <br />
+      <form onSubmit={(e)=>handleRemove(e)} className='inlineForm'>
+        <input
+          type='text'
+          id='confirmInput'
+          placeholder={checkshort}
+          autoFocus={true}
+          className='noCopy redIn'
+          required />
+        <button
+          className='smallAction clearRed'
+          type='submit'
+          id='cutGo'
+          disabled={false}>DELETE</button>
+      </form>
+      <br />
+    </div>
+  );
+};

@@ -10,7 +10,7 @@ import React, { useState } from 'react';
 
 const ModelLarge = ({ 
   title, button, icon, 
-  color, noText, smIcon, primeTopRight,
+  color, noText, lgIcon,
   lock, children
 })=>	{
   
@@ -20,8 +20,7 @@ const ModelLarge = ({
     showChange( !show );
   };
   
-  let iSize = primeTopRight ? ' fa-2x ' :
-              smIcon ? ' fa-1x ' : ' fa-lg ';
+  let iSize = lgIcon ? ' fa-2x ' : ' fa-lg ';
   
   return (
     <span>
@@ -31,7 +30,7 @@ const ModelLarge = ({
         onClick={()=>reveal()}
         disabled={lock}>
         <label className='navIcon actionIconWrap'>
-          <i className={'fas ' + icon + iSize + color}></i>
+          <i className={`fas ' ${icon} ${iSize} fa-fw ${color}`}></i>
           {!noText && <span className={'actionIconText ' + color}>{button}</span>}
         </label>
       </button>

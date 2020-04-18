@@ -4,13 +4,14 @@ import { toast } from 'react-toastify';
 
 const NCFlood = ({ id, live, user, app, ncTypesCombo })=> {
   
-  function handleCheck(e) {
+  function handleCheck(target) {
     const flatCheckList = Array.from(ncTypesCombo, x => 
                                   x.key ? x.live === true && x.typeText : x);
   
-    let match = flatCheckList.find( x => x === e.target.value);
+    let match = flatCheckList.find( x => x === target.value);
     let message = !match ? 'please choose from the list' : '';
-    e.target.setCustomValidity(message);
+    target.setCustomValidity(message);
+    return !match ? false : true;
   }
   
   function handleFloodNC(e) {
@@ -21,10 +22,14 @@ const NCFlood = ({ id, live, user, app, ncTypesCombo })=> {
     const refEntry = this.ncRefs.value.trim().toLowerCase();
     const refSplit = refEntry.split(/\s* \s*/);
     
-    // tgood check
+    const tgood = Roles.userIsInRole(Meteor.userId(), 'nightly') ?
+                    handleCheck(this.ncType) : true;
     
-    
-    if(refSplit.length > 0 && refSplit[0] !== '') {
+    if( !tgood || refSplit.length < 1 || refSplit[0] === '' ) {
+      this.ncRefs.reportValidity();
+      this.ncType.reportValidity();
+      this.go.disabled = false;
+    }else{
       for(let ref of refSplit) {
         ref = ref.replace(",", "");
         if(ref.length < 8) {
@@ -37,18 +42,19 @@ const NCFlood = ({ id, live, user, app, ncTypesCombo })=> {
             autoClose: 10000,
             closeOnClick: false
           });
+          this.go.disabled = false;
         }else{
           toast.warn("Can't add '" + ref + "', A referance can only be 7 characters long", {
             position: toast.POSITION.BOTTOM_CENTER,
             autoClose: 10000,
             closeOnClick: false
           });
+          this.go.disabled = false;
         }
       }
       // const findBox = document.getElementById('lookup');
       // findBox.focus();
-    }else{null}
-    this.go.disabled = false;
+    }
   }
 
 	let lock = !live;
@@ -78,7 +84,7 @@ const NCFlood = ({ id, live, user, app, ncTypesCombo })=> {
               type='search'
               placeholder='Type'
               list='ncTypeList'
-              onInput={(e)=>handleCheck(e)}
+              onInput={(e)=>handleCheck(e.target)}
               required
               disabled={lock || ncTypesCombo.length < 1}
               autoComplete={navigator.userAgent.includes('Firefox/') ? "off" : ""}

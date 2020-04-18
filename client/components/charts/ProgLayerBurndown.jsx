@@ -26,9 +26,6 @@ const ProgLayerBurndown = ({ id, start, floorRelease, end, flowData, itemData, t
     
   Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(countState);
   
-  const flR = !floorRelease ? null : 
-    moment(floorRelease.time);
-
   if(!countState || !firstState) {
     return(
       <CalcSpin />

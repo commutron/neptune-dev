@@ -66,7 +66,6 @@ const NonConMultiBatchBar = ({ batchIDs })=> {
           horizontal={true}
           padding={0}
         >
-        
         {seriesState.map( (entry, index)=>{
           if(entry.length > 0) {
             return(
@@ -81,8 +80,8 @@ const NonConMultiBatchBar = ({ batchIDs })=> {
               />
           )}
         })}
-        </VictoryStack>
-      </VictoryChart>
+      </VictoryStack>
+    </VictoryChart>
   </div>
   );
 };

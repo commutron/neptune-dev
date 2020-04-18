@@ -21,19 +21,24 @@ const ShortBlock = ({ id, serial, entry, done })=> {
     let effect = null;
     let solve = null;
     const act = this.shAct.value;
-    if(act === Pref.doOmit) {
-      effect = true;
-    }else if(act === Pref.shortageWaiting) {
-      effect = false;
-      solve = null;
-    }else if(act === Pref.notResolved) {
-      effect = false;
-      solve = false;
-    }else if(act === Pref.isResolved) {
-      effect = false;
-      solve = true;
-    }else{
-      null;
+    switch(act) {
+      case Pref.doOmit :
+        effect = true;
+        break;
+      case Pref.shortageWaiting :
+        effect = false;
+        solve = null;
+        break;
+      case Pref.notResolved :
+        effect = false;
+        solve = false;
+        break;
+      case Pref.isResolved :
+        effect = false;
+        solve = true;
+        break;
+      default:
+        null;
     }
     const comm = this.shCm.value.trim();
     

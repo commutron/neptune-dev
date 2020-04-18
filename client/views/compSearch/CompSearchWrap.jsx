@@ -92,8 +92,9 @@ const CompSearchWrap = ({ plCache, user, app })=> {
           <button
             type='button'
             title='Download All Parts'
+            className='taskLink'
             onClick={(e)=>dataExport(e)}>
-          <i className='fas fa-download primeRightIcon'></i>
+          <i className='fas fa-download'></i>
           </button>
         </div>
         <div className='frontCenterTitle invert'>Parts Search</div>
@@ -103,8 +104,9 @@ const CompSearchWrap = ({ plCache, user, app })=> {
             type='button'
             title='Rebuild Autocomplete'
             onClick={(e)=>requestRefresh(e)}
+            className='taskLink'
             disabled={!Roles.userIsInRole(Meteor.userId(), 'admin')}>
-          <i className='fas fa-cogs fa-fw primeRightIcon'></i>
+          <i className='fas fa-cogs'></i>
           </button>
         </div>
         <TideFollow invertColor={true} />

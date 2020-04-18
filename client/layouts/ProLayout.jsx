@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import ErrorCatch from '/client/components/utilities/ErrorCatch.jsx';
 import { ToastContainer } from 'react-toastify';
@@ -23,6 +23,8 @@ export const ProWrap = ({
   const [ showVerify, showVerifySet ] = useState(false);
   const [ optionVerify, optionVerifySet ] = useState(false);
   
+  const [ brancheState, brancheSortSet ] = useState([]);
+  
   const [ flow, flowSet ] = useState([]);
   const [ flowAlt, flowAltSet ] = useState([]);
   const [ floorReleased, floorReleaseSet ] = useState(false);
@@ -30,6 +32,13 @@ export const ProWrap = ({
   const [ progCounts, progCountsSet ] = useState(false);
 
 
+  useEffect( ()=>{
+    const branchesSort = app.branches.sort((b1, b2)=> {
+      return b1.position < b2.position ? 1 : 
+             b1.position > b2.position ? -1 : 0 });
+     brancheSortSet(branchesSort);
+  }, [app]);
+  
   useLayoutEffect( ()=> {
     !Session.get('riverExpand') ? null : expandSet( true );
     
@@ -132,8 +141,9 @@ export const ProWrap = ({
             <button
               id='exBatch'
               title='View this in explore'
+              className='taskLink'
               onClick={()=>FlowRouter.go(exploreLink)}>
-              <i className='fas fa-rocket primeRightIcon' data-fa-transform='left-1'></i>
+              <i className='fas fa-rocket' data-fa-transform='left-1 down-1'></i>
             </button>
           </div>
           <TideFollow proRoute={true} />
@@ -157,6 +167,7 @@ export const ProWrap = ({
               {React.cloneElement(children[0],
                 { 
                   currentLive: currentLive,
+                  brancheS: brancheState,
                   flow: flow,
                   flowAlt: flowAlt,
                   floorReleased: floorReleased,
@@ -173,6 +184,7 @@ export const ProWrap = ({
                 {React.cloneElement(children[1],
                   { 
                     currentLive: currentLive,
+                    brancheS: brancheState,
                     flow: flow,
                     flowAlt: flowAlt,
                     floorReleased: floorReleased,
@@ -204,6 +216,7 @@ export const ProWrap = ({
             users={users}
             user={user}
             app={app}
+            brancheS={brancheState}
             ncTypesCombo={ncTypesComboFlat}
             action={action}
             showVerify={showVerify}

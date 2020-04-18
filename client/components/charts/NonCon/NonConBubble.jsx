@@ -7,10 +7,10 @@ import {
   VictoryTooltip,
   VictoryClipContainer
 } from 'victory';
-import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
 
-const NonConBubble = ({ ncOp, nonCons, app })=> {
+const NonConBubble = ({ ncOp, nonCons, app, isDebug })=> {
   
   const [ series, seriesSet ] = useState([]);
   const [ typeNum, typeNumSet ] = useState(1);
@@ -18,31 +18,27 @@ const NonConBubble = ({ ncOp, nonCons, app })=> {
   useEffect( ()=> {
     const nonConOptions = ncOp || [];
     
-    function ncCounter(ncArray, ncOptions, appPhases) {
-    
-      const phasesSet = new Set(appPhases);
+    function ncCounter(ncArray, ncOptions, splitBy) {
       
-      const splitByPhase = [...phasesSet].map( (phase, index)=> {
-        let match = ncArray.filter( y => y.where === phase );
+      const splitOut = splitBy.map( (where, index)=> {
+        let match = ncArray.filter( y => y.where === where );
         return{
-          'phase': phase,
+          'where': where,
           'pNC': match
         };
       });
-      let leftover = ncArray.filter( z => phasesSet.has(z.where) === false );
-      splitByPhase.unshift({ 'phase': 'other', 'pNC': leftover });
       
-      Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(splitByPhase);
+      isDebug && console.log(splitOut);
       
       let ncCounts = [];
       let typeSet = new Set();
-      for(let ncSet of splitByPhase) {
+      for(let ncSet of splitOut) {
         for(let ncType of ncOptions) {
           const typeCount = ncSet.pNC.filter( x => x.type === ncType ).length;
           if(typeCount > 0) {
             typeSet.add(ncType);
             ncCounts.push({
-              x: ncSet.phase,
+              x: ncSet.where,
               y: ncType,
               z: typeCount
             });
@@ -54,8 +50,8 @@ const NonConBubble = ({ ncOp, nonCons, app })=> {
     }
     
     try{
-      const appPhases = app.phases;
-      let calc = ncCounter(nonCons, nonConOptions, appPhases);
+      const splitByWhere = [...new Set( Array.from(nonCons, n => n.where ) ) ];
+      let calc = ncCounter(nonCons, nonConOptions, splitByWhere);
       seriesSet(calc);
     }catch(err) {
       console.log(err);
@@ -63,7 +59,7 @@ const NonConBubble = ({ ncOp, nonCons, app })=> {
   }, []);
           
 
-    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({series, typeNum});
+  isDebug && console.log({series, typeNum});
     
   return(
     <div className='chartNoHeightContain'>
@@ -113,7 +109,7 @@ const NonConBubble = ({ ncOp, nonCons, app })=> {
         />
       </VictoryChart>
       
-      <p className='centreText small cap'>Defect Type and {Pref.phase} as Bubbles</p>
+      <p className='centreText small cap'>Defect Type and Recorded Location as Bubbles</p>
       
     </div>
   );

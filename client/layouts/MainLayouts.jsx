@@ -61,11 +61,11 @@ export const LabelLayout = ({content}) => (
       <TideFollow />
     </div>
     <div className='simpleContent'>
-      <div className='wide noPrint'>
+      <div className='wide indent noPrint'>
         <button
-          className='smallAction clear whiteT'
+          className='taskLink'
           onClick={()=> window.history.back()}
-        ><i className='fas fa-arrow-circle-left fa-lg'></i> Go Back</button>
+        ><i className='fas fa-arrow-left'></i></button>
       </div>
       <div className='printLabel'>
         {content}

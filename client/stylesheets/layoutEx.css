@@ -218,34 +218,8 @@
   align-items: center;
   justify-content: center;
 }
-.taskLink {
-  background-color: rgb(25,25,25);
-  color: var(--silver);
-  margin: 8px 0;
-  width: 6vh;
-  height: 6vh;
-  border-radius: 50%;
-  font-size: 3.5vh;
-  cursor: pointer;
-}
-.taskLink:first-child {
+.taskColumn > button:first-child {
   margin: 10px 0 5px 0;
-}
-.taskLink:disabled {
-  color: var(--silverfade);
-}
-.taskLink:hover, .taskLink:active, .onTL {
-  color: rgb(25,25,25);
-  background-color: var(--silver);
-  box-shadow: var(--dropShadow00);
-}
-
-.taskLink:focus {
-  outline-style: hidden;
-  outline-color: transparent;
-  box-shadow: 
-    0 0 0 3px rgb(25,25,25),
-    0 0 0 5px var(--silver);
 }
 
 .smallResultsBox {

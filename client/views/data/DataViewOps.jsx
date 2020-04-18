@@ -84,6 +84,10 @@ const DataViewOps = ({
     let ncListKeys = [];
     let ncTypesComboFlat = [];
     let progCounts = false;
+    
+    const branchesSort = appData.branches.sort((b1, b2)=> {
+    return b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 });
+             
     if( widgetData && batchData ) {
       
       const getRiverFirst = (w, b)=> {
@@ -117,7 +121,8 @@ const DataViewOps = ({
     return {
       riverTitle, riverFlow, 
       riverAltTitle, riverFlowAlt, 
-      ncTypesComboFlat, progCounts 
+      ncTypesComboFlat, progCounts,
+      branchesSort
     };
   }
 

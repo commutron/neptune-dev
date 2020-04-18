@@ -1,0 +1,285 @@
+/* the point of this file is to have them all in one place so as to
+ eventually figure out a way to limit the number of styles */
+ 
+.action {
+  line-height: 2em;
+  font-size: medium;
+  font-weight: 600;
+  letter-spacing: 1px;
+  /*min-width: 2.5rem;*/
+	min-height: 2.5rem;
+	padding: 0 10px;
+	text-transform: uppercase;
+	overflow: hidden;
+}
+
+.smallAction {
+  line-height: 1rem;
+  font-size: medium;
+  letter-spacing: 1px;
+  min-width: 2rem;
+	height: 2rem;
+	padding: 0 10px;
+}
+
+.blendAction {
+  letter-spacing: 1px;
+	font-size: 1.5vw;
+  width: 2.5vw;
+  height: 2.5vw;
+	padding: 0;
+}
+.blendAction:focus, .blendAction:active {
+  outline: dotted;
+}
+
+.miniAction {
+  min-width: 1rem;
+  min-height: 1rem;
+  border-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: transparent;
+  background-color: transparent;
+}
+.miniAction:hover {
+  opacity: 1;
+  border-bottom-color: inherit;
+}
+.miniAction:focus {
+  outline: 1px dotted;
+}
+
+.hoverAction {
+  cursor: pointer;
+}
+.hoverAction:hover, .hoverAction:focus-within {
+  outline-color: var(--neptuneColor);
+  outline-style: dotted;
+  outline-offset: -0.25vmax;
+}
+
+.mini15x {
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+}
+
+.mini2x {
+  min-width: 2rem;
+  min-height: 2rem;
+}
+
+.textAction {
+  margin: 0px;
+  border: none;
+  padding: 0px;
+  background-color: transparent;
+  cursor: pointer;
+}
+.textAction:hover {
+  text-decoration: underline; 
+}
+
+.textLinkButton {
+  color: var(--belizeHole);
+  font-size: 1rem;
+  cursor: pointer;
+  margin: 0px;
+  border: none;
+  padding: 0px;
+  background-color: transparent;
+}
+
+.inlineLink {
+  color: white;
+  background-color: transparent;
+  border: none;
+  font-size: 1rem;
+}
+.inlineLink:hover {
+  text-decoration: underline;
+}
+
+.leapText {
+  font-size: 1rem;
+  min-width: 1rem;
+	min-height: 1rem;
+	text-transform: uppercase;
+	background-color: transparent;
+  border: 1px solid transparent;
+  border-bottom-color: white;
+  word-break: break-all;
+}
+.leapText:hover, .leapText:focus, .leapText:active {
+  color: var(--peterriver);
+  border-bottom-color: var(--peterriver);
+}
+
+.leapBar, .leapRow {
+  width: 100%;
+  min-height: 32px;
+  font-size: 1rem;
+  font-size: calc(1.1rem - 0.1vw);
+  font-weight: 400;
+	padding: 12px 6px;
+	padding: calc(1em - 0.1vw) calc(1em - 0.1vw);
+  cursor: pointer;
+}
+
+.leapBar {
+	border-top: 1px inset transparent;
+	border-bottom-width: 1px;
+  border-bottom-style: outset;
+  border-bottom-color: var(--silverfade);
+  border-left-width: 5px;
+  border-left-style: solid;
+  border-left-color: white;
+  background-color: rgb(25,25,25);
+	color: var(--clouds);
+  word-break: keep-all;
+  word-wrap: normal;
+}
+
+.leapRow {
+  display: grid;
+  grid-template-columns: 15vw repeat(auto-fit, minmax(100px, 1fr));
+	grid-gap: 0px 16px;
+	align-items: center;
+	border: none;
+  border-left-width: 8px;
+  border-left-style: solid;
+  border-left-color: white;
+  background-color: white;
+	color: var(--black);
+  overflow: hidden;
+  word-break: break-all;
+  word-wrap: break-word;
+  box-shadow: none;
+}
+.leapRow > span {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  font-size: 1.25rem;
+}
+.leapRow > span:first-child {
+ font-size: 1.75rem;
+ justify-self: center;
+}
+.leapRow.centreText > span {
+  justify-self: center;
+}
+
+.leapBar:hover, .leapBar:focus, .leapBar:active {
+  background-color: var(--clouds);
+  color: var(--black);
+}
+.leapRow:hover, .leapRow:focus, .leapRow:active {
+  box-shadow: var(--dropShadow00);
+}
+
+.roundActionIcon {
+  display: block;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 5px;
+  border-radius: 50%;
+  background-color: transparent;
+  text-align: center;
+}
+
+.dbblRound {
+  width: 5rem;
+  height: 5rem;
+}
+label.dbblRound {
+  width: 6rem;
+  height: 6rem;
+}
+.trpplRound {
+  width: 7.5rem;
+  height: 7.5rem;
+}
+label.trpplRound {
+  width: 8.5rem;
+  height: 8.5rem;
+}
+.qdpplRound {
+  width: 10rem;
+  height: 10rem;
+  font-size: 2rem;
+}
+label.qdpplRound {
+  width: 11rem;
+  height: 11rem;
+  font-size: 2rem;
+}
+
+.buttonLayerCorrect { height: 1em; }
+
+.taskLink {
+  margin: 8px 0;
+  width: 6vh;
+  height: 6vh;
+  border-radius: 50%;
+  font-size: 3.5vh;
+  cursor: pointer;
+}
+
+/* ------ Adaptive Round Nav Buttons ----- */
+.taskLink {
+  --task-back-color: rgb(25,25,25);
+  --task-front-color: var(--silver);
+  --box-shadow-color: var(--silver);
+  
+  background-color: var(--task-back-color);
+  color: var(--task-front-color);
+}
+.taskLink:hover, 
+.taskLink:active,
+.taskLink.onTL {
+  color: var(--task-back-color);
+  background-color: var(--task-front-color);
+  box-shadow: var(--dropShadow00);
+}
+.taskLink:focus,
+.taskLink > input[type=radio]:checked + svg,
+.taskLink > input[type=checkbox]:checked + svg{
+  outline-style: hidden;
+  outline-color: transparent;
+}
+.taskLink:focus {
+  box-shadow: 
+    0 0 0 3px var(--task-back-color),
+    0 0 0 5px var(--box-shadow-color);
+}
+.taskLink > input[type=radio]:checked + svg,
+.taskLink > input[type=checkbox]:checked + svg {
+  border-radius: 50%;
+  color: var(--task-back-color);
+  background-color: var(--task-front-color);
+  box-shadow: 
+    0 0 0 6px var(--box-shadow-color),
+    0 0 0 10px var(--task-back-color),
+    0 0 0 12px var(--box-shadow-color);
+}
+
+/* switch variables for context */
+.taskLink.butBlue {
+  --task-front-color: var(--peterriver);
+  --box-shadow-color: var(--peterriver);
+}
+.taskLink.butRed {
+  --task-front-color: var(--alizarin);
+  --box-shadow-color: var(--alizarin);
+}
+.taskLink.butYellow {
+  --task-front-color: var(--orange);
+  --box-shadow-color: var(--orange);
+}
+
+.invert .taskLink {
+  --task-front-color: var(--asbestos);
+  --task-back-color: var(--clouds);
+}
+
+.taskLink:disabled { color: var(--silverfade); }

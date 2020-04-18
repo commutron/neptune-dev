@@ -10,7 +10,7 @@ import {
 import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
 
-const NonConBar = ({ ncOp, nonCons, app })=> {
+const NonConBar = ({ ncOp, nonCons, app, isDebug })=> {
   
   const [ series, seriesSet ] = useState([]);
   const [ typeNum, typeNumSet ] = useState(1);
@@ -18,47 +18,42 @@ const NonConBar = ({ ncOp, nonCons, app })=> {
   useEffect( ()=> {
     const nonConOptions = ncOp || [];
     
-    function ncCounter(ncArray, ncOptions, appPhases) {
+    function ncCounter(ncArray, ncOptions, splitBy) {
     
-      const phasesSet = new Set(appPhases);
-      
-      const splitByPhase = [...phasesSet].map( (phase, index)=> {
-        let match = ncArray.filter( y => y.where === phase );
+      const splitOut = splitBy.map( (where, index)=> {
+        let match = ncArray.filter( y => y.where === where );
         return{
-          'phase': phase,
+          'where': where,
           'pNC': match
         };
       });
-      let leftover = ncArray.filter( z => phasesSet.has(z.where) === false ) || [];
-      splitByPhase.unshift({ 'phase': 'other', 'pNC': leftover });
       
-      
-      Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(splitByPhase);
+      isDebug && console.log(splitOut);
 
       let ncCounts = [];
       let typeSet = new Set();
-      for(let ncSet of splitByPhase) {
-        let ncPhase = [];
+      for(let ncSet of splitOut) {
+        let ncWhere = [];
         for(let ncType of ncOptions) {
           const typeCount = ncSet.pNC.filter( x => x.type === ncType ).length || 0;
           if(typeCount > 0) {
             typeSet.add(ncType);
-            ncPhase.push({
+            ncWhere.push({
               y: typeCount,
               x: ncType,
-              label: ncSet.phase
+              label: ncSet.where
             });
           }
         }
-        ncCounts.push(ncPhase);
+        ncCounts.push(ncWhere);
       }
       typeNumSet([...typeSet].length);
       return ncCounts;
     }
     
     try{
-      const appPhases = app.phases;
-      let calc = ncCounter(nonCons, nonConOptions, appPhases);
+      const splitByWhere = [...new Set( Array.from(nonCons, n => n.where ) ) ];
+      let calc = ncCounter(nonCons, nonConOptions, splitByWhere);
       seriesSet( calc );
     }catch(err) {
       console.log(err);
@@ -128,7 +123,7 @@ const NonConBar = ({ ncOp, nonCons, app })=> {
         </VictoryStack>
       </VictoryChart>
       
-      <p className='centreText small cap'>Defect Type and {Pref.phase} as Bars</p>
+      <p className='centreText small cap'>Defect Type and recorded location as Bars</p>
       
     </div>
   );

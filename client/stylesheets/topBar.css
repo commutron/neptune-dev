@@ -90,28 +90,9 @@ input::-webkit-calendar-picker-indicator {
 .navSpacer {
   flex-grow: 2;
 }
-
+/*
 .primeNav .login-link-text {
   color: black;
-}
-/*
-#dtToggle, #ikyToggle, #timeToggle, #exitToggle {
-  display: none;
-}
-
-#boltSwitch, #snapSwitch, #timeSwitch, #exitSwitch {
-  cursor: pointer;
-  transition: 0.4s cubic-bezier(0.2, 0.6, 0.3, 1.1);
-}
-
-#timeSwitch:hover, #boltSwitch:hover {
-  color: white;
-  border-bottom-color: transparent;
-}
-
-.timeLink {
-  display: block;
-  white-space: nowrap;
 }
 
 */

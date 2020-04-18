@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 const ModelMedium = ({ 
   button, title, 
-  icon, color, noText, smIcon, 
+  icon, color, noText, lgIcon, 
   lock, children 
 })=> {
   
@@ -13,7 +13,7 @@ const ModelMedium = ({
     showChange( !show );
   };
     
-  let iSize = smIcon ? ' fa-1x ' : ' fa-lg ';
+  let iSize = lgIcon ? ' fa-2x ' : ' fa-lg ';
   
   return (
     <span>
@@ -23,7 +23,7 @@ const ModelMedium = ({
         onClick={()=>reveal()}
         disabled={lock}>
         <label className='navIcon actionIconWrap'>
-          <i className={'fas ' + icon + iSize + color}></i>
+          <i className={`fas ' ${icon} ${iSize} fa-fw ${color}`}></i>
           {!noText && <span className={'actionIconText ' + color}>{button}</span>}
         </label>
       </button>

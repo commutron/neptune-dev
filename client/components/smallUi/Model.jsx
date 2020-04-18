@@ -8,7 +8,11 @@ import React, { useState } from 'react';
 //lock
 //children
 
-const Model = (props)=>	{
+const Model = ({ 
+  title, button, 
+  icon, color, noText, lgIcon,
+  lock, children 
+})=>	{
   
   const [ show, showChange ] = useState(false);
   
@@ -16,20 +20,18 @@ const Model = (props)=>	{
     showChange( !show );
   };
   
-  const noText = props.noText;
-  let iSize = props.primeTopRight ? ' fa-2x ' :
-              props.smIcon ? ' fa-1x ' : ' fa-lg ';
+  let iSize = lgIcon ? ' fa-2x ' : ' fa-lg ';
   
   return (
     <span>
       <button
-        title={props.title}
+        title={title}
         className='transparent'
         onClick={()=>reveal()}
-        disabled={props.lock}>
+        disabled={lock}>
         <label className='navIcon actionIconWrap'>
-          <i className={'fas ' + props.icon + iSize + props.color}></i>
-          {!noText && <span className={'actionIconText ' + props.color}>{props.button}</span>}
+          <i className={`fas ' ${icon} ${iSize} fa-fw ${color}`}></i>
+          {!noText && <span className={'actionIconText ' + color}>{button}</span>}
         </label>
       </button>
     
@@ -39,9 +41,9 @@ const Model = (props)=>	{
           <div className='popup'>
             <div className='popupHead'>
               <span>
-                <i className={'fas ' + props.icon + ' fa-lg ' + props.color}></i>
+                <i className={'fas ' + icon + ' fa-lg ' + color}></i>
                 <i className='breath'></i>
-                {props.title}
+                {title}
               </span>
               <button
                 className='action clearRed rAlign'
@@ -50,7 +52,7 @@ const Model = (props)=>	{
               ><i className='fas fa-times fa-lg'></i></button>
             </div>
             <div className='popupContent'>
-              {props.children}
+              {children}
             </div>
           </div>
         </div>

@@ -46,11 +46,12 @@ const TideFollow = ({ proRoute, invertColor })=> {
           `Not currently engaged in a ${Pref.batch}` : 
           `Escape Hatch \nto engaged ${Pref.batch}: ${engaged}`}
         onClick={()=>go()}
+        className='taskLink'
         disabled={!engaged}
-      ><i className='fas fa-street-view primeRightIcon' data-fa-transform='up-1'></i>
+      ><i className='fas fa-street-view'></i>
       </button>
     </div>
   );
 };
-
+//primeRightIcon
 export default TideFollow;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import Pref from '/client/global/pref.js';
@@ -20,8 +20,15 @@ const Stone = ({
 })=> {
 	
   const [ lockState, lockSet ] = useState( true );
+  const [ lockout, lockoutSet ] = useState( true );
   const [ workingState, workingSet ] = useState( false );
 
+	useEffect( ()=> {
+		const checkLock = lockState || blockStone || ( !doneStone ? false : true );
+		lockoutSet(checkLock);
+	}, [ lockState, blockStone, doneStone ]);
+	
+	
 	function unlockAllow() {
 		Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({riverFlowState});
   	if(!currentLive) {
@@ -124,7 +131,7 @@ const Stone = ({
 					riverFlowStateSet( 'slow' );
 					workingSet( false );
 					openUndoOption();
-					// pass === false && unlock();
+					pass === false && unlock();
 				  document.getElementById('lookup').focus();
 			  }else{
 			    toast.error(Pref.blocked);
@@ -201,8 +208,6 @@ const Stone = ({
   const topClass = doneStone ? 'doneStoneMask' :
   								 blockStone ? 'blockStone' : '';
   const topTitle = topClass !== '' ? Pref.stoneislocked : '';
-  
-  const lockout = lockState || blockStone || doneStone;
 	
   return(
    	<div className='noCopy'>

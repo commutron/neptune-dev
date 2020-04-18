@@ -47,7 +47,8 @@ const ProdData = ({
     );
   }
   
-  const activeUsers = users.filter( x => Roles.userIsInRole(x._id, 'active') === true);
+  const activeUsers = users.filter( x => Roles.userIsInRole(x._id, 'active') === true &&
+                                         Roles.userIsInRole(x._id, 'readOnly') === false);
     
   return (
     <ProductionFindOps

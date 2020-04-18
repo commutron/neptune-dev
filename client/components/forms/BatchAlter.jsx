@@ -19,7 +19,6 @@ export const AlterFulfill = ({ batchId, end, app, lock })=> (
     title={`Alter ${Pref.batch} ${Pref.end}`}
     color='blueT'
     icon='fa-calendar-alt'
-    smIcon={true}
     lock={!Roles.userIsInRole(Meteor.userId(), ['edit', 'sales']) || lock}
     noText={true}>
     <AlterFulfillForm

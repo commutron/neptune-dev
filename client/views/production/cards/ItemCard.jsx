@@ -28,6 +28,7 @@ import ScrapBox from '/client/components/smallUi/ScrapBox.jsx';
 //         users={users}
 //         app={app}
 //         currentLive={currentLive}
+//         brancheS={brancheS}
 //         fow={flow}
 //         flowAlt={flowAlt}
 //         progCounts={progCounts}
@@ -40,7 +41,7 @@ import ScrapBox from '/client/components/smallUi/ScrapBox.jsx';
 
 const ItemCard = ({
   itemContext, batchData, itemData, widgetData, 
-  users, app,
+  users, app, brancheS,
   currentLive, flow, flowAlt, floorReleased, progCounts,
   showVerify, optionVerify, changeVerify
 })=> {
@@ -98,6 +99,7 @@ const ItemCard = ({
           app={app}
           users={users}
           currentLive={currentLive}
+          brancheS={brancheS}
           flow={flow}
           flowAlt={flowAlt}
           progCounts={progCounts}

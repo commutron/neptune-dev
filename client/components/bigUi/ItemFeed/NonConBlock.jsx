@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import moment from 'moment';
 import './style.css';
 import Pref from '/client/global/pref.js';
@@ -8,8 +8,10 @@ import UserNice from '/client/components/smallUi/UserNice.jsx';
 
 const NonConBlock = ({
   entry, id, serial,
-  done, user, app, ncTypesCombo
+  done, user, app, ncTypesCombo, brancheS
 })=> {
+  
+  const deleteAuth = Roles.userIsInRole(Meteor.userId(), ['remove', 'qa']);
   
   const [ editState, editSet ] = useState(false);
   
@@ -75,15 +77,15 @@ const NonConBlock = ({
     const ncKey = entry.key;
     Meteor.call('unTrashNC', id, ncKey, (error)=> {
 			error && console.log(error);
-			this.edit();
+			edit();
 		});
   }
   
   function popNC(e) {
-    const yes = window.confirm('Are you sure you want to permanently delete this ' + Pref.nonCon);
+    const yes = window.confirm('Permanently delete this ' + Pref.nonCon + '?');
     if(yes) {
       const ncKey = entry.key;
-      const override = !Roles.userIsInRole(Meteor.userId(), ['remove', 'qa']) ? 
+      const override = !deleteAuth ? 
                         prompt("Enter PIN to override", "") : false;
       Meteor.call('ncRemove', id, ncKey, override, (error)=>{
         error && console.log(error);
@@ -91,7 +93,8 @@ const NonConBlock = ({
       });
     }else{editSet(false)}
   }
-    
+  
+  const smEstr = "ddd, MMM D /YY, h:mm A";
   const dt = entry;
                    
   const fx = typeof dt.fix === 'object';
@@ -107,11 +110,19 @@ const NonConBlock = ({
                 <i><i className="fas fa-wrench fa-lg fa-fw iNG" title='Awaiting Repair'></i></i> :
                 <b><i className="fas fa-check-circle fa-lg fa-fw iG" title='Good'></i></b>;
   
-  let fixed = !fx ? '' : <li>Repaired: <UserNice id={dt.fix.who} /> {moment(dt.fix.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</li>;
-  let inspected = !ins ? '' : <li>Inspected: <UserNice id={dt.inspect.who} /> {moment(dt.inspect.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</li>;
-  let skipped = !skp ? '' : <li>Skipped: <UserNice id={dt.skip.who} /> {moment(dt.skip.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</li>;
+  let fixed = !fx ? '' : <li>Repaired: <UserNice id={dt.fix.who} /> {moment(dt.fix.time).calendar(null, {sameElse: smEstr})}</li>;
+  let inspected = !ins ? '' : <li>Inspected: <UserNice id={dt.inspect.who} /> {moment(dt.inspect.time).calendar(null, {sameElse: smEstr})}</li>;
+  let skipped = !skp ? '' : <li>Skipped: <UserNice id={dt.skip.who} /> {moment(dt.skip.time).calendar(null, {sameElse: smEstr})}</li>;
   let snoozed = !dt.snooze ? false : true;
-  let inTrash = !trashed ? '' : <li>Trashed: <UserNice id={dt.trash.who} /> {moment(dt.trash.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</li>;
+  let inTrash = !trashed ? '' : 
+                <Fragment>
+                  <li>Trashed: <UserNice id={dt.trash.who} /> {moment(dt.trash.time).calendar(null, {sameElse: smEstr})}</li>
+                  <li><button
+                        className='miniAction redT inlineButton'
+                        disabled={!deleteAuth}
+                        onClick={(e)=>popNC(e)}
+                      >Permanently Delete</button></li>
+                </Fragment>;
 
   const editAllow = Roles.userIsInRole(Meteor.userId(), 'inspect') && !done;
   const editIndicate = editState && 'editStandout';
@@ -213,10 +224,14 @@ const NonConBlock = ({
               required />
               <datalist id='ncWhereList'>
                 <option value={dt.where || ''}>{dt.where || ''}</option>
-                <optgroup label={Pref.phases}>
-                  {app.phases.map( (entry, index)=>{
-                    return( <option key={index} value={entry}>{entry}</option> );
-                  })}
+                <optgroup label={Pref.branches}>
+                  {brancheS.map( (entry, index)=>{
+                    return(
+                      <option 
+                        key={`${index}pos${entry.position}`}
+                        value={entry.branch}
+                      >{entry.branch}</option>
+                  )})}
                 </optgroup>
                 <optgroup label={Pref.ancillary}>
                   {app.ancillaryOption.map( (entry, index)=>{
@@ -259,11 +274,6 @@ const NonConBlock = ({
                   onClick={(e)=>handleUnTrash(e)}
                 >Restore</button>
               }
-              <button
-                className='miniAction redT inlineButton'
-                disabled={!Roles.userIsInRole(Meteor.userId(), ['remove', 'qa'])}
-                onClick={(e)=>popNC(e)}
-              >Delete</button>
               <button
                 className='miniAction greenT inlineButton'
                 onClick={(e)=>handleChange(e)}

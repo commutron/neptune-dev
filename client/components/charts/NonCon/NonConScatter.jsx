@@ -13,6 +13,8 @@ import Theme from '/client/global/themeV.js';
 // Not In Use
 //// Keeping as example
 
+// OUT OF DATE -- Uses Phases
+
 const NonConScatter = ({ ncOp, flow, flowAlt, nonCons, app })=> {
   
   const [ series, seriesSet ] = useState([]);

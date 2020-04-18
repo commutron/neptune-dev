@@ -46,11 +46,11 @@ const ProductionFindOps = ({
   function itemData(items, bar) {
     return items.find(x => x.serial === bar);
   }
-/*
-  function group() {
-    return allGroup.find(x => x.group === orb);
-  }
-*/
+
+  // function group() {
+  //  return allGroup.find(x => x.group === orb);
+  // }
+  
   function groupAlias() {
     return allGroup.find(x => x.alias === orb);
   }
@@ -78,7 +78,7 @@ const ProductionFindOps = ({
   if(!orb) {
     Session.set('nowBatch', false);
     return (
-      <ProWrap standAlone={true}>
+      <ProWrap standAlone={true} app={app}>
         <div className='centre wide'>
           <SearchHelp />
         </div>
@@ -90,7 +90,7 @@ const ProductionFindOps = ({
   if(orb === '.') {
     Session.set('nowBatch', false);
     return (
-      <ProWrap standAlone={true}>
+      <ProWrap standAlone={true} app={app}>
         <div className='centre'>
           <p>the special hell</p>
           {/*<img src='/titleLogo.svg' className='shadow noCopy' height='600' />*/}
@@ -102,7 +102,7 @@ const ProductionFindOps = ({
   if(orb === Pref.batch || orb === Pref.batch + 's' || orb === Pref.btch) {
     Session.set('nowBatch', false);
     return (
-      <ProWrap>
+      <ProWrap app={app}>
         <BatchesList batchData={[...allBatch, ...allxBatch]} widgetData={allWidget} />
         <div></div>
       </ProWrap>
@@ -112,7 +112,7 @@ const ProductionFindOps = ({
   if(orb === Pref.group || orb === Pref.group + 's' || orb === Pref.grp) {
     Session.set('nowBatch', false);
     return (
-      <ProWrap>
+      <ProWrap app={app}>
         <GroupsList groupData={allGroup} batchData={allBatch} widgetData={allWidget} />
         <div></div>
       </ProWrap>
@@ -123,7 +123,7 @@ const ProductionFindOps = ({
     Session.set('now', Pref.docs);
     Session.set('nowBatch', false);
     return (
-      <ProWrap standAlone={true}>
+      <ProWrap standAlone={true} app={app}>
         <WikiOps wi={false} root={app.instruct} anchor={false} full={true} />
       </ProWrap>
     );
@@ -254,7 +254,7 @@ const ProductionFindOps = ({
   if(!isNaN(orb) && orb.length > 5 && orb.length <= 10) {
     Session.set('nowBatch', orb);
     return(
-      <ProWrap standAlone={true}>
+      <ProWrap standAlone={true} app={app}>
         <div className='centre wide space'>
           <p className='big centerText'>{orb} is not a registered serial number</p>
           <hr />
@@ -266,7 +266,7 @@ const ProductionFindOps = ({
   
   Session.set('nowBatch', false);
 	return (
-	  <ProWrap standAlone={true}>
+	  <ProWrap standAlone={true} app={app}>
       <div className='centre wide'>
         <p className='biggest'>¯\_(ツ)_/¯</p>
         <br />

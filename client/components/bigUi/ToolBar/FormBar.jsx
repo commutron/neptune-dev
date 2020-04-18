@@ -35,20 +35,19 @@ const FormBar = ({
     <div className='proActionForm'>
       {showX || showlegacyItem ?
         <div className='footLeft'>
-        {action === 'xBatchBuild' ? null :
-          <label htmlFor='firstselect' className='formBarToggle'>
+          {action === 'xBatchBuild' ? null :
+          <label htmlFor='firstselect' className='formBarToggle taskLink butBlue'>
             <input
               type='checkbox'
               id='firstselect'
               name='toggleFirst'
               className='radioIcon'
-              checked={showVerify}
+              checked={showVerify === true}
               onChange={()=>changeVerify(true)}
               disabled={!Roles.userIsInRole(Meteor.userId(), 'verify')} />
-            <i className='fas fa-thumbs-up formBarIcon'></i>
-            <span className='actionIconText'>First</span>
+            <i className='fas fa-thumbs-up' data-fa-transform='up-1'></i>
           </label> }
-          <label htmlFor='ncselect' className='formBarToggle'>
+          <label htmlFor='ncselect' className='formBarToggle taskLink butRed'>
             <input
               type='radio'
               id='ncselect'
@@ -56,10 +55,9 @@ const FormBar = ({
               className='radioIcon'
               checked={show === 'NC'}
               onChange={()=>showSet( 'NC' )} />
-            <i className='fas fa-bug formBarIcon'></i>
-            <span className='actionIconText'>{Pref.nonCon}</span>
+            <i className='fas fa-bug'></i>
           </label>
-          <label htmlFor='shortselect' className='formBarToggle'>
+          <label htmlFor='shortselect' className='formBarToggle taskLink butYellow'>
             <input
               type='radio'
               id='shortselect'
@@ -67,8 +65,7 @@ const FormBar = ({
               className='radioIcon'
               checked={show === 'S'}
               onChange={()=>showSet( 'S' )} />
-            <i className='fas fa-exclamation-circle formBarIcon' data-fa-transform="down-1"></i>
-            <span className='actionIconText'>Shortfall</span>
+            <i className='fas fa-exclamation-circle'></i>
           </label>
         </div>
       : null}

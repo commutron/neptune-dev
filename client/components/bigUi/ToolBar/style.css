@@ -81,55 +81,8 @@ input.orangeIn:invalid {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 0 8px;
+  margin: 0 8px !important;
   transition: all 150ms ease-in-out;
-}
-
-.formBarToggle .formBarIcon {
-  display: block;
-  padding: 1px 5px 3px 5px;
-  background-color: transparent;
-  font-size: 2rem;
-  border-radius: 50%;
-}
-
-#ncselect + .formBarIcon,
-#ncselect ~ .actionIconText {
-  color: var(--alizarin);
-}
-#ncselect:hover + .formBarIcon,
-#ncselect:checked + .formBarIcon {
-  background-color: var(--alizarin);
-  color: black;
-}
-
-#firstselect + .formBarIcon,
-#firstselect ~ .actionIconText {
-  color: var(--peterriver);
-}
-#firstselect:hover + .formBarIcon,
-#firstselect:checked + .formBarIcon {
-  background-color: var(--peterriver);
-  color: black;
-}
-#firstselect:disabled + .formBarIcon,
-#firstselect:disabled ~ .actionIconText {
-  opacity: 0.5;
-}
-#firstselect:disabled:hover + .formBarIcon {
-  background-color: black;
-  color: var(--peterriver);
-  cursor: not-allowed;
-}
-
-#shortselect + .formBarIcon,
-#shortselect ~ .actionIconText {
-  color: var(--orange);
-}
-#shortselect:hover + .formBarIcon,
-#shortselect:checked + .formBarIcon {
-  background-color: var(--orange);
-  color: black;
 }
 
 @media screen and (max-width: 1024px) {

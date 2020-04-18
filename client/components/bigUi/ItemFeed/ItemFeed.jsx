@@ -14,7 +14,7 @@ const ItemFeed = ({
   id, batch, serial,
   createTime, createBy,
   history, 
-  noncons, ncTypesCombo,
+  noncons, ncTypesCombo, brancheS,
   shortfalls,
   rmas, allRMA,
   done,
@@ -60,7 +60,8 @@ const ItemFeed = ({
                 done={done}
                 user={user}
                 app={app}
-                ncTypesCombo={ncTypesCombo} />
+                ncTypesCombo={ncTypesCombo}
+                brancheS={brancheS} />
             );
           }else if(Array.isArray(dt.refs) === true) {
             return( 

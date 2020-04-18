@@ -10,7 +10,7 @@ import {
 import Theme from '/client/global/themeV.js';
 import { CalcSpin } from '/client/components/uUi/Spin.jsx';
 
-const NonConBarRefs = ({ ncOp, nonCons, app })=> {
+const NonConBarRefs = ({ ncOp, nonCons, app, isDebug })=> {
   
   const [ series, seriesSet ] = useState([]);
   const [ typeNum, typeNumSet ] = useState(false);
@@ -49,7 +49,7 @@ const NonConBarRefs = ({ ncOp, nonCons, app })=> {
     seriesSet( splitByType );
   }, []);
 
-    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({series, typeNum});
+    isDebug && console.log({series, typeNum});
 
   if(!typeNum) {
     return(

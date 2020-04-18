@@ -16,8 +16,8 @@ const VersionPanel = ({
   
   const v = versionData;
   const w = widgetData;
-  const g = groupData;
-  const b = batchRelated;
+  // const g = groupData;
+  // const b = batchRelated;
   const a = app;
 
   const vAssmbl = v.assembly.sort((p1, p2)=> {

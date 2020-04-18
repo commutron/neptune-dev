@@ -193,9 +193,9 @@ const OverviewWrap = ({
           <button
             type='button'
             title='Refresh Data'
-            className={working ? 'spin2' : ''}
+            className={working ? 'spin2 taskLink' : 'taskLink'}
             onClick={(e)=>requestRefresh()}>
-          <i className='fas fa-sync-alt primeRightIcon'></i>
+          <i className='fas fa-sync-alt'></i>
           </button>
         </div>
         <TideFollow />

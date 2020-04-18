@@ -76,7 +76,8 @@ const BatchPanel = ({ batchData, widgetData, user, isDebug, app, flowData })=> {
           allDone={allDone}
           progCounts={flowData.progCounts}
           riverTitle={flowData.riverTitle}
-          riverAltTitle={flowData.riverAltTitle} />
+          riverAltTitle={flowData.riverAltTitle}
+          brancheS={flowData.branchesSort} />
       
         <TimeTab 
           a={app}
@@ -107,7 +108,9 @@ const BatchPanel = ({ batchData, widgetData, user, isDebug, app, flowData })=> {
           b={batchData}
           riverFlow={flowData.riverFlow}
           riverAltFlow={flowData.riverAltFlow}
-          ncTypesCombo={flowData.ncTypesComboFlat} />
+          ncTypesCombo={flowData.ncTypesComboFlat}
+          brancheS={flowData.branchesSort}
+          isDebug={isDebug} />
         
         <div>
           <RMATable

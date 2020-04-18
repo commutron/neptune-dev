@@ -11,7 +11,7 @@ import FlowBuilder from '/client/components/bigUi/ArrayBuilder/FlowBuilder.jsx';
 const FlowFormRouteWrapper = ({ 
   id, app,
   existFlows, edit, preFill,
-  small, noText, lock
+  noText, lock
 })=> {
   const name = edit ? 'Edit' : 'New Flow';
   return(
@@ -20,7 +20,6 @@ const FlowFormRouteWrapper = ({
       title={`${name} ${Pref.flow}`}
       color='greenT'
       icon='fa-stream'
-      smIcon={small}
       lock={!Roles.userIsInRole(Meteor.userId(), 'edit') || lock}
       noText={noText}
     >
