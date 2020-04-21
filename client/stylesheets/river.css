@@ -373,7 +373,7 @@
 }
 
 .stoneFrame .actionBox {
-  max-width: 20vmax;
+  max-width: 19vmax;
 }
 .stoneForm {
   display: flex;
@@ -382,20 +382,19 @@
   justify-content: space-around;
   align-items: center;
 }
-fieldset.stoneForm {
+fieldset.stoneForm, .fakeFielset {
   border-top: 5px dashed rgba(255,255,255,0.5);
   border-right: none;
   border-bottom: none;
   border-left: none;
-  padding: 48px 1vmax;
+  padding: 3vmax 1vmax;
 }
 
 .stoneForm input[type='text'],
 .stoneForm select,
 .stoneForm label,
 .stoneForm details {
-  
-  max-width: 18vmax;
+  max-width: 17vmax;
 }
 
 .stoneForm label {
@@ -403,8 +402,8 @@ fieldset.stoneForm {
 }
 
 .stoneForm textarea {
-  min-width: 18vmax;
-  max-width: 18vmax;
+  min-width: 17vmax;
+  max-width: 17vmax;
   min-height: 1rem;
   border-color: black;
 }
@@ -437,6 +436,24 @@ fieldset.stoneForm {
 .stoneForm .clearWhite:hover {
   background-color: white;
   color: var(--peterriver);
+}
+
+.stoneForm .go478283313 {
+  --rmsc-primary: var(--peterriver);
+  --rmsc-hover: var(--peterriverfade);
+  --rmsc-border: transparent;
+  --rmsc-gray: #aaa;
+  --rmsc-background: white;
+  --rmsc-border-radius: 0px;
+  --rmsc-height: 2rem;
+  color: black;
+  min-width: 17vmax;
+  max-width: 17vmax;
+}
+.stoneForm .go478283313 .item-renderer {
+  display: flex;
+  align-content: center;
+  color: black;
 }
 
 .testFail summary::-webkit-details-marker {

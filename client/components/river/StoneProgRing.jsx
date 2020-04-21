@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { VictoryPie } from 'victory';
 
-const StoneProgRing = ({ sKey, step, type, progCounts, isAlt, workingState, children })=> {
+const StoneProgRing = ({ 
+  sKey, step, type, 
+  progCounts, isAlt, 
+  workingState, 
+  children
+})=> {
   
   const [ countDone, doneSet ] = useState(0);
   const [ countRemain, remainSet ] = useState(0);
@@ -10,7 +15,7 @@ const StoneProgRing = ({ sKey, step, type, progCounts, isAlt, workingState, chil
     const pre = progCounts;
     let preFetch = false;
     
-    if(!pre || type === 'first') {
+    if(!pre) {
       null;
     }else{
       const preTotal = isAlt ?
@@ -32,23 +37,13 @@ const StoneProgRing = ({ sKey, step, type, progCounts, isAlt, workingState, chil
     count();
   }, [sKey, progCounts]);
     
-  if(type === 'first') {
-    return(
-      <span className='stoneRing centre'>
-        <div>
-          {children}
-        </div>
-      </span>
-    );
-  }
-    
-    const color0 = 'rgb(60,60,60)';
-    const color1 =
-      type === 'build' ? 'rgb(41, 128, 185)' :
-      type === 'checkpoint' ? 'rgb(127, 140, 141)' :
-      type === 'test' ? 'rgb(22, 160, 133)' :
-      type === 'finish' ? 'rgb(142, 68, 173)' :
-      'rgb(39, 174, 96)';
+  const color0 = 'rgb(60,60,60)';
+  const color1 =
+    type === 'build' ? 'rgb(41, 128, 185)' :
+    type === 'checkpoint' ? 'rgb(127, 140, 141)' :
+    type === 'test' ? 'rgb(22, 160, 133)' :
+    type === 'finish' ? 'rgb(142, 68, 173)' :
+    'rgb(39, 174, 96)';
     
   return(
     <span className={`stoneRing centre ${workingState ? 'spinOuterSVG' : ''}`}>

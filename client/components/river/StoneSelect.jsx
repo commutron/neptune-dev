@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import InOutWrap from '/client/components/tinyUi/InOutWrap.jsx';
 // import Pref from '/client/global/pref.js';
 
-import Stone from './Stone.jsx';
+import StoneControl from './StoneControl.jsx';
 import FirstForm from './FirstForm.jsx';
 import FoldInNested from './FoldInNested.jsx';
 import TestFails from './TestFails.jsx';
@@ -71,9 +71,9 @@ const StoneSelect = ({
   for(let flowStep of flow) {
     const coreStep = allTrackOption.find( t => t.key === flowStep.key);
     const brKey = coreStep && coreStep.branchKey;
-    const stepBranch = !brKey ? flowStep.step : 
-                        brancheS.find( b => b.brKey === brKey ).branch;
-
+    const branchObj = brancheS.find( b => b.brKey === brKey ) || null;
+    const stepBranch = branchObj ? branchObj.branch : flowStep.step;
+    
     const first = flowStep.type === 'first';
 
     const stepComplete = first ? 
@@ -85,7 +85,7 @@ const StoneSelect = ({
     const ncResolved = ncFromHere.length === 0;
     //console.log(stepMatch, ncResolved);
     
-    const damStep = flowStep.type === 'test' || flowStep.type === 'finish';
+    const damStep = !branchObj ? null : branchObj.reqProblemDam;
   
     const ncAllClear = ncOutstanding.length === 0;
     const shAllClear = sh.length === 0 || allAnswered === true;
@@ -100,7 +100,7 @@ const StoneSelect = ({
       const fTest = flowStep.type === 'test' ? 
                     iDone.filter( x => x.type === 'test' && x.good === false) : [];
       
-      const blockStone = damStep && (!ncAllClear || !shAllClear ) ? true : false;
+      const blockStone = damStep && ( !ncAllClear || !shAllClear ) ? true : false;
       const doneStone = stepComplete || false;
 	    
 	    Session.set('ncWhere', stepBranch);
@@ -117,6 +117,8 @@ const StoneSelect = ({
                   flowFirsts={flow.filter( x => x.type === 'first' )}
                   sKey={flowStep.type === 'first' ? flowStep.key : false}
                   step={flowStep.type === 'first' ? flowStep.step : false }
+                  branchObj={flowStep.type === 'first' ? branchObj : false }
+                  brancheS={brancheS}
                   users={users}
                   app={app}
                   optionVerify={optionVerify}
@@ -132,7 +134,7 @@ const StoneSelect = ({
                     //subItems={subItems}
                     lock={false} />
                 : 
-    		          <Stone
+    		          <StoneControl
       		          key={flowStep.key}
                     id={id}
                     barcode={serial}
@@ -140,6 +142,7 @@ const StoneSelect = ({
                     step={flowStep.step}
                     type={flowStep.type}
                     currentLive={currentLive}
+                    branchObj={branchObj}
                     allItems={allItems}
                     isAlt={isAlt}
                     hasAlt={hasAlt}

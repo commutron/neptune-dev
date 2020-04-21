@@ -1,0 +1,82 @@
+import React, { Fragment } from 'react';
+import { toast } from 'react-toastify';
+import Pref from '/client/global/pref.js';
+import StoneProgRing from './StoneProgRing.jsx';
+
+
+const StoneFinish = ({ 
+	key, id, barcode, sKey, step, type,
+	progCounts, 
+	lockout, 
+	topClass, topTitle,
+	
+	allItems, isAlt, hasAlt,
+	
+	handleStepUndo,
+	undoOption, closeUndoOption,
+	
+	enactEntry,
+	workingState
+})=> { 
+	
+  //// Action for marking the board as complete
+	function finish() {
+		enactEntry();
+	  
+    const batchId = id;
+
+    const pre = progCounts;
+    const preTotal = pre.regItems;
+    const preStep = pre.regStepData.find( x => x.key === sKey );
+    const preCount = preStep ? preStep.items : undefined;
+    const benchmark = preCount === 0 ? 'first' : preCount === preTotal - 1 ? 'last' : false;              
+
+		Meteor.call('finishItem', batchId, barcode, sKey, step, type, benchmark, (error, reply)=>{
+		  if(error)
+		    console.log(error);
+		  if(reply === true) {
+		  	document.getElementById('lookup').focus();
+		  }else{
+		    toast.error(Pref.blocked);
+		  }
+		});
+	}
+    
+  return(
+   	<Fragment>
+  		<div className={topClass + ' stoneFrame noCopy'} title={topTitle}>
+      	<StoneProgRing
+  				serial={barcode}
+  				allItems={allItems}
+  				isAlt={isAlt}
+  				hasAlt={hasAlt}
+  				sKey={sKey}
+          step={step}
+          type={type}
+          progCounts={progCounts}
+          workingState={workingState}
+        >
+	      	<button
+	      	  className='stone iFinish'
+	  				name={step}
+	  				id='stoneButton'
+	  				onClick={()=>finish()}
+	  				tabIndex={-1}
+	  				disabled={lockout}>
+						<i>{step}</i>
+					</button>
+				</StoneProgRing>
+			</div>
+			<div className='undoStepWrap centre'>
+				{undoOption ? 
+					<button
+						className='textAction'
+						onClick={(e)=>handleStepUndo(e)}
+					>undo</button> 
+				: null}
+    	</div>
+    </Fragment>
+  );
+};
+
+export default StoneFinish;

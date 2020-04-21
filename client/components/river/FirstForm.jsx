@@ -1,37 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
+import MultiSelect from "react-multi-select-component";
 //import RoleCheck from '/client/components/utilities/RoleCheck.js';
 import UserNice from '../smallUi/UserNice.jsx';
 
 const FirstForm = ({ 
   id, barcode, 
   sKey, step, 
-  flowFirsts, 
+  flowFirsts,
+  brancheS, branchObj,
   optionVerify, changeVerify,
   app, users, methods
 })=> {
 
-  const [ refreshState, refreshSet ] = useState(0);
+  // const [ refreshState, refreshSet ] = useState(0);
   
   const [ stepKeyState, stepKeySet ] = useState(false);
   const [ stepNameState, stepNameSet ] = useState(false);
+  const [ stepBRkeyState, stepBRkeySet ] = useState(false);
+  
   const [ changesState, changesSet ] = useState( "" );
   const [ howIState, howISet ] = useState(false);
-  const [ whoBState, whoBSet ] = useState( new Set() );
-  const [ howBState, howBSet ] = useState(false);
+  
+  const [ whoBState, whoBSet ] = useState( [] );
+  const [ howBState, howBSet ] = useState( [] );
+  
   const [ goodState, goodSet ] = useState(true);
   const [ ngState, ngSet ] = useState(false);
   
+  useEffect( ()=>{
+    console.log(howBState);
+    
+  }, [howBState]);
+  
   function setStep() {
     const stepKey = this.repeatStep.value;
-    const stepName = flowFirsts.find( x => x.key === stepKey ).step;
+    const stepObj = flowFirsts.find( x => x.key === stepKey );
     if(!stepKey) {
       null;
     }else{
       stepKeySet( stepKey );
-      stepNameSet( stepName );
-      !stepName.toLowerCase().includes('smt') ? 
+      stepNameSet( stepObj.step );
+      stepBRkeySet( stepObj.branchKey );
+      !stepObj.step.toLowerCase().includes('smt') ? 
         null : howISet( 'auto' );
     }
   }
@@ -46,30 +58,6 @@ const FirstForm = ({
   }
   function eyes() {
     howISet( 'manual' );
-  }
-
-// step 1
-  function up() {
-    let whoNew = whoBState;
-    let val = this.user.value;
-    whoNew.add(val);
-    whoBSet( whoNew );
-    refreshSet(refreshState+1);
-    this.user.value = '';
-  }
-  
-  function down(entry) {
-    let whoNew = whoBState;
-    whoNew.delete(entry);
-    whoBSet( whoNew );
-    refreshSet(refreshState+1);
-  }
-
-// step 2
-  function tool() {
-    let val = this.methodB.value.trim().toLowerCase();
-    val === 'false' ? val = false : null;
-    howBSet( val );
   }
 
 // step 3
@@ -95,8 +83,9 @@ const FirstForm = ({
 		const stepName = !optionVerify ? step : stepNameState;
       
     const howI = howIState ? howIState : 'manual';
-    const whoB = [...whoBState];
-    const howB = howBState;
+    const whoB = Array.from(whoBState, u => u.value);
+    
+    const howB = Array.from(howBState, u => u.value);
     const good = goodState;
     const diff = changesState;
     const ng = ngState;
@@ -118,11 +107,29 @@ const FirstForm = ({
 		});
 	}
     
-  let secondOpinion = whoBState.has(Meteor.userId()) ? true : false;
+  let secondOpinion = true;//whoBState.has(Meteor.userId()) ? true : false;
   
-  const stepKey = optionVerify ? stepKeyState : sKey;
+  // const stepKey = optionVerify ? stepKeyState : sKey;
   const stepName = optionVerify ? stepNameState : step;
   
+  const userCombo = Array.from(users, x => { return {
+                                              label: x.username,
+                                              value: x._id } } );
+  
+  
+  const stepBranch = branchObj ? branchObj : 
+    brancheS.find( b => b.brKey === stepBRkeyState );
+    
+  const buildMethods = branchObj ? branchObj.buildMethods : 
+                                   stepBranch ? 
+                                    stepBranch.buildMethods : [];
+  
+  console.log(buildMethods);
+  const buildCombo = Array.from(buildMethods, x => { return {
+                                              label: x,
+                                              value: x } } );
+  console.log(buildCombo);                                            
+                                              
   return(
     <div className='vspace noCopy stoneFrame'>
       <div className='actionBox blue'>
@@ -180,7 +187,8 @@ const FirstForm = ({
                   id='manualInspect'
                   type='radio'
                   name='howInspect'
-                  onChange={()=>eyes()} />
+                  onChange={()=>eyes()}
+                  required />
                 <label htmlFor='manualInspect' className='roundActionIcon dbblRound onblueHover'>
                   <i className="fas fa-eye fa-3x"></i>
                   <br /><i className='medBig'>Manual</i>
@@ -199,53 +207,37 @@ const FirstForm = ({
           </fieldset>
         : null}
 
-        <fieldset className='stoneForm'>
-          <p>
-            <select
-              id='user'
-              className='cap'
-              onChange={(e)=>up(e)}>
-              <option></option>
-              {users.map( (entry, index)=>{
-                return( <option key={index} value={entry._id}>{entry.username}</option> );
-              })}
-            </select>
-            <label htmlFor='user'>{Pref.builder}</label>
-          </p>
-          {[...whoBState].map( (entry, index)=>{
-            return(
-              <i className='tempTag medBig' key={index}>
-                <button
-                  type='button'
-                  name={entry}
-                  id='ex'
-                  className='miniAction big redT'
-                  onClick={(e)=>down(entry)}
-                ><i className="fas fa-times"></i>
-                </button>  <UserNice id={entry} />
-              </i>
-          )})}
-        </fieldset>
 
-        <fieldset className='stoneForm'>
-          <p>
-            <select
-              id='methodB'
-              className='cap'
-              onChange={(e)=>tool(e)}
-              required>
-              <option value={false}></option>
-              {app.toolOption.map( (entry, index)=>{
-                if(entry.forSteps.includes(stepKey)) {
-                  return ( <option key={index} value={entry.title}>{entry.title}</option> );
-                }else{null}
-              })}
-            </select>
-            <label htmlFor='methodB'>{Pref.method}</label>
-          </p>
-        </fieldset>
+        <div className='stoneForm fakeFielset'>
+          <label htmlFor='Builder'>
+            <MultiSelect
+              options={userCombo}
+              value={whoBState}
+              onChange={whoBSet}
+              labelledBy={"Builder"}
+              hasSelectAll={false}
+              disableSearch={true}
+          /><br />{Pref.builder}</label>
+        </div>  
+         
+      
+        <div className='stoneForm fakeFielset'>
+          <label htmlFor='Method'>
+            <MultiSelect
+              options={buildCombo}
+              value={howBState}
+              onChange={howBSet}
+              labelledBy={"Method"}
+              hasSelectAll={false}
+              disableSearch={true}
+          />{Pref.method}</label>
+        </div>
+        
   
-        <fieldset className='stoneForm' disabled={whoBState.size === 0 || howBState === false}>
+        <fieldset 
+          className='stoneForm' 
+          //disabled={whoBState.size === 0 || howBState === false}
+        >
           <p>
             <span className='balance'>
               <button
