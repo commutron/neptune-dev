@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useLayoutEffect, Fragment } from 'react';
 import { Meteor } from 'meteor/meteor';
 import ErrorCatch from '/client/components/utilities/ErrorCatch.jsx';
 import { ToastContainer } from 'react-toastify';
@@ -9,7 +9,6 @@ import TideControl from '/client/components/tide/TideControl/TideControl.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
 import FindBox from './FindBox.jsx';
 import FormBar from '/client/components/bigUi/ToolBar/FormBar.jsx';
-import ProgressCounter from '/client/components/utilities/ProgressCounter.js';
 import NonConOptionMerge from '/client/components/utilities/NonConOptionMerge.js';
 
 export const ProWrap = ({ 
@@ -23,58 +22,30 @@ export const ProWrap = ({
   const [ showVerify, showVerifySet ] = useState(false);
   const [ optionVerify, optionVerifySet ] = useState(false);
   
-  const [ brancheState, brancheSortSet ] = useState([]);
-  
-  const [ flow, flowSet ] = useState([]);
-  const [ flowAlt, flowAltSet ] = useState([]);
-  const [ floorReleased, floorReleaseSet ] = useState(false);
   const [ ncTypesComboFlat, ncTypesComboSet ] = useState([]);
-  const [ progCounts, progCountsSet ] = useState(false);
-
-
-  useEffect( ()=>{
-    const branchesSort = app.branches.sort((b1, b2)=> {
-      return b1.position < b2.position ? 1 : 
-             b1.position > b2.position ? -1 : 0 });
-     brancheSortSet(branchesSort);
-  }, [app]);
   
   useLayoutEffect( ()=> {
     !Session.get('riverExpand') ? null : expandSet( true );
     
     const b = batchData;
     const w = widgetData;
-    let getFlow = [];
-    let getFlowAlt = [];
-    let getFlRel = false;
     let getNCListKeys = [];
     let getNCTypesCombo = [];
-    let getProgCounts = false;
+    
     if( b && w ) {
       const river = w.flows.find( x => x.flowKey === b.river);
       const riverAlt = w.flows.find( x => x.flowKey === b.riverAlt );
       if(river) {
-        getFlow = river.flow;
         river.type === 'plus' && getNCListKeys.push(river.ncLists);
       }
       if(riverAlt) {
-        getFlowAlt = riverAlt.flow;
         riverAlt.type === 'plus' && getNCListKeys.push(riverAlt.ncLists);
       }
-      getFlRel = b.releases.findIndex( x => x.type === 'floorRelease') >= 0;
-      if(action !== 'xBatchBuild') {
-        getProgCounts = ProgressCounter(getFlow, getFlowAlt, b);
-      }
       getNCTypesCombo = NonConOptionMerge(getNCListKeys, app);
-
     }
-    flowSet(getFlow);
-    flowAltSet(getFlowAlt);
-    floorReleaseSet(getFlRel);
     ncTypesComboSet(getNCTypesCombo);
-    progCountsSet(getProgCounts);
     
-  }, [batchData, widgetData]);
+  }, [batchData, widgetData, app]);
   
   
   function handleVerify(value) {
@@ -82,8 +53,8 @@ export const ProWrap = ({
     optionVerifySet( value );
   }
   
-  function handleExpand() {
-    const openState = expand;
+  function handleExpand(direct) {
+    const openState = direct !== null ? direct : expand;
     expandSet( !openState );
     Session.set( 'riverExpand', !openState );
   }
@@ -100,7 +71,7 @@ export const ProWrap = ({
   
   const et = !u || !u.engaged ? false : u.engaged.tKey;
   const tide = !bData || !bData.tide ? [] : bData.tide;
-  const currentLive = tide.find( 
+  const tideFloodGate = tide.find( 
     x => x.tKey === et && x.who === Meteor.userId() 
   );
     
@@ -111,14 +82,16 @@ export const ProWrap = ({
                       gAlias ?
                       '/data/overview?request=groups&specify=' + gAlias :
                       '/data/overview?request=batches';
-
-  const cSize = children.length;
   
   let riverExpand = expand;
-    
+  
+  const viewContainer = standAlone ? 'pro_100' :
+                        !riverExpand ? 'pro_20_80' : 
+                                         'pro_40_60';
+                        
   return(
     <ErrorCatch>
-      <div className='containerPro'>
+      <div className={viewContainer + ' containerPro'}>
         <ToastContainer
           position="top-right"
           autoClose={2500}
@@ -131,7 +104,7 @@ export const ProWrap = ({
               <TideControl 
                 batchID={bData._id} 
                 tideKey={et} 
-                currentLive={currentLive}
+                tideFloodGate={tideFloodGate}
                 tideLockOut={tideLockOut} />
             </div>}
           <div className='frontCenterTitle'>
@@ -149,82 +122,90 @@ export const ProWrap = ({
           <TideFollow proRoute={true} />
         </div>
         
-        {standAlone ?
-          <div className='proFull'>
-            {children}
-          </div>
-        :
-        <section className={!riverExpand ? 'proNarrow' : 'proWide'}>
+        <Fragment>
           
-          <div 
-            className={
-              !riverExpand ? 'proSingle forceScrollStyle' : 
-              cSize > 2 ? 'proDual forceScrollStyle' : 
-              'proSingle forceScrollStyle'
-            }
-          >
-            <div className='proPrime'>
-              {React.cloneElement(children[0],
-                { 
-                  currentLive: currentLive,
-                  brancheS: brancheState,
-                  flow: flow,
-                  flowAlt: flowAlt,
-                  floorReleased: floorReleased,
-                  progCounts: progCounts,
-                  showVerify: showVerify,
-                  optionVerify: optionVerify,
-                  changeVerify: (q)=>handleVerify(q)
-                }
-              )}
-            </div>
-            
-            {cSize > 2 && riverExpand ?
-              <div className='proExpand'>
-                {React.cloneElement(children[1],
-                  { 
-                    currentLive: currentLive,
-                    brancheS: brancheState,
-                    flow: flow,
-                    flowAlt: flowAlt,
-                    floorReleased: floorReleased,
-                    progCounts: progCounts
-                  }
-                )}
-              </div>
-            :null}
+          <div className='proPrime forceScrollStyle'>
+            {React.cloneElement(children[0],
+              { 
+                tideLockOut: tideLockOut,
+                ncTypesCombo: ncTypesComboFlat,
+                
+                tideFloodGate: tideFloodGate,
+                expand: expand, 
+                handleExpand: (d)=>handleExpand(d),
+                
+                showVerify: showVerify,
+                optionVerify: optionVerify,
+                handleVerify: (q)=>handleVerify(q)
+              }
+            )}
           </div>
-          
         
           <button
             type='button'
-            className={!riverExpand ? 'riverExpandToggle' : 'riverShrinkToggle'}
-            onClick={()=>handleExpand()}>
+            className={!riverExpand ? 
+              'riverExpandToggle' : 'riverShrinkToggle'
+            }
+            onClick={()=>handleExpand(null)}>
             <i className='fas fa-sort fa-2x' data-fa-transform='rotate-90'></i>
           </button>
-            
+          
           <div className='proInstruct' style={scrollFix}>
-            {children[cSize - 1]}
+            {children[1]}
           </div>
-  
+        
           <FormBar
             batchData={batchData}
-            currentLive={currentLive}
             itemData={itemData}
             widgetData={widgetData}
             versionData={versionData}
-            users={users}
-            user={user}
-            app={app}
-            brancheS={brancheState}
+            
+            tideFloodGate={tideFloodGate}
             ncTypesCombo={ncTypesComboFlat}
             action={action}
             showVerify={showVerify}
-            changeVerify={(q)=>handleVerify(q)} />
+            changeVerify={(q)=>handleVerify(q)}
           
-        </section>
-        }
+            users={users}
+            user={user}
+            app={app} />
+        </Fragment>
+
       </div>
+    </ErrorCatch>
+  );
+};
+
+
+export const ProWindow = ({ children })=> {
+  
+  // let scrollFix = {
+  //   overflowY: 'auto'
+  // };
+  
+  return(
+    <ErrorCatch>
+      <section className='windowPro'>
+        <ToastContainer
+          position="top-right"
+          autoClose={2500}
+          newestOnTop />
+        <div className='tenHeader'>
+          <div className='topBorder' />
+          <HomeIcon />
+          <div className='auxLeft'></div>
+          <div className='frontCenterTitle'>
+            <FindBox />
+          </div>
+          <div className='auxRight'></div>
+          <TideFollow proRoute={true} />
+        </div>
+        <div className='proContent'>
+          <Fragment>
+            {children}
+          </Fragment>
+        </div>
+      </section>
     </ErrorCatch>
   );
 };

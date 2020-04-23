@@ -1,13 +1,12 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 
-import { ProWrap } from '/client/layouts/ProLayout.jsx';
+import { ProWrap, ProWindow } from '/client/layouts/ProLayout.jsx';
 
 import WikiOps from '../wiki/WikiOps.jsx';
 import SearchHelp from './SearchHelp.jsx';
 
-import ItemCard from './cards/ItemCard.jsx';
-import BatchCard from './cards/BatchCard.jsx';
+import DoProCard from './cards/DoProCard.jsx';
 import XBatchCard from './cards/XBatchCard.jsx';
 //import WidgetCard from './cards/WidgetCard.jsx';
 
@@ -78,11 +77,11 @@ const ProductionFindOps = ({
   if(!orb) {
     Session.set('nowBatch', false);
     return (
-      <ProWrap standAlone={true} app={app}>
+      <ProWindow app={app}>
         <div className='centre wide'>
           <SearchHelp />
         </div>
-      </ProWrap>
+      </ProWindow>
     );
   }
 
@@ -90,12 +89,11 @@ const ProductionFindOps = ({
   if(orb === '.') {
     Session.set('nowBatch', false);
     return (
-      <ProWrap standAlone={true} app={app}>
+      <ProWindow app={app}>
         <div className='centre'>
           <p>the special hell</p>
-          {/*<img src='/titleLogo.svg' className='shadow noCopy' height='600' />*/}
         </div>
-      </ProWrap>
+      </ProWindow>
     );
   }
   
@@ -123,9 +121,9 @@ const ProductionFindOps = ({
     Session.set('now', Pref.docs);
     Session.set('nowBatch', false);
     return (
-      <ProWrap standAlone={true} app={app}>
+      <ProWindow app={app}>
         <WikiOps wi={false} root={app.instruct} anchor={false} full={true} />
-      </ProWrap>
+      </ProWindow>
     );
   }
 
@@ -145,7 +143,7 @@ const ProductionFindOps = ({
           action='batchBuild'
           actionBar={true}
         >
-          <BatchCard
+          <DoProCard
             batchData={hotBatch}
             widgetData={widget}
             versionData={version}
@@ -204,19 +202,14 @@ const ProductionFindOps = ({
           app={app}
           actionBar={true}
         >
-          <ItemCard
+          <DoProCard
             batchData={hotBatch}
             itemData={item}
-            widgetData={widget}
-            users={activeUsers}
-            app={app} />
-          <BatchCard
-            batchData={hotBatch}
-            itemSerial={item.serial}
             widgetData={widget}
             versionData={version}
             groupData={group}
             user={user}
+            users={activeUsers}
             app={app} />
           <WikiOps wi={version.wiki} root={app.instruct} anchor={anchor} />
         </ProWrap>
@@ -254,25 +247,25 @@ const ProductionFindOps = ({
   if(!isNaN(orb) && orb.length > 5 && orb.length <= 10) {
     Session.set('nowBatch', orb);
     return(
-      <ProWrap standAlone={true} app={app}>
+      <ProWindow app={app}>
         <div className='centre wide space'>
           <p className='big centerText'>{orb} is not a registered serial number</p>
           <hr />
           <SearchHelp />
         </div>
-      </ProWrap>
+      </ProWindow>
     );
   }
   
   Session.set('nowBatch', false);
 	return (
-	  <ProWrap standAlone={true} app={app}>
+	  <ProWindow app={app}>
       <div className='centre wide'>
         <p className='biggest'>¯\_(ツ)_/¯</p>
         <br />
         <SearchHelp />
       </div>
-    </ProWrap>
+    </ProWindow>
   );
 };
 

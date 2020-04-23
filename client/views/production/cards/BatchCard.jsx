@@ -10,14 +10,13 @@ import ReleaseAction from '/client/components/bigUi/ReleasesModule.jsx';
 import StepsProgress from '../../../components/bigUi/StepsProgress/StepsProgress.jsx';
 
 const BatchCard = ({ 
-  batchData, itemSerial, widgetData, groupData, 
+  batchData, widgetData, groupData, 
   user, app, brancheS,
   flow, flowAlt, floorReleased,
-  progCounts, currentLive
+  progCounts, tideFloodGate
 })=> {
 
   const b = batchData;
-  // const iS = itemSerial;
   // const w = widgetData;
   //const g = groupData;
   // const u = user;
@@ -37,7 +36,7 @@ const BatchCard = ({
 
   return(
     <div className='sidebar' key={b.batch}>
-      {/*<TideLock currentLive={currentLive}></TideLock>*/}
+      {/*<TideLock tideFloodGate={tideFloodGate}></TideLock>*/}
         {iNoready &&
           <div className='centre centreText space'>
             <p><i className="fas fa-exclamation-triangle fa-4x orangeT"></i></p>

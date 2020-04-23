@@ -9,7 +9,7 @@ import ShortAdd from '/client/components/river/ShortAdd.jsx';
 
 const FormBar = ({ 
   batchData, itemData, widgetData, versionData, 
-  currentLive, ncTypesCombo, 
+  tideFloodGate, ncTypesCombo, 
   action, showVerify, changeVerify, 
   user, users, app 
 })=> {
@@ -29,12 +29,14 @@ const FormBar = ({
     
   const pastPN = b && b.shortfall ? [...new Set( Array.from(b.shortfall, x => x.partNum ) )] : [];
   const pastRF = b && b.shortfall ? [...new Set( Array.from(b.shortfall, x => x.refs.toString() ) )] : [];
-    
+  
+  const verAuth = Roles.userIsInRole(Meteor.userId(), 'verify');
+  const lockOutAll = !tideFloodGate;
+  
   return(
-    <TideLock currentLive={currentLive} message={true}>
     <div className='proActionForm'>
       {showX || showlegacyItem ?
-        <div className='footLeft'>
+        <div className='footPick'>
           {action === 'xBatchBuild' ? null :
           <label htmlFor='firstselect' className='formBarToggle taskLink butBlue'>
             <input
@@ -44,7 +46,7 @@ const FormBar = ({
               className='radioIcon'
               checked={showVerify === true}
               onChange={()=>changeVerify(true)}
-              disabled={!Roles.userIsInRole(Meteor.userId(), 'verify')} />
+              disabled={!verAuth || lockOutAll} />
             <i className='fas fa-thumbs-up' data-fa-transform='up-1'></i>
           </label> }
           <label htmlFor='ncselect' className='formBarToggle taskLink butRed'>
@@ -54,7 +56,8 @@ const FormBar = ({
               name='formbarselect'
               className='radioIcon'
               checked={show === 'NC'}
-              onChange={()=>showSet( 'NC' )} />
+              onChange={()=>showSet( 'NC' )}
+              disabled={lockOutAll} />
             <i className='fas fa-bug'></i>
           </label>
           <label htmlFor='shortselect' className='formBarToggle taskLink butYellow'>
@@ -64,12 +67,14 @@ const FormBar = ({
               name='formbarselect'
               className='radioIcon'
               checked={show === 'S'}
-              onChange={()=>showSet( 'S' )} />
+              onChange={()=>showSet( 'S' )}
+              disabled={lockOutAll} />
             <i className='fas fa-exclamation-circle'></i>
           </label>
         </div>
       : null}
-      <div className='footCent'>
+      <div className='footFill'>
+        <TideLock currentLive={tideFloodGate} classSty='' message={true}>
         {b ?
           action === 'xBatchBuild' ?
             show === 'NC' ?
@@ -113,10 +118,9 @@ const FormBar = ({
                 app={app}
                 ncTypesCombo={ncTypesCombo} />
         : null}
+      </TideLock>
       </div>
-      <div className='footRight'></div>
     </div>
-    </TideLock>
   );
 };
 

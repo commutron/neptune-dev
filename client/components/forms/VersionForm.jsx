@@ -3,7 +3,6 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 import Model from '../smallUi/Model.jsx';
-
 // requires
 // widgetData={widgetData} end={a.lastTrack} rootWI={a.instruct}
 
@@ -160,53 +159,3 @@ const VersionForm = (props)=> {
 };
 
 export default VersionForm;
-
-export const VersionRemove = (props)=> {
-  
-  function remove(e) {
-    e.preventDefault();
-    const wId = props.widgetId;
-    const vKey = props.versionKey;
-    const confirm = this.confirm.value.trim();
-    
-    Meteor.call('deleteVersion', wId, vKey, confirm, (error, reply)=>{
-      error && console.log(error);
-      if(reply === 'inUse') {
-        toast.warning('Cannot be removed, entry is in use');
-      }else if(reply) {
-        toast.success('Saved');
-      }else{
-        toast.warning('Rejected by Server');
-      }
-    });
-  }
-    
-  return(
-    <Model
-      button='Delete'
-      title={'Delete ' + Pref.version}
-      color='redT'
-      icon='fa-minus-circle'
-      smIcon={props.small}
-      lock={!Roles.userIsInRole(Meteor.userId(), 'remove')}>
-      
-      <div className='centre'>
-        <p>To remove enter:</p>
-        <p className='noCopy'>{props.lock}</p>
-        <br />
-        <form className='inlineForm' onSubmit={(e)=>remove(e)}>
-          <input 
-            type='text' 
-            className='noCopy' 
-            id='confirm'
-            placeholder={props.lock} />
-          <button
-            type='submit'
-            id='cut'
-            className='smallAction clear redT'
-          >Delete</button>
-        </form>
-      </div>
-    </Model>
-  );
-};

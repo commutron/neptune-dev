@@ -22,7 +22,7 @@ import ScrapForm from '/client/components/forms/ScrapForm.jsx';
 
 import WidgetEditForm from '/client/components/forms/WidgetEditForm.jsx';
 import VersionForm from '/client/components/forms/VersionForm.jsx';
-import { VersionRemove } from '/client/components/forms/VersionForm.jsx';
+import RemoveVersion from '/client/components/forms/RemoveVersion.jsx';
 import CompForm from '/client/components/forms/CompForm.jsx';
 import FlowFormHead from '/client/components/forms/FlowFormHead.jsx';
 
@@ -226,11 +226,10 @@ const ActionBar = ({
             versions={widgetData.versions}
             lock={!widgetData.versions}
             noText={noText} />
-          <VersionRemove
+          <RemoveVersion
             widgetId={widgetData._id}
             versionKey={versionData.versionKey}
-            lock={versionData.createdAt.toISOString()}
-            small={false} />
+            check={versionData.createdAt.toISOString()} />
         </div>
       :
       action === 'widget' ?

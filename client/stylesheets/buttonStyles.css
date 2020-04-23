@@ -282,4 +282,8 @@ label.qdpplRound {
   --task-back-color: var(--clouds);
 }
 
-.taskLink:disabled { color: var(--silverfade); }
+.taskLink > input[type=radio]:disabled + svg,
+.taskLink > input[type=checkbox]:disabled + svg { 
+  cursor: not-allowed;
+  filter: grayscale(0.9);
+}

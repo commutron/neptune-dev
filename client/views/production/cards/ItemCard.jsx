@@ -1,48 +1,14 @@
 import React/*, { useContext, useMemo }*/ from 'react';
-import TideLock from '/client/components/tide/TideLock.jsx';
 import Pref from '/client/global/pref.js';
 
 import River from '/client/components/river/River.jsx';
 import ScrapBox from '/client/components/smallUi/ScrapBox.jsx';
 
-// UNSAFE_componentWillReceiveProps(nextProps) {
-//     itemData.serial !== nextProps.itemData.serial ?
-//       this.forceUpdate() : null;
-//   }
-
-// const ItemCard = ({ 
-//   batchData, itemData, widgetData, 
-//   users, app,
-//   currentLive, flow, flowAlt, progCounts,
-//   showVerify, optionVerify, changeVerify
-// })=> {
-//   let itemContext = useContext(itemData);
-  
-//   return useMemo(() => {
-//     return(
-//       <ItemCardContent
-//         itemContext={itemContext}
-//         batchData={batchData}
-//         itemData={itemData} 
-//         widgetData={widgetData} 
-//         users={users}
-//         app={app}
-//         currentLive={currentLive}
-//         brancheS={brancheS}
-//         fow={flow}
-//         flowAlt={flowAlt}
-//         progCounts={progCounts}
-//         showVerify={showVerify}
-//         optionVerify={optionVerify}
-//         changeVerify={changeVerify} />
-//     );
-//   }, [ itemContext, currentLive ]);
-// };
 
 const ItemCard = ({
   itemContext, batchData, itemData, widgetData, 
   users, app, brancheS,
-  currentLive, flow, flowAlt, floorReleased, progCounts,
+  tideFloodGate, flow, flowAlt, floorReleased, progCounts,
   showVerify, optionVerify, changeVerify
 })=> {
 
@@ -91,14 +57,13 @@ const ItemCard = ({
         </div>
       }
       
-      <TideLock currentLive={currentLive}>
         <River
           itemData={i}
           batchData={b}
           widgetData={w}
           app={app}
           users={users}
-          currentLive={currentLive}
+          currentLive={tideFloodGate}
           brancheS={brancheS}
           flow={flow}
           flowAlt={flowAlt}
@@ -106,7 +71,7 @@ const ItemCard = ({
           showVerify={showVerify}
           optionVerify={optionVerify}
           changeVerify={changeVerify} />
-      </TideLock>
+      
 		</div>
   );
 };

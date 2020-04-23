@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 import './style.css';
         
-const TideControl = ({ batchID, tideKey, currentLive, tideLockOut })=> {
+const TideControl = ({ batchID, tideKey, tideFloodGate, tideLockOut })=> {
   
   const thingMounted = useRef(true);
   const [actionID, setActionID] = useState( Random.id() );
@@ -84,13 +84,13 @@ const TideControl = ({ batchID, tideKey, currentLive, tideLockOut })=> {
   }
 
   if(tideKey) {
-    if(!currentLive) {
+    if(!tideFloodGate) {
       return(
         <button
           title={`Switch to ${Pref.batch}`}
           className='tideFlip'
           onClick={()=>handleSwitch()}
-          disabled={lock}
+          disabled={lock || tideLockOut}
         >
         <i>
           <span className="fa-stack fa-fw tideIcon">

@@ -1,17 +1,39 @@
-.containerPro, .proNarrow, .proWide {
+.windowPro, .containerPro {
   align-content: center;
   overflow-y: hidden !important;
   overflow-x: hidden !important;
   -webkit-overflow-scrolling: touch;
 }
 
-.containerPro {
+.windowPro {
   display: grid;
   grid-template-rows: 10vh 90vh;
-  grid-template-columns: 20vmax 1fr;
+  grid-template-columns: auto;
+  grid-template-areas: 
+    "tenHeader"
+    "proContent";
+}
+.proContent {
+  grid-area: proContent;
+  height: 100%;
+}
+
+.containerPro {
+  display: grid;
+  grid-template-rows: 10vh calc(90vh - 65px) 70px;
   grid-template-areas: 
     "tenHeader tenHeader"
-    "proContent proContent";
+    "proPrime proInstruct"
+    "proForm proForm";
+}
+.pro100 {
+  grid-template-columns: 1vw 1fr;
+}
+.pro_20_80 {
+  grid-template-columns: 20vmax 1fr;
+}
+.pro_40_60 {
+  grid-template-columns: 40vmax 1fr;
 }
 
 .proSearch {
@@ -30,62 +52,36 @@
   margin: 0;
 }
 
-.proFull {
-  grid-area: proContent;
-}
-
-.proNarrow, .proWide {
-  grid-area: proContent;
-  display: grid;
-  grid-template-rows: calc(90vh - 70px) 70px;
-  grid-template-areas: 
-    'proLeft proInstruct'
-    'formFooter formFooter';
-  transition: all 150ms ease-in-out;
-}
-.proNarrow {
-  grid-template-columns: 20vmax 1fr;
-}
-.proWide {
-  grid-template-columns: 40vmax 1fr;
-}
-
-
-.proSingle, .proDual {
-  grid-area: proLeft;
-  display: grid;
+.proPrime {
+  grid-area: proPrime;
   overflow-y: auto;
   overflow-x: hidden;
   background-color: rgb(35,35,35);
+  transition: all 150ms ease-in-out;
 }
-.proSingle {
-  grid-template-columns: 1fr;
-}
-.proDual {
-  grid-template-columns: 1fr 1fr;
-}
-
 
 .proInstruct {
-  height: 100%;
   grid-area: proInstruct;
+  height: 100%;
   background-color: var(--clouds);
   box-shadow: var(--dropShadow2);
 }
 
+
 .proActionForm {
-  grid-area: formFooter;
+  grid-area: proForm;
   background-color: rgb(25,25,25);
-  box-shadow:         0 0 15px 0.5px rgb(0,0,0);
+  box-shadow: 0 0 15px 0.5px rgb(0,0,0);
   width: 100vw;
   min-width: 768px;
-  height: 70px;
+  height: 65px;
   z-index: 8;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   flex-shrink: 0;
   align-items: center;
+  
 }
 
 .cardTitle {
@@ -122,7 +118,7 @@
 .riverShrinkToggle:hover {
   opacity: 1;
 }
-
+/*
 .exLeap {
   color: var(--silver);
   background-color: transparent;
@@ -138,7 +134,7 @@
   color: rgb(20,20,20);
   background-color: var(--silver);
 }
-
+*/
 .miniHistory {
   width: 100%;
   border-collapse: collapse;
@@ -147,3 +143,89 @@
   padding: 5px;
   text-align: center;
 }
+
+.actionForm {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+.actionForm fieldset {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+.footPick {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: center;
+  
+}
+.footFill {
+  flex-grow: 2;
+}
+
+.actionIconWrap {
+  margin: 0 0.5rem;
+}
+.actionIconText {
+  color: white;
+  font-size: small;
+  text-transform: capitalize;
+  line-height: 1rem;
+  display: block;
+  white-space: nowrap;
+  border-bottom-style: hidden;
+  text-decoration: none;
+}
+
+.actionIconWrap:hover .actionIconText {
+  text-decoration: underline;
+}
+
+.actionForm span,
+.actionForm div {
+  margin: 0 10px;
+}
+.actionForm input,
+.actionForm select, 
+.actionForm datalist {
+  line-height: 1.5rem;
+  font-size: 1rem;
+  min-width: 125px;
+  max-width: 250px;
+  height: 1.75rem;
+  letter-spacing: 1.5px;
+}
+.actionForm option {
+  min-width: 125px;
+  max-width: 250px;
+}
+
+.actionForm label {
+  min-width: 125px;
+  max-width: 200px;
+  letter-spacing: 1.5px;
+}
+
+.actionForm > button {
+  margin: 0 5px;
+  height: 48px;
+  font-size: medium;
+  text-transform: capitalize; 
+  word-break: keep-all;
+  letter-spacing: 1px;
+  overflow: hidden;
+}
+
+
+
+
+
+
+

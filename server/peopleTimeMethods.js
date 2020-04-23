@@ -156,8 +156,8 @@ Meteor.methods({
                   if( !tideStop ) {
                     
                     const brCache = CacheDB.findOne({dataName: 'branchCondition'});
-                    const cB = cCache && brCache.dataSet.find( x => x.batch === batchNum );
-                    const openBranches = cB && cB.branchSets.filter( x => x.condition === 'open' );
+                    const brB = brCache && brCache.dataSet.find( x => x.batch === batchNum );
+                    const openBranches = brB && brB.branchSets.filter( x => x.condition === 'open' );
                     const fromOnlyOpen = openBranches && openBranches.length === 1 ?
                                           openBranches[0].branchName : false;
                                           
