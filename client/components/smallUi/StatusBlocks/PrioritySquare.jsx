@@ -1,8 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
-import { min2hr } from '/client/components/utilities/Convert.js';
-import NumStat from '/client/components/uUi/NumStat.jsx';
+import { min2hr } from '/client/utility/Convert.js';
+import NumStat from '/client/components/tinyUi/NumStat.jsx';
 
 import './style';
 

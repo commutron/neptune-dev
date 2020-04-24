@@ -5,7 +5,7 @@ import SlidesNested from '/client/components/smallUi/SlidesNested.jsx';
 
 import RemoveUser from '/client/components/forms/RemoveUser.jsx';
 import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
-import NumLine from '/client/components/uUi/NumLine.jsx';
+import NumLine from '/client/components/tinyUi/NumLine.jsx';
 import TrendLine from '/client/components/charts/Trends/TrendLine.jsx';
 
 import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';

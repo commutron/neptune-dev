@@ -7,7 +7,7 @@ import Pref from '/client/global/pref.js';
 import AccountsUI from '/client/components/bigUi/AccountsUI/AccountsUI.jsx';
 import NavButton from '/client/components/smallUi/NavButton/NavButton.jsx';
 import { NavPlaceholder } from '/client/components/smallUi/NavButton/NavButton.jsx';
-import Spin from '/client/components/uUi/Spin.jsx';
+import Spin from '/client/components/tinyUi/Spin.jsx';
 
 const Login = ({ login, uID, username, timeClock })=> {
   

@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import React, {Component} from 'react';
 import Pref from '/client/global/pref.js';
-import { CalcSpin } from '/client/components/uUi/Spin.jsx';
+import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
 import ReportRequest from '/client/components/forms/ReportRequest.jsx'; 
 import ReportStatsTable from '/client/components/tables/ReportStatsTable.jsx'; 
 

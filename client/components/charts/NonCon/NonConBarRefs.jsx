@@ -8,7 +8,7 @@ import {
 } from 'victory';
 //import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
-import { CalcSpin } from '/client/components/uUi/Spin.jsx';
+import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
 
 const NonConBarRefs = ({ ncOp, nonCons, app, isDebug })=> {
   

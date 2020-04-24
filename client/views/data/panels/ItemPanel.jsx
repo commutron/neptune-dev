@@ -1,7 +1,7 @@
 import React from 'react';
 //import moment from 'moment';
 import Pref from '/client/global/pref.js';
-import CreateTag from '/client/components/uUi/CreateTag.jsx';
+import CreateTag from '/client/components/tinyUi/CreateTag.jsx';
 
 import ScrapBox from '../../../components/smallUi/ScrapBox.jsx';
 import SubItemLink from '/client/components/tinyUi/SubItemLink.jsx';

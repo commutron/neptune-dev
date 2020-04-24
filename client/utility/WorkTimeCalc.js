@@ -1,7 +1,7 @@
 import moment from 'moment';
 // import 'moment-timezone';
 import 'moment-business-time-ship';
-import '/client/components/utilities/ShipTime.js';
+import './ShipTime.js';
 
 export function TimeInWeek( nonWorkDays, weekStart ) {
   if( Array.isArray(nonWorkDays) ) {  

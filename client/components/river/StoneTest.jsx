@@ -6,7 +6,6 @@ import StoneProgRing from './StoneProgRing.jsx';
 
 const StoneTest = ({ 
 	key, id, barcode, sKey, step, type, 
-	currentLive,
 	progCounts, 
 	lockout, 
 	topClass, topTitle,
@@ -104,7 +103,6 @@ const StoneTest = ({
 					<ContextMenuTrigger
 						id={barcode}
 						attributes={ {className:'moreStepAction centre'} }
-						disable={!currentLive }
 						holdToDisplay={1}
             renderTag='div'>
             <i className='fas fa-comment fa-fw fa-lg'></i>

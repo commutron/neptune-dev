@@ -3,7 +3,7 @@ import moment from 'moment';
 // import business from 'moment-business';
 import 'moment-timezone';
 import 'moment-business-time-ship';
-import '/client/components/utilities/ShipTime.js';
+import '/client/utility/ShipTime.js';
 import { toast } from 'react-toastify';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';

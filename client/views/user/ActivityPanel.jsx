@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
 //import Pref from '/client/global/pref.js';
-import { CalcSpin } from '/client/components/uUi/Spin.jsx';
+import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
 import WeekBrowse from '/client/components/bigUi/WeekBrowse/WeekBrowse.jsx';
 import TideWeekMini from '/client/components/charts/Tides/TideWeekMini.jsx';
 import TideEditWrap from '/client/components/tide/TideEditWrap.jsx';

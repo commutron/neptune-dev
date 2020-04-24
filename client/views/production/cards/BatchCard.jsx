@@ -1,19 +1,17 @@
 import React from 'react';
 import moment from 'moment';
-//import TideLock from '/client/components/tide/TideLock.jsx';
 import Pref from '/client/global/pref.js';
 import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 
 import GeneralChunk from '/client/views/data/panels/BatchPanel/GeneralChunk.jsx';
-//import JumpText from '../../../components/tinyUi/JumpText.jsx';
 import ReleaseAction from '/client/components/bigUi/ReleasesModule.jsx';
-import StepsProgress from '../../../components/bigUi/StepsProgress/StepsProgress.jsx';
+import StepsProgress from '/client/components/bigUi/StepsProgress/StepsProgress.jsx';
 
 const BatchCard = ({ 
   batchData, widgetData, groupData, 
   user, app, brancheS,
-  flow, flowAlt, floorReleased,
-  progCounts, tideFloodGate
+  floorReleased,
+  progCounts
 })=> {
 
   const b = batchData;
@@ -35,8 +33,7 @@ const BatchCard = ({
   ];
 
   return(
-    <div className='sidebar' key={b.batch}>
-      {/*<TideLock tideFloodGate={tideFloodGate}></TideLock>*/}
+    <div key={b.batch} className='proPrimeSingle'>
         {iNoready &&
           <div className='centre centreText space'>
             <p><i className="fas fa-exclamation-triangle fa-4x orangeT"></i></p>

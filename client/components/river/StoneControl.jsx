@@ -7,12 +7,12 @@ import StoneVerify from './StoneVerify.jsx';
 import StoneTest from './StoneTest.jsx';
 import StoneFinish from './StoneFinish.jsx';
 
-import useTimeOut from '/client/components/utilities/useTimeOutHook.js';
+import useTimeOut from '/client/utility/useTimeOutHook.js';
 
 const StoneControl = ({
 	key, id, barcode,
 	sKey, step, type,
-	currentLive, branchObj,
+	branchObj,
 	allItems,
 	isAlt, hasAlt,
 	users, app,
@@ -35,11 +35,9 @@ const StoneControl = ({
 	
 	function unlockAllow() {
 		// Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({riverFlowState});
-  	if(!currentLive) {
-  		null;
-  	// }else if(doneStone || blockStone) {
+  	// if(doneStone || blockStone) {
   	// 	null;
-  	}else if(type === 'inspect' && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
+  	if(type === 'inspect' && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
   		null;
   	}else if(type === 'first' && !Roles.userIsInRole(Meteor.userId(), 'verify')) {
   		null;
@@ -121,7 +119,6 @@ const StoneControl = ({
 				sKey={sKey}
 				step={step}
 				type={type} 
-				currentLive={currentLive}
 				progCounts={progCounts} 
 				lockout={lockout}
 				topClass={topClass}
@@ -176,7 +173,6 @@ const StoneControl = ({
 			sKey={sKey}
 			step={step}
 			type={type} 
-			currentLive={currentLive}
 			progCounts={progCounts} 
 			lockout={lockout}
 			topClass={topClass}
@@ -198,7 +194,6 @@ const StoneControl = ({
 
 function areEqual(prevProps, nextProps) {
 	if(
-		prevProps.currentLive !== nextProps.currentLive ||
 		prevProps.doneStone !== nextProps.doneStone ||
 		prevProps.blockStone !== nextProps.blockStone ||
 		prevProps.sKey !== nextProps.sKey ||

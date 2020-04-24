@@ -1,10 +1,10 @@
 import React from 'react';
 import moment from 'moment';
 import 'moment-business-time-ship';
-import '/client/components/utilities/ShipTime.js';
+import '/client/utility/ShipTime.js';
 import Pref from '/client/global/pref.js';
 
-import { min2hr } from '/client/components/utilities/Convert.js';
+import { min2hr } from '/client/utility/Convert.js';
 
 import TagsModule from '/client/components/bigUi/TagsModule.jsx';
 import NoteLine from '/client/components/smallUi/NoteLine.jsx';

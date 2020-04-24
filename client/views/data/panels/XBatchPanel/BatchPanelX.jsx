@@ -1,9 +1,9 @@
 import React from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
-//import ProgressCounter from '/client/components/utilities/ProgressCounter.js';
-import CreateTag from '/client/components/uUi/CreateTag.jsx';
-//import UserName from '/client/components/uUi/UserName.jsx';
+//import ProgressCounter from '/client/utility/ProgressCounter.js';
+import CreateTag from '/client/components/tinyUi/CreateTag.jsx';
+//import UserName from '/client/components/tinyUi/UserName.jsx';
 import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 
 import TagsModule from '/client/components/bigUi/TagsModule.jsx';
@@ -12,7 +12,7 @@ import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 import ReleaseAction from '/client/components/bigUi/ReleasesModule.jsx';
 import NoteLine from '/client/components/smallUi/NoteLine.jsx';
 import BlockList from '/client/components/bigUi/BlockList.jsx';
-import WaterfallTimeline from '/client/components/waterfall/WaterfallTimeline.jsx';
+import WaterfallTimeline from '/client/components/bigUi/WaterfallTimeline.jsx';
 
 import XBatchTimeline from '/client/components/bigUi/BatchFeed/XBatchTimeline.jsx';
 

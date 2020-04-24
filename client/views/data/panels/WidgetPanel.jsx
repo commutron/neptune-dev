@@ -1,6 +1,6 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
-import CreateTag from '/client/components/uUi/CreateTag.jsx';
+import CreateTag from '/client/components/tinyUi/CreateTag.jsx';
 import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 
 import VersionList from '../lists/VersionList.jsx';

@@ -14,7 +14,7 @@ import Calendar from './panels/Calendar.jsx';
 
 import ItemPanel from './panels/ItemPanel.jsx';
 import BatchPanel from './panels/BatchPanel/BatchPanel.jsx';
-import BatchPanelX from './panels/BatchPanelX.jsx';
+import BatchPanelX from './panels/XBatchPanel/BatchPanelX.jsx';
 import WidgetPanel from './panels/WidgetPanel.jsx';
 import VersionPanel from './panels/VersionPanel/VersionPanel.jsx';
 import TestFailPanel from './panels/TestFailPanel.jsx';
@@ -24,8 +24,8 @@ import BatchesList from './lists/BatchesList.jsx';
 import ItemsList from './lists/ItemsList.jsx';
 // import WidgetsList from './lists/WidgetsList.jsx';
 
-import ProgressCounter from '/client/components/utilities/ProgressCounter.js';
-import NonConOptionMerge from '/client/components/utilities/NonConOptionMerge.js';
+import ProgressCounter from '/client/utility/ProgressCounter.js';
+import NonConOptionMerge from '/client/utility/NonConOptionMerge.js';
 
 
 const DataViewOps = ({ 

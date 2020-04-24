@@ -2,7 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { ToastContainer } from 'react-toastify';
 //import Pref from '/client/global/pref.js';
-import ErrorCatch from '/client/components/utilities/ErrorCatch.jsx';
+import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
 
 import HomeIcon from '/client/layouts/HomeIcon.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';

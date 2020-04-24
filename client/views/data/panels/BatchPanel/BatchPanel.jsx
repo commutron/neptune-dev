@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 // import moment from 'moment';
 import Pref from '/client/global/pref.js';
-import CreateTag from '/client/components/uUi/CreateTag.jsx';
+import CreateTag from '/client/components/tinyUi/CreateTag.jsx';
 import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 import InfoTab from './InfoTab.jsx';
 import TimeTab from './TimeTab.jsx';

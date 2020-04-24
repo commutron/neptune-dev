@@ -5,9 +5,14 @@ import StoneSelect from './StoneSelect.jsx';
 import RiverFork from './RiverFork.jsx';
 import RMACascade from './RMACascade.jsx';
 import MiniHistory from './MiniHistory.jsx';
-import AltMarker from '/client/components/uUi/AltMarker.jsx';
+import AltMarker from '/client/components/tinyUi/AltMarker.jsx';
 
-const River = (props)=> {
+const River = ({ 
+  batchData, itemData, widgetData, 
+  app, users, brancheS,
+  flow, flowAlt, progCounts,
+  showVerify, optionVerify, changeVerify
+})=> {
   
   // const [ lock, lockSet ] = useState(true);
   // const [ complete, completeSet ] = useState(false);
@@ -23,14 +28,9 @@ const River = (props)=> {
     undoOpSet( false );
   }
 
-  const b = props.batchData;
-  const i = props.itemData;
-  const w = props.widgetData;
-  const app = props.app;
-  const users = props.users;
-  const flow = props.flow;
-  const flowAlt = props.flowAlt;
-  const progCounts = props.progCounts;
+  const b = batchData;
+  const i = itemData;
+  const w = widgetData;
 
   let useFlow = [];
   let rma = [];
@@ -109,15 +109,16 @@ const River = (props)=> {
           nonCons={b.nonCon}
           sh={sh}
           item={i}
-          currentLive={props.currentLive}
-          brancheS={props.brancheS}
+          brancheS={brancheS}
           users={users}
           progCounts={progCounts}
           app={app}
-          showVerify={props.showVerify}
-          optionVerify={props.optionVerify}
-          changeVerify={props.changeVerify}
+          
+          showVerify={showVerify}
+          optionVerify={optionVerify}
+          changeVerify={changeVerify}
           undoOption={undoStepOption}
+          
           openUndoOption={()=>tempOpenOption()}
           closeUndoOption={()=>closeOption()} />
       </div>

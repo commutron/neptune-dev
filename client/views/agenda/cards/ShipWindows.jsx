@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import moment from 'moment';
 // import 'moment-timezone';
 import 'moment-business-time-ship';
-import '/client/components/utilities/ShipTime.js';
+import '/client/utility/ShipTime.js';
 import Pref from '/client/global/pref.js';
 
 import { LeapTextLink } from '/client/components/tinyUi/LeapText.jsx';

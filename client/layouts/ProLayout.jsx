@@ -1,15 +1,16 @@
 import React, { useState, useLayoutEffect, Fragment } from 'react';
 import { Meteor } from 'meteor/meteor';
-import ErrorCatch from '/client/components/utilities/ErrorCatch.jsx';
 import { ToastContainer } from 'react-toastify';
 //import Pref from '/client/global/pref.js';
 
-import HomeIcon from '/client/layouts/HomeIcon.jsx';
+import HomeIcon from './HomeIcon.jsx';
+import FindBox from './FindBox.jsx';
+import ErrorCatch from './ErrorCatch.jsx';
+
 import TideControl from '/client/components/tide/TideControl/TideControl.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
-import FindBox from './FindBox.jsx';
 import FormBar from '/client/components/bigUi/ToolBar/FormBar.jsx';
-import NonConOptionMerge from '/client/components/utilities/NonConOptionMerge.js';
+import NonConOptionMerge from '/client/utility/NonConOptionMerge.js';
 
 export const ProWrap = ({ 
   itemSerial, itemData, batchData, widgetData, versionData, groupAlias, 

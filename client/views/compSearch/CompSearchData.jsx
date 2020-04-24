@@ -1,10 +1,10 @@
 import React, { useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import InboxToastPop from '/client/components/utilities/InboxToastPop.js';
-import usePrevious from '/client/components/utilities/usePreviousHook.js';
+import InboxToastPop from '/client/utility/InboxToastPop.js';
+import usePrevious from '/client/utility/usePreviousHook.js';
 
-import Spin from '/client/components/uUi/Spin.jsx';
+import Spin from '/client/components/tinyUi/Spin.jsx';
 import CompSearchWrap from './CompSearchWrap.jsx';
 
 const View = ({

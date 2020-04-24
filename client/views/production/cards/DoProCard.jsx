@@ -1,10 +1,15 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect, Fragment } from 'react';
 //import Pref from '/client/global/pref.js';
+
+import HeadWater from '/client/components/river/HeadWater.js';
+import River from '/client/components/river/River.jsx';
+import TideWall from '/client/components/river/TideWall.jsx';
+
+// import TideLock from '/client/components/tide/TideLock.jsx';
 
 import ItemCard from './ItemCard.jsx';
 import BatchCard from './BatchCard.jsx';
 
-import ProgressCounter from '/client/components/utilities/ProgressCounter.js';
 
 const DoProCard = ({ 
   itemData, batchData, widgetData, versionData, groupData,
@@ -22,12 +27,8 @@ const DoProCard = ({
   
 
   const [ brancheState, brancheSortSet ] = useState([]);
-  
-  const [ flow, flowSet ] = useState([]);
-  const [ flowAlt, flowAltSet ] = useState([]);
-  const [ floorReleased, floorReleaseSet ] = useState(false);
-  
-  const [ progCounts, progCountsSet ] = useState(false);
+
+  const [ flowData, flowDataSet ] = useState(false);
 
   useEffect( ()=>{
     const branchesSort = app.branches.sort((b1, b2)=> {
@@ -37,142 +38,80 @@ const DoProCard = ({
   }, [app]);
   
   useLayoutEffect( ()=> {
-    const b = batchData;
-    const w = widgetData;
-    let getFlow = [];
-    let getFlowAlt = [];
-    let getFlRel = false;
-    let getProgCounts = false;
-    if( b && w ) {
-      const river = w.flows.find( x => x.flowKey === b.river);
-      const riverAlt = w.flows.find( x => x.flowKey === b.riverAlt );
-      if(river) {
-        getFlow = river.flow;
-      }
-      if(riverAlt) {
-        getFlowAlt = riverAlt.flow;
-      }
-      getFlRel = b.releases.findIndex( x => x.type === 'floorRelease') >= 0;
-      if( Array.isArray(b.items) ) {
-        getProgCounts = ProgressCounter(getFlow, getFlowAlt, b);
-      }
-    }
-    flowSet(getFlow);
-    flowAltSet(getFlowAlt);
-    floorReleaseSet(getFlRel);
-    progCountsSet(getProgCounts);
+    const getFlowData = HeadWater(batchData, widgetData);
+    flowDataSet(getFlowData);
   }, [batchData, widgetData]);
   
+  scrapCheck = !itemData ? null :
+    itemData.history.find(x => x.type === 'scrap' && x.good === true);
   
-
+  if(!flowData || !batchData) {
+    return <div>nope</div>;
+  }
   
-  // const u = user;
-  // const bData = batchData;
+  const insertTideWall = 
+          <TideWall
+            bID={batchData._id}
+            bComplete={batchData.finishedAt !== false}
+            itemData={itemData || null} />;
+            
+  const insertItemCard = 
+          <ItemCard
+            hasRiver={flowData.hasRiver}
+            isReleased={flowData.floorRel}
+            scrap={scrapCheck} />;
   
-  // const et = !u || !u.engaged ? false : u.engaged.tKey;
-  // const tide = !bData || !bData.tide ? [] : bData.tide;
-  
-    
-  
-  
-  // let riverExpand = expand;
-  
-  // import TideLock from '/client/components/tide/TideLock.jsx';
-
-  // <TideLock tideFloodGate={tideFloodGate}>
-    
-  return(
-      <div>
-          
-          <div 
-            className=''>
-            <div className='proPrime'>
-              {itemData ?
-              
-                <ItemCard
-            batchData={batchData}
+  const insertRiver = 
+          <River
             itemData={itemData}
+            batchData={batchData}
             widgetData={widgetData}
-            users={users}
             app={app}
-            
-                  tideFloodGate={tideFloodGate}
-                  brancheS={brancheState}
-                  flow={flow}
-                  flowAlt={flowAlt}
-                  floorReleased={floorReleased}
-                  progCounts={progCounts}
-                  showVerify={showVerify}
-                  optionVerify={optionVerify}
-                  changeVerify={(q)=>handleVerify(q)}
-                />
-                : null
-              }
-            </div>
-            
-       
-              <div className='proExpand'>
-                <BatchCard
+            users={users}
+            brancheS={brancheState}
+            flow={flowData.flow}
+            flowAlt={flowData.flowAlt}
+            progCounts={flowData.progCounts}
+            showVerify={showVerify}
+            optionVerify={optionVerify}
+            handleVerify={handleVerify} />;
+  
+  const insertBatchCard = 
+          <BatchCard
             batchData={batchData}
             itemData={itemData}
             widgetData={widgetData}
             versionData={versionData}
-          
             user={user}
             app={app}
-            tideFloodGate={tideFloodGate}
-                  brancheS={brancheState}
-                  
-                  
-                  
-                     flow={flow}
-                  flowAlt={flowAlt}
-                  floorReleased={floorReleased}
-                  progCounts={progCounts} />
-              </div>
+            brancheS={brancheState}
+            floorReleased={flowData.floorRel}
+            progCounts={flowData.progCounts} />;
   
-          </div>
+  
+  return(
+    <Fragment>
+    
+    {!itemData ? 
+      
+      insertBatchCard : 
+      
+      !tideFloodGate ? 
+        
+        insertTideWall :
+        
+        !flowData.hasRiver || !flowData.floorRel || scrapCheck ? 
           
+          insertItemCard :
+          
+          insertRiver
+    }
+      
+        
+  	{expand && itemData && insertBatchCard}
   
-      </div>
-
+    </Fragment>
   );
 };
 
 export default DoProCard;
-
-
-
-// UNSAFE_componentWillReceiveProps(nextProps) {
-//     itemData.serial !== nextProps.itemData.serial ?
-//       this.forceUpdate() : null;
-//   }
-
-// const ItemCard = ({ 
-//   batchData, itemData, widgetData, 
-//   users, app,
-//   currentLive, flow, flowAlt, progCounts,
-//   showVerify, optionVerify, changeVerify
-// })=> {
-//   let itemContext = useContext(itemData);
-  
-//   return useMemo(() => {
-//     return(
-//       <ItemCardContent
-//         itemContext={itemContext}
-//         batchData={batchData}
-//         itemData={itemData} 
-//         widgetData={widgetData} 
-//         users={users}
-//         app={app}
-//         currentLive={currentLive}
-//         brancheS={brancheS}
-//         fow={flow}
-//         flowAlt={flowAlt}
-//         progCounts={progCounts}
-//         showVerify={showVerify}
-//         optionVerify={optionVerify}
-//         changeVerify={changeVerify} />
-//     );
-//   }, [ itemContext, currentLive ]);
-// };

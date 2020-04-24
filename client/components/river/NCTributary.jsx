@@ -4,7 +4,7 @@ import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import InOutWrap from '/client/components/tinyUi/InOutWrap.jsx';
 import Pref from '/client/global/pref.js';
 
-const NCTributary = ({ id, serial, currentLive, nonCons, sType })=> {
+const NCTributary = ({ id, serial, nonCons, sType })=> {
 
   function handleFix(ncKey) {
     Meteor.call('fixNC', id, ncKey, (error)=> {
@@ -64,7 +64,6 @@ const NCTributary = ({ id, serial, currentLive, nonCons, sType })=> {
             key={entry.key}
             entry={entry}
             id={id}
-            currentLive={currentLive}
             end={sType === 'finish'}
             doFix={()=> handleFix(entry.key)}
             doInspect={()=> handleInspect(entry.key)}
@@ -80,7 +79,6 @@ const NCTributary = ({ id, serial, currentLive, nonCons, sType })=> {
 
 const NCStream = ({ 
   entry, id,
-  currentLive,
   end, 
   doFix, doInspect, doReject, doSnooze, doUnSkip, doComment 
 })=>{
@@ -95,7 +93,7 @@ const NCStream = ({
   const same = entry.fix.who === Meteor.userId();
   const inspector = Roles.userIsInRole(Meteor.userId(), 'inspect');
   const verifier = Roles.userIsInRole(Meteor.userId(), 'verify');
-  const lockI = !currentLive || fixed ? !same && inspector ? false : true : false;
+  const lockI = fixed ? !same && inspector ? false : true : false;
   let skip = entry.skip;
   let style = !skip ? 'cap tribRow tribRed noCopy' : 'cap tribRow yellowList noCopy';
 
@@ -128,15 +126,13 @@ const NCStream = ({
                 ref={(i)=> this.fixline = i}
                 className='riverInfo'
                 readOnly={true}
-                onClick={doFix}
-                disabled={!currentLive}>
-              <img src='/repair.svg' className='pebbleSVG' /><br />{smple ? null : 'Repaired'}</button>
+                onClick={doFix}>
+              <img src='/repair.svg' className='pebbleSVG' /><br />{smple ? null : 'Repair'}</button>
           }
         </div>
         <div className='tribActionExtra'>
           <ContextMenuTrigger
             id={entry.key}
-            disable={!currentLive}
             holdToDisplay={1}
             renderTag='span'>
             <i className='fas fa-ellipsis-v fa-fw fa-lg'></i>

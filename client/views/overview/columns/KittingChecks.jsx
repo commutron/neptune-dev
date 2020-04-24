@@ -1,10 +1,10 @@
 import React, { Fragment, useState, useEffect, useRef } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
-// import NumStat from '/client/components/uUi/NumStat.jsx';
+// import NumStat from '/client/components/tinyUi/NumStat.jsx';
 // import PrioritySquareData from '/client/components/bigUi/PrioritySquare.jsx';
 // import { PrioritySquare } from '/client/components/bigUi/PrioritySquare.jsx';
-import TrinaryStat from '/client/components/uUi/TrinaryStat.jsx';
+import TrinaryStat from '/client/components/tinyUi/TrinaryStat.jsx';
 import { ReleaseWrapper } from '/client/components/bigUi/ReleasesModule.jsx';
 
 

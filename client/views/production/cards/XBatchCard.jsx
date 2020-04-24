@@ -4,7 +4,7 @@ import React from 'react';
 import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 
 //import JumpText from '../../../components/tinyUi/JumpText.jsx';
-import WaterfallSelect from '/client/components/waterfall/WaterfallSelect.jsx';
+import WaterfallSelect from '/client/components/river/waterfall/WaterfallSelect.jsx';
 import ReleaseAction from '/client/components/bigUi/ReleasesModule.jsx';
 //import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
 //import NonConMiniSatus from '/client/components/charts/NonConMiniStatus.jsx';

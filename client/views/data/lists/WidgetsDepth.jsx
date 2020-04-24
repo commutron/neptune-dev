@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
-import { CalcSpin } from '/client/components/uUi/Spin.jsx';
+import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
 import DumbFilter from '/client/components/tinyUi/DumbFilter.jsx';
 import LeapRow from '/client/components/tinyUi/LeapRow.jsx';
-import NumStat from '/client/components/uUi/NumStat.jsx';
+import NumStat from '/client/components/tinyUi/NumStat.jsx';
 
 const WidgetsDepth = ({ groupAlias, widgetData, active })=> {
   

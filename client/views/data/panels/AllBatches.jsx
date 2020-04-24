@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import Pref from '/client/global/pref.js';
-import NumBox from '/client/components/uUi/NumBox.jsx';
+import NumBox from '/client/components/tinyUi/NumBox.jsx';
 import BatchesListWide from '../lists/BatchesListWide.jsx';
 
 const AllBatches = ({ groupData, widgetData, allWidget, batchData, allBatch, allXBatch, app }) => {

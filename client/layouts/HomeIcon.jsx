@@ -46,15 +46,13 @@ const HomeIcon = () => {
         <MenuItem onClick={()=>FlowRouter.go('/overview')}>
           <i className='fas fa-globe fa-fw'></i><i className='noCopy'> Overview</i>
         </MenuItem>
-        <MenuItem onClick={()=>FlowRouter.go('/data')}>
-          <i className='fas fa-rocket fa-fw'></i><i className='noCopy'> Explore</i>
-        </MenuItem>
         <MenuItem onClick={()=>FlowRouter.go('/people')}>
           <i className='fas fa-user-astronaut fa-fw'></i><i className='noCopy'> People</i>
         </MenuItem>
-        {/*<MenuItem onClick={()=>FlowRouter.go('/starfish')}>
-          <i className='fas fa-microchip fa-fw'></i><i className='noCopy'> Parts Search</i>
-        </MenuItem>*/}
+        <MenuItem onClick={()=>FlowRouter.go('/data')}>
+          <i className='fas fa-rocket fa-fw'></i><i className='noCopy'> Explore</i>
+        </MenuItem>
+        
         {Roles.userIsInRole(Meteor.userId(), 'admin') ?
           <MenuItem onClick={()=>FlowRouter.go('/app')}>
             <i className='fas fa-sliders-h fa-fw'></i><i className='noCopy'> Settings</i>

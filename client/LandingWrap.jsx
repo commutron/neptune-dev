@@ -2,8 +2,8 @@ import React, { useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import Pref from '/client/global/pref.js';
-import { UnreadInboxToastPop } from '/client/components/utilities/InboxToastPop.js';
-import Spin from '/client/components/uUi/Spin.jsx';
+import { UnreadInboxToastPop } from '/client/utility/InboxToastPop.js';
+import Spin from '/client/components/tinyUi/Spin.jsx';
 
 import HomeLogout from '/client/components/tinyUi/HomeLogout.jsx';
 import NavButton from '/client/components/smallUi/NavButton/NavButton.jsx';

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
 import Pref from '/client/global/pref.js';
-import { CalcSpin } from '/client/components/uUi/Spin.jsx';
+import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
 
 import Flatpickr from 'react-flatpickr';
 //import 'flatpickr/dist/themes/airbnb.css';

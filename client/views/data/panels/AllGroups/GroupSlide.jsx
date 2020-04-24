@@ -1,6 +1,6 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
-import CreateTag from '/client/components/uUi/CreateTag.jsx';
+import CreateTag from '/client/components/tinyUi/CreateTag.jsx';
 import WidgetsDepth from '../../lists/WidgetsDepth.jsx';
 import TagsModule from '/client/components/bigUi/TagsModule.jsx';
 

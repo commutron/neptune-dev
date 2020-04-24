@@ -2,7 +2,7 @@ import React from 'react';
 import './style.css';
 import moment from 'moment';
 
-import ActionLink from '/client/components/uUi/ActionLink.jsx';
+import ActionLink from '/client/components/tinyUi/ActionLink.jsx';
 import BlockForm from '/client/components/forms/BlockForm.jsx';
 import BatchCreate from '/client/components/forms/BatchCreate.jsx';
 import BatchEdit from '/client/components/forms/BatchEdit.jsx';

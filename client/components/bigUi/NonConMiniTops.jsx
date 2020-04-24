@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
-import NumStat from '/client/components/uUi/NumStat.jsx';
+import NumStat from '/client/components/tinyUi/NumStat.jsx';
 
 const NonConMiniTops = ({ noncons, items, user, app })=> (
   <div className='centre'>

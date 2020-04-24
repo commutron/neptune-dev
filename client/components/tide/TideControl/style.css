@@ -39,3 +39,15 @@
 .tideFlip:hover .tideIndicate { 
   color: rgb(25,25,25);
 }
+
+.tideIn:disabled,
+.tideOut:disabled, 
+.tideFlip:disabled {
+  opacity: 1;
+  transition: all 200ms ease-in-out 200ms;
+}
+.tideIn:disabled:hover,
+.tideOut:disabled:hover, 
+.tideFlip:disabled:hover {
+  filter: grayscale(0.8);
+}

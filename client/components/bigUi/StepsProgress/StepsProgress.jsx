@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 import './style.css';
 
 import MiniStack from '/client/components/charts/MiniScales/MiniStack.jsx';
-import NumBox from '/client/components/uUi/NumBox.jsx';
+import NumBox from '/client/components/tinyUi/NumBox.jsx';
 // requires 
 /// batchData
 /// flow

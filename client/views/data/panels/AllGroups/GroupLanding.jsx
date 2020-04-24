@@ -3,10 +3,10 @@ import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
 import GroupForm from '/client/components/forms/GroupForm.jsx';
-import NumBox from '/client/components/uUi/NumBox.jsx';
+import NumBox from '/client/components/tinyUi/NumBox.jsx';
 import TrendLine from '/client/components/charts/Trends/TrendLine.jsx';
 
-import { timeRanges } from '/client/components/utilities/CycleCalc';
+import { timeRanges } from '/client/utility/CycleCalc';
 
 function countNewGroup(collected, rangeStart, rangeEnd) {
   const groupFind = collected.filter( x => 

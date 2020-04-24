@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 // import moment from 'moment';
 import Pref from '/client/global/pref.js';
-import NumStat from '/client/components/uUi/NumStat.jsx';
+import NumStat from '/client/components/tinyUi/NumStat.jsx';
 
 const BranchProgress = ({ 
   batchID, releasedToFloor,

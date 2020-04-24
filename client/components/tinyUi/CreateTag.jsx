@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import Username from '/client/components/utilities/Username.js';
+import Username from '/client/utility/Username.js';
 
 const CreateTag = ({ when, who, whenNew, whoNew }) => (
   <p className='clean small fadeMore'>

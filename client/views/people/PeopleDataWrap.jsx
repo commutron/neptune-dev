@@ -4,12 +4,12 @@ import { withTracker } from 'meteor/react-meteor-data';
 import moment from 'moment';
 import 'moment-timezone';
 import { ToastContainer } from 'react-toastify';
-import InboxToastPop from '/client/components/utilities/InboxToastPop.js';
-import usePrevious from '/client/components/utilities/usePreviousHook.js';
+import InboxToastPop from '/client/utility/InboxToastPop.js';
+import usePrevious from '/client/utility/usePreviousHook.js';
 
-import ErrorCatch from '/client/components/utilities/ErrorCatch.jsx';
+import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
 import Pref from '/client/global/pref.js';
-import Spin from '../../components/uUi/Spin.jsx';
+import Spin from '../../components/tinyUi/Spin.jsx';
 
 import HomeIcon from '/client/layouts/HomeIcon.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';

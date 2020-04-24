@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import Pref from '/client/global/pref.js';
-import Spin from '/client/components/uUi/Spin.jsx';
+import Spin from '/client/components/tinyUi/Spin.jsx';
 import moment from 'moment';
 import BigCalendar from 'react-big-calendar';
 

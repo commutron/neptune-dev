@@ -3,12 +3,11 @@ import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 //import Pref from '/client/global/pref.js';
 
-import { ScanListenerUtility } from '/client/components/utilities/ScanListener.js';
-import { ScanListenerOff } from '/client/components/utilities/ScanListener.js';
-import InboxToastPop from '/client/components/utilities/InboxToastPop.js';
-import usePrevious from '/client/components/utilities/usePreviousHook.js';
+import { ScanListenerUtility, ScanListenerOff } from '/client/utility/ScanListener.js';
+import InboxToastPop from '/client/utility/InboxToastPop.js';
+import usePrevious from '/client/utility/usePreviousHook.js';
 
-import Spin from '/client/components/uUi/Spin.jsx';
+import Spin from '/client/components/tinyUi/Spin.jsx';
 import ProductionFindOps from './ProductionFindOps.jsx';
 
 const ProdData = ({

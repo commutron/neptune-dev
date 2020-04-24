@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 import MultiSelect from "react-multi-select-component";
-//import RoleCheck from '/client/components/utilities/RoleCheck.js';
-import UserNice from '../smallUi/UserNice.jsx';
+//import RoleCheck from '/client/utility/RoleCheck.js';
 
 const FirstForm = ({ 
   id, barcode, 

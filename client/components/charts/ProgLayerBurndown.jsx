@@ -4,7 +4,7 @@ import Theme from '/client/global/themeV.js';
 
 import moment from 'moment';
 import 'moment-timezone';
-import { CalcSpin } from '/client/components/uUi/Spin.jsx';
+import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
 
 const ProgLayerBurndown = ({ id, start, floorRelease, end, flowData, itemData, title })=> {
   

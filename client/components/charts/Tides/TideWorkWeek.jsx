@@ -1,6 +1,6 @@
 import React, { useState, useLayoutEffect } from 'react';
 import moment from 'moment';
-import { TimeInDay } from '/client/components/utilities/WorkTimeCalc.js';
+import { TimeInDay } from '/client/utility/WorkTimeCalc.js';
 // import Pref from '/client/global/pref.js';
 import { 
   VictoryChart, VictoryArea, VictoryBar,

@@ -1,28 +1,19 @@
-import React/*, { useContext, useMemo }*/ from 'react';
+import React from 'react';
 import Pref from '/client/global/pref.js';
 
-import River from '/client/components/river/River.jsx';
 import ScrapBox from '/client/components/smallUi/ScrapBox.jsx';
 
 
-const ItemCard = ({
-  itemContext, batchData, itemData, widgetData, 
-  users, app, brancheS,
-  tideFloodGate, flow, flowAlt, floorReleased, progCounts,
-  showVerify, optionVerify, changeVerify
-})=> {
+const ItemCard = ({ iSerial, hasRiver, isReleased, scrap })=> {
 
-  const b = batchData;
-  const i = itemData;
-  const w = widgetData;
-  //const done = i.finishedAt !== false;
-  const scrap = i.history.find(x => x.type === 'scrap' && x.good === true);
+  //const done = itemData.finishedAt !== false;
   
-  if(!b.river) {
+  
+  if(!hasRiver) {
     Session.set('ncWhere', Pref.outOfFlow);
     Session.set('nowStepKey', undefined);
     return(
-      <div className='section sidebar centre centreText' key={i.serial}>
+      <div className='proPrimeSingle centre centreText'>
         <p><i className="fas fa-exclamation-circle fa-5x redT"></i></p>
         <p className='medBig'>
           This {Pref.batch} does not have a {Pref.flow}
@@ -32,11 +23,11 @@ const ItemCard = ({
     );
   }
     
-  if(floorReleased === false) {
+  if(!isReleased) {
     Session.set('ncWhere', Pref.outOfFlow);
     Session.set('nowStepKey', undefined);
     return(
-      <div className='section sidebar centre centreText space' key={i.serial}>
+      <div className='proPrimeSingle centre centreText space'>
         <p><i className="fas fa-exclamation-triangle fa-5x orangeT"></i></p>
         <p className='medBig'>
           This {Pref.batch} has not been released from Kitting
@@ -49,31 +40,15 @@ const ItemCard = ({
     );
   }
 
-  return(
-    <div key={i.serial}>
-      {scrap &&
-        <div className='section sidebar' key={i.serial}>
-          <ScrapBox entry={scrap} />
-        </div>
-      }
+  if(scrap) {
+    return(
+      <div className='proPrimeSingle'>
+        <ScrapBox entry={scrap} />
+      </div>
+    );
+  }
       
-        <River
-          itemData={i}
-          batchData={b}
-          widgetData={w}
-          app={app}
-          users={users}
-          currentLive={tideFloodGate}
-          brancheS={brancheS}
-          flow={flow}
-          flowAlt={flowAlt}
-          progCounts={progCounts}
-          showVerify={showVerify}
-          optionVerify={optionVerify}
-          changeVerify={changeVerify} />
-      
-		</div>
-  );
+  return(null);
 };
 
 export default ItemCard;

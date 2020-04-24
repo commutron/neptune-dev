@@ -7,7 +7,7 @@ import {
   VictoryTooltip,
   VictoryStack
 } from 'victory';
-import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
 
 const NonConBar = ({ ncOp, nonCons, app, isDebug })=> {

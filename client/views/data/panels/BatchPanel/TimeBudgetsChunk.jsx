@@ -3,7 +3,7 @@ import moment from 'moment';
 import 'moment-timezone';
 import Pref from '/client/global/pref.js';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
-import { CalcSpin } from '/client/components/uUi/Spin.jsx';
+import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
 import { TimeBudgetUpgrade, WholeTimeBudget } from '/client/components/forms/QuoteTimeBudget.jsx';
 import TimeBudgetBar from '/client/components/charts/Tides/TimeBudgetBar.jsx';
 import TimeSplitBar from '/client/components/charts/Tides/TimeSplitBar.jsx';

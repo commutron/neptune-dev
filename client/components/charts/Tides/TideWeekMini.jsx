@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import { TimeInWeek } from '/client/components/utilities/WorkTimeCalc.js';
+import { TimeInWeek } from '/client/utility/WorkTimeCalc.js';
 import Pref from '/client/global/pref.js';
 import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
 

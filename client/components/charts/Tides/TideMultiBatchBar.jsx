@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CalcSpin } from '/client/components/uUi/Spin.jsx';
+import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
 import moment from 'moment';
 
 import { 

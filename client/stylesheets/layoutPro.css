@@ -58,6 +58,15 @@
   overflow-x: hidden;
   background-color: rgb(35,35,35);
   transition: all 150ms ease-in-out;
+  
+  display: inline-grid;
+  grid-template-columns: repeat(auto-fill, minmax(19vmax, 1fr));
+  align-items: stretch;
+  justify-items: center;
+}
+.proPrimeSingle { 
+  min-width: 15vmax;
+  max-width: 20vmax;
 }
 
 .proInstruct {

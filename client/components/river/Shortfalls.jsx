@@ -4,7 +4,7 @@ import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import InOutWrap from '/client/components/tinyUi/InOutWrap.jsx';
 import Pref from '/client/global/pref.js';
 
-const Shortfalls = ({ id, shortfalls, currentLive, lock })=> {
+const Shortfalls = ({ id, shortfalls, lock })=> {
   
   function handleChange(shKey, effect, solve) {
     Meteor.call('setShort', id, shKey, effect, solve, (error)=> {
@@ -21,7 +21,6 @@ const Shortfalls = ({ id, shortfalls, currentLive, lock })=> {
               key={entry.key}
               entry={entry}
               doSet={(a, b)=>handleChange(entry.key, a, b)}
-              currentLive={currentLive}
               lock={lock || !Roles.userIsInRole(Meteor.userId(), 'verify')}
             />
           )})}
@@ -30,7 +29,7 @@ const Shortfalls = ({ id, shortfalls, currentLive, lock })=> {
   );
 };
 
-const ShortLine = ({ entry, doSet, currentLive, lock })=>{
+const ShortLine = ({ entry, doSet, lock })=>{
   
   const inE = entry.inEffect;
   const reS = entry.reSolve;
@@ -60,7 +59,6 @@ const ShortLine = ({ entry, doSet, currentLive, lock })=>{
         <div className='tribActionExtra'>
           <ContextMenuTrigger
             id={entry.key}
-            disable={!currentLive}
             holdToDisplay={1}
             renderTag='span'>
             <i className='fas fa-ellipsis-v fa-fw fa-lg'></i>

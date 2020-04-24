@@ -22,7 +22,7 @@ const TideControl = ({ batchID, tideKey, tideFloodGate, tideLockOut })=> {
     if(thingMounted.current) {
       setLock(false); 
     }
-  },5000);
+  },10000);
   
   useEffect(() => {
     return () => {
