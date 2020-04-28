@@ -18,7 +18,7 @@ const StoneVerify = ({
   }
 	
 	let prepend = <label className='big'>{type}<br /></label>;
-
+	
   return(
    	<Fragment>
   		<div className={topClass + ' stoneFrame noCopy'} title={topTitle}>

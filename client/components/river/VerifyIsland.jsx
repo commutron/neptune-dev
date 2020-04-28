@@ -38,7 +38,6 @@ const VerifyIsland = ({
   
   
   useEffect( ()=>{
-    console.log('loaded verifyIsland: ' + optionVerify);
     return ()=>handleVerify(null, false);
   }, []);
   

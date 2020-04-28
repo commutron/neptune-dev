@@ -10,7 +10,7 @@ import StoneFinish from './StoneFinish.jsx';
 import useTimeOut from '/client/utility/useTimeOutHook.js';
 
 const StoneControl = ({
-	key, id, barcode,
+	key, id, serial,
 	sKey, step, type,
 	branchObj,
 	allItems,
@@ -30,13 +30,9 @@ const StoneControl = ({
 	useEffect( ()=> {
 		const checkLock = lockState || blockStone || ( !doneStone ? false : true );
 		lockoutSet(checkLock);
-	}, [ lockState, blockStone, doneStone ]);
-	
+	}, [ serial, sKey, lockState, blockStone, doneStone ]);
 	
 	function unlockAllow() {
-		// Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({riverFlowState});
-  	// if(doneStone || blockStone) {
-  	// 	null;
   	if(type === 'inspect' && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
   		null;
   	}else if(type === 'first' && !Roles.userIsInRole(Meteor.userId(), 'verify')) {
@@ -80,7 +76,7 @@ const StoneControl = ({
   }
 	
 	function handleStepUndo() {
-		Meteor.call('popHistory', id, barcode, ()=>{
+		Meteor.call('popHistory', id, serial, ()=>{
 			closeUndoOption();
 		});
 	}
@@ -89,85 +85,11 @@ const StoneControl = ({
   								 blockStone ? 'blockStone' : '';
   const topTitle = topClass !== '' ? Pref.stoneislocked : '';
 	
-	if(type === 'first') {
-		return(
-			<StoneVerify 
-				key={key}
-				id={id}
-				barcode={barcode}
-				sKey={sKey}
-				step={step}
-				type={type} 
-				lockout={lockout}
-				topClass={topClass}
-				topTitle={topTitle}
-				handleVerify={handleVerify}
-				handleStepUndo={handleStepUndo}
-				undoOption={undoOption}
-			/>
-		);
-	}
-	
-	if(type === 'test') {
-		return(
-			<StoneTest
-				key={key}
-				id={id}
-				barcode={barcode}
-				sKey={sKey}
-				step={step}
-				type={type} 
-				progCounts={progCounts} 
-				lockout={lockout}
-				topClass={topClass}
-				topTitle={topTitle}
-				allItems={allItems}
-				isAlt={isAlt}
-				hasAlt={hasAlt}
-	
-				handleStepUndo={handleStepUndo}
-				undoOption={undoOption}
-				closeUndoOption={closeUndoOption}
-				
-				enactEntry={()=>enactEntry()}
-				resolveEntry={()=>resolveEntry()}
-				workingState={workingState}
-			/>
-		);
-	}
-	
-	if(type === 'finish') {
-		return(
-			<StoneFinish
-				key={key}
-				id={id}
-				barcode={barcode}
-				sKey={sKey}
-				step={step}
-				type={type} 
-				progCounts={progCounts} 
-				lockout={lockout}
-				topClass={topClass}
-				topTitle={topTitle}
-				allItems={allItems}
-				isAlt={isAlt}
-				hasAlt={hasAlt}
-	
-				handleStepUndo={handleStepUndo}
-				undoOption={undoOption}
-				closeUndoOption={closeUndoOption}
-				
-				enactEntry={()=>enactEntry()}
-				workingState={workingState}
-			/>
-		);
-	}
-	
-	return(
+	const renderReg = 
 		<StoneReg 
 			key={key}
 			id={id}
-			barcode={barcode}
+			barcode={serial}
 			sKey={sKey}
 			step={step}
 			type={type} 
@@ -178,20 +100,103 @@ const StoneControl = ({
 			allItems={allItems}
 			isAlt={isAlt}
 			hasAlt={hasAlt}
-
 			handleStepUndo={handleStepUndo}
 			undoOption={undoOption}
 			closeUndoOption={closeUndoOption}
-			
 			enactEntry={()=>enactEntry()}
 			resolveEntry={()=>resolveEntry()}
 			workingState={workingState}
-		/>
+		/>;
+	
+	const renderVerify = 
+		<StoneVerify 
+			key={key}
+			id={id}
+			barcode={serial}
+			sKey={sKey}
+			step={step}
+			type={type} 
+			lockout={lockout}
+			topClass={topClass}
+			topTitle={topTitle}
+			handleVerify={handleVerify}
+			handleStepUndo={handleStepUndo}
+			undoOption={undoOption}
+		/>;
+	
+	const renderTest = 
+		<StoneTest
+			key={key}
+			id={id}
+			barcode={serial}
+			sKey={sKey}
+			step={step}
+			type={type} 
+			progCounts={progCounts} 
+			lockout={lockout}
+			topClass={topClass}
+			topTitle={topTitle}
+			allItems={allItems}
+			isAlt={isAlt}
+			hasAlt={hasAlt}
+			handleStepUndo={handleStepUndo}
+			undoOption={undoOption}
+			closeUndoOption={closeUndoOption}
+			enactEntry={()=>enactEntry()}
+			resolveEntry={()=>resolveEntry()}
+			workingState={workingState}
+		/>;
+	
+	const renderFinish = 
+		<StoneFinish
+			key={key}
+			id={id}
+			barcode={serial}
+			sKey={sKey}
+			step={step}
+			type={type} 
+			progCounts={progCounts} 
+			lockout={lockout}
+			topClass={topClass}
+			topTitle={topTitle}
+			allItems={allItems}
+			isAlt={isAlt}
+			hasAlt={hasAlt}
+			handleStepUndo={handleStepUndo}
+			undoOption={undoOption}
+			closeUndoOption={closeUndoOption}
+			enactEntry={()=>enactEntry()}
+			workingState={workingState}
+		/>;
+		
+		
+	if(type === 'first') {
+		return(
+			renderVerify
+		);
+	}
+	
+	if(type === 'test') {
+		return(
+			renderTest
+		);
+	}
+	
+	if(type === 'finish') {
+		return(
+			renderFinish
+		);
+	}
+	
+	return(
+		renderReg
 	);
 };
 
+
 function areEqual(prevProps, nextProps) {
 	if(
+		prevProps.serial !== nextProps.serial ||
 		prevProps.doneStone !== nextProps.doneStone ||
 		prevProps.blockStone !== nextProps.blockStone ||
 		prevProps.sKey !== nextProps.sKey ||
@@ -202,10 +207,19 @@ function areEqual(prevProps, nextProps) {
 		return true;
 	}
   /*
-  return true if passing nextProps to render would return
-  the same result as passing prevProps to render,
+  return true if nextProps would return the same result as prevProps,
   otherwise return false
-  */
+	*/  
 }
 
 export default React.memo(StoneControl, areEqual);
+/*
+import AnimateOnChange from 'react-animate-on-change';
+<AnimateOnChange
+  customTag='div'
+  baseClassName='cap biggest'
+  animationClassName="twitch-change"
+  animate={i.serial}
+  >{i.serial}
+</AnimateOnChange>
+*/

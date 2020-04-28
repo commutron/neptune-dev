@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 
 const MiniHistory = ({ history })=> (
-  <div className='space mockTable miniHistory'>
+  <div className='mockTable miniHistory'>
     {history.map( (hst, idx)=>{
   		return( 
   		  <div className='mockTableRow cap' key={idx}>

@@ -47,7 +47,6 @@ const StoneReg = ({
 		});
   }
   
-  
 	let shape = '';
 	
 	//// Style the Stone Accordingly \\\\
@@ -64,7 +63,6 @@ const StoneReg = ({
 	              <label className='big'>{type}<br /></label> : null;
 	let apend = type === 'inspect' ?
 	              <label className='big'><br />{type}</label> : null;
-    
 	
   return(
    	<Fragment>

@@ -55,8 +55,6 @@ const DoProCard = ({
   
   const flows = [...flowData.flow,...flowData.flowAlt];
   
-  console.log({showVerifyState});
-  
   const insertTideWall = 
           <TideWall
             bID={batchData._id}

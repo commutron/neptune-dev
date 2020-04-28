@@ -3,6 +3,8 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import CreateTag from '/client/components/tinyUi/CreateTag.jsx';
 
+import AnimateOnChange from 'react-animate-on-change';
+  
 import ScrapBox from '../../../components/smallUi/ScrapBox.jsx';
 import SubItemLink from '/client/components/tinyUi/SubItemLink.jsx';
 //import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
@@ -50,7 +52,13 @@ const ItemPanel = ({
     
       <div className='balance'>
         <div className='numFont space2v'>
-          <div className='cap biggest'>{i.serial}</div>
+          <AnimateOnChange
+            customTag='div'
+            baseClassName='cap biggest'
+            animationClassName="twitch-change"
+            animate={i.serial}
+            >{i.serial}
+          </AnimateOnChange>
         </div>
         <div className='titleSection space2v'>
           <span>Units: {i.units}</span>

@@ -11,8 +11,13 @@ const TideWall = ({ bID, bComplete, itemData }) => {
   return(
     <div>
       <div>
-        <h1 className='biggest'>LOCK</h1>
+        <h1 className='biggest'>Item LOCKED</h1>
       </div>
+  		
+  		<h1 className='biggest'>Item is complete ???</h1>
+  		
+  		<h1 className='biggest'>BIG start button</h1>
+  		
   		
   		{itemData &&
         <MiniHistory history={itemData.history} />

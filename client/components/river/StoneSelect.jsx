@@ -42,7 +42,7 @@ const StoneSelect = ({
     Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(riverFlowState);
   }, [riverFlowState]);
   
-  
+  console.log('stoneSelect render');
   const serial = item.serial;
   const history = item.history;
   const finishedAt = item.finishedAt;
@@ -122,9 +122,9 @@ const StoneSelect = ({
                   lock={false} />
               : 
   		          <StoneControl
-    		          key={flowStep.key}
+    		          key={flowStep.key + serial}
                   id={id}
-                  barcode={serial}
+                  serial={serial}
                   sKey={flowStep.key}
                   step={flowStep.step}
                   type={flowStep.type}
