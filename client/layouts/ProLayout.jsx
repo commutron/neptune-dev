@@ -20,7 +20,7 @@ export const ProWrap = ({
 })=> {
   
   const [ expand, expandSet ] = useState(false);
-  const [ showVerify, showVerifySet ] = useState(false);
+  const [ showVerifyState, showVerifySet ] = useState(false);
   const [ optionVerify, optionVerifySet ] = useState(false);
   
   const [ ncTypesComboFlat, ncTypesComboSet ] = useState([]);
@@ -49,15 +49,16 @@ export const ProWrap = ({
   }, [batchData, widgetData, app]);
   
   
-  function handleVerify(value) {
-    showVerifySet( !showVerify ); 
+  function handleVerify(value, direct) {
+    showVerifySet( !showVerifyState ); 
     optionVerifySet( value );
+    handleExpand(direct);
   }
   
   function handleExpand(direct) {
-    const openState = direct !== null ? direct : expand;
-    expandSet( !openState );
-    Session.set( 'riverExpand', !openState );
+    const openState = direct !== null ? direct : !expand;
+    expandSet( openState );
+    Session.set( 'riverExpand', openState );
   }
     
   let scrollFix = {
@@ -135,9 +136,9 @@ export const ProWrap = ({
                 expand: expand, 
                 handleExpand: (d)=>handleExpand(d),
                 
-                showVerify: showVerify,
+                showVerifyState: showVerifyState,
                 optionVerify: optionVerify,
-                handleVerify: (q)=>handleVerify(q)
+                handleVerify: (q, d)=>handleVerify(q, d)
               }
             )}
           </div>
@@ -164,8 +165,8 @@ export const ProWrap = ({
             tideFloodGate={tideFloodGate}
             ncTypesCombo={ncTypesComboFlat}
             action={action}
-            showVerify={showVerify}
-            changeVerify={(q)=>handleVerify(q)}
+            showVerifyState={showVerifyState}
+            handleVerify={(q, d)=>handleVerify(q, d)}
           
             users={users}
             user={user}

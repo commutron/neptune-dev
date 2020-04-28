@@ -11,7 +11,8 @@ const River = ({
   batchData, itemData, widgetData, 
   app, users, brancheS,
   flow, flowAlt, progCounts,
-  showVerify, optionVerify, changeVerify
+  
+  showVerifyState, optionVerify, handleVerify
 })=> {
   
   // const [ lock, lockSet ] = useState(true);
@@ -114,9 +115,9 @@ const River = ({
           progCounts={progCounts}
           app={app}
           
-          showVerify={showVerify}
+          showVerifyState={showVerifyState}
           optionVerify={optionVerify}
-          changeVerify={changeVerify}
+          handleVerify={handleVerify}
           undoOption={undoStepOption}
           
           openUndoOption={()=>tempOpenOption()}

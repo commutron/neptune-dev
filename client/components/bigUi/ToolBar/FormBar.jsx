@@ -10,7 +10,7 @@ import ShortAdd from '/client/components/river/ShortAdd.jsx';
 const FormBar = ({ 
   batchData, itemData, widgetData, versionData, 
   tideFloodGate, ncTypesCombo, 
-  action, showVerify, changeVerify, 
+  action, showVerifyState, handleVerify, 
   user, users, app 
 })=> {
   
@@ -44,8 +44,8 @@ const FormBar = ({
               id='firstselect'
               name='toggleFirst'
               className='radioIcon'
-              checked={showVerify === true}
-              onChange={()=>changeVerify(true)}
+              checked={showVerifyState === true}
+              onChange={()=>handleVerify(null, true)}
               disabled={!verAuth || lockOutAll} />
             <i className='fas fa-thumbs-up' data-fa-transform='up-1'></i>
           </label> }

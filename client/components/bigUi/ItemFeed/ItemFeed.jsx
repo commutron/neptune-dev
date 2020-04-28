@@ -111,6 +111,7 @@ export const HistoryBlock = ({entry, id, batch, serial, done, showHeader})=>{
                           <i key={i}><UserNice id={e} />, </i> )})
                        : '';
   let method = infoF ? dt.info.buildMethod : '';
+  let methodNice = Array.isArray(method) ? method.join(", ") : method;
   let change = infoF ? dt.info.change : '';
   let issue = infoF ? dt.info.issue : infoT ? dt.info : '';
   
@@ -140,9 +141,9 @@ export const HistoryBlock = ({entry, id, batch, serial, done, showHeader})=>{
       {dt.type === 'first' ?
         <ul className='moreInfoList'>
           <li>Inspected: {inspect}</li>
-          <li>Built: {builder} with {method}</li>
+          <li>Built: {builder} with {methodNice}</li>
           {change !== '' && <li>{change}</li>}
-          {issue && <li>{issue}</li>}
+          {issue !== '' && <li>{issue}</li>}
         </ul>
       :
         dt.type === 'undo' && dt.info.formerWhen && dt.info.formerWho ?

@@ -7,14 +7,14 @@ const StoneVerify = ({
 	lockout, 
 	topClass, topTitle,
 	
-	changeVerify,
+	handleVerify,
 	
 	handleStepUndo,
 	undoOption
 })=> { 
   
   function reveal() {
-    changeVerify(false);
+    handleVerify(sKey, true);
   }
 	
 	let prepend = <label className='big'>{type}<br /></label>;

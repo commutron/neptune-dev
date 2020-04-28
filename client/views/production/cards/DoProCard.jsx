@@ -2,8 +2,12 @@ import React, { useState, useEffect, useLayoutEffect, Fragment } from 'react';
 //import Pref from '/client/global/pref.js';
 
 import HeadWater from '/client/components/river/HeadWater.js';
-import River from '/client/components/river/River.jsx';
+
 import TideWall from '/client/components/river/TideWall.jsx';
+
+import River from '/client/components/river/River.jsx';
+
+import VerifyIsland from '/client/components/river/VerifyIsland.jsx';
 
 // import TideLock from '/client/components/tide/TideLock.jsx';
 
@@ -20,7 +24,7 @@ const DoProCard = ({
   tideFloodGate,
   expand, handleExpand,
   
-  showVerify, 
+  showVerifyState, 
   optionVerify,
   handleVerify
 })=> {
@@ -49,6 +53,10 @@ const DoProCard = ({
     return <div>nope</div>;
   }
   
+  const flows = [...flowData.flow,...flowData.flowAlt];
+  
+  console.log({showVerifyState});
+  
   const insertTideWall = 
           <TideWall
             bID={batchData._id}
@@ -72,7 +80,18 @@ const DoProCard = ({
             flow={flowData.flow}
             flowAlt={flowData.flowAlt}
             progCounts={flowData.progCounts}
-            showVerify={showVerify}
+            showVerifyState={showVerifyState}
+            optionVerify={optionVerify}
+            handleVerify={handleVerify} />;
+            
+  const insertVerifyIsland =
+          <VerifyIsland
+            bID={batchData._id}
+            itemData={itemData}
+            flowFirsts={flows.filter( x => x.type === 'first' )}
+            brancheS={brancheState}
+            app={app}
+            users={users}
             optionVerify={optionVerify}
             handleVerify={handleVerify} />;
   
@@ -104,11 +123,15 @@ const DoProCard = ({
           
           insertItemCard :
           
-          insertRiver
+          showVerifyState ?
+            
+            insertVerifyIsland :
+            
+            insertRiver
     }
       
         
-  	{expand && itemData && insertBatchCard}
+  	{( !showVerifyState && expand ) && itemData && insertBatchCard}
   
     </Fragment>
   );

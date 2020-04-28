@@ -18,8 +18,8 @@ const StoneControl = ({
 	users, app,
 	progCounts,
 	blockStone, doneStone, compEntry,
-	showVerify, changeVerify, undoOption,
-	openUndoOption, closeUndoOption,
+	handleVerify,
+	undoOption, openUndoOption, closeUndoOption,
 	riverFlowState, riverFlowStateSet
 })=> {
 	
@@ -101,9 +101,7 @@ const StoneControl = ({
 				lockout={lockout}
 				topClass={topClass}
 				topTitle={topTitle}
-				
-				changeVerify={changeVerify}
-				
+				handleVerify={handleVerify}
 				handleStepUndo={handleStepUndo}
 				undoOption={undoOption}
 			/>

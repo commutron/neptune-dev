@@ -724,10 +724,15 @@ main {
   flex-direction: row;
   flex-wrap: wrap;
 }
-
 .balance {
   display: flex;
   justify-content: space-around;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.balancer {
+  display: flex;
+  justify-content: space-evenly;
   flex-direction: row;
   flex-wrap: wrap;
 }

@@ -371,48 +371,53 @@
   height: auto;
   transform: translate(0%, 20%);
 }
-
+/*
 .stoneFrame .actionBox {
   max-width: 19vmax;
+}
+.stoneForm details { box-shadow: none; }
+*/
+.stoneFrame {
+  max-width: 39vmax;
 }
 .stoneForm {
   display: flex;
   width: 100%;
+  padding-bottom: 3vh;
   flex-direction: column;
   justify-content: space-around;
-  align-items: center;
+  align-self: flex-start;
 }
-fieldset.stoneForm, .fakeFielset {
+.fakeFielset {
   border-top: 5px dashed rgba(255,255,255,0.5);
   border-right: none;
   border-bottom: none;
   border-left: none;
   padding: 3vmax 1vmax;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
 }
+.wideStone {
+  min-width: 17vmax;
+  width: fit-content;
+  max-width: 34vmax;
+  min-height: 1rem;
 
+}
+.wideStone textarea {
+  min-width: 17vmax;
+  width: 100%;
+}
 .stoneForm input[type='text'],
 .stoneForm select,
-.stoneForm label,
 .stoneForm details {
   max-width: 17vmax;
 }
 
-.stoneForm label {
-  color: white;
-}
+.stoneForm textarea { border-color: black; }
 
-.stoneForm textarea {
-  min-width: 17vmax;
-  max-width: 17vmax;
-  min-height: 1rem;
-  border-color: black;
-}
-
-.stoneForm details {
-  box-shadow: none;
-}
-
-.stoneForm input[type='checkbox']:focus + label,
 .stoneForm input:focus + label,
 .stoneForm select:focus + label,
 .stoneForm textarea:focus + label {

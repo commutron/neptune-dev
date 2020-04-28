@@ -4,7 +4,7 @@ import InOutWrap from '/client/components/tinyUi/InOutWrap.jsx';
 // import Pref from '/client/global/pref.js';
 
 import StoneControl from './StoneControl.jsx';
-import FirstForm from './FirstForm.jsx';
+
 import FoldInNested from './FoldInNested.jsx';
 import TestFails from './TestFails.jsx';
 import NCTributary from './NCTributary.jsx';
@@ -26,9 +26,11 @@ const StoneSelect = ({
   users,
   progCounts,
   app,
-  showVerify,
+  
+  showVerifyState,
   optionVerify,
-  changeVerify,
+  handleVerify,
+  
   undoOption,
   openUndoOption,
   closeUndoOption
@@ -109,54 +111,39 @@ const StoneSelect = ({
         <div>
           <div>
 		        <InOutWrap type='stoneTrans'>
-  		        {showVerify ?
-                <FirstForm
+  		        {flowStep.type === 'nest' ?
+  		          <FoldInNested
+                  id={id}
+                  serial={serial}
+                  sKey={flowStep.key}
+                  step={flowStep.step}
+                  doneStone={doneStone}
+                  //subItems={subItems}
+                  lock={false} />
+              : 
+  		          <StoneControl
+    		          key={flowStep.key}
                   id={id}
                   barcode={serial}
-                  flowFirsts={flow.filter( x => x.type === 'first' )}
-                  sKey={flowStep.type === 'first' ? flowStep.key : false}
-                  step={flowStep.type === 'first' ? flowStep.step : false }
-                  branchObj={flowStep.type === 'first' ? branchObj : false }
-                  brancheS={brancheS}
+                  sKey={flowStep.key}
+                  step={flowStep.step}
+                  type={flowStep.type}
+                  branchObj={branchObj}
+                  allItems={allItems}
+                  isAlt={isAlt}
+                  hasAlt={hasAlt}
                   users={users}
                   app={app}
-                  optionVerify={optionVerify}
-                  changeVerify={changeVerify} />
-  		        : 
-    		        flowStep.type === 'nest' ?
-    		          <FoldInNested
-                    id={id}
-                    serial={serial}
-                    sKey={flowStep.key}
-                    step={flowStep.step}
-                    doneStone={doneStone}
-                    //subItems={subItems}
-                    lock={false} />
-                : 
-    		          <StoneControl
-      		          key={flowStep.key}
-                    id={id}
-                    barcode={serial}
-                    sKey={flowStep.key}
-                    step={flowStep.step}
-                    type={flowStep.type}
-                    branchObj={branchObj}
-                    allItems={allItems}
-                    isAlt={isAlt}
-                    hasAlt={hasAlt}
-                    users={users}
-                    app={app}
-                    progCounts={progCounts}
-                    blockStone={blockStone}
-                    doneStone={doneStone}
-                    compEntry={compEntry}
-                    showVerify={showVerify}
-                    changeVerify={changeVerify}
-                    undoOption={undoOption}
-                    openUndoOption={openUndoOption}
-                    closeUndoOption={closeUndoOption}
-                    riverFlowState={riverFlowState}
-                    riverFlowStateSet={(e)=>riverFlowStateSet(e)} />
+                  progCounts={progCounts}
+                  blockStone={blockStone}
+                  doneStone={doneStone}
+                  compEntry={compEntry}
+                  handleVerify={handleVerify}
+                  undoOption={undoOption}
+                  openUndoOption={openUndoOption}
+                  closeUndoOption={closeUndoOption}
+                  riverFlowState={riverFlowState}
+                  riverFlowStateSet={(e)=>riverFlowStateSet(e)} />
   		        }
             </InOutWrap>
             {fTest.length > 0 && 

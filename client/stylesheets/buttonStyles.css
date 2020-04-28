@@ -187,6 +187,19 @@
   text-align: center;
 }
 
+.roundRadioSelect {
+  display: flex !important;
+  border-bottom: none !important;
+  flex-direction: row;
+  align-items: center;
+  margin: 0.5rem;
+  height: 2.5rem;
+  padding: 1rem;
+  border-radius: 25rem;
+  background-color: transparent;
+  text-align: center;
+}
+
 .dbblRound {
   width: 5rem;
   height: 5rem;
