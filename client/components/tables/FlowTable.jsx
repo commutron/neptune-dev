@@ -32,7 +32,7 @@ const FlowTable = ({ id, flows, app })=> {
             <summary>{entry.title}</summary>
             <div className=''>
               <table className='wide'>
-                <tbody className='clean centreText'>
+                <tbody className='clean'>
                   <tr>
                     <td>type: {entry.type}</td>
                     <td>key: <i className='small'>{entry.flowKey}</i></td>

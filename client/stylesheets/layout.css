@@ -652,6 +652,7 @@ main {
 
 .vmargin { margin: 24px 0; }
 .vmarginhalf { margin: 12px 0; }
+.vgap { margin-bottom: 2vh; }
 .nomargin { margin: 0; }
 
 .noindent,

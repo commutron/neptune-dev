@@ -38,6 +38,10 @@
   animation: spinAround 10s infinite linear;
 }
 
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 var(--high-color); }
+}
+
 .stone {
 	position: absolute;
 	top: 50%;
@@ -58,14 +62,24 @@
   background-origin: content-box;
   background-size: 110%;
   border-radius: 50%;
-  transition: all 200ms ease-out;
+  transition: 0.25s;
   opacity: 1;
   will-change: transform;
   cursor: pointer;
 }
-.stone:active {
-  filter: blur(5px);
+
+.stone:hover,
+.crackedTop:hover, .crackedBot:hover { 
+  background-color: var(--high-color); 
 }
+
+.stone:active,
+.crackedTop:active, .crackedBot:active {
+  filter: blur(5px);
+  animation: pulse 0.5s;
+  box-shadow: 0 0 0 2em rgba(255, 255, 255, 0);
+}
+
 .stone label {
   width: 100%;
   padding: 10px 0 0 0;
@@ -118,8 +132,8 @@
 }
 
 .crackedTop, .crackedBot {
-  width: 15vmax;
-  height: 7.5vmax;
+  width: 16vmax;
+  height: 8vmax;
   z-index: 2;
   background-position: top;
   background-size: 80%;
@@ -139,28 +153,30 @@
   margin: 0 0.25em -0.25em 0.25em;
   background-image: url(test.svg);
   background-color: var(--pomegranate);
+  --high-color: var(--alizarin);
 }
-
-.crackedBot:hover, .crackedBot:active {
-  background-color: var(--alizarin);
-  z-index: 2;
-}
+.crackedBot:hover, .crackedBot:active { z-index: 2; }
 
 .nowUp {
   font-weight: bolder;
 }
 
+.ncAct {
+  transition: 0.25s;
+}
+.ncAct:hover { background-color: var(--high-color); }
+.ncAct:active {
+  animation: pulse 0.5s;
+  box-shadow: 0 0 0 2em rgba(255, 255, 255, 0);
+}
+
 .riverInfo {
   background-color: var(--belizeHole);
-}
-.riverInfo:hover, .riverInfo:active {
-  background-color: var(--peterriver);
+  --high-color: var(--peterriver);
 }
 .riverG {
   background-color: var(--nephritis);
-}
-.riverG:hover, .riverG:active {
-  background-color: var(--emerald);
+  --high-color: var(--emerald);
 }
 
 .riverNG {
@@ -194,34 +210,26 @@
 .iFirst {
   background-image: url(first.svg);
   background-color: var(--belizeHole);
-}
-.iFirst:hover, .iFirst:active {
-  background-color: var(--peterriver);
+  --high-color: var(--peterriver);
 }
 
 .iCheck {
   background-image: url(inspect.svg);
   background-color: var(--nephritis);
-}
-.iCheck:hover, .iCheck:active {
-  background-color: var(--emerald);
+  --high-color: var(--emerald);
 }
 
 .iTest {
   background-image: url(test.svg);
   background-color: var(--greenSea);
-}
-.iTest:hover, .iTest:active {
-  background-color: var(--turquoise);
+  --high-color: var(--turquoise);
 }
 
 .iBuild {
   background-image: url(build.svg);
   background-color: transparent;
   border-color: var(--belizeHole);
-}
-.iBuild:hover, .iBuild:active {
-  border-color: var(--peterriver);
+  --high-color: var(--peterriver);
 }
 
 .iPoint {
@@ -229,9 +237,7 @@
   border-color: var(--asbestos);
   z-index: 1;
   font-size: 1.5rem;
-}
-.iPoint:hover, .iPoint:active {
-  border-color: var(--silver);
+  --high-color: var(--silver);
 }
 .iPoint:after {
   position: absolute;
@@ -254,31 +260,8 @@
 .iFinish {
   background-image: url(inspect.svg);
   background-color: var(--wisteria);
+  --high-color: var(--amethyst);
 }
-.iFinish:hover, .iFinish:active {
-  background-color: var(--amethyst);
-}
-
-/*
-.doneFirst {
-  background-color: var(--peterriver);
-}
-.doneCheck {
-  border: 8px solid var(--emerald);
-}
-.doneTest {
-  background-color: var(--turquoise);
-}
-.doneBuild {
-  background-color: var(--peterriver);
-}
-.donePoint {
-  background-color: var(--silver);
-}
-.doneFinish {
-  background-color: var(--amethyst);
-}
-*/
 
 .ncTrib, .shortGrid {
   position: relative;
@@ -443,7 +426,7 @@
   color: var(--peterriver);
 }
 
-.stoneForm .go478283313 {
+.stoneForm .dropdown-container {
   --rmsc-primary: var(--peterriver);
   --rmsc-hover: var(--peterriverfade);
   --rmsc-border: transparent;
@@ -455,7 +438,7 @@
   min-width: 17vmax;
   max-width: 17vmax;
 }
-.stoneForm .go478283313 .item-renderer {
+.stoneForm .item-renderer {
   display: flex;
   align-content: center;
   color: black;

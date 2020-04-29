@@ -36,8 +36,7 @@ const NonConBlock = ({
     const type = this.ncType.value.trim();
     const where = this.ncWhere.value.trim().toLowerCase();
     
-    const tgood = Roles.userIsInRole(Meteor.userId(), 'nightly') ?
-                    handleCheck(this.ncType, entry.type) : true;
+    const tgood = handleCheck(this.ncType, entry.type);
     
     if( typeof ref !== 'string' || ref.length < 1 ||  !tgood || where.length < 1 ) {
       this.ncRef.reportValidity();
@@ -140,8 +139,7 @@ const NonConBlock = ({
               min={1}
               defaultValue={dt.ref}
               required />
-            {Roles.userIsInRole(Meteor.userId(), 'nightly') ?
-              user.typeNCselection ?
+            {user.typeNCselection ?
               <span>
                 <input 
                   id='ncType'
@@ -204,16 +202,6 @@ const NonConBlock = ({
                 }})}
                 </select>
               </span>
-            :
-              <select 
-                id='ncType'
-                className='redIn cap inlineSelect'
-                defaultValue={dt.type}
-                required>
-                {app.nonConOption.map( (entry, index)=>{
-                  return( <option key={index} value={entry}>{entry}</option> );
-                  })}
-              </select>
             }
             <input 
               id='ncWhere'

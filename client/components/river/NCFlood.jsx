@@ -22,8 +22,7 @@ const NCFlood = ({ id, live, user, app, ncTypesCombo })=> {
     const refEntry = this.ncRefs.value.trim().toLowerCase();
     const refSplit = refEntry.split(/\s* \s*/);
     
-    const tgood = Roles.userIsInRole(Meteor.userId(), 'nightly') ?
-                    handleCheck(this.ncType) : true;
+    const tgood = handleCheck(this.ncType);
     
     if( !tgood || refSplit.length < 1 || refSplit[0] === '' ) {
       this.ncRefs.reportValidity();

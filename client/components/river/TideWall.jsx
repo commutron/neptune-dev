@@ -3,9 +3,10 @@ import React from 'react';
 // import InOutWrap from '/client/components/tinyUi/InOutWrap.jsx';
 // import Pref from '/client/global/pref.js';
 
+import CompleteRest from './CompleteRest.jsx';
 import MiniHistory from './MiniHistory.jsx';
 
-const TideWall = ({ bID, bComplete, itemData }) => {
+const TideWall = ({ bID, bComplete, itemData, shortfalls }) => {
   
   
   return(
@@ -14,14 +15,24 @@ const TideWall = ({ bID, bComplete, itemData }) => {
         <h1 className='biggest'>Item LOCKED</h1>
       </div>
   		
-  		<h1 className='biggest'>Item is complete ???</h1>
+  		<h1 className='biggest'>BIG start</h1>
   		
-  		<h1 className='biggest'>BIG start button</h1>
-  		
-  		
-  		{itemData &&
-        <MiniHistory history={itemData.history} />
-  		}
+  		{itemData ?
+  		  itemData.finishedAt !== false ?
+  		  
+    		  <CompleteRest
+            id={bID}
+            bComplete={bComplete}
+            sh={shortfalls}
+            serial={itemData.serial}
+            history={itemData.history}
+            finishedAt={itemData.finishedAt} />
+  		    
+  		    :
+  		    
+          <MiniHistory history={itemData.history} />
+        
+        : null }
   	</div>
   );
 };

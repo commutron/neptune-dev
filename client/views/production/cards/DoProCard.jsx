@@ -59,10 +59,12 @@ const DoProCard = ({
           <TideWall
             bID={batchData._id}
             bComplete={batchData.finishedAt !== false}
-            itemData={itemData || null} />;
+            itemData={itemData || null}
+            shortfalls={batchData.shortfall} />;
             
   const insertItemCard = 
           <ItemCard
+            itemData={itemData}
             hasRiver={flowData.hasRiver}
             isReleased={flowData.floorRel}
             scrap={scrapCheck} />;

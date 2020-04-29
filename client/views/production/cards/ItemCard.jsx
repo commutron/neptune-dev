@@ -2,9 +2,9 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 
 import ScrapBox from '/client/components/smallUi/ScrapBox.jsx';
+import MiniHistory from '/client/components/river/MiniHistory.jsx';
 
-
-const ItemCard = ({ iSerial, hasRiver, isReleased, scrap })=> {
+const ItemCard = ({ itemData, iSerial, hasRiver, isReleased, scrap })=> {
 
   //const done = itemData.finishedAt !== false;
   
@@ -44,6 +44,7 @@ const ItemCard = ({ iSerial, hasRiver, isReleased, scrap })=> {
     return(
       <div className='proPrimeSingle'>
         <ScrapBox entry={scrap} />
+        <MiniHistory history={itemData.history} />
       </div>
     );
   }

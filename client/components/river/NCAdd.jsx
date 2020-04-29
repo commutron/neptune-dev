@@ -18,8 +18,7 @@ const NCAdd = ({ id, barcode, user, app, ncTypesCombo })=> {
     e.preventDefault();
     const type = this.ncType.value.trim();
     
-    const tgood = Roles.userIsInRole(Meteor.userId(), 'nightly') ?
-                    handleCheck(this.ncType) : true;
+    const tgood = handleCheck(this.ncType);
     
     const where = Session.get('ncWhere') || "";
     
@@ -68,8 +67,7 @@ const NCAdd = ({ id, barcode, user, app, ncTypesCombo })=> {
         required />
       <label htmlFor='ncRefs'>{Pref.nonConRef}</label>
     </span>
-    {Roles.userIsInRole(Meteor.userId(), 'nightly') ?
-      user.typeNCselection ?
+    {user.typeNCselection ?
       <span>
         <input 
           id='ncType'
@@ -132,21 +130,6 @@ const NCAdd = ({ id, barcode, user, app, ncTypesCombo })=> {
                   />
                 );
           }})}
-          </select>
-          <label htmlFor='ncType'>{Pref.nonConType}</label>
-        </span>
-      :
-        <span>
-          <select 
-            id='ncType'
-            className='cap redIn'
-            disabled={lock}
-            required >
-            {app.nonConOption.map( (entry, index)=>{
-              return ( 
-                <option key={index} value={entry}>{index + 1}. {entry}</option>
-                );
-            })}
           </select>
           <label htmlFor='ncType'>{Pref.nonConType}</label>
         </span>

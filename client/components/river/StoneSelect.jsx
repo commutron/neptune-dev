@@ -42,7 +42,6 @@ const StoneSelect = ({
     Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(riverFlowState);
   }, [riverFlowState]);
   
-  console.log('stoneSelect render');
   const serial = item.serial;
   const history = item.history;
   const finishedAt = item.finishedAt;

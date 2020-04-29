@@ -4,6 +4,9 @@ import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import InOutWrap from '/client/components/tinyUi/InOutWrap.jsx';
 import Pref from '/client/global/pref.js';
 
+import AnimateOnChange from 'react-animate-on-change';
+
+
 const NCTributary = ({ id, serial, nonCons, sType })=> {
 
   function handleFix(ncKey) {
@@ -106,7 +109,7 @@ const NCStream = ({
         <div>{entry.type}</div>
       </div>
       <div className='tribAction'>
-        <div className='tribActionMain'>
+      <div className='tribActionMain'>
           {skip ?
             <span className='centre'>
               <i className='far fa-clock fa-lg'></i>{smple ? null : 'Snoozing'}
@@ -115,8 +118,8 @@ const NCStream = ({
             fixed ?
               <button
                 title='All Correct'
-                ref={(i)=> this.inspectline = i}
-                className='riverG'
+                id='inspectline'
+                className='ncAct riverG'
                 readOnly={true}
                 onClick={doInspect}
                 disabled={lockI}>
@@ -124,9 +127,10 @@ const NCStream = ({
           :
               <button
                 ref={(i)=> this.fixline = i}
-                className='riverInfo'
+                className='ncAct riverInfo'
                 readOnly={true}
-                onClick={doFix}>
+                onClick={doFix}
+                disabled={fixed === true}>
               <img src='/repair.svg' className='pebbleSVG' /><br />{smple ? null : 'Repair'}</button>
           }
         </div>
