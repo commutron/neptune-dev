@@ -1,14 +1,17 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 
-import ScrapBox from '/client/components/smallUi/ScrapBox.jsx';
-import MiniHistory from '/client/components/river/MiniHistory.jsx';
+import CompleteRest from '/client/components/river/CompleteRest.jsx';
+//import ScrapBox from '/client/components/smallUi/ScrapBox.jsx';
+// import MiniHistory from '/client/components/river/MiniHistory.jsx';
 
-const ItemCard = ({ itemData, iSerial, hasRiver, isReleased, scrap })=> {
+const ItemCard = ({ 
+  itemData, iSerial, 
+  hasRiver, isReleased, 
+  iFinished, scrap,
+  bID, bComplete, shortfallS 
+})=> {
 
-  //const done = itemData.finishedAt !== false;
-  
-  
   if(!hasRiver) {
     Session.set('ncWhere', Pref.outOfFlow);
     Session.set('nowStepKey', undefined);
@@ -40,11 +43,17 @@ const ItemCard = ({ itemData, iSerial, hasRiver, isReleased, scrap })=> {
     );
   }
 
-  if(scrap) {
+  if(iFinished) {
     return(
       <div className='proPrimeSingle'>
-        <ScrapBox entry={scrap} />
-        <MiniHistory history={itemData.history} />
+        <CompleteRest
+          id={bID}
+          bComplete={bComplete}
+          shortfallS={shortfallS}
+          serial={itemData.serial}
+          history={itemData.history}
+          finishedAt={itemData.finishedAt}
+          scrap={scrap} />
       </div>
     );
   }

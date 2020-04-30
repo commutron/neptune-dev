@@ -1,19 +1,17 @@
-.tideIn, .tideOut, .tideFlip {
+.tideIn, .tideOut, .tideFlip, .tideLock {
   width: 100%;
   height: 100%;
-  background-color: transparent;
   cursor: pointer;
   font-size: 1.5vh;
-}
-.tideIcon {
-  padding: 0.5vh;
-  font-size: 2.5vh;
-  border-radius: 50%;
-}
-
-.tideIn, .tideOut, .tideFlip {
   background-color: rgb(25,25,25);
   color: var(--asbestos);
+  padding-top: 0.25vmax;
+  letter-spacing: 0.2ch;
+}
+
+.tideIcon {
+  font-size: 2.5vh;
+  border-radius: 50%;
 }
 
 .tideIn .tideIndicate { color: var(--pomegranate); }
@@ -40,14 +38,20 @@
   color: rgb(25,25,25);
 }
 
-.tideIn:disabled,
-.tideOut:disabled, 
-.tideFlip:disabled {
-  opacity: 1;
-  transition: all 200ms ease-in-out 200ms;
+.tideIn:active .tideIndicate,
+.tideOut:active .tideIndicate,
+.tideFlip:active .tideIndicate {
+  animation-name: hvr-buzz-out;
+  animation-duration: 1s;
+  animation-timing-function: ease-out;
+  animation-iteration-count: infinite;
 }
-.tideIn:disabled:hover,
-.tideOut:disabled:hover, 
-.tideFlip:disabled:hover {
-  filter: grayscale(0.8);
+
+.tideIn:disabled .tideIndicate,
+.tideOut:disabled .tideIndicate,
+.tideFlip:disabled .tideIndicate {
+  animation-name: hvr-buzz-out;
+  animation-duration: 2s;
+  animation-timing-function: ease-out;
+  animation-iteration-count: infinite;
 }

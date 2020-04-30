@@ -145,8 +145,8 @@
 }
 */
 .miniHistory {
-  padding: 1vh 1vw;
-  width: 100%;
+  margin: 1vh 0.5vmax;
+  min-width: 18vmax;
   max-width: 19vmax;
   border-collapse: collapse;
 }

@@ -16,23 +16,26 @@ const PersonChunk = ({
   const [ branchGuess, setGuess ] = useState(false);
   
   useEffect( ()=>{
-    Meteor.call('branchBestGuess', 
-    userChunk.uID, 
-    userChunk.batch,
-    userChunk.tideBlock.startTime,
-    false,
-    clientTZ,
-    (err, asw)=>{
-      err && console.log(err);
-      asw && setGuess(asw);
-    });
+    if(userChunk.tideBlock.task) {
+      setGuess([ 'fromUserInput', [ userChunk.tideBlock.task ] ]);
+    }else{
+      Meteor.call('branchBestGuess', 
+      userChunk.uID, 
+      userChunk.batch,
+      userChunk.tideBlock.startTime,
+      false,
+      clientTZ,
+      (err, asw)=>{
+        err && console.log(err);
+        asw && setGuess(asw);
+      });
+    }
   }, [userChunk, update]);
   
   useEffect( ()=>{
     if(branchGuess) {
       branchGuess[1].forEach( (gu, ix) => updateBranches(userChunk.uID+ix, gu) );
     }               // with index appended to set multiple branch per person
-    //return ()=>removeBranch(userChunk.uID);
   }, [branchGuess]);
   
   useEffect( ()=>{

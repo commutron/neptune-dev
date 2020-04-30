@@ -18,6 +18,7 @@
   font-size: medium;
   letter-spacing: 1px;
   min-width: 2rem;
+  min-height: fit-content;
 	height: 2rem;
 	padding: 0 10px;
 }

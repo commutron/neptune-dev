@@ -113,7 +113,7 @@ Meteor.methods({
                                 moment(tideStart).isBefore(floorRelease.time); 
           
           if(releasePrep) {
-            return [ 'fromRelease', ['kitting / prep'] ];
+            return [ 'fromRelease', ['before release'] ];
           }else{
               
             const finished = batch.finishedAt !== false;
@@ -228,9 +228,10 @@ Meteor.methods({
     const batch = BatchDB.findOne({_id: batchID, orgKey: accessKey});
     if( batch && Array.isArray(batch.tide) ) {  
       const slim = batch.tide.map( x => {
-        const dt = Meteor.call('branchBestGuess', 
+        const known = x.task ? [ 'fromUserInput', [ x.task ] ] : null;
+        const dt = known || Meteor.call('branchBestGuess', 
                     x.who, batch.batch, 
-                    x.startTime, x.stopTime, 
+                    x.startTime, x.stopTime,
                     clientTZ, accessKey
                   );
         const mStart = moment(x.startTime);
@@ -243,6 +244,23 @@ Meteor.methods({
       });
       
       let slimTimes = [];
+      
+      const ancOptionS = app.ancillaryOption.sort();
+      for(let anc of ancOptionS) {
+        let ancDurr = 0;
+        for(let t of slim) {
+          if( Array.isArray(t.branchGuess) ) {
+            if( t.branchGuess[1].includes( anc ) ) {
+              ancDurr = ancDurr + ( t.duration / t.branchGuess[1].length );
+            }
+          }
+        }
+        slimTimes.push({
+          x: anc,
+          y: ancDurr
+        });
+      }
+      
       for(let br of branchesSort) {
         let brDurr = 0;
         for(let t of slim) {
@@ -264,7 +282,7 @@ Meteor.methods({
       for(let t of slim) {
         if( !t.branchGuess ) {
           xDurr = xDurr + t.duration;
-        }else if( t.branchGuess[1].includes( 'kitting / prep' ) ) {
+        }else if( t.branchGuess[1].includes( 'before release' ) ) {
           aDurr = aDurr + t.duration;
         }else if( t.branchGuess[1].includes( 'after finish' ) ) {
           zDurr = zDurr + t.duration;
@@ -272,7 +290,7 @@ Meteor.methods({
           null;
         }
       }
-      slimTimes.unshift({ x: 'kitting', y: aDurr });
+      slimTimes.unshift({ x: 'before release', y: aDurr });
       slimTimes.push({ x: 'after finish', y: zDurr });
       slimTimes.push({ x: 'unknown', y: xDurr });
       

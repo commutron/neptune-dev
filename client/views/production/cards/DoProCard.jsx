@@ -19,7 +19,7 @@ const DoProCard = ({
   itemData, batchData, widgetData, versionData, groupData,
   user, users, app, 
   
-  ncTypesCombo, tideLockOut,
+  ncTypesCombo, tideLockOut, tideKey,
   
   tideFloodGate,
   expand, handleExpand,
@@ -46,28 +46,52 @@ const DoProCard = ({
     flowDataSet(getFlowData);
   }, [batchData, widgetData]);
   
-  scrapCheck = !itemData ? null :
-    itemData.history.find(x => x.type === 'scrap' && x.good === true);
-  
   if(!flowData || !batchData) {
     return <div>nope</div>;
   }
   
+  const iSerial = !itemData ? null : itemData.serial;
+  
+  const iFinished = !iSerial ? null : itemData.finishedAt !== false;
+  
+  const scrapCheck = !iSerial ? null :
+    itemData.history.find(x => x.type === 'scrap' && x.good === true);
+  
+  const shortfall = batchData.shortfall || [];
+  const shortfallS = !iSerial ? shortfall :
+          shortfall.filter( x => x.serial === iSerial )
+            .sort((s1, s2)=> {
+              if (s1.partNum < s2.partNum) { return -1 }
+              if (s1.partNum > s2.partNum) { return 1 }
+              return 0;
+            });
+  
+  const bComplete = batchData.finishedAt !== false;
   const flows = [...flowData.flow,...flowData.flowAlt];
+  const plainBrancheS = Array.from(brancheState, b => b.branch);
+  const ancOptionS = app.ancillaryOption.sort();
   
   const insertTideWall = 
           <TideWall
             bID={batchData._id}
-            bComplete={batchData.finishedAt !== false}
+            bComplete={bComplete}
             itemData={itemData || null}
-            shortfalls={batchData.shortfall} />;
+            shortfallS={shortfallS}
+            scrap={scrapCheck}
+            ancOptionS={ancOptionS}
+            plainBrancheS={plainBrancheS}
+            tideKey={tideKey} />;
             
   const insertItemCard = 
           <ItemCard
             itemData={itemData}
             hasRiver={flowData.hasRiver}
             isReleased={flowData.floorRel}
-            scrap={scrapCheck} />;
+            iFinished={iFinished}
+            scrap={scrapCheck}
+            bID={batchData._id}
+            bComplete={bComplete}
+            shortfallS={shortfallS} />;
   
   const insertRiver = 
           <River
@@ -80,6 +104,7 @@ const DoProCard = ({
             flow={flowData.flow}
             flowAlt={flowData.flowAlt}
             progCounts={flowData.progCounts}
+            shortfallS={shortfallS}
             showVerifyState={showVerifyState}
             optionVerify={optionVerify}
             handleVerify={handleVerify} />;
@@ -113,13 +138,18 @@ const DoProCard = ({
     
     {!itemData ? 
       
-      insertBatchCard : 
-      
+      !tideFloodGate && !bComplete ? 
+        
+        insertTideWall :
+        
+        insertBatchCard 
+    : 
+        
       !tideFloodGate ? 
         
         insertTideWall :
         
-        !flowData.hasRiver || !flowData.floorRel || scrapCheck ? 
+        !flowData.hasRiver || !flowData.floorRel || iFinished ? 
           
           insertItemCard :
           
@@ -131,7 +161,13 @@ const DoProCard = ({
     }
       
         
-  	{( !showVerifyState && expand ) && itemData && insertBatchCard}
+  	{( !showVerifyState && expand ) && 
+  	 ( itemData || ( !tideFloodGate && !bComplete ) ) ?
+  	  
+  	    insertBatchCard :
+  	    
+  	  null
+  	}
   
     </Fragment>
   );

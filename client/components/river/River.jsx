@@ -11,7 +11,7 @@ const River = ({
   batchData, itemData, widgetData, 
   app, users, brancheS,
   flow, flowAlt, progCounts,
-  
+  shortfallS,
   showVerifyState, optionVerify, handleVerify
 })=> {
   
@@ -54,14 +54,6 @@ const River = ({
   // set flow as River
     useFlow = !flow ? w.flows.find( x => x.flowKey === b.river).flow : flow;
   }
-  
-  const shortfalls = b.shortfall || [];
-  const sh = shortfalls.filter( x => x.serial === i.serial )
-              .sort((s1, s2)=> {
-                if (s1.partNum < s2.partNum) { return -1 }
-                if (s1.partNum > s2.partNum) { return 1 }
-                return 0;
-              });
   
 	// present option between River and Alt River
 	if(i.finishedAt === false && b.riverAlt && !i.alt) {
@@ -108,7 +100,7 @@ const River = ({
           rmas={rma}
           allItems={b.items}
           nonCons={b.nonCon}
-          sh={sh}
+          sh={shortfallS}
           item={i}
           brancheS={brancheS}
           users={users}

@@ -680,16 +680,11 @@ Meteor.methods({
     
   removeAncOption(value) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      const used = BatchDB.findOne({orgKey: Meteor.user().orgKey, 'nonCon.where': value});
-      if(!used) {
-        AppDB.update({orgKey: Meteor.user().orgKey}, {
-          $pull : { 
-            ancillaryOption : value
-        }});
-        return true;
-      }else{
-        return false;
-      }
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $pull : { 
+          ancillaryOption : value
+      }});
+      return true;
     }else{
       return false;
     }

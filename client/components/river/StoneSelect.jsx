@@ -36,7 +36,7 @@ const StoneSelect = ({
   closeUndoOption
 })=> {
   
-  const [ riverFlowState, riverFlowStateSet ] = useState( true );
+  const [ riverFlowState, riverFlowStateSet ] = useState( 'slow' );
   
   useEffect( ()=>{
     Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(riverFlowState);

@@ -64,11 +64,6 @@ main {
   background-color: red !important;
   animation: blinker 5s ease-in-out infinite;
 }
-@keyframes blinker {
-  50% {
-    opacity: 0.5;
-  }
-}
 
 .errorReport {
   margin: 10vh auto;

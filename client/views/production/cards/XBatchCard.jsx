@@ -34,7 +34,7 @@ const BatchCardX = ({
     let released = b.releases.find( x => x.type === 'floorRelease');
 
   return(
-    <div className='section sidebar' key={b.batch}>
+    <div className='proPrimeSingle' key={b.batch}>
       
       {!released ?
         <ReleaseAction id={b._id} rType='floorRelease' />
@@ -47,7 +47,7 @@ const BatchCardX = ({
             <i className='fas fa-info-circle fa-fw' data-fa-transform='down-2' title='Info'></i>, 
             <i className='fas fa-tasks fa-fw' data-fa-transform='down-2' title='Progress'></i>,
           ]}
-          names={expand ? ['Info', 'Progress'] : false}
+          names={false}
           wide={true}
           stick={false}
           hold={true}

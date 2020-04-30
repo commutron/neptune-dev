@@ -1,6 +1,9 @@
 .monoFont {
   font-family: monospace;  
 }
+.numFont {
+  font-family: 'VarelaLocal';
+}
 
 .tableAction {
   min-width: 1.75rem;
@@ -385,10 +388,6 @@
 
 .noBorder { border: none; }
 .noRightBorder { border-right: none; }
-
-.numFont {
-  font-family: 'VarelaLocal';
-}
 
 .low { text-transform: lowercase; }
 

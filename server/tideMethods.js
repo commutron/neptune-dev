@@ -134,7 +134,7 @@ Meteor.methods({
     }
   },
   
-  startTideTask(batchId, accessKey, newTkey) {
+  startTideTask(batchId, accessKey, newTkey, newTask) {
     try {
       const orgKey = accessKey || Meteor.user().orgKey;
       const doc = BatchDB.findOne({ _id: batchId, orgKey: orgKey });
@@ -153,7 +153,8 @@ Meteor.methods({
               tKey: newTkey,
               who: Meteor.userId(),
               startTime: new Date(),
-              stopTime: false
+              stopTime: false,
+              task: newTask
           }}});
           Meteor.users.update(Meteor.userId(), {
             $set: {
@@ -212,7 +213,7 @@ Meteor.methods({
     }
   },
   
-  switchTideTask(tideKey, newbatchID, newTkey) {
+  switchTideTask(tideKey, newbatchID, newTkey, newTask) {
     try {
       const accessKey = Meteor.user().orgKey;
       
@@ -225,15 +226,15 @@ Meteor.methods({
         });
       };
       
-      const startSecond = (nbID, aKey, nTky)=> {
-        Meteor.call('startTideTask', nbID, aKey, nTky, (err, re)=>{
+      const startSecond = (nbID, aKey, nTky, nTsk)=> {
+        Meteor.call('startTideTask', nbID, aKey, nTky, nTsk, (err, re)=>{
           err && new Meteor.Error(err);
           if(re) { return true }
         });
       };
       
       stopFirst(tideKey, accessKey)
-        .then(startSecond(newbatchID, accessKey, newTkey))
+        .then(startSecond(newbatchID, accessKey, newTkey, newTask))
         .finally(()=> { return true });
 
     }catch (error) {
@@ -415,7 +416,8 @@ Meteor.methods({
               tKey: newTkey,
               who: sub.who,
               startTime: newSplit,
-              stopTime: stopTime
+              stopTime: stopTime,
+              task: sub.task
           }}});
           return true;
         }

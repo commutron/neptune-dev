@@ -55,7 +55,7 @@ const ItemPanel = ({
           <AnimateOnChange
             customTag='div'
             baseClassName='cap biggest'
-            animationClassName="twitch-change"
+            animationClassName="quick-bounce-change"
             animate={i.serial}
             >{i.serial}
           </AnimateOnChange>

@@ -107,7 +107,8 @@ export const ProWrap = ({
                 batchID={bData._id} 
                 tideKey={et} 
                 tideFloodGate={tideFloodGate}
-                tideLockOut={tideLockOut} />
+                tideLockOut={tideLockOut}
+                stopOnly={true} />
             </div>}
           <div className='frontCenterTitle'>
             <FindBox append={append} />
@@ -130,6 +131,7 @@ export const ProWrap = ({
             {React.cloneElement(children[0],
               { 
                 tideLockOut: tideLockOut,
+                tideKey: et,
                 ncTypesCombo: ncTypesComboFlat,
                 
                 tideFloodGate: tideFloodGate,

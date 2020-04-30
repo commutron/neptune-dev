@@ -69,13 +69,17 @@ const RawBlock = ({ tB, batch, clientTZ, isDebug, showZero })=> {
   const [ brGuess, setGuess ] = useState(false);
   
   useEffect( ()=>{
-    Meteor.call('branchBestGuess', tB.who, batch, tB.startTime, tB.stopTime, clientTZ,
-    (err, asw)=>{
-      err && console.log(err);
-      if(asw) {
-        setGuess(asw);
-      }
-    });
+    if(tB.task) {
+      setGuess([ 'fromUserInput', [ tB.task ] ]);
+    }else{
+      Meteor.call('branchBestGuess', tB.who, batch, tB.startTime, tB.stopTime, clientTZ,
+      (err, asw)=>{
+        err && console.log(err);
+        if(asw) {
+          setGuess(asw);
+        }
+      });
+    }
   }, []);
   
   const mStart = moment(tB.startTime);
