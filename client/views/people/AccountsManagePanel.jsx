@@ -16,7 +16,7 @@ import UserDMForm from '/client/components/forms/UserDMForm.jsx';
 
 import { ForceStopEngage } from '/client/views/app/appSlides/DataRepair.jsx';
 
-const AccountsManagePanel = ({ app, users, bCache, isDebug })=> {
+const AccountsManagePanel = ({ app, users, bCache, brancheS, isDebug })=> {
   
   const auths = Pref.auths;
   const areas = Pref.areas;
@@ -83,6 +83,7 @@ const AccountsManagePanel = ({ app, users, bCache, isDebug })=> {
                       org={entry.org}
                       auths={auths}
                       areas={areas}
+                      brancheS={brancheS}
                     />
                     {!Roles.userIsInRole(entry._id, 'active') &&
                       entry._id !== Meteor.userId() &&

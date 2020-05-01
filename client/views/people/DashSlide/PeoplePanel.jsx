@@ -7,7 +7,7 @@ import UserNice from '/client/components/smallUi/UserNice.jsx';
 import PersonChunk from './PersonChunk.jsx';
 
 const PeoplePanel = ({ 
-  app, eUsers, dUsers, eBatches, bCache, 
+  app, eUsers, dUsers, eBatches, bCache,
   updateBranches, removeBranch, update, isDebug
 })=> {
   

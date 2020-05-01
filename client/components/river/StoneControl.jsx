@@ -10,7 +10,7 @@ import StoneFinish from './StoneFinish.jsx';
 import useTimeOut from '/client/utility/useTimeOutHook.js';
 
 const StoneControl = ({
-	key, id, serial,
+	id, serial,
 	sKey, step, type,
 	branchObj,
 	allItems,
@@ -19,18 +19,18 @@ const StoneControl = ({
 	progCounts,
 	blockStone, doneStone, compEntry,
 	handleVerify,
-	undoOption, openUndoOption, closeUndoOption,
+	openUndoOption,
 	riverFlowState, riverFlowStateSet
 })=> {
 	
-  const [ lockState, lockSet ] = useState( true );
+  const [ holdState, holdSet ] = useState( true );
   const [ lockout, lockoutSet ] = useState( true );
 	const [ workingState, workingSet ] = useState( false );
 
 	useEffect( ()=> {
-		const checkLock = lockState || blockStone || ( !doneStone ? false : true );
+		const checkLock = holdState || blockStone || ( !doneStone ? false : true );
 		lockoutSet(checkLock);
-	}, [ serial, sKey, lockState, blockStone, doneStone ]);
+	}, [ serial, sKey, holdState, blockStone, doneStone ]);
 	
 	function unlockAllow() {
   	if(type === 'inspect' && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
@@ -42,12 +42,12 @@ const StoneControl = ({
   	}else if(type === 'finish' && !Roles.userIsInRole(Meteor.userId(), 'finish')) {
   		null;
   	}else{
-		  lockSet( false );
+		  holdSet( false );
   	}
-	}
+	}//role={'BRK'+entry.brKey}
 	
 	const speed = !Meteor.user().unlockSpeed ? 
-									4000 : ( Meteor.user().unlockSpeed * 2 );
+									5000 : ( Meteor.user().unlockSpeed );
 	
   const speedVar = riverFlowState === 'slow' ? ( speed * 6 ) : speed;
 	const confirmLock = !riverFlowState ? null : speed;
@@ -63,8 +63,8 @@ const StoneControl = ({
 	useTimeOut( unlockAllow, timeOutCntrl );
   
   function enactEntry() {
-  	if(lockState === true) { return false; }
-	  lockSet( true );
+  	if(holdState === true) { return false; }
+	  holdSet( true );
 	  riverFlowStateSet( false );
 	  workingSet( true );
   }
@@ -74,20 +74,14 @@ const StoneControl = ({
 		openUndoOption();
 	  document.getElementById('lookup').focus();
   }
-	
-	function handleStepUndo() {
-		Meteor.call('popHistory', id, serial, ()=>{
-			closeUndoOption();
-		});
-	}
-    
+   
   const topClass = doneStone ? 'doneStoneMask' :
   								 blockStone ? 'blockStone' : '';
   const topTitle = topClass !== '' ? Pref.stoneislocked : '';
-	
+		
 	const renderReg = 
 		<StoneReg 
-			key={key}
+			key={id+serial+sKey}
 			id={id}
 			barcode={serial}
 			sKey={sKey}
@@ -100,9 +94,6 @@ const StoneControl = ({
 			allItems={allItems}
 			isAlt={isAlt}
 			hasAlt={hasAlt}
-			handleStepUndo={handleStepUndo}
-			undoOption={undoOption}
-			closeUndoOption={closeUndoOption}
 			enactEntry={()=>enactEntry()}
 			resolveEntry={()=>resolveEntry()}
 			workingState={workingState}
@@ -110,7 +101,7 @@ const StoneControl = ({
 	
 	const renderVerify = 
 		<StoneVerify 
-			key={key}
+			key={id+serial+sKey}
 			id={id}
 			barcode={serial}
 			sKey={sKey}
@@ -120,13 +111,11 @@ const StoneControl = ({
 			topClass={topClass}
 			topTitle={topTitle}
 			handleVerify={handleVerify}
-			handleStepUndo={handleStepUndo}
-			undoOption={undoOption}
 		/>;
 	
 	const renderTest = 
 		<StoneTest
-			key={key}
+			key={id+serial+sKey}
 			id={id}
 			barcode={serial}
 			sKey={sKey}
@@ -139,9 +128,6 @@ const StoneControl = ({
 			allItems={allItems}
 			isAlt={isAlt}
 			hasAlt={hasAlt}
-			handleStepUndo={handleStepUndo}
-			undoOption={undoOption}
-			closeUndoOption={closeUndoOption}
 			enactEntry={()=>enactEntry()}
 			resolveEntry={()=>resolveEntry()}
 			workingState={workingState}
@@ -149,7 +135,7 @@ const StoneControl = ({
 	
 	const renderFinish = 
 		<StoneFinish
-			key={key}
+			key={id+serial+sKey}
 			id={id}
 			barcode={serial}
 			sKey={sKey}
@@ -162,13 +148,9 @@ const StoneControl = ({
 			allItems={allItems}
 			isAlt={isAlt}
 			hasAlt={hasAlt}
-			handleStepUndo={handleStepUndo}
-			undoOption={undoOption}
-			closeUndoOption={closeUndoOption}
 			enactEntry={()=>enactEntry()}
 			workingState={workingState}
 		/>;
-		
 		
 	if(type === 'first') {
 		return(
@@ -199,8 +181,7 @@ function areEqual(prevProps, nextProps) {
 		prevProps.serial !== nextProps.serial ||
 		prevProps.doneStone !== nextProps.doneStone ||
 		prevProps.blockStone !== nextProps.blockStone ||
-		prevProps.sKey !== nextProps.sKey ||
-		(prevProps.undoOption === true && nextProps.undoOption === false)
+		prevProps.sKey !== nextProps.sKey
 	) {
   	return false;
 	}else{
@@ -213,13 +194,3 @@ function areEqual(prevProps, nextProps) {
 }
 
 export default React.memo(StoneControl, areEqual);
-/*
-import AnimateOnChange from 'react-animate-on-change';
-<AnimateOnChange
-  customTag='div'
-  baseClassName='cap biggest'
-  animationClassName="twitch-change"
-  animate={i.serial}
-  >{i.serial}
-</AnimateOnChange>
-*/

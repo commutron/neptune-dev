@@ -6,7 +6,7 @@ import UserNice from '/client/components/smallUi/UserNice.jsx';
 
 
 const PersonChunk = ({ 
-  userChunk, bCache, app, 
+  userChunk, bCache, app,
   updateBranches, removeBranch, update, 
   isDebug, clientTZ
 })=> {

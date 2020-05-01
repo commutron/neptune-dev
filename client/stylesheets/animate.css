@@ -296,26 +296,27 @@
     filter: blur(50px);
   }
 }
-@-webkit-keyframes blurIn {
-  0%   { 
+
+@keyframes blurInOut {
+  0% {
     opacity: 0;
-    filter: blur(50px);
+    filter: blur(30px);
   }
-  100% { 
+  25% {
+    opacity: 0.5;
+    filter: blur(10px);
+  }
+  50% {
+    opacity: 1;
+    filter: blur(20px);
+  }
+  100% {
     opacity: 1;
     filter: blur(0px);
   }
 }
-@-moz-keyframes blurIn {
-  0%   { 
-    opacity: 0;
-    filter: blur(50px);
-  }
-  100% { 
-    opacity: 1;
-    filter: blur(0px);
-  }
-}
+
+
 @keyframes blurIn {
   0% {
     opacity: 0;
@@ -460,6 +461,31 @@
   }
 }
 
+
+@keyframes rolley {
+  10% { transform: translateX(10px) rotate(8deg); }
+  20% { transform: translateX(-10px) rotate(-8deg); }
+  30% { transform: translateX(6px) rotate(6deg); }
+  40% { transform: translateX(-6px) rotate(-6deg); }
+  50% { transform: translateX(4px) rotate(4deg); }
+  60% { transform: translateX(-4px) rotate(-4deg); }
+  70% { transform: translateX(2px) rotate(2deg); }
+  80% { transform: translateX(-2px) rotate(-2deg); }
+  90% { transform: translateX(0px) rotate(1deg); }
+  100% { transform: translateX(0px) rotate(0); }
+}
+@keyframes shake {
+  10% { transform: translateX(10px) rotate(8deg); filter: blur(8px); }
+  20% { transform: translateX(-10px) rotate(-8deg); filter: blur(8px); }
+  30% { transform: translateX(6px) rotate(6deg); filter: blur(6px); }
+  40% { transform: translateX(-6px) rotate(-6deg); filter: blur(4px); }
+  50% { transform: translateX(4px) rotate(4deg); filter: blur(2px); }
+  60% { transform: translateX(-4px) rotate(-4deg); filter: blur(1px); }
+  70% { transform: translateX(2px) rotate(2deg); filter: blur(0px); }
+  80% { transform: translateX(-2px) rotate(-2deg); }
+  90% { transform: translateX(0px) rotate(1deg); }
+  100% { transform: translateX(0px) rotate(0); }
+}
 /* Shudder */
 @keyframes hvr-buzz-out {
   10% { transform: translateX(2px) rotate(2deg); }
@@ -480,6 +506,13 @@
   animation-iteration-count: 1;
 }
 
+.twitch-change {
+  animation-name: hvr-buzz-out;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-out;
+  animation-iteration-count: 0.3;
+}
+
 .bounce-change {
   animation-name: bounce;
   animation-duration: 2s;
@@ -494,16 +527,28 @@
   animation-iteration-count: 0.45;
 }
 
-.wobble-change {
-  animation-name: hvr-buzz-out;
+.blur-change {
+  animation-name: blurInOut;
   animation-duration: 1s;
-  animation-timing-function: ease-out;
+  animation-timing-function: ease-in-out;
   animation-iteration-count: 1;
 }
 
-.twitch-change {
-  animation-name: hvr-buzz-out;
+.rolley-change {
+  animation-name: rolley;
+  animation-duration: 3s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
+}
+
+.shaker-change {
+  animation-name: shake;
   animation-duration: 0.5s;
-  animation-timing-function: ease-out;
-  animation-iteration-count: 0.3;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+}
+@media screen and (prefers-reduced-motion: reduce) { 
+  .shaker-change {
+    animation: none;
+  }
 }

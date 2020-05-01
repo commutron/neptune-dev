@@ -6,7 +6,7 @@ import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
 import PeoplePanel from './PeoplePanel.jsx';
 
 
-const DashSlide = ({ app, user, users, batches, bCache, isDebug })=> {
+const DashSlide = ({ app, user, users, batches, bCache, brancheS, isDebug })=> {
   
   const [ update, forceUpdate] = useState(false);
   
@@ -29,7 +29,7 @@ const DashSlide = ({ app, user, users, batches, bCache, isDebug })=> {
   };
   
   const removeBranch = (uID)=>{
-    const indexes = Object.keys(app.branches); // just a list of [0,1,2...]
+    const indexes = Object.keys(brancheS); // just a list of [0,1,2...]
     const rmvKeys = Array.from(indexes, x => uID+x ); // person in multiple
     
     let currBranches = userBranches;

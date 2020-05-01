@@ -44,7 +44,10 @@ const PeopleDataWrap = ({
       </div>
     );
   }
-    
+  
+  const brancheS = app.branches.sort((b1, b2)=> {
+    return b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 });
+     
   const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
   // const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
   const isPeopleSuper = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
@@ -85,6 +88,7 @@ const PeopleDataWrap = ({
             users={users}
             batches={batches}
             bCache={bCache}
+            brancheS={brancheS}
             isDebug={isDebug} />
             
           <HistorySlide
@@ -93,6 +97,7 @@ const PeopleDataWrap = ({
             user={user}
             users={users}
             bCache={bCache}
+            brancheS={brancheS}
             clientTZ={clientTZ}
             allUsers={true}
             isDebug={isDebug} />
@@ -103,6 +108,7 @@ const PeopleDataWrap = ({
             user={user}
             users={users}
             bCache={bCache}
+            brancheS={brancheS}
             clientTZ={clientTZ}
             isDebug={isDebug} />
             
@@ -125,6 +131,7 @@ const PeopleDataWrap = ({
               app={app}
               users={users}
               bCache={bCache}
+              brancheS={brancheS}
               isDebug={isDebug} />
           : null }
           

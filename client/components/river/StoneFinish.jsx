@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { toast } from 'react-toastify';
 import Pref from '/client/global/pref.js';
 import StoneProgRing from './StoneProgRing.jsx';
@@ -11,9 +11,6 @@ const StoneFinish = ({
 	topClass, topTitle,
 	
 	allItems, isAlt, hasAlt,
-	
-	handleStepUndo,
-	undoOption, closeUndoOption,
 	
 	enactEntry,
 	workingState
@@ -43,39 +40,30 @@ const StoneFinish = ({
 	}
     
   return(
-   	<Fragment>
-  		<div className={topClass + ' stoneFrame noCopy'} title={topTitle}>
-      	<StoneProgRing
-  				serial={barcode}
-  				allItems={allItems}
-  				isAlt={isAlt}
-  				hasAlt={hasAlt}
-  				sKey={sKey}
-          step={step}
-          type={type}
-          progCounts={progCounts}
-          workingState={workingState}
-        >
-	      	<button
-	      	  className='stone iFinish'
-	  				name={step}
-	  				id='stoneButton'
-	  				onClick={()=>finish()}
-	  				tabIndex={-1}
-	  				disabled={lockout}>
-						<i>{step}</i>
-					</button>
-				</StoneProgRing>
-			</div>
-			<div className='undoStepWrap centre'>
-				{undoOption ? 
-					<button
-						className='textAction'
-						onClick={(e)=>handleStepUndo(e)}
-					>undo</button> 
-				: null}
-    	</div>
-    </Fragment>
+		<div className={topClass + ' stoneFrame noCopy'} title={topTitle}>
+    	<StoneProgRing
+				serial={barcode}
+				allItems={allItems}
+				isAlt={isAlt}
+				hasAlt={hasAlt}
+				sKey={sKey}
+        step={step}
+        type={type}
+        progCounts={progCounts}
+        workingState={workingState}
+        lockout={lockout}
+      >
+      	<button
+      	  className='stone iFinish'
+  				name={step}
+  				id='stoneButton'
+  				onClick={()=>finish()}
+  				tabIndex={-1}
+  				disabled={lockout}>
+					<i>{step}</i>
+				</button>
+			</StoneProgRing>
+		</div>
   );
 };
 

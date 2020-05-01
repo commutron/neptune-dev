@@ -25,7 +25,8 @@ const FormBar = ({
   const i = itemData;
     
   const showX = b && action === 'xBatchBuild' && b.completed === false;
-  const showlegacyItem = (b && i) && !(b.finishedAt !== false || i.finishedAt !== false );
+  const showlegacyBatch = b && b.finishedAt === false;
+  const showlegacyItem = i && i.finishedAt === false;
     
   const pastPN = b && b.shortfall ? [...new Set( Array.from(b.shortfall, x => x.partNum ) )] : [];
   const pastRF = b && b.shortfall ? [...new Set( Array.from(b.shortfall, x => x.refs.toString() ) )] : [];
@@ -35,7 +36,7 @@ const FormBar = ({
   
   return(
     <div className='proActionForm'>
-      {showX || showlegacyItem ?
+      {showX || (showlegacyBatch && showlegacyItem) ?
         <div className='footPick'>
           {action === 'xBatchBuild' ? null :
           <label htmlFor='firstselect' className='formBarToggle taskLink butBlue'>
@@ -76,7 +77,7 @@ const FormBar = ({
       <div className='footFill'>
         <TideLock currentLive={tideFloodGate} classSty='' message={true}>
         {b ?
-          action === 'xBatchBuild' ?
+          showX && action === 'xBatchBuild' ?
             show === 'NC' ?
               //<NCAdd 
                 //id={b._id}
@@ -93,7 +94,7 @@ const FormBar = ({
                 <p className='centreText'>Batch Omit form <em>in development</em></p>
             : null
           :
-            b && i ?
+            b && i && showlegacyItem ?
               show === 'NC' ?
                 <NCAdd 
                   id={b._id}
@@ -110,15 +111,20 @@ const FormBar = ({
                   app={app}
                   doneClose={(e)=>handleDone(e)} />
               : null
-            : 
-              <NCFlood
-                id={b._id}
-                live={b.finishedAt === false}
-                user={user}
-                app={app}
-                ncTypesCombo={ncTypesCombo} />
+            : null
+          : null 
+        }
+            
+        {
+          b && !i && !showX && showlegacyBatch ?
+            <NCFlood
+              id={b._id}
+              live={b.finishedAt === false}
+              user={user}
+              app={app}
+              ncTypesCombo={ncTypesCombo} />
         : null}
-      </TideLock>
+        </TideLock>
       </div>
     </div>
   );

@@ -8,7 +8,7 @@
 }
 .stoneBase {
   display: flex;
-  flex-direction: row;
+  flex-direction: row-reverse;
   flex-wrap: nowrap;
   align-content: center;
   min-width: 100%;
@@ -16,13 +16,17 @@
   color: var(--asbestos);
 }
 .undoStepWrap {
-  width: 80%;
-  padding: 3px 0 0 20%;
+  width: 100%;
+  min-height: 2rem;
+  text-align: center;
+  background-color: rgb(30,30,30);
+  border: 3px solid rgb(33,33,33);
 }
 .undoStepWrap button {
-  line-height: 0.75em;
+  line-height: 1rem;
   font-size: 1.3rem;
   color: var(--asbestos);
+  background-color: rgb(25,25,25);
 }
 .moreStepAction {
   min-width: 20%;
@@ -65,15 +69,38 @@
 }
 
 .stone:hover,
-.crackedTop:hover, .crackedBot:hover { 
+.crackedTop:hover, 
+.crackedBot:hover { 
   background-color: var(--high-color); 
 }
 
 .stone:active,
-.crackedTop:active, .crackedBot:active {
+.crackedTop:active, 
+.crackedBot:active {
   filter: blur(5px);
   animation: pulse 0.5s;
+  animation-iteration-count: infinite;
   box-shadow: 0 0 0 2em rgba(255, 255, 255, 0);
+}
+@media screen and (prefers-reduced-motion: reduce) { 
+  .stone, .crackedTop, .crackedBot {
+    transition: 0s;
+  }
+  .stone:active,
+  .crackedTop:active, 
+  .crackedBot:active {
+    filter: brightness(0.75);
+    animation: none;
+    box-shadow: 0 0 0 1vmax black,
+                0 0 0 2vmax var(--high-color);
+  }
+}
+.stone:disabled:active,
+.crackedTop:disabled:active, 
+.crackedBot:disabled:active {
+  filter: none;
+  animation: none;
+  box-shadow: none;
 }
 
 .stone label {
@@ -263,7 +290,8 @@
   position: relative;
   z-index: 3;
   display: table;
-  width: 100%;
+  min-width: 19vmax;
+  max-width: 20vmax;
   justify-content: center;
   border-collapse: collapse;
 }
@@ -273,7 +301,8 @@
   flex-wrap: nowrap;
   margin: 12px 0;
   padding: 0px;
-	width: 100%;
+	min-width: 19vmax;
+  max-width: 20vmax;
 	min-height: 65px;
 }
 .tribRed {

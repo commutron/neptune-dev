@@ -15,15 +15,13 @@ const River = ({
   showVerifyState, optionVerify, handleVerify
 })=> {
   
-  // const [ lock, lockSet ] = useState(true);
-  // const [ complete, completeSet ] = useState(false);
   const [ undoStepOption, undoOpSet ] = useState(false);
   
   function tempOpenOption() {
     undoOpSet( true );
     Meteor.setTimeout(()=> {
     	undoOpSet( false );
-    }, 1000*5);
+    }, 1000*10);
   }
   function closeOption() {
     undoOpSet( false );

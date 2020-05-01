@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import InOutWrap from '/client/components/tinyUi/InOutWrap.jsx';
@@ -86,10 +86,17 @@ const NCStream = ({
   doFix, doInspect, doReject, doSnooze, doUnSkip, doComment 
 })=>{
   
-  comment = ()=> {
+  const [ selfLock, selfLockSet ] = useState(false);
+  
+  const handleComment = ()=> {
     let val = window.prompt('Add a comment');
     val !== '' ? doComment(val) : null;
   };
+  
+  function handleClick(e, doThing) {
+    selfLockSet(true);
+    doThing();
+  }
     
   const fixed = entry.fix;
 
@@ -120,17 +127,17 @@ const NCStream = ({
                 title='All Correct'
                 id='inspectline'
                 className='ncAct riverG'
+                onClick={(e)=>handleClick(e, doInspect)}
                 readOnly={true}
-                onClick={doInspect}
-                disabled={lockI}>
+                disabled={lockI || selfLock}>
               <img src='/inspectMini.svg' className='pebbleSVG' /><br />{smple ? null : 'OK'}</button>
           :
               <button
-                ref={(i)=> this.fixline = i}
+                id='fixline'
                 className='ncAct riverInfo'
+                onClick={(e)=>handleClick(e, doFix)}
                 readOnly={true}
-                onClick={doFix}
-                disabled={fixed === true}>
+                disabled={fixed === true || selfLock}>
               <img src='/repair.svg' className='pebbleSVG' /><br />{smple ? null : 'Repair'}</button>
           }
         </div>
@@ -156,7 +163,7 @@ const NCStream = ({
             <MenuItem onClick={doUnSkip} disabled={!skip}>
               Wake Up, repair now
             </MenuItem>
-            <MenuItem onClick={this.comment.bind(this)}>
+            <MenuItem onClick={(e)=>handleComment(e)}>
               {entry.comm !== '' ? 'Change' : 'Add'} Comment
             </MenuItem>
           </ContextMenu>

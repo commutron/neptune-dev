@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import InOutWrap from '/client/components/tinyUi/InOutWrap.jsx';
 // import Pref from '/client/global/pref.js';
 
+import AnimateOnChange from 'react-animate-on-change';
+
 import StoneControl from './StoneControl.jsx';
 
 import FoldInNested from './FoldInNested.jsx';
@@ -36,7 +38,7 @@ const StoneSelect = ({
   closeUndoOption
 })=> {
   
-  const [ riverFlowState, riverFlowStateSet ] = useState( 'slow' );
+  const [ riverFlowState, riverFlowStateSet ] = useState( true );
   
   useEffect( ()=>{
     Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(riverFlowState);
@@ -68,6 +70,14 @@ const StoneSelect = ({
   
   const allAnswered = sh.every( x => x.inEffect === true || x.reSolve === true );
   
+  
+  function handleStepUndo() {
+		Meteor.call('popHistory', id, serial, ()=>{
+			closeUndoOption();
+		});
+	}
+	
+	
   for(let flowStep of flow) {
     const coreStep = allTrackOption.find( t => t.key === flowStep.key);
     const brKey = coreStep && coreStep.branchKey;
@@ -106,50 +116,60 @@ const StoneSelect = ({
 	    Session.set('ncWhere', stepBranch);
 	    Session.set('nowStepKey', flowStep.key);
       Session.set('nowWanchor', flowStep.how);
+	    
 	    return(
         <div>
-          <div>
-		        <InOutWrap type='stoneTrans'>
-  		        {flowStep.type === 'nest' ?
-  		          <FoldInNested
-                  id={id}
-                  serial={serial}
-                  sKey={flowStep.key}
-                  step={flowStep.step}
-                  doneStone={doneStone}
-                  //subItems={subItems}
-                  lock={false} />
-              : 
-  		          <StoneControl
-    		          key={flowStep.key + serial}
-                  id={id}
-                  serial={serial}
-                  sKey={flowStep.key}
-                  step={flowStep.step}
-                  type={flowStep.type}
-                  branchObj={branchObj}
-                  allItems={allItems}
-                  isAlt={isAlt}
-                  hasAlt={hasAlt}
-                  users={users}
-                  app={app}
-                  progCounts={progCounts}
-                  blockStone={blockStone}
-                  doneStone={doneStone}
-                  compEntry={compEntry}
-                  handleVerify={handleVerify}
-                  undoOption={undoOption}
-                  openUndoOption={openUndoOption}
-                  closeUndoOption={closeUndoOption}
-                  riverFlowState={riverFlowState}
-                  riverFlowStateSet={(e)=>riverFlowStateSet(e)} />
-  		        }
-            </InOutWrap>
-            {fTest.length > 0 && 
-              <InOutWrap type='stoneTrans'>
-                <TestFails fails={fTest} />
-              </InOutWrap>}
-          </div>
+
+	        {flowStep.type === 'nest' ?
+	          <FoldInNested
+              id={id}
+              serial={serial}
+              sKey={flowStep.key}
+              step={flowStep.step}
+              doneStone={doneStone}
+              //subItems={subItems}
+              lock={false} />
+          : 
+	          <StoneControl
+		          key={flowStep.key + serial}
+              id={id}
+              serial={serial}
+              sKey={flowStep.key}
+              step={flowStep.step}
+              type={flowStep.type}
+              branchObj={branchObj}
+              allItems={allItems}
+              isAlt={isAlt}
+              hasAlt={hasAlt}
+              users={users}
+              app={app}
+              progCounts={progCounts}
+              blockStone={blockStone}
+              doneStone={doneStone}
+              compEntry={compEntry}
+              handleVerify={handleVerify}
+              undoOption={undoOption}
+              openUndoOption={openUndoOption}
+              closeUndoOption={closeUndoOption}
+              riverFlowState={riverFlowState}
+              riverFlowStateSet={(e)=>riverFlowStateSet(e)} />
+	        }
+  	          
+          <div className='undoStepWrap'>
+  					{undoOption ? 
+  						<button
+  							className='textAction'
+  							onClick={(e)=>handleStepUndo(e)}
+  						>undo</button> 
+  					: null}
+  				</div>
+          
+            
+          {fTest.length > 0 && 
+            <InOutWrap type='stoneTrans'>
+              <TestFails fails={fTest} />
+            </InOutWrap>}
+          
           <div>
             <NCTributary
       			  id={id}

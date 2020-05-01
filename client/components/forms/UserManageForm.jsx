@@ -5,16 +5,16 @@ import { toast } from 'react-toastify';
 
 import { AdminUp } from '../forms/AdminForm.jsx';
 
-const UserManageForm = (props)=> {
+const UserManageForm = ({ id, name, org, auths, areas, brancheS })=> {
   
   function forcePassword(e) {
     e.preventDefault();
     const check = window.confirm('Are you sure you to change this users password?');
     const newPass = prompt('New Password', '');
     const newConfirm = prompt('New Password Again', '');
-    const self = Meteor.userId() === props.id;
+    const self = Meteor.userId() === id;
     if(check && !self && newPass === newConfirm) {
-      Meteor.call('forcePasswordChange', props.id, newPass, (error, reply)=>{
+      Meteor.call('forcePasswordChange', id, newPass, (error, reply)=>{
         error && console.log(error);
         reply ? toast.success('Saved') : toast.error('Server Error');
       });
@@ -24,7 +24,7 @@ const UserManageForm = (props)=> {
   }
   
   function hndlRemove(e) {
-    const user = props.id;
+    const user = id;
     const pin = this.pInNum.value;
     Meteor.call('removeFromOrg', user, pin, (err, reply)=>{
       err && console.log(err);
@@ -32,19 +32,16 @@ const UserManageForm = (props)=> {
     });
   }
 
-  const admin = Roles.userIsInRole(props.id, 'admin');
+  const admin = Roles.userIsInRole(id, 'admin');
   const adminFlag = admin ? Pref.admin : '';
-                   
-  const auths = props.auths;
-  const areas = props.areas;
 
   return(
     <div>
       
-      <h3>Username: {props.name}</h3>
-      <h3 className='clean'>ID: {props.id}</h3>
+      <h3>Username: {name}</h3>
+      <h3 className='clean'>ID: {id}</h3>
       <h3 className='blueT'>{adminFlag}</h3>
-      <h3>organization: <i className='greenT'>{props.org}</i></h3>
+      <h3>organization: <i className='greenT'>{org}</i></h3>
       
       <div className=''>
         <fieldset className=''>
@@ -55,16 +52,18 @@ const UserManageForm = (props)=> {
               if(entry === 'peopleSuper') {
                 return(
                   <SetCheckSuper
-                    key={index}
-                    user={props.id}
+                    key={index+'au'}
+                    user={id}
                     role={entry}
+                    roleName={entry}
                   />
               )}else{
                 return(
                   <SetCheck
-                    key={index}
-                    user={props.id}
+                    key={index+'au'}
+                    user={id}
                     role={entry}
+                    roleName={entry}
                   />
               )}})}
           </ul>
@@ -77,9 +76,26 @@ const UserManageForm = (props)=> {
             {areas.map( (entry, index)=>{
               return(
                 <SetCheck
-                  key={index}
-                  user={props.id}
+                  key={index+'ar'}
+                  user={id}
                   role={entry}
+                  roleName={entry}
+                />
+              )})}
+          </ul>
+        </fieldset>
+        
+        <fieldset className=''>
+          <legend>Task {Pref.branches}</legend>
+          <br />
+          <ul>
+            {brancheS.map( (entry, index)=>{
+              return(
+                <SetCheck
+                  key={index+'br'}
+                  user={id}
+                  role={'BRK'+entry.brKey}
+                  roleName={entry.branch}
                 />
               )})}
           </ul>
@@ -87,7 +103,7 @@ const UserManageForm = (props)=> {
       
         <div>
         
-          <AdminUp userId={props.id} />
+          <AdminUp userId={id} />
           <br />
           {!admin ?
             <fieldset>
@@ -99,7 +115,7 @@ const UserManageForm = (props)=> {
             </fieldset>
           :null}
       
-          {props.org && props.id !== Meteor.userId() ?
+          {org && id !== Meteor.userId() ?
             // leaving an org is undesirable
             <fieldset>
               <legend>Remove from organization</legend>
@@ -118,7 +134,7 @@ const UserManageForm = (props)=> {
               <button 
                 onClick={(e)=>hndlRemove(e)}
                 className='smallAction red'
-                >Remove from Organization: "{props.org}"
+                >Remove from Organization: "{org}"
               </button>
             </fieldset>
           : null}
@@ -132,7 +148,7 @@ const UserManageForm = (props)=> {
 export default UserManageForm;
 
 
-const SetCheckSuper = ({ user, role })=>	{
+const SetCheckSuper = ({ user, role, roleName })=>	{
   const check = Roles.userIsInRole(user, role);
   
   function changeSuper() {
@@ -159,13 +175,13 @@ const SetCheckSuper = ({ user, role })=>	{
         defaultChecked={check}
         onChange={()=>changeSuper()}
         readOnly />
-      <label htmlFor={role}>{role}*</label>
+      <label htmlFor={role}>{roleName}*</label>
       <br />
     </li>
   );
 };
 
-const SetCheck = ({ user, role })=> {
+const SetCheck = ({ user, role, roleName })=> {
   const check = Roles.userIsInRole(user, role);
   
   function change() {
@@ -194,7 +210,7 @@ const SetCheck = ({ user, role })=> {
         onChange={()=>change()}
         readOnly 
         disabled={lockout} />
-      <label htmlFor={role}>{role}</label>
+      <label htmlFor={role}>{roleName}</label>
       <br />
     </li>
   );

@@ -12,9 +12,6 @@ const StoneTest = ({
 	
 	allItems, isAlt, hasAlt,
 	
-	handleStepUndo,
-	undoOption, closeUndoOption,
-	
 	enactEntry,
 	resolveEntry,
 	workingState
@@ -65,6 +62,7 @@ const StoneTest = ({
           type={type}
           progCounts={progCounts}
           workingState={workingState}
+          lockout={lockout}
         >
 					<div className='centre stone'>
 						<button
@@ -91,14 +89,6 @@ const StoneTest = ({
 				</StoneProgRing>
 			</div>
 			<div className='stoneBase'>
-				<div className='undoStepWrap centre'>
-					{undoOption ? 
-						<button
-							className='textAction'
-							onClick={(e)=>handleStepUndo(e)}
-						>undo</button> 
-					: null}
-				</div>
 				{type === 'first' || type === 'finish' ? null :
 					<ContextMenuTrigger
 						id={barcode}

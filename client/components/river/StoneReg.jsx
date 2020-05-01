@@ -13,9 +13,6 @@ const StoneReg = ({
 	
 	allItems, isAlt, hasAlt,
 	
-	handleStepUndo,
-	undoOption, closeUndoOption,
-	
 	enactEntry,
 	resolveEntry,
 	workingState
@@ -77,6 +74,7 @@ const StoneReg = ({
           type={type}
           progCounts={progCounts}
           workingState={workingState}
+          lockout={lockout}
         >
 	      	<button
 	      	  className={shape}
@@ -92,14 +90,6 @@ const StoneReg = ({
 				</StoneProgRing>
 			</div>
 			<div className='stoneBase'>
-				<div className='undoStepWrap centre'>
-					{undoOption ? 
-						<button
-							className='textAction'
-							onClick={(e)=>handleStepUndo(e)}
-						>undo</button> 
-					: null}
-				</div>
 				<ContextMenuTrigger
 					id={barcode}
 					attributes={ {className:'moreStepAction centre'} }

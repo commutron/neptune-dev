@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { VictoryPie } from 'victory';
 
+import AnimateOnChange from 'react-animate-on-change';
+
 const StoneProgRing = ({ 
   sKey, step, type, 
   progCounts, isAlt, 
-  workingState, 
+  workingState, lockout,
   children
 })=> {
   
@@ -46,7 +48,12 @@ const StoneProgRing = ({
     'rgb(39, 174, 96)';
     
   return(
-    <span className={`stoneRing centre ${workingState ? 'spinOuterSVG' : ''}`}>
+    <AnimateOnChange
+  		customTag='span'
+	    baseClassName={`stoneRing centre ${workingState ? 'spinOuterSVG' : ''}`}
+	    animationClassName="shaker-change"
+	    animate={lockout === true}
+	  >
       <VictoryPie
         colorScale={ [ color1, color0 ] }
         padAngle={0}
@@ -56,7 +63,7 @@ const StoneProgRing = ({
         labels={(l)=>null}
       />
       <span className='pieCore numFont'>{children}</span> 
-    </span>
+    </AnimateOnChange>
   );
 };
 
