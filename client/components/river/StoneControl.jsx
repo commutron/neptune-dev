@@ -26,6 +26,8 @@ const StoneControl = ({
   const [ holdState, holdSet ] = useState( true );
   const [ lockout, lockoutSet ] = useState( true );
 	const [ workingState, workingSet ] = useState( false );
+	
+	const [ reqULState, reqULSet ] = useState( false );
 
 	useEffect( ()=> {
 		const checkLock = holdState || blockStone || ( !doneStone ? false : true );
@@ -33,18 +35,19 @@ const StoneControl = ({
 	}, [ serial, sKey, holdState, blockStone, doneStone ]);
 	
 	function unlockAllow() {
-  	if(type === 'inspect' && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
-  		null;
+		const thisBranch = branchObj || null;
+		const reqUL = thisBranch && thisBranch.reqUserLock === true;
+		const reqKey = thisBranch ? ( 'BRK' + branchObj.brKey ) : null;
+  	if( reqUL && !Roles.userIsInRole(Meteor.userId(), reqKey) ) {
+  		reqULSet(true);
+  	}else if(type === 'inspect' && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
+  		reqULSet(true);
   	}else if(type === 'first' && !Roles.userIsInRole(Meteor.userId(), 'verify')) {
-  		null;
-  	}else if(type === 'test' && !Roles.userIsInRole(Meteor.userId(), 'test')) {
-  		null;
-  	}else if(type === 'finish' && !Roles.userIsInRole(Meteor.userId(), 'finish')) {
-  		null;
+  		reqULSet(true);
   	}else{
 		  holdSet( false );
   	}
-	}//role={'BRK'+entry.brKey}
+	}
 	
 	const speed = !Meteor.user().unlockSpeed ? 
 									5000 : ( Meteor.user().unlockSpeed );
@@ -76,7 +79,8 @@ const StoneControl = ({
   }
    
   const topClass = doneStone ? 'doneStoneMask' :
-  								 blockStone ? 'blockStone' : '';
+  								 blockStone ? 'blockStone' :
+  								 reqULState ? 'authBanMask' : '';
   const topTitle = topClass !== '' ? Pref.stoneislocked : '';
 		
 	const renderReg = 

@@ -95,6 +95,7 @@ const BatchPanel = ({ batchData, widgetData, user, isDebug, app, flowData })=> {
           <EventsTimeline
             id={b._id}
             batchData={batchData}
+            brancheS={flowData.branchesSort}
             releaseList={b.releases || []}
             verifyList={verifyListState}
             eventList={b.events || []}

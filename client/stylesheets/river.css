@@ -120,28 +120,39 @@
   opacity: 0.3;
 }
 
-.doneStoneMask, .blockStone {
+.doneStoneMask, .blockStone, .authBanMask {
   position: relative;
   transition: all 200ms ease-out;
 }
 
-.doneStoneMask, .blockStone {
+.doneStoneMask, .blockStone, .authBanMask {
   -webkit-filter: grayscale(75%);
   filter: grayscale(75%);
 }
 
-.doneStoneMask:before, .blockStone:before {
+.doneStoneMask:before,
+.blockStone:before,
+.authBanMask:before {
   text-align: center;
   position: absolute;
   top: 50%;
   padding: 20px;
 }
-.doneStoneMask:before {
-  content: 	"\002714";
-  font-size: calc(3rem + 8vmax);
+.doneStoneMask:before,
+.authBanMask:before {
   left: 50%;
   transform: translate(-50%, -50%) rotate(0deg);
   filter: opacity(0.2);
+}
+
+.doneStoneMask:before {
+  content: 	"\002714";
+  font-size: calc(3rem + 8vmax);
+}
+
+.authBanMask:before {
+  content: 	"\1F6C7";
+  font-size: calc(6rem + 8vmax);
 }
 
 .blockStone:before {
@@ -482,16 +493,18 @@
 }
 .bigTideTask {
   margin: 0 0 2vmax 0;
+  width: 100%;
   border-right: 2vh solid var(--blackFade);
   border-bottom: 2vh solid var(--black);
   border-left: 2vh solid var(--blackFade);
 }
 .bigTideTask select {
-  max-width: 100%;
   height: 3vmax;
+  width: inherit;
 }
 .bigTideTask label {
   padding: 0;
+  max-width: inherit;
   text-align: center;
   background-color: rgb(25,25,25);
 }

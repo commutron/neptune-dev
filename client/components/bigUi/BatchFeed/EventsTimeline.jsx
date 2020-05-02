@@ -12,7 +12,7 @@ import ReleaseBlock from './ReleaseBlock.jsx';
 import CompleteBlock from './CompleteBlock.jsx';
 
 const EventsTimeline = ({ 
-  id, batchData, 
+  id, batchData, brancheS,
   releaseList, verifyList, eventList, alterList, quoteList, 
   doneBatch 
 })=> {
@@ -140,7 +140,8 @@ const EventsTimeline = ({
                 isX={false}
                 done={doneBatch}
                 dt={dt}
-                icon={dt.type === 'floorRelease' && 'fas fa-flag'} /> 
+                icon={dt.type === 'floorRelease' && 'fas fa-flag'}
+                brancheS={brancheS} /> 
             );
           }else if( typeof dt.complete === 'boolean' ) {
             return( 

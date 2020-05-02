@@ -12,23 +12,32 @@ import NonConCounts from './NonConCounts.jsx';
 const BatchDetails = ({
   oB,
   bCache, pCache, acCache,
-  user, clientTZ, app, branchesSort,
+  user, clientTZ, app, brancheS,
   isDebug, isNightly,
-  dense, kittingArea, releasedArea
+  dense, filterBy, 
+  kittingArea, releasedArea, branchArea
 })=> {
+  
+  const branchClear = brancheS.filter( b => b.reqClearance === true );
   
   const statusCols = ['due', 'remaining workdays', 'priority rank', 'items quantity'];
   
-  const clearCols = Array.from(Pref.clearencesArray, x => x.context );
-  const kitCols = [...clearCols, 'flow', 'released'];
-  const progCols = Array.from(branchesSort, x => x.common);
+  const configClearCols = Array.from(Pref.clearencesArray, x => x.context );
+  const branchClearCols = Array.from(branchClear, x => x.common );
+  const kitCols = [...branchClearCols,...configClearCols, 'flow', 'released'];
+  
+  const progCols = branchArea ?
+                    [ brancheS.find( x => x.branch === filterBy).common ] :
+                    Array.from(brancheS, x => x.common);
   const ncCols = ['NC total', 'NC remain', 'NC per item', 'NC items', 'scrap', 'RMA'];
   // due == 'fulfill', 'ship'
   const fullHead = ['SO',...statusCols,...kitCols,'active',...progCols,...ncCols,'watch'];
   const kitHead = ['SO',...statusCols, ...kitCols,'active','watch'];
   const relHead = ['SO',...statusCols,'active',...progCols,...ncCols,'watch'];
   
-  const headersArr = kittingArea ? kitHead : releasedArea ? relHead : fullHead;
+  const headersArr = kittingArea ? kitHead : 
+                     releasedArea || branchArea ? relHead :
+                     fullHead;
   
   return(
     <div className={`overGridScroll forceScrollStyle ${dense ? 'dense' : ''}`} tabIndex='1'>
@@ -58,6 +67,8 @@ const BatchDetails = ({
               pCache={pCache}
               acCache={acCache}
               app={app}
+              brancheS={brancheS}
+              branchClear={branchClear}
               isDebug={isDebug}
               isNightly={isNightly}
               statusCols={statusCols}
@@ -65,8 +76,10 @@ const BatchDetails = ({
               progCols={progCols}
               ncCols={ncCols}
               dense={dense}
+              filterBy={filterBy}
               kittingArea={kittingArea}
-              releasedArea={releasedArea} />
+              releasedArea={releasedArea}
+              branchArea={branchArea} />
       )})}
       
     </div>
@@ -79,9 +92,11 @@ export default BatchDetails;
 const BatchDetailChunk = ({ 
   rowIndex, oB, user, clientTZ, 
   pCache, acCache, app, 
+  brancheS, branchClear,
   isDebug, isNightly,
-  statusCols, kitCols, progCols, ncCols, dense,
-  kittingArea, releasedArea
+  statusCols, kitCols, progCols, ncCols, 
+  dense, filterBy,
+  kittingArea, releasedArea, branchArea
 })=> {
   
   const isX = oB.completed === undefined ? false : true;
@@ -120,7 +135,7 @@ const BatchDetailChunk = ({
         statusCols={statusCols}
         dense={dense} />
     
-    {!releasedArea &&
+    {!releasedArea && !branchArea ?
       <KittingChecks
         batchID={oB._id}
         batchNum={oB.batch}
@@ -131,10 +146,12 @@ const BatchDetailChunk = ({
         clientTZ={clientTZ}
         pCache={pCache}
         app={app}
+        branchClear={branchClear}
         kitCols={kitCols}
         dense={dense}
         isRO={isRO}
-        isDebug={isDebug} />}
+        isDebug={isDebug} />
+    : null}
     
       <div>
         <TideActivitySquare 
@@ -151,6 +168,8 @@ const BatchDetailChunk = ({
           progCols={progCols}
           clientTZ={clientTZ}
           app={app}
+          filterBy={filterBy}
+          branchArea={branchArea}
           isDebug={isDebug} />
           
         <NonConCounts

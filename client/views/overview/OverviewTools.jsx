@@ -23,7 +23,7 @@ function useInterval(callback, delay) {
 }
 
 const OverviewTools = ({
-  app, branchesSort, loadTimeUP,
+  app, brancheS, loadTimeUP,
   filterByUP, sortByUP, denseUP, lightUP,
   changeFilterUP, changeSortUP, denseSetUP, themeSetUP
 })=> {
@@ -51,7 +51,7 @@ const OverviewTools = ({
           <option value={false}>All</option>
           <option value='KITTING' className='cap'>{Pref.kitting}</option>
           <option value={Pref.released} className='cap'>{Pref.released}</option>
-          {branchesSort.map( (br, ix)=> {
+          {brancheS.map( (br, ix)=> {
             return(
               <option key={br.brKey+ix} value={br.branch}>{br.branch}</option>
           )})}

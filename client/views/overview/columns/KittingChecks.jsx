@@ -12,8 +12,8 @@ const KittingChecks = ({
   batchID, batchNum, 
   isX, isDone,
   releasedToFloor, releases,
-  clientTZ, pCache, app, isDebug,
-  kitCols, dense, isRO
+  clientTZ, pCache, app, branchClear, 
+  kitCols, dense, isRO, isDebug
 })=> {
   
   const thingMounted = useRef(true);
@@ -43,6 +43,36 @@ const KittingChecks = ({
     
     return(
       <Fragment>
+        
+        {branchClear.map( (br, ix)=>{
+          const releasedBool = releases.findIndex( x => x.type === 'BRK'+br.brKey) >= 0;
+          const releaseObj = releases.find( x => x.type === 'BRK'+br.brKey);
+          return(
+            <ReleaseWrapper
+              key={batchID+'BRK'+br.brKey+ix}
+              id={batchID}
+              batchNum={batchNum}
+              releasedBool={releasedBool}
+              releaseObj={releaseObj}
+              actionKeyword={'BRK'+br.brKey}
+              actionText='Ready'
+              holdText={`Mark with ${Pref.shortfall}`}
+              unholdText={`Ready without ${Pref.shortfall}`}
+              undoText='Clear'
+              contextText={`for ${br.common}`}
+              lockout={isDone || isRO}
+              isX={isX}>
+              <TrinaryStat
+                status={releasedBool ? !releaseObj.caution ? true : false : null}
+                name={br.common}
+                title={`Ready for ${br.common}`}
+                size=''
+                onIcon='fas fa-check-square fa-2x greenT'
+                midIcon='far fa-minus-square fa-2x yellowT'
+                offIcon='far fa-check-square fa-2x grayT' 
+              />
+            </ReleaseWrapper>
+        )})}
         
         {Pref.clearencesArray.map( (ent, ix)=>{
           const releasedBool = releases.findIndex( x => x.type === ent.keyword) >= 0;

@@ -430,6 +430,7 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
           fields: {
             'orgKey': 0,
             'shareKey': 0,
+            'floorRelease': 0
           }}),
         XBatchDB.find({batch: dataRequest, orgKey: orgKey}, {
           fields: {

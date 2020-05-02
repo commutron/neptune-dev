@@ -6,13 +6,15 @@ import NumStat from '/client/components/tinyUi/NumStat.jsx';
 const BranchProgress = ({ 
   batchID, releasedToFloor,
   progCols, clientTZ, 
-  app, isDebug
+  app, filterBy, branchArea,
+  isDebug
 })=> {
   
   const [ progData, setProg ] = useState(false);
   
   useEffect( ()=> {
-    Meteor.call('branchProgress', batchID, clientTZ, (error, reply)=>{
+    const branchOnly = branchArea ? filterBy : false;
+    Meteor.call('branchProgress', batchID, branchOnly, clientTZ, (error, reply)=>{
       error && console.log(error);
       if( reply ) { 
         setProg( reply );

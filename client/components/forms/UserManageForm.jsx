@@ -35,6 +35,8 @@ const UserManageForm = ({ id, name, org, auths, areas, brancheS })=> {
   const admin = Roles.userIsInRole(id, 'admin');
   const adminFlag = admin ? Pref.admin : '';
 
+  const reqBrancheS = brancheS.filter( x => x.reqUserLock === true );
+  
   return(
     <div>
       
@@ -89,7 +91,7 @@ const UserManageForm = ({ id, name, org, auths, areas, brancheS })=> {
           <legend>Task {Pref.branches}</legend>
           <br />
           <ul>
-            {brancheS.map( (entry, index)=>{
+            {reqBrancheS.map( (entry, index)=>{
               return(
                 <SetCheck
                   key={index+'br'}

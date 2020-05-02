@@ -6,17 +6,19 @@ import '/client/components/bigUi/ItemFeed/style.css';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 
 
-const ReleaseBlock = ({ id, isX, done, dt, icon })=>{
+const ReleaseBlock = ({ id, isX, done, dt, icon, brancheS })=>{
 
   const aK = dt.type;
+  const niceB = brancheS.find( b => ( 'BRK' + b.brKey ) === aK );
+  const niceC = Pref.clearencesArray.find( c => c.keyword === aK );
   
-  let actionString = aK === 'floorRelease' ? 
-                      'Released to the Floor' : 'Released';
-  for(let cl of Pref.clearencesArray) {
-    if( aK === cl.keyword ) {
-      actionString = `${cl.post} ${cl.link} ${cl.context}`;
-      break;
-    }
+  let actionString = 'Clearence';
+  if(aK === 'floorRelease') {
+    actionString = 'Released to the Floor';
+  }else if(niceB) {
+    actionString = `Ready ${niceB.common}`;
+  }else if(niceC) {
+    actionString = `${niceC.post} ${niceC.link} ${niceC.context}`;
   }
   
   function handleCancel() {

@@ -7,7 +7,7 @@ import ModelMedium from '../smallUi/ModelMedium.jsx';
 
 const UndoFinish = ({ id, finishedAtB, serial, finishedAtI, timelock, noText })=>	{
   
-  const auth = Roles.userIsInRole(Meteor.userId(), 'finish') && 
+  const auth = Roles.userIsInRole(Meteor.userId(), 'run') && 
     finishedAtB === false && finishedAtI !== false;
   
   const icon = finishedAtB === false ? 'fa-backward' : 'fa-lock';

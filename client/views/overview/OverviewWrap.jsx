@@ -127,19 +127,6 @@ const OverviewWrap = ({
           if (pB1bf < pB2bf) { return -1 }
           if (pB1bf > pB2bf) { return 1 }
           return 0;
-          /*
-          const pB1 = pCache.dataSet.find( x => x.batchID === b1._id);
-          const pB1bf = pB1 ? pB1.estEnd2fillBuffer : null;
-          const pB2 = pCache.dataSet.find( x => x.batchID === b2._id);
-          const pB2bf = pB2 ? pB2.estEnd2fillBuffer : null;
-          
-          if (!pB1bf) { return 1 }
-          if (!pB2bf) { return -1 }
-          if (pB1.lateLate) { return -1 }
-          if (pB2.lateLate) { return 1 }
-          if (pB1bf < pB2bf) { return -1 }
-          if (pB1bf > pB2bf) { return 1 }
-          return 0;*/
         });
         
       }else if(sortBy === 'sales') {
@@ -172,7 +159,8 @@ const OverviewWrap = ({
                   dense === 2 ? 'minifyed' :
                   '';
   
-  const branchesSort = app.branches.sort((b1, b2)=> {
+  const branches = app.branches.filter( b => b.open === true );
+  const brancheS = branches.sort((b1, b2)=> {
           if (b1.position < b2.position) { return 1 }
           if (b1.position > b2.position) { return -1 }
           return 0;
@@ -203,7 +191,7 @@ const OverviewWrap = ({
       
       <OverviewTools
         app={app}
-        branchesSort={branchesSort}
+        brancheS={brancheS}
         loadTimeUP={loadTime}
         filterByUP={filterBy}
         sortByUP={sortBy}
@@ -246,12 +234,18 @@ const OverviewWrap = ({
             user={user}
             clientTZ={clientTZ}
             app={app}
-            branchesSort={branchesSort}
+            brancheS={brancheS}
             isDebug={isDebug}
             isNightly={isNightly}
             dense={dense > 1}
+            filterBy={filterBy}
             kittingArea={filterBy === 'KITTING'}
-            releasedArea={filterBy !== false && filterBy !== 'KITTING'}
+            releasedArea={filterBy === Pref.released}
+            branchArea={
+              filterBy !== false && 
+              filterBy !== 'KITTING' &&
+              filterBy !== Pref.released
+            }
           />
             
         </div>

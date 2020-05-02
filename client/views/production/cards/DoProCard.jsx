@@ -35,7 +35,8 @@ const DoProCard = ({
   const [ flowData, flowDataSet ] = useState(false);
 
   useEffect( ()=>{
-    const branchesSort = app.branches.sort((b1, b2)=> {
+    const branches = app.branches.filter( b => b.open === true );
+    const branchesSort = branches.sort((b1, b2)=> {
       return b1.position < b2.position ? 1 : 
              b1.position > b2.position ? -1 : 0 });
      brancheSortSet(branchesSort);

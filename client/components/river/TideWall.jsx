@@ -1,12 +1,12 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useLayoutEffect, Fragment } from 'react';
 // import moment from 'moment';
-// import InOutWrap from '/client/components/tinyUi/InOutWrap.jsx';
 import Pref from '/client/global/pref.js';
+
 import TideControl from '/client/components/tide/TideControl/TideControl.jsx';
 
 import CompleteRest from './CompleteRest.jsx';
 import MiniHistory from './MiniHistory.jsx';
-
+  
 const TideWall = ({ 
   bID, bComplete, 
   itemData, shortfallS, scrap,
@@ -15,6 +15,7 @@ const TideWall = ({
 }) => {
   
   const [ taskState, taskSet ] = useState(false);
+  const [ lockTaskState, lockTaskSet ] = useState(false);
   
   return(
     <div className='vgap'>
@@ -30,7 +31,8 @@ const TideWall = ({
                 tideKey={tideKey}
                 tideFloodGate={false}
                 tideLockOut={false}
-                taskState={taskState} />
+                taskState={taskState}
+                lockTaskSet={lockTaskSet} />
             </div>
             <div className='bigTideTask'>
               <select
@@ -38,6 +40,7 @@ const TideWall = ({
                 className='cap'
                 onChange={(e)=>taskSet(e.target.value)}
                 defaultValue={taskState}
+                disabled={lockTaskState}
                 required>
                 <option value={false}></option>
                 <optgroup label='Ancillary'>

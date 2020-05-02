@@ -330,15 +330,17 @@ function collectPriority(privateKey, batchID, clientTZ, mockDay) {
 }
 
 
-function collectProgress(privateKey, batchID, clientTZ) {
+function collectProgress(privateKey, batchID, branchOnly, clientTZ) {
   return new Promise(resolve => {
     const app = AppDB.findOne({orgKey: privateKey});
-    const branchesSort = app.branches.sort((b1, b2)=> {
+    const brancheS = app.branches.sort((b1, b2)=> {
           if (b1.position < b2.position) { return 1 }
           if (b1.position > b2.position) { return -1 }
           return 0;
         }); 
-        
+    const relevantBrancheS = !branchOnly ? brancheS :
+            brancheS.filter( b => b.branch === branchOnly );
+            
     const bx = XBatchDB.findOne({_id: batchID});
     const batch = BatchDB.findOne({_id: batchID});
     
@@ -347,7 +349,7 @@ function collectProgress(privateKey, batchID, clientTZ) {
     
     if(bx) {
       
-      for(let branch of branchesSort) {
+      for(let branch of relevantBrancheS) {
         branchSets.push({
           branch: branch.branch,
           steps: [],
@@ -379,7 +381,7 @@ function collectProgress(privateKey, batchID, clientTZ) {
       const rNC = batch.nonCon.filter( n => 
         !n.trash && n.inspect === false && n.skip === false );
       
-      for(let branch of branchesSort) {
+      for(let branch of relevantBrancheS) {
         const steps = riverFlow.filter( x => x.branchKey === branch.brKey && x.type !== 'first' );
         const nonConLeft = branch.brKey === 't3rm1n2t1ng8r2nch' ? rNC.length > 0 :
                             rNC.filter( x => x.where === branch.branch ).length > 0;
@@ -519,11 +521,11 @@ Meteor.methods({
     return bundlePriority();//batchID, clientTZ, mockDay);
   },
   
-  branchProgress(batchID, clientTZ) {
+  branchProgress(batchID, branchOnly, clientTZ) {
     async function bundleProgress(batchID) {
       const accessKey = Meteor.user().orgKey;
       try {
-        bundle = await collectProgress(accessKey, batchID, clientTZ);
+        bundle = await collectProgress(accessKey, batchID, branchOnly, clientTZ);
         return bundle;
       }catch (err) {
         throw new Meteor.Error(err);

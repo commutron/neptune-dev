@@ -28,10 +28,10 @@ class Pref {
       'create',
       'edit',
       'run',
-      'finish',
-      'test',
-      'verify',
-      'inspect',
+      'finish', // removing
+      'test', // removing
+      'verify', // keep
+      'inspect', // keep
       'active'
     ];
     this.areas = [
@@ -180,16 +180,11 @@ class Pref {
     
     // clearences, additional releases
     this.clearencesArray = [
-      { keyword: 'smtKitRelease', 
-        pre: 'Ready',
-        post: 'Ready',
-        link: 'for',
-        context: 'SMT' },
-      { keyword: 'thKitRelease', 
-        pre: 'Ready',
-        post: 'Ready',
-        link: 'for',
-        context: 'Thru-Hole' },
+      // { keyword: 'thKitRelease', 
+      //   pre: 'Ready',
+      //   post: 'Ready',
+      //   link: 'for',
+      //   context: 'Thru-Hole' },
       { keyword: 'pcbKitRelease',
         pre: 'Ready',
         post: 'Ready',
