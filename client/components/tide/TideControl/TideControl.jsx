@@ -13,6 +13,7 @@ const TideControl = ({
   const thingMounted = useRef(true);
   const [actionID, setActionID] = useState( Random.id() );
   const [lock, setLock] = useState(true);
+  const [working, setWorking] = useState(false);
   
   const timer = ()=> Meteor.setTimeout( ()=>{ 
     if(thingMounted.current) {
@@ -34,6 +35,7 @@ const TideControl = ({
   
   function handleStart() {
     setLock(true);
+    setWorking(true);
     lockTaskSet && lockTaskSet(true);
     let newRndm = actionID;
     Meteor.setTimeout( ()=>{
@@ -54,6 +56,7 @@ const TideControl = ({
   }
   function handleStop() {
     setLock(true);
+    setWorking(true);
     Meteor.call('stopTideTask', tideKey, (error, reply)=> {
       if(error) {
         console.log(error);
@@ -71,6 +74,7 @@ const TideControl = ({
   
   function handleSwitch() {
     setLock(true);
+    setWorking(true);
     lockTaskSet && lockTaskSet(true);
     let newRndm = actionID;
     Meteor.setTimeout( ()=>{
@@ -93,7 +97,7 @@ const TideControl = ({
   if(tideKey && tideFloodGate) {
     return(
       <button
-        title={`STOP ${Pref.batch}`}
+        aria-label={`STOP ${Pref.batch}`}
         className='tideOut'
         onClick={()=>handleStop()}
         disabled={lock}
@@ -112,7 +116,7 @@ const TideControl = ({
     return(
       <button
         title={`START ${Pref.batch}`}
-        className='tideIn'
+        className={`tideIn ${working ? 'startWork' : ''}`}
         onClick={()=>handleStart()}
         disabled={lock || tideLockOut}
       >
@@ -130,7 +134,7 @@ const TideControl = ({
     return(
       <button
         title={`Switch to ${Pref.batch}`}
-        className='tideFlip'
+        className={`tideFlip ${working ? 'flipWork' : ''}`}
         onClick={()=>handleSwitch()}
         disabled={lock || tideLockOut}
       >

@@ -3,7 +3,7 @@ import Pref from '/client/global/pref.js';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 import { toast } from 'react-toastify';
 
-const TideFollow = ({ proRoute, invertColor })=> {
+const TideFollow = ({ proRoute, user, invertColor })=> {
   
   const thingMounted = useRef(true);
   const [engaged, doEngage] = useState(false);
@@ -11,8 +11,9 @@ const TideFollow = ({ proRoute, invertColor })=> {
   useEffect(() => {
     Meteor.call('engagedState', (err, rtn)=>{
 	    err && console.log(err);
-	    rtn && thingMounted.current && doEngage(rtn);
+	    rtn !== undefined && thingMounted.current && doEngage(rtn);
 	  });
+  	  
 	  loopClock = Meteor.setInterval( ()=>{
       if(!proRoute && engaged) {
         toast.dismiss();
@@ -23,35 +24,36 @@ const TideFollow = ({ proRoute, invertColor })=> {
         });
       }
     },1000*60*15);
+    
+  }, [proRoute, user]);
+  	    
+  useEffect(() => {
     return () => { 
-        thingMounted.current = false;
-        Meteor.clearInterval(loopClock); };
-  }, [proRoute]);
-  
-  // useEffect(() => {
-  //   return () => { 
-  //     thingMounted.current = false;
-  //     Meteor.clearInterval(loopClock); };
-  // }, []);
+      thingMounted.current = false;
+      Meteor.clearInterval(loopClock);
+    };
+  }, []);
   
 	const go = ()=> {
-	  Session.set('now', engaged);
+	  Session.set('now', engaged[0]);
     FlowRouter.go('/production');
 	};
-
+	
+  const taskT = !engaged || !engaged[1] ? '' : `, ${engaged[1]}`;
+  const tootip = !engaged ? `No Active ${Pref.batch}` : 
+	         `${Pref.batch} ${engaged[0]}${taskT}`;
+	         
   return(
     <div className={`proRight ${invertColor ? 'invert' : ''}`}>
       <button 
-        title={!engaged ?
-          `Not currently engaged in a ${Pref.batch}` : 
-          `Escape Hatch \nto engaged ${Pref.batch}: ${engaged}`}
+        aria-label={tootip}
         onClick={()=>go()}
-        className='taskLink'
+        className='taskLink tideFollowTip'
         disabled={!engaged}
       ><i className='fas fa-street-view'></i>
       </button>
     </div>
   );
 };
-//primeRightIcon
+
 export default TideFollow;

@@ -16,6 +16,9 @@
   color: var(--asbestos);
 }
 .undoStepWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   min-height: 2rem;
   text-align: center;
@@ -195,9 +198,6 @@
   font-weight: bolder;
 }
 
-.ncAct {
-  transition: 0.25s;
-}
 .ncAct:hover { background-color: var(--high-color); }
 .ncAct:active {
   animation: pulse 0.5s;
@@ -296,7 +296,7 @@
   background-color: var(--wisteria);
   --high-color: var(--amethyst);
 }
-
+/*
 .ncTrib, .shortGrid {
   position: relative;
   z-index: 3;
@@ -305,6 +305,13 @@
   max-width: 20vmax;
   justify-content: center;
   border-collapse: collapse;
+}
+*/
+.tribRow, .shortRow, .testFail {
+	animation-name: slideInLeft;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
 }
 .tribRow, .shortRow {
   display: flex;
@@ -315,6 +322,7 @@
 	min-width: 19vmax;
   max-width: 20vmax;
 	min-height: 65px;
+	transition: background-color 250ms ease-in;
 }
 .tribRed {
   background-color: rgba(192, 57, 43, 0.8);
@@ -361,7 +369,7 @@
   cursor: pointer;
 	text-transform: uppercase;
 	vertical-align: middle;
-  transition: all 200ms ease-out;
+  transition: background-color 500ms ease-in-out;
 }
 .tribActionExtra {
   width: 30%;
@@ -482,6 +490,14 @@
 
 .testFail summary::-webkit-details-marker {
   display: none;
+}
+
+.finishBanner, .scrapBanner {
+	animation-name: blurIn;
+  animation-duration: 300ms;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+  --blurInColor: var(--amethystfade);
 }
 
 .bigTideContainer {

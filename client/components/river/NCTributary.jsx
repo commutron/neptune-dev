@@ -1,11 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
-import InOutWrap from '/client/components/tinyUi/InOutWrap.jsx';
 import Pref from '/client/global/pref.js';
-
-import AnimateOnChange from 'react-animate-on-change';
-
 
 const NCTributary = ({ id, serial, nonCons, sType })=> {
 
@@ -58,8 +54,8 @@ const NCTributary = ({ id, serial, nonCons, sType })=> {
   }
   
   return(
-    <InOutWrap type='ncTrans' add='ncTrib'>
-      {nonCons.map( (entry)=>{
+    <Fragment>
+      {nonCons.map( (entry, index)=>{
         sType === 'finish' && entry.snooze === true ?
           handleUnSkip(entry.key) : null;
         return (
@@ -76,14 +72,16 @@ const NCTributary = ({ id, serial, nonCons, sType })=> {
             doComment={(e)=> handleComment(entry.key, e)}
           />
         )})}
-    </InOutWrap>
+    </Fragment>
   );
 };
+
+export default NCTributary;
 
 const NCStream = ({ 
   entry, id,
   end, 
-  doFix, doInspect, doReject, doSnooze, doUnSkip, doComment 
+  doFix, doInspect, doReject, doSnooze, doUnSkip, doComment
 })=>{
   
   const [ selfLock, selfLockSet ] = useState(false);
@@ -110,7 +108,7 @@ const NCStream = ({
   const smple = window.innerWidth <= 1200;
 
   return(
-    <div className={style} >
+    <div className={style}>
       <div className='tribInfo' title={entry.comm}>
         <div className='up numFont'>{entry.ref} {entry.comm !== '' && <i className='far fa-comment'></i>}</div>
         <div>{entry.type}</div>
@@ -172,6 +170,3 @@ const NCStream = ({
     </div>
   );
 };
-
-
-export default NCTributary;

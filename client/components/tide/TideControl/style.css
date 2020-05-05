@@ -15,7 +15,7 @@
 }
 
 .tideIn .tideIndicate { color: var(--pomegranate); }
-.tideIn:hover {
+.startWork, .tideIn:hover {
   background-color: var(--emerald);
   color: rgb(25,25,25);
 }
@@ -27,13 +27,15 @@
 }
 
 .tideFlip .tideIndicate { color: var(--turquoise); }
-.tideFlip:hover {
+.flipWork, .tideFlip:hover {
   background-color: var(--turquoise);
   color: rgb(25,25,25);
 }
 
+.startWork .tideIndicate,
 .tideIn:hover .tideIndicate,
 .tideOut:hover .tideIndicate,
+.flipWork .tideIndicate,
 .tideFlip:hover .tideIndicate { 
   color: rgb(25,25,25);
 }
@@ -54,4 +56,27 @@
   animation-duration: 2s;
   animation-timing-function: ease-out;
   animation-iteration-count: infinite;
+}
+
+.tideFollowTip:before {
+  position: absolute;
+  top: 2.75vh;
+  right: 8.5vh;
+  background-color: rgb(0,0,0);
+  border-radius: 25px;
+  color: white;
+  content: attr(aria-label);
+  padding: 1.5vh;
+  text-transform: capitalize;
+  transition: all 0.5s ease;
+  width: auto;
+  font-family: 'VarelaLocal';
+  font-size: 2vh;
+  line-height: 2.5vh;
+  opacity: 0;
+  pointer-events: none;
+}
+.tideFollowTip:focus:before, 
+.tideFollowTip:hover:before {
+  opacity: 1;
 }

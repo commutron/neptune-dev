@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 // import moment from 'moment';
-import InOutWrap from '/client/components/tinyUi/InOutWrap.jsx';
 // import Pref from '/client/global/pref.js';
-
-import AnimateOnChange from 'react-animate-on-change';
 
 import StoneControl from './StoneControl.jsx';
 
@@ -166,9 +163,8 @@ const StoneSelect = ({
           
             
           {fTest.length > 0 && 
-            <InOutWrap type='stoneTrans'>
-              <TestFails fails={fTest} />
-            </InOutWrap>}
+            <TestFails fails={fTest} />
+          }
           
           <div>
             <NCTributary
@@ -192,15 +188,13 @@ const StoneSelect = ({
   // Complete
   if(finishedAt !== false) {
     return(
-      <InOutWrap type='stoneTrans'>
-        <CompleteRest
-          id={id}
-          bComplete={bComplete}
-          sh={sh}
-          serial={serial}
-          history={history}
-          finishedAt={finishedAt} />
-      </InOutWrap>
+      <CompleteRest
+        id={id}
+        bComplete={bComplete}
+        sh={sh}
+        serial={serial}
+        history={history}
+        finishedAt={finishedAt} />
     );
   }
   

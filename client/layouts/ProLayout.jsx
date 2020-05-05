@@ -122,7 +122,7 @@ export const ProWrap = ({
               <i className='fas fa-rocket' data-fa-transform='left-1 down-1'></i>
             </button>
           </div>
-          <TideFollow proRoute={true} />
+          <TideFollow proRoute={true} user={user} />
         </div>
         
         <Fragment>

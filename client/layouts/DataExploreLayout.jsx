@@ -79,7 +79,7 @@ export const TraverseWrap = ({
           }
           
           <div className='auxRight'>
-            {isRO ? null 
+            {!goFunc || isRO ? null 
             :
               <button 
                 title='View this in production'

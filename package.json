@@ -22,7 +22,6 @@
     "react-addons-pure-render-mixin": "^15.6.2",
     "react-animate-on-change": "^2.2.0",
     "react-big-calendar": "^0.21.0",
-    "react-big-scheduler": "git+https://github.com/commutron/react-big-scheduler.git",
     "react-contextmenu": "^2.13.0",
     "react-dom": "^16.13.1",
     "react-flatpickr": "^3.10.0",

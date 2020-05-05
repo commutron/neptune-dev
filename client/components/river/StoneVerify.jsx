@@ -3,7 +3,7 @@ import React from 'react';
 import AnimateOnChange from 'react-animate-on-change';
 
 const StoneVerify = ({ 
-	key, id, barcode, sKey, step, type, 
+	id, barcode, sKey, step, type, 
 	lockout, 
 	topClass, topTitle,
 	

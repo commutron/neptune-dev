@@ -257,7 +257,6 @@
   position: sticky;
   top: 0;
   background-color: rgb(30,30,30);
-  z-index: 8;
 }
 .itmFltrBlock > div {
   width: 200px;

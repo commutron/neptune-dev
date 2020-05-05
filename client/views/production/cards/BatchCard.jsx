@@ -53,9 +53,12 @@ const BatchCard = ({
             isX={false} />}
             
         {b.finishedAt !== false &&
-          <h2 className='actionBox centreText green'>
-            Finished: {moment(b.finishedAt).calendar()}
-          </h2>}
+          <div className='finishBanner wide'>
+            <div className='purpleBorder space centreText cap'>
+              <h2>{Pref.batch} Finished:</h2>
+              <h3>{moment(b.finishedAt).calendar()}</h3>
+            </div>
+          </div>}
       
         <Tabs
           tabs={tabOps}

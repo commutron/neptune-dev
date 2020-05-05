@@ -205,7 +205,7 @@
 .purpleT { color: var(--amethyst); }
 .purpleBorder { 
   background-color: transparent;
-	border: 3px solid var(--amethyst);
+	border: 5px solid var(--amethyst);
 	box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2),
 	      inset 0 0 .1em .1em rgba(43,43,43,0.2);
 }

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import moment from 'moment';
 
 const TestFails = ({ fails })=> {
-  const dt = fails.sort();
+  
   let styD = {
     paddingLeft: '10px',
     paddingBottom: '5px',
@@ -10,18 +10,20 @@ const TestFails = ({ fails })=> {
     borderLeft: '5px solid var(--pomegranate)',
   };
   
-  return (
-    <div>
+  const dt = fails.sort();
+  
+  return(
+    <Fragment>
       {dt.map( (entry, index)=>{
         return(
-          <details key={index} style={styD} className='testFail'>
+          <details style={styD} className='testFail'>
             <summary>
               Fail {moment(entry.time).calendar()}
             </summary>
             {entry.comm}
           </details>
       )})}
-    </div>
+    </Fragment>
   );
 };
 

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 
-// import StoneProgRing from './StoneProgRing.jsx';
 import StoneReg from './StoneReg.jsx';
 import StoneVerify from './StoneVerify.jsx';
 import StoneTest from './StoneTest.jsx';
@@ -185,7 +184,8 @@ function areEqual(prevProps, nextProps) {
 		prevProps.serial !== nextProps.serial ||
 		prevProps.doneStone !== nextProps.doneStone ||
 		prevProps.blockStone !== nextProps.blockStone ||
-		prevProps.sKey !== nextProps.sKey
+		prevProps.sKey !== nextProps.sKey ||
+		prevProps.riverFlowState !== nextProps.riverFlowState
 	) {
   	return false;
 	}else{

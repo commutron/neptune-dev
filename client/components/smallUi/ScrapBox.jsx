@@ -10,7 +10,7 @@ const ScrapBox = ({ id, serial, entry, eX })=> {
   const isQA = Roles.userIsInRole(Meteor.userId(), 'qa');
    
    return(
-    <div className='actionBox red vgap'>
+    <div className='actionBox scrapBanner red vgap'>
       <div className='titleBar centre'>
         <h1 className='up'>{entry.type}</h1>
       </div>

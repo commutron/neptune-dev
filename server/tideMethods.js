@@ -130,7 +130,10 @@ Meteor.methods({
       return false;
     }else{
       const batch = BatchDB.findOne({ 'tide.tKey': eg.tKey });
-      return batch.batch || false;
+      const sub = batch && batch.tide.find( x => x.tKey === eg.tKey);
+
+      const bounce = batch ? [ batch.batch, sub.task ] : false;
+      return bounce;
     }
   },
   

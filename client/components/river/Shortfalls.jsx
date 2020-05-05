@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
-import InOutWrap from '/client/components/tinyUi/InOutWrap.jsx';
 import Pref from '/client/global/pref.js';
 
 const Shortfalls = ({ id, shortfalls, lock })=> {
@@ -13,19 +12,17 @@ const Shortfalls = ({ id, shortfalls, lock })=> {
   }
   
   return(
-    <div>
-      <InOutWrap type='ncTrans' add='shortGrid'>
-        {!shortfalls || shortfalls.map( (entry)=>{
-          return (
-            <ShortLine
-              key={entry.key}
-              entry={entry}
-              doSet={(a, b)=>handleChange(entry.key, a, b)}
-              lock={lock || !Roles.userIsInRole(Meteor.userId(), 'verify')}
-            />
-          )})}
-      </InOutWrap>
-    </div>
+    <Fragment>
+      {!shortfalls || shortfalls.map( (entry)=>{
+        return (
+          <ShortLine
+            key={entry.key}
+            entry={entry}
+            doSet={(a, b)=>handleChange(entry.key, a, b)}
+            lock={lock || !Roles.userIsInRole(Meteor.userId(), 'verify')}
+          />
+        )})}
+    </Fragment>
   );
 };
 

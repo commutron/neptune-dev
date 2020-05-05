@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import moment from 'moment';
-import InOutWrap from '/client/components/tinyUi/InOutWrap.jsx';
 import Pref from '/client/global/pref.js';
 
 import ScrapBox from '/client/components/smallUi/ScrapBox.jsx';
@@ -20,14 +19,12 @@ const CompleteRest = ({
       {scrap ?
         <ScrapBox entry={scrap} />
       :
-        <InOutWrap type='stoneTrans'>
-          <div className='wide'>
-            <div className='purpleBorder centreText cap'>
-              <h2>{Pref.trackLast}ed</h2>
-              <h3>{moment(iDone[iDone.length -1].time).calendar()}</h3>
-            </div>
+        <div className='finishBanner wide'>
+          <div className='purpleBorder centreText cap'>
+            <h2>{Pref.trackLast}ed</h2>
+            <h3>{moment(iDone[iDone.length -1].time).calendar()}</h3>
           </div>
-        </InOutWrap>
+        </div>
       }
 
       <Shortfalls

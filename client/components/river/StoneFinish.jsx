@@ -5,7 +5,7 @@ import StoneProgRing from './StoneProgRing.jsx';
 
 
 const StoneFinish = ({ 
-	key, id, barcode, sKey, step, type,
+	id, barcode, sKey, step, type,
 	progCounts, 
 	lockout, 
 	topClass, topTitle,
