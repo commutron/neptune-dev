@@ -22,7 +22,7 @@
 	height: 2rem;
 	padding: 0 10px;
 }
-
+/*
 .blendAction {
   letter-spacing: 1px;
 	font-size: 1.5vw;
@@ -30,8 +30,15 @@
   height: 2.5vw;
 	padding: 0;
 }
-.blendAction:focus, .blendAction:active {
-  outline: dotted;
+.blendAction:focus, .blendAction:active,
+*/
+.iconAction:focus, .iconAction:active {
+  outline: dotted thick;
+}
+
+.iconAction {
+	padding: 0.25rem;
+	transition: all 250ms ease;
 }
 
 .miniAction {

@@ -34,84 +34,19 @@ const StartView = ({ready, readyUsers, user, org, app}) =>	{
   // ${isNightly?'fa-meteor'
   const isPreview = isAdmin || isNightly || isSales || isPeople;
   
-  if(isNightly) {
-    return(
-      <div className='homeNavi'>
-        {isReadOnly ?
-          <NavPlaceholder 
-            title='Production'
-            icon='fas fa-paper-plane' /> :
-          <NavButton
-            title='Production' 
-            icon='fas fa-paper-plane'
-            link='/production' /> }
-        
-        <NavButton title='Overview' icon='fas fa-globe' link='/overview' />
-        
-        <NavButtonShell title='People' link='/people'
-          icon={
-            <span className="fa-stack fa-fw navButtonIcon navButtonLayerCorrect">
-              <i className="fas fa-user-astronaut fa-stack-1x" data-fa-transform="shrink-5 left-10 down-1"></i>
-              <i className="fas fa-user-astronaut fa-stack-1x"></i>
-              <i className="fas fa-user-astronaut fa-stack-1x" data-fa-transform="shrink-5 right-10 down-1"></i>
-            </span>
-          } />
-          
-        <NavButton title='Explore' icon='fa-rocket' link='/data' />
-        
-        <NavButton title='Parts Search' icon='fa-microchip' link='/starfish' />
-        
-        {isPreview ?
-          <NavButton title='Agenda' icon='fa-meteor' link='/agenda' tag='ALPHA' />
-        : <NavPlaceholder title='Agenda' icon="fas fa-meteor" tag='ALPHA' />}
-        
-        <NavButton title={user.username} icon='fa-user-astronaut fa-flip-horizontal' link='/user' />
-        
-        {!app.timeClock || app.timeClock.trim() === '' ?  
-          <NavPlaceholder 
-            title={Pref.timeClock} 
-            icon='fas fa-clock' /> :
-          <NavButton
-            title={Pref.timeClock} 
-            icon='fa-clock' 
-            link={app.timeClock || ''} 
-            blank={true} /> }
-        
-        <NavButton title={Pref.docs} icon='fa-file-alt' link={app.instruct || ''} blank={true} />
-        
-        <NavButton title='Help' icon='fa-question' link={app.help || ''} blank={true} />
-        
-        {isAdmin ?
-          <NavButton title='Settings' icon='fa-sliders-h' link='/app' />
-        : <NavPlaceholder title='Settings' icon='fas fa-sliders-h'/>}
-        
-        <HomeLogout currentUser={user.username} />
-      
-      </div>
-    );
-  }
-  
   return(
     <div className='homeNavi'>
       {isReadOnly ?
         <NavPlaceholder 
           title='Production'
-          icon="fas fa-paper-plane" /> :
+          icon='fas fa-paper-plane' /> :
         <NavButton
           title='Production' 
-          icon="fas fa-paper-plane"
+          icon='fas fa-paper-plane'
           link='/production' /> }
       
-      {isPreview ?
-        <NavButton title='Agenda' icon='fa-meteor' link='/agenda' tag='ALPHA' />
-      : <NavPlaceholder title='Agenda' icon="fas fa-meteor" tag='ALPHA' />}
-      
       <NavButton title='Overview' icon='fas fa-globe' link='/overview' />
-      <NavButton title='Explore' icon='fa-rocket' link='/data' />
       
-      <NavButton title={Pref.docs} icon='fa-file-alt' link={app.instruct || ''} blank={true} />
-      <NavButton title='Parts Search' icon='fa-microchip' link='/starfish' />
-
       <NavButtonShell title='People' link='/people'
         icon={
           <span className="fa-stack fa-fw navButtonIcon navButtonLayerCorrect">
@@ -120,14 +55,35 @@ const StartView = ({ready, readyUsers, user, org, app}) =>	{
             <i className="fas fa-user-astronaut fa-stack-1x" data-fa-transform="shrink-5 right-10 down-1"></i>
           </span>
         } />
-       
-      {isAdmin ?
-        <NavButton title='Settings' icon='fa-sliders-h' link='/app' />
-      : <NavPlaceholder title='Settings' icon='fas fa-sliders-h'/>} 
+        
+      <NavButton title='Explore' icon='fa-rocket' link='/data' />
+      
+      <NavButton title='Parts Search' icon='fa-microchip' link='/starfish' />
+      
+      {isPreview ?
+        <NavButton title='Agenda' icon='fa-meteor' link='/agenda' tag='ALPHA' />
+      : <NavPlaceholder title='Agenda' icon="fas fa-meteor" tag='ALPHA' />}
+      
+      <NavButton title={user.username} icon='fa-user-astronaut fa-flip-horizontal' link='/user' />
+      
+      {!app.timeClock || app.timeClock.trim() === '' ?  
+        <NavPlaceholder 
+          title={Pref.timeClock} 
+          icon='fas fa-clock' /> :
+        <NavButton
+          title={Pref.timeClock} 
+          icon='fa-clock' 
+          link={app.timeClock || ''} 
+          blank={true} /> }
+      
+      <NavButton title={Pref.docs} icon='fa-file-alt' link={app.instruct || ''} blank={true} />
       
       <NavButton title='Help' icon='fa-question' link={app.help || ''} blank={true} />
-      <NavButton title='Time Clock' icon='fa-clock' link={app.timeClock || ''} blank={true} />
-      <NavButton title={user.username} icon='fa-user-astronaut fa-flip-horizontal' link='/user' />
+      
+      {isAdmin ?
+        <NavButton title='Settings' icon='fa-sliders-h' link='/app' />
+      : <NavPlaceholder title='Settings' icon='fas fa-sliders-h'/>}
+      
       <HomeLogout currentUser={user.username} />
     
     </div>

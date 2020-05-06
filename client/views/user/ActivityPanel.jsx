@@ -51,6 +51,7 @@ const ActivityPanel = ({ app, user, users, bCache })=> {
         <TideWeekMini
           tideTimes={weekData || []}
           dateTime={moment(`${weekChoice.yearNum}-${weekChoice.weekNum}`, 'gggg-ww').format()}
+          user={user}
           app={app} />
           
       </div>

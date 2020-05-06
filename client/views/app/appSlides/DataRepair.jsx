@@ -51,6 +51,13 @@ const DataRepair = ({ app, users })=> {
   }
   */
   
+  function markV2date() {
+    Meteor.call('markVersionTwo', (error)=>{
+      error && console.log(error);
+      toast.success('method called', { autoClose: false });
+    });
+  }
+  
   function updateCaches() {
     const clientTZ = moment.tz.guess();
     Meteor.call('FORCEcacheUpdate', clientTZ, (error)=>{
@@ -130,7 +137,11 @@ const DataRepair = ({ app, users })=> {
       <hr />
       <br />*/}
       
-    
+      <h2 className='cap'>VERSION 2.0</h2>
+      <button
+        onClick={()=>markV2date()}
+        className='action clear blueT'
+      >Record Version Two Date</button>
       
       <h2 className='cap'>Delete all CacheDB Entries</h2>
       <button

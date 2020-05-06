@@ -102,33 +102,6 @@ Meteor.methods({
       return false;
     }
   },
-  
-  // ability to kick a user out of an org
-  removeFromOrg(badUserId, pin) {
-    const adminPower = Roles.userIsInRole(Meteor.userId(), 'admin');
-    const team = Meteor.users.findOne({_id: badUserId, orgKey: Meteor.user().orgKey});
-    const self = Meteor.userId() === badUserId;
-    const admin = Roles.userIsInRole(badUserId, 'admin');
-    const auth = adminPower && team && !self && !admin ? true : false;
-    if(auth) {
-      const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
-      const orgPIN = org ? org.orgPIN : false;
-      if(orgPIN && orgPIN === pin) {
-        Roles.removeUsersFromRoles(badUserId, 'active');
-        Meteor.users.update(badUserId, {
-          $set: {
-            org: false,
-            orgKey: false
-          }
-        });
-        return true;
-      }else{
-        return false;
-      }
-    }else{
-      return false;
-    }
-  },
  
   selfPasswordChange(newPassword) {
     const id = Meteor.userId();
@@ -221,7 +194,7 @@ Meteor.methods({
     let setTime = !time ? 2000 : time;
     Meteor.users.update(Meteor.userId(), {
       $set: {
-        unlockSpeed: setTime,
+        unlockSpeed: Number(setTime),
       }
     });
     return true;
@@ -247,7 +220,7 @@ Meteor.methods({
     });
   },
   
-  setMinAction() {
+  setUserMiniPrefer() {
     const curr = Meteor.user().miniAction;
     const change = !curr ? true : false;
     Meteor.users.update(Meteor.userId(), {
@@ -256,6 +229,56 @@ Meteor.methods({
       }
     });
   },
+  
+  setUserLightPrefer() {
+    const curr = Meteor.user().preferLight;
+    const change = !curr ? true : false;
+    Meteor.users.update(Meteor.userId(), {
+      $set: {
+        preferLight: change,
+      }
+    });
+  },
+  
+  setDefaultOverview(option) {
+    let setOp = !option || option === 'false' ? false : option;
+    Meteor.users.update(Meteor.userId(), {
+      $set: {
+        defaultOverview: setOp,
+      }
+    });
+    return true;
+  },
+  
+  setProductionPercent(option, userID) {
+    
+    const user = Meteor.users.findOne({ _id: userID });
+    
+    if(!user.proTimeShare) {
+      Meteor.users.update(userID, {
+        $set: {
+          proTimeShare: [ {
+            updatedAt: new Date(),
+            timeAsDecimal: Number(option)
+          } ]
+        }
+      });
+    }else{
+      Meteor.users.update(userID, {
+        $push : { 
+          'proTimeShare': {
+            $each: [ {
+              updatedAt: new Date(),
+              timeAsDecimal: Number(option)
+            } ],
+            $position: 0
+          }
+        }
+      });
+    }
+    return true;
+  },
+  
   
   setWatchlist(type, keyword) {
     const watching = Meteor.user().watchlist;

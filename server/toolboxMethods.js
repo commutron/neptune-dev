@@ -58,6 +58,19 @@ Meteor.methods({
       }},{multi: true});
       
   },
+  
+  markVersionTwo() {
+    try {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $set : {
+          versionTwo: new Date(),
+        }});
+      return true;
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  
   /*
   backdateTideWall() {
     try {

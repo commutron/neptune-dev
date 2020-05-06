@@ -15,9 +15,7 @@ main {
 
 .hidden { display: none; }
 
-.forceScroll {
-  overflow-y: auto;
-}
+.forceScroll { overflow-y: auto; }
 .forceScrollStyle::-webkit-scrollbar {
   width: 1vmax;
 }
@@ -77,9 +75,7 @@ main {
   font-family: sans-serif;
   padding: 0.5vh 0;
 }
-.errorReport button {
-  font-size: 1.25rem;
-}
+.errorReport button { font-size: 1.25rem; }
 .errorReport a:hover, .errorReport button:hover {
   text-decoration: underline;
 }
@@ -123,9 +119,7 @@ main {
   align-items: center;
   justify-items: center;
 }
-.centreBox {
-  grid-area: centrecentre;
-}
+.centreBox { grid-area: centrecentre; }
 
 /* simple */
 
@@ -148,9 +142,7 @@ main {
   overflow-y: auto;
   scroll-behavior: smooth;
 }
-.simpleContent.locked {
-  overflow-y: hidden;
-}
+.simpleContent.locked { overflow-y: hidden; }
 
 .auxRight {
   grid-area: auxRight;
@@ -163,36 +155,6 @@ main {
   /*animation: blinker 100ms ease infinite;*/
 }
 
-/*
-.primeRightIcon {
-  padding: 1vh;
-  font-size: 6vh;
-  color: var(--silver);
-  border-radius: 50%;
-}
-.primeLayerCorrect {
-  height: 1em;
-  width: 1em;
-}
-.auxRight > button:hover .primeRightIcon,
-.auxRight > button:active .primeRightIcon,
-.proRight > button:hover .primeRightIcon,
-.proRight > button:active .primeRightIcon {
-  background-color: var(--silver);
-  color: rgb(25,25,25);
-}
-.proRight > button:disabled .primeRightIcon {
-  background-color: rgb(25,25,25);
-  color: var(--silverfade);
-}
-.invert button .primeRightIcon {
-  color: var(--blackT);
-}
-.invert button:disabled .primeRightIcon {
-  background-color: transparent;
-  color: var(--concrete);
-}
-*/
 /* home / landing page */
 
 .splashContainer {
@@ -255,9 +217,7 @@ main {
   width: 10vh;
   height: 10vh;
 }
-.homeIconLogo {
-  padding: 1vh;
-}
+.homeIconLogo { padding: 1vh; }
 .homeIconLogo:hover, .homeIconLogo:active {
   animation: spinAround 2s infinite linear;
 }
@@ -331,7 +291,6 @@ main {
   grid-area: slidesubmenu;
   background-color: var(--silverfade);
   box-shadow: var(--dropShadowLeft1);
-/*background-color: var(--asbestos); };*/
 }
 
 .slideMenuButton, .slideNestedMenuButton {
@@ -381,7 +340,6 @@ main {
   box-shadow: none;
 }
 
-
 /* ////////////////////////// */
 
 .bleed {
@@ -398,31 +356,6 @@ main {
   position: absolute;
   right: 5px;
   top: 5px;
-}
-
-.card {
-  width: 90%;
-  min-width: 236px;
-  padding: 0;
-  margin: 25px auto 25px auto;
-  overflow-x: hidden;
-  overflow-y: hidden;
-  box-shadow: 0 0 20px 1px rgb(0,0,0);
-}
-
-.section {
-  border-bottom: 1px groove rgb(255,255,255);
-  border-bottom: 1px groove rgba(255,255,255,0.5);
-  width: 100%;
-  /*min-width: 236px;*/
-  margin: 0;
-  padding: 1vh 1vw 1vh 1vw;
-  overflow-x: hidden;
-  overflow-y: hidden;
-}
-
-.sidebar {
-  padding: 0;
 }
 
 .titleSection {
@@ -669,8 +602,6 @@ main {
 .overscroll { margin-bottom: 5vh; }
 .overscroll2x { margin-bottom: 10vh; }
 
-
-
 .noteCard {
   margin: 16px 0;
   border-top: 1px dotted var(--peterriver);
@@ -827,9 +758,7 @@ button.numberSet {
   text-transform: none;
 }
 
-.inlineRadio {
-  height: 1.5rem;
-}
+.inlineRadio { height: 1.5rem; }
 .inlineCheckbox {
   height: 2rem;
   width: 1.5rem;
@@ -907,6 +836,12 @@ button.numberSet {
   word-break: break-word;/*weird no standerd thing but it works*/
   word-wrap: break-word;
 }
+.gridCell:first-child {
+	text-align: left;
+}
+.gridCell:last-child {
+	text-align: right;
+}
 .openGridCell {
 	display: table-cell;
   border-bottom: 0.1em solid rgba(255,255,255,0.3);
@@ -964,12 +899,13 @@ button.numberSet {
   background-color: var(--black);
 }
 
+/*
 .bottomRightFloat {
   position: absolute;
   right: -5px;
   bottom: -5px;
 }
-
+*/
 .wellSpacedLine {
   margin-bottom: 8px;
   min-height: 3rem;
@@ -1022,7 +958,6 @@ button.numberSet {
 }
 
 /*.twoSqIcons { width: 80px; }*/
-
 .max1200 { max-width: 1200px; }
 .max1000 { max-width: 1000px; }
 .max750 { max-width: 750px; }

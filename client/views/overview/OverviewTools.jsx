@@ -77,8 +77,8 @@ const OverviewTools = ({
         <button
           key='denseOff'
           title='Comfort Layout'
-          onClick={()=>denseSetUP(0)}
-          className={denseUP === 0 ? 'liteToolOn' : 'liteToolOff'}
+          onClick={()=>denseSetUP(false)}
+          className={!denseUP ? 'liteToolOn' : 'liteToolOff'}
         ><i className='fas fa-expand fa-fw'></i></button>
         {/*                fa-expand-arrows-alt
         <button
@@ -91,8 +91,8 @@ const OverviewTools = ({
         <button
           key='miniOn'
           title='Minifyed Layout'
-          onClick={()=>denseSetUP(2)}
-          className={denseUP === 2 ? 'liteToolOn' : 'liteToolOff'}
+          onClick={()=>denseSetUP(true)}
+          className={denseUP ? 'liteToolOn' : 'liteToolOff'}
         ><i className='fas fa-compress fa-fw'></i></button>
       </span>        {/*fa-compress-arrows-alt*/}
       

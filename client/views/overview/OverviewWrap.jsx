@@ -23,24 +23,26 @@ const OverviewWrap = ({
   const [ working, workingSet ] = useState( false );
   const [ loadTime, loadTimeSet ] = useState( moment() );
   
-  const [ filterBy, filterBySet ] = useState( Session.get(sessionSticky+'filter') || false );
+  
+  const defaultFilter = Session.get(sessionSticky+'filter') ||
+                        user.defaultOverview || false;
+  const sessionDense = Session.get(sessionSticky+'dense');
+  const defaultDense = sessionDense !== undefined ? sessionDense :
+                        user.miniAction || false;
+  const sessionLight = Session.get(sessionSticky+'lightTheme');
+  const defaultLight =  sessionLight !== undefined ? sessionLight :
+                        user.preferLight || false;
+                        
+  const [ filterBy, filterBySet ] = useState( defaultFilter );
   const [ sortBy, sortBySet ] = useState( Session.get(sessionSticky+'sort') || 'priority' );
-  const [ dense, denseSet ] = useState( Session.get(sessionSticky+'dense') || 0 );
-  const [ light, themeSet ] = useState( Session.get(sessionSticky+'lightTheme') || false );
+  const [ dense, denseSet ] = useState( defaultDense );
+  const [ light, themeSet ] = useState( defaultLight );
   
   const [ liveState, liveSet ] = useState( false );
   
   useLayoutEffect( ()=> {
     sortInitial();
   }, [b, bx, filterBy, sortBy]);
-  
-  useEffect( ()=> {
-    Session.set(sessionSticky+'dense', dense);
-  }, [dense]);
-  
-  useEffect( ()=> {
-    Session.set(sessionSticky+'lightTheme', light);
-  }, [light]);
   
   function changeFilter(e) {
     const value = e.target.value;
@@ -53,6 +55,16 @@ const OverviewWrap = ({
     const sort = e.target.value;
     sortBySet( sort );
     Session.set(sessionSticky+'sort', sort);
+  }
+  
+  function changeDense(val) {
+    denseSet( val );
+    Session.set(sessionSticky+'dense', val);
+  }
+  
+  function changeTheme(val) {
+    themeSet( val );
+    Session.set(sessionSticky+'lightTheme', val);
   }
   
   function requestRefresh() {
@@ -155,9 +167,7 @@ const OverviewWrap = ({
     });
   }
       
-  const density = dense === 1 ? 'compact' :
-                  dense === 2 ? 'minifyed' :
-                  '';
+  const density = !dense ? '' : 'minifyed';
   
   const branches = app.branches.filter( b => b.open === true );
   const brancheS = branches.sort((b1, b2)=> {
@@ -199,8 +209,8 @@ const OverviewWrap = ({
         lightUP={light}
         changeFilterUP={(e)=>changeFilter(e)}
         changeSortUP={(e)=>changeSort(e)}
-        denseSetUP={(e)=>denseSet(e)}
-        themeSetUP={(e)=>themeSet(e)}
+        denseSetUP={(e)=>changeDense(e)}
+        themeSetUP={(e)=>changeTheme(e)}
       />
       
       <div className='overviewContent forceScrollStyle' tabIndex='0'>
@@ -237,7 +247,7 @@ const OverviewWrap = ({
             brancheS={brancheS}
             isDebug={isDebug}
             isNightly={isNightly}
-            dense={dense > 1}
+            dense={dense}
             filterBy={filterBy}
             kittingArea={filterBy === 'KITTING'}
             releasedArea={filterBy === Pref.released}

@@ -107,9 +107,9 @@ const DashSlide = ({ app, user, users, batches, bCache, brancheS, isDebug })=> {
       <p className='rightText nomargin'>
         <button
           title='refresh data'
-          className='blendAction transparent grayT'
+          className='iconAction transparent grayT'
           onClick={()=>forceUpdate(!update)}>
-          <i className="fas fa-sync-alt"></i>
+          <i className="fas fa-sync-alt fa-2x"></i>
         </button>
       </p>
       

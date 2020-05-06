@@ -15,6 +15,15 @@ const TideDayMini = ({ tideTimes, dateTime, showUser, app })=> {
   useEffect( ()=> {
     const dayHours = TimeInDay( app.nonWorkDays, dateTime );
     maxHoursSet(dayHours);
+    
+    /* Loop for each user
+    const userProTime = user.proTimeShare || false;
+    const relProTime = !userProTime ? false : 
+            userProTime.find( x => moment(x.updatedAt).isSameOrBefore(dateTime, 'week') );
+    const proTime = !relProTime ? 1 : relProTime.timeAsDecimal;
+    const proHours = ( weekHours * proTime ).toFixed(2, 10);
+    maxHoursSet(proHours);
+    */
   }, [dateTime]);
   
   

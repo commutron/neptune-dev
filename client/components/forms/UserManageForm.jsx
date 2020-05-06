@@ -3,9 +3,14 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
+import { UserSelectSetting } from '/client/components/forms/UserSettings.jsx';
+
 import { AdminUp } from '../forms/AdminForm.jsx';
 
-const UserManageForm = ({ id, name, org, auths, areas, brancheS })=> {
+const UserManageForm = ({ 
+  userObj, id, name, org, 
+  auths, areas, brancheS
+})=> {
   
   function forcePassword(e) {
     e.preventDefault();
@@ -22,20 +27,21 @@ const UserManageForm = ({ id, name, org, auths, areas, brancheS })=> {
       alert('not allowed');
     }
   }
-  
-  function hndlRemove(e) {
-    const user = id;
-    const pin = this.pInNum.value;
-    Meteor.call('removeFromOrg', user, pin, (err, reply)=>{
-      err && console.log(err);
-      reply ? toast.success('Saved') : toast.error('Server Error');
-    });
-  }
 
   const admin = Roles.userIsInRole(id, 'admin');
   const adminFlag = admin ? Pref.admin : '';
 
   const reqBrancheS = brancheS.filter( x => x.reqUserLock === true );
+  
+  const proTimeOps = [
+    {value: 1, name: '100%' },
+    {value: 0.8, name: '80%' },
+    {value: 0.6, name: '60%' },
+    {value: 0.4, name: '40%' },
+    {value: 0.2, name: '20%' },
+    {value: 0, name: '0%' }
+  ];
+  const proTime = userObj.proTimeShare ? userObj.proTimeShare[0] : 1;
   
   return(
     <div>
@@ -45,7 +51,16 @@ const UserManageForm = ({ id, name, org, auths, areas, brancheS })=> {
       <h3 className='blueT'>{adminFlag}</h3>
       <h3>organization: <i className='greenT'>{org}</i></h3>
       
-      <div className=''>
+      <div className='grid min300 max400'>
+        <UserSelectSetting
+          userSetting={proTime.timeAsDecimal || false}
+          optionObjArr={proTimeOps}
+          labelText='Production Time in a Day'
+          callMethod='setProductionPercent'
+          userID={id} />
+      </div>
+      
+      <div className='balance'>
         <fieldset className=''>
           <legend>Account Permissions</legend>
           <br />
@@ -102,47 +117,22 @@ const UserManageForm = ({ id, name, org, auths, areas, brancheS })=> {
               )})}
           </ul>
         </fieldset>
-      
-        <div>
-        
-          <AdminUp userId={id} />
-          <br />
-          {!admin ?
-            <fieldset>
-              <legend>Forgot Password</legend>
-              <button
-                className='smallAction clear redT'
-                onClick={(e)=>forcePassword(e)}
-              >Change Password</button>
-            </fieldset>
-          :null}
-      
-          {org && id !== Meteor.userId() ?
-            // leaving an org is undesirable
-            <fieldset>
-              <legend>Remove from organization</legend>
-              <input
-                type='password'
-                id='pInNum'
-                pattern='[0000-9999]*'
-                maxLength='4'
-                minLength='4'
-                cols='4'
-                placeholder='Admin PIN'
-                inputMode='numeric'
-                autoComplete='new-password'
-                required
-              />
-              <button 
-                onClick={(e)=>hndlRemove(e)}
-                className='smallAction red'
-                >Remove from Organization: "{org}"
-              </button>
-            </fieldset>
-          : null}
-          
-        </div>
       </div>
+      
+      <div>
+        <AdminUp userId={id} />
+        <br />
+        {!admin ?
+          <fieldset>
+            <legend>Forgot Password</legend>
+            <button
+              className='smallAction clear redT'
+              onClick={(e)=>forcePassword(e)}
+            >Change Password</button>
+          </fieldset>
+        :null}
+      </div>
+        
     </div>
   );
 };
@@ -215,79 +205,5 @@ const SetCheck = ({ user, role, roleName })=> {
       <label htmlFor={role}>{roleName}</label>
       <br />
     </li>
-  );
-};
-
-export const ChangeAutoScan = ()=> {
-  function handle() {
-    Meteor.call('setAutoScan', (error)=>{
-      if(error)
-        console.log(error);
-    });
-  }
-  let current = Meteor.user().autoScan ? 'ON' : 'OFF';
-  let color = Meteor.user().autoScan ? 'clearGreen' : 'clearRed';
-  return(
-    <p>Auto Scan 
-      <button
-        className={'action clean ' + color}
-        onClick={()=>handle()}
-      >{current}</button>
-    </p>
-  );
-};
-
-export const ChangeNCcodes = ()=> {
-  function handle() {
-    Meteor.call('setUserNCcodes', (error)=>{
-      if(error)
-        console.log(error);
-    });
-  }
-  let current = Meteor.user().showNCcodes ? 'ON' : 'OFF';
-  let color = Meteor.user().showNCcodes ? 'clearGreen' : 'clearRed';
-  return(
-    <p>Use {Pref.nonCon} codes 
-      <button
-        className={'action clean ' + color}
-        onClick={()=>handle()}
-      >{current}</button>
-    </p>
-  );
-};
-
-export const ChangeNCselection = ()=> {
-  function handle() {
-    Meteor.call('setUserNCselection', (error)=>{
-      if(error)
-        console.log(error);
-    });
-  }
-  let current = Meteor.user().typeNCselection ? 'ON' : 'OFF';
-  let color = Meteor.user().typeNCselection ? 'clearGreen' : 'clearRed';
-  return(
-    <p>Type search {Pref.nonCon} list 
-      <button
-        className={'action clean ' + color}
-        onClick={()=>handle()}
-      >{current}</button>
-    </p>
-  );
-};
-
-export const ChangeMinAction = ()=> {
-  function handle() {
-    Meteor.call('setMinAction', (error)=>{
-      if(error)
-        console.log(error);
-    });
-  }
-  let current = Meteor.user().miniAction ? 'OFF' : 'ON';
-  let color = Meteor.user().miniAction ? 'clearRed' : 'clearGreen';
-  return(
-    <button
-      className={'action clean ' + color}
-      onClick={()=>handle()}
-    >Turn Mini Actions {current}</button>
   );
 };

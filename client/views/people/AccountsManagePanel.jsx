@@ -78,6 +78,7 @@ const AccountsManagePanel = ({ app, users, bCache, brancheS, isDebug })=> {
                 {isAdmin ?
                   <Fragment>
                     <UserManageForm
+                      userObj={entry}
                       id={entry._id}
                       name={entry.username}
                       org={entry.org}

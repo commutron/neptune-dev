@@ -5,7 +5,7 @@ import Pref from '/client/global/pref.js';
 import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
 
 
-const TideWeekMini = ({ tideTimes, dateTime, app })=> {
+const TideWeekMini = ({ tideTimes, dateTime, app, user })=> {
   
   const [ batchTotal, batchSet ] = useState([]);
   const [ durrTotal, durrSet ] = useState(0);
@@ -13,7 +13,13 @@ const TideWeekMini = ({ tideTimes, dateTime, app })=> {
   
   useEffect( ()=> {
     const weekHours = TimeInWeek( app.nonWorkDays, dateTime );
-    maxHoursSet(weekHours);
+    
+    const userProTime = user.proTimeShare || false;
+    const relProTime = !userProTime ? false : 
+            userProTime.find( x => moment(x.updatedAt).isSameOrBefore(dateTime, 'week') );
+    const proTime = !relProTime ? 1 : relProTime.timeAsDecimal;
+    const proHours = ( weekHours * proTime ).toFixed(2, 10);
+    maxHoursSet(proHours);
   }, [dateTime]);
   
   

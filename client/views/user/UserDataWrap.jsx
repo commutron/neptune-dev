@@ -4,7 +4,7 @@ import { withTracker } from 'meteor/react-meteor-data';
 import { ToastContainer } from 'react-toastify';
 import { UnreadInboxToastPop } from '/client/utility/InboxToastPop.js';
 
-//import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 import Spin from '/client/components/tinyUi/Spin.jsx';
 
 import HomeIcon from '/client/layouts/HomeIcon.jsx';
@@ -15,13 +15,8 @@ import InboxPanel from './InboxPanel.jsx';
 import WatchlistPanel from './WatchlistPanel.jsx';
 import PrivacyPanel from './PrivacyPanel.jsx';
 
-import { AdminDown } from '/client/components/forms/AdminForm.jsx';
-import { ChangeAutoScan } from '/client/components/forms/UserManageForm.jsx';
-import { ChangeNCcodes } from '/client/components/forms/UserManageForm.jsx';
-import { ChangeNCselection } from '/client/components/forms/UserManageForm.jsx';
-import UserSpeedSet from '/client/components/forms/UserSpeedSet.jsx';
-import PasswordChange from '/client/components/forms/PasswordChange.jsx';
-import { PermissionHelp } from '/client/views/people/AccountsManagePanel';
+import UserSettings from '/client/components/forms/UserSettings.jsx';
+
 
 const UserDataWrap = ({
   readyUsers, readyEvents, // subs
@@ -48,8 +43,14 @@ const UserDataWrap = ({
     );
   }
     
-  const admin = Roles.userIsInRole(Meteor.userId(), 'admin');
-  
+  const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
+  const branches = app.branches.filter( b => b.open === true );
+  const brancheS = branches.sort((b1, b2)=> {
+          if (b1.position < b2.position) { return 1 }
+          if (b1.position > b2.position) { return -1 }
+          return 0;
+        }); 
+        
   return (
     <div className='simpleContainer'>
       <ToastContainer
@@ -71,8 +72,8 @@ const UserDataWrap = ({
             <b><i className='fas fa-history fa-fw'></i>  Production Activity</b>,
             <b><i className='far fa-eye fa-fw'></i>  Watchlist</b>,
             <b><i className='fas fa-inbox fa-fw'></i>  Inbox</b>,
-            <b><i className='fas fa-id-card fa-fw'></i>  Preferences</b>,
-            <b><i className='fas fa-user-shield fa-fw'></i>  Privacy</b>,
+            <b><i className='fas fa-sliders-h fa-fw'></i>  Preferences</b>,
+            <b><i className='fas fa-shield-alt fa-fw'></i>  Privacy & Permissions</b>,
           ]}
           extraClass='space5x5'>
             
@@ -84,6 +85,7 @@ const UserDataWrap = ({
             user={user}
             users={users}
             bCache={bCache} />
+            
           <WatchlistPanel
             key={2}
             orb={orb}
@@ -93,6 +95,7 @@ const UserDataWrap = ({
             users={users}
             batchEvents={batches}
             bCache={bCache} />
+            
           <InboxPanel
             key={3}
             orb={orb}
@@ -101,32 +104,12 @@ const UserDataWrap = ({
             user={user}
             users={users} />
             
-          <div key={4} className='comfort'>
-      
-            <div className=''>
-              <p className='clean'>username: {user.username}</p>
-              <p className='clean'>id: {Meteor.user()._id}</p>
-              <p>organization: <i className='greenT'>{Meteor.user().org}</i></p>
-              <hr />
-              <fieldset>
-                <ChangeAutoScan />
-                <hr/>
-                <ChangeNCcodes />
-                <hr />
-                <ChangeNCselection />
-                <hr />
-                <UserSpeedSet />
-              </fieldset>
-              <hr />
-              <fieldset>
-                <PasswordChange />
-                <hr />
-                { admin ? <AdminDown /> : null }
-              </fieldset>
-            
-            </div>
-            <PermissionHelp auths={Meteor.user().roles} admin={admin} />
-          </div>
+          <UserSettings
+            key={4}
+            app={app}
+            user={user}
+            isAdmin={isAdmin}
+            brancheS={brancheS} />
           
           <PrivacyPanel
             key={5}
@@ -134,7 +117,7 @@ const UserDataWrap = ({
             bolt={bolt}
             app={app}
             user={user}
-            users={users}
+            isAdmin={isAdmin}
             bCache={bCache} />
           
         </Slides>
