@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import moment from 'moment';
 // import 'moment-timezone';
-import 'moment-business-time-ship';
+import 'moment-business-time';
 import '/client/utility/ShipTime.js';
 import Pref from '/client/global/pref.js';
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import moment from 'moment';
 // import business from 'moment-business';
 import 'moment-timezone';
-import 'moment-business-time-ship';
+import 'moment-business-time';
 import '/client/utility/ShipTime.js';
 import { toast } from 'react-toastify';
 import Flatpickr from 'react-flatpickr';

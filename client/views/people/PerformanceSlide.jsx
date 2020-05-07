@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useLayoutEffect } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
-import 'moment-business-time-ship';
+import 'moment-business-time';
 import Pref from '/client/global/pref.js';
 import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
 import WeekBrowse from '/client/components/bigUi/WeekBrowse/WeekBrowse.jsx';

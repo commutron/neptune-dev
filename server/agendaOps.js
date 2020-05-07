@@ -2,7 +2,7 @@
 
 import moment from 'moment';
 import 'moment-timezone';
-import 'moment-business-time-ship';
+import 'moment-business-time';
 
 import { batchTideTime } from './overviewMethods.js';
 

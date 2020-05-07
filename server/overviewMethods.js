@@ -1,6 +1,6 @@
 import moment from 'moment';
 import 'moment-timezone';
-import 'moment-business-time-ship';
+import 'moment-business-time';
 
 import Config from '/server/hardConfig.js';
 

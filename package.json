@@ -15,7 +15,7 @@
     "indexof": "0.0.1",
     "meteor-node-stubs": "^1.0.0",
     "moment": "^2.24.0",
-    "moment-business-time-ship": "git+https://github.com/mattandwhatnot/moment-business-time-ship.git",
+    "moment-business-time": "git+https://github.com/commutron/moment-business-time.git",
     "moment-timezone": "^0.5.28",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",

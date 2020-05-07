@@ -1,6 +1,6 @@
 import moment from 'moment';
 import timezone from 'moment-timezone';
-// import 'moment-business-time-ship';
+// import 'moment-business-time';
 
 Meteor.methods({
 

@@ -1,6 +1,6 @@
 import moment from 'moment';
 import 'moment-timezone';
-import 'moment-business-time-ship';
+import 'moment-business-time';
 
 import { checkTimeBudget } from './tideMethods.js';
 import { whatIsBatch, whatIsBatchX } from './searchOps.js';

@@ -1,6 +1,6 @@
 import moment from 'moment';
 // import 'moment-timezone';
-import 'moment-business-time-ship';
+import 'moment-business-time';
 import './ShipTime.js';
 
 export function TimeInWeek( nonWorkDays, weekStart ) {
@@ -20,9 +20,8 @@ export function TimeInWeek( nonWorkDays, weekStart ) {
       const dayEnd = moment(begin).add(n, 'd').endOf('day');
       const dayTotal = dayEnd.workingDiff(dayStart, 'hours', true);
       
-      const lunchTime = dayTotal <= 5 ? 0 : 45; // << hard coded 45min lunch
       const breakTime = dayTotal <= 5 ? 15 : 30; // << hard coded 15min breaks
-      const idleTime = lunchTime + breakTime + 15; // << hard coded common idle
+      const idleTime = breakTime + 15; // << hard coded common idle
       const minusTime = dayTotal === 0 || ( dayTotal * 60 ) < idleTime ? 0 : idleTime;
         
       const workTime = moment.duration(dayTotal, 'hours')
@@ -50,9 +49,8 @@ export function TimeInDay( nonWorkDays, dayStart ) {
     const end = moment(dayStart).endOf('day').format();
     const dayTotal = moment(end).workingDiff(begin, 'hours', true);
 
-    const lunchTime = dayTotal <= 5 ? 0 : 45; // << hard coded 45min lunch
     const breakTime = dayTotal <= 5 ? 15 : 30; // << hard coded 15min breaks
-    const idleTime = lunchTime + breakTime + 15; // << hard coded common idle
+    const idleTime = breakTime + 15; // << hard coded common idle
     const minusTime = dayTotal === 0 || ( dayTotal * 60 ) < idleTime ? 0 : idleTime;
     
     const workTime = moment.duration(dayTotal, 'hours')
