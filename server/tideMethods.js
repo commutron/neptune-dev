@@ -1,4 +1,6 @@
 import moment from 'moment';
+import 'moment-timezone';
+import 'moment-business-time';
 
 export function batchTideTime(batchTide) {
     
@@ -106,17 +108,40 @@ function collectActivtyLevel(privateKey, batchID, clientTZ) {
 
 function slimBlockReturnData(batch, thePeriod) {
   let slimBlock = [];
-  for(let blck of thePeriod) {  
+  for(let blck of thePeriod) {
+    let mStop = blck.stopTime ? moment(blck.stopTime) : moment();
+    let durr = moment.duration(mStop.diff(blck.startTime)).asMinutes();
     slimBlock.push({
       batch: batch,
       tKey: blck.tKey,
       who: blck.who,
       startTime: blck.startTime,
-      stopTime: blck.stopTime
+      stopTime: blck.stopTime,
+      durrAsMin: durr,
+      task: blck.task || null
     });
   }
   return slimBlock;     
 }
+/*
+function durrBlockReturnData(batch, thePeriod, clientTZ) {
+  let slimBlock = [];
+  for(let blck of thePeriod) {
+    let dayStart = moment.tz(blck.startTime, clientTZ)
+                              .startOf('day').nextWorkingTime().format();
+    let mStop = blck.stopTime ? moment(blck.stopTime) : moment();//.tz(clientTZ);
+    let durr = moment.duration(mStop.diff(blck.startTime)).asMinutes();
+    slimBlock.push({
+      batch: batch,
+      who: blck.who,
+      tDay: dayStart,
+      durrAsMin: durr,
+      task: blck.task || null
+    });
+  }
+  return slimBlock;     
+}
+*/
 
 Meteor.methods({
 
@@ -303,8 +328,9 @@ Meteor.methods({
       const pinDate = moment.tz(clientTZ).year(getYear).week(getWeek);
       
       const isAuth = Roles.userIsInRole(Meteor.userId(), ['admin', 'peopleSuper']);
-      const sendAll = isAuth && allOrg;
-      const sendOneID = isAuth && mockUserId ? mockUserId : Meteor.userId();
+      const sendAll = allOrg;
+      const sendOneID = !mockUserId ? Meteor.userId() :
+                        isAuth ? mockUserId : null;
       
       const allTouched = !sendAll ?
         BatchDB.find({
@@ -331,9 +357,9 @@ Meteor.methods({
           moment(x.startTime).weekYear() === getYear && 
           moment(x.startTime).week() === getWeek);
           
-        slimTideCollection.push(
-          slimBlockReturnData(btch.batch, yourWeek)
-        );
+        const rtnBlock = slimBlockReturnData(btch.batch, yourWeek);
+          //sendAll ? durrBlockReturnData(btch.batch, yourWeek, clientTZ);
+        slimTideCollection.push( rtnBlock );
       }
       return [].concat(...slimTideCollection);
     }catch(err) {

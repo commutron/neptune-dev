@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 // import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
@@ -8,7 +8,7 @@ import CompleteRest from './CompleteRest.jsx';
 import MiniHistory from './MiniHistory.jsx';
   
 const TideWall = ({ 
-  bID, bComplete, 
+  bID, bComplete, bWrapUp,
   itemData, shortfallS, scrap,
   ancOptionS, plainBrancheS,
   tideKey
@@ -20,7 +20,7 @@ const TideWall = ({
   return(
     <div className='vgap'>
 
-  		{( !itemData && !bComplete ) || 
+  		{( !itemData && ( !bComplete || bWrapUp ) ) || 
   		 ( itemData && itemData.finishedAt === false ) ?
   		  
   		    <Fragment>

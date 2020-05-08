@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect, Fragment } from 'react';
+import moment from 'moment';
 //import Pref from '/client/global/pref.js';
 
 import HeadWater from '/client/components/river/HeadWater.js';
@@ -67,7 +68,11 @@ const DoProCard = ({
               return 0;
             });
   
-  const bComplete = batchData.finishedAt !== false;
+  const bFinished = batchData.finishedAt;
+  const bComplete = bFinished !== false;
+  const bWrapUp = bComplete ? moment().diff(bFinished, 'days') <= 7 : false;
+  console.log({bWrapUp});
+  
   const flows = [...flowData.flow,...flowData.flowAlt];
   const plainBrancheS = Array.from(brancheState, b => b.branch);
   const ancOptionS = app.ancillaryOption.sort();
@@ -76,6 +81,7 @@ const DoProCard = ({
           <TideWall
             bID={batchData._id}
             bComplete={bComplete}
+            bWrapUp={bWrapUp}
             itemData={itemData || null}
             shortfallS={shortfallS}
             scrap={scrapCheck}
@@ -167,7 +173,11 @@ const DoProCard = ({
   	  
   	    insertBatchCard :
   	    
-  	  null
+  	    !itemData && expand ?
+  	    
+  	      insertTideWall :
+  	      
+  	      null
   	}
   
     </Fragment>

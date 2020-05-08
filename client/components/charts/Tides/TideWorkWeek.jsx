@@ -1,6 +1,7 @@
 import React, { useState, useLayoutEffect } from 'react';
 import moment from 'moment';
 import { TimeInDay } from '/client/utility/WorkTimeCalc.js';
+import { UsersTimeTotal } from '/client/utility/WorkTimeCalc.js';
 // import Pref from '/client/global/pref.js';
 import { 
   VictoryChart, VictoryArea, VictoryBar,
@@ -32,7 +33,6 @@ const TideWorkWeek = ({
       
       for(const [index, day] of weekdays.entries()) {
         const dateTime = weekStart.clone().add(index, 'day').format();
-        //if( weekEnd.add(1, 'day').isSame(dateTime, 'day') ) {
         if( weekEnd.isBefore(dateTime, 'day') ) {
           break;
         }else{
@@ -41,18 +41,18 @@ const TideWorkWeek = ({
                               moment(x.startTime).isSame(dateTime, 'day') );
   
           let dTotal = tideTime.reduce( (arr, x)=> {
-            let mStop = x.stopTime ? moment(x.stopTime) : moment();
-            let durr = moment.duration(mStop.diff(x.startTime)).asHours();
+            let durr = moment.duration(x.durrAsMin, 'minutes').asHours();
             return arr + durr }, 0 );
           const dTotalNice = Math.round((dTotal + Number.EPSILON) * 100) / 100;
                                         // exactly rounding to 2 decimal points
-          const unqUsers = new Set( Array.from(tideTime, x => x.who ) ).size;
-          
+
+          const userIDs = new Set( Array.from(tideTime, x => x.who ) );
+          const getUsersTime = UsersTimeTotal( userIDs, users, dateTime, 'day', dayHours );
+    
           workDays.push({
             day: day,
-            hoursDay: dayHours * unqUsers,
+            hoursDay: getUsersTime,
             hoursRec: dTotalNice,
-            // hoursMax: dayHours * liveUsers
           });
         }
       }
@@ -63,13 +63,10 @@ const TideWorkWeek = ({
       workhoursSet(Array.from(workDays, x => { 
         return { 'x': x.day, 'y': x.hoursRec } } )
       );
-      // hoursMaxSet( Array.from(workDays, x => { 
-      //   return { 'x': x.day, 'y': x.hoursMax } } )
-      // );
       
       const dht = Array.from(workDays, x => x.hoursDay );
       const whr = Array.from(workDays, x => x.hoursRec.toString() );
-      // const dhm = Array.from(workDays, x => x.hoursMax );
+
       topDayHoursSet( Math.max(...dht,...whr) );
     
       isDebug && console.log({workDays});
@@ -100,22 +97,6 @@ const TideWorkWeek = ({
       categories={{ x: weekdays }}
       minDomain={{ y: 0 }}
       maxDomain={{ y: topDayHours }}>
-    
-      {/*<VictoryArea
-        data={hoursMaxNum}
-        style={{ 
-          data: { 
-            fill: 'white',
-            fillOpacity: 0.2,
-            stroke: 'darkgray',
-          } }}
-        labels={(d) => d.y}
-        labelComponent={
-          <VictoryLabel 
-            style={{ fill: 'darkgray' }} 
-            renderInPortal />
-        }
-      />*/}
       
       <VictoryArea
         data={dayhoursNum}

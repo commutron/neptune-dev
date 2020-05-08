@@ -65,7 +65,8 @@ const HistorySlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
           timeSpan='day'
           dateTime={moment(dateString, 'YYYY-MM-DD').format()}
           showUser={true}
-          app={app} />
+          app={app}
+          users={users} />
       
       </div>
       {!dayData ?
@@ -73,7 +74,8 @@ const HistorySlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
       :
       dayData.length === 0 ?
         <div>
-          <p className='medBig centreText line4x'>No activity found for this day</p>
+          <p className='centreText'><i className="fas fa-ghost fa-4x grayT fade"></i></p>
+          <p className='medBig centreText line3x'>No activity on this day</p>
         </div>
       :
       <table className='wide cap space'>
@@ -107,10 +109,7 @@ const HistorySlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
                   key={blk.tKey}
                   batch={keyword}
                   describe={what}
-                  tideKey={blk.tKey}
-                  tideWho={blk.who}
-                  startTime={blk.startTime}
-                  stopTime={blk.stopTime} />
+                  tBlock={blk} />
               </Fragment>
             );
           }else{
@@ -119,10 +118,7 @@ const HistorySlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
                 key={blk.tKey}
                 batch={keyword}
                 describe={what}
-                tideKey={blk.tKey}
-                tideWho={blk.who}
-                startTime={blk.startTime}
-                stopTime={blk.stopTime} />
+                tBlock={blk} />
             );
           }
         })}
@@ -141,11 +137,16 @@ export default HistorySlide;
 
 
 const TidePlainRow = ({ 
-  batch, describe, tideKey, tideWho, 
-  startTime, stopTime
+  batch, describe, tBlock
 })=> {
- 
-  const mStart = moment(startTime);
+  
+  // const tideKey = tBlock.tKey;
+  const tideWho = tBlock.who;
+  const durrAsMin = tBlock.durrAsMin;
+  // const task = tBlock.task;
+  
+  const mStart = moment(tBlock.startTime);
+  const mStop = tBlock.stopTime && moment(tBlock.stopTime);
 
   const staticFormat = Roles.userIsInRole(Meteor.userId(), 'debug') ? 'hh:mm:ss A' : 'hh:mm A';
   
@@ -169,13 +170,13 @@ const TidePlainRow = ({
         
       <td className='noRightBorder numFont centreText timeInputs'>
         <i className="fas fa-stop fa-fw fa-xs redT"></i>
-        {!stopTime ? <i> __:__ __</i> : <i> {moment(stopTime).format(staticFormat)}</i>}
+        {!mStop ? <i> __:__ __</i> : <i> {mStop.format(staticFormat)}</i>}
       </td>
         
       <td className='noRightBorder clean numFont'>
-        {stopTime ? Math.round( moment.duration(moment(stopTime).diff(mStart)).asMinutes() ) : '...'} minutes
+        {mStop ? Math.round( durrAsMin ) : '...'} minutes
       </td>
-
+      
     </tr>
   );
 };

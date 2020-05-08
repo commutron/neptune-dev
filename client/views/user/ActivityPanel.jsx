@@ -60,7 +60,8 @@ const ActivityPanel = ({ app, user, users, bCache })=> {
       :
       weekData.length === 0 ?
         <div>
-          <p className='medBig centreText line4x'>No activity found for this week</p>
+          <p className='centreText'><i className="fas fa-ghost fa-4x grayT fade"></i></p>
+          <p className='medBig centreText line3x'>No activity this week</p>
         </div>
       :
       <table className='wide cap space'>

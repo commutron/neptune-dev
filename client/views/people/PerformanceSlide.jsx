@@ -20,6 +20,7 @@ const PerformanceSlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
   
   const [userList, setUserList] = useState([]);
   const [batchList, setBatchList] = useState([]);
+  const [taskList, setTaskList] = useState([]);
   
   const [ selectDayState, selectDaySet ] = useState(false);
   
@@ -33,12 +34,7 @@ const PerformanceSlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
       Meteor.call('fetchWeekTideActivity', yearNum, weekNum, clientTZ, true, false, 
       (err, rtn)=>{
   	    err && console.log(err);
-  	    const cronoTimes = rtn.sort((x1, x2)=> {
-                            if (x1.startTime < x2.startTime) { return 1 }
-                            if (x1.startTime > x2.startTime) { return -1 }
-                            return 0;
-                          });
-        setWeekData(cronoTimes);
+        setWeekData(rtn);
   	  });
     }
   }
@@ -47,7 +43,7 @@ const PerformanceSlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
     setWeekChoice(response);
   }
   
-  useLayoutEffect( ()=>{
+  useLayoutEffect( ()=>{ // week selection
     getData(true);
     selectDaySet(false);
     if(weekChoice) {
@@ -68,7 +64,7 @@ const PerformanceSlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
     }
   }, [weekChoice]);
   
-  useLayoutEffect( ()=>{
+  useLayoutEffect( ()=>{ // fetch data handling
     const tideTime = weekData || [];
     const ttDay = selectDayState && 
       alldays.findIndex( x => x === selectDayState);
@@ -80,6 +76,10 @@ const PerformanceSlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
     
     const unqBatches = new Set( Array.from(dayFiltered, x => x.batch ) );
     setBatchList([...unqBatches].sort());
+    
+    const unqTasks = new Set( Array.from(dayFiltered, x => x.task ) );
+    const unqTasksClean = [...unqTasks].filter( x => x !== null );
+    setTaskList(unqTasksClean.sort());
     
   }, [weekData, selectDayState]);
   
@@ -122,12 +122,11 @@ const PerformanceSlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
           <div className='balance dropCeiling'>
             <dl>
               <dt>User List ({userList.length}) [{selectDayState || 'Week'}]</dt>
-              {userList.map( (ent, ix)=>{
-                return(
-                  <dd key={ent+ix}>
-                    <UserNice id={ent} />
-                  </dd>
-              )})}
+              {userList.map( (ent, ix)=>(
+                <dd key={ent+ix}>
+                  <UserNice id={ent} />
+                </dd>
+              ))}
             </dl>
               
             <dl>
@@ -140,6 +139,13 @@ const PerformanceSlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
                     <ExploreLinkBlock type='batch' keyword={ent} /> <em>{what}</em>
                   </dd>
               )})}
+            </dl>
+            
+            <dl>
+              <dt>Known Tasks List ({taskList.length}) [{selectDayState || 'Week'}]</dt>
+              {taskList.map( (ent, ix)=>(
+                <dd key={ent+ix}>{ent}</dd>
+              ))}
             </dl>
           </div>
             

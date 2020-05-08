@@ -61,6 +61,34 @@ export function TimeInDay( nonWorkDays, dayStart ) {
     return 0;
   }
 }
+
+
+export function UsersTimeTotal( userIDs, allUsers, dateTime, span, spanHours ) {
+  
+  let userTimeMax = [];
+    
+    for( let uID of userIDs) {
+      const userObj = allUsers.find( x => x._id === uID );
+      
+      const userProTime = userObj.proTimeShare || false;
+      
+      const relProTime = !userProTime ? false : 
+            userProTime.find( x => moment(x.updatedAt).isSameOrBefore(dateTime, span) );
+      
+      const proTime = !relProTime ? 1 : relProTime.timeAsDecimal;
+      const proHours = ( spanHours * proTime );
+      userTimeMax.push(proHours);
+    }
+    
+    const userTimeTotal = userTimeMax.reduce( (arr, x)=> { 
+                                        return arr + x }, 0 );
+                                  
+    const userTimeTotalNice = Math.round((userTimeTotal + Number.EPSILON) * 100) / 100;
+                                          // exactly rounding to 2 decimal points
+
+    return userTimeTotalNice;
+}
+
 /*
 export function TimeRemainDay( nonWorkDays, dayTime ) {
   if( Array.isArray(nonWorkDays) ) {  

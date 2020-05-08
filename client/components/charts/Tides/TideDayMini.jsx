@@ -1,35 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { TimeInDay } from '/client/utility/WorkTimeCalc.js';
+import { UsersTimeTotal } from '/client/utility/WorkTimeCalc.js';
 import Pref from '/client/global/pref.js';
 import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
 
 
-const TideDayMini = ({ tideTimes, dateTime, showUser, app })=> {
+const TideDayMini = ({ tideTimes, dateTime, showUser, app, users })=> {
   
   const [ userTotal, userSet ] = useState(0);
   const [ batchTotal, batchSet ] = useState([]);
   const [ durrTotal, durrSet ] = useState(0);
-  const [ maxHours, maxHoursSet ] = useState(0);
+  const [ dayHours, dayHoursSet ] = useState(0);
+  const [ userHours, userHoursSet ] = useState(0);
   
   useEffect( ()=> {
-    const dayHours = TimeInDay( app.nonWorkDays, dateTime );
-    maxHoursSet(dayHours);
-    
-    /* Loop for each user
-    const userProTime = user.proTimeShare || false;
-    const relProTime = !userProTime ? false : 
-            userProTime.find( x => moment(x.updatedAt).isSameOrBefore(dateTime, 'week') );
-    const proTime = !relProTime ? 1 : relProTime.timeAsDecimal;
-    const proHours = ( weekHours * proTime ).toFixed(2, 10);
-    maxHoursSet(proHours);
-    */
+    const getDayHours = TimeInDay( app.nonWorkDays, dateTime );
+    dayHoursSet(getDayHours);
   }, [dateTime]);
   
   
   useEffect( ()=> {
-    const unqUsers = new Set( Array.from(tideTimes, x => x.who ) ).size;
+    const userIDs = new Set( Array.from(tideTimes, x => x.who ) );
+    const unqUsers = userIDs.size;
     userSet(unqUsers);
+    
+    const getUsersTime = UsersTimeTotal( userIDs, users, dateTime, 'day', dayHours );
+    userHoursSet(getUsersTime);
     
     const qBatches = tideTimes.reduce( (allBatch, batch, index, array)=> { 
       const objkey = !batch ? false : batch.batch;
@@ -55,8 +52,6 @@ const TideDayMini = ({ tideTimes, dateTime, showUser, app })=> {
     durrSet(dTotalNice);
     
   }, [tideTimes]);
-    
-  const calcEx = showUser ? ` (people x ${maxHours})` : '';
   
   return(
     <div className='balance middle'>
@@ -81,9 +76,9 @@ const TideDayMini = ({ tideTimes, dateTime, showUser, app })=> {
       
       <NumStatRing
         total={durrTotal}
-        nums={[ durrTotal, ((userTotal * maxHours) - durrTotal) ]}
+        nums={[ durrTotal, (userHours - durrTotal) ]}
         name='Total Hours'
-        title={`total of durations in hours \nout of ${userTotal * maxHours}${calcEx}`}
+        title={`total of durations in hours \nout of potential max user time: ${userHours} hours`}
         colour='blueBi'
         maxSize='chart10Contain'
       />
