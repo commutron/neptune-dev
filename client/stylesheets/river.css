@@ -57,13 +57,14 @@
   height: 16vmax;
   font-size: calc(0.5rem + 1.5vmax);
   font-weight: bolder;
-  text-shadow: 0 0 15px #000;
+  text-shadow: 0 5px 10px #000;
+  letter-spacing: 0.1ch;
 	text-transform: uppercase;
   color: white;
   background-position: 50% 50%;
   background-repeat: no-repeat;
   background-origin: content-box;
-  background-size: 110%;
+  background-size: 125%;
   border-radius: 50%;
   transition: 0.25s;
   opacity: 1;

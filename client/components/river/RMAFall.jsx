@@ -19,34 +19,37 @@ const RMAFall = ({ id, cascadeData, barcode, rma, allItems })=> {
   }
   let lock = !Roles.userIsInRole(Meteor.userId(), ['qa', 'run', 'inspect']);
   
-  return (
-    <div className='centre'>
-    {!lock && cascades.length > 0 ? 
-      <form 
-        id='srtcsc'
-        className='fullForm'
-        onSubmit={(e)=>activate(e, id, barcode, this.op.value)}>
-        <select id='op' required>
-          <option></option>
-          {cascades.map( (entry, index)=>{
-            let lock = rma.includes(entry.key) ? 'disabled' : null;
-            return(
-              <option key={index} value={entry.key} disabled={lock}>
-                RMA {entry.rmaId} - {moment(entry.time).calendar()}
-              </option>
-          )})}
-        </select>
-        <button
-          type='submit'
-          form='srtcsc'
-          className='smallAction clear yellowT'
-          disabled={lock}
-        >Activate RMA</button>
-      </form>
-    : // if all the rma quantities are satisfied show nothing
-      null}
-    </div>
-  );
+  
+    
+  if(!lock && cascades.length > 0) { 
+    return (
+      <div className='vmargin centre'>
+        <form 
+          id='srtcsc'
+          className='fullForm'
+          onSubmit={(e)=>activate(e, id, barcode, this.op.value)}>
+          <select id='op' required>
+            <option></option>
+            {cascades.map( (entry, index)=>{
+              let lock = rma.includes(entry.key) ? 'disabled' : null;
+              return(
+                <option key={index} value={entry.key} disabled={lock}>
+                  RMA {entry.rmaId} - {moment(entry.time).calendar()}
+                </option>
+            )})}
+          </select>
+          <button
+            type='submit'
+            form='srtcsc'
+            className='smallAction clear yellowT'
+            disabled={lock}
+          >Activate RMA</button>
+        </form>
+      </div>
+    );
+  }
+  
+  return null;
 };
 
 export default RMAFall;

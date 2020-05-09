@@ -11,7 +11,7 @@ const River = ({
   batchData, itemData, widgetData, 
   app, users, brancheS,
   flow, flowAlt, progCounts,
-  shortfallS,
+  shortfallS, scrapCheck,
   showVerifyState, optionVerify, handleVerify
 })=> {
   
@@ -65,9 +65,7 @@ const River = ({
             river={b.river}
             riverAlt={b.riverAlt} />
         </div>
-  		  <div className='space'>
-  			  <MiniHistory history={i.history} />
-  			</div>
+  		  <MiniHistory history={i.history} />
     	</div>
     );
 	}
@@ -95,10 +93,11 @@ const River = ({
           flow={useFlow}
           isAlt={i.alt === 'yes'}
           hasAlt={!b.riverAlt ? false : true}
-          rmas={rma}
           allItems={b.items}
           nonCons={b.nonCon}
           sh={shortfallS}
+          scrapCheck={scrapCheck}
+          iCascade={i.rma.length > 0}
           item={i}
           brancheS={brancheS}
           users={users}

@@ -3,14 +3,10 @@ import moment from 'moment';
 
 import RMAFall from './RMAFall.jsx';
 
-// props
-/// id={b._id}
-/// barcode={i.barcode}
-/// rma={rma} // relevent cascades
-/// cascadeData={b.cascade} // all cascades
-/// rmaList={i.rma}
-
-const RMACascade = (props)=> {
+const RMACascade = ({ 
+  id, barcode, rma, 
+  cascadeData, rmaList, allItems 
+})=> {
   
   const [ fall, fallSet ] = useState(false);
 
@@ -20,26 +16,27 @@ const RMACascade = (props)=> {
         fallSet( true ) :
         fallSet( false );
     }, 100);
-  }, [props]);
+  }, [cascadeData]);
 
   return (
     <div className='wide'>
       {fall ?
       // RMA activating available after current RMAs are finished
         <RMAFall
-          id={props.id}
-          cascadeData={props.cascadeData}
-          barcode={props.barcode}
-          rma={props.rmaList}
-          allItems={props.allItems} />
+          id={id}
+          cascadeData={cascadeData}
+          barcode={barcode}
+          rma={rmaList}
+          allItems={allItems} />
       :null}
-      {props.rma.map( (entry, index)=>{
+      {rma.map( (entry, index)=>{
       // list rmas active on this item  
-        if(index == props.rma.length - 1) {
+        if(index == rma.length - 1) {
         // current rma is bold
           return(
-            <div key={index} className='bleed cap fadeRed centre'>
-              <b>RMA: {entry.rmaId}, {moment(entry.time).calendar()}</b>
+            <div key={index} className='bleed cap fadeRed centreText'>
+              <b>RMA: {entry.rmaId},</b>
+              <b>{moment(entry.time).calendar()}</b>
               {/*<p>{entry.comm}</p>*/}
             </div>
             );
@@ -47,7 +44,8 @@ const RMACascade = (props)=> {
         // previous rmas are italic
           return(
             <div key={index} className='bleed cap fadeRed centre'>
-              <i>RMA: {entry.rmaId}, {moment(entry.time).calendar()}</i>
+              <em>RMA: {entry.rmaId},</em>
+              <em>{moment(entry.time).calendar()}</em>
             </div>
             );
         }})

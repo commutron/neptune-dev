@@ -22,25 +22,22 @@ const FoldInNested = ({ id, serial, sKey, step, lock })=> {
   }
   
   return(
-    <div className='actionBox teal centre'>
+    <div className='stoneFrame fakeFielset teal centre'>
       <br />
       <p className='bigger centreText up'>{step}</p>
   		<br />
-  		{/*doneStone ?
-  			<div>
-  				<p className='centreText'>Includes: {subItems.toString()}</p>
-  			</div>
-  		:
-  		*/}
-	  		<form className='centre' onSubmit={(e)=>passNested(e)}>
+	  		<form 
+	  			className='centre stoneForm' 
+	  			onSubmit={(e)=>passNested(e)}>
 			    <input
 			      type='text'
 			      className='centreText'
 			      id='nestSerial'
 			      maxLength={10}
-	          minLength={9}
-	          placeholder='1000000000-9999999999'
-	          inputMode='numeric' />
+	          minLength={8}
+	          placeholder='serial number'
+	          inputMode='numeric'
+	          required />
 	        <br />
 			    <button
 			      type='submit'
@@ -51,7 +48,6 @@ const FoldInNested = ({ id, serial, sKey, step, lock })=> {
 					  disabled={lock}
 					>{Pref.nest}</button>
 				</form>
-			{/**/}
 			<br />
     </div>
   );

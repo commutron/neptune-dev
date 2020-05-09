@@ -8,22 +8,22 @@ import RMAForm from '/client/components/forms/RMAForm.jsx';
 // requires data
 // rma array
 
-const RMATable = (props)=> {
+const RMATable = ({ 
+  id, data, items,
+  options, end, inUse, 
+  ncTypesCombo, app, user
+})=> {
   
   function pullRMA(e, cKey) {
     let check = 'Are you sure you want to remove this ' + Pref.rmaProcess;
     const yes = window.confirm(check);
     if(yes) {
-      const id = props.id;
       Meteor.call('pullRMACascade', id, cKey, (error)=>{
         if(error)
           console.log(error);
       });
     }else{null}
   }
-
-
-  const data = props.data;
 
   return (
     <div>
@@ -44,18 +44,19 @@ const RMATable = (props)=> {
           </tr>
         </thead>
         {data.map( (entry)=>{
-          let started = props.inUse.includes(entry.key);
+          let started = inUse.includes(entry.key);
           Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(started);
           return (
             <RMARow
               key={entry.key}
               entry={entry}
-              id={props.id}
-              assigned={props.items.filter(x => x.rma.includes(entry.key)).length}
+              id={id}
+              assigned={items.filter(x => x.rma.includes(entry.key)).length}
               onRemove={(e)=>pullRMA(e, entry.key)}
-              ncTypesCombo={props.ncTypesCombo}
-              lock={started}
-              app={props.app} />
+              ncTypesCombo={ncTypesCombo}
+              app={app}
+              user={user}
+              lock={started} />
           );
         })}
       </table>
@@ -73,7 +74,12 @@ export default RMATable;
 
 
 
-const RMARow = ({ entry, id, assigned, onRemove, ncTypesCombo, lock, app })=> {
+const RMARow = ({ 
+  entry, id, assigned, 
+  onRemove, 
+  ncTypesCombo,
+  app, user, lock
+})=> {
   
   let dt = entry;
   
@@ -98,8 +104,10 @@ const RMARow = ({ entry, id, assigned, onRemove, ncTypesCombo, lock, app })=> {
             <RMAForm
               id={id}
               editObj={dt}
-              small={true}
+              trackOptions={app.trackOption}
+              end={app.lastTrack}
               app={app}
+              user={user}
               ncTypesCombo={ncTypesCombo} />
           }
         </td>

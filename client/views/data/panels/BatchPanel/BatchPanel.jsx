@@ -122,7 +122,9 @@ const BatchPanel = ({ batchData, widgetData, user, isDebug, app, flowData })=> {
             end={a.lastTrack}
             inUse={rmaListState}
             ncTypesCombo={flowData.ncTypesComboFlat}
-            app={a} />
+            app={a}
+            user={user} />
+          
           <p>{Pref.escape}s: {b.escaped.length}</p>
         </div>
         

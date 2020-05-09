@@ -55,6 +55,7 @@ const DoProCard = ({
   const iSerial = !itemData ? null : itemData.serial;
   
   const iFinished = !iSerial ? null : itemData.finishedAt !== false;
+  const iCascade = !iSerial ? null : itemData.rma.length > 0;
   
   const scrapCheck = !iSerial ? null :
     itemData.history.find(x => x.type === 'scrap' && x.good === true);
@@ -68,10 +69,15 @@ const DoProCard = ({
               return 0;
             });
   
+  
   const bFinished = batchData.finishedAt;
   const bComplete = bFinished !== false;
-  const bWrapUp = bComplete ? moment().diff(bFinished, 'days') <= 7 : false;
-  console.log({bWrapUp});
+  
+  const bWrapUp = bComplete ? moment().diff(bFinished, 'hours') <= 24 : false;
+  
+  const bCascade = batchData.cascade.length > 0;
+  
+  const bOpen = batchData.live || bWrapUp;
   
   const flows = [...flowData.flow,...flowData.flowAlt];
   const plainBrancheS = Array.from(brancheState, b => b.branch);
@@ -81,8 +87,10 @@ const DoProCard = ({
           <TideWall
             bID={batchData._id}
             bComplete={bComplete}
-            bWrapUp={bWrapUp}
+            bOpen={bOpen}
+            bCascade={bCascade}
             itemData={itemData || null}
+            iCascade={iCascade}
             shortfallS={shortfallS}
             scrap={scrapCheck}
             ancOptionS={ancOptionS}
@@ -95,6 +103,7 @@ const DoProCard = ({
             hasRiver={flowData.hasRiver}
             isReleased={flowData.floorRel}
             iFinished={iFinished}
+            iCascade={iCascade}
             scrap={scrapCheck}
             bID={batchData._id}
             bComplete={bComplete}
@@ -112,6 +121,7 @@ const DoProCard = ({
             flowAlt={flowData.flowAlt}
             progCounts={flowData.progCounts}
             shortfallS={shortfallS}
+            scrapCheck={scrapCheck}
             showVerifyState={showVerifyState}
             optionVerify={optionVerify}
             handleVerify={handleVerify} />;
@@ -156,7 +166,7 @@ const DoProCard = ({
         
         insertTideWall :
         
-        !flowData.hasRiver || !flowData.floorRel || iFinished ? 
+        !flowData.hasRiver || !flowData.floorRel || (iFinished && !bCascade) ? 
           
           insertItemCard :
           

@@ -84,10 +84,13 @@ const HistorySlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
             <th colSpan='3' className='bigger'
               >{moment(dateString, 'YYYY-MM-DD').format('dddd MMMM Do')}
             </th>
+            {/*
             <th className='centreText'><i className="fas fa-play fa-fw fa-xs blackT"></i> Start<sup>i</sup></th>
             <th className='centreText'></th>
             <th className='centreText'><i className="fas fa-stop fa-fw fa-xs blackT"></i> Stop<sup>i</sup></th>
-            <th>Duration<sup>ii</sup></th>
+            */}
+            <th>Task<sup>ii</sup></th>
+            <th>Duration<sup>iii</sup></th>
             <th></th>
           </tr>
         </tbody>
@@ -103,7 +106,7 @@ const HistorySlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
             return(
               <Fragment key={blk.tKey+index}>
                 <tr key={blk.startTime.toISOString()} className='big leftText line4x'>
-                  <th colSpan='4'>{moment(blk.startTime).format('h:mm A')}</th>
+                  <th colSpan='4'>{moment(blk.startTime).format('h A')}</th>
                 </tr>
                 <TidePlainRow
                   key={blk.tKey}
@@ -127,7 +130,8 @@ const HistorySlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
       }
       <div>
         <p><sup>i.</sup>Times are displayed for timezone: {moment.tz.guess()}</p>
-        <p><sup>ii.</sup>Durations are rounded to the nearest minute</p>
+        <p><sup>ii.</sup>Task is from direct user input only</p>
+        <p><sup>iii.</sup>Durations are rounded to the nearest minute</p>
       </div>
     </div>
   );
@@ -143,12 +147,12 @@ const TidePlainRow = ({
   // const tideKey = tBlock.tKey;
   const tideWho = tBlock.who;
   const durrAsMin = tBlock.durrAsMin;
-  // const task = tBlock.task;
+  const task = tBlock.task;
   
-  const mStart = moment(tBlock.startTime);
+  // const mStart = moment(tBlock.startTime);
   const mStop = tBlock.stopTime && moment(tBlock.stopTime);
 
-  const staticFormat = Roles.userIsInRole(Meteor.userId(), 'debug') ? 'hh:mm:ss A' : 'hh:mm A';
+  // const staticFormat = Roles.userIsInRole(Meteor.userId(), 'debug') ? 'hh:mm:ss A' : 'hh:mm A';
   
   return(
     <tr>
@@ -160,6 +164,7 @@ const TidePlainRow = ({
       
       <td className='noRightBorder'>{describe}</td>
       
+      {/*
       <td className='noRightBorder numFont centreText timeInputs'>
         <i className="fas fa-play fa-fw fa-xs greenT"></i><i> {mStart.format(staticFormat)}</i>
       </td>
@@ -172,7 +177,12 @@ const TidePlainRow = ({
         <i className="fas fa-stop fa-fw fa-xs redT"></i>
         {!mStop ? <i> __:__ __</i> : <i> {mStop.format(staticFormat)}</i>}
       </td>
-        
+      */}
+      
+      <td className='noRightBorder timeInputs'>
+        <em>{task ? task : '   '}</em>
+      </td>
+      
       <td className='noRightBorder clean numFont'>
         {mStop ? Math.round( durrAsMin ) : '...'} minutes
       </td>

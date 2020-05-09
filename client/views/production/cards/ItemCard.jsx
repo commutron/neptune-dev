@@ -9,7 +9,7 @@ const ItemCard = ({
   itemData, iSerial, 
   hasRiver, isReleased, 
   iFinished, scrap,
-  bID, bComplete, shortfallS 
+  bID, bComplete, iCascade, shortfallS 
 })=> {
 
   if(!hasRiver) {
@@ -53,7 +53,9 @@ const ItemCard = ({
           serial={itemData.serial}
           history={itemData.history}
           finishedAt={itemData.finishedAt}
+          iCascade={iCascade}
           scrap={scrap} />
+        
       </div>
     );
   }

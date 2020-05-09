@@ -9,9 +9,9 @@ import FlowBuilder from '/client/components/bigUi/ArrayBuilder/FlowBuilder.jsx';
 // barcode
 
 const RMAForm = ({ 
-  id, editObj, trackOptions, end,
+  id, editObj, 
+  trackOptions, end,
   app, user,
-  noText, small,
   ncTypesCombo 
 })=> {
   
@@ -30,10 +30,11 @@ const RMAForm = ({
   const flatCheckList = Array.from(ncTypesCombo, x => 
                                   x.key ? x.live === true && x.typeText : x);
   
-  function handleCheck(e) {
-    let match = flatCheckList.find( x => x === e.target.value);
+  function handleCheck(target) {
+    let match = flatCheckList.find( x => x === target.value);
     let message = !match ? 'please choose from the list' : '';
-    e.target.setCustomValidity(message);
+    target.setCustomValidity(message);
+    return !match ? false : true;
   }
   
   
@@ -49,12 +50,12 @@ const RMAForm = ({
   function handleNC(e) {
     const type = this.ncType.value.trim().toLowerCase();
     
-    const tgood = Roles.userIsInRole(Meteor.userId(), 'nightly') ?
-                    flatCheckList.find( x => x === type) : true;
+    const tgood = handleCheck(this.ncType);
     
-    if(tgood) {
-      const refEntry = this.ncRefs.value.trim().toLowerCase();
-      const refSplit = refEntry.split(/\s* \s*/);
+    const refEntry = this.ncRefs.value.trim().toLowerCase();
+    const refSplit = refEntry.split(/\s* \s*/);
+    
+    if(tgood && refSplit.length > 0 && refSplit[0] !== '') {
       
       let allNonCons = [...nonConsState];
       
@@ -68,7 +69,7 @@ const RMAForm = ({
         this.ncRefs.value = '';
       }else{null}
     }else{
-      this.ncType.setCustomValidity('invalid type');
+      this.ncType.reportValidity();
     }
     
   }
@@ -129,9 +130,7 @@ const RMAForm = ({
       title={title}
       color='orangeT'
       icon='fa-exchange-alt'
-      smIcon={small}
-      lock={!Roles.userIsInRole(Meteor.userId(), 'qa')}
-      noText={noText}>
+      lock={!Roles.userIsInRole(Meteor.userId(), 'qa')}>
       <div className='space'>
         <form
           id='rmaSave'
@@ -184,7 +183,7 @@ const RMAForm = ({
             type='search'
             placeholder='Type'
             list='ncTypeList'
-            onInput={(e)=>handleCheck(e)}
+            onInput={(e)=>handleCheck(e.target)}
             disabled={ncTypesCombo.length < 1}
             autoComplete={navigator.userAgent.includes('Firefox/') ? "off" : ""}
               // ^^^ workaround for persistent bug in desktop Firefox ^^^

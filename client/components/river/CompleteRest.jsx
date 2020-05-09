@@ -7,7 +7,7 @@ import Shortfalls from './Shortfalls.jsx';
 import MiniHistory from './MiniHistory.jsx';
 
 const CompleteRest = ({ 
-  id, bComplete, shortfallS, serial, 
+  id, bComplete, iCascade, shortfallS, serial, 
   history, finishedAt, scrap
 })=> {
   
@@ -33,6 +33,12 @@ const CompleteRest = ({
 			  lock={finishedAt !== false} />
 
       <MiniHistory history={history} />
+      
+      {iCascade &&
+        <p className='centreText'>
+          <i className="fas fa-exchange-alt fa-2x fa-fw orangeT"></i>{Pref.rmaProcess} has been activated
+        </p>
+      }
   	</Fragment>
   );
 };

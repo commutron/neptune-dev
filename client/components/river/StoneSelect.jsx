@@ -16,10 +16,11 @@ const StoneSelect = ({
   flow,
   isAlt,
   hasAlt,
-  rmas,
   allItems,
   nonCons,
   sh,
+  iCascade,
+  scrapCheck,
   item,
   brancheS,
   users,
@@ -44,8 +45,6 @@ const StoneSelect = ({
   const serial = item.serial;
   const history = item.history;
   const finishedAt = item.finishedAt;
-  //const subItems = item.subItems;
-  let allTrackOption = [...app.trackOption, app.lastTrack];
     
   const nc = nonCons.filter( 
               x => x.serial === serial && !x.trash && x.inspect === false )
@@ -76,8 +75,7 @@ const StoneSelect = ({
 	
 	
   for(let flowStep of flow) {
-    const coreStep = allTrackOption.find( t => t.key === flowStep.key);
-    const brKey = coreStep && coreStep.branchKey;
+    const brKey = flowStep && flowStep.branchKey;
     const branchObj = brancheS.find( b => b.brKey === brKey ) || null;
     const stepBranch = branchObj ? branchObj.branch : flowStep.step;
     
@@ -90,7 +88,6 @@ const StoneSelect = ({
     
     const ncFromHere = ncOutstanding.filter( x => x.where === stepBranch );
     const ncResolved = ncFromHere.length === 0;
-    //console.log(stepMatch, ncResolved);
     
     const damStep = !branchObj ? null : branchObj.reqProblemDam;
   
@@ -194,7 +191,9 @@ const StoneSelect = ({
         sh={sh}
         serial={serial}
         history={history}
-        finishedAt={finishedAt} />
+        finishedAt={finishedAt}
+        iCascade={iCascade}
+        scrap={scrapCheck} />
     );
   }
   

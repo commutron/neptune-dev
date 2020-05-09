@@ -8,8 +8,8 @@ import CompleteRest from './CompleteRest.jsx';
 import MiniHistory from './MiniHistory.jsx';
   
 const TideWall = ({ 
-  bID, bComplete, bWrapUp,
-  itemData, shortfallS, scrap,
+  bID, bComplete, bOpen, bCascade,
+  itemData, iCascade, shortfallS, scrap,
   ancOptionS, plainBrancheS,
   tideKey
 }) => {
@@ -20,8 +20,9 @@ const TideWall = ({
   return(
     <div className='vgap'>
 
-  		{( !itemData && ( !bComplete || bWrapUp ) ) || 
-  		 ( itemData && itemData.finishedAt === false ) ?
+  		{( !itemData && bOpen ) || 
+  		 ( itemData && 
+  		      ( itemData.finishedAt === false || bCascade ) ) ?
   		  
   		    <Fragment>
             
@@ -72,6 +73,7 @@ const TideWall = ({
               serial={itemData.serial}
               history={itemData.history}
               finishedAt={itemData.finishedAt}
+              iCascade={iCascade}
               scrap={scrap} />
             
           :
