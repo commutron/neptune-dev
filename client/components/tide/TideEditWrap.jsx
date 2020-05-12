@@ -1,10 +1,12 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import moment from 'moment';
+import 'moment-business-time';
 // import Pref from '/client/global/pref.js';
+import DayPieceBar from '/client/components/charts/Tides/DayPieceBar.jsx';
 import TideBlockRow from '/client/components/tide/TideBlockRow.jsx';
 
 
-const TideEditWrap = ({ weekData, bCache, updateData })=> {
+const TideEditWrap = ({ weekData, bCache, updateData, user, app })=> {
   
   const [ doEditKey, enableEdit ] = useState(false);
   const [ doSplitKey, enableSplit ] = useState(false);
@@ -77,20 +79,31 @@ const TideEditWrap = ({ weekData, bCache, updateData })=> {
         const nextStart = lastStart ? lastStart : false;
         
         if(index === 0 || moment(blk.startTime).isSame(lastStart, 'day') === false) {
+          const newDayTime = moment(blk.startTime);
+          const dayStart = newDayTime.startOf('day').nextWorkingTime();
+          const dayEnd = newDayTime.endOf('day').lastWorkingTime();
+          const restOfDay = weekData.filter( x => moment(x.startTime).isSame(newDayTime, 'day') );
           return(
             <Fragment key={index+blk.tKey}>
               <tr key={blk.startTime.toISOString()} className='big leftText line4x'>
-                <th colSpan='5'>{moment(blk.startTime).format('dddd MMMM Do')}</th>
+                <th colSpan='5'>{newDayTime.format('dddd MMMM Do')}</th>
+              </tr>
+              <tr>
+                <th colSpan='7'>
+                  <DayPieceBar
+                    tideTimes={restOfDay}
+                    dateTime={newDayTime}
+                    regDayStart={dayStart}
+                    regDayEnd={dayEnd}
+                    app={app}
+                    user={user} />
+                </th>
               </tr>
               <TideBlockRow
                 key={blk.tKey}
                 batch={keyword}
                 describe={what}
                 tideObj={blk}
-                // tideKey={blk.tKey}
-                // tideWho={blk.who}
-                // startTime={blk.startTime}
-                // stopTime={blk.stopTime}
                 lastStop={lastStop}
                 nextStart={nextStart}
                 editKey={doEditKey}
@@ -109,10 +122,6 @@ const TideEditWrap = ({ weekData, bCache, updateData })=> {
               batch={keyword}
               describe={what}
               tideObj={blk}
-              // tideKey={blk.tKey}
-              // tideWho={blk.who}
-              // startTime={blk.startTime}
-              // stopTime={blk.stopTime}
               lastStop={lastStop}
               nextStart={nextStart}
               editKey={doEditKey} 

@@ -3,7 +3,6 @@ import moment from 'moment';
 // import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
-import { AnonyUser } from '/client/components/smallUi/UserNice.jsx';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
 
@@ -52,17 +51,16 @@ const TideBlockRow = ({
   const mStart = moment(startTime);
   const mStop = stopTime ? moment(stopTime) : false;// this is what is causing the warning
   
-  const absoluteMin = /*allUsers ? moment(startTime).startOf('day').format() :*/
+  const absoluteMin =
   !lastStop || !moment(lastStop).isAfter(moment(startTime).startOf('day')) ?
     moment(startTime).startOf('day').format() : lastStop;
     
-  const absoluteMax = /*allUsers ? moment(mStop).endOf('day').format() :*/
+  const absoluteMax =
   !mStop ? moment().format() : 
     !nextStart && !moment().isAfter(mStop, 'day') ? moment().format() :
       !nextStart || moment(nextStart).isAfter(moment(mStop).endOf('day')) ?
         moment(mStop).endOf('day').format() : nextStart;
   
-  const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
   const isDebug = Roles.userIsInRole(Meteor.userId(), 'debug');
   
   const editSelf = tideWho === Meteor.userId();
@@ -72,7 +70,6 @@ const TideBlockRow = ({
   
     return(
       <tr className={editOn ? 'pop' : ''}>
-        {/*allUsers && tideWho && <td className='noRightBorder'><AnonyUser id={tideWho} /></td>*/}
         <td className='noRightBorder medBig'>
           <ExploreLinkBlock type='batch' keyword={batch} />
         </td>
@@ -87,7 +84,6 @@ const TideBlockRow = ({
                 options={{
                   dateFormat: "Y-m-dTG:i:s",
                   defaultDate: moment(mStart).format("YYYY-m-dThh:mm:ss"),
-                  // minDate: absoluteMin,
                   minDate: moment(absoluteMin).startOf('minute').format(),
                   maxDate: tempStop[0] ? 
                     moment(tempStop[0]).startOf('minute').format() :

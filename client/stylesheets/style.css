@@ -597,6 +597,37 @@
   height: 16px;
 }
 
+.progBlue { 
+  background: var(--silver); 
+  margin: 5px 0;
+  width: 100%;
+  height: 1vh;
+}
+.progBlue::-webkit-progress-bar {
+  background: var(--silver);
+}
+.progBlue::-webkit-progress-value {
+  background-color: var(--peterriver);
+}
+.progBlue::-moz-progress-bar {
+  background-color: var(--peterriver);
+}
+.pcBarWrap {
+  margin: 0;
+  width: 100%;
+  height: 1vh;
+  display: flex;
+  justify-content: stretch;
+}
+.pcBarWrap > div {
+  flex: 2;
+  border-right: 1px solid var(--clouds);
+}
+.pcBarWrap > div:last-child {
+  border-right: none;
+}
+.pcOn { background-color: var(--peterriver) }
+.pcOff { background-color: var(--silver); }
 
 .eventList {
   list-style-type: square;

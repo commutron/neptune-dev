@@ -21,7 +21,7 @@ import UserSettings from '/client/components/forms/UserSettings.jsx';
 const UserDataWrap = ({
   readyUsers, readyEvents, // subs
   orb, bolt, // meta
-  user, active, org, app, // self
+  user, isAdmin, isDebug, org, app, // self
   bCache, batches, users // working data
 })=> {
   
@@ -43,7 +43,6 @@ const UserDataWrap = ({
     );
   }
     
-  const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
   const branches = app.branches.filter( b => b.open === true );
   const brancheS = branches.sort((b1, b2)=> {
           if (b1.position < b2.position) { return 1 }
@@ -83,6 +82,8 @@ const UserDataWrap = ({
             bolt={bolt}
             app={app}
             user={user}
+            // isAdmin={isAdmin}
+            // isDebug={isDebug}
             users={users}
             bCache={bCache} />
             
@@ -92,6 +93,8 @@ const UserDataWrap = ({
             bolt={bolt}
             app={app}
             user={user}
+            // isAdmin={isAdmin}
+            // isDebug={isDebug}
             users={users}
             batchEvents={batches}
             bCache={bCache} />
@@ -102,6 +105,8 @@ const UserDataWrap = ({
             bolt={bolt}
             app={app}
             user={user}
+            // isAdmin={isAdmin}
+            // isDebug={isDebug}
             users={users} />
             
           <UserSettings
@@ -109,6 +114,7 @@ const UserDataWrap = ({
             app={app}
             user={user}
             isAdmin={isAdmin}
+            // isDebug={isDebug}
             brancheS={brancheS} />
           
           <PrivacyPanel
@@ -118,6 +124,7 @@ const UserDataWrap = ({
             app={app}
             user={user}
             isAdmin={isAdmin}
+            // isDebug={isDebug}
             bCache={bCache} />
           
         </Slides>
@@ -131,15 +138,11 @@ export default withTracker( () => {
   let login = Meteor.userId() ? true : false;
   let user = login ? Meteor.user() : false;
   let org = user ? user.org : false;
-  let active = login ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
+  const isAdmin = login ? Roles.userIsInRole(Meteor.userId(), 'admin') : false;
+  const isDebug = login ? Roles.userIsInRole(Meteor.userId(), 'admin') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
   const eventsSub = login ? Meteor.subscribe('eventsData') : false;
   if(!login) {
-    return {
-      readyUsers: false,
-      readyEvents: false
-    };
-  }else if(!active) {
     return {
       readyUsers: false,
       readyEvents: false
@@ -151,7 +154,8 @@ export default withTracker( () => {
       orb: Session.get('now'),
       bolt: Session.get('allData'),
       user: user,
-      active: active,
+      isAdmin: isAdmin,
+      isDebug: isDebug,
       org: org,
       app: AppDB.findOne({org: org}),
       bCache: CacheDB.findOne({dataName: 'batchInfo'}),

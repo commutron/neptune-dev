@@ -2,6 +2,7 @@ import React, { useState, useLayoutEffect } from 'react';
 import moment from 'moment';
 import { TimeInDay } from '/client/utility/WorkTimeCalc.js';
 import { UsersTimeTotal } from '/client/utility/WorkTimeCalc.js';
+import { round2Decimal } from '/client/utility/Convert.js';
 // import Pref from '/client/global/pref.js';
 import { 
   VictoryChart, VictoryArea, VictoryBar,
@@ -40,12 +41,10 @@ const TideWorkWeek = ({
           const tideTime = tideTimes.filter( x => 
                               moment(x.startTime).isSame(dateTime, 'day') );
   
-          let dTotal = tideTime.reduce( (arr, x)=> {
-            let durr = moment.duration(x.durrAsMin, 'minutes').asHours();
-            return arr + durr }, 0 );
-          const dTotalNice = Math.round((dTotal + Number.EPSILON) * 100) / 100;
-                                        // exactly rounding to 2 decimal points
-
+          const dTotal = tideTime.reduce( (arr, x)=> { return arr + x.durrAsMin }, 0);
+          const durrHr = moment.duration(dTotal, 'minutes').asHours();
+          const dTotalNice = round2Decimal(durrHr);
+    
           const userIDs = new Set( Array.from(tideTime, x => x.who ) );
           const getUsersTime = UsersTimeTotal( userIDs, users, dateTime, 'day', dayHours );
     

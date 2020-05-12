@@ -3,6 +3,8 @@ import moment from 'moment';
 import 'moment-business-time';
 import './ShipTime.js';
 
+import { round2Decimal } from '/client/utility/Convert.js';
+
 export function TimeInWeek( nonWorkDays, weekStart ) {
   if( Array.isArray(nonWorkDays) ) {  
     moment.updateLocale('en', {
@@ -62,31 +64,38 @@ export function TimeInDay( nonWorkDays, dayStart ) {
   }
 }
 
+export function UserTime( userObj, dateTime, span, spanHours ) {
+  
+  const userProTime = userObj.proTimeShare || false;
+  const relProTime = !userProTime ? false : 
+          userProTime.find( x => moment(x.updatedAt).isSameOrBefore(dateTime, span) );
+  
+  const proTime = !relProTime ? 1 : relProTime.timeAsDecimal;
+  const proHours = ( spanHours * proTime );
+  
+  const proHoursNice = round2Decimal(proHours);
+  
+  return proHoursNice;
+}
+    
+    
 
 export function UsersTimeTotal( userIDs, allUsers, dateTime, span, spanHours ) {
   
   let userTimeMax = [];
     
-    for( let uID of userIDs) {
-      const userObj = allUsers.find( x => x._id === uID );
-      
-      const userProTime = userObj.proTimeShare || false;
-      
-      const relProTime = !userProTime ? false : 
-            userProTime.find( x => moment(x.updatedAt).isSameOrBefore(dateTime, span) );
-      
-      const proTime = !relProTime ? 1 : relProTime.timeAsDecimal;
-      const proHours = ( spanHours * proTime );
-      userTimeMax.push(proHours);
-    }
+  for( let uID of userIDs) {
+    const userObj = allUsers.find( x => x._id === uID );
     
-    const userTimeTotal = userTimeMax.reduce( (arr, x)=> { 
-                                        return arr + x }, 0 );
-                                  
-    const userTimeTotalNice = Math.round((userTimeTotal + Number.EPSILON) * 100) / 100;
-                                          // exactly rounding to 2 decimal points
+    const proHours = UserTime( userObj, dateTime, span, spanHours );
+    
+    userTimeMax.push(proHours);
+  }
+  
+  const userTimeTotal = userTimeMax.reduce( (arr, x)=> { 
+                                      return arr + x }, 0 );
 
-    return userTimeTotalNice;
+  return userTimeTotal;
 }
 
 /*

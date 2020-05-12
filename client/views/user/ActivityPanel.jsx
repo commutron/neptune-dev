@@ -78,7 +78,9 @@ const ActivityPanel = ({ app, user, users, bCache })=> {
         <TideEditWrap 
           weekData={weekData} 
           bCache={bCache} 
-          updateData={()=>getData(false)} />
+          updateData={()=>getData(false)}
+          user={user}
+          app={app} />
       </table>
       }
       <div>
