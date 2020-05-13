@@ -7,7 +7,7 @@ import WeekBrowse from '/client/components/bigUi/WeekBrowse/WeekBrowse.jsx';
 import TideWeekMini from '/client/components/charts/Tides/TideWeekMini.jsx';
 import TideEditWrap from '/client/components/tide/TideEditWrap.jsx';
 
-const ActivityPanel = ({ app, user, users, bCache })=> {
+const ActivityPanel = ({ app, user, isDebug, users, bCache })=> {
   
   const [weekChoice, setWeekChoice] = useState(false);
   const [weekData, setWeekData] = useState(false);
@@ -67,11 +67,11 @@ const ActivityPanel = ({ app, user, users, bCache })=> {
       <table className='wide cap space'>
         <tbody key={00}>
           <tr className='leftText line2x'>
-            <th colSpan='2'></th>
+            <th colSpan='3'></th>
             <th className='centreText'><i className="fas fa-play fa-fw fa-xs blackT"></i> Start<sup>i</sup></th>
             <th className='centreText'></th>
             <th className='centreText'><i className="fas fa-stop fa-fw fa-xs blackT"></i> Stop<sup>i</sup></th>
-            <th>Duration<sup>ii</sup></th>
+            <th className='rightText'>Duration<sup>ii</sup></th>
             <th></th>
           </tr>
         </tbody>
@@ -80,12 +80,15 @@ const ActivityPanel = ({ app, user, users, bCache })=> {
           bCache={bCache} 
           updateData={()=>getData(false)}
           user={user}
+          isDebug={isDebug}
           app={app} />
       </table>
       }
-      <div>
+      <div className='dropCeiling'>
         <p><sup>i.</sup>Times are displayed for timezone: {moment.tz.guess()}</p>
         <p><sup>ii.</sup>Durations are rounded to the nearest minute</p>
+        <p><sup>o.</sup>Pieces bar is in 15 minute chunks</p>
+        <p><sup>oo.</sup>Progress bars are scaled to your expected Production Time percentage</p>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
-//import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
@@ -90,8 +90,7 @@ const HistorySlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
             <th className='centreText'><i className="fas fa-stop fa-fw fa-xs blackT"></i> Stop<sup>i</sup></th>
             */}
             <th>Task<sup>ii</sup></th>
-            <th>Duration<sup>iii</sup></th>
-            <th></th>
+            <th className='rightText'>Duration<sup>iii</sup></th>
           </tr>
         </tbody>
         <tbody>
@@ -183,7 +182,7 @@ const TidePlainRow = ({
         <em>{task ? task : '   '}</em>
       </td>
       
-      <td className='noRightBorder clean numFont'>
+      <td className='noRightBorder clean numFont rightText'>
         {mStop ? Math.round( durrAsMin ) : '...'} minutes
       </td>
       

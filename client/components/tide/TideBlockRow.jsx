@@ -12,7 +12,8 @@ const TideBlockRow = ({
   lastStop, nextStart,
   editKey, editMode,
   splitKey, splitMode,
-  setEdit, setEnd, setSplit
+  setEdit, setEnd, setSplit,
+  isDebug
 })=> {
   
   const tideKey = tideObj.tKey;
@@ -61,19 +62,21 @@ const TideBlockRow = ({
       !nextStart || moment(nextStart).isAfter(moment(mStop).endOf('day')) ?
         moment(mStop).endOf('day').format() : nextStart;
   
-  const isDebug = Roles.userIsInRole(Meteor.userId(), 'debug');
-  
   const editSelf = tideWho === Meteor.userId();
   const editAuth = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
   const zeroed = mStop && mStop.diff(mStart, 'minutes') <= 0.5 ? true : false;
   const staticFormat = isDebug ? 'hh:mm:ss A' : 'hh:mm A';
   
     return(
+      <Fragment>
       <tr className={editOn ? 'pop' : ''}>
         <td className='noRightBorder medBig'>
           <ExploreLinkBlock type='batch' keyword={batch} />
         </td>
-        <td className='noRightBorder'>{describe}</td>
+        <td className='noRightBorder smTxt'>{describe}</td>
+        
+        <td className='noRightBorder'><em>{tideObj.task ? tideObj.task : '   '}</em></td>
+
         <td className='noRightBorder numFont centreText timeInputs'>
           <i className="fas fa-play fa-fw fa-xs greenT"></i>
             {!editOn || splitOn ? ////////////////////////////////////// START
@@ -97,7 +100,7 @@ const TideBlockRow = ({
                 }}
               />}
         </td>
-        <td className='noRightBorder centreText timeInputs'>
+        <td className='noRightBorder nospace centreText timeInputs'>
           {!editOn ?
             <em><i className="fas fa-long-arrow-alt-right"></i></em>
           : splitOn ? ///////////////////////////////////////////////// SPLIT
@@ -169,8 +172,8 @@ const TideBlockRow = ({
           </Fragment>
         :
           <Fragment>
-            <td className='noRightBorder clean numFont'>
-              {mStop ? Math.round( moment.duration(mStop.diff(mStart)).asMinutes() ) : '...'} minutes
+            <td className='noRightBorder clean numFont rightText'>
+              {mStop ? Math.round( tideObj.durrAsMin ) : '...'}<i className='small'> minutes</i>
             </td>
             <td className='noRightBorder centreText'>
             {!mStop ?
@@ -190,7 +193,14 @@ const TideBlockRow = ({
           </Fragment>
         }
     </tr>
+    
+    </Fragment>
   );
 };
 
 export default TideBlockRow;
+
+
+// <tr className={editOn ? 'pop' : ''}>
+//       <td className='u10space'><em>{tideObj.task ? tideObj.task : '   '}</em></td>
+//     </tr>

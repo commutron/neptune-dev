@@ -72,7 +72,7 @@ const UserDataWrap = ({
             <b><i className='far fa-eye fa-fw'></i>  Watchlist</b>,
             <b><i className='fas fa-inbox fa-fw'></i>  Inbox</b>,
             <b><i className='fas fa-sliders-h fa-fw'></i>  Preferences</b>,
-            <b><i className='fas fa-shield-alt fa-fw'></i>  Privacy & Permissions</b>,
+            <b><i className='fas fa-shield-alt fa-fw'></i>  Privacy & Access</b>,
           ]}
           extraClass='space5x5'>
             
@@ -83,7 +83,7 @@ const UserDataWrap = ({
             app={app}
             user={user}
             // isAdmin={isAdmin}
-            // isDebug={isDebug}
+            isDebug={isDebug}
             users={users}
             bCache={bCache} />
             

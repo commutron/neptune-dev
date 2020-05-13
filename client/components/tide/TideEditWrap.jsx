@@ -6,7 +6,7 @@ import DayPieceBar from '/client/components/charts/Tides/DayPieceBar.jsx';
 import TideBlockRow from '/client/components/tide/TideBlockRow.jsx';
 
 
-const TideEditWrap = ({ weekData, bCache, updateData, user, app })=> {
+const TideEditWrap = ({ weekData, bCache, updateData, user, isDebug, app })=> {
   
   const [ doEditKey, enableEdit ] = useState(false);
   const [ doSplitKey, enableSplit ] = useState(false);
@@ -75,21 +75,23 @@ const TideEditWrap = ({ weekData, bCache, updateData, user, app })=> {
         const what = moreInfo ? moreInfo.isWhat : 'unavailable';
         
         const lastStart = weekData[index-1] && weekData[index-1].startTime;
-        const lastStop = weekData[index+1] ? weekData[index+1].stopTime : false;
+        const lastStop = weekData[index+1] && weekData[index+1].stopTime;
+        // const lastStart = weekData[index-1]?.startTime; // STILL
+        // const lastStop = weekData[index+1]?.stopTime; // WONT LINT
         const nextStart = lastStart ? lastStart : false;
         
         if(index === 0 || moment(blk.startTime).isSame(lastStart, 'day') === false) {
           const newDayTime = moment(blk.startTime);
-          const dayStart = newDayTime.startOf('day').nextWorkingTime();
-          const dayEnd = newDayTime.endOf('day').lastWorkingTime();
-          const restOfDay = weekData.filter( x => moment(x.startTime).isSame(newDayTime, 'day') );
+          const dayStart = newDayTime.clone().startOf('day').nextWorkingTime();
+          const dayEnd = newDayTime.clone().endOf('day').lastWorkingTime();
+          const restOfDay = weekData.filter( x => newDayTime.isSame(x.startTime, 'day') );
           return(
             <Fragment key={index+blk.tKey}>
               <tr key={blk.startTime.toISOString()} className='big leftText line4x'>
                 <th colSpan='5'>{newDayTime.format('dddd MMMM Do')}</th>
               </tr>
               <tr>
-                <th colSpan='7'>
+                <th colSpan='8'>
                   <DayPieceBar
                     tideTimes={restOfDay}
                     dateTime={newDayTime}
@@ -112,7 +114,8 @@ const TideEditWrap = ({ weekData, bCache, updateData, user, app })=> {
                 splitMode={(e)=>enableSplit(e ? blk.tKey : false)}
                 setEdit={(e)=>editBlock(e)}
                 setEnd={(e)=>endBlock(e)}
-                setSplit={(e)=>splitBlock(e)} />
+                setSplit={(e)=>splitBlock(e)}
+                isDebug={isDebug} />
             </Fragment>
           );
         }else{
@@ -130,7 +133,8 @@ const TideEditWrap = ({ weekData, bCache, updateData, user, app })=> {
               splitMode={(e)=>enableSplit(e ? blk.tKey : false)}
               setEdit={(e)=>editBlock(e)}
               setEnd={(e)=>endBlock(e)}
-              setSplit={(e)=>splitBlock(e)} />
+              setSplit={(e)=>splitBlock(e)}
+              isDebug={isDebug} />
           );
         }
       })}

@@ -327,7 +327,9 @@ Meteor.methods({
       const getWeek = weekNum || moment().week();
       const pinDate = moment.tz(clientTZ).year(getYear).week(getWeek);
       
-      const isAuth = Roles.userIsInRole(Meteor.userId(), ['admin', 'peopleSuper']);
+      const isAuth = Meteor.userId() === mockUserId ||
+              Roles.userIsInRole(Meteor.userId(), ['admin', 'peopleSuper']);
+                      
       const sendAll = allOrg;
       const sendOneID = !mockUserId ? Meteor.userId() :
                         isAuth ? mockUserId : null;

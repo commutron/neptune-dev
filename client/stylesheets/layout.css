@@ -575,6 +575,7 @@ main {
 .vspace { padding: 24px 0; }
 .nspace { padding: 1vh 2vw 0 2vw; }
 .uspace { padding: 0 2vw 1vh 2vw; }
+.u10space { padding: 0 10px 10px 10px; }
 .vbreak { padding: 0 0 24px 0; }
 .nospace { padding: 0; }
 
@@ -695,6 +696,7 @@ main {
 
 .smaller { font-size: smaller; }
 .small { font-size: small; }
+.smTxt { font-size: 0.9rem; }
 
 .med { font-size: 1rem; }
 
