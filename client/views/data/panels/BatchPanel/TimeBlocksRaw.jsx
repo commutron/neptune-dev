@@ -90,13 +90,19 @@ const RawBlock = ({ tB, batch, clientTZ, isDebug, showZero })=> {
     return null;
   }
   
+  const taskCell = brGuess ? 
+          brGuess[0] === 'fromUserInput' ?
+            <td>{brGuess[1]}</td> :
+            <td><em>{brGuess[1].join(', ') }</em></td> :
+            <td></td>;
+            
   return(
     <tr title={tB.tKey}>
       <td><AnonyUser id={tB.who} /></td>
       <td>{mStart.format('YYYY/MM/DD-kk:mm')}</td>
       <td>{mStop.format('YYYY/MM/DD-kk:mm')}</td>
       <td>{durr} minutes</td>
-      <td>{brGuess && brGuess[1].join(', ') }</td>
+      {taskCell}
       {isDebug && <td>{brGuess ? brGuess[0] : '....'}</td>}
     </tr>
   );

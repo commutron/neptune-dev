@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import moment from 'moment';
-// import Pref from '/client/global/pref.js';
+import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 import Flatpickr from 'react-flatpickr';
@@ -13,6 +13,8 @@ const TideBlockRow = ({
   editKey, editMode,
   splitKey, splitMode,
   setEdit, setEnd, setSplit,
+  
+  ancOptionS, plainBrancheS,
   isDebug
 })=> {
   
@@ -20,6 +22,7 @@ const TideBlockRow = ({
   const tideWho = tideObj.who;
   const startTime = tideObj.startTime;
   const stopTime = tideObj.stopTime;
+  const taskU = tideObj.task;
                 
   const editOn = tideKey === editKey;
   const splitOn = tideKey === splitKey; 
@@ -27,6 +30,7 @@ const TideBlockRow = ({
   const [ tempStart, setTempStart ] = useState(false);
   const [ tempStop, setTempStop ] = useState(false);
   const [ tempSplit, setTempSplit ] = useState(false);
+  const [ tempTask, setTempTask ] = useState(false);
   
   function safeCancel() {
     !splitOn ? editMode(false) : splitMode(false);
@@ -45,7 +49,8 @@ const TideBlockRow = ({
     }else{
       const newStart = tempStart || [startTime];
       const newStop = tempStop || [stopTime];
-      setEdit({batch, tideKey, newStart, newStop});
+      const taskIs = tempTask || taskU;
+      setEdit({batch, tideKey, newStart, newStop, taskIs});
     }
   }
  
@@ -75,12 +80,20 @@ const TideBlockRow = ({
         </td>
         <td className='noRightBorder smTxt'>{describe}</td>
         
-        <td className='noRightBorder'><em>{tideObj.task ? tideObj.task : '   '}</em></td>
-
+        <TideTaskExplicit
+          taskIs={taskU}
+          ancOptionS={ancOptionS}
+          plainBrancheS={plainBrancheS}
+          editOn={editOn}
+          splitOn={splitOn}
+          tempTask={tempTask}
+          setTempTask={setTempTask} />
+        
         <td className='noRightBorder numFont centreText timeInputs'>
           <i className="fas fa-play fa-fw fa-xs greenT"></i>
             {!editOn || splitOn ? ////////////////////////////////////// START
-              <i> {mStart.format(staticFormat)}</i> :
+              <i> {mStart.format(staticFormat)}</i> 
+              :
               <Flatpickr
                 value={moment(mStart).format()}
                 onClose={(e)=>setTempStart(e)} 
@@ -201,6 +214,40 @@ const TideBlockRow = ({
 export default TideBlockRow;
 
 
-// <tr className={editOn ? 'pop' : ''}>
-//       <td className='u10space'><em>{tideObj.task ? tideObj.task : '   '}</em></td>
-//     </tr>
+const TideTaskExplicit = ({ 
+  taskIs, ancOptionS, plainBrancheS,
+  editOn, splitOn, tempTask, setTempTask
+})=> {
+  
+  if( !editOn || splitOn ) {
+    return(
+      <td className='noRightBorder smTxt'>
+        {taskIs ? taskIs : '   '}
+      </td>
+    );
+  }
+
+  return(
+    <td className='noRightBorder centreText'>
+      <em><i className="fas fa-exchange-alt fa-fw tealT"></i> </em>
+      <select
+        id='tskSlctEdit'
+        className='cap tableInput smTxt'
+        onChange={(e)=>setTempTask(e.target.value)}
+        defaultValue={taskIs}
+        disabled={false}>
+        <option value={false}></option>
+        <optgroup label='Ancillary'>
+          {ancOptionS.map( (v, ix)=>(
+            <option key={ix+'o1'} value={v}>{v}</option>
+          ))}
+        </optgroup>
+        <optgroup label={Pref.branches}>
+          {plainBrancheS.map( (v, ix)=>(
+            <option key={ix+'o2'} value={v}>{v}</option>
+          ))}
+        </optgroup>
+      </select>
+    </td>
+  );
+};

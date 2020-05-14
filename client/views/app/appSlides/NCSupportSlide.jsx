@@ -23,19 +23,6 @@ const NCSupportSlide = ({app})=> {
     });
   }
   
-  function ancRemove(name) {
-    toast.info('This may take a moment');
-    Meteor.call('removeAncOption', name, (error, reply)=>{
-      if(error)
-        console.log(error);
-      if(reply) {
-        toast.success('Saved');
-      }else{
-        toast.warning('Cannot be removed, entry is in use');
-      }
-    });
-  }
-  
   return (
     <div>
       <h2 className='cap'>{Pref.nonCon} scale</h2>
@@ -58,26 +45,7 @@ const NCSupportSlide = ({app})=> {
         rndmKey={Math.random().toString(36).substr(2, 5)} />
       <i><em>currently set to: </em>{app.missingType || ''}</i>
       
-      <hr />
       
-      <h2 className='cap'>{Pref.ancillary} steps</h2>
-      <i>Not strictly assembly but part of the total proccess. Not tracked</i>
-      <AppSetSimple
-        title='step'
-        action='addAncOp'
-        rndmKey={Math.random().toString(36).substr(2, 5)} />
-      <ul>
-        {app.ancillaryOption.map( (entry, index)=>{
-          return( 
-            <li key={index}>
-              <i>{entry}</i>
-              <button 
-                className='miniAction redT'
-                onClick={()=>ancRemove(entry)}
-              ><i className='fas fa-times fa-fw'></i></button>
-            </li>
-        )})}
-      </ul>
     </div>
   );
 };

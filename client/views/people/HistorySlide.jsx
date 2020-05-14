@@ -79,20 +79,20 @@ const HistorySlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
         </div>
       :
       <table className='wide cap space'>
-        <tbody key={00}>
+        {/*<tbody key={00}>
           <tr className='leftText line2x'>
             <th colSpan='3' className='bigger'
               >{moment(dateString, 'YYYY-MM-DD').format('dddd MMMM Do')}
             </th>
-            {/*
+            
             <th className='centreText'><i className="fas fa-play fa-fw fa-xs blackT"></i> Start<sup>i</sup></th>
             <th className='centreText'></th>
             <th className='centreText'><i className="fas fa-stop fa-fw fa-xs blackT"></i> Stop<sup>i</sup></th>
-            */}
+            
             <th>Task<sup>ii</sup></th>
             <th className='rightText'>Duration<sup>iii</sup></th>
           </tr>
-        </tbody>
+        </tbody>*/}
         <tbody>
         {dayData.map( (blk, index)=>{
           const keyword = blk.batch;
@@ -179,7 +179,7 @@ const TidePlainRow = ({
       */}
       
       <td className='noRightBorder timeInputs'>
-        <em>{task ? task : '   '}</em>
+        {task ? task : '   '}
       </td>
       
       <td className='noRightBorder clean numFont rightText'>

@@ -23,8 +23,8 @@ export function TimeInWeek( nonWorkDays, weekStart ) {
       const dayTotal = dayEnd.workingDiff(dayStart, 'hours', true);
       
       const breakTime = dayTotal <= 5 ? 15 : 30; // << hard coded 15min breaks
-      const idleTime = breakTime + 15; // << hard coded common idle
-      const minusTime = dayTotal === 0 || ( dayTotal * 60 ) < idleTime ? 0 : idleTime;
+      //const idleTime = breakTime + 15; // << hard coded common idle
+      const minusTime = ( dayTotal * 60 ) < breakTime ? 0 : breakTime;
         
       const workTime = moment.duration(dayTotal, 'hours')
                         .subtract(minusTime, 'minutes').asHours();
@@ -52,8 +52,8 @@ export function TimeInDay( nonWorkDays, dayStart ) {
     const dayTotal = moment(end).workingDiff(begin, 'hours', true);
 
     const breakTime = dayTotal <= 5 ? 15 : 30; // << hard coded 15min breaks
-    const idleTime = breakTime + 15; // << hard coded common idle
-    const minusTime = dayTotal === 0 || ( dayTotal * 60 ) < idleTime ? 0 : idleTime;
+    //const idleTime = breakTime + 15; // << hard coded common idle
+    const minusTime = ( dayTotal * 60 ) < breakTime ? 0 : breakTime;
     
     const workTime = moment.duration(dayTotal, 'hours')
                       .subtract(minusTime, 'minutes').asHours();
@@ -111,15 +111,10 @@ export function TimeRemainDay( nonWorkDays, dayTime ) {
     const end = moment(dayTime).endOf('day');
     
     const dayTotal = end.workingDiff(dayTime, 'hours', true);
-    
-    const lunchTime = dayTotal >= 5.75 ? 45 : 
-                      dayTotal >= 5.5 ? 30 : 
-                      dayTotal >= 5.25 ? 15 : 0;
                       
-    const breakTime = dayTotal <= 6 ? 15 : 30; // fuzzy
+    const breakTime = dayTotal <= 5 ? 15 : 30; // fuzzy
 
-    const idleTime = lunchTime + breakTime + 15;
-    const minusTime = dayTotal === 0 || ( dayTotal * 60 ) < idleTime ? 0 : idleTime;
+    const minusTime = dayTotal === 0 || ( dayTotal * 60 ) < breakTime ? 0 : breakTime;
     
     const workTime = moment.duration(dayTotal, 'hours')
                       .subtract(minusTime, 'minutes').asHours();

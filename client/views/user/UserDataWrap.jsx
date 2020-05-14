@@ -6,7 +6,7 @@ import { UnreadInboxToastPop } from '/client/utility/InboxToastPop.js';
 
 // import Pref from '/client/global/pref.js';
 import Spin from '/client/components/tinyUi/Spin.jsx';
-
+import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
 import HomeIcon from '/client/layouts/HomeIcon.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
 import Slides from '../../components/smallUi/Slides.jsx';
@@ -48,9 +48,10 @@ const UserDataWrap = ({
           if (b1.position < b2.position) { return 1 }
           if (b1.position > b2.position) { return -1 }
           return 0;
-        }); 
+        });
         
-  return (
+  return(
+    <ErrorCatch>
     <div className='simpleContainer'>
       <ToastContainer
         position="top-right"
@@ -78,9 +79,8 @@ const UserDataWrap = ({
             
           <ActivityPanel
             key={1}
-            orb={orb}
-            bolt={bolt}
             app={app}
+            brancheS={brancheS}
             user={user}
             // isAdmin={isAdmin}
             isDebug={isDebug}
@@ -131,6 +131,7 @@ const UserDataWrap = ({
 				
       </div>
     </div>
+    </ErrorCatch>
   );
 };
 
@@ -139,7 +140,7 @@ export default withTracker( () => {
   let user = login ? Meteor.user() : false;
   let org = user ? user.org : false;
   const isAdmin = login ? Roles.userIsInRole(Meteor.userId(), 'admin') : false;
-  const isDebug = login ? Roles.userIsInRole(Meteor.userId(), 'admin') : false;
+  const isDebug = login ? Roles.userIsInRole(Meteor.userId(), 'debug') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
   const eventsSub = login ? Meteor.subscribe('eventsData') : false;
   if(!login) {

@@ -58,6 +58,26 @@ const DataRepair = ({ app, users })=> {
     });
   }
   
+  function rebuildTheBigThing() {
+    toast.warn('Method Called, Please Wait...', {
+      toastId: ( 'ReBuildAllOp' ),
+      autoClose: false
+    });
+        
+    Meteor.call('rebuildALLWidgetFlows', (error, reply)=>{
+      error && console.log(error);
+      if(reply === true) {
+        toast.update(( 'ReBuildAllOp' ), {
+          render: "Complete Success",
+          type: toast.TYPE.SUCCESS,
+          autoClose: 10000
+        });
+      }else{
+        toast.error('There was a problem...');
+      }
+    });
+  }
+  
   function updateCaches() {
     const clientTZ = moment.tz.guess();
     Meteor.call('FORCEcacheUpdate', clientTZ, (error)=>{
@@ -142,6 +162,12 @@ const DataRepair = ({ app, users })=> {
         onClick={()=>markV2date()}
         className='action clear blueT'
       >Record Version Two Date</button>
+      
+      <h2 className='cap'>Rebuild ALL Widget Flows</h2>
+      <button
+        onClick={()=>rebuildTheBigThing()}
+        className='action clear blueT'
+      >ReBuild All Now</button>
       
       <h2 className='cap'>Delete all CacheDB Entries</h2>
       <button

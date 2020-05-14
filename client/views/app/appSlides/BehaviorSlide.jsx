@@ -1,6 +1,7 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
+import AppSetSimple from '/client/components/forms/AppSetSimple';
 
 const BehaviorSlide = ({app})=> {
   
@@ -29,6 +30,19 @@ const BehaviorSlide = ({app})=> {
         toast.success('Saved');
       }else{
         toast.danger('Server Error');
+      }
+    });
+  }
+  
+  function ancRemove(name) {
+    toast.info('This may take a moment');
+    Meteor.call('removeAncOption', name, (error, reply)=>{
+      if(error)
+        console.log(error);
+      if(reply) {
+        toast.success('Saved');
+      }else{
+        toast.warning('Cannot be removed, entry is in use');
       }
     });
   }
@@ -89,6 +103,27 @@ const BehaviorSlide = ({app})=> {
         </label>
       
       </div>
+      
+      <hr />
+      
+      <h2 className='cap'>{Pref.ancillary} steps</h2>
+      <i>Not strictly assembly but part of the total proccess. Not tracked</i>
+      <AppSetSimple
+        title='step'
+        action='addAncOp'
+        rndmKey={Math.random().toString(36).substr(2, 5)} />
+      <ul>
+        {app.ancillaryOption.map( (entry, index)=>{
+          return( 
+            <li key={index}>
+              <i>{entry}</i>
+              <button 
+                className='miniAction redT'
+                onClick={()=>ancRemove(entry)}
+              ><i className='fas fa-times fa-fw'></i></button>
+            </li>
+        )})}
+      </ul>
       
     </div>
   );

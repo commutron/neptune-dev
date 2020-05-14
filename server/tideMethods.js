@@ -369,7 +369,7 @@ Meteor.methods({
     }
   },
   
-  editTideTimeBlock(batch, tideKey, newStart, newStop) {
+  editTideTimeBlock(batch, tideKey, newStart, newStop, taskIs) {
     try {
       const doc = BatchDB.findOne({ batch: batch, 'tide.tKey': tideKey });
       const sub = doc && doc.tide.find( x => x.tKey === tideKey );
@@ -381,10 +381,12 @@ Meteor.methods({
         if(!auth) {
           return false;
         }else{
+          const taskVal = !taskIs || taskIs === 'false' ? false : taskIs;
           BatchDB.update({ batch: batch, orgKey: Meteor.user().orgKey, 'tide.tKey': tideKey}, {
             $set : { 
               'tide.$.startTime' : newStart,
-              'tide.$.stopTime' : newStop
+              'tide.$.stopTime' : newStop,
+              'tide.$.task' : taskVal
           }});
           return true;
         }

@@ -66,7 +66,9 @@ const AccountsManagePanel = ({ app, users, bCache, brancheS, isDebug })=> {
                 <ActivityPanel
                   key={0}
                   app={app}
+                  brancheS={brancheS}
                   user={entry}
+                  isDebug={isDebug}
                   users={usersSort}
                   bCache={bCache} />
                 

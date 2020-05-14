@@ -5,15 +5,6 @@
   font-family: 'VarelaLocal';
 }
 
-.tableAction {
-  min-width: 1.75rem;
-  max-width: 10ch;
-  height: 1.5rem;
-}
-.tableAction.narrow {
-  max-width: 4ch;
-}
-
 .moveLR {
   color: white;
 }
@@ -198,8 +189,8 @@
 
 .trueyellowT { color: var(--sunflower); }
 
-.teal { background-color: rgb(26,188,156); }
-.tealT { color: rgb(26,188,156); }
+.teal { background-color: var(--turquoise); }
+.tealT { color: var(--turquoise); }
 
 .purple { background-color: rgb(155,89,182); }
 .purpleT { color: var(--amethyst); }

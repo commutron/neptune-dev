@@ -7,7 +7,7 @@ import WeekBrowse from '/client/components/bigUi/WeekBrowse/WeekBrowse.jsx';
 import TideWeekMini from '/client/components/charts/Tides/TideWeekMini.jsx';
 import TideEditWrap from '/client/components/tide/TideEditWrap.jsx';
 
-const ActivityPanel = ({ app, user, isDebug, users, bCache })=> {
+const ActivityPanel = ({ app, brancheS, user, isDebug, users, bCache })=> {
   
   const [weekChoice, setWeekChoice] = useState(false);
   const [weekData, setWeekData] = useState(false);
@@ -39,6 +39,9 @@ const ActivityPanel = ({ app, user, isDebug, users, bCache })=> {
   useEffect( ()=>{
     getData(true);
   }, [weekChoice]);
+  
+  const plainBrancheS = Array.from(brancheS, b => b.branch);
+  const ancOptionS = app.ancillaryOption.sort();
     
   return(
     <div className='invert overscroll'>
@@ -65,7 +68,7 @@ const ActivityPanel = ({ app, user, isDebug, users, bCache })=> {
         </div>
       :
       <table className='wide cap space'>
-        <tbody key={00}>
+        {/*<tbody key={00}>
           <tr className='leftText line2x'>
             <th colSpan='3'></th>
             <th className='centreText'><i className="fas fa-play fa-fw fa-xs blackT"></i> Start<sup>i</sup></th>
@@ -74,20 +77,22 @@ const ActivityPanel = ({ app, user, isDebug, users, bCache })=> {
             <th className='rightText'>Duration<sup>ii</sup></th>
             <th></th>
           </tr>
-        </tbody>
+        </tbody>*/}
         <TideEditWrap 
           weekData={weekData} 
           bCache={bCache} 
           updateData={()=>getData(false)}
           user={user}
           isDebug={isDebug}
-          app={app} />
+          app={app}
+          ancOptionS={ancOptionS}
+          plainBrancheS={plainBrancheS} />
       </table>
       }
       <div className='dropCeiling'>
         <p><sup>i.</sup>Times are displayed for timezone: {moment.tz.guess()}</p>
         <p><sup>ii.</sup>Durations are rounded to the nearest minute</p>
-        <p><sup>o.</sup>Pieces bar is in 15 minute chunks</p>
+        <p><sup>o.</sup>Pieces bar is in 10 minute chunks</p>
         <p><sup>oo.</sup>Progress bars are scaled to your expected Production Time percentage</p>
       </div>
     </div>

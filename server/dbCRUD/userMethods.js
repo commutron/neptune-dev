@@ -251,31 +251,34 @@ Meteor.methods({
   },
   
   setProductionPercent(option, userID) {
+
+    const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
+    const backdate = appDoc.tidewall || new Date();
     
-    const user = Meteor.users.findOne({ _id: userID });
+    Meteor.users.update(userID, {
+      $set: {
+        proTimeShare: [ {
+          updatedAt: backdate,
+          timeAsDecimal: Number(option)
+        } ]
+      }
+    });
+    return true;
+  },
+  
+  updateProductionPercent(option, userID) {
     
-    if(!user.proTimeShare) {
-      Meteor.users.update(userID, {
-        $set: {
-          proTimeShare: [ {
+    Meteor.users.update(userID, {
+      $push : { 
+        'proTimeShare': {
+          $each: [ {
             updatedAt: new Date(),
             timeAsDecimal: Number(option)
-          } ]
+          } ],
+          $position: 0
         }
-      });
-    }else{
-      Meteor.users.update(userID, {
-        $push : { 
-          'proTimeShare': {
-            $each: [ {
-              updatedAt: new Date(),
-              timeAsDecimal: Number(option)
-            } ],
-            $position: 0
-          }
-        }
-      });
-    }
+      }
+    });
     return true;
   },
   

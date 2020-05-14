@@ -760,6 +760,21 @@ button.numberSet {
   text-transform: none;
 }
 
+.tableAction {
+  min-width: 1.75rem;
+  max-width: 10ch;
+  height: 1.5rem;
+}
+.tableAction.narrow {
+  max-width: 4ch;
+}
+
+.tableInput {
+  min-width: 10ch;
+  max-width: fit-content;
+  height: 1.5rem;
+}
+
 .inlineRadio { height: 1.5rem; }
 .inlineCheckbox {
   height: 2rem;

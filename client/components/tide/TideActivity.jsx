@@ -56,7 +56,7 @@ export const TideActivitySquare = ({ batchID, acData, app })=> {
     const iconState = !moving ?
       <strong><i className='fas fa-minus fa-2x fa-fw grayT fade'></i></strong>
       : moving === 'still' ?
-      <em><i className={`fas fa-shoe-prints fa-2x fa-fw ${movedClass}`}></i></em>
+      <em className={movedClass}><i className='fas fa-shoe-prints fa-2x fa-fw'></i></em>
       : moving === 'walk' ?
       <b><i className='fas fa-walking greenT fa-2x fa-fw'></i></b>
       :

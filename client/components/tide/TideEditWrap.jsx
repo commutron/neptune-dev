@@ -6,7 +6,11 @@ import DayPieceBar from '/client/components/charts/Tides/DayPieceBar.jsx';
 import TideBlockRow from '/client/components/tide/TideBlockRow.jsx';
 
 
-const TideEditWrap = ({ weekData, bCache, updateData, user, isDebug, app })=> {
+const TideEditWrap = ({ 
+  weekData, bCache, updateData, 
+  user, isDebug, 
+  app, ancOptionS, plainBrancheS 
+})=> {
   
   const [ doEditKey, enableEdit ] = useState(false);
   const [ doSplitKey, enableSplit ] = useState(false);
@@ -21,15 +25,18 @@ const TideEditWrap = ({ weekData, bCache, updateData, user, isDebug, app })=> {
     const tideKey = e.tideKey;
     const newStart = Array.isArray(e.newStart) ? e.newStart[0] : false;
     const newStop = Array.isArray(e.newStop) ? e.newStop[0] : false;
-
+    const taskIs = e.taskIs;
+    
     if(!batch || !tideKey || !newStart || !newStop) { 
       console.log([{batch, tideKey, newStart, newStop}, 'data issue no call']);
     }else{
-      Meteor.call('editTideTimeBlock', batch, tideKey, newStart, newStop, (err, asw)=>{
-        err && console.log(err);
-        if(asw === true) {
-          updateData();
-        }
+      Meteor.call('editTideTimeBlock', 
+        batch, tideKey, newStart, newStop, taskIs, 
+        (err, asw)=>{
+          err && console.log(err);
+          if(asw === true) {
+            updateData();
+          }
       });
     }
   }
@@ -115,6 +122,8 @@ const TideEditWrap = ({ weekData, bCache, updateData, user, isDebug, app })=> {
                 setEdit={(e)=>editBlock(e)}
                 setEnd={(e)=>endBlock(e)}
                 setSplit={(e)=>splitBlock(e)}
+                ancOptionS={ancOptionS}
+                plainBrancheS={plainBrancheS}
                 isDebug={isDebug} />
             </Fragment>
           );
@@ -134,6 +143,8 @@ const TideEditWrap = ({ weekData, bCache, updateData, user, isDebug, app })=> {
               setEdit={(e)=>editBlock(e)}
               setEnd={(e)=>endBlock(e)}
               setSplit={(e)=>splitBlock(e)}
+              ancOptionS={ancOptionS}
+              plainBrancheS={plainBrancheS}
               isDebug={isDebug} />
           );
         }

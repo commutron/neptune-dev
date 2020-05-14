@@ -52,12 +52,21 @@ const UserManageForm = ({
       <h3>organization: <i className='greenT'>{org}</i></h3>
       
       <div className='grid min300 max400'>
+      {!userObj.proTimeShare ?
         <UserSelectSetting
-          userSetting={proTime.timeAsDecimal || false}
+          userSetting={false}
           optionObjArr={proTimeOps}
-          labelText='Production Time in a Day'
+          labelText='SET INITIAL Production Time in a Day'
           callMethod='setProductionPercent'
           userID={id} />
+      :
+        <UserSelectSetting
+          userSetting={proTime.timeAsDecimal}
+          optionObjArr={proTimeOps}
+          labelText='Production Time in a Day'
+          callMethod='updateProductionPercent'
+          userID={id} />
+      }
       </div>
       
       <div className='balance'>
