@@ -47,6 +47,36 @@ Meteor.methods({
     }
   },
   
+  /*
+    //// Variants \\\\
+  addNewVarient(widgetId, groupId, OLDversionKey, version, wiki, unit) {
+    const duplicate = VariantDB.findOne({versionKey: OLDversionKey});
+    if(!duplicate && Roles.userIsInRole(Meteor.userId(), 'create')) {
+          
+      VariantDB.insert({
+        orgKey: Meteor.user().orgKey,
+        groupId: groupId,
+        widgetId: widgetId,
+        versionKey: OLDversionKey,//new Meteor.Collection.ObjectID().valueOf(),
+        version: version,
+        createdAt: new Date(),
+        createdWho: Meteor.userId(),
+        updatedAt: new Date(),
+		    updatedWho: Meteor.userId(),
+        live: true,
+        tags: [],
+        instruct: wiki,
+        runUnits: Number(unit),
+		    notes: false,
+		    assembly: [],
+		    npiTime: []
+      });
+      return true;
+    }else{
+      return false;
+    }
+  },
+  */
   editWidget(widgetId, newName, newDesc) {
     const doc = WidgetDB.findOne({_id: widgetId});
     let duplicate = WidgetDB.findOne({widget: newName});

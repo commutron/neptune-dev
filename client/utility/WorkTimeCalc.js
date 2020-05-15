@@ -5,6 +5,16 @@ import './ShipTime.js';
 
 import { round2Decimal } from '/client/utility/Convert.js';
 
+export function HolidayCheck( nonWorkDays, dateTime ) {
+  if( Array.isArray(nonWorkDays) ) {  
+    moment.updateLocale('en', {
+      holidays: nonWorkDays
+    });
+  }
+  const isit = moment(dateTime).isHoliday() ? true : false;
+  return isit;
+}
+
 export function TimeInWeek( nonWorkDays, weekStart ) {
   if( Array.isArray(nonWorkDays) ) {  
     moment.updateLocale('en', {

@@ -590,6 +590,8 @@ main {
   text-indent: 0;
 }
 
+.line05x { line-height: 0.5; }
+.line1x { line-height: 1; }
 .line2x { line-height: 2; }
 .line3x { line-height: 3; }
 .line4x { line-height: 4; }

@@ -13,6 +13,7 @@ const StoneFinish = ({
 	allItems, isAlt, hasAlt,
 	
 	enactEntry,
+	resolveEntry,
 	workingState
 })=> { 
 	
@@ -32,9 +33,9 @@ const StoneFinish = ({
 		  if(error)
 		    console.log(error);
 		  if(reply === true) {
-		  	document.getElementById('lookup').focus();
-		  }else{
-		    toast.error(Pref.blocked);
+				resolveEntry();
+			}else{
+		    toast.error('server error');
 		  }
 		});
 	}

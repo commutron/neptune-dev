@@ -14,21 +14,20 @@ import Theme from '/client/global/themeV.js';
 
 const TideWorkWeek = ({ 
   tideTimes, weekStart, weekEnd, weekdays,
-  app, users, isDebug, selectDayUP
+  app, users, isDebug, selectDayUP,
+  totalWeekHrsUP, totalLogHrsUP, diffPotHrsUP
 })=> {
   
   const [ dayhoursNum, dayhoursSet ] = useState([0, 0, 0, 0, 0]);
   const [ workhoursNum, workhoursSet ] = useState([0, 0, 0, 0, 0]);
-  // const [ hoursMaxNum, hoursMaxSet ] = useState([0, 0, 0, 0, 0]);
   const [ topDayHours, topDayHoursSet ] = useState(50);
-  
-  // const liveUsers = users.filter( x => Roles.userIsInRole(x._id, 'active') && 
-  //                                     !Roles.userIsInRole(x._id, 'readOnly') 
-  //                                     ).length;
     
   useLayoutEffect( ()=> {
     
     let workDays = [];
+    
+    let totalWeekTime = 0;
+    let totalLogTime = 0;
     
     if(tideTimes && weekStart && weekEnd) {
       
@@ -53,6 +52,9 @@ const TideWorkWeek = ({
             hoursDay: getUsersTime,
             hoursRec: dTotalNice,
           });
+          
+          totalWeekTime = totalWeekTime + getUsersTime;
+          totalLogTime = totalLogTime + dTotalNice;
         }
       }
       
@@ -67,7 +69,11 @@ const TideWorkWeek = ({
       const whr = Array.from(workDays, x => x.hoursRec.toString() );
 
       topDayHoursSet( Math.max(...dht,...whr) );
-    
+      
+      totalWeekHrsUP(round2Decimal(totalWeekTime));
+      totalLogHrsUP(round2Decimal(totalLogTime));
+      diffPotHrsUP(round2Decimal( totalWeekTime - totalLogTime ));
+      
       isDebug && console.log({workDays});
     }
   }, [tideTimes, weekStart, weekEnd]);
@@ -156,17 +162,13 @@ const TideWorkWeek = ({
    
       <details className='footnotes'>
         <summary>Chart Details</summary>
-        {/*<p className='footnote'>
-          Max Line is the MAX hours available of all <em>active</em> users ({liveUsers})</p>*/}
         <p className='footnote'>
           Upper Line is the TOP hours of that days <em>engaged</em> users</p>
         <p className='footnote'>
           Bar is the Recorded hours of that days <em>engaged</em> users</p>
-        <p className='footnote'>Corrected for idle minutes.</p>
+        <p className='footnote'>Corrected for breaks minutes.</p>
         <dl className='monoFont'>
-          <dd>lunch_time = day_total  less-than-or-equals 5 then 0 or-else 45</dd>
           <dd>break_time = day_total less-than-or-equals 5 then 15 or-else 30</dd>
-          <dd>total_idle = lunch_time + break_time + 15</dd>
         </dl>
       </details>
       

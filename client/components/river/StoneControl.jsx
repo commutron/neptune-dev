@@ -152,6 +152,7 @@ const StoneControl = ({
 			isAlt={isAlt}
 			hasAlt={hasAlt}
 			enactEntry={()=>enactEntry()}
+			resolveEntry={()=>resolveEntry()}
 			workingState={workingState}
 		/>;
 		

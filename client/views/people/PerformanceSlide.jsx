@@ -6,6 +6,7 @@ import Pref from '/client/global/pref.js';
 import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
 import WeekBrowse from '/client/components/bigUi/WeekBrowse/WeekBrowse.jsx';
 import TideWorkWeek from '/client/components/charts/Tides/TideWorkWeek.jsx';
+import NumLine from '/client/components/tinyUi/NumLine.jsx';
 
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
@@ -23,6 +24,9 @@ const PerformanceSlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
   const [taskList, setTaskList] = useState([]);
   
   const [ selectDayState, selectDaySet ] = useState(false);
+  const [ totalWeekHrsState, totalWeekHrsSet ] = useState(false);
+  const [ totalLogHrsState, totalLogHrsSet ] = useState(false);
+  const [ diffPotHrsState, diffPotHrsSet ] = useState(false);
   
   const alldays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   
@@ -117,9 +121,13 @@ const PerformanceSlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
             app={app}
             users={users}
             isDebug={isDebug}
-            selectDayUP={(v)=>selectDaySet(v)} />
+            selectDayUP={(v)=>selectDaySet(v)}
+            totalWeekHrsUP={(v)=>totalWeekHrsSet(v)}
+            totalLogHrsUP={(v)=>totalLogHrsSet(v)}
+            diffPotHrsUP={(v)=>diffPotHrsSet(v)} />
           
           <div className='balance dropCeiling'>
+          
             <dl>
               <dt>User List ({userList.length}) [{selectDayState || 'Week'}]</dt>
               {userList.map( (ent, ix)=>(
@@ -147,6 +155,27 @@ const PerformanceSlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
                 <dd key={ent+ix}>{ent}</dd>
               ))}
             </dl>
+            
+            <div className='dropCeiling centreRow'>
+              <NumLine
+                num={totalWeekHrsState}
+                name='Total Hours for the Week'
+                color='blueT'
+                big={true} />
+                
+              <NumLine
+                num={totalLogHrsState}
+                name='Total Logged Hours'
+                color='tealT'
+                big={true} />
+          
+              <NumLine
+                num={diffPotHrsState}
+                name='Hours Missed Potential'
+                color='grayT'
+                big={true} />
+            </div>
+            
           </div>
             
         </Fragment>

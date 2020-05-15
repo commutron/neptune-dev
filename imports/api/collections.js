@@ -28,6 +28,12 @@ WidgetDB.deny({
   remove: () => { return true; },
 });
 
+// VariantDB.deny({
+//   insert: () => { return true; },
+//   update: () => { return true; },
+//   remove: () => { return true; },
+// });
+
 BatchDB.deny({
   insert: () => { return true; },
   update: () => { return true; },

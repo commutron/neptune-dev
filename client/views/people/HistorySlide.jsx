@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
+import { HolidayCheck } from '/client/utility/WorkTimeCalc.js';
 // import Pref from '/client/global/pref.js';
 import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
 import Flatpickr from 'react-flatpickr';
@@ -39,7 +40,10 @@ const HistorySlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
   }
   
   let minDate = moment(app.tideWall || app.createdAt).format('YYYY-MM-DD');
-
+  
+  const localDate = moment.tz(dateString, clientTZ);
+  const isHoliday = HolidayCheck( app.nonWorkDays, moment(dateString, 'YYYY-MM-DD').format());
+                      
   return(
     <div className='space5x5 invert overscroll'>
       <div className='med vbreak comfort middle'>
@@ -57,7 +61,10 @@ const HistorySlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
               altFormat: "F J",
             }} />
             <br />
-            <span className='biggester breath numFont'> {moment.tz(dateString, clientTZ).year()}<sub>d</sub>{moment.tz(dateString, clientTZ).dayOfYear()} </span>
+            <span className='biggester breath numFont'
+              > {localDate.year()}<sub>d</sub>{localDate.dayOfYear()} </span>
+            <br />
+            {isHoliday ? <span className='bigger line05x'>Holiday</span> : null}
         </div>
       
         <TideDayMini

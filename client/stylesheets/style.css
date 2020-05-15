@@ -643,7 +643,7 @@
   animation-duration: 600ms;
 }
 .pcOff { 
-  background-color: var(--silver);
+  background-color: var(--silverfade);
   animation-name: scaleUp;
 }
 .pcOff:nth-child(even) { 

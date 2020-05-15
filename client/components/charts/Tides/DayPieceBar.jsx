@@ -21,7 +21,7 @@ const DayPieceBar = ({ tideTimes, dateTime, regDayStart, regDayEnd, app, user })
       durrSet(dTotalNice);
       
       const firstBlock = tideTimes[0];
-      const lastTime = firstBlock.stopTime || moment.format();
+      const lastTime = firstBlock.stopTime || moment().format();
       
       const lastBlock = tideTimes[tideTimes.length-1];
       const firstTime = lastBlock.startTime;

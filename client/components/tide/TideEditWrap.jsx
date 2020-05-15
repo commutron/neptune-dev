@@ -2,6 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-business-time';
 // import Pref from '/client/global/pref.js';
+import { HolidayCheck } from '/client/utility/WorkTimeCalc.js';
 import DayPieceBar from '/client/components/charts/Tides/DayPieceBar.jsx';
 import TideBlockRow from '/client/components/tide/TideBlockRow.jsx';
 
@@ -92,10 +93,15 @@ const TideEditWrap = ({
           const dayStart = newDayTime.clone().startOf('day').nextWorkingTime();
           const dayEnd = newDayTime.clone().endOf('day').lastWorkingTime();
           const restOfDay = weekData.filter( x => newDayTime.isSame(x.startTime, 'day') );
+          const isHoliday = HolidayCheck( app.nonWorkDays, newDayTime);
+
           return(
             <Fragment key={index+blk.tKey}>
               <tr key={blk.startTime.toISOString()} className='big leftText line4x'>
-                <th colSpan='5'>{newDayTime.format('dddd MMMM Do')}</th>
+                <th colSpan='6'>{newDayTime.format('dddd MMMM Do')}</th>
+                <th colSpan='2' className='rightText'>
+                  {isHoliday ? <span className='big'>Holiday</span> : null}
+                </th>
               </tr>
               <tr>
                 <th colSpan='8'>

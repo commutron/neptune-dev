@@ -12,7 +12,7 @@ import RiverSelect from '/client/components/forms/RiverSelect.jsx';
 import CounterAssign from '/client/components/bigUi/ArrayBuilder/CounterAssign.jsx';
 import NCEscape from '/client/components/forms/NCEscape.jsx';
 import RMAForm from '/client/components/forms/RMAForm.jsx';
-import Remove from '/client/components/forms/Remove.jsx';
+import RemoveBatch from '/client/components/forms/RemoveBatch.jsx';
 
 import UnitSet from '/client/components/forms/UnitSet.jsx';
 import PanelBreak from '/client/components/forms/PanelBreak.jsx';
@@ -25,6 +25,8 @@ import VersionForm from '/client/components/forms/VersionForm.jsx';
 import RemoveVersion from '/client/components/forms/RemoveVersion.jsx';
 import CompForm from '/client/components/forms/CompForm.jsx';
 import FlowFormHead from '/client/components/forms/FlowFormHead.jsx';
+
+import Remove from '/client/components/forms/Remove.jsx';
 
 const ActionBar = ({
   batchData, itemData, 
@@ -138,13 +140,11 @@ const ActionBar = ({
           nons={app.nonConOption}
           noText={noText}
           ncTypesCombo={ncTypesCombo || []} />
-        <Remove
-          action='batch'
+        <RemoveBatch
           title={batchData.batch}
           check={batchData.createdAt.toISOString()}
           entry={batchData}
-          lockOut={batchData.finishedAt !== false}
-          noText={noText} />
+          lockOut={batchData.finishedAt !== false} />
       </div>
       :
       action === 'xbatch' ?

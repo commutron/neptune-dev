@@ -10,6 +10,8 @@ Meteor.startup(function () {
   BatchDB._ensureIndex({ batch : 1, 'items.serial' : 'text' }, { unique: true });
   GroupDB._ensureIndex({ group : 1 }, { unique: true });
   WidgetDB._ensureIndex({ widget : 1, 'versions.version' : 1 }, { unique: true });
+  // WidgetDB._ensureIndex({ widget : 1 }, { unique: true });
+  // VariantDB._ensureIndex({ versionKey : 1 }, { unique: true });
   CacheDB._ensureIndex({ dataName : 1 }, { unique: true });
 });
 

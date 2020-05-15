@@ -1,4 +1,5 @@
 import moment from 'moment';
+import batchCacheUpdate from '/server/cacheMethods.js';
 
 Meteor.methods({
 
@@ -46,7 +47,7 @@ Meteor.methods({
         events: [],
       });
       Meteor.defer( ()=>{
-        Meteor.call('batchCacheUpdate', accessKey, true);
+        batchCacheUpdate( accessKey, true );
         Meteor.call('priorityCacheUpdate', accessKey, clientTZ, true);
       });
       return true;
@@ -106,26 +107,6 @@ Meteor.methods({
       return true;
     }else{
       return false;
-    }
-  },
-
-  deleteBatch(batchId, pass) {
-    const doc = BatchDB.findOne({_id: batchId});
-    // if any items have history
-    const inUse = doc.items.some( x => x.history.length > 0 ) ? true : false;
-    if(!inUse) {
-      const lock = doc.createdAt.toISOString().split("T")[0];
-      const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
-      const access = doc.orgKey === Meteor.user().orgKey;
-      const unlock = lock === pass;
-      if(auth && access && unlock) {
-        BatchDB.remove({_id: batchId});
-        return true;
-      }else{
-        return false;
-      }
-    }else{
-      return 'inUse';
     }
   },
   
@@ -851,7 +832,122 @@ Meteor.methods({
         return false;
       }
     }
-  }
+  },
+  
+  //////////////////// DESTRUCTIVE \\\\\\\\\\\\\\\\\\\\\
+  
+  deleteBatchItems(batchId) {
+    const accessKey = Meteor.user().orgKey;
+    const doc = BatchDB.findOne({_id: batchId});
+    const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
+    const inUse = doc.items.some( x => x.history.length > 0 ) ? true : false;
+    const howMany = doc.items.length + ' items';
+    if(!inUse && auth && doc.orgKey === accessKey) {
+      BatchDB.update({_id: batchId, orgKey: accessKey}, {
+        $set : {
+          items: [],
+        },
+        $push : {
+          altered: {
+            changeDate: new Date(),
+            changeWho: Meteor.userId(),
+            changeReason: 'user discretion',
+            changeKey: 'items',
+            oldValue: howMany,
+            newValue: '0 items'
+          }
+        }
+      });
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  deleteBatchTide(batchId) {
+    const accessKey = Meteor.user().orgKey;
+    const doc = BatchDB.findOne({_id: batchId});
+    const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
+    const inUse = doc.tide.some( x => x.stopTime === false ) ? true : false;
+    const howMany = doc.tide.length + ' times';
+    if(!inUse && auth && doc.orgKey === accessKey) {
+      BatchDB.update({_id: batchId, orgKey: accessKey}, {
+        $set : {
+          tide: [],
+        },
+        $push : {
+          altered: {
+            changeDate: new Date(),
+            changeWho: Meteor.userId(),
+            changeReason: 'user discretion',
+            changeKey: 'tide',
+            oldValue: howMany,
+            newValue: '0 times'
+          }
+        }
+      });
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  /*deleteBatchProblems(batchId) {
+    const accessKey = Meteor.user().orgKey;
+    const doc = BatchDB.findOne({_id: batchId});
+    const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
+    const howManyNC = doc.nonCon.length + ' nonCons';
+    const howManyES = doc.escaped.length + ' escaped';
+    const howManySH = doc.shortfall.length + ' shortfalls';
+    const howMany = `${howManyNC}, ${howManyES}, ${howManySH}`;
+    
+    if(auth && doc.orgKey === accessKey) {
+      BatchDB.update({_id: batchId, orgKey: accessKey}, {
+        $set : {
+          nonCon: [],
+          escaped: [],
+          shortfall: [],
+        },
+        $push : {
+          altered: {
+            changeDate: new Date(),
+            changeWho: Meteor.userId(),
+            changeReason: 'user discretion',
+            changeKey: 'nonCon, escaped, shortfall',
+            oldValue: howMany,
+            newValue: '0 nonCons, 0 escaped, 0 shortfalls'
+          }
+        }
+      });
+      return true;
+    }else{
+      return false;
+    }
+  },*/
+  
+  deleteWholeBatch(batchId, pass) {
+    const doc = BatchDB.findOne({_id: batchId});
+    
+    const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
+    const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
+    
+    const inUse = doc.tide.length > 0 || doc.items.length > 0 ? true : false;
+      // nonCon.length > 0 || escaped.length > 0 || shortfall.length > 0
+        
+    if(!inUse && isAdmin && auth) {
+      const lock = doc.createdAt.toISOString().split("T")[0];
+      const access = doc.orgKey === Meteor.user().orgKey;
+      const unlock = lock === pass;
+      if(access && unlock) {
+        BatchDB.remove({_id: batchId});
+        return true;
+      }else{
+        return false;
+      }
+    }else{
+      return 'inUse';
+    }
+  },
   
   
 });
