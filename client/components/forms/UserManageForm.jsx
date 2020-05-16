@@ -27,6 +27,19 @@ const UserManageForm = ({
       alert('not allowed');
     }
   }
+  
+  function handlePro100() {
+    Meteor.call('setProductionPercent', id, 1, (error, reply)=>{
+      error && console.log(error);
+      reply ? toast.success('Saved') : toast.error('Server Error');
+    });
+  }
+  function handlePro0() {
+    Meteor.call('setProductionPercent', id, 0, (error, reply)=>{
+      error && console.log(error);
+      reply ? toast.success('Saved') : toast.error('Server Error');
+    });
+  }
 
   const admin = Roles.userIsInRole(id, 'admin');
   const adminFlag = admin ? Pref.admin : '';
@@ -51,15 +64,19 @@ const UserManageForm = ({
       <h3 className='blueT'>{adminFlag}</h3>
       <h3>organization: <i className='greenT'>{org}</i></h3>
       
+      <p>
+        <button 
+          className='action clearBlue'
+          onClick={()=>handlePro100()}
+          >Backdate to 100</button>
+        <button 
+          className='action clearBlue'
+          onClick={()=>handlePro0()}
+          >Backdate to 0</button>
+      </p>
+
       <div className='grid min300 max400'>
-      {!userObj.proTimeShare ?
-        <UserSelectSetting
-          userSetting={false}
-          optionObjArr={proTimeOps}
-          labelText='SET INITIAL Production Time in a Day'
-          callMethod='setProductionPercent'
-          userID={id} />
-      :
+      {!userObj.proTimeShare ? null :
         <UserSelectSetting
           userSetting={proTime.timeAsDecimal}
           optionObjArr={proTimeOps}

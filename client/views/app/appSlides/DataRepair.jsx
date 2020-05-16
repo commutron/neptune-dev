@@ -51,13 +51,6 @@ const DataRepair = ({ app, users })=> {
   }
   */
   
-  function markV2date() {
-    Meteor.call('markVersionTwo', (error)=>{
-      error && console.log(error);
-      toast.success('method called', { autoClose: false });
-    });
-  }
-  
   function rebuildTheBigThing() {
     toast.warn('Method Called, Please Wait...', {
       toastId: ( 'ReBuildAllOp' ),
@@ -156,12 +149,6 @@ const DataRepair = ({ app, users })=> {
       >Fix Basline Time Key</button>
       <hr />
       <br />*/}
-      
-      <h2 className='cap'>VERSION 2.0</h2>
-      <button
-        onClick={()=>markV2date()}
-        className='action clear blueT'
-      >Record Version Two Date</button>
       
       <h2 className='cap'>Rebuild ALL Widget Flows</h2>
       <button

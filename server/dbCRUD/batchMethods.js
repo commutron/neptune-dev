@@ -1,5 +1,5 @@
 import moment from 'moment';
-import batchCacheUpdate from '/server/cacheMethods.js';
+import { batchCacheUpdate} from '/server/cacheMethods.js';
 
 Meteor.methods({
 
@@ -839,8 +839,9 @@ Meteor.methods({
   deleteBatchItems(batchId) {
     const accessKey = Meteor.user().orgKey;
     const doc = BatchDB.findOne({_id: batchId});
+    const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
     const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
-    const inUse = doc.items.some( x => x.history.length > 0 ) ? true : false;
+    const inUse = doc.items.some( x => x.history.length > 0 ) && !isAdmin ? true : false;
     const howMany = doc.items.length + ' items';
     if(!inUse && auth && doc.orgKey === accessKey) {
       BatchDB.update({_id: batchId, orgKey: accessKey}, {

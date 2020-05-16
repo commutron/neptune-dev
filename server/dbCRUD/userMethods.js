@@ -250,10 +250,10 @@ Meteor.methods({
     return true;
   },
   
-  setProductionPercent(option, userID) {
+  setProductionPercent(userID, option) {
 
     const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
-    const backdate = appDoc.tidewall || new Date();
+    const backdate = appDoc.tideWall || new Date();
     
     Meteor.users.update(userID, {
       $set: {

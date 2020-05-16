@@ -32,14 +32,16 @@
 }
 .blendAction:focus, .blendAction:active,
 */
+.iconAction {
+	padding: 0.25rem;
+	background-color: transparent;
+	transition: all 250ms ease;
+}
 .iconAction:focus, .iconAction:active {
   outline: dotted thick;
 }
 
-.iconAction {
-	padding: 0.25rem;
-	transition: all 250ms ease;
-}
+
 
 .miniAction {
   min-width: 1rem;

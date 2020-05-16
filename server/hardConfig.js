@@ -20,7 +20,7 @@ class Config {
       4: ['07:00:00', '11:45:00', '12:30:00', '16:30:00'],
       5: ['07:00:00', '12:00:00'],
       6: null
-    };// including lunch breaks!
+    };
     
     this.maxShift = 10;
     
