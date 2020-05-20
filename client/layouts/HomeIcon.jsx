@@ -33,7 +33,7 @@ const HomeIcon = () => {
       </a>
       
       </ContextMenuTrigger>
-      <ContextMenu id='absoluteHome01'>
+      <ContextMenu id='absoluteHome01' className='medBig'>
         <MenuItem disabled={true}>
           <i>{'Neptune v.' + Pref.neptuneVersion}</i><br />
           <i>Status: {Meteor.status().status}</i>

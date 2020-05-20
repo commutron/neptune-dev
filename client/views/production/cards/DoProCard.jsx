@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect, Fragment } from 'react';
 import moment from 'moment';
-//import Pref from '/client/global/pref.js';
+import Pref from '/client/global/pref.js';
 
 import HeadWater from '/client/components/river/HeadWater.js';
 
@@ -30,7 +30,6 @@ const DoProCard = ({
   handleVerify
 })=> {
   
-
   const [ brancheState, brancheSortSet ] = useState([]);
 
   const [ flowData, flowDataSet ] = useState(false);
@@ -69,11 +68,11 @@ const DoProCard = ({
               return 0;
             });
   
-  
   const bFinished = batchData.finishedAt;
   const bComplete = bFinished !== false;
   
-  const bWrapUp = bComplete ? moment().diff(bFinished, 'hours') <= 24 : false;
+  const bWrapUp = !bComplete ? false :
+                    moment().diff(bFinished, 'hours') <= Pref.timeAfterGrace;
   
   const bCascade = batchData.cascade.length > 0;
   
@@ -95,7 +94,8 @@ const DoProCard = ({
             scrap={scrapCheck}
             ancOptionS={ancOptionS}
             plainBrancheS={plainBrancheS}
-            tideKey={tideKey} />;
+            tideKey={tideKey}
+            tideFloodGate={tideFloodGate} />;
             
   const insertItemCard = 
           <ItemCard

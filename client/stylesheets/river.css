@@ -522,6 +522,7 @@
 .bigTideTask label {
   padding: 0;
   max-width: inherit;
+  font-size: 1.3vmax;
   text-align: center;
   background-color: rgb(25,25,25);
 }

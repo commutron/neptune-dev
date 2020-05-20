@@ -11,18 +11,25 @@ const TideWall = ({
   bID, bComplete, bOpen, bCascade,
   itemData, iCascade, shortfallS, scrap,
   ancOptionS, plainBrancheS,
-  tideKey
-}) => {
+  tideKey, tideFloodGate
+})=> {
   
-  const [ taskState, taskSet ] = useState(false);
+  const [ taskState, taskSet ] = useState( tideFloodGate ? tideFloodGate.task : false );
   const [ lockTaskState, lockTaskSet ] = useState(false);
+  
+  function handleTask(val) {
+    taskSet(val);
+    Session.set('userSetTask', val);
+  }
+  
+  const ctxLabel = tideFloodGate ? 'Set Different Task' : `Set A Task`;
   
   return(
     <div className='vgap'>
 
   		{( !itemData && bOpen ) || 
   		 ( itemData && 
-  		      ( itemData.finishedAt === false || bCascade ) ) ?
+  		    ( itemData.finishedAt === false || bCascade ) ) ?
   		  
   		    <Fragment>
             
@@ -39,7 +46,7 @@ const TideWall = ({
               <select
                 id='tskSlct'
                 className='cap'
-                onChange={(e)=>taskSet(e.target.value)}
+                onChange={(e)=>handleTask(e.target.value)}
                 defaultValue={taskState}
                 disabled={lockTaskState}
                 required>
@@ -55,7 +62,7 @@ const TideWall = ({
                   ))}
                 </optgroup>
               </select>
-              <label htmlFor='tskSlct'>Set Specific Task</label>
+              <label htmlFor='tskSlct'>{ctxLabel}</label>
             </div>
             
           </Fragment>

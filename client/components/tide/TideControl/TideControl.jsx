@@ -18,6 +18,7 @@ const TideControl = ({
   const timer = ()=> Meteor.setTimeout( ()=>{ 
     if(thingMounted.current) {
       setLock(false);
+      setWorking(false);
       lockTaskSet && lockTaskSet(false);
     }
   },3000);

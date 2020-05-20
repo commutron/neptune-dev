@@ -177,14 +177,10 @@ class Pref {
     this.statisticalEndHour = 20; // 8pm
     //this.minWorkDayStartTime
     //this.maxWorkDayEndTime
+    this.timeAfterGrace = 48; // keep the tideControl unlocked for how many hours
     
     // clearences, additional releases
     this.clearencesArray = [
-      // { keyword: 'thKitRelease', 
-      //   pre: 'Ready',
-      //   post: 'Ready',
-      //   link: 'for',
-      //   context: 'Thru-Hole' },
       { keyword: 'pcbKitRelease',
         pre: 'Ready',
         post: 'Ready',

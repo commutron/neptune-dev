@@ -1,13 +1,14 @@
 import React, { useState, useLayoutEffect } from 'react';
 import moment from 'moment';
-import { TimeInDay } from '/client/utility/WorkTimeCalc.js';
-import { UsersTimeTotal } from '/client/utility/WorkTimeCalc.js';
+import { 
+  TimeInDay, UsersTimeTotal, HolidayCheck
+} from '/client/utility/WorkTimeCalc.js';
 import { round2Decimal } from '/client/utility/Convert.js';
 // import Pref from '/client/global/pref.js';
 import { 
   VictoryChart, VictoryArea, VictoryBar,
   VictoryLabel, VictoryAxis, 
-  VictoryGroup
+  VictoryGroup, VictoryLegend
 } from 'victory';
 import Theme from '/client/global/themeV.js';
 
@@ -21,10 +22,12 @@ const TideWorkWeek = ({
   const [ dayhoursNum, dayhoursSet ] = useState([0, 0, 0, 0, 0]);
   const [ workhoursNum, workhoursSet ] = useState([0, 0, 0, 0, 0]);
   const [ topDayHours, topDayHoursSet ] = useState(50);
+  const [ nonDays, nonDaysSet ] = useState([]);
     
   useLayoutEffect( ()=> {
     
     let workDays = [];
+    let nonWorkDays = [];
     
     let totalWeekTime = 0;
     let totalLogTime = 0;
@@ -37,6 +40,11 @@ const TideWorkWeek = ({
           break;
         }else{
           const dayHours = TimeInDay( app.nonWorkDays, dateTime );
+          const isNoDay = HolidayCheck(app.nonWorkDays, dateTime);
+          if(isNoDay) { 
+            nonWorkDays.push({ name: day, symbol: { type: "star" } });
+          }
+          
           const tideTime = tideTimes.filter( x => 
                               moment(x.startTime).isSame(dateTime, 'day') );
   
@@ -46,7 +54,7 @@ const TideWorkWeek = ({
     
           const userIDs = new Set( Array.from(tideTime, x => x.who ) );
           const getUsersTime = UsersTimeTotal( userIDs, users, dateTime, 'day', dayHours );
-    
+          
           workDays.push({
             day: day,
             hoursDay: getUsersTime,
@@ -64,6 +72,7 @@ const TideWorkWeek = ({
       workhoursSet(Array.from(workDays, x => { 
         return { 'x': x.day, 'y': x.hoursRec } } )
       );
+      nonDaysSet(nonWorkDays);
       
       const dht = Array.from(workDays, x => x.hoursDay );
       const whr = Array.from(workDays, x => x.hoursRec.toString() );
@@ -90,11 +99,23 @@ const TideWorkWeek = ({
       width={500}
       padding={{ top: 10, bottom: 20, left: 20, right: 10 }}
       domainPadding={25}
-      // animate={{
-      //     duration: 1000,
-      //     onLoad: { duration: 2000 }
-      //   }}
+      animate={{
+          duration: 750,
+          onLoad: { duration: 500 }
+        }}
     >
+    {nonDays.length > 0 &&
+      <VictoryLegend x={0} y={0}
+      	title="Holidays"
+        labels={{ fontSize: 15 }}
+        titleOrientation="left"
+        gutter={15}
+        borderPadding={{ top: 2, bottom: 0 }}
+        orientation="horizontal"
+        style={{ border: { stroke: "grey" }, title: {fontSize: 10 } }}
+        data={nonDays}
+      />}
+      
     
     <VictoryAxis />
         
@@ -114,8 +135,9 @@ const TideWorkWeek = ({
         labels={(d) => d.y}
         labelComponent={
           <VictoryLabel 
-            style={{ fill: 'rgba(23,123,201,0.7)' }} 
-            renderInPortal />
+            style={{ fill: 'rgb(23,123,201)' }} 
+            renderInPortal
+            textAnchor='end' />
         }
       />
       
@@ -132,7 +154,8 @@ const TideWorkWeek = ({
         labelComponent={
           <VictoryLabel 
             style={{ fill: 'black' }} 
-            renderInPortal />
+            renderInPortal
+            textAnchor='start' />
         }
         events={[
           {

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 //import Pref from '/client/global/pref.js';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
+import TaskTag from '/client/components/tinyUi/TaskTag.jsx';
 
 
 const PersonChunk = ({ 
@@ -46,17 +47,12 @@ const PersonChunk = ({
   
   const moreInfo = bCache ? bCache.dataSet.find( x => x.batch === uC.batch) : false;
   const what = moreInfo ? moreInfo.isWhat : 'unavailable';
-  const taskCell = branchGuess ? 
-          branchGuess[0] === 'fromUserInput' ?
-            branchGuess[1] :
-            <em>{branchGuess[1].join(', ') }</em> :
-            <i className='clean small'>unknown</i> ;
             
   return(
     <tr className='leftText line2x numFont'>
       <td className='noRightBorder medBig'><UserNice id={uC.uID} /></td>
       <td className='noRightBorder'>
-        {taskCell}
+        <TaskTag task={branchGuess[1]} guess={branchGuess[0] === 'fromUserInput'} />
       </td>
       <td className='noRightBorder'>{uC.batch}</td>
       <td className='noRightBorder'>{what}</td>

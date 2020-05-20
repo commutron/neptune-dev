@@ -92,7 +92,7 @@ const ActivityPanel = ({ app, brancheS, user, isDebug, users, bCache })=> {
       <div className='dropCeiling'>
         <p><sup>i.</sup>Times are displayed for timezone: {moment.tz.guess()}</p>
         <p><sup>ii.</sup>Durations are rounded to the nearest minute</p>
-        <p><sup>o.</sup>Pieces bar is in 10 minute chunks</p>
+        <p><sup>o.</sup>Piece bar is 10 minute chunks for the whole day including breaks, lunch and overtime</p>
         <p><sup>oo.</sup>Progress bars are scaled to your expected Production Time percentage</p>
       </div>
     </div>

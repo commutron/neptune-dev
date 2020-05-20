@@ -14,7 +14,6 @@ export function batchTideTime(batchTide) {
       const block = moment.duration(mStop.diff(mStart)).asMinutes();
       tideTime = tideTime + block;
     }
-    //console.log(tideTime);
     if( !tideTime || typeof tideTime !== 'number' ) {
       return false;
     }else{
@@ -123,25 +122,7 @@ function slimBlockReturnData(batch, thePeriod) {
   }
   return slimBlock;     
 }
-/*
-function durrBlockReturnData(batch, thePeriod, clientTZ) {
-  let slimBlock = [];
-  for(let blck of thePeriod) {
-    let dayStart = moment.tz(blck.startTime, clientTZ)
-                              .startOf('day').nextWorkingTime().format();
-    let mStop = blck.stopTime ? moment(blck.stopTime) : moment();//.tz(clientTZ);
-    let durr = moment.duration(mStop.diff(blck.startTime)).asMinutes();
-    slimBlock.push({
-      batch: batch,
-      who: blck.who,
-      tDay: dayStart,
-      durrAsMin: durr,
-      task: blck.task || null
-    });
-  }
-  return slimBlock;     
-}
-*/
+
 
 Meteor.methods({
 
@@ -364,6 +345,46 @@ Meteor.methods({
         slimTideCollection.push( rtnBlock );
       }
       return [].concat(...slimTideCollection);
+    }catch(err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  
+  fetch24TideActivity() {
+    this.unblock();
+    try {
+      const serverTime = moment();
+      const timeAgo = serverTime.clone().subtract(24, 'hours');
+
+      const allTouched =
+        BatchDB.find({
+          orgKey: Meteor.user().orgKey, 
+          tide: { $elemMatch: { startTime: {
+            $gte: new Date(timeAgo.format()),
+            $lte: new Date(serverTime.format())
+          }}},
+          'tide.who': Meteor.userId()
+        }).fetch();
+    
+      let slimTideCollection = [];
+      for(let btch of allTouched) {
+        const yourDay = !btch.tide ? [] : btch.tide.filter( x => 
+          x.who === Meteor.userId() &&  
+          moment(x.startTime).isSameOrAfter(timeAgo) );
+        for(let blck of yourDay) {
+          slimTideCollection.push({
+            batch: btch.batch,
+            startTime: blck.startTime
+          });
+        }
+      }
+      const cronoTimes = slimTideCollection.sort((x1, x2)=> {
+                          if (x1.startTime < x2.startTime) { return 1 }
+                          if (x1.startTime > x2.startTime) { return -1 }
+                          return 0;
+                        });
+      const uniqTimes = [...new Set( Array.from(cronoTimes, x => x.batch ) ) ];
+      return uniqTimes;
     }catch(err) {
       throw new Meteor.Error(err);
     }

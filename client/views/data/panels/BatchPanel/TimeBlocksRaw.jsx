@@ -3,6 +3,7 @@ import moment from 'moment';
 // import 'moment-timezone';
 import Pref from '/client/global/pref.js';
 import { AnonyUser } from '/client/components/smallUi/UserNice.jsx';
+import TaskTag from '/client/components/tinyUi/TaskTag.jsx';
 import { ForceRemoveTideBlock } from '/client/views/app/appSlides/DataRepair.jsx';
 
 const TimeBlocksRaw = ({ batch, tide, clientTZ, isDebug })=> {
@@ -89,20 +90,14 @@ const RawBlock = ({ tB, batch, clientTZ, isDebug, showZero })=> {
   if(!showZero && durr === 0) {
     return null;
   }
-  
-  const taskCell = brGuess ? 
-          brGuess[0] === 'fromUserInput' ?
-            <td>{brGuess[1]}</td> :
-            <td><em>{brGuess[1].join(', ') }</em></td> :
-            <td></td>;
             
   return(
-    <tr title={tB.tKey}>
+    <tr title={isDebug ? tB.tKey : ''}>
       <td><AnonyUser id={tB.who} /></td>
       <td>{mStart.format('YYYY/MM/DD-kk:mm')}</td>
       <td>{mStop.format('YYYY/MM/DD-kk:mm')}</td>
       <td>{durr} minutes</td>
-      {taskCell}
+      <td><TaskTag task={brGuess[1]} guess={brGuess[0] === 'fromUserInput'} /></td>
       {isDebug && <td>{brGuess ? brGuess[0] : '....'}</td>}
     </tr>
   );

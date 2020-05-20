@@ -10,3 +10,9 @@ export function round2Decimal(thrtytw) {
   // exactly rounding to 2 decimal points
   return trunc;
 }
+
+export function round1Decimal(thrtytw) {
+  const trunc = Math.round((thrtytw + Number.EPSILON) * 10) / 100;
+  // exactly rounding to 1 decimal points
+  return trunc;
+}
