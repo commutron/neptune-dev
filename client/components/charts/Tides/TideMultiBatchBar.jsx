@@ -10,7 +10,7 @@ import {
   // VictoryTooltip,
   VictoryStack
 } from 'victory';
-//import Pref from '/client/global/pref.js';
+import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
 
 const TideMultiBatchBar = ({ batchIDs, app })=> {
@@ -33,30 +33,31 @@ const TideMultiBatchBar = ({ batchIDs, app })=> {
       <CalcSpin />
     );
   }
-    
-  return(
-    <div className='invert chartNoHeightContain'>
-      <VictoryChart
-        theme={Theme.NeptuneVictory}
-        padding={{top: 25, right: 25, bottom: 25, left: 50}}
-        domainPadding={{x: 10, y: 40}}
-        height={50 + ( batchTimes.batchTides.length * 35 )}
-      >
-        <VictoryAxis 
-          dependentAxis 
-          tickFormat={(t) => Math.round( asHours(t) )}
-        />
-        <VictoryAxis />
-        <VictoryStack
+  
+  if(batchTimes.batchTides.length > 0) {
+    return(
+      <div className='invert chartNoHeightContain'>
+        <VictoryChart
           theme={Theme.NeptuneVictory}
-          colorScale={["rgb(52, 152, 219)", "rgb(149, 165, 166)", "rgb(241, 196, 15)"]}
-          horizontal={true}
-          padding={0}
-          animate={{
-            duration: 500,
-            onLoad: { duration: 250 }
-          }}
+          padding={{top: 25, right: 25, bottom: 25, left: 50}}
+          domainPadding={{x: 10, y: 40}}
+          height={50 + ( batchTimes.batchTides.length * 35 )}
         >
+          <VictoryAxis 
+            dependentAxis 
+            tickFormat={(t) => Math.round( asHours(t) )}
+          />
+          <VictoryAxis />
+          <VictoryStack
+            theme={Theme.NeptuneVictory}
+            colorScale={["rgb(52, 152, 219)", "rgb(149, 165, 166)", "rgb(241, 196, 15)"]}
+            horizontal={true}
+            padding={0}
+            animate={{
+              duration: 500,
+              onLoad: { duration: 250 }
+            }}
+          >
             <VictoryBar
               data={batchTimes.batchTides}
               horizontal={true}
@@ -94,6 +95,14 @@ const TideMultiBatchBar = ({ batchIDs, app })=> {
         </VictoryChart>
         <div className='centreText small'>Duration in Hours</div>
       </div>
+    );
+  }
+    
+  return(
+    <div className='centreText fade'>
+      <i className='fas fa-ghost fa-3x grayT'></i>
+      <p className='big cap'>no {Pref.batches}</p>
+    </div>
   );
 };
 

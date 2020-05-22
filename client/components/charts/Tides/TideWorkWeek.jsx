@@ -109,10 +109,14 @@ const TideWorkWeek = ({
       	title="Holidays"
         labels={{ fontSize: 15 }}
         titleOrientation="left"
-        gutter={15}
-        borderPadding={{ top: 2, bottom: 0 }}
+        gutter={10}
+        symbolSpacer={3}
+        borderPadding={{ top: 4, bottom: 0 }}
         orientation="horizontal"
-        style={{ border: { stroke: "grey" }, title: {fontSize: 10 } }}
+        style={{ 
+          border: { stroke: "grey" }, 
+          title: { padding: 2, fontSize: 10 } 
+        }}
         data={nonDays}
       />}
       

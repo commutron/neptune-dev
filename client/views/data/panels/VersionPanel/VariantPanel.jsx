@@ -8,13 +8,13 @@ import TagsModule from '/client/components/bigUi/TagsModule.jsx';
 import NoteLine from '/client/components/smallUi/NoteLine.jsx';
 //import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
-const VersionPanel = ({ 
-  versionData, widgetData, 
+const VariantPanel = ({ 
+  variantData, widgetData, 
   groupData, batchRelated, 
   app, user
 })=> {
   
-  const v = versionData;
+  const v = variantData;
   const w = widgetData;
   // const g = groupData;
   // const b = batchRelated;
@@ -26,18 +26,17 @@ const VersionPanel = ({
                   return 0;
                 });
   
-  function removeComp(id, vKey, compPN) {
+  function removeComp(id, compPN) {
     const check = confirm('Are you sure you want to remove this ' + Pref.comp + '?');
     if(!check) {
       null;
     }else{
-      Meteor.call('pullComp', id, vKey, compPN, (error)=>{
-        if(error)
-          console.log(error);
+      Meteor.call('pullCompV', id, compPN, (err)=>{
+        err && console.log(error);
       });
     }
   }
-  
+  /*
   function downloadComp(id, vKey) {
     Meteor.call('componentExport', id, vKey, (error, reply)=>{
       if(error)
@@ -59,16 +58,16 @@ const VersionPanel = ({
       }
     });
   }
-  
+  */
   return(
     <div className='section'>
             
       <Tabs
-        tabs={[Pref.version + 's', 'Components']}
+        tabs={[Pref.variant, 'Components']}
         wide={true}
         stick={false}
         hold={true}
-        sessionTab='versionExPanelTabs'>
+        sessionTab='variantExPanelTabs'>
         
         <div>
           <div className='oneTwoThreeContainer'>
@@ -77,26 +76,25 @@ const VersionPanel = ({
               <p>Status: <i className='big'>{v.live ? 'Live' : 'Archived'}</i></p>
             
               <TagsModule
-                action='version'
-                id={w._id}
+                action='variant'
+                id={v._id}
                 tags={v.tags}
                 vKey={v.versionKey}
                 tagOps={a.tagOption} />
               
               <p>
-                <a className='clean wordBr' href={v.wiki} target='_blank'>{v.wiki}</a>
+                <a className='clean wordBr' href={v.instruct} target='_blank'>{v.instruct}</a>
               </p>
               
-              <p className='numFont'>default units: {v.units}</p>
+              <p className='numFont'>default units: {v.runUnits}</p>
               
             </div>
             
             <div className='twoThirdsContent'>
               <NoteLine 
-                action='version'
-                id={w._id}
-                entry={v.notes}
-                versionKey={v.versionKey} />
+                action='variant'
+                id={v._id}
+                entry={v.notes} />
             </div>
             
           </div>
@@ -123,7 +121,8 @@ const VersionPanel = ({
           <button
             className='transparent'
             title='Download Parts List'
-            onClick={()=>downloadComp(w._id, v.versionKey)}>
+            // onClick={()=>downloadComp(w._id, v.versionKey)}
+            disabled={true}>
             <label className='navIcon actionIconWrap'>
               <i className='fas fa-download fa-fw'></i>
               <span className='actionIconText blackT'>Download</span>
@@ -144,4 +143,4 @@ const VersionPanel = ({
   );
 };
 
-export default VersionPanel;
+export default VariantPanel;

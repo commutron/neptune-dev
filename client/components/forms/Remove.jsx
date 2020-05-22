@@ -10,7 +10,7 @@ import ModelMedium from '../smallUi/ModelMedium.jsx';
 // check : a string for a conformation
 // entry : the object to be deleted
 
-const RemoveWrapper = ({ action, entry, title, check, noText, lockOut })=> {
+const RemoveWrapper = ({ action, entry, title, check, lockOut })=> {
   
   const auth = Roles.userIsInRole(Meteor.userId(), 'remove') && !lockOut;
   
@@ -21,7 +21,6 @@ const RemoveWrapper = ({ action, entry, title, check, noText, lockOut })=> {
       color='redT'
       icon='fa-minus-circle'
       lock={!auth}
-      noText={noText}
     >
       <Remove
         action={action}
@@ -58,6 +57,20 @@ const Remove = ({ action, entry, title, check })=> {
         break;
       case 'widget':
         Meteor.call('deleteWidget', entry, confirm, (err, reply)=>{
+          err && console.log(err);
+          if(reply === 'inUse') {
+            toast.warning('Cannot do this, entry is in use');
+          }else if(reply) {
+            toast.success('Entry removed');
+            FlowRouter.go('/data/overview?request=groups');
+          }else{
+            toast.error('Rejected by Server');
+            this.cutGo.disabled = false;
+          }
+        });
+        break;
+      case 'variant':
+        Meteor.call('deleteVariant', entry, confirm, (err, reply)=>{
           err && console.log(err);
           if(reply === 'inUse') {
             toast.warning('Cannot do this, entry is in use');

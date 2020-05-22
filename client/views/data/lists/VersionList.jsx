@@ -4,7 +4,9 @@ import Pref from '/client/global/pref.js';
 import LeapRow from '/client/components/tinyUi/LeapRow.jsx';
 
 const VersionList = ({ versionData, widgetData, app })=>	{
-                
+  
+  const widget = widgetData.widget;
+  
   let v = versionData.sort((v1, v2)=> {
           if (v1.version < v2.version) { return 1 }
           if (v1.version > v2.version) { return -1 }
@@ -19,8 +21,9 @@ const VersionList = ({ versionData, widgetData, app })=>	{
         return(
           <VersionIndexCard 
             key={entry.versionKey} 
-            widget={widgetData.widget} 
-            version={entry} 
+            widget={widget} 
+            version={entry}
+            gotoLink={'/data/widget?request=' + widget + '&specify=' + entry.version}
             barStyle={ac} />
       )})}
     </div>
@@ -29,7 +32,33 @@ const VersionList = ({ versionData, widgetData, app })=>	{
 
 export default VersionList;
 
-const VersionIndexCard = ({ widget, version, barStyle })=> {
+
+export const VariantList = ({ variantData, widgetData, app })=>	{
+                
+  let v = variantData.sort((v1, v2)=> {
+          if (v1.variant < v2.variant) { return 1 }
+          if (v1.variant > v2.variant) { return -1 }
+          return 0;
+        });
+  
+  return(
+    <div className='space'>
+      {v.length < 1 ? <p>no {Pref.variants} created</p> : null}
+      {v.map( (entry, index)=> {
+        let ac = entry.live ? 'activeMark vmarginhalf' : 'vmarginhalf';
+        return(
+          <VersionIndexCard 
+            key={entry.versionKey} 
+            widget={widgetData.widget} 
+            version={entry}
+            gotoLink={'/data/variant?request=' + variantData.variant}
+            barStyle={ac} />
+      )})}
+    </div>
+  ); 
+};
+
+const VersionIndexCard = ({ widget, version, gotoLink, barStyle })=> {
 
   /*
   totalI(mData) {
@@ -77,7 +106,7 @@ const VersionIndexCard = ({ widget, version, barStyle })=> {
       cFive=''
       cSix=''
       sty={barStyle}
-      address={'/data/widget?request=' + widget + '&specify=' + version.version}
+      address={gotoLink}
     />
   );
 };

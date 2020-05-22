@@ -26,12 +26,14 @@ import RemoveVersion from '/client/components/forms/RemoveVersion.jsx';
 import CompForm from '/client/components/forms/CompForm.jsx';
 import FlowFormHead from '/client/components/forms/FlowFormHead.jsx';
 
+import VariantForm from '/client/components/forms/VariantForm.jsx';
+
 import Remove from '/client/components/forms/Remove.jsx';
 
 const ActionBar = ({
   batchData, itemData, 
   groupData, 
-  widgetData, versionData, 
+  widgetData, versionData, variantData,
   app, user,
   action, noText,
   ncTypesCombo
@@ -196,6 +198,43 @@ const ActionBar = ({
           noText={noText} />
       </div>
       :
+        action === 'variant' && variantData ?
+        <div>
+          <VariantForm
+            widgetData={widgetData}
+            variantData={variantData}
+            app={app}
+            rootWI={variantData.instruct} />
+          {/*<CompForm 
+            id={widgetData._id} 
+            versionKey={versionData.versionKey} />
+          <BatchCreate
+            versionNow={versionData.versionKey}
+            widgetId={widgetData._id}
+            versions={widgetData.versions}
+            lock={!widgetData.versions}
+            noText={noText} />
+          <BatchFormX
+            batchId={false}
+            batchNow='new'
+            versionNow={versionData.versionKey}
+            salesOrder={false}
+            start={false}
+            end={false}
+            quantity={false}
+            groupId={groupData._id}
+            widgetId={widgetData._id}
+            versions={widgetData.versions}
+            lock={!widgetData.versions}
+            noText={noText} />*/}
+          <Remove
+            action='variant'
+            title={variantData.variant}
+            check={variantData.createdAt.toISOString()}
+            entry={variantData}
+            lockOut={variantData.live === true} />
+        </div>
+      :
         action === 'version' && versionData ?
         <div>
           <VersionForm
@@ -243,6 +282,13 @@ const ActionBar = ({
             version={false}
             app={app}
             noText={noText} />
+          {/*
+          <VariantForm
+            widgetData={widgetData}
+            variantData={false}
+            app={app}
+            rootWI={false} />
+            */}
           <FlowFormHead
             id={widgetData._id}
             edit={false}

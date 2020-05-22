@@ -7,19 +7,23 @@ export function whatIsBatch(keyword) {
   if(!batch) {
     return false;
   }else{
-    const widget = WidgetDB.findOne({_id: batch.widgetId});
-    const version = widget.versions.find( x => x.versionKey === batch.versionKey);
     const group = GroupDB.findOne({_id: widget.groupId});
-    const nice = `${group.alias.toUpperCase()} ${widget.widget.toUpperCase()} v.${version.version}`;
+    const widget = WidgetDB.findOne({_id: batch.widgetId});
+    const variant = VariantDB.findOne({_id: batch.versionKey});
+    const version = widget.versions.find( x => x.versionKey === batch.versionKey);
+    const vNice = variant ? `v.${variant.variant}` : `v^${version.version}`;
+    const nice = `${group.alias.toUpperCase()} ${widget.widget.toUpperCase()} ${vNice}`;
     return nice;
   }
 }
 export function whatIsBatchX(keyword) {
   const batch = XBatchDB.findOne({batch: keyword});
-  const widget = WidgetDB.findOne({_id: batch.widgetId});
-  const version = widget.versions.find( x => x.versionKey === batch.versionKey);
   const group = GroupDB.findOne({_id: batch.groupId});
-  const nice = `${group.alias.toUpperCase()} ${widget.widget.toUpperCase()} v.${version.version}`;
+  const widget = WidgetDB.findOne({_id: batch.widgetId});
+  const variant = VariantDB.findOne({_id: batch.versionKey});
+  const version = widget.versions.find( x => x.versionKey === batch.versionKey);
+  const vNice = variant ? `v.${variant.variant}` : `v^${version.version}`;
+  const nice = `${group.alias.toUpperCase()} ${widget.widget.toUpperCase()} ${vNice}`;
   return nice;
 }
 /*
@@ -39,6 +43,12 @@ function getVersion(widget, vKey) {
   return new Promise(resolve => { 
     const version = widget.versions.find( x => x.versionKey === vKey);
     resolve(version);
+  });
+}
+function getVariant(vKey) {  
+  return new Promise(resolve => { 
+    const variant = VariantDB.findOne({versionKey: vKey});;
+    resolve(variant);
   });
 }
 function getGroup(groupId) {  
@@ -102,7 +112,11 @@ Meteor.methods({
     const found = version.version;
     return found;
   },
-  
+  quickVariant(vKey) {
+    const variant = VariantDB.findOne({versionKey: vKey});
+    const found = variant.variant;
+    return found;
+  },
   
   /*
   popularWidgets() {
@@ -231,6 +245,8 @@ Meteor.methods({
   ///////////////////////////////////////////////////////////////////////////////////
   
   componentFind(num, batchInfo, unitInfo) {
+    // const variants = VariantDB.find({'assembly.component': num}).fetch();
+    
     const widgets = WidgetDB.find({'versions.assembly.component': num}).fetch();
     const data = [];
     for(let w of widgets) {
@@ -276,6 +292,8 @@ Meteor.methods({
   ///////////////////////////////////////////////////////////////////////////////////
   
   componentExportAll() {
+    // const variants = VariantDB.find({orgKey: Meteor.user().orgKey}).fetch();
+    
     const widgets = WidgetDB.find({orgKey: Meteor.user().orgKey}).fetch();
     const data = [];
     for(let w of widgets) {
@@ -290,6 +308,8 @@ Meteor.methods({
   },
   
   componentExport(wID, vKey) {
+    // const variant = VariantDB.findOne({_id: vID, orgKey: Meteor.user().orgKey});
+    
     const widget = WidgetDB.findOne({_id: wID, orgKey: Meteor.user().orgKey});
     const data = [];
     const version = widget ? widget.versions.find( x => x.versionKey === vKey ) : null;

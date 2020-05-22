@@ -17,7 +17,7 @@ const WidgetPanel = ({ groupData, widgetData, batchRelated, app, user })=> {
   const a = app;
 
   return(
-    <div className='section' key={w.widget}>
+    <div className='space' key={w.widget}>
     
       <div className='titleSection'>
         <span className='cap'>{w.describe}</span>
@@ -31,7 +31,7 @@ const WidgetPanel = ({ groupData, widgetData, batchRelated, app, user })=> {
         */}
       </div>
       
-      <div className='space edit'>
+      <div className='edit'>
         
       <br />
           

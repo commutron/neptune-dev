@@ -4,7 +4,7 @@
 AppDB = new Mongo.Collection('appdb');
 GroupDB = new Mongo.Collection('groupdb');
 WidgetDB = new Mongo.Collection('widgetdb');
-// VariantDB = new Mongo.Collection('variantdb');
+VariantDB = new Mongo.Collection('variantdb');
 BatchDB = new Mongo.Collection('batchdb');
 XBatchDB = new Mongo.Collection('xbatchdb');
 //ItemDB = new Mongo.Collection('itemdb');// future plans, DO NOT enable
@@ -274,12 +274,13 @@ Meteor.publish('thinData', function(){
           'groupId': 1,
         }}),
         
-      // VariantDB.find({orgKey: orgKey}, {
-      //   fields: {
-      //     'groupId': 1,
-      //     'widgetId': 1,
-      //     'versionKey': 1,
-      //   }}),
+      VariantDB.find({orgKey: orgKey}, {
+        fields: {
+          'groupId': 1,
+          'widgetId': 1,
+          'versionKey': 1,
+          'variant': 1
+        }}),
       
       BatchDB.find({orgKey: orgKey}, {
         sort: {batch:-1},
@@ -331,15 +332,12 @@ Meteor.publish('hotDataPlus', function(batch){
       WidgetDB.find({_id: wID, orgKey: orgKey}, {
         fields: {
           'orgKey': 0
+        }}),
+      VariantDB.find({widgetId: wID, orgKey: orgKey}, {
+        fields: {
+          'orgKey': 0
         }})
-      
-      // VariantDB.find({orgKey: orgKey}, {
-      //   fields: {
-      //     'groupId': 1,
-      //     'widgetId': 1,
-      //     'versionKey': 1,
-      //   }})
-      ];
+    ];
   }
 });
 
@@ -369,12 +367,13 @@ Meteor.publish('skinnyData', function(clientTZ){
           'versions': 1,
         }}),
         
-      // VariantDB.find({orgKey: orgKey}, {
-      //   fields: {
-      //     'groupId': 1,
-      //     'widgetId': 1,
-      //     'versionKey': 1,
-      //   }}),
+      VariantDB.find({orgKey: orgKey}, {
+        fields: {
+          'groupId': 1,
+          'widgetId': 1,
+          'versionKey': 1,
+          'variant': 1
+        }}),
       
       BatchDB.find({orgKey: orgKey}, {
         sort: {batch:-1},
@@ -414,7 +413,7 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
   
-  
+  let hothotID = false;
   let hothotWidget = hotWidget || false;
   
   if(!hothotWidget) {
@@ -423,8 +422,14 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
     if(hotBatchXBatch) {
       const maybe = WidgetDB.findOne({ _id: hotBatchXBatch.widgetId });
       if(maybe) {
+        hothotID = maybe._id;
         hothotWidget = maybe.widget;
       }
+    }
+  }else{
+    const otherwise = WidgetDB.findOne({ widget: hotWidget });
+    if(otherwise) {
+      hothotID = otherwise._id;
     }
   }
                     
@@ -442,12 +447,10 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
           fields: {
             'createdAt': 1
         }}),
-        // VariantDB.find({orgKey: orgKey}, {
-        //   fields: {
-        //     'groupId': 1,
-        //     'widgetId': 1,
-        //     'versionKey': 1,
-        // }}),
+        VariantDB.find({orgKey: orgKey}, {
+          fields: {
+            'createdAt': 1
+        }}),
       ];
     }else {
       return [
@@ -455,12 +458,10 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
           fields: {
             'orgKey': 0,
           }}),
-        // VariantDB.find({orgKey: orgKey}, {
-        //   fields: {
-        //     'groupId': 1,
-        //     'widgetId': 1,
-        //     'versionKey': 1,
-        //   }}),
+        VariantDB.find({widgetId: hothotID, orgKey: orgKey}, {
+          fields: {
+            'orgKey': 0,
+          }}),
         BatchDB.find({batch: dataRequest, orgKey: orgKey}, {
           fields: {
             'orgKey': 0,

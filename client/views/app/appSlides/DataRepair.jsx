@@ -57,7 +57,7 @@ const DataRepair = ({ app, users })=> {
       autoClose: false
     });
         
-    Meteor.call('rebuildALLWidgetFlows', (error, reply)=>{
+    Meteor.call('migrateALLWidgetVersions', (error, reply)=>{
       error && console.log(error);
       if(reply === true) {
         toast.update(( 'ReBuildAllOp' ), {
@@ -150,11 +150,11 @@ const DataRepair = ({ app, users })=> {
       <hr />
       <br />*/}
       
-      <h2 className='cap'>Rebuild ALL Widget Flows</h2>
+      <h2 className='cap'>Migrate ALL Widget Versions</h2>
       <button
         onClick={()=>rebuildTheBigThing()}
         className='action clear blueT'
-      >ReBuild All Now</button>
+      >Migrate to VariantDB</button>
       
       <h2 className='cap'>Delete all CacheDB Entries</h2>
       <button

@@ -108,21 +108,21 @@ Meteor.methods({
   },
   */
   
-  rebuildALLWidgetFlows() {
+  migrateALLWidgetVersions() {
     this.unblock();
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       // const accessKey = Meteor.userId();
       const allWidgets = WidgetDB.find({orgKey: Meteor.user().orgKey}).fetch();
       
       for( let wijt of allWidgets ) {
-        Meteor.call('rebuildWidgetFlows', wijt._id);
+        Meteor.call('migrateWidgetVersions', wijt._id);
       }
       
       return true;  
     }else{
       return false;
     }
-  },     
+  },
   
   resetALLCacheDB() {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {

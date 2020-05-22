@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { TimeInDay } from '/client/utility/WorkTimeCalc.js';
 import { UsersTimeTotal } from '/client/utility/WorkTimeCalc.js';
-import { round2Decimal } from '/client/utility/Convert.js';
+import { round1Decimal } from '/client/utility/Convert.js';
 import Pref from '/client/global/pref.js';
 import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
 
@@ -44,7 +44,7 @@ const TideDayMini = ({ tideTimes, dateTime, showUser, app, users })=> {
     
     const dTotal = tideTimes.reduce( (arr, x)=> { return arr + x.durrAsMin }, 0);
     const durrHr = moment.duration(dTotal, 'minutes').asHours();
-    const dTotalNice = round2Decimal(durrHr);
+    const dTotalNice = round1Decimal(durrHr);
     durrSet(dTotalNice);
     
   }, [tideTimes]);

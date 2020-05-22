@@ -30,7 +30,7 @@ import LandingWrap from './LandingWrap.jsx';
 AppDB = new Mongo.Collection('appdb');
 GroupDB = new Mongo.Collection('groupdb');
 WidgetDB = new Mongo.Collection('widgetdb');
-// VariantDB = new Mongo.Collection('variantdb');
+VariantDB = new Mongo.Collection('variantdb');
 BatchDB = new Mongo.Collection('batchdb');
 XBatchDB = new Mongo.Collection('xbatchdb');
 

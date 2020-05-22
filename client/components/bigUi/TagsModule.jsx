@@ -7,29 +7,42 @@ import Pref from '/client/global/pref.js';
 // Batch ._id as "id"
 // flags array as "tags"
 
-const TagsModule = ({ id, group, vKey, xBatch, tags, tagOps })=>	{
+const TagsModule = ({ action, id, vKey, tags, tagOps })=>	{
 
   function addTag(tag) {
     const cleanTag = !tag ? false : tag.trim();
     if(!cleanTag || cleanTag == '' || tags.includes(cleanTag)) {
       null;
     }else{
-      if(typeof vKey === 'string') {
-        Meteor.call('pushWTag', id, vKey, cleanTag, (err)=>{
-          err && console.log(err);
-        });
-      }else if(group) {
-        Meteor.call('pushGTag', id, cleanTag, (err)=>{
-          err && console.log(err);
-        });
-      }else if(xBatch) {
+      switch(action) {
+      case 'xBatch':
         Meteor.call('pushBTagX', id, cleanTag, (err)=>{
           err && console.log(err);
         });
-      }else{
+        break;
+      case 'batch':
         Meteor.call('pushBTag', id, cleanTag, (err)=>{
           err && console.log(err);
         });
+        break;
+      case 'variant':
+        Meteor.call('pushVTag', id, vKey, cleanTag, (err)=>{
+          err && console.log(err);
+        });
+        break;
+      case 'version':
+        Meteor.call('pushWTag', id, vKey, cleanTag, (err)=>{
+          err && console.log(err);
+        });
+        break;
+      case 'group':
+        Meteor.call('pushGTag', id, cleanTag, (err)=>{
+          err && console.log(err);
+        });
+        break;
+      default:
+        toast.error('Server Error');
+        console.log('this component is not wired properly');
       }
     }
   }
@@ -39,22 +52,35 @@ const TagsModule = ({ id, group, vKey, xBatch, tags, tagOps })=>	{
     if(!yes) {
       null;
     }else{
-      if(typeof vKey === 'string') {
-        Meteor.call('pullWTag', id, vKey, tag, (err)=>{
-          err && console.log(err);
-        });
-      }else if(group) {
-        Meteor.call('pullGTag', id, tag, (err)=>{
-          err && console.log(err);
-        });
-      }else if(xBatch) {
+      switch(action) {
+      case 'xBatch':
         Meteor.call('pullBTagX', id, tag, (err)=>{
           err && console.log(err);
         });
-      }else{
+        break;
+      case 'batch':
         Meteor.call('pullBTag', id, tag, (err)=>{
           err && console.log(err);
         });
+        break;
+      case 'variant':
+        Meteor.call('pullVTag', id, tag, (err)=>{
+          err && console.log(err);
+        });
+        break;
+      case 'version':
+        Meteor.call('pullWTag', id, vKey, tag, (err)=>{
+          err && console.log(err);
+        });
+        break;
+      case 'group':
+        Meteor.call('pullGTag', id, tag, (err)=>{
+          err && console.log(err);
+        });
+        break;
+      default:
+        toast.error('Server Error');
+        console.log('this component is not wired properly');
       }
     }
   }

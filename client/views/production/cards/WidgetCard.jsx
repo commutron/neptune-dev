@@ -31,6 +31,7 @@ const WidgetCard = ({ groupData, widgetData, batchRelated, app })=> {
               <span key={entry.versionKey}>
                 <i className={live}>{entry.version}</i>
                 <TagsModule
+                  action='version'
                   id={w._id}
                   tags={entry.tags}
                   vKey={entry.versionKey}

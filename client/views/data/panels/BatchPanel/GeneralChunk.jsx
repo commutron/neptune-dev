@@ -50,9 +50,9 @@ const GeneralChunk = ({
     <div>
 
       <TagsModule
+        action='batch'
         id={b._id}
         tags={b.tags}
-        vKey={false}
         tagOps={a.tagOption} />
       
       <fieldset className='noteCard'>
@@ -98,8 +98,12 @@ const GeneralChunk = ({
           <legend>Serial Range</legend>
           <p className='numFont'>{itemsOrder[0].serial} - {itemsOrder[itemsOrder.length-1].serial}</p>
         </fieldset>}
-      
-      <NoteLine entry={b.notes} id={b._id} widgetKey={false}  />
+
+      <NoteLine 
+        action='batch'
+        id={b._id}
+        entry={b.notes} />
+              
       <BlockList id={b._id} data={b.blocks} lock={done} expand={expand} />
 
     </div>

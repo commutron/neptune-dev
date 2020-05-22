@@ -62,11 +62,15 @@ Meteor.methods({
       let batch = BatchDB.findOne({_id: batchID});
       if(!batch) {
         let xbatch = XBatchDB.findOne({_id: batchID});
-        let batchNum = !xbatch ? batchID.slice(0,5) : xbatch.batch;
-        batchQT.push(0);
-        batchTides.push({ x: batchNum, y: 0 });
-        batchLeftBuffer.push({ x: batchNum, y: 0 });
-        batchOverBuffer.push({ x: batchNum, y: 0 });
+        if(!xbatch) {
+          null;
+        }else{
+          let batchNum = xbatch.batch;
+          batchQT.push(0);
+          batchTides.push({ x: batchNum, y: 0 });
+          batchLeftBuffer.push({ x: batchNum, y: 0 });
+          batchOverBuffer.push({ x: batchNum, y: 0 });
+        }
       }else{ totalST(batch) }
     }
     return { 

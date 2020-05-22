@@ -55,12 +55,15 @@ const BatchCardX = ({
           
           <div className='space cap'>
             <TagsModule
+              action='xBatch'
               id={b._id}
               tags={b.tags}
-              vKey={false}
               tagOps={a.tagOption} />
             <br />
-            <NoteLine entry={b.notes} id={b._id} xbatch={true} versionKey={false} />
+            <NoteLine 
+              action='xBatch'
+              id={b._id}
+              entry={b.notes} />
             <BlockList id={b._id} data={b.blocks} xbatch={true} lock={done} expand={expand} />
           </div>
           

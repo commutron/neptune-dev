@@ -48,10 +48,9 @@ const GroupSlide = ({ groupData, widgetsList, batchData, batchDataX, app })=>{
               keyword={g.alias} />
           </span>*/}
           <TagsModule
+            action='group'
             id={g._id}
             tags={g.tags}
-            vKey={false}
-            group={true}
             tagOps={app.tagOption} />
         </div>
           

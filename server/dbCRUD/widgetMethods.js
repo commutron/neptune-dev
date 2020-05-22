@@ -47,36 +47,7 @@ Meteor.methods({
     }
   },
   
-  /*
-    //// Variants \\\\
-  addNewVarient(widgetId, groupId, OLDversionKey, version, wiki, unit) {
-    const duplicate = VariantDB.findOne({versionKey: OLDversionKey});
-    if(!duplicate && Roles.userIsInRole(Meteor.userId(), 'create')) {
-          
-      VariantDB.insert({
-        orgKey: Meteor.user().orgKey,
-        groupId: groupId,
-        widgetId: widgetId,
-        versionKey: OLDversionKey,//new Meteor.Collection.ObjectID().valueOf(),
-        version: version,
-        createdAt: new Date(),
-        createdWho: Meteor.userId(),
-        updatedAt: new Date(),
-		    updatedWho: Meteor.userId(),
-        live: true,
-        tags: [],
-        instruct: wiki,
-        runUnits: Number(unit),
-		    notes: false,
-		    assembly: [],
-		    npiTime: []
-      });
-      return true;
-    }else{
-      return false;
-    }
-  },
-  */
+  
   editWidget(widgetId, newName, newDesc) {
     const doc = WidgetDB.findOne({_id: widgetId});
     let duplicate = WidgetDB.findOne({widget: newName});
@@ -98,7 +69,8 @@ Meteor.methods({
   
   deleteWidget(widgetId, pass) {
     const inUse = BatchDB.findOne({widgetId: widgetId});
-    if(!inUse) {
+    const inUseX = XBatchDB.findOne({widgetId: widgetId});
+    if(!inUse && !inUseX) {
       const doc = WidgetDB.findOne({_id: widgetId});
       const lock = doc.createdAt.toISOString().split("T")[0];
       const user = Roles.userIsInRole(Meteor.userId(), 'remove');
@@ -375,36 +347,6 @@ Meteor.methods({
     }
   },
 
-  
-  // needs testing
-    /*
-    assembly: [
-      { 
-        ref: 'referance',
-        component: 'part nummber',
-        location: [x,y,z], // "z is optional"
-        theta: 'orientation in degrees',
-        bSide: true, // "or false" // "a split for double sided items"
-      }
-    ]
-    */
-  /*
-  setAssembly(widgetId, vKey, assembly, verify) {
-    if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
-      const verified = verify ? Meteor.userId() : false;
-      WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.versionKey': vKey}, {
-        $set : {
-          'versions.$.updatedAt': new Date(),
-          'versions.$.verifiedWho': verified,
-          'versions.$.assembly': assembly
-  		   }});
-  		return true;
-    }else{
-      return false;
-    }
-  },
-  */
-  
   
 // push a Component
   pushComp(widgetId, vKey, comps) {

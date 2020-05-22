@@ -99,10 +99,9 @@ const BatchPanelX = ({ batchData, widgetData, groupData, user, app })=> {
               type='batch'
               keyword={b.batch} />
             <TagsModule
+              action='xBatch'
               id={b._id}
               tags={b.tags}
-              vKey={false}
-              xBatch={true}
               tagOps={a.tagOption} />
             <fieldset className='noteCard'>
               <legend>Time Range</legend>
@@ -122,7 +121,10 @@ const BatchPanelX = ({ batchData, widgetData, groupData, user, app })=> {
             }
           </div>
           <div className='twoThirdsContent'>
-            <NoteLine entry={b.notes} id={b._id} xBatch={true} widgetKey={false}  />
+            <NoteLine 
+              action='xBatch'
+              id={b._id}
+              entry={b.notes} />
             <BlockList id={b._id} data={b.blocks} xBatch={true} lock={done} expand={true} />
           </div>
         </div>
