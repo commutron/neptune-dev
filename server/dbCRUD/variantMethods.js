@@ -143,7 +143,7 @@ Meteor.methods({
         $push : { 
           tags: tag
         }});
-      BatchDB.update({orgKey: Meteor.user().orgKey, versionKey: vKey, active: true}, {
+      BatchDB.update({orgKey: Meteor.user().orgKey, versionKey: vKey, live: true}, {
         $push : { 
           tags: tag
         }});

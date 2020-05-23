@@ -311,6 +311,26 @@ main {
   color: rgb(35,35,35);
   border-color: var(--asbestosfade);
 }
+.slideNestedMenuButton:nth-child(2) {
+  border-top: 1px solid var(--asbestosfade);
+}
+.slideNestedSearch {
+  width: 100%;
+  min-height: 6vh;
+  text-indent: 1ch;
+  padding-right: 0.75ch;
+  border-top: 1vh solid;
+  border-right: 1vw solid;
+  border-bottom: 1vh solid;
+  border-left: 1vw solid;
+  box-shadow: inset 0 0 5px 0px rgba(0,0,0,0.5);
+}
+.slideNestedSearch,
+.invert .slideNestedSearch,
+.slideNestedSearch:focus,
+.invert .slideNestedSearch:focus {
+  border-color: var(--silverfade);
+}
 
 .slideMenuButton:hover, 
 .slideMenuButton:active, 

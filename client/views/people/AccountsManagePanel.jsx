@@ -33,7 +33,7 @@ const AccountsManagePanel = ({ app, users, bCache, brancheS, isDebug })=> {
   
   let usersMenu = usersSort.map( (entry)=>{
     const clss = !Roles.userIsInRole(entry._id, 'active') ? 'strike fade' : '';
-    return <b className={clss}>{entry.username}</b>;
+    return [ entry.username, clss ];
   });
   
   const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');

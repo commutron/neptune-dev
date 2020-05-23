@@ -103,7 +103,7 @@ const FirstForm = ({
         <div className='fakeFielset balancer'>
           {inspectCombo.map( (obj, ix)=>{
             return(
-              <Fragment>
+              <Fragment key={ix}>
                 <input
                   id={obj.name+ix}
                   type='radio'

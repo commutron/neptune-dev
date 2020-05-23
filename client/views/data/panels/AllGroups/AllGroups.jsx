@@ -17,7 +17,7 @@ const AllGroups = ({
                     return 0;
                   });
   const menuList = sortList.map( (entry, index)=> {
-                    return entry.alias;
+                    return [entry.alias];
                   });
   
   const defaultSlide = specify ? 

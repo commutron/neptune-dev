@@ -12,7 +12,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '2.0.2';
+    this.neptuneVersion = '2.1.0';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -70,7 +70,9 @@ class Pref {
     this.Widget = 'Product';//Product
     this.widgets = 'products';//product
     this.wdgt = 'p'; // widget shortcut
-    this.version = 'version';// version, variation, rev
+    this.variant = 'variant';// variant, variation
+    this.variants = 'variant';// variants, variations
+    this.version = 'version';// version, revision
     this.vrsn = 'v'; // version shorcut
     this.live = 'live'; // live / active in context of a product
     this.notlive = 'not live';

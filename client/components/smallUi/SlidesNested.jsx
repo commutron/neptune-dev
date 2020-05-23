@@ -10,8 +10,10 @@ const SlidesNested = ({
   
   const df = defaultSlide === undefined ? menuTitle ? false : 0 : defaultSlide;
 
+  const [ filter, setFilter ] = useState( false );
   const [ section, setSection ] = useState( df );
-
+  
+  
   let show = section;
   let dA = [];
   
@@ -26,6 +28,14 @@ const SlidesNested = ({
   return(
     <div className='slidesNestedLayout'>
       <div className='slidesNestedMenu noPrint'>
+
+        <input 
+          key={'1a1'} 
+          type='search'
+          id='txtFltr'
+          className='slideNestedSearch'
+          onChange={(e)=>setFilter(e.target.value)} />
+        
         {menuTitle &&
           <button
             key={'0x0'}
@@ -39,18 +49,25 @@ const SlidesNested = ({
           ><div className='wide centreText'><b>{menuTitle}</b></div></button>}
           
         {menu.map( (entry, index)=>{
+          const showThing = !filter || entry[0].includes(filter) ? true : false;
           let clss =  show === index ? 
                       'slideNestedMenuButton slideOn' : 
                       'slideNestedMenuButton slideOff';
-          return (
-            <button
-              key={index}
-              onClick={()=>setSection(index)}
-              className={`${clss} ${textStyle || 'cap'}`}
-              disabled={dA[index+1]}
-            ><b>{entry}</b></button>
-        )})}
+          if(showThing) {
+            return(
+              <button
+                key={index}
+                onClick={()=>setSection(index)}
+                className={`${clss} ${entry[1]} ${textStyle || 'cap'}`}
+                disabled={dA[index+1]}
+              ><b>{entry[0]}</b></button>
+            );
+          }else{
+            return <hr key={index} />;
+          }
+        })}
       </div>
+      
       <section className={`slidesNestedSlide forceScrollStyle ${extraClass || ''}`}>
         
         {show === false ?

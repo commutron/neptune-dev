@@ -7,8 +7,8 @@ export function whatIsBatch(keyword) {
   if(!batch) {
     return false;
   }else{
-    const group = GroupDB.findOne({_id: widget.groupId});
     const widget = WidgetDB.findOne({_id: batch.widgetId});
+    const group = GroupDB.findOne({_id: widget.groupId});
     const variant = VariantDB.findOne({_id: batch.versionKey});
     const version = widget.versions.find( x => x.versionKey === batch.versionKey);
     const vNice = variant ? `v.${variant.variant}` : `v^${version.version}`;
