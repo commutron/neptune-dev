@@ -14,7 +14,8 @@ import DataViewOps from './DataViewOps.jsx';
 const ExploreView = ({
   usersReady, coldReady, hotReady, // subs
   user, isDebug, org, users, app, // self
-  allGroup, allWidget, allBatch, allXBatch, // customers
+  allGroup, allWidget, allVariant, // customers
+  allBatch, allXBatch, 
   hotBatch, hotXBatch, // relevant
   view, request, specify, subLink // routing
 })=> {
@@ -40,7 +41,6 @@ const ExploreView = ({
       <TraverseWrap
         batchData={false}
         widgetData={false}
-        versionData={false}
         groupData={false}
         user={false}
         app={false}
@@ -66,6 +66,7 @@ const ExploreView = ({
       app={app}
       allGroup={allGroup}
       allWidget={allWidget}
+      allVariant={allVariant}
       allBatch={allBatch}
       allXBatch={allXBatch}
       hotBatch={hotBatch}
@@ -114,6 +115,7 @@ export default withTracker( ({ view, request, specify }) => {
       app: AppDB.findOne({org: org}),
       allGroup: GroupDB.find( {}, { sort: { group: 1 } } ).fetch(),
       allWidget: WidgetDB.find( {}, { sort: { widget: 1 } } ).fetch(),
+      allVariant: VariantDB.find( {} ).fetch(),
       allBatch: BatchDB.find( {}, { sort: { batch: -1 } } ).fetch(),
       allXBatch: XBatchDB.find( {}, { sort: { batch: -1 } } ).fetch(),
       hotBatch: hotBatch,

@@ -13,7 +13,7 @@ import ItemFeed from '/client/components/bigUi/ItemFeed/ItemFeed.jsx';
 
 const ItemPanel = ({ 
   batchData, itemData,
-  widgetData, versionData, groupData, 
+  widgetData, variantData, groupData, 
   app, user, 
   listTitle, flowData
 })=>	{
@@ -38,7 +38,7 @@ const ItemPanel = ({
   const i = itemData;
   //const w = widgetData;
   //const g = groupData;
-  //const v = w.versions.find( x => x.versionKey === b.versionKey );
+  //const v = variantData;
   
   const nc = ncData();
   const sh = shData();

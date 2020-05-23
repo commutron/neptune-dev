@@ -9,7 +9,7 @@ import TimeBudgetBar from '/client/components/charts/Tides/TimeBudgetBar.jsx';
 import TimeSplitBar from '/client/components/charts/Tides/TimeSplitBar.jsx';
 
 const TimeBudgetsChunk = ({
-  a, b, v,
+  a, b,
   totalUnits, clientTZ, isDebug
 }) =>	{
   

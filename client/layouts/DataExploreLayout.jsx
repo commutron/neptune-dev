@@ -13,8 +13,8 @@ import CookieBar from './CookieBar.jsx';
 export const TraverseWrap = ({
   itemData,
   batchData,
-  versionData,
   widgetData,
+  variantData,
   groupData,
   user,
   app,
@@ -71,7 +71,7 @@ export const TraverseWrap = ({
               batchData={batchData}
               itemData={itemData}
               widgetData={widgetData}
-              versionData={versionData}
+              variantData={variantData}
               groupData={groupData}
               app={app}
               action={action}
@@ -123,7 +123,7 @@ export const TraverseWrap = ({
                   itemData={itemData}
                   groupData={groupData}
                   widgetData={widgetData}
-                  versionData={versionData}
+                  variantData={variantData}
                   app={app}
                   user={user}
                   action={action}

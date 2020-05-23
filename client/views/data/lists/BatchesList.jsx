@@ -3,7 +3,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import LeapButton from '/client/components/tinyUi/LeapButton.jsx';
 import FilterActive from '/client/components/bigUi/FilterActive.jsx';
 
-const BatchesList = ({ batchData, widgetData })=> {
+const BatchesList = ({ batchData, widgetData, variantData })=> {
   
   const [ filter, filterSet ] = useState(false);
   const [ textString, textSet ] = useState('');
@@ -51,12 +51,12 @@ const BatchesList = ({ batchData, widgetData })=> {
                       'leapBar numFont activeMark' :
                       'leapBar numFont gMark';
         const subW = w.find( x => x._id === entry.widgetId);
-        const subV = subW.versions.find( x => x.versionKey === entry.versionKey);
-          return (
+        const subV = variantData.find( x => x.versionKey === entry.versionKey);
+          return(
             <LeapButton
               key={index}
               title={entry.batch} 
-              sub={<i><i className='up'>{subW.widget}</i> v.{subV.version}</i>}
+              sub={<i><i className='up'>{subW.widget}</i> v.{subV.variant}</i>}
               sty={style}
               address={'/data/batch?request=' + entry.batch}
             />

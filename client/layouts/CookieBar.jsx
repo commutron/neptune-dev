@@ -2,7 +2,7 @@ import React from 'react';
 
 const CookieBar = ({ 
   groupData, 
-  widgetData, versionData, 
+  widgetData, variantData,
   batchData, itemData, 
   app, 
   action, miniAction
@@ -31,13 +31,13 @@ const CookieBar = ({
               widgetData.widget.substring(0, 15) + '...'}
           </button>
         </span>}
-      {versionData && 
+      {variantData && 
         <span className='cookieCrumb'>
           <span className='crumb'><i className='fas fa-chevron-right fa-lg'></i></span>
           <button 
             className='cookie'
-            onClick={()=>FlowRouter.go('/data/widget?request=' + widgetData.widget + '&specify=' + versionData.version)}>
-            <i className='clean'> v.{versionData.version}</i>
+            onClick={()=>FlowRouter.go('/data/widget?request=' + widgetData.widget + '&specify=' + variantData.variant)}>
+            <i className='clean'> v.{variantData.variant}</i>
           </button>
         </span>}
       {batchData && 

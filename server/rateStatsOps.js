@@ -61,23 +61,16 @@ import 'moment-timezone';
     }).fetch();
     return widgetFind.length;
   }
-
-  export function countNewVersion(accessKey, rangeStart, rangeEnd) {
-    const widgetFind = WidgetDB.find({
+  
+  export function countNewVariant(accessKey, rangeStart, rangeEnd) {
+    const variantFind = VariantDB.find({
       orgKey: accessKey, 
       createdAt: { 
+        $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
       }
     }).fetch();
-    
-    let vCount = 0;
-    for(let wf of widgetFind) {
-      const thisV = wf.versions.filter( x =>
-        moment(x.createdAt).isBetween(rangeStart, rangeEnd)
-      );
-      vCount = vCount + thisV.length;   
-    }
-    return vCount;
+    return variantFind.length;
   }
 
   export function countNewBatch(accessKey, rangeStart, rangeEnd) {
@@ -314,8 +307,8 @@ Meteor.methods({
         loop = countNewGroup;
       }else if( stat === 'newWidget' ) {
         loop = countNewWidget;
-      }else if( stat === 'newVersion' ) {
-        loop = countNewVersion;
+      }else if( stat === 'newVariant' ) {
+        loop = countNewVariant;
       }else if( stat === 'newBatch' ) {
         loop = countNewBatch;
       }else if( stat === 'doneBatch' ) {

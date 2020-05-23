@@ -30,12 +30,18 @@ import XBatchTimeline from '/client/components/bigUi/BatchFeed/XBatchTimeline.js
 //import RMATable from '../../../components/tables/RMATable.jsx';
 
 
-const BatchPanelX = ({ batchData, widgetData, groupData, user, app })=> {
+const BatchPanelX = ({ 
+  batchData, widgetData, variantData, groupData,
+  user, app
+})=> {
 
   const a = app;
   const b = batchData;
   // const w = widgetData;
   // const g = groupData;
+  const branchesSort = app.branches.sort((b1, b2)=> {
+    return b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 });
+     
   
   const end = !b.completed ? moment() : moment(b.completedAt);
   const timeElapse = moment.duration(end.diff(b.salesStart)).asWeeks().toFixed(1);
@@ -50,7 +56,7 @@ const BatchPanelX = ({ batchData, widgetData, groupData, user, app })=> {
                
   const cmplt = b.completedAt ? end.format("MMMM Do, YYYY") : null;
   
-  // const v = w.versions.find( x => x.versionKey === b.versionKey );
+  // const v = variantData;
   
   //const flow = w.flows.find( x => x.flowKey === b.river );
   //const flowAlt = w.flows.find( x => x.flowKey === b.riverAlt );
@@ -160,7 +166,8 @@ const BatchPanelX = ({ batchData, widgetData, groupData, user, app })=> {
             eventList={b.events || []}
             alterList={b.altered || []}
             quoteList={[]}//b.quoteTimeBudget || []}
-            doneBatch={done} />
+            doneBatch={done}
+            brancheS={branchesSort} />
         </div>
         
       </Tabs>

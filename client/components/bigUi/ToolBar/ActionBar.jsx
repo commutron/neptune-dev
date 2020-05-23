@@ -99,7 +99,7 @@ const ActionBar = ({
           id={batchData._id}
           items={batchData.items}
           more={batchData.finishedAt === false}
-          unit={versionData.units}
+          unit={variantData.runUnits}
           app={app}
           noText={noText} />
         <RiverSelect
@@ -114,7 +114,7 @@ const ActionBar = ({
                     batchData.batch + 
                     '?group=' + groupData.alias +
                     '&widget=' + widgetData.widget + 
-                    '&ver=' + versionData.version +
+                    '&ver=' + variantData.variant +
                     '&desc=' + widgetData.describe +
                     '&sales=' + (batchData.salesOrder || '') +
                     '&quant=' + batchData.items.length }
@@ -175,7 +175,7 @@ const ActionBar = ({
                     batchData.batch + 
                     '?group=' + groupData.alias +
                     '&widget=' + widgetData.widget + 
-                    '&ver=' + versionData.version +
+                    '&ver=' + variantData.variant +
                     '&desc=' + widgetData.describe +
                     '&sales=' + (batchData.salesOrder || '') +
                     '&quant=' + batchData.quantity }
@@ -207,25 +207,25 @@ const ActionBar = ({
             rootWI={variantData.instruct} />
           {/*<CompForm 
             id={widgetData._id} 
-            versionKey={versionData.versionKey} />
+            versionKey={variantData.versionKey} />
           <BatchCreate
-            versionNow={versionData.versionKey}
+            versionNow={variantData.versionKey}
             widgetId={widgetData._id}
-            versions={widgetData.versions}
+            variantData={variantData}
             lock={!widgetData.versions}
             noText={noText} />
           <BatchFormX
             batchId={false}
             batchNow='new'
-            versionNow={versionData.versionKey}
+            versionNow={variantData.versionKey}
             salesOrder={false}
             start={false}
             end={false}
             quantity={false}
             groupId={groupData._id}
             widgetId={widgetData._id}
-            versions={widgetData.versions}
-            lock={!widgetData.versions}
+            variantData={variantData}
+            lock={!variantData}
             noText={noText} />*/}
           <Remove
             action='variant'

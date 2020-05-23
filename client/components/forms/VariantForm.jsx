@@ -49,10 +49,10 @@ const VariantForm = ({ widgetData, variantData, app, rootWI })=> {
   let e = variantData;
   let name = e ? `edit ${Pref.variant}` : `new ${Pref.variant}`;
   let eV = e ? e.variant : null;
-  let eU = e ? e.units : null;
+  let eU = e ? e.runUnits : null;
   let eL = e ? e.live : null;
   
-  const instruct = !e ? app.instruct : e.wiki;
+  const instruct = !e ? app.instruct : e.instruct;
 
   return (
     <Model

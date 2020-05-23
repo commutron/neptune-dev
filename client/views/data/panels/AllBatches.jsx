@@ -4,7 +4,11 @@ import Pref from '/client/global/pref.js';
 import NumBox from '/client/components/tinyUi/NumBox.jsx';
 import BatchesListWide from '../lists/BatchesListWide.jsx';
 
-const AllBatches = ({ groupData, widgetData, allWidget, batchData, allBatch, allXBatch, app }) => {
+const AllBatches = ({ 
+  groupData, widgetData, allWidget, allVariant,
+  batchData, allBatch, allXBatch, 
+  app
+}) => {
   
   const total = batchData.length;
   const xTotal = allXBatch.length;
@@ -39,6 +43,7 @@ const AllBatches = ({ groupData, widgetData, allWidget, batchData, allBatch, all
         <BatchesListWide
           batchData={[...allBatch, ...allXBatch]}
           widgetData={allWidget}
+          variantData={allVariant}
           groupData={groupData}
           app={app} />
           

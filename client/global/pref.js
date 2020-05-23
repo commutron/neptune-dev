@@ -71,7 +71,7 @@ class Pref {
     this.widgets = 'products';//product
     this.wdgt = 'p'; // widget shortcut
     this.variant = 'variant';// variant, variation
-    this.variants = 'variant';// variants, variations
+    this.variants = 'variants';// variants, variations
     this.version = 'version';// version, revision
     this.vrsn = 'v'; // version shorcut
     this.live = 'live'; // live / active in context of a product

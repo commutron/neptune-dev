@@ -106,7 +106,7 @@ const TideWorkWeek = ({
     >
     {nonDays.length > 0 &&
       <VictoryLegend x={0} y={0}
-      	title="Holidays"
+      	title="Holiday"
         labels={{ fontSize: 15 }}
         titleOrientation="left"
         gutter={10}

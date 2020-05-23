@@ -3,7 +3,9 @@ import React, { useState, useEffect } from 'react';
 import LeapRow from '/client/components/tinyUi/LeapRow.jsx';
 import DumbFilter from '/client/components/tinyUi/DumbFilter.jsx';
 
-const BatchesListWide = ({ batchData, widgetData, groupData, app }) => {
+const BatchesListWide = ({ 
+  batchData, widgetData, variantData, groupData, app 
+}) => {
   
   const [ allState, allSet ] = useState(false);
   
@@ -17,19 +19,20 @@ const BatchesListWide = ({ batchData, widgetData, groupData, app }) => {
   useEffect( ()=> {
     
     const w = widgetData;
+    const v = variantData;
     const g = groupData;
     //const bDt = allState ? batchData : batchData.filter( x => x.live === true);
     let blendedList = [];
     for(let b of batchData){
       const subW = w.find( x => x._id === b.widgetId);
-      const subV = subW.versions.find( x => x.versionKey === b.versionKey);
+      const subV = v.find( x => x.versionKey === b.versionKey);
       const subG = g.find( x => x._id === subW.groupId);
       blendedList.push({
         batchNumber: b.batch,
         salesNumber: b.salesOrder || 'n/a',
         groupAlias: subG.alias,
         widget: subW.widget, 
-        version: subV.version,
+        variant: subV.variant,
         tags: b.tags,
         live: b.live
       });
@@ -41,7 +44,7 @@ const BatchesListWide = ({ batchData, widgetData, groupData, app }) => {
                       tx.salesNumber.toLowerCase().includes(textString) === true ||
                       tx.groupAlias.toLowerCase().includes(textString) === true ||
                       tx.widget.toLowerCase().includes(textString) === true ||
-                      tx.version.toLowerCase().includes(textString) === true ||
+                      tx.variant.toLowerCase().includes(textString) === true ||
                       tx.tags.join('|').toLowerCase().split('|').includes(textString) === true
                   );
     let sortList = showList.sort((b1, b2)=> {
@@ -87,7 +90,7 @@ const BatchesListWide = ({ batchData, widgetData, groupData, app }) => {
                 title={entry.batchNumber.toUpperCase()}
                 cTwo={<i><i className='smaller'>so: </i>{entry.salesNumber.toUpperCase()}</i>}
                 cThree={entry.groupAlias.toUpperCase()}
-                cFour={entry.widget.toUpperCase() + ' v.' + entry.version}
+                cFour={entry.widget.toUpperCase() + ' v.' + entry.variant}
                 cFive={tags}
                 sty={`${sty} lastSpanRight`}
                 address={'/data/batch?request=' + entry.batchNumber}

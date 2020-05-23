@@ -14,7 +14,7 @@ import CompleteBlock from './CompleteBlock.jsx';
 const EventsTimeline = ({ 
   id, batchData, 
   releaseList, verifyList, eventList, alterList, quoteList, 
-  doneBatch 
+  doneBatch, brancheS
 })=> {
   
   const [ incList, incListSet ] = useState( [] );
@@ -147,7 +147,8 @@ const EventsTimeline = ({
                 isX={true}
                 done={doneBatch}
                 dt={dt}
-                icon={dt.type === 'floorRelease' && 'fas fa-flag'} /> 
+                icon={dt.type === 'floorRelease' && 'fas fa-flag'}
+                brancheS={brancheS} /> 
             );
           }else if( typeof dt.complete === 'boolean' ) {
             return( 

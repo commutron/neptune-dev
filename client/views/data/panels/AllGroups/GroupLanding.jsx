@@ -24,32 +24,23 @@ function countNewWidget(collected, rangeStart, rangeEnd) {
   return widgetFind.length;
 }
 
-function countNewVersion(collected, rangeStart, rangeEnd) {
-  const widgetFind = collected.filter( x =>
+function countNewVariant(collected, rangeStart, rangeEnd) {
+  const variantFind = collected.filter( x =>
+    x.createdAt > new Date(rangeStart) &&
     x.createdAt < new Date(rangeEnd) 
   );
-    
-  let vCount = 0;
-  for(let wf of widgetFind) {
-    const thisV = wf.versions.filter( x =>
-      moment(x.createdAt).isBetween(rangeStart, rangeEnd)
-    );
-    vCount = vCount + thisV.length;   
-  }
-  return vCount;
+  return variantFind.length;
 }
 
 const GroupLanding = ({ 
-  groupData, widgetData, 
+  groupData, widgetData, variantData,
   batchData, batchDataX, 
   app
 })=> {
   
-  const verAdd = Array.from(widgetData, x => x.versions.length).reduce((x, y) => x + y, 0);
-
   const xyG = timeRanges(groupData, countNewGroup, 12, 'month');
   const xyW = timeRanges(widgetData, countNewWidget, 12, 'month');
-  const xyV = timeRanges(widgetData, countNewVersion, 12, 'month');
+  const xyV = timeRanges(widgetData, countNewVariant, 12, 'month');
   
   return(
     <div className='overscroll'>
@@ -75,8 +66,8 @@ const GroupLanding = ({
             name={Pref.widget + 's'}
             color='blueT' />
           <NumBox
-            num={verAdd}
-            name={Pref.version + 's'}
+            num={variantData.length}
+            name={Pref.variants}
             color='blueT' />
         </div>
       </div>
@@ -101,9 +92,9 @@ const GroupLanding = ({
           lineColor='rgb(52, 152, 219)' />
           
         <TrendLine 
-          title={`new ${Pref.version}s`}
+          title={`new ${Pref.variants}`}
           localXY={xyV}
-          //statType='newVersion'
+          //statType='newVariant'
           cycleCount={12}
           cycleBracket='month'
           lineColor='rgb(52, 152, 219)' />

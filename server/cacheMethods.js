@@ -187,6 +187,7 @@ Meteor.methods({
         const slim = batches.map( x => {
           return Meteor.call('priorityRank', x._id, clientTZ, accessKey);
         });
+        /*
         const slimSort = slim.sort((pB1, pB2)=> { // insert a master index~
           const pB1ffr = pB1.estEnd2fillBuffer;
           const pB2ffr = pB2.estEnd2fillBuffer;
@@ -197,7 +198,7 @@ Meteor.methods({
           if (pB1ffr < pB2ffr) { return -1 }
           if (pB1ffr > pB2ffr) { return 1 }
           return 0;
-        });
+        });*/
         // const shaddowPriority = {
         //   lastUpdated: new Date(),
         //   ranking: Array.from(slimSort, (x, ix) =>  {
@@ -209,7 +210,7 @@ Meteor.methods({
             orgKey: accessKey,
             lastUpdated: new Date(),
             dataName: 'priorityRank',
-            dataSet: slimSort,
+            dataSet: slim,
             assembled: true,
             minified: false
         }});

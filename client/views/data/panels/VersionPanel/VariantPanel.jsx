@@ -73,6 +73,8 @@ const VariantPanel = ({
           <div className='oneTwoThreeContainer'>
             <div className='oneThirdContent'>
               
+              <h1>VARIANT {v.variant}</h1>
+              
               <p>Status: <i className='big'>{v.live ? 'Live' : 'Archived'}</i></p>
             
               <TagsModule

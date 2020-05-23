@@ -16,7 +16,7 @@ import ItemPanel from './panels/ItemPanel.jsx';
 import BatchPanel from './panels/BatchPanel/BatchPanel.jsx';
 import BatchPanelX from './panels/XBatchPanel/BatchPanelX.jsx';
 import WidgetPanel from './panels/WidgetPanel.jsx';
-import VersionPanel from './panels/VersionPanel/VersionPanel.jsx';
+import VariantPanel from './panels/VersionPanel/VariantPanel.jsx';
 import TestFailPanel from './panels/TestFailPanel.jsx';
 import ScrapPanel from './panels/ScrapPanel.jsx';
 
@@ -30,7 +30,7 @@ import NonConOptionMerge from '/client/utility/NonConOptionMerge.js';
 
 const DataViewOps = ({ 
   allXBatch, allBatch, 
-  allGroup, allWidget,
+  allGroup, allWidget, allVariant,
   user, isDebug, app, users,
   hotBatch, hotXBatch,
   view, request, specify,
@@ -58,18 +58,23 @@ const DataViewOps = ({
   }
   
   function getWidget(request) {
-    return allWidget
-            .find( x => 
-              x._id === request || 
-              x.widget === request );
+    return allWidget.find( x => 
+              x._id === request || x.widget === request );
   }
-  
   function linkedWidget(wId) {
     return allWidget.find(x => x._id === wId);
   }
   
+  function linkedVariantKey(vKey) {
+    return allVariant.find(x => x.versionKey === vKey);
+  }
+  
   function groupWidgets(gId) {
     return allWidget.filter(x => x.groupId === gId);
+  }
+  
+  function widgetVariants(wId) {
+    return allVariant.filter(x => x.widgetId === wId);
   }
   
   function versionData(versions, vKeum) {
@@ -133,7 +138,7 @@ const DataViewOps = ({
       <TraverseWrap
 	      batchData={false}
         widgetData={false}
-        versionData={false}
+        variantData={false}
         groupData={false}
         user={user}
         app={app}
@@ -147,6 +152,7 @@ const DataViewOps = ({
           batchData={allBatch}
           xBatchData={allXBatch}
           widgetData={allWidget}
+          variantData={allVariant}
           groupData={allGroup} 
           app={app}
           isDebug={isDebug} />
@@ -160,7 +166,7 @@ const DataViewOps = ({
       <TraverseWrap
 	      batchData={false}
         widgetData={false}
-        versionData={false}
+        variantData={false}
         groupData={false}
         user={user}
         app={app}
@@ -182,7 +188,7 @@ const DataViewOps = ({
       <TraverseWrap
 	      batchData={false}
         widgetData={false}
-        versionData={false}
+        variantData={false}
         groupData={false}
         user={user}
         app={app}
@@ -195,6 +201,7 @@ const DataViewOps = ({
         <ReportsWrap
           batchData={allBatch}
           widgetData={allWidget}
+          variantData={allVariant}
           groupData={allGroup} 
           app={app} />
       </TraverseWrap>
@@ -208,7 +215,7 @@ const DataViewOps = ({
         <TraverseWrap
 		      batchData={false}
           widgetData={false}
-          versionData={false}
+          variantData={false}
           groupData={false}
           user={user}
           app={app}
@@ -222,6 +229,7 @@ const DataViewOps = ({
             batchData={allBatch}
             batchDataX={allXBatch}
             widgetData={allWidget}
+            variantData={allVariant}
             groupData={allGroup} 
             app={app}
             specify={specify} />
@@ -233,6 +241,7 @@ const DataViewOps = ({
 		      batchData={false}
           widgetData={false}
           versionData={false}
+          variantData={false}
           groupData={false}
           user={user}
           app={app}
@@ -247,6 +256,7 @@ const DataViewOps = ({
             widgetData={allWidget}
             groupData={allGroup}
             allWidget={allWidget}
+            allVariant={allVariant}
             allBatch={allBatch}
             allXBatch={allXBatch}
             app={app} />
@@ -257,7 +267,7 @@ const DataViewOps = ({
         <TraverseWrap
 		      batchData={false}
           widgetData={false}
-          versionData={false}
+          variantData={false}
           groupData={false}
           user={user}
           app={app}
@@ -271,6 +281,7 @@ const DataViewOps = ({
             batchData={allBatch}
             xBatchData={allXBatch}
             widgetData={allWidget}
+            variantData={allVariant}
             groupData={allGroup} 
             app={app} />
         </TraverseWrap>
@@ -280,7 +291,7 @@ const DataViewOps = ({
         <TraverseWrap
 		      batchData={false}
           widgetData={false}
-          versionData={false}
+          variantData={false}
           groupData={false}
           user={user}
           app={app}
@@ -291,7 +302,9 @@ const DataViewOps = ({
           base={true}
           invertColor={true}
         >
-          <TestFailPanel batchData={allBatch} app={app} />
+          <TestFailPanel 
+            batchData={allBatch} 
+            app={app} />
         </TraverseWrap>
       );
     }else if(request === 'scraps') {
@@ -299,7 +312,7 @@ const DataViewOps = ({
         <TraverseWrap
 		      batchData={false}
           widgetData={false}
-          versionData={false}
+          variantData={false}
           groupData={false}
           user={user}
           app={app}
@@ -309,7 +322,9 @@ const DataViewOps = ({
           base={true}
           invertColor={true}
         >
-          <ScrapPanel batchData={allBatch} app={app} />
+          <ScrapPanel 
+            batchData={allBatch} 
+            app={app} />
         </TraverseWrap>
       );
     }else{
@@ -317,7 +332,7 @@ const DataViewOps = ({
         <TraverseWrap
 		      batchData={false}
           widgetData={false}
-          versionData={false}
+          variantData={false}
           groupData={false}
           user={user}
           app={app}
@@ -339,16 +354,18 @@ const DataViewOps = ({
     if(hotBatch) {
       let item = itemData(hotBatch.items, specify);
       let widget = linkedWidget(hotBatch.widgetId);
+      let variant = linkedVariantKey(hotBatch.versionKey);
       let version = versionData(widget.versions, hotBatch.versionKey);
       let group = linkedGroup(widget.groupId);
       let flowData = getFlowData(hotBatch, widget, app);
-      if(item && widget && version && group) {
+      if(item && widget && variant && version && group) {
         return (
           <TraverseWrap
             batchData={hotBatch}
             itemData={item}
             widgetData={widget}
             versionData={version}
+            variantData={variant}
             groupData={group}
             user={user}
             app={app}
@@ -361,7 +378,7 @@ const DataViewOps = ({
               batchData={hotBatch}
               itemData={item}
               widgetData={widget}
-              versionData={version}
+              variantData={variant}
               groupData={group}
               app={app}
               user={user}
@@ -380,7 +397,7 @@ const DataViewOps = ({
           <TraverseWrap
   		      batchData={false}
             widgetData={false}
-            versionData={false}
+            variantData={false}
             groupData={false}
             user={user}
             app={app}
@@ -403,6 +420,7 @@ const DataViewOps = ({
   if(view === 'batch') {
     if(hotBatch) {
       let widget = linkedWidget(hotBatch.widgetId);
+      let variant = linkedVariantKey(hotBatch.versionKey);
       let version = versionData(widget.versions, hotBatch.versionKey);
       let group = linkedGroup(widget.groupId);
       let flowData = getFlowData(hotBatch, widget, app);
@@ -411,6 +429,7 @@ const DataViewOps = ({
 		      batchData={hotBatch}
           widgetData={widget}
           versionData={version}
+          variantData={variant}
           groupData={group}
           user={user}
           app={app}
@@ -423,7 +442,7 @@ const DataViewOps = ({
           <BatchPanel
             batchData={hotBatch}
             widgetData={widget}
-            versionData={version}
+            variantData={variant}
             groupData={group} 
             app={app}
             user={user}
@@ -439,6 +458,7 @@ const DataViewOps = ({
       );
     }else if(hotXBatch) {
       let widget = linkedWidget(hotXBatch.widgetId);
+      let variant = linkedVariantKey(hotXBatch.versionKey);
       let version = versionData(widget.versions, hotXBatch.versionKey);
       let group = linkedGroup(hotXBatch.groupId);
       return (
@@ -446,6 +466,7 @@ const DataViewOps = ({
 		      batchData={hotXBatch}
           widgetData={widget}
           versionData={version}
+          variantData={variant}
           groupData={group}
           user={user}
           app={app}
@@ -457,7 +478,7 @@ const DataViewOps = ({
           <BatchPanelX
             batchData={hotXBatch}
             widgetData={widget}
-            versionData={version}
+            variantData={variant}
             groupData={group} 
             app={app}
             user={user} />
@@ -467,43 +488,46 @@ const DataViewOps = ({
     }
   }
 
-// Version  
+// Variant
   if(view === 'widget' && specify) {
     let widget = getWidget(request);
-    let version = versionData(widget.versions, specify);
-    if(widget && version) {
+    if(widget) {
       Session.set('nowBatch', false);
-      let group = linkedGroup(widget.groupId);
-      let allWidgets = groupWidgets(widget.groupId);
-      let allBatches = verLinkedBatches(version.versionKey);
-      return (
-        <TraverseWrap
-          batchData={false}
-          itemData={false}
-          widgetData={widget}
-          versionData={version}
-          groupData={group}
-          user={user}
-          app={app}
-          title='Version'
-          subLink={subLink}
-          action='version'
-          invertColor={true}
-        >
-          <VersionPanel
-            versionData={version}
+      let allVariants = widgetVariants(widget._id);
+      let variant = allVariants.find( x => x.variant === specify);
+      if(variant) {
+        let group = linkedGroup(widget.groupId);
+        let allWidgets = groupWidgets(widget.groupId);
+        let allBatches = verLinkedBatches(variant.versionKey);
+        return (
+          <TraverseWrap
+            batchData={false}
+            itemData={false}
             widgetData={widget}
+            variantData={variant}
             groupData={group}
-            batchRelated={allBatches}
-            app={app}
             user={user}
-          />
-          <BatchesList
-            batchData={allBatches}
-            versionData={version}
-            widgetData={allWidgets} />
-        </TraverseWrap>
-      );
+            app={app}
+            title='Variant'
+            subLink={subLink}
+            action='variant'
+            invertColor={true}
+          >
+            <VariantPanel
+              variantData={variant}
+              widgetData={widget}
+              groupData={group}
+              batchRelated={allBatches}
+              app={app}
+              user={user}
+            />
+            <BatchesList
+              batchData={allBatches}
+              widgetData={allWidgets}
+              variantData={allVariants} />
+          </TraverseWrap>
+        );
+      }
     }
   }
 // Widget
@@ -513,13 +537,14 @@ const DataViewOps = ({
       Session.set('nowBatch', false);
       let group = linkedGroup(widget.groupId);
       let allWidgets = groupWidgets(widget.groupId);
+      let allVariants = widgetVariants(widget._id);
       let allBatches = allLinkedBatches(widget._id);
       return(
         <TraverseWrap
           batchData={false}
           itemData={false}
           widgetData={widget}
-          versionData={false}
+          variantData={false}
           groupData={group}
           user={user}
           app={app}
@@ -531,13 +556,15 @@ const DataViewOps = ({
           <WidgetPanel
             widgetData={widget}
             groupData={group}
+            variantData={allVariants}
             batchRelated={allBatches}
             app={app}
             user={user}
           />
           <BatchesList
             batchData={allBatches}
-            widgetData={allWidgets} />
+            widgetData={allWidgets}
+            variantData={allVariants} />
         </TraverseWrap>
       );
     }
@@ -548,7 +575,7 @@ const DataViewOps = ({
 	  <TraverseWrap
       batchData={false}
       widgetData={false}
-      versionData={false}
+      variantData={false}
       groupData={false}
       user={user}
       app={app}

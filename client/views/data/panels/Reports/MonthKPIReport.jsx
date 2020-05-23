@@ -38,7 +38,7 @@ const MonthKPIReport = ({ batchData, widgetData, groupData, app })=> {
             [`${Pref.items} Passed Test`, rtn.itemTestPass ],
             [`${Pref.groups} Created`, rtn.newGroup ],
             [`${Pref.widgets} Created`, rtn.newWidget ],
-            [`${Pref.version}s Created`, rtn.newVersion ],
+            [`${Pref.variants} Created`, rtn.newVariant ],
             ['Users Created', rtn.newUser ],
             [`Total ${Pref.tide} Minutes`, rtn.tttMinutes ],
             [`Total ${Pref.tide} Hours`, rtn.tttHours ],

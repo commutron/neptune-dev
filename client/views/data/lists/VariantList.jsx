@@ -3,37 +3,8 @@ import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import LeapRow from '/client/components/tinyUi/LeapRow.jsx';
 
-const VersionList = ({ versionData, widgetData, app })=>	{
-  
-  const widget = widgetData.widget;
-  
-  let v = versionData.sort((v1, v2)=> {
-          if (v1.version < v2.version) { return 1 }
-          if (v1.version > v2.version) { return -1 }
-          return 0;
-        });
-  
-  return(
-    <div className='space'>
-      {v.length < 1 ? <p>no {Pref.version}s created</p> : null}
-      {v.map( (entry, index)=> {
-        let ac = entry.live ? 'activeMark vmarginhalf' : 'vmarginhalf';
-        return(
-          <VersionIndexCard 
-            key={entry.versionKey} 
-            widget={widget} 
-            version={entry}
-            gotoLink={'/data/widget?request=' + widget + '&specify=' + entry.version}
-            barStyle={ac} />
-      )})}
-    </div>
-  ); 
-};
 
-export default VersionList;
-
-
-export const VariantList = ({ variantData, widgetData, app })=>	{
+const VariantList = ({ variantData, widgetData, app })=>	{
                 
   let v = variantData.sort((v1, v2)=> {
           if (v1.variant < v2.variant) { return 1 }
@@ -47,18 +18,20 @@ export const VariantList = ({ variantData, widgetData, app })=>	{
       {v.map( (entry, index)=> {
         let ac = entry.live ? 'activeMark vmarginhalf' : 'vmarginhalf';
         return(
-          <VersionIndexCard 
+          <VariantIndexCard 
             key={entry.versionKey} 
             widget={widgetData.widget} 
-            version={entry}
-            gotoLink={'/data/variant?request=' + variantData.variant}
+            vTitle={entry.variant}
+            vDate={entry.createdAt}
             barStyle={ac} />
       )})}
     </div>
   ); 
 };
 
-const VersionIndexCard = ({ widget, version, gotoLink, barStyle })=> {
+export default VariantList;
+
+const VariantIndexCard = ({ widget, vTitle, vDate, barStyle })=> {
 
   /*
   totalI(mData) {
@@ -95,18 +68,18 @@ const VersionIndexCard = ({ widget, version, gotoLink, barStyle })=> {
   }
   */
   
-  const cTime = moment(version.createdAt).calendar();
+  const cTime = moment(vDate).calendar();
       
   return(
     <LeapRow
-      title={version.version}
+      title={vTitle}
       cTwo={`created: ${cTime}`}
       cThree=''
       cFour=''
       cFive=''
       cSix=''
       sty={barStyle}
-      address={gotoLink}
+      address={'/data/widget?request=' + widget + '&specify=' + vTitle}
     />
   );
 };

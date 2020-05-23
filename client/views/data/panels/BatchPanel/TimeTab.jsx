@@ -9,7 +9,7 @@ import TimeBudgetsChunk from './TimeBudgetsChunk.jsx';
 import TimeBlocksRaw from './TimeBlocksRaw.jsx';
 
 const TimeTab = ({
-  a, b, v, 
+  a, b,
   user, isDebug,
   totalUnits,
   done, allDone,
@@ -27,7 +27,6 @@ const TimeTab = ({
       <TimeBudgetsChunk
         a={a}
         b={b}
-        v={v}
         totalUnits={totalUnits}
         clientTZ={clientTZ}
         isDebug={isDebug} />

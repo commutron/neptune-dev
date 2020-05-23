@@ -11,7 +11,7 @@ import { countScrap } from './rateStatsOps.js';
 import { itemsWithPromise } from './statOps.js';
 import { countNewGroup } from './rateStatsOps.js';
 import { countNewWidget } from './rateStatsOps.js';
-import { countNewVersion } from './rateStatsOps.js';
+import { countNewVariant } from './rateStatsOps.js';
 import { countNewUser } from './rateStatsOps.js';
 import { totalTideTimePromise } from './statOps.js';
 
@@ -51,7 +51,7 @@ Meteor.methods({
         itemTestPass = await itemsWithPromise(accessKey, rangeStart, rangeEnd, 'test');
         newGroup = await promiser(countNewGroup, accessKey, rangeStart, rangeEnd);
         newWidget = await promiser(countNewWidget, accessKey, rangeStart, rangeEnd);
-        newVersion = await promiser(countNewVersion, accessKey, rangeStart, rangeEnd);
+        newVariant = await promiser(countNewVariant, accessKey, rangeStart, rangeEnd);
         newUser = await promiser(countNewUser, accessKey, rangeStart, rangeEnd);
         
         totalTideTime = await totalTideTimePromise(accessKey, rangeStart, rangeEnd);
@@ -63,7 +63,7 @@ Meteor.methods({
           newBatch, doneBatchOnTime, doneBatchLate,
           newItem, doneItem, 
           noncon, shortfall, scrap, itemTestPass,
-          newGroup, newWidget, newVersion, newUser,
+          newGroup, newWidget, newVariant, newUser,
           tttMinutes, tttHours
         };
       }catch (err) {

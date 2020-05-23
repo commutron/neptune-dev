@@ -18,7 +18,7 @@ const SearchHelp = ()=> (
         </ul>
       </ul>
       <ul>
-        <li>Not Searchable Yet</li>
+        <li>Not Searchable</li>
         <ul>
           <li>part numbers</li>
           <li>{Pref.widget} descriptions</li>

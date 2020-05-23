@@ -11,7 +11,11 @@ import EventsTimeline from '/client/components/bigUi/BatchFeed/EventsTimeline.js
 import RMATable from '/client/components/tables/RMATable.jsx';
 
 
-const BatchPanel = ({ batchData, widgetData, user, isDebug, app, flowData })=> {
+const BatchPanel = ({ 
+  batchData, widgetData, //variantData,
+  user, isDebug, app, 
+  flowData
+})=> {
   
   const [ verifyListState, verifyListSet ] = useState([]);
   const [ rmaListState, rmaListSet ] = useState([]);
@@ -27,11 +31,11 @@ const BatchPanel = ({ batchData, widgetData, user, isDebug, app, flowData })=> {
         }
       }else{null}
       // check history for...
-      for(let v of item.history) {
+      for(let i of item.history) {
         // firsts
-        if(v.type === 'first') {
-          v.serial = item.serial;
-          verifyList.push( v );
+        if(i.type === 'first') {
+          i.serial = item.serial;
+          verifyList.push( i );
         }
       }
      });
@@ -41,8 +45,8 @@ const BatchPanel = ({ batchData, widgetData, user, isDebug, app, flowData })=> {
 
   const a = app;
   const b = batchData;
-  const w = widgetData;
-  const v = w.versions.find( x => x.versionKey === b.versionKey );
+  // const w = widgetData;
+  //const v = variantData;
   
   const done = b.finishedAt !== false; // no more boards if batch is finished
   const allDone = b.items.every( x => x.finishedAt !== false );
@@ -82,7 +86,6 @@ const BatchPanel = ({ batchData, widgetData, user, isDebug, app, flowData })=> {
         <TimeTab 
           a={app}
           b={batchData}
-          v={v}
           user={user}
           isDebug={isDebug}
           totalUnits={flowData.progCounts.totalRegUnits + flowData.progCounts.totalAltUnits}

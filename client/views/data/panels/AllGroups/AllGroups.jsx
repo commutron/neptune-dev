@@ -6,7 +6,7 @@ import GroupLanding from './GroupLanding.jsx';
 import GroupSlide from './GroupSlide.jsx';
 
 const AllGroups = ({ 
-  groupData, widgetData, 
+  groupData, widgetData, variantData,
   batchData, batchDataX, 
   app, specify 
 }) => {
@@ -32,7 +32,8 @@ const AllGroups = ({
           groupData={groupData}
           batchData={batchData}
           batchDataX={batchDataX}
-          widgetData={widgetData} />
+          widgetData={widgetData}
+          variantData={variantData} />
       }
       defaultSlide={defaultSlide}
       textStyle='up'>
