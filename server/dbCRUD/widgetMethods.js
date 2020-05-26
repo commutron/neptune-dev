@@ -1,7 +1,7 @@
 Meteor.methods({
   
   //// Widgets \\\\
-  addNewWidget(widget, groupId, desc, version, wiki, unit, endTrack) {
+  addNewWidget(widget, groupId, desc, endTrack) {
     const duplicate = WidgetDB.findOne({widget: widget});
     if(!duplicate && Roles.userIsInRole(Meteor.userId(), 'create')) {
           
@@ -21,7 +21,7 @@ Meteor.methods({
 				    type: 'basic',
             flow: [endTrack]
           }
-        ],
+        ],/*
         versions: [
           {
             versionKey: new Meteor.Collection.ObjectID().valueOf(),
@@ -39,7 +39,7 @@ Meteor.methods({
 				    assembly: [],
 				    subWidgets: [] // widgetId and versionKey
           }
-				],
+				],*/
       });
       return true;
     }else{
@@ -87,7 +87,7 @@ Meteor.methods({
     }
   },
   
-  
+  /*
   addVersion(widgetId, versionId, wiki, unit) {
     const doc = WidgetDB.findOne({_id: widgetId});
     const duplicate = doc.versions.find(x => x.version === versionId);
@@ -162,7 +162,7 @@ Meteor.methods({
       return 'inUse';
     }
   },
-
+*/
 // new
   pushBasicPlusFlow(widgetId, flowTitle, ncLists) {
     const exdt = Array.isArray(ncLists);
@@ -305,7 +305,7 @@ Meteor.methods({
       return false;
     }
   },
-
+/*
   setVersionNote(widgetId, vKey, note) {
     if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
       WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.versionKey': vKey}, {
@@ -319,7 +319,8 @@ Meteor.methods({
       return false;
     }
   },
-  
+  */
+  /*
   // push a tag
   pushWTag(widgetId, vKey, tag) {
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
@@ -346,8 +347,8 @@ Meteor.methods({
       null;
     }
   },
-
-  
+*/
+/*
 // push a Component
   pushComp(widgetId, vKey, comps) {
     if(Roles.userIsInRole(Meteor.userId(), ['create', 'edit'])) {
@@ -381,7 +382,7 @@ Meteor.methods({
       null;
     }
   },
-
+*/
   
   
 });

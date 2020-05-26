@@ -849,12 +849,13 @@
 }
 .searchResult td {
   padding: 20px;
-}
-.searchResult tr:nth-child(1) td {
-  padding: 10px;
-  text-align: left;
-  font-weight: bold;
   letter-spacing: 1px;
+}
+.searchResult td:nth-child(1) {
+  text-align: left;
+}
+.searchResult td:nth-child(2) {
+  font-family: VarelaLocal;
 }
 .searchResult .mockTableCell {
   padding: 5px 10px;

@@ -6,12 +6,6 @@ import { toast } from 'react-toastify';
 import ModelMedium from '../smallUi/ModelMedium.jsx';
 import PrioritySquareData from '/client/components/smallUi/StatusBlocks/PrioritySquare.jsx';
 
-// required data
-/// batchId={b._id}
-/// batchNow={b.batch}
-/// versionNow={vKey}
-/// versions={w.versions}
-/// lock={!w.versions}
 
 export const AlterFulfill = ({ batchId, end, app, lock })=> (
   <ModelMedium

@@ -15,6 +15,7 @@ export const TraverseWrap = ({
   batchData,
   widgetData,
   variantData,
+  allVariants,
   groupData,
   user,
   app,
@@ -124,6 +125,7 @@ export const TraverseWrap = ({
                   groupData={groupData}
                   widgetData={widgetData}
                   variantData={variantData}
+                  allVariants={allVariants}
                   app={app}
                   user={user}
                   action={action}

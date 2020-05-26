@@ -8,20 +8,19 @@ import Model from '../smallUi/Model.jsx';
 // required data
 /// batchId={false}
 /// batchNow='new'
-/// versionNow='new'
 /// groupId={g._id}
 /// widgetId={w._id}
-/// versions={w.versions}
 /// lock={!w.versions}
 
-const BatchFormX = (props)=> {
+const BatchFormX = ({ 
+  batchId, batchNow, groupId, widgetId, versionKey, allVariants,
+  salesOrder, start, end, quantity, lock
+})=> {
 
   function save(e) {
     e.preventDefault();
-    const batchId = props.batchId;
-    const batchNow = props.batchNow;
-    const gId = props.groupId;
-    const wId = props.widgetId;
+    const gId = groupId;
+    const wId = widgetId;
     const vKey = this.vrsn.value;
     const batchNum = this.oNum.value.trim().toLowerCase();
     const salesNum = this.soNum.value.trim().toLowerCase();
@@ -66,18 +65,18 @@ const BatchFormX = (props)=> {
     }
   }
     
-  const ex = props.batchNow;
+  const ex = batchNow;
   let title = ex === 'new' ? 'create new' : 'edit';
   let bttn = ex === 'new' ? 'new' : 'edit';
   let eNum = ex === 'new' ? '' : ex;
   
-  const exV = props.versionNow;
+  const exV = versionKey;
   let eVer = !exV ? '' : exV;
   
-  let eSO = props.salesOrder || '';
-  let eS = props.start || moment().format('YYYY-MM-DD');
-  let eE = props.end || '';
-  let eQ = props.quantity || '';
+  let eSO = salesOrder || '';
+  let eS = start || moment().format('YYYY-MM-DD');
+  let eE = end || '';
+  let eQ = quantity || '';
     
   return (
     <Model
@@ -85,19 +84,18 @@ const BatchFormX = (props)=> {
       title={title + ' ' + Pref.xBatch}
       color='blueT'
       icon='fa-cubes'
-      lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'nightly']) || props.lock}
-      noText={props.noText}>
+      lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'nightly']) || lock}>
       <form className='centre' onSubmit={(e)=>save(e)}>
         <p>
           <select
             id='vrsn'
             defaultValue={eVer}
             required>
-          {props.versions.map( (entry)=>{
+          {allVariants.map( (entry)=>{
             if(entry.live) {
               return(
                 <option value={entry.versionKey} key={entry.versionKey}>
-                  {entry.version}
+                  {entry.variant}
                 </option>
               )}})}
           </select>

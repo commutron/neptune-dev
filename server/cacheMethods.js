@@ -276,16 +276,13 @@ Meteor.methods({
   partslistCacheUpdate(internalKey) {
     const accessKey = internalKey || Meteor.user().orgKey;
     
-    const widgets = WidgetDB.find({orgKey: accessKey, 'versions.live': true}).fetch();
+    const variants = VariantDB.find({orgKey: accessKey, live: true}).fetch();
     
     let allParts = [];
-    for(let w of widgets) {
-      let findV = w.versions.filter( x => x.live === true );
-      for(let v of findV) {
-        const locations = Array.from(v.assembly, pt => pt.component);
-        const parts = [...new Set(locations) ];
-        allParts.push(parts);
-      }
+    for(let v of variants) {
+      const locations = Array.from(v.assembly, pt => pt.component);
+      const parts = [...new Set(locations) ];
+      allParts.push(parts);
     }
     const allPartsFlat = [].concat(...allParts);
     const allPartsClean = [...new Set(allPartsFlat) ];
@@ -299,7 +296,6 @@ Meteor.methods({
         assembled: false,
         minified: true
     }});
-      
             
   }
   

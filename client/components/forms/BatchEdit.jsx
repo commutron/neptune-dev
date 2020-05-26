@@ -5,15 +5,9 @@ import { toast } from 'react-toastify';
 
 import Model from '../smallUi/Model.jsx';
 
-// required data
-/// batchId={b._id}
-/// batchNow={b.batch}
-/// versionNow={vKey}
-/// versions={w.versions}
-/// lock={!w.versions}
 
 const BatchEdit = ({ 
-  batchId, batchNow, versionNow, versions, 
+  batchId, batchNow, versionKey, allVariants, 
   salesOrder, start, end, quoteTimeBudget,
   lock, noText
 })=> {
@@ -54,17 +48,17 @@ const BatchEdit = ({
       noText={noText}>
       <form className='centre' onSubmit={(e)=>save(e)}>
         <p>
-          <label htmlFor='vrsn'>{Pref.version}</label><br />
+          <label htmlFor='vrsn'>{Pref.variant}</label><br />
           <select
             id='vrsn'
             className='numberSet'
-            defaultValue={versionNow}
+            defaultValue={versionKey}
             required>
-            {versions.map( (entry)=>{
+            {allVariants.map( (entry)=>{
               if(entry.live) {
                 return(
                   <option value={entry.versionKey} key={entry.versionKey}>
-                    {entry.version}
+                    {entry.variant}
                   </option>
                 )}})}
           </select>

@@ -5,15 +5,9 @@ import { toast } from 'react-toastify';
 
 import Model from '../smallUi/Model.jsx';
 
-// required data
-/// batchId={false}
-/// batchNow='new'
-/// versionNow='new'
-/// widgetId={w._id}
-/// versions={w.versions}
-/// lock={!w.versions}
 
-const BatchCreate = ({ widgetId, versionNow, versions, lock, noText })=> {
+
+const BatchCreate = ({ widgetId, versionKey, allVariants, lock })=> {
 
   function save(e) {
     e.preventDefault();
@@ -47,7 +41,7 @@ const BatchCreate = ({ widgetId, versionNow, versions, lock, noText })=> {
     });
   }
     
-  let eVer = !versionNow ? '' : versionNow;
+  let eVer = !versionKey ? '' : versionKey;
 
   return (
     <Model
@@ -55,21 +49,20 @@ const BatchCreate = ({ widgetId, versionNow, versions, lock, noText })=> {
       title={'Create a new ' + Pref.batch}
       color='greenT'
       icon='fa-cubes'
-      lock={!Roles.userIsInRole(Meteor.userId(), 'create') || lock}
-      noText={noText}>
+      lock={!Roles.userIsInRole(Meteor.userId(), 'create') || lock}>
       <form className='centre' onSubmit={(e)=>save(e)}>
         <p>
-          <label htmlFor='vrsn'>{Pref.version}</label><br />
+          <label htmlFor='vrsn'>{Pref.variant}</label><br />
           <select
             id='vrsn'
             className='numberSet'
             defaultValue={eVer}
             required>
-            {versions.map( (entry)=>{
+            {allVariants.map( (entry)=>{
               if(entry.live) {
                 return(
                   <option value={entry.versionKey} key={entry.versionKey}>
-                    {entry.version}
+                    {entry.variant}
                   </option>
                 )}})}
           </select>

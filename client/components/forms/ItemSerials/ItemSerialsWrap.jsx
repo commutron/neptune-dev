@@ -8,7 +8,7 @@ import MultiItemForm from './MultiItemForm.jsx';
 import YrWkPnItemForm from './YrWkPnItemForm.jsx';
 
 
-const ItemSerialsWrap = ({ id, items, more, unit, app, noText })=> {
+const ItemSerialsWrap = ({ id, items, more, unit, app })=> {
   
   const auth = Roles.userIsInRole(Meteor.userId(), 'create');
   
@@ -18,8 +18,7 @@ const ItemSerialsWrap = ({ id, items, more, unit, app, noText })=> {
       title={'add ' + Pref.item + ' ' + Pref.itemSerial + ' numbers'}
       color='greenT'
       icon={'fa-' + Pref.serialType}
-      lock={!auth || !more}
-      noText={noText}>
+      lock={!auth || !more}>
     
 
       <Tabs

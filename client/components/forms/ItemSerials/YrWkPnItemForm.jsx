@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 /// items array as props.items
 /// props.more as true or false
 
-const YrWkPnItemForm = ({ id, items, more, unit, app, noText })=> {
+const YrWkPnItemForm = ({ id, items, more, unit, app })=> {
   
   const thisYear = moment().weekYear().toString().slice(-2);
   const thisWeek = moment().week();

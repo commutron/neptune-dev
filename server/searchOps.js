@@ -245,41 +245,34 @@ Meteor.methods({
   ///////////////////////////////////////////////////////////////////////////////////
   
   componentFind(num, batchInfo, unitInfo) {
-    // const variants = VariantDB.find({'assembly.component': num}).fetch();
-    
-    const widgets = WidgetDB.find({'versions.assembly.component': num}).fetch();
+    const variants = VariantDB.find({'assembly.component': num}).fetch();
     const data = [];
-    for(let w of widgets) {
-      let findG = GroupDB.findOne({ _id: w.groupId });
-      let findV = w.versions.filter( x => x.assembly.find( y => y.component === num));
-      let versions = [];
-      for(let v of findV) {
-        let batches = [];
-        if(batchInfo) {
-          const findB = BatchDB.find({live: true, versionKey: v.versionKey}).fetch();
-          batches = Array.from(findB, x => { 
-                      countI = 0;
-                      unitInfo ? 
-                        x.items.forEach( y => countI += y.units )
-                      : null;
-                      return {
-                        btch: x.batch,
-                        cnt: countI
-                    } } );
-        }else{null}
-        versions.push({ 
-          vKey: v.versionKey,
-          ver: v.version,
-          places: 1,
-          //v.assembly.filter( x => x.component === num ).length,
-          btchs: batches
-        });
-      }
-      data.push({ 
-        wdgt: w.widget,
-        dsc: w.describe,
+    for(let v of variants) {
+      let findG = GroupDB.findOne({ _id: v.groupId });
+      let findW = WidgetDB.findOne({ _id: v.widgetId });
+
+      let batches = [];
+      if(batchInfo) {
+        const findB = BatchDB.find({live: true, versionKey: v.versionKey}).fetch();
+        batches = Array.from(findB, x => { 
+                    countI = 0;
+                    unitInfo ? 
+                      x.items.forEach( y => countI += y.units )
+                    : null;
+                    return {
+                      btch: x.batch,
+                      cnt: countI
+                  } } );
+      }else{null}
+
+      data.push({
         grp: findG.alias,
-        vrsns: versions
+        wdgt: findW.widget,
+        vrnt: v.variant,
+        dsc: findW.describe,
+        btchs: batches,
+        places: 1
+        //v.assembly.filter( x => x.component === num ).length,
       });
     }
     return data;
@@ -292,37 +285,17 @@ Meteor.methods({
   ///////////////////////////////////////////////////////////////////////////////////
   
   componentExportAll() {
-    // const variants = VariantDB.find({orgKey: Meteor.user().orgKey}).fetch();
+    const variants = VariantDB.find({orgKey: Meteor.user().orgKey}).fetch();
     
-    const widgets = WidgetDB.find({orgKey: Meteor.user().orgKey}).fetch();
     const data = [];
-    for(let w of widgets) {
-      for(let v of w.versions) {
-        for(let a of v.assembly) {
-          data.push(a.component);
-        }
+    for(let v of variants) {
+      for(let a of v.assembly) {
+        data.push(a.component);
       }
     }
     const cleanData = [... new Set(data) ].sort();
     return cleanData;
-  },
-  
-  componentExport(wID, vKey) {
-    // const variant = VariantDB.findOne({_id: vID, orgKey: Meteor.user().orgKey});
-    
-    const widget = WidgetDB.findOne({_id: wID, orgKey: Meteor.user().orgKey});
-    const data = [];
-    const version = widget ? widget.versions.find( x => x.versionKey === vKey ) : null;
-    if(version) {
-      for(let a of version.assembly) {
-        data.push(a.component);
-      }
-    }
-    let cleanData = [... new Set(data) ].sort();
-    cleanData.unshift(version.version);
-    cleanData.unshift(widget.widget);
-    return cleanData;
-  },
+  }
 
   
 });

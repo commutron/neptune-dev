@@ -421,15 +421,15 @@ const DataViewOps = ({
     if(hotBatch) {
       let widget = linkedWidget(hotBatch.widgetId);
       let variant = linkedVariantKey(hotBatch.versionKey);
-      let version = versionData(widget.versions, hotBatch.versionKey);
+      let allVariants = widgetVariants(hotBatch.widgetId);
       let group = linkedGroup(widget.groupId);
       let flowData = getFlowData(hotBatch, widget, app);
       return (
 		    <TraverseWrap
 		      batchData={hotBatch}
           widgetData={widget}
-          versionData={version}
           variantData={variant}
+          allVariants={allVariants}
           groupData={group}
           user={user}
           app={app}
@@ -459,6 +459,7 @@ const DataViewOps = ({
     }else if(hotXBatch) {
       let widget = linkedWidget(hotXBatch.widgetId);
       let variant = linkedVariantKey(hotXBatch.versionKey);
+      let allVariants = widgetVariants(hotXBatch.widgetId);
       let version = versionData(widget.versions, hotXBatch.versionKey);
       let group = linkedGroup(hotXBatch.groupId);
       return (
@@ -467,6 +468,7 @@ const DataViewOps = ({
           widgetData={widget}
           versionData={version}
           variantData={variant}
+          allVariants={allVariants}
           groupData={group}
           user={user}
           app={app}
@@ -505,6 +507,7 @@ const DataViewOps = ({
             itemData={false}
             widgetData={widget}
             variantData={variant}
+            allVariants={allVariants}
             groupData={group}
             user={user}
             app={app}
@@ -545,6 +548,7 @@ const DataViewOps = ({
           itemData={false}
           widgetData={widget}
           variantData={false}
+          allVariants={allVariants}
           groupData={group}
           user={user}
           app={app}

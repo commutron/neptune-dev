@@ -36,7 +36,14 @@ const CompSearchWrap = ({ plCache, user, app })=> {
         if(error)
           return error;
         if(reply.length > 0) {
-          setResults( reply );
+          const replieS = reply.sort((r1, r2)=> {
+              if (r1.grp === r2.grp && r1.wdgt < r2.wdgt) { return -1 }
+              if (r1.grp === r2.grp && r1.wdgt > r2.wdgt) { return 1 }
+              if (r1.grp < r2.grp) { return -1 }
+              if (r1.grp > r2.grp) { return 1 }
+              return 0;
+            });
+          setResults( replieS );
         }else{
           setResults( false );
         }
@@ -75,9 +82,8 @@ const CompSearchWrap = ({ plCache, user, app })=> {
     });
   }
 
-  let r = results;
-  let w = 0;
-  r && r.length > 0 ? r.forEach( x => x.vrsns.forEach( y => w += y.btchs.length ) ) : null;
+  let batchCount = 0;
+  results && results.forEach( y => batchCount += y.btchs.length );
 
   return(
     <div key={1} className='simpleContainer'>
@@ -176,48 +182,40 @@ const CompSearchWrap = ({ plCache, user, app })=> {
       
       <div className='centre space'>
         <div className='balance min400 cap'>
-          <i>{Pref.widget}s: {r ? r.length : 0}</i>
-          <i>{Pref.batch}s: {w}</i>
+          <i>{Pref.widget} {Pref.variants}: {results ? results.length : 0}</i>
+          <i>{Pref.batch}s: {batchCount}</i>
         </div>
       </div>
       
       <hr />
       
-      {!r ?
+      {!results ?
         <div className='space'>
           <p className='centreText'><em>Nothing Found</em></p>
         </div>
       :
         <div className='centre space'>
           <table className='wide searchResult'>
-            {r.map((entry, index)=>{
+            {results.map((entry, index)=>{
+              const mtch = entry.btchs.length > 0 ? entry.btchs.length : 1;
               return(
                 <tbody key={index}>
                   <tr className='cap'>
-                    <td colSpan='2'>
-                      {entry.grp} {entry.dsc}
+                    <td rowSpan={mtch}>
+                      {entry.grp} {entry.wdgt} v.{entry.vrnt} {entry.dsc}
+                    </td>
+                    <td>
+                    {entry.btchs.map((b, ix)=>{
+                      return(
+                        <div key={b.btch + ix} className='mockTableRow'>
+                          <div className='mockTableCell'>{b.btch}</div>
+                          {b.cnt > 0 ?
+                            <div className='mockTableCell'>{b.cnt} boards</div>
+                          :null}
+                        </div>
+                    )})}
                     </td>
                   </tr>
-                  
-                  {entry.vrsns.map((e)=>{
-                    return(
-                      <tr key={e.vKey}>
-                        <td className='up'>
-                          {entry.wdgt}{e.ver}
-                        </td>
-                        <td>
-                        {e.btchs.map((b)=>{
-                          return(
-                            <div key={b.btch + e.vKey} className='mockTableRow'>
-                              <div className='mockTableCell'>{b.btch}</div>
-                              {b.cnt > 0 ?
-                                <div className='mockTableCell'>{b.cnt} boards</div>
-                              :null}
-                            </div>
-                        )})}
-                        </td>
-                      </tr>
-                  )})}
                 </tbody>
             )})}
           </table>

@@ -3,7 +3,7 @@ Meteor.methods({
 //// Variants \\\\
   
   addNewVariant(widgetId, groupId, variant, wiki, unit) {
-    const duplicate = VariantDB.findOne({versionKey: OLDversionKey});
+    const duplicate = VariantDB.findOne({widgetId: widgetId, variant: variant});
     if(!duplicate && Roles.userIsInRole(Meteor.userId(), 'create')) {
           
       VariantDB.insert({
@@ -101,7 +101,7 @@ Meteor.methods({
   /// move a variant to a different widget??
 
   deleteVariant(vObj, pass) {
-    const doc = VariantDB.findOne({_id: vId});
+    const doc = VariantDB.findOne({_id: vObj._id});
     const versionKey = doc.versionKey;
     const inUse = BatchDB.findOne({versionKey: versionKey});
     const inUseX = XBatchDB.findOne({versionKey: versionKey});
@@ -186,7 +186,7 @@ Meteor.methods({
   // pull a Component
   pullCompV(vId, comp) {
     if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
-      VariantDB.update({_id: vID, orgKey: Meteor.user().orgKey}, {
+      VariantDB.update({_id: vId, orgKey: Meteor.user().orgKey}, {
         $pull : { 
           assembly: { 
             component: comp
@@ -196,6 +196,22 @@ Meteor.methods({
       null;
     }
   },
+  
+  componentExport(wId, vId) {
+    // const variant = VariantDB.findOne({_id: vID, orgKey: Meteor.user().orgKey});
+    const widget = WidgetDB.findOne({_id: wId, orgKey: Meteor.user().orgKey});
+    const variant = VariantDB.findOne({_id: vId, orgKey: Meteor.user().orgKey});
+    
+    const data = [];
+    if(variant) {
+      for(let a of variant.assembly) {
+        data.push(a.component);
+      }
+    }
+    let cleanData = [... new Set(data) ].sort();
+    cleanData.unshift(`${widget.widget}_v.${variant.variant}_${widget.describe}`);
+    return cleanData;
+  }
   
 });
 

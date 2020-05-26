@@ -65,9 +65,7 @@ const GroupSlide = ({ groupData, widgetsList, batchData, batchDataX, app })=>{
             primeTopRight={false} />
           <WidgetNewForm
             groupId={g._id}
-            end={app.lastTrack} 
-            rootWI={app.instruct}
-            noText={false} />
+            endTrack={app.lastTrack}  />
           <Remove
             action='group'
             title={g.group}

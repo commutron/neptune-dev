@@ -1,5 +1,6 @@
 import React from 'react';
 // import moment from 'moment';
+import { toast } from 'react-toastify';
 import Pref from '/client/global/pref.js';
 
 import CreateTag from '/client/components/tinyUi/CreateTag.jsx';
@@ -18,7 +19,6 @@ const VariantPanel = ({
   const w = widgetData;
   // const g = groupData;
   // const b = batchRelated;
-  const a = app;
 
   const vAssmbl = v.assembly.sort((p1, p2)=> {
                   if (p1.component < p2.component) { return -1 }
@@ -26,23 +26,22 @@ const VariantPanel = ({
                   return 0;
                 });
   
-  function removeComp(id, compPN) {
+  function removeComp(compPN) {
     const check = confirm('Are you sure you want to remove this ' + Pref.comp + '?');
     if(!check) {
       null;
     }else{
-      Meteor.call('pullCompV', id, compPN, (err)=>{
-        err && console.log(error);
+      Meteor.call('pullCompV', v._id, compPN, (err)=>{
+        err && console.log(err);
       });
     }
   }
-  /*
-  function downloadComp(id, vKey) {
-    Meteor.call('componentExport', id, vKey, (error, reply)=>{
-      if(error)
-        console.log(error);
+  
+  function downloadComp() {
+    Meteor.call('componentExport', w._id, v._id, (error, reply)=>{
+      error && console.log(error);
       if(reply) {
-        const name = w.widget + "_" + v.version;
+        const name = w.widget + "_" + v.variant;
         const outputLines = reply.join('\n');
         const outputComma = reply.toString();
         toast(
@@ -58,7 +57,7 @@ const VariantPanel = ({
       }
     });
   }
-  */
+  
   return(
     <div className='section'>
             
@@ -82,10 +81,14 @@ const VariantPanel = ({
                 id={v._id}
                 tags={v.tags}
                 vKey={v.versionKey}
-                tagOps={a.tagOption} />
+                tagOps={app.tagOption} />
               
               <p>
-                <a className='clean wordBr' href={v.instruct} target='_blank'>{v.instruct}</a>
+                <a 
+                  className='clean wordBr' 
+                  href={v.instruct} 
+                  target='_blank'
+                >{v.instruct}</a>
               </p>
               
               <p className='numFont'>default units: {v.runUnits}</p>
@@ -113,7 +116,7 @@ const VariantPanel = ({
                   {entry.component}
                   <button
                     className='miniAction redT'
-                    onClick={()=>removeComp(w._id, v.versionKey, entry.component)}
+                    onClick={()=>removeComp(entry.component)}
                     disabled={!Roles.userIsInRole(Meteor.userId(), 'remove')}>
                   <i className='fas fa-times fa-fw'></i></button>
                 </dt>
@@ -123,8 +126,7 @@ const VariantPanel = ({
           <button
             className='transparent'
             title='Download Parts List'
-            // onClick={()=>downloadComp(w._id, v.versionKey)}
-            disabled={true}>
+            onClick={()=>downloadComp()}>
             <label className='navIcon actionIconWrap'>
               <i className='fas fa-download fa-fw'></i>
               <span className='actionIconText blackT'>Download</span>

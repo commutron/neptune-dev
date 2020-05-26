@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 import Model from '../smallUi/Model.jsx';
 
-const PanelBreak = (props)=> {
+const PanelBreak = ({ id, batch, item })=> {
   
   const [ newSerials, newSerialsSet ] = useState([]);
   
@@ -16,9 +16,7 @@ const PanelBreak = (props)=> {
   
   function splitApart(e) {
     e.preventDefault();
-    const id = props.id;
-    const batch = props.batch;
-    const serial = props.item.serial;
+    const serial = item.serial;
     
     if(newSerials.length > 0) {
       let overlap = newSerials.find( x => x === serial);
@@ -41,7 +39,7 @@ const PanelBreak = (props)=> {
   }
       	    
   const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
-  let done = props.item.finishedAt !== false;
+  let done = item.finishedAt !== false;
 
   return(
     <Model
@@ -49,8 +47,7 @@ const PanelBreak = (props)=> {
       title='Split Panel Into Its Units'
       color='yellowT'
       icon='fa-cut'
-      lock={done || props.item.units < 2 || !auth}
-      noText={props.noText}>
+      lock={done || item.units < 2 || !auth}>
       <p className='medBig space'>
         <b>Transform this item into new individual units</b><br />
         <i>New Items are created with a copy of this item's history</i><br />
@@ -75,7 +72,7 @@ const PanelBreak = (props)=> {
               required></textarea>
             <label htmlFor='con'>New serials for each new item</label>
             <br />
-            <em>{props.item.units} numbers, seperated by a space</em>
+            <em>{item.units} numbers, seperated by a space</em>
           </p>
           <ol className='medBig'>
             {newSerials.map( (entry, index)=>{
@@ -86,7 +83,7 @@ const PanelBreak = (props)=> {
         <p>
           <button
             id='go'
-            disabled={newSerials.length !== props.item.units}
+            disabled={newSerials.length !== item.units}
             className='action clearGreen'
             type='submit'>Split</button>
         </p>

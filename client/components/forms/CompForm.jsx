@@ -3,13 +3,12 @@ import Pref from '/client/global/pref.js';
 
 import Model from '../smallUi/Model.jsx';
 
-const CompForm = ({ id, versionKey, smIcon })=> {
+const CompForm = ({ vID })=> {
   
   function addParts(e) {
     e.preventDefault();
     this.go.disabled = true;
     
-    const vKey = versionKey;
     const allNums = this.parts.value.trim().toLowerCase();
     
     const alterOne = allNums.replace(/\s* \s*/gi, "|");// spaces
@@ -18,9 +17,8 @@ const CompForm = ({ id, versionKey, smIcon })=> {
     
     let indieNums = [... new Set(split) ];
     
-    Meteor.call('pushComp', id, vKey, indieNums, (error)=>{
-      if(error)
-        console.log(error);
+    Meteor.call('pushCompV', vID, indieNums, (error)=>{
+      error && console.log(error);
       this.parts.value = '';
       this.go.disabled = false;
     });
@@ -32,7 +30,6 @@ const CompForm = ({ id, versionKey, smIcon })=> {
       title={'Add ' + Pref.comp + 's'}
       color='greenT'
       icon='fa-microchip'
-      smIcon={smIcon}
       lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit'])}>
       <form id='new' className='centre' onSubmit={(e)=>addParts(e)}>
         <p>Add multiple {Pref.comp}s seperated by pipe, space or new line</p>

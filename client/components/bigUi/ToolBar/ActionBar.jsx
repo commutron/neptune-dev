@@ -21,8 +21,6 @@ import ItemIncompleteForm from '/client/components/forms/ItemIncompleteForm.jsx'
 import ScrapForm from '/client/components/forms/ScrapForm.jsx';
 
 import WidgetEditForm from '/client/components/forms/WidgetEditForm.jsx';
-import VersionForm from '/client/components/forms/VersionForm.jsx';
-import RemoveVersion from '/client/components/forms/RemoveVersion.jsx';
 import CompForm from '/client/components/forms/CompForm.jsx';
 import FlowFormHead from '/client/components/forms/FlowFormHead.jsx';
 
@@ -32,8 +30,8 @@ import Remove from '/client/components/forms/Remove.jsx';
 
 const ActionBar = ({
   batchData, itemData, 
-  groupData, 
-  widgetData, versionData, variantData,
+  groupData, widgetData, 
+  variantData, allVariants,
   app, user,
   action, noText,
   ncTypesCombo
@@ -46,13 +44,11 @@ const ActionBar = ({
   	  <div> 
     	  <UnitSet
     	    id={batchData._id}
-    	    item={itemData}
-    	    noText={noText} />
-    	 <PanelBreak
+    	    item={itemData} />
+    	  <PanelBreak
           id={batchData._id}
           batch={batchData.batch}
-    	    item={itemData}
-    	    noText={noText} />
+    	    item={itemData} />
         <UndoFinish
     	    id={batchData._id}
     	    finishedAtB={batchData.finishedAt}
@@ -61,25 +57,21 @@ const ActionBar = ({
     	    timelock={ itemData.finishedAt !== false ?
     	      moment().diff(moment(itemData.finishedAt), 'minutes') 
     	      > (60 * 24 * 7) : true
-    	    }
-    	    noText={noText} />
+    	    } />
         <ItemIncompleteForm
-	        id={batchData._id}
-	        item={itemData}
-	        app={app}
-	        noText={noText} />
-	      <ScrapForm
-	        id={batchData._id}
-	        item={itemData}
-	        anc={app.ancillaryOption}
-	        noText={noText} />
+          id={batchData._id}
+          item={itemData}
+          app={app} />
+        <ScrapForm
+          id={batchData._id}
+          item={itemData}
+          anc={app.ancillaryOption} />
         <Remove
           action='item'
           title={itemData.serial}
           check={itemData.createdAt.toISOString()}
           entry={batchData}
-          lockOut={batchData.finishedAt !== false}
-          noText={noText} />
+          lockOut={batchData.finishedAt !== false} />
       </div>
 		:
     action === 'batch' ?
@@ -87,28 +79,25 @@ const ActionBar = ({
         <BatchEdit
           batchId={batchData._id}
           batchNow={batchData.batch}
-          versionNow={batchData.versionKey}
+          versionKey={variantData.versionKey}
           salesOrder={batchData.salesOrder || ''}
           start={batchData.start}
           end={batchData.end}
           quoteTimeBudget={batchData.quoteTimeBudget}
-          versions={widgetData.versions}
-          lock={!widgetData.versions || !batchData.live}
-          noText={noText} />
+          allVariants={allVariants}
+          lock={!variantData || !batchData.live} />
         <ItemSerialsWrap
           id={batchData._id}
           items={batchData.items}
           more={batchData.finishedAt === false}
           unit={variantData.runUnits}
-          app={app}
-          noText={noText} />
+          app={app} />
         <RiverSelect
           id={batchData._id}
           widget={widgetData}
           river={batchData.river}
           riverAlt={batchData.riverAlt}
-          lock={batchData.finishedAt !== false}
-          noText={noText} />
+          lock={batchData.finishedAt !== false} />
         <ActionLink
           address={'/print/generallabel/' + 
                     batchData.batch + 
@@ -120,13 +109,11 @@ const ActionBar = ({
                     '&quant=' + batchData.items.length }
           title='Print Label'
           icon='fa-print'
-          color='whiteT'
-          noText={noText} />
+          color='whiteT' />
         <BlockForm
           id={batchData._id}
           edit={false}
-          lock={batchData.finishedAt !== false}
-          noText={noText} />
+          lock={batchData.finishedAt !== false} />
         <RMAForm
           id={batchData._id}
           editObj={false}
@@ -134,13 +121,11 @@ const ActionBar = ({
           end={app.lastTrack}
           app={app}
           user={user}
-          noText={noText}
           ncTypesCombo={ncTypesCombo || []} />
         <NCEscape
           id={batchData._id}
           user={user}
           nons={app.nonConOption}
-          noText={noText}
           ncTypesCombo={ncTypesCombo || []} />
         <RemoveBatch
           title={batchData.batch}
@@ -150,83 +135,75 @@ const ActionBar = ({
       </div>
       :
       action === 'xbatch' ?
-      <div>
-        <BatchFormX
-          batchId={batchData._id}
-          batchNow={batchData.batch}
-          versionNow={batchData.versionKey}
-          salesOrder={batchData.salesOrder}
-          start={batchData.salesStart}
-          end={batchData.salesEnd}
-          quantity={batchData.quantity}
-          groupId={batchData.groupId}
-          widgetId={batchData.widgetId}
-          versions={widgetData.versions}
-          lock={!widgetData.versions || !batchData.live}
-          noText={noText} />
-        <CounterAssign
-          id={batchData._id}
-          waterfall={batchData.waterfall}
-          app={app}
-          lock={batchData.completed === true}
-          noText={noText} />
-        <ActionLink
-          address={'/print/generallabel/' + 
-                    batchData.batch + 
-                    '?group=' + groupData.alias +
-                    '&widget=' + widgetData.widget + 
-                    '&ver=' + variantData.variant +
-                    '&desc=' + widgetData.describe +
-                    '&sales=' + (batchData.salesOrder || '') +
-                    '&quant=' + batchData.quantity }
-          title='Print Label'
-          icon='fa-print'
-          color='whiteT'
-          noText={noText} />
-        <BlockForm
-          id={batchData._id}
-          edit={false}
-          xBatch={true}
-          lock={batchData.completed === true}
-          noText={noText} />
-        <Remove
-          action='xbatch'
-          title={batchData.batch}
-          check={batchData.createdAt.toISOString()}
-          entry={batchData}
-          lockOut={batchData.completed === true}
-          noText={noText} />
-      </div>
+        <div>
+          <BatchFormX
+            batchId={batchData._id}
+            batchNow={batchData.batch}
+            versionKey={variantData.versionKey}
+            salesOrder={batchData.salesOrder}
+            start={batchData.salesStart}
+            end={batchData.salesEnd}
+            quantity={batchData.quantity}
+            groupId={batchData.groupId}
+            widgetId={batchData.widgetId}
+            allVariants={allVariants}
+            lock={!variantData || !batchData.live} />
+          <CounterAssign
+            id={batchData._id}
+            waterfall={batchData.waterfall}
+            app={app}
+            lock={batchData.completed === true} />
+          <ActionLink
+            address={'/print/generallabel/' + 
+                      batchData.batch + 
+                      '?group=' + groupData.alias +
+                      '&widget=' + widgetData.widget + 
+                      '&ver=' + variantData.variant +
+                      '&desc=' + widgetData.describe +
+                      '&sales=' + (batchData.salesOrder || '') +
+                      '&quant=' + batchData.quantity }
+            title='Print Label'
+            icon='fa-print'
+            color='whiteT' />
+          <BlockForm
+            id={batchData._id}
+            edit={false}
+            xBatch={true}
+            lock={batchData.completed === true} />
+          <Remove
+            action='xbatch'
+            title={batchData.batch}
+            check={batchData.createdAt.toISOString()}
+            entry={batchData}
+            lockOut={batchData.completed === true} />
+        </div>
       :
-        action === 'variant' && variantData ?
+      action === 'variant' && variantData ?
         <div>
           <VariantForm
             widgetData={widgetData}
             variantData={variantData}
             app={app}
             rootWI={variantData.instruct} />
-          {/*<CompForm 
-            id={widgetData._id} 
-            versionKey={variantData.versionKey} />
+          <CompForm 
+            vID={variantData._id} />
           <BatchCreate
-            versionNow={variantData.versionKey}
+            versionKey={variantData.versionKey}
             widgetId={widgetData._id}
-            variantData={variantData}
-            lock={!widgetData.versions}
-            noText={noText} />
+            allVariants={allVariants}
+            lock={!allVariants} />
           <BatchFormX
             batchId={false}
             batchNow='new'
-            versionNow={variantData.versionKey}
+            versionKey={variantData.versionKey}
             salesOrder={false}
             start={false}
             end={false}
             quantity={false}
             groupId={groupData._id}
             widgetId={widgetData._id}
-            variantData={variantData}
-            lock={!variantData}
-            noText={noText} />*/}
+            allVariants={allVariants}
+            lock={!allVariants} />
           <Remove
             action='variant'
             title={variantData.variant}
@@ -235,91 +212,44 @@ const ActionBar = ({
             lockOut={variantData.live === true} />
         </div>
       :
-        action === 'version' && versionData ?
-        <div>
-          <VersionForm
-            widgetData={widgetData}
-            versionData={versionData}
-            app={app}
-            rootWI={versionData.wiki}
-            small={false} />
-          <CompForm 
-            id={widgetData._id} 
-            versionKey={versionData.versionKey} />
-          <BatchCreate
-            versionNow={versionData.versionKey}
-            widgetId={widgetData._id}
-            versions={widgetData.versions}
-            lock={!widgetData.versions}
-            noText={noText} />
-          <BatchFormX
-            batchId={false}
-            batchNow='new'
-            versionNow={versionData.versionKey}
-            salesOrder={false}
-            start={false}
-            end={false}
-            quantity={false}
-            groupId={groupData._id}
-            widgetId={widgetData._id}
-            versions={widgetData.versions}
-            lock={!widgetData.versions}
-            noText={noText} />
-          <RemoveVersion
-            widgetId={widgetData._id}
-            versionKey={versionData.versionKey}
-            check={versionData.createdAt.toISOString()} />
-        </div>
-      :
       action === 'widget' ?
         <div>
           <WidgetEditForm
             id={widgetData._id}
-            now={widgetData}
-            noText={noText} />
-          <VersionForm
-            widgetData={widgetData}
-            version={false}
-            app={app}
-            noText={noText} />
-          {/*
+            now={widgetData} />
           <VariantForm
             widgetData={widgetData}
             variantData={false}
             app={app}
-            rootWI={false} />
-            */}
+            rootWI={groupData.wiki} />
           <FlowFormHead
             id={widgetData._id}
             edit={false}
             existFlows={widgetData.flows}
-            app={app}
-            noText={noText} />
+            app={app} />
           <BatchCreate
-            versionNow={false}
+            versionKey={false}
             widgetId={widgetData._id}
-            versions={widgetData.versions}
-            lock={!widgetData.versions}
-            noText={noText} />
+            allVariants={allVariants}
+            lock={!allVariants} />
           <BatchFormX
             batchId={false}
             batchNow='new'
-            versionNow={false}
+            variantNow={false}
             salesOrder={false}
             start={false}
             end={false}
             quantity={false}
             groupId={groupData._id}
             widgetId={widgetData._id}
-            versions={widgetData.versions}
-            lock={!widgetData.versions}
-            noText={noText} />
+            allVariants={allVariants}
+            lock={!allVariants} />
           <Remove
             action='widget'
             title={widgetData.widget}
             check={widgetData.createdAt.toISOString()}
             entry={widgetData._id}
-            noText={noText} />
+            lockOut={!allVariants.every( x => x.live === false )} />
         </div>
       : null
     }
