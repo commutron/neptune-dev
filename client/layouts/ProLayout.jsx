@@ -13,7 +13,8 @@ import FormBar from '/client/components/bigUi/ToolBar/FormBar.jsx';
 import NonConOptionMerge from '/client/utility/NonConOptionMerge.js';
 
 export const ProWrap = ({ 
-  itemSerial, itemData, batchData, widgetData, versionData, groupAlias, 
+  itemSerial, itemData, batchData, 
+  widgetData, groupAlias, 
   user, users, app,
   action, tideLockOut, standAlone,
   children
@@ -162,7 +163,6 @@ export const ProWrap = ({
             batchData={batchData}
             itemData={itemData}
             widgetData={widgetData}
-            versionData={versionData}
             
             tideFloodGate={tideFloodGate}
             ncTypesCombo={ncTypesComboFlat}

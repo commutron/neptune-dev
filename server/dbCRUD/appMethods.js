@@ -24,7 +24,6 @@ Meteor.methods({
       orgPIN: '0000',
       minorPIN: '000',
       createdAt: new Date(),
-      // phases: ['finish'],
       branches: [
         {
           brKey: 't3rm1n2t1ng8r2nch',
@@ -382,31 +381,6 @@ Meteor.methods({
             low: Number(chill),
             high: Number(warm),
             max: Number(hot),
-          }
-      }});
-      return true;
-    }else{
-      return false;
-    }
-  },
-  
-  // new tool option
-  addToolOp(title, forStep) {
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-
-      const doc = AppDB.findOne({orgKey: Meteor.user().orgKey});
-      if(doc.toolOption.find( x => x.title === title )) {
-        AppDB.update({orgKey: Meteor.user().orgKey, 'toolOption.title': title}, {
-          $pull : {
-            toolOption: { title: title }
-        }});
-      }else{null}
-
-      AppDB.update({orgKey: Meteor.user().orgKey}, {
-        $push : { 
-          toolOption : {
-            title: title,
-            forSteps: forStep
           }
       }});
       return true;

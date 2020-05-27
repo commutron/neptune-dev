@@ -117,24 +117,24 @@ const ScalesSlide = ({app})=> {
         <input 
           type='number' 
           id='low' 
-          className='miniIn7' 
+          className='miniIn8' 
           placeholder='p4 is >'
           defaultValue={pScl.low} />
         <input 
           type='number' 
           id='high' 
-          className='miniIn7' 
+          className='miniIn8' 
           placeholder='p3 is >'
           defaultValue={pScl.high} />
         <input 
           type='number' 
           id='max' 
-          className='miniIn7'
+          className='miniIn8'
           placeholder='p2 to p1'
           defaultValue={pScl.max} />
         <input 
           type='number' 
-          className='miniIn7'
+          className='miniIn8'
           value={pScl.max}
           disabled />
         <button type='submit' className='smallAction clearGreen'>Save</button>

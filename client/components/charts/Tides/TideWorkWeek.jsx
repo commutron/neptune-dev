@@ -99,10 +99,8 @@ const TideWorkWeek = ({
       width={500}
       padding={{ top: 10, bottom: 20, left: 20, right: 10 }}
       domainPadding={25}
-      animate={{
-          duration: 750,
-          onLoad: { duration: 500 }
-        }}
+      animate={ dayhoursNum === [0, 0, 0, 0, 0] ? null : 
+        { onLoad: { duration: 400 }} }
     >
     {nonDays.length > 0 &&
       <VictoryLegend x={0} y={0}

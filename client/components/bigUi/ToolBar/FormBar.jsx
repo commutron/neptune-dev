@@ -8,7 +8,7 @@ import NCFlood from '/client/components/river/NCFlood.jsx';
 import ShortAdd from '/client/components/river/ShortAdd.jsx';
 
 const FormBar = ({ 
-  batchData, itemData, widgetData, versionData, 
+  batchData, itemData, widgetData,
   tideFloodGate, ncTypesCombo, 
   action, showVerifyState, handleVerify, 
   user, users, app 

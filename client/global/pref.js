@@ -12,7 +12,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '2.1.0';
+    this.neptuneVersion = '2.2.0';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -78,6 +78,8 @@ class Pref {
     this.vrsn = 'v'; // version shorcut
     this.live = 'live'; // live / active in context of a product
     this.notlive = 'not live';
+    this.npi = 'npi';
+    this.npiFull = 'new product intro';
     this.unit = 'unit';// how many in a panel/set
     this.panel = 'set of tracked items';
     this.panelCode = 'panel serial';

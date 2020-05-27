@@ -61,7 +61,9 @@ Meteor.publish('appData', function(){
         {fields: { 
           'orgKey': 0,
           'orgPIN': 0,
-          'minorPIN': 0
+          'minorPIN': 0,
+          'phases': 0,
+          'toolOption': 0
         }}),
       ];
   }else{
@@ -332,7 +334,8 @@ Meteor.publish('hotDataPlus', function(batch){
         }}),
       WidgetDB.find({_id: wID, orgKey: orgKey}, {
         fields: {
-          'orgKey': 0
+          'orgKey': 0,
+          'versions': 0
         }}),
       VariantDB.find({widgetId: wID, orgKey: orgKey}, {
         fields: {
@@ -365,7 +368,6 @@ Meteor.publish('skinnyData', function(clientTZ){
           'widget': 1,
           'describe': 1,
           'groupId': 1,
-          // 'versions': 1,
         }}),
         
       VariantDB.find({orgKey: orgKey}, {

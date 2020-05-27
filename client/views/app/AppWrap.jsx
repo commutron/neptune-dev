@@ -8,11 +8,9 @@ import TideFollow from '/client/components/tide/TideFollow.jsx';
 import Slides from '../../components/smallUi/Slides.jsx';
 
 import BranchesSlide from './appSlides/BranchesSlide.jsx';
-import PhasesSlide from './appSlides/PhasesSlide.jsx';
 import BehaviorSlide from './appSlides/BehaviorSlide.jsx';
 import TrackStepSlide from './appSlides/TrackStepSlide.jsx';
 import CounterSlide from './appSlides/CounterSlide.jsx';
-import MethodSlide from './appSlides/MethodSlide.jsx';
 import ReasonsSlide from './appSlides/ReasonsSlide.jsx';
 import NCLegacySlide from './appSlides/NCLegacySlide.jsx';
 import NCTypeSlide from './appSlides/NCTypeSlide.jsx';
@@ -67,11 +65,9 @@ const AppWrap = ({ isAdmin, isDebug, users, app })=> {
         <Slides
           menu={[
             <b><i className='fas fa-code-branch fa-fw'></i>   {Pref.branches}</b>,
-            <b><i className='fas fa-stream fa-fw yellowT'></i>   {Pref.phases}</b>,
-            <b><i className='fas fa-wave-square fa-fw'></i>   Steps Behavior</b>,
             <b><i className='fas fa-shoe-prints fa-fw'></i>   Track Steps</b>,
             <b><i className='fas fa-stopwatch fa-fw'></i>   Counter Steps</b>,
-            <b><i className='fas fa-wrench fa-fw yellowT'></i>   Verify Methods</b>,
+            <b><i className='fas fa-wave-square fa-fw'></i>   Steps Behavior</b>,
             <b><i className='fas fa-dice fa-fw'></i>   Reasons Options</b>,
             <b><i className='fas fa-bug fa-fw'></i>   Legacy NonCons</b>,
             <b><i className='fas fa-bug fa-fw'></i>   NonCon Types</b>,
@@ -86,12 +82,10 @@ const AppWrap = ({ isAdmin, isDebug, users, app })=> {
           ]}
           extraClass='space5x5'>
           
-          <BranchesSlide key={000} app={app} isDebug={isDebug} />
-          <PhasesSlide key={00} app={app} />
-          <BehaviorSlide key={0} app={app} />
+          <BranchesSlide key={0} app={app} isDebug={isDebug} />
           <TrackStepSlide key={1} app={app} sorted={sortedTrackOptions} />
           <CounterSlide key={2} app={app} />
-          <MethodSlide key={3} app={app} sorted={sortedTrackOptions} />
+          <BehaviorSlide key={3} app={app} />
           <ReasonsSlide key={4} app={app} />
           <NCLegacySlide key={5} app={app} />
           <NCTypeSlide key={6} app={app} />

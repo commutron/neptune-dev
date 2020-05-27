@@ -8,27 +8,20 @@ import SearchHelp from './SearchHelp.jsx';
 
 import DoProCard from './cards/DoProCard.jsx';
 import XBatchCard from './cards/XBatchCard.jsx';
-//import WidgetCard from './cards/WidgetCard.jsx';
 
 import BatchesList from './lists/BatchesList.jsx';
 import GroupsList from './lists/GroupsList.jsx';
 import WidgetsList from './lists/WidgetsList.jsx';
 
+import NPICard from './cards/NPICard.jsx';
+
 const ProductionFindOps = ({ 
   hotBatch, hotxBatch, 
   allBatch, allxBatch,
-  allWidget, allGroup,
+  allGroup, allWidget, allVariant,
   user, activeUsers, app,
   orb, anchor
 })=> {
-  
-  // function linkedBatch(wId, vKey) {
-  //   return allBatch.find(x => x.widgetId === wId, x => x.versionKey === vKey);
-  // }
-  
-  // function allLinkedBatches(wId) {
-  //   return allBatch.filter(x => x.widgetId === wId);
-  // }
   
   function groupActiveWidgets(gId) {
     let widgetsList = allWidget.filter(x => x.groupId === gId);
@@ -49,7 +42,6 @@ const ProductionFindOps = ({
   // function group() {
   //  return allGroup.find(x => x.group === orb);
   // }
-  
   function groupAlias() {
     return allGroup.find(x => x.alias === orb);
   }
@@ -57,10 +49,6 @@ const ProductionFindOps = ({
   function linkedGroup(gId) {
     return allGroup.find(x => x._id === gId);
   }
-  
-  // function widget() {
-  //   return allWidget.find(x => x.widget === orb);
-  // }
   
   function linkedWidget(wId) {
     return allWidget.find(x => x._id === wId);
@@ -70,8 +58,12 @@ const ProductionFindOps = ({
     return allWidget.filter(x => x.groupId === gId);
   }
   
-  function versionData(versions, vKey) {
-    return versions.find(x => x.versionKey === vKey);
+  function groupVariants(gId) {
+    return allVariant.filter(x => x.groupId === gId);
+  }
+  
+  function variantDataByKey(vKey) {
+    return allVariant.find(x => x.versionKey === vKey);
   }
 
   if(!orb) {
@@ -101,7 +93,9 @@ const ProductionFindOps = ({
     Session.set('nowBatch', false);
     return (
       <ProWrap app={app}>
-        <BatchesList batchData={[...allBatch, ...allxBatch]} widgetData={allWidget} />
+        <BatchesList 
+          batchData={[...allBatch, ...allxBatch]} 
+          widgetData={allWidget} />
         <div></div>
       </ProWrap>
     );
@@ -111,7 +105,10 @@ const ProductionFindOps = ({
     Session.set('nowBatch', false);
     return (
       <ProWrap app={app}>
-        <GroupsList groupData={allGroup} batchData={allBatch} widgetData={allWidget} />
+        <GroupsList 
+          groupData={allGroup} 
+          batchData={allBatch} 
+          widgetData={allWidget} />
         <div></div>
       </ProWrap>
     );
@@ -126,18 +123,40 @@ const ProductionFindOps = ({
       </ProWindow>
     );
   }
+  
+  if(orb === Pref.npi || orb === Pref.npiFull) {
+    Session.set('now', Pref.npiFull);
+    Session.set('nowBatch', false);
+    return (
+      <ProWrap
+        user={user}
+        app={app}
+        action='npiDo'
+      >
+        <NPICard
+          allGroup={allGroup}
+          allWidget={allWidget}
+          allVariant={allVariant}
+          user={user}
+          app={app} />
+        <WikiOps 
+          wi={false} 
+          root={app.instruct} 
+          anchor={false} />
+      </ProWrap>
+    );
+  }
 
 // Batch
   if(!isNaN(orb) && orb.length === 5) {
     if(hotBatch) {
       let widget = linkedWidget(hotBatch.widgetId);
-      let version = versionData(widget.versions, hotBatch.versionKey);
+      let variant= variantDataByKey(hotBatch.versionKey);
       let group = linkedGroup(widget.groupId);
       return (
 		    <ProWrap
 		      batchData={hotBatch}
 		      widgetData={widget}
-          versionData={version}
           user={user}
           app={app}
           action='batchBuild'
@@ -146,22 +165,23 @@ const ProductionFindOps = ({
           <DoProCard
             batchData={hotBatch}
             widgetData={widget}
-            versionData={version}
             groupData={group}
             user={user}
             app={app} />
-          <WikiOps wi={version.wiki} root={app.instruct} anchor={anchor} />
+          <WikiOps 
+            wi={variant.instruct} 
+            root={app.instruct} 
+            anchor={anchor} />
         </ProWrap>
       );
     }else if(hotxBatch) {
       let widget = linkedWidget(hotxBatch.widgetId);
-      let version = versionData(widget.versions, hotxBatch.versionKey);
+      let variant = variantDataByKey(hotxBatch.versionKey);
       let group = linkedGroup(hotxBatch.groupId);
       return (
 		    <ProWrap
 		      batchData={hotxBatch}
 		      widgetData={widget}
-          versionData={version}
           user={user}
           app={app}
           action='xBatchBuild'
@@ -171,11 +191,13 @@ const ProductionFindOps = ({
           <XBatchCard
             batchData={hotxBatch}
             widgetData={widget}
-            versionData={version}
             groupData={group}
             user={user}
             app={app} />
-          <WikiOps wi={version.wiki} root={app.instruct} anchor={anchor} />
+          <WikiOps 
+            wi={variant.instruct}
+            root={app.instruct}
+            anchor={anchor} />
         </ProWrap>
       );
     }
@@ -188,7 +210,7 @@ const ProductionFindOps = ({
     if(hotBatch) {
       let item = itemData(hotBatch.items, orb);
       let widget = linkedWidget(hotBatch.widgetId);
-      let version = versionData(widget.versions, hotBatch.versionKey);
+      let variant= variantDataByKey(hotBatch.versionKey);
       let group = linkedGroup(widget.groupId);
       return (
         <ProWrap
@@ -196,7 +218,6 @@ const ProductionFindOps = ({
           itemData={item}
           itemSerial={item.serial}
           widgetData={widget}
-          versionData={version}
           user={user}
           users={activeUsers}
           app={app}
@@ -206,12 +227,14 @@ const ProductionFindOps = ({
             batchData={hotBatch}
             itemData={item}
             widgetData={widget}
-            versionData={version}
             groupData={group}
             user={user}
             users={activeUsers}
             app={app} />
-          <WikiOps wi={version.wiki} root={app.instruct} anchor={anchor} />
+          <WikiOps 
+            wi={variant.instruct} 
+            root={app.instruct}
+            anchor={anchor} />
         </ProWrap>
       );
     }
@@ -220,24 +243,28 @@ const ProductionFindOps = ({
 // Group
   if(isNaN(orb)) {
     let alias = groupAlias();
-    let lookup = alias ? alias : false;
-    if(lookup) {
+    let lookupG = alias ? alias : false;
+    if(lookupG) {
       Session.set('nowBatch', false);
-      let widgets = groupWidgets(lookup._id);
-      let activeWidgets = groupActiveWidgets(lookup._id);
+      let widgets = groupWidgets(lookupG._id);
+      let variants = groupVariants(lookupG._id);
+      let activeWidgets = groupActiveWidgets(lookupG._id);
       return (
         <ProWrap
           batchData={false}
           itemData={false}
-          versionData={false}
-          groupAlias={lookup.alias}
+          groupAlias={lookupG.alias}
           app={app}
         >
           <WidgetsList
-            groupAlias={lookup.alias}
+            groupAlias={lookupG.alias}
             widgetData={widgets}
+            variantData={variants}
             active={activeWidgets} />
-          <WikiOps wi={lookup.wiki} root={app.instruct} anchor={anchor} />
+          <WikiOps 
+            wi={lookupG.wiki} 
+            root={app.instruct} 
+            anchor={anchor} />
         </ProWrap>
       );
     }

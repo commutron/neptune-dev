@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 import LeapButton from '../../../components/tinyUi/LeapButton.jsx';
 import FilterActive from '../../../components/bigUi/FilterActive.jsx';
 
-const WidgetsList = ({ active, widgetData, groupAlias })=> {
+const WidgetsList = ({ active, widgetData, variantData, groupAlias })=> {
   
   const [ filterState, filterSet ] = useState(false);
   const [ textString, textStringSet ] = useState('');

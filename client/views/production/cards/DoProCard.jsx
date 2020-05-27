@@ -17,7 +17,7 @@ import BatchCard from './BatchCard.jsx';
 
 
 const DoProCard = ({ 
-  itemData, batchData, widgetData, versionData, groupData,
+  itemData, batchData, widgetData, groupData,
   user, users, app, 
   
   ncTypesCombo, tideLockOut, tideKey,
@@ -142,7 +142,6 @@ const DoProCard = ({
             batchData={batchData}
             itemData={itemData}
             widgetData={widgetData}
-            versionData={versionData}
             user={user}
             app={app}
             brancheS={brancheState}

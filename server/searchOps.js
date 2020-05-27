@@ -10,7 +10,6 @@ export function whatIsBatch(keyword) {
     const widget = WidgetDB.findOne({_id: batch.widgetId});
     const group = GroupDB.findOne({_id: widget.groupId});
     const variant = VariantDB.findOne({versionKey: batch.versionKey});
-    // const version = widget.versions.find( x => x.versionKey === batch.versionKey);
     const vNice = `v.${variant.variant}`;
     const nice = `${group.alias.toUpperCase()} ${widget.widget.toUpperCase()} ${vNice}`;
     return nice;
@@ -21,7 +20,6 @@ export function whatIsBatchX(keyword) {
   const group = GroupDB.findOne({_id: batch.groupId});
   const widget = WidgetDB.findOne({_id: batch.widgetId});
   const variant = VariantDB.findOne({versionKey: batch.versionKey});
-  // const version = widget.versions.find( x => x.versionKey === batch.versionKey);
   const vNice = `v.${variant.variant}`;
   const nice = `${group.alias.toUpperCase()} ${widget.widget.toUpperCase()} ${vNice}`;
   return nice;
@@ -100,12 +98,6 @@ Meteor.methods({
     return { results, exact };
   },
   
-  // quickVersion(vKey) {
-  //   const widget = WidgetDB.findOne({'versions.versionKey': vKey});
-  //   const version = widget ? widget.versions.find( x => x.versionKey === vKey) : false;
-  //   const found = version.version;
-  //   return found;
-  // },
   quickVariant(vKey) {
     const variant = VariantDB.findOne({versionKey: vKey});
     const found = variant.variant;

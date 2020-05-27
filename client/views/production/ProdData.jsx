@@ -13,7 +13,8 @@ import ProductionFindOps from './ProductionFindOps.jsx';
 const ProdData = ({
   usersReady, coldReady, hotReady, // subs
   orb, anchor, user, org, users, app, // self 
-  allGroup, allWidget, allBatch, allxBatch,  // customer data
+  allGroup, allWidget, allVariant, // customer data
+  allBatch, allxBatch,
   hotBatch, hotxBatch // working data
 })=> {
 
@@ -46,8 +47,9 @@ const ProdData = ({
     );
   }
   
-  const activeUsers = users.filter( x => Roles.userIsInRole(x._id, 'active') === true &&
-                                         Roles.userIsInRole(x._id, 'readOnly') === false);
+  const activeUsers = users.filter( x => 
+                        Roles.userIsInRole(x._id, 'active') === true &&
+                        Roles.userIsInRole(x._id, 'readOnly') === false);
     
   return (
     <ProductionFindOps
@@ -59,6 +61,7 @@ const ProdData = ({
       app={app}
       allGroup={allGroup}
       allWidget={allWidget}
+      allVariant={allVariant}
       allBatch={allBatch}
       allxBatch={allxBatch}
       hotBatch={hotBatch}
@@ -151,6 +154,7 @@ export default withTracker( () => {
       app: AppDB.findOne({org: org}),
       allGroup: GroupDB.find( {}, { sort: { group: 1 } } ).fetch(),
       allWidget: WidgetDB.find( {}, { sort: { widget: 1 } } ).fetch(),
+      allVariant: VariantDB.find( {} ).fetch(),
       allBatch: BatchDB.find( {}, { sort: { batch: -1 } } ).fetch(),
       allxBatch: XBatchDB.find( {}, { sort: { batch: -1 } } ).fetch(),
       hotBatch: hotBatch,

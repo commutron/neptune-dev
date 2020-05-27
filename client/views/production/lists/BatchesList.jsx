@@ -7,7 +7,7 @@ const BatchesList = ({ batchData, widgetData })=> {
   
   const [ filter, filterSet ] = useState( false );
   const [ textString, textStringSet ] = useState( '' );
-  const [ versionNames, versionNamesSet ] = useState( [] );
+  const [ variantNames, variantNamesSet ] = useState( [] );
   const [ showListState, showListSet ] = useState( batchData );
 
   function setFilter(rule) {
@@ -21,7 +21,7 @@ const BatchesList = ({ batchData, widgetData })=> {
   useEffect( ()=> {
     let vFetch = [];
     for(let b of batchData) {
-      Meteor.call('quickVersion', b.versionKey, (error, reply)=>{
+      Meteor.call('quickVariant', b.versionKey, (error, reply)=>{
         if(error)
           console.log(error);
         if(reply) {
@@ -29,7 +29,7 @@ const BatchesList = ({ batchData, widgetData })=> {
         }else{null}
       });
     }
-    versionNamesSet( vFetch );
+    variantNamesSet( vFetch );
   }, [ batchData ]);
 
   useEffect( ()=> {
@@ -68,7 +68,7 @@ const BatchesList = ({ batchData, widgetData })=> {
                       'leapBar numFont activeMark' : 
                       'leapBar numFont gMark';
         const subW = widgetData.find( x => x._id === entry.widgetId);
-        const subV = versionNames.find( x => x.vKey === entry.versionKey);
+        const subV = variantNames.find( x => x.vKey === entry.versionKey);
         const subVname = !subV ? false : subV.vName;
           return (
             <JumpButton

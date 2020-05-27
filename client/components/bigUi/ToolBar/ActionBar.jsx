@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import './style.css';
 import moment from 'moment';
 
@@ -41,7 +41,7 @@ const ActionBar = ({
     <div className='footLeft'>
     { 
   	action === 'item' ?
-  	  <div> 
+  	  <Fragment> 
     	  <UnitSet
     	    id={batchData._id}
     	    item={itemData} />
@@ -72,10 +72,10 @@ const ActionBar = ({
           check={itemData.createdAt.toISOString()}
           entry={batchData}
           lockOut={batchData.finishedAt !== false} />
-      </div>
+      </Fragment>
 		:
     action === 'batch' ?
-      <div>
+      <Fragment>
         <BatchEdit
           batchId={batchData._id}
           batchNow={batchData.batch}
@@ -132,10 +132,10 @@ const ActionBar = ({
           check={batchData.createdAt.toISOString()}
           entry={batchData}
           lockOut={batchData.finishedAt !== false} />
-      </div>
+      </Fragment>
       :
       action === 'xbatch' ?
-        <div>
+        <Fragment>
           <BatchFormX
             batchId={batchData._id}
             batchNow={batchData.batch}
@@ -176,10 +176,10 @@ const ActionBar = ({
             check={batchData.createdAt.toISOString()}
             entry={batchData}
             lockOut={batchData.completed === true} />
-        </div>
+        </Fragment>
       :
       action === 'variant' && variantData ?
-        <div>
+        <Fragment>
           <VariantForm
             widgetData={widgetData}
             variantData={variantData}
@@ -210,10 +210,10 @@ const ActionBar = ({
             check={variantData.createdAt.toISOString()}
             entry={variantData}
             lockOut={variantData.live === true} />
-        </div>
+        </Fragment>
       :
       action === 'widget' ?
-        <div>
+        <Fragment>
           <WidgetEditForm
             id={widgetData._id}
             now={widgetData} />
@@ -250,17 +250,10 @@ const ActionBar = ({
             check={widgetData.createdAt.toISOString()}
             entry={widgetData._id}
             lockOut={!allVariants.every( x => x.live === false )} />
-        </div>
+        </Fragment>
       : null
     }
-
     </div>
-    
-  { /* Center Section */ }      
-    <div className='footCent'></div>
-        
-  { /* Right Section */ }
-    <div className='footRight'></div>
   </div>
 );
 
