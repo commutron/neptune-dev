@@ -59,55 +59,47 @@ const VariantPanel = ({
   }
   
   return(
-    <div className='section'>
-            
-      <Tabs
-        tabs={[Pref.variant, 'Components']}
-        wide={true}
-        stick={false}
-        hold={true}
-        sessionTab='variantExPanelTabs'>
+    <div className='space'>
+      <div className='wide comfort'>
         
-        <div>
-          <div className='oneTwoThreeContainer'>
-            <div className='oneThirdContent'>
-              
-              <h1>VARIANT {v.variant}</h1>
-              
-              <p>Status: <i className='big'>{v.live ? 'Live' : 'Archived'}</i></p>
-            
-              <TagsModule
-                action='variant'
-                id={v._id}
-                tags={v.tags}
-                vKey={v.versionKey}
-                tagOps={app.tagOption} />
-              
-              <p>
-                <a 
-                  className='clean wordBr' 
-                  href={v.instruct} 
-                  target='_blank'
-                >{v.instruct}</a>
-              </p>
-              
-              <p className='numFont'>default units: {v.runUnits}</p>
-              
-            </div>
-            
-            <div className='twoThirdsContent'>
-              <NoteLine 
-                action='variant'
-                id={v._id}
-                entry={v.notes} />
-            </div>
-            
-          </div>
+        <TagsModule
+          action='variant'
+          id={v._id}
+          tags={v.tags}
+          vKey={v.versionKey}
+          tagOps={app.tagOption} />
           
+        <div className='middle'
+          >Status: <i className='bigger'>{v.live ? 'Live' : 'Archived'}</i>
         </div>
-          
         
-        <div className='space'>
+      </div>
+
+      <hr className='vmargin' />
+      
+      <div className='containerE'/*oneTwoThreeContainer'*/>
+        <div className='oneEcontent' /*'oneThirdContent'*/>
+
+          <p>
+            <a 
+              className='clean wordBr' 
+              href={v.instruct} 
+              target='_blank'
+            >{v.instruct}</a>
+          </p>
+              
+          <p className='numFont'>default units: {v.runUnits}</p>
+          
+          <NoteLine 
+            action='variant'
+            id={v._id}
+            entry={v.notes} />
+            
+        </div>
+        
+        <div className='threeEcontent' /*twoThirdsContent'*/>
+            
+          
           <h3>{Pref.comp}s: {v.assembly.length}</h3>
           <dl>
             {vAssmbl.map((entry, index)=>{
@@ -132,10 +124,10 @@ const VariantPanel = ({
               <span className='actionIconText blackT'>Download</span>
             </label>
           </button>
+          
         </div>
-        
-      </Tabs>
-
+          
+      </div>
 
       <CreateTag
         when={v.createdAt}

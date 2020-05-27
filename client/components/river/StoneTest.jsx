@@ -1,13 +1,13 @@
 import React, { Fragment } from 'react';
 import { toast } from 'react-toastify';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
-import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 import StoneProgRing from './StoneProgRing.jsx';
 
 const StoneTest = ({ 
 	id, barcode, sKey, step, type, 
 	progCounts, 
-	lockout, 
+	lockout,
 	topClass, topTitle,
 	
 	allItems, isAlt, hasAlt,
@@ -37,13 +37,18 @@ const StoneTest = ({
     	// unlock();
     	null;
     }else{
-			Meteor.call('addTest', id, barcode, sKey, step, type, comm, pass, more, benchmark, (error, reply)=>{
-		    if(error)
+			Meteor.call('addTest', 
+				id, barcode, sKey, step, type,
+				comm, pass, more, benchmark, 
+			(error, reply)=>{
+		    if(error) {
 			    console.log(error);
+			    toast.error('Server Error');
+		    }
 				if(reply === true) {
 					resolveEntry();
 			  }else{
-			    toast.error(Pref.blocked);
+			    toast.warning('Insufficient Permissions');
 			  }
 			});
     }

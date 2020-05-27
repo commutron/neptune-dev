@@ -323,6 +323,7 @@ Meteor.publish('hotDataPlus', function(batch){
           'orgKey': 0,
           'shareKey': 0,
           'events': 0,
+          'floorRelease': 0
         }}),
       XBatchDB.find({batch: batch, orgKey: orgKey}, {
         fields: {
@@ -364,7 +365,7 @@ Meteor.publish('skinnyData', function(clientTZ){
           'widget': 1,
           'describe': 1,
           'groupId': 1,
-          'versions': 1,
+          // 'versions': 1,
         }}),
         
       VariantDB.find({orgKey: orgKey}, {
@@ -457,6 +458,7 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
         WidgetDB.find({widget: hothotWidget, orgKey: orgKey}, {
           fields: {
             'orgKey': 0,
+            'versions': 0
           }}),
         VariantDB.find({widgetId: hothotID, orgKey: orgKey}, {
           fields: {

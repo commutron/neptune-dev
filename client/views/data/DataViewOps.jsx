@@ -77,10 +77,6 @@ const DataViewOps = ({
     return allVariant.filter(x => x.widgetId === wId);
   }
   
-  function versionData(versions, vKeum) {
-    return versions.find( x => x.versionKey === vKeum || x.version === vKeum );
-  }
-  
   function getFlowData(batchData, widgetData, appData) {
     let riverTitle = 'not found';
     let riverFlow = [];
@@ -219,7 +215,7 @@ const DataViewOps = ({
           groupData={false}
           user={user}
           app={app}
-          title={Pref.groups + ' Overview'}
+          title={Pref.groups}
           subLink={subLink}
           action='newGroup'
           base={true}
@@ -240,12 +236,11 @@ const DataViewOps = ({
         <TraverseWrap
 		      batchData={false}
           widgetData={false}
-          versionData={false}
           variantData={false}
           groupData={false}
           user={user}
           app={app}
-          title={Pref.batches + ' Overview'}
+          title={Pref.batches}
           subLink={subLink}
           action={false}
           base={true}
@@ -295,7 +290,7 @@ const DataViewOps = ({
           groupData={false}
           user={user}
           app={app}
-          title='Test Fail Overview'
+          title='Tests Failed'
           subLink={subLink}
           action={false}
           beta={true}
@@ -316,7 +311,7 @@ const DataViewOps = ({
           groupData={false}
           user={user}
           app={app}
-          title='Scraps Overview'
+          title='Scraps'
           subLink={subLink}
           action={false}
           base={true}
@@ -355,16 +350,14 @@ const DataViewOps = ({
       let item = itemData(hotBatch.items, specify);
       let widget = linkedWidget(hotBatch.widgetId);
       let variant = linkedVariantKey(hotBatch.versionKey);
-      let version = versionData(widget.versions, hotBatch.versionKey);
       let group = linkedGroup(widget.groupId);
       let flowData = getFlowData(hotBatch, widget, app);
-      if(item && widget && variant && version && group) {
+      if(item && widget && variant && group) {
         return (
           <TraverseWrap
             batchData={hotBatch}
             itemData={item}
             widgetData={widget}
-            versionData={version}
             variantData={variant}
             groupData={group}
             user={user}
@@ -460,13 +453,11 @@ const DataViewOps = ({
       let widget = linkedWidget(hotXBatch.widgetId);
       let variant = linkedVariantKey(hotXBatch.versionKey);
       let allVariants = widgetVariants(hotXBatch.widgetId);
-      let version = versionData(widget.versions, hotXBatch.versionKey);
       let group = linkedGroup(hotXBatch.groupId);
       return (
 		    <TraverseWrap
 		      batchData={hotXBatch}
           widgetData={widget}
-          versionData={version}
           variantData={variant}
           allVariants={allVariants}
           groupData={group}

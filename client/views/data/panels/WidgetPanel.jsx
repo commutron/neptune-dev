@@ -15,7 +15,7 @@ const WidgetPanel = ({
   app, user
 })=> {
 
-  const g = groupData;
+  // const g = groupData;
   const w = widgetData;
   const b = batchRelated;
   const a = app;

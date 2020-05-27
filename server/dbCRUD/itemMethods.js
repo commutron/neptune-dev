@@ -370,7 +370,9 @@ Meteor.methods({
   
   // ship failed test
   addTest(batchId, bar, key, step, type, com, pass, more, benchmark) {
-    if(type === 'test' && !Roles.userIsInRole(Meteor.userId(), 'test')) {
+    if(!Roles.userIsInRole(Meteor.userId(), 'active') ||
+       !Roles.userIsInRole(Meteor.userId(), 'inspect')
+    ) {
       return false;
     }else{
       const orgKey = Meteor.user().orgKey;
@@ -456,7 +458,7 @@ Meteor.methods({
 
   // finish Item
   finishItem(batchId, serial, key, step, type, benchmark) {
-    if(!Roles.userIsInRole(Meteor.userId(), 'finish')) {
+    if(!Roles.userIsInRole(Meteor.userId(), "BRKt3rm1n2t1ng8r2nch")) {
       return false;
     }else{
       const orgKey = Meteor.user().orgKey;
@@ -631,7 +633,9 @@ Meteor.methods({
   
   //  Undo a Finish
   pullFinish(batchId, serial, override) {
-    if(!Roles.userIsInRole(Meteor.userId(), 'finish') || override === undefined) {
+    if(!Roles.userIsInRole(Meteor.userId(), ("BRKt3rm1n2t1ng8r2nch")) 
+          || override === undefined) 
+    {
       null;
     }else{
       const doc = BatchDB.findOne({_id: batchId});

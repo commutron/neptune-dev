@@ -98,7 +98,7 @@ const TimeBudgetsChunk = ({
           </p>}
       </div>
         
-      <div className='space containerE' /*aFrameContainer'*/>
+      <div className='space containerE'>
         
         <div className='oneEcontent numFont'>
           <TimeBudgetBar a={totalTideMinutes} b={totalLeftMinutes} c={totalOverMinutes} />

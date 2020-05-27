@@ -79,13 +79,16 @@ const FirstForm = ({
 		  good, whoB, howB, howI, 
 		  diff, ng, fresh, 
 		(error, reply)=>{
-		  error && console.log(error);
-		  if(reply) {
-		    document.getElementById('lookup').focus();
+			if(error) {
+		    console.log(error);
+		    toast.error('Server Error');
+			}
+		  if(reply === true) {
+				document.getElementById('lookup').focus();
      	  handleVerify(null);
-			 }else{
-			   toast.error('Blocked by Server');
-			 }
+			}else{
+				toast.warning('Insufficient Permissions');
+		  }
 		});
 	}
   

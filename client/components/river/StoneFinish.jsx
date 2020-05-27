@@ -29,13 +29,16 @@ const StoneFinish = ({
     const preCount = preStep ? preStep.items : undefined;
     const benchmark = preCount === 0 ? 'first' : preCount === preTotal - 1 ? 'last' : false;              
 
-		Meteor.call('finishItem', batchId, barcode, sKey, step, type, benchmark, (error, reply)=>{
-		  if(error)
+		Meteor.call('finishItem', batchId, barcode, sKey, step, type, benchmark, 
+			(error, reply)=>{
+		  if(error) {
 		    console.log(error);
+		    toast.error('Server Error');
+			}
 		  if(reply === true) {
 				resolveEntry();
 			}else{
-		    toast.error('server error');
+				toast.warning('Insufficient Permissions');
 		  }
 		});
 	}

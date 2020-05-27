@@ -9,9 +9,9 @@ export function whatIsBatch(keyword) {
   }else{
     const widget = WidgetDB.findOne({_id: batch.widgetId});
     const group = GroupDB.findOne({_id: widget.groupId});
-    const variant = VariantDB.findOne({_id: batch.versionKey});
-    const version = widget.versions.find( x => x.versionKey === batch.versionKey);
-    const vNice = variant ? `v.${variant.variant}` : `v^${version.version}`;
+    const variant = VariantDB.findOne({versionKey: batch.versionKey});
+    // const version = widget.versions.find( x => x.versionKey === batch.versionKey);
+    const vNice = `v.${variant.variant}`;
     const nice = `${group.alias.toUpperCase()} ${widget.widget.toUpperCase()} ${vNice}`;
     return nice;
   }
@@ -20,9 +20,9 @@ export function whatIsBatchX(keyword) {
   const batch = XBatchDB.findOne({batch: keyword});
   const group = GroupDB.findOne({_id: batch.groupId});
   const widget = WidgetDB.findOne({_id: batch.widgetId});
-  const variant = VariantDB.findOne({_id: batch.versionKey});
-  const version = widget.versions.find( x => x.versionKey === batch.versionKey);
-  const vNice = variant ? `v.${variant.variant}` : `v^${version.version}`;
+  const variant = VariantDB.findOne({versionKey: batch.versionKey});
+  // const version = widget.versions.find( x => x.versionKey === batch.versionKey);
+  const vNice = `v.${variant.variant}`;
   const nice = `${group.alias.toUpperCase()} ${widget.widget.toUpperCase()} ${vNice}`;
   return nice;
 }
@@ -37,12 +37,6 @@ function getWidget(widgetId) {
   return new Promise(resolve => { 
     const widget = WidgetDB.findOne({_id: widgetId});
     resolve(widget);
-  });
-}
-function getVersion(widget, vKey) {  
-  return new Promise(resolve => { 
-    const version = widget.versions.find( x => x.versionKey === vKey);
-    resolve(version);
   });
 }
 function getVariant(vKey) {  
@@ -106,12 +100,12 @@ Meteor.methods({
     return { results, exact };
   },
   
-  quickVersion(vKey) {
-    const widget = WidgetDB.findOne({'versions.versionKey': vKey});
-    const version = widget ? widget.versions.find( x => x.versionKey === vKey) : false;
-    const found = version.version;
-    return found;
-  },
+  // quickVersion(vKey) {
+  //   const widget = WidgetDB.findOne({'versions.versionKey': vKey});
+  //   const version = widget ? widget.versions.find( x => x.versionKey === vKey) : false;
+  //   const found = version.version;
+  //   return found;
+  // },
   quickVariant(vKey) {
     const variant = VariantDB.findOne({versionKey: vKey});
     const found = variant.variant;

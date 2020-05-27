@@ -1,4 +1,5 @@
 import React from 'react';
+import Pref from '/client/global/pref.js';
 
 const CookieBar = ({ 
   groupData, 
@@ -11,7 +12,7 @@ const CookieBar = ({
   return(
     <div className='cookieRow'>
       {groupData && 
-        <span className='cookieCrumb'>
+        <span className='cookieCrumb' title={`${Pref.group}: ${groupData.alias}`}>
           <button 
             className='cookie up numFont'
             onClick={()=>FlowRouter.go('/data/overview?request=groups&specify=' + groupData.alias)}>
@@ -21,7 +22,7 @@ const CookieBar = ({
           </button>
         </span>}
       {widgetData && 
-        <span className='cookieCrumb'>
+        <span className='cookieCrumb' title={`${Pref.widget}: ${widgetData.widget}`}>
           <span className='crumb'></span>
           <button 
             className='cookie up numFont'
@@ -32,7 +33,7 @@ const CookieBar = ({
           </button>
         </span>}
       {variantData && 
-        <span className='cookieCrumb'>
+        <span className='cookieCrumb' title={`${Pref.variant}: ${variantData.variant}`}>
           <span className='crumb'><i className='fas fa-chevron-right fa-lg'></i></span>
           <button 
             className='cookie'
@@ -41,7 +42,7 @@ const CookieBar = ({
           </button>
         </span>}
       {batchData && 
-        <span className='cookieCrumb'>
+        <span className='cookieCrumb' title={`${Pref.batch}: ${batchData.batch}`}>
           <span className='crumb'></span>
           <button 
             className='cookie numFont'

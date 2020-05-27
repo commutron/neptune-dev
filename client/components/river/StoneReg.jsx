@@ -33,13 +33,16 @@ const StoneReg = ({
     const preCount = preStep ? preStep.items : undefined;
     const benchmark = preCount === 0 ? 'first' : preCount === preTotal - 1 ? 'last' : false;              
     
-		Meteor.call('addHistory', id, barcode, sKey, step, type, comm, pass, benchmark, (error, reply)=>{
-	    if(error)
+		Meteor.call('addHistory', id, barcode, sKey, step, type, comm, pass, benchmark, 
+			(error, reply)=>{
+	    if(error) {
 		    console.log(error);
+		    toast.error('Server Error');
+			}	
 			if(reply === true) {
 				resolveEntry();
 			}else{
-		    toast.error('server error');
+		    toast.warning('Insufficient Permissions');
 		  }
 		});
   }
