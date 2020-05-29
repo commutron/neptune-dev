@@ -50,7 +50,7 @@ const DataRepair = ({ app, users })=> {
     });
   }
   */
-  
+  /*
   function rebuildTheBigThing() {
     toast.warn('Method Called, Please Wait...', {
       toastId: ( 'ReBuildAllOp' ),
@@ -70,7 +70,7 @@ const DataRepair = ({ app, users })=> {
       }
     });
   }
-  
+  */
   function updateCaches() {
     const clientTZ = moment.tz.guess();
     Meteor.call('FORCEcacheUpdate', clientTZ, (error)=>{
@@ -149,13 +149,13 @@ const DataRepair = ({ app, users })=> {
       >Fix Basline Time Key</button>
       <hr />
       <br />*/}
-      
+      {/*
       <h2 className='cap'>Migrate ALL Widget Versions</h2>
       <button
         onClick={()=>rebuildTheBigThing()}
         className='action clear blueT'
       >Migrate to VariantDB</button>
-      
+      */}
       <h2 className='cap'>Delete all CacheDB Entries</h2>
       <button
         onClick={()=>clearAllCaches()}

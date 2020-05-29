@@ -107,7 +107,7 @@ Meteor.methods({
     }
   },
   */
-  
+  /*
   migrateALLWidgetVersions() {
     this.unblock();
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
@@ -123,6 +123,7 @@ Meteor.methods({
       return false;
     }
   },
+  */
   
   resetALLCacheDB() {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {

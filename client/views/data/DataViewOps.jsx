@@ -195,10 +195,11 @@ const DataViewOps = ({
         invertColor={true}
       >
         <ReportsWrap
-          batchData={allBatch}
-          widgetData={allWidget}
-          variantData={allVariant}
-          groupData={allGroup} 
+          allBatch={allBatch}
+          allXBatch={allXBatch}
+          allWidget={allWidget}
+          allVariant={allVariant}
+          allGroup={allGroup} 
           app={app} />
       </TraverseWrap>
     );

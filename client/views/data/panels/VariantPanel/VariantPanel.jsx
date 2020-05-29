@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import Pref from '/client/global/pref.js';
 
 import CreateTag from '/client/components/tinyUi/CreateTag.jsx';
-import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
+// import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 import TagsModule from '/client/components/bigUi/TagsModule.jsx';
 import NoteLine from '/client/components/smallUi/NoteLine.jsx';
 //import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';

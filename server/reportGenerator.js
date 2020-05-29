@@ -4,12 +4,18 @@ import timezone from 'moment-timezone';
 function findRelevantBatches(orgKey, from, to) {
   return new Promise(resolve => {
     // for BatchDB only
-    const allBatches = BatchDB.find({orgKey: orgKey}).fetch();
     // time window - without timezone corection, assumes the server is onsite
-    const batchPack = allBatches.filter( x => 
-                        moment(x.createdAt).isBefore(to) &&
-                          ( x.finishedAt === false || 
-                            moment(x.finishedAt).isAfter(from) ) );
+    const batchPack = BatchDB.find({
+        orgKey: Meteor.user().orgKey,
+        $and : [
+          { createdAt: { $lte: new Date( to ) } },
+          { $or : [ 
+            { finishedAt : false }, 
+            { finishedAt : { $gte: new Date( from ) } } 
+          ] }
+        ]
+      }).fetch();
+
     resolve(batchPack);
   });
 }
@@ -111,8 +117,7 @@ Meteor.methods({
       }
     }
     return getBatches();
-  },
-  
+  }
   
   
 })
