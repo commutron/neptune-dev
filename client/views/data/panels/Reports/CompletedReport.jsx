@@ -135,7 +135,8 @@ const CompletedReport = ({ batchData, widgetData, groupData, app })=> {
         <ReportStatsTable 
           title={`completed ${Pref.batches} report totals`}
           dateString={`${weekChoice.yearNum}w${weekChoice.weekNum}`}
-          rows={totalData} />
+          rows={totalData}
+          extraClass='max500' />
       }
            
     </div>

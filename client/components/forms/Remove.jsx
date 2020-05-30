@@ -17,7 +17,7 @@ const RemoveWrapper = ({ action, entry, title, check, lockOut })=> {
   return(
     <ModelMedium
       button='Delete'
-      title={`delete "${title}" permanently`}
+      title={`delete "${title}"`}
       color='redT'
       icon='fa-minus-circle'
       lock={!auth}

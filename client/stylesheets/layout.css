@@ -1014,3 +1014,5 @@ button.numberSet {
 .maxW50 { max-width: 50vw; }
 .maxW30 { max-width: 30vw; }
 .flxGrow { flex-grow: 2; }
+
+.minH60 { min-height: 60px; }

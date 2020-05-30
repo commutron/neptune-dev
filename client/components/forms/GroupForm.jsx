@@ -31,7 +31,7 @@ const GroupFormWrapper = ({ id, name, alias, wiki, noText, primeTopRight })=> {
 
 export default GroupFormWrapper;
 
-const GroupForm = ({ id, name, alias, wiki, title })=> {
+const GroupForm = ({ id, name, alias, wiki, title, selfclose })=> {
 
     function createCustomer(e) {
       e.preventDefault();
@@ -46,7 +46,7 @@ const GroupForm = ({ id, name, alias, wiki, title })=> {
             console.log(error);
           if(reply) {
             toast.success('Saved');
-            FlowRouter.go('/data/overview?request=groups&specify=' + groupAlias);
+            selfclose();
           }else{
             toast.error('Server Error');
           }
@@ -80,25 +80,29 @@ const GroupForm = ({ id, name, alias, wiki, title })=> {
   const orWiki = wiki ? wiki : '';
 
   return(
-    <form id='new' className='centre' onSubmit={(e)=>createCustomer(e)}>
-      <p className='inlineForm'>
+    <form id='new' onSubmit={(e)=>createCustomer(e)}>
+      <p>
         <span>
           <input
             type='text'
             id='gName'
             defaultValue={orName}
             placeholder='ie. Trailer Safegaurd'
+            className='dbbleWide'
+            maxLength={Pref.groupMax}
             autoFocus={true}
             required />
           <label htmlFor='gName'>Full Name</label>
         </span>
-        <span className='breath' />
+      </p>
+      <p>
         <span>
           <input
             type='text'
             id='gAlias'
             defaultValue={orAlias}
             placeholder='ie. TSG'
+            maxLength={Pref.aliasMax}
             required />
           <label htmlFor='gAlias'>Abbreviation / Alias</label>
         </span>
@@ -112,8 +116,9 @@ const GroupForm = ({ id, name, alias, wiki, title })=> {
           className='dbbleWide' />
         <label htmlFor='gWiki' className='cap'>{Pref.group} {Pref.instruct} index</label>
       </p>
-      <br />
-      <Submit name={title} type='action' />
+      <span className='centre'>
+        <Submit name={title} type='action' />
+      </span>
     </form>
   );
 };

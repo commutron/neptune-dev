@@ -2,7 +2,7 @@ import React from 'react';
 import './style.css';
 import { toast } from 'react-toastify';
 
-const ReportStatsTable = ({ title, dateString, rows })=> {
+const ReportStatsTable = ({ title, dateString, rows, extraClass })=> {
   
   function exportTable() {
     const filename = title.split(" ").join("_");
@@ -26,7 +26,7 @@ const ReportStatsTable = ({ title, dateString, rows })=> {
   return(
     <div className='printTable'>
         
-        <div className='space wide max500'>
+        <div className={`space wide ${extraClass}`}>
           
           <div className='comfort middle'>
             <h3 className='cap'>{title}</h3>
@@ -38,7 +38,7 @@ const ReportStatsTable = ({ title, dateString, rows })=> {
             ><i className='fas fa-download fa-fw'></i></button>
           </div>
           
-          <table className='reportReceipt wide cap'>
+          <table className='reportReceipt wide'>
             {rows.map( (entry, index)=>{
               if(entry[1] === false) {
                 null;
@@ -54,7 +54,9 @@ const ReportStatsTable = ({ title, dateString, rows })=> {
                       return(
                         <tr key={rndm}>
                           <td className='indent'>{etr[0]}</td>
-                          <td className='leftBorder'>{etr[1]}</td>
+                          <td>{etr[1]}</td>
+                          {entry[2] && <td>{entry[2]}</td>}
+                          {entry[3] && <td>{entry[3]}</td>}
                         </tr>
                     )})}
                   </tbody>
@@ -64,7 +66,9 @@ const ReportStatsTable = ({ title, dateString, rows })=> {
                   <tbody key={index}>
                     <tr>
                       <td>{entry[0]}</td>
-                      <td className='leftBorder'>{entry[1]}</td>
+                      <td>{entry[1]}</td>
+                      {entry[2] && <td>{entry[2]}</td>}
+                      {entry[3] && <td>{entry[3]}</td>}
                     </tr>
                   </tbody>
             )}})}

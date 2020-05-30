@@ -12,7 +12,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '2.2.0';
+    this.neptuneVersion = '2.3.0';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -40,7 +40,10 @@ class Pref {
       
     ];
     
+    // config
     this.userTimePublic = true;
+    this.aliasMax = 128;
+    this.aliasMax = 16;
     
     // app navigation
     this.post = 'record';

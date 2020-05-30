@@ -22,8 +22,8 @@ const ReportsWrap = ({
       
       <Tabs
         tabs={[
-          <b><i className='fas fa-fast-backward fa-fw'></i> Build History</b>,
           <b><i className='fas fa-flag-checkered fa-fw'></i> Completed</b>,
+          <b><i className='fas fa-fast-backward fa-fw'></i> Build History</b>,
           <b><i className='fas fa-calendar fa-fw'></i> Month Raw</b>,
           <b><i className='fas fa-umbrella fa-fw'></i> General</b>,
         ]}
@@ -32,6 +32,12 @@ const ReportsWrap = ({
         hold={true}
         sessionTab='reportExPanelTabs'>
         
+        <CompletedReport
+          batchData={allBatch}
+          widgetData={allWidget}
+          groupData={allGroup} 
+          app={app} />
+          
         <BuildHistory
           allBatch={allBatch}
           allXBatch={allXBatch}
@@ -39,22 +45,16 @@ const ReportsWrap = ({
           allWidget={allWidget}
           allGroup={allGroup} 
           app={app} />
-          
-        <CompletedReport
-          batchData={allBatch}
-          widgetData={allWidget}
-          groupData={allGroup} 
-          app={app} />
       
-      {isNightly ?
-        <MonthKPIReport
-          batchData={allBatch}
-          widgetData={allWidget}
-          groupData={allGroup} 
-          app={app} />
-        :
-        <div><em>available in the "nightly"</em></div>
-      }
+        {isNightly ?
+          <MonthKPIReport
+            batchData={allBatch}
+            widgetData={allWidget}
+            groupData={allGroup} 
+            app={app} />
+          :
+          <div><em>available in the "nightly"</em></div>
+        }
           
         <GeneralReport
           batchData={allBatch}

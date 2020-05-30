@@ -137,7 +137,8 @@ export default class Reports extends Component {
           <ReportStatsTable 
             title='basic report' 
             dateString={`${this.state.start}to${this.state.end}`}
-            rows={this.state.replyData} />
+            rows={this.state.replyData}
+            extraClass='max500' />
         }
             
       </div>

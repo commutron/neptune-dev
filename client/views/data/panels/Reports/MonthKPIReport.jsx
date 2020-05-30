@@ -97,7 +97,8 @@ const MonthKPIReport = ({ batchData, widgetData, groupData, app })=> {
         <ReportStatsTable 
           title={`monthly report`}
           dateString={`${dateString}`}
-          rows={monthDataState} />
+          rows={monthDataState}
+          extraClass='max500' />
       }
            
     </div>
