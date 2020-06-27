@@ -416,7 +416,7 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
   
-  let hothotID = false;
+  let hothotWidgetID = false;
   let hothotWidget = hotWidget || false;
   
   if(!hothotWidget) {
@@ -425,14 +425,16 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
     if(hotBatchXBatch) {
       const maybe = WidgetDB.findOne({ _id: hotBatchXBatch.widgetId });
       if(maybe) {
-        hothotID = maybe._id;
+        hothotWidgetID = maybe._id;
         hothotWidget = maybe.widget;
       }
     }
   }else{
-    const otherwise = WidgetDB.findOne({ widget: hotWidget });
+    const otherwise = WidgetDB.findOne({ _id: hotWidget }) ||
+                      WidgetDB.findOne({ widget: hotWidget });
     if(otherwise) {
-      hothotID = otherwise._id;
+      hothotWidgetID = otherwise._id;
+      hothotWidget = otherwise.widget;
     }
   }
                     
@@ -455,6 +457,18 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
             'createdAt': 1
         }}),
       ];
+    }else if( dataRequest === 'widget' ) {
+      return [
+        WidgetDB.find({_id: hothotWidgetID, orgKey: orgKey}, {
+          fields: {
+            'orgKey': 0,
+            'versions': 0
+          }}),
+        VariantDB.find({widgetId: hothotWidgetID, orgKey: orgKey}, {
+          fields: {
+            'orgKey': 0,
+          }}),
+      ];
     }else {
       return [
         WidgetDB.find({widget: hothotWidget, orgKey: orgKey}, {
@@ -462,7 +476,7 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
             'orgKey': 0,
             'versions': 0
           }}),
-        VariantDB.find({widgetId: hothotID, orgKey: orgKey}, {
+        VariantDB.find({widgetId: hothotWidgetID, orgKey: orgKey}, {
           fields: {
             'orgKey': 0,
           }}),

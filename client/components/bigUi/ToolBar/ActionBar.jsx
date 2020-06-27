@@ -247,7 +247,7 @@ const ActionBar = ({
           <Remove
             action='widget'
             title={widgetData.widget}
-            check={widgetData.createdAt.toISOString()}
+            check={widgetData.createdAt && widgetData.createdAt.toISOString()}
             entry={widgetData._id}
             lockOut={!allVariants.every( x => x.live === false )} />
         </Fragment>

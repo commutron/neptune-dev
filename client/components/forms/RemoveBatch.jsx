@@ -104,9 +104,8 @@ const RemoveBatch = ({ entry, title, check })=> {
   return(
     <div className='vspace wide'>
       <h2 className='centreText redT'>This cannot be undone</h2>
-      <br />
       
-      <div className='vspace balancer'>
+      <div className='vspace balancer cap'>
         <div>
           <p>Delete ALL {et.items.length} {Pref.items}</p>
           <button
@@ -114,27 +113,33 @@ const RemoveBatch = ({ entry, title, check })=> {
             type='button'
             onClick={(e)=>handleItemRemove(e)}
             id='cutItemGo'
-            disabled={false}
+            disabled={et.items.length === 0}
           >DELETE Items</button>
         </div>
         <div>
-          <p>Delete ALL {Pref.tide} Times</p>
+          <p>Delete ALL {et.tide.length} {Pref.tide}s</p>
           <button
             className='smallAction clearRed'
             type='button'
             onClick={(e)=>handleTideRemove(e)}
             id='cutTideGo'
-            disabled={false}
+            disabled={et.tide.length === 0}
           >DELETE Times</button>
         </div>
       </div>
       
       <hr />
       
-      {!Roles.userIsInRole(Meteor.userId(), 'admin') ? null :
-        et.tide.length === 0 && et.items.length === 0 ?
+      {et.tide.length === 0 && et.items.length === 0 ?
+        !Roles.userIsInRole(Meteor.userId(), 'admin') ? 
+          <p className='centreText'>
+            <strong>An "Admin" account is required to delete the entire {Pref.batch}</strong>
+          </p> 
+        :
         <div>
-          <p><strong>Are you sure you want to try to delete all of "{title}"?</strong></p>
+          <p className='centreText'>
+            <strong>Are you sure you want to try to delete all of "{title}"?</strong>
+          </p>
           <dl>
             <dt>This includes:</dt>
             <dd>NonCons: {et.nonCon.length}</dd>
@@ -153,7 +158,6 @@ const RemoveBatch = ({ entry, title, check })=> {
               type='text'
               id='confirmInput'
               placeholder={checkshort}
-              autoFocus={true}
               className='noCopy redIn'
               required />
             <button
@@ -163,7 +167,10 @@ const RemoveBatch = ({ entry, title, check })=> {
               disabled={false}>DELETE Whole {Pref.batch}</button>
           </form>
         </div>
-      : <p>{Pref.batch} cannot be deleted while there are recorded items or times</p>
+      : 
+        <p className='centreText'>
+          <strong>{Pref.batch} cannot be deleted while there are recorded items or times</strong>
+        </p>
       }
       
       <hr />

@@ -126,7 +126,8 @@ const WidgetIndexCard = ({ data, barStyle })=>{
           size='big' />
       }
       sty={barStyle}
-      address={'/data/widget?request=' + data.widget}
+      // address={'/data/widget?request=' + data.widget}
+      address={'/data/widget?request=' + data._id}
     />
   );
 };

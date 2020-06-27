@@ -20,7 +20,7 @@ const RemoveWrapper = ({ action, entry, title, check, lockOut })=> {
       title={`delete "${title}"`}
       color='redT'
       icon='fa-minus-circle'
-      lock={!auth}
+      lock={!auth || !check}
     >
       <Remove
         action={action}

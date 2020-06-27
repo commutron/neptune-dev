@@ -79,8 +79,8 @@ const AgendaWrap = ({
       true, // batchUp
       true, // priorityUp
       false, // activityUp
-      false, // phaseUp
-      false, // compUp
+      false, // branchUp
+      true, // compUp
     ()=>{
       loadTimeSet( moment() );
       workingSet( false );

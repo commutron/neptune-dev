@@ -148,6 +148,7 @@ Meteor.methods({
 
 ///////////// CACHES //////////////////
   FORCEcacheUpdate(clientTZ) {
+    this.unblock();
     if(Roles.userIsInRole(Meteor.userId(), 'active')) {
       const key = Meteor.user().orgKey;
       batchCacheUpdate(key, true);
@@ -159,6 +160,7 @@ Meteor.methods({
   },
   
   REQUESTcacheUpdate(clientTZ, batchUp, priorityUp, activityUp, branchConUp, compUp) {
+    this.unblock();
     if(Roles.userIsInRole(Meteor.userId(), 'active')) {
       const key = Meteor.user().orgKey;
       batchUp && Meteor.defer( ()=>{
@@ -176,7 +178,7 @@ Meteor.methods({
   
   priorityCacheUpdate(accessKey, clientTZ, force) {
     if(typeof accessKey === 'string') {
-      const timeOut = moment().subtract(15, 'minutes').toISOString();
+      const timeOut = moment().subtract(30, 'minutes').toISOString();
       const currentCache = CacheDB.findOne({
         orgKey: accessKey, 
         lastUpdated: { $gte: new Date(timeOut) },
@@ -184,7 +186,8 @@ Meteor.methods({
       
       if(force || !currentCache ) {
         const batches = BatchDB.find({orgKey: accessKey, live: true}).fetch();
-        const slim = batches.map( x => {
+        const batchesX = XBatchDB.find({orgKey: accessKey, live: true}).fetch();
+        const slim = [...batches,...batchesX].map( x => {
           return Meteor.call('priorityRank', x._id, clientTZ, accessKey);
         });
         /*
@@ -220,7 +223,7 @@ Meteor.methods({
   
   activityCacheUpdate(accessKey, clientTZ, force) {
     if(typeof accessKey === 'string') {
-      const timeOut = moment().subtract(1, 'minutes').toISOString();
+      const timeOut = moment().subtract(5, 'minutes').toISOString();
       const currentCache = CacheDB.findOne({
         orgKey: accessKey, 
         lastUpdated: { $gte: new Date(timeOut) },

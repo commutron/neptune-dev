@@ -49,6 +49,7 @@ const WidgetNewForm = ({ groupId, endTrack })=> {
           id='nwNm'
           placeholder='ID ie. A4-R-0221'
           className='wide'
+          pattern='[A-Za-z0-9 _-]*'
           autoFocus={true}
           required />
         <label htmlFor='nwNm'>{Pref.widget} ID</label>

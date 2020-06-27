@@ -30,16 +30,20 @@ const TotalInQu = ({
     
     let kitTime = [];
     let openTime = [];
-    for( let pB of pData) {
-      let rel = brData.find( y => y.batchID === pB.batchID );
-      if(!rel) {
-        break;
+    for( let pB of pData ) {
+      if(!pB) {
+        null;
       }else{
-        let bar = rel.branchSets.every( z => z.condition === false );
-        if(bar) {
-          kitTime.push(pB);
+        let rel = brData.find( y => y.batchID === pB.batchID );
+        if(!rel) {
+          break;
         }else{
-          openTime.push(pB);
+          let bar = rel.branchSets.every( z => z.condition === false );
+          if(bar) {
+            kitTime.push(pB);
+          }else{
+            openTime.push(pB);
+          }
         }
       }
     }

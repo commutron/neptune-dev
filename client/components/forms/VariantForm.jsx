@@ -90,7 +90,7 @@ const VariantForm = ({ widgetData, variantData, app, rootWI })=> {
                 id='rev'
                 defaultValue={eV}
                 placeholder='1a'
-                inputMode='numeric'
+                pattern='[A-Za-z0-9 _-]*'
                 className='wide'
                 required />
               <label htmlFor='rev'>{Pref.variant}</label>

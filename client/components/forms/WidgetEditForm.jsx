@@ -46,6 +46,7 @@ const WidgetEditForm = ({ id, now })=> {
           id='nwNm'
           defaultValue={now.widget}
           placeholder='ID ie. A4-R-0221'
+          pattern='[A-Za-z0-9 _-]*'
           autoFocus={true}
           required />
         <label htmlFor='nwNm'>{Pref.widget} ID</label>

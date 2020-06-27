@@ -353,38 +353,42 @@ Meteor.methods({
   fetch24TideActivity() {
     this.unblock();
     try {
-      const serverTime = moment();
-      const timeAgo = serverTime.clone().subtract(24, 'hours');
-
-      const allTouched =
-        BatchDB.find({
-          orgKey: Meteor.user().orgKey, 
-          tide: { $elemMatch: { startTime: {
-            $gte: new Date(timeAgo.format()),
-            $lte: new Date(serverTime.format())
-          }}},
-          'tide.who': Meteor.userId()
-        }).fetch();
-    
-      let slimTideCollection = [];
-      for(let btch of allTouched) {
-        const yourDay = !btch.tide ? [] : btch.tide.filter( x => 
-          x.who === Meteor.userId() &&  
-          moment(x.startTime).isSameOrAfter(timeAgo) );
-        for(let blck of yourDay) {
-          slimTideCollection.push({
-            batch: btch.batch,
-            startTime: blck.startTime
-          });
+      if(!Meteor.userId()) {
+        return undefined;
+      }else{
+        const serverTime = moment();
+        const timeAgo = serverTime.clone().subtract(24, 'hours');
+  
+        const allTouched =
+          BatchDB.find({
+            orgKey: Meteor.user().orgKey, 
+            tide: { $elemMatch: { startTime: {
+              $gte: new Date(timeAgo.format()),
+              $lte: new Date(serverTime.format())
+            }}},
+            'tide.who': Meteor.userId()
+          }).fetch();
+      
+        let slimTideCollection = [];
+        for(let btch of allTouched) {
+          const yourDay = !btch.tide ? [] : btch.tide.filter( x => 
+            x.who === Meteor.userId() &&  
+            moment(x.startTime).isSameOrAfter(timeAgo) );
+          for(let blck of yourDay) {
+            slimTideCollection.push({
+              batch: btch.batch,
+              startTime: blck.startTime
+            });
+          }
         }
+        const cronoTimes = slimTideCollection.sort((x1, x2)=> {
+                            if (x1.startTime < x2.startTime) { return 1 }
+                            if (x1.startTime > x2.startTime) { return -1 }
+                            return 0;
+                          });
+        const uniqTimes = [...new Set( Array.from(cronoTimes, x => x.batch ) ) ];
+        return uniqTimes;
       }
-      const cronoTimes = slimTideCollection.sort((x1, x2)=> {
-                          if (x1.startTime < x2.startTime) { return 1 }
-                          if (x1.startTime > x2.startTime) { return -1 }
-                          return 0;
-                        });
-      const uniqTimes = [...new Set( Array.from(cronoTimes, x => x.batch ) ) ];
-      return uniqTimes;
     }catch(err) {
       throw new Meteor.Error(err);
     }

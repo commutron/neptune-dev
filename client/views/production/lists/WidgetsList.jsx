@@ -54,7 +54,8 @@ const WidgetsList = ({ active, widgetData, variantData, groupAlias })=> {
               title={entry.widget}
               sub={entry.describe}
               sty={ac}
-              address={'/data/widget?request=' + entry.widget}
+              // address={'/data/widget?request=' + entry.widget}
+              address={'/data/widget?request=' + entry._id}
             />
         )})}
     </div>
