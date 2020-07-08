@@ -175,7 +175,6 @@ Meteor.publish('tideData', function(clientTZ){
 Meteor.publish('cacheData', function(clientTZ){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  // Meteor.defer( ()=>{ Meteor.call('batchCacheUpdate', orgKey); });
   Meteor.defer( ()=>{ batchCacheUpdate(orgKey); });
   Meteor.defer( ()=>{ Meteor.call('priorityCacheUpdate', orgKey, clientTZ); });
   Meteor.defer( ()=>{ Meteor.call('activityCacheUpdate', orgKey, clientTZ); });

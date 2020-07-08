@@ -190,6 +190,7 @@ Meteor.methods({
         const slim = [...batches,...batchesX].map( x => {
           return Meteor.call('priorityRank', x._id, clientTZ, accessKey);
         });
+        // console.log(slim.length);
         /*
         const slimSort = slim.sort((pB1, pB2)=> { // insert a master index~
           const pB1ffr = pB1.estEnd2fillBuffer;

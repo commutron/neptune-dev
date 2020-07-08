@@ -21,7 +21,7 @@ const BranchProgress = ({
         isDebug && console.log(progData);
       }
     });
-  }, [batchID]);
+  }, [batchID, branchArea, filterBy]);
   
   const dt = progData;
  

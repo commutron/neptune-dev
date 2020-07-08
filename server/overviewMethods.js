@@ -316,7 +316,7 @@ function collectPriority(privateKey, batchID, clientTZ, mockDay) {
                                   0 : b.quoteTimeBudget[0].timeAsMinutes;
         
       if(qtBready) {
-        const totalTideMinutes = batchTideTime(b.tide);
+        const totalTideMinutes = batchTideTime(b.tide) || 0;
         
         const quote2tide = totalQuoteMinutes - totalTideMinutes;
         const overQuote = quote2tide < 0 ? true : false;
@@ -543,7 +543,7 @@ Meteor.methods({
   },
   
   priorityRank(batchID, clientTZ, serverAccessKey, mockDay) {
-    async function bundlePriority() {//batchID, clientTZ, mockDay) {
+    async function bundlePriority() {//batchID, clientTZ, orgKey, mockDay) {
       const accessKey = serverAccessKey || Meteor.user().orgKey;
       try {
         bundle = await collectPriority(accessKey, batchID, clientTZ, mockDay);
@@ -556,6 +556,7 @@ Meteor.methods({
   },
   
   branchProgress(batchID, branchOnly, clientTZ) {
+    this.unblock();
     async function bundleProgress(batchID) {
       const accessKey = Meteor.user().orgKey;
       try {
