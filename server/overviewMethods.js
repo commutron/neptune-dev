@@ -312,11 +312,12 @@ function collectPriority(privateKey, batchID, clientTZ, mockDay) {
       const lateLate = calcShip[1];
       
       const qtBready = !b.quoteTimeBudget ? false : true;
-      const totalQuoteMinutes = !qtBready || b.quoteTimeBudget.length === 0 ?
-                                  0 : b.quoteTimeBudget[0].timeAsMinutes;
         
-      if(qtBready) {
-        const totalTideMinutes = batchTideTime(b.tide) || 0;
+      if(qtBready && b.tide) {
+        const totalQuoteMinutes = b.quoteTimeBudget.length === 0 ? 0 :
+                                  b.quoteTimeBudget[0].timeAsMinutes;
+                                  
+        const totalTideMinutes = batchTideTime(b.tide);
         
         const quote2tide = totalQuoteMinutes - totalTideMinutes;
         const overQuote = quote2tide < 0 ? true : false;
@@ -349,13 +350,13 @@ function collectPriority(privateKey, batchID, clientTZ, mockDay) {
         resolve(collection);
       }else{
         collection = {
-          batch: bx.batch,
-          batchID: bx._id,
+          batch: b.batch,
+          batchID: b._id,
           quote2tide: false,
           isStupid: false,
           estEnd2fillBuffer: 0,
-          shipTime: calcShipX[0].format(),
-          lateLate: calcShipX[1]
+          shipTime: shipTime.format(),
+          lateLate: lateLate
         };
         resolve(collection);
       }
