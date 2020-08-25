@@ -19,7 +19,7 @@ const VariantForm = ({ widgetData, variantData, app, rootWI })=> {
     
     const variant = this.rev.value.trim();
     const live = this.live ? this.live.checked : false;
-    const wiki = this.wikdress.value.trim().toLowerCase();
+    const wiki = this.wikdress.value.trim();
     const unit = this.unit.value.trim();
     
     if(edit) {
@@ -90,7 +90,7 @@ const VariantForm = ({ widgetData, variantData, app, rootWI })=> {
                 id='rev'
                 defaultValue={eV}
                 placeholder='1a'
-                pattern='[A-Za-z0-9 _-]*'
+                pattern='[A-Za-z0-9 \._-]*'
                 className='wide'
                 required />
               <label htmlFor='rev'>{Pref.variant}</label>

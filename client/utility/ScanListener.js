@@ -6,7 +6,7 @@ function reFocus() {
 }
 
 function onPress(event) {
-  //console.log(event);
+  // console.log(event);
   const element = document.activeElement;
   if(element.id !== 'lookup' && element.id !== 'nestSerial' && element.id !== 'ncRefs') {
     const inputKey = event.key;
@@ -15,10 +15,11 @@ function onPress(event) {
     if( inputKey ) {
       if( inputCode === 13 ) { // "enter"
         const slL = scanListener.length;
-        if( slL >= 8 && slL >= 10 ) {
+        if( slL >= 8 && slL <= 10 ) {
           !event.preventDefault ? null : event.preventDefault();
           Session.set('now', scanListener);
-          document.getElementById('ncRefs').value = '';
+          document.getElementById('ncRefs') ?
+            document.getElementById('ncRefs').value = '' : null;
           document.getElementById('lookup').value = '';
         }
         scanListener = '';
@@ -27,7 +28,7 @@ function onPress(event) {
       }else if( inputKey.match(/[0-9]/) ) {
         scanListener = scanListener.concat(event.key);
       }
-      //console.log(scanListener);
+      // console.log(scanListener);
       Session.set('scanListener', scanListener);
     }
   }else{
@@ -36,27 +37,31 @@ function onPress(event) {
 }
 
 function onMessage(event) {
-  if(event.data.orgin === 'pisces') {
-    console.log(event.data);
+  // if(event.data.dtOrigin === 'pisces') {
+    console.log(event);
     onPress(event.data);
-  }else{null}
+  // }else{null}
 }
 
 export function ScanListenerUtility(user) {
   window.addEventListener('visibilitychange', reFocus);
   window.addEventListener('focus', reFocus);
   // navigator.usb ? console.log('WebUSB IS supported') : 
-  //                 console.log('WebUSB NOT supported');
+                  // console.log('WebUSB NOT supported');
     
   const autoScan = user.autoScan;
   // if(autoScan === undefined) {
   //   const check = window.confirm('Would you like to use a barcode scanner from anywhere in this window?');
   //   Meteor.call('setAutoScan', check, (error)=> error && console.log(error));
   
-  if(autoScan === false) {
-    null;// console.log('auto window scanning OFF');
+  document.getElementById('instruct').contentWindow.document.addEventListener('focus',function(){
+    console.log("contentWindow listener");
+  });
+
+  if(!autoScan) {
+    console.log('auto window scanning OFF');
   }else{
-    // console.log('auto window scanning ON');
+    console.log('auto window scanning ON');
     window.addEventListener('keydown', onPress);
     window.addEventListener('message', onMessage);
   }

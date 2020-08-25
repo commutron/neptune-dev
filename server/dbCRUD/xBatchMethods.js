@@ -272,7 +272,7 @@ Meteor.methods({
   
   // Finish Batch
   finishBatchX(batchId) {
-    if(!Roles.userIsInRole(Meteor.userId(), 'finish')) {
+    if(!Roles.userIsInRole(Meteor.userId(), "BRKt3rm1n2t1ng8r2nch")) {
       null;
     }else{
       const doc = XBatchDB.findOne({_id: batchId});
@@ -292,7 +292,7 @@ Meteor.methods({
   
   // Undo Finish Batch
   undoFinishBatchX(batchId, override) {
-    if(!Roles.userIsInRole(Meteor.userId(), 'finish' || override === undefined)) {
+    if(!Roles.userIsInRole(Meteor.userId(), 'run' || override === undefined)) {
       null;
     }else{
       const doc = XBatchDB.findOne({_id: batchId});

@@ -1,9 +1,8 @@
-import React, { useEffect, useLayoutEffect} from 'react';
+import React, { useLayoutEffect} from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 //import Pref from '/client/global/pref.js';
 
-import { ScanListenerUtility, ScanListenerOff } from '/client/utility/ScanListener.js';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
 import usePrevious from '/client/utility/usePreviousHook.js';
 
@@ -22,13 +21,6 @@ const ProdData = ({
   useLayoutEffect( ()=>{
     InboxToastPop(prevUser, user);
   }, [user]);
-  
-  useEffect( ()=> {
-    if(user) {
-      ScanListenerUtility(user);
-    }
-    return ScanListenerOff();
-  }, []);
   
 
   if(

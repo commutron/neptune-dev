@@ -76,7 +76,8 @@ export default class MultiItemForm extends Component {
     // display quantity
     let quantity = isNaN(count) ? 'Not a number' : 
                    count < 1 ? 'Invalid Range' :
-                   count + ' ' + Pref.item + '(s)';
+      `${count} serial number${count == 1 ? '' : 's'} == 
+        ${count*unit} ${Pref.item}${count*unit == 1 ? '' : 's'}`;
     this.message.value = quantity;
   }
 
@@ -167,8 +168,9 @@ export default class MultiItemForm extends Component {
               defaultValue={this.props.unit}
               placeholder='1-250'
               inputMode='numeric'
-              required />
-            <label htmlFor='cln'>{Pref.unit} Quantity</label>
+              required
+              onInput={this.checkRange} />
+            <label htmlFor='cln'>{Pref.unit}s <em>Quantity per serial number</em></label>
           </p>
           <p>
             <input

@@ -150,21 +150,33 @@ Meteor.methods({
       if(typeof newTkey !== 'string') {
         null;
       }else{
-        const keyCheck = doc && doc.tide.every( x => x.tKey !== newTkey );
+        const keyCheck = doc && ( !doc.tide || doc.tide.every( x => x.tKey !== newTkey ) );
         const user = Meteor.user();
         const spinning = user && user.engaged;
         if(!doc || !keyCheck || spinning || !Roles.userIsInRole(Meteor.userId(), 'active')) { 
           null;
         }else{
-          // const newTkey = new Meteor.Collection.ObjectID().valueOf();
-          BatchDB.update({ _id: batchId }, {
-            $push : { tide: { 
-              tKey: newTkey,
-              who: Meteor.userId(),
-              startTime: new Date(),
-              stopTime: false,
-              task: newTask
-          }}});
+          if(!doc.tide) {
+            BatchDB.update({ _id: batchId }, {
+              $set : {
+                tide: [{
+                  tKey: newTkey,
+                  who: Meteor.userId(),
+                  startTime: new Date(),
+                  stopTime: false,
+                  task: newTask
+              }]
+            }});
+          }else{
+            BatchDB.update({ _id: batchId }, {
+              $push : { tide: { 
+                tKey: newTkey,
+                who: Meteor.userId(),
+                startTime: new Date(),
+                stopTime: false,
+                task: newTask
+            }}});
+          }
           Meteor.users.update(Meteor.userId(), {
             $set: {
               engaged: {

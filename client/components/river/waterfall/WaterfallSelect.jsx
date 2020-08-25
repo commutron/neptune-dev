@@ -90,7 +90,7 @@ const WaterfallSelect = ({ batchData, app })=> {
               <button
                 className='action clearPurple'
                 onClick={()=>finishBatchX()}
-                disabled={!Roles.userIsInRole(Meteor.userId(), 'finish')}
+                disabled={!Roles.userIsInRole(Meteor.userId(), "BRKt3rm1n2t1ng8r2nch")}
               >Complete {Pref.xBatch}</button>
             </div>
           :
@@ -103,7 +103,7 @@ const WaterfallSelect = ({ batchData, app })=> {
                   <button
                     className='action clearWhite'
                     onClick={()=>undoFinishBatchX(false)}
-                    disabled={!Roles.userIsInRole(Meteor.userId(), 'finish')}
+                    disabled={!Roles.userIsInRole(Meteor.userId(), "BRKt3rm1n2t1ng8r2nch")}
                   >Reactivate</button>
                 </div>
               :

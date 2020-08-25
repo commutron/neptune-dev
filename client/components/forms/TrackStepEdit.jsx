@@ -50,21 +50,6 @@ const TrackStepEdit = ({app, branchesSort, data})=> {
         </select>
       </label>
 
-        <label htmlFor={opKey + 'phase'}><br />
-          <select
-            id={opKey + 'phase'}
-            defaultValue={data.phase || null} 
-            disabled={true}
-            className='tableAction'
-          >
-            <option></option>
-            {app.phases.map( (entry, index)=>{
-              return( 
-                <option key={index} value={entry}>{entry}</option>
-            )})}
-          </select>
-        </label>
-
       <label htmlFor={opKey + 'branch'}><br />
         <select
           id={opKey + 'branch'}
