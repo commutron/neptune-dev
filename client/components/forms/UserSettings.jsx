@@ -3,6 +3,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 // import { toast } from 'react-toastify';
 
+import UsernameChange from '/client/components/forms/UsernameChange.jsx';
 import PasswordChange from '/client/components/forms/PasswordChange.jsx';
 
 import { AdminDown } from '/client/components/forms/AdminForm.jsx';
@@ -85,6 +86,8 @@ const UserSettings = ({ app, user, isAdmin, brancheS })=> {
       <div>
         
         <fieldset>
+          <UsernameChange />
+          <hr />
           <PasswordChange />
           <hr />
           { isAdmin ? <AdminDown /> : null }

@@ -79,7 +79,7 @@ const RemoveBatch = ({ entry, title, check })=> {
     this.cutAllGo.disabled = true;
     const confirm = this.confirmInput.value.trim();
     
-    const check = window.confirm('Delete this User Forever??');
+    const check = window.confirm(`Delete this ${Pref.batch} Forever??`);
     
     if(check) {
       

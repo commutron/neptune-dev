@@ -22,8 +22,8 @@ const AccountsManagePanel = ({ app, users, bCache, brancheS, isDebug })=> {
   const areas = Pref.areas;
   
   const usersSort = users.sort((user1, user2)=> {
-          let u1 = user1.username.charAt(0).toLowerCase();
-          let u2 = user2.username.charAt(0).toLowerCase();
+          let u1 = user1.username.substr(0, 4).toLowerCase();
+          let u2 = user2.username.substr(0, 4).toLowerCase();
           if (!Roles.userIsInRole(user1._id, 'active')) { return 1 }
           if (!Roles.userIsInRole(user2._id, 'active')) { return -1 }
           if (u1.username < u2.username) { return -1 }

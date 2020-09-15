@@ -15,6 +15,34 @@ Accounts.validateLoginAttempt(function(attempt) {
   return true;
 });
 
+Accounts.validateNewUser(function(attempt) {
+  if(attempt.username.length >= 4) {
+    return true;
+  }else {
+    throw new Meteor.Error(403, 'Username must have at least 4 characters');
+  }
+});
+
+Accounts.onCreateUser((options, user) => {
+  const orgName = options.org;
+  const orgIs = AppDB.findOne({ org: orgName });
+  if(orgIs) {
+    const customizedUser = Object.assign({
+      org: orgIs.org,
+      orgKey: orgIs.orgKey,
+      roles: ['active'],
+      autoScan: true,
+      unlockSpeed: 2000,
+      inbox: [],
+      watchlist: [],
+      usageLog: [],
+      engaged: false
+    }, user);
+  
+    return customizedUser;
+  }
+});
+
 Meteor.methods({
   
   verifyOrgJoin(orgName, pin) {
@@ -27,30 +55,6 @@ Meteor.methods({
       }
     }else{
       return false;
-    }
-  },
-  joinOrgAtLogin(orgName, pin) {
-    const orgIs = AppDB.findOne({ org: orgName });
-    if(orgIs) {
-      if(orgIs.orgPIN === pin) {
-        Roles.addUsersToRoles(Meteor.userId(), 'active');
-        Meteor.users.update(Meteor.userId(), {
-          $set: {
-            org: orgIs.org,
-            orgKey: orgIs.orgKey,
-            autoScan: true,
-            unlockSpeed: 2000,
-            inbox: [],
-            watchlist: [],
-            breadcrumbs: []
-          }
-        });
-        return 'ok';
-      }else{
-        return 'no PIN match';
-      }
-    }else{
-      return 'no org match';
     }
   },
 
@@ -109,6 +113,16 @@ Meteor.methods({
       return false;
     }else{
       Accounts.setPassword(id, newPassword, {logout: false});
+      return true;
+    }
+  },
+  
+  selfUsernameChange(newUsername) {
+    const userId = Meteor.userId();
+    if(!userId) {
+      return false;
+    }else{
+      Accounts.setUsername(userId, newUsername);
       return true;
     }
   },

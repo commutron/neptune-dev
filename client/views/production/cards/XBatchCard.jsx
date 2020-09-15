@@ -37,7 +37,12 @@ const BatchCardX = ({
     <div className='proPrimeSingle' key={b.batch}>
       
       {!released ?
-        <ReleaseAction id={b._id} rType='floorRelease' />
+        <ReleaseAction 
+          id={b._id} 
+          rType='floorRelease'
+          actionText='release'
+          //contextText='to the floor'
+          isX={true} />
       :
         <WaterfallSelect batchData={b} app={a} />
       }

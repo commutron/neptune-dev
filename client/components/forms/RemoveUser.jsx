@@ -22,7 +22,7 @@ const RemoveUser = ({ userID })=> {
         <button
           type='button'
           className='miniAction red'
-          onClick={()=>deleteForever(e)}
+          onClick={(e)=>deleteForever(e)}
         >Delete User Account</button>
       </p>
     </div>

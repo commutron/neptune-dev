@@ -55,7 +55,7 @@ const PasswordChange = (props)=> {
         <p>
           <button
             type='submit'
-            id='changeSubmit'
+            id='changePassSubmit'
             className='action clearGreen'
            >Save New Password</button>
         </p>

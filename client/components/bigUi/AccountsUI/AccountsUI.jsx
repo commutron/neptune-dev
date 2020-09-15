@@ -57,28 +57,20 @@ const AccountsUI = ({ login, uID, username })=> {
 	    Meteor.call('verifyOrgJoin', orgName, orgPIN, (error, reply)=>{
 	      if(error)
 	        console.log(error);
-	      if(reply) {
+	      if(reply === true) {
 	      	newUserResultSet( "" );
-	      	let options = {username: user, password: passChoice};
+	      	let options = {username: user, password: passChoice, org: orgName};
 	      	Accounts.createUser(options, (error)=>{
 	      		if(error) {
 	      			console.log(error);
 	      			toast.error('the server says no');
 	      			newUserResultSet( error.reason );
 	      		}else{
-	      			Meteor.call('joinOrgAtLogin', orgName, orgPIN, (error, reply)=>{
-	      				if(error)
-	      					console.log(error);
-	      				if(reply) {
-	      					reply === 'ok' ?
-	      						toast.success('Everything worked corectly') :
-	      						toast.error(`Not everything worked corectly. ${reply}`);
-	      				}
-	      			});
-	      			const redirect = Session.get('redirectAfterLogin');
-	      			if(!redirect || redirect === '/login') {
-					    	loginStatusSet( Meteor.userId() );
-					    }
+	      			toast.success('Everything worked corectly');
+    					// const redirect = Session.get('redirectAfterLogin');
+    					// if(!redirect || redirect === '/login') {
+			    		// 	loginStatusSet( Meteor.userId() );
+			    		// }
 	      		}
 	      	});
 		    }else{
@@ -158,6 +150,8 @@ const AccountsUI = ({ login, uID, username })=> {
 	              onChange={()=>newUsernameSet( newUsername.value )}
 	              placeholder='username'
 	              required
+	              minLength='4'
+	              pattern='[A-Za-z0-9 \._-]*'
 	              autoComplete="username" />
 	          </p>
 	          <p>
