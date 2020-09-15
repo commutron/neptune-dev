@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { batchCacheUpdate} from '/server/cacheMethods.js';
 
 Meteor.methods({
 
@@ -45,7 +46,7 @@ Meteor.methods({
         events: []
       });
       Meteor.defer( ()=>{
-        Meteor.call('batchCacheUpdate', accessKey, true);
+        batchCacheUpdate( accessKey, true );
       });
       return true;
     }else{
@@ -84,8 +85,7 @@ Meteor.methods({
                   doc.blocks.length > 1 ||
                   doc.releases.length > 1 ||
                   doc.verifications.length > 1 ||
-                  doc.nonconformaces.length > 1 ||
-                  doc.omitted.length > 1;
+                  doc.nonconformaces.length > 1;
     if(!inUse) {
       const lock = doc.createdAt.toISOString().split("T")[0];
       const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
