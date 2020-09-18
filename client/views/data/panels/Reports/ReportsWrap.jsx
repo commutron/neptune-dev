@@ -6,7 +6,8 @@ import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 // import PopularWidget from '/client/components/charts/PopularWidget.jsx'; 
 import GeneralReport from './GeneralReport.jsx'; 
 import CompletedReport from './CompletedReport.jsx';
-import BuildHistory from './BuildHistory.jsx'; 
+import BuildHistory from './BuildHistory.jsx';
+import BuildDurration from './BuildDurration';
 import MonthKPIReport from './MonthKPIReport.jsx'; 
 
 const ReportsWrap = ({ 
@@ -26,6 +27,7 @@ const ReportsWrap = ({
         tabs={[
           <b><i className='fas fa-flag-checkered fa-fw'></i> Completed</b>,
           <b><i className='fas fa-fast-backward fa-fw'></i> Build History</b>,
+          <b><i className='fas fa-hourglass-end fa-fw'></i> Durrations</b>,
           <b><i className='fas fa-calendar fa-fw'></i> Month Raw</b>,
           <b><i className='fas fa-umbrella fa-fw'></i> General</b>,
         ]}
@@ -47,6 +49,8 @@ const ReportsWrap = ({
           allWidget={allWidget}
           allGroup={allGroup} 
           app={app} />
+          
+        <BuildDurration />
       
         {isNightly ?
           <MonthKPIReport
