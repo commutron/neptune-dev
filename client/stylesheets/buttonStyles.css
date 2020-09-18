@@ -241,8 +241,8 @@ label.qdpplRound {
 
 .taskLink {
   margin: 8px 0;
-  width: 6vh;
-  height: 6vh;
+  width: 5.5vh;
+  height: 5.5vh;
   border-radius: 50%;
   font-size: 3.5vh;
   cursor: pointer;
@@ -253,7 +253,6 @@ label.qdpplRound {
   --task-back-color: rgb(25,25,25);
   --task-front-color: var(--silver);
   --box-shadow-color: var(--silver);
-  
   background-color: var(--task-back-color);
   color: var(--task-front-color);
 }

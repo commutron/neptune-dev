@@ -1,21 +1,22 @@
 .waterfallSelector details {
-  height: 4vw;
+  height: 3vmax;
   box-shadow: none;
 }
 .waterfallSelector details[open] {
-  height: 20vw;
+  height: 16vmax;
 }
 
 .waterfallWrap {
-  width: 20vw;
+  min-width: 15vmax;
+  max-width: 16vmax;
 }
 
 .waterfallTitle {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 4vw;
-  font-size: calc(0.5rem + 1vw);
+  height: 3vw;
+  font-size: calc(0.25rem + 1vmax);
   font-weight: 600;
   color: black;
   border-top: 5px solid var(--silverfade);
@@ -24,7 +25,7 @@
 .waterfallGrid {
   display: grid;
   width: 100%;
-  height: 16vw;
+  height: 12vmax;
   grid-template-columns: 1fr 3fr;
   grid-template-rows: repeat(3, 1fr);
   grid-template-areas: 
@@ -65,7 +66,7 @@
 
 .countMinus {
   grid-area: minusOne;
-  font-size: calc(0.5rem + 1vw);
+  font-size: calc(0.5rem + 1vmax);
   background-color: var(--alizarin);
 }
 .countMinus:hover,
@@ -75,12 +76,12 @@
 
 .countN {
   grid-area: plusN;
-  font-size: calc(0.5rem + 1vw);
+  font-size: calc(0.5rem + 1vmax);
 }
 
 .countRec {
   grid-area: recKey;
-  font-size: calc(0.5rem + 1vw);
+  font-size: calc(0.5rem + 1vmax);
 }
 
 /*
@@ -98,7 +99,7 @@
 
 .countPlus {
   grid-area: plusOne;
-  font-size: calc(0.5rem + 1.25vw);
+  font-size: calc(0.5rem + 1.25vmax);
   background-color: transparent;
   border-width: 10px;
   border-style: solid;
@@ -107,7 +108,7 @@
 }
 
 .countPlusTop {
-  font-size: calc(2rem + 2vw);
+  font-size: calc(2rem + 2vmax);
 }  
 
 .waterfallHistory {

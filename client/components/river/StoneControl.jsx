@@ -76,6 +76,11 @@ const StoneControl = ({
 		openUndoOption();
 	  document.getElementById('lookup').focus();
   }
+  function tryagainEntry() {
+  	riverFlowStateSet( 'slow' );
+		workingSet( false );
+	  document.getElementById('lookup').focus();
+  }
    
   const topClass = doneStone ? 'doneStoneMask' :
   								 blockStone ? 'blockStone' :
@@ -134,6 +139,7 @@ const StoneControl = ({
 			enactEntry={()=>enactEntry()}
 			resolveEntry={()=>resolveEntry()}
 			workingState={workingState}
+			tryagainEntry={()=>tryagainEntry()}
 		/>;
 	
 	const renderFinish = 

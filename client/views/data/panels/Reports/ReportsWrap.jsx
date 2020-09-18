@@ -17,6 +17,8 @@ const ReportsWrap = ({
   
   const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
   
+  
+  
   return(
     <div className='space36v'>
       

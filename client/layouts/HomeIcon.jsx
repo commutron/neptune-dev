@@ -16,10 +16,12 @@ const HomeIcon = () => {
 		  Meteor.logout();
 	  }
 	}
+
+	const isDebug = Roles.userIsInRole(Meteor.userId(), 'debug');
 	
   const user = Meteor.user() ? Meteor.user().username : '';
   
-  const warningLight = Roles.userIsInRole(Meteor.userId(), 'debug') ? 'debugWarningLight' : '';
+  const warningLight = isDebug ? 'debugWarningLight' : '';
   
   return(
     <div className={'homeIcon '}>
@@ -36,6 +38,9 @@ const HomeIcon = () => {
       <ContextMenu id='absoluteHome01' className='medBig'>
         <MenuItem disabled={true}>
           <i>{'Neptune v.' + Pref.neptuneVersion}</i><br />
+          
+          {isDebug ? <small>{Meteor.release}<br /></small> : null}
+          
           <i>Status: {Meteor.status().status}</i>
         </MenuItem>
         {Meteor.userId() ? <React.Fragment>

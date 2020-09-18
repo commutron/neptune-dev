@@ -14,7 +14,8 @@ const StoneTest = ({
 	
 	enactEntry,
 	resolveEntry,
-	workingState
+	workingState,
+	tryagainEntry
 })=> { 
 	
   //// Action for test step
@@ -34,8 +35,7 @@ const StoneTest = ({
     const benchmark = preCount === 0 ? 'first' : preCount === preTotal - 1 ? 'last' : false;              
 		
     if(pass === false && ( !comm || comm == '' ) ) {
-    	// unlock();
-    	null;
+    	tryagainEntry();
     }else{
 			Meteor.call('addTest', 
 				id, barcode, sKey, step, type,
@@ -69,7 +69,7 @@ const StoneTest = ({
           workingState={workingState}
           lockout={lockout}
         >
-					<div className='centre stone'>
+					<div className='centre'>
 						<button
 		      	  className='crackedTop iTest'
 		  				name={step + ' pass'}

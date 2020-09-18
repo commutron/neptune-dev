@@ -81,8 +81,47 @@ input.orangeIn:invalid {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 0 8px !important;
   transition: all 150ms ease-in-out;
+  margin: 0 1vmin !important;
+  font-size: 30px !important;
+  width: 45px !important;
+  height: 45px !important;
+}
+
+.actionForm span,
+.actionForm div {
+  margin: 0 10px;
+}
+.actionForm input,
+.actionForm select, 
+.actionForm datalist {
+  line-height: 1.5rem;
+  font-size: 1rem;
+  min-width: 125px;
+  max-width: 250px;
+  height: 1.75rem;
+  letter-spacing: 1.5px;
+}
+.actionForm option {
+  min-width: 125px;
+  max-width: 250px;
+}
+
+.actionForm label {
+  min-width: 125px;
+  max-width: 250px;
+  letter-spacing: 1.5px;
+}
+
+.actionForm > button {
+  margin: 0 0.5vmin;
+  padding: 0 1vmin;
+  height: 44px;
+  font-size: medium;
+  text-transform: capitalize; 
+  word-break: keep-all;
+  letter-spacing: 1px;
+  overflow: hidden;
 }
 
 @media screen and (max-width: 1024px) {
@@ -90,7 +129,7 @@ input.orangeIn:invalid {
   .actionForm select, 
   .actionForm datalist
   .actionForm label {
-    min-width: 100px;
-    max-width: 175px;
+    min-width: 50px;
+    max-width: 150px;
   }
 }

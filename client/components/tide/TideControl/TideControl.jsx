@@ -110,7 +110,8 @@ const TideControl = ({
           <i className="fas fa-stop fa-stack-1x" data-fa-transform="shrink-1"></i>
         </span> 
       </em>
-      <br />STOP</button>
+      {/*<br />STOP */}
+      </button>
     );
   }
   
@@ -158,7 +159,8 @@ const TideControl = ({
           <i className="fas fa-play fa-stack-1x" data-fa-transform="shrink-1 right-2"></i>
         </span>
       </b>
-    <br />LOCKED</button>
+      {/*<br />LOCKED */}
+    </button>
   );
 };
 

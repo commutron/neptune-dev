@@ -128,7 +128,7 @@ main {
   /*min-width: 768px;*/
   min-height: 100%;
   max-height: 100%;
-  grid-template-rows: 10vh 90vh;
+  grid-template-rows: 8vh 92vh;
   grid-template-columns: 100%;
   grid-template-areas: 
     'tenHeader'
@@ -161,7 +161,7 @@ main {
   display: grid;
   width: 100vw;
   height: 100vh;
-  grid-template-rows: 10vh 1fr;
+  grid-template-rows: 8vh 1fr;
   grid-template-columns: 100%;
   grid-template-areas: 
     'tenHeader'
@@ -171,8 +171,8 @@ main {
   grid-area: tenHeader;
   display: grid;
   max-width: 100vw;
-  grid-template-rows: 1vh 1fr;
-  grid-template-columns: 10vh 10vh 1fr 10vh 10vh;
+  grid-template-rows: 1vh 7vh;
+  grid-template-columns: 8vh 7vh 1fr 7vh 7vh;
   grid-template-areas: 
     'topBorder topBorder topBorder topBorder topBorder'
     'homeIcon auxLeft frontCenter auxRight proRight';
@@ -193,10 +193,10 @@ main {
 }
 .frontCenterTitle {
   grid-area: frontCenter;
-  max-width: calc(100vw - 30vh);
-  height: 9vh;
+  max-width: calc(100vw - 24vh);
+  height: 7vh;
   background-color: rgb(25,25,25);
-  font-size: 5vh;
+  font-size: 4vh;
   font-weight: 900;
   color: var(--silver);
 }
@@ -214,8 +214,8 @@ main {
   text-overflow: ellipsis;
 }
 .homeIconLink, .homeIconLogo {
-  width: 10vh;
-  height: 10vh;
+  width: 8vh;
+  height: 8vh;
 }
 .homeIconLogo { padding: 1vh; }
 .homeIconLogo:hover, .homeIconLogo:active {
@@ -250,10 +250,10 @@ main {
 
 .slidesLayout, .slidesNestedLayout {
   display: grid;
-  grid-template-rows: 90vh;
+  grid-template-rows: 92vh;
   grid-template-columns: minmax(min-content, 15vw) 1fr;
   width: 100%;
-  height: calc(100% - 10vh);
+  height: calc(100% - 8vh);
 }
 .slidesLayout {
   grid-template-areas: 
@@ -452,7 +452,7 @@ main {
   position: relative;
   z-index: 10;
   border: 1px solid rgb(0,0,0);
-  box-shadow:         0 0 100px 500px rgba(0,0,0,0.5);
+  box-shadow: 0 0 100px 500px rgba(0,0,0,0.5);
 }
 .popupHead, .medModelHead {
   display: flex;
@@ -484,10 +484,10 @@ main {
 }
 
 @media screen and (max-width: 1150px){
-  .popup{ max-width: 80%; }
+  .popup{ max-width: 90%; }
 }
 @media screen and (max-width: 1000px){
-  .popup{ max-width: 90%; }
+  .popup{ max-width: 95%; }
 }
 
 .medModel {
@@ -581,7 +581,7 @@ main {
 }
 
 .lastSpanRight span:last-child {
- justify-self: right;
+  justify-self: right;
 }
 
 .space5x5 { padding: 5vh 5vw; }

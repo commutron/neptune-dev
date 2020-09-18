@@ -39,13 +39,18 @@ const StoneSelect = ({
   const [ riverFlowState, riverFlowStateSet ] = useState( true );
   
   useEffect( ()=>{
-    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(riverFlowState);
+    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(`rvrfl:${riverFlowState}`);
   }, [riverFlowState]);
   
   const serial = item.serial;
   const history = item.history;
   const finishedAt = item.finishedAt;
-    
+  
+  useEffect( ()=> {
+		riverFlowStateSet( true );
+		closeUndoOption();
+	}, [ serial ]);
+	
   const nc = nonCons.filter( 
               x => x.serial === serial && !x.trash && x.inspect === false )
                 .sort((n1, n2)=> {

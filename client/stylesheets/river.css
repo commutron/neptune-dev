@@ -1,7 +1,7 @@
 /* River */
 .stoneFrame {
-  max-width: 20vmax;
-  min-height: 20vmax;
+  max-width: 16vmax;
+  min-height: 16vmax;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -38,8 +38,8 @@
 .stoneRing {
   position: relative;
   z-index: 0;
-  width: 18vmax;
-  height: 18vmax;
+  width: 15vmax;
+  height: 15vmax;
 }
 .spinOuterSVG svg {
   animation: spinAround 10s infinite linear;
@@ -53,13 +53,14 @@
 	z-index: 1;
 	margin: 0;
   border: 10px solid transparent;
-  width: 16vmax;
-  height: 16vmax;
-  font-size: calc(0.5rem + 1.5vmax);
+  width: 13vmax;
+  height: 13vmax;
+  font-size: calc(0.5rem + 1vmax);
   font-weight: bolder;
   text-shadow: 0 5px 10px #000;
   letter-spacing: 0.1ch;
 	text-transform: uppercase;
+	word-break: break-word;
   color: white;
   background-position: 50% 50%;
   background-repeat: no-repeat;
@@ -109,7 +110,7 @@
 
 .stone label {
   width: 100%;
-  padding: 10px 0 0 0;
+  padding: 0;
   font-size: calc(0.5rem + 1vmax);
 }
 .stone br {
@@ -138,9 +139,10 @@
 .blockStone:before,
 .authBanMask:before {
   text-align: center;
+  text-shadow: 1px 1px black;
   position: absolute;
   top: 50%;
-  padding: 20px;
+  padding: 1vh 1vw;
 }
 .doneStoneMask:before,
 .authBanMask:before {
@@ -160,7 +162,7 @@
 }
 
 .blockStone:before {
-  content: 'All nonconformances and shortages need to be resolved before this next step';
+  content: 'All nonconformances and shortages must be resolved to continue';
   font-size: calc(0.5rem + 1vmax);
   left: 0;
   z-index: 3;
@@ -170,8 +172,8 @@
 }
 
 .crackedTop, .crackedBot {
-  width: 16vmax;
-  height: 8vmax;
+  width: 13vmax;
+  height: 6.5vmax;
   z-index: 2;
   background-position: top;
   background-size: 80%;
@@ -182,12 +184,12 @@
 }
 
 .crackedTop {
-  border-radius: 11rem 11rem 0 0;
+  border-radius: 9rem 9rem 0 0;
   margin: -0.25em 0.25em 0 0.25em;
 }
 
 .crackedBot {
-  border-radius: 0 0 11rem 11rem;
+  border-radius: 0 0 9rem 9rem;
   margin: 0 0.25em -0.25em 0.25em;
   background-image: url(test.svg);
   background-color: var(--pomegranate);
@@ -320,8 +322,8 @@
   flex-wrap: nowrap;
   margin: 12px 0;
   padding: 0px;
-	min-width: 19vmax;
-  max-width: 20vmax;
+	min-width: 15vmax;
+  max-width: 16vmax;
 	min-height: 65px;
 	transition: background-color 250ms ease-in;
 }
@@ -406,7 +408,7 @@
 .stoneForm details { box-shadow: none; }
 */
 .stoneFrame {
-  max-width: 39vmax;
+  max-width: 31vmax;
 }
 .stoneForm {
   display: flex;
@@ -428,20 +430,20 @@
   justify-content: space-around;
 }
 .wideStone {
-  min-width: 17vmax;
+  min-width: 13vmax;
   width: fit-content;
-  max-width: 34vmax;
+  max-width: 30vmax;
   min-height: 1rem;
 
 }
 .wideStone textarea {
-  min-width: 17vmax;
+  min-width: 13vmax;
   width: 100%;
 }
 .stoneForm input[type='text'],
 .stoneForm select,
 .stoneForm details {
-  max-width: 17vmax;
+  max-width: 13vmax;
 }
 
 .stoneForm textarea { border-color: black; }
@@ -480,8 +482,8 @@
   --rmsc-border-radius: 0px;
   --rmsc-height: 2rem;
   color: black;
-  min-width: 17vmax;
-  max-width: 17vmax;
+  min-width: 13vmax;
+  max-width: 13vmax;
 }
 .stoneForm .item-renderer {
   display: flex;
@@ -502,7 +504,7 @@
 }
 
 .bigTideContainer {
-  min-height: 18vmax;
+  min-height: 14vmax;
   margin: 0;
   border-top: 2vh solid var(--black);
   border-right: 2vh solid var(--blackFade);
@@ -527,12 +529,12 @@
   background-color: rgb(25,25,25);
 }
 .bigTideContainer button {
-  min-height: 18vmax;
+  min-height: 14vmax;
   font-size: 2.5vmax;
   font-weight: bold;
   line-height: 1.1;
 }
 .bigTideContainer .tideIcon {
-  font-size: 6vmax;
+  font-size: 5vmax;
   font-weight: 800;
 }

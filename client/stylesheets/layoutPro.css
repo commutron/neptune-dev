@@ -7,7 +7,7 @@
 
 .windowPro {
   display: grid;
-  grid-template-rows: 10vh 90vh;
+  grid-template-rows: 8vh 92vh;
   grid-template-columns: auto;
   grid-template-areas: 
     "tenHeader"
@@ -20,7 +20,7 @@
 
 .containerPro {
   display: grid;
-  grid-template-rows: 10vh calc(90vh - 65px) 70px;
+  grid-template-rows: 8vh calc(92vh - 65px) 70px;
   grid-template-areas: 
     "tenHeader tenHeader"
     "proPrime proInstruct"
@@ -30,10 +30,10 @@
   grid-template-columns: 1vw 1fr;
 }
 .pro_20_80 {
-  grid-template-columns: 20vmax 1fr;
+  grid-template-columns: 16vmax 1fr;
 }
 .pro_40_60 {
-  grid-template-columns: 40vmax 1fr;
+  grid-template-columns: 32vmax 1fr;
 }
 
 .proSearch {
@@ -59,14 +59,14 @@
   background-color: rgb(35,35,35);
   transition: all 150ms ease-in-out;
   display: inline-grid;
-  grid-template-columns: repeat(auto-fit, minmax(19vmax, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(15vmax, 1fr));
   align-items: stretch;
   justify-content: flex-start;
 }
 .proPrimeSingle { 
   min-width: 15vmax;
   width: 100%;
-  max-width: 20vmax;
+  max-width: 16vmax;
 }
 
 .proInstruct {
@@ -120,34 +120,18 @@
   background-color: var(--asbestos);
   color: var(--clouds);
 }
-.riverExpandToggle { left: 20vmax; }
-.riverShrinkToggle { left: 40vmax; }
+.riverExpandToggle { left: 16vmax; }
+.riverShrinkToggle { left: 32vmax; }
 
 .riverExpandToggle:hover, 
 .riverShrinkToggle:hover {
   opacity: 1;
 }
-/*
-.exLeap {
-  color: var(--silver);
-  background-color: transparent;
-  min-width: 40px;
-  min-height: 40px;
-  padding: 0 4px;
-  font-size: 1.5rem;
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-}
-.exLeap:hover {
-  color: rgb(20,20,20);
-  background-color: var(--silver);
-}
-*/
+
 .miniHistory {
   margin: 1vh 0.5vmax;
-  min-width: 18vmax;
-  max-width: 19vmax;
+  min-width: 14vmax;
+  max-width: 15vmax;
   border-collapse: collapse;
 }
 .miniHistory .mockTableCell {
@@ -197,41 +181,6 @@
 
 .actionIconWrap:hover .actionIconText {
   text-decoration: underline;
-}
-
-.actionForm span,
-.actionForm div {
-  margin: 0 10px;
-}
-.actionForm input,
-.actionForm select, 
-.actionForm datalist {
-  line-height: 1.5rem;
-  font-size: 1rem;
-  min-width: 125px;
-  max-width: 250px;
-  height: 1.75rem;
-  letter-spacing: 1.5px;
-}
-.actionForm option {
-  min-width: 125px;
-  max-width: 250px;
-}
-
-.actionForm label {
-  min-width: 125px;
-  max-width: 200px;
-  letter-spacing: 1.5px;
-}
-
-.actionForm > button {
-  margin: 0 5px;
-  height: 48px;
-  font-size: medium;
-  text-transform: capitalize; 
-  word-break: keep-all;
-  letter-spacing: 1px;
-  overflow: hidden;
 }
 
 

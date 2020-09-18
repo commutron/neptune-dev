@@ -5,7 +5,7 @@
   font-size: 1.5vh;
   background-color: rgb(25,25,25);
   color: var(--asbestos);
-  padding-top: 0.25vmax;
+  padding-top: 0.2vmax;
   letter-spacing: 0.2ch;
 }
 
@@ -58,14 +58,12 @@
   animation-iteration-count: infinite;
 }
 
-.tideFollowTip:before {
+.tideOut:before, .tideFollowTip:before {
   position: absolute;
-  top: 2.75vh;
-  right: 8.5vh;
+  top: 1.5vh;
   background-color: rgb(0,0,0);
   border-radius: 25px;
   color: white;
-  content: attr(aria-label);
   padding: 1.5vh;
   text-transform: capitalize;
   transition: all 0.5s ease;
@@ -76,7 +74,15 @@
   opacity: 0;
   pointer-events: none;
 }
-.tideFollowTip:focus:before, 
-.tideFollowTip:hover:before {
+.tideOut:before {
+  left: 15vh;
+  content: "STOP";
+}
+.tideFollowTip:before {
+  right: 7.5vh;
+  content: attr(aria-label);
+}
+.tideOut:focus:before, .tideOut:hover:before, 
+.tideFollowTip:focus:before, .tideFollowTip:hover:before {
   opacity: 1;
 }
