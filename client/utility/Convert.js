@@ -21,15 +21,18 @@ export function round2Decimal(thrtytw) {
 // const array1 = [1, 2, 3, 4];
 // const reducer = (accumulator, currentValue) => accumulator + currentValue;
 
-// // 1 + 2 + 3 + 4
 // console.log(array1.reduce(reducer));
 // // expected output: 10
 
-/*
-const dArr = entry.durrArray;
-const avg = dArr.length == 1 ? dArr[0] : dArr.length > 1 &&
-  dArr.reduce( (a,c)=>a+c) / dArr.length;
-const avgWeeks = moment.duration(avg, 'minutes').asWeeks();
-const avgDays = moment.duration(avg, 'minutes').asDays();
-
-*/
+export function avgOfArray(arr) {
+  const cArr = arr.filter( f => f );
+  
+  if(cArr.length == 1) {
+    return cArr[0];
+  }else if(cArr.length > 1) {
+    const reduced = cArr.reduce( (a,c)=>a+c) / cArr.length;
+    return reduced;
+  }else{
+    return 0;
+  }
+}

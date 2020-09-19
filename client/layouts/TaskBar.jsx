@@ -32,24 +32,10 @@ const TaskBar = ({ subLink }) => {
       ><i className='fas fa-qrcode' data-fa-transform='down-1'></i></button>
       
       <button
-        title='Events Calendar'
-        className={subLink === 'calendarundefined' ? 'taskLink onTL' : 'taskLink'}
-        onClick={()=>FlowRouter.go('/data/calendar')}
-      ><i className='far fa-calendar-alt'></i></button>
-      
-      <button
         title='Reports'
         className={subLink === 'reportsundefined' ? 'taskLink onTL' : 'taskLink'}
         onClick={()=>FlowRouter.go('/data/reports')}
       ><i className="fas fa-chart-line" data-fa-transform='down-1'></i></button>
-      
-      {/*
-      <button
-        title='parts search'
-        className='taskLink'
-        onClick={()=>FlowRouter.go('/starfish')}
-      ><i className='fas fa-microchip fa-2x'></i></button>
-      */}
       
       <button
         title='Test Fail Tracker'

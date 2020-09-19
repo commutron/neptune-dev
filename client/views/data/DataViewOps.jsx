@@ -10,7 +10,6 @@ import ReportsWrap from './panels/Reports/ReportsWrap.jsx';
 import AllGroups from './panels/AllGroups/AllGroups.jsx';
 import AllBatches from './panels/AllBatches.jsx';
 import AllItems from './panels/AllItems.jsx';
-import Calendar from './panels/Calendar.jsx';
 
 import ItemPanel from './panels/ItemPanel.jsx';
 import BatchPanel from './panels/BatchPanel/BatchPanel.jsx';
@@ -152,28 +151,6 @@ const DataViewOps = ({
           groupData={allGroup} 
           app={app}
           isDebug={isDebug} />
-      </TraverseWrap>
-    );
-  }
-    
-  if(view === 'calendar') {
-    Session.set('nowBatch', false);
-    return (
-      <TraverseWrap
-	      batchData={false}
-        widgetData={false}
-        variantData={false}
-        groupData={false}
-        user={user}
-        app={app}
-        title='Events Calendar'
-        subLink={subLink}
-        action={false}
-        base={true}
-        invertColor={true}
-      >
-        <Calendar
-          app={app} />
       </TraverseWrap>
     );
   }

@@ -124,11 +124,10 @@ Meteor.publish('usersDataDebug', function(){
   }
 });
 
-// Calendar
+/*
 Meteor.publish('eventsData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  // Meteor.defer( ()=>{ Meteor.call('batchCacheUpdate', orgKey); });
   Meteor.defer( ()=>{ batchCacheUpdate(orgKey); });
   if(!this.userId){
     return this.ready();
@@ -146,6 +145,7 @@ Meteor.publish('eventsData', function(){
     ];
   }
 });
+*/
 
 Meteor.publish('tideData', function(clientTZ){
   const user = Meteor.users.findOne({_id: this.userId});

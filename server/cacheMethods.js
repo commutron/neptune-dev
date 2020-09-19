@@ -10,38 +10,6 @@ moment.updateLocale('en', {
   shippinghours: Config.shippingHours
 });
 
-    
-  function distTime(clientTZ, bSalesStart, bSalesEnd, bComplete, qtB, bTide) {
-  
-    const localEnd = moment.tz(bSalesEnd, clientTZ);
-    const shipDue = localEnd.isShipDay() ?
-                      localEnd.clone().nextShippingTime().format() :
-                      localEnd.clone().lastShippingTime().format();
-    const didEnd = moment(bComplete).tz(clientTZ).format();
-      
-    const gapSale2Ship = moment(shipDue).workingDiff(bSalesStart, 'minutes');
-    const gapSale2End = moment(didEnd).workingDiff(bSalesStart, 'minutes');
-    
-    const tideBegin = bTide && bTide.length > 0 ? bTide[0] : null;
-    const beginTime = tideBegin ? tideBegin.startTime : null;
-    
-    const tideDone = bTide && bTide.length > 0 ? bTide[bTide.length-1] : null;
-    const doneTime = tideDone ? tideDone.stopTime : null;
-    
-    const gapBegin2Done = beginTime && doneTime ?
-                            moment(doneTime).workingDiff(beginTime, 'minutes')
-                          : null;
-  
-    const quoteTotal = !qtB || qtB.length === 0 ? null :
-                          Math.round( qtB[0].timeAsMinutes );
-                          
-    const trialObj = { gapSale2Ship, gapSale2End, gapBegin2Done, quoteTotal };
-    
-    return trialObj;
-  }
-  
-    
-
 
 export function batchCacheUpdate(accessKey, force) {
   if(typeof accessKey === 'string') {
@@ -108,10 +76,6 @@ function minifyComplete(accessKey, clientTZ) {
     
   const batches = BatchDB.find({orgKey: accessKey, live: false}).fetch();
   const slimL = batches.map( x => {
-    const testTheTime = distTime(
-      clientTZ, x.start, x.end, x.finishedAt, 
-      x.quoteTimeBudget, x.tide
-    );
     return {
       batchNum: x.batch,
       widgetID: x.widgetId,
@@ -121,12 +85,10 @@ function minifyComplete(accessKey, clientTZ) {
       completedAt: x.finishedAt,
       quantity: x.items.length,
       serialize: true,
-      testTheTime: testTheTime
     };
   });
   const batchesX = XBatchDB.find({orgKey: accessKey, completed: true}).fetch();
   const slimX = batchesX.map( x => {
-    const testTheTime = false;
     return {
       batchNum: x.batch,
       widgetID: x.widgetId,
@@ -136,7 +98,6 @@ function minifyComplete(accessKey, clientTZ) {
       completedAt: x.completedAt,
       quantity: x.quantity,
       serialize: x.serialize,
-      testTheTime: testTheTime
     };
   });
   const slim = [...slimL,...slimX];
