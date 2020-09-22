@@ -686,13 +686,15 @@ main {
   flex-direction: row;
   flex-wrap: wrap;
 }
-.rowWrap {
+.rowWrap, .rowWrapR {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-start;
   align-items: baseline;
 }
+.rowWrap { justify-content: flex-start; }
+.rowWrapR { justify-content: flex-end; }
 
 .wide {
   width: 100%;

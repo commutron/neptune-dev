@@ -152,7 +152,6 @@ moment.updateLocale('en', {
   
   reportOnCompleted(clientTZ, yearNum, weekNum) {
     try {
-      
       // const nowLocal = moment().tz(clientTZ);
       const requestLocal = moment().tz(clientTZ).set({'year': yearNum, 'week': weekNum});
       
@@ -160,7 +159,6 @@ moment.updateLocale('en', {
       const rangeEnd = requestLocal.clone().endOf('week').toISOString();
       
       // console.log(requestLocal);
-      
       
       return weekDoneAnalysis(clientTZ, rangeStart, rangeEnd);
 

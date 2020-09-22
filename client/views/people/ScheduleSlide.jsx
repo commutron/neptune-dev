@@ -11,7 +11,7 @@ import 'flatpickr/dist/themes/airbnb.css';
 
 // const clientTZ = moment.tz.guess();
 
-const ScheduleSlide = ({ app, user, users, pCache })=> {
+const ScheduleSlide = ({ app, user, users })=> {
   
   const now = moment().format('YYYY-MM-DD');
   const nArr = now.split('-');

@@ -124,7 +124,7 @@ Meteor.publish('usersDataDebug', function(){
   }
 });
 
-/*
+
 Meteor.publish('eventsData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
@@ -145,7 +145,7 @@ Meteor.publish('eventsData', function(){
     ];
   }
 });
-*/
+
 
 Meteor.publish('tideData', function(clientTZ){
   const user = Meteor.users.findOne({_id: this.userId});
@@ -163,9 +163,11 @@ Meteor.publish('tideData', function(clientTZ){
           'batch': 1,
           'tide': 1
         }}),
-      CacheDB.find({orgKey: orgKey, assembled: true}, {
+      CacheDB.find({orgKey: orgKey, dataName: 'batchInfo' }, {
         fields: {
-          'orgKey': 0
+          'orgKey': 0,
+          'assembled' : 0,
+          'minified': 0
         }}),
     ];
   }

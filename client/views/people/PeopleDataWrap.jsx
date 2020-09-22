@@ -24,7 +24,7 @@ import AccountsManagePanel, { PermissionHelp } from './AccountsManagePanel.jsx';
 const PeopleDataWrap = ({
   ready, readyUsers, readyTides, // subs
   user, active, isDebug, org, app, // self
-  bCache, pCache, // caches
+  bCache, // caches
   batches, users // working data
 })=> {
   
@@ -117,8 +117,7 @@ const PeopleDataWrap = ({
               key={3}
               app={app}
               user={user}
-              users={users}
-              pCache={pCache} />
+              users={users} />
           }
           
           <div key={4}>
@@ -172,7 +171,6 @@ export default withTracker( () => {
       org: org,
       app: AppDB.findOne({org: org}),
       bCache: CacheDB.findOne({dataName: 'batchInfo'}),
-      pCache: CacheDB.findOne({dataName: 'priorityRank'}),
       batches: BatchDB.find({}).fetch(),
       users: Meteor.users.find({}, { sort: { username: 1 } } ).fetch()
     };

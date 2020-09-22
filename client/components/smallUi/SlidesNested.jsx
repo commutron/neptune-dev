@@ -34,6 +34,7 @@ const SlidesNested = ({
           type='search'
           id='txtFltr'
           className='slideNestedSearch'
+          autoFocus={true}
           onChange={(e)=>setFilter(e.target.value)} />
         
         {menuTitle &&

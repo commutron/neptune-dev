@@ -5,6 +5,7 @@ import 'moment-business-time';
 // import { checkTimeBudget } from './tideMethods.js';
 // import { whatIsBatch, whatIsBatchX } from './searchOps.js';
 
+import { avgOfArray } from '/server/calcOps';
 import Config from '/server/hardConfig.js';
 
 moment.updateLocale('en', {
@@ -12,103 +13,123 @@ moment.updateLocale('en', {
   shippinghours: Config.shippingHours
 });
 
+/*
 function distTime(widget, bReleases, bSalesStart, bSalesEnd, bComplete, bTide) {
   
-  /*const localEnd = moment.tz(bSalesEnd, clientTZ);
+  const localEnd = moment.tz(bSalesEnd, clientTZ);
   const shipDue = localEnd.isShipDay() ?
                     localEnd.clone().nextShippingTime().format() :
                     localEnd.clone().lastShippingTime().format();
   const didEnd = moment(bComplete).tz(clientTZ).format();
-  const gapSale2Due = moment(shipDue).workingDiff(bSalesStart, 'minutes');*/
-
-  const floorRelease = bReleases.find( x => x.type === 'floorRelease');
-  const flrRelTime = floorRelease && floorRelease.time;
+  const gapSale2Due = moment(shipDue).workingDiff(bSalesStart, 'minutes');
   
-  const gapSale2Rel = !flrRelTime ? null :
-    moment(flrRelTime).workingDiff(bSalesStart, 'minutes');
-
-
-  const tideBegin = bTide && bTide.length > 0 ? bTide[0] : null;
-  const beginTime = tideBegin ? tideBegin.startTime : null;
-  
-  const gapSale2Start = !beginTime ? null :
-    moment(beginTime).workingDiff(bSalesStart, 'minutes');
-  
-  
-  const gapSale2End = moment(bSalesEnd).workingDiff(bSalesStart, 'minutes');
-  
-  const gapSale2Complete = moment(bComplete).workingDiff(bSalesStart, 'minutes');
-  
-    /*
     const tideDone = bTide && bTide.length > 0 ? bTide[bTide.length-1] : null;
     const doneTime = tideDone ? tideDone.stopTime : null;
     
     const gapBegin2Done = beginTime && doneTime ?
                             moment(doneTime).workingDiff(beginTime, 'minutes')
                           : null;
-    */
-    /*
+
     const quoteTotal = !qtB || qtB.length === 0 ? null :
                           Math.round( qtB[0].timeAsMinutes );
-    */                      
+                       
     const timeObj = [
       widget,
-      moment.duration(gapSale2Rel, 'minutes').asDays(), 
-      moment.duration(gapSale2Start, 'minutes').asDays(),
-      moment.duration(gapSale2End, 'minutes').asDays(),
-      moment.duration(gapSale2Complete, 'minutes').asDays()
+      gapSale2Rel, 
+      gapSale2Start,
+      gapSale2End,
+      gapSale2Complete
     ];
     
     return timeObj;
   }
+  */
+  
+function toRelDiff(bSalesStart, bReleases) {
+  
+  const floorRelease = bReleases.find( x => x.type === 'floorRelease');
+  const flrRelTime = floorRelease && floorRelease.time;
+  
+  const gapSale2Rel = !flrRelTime ? null :
+    moment(flrRelTime).workingDiff(bSalesStart, 'days');
 
+  return gapSale2Rel;
+}
 
+function toStrtDiff(bSalesStart, bTide) {
+
+  const tideBegin = bTide && bTide.length > 0 ? bTide[0] : null;
+  const beginTime = tideBegin ? tideBegin.startTime : null;
+  
+  const gapSale2Start = !beginTime ? null :
+    moment(beginTime).workingDiff(bSalesStart, 'days');
+  
+  return gapSale2Start;
+}
+
+function toEndDiff(bSalesStart, bSalesEnd) {
+  const gapSale2End = moment(bSalesEnd).workingDiff(bSalesStart, 'days');
+  return gapSale2End;
+}
+
+function toCompDiff(bSalesStart, bComplete) {
+  const gapSale2Complete = moment(bComplete).workingDiff(bSalesStart, 'days');
+  return gapSale2Complete;
+}
+
+  
 function sortCC(accessKey) {
   
-  const groups = GroupDB.find(
-    { orgKey: Meteor.user().orgKey },
-    { sort: { group: 1 } }
-  ).fetch();
-  let gdur = [];
-  for( let group of groups ) {
-    const widgets = WidgetDB.find(
-      {
+  return new Promise(function(resolve) {
+  
+    const groups = GroupDB.find({ orgKey: accessKey }).fetch();
+    let gdur = [];
+    for( let group of groups ) {
+      const widgets = WidgetDB.find({
         orgKey: accessKey,
         groupId: group._id
-      },
-      { sort: { widget: 1 } }
-    ).fetch();
+      }).fetch();
     
-    let wdur = [];
-    for( let widget of widgets ) {
+      let wdur = [];
+      for( let widget of widgets ) {
+        let relAvg = [];
+        let stAvg = [];
+        let endAvg = [];
+        let compAvg = [];
+                
+        const compB = BatchDB.find({widgetId: widget._id, live: false});
+        for( let b of compB ) {
+          relAvg.push( toRelDiff(b.start, b.releases) );
+          stAvg.push( toStrtDiff(b.start, b.tide) );
+          endAvg.push( toEndDiff(b.start, b.end) );
+          compAvg.push( toCompDiff(b.start, b.finishedAt) );
+        }
+        
+        const compX = XBatchDB.find({widgetId: widget._id, completed: true}).fetch();
+        for( let x of compX ) {
+          relAvg.push( toRelDiff(x.salesStart, x.releases) );
+          //stAvg.push( toStrtDiff(x.salesStart, x.tide) );
+          endAvg.push( toEndDiff(x.salesStart, x.salesEnd) );
+          compAvg.push( toCompDiff(x.salesStart, x.completedAt) );
+        }
       
-      const compB = BatchDB.find({widgetId: widget._id, live: false});
-      for( let b of compB ) {
-        const testTheTime = distTime(
+        const testTheTime = [
           widget.widget,
-          b.releases, b.start, b.end, b.finishedAt, b.tide
-        );
-        wdur.push(testTheTime);
-      }
-      const compX = XBatchDB.find({widgetId: widget._id, completed: true}).fetch();
-      for( let x of compX ) {
-        const testTheTime = distTime(
-          widget.widget,
-          x.releases, x.salesStart, x.salesEnd, x.completedAt, []
-        );
-        wdur.push(testTheTime);
+          avgOfArray( relAvg ),
+          avgOfArray( stAvg ),
+          avgOfArray( endAvg ),
+          avgOfArray( compAvg )
+        ];
+        wdur.push(testTheTime);  
       }
       
+      gdur.push({
+        group: group.alias,
+        durrArray: wdur
+      });
     }
-    
-    gdur.push({
-      group: group.alias,
-      durrArray: wdur
-    });
-    
-  }
-  
-  return gdur;
+    resolve(gdur);
+  });
 }
 
 
@@ -118,9 +139,20 @@ function sortCC(accessKey) {
 Meteor.methods({
   
   reportOnTurnAround() {
+    this.unblock();
     const accessKey = Meteor.user().orgKey;
-    const result = sortCC(accessKey);
-    return JSON.stringify(result);
+    
+    async function collect() {
+      try {
+        result = await sortCC(accessKey);
+        const resultString = JSON.stringify(result);
+        return resultString;
+      }catch (err) {
+        throw new Meteor.Error(err);
+      }
+    }
+    
+    return collect();
   }
 
 
