@@ -292,6 +292,12 @@ main {
   background-color: var(--silverfade);
   box-shadow: var(--dropShadowLeft1);
 }
+.slidesNestedMenu hr:nth-child(odd) {
+  margin: 4px 0;
+}
+.slidesNestedMenu hr:nth-child(even) {
+  display: none;
+}
 
 .slideMenuButton, .slideNestedMenuButton {
   width: 100%;

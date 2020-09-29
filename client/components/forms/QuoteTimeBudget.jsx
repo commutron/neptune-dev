@@ -4,18 +4,27 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 
-export const TimeBudgetUpgrade = ({ bID })=>	{
+export const TimeBudgetUpgrade = ({ bID, isX })=>	{
   
   const auth = Roles.userIsInRole(Meteor.userId(), ['sales', 'edit']);
   
   const upgradeForQuoteTime = ()=> {
     if(auth) {
-      Meteor.call('upBatchTimeBudget', bID, (error)=>{
+      if(isX) {
+        Meteor.call('upBatchXTimeBudget', bID, (error)=>{
         if(error) {
           console.log(error);
           toast.error('Server Error');
         }
       });
+      }else{
+        Meteor.call('upBatchTimeBudget', bID, (error)=>{
+          if(error) {
+            console.log(error);
+            toast.error('Server Error');
+          }
+        });
+      }
     }else{ toast.error('NO Permission'); }
   };
   
@@ -31,7 +40,7 @@ export const TimeBudgetUpgrade = ({ bID })=>	{
   );
 };
 
-export const WholeTimeBudget = ({ bID })=>	{
+export const WholeTimeBudget = ({ bID, isX })=>	{
   
   const auth = Roles.userIsInRole(Meteor.userId(), ['sales', 'edit']);
   
@@ -42,12 +51,21 @@ export const WholeTimeBudget = ({ bID })=>	{
     //const niceMinutes = Math.round(inMinutes);
     const clientTZ = moment.tz.guess();
     if(auth) {
-      Meteor.call('pushBatchTimeBudget', bID, inMinutes, clientTZ, (error)=>{
-        if(error) {
-          console.log(error);
-          toast.error('Server Error');
-        }
-      });
+      if(isX) {
+        Meteor.call('pushBatchXTimeBudget', bID, inMinutes, clientTZ, (error)=>{
+          if(error) {
+            console.log(error);
+            toast.error('Server Error');
+          }
+        });
+      }else{
+        Meteor.call('pushBatchTimeBudget', bID, inMinutes, clientTZ, (error)=>{
+          if(error) {
+            console.log(error);
+            toast.error('Server Error');
+          }
+        });
+      }
       e.target.hourNum.value = '';
     }else{ toast.error('NO Permission'); }
   };

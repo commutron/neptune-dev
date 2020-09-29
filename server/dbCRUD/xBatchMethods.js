@@ -37,7 +37,6 @@ Meteor.methods({
   			river: false,
   			waterfall: [],
   			tide: [],
-  			rapids: [],
   			blocks: [],
         releases: [],
         verifications: [],
@@ -78,29 +77,7 @@ Meteor.methods({
     }
   },
 
-  deleteBatchX(batch, pass) {
-    const doc = XBatchDB.findOne({_id: batch._id});
-    // if any items have history
-    const inUse = doc.rapids.length > 1 ||
-                  doc.blocks.length > 1 ||
-                  doc.releases.length > 1 ||
-                  doc.verifications.length > 1 ||
-                  doc.nonconformaces.length > 1;
-    if(!inUse) {
-      const lock = doc.createdAt.toISOString().split("T")[0];
-      const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
-      const access = doc.orgKey === Meteor.user().orgKey;
-      const unlock = lock === pass;
-      if(auth && access && unlock) {
-        XBatchDB.remove(batch);
-        return true;
-      }else{
-        return false;
-      }
-    }else{
-      return 'inUse';
-    }
-  },
+  
 /*
   changepStatus(batchId, status) {
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
@@ -186,6 +163,54 @@ Meteor.methods({
       return true;
     }else{
       return false;
+    }
+  },
+  
+  //// Tide
+  
+  // setup quote time key // LEGACY SUPPORT
+  upBatchXTimeBudget(batchId) {
+    try{
+      if(Roles.userIsInRole(Meteor.userId(), ['sales', 'edit'])) {
+        XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+          $set : { 
+            'quoteTimeBudget': []
+        }});
+        const doc = XBatchDB.findOne({ _id: batchId });
+        if(!doc.tide) {
+          XBatchDB.update({ _id: batchId }, {
+            $set : { 
+              'tide': []
+          }});
+        }else{null}
+      }else{null}
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  // push time budget, whole time for batch
+  pushBatchXTimeBudget(batchId, qTime, clientTZ) {
+    try{
+      const accessKey = Meteor.user().orgKey;
+      if(Roles.userIsInRole(Meteor.userId(), ['sales', 'run', 'edit'])) {
+        XBatchDB.update({_id: batchId, orgKey: accessKey}, {
+          $push : { 
+            'quoteTimeBudget': {
+              $each: [ {
+                updatedAt: new Date(),
+                timeAsMinutes: Number(qTime)
+              } ],
+              $position: 0
+            }
+          }});
+        Meteor.defer( ()=>{
+          Meteor.call('priorityCacheUpdate', accessKey, clientTZ, true);
+        });
+      }else{
+        null;
+      }
+    }catch (err) {
+      throw new Meteor.Error(err);
     }
   },
 
@@ -425,9 +450,58 @@ Meteor.methods({
     }
   },
   
-  //// Shortages \\\\
   
-
-  //////////////////////////////////////////////////////////////////////////////////////////////////
-
+    //////////////////// DESTRUCTIVE \\\\\\\\\\\\\\\\\\\\\
+  
+  deleteBatchXTide(batchId) {
+    const accessKey = Meteor.user().orgKey;
+    const doc = XBatchDB.findOne({_id: batchId});
+    const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
+    const inUse = doc.tide.some( x => x.stopTime === false ) ? true : false;
+    const howMany = doc.tide.length + ' times';
+    if(!inUse && auth && doc.orgKey === accessKey) {
+      XBatchDB.update({_id: batchId, orgKey: accessKey}, {
+        $set : {
+          tide: [],
+        },
+        $push : {
+          altered: {
+            changeDate: new Date(),
+            changeWho: Meteor.userId(),
+            changeReason: 'user discretion',
+            changeKey: 'tide',
+            oldValue: howMany,
+            newValue: '0 times'
+          }
+        }
+      });
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  deleteBatchX(batch, pass) {
+    const doc = XBatchDB.findOne({_id: batch._id});
+    // if any items have history
+    const inUse = doc.tide.length > 0 ||
+                  doc.releases.length > 0 ||
+                  doc.verifications.length > 0 ||
+                  doc.nonconformaces.length > 0;
+    if(!inUse) {
+      const lock = doc.createdAt.toISOString().split("T")[0];
+      const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
+      const access = doc.orgKey === Meteor.user().orgKey;
+      const unlock = lock === pass;
+      if(auth && access && unlock) {
+        XBatchDB.remove(batch);
+        return true;
+      }else{
+        return false;
+      }
+    }else{
+      return 'inUse';
+    }
+  },
+  
 });

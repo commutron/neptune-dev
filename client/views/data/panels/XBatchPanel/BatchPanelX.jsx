@@ -16,6 +16,8 @@ import WaterfallTimeline from '/client/components/bigUi/WaterfallTimeline.jsx';
 
 import XBatchTimeline from '/client/components/bigUi/BatchFeed/XBatchTimeline.jsx';
 
+import TimeTab from './TimeTab.jsx';
+
 //import RiverSatus from '../../../components/smallUi/RiverStatus.jsx';
 //import FirstsOverview from '/client/components/bigUi/FirstsOverview.jsx';
 //import FirstsTimeline from '/client/components/bigUi/FirstsTimeline.jsx';
@@ -32,7 +34,7 @@ import XBatchTimeline from '/client/components/bigUi/BatchFeed/XBatchTimeline.js
 
 const BatchPanelX = ({ 
   batchData, widgetData, variantData, groupData,
-  user, app
+  user, app, isDebug, isNigh
 })=> {
 
   const a = app;
@@ -90,7 +92,8 @@ const BatchPanelX = ({
           [
             'Info',
             'Progress',
-            'Timeline'
+            'Time',
+            'Events'
           ]
         }
         wide={true}
@@ -157,6 +160,16 @@ const BatchPanelX = ({
           </div>
         </div>
         
+        <TimeTab 
+          a={app}
+          b={b}
+          user={user}
+          isDebug={isDebug}
+          totalUnits={b.quantity}
+          done={done}
+          allDone={done}
+          riverFlow={false} />
+          
         <div className='space3v'>
           <XBatchTimeline
             id={b._id}
@@ -165,7 +178,7 @@ const BatchPanelX = ({
             verifyList={[]}//filter.verifyList}
             eventList={b.events || []}
             alterList={b.altered || []}
-            quoteList={[]}//b.quoteTimeBudget || []}
+            quoteList={b.quoteTimeBudget || []}
             doneBatch={done}
             brancheS={branchesSort} />
         </div>

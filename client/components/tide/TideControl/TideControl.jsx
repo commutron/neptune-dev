@@ -41,7 +41,7 @@ const TideControl = ({
     lockTaskSet && lockTaskSet(true);
     let newRndm = actionID;
     Meteor.setTimeout( ()=>{
-      Meteor.call('startTideTask', batchID, null, newRndm, taskState, (error, reply)=> {
+      Meteor.call('startTideTask', batchID, newRndm, taskState, (error, reply)=> {
         if(error) {
           console.log(error);
           toast.error('Rejected by Server');

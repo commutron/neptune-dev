@@ -6,7 +6,7 @@ import '/client/components/bigUi/ItemFeed/style.css';
 import CreateBlock from '/client/components/bigUi/ItemFeed/CreateBlock.jsx';
 // import EventBlock from './EventBlock.jsx';
 import AlterBlock from './AlterBlock.jsx';
-// import QuoteBlock from './QuoteBlock.jsx';
+import QuoteBlock from './QuoteBlock.jsx';
 import ReleaseBlock from './ReleaseBlock.jsx';
 import CompleteBlock from './CompleteBlock.jsx';
 // import { HistoryBlock } from '/client/components/bigUi/ItemFeed/ItemFeed.jsx';
@@ -23,19 +23,19 @@ const EventsTimeline = ({
   // const [ incVerify, verifySet ] = useState( true );
   // const [ incEvent, eventSet ] = useState( true );
   const [ incAlter, alterSet ] = useState( true );
-  // const [ incQuote, quoteSet ] = useState( true );
+  const [ incQuote, quoteSet ] = useState( true );
   
   useEffect( ()=>{
     const rL = incRelease ? releaseList || [] : [];
     // const vL = incVerify ? verifyList || [] : [];
     // const eL = incEvent ? eventList || [] : [];
     const aL = incAlter ? alterList || [] : [];
-    // const qL = incQuote ? quoteList || [] : [];
+    const qL = incQuote ? quoteList || [] : [];
     const fn = batchData.completed ? 
                 [{ complete: true, time: batchData.completedAt }] : [];
     
     // const concatPings = [...rL, ...vL, ...eL, ...aL, ...qL, ...fn];
-    const concatPings = [...rL, ...aL, ...fn];
+    const concatPings = [...rL, ...aL, ...qL, ...fn];
     
     incListSet(concatPings);
     
@@ -43,11 +43,11 @@ const EventsTimeline = ({
     releaseList, 
     //verifyList, eventList, 
     alterList,
-    // quoteList,
+    quoteList,
     incRelease, 
     // incVerify, incEvent, 
-    incAlter
-    //, incQuote
+    incAlter,
+    incQuote
   ]);
   
   let sortedList = incList.sort((x, y)=> {
@@ -94,14 +94,14 @@ const EventsTimeline = ({
               defaultChecked={incAlter} />
             <label htmlFor='inputAlt'>Alters</label>
           </span>
-          {/*<span title={`quote ${Pref.timeBudget} changes`}>
+          <span title={`quote ${Pref.timeBudget} changes`}>
             <input
               type='checkbox'
               id='inputQut'
               onChange={(e)=>quoteSet(!incQuote)}
               defaultChecked={incQuote} />
             <label htmlFor='inputQut'>Quotes</label>
-          </span>*/}
+          </span>
         </div>
           
         <CreateBlock
@@ -127,13 +127,13 @@ const EventsTimeline = ({
                 key={dt.changeDate.toISOString()+ix}
                 dt={dt} /> 
             );
-          /*}else if( typeof dt.timeAsMinutes === 'number' ) {
+          }else if( typeof dt.timeAsMinutes === 'number' ) {
             return( 
               <QuoteBlock
                 key={dt.updatedAt.toISOString()+ix}
                 dt={dt} /> 
             );
-          }else if( typeof dt.detail === 'string' ) {
+          /*}else if( typeof dt.detail === 'string' ) {
             return( 
               <EventBlock
                 key={dt.time.toISOString()+ix}

@@ -432,6 +432,7 @@ const DataViewOps = ({
       let variant = linkedVariantKey(hotXBatch.versionKey);
       let allVariants = widgetVariants(hotXBatch.widgetId);
       let group = linkedGroup(hotXBatch.groupId);
+      const isNigh = Roles.userIsInRole(Meteor.userId(), 'nightly');
       return (
 		    <TraverseWrap
 		      batchData={hotXBatch}
@@ -444,7 +445,7 @@ const DataViewOps = ({
           title='Batch+'
           subLink={subLink}
           action='xbatch'
-          //invertColor={true}
+          invertColor={isNigh}
         >
           <BatchPanelX
             batchData={hotXBatch}
@@ -452,7 +453,9 @@ const DataViewOps = ({
             variantData={variant}
             groupData={group} 
             app={app}
-            user={user} />
+            user={user}
+            isDebug={isDebug}
+            isNigh={isNigh} />
           <div>no items</div>
         </TraverseWrap>
       );

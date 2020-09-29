@@ -9,17 +9,19 @@ import TimeBudgetBar from '/client/components/charts/Tides/TimeBudgetBar.jsx';
 import TimeSplitBar from '/client/components/charts/Tides/TimeSplitBar.jsx';
 
 const TimeBudgetsChunk = ({
-  a, b,
+  a, b, isX,
   totalUnits, clientTZ, isDebug
 }) =>	{
   
   const [ branchTime, branchTimeSet ] = useState(false);
   
   useEffect( ()=>{
-    Meteor.call('assembleBranchTime', b._id, clientTZ, (err, reply)=>{
-      err && console.log(err);
-      reply && branchTimeSet( reply );
-    });
+    if(!isX) {
+      Meteor.call('assembleBranchTime', b._id, clientTZ, (err, reply)=>{
+        err && console.log(err);
+        reply && branchTimeSet( reply );
+      });
+    }
   }, []);
   
   
@@ -119,8 +121,8 @@ const TimeBudgetsChunk = ({
           </p>
           
           <div className='vmargin'>
-            {!qtBready ? <TimeBudgetUpgrade bID={b._id} /> :
-              <WholeTimeBudget bID={b._id} /> }
+            {!qtBready ? <TimeBudgetUpgrade bID={b._id} isX={isX} /> :
+              <WholeTimeBudget bID={b._id} isX={isX} /> }
           </div>
           
         </div>

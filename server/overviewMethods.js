@@ -4,7 +4,7 @@ import 'moment-business-time';
 
 import Config from '/server/hardConfig.js';
 
-import { batchTideTime } from './tideMethods.js';
+import { batchTideTime } from './tideGlobalMethods.js';
 
 moment.updateLocale('en', {
   workinghours: Config.workingHours,
