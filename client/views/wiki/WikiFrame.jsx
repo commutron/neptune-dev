@@ -6,7 +6,8 @@ const WikiFrame = ({ go, full, anchor })=> {
     minHeight: '99%',
     border: '0',
     margin: '0',
-    padding: '0'
+    padding: '0',
+    scrollPadding: '100px 0 0 0'
   };
   //let correct = full ? 45 : 115;
   

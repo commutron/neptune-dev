@@ -62,6 +62,11 @@ const UserSettings = ({ app, user, isAdmin, brancheS })=> {
             userSetting={Meteor.user().showNCcodes}
             labelText={`Show ${Pref.nonCon} Codes`}
             callMethod='setUserNCcodes' />
+            
+          <UserToggleSetting
+            userSetting={Meteor.user().scrollInstruct}
+            labelText={`Autoscroll To Instruction Section`}
+            callMethod='setUserAutoscrollI' />
           
           <UserToggleSetting
             userSetting={Meteor.user().typeNCselection}

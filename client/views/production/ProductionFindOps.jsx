@@ -186,7 +186,7 @@ const ProductionFindOps = ({
           app={app}
           action='xBatchBuild'
           actionBar={true}
-          tideLockOut={true}
+          // tideLockOut={false}
         >
           <XBatchCard
             batchData={hotxBatch}

@@ -7,7 +7,7 @@ import ModelMedium from '../smallUi/ModelMedium.jsx';
 
 const UndoFinish = ({ id, finishedAtB, serial, finishedAtI, timelock, noText })=>	{
   
-  const auth = Roles.userIsInRole(Meteor.userId(), 'run') && 
+  const auth = Roles.userIsInRole(Meteor.userId(), 'BRKt3rm1n2t1ng8r2nch') && 
     finishedAtB === false && finishedAtI !== false;
   
   const icon = finishedAtB === false ? 'fa-backward' : 'fa-lock';
@@ -24,17 +24,15 @@ const UndoFinish = ({ id, finishedAtB, serial, finishedAtI, timelock, noText })=
         id={id}
         finishedAtB={finishedAtB}
         serial={serial}
-        finishedAtI={finishedAtI}
-        timelock={timelock} />
+        finishedAtI={finishedAtI} />
     </ModelMedium>
   );
 };
 
-const UndoFinishForm = ({ id, finishedAtB, serial, finishedAtI, timelock, selfclose })=> {
+const UndoFinishForm = ({ id, finishedAtB, serial, finishedAtI, selfclose })=> {
   
   const handleUndo = ()=> {
-    const override = timelock ? prompt("Enter minor PIN to override", "") : false;
-    Meteor.call('pullFinish', id, serial, override, (error, reply)=>{
+    Meteor.call('pullFinish', id, serial, (error, reply)=>{
       error && console.log(error);
       if(reply) {
         toast.success('Saved');
@@ -45,18 +43,23 @@ const UndoFinishForm = ({ id, finishedAtB, serial, finishedAtI, timelock, selfcl
     });
   };
   
+  const howLong = moment().diff(moment(finishedAtI), 'hours');
+  const grace = howLong < 24 || Roles.userIsInRole(Meteor.userId(), 'run');
+    
   return(
     <div>
-      <p className='centreText'>After one week, reactivating an {Pref.item} requires an override</p>
+      {!grace ? <p className='centreText'>This action requires "Run" permission</p> :
+                <p className='centreText'>This action requires "Complete" permission</p>}
       <p className='centreText'>After the {Pref.batch} is finished, {Pref.items} are locked and cannot be changed</p>
-      <p className='centreText'>
-        <i>This {Pref.item} was finished <b>{moment(finishedAtI).fromNow()}</b></i>
-      </p>
+      <br />
+      <p className='centreText'>This {Pref.item} was finished <b>{moment(finishedAtI).fromNow()}</b></p>
+      
       <p className='centre'>
         <button
           id='notDone'
           className='action blueHover'
           onClick={()=>handleUndo()}
+          disabled={!grace}
         >Undo Finish</button>
       </p>
     </div>

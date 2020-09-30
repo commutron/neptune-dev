@@ -63,7 +63,7 @@ export const ProWrap = ({
   }
     
   let scrollFix = {
-    overflowY: 'auto'
+    overflowY: 'hidden'
   };
   
   const u = user;
@@ -131,7 +131,7 @@ export const ProWrap = ({
           <div className='proPrime forceScrollStyle'>
             {React.cloneElement(children[0],
               { 
-                tideLockOut: tideLockOut,
+                //tideLockOut: tideLockOut,
                 tideKey: et,
                 ncTypesCombo: ncTypesComboFlat,
                 

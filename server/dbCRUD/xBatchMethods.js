@@ -12,6 +12,8 @@ Meteor.methods({
     const accessKey = Meteor.user().orgKey;
     
     if(auth && !legacyduplicate && !duplicateX && doc.orgKey === accessKey) {
+      //const qTimeNum = qTime ? Number(qTime) : false;
+
       XBatchDB.insert({
   			batch: batchNum,
   			orgKey: accessKey,
@@ -29,6 +31,13 @@ Meteor.methods({
   			salesOrder: salesNum,
   			salesStart: sDate,
   			salesEnd: eDate,
+  			quoteTimeBudget: [
+  			  /*
+  			  {
+          updatedAt: new Date(),
+          timeAsMinutes: qTimeNum
+        }*/
+        ],
   			completed: false,
   			completedAt: null,
   			completedWho: null,

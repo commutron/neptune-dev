@@ -632,9 +632,8 @@ Meteor.methods({
   },
   
   //  Undo a Finish
-  pullFinish(batchId, serial, override) {
-    if(!Roles.userIsInRole(Meteor.userId(), ("BRKt3rm1n2t1ng8r2nch")) 
-          || override === undefined) 
+  pullFinish(batchId, serial) {
+    if(!Roles.userIsInRole(Meteor.userId(), ("BRKt3rm1n2t1ng8r2nch")) ) 
     {
       null;
     }else{
@@ -644,13 +643,10 @@ Meteor.methods({
       
       const whenDid = subDoc.finishedAt;
       const whoDid = subDoc.finishedWho;
-      const inTime = whenDid !== false ? 
-        moment().diff(moment(whenDid), 'minutes') < (60 * 24 * 7) : false;
-
+      
       const accessKey = Meteor.user().orgKey;
-      const org = AppDB.findOne({ orgKey: accessKey });
-      const minorPIN = org ? org.minorPIN : null;
-      if(doc && docOpen && (inTime || minorPIN === override)) {
+    
+      if(doc && docOpen) {
         BatchDB.update({_id: batchId, orgKey: accessKey, 'items.serial': serial}, {
           $pull : {
             'items.$.history': { key: 'f1n15h1t3m5t3p' }

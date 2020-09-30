@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-//import Pref from '/client/global/pref.js';
+import Pref from '/client/global/pref.js';
 
 import StoneSelect from './StoneSelect.jsx';
 import RiverFork from './RiverFork.jsx';
@@ -21,7 +21,7 @@ const River = ({
     undoOpSet( true );
     Meteor.setTimeout(()=> {
     	undoOpSet( false );
-    }, 1000*10);
+    }, Pref.stepUndoWindow);
   }
   function closeOption() {
     undoOpSet( false );

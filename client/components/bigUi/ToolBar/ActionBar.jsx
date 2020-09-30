@@ -53,11 +53,7 @@ const ActionBar = ({
     	    id={batchData._id}
     	    finishedAtB={batchData.finishedAt}
     	    serial={itemData.serial}
-    	    finishedAtI={itemData.finishedAt}
-    	    timelock={ itemData.finishedAt !== false ?
-    	      moment().diff(moment(itemData.finishedAt), 'minutes') 
-    	      > (60 * 24 * 7) : true
-    	    } />
+    	    finishedAtI={itemData.finishedAt} />
         <ItemIncompleteForm
           id={batchData._id}
           item={itemData}

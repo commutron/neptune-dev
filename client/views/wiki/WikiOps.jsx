@@ -16,8 +16,9 @@ const WikiOps = ({ wi, root, anchor, full })=> {
   const address = !wi || wi === 'home' || wi === 'none' ?
                     root : wi;
   
-  const goString = !anchor || anchor === "" ? 
-                    address : `${address}?m=${anchor}#${anchor}`;
+  // console.log(anchor);
+  const noA = !Meteor.user().scrollInstruct || !anchor || anchor === "";
+  const goString = noA ? address : `${address}?m=${anchor}#${anchor}`;
   // const goString = address;
   
   return(

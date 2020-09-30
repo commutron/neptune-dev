@@ -234,6 +234,16 @@ Meteor.methods({
     });
   },
   
+  setUserAutoscrollI() {
+    const curr = Meteor.user().scrollInstruct;
+    const change = !curr ? true : false;
+    Meteor.users.update(Meteor.userId(), {
+      $set: {
+        scrollInstruct: change,
+      }
+    });
+  },
+  
   setUserMiniPrefer() {
     const curr = Meteor.user().miniAction;
     const change = !curr ? true : false;

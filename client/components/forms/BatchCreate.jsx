@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 
 import Model from '../smallUi/Model.jsx';
 
+// import PrioritySquareData from '/client/components/smallUi/StatusBlocks/PrioritySquare.jsx';
 
 
 const BatchCreate = ({ widgetId, versionKey, allVariants, lock })=> {
@@ -67,7 +68,8 @@ const BatchCreate = ({ widgetId, versionKey, allVariants, lock })=> {
                 )}})}
           </select>
         </p>
-        <p>
+        <div className='centreRow vmargin'>
+          
           <label htmlFor='oNum' className='breath'>{Pref.batch} number<br />
           <input
             type='number'
@@ -84,18 +86,24 @@ const BatchCreate = ({ widgetId, versionKey, allVariants, lock })=> {
             autoFocus={true}
             required 
           /></label>
-        </p>
-        <div className='centreRow vmargin'>
-          <label htmlFor='soNum' className='breath'>{Pref.salesOrder}<br />
+          
+          <label htmlFor='soNum' className='breath'>{Pref.salesOrder} Alphanumeric<br />
           <input
             type='text'
             id='soNum'
             className='numberSet indenText'
+            pattern='[A-Za-z0-9 \._-]*'
             maxLength='32'
             minLength='1'
-            placeholder='179470b'
+            placeholder='xx00at70b'
             required
           /></label>
+        </div>
+        <div className='centreRow vmargin'>
+          
+          
+          
+          
           <label htmlFor='hourNum' className='breath'>{Pref.timeBudget} (in hours)<br />
           <input
             type='number'
@@ -124,6 +132,18 @@ const BatchCreate = ({ widgetId, versionKey, allVariants, lock })=> {
             required 
           /></label>
           <label htmlFor='eDate' className='breath'>{Pref.end}<br />
+          
+          
+          <div className='vmarginhalf'>
+          {/*
+            <PrioritySquareData
+              batchID={batchId}
+              app={app}
+              mockDay={endDateState}
+              showExtra={true} />
+            */}
+          </div>
+      
           <input
             type='date'
             id='eDate'

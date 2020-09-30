@@ -10,8 +10,6 @@ import River from '/client/components/river/River.jsx';
 
 import VerifyIsland from '/client/components/river/VerifyIsland.jsx';
 
-// import TideLock from '/client/components/tide/TideLock.jsx';
-
 import ItemCard from './ItemCard.jsx';
 import BatchCard from './BatchCard.jsx';
 
@@ -20,7 +18,7 @@ const DoProCard = ({
   itemData, batchData, widgetData, groupData,
   user, users, app, 
   
-  ncTypesCombo, tideLockOut, tideKey,
+  ncTypesCombo, tideKey,
   
   tideFloodGate,
   expand, handleExpand,

@@ -70,15 +70,10 @@ const StoneControl = ({
 	  riverFlowStateSet( false );
 	  workingSet( true );
   }
-  function resolveEntry() {
+  function resolveEntry(blockUndo) {
   	riverFlowStateSet( 'slow' );
 		workingSet( false );
-		openUndoOption();
-	  document.getElementById('lookup').focus();
-  }
-  function tryagainEntry() {
-  	riverFlowStateSet( 'slow' );
-		workingSet( false );
+		!blockUndo && openUndoOption();
 	  document.getElementById('lookup').focus();
   }
    
@@ -139,7 +134,7 @@ const StoneControl = ({
 			enactEntry={()=>enactEntry()}
 			resolveEntry={()=>resolveEntry()}
 			workingState={workingState}
-			tryagainEntry={()=>tryagainEntry()}
+			tryagainEntry={()=>resolveEntry(true)}
 		/>;
 	
 	const renderFinish = 
@@ -158,7 +153,7 @@ const StoneControl = ({
 			isAlt={isAlt}
 			hasAlt={hasAlt}
 			enactEntry={()=>enactEntry()}
-			resolveEntry={()=>resolveEntry()}
+			resolveEntry={()=>resolveEntry(true)}
 			workingState={workingState}
 		/>;
 		

@@ -47,6 +47,9 @@ const StoneSelect = ({
   const finishedAt = item.finishedAt;
   
   useEffect( ()=> {
+    Session.set('ncWhere', null);
+	  Session.set('nowStepKey', null);
+    Session.set('nowWanchor', null);
 		riverFlowStateSet( true );
 		closeUndoOption();
 	}, [ serial ]);
@@ -98,23 +101,23 @@ const StoneSelect = ({
   
     const ncAllClear = ncOutstanding.length === 0;
     const shAllClear = sh.length === 0 || allAnswered === true;
-
+      
     if( ( ( flowStep.type === 'first' || flowStep.type === 'build' ) && stepComplete ) 
         || ( stepComplete && ncResolved ) 
       ) {
       null;
     }else{
-
+      
+      Session.set('ncWhere', stepBranch);
+	    Session.set('nowStepKey', flowStep.key);
+      Session.set('nowWanchor', flowStep.how);
+    
       const compEntry = iDone.find( sc => sc.key === flowStep.key && sc.good === true);
       const fTest = flowStep.type === 'test' ? 
                     iDone.filter( x => x.type === 'test' && x.good === false) : [];
       
       const blockStone = damStep && ( !ncAllClear || !shAllClear ) ? true : false;
       const doneStone = stepComplete || false;
-	    
-	    Session.set('ncWhere', stepBranch);
-	    Session.set('nowStepKey', flowStep.key);
-      Session.set('nowWanchor', flowStep.how);
 	    
 	    return(
         <div>
@@ -149,7 +152,6 @@ const StoneSelect = ({
               handleVerify={handleVerify}
               undoOption={undoOption}
               openUndoOption={openUndoOption}
-              closeUndoOption={closeUndoOption}
               riverFlowState={riverFlowState}
               riverFlowStateSet={(e)=>riverFlowStateSet(e)} />
 	        }
@@ -159,7 +161,7 @@ const StoneSelect = ({
   						<button
   							className='textAction'
   							onClick={(e)=>handleStepUndo(e)}
-  						>undo</button> 
+  						>undo last step</button>
   					: null}
   				</div>
           

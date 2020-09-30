@@ -96,7 +96,7 @@ const TideBlockRow = ({
               :
               <Flatpickr
                 value={moment(mStart).format()}
-                onClose={(e)=>setTempStart(e)} 
+                onChange={(e)=>setTempStart(e)} 
                 options={{
                   dateFormat: "Y-m-dTG:i:s",
                   defaultDate: moment(mStart).format("YYYY-m-dThh:mm:ss"),
@@ -119,7 +119,7 @@ const TideBlockRow = ({
           : splitOn ? ///////////////////////////////////////////////// SPLIT
             <Flatpickr
               value={mStop.clone().subtract(1, 'm').format()}
-              onClose={(e)=>setTempSplit(e)} 
+              onChange={(e)=>setTempSplit(e)} 
               options={{
                 dateFormat: "Y-m-dTG:i:s",
                 defaultDate: mStop.clone().subtract(1, 'm').format("YYYY-m-dThh:mm:ss"),
@@ -149,7 +149,7 @@ const TideBlockRow = ({
             :
             <Flatpickr
               value={mStop.format()}
-              onClose={(e)=>setTempStop(e)} 
+              onChange={(e)=>setTempStop(e)} 
               options={{
                 dateFormat: "Y-m-dTG:i:s",
                 defaultDate: mStop.format("YYYY-m-dThh:mm:ss"),
