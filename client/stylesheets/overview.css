@@ -3,7 +3,7 @@
 .overviewContainer {
   display: grid;
   height: 100vh;
-  grid-template-rows: 10vh 3vh 1fr;/*87vh*/
+  grid-template-rows: 8vh 3vh 1fr;/*87vh*/
   grid-template-columns: 100%;
   grid-template-areas: 
     'tenHeader'

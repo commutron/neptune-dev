@@ -45,11 +45,15 @@ Meteor.methods({
   branchBestGuess(uID, batchNum, tideStart, tideStop, clientTZ, accessKey) {
     const privateKey = accessKey || Meteor.user().orgKey;
     const tStop = tideStop ? tideStop : new Date();
-    const batch = BatchDB.findOne({ orgKey: privateKey, batch: batchNum });
     const app = AppDB.findOne({ orgKey: privateKey});
     const trackOptions = [...app.trackOption, app.lastTrack];
     const branchOptions = app.branches;
     
+    const batch = BatchDB.findOne({ orgKey: privateKey, batch: batchNum });
+    
+    if(!batch) {
+      return [ 'guessUnsupported', [ "" ] ];
+    }
     
     const yourHistory = Array.from( batch.items, x =>
                           x.history.filter( y => y.who === uID || 
@@ -216,8 +220,8 @@ Meteor.methods({
     }
   },
   
-
-  assembleBranchTime(batchID, clientTZ) {
+  
+    assembleBranchTime(batchID, clientTZ) {
     const accessKey = Meteor.user().orgKey;
     const app = AppDB.findOne({ orgKey: accessKey});
     const branchesSort = app.branches.sort((b1, b2)=> {
@@ -225,7 +229,11 @@ Meteor.methods({
           if (b1.position > b2.position) { return -1 }
           return 0;
         });
-    const batch = BatchDB.findOne({_id: batchID, orgKey: accessKey});
+    const batch = BatchDB.findOne({_id: batchID, orgKey: accessKey}) ||
+                  XBatchDB.findOne({_id: batchID, orgKey: accessKey});
+    
+    let slimTimes = [];
+    
     if( batch && Array.isArray(batch.tide) ) {  
       const slim = batch.tide.map( x => {
         const known = x.task ? [ 'fromUserInput', [ x.task ] ] : null;
@@ -242,8 +250,6 @@ Meteor.methods({
           duration: dur
         };
       });
-      
-      let slimTimes = [];
       
       const ancOptionS = app.ancillaryOption.sort();
       for(let anc of ancOptionS) {
@@ -280,7 +286,7 @@ Meteor.methods({
       let zDurr = 0;
       let xDurr = 0;
       for(let t of slim) {
-        if( !t.branchGuess ) {
+        if( !t.branchGuess || t.branchGuess[1].includes( 'guessUnsupported' ) ) {
           xDurr = xDurr + t.duration;
         }else if( t.branchGuess[1].includes( 'before release' ) ) {
           aDurr = aDurr + t.duration;
@@ -296,9 +302,10 @@ Meteor.methods({
       
       return slimTimes;
     }else{
-      return false;
+      return slimTimes;
     }
-  },
+  }
+  
   
 });
 

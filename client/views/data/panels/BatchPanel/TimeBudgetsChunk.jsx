@@ -16,12 +16,10 @@ const TimeBudgetsChunk = ({
   const [ branchTime, branchTimeSet ] = useState(false);
   
   useEffect( ()=>{
-    if(!isX) {
-      Meteor.call('assembleBranchTime', b._id, clientTZ, (err, reply)=>{
-        err && console.log(err);
-        reply && branchTimeSet( reply );
-      });
-    }
+    Meteor.call('assembleBranchTime', b._id, clientTZ, (err, reply)=>{
+      err && console.log(err);
+      reply && branchTimeSet( reply );
+    });
   }, []);
   
   

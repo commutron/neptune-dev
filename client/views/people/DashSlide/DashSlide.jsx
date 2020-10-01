@@ -6,7 +6,7 @@ import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
 import PeoplePanel from './PeoplePanel.jsx';
 
 
-const DashSlide = ({ app, user, users, batches, bCache, brancheS, isDebug })=> {
+const DashSlide = ({ app, user, users, allBatch, bCache, brancheS, isDebug })=> {
   
   const [ update, forceUpdate] = useState(false);
   
@@ -59,7 +59,7 @@ const DashSlide = ({ app, user, users, batches, bCache, brancheS, isDebug })=> {
     
     isDebug && console.log({eUsers});
 
-    const tideBatches = batches.filter( x => 
+    const tideBatches = allBatch.filter( x => 
       typeof x === 'object' && Array.isArray(x.tide) === true );
     
     const eBatches = eUsers.reduce( (result, user)=> {
@@ -74,7 +74,7 @@ const DashSlide = ({ app, user, users, batches, bCache, brancheS, isDebug })=> {
     isDebug && console.log({tideBatches, eBatches});
     eBatchesSet(eBatches);
     
-  },[batches, users]);
+  },[allBatch, users]);
   
   useEffect( ()=>{
     const qBatches = _.countBy(eBatchesState, x => x && x.batch);

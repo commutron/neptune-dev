@@ -115,142 +115,6 @@ Meteor.methods({
 
 //// Tide \\\\\
 
-  // engagedState() {
-  //   const user = Meteor.user();
-  //   const eg = user && user.engaged;
-  //   if(!eg || !eg.tKey) {
-  //     return false;
-  //   }else{
-  //     const batch = BatchDB.findOne({ 'tide.tKey': eg.tKey });
-  //     const sub = batch && batch.tide.find( x => x.tKey === eg.tKey);
-
-  //     const bounce = batch ? [ batch.batch, sub.task ] : false;
-  //     return bounce;
-  //   }
-  // },
-  
-  // startTideTask(batchId, accessKey, newTkey, newTask) {
-  //   try {
-  //     const orgKey = accessKey || Meteor.user().orgKey;
-  //     const doc = BatchDB.findOne({ _id: batchId, orgKey: orgKey });
-  //     if(typeof newTkey !== 'string') {
-  //       null;
-  //     }else{
-  //       const keyCheck = doc && ( !doc.tide || doc.tide.every( x => x.tKey !== newTkey ) );
-  //       const user = Meteor.user();
-  //       const spinning = user && user.engaged;
-  //       if(!doc || !keyCheck || spinning || !Roles.userIsInRole(Meteor.userId(), 'active')) { 
-  //         null;
-  //       }else{
-  //         if(!doc.tide) {
-  //           BatchDB.update({ _id: batchId }, {
-  //             $set : {
-  //               tide: [{
-  //                 tKey: newTkey,
-  //                 who: Meteor.userId(),
-  //                 startTime: new Date(),
-  //                 stopTime: false,
-  //                 task: newTask
-  //             }]
-  //           }});
-  //         }else{
-  //           BatchDB.update({ _id: batchId }, {
-  //             $push : { tide: { 
-  //               tKey: newTkey,
-  //               who: Meteor.userId(),
-  //               startTime: new Date(),
-  //               stopTime: false,
-  //               task: newTask
-  //           }}});
-  //         }
-  //         Meteor.users.update(Meteor.userId(), {
-  //           $set: {
-  //             engaged: {
-  //               task: 'PRO',
-  //               tKey: newTkey
-  //             }
-  //           }
-  //         });
-
-  //         Meteor.defer( ()=>{
-  //           const sameDay = doc.tide.find( x => moment(x.startTime).isSame(moment(), 'day') );
-  //           if(!sameDay) {
-  //             Meteor.call(
-  //               'sendNotifyForBatch',
-  //               orgKey, 
-  //               doc.batch,
-  //               `${doc.batch} Start`,
-  //               `First activity of the day`
-  //             );
-  //           }
-  //         });
-  //         return true;
-  //       }
-  //     }
-  //   }catch (err) {
-  //     throw new Meteor.Error(err);
-  //   }
-  // },
-  
-  // stopTideTask(tideKey, accessKey) {
-  //   try {
-  //     // const orgKey = accessKey || Meteor.user().orgKey;
-  //     const orgKey = Meteor.user().orgKey;
-  //     const userId = Meteor.userId(); 
-      
-  //     const doc = BatchDB.findOne({ 'tide.tKey': tideKey });
-  //     const sub = doc && doc.tide.find( x => x.tKey === tideKey && x.who === userId );
-  //     if(!sub) { null }else{
-  //       const batch = BatchDB.findOne({ 'tide.tKey': tideKey });
-  //       const batchID = batch._id || false;
-  //       if(batchID) {
-  //         BatchDB.update({_id: batchID, orgKey: orgKey, 'tide.tKey': tideKey}, {
-  //           $set : { 
-  //             'tide.$.stopTime' : new Date()
-  //         }});
-  //         Meteor.users.update(userId, {
-  //           $set: {
-  //             engaged: false
-  //           }
-  //         });    
-  //       return true;
-  //       }
-  //     }
-  //   }catch (err) {
-  //     throw new Meteor.Error(err);
-  //   }
-  // },
-  
-  // switchTideTask(tideKey, newbatchID, newTkey, newTask) {
-  //   try {
-  //     const accessKey = Meteor.user().orgKey;
-      
-  //     const stopFirst = (tKey, aKey)=> {
-  //       return new Promise(function(resolve, reject) {
-  //         Meteor.call('stopTideTask', tKey, aKey, (err, re)=>{
-  //           err && reject(err);
-  //           re && resolve('Success');
-  //         });
-  //       });
-  //     };
-      
-  //     const startSecond = (nbID, aKey, nTky, nTsk)=> {
-  //       Meteor.call('startTideTask', nbID, aKey, nTky, nTsk, (err, re)=>{
-  //         err && new Meteor.Error(err);
-  //         if(re) { return true }
-  //       });
-  //     };
-      
-  //     stopFirst(tideKey, accessKey)
-  //       .then(startSecond(newbatchID, accessKey, newTkey, newTask))
-  //       .finally(()=> { return true });
-
-  //   }catch (error) {
-  //     throw new Meteor.Error(error);
-  //   }finally{ return true }
-  // },
-  
-  
   tideActivityLevel(batchID, clientTZ, serverAccessKey) {
     async function bundleActivity(batchID) {
       const accessKey = serverAccessKey || Meteor.user().orgKey;
@@ -277,13 +141,22 @@ Meteor.methods({
       const getYear = localDate.year();
       const getDay = localDate.dayOfYear();
       
-      const allTouched = BatchDB.find({
+      const touchedB = BatchDB.find({
         orgKey: Meteor.user().orgKey,
         tide: { $elemMatch: { startTime: {
         $gte: new Date(localDate.startOf('day').format()),
         $lte: new Date(localDate.endOf('day').format())
       }}}
       }).fetch();
+      const touchedBX = XBatchDB.find({
+        orgKey: Meteor.user().orgKey,
+        tide: { $elemMatch: { startTime: {
+        $gte: new Date(localDate.startOf('day').format()),
+        $lte: new Date(localDate.endOf('day').format())
+      }}}
+      }).fetch();
+      
+      const allTouched = [...touchedB,...touchedBX];
       
       let slimTideCollection = [];
       for(let btch of allTouched) {
@@ -314,7 +187,7 @@ Meteor.methods({
       const sendOneID = !mockUserId ? Meteor.userId() :
                         isAuth ? mockUserId : null;
       
-      const allTouched = !sendAll ?
+      const touchedB = !sendAll ?
         BatchDB.find({
           orgKey: Meteor.user().orgKey, 
           tide: { $elemMatch: { startTime: {
@@ -331,6 +204,26 @@ Meteor.methods({
             $lte: new Date(pinDate.endOf('week').format())
           }}},
         }).fetch();
+
+      const touchedBX = !sendAll ?
+        XBatchDB.find({
+          orgKey: Meteor.user().orgKey, 
+          tide: { $elemMatch: { startTime: {
+            $gte: new Date(pinDate.startOf('week').format()),
+            $lte: new Date(pinDate.endOf('week').format())
+          }}},
+          'tide.who': sendOneID
+        }).fetch()
+        :
+        XBatchDB.find({
+          orgKey: Meteor.user().orgKey,
+          tide: { $elemMatch: { startTime: {
+            $gte: new Date(pinDate.startOf('week').format()),
+            $lte: new Date(pinDate.endOf('week').format())
+          }}},
+        }).fetch();
+        
+      const allTouched = [...touchedB,...touchedBX];
       
       let slimTideCollection = [];
       for(let btch of allTouched) {
@@ -340,7 +233,7 @@ Meteor.methods({
           moment(x.startTime).week() === getWeek);
           
         const rtnBlock = slimBlockReturnData(btch.batch, yourWeek);
-          //sendAll ? durrBlockReturnData(btch.batch, yourWeek, clientTZ);
+        //sendAll ? durrBlockReturnData(btch.batch, yourWeek, clientTZ);
         slimTideCollection.push( rtnBlock );
       }
       return [].concat(...slimTideCollection);
@@ -358,7 +251,7 @@ Meteor.methods({
         const serverTime = moment();
         const timeAgo = serverTime.clone().subtract(24, 'hours');
   
-        const allTouched =
+        const touchedB =
           BatchDB.find({
             orgKey: Meteor.user().orgKey, 
             tide: { $elemMatch: { startTime: {
@@ -367,7 +260,18 @@ Meteor.methods({
             }}},
             'tide.who': Meteor.userId()
           }).fetch();
-      
+        const touchedBX =
+          XBatchDB.find({
+            orgKey: Meteor.user().orgKey, 
+            tide: { $elemMatch: { startTime: {
+              $gte: new Date(timeAgo.format()),
+              $lte: new Date(serverTime.format())
+            }}},
+            'tide.who': Meteor.userId()
+          }).fetch();
+        
+        const allTouched = [...touchedB,...touchedBX];
+        
         let slimTideCollection = [];
         for(let btch of allTouched) {
           const yourDay = !btch.tide ? [] : btch.tide.filter( x => 
@@ -393,96 +297,7 @@ Meteor.methods({
     }
   },
   
-  editTideTimeBlock(batch, tideKey, newStart, newStop, taskIs) {
-    try {
-      const doc = BatchDB.findOne({ batch: batch, 'tide.tKey': tideKey });
-      const sub = doc && doc.tide.find( x => x.tKey === tideKey );
-      
-      if(!sub || !newStart || !newStop) {
-        return false;
-      }else{
-        const auth = sub.who === Meteor.userId() || Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
-        if(!auth) {
-          return false;
-        }else{
-          const taskVal = !taskIs || taskIs === 'false' ? false : taskIs;
-          BatchDB.update({ batch: batch, orgKey: Meteor.user().orgKey, 'tide.tKey': tideKey}, {
-            $set : { 
-              'tide.$.startTime' : newStart,
-              'tide.$.stopTime' : newStop,
-              'tide.$.task' : taskVal
-          }});
-          return true;
-        }
-      }
-      
-    }catch (err) {
-      throw new Meteor.Error(err);
-    }
-  },
-  
-  stopTideTimeBlock(batch, tideKey) {
-    try {
-      const doc = BatchDB.findOne({ batch: batch, 'tide.tKey': tideKey });
-      const sub = doc && doc.tide.find( x => x.tKey === tideKey );
-      
-      if( !sub || sub.stopTime !== false ) {
-        return false;
-      }else{
-        const auth = sub.who === Meteor.userId() || Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
-        if(!auth) {
-          return false;
-        }else{
-          BatchDB.update({ batch: batch, orgKey: Meteor.user().orgKey, 'tide.tKey': tideKey}, {
-            $set : { 
-              'tide.$.stopTime' : new Date()
-          }});
-          Meteor.users.update(sub.who, {
-            $set: {
-              engaged: false
-            }
-          });
-          return true;
-        }
-      }
-      
-    }catch (err) {
-      throw new Meteor.Error(err);
-    }
-  },
-  
-  splitTideTimeBlock(batch, tideKey, newSplit, stopTime) {
-    try {
-      const doc = BatchDB.findOne({ batch: batch, 'tide.tKey': tideKey });
-      const sub = doc && doc.tide.find( x => x.tKey === tideKey );
-      
-      if(!sub || !newSplit || !stopTime) {
-        return false;
-      }else{
-        const auth = sub.who === Meteor.userId() || Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
-        if(!auth) {
-          return false;
-        }else{
-          BatchDB.update({ batch: batch, orgKey: Meteor.user().orgKey, 'tide.tKey': tideKey}, {
-            $set : { 
-              'tide.$.stopTime' : newSplit
-          }});
-          const newTkey = new Meteor.Collection.ObjectID().valueOf();
-          BatchDB.update({ batch: batch, orgKey: Meteor.user().orgKey, 'tide.tKey': tideKey}, {
-            $push : { tide: { 
-              tKey: newTkey,
-              who: sub.who,
-              startTime: newSplit,
-              stopTime: stopTime,
-              task: sub.task
-          }}});
-          return true;
-        }
-      }
-    }catch (err) {
-       throw new Meteor.Error(err);
-    }
-  },
+  // FIX
   
   errorFixDeleteTideTimeBlock(batch) {
     try {
@@ -503,7 +318,7 @@ Meteor.methods({
           const docx = XBatchDB.findOne({ batch: batch });
           
           if( docx ) {
-            BatchDB.update({
+            XBatchDB.update({
               batch: batch,
               orgKey: Meteor.user().orgKey
             }, {
@@ -519,14 +334,6 @@ Meteor.methods({
     }
   },
   
-  errorFixForceClearEngage(userID) {
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      Meteor.users.update(userID, {
-        $set: {
-          engaged: false
-        }
-      });
-    }
-  },
+  
 
 });

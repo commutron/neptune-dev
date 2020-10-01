@@ -25,7 +25,7 @@ const PeopleDataWrap = ({
   ready, readyUsers, readyTides, // subs
   user, active, isDebug, org, app, // self
   bCache, // caches
-  batches, users // working data
+  batches, batchesX, users // working data
 })=> {
   
   const prevUser = usePrevious(user);
@@ -86,7 +86,7 @@ const PeopleDataWrap = ({
             app={app}
             user={user}
             users={users}
-            batches={batches}
+            allBatch={[...batches,...batchesX]}
             bCache={bCache}
             brancheS={brancheS}
             isDebug={isDebug} />
@@ -172,6 +172,7 @@ export default withTracker( () => {
       app: AppDB.findOne({org: org}),
       bCache: CacheDB.findOne({dataName: 'batchInfo'}),
       batches: BatchDB.find({}).fetch(),
+      batchesX: XBatchDB.find({}).fetch(),
       users: Meteor.users.find({}, { sort: { username: 1 } } ).fetch()
     };
   }

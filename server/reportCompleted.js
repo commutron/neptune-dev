@@ -128,12 +128,11 @@ moment.updateLocale('en', {
       const onTime = deliveryState(shipDue, localComplete);
       
       // check for over quote
-      // const quote2tide = checkTimeBudget(gf.tide, gf.quoteTimeBudget);
-      // const overQuote = quote2tide === null ? 'n/a' :
-      //                   quote2tide < 0 ? 
-      //                   `${asHours(Math.abs(quote2tide))} hours over` : 
-      //                   `${asHours(Math.abs(quote2tide))} hours under`;
-      const overQuote = 'n/a';
+      const quote2tide = checkTimeBudget(gf.tide, gf.quoteTimeBudget);
+      const overQuote = quote2tide === null ? 'n/a' :
+                        quote2tide < 0 ? 
+                        `${asHours(Math.abs(quote2tide))} hours over` : 
+                        `${asHours(Math.abs(quote2tide))} hours under`;
       
       batchMetrics.push([
         batchNum, describe, 
@@ -154,11 +153,10 @@ moment.updateLocale('en', {
     try {
       // const nowLocal = moment().tz(clientTZ);
       const requestLocal = moment().tz(clientTZ).set({'year': yearNum, 'week': weekNum});
+      // console.log(requestLocal);
       
       const rangeStart = requestLocal.clone().startOf('week').toISOString();
       const rangeEnd = requestLocal.clone().endOf('week').toISOString();
-      
-      // console.log(requestLocal);
       
       return weekDoneAnalysis(clientTZ, rangeStart, rangeEnd);
 

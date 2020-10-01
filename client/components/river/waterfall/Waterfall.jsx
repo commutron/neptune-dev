@@ -30,7 +30,7 @@ const Waterfall = (props)=> {
         let speed = !Meteor.user().unlockSpeed ? 2000 : Meteor.user().unlockSpeed; 
         Meteor.setTimeout(()=> {
           lockPlusSet( false );
-        }, speed/4);
+        }, speed);
       });
     }
   }
@@ -44,7 +44,7 @@ const Waterfall = (props)=> {
         let speed = !Meteor.user().unlockSpeed ? 2000 : Meteor.user().unlockSpeed; 
         Meteor.setTimeout(()=> {
           lockMinusSet( false );
-        }, speed/4);
+        }, speed);
       });
     }
   }

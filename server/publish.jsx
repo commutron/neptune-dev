@@ -163,6 +163,11 @@ Meteor.publish('tideData', function(clientTZ){
           'batch': 1,
           'tide': 1
         }}),
+      XBatchDB.find({orgKey: orgKey, tide: { $exists: true } }, {
+        fields: {
+          'batch': 1,
+          'tide': 1
+        }}),
       CacheDB.find({orgKey: orgKey, dataName: 'batchInfo' }, {
         fields: {
           'orgKey': 0,
