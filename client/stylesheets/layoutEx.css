@@ -35,7 +35,7 @@
   overflow-x: hidden !important;
 }
 .traverseContainer {
-  grid-template-columns: auto calc(200px + 3vw);
+  grid-template-columns: auto 16vmax;
 }
 .baseContainer, .baseTraverseContainer {
   grid-template-columns: auto;
@@ -259,22 +259,26 @@
   background-color: rgb(30,30,30);
 }
 .itmFltrBlock > div {
-  width: 200px;
+  max-width: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  align-items: center;
 }
 .itmFltrBlock input, .itmFltrBlock select {
   height: 1.25rem;
-  width: 155px;
-  font-size: 0.9rem;
+  width: 12vmax;
+  font-size: calc(0.7rem + 0.3vw);
   margin: 5px;
 }
 
 .itmFltrStatic {
   display: inline-block;
-  width: 33px;
+  width: 2vmax;
 }
 #itmTglON, #itmTglOFF {
   display: inline-block;
-  width: 33px;
+  width: 2vmax;
   cursor: pointer;
 }
 .onoffFilter > input {

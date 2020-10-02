@@ -6,7 +6,7 @@ import React from 'react';
 import GeneralChunk from './GeneralChunk.jsx';
 import PrioritySquareData from '/client/components/smallUi/StatusBlocks/PrioritySquare';
 import TideActivityData from '/client/components/tide/TideActivity';
-import BatchFinish from '/client/components/forms/BatchFinish.jsx';
+import BatchFinish from '/client/components/forms/Batch/BatchFinish.jsx';
 import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 import ReleaseAction from '/client/components/bigUi/ReleasesModule.jsx';
 import StepsProgress from '/client/components/bigUi/StepsProgress/StepsProgress.jsx';

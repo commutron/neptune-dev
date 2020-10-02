@@ -275,7 +275,7 @@ function collectKitting(privateKey, batchID, clientTZ) {
 function collectPriority(privateKey, batchID, clientTZ, mockDay) {
   return new Promise(resolve => {
     let collection = false;
-    const b = BatchDB.findOne({_id: batchID});
+    
     const app = AppDB.findOne({orgKey: privateKey});
     const nonWorkDays = app.nonWorkDays;
     if( Array.isArray(nonWorkDays) ) {  
@@ -285,28 +285,15 @@ function collectPriority(privateKey, batchID, clientTZ, mockDay) {
     }
     const now = moment().tz(clientTZ);
     
+    const b = BatchDB.findOne({_id: batchID}) ||
+              XBatchDB.findOne({_id: batchID});
+    
     if(!b) {
-      const bx = XBatchDB.findOne({_id: batchID});
-      if(!bx) {
-        resolve(collection);
-      }else{
-        const futureX = mockDay ? mockDay : bx.salesEnd;
-        const calcShipX = calcShipDay( now, futureX, clientTZ );
-        
-        collection = {
-          batch: bx.batch,
-          batchID: bx._id,
-          quote2tide: false,
-          isStupid: false,
-          estEnd2fillBuffer: 0,
-          shipTime: calcShipX[0].format(),
-          lateLate: calcShipX[1]
-        };
-        resolve(collection);
-      }
+      resolve(collection);
     }else{
+      const endEntry = b.end || b.salesEnd;
       
-      const future = mockDay ? mockDay : b.end;
+      const future = mockDay ? mockDay : endEntry;
       const calcShip = calcShipDay( now, future, clientTZ );
       const shipTime = calcShip[0];
       const lateLate = calcShip[1];

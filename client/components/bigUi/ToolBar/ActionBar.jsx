@@ -1,18 +1,20 @@
 import React, { Fragment } from 'react';
 import './style.css';
-import moment from 'moment';
 
 import ActionLink from '/client/components/tinyUi/ActionLink.jsx';
 import BlockForm from '/client/components/forms/BlockForm.jsx';
-import BatchCreate from '/client/components/forms/BatchCreate.jsx';
-import BatchEdit from '/client/components/forms/BatchEdit.jsx';
-import BatchFormX from '/client/components/forms/BatchFormX.jsx';
-import ItemSerialsWrap from '/client/components/forms/ItemSerials/ItemSerialsWrap.jsx';
+
+import BatchCreate from '/client/components/forms/Batch/BatchCreate';
+import BatchEdit from '/client/components/forms/Batch/BatchEdit';
+import RemoveBatch from '/client/components/forms/Batch/RemoveBatch';
+import BatchXCreate from '/client/components/forms/Batch/BatchXCreate';
+import BatchXEdit from '/client/components/forms/Batch/BatchXEdit';
+
+import ItemSerialsWrap from '/client/components/forms/ItemSerials/ItemSerialsWrap';
 import RiverSelect from '/client/components/forms/RiverSelect.jsx';
 import CounterAssign from '/client/components/bigUi/ArrayBuilder/CounterAssign.jsx';
 import NCEscape from '/client/components/forms/NCEscape.jsx';
 import RMAForm from '/client/components/forms/RMAForm.jsx';
-import RemoveBatch from '/client/components/forms/RemoveBatch.jsx';
 
 import UnitSet from '/client/components/forms/UnitSet.jsx';
 import PanelBreak from '/client/components/forms/PanelBreak.jsx';
@@ -132,7 +134,7 @@ const ActionBar = ({
       :
       action === 'xbatch' ?
         <Fragment>
-          <BatchFormX
+          <BatchXEdit
             batchId={batchData._id}
             batchNow={batchData.batch}
             versionKey={variantData.versionKey}
@@ -140,8 +142,6 @@ const ActionBar = ({
             start={batchData.salesStart}
             end={batchData.salesEnd}
             quantity={batchData.quantity}
-            groupId={batchData.groupId}
-            widgetId={batchData.widgetId}
             allVariants={allVariants}
             lock={!variantData || !batchData.live} />
           <CounterAssign
@@ -188,16 +188,10 @@ const ActionBar = ({
             widgetId={widgetData._id}
             allVariants={allVariants}
             lock={!allVariants} />
-          <BatchFormX
-            batchId={false}
-            batchNow='new'
-            versionKey={variantData.versionKey}
-            salesOrder={false}
-            start={false}
-            end={false}
-            quantity={false}
+          <BatchXCreate
             groupId={groupData._id}
             widgetId={widgetData._id}
+            versionKey={variantData.versionKey}
             allVariants={allVariants}
             lock={!allVariants} />
           <Remove
@@ -228,16 +222,10 @@ const ActionBar = ({
             widgetId={widgetData._id}
             allVariants={allVariants}
             lock={!allVariants} />
-          <BatchFormX
-            batchId={false}
-            batchNow='new'
-            variantNow={false}
-            salesOrder={false}
-            start={false}
-            end={false}
-            quantity={false}
+          <BatchXCreate
             groupId={groupData._id}
             widgetId={widgetData._id}
+            versionKey={false}
             allVariants={allVariants}
             lock={!allVariants} />
           <Remove

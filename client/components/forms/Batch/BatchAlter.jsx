@@ -3,11 +3,11 @@ import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelMedium from '../smallUi/ModelMedium.jsx';
+import ModelMedium from '/client/components/smallUi/ModelMedium.jsx';
 import PrioritySquareData from '/client/components/smallUi/StatusBlocks/PrioritySquare.jsx';
 
 
-export const AlterFulfill = ({ batchId, end, app, lock })=> (
+export const AlterFulfill = ({ batchId, isX, end, app, lock })=> (
   <ModelMedium
     button={'Alter ' + Pref.end}
     title={`Alter ${Pref.batch} ${Pref.end}`}
@@ -17,13 +17,14 @@ export const AlterFulfill = ({ batchId, end, app, lock })=> (
     noText={true}>
     <AlterFulfillForm
       batchId={batchId}
+      isX={isX}
       end={end}
       app={app} />
   </ModelMedium>
 );
 
 
-const AlterFulfillForm = ({ batchId, end, app, selfclose })=> {
+const AlterFulfillForm = ({ batchId, isX, end, app, selfclose })=> {
 
   const [ reasonState, reasonSet ] = useState(false);
   const [ endDateState, endDateSet ] = useState( end );
@@ -31,9 +32,11 @@ const AlterFulfillForm = ({ batchId, end, app, selfclose })=> {
   function save(e) {
     e.preventDefault();
     
+    const callMthd = !isX ? 'alterBatchFulfill' : 'alterBatchXFulfill';
+    
     const clientTZ = moment.tz.guess();
     
-    Meteor.call('alterBatchFulfill', batchId, end, endDateState, reasonState, clientTZ, (error, reply)=>{
+    Meteor.call(callMthd, batchId, end, endDateState, reasonState, clientTZ, (error, reply)=>{
       if(error) {
         console.log(error);
         toast.error('Server Error');

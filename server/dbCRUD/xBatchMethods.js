@@ -4,15 +4,18 @@ import { batchCacheUpdate} from '/server/cacheMethods.js';
 Meteor.methods({
 
 //// Complex, Dexterous, Multiplex Batches \\\\
-  addBatchX(batchNum, groupId, widgetId, vKey, salesNum, sDate, eDate, quantity) {
-    const doc = WidgetDB.findOne({_id: widgetId});
-    const legacyduplicate = BatchDB.findOne({batch: batchNum});
-    const duplicateX = XBatchDB.findOne({batch: batchNum});
+  addBatchX(batchNum, groupId, widgetId, vKey, salesNum, sDate, eDate, quantity, qTime, clientTZ,) {
+    const doc = WidgetDB.findOne({ _id: widgetId });
+    const legacyduplicate = BatchDB.findOne({ batch: batchNum });
+    const duplicateX = XBatchDB.findOne({ batch: batchNum });
     const auth = Roles.userIsInRole(Meteor.userId(), 'create');
     const accessKey = Meteor.user().orgKey;
     
+    const inHours = parseFloat( qTime );
+    const inMinutes = moment.duration(inHours, 'hours').asMinutes();
+    const qTimeNum = isNaN(inMinutes) ? false : Number(inMinutes);
+
     if(auth && !legacyduplicate && !duplicateX && doc.orgKey === accessKey) {
-      //const qTimeNum = qTime ? Number(qTime) : false;
 
       XBatchDB.insert({
   			batch: batchNum,
@@ -31,13 +34,10 @@ Meteor.methods({
   			salesOrder: salesNum,
   			salesStart: sDate,
   			salesEnd: eDate,
-  			quoteTimeBudget: [
-  			  /*
-  			  {
+  			quoteTimeBudget: [{
           updatedAt: new Date(),
           timeAsMinutes: qTimeNum
-        }*/
-        ],
+        }],
   			completed: false,
   			completedAt: null,
   			completedWho: null,
@@ -53,8 +53,10 @@ Meteor.methods({
         altered: [],
         events: []
       });
+      
       Meteor.defer( ()=>{
         batchCacheUpdate( accessKey, true );
+        Meteor.call('priorityCacheUpdate', accessKey, clientTZ, true);
       });
       return true;
     }else{
@@ -86,6 +88,34 @@ Meteor.methods({
     }
   },
 
+
+  alterBatchXFulfill(batchId, oldDate, newDate, reason, clientTZ) {
+    const accessKey = Meteor.user().orgKey;
+    const auth = Roles.userIsInRole(Meteor.userId(), ['edit', 'sales']);
+    if(auth) {
+      XBatchDB.update({_id: batchId, orgKey: accessKey}, {
+        $set : {
+          end: newDate,
+        }});
+      XBatchDB.update({_id: batchId, orgKey: accessKey}, {
+        $push : {
+          altered: {
+            changeDate: new Date(),
+            changeWho: Meteor.userId(),
+            changeReason: reason,
+            changeKey: 'salesEnd',
+            oldValue: oldDate,
+            newValue: newDate
+          }
+        }});
+      Meteor.defer( ()=>{
+        Meteor.call('priorityCacheUpdate', accessKey, clientTZ, true);
+      });
+      return true;
+    }else{
+      return false;
+    }
+  },
   
 /*
   changepStatus(batchId, status) {

@@ -9,7 +9,7 @@ import { min2hr } from '/client/utility/Convert.js';
 import TagsModule from '/client/components/bigUi/TagsModule.jsx';
 import NoteLine from '/client/components/smallUi/NoteLine.jsx';
 import BlockList from '/client/components/bigUi/BlockList.jsx';
-import { AlterFulfill } from '/client/components/forms/BatchAlter.jsx';
+import { AlterFulfill } from '/client/components/forms/Batch/BatchAlter.jsx';
 
 const GeneralChunk = ({
   a, b, 

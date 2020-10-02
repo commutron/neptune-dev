@@ -1,9 +1,10 @@
 import React from 'react';
 import moment from 'moment';
+import 'moment-timezone';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import Model from '../smallUi/Model.jsx';
+import Model from '/client/components/smallUi/Model.jsx';
 
 // import PrioritySquareData from '/client/components/smallUi/StatusBlocks/PrioritySquare.jsx';
 
@@ -99,28 +100,7 @@ const BatchCreate = ({ widgetId, versionKey, allVariants, lock })=> {
             required
           /></label>
         </div>
-        <div className='centreRow vmargin'>
-          
-          
-          
-          
-          <label htmlFor='hourNum' className='breath'>{Pref.timeBudget} (in hours)<br />
-          <input
-            type='number'
-            id='hourNum'
-            title={`update quoted time budget\n in hours to 2 decimal places`}
-            className='numberSet indenText'
-            pattern="^\d*(\.\d{0,2})?$"
-            maxLength='6'
-            minLength='1'
-            max='1000'
-            min='0.01'
-            step=".01"
-            inputMode='numeric'
-            placeholder='54.07'
-            // required 
-          /></label>
-        </div>
+        
         <div className='centreRow vmargin'>
           <label htmlFor='sDate' className='breath'>{Pref.start}<br />
           <input
@@ -132,18 +112,6 @@ const BatchCreate = ({ widgetId, versionKey, allVariants, lock })=> {
             required 
           /></label>
           <label htmlFor='eDate' className='breath'>{Pref.end}<br />
-          
-          
-          <div className='vmarginhalf'>
-          {/*
-            <PrioritySquareData
-              batchID={batchId}
-              app={app}
-              mockDay={endDateState}
-              showExtra={true} />
-            */}
-          </div>
-      
           <input
             type='date'
             id='eDate'
@@ -152,6 +120,7 @@ const BatchCreate = ({ widgetId, versionKey, allVariants, lock })=> {
             required 
           /></label>
         </div>
+        
         <div className='centreRow vmargin fade'>
           <label htmlFor='qUnum' className='breath'>Quantity<br />
           <input
@@ -173,10 +142,40 @@ const BatchCreate = ({ widgetId, versionKey, allVariants, lock })=> {
               className='indenText inlineCheckbox'
               defaultChecked={true}
               disabled={true}
-              //required 
             /><i className='medBig'>Use {Pref.itemSerial} numbers</i></label>
           </label>
         </div>
+        
+        <div className='centreRow vmargin'>
+          
+          <label htmlFor='hourNum' className='breath'>{Pref.timeBudget} (in hours)<br />
+          <input
+            type='number'
+            id='hourNum'
+            title={`update quoted time budget\n in hours to 2 decimal places`}
+            className='numberSet indenText'
+            pattern="^\d*(\.\d{0,2})?$"
+            maxLength='6'
+            minLength='1'
+            max='1000'
+            min='0.01'
+            step=".01"
+            inputMode='numeric'
+            placeholder='54.07'
+          /></label>
+          
+           {/*
+            <PrioritySquareData
+              batchID={batchId}
+              app={app}
+              mockDay={endDateState}
+              showExtra={true} />
+            */}
+            
+            
+        </div>
+        
+        
         <div className='vmargin'>
           <button 
             type='submit' 

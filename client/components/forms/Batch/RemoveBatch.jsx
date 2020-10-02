@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelMedium from '../smallUi/ModelMedium.jsx';
+import ModelMedium from '/client/components/smallUi/ModelMedium.jsx';
 
 // requires
 // title : a string of the thing you want to delete

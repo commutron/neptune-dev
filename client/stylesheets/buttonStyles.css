@@ -126,12 +126,12 @@
 
 .leapBar, .leapRow {
   width: 100%;
-  min-height: 32px;
+  min-height: 4vh;
   font-size: 1rem;
-  font-size: calc(1.1rem - 0.1vw);
+  font-size: calc(0.6rem + 0.4vw);
   font-weight: 400;
 	padding: 12px 6px;
-	padding: calc(1em - 0.1vw) calc(1em - 0.1vw);
+	padding: calc(0.5em + 0.5vw) calc(0.5em + 0.5vw);
   cursor: pointer;
 }
 
@@ -172,7 +172,7 @@
   font-size: 1.25rem;
 }
 .leapRow > span:first-child {
- font-size: 1.75rem;
+ font-size: 1.50rem;
  justify-self: center;
 }
 .leapRow.centreText > span {

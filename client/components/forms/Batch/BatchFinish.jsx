@@ -2,7 +2,7 @@ import React from 'react';
 //import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
-import ModelMedium from '../smallUi/ModelMedium.jsx';
+import ModelMedium from '/client/components/smallUi/ModelMedium.jsx';
 
 const BatchFinish = ({ batchId, finished, finishedAt, allFinished, live })=>	{
   

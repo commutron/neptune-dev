@@ -3,7 +3,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import Model from '../smallUi/Model.jsx';
+import Model from '/client/components/smallUi/Model.jsx';
 
 
 const BatchEdit = ({ 
@@ -63,7 +63,7 @@ const BatchEdit = ({
                 )}})}
           </select>
         </p>
-        <div className='vmargin'>
+        <div className='centreRow vmargin'>
           <label htmlFor='oNum' className='breath'>{Pref.batch} number<br />
           <input
             type='number'
@@ -81,8 +81,7 @@ const BatchEdit = ({
             autoFocus={true}
             required 
           /></label>
-        </div>
-        <div className='centreRow vmargin'>
+        
           <label htmlFor='soNum' className='breath'>{Pref.salesOrder}<br />
           <input
             type='text'
@@ -94,24 +93,8 @@ const BatchEdit = ({
             placeholder={salesOrder}
             required
           /></label>
-          <label htmlFor='hourNum' className='breath'>{Pref.timeBudget}<br />
-          <input
-            type='number'
-            id='hourNum'
-            title={`update quoted time budget\n in hours to 2 decimal places`}
-            className='numberSet indenText'
-            pattern="^\d*(\.\d{0,2})?$"
-            maxLength='6'
-            minLength='1'
-            max='1000'
-            min='0.01'
-            step=".01"
-            inputMode='numeric'
-            defaultValue={qtB}
-            disabled={true}
-            required 
-          /></label>
         </div>
+        
         <div className='centreRow vmargin'>
           <label htmlFor='sDate' className='breath'>{Pref.start}<br />
           <input
@@ -157,6 +140,27 @@ const BatchEdit = ({
             /><i className='medBig'>Use {Pref.itemSerial} numbers</i></label>
           </label>
         </div>
+        
+        <div className='centreRow vmargin'>
+          <label htmlFor='hourNum' className='breath'>{Pref.timeBudget}<br />
+          <input
+            type='number'
+            id='hourNum'
+            title={`update quoted time budget\n in hours to 2 decimal places`}
+            className='numberSet indenText'
+            pattern="^\d*(\.\d{0,2})?$"
+            maxLength='6'
+            minLength='1'
+            max='1000'
+            min='0.01'
+            step=".01"
+            inputMode='numeric'
+            defaultValue={qtB}
+            disabled={true}
+            required 
+          /></label>
+        </div>
+        
         <div className='vmargin'>
           <button 
             type='submit' 

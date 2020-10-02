@@ -456,7 +456,14 @@ const DataViewOps = ({
             user={user}
             isDebug={isDebug}
             isNigh={isNigh} />
-          <div>no items</div>
+          <div>
+            <fieldset className='noteCard'>
+              <legend>Non-Serialized</legend>
+              <p className='numFont'>Quantity:
+                <b className='medBig'> {hotXBatch.quantity}</b>
+              </p>
+            </fieldset>
+          </div>
         </TraverseWrap>
       );
     }
