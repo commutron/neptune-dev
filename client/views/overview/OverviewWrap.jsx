@@ -23,12 +23,14 @@ const OverviewWrap = ({
   const [ working, workingSet ] = useState( false );
   const [ loadTime, loadTimeSet ] = useState( moment() );
   
-  
-  const defaultFilter = Session.get(sessionSticky+'filter') ||
+  const sessionFilter = Session.get(sessionSticky+'filter');
+  const defaultFilter = sessionFilter !== undefined ? sessionFilter :
                         user.defaultOverview || false;
+                        
   const sessionDense = Session.get(sessionSticky+'dense');
   const defaultDense = sessionDense !== undefined ? sessionDense :
                         user.miniAction || false;
+                        
   const sessionLight = Session.get(sessionSticky+'lightTheme');
   const defaultLight =  sessionLight !== undefined ? sessionLight :
                         user.preferLight || false;

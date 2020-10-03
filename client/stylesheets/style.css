@@ -719,8 +719,7 @@
 }
 .fltrsInput input, .fltrsInput select {
   height: 1.25rem;
-  min-width: 128px;
-  max-width: 160px;
+  max-width: 12vmax;
   font-size: 0.9rem;
   margin: 5px 5px;
 }

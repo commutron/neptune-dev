@@ -20,6 +20,8 @@ const FilterActive = ({ title, open, done, total, onClick, onTxtChange })=>	{
             onChange={(e)=>changeTextFilter(e)}
             disabled={!onTxtChange} />
         </label>
+      </div>
+      <div>
         <label className='fltrsInput'>
           <i className='fas fa-map-marker-alt fa-fw'></i>
           <select

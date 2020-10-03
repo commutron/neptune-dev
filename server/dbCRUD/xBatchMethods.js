@@ -492,7 +492,7 @@ Meteor.methods({
   
     //////////////////// DESTRUCTIVE \\\\\\\\\\\\\\\\\\\\\
   
-  deleteBatchXTide(batchId) {
+  deleteXBatchTide(batchId) {
     const accessKey = Meteor.user().orgKey;
     const doc = XBatchDB.findOne({_id: batchId});
     const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
@@ -520,20 +520,18 @@ Meteor.methods({
     }
   },
   
-  deleteBatchX(batch, pass) {
-    const doc = XBatchDB.findOne({_id: batch._id});
+  deleteWholeXBatch(batchID, pass) {
+    const doc = XBatchDB.findOne({_id: batchID});
     // if any items have history
-    const inUse = doc.tide.length > 0 ||
-                  doc.releases.length > 0 ||
-                  doc.verifications.length > 0 ||
-                  doc.nonconformaces.length > 0;
+    const inUse = doc.tide.length > 0 || doc.waterfall.length > 0;
+                  
     if(!inUse) {
       const lock = doc.createdAt.toISOString().split("T")[0];
       const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
       const access = doc.orgKey === Meteor.user().orgKey;
       const unlock = lock === pass;
       if(auth && access && unlock) {
-        XBatchDB.remove(batch);
+        XBatchDB.remove({_id: batchID});
         return true;
       }else{
         return false;

@@ -9,6 +9,7 @@ import BatchEdit from '/client/components/forms/Batch/BatchEdit';
 import RemoveBatch from '/client/components/forms/Batch/RemoveBatch';
 import BatchXCreate from '/client/components/forms/Batch/BatchXCreate';
 import BatchXEdit from '/client/components/forms/Batch/BatchXEdit';
+import RemoveXBatch from '/client/components/forms/Batch/RemoveXBatch';
 
 import ItemSerialsWrap from '/client/components/forms/ItemSerials/ItemSerialsWrap';
 import RiverSelect from '/client/components/forms/RiverSelect.jsx';
@@ -166,8 +167,7 @@ const ActionBar = ({
             edit={false}
             xBatch={true}
             lock={batchData.completed === true} />
-          <Remove
-            action='xbatch'
+          <RemoveXBatch
             title={batchData.batch}
             check={batchData.createdAt.toISOString()}
             entry={batchData}
