@@ -6,7 +6,7 @@ import React from 'react';
 import GeneralChunk from './GeneralChunk.jsx';
 import PrioritySquareData from '/client/components/smallUi/StatusBlocks/PrioritySquare';
 import TideActivityData from '/client/components/tide/TideActivity';
-import BatchFinish from '/client/components/forms/Batch/BatchFinish.jsx';
+import BatchStatus from '/client/components/forms/Batch/BatchStatus.jsx';
 import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 import ReleaseAction from '/client/components/bigUi/ReleasesModule.jsx';
 import StepsProgress from '/client/components/bigUi/StepsProgress/StepsProgress.jsx';
@@ -62,7 +62,7 @@ const InfoTab = ({
                 </div>
               </div>
             }
-            <BatchFinish 
+            <BatchStatus 
               batchId={b._id} 
               finished={done}
               finishedAt={b.finishedAt} 

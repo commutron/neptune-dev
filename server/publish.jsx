@@ -197,6 +197,24 @@ Meteor.publish('cacheData', function(clientTZ){
           'assembled' : 0,
           'minified': 0
         }}),
+    ];
+  }
+});
+// PartsPlus
+Meteor.publish('partsPlusCacheData', function(){
+  const user = Meteor.users.findOne({_id: this.userId});
+  const orgKey = user ? user.orgKey : false;
+  // Meteor.defer( ()=>{ Meteor.call('partslistCacheUpdate', orgKey); });
+  if(!this.userId){
+    return this.ready();
+  }else{
+    return [
+      CacheDB.find({orgKey: orgKey, dataName: 'partslist'}, {
+        fields: {
+          'orgKey': 0,
+          'assembled' : 0,
+          'minified': 0
+        }}),
       ];
     }
 });

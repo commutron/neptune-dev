@@ -169,12 +169,23 @@ Meteor.methods({
   /////////////////////////////////////////////////
 
   changeStatus(batchId, status) {
+    const flip = !status;
+    const txtOld = flip.toString();
+    const txtNew = status.toString();
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
   			$set : {
-  			  updatedAt: new Date(),
-  			  updatedWho: Meteor.userId(),
   			  live: status
+        },
+        $push : {
+          altered: {
+            changeDate: new Date(),
+            changeWho: Meteor.userId(),
+            changeReason: 'user discretion',
+            changeKey: 'live',
+            oldValue: txtOld,
+            newValue: txtNew
+          }
       }});
     }else{null}
   },

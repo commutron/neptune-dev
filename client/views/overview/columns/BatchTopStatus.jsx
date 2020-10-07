@@ -68,7 +68,7 @@ const BatchTopStatus = ({
         <div>
           <NumStat
             num={dt.itemQuantity}
-            name='Total Boards'
+            name='Total Items'
             title=''
             color='blueT'
             size='big' />

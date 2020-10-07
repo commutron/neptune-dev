@@ -37,6 +37,7 @@
   grid-area: overviewContent;
   background-color: rgb(30,30,30);
   overflow-y: scroll;
+  min-height: 89vh;
 }
 
 .overlistSort {
@@ -61,11 +62,16 @@
 
 /*OverGrid */
 
-.overGridFrame {
+.overGridFrame, .overGridWideFrame {
   display: grid;
-  grid-template-columns: minmax(min-content, 25vw) auto;
   grid-template-areas: 
     'overFixedArea overScrollArea';
+}
+.overGridFrame {
+  grid-template-columns: minmax(min-content, 25vw) auto;
+}
+.overGridWideFrame {
+  grid-template-columns: minmax(min-content, 30vw) auto;
 }
 
 .overGridFixed {
@@ -93,7 +99,7 @@
   border-right: 1px outset rgba(255,255,255,0.3);
   border-bottom: 1px outset rgba(255,255,255,0.4);
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: min-content auto;
   place-items: stretch start;
 }
 .overGridRowFixed > div {
@@ -109,7 +115,7 @@
 .overGridRowFixed > div:last-child {
   overflow: hidden;
   text-overflow: ellipsis;
-  word-break: break-all;
+  word-break: break-word;
   font-size: 1.75vh;
 }
 
@@ -142,6 +148,7 @@
 
 .overGridRowScroll > div, .statusBlock {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 1vh 1vw;

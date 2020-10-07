@@ -6,10 +6,10 @@ import { UnreadInboxToastPop } from '/client/utility/InboxToastPop.js';
 import Spin from '/client/components/tinyUi/Spin.jsx';
 
 import HomeLogout from '/client/components/tinyUi/HomeLogout.jsx';
-import NavButton from '/client/components/smallUi/NavButton/NavButton.jsx';
-import { NavButtonShell } from '/client/components/smallUi/NavButton/NavButton.jsx';
+import NavButton from '/client/layouts/NavButton/NavButton';
+import { NavButtonShell } from '/client/layouts/NavButton/NavButton';
 //import { NavPlaceholderShell } from '/client/components/smallUi/NavButton/NavButton.jsx';
-import { NavPlaceholder } from '/client/components/smallUi/NavButton/NavButton.jsx';
+import { NavPlaceholder } from '/client/layouts/NavButton/NavButton';
 
 const StartView = ({ready, readyUsers, user, org, app}) =>	{
   
@@ -27,12 +27,12 @@ const StartView = ({ready, readyUsers, user, org, app}) =>	{
   
   const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
   const isReadOnly = Roles.userIsInRole(Meteor.userId(), 'readOnly');
-  const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
+  const isNigh = Roles.userIsInRole(Meteor.userId(), 'nightly');
   
   const isSales = Roles.userIsInRole(Meteor.userId(), 'sales');
   const isPeople = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
-  // ${isNightly?'fa-meteor'
-  const isPreview = isAdmin || isNightly || isSales || isPeople;
+  // ${isNigh ?'fa-meteor'
+  const isPreview = isAdmin || isNigh || isSales || isPeople;
   
   return(
     <div className='homeNavi'>
@@ -58,9 +58,11 @@ const StartView = ({ready, readyUsers, user, org, app}) =>	{
         
       <NavButton title='Explore' icon='fa-rocket' link='/data' />
       
-      <NavButton title='Parts Search' icon='fa-microchip' link='/starfish' />
+      {!isNigh ?
+        <NavButton title='Parts Search' icon='fa-microchip' link='/starfish' />
+      : <NavButton title={Pref.upstream} icon='fa-warehouse' link='/upstream' tag='β' /> }
       
-      {isPreview ?
+      {isPreview ? // fa-satellite-dish
         <NavButton title='Agenda' icon='fa-meteor' link='/agenda' tag='ALPHA' />
       : <NavPlaceholder title='Agenda' icon="fas fa-meteor" tag='ALPHA' />}
       
@@ -76,7 +78,7 @@ const StartView = ({ready, readyUsers, user, org, app}) =>	{
           link={app.timeClock || ''} 
           blank={true} /> }
       
-      <NavButton title={Pref.docs} icon='fa-file-alt' link={app.instruct || ''} blank={true} />
+      <NavButton title={Pref.docs} icon='fa-file-invoice' link={app.instruct || ''} blank={true} />
       
       <NavButton title='Help' icon='fa-question' link={app.help || ''} blank={true} />
       

@@ -117,18 +117,28 @@ Meteor.methods({
     }
   },
   
-/*
-  changepStatus(batchId, status) {
+  changeStatusX(batchId, status) {
+    const flip = !status;
+    const txtOld = flip.toString();
+    const txtNew = status.toString();
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+      XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
   			$set : {
-  			  updatedAt: new Date(),
-  			  updatedWho: Meteor.userId(),
   			  live: status
-      }});
+        },
+        $push : {
+          altered: {
+            changeDate: new Date(),
+            changeWho: Meteor.userId(),
+            changeReason: 'user discretion',
+            changeKey: 'live',
+            oldValue: txtOld,
+            newValue: txtNew
+          }
+        }});
     }else{null}
   },
-*/  
+  
   // push a tag
   pushBTagX(batchId, tag) {
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
@@ -360,18 +370,35 @@ Meteor.methods({
       null;
     }else{
       const doc = XBatchDB.findOne({_id: batchId});
-      const inTime = doc.completed ? moment().diff(moment(doc.completedAt), 'minutes') < 60 : false;
-      const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
-      const orgPIN = org ? org.orgPIN : null;
-      if(doc && (inTime || orgPIN === override)) {
-        XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
-    			$set : { 
-    			  live: true,
-    			  completed: false,
-    			  completedAt: false,
-    			  completedWho: false,
-        }});
-        return true;
+      const completed = doc && doc.completed;
+      
+      if(completed) {
+        const cmltDate = doc.completedAt;
+        const inTime = moment().diff(moment(cmltDate), 'minutes') < 60;
+        const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
+        const orgPIN = org ? org.orgPIN : null;
+        if(inTime || orgPIN === override) {
+          XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+      			$set : { 
+      			  live: true,
+      			  completed: false,
+      			  completedAt: false,
+      			  completedWho: false,
+            },
+            $push : {
+              altered: {
+                changeDate: new Date(),
+                changeWho: Meteor.userId(),
+                changeReason: 'user discretion',
+                changeKey: 'completed',
+                oldValue: cmltDate,
+                newValue: 'false'
+              }
+          }});
+          return true;
+        }else{
+          return false;
+        }
       }else{
         return false;
       }

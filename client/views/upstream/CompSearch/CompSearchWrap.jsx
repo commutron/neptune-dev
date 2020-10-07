@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
-import HomeIcon from '/client/layouts/HomeIcon.jsx';
-import TideFollow from '/client/components/tide/TideFollow.jsx';
-import { ToastContainer, toast } from 'react-toastify';
-
+import { toast } from 'react-toastify';
 
 const CompSearchWrap = ({ plCache, user, app })=> {
   
@@ -84,17 +81,12 @@ const CompSearchWrap = ({ plCache, user, app })=> {
 
   let batchCount = 0;
   results && results.forEach( y => batchCount += y.btchs.length );
-
+  
   return(
-    <div key={1} className='simpleContainer'>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        newestOnTop />
-      <div className='tenHeader invert'>
-        <div className='topBorder'></div>
-        <HomeIcon />
-        <div className='auxLeft invert'>
+    <div className='simpleContent invert starfishAccents'>
+    
+      <div className='wide rowWrapR'>
+        <div className='invert'>
           <button
             type='button'
             title='Download All Parts'
@@ -103,8 +95,7 @@ const CompSearchWrap = ({ plCache, user, app })=> {
           <i className='fas fa-download'></i>
           </button>
         </div>
-        <div className='frontCenterTitle invert'>Parts Search</div>
-        <div className='auxRight invert'>
+        <div className='invert'>
           <button
             id='cachePLupdate'
             type='button'
@@ -115,10 +106,8 @@ const CompSearchWrap = ({ plCache, user, app })=> {
           <i className='fas fa-cogs'></i>
           </button>
         </div>
-        <TideFollow invertColor={true} />
       </div>
-    
-    <div className='simpleContent invert starfishAccents vspace'>
+      
       <div className='centre space'>
         <form
           className='inlineForm'
@@ -153,9 +142,6 @@ const CompSearchWrap = ({ plCache, user, app })=> {
             ><i className='bigger fas fa-search fa-fw'></i></button>
           </label>
         </form>
-        
-        
-        
         
         <div className='balance'>
           <br />
@@ -221,7 +207,6 @@ const CompSearchWrap = ({ plCache, user, app })=> {
           </table>
         </div>
       }
-    </div>
     </div>
   );
 };

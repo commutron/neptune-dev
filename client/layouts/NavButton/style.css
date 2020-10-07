@@ -41,6 +41,7 @@
   font-size: 3vh;
   text-align: center;
   color: var(--neptuneColor);
+  text-transform: capitalize;
 }
 .navButtonWrap:hover .navButtonIcon,
 .navButtonWrap:hover .navButtonText {

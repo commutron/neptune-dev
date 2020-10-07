@@ -599,6 +599,7 @@ main {
 .space { padding: 24px; }
 .espace { padding: 0.5rem; }
 .vspace { padding: 24px 0; }
+.vspacehalf { padding: 12px 0; }
 .nspace { padding: 1vh 2vw 0 2vw; }
 .uspace { padding: 0 2vw 1vh 2vw; }
 .u10space { padding: 0 10px 10px 10px; }

@@ -3,7 +3,7 @@ import React from 'react';
 
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 
-const BatchHeaders = ({ oB, bCache, title })=> {
+const BatchHeaders = ({ oB, bCache, title, showMore })=> {
   
   return(
     <div className='overGridFixed'>
@@ -18,7 +18,8 @@ const BatchHeaders = ({ oB, bCache, title })=> {
             <BatchHeaderChunk
               key={`${entry._id}livefixed${index}`}
               ck={entry}
-              bCache={bCache} />
+              bCache={bCache}
+              showMore={showMore} />
       )})}
       
     </div>
@@ -28,17 +29,19 @@ const BatchHeaders = ({ oB, bCache, title })=> {
 
 export default BatchHeaders;
 
-const BatchHeaderChunk = ({ck, source, bCache})=> {
+const BatchHeaderChunk = ({ck, source, bCache, showMore })=> {
 
   const moreInfo = bCache ? bCache.dataSet.find( x => x.batch === ck.batch) : false;
-  const what = moreInfo ? moreInfo.isWhat : 'unavailable';
+  const what = !moreInfo ? 'unavailable' : 
+                !showMore ? moreInfo.isWhat : `${moreInfo.isWhat} ${moreInfo.more}` ;
+  const cut = !showMore ? 50 : 75;
   
   return(
     <div className='overGridRowFixed'>
       <div>
         <ExploreLinkBlock type='batch' keyword={ck.batch} wrap={false} />
       </div>
-      <div>{what.length <= 50 ? what : what.substring(0, 50) + '...'}</div>
+      <div>{what.length <= cut ? what : what.substring(0, cut) + '...'}</div>
     </div>
   );
 };

@@ -6,7 +6,7 @@ import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
 
 import HomeIcon from '/client/layouts/HomeIcon.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
-import TaskBar from './TaskBar.jsx';
+import { ExTaskBar } from './TaskBars.jsx';
 import ActionBar from '/client/components/bigUi/ToolBar/ActionBar.jsx';
 import CookieBar from './CookieBar.jsx';
 
@@ -95,7 +95,7 @@ export const TraverseWrap = ({
         
         </div>
         <aside className='taskBarEx noPrint'>
-          <TaskBar subLink={subLink} />
+          <ExTaskBar subLink={subLink} />
         </aside>
         
         <div className={'contentAreaEx ' + invert}>

@@ -95,9 +95,11 @@ class Pref {
     this.end = 'fulfill date';
     this.timeBudget = 'time budget';
     this.tag = 'flag';
-    this.comp = 'part';
+    
+    this.upstream = 'inventory';
     this.kit = 'kit';
     this.kitting = 'kitting';
+    this.comp = 'part';
     this.release = 'release';
     this.released = 'released';
     this.ship = 'ship';

@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 
 import ModelMedium from '/client/components/smallUi/ModelMedium.jsx';
 
-const BatchFinish = ({ batchId, finished, finishedAt, allFinished, live })=>	{
+const BatchStatus = ({ batchId, finished, finishedAt, allFinished, live })=>	{
   
   const handleFinish = ()=> {
     Meteor.call('finishBatch', batchId, false, (error)=>{
@@ -95,4 +95,4 @@ const BatchFinish = ({ batchId, finished, finishedAt, allFinished, live })=>	{
   
 };
 
-export default BatchFinish;
+export default BatchStatus;

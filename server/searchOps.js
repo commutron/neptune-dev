@@ -2,7 +2,7 @@ import moment from 'moment';
 import timezone from 'moment-timezone';
 
 
-export function whatIsBatch(keyword) {
+export function whatIsBatch(keyword, labelString) {
   const batch = BatchDB.findOne({batch: keyword});
   if(!batch) {
     return false;
@@ -10,19 +10,46 @@ export function whatIsBatch(keyword) {
     const widget = WidgetDB.findOne({_id: batch.widgetId});
     const group = GroupDB.findOne({_id: widget.groupId});
     const variant = VariantDB.findOne({versionKey: batch.versionKey});
-    const vNice = `v.${variant.variant}`;
-    const nice = `${group.alias.toUpperCase()} ${widget.widget.toUpperCase()} ${vNice}`;
-    return nice;
+    const more = widget.describe;
+    
+    if(labelString) {
+      const label = '/print/generallabel/' + keyword +
+                    '?group=' + group.alias +
+                    '&widget=' + widget.widget +
+                    '&ver=' + variant.variant +
+                    '&desc=' + more +
+                    '&sales=' + batch.salesOrder +
+                    '&quant=' + batch.items.length; 
+      return label;     
+    }else{
+      const vNice = `v.${variant.variant}`;
+      const nice = `${group.alias.toUpperCase()} ${widget.widget.toUpperCase()} ${vNice}`;
+      return [ nice, more ];
+    }
   }
 }
-export function whatIsBatchX(keyword) {
+
+export function whatIsBatchX(keyword, labelString) {
   const batch = XBatchDB.findOne({batch: keyword});
   const group = GroupDB.findOne({_id: batch.groupId});
   const widget = WidgetDB.findOne({_id: batch.widgetId});
   const variant = VariantDB.findOne({versionKey: batch.versionKey});
-  const vNice = `v.${variant.variant}`;
-  const nice = `${group.alias.toUpperCase()} ${widget.widget.toUpperCase()} ${vNice}`;
-  return nice;
+  const more = widget.describe;
+  
+  if(labelString) {
+    const label = '/print/generallabel/' + keyword +
+                  '?group=' + group.alias +
+                  '&widget=' + widget.widget +
+                  '&ver=' + variant.variant +
+                  '&desc=' + more +
+                  '&sales=' + batch.salesOrder +
+                  '&quant=' + batch.quantity; 
+    return label;     
+  }else{
+    const vNice = `v.${variant.variant}`;
+    const nice = `${group.alias.toUpperCase()} ${widget.widget.toUpperCase()} ${vNice}`;
+    return [ nice, more ];
+  }
 }
 /*
 function getBatch(batchNum) {  
@@ -66,9 +93,15 @@ Meteor.methods({
     const niceString = whatIsBatch(keyword) || whatIsBatchX(keyword);
     const niceObj = {
       batch: keyword, 
-      isWhat: niceString
+      isWhat: niceString[0],
+      more: niceString[1]
     };
     return niceObj;
+  },
+  
+  getBatchPrintLink(keyword) {
+    const labelString = whatIsBatch(keyword, true) || whatIsBatchX(keyword, true);
+    return labelString;
   },
   
   serialLookup(orb) {

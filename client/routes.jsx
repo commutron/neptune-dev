@@ -13,6 +13,9 @@ import Login from './views/Login.jsx';
 //import InitialSetup from './views/InitialSetup.jsx';
 
 import ProdData from './views/production/ProdData.jsx';
+
+import UpstreamData from './views/upstream/UpstreamData.jsx';
+
 import AgendaData from './views/agenda/AgendaData.jsx';
 import OverviewData from './views/overview/OverviewData.jsx';
 
@@ -134,6 +137,22 @@ privlegedRoutes.route('/', {
   }
 });
 
+privlegedRoutes.route('/app', {
+  action() {
+    mount(CleanLayout, {
+       content: (<AppData />)
+    });
+  }
+});
+
+privlegedRoutes.route('/user', {
+  action() {
+    mount(CleanLayout, {
+       content: (<UserDataWrap />)
+    });
+  }
+});
+
 privlegedRoutes.route('/production', {
   name: 'production',
   action() {
@@ -169,14 +188,7 @@ privlegedRoutes.route('/people', {
   }
 });
 
-privlegedRoutes.route('/user', {
-  action() {
-    mount(CleanLayout, {
-       content: (<UserDataWrap />)
-    });
-  }
-});
-
+// DEPRECIATE
 privlegedRoutes.route('/starfish', {
   action() {
     mount(CleanLayout, {
@@ -185,12 +197,25 @@ privlegedRoutes.route('/starfish', {
   }
 });
 
-privlegedRoutes.route('/app', {
+// Upstream Routing
+
+privlegedRoutes.route('/upstream', {
   action() {
     mount(CleanLayout, {
-       content: (<AppData />)
+      content: ( <UpstreamData /> )
     });
   }
+});
+
+privlegedRoutes.route('/upstream/:view', {
+  name: 'upstream', // optional
+  // do some action for this route
+  action: function(params) {
+    console.log("Params:", params);
+    mount(CleanLayout, {
+      content: ( <UpstreamData view={params.view} /> )
+    });
+  },
 });
 
 privlegedRoutes.route('/print/generallabel/:batch', {

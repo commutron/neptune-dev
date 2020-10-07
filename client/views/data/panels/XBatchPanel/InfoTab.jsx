@@ -17,6 +17,8 @@ import { AlterFulfill } from '/client/components/forms/Batch/BatchAlter.jsx';
 
 import PrioritySquareData from '/client/components/smallUi/StatusBlocks/PrioritySquare';
 import TideActivityData from '/client/components/tide/TideActivity';
+import BatchXStatus from '/client/components/forms/Batch/BatchXStatus.jsx';
+
 //import BatchFinish from '/client/components/forms/Batch/BatchFinish.jsx';
 //import StepsProgress from '/client/components/bigUi/StepsProgress/StepsProgress.jsx';
 
@@ -62,7 +64,7 @@ const InfoTab = ({
 
         <div className='vmarginhalf centreText line2x'>
             
-            { b.live ?
+            { b.live &&
               <div className='centreRow balance'>
                 <div className='statusBlock'>
                   <PrioritySquareData
@@ -77,17 +79,8 @@ const InfoTab = ({
                     app={a} />
                 </div>
               </div>
-            :
-              <i className='fa fa-check-circle greenT' title='Complete'></i>
             }
-            {/*
-            <BatchFinish 
-              batchId={b._id} 
-              finished={done}
-              finishedAt={b.finishedAt} 
-              allFinished={allDone}
-              live={b.live} />
-              */}
+            <BatchXStatus batchData={b} />
           
         </div>
         
