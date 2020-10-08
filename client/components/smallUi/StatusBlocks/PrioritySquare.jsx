@@ -105,25 +105,29 @@ export const PrioritySquare = ({
     const prTxt = `Priority Rank "${priorityRank}"`;
     const bffTxt = `buffer: ${bffrTime} minutes`;
     const treTxt = `Quote Time Remaining: ${min2hr(q2t)} hours`;
-    const inxTxt = `cacheSortIndex: ${pIXnum}`;
+    //const inxTxt = `cacheSortIndex: ${pIXnum}`;
+    const soonTxt = `Soonest Complete: ${moment(pt.estSoonest).format("ddd, MMM Do, h:mm a")}`;
+    const mustTxt = `Must Be Active By: ${moment(pt.estLatestBegin).format("ddd, MMM Do, h:mm a")}`;
     
-    const title = `${prTxt}\n${treTxt}\n${ovrTxt}`;
-    const debugTitle = `${prTxt}\n${bffTxt}\n${ovrTxt}\n${treTxt}\n${inxTxt}`;
+    const title = `${prTxt}\n${ovrTxt}\n${treTxt}\n${soonTxt}\n${mustTxt}`;
+    const debugTitle = `${prTxt}\n${bffTxt}\n${ovrTxt}\n${treTxt}\n${soonTxt}\n${mustTxt}`;
     
     return(
-      <div className={`${baseClass} ${extraClass} ${priorityClass} ${overClass}`}>
+      <div 
+        className={`${baseClass} ${extraClass} ${priorityClass} ${overClass}`}
+        title={isDebug ? debugTitle : title}
+      >
         <NumStat
           num={pLabel}
           name={subLabel}
           // name={`${subLabel}${isNightly ? ` (${altNumber})` : ''}`}
-          title={isDebug ? debugTitle : title}
           color='blackT'
           size='big' />
         {showExtra ? 
           <dl className='med clean noindent espace'>
             <dd>{treTxt}</dd>
-            <dd>Last Available Ship Day: {moment(pt.concludeDT).format("ddd, MMM Do")}</dd>
-            <dd>Soonest Complete: {moment(pt.estSoonest).format("ddd, MMM Do, h:mm a")}</dd>
+            <dd>{soonTxt}</dd>
+            <dd>{mustTxt}</dd>
           </dl> : null}
       </div>
     );

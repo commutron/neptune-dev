@@ -55,21 +55,22 @@ const TideBlockRow = ({
   }
  
   const mStart = moment(startTime);
-  const mStop = stopTime ? moment(stopTime) : false;// this is what is causing the warning
+  const isStop = stopTime ? true : false;
+  const mStop = stopTime ? moment(stopTime) : moment();// this is what is causing the warning
   
   const absoluteMin =
   !lastStop || !moment(lastStop).isAfter(moment(startTime).startOf('day')) ?
     moment(startTime).startOf('day').format() : lastStop;
     
   const absoluteMax =
-  !mStop ? moment().format() : 
-    !nextStart && !moment().isAfter(mStop, 'day') ? moment().format() :
-      !nextStart || moment(nextStart).isAfter(moment(mStop).endOf('day')) ?
-        moment(mStop).endOf('day').format() : nextStart;
+  !isStop ? mStop.format() : 
+    !nextStart && !moment().isAfter(mStop, 'day') ? mStop.format() :
+      !nextStart || moment(nextStart).isAfter(mStop.endOf('day')) ?
+        mStop.endOf('day').format() : nextStart;
   
   const editSelf = tideWho === Meteor.userId();
   const editAuth = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
-  const zeroed = mStop && mStop.diff(mStart, 'minutes') <= 0.5 ? true : false;
+  const zeroed = isStop && mStop.diff(mStart, 'minutes') <= 0.5 ? true : false;
   const staticFormat = isDebug ? 'hh:mm:ss A' : 'hh:mm A';
   
     return(
@@ -103,7 +104,7 @@ const TideBlockRow = ({
                   minDate: moment(absoluteMin).startOf('minute').format(),
                   maxDate: tempStop[0] ? 
                     moment(tempStop[0]).startOf('minute').format() :
-                    moment(mStop).startOf('minute').format(),
+                    mStop.startOf('minute').format(),
                   minuteIncrement: 1,
                   noCalendar: true,
                   enableTime: true,
@@ -143,7 +144,7 @@ const TideBlockRow = ({
         </td>
         <td className='noRightBorder numFont centreText timeInputs'>
           <i className="fas fa-stop fa-fw fa-xs redT"></i>
-          {!mStop ? <i> __:__ __</i> :
+          {!isStop ? <i> __:__ __</i> :
             !editOn || splitOn ? /////////////////////////////////////// STOP
             <i> {mStop.format(staticFormat)}</i>
             :
@@ -186,10 +187,10 @@ const TideBlockRow = ({
         :
           <Fragment>
             <td className='noRightBorder clean numFont rightText'>
-              {mStop ? Math.round( tideObj.durrAsMin ) : '...'}<i className='small'> minutes</i>
+              {isStop ? Math.round( tideObj.durrAsMin ) : '...'}<i className='small'> minutes</i>
             </td>
             <td className='noRightBorder centreText'>
-            {!mStop ?
+            {!isStop ?
               <button
                 className='miniAction'
                 onClick={()=>setEnd({batch, tideKey})}

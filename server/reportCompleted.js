@@ -2,7 +2,7 @@ import moment from 'moment';
 import 'moment-timezone';
 import 'moment-business-time';
 
-import { checkTimeBudget } from './tideGlobalMethods.js';
+import { checkTimeBudget, diffTimeBudget, perItemTimeBudget } from './tideGlobalMethods.js';
 import { whatIsBatch, whatIsBatchX } from './searchOps.js';
 
 import Config from '/server/hardConfig.js';
@@ -88,6 +88,10 @@ moment.updateLocale('en', {
                         `${asHours(Math.abs(quote2tide))} hours over` : 
                         `${asHours(Math.abs(quote2tide))} hours under`;
       
+      const q2tDiff = diffTimeBudget(gf.tide, gf.quoteTimeBudget);
+      
+      const tqPer = perItemTimeBudget(gf.tide, gf.quoteTimeBudget, itemQuantity);
+      
       batchMetrics.push([
         batchNum, describe, 
         salesOrder, itemQuantity, ncRate,
@@ -133,6 +137,10 @@ moment.updateLocale('en', {
                         quote2tide < 0 ? 
                         `${asHours(Math.abs(quote2tide))} hours over` : 
                         `${asHours(Math.abs(quote2tide))} hours under`;
+      
+      const q2tDiff = diffTimeBudget(gf.tide, gf.quoteTimeBudget);
+      
+      const tqPer = perItemTimeBudget(gf.tide, gf.quoteTimeBudget, itemQuantity);
       
       batchMetrics.push([
         batchNum, describe, 

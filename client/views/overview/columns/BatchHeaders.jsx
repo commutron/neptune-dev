@@ -33,7 +33,7 @@ const BatchHeaderChunk = ({ck, source, bCache, showMore })=> {
 
   const moreInfo = bCache ? bCache.dataSet.find( x => x.batch === ck.batch) : false;
   const what = !moreInfo ? 'unavailable' : 
-                !showMore ? moreInfo.isWhat : `${moreInfo.isWhat} ${moreInfo.more}` ;
+                !showMore ? moreInfo.isWhat : `${moreInfo.isWhat}\n${moreInfo.more}` ;
   const cut = !showMore ? 50 : 75;
   
   return(

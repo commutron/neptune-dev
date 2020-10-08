@@ -310,15 +310,14 @@ function collectPriority(privateKey, batchID, clientTZ, mockDay) {
         const overQuote = quote2tide < 0 ? true : false;
         const q2tNice = overQuote ? 0 : quote2tide;
                                                       // insert additional ship bumper
-        // const estConclude = shipTime;//shipTime.clone().subtractWorkingTime(0, 'hours');
-        // const estLatestBegin = shipTime.clone().subtractWorkingTime(q2tNice, 'minutes');
+        //const estConclude = shipTime;//shipTime.clone().subtractWorkingTime(0, 'hours');
+        const estLatestBegin = shipTime.clone().subtractWorkingTime(q2tNice, 'minutes');
         const maxGap = shipTime.workingDiff(moment(b.createdAt), 'hours', true);
         const isStupid =  maxGap < totalQuoteMinutes;
         
         const estSoonest = now.clone().addWorkingTime(q2tNice, 'minutes');
 
         const buffer = shipTime.workingDiff(estSoonest, 'minutes');
-        // or for same result = estCommence.workingDiff(now, 'minutes');
         
         const estEnd2fillBuffer = buffer || null;
         
@@ -326,9 +325,8 @@ function collectPriority(privateKey, batchID, clientTZ, mockDay) {
           batch: b.batch,
           batchID: b._id,
           quote2tide: quote2tide,
-          // estSoonest: estSoonest.format(),
-          // estLatestBegin: estLatestBegin.format(),
-          // concludeDT: estConclude.format(),
+          estSoonest: estSoonest.format(),
+          estLatestBegin: estLatestBegin.format(),
           isStupid: isStupid,
           estEnd2fillBuffer: estEnd2fillBuffer,
           shipTime: shipTime.format(),

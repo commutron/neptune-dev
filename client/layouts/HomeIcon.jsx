@@ -48,9 +48,15 @@ const HomeIcon = () => {
           disabled={Roles.userIsInRole(Meteor.userId(), 'readOnly')}>
           <i className='fas fa-paper-plane fa-fw'></i><i className='noCopy'> Production</i>
         </MenuItem>
+        
         <MenuItem onClick={()=>FlowRouter.go('/overview')}>
           <i className='fas fa-globe fa-fw'></i><i className='noCopy'> Overview</i>
         </MenuItem>
+        
+        <MenuItem onClick={()=>FlowRouter.go('/upstream')}>
+          <i className='fas fa-warehouse fa-fw'></i><i className='noCopy cap'> {Pref.upstream}</i>
+        </MenuItem>
+        
         <MenuItem onClick={()=>FlowRouter.go('/people')}>
           <i className='fas fa-user-astronaut fa-fw'></i><i className='noCopy'> People</i>
         </MenuItem>

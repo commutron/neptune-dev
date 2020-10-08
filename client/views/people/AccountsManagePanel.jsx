@@ -3,15 +3,15 @@ import Pref from '/client/global/pref.js';
 
 import SlidesNested from '/client/components/smallUi/SlidesNested.jsx';
 
-import RemoveUser from '/client/components/forms/RemoveUser.jsx';
+import RemoveUser from '/client/components/forms/User/RemoveUser.jsx';
 import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
 import NumLine from '/client/components/tinyUi/NumLine.jsx';
 import TrendLine from '/client/components/charts/Trends/TrendLine.jsx';
 
 import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 import ActivityPanel from '/client/views/user/ActivityPanel.jsx';
-import UserManageForm from '/client/components/forms/UserManageForm.jsx';
-import UserDMForm from '/client/components/forms/UserDMForm.jsx';
+import UserManageForm from '/client/components/forms/User/UserManageForm.jsx';
+import UserDMForm from '/client/components/forms/User/UserDMForm.jsx';
 
 
 import { ForceStopEngage } from '/client/views/app/appSlides/DataRepair.jsx';

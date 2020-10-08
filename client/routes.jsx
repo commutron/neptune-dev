@@ -22,7 +22,6 @@ import OverviewData from './views/overview/OverviewData.jsx';
 import PeopleDataWrap from './views/people/PeopleDataWrap.jsx';
 import UserDataWrap from './views/user/UserDataWrap.jsx';
 import DataData from './views/data/DataData.jsx';
-import CompSearchData from './views/compSearch/CompSearchData.jsx';
 import AppData from './views/app/AppData.jsx';
 
 import GeneralLabel from './views/paper/GeneralLabel.jsx';
@@ -188,17 +187,7 @@ privlegedRoutes.route('/people', {
   }
 });
 
-// DEPRECIATE
-privlegedRoutes.route('/starfish', {
-  action() {
-    mount(CleanLayout, {
-      content: (<CompSearchData />)
-    });
-  }
-});
-
 // Upstream Routing
-
 privlegedRoutes.route('/upstream', {
   action() {
     mount(CleanLayout, {

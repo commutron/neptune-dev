@@ -15,7 +15,7 @@ import InboxPanel from './InboxPanel.jsx';
 import WatchlistPanel from './WatchlistPanel.jsx';
 import PrivacyPanel from './PrivacyPanel.jsx';
 
-import UserSettings from '/client/components/forms/UserSettings.jsx';
+import UserSettings from '/client/components/forms/User/UserSettings';
 
 
 const UserDataWrap = ({

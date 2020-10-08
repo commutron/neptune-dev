@@ -35,21 +35,21 @@ const WatchButton = ({list, type, keyword, unique, iconOnly})=> {
         <label 
           title='Start Watching'
           className='offWatchButton'
-        >{iconOnly ? null : 'Watching'}
+        >{iconOnly ? null : <i className='gap'>Watching</i>}
           <button
             key={'offWatchButton' + unique}
             onClick={()=>changeWatch(type, keyword)}
-          ><i className='far fa-eye-slash fa-lg grayT'></i></button>
+          ><i className='far fa-eye-slash grayT'></i></button>
         </label>
       :
         <label 
           className='on onWatchButton'
           title='Stop Watching'
-        >{iconOnly ? null : 'Watching'}
+        >{iconOnly ? null : <i className='gap'>Watching</i>}
           <button
             key={'onWatchButton' + unique}
             onClick={()=>changeWatch(type, keyword)}
-          ><i className='far fa-eye fa-lg greenT'></i></button>
+          ><i className='far fa-eye greenT'></i></button>
         </label>
       }
     </span>
@@ -63,20 +63,20 @@ export const MuteButton = ({wKey, mute})=> {
       {!mute ?
         <label
           title='Turn OFF notifications'
-          className='on onMuteButton'>Notify
+          className='on onMuteButton'><i className='gap'>Notify</i>
           <button
             key={'onMuteButton' + wKey}
             onClick={()=>changeMute(wKey, mute)}
-          ><i className='far fa-bell fa-lg greenT'></i></button>
+          ><i className='far fa-bell greenT'></i></button>
         </label>
       :
         <label
           title='Turn ON notifications'
-          className='offMuteButton'>Notify
+          className='offMuteButton'><i className='gap'>Notify</i>
           <button
             key={'offMuteButton' + wKey}
             onClick={()=>changeMute(wKey, mute)}
-          ><i className='far fa-bell-slash fa-lg grayT'></i></button>
+          ><i className='far fa-bell-slash grayT'></i></button>
         </label>
       }
     </span>

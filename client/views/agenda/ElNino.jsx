@@ -11,7 +11,7 @@ const ElNino = ({
   
    
   return(
-    <i>_</i>
+    <i></i>
     
   );
 };

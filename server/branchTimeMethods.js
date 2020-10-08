@@ -41,7 +41,8 @@ function deriveFromProb(probObjs) {
 }
     
 Meteor.methods({
-
+  
+  
   branchBestGuess(uID, batchNum, tideStart, tideStop, clientTZ, accessKey) {
     const privateKey = accessKey || Meteor.user().orgKey;
     const tStop = tideStop ? tideStop : new Date();
@@ -221,7 +222,7 @@ Meteor.methods({
   },
   
   
-    assembleBranchTime(batchID, clientTZ) {
+  assembleBranchTime(batchID, clientTZ) {
     const accessKey = Meteor.user().orgKey;
     const app = AppDB.findOne({ orgKey: accessKey});
     const branchesSort = app.branches.sort((b1, b2)=> {

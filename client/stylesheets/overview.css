@@ -71,7 +71,7 @@
   grid-template-columns: minmax(min-content, 25vw) auto;
 }
 .overGridWideFrame {
-  grid-template-columns: minmax(min-content, 30vw) auto;
+  grid-template-columns: minmax(min-content, max-content) auto;
 }
 
 .overGridFixed {
@@ -175,14 +175,6 @@
 .overGridRowScroll .small {
   font-size: 1vh;
 }
-.overGridRowScroll .watchWrap {
-  height: 3vh;
-  align-items: baseline;
-}
-.overGridRowScroll .watchWrap button {
-  margin: 0;
-  height: 3vh;
-}
 
 .ovColhead { color: white; }
 
@@ -225,13 +217,6 @@
   font-size: 1.2vh; }
 
 .minifyed .overGridRowScroll .big { font-size: 1.5vh; }
-
-.minifyed .overGridRowScroll .watchWrap,
-.minifyed .overGridRowScroll .watchWrap label {
-  height: 1.5rem; }
-.minifyed .overGridRowScroll .watchWrap button {
-  height: 2rem; font-size: 1.5vh; }
-  
 
 .lightTheme .overviewToolbar {
   background-color: var(--silverfade);

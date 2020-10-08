@@ -19,14 +19,14 @@ const UpstreamDetails = ({
   
   const branchClear = brancheS.filter( b => b.reqClearance === true );
   
-  const statusCols = ['due', 'remaining workdays', 'priority rank', 'items quantity'];
+  const statusCols = ['due','remaining workdays','priority rank','items quantity','active'];
   
   const configClearCols = Array.from(Pref.clearencesArray, x => x.context );
   const branchClearCols = Array.from(branchClear, x => x.common );
   const kitCols = [...branchClearCols,...configClearCols, 'flow', 'released'];
   
   // due == 'fulfill', 'ship'
-  const kitHead = ['SO',...statusCols, ...kitCols,'active','print','production','watch'];
+  const kitHead = ['SO',...statusCols, ...kitCols,'print','production','watch'];
   
   return(
     <div className={`overGridScroll forceScrollStyle ${dense ? 'dense' : ''}`} tabIndex='1'>
@@ -128,6 +128,13 @@ const UpstreamDetailChunk = ({
         statusCols={statusCols}
         dense={dense} />
     
+      <div>
+        <TideActivitySquare 
+          batchID={oB._id} 
+          acData={ac}
+          app={app} />
+      </div>
+      
       <KittingChecks
         batchID={oB._id}
         batchNum={oB.batch}
@@ -145,13 +152,6 @@ const UpstreamDetailChunk = ({
         isDebug={isDebug} />
     
       <div>
-        <TideActivitySquare 
-          batchID={oB._id} 
-          acData={ac}
-          app={app} />
-      </div>
-      
-      <div>
         <PrintLink
           batchNum={oB.batch}
           title='Print Label'
@@ -161,16 +161,16 @@ const UpstreamDetailChunk = ({
       
     
       <div>
-  			<button
+  			<a
           title={`View ${oB.batch} in production`}
           className='transparent'
           onClick={()=>goPro(oB.batch)}
           disabled={isRO}>
           <label className='navIcon actionIconWrap taskLink'>
-            <i className='fas fa-paper-plane' data-fa-transform='left-1 down-2 shrink-1'></i>
+            <i className='fas fa-paper-plane' data-fa-transform='left-1 down-2 shrink-3'></i>
           </label>
           {!dense && <i className='label infoSquareLabel whiteT'>Production</i>}
-        </button>
+        </a>
       </div>
       
       <div>

@@ -30,7 +30,7 @@ const PrintLink = ({ batchNum, title, iText }) => {
       href={flink}
       >
       <label className='navIcon actionIconWrap taskLink'>
-        <i className={`fas fa-print`} data-fa-transform='down-2 shrink-2'></i>
+        <i className={`fas fa-print`} data-fa-transform='down-2 shrink-4'></i>
       </label>
       {iText && <span className={'infoSquareLabel whiteT'}>{title}</span>}
     </a>

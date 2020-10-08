@@ -3,9 +3,9 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import { UserSelectSetting } from '/client/components/forms/UserSettings.jsx';
+import { UserSelectSetting } from './UserSettings';
 
-import { AdminUp } from '../forms/AdminForm.jsx';
+import { AdminUp } from './AdminForm';
 
 const UserManageForm = ({ 
   userObj, id, name, org, 

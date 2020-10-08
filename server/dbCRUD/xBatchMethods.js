@@ -349,17 +349,21 @@ Meteor.methods({
     if(!Roles.userIsInRole(Meteor.userId(), "BRKt3rm1n2t1ng8r2nch")) {
       null;
     }else{
+      const privateKey = Meteor.user().orgKey;
       const doc = XBatchDB.findOne({_id: batchId});
       const did = doc.quantity > 0;
       const noItems = doc.serialize === false;
       if(doc && did && noItems) {
-        XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        XBatchDB.update({_id: batchId, orgKey: privateKey}, {
     			$set : { 
     			  live: false,
     			  completed: true,
     			  completedAt: new Date(),
     			  completedWho: Meteor.userId(),
         }});
+        Meteor.defer( ()=>{
+          Meteor.call('completeCacheUpdate', privateKey, true);
+        });
       }else{null}
     }
   },
@@ -373,12 +377,13 @@ Meteor.methods({
       const completed = doc && doc.completed;
       
       if(completed) {
+        const privateKey = Meteor.user().orgKey;
         const cmltDate = doc.completedAt;
         const inTime = moment().diff(moment(cmltDate), 'minutes') < 60;
-        const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
+        const org = AppDB.findOne({ orgKey: privateKey });
         const orgPIN = org ? org.orgPIN : null;
         if(inTime || orgPIN === override) {
-          XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+          XBatchDB.update({_id: batchId, orgKey: privateKey}, {
       			$set : { 
       			  live: true,
       			  completed: false,
@@ -395,6 +400,9 @@ Meteor.methods({
                 newValue: 'false'
               }
           }});
+          Meteor.defer( ()=>{
+            Meteor.call('completeCacheUpdate', privateKey, true);
+          });
           return true;
         }else{
           return false;

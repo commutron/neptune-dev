@@ -31,7 +31,7 @@ export function batchCacheUpdate(accessKey, force) {
           lastUpdated: new Date(),
           dataName: 'batchInfo',
           dataSet: slim,
-          assembled: true,
+          structured: true,
           minified: true
       }});
     }
@@ -58,14 +58,14 @@ export function branchConCacheUpdate(accessKey, force) {
           lastUpdated: new Date(),
           dataName: 'branchCondition',
           dataSet: slim,
-          assembled: true,
+          structured: true,
           minified: false
       }});
     }
   }
 }
   
-function minifyComplete(accessKey, clientTZ) {
+function minifyComplete(accessKey) {
   const app = AppDB.findOne({orgKey: accessKey});
   const nonWorkDays = app.nonWorkDays;
   if( Array.isArray(nonWorkDays) ) {  
@@ -116,7 +116,7 @@ Meteor.methods({
       Meteor.call('priorityCacheUpdate', key, clientTZ, true);
       Meteor.call('activityCacheUpdate', key, clientTZ, true);
       branchConCacheUpdate(key, true);
-      Meteor.call('completeCacheUpdate', key, clientTZ, true);
+      Meteor.call('completeCacheUpdate', key, true);
     }
   },
   
@@ -133,11 +133,12 @@ Meteor.methods({
       branchConUp && Meteor.defer( ()=>{
         branchConCacheUpdate(key, false) });
       compUp && Meteor.defer( ()=>{
-        Meteor.call('completeCacheUpdate', key, clientTZ, false) });
+        Meteor.call('completeCacheUpdate', key, false) });
     }
   },
   
   priorityCacheUpdate(accessKey, clientTZ, force) {
+    this.unblock();
     if(typeof accessKey === 'string') {
       const timeOut = moment().subtract(30, 'minutes').toISOString();
       const currentCache = CacheDB.findOne({
@@ -176,7 +177,7 @@ Meteor.methods({
             lastUpdated: new Date(),
             dataName: 'priorityRank',
             dataSet: slim,
-            assembled: true,
+            structured: true,
             minified: false
         }});
       }
@@ -184,6 +185,7 @@ Meteor.methods({
   },
   
   activityCacheUpdate(accessKey, clientTZ, force) {
+    this.unblock();
     if(typeof accessKey === 'string') {
       const timeOut = moment().subtract(5, 'minutes').toISOString();
       const currentCache = CacheDB.findOne({
@@ -203,7 +205,7 @@ Meteor.methods({
             lastUpdated: new Date(),
             dataName: 'activityLevel',
             dataSet: slim,
-            assembled: true,
+            structured: true,
             minified: false
         }});
       }
@@ -212,24 +214,24 @@ Meteor.methods({
   
   //CacheDB.remove({orgKey: accessKey, dataName: 'phaseCondition'}
   
-  completeCacheUpdate(accessKey, clientTZ, force) {
+  completeCacheUpdate(accessKey, force) {
     this.unblock();
     if(typeof accessKey === 'string') {
-      const timeOut = moment().subtract(60, 'minutes').toISOString();
+      const timeOut = moment().subtract(12, 'hours').toISOString();
       const currentCache = CacheDB.findOne({
-        orgKey: accessKey, 
+        orgKey: accessKey,
         lastUpdated: { $gte: new Date(timeOut) },
         dataName:'completeBatch'});
 
       if( force || !currentCache ) {
-        const slim = minifyComplete(accessKey, clientTZ);
+        const slim = minifyComplete(accessKey);
         CacheDB.upsert({orgKey: accessKey, dataName: 'completeBatch'}, {
           $set : { 
             orgKey: accessKey,
             lastUpdated: new Date(),
             dataName: 'completeBatch',
             dataSet: slim,
-            assembled: true,
+            structured: true,
             minified: false
         }});
       }
@@ -239,6 +241,7 @@ Meteor.methods({
   
   // a cache for a plain list of all part numbers for autocomplete
   partslistCacheUpdate(internalKey) {
+    this.unblock();
     const accessKey = internalKey || Meteor.user().orgKey;
     
     const variants = VariantDB.find({orgKey: accessKey, live: true}).fetch();
@@ -258,7 +261,7 @@ Meteor.methods({
         lastUpdated: new Date(),
         dataName: 'partslist',
         dataSet: allPartsClean,
-        assembled: false,
+        structured: false,
         minified: true
     }});
             

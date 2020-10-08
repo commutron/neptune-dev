@@ -333,13 +333,17 @@ Meteor.methods({
   			  live: false,
   			  finishedAt: new Date()
       }});
+      Meteor.defer( ()=>{
+        Meteor.call('completeCacheUpdate', privateKey, true);
+      });
     }else{null}
   },
   
   // Clear / Undo finish Batch
   undoFinishBatch(batchId, oldDate) {
     if( Roles.userIsInRole(Meteor.userId(), 'run') ) {
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+      const privateKey = Meteor.user().orgKey;
+      BatchDB.update({_id: batchId, orgKey: privateKey}, {
   			$set : { 
   			  live: true,
   			  finishedAt: false
@@ -354,6 +358,9 @@ Meteor.methods({
             newValue: 'false'
           }
         }
+      });
+      Meteor.defer( ()=>{
+        Meteor.call('completeCacheUpdate', privateKey, true);
       });
     }else{null}
   },

@@ -4,7 +4,7 @@ import React from 'react';
     display: 'inline-block',
     textAlign: 'center',
     margin: '5px',
-    width: '105px'
+    minWidth: '105px'
   };
   const bSty = {
     verticalAlign: 'bottom',

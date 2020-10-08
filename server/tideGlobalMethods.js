@@ -22,11 +22,9 @@ export function batchTideTime(batchTide) {
   }
 }
 
-export function checkTimeBudget(tide, quoteTimeBudget) {
+function getTvals(tide, quoteTimeBudget) {
     
   const qtBready = !quoteTimeBudget ? false : true;
-  
-  let quote2tide = null;
   
   if(qtBready) {
     const qtB = qtBready && quoteTimeBudget.length > 0 ? 
@@ -36,11 +34,41 @@ export function checkTimeBudget(tide, quoteTimeBudget) {
     
     const totalTideMinutes = batchTideTime(tide);
     
-    quote2tide = totalQuoteMinutes - totalTideMinutes;
+    return [ totalTideMinutes, totalQuoteMinutes ];
+  }else{
+    return [0, 0];
   }
+}
+
+export function checkTimeBudget(tide, quoteTimeBudget) {
+  
+  const tVq = getTvals(tide, quoteTimeBudget);
+    
+  const quote2tide = tVq[1] - tVq[0];
   
   return quote2tide;
 }
+
+export function diffTimeBudget(tide, quoteTimeBudget) {
+  
+  const tVq = getTvals(tide, quoteTimeBudget);
+    
+  const tide2quote = ( 1 - ( tVq[0] / tVq[1]) ) * 100;
+  
+  return tide2quote;
+}
+
+export function perItemTimeBudget(tide, quoteTimeBudget, iQ) {
+  
+  const tVq = getTvals(tide, quoteTimeBudget);
+  
+  const tPer = tVq[0] / iQ;
+  
+  const qPer = tVq[1] / iQ;
+  
+  return [ tPer, qPer ];
+}
+
   
 function collectActivtyLevel(privateKey, batchID, clientTZ) {
   return new Promise(resolve => {
