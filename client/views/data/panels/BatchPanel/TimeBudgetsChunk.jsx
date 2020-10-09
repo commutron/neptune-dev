@@ -8,6 +8,8 @@ import { TimeBudgetUpgrade, WholeTimeBudget } from '/client/components/forms/Quo
 import TimeBudgetBar from '/client/components/charts/Tides/TimeBudgetBar.jsx';
 import TimeSplitBar from '/client/components/charts/Tides/TimeSplitBar.jsx';
 
+import { min2hr } from '/client/utility/Convert';
+
 const TimeBudgetsChunk = ({
   a, b, isX,
   totalUnits, clientTZ, isDebug
@@ -24,7 +26,7 @@ const TimeBudgetsChunk = ({
   
   
   const totalSTbyPeople = ()=> {
-    let totalTime = 0;
+    let totalTimeNum = 0;
     let peopleTime = [];
     let usersNice = [];
     if(!b.tide) {
@@ -34,42 +36,42 @@ const TimeBudgetsChunk = ({
       usersNice = [...new Set(usersGrab)];
       
       for(let ul of usersNice) {
-        let userTime = 0;
+        let userTimeNum = 0;
         const userTide = b.tide.filter( x => x.who === ul );
         for(let bl of userTide) {
           const mStart = moment(bl.startTime);
           const mStop = !bl.stopTime ? moment() : moment(bl.stopTime);
-          const block = Math.round( 
-            moment.duration(mStop.diff(mStart)).asMinutes() );
-          totalTime = totalTime + block;
-          userTime = userTime + block;
+          const block = moment.duration(mStop.diff(mStart)).asMinutes();
+          totalTimeNum = totalTimeNum + block;
+          userTimeNum = userTimeNum + block;
         }
+        const userTime = Math.round( userTimeNum );
         peopleTime.push({
           uID: ul,
           uTime: userTime
         });
       }
     }
+    const totalTime = Math.round( totalTimeNum );
+    
     return { totalTime, peopleTime };
   };
   
   const totalsCalc = totalSTbyPeople();
-
-  const asHours = (mnts) => moment.duration(mnts, "minutes").asHours().toFixed(2, 10);
 
   const qtBready = !b.quoteTimeBudget ? false : true;
   const qtB = qtBready && b.quoteTimeBudget.length > 0 ? 
                 b.quoteTimeBudget[0].timeAsMinutes : 0;
   
   const totalQuoteMinutes = qtB || 0;
-  const totalQuoteAsHours = asHours(totalQuoteMinutes);
+  const totalQuoteAsHours = min2hr(totalQuoteMinutes);
   
   const totalTideMinutes = totalsCalc.totalTime;
-  const totalTideAsHours = asHours(totalTideMinutes);
+  const totalTideAsHours = min2hr(totalTideMinutes);
   
   const quote2tide = totalQuoteMinutes - totalTideMinutes;
   const bufferNice = Math.abs(quote2tide);
-  const bufferAsHours = asHours(bufferNice);
+  const bufferAsHours = min2hr(bufferNice);
   const bufferMessage = quote2tide < 0 ?
     "exceeding quoted" : "remaining of quoted";
   
@@ -136,7 +138,7 @@ const TimeBudgetsChunk = ({
                     title={`${per.uTime} minutes`}
                     className='comfort middle'
                   ><i className='big'><UserNice id={per.uID} /></i>
-                  <i className='grayT'> {asHours(per.uTime)} hours</i></dt> 
+                  <i className='grayT'> {min2hr(per.uTime)} hours</i></dt> 
             )}})}
           </dl>
           
@@ -164,7 +166,7 @@ const TimeBudgetsChunk = ({
                           title={`${Math.round(br.y)} minutes`}
                           className='comfort middle'
                         ><i className='big cap'>{br.x}</i>
-                        <i className='grayT'> {asHours(br.y)} hours</i></dt> 
+                        <i className='grayT'> {min2hr(br.y)} hours</i></dt> 
                   )}})}
                 </dl>
               </div>

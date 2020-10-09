@@ -32,7 +32,7 @@ const CompletedReport = ({ batchData, widgetData, groupData, app })=> {
           Pref.batch, 'description', 
           'sales order', 'tracked items', 'nonCon rate',
           'fulfill due', 'ship due', 'complete', 'moved fulfill', 
-          'delivery', 'quote'
+          'delivery', 'quote hrs', 'quote %'
         ]);     
         setWeekData(cronoTimes);
   	  });

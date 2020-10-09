@@ -2,6 +2,8 @@ import moment from 'moment';
 import 'moment-timezone';
 import 'moment-business-time';
 
+import { sc2mn, sc2hr, round2Decimal } from './calcOps';
+
 export function batchTideTime(batchTide) {
     
   if(!batchTide) {
@@ -11,23 +13,21 @@ export function batchTideTime(batchTide) {
     for(let bl of batchTide) {
       const mStart = moment(bl.startTime);
       const mStop = !bl.stopTime ? moment() : moment(bl.stopTime);
-      const block = moment.duration(mStop.diff(mStart)).asMinutes();
+      const block = moment.duration(mStop.diff(mStart)).asSeconds();
       tideTime = tideTime + block;
     }
     if( !tideTime || typeof tideTime !== 'number' ) {
       return false;
     }else{
-      return tideTime.toFixed(2, 10);
+      const cleanTime = sc2mn(tideTime);
+      return cleanTime;
     }
   }
 }
 
 function getTvals(tide, quoteTimeBudget) {
-    
-  const qtBready = !quoteTimeBudget ? false : true;
-  
-  if(qtBready) {
-    const qtB = qtBready && quoteTimeBudget.length > 0 ? 
+  if(quoteTimeBudget) {
+    const qtB = quoteTimeBudget.length > 0 ? 
                 quoteTimeBudget[0].timeAsMinutes : 0;
     
     const totalQuoteMinutes = qtB || 0;
@@ -36,7 +36,7 @@ function getTvals(tide, quoteTimeBudget) {
     
     return [ totalTideMinutes, totalQuoteMinutes ];
   }else{
-    return [0, 0];
+    return undefined;
   }
 }
 
@@ -49,6 +49,7 @@ export function checkTimeBudget(tide, quoteTimeBudget) {
   return quote2tide;
 }
 
+/*
 export function diffTimeBudget(tide, quoteTimeBudget) {
   
   const tVq = getTvals(tide, quoteTimeBudget);
@@ -67,6 +68,35 @@ export function perItemTimeBudget(tide, quoteTimeBudget, iQ) {
   const qPer = tVq[1] / iQ;
   
   return [ tPer, qPer ];
+}
+*/
+
+export function distTimeBudget(tide, quoteTimeBudget, progQuantity, allQuantity) {
+  
+  const tideVquote = getTvals(tide, quoteTimeBudget);
+  
+  if( tideVquote == undefined ) {
+    return undefined;
+  }else{
+    const totalTide = moment.duration( tideVquote[0], 'minutes' ).asSeconds();
+    const trueQuote = moment.duration( tideVquote[1], 'minutes' ).asSeconds();
+    
+    const tidePerItem = round2Decimal( totalTide / progQuantity );
+    const tPi = sc2mn( tidePerItem );
+    
+    const quotePerItem = round2Decimal( trueQuote / allQuantity );
+    const qPi = sc2mn( quotePerItem );
+    
+    // xx quote minutes remain
+    const quoteMNtide = trueQuote - totalTide;
+    const qMNt = sc2hr( quoteMNtide );
+    
+    // tide is xx% under/over quote
+    const tidePCquote = ( 1 - ( tidePerItem / quotePerItem ) ) * 100;
+    const tPCq = round2Decimal(tidePCquote);
+    
+    return [ tPi, qPi, qMNt, tPCq ];
+  }
 }
 
   

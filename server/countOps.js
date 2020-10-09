@@ -1,6 +1,8 @@
 import moment from 'moment';
-import timezone from 'moment-timezone';
+// import timezone from 'moment-timezone';
 
+import { distTimeBudget } from './tideGlobalMethods.js';
+import { avgOfArray, round2Decimal } from './calcOps';
 
 
 Meteor.methods({
@@ -59,19 +61,12 @@ Meteor.methods({
     };
   
     for(let batchID of batchIDs) {
-      let batch = BatchDB.findOne({_id: batchID});
+      let batch = BatchDB.findOne({_id: batchID}) ||
+                  XBatchDB.findOne({_id: batchID});
       if(!batch) {
-        let xbatch = XBatchDB.findOne({_id: batchID});
-        if(!xbatch) {
-          null;
-        }else{
-          let batchNum = xbatch.batch;
-          batchQT.push(0);
-          batchTides.push({ x: batchNum, y: 0 });
-          batchLeftBuffer.push({ x: batchNum, y: 0 });
-          batchOverBuffer.push({ x: batchNum, y: 0 });
-        }
-      }else{ totalST(batch) }
+        null;
+      }else{ 
+        totalST(batch) }
     }
     return { 
       batchQT,
@@ -79,6 +74,65 @@ Meteor.methods({
       batchLeftBuffer, 
       batchOverBuffer
     };
+    
+  },
+  
+  countMultiBatchTideToQuote(batchIDs) {
+    
+    let tidePerItem = [];
+    
+    let quotePerItem = [];
+    
+    let tideToQuoteHours = [];
+    
+    let tideToQuotePercent = [];
+    
+    const discover = (b, itemQuantity)=> {
+      
+      // check for over quote
+      const distTB = distTimeBudget(b.tide, b.quoteTimeBudget, itemQuantity, itemQuantity);
+      if(distTB) {
+        tidePerItem.push( distTB[0] );
+        quotePerItem.push( distTB[1] );
+        tideToQuoteHours.push( distTB[2] );
+        tideToQuotePercent.push( distTB[3] );
+      }
+    };
+  
+    for(let batchID of batchIDs) {
+      let batch = BatchDB.findOne({_id: batchID});
+      if(batch) {
+        if(batch.finishedAt !== false) {
+          const quantity = batch.items.length;
+          discover(batch, quantity);
+        }else{null}
+      }else{
+        const xbatch = XBatchDB.findOne({_id: batchID});
+        if(xbatch) {
+          if(xbatch.completed) {
+            const xquantity = xbatch.quantity;
+            discover(xbatch, xquantity);
+          }else{null}
+        }else{null}
+      }
+    }
+    
+    const avgArrays = {
+      tidePerItemAvg: round2Decimal( avgOfArray(tidePerItem) ),
+      quotePerItemAvg: round2Decimal( avgOfArray(quotePerItem) ), 
+      tideToQuoteHoursAvg: round2Decimal( avgOfArray(tideToQuoteHours) ), 
+      tideToQuotePercentAvg: round2Decimal( avgOfArray(tideToQuotePercent) )
+    };
+    
+    return JSON.stringify(avgArrays);
+    
+    // return { 
+    //   tidePerItem,
+    //   quotePerItem, 
+    //   tideToQuoteHours, 
+    //   tideToQuotePercent,
+    //   avgArrays: JSON.stringify(avgArrays)
+    // };
     
   },
 

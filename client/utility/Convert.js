@@ -1,8 +1,11 @@
 import moment from 'moment';
 
 export function min2hr(minutes) {
-  return moment.duration(minutes, "minutes")
-          .asHours().toFixed(2, 10);
+  const asHours = moment.duration(minutes, "minutes").asHours();
+  const trunc = ( Math.round(
+                   (asHours + Number.EPSILON) * 100) 
+                      / 100 ).toFixed(2, 10);
+  return trunc;
 }
 
 export function round1Decimal(thrtytw) {
@@ -35,4 +38,10 @@ export function avgOfArray(arr) {
   }else{
     return 0;
   }
+}
+
+export function flipArray(originalArr) {
+  const flippedArr = originalArr.reduce((ary, ele) => 
+                      {ary.unshift(ele); return ary}, []);
+  return flippedArr;
 }

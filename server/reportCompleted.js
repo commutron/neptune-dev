@@ -2,8 +2,9 @@ import moment from 'moment';
 import 'moment-timezone';
 import 'moment-business-time';
 
-import { checkTimeBudget, diffTimeBudget, perItemTimeBudget } from './tideGlobalMethods.js';
+import { distTimeBudget } from './tideGlobalMethods.js';
 import { whatIsBatch, whatIsBatchX } from './searchOps.js';
+// import { min2hr } from './calcOps';
 
 import Config from '/server/hardConfig.js';
 
@@ -33,10 +34,6 @@ moment.updateLocale('en', {
   
   function weekDoneAnalysis(clientTZ, rangeStart, rangeEnd) {
     
-    const asHours = (mnts) => 
-      moment.duration(mnts, "minutes")
-        .asHours().toFixed(2, 10);
-    
     const app = AppDB.findOne({orgKey: Meteor.user().orgKey});
     const nonWorkDays = app.nonWorkDays;
     if( Array.isArray(nonWorkDays) ) {  
@@ -59,7 +56,7 @@ moment.updateLocale('en', {
     
     for(let gf of generalFind) {
       const batchNum = gf.batch;
-      const describe = whatIsBatch(batchNum);
+      const describe = whatIsBatch(batchNum)[0];
       const salesOrder = gf.salesOrder;
       const itemQuantity = gf.items.length;
       const ncQuantity = gf.nonCon.filter( n => !n.trash ).length;
@@ -80,23 +77,25 @@ moment.updateLocale('en', {
       
       // duration between finish and fulfill
       const onTime = deliveryState(shipDue, localFinish);
-      
+     
       // check for over quote
-      const quote2tide = checkTimeBudget(gf.tide, gf.quoteTimeBudget);
-      const overQuote = quote2tide === null ? 'n/a' :
-                        quote2tide < 0 ? 
-                        `${asHours(Math.abs(quote2tide))} hours over` : 
-                        `${asHours(Math.abs(quote2tide))} hours under`;
+      const distTB = distTimeBudget(gf.tide, gf.quoteTimeBudget, itemQuantity, itemQuantity);
+      //return [ tidePerItem, quotePerItem, quoteMNtide, tidePCquote ];
       
-      const q2tDiff = diffTimeBudget(gf.tide, gf.quoteTimeBudget);
-      
-      const tqPer = perItemTimeBudget(gf.tide, gf.quoteTimeBudget, itemQuantity);
+      const overQuote = distTB === undefined ? 'n/a' :
+                        distTB[2] < 0 ? 
+                        `${Math.abs(distTB[2])} hours over` : 
+                        `${Math.abs(distTB[2])} hours under`;
+      const percentOvUn = distTB === undefined ? 'n/a' : 
+                          distTB[3] < 0 ? 
+                          `${Math.abs(distTB[3])}% over` : 
+                          `${Math.abs(distTB[3])}% under`;
       
       batchMetrics.push([
         batchNum, describe, 
         salesOrder, itemQuantity, ncRate,
         salesEnd, shipDue, localFinish, endAlter,
-        onTime, overQuote
+        onTime, overQuote, percentOvUn
       ]);
     }
     
@@ -110,7 +109,7 @@ moment.updateLocale('en', {
     
     for(let gf of generalFindX) {
       const batchNum = gf.batch;
-      const describe = whatIsBatchX(batchNum);
+      const describe = whatIsBatchX(batchNum)[0];
       const salesOrder = gf.salesOrder;
       const itemQuantity = gf.quantity;
       const ncQuantity = gf.nonconformaces.filter( n => !n.trash ).length;
@@ -132,21 +131,23 @@ moment.updateLocale('en', {
       const onTime = deliveryState(shipDue, localComplete);
       
       // check for over quote
-      const quote2tide = checkTimeBudget(gf.tide, gf.quoteTimeBudget);
-      const overQuote = quote2tide === null ? 'n/a' :
-                        quote2tide < 0 ? 
-                        `${asHours(Math.abs(quote2tide))} hours over` : 
-                        `${asHours(Math.abs(quote2tide))} hours under`;
+      const distTB = distTimeBudget(gf.tide, gf.quoteTimeBudget, itemQuantity, itemQuantity);
+      //return [ tidePerItem, quotePerItem, quoteMNtide, tidePCquote ];
       
-      const q2tDiff = diffTimeBudget(gf.tide, gf.quoteTimeBudget);
-      
-      const tqPer = perItemTimeBudget(gf.tide, gf.quoteTimeBudget, itemQuantity);
+      const overQuote = distTB === undefined ? 'n/a' :
+                        distTB[2] < 0 ? 
+                        `${Math.abs(distTB[2])} hours over` : 
+                        `${Math.abs(distTB[2])} hours under`;
+      const percentOvUn = distTB === undefined ? 'n/a' : 
+                          distTB[3] < 0 ? 
+                          `${Math.abs(distTB[3])}% over` : 
+                          `${Math.abs(distTB[3])}% under`;
       
       batchMetrics.push([
         batchNum, describe, 
         salesOrder, itemQuantity, ncRate,
         salesEnd, shipDue, localComplete, endAlter,
-        onTime, overQuote
+        onTime, overQuote, percentOvUn
       ]);
     }
     
