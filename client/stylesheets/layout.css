@@ -777,6 +777,10 @@ input.variableInput.biggest {
 input.miniIn6 { width: 6ch; }
 input.miniIn8 { width: 8ch; }
 
+.multiSelectContain .dropdown-container {
+  max-width: 400px;
+  margin: 0;
+}
 .numberSet {
   height: 2rem;
   line-height: 1.1;

@@ -149,7 +149,7 @@ const FlowFormHead = ({ id, existFlows, preFill, app, selfclose })=> {
       <h2 className='cap'>{Pref.nonCon} lists</h2>
       
       <div>
-        <label htmlFor='List Options'>
+        <label htmlFor='List Options' className='multiSelectContain'>
           <MultiSelect
             options={ncOptions}
             value={ncLists}

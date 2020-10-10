@@ -3,7 +3,7 @@ import React from 'react';
   const sty = {
     display: 'block',
     padding: '0 5px',
-    margin: '0 5px',
+    margin: '10px 5px',
     maxWidth: '200px'
   };
   const styBig = {

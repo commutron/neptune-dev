@@ -505,7 +505,8 @@ Meteor.methods({
           x => x.listName === newListName );
         const dbblPrefix = doc.nonConTypeLists.find(
           x => x.listPrefix === newPrefix );
-        const validPrefix = typeof newPrefix === 'string' && newPrefix.length === 1;
+        const validPrefix = typeof newPrefix === 'string' && 
+                              newPrefix.length > 0 && newPrefix.length < 3;
         
         // Insert
         if(!dbblTitle && !dbblPrefix && validPrefix === true) {

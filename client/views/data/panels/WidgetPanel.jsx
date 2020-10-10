@@ -53,10 +53,12 @@ const WidgetPanel = ({
         hold={true}
         sessionTab='widgetExPanelTabs'>
         
-        <div className='comfort'>
+        <div className=''>
+            
           <MultiBatchKPI
             batchIDs={batchIDs}
             app={a} />
+          
           <VariantList 
             variantData={variantData}
             widgetData={w} 

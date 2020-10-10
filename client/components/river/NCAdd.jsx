@@ -9,6 +9,7 @@ const NCAdd = ({ id, barcode, user, app, ncTypesCombo })=> {
                                   x.key ? x.live === true && x.typeText : x);
 
     let match = flatCheckList.find( x => x === target.value);
+
     let message = !match ? 'please choose from the list' : '';
     target.setCustomValidity(message);
     return !match ? false : true;
@@ -86,7 +87,7 @@ const NCAdd = ({ id, barcode, user, app, ncTypesCombo })=> {
               if(!entry.key) {
                 return ( 
                   <option 
-                    key={index} 
+                    key={index}
                     value={entry}
                   >{index + 1}. {entry}</option>
                 );
@@ -111,6 +112,7 @@ const NCAdd = ({ id, barcode, user, app, ncTypesCombo })=> {
             required
             disabled={lock || ncTypesCombo.length < 1}
           >
+          <option />
           {ncTypesCombo.map( (entry, index)=>{
               if(!entry.key) {
                 return ( 

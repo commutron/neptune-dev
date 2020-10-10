@@ -103,9 +103,9 @@ const NCTypeSlide = ({app})=> {
               <input
                 type='text'
                 id={rndmKey + 'inputPre'}
-                maxLength={1}
-                pattern="[a-z]{1}"
-                placeholder='One Letter Pefix'
+                maxLength={2}
+                pattern="[a-z]{1-2}"
+                placeholder='Letter Pefix'
                 required
               />
             </label>

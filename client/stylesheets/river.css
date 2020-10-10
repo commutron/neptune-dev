@@ -538,3 +538,7 @@
   font-size: 5vmax;
   font-weight: 800;
 }
+
+.ncTypeList datalist {
+  text-transform: capitalize;
+}
