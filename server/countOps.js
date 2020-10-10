@@ -2,6 +2,7 @@ import moment from 'moment';
 // import timezone from 'moment-timezone';
 
 import { distTimeBudget } from './tideGlobalMethods.js';
+import { deliveryState } from './reportCompleted.js';
 import { avgOfArray, round2Decimal } from './calcOps';
 
 
@@ -37,7 +38,7 @@ Meteor.methods({
         const qtBready = !batch.quoteTimeBudget ? false : true;
         const qtB = qtBready && batch.quoteTimeBudget.length > 0 ? 
           batch.quoteTimeBudget[0].timeAsMinutes : 0;
-        const totalQuoteMinutes = qtB || 0;
+        const totalQuoteMinutes = qtB || totalTime;
         const quote2tide = totalQuoteMinutes - totalTime;
         const bufferNice = Math.abs(quote2tide);
   
@@ -77,7 +78,7 @@ Meteor.methods({
     
   },
   
-  countMultiBatchTideToQuote(batchIDs) {
+  countMultiBatchTideToQuote(batchIDs, clientTZ) {
     
     let tidePerItem = [];
     
@@ -87,8 +88,9 @@ Meteor.methods({
     
     let tideToQuotePercent = [];
     
-    const discover = (b, itemQuantity)=> {
-      
+    let wasDelivered = [];
+    
+    const discoverTQ = (b, itemQuantity)=> {
       // check for over quote
       const distTB = distTimeBudget(b.tide, b.quoteTimeBudget, itemQuantity, itemQuantity);
       if(distTB) {
@@ -98,41 +100,51 @@ Meteor.methods({
         tideToQuotePercent.push( distTB[3] );
       }
     };
+    
+    const discoverOT = (endTime, completeTime)=> {
+      // duration between finish and fulfill
+      const deliveryResult = deliveryState(endTime, completeTime, clientTZ);
+      const dr3 = deliveryResult[3];
+      const timeVal = !dr3[0] ? 0 : 
+                      dr3[1] === 'hour' || dr3[1] === 'hours' ? ( dr3[0] / 24 ) :
+                      dr3[0];
+      const timeNum = dr3[2] === 'late' ? -Math.abs(timeVal) : timeVal;
+      
+      wasDelivered.push( timeNum );
+    };
+      
   
     for(let batchID of batchIDs) {
       let batch = BatchDB.findOne({_id: batchID});
       if(batch) {
         if(batch.finishedAt !== false) {
           const quantity = batch.items.length;
-          discover(batch, quantity);
+          discoverTQ(batch, quantity);
+          discoverOT(batch.end, batch.finishedAt);
         }else{null}
       }else{
         const xbatch = XBatchDB.findOne({_id: batchID});
         if(xbatch) {
           if(xbatch.completed) {
             const xquantity = xbatch.quantity;
-            discover(xbatch, xquantity);
+            discoverTQ(xbatch, xquantity);
+            discoverOT(xbatch.salesEnd, xbatch.completedAt);
           }else{null}
         }else{null}
       }
     }
     
+    const delvAvg = round2Decimal( avgOfArray(wasDelivered) );
+    
     const avgArrays = {
       tidePerItemAvg: round2Decimal( avgOfArray(tidePerItem) ),
       quotePerItemAvg: round2Decimal( avgOfArray(quotePerItem) ), 
       tideToQuoteHoursAvg: round2Decimal( avgOfArray(tideToQuoteHours) ), 
-      tideToQuotePercentAvg: round2Decimal( avgOfArray(tideToQuotePercent) )
+      tideToQuotePercentAvg: round2Decimal( avgOfArray(tideToQuotePercent) ),
+      deliveryGap: delvAvg
     };
     
     return JSON.stringify(avgArrays);
-    
-    // return { 
-    //   tidePerItem,
-    //   quotePerItem, 
-    //   tideToQuoteHours, 
-    //   tideToQuotePercent,
-    //   avgArrays: JSON.stringify(avgArrays)
-    // };
     
   },
 

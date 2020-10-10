@@ -27,12 +27,12 @@ export function batchTideTime(batchTide) {
 
 function getTvals(tide, quoteTimeBudget) {
   if(quoteTimeBudget) {
+    const totalTideMinutes = batchTideTime(tide);
+    
     const qtB = quoteTimeBudget.length > 0 ? 
                 quoteTimeBudget[0].timeAsMinutes : 0;
     
-    const totalQuoteMinutes = qtB || 0;
-    
-    const totalTideMinutes = batchTideTime(tide);
+    const totalQuoteMinutes = qtB || totalTideMinutes;
     
     return [ totalTideMinutes, totalQuoteMinutes ];
   }else{
@@ -48,28 +48,6 @@ export function checkTimeBudget(tide, quoteTimeBudget) {
   
   return quote2tide;
 }
-
-/*
-export function diffTimeBudget(tide, quoteTimeBudget) {
-  
-  const tVq = getTvals(tide, quoteTimeBudget);
-    
-  const tide2quote = ( 1 - ( tVq[0] / tVq[1]) ) * 100;
-  
-  return tide2quote;
-}
-
-export function perItemTimeBudget(tide, quoteTimeBudget, iQ) {
-  
-  const tVq = getTvals(tide, quoteTimeBudget);
-  
-  const tPer = tVq[0] / iQ;
-  
-  const qPer = tVq[1] / iQ;
-  
-  return [ tPer, qPer ];
-}
-*/
 
 export function distTimeBudget(tide, quoteTimeBudget, progQuantity, allQuantity) {
   

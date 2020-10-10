@@ -24,8 +24,8 @@ function useInterval(callback, delay) {
 
 const OverviewTools = ({
   app, brancheS, loadTimeUP,
-  filterByUP, sortByUP, denseUP, lightUP,
-  changeFilterUP, changeSortUP, denseSetUP, themeSetUP
+  filterByUP, sortByUP, ghostUP, denseUP, lightUP,
+  changeFilterUP, changeSortUP, ghostSetUP, denseSetUP, themeSetUP
 })=> {
   
   const [ tickingTime, tickingTimeSet ] = useState( moment() );
@@ -49,7 +49,7 @@ const OverviewTools = ({
           defaultValue={filterByUP}
           onChange={(e)=>changeFilterUP(e)}>
           <option value={false}>All</option>
-          <option value='KITTING' className='cap'>{Pref.kitting}</option>
+          {/* <option value='KITTING' className='cap'>{Pref.kitting}</option> */}
           <option value={Pref.released} className='cap'>{Pref.released}</option>
           {brancheS.map( (br, ix)=> {
             return(
@@ -75,26 +75,28 @@ const OverviewTools = ({
       
       <span>
         <button
+          key='ghostToggle'
+          title='Toggle In Kitting'
+          onClick={()=>ghostSetUP(!ghostUP)}
+          className={!ghostUP ? 'liteToolOff' : 'liteToolOn'}
+        ><i className='fas fa-cart-plus fa-fw'></i></button>
+        
+      </span>
+      
+      <span>
+        <button
           key='denseOff'
           title='Comfort Layout'
           onClick={()=>denseSetUP(false)}
           className={!denseUP ? 'liteToolOn' : 'liteToolOff'}
         ><i className='fas fa-expand fa-fw'></i></button>
-        {/*                fa-expand-arrows-alt
-        <button
-          key='compactOn'
-          title='Compact Layout'
-          onClick={()=>denseSetUP(1)}
-          className={denseUP === 1 ? 'liteToolOn' : 'liteToolOff'}
-        ><i className='fas fa-compress fa-fw'></i></button>
-        */}
         <button
           key='miniOn'
           title='Minifyed Layout'
           onClick={()=>denseSetUP(true)}
           className={denseUP ? 'liteToolOn' : 'liteToolOff'}
         ><i className='fas fa-compress fa-fw'></i></button>
-      </span>        {/*fa-compress-arrows-alt*/}
+      </span>
       
       <span>
         <button

@@ -12,12 +12,38 @@ moment.updateLocale('en', {
   workinghours: Config.workingHours,
   shippinghours: Config.shippingHours
 });
-
-  function deliveryState(wasDue, didEnd) {
-    const isLate = moment(didEnd).isAfter(wasDue);
-    const hourGap = moment(wasDue).workingDiff(didEnd, 'hours');
-    const dayGap = moment(wasDue).workingDiff(didEnd, 'days', true);
-
+  
+  // export function explainShipGap(hourGap) {
+  //   const hrGp = Math.abs(hourGap);
+  //   const hourS = hrGp > 1 ? 'hours' : 'hour';
+  //   const dyGp = Math.abs( Math.round(dayGap) );
+  //   const dayS = dyGp > 1 ? 'days' : 'day';
+    
+  //   const gapZone = ( !isLate || hrGp < Config.shipLateAllow ) ?
+  //                     hrGp < Config.maxShift ?   // ON TIME
+  //                       'on time' : `${dyGp} ${dayS} early` 
+  //                     : 
+  //                     hrGp < Config.maxShift ?  // LATE
+  //                     `${hrGp} ${hourS} late` : `${dyGp} ${dayS} late`;
+  //   return gapZone;
+  // }
+  
+  export function deliveryState(bEnd, bFinish, clientTZ) {
+    const localEnd = moment.tz(bEnd, clientTZ);
+    
+    const salesEnd = localEnd.isWorkingDay() ?
+                      localEnd.clone().endOf('day').lastWorkingTime().format() :
+                      localEnd.clone().lastWorkingTime().format();
+    const shipDue = localEnd.isShipDay() ?
+                      localEnd.clone().nextShippingTime().format() :
+                      localEnd.clone().lastShippingTime().format();
+    
+    const didFinish = moment(bFinish).tz(clientTZ).format();
+      
+    const isLate = moment(didFinish).isAfter(shipDue);
+    const hourGap = moment(shipDue).workingDiff(didFinish, 'hours');
+    const dayGap = moment(shipDue).workingDiff(didFinish, 'days', true);
+    
     const hrGp = Math.abs(hourGap);
     const hourS = hrGp > 1 ? 'hours' : 'hour';
     const dyGp = Math.abs( Math.round(dayGap) );
@@ -25,11 +51,12 @@ moment.updateLocale('en', {
     
     const gapZone = ( !isLate || hrGp < Config.shipLateAllow ) ?
                       hrGp < Config.maxShift ?   // ON TIME
-                        'on time' : `${dyGp} ${dayS} early` 
+                        [ null, null, 'on time' ] : [ dyGp, dayS, 'early' ] 
                       : 
                       hrGp < Config.maxShift ?  // LATE
-                      `${hrGp} ${hourS} late` : `${dyGp} ${dayS} late`;
-    return gapZone;
+                        [ hrGp, hourS, 'late' ] : [ dyGp, dayS, 'late' ];
+    
+    return [ salesEnd, shipDue, didFinish, gapZone ];
   }
   
   function weekDoneAnalysis(clientTZ, rangeStart, rangeEnd) {
@@ -52,7 +79,6 @@ moment.updateLocale('en', {
       }
     }).fetch();
     
-    //console.log(clientTZ);
     
     for(let gf of generalFind) {
       const batchNum = gf.batch;
@@ -64,20 +90,13 @@ moment.updateLocale('en', {
       const endAlter = !gf.altered ? 'n/a' :
         gf.altered.filter( a => a.changeKey === 'end' ).length;
       
-      const localEnd = moment.tz(gf.end, clientTZ);
-      
-      const salesEnd = localEnd.isWorkingDay() ?
-                        localEnd.clone().endOf('day').lastWorkingTime().format() :
-                        localEnd.clone().lastWorkingTime().format();
-      const shipDue = localEnd.isShipDay() ?
-                        localEnd.clone().nextShippingTime().format() :
-                        localEnd.clone().lastShippingTime().format();
-      
-      const localFinish = moment(gf.finishedAt).tz(clientTZ).format();
-      
       // duration between finish and fulfill
-      const onTime = deliveryState(shipDue, localFinish);
-     
+      const deliveryResult = deliveryState(gf.end, gf.finishedAt, clientTZ);
+      const salesEnd = deliveryResult[0];
+      const shipDue = deliveryResult[1];
+      const localFinish = deliveryResult[2];
+      const onTime = deliveryResult[3].join(" ");
+      
       // check for over quote
       const distTB = distTimeBudget(gf.tide, gf.quoteTimeBudget, itemQuantity, itemQuantity);
       //return [ tidePerItem, quotePerItem, quoteMNtide, tidePCquote ];
@@ -116,19 +135,11 @@ moment.updateLocale('en', {
       const ncRate = ( ncQuantity / itemQuantity ).toFixed(1, 10);
       const endAlter = gf.altered.filter( a => a.changeKey === 'salesEnd' ).length;
       
-      const localEnd = moment.tz(gf.salesEnd, clientTZ);
-      
-      const salesEnd = localEnd.isWorkingDay() ?
-                        localEnd.clone().nextWorkingTime().format() :
-                        localEnd.clone().lastWorkingTime().format();
-      const shipDue = localEnd.isShipDay() ?
-                        localEnd.clone().nextShippingTime().format() :
-                        localEnd.clone().lastShippingTime().format();
-      
-      const localComplete = moment(gf.completedAt).tz(clientTZ).format();
-      
-      // duration between complete and fulfill
-      const onTime = deliveryState(shipDue, localComplete);
+      const deliveryResult = deliveryState(gf.salesEnd, gf.completedAt, clientTZ);
+      const salesEnd = deliveryResult[0];
+      const shipDue = deliveryResult[1];
+      const localComplete = deliveryResult[2];
+      const onTime = deliveryResult[3].join(" ");
       
       // check for over quote
       const distTB = distTimeBudget(gf.tide, gf.quoteTimeBudget, itemQuantity, itemQuantity);

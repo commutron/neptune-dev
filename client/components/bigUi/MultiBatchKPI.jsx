@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
-// import moment from 'moment';
+import moment from 'moment';
+import 'moment-timezone';
 
 // import { min2hr } from '/client/utility/Convert';
 import NumLine from '/client/components/tinyUi/NumLine.jsx';
@@ -12,11 +13,12 @@ const MultiBatchKPI = ({ batchIDs, app })=> {
   const [ batchDT, batchDTset ] = useState(false);
   
   useEffect( ()=>{
-    Meteor.call('countMultiBatchTideToQuote', batchIDs, (error, reply)=>{
+    const clientTZ = moment.tz.guess();
+    Meteor.call('countMultiBatchTideToQuote', batchIDs, clientTZ, (error, reply)=>{
       error && console.log(error);
       batchDTset( reply );
     });
-  }, [batchIDs]);
+  }, []);
   
   if(!batchDT) {
     return(
@@ -36,6 +38,10 @@ const MultiBatchKPI = ({ batchIDs, app })=> {
     const toPtext = t2qPr < 0 ? `\nover quote` : `\nunder quote`;
     const prColor = t2qPr < 0 ? 'redT' : 'tealT';
     
+    const delvAvg = bdtObj.deliveryGap;
+    const dlvText = delvAvg < 0 ? 'days late' : 'days early';
+    const dlvColr = delvAvg < 0 ? 'redT' : 'greenT';
+    
     return(
       <div className='invert vspacehalf rowWrap' 
         title={`Mean Average of completed ${Pref.batches}`}>
@@ -45,13 +51,6 @@ const MultiBatchKPI = ({ batchIDs, app })=> {
           num={bdtObj.tidePerItemAvg}
           name='minutes per item (recored)'
           color='blackT' />
-          
-        {/* 
-        <NumLine
-          num={bdtObj.quotePerItemAvg}
-          name='minutes per item (quoted)'
-          color='blackT' />
-        */}
          
         <NumLine
           num={Math.abs(t2qHr)}
@@ -63,6 +62,11 @@ const MultiBatchKPI = ({ batchIDs, app })=> {
           name={toPtext}
           color={prColor}
           big={true} />
+          
+        <NumLine
+          num={Math.abs(delvAvg)}
+          name={dlvText}
+          color={dlvColr} />
         
       </div>
     );

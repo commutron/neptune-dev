@@ -1,6 +1,6 @@
 import React, {useState, useLayoutEffect } from 'react';
 import moment from 'moment';
-import 'moment-timezone';
+// import 'moment-timezone';
 import { ToastContainer } from 'react-toastify';
 import Pref from '/client/global/pref.js';
 
@@ -26,6 +26,9 @@ const OverviewWrap = ({
   const sessionFilter = Session.get(sessionSticky+'filter');
   const defaultFilter = sessionFilter !== undefined ? sessionFilter :
                         user.defaultOverview || false;
+  
+  const sessionGhost = Session.get(sessionSticky+'ghost');
+  const defaultGhost = sessionGhost !== undefined ? sessionGhost : false;
                         
   const sessionDense = Session.get(sessionSticky+'dense');
   const defaultDense = sessionDense !== undefined ? sessionDense :
@@ -37,6 +40,7 @@ const OverviewWrap = ({
                         
   const [ filterBy, filterBySet ] = useState( defaultFilter );
   const [ sortBy, sortBySet ] = useState( Session.get(sessionSticky+'sort') || 'priority' );
+  const [ ghost, ghostSet ] = useState( defaultGhost );
   const [ dense, denseSet ] = useState( defaultDense );
   const [ light, themeSet ] = useState( defaultLight );
   
@@ -57,6 +61,11 @@ const OverviewWrap = ({
     const sort = e.target.value;
     sortBySet( sort );
     Session.set(sessionSticky+'sort', sort);
+  }
+  
+  function changeGhost(val) {
+    ghostSet( val );
+    Session.set(sessionSticky+'ghost', val);
   }
   
   function changeDense(val) {
@@ -218,10 +227,12 @@ const OverviewWrap = ({
         loadTimeUP={loadTime}
         filterByUP={filterBy}
         sortByUP={sortBy}
+        ghostUP={ghost}
         denseUP={dense}
         lightUP={light}
         changeFilterUP={(e)=>changeFilter(e)}
         changeSortUP={(e)=>changeSort(e)}
+        ghostSetUP={(e)=>changeGhost(e)}
         denseSetUP={(e)=>changeDense(e)}
         themeSetUP={(e)=>changeTheme(e)}
       />
