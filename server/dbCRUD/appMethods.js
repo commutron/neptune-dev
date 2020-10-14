@@ -49,7 +49,6 @@ Meteor.methods({
         how: 'finish'
       },
       countOption: [],
-      nonConOption: [],
       nonConTypeLists: [],
       ncScale: {
         low: Number(5),
@@ -459,36 +458,6 @@ Meteor.methods({
     }
   },
   ////////////
-  
-// NonCon Types
-  addNCOption(value) {
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      AppDB.update({orgKey: Meteor.user().orgKey}, {
-        $push : { 
-          nonConOption : value
-      }});
-      return true;
-    }else{
-      return false;
-    }
-  },
-  
-  removeNCOption(value) {
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      const used = BatchDB.findOne({orgKey: Meteor.user().orgKey, 'nonCon.type': value});
-      if(!used) {
-        AppDB.update({orgKey: Meteor.user().orgKey}, {
-          $pull : { 
-            nonConOption : value
-        }});
-        return true;
-      }else{
-        return false;
-      }
-    }else{
-      return false;
-    }
-  },
   
 // Smarter NonCon Types
   

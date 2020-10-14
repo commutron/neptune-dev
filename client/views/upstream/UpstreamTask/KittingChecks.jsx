@@ -1,5 +1,5 @@
-import React, { Fragment, useState, useEffect, useRef } from 'react';
-import moment from 'moment';
+import React, { Fragment } from 'react';
+// import moment from 'moment';
 import Pref from '/client/global/pref.js';
 // import NumStat from '/client/components/tinyUi/NumStat.jsx';
 // import PrioritySquareData from '/client/components/bigUi/PrioritySquare.jsx';
@@ -15,28 +15,10 @@ const KittingChecks = ({
   clientTZ, pCache, app, branchClear, 
   kitCols, dense, isRO, isDebug
 })=> {
-  
-  const thingMounted = useRef(true);
-  const [ stData, setStatus ] = useState(false);
-  
-  useEffect( ()=> { 
-    return () => { thingMounted.current = false; };
-  }, []);
-  
-  useEffect( ()=> {
-    Meteor.call('overviewKittingStatus', batchID, clientTZ, (error, reply)=>{
-      error && console.log(error);
-      if( reply ) { 
-        thingMounted.current && setStatus( reply );
-        isDebug && console.log(stData);
-      }
-    });
-  }, [batchID]);
-  
-  const dt = stData;
+
   // const pt = pCache.dataSet.find( x => x.batchID === batchID );
     
-  if( dt && dt.batchID === batchID && Array.isArray(releases) ) {
+  if( Array.isArray(releases) ) {
     
     const floorRelease = !releasedToFloor ? false :
       releases.find( x => x.type === 'floorRelease');
@@ -103,16 +85,6 @@ const KittingChecks = ({
               />
             </ReleaseWrapper>
         )})}
-        
-        <div>
-          <TrinaryStat
-            status={dt.riverChosen}
-            name='Flow'
-            title='Process Flow Assignment'
-            size=''
-            onIcon='far fa-check-circle fa-2x greenT' 
-            midIcon='far fa-times-circle fa-2x grayT' />
-        </div>
         
         <ReleaseWrapper
           id={batchID}

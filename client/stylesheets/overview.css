@@ -255,3 +255,8 @@
   word-break: keep-all;
   word-wrap: normal;
 }
+
+.ghostState {
+  filter: saturate(0%) opacity(0.7);
+  overflow-y: hidden;
+}

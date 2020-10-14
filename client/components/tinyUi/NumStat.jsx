@@ -4,7 +4,7 @@ import React from 'react';
     display: 'inline-block',
     textAlign: 'center',
     margin: '5px',
-    minWidth: '105px'
+    // minWidth: '105px'
   };
   const bSty = {
     verticalAlign: 'bottom',
@@ -17,7 +17,7 @@ import React from 'react';
     verticalAlign: 'top',
     textTransform: 'capitalize',
     wordBreak: 'keep-all',
-    wordWrap: 'keep-all'
+    wordWrap: 'keep-all',
   };
  
 const NumStat = ({ num, name, title, color, size, moreClass }) => (

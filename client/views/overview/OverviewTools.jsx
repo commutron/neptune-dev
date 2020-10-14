@@ -49,8 +49,6 @@ const OverviewTools = ({
           defaultValue={filterByUP}
           onChange={(e)=>changeFilterUP(e)}>
           <option value={false}>All</option>
-          {/* <option value='KITTING' className='cap'>{Pref.kitting}</option> */}
-          <option value={Pref.released} className='cap'>{Pref.released}</option>
           {brancheS.map( (br, ix)=> {
             return(
               <option key={br.brKey+ix} value={br.branch}>{br.branch}</option>
@@ -79,7 +77,11 @@ const OverviewTools = ({
           title='Toggle In Kitting'
           onClick={()=>ghostSetUP(!ghostUP)}
           className={!ghostUP ? 'liteToolOff' : 'liteToolOn'}
-        ><i className='fas fa-cart-plus fa-fw'></i></button>
+          style={{'cursor':'pointer'}}
+        ><i className='fas fa-history fa-fw' 
+            data-fa-transform="flip-h"
+          ></i>
+        </button>
         
       </span>
       

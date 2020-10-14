@@ -12,9 +12,7 @@ import BehaviorSlide from './appSlides/BehaviorSlide.jsx';
 import TrackStepSlide from './appSlides/TrackStepSlide.jsx';
 import CounterSlide from './appSlides/CounterSlide.jsx';
 import ReasonsSlide from './appSlides/ReasonsSlide.jsx';
-import NCLegacySlide from './appSlides/NCLegacySlide.jsx';
 import NCTypeSlide from './appSlides/NCTypeSlide.jsx';
-import NCSupportSlide from './appSlides/NCSupportSlide.jsx';
 import ScalesSlide from './appSlides/ScalesSlide.jsx';
 import TagSlide from './appSlides/TagSlide.jsx';
 import AddressSlide from './appSlides/AddressSlide.jsx';
@@ -69,9 +67,7 @@ const AppWrap = ({ isAdmin, isDebug, users, app })=> {
             <b><i className='fas fa-stopwatch fa-fw'></i>   Counter Steps</b>,
             <b><i className='fas fa-wave-square fa-fw'></i>   Steps Behavior</b>,
             <b><i className='fas fa-dice fa-fw'></i>   Reasons Options</b>,
-            <b><i className='fas fa-bug fa-fw'></i>   Legacy NonCons</b>,
             <b><i className='fas fa-bug fa-fw'></i>   NonCon Types</b>,
-            <b><i className='fas fa-bug fa-fw'></i>   NonCon Support</b>,
             <b><i className='fas fa-ruler-horizontal fa-fw'></i>   Scales</b>,
             <b><i className='fas fa-tag fa-fw'></i>   Tags</b>,
             <b><i className='fas fa-link fa-fw'></i>   Addresses</b>,
@@ -79,24 +75,22 @@ const AppWrap = ({ isAdmin, isDebug, users, app })=> {
             <b><i className='fas fa-toolbox fa-fw'></i>  Data Repair</b>,//12
             <b><i className='fas fa-bell fa-fw'></i>  Test Alerts</b>,//13
             <b><i className='fas fa-life-ring fa-fw'></i>  Legacy Support</b>//14
-          ]}
-          extraClass='space5x5'>
+          ]}>
+          {/*extraClass='space5x5'>*/}
           
           <BranchesSlide key={0} app={app} isDebug={isDebug} />
           <TrackStepSlide key={1} app={app} sorted={sortedTrackOptions} />
           <CounterSlide key={2} app={app} />
           <BehaviorSlide key={3} app={app} />
           <ReasonsSlide key={4} app={app} />
-          <NCLegacySlide key={5} app={app} />
-          <NCTypeSlide key={6} app={app} />
-          <NCSupportSlide key={7} app={app} />
-          <ScalesSlide key={8} app={app} />
-          <TagSlide key={9} app={app} />
-          <AddressSlide key={10} app={app} />
-          <PINSlide key={11} />
-          <DataRepair key={12} app={app} users={users} />
-          <ToastSlide key={13} />
-          <div key={14}>
+          <NCTypeSlide key={5} app={app} />
+          <ScalesSlide key={6} app={app} />
+          <TagSlide key={7} app={app} />
+          <AddressSlide key={8} app={app} />
+          <PINSlide key={9} />
+          <DataRepair key={10} app={app} users={users} />
+          <ToastSlide key={11} />
+          <div key={12} className='space3v'>
             <p>determine support needs</p>
             <p>
               <button

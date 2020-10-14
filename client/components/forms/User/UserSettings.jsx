@@ -22,15 +22,11 @@ const UserSettings = ({ app, user, isAdmin, brancheS })=> {
     {value: 2000, name: 'Slow' }
   ];
   
-  const overTopOps = [
-    { value: false, name: 'All' },
-    { value: 'KITTING', name: Pref.kitting },
-    { value: Pref.released, name: Pref.released },
-  ];
+  const overTopOp = [{ value: false, name: 'All' }];
   const overBrOps = Array.from(brancheS, x => {
     return { value: x.branch, name: x.branch };
   });
-  const overOps = [...overTopOps,...overBrOps];
+  const overOps = [...overTopOp,...overBrOps];
   
   return(
     <div className='comfort'>

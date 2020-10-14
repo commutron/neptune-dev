@@ -43,7 +43,7 @@ const ReasonsSlide = ({app})=> {
   }
   
   return (
-    <div>
+    <div className='space3v'>
       <h2>First-Off / Verify Repeat</h2>
       <p>Options for reason of a repeated first-off or verify</p>
       <em>a new smarter, keyed collection</em>

@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
 import BatchTopStatus from './BatchTopStatus.jsx';
-import KittingChecks from './KittingChecks.jsx';
+import ReleasedCheck from './ReleasedCheck.jsx';
 import { TideActivitySquare } from '/client/components/tide/TideActivity';
 import BranchProgress from './BranchProgress.jsx';
 import NonConCounts from './NonConCounts.jsx';
@@ -14,30 +14,22 @@ const BatchDetails = ({
   bCache, pCache, acCache,
   user, clientTZ, app, brancheS,
   isDebug, isNightly,
-  dense, filterBy, 
-  kittingArea, releasedArea, branchArea
+  dense, filterBy, branchArea
 })=> {
   
   const branchClear = brancheS.filter( b => b.reqClearance === true );
   
-  const statusCols = ['due', 'remaining workdays', 'priority rank', 'items quantity'];
-  
-  const configClearCols = Array.from(Pref.clearencesArray, x => x.context );
-  const branchClearCols = Array.from(branchClear, x => x.common );
-  const kitCols = [...branchClearCols,...configClearCols, 'flow', 'released'];
+  const statusCols = ['due', 'remaining workdays', 'priority rank', 'items quantity','serial flow'];
   
   const progCols = branchArea ?
                     [ brancheS.find( x => x.branch === filterBy).common ] :
                     Array.from(brancheS, x => x.common);
   const ncCols = ['NC total', 'NC remain', 'NC per item', 'NC items', 'scrap', 'RMA'];
   // due == 'fulfill', 'ship'
-  const fullHead = ['SO',...statusCols,...kitCols,'active',...progCols,...ncCols,'watch'];
-  const kitHead = ['SO',...statusCols, ...kitCols,'active','watch'];
-  const relHead = ['SO',...statusCols,'active',...progCols,...ncCols,'watch'];
+  const fullHead = ['SO',...statusCols,'released','active',...progCols,...ncCols,'watch'];
+  const brchHead = ['SO',...statusCols,'active',...progCols,...ncCols,'watch'];
   
-  const headersArr = kittingArea ? kitHead : 
-                     releasedArea || branchArea ? relHead :
-                     fullHead;
+  const headersArr = branchArea ? brchHead : fullHead;
   
   return(
     <div className={`overGridScroll forceScrollStyle ${dense ? 'dense' : ''}`} tabIndex='1'>
@@ -72,13 +64,10 @@ const BatchDetails = ({
               isDebug={isDebug}
               isNightly={isNightly}
               statusCols={statusCols}
-              kitCols={kitCols}
               progCols={progCols}
               ncCols={ncCols}
               dense={dense}
               filterBy={filterBy}
-              kittingArea={kittingArea}
-              releasedArea={releasedArea}
               branchArea={branchArea} />
       )})}
       
@@ -94,9 +83,8 @@ const BatchDetailChunk = ({
   pCache, acCache, app, 
   brancheS, branchClear,
   isDebug, isNightly,
-  statusCols, kitCols, progCols, ncCols, 
-  dense, filterBy,
-  kittingArea, releasedArea, branchArea
+  statusCols, progCols, ncCols, 
+  dense, filterBy, branchArea
 })=> {
   
   const isX = oB.completed === undefined ? false : true;
@@ -104,6 +92,8 @@ const BatchDetailChunk = ({
   
   const releasedToFloor = oB.releases.findIndex( 
                             x => x.type === 'floorRelease') >= 0;
+  const rTFghostC = releasedToFloor ? '' : 'ghostState';
+  const rTFghostT = releasedToFloor ? '' : `Not released from ${Pref.kitting}`;
   
   const ac = acCache.dataSet.find( x => x.batchID === oB._id );
   /*
@@ -114,7 +104,7 @@ const BatchDetailChunk = ({
   const isRO = Roles.userIsInRole(Meteor.userId(), 'readOnly');
   
   return(
-    <div className='overGridRowScroll'>
+    <div className={`overGridRowScroll ${rTFghostC}`} title={rTFghostT}>
       <div>
         <i><i className='label' title={Pref.salesOrder}
           >{Pref.SO}:<br /></i>{oB.salesOrder}</i>
@@ -135,23 +125,19 @@ const BatchDetailChunk = ({
         statusCols={statusCols}
         dense={dense} />
     
-    {!releasedArea && !branchArea ?
-      <KittingChecks
-        batchID={oB._id}
-        batchNum={oB.batch}
-        isX={isX}
-        isDone={isDone}
-        releasedToFloor={releasedToFloor}
-        releases={oB.releases}
-        clientTZ={clientTZ}
-        pCache={pCache}
-        app={app}
-        branchClear={branchClear}
-        kitCols={kitCols}
-        dense={dense}
-        isRO={isRO}
-        isDebug={isDebug} />
-    : null}
+      {!branchArea ?
+        <ReleasedCheck
+          batchID={oB._id}
+          batchNum={oB.batch}
+          isX={isX}
+          isDone={isDone}
+          releasedToFloor={releasedToFloor}
+          releases={oB.releases}
+          app={app}
+          dense={dense}
+          isRO={isRO}
+          isDebug={isDebug} />
+      : null}
     
       <div>
         <TideActivitySquare 
@@ -160,26 +146,22 @@ const BatchDetailChunk = ({
           app={app} />
       </div>
       
-    {!kittingArea &&
-      <Fragment>
-        <BranchProgress
-          batchID={oB._id}
-          releasedToFloor={releasedToFloor}
-          progCols={progCols}
-          clientTZ={clientTZ}
-          app={app}
-          filterBy={filterBy}
-          branchArea={branchArea}
-          isDebug={isDebug} />
-          
-        <NonConCounts
-          batchID={oB._id}
-          releasedToFloor={releasedToFloor}
-          app={app}
-          ncCols={ncCols}
-          isDebug={isDebug} />
-      </Fragment>
-    }
+      <BranchProgress
+        batchID={oB._id}
+        releasedToFloor={releasedToFloor}
+        progCols={progCols}
+        clientTZ={clientTZ}
+        app={app}
+        filterBy={filterBy}
+        branchArea={branchArea}
+        isDebug={isDebug} />
+        
+      <NonConCounts
+        batchID={oB._id}
+        releasedToFloor={releasedToFloor}
+        app={app}
+        ncCols={ncCols}
+        isDebug={isDebug} />
     
       <div>
         <WatchButton 

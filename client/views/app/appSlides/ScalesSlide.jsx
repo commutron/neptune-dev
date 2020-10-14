@@ -56,7 +56,7 @@ const ScalesSlide = ({app})=> {
   };
   
   return (
-    <div>
+    <div className='space3v'>
     
     <h2 className='cap'>override last serials</h2>
               

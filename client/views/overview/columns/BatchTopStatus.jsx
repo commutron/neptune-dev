@@ -4,7 +4,7 @@ import moment from 'moment';
 import NumStat from '/client/components/tinyUi/NumStat.jsx';
 // import PrioritySquareData from '/client/components/bigUi/PrioritySquare.jsx';
 import { PrioritySquare } from '/client/components/smallUi/StatusBlocks/PrioritySquare.jsx';
-// import TrinaryStat from '/client/components/tinyUi/TrinaryStat.jsx';
+import TrinaryStat from '/client/components/tinyUi/TrinaryStat.jsx';
 
 
 const BatchTopStatus = ({ 
@@ -47,13 +47,12 @@ const BatchTopStatus = ({
             name={
               dt.weekDaysRemain < 0 ? 
                 dt.weekDaysRemain === -1 ?
-                  'Workday Overdue' :
-                  'Workdays Overdue' : 
+                  `Workday Overdue` :
+                  `Workdays Overdue` : 
                     dt.weekDaysRemain === 1 ?
                       'Workday Remaining' :
                       'Workdays Remaining'}
-            title=''
-            color={dt.weekDaysRemain < 0 ? 'yellowT' : 'blueT'}
+            color={dt.weekDaysRemain < 0 ? 'orangeT' : 'blueT'}
             size='big' />
         </div>
         
@@ -72,6 +71,16 @@ const BatchTopStatus = ({
             title=''
             color='blueT'
             size='big' />
+        </div>
+        
+        <div>
+          <TrinaryStat
+            status={dt.riverChosen}
+            name='Flow'
+            title='Process Flow Assignment'
+            size=''
+            onIcon='far fa-check-circle fa-2x greenT' 
+            midIcon='far fa-times-circle fa-2x grayT' />
         </div>
         
       </Fragment>

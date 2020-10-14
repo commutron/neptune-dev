@@ -3,7 +3,7 @@ import React from 'react';
 
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 
-const BatchHeaders = ({ oB, bCache, title })=> (
+const UpstreamHeaders = ({ oB, bCache, title, showMore })=> (
   <div className='overGridFixed'>
       
     <div id="allLiveBatch" className='overGridRowFixedHeader'>
@@ -13,7 +13,7 @@ const BatchHeaders = ({ oB, bCache, title })=> (
     {!oB ? null :
       oB.map( (entry, index)=>{
         return(
-          <BatchHeaderChunk
+          <UpstreamHeaderChunk
             key={`${entry._id}livefixed${index}`}
             ck={entry}
             bCache={bCache} />
@@ -22,23 +22,18 @@ const BatchHeaders = ({ oB, bCache, title })=> (
   </div>
 );
 
-export default BatchHeaders;
+export default UpstreamHeaders;
 
-const BatchHeaderChunk = ({ ck, source, bCache })=> {
+const UpstreamHeaderChunk = ({ck, source, bCache })=> {
 
   const moreInfo = bCache ? bCache.dataSet.find( x => x.batch === ck.batch) : false;
-  const what = !moreInfo ? 'unavailable' : moreInfo.isWhat;
-  
-  const releasedToFloor = ck.releases.findIndex( 
-                            x => x.type === 'floorRelease') >= 0 ? 
-                            '' : 'ghostState';
-                            
+  const what = !moreInfo ? 'unavailable' : `${moreInfo.isWhat} ${moreInfo.more}`;
   return(
-    <div className={`overGridRowFixed ${releasedToFloor}`}>
+    <div className='overGridRowFixed'>
       <div>
         <ExploreLinkBlock type='batch' keyword={ck.batch} wrap={false} />
       </div>
-      <div>{what.length <= 50 ? what : what.substring(0, 50) + '...'}</div>
+      <div>{what.length <= 75 ? what : what.substring(0, 75) + '...'}</div>
     </div>
   );
 };

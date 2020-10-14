@@ -25,7 +25,7 @@ const BranchProgress = ({
   
   const dt = progData;
  
-  if(releasedToFloor !== false && dt && dt.batchID === batchID) {
+  if(dt && dt.batchID === batchID) {
     return(
       <Fragment>
 

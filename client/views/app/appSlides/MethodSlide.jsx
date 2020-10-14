@@ -30,7 +30,7 @@ const MethodSlide = ({app, sorted})=> {
   }
   
   return(
-    <div>
+    <div className='space3v'>
       <h2 className='cap'>smarter {Pref.method} options:</h2>
       <i>available methods for first-off form</i>
             

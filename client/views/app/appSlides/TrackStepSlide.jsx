@@ -33,7 +33,7 @@ const TrackStepSlide = ({app, sorted})=> {
   }
   
   return (
-    <div className='invert'>
+    <div className='invert space3v'>
       
       <p>
         <i className='fas fa-exclamation-circle'></i>

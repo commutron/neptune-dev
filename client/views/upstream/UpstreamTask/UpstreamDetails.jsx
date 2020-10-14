@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
 import BatchTopStatus from '../../overview/columns/BatchTopStatus.jsx';
-import KittingChecks from '../../overview/columns/KittingChecks.jsx';
+import KittingChecks from './KittingChecks';
 import { TideActivitySquare } from '/client/components/tide/TideActivity';
 import PrintLink from '/client/components/smallUi/PrintLink.jsx';
 
@@ -19,11 +19,11 @@ const UpstreamDetails = ({
   
   const branchClear = brancheS.filter( b => b.reqClearance === true );
   
-  const statusCols = ['due','remaining workdays','priority rank','items quantity','active'];
+  const statusCols = ['due','remaining workdays','priority rank','items quantity','serial flow','active'];
   
   const configClearCols = Array.from(Pref.clearencesArray, x => x.context );
   const branchClearCols = Array.from(branchClear, x => x.common );
-  const kitCols = [...branchClearCols,...configClearCols, 'flow', 'released'];
+  const kitCols = [...branchClearCols,...configClearCols, 'released'];
   
   // due == 'fulfill', 'ship'
   const kitHead = ['SO',...statusCols, ...kitCols,'print','production','watch'];

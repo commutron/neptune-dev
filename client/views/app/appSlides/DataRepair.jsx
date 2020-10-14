@@ -101,7 +101,7 @@ const DataRepair = ({ app, users })=> {
   }
   
   return (
-    <div className='invert'>
+    <div className='space3v'>
       <h2 className='cap'>NonCon "Where" Data Repair</h2>
       <p>Potentialy very damaging. This will change data of all batches. Be VERY carefull</p>
       

@@ -66,6 +66,7 @@ function collectBranchCondition(privateKey, batchID) {
         const conArr = Array.from(branchSteps, x => x.condition );
            
         const branchCon = branchSteps.length === 0 ? false :
+          conArr.includes('onHold') ? 'onHold' :
           conArr.includes('canStart') ||
           conArr.includes('stepRemain') ?
           'open' : 
@@ -135,6 +136,7 @@ function collectBranchCondition(privateKey, batchID) {
                             rNC.filter( x => x.where === branch.branch ).length;
             
         const branchCon = branchSteps.length === 0 ? false :
+          conArr.includes('onHold') ? 'onHold' :
           conArr.includes('canStart') ||
           conArr.includes('stepRemain') ||
           nonConLeft > 0 ?
@@ -188,7 +190,7 @@ function collectStatus(privateKey, batchID, clientTZ) {
     };
     
     if(bx) {
-      let complete = bx.completed; // is it done
+      const complete = bx.completed; // is it done
       
       const shipDue = findShipDay(bx.salesEnd);
       
@@ -197,18 +199,21 @@ function collectStatus(privateKey, batchID, clientTZ) {
       const timeRemainClean = timeRemain > -1 && timeRemain < 1 ? 
           timeRemain.toPrecision(1) : Math.round(timeRemain);
       
+      const riverChosen = b.river !== false; // River Setup
+      
       collection = {
         batch: bx.batch,
         batchID: bx._id,
         shipDue: shipDue.format(),
         weekDaysRemain: timeRemainClean,
         itemQuantity: bx.quantity,
+        riverChosen: riverChosen
       };
       
       resolve(collection);
       
     }else if(b) {
-      let complete = b.finishedAt !== false; // is it done
+      const complete = b.finishedAt !== false; // is it done
       
       const shipDue = findShipDay(b.end);
       
@@ -217,7 +222,8 @@ function collectStatus(privateKey, batchID, clientTZ) {
       const timeRemainClean = timeRemain > -1 && timeRemain < 1 ? 
           timeRemain.toPrecision(1) : Math.round(timeRemain);
          
-      let itemQuantity = b.items.length; // how many items
+      const itemQuantity = b.items.length; // how many items
+      const riverChosen = b.river !== false; // River Setup
       
       collection = {
         batch: b.batch,
@@ -225,43 +231,7 @@ function collectStatus(privateKey, batchID, clientTZ) {
         shipDue: shipDue.format(),
         weekDaysRemain: timeRemainClean,
         itemQuantity: itemQuantity,
-      };
-
-      resolve(collection);
-      
-    }else{
-      resolve(false);
-    }
-  });
-}
-
-function collectKitting(privateKey, batchID, clientTZ) {
-  return new Promise(resolve => {
-    let collection = false;
-    
-    const bx = XBatchDB.findOne({_id: batchID});
-    const b = !bx ? BatchDB.findOne({_id: batchID}) : {};
-    
-    // const app = AppDB.findOne({orgKey: privateKey});
-    
-    if(bx) {
-      
-      collection = {
-        batch: bx.batch,
-        batchID: bx._id,
-        riverChosen: null,
-      };
-      
-      resolve(collection);
-      
-    }else if(b) {
-      
-      const riverChosen = b.river !== false; // River Setup
-      
-      collection = {
-        batch: b.batch,
-        batchID: b._id,
-        riverChosen: riverChosen,
+        riverChosen: riverChosen
       };
 
       resolve(collection);
@@ -507,19 +477,6 @@ Meteor.methods({
       const accessKey = Meteor.user().orgKey;
       try {
         bundle = await collectStatus(accessKey, batchID, clientTZ);
-        return bundle;
-      }catch (err) {
-        throw new Meteor.Error(err);
-      }
-    }
-    return bundleProgress(batchID);
-  },
-  
-  overviewKittingStatus(batchID, clientTZ) {
-    async function bundleProgress(batchID) {
-      const accessKey = Meteor.user().orgKey;
-      try {
-        bundle = await collectKitting(accessKey, batchID, clientTZ);
         return bundle;
       }catch (err) {
         throw new Meteor.Error(err);

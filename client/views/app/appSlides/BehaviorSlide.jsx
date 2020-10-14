@@ -52,7 +52,7 @@ const BehaviorSlide = ({app})=> {
   let dfHow = lt.how;
   
   return (
-    <div className='invert'>
+    <div className='space3v'>
       
       
       <div className='vspace'>

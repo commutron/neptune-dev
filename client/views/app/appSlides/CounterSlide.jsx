@@ -30,7 +30,7 @@ const CounterSlide = ({ app })=> {
   }
   
   return (
-    <div>
+    <div className='space3v'>
     
       <p>
         <i className='fas fa-exclamation-circle'></i>

@@ -3,7 +3,7 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 import AppSetSimple from '/client/components/forms/AppSetSimple';
 
-const NCSupportSlide = ({app})=> {
+const NCSupportChunk = ({app})=> {
   
   let df = app.ncScale || { low: 5, high: 10, max: 25 };
   
@@ -25,7 +25,7 @@ const NCSupportSlide = ({app})=> {
   
   return (
     <div>
-      <h2 className='cap'>{Pref.nonCon} scale</h2>
+      <h3 className='cap'>{Pref.nonCon} scale</h3>
       <label htmlFor='scaleForm'>Set Scale</label>
       <form id='scaleForm' className='inlineForm' onSubmit={(e)=>handleScale(e)}>
         <input type='number' id='low' className='miniNumIn' defaultValue={df.low} />
@@ -35,9 +35,9 @@ const NCSupportSlide = ({app})=> {
       </form>
       
             
-      <hr />
+      <hr className='vmargin' />
       
-      <h2 className='cap'>missing type</h2>
+      <h3 className='cap'>missing type</h3>
       <i>Type of {Pref.nonCon} that can be converted into a shortfall</i>
       <AppSetSimple
         title='type'
@@ -50,4 +50,4 @@ const NCSupportSlide = ({app})=> {
   );
 };
 
-export default NCSupportSlide;
+export default NCSupportChunk;

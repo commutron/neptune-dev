@@ -27,7 +27,7 @@ const ToastSlide = ({app})=> {
   
   
   return(
-    <div>
+    <div className='space3v'>
       <h2 className='cap'>Notification Styles:</h2>
       <i>available toast notification styles</i>
       <p>

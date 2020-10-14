@@ -35,7 +35,7 @@ const MultiBatchKPI = ({ batchIDs, app })=> {
     const hrColor = t2qHr < 0 ? 'redT' : 'tealT';
     
     const t2qPr = bdtObj.tideToQuotePercentAvg;                  
-    const toPtext = t2qPr < 0 ? `\nover quote` : `\nunder quote`;
+    const toPtext = t2qPr < 0 ? 'over quote' : 'under quote';
     const prColor = t2qPr < 0 ? 'redT' : 'tealT';
     
     const delvAvg = bdtObj.deliveryGap;

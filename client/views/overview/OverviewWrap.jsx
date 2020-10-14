@@ -48,7 +48,7 @@ const OverviewWrap = ({
   
   useLayoutEffect( ()=> {
     sortInitial();
-  }, [b, bx, filterBy, sortBy]);
+  }, [b, bx, filterBy, sortBy, ghost]);
   
   function changeFilter(e) {
     const value = e.target.value;
@@ -102,19 +102,8 @@ const OverviewWrap = ({
       let liveBatches = [...batches,...batchesX];
       
       let filteredBatches = filterBy === false ? 
-        liveBatches 
+        ghost === true ? liveBatches 
         :
-        filterBy === 'KITTING' ? 
-        liveBatches.filter( bx => {
-          const releasedToFloor = Array.isArray(bx.releases) ?
-            bx.releases.findIndex( x => x.type === 'floorRelease') >= 0 :
-            typeof bx.floorRelease === 'object';
-          if(!releasedToFloor) {
-            return bx;
-          }
-        }) 
-        :
-        filterBy === Pref.released ? 
         liveBatches.filter( bx => {
           const releasedToFloor = Array.isArray(bx.releases) ?
             bx.releases.findIndex( x => x.type === 'floorRelease') >= 0 :
@@ -124,15 +113,15 @@ const OverviewWrap = ({
           }
         }) 
         :
-        liveBatches.filter( bx => {
-          const cB = brCache.dataSet.find( x => x.batchID === bx._id);
+        liveBatches.filter( bbx => {
+          const cB = brCache.dataSet.find( x => x.batchID === bbx._id);
           const cP = cB && cB.branchSets.find( x => x.branch === filterBy );
           const con = cP && cP.condition;
           
-          isDebug && console.log(`${bx.batch}: ${con}`);
+          isDebug && console.log(`${bbx.batch}: ${con}`);
           
-          if(con && con === 'open') {
-            return bx;
+          if( (con === 'onHold' && ghost === true) || (con === 'open') ) {
+            return bbx;
           }
         });
       
@@ -252,11 +241,7 @@ const OverviewWrap = ({
             key='fancylist0'
             oB={liveState}
             bCache={bCache}
-            title={
-              !filterBy ? 'All Live' :
-              filterBy === 'KITTING' ? Pref.kitting : 
-              filterBy
-            }
+            title={!filterBy ? 'All Live' : filterBy}
           />
           
           <BatchDetails
@@ -273,13 +258,7 @@ const OverviewWrap = ({
             isNightly={isNightly}
             dense={dense}
             filterBy={filterBy}
-            kittingArea={filterBy === 'KITTING'}
-            releasedArea={filterBy === Pref.released}
-            branchArea={
-              filterBy !== false && 
-              filterBy !== 'KITTING' &&
-              filterBy !== Pref.released
-            }
+            branchArea={filterBy !== false}
           />
             
         </div>

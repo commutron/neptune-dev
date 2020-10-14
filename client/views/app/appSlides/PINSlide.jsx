@@ -63,7 +63,7 @@ const PINSlide = ()=> {
   }
   
   return (
-    <div>
+    <div className='space3v'>
       <h2>Set or Change PIN Numbers</h2>
       <p>A pin is necessary for activating new users and admins</p>
       <form onSubmit={(e)=>setPin(e)} autoComplete='off'>

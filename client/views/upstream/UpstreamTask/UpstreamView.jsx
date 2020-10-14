@@ -6,7 +6,7 @@ import Pref from '/client/global/pref.js';
 import Spin from '/client/components/tinyUi/Spin.jsx';
 
 import UpstreamTools from './UpstreamTools';
-import BatchHeaders from '../../overview/columns/BatchHeaders';
+import UpstreamHeaders from './UpstreamHeaders';
 import UpstreamDetails from './UpstreamDetails';
 
 
@@ -147,7 +147,7 @@ const UpstreamView = ({
       :  
         <div className={`overGridWideFrame ${density}`}>
           
-          <BatchHeaders
+          <UpstreamHeaders
             key='fancylist0'
             oB={liveState}
             bCache={bCache}

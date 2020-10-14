@@ -5,7 +5,7 @@ import AppSetSimple from '/client/components/forms/AppSetSimple';
 const TagSlide = ({app})=> {
   
   return (
-    <div>
+    <div className='space3v'>
       <h2 className='cap'>{Pref.tag} options:</h2>
       <i>available reusable {Pref.tag}s</i>
       <AppSetSimple

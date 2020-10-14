@@ -1,6 +1,6 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 
 import BranchBuilder from '/client/components/bigUi/ArrayBuilder/BranchBuilder.jsx';
 
@@ -25,7 +25,7 @@ const BranchesSlide = ({ app, isAdmin, isDebug })=> {
 
   
   return (
-    <div className='invert'>
+    <div className='invert space3v'>
       
       <h2 className='cap'><i className='fas fa-code-branch fa-fw'></i> {Pref.branches}</h2>
       <p>Options for Branch / Department / Tracking Catagory</p>
