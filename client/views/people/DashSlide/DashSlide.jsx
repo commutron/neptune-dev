@@ -6,15 +6,15 @@ import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
 import PeoplePanel from './PeoplePanel.jsx';
 
 
-const DashSlide = ({ app, user, users, allBatch, bCache, brancheS, isDebug })=> {
+const DashSlide = ({ app, user, users, bCache, brancheS, clientTZ, isDebug })=> {
   
   const [ update, forceUpdate] = useState(false);
   
-  const [ eBatchesState, eBatchesSet ] = useState([]);
-  const [ xyBatchState, xyBatchSet ] = useState([]);
-  
   const [ eUsersState, eUsersSet ] = useState([]);
   const [ dUsersState, dUsersSet ] = useState([]);
+  
+  const [ openTBlockState, openTBlockSet ] = useState("[]");
+  const [ xyBatchState, xyBatchSet ] = useState([]);
   
   const [ userBranches, setUserBranches ] = useState({});
   const [ brList, setBranchList ] = useState([]);
@@ -58,26 +58,17 @@ const DashSlide = ({ app, user, users, allBatch, bCache, brancheS, isDebug })=> 
     dUsersSet( dUsers );
     
     isDebug && console.log({eUsers});
-
-    const tideBatches = allBatch.filter( x => 
-      typeof x === 'object' && Array.isArray(x.tide) === true );
     
-    const eBatches = eUsers.reduce( (result, user)=> {
-      const acBatch = tideBatches.find( y =>
-        y.tide.find( z => z.tKey === user.engaged.tKey ) );
-      if(acBatch) {
-        result.push(acBatch);
-      }
-      return result;
-    }, []);
-    
-    isDebug && console.log({tideBatches, eBatches});
-    eBatchesSet(eBatches);
-    
-  },[allBatch, users]);
+    const userTkeys = Array.from(eUsers, e => e.engaged.tKey);
+    Meteor.call('getEngagedBlocks', userTkeys, (err, re)=>{
+      err && console.log(err);
+      if(re) { openTBlockSet(re); }
+    });
+  },[users]);
   
   useEffect( ()=>{
-    const qBatches = _.countBy(eBatchesState, x => x && x.batch);
+    const openTBlocks = JSON.parse(openTBlockState);
+    const qBatches = _.countBy(openTBlocks, x => x && x.batch);
     const qBatchesClean = _.omit(qBatches, (value, key, object)=> {
       return key == false;
     });
@@ -85,8 +76,9 @@ const DashSlide = ({ app, user, users, allBatch, bCache, brancheS, isDebug })=> 
     const itrXY = obj2xy(qBatchesClean);
     
     isDebug && console.log({qBatches, itrXY});
+    
     xyBatchSet(itrXY);
-  }, [eBatchesState]);
+  }, [openTBlockState]);
   
   
   useEffect( ()=>{
@@ -99,7 +91,6 @@ const DashSlide = ({ app, user, users, allBatch, bCache, brancheS, isDebug })=> 
     
     setBranchesXY(brXY);
   }, [brList]);
-  
 
   return(
     <div className='space5x5 invert overscroll'>
@@ -147,11 +138,12 @@ const DashSlide = ({ app, user, users, allBatch, bCache, brancheS, isDebug })=> 
           app={app}
           eUsers={eUsersState}
           dUsers={dUsersState}
-          eBatches={eBatchesState}
+          openTBlockState={openTBlockState}
           bCache={bCache}
           updateBranches={(id, br)=>updateBranches(id, br)}
           removeBranch={(id)=>removeBranch(id)}
           update={update}
+          clientTZ={clientTZ}
           isDebug={isDebug} />
           
       </div>    

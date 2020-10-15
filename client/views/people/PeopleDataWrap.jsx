@@ -23,9 +23,9 @@ import AccountsManagePanel, { PermissionHelp } from './AccountsManagePanel.jsx';
 
 const PeopleDataWrap = ({
   ready, readyUsers, readyTides, // subs
-  user, active, isDebug, org, app, // self
+  user, active, isDebug, // self
+  org, users, app, // org
   bCache, // caches
-  batches, batchesX, users // working data
 })=> {
   
   const prevUser = usePrevious(user);
@@ -86,9 +86,9 @@ const PeopleDataWrap = ({
             app={app}
             user={user}
             users={users}
-            allBatch={[...batches,...batchesX]}
             bCache={bCache}
             brancheS={brancheS}
+            clientTZ={clientTZ}
             isDebug={isDebug} />
             
           <HistorySlide
@@ -146,11 +146,10 @@ export default withTracker( () => {
   let login = Meteor.userId() ? true : false;
   let user = login ? Meteor.user() : false;
   let org = user ? user.org : false;
-  const clientTZ = moment.tz.guess();
   let active = login ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   const isDebug = login ? Roles.userIsInRole(Meteor.userId(), 'debug') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
-  const tidesSub = login ? Meteor.subscribe('tideData', clientTZ) : false;
+  const tidesSub = login ? Meteor.subscribe('bCacheData') : false;
   if(!login) {
     return {
       readyUsers: false,
@@ -171,8 +170,6 @@ export default withTracker( () => {
       org: org,
       app: AppDB.findOne({org: org}),
       bCache: CacheDB.findOne({dataName: 'batchInfo'}),
-      batches: BatchDB.find({}).fetch(),
-      batchesX: XBatchDB.find({}).fetch(),
       users: Meteor.users.find({}, { sort: { username: 1 } } ).fetch()
     };
   }

@@ -28,6 +28,37 @@ Meteor.methods({
     }
   },
   
+  getEngagedBlocks(userTkeys) {
+    if(Array.isArray(userTkeys) === false) {
+      return false;
+    }else{
+      let objArr = [];
+      for( let uTkey of userTkeys ) {
+        const batch = BatchDB.findOne({ 'tide.tKey': uTkey });
+        const sub = batch && batch.tide.find( x => x.tKey === uTkey);
+        if(sub) {
+          objArr.push({
+            uID: sub.who,
+            batch: batch.batch,
+            tideBlock: sub
+          });
+        }else{
+          const batchX = XBatchDB.findOne({ 'tide.tKey': uTkey });
+          const subX = batchX && batchX.tide.find( x => x.tKey === uTkey);
+          if(subX) {
+            objArr.push({
+              uID: subX.who,
+              batch: batchX.batch,
+              tideBlock: subX
+            });
+          }else{null}
+        }
+      }
+      return JSON.stringify(objArr);
+    }
+  },
+
+  
   // RECORD
   
   startTideTask(batchId, newTkey, newTask) {

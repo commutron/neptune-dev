@@ -148,7 +148,8 @@ Meteor.publish('eventsData', function(){
   }
 });
 
-
+// DEPRECIATED
+/*
 Meteor.publish('tideData', function(clientTZ){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
@@ -178,7 +179,26 @@ Meteor.publish('tideData', function(clientTZ){
     ];
   }
 });
+*/
 
+// People
+Meteor.publish('bCacheData', function(){
+  const user = Meteor.users.findOne({_id: this.userId});
+  const orgKey = user ? user.orgKey : false;
+  Meteor.defer( ()=>{ batchCacheUpdate(orgKey); });
+  if(!this.userId){
+    return this.ready();
+  }else{
+    return [
+      CacheDB.find({orgKey: orgKey, dataName: 'batchInfo' }, {
+        fields: {
+          'orgKey': 0,
+          'structured' : 0,
+          'minified': 0
+        }}),
+    ];
+  }
+});
 
 // Overview Agenda Upstream
 Meteor.publish('cacheData', function(clientTZ){

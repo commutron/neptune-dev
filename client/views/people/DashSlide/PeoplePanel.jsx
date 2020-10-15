@@ -1,44 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import moment from 'moment';
-import 'moment-timezone';
 import Pref from '/client/global/pref.js';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 
 import PersonChunk from './PersonChunk.jsx';
 
 const PeoplePanel = ({ 
-  app, eUsers, dUsers, eBatches, bCache,
-  updateBranches, removeBranch, update, isDebug
+  app, eUsers, dUsers, openTBlockState, bCache,
+  updateBranches, removeBranch, update, 
+  clientTZ, isDebug
 })=> {
   
   const [ userChunks, setChunks ] = useState([]);
   
   useEffect( ()=>{
-    let chunks = [];
-    for( let u of eUsers ) {
-      const batchMatch = eBatches.find( 
-        x => Array.isArray(x.tide) === true && x.tide.find(  y => y.tKey === u.engaged.tKey ) //NO?
-      );
-      const uTide = batchMatch && batchMatch.tide.find(  y => y.tKey === u.engaged.tKey );
-      if(uTide) {
-        chunks.push({
-          uID: u._id,
-          batch: batchMatch.batch,
-          tideBlock: uTide,
-        });
-      }
-    }
-    const nmrlChunks = chunks.sort((x1, x2)=> {
+    const openTBlocks = JSON.parse(openTBlockState);
+    const nmrlChunks = openTBlocks.sort((x1, x2)=> {
       if (x1.batch < x2.batch) { return 1 }
       if (x1.batch > x2.batch) { return -1 }
       return 0;
     });
     setChunks(nmrlChunks);
-  }, [eUsers, eBatches, update]);
+  }, [eUsers, openTBlockState, update]);
   
   isDebug && console.log({userChunks});
-  
-  const clientTZ = moment.tz.guess();
    
   return(
     <div>

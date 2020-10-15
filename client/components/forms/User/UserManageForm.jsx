@@ -34,6 +34,12 @@ const UserManageForm = ({
       reply ? toast.success('Saved') : toast.error('Server Error');
     });
   }
+  function handlePro50() {
+    Meteor.call('setProductionPercent', id, 0.5, (error, reply)=>{
+      error && console.log(error);
+      reply ? toast.success('Saved') : toast.error('Server Error');
+    });
+  }
   function handlePro0() {
     Meteor.call('setProductionPercent', id, 0, (error, reply)=>{
       error && console.log(error);
@@ -50,6 +56,7 @@ const UserManageForm = ({
     {value: 1, name: '100%' },
     {value: 0.8, name: '80%' },
     {value: 0.6, name: '60%' },
+    {value: 0.5, name: '50%' },
     {value: 0.4, name: '40%' },
     {value: 0.2, name: '20%' },
     {value: 0, name: '0%' }
@@ -66,11 +73,15 @@ const UserManageForm = ({
       
       <p>
         <button 
-          className='action clearBlue'
+          className='action clearGreen'
           onClick={()=>handlePro100()}
           >Backdate to 100</button>
         <button 
           className='action clearBlue'
+          onClick={()=>handlePro50()}
+          >Backdate to 50</button>
+          <button 
+          className='action clearBlack'
           onClick={()=>handlePro0()}
           >Backdate to 0</button>
       </p>
