@@ -5,22 +5,13 @@ import 'moment-business-time';
 import Config from '/server/hardConfig.js';
 
 import { batchTideTime } from './tideGlobalMethods.js';
+import { calcShipDay } from './reportCompleted.js';
 
 moment.updateLocale('en', {
   workinghours: Config.workingHours,
   shippinghours: Config.shippingHours
 });
 
-function calcShipDay( nowDay, futureDay, clientTZ ) {
-  const endDay = moment.tz(futureDay, clientTZ);
-  const lateLate = nowDay.clone().isAfter(endDay);
-  
-  const shipTime = endDay.isShipDay() ? 
-                    endDay.clone().nextShippingTime() : 
-                    endDay.clone().lastShippingTime();
-                    
-  return [ shipTime, lateLate ];
-}
 //const now = moment().tz(clientTZ);
 //const isNow = (t)=>{ return ( now.isSame(moment(t), 'day') ) };
 
@@ -181,18 +172,10 @@ function collectStatus(privateKey, batchID, clientTZ) {
     
     const now = moment().tz(clientTZ);
     
-    const findShipDay = (endDateTime) => {
-      const localEnd = moment.tz(endDateTime, clientTZ);
-      const shipDue = localEnd.isShipDay() ?
-                      localEnd.clone().nextShippingTime() :
-                      localEnd.clone().lastShippingTime();
-      return shipDue;
-    };
-    
     if(bx) {
       const complete = bx.completed; // is it done
       
-      const shipDue = findShipDay(bx.salesEnd);
+      const shipDue = calcShipDay( now, bx.salesEnd, clientTZ )[0];
       
       const timeRemain = !complete ?  // duration between now and ship due
         shipDue.workingDiff(now, 'day', true) : 0;
@@ -215,7 +198,7 @@ function collectStatus(privateKey, batchID, clientTZ) {
     }else if(b) {
       const complete = b.finishedAt !== false; // is it done
       
-      const shipDue = findShipDay(b.end);
+      const shipDue = calcShipDay( now, b.end, clientTZ )[0];
       
       const timeRemain = !complete ?  // duration between now and ship due
         shipDue.workingDiff(now, 'day', true) : 0;
@@ -473,7 +456,7 @@ function collectNonCon(privateKey, batchID, temp) {
 Meteor.methods({
   
   overviewBatchStatus(batchID, clientTZ) {
-    async function bundleProgress(batchID) {
+    async function bundleStatus(batchID) {
       const accessKey = Meteor.user().orgKey;
       try {
         bundle = await collectStatus(accessKey, batchID, clientTZ);
@@ -482,7 +465,7 @@ Meteor.methods({
         throw new Meteor.Error(err);
       }
     }
-    return bundleProgress(batchID);
+    return bundleStatus(batchID);
   },
   
   priorityRank(batchID, clientTZ, serverAccessKey, mockDay) {

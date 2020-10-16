@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment';
+// import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
 import GroupForm from '/client/components/forms/GroupForm.jsx';
@@ -8,28 +8,12 @@ import TrendLine from '/client/components/charts/Trends/TrendLine.jsx';
 
 import { timeRanges } from '/client/utility/CycleCalc';
 
-function countNewGroup(collected, rangeStart, rangeEnd) {
-  const groupFind = collected.filter( x => 
-    x.createdAt > new Date(rangeStart) &&
-    x.createdAt < new Date(rangeEnd)
-  );
-  return groupFind.length;
-}
-
-function countNewWidget(collected, rangeStart, rangeEnd) {
-  const widgetFind = collected.filter( x =>
+function countNewCollection(collected, rangeStart, rangeEnd) {
+  const collectFind = collected.filter( x =>
     x.createdAt > new Date(rangeStart) &&
     x.createdAt < new Date(rangeEnd) 
   );
-  return widgetFind.length;
-}
-
-function countNewVariant(collected, rangeStart, rangeEnd) {
-  const variantFind = collected.filter( x =>
-    x.createdAt > new Date(rangeStart) &&
-    x.createdAt < new Date(rangeEnd) 
-  );
-  return variantFind.length;
+  return collectFind.length;
 }
 
 const GroupLanding = ({ 
@@ -38,9 +22,9 @@ const GroupLanding = ({
   app
 })=> {
   
-  const xyG = timeRanges(groupData, countNewGroup, 12, 'month');
-  const xyW = timeRanges(widgetData, countNewWidget, 12, 'month');
-  const xyV = timeRanges(widgetData, countNewVariant, 12, 'month');
+  const xyG = timeRanges(groupData, countNewCollection, 12, 'month');
+  const xyW = timeRanges(widgetData, countNewCollection, 12, 'month');
+  const xyV = timeRanges(variantData, countNewCollection, 12, 'month');
   
   return(
     <div className='overscroll'>

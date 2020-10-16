@@ -8,7 +8,6 @@ import 'flatpickr/dist/themes/airbnb.css';
 
 const TideBlockRow = ({ 
   batch, describe, tideObj,
-  // startTime, stopTime,
   lastStop, nextStart,
   editKey, editMode,
   splitKey, splitMode,
@@ -55,24 +54,27 @@ const TideBlockRow = ({
   }
  
   const mStart = moment(startTime);
-  const isStop = stopTime ? true : false;
-  const mStop = stopTime ? moment(stopTime) : moment();// this is what is causing the warning
+  const isStop = stopTime === false ? false : true;
+  const mStop = isStop ? moment(stopTime) : moment();
+  
+  const mStartDay = mStart.clone().startOf('day');
+  const mStopDay = mStop.clone().endOf('day');
   
   const absoluteMin =
-  !lastStop || !moment(lastStop).isAfter(moment(startTime).startOf('day')) ?
-    moment(startTime).startOf('day').format() : lastStop;
+  !lastStop || !moment(lastStop).isAfter(mStartDay) ?
+    mStartDay.format() : lastStop;
     
   const absoluteMax =
   !isStop ? mStop.format() : 
     !nextStart && !moment().isAfter(mStop, 'day') ? mStop.format() :
-      !nextStart || moment(nextStart).isAfter(mStop.endOf('day')) ?
-        mStop.endOf('day').format() : nextStart;
+      !nextStart || moment(nextStart).isAfter(mStopDay) ?
+        mStopDay.format() : nextStart;
   
   const editSelf = tideWho === Meteor.userId();
   const editAuth = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
   const zeroed = isStop && mStop.diff(mStart, 'minutes') <= 0.5 ? true : false;
   const staticFormat = isDebug ? 'hh:mm:ss A' : 'hh:mm A';
-  
+    
     return(
       <Fragment>
       <tr className={editOn ? 'pop' : ''}>
@@ -104,7 +106,7 @@ const TideBlockRow = ({
                   minDate: moment(absoluteMin).startOf('minute').format(),
                   maxDate: tempStop[0] ? 
                     moment(tempStop[0]).startOf('minute').format() :
-                    mStop.startOf('minute').format(),
+                    mStop.clone().startOf('minute').format(),
                   minuteIncrement: 1,
                   noCalendar: true,
                   enableTime: true,

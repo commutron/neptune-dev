@@ -67,7 +67,7 @@ const AppWrap = ({ isAdmin, isDebug, users, app })=> {
             <b><i className='fas fa-stopwatch fa-fw'></i>   Counter Steps</b>,
             <b><i className='fas fa-wave-square fa-fw'></i>   Steps Behavior</b>,
             <b><i className='fas fa-dice fa-fw'></i>   Reasons Options</b>,
-            <b><i className='fas fa-bug fa-fw'></i>   NonCon Types</b>,
+            <b><i className='fas fa-times-circle fa-fw'></i>   NonCon Types</b>,
             <b><i className='fas fa-ruler-horizontal fa-fw'></i>   Scales</b>,
             <b><i className='fas fa-tag fa-fw'></i>   Tags</b>,
             <b><i className='fas fa-link fa-fw'></i>   Addresses</b>,

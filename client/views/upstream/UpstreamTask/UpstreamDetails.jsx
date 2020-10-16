@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 // import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
@@ -21,12 +21,11 @@ const UpstreamDetails = ({
   
   const statusCols = ['due','remaining workdays','priority rank','items quantity','serial flow','active'];
   
-  const configClearCols = Array.from(Pref.clearencesArray, x => x.context );
   const branchClearCols = Array.from(branchClear, x => x.common );
-  const kitCols = [...branchClearCols,...configClearCols, 'released'];
+  const kitCols = [...branchClearCols, Pref.baseSerialPart+'s', 'released'];
   
   // due == 'fulfill', 'ship'
-  const kitHead = ['SO',...statusCols, ...kitCols,'print','production','watch'];
+  const kitHead = ['SO',...statusCols,...kitCols,'print','production','watch'];
   
   return(
     <div className={`overGridScroll forceScrollStyle ${dense ? 'dense' : ''}`} tabIndex='1'>

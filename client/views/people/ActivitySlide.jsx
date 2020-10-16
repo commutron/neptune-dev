@@ -100,7 +100,7 @@ const ActivitySlide = ({ orb, bolt, app, user, users, bCache, clientTZ })=> {
       </table>
       }
       <div>
-        <p><sup>i.</sup>Times are displayed for timezone: {moment.tz.guess()}</p>
+        <p><sup>i.</sup>Times are displayed for timezone: {clientTZ}</p>
         <p><sup>ii.</sup>Durations are rounded to the nearest minute</p>
       </div>
     </div>

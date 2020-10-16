@@ -99,6 +99,7 @@ class Pref {
     this.upstream = 'inventory';
     this.kit = 'kit';
     this.kitting = 'kitting';
+    this.baseSerialPart = 'PCB';
     this.comp = 'part';
     this.release = 'release';
     this.released = 'released';
@@ -188,15 +189,7 @@ class Pref {
     //this.maxWorkDayEndTime
     this.stepUndoWindow = 1000*30;
     this.timeAfterGrace = 48; // keep the tideControl unlocked for how many hours
-    
-    // clearences, additional releases
-    this.clearencesArray = [
-      { keyword: 'pcbKitRelease',
-        pre: 'Ready',
-        post: 'Ready',
-        link: '',
-        context: 'PCBs' }
-    ];
+
   }
 }
 

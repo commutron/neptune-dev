@@ -59,7 +59,7 @@ const FormBar = ({
               checked={show === 'NC'}
               onChange={()=>showSet( 'NC' )}
               disabled={lockOutAll} />
-            <i className='fas fa-bug'></i>
+            <i className='fas fa-times-circle'></i>
           </label>
           <label htmlFor='shortselect' className='formBarToggle taskLink butYellow'>
             <input

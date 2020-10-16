@@ -274,6 +274,7 @@ Meteor.publish('shaddowData', function(clientTZ){
           'salesEnd': 1,
           'completed': 1,
           //'completedAt': 1,
+          // 'serialize': 1,
           'releases': 1
         }}),
     ];

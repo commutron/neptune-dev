@@ -239,7 +239,11 @@
 }
 
 .statusBlock {
-  max-width: 105px;
+  max-width: 11vh;
+  min-width: 50%;
+}
+.statusBlock > div {
+  width: 100%;
 }
 
 .infoSquareOuter {

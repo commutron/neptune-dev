@@ -23,6 +23,8 @@ const KittingChecks = ({
     const floorRelease = !releasedToFloor ? false :
       releases.find( x => x.type === 'floorRelease');
     
+    const serialRelease = releases.find( x => x.type === 'pcbKitRelease');
+          
     return(
       <Fragment>
         
@@ -56,35 +58,41 @@ const KittingChecks = ({
             </ReleaseWrapper>
         )})}
         
-        {Pref.clearencesArray.map( (ent, ix)=>{
-          const releasedBool = releases.findIndex( x => x.type === ent.keyword) >= 0;
-          const releaseObj = releases.find( x => x.type === ent.keyword);
-          return(
-            <ReleaseWrapper
-              key={batchID+ent.keyword+ix}
-              id={batchID}
-              batchNum={batchNum}
-              releasedBool={releasedBool}
-              releaseObj={releaseObj}
-              actionKeyword={ent.keyword}
-              actionText={ent.pre}
-              holdText={`Mark with ${Pref.shortfall}`}
-              unholdText={`${ent.pre} without ${Pref.shortfall}`}
-              undoText='Clear'
-              contextText={`${ent.link} ${ent.context}`}
-              lockout={isDone || isRO}
-              isX={isX}>
-              <TrinaryStat
-                status={releasedBool ? !releaseObj.caution ? true : false : null}
-                name={ent.context}
-                title={`${ent.post} ${ent.link} ${ent.context}`}
-                size=''
-                onIcon='fas fa-check-square fa-2x greenT'
-                midIcon='far fa-minus-square fa-2x yellowT'
-                offIcon='far fa-check-square fa-2x grayT' 
-              />
-            </ReleaseWrapper>
-        )})}
+        
+        {isX /* && b.serialize */ ?
+          <div title='N/A'>
+            <div className='infoSquareOuter noCopy'>
+              <i className='fas fa-minus fa-2x fa-fw grayT fade'></i>
+              <br />
+              <i className='label infoSquareLabel'></i>
+            </div>
+          </div>
+        :
+          <ReleaseWrapper
+            key={batchID+'pcbKitRelease'}
+            id={batchID}
+            batchNum={batchNum}
+            releasedBool={!serialRelease ? false : true}
+            releaseObj={serialRelease}
+            actionKeyword='pcbKitRelease'
+            actionText='Ready'
+            holdText={`Mark with ${Pref.shortfall}`}
+            unholdText={`Ready without ${Pref.shortfall}`}
+            undoText='Clear'
+            contextText={`${Pref.baseSerialPart}s`}
+            lockout={isDone || isRO}
+            isX={isX}>
+            <TrinaryStat
+              status={!serialRelease ? null : !serialRelease.caution ? true : false}
+              name={`${Pref.baseSerialPart}s`}
+              title={`Ready ${Pref.baseSerialPart}s`}
+              size=''
+              onIcon='fas fa-check-square fa-2x greenT'
+              midIcon='far fa-minus-square fa-2x yellowT'
+              offIcon='far fa-check-square fa-2x grayT' 
+            />
+          </ReleaseWrapper>
+        }
         
         <ReleaseWrapper
           id={batchID}

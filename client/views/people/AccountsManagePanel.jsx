@@ -56,8 +56,8 @@ const AccountsManagePanel = ({ app, users, bCache, brancheS, isDebug })=> {
               <Tabs
                 tabs={[
                   <b><i className='far fa-clock fa-fw'></i>   Time</b>,
-                  <b><i className='far fa-envelope fa-fw'></i>  Message</b>,
                   <b><i className='fas fa-key fa-fw'></i>  Access</b>,
+                  <b><i className='far fa-envelope fa-fw'></i>  Message</b>
                 ]}
                 wide={false}
                 hold={false}
@@ -72,11 +72,7 @@ const AccountsManagePanel = ({ app, users, bCache, brancheS, isDebug })=> {
                   users={usersSort}
                   bCache={bCache} />
                 
-                <div key={1} className='vspace'>
-                  <UserDMForm userID={entry._id} />
-                </div>
-                
-                <div key={2}>
+                <div key={1}>
                 {isAdmin ?
                   <Fragment>
                     <UserManageForm
@@ -102,6 +98,10 @@ const AccountsManagePanel = ({ app, users, bCache, brancheS, isDebug })=> {
                     :null}
                   </Fragment>
                 : noAccess}
+                </div>
+                
+                <div key={2} className='vspace'>
+                  <UserDMForm userID={entry._id} />
                 </div>
 
               </Tabs>

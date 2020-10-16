@@ -76,15 +76,6 @@ const WidgetIndexCard = ({ data, barStyle })=>{
     return total + totalX;
   }
   
-  function totalNC(mData) {
-    let ncs = Array.from(mData.batchInfo, x => x.nonCons);
-    let ncsX = Array.from(mData.batchInfoX, x => x.nonCons);
-    let allNCs = ncs.length > 0 ? ncs.reduce((x,y)=>x+y) : 0;
-    let allNCsX = ncsX.length > 0 ? ncsX.reduce((x,y)=>x+y) : 0;
-    const total = allNCs + allNCsX;
-    return total;
-  }
-  
   const mData = moreData;
   
   if(!mData) {
@@ -95,7 +86,6 @@ const WidgetIndexCard = ({ data, barStyle })=>{
     
   let totalBatches = totalB(mData);
   let totalItems = totalI(mData);
-  let totalNonCons = totalNC(mData);
     
   return(
     <LeapRow
@@ -103,26 +93,26 @@ const WidgetIndexCard = ({ data, barStyle })=>{
       cTwo={data.describe}
       cThree={
         <NumStat
+          num={mData.variants}
+          name={Pref.variants}
+          title={`total ${Pref.variants}`}
+          color='blueT'
+          size='big' />
+      }
+      cFour={
+        <NumStat
           num={totalBatches}
           name={Pref.batches}
           title={'all ' + Pref.batches + ' & Batch+'}
           color='blueT'
           size='big' />
       }
-      cFour={
+      cFive={
         <NumStat
           num={totalItems}
           name={Pref.items}
           title={'serialized items of all ' + Pref.batch + 'es'}
           color='blueT'
-          size='big' />
-      }
-      cFive={
-        <NumStat
-          num={totalNonCons}
-          name={'nonCons'}
-          title={'total of all ' + Pref.batch + 'es'}
-          color='redT'
           size='big' />
       }
       sty={barStyle}

@@ -91,17 +91,16 @@ Meteor.methods({
   },
   
   widgetTops(wID) {
+    const variants = VariantDB.find({widgetId: wID}).fetch().length;
     const batches = BatchDB.find({orgKey: Meteor.user().orgKey, widgetId: wID}).fetch();
     const batchesX = XBatchDB.find({orgKey: Meteor.user().orgKey, widgetId: wID}).fetch();
     const batchInfo = Array.from(batches, x => { return { 
       items: x.items.length,
-      nonCons: x.nonCon.length,
     }});
     const batchInfoX = Array.from(batchesX, x => { return { 
       quantity: x.quantity,
-      nonCons: x.nonconformaces.length,
     }});
-    return { batchInfo, batchInfoX };
+    return { batchInfo, batchInfoX, variants };
   }
   
   

@@ -10,15 +10,14 @@ const ReleaseBlock = ({ id, isX, done, dt, icon, brancheS })=>{
 
   const aK = dt.type;
   const niceB = brancheS.find( b => ( 'BRK' + b.brKey ) === aK );
-  const niceC = Pref.clearencesArray.find( c => c.keyword === aK );
   
   let actionString = 'Clearence';
   if(aK === 'floorRelease') {
     actionString = 'Released to the Floor';
+  }else if(aK === 'pcbKitRelease') {
+    actionString = `Ready ${Pref.baseSerialPart}s`;
   }else if(niceB) {
     actionString = `Ready ${niceB.common}`;
-  }else if(niceC) {
-    actionString = `${niceC.post} ${niceC.link} ${niceC.context}`;
   }
   
   function handleCancel() {
