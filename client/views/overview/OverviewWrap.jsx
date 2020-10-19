@@ -15,7 +15,8 @@ import BatchDetails from './columns/BatchDetails';
 
 const OverviewWrap = ({ 
   b, bx, bCache, pCache, acCache, brCache, 
-  user, clientTZ, app, isDebug, isNightly
+  user, clientTZ, app, brancheS,
+  isDebug, isNightly
 })=> {
   
   const sessionSticky = 'overviewOverview';
@@ -24,6 +25,8 @@ const OverviewWrap = ({
   const [ loadTime, loadTimeSet ] = useState( moment() );
   
   const sessionFilter = Session.get(sessionSticky+'filter');
+  // const userDefault = brancheS.find( x => x.branch === user.defaultOverview ) ?
+  //                     user.defaultOverview : false; // validate default (legacy support)
   const defaultFilter = sessionFilter !== undefined ? sessionFilter :
                         user.defaultOverview || false;
   
@@ -180,12 +183,6 @@ const OverviewWrap = ({
       
   const density = !dense ? '' : 'minifyed';
   
-  const branches = app.branches.filter( b => b.open === true );
-  const brancheS = branches.sort((b1, b2)=> {
-          if (b1.position < b2.position) { return 1 }
-          if (b1.position > b2.position) { return -1 }
-          return 0;
-        });               
   // const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
     
   return(

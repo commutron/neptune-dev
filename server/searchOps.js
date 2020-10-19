@@ -51,41 +51,8 @@ export function whatIsBatchX(keyword, labelString) {
     return [ nice, more ];
   }
 }
-/*
-function getBatch(batchNum) {  
-  return new Promise(resolve => { 
-    const batch = BatchDB.findOne({batch: batchNum});
-    resolve(batch);
-  });
-}
-function getWidget(widgetId) {  
-  return new Promise(resolve => { 
-    const widget = WidgetDB.findOne({_id: widgetId});
-    resolve(widget);
-  });
-}
-function getVariant(vKey) {  
-  return new Promise(resolve => { 
-    const variant = VariantDB.findOne({versionKey: vKey});;
-    resolve(variant);
-  });
-}
-function getGroup(groupId) {  
-  return new Promise(resolve => { 
-    const group = GroupDB.findOne({_id: groupId});
-    resolve(group);
-  });
-}
 
-function unitTotalCount(items) {
-  let totalUnits = 0;
-  for(let i of items) {
-    totalUnits += i.units;
-  }
-  return totalUnits;
-}
 
-*/
     
 Meteor.methods({
   
@@ -136,20 +103,6 @@ Meteor.methods({
     const found = variant.variant;
     return found;
   },
-  
-  /*
-  popularWidgets() {
-    const wdgts = WidgetDB.find({orgKey: Meteor.user().orgKey}).fetch();
-    let numOfwdgt = [];
-    for(let w of wdgts) {
-      const num = BatchDB.find({widgetId: w._id}).fetch().length;
-        numOfwdgt.push({group: w.groupId, meta: w.widget, value: num});
-    }
-    return numOfwdgt.sort((a, b)=> { return b.value - a.value });
-  },
-  
-  
-  */
    
   
       /////////////////////////////////////////////////////////////////////////

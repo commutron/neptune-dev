@@ -33,6 +33,13 @@ const View = ({
       </div>
     );
   }
+  
+  const branches = app.branches.filter( b => b.open === true );
+  const brancheS = branches.sort((b1, b2)=> {
+          if (b1.position < b2.position) { return 1 }
+          if (b1.position > b2.position) { return -1 }
+          return 0;
+        });  
 
   return(
     <OverviewWrap 
@@ -44,6 +51,7 @@ const View = ({
       brCache={brCache}
       user={user}
       app={app}
+      brancheS={brancheS}
       clientTZ={clientTZ}
       isDebug={isDebug}
       isNightly={isNightly} />

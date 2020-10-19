@@ -41,19 +41,20 @@ const BranchProgress = ({
             const calNum = calPer > 0 && calPer < 1 ? 
                             calPer.toPrecision(1) : Math.floor( calPer );
             isDebug && console.log(`${dt.batch} ${branch.branch} calNum: ${calNum}`);
-            let fadeTick = calNum == 0 ? '0' :
-                 calNum < 2 ? '1' :
-                 calNum < 10 ? '5' :
-                 calNum < 20 ? '10' :
-                 calNum < 30 ? '20' :
-                 calNum < 40 ? '30' :
-                 calNum < 50 ? '40' :
-                 calNum < 60 ? '50' :
-                 calNum < 70 ? '60' :
-                 calNum < 80 ? '70' :
-                 calNum < 90 ? '80' :
-                 calNum < 100 ? '90' :
-                 '100';
+            let fadeTick = isNaN(calNum) ? '' :
+               calNum == 0 ? '0' :
+               calNum < 2 ? '1' :
+               calNum < 10 ? '5' :
+               calNum < 20 ? '10' :
+               calNum < 30 ? '20' :
+               calNum < 40 ? '30' :
+               calNum < 50 ? '40' :
+               calNum < 60 ? '50' :
+               calNum < 70 ? '60' :
+               calNum < 80 ? '70' :
+               calNum < 90 ? '80' :
+               calNum < 100 ? '90' :
+               '100';
             let redLine = calNum >= 100 && branch.ncLeft ? ' redRight' : '';
             let yellLine = calNum < 100 && branch.shLeft ? ' yellowLeft' : '';
             let niceName = branch.branch;
@@ -62,7 +63,7 @@ const BranchProgress = ({
                 key={batchID + branch + index + 'g'} 
                 className={'fillRight' + fadeTick + redLine + yellLine}>
                 <NumStat
-                  num={`${calNum}%`}
+                  num={isNaN(calNum) ? '' : `${calNum}%`}
                   name={niceName}
                   title={`Steps: ${branch.steps.length}`}
                   color='whiteT'

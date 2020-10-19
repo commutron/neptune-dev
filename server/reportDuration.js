@@ -13,37 +13,6 @@ moment.updateLocale('en', {
   shippinghours: Config.shippingHours
 });
 
-/*
-function distTime(widget, bReleases, bSalesStart, bSalesEnd, bComplete, bTide) {
-  
-  const localEnd = moment.tz(bSalesEnd, clientTZ);
-  const shipDue = localEnd.isShipDay() ?
-                    localEnd.clone().nextShippingTime().format() :
-                    localEnd.clone().lastShippingTime().format();
-  const didEnd = moment(bComplete).tz(clientTZ).format();
-  const gapSale2Due = moment(shipDue).workingDiff(bSalesStart, 'minutes');
-  
-    const tideDone = bTide && bTide.length > 0 ? bTide[bTide.length-1] : null;
-    const doneTime = tideDone ? tideDone.stopTime : null;
-    
-    const gapBegin2Done = beginTime && doneTime ?
-                            moment(doneTime).workingDiff(beginTime, 'minutes')
-                          : null;
-
-    const quoteTotal = !qtB || qtB.length === 0 ? null :
-                          Math.round( qtB[0].timeAsMinutes );
-                       
-    const timeObj = [
-      widget,
-      gapSale2Rel, 
-      gapSale2Start,
-      gapSale2End,
-      gapSale2Complete
-    ];
-    
-    return timeObj;
-  }
-  */
   
 function toRelDiff(bSalesStart, bReleases) {
   
