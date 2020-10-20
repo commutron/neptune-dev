@@ -1,6 +1,7 @@
 import React, { useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
+import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
 import moment from 'moment';
 import 'moment-timezone';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
@@ -38,44 +39,48 @@ const ExploreView = ({
     !app 
   ) {
     return(
-      <TraverseWrap
-        batchData={false}
-        widgetData={false}
-        groupData={false}
-        user={false}
-        app={false}
-        title={false}
-        subLink={subLink}
-        action={false}
-        base={true}
-        invertColor={true}
-      >
-        <div className='centre wide'>
-          <Spin />
-        </div>
-      </TraverseWrap>
+      <ErrorCatch>
+        <TraverseWrap
+          batchData={false}
+          widgetData={false}
+          groupData={false}
+          user={false}
+          app={false}
+          title={false}
+          subLink={subLink}
+          action={false}
+          base={true}
+          invertColor={true}
+        >
+          <div className='centre wide'>
+            <Spin />
+          </div>
+        </TraverseWrap>
+      </ErrorCatch>
     );
   }
     
   return(
-    <DataViewOps
-      user={user}
-      isDebug={isDebug}
-      org={org}
-      users={users}
-      app={app}
-      allGroup={allGroup}
-      allWidget={allWidget}
-      allVariant={allVariant}
-      allBatch={allBatch}
-      allXBatch={allXBatch}
-      hotBatch={hotBatch}
-      hotXBatch={hotXBatch}
-      view={view}
-      request={request}
-      specify={specify}
-      subLink={subLink}
-    />
+    <ErrorCatch>
+      <DataViewOps
+        user={user}
+        isDebug={isDebug}
+        org={org}
+        users={users}
+        app={app}
+        allGroup={allGroup}
+        allWidget={allWidget}
+        allVariant={allVariant}
+        allBatch={allBatch}
+        allXBatch={allXBatch}
+        hotBatch={hotBatch}
+        hotXBatch={hotXBatch}
+        view={view}
+        request={request}
+        specify={specify}
+        subLink={subLink}
+      />
+    </ErrorCatch>
   );
 };
 

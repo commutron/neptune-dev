@@ -1,6 +1,7 @@
 import React, { useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
+import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
 import moment from 'moment';
 import 'moment-timezone';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
@@ -42,19 +43,21 @@ const View = ({
         });  
 
   return(
-    <OverviewWrap 
-      b={batch}
-      bx={batchX}
-      bCache={bCache}
-      pCache={pCache}
-      acCache={acCache}
-      brCache={brCache}
-      user={user}
-      app={app}
-      brancheS={brancheS}
-      clientTZ={clientTZ}
-      isDebug={isDebug}
-      isNightly={isNightly} />
+    <ErrorCatch>
+      <OverviewWrap 
+        b={batch}
+        bx={batchX}
+        bCache={bCache}
+        pCache={pCache}
+        acCache={acCache}
+        brCache={brCache}
+        user={user}
+        app={app}
+        brancheS={brancheS}
+        clientTZ={clientTZ}
+        isDebug={isDebug}
+        isNightly={isNightly} />
+    </ErrorCatch>
   );
 };
 

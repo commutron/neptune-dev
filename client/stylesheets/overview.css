@@ -178,14 +178,6 @@
 
 .ovColhead { color: white; }
 
-/* dense compact layout */
-.overGridFrame.compact {
-  grid-template-columns: minmax(min-content, 22.5vw) auto; }
- 
-.compact .overGridFixed { grid-auto-rows: 7.5vh; }
-.compact .overGridScroll { grid-auto-rows: 7.5vh; }
-
-
 /* dense minifyed layout */
 .overGridFrame.minifyed {
   grid-template-columns: minmax(min-content, 20vw) auto; }

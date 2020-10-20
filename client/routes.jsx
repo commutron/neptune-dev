@@ -200,7 +200,6 @@ privlegedRoutes.route('/upstream/:view', {
   name: 'upstream', // optional
   // do some action for this route
   action: function(params) {
-    console.log("Params:", params);
     mount(CleanLayout, {
       content: ( <UpstreamData view={params.view} /> )
     });

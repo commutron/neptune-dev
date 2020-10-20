@@ -1,21 +1,7 @@
 
 Meteor.methods({
 
-
-  ////////////  defaultOverview: setOp,
-  
-  fixOvFilter() {
-    try {
-      Meteor.users.update({ orgKey: Meteor.user().orgKey, 'defaultOverview': { $exists: true } }, {
-        $set : {
-          defaultOverview: false
-        }
-      },{multi: true});
-      return true;
-    }catch (err) {
-      throw new Meteor.Error(err);
-    }
-  },
+  ////////////
   // Testing Functions //
   
   sendTestMail(all, title, message) {

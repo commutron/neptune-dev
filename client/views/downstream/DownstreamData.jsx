@@ -8,7 +8,7 @@ import InboxToastPop from '/client/utility/InboxToastPop.js';
 import usePrevious from '/client/utility/usePreviousHook.js';
 
 import Spin from '/client/components/tinyUi/Spin.jsx';
-import UpstreamWrap from './UpstreamWrap.jsx';
+import DownstreamWrap from './DownstreamWrap.jsx';
 
 const View = ({
   login,
@@ -37,7 +37,7 @@ const View = ({
 
   return(
     <ErrorCatch>
-      <UpstreamWrap 
+      <DownstreamWrap 
         view={view}
         batch={batch}
         batchX={batchX}

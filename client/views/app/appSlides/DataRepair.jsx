@@ -31,14 +31,13 @@ const DataRepair = ({ app, users })=> {
       if(reply) { toast.success('data edit complete', { autoClose: false }); }
     });
   }
-  
+  /*
   function clearAuserThing() {
-    
     Meteor.call('fixOvFilter', (error, reply)=>{
       error && console.log(error);
       if(reply) { toast.success('data edit complete', { autoClose: false }); }
     });
-  }
+  }*/
   
   /*
   function addAthing() {
@@ -181,12 +180,6 @@ const DataRepair = ({ app, users })=> {
       >Clear</button>
       
       <hr />
-      
-      <h2 className='cap'>Clear User Overview Filter Default</h2>
-      <button
-        onClick={()=>clearAuserThing()}
-        className='action orangeHover'
-      >Clear Default Setting</button>
       
       <div>
         <p><b><i className='fas fa-user-shield fa-fw'></i>  Privacy</b></p>

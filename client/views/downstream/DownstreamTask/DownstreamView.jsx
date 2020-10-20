@@ -5,12 +5,12 @@ import Pref from '/client/global/pref.js';
 
 import Spin from '/client/components/tinyUi/Spin.jsx';
 
-import UpstreamTools from './UpstreamTools';
-import UpstreamHeaders from './UpstreamHeaders';
-import UpstreamDetails from './UpstreamDetails';
+import DownstreamTools from './DownstreamTools';
+import DownstreamHeaders from './DownstreamHeaders';
+import DownstreamDetails from './DownstreamDetails';
 
 
-const UpstreamView = ({ 
+const DownstreamView = ({ 
   batch, batchX, bCache, pCache, acCache, brCache, 
   user, clientTZ, app, isDebug, isNightly
 })=> {
@@ -125,7 +125,7 @@ const UpstreamView = ({
   return(
     <div key={0} className={`${light === true ? 'lightTheme invert' : ''}`}>
     
-      <UpstreamTools
+      <DownstreamTools
         app={app}
         loadTimeUP={loadTime}
         sortByUP={sortBy}
@@ -147,15 +147,15 @@ const UpstreamView = ({
       :  
         <div className={`overGridWideFrame ${density}`}>
           
-          <UpstreamHeaders
+          <DownstreamHeaders
             key='fancylist0'
             oB={liveState}
             bCache={bCache}
-            title={Pref.kitting}
+            title='xxx'
             showMore={true}
           />
 
-          <UpstreamDetails
+          <DownstreamDetails
             key='fancylist1'
             oB={liveState}
             bCache={bCache}
@@ -178,4 +178,4 @@ const UpstreamView = ({
   );
 };
 
-export default UpstreamView;
+export default DownstreamView;

@@ -2,7 +2,7 @@ import React, {useState, useLayoutEffect } from 'react';
 import moment from 'moment';
 // import 'moment-timezone';
 import { ToastContainer } from 'react-toastify';
-import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 
 import Spin from '../../components/tinyUi/Spin.jsx';
 import HomeIcon from '/client/layouts/HomeIcon.jsx';
@@ -194,7 +194,7 @@ const OverviewWrap = ({
       <div className='tenHeader'>
         <div className='topBorder'></div>
         <HomeIcon />
-        <div className='frontCenterTitle'>Overview</div>
+        <div className='frontCenterTitle'>Overview WIP</div>
         <div className='auxRight'>
           <button
             type='button'
