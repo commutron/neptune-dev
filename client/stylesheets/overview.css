@@ -20,14 +20,16 @@
   flex-flow: row wrap;
   justify-content: flex-start;
   align-items: center;
-  
 }
 .overviewToolbar span,
 .overviewToolbar select,
 .overviewToolbar button { 
   font-size: 1.7vh;
 }
-.overviewToolbar span { padding: 0 1vw; }
+.overviewToolbar span { 
+  padding: 0 1vw;
+  height: 3vh;
+}
 .overviewToolbar select { 
   border-top-color: transparent;
   border-bottom-color: transparent;
@@ -255,4 +257,22 @@
 .ghostState {
   filter: saturate(0%) opacity(0.7);
   overflow-y: hidden;
+}
+
+@media screen and (max-width: 1000px){
+  .overviewContainer {
+    grid-template-rows: 8vh 6vh 1fr;/*87vh*/
+  }
+  .overviewContainer .overviewToolbar {
+    align-items: stretch;
+  }
+  .overviewContent {
+    min-height: 86vh;
+  }
+  .overGridFrame {
+    grid-template-columns: minmax(30vw, 35vw) auto;
+  }
+  .overGridFrame.minifyed {
+    grid-template-columns: minmax(20vw, 30vw) auto;
+  }
 }

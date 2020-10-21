@@ -223,6 +223,38 @@ main {
 }
 .auxLeft { grid-area: auxLeft; }
 
+@media (orientation: portrait) {
+  /*.simpleContainer {*/
+  /*  grid-template-rows: 13vh 87vh;*/
+  /*}*/
+  .splashContainer {
+    grid-template-rows: 13vh 1fr;
+  }
+  .splashContainer .tenHeader {
+    grid-template-rows: 1vh 6vh 6vh;
+    grid-template-columns: 6vh 1fr 6vh;
+    grid-template-areas: 
+      'topBorder topBorder topBorder'
+      'homeIcon frontCenter proRight'
+      'auxLeft frontCenter auxRight';
+  }
+  .splashContainer .homeIconLink, 
+  .splashContainer .homeIconLogo {
+    width: 7vh;
+    height: 7vh;
+  }
+  .splashContainer .frontCenterTitle {
+    max-width: calc(100vw - 12vh);
+    height: 12vh;
+    font-size: 4vh;
+    white-space: inherit;
+    text-align: center;
+  }
+  .navButtonText {
+    font-size: 3vmin;
+  }
+}
+
 .homeNavi, .homeNaviMini {
   display: grid;
   grid-gap: 1vh 1vw;

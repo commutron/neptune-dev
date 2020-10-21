@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
@@ -34,22 +34,16 @@ const FlowTable = ({ id, flows, app })=> {
               <table className='wide'>
                 <tbody className='clean'>
                   <tr>
-                    <td>type: {entry.type}</td>
-                    <td>key: <i className='small'>{entry.flowKey}</i></td>
+                    <td>type: {entry.type} <br />key: <i className='small wordBr'>{entry.flowKey}</i></td>
                     <td><dl>
                     <dt>{Pref.nonCon} Lists:</dt>
                       {entry.type === 'plus' ?
-                        entry.ncLists.map( (en, ix)=>{
-                         const obj = app.nonConTypeLists.find( x => x.key === en );
-                         if(obj) {
-                          return( 
-                            <dd key={ix}>{obj.listPrefix}. {obj.listName}</dd>
-                        )}})
+                        <NClists chosen={entry.ncLists} app={app} />
                       :
-                        <dd><em>Legacy</em></dd>
+                        <em>Legacy</em>
                       }
                     </dl></td>
-                    <td>
+                    <td className='centreText'>
                       <FlowFormHead
                         id={id}
                         edit={true}
@@ -57,6 +51,8 @@ const FlowTable = ({ id, flows, app })=> {
                         existFlows={flows}
                         app={app}
                         small={true} />
+                    </td>
+                    <td className='centreText'>
                       <FlowRemove id={id} fKey={entry.flowKey} />
                     </td>
                   </tr>
@@ -80,7 +76,7 @@ const FlowTable = ({ id, flows, app })=> {
                         step={step} />
                     )})}
                   <tr>
-                    <td colSpan='4'>
+                    <td colSpan='4' className='rightText'>
                     <FlowFormRoute
                       id={id}
                       edit={true}
@@ -104,6 +100,24 @@ const FlowTable = ({ id, flows, app })=> {
             >Rebuild {Pref.flow}s for current app settings</button>
           </div>}
     </div>
+  );
+};
+
+const NClists = ({ chosen, app })=> {
+  
+  const filtered = app.nonConTypeLists.filter( x => chosen.includes(x.key) );
+  
+  const sorted = filtered.sort((n1, n2)=> {
+    return n1.listPrefix < n2.listPrefix ? -1 : n1.listPrefix > n2.listPrefix ? 1 : 0 });
+                    
+  return(
+    <Fragment>
+    {sorted.map( (obj, ix)=>(
+      <i key={ix} className='gap'>
+        <b className='up'>{obj.listPrefix}.</b> {obj.listName}
+      </i>
+      ))}
+    </Fragment>
   );
 };
 

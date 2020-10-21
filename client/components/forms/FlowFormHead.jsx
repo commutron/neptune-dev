@@ -22,7 +22,7 @@ const FlowFormHeadWrapper = ({
       button={name}
       title={name}
       color='greenT'
-      icon='fa-project-diagram'
+      icon='fa-project-diagram gap'
       lock={!Roles.userIsInRole(Meteor.userId(), 'edit') || lock}
       noText={noText}
     >
@@ -54,7 +54,10 @@ const FlowFormHead = ({ id, existFlows, preFill, app, selfclose })=> {
                         label: x.listPrefix +". "+ x.listName, 
                         value: x.key 
                       } } );
-    ncOptionsSet(ncCombo);
+    const ncComboSort = ncCombo.sort((n1, n2)=> {
+    return n1.label < n2.label ? -1 : n1.label > n2.label ? 1 : 0 });
+      
+    ncOptionsSet(ncComboSort);
     
     const optn = preFill;
     if(!optn) {
@@ -201,7 +204,7 @@ export const FlowRemove = ({ id, fKey })=>	{
         disabled={!Roles.userIsInRole(Meteor.userId(), 'edit')}>
         <label className='navIcon actionIconWrap'>
           <i className={'fas fa-minus-circle fa-lg fa-fw redT'}></i>
-          <span className={'actionIconText redT'}>Delete</span>
+          <span className='actionIconText redT'>Delete</span>
         </label>
       </button>
     </span>

@@ -10,11 +10,15 @@ function NonConOptionMerge(ncListKeys, app, allKeys) {
                               x => ncListKeysFlat.find( y => y === x.key ) 
                             ? true : false );
     
-    const ncTypesCombo = Array.from(asignedNCLists, x => x.typeList);
+    const ncTypeLists = Array.from(asignedNCLists, x => x.typeList);
   	
-  	const ncTypesComboFlat = [].concat(...ncTypesCombo);
+  	const ncTypesCombo = [].concat(...ncTypeLists);
   	
-    return ncTypesComboFlat;
+  	const ncTypesComboSort = ncTypesCombo.sort((n1, n2)=> {
+    return n1.typeCode < n2.typeCode ? -1 : n1.typeCode > n2.typeCode ? 1 : 0 });
+       
+       
+    return ncTypesComboSort;
   }
   
 }

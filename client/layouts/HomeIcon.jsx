@@ -53,9 +53,20 @@ const HomeIcon = () => {
           <i className='fas fa-globe fa-fw'></i><i className='noCopy'> Overview</i>
         </MenuItem>
         
-        <MenuItem onClick={()=>FlowRouter.go('/upstream')}>
-          <i className='fas fa-warehouse fa-fw'></i><i className='noCopy cap'> {Pref.upstream}</i>
-        </MenuItem>
+        {Roles.userIsInRole(Meteor.userId(), 'nightly') ?
+          <MenuItem onClick={()=>FlowRouter.go('/upstream')}>
+            <i className='fas fa-satellite-dish fa-fw'></i><i className='noCopy cap'> upstream</i>
+          </MenuItem>
+            :
+            <MenuItem onClick={()=>FlowRouter.go('/upstream')}>
+            <i className='fas fa-warehouse fa-fw'></i><i className='noCopy cap'> {Pref.upstream}</i>
+          </MenuItem>
+          }
+          
+        {Roles.userIsInRole(Meteor.userId(), 'nightly') &&
+          <MenuItem onClick={()=>FlowRouter.go('/downstream')}>
+            <i className='fas fa-satellite fa-fw'></i><i className='noCopy cap'> {Pref.downstream}</i>
+          </MenuItem>}
         
         <MenuItem onClick={()=>FlowRouter.go('/people')}>
           <i className='fas fa-user-astronaut fa-fw'></i><i className='noCopy'> People</i>

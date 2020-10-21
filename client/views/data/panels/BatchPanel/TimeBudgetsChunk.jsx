@@ -4,11 +4,13 @@ import 'moment-timezone';
 import Pref from '/client/global/pref.js';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
+import ToggleBar from '/client/components/bigUi/ToolBar/ToggleBar';
+
 import { TimeBudgetUpgrade, WholeTimeBudget } from '/client/components/forms/QuoteTimeBudget.jsx';
 import TimeBudgetBar from '/client/components/charts/Tides/TimeBudgetBar.jsx';
 import TimeSplitBar from '/client/components/charts/Tides/TimeSplitBar.jsx';
 
-import { min2hr } from '/client/utility/Convert';
+import { min2hr, percentOf, percentOverUnder } from '/client/utility/Convert';
 
 const TimeBudgetsChunk = ({
   a, b, isX,
@@ -16,6 +18,8 @@ const TimeBudgetsChunk = ({
 }) =>	{
   
   const [ branchTime, branchTimeSet ] = useState(false);
+  
+  const [ conversion, conversionSet] = useState('hours');
   
   useEffect( ()=>{
     Meteor.call('assembleBranchTime', b._id, clientTZ, (err, reply)=>{
@@ -64,14 +68,26 @@ const TimeBudgetsChunk = ({
                 b.quoteTimeBudget[0].timeAsMinutes : 0;
   
   const totalQuoteMinutes = qtB || 0;
-  const totalQuoteAsHours = min2hr(totalQuoteMinutes);
+  const totalQuoteAs = conversion === 'minutes' ? 
+                        Math.round(totalQuoteMinutes) :
+                        min2hr(totalQuoteMinutes);
   
   const totalTideMinutes = totalsCalc.totalTime;
-  const totalTideAsHours = min2hr(totalTideMinutes);
-  
+  const totalTideAs = conversion === 'minutes' ? 
+                        Math.round(totalTideMinutes) :
+                      conversion === 'percent' ?
+                        percentOf(totalQuoteMinutes, totalTideMinutes) :
+                        min2hr(totalTideMinutes);
+                        
   const quote2tide = totalQuoteMinutes - totalTideMinutes;
   const bufferNice = Math.abs(quote2tide);
-  const bufferAsHours = min2hr(bufferNice);
+  
+  const bufferAs = conversion === 'minutes' ? 
+                    bufferNice :
+                   conversion === 'percent' ?
+                    Math.abs(percentOverUnder(totalQuoteMinutes, totalTideMinutes)) :
+                    min2hr(bufferNice);
+  
   const bufferMessage = quote2tide < 0 ?
     "exceeding quoted" : "remaining of quoted";
   
@@ -88,11 +104,15 @@ const TimeBudgetsChunk = ({
 
   const totalPeople = totalsCalc.peopleTime;
   const tP = totalPeople.length;
-
   
   return(
     <div className=''>
-    
+      <ToggleBar
+        toggleOptions={['hours', 'minutes', 'percent']}
+        toggleVal={conversion}
+        toggleSet={(e)=>conversionSet(e)}
+      />
+      
       <div className='big'>
         {!moment(b.createdAt).isAfter(a.tideWall) && 
           <p className='orangeT'>{` ** This ${Pref.batch} was created before \n
@@ -104,20 +124,17 @@ const TimeBudgetsChunk = ({
         
         <div className='oneEcontent numFont'>
           <TimeBudgetBar a={totalTideMinutes} b={totalLeftMinutes} c={totalOverMinutes} />
-          <p
-            className='bigger' 
-            title={`${Math.round(totalQuoteMinutes)} minutes\nQuoted`}
-          >{totalQuoteAsHours} <i className='med'>hours budgeted</i>
+          
+          <p className='bigger'
+            >{totalQuoteAs} <i className='med'>{conversion === 'minutes' ? 'minutes' : 'hours'} budgeted</i>
           </p>
-          <p 
-            className='bigger' 
-            title={`${Math.round(totalTideMinutes)} minutes\nLogged`}
-          >{totalTideAsHours} <i className='med'>hours logged</i>
+          
+          <p className='bigger'
+            >{totalTideAs} <i className='med'>{conversion} logged</i>
           </p>
-          <p 
-            className='bigger' 
-            title={`${Math.round(bufferNice)} minutes\n${bufferMessage}`}
-          >{bufferAsHours} <i className='med'>hours {bufferMessage}</i>
+          
+          <p className='bigger' 
+            >{bufferAs} <i className='med'>{conversion} {bufferMessage}</i>
           </p>
           
           <div className='vmargin'>
@@ -132,13 +149,16 @@ const TimeBudgetsChunk = ({
           <dl>
             {totalPeople.map((per, ix)=>{
               if(per.uTime > 0) {
+                const timeAs = conversion === 'minutes' ? per.uTime :
+                                conversion === 'percent' ?
+                                percentOf(totalTideMinutes, per.uTime) :
+                                min2hr(per.uTime);
                 return( 
                   <dt 
                     key={ix}
-                    title={`${per.uTime} minutes`}
                     className='comfort middle'
                   ><i className='big'><UserNice id={per.uID} /></i>
-                  <i className='grayT'> {min2hr(per.uTime)} hours</i></dt> 
+                  <i className='grayT'> {timeAs} {conversion}</i></dt> 
             )}})}
           </dl>
           
@@ -160,13 +180,18 @@ const TimeBudgetsChunk = ({
                 <dl>
                   {branchTime.map((br, ix)=>{
                     if(br.y > 0) {
+                      const timeAs = conversion === 'minutes' ? 
+                                      Math.round(br.y) :
+                                     conversion === 'percent' ?
+                                      percentOf(totalTideMinutes, br.y) :
+                                      min2hr(br.y);
                       return( 
                         <dt
                           key={ix}
                           title={`${Math.round(br.y)} minutes`}
                           className='comfort middle'
                         ><i className='big cap'>{br.x}</i>
-                        <i className='grayT'> {min2hr(br.y)} hours</i></dt> 
+                        <i className='grayT'> {timeAs} {conversion}</i></dt> 
                   )}})}
                 </dl>
               </div>

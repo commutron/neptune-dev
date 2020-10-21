@@ -56,7 +56,7 @@ const UpstreamTools = ({
     </span>
     
     <span className='flexSpace' />
-    <ClockString loadTime={loadTimeUP} />
+    <div><ClockString loadTime={loadTimeUP} /></div>
   </nav>
 );
 

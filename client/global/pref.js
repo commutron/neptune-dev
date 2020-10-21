@@ -103,6 +103,8 @@ class Pref {
     this.comp = 'part';
     this.release = 'release';
     this.released = 'released';
+    
+    this.downstream = 'downstream';
     this.ship = 'ship';
     // build tracking
     this.branch = 'branch';

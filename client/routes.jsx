@@ -15,6 +15,7 @@ import Login from './views/Login.jsx';
 import ProdData from './views/production/ProdData.jsx';
 
 import UpstreamData from './views/upstream/UpstreamData.jsx';
+import DownstreamData from './views/downstream/DownstreamData.jsx';
 
 import AgendaData from './views/agenda/AgendaData.jsx';
 import OverviewData from './views/overview/OverviewData.jsx';
@@ -185,6 +186,41 @@ privlegedRoutes.route('/people', {
        content: (<PeopleDataWrap />)
     });
   }
+});
+
+// Downstream Routing
+privlegedRoutes.route('/downstream', {
+  // action() {
+  //   mount(CleanLayout, {
+  //     content: ( <DownstreamData /> )
+  //   });
+  action: function(params) {  
+    if(Roles.userIsInRole(Meteor.userId(), 'nightly')) {
+      mount(CleanLayout, {
+        content: ( <DownstreamData /> )
+      });
+    }else{
+      mount(CleanLayout, {
+        content: ( <AgendaData /> )
+      });
+    }
+  }
+});
+
+privlegedRoutes.route('/downstream/:view', {
+  name: 'downstream', // optional
+  // do some action for this route
+  action: function(params) {
+    if(Roles.userIsInRole(Meteor.userId(), 'nightly')) {
+      mount(CleanLayout, {
+        content: ( <DownstreamData view={params.view} /> )
+      });
+    }else{
+      mount(CleanLayout, {
+        content: ( <AgendaData /> )
+      });
+    }
+  },
 });
 
 // Upstream Routing
