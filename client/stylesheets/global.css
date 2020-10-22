@@ -53,6 +53,10 @@ p {
 i {
   font-style: normal;
 }
+var { 
+  text-transform: none;
+  font-style: inherit;
+}
 sup, sub {
   color: var(--asbestos);
 }

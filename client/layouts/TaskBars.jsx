@@ -96,6 +96,14 @@ export const UpTaskBar = ({ subLink }) => (
       icon='fas fa-microchip'
       iconAdj=''
     />
+    
+    <TaskElement
+      title='Part Value Conversion'
+      subON={subLink === 'values'}
+      goLink='/upstream/values'
+      icon='fas fa-calculator'
+      iconAdj=''
+    />
       
   </div>
 );

@@ -5,6 +5,7 @@ import StreamLayout from '/client/layouts/StreamLayout.jsx';
 
 import UpstreamView from '/client/views/upstream/UpstreamTask/UpstreamView';
 import CompSearchData from '/client/views/upstream/CompSearch/CompSearchData';
+import CompValuesSlide from '/client/views/upstream/CompValues/CompValuesSlide';
 
 
 const UpstreamWrap = ({ 
@@ -27,6 +28,24 @@ const UpstreamWrap = ({
       >
         <CompSearchData
           name={user.username} 
+          user={user}
+          org={user.org}
+          app={app} />
+      </StreamLayout>
+    );
+  }
+  
+  if(view === 'values') {
+    return (
+      <StreamLayout
+        user={user}
+        app={app}
+        title='Value Conversion'
+        subLink={view}
+        invertColor={true}
+        action={false}
+      >
+        <CompValuesSlide
           user={user}
           org={user.org}
           app={app} />

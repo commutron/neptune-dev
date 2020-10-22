@@ -389,6 +389,7 @@
 .smCap { font-variant: small-caps; }
 
 .up { text-transform: uppercase; }
+/*.low { text-transform: lowercase; }*/
 
 .bold { font-weight: 600; }
 
