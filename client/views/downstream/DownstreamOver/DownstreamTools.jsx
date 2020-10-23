@@ -2,19 +2,44 @@ import React, {useState, useEffect, useRef} from 'react';
 import moment from 'moment';
 import 'moment-timezone';
 import Pref from '/client/global/pref.js';
-import ClockString from '/client/components/smallUi/ClockString';
 
+function useInterval(callback, delay) {
+  const savedCallback = useRef();
+  // Remember the latest callback.
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  // Set up the interval.
+  useEffect(() => {
+    function tick() {
+      savedCallback.current();
+    }
+    if (delay !== null) {
+      let id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
+}
 
 const DownstreamTools = ({
   app, loadTimeUP, 
   sortByUP, denseUP, lightUP,
   changeSortUP, denseSetUP, themeSetUP
 })=> {
-   
   
+  const [ tickingTime, tickingTimeSet ] = useState( moment() );
+
+  useInterval( ()=> {
+    tickingTimeSet( moment() );
+  },1000*60);
+   
+  const duration = moment.duration(
+    loadTimeUP.diff(tickingTime))
+      .humanize();
         
   return(
-    <nav className='downstreamToolbar gridViewTools'>
+    <nav className='overviewToolbar'>
       
       <span>
         <i className='fas fa-sort-amount-down fa-fw darkgrayT'></i>
@@ -63,7 +88,7 @@ const DownstreamTools = ({
       </span>
       
       <span className='flexSpace' />
-      <div><ClockString loadTime={loadTimeUP} /></div>
+      <span className='darkgrayT'>Updated {duration} ago</span>
     </nav>
   );
 };

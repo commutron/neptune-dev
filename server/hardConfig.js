@@ -10,6 +10,8 @@ class Config {
       instance = this;
     }
     
+    this.clientTZ = "America/Regina";
+    
     this.allowedSupers = 2;
     
     this.workingHours = {

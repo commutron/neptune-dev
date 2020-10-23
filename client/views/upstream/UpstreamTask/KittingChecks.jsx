@@ -12,7 +12,7 @@ const KittingChecks = ({
   batchID, batchNum, 
   isX, isDone,
   releasedToFloor, releases,
-  clientTZ, pCache, app, branchClear, 
+  pCache, app, branchClear, 
   kitCols, dense, isRO, isDebug
 })=> {
 

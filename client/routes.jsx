@@ -190,20 +190,10 @@ privlegedRoutes.route('/people', {
 
 // Downstream Routing
 privlegedRoutes.route('/downstream', {
-  // action() {
-  //   mount(CleanLayout, {
-  //     content: ( <DownstreamData /> )
-  //   });
-  action: function(params) {  
-    if(Roles.userIsInRole(Meteor.userId(), 'nightly')) {
-      mount(CleanLayout, {
-        content: ( <DownstreamData /> )
-      });
-    }else{
-      mount(CleanLayout, {
-        content: ( <AgendaData /> )
-      });
-    }
+  action() {
+    mount(CleanLayout, {
+      content: ( <DownstreamData /> )
+    });
   }
 });
 
@@ -211,15 +201,9 @@ privlegedRoutes.route('/downstream/:view', {
   name: 'downstream', // optional
   // do some action for this route
   action: function(params) {
-    if(Roles.userIsInRole(Meteor.userId(), 'nightly')) {
-      mount(CleanLayout, {
-        content: ( <DownstreamData view={params.view} /> )
-      });
-    }else{
-      mount(CleanLayout, {
-        content: ( <AgendaData /> )
-      });
-    }
+    mount(CleanLayout, {
+      content: ( <DownstreamData view={params.view} /> )
+    });
   },
 });
 

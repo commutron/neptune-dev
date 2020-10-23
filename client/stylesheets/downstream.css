@@ -1,0 +1,58 @@
+.downstreamView {
+  display: grid;
+  /*height: 89vh;*/
+  grid-template-rows: 3vh 89vh; 
+  grid-template-areas: 
+    'downTools'
+    'downContent';
+  overflow-y: hidden !important;
+  overflow-x: hidden !important;
+}
+
+.downstreamToolbar {
+  grid-area: downTools;
+  background-color: rgb(50,50,50);
+  display: flex;
+  width: 100%;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+.lightTheme .downstreamToolbar {
+  background-color: var(--silverfade);
+}
+
+.downstreamContent {
+  grid-area: downContent;
+  overflow-y: scroll !important;
+}
+
+.downGridFrame {
+  display: grid;
+  /*grid-template-rows: repeat(20vh);*/
+  grid-template-columns: 4rem calc(100vw - 8vh - 4rem - 1vw);
+  grid-template-areas: 
+    'downWeek downOrders';
+  border-bottom: 5px dashed green;
+}
+
+.downWeek {
+  grid-area: downWeek;
+  background-color: violet;
+  writing-mode: tb-rl;
+  transform: rotate(-180deg);
+  font-size: 2rem;
+  line-height: 2;
+  padding: 2ch 0;
+  /*text-orientation: sidways;*/
+}
+
+
+.downOrders {
+  grid-area: downOrders;
+  background-color: rgba(234,32,234,0.1);
+  display: grid;
+  grid-auto-flow: columns;
+  grid-auto-columns: repeat(10vw);
+  
+}

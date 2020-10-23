@@ -9,7 +9,7 @@ import TrinaryStat from '/client/components/tinyUi/TrinaryStat.jsx';
 
 const BatchTopStatus = ({ 
   rowIndex, batchID,
-  clientTZ, pCache, app,
+  pCache, app,
   isDebug, isNightly,
   statusCols, dense
 })=> {
@@ -17,7 +17,7 @@ const BatchTopStatus = ({
   const [ stData, setStatus ] = useState(false);
   
   useEffect( ()=> {
-    Meteor.call('overviewBatchStatus', batchID, clientTZ, (error, reply)=>{
+    Meteor.call('overviewBatchStatus', batchID, (error, reply)=>{
       error && console.log(error);
       if( reply ) { 
         setStatus( reply );
@@ -32,7 +32,7 @@ const BatchTopStatus = ({
   
   if( dt && dt.batchID === batchID ) {
     
-    const dueDateShip = moment(dt.shipDue);
+    const dueDateShip = moment(dt.shipAim);
     const adaptDateShip = dueDateShip.isAfter(moment(), 'year') ?
                             "MMM Do, YYYY" : "MMM Do";
 

@@ -13,8 +13,8 @@ moment.updateLocale('en', {
   shippinghours: Config.shippingHours
 });
 
-export function calcShipDay( nowDay, futureDay, clientTZ ) {
-  const endDay = moment.tz(futureDay, clientTZ);
+export function calcShipDay( nowDay, futureDay ) {
+  const endDay = moment.tz(futureDay, Config.clientTZ);
 
   const shipAim = endDay.isShipDay() ?
                     endDay.clone().startOf('day').nextShippingTime() :
@@ -33,8 +33,8 @@ export function calcShipDay( nowDay, futureDay, clientTZ ) {
 }
 
 
-export function deliveryState(bEnd, bFinish, clientTZ) {
-  const localEnd = moment.tz(bEnd, clientTZ);
+export function deliveryState(bEnd, bFinish) {
+  const localEnd = moment.tz(bEnd, Config.clientTZ);
   
   const salesEnd = localEnd.isWorkingDay() ?
                     localEnd.clone().endOf('day').lastWorkingTime().format() :
@@ -48,7 +48,7 @@ export function deliveryState(bEnd, bFinish, clientTZ) {
                     localEnd.clone().endOf('day').lastShippingTime() :
                     localEnd.clone().lastShippingTime();
   
-  const didFinish = moment(bFinish).tz(clientTZ).format();
+  const didFinish = moment(bFinish).tz(Config.clientTZ).format();
     
   const isLate = moment(didFinish).isAfter(shipDue);
   const hourGap = shipDue.workingDiff(didFinish, 'hours');
@@ -69,7 +69,7 @@ export function deliveryState(bEnd, bFinish, clientTZ) {
   return [ salesEnd, shipAim, didFinish, gapZone ];
 }
   
-function weekDoneAnalysis(clientTZ, rangeStart, rangeEnd) {
+function weekDoneAnalysis(rangeStart, rangeEnd) {
   
   const app = AppDB.findOne({orgKey: Meteor.user().orgKey});
   const nonWorkDays = app.nonWorkDays;
@@ -101,7 +101,7 @@ function weekDoneAnalysis(clientTZ, rangeStart, rangeEnd) {
       gf.altered.filter( a => a.changeKey === 'end' ).length;
     
     // duration between finish and fulfill
-    const deliveryResult = deliveryState(gf.end, gf.finishedAt, clientTZ);
+    const deliveryResult = deliveryState(gf.end, gf.finishedAt);
     const salesEnd = deliveryResult[0];
     const shipDue = deliveryResult[1];
     const localFinish = deliveryResult[2];
@@ -145,7 +145,7 @@ function weekDoneAnalysis(clientTZ, rangeStart, rangeEnd) {
     const ncRate = ( ncQuantity / itemQuantity ).toFixed(1, 10);
     const endAlter = gf.altered.filter( a => a.changeKey === 'salesEnd' ).length;
     
-    const deliveryResult = deliveryState(gf.salesEnd, gf.completedAt, clientTZ);
+    const deliveryResult = deliveryState(gf.salesEnd, gf.completedAt);
     const salesEnd = deliveryResult[0];
     const shipDue = deliveryResult[1];
     const localComplete = deliveryResult[2];
@@ -179,24 +179,21 @@ function weekDoneAnalysis(clientTZ, rangeStart, rangeEnd) {
   Meteor.methods({
   
   
-  reportOnCompleted(clientTZ, yearNum, weekNum) {
+  reportOnCompleted(yearNum, weekNum) {
     try {
-      // const nowLocal = moment().tz(clientTZ);
-      const requestLocal = moment().tz(clientTZ).set({'year': yearNum, 'week': weekNum});
+      // const nowLocal = moment().tz(Config.clientTZ);
+      const requestLocal = moment().tz(Config.clientTZ).set({'year': yearNum, 'week': weekNum});
       // console.log(requestLocal);
       
       const rangeStart = requestLocal.clone().startOf('week').toISOString();
       const rangeEnd = requestLocal.clone().endOf('week').toISOString();
       
-      return weekDoneAnalysis(clientTZ, rangeStart, rangeEnd);
+      return weekDoneAnalysis(rangeStart, rangeEnd);
 
     }catch(err) {
       throw new Meteor.Error(err);
     }
   }
-  
-
-  
   
   
 });

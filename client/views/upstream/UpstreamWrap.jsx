@@ -60,7 +60,7 @@ const UpstreamWrap = ({
       title={Pref.upstream}
       subLink={false}
       invertColor={false}
-      beta={true}
+      tag='kit'
     >
       <UpstreamView
         batch={batch}

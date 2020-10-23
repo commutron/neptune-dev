@@ -7,7 +7,7 @@ const OverviewTools = ({
   filterByUP, sortByUP, ghostUP, denseUP, lightUP,
   changeFilterUP, changeSortUP, ghostSetUP, denseSetUP, themeSetUP
 })=> (
-  <nav className='overviewToolbar'>
+  <nav className='overviewToolbar gridViewTools'>
     <span>
       <i className='fas fa-filter fa-fw darkgrayT'></i>
       <select

@@ -5,7 +5,7 @@ import { ToastContainer } from 'react-toastify';
 
 import HomeIcon from '/client/layouts/HomeIcon.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
-import { UpTaskBar } from './TaskBars.jsx';
+import { UpTaskBar, DownTaskBar } from './TaskBars.jsx';
 
 const StreamLayout = ({
   // batchData,
@@ -16,7 +16,8 @@ const StreamLayout = ({
   title,
   subLink,
   invertColor,
-  beta,
+  tag,
+  navBar,
   children
 })=>	{
   
@@ -33,13 +34,15 @@ const StreamLayout = ({
         <HomeIcon />
         
           <div className='frontCenterTitle cap'>{title}
-          {beta && <sup className='medBig monoFont'>BETA</sup>}</div>
+          {tag && <sup className='medBig monoFont'>{tag}</sup>}</div>
         
         <TideFollow />
       
       </div>
       <aside className='taskBarEx noPrint'>
-        <UpTaskBar subLink={subLink} />
+        {navBar === 'down' ?
+          <DownTaskBar subLink={subLink} /> :
+          <UpTaskBar subLink={subLink} />}
       </aside>
       
       <div className={`contentAreaEx ${invert}`}>

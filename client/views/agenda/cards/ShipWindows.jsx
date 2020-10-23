@@ -35,7 +35,7 @@ const ShipWindows = ({ bCache, pCache, zCache, app })=> {
     }
   }
   const lateCatch = next100Days[0];
-  const lateBatch = pCache.filter( x => moment(x.shipTime).isBefore(lateCatch, 'day') );
+  const lateBatch = pCache.filter( x => moment(x.shipAim).isBefore(lateCatch, 'day') );
   const lateTimeArr = Array.from(lateBatch, x => typeof x.quote2tide === 'number' && x.quote2tide );
   const lateTimeTotal = lateTimeArr.reduce( (arr, x)=> x > 0 ? arr + x : arr, 0 );
           
@@ -49,7 +49,7 @@ const ShipWindows = ({ bCache, pCache, zCache, app })=> {
           <BatchListPending batchList={lateBatch} bCache={bCache} />
           
         {next100Days.map( (e, ix)=>{
-          const shipIn = pCache.filter( x => moment(x.shipTime).isSame(e, 'day') );
+          const shipIn = pCache.filter( x => moment(x.shipAim).isSame(e, 'day') );
           const reTimeArr = Array.from(shipIn, 
             x => typeof x.quote2tide === 'number' && x.quote2tide );
           const reTimeTotal = reTimeArr.reduce( 
@@ -87,7 +87,7 @@ const BatchListComplete = ({ batchList, bCache })=> (
         return(
           <dd key={ix+'z'} className='fade cap' title={what}>
           <LeapTextLink
-            title={b.batchNum} 
+            title={b.batch} 
             sty='numFont whiteT'
             address={'/data/batch?request=' + b.batchNum}
           /> -> {Pref.batch} is {Pref.isDone}</dd>

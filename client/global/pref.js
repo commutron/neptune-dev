@@ -96,7 +96,7 @@ class Pref {
     this.timeBudget = 'time budget';
     this.tag = 'flag';
     
-    this.upstream = 'inventory';
+    this.upstream = 'upstream';
     this.kit = 'kit';
     this.kitting = 'kitting';
     this.baseSerialPart = 'PCB';

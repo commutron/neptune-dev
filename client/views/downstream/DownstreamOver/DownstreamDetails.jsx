@@ -4,14 +4,13 @@ import Pref from '/client/global/pref.js';
 import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
 import BatchTopStatus from '../../overview/columns/BatchTopStatus.jsx';
-import KittingChecks from './KittingChecks';
 import { TideActivitySquare } from '/client/components/tide/TideActivity';
 import PrintLink from '/client/components/smallUi/PrintLink.jsx';
 
-const UpstreamDetails = ({
+const DownstreamDetails = ({
   oB,
   bCache, pCache, acCache,
-  user, app, brancheS,
+  user, clientTZ, app, brancheS,
   isDebug, isNightly,
   dense, filterBy
 })=> {
@@ -21,10 +20,9 @@ const UpstreamDetails = ({
   const statusCols = ['due','remaining workdays','priority rank','items quantity','serial flow','active'];
   
   const branchClearCols = Array.from(branchClear, x => x.common );
-  const kitCols = [...branchClearCols, Pref.baseSerialPart+'s', 'released'];
   
   // due == 'fulfill', 'ship'
-  const kitHead = ['SO',...statusCols,...kitCols,'print','production','watch'];
+  const kitHead = ['SO',...statusCols,'print','production','watch'];
   
   return(
     <div className={`overGridScroll forceScrollStyle ${dense ? 'dense' : ''}`} tabIndex='1'>
@@ -45,11 +43,12 @@ const UpstreamDetails = ({
       {!oB ? null :
         oB.map( (entry, index)=>{
           return(
-            <UpstreamDetailChunk
+            <DownstreamDetailChunk
               key={`${entry.batchID}live${index}`}
               rowIndex={index}
               oB={entry}
               user={user}
+              clientTZ={clientTZ}
               pCache={pCache}
               acCache={acCache}
               app={app}
@@ -58,7 +57,6 @@ const UpstreamDetails = ({
               isDebug={isDebug}
               isNightly={isNightly}
               statusCols={statusCols}
-              kitCols={kitCols}
               dense={dense}
               filterBy={filterBy} />
       )})}
@@ -67,15 +65,15 @@ const UpstreamDetails = ({
   );
 };
 
-export default UpstreamDetails;
+export default DownstreamDetails;
 
 
-const UpstreamDetailChunk = ({ 
-  rowIndex, oB, user,
+const DownstreamDetailChunk = ({ 
+  rowIndex, oB, user, clientTZ, 
   pCache, acCache, app, 
   brancheS, branchClear,
   isDebug, isNightly,
-  statusCols, kitCols, 
+  statusCols,
   dense, filterBy
 })=> {
   
@@ -113,6 +111,7 @@ const UpstreamDetailChunk = ({
         rowIndex={rowIndex}
         batchID={oB._id}
         dueDate={oB.salesEnd || oB.end}
+        clientTZ={clientTZ}
         pCache={pCache}
         app={app}
         isDebug={isDebug}
@@ -127,20 +126,6 @@ const UpstreamDetailChunk = ({
           app={app} />
       </div>
       
-      <KittingChecks
-        batchID={oB._id}
-        batchNum={oB.batch}
-        isX={isX}
-        isDone={isDone}
-        releasedToFloor={releasedToFloor}
-        releases={oB.releases}
-        pCache={pCache}
-        app={app}
-        branchClear={branchClear}
-        kitCols={kitCols}
-        dense={dense}
-        isRO={isRO}
-        isDebug={isDebug} />
     
       <div>
         <PrintLink

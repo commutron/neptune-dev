@@ -12,7 +12,6 @@ moment.updateLocale('en', {
   shippinghours: Config.shippingHours
 });
 
-//const now = moment().tz(clientTZ);
 //const isNow = (t)=>{ return ( now.isSame(moment(t), 'day') ) };
 
 function collectBranchCondition(privateKey, batchID) {
@@ -155,7 +154,7 @@ function collectBranchCondition(privateKey, batchID) {
   });
 }
 
-function collectStatus(privateKey, batchID, clientTZ) {
+function collectStatus(privateKey, batchID) {
   return new Promise(resolve => {
     let collection = false;
     
@@ -170,15 +169,15 @@ function collectStatus(privateKey, batchID, clientTZ) {
       });
     }
     
-    const now = moment().tz(clientTZ);
+    const now = moment().tz(Config.clientTZ);
     
     if(bx) {
       const complete = bx.completed; // is it done
       
-      const shipDue = calcShipDay( now, bx.salesEnd, clientTZ )[0];
+      const shipAim = calcShipDay( now, bx.salesEnd, Config.clientTZ )[0];
       
       const timeRemain = !complete ?  // duration between now and ship due
-        shipDue.workingDiff(now, 'day', true) : 0;
+        shipAim.workingDiff(now, 'day', true) : 0;
       const timeRemainClean = timeRemain > -1 && timeRemain < 1 ? 
           timeRemain.toPrecision(1) : Math.round(timeRemain);
       
@@ -187,7 +186,7 @@ function collectStatus(privateKey, batchID, clientTZ) {
       collection = {
         batch: bx.batch,
         batchID: bx._id,
-        shipDue: shipDue.format(),
+        shipAim: shipAim.format(),
         weekDaysRemain: timeRemainClean,
         itemQuantity: bx.quantity,
         riverChosen: riverChosen
@@ -198,10 +197,10 @@ function collectStatus(privateKey, batchID, clientTZ) {
     }else if(b) {
       const complete = b.finishedAt !== false; // is it done
       
-      const shipDue = calcShipDay( now, b.end, clientTZ )[0];
+      const shipAim = calcShipDay( now, b.end, Config.clientTZ )[0];
       
       const timeRemain = !complete ?  // duration between now and ship due
-        shipDue.workingDiff(now, 'day', true) : 0;
+        shipAim.workingDiff(now, 'day', true) : 0;
       const timeRemainClean = timeRemain > -1 && timeRemain < 1 ? 
           timeRemain.toPrecision(1) : Math.round(timeRemain);
          
@@ -211,7 +210,7 @@ function collectStatus(privateKey, batchID, clientTZ) {
       collection = {
         batch: b.batch,
         batchID: b._id,
-        shipDue: shipDue.format(),
+        shipAim: shipAim.format(),
         weekDaysRemain: timeRemainClean,
         itemQuantity: itemQuantity,
         riverChosen: riverChosen
@@ -248,7 +247,7 @@ function collectPriority(privateKey, batchID, clientTZ, mockDay) {
       
       const future = mockDay ? mockDay : endEntry;
       const calcShip = calcShipDay( now, future, clientTZ );
-      const shipTime = calcShip[0];
+      const shipAim = calcShip[0];
       const lateLate = calcShip[1];
       
       const qtBready = !b.quoteTimeBudget ? false : true;
@@ -263,14 +262,14 @@ function collectPriority(privateKey, batchID, clientTZ, mockDay) {
         const overQuote = quote2tide < 0 ? true : false;
         const q2tNice = overQuote ? 0 : quote2tide;
                                                       // insert additional ship bumper
-        //const estConclude = shipTime;//shipTime.clone().subtractWorkingTime(0, 'hours');
-        const estLatestBegin = shipTime.clone().subtractWorkingTime(q2tNice, 'minutes');
-        const maxGap = shipTime.workingDiff(moment(b.createdAt), 'hours', true);
+        //const estConclude = shipAim;//shipAim.clone().subtractWorkingTime(0, 'hours');
+        const estLatestBegin = shipAim.clone().subtractWorkingTime(q2tNice, 'minutes');
+        const maxGap = shipAim.workingDiff(moment(b.createdAt), 'hours', true);
         const isStupid =  maxGap < totalQuoteMinutes;
         
         const estSoonest = now.clone().addWorkingTime(q2tNice, 'minutes');
 
-        const buffer = shipTime.workingDiff(estSoonest, 'minutes');
+        const buffer = shipAim.workingDiff(estSoonest, 'minutes');
         
         const estEnd2fillBuffer = buffer || null;
         
@@ -282,7 +281,7 @@ function collectPriority(privateKey, batchID, clientTZ, mockDay) {
           estLatestBegin: estLatestBegin.format(),
           isStupid: isStupid,
           estEnd2fillBuffer: estEnd2fillBuffer,
-          shipTime: shipTime.format(),
+          shipAim: shipAim.format(),
           lateLate: lateLate
         };
         resolve(collection);
@@ -303,7 +302,7 @@ function collectPriority(privateKey, batchID, clientTZ, mockDay) {
 }
 
 
-function collectProgress(privateKey, batchID, branchOnly, clientTZ) {
+function collectProgress(privateKey, batchID, branchOnly) {
   return new Promise(resolve => {
     const app = AppDB.findOne({orgKey: privateKey});
     const brancheS = app.branches.sort((b1, b2)=> {
@@ -345,10 +344,10 @@ function collectProgress(privateKey, batchID, branchOnly, clientTZ) {
       const flow = docW.flows.find( x => x.flowKey === batch.river );
       const riverFlow = flow ? flow.flow : [];
       
-      const now = moment().tz(clientTZ);
+      const now = moment().tz(Config.clientTZ);
       const tide = batch.tide || [];
       const isActive = tide.find( x => 
-        now.isSame(moment(x.startTime).tz(clientTZ), 'day')
+        now.isSame(moment(x.startTime).tz(Config.clientTZ), 'day')
       ) ? true : false;
       
       const rNC = batch.nonCon.filter( n => 
@@ -455,11 +454,11 @@ function collectNonCon(privateKey, batchID, temp) {
 
 Meteor.methods({
   
-  overviewBatchStatus(batchID, clientTZ) {
+  overviewBatchStatus(batchID) {
     async function bundleStatus(batchID) {
       const accessKey = Meteor.user().orgKey;
       try {
-        bundle = await collectStatus(accessKey, batchID, clientTZ);
+        bundle = await collectStatus(accessKey, batchID);
         return bundle;
       }catch (err) {
         throw new Meteor.Error(err);
@@ -481,12 +480,12 @@ Meteor.methods({
     return bundlePriority();//batchID, clientTZ, mockDay);
   },
   
-  branchProgress(batchID, branchOnly, clientTZ) {
+  branchProgress(batchID, branchOnly) {
     this.unblock();
     async function bundleProgress(batchID) {
       const accessKey = Meteor.user().orgKey;
       try {
-        bundle = await collectProgress(accessKey, batchID, branchOnly, clientTZ);
+        bundle = await collectProgress(accessKey, batchID, branchOnly);
         return bundle;
       }catch (err) {
         throw new Meteor.Error(err);

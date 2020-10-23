@@ -6,15 +6,16 @@ import Pref from '/client/global/pref.js';
 import Spin from '/client/components/tinyUi/Spin.jsx';
 
 import DownstreamTools from './DownstreamTools';
-import ShipWindows from './ShipWindows';
+import DownstreamHeaders from './DownstreamHeaders';
+import DownstreamDetails from './DownstreamDetails';
 
 
 const DownstreamView = ({ 
-  batch, batchX, bCache, pCache, acCache, brCache, zCache,
+  batch, batchX, bCache, pCache, acCache, brCache, 
   user, clientTZ, app, isDebug, isNightly
 })=> {
   
-  const sessionSticky = 'overviewDownstream';
+  const sessionSticky = 'overviewUpstream';
   
   // const [ working, workingSet ] = useState( false );
   const [ loadTime, loadTimeSet ] = useState( moment() );
@@ -26,8 +27,7 @@ const DownstreamView = ({
   const sessionLight = Session.get(sessionSticky+'lightTheme');
   const defaultLight =  sessionLight !== undefined ? sessionLight :
                         user.preferLight || false;
-  
-  const [ calcFor, calcForSet ] = useState(6);
+                        
   const [ sortBy, sortBySet ] = useState( Session.get(sessionSticky+'sort') || 'priority' );
   const [ dense, denseSet ] = useState( defaultDense );
   const [ light, themeSet ] = useState( defaultLight );
@@ -123,10 +123,7 @@ const DownstreamView = ({
         });               
 
   return(
-    <div
-      key={0} 
-      className={`${light === true ? 
-        'lightTheme invert downstreamView' : 'downstreamView'}`}>
+    <div key={0} className={`${light === true ? 'lightTheme invert' : ''}`}>
     
       <DownstreamTools
         app={app}
@@ -139,7 +136,7 @@ const DownstreamView = ({
         themeSetUP={(e)=>changeTheme(e)}
       />
       
-      <div className={`downstreamContent forceScrollStyle ${density}`}>
+      <div className='overviewContent forceScrollStyle' tabIndex='0'>
         
       {!liveState ?
         <div className='centreContainer'>
@@ -148,21 +145,35 @@ const DownstreamView = ({
           </div>
         </div>
       :  
-              
-        <ShipWindows
-          calcFor={calcFor}
-          bCache={bCache.dataSet}
-          pCache={pCache.dataSet}
-          acCache={acCache.dataSet}
-          zCache={zCache.dataSet}
-          brancheS={brancheS}
-          app={app}
-          user={user}
-          clientTZ={clientTZ}
-        />
-        
+        <div className={`overGridWideFrame ${density}`}>
+          
+          <DownstreamHeaders
+            key='fancylist0'
+            oB={liveState}
+            bCache={bCache}
+            title='xxx'
+            showMore={true}
+          />
+
+          <DownstreamDetails
+            key='fancylist1'
+            oB={liveState}
+            bCache={bCache}
+            pCache={pCache}
+            acCache={acCache}
+            user={user}
+            clientTZ={clientTZ}
+            app={app}
+            brancheS={brancheS}
+            isDebug={isDebug}
+            isNightly={isNightly}
+            dense={dense}
+            filterBy={false}
+          />
+            
+        </div>
       }  
-      </div> 
+      </div>
     </div>
   );
 };

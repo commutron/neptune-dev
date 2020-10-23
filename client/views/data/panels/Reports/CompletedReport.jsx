@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import moment from 'moment';
-import 'moment-timezone';
 import Pref from '/client/global/pref.js';
 import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
 import WeekBrowse from '/client/components/bigUi/WeekBrowse/WeekBrowse.jsx';
@@ -19,9 +17,8 @@ const CompletedReport = ({ batchData, widgetData, groupData, app })=> {
     if(weekChoice) {
       const yearNum = weekChoice.yearNum;
       const weekNum = weekChoice.weekNum;
-      const clientTZ = moment.tz.guess();
 
-      Meteor.call('reportOnCompleted', clientTZ, yearNum, weekNum, (err, rtn)=>{
+      Meteor.call('reportOnCompleted', yearNum, weekNum, (err, rtn)=>{
   	    err && console.log(err);
   	    let cronoTimes = rtn.sort((x1, x2)=> {
                             if (x1[3] < x2[3]) { return -1 }

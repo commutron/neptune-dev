@@ -21,16 +21,16 @@
   justify-content: flex-start;
   align-items: center;
 }
-.overviewToolbar span,
-.overviewToolbar select,
-.overviewToolbar button { 
+.gridViewTools span,
+.gridViewTools select,
+.gridViewTools button { 
   font-size: 1.7vh;
 }
-.overviewToolbar span { 
+.gridViewTools span { 
   padding: 0 1vw;
   height: 3vh;
 }
-.overviewToolbar select { 
+.gridViewTools select { 
   border-top-color: transparent;
   border-bottom-color: transparent;
   cursor: pointer; }

@@ -2,6 +2,8 @@ import moment from 'moment';
 import 'moment-timezone';
 import 'moment-business-time';
 
+import Config from '/server/hardConfig.js';
+
 import { sc2mn, sc2hr, round2Decimal } from './calcOps';
 
 export function batchTideTime(batchTide) {
@@ -78,12 +80,12 @@ export function distTimeBudget(tide, quoteTimeBudget, progQuantity, allQuantity)
 }
 
   
-function collectActivtyLevel(privateKey, batchID, clientTZ) {
+function collectActivtyLevel(privateKey, batchID) {
   return new Promise(resolve => {
     const batch = BatchDB.findOne({_id: batchID}) ||
                   XBatchDB.findOne({_id: batchID});
     
-    const now = moment().tz(clientTZ);
+    const now = moment().tz(Config.clientTZ);
     
     const peopleCount = (filtered)=> new Set( 
       Array.from(filtered, y => y.who ) 
@@ -103,12 +105,12 @@ function collectActivtyLevel(privateKey, batchID, clientTZ) {
       const allStopped = tide.filter( x => x.stopTime !== false );
       
       const yHour = allStopped.filter( x => moment.duration(
-                                        now.diff(moment(x.stopTime).tz(clientTZ)))
+                                        now.diff(moment(x.stopTime).tz(Config.clientTZ)))
                                           .as('hours') < 1 );
       const hasHour = peopleCount(yHour);
       
       const yDay = allStopped.filter( x => now.isSame(
-                                      moment(x.stopTime).tz(clientTZ)
+                                      moment(x.stopTime).tz(Config.clientTZ)
                                       , 'day') );
       const hasDay = peopleCount(yDay);
  
@@ -151,11 +153,11 @@ Meteor.methods({
 
 //// Tide \\\\\
 
-  tideActivityLevel(batchID, clientTZ, serverAccessKey) {
+  tideActivityLevel(batchID, serverAccessKey) {
     async function bundleActivity(batchID) {
       const accessKey = serverAccessKey || Meteor.user().orgKey;
       try {
-        bundle = await collectActivtyLevel(accessKey, batchID, clientTZ);
+        bundle = await collectActivtyLevel(accessKey, batchID);
         return bundle;
       }catch (err) {
         throw new Meteor.Error(err);
@@ -170,9 +172,9 @@ Meteor.methods({
   
   ////////////////////////////////////////////////////
 
-  fetchOrgTideActivity(dateString, clientTZ) {
+  fetchOrgTideActivity(dateString) {
     try {
-      const localDate = moment.tz(dateString, clientTZ);
+      const localDate = moment.tz(dateString, Config.clientTZ);
       
       const getYear = localDate.year();
       const getDay = localDate.dayOfYear();
@@ -197,8 +199,8 @@ Meteor.methods({
       let slimTideCollection = [];
       for(let btch of allTouched) {
         const theDay = !btch.tide ? [] : btch.tide.filter( x => 
-          moment.tz(x.startTime, clientTZ).year() === getYear && 
-          moment.tz(x.startTime, clientTZ).dayOfYear() === getDay);
+          moment.tz(x.startTime, Config.clientTZ).year() === getYear && 
+          moment.tz(x.startTime, Config.clientTZ).dayOfYear() === getDay);
         
         slimTideCollection.push(
           slimBlockReturnData(btch.batch, theDay)
@@ -214,7 +216,7 @@ Meteor.methods({
     try {
       const getYear = yearNum || moment().weekYear();
       const getWeek = weekNum || moment().week();
-      const pinDate = moment.tz(clientTZ).year(getYear).week(getWeek);
+      const pinDate = moment.tz(Config.clientTZ).year(getYear).week(getWeek);
       
       const isAuth = Meteor.userId() === mockUserId ||
               Roles.userIsInRole(Meteor.userId(), ['admin', 'peopleSuper']);
@@ -269,7 +271,7 @@ Meteor.methods({
           moment(x.startTime).week() === getWeek);
           
         const rtnBlock = slimBlockReturnData(btch.batch, yourWeek);
-        //sendAll ? durrBlockReturnData(btch.batch, yourWeek, clientTZ);
+        //sendAll ? durrBlockReturnData(btch.batch, yourWeek, Config.clientTZ);
         slimTideCollection.push( rtnBlock );
       }
       return [].concat(...slimTideCollection);

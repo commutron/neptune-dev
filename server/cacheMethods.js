@@ -4,6 +4,7 @@ import 'moment-timezone';
 import 'moment-business-time';
 
 import Config from '/server/hardConfig.js';
+import { deliveryState } from '/server/reportCompleted.js';
 
 moment.updateLocale('en', {
   workinghours: Config.workingHours,
@@ -76,26 +77,37 @@ function minifyComplete(accessKey) {
     
   const batches = BatchDB.find({orgKey: accessKey, live: false}).fetch();
   const slimL = batches.map( x => {
+    const bFinish = x.finishedAt !== false ? x.finishedAt : new Date();
+    const dlv = deliveryState(x.end, bFinish, Config.clientTZ);
+    //ARRAY: salesEnd, shipAim, didFinish, gapZone
     return {
-      batchNum: x.batch,
+      batch: x.batch,
+      batchID: x._id,
       widgetID: x.widgetId,
       versionKey: x.versionKey,
       salesOrder: x.salesOrder,
-      salesEnd: x.end,
-      completedAt: x.finishedAt,
+      salesEnd: dlv[0],
+      shipAim: dlv[1],
+      completedAt: dlv[2],
+      gapZone: dlv[3],
       quantity: x.items.length,
       serialize: true,
     };
   });
   const batchesX = XBatchDB.find({orgKey: accessKey, completed: true}).fetch();
   const slimX = batchesX.map( x => {
+    const dlv = deliveryState(x.salesEnd, x.completedAt, Config.clientTZ);
+    
     return {
-      batchNum: x.batch,
+      batch: x.batch,
+      batchID: x._id,
       widgetID: x.widgetId,
       versionKey: x.versionKey,
       salesOrder: x.salesOrder,
-      salesEnd: x.salesEnd,
-      completedAt: x.completedAt,
+      salesEnd: dlv[0],
+      shipAim: dlv[1],
+      completedAt: dlv[2],
+      gapZone: dlv[3],
       quantity: x.quantity,
       serialize: x.serialize,
     };
@@ -114,7 +126,7 @@ Meteor.methods({
       const key = Meteor.user().orgKey;
       batchCacheUpdate(key, true);
       Meteor.call('priorityCacheUpdate', key, clientTZ, true);
-      Meteor.call('activityCacheUpdate', key, clientTZ, true);
+      Meteor.call('activityCacheUpdate', key, true);
       branchConCacheUpdate(key, true);
       Meteor.call('completeCacheUpdate', key, true);
     }
@@ -129,7 +141,7 @@ Meteor.methods({
       priorityUp && Meteor.defer( ()=>{
         Meteor.call('priorityCacheUpdate', key, clientTZ, false) });
       activityUp && Meteor.defer( ()=>{
-        Meteor.call('activityCacheUpdate', key, clientTZ, false) });
+        Meteor.call('activityCacheUpdate', key, false) });
       branchConUp && Meteor.defer( ()=>{
         branchConCacheUpdate(key, false) });
       compUp && Meteor.defer( ()=>{
@@ -184,7 +196,7 @@ Meteor.methods({
     }
   },
   
-  activityCacheUpdate(accessKey, clientTZ, force) {
+  activityCacheUpdate(accessKey, force) {
     this.unblock();
     if(typeof accessKey === 'string') {
       const timeOut = moment().subtract(5, 'minutes').toISOString();
@@ -197,7 +209,7 @@ Meteor.methods({
         const batches = BatchDB.find({orgKey: accessKey, live: true}).fetch();
         const batchesX = XBatchDB.find({orgKey: accessKey, live: true}).fetch();
         const slim = [...batches,...batchesX].map( x => {
-          return Meteor.call('tideActivityLevel', x._id, clientTZ, accessKey);
+          return Meteor.call('tideActivityLevel', x._id, accessKey);
         });
         CacheDB.upsert({orgKey: accessKey, dataName: 'activityLevel'}, {
           $set : { 

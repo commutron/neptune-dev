@@ -206,7 +206,7 @@ Meteor.publish('cacheData', function(clientTZ){
   const orgKey = user ? user.orgKey : false;
   Meteor.defer( ()=>{ batchCacheUpdate(orgKey); });
   Meteor.defer( ()=>{ Meteor.call('priorityCacheUpdate', orgKey, clientTZ); });
-  Meteor.defer( ()=>{ Meteor.call('activityCacheUpdate', orgKey, clientTZ); });
+  Meteor.defer( ()=>{ Meteor.call('activityCacheUpdate', orgKey); });
   Meteor.defer( ()=>{ branchConCacheUpdate(orgKey) });
   Meteor.defer( ()=>{ Meteor.call('completeCacheUpdate', orgKey); });
   if(!this.userId){

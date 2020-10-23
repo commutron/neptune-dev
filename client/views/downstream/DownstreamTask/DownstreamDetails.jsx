@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 // import moment from 'moment';
 import Pref from '/client/global/pref.js';
+import { min2hr } from '/client/utility/Convert';
+
 import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
+
+import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 
 import BatchTopStatus from '../../overview/columns/BatchTopStatus.jsx';
 import { TideActivitySquare } from '/client/components/tide/TideActivity';
@@ -10,20 +14,20 @@ import PrintLink from '/client/components/smallUi/PrintLink.jsx';
 const DownstreamDetails = ({
   oB,
   bCache, pCache, acCache,
-  user, clientTZ, app, brancheS,
+  user, app, brancheS,
   isDebug, isNightly,
-  dense, filterBy
+  dense
 })=> {
-  
-  const branchClear = brancheS.filter( b => b.reqClearance === true );
   
   const statusCols = ['due','remaining workdays','priority rank','items quantity','serial flow','active'];
   
-  const branchClearCols = Array.from(branchClear, x => x.common );
+  console.log(oB);
   
   // due == 'fulfill', 'ship'
   const kitHead = ['SO',...statusCols,'print','production','watch'];
   
+          
+          
   return(
     <div className={`overGridScroll forceScrollStyle ${dense ? 'dense' : ''}`} tabIndex='1'>
       
@@ -43,22 +47,17 @@ const DownstreamDetails = ({
       {!oB ? null :
         oB.map( (entry, index)=>{
           return(
-            <DownstreamDetailChunk
-              key={`${entry.batchID}live${index}`}
-              rowIndex={index}
-              oB={entry}
-              user={user}
-              clientTZ={clientTZ}
-              pCache={pCache}
-              acCache={acCache}
+            <DownstreamChunk
+              ck={entry}
+              bCache={bCache}
               app={app}
-              brancheS={brancheS}
-              branchClear={branchClear}
-              isDebug={isDebug}
-              isNightly={isNightly}
-              statusCols={statusCols}
-              dense={dense}
-              filterBy={filterBy} />
+            />
+              // brancheS={brancheS}
+              // branchClear={branchClear}
+              // isDebug={isDebug}
+              // isNightly={isNightly}
+              // statusCols={statusCols}
+              // dense={dense} />
       )})}
       
     </div>
@@ -67,14 +66,43 @@ const DownstreamDetails = ({
 
 export default DownstreamDetails;
 
+const DownstreamChunk = ({ck, bCache })=> {
+
+  const moreInfo = bCache ? bCache.find( x => x.batch === ck.batch) : false;
+  const what = !moreInfo ? 'unavailable' : `${moreInfo.isWhat}`;// ${moreInfo.more}`;
+  
+  const isDone = ck.completedAt ? true : false;
+  
+  const q2t = ck.quote2tide;
+  const q2tStatus = !q2t ? 'Time Not Tracked' :
+          q2t > 0 ? 
+            `${min2hr(q2t)} hours remain` :
+            'Over-Quote, remaining time unknown';
+  
+  return(
+    <Fragment>
+      <ExploreLinkBlock type='batch' keyword={ck.batch} wrap={false} />
+      <div>{what.length <= 75 ? what : what.substring(0, 75) + '...'}</div>
+      
+      {!isDone ?
+        <div title={`${q2t} minutes`} className='fade'> -> {q2tStatus}</div>
+      : <div className='fade'> -> {Pref.batch} is {Pref.isDone}</div> }
+      
+    </Fragment>
+  );
+};
+
+
+
+
 
 const DownstreamDetailChunk = ({ 
-  rowIndex, oB, user, clientTZ, 
+  rowIndex, oB, user,
   pCache, acCache, app, 
   brancheS, branchClear,
   isDebug, isNightly,
   statusCols,
-  dense, filterBy
+  dense
 })=> {
   
   const isX = oB.completed === undefined ? false : true;
@@ -111,7 +139,6 @@ const DownstreamDetailChunk = ({
         rowIndex={rowIndex}
         batchID={oB._id}
         dueDate={oB.salesEnd || oB.end}
-        clientTZ={clientTZ}
         pCache={pCache}
         app={app}
         isDebug={isDebug}

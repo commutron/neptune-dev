@@ -47,8 +47,8 @@ const ClockString = ({ loadTime })=> {
       
   return(
     <Fragment>
-      <span className='darkgrayT'>Updated {duration} ago</span>
-      <span className='darkgrayT'>{clockTime}</span>
+      <span className='grayT'>Updated {duration} ago</span>
+      <span className='grayT'>{clockTime}</span>
     </Fragment>
   );
 };

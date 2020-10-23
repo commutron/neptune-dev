@@ -108,4 +108,27 @@ export const UpTaskBar = ({ subLink }) => (
   </div>
 );
 
+export const DownTaskBar = ({ subLink }) => (
+  <div className='taskColumn'>
+  
+    <TaskElement
+      title='Upstream'
+      subON={!subLink}
+      goLink='/downstream'
+      icon='fas fa-satellite'
+      //iconAdj=''
+    />
+    
+    <TaskElement
+      title='old feed'
+      subON={subLink === 'overview'}
+      goLink='/downstream/overview'
+      icon='fas fa-rss'
+      //iconAdj=''
+    />
+    
+      
+  </div>
+);
+
 

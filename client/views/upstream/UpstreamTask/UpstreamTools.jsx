@@ -7,7 +7,7 @@ const UpstreamTools = ({
   sortByUP, denseUP, lightUP,
   changeSortUP, denseSetUP, themeSetUP
 })=> (
-  <nav className='overviewToolbar'>
+  <nav className='overviewToolbar gridViewTools'>
     
     <span>
       <i className='fas fa-sort-amount-down fa-fw darkgrayT'></i>

@@ -16,14 +16,13 @@ const View = ({
   username, user, clientTZ, org, app,
   isDebug, isNightly,
   batch, batchX,
-  bCache, pCache, acCache, brCache,
+  bCache, pCache, acCache, brCache, zCache
 })=> {
   
   const prevUser = usePrevious(user);
   useLayoutEffect( ()=>{
     InboxToastPop(prevUser, user);
   }, [user]);
-  
     
   if( !readyUsers || !ready || !readyC || !app ) {
     return (
@@ -45,6 +44,7 @@ const View = ({
         pCache={pCache}
         acCache={acCache}
         brCache={brCache}
+        zCache={zCache}
         user={user}
         app={app}
         clientTZ={clientTZ}
@@ -99,7 +99,8 @@ export default withTracker( ({ view } ) => {
       bCache: CacheDB.findOne({dataName: 'batchInfo'}),
       pCache: CacheDB.findOne({dataName: 'priorityRank'}),
       acCache: CacheDB.findOne({dataName: 'activityLevel'}),
-      brCache: CacheDB.findOne({dataName: 'branchCondition'})
+      brCache: CacheDB.findOne({dataName: 'branchCondition'}),
+      zCache: CacheDB.findOne({dataName: 'completeBatch'}),
     };
   }
 })(View);

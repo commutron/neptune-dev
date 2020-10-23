@@ -206,6 +206,9 @@ Invert Rules */
 .invert .whiteT {
   color: var(--blackT);
 }
+.invert .grayT {
+  color: var(--black);
+}
 /*
 .contrastList:nth-child(odd) {
   background-color: rgba(50,50,50,0.3);
