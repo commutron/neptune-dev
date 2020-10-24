@@ -31,10 +31,9 @@ Accounts.onCreateUser((options, user) => {
       org: orgIs.org,
       orgKey: orgIs.orgKey,
       roles: ['active'],
+      inbox: [],
       autoScan: true,
       unlockSpeed: 2000,
-      inbox: [],
-      watchlist: [],
       usageLog: [],
       engaged: false
     }, user);
@@ -306,40 +305,6 @@ Meteor.methods({
     return true;
   },
   
-  
-  setWatchlist(type, keyword) {
-    const watching = Meteor.user().watchlist;
-    const double = watching.find( x => x.type === type && x.keyword === keyword);
-    if(!double) {
-      Meteor.users.update(Meteor.userId(), {
-        $push: {
-          watchlist: {
-            watchKey: new Meteor.Collection.ObjectID().valueOf(),
-            type: type,
-            keyword: keyword,
-            time: new Date(),
-            mute: true
-          }
-        }
-      });
-    }else{
-      Meteor.users.update(Meteor.userId(), {
-        $pull : {
-          watchlist: {type: type, keyword: keyword}
-        }
-      });
-    }
-  },
-  
-  setMuteState(wKey, mute) {
-    const change = !mute ? true : false;
-    Meteor.users.update({_id: Meteor.userId(), 'watchlist.watchKey': wKey}, {
-      $set: {
-        'watchlist.$.mute': change,
-      }
-    });
-  },
-  
   setNotifyAsRead(nKey, read) {
     const change = !read;
     Meteor.users.update({_id: Meteor.userId(), 'inbox.notifyKey': nKey}, {
@@ -370,17 +335,6 @@ Meteor.methods({
       }
     });
     return true;
-  },
-  
-  clearAllUserWatchlists() {
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      Meteor.users.update({orgKey: Meteor.user().orgKey}, {
-        $set: {
-          watchlist: [],
-        },
-      },{multi: true});
-      return true;
-    }
   },
   
   clearNonDebugUserUsageLogs() {

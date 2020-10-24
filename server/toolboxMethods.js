@@ -57,6 +57,22 @@ Meteor.methods({
       
   },
   
+  UNSETwatchlistKey() {
+    try{
+      if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+        Meteor.users.update({ orgKey: Meteor.user().orgKey }, {
+          $unset : { 
+            'watchlist': ""
+          }},{multi: true});
+          return true;
+      }else{
+        null;
+      }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  
   /*
   backdateTideWall() {
     try {

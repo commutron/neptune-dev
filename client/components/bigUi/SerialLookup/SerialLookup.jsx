@@ -67,7 +67,7 @@ const SerialLookup = (props)=> {
             key='1a'
             title={re[0].batch}
             cTwo={re[0].meta}
-            cThree={this.state.searchText}
+            cThree={searchText}
             sty='greenB'
             address={'/data/batch?request=' + re[0].batch + '&specify=' + searchText}
           />

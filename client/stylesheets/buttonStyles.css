@@ -163,7 +163,7 @@
   overflow: hidden;
   word-break: break-all;
   word-wrap: break-word;
-  box-shadow: none;
+  box-shadow: var(--dropShadow000);
 }
 .leapRow > span {
   display: flex;
@@ -240,7 +240,7 @@ label.qdpplRound {
 .buttonLayerCorrect { height: 1em; }
 
 .taskLink {
-  margin: 8px 0;
+  margin: 0.75vh 0;
   width: 5.5vh;
   height: 5.5vh;
   border-radius: 50%;

@@ -12,14 +12,13 @@ import TideFollow from '/client/components/tide/TideFollow.jsx';
 import Slides from '../../components/smallUi/Slides.jsx';
 import ActivityPanel from './ActivityPanel.jsx';
 import InboxPanel from './InboxPanel.jsx';
-import WatchlistPanel from './WatchlistPanel.jsx';
 import PrivacyPanel from './PrivacyPanel.jsx';
 
 import UserSettings from '/client/components/forms/User/UserSettings';
 
 
 const UserDataWrap = ({
-  readyUsers, readyEvents, // subs
+  readyUsers, // readyEvents, // subs
   orb, bolt, // meta
   user, isAdmin, isDebug, org, app, // self
   bCache, batches, users // working data
@@ -31,7 +30,7 @@ const UserDataWrap = ({
   
   if(
     !readyUsers || 
-    !readyEvents ||
+    // !readyEvents ||
     !app
   ) {
     return (
@@ -70,7 +69,6 @@ const UserDataWrap = ({
         <Slides
           menu={[
             <b><i className='fas fa-history fa-fw'></i>  Production Activity</b>,
-            <b><i className='far fa-eye fa-fw'></i>  Watchlist</b>,
             <b><i className='fas fa-inbox fa-fw'></i>  Inbox</b>,
             <b><i className='fas fa-sliders-h fa-fw'></i>  Preferences</b>,
             <b><i className='fas fa-shield-alt fa-fw'></i>  Privacy & Access</b>,
@@ -85,18 +83,6 @@ const UserDataWrap = ({
             // isAdmin={isAdmin}
             isDebug={isDebug}
             users={users}
-            bCache={bCache} />
-            
-          <WatchlistPanel
-            key={2}
-            orb={orb}
-            bolt={bolt}
-            app={app}
-            user={user}
-            // isAdmin={isAdmin}
-            // isDebug={isDebug}
-            users={users}
-            batchEvents={batches}
             bCache={bCache} />
             
           <InboxPanel
@@ -142,16 +128,16 @@ export default withTracker( () => {
   const isAdmin = login ? Roles.userIsInRole(Meteor.userId(), 'admin') : false;
   const isDebug = login ? Roles.userIsInRole(Meteor.userId(), 'debug') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
-  const eventsSub = login ? Meteor.subscribe('eventsData') : false;
+  // const eventsSub = login ? Meteor.subscribe('eventsData') : false;
   if(!login) {
     return {
       readyUsers: false,
-      readyEvents: false
+      // readyEvents: false
     };
   }else{
     return {
       readyUsers: usersSub.ready(),
-      readyEvents: eventsSub.ready(),
+      // readyEvents: eventsSub.ready(),
       orb: Session.get('now'),
       bolt: Session.get('allData'),
       user: user,

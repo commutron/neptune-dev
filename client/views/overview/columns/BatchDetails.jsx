@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 // import moment from 'moment';
 import Pref from '/client/global/pref.js';
-import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
 import BatchTopStatus from './BatchTopStatus.jsx';
 import ReleasedCheck from './ReleasedCheck.jsx';
@@ -26,8 +25,8 @@ const BatchDetails = ({
                     Array.from(brancheS, x => x.common);
   const ncCols = ['NC total', 'NC remain', 'NC per item', 'NC items', 'scrap', 'RMA'];
   // due == 'fulfill', 'ship'
-  const fullHead = ['SO',...statusCols,'released','active',...progCols,...ncCols,'watch'];
-  const brchHead = ['SO',...statusCols,'active',...progCols,...ncCols,'watch'];
+  const fullHead = ['SO',...statusCols,'released','active',...progCols,...ncCols];
+  const brchHead = ['SO',...statusCols,'active',...progCols,...ncCols];
   
   const headersArr = branchArea ? brchHead : fullHead;
   
@@ -162,15 +161,6 @@ const BatchDetailChunk = ({
         app={app}
         ncCols={ncCols}
         isDebug={isDebug} />
-    
-      <div>
-        <WatchButton 
-          list={user.watchlist}
-          type='batch'
-          keyword={oB.batch}
-          unique={`watch=${oB.batch}`}
-          iconOnly={true} />
-      </div>
       
       {isDebug && <div><b>{oB.batch}</b></div> }
         

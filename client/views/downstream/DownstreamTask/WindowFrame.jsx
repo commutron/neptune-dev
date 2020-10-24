@@ -28,17 +28,17 @@ const WindowFrame = ({
 
   return(
     <div key={ix} className='downGridFrame'>
-      <div className='downWeek'>
-        <dt title={`ship day ${ix+1}`}>{windowMoment.format('dddd MMM DD')}</dt>
+      <div className='downWeek' title={`ship day ${ix+1}`}
+        >{windowMoment.format('dddd MMM DD')}
       </div>
-      <div className='downOrders'>
       
-        <WindowHeader 
-          windowMoment={windowMoment}
-          shipIn={shipIn}
-          pCache={pCache}
-        />
+      <WindowHeader 
+        windowMoment={windowMoment}
+        shipIn={shipIn}
+        pCache={pCache}
+      />
         
+      <div className='downOrders'>
         <DownstreamDetails
             key={'fancylist0'+ix}
             oB={mixedOrders}
@@ -72,7 +72,7 @@ const WindowHeader = ({ windowMoment, shipIn, pCache })=> {
     (arr, x)=> x > 0 ? arr + x : arr, 0 );
     
   return(
-    <div>
+    <div className='downHead'>
       {reTimeTotal > 0 && <i> -> {min2hr(reTimeTotal)} hours total remain</i>}
     </div>
   );

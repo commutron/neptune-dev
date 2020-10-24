@@ -28,7 +28,6 @@
 }
 .gridViewTools span { 
   padding: 0 1vw;
-  height: 3vh;
 }
 .gridViewTools select { 
   border-top-color: transparent;
@@ -259,9 +258,10 @@
   overflow-y: hidden;
 }
 
+/*
 @media screen and (max-width: 1000px){
   .overviewContainer {
-    grid-template-rows: 8vh 6vh 1fr;/*87vh*/
+    grid-template-rows: 8vh 6vh 1fr;
   }
   .overviewContainer .overviewToolbar {
     align-items: stretch;
@@ -276,3 +276,4 @@
     grid-template-columns: minmax(20vw, 30vw) auto;
   }
 }
+*/

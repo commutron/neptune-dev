@@ -7,7 +7,6 @@ import Pref from '/client/global/pref.js';
 import { min2hr } from '/client/utility/Convert.js';
 
 import TagsModule from '/client/components/bigUi/TagsModule.jsx';
-import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
 import ReleaseAction from '/client/components/bigUi/ReleasesModule.jsx';
 import NoteLine from '/client/components/smallUi/NoteLine.jsx';
@@ -83,14 +82,6 @@ const InfoTab = ({
             <BatchXStatus batchData={b} />
           
         </div>
-        
-        <div className='vmargin'>
-          <WatchButton 
-            list={user.watchlist}
-            type='batch'
-            keyword={b.batch} />
-        </div>
-          
           
         <fieldset className='noteCard'>
           <legend className='cap'>Sales</legend>

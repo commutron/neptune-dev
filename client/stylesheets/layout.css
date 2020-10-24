@@ -467,7 +467,7 @@ main {
 }
 .tableList > div,
 .tableList > button {
-  margin: 32px 0;
+  margin: 2vh 0;
 }
 
 /* modal popup */

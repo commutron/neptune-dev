@@ -7,7 +7,6 @@ import GeneralChunk from './GeneralChunk.jsx';
 import PrioritySquareData from '/client/components/smallUi/StatusBlocks/PrioritySquare';
 import TideActivityData from '/client/components/tide/TideActivity';
 import BatchStatus from '/client/components/forms/Batch/BatchStatus.jsx';
-import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 import ReleaseAction from '/client/components/bigUi/ReleasesModule.jsx';
 import StepsProgress from '/client/components/bigUi/StepsProgress/StepsProgress.jsx';
 
@@ -69,13 +68,6 @@ const InfoTab = ({
               allFinished={allDone}
               live={b.live} />
           
-        </div>
-        
-        <div className='vmargin'>
-          <WatchButton 
-            list={user.watchlist}
-            type='batch'
-            keyword={b.batch} />
         </div>
         
         <GeneralChunk 

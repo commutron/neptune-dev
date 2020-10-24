@@ -7,7 +7,7 @@ const NavButton = ({ title, icon, link, blank, tag }) => (
       <i
         className={'fas ' + (icon || 'fa-unlink') + ' fa-fw navButtonIcon'}></i>
       <i className='navButtonText'
-      >{title || ''}{tag && <sup className='med monoFont'>{tag}</sup>}</i>
+      >{title || ''}{tag && <sup className='monoFont'>{tag}</sup>}</i>
     </a>
   </span>
 );
@@ -29,7 +29,7 @@ export const NavPlaceholder = ({ title, icon, tag }) => (
       <i 
         className={(icon || 'fas fa-unlink') + ' fa-fw navButtonIcon'}></i>
       <i className='navButtonText'
-      >{title || ''}{tag && <sup className='med monoFont'>{tag}</sup>}</i>
+      >{title || ''}{tag && <sup className='monoFont'>{tag}</sup>}</i>
     </div>
   </span>
 );

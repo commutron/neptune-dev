@@ -120,50 +120,6 @@ Meteor.methods({
         time: new Date()
       }
     }});
-    try {
-      const batchNum = BatchDB.findOne({_id: batchId, orgKey: accessKey}).batch;
-      Meteor.users.update({
-        orgKey: accessKey,
-        'watchlist.type': 'batch', 
-        'watchlist.keyword': batchNum,
-        'watchlist.mute': false
-      }, {
-        $push : { inbox : {
-          notifyKey: new Meteor.Collection.ObjectID().valueOf(),
-          keyword: batchNum,
-          type: 'batch',
-          title: eventTitle,
-          detail: eventDetail,
-          time: new Date(),
-          unread: true
-        }
-      }},{multi: true});
-    }catch (err) {
-      throw new Meteor.Error(err);
-    }
-  },
-  
-  sendNotifyForBatch(accessKey, batchNum, eventTitle, eventDetail) {
-    try {
-      Meteor.users.update({
-        orgKey: accessKey,
-        'watchlist.type': 'batch', 
-        'watchlist.keyword': batchNum,
-        'watchlist.mute': false
-      }, {
-        $push : { inbox : {
-          notifyKey: new Meteor.Collection.ObjectID().valueOf(),
-          keyword: batchNum,
-          type: 'batch',
-          title: eventTitle,
-          detail: eventDetail,
-          time: new Date(),
-          unread: true
-        }
-      }},{multi: true});
-    }catch (err) {
-      throw new Meteor.Error(err);
-    }
   },
   
   /////////////////////////////////////////////////

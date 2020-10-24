@@ -2,9 +2,6 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import moment from 'moment';
 
-import { UnReadButton } from '/client/components/bigUi/WatchModule/WatchModule.jsx';
-import { RemoveNotifyButton } from '/client/components/bigUi/WatchModule/WatchModule.jsx';
-
 
 const InboxPanel = ({ orb, bolt, app, user, users })=> {
   
@@ -16,10 +13,6 @@ const InboxPanel = ({ orb, bolt, app, user, users })=> {
   
   return (
     <div className='invert'>
-      <p>
-        Events will show up in your inbox for {Pref.batches} in your watchlist 
-        while notify is turned on.
-      </p>
       <p className='vspace'></p>
       <table className=' wide cap'>
         {orderedInbox.map( (entry, index)=>{
@@ -58,3 +51,51 @@ const InboxPanel = ({ orb, bolt, app, user, users })=> {
 };
 
 export default InboxPanel;
+
+
+
+const UnReadButton = ({nKey, unread})=> {
+  
+  function changeRead(nKey, read) {
+    Meteor.call('setNotifyAsRead', nKey, read, (error)=>{
+      error && console.log(error);
+    });
+  }
+
+  return(
+    <span className='notifyWrap'>
+      {!unread ?
+        <button
+          key={'readButton' + nKey}
+          title='read'
+          onClick={()=>changeRead(nKey, unread)}
+        ><i className="far fa-circle fa-lg greenT"></i></button>
+      :
+        <button
+          key={'unreadButton' + nKey}
+          title='unread'
+          onClick={()=>changeRead(nKey, unread)}
+        ><i className="fas fa-circle fa-lg greenT"></i></button>
+      }
+    </span>
+  );
+};
+
+const RemoveNotifyButton = ({nKey})=> {
+  
+  function removeNotify(nKey) {
+    Meteor.call('removeNotify', nKey, (error)=>{
+      error && console.log(error);
+    });
+  }
+
+  return(
+    <span className='notifyWrap'>
+      <button
+        key={'removeButton' + nKey}
+        title='remove'
+        onClick={()=>removeNotify(nKey)}
+      ><i className="fas fa-times fa-lg redT"></i></button>
+    </span>
+  );
+};

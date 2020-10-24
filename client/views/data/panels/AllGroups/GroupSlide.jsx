@@ -41,12 +41,6 @@ const GroupSlide = ({ groupData, widgetsList, batchData, batchDataX, app })=>{
       <div className='wide comfort'>
         
         <div className='centreRow'>
-          {/*<span>
-            <WatchButton 
-              list={user.watchlist}
-              type='group'
-              keyword={g.alias} />
-          </span>*/}
           <TagsModule
             action='group'
             id={g._id}

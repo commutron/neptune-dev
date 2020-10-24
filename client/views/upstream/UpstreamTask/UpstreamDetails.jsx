@@ -1,7 +1,6 @@
 import React from 'react';
 // import moment from 'moment';
 import Pref from '/client/global/pref.js';
-import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
 import BatchTopStatus from '../../overview/columns/BatchTopStatus.jsx';
 import KittingChecks from './KittingChecks';
@@ -24,7 +23,7 @@ const UpstreamDetails = ({
   const kitCols = [...branchClearCols, Pref.baseSerialPart+'s', 'released'];
   
   // due == 'fulfill', 'ship'
-  const kitHead = ['SO',...statusCols,...kitCols,'print','production','watch'];
+  const kitHead = ['SO',...statusCols,...kitCols,'print','production'];
   
   return(
     <div className={`overGridScroll forceScrollStyle ${dense ? 'dense' : ''}`} tabIndex='1'>
@@ -162,15 +161,6 @@ const UpstreamDetailChunk = ({
           </label>
           {!dense && <i className='label infoSquareLabel whiteT'>Production</i>}
         </a>
-      </div>
-      
-      <div>
-        <WatchButton 
-          list={user.watchlist}
-          type='batch'
-          keyword={oB.batch}
-          unique={`watch=${oB.batch}`}
-          iconOnly={true} />
       </div>
         
     </div>

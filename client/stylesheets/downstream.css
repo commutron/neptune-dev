@@ -17,6 +17,7 @@
   flex-flow: row wrap;
   justify-content: flex-start;
   align-items: center;
+  overflow: hidden;
 }
 .lightTheme .downstreamToolbar {
   background-color: var(--silverfade);
@@ -29,30 +30,38 @@
 
 .downGridFrame {
   display: grid;
-  /*grid-template-rows: repeat(20vh);*/
-  grid-template-columns: 4rem calc(100vw - 8vh - 4rem - 1vw);
+  grid-template-rows: 5vmin auto;
+  grid-template-columns: 4vmin calc(100vw - 8vh - 4vmin - 1vmax);
   grid-template-areas: 
+    'downWeek downHeader'
     'downWeek downOrders';
   border-bottom: 5px dashed green;
 }
+
+
 
 .downWeek {
   grid-area: downWeek;
   background-color: violet;
   writing-mode: tb-rl;
   transform: rotate(-180deg);
-  font-size: 2rem;
-  line-height: 2;
+  font-size: 3vmin;
+  /*line-height: 1;*/
+  text-align: right;
   padding: 2ch 0;
   /*text-orientation: sidways;*/
 }
 
+.downHead {
+  grid-area: downHeader;
+  background-color: teal;
+}
 
 .downOrders {
   grid-area: downOrders;
   background-color: rgba(234,32,234,0.1);
   display: grid;
-  grid-auto-flow: columns;
-  grid-auto-columns: repeat(10vw);
+  /*grid-auto-rows: 10vmin;*/
+  
   
 }

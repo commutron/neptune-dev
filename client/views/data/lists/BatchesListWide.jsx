@@ -10,6 +10,7 @@ const BatchesListWide = ({
   const [ allState, allSet ] = useState(false);
   
   const [ textString, textStringSet ] = useState( '' );
+  const [ blendedListState, blendedListSet ] = useState( [] );
   const [ showListState, showListSet ] = useState( [] );
 
   function setTextFilter(rule) {
@@ -17,7 +18,6 @@ const BatchesListWide = ({
   }
 
   useEffect( ()=> {
-    
     const w = widgetData;
     const v = variantData;
     const g = groupData;
@@ -27,33 +27,29 @@ const BatchesListWide = ({
       const subW = w.find( x => x._id === b.widgetId);
       const subV = v.find( x => x.versionKey === b.versionKey);
       const subG = g.find( x => x._id === subW.groupId);
-      blendedList.push({
-        batchNumber: b.batch,
-        salesNumber: b.salesOrder || 'n/a',
-        groupAlias: subG.alias,
-        widget: subW.widget, 
-        variant: subV.variant,
-        tags: b.tags,
-        live: b.live
-      });
+      blendedList.push([
+        b.batch,
+        b.salesOrder || 'n/a',
+        subG.alias,
+        subW.widget, 
+        subV.variant,
+        b.tags,
+        b.live
+      ]);
     }
+    blendedListSet( blendedList );
+  }, []); 
     
-    let showList = blendedList.filter( 
-                    tx => 
-                      tx.batchNumber.toLowerCase().includes(textString) === true ||
-                      tx.salesNumber.toLowerCase().includes(textString) === true ||
-                      tx.groupAlias.toLowerCase().includes(textString) === true ||
-                      tx.widget.toLowerCase().includes(textString) === true ||
-                      tx.variant.toLowerCase().includes(textString) === true ||
-                      tx.tags.join('|').toLowerCase().split('|').includes(textString) === true
-                  );
+  useEffect( ()=> {
+    let showList = blendedListState.filter( tx =>
+                    JSON.stringify(tx).toLowerCase().includes(textString) === true );
     let sortList = showList.sort((b1, b2)=> {
-                if (b1.batchNumber < b2.batchNumber) { return 1 }
-                if (b1.batchNumber > b2.batchNumber) { return -1 }
+                if (b1[0] < b2[0]) { return 1 }
+                if (b1[0] > b2[0]) { return -1 }
                 return 0;
               });
     showListSet( sortList );
-  }, [ batchData, widgetData, groupData, textString ]);
+  }, [ blendedListState, textString ]);
   
   return(
     <div className='centre' key={1}>
@@ -79,21 +75,21 @@ const BatchesListWide = ({
         </div>
 
         {showListState.map( (entry, index)=> {
-          const tags = entry.tags.map( (et, ix)=>{
+          const tags = entry[5].map( (et, ix)=>{
             return(<span key={ix} className='tagFlag'><i>{et}</i></span>);
           });
-          if(!allState && !entry.live) { return null }else{
-            const sty = !entry.live ? 'numFont gMark' : 'numFont activeMark';
+          if(!allState && !entry[6]) { return null }else{
+            const sty = !entry[6] ? 'numFont gMark' : 'numFont activeMark';
             return(
               <LeapRow
                 key={"wo"+index}
-                title={entry.batchNumber.toUpperCase()}
-                cTwo={<i><i className='smaller'>so: </i>{entry.salesNumber.toUpperCase()}</i>}
-                cThree={entry.groupAlias.toUpperCase()}
-                cFour={entry.widget.toUpperCase() + ' v.' + entry.variant}
+                title={entry[0].toUpperCase()}
+                cTwo={<i><i className='smaller'>so: </i>{entry[1].toUpperCase()}</i>}
+                cThree={entry[2].toUpperCase()}
+                cFour={entry[3].toUpperCase() + ' v.' + entry[4]}
                 cFive={tags}
                 sty={`${sty} lastSpanRight`}
-                address={'/data/batch?request=' + entry.batchNumber}
+                address={'/data/batch?request=' + entry[0]}
               />
         )}})}
 

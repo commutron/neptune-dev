@@ -32,12 +32,12 @@ const DownstreamView = ({
   const [ dense, denseSet ] = useState( defaultDense );
   const [ light, themeSet ] = useState( defaultLight );
   
-  const [ liveState, liveSet ] = useState( false );
-  
+  // const [ liveState, liveSet ] = useState( false );
+  /*
   useLayoutEffect( ()=> {
     sortInitial();
   }, [batch, batchX, sortBy]);
-  
+  */
   function changeSort(e) {
     const sort = e.target.value;
     sortBySet( sort );
@@ -53,7 +53,7 @@ const DownstreamView = ({
     themeSet( val );
     Session.set(sessionSticky+'lightTheme', val);
   }
-  
+  /*
   function sortInitial() {
     return new Promise((resolve) => {
       
@@ -112,7 +112,7 @@ const DownstreamView = ({
       liveSet( orderedBatches );
     });
   }
-      
+   */   
   const density = !dense ? '' : 'minifyed';
   
   const branches = app.branches.filter( b => b.open === true );
@@ -141,13 +141,13 @@ const DownstreamView = ({
       
       <div className={`downstreamContent forceScrollStyle ${density}`}>
         
-      {!liveState ?
+      {/*!liveState ?
         <div className='centreContainer'>
           <div className='centrecentre'>
             <Spin />
           </div>
         </div>
-      :  
+      :   */}
               
         <ShipWindows
           calcFor={calcFor}
@@ -161,7 +161,6 @@ const DownstreamView = ({
           clientTZ={clientTZ}
         />
         
-      }  
       </div> 
     </div>
   );

@@ -84,7 +84,7 @@ const OverviewTools = ({
     </span>
     
     <span className='flexSpace' />
-    <div><ClockString loadTime={loadTimeUP} /></div>
+    <ClockString loadTime={loadTimeUP} />
   </nav>
 );
 

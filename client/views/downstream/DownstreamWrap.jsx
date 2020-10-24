@@ -4,7 +4,6 @@ import Pref from '/client/global/pref.js';
 import StreamLayout from '/client/layouts/StreamLayout.jsx';
 
 import DownstreamView from '/client/views/downstream/DownstreamTask/DownstreamView';
-import DownstreamOver from '/client/views/downstream/DownstreamOver/DownstreamOver';
 
 
 const DownstreamWrap = ({ 
@@ -26,19 +25,7 @@ const DownstreamWrap = ({
         action={false}
         navBar='down'
       >
-        <DownstreamOver
-          batch={batch}
-          batchX={batchX}
-          bCache={bCache}
-          pCache={pCache}
-          acCache={acCache}
-          brCache={brCache}
-          user={user}
-          app={app}
-          clientTZ={clientTZ}
-          isDebug={isDebug}
-          isNightly={isNightly}
-        />
+        <div>OK</div>
       </StreamLayout>
     );
   }

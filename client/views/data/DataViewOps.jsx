@@ -11,6 +11,8 @@ import AllGroups from './panels/AllGroups/AllGroups.jsx';
 import AllBatches from './panels/AllBatches.jsx';
 import AllItems from './panels/AllItems.jsx';
 
+import BuildHistory from './panels/BuildHistory.jsx';
+
 import ItemPanel from './panels/ItemPanel.jsx';
 import BatchPanel from './panels/BatchPanel/BatchPanel.jsx';
 import BatchPanelX from './panels/XBatchPanel/BatchPanelX.jsx';
@@ -35,6 +37,8 @@ const DataViewOps = ({
   view, request, specify,
   subLink, orb
 })=> {
+  
+  const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
   
   function allLinkedBatches(wId) {
     const xBatches = allXBatch.filter(x => x.widgetId === wId);
@@ -154,7 +158,34 @@ const DataViewOps = ({
       </TraverseWrap>
     );
   }
-    
+
+  if(view === 'buildHistory') {
+    Session.set('nowBatch', false);
+    return (
+      <TraverseWrap
+	      batchData={false}
+        widgetData={false}
+        variantData={false}
+        groupData={false}
+        user={user}
+        app={app}
+        title='Build History'
+        subLink={subLink}
+        action={false}
+        base={true}
+        invertColor={true}
+      >
+        <BuildHistory
+          allBatch={allBatch}
+          allXBatch={allXBatch}
+          allVariant={allVariant}
+          allWidget={allWidget}
+          allGroup={allGroup} 
+          app={app} />
+      </TraverseWrap>
+    );
+  }   
+      
   if(view === 'reports') {
     Session.set('nowBatch', false);
     return (
@@ -177,7 +208,8 @@ const DataViewOps = ({
           allWidget={allWidget}
           allVariant={allVariant}
           allGroup={allGroup} 
-          app={app} />
+          app={app}
+          isNightly={isNightly} />
       </TraverseWrap>
     );
   }

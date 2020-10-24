@@ -31,13 +31,13 @@ const DataRepair = ({ app, users })=> {
       if(reply) { toast.success('data edit complete', { autoClose: false }); }
     });
   }
-  /*
+  
   function clearAuserThing() {
-    Meteor.call('fixOvFilter', (error, reply)=>{
+    Meteor.call('UNSETwatchlistKey', (error, reply)=>{
       error && console.log(error);
       if(reply) { toast.success('data edit complete', { autoClose: false }); }
     });
-  }*/
+  }
   
   /*
   function addAthing() {
@@ -90,13 +90,6 @@ const DataRepair = ({ app, users })=> {
     Meteor.call('resetALLCacheDB', (error)=>{
       error && console.log(error);
       toast.success('method called', { autoClose: false });
-    });
-  }
-  
-  function clearAllWatch() {
-    Meteor.call('clearAllUserWatchlists', (error, reply)=>{
-      error && console.log(error);
-      if(reply) { toast.success('data edit complete', { autoClose: false }); }
     });
   }
   
@@ -173,11 +166,11 @@ const DataRepair = ({ app, users })=> {
       
       <hr />
       
-      <h2 className='cap'>Clear All User Watchlists</h2>
+      <h2 className='cap'>Clear All User Watchlist Keys</h2>
       <button
-        onClick={()=>clearAllWatch()}
+        onClick={()=>clearAuserThing()}
         className='action clear blackT'
-      >Clear</button>
+      >Clear and Delete</button>
       
       <hr />
       

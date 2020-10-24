@@ -36,7 +36,21 @@ const UpstreamView = ({
   
   useLayoutEffect( ()=> {
     sortInitial();
-  }, [batch, batchX, sortBy]);
+  }, [sortBy]);
+  
+  useLayoutEffect( ()=> {
+    liveSet( false );
+    Meteor.call('REQUESTcacheUpdate', clientTZ, 
+      true, // batchUp
+      true, // priorityUp
+      true, // activityUp
+      true, // branchConUp
+      false, // compUp
+    ()=>{
+      sortInitial();
+      loadTimeSet( moment() );
+    });
+  }, [ batch, batchX ]);
   
   function changeSort(e) {
     const sort = e.target.value;

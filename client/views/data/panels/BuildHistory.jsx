@@ -172,7 +172,7 @@ const BuildHistory = ({ allBatch, allXBatch, allVariant, allWidget, allGroup })=
   
   return(
     <div className='space'>
-    
+      
       <p>
         <i className='medBig line2x'>When was </i>
         
@@ -231,10 +231,10 @@ const BuildHistory = ({ allBatch, allXBatch, allVariant, allWidget, allGroup })=
         }
       </p>
       
-      <hr />
+      <hr className='vmargin' />
       
       <p className='medBig line2x'
-      >Which {Pref.widgets} from {insertGroup} {insertWas} built {insertInc} {I && insertNum} {insertSpan}
+        >Which {Pref.widgets} from {insertGroup} {insertWas} built {insertInc} {I && insertNum} {insertSpan}
       </p>
       
       <ReportStatsTable 
@@ -242,6 +242,8 @@ const BuildHistory = ({ allBatch, allXBatch, allVariant, allWidget, allGroup })=
         dateString={`${G}-${wasState}-${incState}-${numState}-${spanState}`}
         rows={viewState}
         extraClass='max750 transparent' />
+        
+      
 
     </div>
   );
