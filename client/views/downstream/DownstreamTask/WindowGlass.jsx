@@ -5,11 +5,11 @@ import 'moment-business-time';
 import '/client/utility/ShipTime.js';
 import Pref from '/client/global/pref.js';
 
-import DownstreamHeaders from './DownstreamHeaders';
+import DownstreamDetails from './DownstreamDetails';
 
 import { min2hr } from '/client/utility/Convert';
 
-const WindowFrame = ({ 
+const WindowGlass = ({ 
   windowMoment, indexKey, 
   bCache, pCache, acCache, zCache, 
   brancheS, app, user
@@ -26,19 +26,12 @@ const WindowFrame = ({
   const mixedOrders = [...shipIn,...early];
 
   return(
-    <div key={ix} className='downGridFrameFixed'>
-      <div className='downWeek' title={`ship day ${ix+1}`}
-        >{windowMoment.format('dddd MMM DD')}
-      </div>
-      
-      <WindowHeader 
-        windowMoment={windowMoment}
-        shipIn={shipIn}
-        pCache={pCache}
-      />
+    <div key={ix} className='downGridFrameScroll'>
+    
+      <div className='downHeadScroll'></div>
         
-      <div className='downOrdersFixed'>
-        <DownstreamHeaders
+      <div className='downOrdersScroll'>
+        <DownstreamDetails
             key={'fancylist0'+ix}
             oB={mixedOrders}
             bCache={bCache}
@@ -60,19 +53,4 @@ const WindowFrame = ({
   );
 };
 
-export default WindowFrame;
-
-
-const WindowHeader = ({ windowMoment, shipIn, pCache })=> {
-  
-  const reTimeArr = Array.from(shipIn, 
-    x => typeof x.quote2tide === 'number' && x.quote2tide );
-  const reTimeTotal = reTimeArr.reduce( 
-    (arr, x)=> x > 0 ? arr + x : arr, 0 );
-    
-  return(
-    <div className='downHeadFixed'>
-      {reTimeTotal > 0 && <i>{min2hr(reTimeTotal)} hours total remain</i>}
-    </div>
-  );
-};
+export default WindowGlass;

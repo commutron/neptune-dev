@@ -32,16 +32,23 @@ const NCFlood = ({ id, live, user, app, ncTypesCombo })=> {
       for(let ref of refSplit) {
         ref = ref.replace(",", "");
         if(ref.length < 8) {
-          Meteor.call('floodNC', id, ref, type, (error)=>{
-            error && console.log(error);
-          });
-          this.ncRefs.value = '';
-          toast.success("NonConformance has been added to all Work In Progress items", {
+          toast.warn('Please Wait For Confirmation...', {
+            toastId: ( 'floodpOp' ),
             position: toast.POSITION.BOTTOM_CENTER,
-            autoClose: 10000,
-            closeOnClick: false
+            autoClose: false
           });
-          this.go.disabled = false;
+          Meteor.call('floodNC', id, ref, type, (error, reply)=>{
+            error && console.log(error);
+            if(reply) {
+              toast.update(( 'floodpOp' ), {
+                render: "NonConformance has been added to all Work In Progress items",
+                type: toast.TYPE.SUCCESS,
+                autoClose: 3000
+              });
+              this.ncRefs.value = '';
+              this.go.disabled = false;
+            }
+          });
         }else{
           toast.warn("Can't add '" + ref + "', A referance can only be 7 characters long", {
             position: toast.POSITION.BOTTOM_CENTER,

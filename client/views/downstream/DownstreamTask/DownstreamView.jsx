@@ -138,8 +138,6 @@ const DownstreamView = ({
         denseSetUP={(e)=>changeDense(e)}
         themeSetUP={(e)=>changeTheme(e)}
       />
-      
-      <div className={`downstreamContent forceScrollStyle ${density}`}>
         
       {/*!liveState ?
         <div className='centreContainer'>
@@ -159,9 +157,9 @@ const DownstreamView = ({
           app={app}
           user={user}
           clientTZ={clientTZ}
+          density={density}
         />
-        
-      </div> 
+
     </div>
   );
 };

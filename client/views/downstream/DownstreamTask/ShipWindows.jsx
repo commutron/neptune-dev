@@ -6,6 +6,7 @@ import '/client/utility/ShipTime.js';
 import Pref from '/client/global/pref.js';
 
 import WindowFrame from './WindowFrame';
+import WindowGlass from './WindowGlass';
 
 import { LeapTextLink } from '/client/components/tinyUi/LeapText.jsx';
 
@@ -13,7 +14,7 @@ const asHours = (min) => moment.duration(min, "minutes").asHours().toFixed(2, 10
 
 const ShipWindows = ({ 
   calcFor, bCache, pCache, acCache, zCache,
-  brancheS, app, user, clientTZ
+  brancheS, app, user, clientTZ, density
 })=> {
 
   const nonWorkDays = app.nonWorkDays;
@@ -45,7 +46,7 @@ const ShipWindows = ({
   const lateTimeTotal = lateTimeArr.reduce( (arr, x)=> x > 0 ? arr + x : arr, 0 );
           
   return(
-    <Fragment>
+    <div className={`downstreamContent forceScrollStyle ${density}`}>
     {/*
       <div key='0x0' className='downGridFrame'>
         <div className='downWeek'>
@@ -57,7 +58,9 @@ const ShipWindows = ({
           <BatchListPending batchList={lateBatch} bCache={bCache} />
         </div>
       </div>
-       */}   
+       */}  
+       
+      <div className={`downstreamFixed forceScrollStyle ${density}`}>
       {next50Days.map( (e, ix)=>( 
         <WindowFrame 
           windowMoment={e}
@@ -72,7 +75,28 @@ const ShipWindows = ({
           clientTZ={clientTZ}
         />
       ))}
-    </Fragment>
+      </div>
+      
+      <div className={`downstreamScroll forceScrollStyle ${density}`}>
+        {next50Days.map( (e, ix)=>( 
+        <WindowGlass
+          windowMoment={e}
+          indexKey={ix}
+          bCache={bCache}
+          pCache={pCache}
+          acCache={acCache}
+          zCache={zCache}
+          brancheS={brancheS}
+          app={app}
+          user={user}
+          clientTZ={clientTZ}
+        />
+      ))}
+      </div>
+      
+      
+      
+    </div>
   );
 };
 

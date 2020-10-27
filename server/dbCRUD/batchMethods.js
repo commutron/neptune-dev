@@ -326,33 +326,33 @@ Meteor.methods({
     const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
     if(!Meteor.userId() || !doc) { null }else{
       const liveItems = doc.items.filter( x => x.finishedAt === false );
-      const liveSerials = Array.from(liveItems, x => x.serial);
+      const liveSerials = Array.from(liveItems, x => {
+                            const double = doc.nonCon.find( y => 
+                              y.ref === ref &&
+                              y.serial === x.serial &&
+                              y.type === type &&
+                              y.inspect === false
+                            );
+                            if( !double ) { return x.serial } } );
       for( let sn of liveSerials ) {
-        const double = doc.nonCon.find( x => 
-                        x.ref === ref &&
-                        x.serial === sn &&
-                        x.type === type &&
-                        x.inspect === false
-                      );
-        if(double) { null }else{
-          BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
-            $push : { nonCon: {
-              key: new Meteor.Collection.ObjectID().valueOf(), // id of the nonCon entry
-              serial: sn, // barcode id of item
-              ref: ref, // referance on the widget
-              type: type, // type of nonCon
-              where: 'wip', // where in the process
-              time: new Date(), // when nonCon was discovered
-              who: Meteor.userId(),
-              fix: false,
-              inspect: false,
-              reject: [],
-              skip: false,
-              snooze: false,
-              comm: ''
-          }}});
-        }
+        BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+          $push : { nonCon: {
+            key: new Meteor.Collection.ObjectID().valueOf(), // id of the nonCon entry
+            serial: sn, // barcode id of item
+            ref: ref, // referance on the widget
+            type: type, // type of nonCon
+            where: 'wip', // where in the process
+            time: new Date(), // when nonCon was discovered
+            who: Meteor.userId(),
+            fix: false,
+            inspect: false,
+            reject: [],
+            skip: false,
+            snooze: false,
+            comm: ''
+        }}});
       }
+      return true;
     }
   },
   

@@ -1,39 +1,69 @@
-import React from 'react';
-// import Pref from '/client/global/pref.js';
+import React, { Fragment } from 'react';
+// import moment from 'moment';
+import Pref from '/client/global/pref.js';
 
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 
-const DownstreamHeaders = ({ oB, bCache, title, showMore })=> (
-  <div className='overGridFixed'>
+const DownstreamHeaders = ({
+  oB,
+  bCache, pCache, acCache,
+  user, app, brancheS,
+  isDebug, isNightly,
+  dense
+})=> {
+  
+  console.log(oB);
+  
+  return(
+    <Fragment>
       
-    <div id="allLiveBatch" className='overGridRowFixedHeader'>
-      <span>{title} <sup>{oB.length}</sup></span>
-    </div>
-    
-    {!oB ? null :
-      oB.map( (entry, index)=>{
-        return(
-          <DownstreamHeaderChunk
-            key={`${entry._id}livefixed${index}`}
-            ck={entry}
-            bCache={bCache} />
-    )})}
-    
-  </div>
-);
+      {!oB ? null :
+        oB.map( (entry, index)=>{
+          return(
+            <DownstreamFixedChunk
+              ck={entry}
+              bCache={bCache}
+              pCache={pCache}
+              acCache={acCache}
+              app={app}
+              user={user}
+              isDebug={isDebug}
+            />
+              // brancheS={brancheS}
+              // branchClear={branchClear}
+              // isDebug={isDebug}
+              // isNightly={isNightly}
+              // statusCols={statusCols}
+              // dense={dense} />
+      )})}
+      
+    </Fragment>
+  );
+};
 
 export default DownstreamHeaders;
 
-const DownstreamHeaderChunk = ({ck, source, bCache })=> {
 
-  const moreInfo = bCache ? bCache.dataSet.find( x => x.batch === ck.batch) : false;
-  const what = !moreInfo ? 'unavailable' : `${moreInfo.isWhat} ${moreInfo.more}`;
+const DownstreamFixedChunk = ({ck, bCache, pCache, acCache, app, user,isDebug, dense })=> {
+
+  const moreInfo = bCache ? bCache.find( x => x.batch === ck.batch) : false;
+  const what = !moreInfo ? 'unavailable' : `${moreInfo.isWhat}`;// ${moreInfo.more}`;
+  
+  
   return(
-    <div className='overGridRowFixed'>
-      <div>
-        <ExploreLinkBlock type='batch' keyword={ck.batch} wrap={false} />
-      </div>
+    <div className='downRowFixed'>
+      <div><ExploreLinkBlock type='batch' keyword={ck.batch} wrap={false} /></div>
       <div>{what.length <= 75 ? what : what.substring(0, 75) + '...'}</div>
     </div>
   );
 };
+
+ {/*
+      <div>
+        <i><i className='label' title={Pref.salesOrder}
+          >{Pref.SO}:<br /></i>{oB.salesOrder}</i>
+      </div>
+    */}
+      
+      
+  

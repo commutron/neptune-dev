@@ -137,7 +137,8 @@ const UpstreamView = ({
         });               
 
   return(
-    <div key={0} className={`${light === true ? 'lightTheme invert ' : ''}`}>
+    <div key={0} className={`${light === true ? 
+                  'upstreamView lightTheme invert ' : 'upstreamView'}`}>
     
       <UpstreamTools
         app={app}

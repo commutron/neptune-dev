@@ -103,8 +103,8 @@ export function UsersTimeTotal( userIDs, allUsers, dateTime, span, spanHours ) {
   }
   
   const userTimeTotal = userTimeMax.reduce( (arr, x)=> { 
-                                      return arr + x }, 0 );
-
+                          return arr + x }, 0 ).toPrecision(10) / 1;
+  
   return userTimeTotal;
 }
 
