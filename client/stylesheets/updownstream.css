@@ -159,3 +159,15 @@
   border-right: 1px outset rgba(255,255,255,0.3);
   border-bottom: 1px outset rgba(255,255,255,0.4);
 }
+
+
+
+.gridViewTools input[type=range] {
+  filter: grayscale(1) invert(1);
+  overflow: hidden;
+}
+
+.invert .gridViewTools input[type=range] {
+  filter: grayscale(0.95) brightness(1.7);
+  overflow: hidden;
+}

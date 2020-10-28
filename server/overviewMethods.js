@@ -181,7 +181,7 @@ function collectStatus(privateKey, batchID) {
       const timeRemainClean = timeRemain > -1 && timeRemain < 1 ? 
           timeRemain.toPrecision(1) : Math.round(timeRemain);
       
-      const riverChosen = b.river !== false; // River Setup
+      const riverChosen = bx.river !== false; // River Setup
       
       collection = {
         batch: bx.batch,
@@ -224,7 +224,7 @@ function collectStatus(privateKey, batchID) {
   });
 }
 
-function collectPriority(privateKey, batchID, clientTZ, mockDay) {
+function collectPriority(privateKey, batchID, mockDay) {
   return new Promise(resolve => {
     let collection = false;
     
@@ -235,7 +235,7 @@ function collectPriority(privateKey, batchID, clientTZ, mockDay) {
         holidays: nonWorkDays
       });
     }
-    const now = moment().tz(clientTZ);
+    const now = moment().tz(Config.clientTZ);
     
     const b = BatchDB.findOne({_id: batchID}) ||
               XBatchDB.findOne({_id: batchID});
@@ -243,10 +243,10 @@ function collectPriority(privateKey, batchID, clientTZ, mockDay) {
     if(!b) {
       resolve(collection);
     }else{
-      const endEntry = b.end || b.salesEnd;
+      const endEntry = b.salesEnd || b.end;
       
       const future = mockDay ? mockDay : endEntry;
-      const calcShip = calcShipDay( now, future, clientTZ );
+      const calcShip = calcShipDay( now, future );
       const shipAim = calcShip[0];
       const lateLate = calcShip[1];
       
@@ -281,6 +281,7 @@ function collectPriority(privateKey, batchID, clientTZ, mockDay) {
           estLatestBegin: estLatestBegin.format(),
           isStupid: isStupid,
           estEnd2fillBuffer: estEnd2fillBuffer,
+          endEntry: endEntry,
           shipAim: shipAim.format(),
           lateLate: lateLate
         };
@@ -292,7 +293,8 @@ function collectPriority(privateKey, batchID, clientTZ, mockDay) {
           quote2tide: false,
           isStupid: false,
           estEnd2fillBuffer: 0,
-          shipTime: shipTime.format(),
+          endEntry: endEntry,  
+          shipAim: shipAim.format(),
           lateLate: lateLate
         };
         resolve(collection);
@@ -467,17 +469,17 @@ Meteor.methods({
     return bundleStatus(batchID);
   },
   
-  priorityRank(batchID, clientTZ, serverAccessKey, mockDay) {
-    async function bundlePriority() {//batchID, clientTZ, orgKey, mockDay) {
+  priorityRank(batchID, serverAccessKey, mockDay) {
+    async function bundlePriority() {//batchID, orgKey, mockDay) {
       const accessKey = serverAccessKey || Meteor.user().orgKey;
       try {
-        bundle = await collectPriority(accessKey, batchID, clientTZ, mockDay);
+        bundle = await collectPriority(accessKey, batchID, mockDay);
         return bundle;
       }catch (err) {
         throw new Meteor.Error(err);
       }
     }
-    return bundlePriority();//batchID, clientTZ, mockDay);
+    return bundlePriority();//batchID, mockDay);
   },
   
   branchProgress(batchID, branchOnly) {

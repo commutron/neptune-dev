@@ -15,8 +15,7 @@ const PrioritySquareData = ({
   const [ ptData, setPriority ] = useState(false);
   
   useEffect( ()=> {
-    const clientTZ = moment.tz.guess();
-    Meteor.call('priorityRank', batchID, clientTZ, false, mockDay, (error, reply)=>{
+    Meteor.call('priorityRank', batchID, false, mockDay, (error, reply)=>{
       error && console.log(error);
       if( reply ) { 
         if(thingMounted.current) { setPriority( reply ); }

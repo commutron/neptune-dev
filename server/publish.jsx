@@ -154,7 +154,7 @@ Meteor.publish('tideData', function(clientTZ){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
   Meteor.defer( ()=>{ batchCacheUpdate(orgKey); });
-  // Meteor.defer( ()=>{ Meteor.call('priorityCacheUpdate', orgKey, clientTZ); });
+  // Meteor.defer( ()=>{ Meteor.call('priorityCacheUpdate', orgKey); });
   // Meteor.defer( ()=>{ branchConCacheUpdate(orgKey) });
   if(!this.userId){
     return this.ready();
@@ -201,11 +201,11 @@ Meteor.publish('bCacheData', function(){
 });
 
 // Overview Agenda Upstream
-Meteor.publish('cacheData', function(clientTZ){
+Meteor.publish('cacheData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
   Meteor.defer( ()=>{ batchCacheUpdate(orgKey); });
-  Meteor.defer( ()=>{ Meteor.call('priorityCacheUpdate', orgKey, clientTZ); });
+  Meteor.defer( ()=>{ Meteor.call('priorityCacheUpdate', orgKey); });
   Meteor.defer( ()=>{ Meteor.call('activityCacheUpdate', orgKey); });
   Meteor.defer( ()=>{ branchConCacheUpdate(orgKey) });
   Meteor.defer( ()=>{ Meteor.call('completeCacheUpdate', orgKey); });
@@ -243,7 +243,7 @@ Meteor.publish('partsPlusCacheData', function(){
 });
 
 // Overview
-Meteor.publish('shaddowData', function(clientTZ){
+Meteor.publish('shaddowData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
   if(!this.userId){
@@ -373,11 +373,11 @@ Meteor.publish('hotDataPlus', function(batch){
 });
 
 // Explore
-Meteor.publish('skinnyData', function(clientTZ){
+Meteor.publish('skinnyData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
   // Meteor.defer( ()=>{ Meteor.call('batchCacheUpdate', orgKey); });
-  // Meteor.defer( ()=>{ Meteor.call('priorityCacheUpdate', orgKey, clientTZ); });
+  // Meteor.defer( ()=>{ Meteor.call('priorityCacheUpdate', orgKey); });
   // Meteor.defer( ()=>{ branchConCacheUpdate(orgKey) });
   if(!this.userId){
     return this.ready();

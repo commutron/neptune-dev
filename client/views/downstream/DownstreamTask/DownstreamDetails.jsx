@@ -8,7 +8,7 @@ import { PrioritySquare } from '/client/components/smallUi/StatusBlocks/Priority
 import { TideActivitySquare } from '/client/components/tide/TideActivity';
 
 const DownstreamDetails = ({
-  oB,
+  oB, indexKey,
   bCache, pCache, acCache,
   user, app, brancheS,
   isDebug, isNightly,
@@ -24,6 +24,7 @@ const DownstreamDetails = ({
           return(
             <DownstreamScrollChunk
               ck={entry}
+              indexKey={indexKey+'c'+index}
               bCache={bCache}
               pCache={pCache}
               acCache={acCache}
@@ -46,7 +47,11 @@ const DownstreamDetails = ({
 export default DownstreamDetails;
 
 
-const DownstreamScrollChunk = ({ck, bCache, pCache, acCache, app, user,isDebug, dense })=> {
+const DownstreamScrollChunk = ({
+  ck, indexKey,
+  bCache, pCache, acCache, 
+  app, user, isDebug, dense 
+})=> {
 
   const isDone = ck.completedAt ? true : false;
   
@@ -74,7 +79,7 @@ const DownstreamScrollChunk = ({ck, bCache, pCache, acCache, app, user,isDebug, 
   
   
   return(
-    <div className='downRowScroll' title={ck.batch}>
+    <div key={indexKey} className='downRowScroll' title={ck.batch}>
      
       {!isDone ?
         <div title={`${q2t} minutes`} className='fade'>{q2tStatus}</div>

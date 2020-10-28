@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import moment from 'moment';
 // import 'moment-timezone';
 import 'moment-business-time';
@@ -15,39 +15,45 @@ const WindowGlass = ({
   brancheS, app, user
 })=> {
   
-  const ix = indexKey;
-
-  const shipIn = pCache.filter( x => moment(x.shipAim).isSame(windowMoment, 'day') );
-    
-  const early = zCache.filter( x => {
-    if(moment(x.shipAim).isSame(windowMoment, 'day')) { return true }
-  });
+  const [ mixedOrders, mixedOrdersSet ] = useState([]);
   
-  const mixedOrders = [...shipIn,...early];
+  useLayoutEffect( ()=>{
+    if(indexKey === 0) {
+      const lateShip = pCache.filter( x => moment(x.shipAim).isSameOrBefore(windowMoment, 'day') );
+    //const lateTimeArr = Array.from(lateBatch, x => typeof x.quote2tide === 'number' && x.quote2tide );
+    //const lateTimeTotal = lateTimeArr.reduce( (arr, x)=> x > 0 ? arr + x : arr, 0 );
+      mixedOrdersSet( lateShip );
+    }else{
+      const shipIn = pCache.filter( x => moment(x.shipAim).isSame(windowMoment, 'day') );
+      const early = zCache.filter( x => {
+        if(moment(x.shipAim).isSame(windowMoment, 'day')) { return true }
+      });
+      mixedOrdersSet( [...shipIn,...early] );
+    }
+  }, []);
 
   return(
-    <div key={ix} className='downGridFrameScroll'>
+    <div key={'s'+indexKey} className='downGridFrameScroll'>
     
       <div className='downHeadScroll'></div>
         
       <div className='downOrdersScroll'>
         <DownstreamDetails
-            key={'fancylist0'+ix}
-            oB={mixedOrders}
-            bCache={bCache}
-            title='things'
-            showMore={true}
-            
-            pCache={pCache}
-            acCache={acCache}
-            user={user}
-            app={app}
-            brancheS={brancheS}
-            isDebug={false}
-            isNightly={false}
-            dense={false}
-            filterBy={false}
-          />
+          indexKey={'fancylist0S'+indexKey}
+          oB={mixedOrders}
+          bCache={bCache}
+          title='things'
+          showMore={true}
+          pCache={pCache}
+          acCache={acCache}
+          user={user}
+          app={app}
+          brancheS={brancheS}
+          isDebug={false}
+          isNightly={false}
+          dense={false}
+          filterBy={false}
+        />
       </div>
     </div>
   );

@@ -15,6 +15,24 @@ export function HolidayCheck( nonWorkDays, dateTime ) {
   return isit;
 }
 
+export function listShipDays( nonWorkDays, arrLength, withLast ) {
+  if( Array.isArray(nonWorkDays) ) {  
+    moment.updateLocale('en', {
+      holidays: nonWorkDays
+    });
+  }
+  const now = moment().lastShipDay();
+  
+  let sArr = [];
+  for(let s = 0; sArr.length < arrLength; s++) {
+    const newDay = sArr.length === 0 ?
+                    withLast ? now : now.nextShipDay() :
+                    sArr[sArr.length - 1].nextShipDay();
+    sArr.push(newDay);
+  }
+  return sArr;
+}
+
 export function TimeInWeek( nonWorkDays, weekStart ) {
   if( Array.isArray(nonWorkDays) ) {  
     moment.updateLocale('en', {

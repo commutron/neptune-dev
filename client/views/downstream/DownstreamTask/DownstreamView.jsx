@@ -38,6 +38,13 @@ const DownstreamView = ({
     sortInitial();
   }, [batch, batchX, sortBy]);
   */
+  function changeNum(e) {
+    const cleanVal = Number(e) < 1 ? 1 :
+                    Number(e) > 24 ? 24 :
+                    Number(e);
+    calcForSet( cleanVal );
+  }
+  
   function changeSort(e) {
     const sort = e.target.value;
     sortBySet( sort );
@@ -120,7 +127,7 @@ const DownstreamView = ({
           if (b1.position < b2.position) { return 1 }
           if (b1.position > b2.position) { return -1 }
           return 0;
-        });               
+        });
 
   return(
     <div
@@ -131,9 +138,11 @@ const DownstreamView = ({
       <DownstreamTools
         app={app}
         loadTimeUP={loadTime}
+        numUp={calcFor}
         sortByUP={sortBy}
         denseUP={dense}
         lightUP={light}
+        changeNumUP={(e)=>changeNum(e.target.value)}
         changeSortUP={(e)=>changeSort(e)}
         denseSetUP={(e)=>changeDense(e)}
         themeSetUP={(e)=>changeTheme(e)}

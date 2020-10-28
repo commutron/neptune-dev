@@ -868,29 +868,6 @@
   border-color: rgba(0,0,0,0.2);
 }
 
-.liteToolOn, 
-.liteToolOff {
-  min-height: 3vh;
-  padding: 0 5px;
-  line-height: 1.5;
-  font-size: medium;
-  color: black;
-  letter-spacing: 1px;
-	text-transform: capitalize;
-	overflow: hidden;
-	border-width: 0.5px;
-	border-style: solid;
-	border-top-color: transparent;
-	border-right-color: rgb(0,0,0);
-	border-bottom-color: transparent;
-	border-left-color: rgb(0,0,0);
-}
-.liteToolOn { 
-  background-color: var(--navIndicatorB);
-  cursor: default; }
-.liteToolOff { background-color: var(--navIndicatorA); }
-.liteToolOff:active { background-color: var(--navIndicatorB); }
-
 .uiCheck label { cursor: pointer; }
 .uiCheck input[type='checkbox']:hover,
 .uiCheck input[type='checkbox']:active {

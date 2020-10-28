@@ -84,7 +84,7 @@ const OverviewWrap = ({
   function requestRefresh() {
     workingSet( true );
     liveSet( false );
-    Meteor.call('REQUESTcacheUpdate', clientTZ, 
+    Meteor.call('REQUESTcacheUpdate', 
       true, // batchUp
       true, // priorityUp
       true, // activityUp

@@ -21,7 +21,7 @@ const TideControl = ({
       setWorking(false);
       lockTaskSet && lockTaskSet(false);
     }
-  },3000);
+  },2500);
   
   useEffect(() => {
     setLock(true);
@@ -54,7 +54,7 @@ const TideControl = ({
           }
         }
       });
-    }, 3000);
+    }, 2500);
   }
   function handleStop() {
     setLock(true);

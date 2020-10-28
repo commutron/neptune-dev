@@ -7,14 +7,31 @@ import ClockString from '/client/components/smallUi/ClockString';
 
 const DownstreamTools = ({
   app, loadTimeUP, 
-  sortByUP, denseUP, lightUP,
-  changeSortUP, denseSetUP, themeSetUP
+  numUp, sortByUP, denseUP, lightUP,
+  changeNumUP, changeSortUP, denseSetUP, themeSetUP
 })=> {
    
   
         
   return(
     <nav className='downstreamToolbar gridViewTools'>
+      
+      <span>
+        <i className='fas fa-sort-numeric-down fa-fw darkgrayT'></i>
+        <input
+          type='range'
+          id='numTick'
+          title='Change Number of Days'
+          className='overToolSort liteToolOn'
+          pattern='[0-99]*'
+          maxLength='2'
+          minLength='1'
+          max='24'
+          min='1'
+          inputMode='numeric'
+          defaultValue={numUp}
+          onChange={(e)=>changeNumUP(e)} />
+      </span>
       
       <span>
         <i className='fas fa-sort-amount-down fa-fw darkgrayT'></i>

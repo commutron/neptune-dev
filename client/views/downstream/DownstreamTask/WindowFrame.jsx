@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import moment from 'moment';
 // import 'moment-timezone';
 import 'moment-business-time';
@@ -15,46 +15,57 @@ const WindowFrame = ({
   brancheS, app, user
 })=> {
   
-  const ix = indexKey;
-
-  const shipIn = pCache.filter( x => moment(x.shipAim).isSame(windowMoment, 'day') );
-    
-  const early = zCache.filter( x => {
-    if(moment(x.shipAim).isSame(windowMoment, 'day')) { return true }
-  });
+  const [ wipOrders, wipOrdersSet ] = useState([]);
+  const [ mixedOrders, mixedOrdersSet ] = useState([]);
   
-  const mixedOrders = [...shipIn,...early];
+  useLayoutEffect( ()=>{
+    if(indexKey === 0) {
+      const lateShip = pCache.filter( x => moment(x.shipAim).isSameOrBefore(windowMoment, 'day') );
+    //const lateTimeArr = Array.from(lateBatch, x => typeof x.quote2tide === 'number' && x.quote2tide );
+    //const lateTimeTotal = lateTimeArr.reduce( (arr, x)=> x > 0 ? arr + x : arr, 0 );
+      wipOrdersSet( lateShip );
+      mixedOrdersSet( lateShip );
+    }else{
+      const shipIn = pCache.filter( x => moment(x.shipAim).isSame(windowMoment, 'day') );
+      const early = zCache.filter( x => {
+        if(moment(x.shipAim).isSame(windowMoment, 'day')) { return true }
+      });
+      wipOrdersSet( shipIn );
+      mixedOrdersSet( [...shipIn,...early] );
+    }
+  }, []);
+  
+  
 
   return(
-    <div key={ix} className='downGridFrameFixed'>
-      <div className='downWeek' title={`ship day ${ix+1}`}
+    <div key={'f'+indexKey} className='downGridFrameFixed'>
+      <div className='downWeek' title={`ship day ${indexKey+1}`}
         >{windowMoment.format('dddd MMM DD')}
       </div>
       
       <WindowHeader 
         windowMoment={windowMoment}
-        shipIn={shipIn}
+        shipIn={wipOrders}
         pCache={pCache}
       />
         
       <div className='downOrdersFixed'>
         <DownstreamHeaders
-            key={'fancylist0'+ix}
-            oB={mixedOrders}
-            bCache={bCache}
-            title='things'
-            showMore={true}
-            
-            pCache={pCache}
-            acCache={acCache}
-            user={user}
-            app={app}
-            brancheS={brancheS}
-            isDebug={false}
-            isNightly={false}
-            dense={false}
-            filterBy={false}
-          />
+          indexKey={'fancylist0F'+indexKey}
+          oB={mixedOrders}
+          bCache={bCache}
+          title='things'
+          showMore={true}
+          pCache={pCache}
+          acCache={acCache}
+          user={user}
+          app={app}
+          brancheS={brancheS}
+          isDebug={false}
+          isNightly={false}
+          dense={false}
+          filterBy={false}
+        />
       </div>
     </div>
   );

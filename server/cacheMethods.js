@@ -120,12 +120,12 @@ function minifyComplete(accessKey) {
 Meteor.methods({
 
 ///////////// CACHES //////////////////
-  FORCEcacheUpdate(clientTZ) {
+  FORCEcacheUpdate() {
     this.unblock();
     if(Roles.userIsInRole(Meteor.userId(), 'active')) {
       const key = Meteor.user().orgKey;
       batchCacheUpdate(key, true);
-      Meteor.call('priorityCacheUpdate', key, clientTZ, true);
+      Meteor.call('priorityCacheUpdate', key, true);
       Meteor.call('activityCacheUpdate', key, true);
       branchConCacheUpdate(key, true);
       Meteor.call('completeCacheUpdate', key, true);
@@ -139,7 +139,7 @@ Meteor.methods({
       batchUp && Meteor.defer( ()=>{
         batchCacheUpdate(key, false) });
       priorityUp && Meteor.defer( ()=>{
-        Meteor.call('priorityCacheUpdate', key, clientTZ, false) });
+        Meteor.call('priorityCacheUpdate', key, false) });
       activityUp && Meteor.defer( ()=>{
         Meteor.call('activityCacheUpdate', key, false) });
       branchConUp && Meteor.defer( ()=>{
@@ -149,7 +149,7 @@ Meteor.methods({
     }
   },
   
-  priorityCacheUpdate(accessKey, clientTZ, force) {
+  priorityCacheUpdate(accessKey, force) {
     this.unblock();
     if(typeof accessKey === 'string') {
       const timeOut = moment().subtract(30, 'minutes').toISOString();
@@ -162,7 +162,7 @@ Meteor.methods({
         const batches = BatchDB.find({orgKey: accessKey, live: true}).fetch();
         const batchesX = XBatchDB.find({orgKey: accessKey, live: true}).fetch();
         const slim = [...batches,...batchesX].map( x => {
-          return Meteor.call('priorityRank', x._id, clientTZ, accessKey);
+          return Meteor.call('priorityRank', x._id, accessKey);
         });
         // console.log(slim.length);
         /*

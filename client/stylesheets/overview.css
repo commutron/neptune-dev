@@ -23,11 +23,15 @@
 }
 .gridViewTools span,
 .gridViewTools select,
-.gridViewTools button { 
+.gridViewTools button,
+.gridViewTools input { 
   font-size: 1.7vh;
 }
 .gridViewTools span { 
   padding: 0 1vw;
+  max-height: 3vh;
+  display: flex;
+  align-items: center;
 }
 .gridViewTools select { 
   border-top-color: transparent;
@@ -46,6 +50,7 @@
   font-size: 1rem;
   line-height: 1.1;
   width: 12ch;
+  
   background-color: transparent;
   border-color: transparent;
   color: white;
@@ -54,7 +59,9 @@
   height: 3vh;
   text-indent: 0px;
   width: 12.5ch;
-  width: min-content;
+  min-width: min-content;
+  margin: 0;
+  padding: 0;
 }
 
 .overlistSort option {
@@ -256,6 +263,7 @@
 .ghostState {
   filter: saturate(0%) opacity(0.7);
   overflow-y: hidden;
+  overflow-x: hidden;
 }
 
 /*

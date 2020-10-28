@@ -79,8 +79,7 @@ const DataRepair = ({ app, users })=> {
   }
   */
   function updateCaches() {
-    const clientTZ = moment.tz.guess();
-    Meteor.call('FORCEcacheUpdate', clientTZ, (error)=>{
+    Meteor.call('FORCEcacheUpdate', (error)=>{
       error && console.log(error);
       toast.success('method called', { autoClose: false });
     });
