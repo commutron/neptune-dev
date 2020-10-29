@@ -7,8 +7,8 @@ import NumStat from '/client/components/tinyUi/NumStat.jsx';
 import './style';
 
 const PrioritySquareData = ({ 
-  batchID, app, dbDay, mockDay, 
-  altNumber, isDebug, showExtra
+  batchID, app, dbDay, mockDay, isDone,
+  altNumber, isDebug, showExtra, showLess
 })=> {
   
   const thingMounted = useRef(true);
@@ -32,10 +32,12 @@ const PrioritySquareData = ({
     <PrioritySquare 
       batchID={batchID} 
       ptData={ptData}
+      isDone={isDone}
       altNumber={altNumber}
       app={app}
       isDebug={isDebug}
-      showExtra={showExtra} /> 
+      showExtra={showExtra}
+      showLess={showLess} /> 
   );
 };
 
@@ -44,10 +46,23 @@ export default PrioritySquareData;
 ///////////////////////////////////////////////////////////////////////////////
 
 export const PrioritySquare = ({ 
-  batchID, ptData, pIndex, 
-  altNumber, app, isDebug, showExtra
+  batchID, ptData, isDone,
+  altNumber, app, isDebug, showExtra, showLess
 })=> {
   
+  if(isDone) {
+    return(
+      <div className='green'>
+        <NumStat
+          num={<i className="far fa-star fa-lg"></i>}
+          name=''
+          title='Complete'
+          color=''
+          size='' />
+      </div>
+    );
+  }
+    
   const pt = ptData;
   
   if( pt && pt.batchID === batchID ) {
@@ -57,6 +72,19 @@ export const PrioritySquare = ({
     const overQuote = q2t < 0;
     isDebug && console.log({pt, batchID, bffrTime, q2t});
 
+    if(pt.isDone) {
+      return(
+        <div className='green'>
+          <NumStat
+            num={<i className="far fa-star fa-lg"></i>}
+            name=''
+            title='Complete'
+            color=''
+            size='' />
+      </div>
+      );
+    }
+    
     if(!bffrTime) {
       return(
         <div>
@@ -92,11 +120,12 @@ export const PrioritySquare = ({
       priorityRank === 'medium' ? 'pScale3' : 
       'pScale4';
     
-    const pIXnum = isNaN(pIndex) ? 'x' : pIndex + 1;
-    const pLabel = 
-      <b>{isDebug ? `${priorityRank}_${pIXnum}` : priorityRank}</b>;
+    const tNum = Math.round( ( bffrTime / 100 ) );
+    
+    const pLabel = <b>{showLess ? (tNum < 0 ? '!' : tNum) : priorityRank}</b>;
+    
     const subLabel = pt.lateLate ? 'Is Late' :
-      bffrTime < 0 ? 'Estimated Late' : Math.round( ( bffrTime / 100 ) );
+      bffrTime < 0 ? 'Estimated Late' : tNum;
       
     const overClass = overQuote ? 'moreEphasis' : '';
     const ovrTxt = overQuote ? 'Over Quote' : 'Under Quote';
@@ -104,7 +133,6 @@ export const PrioritySquare = ({
     const prTxt = `Priority Rank "${priorityRank}"`;
     const bffTxt = `buffer: ${bffrTime} minutes`;
     const treTxt = `Quote Time Remaining: ${min2hr(q2t)} hours`;
-    //const inxTxt = `cacheSortIndex: ${pIXnum}`;
     const soonTxt = `Soonest Complete: ${moment(pt.estSoonest).format("ddd, MMM Do, h:mm a")}`;
     const mustTxt = `Must Be Active By: ${moment(pt.estLatestBegin).format("ddd, MMM Do, h:mm a")}`;
     
@@ -118,11 +146,11 @@ export const PrioritySquare = ({
       >
         <NumStat
           num={pLabel}
-          name={subLabel}
+          name={showLess ? '' : subLabel}
           // name={`${subLabel}${isNightly ? ` (${altNumber})` : ''}`}
           color='blackT'
-          size='big' />
-        {showExtra ? 
+          size='big vBanner' />
+        {showExtra && !showLess ? 
           <dl className='med clean noindent espace'>
             <dd>{treTxt}</dd>
             <dd>{soonTxt}</dd>
@@ -139,7 +167,7 @@ export const PrioritySquare = ({
         name=''
         title='priority rank unknown'
         color='fade'
-        size='vbigger bold' />
+        size='vbigger bold vBanner' />
     </div>
   );
 };

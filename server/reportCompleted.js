@@ -25,8 +25,9 @@ export function calcShipDay( nowDay, futureDay ) {
                     endDay.clone().endOf('day').lastShippingTime() :
                     endDay.clone().lastShippingTime();
   //console.log(shipDue);
+  const endWork = endDay.clone().endOf('day').lastWorkingTime();
   
-  const lateLate = nowDay.clone().isAfter(endDay);
+  const lateLate = nowDay.clone().isAfter(endWork);
   const shipLate = nowDay.clone().isAfter(shipDue);
   
   return [ shipAim, lateLate, shipLate ];

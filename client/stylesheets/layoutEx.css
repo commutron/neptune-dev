@@ -217,9 +217,7 @@
   flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
-}
-.taskColumn > button:first-child {
-  margin: 10px 0 5px 0;
+  padding-top: 1vh;
 }
 
 .smallResultsBox {
@@ -285,3 +283,47 @@
   display: none;
 }
 
+@media (orientation: portrait) {
+  .containerEx {
+    grid-template-rows: 6vh 94vh;
+    grid-template-columns: 6vh auto;
+  }
+  .containerEx .tenHeader {
+    grid-template-rows: 1vh 5vh;
+    grid-template-columns: 6vh 1fr 6vh 6vh;
+    grid-template-areas: 
+      'topBorder topBorder topBorder topBorder'
+      'homeIcon frontCenter auxRight proRight';
+  }
+  .containerEx .homeIcon {
+    grid-area: topBorder / topBorder / homeIcon / homeIcon;
+    padding: 0.5vh 0;
+  }
+  .containerEx .homeIconLink, 
+  .containerEx .homeIconLogo {
+    width: 7vh;
+    height: 7vh;
+  }
+  .containerEx .frontCenterTitle {
+    max-width: calc(100vw - 18vh);
+    height: 5vh;
+    font-size: 3vh;
+  }
+  .containerEx .taskLink {
+    margin: 1vh 0;
+    width: 4vh;
+    height: 4vh;
+    font-size: 2.5vh;
+  }
+  .baseContainer {
+    grid-template-rows: 94vh 0px;
+  }
+  .traverseContainer, .baseTraverseContainer {
+    grid-template-rows: calc(94vh - 48px) 48px;
+  }
+  .cookieRow { grid-area: frontCenter; }
+  .cookieCrumb { height: 5vh; }
+  .cookie { font-size: 2vh; }
+  .crumb { width: 5vh; }
+  .crumb::before { left: -8.5vh; }
+}

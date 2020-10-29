@@ -228,15 +228,18 @@ main {
   /*  grid-template-rows: 13vh 87vh;*/
   /*}*/
   .splashContainer {
-    grid-template-rows: 13vh 1fr;
+    grid-template-rows: 6vh 1fr;
   }
   .splashContainer .tenHeader {
-    grid-template-rows: 1vh 6vh 6vh;
+    grid-template-rows: 1vh 5vh;
     grid-template-columns: 6vh 1fr 6vh;
     grid-template-areas: 
       'topBorder topBorder topBorder'
-      'homeIcon frontCenter proRight'
-      'auxLeft frontCenter auxRight';
+      'homeIcon frontCenter proRight';
+  }
+  .splashContainer .homeIcon {
+    grid-area: topBorder / topBorder / homeIcon / homeIcon;
+    padding: 0.5vh 0;
   }
   .splashContainer .homeIconLink, 
   .splashContainer .homeIconLogo {
@@ -245,10 +248,8 @@ main {
   }
   .splashContainer .frontCenterTitle {
     max-width: calc(100vw - 12vh);
-    height: 12vh;
-    font-size: 4vh;
-    white-space: inherit;
-    text-align: center;
+    height: 5vh;
+    font-size: 3vh;
   }
   .navButtonText {
     font-size: 3vmin;

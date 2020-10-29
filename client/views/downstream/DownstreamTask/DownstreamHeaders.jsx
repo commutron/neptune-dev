@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 // import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
+import { PrioritySquare } from '/client/components/smallUi/StatusBlocks/PrioritySquare.jsx';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 
 const DownstreamHeaders = ({
@@ -22,7 +23,7 @@ const DownstreamHeaders = ({
           return(
             <DownstreamFixedChunk
               ck={entry}
-              indexKey={indexKey+'c'+index}
+              key={indexKey+'c'+index}
               bCache={bCache}
               pCache={pCache}
               acCache={acCache}
@@ -46,16 +47,28 @@ export default DownstreamHeaders;
 
 
 const DownstreamFixedChunk = ({
-  ck, indexKey,
+  ck,
   bCache, pCache, acCache, 
   app, user, isDebug, dense 
 })=> {
-
+  
+  
+  const isDone = ck.completedAt ? true : false;
+  const pt = pCache.find( x => x.batchID === ck.batchID );
+  
   const moreInfo = bCache ? bCache.find( x => x.batch === ck.batch) : false;
   const what = !moreInfo ? 'unavailable' : `${moreInfo.isWhat}`;// ${moreInfo.more}`;
   
   return(
-    <div key={indexKey} className='downRowFixed'>
+    <div className='downRowFixed'>
+      <PrioritySquare
+        batchID={ck.batchID}
+        ptData={pt}
+        isDone={isDone}
+        app={app}
+        isDebug={isDebug}
+        showLess={true}
+      />
       <div><ExploreLinkBlock type='batch' keyword={ck.batch} wrap={false} /></div>
       <div>{what.length <= 75 ? what : what.substring(0, 75) + '...'}</div>
     </div>

@@ -138,7 +138,7 @@ const DownstreamView = ({
       <DownstreamTools
         app={app}
         loadTimeUP={loadTime}
-        numUp={calcFor}
+        numUP={calcFor}
         sortByUP={sortBy}
         denseUP={dense}
         lightUP={light}

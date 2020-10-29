@@ -58,15 +58,10 @@ const StartView = ({ready, readyUsers, user, org, app}) =>	{
         
       <NavButton title='Explore' icon='fa-rocket' link='/data' />
       
+      <NavButton title={Pref.upstream} icon='fa-satellite-dish' link='/upstream' tag=' Kit' />
       
       {isNigh ?
-        <NavButton title={Pref.upstream} icon='fa-satellite-dish' link='/upstream' tag='Kit' />
-        :
-        <NavButton title={Pref.upstream} icon='fa-warehouse' link='/upstream' tag='β' />
-      }
-      
-      {isNigh ?
-        <NavButton title={Pref.downstream} icon='fa-satellite' link='/downstream' tag='Ship' />
+        <NavButton title={Pref.downstream} icon='fa-satellite' link='/downstream' tag=' Ship' />
       :
       isPreview ? // fa-satellite-dish
         <NavButton title='Agenda' icon='fa-meteor' link='/agenda' tag='ALPHA' />

@@ -24,7 +24,7 @@ const ShipWindows = ({
     const getShipDays = listShipDays( app.nonWorkDays, numOf, true );
     // returns an array of moments
     nextShipDaysSet(getShipDays);
-  }, [calcFor]);
+  }, [calcFor, pCache, zCache]);
 
          
   return(
@@ -33,6 +33,7 @@ const ShipWindows = ({
       <div className={`downstreamFixed forceScrollStyle ${density}`}>
         {nextShipDays.map( (e, ix)=>( 
           <WindowFrame 
+            key={'f'+ix}
             windowMoment={e}
             indexKey={ix}
             bCache={bCache}
@@ -50,6 +51,7 @@ const ShipWindows = ({
       <div className={`downstreamScroll forceScrollStyle ${density}`}>
         {nextShipDays.map( (e, ix)=>( 
           <WindowGlass
+            key={'s'+ix}
             windowMoment={e}
             indexKey={ix}
             bCache={bCache}

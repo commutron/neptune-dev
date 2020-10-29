@@ -30,10 +30,10 @@ const WindowGlass = ({
       });
       mixedOrdersSet( [...shipIn,...early] );
     }
-  }, []);
+  }, [acCache]);
 
   return(
-    <div key={'s'+indexKey} className='downGridFrameScroll'>
+    <div className='downGridFrameScroll'>
     
       <div className='downHeadScroll'></div>
         

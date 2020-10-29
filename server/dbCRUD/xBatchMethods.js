@@ -95,7 +95,7 @@ Meteor.methods({
     if(auth) {
       XBatchDB.update({_id: batchId, orgKey: accessKey}, {
         $set : {
-          end: newDate,
+          salesEnd: newDate,
         }});
       XBatchDB.update({_id: batchId, orgKey: accessKey}, {
         $push : {

@@ -6,7 +6,7 @@ import WeekBrowse from '/client/components/bigUi/WeekBrowse/WeekBrowse.jsx';
 import ReportBasicTable from '/client/components/tables/ReportBasicTable.jsx'; 
 import ReportStatsTable from '/client/components/tables/ReportStatsTable.jsx'; 
 
-const CompletedReport = ({ batchData, widgetData, groupData, app })=> {
+const CompletedReport = ({ app })=> {
   
   const [weekChoice, setWeekChoice] = useState(false);
   const [weekData, setWeekData] = useState(false);
@@ -100,7 +100,7 @@ const CompletedReport = ({ batchData, widgetData, groupData, app })=> {
   }, [weekData]);
     
   return(
-    <div className='wide'>
+    <div className='wide space2v'>
         
       <div className='med line2x'>
         <WeekBrowse

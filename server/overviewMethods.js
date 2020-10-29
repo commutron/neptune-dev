@@ -244,11 +244,13 @@ function collectPriority(privateKey, batchID, mockDay) {
       resolve(collection);
     }else{
       const endEntry = b.salesEnd || b.end;
+      const doneEntry = b.completed ? b.completedAt : b.finishedAt;
       
       const future = mockDay ? mockDay : endEntry;
       const calcShip = calcShipDay( now, future );
       const shipAim = calcShip[0];
       const lateLate = calcShip[1];
+      // const shipLate = calcShip[2];
       
       const qtBready = !b.quoteTimeBudget ? false : true;
         
@@ -279,6 +281,7 @@ function collectPriority(privateKey, batchID, mockDay) {
           quote2tide: quote2tide,
           estSoonest: estSoonest.format(),
           estLatestBegin: estLatestBegin.format(),
+          isDone: doneEntry, 
           isStupid: isStupid,
           estEnd2fillBuffer: estEnd2fillBuffer,
           endEntry: endEntry,
@@ -291,6 +294,7 @@ function collectPriority(privateKey, batchID, mockDay) {
           batch: b.batch,
           batchID: b._id,
           quote2tide: false,
+          isDone: doneEntry,
           isStupid: false,
           estEnd2fillBuffer: 0,
           endEntry: endEntry,  

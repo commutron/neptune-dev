@@ -21,8 +21,6 @@ const WindowFrame = ({
   useLayoutEffect( ()=>{
     if(indexKey === 0) {
       const lateShip = pCache.filter( x => moment(x.shipAim).isSameOrBefore(windowMoment, 'day') );
-    //const lateTimeArr = Array.from(lateBatch, x => typeof x.quote2tide === 'number' && x.quote2tide );
-    //const lateTimeTotal = lateTimeArr.reduce( (arr, x)=> x > 0 ? arr + x : arr, 0 );
       wipOrdersSet( lateShip );
       mixedOrdersSet( lateShip );
     }else{
@@ -36,11 +34,10 @@ const WindowFrame = ({
   }, []);
   
   
-
   return(
-    <div key={'f'+indexKey} className='downGridFrameFixed'>
+    <div className='downGridFrameFixed'>
       <div className='downWeek' title={`ship day ${indexKey+1}`}
-        >{windowMoment.format('dddd MMM DD')}
+        >{indexKey === 0 ? 'Late' : windowMoment.format('dddd MMM DD')}
       </div>
       
       <WindowHeader 
@@ -82,8 +79,8 @@ const WindowHeader = ({ windowMoment, shipIn, pCache })=> {
     (arr, x)=> x > 0 ? arr + x : arr, 0 );
     
   return(
-    <div className='downHeadFixed'>
-      {reTimeTotal > 0 && <i>{min2hr(reTimeTotal)} hours total remain</i>}
+    <div className='downHeadFixed grayT'>
+      {reTimeTotal > 0 && <i>{min2hr(reTimeTotal)} total quote hours remain</i>}
     </div>
   );
 };

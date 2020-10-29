@@ -93,7 +93,7 @@ export const UpTaskBar = ({ subLink }) => (
       title='Upstream'
       subON={!subLink}
       goLink='/upstream'
-      icon='fas fa-warehouse'
+      icon='fas fa-satellite-dish'
       iconAdj='shrink-2'
     />
     
@@ -128,13 +128,22 @@ export const DownTaskBar = ({ subLink }) => (
     />
     
     <TaskElement
+      title='Week Reports'
+      subON={subLink === 'reportweek'}
+      goLink='/downstream/reportweek'
+      icon='fas fa-flag-checkered'
+      //iconAdj=''
+    />
+    
+    {/*
+    <TaskElement
       title='old feed'
       subON={subLink === 'overview'}
       goLink='/downstream/overview'
       icon='fas fa-rss'
       //iconAdj=''
     />
-    
+    */}
       
   </div>
 );

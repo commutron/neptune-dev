@@ -24,7 +24,7 @@ const DownstreamDetails = ({
           return(
             <DownstreamScrollChunk
               ck={entry}
-              indexKey={indexKey+'c'+index}
+              key={indexKey+'c'+index}
               bCache={bCache}
               pCache={pCache}
               acCache={acCache}
@@ -48,7 +48,7 @@ export default DownstreamDetails;
 
 
 const DownstreamScrollChunk = ({
-  ck, indexKey,
+  ck,
   bCache, pCache, acCache, 
   app, user, isDebug, dense 
 })=> {
@@ -59,10 +59,7 @@ const DownstreamScrollChunk = ({
   const q2tStatus = !q2t ? 'Time Not Tracked' :
           q2t > 0 ? 
             `${min2hr(q2t)} hours remain` :
-            'Over-Quote, remaining time unknown';
-  
-  const pt = pCache.find( x => x.batchID === ck.batchID );
-  const pIX = pCache.findIndex( x => x.batchID === ck.batchID );
+            'remaining time unknown';
   
   const ac = acCache.find( x => x.batchID === ck.batchID );
   
@@ -79,19 +76,11 @@ const DownstreamScrollChunk = ({
   
   
   return(
-    <div key={indexKey} className='downRowScroll' title={ck.batch}>
+    <div className='downRowScroll'>
      
       {!isDone ?
         <div title={`${q2t} minutes`} className='fade'>{q2tStatus}</div>
       : <div className='fade'>{Pref.batch} is {Pref.isDone}</div> }
-      
-      <PrioritySquare
-        batchID={ck.batchID}
-        ptData={pt}
-        pIndex={pIX}
-        // altNumber={rowIndex+1}
-        app={app}
-        isDebug={isDebug} />
           
       <div>
         <TideActivitySquare 
