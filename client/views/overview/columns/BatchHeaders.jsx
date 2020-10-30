@@ -1,9 +1,10 @@
 import React from 'react';
 // import Pref from '/client/global/pref.js';
 
+import { PrioritySquare } from '/client/components/smallUi/StatusBlocks/PrioritySquare.jsx';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 
-const BatchHeaders = ({ oB, bCache, title })=> (
+const BatchHeaders = ({ oB, bCache, pCache, app, title })=> (
   <div className='overGridFixed'>
       
     <div id="allLiveBatch" className='overGridRowFixedHeader'>
@@ -16,7 +17,9 @@ const BatchHeaders = ({ oB, bCache, title })=> (
           <BatchHeaderChunk
             key={`${entry._id}livefixed${index}`}
             ck={entry}
-            bCache={bCache} />
+            bCache={bCache}
+            pCache={pCache}
+            app={app} />
     )})}
     
   </div>
@@ -24,8 +27,11 @@ const BatchHeaders = ({ oB, bCache, title })=> (
 
 export default BatchHeaders;
 
-const BatchHeaderChunk = ({ ck, source, bCache })=> {
-
+const BatchHeaderChunk = ({ ck, source, bCache, pCache, app })=> {
+  
+  const isDone = ck.completed || ck.finishedAt ? true : false;
+  const pt = pCache.dataSet.find( x => x.batchID === ck._id );
+  
   const moreInfo = bCache ? bCache.dataSet.find( x => x.batch === ck.batch) : false;
   const what = !moreInfo ? 'unavailable' : moreInfo.isWhat;
   
@@ -35,6 +41,14 @@ const BatchHeaderChunk = ({ ck, source, bCache })=> {
                             
   return(
     <div className={`overGridRowFixed ${releasedToFloor}`}>
+      <PrioritySquare
+        batchID={ck._id}
+        ptData={pt}
+        isDone={isDone}
+        app={app}
+        isDebug={false}
+        showLess={true}
+      />
       <div>
         <ExploreLinkBlock type='batch' keyword={ck.batch} wrap={false} />
       </div>

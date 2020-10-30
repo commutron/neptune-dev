@@ -121,8 +121,9 @@ export const PrioritySquare = ({
       'pScale4';
     
     const tNum = Math.round( ( bffrTime / 100 ) );
+    const tSym = pt.lateLate ? 'S!' : tNum < 0 ? 'U' : tNum;
     
-    const pLabel = <b>{showLess ? (tNum < 0 ? '!' : tNum) : priorityRank}</b>;
+    const pLabel = <b>{showLess ? tSym : priorityRank}</b>;
     
     const subLabel = pt.lateLate ? 'Is Late' :
       bffrTime < 0 ? 'Estimated Late' : tNum;

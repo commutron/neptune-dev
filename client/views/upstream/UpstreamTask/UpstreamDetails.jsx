@@ -17,7 +17,7 @@ const UpstreamDetails = ({
   
   const branchClear = brancheS.filter( b => b.reqClearance === true );
   
-  const statusCols = ['due','remaining workdays','priority rank','items quantity','serial flow','active'];
+  const statusCols = ['due','remaining workdays','items quantity','serial flow','active'];
   
   const branchClearCols = Array.from(branchClear, x => x.common );
   const kitCols = [...branchClearCols, Pref.baseSerialPart+'s', 'released'];
@@ -112,7 +112,6 @@ const UpstreamDetailChunk = ({
         rowIndex={rowIndex}
         batchID={oB._id}
         dueDate={oB.salesEnd || oB.end}
-        pCache={pCache}
         app={app}
         isDebug={isDebug}
         isNightly={isNightly}

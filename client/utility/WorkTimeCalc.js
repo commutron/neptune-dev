@@ -22,7 +22,7 @@ export function listShipDays( nonWorkDays, arrLength, withLast ) {
     });
   }
   const now = moment().lastShipDay();
-  
+
   let sArr = [];
   for(let s = 0; sArr.length < arrLength; s++) {
     const newDay = sArr.length === 0 ?

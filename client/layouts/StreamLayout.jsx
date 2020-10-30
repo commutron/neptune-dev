@@ -34,7 +34,7 @@ const StreamLayout = ({
         <HomeIcon />
         
           <div className='frontCenterTitle cap'>{title}
-          {tag && <sup className='medBig monoFont'>{tag}</sup>}</div>
+          {tag && <sup className='vbig monoFont'>{tag}</sup>}</div>
         
         <TideFollow />
       

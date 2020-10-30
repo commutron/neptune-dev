@@ -2,14 +2,11 @@ import React, { Fragment, useState, useEffect } from 'react';
 import moment from 'moment';
 // import Pref from '/client/global/pref.js';
 import NumStat from '/client/components/tinyUi/NumStat.jsx';
-// import PrioritySquareData from '/client/components/bigUi/PrioritySquare.jsx';
-import { PrioritySquare } from '/client/components/smallUi/StatusBlocks/PrioritySquare.jsx';
 import TrinaryStat from '/client/components/tinyUi/TrinaryStat.jsx';
 
 
 const BatchTopStatus = ({ 
-  rowIndex, batchID,
-  pCache, app,
+  rowIndex, batchID, app,
   isDebug, isNightly,
   statusCols, dense
 })=> {
@@ -27,8 +24,6 @@ const BatchTopStatus = ({
   }, [batchID]);
   
   const dt = stData;
-  const pt = pCache.dataSet.find( x => x.batchID === batchID );
-  const pIX = pCache.dataSet.findIndex( x => x.batchID === batchID );
   
   if( dt && dt.batchID === batchID ) {
     
@@ -52,17 +47,9 @@ const BatchTopStatus = ({
                     dt.weekDaysRemain === 1 ?
                       'Workday Remaining' :
                       'Workdays Remaining'}
-            color={dt.weekDaysRemain < 0 ? 'orangeT' : 'blueT'}
+            color={dt.weekDaysRemain < 0 ? 'orangeT' : 'grayT'}
             size='big' />
         </div>
-        
-        <PrioritySquare
-          batchID={batchID}
-          ptData={pt}
-          pIndex={pIX}
-          altNumber={rowIndex+1}
-          app={app}
-          isDebug={isDebug} />
         
         <div>
           <NumStat

@@ -107,7 +107,7 @@
 }
 .downHeadScroll {
   grid-area: downHeaderS;
-  /*background-color: teal;*/
+  width: 100%;
 }
 
 .downOrdersFixed, .downOrdersScroll {
@@ -125,7 +125,6 @@
   display: grid;
   grid-template-columns: min-content minmax(min-content, max-content) auto;
   place-items: stretch stretch;
-  
   border-right: 0.3vw groove rgba(255,255,255,0.4);
 }
 .downRowFixed > div {
@@ -135,19 +134,17 @@
   line-height: 1.3;
   border-bottom: 1px outset rgba(255,255,255,0.4);
 }
-
 .downRowFixed > div:first-child {
   font-size: 2vmin !important;
   justify-content: center;
   padding: 0;
-  max-height: 8vh;
+  /*max-height: 8vh;*/
   width: 4vmin;
   overflow: hidden;
 }
 .downRowFixed > div:first-child .big {
   font-size: inherit;
 }
-
 .downRowFixed > div:nth-child(2) {
   border-right: 1px outset rgba(255,255,255,0.4);
   font-size: 2.5vh;
@@ -163,8 +160,8 @@
 
 .downRowScroll {
   display: grid;
-  /*grid-auto-flow: column;*/
-  grid-template-columns: repeat(4, 8.25vh);
+  grid-auto-flow: column;
+  grid-auto-columns: 8.25vh;
   place-items: stretch stretch;
   border-left: 0.25vw groove rgba(255,255,255,0.4);
   border-right: 0.3vw groove rgba(255,255,255,0.4);

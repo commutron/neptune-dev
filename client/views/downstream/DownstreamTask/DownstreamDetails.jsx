@@ -6,6 +6,10 @@ import { min2hr } from '/client/utility/Convert';
 import BatchTopStatus from '../../overview/columns/BatchTopStatus.jsx';
 import { PrioritySquare } from '/client/components/smallUi/StatusBlocks/PrioritySquare.jsx';
 import { TideActivitySquare } from '/client/components/tide/TideActivity';
+import ReleasedCheck from '../../overview/columns/ReleasedCheck.jsx';
+import BranchProgress from '../../overview/columns/BranchProgress.jsx';
+import NonConCounts from '../../overview/columns/NonConCounts.jsx';
+
 
 const DownstreamDetails = ({
   oB, indexKey,
@@ -31,8 +35,8 @@ const DownstreamDetails = ({
               app={app}
               user={user}
               isDebug={isDebug}
+              brancheS={brancheS}
             />
-              // brancheS={brancheS}
               // branchClear={branchClear}
               // isDebug={isDebug}
               // isNightly={isNightly}
@@ -50,7 +54,7 @@ export default DownstreamDetails;
 const DownstreamScrollChunk = ({
   ck,
   bCache, pCache, acCache, 
-  app, user, isDebug, dense 
+  app, user, brancheS, isDebug, dense 
 })=> {
 
   const isDone = ck.completedAt ? true : false;
@@ -65,6 +69,11 @@ const DownstreamScrollChunk = ({
   
   //const releasedToFloor = oB.releases.findIndex( 
     //                      x => x.type === 'floorRelease') >= 0;
+  const releasedToFloor = false;
+  
+  const progCols = Array.from(brancheS, x => x.common);
+  const ncCols = ['NC total', 'NC remain', 'NC per item', 'NC items', 'scrap', 'RMA'];
+  
   
   
   function goPro(location) {
@@ -77,10 +86,27 @@ const DownstreamScrollChunk = ({
   
   return(
     <div className='downRowScroll'>
-     
+      
+      <div>
+        <i><i className='label' title={Pref.salesOrder}
+          >{Pref.SO}:<br /></i>{ck.salesOrder}</i>
+      </div>
+      
       {!isDone ?
-        <div title={`${q2t} minutes`} className='fade'>{q2tStatus}</div>
-      : <div className='fade'>{Pref.batch} is {Pref.isDone}</div> }
+        <div title={`${q2t} minutes`}>{q2tStatus}</div>
+      : <div>{Pref.batch} is {Pref.isDone}</div> }
+      
+      <ReleasedCheck
+        batchID={ck.batchID}
+        batchNum={ck.batch}
+        isX={false}
+        isDone={isDone}
+        releasedToFloor={releasedToFloor}
+        releases={ck.releases || []}
+        app={app}
+        dense={dense}
+        isRO={isRO}
+        isDebug={isDebug} />
           
       <div>
         <TideActivitySquare 
@@ -89,6 +115,25 @@ const DownstreamScrollChunk = ({
           app={app} />
       </div>
       
+      
+      <BranchProgress
+        batchID={ck.batchID}
+        progCols={progCols}
+        app={app}
+        filterBy={false}
+        branchArea={false}
+        isDebug={isDebug} />
+        
+      <NonConCounts
+        batchID={ck.batchID}
+        releasedToFloor={releasedToFloor}
+        force={true}
+        app={app}
+        ncCols={ncCols}
+        isDebug={isDebug} />
+        
+        
+        
       <div>
   			<a
           title={`View ${ck.batch} in production`}
@@ -108,10 +153,7 @@ const DownstreamScrollChunk = ({
 };
 
  {/*
-      <div>
-        <i><i className='label' title={Pref.salesOrder}
-          >{Pref.SO}:<br /></i>{oB.salesOrder}</i>
-      </div>
+      
       
       
       <BatchTopStatus

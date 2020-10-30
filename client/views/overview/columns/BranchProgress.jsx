@@ -4,8 +4,8 @@ import Pref from '/client/global/pref.js';
 import NumStat from '/client/components/tinyUi/NumStat.jsx';
 
 const BranchProgress = ({ 
-  batchID, releasedToFloor,
-  progCols, clientTZ, 
+  batchID,
+  progCols,
   app, filterBy, branchArea,
   isDebug
 })=> {
@@ -14,7 +14,7 @@ const BranchProgress = ({
   
   useEffect( ()=> {
     const branchOnly = branchArea ? filterBy : false;
-    Meteor.call('branchProgress', batchID, branchOnly, clientTZ, (error, reply)=>{
+    Meteor.call('branchProgress', batchID, branchOnly, (error, reply)=>{
       error && console.log(error);
       if( reply ) { 
         setProg( reply );

@@ -4,12 +4,15 @@ import React, { Fragment, useState, useEffect } from 'react';
 import NumStat from '/client/components/tinyUi/NumStat.jsx';
 
 
-const NonConCounts = ({ batchID, releasedToFloor, app, isDebug, ncCols })=> {
+const NonConCounts = ({ 
+  batchID, releasedToFloor, force,
+  app, isDebug, ncCols 
+})=> {
   
   const [ ncData, setNC ] = useState(false);
   
   useEffect( ()=> {
-    if(!releasedToFloor) { null }else{
+    if(!releasedToFloor && !force) { null }else{
       Meteor.call('nonconQuickStats', batchID, 'warm', (error, reply)=>{
         error && console.log(error);
         if( reply ) { 
@@ -22,7 +25,7 @@ const NonConCounts = ({ batchID, releasedToFloor, app, isDebug, ncCols })=> {
   
   const dt = ncData;
     
-  if(releasedToFloor && dt && dt.batchID === batchID) {
+  if((releasedToFloor || force) && dt && dt.batchID === batchID) {
     return(
       <Fragment>
         <div>

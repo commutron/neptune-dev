@@ -52,7 +52,6 @@ const DownstreamFixedChunk = ({
   app, user, isDebug, dense 
 })=> {
   
-  
   const isDone = ck.completedAt ? true : false;
   const pt = pCache.find( x => x.batchID === ck.batchID );
   

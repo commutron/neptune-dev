@@ -194,7 +194,9 @@ const OverviewWrap = ({
       <div className='tenHeader'>
         <div className='topBorder'></div>
         <HomeIcon />
-        <div className='frontCenterTitle'>Overview WIP</div>
+        <div className='frontCenterTitle'
+          >Overview<sup className='vbig monoFont'>WIP</sup>
+        </div>
         <div className='auxRight'>
           <button
             type='button'
@@ -238,6 +240,8 @@ const OverviewWrap = ({
             key='fancylist0'
             oB={liveState}
             bCache={bCache}
+            pCache={pCache}
+            app={app}
             title={!filterBy ? 'All Live' : filterBy}
           />
           

@@ -166,6 +166,8 @@ const UpstreamView = ({
             key='fancylist0'
             oB={liveState}
             bCache={bCache}
+            pCache={pCache}
+            app={app}
             title={Pref.kitting}
             showMore={true}
           />

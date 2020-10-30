@@ -18,7 +18,7 @@ const BatchDetails = ({
   
   const branchClear = brancheS.filter( b => b.reqClearance === true );
   
-  const statusCols = ['due', 'remaining workdays', 'priority rank', 'items quantity','serial flow'];
+  const statusCols = ['due', 'remaining workdays', 'items quantity','serial flow'];
   
   const progCols = branchArea ?
                     [ brancheS.find( x => x.branch === filterBy).common ] :
@@ -117,7 +117,6 @@ const BatchDetailChunk = ({
         batchID={oB._id}
         dueDate={oB.salesEnd || oB.end}
         clientTZ={clientTZ}
-        pCache={pCache}
         app={app}
         isDebug={isDebug}
         isNightly={isNightly}
@@ -147,9 +146,7 @@ const BatchDetailChunk = ({
       
       <BranchProgress
         batchID={oB._id}
-        releasedToFloor={releasedToFloor}
         progCols={progCols}
-        clientTZ={clientTZ}
         app={app}
         filterBy={filterBy}
         branchArea={branchArea}
