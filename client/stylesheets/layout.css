@@ -223,39 +223,6 @@ main {
 }
 .auxLeft { grid-area: auxLeft; }
 
-@media (orientation: portrait) {
-  /*.simpleContainer {*/
-  /*  grid-template-rows: 13vh 87vh;*/
-  /*}*/
-  .splashContainer {
-    grid-template-rows: 6vh 1fr;
-  }
-  .splashContainer .tenHeader {
-    grid-template-rows: 1vh 5vh;
-    grid-template-columns: 6vh 1fr 6vh;
-    grid-template-areas: 
-      'topBorder topBorder topBorder'
-      'homeIcon frontCenter proRight';
-  }
-  .splashContainer .homeIcon {
-    grid-area: topBorder / topBorder / homeIcon / homeIcon;
-    padding: 0.5vh 0;
-  }
-  .splashContainer .homeIconLink, 
-  .splashContainer .homeIconLogo {
-    width: 7vh;
-    height: 7vh;
-  }
-  .splashContainer .frontCenterTitle {
-    max-width: calc(100vw - 12vh);
-    height: 5vh;
-    font-size: 3vh;
-  }
-  .navButtonText {
-    font-size: 3vmin;
-  }
-}
-
 .homeNavi, .homeNaviMini {
   display: grid;
   grid-gap: 1vh 1vw;
@@ -828,6 +795,21 @@ button.numberSet {
   text-transform: none;
 }
 
+.navIcon {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: normal;
+}
+.icontext {
+  display: block;
+  white-space: nowrap;
+  font-size: 0.9rem;
+}
+
+.navSpacer {
+  flex-grow: 2;
+}
+
 .tableAction {
   min-width: 1.75rem;
   max-width: 10ch;
@@ -1062,3 +1044,48 @@ button.numberSet {
 .flxGrow { flex-grow: 2; }
 
 .minH60 { min-height: 60px; }
+
+
+
+@media (orientation: portrait) {
+  
+  .simpleContainer, .splashContainer {
+    grid-template-rows: 8vmin calc(100vh - 8vmin);
+  }
+  .simpleContainer .tenHeader,
+  .splashContainer .tenHeader {
+    grid-template-rows: 1vmin 7vmin;
+    grid-template-columns: 8vmin 1fr 8vmin;
+    grid-template-areas: 
+      'topBorder topBorder topBorder'
+      'homeIcon frontCenter proRight';
+  }
+  .homeIcon {
+    grid-area: topBorder / topBorder / homeIcon / homeIcon;
+    padding: 0;
+  }
+  .homeIconLink, 
+  .homeIconLogo {
+    width: 8vmin;
+    height: 8vmin;
+    padding: 1vmin;
+  }
+  .frontCenterTitle {
+    max-width: calc(100vw - 16vmin);
+    height: 7vmin;
+    font-size: 4vmin;
+  }
+  .taskLink {
+    margin: 1vmin 0;
+    width: 5vmin;
+    height: 5vmin;
+    font-size: 3vmin;
+  }
+  .navButtonText {
+    font-size: 3vmin;
+  }
+  .slidesLayout, .slidesNestedLayout {
+    grid-template-rows: calc(100vh - 8vmin);
+    height: calc(100% - 8vmin);
+  }
+}

@@ -9,9 +9,8 @@ import CompletedReport from './CompletedReport.jsx';
 
 const DownstreamWrap = ({ 
   view, subLink,
-  batch, batchX, 
   bCache, pCache, acCache, brCache, zCache,
-  user, app, clientTZ,
+  user, app,
   isDebug, isNightly
 })=> {
   
@@ -59,8 +58,6 @@ const DownstreamWrap = ({
       navBar='down'
     >
       <DownstreamView
-        batch={batch}
-        batchX={batchX}
         bCache={bCache}
         pCache={pCache}
         acCache={acCache}
@@ -68,7 +65,6 @@ const DownstreamWrap = ({
         zCache={zCache}
         user={user}
         app={app}
-        clientTZ={clientTZ}
         isDebug={isDebug}
         isNightly={isNightly}
       />

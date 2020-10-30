@@ -7,7 +7,7 @@ import Pref from '/client/global/pref.js';
 
 import DownstreamDetails from './DownstreamDetails';
 
-import { min2hr } from '/client/utility/Convert';
+// import { min2hr } from '/client/utility/Convert';
 
 const WindowGlass = ({ 
   windowMoment, indexKey, 
@@ -20,8 +20,6 @@ const WindowGlass = ({
   useLayoutEffect( ()=>{
     if(indexKey === 0) {
       const lateShip = pCache.filter( x => moment(x.shipAim).isSameOrBefore(windowMoment, 'day') );
-    //const lateTimeArr = Array.from(lateBatch, x => typeof x.quote2tide === 'number' && x.quote2tide );
-    //const lateTimeTotal = lateTimeArr.reduce( (arr, x)=> x > 0 ? arr + x : arr, 0 );
       mixedOrdersSet( lateShip );
     }else{
       const shipIn = pCache.filter( x => moment(x.shipAim).isSame(windowMoment, 'day') );

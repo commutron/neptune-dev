@@ -5,6 +5,29 @@
   font-family: 'VarelaLocal';
 }
 
+input::-webkit-calendar-picker-indicator {
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0);
+}
+
+.logoWrap {
+  display: flex;
+  align-items: center;
+}
+.logoSVG {
+  width: 2.5rem;
+}
+.logoSVG:hover, .logoSVG:active {
+  animation: spinAround 1s infinite linear;
+}
+.logoSVG:hover svg, .logoSVG:active svg {
+  fill: var(--neptuneColor);
+}
+
+.slowSpin {
+  animation: spinAround 5s infinite linear ;
+}
+
 .moveLR {
   color: white;
 }

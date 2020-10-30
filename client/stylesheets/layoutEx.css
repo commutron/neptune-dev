@@ -156,7 +156,7 @@
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
-  height: 9vh;
+  height: 9vmax;
   background-color: transparent;
   overflow: hidden;
   white-space: nowrap;
@@ -167,8 +167,8 @@
   color: var(--silver);
   max-width: 20vw;
   height: 100%;
-  font-size: 2.5vh;
-  padding: 0 1vh;
+  font-size: 2.5vmin;
+  padding: 0 1vmin;
   overflow: hidden;
   word-break: keep-all;
   text-overflow: ellipsis;
@@ -177,22 +177,22 @@
 .crumb {
   color: var(--silverfade);
   overflow: hidden;
-  width: 6vh;
+  width: 6vmin;
 }
 .crumb::before {
   background-color: rgb(25,25,25);
 	border-style: solid;
-	border-width: 1vh 1vh 0 0;
+	border-width: 1vmin 1vmin 0 0;
 	border-radius: 5%;
 	content: '';
 	display: inline-block;
-	height: 11vh;
+	height: 11vmin;
 	position: relative;
 	top: 0em;
-	left: -7.5vh;
+	left: -8.5vmin;
 	transform: rotate(45deg);
 	vertical-align: top;
-	width: 11vh;
+	width: 11vmin;
   transition: all 150ms ease-in-out;
 }
 .cookieCrumb:hover, .cookieCrumb:active {
@@ -283,47 +283,27 @@
   display: none;
 }
 
+
 @media (orientation: portrait) {
   .containerEx {
-    grid-template-rows: 6vh 94vh;
-    grid-template-columns: 6vh auto;
+    grid-template-rows: 8vmin calc(100vh - 8vmin);
+    grid-template-columns: 8vmin auto;
   }
   .containerEx .tenHeader {
-    grid-template-rows: 1vh 5vh;
-    grid-template-columns: 6vh 1fr 6vh 6vh;
+    grid-template-rows: 1vmin 7vmin;
+    grid-template-columns: 8vmin 1fr 8vmin 8vmin;
     grid-template-areas: 
       'topBorder topBorder topBorder topBorder'
       'homeIcon frontCenter auxRight proRight';
   }
-  .containerEx .homeIcon {
-    grid-area: topBorder / topBorder / homeIcon / homeIcon;
-    padding: 0.5vh 0;
-  }
-  .containerEx .homeIconLink, 
-  .containerEx .homeIconLogo {
-    width: 7vh;
-    height: 7vh;
-  }
-  .containerEx .frontCenterTitle {
-    max-width: calc(100vw - 18vh);
-    height: 5vh;
-    font-size: 3vh;
-  }
-  .containerEx .taskLink {
-    margin: 1vh 0;
-    width: 4vh;
-    height: 4vh;
-    font-size: 2.5vh;
+  .taskColumn {
+    padding-top: 1vmin;
   }
   .baseContainer {
-    grid-template-rows: 94vh 0px;
+    grid-template-rows: calc(100vh - 8vmin) 0px;
   }
   .traverseContainer, .baseTraverseContainer {
-    grid-template-rows: calc(94vh - 48px) 48px;
+    grid-template-rows: calc(100vh - 8vmin - 48px) 48px;
   }
   .cookieRow { grid-area: frontCenter; }
-  .cookieCrumb { height: 5vh; }
-  .cookie { font-size: 2vh; }
-  .crumb { width: 5vh; }
-  .crumb::before { left: -8.5vh; }
 }

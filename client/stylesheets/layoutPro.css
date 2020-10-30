@@ -183,9 +183,96 @@
   text-decoration: underline;
 }
 
+#lookup {
+  font-size: 4.5vh;
+  text-align: center;
+  line-height: normal;
+  height: 100%;
+  width: 100%;
+	color: white;
+	border-top: 3px solid transparent;
+	border-right: 0;
+	border-bottom: 3px solid transparent;
+	border-left: 0;
+	background-color: transparent;
+  padding: 0;
+  border-radius: 0%;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  word-break: normal;
+}
+
+@media screen and (max-width: 885px){
+  #lookup { font-size: 4vh; }
+}
+@media screen and (max-width: 785px){
+  #lookup { font-size: 3.5vh; }
+}
+
+#lookup::selection {
+	color: white;
+	background: rgb(30,30,30);
+}
+#lookup::-moz-selection {
+	color: white;
+	background: rgb(30,30,30);
+}
+
+#lookup::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: white;
+  opacity: 0.9;
+}
+#lookup:-moz-placeholder { /* Firefox */
+  color: white;
+  opacity: 0.9;
+}
+#lookup:-ms-input-placeholder { /* IE 10+ */
+  color: white;
+  opacity: 0.9;
+}
 
 
-
-
+@media (orientation: portrait) {
+  .windowPro {
+    grid-template-rows: 8vh 92vh;
+  }
+  .containerPro {
+    display: grid;
+    grid-template-rows: 8vh calc(92vh - 65px) 70px;
+    grid-template-areas: 
+      "tenHeader tenHeader"
+      "proPrime proInstruct"
+      "proForm proForm";
+  }
+  .windowPro .tenHeader,
+  .containerPro .tenHeader {
+    grid-template-rows: 1vh 7vh;
+    grid-template-columns: 8vh 7vh 1fr 6vh 6vh;
+    grid-template-areas: 
+      'topBorder topBorder topBorder topBorder topBorder'
+      'homeIcon auxLeft frontCenter auxRight proRight';
+  }
+  .windowPro .homeIconLink, 
+  .windowPro .homeIconLogo,
+  .containerPro .homeIconLink, 
+  .containerPro .homeIconLogo {
+    width: 8vh;
+    height: 8vh;
+    padding: 1vh;
+  }
+  .windowPro .frontCenterTitle,
+  .containerPro .frontCenterTitle {
+    max-width: calc(100vw - 16vh);
+    height: 7vh;
+    font-size: 4vh;
+  }
+  .windowPro .taskLink,
+  .containerPro .taskLink {
+    margin: 1vh 0;
+    width: 5vh;
+    height: 5vh;
+    font-size: 3vh;
+  }
+}
 
 
