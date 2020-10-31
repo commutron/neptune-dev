@@ -708,7 +708,7 @@ main {
   margin: 0 auto;
 }
 
-.hide { display: none; }
+.hide { display: none !important; }
 .invisible { visibility: hidden; }
 
 .verLine { vertical-align: middle; }

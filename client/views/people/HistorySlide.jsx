@@ -104,7 +104,7 @@ const HistorySlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
         {dayData.map( (blk, index)=>{
           const keyword = blk.batch;
           const moreInfo = bCache ? bCache.dataSet.find( x => x.batch === blk.batch) : false;
-          const what = moreInfo ? moreInfo.isWhat : 'unavailable';
+          const what = moreInfo ? moreInfo.isWhat.join(' ') : 'unavailable';
           
           const lastStart = dayData[index-1] && dayData[index-1].startTime;
           

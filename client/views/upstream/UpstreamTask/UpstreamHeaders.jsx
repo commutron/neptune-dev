@@ -33,7 +33,7 @@ const UpstreamHeaderChunk = ({ck, source, bCache, pCache, app })=> {
   const pt = pCache.dataSet.find( x => x.batchID === ck._id );
   
   const moreInfo = bCache ? bCache.dataSet.find( x => x.batch === ck.batch) : false;
-  const what = !moreInfo ? 'unavailable' : `${moreInfo.isWhat} ${moreInfo.more}`;
+  const what = !moreInfo ? 'unavailable' : `${moreInfo.isWhat.join(' ')} ${moreInfo.more}`;
   
   return(
     <div className='overGridRowFixed'>

@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect } from 'react';
-// import moment from 'moment';
+import moment from 'moment';
 // import 'moment-timezone';
 // import 'moment-business-time';
 import '/client/utility/ShipTime.js';
@@ -14,7 +14,7 @@ import { listShipDays } from '/client/utility/WorkTimeCalc';
 
 const ShipWindows = ({ 
   calcFor, bCache, pCache, acCache, zCache,
-  brancheS, app, user, density
+  brancheS, app, user, dense, loadTimeSet
 })=> {
   
   const [ nextShipDays, nextShipDaysSet ] = useState([]);
@@ -24,13 +24,23 @@ const ShipWindows = ({
     const getShipDays = listShipDays( app.nonWorkDays, numOf, true );
     // returns an array of moments
     nextShipDaysSet(getShipDays);
-  }, [calcFor, pCache, zCache]);
+    
+    Meteor.call('REQUESTcacheUpdate', 
+      false, // batchUp
+      true, // priorityUp
+      true, // activityUp
+      false, // branchConUp
+      false, // compUp
+    ()=>{
+      loadTimeSet( moment() );
+    });
+  }, [calcFor, pCache, zCache, acCache]);
 
          
   return(
-    <div className={`downstreamContent forceScrollStyle ${density}`}>
+    <div className={`downstreamContent forceScrollStyle ${dense}`}>
        
-      <div className={`downstreamFixed forceScrollStyle ${density}`}>
+      <div className={`downstreamFixed forceScrollStyle ${dense}`}>
         {nextShipDays.map( (e, ix)=>( 
           <WindowFrame 
             key={'f'+ix}
@@ -43,11 +53,12 @@ const ShipWindows = ({
             brancheS={brancheS}
             app={app}
             user={user}
+            dense={dense}
           />
         ))}
       </div>
       
-      <div className={`downstreamScroll forceScrollStyle ${density}`}>
+      <div className={`downstreamScroll forceScrollStyle ${dense}`}>
         {nextShipDays.map( (e, ix)=>( 
           <WindowGlass
             key={'s'+ix}
@@ -60,6 +71,7 @@ const ShipWindows = ({
             brancheS={brancheS}
             app={app}
             user={user}
+            dense={dense}
           />
         ))}
       </div>

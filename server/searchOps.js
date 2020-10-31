@@ -23,7 +23,7 @@ export function whatIsBatch(keyword, labelString) {
       return label;     
     }else{
       const vNice = `v.${variant.variant}`;
-      const nice = `${group.alias.toUpperCase()} ${widget.widget.toUpperCase()} ${vNice}`;
+      const nice = [ group.alias.toUpperCase(), widget.widget.toUpperCase(), vNice ];
       return [ nice, more ];
     }
   }
@@ -47,7 +47,7 @@ export function whatIsBatchX(keyword, labelString) {
     return label;     
   }else{
     const vNice = `v.${variant.variant}`;
-    const nice = `${group.alias.toUpperCase()} ${widget.widget.toUpperCase()} ${vNice}`;
+    const nice = [ group.alias.toUpperCase(), widget.widget.toUpperCase(), vNice ];
     return [ nice, more ];
   }
 }
@@ -61,7 +61,7 @@ Meteor.methods({
     const niceObj = {
       batch: keyword, 
       isWhat: niceString[0],
-      more: niceString[1]
+      more: niceString[1],
     };
     return niceObj;
   },

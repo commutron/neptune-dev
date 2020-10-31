@@ -12,7 +12,7 @@ import DownstreamDetails from './DownstreamDetails';
 const WindowGlass = ({ 
   windowMoment, indexKey, 
   bCache, pCache, acCache, zCache, 
-  brancheS, app, user
+  brancheS, app, user, dense
 })=> {
   
   const [ mixedOrders, mixedOrdersSet ] = useState([]);
@@ -29,11 +29,25 @@ const WindowGlass = ({
       mixedOrdersSet( [...shipIn,...early] );
     }
   }, [acCache]);
+  
+  const statCols = ['sales order','active','quote'];
+  const progCols = ['total items',...Array.from(brancheS, x => x.common)];
+  const ncCols = ['NC total', 'NC remain', 'NC per item', 'NC items', 'scrap', 'RMA'];
+  const headersArr = [...statCols,...progCols,...ncCols,''];
 
   return(
-    <div className='downGridFrameScroll'>
-    
-      <div className='downHeadScroll'></div>
+    <div className='downGridFrameScroll' tabIndex='1'>
+     
+      <div className='downHeadScroll'>
+        {headersArr.map( (entry, index)=>{
+          return(
+            <div 
+              key={entry+index} 
+              className={`cap grayT ${!dense ? 'invisible' : ''}`}
+              >{entry}
+            </div>
+      )})}
+      </div>
         
       <div className='downOrdersScroll'>
         <DownstreamDetails
@@ -49,8 +63,10 @@ const WindowGlass = ({
           brancheS={brancheS}
           isDebug={false}
           isNightly={false}
-          dense={false}
+          dense={dense}
           filterBy={false}
+          progCols={progCols}
+          ncCols={ncCols}
         />
       </div>
     </div>

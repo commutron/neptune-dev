@@ -141,7 +141,7 @@ const PerformanceSlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
               <dt>{Pref.Batch} List ({batchList.length}) [{selectDayState || 'Week'}]</dt>
               {batchList.map( (ent, ix)=>{
                 const moreInfo = bCache ? bCache.dataSet.find( x => x.batch === ent) : false;
-                const what = moreInfo ? moreInfo.isWhat : 'unavailable';
+                const what = moreInfo ? moreInfo.isWhat.join(' ') : 'unavailable';
                 return(
                   <dd key={ent+ix}>
                     <ExploreLinkBlock type='batch' keyword={ent} /> <em>{what}</em>

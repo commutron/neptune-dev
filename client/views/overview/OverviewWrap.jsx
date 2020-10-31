@@ -42,6 +42,9 @@ const OverviewWrap = ({
                         user.preferLight || false;
                         
   const [ filterBy, filterBySet ] = useState( defaultFilter );
+  
+  const [ focusBy, focusBySet ] = useState( Session.get(sessionSticky+'focus') || false );
+  
   const [ sortBy, sortBySet ] = useState( Session.get(sessionSticky+'sort') || 'priority' );
   const [ ghost, ghostSet ] = useState( defaultGhost );
   const [ dense, denseSet ] = useState( defaultDense );
@@ -58,6 +61,13 @@ const OverviewWrap = ({
     const filter = value === 'false' ? false : value;
     filterBySet( filter );
     Session.set(sessionSticky+'filter', filter);
+  }
+  
+  function changeFocus(e) {
+    const value = e.target.value;
+    const focus = value === 'false' ? false : value;
+    focusBySet( focus );
+    Session.set(sessionSticky+'focus', focus);
   }
   
   function changeSort(e) {
@@ -85,7 +95,7 @@ const OverviewWrap = ({
     workingSet( true );
     liveSet( false );
     Meteor.call('REQUESTcacheUpdate', 
-      true, // batchUp
+      false, // batchUp
       true, // priorityUp
       true, // activityUp
       true, // branchConUp
@@ -211,8 +221,11 @@ const OverviewWrap = ({
       
       <OverviewTools
         app={app}
+        bCache={bCache}
         brancheS={brancheS}
         loadTimeUP={loadTime}
+        focusByUP={focusBy}
+        changeFocusByUP={(e)=>changeFocus(e)}
         filterByUP={filterBy}
         sortByUP={sortBy}
         ghostUP={ghost}
@@ -243,6 +256,7 @@ const OverviewWrap = ({
             pCache={pCache}
             app={app}
             title={!filterBy ? 'All Live' : filterBy}
+            focusBy={focusBy}
           />
           
           <BatchDetails

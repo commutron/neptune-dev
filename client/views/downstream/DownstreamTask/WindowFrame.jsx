@@ -12,7 +12,7 @@ import { min2hr } from '/client/utility/Convert';
 const WindowFrame = ({ 
   windowMoment, indexKey, 
   bCache, pCache, acCache, zCache, 
-  brancheS, app, user
+  brancheS, app, user, dense
 })=> {
   
   const [ wipOrders, wipOrdersSet ] = useState([]);
@@ -60,7 +60,7 @@ const WindowFrame = ({
           brancheS={brancheS}
           isDebug={false}
           isNightly={false}
-          dense={false}
+          dense={dense}
           filterBy={false}
         />
       </div>

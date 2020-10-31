@@ -6,6 +6,7 @@ import BatchTopStatus from '../../overview/columns/BatchTopStatus.jsx';
 import KittingChecks from './KittingChecks';
 import { TideActivitySquare } from '/client/components/tide/TideActivity';
 import PrintLink from '/client/components/smallUi/PrintLink.jsx';
+import ProJump from '/client/components/smallUi/ProJump';
 
 const UpstreamDetails = ({
   oB,
@@ -17,13 +18,13 @@ const UpstreamDetails = ({
   
   const branchClear = brancheS.filter( b => b.reqClearance === true );
   
-  const statusCols = ['due','remaining workdays','items quantity','serial flow','active'];
+  const statusCols = ['due','remaining workdays','items quantity','serial flow'];
   
   const branchClearCols = Array.from(branchClear, x => x.common );
   const kitCols = [...branchClearCols, Pref.baseSerialPart+'s', 'released'];
   
   // due == 'fulfill', 'ship'
-  const kitHead = ['SO',...statusCols,...kitCols,'print','production'];
+  const kitHead = ['sales order','active',...statusCols,...kitCols,'print','production'];
   
   return(
     <div className={`overGridScroll forceScrollStyle ${dense ? 'dense' : ''}`} tabIndex='1'>
@@ -90,14 +91,7 @@ const UpstreamDetailChunk = ({
   const adaptDate = dueDate.isAfter(moment(), 'year') ?
                     "MMM Do, YYYY" : "MMM Do";
   */
-  
-  function goPro(location) {
-    Session.set('now', location);
-    FlowRouter.go('production');
-  }
     
-  const isRO = Roles.userIsInRole(Meteor.userId(), 'readOnly');
-  
   return(
     <div className='overGridRowScroll'>
       <div>
@@ -108,6 +102,13 @@ const UpstreamDetailChunk = ({
         <i><i className='label'>Fulfill:<br /></i>{dueDate.format(adaptDate)}</i>
       </div>*/}
       
+      <div>
+        <TideActivitySquare 
+          batchID={oB._id} 
+          acData={ac}
+          app={app} />
+      </div>
+      
       <BatchTopStatus
         rowIndex={rowIndex}
         batchID={oB._id}
@@ -117,13 +118,6 @@ const UpstreamDetailChunk = ({
         isNightly={isNightly}
         statusCols={statusCols}
         dense={dense} />
-    
-      <div>
-        <TideActivitySquare 
-          batchID={oB._id} 
-          acData={ac}
-          app={app} />
-      </div>
       
       <KittingChecks
         batchID={oB._id}
@@ -137,7 +131,6 @@ const UpstreamDetailChunk = ({
         branchClear={branchClear}
         kitCols={kitCols}
         dense={dense}
-        isRO={isRO}
         isDebug={isDebug} />
     
       <div>
@@ -148,19 +141,7 @@ const UpstreamDetailChunk = ({
         />
       </div>
       
-    
-      <div>
-  			<a
-          title={`View ${oB.batch} in production`}
-          className='transparent'
-          onClick={()=>goPro(oB.batch)}
-          disabled={isRO}>
-          <label className='navIcon actionIconWrap taskLink'>
-            <i className='fas fa-paper-plane' data-fa-transform='left-1 down-2 shrink-3'></i>
-          </label>
-          {!dense && <i className='label infoSquareLabel whiteT'>Production</i>}
-        </a>
-      </div>
+      <ProJump batchNum={oB.batch} dense={dense} />
         
     </div>
   );

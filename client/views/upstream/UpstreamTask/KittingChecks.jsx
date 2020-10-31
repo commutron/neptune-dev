@@ -13,11 +13,11 @@ const KittingChecks = ({
   isX, isDone,
   releasedToFloor, releases,
   pCache, app, branchClear, 
-  kitCols, dense, isRO, isDebug
+  kitCols, dense, isDebug
 })=> {
+  
+  const isRO = Roles.userIsInRole(Meteor.userId(), 'readOnly');
 
-  // const pt = pCache.dataSet.find( x => x.batchID === batchID );
-    
   if( Array.isArray(releases) ) {
     
     const floorRelease = !releasedToFloor ? false :

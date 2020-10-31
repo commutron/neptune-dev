@@ -14,7 +14,7 @@ const DownstreamView = ({
   
   const sessionSticky = 'overviewDownstream';
   
-  const [ loadTime ] = useState( moment() );
+  const [ loadTime, loadTimeSet ] = useState( moment() );
                         
   const sessionDense = Session.get(sessionSticky+'dense');
   const defaultDense = sessionDense !== undefined ? sessionDense :
@@ -90,7 +90,8 @@ const DownstreamView = ({
         brancheS={brancheS}
         app={app}
         user={user}
-        density={density}
+        dense={density}
+        loadTimeSet={(e)=>loadTimeSet(e)}
       />
 
     </div>

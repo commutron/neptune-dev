@@ -7,6 +7,7 @@ import ReleasedCheck from './ReleasedCheck.jsx';
 import { TideActivitySquare } from '/client/components/tide/TideActivity';
 import BranchProgress from './BranchProgress.jsx';
 import NonConCounts from './NonConCounts.jsx';
+import ProJump from '/client/components/smallUi/ProJump';
 
 const BatchDetails = ({
   oB,
@@ -18,15 +19,16 @@ const BatchDetails = ({
   
   const branchClear = brancheS.filter( b => b.reqClearance === true );
   
-  const statusCols = ['due', 'remaining workdays', 'items quantity','serial flow'];
+  const statusCols = branchArea ? ['due', 'remaining workdays', 'items quantity'] :
+                      ['due', 'remaining workdays', 'items quantity', 'serial flow'];
   
   const progCols = branchArea ?
                     [ brancheS.find( x => x.branch === filterBy).common ] :
                     Array.from(brancheS, x => x.common);
   const ncCols = ['NC total', 'NC remain', 'NC per item', 'NC items', 'scrap', 'RMA'];
-  // due == 'fulfill', 'ship'
-  const fullHead = ['SO',...statusCols,'released','active',...progCols,...ncCols];
-  const brchHead = ['SO',...statusCols,'active',...progCols,...ncCols];
+
+  const fullHead = ['sales order','active',...statusCols,'released',...progCols,...ncCols,''];
+  const brchHead = ['sales order','active',...statusCols,...progCols,...ncCols,''];
   
   const headersArr = branchArea ? brchHead : fullHead;
   
@@ -112,6 +114,13 @@ const BatchDetailChunk = ({
         <i><i className='label'>Fulfill:<br /></i>{dueDate.format(adaptDate)}</i>
       </div>*/}
       
+      <div>
+        <TideActivitySquare 
+          batchID={oB._id} 
+          acData={ac}
+          app={app} />
+      </div>
+      
       <BatchTopStatus
         rowIndex={rowIndex}
         batchID={oB._id}
@@ -121,6 +130,7 @@ const BatchDetailChunk = ({
         isDebug={isDebug}
         isNightly={isNightly}
         statusCols={statusCols}
+        branchArea={branchArea}
         dense={dense} />
     
       {!branchArea ?
@@ -136,13 +146,6 @@ const BatchDetailChunk = ({
           isRO={isRO}
           isDebug={isDebug} />
       : null}
-    
-      <div>
-        <TideActivitySquare 
-          batchID={oB._id} 
-          acData={ac}
-          app={app} />
-      </div>
       
       <BranchProgress
         batchID={oB._id}
@@ -159,7 +162,7 @@ const BatchDetailChunk = ({
         ncCols={ncCols}
         isDebug={isDebug} />
       
-      {isDebug && <div><b>{oB.batch}</b></div> }
+      <ProJump batchNum={oB.batch} dense={dense} />
         
     </div>
   );

@@ -8,6 +8,25 @@ import { avgOfArray, round2Decimal } from './calcOps';
 
 Meteor.methods({
 
+  /*
+  countItems(batchID) {
+    
+    const b = BatchDB.findOne({_id: batchID});
+    
+    if(b) {
+      const itemCount = b.items.length;
+      return itemCount;
+    }else{
+      const bx = XBatchDB.findOne({_id: batchID});
+      
+      if(bx) {
+        return bx.quantity;
+      }else{
+        return 0;
+      }
+    }
+  },*/
+  
   /////////////////////////////////////////////////////////////////////////////
   
     // Counts Of Batches Tide Time

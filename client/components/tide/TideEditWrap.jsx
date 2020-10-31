@@ -80,7 +80,7 @@ const TideEditWrap = ({
       {weekData.map( (blk, index)=>{
         const keyword = blk.batch;
         const moreInfo = bCache ? bCache.dataSet.find( x => x.batch === blk.batch) : false;
-        const what = moreInfo ? moreInfo.isWhat : 'unavailable';
+        const what = moreInfo ? moreInfo.isWhat.join(' ') : 'unavailable';
         
         const lastStart = weekData[index-1] && weekData[index-1].startTime;
         const lastStop = weekData[index+1] && weekData[index+1].stopTime;

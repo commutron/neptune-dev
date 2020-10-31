@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 // import moment from 'moment';
-import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 
 import { PrioritySquare } from '/client/components/smallUi/StatusBlocks/PrioritySquare.jsx';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
@@ -12,8 +12,7 @@ const DownstreamHeaders = ({
   isDebug, isNightly,
   dense
 })=> {
-  
-  // console.log(oB);
+
   
   return(
     <Fragment>
@@ -31,12 +30,6 @@ const DownstreamHeaders = ({
               user={user}
               isDebug={isDebug}
             />
-              // brancheS={brancheS}
-              // branchClear={branchClear}
-              // isDebug={isDebug}
-              // isNightly={isNightly}
-              // statusCols={statusCols}
-              // dense={dense} />
       )})}
       
     </Fragment>
@@ -56,7 +49,7 @@ const DownstreamFixedChunk = ({
   const pt = pCache.find( x => x.batchID === ck.batchID );
   
   const moreInfo = bCache ? bCache.find( x => x.batch === ck.batch) : false;
-  const what = !moreInfo ? 'unavailable' : `${moreInfo.isWhat}`;// ${moreInfo.more}`;
+  const what = !moreInfo ? 'unavailable' : `${moreInfo.isWhat.join(' ')}`;// ${moreInfo.more}`;
   
   return(
     <div className='downRowFixed'>
@@ -73,13 +66,3 @@ const DownstreamFixedChunk = ({
     </div>
   );
 };
-
- {/*
-      <div>
-        <i><i className='label' title={Pref.salesOrder}
-          >{Pref.SO}:<br /></i>{oB.salesOrder}</i>
-      </div>
-    */}
-      
-      
-  

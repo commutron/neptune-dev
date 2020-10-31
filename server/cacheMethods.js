@@ -132,7 +132,7 @@ Meteor.methods({
     }
   },
   
-  REQUESTcacheUpdate(clientTZ, batchUp, priorityUp, activityUp, branchConUp, compUp) {
+  REQUESTcacheUpdate(batchUp, priorityUp, activityUp, branchConUp, compUp) {
     this.unblock();
     if(Roles.userIsInRole(Meteor.userId(), 'active')) {
       const key = Meteor.user().orgKey;

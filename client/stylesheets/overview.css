@@ -54,18 +54,19 @@
   border-color: transparent;
   color: white;
 }
+.overlistSort option {
+  color: black;
+}
 .overToolSort {
   height: 3vh;
   text-indent: 0px;
-  width: 12.5ch;
-  min-width: min-content;
+  width: 15ch;
+  /*min-width: min-content;*/
   margin: 0;
   padding: 0;
 }
 
-.overlistSort option {
-  color: black;
-}
+
 
 /*OverGrid */
 
@@ -114,16 +115,12 @@
   align-items: center;
   /*white-space: nowrap;*/
   padding: 1vh 1vw;
-  
   line-height: 1.3;
-  /*border-bottom: 1px outset rgba(255,255,255,0.4);*/
-
 }
 .overGridRowFixed > div:first-child {
   font-size: 2vmin !important;
   justify-content: center;
   padding: 0;
-  /*max-height: 8vh;*/
   width: 4vmin;
   overflow: hidden;
 }
@@ -142,7 +139,6 @@
 }
 
 
-
 .overGridScroll {
   grid-area: overScrollArea;
   display: grid;
@@ -151,12 +147,12 @@
   overflow-x: scroll;
 }
 
-.overGridScroll:focus {
+.overGridScroll:focus,
+.downstreamScroll:focus-within {
   outline-color: var(--neptuneColor);
   outline-style: dotted;
   outline-width: thick;
-  outline-offset: -0.25vmax;
-  
+  outline-offset: -0.2vmax;
 }
 .overGridRowScrollHeader {
   border-bottom: 1px outset rgba(255,255,255,0.4);
@@ -175,34 +171,51 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 1vh 1vw;
+  padding-top: 1vh;
+  padding-right: 1vmin;
+  padding-bottom: 1vh;
+  padding-left: 1vmin;
   overflow: hidden;
   font-size: 1.5vh;
   line-height: 1.3;
   text-overflow: ellipsis;
   text-align: center;
 }
+
 .overGridRowScroll > div {
   border-right: 1px outset rgba(255,255,255,0.3);
   border-bottom: 1px outset rgba(255,255,255,0.4);
 }
 
-.overGridRowScroll > div.redRight {
-  border-right: 0.5vh outset var(--alizarin); 
-}
-.overGridRowScroll > div.yellowLeft {
-  border-left: 0.5vh outset var(--orange); 
-}
-.overGridRowScroll .big {
+.overGridRowScroll .big,
+.downRowScroll .big {
   font-size: 2vh;
 }
-.overGridRowScroll .small {
+.overGridRowScroll .small,
+.downRowScroll .small {
   font-size: 1vh;
 }
 
 .ovColhead { color: white; }
 
+
+.overGridRowScroll > .yellowLeft,
+.downRowScroll > .yellowLeft {
+  border-left: 1vmin outset var(--orange); 
+}
+.overGridRowScroll > .yellowLeft {
+  padding-left: 0;
+}
+.overGridRowScroll > .redRight,
+.downRowScroll > .redRight {
+  border-right: 1vmin outset var(--alizarin); 
+}
+.overGridRowScroll > .redRight {
+  padding-right: 0;
+}
+
 /* dense minifyed layout */
+
 .overGridFrame.minifyed {
   grid-template-columns: minmax(min-content, 25vw) auto; }
   
@@ -212,9 +225,13 @@
   font-size: 2vh;
 }
 
-.minifyed .overGridFixed { grid-auto-rows: 5vh; }
-.minifyed .overGridScroll { grid-auto-rows: 5vh; }
-.minifyed .overGridRowScroll { 
+.minifyed .overGridFixed,
+.minifyed .overGridScroll,
+.minifyed .downOrdersFixed, 
+.minifyed .downOrdersScroll { 
+  grid-auto-rows: 5vh; }
+.minifyed .overGridRowScroll,
+.minifyed .downRowScroll { 
   grid-auto-columns: 8.25vh; }
 
 
@@ -225,15 +242,28 @@
   
 .minifyed .overGridRowFixedHeader:first-child { 
   border-right: none; }
+.minifyed .overGridRowFixed > div:first-child > div,
+.minifyed .downRowFixed > div:first-child > div {
+  display: inline-flex;
+  align-items: center; }
+.minifyed .overGridRowFixed > div:first-child .big,
+.minifyed .downRowFixed > div:first-child .big { 
+  font-size: 1.5vmin; }
+.minifyed .overGridRowFixed > div:nth-child(2),
+.minifyed .downRowFixed > div:nth-child(2) { 
+  font-size: 1.75vh; }
+.minifyed .overGridRowFixed > div:last-child,
+.minifyed .downRowFixed > div:last-child{ 
+  font-size: 1.25vh; }
 
-.minifyed .overGridRowFixed > div:first-child .big { font-size: 1.5vmin; }
-.minifyed .overGridRowFixed > div:nth-child(2) { font-size: 1.75vh; }
-.minifyed .overGridRowFixed > div:last-child { font-size: 1.25vh; }
-
-.minifyed .overGridRowScroll > div, .minifyed .statusBlock {
+.minifyed .overGridRowScroll > div,
+.minifyed .downRowScroll > div,
+.minifyed .statusBlock {
   font-size: 1.2vh; }
 
-.minifyed .overGridRowScroll .big { font-size: 1.5vh; }
+.minifyed .overGridRowScroll .big,
+.minifyed .downOrdersScroll .big { 
+  font-size: 1.5vh; }
 
 .lightTheme .overviewToolbar {
   background-color: var(--silverfade);
@@ -280,6 +310,11 @@
   filter: saturate(0%) opacity(0.7);
   overflow-y: hidden;
   overflow-x: hidden;
+}
+
+.highG {
+  outline: 0.25vmin double var(--neptuneColor);
+  outline-offset: -0.25vmin;
 }
 
 

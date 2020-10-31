@@ -46,7 +46,7 @@ const PersonChunk = ({
   isDebug && console.log(branchGuess);
   
   const moreInfo = bCache ? bCache.dataSet.find( x => x.batch === uC.batch) : false;
-  const what = moreInfo ? moreInfo.isWhat : 'unavailable';
+  const what = moreInfo ? moreInfo.isWhat.join(' ') : 'unavailable';
             
   return(
     <tr className='leftText line2x numFont'>

@@ -8,7 +8,7 @@ import TrinaryStat from '/client/components/tinyUi/TrinaryStat.jsx';
 const BatchTopStatus = ({ 
   rowIndex, batchID, app,
   isDebug, isNightly,
-  statusCols, dense
+  statusCols, branchArea, dense
 })=> {
   
   const [ stData, setStatus ] = useState(false);
@@ -47,7 +47,7 @@ const BatchTopStatus = ({
                     dt.weekDaysRemain === 1 ?
                       'Workday Remaining' :
                       'Workdays Remaining'}
-            color={dt.weekDaysRemain < 0 ? 'orangeT' : 'grayT'}
+            color={dt.weekDaysRemain < 0 ? 'orangeT' : 'whiteT'}
             size='big' />
         </div>
         
@@ -60,6 +60,7 @@ const BatchTopStatus = ({
             size='big' />
         </div>
         
+        {!branchArea &&
         <div>
           <TrinaryStat
             status={dt.riverChosen}
@@ -68,7 +69,7 @@ const BatchTopStatus = ({
             size=''
             onIcon='far fa-check-circle fa-2x greenT' 
             midIcon='far fa-times-circle fa-2x grayT' />
-        </div>
+        </div>}
         
       </Fragment>
     );

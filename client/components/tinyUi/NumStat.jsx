@@ -1,10 +1,9 @@
 import React from 'react';
 
   const sty = {
-    display: 'inline-block',
     textAlign: 'center',
     margin: '5px',
-    // minWidth: '105px'
+
   };
   const bSty = {
     verticalAlign: 'bottom',

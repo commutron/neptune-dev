@@ -11,7 +11,7 @@ import CompValuesSlide from '/client/views/upstream/CompValues/CompValuesSlide';
 const UpstreamWrap = ({ 
   view, subLink,
   batch, batchX, 
-  bCache, pCache, acCache, brCache,
+  bCache, pCache, acCache,
   user, app, clientTZ,
   isDebug, isNightly
 })=> {
@@ -68,7 +68,6 @@ const UpstreamWrap = ({
         bCache={bCache}
         pCache={pCache}
         acCache={acCache}
-        brCache={brCache}
         user={user}
         app={app}
         clientTZ={clientTZ}

@@ -148,9 +148,8 @@ export const PrioritySquare = ({
         <NumStat
           num={pLabel}
           name={showLess ? '' : subLabel}
-          // name={`${subLabel}${isNightly ? ` (${altNumber})` : ''}`}
           color='blackT'
-          size='big vBanner' />
+          size='big' />
         {showExtra && !showLess ? 
           <dl className='med clean noindent espace'>
             <dd>{treTxt}</dd>
@@ -168,7 +167,7 @@ export const PrioritySquare = ({
         name=''
         title='priority rank unknown'
         color='fade'
-        size='vbigger bold vBanner' />
+        size='vbigger bold' />
     </div>
   );
 };

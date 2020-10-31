@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 import NumStat from '/client/components/tinyUi/NumStat.jsx';
 
 const BranchProgress = ({ 
-  batchID,
+  batchID, showTotal,
   progCols,
   app, filterBy, branchArea,
   isDebug
@@ -28,7 +28,17 @@ const BranchProgress = ({
   if(dt && dt.batchID === batchID) {
     return(
       <Fragment>
-
+        
+        {showTotal &&
+          <div>
+            <NumStat
+              num={dt.totalItems}
+              name='Total Items'
+              title=''
+              color='blueT'
+              size='big' />
+          </div>}
+      
         {dt.branchSets.map( (branch, index)=>{
           if(branch.steps.length === 0) {
             return(
@@ -55,17 +65,25 @@ const BranchProgress = ({
                calNum < 90 ? '80' :
                calNum < 100 ? '90' :
                '100';
-            let redLine = calNum >= 100 && branch.ncLeft ? ' redRight' : '';
-            let yellLine = calNum < 100 && branch.shLeft ? ' yellowLeft' : '';
+            let isRed = calNum >= 100 && branch.ncLeft;
+            let redLne = isRed ? ' redRight' : '';
+            let redtxt = isRed ? `\nUnresolved ${Pref.nonCons}` : '';
+            
+            let isYllw = calNum < 100 && branch.shLeft;
+            let ylwLne = isYllw ? ' yellowLeft' : '';
+            let ylwTxt = isYllw ? `\nBlocked by ${Pref.shortfalls}` : '';
+            
+            const ttlText = `Steps: ${branch.steps.length}${ylwTxt}${redtxt}`;
+            
             let niceName = branch.branch;
             return(
               <div 
                 key={batchID + branch + index + 'g'} 
-                className={'fillRight' + fadeTick + redLine + yellLine}>
+                className={'fillRight' + fadeTick + redLne + ylwLne}
+                title={ttlText}>
                 <NumStat
                   num={isNaN(calNum) ? '' : `${calNum}%`}
                   name={niceName}
-                  title={`Steps: ${branch.steps.length}`}
                   color='whiteT'
                   size='big' />
             </div>

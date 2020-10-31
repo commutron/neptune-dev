@@ -40,6 +40,7 @@ input::-webkit-calendar-picker-indicator {
 .gMark { border-left-color: var(--nephritis); }
 .ngMark { border-left-color: var(--pomegranate); }
 
+
 .open {
   color: black;
   font-size: 1.5rem;

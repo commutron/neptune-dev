@@ -11,7 +11,7 @@ import UpstreamDetails from './UpstreamDetails';
 
 
 const UpstreamView = ({ 
-  batch, batchX, bCache, pCache, acCache, brCache, 
+  batch, batchX, bCache, pCache, acCache,
   user, clientTZ, app, isDebug, isNightly
 })=> {
   
@@ -40,17 +40,17 @@ const UpstreamView = ({
   
   useLayoutEffect( ()=> {
     liveSet( false );
-    Meteor.call('REQUESTcacheUpdate', clientTZ, 
-      true, // batchUp
+    Meteor.call('REQUESTcacheUpdate',
+      false, // batchUp
       true, // priorityUp
       true, // activityUp
-      true, // branchConUp
+      false, // branchConUp
       false, // compUp
     ()=>{
       sortInitial();
       loadTimeSet( moment() );
     });
-  }, [ batch, batchX ]);
+  }, [ batch, batchX, pCache, acCache ]);
   
   function changeSort(e) {
     const sort = e.target.value;
