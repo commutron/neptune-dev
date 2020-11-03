@@ -5,13 +5,13 @@ import { toast } from 'react-toastify';
 import ModelMedium from '../smallUi/ModelMedium.jsx';
 
 
-const WidgetEditWrapper = ({ groupId, endTrack })=> (
+const WidgetEditWrapper = ({ groupId, endTrack, lock })=> (
   <ModelMedium
     button={'new ' + Pref.widget}
     title={'new ' + Pref.widget}
     color='greenT'
     icon='fa-cube'
-    lock={!Roles.userIsInRole(Meteor.userId(), 'create')}>
+    lock={!Roles.userIsInRole(Meteor.userId(), 'create') || lock}>
     <WidgetNewForm
       groupId={groupId}
       endTrack={endTrack} 

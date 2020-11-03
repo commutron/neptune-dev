@@ -45,6 +45,24 @@ Meteor.methods({
       return false;
     }
   },
+  
+  hibernateGroup(groupId) {
+    const doc = GroupDB.findOne({_id: groupId});
+    const inUse = VariantDB.find({groupId: groupId, live: true}).fetch();
+    const auth = Roles.userIsInRole(Meteor.userId(), 'edit');
+    const switchTo = !doc.hibernate;
+    if(inUse.length === 0 && auth) {
+      GroupDB.update({_id: groupId, orgKey: Meteor.user().orgKey}, {
+        $set : {
+          hibernate: switchTo,
+          updatedAt: new Date(),
+  			  updatedWho: Meteor.userId(),
+        }});
+      return true;
+    }else{
+      return false;
+    }
+  },
 
   deleteGroup(groupId, pass) {
     const inUse = WidgetDB.findOne({groupId: groupId});

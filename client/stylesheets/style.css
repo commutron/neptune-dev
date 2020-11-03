@@ -226,6 +226,10 @@ input::-webkit-calendar-picker-indicator {
 }
 
 .wetasphalt { background-color: var(--wetasphalt); }
+.wetasphaltBorder { 
+  background-color: transparent;
+	border: 3px solid var(--wetasphalt);
+}
 
 .grayT { color: var(--concrete); }
 .darkgrayT { color: var(--asbestos); }

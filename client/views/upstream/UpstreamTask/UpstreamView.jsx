@@ -27,7 +27,9 @@ const UpstreamView = ({
   const sessionLight = Session.get(sessionSticky+'lightTheme');
   const defaultLight =  sessionLight !== undefined ? sessionLight :
                         user.preferLight || false;
-                        
+  
+  const [ focusBy, focusBySet ] = useState( Session.get(sessionSticky+'focus') || false );
+                     
   const [ sortBy, sortBySet ] = useState( Session.get(sessionSticky+'sort') || 'priority' );
   const [ dense, denseSet ] = useState( defaultDense );
   const [ light, themeSet ] = useState( defaultLight );
@@ -51,6 +53,13 @@ const UpstreamView = ({
       loadTimeSet( moment() );
     });
   }, [ batch, batchX, pCache, acCache ]);
+  
+  function changeFocus(e) {
+    const value = e.target.value;
+    const focus = value === 'false' ? false : value;
+    focusBySet( focus );
+    Session.set(sessionSticky+'focus', focus);
+  }
   
   function changeSort(e) {
     const sort = e.target.value;
@@ -142,7 +151,10 @@ const UpstreamView = ({
     
       <UpstreamTools
         app={app}
+        bCache={bCache}
         loadTimeUP={loadTime}
+        focusByUP={focusBy}
+        changeFocusByUP={(e)=>changeFocus(e)}
         sortByUP={sortBy}
         denseUP={dense}
         lightUP={light}
@@ -169,6 +181,7 @@ const UpstreamView = ({
             pCache={pCache}
             app={app}
             title={Pref.kitting}
+            focusBy={focusBy}
             showMore={true}
           />
 
@@ -185,7 +198,7 @@ const UpstreamView = ({
             isDebug={isDebug}
             isNightly={isNightly}
             dense={dense}
-            filterBy={false}
+            focusBy={focusBy}
           />
             
         </div>

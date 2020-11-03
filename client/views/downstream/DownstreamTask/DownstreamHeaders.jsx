@@ -10,7 +10,7 @@ const DownstreamHeaders = ({
   bCache, pCache, acCache,
   user, app, brancheS,
   isDebug, isNightly,
-  dense
+  focusBy, dense
 })=> {
 
   
@@ -29,6 +29,8 @@ const DownstreamHeaders = ({
               app={app}
               user={user}
               isDebug={isDebug}
+              focusBy={focusBy}
+              dense={dense}
             />
       )})}
       
@@ -42,17 +44,19 @@ export default DownstreamHeaders;
 const DownstreamFixedChunk = ({
   ck,
   bCache, pCache, acCache, 
-  app, user, isDebug, dense 
+  app, user, isDebug, focusBy, dense 
 })=> {
   
   const isDone = ck.completedAt ? true : false;
   const pt = pCache.find( x => x.batchID === ck.batchID );
   
-  const moreInfo = bCache ? bCache.find( x => x.batch === ck.batch) : false;
-  const what = !moreInfo ? 'unavailable' : `${moreInfo.isWhat.join(' ')}`;// ${moreInfo.more}`;
+  const bInfo = bCache ? bCache.find( x => x.batch === ck.batch) : false;
+  const what = !bInfo ? 'unavailable' : bInfo.isWhat.join(' ');
+  const highG = bInfo && focusBy ? bInfo.isWhat[0] === focusBy ? '' : 'hide' : '';
+  
   
   return(
-    <div className='downRowFixed'>
+    <div className={`downRowFixed ${highG}`}>
       <PrioritySquare
         batchID={ck.batchID}
         ptData={pt}

@@ -3,7 +3,7 @@ import Pref from '/client/global/pref.js';
 
 import Model from '../smallUi/Model.jsx';
 
-const CompForm = ({ vID })=> {
+const CompForm = ({ vID, lockOut })=> {
   
   function addParts(e) {
     e.preventDefault();
@@ -30,7 +30,7 @@ const CompForm = ({ vID })=> {
       title={'Add ' + Pref.comp + 's'}
       color='greenT'
       icon='fa-microchip'
-      lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit'])}>
+      lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit']) || lockOut}>
       <form id='new' className='centre' onSubmit={(e)=>addParts(e)}>
         <p>Add multiple {Pref.comp}s seperated by pipe, space or new line</p>
         <p>

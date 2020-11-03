@@ -143,14 +143,6 @@ const OverviewWrap = ({
       if(sortBy === 'priority') {
         const pData = pCache.dataSet;
         orderedBatches = filteredBatches.sort((b1, b2)=> {
-          // const pIX1 = pData.findIndex( x => x.batchID === b1._id );
-          // const pB1bf = pIX1 >= 0 ? pIX1+1 : null;
-          // const pIX2 = pData.findIndex( x => x.batchID === b2._id );
-          // const pB2bf = pIX2 >= 0 ? pIX2+1 : null;
-          // if (!pB1bf) { return 1 }
-          // if (!pB2bf) { return -1 }
-          // if (pB1bf < pB2bf) { return -1 }
-          // if (pB1bf > pB2bf) { return 1 }
           
           const pB1 = pData.find( x => x.batchID === b1._id);
           const pB1bf = pB1 ? pB1.estEnd2fillBuffer : null;
@@ -193,8 +185,6 @@ const OverviewWrap = ({
       
   const density = !dense ? '' : 'minifyed';
   
-  // const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
-    
   return(
     <div key={0} className={`overviewContainer ${light === true ? 'lightTheme invert' : ''}`}>
       <ToastContainer
@@ -273,6 +263,7 @@ const OverviewWrap = ({
             isNightly={isNightly}
             dense={dense}
             filterBy={filterBy}
+            focusBy={focusBy}
             branchArea={filterBy !== false}
           />
             

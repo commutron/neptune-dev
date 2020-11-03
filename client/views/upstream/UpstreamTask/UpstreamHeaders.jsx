@@ -4,7 +4,7 @@ import React from 'react';
 import { PrioritySquare } from '/client/components/smallUi/StatusBlocks/PrioritySquare.jsx';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 
-const UpstreamHeaders = ({ oB, bCache, pCache, app, title, showMore })=> (
+const UpstreamHeaders = ({ oB, bCache, pCache, app, title, focusBy, showMore })=> (
   <div className='overGridFixed'>
       
     <div id="allLiveBatch" className='overGridRowFixedHeader'>
@@ -19,7 +19,8 @@ const UpstreamHeaders = ({ oB, bCache, pCache, app, title, showMore })=> (
             ck={entry}
             bCache={bCache}
             pCache={pCache}
-            app={app} />
+            app={app}
+            focusBy={focusBy} />
     )})}
     
   </div>
@@ -27,16 +28,17 @@ const UpstreamHeaders = ({ oB, bCache, pCache, app, title, showMore })=> (
 
 export default UpstreamHeaders;
 
-const UpstreamHeaderChunk = ({ck, source, bCache, pCache, app })=> {
+const UpstreamHeaderChunk = ({ck, source, bCache, pCache, app, focusBy })=> {
   
   const isDone = ck.completed || ck.finishedAt ? true : false;
   const pt = pCache.dataSet.find( x => x.batchID === ck._id );
   
-  const moreInfo = bCache ? bCache.dataSet.find( x => x.batch === ck.batch) : false;
-  const what = !moreInfo ? 'unavailable' : `${moreInfo.isWhat.join(' ')} ${moreInfo.more}`;
+  const bInfo = bCache ? bCache.dataSet.find( x => x.batch === ck.batch) : false;
+  const what = !bInfo ? 'unavailable' : `${bInfo.isWhat.join(' ')} ${bInfo.more}`;
+  const highG = bInfo && focusBy ? bInfo.isWhat[0] === focusBy ? '' : 'hide' : '';
   
   return(
-    <div className='overGridRowFixed'>
+    <div className={`overGridRowFixed ${highG}`}>
       <PrioritySquare
         batchID={ck._id}
         ptData={pt}

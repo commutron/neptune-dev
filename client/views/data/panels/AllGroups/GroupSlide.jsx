@@ -5,6 +5,7 @@ import WidgetsDepth from '../../lists/WidgetsDepth.jsx';
 import TagsModule from '/client/components/bigUi/TagsModule.jsx';
 
 import GroupForm from '/client/components/forms/GroupForm.jsx';
+import GroupHibernate from '/client/components/forms/GroupHibernate';
 import WidgetNewForm from '/client/components/forms/WidgetNewForm.jsx';
 import Remove from '/client/components/forms/Remove.jsx';
 
@@ -39,6 +40,13 @@ const GroupSlide = ({ groupData, widgetsList, batchData, batchDataX, app })=>{
       </div>
       
       <div className='wide comfort'>
+      
+        {g.hibernate &&
+          <div className='wide centreText comfort middle wetasphaltBorder'>
+            <i className='fas fa-archive fa-fw fa-2x'></i>
+            <h3>Hibernated {Pref.group}</h3>
+            <i className='fas fa-bed fa-fw fa-2x'></i>
+          </div>}
         
         <div className='centreRow'>
           <TagsModule
@@ -48,7 +56,6 @@ const GroupSlide = ({ groupData, widgetsList, batchData, batchDataX, app })=>{
             tagOps={app.tagOption} />
         </div>
           
-          
         <div className='centreRow'>
           <GroupForm
             id={g._id}
@@ -56,16 +63,24 @@ const GroupSlide = ({ groupData, widgetsList, batchData, batchDataX, app })=>{
             alias={g.alias}
             wiki={g.wiki}
             noText={false}
-            primeTopRight={false} />
+            primeTopRight={false}
+            lockOut={g.hibernate} />
           <WidgetNewForm
             groupId={g._id}
-            endTrack={app.lastTrack}  />
+            endTrack={app.lastTrack}
+            lock={g.hibernate} />
+          <GroupHibernate
+            id={g._id}
+            hState={g.hibernate}
+            noText={false}
+            primeTopRight={false} />
           <Remove
             action='group'
             title={g.group}
             check={g.createdAt.toISOString()}
             entry={g._id}
-            noText={false} />
+            noText={false}
+            lockOut={g.hibernate !== true} />
         </div>
         
       </div>

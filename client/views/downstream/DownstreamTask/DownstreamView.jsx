@@ -25,6 +25,8 @@ const DownstreamView = ({
                         user.preferLight || false;
   
   const [ calcFor, calcForSet ] = useState(6);
+  
+  const [ focusBy, focusBySet ] = useState( Session.get(sessionSticky+'focus') || false );
   //const [ sortBy, sortBySet ] = useState( Session.get(sessionSticky+'sort') || 'priority' );
   const [ dense, denseSet ] = useState( defaultDense );
   const [ light, themeSet ] = useState( defaultLight );
@@ -41,6 +43,13 @@ const DownstreamView = ({
   //   sortBySet( sort );
   //   Session.set(sessionSticky+'sort', sort);
   // }
+  
+  function changeFocus(e) {
+    const value = e.target.value;
+    const focus = value === 'false' ? false : value;
+    focusBySet( focus );
+    Session.set(sessionSticky+'focus', focus);
+  }
   
   function changeDense(val) {
     denseSet( val );
@@ -70,12 +79,18 @@ const DownstreamView = ({
     
       <DownstreamTools
         app={app}
+        bCache={bCache}
         loadTimeUP={loadTime}
         numUP={calcFor}
+        changeNumUP={(e)=>changeNum(e.target.value)}
+        
+        focusByUP={focusBy}
+        changeFocusByUP={(e)=>changeFocus(e)}
+        
         // sortByUP={sortBy}
         denseUP={dense}
         lightUP={light}
-        changeNumUP={(e)=>changeNum(e.target.value)}
+        
         // changeSortUP={(e)=>changeSort(e)}
         denseSetUP={(e)=>changeDense(e)}
         themeSetUP={(e)=>changeTheme(e)}
@@ -90,6 +105,7 @@ const DownstreamView = ({
         brancheS={brancheS}
         app={app}
         user={user}
+        focusBy={focusBy}
         dense={density}
         loadTimeSet={(e)=>loadTimeSet(e)}
       />

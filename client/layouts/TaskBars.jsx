@@ -135,15 +135,15 @@ export const DownTaskBar = ({ subLink }) => (
       //iconAdj=''
     />
     
-    {/*
-    <TaskElement
-      title='old feed'
-      subON={subLink === 'overview'}
-      goLink='/downstream/overview'
-      icon='fas fa-rss'
-      //iconAdj=''
-    />
-    */}
+    {Roles.userIsInRole(Meteor.userId(), 'nightly') &&
+      <TaskElement
+        title='Experimental'
+        subON={subLink === 'outlook'}
+        goLink='/downstream/outlook'
+        icon='fas fa-meteor'
+        //iconAdj=''
+      />
+    }
       
   </div>
 );

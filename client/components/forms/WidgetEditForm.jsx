@@ -4,13 +4,13 @@ import { toast } from 'react-toastify';
 
 import ModelMedium from '../smallUi/ModelMedium.jsx';
 
-const WidgetEditWrapper = ({ id, now })=> (
+const WidgetEditWrapper = ({ id, now, lockOut })=> (
   <ModelMedium
     button={'Edit ' + Pref.widget}
     title={'edit ' + Pref.widget}
     color='greenT'
     icon='fa-cube'
-    lock={!Roles.userIsInRole(Meteor.userId(), 'edit')}>
+    lock={!Roles.userIsInRole(Meteor.userId(), 'edit') || lockOut}>
     <WidgetEditForm
       id={id}
       now={now} 

@@ -386,7 +386,8 @@ Meteor.publish('skinnyData', function(){
       GroupDB.find({orgKey: orgKey}, {
         fields: {
           'group': 1,
-          'alias': 1
+          'alias': 1,
+          'hibernate': 1
           // 'orgKey': 0,
           // 'shareKey': 0,
         }}),

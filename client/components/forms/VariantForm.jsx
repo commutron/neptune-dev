@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 
 import Model from '../smallUi/Model.jsx';
 
-const VariantForm = ({ widgetData, variantData, app, rootWI })=> {
+const VariantForm = ({ widgetData, variantData, app, rootWI, lockOut })=> {
 
   // const [ instructState, instructSet ] = useState( '...' );
 
@@ -60,7 +60,7 @@ const VariantForm = ({ widgetData, variantData, app, rootWI })=> {
       title={name}
       color='greenT'
       icon='fa-cube fa-rotate-90'
-      lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit'])}>
+      lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit']) || lockOut}>
 
       <div className='split'>
   

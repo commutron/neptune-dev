@@ -180,20 +180,22 @@ const ActionBar = ({
             widgetData={widgetData}
             variantData={variantData}
             app={app}
-            rootWI={variantData.instruct} />
+            rootWI={variantData.instruct}
+            lockOut={groupData.hibernate} />
           <CompForm 
-            vID={variantData._id} />
+            vID={variantData._id}
+            lockOut={groupData.hibernate} />
           <BatchCreate
             versionKey={variantData.versionKey}
             widgetId={widgetData._id}
             allVariants={allVariants}
-            lock={!allVariants} />
+            lock={!allVariants || variantData.live === false} />
           <BatchXCreate
             groupId={groupData._id}
             widgetId={widgetData._id}
             versionKey={variantData.versionKey}
             allVariants={allVariants}
-            lock={!allVariants} />
+            lock={!allVariants || variantData.live === false} />
           <Remove
             action='variant'
             title={variantData.variant}
@@ -206,12 +208,14 @@ const ActionBar = ({
         <Fragment>
           <WidgetEditForm
             id={widgetData._id}
-            now={widgetData} />
+            now={widgetData}
+            lockOut={groupData.hibernate} />
           <VariantForm
             widgetData={widgetData}
             variantData={false}
             app={app}
-            rootWI={groupData.wiki} />
+            rootWI={groupData.wiki}
+            lockOut={groupData.hibernate} />
           <FlowFormHead
             id={widgetData._id}
             edit={false}
@@ -221,13 +225,13 @@ const ActionBar = ({
             versionKey={false}
             widgetId={widgetData._id}
             allVariants={allVariants}
-            lock={!allVariants} />
+            lock={!allVariants || allVariants.every(v => v.live === false)} />
           <BatchXCreate
             groupId={groupData._id}
             widgetId={widgetData._id}
             versionKey={false}
             allVariants={allVariants}
-            lock={!allVariants} />
+            lock={!allVariants || allVariants.every(v => v.live === false)} />
           <Remove
             action='widget'
             title={widgetData.widget}

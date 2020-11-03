@@ -18,10 +18,10 @@ import UserSettings from '/client/components/forms/User/UserSettings';
 
 
 const UserDataWrap = ({
-  readyUsers, // readyEvents, // subs
+  readyUsers, readybNames, // subs
   orb, bolt, // meta
   user, isAdmin, isDebug, org, app, // self
-  bCache, batches, users // working data
+  bCache, users // working data
 })=> {
   
   useLayoutEffect( ()=>{
@@ -29,9 +29,7 @@ const UserDataWrap = ({
   }, []);
   
   if(
-    !readyUsers || 
-    // !readyEvents ||
-    !app
+    !readyUsers || !readybNames || !app
   ) {
     return (
       <div className='centreContainer'>
@@ -128,16 +126,16 @@ export default withTracker( () => {
   const isAdmin = login ? Roles.userIsInRole(Meteor.userId(), 'admin') : false;
   const isDebug = login ? Roles.userIsInRole(Meteor.userId(), 'debug') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
-  // const eventsSub = login ? Meteor.subscribe('eventsData') : false;
+  const bNameSub = login ? Meteor.subscribe('bCacheData') : false;
   if(!login) {
     return {
       readyUsers: false,
-      // readyEvents: false
+      readybNames: false
     };
   }else{
     return {
       readyUsers: usersSub.ready(),
-      // readyEvents: eventsSub.ready(),
+      readybNames: bNameSub.ready(),
       orb: Session.get('now'),
       bolt: Session.get('allData'),
       user: user,
@@ -146,7 +144,6 @@ export default withTracker( () => {
       org: org,
       app: AppDB.findOne({org: org}),
       bCache: CacheDB.findOne({dataName: 'batchInfo'}),
-      batches: BatchDB.find({}).fetch(),
       users: Meteor.users.find({}, {sort: {username:1}}).fetch()
     };
   }

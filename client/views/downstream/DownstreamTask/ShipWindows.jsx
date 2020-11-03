@@ -14,7 +14,7 @@ import { listShipDays } from '/client/utility/WorkTimeCalc';
 
 const ShipWindows = ({ 
   calcFor, bCache, pCache, acCache, zCache,
-  brancheS, app, user, dense, loadTimeSet
+  brancheS, app, user, focusBy, dense, loadTimeSet
 })=> {
   
   const [ nextShipDays, nextShipDaysSet ] = useState([]);
@@ -53,6 +53,7 @@ const ShipWindows = ({
             brancheS={brancheS}
             app={app}
             user={user}
+            focusBy={focusBy}
             dense={dense}
           />
         ))}
@@ -71,6 +72,7 @@ const ShipWindows = ({
             brancheS={brancheS}
             app={app}
             user={user}
+            focusBy={focusBy}
             dense={dense}
           />
         ))}

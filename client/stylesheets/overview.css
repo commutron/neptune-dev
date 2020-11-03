@@ -312,11 +312,6 @@
   overflow-x: hidden;
 }
 
-.highG {
-  outline: 0.25vmin double var(--neptuneColor);
-  outline-offset: -0.25vmin;
-}
-
 
 @media (orientation: portrait) {
   .overviewContainer {

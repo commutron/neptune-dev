@@ -14,7 +14,7 @@ const DownstreamDetails = ({
   bCache, pCache, acCache,
   user, app, brancheS,
   isDebug, isNightly,
-  dense, progCols, ncCols
+  focusBy, dense, progCols, ncCols
 })=> {
           
           
@@ -34,6 +34,8 @@ const DownstreamDetails = ({
               user={user}
               isDebug={isDebug}
               brancheS={brancheS}
+              focusBy={focusBy}
+              dense={dense}
               progCols={progCols}
               ncCols={ncCols}
             />
@@ -49,7 +51,7 @@ export default DownstreamDetails;
 const DownstreamScrollChunk = ({
   ck,
   bCache, pCache, acCache, 
-  app, user, brancheS, isDebug, dense, progCols, ncCols
+  app, user, brancheS, focusBy, isDebug, dense, progCols, ncCols
 })=> {
 
   const isDone = ck.completedAt ? true : false;
@@ -60,6 +62,9 @@ const DownstreamScrollChunk = ({
             `${min2hr(q2t)} hours remain` :
             'remaining time unknown';
   
+  const bInfo = focusBy && bCache ? bCache.find( x => x.batch === ck.batch) : false;
+  const highG = bInfo ? bInfo.isWhat[0] === focusBy ? '' : 'hide' : '';
+  
   const ac = acCache.find( x => x.batchID === ck.batchID );
   
   //const releasedToFloor = oB.releases.findIndex( 
@@ -67,7 +72,7 @@ const DownstreamScrollChunk = ({
   const releasedToFloor = false;
   
   return(
-    <div className='downRowScroll'>
+    <div className={`downRowScroll ${highG}`}>
       
       <div>
         <i><i className='label' title={Pref.salesOrder}
@@ -107,22 +112,6 @@ const DownstreamScrollChunk = ({
     </div>
   );
 };
-
- {/*
-      
-      
-      
-      <BatchTopStatus
-        rowIndex={rowIndex}
-        batchID={oB._id}
-        dueDate={oB.salesEnd || oB.end}
-        pCache={pCache}
-        app={app}
-        isDebug={isDebug}
-        isNightly={isNightly}
-        statusCols={statusCols}
-        dense={dense} />
-    */}
       
       
   

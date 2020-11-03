@@ -12,12 +12,16 @@ const AllGroups = ({
 }) => {
   
   const sortList = groupData.sort((g1, g2)=> {
+                    //if (g1.hibernate) { return 1 }
+                    //if (g2.hibernate) { return -1 }
                     if (g1.alias < g2.alias) { return -1 }
                     if (g1.alias > g2.alias) { return 1 }
                     return 0;
                   });
+        
   const menuList = sortList.map( (entry, index)=> {
-                    return [entry.alias];
+                    const clss = entry.hibernate ? 'strike fade' : '';
+                    return [entry.alias, clss];
                   });
   
   const defaultSlide = specify ? 

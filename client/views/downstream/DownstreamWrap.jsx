@@ -5,6 +5,7 @@ import StreamLayout from '/client/layouts/StreamLayout.jsx';
 
 import DownstreamView from '/client/views/downstream/DownstreamTask/DownstreamView';
 import CompletedReport from './CompletedReport.jsx';
+import Outlook from './Outlook.jsx';
 
 
 const DownstreamWrap = ({ 
@@ -31,18 +32,25 @@ const DownstreamWrap = ({
     );
   }
   
-  if(view === 'overview') {
+  if(isNightly && view === 'outlook') {
     return (
       <StreamLayout
         user={user}
         app={app}
-        title='Downstream Over'
+        title='Future Outlook'
         subLink={view}
         invertColor={false}
         action={false}
         navBar='down'
       >
-        <div>OK</div>
+        <Outlook 
+          pCache={pCache}
+          brCache={brCache}
+          zCache={zCache}
+          app={app}
+          user={user}
+          isNightly={isNightly}
+        />
       </StreamLayout>
     );
   }

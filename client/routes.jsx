@@ -15,10 +15,8 @@ import Login from './views/Login.jsx';
 import ProdData from './views/production/ProdData.jsx';
 
 import UpstreamData from './views/upstream/UpstreamData.jsx';
-import DownstreamData from './views/downstream/DownstreamData.jsx';
-
-import AgendaData from './views/agenda/AgendaData.jsx';
 import OverviewData from './views/overview/OverviewData.jsx';
+import DownstreamData from './views/downstream/DownstreamData.jsx';
 
 import PeopleDataWrap from './views/people/PeopleDataWrap.jsx';
 import UserDataWrap from './views/user/UserDataWrap.jsx';
@@ -158,15 +156,6 @@ privlegedRoutes.route('/production', {
   action() {
     mount(CleanLayout, {
       content: (<ProdData />)
-    });
-  }
-});
-
-privlegedRoutes.route('/agenda', {
-  name: 'agenda',
-  action() {
-    mount(CleanLayout, {
-      content: ( <AgendaData /> )
     });
   }
 });

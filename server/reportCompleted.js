@@ -92,7 +92,7 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
   
   for(let gf of generalFind) {
     const batchNum = gf.batch;
-    const describe = whatIsBatch(batchNum)[0];
+    const describe = whatIsBatch(batchNum)[0].join(' ');
     const salesOrder = gf.salesOrder;
     const itemQuantity = gf.items.length;
     const ncQuantity = gf.nonCon.filter( n => !n.trash ).length;
@@ -138,7 +138,7 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
   
   for(let gf of generalFindX) {
     const batchNum = gf.batch;
-    const describe = whatIsBatchX(batchNum)[0];
+    const describe = whatIsBatchX(batchNum)[0].join(' ');
     const salesOrder = gf.salesOrder;
     const itemQuantity = gf.quantity;
     const ncQuantity = gf.nonconformaces.filter( n => !n.trash ).length;

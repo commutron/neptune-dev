@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import ModelMedium from '../smallUi/ModelMedium.jsx';
 import {Submit} from './Inputs.jsx';
 
-const GroupFormWrapper = ({ id, name, alias, wiki, noText, primeTopRight })=> {
+const GroupFormWrapper = ({ id, name, alias, wiki, noText, primeTopRight, lockOut})=> {
   const bttn = name ? `edit ${Pref.group}` : `new ${Pref.group}`;
   const title = name ? 'edit' : 'create new';
   
@@ -15,7 +15,7 @@ const GroupFormWrapper = ({ id, name, alias, wiki, noText, primeTopRight })=> {
       title={title + ' ' + Pref.group}
       color='greenT'
       icon='fa-industry'
-      lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit'])}
+      lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit']) || lockOut}
       noText={noText}
       primeTopRight={primeTopRight}>
       <GroupForm 

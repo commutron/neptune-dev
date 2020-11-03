@@ -14,7 +14,7 @@ const BatchDetails = ({
   bCache, pCache, acCache,
   user, clientTZ, app, brancheS,
   isDebug, isNightly,
-  dense, filterBy, branchArea
+  dense, filterBy, focusBy, branchArea
 })=> {
   
   const branchClear = brancheS.filter( b => b.reqClearance === true );
@@ -57,6 +57,7 @@ const BatchDetails = ({
               oB={entry}
               user={user}
               clientTZ={clientTZ}
+              bCache={bCache}
               pCache={pCache}
               acCache={acCache}
               app={app}
@@ -69,6 +70,7 @@ const BatchDetails = ({
               ncCols={ncCols}
               dense={dense}
               filterBy={filterBy}
+              focusBy={focusBy}
               branchArea={branchArea} />
       )})}
       
@@ -81,15 +83,18 @@ export default BatchDetails;
 
 const BatchDetailChunk = ({ 
   rowIndex, oB, user, clientTZ, 
-  pCache, acCache, app, 
+  bCache, pCache, acCache, app, 
   brancheS, branchClear,
   isDebug, isNightly,
   statusCols, progCols, ncCols, 
-  dense, filterBy, branchArea
+  dense, filterBy, focusBy, branchArea
 })=> {
   
   const isX = oB.completed === undefined ? false : true;
   const isDone = isX ? oB.completed : oB.finishedAt !== false;
+  
+  const bInfo = focusBy && bCache ? bCache.dataSet.find( x => x.batch === oB.batch) : false;
+  const highG = bInfo ? bInfo.isWhat[0] === focusBy ? '' : 'hide' : '';
   
   const releasedToFloor = oB.releases.findIndex( 
                             x => x.type === 'floorRelease') >= 0;
@@ -97,22 +102,15 @@ const BatchDetailChunk = ({
   const rTFghostT = releasedToFloor ? '' : `Not released from ${Pref.kitting}`;
   
   const ac = acCache.dataSet.find( x => x.batchID === oB._id );
-  /*
-  const dueDate = moment(oB.salesEnd || oB.end);
-  const adaptDate = dueDate.isAfter(moment(), 'year') ?
-                    "MMM Do, YYYY" : "MMM Do";
-  */
+  
   const isRO = Roles.userIsInRole(Meteor.userId(), 'readOnly');
   
   return(
-    <div className={`overGridRowScroll ${rTFghostC}`} title={rTFghostT}>
+    <div className={`overGridRowScroll ${highG} ${rTFghostC}`} title={rTFghostT}>
       <div>
         <i><i className='label' title={Pref.salesOrder}
           >{Pref.SO}:<br /></i>{oB.salesOrder}</i>
       </div>
-      {/*<div>
-        <i><i className='label'>Fulfill:<br /></i>{dueDate.format(adaptDate)}</i>
-      </div>*/}
       
       <div>
         <TideActivitySquare 

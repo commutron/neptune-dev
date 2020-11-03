@@ -13,7 +13,7 @@ const UpstreamDetails = ({
   bCache, pCache, acCache,
   user, app, brancheS,
   isDebug, isNightly,
-  dense, filterBy
+  dense, focusBy
 })=> {
   
   const branchClear = brancheS.filter( b => b.reqClearance === true );
@@ -50,6 +50,7 @@ const UpstreamDetails = ({
               rowIndex={index}
               oB={entry}
               user={user}
+              bCache={bCache}
               pCache={pCache}
               acCache={acCache}
               app={app}
@@ -60,7 +61,7 @@ const UpstreamDetails = ({
               statusCols={statusCols}
               kitCols={kitCols}
               dense={dense}
-              filterBy={filterBy} />
+              focusBy={focusBy} />
       )})}
       
     </div>
@@ -72,35 +73,30 @@ export default UpstreamDetails;
 
 const UpstreamDetailChunk = ({ 
   rowIndex, oB, user,
-  pCache, acCache, app, 
+  bCache, pCache, acCache, app, 
   brancheS, branchClear,
   isDebug, isNightly,
   statusCols, kitCols, 
-  dense, filterBy
+  dense, focusBy
 })=> {
   
   const isX = oB.completed === undefined ? false : true;
   const isDone = isX ? oB.completed : oB.finishedAt !== false;
   
+  const bInfo = focusBy && bCache ? bCache.dataSet.find( x => x.batch === oB.batch) : false;
+  const highG = bInfo ? bInfo.isWhat[0] === focusBy ? '' : 'hide' : '';
+  
   const releasedToFloor = oB.releases.findIndex( 
                             x => x.type === 'floorRelease') >= 0;
   
   const ac = acCache.dataSet.find( x => x.batchID === oB._id );
-  /*
-  const dueDate = moment(oB.salesEnd || oB.end);
-  const adaptDate = dueDate.isAfter(moment(), 'year') ?
-                    "MMM Do, YYYY" : "MMM Do";
-  */
     
   return(
-    <div className='overGridRowScroll'>
+    <div className={`overGridRowScroll ${highG}`}>
       <div>
         <i><i className='label' title={Pref.salesOrder}
           >{Pref.SO}:<br /></i>{oB.salesOrder}</i>
       </div>
-      {/*<div>
-        <i><i className='label'>Fulfill:<br /></i>{dueDate.format(adaptDate)}</i>
-      </div>*/}
       
       <div>
         <TideActivitySquare 

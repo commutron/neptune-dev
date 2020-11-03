@@ -33,10 +33,9 @@ const BatchHeaderChunk = ({ ck, source, bCache, pCache, app, focusBy })=> {
   const isDone = ck.completed || ck.finishedAt ? true : false;
   const pt = pCache.dataSet.find( x => x.batchID === ck._id );
   
-  const moreInfo = bCache ? bCache.dataSet.find( x => x.batch === ck.batch) : false;
-  const what = !moreInfo ? 'unavailable' : moreInfo.isWhat.join(' ');
-  
-  const highG = what.includes(focusBy) ? 'highG' : '';
+  const bInfo = bCache ? bCache.dataSet.find( x => x.batch === ck.batch) : false;
+  const what = !bInfo ? 'unavailable' : bInfo.isWhat.join(' ');
+  const highG = bInfo && focusBy ? bInfo.isWhat[0] === focusBy ? '' : 'hide' : '';
   
   const releasedToFloor = ck.releases.findIndex( 
                             x => x.type === 'floorRelease') >= 0 ? 

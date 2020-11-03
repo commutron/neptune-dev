@@ -9,6 +9,7 @@ export function whatIsBatch(keyword, labelString) {
   }else{
     const widget = WidgetDB.findOne({_id: batch.widgetId});
     const group = GroupDB.findOne({_id: widget.groupId});
+    const groupH = group.hibernate ? "."+group.alias : group.alias;
     const variant = VariantDB.findOne({versionKey: batch.versionKey});
     const more = widget.describe;
     
@@ -23,7 +24,7 @@ export function whatIsBatch(keyword, labelString) {
       return label;     
     }else{
       const vNice = `v.${variant.variant}`;
-      const nice = [ group.alias.toUpperCase(), widget.widget.toUpperCase(), vNice ];
+      const nice = [ groupH.toUpperCase(), widget.widget.toUpperCase(), vNice ];
       return [ nice, more ];
     }
   }
@@ -32,6 +33,7 @@ export function whatIsBatch(keyword, labelString) {
 export function whatIsBatchX(keyword, labelString) {
   const batch = XBatchDB.findOne({batch: keyword});
   const group = GroupDB.findOne({_id: batch.groupId});
+  const groupH = group.hibernate ? "."+group.alias : group.alias;
   const widget = WidgetDB.findOne({_id: batch.widgetId});
   const variant = VariantDB.findOne({versionKey: batch.versionKey});
   const more = widget.describe;
@@ -47,7 +49,7 @@ export function whatIsBatchX(keyword, labelString) {
     return label;     
   }else{
     const vNice = `v.${variant.variant}`;
-    const nice = [ group.alias.toUpperCase(), widget.widget.toUpperCase(), vNice ];
+    const nice = [ groupH.toUpperCase(), widget.widget.toUpperCase(), vNice ];
     return [ nice, more ];
   }
 }
