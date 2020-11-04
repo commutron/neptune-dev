@@ -1,6 +1,5 @@
 import React from 'react';
 import moment from 'moment';
-import 'moment-timezone';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
@@ -25,11 +24,9 @@ const BatchCreate = ({ widgetId, versionKey, allVariants, lock })=> {
     const inHours = parseFloat( quoteTimeInput );
     const inMinutes = moment.duration(inHours, 'hours').asMinutes();
     const quoteTime = isNaN(inMinutes) ? false : inMinutes;
-
-    const clientTZ = moment.tz.guess();
     
     Meteor.call('addBatch', 
-      batchNum, wId, vKey, salesNum, startDate, endDate, quoteTime, clientTZ,
+      batchNum, wId, vKey, salesNum, startDate, endDate, quoteTime,
       (error, reply)=>{
         if(error) {
           console.log(error);

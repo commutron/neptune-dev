@@ -54,6 +54,7 @@ const DownstreamFixedChunk = ({
   const what = !bInfo ? 'unavailable' : bInfo.isWhat.join(' ');
   const highG = bInfo && focusBy ? bInfo.isWhat[0] === focusBy ? '' : 'hide' : '';
   
+  isDebug && console.log(ck.batch+'='+ck.batchID);
   
   return(
     <div className={`downRowFixed ${highG}`}>

@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 import { min2hr } from '/client/utility/Convert';
 
 import ProJump from '/client/components/smallUi/ProJump';
-import { TideActivitySquare } from '/client/components/tide/TideActivity';
+import TideActivityData, { TideActivitySquare } from '/client/components/tide/TideActivity';
 import BranchProgress from '../../overview/columns/BranchProgress.jsx';
 import NonConCounts from '../../overview/columns/NonConCounts.jsx';
 
@@ -80,10 +80,16 @@ const DownstreamScrollChunk = ({
       </div>
       
       <div>
+      {!isDone ?
         <TideActivitySquare 
           batchID={ck.batchID} 
           acData={ac}
-          app={app} />
+          isDebug={isDebug} />
+      :
+        <TideActivityData
+          batchID={ck.batchID}
+          isDebug={isDebug} />
+      }    
       </div>
       
       {!isDone ?

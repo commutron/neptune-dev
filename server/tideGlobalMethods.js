@@ -96,35 +96,51 @@ function collectActivtyLevel(privateKey, batchID) {
     if(!batch) {
       resolve(collection);
     }else{
-
+      const aDone = batch.completedAt || batch.finishedAt;
+      const rested = aDone && moment.duration(now.diff(moment(aDone))).asHours() > 24;
+      
       const tide = batch.tide || [];
       
-      const yNow = tide.filter( x => x.stopTime === false );
-      const isNow = peopleCount(yNow);
-      
-      const allStopped = tide.filter( x => x.stopTime !== false );
-      
-      const yHour = allStopped.filter( x => moment.duration(
-                                        now.diff(moment(x.stopTime).tz(Config.clientTZ)))
-                                          .as('hours') < 1 );
-      const hasHour = peopleCount(yHour);
-      
-      const yDay = allStopped.filter( x => now.isSame(
-                                      moment(x.stopTime).tz(Config.clientTZ)
-                                      , 'day') );
-      const hasDay = peopleCount(yDay);
- 
-      collection = {
-        batch: batch.batch,
-        batchID: batch._id,
-        isActive: {
-          isNow: isNow,
-          hasHour: hasHour,
-          hasDay: hasDay,
-          hasNone: tide.length === 0
-        }
-      };
-      resolve(collection);
+      if(rested) {
+        collection = {
+          batch: batch.batch,
+          batchID: batch._id,
+          isActive: {
+            isNow: 0,
+            hasHour: 0,
+            hasDay: 0,
+            hasNone: tide.length === 0
+          }
+        };
+        resolve(collection);
+      }else{
+        const yNow = tide.filter( x => x.stopTime === false );
+        const isNow = peopleCount(yNow);
+        
+        const allStopped = tide.filter( x => x.stopTime !== false );
+        
+        const yHour = allStopped.filter( x => moment.duration(
+                                          now.diff(moment(x.stopTime).tz(Config.clientTZ)))
+                                            .as('hours') < 1 );
+        const hasHour = peopleCount(yHour);
+        
+        const yDay = allStopped.filter( x => now.isSame(
+                                        moment(x.stopTime).tz(Config.clientTZ)
+                                        , 'day') );
+        const hasDay = peopleCount(yDay);
+   
+        collection = {
+          batch: batch.batch,
+          batchID: batch._id,
+          isActive: {
+            isNow: isNow,
+            hasHour: hasHour,
+            hasDay: hasDay,
+            hasNone: tide.length === 0
+          }
+        };
+        resolve(collection);
+      }
     }
   });
 }

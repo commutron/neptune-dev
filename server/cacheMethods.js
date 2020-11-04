@@ -152,7 +152,7 @@ Meteor.methods({
   priorityCacheUpdate(accessKey, force) {
     this.unblock();
     if(typeof accessKey === 'string') {
-      const timeOut = moment().subtract(30, 'minutes').toISOString();
+      const timeOut = moment().subtract(60, 'minutes').toISOString();
       const currentCache = CacheDB.findOne({
         orgKey: accessKey, 
         lastUpdated: { $gte: new Date(timeOut) },
@@ -164,25 +164,7 @@ Meteor.methods({
         const slim = [...batches,...batchesX].map( x => {
           return Meteor.call('priorityRank', x._id, accessKey);
         });
-        // console.log(slim.length);
-        /*
-        const slimSort = slim.sort((pB1, pB2)=> { // insert a master index~
-          const pB1ffr = pB1.estEnd2fillBuffer;
-          const pB2ffr = pB2.estEnd2fillBuffer;
-          if (!pB1ffr) { return 1 }
-          if (!pB2ffr) { return -1 }
-          if (pB1.lateLate) { return -1 }
-          if (pB2.lateLate) { return 1 }
-          if (pB1ffr < pB2ffr) { return -1 }
-          if (pB1ffr > pB2ffr) { return 1 }
-          return 0;
-        });*/
-        // const shaddowPriority = {
-        //   lastUpdated: new Date(),
-        //   ranking: Array.from(slimSort, (x, ix) =>  {
-        //             return { batch: x.batch, pIX: ix } })
-        // };
-        // console.log(shaddowPriority);
+        
         CacheDB.upsert({orgKey: accessKey, dataName: 'priorityRank'}, {
           $set : { 
             orgKey: accessKey,

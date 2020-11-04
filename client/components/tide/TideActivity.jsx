@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 // import Pref from '/client/global/pref.js';
 
-const TideActivityData = ({ batchID, app })=> {
+const TideActivityData = ({ batchID, isDebug })=> {
 
   const thingMounted = useRef(true);
   const [ acData, setPriority ] = useState(false);
@@ -11,7 +11,7 @@ const TideActivityData = ({ batchID, app })=> {
       error && console.log(error);
       if( reply ) { 
         if(thingMounted.current) { setPriority( reply ); }
-        Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(reply);
+        isDebug && console.log(reply);
       }
     });
   }, [batchID]);
@@ -24,7 +24,7 @@ const TideActivityData = ({ batchID, app })=> {
     <TideActivitySquare 
       batchID={batchID} 
       acData={acData}
-      app={app} />
+      isDebug={isDebug} />
   );
 };
 
@@ -32,12 +32,12 @@ export default TideActivityData;
 
 ///////////////////////////////////////////////////////////////////////////////
 
-export const TideActivitySquare = ({ batchID, acData, app })=> {
+export const TideActivitySquare = ({ batchID, acData, isDebug })=> {
   
   const ac = acData && acData.isActive;
   
-  //const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
-   
+  isDebug && console.log(batchID+':ac:'+JSON.stringify(ac));
+
   if( ac && acData.batchID === batchID ) {
     
     const moving = ac.isNow > 1 ? 'run' : 
@@ -47,8 +47,6 @@ export const TideActivitySquare = ({ batchID, acData, app })=> {
     const movedClass = ac.hasHour > 0 ? 'greenT' : 
                        ac.hasDay > 0 ? 'greenT fadeMore' :
                        'grayT fadeMore';
-    
-    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({ac});
     
     const iconState = !moving ?
       <strong><i className='fas fa-minus fa-2x fa-fw grayT fade'></i></strong>

@@ -14,7 +14,7 @@ const BatchXEdit = ({
     title={'Edit ' + Pref.xBatch}
     color='blueT'
     icon='fa-cubes'
-    lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'nightly']) || lock}
+    lock={!Roles.userIsInRole(Meteor.userId(), 'create') || lock}
   >
   <BXEditForm 
     batchId={batchId}
@@ -43,10 +43,9 @@ const BXEditForm = ({
     const batchNum = this.oNum.value.trim().toLowerCase();
     const salesNum = this.soNum.value.trim().toLowerCase();
     const startDate = this.sDate.value;
-    const endDate = this.eDate.value;
     const quantity = this.quant.value.trim().toLowerCase();
 
-    Meteor.call('editBatchX', batchId, batchNum, vKey, salesNum, startDate, endDate, quantity, (error, reply)=>{
+    Meteor.call('editBatchX', batchId, batchNum, vKey, salesNum, startDate, quantity, (error, reply)=>{
       if(error) {
         console.log(error);
         toast.error('Server Error');
@@ -132,7 +131,7 @@ const BXEditForm = ({
           id='eDate'
           defaultValue={eE}
           pattern='[0-9]{4}-[0-9]{2}-[0-9]{2}'
-          required
+          disabled={true}
         /></label>
       
       </div>

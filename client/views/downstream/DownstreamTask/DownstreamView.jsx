@@ -105,6 +105,7 @@ const DownstreamView = ({
         brancheS={brancheS}
         app={app}
         user={user}
+        isDebug={isDebug}
         focusBy={focusBy}
         dense={density}
         loadTimeSet={(e)=>loadTimeSet(e)}

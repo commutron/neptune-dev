@@ -4,7 +4,7 @@ import { batchCacheUpdate} from '/server/cacheMethods.js';
 Meteor.methods({
 
 //// Complex, Dexterous, Multiplex Batches \\\\
-  addBatchX(batchNum, groupId, widgetId, vKey, salesNum, sDate, eDate, quantity, qTime, clientTZ,) {
+  addBatchX(batchNum, groupId, widgetId, vKey, salesNum, sDate, eDate, quantity, qTime) {
     const doc = WidgetDB.findOne({ _id: widgetId });
     const legacyduplicate = BatchDB.findOne({ batch: batchNum });
     const duplicateX = XBatchDB.findOne({ batch: batchNum });
@@ -56,7 +56,7 @@ Meteor.methods({
       
       Meteor.defer( ()=>{
         batchCacheUpdate( accessKey, true );
-        Meteor.call('priorityCacheUpdate', accessKey, clientTZ, true);
+        Meteor.call('priorityCacheUpdate', accessKey, true);
       });
       return true;
     }else{
@@ -64,7 +64,7 @@ Meteor.methods({
     }
   },
   
-  editBatchX(batchId, newBatchNum, vKey, salesNum, sDate, eDate, quantity) {
+  editBatchX(batchId, newBatchNum, vKey, salesNum, sDate, quantity) {
     const doc = XBatchDB.findOne({_id: batchId});
     const legacyduplicate = BatchDB.findOne({batch: newBatchNum});
     let duplicate = XBatchDB.findOne({batch: newBatchNum});
@@ -77,11 +77,13 @@ Meteor.methods({
           versionKey: vKey,
           salesOrder: salesNum,
           salesStart: sDate,
-  			  salesEnd: eDate,
   			  quantity: Number(quantity),
   			  updatedAt: new Date(),
   			  updatedWho: Meteor.userId()
         }});
+      Meteor.defer( ()=>{
+        Meteor.call('priorityCacheUpdate', accessKey, true);
+      });
       return true;
     }else{
       return false;
@@ -89,7 +91,7 @@ Meteor.methods({
   },
 
 
-  alterBatchXFulfill(batchId, oldDate, newDate, reason, clientTZ) {
+  alterBatchXFulfill(batchId, oldDate, newDate, reason) {
     const accessKey = Meteor.user().orgKey;
     const auth = Roles.userIsInRole(Meteor.userId(), ['edit', 'sales']);
     if(auth) {
@@ -109,7 +111,7 @@ Meteor.methods({
           }
         }});
       Meteor.defer( ()=>{
-        Meteor.call('priorityCacheUpdate', accessKey, clientTZ, true);
+        Meteor.call('priorityCacheUpdate', accessKey, true);
       });
       return true;
     }else{
@@ -238,7 +240,7 @@ Meteor.methods({
     }
   },
   // push time budget, whole time for batch
-  pushBatchXTimeBudget(batchId, qTime, clientTZ) {
+  pushBatchXTimeBudget(batchId, qTime) {
     try{
       const accessKey = Meteor.user().orgKey;
       if(Roles.userIsInRole(Meteor.userId(), ['sales', 'run', 'edit'])) {
@@ -253,7 +255,7 @@ Meteor.methods({
             }
           }});
         Meteor.defer( ()=>{
-          Meteor.call('priorityCacheUpdate', accessKey, clientTZ, true);
+          Meteor.call('priorityCacheUpdate', accessKey, true);
         });
       }else{
         null;

@@ -63,14 +63,14 @@ function loopItems(items, from, to ) {
   });
 }
 
-function loopNonCons(nonCons, from, to, optionsLegacy, phases, getNC, getType, getPhase) {
+function loopNonCons(nonCons, from, to, flatTypeListClean, phases, getNC, getType, getPhase) {
   return new Promise(resolve => {
     const inTime = getNC ? nonCons.filter( x => moment(x.time).isBetween(from, to) ) : [];
     let foundNC = getNC ? inTime.length : false;
     let uniqueSerials = getNC ? [... new Set( Array.from(inTime, x => x.serial ) ) ].length : false;
     let typeBreakdown = getNC && getType ? [] : false;
     if(getNC && getType) {
-      for(let ncOp of optionsLegacy) {
+      for(let ncOp of flatTypeListClean) {
         const num = inTime.filter( x => x.type === ncOp ).length;
         typeBreakdown.push([ ncOp, num ]);
       }
@@ -96,7 +96,15 @@ Meteor.methods({
   buildReport(startDay, endDay, getNC, getType, getPhase) {
     const orgKey = Meteor.user().orgKey;
     let org = AppDB.findOne({orgKey: Meteor.user().orgKey});
-    let optionsLegacy = !org ? [] : org.nonConOption;
+    
+    const ncTypesCombo = Array.from(org.nonConTypeLists, x => x.typeList);
+  	    const ncTCF = [].concat(...ncTypesCombo,...org.nonConOption);
+	  const flatTypeList = Array.from(ncTCF, x => 
+	    typeof x === 'string' ? x : 
+	    x.live === true && x.typeText
+	  );
+	  const flatTypeListClean = flatTypeList.filter(f=> f);
+        
     let phases = !org ? [] : org.phases;
     const from = moment(startDay).startOf('day').format();
     const to = moment(endDay).endOf('day').format();
@@ -106,7 +114,7 @@ Meteor.methods({
         batchSlice = await findRelevantBatches(orgKey, from, to);
         batchArange = await loopBatches(batchSlice, from, to);
         itemStats = await loopItems(batchArange.allItems, from, to);
-        nonConStats = await loopNonCons(batchArange.allNonCons, from, to, optionsLegacy, phases, getNC, getType, getPhase);
+        nonConStats = await loopNonCons(batchArange.allNonCons, from, to, flatTypeListClean, phases, getNC, getType, getPhase);
         const batchInclude = batchSlice.length;
         const itemsInclude = batchArange.allItems.length;
         //const itemsWithPercent = ( ( nonConStats.uniqueSerials / itemsInclude ) * 100 ).toFixed(1) + '%';

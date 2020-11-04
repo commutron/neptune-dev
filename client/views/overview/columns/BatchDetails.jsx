@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 
 import BatchTopStatus from './BatchTopStatus.jsx';
 import ReleasedCheck from './ReleasedCheck.jsx';
-import { TideActivitySquare } from '/client/components/tide/TideActivity';
+import TideActivityData, { TideActivitySquare } from '/client/components/tide/TideActivity';
 import BranchProgress from './BranchProgress.jsx';
 import NonConCounts from './NonConCounts.jsx';
 import ProJump from '/client/components/smallUi/ProJump';
@@ -113,10 +113,16 @@ const BatchDetailChunk = ({
       </div>
       
       <div>
+      {!isDone ?
         <TideActivitySquare 
           batchID={oB._id} 
           acData={ac}
-          app={app} />
+          isDebug={isDebug} />
+      :
+        <TideActivityData
+          batchID={oB._id}
+          isDebug={isDebug} />
+      }    
       </div>
       
       <BatchTopStatus

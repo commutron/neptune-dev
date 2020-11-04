@@ -56,10 +56,11 @@ function collectBranchCondition(privateKey, batchID) {
         const conArr = Array.from(branchSteps, x => x.condition );
            
         const branchCon = branchSteps.length === 0 ? false :
-          conArr.includes('onHold') ? 'onHold' :
           conArr.includes('canStart') ||
           conArr.includes('stepRemain') ?
-          'open' : 
+          'open' :
+          conArr.includes('onHold') ? 
+          'onHold' :
           'closed';
           
         branchSets.push({
@@ -118,19 +119,22 @@ function collectBranchCondition(privateKey, batchID) {
         }
       });
       
+      
       let branchSets = [];
       for(let branch of branches) {
         const branchSteps = progSteps.filter( x => x.branchKey === branch.brKey );
         const conArr = Array.from(branchSteps, x => x.condition );
+        
         const nonConLeft = branch.brKey === 't3rm1n2t1ng8r2nch' ? rNC.length :
                             rNC.filter( x => x.where === branch.branch ).length;
             
         const branchCon = branchSteps.length === 0 ? false :
-          conArr.includes('onHold') ? 'onHold' :
           conArr.includes('canStart') ||
           conArr.includes('stepRemain') ||
           nonConLeft > 0 ?
-          'open' : 
+          'open' :
+          conArr.includes('onHold') ? 
+          'onHold' :
           'closed';
           
         branchSets.push({

@@ -34,9 +34,7 @@ const AlterFulfillForm = ({ batchId, isX, end, app, selfclose })=> {
     
     const callMthd = !isX ? 'alterBatchFulfill' : 'alterBatchXFulfill';
     
-    const clientTZ = moment.tz.guess();
-    
-    Meteor.call(callMthd, batchId, end, endDateState, reasonState, clientTZ, (error, reply)=>{
+    Meteor.call(callMthd, batchId, end, endDateState, reasonState, (error, reply)=>{
       if(error) {
         console.log(error);
         toast.error('Server Error');

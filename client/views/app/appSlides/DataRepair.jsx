@@ -81,7 +81,7 @@ const DataRepair = ({ app, users })=> {
   function updateCaches() {
     Meteor.call('FORCEcacheUpdate', (error)=>{
       error && console.log(error);
-      toast.success('method called', { autoClose: false });
+      toast.success('method coomplete', { autoClose: false });
     });
   }
   

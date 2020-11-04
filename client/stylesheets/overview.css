@@ -1,7 +1,12 @@
-/* OverLayout */
+.overviewContainer,
+.upstreamView,
+.downstreamView {
+  display: grid;
+  overflow-y: hidden !important;
+  overflow-x: hidden !important;
+}
 
 .overviewContainer {
-  display: grid;
   height: 100vh;
   grid-template-rows: 8vh 3vh 1fr;/*87vh*/
   grid-template-columns: 100%;
@@ -9,18 +14,37 @@
     'tenHeader'
     'overviewNav'
     'overviewContent';
-  overflow-y: hidden !important;
-  overflow-x: hidden !important;
+}
+.upstreamView,
+.downstreamView {
+  grid-template-rows: 3vh 89vh;
+}
+.upstreamView {
+  grid-template-areas: 
+    'overviewNav'
+    'overviewContent';
+}
+.downstreamView {
+  grid-template-areas: 
+    'downTools'
+    'downContent';
 }
 
-.overviewToolbar {
-  grid-area: overviewNav;
+.overviewToolbar,
+.downstreamToolbar {
   background-color: rgb(50,50,50);
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
   align-items: center;
 }
+.overviewToolbar {
+  grid-area: overviewNav;
+}
+.downstreamToolbar {
+  grid-area: downTools;
+}
+
 .gridViewTools span,
 .gridViewTools select,
 .gridViewTools button,
@@ -36,15 +60,8 @@
 .gridViewTools select { 
   border-top-color: transparent;
   border-bottom-color: transparent;
-  cursor: pointer; }
-
-.overviewContent {
-  grid-area: overviewContent;
-  background-color: rgb(30,30,30);
-  overflow-y: scroll;
-  min-height: 89vh;
+  cursor: pointer; 
 }
-
 .overlistSort {
   height: 3vh;
   font-size: 1rem;
@@ -66,7 +83,22 @@
   padding: 0;
 }
 
-
+.overviewContent,
+.downstreamContent {
+  background-color: rgb(30,30,30);
+  overflow-y: scroll;
+}
+.overviewContent {
+  grid-area: overviewContent;
+  min-height: 89vh;
+}
+.downstreamContent {
+  grid-area: downContent;
+  display: grid;
+  grid-template-columns: minmax(min-content, 30vw) auto;
+  grid-template-areas:
+    'downFixed downScroll';
+}
 
 /*OverGrid */
 
@@ -82,11 +114,14 @@
   grid-template-columns: minmax(min-content, max-content) auto;
 }
 
+.overGridFixed, .overGridScroll,
+.downOrdersFixed, .downOrdersScroll {
+  display: grid;
+  grid-auto-rows: 10vh;
+}
+
 .overGridFixed {
   grid-area: overFixedArea;
-  display: grid;
-  grid-auto-flow: row;
-  grid-auto-rows: 10vh;
   overflow-x: hidden;
 }
 .overGridRowFixedHeader {
@@ -103,47 +138,63 @@
   font-size: 3vh;
   font-weight: 600;
 }
+
+.overGridRowFixed,
+.downRowFixed {
+  display: grid;
+  grid-template-columns: min-content minmax(min-content, max-content) auto;
+  place-items: stretch stretch;
+}
 .overGridRowFixed {
   border-right: 1px outset rgba(255,255,255,0.3);
   border-bottom: 1px outset rgba(255,255,255,0.4);
-  display: grid;
-  grid-template-columns: min-content minmax(min-content, max-content) auto;
-  place-items: stretch start;
 }
-.overGridRowFixed > div {
+.downRowFixed {
+  border-right: 0.3vw groove rgba(255,255,255,0.4);
+}
+
+.overGridRowFixed > div,
+.downRowFixed > div {
   display: flex;
   align-items: center;
   /*white-space: nowrap;*/
   padding: 1vh 1vw;
   line-height: 1.3;
 }
-.overGridRowFixed > div:first-child {
+.downRowFixed > div {
+  border-bottom: 1px outset rgba(255,255,255,0.4);
+}
+
+.overGridRowFixed > div:first-child,
+.downRowFixed > div:first-child {
   font-size: 2vmin !important;
   justify-content: center;
   padding: 0;
   width: 4vmin;
   overflow: hidden;
 }
-.overGridRowFixed > div:first-child .big {
+.overGridRowFixed > div:first-child .big,
+.downRowFixed > div:first-child .big {
   font-size: inherit;
 }
-.overGridRowFixed > div:nth-child(2) {
+.overGridRowFixed > div:nth-child(2),
+.downRowFixed > div:nth-child(2) {
   border-right: 1px outset rgba(255,255,255,0.4);
   font-size: 2.5vh;
 }
-.overGridRowFixed > div:last-child {
+.overGridRowFixed > div:last-child,
+.downRowFixed > div:last-child {
   overflow: hidden;
   text-overflow: ellipsis;
   word-break: break-word;
   font-size: 1.75vh;
 }
-
+.downRowFixed > div:last-child {
+  border-right: 1px outset rgba(255,255,255,0.3);
+}
 
 .overGridScroll {
   grid-area: overScrollArea;
-  display: grid;
-  grid-auto-flow: row;
-  grid-auto-rows: 10vh;
   overflow-x: scroll;
 }
 
@@ -160,13 +211,26 @@
 .overGridRowScroll {
   border-left: 0.25vw groove rgba(255,255,255,0.4);
   border-right: 0.3vw groove rgba(255,255,255,0.4);
+}
+.overGridRowScroll,
+.downHeadScroll,
+.downRowScroll {
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: 11vh;
   place-items: stretch stretch;
 }
+.downHeadScroll {
+  grid-area: downHeaderS;
+  line-height: 1;
+  font-size: 1.2vh;
+  text-align: center;
+  align-items: center;
+}
 
-.overGridRowScroll > div, .statusBlock {
+.overGridRowScroll > div,
+.downRowScroll > div,
+.statusBlock {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -182,7 +246,8 @@
   text-align: center;
 }
 
-.overGridRowScroll > div {
+.overGridRowScroll > div,
+.downRowScroll > div {
   border-right: 1px outset rgba(255,255,255,0.3);
   border-bottom: 1px outset rgba(255,255,255,0.4);
 }
@@ -197,7 +262,6 @@
 }
 
 .ovColhead { color: white; }
-
 
 .overGridRowScroll > .yellowLeft,
 .downRowScroll > .yellowLeft {
@@ -214,9 +278,85 @@
   padding-right: 0;
 }
 
+/* downstream shipday grid */
+
+.downstreamFixed {
+  grid-area: downFixed;
+}
+.downstreamScroll {
+  grid-area: downScroll;
+  overflow-y: hidden !important;
+  overflow-x: auto !important;
+}
+.downGridFrameFixed, .downGridFrameScroll {
+  display: grid;
+  grid-template-rows: 3vh auto;
+  min-height: 30vh;
+}
+.downGridFrameFixed {
+  grid-template-columns: 4vmin auto;
+  grid-template-areas: 
+    'downWeek downHeaderF'
+    'downWeek downOrdersF';
+}
+.downGridFrameScroll {
+  grid-template-areas: 
+    'downHeaderS'
+    'downOrdersS';
+}
+.downWeek {
+  grid-area: downWeek;
+  writing-mode: tb-rl;
+  transform: rotate(-180deg);
+  font-size: 3vmin;
+  text-align: center;
+  padding-bottom: 3vh;
+}
+.downGridFrameFixed:nth-child(odd) > .downWeek,
+.downGridFrameFixed:nth-child(odd) > .downHeadFixed,
+.downGridFrameScroll:nth-child(odd) > .downHeadScroll {
+  background-color: rgba(41, 128, 185, 0.1);
+}
+.downGridFrameFixed:nth-child(even) > .downWeek,
+.downGridFrameFixed:nth-child(even) > .downHeadFixed,
+.downGridFrameScroll:nth-child(even) > .downHeadScroll {
+  background-color: rgba(52, 152, 219, 0.1);
+}
+.downGridFrameFixed:first-child,
+.downGridFrameScroll:first-child {
+  min-height: 15vh;
+}
+.downGridFrameFixed:first-child > .downWeek {
+  background-color: var(--alizarin);
+}
+.downHeadFixed {
+  grid-area: downHeaderF;
+  line-height: 1;
+  font-size: 1.5vh;
+  padding-left: 1vmin;
+  display: flex;
+  align-items: center;
+}
+.downOrdersFixed {
+  grid-area: downOrdersF;
+}
+.downOrdersScroll {
+  grid-area: downOrdersS;
+}
+
+.gridViewTools input[type=range] {
+  filter: grayscale(1) invert(1) brightness(0.9);
+  overflow: hidden;
+}
+.invert .gridViewTools input[type=range] {
+  filter: grayscale(0.95) brightness(1.4);
+  overflow: hidden;
+}
+
 /* dense minifyed layout */
 
-.overGridFrame.minifyed {
+.overGridFrame.minifyed,
+.downstreamContent.minifyed {
   grid-template-columns: minmax(min-content, 25vw) auto; }
   
 .minifyed .label { display: none; }
@@ -231,8 +371,10 @@
 .minifyed .downOrdersScroll { 
   grid-auto-rows: 5vh; }
 .minifyed .overGridRowScroll,
-.minifyed .downRowScroll { 
-  grid-auto-columns: 8.25vh; }
+.minifyed .downRowScroll,
+.minifyed .downHeadScroll { 
+  grid-auto-columns: 8.25vh;
+}
 
 
 .minifyed .overGridRowScroll:first-child > div { 
@@ -265,7 +407,8 @@
 .minifyed .downOrdersScroll .big { 
   font-size: 1.5vh; }
 
-.lightTheme .overviewToolbar {
+.lightTheme .overviewToolbar,
+.lightTheme .downstreamToolbar {
   background-color: var(--silverfade);
 }
 
@@ -277,7 +420,8 @@
   color: var(--blackT); 
 }
 .lightTheme .overviewContent,
-.lightTheme .overGridFrame { 
+.lightTheme .overGridFrame,
+.lightTheme .downstreamContent { 
   background-color: whitesmoke;
 }
 .lightTheme .overGridRowFixedHeader > span,
