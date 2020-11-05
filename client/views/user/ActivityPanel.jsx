@@ -15,11 +15,10 @@ const ActivityPanel = ({ app, brancheS, user, isDebug, users, bCache })=> {
   function getData(fresh) {
     fresh && setWeekData(false);
     if(weekChoice) {
-      const clientTZ = moment.tz.guess();
       const yearNum = weekChoice.yearNum;
       const weekNum = weekChoice.weekNum;
       const userID = user._id;
-      Meteor.call('fetchWeekTideActivity', yearNum, weekNum, clientTZ, false, userID,
+      Meteor.call('fetchWeekTideActivity', yearNum, weekNum, false, userID,
       (err, rtn)=>{
   	    err && console.log(err);
   	    const cronoTimes = rtn.sort((x1, x2)=> {

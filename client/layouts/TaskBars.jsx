@@ -106,6 +106,14 @@ export const UpTaskBar = ({ subLink }) => (
     />
     
     <TaskElement
+      title={Pref.shortfalls}
+      subON={subLink === 'shortfalls'}
+      goLink='/upstream/shortfalls'
+      icon='fas fa-exclamation'
+      iconAdj='down-1'
+    />
+    
+    <TaskElement
       title='Part Value Conversion'
       subON={subLink === 'values'}
       goLink='/upstream/values'
@@ -132,6 +140,14 @@ export const DownTaskBar = ({ subLink }) => (
       subON={subLink === 'reportweek'}
       goLink='/downstream/reportweek'
       icon='fas fa-flag-checkered'
+      //iconAdj=''
+    />
+    
+    <TaskElement
+      title='Daily Completed'
+      subON={subLink === 'reportday'}
+      goLink='/downstream/reportday'
+      icon='far fa-calendar-check'
       //iconAdj=''
     />
     

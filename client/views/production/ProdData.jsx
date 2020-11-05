@@ -6,7 +6,7 @@ import { withTracker } from 'meteor/react-meteor-data';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
 import usePrevious from '/client/utility/usePreviousHook.js';
 
-import Spin from '/client/components/tinyUi/Spin.jsx';
+import { SpinWrap } from '/client/components/tinyUi/Spin.jsx';
 import ProductionFindOps from './ProductionFindOps.jsx';
 
 const ProdData = ({
@@ -30,13 +30,7 @@ const ProdData = ({
      !user ||
      !app
     ) {
-    return(
-      <div className='centreContainer'>
-        <div className='centrecentre'>
-          <Spin />
-        </div>
-      </div>
-    );
+    return( <SpinWrap /> );
   }
   
   const activeUsers = users.filter( x => 

@@ -228,7 +228,7 @@ Meteor.methods({
     }
   },
   
-  fetchWeekTideActivity(yearNum, weekNum, clientTZ, allOrg, mockUserId) {
+  fetchWeekTideActivity(yearNum, weekNum, allOrg, mockUserId) {
     try {
       const getYear = yearNum || moment().weekYear();
       const getWeek = weekNum || moment().week();

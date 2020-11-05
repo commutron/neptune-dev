@@ -6,7 +6,7 @@ import StreamLayout from '/client/layouts/StreamLayout.jsx';
 import UpstreamView from '/client/views/upstream/UpstreamTask/UpstreamView';
 import CompSearchData from '/client/views/upstream/CompSearch/CompSearchData';
 import CompValuesSlide from '/client/views/upstream/CompValues/CompValuesSlide';
-
+import ReportShort from '/client/views/upstream/ReportShort';
 
 const UpstreamWrap = ({ 
   view, subLink,
@@ -31,6 +31,24 @@ const UpstreamWrap = ({
           user={user}
           org={user.org}
           app={app} />
+      </StreamLayout>
+    );
+  }
+  
+  if(view === 'shortfalls') {
+    return (
+      <StreamLayout
+        user={user}
+        app={app}
+        title={Pref.shortfalls}
+        subLink={view}
+        invertColor={true}
+        action={false}
+      >
+        <ReportShort
+          user={user}
+          app={app}
+        />
       </StreamLayout>
     );
   }

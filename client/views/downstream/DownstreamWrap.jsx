@@ -5,6 +5,7 @@ import StreamLayout from '/client/layouts/StreamLayout.jsx';
 
 import DownstreamView from '/client/views/downstream/DownstreamTask/DownstreamView';
 import CompletedReport from './CompletedReport.jsx';
+import ReportDaily from './ReportDaily';
 import Outlook from './Outlook.jsx';
 
 const DownstreamWrap = ({ 
@@ -27,6 +28,30 @@ const DownstreamWrap = ({
       >
         <CompletedReport
           app={app} />
+      </StreamLayout>
+    );
+  }
+  
+  if(view === 'reportday') {
+    return (
+      <StreamLayout
+        user={user}
+        app={app}
+        title='Daily Completed'
+        subLink={view}
+        invertColor={true}
+        action={false}
+        navBar='down'
+      >
+        <ReportDaily 
+          bCache={bCache}
+          // pCache={pCache}
+          // brCache={brCache}
+          // zCache={zCache}
+          app={app}
+          user={user}
+          isDebug={isDebug}
+        />
       </StreamLayout>
     );
   }

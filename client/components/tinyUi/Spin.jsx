@@ -20,6 +20,14 @@ const Spin = ({ color, message }) => {
 
 export default Spin;
 
+export const SpinWrap = ({ color, message })=> (
+  <div className='centreContainer'>
+    <div className='centrecentre'>
+      <Spin color={color} message={message} />
+    </div>
+  </div>
+);
+
 export const CalcSpin = () => {
   let sty = { height: '50px' };
   return(

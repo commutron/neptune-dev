@@ -57,6 +57,7 @@ Meteor.methods({
       
   },
   
+  /*
   UNSETwatchlistKey() {
     try{
       if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
@@ -71,7 +72,7 @@ Meteor.methods({
     }catch (err) {
       throw new Meteor.Error(err);
     }
-  },
+  },*/
   
   /*
   backdateTideWall() {

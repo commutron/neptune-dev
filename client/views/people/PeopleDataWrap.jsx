@@ -9,7 +9,7 @@ import usePrevious from '/client/utility/usePreviousHook.js';
 
 import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
 import Pref from '/client/global/pref.js';
-import Spin from '../../components/tinyUi/Spin.jsx';
+import { SpinWrap } from '../../components/tinyUi/Spin.jsx';
 
 import HomeIcon from '/client/layouts/HomeIcon.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
@@ -36,13 +36,7 @@ const PeopleDataWrap = ({
   const clientTZ = moment.tz.guess(); 
     
   if( !readyUsers || !readyTides || !app) {
-    return (
-      <div className='centreContainer'>
-        <div className='centrecentre'>
-          <Spin />
-        </div>
-      </div>
-    );
+    return( <SpinWrap /> );
   }
   
   const brancheS = app.branches.sort((b1, b2)=> {

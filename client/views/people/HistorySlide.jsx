@@ -18,7 +18,7 @@ const HistorySlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
   
   function getData() {
     setDayData(false);
-    Meteor.call('fetchOrgTideActivity', dateString, clientTZ, (err, rtn)=>{
+    Meteor.call('fetchOrgTideActivity', dateString, (err, rtn)=>{
 	    err && console.log(err);
 	    const cronoTimes = rtn.sort((x1, x2)=> {
                           if (x1.startTime < x2.startTime) { return 1 }

@@ -1,6 +1,7 @@
 import moment from 'moment';
 import timezone from 'moment-timezone';
 
+import Config from '/server/hardConfig.js';
 
 export function whatIsBatch(keyword, labelString) {
   const batch = BatchDB.findOne({batch: keyword});
@@ -127,6 +128,42 @@ Meteor.methods({
       }
     }
     return first.tz(clientTZ).format();
+  },
+  
+     ///////////////////////////////////////////////////////////////////////////////////
+  
+  // Shortfall Items
+  
+  ///////////////////////////////////////////////////////////////////////////////////
+ 
+ 
+  fetchShortfalls() {
+    
+    const bCache = CacheDB.findOne({orgKey: Meteor.user().orgKey, dataName: 'batchInfo'});
+    
+    const touchedB = BatchDB.find({
+      orgKey: Meteor.user().orgKey,
+      $nor: [ { 'shortfall.inEffect': true }, { 'shortfall.reSolve': true } ]
+    }).fetch();
+    
+     
+    let sMatch = [];
+    
+    for(let iB of touchedB) {
+      const mShort = iB.shortfall.filter( s => !(s.inEffect || s.reSolve) );
+      const is = bCache.dataSet.find( x => x.batch === iB.batch);
+      const what = is ? is.isWhat.join(" ") : 'unavailable';
+        
+      for(let mS of mShort) {
+        const time = moment.tz(mS.cTime, Config.clientTZ).format();
+        
+        sMatch.push([ 
+          iB.batch, iB.salesOrder, what, mS.serial, mS.partNum, mS.refs, time
+        ]);
+      }
+    }
+      
+    return sMatch;
   },
   
   

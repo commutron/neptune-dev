@@ -193,7 +193,39 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
     }catch(err) {
       throw new Meteor.Error(err);
     }
-  }
+  },
+  
+  fetchFinishOnDay(dateString) {
+    
+    const localDate = moment.tz(dateString, Config.clientTZ);
+    const bCache = CacheDB.findOne({orgKey: Meteor.user().orgKey, dataName: 'batchInfo'});
+    
+    const touchedB = BatchDB.find({
+      orgKey: Meteor.user().orgKey,
+      items: { $elemMatch: { finishedAt: {
+      $gte: new Date(localDate.startOf('day').format()),
+      $lte: new Date(localDate.endOf('day').format())
+    }}}
+    }).fetch();
+    
+    let itemsMatch = [];
+    
+    for(let iB of touchedB) {
+      const mItems = iB.items.filter( i => i.finishedAt && localDate.isSame(i.finishedAt, 'day') );
+      const is = bCache.dataSet.find( x => x.batch === iB.batch);
+      const what = is ? is.isWhat.join(" ") : 'unavailable';
+        
+      for(let mI of mItems) {
+        const time = moment.tz(mI.finishedAt, Config.clientTZ).format('HH:mm:ss');
+        
+        itemsMatch.push([ 
+          iB.batch, iB.salesOrder, what, mI.serial, time
+        ]);
+      }
+    }
+      
+    return itemsMatch;
+  },
   
   
 });

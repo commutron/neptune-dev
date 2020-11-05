@@ -1,7 +1,7 @@
 import React from 'react';
 //import Pref from '/client/global/pref.js';
-import moment from 'moment';
-import 'moment-timezone';
+// import moment from 'moment';
+// import 'moment-timezone';
 import { toast } from 'react-toastify';
 
 const DataRepair = ({ app, users })=> {
@@ -31,13 +31,13 @@ const DataRepair = ({ app, users })=> {
       if(reply) { toast.success('data edit complete', { autoClose: false }); }
     });
   }
-  
+  /*
   function clearAuserThing() {
     Meteor.call('UNSETwatchlistKey', (error, reply)=>{
       error && console.log(error);
       if(reply) { toast.success('data edit complete', { autoClose: false }); }
     });
-  }
+  }*/
   
   /*
   function addAthing() {
@@ -162,14 +162,6 @@ const DataRepair = ({ app, users })=> {
         onClick={()=>updateCaches()}
         className='action clear blackT'
       >Force Update All Caches</button>
-      
-      <hr />
-      
-      <h2 className='cap'>Clear All User Watchlist Keys</h2>
-      <button
-        onClick={()=>clearAuserThing()}
-        className='action clear blackT'
-      >Clear and Delete</button>
       
       <hr />
       

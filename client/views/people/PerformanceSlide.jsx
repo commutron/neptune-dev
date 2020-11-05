@@ -1,6 +1,5 @@
 import React, { Fragment, useState, useLayoutEffect } from 'react';
 import moment from 'moment';
-import 'moment-timezone';
 import 'moment-business-time';
 import Pref from '/client/global/pref.js';
 import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
@@ -11,7 +10,7 @@ import NumLine from '/client/components/tinyUi/NumLine.jsx';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 
-const PerformanceSlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
+const PerformanceSlide = ({ app, user, users, bCache, isDebug })=> {
   
   const [weekChoice, setWeekChoice] = useState(false);
   const [weekData, setWeekData] = useState(false);
@@ -35,7 +34,7 @@ const PerformanceSlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
     if(weekChoice) {
       const yearNum = weekChoice.yearNum;
       const weekNum = weekChoice.weekNum;
-      Meteor.call('fetchWeekTideActivity', yearNum, weekNum, clientTZ, true, false, 
+      Meteor.call('fetchWeekTideActivity', yearNum, weekNum, true, false, 
       (err, rtn)=>{
   	    err && console.log(err);
         setWeekData(rtn);

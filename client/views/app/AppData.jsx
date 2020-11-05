@@ -4,7 +4,7 @@ import { withTracker } from 'meteor/react-meteor-data';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
 import usePrevious from '/client/utility/usePreviousHook.js';
 
-import Spin from '../../components/tinyUi/Spin.jsx';
+import { SpinWrap } from '../../components/tinyUi/Spin.jsx';
 import AppWrap from './AppWrap.jsx';
 
 const AppView = ({
@@ -21,13 +21,7 @@ const AppView = ({
   
    
   if(!readyUsers || !readyDebug || !app ) {
-    return (
-      <div className='centreContainer'>
-        <div className='centrecentre'>
-          <Spin />
-        </div>
-      </div>
-    );
+    return( <SpinWrap /> );
   }
   
   if(isAdmin) {

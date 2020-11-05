@@ -5,7 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import { UnreadInboxToastPop } from '/client/utility/InboxToastPop.js';
 
 // import Pref from '/client/global/pref.js';
-import Spin from '/client/components/tinyUi/Spin.jsx';
+import { SpinWrap } from '/client/components/tinyUi/Spin.jsx';
 import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
 import HomeIcon from '/client/layouts/HomeIcon.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
@@ -28,16 +28,8 @@ const UserDataWrap = ({
     UnreadInboxToastPop(user);
   }, []);
   
-  if(
-    !readyUsers || !readybNames || !app
-  ) {
-    return (
-      <div className='centreContainer'>
-        <div className='centrecentre'>
-          <Spin />
-        </div>
-      </div>
-    );
+  if( !readyUsers || !readybNames || !app ) {
+    return( <SpinWrap /> );
   }
     
   const branches = app.branches.filter( b => b.open === true );

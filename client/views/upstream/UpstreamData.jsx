@@ -7,7 +7,7 @@ import 'moment-timezone';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
 import usePrevious from '/client/utility/usePreviousHook.js';
 
-import Spin from '/client/components/tinyUi/Spin.jsx';
+import { SpinWrap } from '/client/components/tinyUi/Spin.jsx';
 import UpstreamWrap from './UpstreamWrap.jsx';
 
 const View = ({
@@ -26,13 +26,7 @@ const View = ({
   
     
   if( !readyUsers || !ready || !readyC || !app ) {
-    return (
-      <div className='centreContainer'>
-        <div className='centrecentre'>
-          <Spin />
-        </div>
-      </div>
-    );
+    return( <SpinWrap /> );
   }
 
   return(

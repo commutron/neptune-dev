@@ -43,7 +43,7 @@ export const FocusSelect = ({ bCacheData, focusState, changeFunc })=> {
   
   const groupList = _.uniq( Array.from(bCacheData, g =>
                               !g.isWhat[0].startsWith('.') && g.isWhat[0] ))
-                                .filter( f => f );
+                                .filter( f => f ).sort();
 
   return(
     <span>
