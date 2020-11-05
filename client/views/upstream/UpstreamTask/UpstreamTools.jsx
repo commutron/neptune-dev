@@ -1,7 +1,7 @@
 import React from 'react';
 import ClockString from '/client/components/smallUi/ClockString';
 import { 
-  FocusSelect, //SortSelect,
+  FocusSelect, SortSelect,
   LayoutSwitch, ThemeSwitch
 } from '/client/components/smallUi/ToolBarTools';
 
@@ -13,10 +13,10 @@ const UpstreamTools = ({
 })=> (
   <nav className='overviewToolbar gridViewTools'>
     
-    {/*<SortSelect
+    <SortSelect
       sortState={sortByUP}
       changeFunc={changeSortUP}
-    />*/}
+    />
     
     <FocusSelect
       bCacheData={bCache.dataSet}

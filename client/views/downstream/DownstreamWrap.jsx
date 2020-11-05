@@ -7,7 +7,6 @@ import DownstreamView from '/client/views/downstream/DownstreamTask/DownstreamVi
 import CompletedReport from './CompletedReport.jsx';
 import Outlook from './Outlook.jsx';
 
-
 const DownstreamWrap = ({ 
   view, subLink,
   bCache, pCache, acCache, brCache, zCache,

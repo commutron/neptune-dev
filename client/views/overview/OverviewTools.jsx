@@ -1,7 +1,7 @@
 import React from 'react';
 import ClockString from '/client/components/smallUi/ClockString';
 import { 
-  BranchFilterSelect, //SortSelect, 
+  BranchFilterSelect, SortSelect, 
   FocusSelect,
   LayoutSwitch, ThemeSwitch
 } from '/client/components/smallUi/ToolBarTools';
@@ -23,10 +23,10 @@ const OverviewTools = ({
       changeFunc={changeFilterUP}
     />
     
-    {/*<SortSelect
+    <SortSelect
       sortState={sortByUP}
       changeFunc={changeSortUP}
-    />*/}
+    />
     
     <FocusSelect
       bCacheData={bCache.dataSet}
