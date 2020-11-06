@@ -11,7 +11,7 @@ import TideDayMini from '/client/components/charts/Tides/TideDayMini.jsx';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 import { AnonyUser } from '/client/components/smallUi/UserNice.jsx';
 
-const HistorySlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
+const HistorySlide = ({ app, user, users, bCache, isDebug })=> {
   
   const [dateString, setDateString] = useState(moment().format('YYYY-MM-DD'));
   const [dayData, setDayData] = useState(false);
@@ -41,7 +41,7 @@ const HistorySlide = ({ app, user, users, bCache, clientTZ, isDebug })=> {
   
   let minDate = moment(app.tideWall || app.createdAt).format('YYYY-MM-DD');
   
-  const localDate = moment.tz(dateString, clientTZ);
+  const localDate = moment.tz(dateString, moment.tz.guess());
   const isHoliday = HolidayCheck( app.nonWorkDays, moment(dateString, 'YYYY-MM-DD').format());
                       
   return(

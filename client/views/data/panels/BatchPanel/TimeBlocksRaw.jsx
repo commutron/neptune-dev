@@ -6,7 +6,7 @@ import { AnonyUser } from '/client/components/smallUi/UserNice.jsx';
 import TaskTag from '/client/components/tinyUi/TaskTag.jsx';
 import { ForceRemoveTideBlock } from '/client/views/app/appSlides/DataRepair.jsx';
 
-const TimeBlocksRaw = ({ batch, tide, clientTZ, isDebug })=> {
+const TimeBlocksRaw = ({ batch, tide, isDebug })=> {
   
   const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
   
@@ -25,7 +25,6 @@ const TimeBlocksRaw = ({ batch, tide, clientTZ, isDebug })=> {
                 key={index} 
                 tB={mov} 
                 batch={batch} 
-                clientTZ={clientTZ}
                 isDebug={isDebug}
                 showZero={showZero} />
           )})}
@@ -65,7 +64,7 @@ export default TimeBlocksRaw;
 
 
 
-const RawBlock = ({ tB, batch, clientTZ, isDebug, showZero })=> {
+const RawBlock = ({ tB, batch, isDebug, showZero })=> {
   
   const [ brGuess, setGuess ] = useState(false);
   
@@ -73,7 +72,7 @@ const RawBlock = ({ tB, batch, clientTZ, isDebug, showZero })=> {
     if(tB.task) {
       setGuess([ 'fromUserInput', [ tB.task ] ]);
     }else{
-      Meteor.call('branchBestGuess', tB.who, batch, tB.startTime, tB.stopTime, clientTZ,
+      Meteor.call('branchBestGuess', tB.who, batch, tB.startTime, tB.stopTime,
       (err, asw)=>{
         err && console.log(err);
         if(asw) {

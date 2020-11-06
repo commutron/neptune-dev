@@ -1,6 +1,4 @@
 import React from 'react';
-import moment from 'moment';
-import 'moment-timezone';
 //import Pref from '/client/global/pref.js';
 
 import ProgLayerBurndown, { ProgLayerBurndownExplain } 
@@ -16,8 +14,6 @@ const TimeTab = ({
   riverFlow, riverAltFlow
 }) =>	{
 
-  const clientTZ = moment.tz.guess();
-  
   // const proto = Roles.userIsInRole(Meteor.userId(), 'nightly');
   // const pSup = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
   
@@ -28,7 +24,6 @@ const TimeTab = ({
         a={a}
         b={b}
         totalUnits={totalUnits}
-        clientTZ={clientTZ}
         isDebug={isDebug} />
         
       <div className='dropCeiling vmargin space'>
@@ -58,7 +53,6 @@ const TimeTab = ({
         <TimeBlocksRaw 
           batch={b.batch} 
           tide={b.tide} 
-          clientTZ={clientTZ}
           isDebug={isDebug} />
       </div>
               

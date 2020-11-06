@@ -32,8 +32,6 @@ const PeopleDataWrap = ({
   useLayoutEffect( ()=>{
     InboxToastPop(prevUser, user);
   }, [user]);
-   
-  const clientTZ = moment.tz.guess(); 
     
   if( !readyUsers || !readyTides || !app) {
     return( <SpinWrap /> );
@@ -82,7 +80,6 @@ const PeopleDataWrap = ({
             users={users}
             bCache={bCache}
             brancheS={brancheS}
-            clientTZ={clientTZ}
             isDebug={isDebug} />
             
           <HistorySlide
@@ -92,7 +89,6 @@ const PeopleDataWrap = ({
             users={users}
             bCache={bCache}
             brancheS={brancheS}
-            clientTZ={clientTZ}
             allUsers={true}
             isDebug={isDebug} />
           
@@ -103,7 +99,6 @@ const PeopleDataWrap = ({
             users={users}
             bCache={bCache}
             brancheS={brancheS}
-            clientTZ={clientTZ}
             isDebug={isDebug} />
             
           {!antiAuth &&

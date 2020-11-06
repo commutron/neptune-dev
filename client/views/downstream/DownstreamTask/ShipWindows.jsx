@@ -18,6 +18,8 @@ const ShipWindows = ({
 })=> {
   
   const [ nextShipDays, nextShipDaysSet ] = useState([]);
+  const [ pCacheSort, pCacheSSet ] = useState([]);
+  const [ zCacheSort, zCacheSSet ] = useState([]);
   
   useLayoutEffect( ()=>{
     const numOf = calcFor + 1;
@@ -25,6 +27,24 @@ const ShipWindows = ({
     // returns an array of moments
     nextShipDaysSet(getShipDays);
     
+    pCacheSSet( pCache.sort((p1, p2)=> {
+      const p1bf = p1.estEnd2fillBuffer;
+      const p2bf = p2.estEnd2fillBuffer;
+      if (!p1bf) { return 1 }
+      if (!p2bf) { return -1 }
+      if (p1.lateLate) { return -1 }
+      if (p2.lateLate) { return 1 }
+      if (p1bf < p2bf) { return -1 }
+      if (p1bf > p2bf) { return 1 }
+      return 0;
+    }) );
+    
+    zCacheSSet( zCache.sort((z1, z2)=> {
+      if (z1.gapZone[0] < z2.gapZone[0]) { return -1 }
+      if (z1.gapZone[0] > z2.gapZone[0]) { return 1 }
+      return 0;
+    }) );
+        
     Meteor.call('REQUESTcacheUpdate', 
       false, // batchUp
       true, // priorityUp
@@ -47,9 +67,9 @@ const ShipWindows = ({
             windowMoment={e}
             indexKey={ix}
             bCache={bCache}
-            pCache={pCache}
+            pCache={pCacheSort}
             acCache={acCache}
-            zCache={zCache}
+            zCache={zCacheSort}
             brancheS={brancheS}
             app={app}
             user={user}
@@ -67,9 +87,9 @@ const ShipWindows = ({
             windowMoment={e}
             indexKey={ix}
             bCache={bCache}
-            pCache={pCache}
+            pCache={pCacheSort}
             acCache={acCache}
-            zCache={zCache}
+            zCache={zCacheSort}
             brancheS={brancheS}
             app={app}
             user={user}

@@ -24,12 +24,12 @@ const WindowFrame = ({
       wipOrdersSet( lateShip );
       mixedOrdersSet( lateShip );
     }else{
-      const shipIn = pCache.filter( x => moment(x.shipAim).isSame(windowMoment, 'day') );
       const early = zCache.filter( x => {
         if(moment(x.shipAim).isSame(windowMoment, 'day')) { return true }
       });
+      const shipIn = pCache.filter( x => moment(x.shipAim).isSame(windowMoment, 'day') );
       wipOrdersSet( shipIn );
-      mixedOrdersSet( [...shipIn,...early] );
+      mixedOrdersSet( [...early,...shipIn] );
     }
   }, []);
   

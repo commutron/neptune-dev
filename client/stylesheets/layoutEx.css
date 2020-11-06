@@ -156,30 +156,26 @@
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
-  height: 9vmax;
+  height: 100%;
   background-color: transparent;
   overflow: hidden;
   white-space: nowrap;
   transition: all 150ms ease-in-out;
-}
-.cookie {
-  background-color: transparent;
   color: var(--silver);
   max-width: 20vw;
-  height: 100%;
   font-size: 2.5vmin;
-  padding: 0 1vmin;
-  overflow: hidden;
+  text-indent: 1vmin;
   word-break: keep-all;
   text-overflow: ellipsis;
   cursor: pointer;
 }
-.crumb {
+.crumb, .endCrumb {
   color: var(--silverfade);
   overflow: hidden;
-  width: 6vmin;
+  width: 5vmin;
 }
-.crumb::before {
+.crumb::before,
+.endCrumb::before {
   background-color: rgb(25,25,25);
 	border-style: solid;
 	border-width: 1vmin 1vmin 0 0;
@@ -198,8 +194,8 @@
 .cookieCrumb:hover, .cookieCrumb:active {
   background-color: var(--silver);
 }
-.cookieCrumb:hover > .cookie,
-.cookieCrumb:active > .cookie {
+.cookieCrumb:hover,
+.cookieCrumb:active {
   color: rgb(25,25,25);
 }
 .cookieCrumb:hover > .crumb:before,
@@ -207,7 +203,9 @@
   color: var(--silver);
 }
 .cookieCrumb:hover + .cookieCrumb > .crumb:before,
-.cookieCrumb:active + .cookieCrumb > .crumb:before {
+.cookieCrumb:hover + .endCrumb:before,
+.cookieCrumb:active + .cookieCrumb > .crumb:before,
+.cookieCrumb:active + .endCrumb:before {
   background-color: var(--silver);
 }
 
@@ -216,7 +214,6 @@
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: center;
-  /*justify-content: center;*/
   padding-top: 1vh;
   height: 100%;
 }

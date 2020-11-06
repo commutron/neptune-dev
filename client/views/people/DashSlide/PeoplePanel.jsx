@@ -6,8 +6,7 @@ import PersonChunk from './PersonChunk.jsx';
 
 const PeoplePanel = ({ 
   app, eUsers, dUsers, openTBlockState, bCache,
-  updateBranches, removeBranch, update, 
-  clientTZ, isDebug
+  updateBranches, removeBranch, update, isDebug
 })=> {
   
   const [ userChunks, setChunks ] = useState([]);
@@ -41,8 +40,7 @@ const PeoplePanel = ({
                 updateBranches={(id, ph)=>updateBranches(id, ph)}
                 removeBranch={(id)=>removeBranch(id)}
                 update={update}
-                isDebug={isDebug}
-                clientTZ={clientTZ} />
+                isDebug={isDebug} />
           )})}
         </tbody>
       </table>

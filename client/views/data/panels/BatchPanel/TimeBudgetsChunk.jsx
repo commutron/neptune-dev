@@ -14,7 +14,7 @@ import { min2hr, percentOf, percentOverUnder } from '/client/utility/Convert';
 
 const TimeBudgetsChunk = ({
   a, b, isX,
-  totalUnits, clientTZ, isDebug
+  totalUnits, isDebug
 }) =>	{
   
   const [ branchTime, branchTimeSet ] = useState(false);
@@ -22,7 +22,7 @@ const TimeBudgetsChunk = ({
   const [ conversion, conversionSet] = useState('hours');
   
   useEffect( ()=>{
-    Meteor.call('assembleBranchTime', b._id, clientTZ, (err, reply)=>{
+    Meteor.call('assembleBranchTime', b._id, (err, reply)=>{
       err && console.log(err);
       reply && branchTimeSet( reply );
     });

@@ -1,6 +1,4 @@
 import React from 'react';
-import moment from 'moment';
-import 'moment-timezone';
 //import Pref from '/client/global/pref.js';
 
 // import ProgLayerBurndown, { ProgLayerBurndownExplain } 
@@ -14,9 +12,7 @@ const TimeTab = ({
   totalUnits,
   done, allDone,
   riverFlow
-}) =>	{
-
-  const clientTZ = moment.tz.guess();
+})=>	{
   
   // const proto = Roles.userIsInRole(Meteor.userId(), 'nightly');
   // const pSup = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
@@ -29,7 +25,6 @@ const TimeTab = ({
         b={b}
         isX={true}
         totalUnits={totalUnits}
-        clientTZ={clientTZ}
         isDebug={isDebug} />
       
       {/*
@@ -60,7 +55,6 @@ const TimeTab = ({
         <TimeBlocksRaw 
           batch={b.batch}
           tide={b.tide} 
-          clientTZ={clientTZ}
           isDebug={isDebug} />
       </div>
               

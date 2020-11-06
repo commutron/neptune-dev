@@ -9,7 +9,7 @@ import TaskTag from '/client/components/tinyUi/TaskTag.jsx';
 const PersonChunk = ({ 
   userChunk, bCache, app,
   updateBranches, removeBranch, update, 
-  isDebug, clientTZ
+  isDebug
 })=> {
   
   const uC = userChunk;
@@ -25,7 +25,6 @@ const PersonChunk = ({
       userChunk.batch,
       userChunk.tideBlock.startTime,
       false,
-      clientTZ,
       (err, asw)=>{
         err && console.log(err);
         asw && setGuess(asw);

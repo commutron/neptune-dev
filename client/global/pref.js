@@ -43,7 +43,7 @@ class Pref {
     // config
     this.userTimePublic = true;
     this.aliasMax = 128;
-    this.aliasMax = 16;
+    this.aliasMin = 16;
     
     // app navigation
     this.post = 'record';

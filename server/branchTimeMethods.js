@@ -1,6 +1,7 @@
 import moment from 'moment';
 //import timezone from 'moment-timezone';
 //import business from 'moment-business';
+import Config from '/server/hardConfig.js';
 
 function deriveFromHistory(history, trackOptions, branchOptions) {
   
@@ -43,7 +44,7 @@ function deriveFromProb(probObjs) {
 Meteor.methods({
   
   
-  branchBestGuess(uID, batchNum, tideStart, tideStop, clientTZ, accessKey) {
+  branchBestGuess(uID, batchNum, tideStart, tideStop, accessKey) {
     const privateKey = accessKey || Meteor.user().orgKey;
     const tStop = tideStop ? tideStop : new Date();
     const app = AppDB.findOne({ orgKey: privateKey});
@@ -130,8 +131,8 @@ Meteor.methods({
             }else{
           
               const sameHourTide = yourHistoryFlat.filter( y => // duration ???
-                                    moment(y.time).tz(clientTZ)
-                                    .isSame(moment(tStop).tz(clientTZ), 'hour') );
+                                    moment(y.time).tz(Config.clientTZ)
+                                    .isSame(moment(tStop).tz(Config.clientTZ), 'hour') );
       
               const fromSameHour = deriveFromHistory(sameHourTide, trackOptions, branchOptions);
               const fromSameHourClean = fromSameHour.cleanResult;
@@ -144,8 +145,8 @@ Meteor.methods({
               }else{
             
                 const sameDayTide = yourHistoryFlat.filter( y =>
-                                    moment(y.time).tz(clientTZ)
-                                    .isSame(moment(tStop).tz(clientTZ), 'day') );
+                                    moment(y.time).tz(Config.clientTZ)
+                                    .isSame(moment(tStop).tz(Config.clientTZ), 'day') );
       
                 const fromSameDay = deriveFromHistory(sameDayTide, trackOptions, branchOptions);
                 const fromSameDayClean = fromSameDay.cleanResult;
@@ -222,7 +223,7 @@ Meteor.methods({
   },
   
   
-  assembleBranchTime(batchID, clientTZ) {
+  assembleBranchTime(batchID) {
     const accessKey = Meteor.user().orgKey;
     const app = AppDB.findOne({ orgKey: accessKey});
     const branchesSort = app.branches.sort((b1, b2)=> {
@@ -241,7 +242,7 @@ Meteor.methods({
         const dt = known || Meteor.call('branchBestGuess', 
                     x.who, batch.batch, 
                     x.startTime, x.stopTime,
-                    clientTZ, accessKey
+                    accessKey
                   );
         const mStart = moment(x.startTime);
         const mStop = !x.stopTime ? moment() : moment(x.stopTime);

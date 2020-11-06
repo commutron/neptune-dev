@@ -136,16 +136,15 @@ Meteor.methods({
   
   ///////////////////////////////////////////////////////////////////////////////////
  
- 
+ /*
   fetchShortfalls() {
-    
     const bCache = CacheDB.findOne({orgKey: Meteor.user().orgKey, dataName: 'batchInfo'});
     
     const touchedB = BatchDB.find({
       orgKey: Meteor.user().orgKey,
-      $nor: [ { 'shortfall.inEffect': true }, { 'shortfall.reSolve': true } ]
+      finishedAt: false,
+      shortfall: { $elemMatch: { inEffect: { $ne: true }, reSolve: { $ne: true } } }
     }).fetch();
-    
      
     let sMatch = [];
     
@@ -162,7 +161,44 @@ Meteor.methods({
         ]);
       }
     }
-      
+    return sMatch;
+  },
+  */
+   
+  fetchShortfallParts() {
+    const bCache = CacheDB.findOne({orgKey: Meteor.user().orgKey, dataName: 'batchInfo'});
+    
+    const touchedB = BatchDB.find({
+      orgKey: Meteor.user().orgKey,
+      finishedAt: false,
+      shortfall: { $elemMatch: { inEffect: { $ne: true }, reSolve: { $ne: true } } }
+    }).fetch();
+    
+    let sMatch = [];
+    
+    for(let iB of touchedB) {    // s.inEffect !== true && s.reSolve !== true
+      const mShort = iB.shortfall.filter( s => !(s.inEffect || s.reSolve) );
+      if(mShort.length > 0) {
+        const is = bCache.dataSet.find( x => x.batch === iB.batch);
+        const what = is ? is.isWhat.join(" ") : 'unavailable';
+        
+        const unqShort = _.uniq(mShort, false, n=> n.partNum );
+
+        let bsMatch = [];
+        for(let mS of unqShort) {
+          
+          bsMatch.push([
+            iB.batch, iB.salesOrder, what, mS.partNum
+          ]);
+        }
+  	    bsMatch.map((ent, ix)=>{
+  	      const same = iB.shortfall.filter( s => s.partNum === ent[3] );
+  	      const locations = [].concat(...Array.from(same, sm => sm.refs));
+  	      ent.push(_.uniq(locations).join(","), locations.length);
+  	      sMatch.push(ent);
+  	    });
+      }
+    }
     return sMatch;
   },
   
