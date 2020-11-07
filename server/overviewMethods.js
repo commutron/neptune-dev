@@ -16,144 +16,158 @@ moment.updateLocale('en', {
 
 function collectBranchCondition(privateKey, batchID) {
   return new Promise(resolve => {
-    let collection = false;
     const app = AppDB.findOne({orgKey: privateKey});
     const batchX = XBatchDB.findOne({_id: batchID});
     const batch = BatchDB.findOne({_id: batchID});
     const branches = app.branches;
     
     if(batchX) {
-      const quantity = batchX.quantity;
-      const waterfall = batchX.waterfall;
-      const released = batchX.releases.findIndex( x => x.type === 'floorRelease') >= 0;
-      let previous = released;
-      
-      let progSteps = waterfall;
-      progSteps.map( (step, index)=> {
-        if(!previous) {
-          progSteps[index].condition = 'onHold';
-        }else{
-          
-          const wfCount = step.counts.length === 0 ? 0 :
-            Array.from(step.counts, x => x.tick).reduce((x,y)=> x + y);
-          
-          if( wfCount <= 0 ) {
-            progSteps[index].condition = 'canStart';
-            previous = false;
-          }else{
-            
-            let condition = wfCount < quantity ? 
-                            'stepRemain' : 'allClear';
-                         
-            progSteps[index].condition = condition;
-          }
-        }
-      });
-      
-      let branchSets = [];
-      for(let branch of branches) {
-        const branchSteps = progSteps.filter( x => x.branchKey === branch.brKey );
-        const conArr = Array.from(branchSteps, x => x.condition );
-           
-        const branchCon = branchSteps.length === 0 ? false :
-          conArr.includes('canStart') ||
-          conArr.includes('stepRemain') ?
-          'open' :
-          conArr.includes('onHold') ? 
-          'onHold' :
-          'closed';
-          
-        branchSets.push({
-          brKey: branch.brKey,
-          branch: branch.branch,
-          condition: branchCon
+      if(batchX.completed && !batchX.live) {
+        resolve({
+          batch: batchX.batch,
+          batchID: batchX._id,
+          onFloor: false,
+          branchSets: []
         });
-      }
- 
-      collection = {
-        batch: batchX.batch,
-        batchID: batchX._id,
-        // stepSets: progSteps, // only need for debug
-        branchSets: branchSets
-      };
-      
-      resolve(collection);
-    }else if(batch) {
-      const docW = WidgetDB.findOne({_id: batch.widgetId});
-      const flow = docW.flows.find( x => x.flowKey === batch.river );
-      const riverFlow = flow ? flow.flow : [];
-      
-      const rNC = batch.nonCon.filter( n => 
-        !n.trash && n.inspect === false && n.skip === false );
-      
-      const released = batch.releases.findIndex( x => x.type === 'floorRelease') >= 0;
-      let previous = released;
-      
-      let progSteps = riverFlow;
-      progSteps.map( (step, index)=> {
-        if(!previous) {
-          progSteps[index].condition = 'onHold';
-        }else{
-          
-          const wipStart = batch.items.some( 
-            x => x.history.find( 
-              y => y.key === step.key && y.good === true
-          ) );
-          
-          if( wipStart === false ) {
-            progSteps[index].condition = 'canStart';
-            previous = false;
-          }else if(step.type === 'first') {
-            progSteps[index].condition = 'allClear';
-          }else{
-            
-            const wipDone = batch.items.every( 
-              x => x.finishedAt !== false || x.history.find( 
-                y => ( y.key === step.key && y.good === true ) )
-            );
-            
-            let condition = !wipDone ? 'stepRemain' : 'allClear';
-                         
-            progSteps[index].condition = condition;
-          }
-        }
-      });
-      
-      
-      let branchSets = [];
-      for(let branch of branches) {
-        const branchSteps = progSteps.filter( x => x.branchKey === branch.brKey );
-        const conArr = Array.from(branchSteps, x => x.condition );
+      }else{
+        const quantity = batchX.quantity;
+        const waterfall = batchX.waterfall;
+        const released = batchX.releases.findIndex( x => x.type === 'floorRelease') >= 0;
+        let previous = released;
         
-        const nonConLeft = branch.brKey === 't3rm1n2t1ng8r2nch' ? rNC.length :
-                            rNC.filter( x => x.where === branch.branch ).length;
+        let progSteps = waterfall;
+        progSteps.map( (step, index)=> {
+          if(!previous) {
+            progSteps[index].condition = 'onHold';
+          }else{
             
-        const branchCon = branchSteps.length === 0 ? false :
-          conArr.includes('canStart') ||
-          conArr.includes('stepRemain') ||
-          nonConLeft > 0 ?
-          'open' :
-          conArr.includes('onHold') ? 
-          'onHold' :
-          'closed';
-          
-        branchSets.push({
-          brKey: branch.brKey,
-          branch: branch.branch,
-          condition: branchCon
+            const wfCount = step.counts.length === 0 ? 0 :
+              Array.from(step.counts, x => x.tick).reduce((x,y)=> x + y);
+            
+            if( wfCount <= 0 ) {
+              progSteps[index].condition = 'canStart';
+              previous = false;
+            }else{
+              
+              let condition = wfCount < quantity ? 
+                              'stepRemain' : 'allClear';
+                           
+              progSteps[index].condition = condition;
+            }
+          }
+        });
+        
+        let branchSets = [];
+        for(let branch of branches) {
+          const branchSteps = progSteps.filter( x => x.branchKey === branch.brKey );
+          const conArr = Array.from(branchSteps, x => x.condition );
+             
+          const branchCon = branchSteps.length === 0 ? false :
+            conArr.includes('canStart') ||
+            conArr.includes('stepRemain') ?
+            'open' :
+            conArr.includes('onHold') ? 
+            'onHold' :
+            'closed';
+            
+          branchSets.push({
+            brKey: branch.brKey,
+            branch: branch.branch,
+            condition: branchCon
+          });
+        }
+   
+        resolve({
+          batch: batchX.batch,
+          batchID: batchX._id,
+          // stepSets: progSteps, // only need for debug
+          onFloor: released,
+          branchSets: branchSets
         });
       }
- 
-      collection = {
-        batch: batch.batch,
-        batchID: batch._id,
-        // branchSets: progSteps, // only need for debug
-        branchSets: branchSets
-      };
-      
-      resolve(collection);
+    }else if(batch) {
+      if(batch.finishedAt !== false && !batch.live) {
+        resolve({
+          batch: batch.batch,
+          batchID: batch._id,
+          onFloor: false,
+          branchSets: []
+        });
+      }else{
+        const docW = WidgetDB.findOne({_id: batch.widgetId});
+        const flow = docW.flows.find( x => x.flowKey === batch.river );
+        const riverFlow = flow ? flow.flow : [];
+        
+        const rNC = batch.nonCon.filter( n => 
+          !n.trash && n.inspect === false && n.skip === false );
+        
+        const released = batch.releases.findIndex( x => x.type === 'floorRelease') >= 0;
+        let previous = released;
+        
+        let progSteps = riverFlow;
+        progSteps.map( (step, index)=> {
+          if(!previous) {
+            progSteps[index].condition = 'onHold';
+          }else{
+            
+            const wipStart = batch.items.some( 
+              x => x.history.find( 
+                y => y.key === step.key && y.good === true
+            ) );
+            
+            if( wipStart === false ) {
+              progSteps[index].condition = 'canStart';
+              previous = false;
+            }else if(step.type === 'first') {
+              progSteps[index].condition = 'allClear';
+            }else{
+              
+              const wipDone = batch.items.every( 
+                x => x.finishedAt !== false || x.history.find( 
+                  y => ( y.key === step.key && y.good === true ) )
+              );
+              
+              let condition = !wipDone ? 'stepRemain' : 'allClear';
+                           
+              progSteps[index].condition = condition;
+            }
+          }
+        });
+        
+        let branchSets = [];
+        for(let branch of branches) {
+          const branchSteps = progSteps.filter( x => x.branchKey === branch.brKey );
+          const conArr = Array.from(branchSteps, x => x.condition );
+          
+          const nonConLeft = branch.brKey === 't3rm1n2t1ng8r2nch' ? rNC.length :
+                              rNC.filter( x => x.where === branch.branch ).length;
+              
+          const branchCon = branchSteps.length === 0 ? false :
+            conArr.includes('canStart') ||
+            conArr.includes('stepRemain') ||
+            nonConLeft > 0 ?
+            'open' :
+            conArr.includes('onHold') ? 
+            'onHold' :
+            'closed';
+            
+          branchSets.push({
+            brKey: branch.brKey,
+            branch: branch.branch,
+            condition: branchCon
+          });
+        }
+   
+        resolve({
+          batch: batch.batch,
+          batchID: batch._id,
+          // branchSets: progSteps, // only need for debug
+          onFloor: released,
+          branchSets: branchSets
+        });
+      }
     }else{
-      resolve(collection);
+      resolve(false);
     }
   });
 }
@@ -178,7 +192,7 @@ function collectStatus(privateKey, batchID) {
     if(bx) {
       const complete = bx.completed; // is it done
       
-      const shipAim = calcShipDay( now, bx.salesEnd, Config.clientTZ )[0];
+      const shipAim = calcShipDay( now, bx.salesEnd )[1];
       
       const timeRemain = !complete ?  // duration between now and ship due
         shipAim.workingDiff(now, 'day', true) : 0;
@@ -201,7 +215,7 @@ function collectStatus(privateKey, batchID) {
     }else if(b) {
       const complete = b.finishedAt !== false; // is it done
       
-      const shipAim = calcShipDay( now, b.end, Config.clientTZ )[0];
+      const shipAim = calcShipDay( now, b.end )[1];
       
       const timeRemain = !complete ?  // duration between now and ship due
         shipAim.workingDiff(now, 'day', true) : 0;
@@ -252,8 +266,8 @@ function collectPriority(privateKey, batchID, mockDay) {
       
       const future = mockDay ? mockDay : endEntry;
       const calcShip = calcShipDay( now, future );
-      const shipAim = calcShip[0];
-      const lateLate = calcShip[1];
+      const shipAim = calcShip[1];
+      const lateLate = calcShip[2];
       
       const qtBready = !b.quoteTimeBudget ? false : true;
         

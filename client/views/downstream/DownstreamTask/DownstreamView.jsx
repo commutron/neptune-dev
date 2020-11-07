@@ -1,7 +1,7 @@
-import React, {useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
-import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 
 import DownstreamTools from './DownstreamTools';
 import ShipWindows from './ShipWindows';
@@ -30,6 +30,20 @@ const DownstreamView = ({
   //const [ sortBy, sortBySet ] = useState( Session.get(sessionSticky+'sort') || 'priority' );
   const [ dense, denseSet ] = useState( defaultDense );
   const [ light, themeSet ] = useState( defaultLight );
+  
+  const [ updateTrigger, updateTriggerSet ] = useState(true);
+  
+  useEffect( ()=>{
+    Meteor.call('REQUESTcacheUpdate', 
+      false, // batchUp
+      true, // priorityUp
+      true, // activityUp
+      false, // branchConUp
+      false, // compUp
+    ()=>{
+      loadTimeSet( moment() );
+    });
+  }, [updateTrigger]);
   
   function changeNum(e) {
     const cleanVal = Number(e) < 1 ? 1 :
@@ -94,6 +108,8 @@ const DownstreamView = ({
         // changeSortUP={(e)=>changeSort(e)}
         denseSetUP={(e)=>changeDense(e)}
         themeSetUP={(e)=>changeTheme(e)}
+        
+        doThing={()=>updateTriggerSet(!updateTrigger)}
       />
               
       <ShipWindows
@@ -108,7 +124,7 @@ const DownstreamView = ({
         isDebug={isDebug}
         focusBy={focusBy}
         dense={density}
-        loadTimeSet={(e)=>loadTimeSet(e)}
+        updateTrigger={updateTrigger}
       />
 
     </div>

@@ -3,7 +3,7 @@ import moment from 'moment';
 // import 'moment-timezone';
 import 'moment-business-time';
 import '/client/utility/ShipTime.js';
-import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 
 import DownstreamDetails from './DownstreamDetails';
 
@@ -12,7 +12,7 @@ import DownstreamDetails from './DownstreamDetails';
 const WindowGlass = ({ 
   windowMoment, indexKey, 
   bCache, pCache, acCache, zCache, 
-  brancheS, app, user, isDebug, focusBy, dense
+  brancheS, app, user, isDebug, focusBy, dense, updateTrigger
 })=> {
   
   const [ mixedOrders, mixedOrdersSet ] = useState([]);
@@ -22,13 +22,13 @@ const WindowGlass = ({
       const lateShip = pCache.filter( x => moment(x.shipAim).isSameOrBefore(windowMoment, 'day') );
       mixedOrdersSet( lateShip );
     }else{
-      const shipIn = pCache.filter( x => moment(x.shipAim).isSame(windowMoment, 'day') );
       const early = zCache.filter( x => {
         if(moment(x.shipAim).isSame(windowMoment, 'day')) { return true }
       });
-      mixedOrdersSet( [...shipIn,...early] );
+      const shipIn = pCache.filter( x => moment(x.shipAim).isSame(windowMoment, 'day') );
+      mixedOrdersSet( [...early,...shipIn] );
     }
-  }, [acCache]);
+  }, [pCache, acCache]);
   
   const statCols = ['sales order','active','quote'];
   const progCols = ['total items',...Array.from(brancheS, x => x.common)];
@@ -67,6 +67,7 @@ const WindowGlass = ({
           focusBy={focusBy}
           progCols={progCols}
           ncCols={ncCols}
+          updateTrigger={updateTrigger}
         />
       </div>
     </div>

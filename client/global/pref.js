@@ -1,4 +1,4 @@
-import { Meteor } from 'meteor/meteor';
+// import { Meteor } from 'meteor/meteor';
 
 //// Preferences singleton class \\\\
 
@@ -12,7 +12,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '2.8.0';
+    this.neptuneVersion = '2.8.1';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -37,13 +37,12 @@ class Pref {
     this.areas = [
       'sales',
       'kitting'
-      
     ];
     
     // config
     this.userTimePublic = true;
-    this.aliasMax = 128;
-    this.aliasMin = 16;
+    this.groupMax = 128;
+    this.aliasMax = 16;
     
     // app navigation
     this.post = 'record';

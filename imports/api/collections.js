@@ -46,7 +46,7 @@ XBatchDB.deny({
   remove: () => { return true; },
 });
 
-ArchiveDB.deny({
+TraceDB.deny({
   insert: () => { return true; },
   update: () => { return true; },
   remove: () => { return true; },

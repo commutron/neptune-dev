@@ -9,7 +9,8 @@ const UpstreamTools = ({
   app, bCache, loadTimeUP,
   focusByUP, changeFocusByUP,
   sortByUP, denseUP, lightUP,
-  changeSortUP, denseSetUP, themeSetUP
+  changeSortUP, denseSetUP, themeSetUP,
+  doThing
 })=> (
   <nav className='overviewToolbar gridViewTools'>
     
@@ -35,7 +36,7 @@ const UpstreamTools = ({
     />
 
     <span className='flexSpace' />
-    <ClockString loadTime={loadTimeUP} />
+    <ClockString loadTime={loadTimeUP} doThing={doThing} />
   </nav>
 );
 

@@ -11,7 +11,8 @@ const DownstreamTools = ({
   numUP, changeNumUP,
   focusByUP, changeFocusByUP,
   sortByUP, denseUP, lightUP,
-  changeSortUP, denseSetUP, themeSetUP
+  changeSortUP, denseSetUP, themeSetUP,
+  doThing
 })=> (
   <nav className='downstreamToolbar gridViewTools'>
     
@@ -50,7 +51,7 @@ const DownstreamTools = ({
     />
       
     <span className='flexSpace' />
-    <ClockString loadTime={loadTimeUP} />
+    <ClockString loadTime={loadTimeUP} doThing={doThing} />
   </nav>
 );
 

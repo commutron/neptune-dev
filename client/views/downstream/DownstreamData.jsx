@@ -44,7 +44,6 @@ const View = ({
 };
 
 
-
 export default withTracker( ({ view } ) => {
   let login = Meteor.userId() ? true : false;
   let user = login ? Meteor.user() : false;
@@ -54,34 +53,26 @@ export default withTracker( ({ view } ) => {
   const isNightly = user ? Roles.userIsInRole(Meteor.userId(), 'nightly') : false;
   let org = user ? user.org : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
-  // const sub = login ? Meteor.subscribe('shaddowData') : false;
-  
   const subC = login ? Meteor.subscribe('cacheData') : false;
   
   if(!login || !active) {
     return {
       readyUsers: false,
-      // ready: false,
       readyC: false,
     };
   }else{
     return {
       login: Meteor.userId(),
-      // sub: sub,
       subC: subC,
       readyUsers: usersSub.ready(),
-      // ready: sub.ready(),
       readyC: subC.ready(),
       view: view,
-      
       username: name,
       user: user,
       isDebug: isDebug,
       isNightly: isNightly,
       org: org,
       app: AppDB.findOne({org: org}),
-      // batch: BatchDB.find({live: true}).fetch(),
-      // batchX: XBatchDB.find({live: true}).fetch(),
       bCache: CacheDB.findOne({dataName: 'batchInfo'}),
       pCache: CacheDB.findOne({dataName: 'priorityRank'}),
       acCache: CacheDB.findOne({dataName: 'activityLevel'}),

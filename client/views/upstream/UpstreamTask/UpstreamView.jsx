@@ -1,4 +1,4 @@
-import React, {useState, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
 import Pref from '/client/global/pref.js';
@@ -38,21 +38,21 @@ const UpstreamView = ({
   
   useLayoutEffect( ()=> {
     sortInitial();
-  }, [sortBy]);
+  }, [batch, batchX, pCache, acCache, sortBy]);
   
-  useLayoutEffect( ()=> {
-    liveSet( false );
-    Meteor.call('REQUESTcacheUpdate',
+  const [ updateTrigger, updateTriggerSet ] = useState(true);
+  
+  useEffect( ()=>{
+    Meteor.call('REQUESTcacheUpdate', 
       false, // batchUp
       true, // priorityUp
       true, // activityUp
       false, // branchConUp
       false, // compUp
     ()=>{
-      sortInitial();
       loadTimeSet( moment() );
     });
-  }, [ batch, batchX, pCache, acCache ]);
+  }, [batch, batchX, updateTrigger]);
   
   function changeFocus(e) {
     const value = e.target.value;
@@ -161,6 +161,7 @@ const UpstreamView = ({
         changeSortUP={(e)=>changeSort(e)}
         denseSetUP={(e)=>changeDense(e)}
         themeSetUP={(e)=>changeTheme(e)}
+        doThing={()=>updateTriggerSet(!updateTrigger)}
       />
       
       <div className='overviewContent forceScrollStyle' tabIndex='0'>

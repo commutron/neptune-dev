@@ -1,9 +1,9 @@
 import React, { useState, useLayoutEffect } from 'react';
-import moment from 'moment';
+// import moment from 'moment';
 // import 'moment-timezone';
 // import 'moment-business-time';
 import '/client/utility/ShipTime.js';
-import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 
 import WindowFrame from './WindowFrame';
 import WindowGlass from './WindowGlass';
@@ -14,7 +14,7 @@ import { listShipDays } from '/client/utility/WorkTimeCalc';
 
 const ShipWindows = ({ 
   calcFor, bCache, pCache, acCache, zCache,
-  brancheS, app, user, isDebug, focusBy, dense, loadTimeSet
+  brancheS, app, user, isDebug, focusBy, dense, updateTrigger
 })=> {
   
   const [ nextShipDays, nextShipDaysSet ] = useState([]);
@@ -44,17 +44,7 @@ const ShipWindows = ({
       if (z1.gapZone[0] > z2.gapZone[0]) { return 1 }
       return 0;
     }) );
-        
-    Meteor.call('REQUESTcacheUpdate', 
-      false, // batchUp
-      true, // priorityUp
-      true, // activityUp
-      false, // branchConUp
-      false, // compUp
-    ()=>{
-      loadTimeSet( moment() );
-    });
-  }, [calcFor, pCache, zCache, acCache]);
+  }, [calcFor, pCache, zCache]);
 
          
   return(
@@ -96,6 +86,7 @@ const ShipWindows = ({
             isDebug={isDebug}
             focusBy={focusBy}
             dense={dense}
+            updateTrigger={updateTrigger}
           />
         ))}
       </div>

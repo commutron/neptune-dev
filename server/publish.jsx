@@ -8,7 +8,7 @@ VariantDB = new Mongo.Collection('variantdb');
 BatchDB = new Mongo.Collection('batchdb');
 XBatchDB = new Mongo.Collection('xbatchdb');
 //ItemDB = new Mongo.Collection('itemdb');// future plans, DO NOT enable
-ArchiveDB = new Mongo.Collection('archivedb');
+TraceDB = new Mongo.Collection('tracedb');
 
 CacheDB = new Mongo.Collection('cachedb');
 
@@ -124,7 +124,7 @@ Meteor.publish('usersDataDebug', function(){
   }
 });
 
-
+/*
 Meteor.publish('eventsData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
@@ -146,7 +146,7 @@ Meteor.publish('eventsData', function(){
         }}),
     ];
   }
-});
+});*/
 
 // People
 Meteor.publish('bCacheData', function(){
@@ -163,6 +163,7 @@ Meteor.publish('bCacheData', function(){
           'structured' : 0,
           'minified': 0
         }}),
+      TraceDB.find({}),
     ];
   }
 });
@@ -186,7 +187,7 @@ Meteor.publish('cacheData', function(){
           'structured' : 0,
           'minified': 0
         }}),
-      
+      TraceDB.find({}),
     ];
   }
 });
@@ -205,8 +206,9 @@ Meteor.publish('partsPlusCacheData', function(){
           'structured' : 0,
           'minified': 0
         }}),
-      ];
-    }
+      TraceDB.find({}),
+    ];
+  }
 });
 
 // Overview

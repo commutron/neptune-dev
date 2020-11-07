@@ -6,7 +6,7 @@ import NumStat from '/client/components/tinyUi/NumStat.jsx';
 
 const NonConCounts = ({ 
   batchID, releasedToFloor, force,
-  app, isDebug, ncCols 
+  app, ncCols, updateTrigger, isDebug
 })=> {
   
   const [ ncData, setNC ] = useState(false);
@@ -21,7 +21,7 @@ const NonConCounts = ({
         }
       });
     }
-  }, [batchID]);
+  }, [batchID, updateTrigger]);
   
   const dt = ncData;
     

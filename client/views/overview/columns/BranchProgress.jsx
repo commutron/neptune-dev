@@ -7,7 +7,7 @@ const BranchProgress = ({
   batchID, showTotal,
   progCols,
   app, filterBy, branchArea,
-  isDebug
+  updateTrigger, isDebug
 })=> {
   
   const [ progData, setProg ] = useState(false);
@@ -21,7 +21,7 @@ const BranchProgress = ({
         isDebug && console.log(progData);
       }
     });
-  }, [batchID, branchArea, filterBy]);
+  }, [batchID, branchArea, filterBy, updateTrigger]);
   
   const dt = progData;
  

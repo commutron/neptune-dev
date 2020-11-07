@@ -78,10 +78,18 @@ const DataRepair = ({ app, users })=> {
     });
   }
   */
+  
+  function runTraceMinify() {
+    Meteor.call('minifyBatchesBase', (error, re)=>{
+      error && console.log(error);
+      re && toast.success('method complete', { autoClose: false });
+    });
+  }
+  
   function updateCaches() {
     Meteor.call('FORCEcacheUpdate', (error)=>{
       error && console.log(error);
-      toast.success('method coomplete', { autoClose: false });
+      toast.success('method complete', { autoClose: false });
     });
   }
   
@@ -162,6 +170,14 @@ const DataRepair = ({ app, users })=> {
         onClick={()=>updateCaches()}
         className='action clear blackT'
       >Force Update All Caches</button>
+      
+      <hr />
+      
+      <h2 className='cap'>Build TraceDB</h2>
+      <button
+        onClick={()=>runTraceMinify()}
+        className='action clear purpleT'
+      >Run Minify</button>
       
       <hr />
       

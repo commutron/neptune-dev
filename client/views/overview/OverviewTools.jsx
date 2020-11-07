@@ -13,7 +13,8 @@ const OverviewTools = ({
   sortByUP, changeSortUP, 
   ghostUP, ghostSetUP, 
   denseUP, denseSetUP,
-  lightUP, themeSetUP
+  lightUP, themeSetUP,
+  doThing
 })=> (
   <nav className='overviewToolbar gridViewTools'>
     
@@ -58,7 +59,7 @@ const OverviewTools = ({
     />
     
     <span className='flexSpace' />
-    <ClockString loadTime={loadTimeUP} />
+    <ClockString loadTime={loadTimeUP} doThing={doThing} />
   </nav>
 );
 

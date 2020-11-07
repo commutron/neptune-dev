@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 // import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
@@ -14,7 +14,7 @@ const BatchDetails = ({
   bCache, pCache, acCache,
   user, clientTZ, app, brancheS,
   isDebug, isNightly,
-  dense, filterBy, focusBy, branchArea
+  dense, filterBy, focusBy, branchArea, updateTrigger
 })=> {
   
   const branchClear = brancheS.filter( b => b.reqClearance === true );
@@ -71,7 +71,8 @@ const BatchDetails = ({
               dense={dense}
               filterBy={filterBy}
               focusBy={focusBy}
-              branchArea={branchArea} />
+              branchArea={branchArea}
+              updateTrigger={updateTrigger} />
       )})}
       
     </div>
@@ -87,7 +88,8 @@ const BatchDetailChunk = ({
   brancheS, branchClear,
   isDebug, isNightly,
   statusCols, progCols, ncCols, 
-  dense, filterBy, focusBy, branchArea
+  dense, filterBy, focusBy, branchArea,
+  updateTrigger
 })=> {
   
   const isX = oB.completed === undefined ? false : true;
@@ -157,6 +159,7 @@ const BatchDetailChunk = ({
         app={app}
         filterBy={filterBy}
         branchArea={branchArea}
+        updateTrigger={updateTrigger}
         isDebug={isDebug} />
         
       <NonConCounts
@@ -164,6 +167,7 @@ const BatchDetailChunk = ({
         releasedToFloor={releasedToFloor}
         app={app}
         ncCols={ncCols}
+        updateTrigger={updateTrigger}
         isDebug={isDebug} />
       
       <ProJump batchNum={oB.batch} dense={dense} />

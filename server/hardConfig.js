@@ -25,6 +25,7 @@ class Config {
     };
     
     this.maxShift = 10;
+    this.dropShipBffr = 5;
     
     // treated as a ship deadline
     this.shippingHours = {

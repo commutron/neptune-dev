@@ -14,36 +14,31 @@ const DownstreamDetails = ({
   bCache, pCache, acCache,
   user, app, brancheS,
   isDebug, isNightly,
-  focusBy, dense, progCols, ncCols
-})=> {
-          
-          
-  return(
-    <Fragment>
-      
-      {!oB ? null :
-        oB.map( (entry, index)=>{
-          return(
-            <DownstreamScrollChunk
-              ck={entry}
-              key={indexKey+'c'+index}
-              bCache={bCache}
-              pCache={pCache}
-              acCache={acCache}
-              app={app}
-              user={user}
-              isDebug={isDebug}
-              brancheS={brancheS}
-              focusBy={focusBy}
-              dense={dense}
-              progCols={progCols}
-              ncCols={ncCols}
-            />
-      )})}
-      
-    </Fragment>
-  );
-};
+  focusBy, dense, progCols, ncCols, updateTrigger
+})=> (
+  <Fragment>
+    {!oB ? null :
+      oB.map( (entry, index)=>{
+        return(
+          <DownstreamScrollChunk
+            ck={entry}
+            key={indexKey+'c'+index}
+            bCache={bCache}
+            pCache={pCache}
+            acCache={acCache}
+            app={app}
+            user={user}
+            isDebug={isDebug}
+            brancheS={brancheS}
+            focusBy={focusBy}
+            dense={dense}
+            progCols={progCols}
+            ncCols={ncCols}
+            updateTrigger={updateTrigger}
+          />
+    )})}
+  </Fragment>
+);
 
 export default DownstreamDetails;
 
@@ -51,7 +46,8 @@ export default DownstreamDetails;
 const DownstreamScrollChunk = ({
   ck,
   bCache, pCache, acCache, 
-  app, user, brancheS, focusBy, isDebug, dense, progCols, ncCols
+  app, user, brancheS, focusBy, isDebug, dense, progCols, ncCols,
+  updateTrigger
 })=> {
 
   const isDone = ck.completedAt ? true : false;
@@ -103,6 +99,7 @@ const DownstreamScrollChunk = ({
         app={app}
         filterBy={false}
         branchArea={false}
+        updateTrigger={updateTrigger}
         isDebug={isDebug} />
         
       <NonConCounts
@@ -111,6 +108,7 @@ const DownstreamScrollChunk = ({
         force={true}
         app={app}
         ncCols={ncCols}
+        updateTrigger={updateTrigger}
         isDebug={isDebug} />
       
       <ProJump batchNum={ck.batch} dense={dense} />

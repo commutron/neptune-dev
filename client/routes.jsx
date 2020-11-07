@@ -36,6 +36,7 @@ BatchDB = new Mongo.Collection('batchdb');
 XBatchDB = new Mongo.Collection('xbatchdb');
 
 CacheDB = new Mongo.Collection('cachedb');
+TraceDB = new Mongo.Collection('tracedb');
 
 FlowRouter.notFound = {
   action() {

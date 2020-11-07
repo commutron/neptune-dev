@@ -22,9 +22,7 @@ function useInterval(callback, delay) {
   }, [delay]);
 }
 
-
-const ClockString = ({ loadTime })=> {
-  
+const ClockString = ({ loadTime, doThing })=> {
   // var options = {
   //   month: 'short',
   //   day: 'long',
@@ -36,18 +34,20 @@ const ClockString = ({ loadTime })=> {
   const fstring = "MMM Do, h:mm:ss a";
   
   const [ clockTime, clockTimeSet ] = useState( moment().format(fstring) );
-  const [ tickingTime, tickingTimeSet ] = useState( moment() );
+  const [ tickingTime, tickingTimeSet ] = useState( moment.duration() );
 
   useInterval( ()=> {
     clockTimeSet( moment().format(fstring) );
-    tickingTimeSet( moment() );
+    tickingTimeSet( tickingTime => tickingTime.add(1, 's') );
+    
+    if(doThing && tickingTime.asMinutes() > 15) { 
+      tickingTimeSet( moment.duration() );
+      doThing(); }
   },1000);
-  
-  const duration = moment.duration(loadTime.diff(tickingTime)).humanize();
       
   return(
     <Fragment>
-      <span className='grayT'>Updated {duration} ago</span>
+      <span className='grayT'>Updated {tickingTime.humanize()} ago</span>
       <span className='grayT'>{clockTime}</span>
     </Fragment>
   );

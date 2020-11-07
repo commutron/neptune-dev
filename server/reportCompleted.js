@@ -24,12 +24,15 @@ export function calcShipDay( nowDay, futureDay ) {
                     endDay.clone().endOf('day').lastShippingTime() :
                     endDay.clone().lastShippingTime();
 
-  const endWork = endDay.clone().endOf('day').lastWorkingTime();
+  const endWork = endDay.isWorkingDay() ?
+                    endDay.clone().endOf('day').lastWorkingTime() :
+                    endDay.clone().lastWorkingTime();
+  const salesEnd = endWork.format();
   
   const lateLate = nowDay.clone().isAfter(endWork);
   const shipLate = nowDay.clone().isAfter(shipDue);
   
-  return [ shipAim, lateLate, shipLate ];
+  return [ salesEnd, shipAim, lateLate, shipLate ];
 }
 
 
@@ -55,15 +58,15 @@ export function deliveryState(bEnd, bFinish) {
   const dayGap = shipDue.workingDiff(didFinish, 'days', true);
   
   const hrGp = Math.abs(hourGap);
-  const hourS = hrGp > 1 ? 'hours' : 'hour';
+  const hourS = dyGp == 0 || hrGp > 1 ? 'hours' : 'hour';
   const dyGp = Math.abs( Math.round(dayGap) );
-  const dayS = dyGp > 1 ? 'days' : 'day';
+  const dayS = dyGp == 0 || dyGp > 1 ? 'days' : 'day';
   
   const gapZone = !isLate ?
-                    hrGp < Config.maxShift ?   // ON TIME
+                    hrGp <= Config.dropShipBffr ?   // ON TIME
                       [ null, null, 'on time' ] : [ dyGp, dayS, 'early' ] 
                   : 
-                    hrGp < Config.maxShift ?  // LATE
+                    hrGp <= Config.dropShipBffr ?  // LATE
                       [ hrGp, hourS, 'late' ] : [ dyGp, dayS, 'late' ];
   
   return [ salesEnd, shipAim, didFinish, gapZone ];

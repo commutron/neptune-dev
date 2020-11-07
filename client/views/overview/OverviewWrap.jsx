@@ -1,4 +1,4 @@
-import React, {useState, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import moment from 'moment';
 // import 'moment-timezone';
 import { ToastContainer } from 'react-toastify';
@@ -21,7 +21,7 @@ const OverviewWrap = ({
   
   const sessionSticky = 'overviewOverview';
   
-  const [ working, workingSet ] = useState( false );
+  // const [ working, workingSet ] = useState( false );
   const [ loadTime, loadTimeSet ] = useState( moment() );
   
   const sessionFilter = Session.get(sessionSticky+'filter');
@@ -54,7 +54,7 @@ const OverviewWrap = ({
   
   useLayoutEffect( ()=> {
     sortInitial();
-  }, [b, bx, filterBy, sortBy, ghost]);
+  }, [b, bx, pCache, acCache, brCache, filterBy, sortBy, ghost]);
   
   function changeFilter(e) {
     const value = e.target.value;
@@ -90,7 +90,7 @@ const OverviewWrap = ({
     themeSet( val );
     Session.set(sessionSticky+'lightTheme', val);
   }
-  
+  /*
   function requestRefresh() {
     workingSet( true );
     liveSet( false );
@@ -105,7 +105,21 @@ const OverviewWrap = ({
       loadTimeSet( moment() );
       workingSet( false );
     });
-  }
+  }*/
+  
+  const [ updateTrigger, updateTriggerSet ] = useState(true);
+  
+  useEffect( ()=>{
+    Meteor.call('REQUESTcacheUpdate', 
+      false, // batchUp
+      true, // priorityUp
+      true, // activityUp
+      true, // branchConUp
+      false, // compUp
+    ()=>{
+      loadTimeSet( moment() );
+    });
+  }, [b, bx, updateTrigger]);
   
   function sortInitial() {
     return new Promise((resolve) => {
@@ -198,13 +212,13 @@ const OverviewWrap = ({
           >Overview<sup className='vbig monoFont'>WIP</sup>
         </div>
         <div className='auxRight'>
-          <button
+         {/* <button
             type='button'
             title='Refresh Data'
             className={working ? 'spin2 taskLink' : 'taskLink'}
             onClick={(e)=>requestRefresh()}>
           <i className='fas fa-sync-alt'></i>
-          </button>
+          </button> */}
         </div>
         <TideFollow />
       </div>
@@ -226,6 +240,7 @@ const OverviewWrap = ({
         ghostSetUP={(e)=>changeGhost(e)}
         denseSetUP={(e)=>changeDense(e)}
         themeSetUP={(e)=>changeTheme(e)}
+        doThing={()=>updateTriggerSet(!updateTrigger)}
       />
       
       <div className='overviewContent forceScrollStyle' tabIndex='0'>
@@ -265,6 +280,7 @@ const OverviewWrap = ({
             filterBy={filterBy}
             focusBy={focusBy}
             branchArea={filterBy !== false}
+            updateTrigger={updateTrigger}
           />
             
         </div>
