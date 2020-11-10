@@ -58,7 +58,7 @@ export function deliveryState(bEnd, bFinish) {
   const dayGap = shipDue.workingDiff(didFinish, 'days', true);
   
   const hrGp = Math.abs(hourGap);
-  const hourS = dyGp == 0 || hrGp > 1 ? 'hours' : 'hour';
+  const hourS = hrGp == 0 || hrGp > 1 ? 'hours' : 'hour';
   const dyGp = Math.abs( Math.round(dayGap) );
   const dayS = dyGp == 0 || dyGp > 1 ? 'days' : 'day';
   

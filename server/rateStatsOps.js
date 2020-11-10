@@ -1,10 +1,11 @@
 import moment from 'moment';
 import 'moment-timezone';
 // import 'moment-business-time';
+import Config from '/server/hardConfig.js';
+import { deliveryState, calcShipDay } from '/server/reportCompleted.js';
 
-
-  function timeRanges(accessKey, clientTZ, counter, cycles, bracket) {
-    const nowLocal = moment().tz(clientTZ);
+  function timeRanges(accessKey, counter, cycles, bracket) {
+    const nowLocal = moment().tz(Config.clientTZ);
     
     async function runLoop() {
       let countArray = [];
@@ -14,7 +15,6 @@ import 'moment-timezone';
        
         const rangeStart = loopBack.clone().startOf(bracket).toISOString();
         const rangeEnd = loopBack.clone().endOf(bracket).toISOString();
-        
         
         quantity = await new Promise(function(resolve) {
           const fetch = counter(accessKey, rangeStart, rangeEnd);
@@ -98,42 +98,38 @@ import 'moment-timezone';
     let doneOnTime = 0;
     let doneLate = 0;
     
-    const generalFind = BatchDB.find({
+    BatchDB.find({
       orgKey: accessKey, 
       finishedAt: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
       }
-    }).fetch();
-    for(let gf of generalFind) {
-      if( moment(gf.finishedAt).isSameOrBefore(moment(gf.end), 'day') ) {
-        doneOnTime++;
-      }else if( moment(gf.finishedAt).isAfter(moment(gf.end), 'day') ) {
+    }).forEach( (gf)=> {
+      const dst = deliveryState(gf.end, gf.finishedAt)[3][2];
+      if( dst === 'late' ) {
         doneLate++;
       }else{
-        null;
+        doneOnTime++;
       }
-    }
+    });
     
     let doneOnTimeX = 0;
     let doneLateX = 0;
     
-    const generalFindX = XBatchDB.find({
+    XBatchDB.find({
       orgKey: accessKey, 
       completedAt: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
       }
-    }).fetch();
-    for(let gfx of generalFindX) {
-      if( moment(gfx.completedAt).isSameOrBefore(moment(gfx.salesEnd), 'day') ) {
-        doneOnTimeX++;
-      }else if( moment(gfx.completedAt).isAfter(moment(gfx.salesEnd), 'day') ) {
-        doneLateX++;
+    }).forEach( (gfx)=> {
+      const dst = deliveryState(gfx.salesEnd, gfx.completedAt)[3][2];
+      if( dst === 'late' ) {
+        doneLate++;
       }else{
-        null;
+        doneOnTime++;
       }
-    }
+    });
     
     return [ doneOnTime + doneOnTimeX, doneLate + doneLateX ];
   }
@@ -295,7 +291,7 @@ import 'moment-timezone';
 Meteor.methods({
   
   
-  cycleWeekRate(clientTZ, stat, cycles, bracket) {////
+  cycleWeekRate(stat, cycles, bracket) {////
     try {
       let loop = false;
       
@@ -333,7 +329,7 @@ Meteor.methods({
         return false;
       }else{
         const accessKey = Meteor.user().orgKey;
-        return timeRanges(accessKey, clientTZ, loop, cycles, bracket);
+        return timeRanges(accessKey, loop, cycles, bracket);
       }
     }catch(err) {
       throw new Meteor.Error(err);

@@ -9,7 +9,7 @@ import 'flatpickr/dist/themes/airbnb.css';
 
 import ReportBasicTable from '/client/components/tables/ReportBasicTable.jsx'; 
 
-const ReportDaily = ({ app, user, isDebug })=> {
+const DailyReport = ({ app, user, isDebug })=> {
   
   const [dateString, setDateString] = useState(moment().format('YYYY-MM-DD'));
   const [dayData, setDayData] = useState(false);
@@ -91,4 +91,4 @@ const ReportDaily = ({ app, user, isDebug })=> {
   );
 };
 
-export default ReportDaily;
+export default DailyReport;

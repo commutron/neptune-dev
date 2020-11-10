@@ -16,7 +16,7 @@ import BuildHistory from './panels/BuildHistory.jsx';
 import ItemPanel from './panels/ItemPanel.jsx';
 import BatchPanel from './panels/BatchPanel/BatchPanel.jsx';
 import BatchPanelX from './panels/XBatchPanel/BatchPanelX.jsx';
-import WidgetPanel from './panels/WidgetPanel.jsx';
+import WidgetPanel from './panels/WidgetPanel/WidgetPanel';
 import VariantPanel from './panels/VariantPanel/VariantPanel.jsx';
 import TestFailPanel from './panels/TestFailPanel.jsx';
 import ScrapPanel from './panels/ScrapPanel.jsx';

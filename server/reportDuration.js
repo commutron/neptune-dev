@@ -45,13 +45,46 @@ function toCompDiff(bSalesStart, bComplete) {
   const gapSale2Complete = moment(bComplete).workingDiff(bSalesStart, 'days');
   return gapSale2Complete;
 }
+  
+function getWidgetDur(accessKey, widget) {
+  
+  let relAvg = [];
+  let stAvg = [];
+  let endAvg = [];
+  let compAvg = [];
+              
+  const compB = BatchDB.find({widgetId: widget._id, live: false});
+  for( let b of compB ) {
+    relAvg.push( toRelDiff(b.start, b.releases) );
+    stAvg.push( toStrtDiff(b.start, b.tide) );
+    endAvg.push( toEndDiff(b.start, b.end) );
+    compAvg.push( toCompDiff(b.start, b.finishedAt) );
+  }
+    
+  const compX = XBatchDB.find({widgetId: widget._id, completed: true}).fetch();
+  for( let x of compX ) {
+    relAvg.push( toRelDiff(x.salesStart, x.releases) );
+    //stAvg.push( toStrtDiff(x.salesStart, x.tide) );
+    endAvg.push( toEndDiff(x.salesStart, x.salesEnd) );
+    compAvg.push( toCompDiff(x.salesStart, x.completedAt) );
+  }
 
-  
-function sortCC(accessKey) {
-  
+  const testTheTime = [
+    widget.widget,
+    avgOfArray( relAvg ),
+    avgOfArray( stAvg ),
+    avgOfArray( endAvg ),
+    avgOfArray( compAvg )
+  ];
+  return testTheTime;
+}
+
+
+function collectAllGroupDur(accessKey) {
   return new Promise(function(resolve) {
   
     const groups = GroupDB.find({ orgKey: accessKey }).fetch();
+    
     let gdur = [];
     for( let group of groups ) {
       const widgets = WidgetDB.find({
@@ -61,37 +94,9 @@ function sortCC(accessKey) {
     
       let wdur = [];
       for( let widget of widgets ) {
-        let relAvg = [];
-        let stAvg = [];
-        let endAvg = [];
-        let compAvg = [];
-                
-        const compB = BatchDB.find({widgetId: widget._id, live: false});
-        for( let b of compB ) {
-          relAvg.push( toRelDiff(b.start, b.releases) );
-          stAvg.push( toStrtDiff(b.start, b.tide) );
-          endAvg.push( toEndDiff(b.start, b.end) );
-          compAvg.push( toCompDiff(b.start, b.finishedAt) );
-        }
-        
-        const compX = XBatchDB.find({widgetId: widget._id, completed: true}).fetch();
-        for( let x of compX ) {
-          relAvg.push( toRelDiff(x.salesStart, x.releases) );
-          //stAvg.push( toStrtDiff(x.salesStart, x.tide) );
-          endAvg.push( toEndDiff(x.salesStart, x.salesEnd) );
-          compAvg.push( toCompDiff(x.salesStart, x.completedAt) );
-        }
-      
-        const testTheTime = [
-          widget.widget,
-          avgOfArray( relAvg ),
-          avgOfArray( stAvg ),
-          avgOfArray( endAvg ),
-          avgOfArray( compAvg )
-        ];
-        wdur.push(testTheTime);  
+        const timeArr = getWidgetDur(accessKey, widget);
+        wdur.push(timeArr);
       }
-      
       gdur.push({
         group: group.alias,
         durrArray: wdur
@@ -102,9 +107,6 @@ function sortCC(accessKey) {
 }
 
 
-
-
-
 Meteor.methods({
   
   reportOnTurnAround() {
@@ -113,7 +115,7 @@ Meteor.methods({
     
     async function collect() {
       try {
-        result = await sortCC(accessKey);
+        result = await collectAllGroupDur(accessKey);
         const resultString = JSON.stringify(result);
         return resultString;
       }catch (err) {
@@ -122,6 +124,16 @@ Meteor.methods({
     }
     
     return collect();
+  },
+  
+  oneWidgetTurnAround(wID) {
+    const accessKey = Meteor.user().orgKey;
+    
+    const widget = WidgetDB.find({ orgKey: accessKey, widgetId: wID }).fetch();
+    
+    const timeArr = getWidgetDur(accessKey, widget);
+    
+    return timeArr;
   }
 
 

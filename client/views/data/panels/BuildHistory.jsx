@@ -28,6 +28,8 @@ const BuildHistory = ({ allBatch, allXBatch, allVariant, allWidget, allGroup })=
   const fillG = (gID)=> allGroup.find( g => g._id === gID ).group;
   const fillW = (wID)=> allWidget.find( w => w._id === wID ).widget.toUpperCase();
   
+  const allGroupS = allGroup.sort((x1, x2)=> 
+	                    x1.alias > x2.alias ? 1 : x1.alias < x2.alias ? -1 : 0 );
   
   useEffect( ()=> {
     
@@ -107,11 +109,15 @@ const BuildHistory = ({ allBatch, allXBatch, allVariant, allWidget, allGroup })=
     const arrayView = Array.from(result, r => [
                         fillG(r.groupId), fillW(r.widgetId), r.variant
                       ] );
-    const arrayViewS = arrayView.sort((a1, a2)=> {
-                if (a1[0] === a2[0] && a1[1] < a2[1]) { return -1 }
-                if (a1[0] === a2[0] && a1[1] > a2[1]) { return 1 }
-                if (a1[0] < a2[0]) { return -1 }
-                if (a1[0] > a2[0]) { return 1 }
+    const arrayViewS = arrayView.sort((A1, A2)=> {
+                let a10 = A1[0].toLowerCase();
+                let a11 = A1[1].toLowerCase();
+                let a20 = A2[0].toLowerCase();
+                let a21 = A2[1].toLowerCase();
+                if (a10 === a20 && a11 < a21) { return -1 }
+                if (a10 === a20 && a11 > a21) { return 1 }
+                if (a10 < a20) { return -1 }
+                if (a10 > a20) { return 1 }
                 return 0;
               });
     viewSet(arrayViewS);
@@ -123,7 +129,7 @@ const BuildHistory = ({ allBatch, allXBatch, allVariant, allWidget, allGroup })=
           <GroupSelector
             groupState={groupState}
             groupSet={groupSet}
-            allGroup={allGroup}
+            allGroup={allGroupS}
             showANY={true} />;
             
   const insertWas = 
@@ -208,7 +214,7 @@ const BuildHistory = ({ allBatch, allXBatch, allVariant, allWidget, allGroup })=
             style={ { width: `${Pref.aliasMax+2}ch`, border: 'none' } }
             onChange={(e)=>groupASet(e.target.value)} />
             <datalist id='grpList'>
-              {allGroup.map( (e, ix)=>(
+              {allGroupS.map( (e, ix)=>(
                 <option 
                   key={ix+'g'+e._id} 
                   value={e.alias.toUpperCase()}

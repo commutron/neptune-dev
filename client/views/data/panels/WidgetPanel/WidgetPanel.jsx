@@ -3,15 +3,15 @@ import Pref from '/client/global/pref.js';
 import CreateTag from '/client/components/tinyUi/CreateTag.jsx';
 import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 
-import VariantList from '../lists/VariantList.jsx';
+import VariantList from '../../lists/VariantList.jsx';
 
 import MultiBatchKPI from '/client/components/bigUi/MultiBatchKPI';
 
 import FlowTable from '/client/components/tables/FlowTable.jsx';
-import TideMultiBatchBar from '/client/components/charts/Tides/TideMultiBatchBar.jsx';
+import WTimeTab from './WTimeTab';
 import NonConMultiBatchBar from '/client/components/charts/NonCon/NonConMultiBatchBar.jsx';
 
-import { min2hr, flipArray } from '/client/utility/Convert';
+import { flipArray } from '/client/utility/Convert';
 
 const WidgetPanel = ({ 
   groupData, widgetData, variantData,
@@ -58,11 +58,11 @@ const WidgetPanel = ({
         
         <FlowTable id={w._id} flows={w.flows} app={a} />
         
-        <TideMultiBatchBar 
-          // batchRelated={batchRelated}
+        <WTimeTab
+          widgetData={widgetData}
           batchIDs={batchIDs}
           app={a} />
-        
+          
         <NonConMultiBatchBar batchIDs={batchIDs} />
         
       </Tabs>

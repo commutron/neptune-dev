@@ -1,8 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import React, { useRef, useState, useEffect } from 'react';
 // import Pref from '/client/global/pref.js';
-import moment from 'moment';
-import 'moment-timezone';
+// import moment from 'moment';
+// import 'moment-timezone';
 import { 
   VictoryBar,
   VictoryChart, 
@@ -23,8 +23,7 @@ const TrendBar = ({ title, statType, cycleCount, cycleBracket })=>{
   const [ dataNG, dataNGSet ] = useState( blank );
   
   useEffect( ()=>{
-    const clientTZ = moment.tz.guess();
-    Meteor.call('cycleWeekRate', clientTZ, statType, cycleCount, cycleBracket, (err, re)=>{
+    Meteor.call('cycleWeekRate', statType, cycleCount, cycleBracket, (err, re)=>{
       err && console.log(err);
       if(re) {
         if(thingMounted.current) {
