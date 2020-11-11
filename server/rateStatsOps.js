@@ -2,7 +2,8 @@ import moment from 'moment';
 import 'moment-timezone';
 // import 'moment-business-time';
 import Config from '/server/hardConfig.js';
-import { deliveryState, calcShipDay } from '/server/reportCompleted.js';
+import { deliveryState } from '/server/reportCompleted.js';
+import { checkTimeBudget } from '/server/tideGlobalMethods';
 
   function timeRanges(accessKey, counter, cycles, bracket) {
     const nowLocal = moment().tz(Config.clientTZ);
@@ -97,6 +98,8 @@ import { deliveryState, calcShipDay } from '/server/reportCompleted.js';
     
     let doneOnTime = 0;
     let doneLate = 0;
+    let doneUnderQ = 0;
+    let doneOverQ = 0;
     
     BatchDB.find({
       orgKey: accessKey, 
@@ -111,10 +114,20 @@ import { deliveryState, calcShipDay } from '/server/reportCompleted.js';
       }else{
         doneOnTime++;
       }
+      const q = checkTimeBudget(gf.tide, gf.quoteTimeBudget);
+      if( !q ) {
+        null;
+      }else if(q < 0) {
+        doneOverQ++;
+      }else{
+        doneUnderQ++;
+      }
     });
     
     let doneOnTimeX = 0;
     let doneLateX = 0;
+    let doneUnderQX = 0;
+    let doneOverQX = 0;
     
     XBatchDB.find({
       orgKey: accessKey, 
@@ -129,30 +142,41 @@ import { deliveryState, calcShipDay } from '/server/reportCompleted.js';
       }else{
         doneOnTime++;
       }
+      const qx = checkTimeBudget(gfx.tide, gfx.quoteTimeBudget);
+      if( !qx ) {
+        null;
+      }else if(qx < 0) {
+        doneOverQX++;
+      }else{
+        doneUnderQX++;
+      }
     });
     
-    return [ doneOnTime + doneOnTimeX, doneLate + doneLateX ];
+    return [ 
+      doneOnTime + doneOnTimeX,
+      doneLate + doneLateX,
+      doneUnderQ + doneUnderQX,
+      doneOverQ + doneOverQX
+    ];
   }
   
   export function countNewItem(accessKey, rangeStart, rangeEnd) {
     
     let diCount = 0;
     
-    const generalFind = BatchDB.find({
+    BatchDB.find({
       orgKey: accessKey, 
       items: { $elemMatch: { createdAt: {
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
       }}}
-    }).fetch();
-    
-    for(let gf of generalFind) {
+    }).forEach( (gf)=> {
       const thisDI = gf.items.filter( x =>
         moment(x.createdAt).isBetween(rangeStart, rangeEnd)
       );
       
       diCount = diCount + thisDI.length;   
-    }
+    });
     return diCount;
   }
   
@@ -160,22 +184,19 @@ import { deliveryState, calcShipDay } from '/server/reportCompleted.js';
     
     let diCount = 0;
     
-    const generalFind = BatchDB.find({
+    BatchDB.find({
       orgKey: accessKey, 
       items: { $elemMatch: { finishedAt: {
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
       }}}
-    }).fetch();
-    
-    for(let gf of generalFind) {
+    }).forEach( (gf)=> {
       const thisDI = gf.items.filter( x =>
         x.finishedAt !== false &&
         moment(x.finishedAt).isBetween(rangeStart, rangeEnd)
       );
-      
       diCount = diCount + thisDI.length;   
-    }
+    });
     return diCount;
   }
   
@@ -183,19 +204,18 @@ import { deliveryState, calcShipDay } from '/server/reportCompleted.js';
     
     let ncCount = 0;
     
-    const generalFind = BatchDB.find({
+    BatchDB.find({
       orgKey: accessKey, 
       nonCon: { $elemMatch: { time: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
       }}}
-    }).fetch();
-    for(let gf of generalFind) {
+    }).forEach( (gf)=> {
       const thisNC = gf.nonCon.filter( 
         x => moment(x.time).isBetween(rangeStart, rangeEnd) 
       );
       ncCount = ncCount + thisNC.length;   
-    }
+    });
     /*
     const generalFindX = XBatchDB.find({
       orgKey: accessKey, 
@@ -212,19 +232,18 @@ import { deliveryState, calcShipDay } from '/server/reportCompleted.js';
     
     let shCount = 0;
     
-    const generalFind = BatchDB.find({
+    BatchDB.find({
       orgKey: accessKey, 
       shortfall: { $elemMatch: { cTime: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
       }}}
-    }).fetch();
-    for(let gf of generalFind) {
+    }).forEach( (gf)=> {
       const thisSH = gf.shortfall.filter( 
         x => moment(x.cTime).isBetween(rangeStart, rangeEnd) 
       );
       shCount = shCount + thisSH.length;   
-    }
+    });
     /*
     const generalFindX = XBatchDB.find({
       orgKey: accessKey, 
@@ -240,7 +259,7 @@ import { deliveryState, calcShipDay } from '/server/reportCompleted.js';
   export function countTestFail(accessKey, rangeStart, rangeEnd) {
     let tfCount = 0;
     
-    const generalFind = BatchDB.find({
+    BatchDB.find({
       orgKey: accessKey, 
       items: { $elemMatch: { 
         createdAt: { 
@@ -249,9 +268,7 @@ import { deliveryState, calcShipDay } from '/server/reportCompleted.js';
         finishedAt: { 
           $gte: new Date(rangeStart) 
       }}}
-    }).fetch();
-    
-    for(let gf of generalFind) {
+    }).forEach( (gf)=> {
       const thisTF = gf.items.filter( x =>
         x.history.find( y =>
           moment(y.time).isBetween(rangeStart, rangeEnd) &&
@@ -259,7 +276,7 @@ import { deliveryState, calcShipDay } from '/server/reportCompleted.js';
       );
       
       tfCount = tfCount + thisTF.length;   
-    }
+    });
     return tfCount;
   }
   
@@ -267,23 +284,20 @@ import { deliveryState, calcShipDay } from '/server/reportCompleted.js';
 
     let scCount = 0;
     
-    const generalFind = BatchDB.find({
+    BatchDB.find({
       orgKey: accessKey, 
       items: { $elemMatch: { finishedAt: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
       }}}
-    }).fetch();
-    
-    for(let gf of generalFind) {
+    }).forEach( (gf)=> {
       const thisSC = gf.items.filter( x =>
         x.history.find( y =>
           moment(y.time).isBetween(rangeStart, rangeEnd) &&
           y.type === 'scrap' && y.good === true )
       );
-      
       scCount = scCount + thisSC.length;   
-    }
+    });
     return scCount;
   }
       

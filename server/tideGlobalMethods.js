@@ -46,7 +46,7 @@ export function checkTimeBudget(tide, quoteTimeBudget) {
   
   const tVq = getTvals(tide, quoteTimeBudget);
     
-  const quote2tide = tVq[1] - tVq[0];
+  const quote2tide = !tVq ? null : tVq[1] - tVq[0];
   
   return quote2tide;
 }
