@@ -10,9 +10,9 @@ import NonConCounts from './NonConCounts.jsx';
 import ProJump from '/client/components/smallUi/ProJump';
 
 const BatchDetails = ({
-  oB,
+  oB, traceDT,
   bCache, pCache, acCache,
-  user, clientTZ, app, brancheS,
+  user, app, brancheS,
   isDebug, isNightly,
   dense, filterBy, focusBy, branchArea, updateTrigger
 })=> {
@@ -50,13 +50,14 @@ const BatchDetails = ({
       
       {!oB ? null :
         oB.map( (entry, index)=>{
+          const tBatch = traceDT.find( t => t.batchID === entry._id );
           return(
             <BatchDetailChunk
               key={`${entry.batchID}live${index}`}
               rowIndex={index}
               oB={entry}
+              tBatch={tBatch}
               user={user}
-              clientTZ={clientTZ}
               bCache={bCache}
               pCache={pCache}
               acCache={acCache}
@@ -83,7 +84,7 @@ export default BatchDetails;
 
 
 const BatchDetailChunk = ({ 
-  rowIndex, oB, user, clientTZ, 
+  rowIndex, oB, tBatch, user, 
   bCache, pCache, acCache, app, 
   brancheS, branchClear,
   isDebug, isNightly,
@@ -95,8 +96,9 @@ const BatchDetailChunk = ({
   const isX = oB.completed === undefined ? false : true;
   const isDone = isX ? oB.completed : oB.finishedAt !== false;
   
-  const bInfo = focusBy && bCache ? bCache.dataSet.find( x => x.batch === oB.batch) : false;
-  const highG = bInfo ? bInfo.isWhat[0] === focusBy ? '' : 'hide' : '';
+  //const bInfo = focusBy && bCache ? bCache.dataSet.find( x => x.batch === oB.batch) : false;
+  //const highG = bInfo ? bInfo.isWhat[0] === focusBy ? '' : 'hide' : '';
+  const highG = tBatch && focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
   
   const releasedToFloor = oB.releases.findIndex( 
                             x => x.type === 'floorRelease') >= 0;
@@ -118,7 +120,7 @@ const BatchDetailChunk = ({
       {!isDone ?
         <TideActivitySquare 
           batchID={oB._id} 
-          acData={ac}
+          acData={tBatch || ac}
           isDebug={isDebug} />
       :
         <TideActivityData
@@ -130,8 +132,7 @@ const BatchDetailChunk = ({
       <BatchTopStatus
         rowIndex={rowIndex}
         batchID={oB._id}
-        dueDate={oB.salesEnd || oB.end}
-        clientTZ={clientTZ}
+        tBatch={tBatch}
         app={app}
         isDebug={isDebug}
         isNightly={isNightly}

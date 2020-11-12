@@ -10,7 +10,8 @@ import MonthTrend from './MonthTrend';
 import Outlook from './Outlook.jsx';
 
 const DownstreamWrap = ({ 
-  view, subLink,
+  view, subLink, 
+  traceDT,
   bCache, pCache, acCache, brCache, zCache,
   user, app,
   isDebug, isNightly
@@ -115,6 +116,7 @@ const DownstreamWrap = ({
       navBar='down'
     >
       <DownstreamView
+        traceDT={traceDT}
         bCache={bCache}
         pCache={pCache}
         acCache={acCache}

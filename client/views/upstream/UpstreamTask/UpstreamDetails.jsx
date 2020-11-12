@@ -9,7 +9,7 @@ import PrintLink from '/client/components/smallUi/PrintLink.jsx';
 import ProJump from '/client/components/smallUi/ProJump';
 
 const UpstreamDetails = ({
-  oB,
+  oB, traceDT,
   bCache, pCache, acCache,
   user, app, brancheS,
   isDebug, isNightly,
@@ -44,11 +44,13 @@ const UpstreamDetails = ({
       
       {!oB ? null :
         oB.map( (entry, index)=>{
+          const tBatch = traceDT.find( t => t.batchID === entry._id );
           return(
             <UpstreamDetailChunk
               key={`${entry.batchID}live${index}`}
               rowIndex={index}
               oB={entry}
+              tBatch={tBatch}
               user={user}
               bCache={bCache}
               pCache={pCache}
@@ -72,7 +74,7 @@ export default UpstreamDetails;
 
 
 const UpstreamDetailChunk = ({ 
-  rowIndex, oB, user,
+  rowIndex, oB, tBatch, user,
   bCache, pCache, acCache, app, 
   brancheS, branchClear,
   isDebug, isNightly,
@@ -83,8 +85,7 @@ const UpstreamDetailChunk = ({
   const isX = oB.completed === undefined ? false : true;
   const isDone = isX ? oB.completed : oB.finishedAt !== false;
   
-  const bInfo = focusBy && bCache ? bCache.dataSet.find( x => x.batch === oB.batch) : false;
-  const highG = bInfo ? bInfo.isWhat[0] === focusBy ? '' : 'hide' : '';
+  const highG = tBatch && focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
   
   const releasedToFloor = oB.releases.findIndex( 
                             x => x.type === 'floorRelease') >= 0;
@@ -101,14 +102,14 @@ const UpstreamDetailChunk = ({
       <div>
         <TideActivitySquare 
           batchID={oB._id} 
-          acData={ac}
+          acData={tBatch || ac}
           app={app} />
       </div>
       
       <BatchTopStatus
         rowIndex={rowIndex}
         batchID={oB._id}
-        dueDate={oB.salesEnd || oB.end}
+        tBatch={tBatch}
         app={app}
         isDebug={isDebug}
         isNightly={isNightly}

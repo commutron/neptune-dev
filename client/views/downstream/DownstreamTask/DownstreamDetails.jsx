@@ -10,7 +10,7 @@ import NonConCounts from '../../overview/columns/NonConCounts.jsx';
 
 
 const DownstreamDetails = ({
-  oB, indexKey,
+  indexKey, oB, traceDT,
   bCache, pCache, acCache,
   user, app, brancheS,
   isDebug, isNightly,
@@ -19,10 +19,12 @@ const DownstreamDetails = ({
   <Fragment>
     {!oB ? null :
       oB.map( (entry, index)=>{
+        const tBatch = traceDT.find( t => t.batchID === entry.batchID );
         return(
           <DownstreamScrollChunk
-            ck={entry}
             key={indexKey+'c'+index}
+            ck={entry}
+            tBatch={tBatch}
             bCache={bCache}
             pCache={pCache}
             acCache={acCache}
@@ -44,7 +46,7 @@ export default DownstreamDetails;
 
 
 const DownstreamScrollChunk = ({
-  ck,
+  ck, tBatch,
   bCache, pCache, acCache, 
   app, user, brancheS, focusBy, isDebug, dense, progCols, ncCols,
   updateTrigger
@@ -58,14 +60,15 @@ const DownstreamScrollChunk = ({
             `${min2hr(q2t)} hours remain` :
             'remaining time unknown';
   
-  const bInfo = focusBy && bCache ? bCache.find( x => x.batch === ck.batch) : false;
-  const highG = bInfo ? bInfo.isWhat[0] === focusBy ? '' : 'hide' : '';
+  //const bInfo = focusBy && bCache ? bCache.find( x => x.batch === ck.batch) : false;
+  //const highG = bInfo ? bInfo.isWhat[0] === focusBy ? '' : 'hide' : '';
+  const highG = tBatch && focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
   
   const ac = acCache.find( x => x.batchID === ck.batchID );
   
   //const releasedToFloor = oB.releases.findIndex( 
     //                      x => x.type === 'floorRelease') >= 0;
-  const releasedToFloor = false;
+  const releasedToFloor = tBatch.onFloor;
   
   return(
     <div className={`downRowScroll ${highG}`}>
@@ -79,7 +82,7 @@ const DownstreamScrollChunk = ({
       {!isDone ?
         <TideActivitySquare 
           batchID={ck.batchID} 
-          acData={ac}
+          acData={tBatch || ac}
           isDebug={isDebug} />
       :
         <TideActivityData

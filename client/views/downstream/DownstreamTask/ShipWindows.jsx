@@ -13,7 +13,7 @@ import { listShipDays } from '/client/utility/WorkTimeCalc';
 // import { LeapTextLink } from '/client/components/tinyUi/LeapText.jsx';
 
 const ShipWindows = ({ 
-  calcFor, bCache, pCache, acCache, zCache,
+  calcFor, traceDT, bCache, pCache, acCache, zCache,
   brancheS, app, user, isDebug, focusBy, dense, updateTrigger
 })=> {
   
@@ -56,6 +56,7 @@ const ShipWindows = ({
             key={'f'+ix}
             windowMoment={e}
             indexKey={ix}
+            traceDT={traceDT}
             bCache={bCache}
             pCache={pCacheSort}
             acCache={acCache}
@@ -76,6 +77,7 @@ const ShipWindows = ({
             key={'s'+ix}
             windowMoment={e}
             indexKey={ix}
+            traceDT={traceDT}
             bCache={bCache}
             pCache={pCacheSort}
             acCache={acCache}

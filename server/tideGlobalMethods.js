@@ -90,19 +90,18 @@ function collectActivtyLevel(privateKey, batchID) {
     const peopleCount = (filtered)=> new Set( 
       Array.from(filtered, y => y.who ) 
     ).size;
-      
-    let collection = false;
     
     if(!batch) {
-      resolve(collection);
+      resolve(false);
     }else{
       const aDone = batch.completedAt || batch.finishedAt;
-      const rested = aDone && moment.duration(now.diff(moment(aDone))).asHours() > 24;
+      const rested = !batch.live && aDone && 
+                        moment.duration(now.diff(moment(aDone))).asHours() > 24;
       
       const tide = batch.tide || [];
       
       if(rested) {
-        collection = {
+        resolve({
           batch: batch.batch,
           batchID: batch._id,
           isActive: {
@@ -111,8 +110,7 @@ function collectActivtyLevel(privateKey, batchID) {
             hasDay: 0,
             hasNone: tide.length === 0
           }
-        };
-        resolve(collection);
+        });
       }else{
         const yNow = tide.filter( x => x.stopTime === false );
         const isNow = peopleCount(yNow);
@@ -129,7 +127,7 @@ function collectActivtyLevel(privateKey, batchID) {
                                         , 'day') );
         const hasDay = peopleCount(yDay);
    
-        collection = {
+        resolve({
           batch: batch.batch,
           batchID: batch._id,
           isActive: {
@@ -138,8 +136,7 @@ function collectActivtyLevel(privateKey, batchID) {
             hasDay: hasDay,
             hasNone: tide.length === 0
           }
-        };
-        resolve(collection);
+        });
       }
     }
   });

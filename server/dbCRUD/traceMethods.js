@@ -10,79 +10,219 @@ moment.updateLocale('en', {
   shippinghours: Config.shippingHours
 });
 
+function shrinkWhole(bData, accessKey) {
+  const app = AppDB.findOne({orgKey: accessKey});
+  const nonWorkDays = app.nonWorkDays;
+  if( Array.isArray(nonWorkDays) ) {  
+    moment.updateLocale('en', {
+      holidays: nonWorkDays
+    });
+  }
+  const now = moment().tz(Config.clientTZ);
+  
+  const isWhat = Meteor.call('getBasicBatchInfo', bData.batch);
+  
+  const quantity = bData.quantity || bData.items.length;
+  const serialize = bData.serialize || Array.isArray(bData.items);
+  
+  const endDay = bData.salesEnd || bData.end;
+  
+  const isX = bData.completed !== undefined;
+  const didFinish = isX ? bData.completed : bData.finishedAt !== false;
+  const whenFinish = didFinish ? bData.completedAt || bData.finishedAt : false;
+  
+  const shpdlv = didFinish ? deliveryState( endDay, whenFinish )
+                            // salesEnd, shipAim, didFinish, gapZone
+                           : calcShipDay( now, endDay );
+                            // salesEnd, shipAim, lateLate, shipLate
+    
+  const salesEnd = shpdlv[0];
+  const shipAim = didFinish ? shpdlv[1] : shpdlv[1].format();
+  const completedAt = didFinish ? new Date(shpdlv[2]) : false;
+  const gapZone = didFinish ? shpdlv[3] : null;
+  const lateLate = didFinish ? gapZone[2] === 'late' : shpdlv[2];
+  
+  const actvLvl = Meteor.call('tideActivityLevel', bData._id);
+  const brchCn = Meteor.call('branchCondition', bData._id);
+  
+  TraceDB.upsert({batchID: bData._id}, {
+    $set : { 
+      orgKey: accessKey,
+      lastUpserted: new Date(),
+      lastUpdated: new Date(),
+      batch: bData.batch,
+      batchID: bData._id,
+      salesOrder: bData.salesOrder,
+      isWhat: isWhat.isWhat,
+      describe: isWhat.more,
+      quantity: Number(quantity),
+      serialize: serialize,
+      live: bData.live,
+      salesEnd: new Date(salesEnd),
+      shipAim: new Date(shipAim),
+      completed: didFinish,
+      completedAt: completedAt,
+      lateLate: lateLate,
+      isActive: actvLvl.isActive,
+      onFloor: brchCn.onFloor,
+      branchCondition: brchCn.branchSets
+  }});
+}
+
+function checkMinify(bData, accessKey) {
+  const isWhat = Meteor.call('getBasicBatchInfo', bData.batch);
+  
+  const quantity = bData.quantity || bData.items.length;
+  const serialize = bData.serialize || Array.isArray(bData.items);
+  
+  TraceDB.update({batchID: bData._id}, {
+    $set : { 
+      orgKey: accessKey,
+      lastUpserted: new Date(),
+      batch: bData.batch,
+      batchID: bData._id,
+      salesOrder: bData.salesOrder,
+      isWhat: isWhat.isWhat,
+      describe: isWhat.more,
+      quantity: Number(quantity),
+      serialize: serialize
+  }});
+}
+
+function checkMovement(bData, accessKey) {
+  const app = AppDB.findOne({orgKey: accessKey});
+  const nonWorkDays = app.nonWorkDays;
+  if( Array.isArray(nonWorkDays) ) {  
+    moment.updateLocale('en', {
+      holidays: nonWorkDays
+    });
+  }
+  const now = moment().tz(Config.clientTZ);
+  
+  const endDay = bData.salesEnd || bData.end;
+  
+  const isX = bData.completed !== undefined;
+  const didFinish = isX ? bData.completed : bData.finishedAt !== false;
+  const whenFinish = didFinish ? bData.completedAt || bData.finishedAt : false;
+  
+  const shpdlv = didFinish ? deliveryState( endDay, whenFinish )
+                            // salesEnd, shipAim, didFinish, gapZone
+                           : calcShipDay( now, endDay );
+                            // salesEnd, shipAim, lateLate, shipLate
+    
+  const salesEnd = shpdlv[0];
+  const shipAim = didFinish ? shpdlv[1] : shpdlv[1].format();
+  const completedAt = didFinish ? new Date(shpdlv[2]) : false;
+  const gapZone = didFinish ? shpdlv[3] : null;
+  const lateLate = didFinish ? gapZone[2] === 'late' : shpdlv[2];
+  
+  const actvLvl = Meteor.call('tideActivityLevel', bData._id);
+  const brchCn = Meteor.call('branchCondition', bData._id);
+  
+  TraceDB.update({batchID: bData._id}, {
+    $set : { 
+      lastUpdated: new Date(),
+      live: bData.live,
+      salesEnd: new Date(salesEnd),
+      shipAim: new Date(shipAim),
+      completed: didFinish,
+      completedAt: completedAt,
+      lateLate: lateLate,
+      isActive: actvLvl.isActive,
+      onFloor: brchCn.onFloor,
+      branchCondition: brchCn.branchSets
+  }});
+}
+
 Meteor.methods({
+
   
+  rebuildLatestTrace(force) {
+    const accessKey = Meteor.user().orgKey;
+    const timeOut = force ? 0 : 12;
+    const stale = moment().subtract(timeOut, 'hours').toISOString();
+    
+    BatchDB.find({orgKey: accessKey})
+            .forEach( (b)=> {
+              const t = TraceDB.findOne({
+                batchID: b._id, 
+                lastUpserted: { $gte: new Date(stale) }
+              });
+              if(!t) {
+                shrinkWhole( b, accessKey );
+              }
+            });
+    
+    XBatchDB.find({orgKey: accessKey})
+              .forEach( (x)=> {
+                const t = TraceDB.findOne({
+                  batchID: x._id, 
+                  lastUpserted: { $gte: new Date(stale) }
+                });
+                if(!t) {
+                  shrinkWhole( x, accessKey );
+                }
+              });
+    return true;
+  },
   
-  minifyBatchesBase() {
+  rebuildOneTrace(bID) {
     const accessKey = Meteor.user().orgKey;
     
-    const app = AppDB.findOne({orgKey: accessKey});
-    const nonWorkDays = app.nonWorkDays;
-    if( Array.isArray(nonWorkDays) ) {  
-      moment.updateLocale('en', {
-        holidays: nonWorkDays
-      });
-    }
-          
-    function shrink(bData, accessKey) {
-      const isWhat = Meteor.call('getBasicBatchInfo', bData.batch);
-      
-      const quantity = bData.quantity || bData.items.length;
-      const serialize = bData.serialize || Array.isArray(bData.items);
-      
-      const now = moment().tz(Config.clientTZ);
-      
-      const endDay = bData.end || bData.salesEnd;
-      
-      const didFinish = bData.completed || bData.finishedAt !== false;
-      const whenFinish = didFinish ? bData.completedAt || bData.finishedAt : false;
-      
-      const shpdlv = didFinish ? deliveryState( endDay, whenFinish )
-                                // salesEnd, shipAim, didFinish, gapZone
-                               : calcShipDay( now, endDay );
-                                // salesEnd, shipAim, lateLate, shipLate
-        
-      const salesEnd = shpdlv[0];
-      const shipAim = didFinish ? shpdlv[1] : shpdlv[1].format();
-      const completedAt = didFinish ? shpdlv[2] : false;
-      const gapZone = didFinish ? shpdlv[3] : null;
-      const lateLate = didFinish ? gapZone[2] === 'late' : shpdlv[2];
-      
-      const actvLvl = Meteor.call('tideActivityLevel', bData._id);
-      const brchCn = Meteor.call('branchCondition', bData._id);
-      
-      TraceDB.upsert({orgKey: accessKey, batch: bData.batch}, {
-        $set : { 
-          orgKey: accessKey,
-          lastUpdated: new Date(),
-          batch: bData.batch,
-          batchID: bData._id,
-          salesOrder: bData.salesOrder,
-          live: bData.live,
-          isWhat: isWhat.isWhat,
-          describe: isWhat.more,
-          quantity: quantity,
-          serialize: serialize,
-          salesEnd: salesEnd,
-          shipAim: shipAim,
-          completed: didFinish,
-          completedAt: completedAt,
-          lateLate: lateLate,
-          isActive: actvLvl.isActive,
-          onFloor: brchCn.onFloor,
-          branchCondition: brchCn.branchSets
-      }});
-    }
+    BatchDB.find({_id: bID})
+            .forEach( (b)=> shrinkWhole( b, accessKey ) );
+    
+    XBatchDB.find({_id: bID})
+              .forEach( (x)=> shrinkWhole( x, accessKey ) );
+  },
   
-    BatchDB.find({orgKey: accessKey}).forEach( (b)=> shrink( b, accessKey ) );
+  updateOneMinify(bID) {
+    const accessKey = Meteor.user().orgKey;
     
-    XBatchDB.find({orgKey: accessKey}).forEach( (x)=> shrink( x, accessKey ) );
-
-    return true;
+    BatchDB.find({_id: bID})
+            .forEach( (b)=> checkMinify( b, accessKey ) );
     
+    XBatchDB.find({_id: bID})
+              .forEach( (x)=> checkMinify( x, accessKey ) );
+  },
+  
+  
+  updateLiveMovement() {
+    const accessKey = Meteor.user().orgKey;
+    const fresh = moment().subtract(5, 'minutes').toISOString();
+    const stale = moment().subtract(30, 'days').toISOString();
+    
+    BatchDB.find({orgKey: accessKey,
+                    $or: [ { live: true }, 
+                           { finishedAt: { $gte: new Date(stale) } }
+                    // { end: { $gte: new Date() } } not saved as Date()
+                         ]
+    }).forEach( (b)=> {
+        const t = TraceDB.findOne({
+          batchID: b._id, 
+          lastUpdated: { $gte: new Date(fresh) }
+        });
+        if(!t) {
+          checkMovement( b, accessKey );
+        }
+      });
+    
+    XBatchDB.find({orgKey: accessKey, 
+                    $or: [ { live: true }, 
+                           { completedAt: { $gte: new Date(stale) } }
+                    // { salesEnd: { $gte: new Date() } } not saved as Date()
+                         ]
+    }).forEach( (x)=> {
+        const t = TraceDB.findOne({
+          batchID: x._id, 
+          lastUpdated: { $gte: new Date(fresh) }
+        });
+        if(!t) {
+          checkMovement( x, accessKey );
+        }
+      });
   }
   
   
   
 });
-

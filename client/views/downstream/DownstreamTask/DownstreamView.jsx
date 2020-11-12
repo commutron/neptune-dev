@@ -8,7 +8,7 @@ import ShipWindows from './ShipWindows';
 
 
 const DownstreamView = ({ 
-  bCache, pCache, acCache, brCache, zCache,
+  traceDT, bCache, pCache, acCache, brCache, zCache,
   user, app, isDebug, isNightly
 })=> {
   
@@ -34,6 +34,7 @@ const DownstreamView = ({
   const [ updateTrigger, updateTriggerSet ] = useState(true);
   
   useEffect( ()=>{
+    Meteor.call('updateLiveMovement');
     Meteor.call('REQUESTcacheUpdate', 
       false, // batchUp
       true, // priorityUp
@@ -114,6 +115,7 @@ const DownstreamView = ({
               
       <ShipWindows
         calcFor={calcFor}
+        traceDT={traceDT}
         bCache={bCache.dataSet}
         pCache={pCache.dataSet}
         acCache={acCache.dataSet}

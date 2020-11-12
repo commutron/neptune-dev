@@ -10,7 +10,7 @@ import DownstreamDetails from './DownstreamDetails';
 // import { min2hr } from '/client/utility/Convert';
 
 const WindowGlass = ({ 
-  windowMoment, indexKey, 
+  windowMoment, indexKey, traceDT,
   bCache, pCache, acCache, zCache, 
   brancheS, app, user, isDebug, focusBy, dense, updateTrigger
 })=> {
@@ -53,6 +53,7 @@ const WindowGlass = ({
         <DownstreamDetails
           indexKey={'fancylist0S'+indexKey}
           oB={mixedOrders}
+          traceDT={traceDT}
           bCache={bCache}
           title='things'
           showMore={true}

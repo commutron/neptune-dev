@@ -6,7 +6,7 @@ import TrinaryStat from '/client/components/tinyUi/TrinaryStat.jsx';
 
 
 const BatchTopStatus = ({ 
-  rowIndex, batchID, app,
+  rowIndex, batchID, tBatch, app,
   isDebug, isNightly,
   statusCols, branchArea, dense
 })=> {
@@ -27,7 +27,7 @@ const BatchTopStatus = ({
   
   if( dt && dt.batchID === batchID ) {
     
-    const dueDateShip = moment(dt.shipAim);
+    const dueDateShip = moment(tBatch ? tBatch.shipAim : dt.shipAim);
     const adaptDateShip = dueDateShip.isAfter(moment(), 'year') ?
                             "MMM Do, YYYY" : "MMM Do";
 
@@ -54,8 +54,9 @@ const BatchTopStatus = ({
         <div>
           <NumStat
             num={dt.itemQuantity}
+            //num={tBatch.quantity}
             name='Total Items'
-            title=''
+            title={`cached: ${tBatch?.quantity}`}
             color='blueT'
             size='big' />
         </div>

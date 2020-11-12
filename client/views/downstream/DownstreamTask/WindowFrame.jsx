@@ -3,14 +3,14 @@ import moment from 'moment';
 // import 'moment-timezone';
 import 'moment-business-time';
 import '/client/utility/ShipTime.js';
-import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 
 import DownstreamHeaders from './DownstreamHeaders';
 
 import { min2hr } from '/client/utility/Convert';
 
 const WindowFrame = ({ 
-  windowMoment, indexKey, 
+  windowMoment, indexKey, traceDT,
   bCache, pCache, acCache, zCache, 
   brancheS, app, user, isDebug, focusBy, dense
 })=> {
@@ -50,6 +50,7 @@ const WindowFrame = ({
         <DownstreamHeaders
           indexKey={'fancylist0F'+indexKey}
           oB={mixedOrders}
+          traceDT={traceDT}
           bCache={bCache}
           title='things'
           showMore={true}

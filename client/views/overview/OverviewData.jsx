@@ -2,8 +2,6 @@ import React, { useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
-import moment from 'moment';
-import 'moment-timezone';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
 import usePrevious from '/client/utility/usePreviousHook.js';
 
@@ -12,10 +10,10 @@ import OverviewWrap from './OverviewWrap.jsx';
 
 const View = ({
   login,
-  readyUsers, ready, readyC, 
-  username, user, clientTZ, org, app,
+  readyUsers, ready, readyC, readyT,
+  username, user, org, app,
   isDebug, isNightly,
-  batch, batchX,
+  batch, batchX, traceDT,
   bCache, pCache, acCache, brCache
 })=> {
   
@@ -25,22 +23,20 @@ const View = ({
   }, [user]);
   
     
-  if( !readyUsers || !ready || !readyC || !app ) {
+  if( !readyUsers || !ready || !readyC || !readyT || !app ) {
     return( <SpinWrap /> );
   }
   
   const branches = app.branches.filter( b => b.open === true );
   const brancheS = branches.sort((b1, b2)=> {
-          if (b1.position < b2.position) { return 1 }
-          if (b1.position > b2.position) { return -1 }
-          return 0;
-        });  
+          b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 });  
 
   return(
     <ErrorCatch>
       <OverviewWrap 
         b={batch}
         bx={batchX}
+        traceDT={traceDT}
         bCache={bCache}
         pCache={pCache}
         acCache={acCache}
@@ -48,7 +44,6 @@ const View = ({
         user={user}
         app={app}
         brancheS={brancheS}
-        clientTZ={clientTZ}
         isDebug={isDebug}
         isNightly={isNightly} />
     </ErrorCatch>
@@ -65,10 +60,12 @@ export default withTracker( () => {
   let isDebug = user ? Roles.userIsInRole(Meteor.userId(), 'debug') : false;
   const isNightly = user ? Roles.userIsInRole(Meteor.userId(), 'nightly') : false;
   let org = user ? user.org : false;
-  const clientTZ = moment.tz.guess();
   const usersSub = login ? Meteor.subscribe('usersData') : false;
-  const sub = login ? Meteor.subscribe('shaddowData', clientTZ) : false;
-  const subC = login ? Meteor.subscribe('cacheData', clientTZ) : false;
+  const sub = login ? Meteor.subscribe('shaddowData') : false;
+  
+  const subC = login ? Meteor.subscribe('cacheData') : false;
+  const subT = login ? Meteor.subscribe('traceDataActive') : false;
+  
   if(!login || !active) {
     return {
       readyUsers: false,
@@ -77,17 +74,17 @@ export default withTracker( () => {
   }else{
     return {
       login: Meteor.userId(),
-      sub: sub,
-      subC: subC,
+      // sub: sub,
+      // subC: subC,
       readyUsers: usersSub.ready(),
       ready: sub.ready(),
       readyC: subC.ready(),
+      readyT: subT.ready(),
       username: name,
       user: user,
       isDebug: isDebug,
       isNightly: isNightly,
       org: org,
-      clientTZ: clientTZ,
       app: AppDB.findOne({org: org}),
       batch: BatchDB.find({live: true}).fetch(),
       batchX: XBatchDB.find({live: true}).fetch(),
@@ -95,6 +92,8 @@ export default withTracker( () => {
       pCache: CacheDB.findOne({dataName: 'priorityRank'}),
       acCache: CacheDB.findOne({dataName: 'activityLevel'}),
       brCache: CacheDB.findOne({dataName: 'branchCondition'}),
+    
+      traceDT: TraceDB.find({}).fetch(),
     };
   }
 })(View);

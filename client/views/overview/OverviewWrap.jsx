@@ -14,8 +14,9 @@ import BatchDetails from './columns/BatchDetails';
 
 
 const OverviewWrap = ({ 
-  b, bx, bCache, pCache, acCache, brCache, 
-  user, clientTZ, app, brancheS,
+  b, bx, traceDT,
+  bCache, pCache, acCache, brCache, 
+  user, app, brancheS,
   isDebug, isNightly
 })=> {
   
@@ -110,6 +111,7 @@ const OverviewWrap = ({
   const [ updateTrigger, updateTriggerSet ] = useState(true);
   
   useEffect( ()=>{
+    Meteor.call('updateLiveMovement');
     Meteor.call('REQUESTcacheUpdate', 
       false, // batchUp
       true, // priorityUp
@@ -257,6 +259,7 @@ const OverviewWrap = ({
           <BatchHeaders
             key='fancylist0'
             oB={liveState}
+            traceDT={traceDT}
             bCache={bCache}
             pCache={pCache}
             app={app}
@@ -267,11 +270,11 @@ const OverviewWrap = ({
           <BatchDetails
             key='fancylist1'
             oB={liveState}
+            traceDT={traceDT}
             bCache={bCache}
             pCache={pCache}
             acCache={acCache}
             user={user}
-            clientTZ={clientTZ}
             app={app}
             brancheS={brancheS}
             isDebug={isDebug}

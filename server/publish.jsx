@@ -163,12 +163,121 @@ Meteor.publish('bCacheData', function(){
           'structured' : 0,
           'minified': 0
         }}),
-      TraceDB.find({}),
+      //TraceDB.find({}),
     ];
   }
 });
 
-// Overview Up-Down-stream
+// Upstream
+Meteor.publish('traceDataLive', function(){
+  const user = Meteor.users.findOne({_id: this.userId});
+  const orgKey = user ? user.orgKey : false;
+  Meteor.defer( ()=>{ Meteor.call('rebuildLatestTrace'); });
+  if(!this.userId){
+    return this.ready();
+  }else{
+    return [
+      TraceDB.find({
+        orgKey: orgKey, live: true, onFloor: false }, {
+        fields: {
+          // 'lastUpserted': 1,
+          // 'lastUpdated': 1,
+          'batch': 1,
+          'batchID': 1,
+          // 'salesOrder': 1,
+          'isWhat': 1,
+          'describe': 1,
+          'quantity': 1,
+          'serialize': 1,
+          // 'live': 1,
+          'salesEnd': 1,
+          'shipAim': 1,
+          // 'completed': 1,
+          // 'completedAt': 1,
+          'lateLate': 1,
+          'isActive': 1,
+          // 'onFloor': 1,
+          // 'branchCondition': 1
+        }
+      })
+    ];
+  }
+});
+// Overview
+Meteor.publish('traceDataActive', function(){
+  const user = Meteor.users.findOne({_id: this.userId});
+  const orgKey = user ? user.orgKey : false;
+  Meteor.defer( ()=>{ Meteor.call('rebuildLatestTrace'); });
+  if(!this.userId){
+    return this.ready();
+  }else{
+    return [
+      TraceDB.find({
+        orgKey: orgKey, 
+        $or: [ { live: true }, { 'isActive.hasDay': { $gt: 0 } } ]
+      }, {
+        fields: {
+          // 'lastUpserted': 1,
+          // 'lastUpdated': 1,
+          'batch': 1,
+          'batchID': 1,
+          // 'salesOrder': 1,
+          'isWhat': 1,
+          'describe': 1,
+          'quantity': 1,
+          'serialize': 1,
+          // 'live': 1,
+          'salesEnd': 1,
+          'shipAim': 1,
+          // 'completed': 1,
+          // 'completedAt': 1,
+          // 'lateLate': 1,
+          'isActive': 1,
+          'onFloor': 1,
+          'branchCondition': 1
+        }
+      })
+    ];
+  }
+});
+// Downstream
+Meteor.publish('traceDataOpen', function(){
+  const user = Meteor.users.findOne({_id: this.userId});
+  const orgKey = user ? user.orgKey : false;
+  Meteor.defer( ()=>{ Meteor.call('rebuildLatestTrace'); });
+  if(!this.userId){
+    return this.ready();
+  }else{
+    return [
+      TraceDB.find({
+        orgKey: orgKey,
+        $or: [ { live: true }, { salesEnd: { $gte: new Date() } } ]
+      }, {
+        fields: {
+          // 'lastUpserted': 1,
+          // 'lastUpdated': 1,
+          'batch': 1,
+          'batchID': 1,
+          'salesOrder': 1,
+          'isWhat': 1,
+          'describe': 1,
+          'quantity': 1,
+          'serialize': 1,
+          'live': 1,
+          'salesEnd': 1,
+          'shipAim': 1,
+          'completed': 1,
+          'completedAt': 1,
+          'lateLate': 1,
+          'isActive': 1,
+          'onFloor': 1,
+          'branchCondition': 1
+        }
+      })
+    ];
+  }
+});
+
 Meteor.publish('cacheData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
@@ -186,8 +295,7 @@ Meteor.publish('cacheData', function(){
           'orgKey': 0,
           'structured' : 0,
           'minified': 0
-        }}),
-      TraceDB.find({}),
+        }})
     ];
   }
 });
@@ -205,8 +313,7 @@ Meteor.publish('partsPlusCacheData', function(){
           'orgKey': 0,
           'structured' : 0,
           'minified': 0
-        }}),
-      TraceDB.find({}),
+        }})
     ];
   }
 });

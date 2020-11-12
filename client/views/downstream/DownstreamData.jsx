@@ -10,10 +10,10 @@ import DownstreamWrap from './DownstreamWrap.jsx';
 
 const View = ({
   login,
-  readyUsers, readyC, view,
+  readyUsers, readyC, readyT, view,
   username, user, org, app,
   isDebug, isNightly,
-  batch, batchX,
+  traceDT,
   bCache, pCache, acCache, brCache, zCache
 })=> {
   
@@ -22,7 +22,7 @@ const View = ({
     InboxToastPop(prevUser, user);
   }, [user]);
     
-  if( !readyUsers || !readyC || !app ) {
+  if( !readyUsers || !readyC || !readyT || !app ) {
     return( <SpinWrap /> );
   }
 
@@ -30,6 +30,7 @@ const View = ({
     <ErrorCatch>
       <DownstreamWrap 
         view={view}
+        traceDT={traceDT}
         bCache={bCache}
         pCache={pCache}
         acCache={acCache}
@@ -53,12 +54,15 @@ export default withTracker( ({ view } ) => {
   const isNightly = user ? Roles.userIsInRole(Meteor.userId(), 'nightly') : false;
   let org = user ? user.org : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
+  
   const subC = login ? Meteor.subscribe('cacheData') : false;
+  const subT = login ? Meteor.subscribe('traceDataOpen') : false;
   
   if(!login || !active) {
     return {
       readyUsers: false,
       readyC: false,
+      readyT: false
     };
   }else{
     return {
@@ -66,6 +70,7 @@ export default withTracker( ({ view } ) => {
       subC: subC,
       readyUsers: usersSub.ready(),
       readyC: subC.ready(),
+      readyT: subT.ready(),
       view: view,
       username: name,
       user: user,
@@ -78,6 +83,8 @@ export default withTracker( ({ view } ) => {
       acCache: CacheDB.findOne({dataName: 'activityLevel'}),
       brCache: CacheDB.findOne({dataName: 'branchCondition'}),
       zCache: CacheDB.findOne({dataName: 'completeBatch'}),
+      
+      traceDT: TraceDB.find({}).fetch(),
     };
   }
 })(View);

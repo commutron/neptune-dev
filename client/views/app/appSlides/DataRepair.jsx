@@ -80,7 +80,7 @@ const DataRepair = ({ app, users })=> {
   */
   
   function runTraceMinify() {
-    Meteor.call('minifyBatchesBase', (error, re)=>{
+    Meteor.call('rebuildLatestTrace', true, (error, re)=>{
       error && console.log(error);
       re && toast.success('method complete', { autoClose: false });
     });

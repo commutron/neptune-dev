@@ -11,7 +11,7 @@ import UpstreamDetails from './UpstreamDetails';
 
 
 const UpstreamView = ({ 
-  batch, batchX, bCache, pCache, acCache,
+  batch, batchX, traceDT, bCache, pCache, acCache,
   user, clientTZ, app, isDebug, isNightly
 })=> {
   
@@ -43,6 +43,7 @@ const UpstreamView = ({
   const [ updateTrigger, updateTriggerSet ] = useState(true);
   
   useEffect( ()=>{
+    Meteor.call('updateLiveMovement');
     Meteor.call('REQUESTcacheUpdate', 
       false, // batchUp
       true, // priorityUp
@@ -140,10 +141,7 @@ const UpstreamView = ({
   
   const branches = app.branches.filter( b => b.open === true );
   const brancheS = branches.sort((b1, b2)=> {
-          if (b1.position < b2.position) { return 1 }
-          if (b1.position > b2.position) { return -1 }
-          return 0;
-        });               
+          b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 });               
 
   return(
     <div key={0} className={`${light === true ? 
@@ -178,6 +176,7 @@ const UpstreamView = ({
           <UpstreamHeaders
             key='fancylist0'
             oB={liveState}
+            traceDT={traceDT}
             bCache={bCache}
             pCache={pCache}
             app={app}
@@ -189,6 +188,7 @@ const UpstreamView = ({
           <UpstreamDetails
             key='fancylist1'
             oB={liveState}
+            traceDT={traceDT}
             bCache={bCache}
             pCache={pCache}
             acCache={acCache}
