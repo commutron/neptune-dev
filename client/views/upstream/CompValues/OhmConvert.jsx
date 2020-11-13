@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from 'react';
 // import Pref from '/client/global/pref.js';
 
-
-const OhmConvert = ({ 
-  view, subLink,
-  //batch, batchX, 
-  //bCache, pCache, acCache, brCache,
-  user, app, // clientTZ,
-  //isDebug, isNightly
-})=> {
+const OhmConvert = ()=> {
   
   const [ standardOhm, standardOhmSet ] = useState(null);
   

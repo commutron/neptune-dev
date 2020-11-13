@@ -1,15 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 
-
-
-const CompValuesSlide = ({ 
-  view, subLink,
-  //batch, batchX, 
-  //bCache, pCache, acCache, brCache,
-  user, app, // clientTZ,
-  //isDebug, isNightly
-})=> {
+const FaradConvert = ()=> {
   
   const [ farad, faradSet ] = useState(null);
   
@@ -28,7 +20,6 @@ const CompValuesSlide = ({
     !farad ? '' : microSet( (farad * 1000000).toPrecision(10) / 1 );
     
   }, [farad]);
-  
   
   return(
     <div>
@@ -69,4 +60,4 @@ const CompValuesSlide = ({
   );
 };
 
-export default CompValuesSlide;
+export default FaradConvert;

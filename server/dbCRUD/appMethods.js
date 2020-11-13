@@ -12,7 +12,7 @@ Meteor.startup(function () {
   WidgetDB._ensureIndex({ widget : 1 }, { unique: true });
   VariantDB._ensureIndex({ versionKey : 1 }, { unique: true });
   CacheDB._ensureIndex({ dataName : 1 }, { unique: true });
-  TraceDB._ensureIndex({ batch : 1 }, { unique: true });
+  TraceDB._ensureIndex({ batchID : 1 }, { unique: true });
 });
 
 Meteor.methods({

@@ -57,3 +57,28 @@ export function percentOverUnder(goalNumber, realNumber) {
   const overunderClean = round2Decimal(overunder);
   return overunderClean;
 }
+
+
+// milliseconds
+
+export function ms2sc(milliseconds) {
+    const asSeconds = moment.duration(milliseconds).asSeconds();
+    const trunc = ( Math.round(
+                     (asSeconds + Number.EPSILON) * 100) 
+                        / 100 ).toFixed(2, 10);
+    return parseFloat(trunc);
+  }   
+export function ms2mn(milliseconds) {
+    const asMinutes = moment.duration(milliseconds).asMinutes();
+    const trunc = ( Math.round(
+                     (asMinutes + Number.EPSILON) * 100) 
+                        / 100 ).toFixed(2, 10);
+    return parseFloat(trunc);
+  }
+export function sc2hr(milliseconds) {
+    const asHours = moment.duration(milliseconds).asHours();
+    const trunc = ( Math.round(
+                     (asHours + Number.EPSILON) * 100) 
+                        / 100 ).toFixed(2, 10);
+    return parseFloat(trunc);
+  }

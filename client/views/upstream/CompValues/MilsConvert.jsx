@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from 'react';
 // import Pref from '/client/global/pref.js';
 
-
-const MilsConvert = ({ 
-  view, subLink,
-  //batch, batchX, 
-  //bCache, pCache, acCache, brCache,
-  user, app, // clientTZ,
-  //isDebug, isNightly
-})=> {
+const MilsConvert = ()=> {
   
   const [ metricMM, metricMMSet ] = useState(null);
   
