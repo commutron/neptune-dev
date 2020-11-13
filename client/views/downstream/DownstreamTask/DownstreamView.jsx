@@ -34,7 +34,6 @@ const DownstreamView = ({
   const [ updateTrigger, updateTriggerSet ] = useState(true);
   
   useEffect( ()=>{
-    Meteor.call('updateLiveMovement');
     Meteor.call('REQUESTcacheUpdate', 
       false, // batchUp
       true, // priorityUp
@@ -43,6 +42,7 @@ const DownstreamView = ({
       false, // compUp
     ()=>{
       loadTimeSet( moment() );
+      Meteor.call('updateLiveMovement');
     });
   }, [updateTrigger]);
   

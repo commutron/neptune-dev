@@ -190,7 +190,7 @@ Meteor.methods({
   updateLiveMovement() {
     const accessKey = Meteor.user().orgKey;
     const fresh = moment().subtract(5, 'minutes').toISOString();
-    const stale = moment().subtract(30, 'days').toISOString();
+    const stale = moment().subtract(7, 'days').toISOString();
     
     BatchDB.find({orgKey: accessKey,
                     $or: [ { live: true }, 

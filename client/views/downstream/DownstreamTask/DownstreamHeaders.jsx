@@ -48,11 +48,21 @@ const DownstreamFixedChunk = ({
   const isDone = ck.completedAt ? true : false;
   const pt = pCache.find( x => x.batchID === ck.batchID );
   
-  //const bInfo = bCache ? bCache.find( x => x.batch === ck.batch) : false;
-  //const what = !bInfo ? 'unavailable' : bInfo.isWhat.join(' ');
-  //const highG = bInfo && focusBy ? bInfo.isWhat[0] === focusBy ? '' : 'hide' : '';
-  const whaT = !tBatch ? 'unavailable' : tBatch.isWhat.join(' ');
-  const highG = tBatch && focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
+  let what = 'unavailable';
+  let highG = '';
+  let describe = '';
+  
+  if(!tBatch) {
+    console.log(ck.batch+': NO tBatch');
+    const bInfo = bCache ? bCache.find( x => x.batch === ck.batch) : false;
+    what = !bInfo ? 'unavailable' : bInfo.isWhat.join(' ');
+    describe = bInfo.more;
+    highG = bInfo && focusBy ? bInfo.isWhat[0] === focusBy ? '' : 'hide' : '';
+  }else{
+    what = !tBatch ? 'unavailable' : tBatch.isWhat.join(' ');
+    describe = tBatch.describe;
+    highG = tBatch && focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
+  }
   
   isDebug && console.log(ck.batch+'='+ck.batchID);
   
@@ -67,8 +77,8 @@ const DownstreamFixedChunk = ({
         showLess={true}
       />
       <div><ExploreLinkBlock type='batch' keyword={ck.batch} wrap={false} /></div>
-      <div title={tBatch.describe}
-        >{whaT.length <= 75 ? whaT : whaT.substring(0, 75) + '...'}</div>
+      <div title={describe}
+        >{what.length <= 75 ? what : what.substring(0, 75) + '...'}</div>
     </div>
   );
 };

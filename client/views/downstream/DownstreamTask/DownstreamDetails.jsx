@@ -60,15 +60,19 @@ const DownstreamScrollChunk = ({
             `${min2hr(q2t)} hours remain` :
             'remaining time unknown';
   
-  //const bInfo = focusBy && bCache ? bCache.find( x => x.batch === ck.batch) : false;
-  //const highG = bInfo ? bInfo.isWhat[0] === focusBy ? '' : 'hide' : '';
-  const highG = tBatch && focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
+  let highG = '';
+  if(!tBatch) {
+    const bInfo = bCache ? bCache.find( x => x.batch === ck.batch) : false;
+    highG = bInfo && focusBy ? bInfo.isWhat[0] === focusBy ? '' : 'hide' : '';
+  }else{
+    highG = tBatch && focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
+  }
   
   const ac = acCache.find( x => x.batchID === ck.batchID );
   
   //const releasedToFloor = oB.releases.findIndex( 
     //                      x => x.type === 'floorRelease') >= 0;
-  const releasedToFloor = tBatch.onFloor;
+  const releasedToFloor = tBatch ? tBatch.onFloor : false;
   
   return(
     <div className={`downRowScroll ${highG}`}>

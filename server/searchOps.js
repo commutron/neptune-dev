@@ -194,7 +194,7 @@ Meteor.methods({
   	    bsMatch.map((ent, ix)=>{
   	      const same = iB.shortfall.filter( s => s.partNum === ent[3] );
   	      const locations = [].concat(...Array.from(same, sm => sm.refs));
-  	      ent.push(_.uniq(locations).join(","), locations.length);
+  	      ent.push(_.uniq(locations).join(", "), locations.length);
   	      sMatch.push(ent);
   	    });
       }

@@ -111,7 +111,6 @@ const OverviewWrap = ({
   const [ updateTrigger, updateTriggerSet ] = useState(true);
   
   useEffect( ()=>{
-    Meteor.call('updateLiveMovement');
     Meteor.call('REQUESTcacheUpdate', 
       false, // batchUp
       true, // priorityUp
@@ -120,6 +119,7 @@ const OverviewWrap = ({
       false, // compUp
     ()=>{
       loadTimeSet( moment() );
+      Meteor.call('updateLiveMovement');
     });
   }, [b, bx, updateTrigger]);
   

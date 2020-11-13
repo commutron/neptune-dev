@@ -31,9 +31,14 @@ const MonthTrend = ({ app, isDebug })=>{
   const [ dataQ, dataSetQ ] = useState( blank );
               
   useEffect( ()=>{
+    // const dur = parseInt( moment.duration(
+    //                         moment().diff(moment(app.createdAt)))
+    //                         .asMonths(), 10 );
+        // preformace issues                    
     const dur = parseInt( moment.duration(
-                            moment().diff(moment(app.createdAt)))
+                            moment().diff(moment(app.tideWall)))
                             .asMonths(), 10 );
+                            
     durrSet( dur );
     Meteor.call('cycleWeekRate', 'doneBatch', dur, 'month', (err, re)=>{
       err && console.log(err);
