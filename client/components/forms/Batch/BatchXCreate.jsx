@@ -34,14 +34,19 @@ const BXCreateForm = ({ groupId, widgetId, versionKey, allVariants })=> {
     const vKey = this.vrsn.value;
     const batchNum = this.oNum.value.trim().toLowerCase();
     const salesNum = this.soNum.value.trim().toLowerCase();
+    
     const startDate = this.sDate.value;
+    const corStart = moment(startDate).startOf('day').format();
+    
     const endDate = this.eDate.value;
+    const corEnd = moment(endDate).endOf('day').format();
+    
     const quantity = this.quant.value.trim().toLowerCase();
     const quoteTimeInput = this.hourNum.value;
 
     Meteor.call('addBatchX', 
       batchNum, groupId, widgetId, vKey, 
-      salesNum, startDate, endDate, 
+      salesNum, corStart, corEnd,
       quantity, quoteTimeInput,
       (error, reply)=>{
         if(error) {

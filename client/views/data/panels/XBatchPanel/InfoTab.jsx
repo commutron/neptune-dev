@@ -103,7 +103,7 @@ const InfoTab = ({
               isX={true}
               end={b.salesEnd}
               app={a}
-              lock={b.complete}
+              lock={b.completed === true && !isDebug}
               isDebug={isDebug} />
           </div>
           

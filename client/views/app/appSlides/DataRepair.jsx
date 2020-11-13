@@ -79,8 +79,15 @@ const DataRepair = ({ app, users })=> {
   }
   */
   
+  function upgradeSaleEnd() {
+    Meteor.call('dateObjBatchUPGRADE', (error, re)=>{
+      error && console.log(error);
+      re && toast.success('method complete', { autoClose: false });
+    });
+  }
+  
   function runTraceMinify() {
-    Meteor.call('rebuildLatestTrace', true, (error, re)=>{
+    Meteor.call('rebuildTrace', (error, re)=>{
       error && console.log(error);
       re && toast.success('method complete', { autoClose: false });
     });
@@ -177,7 +184,16 @@ const DataRepair = ({ app, users })=> {
       <button
         onClick={()=>runTraceMinify()}
         className='action clear purpleT'
-      >Run Minify</button>
+      >FORCE Run TraceDB Rebuild</button>
+      
+      <hr />
+      
+      <h2 className='cap'>Build TraceDB</h2>
+      <button
+        onClick={()=>upgradeSaleEnd()}
+        className='action clear purpleT'
+      >Run Date Object Upgrade</button>
+
       
       <hr />
       

@@ -137,33 +137,67 @@ function checkMovement(bData, accessKey) {
 Meteor.methods({
 
   
-  rebuildLatestTrace(force) {
-    const accessKey = Meteor.user().orgKey;
-    const timeOut = force ? 0 : 12;
-    const stale = moment().subtract(timeOut, 'hours').toISOString();
-    
-    BatchDB.find({orgKey: accessKey})
-            .forEach( (b)=> {
-              const t = TraceDB.findOne({
-                batchID: b._id, 
-                lastUpserted: { $gte: new Date(stale) }
-              });
-              if(!t) {
+  rebuildTrace() {
+    this.unblock();
+    try {
+      const accessKey = Meteor.user().orgKey;
+      
+      BatchDB.find({orgKey: accessKey})
+              .forEach( (b)=> {
                 shrinkWhole( b, accessKey );
-              }
-            });
-    
-    XBatchDB.find({orgKey: accessKey})
-              .forEach( (x)=> {
-                const t = TraceDB.findOne({
-                  batchID: x._id, 
-                  lastUpserted: { $gte: new Date(stale) }
-                });
-                if(!t) {
-                  shrinkWhole( x, accessKey );
-                }
               });
-    return true;
+      
+      XBatchDB.find({orgKey: accessKey})
+                .forEach( (x)=> {
+                  shrinkWhole( x, accessKey );
+                });
+      return true;
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  
+  rebuildOpenTrace() {
+    this.unblock();
+    try {
+      const accessKey = Meteor.user().orgKey;
+      const ystrday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date);
+      const lstweek = ( d => new Date(d.setDate(d.getDate()-7)) )(new Date);
+      
+      const fresh = moment().subtract(12, 'hours').toISOString();
+      
+      BatchDB.find({orgKey: accessKey,
+                      $or: [ { live: true }, 
+                             { finishedAt: { $gte: lstweek } },
+                             { end: { $gte: ystrday } }
+                           ]
+      }).forEach( (b)=> {
+          const t = TraceDB.findOne({
+            batchID: b._id, 
+            lastUpserted: { $gte: new Date(fresh) }
+          });
+          if(!t) {
+            shrinkWhole( b, accessKey );
+          }
+      });
+      
+      XBatchDB.find({orgKey: accessKey,
+                      $or: [ { live: true }, 
+                             { completedAt: { $gte: lstweek } },
+                             { salesEnd: { $gte: ystrday } }
+                           ]
+      }).forEach( (x)=> {
+          const t = TraceDB.findOne({
+            batchID: x._id, 
+            lastUpserted: { $gte: new Date(fresh) }
+          });
+          if(!t) {
+            shrinkWhole( x, accessKey );
+          }
+      });
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
   },
   
   rebuildOneTrace(bID) {
@@ -188,39 +222,46 @@ Meteor.methods({
   
   
   updateLiveMovement() {
-    const accessKey = Meteor.user().orgKey;
-    const fresh = moment().subtract(5, 'minutes').toISOString();
-    const stale = moment().subtract(7, 'days').toISOString();
-    
-    BatchDB.find({orgKey: accessKey,
-                    $or: [ { live: true }, 
-                           { finishedAt: { $gte: new Date(stale) } }
-                    // { end: { $gte: new Date() } } not saved as Date()
-                         ]
-    }).forEach( (b)=> {
-        const t = TraceDB.findOne({
-          batchID: b._id, 
-          lastUpdated: { $gte: new Date(fresh) }
+    this.unblock();
+    try {
+      const accessKey = Meteor.user().orgKey;
+      const ystrday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date);
+      const lstweek = ( d => new Date(d.setDate(d.getDate()-7)) )(new Date);
+      const fresh = moment().subtract(5, 'minutes').toISOString();
+      
+      BatchDB.find({orgKey: accessKey,
+                      $or: [ { live: true }, 
+                             { finishedAt: { $gte: lstweek } },
+                             { end: { $gte: ystrday } }
+                           ]
+      }).forEach( (b)=> {
+          const t = TraceDB.findOne({
+            batchID: b._id, 
+            lastUpdated: { $gte: new Date(fresh) }
+          });
+          if(!t) {
+            checkMovement( b, accessKey );
+          }
         });
-        if(!t) {
-          checkMovement( b, accessKey );
-        }
-      });
-    
-    XBatchDB.find({orgKey: accessKey, 
-                    $or: [ { live: true }, 
-                           { completedAt: { $gte: new Date(stale) } }
-                    // { salesEnd: { $gte: new Date() } } not saved as Date()
-                         ]
-    }).forEach( (x)=> {
-        const t = TraceDB.findOne({
-          batchID: x._id, 
-          lastUpdated: { $gte: new Date(fresh) }
+      
+      XBatchDB.find({orgKey: accessKey, 
+                      $or: [ { live: true }, 
+                             { completedAt: { $gte: lstweek } },
+                             { salesEnd: { $gte: ystrday } }
+                           ]
+      }).forEach( (x)=> {
+          const t = TraceDB.findOne({
+            batchID: x._id, 
+            lastUpdated: { $gte: new Date(fresh) }
+          });
+          if(!t) {
+            checkMovement( x, accessKey );
+          }
         });
-        if(!t) {
-          checkMovement( x, accessKey );
-        }
-      });
+      
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
   }
   
   

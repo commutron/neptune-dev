@@ -42,10 +42,13 @@ const BXEditForm = ({
     const vKey = this.vrsn.value;
     const batchNum = this.oNum.value.trim().toLowerCase();
     const salesNum = this.soNum.value.trim().toLowerCase();
+    
     const startDate = this.sDate.value;
+    const corStart = moment(startDate).startOf('day').format();
+
     const quantity = this.quant.value.trim().toLowerCase();
 
-    Meteor.call('editBatchX', batchId, batchNum, vKey, salesNum, startDate, quantity, (error, reply)=>{
+    Meteor.call('editBatchX', batchId, batchNum, vKey, salesNum, corStart, quantity, (error, reply)=>{
       if(error) {
         console.log(error);
         toast.error('Server Error');
@@ -120,7 +123,7 @@ const BXEditForm = ({
         <input
           type='date'
           id='sDate'
-          defaultValue={eS}
+          defaultValue={moment(eS).format('YYYY-MM-DD')}
           pattern='[0-9]{4}-[0-9]{2}-[0-9]{2}'
           required 
         /></label>
@@ -129,7 +132,7 @@ const BXEditForm = ({
         <input
           type='date'
           id='eDate'
-          defaultValue={eE}
+          defaultValue={moment(eE).format('YYYY-MM-DD')}
           pattern='[0-9]{4}-[0-9]{2}-[0-9]{2}'
           disabled={true}
         /></label>

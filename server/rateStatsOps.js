@@ -305,7 +305,8 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
 Meteor.methods({
   
   
-  cycleWeekRate(stat, cycles, bracket) {////
+  cycleWeekRate(stat, cycles, bracket) {
+    this.unblock();
     try {
       let loop = false;
       

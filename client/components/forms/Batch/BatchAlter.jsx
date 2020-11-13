@@ -33,8 +33,9 @@ const AlterFulfillForm = ({ batchId, isX, end, app, selfclose })=> {
     e.preventDefault();
     
     const callMthd = !isX ? 'alterBatchFulfill' : 'alterBatchXFulfill';
+    const correctedEnd = moment(endDateState).endOf('day').format();
     
-    Meteor.call(callMthd, batchId, end, endDateState, reasonState, (error, reply)=>{
+    Meteor.call(callMthd, batchId, end, correctedEnd, reasonState, (error, reply)=>{
       if(error) {
         console.log(error);
         toast.error('Server Error');
@@ -75,7 +76,7 @@ const AlterFulfillForm = ({ batchId, isX, end, app, selfclose })=> {
           type='date'
           id='eDate'
           className='numberSet'
-          defaultValue={end}
+          defaultValue={moment(end).format('YYYY-MM-DD')}
           onChange={(e)=>endDateSet(e.target.value)}
           required 
         /></label>

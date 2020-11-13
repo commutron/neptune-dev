@@ -74,7 +74,7 @@ const GeneralChunk = ({
             batchId={b._id}
             end={b.end}
             app={a}
-            lock={b.finishedAt !== false}
+            lock={b.finishedAt !== false && !isDebug}
             isDebug={isDebug} />
         </div>
         

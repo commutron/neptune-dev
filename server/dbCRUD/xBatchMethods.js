@@ -32,8 +32,8 @@ Meteor.methods({
   			updatedWho: Meteor.userId(),
   			live: true,
   			salesOrder: salesNum,
-  			salesStart: sDate,
-  			salesEnd: eDate,
+  			salesStart: new Date(sDate),
+  			salesEnd: new Date(eDate),
   			quoteTimeBudget: [{
           updatedAt: new Date(),
           timeAsMinutes: qTimeNum
@@ -97,7 +97,7 @@ Meteor.methods({
     if(auth) {
       XBatchDB.update({_id: batchId, orgKey: accessKey}, {
         $set : {
-          salesEnd: newDate,
+          salesEnd: new Date(newDate),
         }});
       XBatchDB.update({_id: batchId, orgKey: accessKey}, {
         $push : {

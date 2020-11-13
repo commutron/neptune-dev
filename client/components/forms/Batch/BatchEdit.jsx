@@ -1,5 +1,5 @@
 import React from 'react';
-//import moment from 'moment';
+import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
@@ -19,9 +19,10 @@ const BatchEdit = ({
     const batchNum = e.target.oNum.value.trim().toLowerCase();
     const salesNum = e.target.soNum.value.trim().toLowerCase();
     const startDate = e.target.sDate.value;
+    const corStart = moment(startDate).startOf('day').format();
 
     Meteor.call('editBatch', 
-      batchId, batchNum, vKey, salesNum, startDate, 
+      batchId, batchNum, vKey, salesNum, corStart, 
       (error, reply)=>{
         if(error) {
           console.log(error);
@@ -101,7 +102,7 @@ const BatchEdit = ({
             type='date'
             id='sDate'
             className='numberSet'
-            defaultValue={start}
+            defaultValue={moment(start).format('YYYY-MM-DD')}
             pattern='[0-9]{4}-[0-9]{2}-[0-9]{2}'
             required 
           /></label>
@@ -110,7 +111,7 @@ const BatchEdit = ({
             type='date'
             id='eDate'
             className='numberSet'
-            defaultValue={end}
+            defaultValue={moment(end).format('YYYY-MM-DD')}
             disabled={true}
             required 
           /></label>

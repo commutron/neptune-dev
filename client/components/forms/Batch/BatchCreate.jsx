@@ -17,8 +17,12 @@ const BatchCreate = ({ widgetId, versionKey, allVariants, lock })=> {
     const vKey = e.target.vrsn.value;
     const batchNum = e.target.oNum.value.trim().toLowerCase();
     const salesNum = e.target.soNum.value.trim().toLowerCase();
+    
     const startDate = e.target.sDate.value;
+    const corStart = moment(startDate).startOf('day').format();
+    
     const endDate = e.target.eDate.value;
+    const corEnd = moment(endDate).endOf('day').format();
     
     const quoteTimeInput = e.target.hourNum.value;
     const inHours = parseFloat( quoteTimeInput );
@@ -26,7 +30,7 @@ const BatchCreate = ({ widgetId, versionKey, allVariants, lock })=> {
     const quoteTime = isNaN(inMinutes) ? false : inMinutes;
     
     Meteor.call('addBatch', 
-      batchNum, wId, vKey, salesNum, startDate, endDate, quoteTime,
+      batchNum, wId, vKey, salesNum, corStart, corEnd, quoteTime,
       (error, reply)=>{
         if(error) {
           console.log(error);

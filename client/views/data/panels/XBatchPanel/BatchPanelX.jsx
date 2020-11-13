@@ -73,6 +73,7 @@ const BatchPanelX = ({
           user={user}
           b={b}
           done={done}
+          isDebug={isDebug}
         />
       
         

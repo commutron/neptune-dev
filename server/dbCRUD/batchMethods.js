@@ -26,8 +26,8 @@ Meteor.methods({
   			updatedWho: Meteor.userId(),
   			finishedAt: false,
   			salesOrder: salesNum,
-  			start: sDate,
-  			end: eDate,
+  			start: new Date(sDate),
+  			end: new Date(eDate),
   			quoteTimeBudget: [{
           updatedAt: new Date(),
           timeAsMinutes: qTimeNum
@@ -88,7 +88,7 @@ Meteor.methods({
     if(auth) {
       BatchDB.update({_id: batchId, orgKey: accessKey}, {
         $set : {
-          end: newDate,
+          end: new Date(newDate),
         }});
       BatchDB.update({_id: batchId, orgKey: accessKey}, {
         $push : {

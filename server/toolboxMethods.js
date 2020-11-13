@@ -1,3 +1,4 @@
+import moment from 'moment';
 
 Meteor.methods({
 
@@ -149,6 +150,40 @@ Meteor.methods({
     }
   },
   
+  dateObjBatchUPGRADE() {
+    if(!Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      return false;
+    }else{
+      const allBatches = BatchDB.find({}).fetch();
+      for(let batch of allBatches) {
+        const salesStart = moment(batch.start).startOf('day').format();
+        const salesEnd = moment(batch.end).endOf('day').format();
+        BatchDB.update({_id: batch._id}, {
+    			$set : { 
+    			  start: new Date(salesStart),
+    			  end: new Date(salesEnd)
+    			}
+    		});
+      }
+      const allXBatches = XBatchDB.find({}).fetch();
+      for(let xbatch of allXBatches) {
+        const salesStartX = moment(xbatch.salesStart).startOf('day').format();
+        const salesEndX = moment(xbatch.salesEnd).endOf('day').format();
+        XBatchDB.update({_id: xbatch._id}, {
+    			$set : { 
+    			  salesStart: new Date(salesStartX),
+    			  salesEnd: new Date(salesEndX)
+    			}
+    		});
+    		XBatchDB.update({_id: xbatch._id}, {
+    			$unset : { 
+    			  end: ''
+    			}
+    		});
+      }
+      return true;
+    }
+  },
   
   repairNonConsDANGEROUS(oldText, newText, exact) {
     if(!Roles.userIsInRole(Meteor.userId(), 'admin')) {
