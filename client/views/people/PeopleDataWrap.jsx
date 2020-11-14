@@ -63,7 +63,7 @@ const PeopleDataWrap = ({
       <div className='simpleContent'>
       
         <Slides
-          menu={[           // satellite-dish
+          menu={[
             <b><i className='fas fa-walking fa-fw'></i>  Current</b>,
             <b><i className='fas fa-history fa-fw'></i>  Daily History</b>,
             <b><i className='fas fa-tachometer-alt fa-fw'></i>  Weekly Metrics</b>,
@@ -71,7 +71,7 @@ const PeopleDataWrap = ({
             <b><i className='fas fa-user-lock fa-fw'></i>  Permissions</b>,
             <b><i className='fas fa-users-cog fa-fw'></i>   Account Manager</b>,
           ]}
-          disable={[false, false, false, antiAuth, false, antiAuth]}>
+          disable={[false, false, false, false, false, antiAuth]}>
           
           <DashSlide
             key={0}
@@ -101,13 +101,13 @@ const PeopleDataWrap = ({
             brancheS={brancheS}
             isDebug={isDebug} />
             
-          {!antiAuth &&
-            <ScheduleSlide
-              key={3}
-              app={app}
-              user={user}
-              users={users} />
-          }
+          <ScheduleSlide
+            key={3}
+            app={app}
+            user={user}
+            users={users}
+            isAdmin={isAdmin}
+            isPeopleSuper={isPeopleSuper} />
           
           <div key={4}>
             <PermissionHelp auths={Pref.auths} admin={false} />
