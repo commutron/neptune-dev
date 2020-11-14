@@ -114,7 +114,7 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
       }else{
         doneOnTime++;
       }
-      const q = checkTimeBudget(gf.tide, gf.quoteTimeBudget);
+      const q = checkTimeBudget(gf.tide, gf.quoteTimeBudget, gf.lockTrunc);
       if( !q ) {
         null;
       }else if(q < 0) {
@@ -142,7 +142,7 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
       }else{
         doneOnTime++;
       }
-      const qx = checkTimeBudget(gfx.tide, gfx.quoteTimeBudget);
+      const qx = checkTimeBudget(gfx.tide, gfx.quoteTimeBudget, gfx.lockTrunc);
       if( !qx ) {
         null;
       }else if(qx < 0) {

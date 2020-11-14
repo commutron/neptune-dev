@@ -66,7 +66,8 @@ const InfoTab = ({
               finished={done}
               finishedAt={b.finishedAt} 
               allFinished={allDone}
-              live={b.live} />
+              live={b.live}
+              bLock={b.lock} />
           
         </div>
         

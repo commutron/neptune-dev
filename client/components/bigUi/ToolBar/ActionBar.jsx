@@ -120,12 +120,14 @@ const ActionBar = ({
           end={app.lastTrack}
           app={app}
           user={user}
-          ncTypesCombo={ncTypesCombo || []} />
+          ncTypesCombo={ncTypesCombo || []}
+          lockOut={batchData.lock} />
         <NCEscape
           id={batchData._id}
           user={user}
           nons={app.nonConOption}
-          ncTypesCombo={ncTypesCombo || []} />
+          ncTypesCombo={ncTypesCombo || []}
+          lockOut={batchData.lock} />
         <RemoveBatch
           title={batchData.batch}
           check={batchData.createdAt.toISOString()}

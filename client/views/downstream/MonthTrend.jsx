@@ -31,11 +31,12 @@ const MonthTrend = ({ app, isDebug })=>{
   const [ dataQ, dataSetQ ] = useState( blank );
               
   useEffect( ()=>{
-    // const dur = parseInt( moment.duration(
-    //                         moment().diff(moment(app.createdAt)))
-    //                         .asMonths(), 10 );
-        // preformace issues                    
-    const dur = parseInt( moment.duration(
+    const dur = isDebug ?
+                  parseInt( moment.duration(
+                            moment().diff(moment(app.createdAt)))
+                            .asMonths(), 10 )
+                :
+                  parseInt( moment.duration(
                             moment().diff(moment(app.tideWall)))
                             .asMonths(), 10 );
                             

@@ -1,5 +1,6 @@
 import moment from 'moment';
-import { batchCacheUpdate} from '/server/cacheMethods.js';
+import { batchCacheUpdate } from '/server/cacheMethods.js';
+import { batchTideTime } from '/server/tideGlobalMethods';
 
 Meteor.methods({
 
@@ -49,6 +50,7 @@ Meteor.methods({
       Meteor.defer( ()=>{
         batchCacheUpdate( accessKey, true );
         Meteor.call('priorityCacheUpdate', accessKey, true);
+        Meteor.call('buildNewTrace');
       });
       return true;
     }else{
@@ -74,7 +76,8 @@ Meteor.methods({
   			  updatedWho: Meteor.userId()
         }});
       Meteor.defer( ()=>{
-        Meteor.call('batchCacheUpdate', accessKey, true);
+        batchCacheUpdate( accessKey, true);
+        Meteor.call('updateOneMinify', batchId);
       });
       return true;
     }else{
@@ -103,6 +106,7 @@ Meteor.methods({
         }});
       Meteor.defer( ()=>{
         Meteor.call('priorityCacheUpdate', accessKey, true);
+        Meteor.call('updateOneMovement', batchId);
       });
       return true;
     }else{
@@ -143,6 +147,54 @@ Meteor.methods({
             newValue: txtNew
           }
       }});
+      Meteor.defer( ()=>{
+        Meteor.call('updateOneMovement', batchId);
+        if(status === true) {
+          Meteor.call('disableLock', batchId);
+        }
+      });
+    }else{null}
+  },
+  
+  enableLock(batchId) {
+    const doc = BatchDB.findOne({_id: batchId});
+    const clear = doc.live === false && doc.finishedAt !== false &&
+                    doc.end < new Date() && doc.cascade.length === 0;
+    if(Roles.userIsInRole(Meteor.userId(), 'run') && clear) {
+      let totalUnits = 0;
+      let scrapUnits = 0;
+      for(let i of doc.items) {
+        totalUnits += i.units;
+        const sc = i.history.find(s => s.type === 'scrap' && s.good === true);
+        !sc ? null : scrapUnits += i.units;
+      }
+      const tTime = !doc.tide ? 0 : batchTideTime(doc.tide);
+      const ncTypes = Meteor.call('nonConSelfCount', doc.nonCon);
+    
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+  			$set : {
+  			  lock: true,
+  			  lockTrunc: {
+  			    lockedAt: new Date(),
+  			    unitQuantity: Number(totalUnits),
+  			    scrapQuantity: Number(scrapUnits),
+  			    tideTotal: Number(tTime),
+  			    ncTypes: ncTypes
+  			  }
+        }
+      });
+    }else{null}
+  },
+  
+  disableLock(batchId) {
+    const doc = BatchDB.findOne({_id: batchId});
+    const locked = doc.lock === true;
+    if(Roles.userIsInRole(Meteor.userId(), 'run') && locked) {
+      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+  			$set : {
+  			  lock: false
+        }
+      });
     }else{null}
   },
   

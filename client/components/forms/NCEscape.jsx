@@ -42,7 +42,7 @@ const NCEscape = (props)=> {
       title={'record escaped ' + Pref.nonCon}
       color='orangeT'
       icon='fa-bug'
-      lock={true}//!Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])}
+      lock={true}//!Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])} || props.lockOut
       noText={props.noText}>
       <div className='centre'>
         <br />

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 //import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
@@ -13,6 +13,20 @@ const BatchXStatus = ({ batchData })=>	{
     });
   };
   
+  function handleLock(e) {
+    this.doLock.disabled = true;
+    Meteor.call('enableLockX', batchData._id, (error)=>{
+      error && console.log(error);
+    });
+  }
+  function handleUnLock(e) {
+    this.doUnLock.disabled = true;
+    Meteor.call('disableLockX', batchData._id, (error)=>{
+      error && console.log(error);
+    });
+  }
+  
+  const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
   const isRun = Roles.userIsInRole(Meteor.userId(), 'run');
   
   if(batchData.waterfall.length === 0) {
@@ -27,6 +41,7 @@ const BatchXStatus = ({ batchData })=>	{
         <BatchXComplete batchData={batchData} />
         
         {!batchData.live ?
+          <Fragment>
           <p className='cap middle'>
             <button
               id='isDone'
@@ -37,6 +52,31 @@ const BatchXStatus = ({ batchData })=>	{
             ><i><i className='far fa-lightbulb grayT fa-2x fa-fw'></i></i>
             </button>   {Pref.xBatch} is {Pref.notlive}
           </p>
+            {isAdmin && !batchData.lock &&
+              <p className='cap middle'>
+                <button
+                  id='doLock'
+                  title='Enable Lock'
+                  className='miniAction noFade medBig'
+                  onClick={(e)=>handleLock(e)}
+                  disabled={!isRun}
+                ><i><i className='fas fa-lock-open purpleT fa-2x fa-fw'></i></i>
+                </button>   UnLocked
+              </p>
+            }
+            {isRun && batchData.lock &&
+              <p className='cap middle'>
+                <button
+                  id='doUnLock'
+                  title='Disable Lock'
+                  className='miniAction noFade medBig'
+                  onClick={(e)=>handleUnLock(e)}
+                  disabled={!isRun}
+                ><i><i className='fas fa-lock purpleT fa-2x fa-fw'></i></i>
+                </button>   Locked
+              </p>
+            }
+          </Fragment>
         :
           <p className='cap middle'>
             <button

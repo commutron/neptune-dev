@@ -157,6 +157,35 @@ Meteor.methods({
     }
   },
   
+  buildNewTrace() {
+    this.unblock();
+    try {
+      const accessKey = Meteor.user().orgKey;
+      const ystrday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date);
+      
+      BatchDB.find({ createdAt: { $gte: ystrday } }).forEach( (b)=> {
+          const t = TraceDB.findOne({ batchID: b._id });
+          if(!t) { shrinkWhole( b, accessKey ) }
+      });
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  buildNewTraceX() {
+    this.unblock();
+    try {
+      const accessKey = Meteor.user().orgKey;
+      const ystrday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date);
+      
+      XBatchDB.find({ createdAt: { $gte: ystrday } }).forEach( (x)=> {
+          const t = TraceDB.findOne({ batchID: x._id });
+          if(!t) { shrinkWhole( x, accessKey ) }
+      });
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  
   rebuildOpenTrace() {
     this.unblock();
     try {
@@ -218,6 +247,16 @@ Meteor.methods({
     
     XBatchDB.find({_id: bID})
               .forEach( (x)=> checkMinify( x, accessKey ) );
+  },
+  
+  updateOneMovement(bID) {
+    const accessKey = Meteor.user().orgKey;
+    
+    BatchDB.find({_id: bID})
+            .forEach( (b)=> checkMovement( b, accessKey ) );
+    
+    XBatchDB.find({_id: bID})
+              .forEach( (x)=> checkMovement( x, accessKey ) );
   },
   
   

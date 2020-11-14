@@ -29,6 +29,7 @@ const BatchEdit = ({
           toast.error('Server Error');
         }
         if(reply) {
+          toast.success('Saved');
           FlowRouter.go('/data/batch?request=' + batchNum);
         }else{
           toast.warning('Duplicate');

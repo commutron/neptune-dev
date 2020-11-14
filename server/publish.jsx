@@ -429,12 +429,14 @@ Meteor.publish('hotDataPlus', function(batch){
           'orgKey': 0,
           'shareKey': 0,
           'events': 0,
-          'floorRelease': 0
+          'floorRelease': 0,
+          'lockTrunc': 0
         }}),
       XBatchDB.find({batch: batch, orgKey: orgKey}, {
         fields: {
           'orgKey': 0,
-          'shareKey': 0
+          'shareKey': 0,
+          'lockTrunc': 0
         }}),
       WidgetDB.find({_id: wID, orgKey: orgKey}, {
         fields: {
@@ -589,12 +591,14 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
           fields: {
             'orgKey': 0,
             'shareKey': 0,
-            'floorRelease': 0
+            'floorRelease': 0,
+            'lockTrunc': 0
           }}),
         XBatchDB.find({batch: dataRequest, orgKey: orgKey}, {
           fields: {
             'orgKey': 0,
-            'shareKey': 0
+            'shareKey': 0,
+            'lockTrunc': 0
         }})
       ];
     }

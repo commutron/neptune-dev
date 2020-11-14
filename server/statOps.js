@@ -101,7 +101,18 @@ Meteor.methods({
       quantity: x.quantity,
     }});
     return { batchInfo, batchInfoX, variants };
-  }
+  },
   
+  nonConSelfCount(nonConCol) {
+    const nonConClean = nonConCol.filter( x => !x.trash );
+    const typeObj = _.countBy(nonConClean, x => x.type);
+    const typeObjClean = _.omit(typeObj, (value, key, object)=> {
+      return key == false;
+    });
+
+    const itr = Object.entries(typeObjClean);
+    const typeArr = Array.from(itr, (arr)=> { return {type: arr[0], count: arr[1]} } );
+    return typeArr;
+  }
   
 });

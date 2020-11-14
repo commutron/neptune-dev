@@ -12,7 +12,8 @@ const RMAForm = ({
   id, editObj, 
   trackOptions, end,
   app, user,
-  ncTypesCombo 
+  ncTypesCombo,
+  lockOut
 })=> {
   
   const [ flowState, flowSet ] = useState(false);
@@ -130,7 +131,7 @@ const RMAForm = ({
       title={title}
       color='orangeT'
       icon='fa-exchange-alt'
-      lock={!Roles.userIsInRole(Meteor.userId(), 'qa')}>
+      lock={!Roles.userIsInRole(Meteor.userId(), 'qa') || lockOut}>
       <div className='space'>
         <form
           id='rmaSave'

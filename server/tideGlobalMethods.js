@@ -6,30 +6,34 @@ import Config from '/server/hardConfig.js';
 
 import { sc2mn, sc2hr, round2Decimal } from './calcOps';
 
-export function batchTideTime(batchTide) {
+export function batchTideTime(batchTide, lockTrunc) {
     
   if(!batchTide) {
     return undefined;
   }else{
-    let tideTime = 0;
-    for(let bl of batchTide) {
-      const mStart = moment(bl.startTime);
-      const mStop = !bl.stopTime ? moment() : moment(bl.stopTime);
-      const block = moment.duration(mStop.diff(mStart)).asSeconds();
-      tideTime = tideTime + block;
-    }
-    if( !tideTime || typeof tideTime !== 'number' ) {
-      return false;
+    if(typeof lockTrunc === 'object') {
+      return lockTrunc.tideTotal;
     }else{
-      const cleanTime = sc2mn(tideTime);
-      return cleanTime;
+      let tideTime = 0;
+      for(let bl of batchTide) {
+        const mStart = moment(bl.startTime);
+        const mStop = !bl.stopTime ? moment() : moment(bl.stopTime);
+        const block = moment.duration(mStop.diff(mStart)).asSeconds();
+        tideTime = tideTime + block;
+      }
+      if( !tideTime || typeof tideTime !== 'number' ) {
+        return false;
+      }else{
+        const cleanTime = sc2mn(tideTime);
+        return cleanTime;
+      }
     }
   }
 }
 
-function getTvals(tide, quoteTimeBudget) {
+function getTvals(tide, quoteTimeBudget, lockTrunc) {
   if(quoteTimeBudget) {
-    const totalTideMinutes = batchTideTime(tide);
+    const totalTideMinutes = batchTideTime(tide, lockTrunc);
     
     const qtB = quoteTimeBudget.length > 0 ? 
                 quoteTimeBudget[0].timeAsMinutes : 0;
@@ -42,9 +46,9 @@ function getTvals(tide, quoteTimeBudget) {
   }
 }
 
-export function checkTimeBudget(tide, quoteTimeBudget) {
+export function checkTimeBudget(tide, quoteTimeBudget, lockTrunc) {
   
-  const tVq = getTvals(tide, quoteTimeBudget);
+  const tVq = getTvals(tide, quoteTimeBudget, lockTrunc);
     
   const quote2tide = !tVq ? null : tVq[1] - tVq[0];
   
