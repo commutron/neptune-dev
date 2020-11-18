@@ -7,7 +7,7 @@ import {
 } from '/client/components/smallUi/ToolBarTools';
 
 const OverviewTools = ({
-  app, bCache, brancheS, loadTimeUP,
+  app, traceDT, brancheS, loadTimeUP,
   filterByUP, changeFilterUP,
   focusByUP, changeFocusByUP,
   sortByUP, changeSortUP, 
@@ -15,52 +15,58 @@ const OverviewTools = ({
   denseUP, denseSetUP,
   lightUP, themeSetUP,
   doThing
-})=> (
-  <nav className='overviewToolbar gridViewTools'>
-    
-    <BranchFilterSelect
-      brancheS={brancheS}
-      filterState={filterByUP}
-      changeFunc={changeFilterUP}
-    />
-    
-    <SortSelect
-      sortState={sortByUP}
-      changeFunc={changeSortUP}
-    />
-    
-    <FocusSelect
-      bCacheData={bCache.dataSet}
-      focusState={focusByUP}
-      changeFunc={changeFocusByUP}
-    />
-    
-    <span>
-      <button
-        key='ghostToggle'
-        title='Toggle In Kitting'
-        onClick={()=>ghostSetUP(!ghostUP)}
-        className={!ghostUP ? 'liteToolOff' : 'liteToolOn'}
-        style={{'cursor':'pointer'}}
-      ><i className='fas fa-history fa-fw' 
-          data-fa-transform="flip-h"
-        ></i>
-      </button>
-    </span>
+})=> {
+  const gList = _.uniq( Array.from(traceDT, g =>
+                          !g.isWhat[0].startsWith('.') && g.isWhat[0] ))
+                            .filter( f => f ).sort();
+                                
+  return(
+    <nav className='overviewToolbar gridViewTools'>
       
-    <LayoutSwitch
-      denseState={denseUP}
-      changeFunc={denseSetUP}
-    />
+      <BranchFilterSelect
+        brancheS={brancheS}
+        filterState={filterByUP}
+        changeFunc={changeFilterUP}
+      />
+      
+      <SortSelect
+        sortState={sortByUP}
+        changeFunc={changeSortUP}
+      />
+      
+      <FocusSelect
+        gList={gList}
+        focusState={focusByUP}
+        changeFunc={changeFocusByUP}
+      />
     
-    <ThemeSwitch
-      themeState={lightUP}
-      changeFunc={themeSetUP}
-    />
-    
-    <span className='flexSpace' />
-    <ClockString loadTime={loadTimeUP} doThing={doThing} />
-  </nav>
-);
+      <span>
+        <button
+          key='ghostToggle'
+          title='Toggle In Kitting'
+          onClick={()=>ghostSetUP(!ghostUP)}
+          className={!ghostUP ? 'liteToolOff' : 'liteToolOn'}
+          style={{'cursor':'pointer'}}
+        ><i className='fas fa-history fa-fw' 
+            data-fa-transform="flip-h"
+          ></i>
+        </button>
+      </span>
+        
+      <LayoutSwitch
+        denseState={denseUP}
+        changeFunc={denseSetUP}
+      />
+      
+      <ThemeSwitch
+        themeState={lightUP}
+        changeFunc={themeSetUP}
+      />
+      
+      <span className='flexSpace' />
+      <ClockString loadTime={loadTimeUP} doThing={doThing} />
+    </nav>
+  );
+};
 
 export default OverviewTools;

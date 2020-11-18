@@ -172,76 +172,6 @@ function collectBranchCondition(privateKey, batchID) {
   });
 }
 
-function collectStatus(privateKey, batchID) {
-  return new Promise(resolve => {
-    let collection = false;
-    
-    const bx = XBatchDB.findOne({_id: batchID});
-    const b = !bx ? BatchDB.findOne({_id: batchID}) : {};
-    
-    const app = AppDB.findOne({orgKey: privateKey});
-    const nonWorkDays = app.nonWorkDays;
-    if( Array.isArray(nonWorkDays) ) {  
-      moment.updateLocale('en', {
-        holidays: nonWorkDays
-      });
-    }
-    
-    const now = moment().tz(Config.clientTZ);
-    
-    if(bx) {
-      const complete = bx.completed; // is it done
-      
-      const shipAim = calcShipDay( now, bx.salesEnd )[1];
-      
-      const timeRemain = !complete ?  // duration between now and ship due
-        shipAim.workingDiff(now, 'day', true) : 0;
-      const timeRemainClean = timeRemain > -1 && timeRemain < 1 ? 
-          timeRemain.toPrecision(1) : Math.round(timeRemain);
-      
-      const riverChosen = bx.river !== false; // River Setup
-      
-      collection = {
-        batch: bx.batch,
-        batchID: bx._id,
-        shipAim: shipAim.format(),
-        weekDaysRemain: timeRemainClean,
-        itemQuantity: bx.quantity,
-        riverChosen: riverChosen
-      };
-      
-      resolve(collection);
-      
-    }else if(b) {
-      const complete = b.finishedAt !== false; // is it done
-      
-      const shipAim = calcShipDay( now, b.end )[1];
-      
-      const timeRemain = !complete ?  // duration between now and ship due
-        shipAim.workingDiff(now, 'day', true) : 0;
-      const timeRemainClean = timeRemain > -1 && timeRemain < 1 ? 
-          timeRemain.toPrecision(1) : Math.round(timeRemain);
-         
-      const itemQuantity = b.items.length; // how many items
-      const riverChosen = b.river !== false; // River Setup
-      
-      collection = {
-        batch: b.batch,
-        batchID: b._id,
-        shipAim: shipAim.format(),
-        weekDaysRemain: timeRemainClean,
-        itemQuantity: itemQuantity,
-        riverChosen: riverChosen
-      };
-
-      resolve(collection);
-      
-    }else{
-      resolve(false);
-    }
-  });
-}
-
 function collectPriority(privateKey, batchID, mockDay) {
   return new Promise(resolve => {
     let collection = false;
@@ -478,19 +408,6 @@ function collectNonCon(privateKey, batchID, temp) {
 
 
 Meteor.methods({
-  
-  overviewBatchStatus(batchID) {
-    async function bundleStatus(batchID) {
-      const accessKey = Meteor.user().orgKey;
-      try {
-        bundle = await collectStatus(accessKey, batchID);
-        return bundle;
-      }catch (err) {
-        throw new Meteor.Error(err);
-      }
-    }
-    return bundleStatus(batchID);
-  },
   
   priorityRank(batchID, serverAccessKey, mockDay) {
     async function bundlePriority() {//batchID, orgKey, mockDay) {

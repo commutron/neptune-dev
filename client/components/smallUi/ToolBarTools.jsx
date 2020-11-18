@@ -39,30 +39,23 @@ export const SortSelect = ({ sortState, changeFunc })=> (
 );
 
 
-export const FocusSelect = ({ bCacheData, focusState, changeFunc })=> {
-  
-  const groupList = _.uniq( Array.from(bCacheData, g =>
-                              !g.isWhat[0].startsWith('.') && g.isWhat[0] ))
-                                .filter( f => f ).sort();
-
-  return(
-    <span>
-      <i className='fas fa-industry fa-fw darkgrayT'></i>
-      <select
-        id='focusSelect'
-        title={`Focus on ${Pref.group}`}
-        className='overToolSort liteToolOn'
-        defaultValue={focusState}
-        onChange={(e)=>changeFunc(e)}>
-        <option value={false}>All {Pref.group}s</option>
-        {groupList.map( (gr, ix)=> {
-          return(
-            <option key={gr+ix}>{gr}</option>
-        )})}
-      </select>
-    </span>
-  );
-};
+export const FocusSelect = ({ gList, focusState, changeFunc })=> (
+  <span>
+    <i className='fas fa-industry fa-fw darkgrayT'></i>
+    <select
+      id='focusSelect'
+      title={`Focus on ${Pref.group}`}
+      className='overToolSort liteToolOn'
+      defaultValue={focusState}
+      onChange={(e)=>changeFunc(e)}>
+      <option value={false}>All {Pref.group}s</option>
+      {gList.map( (gr, ix)=> {
+        return(
+          <option key={gr+ix}>{gr}</option>
+      )})}
+    </select>
+  </span>
+);
 
 
 export const LayoutSwitch = ({ denseState, changeFunc })=> (

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import moment from 'moment';
-// import 'moment-timezone';
 import { ToastContainer } from 'react-toastify';
 // import Pref from '/client/global/pref.js';
 
@@ -15,14 +14,13 @@ import BatchDetails from './columns/BatchDetails';
 
 const OverviewWrap = ({ 
   b, bx, traceDT,
-  bCache, pCache, acCache, brCache, 
+  pCache, 
   user, app, brancheS,
   isDebug, isNightly
 })=> {
   
   const sessionSticky = 'overviewOverview';
   
-  // const [ working, workingSet ] = useState( false );
   const [ loadTime, loadTimeSet ] = useState( moment() );
   
   const sessionFilter = Session.get(sessionSticky+'filter');
@@ -55,7 +53,7 @@ const OverviewWrap = ({
   
   useLayoutEffect( ()=> {
     sortInitial();
-  }, [b, bx, pCache, acCache, brCache, filterBy, sortBy, ghost]);
+  }, [b, bx, pCache, filterBy, sortBy, ghost]);
   
   function changeFilter(e) {
     const value = e.target.value;
@@ -91,22 +89,6 @@ const OverviewWrap = ({
     themeSet( val );
     Session.set(sessionSticky+'lightTheme', val);
   }
-  /*
-  function requestRefresh() {
-    workingSet( true );
-    liveSet( false );
-    Meteor.call('REQUESTcacheUpdate', 
-      false, // batchUp
-      true, // priorityUp
-      true, // activityUp
-      true, // branchConUp
-      false, // compUp
-    ()=>{
-      sortInitial();
-      loadTimeSet( moment() );
-      workingSet( false );
-    });
-  }*/
   
   const [ updateTrigger, updateTriggerSet ] = useState(true);
   
@@ -114,8 +96,8 @@ const OverviewWrap = ({
     Meteor.call('REQUESTcacheUpdate', 
       false, // batchUp
       true, // priorityUp
-      true, // activityUp
-      true, // branchConUp
+      false, // activityUp
+      false, // branchConUp
       false, // compUp
     ()=>{
       loadTimeSet( moment() );
@@ -143,8 +125,9 @@ const OverviewWrap = ({
         }) 
         :
         liveBatches.filter( bbx => {
-          const cB = brCache.dataSet.find( x => x.batchID === bbx._id);
-          const cP = cB && cB.branchSets.find( x => x.branch === filterBy );
+          const tBatch = traceDT.find( t => t.batchID === bbx._id );
+          const tBc = tBatch && tBatch.branchCondition;
+          const cP = tBc && tBc.find( x => x.branch === filterBy );
           const con = cP && cP.condition;
           
           isDebug && console.log(`${bbx.batch}: ${con}`);
@@ -213,21 +196,12 @@ const OverviewWrap = ({
         <div className='frontCenterTitle'
           >Overview<sup className='vbig monoFont'>WIP</sup>
         </div>
-        <div className='auxRight'>
-         {/* <button
-            type='button'
-            title='Refresh Data'
-            className={working ? 'spin2 taskLink' : 'taskLink'}
-            onClick={(e)=>requestRefresh()}>
-          <i className='fas fa-sync-alt'></i>
-          </button> */}
-        </div>
         <TideFollow />
       </div>
       
       <OverviewTools
         app={app}
-        bCache={bCache}
+        traceDT={traceDT}
         brancheS={brancheS}
         loadTimeUP={loadTime}
         focusByUP={focusBy}
@@ -260,7 +234,6 @@ const OverviewWrap = ({
             key='fancylist0'
             oB={liveState}
             traceDT={traceDT}
-            bCache={bCache}
             pCache={pCache}
             app={app}
             title={!filterBy ? 'All Live' : filterBy}
@@ -271,9 +244,7 @@ const OverviewWrap = ({
             key='fancylist1'
             oB={liveState}
             traceDT={traceDT}
-            bCache={bCache}
             pCache={pCache}
-            acCache={acCache}
             user={user}
             app={app}
             brancheS={brancheS}

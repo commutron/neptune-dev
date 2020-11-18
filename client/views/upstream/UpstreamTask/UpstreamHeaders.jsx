@@ -6,7 +6,7 @@ import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 
 const UpstreamHeaders = ({ 
   oB, traceDT,
-  bCache, pCache,
+  pCache,
   app, title, focusBy, showMore 
 })=> (
   <div className='overGridFixed'>
@@ -23,7 +23,6 @@ const UpstreamHeaders = ({
             key={`${entry._id}livefixed${index}`}
             ck={entry}
             tBatch={tBatch}
-            bCache={bCache}
             pCache={pCache}
             app={app}
             focusBy={focusBy} />
@@ -37,9 +36,7 @@ const UpstreamHeaderChunk = ({ck, tBatch, bCache, pCache, app, focusBy })=> {
   
   const isDone = ck.completed || ck.finishedAt ? true : false;
   const pt = pCache.dataSet.find( x => x.batchID === ck._id );
-  
-  //const bInfo = bCache ? bCache.dataSet.find( x => x.batch === ck.batch) : false;
-  //const what = !bInfo ? 'unavailable' : `${bInfo.isWhat.join(' ')} ${bInfo.more}`;
+
   const whaT = !tBatch ? 'unavailable' : `${tBatch.isWhat.join(' ')} ${tBatch.describe}`;
   const highG = tBatch && focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
   

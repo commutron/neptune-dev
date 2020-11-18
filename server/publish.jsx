@@ -15,8 +15,6 @@ CacheDB = new Mongo.Collection('cachedb');
 
 import { batchCacheUpdate } from './cacheMethods.js';
 
-import { branchConCacheUpdate } from './cacheMethods.js';
-
 
 Meteor.publish('loginData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
@@ -124,29 +122,6 @@ Meteor.publish('usersDataDebug', function(){
   }
 });
 
-/*
-Meteor.publish('eventsData', function(){
-  const user = Meteor.users.findOne({_id: this.userId});
-  const orgKey = user ? user.orgKey : false;
-  Meteor.defer( ()=>{ batchCacheUpdate(orgKey); });
-  if(!this.userId){
-    return this.ready();
-  }else{
-    return [
-      BatchDB.find({orgKey: orgKey, events: { $exists: true } }, {
-        fields: {
-          'batch': 1,
-          'events': 1,
-        }}),
-      CacheDB.find({orgKey: orgKey, dataName: 'batchInfo'}, {
-        fields: {
-          'orgKey': 0,
-          'structured' : 0,
-          'minified': 0
-        }}),
-    ];
-  }
-});*/
 
 // People
 Meteor.publish('bCacheData', function(){
@@ -189,6 +164,7 @@ Meteor.publish('traceDataLive', function(){
           'describe': 1,
           'quantity': 1,
           'serialize': 1,
+          'riverChosen': 1,
           // 'live': 1,
           'salesEnd': 1,
           'shipAim': 1,
@@ -226,6 +202,7 @@ Meteor.publish('traceDataActive', function(){
           'describe': 1,
           'quantity': 1,
           'serialize': 1,
+          'riverChosen': 1,
           // 'live': 1,
           'salesEnd': 1,
           'shipAim': 1,
@@ -264,6 +241,7 @@ Meteor.publish('traceDataOpen', function(){
           'describe': 1,
           'quantity': 1,
           'serialize': 1,
+          // 'riverChosen': 1,
           'live': 1,
           'salesEnd': 1,
           'shipAim': 1,
@@ -282,16 +260,16 @@ Meteor.publish('traceDataOpen', function(){
 Meteor.publish('cacheData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  Meteor.defer( ()=>{ batchCacheUpdate(orgKey); });
+  // Meteor.defer( ()=>{ batchCacheUpdate(orgKey); });
   Meteor.defer( ()=>{ Meteor.call('priorityCacheUpdate', orgKey); });
-  Meteor.defer( ()=>{ Meteor.call('activityCacheUpdate', orgKey); });
-  Meteor.defer( ()=>{ branchConCacheUpdate(orgKey) });
-  Meteor.defer( ()=>{ Meteor.call('completeCacheUpdate', orgKey); });
+  // Meteor.defer( ()=>{ Meteor.call('activityCacheUpdate', orgKey); });
+  // Meteor.defer( ()=>{ branchConCacheUpdate(orgKey) });
+  // Meteor.defer( ()=>{ Meteor.call('completeCacheUpdate', orgKey); });
   if(!this.userId){
     return this.ready();
   }else{
     return [
-      CacheDB.find({orgKey: orgKey, structured: true}, {
+      CacheDB.find({orgKey: orgKey, dataName: 'priorityRank' }, {// structured: true}, {
         fields: {
           'orgKey': 0,
           'structured' : 0,
@@ -509,12 +487,7 @@ Meteor.publish('skinnyData', function(){
             'salesOrder': 1,
             'completed': 1,
             'completedAt': 1
-          }}),
-          
-      // CacheDB.find({orgKey: orgKey}, {
-      //   fields: {
-      //     'orgKey': 0
-      // }}),
+          }})
       ];
     }
 });

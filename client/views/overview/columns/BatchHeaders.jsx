@@ -6,7 +6,7 @@ import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 
 const BatchHeaders = ({ 
   oB, traceDT,
-  bCache, pCache, app, title, focusBy 
+  pCache, app, title, focusBy 
 })=> (
   <div className='overGridFixed'>
       
@@ -22,7 +22,6 @@ const BatchHeaders = ({
             key={`${entry._id}livefixed${index}`}
             ck={entry}
             tBatch={tBatch}
-            bCache={bCache}
             pCache={pCache}
             app={app}
             focusBy={focusBy} />
@@ -33,14 +32,11 @@ const BatchHeaders = ({
 
 export default BatchHeaders;
 
-const BatchHeaderChunk = ({ ck, tBatch, bCache, pCache, app, focusBy })=> {
+const BatchHeaderChunk = ({ ck, tBatch, pCache, app, focusBy })=> {
   
   const isDone = ck.completed || ck.finishedAt ? true : false;
   const pt = pCache.dataSet.find( x => x.batchID === ck._id );
   
-  //const bInfo = bCache ? bCache.dataSet.find( x => x.batch === ck.batch) : false;
-  //const what = !bInfo ? 'unavailable' : bInfo.isWhat.join(' ');
-  //const highG = bInfo && focusBy ? bInfo.isWhat[0] === focusBy ? '' : 'hide' : '';
   const whaT = !tBatch ? 'unavailable' : tBatch.isWhat.join(' ');
   const highG = tBatch && focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
   

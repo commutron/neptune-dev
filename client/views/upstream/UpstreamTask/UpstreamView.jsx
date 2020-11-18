@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import moment from 'moment';
-import 'moment-timezone';
 import Pref from '/client/global/pref.js';
 
 import Spin from '/client/components/tinyUi/Spin.jsx';
@@ -11,13 +10,12 @@ import UpstreamDetails from './UpstreamDetails';
 
 
 const UpstreamView = ({ 
-  batch, batchX, traceDT, bCache, pCache, acCache,
-  user, clientTZ, app, isDebug, isNightly
+  batch, batchX, traceDT, pCache,
+  user, app, brancheS, isDebug, isNightly
 })=> {
   
   const sessionSticky = 'overviewUpstream';
   
-  // const [ working, workingSet ] = useState( false );
   const [ loadTime, loadTimeSet ] = useState( moment() );
                         
   const sessionDense = Session.get(sessionSticky+'dense');
@@ -38,7 +36,7 @@ const UpstreamView = ({
   
   useLayoutEffect( ()=> {
     sortInitial();
-  }, [batch, batchX, pCache, acCache, sortBy]);
+  }, [batch, batchX, pCache, sortBy]);
   
   const [ updateTrigger, updateTriggerSet ] = useState(true);
   
@@ -46,7 +44,7 @@ const UpstreamView = ({
     Meteor.call('REQUESTcacheUpdate', 
       false, // batchUp
       true, // priorityUp
-      true, // activityUp
+      false, // activityUp
       false, // branchConUp
       false, // compUp
     ()=>{
@@ -139,17 +137,13 @@ const UpstreamView = ({
       
   const density = !dense ? '' : 'minifyed';
   
-  const branches = app.branches.filter( b => b.open === true );
-  const brancheS = branches.sort((b1, b2)=> {
-          b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 });               
-
   return(
     <div key={0} className={`${light === true ? 
                   'upstreamView lightTheme invert ' : 'upstreamView'}`}>
     
       <UpstreamTools
         app={app}
-        bCache={bCache}
+        traceDT={traceDT}
         loadTimeUP={loadTime}
         focusByUP={focusBy}
         changeFocusByUP={(e)=>changeFocus(e)}
@@ -177,7 +171,6 @@ const UpstreamView = ({
             key='fancylist0'
             oB={liveState}
             traceDT={traceDT}
-            bCache={bCache}
             pCache={pCache}
             app={app}
             title={Pref.kitting}
@@ -189,11 +182,8 @@ const UpstreamView = ({
             key='fancylist1'
             oB={liveState}
             traceDT={traceDT}
-            bCache={bCache}
             pCache={pCache}
-            acCache={acCache}
             user={user}
-            clientTZ={clientTZ}
             app={app}
             brancheS={brancheS}
             isDebug={isDebug}

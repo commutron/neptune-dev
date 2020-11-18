@@ -9,17 +9,15 @@ import WindowFrame from './WindowFrame';
 import WindowGlass from './WindowGlass';
 
 import { listShipDays } from '/client/utility/WorkTimeCalc';
-// import { min2hr } from '/client/utility/Convert';
-// import { LeapTextLink } from '/client/components/tinyUi/LeapText.jsx';
 
 const ShipWindows = ({ 
-  calcFor, traceDT, bCache, pCache, acCache, zCache,
+  calcFor, traceDT, pCache,
   brancheS, app, user, isDebug, focusBy, dense, updateTrigger
 })=> {
   
   const [ nextShipDays, nextShipDaysSet ] = useState([]);
   const [ pCacheSort, pCacheSSet ] = useState([]);
-  const [ zCacheSort, zCacheSSet ] = useState([]);
+  const [ traceDTSort, traceDTSSet ] = useState([]);
   
   useLayoutEffect( ()=>{
     const numOf = calcFor + 1;
@@ -39,12 +37,12 @@ const ShipWindows = ({
       return 0;
     }) );
     
-    zCacheSSet( zCache.sort((z1, z2)=> {
-      if (z1.gapZone[0] < z2.gapZone[0]) { return -1 }
-      if (z1.gapZone[0] > z2.gapZone[0]) { return 1 }
+    traceDTSSet( traceDT.sort((z1, z2)=> {
+      if (z1.completedAt < z2.completedAt) { return -1 }
+      if (z1.completedAt > z2.completedAt) { return 1 }
       return 0;
     }) );
-  }, [calcFor, pCache, zCache]);
+  }, [calcFor, pCache, traceDT]);
 
          
   return(
@@ -56,12 +54,8 @@ const ShipWindows = ({
             key={'f'+ix}
             windowMoment={e}
             indexKey={ix}
-            traceDT={traceDT}
-            bCache={bCache}
+            traceDT={traceDTSort}
             pCache={pCacheSort}
-            acCache={acCache}
-            zCache={zCacheSort}
-            brancheS={brancheS}
             app={app}
             user={user}
             isDebug={isDebug}
@@ -77,11 +71,8 @@ const ShipWindows = ({
             key={'s'+ix}
             windowMoment={e}
             indexKey={ix}
-            traceDT={traceDT}
-            bCache={bCache}
+            traceDT={traceDTSort}
             pCache={pCacheSort}
-            acCache={acCache}
-            zCache={zCacheSort}
             brancheS={brancheS}
             app={app}
             user={user}

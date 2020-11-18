@@ -1,10 +1,10 @@
-import React, {useState, useEffect, Fragment} from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
 // import Pref from '/client/global/pref.js';
 
-const TotalInQu = ({ 
-  pCache, brCache, zCache,
+const TotalInQu = ({ ////////////  NO LONGER USES HOT ENOUGH DATA \\\\\\\\\\\
+  pCache, brCache,
   app, isNightly
 })=> {
  

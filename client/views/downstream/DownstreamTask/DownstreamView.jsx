@@ -8,7 +8,7 @@ import ShipWindows from './ShipWindows';
 
 
 const DownstreamView = ({ 
-  traceDT, bCache, pCache, acCache, brCache, zCache,
+  traceDT, pCache,
   user, app, isDebug, isNightly
 })=> {
   
@@ -37,7 +37,7 @@ const DownstreamView = ({
     Meteor.call('REQUESTcacheUpdate', 
       false, // batchUp
       true, // priorityUp
-      true, // activityUp
+      false, // activityUp
       false, // branchConUp
       false, // compUp
     ()=>{
@@ -94,7 +94,7 @@ const DownstreamView = ({
     
       <DownstreamTools
         app={app}
-        bCache={bCache}
+        traceDT={traceDT}
         loadTimeUP={loadTime}
         numUP={calcFor}
         changeNumUP={(e)=>changeNum(e.target.value)}
@@ -116,10 +116,7 @@ const DownstreamView = ({
       <ShipWindows
         calcFor={calcFor}
         traceDT={traceDT}
-        bCache={bCache.dataSet}
         pCache={pCache.dataSet}
-        acCache={acCache.dataSet}
-        zCache={zCache.dataSet}
         brancheS={brancheS}
         app={app}
         user={user}

@@ -10,8 +10,7 @@ import NonConCounts from './NonConCounts.jsx';
 import ProJump from '/client/components/smallUi/ProJump';
 
 const BatchDetails = ({
-  oB, traceDT,
-  bCache, pCache, acCache,
+  oB, traceDT, pCache,
   user, app, brancheS,
   isDebug, isNightly,
   dense, filterBy, focusBy, branchArea, updateTrigger
@@ -58,9 +57,7 @@ const BatchDetails = ({
               oB={entry}
               tBatch={tBatch}
               user={user}
-              bCache={bCache}
               pCache={pCache}
-              acCache={acCache}
               app={app}
               brancheS={brancheS}
               branchClear={branchClear}
@@ -84,8 +81,8 @@ export default BatchDetails;
 
 
 const BatchDetailChunk = ({ 
-  rowIndex, oB, tBatch, user, 
-  bCache, pCache, acCache, app, 
+  rowIndex, oB, tBatch,
+  pCache, user, app, 
   brancheS, branchClear,
   isDebug, isNightly,
   statusCols, progCols, ncCols, 
@@ -96,16 +93,12 @@ const BatchDetailChunk = ({
   const isX = oB.completed === undefined ? false : true;
   const isDone = isX ? oB.completed : oB.finishedAt !== false;
   
-  //const bInfo = focusBy && bCache ? bCache.dataSet.find( x => x.batch === oB.batch) : false;
-  //const highG = bInfo ? bInfo.isWhat[0] === focusBy ? '' : 'hide' : '';
   const highG = tBatch && focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
   
   const releasedToFloor = oB.releases.findIndex( 
                             x => x.type === 'floorRelease') >= 0;
   const rTFghostC = releasedToFloor ? '' : 'ghostState';
   const rTFghostT = releasedToFloor ? '' : `Not released from ${Pref.kitting}`;
-  
-  const ac = acCache.dataSet.find( x => x.batchID === oB._id );
   
   const isRO = Roles.userIsInRole(Meteor.userId(), 'readOnly');
   
@@ -120,7 +113,7 @@ const BatchDetailChunk = ({
       {!isDone ?
         <TideActivitySquare 
           batchID={oB._id} 
-          acData={tBatch || ac}
+          acData={tBatch}
           isDebug={isDebug} />
       :
         <TideActivityData

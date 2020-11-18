@@ -25,9 +25,9 @@ function shrinkWhole(bData, accessKey) {
   const quantity = bData.quantity || bData.items.length;
   const serialize = bData.serialize || Array.isArray(bData.items);
   
-  const endDay = bData.salesEnd || bData.end;
-  
   const isX = bData.completed !== undefined;
+  
+  const endDay = isX ? bData.salesEnd : bData.end;
   const didFinish = isX ? bData.completed : bData.finishedAt !== false;
   const whenFinish = didFinish ? bData.completedAt || bData.finishedAt : false;
   
@@ -42,8 +42,8 @@ function shrinkWhole(bData, accessKey) {
   const gapZone = didFinish ? shpdlv[3] : null;
   const lateLate = didFinish ? gapZone[2] === 'late' : shpdlv[2];
   
-  const actvLvl = Meteor.call('tideActivityLevel', bData._id);
-  const brchCn = Meteor.call('branchCondition', bData._id);
+  const actvLvl = Meteor.call('tideActivityLevel', bData._id, accessKey);
+  const brchCn = Meteor.call('branchCondition', bData._id, accessKey);
   
   TraceDB.upsert({batchID: bData._id}, {
     $set : { 
@@ -57,6 +57,7 @@ function shrinkWhole(bData, accessKey) {
       describe: isWhat.more,
       quantity: Number(quantity),
       serialize: serialize,
+      riverChosen: bData.river !== false,
       live: bData.live,
       salesEnd: new Date(salesEnd),
       shipAim: new Date(shipAim),
@@ -85,7 +86,8 @@ function checkMinify(bData, accessKey) {
       isWhat: isWhat.isWhat,
       describe: isWhat.more,
       quantity: Number(quantity),
-      serialize: serialize
+      serialize: serialize,
+      riverChosen: bData.river !== false
   }});
 }
 
@@ -99,9 +101,9 @@ function checkMovement(bData, accessKey) {
   }
   const now = moment().tz(Config.clientTZ);
   
-  const endDay = bData.salesEnd || bData.end;
-  
   const isX = bData.completed !== undefined;
+  
+  const endDay = isX ? bData.salesEnd : bData.end;
   const didFinish = isX ? bData.completed : bData.finishedAt !== false;
   const whenFinish = didFinish ? bData.completedAt || bData.finishedAt : false;
   
@@ -116,8 +118,8 @@ function checkMovement(bData, accessKey) {
   const gapZone = didFinish ? shpdlv[3] : null;
   const lateLate = didFinish ? gapZone[2] === 'late' : shpdlv[2];
   
-  const actvLvl = Meteor.call('tideActivityLevel', bData._id);
-  const brchCn = Meteor.call('branchCondition', bData._id);
+  const actvLvl = Meteor.call('tideActivityLevel', bData._id, accessKey);
+  const brchCn = Meteor.call('branchCondition', bData._id, accessKey);
   
   TraceDB.update({batchID: bData._id}, {
     $set : { 
@@ -157,10 +159,10 @@ Meteor.methods({
     }
   },
   
-  buildNewTrace() {
+  buildNewTrace(privateKey) {
     this.unblock();
     try {
-      const accessKey = Meteor.user().orgKey;
+      const accessKey = privateKey || Meteor.user().orgKey;
       const ystrday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date);
       
       BatchDB.find({ createdAt: { $gte: ystrday } }).forEach( (b)=> {
@@ -171,10 +173,10 @@ Meteor.methods({
       throw new Meteor.Error(err);
     }
   },
-  buildNewTraceX() {
+  buildNewTraceX(privateKey) {
     this.unblock();
     try {
-      const accessKey = Meteor.user().orgKey;
+      const accessKey = privateKey || Meteor.user().orgKey;
       const ystrday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date);
       
       XBatchDB.find({ createdAt: { $gte: ystrday } }).forEach( (x)=> {
@@ -186,10 +188,10 @@ Meteor.methods({
     }
   },
   
-  rebuildOpenTrace() {
+  rebuildOpenTrace(privateKey) {
     this.unblock();
     try {
-      const accessKey = Meteor.user().orgKey;
+      const accessKey = privateKey || Meteor.user().orgKey;
       const ystrday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date);
       const lstweek = ( d => new Date(d.setDate(d.getDate()-7)) )(new Date);
       
@@ -229,8 +231,8 @@ Meteor.methods({
     }
   },
   
-  rebuildOneTrace(bID) {
-    const accessKey = Meteor.user().orgKey;
+  rebuildOneTrace(bID, privateKey) {
+    const accessKey = privateKey || Meteor.user().orgKey;
     
     BatchDB.find({_id: bID})
             .forEach( (b)=> shrinkWhole( b, accessKey ) );
@@ -239,8 +241,8 @@ Meteor.methods({
               .forEach( (x)=> shrinkWhole( x, accessKey ) );
   },
   
-  updateOneMinify(bID) {
-    const accessKey = Meteor.user().orgKey;
+  updateOneMinify(bID, privateKey) {
+    const accessKey = Meteor.user().orgKey || privateKey;
     
     BatchDB.find({_id: bID})
             .forEach( (b)=> checkMinify( b, accessKey ) );
@@ -249,8 +251,8 @@ Meteor.methods({
               .forEach( (x)=> checkMinify( x, accessKey ) );
   },
   
-  updateOneMovement(bID) {
-    const accessKey = Meteor.user().orgKey;
+  updateOneMovement(bID, privateKey) {
+    const accessKey = privateKey || Meteor.user().orgKey;
     
     BatchDB.find({_id: bID})
             .forEach( (b)=> checkMovement( b, accessKey ) );
@@ -260,10 +262,10 @@ Meteor.methods({
   },
   
   
-  updateLiveMovement() {
+  updateLiveMovement(privateKey) {
     this.unblock();
     try {
-      const accessKey = Meteor.user().orgKey;
+      const accessKey = privateKey || Meteor.user().orgKey;
       const ystrday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date);
       const lstweek = ( d => new Date(d.setDate(d.getDate()-7)) )(new Date);
       const fresh = moment().subtract(5, 'minutes').toISOString();

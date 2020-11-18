@@ -18,7 +18,7 @@ export function calcShipDay( nowDay, futureDay ) {
 
   const shipAim = endDay.isShipDay() ?
                     endDay.clone().startOf('day').nextShippingTime() :
-                    endDay.clone().lastShipDay().nextShippingTime();
+                    endDay.clone().lastShipDay().startOf('day').nextShippingTime();
 
   const shipDue = endDay.isShipDay() ?
                     endDay.clone().endOf('day').lastShippingTime() :
@@ -45,7 +45,7 @@ export function deliveryState(bEnd, bFinish) {
   
   const shipAim = localEnd.isShipDay() ?
                     localEnd.clone().startOf('day').nextShippingTime().format() :
-                    localEnd.clone().lastShipDay().nextShippingTime().format();
+                    localEnd.clone().lastShipDay().startOf('day').nextShippingTime().format();
                     
   const shipDue = localEnd.isShipDay() ?
                     localEnd.clone().endOf('day').lastShippingTime() :
@@ -184,9 +184,7 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
   
   reportOnCompleted(yearNum, weekNum) {
     try {
-      // const nowLocal = moment().tz(Config.clientTZ);
       const requestLocal = moment().tz(Config.clientTZ).set({'year': yearNum, 'week': weekNum});
-      // console.log(requestLocal);
       
       const rangeStart = requestLocal.clone().startOf('week').toISOString();
       const rangeEnd = requestLocal.clone().endOf('week').toISOString();
@@ -201,7 +199,6 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
   fetchFinishOnDay(dateString) {
     
     const localDate = moment.tz(dateString, Config.clientTZ);
-    const bCache = CacheDB.findOne({orgKey: Meteor.user().orgKey, dataName: 'batchInfo'});
     
     const touchedB = BatchDB.find({
       orgKey: Meteor.user().orgKey,
@@ -215,14 +212,13 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
     
     for(let iB of touchedB) {
       const mItems = iB.items.filter( i => i.finishedAt && localDate.isSame(i.finishedAt, 'day') );
-      const is = bCache.dataSet.find( x => x.batch === iB.batch);
-      const what = is ? is.isWhat.join(" ") : 'unavailable';
-        
+      const describe = whatIsBatch(iB.batch)[0].join(' ');
+      
       for(let mI of mItems) {
         const time = moment.tz(mI.finishedAt, Config.clientTZ).format('HH:mm:ss');
         
         itemsMatch.push([ 
-          iB.batch, iB.salesOrder, what, mI.serial, time
+          iB.batch, iB.salesOrder, describe, mI.serial, time
         ]);
       }
     }

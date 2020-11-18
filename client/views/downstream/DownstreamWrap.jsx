@@ -11,8 +11,7 @@ import Outlook from './Outlook.jsx';
 
 const DownstreamWrap = ({ 
   view, subLink, 
-  traceDT,
-  bCache, pCache, acCache, brCache, zCache,
+  traceDT, pCache,
   user, app,
   isDebug, isNightly
 })=> {
@@ -46,10 +45,6 @@ const DownstreamWrap = ({
         navBar='down'
       >
         <DailyReport 
-          bCache={bCache}
-          // pCache={pCache}
-          // brCache={brCache}
-          // zCache={zCache}
           app={app}
           user={user}
           isDebug={isDebug}
@@ -70,10 +65,6 @@ const DownstreamWrap = ({
         navBar='down'
       >
         <MonthTrend 
-          bCache={bCache}
-          // pCache={pCache}
-          // brCache={brCache}
-          // zCache={zCache}
           app={app}
           // user={user}
           isDebug={isDebug}
@@ -95,8 +86,6 @@ const DownstreamWrap = ({
       >
         <Outlook 
           pCache={pCache}
-          brCache={brCache}
-          zCache={zCache}
           app={app}
           user={user}
           isNightly={isNightly}
@@ -117,11 +106,7 @@ const DownstreamWrap = ({
     >
       <DownstreamView
         traceDT={traceDT}
-        bCache={bCache}
         pCache={pCache}
-        acCache={acCache}
-        brCache={brCache}
-        zCache={zCache}
         user={user}
         app={app}
         isDebug={isDebug}

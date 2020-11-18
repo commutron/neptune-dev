@@ -58,7 +58,7 @@ Meteor.methods({
       Meteor.defer( ()=>{
         batchCacheUpdate( accessKey, true );
         Meteor.call('priorityCacheUpdate', accessKey, true);
-        Meteor.call('buildNewTraceX');
+        Meteor.call('buildNewTraceX', accessKey);
       });
       return true;
     }else{
@@ -86,7 +86,7 @@ Meteor.methods({
       Meteor.defer( ()=>{
         batchCacheUpdate( accessKey, true );
         Meteor.call('priorityCacheUpdate', accessKey, true);
-        Meteor.call('updateOneMinify', batchId);
+        Meteor.call('updateOneMinify', batchId, accessKey);
       });
       return true;
     }else{
@@ -116,7 +116,7 @@ Meteor.methods({
         }});
       Meteor.defer( ()=>{
         Meteor.call('priorityCacheUpdate', accessKey, true);
-        Meteor.call('updateOneMovement', batchId);
+        Meteor.call('updateOneMovement', batchId, accessKey);
       });
       return true;
     }else{
@@ -128,8 +128,9 @@ Meteor.methods({
     const flip = !status;
     const txtOld = flip.toString();
     const txtNew = status.toString();
+    const accessKey = Meteor.user().orgKey;
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
-      XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+      XBatchDB.update({_id: batchId, orgKey: accessKey}, {
   			$set : {
   			  live: status
         },
@@ -144,9 +145,9 @@ Meteor.methods({
           }
         }});
         Meteor.defer( ()=>{
-          Meteor.call('updateOneMovement', batchId);
+          Meteor.call('updateOneMovement', batchId, accessKey);
           if(status === true) {
-            Meteor.call('disableLockX', batchId);
+            Meteor.call('disableLockX', batchId, accessKey);
           }
         });
     }else{null}
@@ -182,11 +183,13 @@ Meteor.methods({
     }else{null}
   },
   
-  disableLockX(batchId) {
+  disableLockX(batchId, privateKey) {
     const doc = XBatchDB.findOne({_id: batchId});
     const locked = doc.lock === true;
-    if(Roles.userIsInRole(Meteor.userId(), 'run') && locked) {
-      XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+    const accessKey = privateKey || Meteor.user().orgKey;
+    const auth = privateKey || Roles.userIsInRole(Meteor.userId(), 'run');
+    if(auth && locked) {
+      XBatchDB.update({_id: batchId, orgKey: accessKey}, {
   			$set : {
   			  lock: false
         }
@@ -232,8 +235,9 @@ Meteor.methods({
   },
   
   addRelease(batchId, rType, rDate, caution) {
+    const accessKey = Meteor.user().orgKey;
     if(Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])) {
-      XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+      XBatchDB.update({_id: batchId, orgKey: accessKey}, {
         $push : { releases: {
             type: rType,
             time: rDate,
@@ -241,6 +245,7 @@ Meteor.methods({
             caution: caution
           }
       }});
+      Meteor.defer( ()=>{ Meteor.call('updateOneMovement', batchId, accessKey); });
       return true;
     }else{
       return false;
@@ -309,6 +314,7 @@ Meteor.methods({
           }});
         Meteor.defer( ()=>{
           Meteor.call('priorityCacheUpdate', accessKey, true);
+          // Meteor.call('updateOneMovement', batchId, accessKey);
         });
       }else{
         null;
@@ -418,6 +424,7 @@ Meteor.methods({
         }});
         Meteor.defer( ()=>{
           Meteor.call('completeCacheUpdate', privateKey, true);
+          Meteor.call('updateOneMovement', batchId, privateKey);
         });
       }else{null}
     }
@@ -457,6 +464,7 @@ Meteor.methods({
           }});
           Meteor.defer( ()=>{
             Meteor.call('completeCacheUpdate', privateKey, true);
+            Meteor.call('updateOneMovement', batchId, privateKey);
           });
           return true;
         }else{

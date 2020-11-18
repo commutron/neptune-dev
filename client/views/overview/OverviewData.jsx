@@ -2,6 +2,7 @@ import React, { useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
+import moment from 'moment';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
 import usePrevious from '/client/utility/usePreviousHook.js';
 
@@ -14,7 +15,7 @@ const View = ({
   username, user, org, app,
   isDebug, isNightly,
   batch, batchX, traceDT,
-  bCache, pCache, acCache, brCache
+  pCache,
 })=> {
   
   const prevUser = usePrevious(user);
@@ -27,9 +28,15 @@ const View = ({
     return( <SpinWrap /> );
   }
   
+  if( Array.isArray(app.nonWorkDays) ) {  
+    moment.updateLocale('en', {
+      holidays: app.nonWorkDays
+    });
+  }
+    
   const branches = app.branches.filter( b => b.open === true );
-  const brancheS = branches.sort((b1, b2)=> {
-          b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 });  
+  const brancheS = branches.sort((b1, b2)=> { 
+    return b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 });  
 
   return(
     <ErrorCatch>
@@ -37,10 +44,7 @@ const View = ({
         b={batch}
         bx={batchX}
         traceDT={traceDT}
-        bCache={bCache}
         pCache={pCache}
-        acCache={acCache}
-        brCache={brCache}
         user={user}
         app={app}
         brancheS={brancheS}
@@ -49,7 +53,6 @@ const View = ({
     </ErrorCatch>
   );
 };
-
 
 
 export default withTracker( () => {
@@ -74,8 +77,6 @@ export default withTracker( () => {
   }else{
     return {
       login: Meteor.userId(),
-      // sub: sub,
-      // subC: subC,
       readyUsers: usersSub.ready(),
       ready: sub.ready(),
       readyC: subC.ready(),
@@ -88,11 +89,7 @@ export default withTracker( () => {
       app: AppDB.findOne({org: org}),
       batch: BatchDB.find({live: true}).fetch(),
       batchX: XBatchDB.find({live: true}).fetch(),
-      bCache: CacheDB.findOne({dataName: 'batchInfo'}),
       pCache: CacheDB.findOne({dataName: 'priorityRank'}),
-      acCache: CacheDB.findOne({dataName: 'activityLevel'}),
-      brCache: CacheDB.findOne({dataName: 'branchCondition'}),
-    
       traceDT: TraceDB.find({}).fetch(),
     };
   }

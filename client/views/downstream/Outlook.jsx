@@ -3,11 +3,11 @@ import React from 'react';
 // import 'moment-timezone';
 // import Pref from '/client/global/pref.js';
 
-import TotalInQu from './cards/TotalInQu';
+// import TotalInQu from './cards/TotalInQu';
 
 
 const Outlook = ({ 
-  bCache, pCache, brCache, zCache,
+  pCache,
   user, app, isNightly
 })=> {
 
@@ -17,11 +17,12 @@ const Outlook = ({
         
         
       <div className='balance numFont letterSpaced overscroll'>
-           
+        {/*  NEEDS TO USE TRACE DATA \\\\
           <TotalInQu
             pCache={pCache}
             brCache={brCache}
             app={app} />
+        */}
         
       </div>
     </div>

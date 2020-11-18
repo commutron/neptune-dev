@@ -7,8 +7,8 @@ import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 
 const DownstreamHeaders = ({
   indexKey, oB, traceDT,
-  bCache, pCache, acCache,
-  user, app, brancheS,
+  pCache,
+  user, app,
   isDebug, isNightly,
   focusBy, dense
 })=> (
@@ -22,9 +22,7 @@ const DownstreamHeaders = ({
             key={indexKey+'c'+index}
             ck={entry}
             tBatch={tBatch}
-            bCache={bCache}
             pCache={pCache}
-            acCache={acCache}
             app={app}
             user={user}
             isDebug={isDebug}
@@ -41,7 +39,7 @@ export default DownstreamHeaders;
 
 const DownstreamFixedChunk = ({
   ck, tBatch,
-  bCache, pCache, acCache, 
+  pCache,
   app, user, isDebug, focusBy, dense 
 })=> {
   
@@ -52,17 +50,9 @@ const DownstreamFixedChunk = ({
   let highG = '';
   let describe = '';
   
-  if(!tBatch) {
-    console.log(ck.batch+': NO tBatch');
-    const bInfo = bCache ? bCache.find( x => x.batch === ck.batch) : false;
-    what = !bInfo ? 'unavailable' : bInfo.isWhat.join(' ');
-    describe = bInfo.more;
-    highG = bInfo && focusBy ? bInfo.isWhat[0] === focusBy ? '' : 'hide' : '';
-  }else{
-    what = !tBatch ? 'unavailable' : tBatch.isWhat.join(' ');
-    describe = tBatch.describe;
-    highG = tBatch && focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
-  }
+  what = !tBatch ? 'unavailable' : tBatch.isWhat.join(' ');
+  describe = tBatch.describe || '';
+  highG = tBatch && focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
   
   isDebug && console.log(ck.batch+'='+ck.batchID);
   

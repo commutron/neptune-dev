@@ -11,8 +11,8 @@ import ReportShort from '/client/views/upstream/ReportShort';
 const UpstreamWrap = ({ 
   view, subLink,
   batch, batchX, traceDT,
-  bCache, pCache, acCache,
-  user, app, clientTZ,
+  pCache,
+  user, app, brancheS,
   isDebug, isNightly
 })=> {
 
@@ -84,12 +84,10 @@ const UpstreamWrap = ({
         batch={batch}
         batchX={batchX}
         traceDT={traceDT}
-        bCache={bCache}
         pCache={pCache}
-        acCache={acCache}
         user={user}
         app={app}
-        clientTZ={clientTZ}
+        brancheS={brancheS}
         isDebug={isDebug}
         isNightly={isNightly}
       />

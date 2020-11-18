@@ -13,8 +13,7 @@ const View = ({
   readyUsers, readyC, readyT, view,
   username, user, org, app,
   isDebug, isNightly,
-  traceDT,
-  bCache, pCache, acCache, brCache, zCache
+  traceDT, pCache
 })=> {
   
   const prevUser = usePrevious(user);
@@ -31,11 +30,7 @@ const View = ({
       <DownstreamWrap 
         view={view}
         traceDT={traceDT}
-        bCache={bCache}
         pCache={pCache}
-        acCache={acCache}
-        brCache={brCache}
-        zCache={zCache}
         user={user}
         app={app}
         isDebug={isDebug}
@@ -78,12 +73,7 @@ export default withTracker( ({ view } ) => {
       isNightly: isNightly,
       org: org,
       app: AppDB.findOne({org: org}),
-      bCache: CacheDB.findOne({dataName: 'batchInfo'}),
       pCache: CacheDB.findOne({dataName: 'priorityRank'}),
-      acCache: CacheDB.findOne({dataName: 'activityLevel'}),
-      brCache: CacheDB.findOne({dataName: 'branchCondition'}),
-      zCache: CacheDB.findOne({dataName: 'completeBatch'}),
-      
       traceDT: TraceDB.find({}).fetch(),
     };
   }

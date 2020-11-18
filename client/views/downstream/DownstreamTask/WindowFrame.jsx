@@ -11,8 +11,8 @@ import { min2hr } from '/client/utility/Convert';
 
 const WindowFrame = ({ 
   windowMoment, indexKey, traceDT,
-  bCache, pCache, acCache, zCache, 
-  brancheS, app, user, isDebug, focusBy, dense
+  pCache, 
+  app, user, isDebug, focusBy, dense
 })=> {
   
   const [ wipOrders, wipOrdersSet ] = useState([]);
@@ -24,14 +24,16 @@ const WindowFrame = ({
       wipOrdersSet( lateShip );
       mixedOrdersSet( lateShip );
     }else{
-      const early = zCache.filter( x => {
-        if(moment(x.shipAim).isSame(windowMoment, 'day')) { return true }
-      });
+      // const early = zCache.filter( x => {
+      //   if(moment(x.shipAim).isSame(windowMoment, 'day')) { return true } });
+      const early = traceDT.filter( x => {
+        return x.completed && moment(x.shipAim).isSame(windowMoment, 'day') });
+      
       const shipIn = pCache.filter( x => moment(x.shipAim).isSame(windowMoment, 'day') );
       wipOrdersSet( shipIn );
       mixedOrdersSet( [...early,...shipIn] );
     }
-  }, []);
+  }, [pCache, traceDT]);
   
   
   return(
@@ -51,14 +53,11 @@ const WindowFrame = ({
           indexKey={'fancylist0F'+indexKey}
           oB={mixedOrders}
           traceDT={traceDT}
-          bCache={bCache}
           title='things'
           showMore={true}
           pCache={pCache}
-          acCache={acCache}
           user={user}
           app={app}
-          brancheS={brancheS}
           isDebug={isDebug}
           isNightly={false}
           focusBy={focusBy}

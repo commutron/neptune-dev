@@ -81,7 +81,6 @@ Meteor.methods({
   },
   
   serialLookupPartial(orb) {
-    const bCache = CacheDB.findOne({orgKey: Meteor.user().orgKey, dataName: 'batchInfo'});
     const itemsBatch = BatchDB.find({
       "items.serial": { $regex: new RegExp( orb ) }
     }).fetch();
@@ -91,10 +90,11 @@ Meteor.methods({
     //const results = Array.from(itemsBatch, x => x.batch);
     const results = [];
     for(let iB of itemsBatch) {
-      let fill = bCache.dataSet.find( x => x.batch === iB.batch);
+      const describe = whatIsBatch(iB.batch)[0].join(' ');
+      
       results.push({
         batch: iB.batch, 
-        meta: !fill ? undefined : fill.isWhat,
+        meta: describe,
       });
     }
       
@@ -138,8 +138,7 @@ Meteor.methods({
  
  /*
   fetchShortfalls() {
-    const bCache = CacheDB.findOne({orgKey: Meteor.user().orgKey, dataName: 'batchInfo'});
-    
+
     const touchedB = BatchDB.find({
       orgKey: Meteor.user().orgKey,
       finishedAt: false,
@@ -150,9 +149,8 @@ Meteor.methods({
     
     for(let iB of touchedB) {
       const mShort = iB.shortfall.filter( s => !(s.inEffect || s.reSolve) );
-      const is = bCache.dataSet.find( x => x.batch === iB.batch);
-      const what = is ? is.isWhat.join(" ") : 'unavailable';
-        
+      const describe = whatIsBatch(iB.batch)[0].join(' ');
+      
       for(let mS of mShort) {
         const time = moment.tz(mS.cTime, Config.clientTZ).format();
         
@@ -166,8 +164,7 @@ Meteor.methods({
   */
    
   fetchShortfallParts() {
-    const bCache = CacheDB.findOne({orgKey: Meteor.user().orgKey, dataName: 'batchInfo'});
-    
+
     const touchedB = BatchDB.find({
       orgKey: Meteor.user().orgKey,
       finishedAt: false,
@@ -178,17 +175,16 @@ Meteor.methods({
     
     for(let iB of touchedB) {    // s.inEffect !== true && s.reSolve !== true
       const mShort = iB.shortfall.filter( s => !(s.inEffect || s.reSolve) );
+      const describe = whatIsBatch(iB.batch)[0].join(' ');
+
       if(mShort.length > 0) {
-        const is = bCache.dataSet.find( x => x.batch === iB.batch);
-        const what = is ? is.isWhat.join(" ") : 'unavailable';
-        
         const unqShort = _.uniq(mShort, false, n=> n.partNum );
 
         let bsMatch = [];
         for(let mS of unqShort) {
           
           bsMatch.push([
-            iB.batch, iB.salesOrder, what, mS.partNum
+            iB.batch, iB.salesOrder, describe, mS.partNum
           ]);
         }
   	    bsMatch.map((ent, ix)=>{

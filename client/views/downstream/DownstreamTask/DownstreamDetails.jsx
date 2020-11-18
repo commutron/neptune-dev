@@ -8,11 +8,10 @@ import TideActivityData, { TideActivitySquare } from '/client/components/tide/Ti
 import BranchProgress from '../../overview/columns/BranchProgress.jsx';
 import NonConCounts from '../../overview/columns/NonConCounts.jsx';
 
-
 const DownstreamDetails = ({
   indexKey, oB, traceDT,
-  bCache, pCache, acCache,
-  user, app, brancheS,
+  pCache,
+  user, app,
   isDebug, isNightly,
   focusBy, dense, progCols, ncCols, updateTrigger
 })=> (
@@ -25,13 +24,10 @@ const DownstreamDetails = ({
             key={indexKey+'c'+index}
             ck={entry}
             tBatch={tBatch}
-            bCache={bCache}
             pCache={pCache}
-            acCache={acCache}
             app={app}
             user={user}
             isDebug={isDebug}
-            brancheS={brancheS}
             focusBy={focusBy}
             dense={dense}
             progCols={progCols}
@@ -47,8 +43,8 @@ export default DownstreamDetails;
 
 const DownstreamScrollChunk = ({
   ck, tBatch,
-  bCache, pCache, acCache, 
-  app, user, brancheS, focusBy, isDebug, dense, progCols, ncCols,
+  pCache,
+  app, user, focusBy, isDebug, dense, progCols, ncCols,
   updateTrigger
 })=> {
 
@@ -57,22 +53,12 @@ const DownstreamScrollChunk = ({
   const q2t = ck.quote2tide;
   const q2tStatus = !q2t ? 'Time Not Tracked' :
           q2t > 0 ? 
-            `${min2hr(q2t)} hours remain` :
+            `${min2hr(q2t)} hr remain` :
             'remaining time unknown';
   
-  let highG = '';
-  if(!tBatch) {
-    const bInfo = bCache ? bCache.find( x => x.batch === ck.batch) : false;
-    highG = bInfo && focusBy ? bInfo.isWhat[0] === focusBy ? '' : 'hide' : '';
-  }else{
-    highG = tBatch && focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
-  }
-  
-  const ac = acCache.find( x => x.batchID === ck.batchID );
-  
-  //const releasedToFloor = oB.releases.findIndex( 
-    //                      x => x.type === 'floorRelease') >= 0;
-  const releasedToFloor = tBatch ? tBatch.onFloor : false;
+  let highG = tBatch && focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
+
+  const releasedToFloor = tBatch.onFloor || false;
   
   return(
     <div className={`downRowScroll ${highG}`}>
@@ -86,7 +72,7 @@ const DownstreamScrollChunk = ({
       {!isDone ?
         <TideActivitySquare 
           batchID={ck.batchID} 
-          acData={tBatch || ac}
+          acData={tBatch}
           isDebug={isDebug} />
       :
         <TideActivityData
@@ -97,7 +83,7 @@ const DownstreamScrollChunk = ({
       
       {!isDone ?
         <div title={`${q2t} minutes`}>{q2tStatus}</div>
-      : <div>{Pref.batch} is {Pref.isDone}</div> }
+      : <div>{Pref.batch} {Pref.isDone}</div> }
       
       <BranchProgress
         batchID={ck.batchID}

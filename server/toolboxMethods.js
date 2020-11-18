@@ -149,7 +149,7 @@ Meteor.methods({
       return false;
     }
   },
-  
+  /*
   dateObjBatchUPGRADE() {
     if(!Roles.userIsInRole(Meteor.userId(), 'admin')) {
       return false;
@@ -184,7 +184,7 @@ Meteor.methods({
       return true;
     }
   },
-  
+  */
   repairNonConsDANGEROUS(oldText, newText, exact) {
     if(!Roles.userIsInRole(Meteor.userId(), 'admin')) {
       return false;

@@ -10,7 +10,7 @@ import ProJump from '/client/components/smallUi/ProJump';
 
 const UpstreamDetails = ({
   oB, traceDT,
-  bCache, pCache, acCache,
+  pCache,
   user, app, brancheS,
   isDebug, isNightly,
   dense, focusBy
@@ -52,9 +52,7 @@ const UpstreamDetails = ({
               oB={entry}
               tBatch={tBatch}
               user={user}
-              bCache={bCache}
               pCache={pCache}
-              acCache={acCache}
               app={app}
               brancheS={brancheS}
               branchClear={branchClear}
@@ -75,7 +73,7 @@ export default UpstreamDetails;
 
 const UpstreamDetailChunk = ({ 
   rowIndex, oB, tBatch, user,
-  bCache, pCache, acCache, app, 
+  pCache, app, 
   brancheS, branchClear,
   isDebug, isNightly,
   statusCols, kitCols, 
@@ -90,8 +88,6 @@ const UpstreamDetailChunk = ({
   const releasedToFloor = oB.releases.findIndex( 
                             x => x.type === 'floorRelease') >= 0;
   
-  const ac = acCache.dataSet.find( x => x.batchID === oB._id );
-    
   return(
     <div className={`overGridRowScroll ${highG}`}>
       <div>
@@ -102,7 +98,7 @@ const UpstreamDetailChunk = ({
       <div>
         <TideActivitySquare 
           batchID={oB._id} 
-          acData={tBatch || ac}
+          acData={tBatch}
           app={app} />
       </div>
       

@@ -10,8 +10,7 @@ import DownstreamDetails from './DownstreamDetails';
 // import { min2hr } from '/client/utility/Convert';
 
 const WindowGlass = ({ 
-  windowMoment, indexKey, traceDT,
-  bCache, pCache, acCache, zCache, 
+  windowMoment, indexKey, traceDT, pCache,
   brancheS, app, user, isDebug, focusBy, dense, updateTrigger
 })=> {
   
@@ -22,13 +21,15 @@ const WindowGlass = ({
       const lateShip = pCache.filter( x => moment(x.shipAim).isSameOrBefore(windowMoment, 'day') );
       mixedOrdersSet( lateShip );
     }else{
-      const early = zCache.filter( x => {
-        if(moment(x.shipAim).isSame(windowMoment, 'day')) { return true }
-      });
+      // const early = zCache.filter( x => {
+      //  if(moment(x.shipAim).isSame(windowMoment, 'day')) { return true } });
+      const early = traceDT.filter( x => {
+        return x.completed && moment(x.shipAim).isSame(windowMoment, 'day') });
+      
       const shipIn = pCache.filter( x => moment(x.shipAim).isSame(windowMoment, 'day') );
       mixedOrdersSet( [...early,...shipIn] );
     }
-  }, [pCache, acCache]);
+  }, [pCache, traceDT]);
   
   const statCols = ['sales order','active','quote'];
   const progCols = ['total items',...Array.from(brancheS, x => x.common)];
@@ -54,14 +55,11 @@ const WindowGlass = ({
           indexKey={'fancylist0S'+indexKey}
           oB={mixedOrders}
           traceDT={traceDT}
-          bCache={bCache}
           title='things'
           showMore={true}
           pCache={pCache}
-          acCache={acCache}
           user={user}
           app={app}
-          brancheS={brancheS}
           isDebug={isDebug}
           isNightly={false}
           dense={dense}
