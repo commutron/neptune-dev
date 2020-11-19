@@ -22,10 +22,10 @@ import ScheduleSlide from './ScheduleSlide.jsx';
 import AccountsManagePanel, { PermissionHelp } from './AccountsManagePanel.jsx';
 
 const PeopleDataWrap = ({
-  ready, readyUsers, readyTides, // subs
+  ready, readyUsers, readybName, // subs
   user, active, isDebug, // self
   org, users, app, // org
-  bCache, // caches
+  traceDT // batch name cache
 })=> {
   
   const prevUser = usePrevious(user);
@@ -33,7 +33,7 @@ const PeopleDataWrap = ({
     InboxToastPop(prevUser, user);
   }, [user]);
     
-  if( !readyUsers || !readyTides || !app) {
+  if( !readyUsers || !readybName || !app) {
     return( <SpinWrap /> );
   }
   
@@ -78,7 +78,7 @@ const PeopleDataWrap = ({
             app={app}
             user={user}
             users={users}
-            bCache={bCache}
+            traceDT={traceDT}
             brancheS={brancheS}
             isDebug={isDebug} />
             
@@ -87,7 +87,7 @@ const PeopleDataWrap = ({
             app={app}
             user={user}
             users={users}
-            bCache={bCache}
+            traceDT={traceDT}
             brancheS={brancheS}
             allUsers={true}
             isDebug={isDebug} />
@@ -97,7 +97,7 @@ const PeopleDataWrap = ({
             app={app}
             user={user}
             users={users}
-            bCache={bCache}
+            traceDT={traceDT}
             brancheS={brancheS}
             isDebug={isDebug} />
             
@@ -118,7 +118,7 @@ const PeopleDataWrap = ({
               key={5} 
               app={app}
               users={users}
-              bCache={bCache}
+              traceDT={traceDT}
               brancheS={brancheS}
               isDebug={isDebug} />
           : null }
@@ -138,27 +138,27 @@ export default withTracker( () => {
   let active = login ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   const isDebug = login ? Roles.userIsInRole(Meteor.userId(), 'debug') : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
-  const tidesSub = login ? Meteor.subscribe('bCacheData') : false;
+  const bNameSub = login ? Meteor.subscribe('bCacheData') : false;
   if(!login) {
     return {
       readyUsers: false,
-      readyTides: false
+      readybName: false
     };
   }else if(!active) {
     return {
       readyUsers: false,
-      readyTides: false
+      readybName: false
     };
   }else{
     return {
       readyUsers: usersSub.ready(),
-      readyTides: tidesSub.ready(),
+      readybName: bNameSub.ready(),
       user: user,
       active: active,
       isDebug: isDebug,
       org: org,
       app: AppDB.findOne({org: org}),
-      bCache: CacheDB.findOne({dataName: 'batchInfo'}),
+      traceDT: TraceDB.find({}).fetch(),
       users: Meteor.users.find({}, { sort: { username: 1 } } ).fetch()
     };
   }

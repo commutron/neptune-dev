@@ -327,8 +327,9 @@ Meteor.methods({
   //// Waterfall
   
   addCounter(batchId, wfKey, gate, type, wfBranch) {
+    const accessKey = Meteor.user().orgKey;
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
-      XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+      XBatchDB.update({_id: batchId, orgKey: accessKey}, {
         $push : { 
           waterfall: {
             wfKey: wfKey,
@@ -339,6 +340,7 @@ Meteor.methods({
             counts: []
           }
       }});
+      Meteor.defer( ()=>{ Meteor.call('updateOneMinify', batchId, accessKey); });
       return true;
     }else{
       return false;
@@ -612,6 +614,10 @@ Meteor.methods({
           }
         }
       });
+      // Meteor.defer( ()=>{
+      //   Meteor.call('priorityCacheUpdate', accessKey, true);
+      //   Meteor.call('updateOneMovement', batchId, accessKey);
+      // });
       return true;
     }else{
       return false;
@@ -630,6 +636,7 @@ Meteor.methods({
       const unlock = lock === pass;
       if(auth && access && unlock) {
         XBatchDB.remove({_id: batchID});
+        TraceDB.remove({batchID: batchID});
         return true;
       }else{
         return false;

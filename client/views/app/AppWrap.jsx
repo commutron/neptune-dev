@@ -38,11 +38,11 @@ const AppWrap = ({ isAdmin, isDebug, users, app })=> {
     });
   }
   
+  const branchesS = app.branches.sort((b1, b2)=> {
+   return b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 });
+  
   const sortedTrackOptions = app.trackOption.sort((t1, t2)=> {
-                              if (t1.step < t2.step) { return -1 }
-                              if (t1.step > t2.step) { return 1 }
-                              return 0;
-                            });
+                  return t1.step < t2.step ? -1 : t1.step > t2.step ? 1 : 0 });
   
   return(
     <div className='simpleContainer'>
@@ -79,8 +79,15 @@ const AppWrap = ({ isAdmin, isDebug, users, app })=> {
           {/*extraClass='space5x5'>*/}
           
           <BranchesSlide key={0} app={app} isDebug={isDebug} />
-          <TrackStepSlide key={1} app={app} sorted={sortedTrackOptions} />
-          <CounterSlide key={2} app={app} />
+          <TrackStepSlide 
+            key={1}
+            app={app}
+            branchesS={branchesS}
+            sorted={sortedTrackOptions} />
+          <CounterSlide
+            key={2}
+            app={app}
+            branchesS={branchesS} />
           <BehaviorSlide key={3} app={app} />
           <ReasonsSlide key={4} app={app} />
           <NCTypeSlide key={5} app={app} />

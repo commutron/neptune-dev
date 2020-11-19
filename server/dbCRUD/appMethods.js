@@ -315,13 +315,13 @@ Meteor.methods({
       return false;
     }
   },
-  /*
-  editCountOption(opKey, branch) {
+
+  editCountOption(opKey, gate, type, branch) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       AppDB.update({orgKey: Meteor.user().orgKey, 'countOption.key' : opKey}, {
         $set : { 
-          // 'countOption.$.gate' : step,
-          // 'countOption.$.type' : type,
+          'countOption.$.gate' : gate,
+          'countOption.$.type' : type,
           'countOption.$.branchKey' : branch
           }
       });
@@ -330,7 +330,7 @@ Meteor.methods({
       return false;
     }
   },
-  */
+
   ////////// Lock Unlock control type ////////////////
   
   setLockType(lockVal) {

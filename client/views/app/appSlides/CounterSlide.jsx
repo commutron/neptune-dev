@@ -2,9 +2,15 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-const CounterSlide = ({ app })=> {
+import CountStepEdit from '/client/components/forms/CountStepEdit.jsx';
+
+const CounterSlide = ({ app, branchesS })=> {
   
   const rndmKey = Math.random().toString(36).substr(2, 5);
+  
+  const counterS = app.countOption.sort((c1, c2)=> {
+                  return c1.gate < c2.gate ? -1 : c1.gate > c2.gate ? 1 : 0 });
+  
   
   function addCountTrackOp(e) {
     e.preventDefault();
@@ -40,6 +46,8 @@ const CounterSlide = ({ app })=> {
           
       <h2 className='cap'>{Pref.counter} gates</h2>
       <i>Options for counters</i>
+      <ul>
+      
       <form onSubmit={(e)=>addCountTrackOp(e)} className='inlineForm'>
         <label htmlFor={rndmKey + 'form'}>gate<br />
           <input
@@ -65,7 +73,7 @@ const CounterSlide = ({ app })=> {
         <label htmlFor={rndmKey + 'branch'}>{Pref.branch}<br />
           <select id={rndmKey + 'branch'} required >
             <option></option>
-            {app.branches.map( (entry, index)=>{
+            {branchesS.map( (entry, index)=>{
               return( 
                 <option key={index} value={entry.brKey}>{entry.branch}</option>
             )})}
@@ -81,14 +89,22 @@ const CounterSlide = ({ app })=> {
         </label>
       </form>
         
-      <ul>
-        {app.countOption && app.countOption.map( (entry, index)=>{
+      <hr />
+        {/*app.countOption && app.countOption.map( (entry, index)=>{
           const branchObj = app.branches.find( y => y.brKey === entry.branchKey );
           const branchName = branchObj ? branchObj.branch : 'n/a';
           return( 
             <li key={index}>{entry.gate} - {entry.type} - {branchName}</li> 
           );
-        })}
+        })*/}
+        {counterS.map( (entry, index)=>( 
+          <CountStepEdit 
+            key={rndmKey + index + entry.key} 
+            app={app}
+            branchesSort={branchesS}
+            data={entry} />
+        ))}
+        
       </ul>
     </div>
   );

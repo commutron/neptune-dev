@@ -5,7 +5,7 @@ import UserNice from '/client/components/smallUi/UserNice.jsx';
 import PersonChunk from './PersonChunk.jsx';
 
 const PeoplePanel = ({ 
-  app, eUsers, dUsers, openTBlockState, bCache,
+  app, eUsers, dUsers, openTBlockState, traceDT,
   updateBranches, removeBranch, update, isDebug
 })=> {
   
@@ -35,7 +35,7 @@ const PeoplePanel = ({
               <PersonChunk 
                 key={entry.uID}
                 userChunk={entry}
-                bCache={bCache}
+                traceDT={traceDT}
                 app={app}
                 updateBranches={(id, ph)=>updateBranches(id, ph)}
                 removeBranch={(id)=>removeBranch(id)}

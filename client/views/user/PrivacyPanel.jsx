@@ -4,7 +4,7 @@ import moment from 'moment';
 import { toast } from 'react-toastify';
 import { PermissionHelp } from '/client/views/people/AccountsManagePanel';
 
-const PrivacyPanel = ({ orb, bolt, app, user, isAdmin, bCache })=> {
+const PrivacyPanel = ({ orb, bolt, app, user, isAdmin, traceDT })=> {
   
   function clearthisUserCrumbs() {
     Meteor.call('clearBreadcrumbsRepair', (error, reply)=>{
@@ -30,7 +30,7 @@ const PrivacyPanel = ({ orb, bolt, app, user, isAdmin, bCache })=> {
         {limitedTrail.map( (entry, index)=>{
           const keyword = entry.keyword;
           const link = keyword.length === 5 ? 'pro' : false;
-          const moreInfo = bCache ? bCache.dataSet.find( x => x.batch === entry.keyword) : false;
+          const moreInfo = traceDT ? traceDT.find( x => x.batch === entry.keyword) : false;
           const what = moreInfo ? moreInfo.isWhat : 'unavailable';
           return(
             <tbody key={index}>

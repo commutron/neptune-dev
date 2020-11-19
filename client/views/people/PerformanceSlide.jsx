@@ -10,7 +10,7 @@ import NumLine from '/client/components/tinyUi/NumLine.jsx';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 
-const PerformanceSlide = ({ app, user, users, bCache, isDebug })=> {
+const PerformanceSlide = ({ app, user, users, traceDT, isDebug })=> {
   
   const [weekChoice, setWeekChoice] = useState(false);
   const [weekData, setWeekData] = useState(false);
@@ -139,7 +139,7 @@ const PerformanceSlide = ({ app, user, users, bCache, isDebug })=> {
             <dl>
               <dt>{Pref.Batch} List ({batchList.length}) [{selectDayState || 'Week'}]</dt>
               {batchList.map( (ent, ix)=>{
-                const moreInfo = bCache ? bCache.dataSet.find( x => x.batch === ent) : false;
+                const moreInfo = traceDT ? traceDT.find( x => x.batch === ent) : false;
                 const what = moreInfo ? moreInfo.isWhat.join(' ') : 'unavailable';
                 return(
                   <dd key={ent+ix}>

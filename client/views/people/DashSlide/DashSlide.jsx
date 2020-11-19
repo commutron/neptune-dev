@@ -6,7 +6,7 @@ import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
 import PeoplePanel from './PeoplePanel.jsx';
 
 
-const DashSlide = ({ app, user, users, bCache, brancheS, isDebug })=> {
+const DashSlide = ({ app, user, users, traceDT, brancheS, isDebug })=> {
   
   const [ update, forceUpdate] = useState(false);
   
@@ -139,7 +139,7 @@ const DashSlide = ({ app, user, users, bCache, brancheS, isDebug })=> {
           eUsers={eUsersState}
           dUsers={dUsersState}
           openTBlockState={openTBlockState}
-          bCache={bCache}
+          traceDT={traceDT}
           updateBranches={(id, br)=>updateBranches(id, br)}
           removeBranch={(id)=>removeBranch(id)}
           update={update}

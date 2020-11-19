@@ -80,10 +80,7 @@ const DownstreamView = ({
   
   const branches = app.branches.filter( b => b.open === true );
   const brancheS = branches.sort((b1, b2)=> {
-          if (b1.position < b2.position) { return 1 }
-          if (b1.position > b2.position) { return -1 }
-          return 0;
-        });
+    return b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 });
 
   return(
     <div

@@ -275,21 +275,32 @@ function collectProgress(privateKey, batchID, branchOnly) {
     let branchSets = [];
     
     if(bx) {
+      const waterfall = bx.waterfall;
       
       for(let branch of relevantBrancheS) {
+        const steps = waterfall.filter( x => x.branchKey === branch.brKey );
+        
         branchSets.push({
           branch: branch.branch,
-          steps: [],
+          steps: steps,
           count: 0,
-          ncLeft: false
+          ncLeft: 0,
+          shLeft: 0
         });
       }
+
+      branchSets.map( (brSet, index)=> {
+        for(let stp of brSet.steps) {
+          const wfCount = stp.counts.length === 0 ? 0 :
+              Array.from(stp.counts, x => x.tick).reduce((x,y)=> x + y);
+          branchSets[index].count = brSet.count + wfCount;
+        }
+      });
       
       collection = {
         batch: bx.batch,
         batchID: bx._id,
         totalItems: bx.quantity,
-        // isActive: null,
         branchSets: branchSets,
       };
       resolve(collection);
@@ -298,12 +309,6 @@ function collectProgress(privateKey, batchID, branchOnly) {
       const docW = WidgetDB.findOne({_id: batch.widgetId});
       const flow = docW.flows.find( x => x.flowKey === batch.river );
       const riverFlow = flow ? flow.flow : [];
-      
-      // const now = moment().tz(Config.clientTZ);
-      // const tide = batch.tide || [];
-      // const isActive = tide.find( x => 
-      //   now.isSame(moment(x.startTime).tz(Config.clientTZ), 'day')
-      // ) ? true : false;
       
       const rNC = batch.nonCon.filter( n => 
         !n.trash && n.inspect === false && n.skip === false );
@@ -344,7 +349,6 @@ function collectProgress(privateKey, batchID, branchOnly) {
         batch: batch.batch,
         batchID: batch._id,
         totalItems: batch.items.length,
-        // isActive: isActive,
         branchSets: branchSets,
       };
       resolve(collection);

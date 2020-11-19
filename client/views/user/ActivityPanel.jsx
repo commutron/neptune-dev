@@ -7,7 +7,7 @@ import WeekBrowse from '/client/components/bigUi/WeekBrowse/WeekBrowse.jsx';
 import TideWeekMini from '/client/components/charts/Tides/TideWeekMini.jsx';
 import TideEditWrap from '/client/components/tide/TideEditWrap.jsx';
 
-const ActivityPanel = ({ app, brancheS, user, isDebug, users, bCache })=> {
+const ActivityPanel = ({ app, brancheS, user, isDebug, users, traceDT })=> {
   
   const [weekChoice, setWeekChoice] = useState(false);
   const [weekData, setWeekData] = useState(false);
@@ -79,7 +79,7 @@ const ActivityPanel = ({ app, brancheS, user, isDebug, users, bCache })=> {
         </tbody>*/}
         <TideEditWrap 
           weekData={weekData} 
-          bCache={bCache} 
+          traceDT={traceDT} 
           updateData={()=>getData(false)}
           user={user}
           isDebug={isDebug}

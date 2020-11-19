@@ -896,6 +896,7 @@ Meteor.methods({
           }
         }
       });
+      Meteor.defer( ()=>{ Meteor.call('updateOneMinify', batchId, accessKey); });
       return true;
     }else{
       return false;
@@ -924,6 +925,10 @@ Meteor.methods({
           }
         }
       });
+      // Meteor.defer( ()=>{
+      //   Meteor.call('priorityCacheUpdate', accessKey, true);
+      //   Meteor.call('updateOneMovement', batchId, accessKey);
+      // });
       return true;
     }else{
       return false;
@@ -978,6 +983,7 @@ Meteor.methods({
       const unlock = lock === pass;
       if(access && unlock) {
         BatchDB.remove({_id: batchId});
+        TraceDB.remove({batchID: batchID});
         return true;
       }else{
         return false;

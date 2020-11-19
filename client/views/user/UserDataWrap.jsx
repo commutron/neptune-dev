@@ -21,7 +21,7 @@ const UserDataWrap = ({
   readyUsers, readybNames, // subs
   orb, bolt, // meta
   user, isAdmin, isDebug, org, app, // self
-  bCache, users // working data
+  traceDT, users // working data
 })=> {
   
   useLayoutEffect( ()=>{
@@ -34,10 +34,7 @@ const UserDataWrap = ({
     
   const branches = app.branches.filter( b => b.open === true );
   const brancheS = branches.sort((b1, b2)=> {
-          if (b1.position < b2.position) { return 1 }
-          if (b1.position > b2.position) { return -1 }
-          return 0;
-        });
+    return b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 });
         
   return(
     <ErrorCatch>
@@ -73,7 +70,7 @@ const UserDataWrap = ({
             // isAdmin={isAdmin}
             isDebug={isDebug}
             users={users}
-            bCache={bCache} />
+            traceDT={traceDT} />
             
           <InboxPanel
             key={3}
@@ -101,7 +98,7 @@ const UserDataWrap = ({
             user={user}
             isAdmin={isAdmin}
             // isDebug={isDebug}
-            bCache={bCache} />
+            traceDT={traceDT} />
           
         </Slides>
 				
@@ -135,7 +132,7 @@ export default withTracker( () => {
       isDebug: isDebug,
       org: org,
       app: AppDB.findOne({org: org}),
-      bCache: CacheDB.findOne({dataName: 'batchInfo'}),
+      traceDT: TraceDB.find({}).fetch(),
       users: Meteor.users.find({}, {sort: {username:1}}).fetch()
     };
   }

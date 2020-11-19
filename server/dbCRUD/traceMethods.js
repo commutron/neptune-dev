@@ -81,7 +81,7 @@ function checkMinify(bData, accessKey) {
       orgKey: accessKey,
       lastUpserted: new Date(),
       batch: bData.batch,
-      batchID: bData._id,
+      // batchID: bData._id,
       salesOrder: bData.salesOrder,
       isWhat: isWhat.isWhat,
       describe: isWhat.more,
@@ -156,6 +156,22 @@ Meteor.methods({
       return true;
     }catch (err) {
       throw new Meteor.Error(err);
+    }
+  },
+  
+  clearTraceErrors() {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      const allTrace = TraceDB.find({}).fetch();
+      for( let t of allTrace ) {
+        const doc = BatchDB.findOne({_id: t.batchID});
+        const docX = XBatchDB.findOne({_id: t.batchID});
+        if(!doc && !docX) {
+           TraceDB.remove({batchID: t.batchID});
+        }
+      }
+      return true;
+    }else{
+      return false;
     }
   },
   
@@ -242,7 +258,7 @@ Meteor.methods({
   },
   
   updateOneMinify(bID, privateKey) {
-    const accessKey = Meteor.user().orgKey || privateKey;
+    const accessKey = privateKey || Meteor.user().orgKey;
     
     BatchDB.find({_id: bID})
             .forEach( (b)=> checkMinify( b, accessKey ) );

@@ -127,18 +127,18 @@ Meteor.publish('usersDataDebug', function(){
 Meteor.publish('bCacheData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  Meteor.defer( ()=>{ batchCacheUpdate(orgKey); });
   if(!this.userId){
     return this.ready();
   }else{
     return [
-      CacheDB.find({orgKey: orgKey, dataName: 'batchInfo' }, {
+      TraceDB.find({orgKey: orgKey}, {
         fields: {
-          'orgKey': 0,
-          'structured' : 0,
-          'minified': 0
-        }}),
-      //TraceDB.find({}),
+          'batch': 1,
+          'batchID': 1,
+          'isWhat': 1,
+          // 'describe': 1
+        }
+      })
     ];
   }
 });

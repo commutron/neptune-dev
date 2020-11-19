@@ -4,14 +4,9 @@ import { toast } from 'react-toastify';
 
 import TrackStepEdit from '/client/components/forms/TrackStepEdit.jsx';
 
-const TrackStepSlide = ({app, sorted})=> {
+const TrackStepSlide = ({ app, branchesS, sorted })=> {
   
   const rndmKey = Math.random().toString(36).substr(2, 5);
-  const branchesSort = app.branches.sort((b1, b2)=> {
-          if (b1.position < b2.position) { return 1 }
-          if (b1.position > b2.position) { return -1 }
-          return 0;
-        });
   
   function addTrackOp(e) {
     e.preventDefault();
@@ -77,7 +72,7 @@ const TrackStepSlide = ({app, sorted})=> {
           <label htmlFor={rndmKey + 'branch'}>{Pref.branch}<br />
             <select id={rndmKey + 'branch'} required >
               <option></option>
-              {branchesSort.map( (entry, index)=>{
+              {branchesS.map( (entry, index)=>{
                 return( 
                   <option key={index} value={entry.brKey}>{entry.branch}</option>
               )})}
@@ -100,7 +95,7 @@ const TrackStepSlide = ({app, sorted})=> {
             <TrackStepEdit 
               key={rndmKey + index + entry.key} 
               app={app}
-              branchesSort={branchesSort}
+              branchesSort={branchesS}
               data={entry} />
         )})}
       </ul>

@@ -40,7 +40,7 @@ const ClockString = ({ loadTime, doThing })=> {
     clockTimeSet( moment().format(fstring) );
     tickingTimeSet( tickingTime => tickingTime.add(1, 's') );
     
-    if(doThing && tickingTime.asMinutes() > 15) { 
+    if(doThing && tickingTime.asMinutes() > 10) { 
       tickingTimeSet( moment.duration() );
       doThing(); }
   },1000);

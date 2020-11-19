@@ -7,7 +7,7 @@ import TaskTag from '/client/components/tinyUi/TaskTag.jsx';
 
 
 const PersonChunk = ({ 
-  userChunk, bCache, app,
+  userChunk, traceDT, app,
   updateBranches, removeBranch, update, 
   isDebug
 })=> {
@@ -44,7 +44,7 @@ const PersonChunk = ({
   
   isDebug && console.log(branchGuess);
   
-  const moreInfo = bCache ? bCache.dataSet.find( x => x.batch === uC.batch) : false;
+  const moreInfo = traceDT ? traceDT.find( x => x.batch === uC.batch) : false;
   const what = moreInfo ? moreInfo.isWhat.join(' ') : 'unavailable';
             
   return(

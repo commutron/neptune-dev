@@ -16,7 +16,7 @@ import UserDMForm from '/client/components/forms/User/UserDMForm.jsx';
 
 import { ForceStopEngage } from '/client/views/app/appSlides/DataRepair.jsx';
 
-const AccountsManagePanel = ({ app, users, bCache, brancheS, isDebug })=> {
+const AccountsManagePanel = ({ app, users, traceDT, brancheS, isDebug })=> {
   
   const auths = Pref.auths;
   const areas = Pref.areas;
@@ -70,7 +70,7 @@ const AccountsManagePanel = ({ app, users, bCache, brancheS, isDebug })=> {
                   user={entry}
                   isDebug={isDebug}
                   users={usersSort}
-                  bCache={bCache} />
+                  traceDT={traceDT} />
                 
                 <div key={1}>
                 {isAdmin ?

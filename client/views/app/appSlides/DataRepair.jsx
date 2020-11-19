@@ -85,6 +85,12 @@ const DataRepair = ({ app, users })=> {
       re && toast.success('method complete', { autoClose: false });
     });
   }
+  function runTraceFix() {
+    Meteor.call('clearTraceErrors', (error, re)=>{
+      error && console.log(error);
+      re && toast.success('method complete', { autoClose: false });
+    });
+  }
   
   function updateCaches() {
     Meteor.call('FORCEcacheUpdate', (error)=>{
@@ -176,8 +182,16 @@ const DataRepair = ({ app, users })=> {
       <h2 className='cap'>Build TraceDB</h2>
       <button
         onClick={()=>runTraceMinify()}
-        className='action clear purpleT'
+        className='action clearPurple'
       >FORCE Run TraceDB Rebuild</button>
+      
+      <hr />
+      
+      <h2 className='cap'>TraceDB Error Fix</h2>
+      <button
+        onClick={()=>runTraceFix()}
+        className='action clearOrange'
+      >Fix Errors in TraceDB</button>
       
       <hr />
       

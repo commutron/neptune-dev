@@ -8,7 +8,7 @@ import TideBlockRow from '/client/components/tide/TideBlockRow.jsx';
 
 
 const TideEditWrap = ({ 
-  weekData, bCache, updateData, 
+  weekData, traceDT, updateData, 
   user, isDebug, 
   app, ancOptionS, plainBrancheS 
 })=> {
@@ -79,7 +79,7 @@ const TideEditWrap = ({
     <tbody>
       {weekData.map( (blk, index)=>{
         const keyword = blk.batch;
-        const moreInfo = bCache ? bCache.dataSet.find( x => x.batch === blk.batch) : false;
+        const moreInfo = traceDT ? traceDT.find( x => x.batch === blk.batch) : false;
         const what = moreInfo ? moreInfo.isWhat.join(' ') : 'unavailable';
         
         const lastStart = weekData[index-1] && weekData[index-1].startTime;
