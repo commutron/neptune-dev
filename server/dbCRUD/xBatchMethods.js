@@ -167,16 +167,23 @@ Meteor.methods({
       // }
       const tTime = !doc.tide ? 0 : batchTideTime(doc.tide);
       //const ncTypes = Meteor.call('nonConSelfCount', doc.nonCon);
-    
+      
+      // waterfall steps
+      
       XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
   			$set : {
   			  lock: true,
   			  lockTrunc: {
   			    lockedAt: new Date(),
+  			    itemQuantity:  Number(doc.quantity),
   			    unitQuantity: Number(doc.quantity),
-  			    scrapQuantity: Number(0),
+  			    scitemQuantity: Number(0),
+  			    scunitQuantity: Number(0),
   			    tideTotal: Number(tTime),
-  			    ncTypes: []
+  			    ncTypes: [],
+  			    shTypes: [],
+  			    rvSteps: [],
+  			    wfSteps: []
   			  }
         }
       });

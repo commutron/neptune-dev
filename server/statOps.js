@@ -106,13 +106,35 @@ Meteor.methods({
   nonConSelfCount(nonConCol) {
     const nonConClean = nonConCol.filter( x => !x.trash );
     const typeObj = _.countBy(nonConClean, x => x.type);
-    const typeObjClean = _.omit(typeObj, (value, key, object)=> {
-      return key == false;
-    });
-
-    const itr = Object.entries(typeObjClean);
+    // const typeObjClean = _.omit(typeObj, (value, key, object)=> {
+    //   return key == false;
+    // });
+    const itr = Object.entries(typeObj);
     const typeArr = Array.from(itr, (arr)=> { return {type: arr[0], count: arr[1]} } );
     return typeArr;
+  },
+  
+  // Shortfall Counts
+  
+  riverStepSelfCount(itemsCol) {
+    const itemHistory = Array.from( itemsCol, x => 
+              x.history.filter( y => y.type !== 'first' && y.good === true) );
+    
+    const itemHkeys = Array.from( itemHistory, x => x.map( s => 
+                                      `${s.key}<|>${s.step}<|>${s.type}` ) );
+    
+    const keysFlat = [].concat(...itemHkeys);
+    const keyObj = _.countBy(keysFlat, x => x);
+    const itr = Object.entries(keyObj);
+
+    const keyArr = Array.from(itr, (a)=> ( {keystep: a[0], count: a[1]} ) );
+    return keyArr;
   }
   
+  // Waterfall counts
+  
+  
+  
+
+
 });
