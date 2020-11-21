@@ -171,7 +171,7 @@ Meteor.methods({
       }
       const tTime = !doc.tide ? 0 : batchTideTime(doc.tide);
       const ncTypes = Meteor.call('nonConSelfCount', doc.nonCon);
-      // Shortfall Counts
+      const shPNums = Meteor.call('shortfallSelfCount', doc.shortfall);
       const rvSteps = Meteor.call('riverStepSelfCount', doc.items);
     
       BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
@@ -185,7 +185,7 @@ Meteor.methods({
   			    scunitQuantity: Number(scrapUnits),
   			    tideTotal: Number(tTime),
   			    ncTypes: ncTypes,
-  			    shTypes: [],
+  			    shTypes: shPNums,
   			    rvSteps: rvSteps,
   			    wfSteps: []
   			  }

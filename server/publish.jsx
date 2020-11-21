@@ -13,7 +13,7 @@ TraceDB = new Mongo.Collection('tracedb');
 CacheDB = new Mongo.Collection('cachedb');
 
 
-import { batchCacheUpdate } from './cacheMethods.js';
+// import { batchCacheUpdate } from './cacheMethods.js';
 
 
 Meteor.publish('loginData', function(){
@@ -565,13 +565,13 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
             'orgKey': 0,
             'shareKey': 0,
             'floorRelease': 0,
-            'lockTrunc': 0
+            // 'lockTrunc': 0
           }}),
         XBatchDB.find({batch: dataRequest, orgKey: orgKey}, {
           fields: {
             'orgKey': 0,
             'shareKey': 0,
-            'lockTrunc': 0
+            // 'lockTrunc': 0
         }})
       ];
     }

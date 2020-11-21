@@ -114,11 +114,28 @@ Meteor.methods({
     return typeArr;
   },
   
-  // Shortfall Counts
+  shortfallSelfCount(shortfallCol) {
+    const pnums = _.uniq( Array.from(shortfallCol, x => x.partNum) );
+    
+    let pnCounts = [];
+    for( let pn of pnums) {
+      const shOf = shortfallCol.filter( s => s.partNum === pn );
+      let shCount = 0;
+      for(let sh of shOf) {
+        shCount += sh.refs.length;
+      }
+      pnCounts.push({
+        partNum: pn,
+        count: shCount
+      });
+    }
+    return pnCounts;
+  },
   
   riverStepSelfCount(itemsCol) {
     const itemHistory = Array.from( itemsCol, x => 
-              x.history.filter( y => y.type !== 'first' && y.good === true) );
+              x.history.filter( y => 
+                y.type !== 'first' && y.type !== 'scrap' && y.good === true) );
     
     const itemHkeys = Array.from( itemHistory, x => x.map( s => 
                                       `${s.key}<|>${s.step}<|>${s.type}` ) );
@@ -129,12 +146,22 @@ Meteor.methods({
 
     const keyArr = Array.from(itr, (a)=> ( {keystep: a[0], count: a[1]} ) );
     return keyArr;
+  },
+  
+  waterfallSelfCount(waterfallCol) {
+    let keyArr = [];
+    for(let wf of waterfallCol) {
+      const wfstep = `${wf.key}<|>${wf.gate}<|>${wf.type}`;
+      const wfCount = wf.counts.length === 0 ? 0 :
+                        Array.from(wf.counts, x => x.tick).reduce((x,y)=> x + y);
+      keyArr.push({
+        keystep: wfstep,
+        count: wfCount
+      });
+    }
+    return keyArr;
   }
-  
-  // Waterfall counts
-  
-  
-  
+
 
 
 });

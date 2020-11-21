@@ -72,8 +72,9 @@ const TideBlockRow = ({
   
   const editSelf = tideWho === Meteor.userId();
   const editAuth = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
-  const zeroed = isStop && mStop.diff(mStart, 'minutes') <= 0.5 ? true : false;
+  const zeroed = isStop && !isDebug && mStop.diff(mStart, 'minutes') <= 0.5;
   const staticFormat = isDebug ? 'hh:mm:ss A' : 'hh:mm A';
+  const staticAlt = isDebug ? "G:i:s K" : "G:i K";
     
     return(
       <Fragment>
@@ -102,17 +103,19 @@ const TideBlockRow = ({
                 onChange={(e)=>setTempStart(e)} 
                 options={{
                   dateFormat: "Y-m-dTG:i:s",
-                  defaultDate: moment(mStart).format("YYYY-m-dThh:mm:ss"),
-                  minDate: moment(absoluteMin).startOf('minute').format(),
+                  defaultDate: mStart.format("YYYY-m-dThh:mm:ss"),
+                  minDate: mStart.isSame(absoluteMin, 'minute') ?
+                    moment(absoluteMin).format() :
+                    moment(absoluteMin).startOf('minute').format(),
                   maxDate: tempStop[0] ? 
-                    moment(tempStop[0]).startOf('minute').format() :
-                    mStop.clone().startOf('minute').format(),
+                    moment(tempStop[0]).format() :
+                    mStop.clone().format(),
                   minuteIncrement: 1,
                   noCalendar: true,
                   enableTime: true,
                   time_24hr: false,
                   altInput: true,
-                  altFormat: "G:i K",
+                  altFormat: staticAlt
                 }}
               />}
         </td>
@@ -133,7 +136,7 @@ const TideBlockRow = ({
                 enableTime: true,
                 time_24hr: false,
                 altInput: true,
-                altFormat: "G:i K",
+                altFormat: staticAlt
               }}
             />
           :
@@ -165,7 +168,7 @@ const TideBlockRow = ({
                 enableTime: true,
                 time_24hr: false,
                 altInput: true,
-                altFormat: "G:i K",
+                altFormat: staticAlt,
               }}
             />
             }

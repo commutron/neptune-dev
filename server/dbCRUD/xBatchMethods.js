@@ -166,9 +166,7 @@ Meteor.methods({
       //   !sc ? null : scrapUnits += i.units;
       // }
       const tTime = !doc.tide ? 0 : batchTideTime(doc.tide);
-      //const ncTypes = Meteor.call('nonConSelfCount', doc.nonCon);
-      
-      // waterfall steps
+      const wfCount = Meteor.call('waterfallSelfCount', doc.waterfall);
       
       XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
   			$set : {
@@ -183,7 +181,7 @@ Meteor.methods({
   			    ncTypes: [],
   			    shTypes: [],
   			    rvSteps: [],
-  			    wfSteps: []
+  			    wfSteps: wfCount
   			  }
         }
       });
