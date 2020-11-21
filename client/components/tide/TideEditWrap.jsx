@@ -13,6 +13,8 @@ const TideEditWrap = ({
   app, ancOptionS, plainBrancheS 
 })=> {
   
+  const isSuper = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
+  
   const [ doEditKey, enableEdit ] = useState(false);
   const [ doSplitKey, enableSplit ] = useState(false);
   
@@ -130,6 +132,7 @@ const TideEditWrap = ({
                 setSplit={(e)=>splitBlock(e)}
                 ancOptionS={ancOptionS}
                 plainBrancheS={plainBrancheS}
+                isSuper={isSuper}
                 isDebug={isDebug} />
             </Fragment>
           );
@@ -151,6 +154,7 @@ const TideEditWrap = ({
               setSplit={(e)=>splitBlock(e)}
               ancOptionS={ancOptionS}
               plainBrancheS={plainBrancheS}
+              isSuper={isSuper}
               isDebug={isDebug} />
           );
         }

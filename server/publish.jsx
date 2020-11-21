@@ -13,9 +13,6 @@ TraceDB = new Mongo.Collection('tracedb');
 CacheDB = new Mongo.Collection('cachedb');
 
 
-// import { batchCacheUpdate } from './cacheMethods.js';
-
-
 Meteor.publish('loginData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
@@ -260,11 +257,7 @@ Meteor.publish('traceDataOpen', function(){
 Meteor.publish('cacheData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  // Meteor.defer( ()=>{ batchCacheUpdate(orgKey); });
   Meteor.defer( ()=>{ Meteor.call('priorityCacheUpdate', orgKey); });
-  // Meteor.defer( ()=>{ Meteor.call('activityCacheUpdate', orgKey); });
-  // Meteor.defer( ()=>{ branchConCacheUpdate(orgKey) });
-  // Meteor.defer( ()=>{ Meteor.call('completeCacheUpdate', orgKey); });
   if(!this.userId){
     return this.ready();
   }else{
@@ -433,9 +426,7 @@ Meteor.publish('hotDataPlus', function(batch){
 Meteor.publish('skinnyData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  // Meteor.defer( ()=>{ Meteor.call('batchCacheUpdate', orgKey); });
   // Meteor.defer( ()=>{ Meteor.call('priorityCacheUpdate', orgKey); });
-  // Meteor.defer( ()=>{ branchConCacheUpdate(orgKey) });
   if(!this.userId){
     return this.ready();
   }else{
@@ -565,13 +556,13 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
             'orgKey': 0,
             'shareKey': 0,
             'floorRelease': 0,
-            // 'lockTrunc': 0
+            'lockTrunc': 0
           }}),
         XBatchDB.find({batch: dataRequest, orgKey: orgKey}, {
           fields: {
             'orgKey': 0,
             'shareKey': 0,
-            // 'lockTrunc': 0
+            'lockTrunc': 0
         }})
       ];
     }

@@ -146,7 +146,7 @@ function collectActivtyLevel(privateKey, batchID) {
   });
 }
 
-function slimBlockReturnData(batch, thePeriod) {
+function slimBlockReturnData(batch, thePeriod, lockout) {
   let slimBlock = [];
   for(let blck of thePeriod) {
     let mStop = blck.stopTime ? moment(blck.stopTime) : moment();
@@ -158,7 +158,8 @@ function slimBlockReturnData(batch, thePeriod) {
       startTime: blck.startTime,
       stopTime: blck.stopTime,
       durrAsMin: durr,
-      task: blck.task || null
+      task: blck.task || null,
+      lockOut: lockout
     });
   }
   return slimBlock;     
@@ -220,7 +221,7 @@ Meteor.methods({
           moment.tz(x.startTime, Config.clientTZ).dayOfYear() === getDay);
         
         slimTideCollection.push(
-          slimBlockReturnData(btch.batch, theDay)
+          slimBlockReturnData(btch.batch, theDay, btch.lock)
         );
       }
       return [].concat(...slimTideCollection);
@@ -287,7 +288,7 @@ Meteor.methods({
           moment(x.startTime).weekYear() === getYear && 
           moment(x.startTime).week() === getWeek);
           
-        const rtnBlock = slimBlockReturnData(btch.batch, yourWeek);
+        const rtnBlock = slimBlockReturnData(btch.batch, yourWeek, btch.lock);
         //sendAll ? durrBlockReturnData(btch.batch, yourWeek, Config.clientTZ);
         slimTideCollection.push( rtnBlock );
       }

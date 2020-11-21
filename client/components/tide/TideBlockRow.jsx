@@ -14,7 +14,7 @@ const TideBlockRow = ({
   setEdit, setEnd, setSplit,
   
   ancOptionS, plainBrancheS,
-  isDebug
+  isSuper, isDebug
 })=> {
   
   const tideKey = tideObj.tKey;
@@ -61,21 +61,24 @@ const TideBlockRow = ({
   const mStopDay = mStop.clone().endOf('day');
   
   const absoluteMin =
-  !lastStop || !moment(lastStop).isAfter(mStartDay) ?
-    mStartDay.format() : lastStop;
+    !lastStop || !moment(lastStop).isAfter(mStartDay) ?
+      mStartDay.format() : lastStop;
     
   const absoluteMax =
-  !isStop ? mStop.format() : 
-    !nextStart && !moment().isAfter(mStop, 'day') ? mStop.format() :
-      !nextStart || moment(nextStart).isAfter(mStopDay) ?
-        mStopDay.format() : nextStart;
+    !nextStart || moment(nextStart).isAfter(mStopDay) ?
+      mStopDay.format() : nextStart;
   
   const editSelf = tideWho === Meteor.userId();
-  const editAuth = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
   const zeroed = isStop && !isDebug && mStop.diff(mStart, 'minutes') <= 0.5;
   const staticFormat = isDebug ? 'hh:mm:ss A' : 'hh:mm A';
   const staticAlt = isDebug ? "G:i:s K" : "G:i K";
-    
+  
+  isDebug && console.log({ 
+    mStart, mStop,
+    lastStop, absoluteMin,
+    nextStart, absoluteMax
+  });
+  
     return(
       <Fragment>
       <tr className={editOn ? 'pop' : ''}>
@@ -95,50 +98,36 @@ const TideBlockRow = ({
         
         <td className='noRightBorder numFont centreText timeInputs'>
           <i className="fas fa-play fa-fw fa-xs greenT"></i>
-            {!editOn || splitOn ? ////////////////////////////////////// START
+            {!editOn || splitOn ?
               <i> {mStart.format(staticFormat)}</i> 
               :
-              <Flatpickr
-                value={moment(mStart).format()}
-                onChange={(e)=>setTempStart(e)} 
-                options={{
-                  dateFormat: "Y-m-dTG:i:s",
-                  defaultDate: mStart.format("YYYY-m-dThh:mm:ss"),
-                  minDate: mStart.isSame(absoluteMin, 'minute') ?
+              <TimePicker
+                stateValue={moment(mStart).format()}
+                changeValue={(e)=>setTempStart(e)}
+                defaultMmnt={mStart}
+                minLimit={mStart.isSame(absoluteMin, 'minute') ?
                     moment(absoluteMin).format() :
-                    moment(absoluteMin).startOf('minute').format(),
-                  maxDate: tempStop[0] ? 
+                    moment(absoluteMin).startOf('minute').format()}
+                maxLimit={tempStop[0] ? 
                     moment(tempStop[0]).format() :
-                    mStop.clone().format(),
-                  minuteIncrement: 1,
-                  noCalendar: true,
-                  enableTime: true,
-                  time_24hr: false,
-                  altInput: true,
-                  altFormat: staticAlt
-                }}
+                    mStop.clone().format()}
+                calendarBool={true}
+                staticAlt={staticAlt}
               />}
         </td>
         <td className='noRightBorder nospace centreText timeInputs'>
           {!editOn ?
             <em><i className="fas fa-long-arrow-alt-right"></i></em>
-          : splitOn ? ///////////////////////////////////////////////// SPLIT
-            <Flatpickr
-              value={mStop.clone().subtract(1, 'm').format()}
-              onChange={(e)=>setTempSplit(e)} 
-              options={{
-                dateFormat: "Y-m-dTG:i:s",
-                defaultDate: mStop.clone().subtract(1, 'm').format("YYYY-m-dThh:mm:ss"),
-                minDate: moment(startTime).endOf('minute').format(),
-                maxDate: mStop.clone().startOf('minute').format(),
-                minuteIncrement: 1,
-                noCalendar: mStop.isAfter(mStart, 'day') === false,
-                enableTime: true,
-                time_24hr: false,
-                altInput: true,
-                altFormat: staticAlt
-              }}
-            />
+          : splitOn ?
+              <TimePicker
+                stateValue={mStop.clone().subtract(1, 'm').format()}
+                changeValue={(e)=>setTempSplit(e)}
+                defaultMmnt={mStop.clone().subtract(1, 'm')}
+                minLimit={moment(startTime).endOf('minute').format()}
+                maxLimit={mStop.clone().startOf('minute').format()}
+                calendarBool={mStop.isAfter(mStart, 'day') === false}
+                staticAlt={staticAlt}
+              />
           :
             <button
               className='miniAction'
@@ -150,28 +139,20 @@ const TideBlockRow = ({
         <td className='noRightBorder numFont centreText timeInputs'>
           <i className="fas fa-stop fa-fw fa-xs redT"></i>
           {!isStop ? <i> __:__ __</i> :
-            !editOn || splitOn ? /////////////////////////////////////// STOP
+            !editOn || splitOn ?
             <i> {mStop.format(staticFormat)}</i>
             :
-            <Flatpickr
-              value={mStop.format()}
-              onChange={(e)=>setTempStop(e)} 
-              options={{
-                dateFormat: "Y-m-dTG:i:s",
-                defaultDate: mStop.format("YYYY-m-dThh:mm:ss"),
-                minDate: tempStart[0] ? 
+            <TimePicker
+              stateValue={mStop.format()}
+              changeValue={(e)=>setTempStop(e)}
+              defaultMmnt={mStop}
+              minLimit={tempStart[0] ? 
                           moment(tempStart[0]).endOf('minute').format() : 
-                          moment(startTime).endOf('minute').format(),
-                maxDate: absoluteMax,
-                minuteIncrement: 1,
-                noCalendar: mStop.isAfter(mStart, 'day') === false,
-                enableTime: true,
-                time_24hr: false,
-                altInput: true,
-                altFormat: staticAlt,
-              }}
-            />
-            }
+                          moment(startTime).endOf('minute').format()}
+              maxLimit={absoluteMax}
+              calendarBool={mStop.isAfter(mStart, 'day') === false}
+              staticAlt={staticAlt}
+            />}
         </td>
         
         {editOn ?
@@ -199,13 +180,14 @@ const TideBlockRow = ({
               <button
                 className='miniAction'
                 onClick={()=>setEnd({batch, tideKey})}
-                disabled={!editAuth}
+                disabled={!isSuper}
               ><em><i className="far fa-edit"></i></em> stop</button>
-            :
+            : 
+              tideObj.lockOut ? <i className="fas fa-lock purpleT"></i> :
               <button
                 className='miniAction'
                 onClick={()=>editMode(true)}
-                disabled={zeroed || ( !editSelf && !editAuth )}
+                disabled={zeroed || ( !editSelf && !isSuper )}
               ><em><i className="far fa-edit"></i></em> edit</button>
             }
             </td>
@@ -257,3 +239,26 @@ const TideTaskExplicit = ({
     </td>
   );
 };
+
+
+const TimePicker = ({ 
+  stateValue, changeValue, defaultMmnt,
+  minLimit, maxLimit, calendarBool, staticAlt
+})=> (
+  <Flatpickr
+    value={stateValue}
+    onChange={changeValue}
+    options={{
+      dateFormat: "Y-m-dTG:i:s",
+      defaultDate: defaultMmnt.format("YYYY-m-dThh:mm:ss"),
+      minDate: minLimit,
+      maxDate: maxLimit,
+      minuteIncrement: 1,
+      noCalendar: calendarBool,
+      enableTime: true,
+      time_24hr: false,
+      altInput: true,
+      altFormat: staticAlt
+    }}
+  />
+);

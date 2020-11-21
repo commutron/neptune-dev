@@ -1,5 +1,4 @@
 import moment from 'moment';
-import { batchCacheUpdate} from '/server/cacheMethods.js';
 import { batchTideTime } from '/server/tideGlobalMethods';
 
 Meteor.methods({
@@ -56,7 +55,6 @@ Meteor.methods({
       });
       
       Meteor.defer( ()=>{
-        batchCacheUpdate( accessKey, true );
         Meteor.call('priorityCacheUpdate', accessKey, true);
         Meteor.call('buildNewTraceX', accessKey);
       });
@@ -84,7 +82,6 @@ Meteor.methods({
   			  updatedWho: Meteor.userId()
         }});
       Meteor.defer( ()=>{
-        batchCacheUpdate( accessKey, true );
         Meteor.call('priorityCacheUpdate', accessKey, true);
         Meteor.call('updateOneMinify', batchId, accessKey);
       });

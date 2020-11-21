@@ -53,6 +53,7 @@ const TimeTab = ({
         <TimeBlocksRaw 
           batch={b.batch} 
           tide={b.tide} 
+          lockOut={b.lock}
           isDebug={isDebug} />
       </div>
               

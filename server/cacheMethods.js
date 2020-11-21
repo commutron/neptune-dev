@@ -1,70 +1,12 @@
 // import { Random } from 'meteor/random'
 import moment from 'moment';
-import 'moment-timezone';
-import 'moment-business-time';
 
-import Config from '/server/hardConfig.js';
-import { deliveryState } from '/server/reportCompleted.js';
+// import Config from '/server/hardConfig.js';
 
-moment.updateLocale('en', {
-  workinghours: Config.workingHours,
-  shippinghours: Config.shippingHours
-});
-
-
-export function batchCacheUpdate(accessKey, force) {
-  if(typeof accessKey === 'string') {
-    const timeOut = moment().subtract(12, 'hours').toISOString();
-    const currentCache = CacheDB.findOne({
-      orgKey: accessKey, 
-      lastUpdated: { $gte: new Date(timeOut) },
-      dataName:'batchInfo'});
-    
-    if(force || !currentCache ) {
-      const batches = BatchDB.find({orgKey: accessKey}).fetch();
-      const batchesX = XBatchDB.find({orgKey: accessKey}).fetch();
-      const slim = [...batches,...batchesX].map( x => {
-        return Meteor.call('getBasicBatchInfo', x.batch);
-      });
-      CacheDB.upsert({orgKey: accessKey, dataName: 'batchInfo'}, {
-        $set : { 
-          orgKey: accessKey,
-          lastUpdated: new Date(),
-          dataName: 'batchInfo',
-          dataSet: slim,
-          structured: true,
-          minified: true
-      }});
-    }
-  }
-}
-
-export function branchConCacheUpdate(accessKey, force) {
-  if(typeof accessKey === 'string') {
-    const timeOut = moment().subtract(15, 'minutes').toISOString();
-    const currentCache = CacheDB.findOne({
-      orgKey: accessKey, 
-      lastUpdated: { $gte: new Date(timeOut) },
-      dataName:'branchCondition'});
-
-    if( force || !currentCache ) {
-      const batches = BatchDB.find({orgKey: accessKey, live: true}).fetch();
-      const batchesX = XBatchDB.find({orgKey: accessKey, live: true}).fetch();
-      const slim = [...batches,...batchesX].map( x => {
-        return Meteor.call('branchCondition', x._id, accessKey);
-      });
-      CacheDB.upsert({orgKey: accessKey, dataName: 'branchCondition'}, {
-        $set : { 
-          orgKey: accessKey,
-          lastUpdated: new Date(),
-          dataName: 'branchCondition',
-          dataSet: slim,
-          structured: true,
-          minified: false
-      }});
-    }
-  }
-}
+// moment.updateLocale('en', {
+//   workinghours: Config.workingHours,
+//   shippinghours: Config.shippingHours
+// });
 
 
 Meteor.methods({
@@ -74,25 +16,16 @@ Meteor.methods({
     this.unblock();
     if(Roles.userIsInRole(Meteor.userId(), 'active')) {
       const key = Meteor.user().orgKey;
-      batchCacheUpdate(key, true);
       Meteor.call('priorityCacheUpdate', key, true);
-      Meteor.call('activityCacheUpdate', key, true);
-      branchConCacheUpdate(key, true);
     }
   },
   
-  REQUESTcacheUpdate(batchUp, priorityUp, activityUp, branchConUp) {
+  REQUESTcacheUpdate() {
     this.unblock();
     if(Roles.userIsInRole(Meteor.userId(), 'active')) {
       const key = Meteor.user().orgKey;
-      batchUp && Meteor.defer( ()=>{
-        batchCacheUpdate(key, false) });
-      priorityUp && Meteor.defer( ()=>{
+      Meteor.defer( ()=>{
         Meteor.call('priorityCacheUpdate', key, false) });
-      activityUp && Meteor.defer( ()=>{
-        Meteor.call('activityCacheUpdate', key, false) });
-      branchConUp && Meteor.defer( ()=>{
-        branchConCacheUpdate(key, false) });
     }
   },
   
@@ -117,34 +50,6 @@ Meteor.methods({
             orgKey: accessKey,
             lastUpdated: new Date(),
             dataName: 'priorityRank',
-            dataSet: slim,
-            structured: true,
-            minified: false
-        }});
-      }
-    }
-  },
-  
-  activityCacheUpdate(accessKey, force) {
-    this.unblock();
-    if(typeof accessKey === 'string') {
-      const timeOut = moment().subtract(5, 'minutes').toISOString();
-      const currentCache = CacheDB.findOne({
-        orgKey: accessKey, 
-        lastUpdated: { $gte: new Date(timeOut) },
-        dataName:'activityLevel'});
-      
-      if(force || !currentCache ) {
-        const batches = BatchDB.find({orgKey: accessKey, live: true}).fetch();
-        const batchesX = XBatchDB.find({orgKey: accessKey, live: true}).fetch();
-        const slim = [...batches,...batchesX].map( x => {
-          return Meteor.call('tideActivityLevel', x._id, accessKey);
-        });
-        CacheDB.upsert({orgKey: accessKey, dataName: 'activityLevel'}, {
-          $set : { 
-            orgKey: accessKey,
-            lastUpdated: new Date(),
-            dataName: 'activityLevel',
             dataSet: slim,
             structured: true,
             minified: false

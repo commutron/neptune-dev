@@ -54,7 +54,8 @@ const TimeTab = ({
       <div className='vmargin space'>
         <TimeBlocksRaw 
           batch={b.batch}
-          tide={b.tide} 
+          tide={b.tide}
+          lockOut={b.lock}
           isDebug={isDebug} />
       </div>
               

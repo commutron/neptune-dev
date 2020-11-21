@@ -6,7 +6,7 @@ import { AnonyUser } from '/client/components/smallUi/UserNice.jsx';
 import TaskTag from '/client/components/tinyUi/TaskTag.jsx';
 import { ForceRemoveTideBlock } from '/client/views/app/appSlides/DataRepair.jsx';
 
-const TimeBlocksRaw = ({ batch, tide, isDebug })=> {
+const TimeBlocksRaw = ({ batch, tide, lockOut, isDebug })=> {
   
   const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
   
@@ -31,7 +31,7 @@ const TimeBlocksRaw = ({ batch, tide, isDebug })=> {
         </tbody>
       </table>
       
-      {isAdmin && isDebug &&
+      {isAdmin && isDebug && !lockOut &&
         <ForceRemoveTideBlock 
           batch={batch}
           isAdmin={isAdmin}
