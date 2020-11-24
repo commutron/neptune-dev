@@ -7,6 +7,8 @@ import CreateTag from '/client/components/tinyUi/CreateTag.jsx';
 // import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 import TagsModule from '/client/components/bigUi/TagsModule.jsx';
 import NoteLine from '/client/components/smallUi/NoteLine.jsx';
+import VariantLive from '/client/components/forms/VariantLive';
+
 
 const VariantPanel = ({ 
   variantData, widgetData, 
@@ -69,9 +71,12 @@ const VariantPanel = ({
           tagOps={app.tagOption} />
           
         <div className='middle'>
-          {v.live ? 
-            <b><i className="fas fa-folder-open fa-2x blueT"></i><br />Live</b> : 
-            <em className='centreText'><i className="fas fa-folder fa-2x grayT"></i><br />Archived</em> }
+          <VariantLive
+            vId={v._id}
+            vKey={v.versionKey}
+            vState={v.live}
+            noText={false}
+            primeTopRight={false} />
         </div>
         
       </div>

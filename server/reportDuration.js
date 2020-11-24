@@ -13,6 +13,36 @@ moment.updateLocale('en', {
   shippinghours: Config.shippingHours
 });
 
+function splitItmTm( items, tide ) {
+  const fitems = items.filter( i => i.finishedAt !== false);
+  const etide = tide.filter( t => t.stopTime !== false);
+  if(fitems.length > 0 && tide && tide.length > 0) {
+    const itemS = fitems.sort( (i1, i2)=> {
+      return i1.finishedAt < i2.finishedAt ? -1 : i1.finishedAt > i2.finishedAt ? 1 : 0; });
+      
+    const itemMidex = Math.floor( itemS.length / 2 );
+    const midItem = itemS[itemMidex];
+    const midMmnt = moment(midItem.finishedAt);
+    
+    let lTide = 0;
+    let rTide = 0;
+    
+    for( let en of etide ) {
+      if( midMmnt.isBetween(en.startTime, en.stopTime ) ) {
+        lTide += ( moment.duration(midMmnt.diff(en.startTime)).asMinutes() );  
+        rTide += ( moment.duration(moment(en.stopTime).diff(midMmnt)).asMinutes() );  
+        
+      }else if( midMmnt.isBefore(en.startTime) ) {
+        lTide += ( moment.duration(moment(en.stopTime).diff(en.startTime)).asMinutes() );
+      }else{
+        rTide += ( moment.duration(moment(en.stopTime).diff(en.startTime)).asMinutes() );
+      }
+    }
+    return [ lTide, rTide ];
+  }else{
+    return [ 0, 0 ];
+  }
+}
   
 function toRelDiff(bSalesStart, bReleases) {
   
@@ -64,7 +94,7 @@ function getWidgetDur(accessKey, widget) {
   const compX = XBatchDB.find({widgetId: widget._id, completed: true}).fetch();
   for( let x of compX ) {
     relAvg.push( toRelDiff(x.salesStart, x.releases) );
-    //stAvg.push( toStrtDiff(x.salesStart, x.tide) );
+    stAvg.push( toStrtDiff(x.salesStart, x.tide) );
     endAvg.push( toEndDiff(x.salesStart, x.salesEnd) );
     compAvg.push( toCompDiff(x.salesStart, x.completedAt) );
   }
@@ -79,8 +109,28 @@ function getWidgetDur(accessKey, widget) {
   return testTheTime;
 }
 
+function getWidgetPace(accessKey, widget) {
+  
+  let btchs = [];
+  
+  const compB = BatchDB.find({widgetId: widget._id, live: false});
+  for( let b of compB ) {
+    const spliTime = splitItmTm(b.items, b.tide || []);
+    btchs.push( [ b.batch, spliTime[0], spliTime[1] ] );
+  }
+  // const compX = XBatchDB.find({widgetId: widget._id, completed: true}).fetch();
+  // for( let x of compX ) {
+  //   relAvg.push( splitItmTm(x.salesStart, x.releases) );
+  // }
 
-function collectAllGroupDur(accessKey) {
+  const testTheTime = [
+    widget.widget, btchs
+  ];
+  return testTheTime;
+}
+
+
+function collectAllGroupDur(accessKey, wFuncLoop) {
   return new Promise(function(resolve) {
   
     const groups = GroupDB.find({ orgKey: accessKey }).fetch();
@@ -92,14 +142,14 @@ function collectAllGroupDur(accessKey) {
         groupId: group._id
       }).fetch();
     
-      let wdur = [];
+      let wSets = [];
       for( let widget of widgets ) {
-        const timeArr = getWidgetDur(accessKey, widget);
-        wdur.push(timeArr);
+        const timeArr = wFuncLoop(accessKey, widget);
+        wSets.push(timeArr);
       }
       gdur.push({
         group: group.alias,
-        durrArray: wdur
+        durrArray: wSets
       });
     }
     resolve(gdur);
@@ -115,14 +165,13 @@ Meteor.methods({
     
     async function collect() {
       try {
-        result = await collectAllGroupDur(accessKey);
+        result = await collectAllGroupDur(accessKey, getWidgetDur);
         const resultString = JSON.stringify(result);
         return resultString;
       }catch (err) {
         throw new Meteor.Error(err);
       }
     }
-    
     return collect();
   },
   
@@ -134,7 +183,23 @@ Meteor.methods({
     const timeArr = getWidgetDur(accessKey, widget);
     
     return timeArr;
-  }
+  },
+  
+  reportOnCyclePace() {
+    this.unblock();
+    const accessKey = Meteor.user().orgKey;
+    
+    async function collect() {
+      // try {
+        result = await collectAllGroupDur(accessKey, getWidgetPace);
+        const resultString = JSON.stringify(result);
+        return resultString;
+      // }catch (err) {
+      //   throw new Meteor.Error(err);
+      // }
+    }
+    return collect();
+  },
 
 
 });

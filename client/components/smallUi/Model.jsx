@@ -41,12 +41,12 @@ const Model = ({
           <div className='popup'>
             <div className='popupHead'>
               <span>
-                <i className={'fas ' + icon + ' fa-lg ' + color}></i>
+                <i className={`fas ${icon} ${color}`}></i>
                 <i className='breath'></i>
                 {title}
               </span>
               <button
-                className='action clearRed rAlign'
+                className='closeAction clearRed'
                 onClick={()=>reveal()}
                 title='close'
               ><i className='fas fa-times fa-lg'></i></button>

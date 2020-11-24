@@ -15,7 +15,7 @@ const ModelMedium = ({
     
   let iSize = lgIcon ? ' fa-2x ' : ' fa-lg ';
   
-  return (
+  return(
     <span>
       <button
         title={title}
@@ -23,7 +23,7 @@ const ModelMedium = ({
         onClick={()=>reveal()}
         disabled={lock}>
         <label className='navIcon actionIconWrap'>
-          <i className={`fas ' ${icon} ${iSize} fa-fw ${color}`}></i>
+          <i className={`fas ${icon} ${iSize} fa-fw ${color}`}></i>
           {!noText && <span className={'actionIconText ' + color}>{button}</span>}
         </label>
       </button>
@@ -34,12 +34,12 @@ const ModelMedium = ({
           <div className='medModel'>
             <div className='medModelHead'>
               <span>
-                <i className={'fas ' + icon + ' fa-lg ' + color}></i>
+                <i className={`fas ${icon} ${color}`}></i>
                 <i className='breath'></i>
                 {title}
               </span>
               <button
-                className='action clearRed rAlign'
+                className='closeAction clearRed'
                 onClick={()=>reveal()}
                 title='close'
               ><i className='fas fa-times fa-lg'></i></button>

@@ -18,12 +18,11 @@ const VariantForm = ({ widgetData, variantData, app, rootWI, lockOut })=> {
     const vId = edit ? variantData._id : false;
     
     const variant = this.rev.value.trim();
-    const live = this.live ? this.live.checked : false;
     const wiki = this.wikdress.value.trim();
     const unit = this.unit.value.trim();
     
     if(edit) {
-      Meteor.call('editVariant', wId, vId, variant, live, wiki, unit, (error, reply)=>{
+      Meteor.call('editVariant', wId, vId, variant, wiki, unit, (error, reply)=>{
         error && console.log(error);
         if(reply) {
           toast.success('Saved');
@@ -50,7 +49,6 @@ const VariantForm = ({ widgetData, variantData, app, rootWI, lockOut })=> {
   let name = e ? `edit ${Pref.variant}` : `new ${Pref.variant}`;
   let eV = e ? e.variant : null;
   let eU = e ? e.runUnits : null;
-  let eL = e ? e.live : null;
   
   const instruct = !e ? app.instruct : e.instruct;
 
@@ -65,25 +63,10 @@ const VariantForm = ({ widgetData, variantData, app, rootWI, lockOut })=> {
       <div className='split'>
   
         <div className='half space edit'>
+          <h2 className='up'>{widgetData.widget}</h2>
+          <h3>{widgetData.describe}</h3>
+          
           <form onSubmit={(e)=>save(e)}>
-            <p>
-              <input
-                type='text'
-                id='widgetId'
-                defaultValue={widgetData.widget}
-                className='wide'
-                disabled={true} />
-              <label htmlFor='widgetId'>{Pref.widget} ID</label>
-            </p>
-            <p>
-              <input
-                type='text'
-                id='prodiption'
-                defaultValue={widgetData.describe}
-                className='wide'
-                disabled={true} />
-              <label htmlFor='prodiption'>{Pref.widget} Description</label>
-            </p>
             <p>
               <input
                 type='text'
@@ -121,17 +104,6 @@ const VariantForm = ({ widgetData, variantData, app, rootWI, lockOut })=> {
                 className='wide' />{/*instructState*/}
               <label htmlFor='wikdress'>Work Instructions</label>
             </p>
-            <br />
-            {e ?
-              <fieldset>
-                <input
-                  type='checkbox'
-                  id='live'
-                  defaultChecked={eL} />
-                <label htmlFor='live'>{Pref.live} {Pref.variant}</label>
-              </fieldset>
-            : null}
-            <br />
             <button
               type='submit'
               className='action clearGreen'

@@ -41,7 +41,14 @@
   outline: dotted thick;
 }
 
-
+.closeAction {
+  /*font-size: 2vh;*/
+  font-weight: 800;
+  /*height: 3rem;*/
+	padding: 0 10px;
+	text-transform: uppercase;
+	overflow: hidden;
+}
 
 .miniAction {
   min-width: 1rem;

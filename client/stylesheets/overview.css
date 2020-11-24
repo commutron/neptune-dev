@@ -293,6 +293,10 @@
   grid-template-rows: 3vh auto;
   min-height: 30vh;
 }
+.downGridFrameFixed:last-child,
+.downGridFrameScroll:last-child {
+  margin-bottom: 1vmax;
+}
 .downGridFrameFixed {
   grid-template-columns: 4vmin auto;
   grid-template-areas: 

@@ -6,12 +6,12 @@ import { toast } from 'react-toastify';
 
 import { round1Decimal } from '/client/utility/Convert';
 
-const BuildDuration = ()=> {
+const BuildPace = ()=> {
   
   const [ result, resultSet ] = useState(false);
   
   useEffect( ()=>{
-    Meteor.call('reportOnTurnAround', (err, reply)=>{
+    Meteor.call('reportOnCyclePace', (err, reply)=>{
       err && console.log(err);
       reply && resultSet(reply);
     });
@@ -21,8 +21,8 @@ const BuildDuration = ()=> {
     const dateString = new Date().toLocaleDateString();
     toast(
       <a href={`data:text/plain;charset=UTF-8,${result}`}
-        download={`build_durations_${dateString}.txt`}
-      >Download Build Durations for {dateString} to your computer as JSON text file</a>
+        download={`build_pace_${dateString}.txt`}
+      >Download Build Pace for {dateString} to your computer as JSON text file</a>
       , {autoClose: false, closeOnClick: false}
     );
   }
@@ -38,7 +38,7 @@ const BuildDuration = ()=> {
   
   return(
     <div className='overscroll wide'>
-      <p>Mean average of all orders since records began. Expressed in days.</p>
+      <p>All complete, serialized orders since pertinent records began. Expressed in minutes.</p>
       <br />
       
       <div className='rowWrapR middle '>
@@ -52,10 +52,9 @@ const BuildDuration = ()=> {
         <thead>
           <tr>
             <th>Customer</th>
-            <th>Sales Start to Release</th>
-            <th>Sales Start to Timer Start</th>
-            <th>Sales Start to Sales End</th>
-            <th>Sales Start to Complete</th>
+            <th>Product Batch</th>
+            <th>0%->50% minutes</th>
+            <th>51%->100% minutes</th>
             </tr>
         </thead>
         <tbody>
@@ -64,19 +63,27 @@ const BuildDuration = ()=> {
             .map( (entry, index)=>(
               <Fragment key={index}>
                 <tr>
-                  <td colSpan='5' className='medBig bold'
+                  <td colSpan='4' className='medBig bold'
                   >{entry.group.toUpperCase()}</td>
                 </tr>
                 {entry.durrArray
                   .sort((w1, w2)=> w1[0] < w2[0] ? -1 : w1[0] > w2[0] ? 1 : 0)
                   .map( (e, ix)=>(
-                    <tr key={'t'+ix}>
-                      <td className='small'>{ e[0].toUpperCase() }</td>
-                      <td>{ round1Decimal(e[1]) }</td>
-                      <td>{ e[2] ? round1Decimal(e[2]) : null }</td>
-                      <td>{ round1Decimal(e[3]) }</td>
-                      <td>{ round1Decimal(e[4]) }</td>
-                    </tr>
+                    <Fragment>
+                      <tr key={'t'+ix}>
+                        <td></td>
+                        <td className='bold' colSpan='3'>{ e[0].toUpperCase() }</td>
+                      </tr>
+                      {e[1].sort((b1, b2)=> b1[0] < b2[0] ? -1 : b1[0] > b2[0] ? 1 : 0)
+                        .map( (y, i)=>(
+                          <tr key={'b'+i}>
+                            <td></td>
+                            <td className='small'>{ y[0] }</td>
+                            <td>{ round1Decimal(y[1]) }</td>
+                            <td>{ round1Decimal(y[2]) }</td>
+                          </tr>
+                      ))}
+                    </Fragment>
                 ))}
             </Fragment>
           ))}
@@ -86,4 +93,4 @@ const BuildDuration = ()=> {
   );
 };
 
-export default BuildDuration;
+export default BuildPace;

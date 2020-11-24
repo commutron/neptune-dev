@@ -77,7 +77,7 @@ Meteor.methods({
     }
   },
   
-  editVariant(widgetId, vId, newVar, vState, newWiki, newUnit) {
+  editVariant(widgetId, vId, newVar, newWiki, newUnit) {
     const doc = VariantDB.findOne({_id: vId});
     const dups = VariantDB.findOne({widgetId: widgetId, variant: newVar});
     let duplicate = doc.variant !== newVar && dups ? true : false;
@@ -88,10 +88,26 @@ Meteor.methods({
           updatedAt: new Date(),
   			  updatedWho: Meteor.userId(),
           variant: newVar,
-          live: vState,
           instruct: newWiki,
           runUnits: Number(newUnit)
         }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  changeVive(vId, vKey, status) {
+    const flip = !status;
+    const accessKey = Meteor.user().orgKey;
+    const inUse = BatchDB.findOne({versionKey: vKey, live: true});
+    const inUseX = XBatchDB.findOne({versionKey: vKey, live: true});
+    if(!inUse && !inUseX && Roles.userIsInRole(Meteor.userId(), 'edit')) {
+      VariantDB.update({_id: vId, orgKey: accessKey}, {
+  			$set : {
+  			  live: flip
+        }
+      });
       return true;
     }else{
       return false;

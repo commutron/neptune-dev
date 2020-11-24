@@ -6,6 +6,7 @@ import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 // import PopularWidget from '/client/components/charts/PopularWidget.jsx'; 
 import GeneralReport from './GeneralReport.jsx'; 
 import BuildDurration from './BuildDurration';
+import BuildPace from './BuildPace';
 import MonthKPIReport from './MonthKPIReport.jsx'; 
 
 const ReportsWrap = ({ 
@@ -19,6 +20,7 @@ const ReportsWrap = ({
       tabs={[
         <b><i className='fas fa-umbrella fa-fw'></i> General</b>,
         <b><i className='fas fa-hourglass-end fa-fw'></i> Durrations</b>,
+        <b><i className='fas fa-icicles fa-fw' data-fa-transform='flip-v'></i> Cycle Pace</b>,
         <b><i className='fas fa-calendar fa-fw'></i> Month Raw</b>
       ]}
       wide={false}
@@ -33,6 +35,8 @@ const ReportsWrap = ({
         app={app} />
         
       <BuildDurration />
+      
+      <BuildPace />
     
       {isNightly ?
         <MonthKPIReport
