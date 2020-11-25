@@ -154,11 +154,12 @@ Meteor.methods({
     }else{null}
   },
   
-  enableLock(batchId) {
+  enableLock(batchId, privateKey) {
+    const accessKey = privateKey || Meteor.user().orgKey;
     const doc = BatchDB.findOne({_id: batchId});
     const clear = doc.live === false && doc.finishedAt !== false &&
-                    doc.end < new Date() && doc.cascade.length === 0;
-    if(Roles.userIsInRole(Meteor.userId(), 'run') && clear) {
+                    doc.end < new Date();
+    if(( privateKey || Roles.userIsInRole(Meteor.userId(), 'run') ) && clear) {
       let totalUnits = 0;
       let scrapItems = 0;
       let scrapUnits = 0;
@@ -173,7 +174,7 @@ Meteor.methods({
       const shPNums = Meteor.call('shortfallSelfCount', doc.shortfall);
       const rvSteps = Meteor.call('riverStepSelfCount', doc.items);
     
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+      BatchDB.update({_id: batchId, orgKey: accessKey}, {
   			$set : {
   			  lock: true,
   			  lockTrunc: {

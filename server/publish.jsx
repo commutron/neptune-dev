@@ -60,7 +60,8 @@ Meteor.publish('appData', function(){
           'phases': 0,
           'toolOption': 0
         }}),
-      ];
+      CacheDB.find({dataName: 'lockingTask'})
+    ];
   }else{
     return this.ready();
   }
@@ -82,8 +83,8 @@ Meteor.publish('usersData', function(){
           'watchlist': 0,
           'inbox': 0,
           'breadcrumbs': 0
-        }}),
-      ];
+        }})
+    ];
   }else if(user && orgKey) {
     return [
       Meteor.users.find({orgKey: orgKey},
@@ -462,6 +463,7 @@ Meteor.publish('skinnyData', function(){
             'versionKey': 1,
             'tags': 1,
             'live': 1,
+            'lock': 1,
             'salesOrder': 1,
             'finishedAt': 1,
           }}),
@@ -475,6 +477,7 @@ Meteor.publish('skinnyData', function(){
             'versionKey': 1,
             'tags': 1,
             'live': 1,
+            'lock': 1,
             'salesOrder': 1,
             'completed': 1,
             'completedAt': 1
@@ -556,13 +559,13 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
             'orgKey': 0,
             'shareKey': 0,
             'floorRelease': 0,
-            'lockTrunc': 0
+            // 'lockTrunc': 0
           }}),
         XBatchDB.find({batch: dataRequest, orgKey: orgKey}, {
           fields: {
             'orgKey': 0,
             'shareKey': 0,
-            'lockTrunc': 0
+            // 'lockTrunc': 0
         }})
       ];
     }

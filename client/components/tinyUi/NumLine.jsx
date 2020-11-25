@@ -30,10 +30,10 @@ import React from 'react';
   };
  
 const NumLine = ({ 
-  num, name, 
+  num, name, title,
   color, big, inline, 
 }) => (
-  <div style={inline ? styInline : big ? styBig : sty}>
+  <div title={title} style={inline ? styInline : big ? styBig : sty}>
     <i style={bSty} className={color + ' numFont'}>{num}</i>
     <i style={sSty}> {name}</i>
   </div>
@@ -43,12 +43,12 @@ export default NumLine;
 
 
 export const StatLine = ({ 
-  num, name, 
+  num, name, title,
   color, big, inline, 
   preNum, preText, 
   postNum, postText
 }) => (
-  <div style={inline ? styInline : big ? styBig : sty}>
+  <div title={title} style={inline ? styInline : big ? styBig : sty}>
     {preNum && <i style={mSty} className={color + ' numFont'}>{preNum}</i>}
     {preText && <i style={sSty}> {preText}</i>}
     

@@ -150,11 +150,12 @@ Meteor.methods({
     }else{null}
   },
   
-  enableLockX(batchId) {
+  enableLockX(batchId, privateKey) {
+    const accessKey = privateKey || Meteor.user().orgKey;
     const doc = XBatchDB.findOne({_id: batchId});
     const clear = doc.live === false && doc.completed === true &&
-                    doc.salesEnd < new Date(); // && doc.cascade.length === 0;
-    if(Roles.userIsInRole(Meteor.userId(), 'run') && clear) {
+                    doc.salesEnd < new Date();
+    if(( privateKey || Roles.userIsInRole(Meteor.userId(), 'run') ) && clear) {
       // let totalUnits = 0;
       // let scrapUnits = 0;
       // for(let i of doc.items) {
@@ -165,7 +166,7 @@ Meteor.methods({
       const tTime = !doc.tide ? 0 : batchTideTime(doc.tide);
       const wfCount = Meteor.call('waterfallSelfCount', doc.waterfall);
       
-      XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+      XBatchDB.update({_id: batchId, orgKey: accessKey}, {
   			$set : {
   			  lock: true,
   			  lockTrunc: {

@@ -54,7 +54,7 @@ const InfoTab = ({
   const remainClean = remain > -1 && remain < 1 ? 
           remain.toPrecision(1) : Math.round(remain);
 
-  const cmplt = b.complete ? end.format("MMMM Do, YYYY h:mm A") : null;
+  const cmplt = b.completed ? end.format("MMMM Do, YYYY h:mm A") : null;
   
   
   return(

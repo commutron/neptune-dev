@@ -13,12 +13,12 @@ const BatchXStatus = ({ batchData })=>	{
     });
   };
   
-  function handleLock(e) {
+  /*function handleLock(e) { // Manual Locking
     this.doLock.disabled = true;
     Meteor.call('enableLockX', batchData._id, (error)=>{
       error && console.log(error);
     });
-  }
+  }*/
   function handleUnLock(e) {
     this.doUnLock.disabled = true;
     Meteor.call('disableLockX', batchData._id, (error)=>{
@@ -26,7 +26,7 @@ const BatchXStatus = ({ batchData })=>	{
     });
   }
   
-  const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
+  //const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
   const isRun = Roles.userIsInRole(Meteor.userId(), 'run');
   
   if(batchData.waterfall.length === 0) {
@@ -52,7 +52,7 @@ const BatchXStatus = ({ batchData })=>	{
             ><i><i className='far fa-lightbulb grayT fa-2x fa-fw'></i></i>
             </button>   {Pref.xBatch} is {Pref.notlive}
           </p>
-            {isAdmin && !batchData.lock &&
+            {/*isAdmin && !batchData.lock && // Manual Locking
               <p className='cap middle'>
                 <button
                   id='doLock'
@@ -63,7 +63,7 @@ const BatchXStatus = ({ batchData })=>	{
                 ><i><i className='fas fa-lock-open purpleT fa-2x fa-fw'></i></i>
                 </button>   UnLocked
               </p>
-            }
+            */}
             {isRun && batchData.lock &&
               <p className='cap middle'>
                 <button

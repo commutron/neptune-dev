@@ -7,7 +7,7 @@ import BatchesListWide from '../lists/BatchesListWide.jsx';
 const AllBatches = ({ 
   groupData, widgetData, allWidget, allVariant,
   batchData, allBatch, allXBatch, 
-  app
+  app, isDebug
 }) => {
   
   const total = batchData.length;
@@ -16,6 +16,9 @@ const AllBatches = ({
   const xlive = allXBatch.filter( x => x.live === true ).length;
   const process = batchData.filter( x => x.finishedAt === false ).length;
   const xProcess = allXBatch.filter( x => x.completed === false ).length;
+  
+  const locked = batchData.filter( x => x.lock === true ).length;
+  const xlocked = allXBatch.filter( x => x.lock === true ).length;
   
   return(
     <section className='overscroll'>
@@ -36,6 +39,12 @@ const AllBatches = ({
           num={(total + xTotal) - (process + xProcess)}
           name={'Finished ' + Pref.batch + 's'}
           color='greenT' />
+        {isDebug &&
+          <NumBox
+            num={locked + xlocked}
+            name={'Locked ' + Pref.batches}
+            title={`Non-Active,\nYear Old Finished Date\nperformance optimization`}
+            color='purpleT' />}
       </div>
         
       <div className='centre'>

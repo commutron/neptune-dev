@@ -23,12 +23,12 @@ const BatchStatus = ({ batchId, finished, finishedAt, allFinished, live, bLock }
     });
   };
   
-  function handleLock(e) {
+  /*function handleLock(e) { // Manual Locking
     this.doLock.disabled = true;
     Meteor.call('enableLock', batchId, (error)=>{
       error && console.log(error);
     });
-  }
+  }*/
   function handleUnLock(e) {
     this.doUnLock.disabled = true;
     Meteor.call('disableLock', batchId, (error)=>{
@@ -36,7 +36,7 @@ const BatchStatus = ({ batchId, finished, finishedAt, allFinished, live, bLock }
     });
   }
   
-  const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
+  //const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
   const isRun = Roles.userIsInRole(Meteor.userId(), 'run');
   const auth = isRun && !finished;
   
@@ -89,7 +89,7 @@ const BatchStatus = ({ batchId, finished, finishedAt, allFinished, live, bLock }
             ><i><i className='far fa-lightbulb grayT fa-2x fa-fw'></i></i>
             </button>   {Pref.batch} is {Pref.notlive}
           </p>
-            {isAdmin && !bLock &&
+            {/*isAdmin && !bLock && // Manual Locking
               <p className='cap middle'>
                 <button
                   id='doLock'
@@ -100,7 +100,7 @@ const BatchStatus = ({ batchId, finished, finishedAt, allFinished, live, bLock }
                 ><i><i className='fas fa-lock-open purpleT fa-2x fa-fw'></i></i>
                 </button>   UnLocked
               </p>
-            }
+            */}
             {isRun && bLock &&
               <p className='cap middle'>
                 <button

@@ -264,7 +264,8 @@ const DataViewOps = ({
             allVariant={allVariant}
             allBatch={allBatch}
             allXBatch={allXBatch}
-            app={app} />
+            app={app}
+            isDebug={isDebug} />
         </TraverseWrap>
       );
     }else if(request === 'items') {

@@ -62,7 +62,7 @@ export function deliveryState(bEnd, bFinish) {
   const dyGp = Math.abs( Math.round(dayGap) );
   const dayS = dyGp == 0 || dyGp > 1 ? 'days' : 'day';
   
-  const gapZone = !isLate ?
+  const gapZone = !isLate || hrGp == 0 ?
                     hrGp <= Config.dropShipBffr ?   // ON TIME
                       [ null, null, 'on time' ] : [ dyGp, dayS, 'early' ] 
                   : 

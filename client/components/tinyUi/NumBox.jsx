@@ -19,8 +19,8 @@ import React from 'react';
     wordWrap: 'keep-all'
   };
  
-const NumBox = ({ num, name, color }) => (
-  <div style={sty}>
+const NumBox = ({ num, name, title, color }) => (
+  <div title={title} style={sty}>
     <i style={bSty} className={color + ' numFont'}>{num}</i>
     <br />
     <i style={sSty}>{name}</i>

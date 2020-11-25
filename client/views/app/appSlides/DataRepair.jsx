@@ -113,6 +113,13 @@ const DataRepair = ({ app, users })=> {
     });
   }
   
+  function forceLockCheck() {
+    Meteor.call('lockingCacheUpdate', false, true, (error)=>{
+      error && console.log(error);
+      toast.success('request sent');
+    });
+  }
+  
   return (
     <div className='space3v'>
       <h2 className='cap'>NonCon "Where" Data Repair</h2>
@@ -162,6 +169,15 @@ const DataRepair = ({ app, users })=> {
       >Fix Basline Time Key</button>
       <hr />
       <br />*/}
+      
+      <h2 className='cap'>Batch Locking</h2>
+      <button
+        onClick={()=>forceLockCheck()}
+        className='action clearPurple'
+      >Request Locking</button>
+      
+
+      <hr className='vmargin' />
       
       <h2 className='cap'>Delete all CacheDB Entries</h2>
       <button
