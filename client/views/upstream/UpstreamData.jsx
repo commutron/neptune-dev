@@ -11,11 +11,10 @@ import UpstreamWrap from './UpstreamWrap.jsx';
 
 const View = ({
   login,
-  readyUsers, ready, readyC, readyT, view,
+  readyUsers, ready, readyT, view,
   username, user, org, app,
   isDebug, isNightly,
   batch, batchX, traceDT,
-  pCache
 })=> {
   
   const prevUser = usePrevious(user);
@@ -24,7 +23,7 @@ const View = ({
   }, [user]);
   
     
-  if( !readyUsers || !ready || !readyC || !readyT || !app ) {
+  if( !readyUsers || !ready || !readyT || !app ) {
     return( <SpinWrap /> );
   }
   
@@ -35,8 +34,8 @@ const View = ({
   }
   
   const branches = app.branches.filter( b => b.open === true );
-  const brancheS = branches.sort((b1, b2)=> {
-    return b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 });               
+  const brancheS = branches.sort((b1, b2)=>
+            b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );               
 
   return(
     <ErrorCatch>
@@ -45,7 +44,6 @@ const View = ({
         batch={batch}
         batchX={batchX}
         traceDT={traceDT}
-        pCache={pCache}
         user={user}
         app={app}
         brancheS={brancheS}
@@ -66,15 +64,12 @@ export default withTracker( ({ view } ) => {
   let org = user ? user.org : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
   const sub = login ? Meteor.subscribe('shaddowData') : false;
-  
-  const subC = login ? Meteor.subscribe('cacheData') : false;
   const subT = login ? Meteor.subscribe('traceDataLive') : false;
   
   if(!login || !active) {
     return {
       readyUsers: false,
       ready: false,
-      readyC: false,
       readyT: false
     };
   }else{
@@ -82,7 +77,6 @@ export default withTracker( ({ view } ) => {
       login: Meteor.userId(),
       readyUsers: usersSub.ready(),
       ready: sub.ready(),
-      readyC: subC.ready(),
       readyT: subT.ready(),
       view: view,
       
@@ -95,7 +89,6 @@ export default withTracker( ({ view } ) => {
       app: AppDB.findOne({org: org}),
       batch: BatchDB.find({live: true}).fetch(),
       batchX: XBatchDB.find({live: true}).fetch(),
-      pCache: CacheDB.findOne({dataName: 'priorityRank'}),
       traceDT: TraceDB.find({}).fetch(),
     };
   }

@@ -10,7 +10,6 @@ import NonConCounts from '../../overview/columns/NonConCounts.jsx';
 
 const DownstreamDetails = ({
   indexKey, oB, traceDT,
-  pCache,
   user, app,
   isDebug, isNightly,
   focusBy, dense, progCols, ncCols, updateTrigger
@@ -24,7 +23,6 @@ const DownstreamDetails = ({
             key={indexKey+'c'+index}
             ck={entry}
             tBatch={tBatch}
-            pCache={pCache}
             app={app}
             user={user}
             isDebug={isDebug}
@@ -43,7 +41,6 @@ export default DownstreamDetails;
 
 const DownstreamScrollChunk = ({
   ck, tBatch,
-  pCache,
   app, user, focusBy, isDebug, dense, progCols, ncCols,
   updateTrigger
 })=> {

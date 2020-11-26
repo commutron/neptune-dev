@@ -6,7 +6,6 @@ import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 
 const UpstreamHeaders = ({ 
   oB, traceDT,
-  pCache,
   app, title, focusBy, showMore 
 })=> (
   <div className='overGridFixed'>
@@ -23,7 +22,6 @@ const UpstreamHeaders = ({
             key={`${entry._id}livefixed${index}`}
             ck={entry}
             tBatch={tBatch}
-            pCache={pCache}
             app={app}
             focusBy={focusBy} />
     )})}
@@ -32,10 +30,9 @@ const UpstreamHeaders = ({
 
 export default UpstreamHeaders;
 
-const UpstreamHeaderChunk = ({ck, tBatch, bCache, pCache, app, focusBy })=> {
+const UpstreamHeaderChunk = ({ck, tBatch, bCache, app, focusBy })=> {
   
   const isDone = ck.completed || ck.finishedAt ? true : false;
-  const pt = pCache.dataSet.find( x => x.batchID === ck._id );
 
   const whaT = !tBatch ? 'unavailable' : `${tBatch.isWhat.join(' ')} ${tBatch.describe}`;
   const highG = tBatch && focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
@@ -44,7 +41,7 @@ const UpstreamHeaderChunk = ({ck, tBatch, bCache, pCache, app, focusBy })=> {
     <div className={`overGridRowFixed ${highG}`}>
       <PrioritySquare
         batchID={ck._id}
-        ptData={pt}
+        ptData={tBatch}
         isDone={isDone}
         app={app}
         isDebug={false}

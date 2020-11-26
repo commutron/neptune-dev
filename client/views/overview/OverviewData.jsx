@@ -11,11 +11,10 @@ import OverviewWrap from './OverviewWrap.jsx';
 
 const View = ({
   login,
-  readyUsers, ready, readyC, readyT,
+  readyUsers, ready, readyT,
   username, user, org, app,
   isDebug, isNightly,
-  batch, batchX, traceDT,
-  pCache,
+  batch, batchX, traceDT
 })=> {
   
   const prevUser = usePrevious(user);
@@ -24,7 +23,7 @@ const View = ({
   }, [user]);
   
     
-  if( !readyUsers || !ready || !readyC || !readyT || !app ) {
+  if( !readyUsers || !ready || !readyT || !app ) {
     return( <SpinWrap /> );
   }
   
@@ -35,8 +34,8 @@ const View = ({
   }
     
   const branches = app.branches.filter( b => b.open === true );
-  const brancheS = branches.sort((b1, b2)=> { 
-    return b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 });  
+  const brancheS = branches.sort((b1, b2)=>
+           b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );  
 
   return(
     <ErrorCatch>
@@ -44,7 +43,6 @@ const View = ({
         b={batch}
         bx={batchX}
         traceDT={traceDT}
-        pCache={pCache}
         user={user}
         app={app}
         brancheS={brancheS}
@@ -65,8 +63,6 @@ export default withTracker( () => {
   let org = user ? user.org : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
   const sub = login ? Meteor.subscribe('shaddowData') : false;
-  
-  const subC = login ? Meteor.subscribe('cacheData') : false;
   const subT = login ? Meteor.subscribe('traceDataActive') : false;
   
   if(!login || !active) {
@@ -79,7 +75,6 @@ export default withTracker( () => {
       login: Meteor.userId(),
       readyUsers: usersSub.ready(),
       ready: sub.ready(),
-      readyC: subC.ready(),
       readyT: subT.ready(),
       username: name,
       user: user,
@@ -89,7 +84,6 @@ export default withTracker( () => {
       app: AppDB.findOne({org: org}),
       batch: BatchDB.find({live: true}).fetch(),
       batchX: XBatchDB.find({live: true}).fetch(),
-      pCache: CacheDB.findOne({dataName: 'priorityRank'}),
       traceDT: TraceDB.find({}).fetch(),
     };
   }

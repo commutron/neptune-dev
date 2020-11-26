@@ -10,7 +10,7 @@ import UpstreamDetails from './UpstreamDetails';
 
 
 const UpstreamView = ({ 
-  batch, batchX, traceDT, pCache,
+  batch, batchX, traceDT,
   user, app, brancheS, isDebug, isNightly
 })=> {
   
@@ -36,21 +36,12 @@ const UpstreamView = ({
   
   useLayoutEffect( ()=> {
     sortInitial();
-  }, [batch, batchX, pCache, sortBy]);
+  }, [batch, batchX, traceDT, sortBy]);
   
   const [ updateTrigger, updateTriggerSet ] = useState(true);
   
   useEffect( ()=>{
-    Meteor.call('REQUESTcacheUpdate', 
-      false, // batchUp
-      true, // priorityUp
-      false, // activityUp
-      false, // branchConUp
-      false, // compUp
-    ()=>{
-      loadTimeSet( moment() );
-      Meteor.call('updateLiveMovement');
-    });
+    Meteor.call('updateLiveMovement', ()=>{ loadTimeSet( moment() ) });
   }, [batch, batchX, updateTrigger]);
   
   function changeFocus(e) {
@@ -93,12 +84,11 @@ const UpstreamView = ({
       let orderedBatches = filteredBatches;
       
       if(sortBy === 'priority') {
-        const pData = pCache.dataSet;
         orderedBatches = filteredBatches.sort((b1, b2)=> {
           
-          const pB1 = pData.find( x => x.batchID === b1._id);
+          const pB1 = traceDT.find( x => x.batchID === b1._id);
           const pB1bf = pB1 ? pB1.estEnd2fillBuffer : null;
-          const pB2 = pData.find( x => x.batchID === b2._id);
+          const pB2 = traceDT.find( x => x.batchID === b2._id);
           const pB2bf = pB2 ? pB2.estEnd2fillBuffer : null;
           if (!pB1bf) { return 1 }
           if (!pB2bf) { return -1 }
@@ -171,7 +161,6 @@ const UpstreamView = ({
             key='fancylist0'
             oB={liveState}
             traceDT={traceDT}
-            pCache={pCache}
             app={app}
             title={Pref.kitting}
             focusBy={focusBy}
@@ -182,7 +171,6 @@ const UpstreamView = ({
             key='fancylist1'
             oB={liveState}
             traceDT={traceDT}
-            pCache={pCache}
             user={user}
             app={app}
             brancheS={brancheS}

@@ -8,7 +8,7 @@ import ShipWindows from './ShipWindows';
 
 
 const DownstreamView = ({ 
-  traceDT, pCache,
+  traceDT,
   user, app, isDebug, isNightly
 })=> {
   
@@ -34,16 +34,7 @@ const DownstreamView = ({
   const [ updateTrigger, updateTriggerSet ] = useState(true);
   
   useEffect( ()=>{
-    Meteor.call('REQUESTcacheUpdate', 
-      false, // batchUp
-      true, // priorityUp
-      false, // activityUp
-      false, // branchConUp
-      false, // compUp
-    ()=>{
-      loadTimeSet( moment() );
-      Meteor.call('updateLiveMovement');
-    });
+    Meteor.call('updateLiveMovement', ()=>{ loadTimeSet( moment() ) });
   }, [updateTrigger]);
   
   function changeNum(e) {
@@ -79,8 +70,8 @@ const DownstreamView = ({
   const density = !dense ? '' : 'minifyed';
   
   const branches = app.branches.filter( b => b.open === true );
-  const brancheS = branches.sort((b1, b2)=> {
-    return b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 });
+  const brancheS = branches.sort((b1, b2)=>
+          b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
 
   return(
     <div
@@ -113,7 +104,6 @@ const DownstreamView = ({
       <ShipWindows
         calcFor={calcFor}
         traceDT={traceDT}
-        pCache={pCache.dataSet}
         brancheS={brancheS}
         app={app}
         user={user}

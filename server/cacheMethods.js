@@ -1,5 +1,5 @@
 // import { Random } from 'meteor/random'
-import moment from 'moment';
+// import moment from 'moment';
 
 // import Config from '/server/hardConfig.js';
 
@@ -13,22 +13,24 @@ Meteor.methods({
 
 ///////////// CACHES //////////////////
   FORCEcacheUpdate() {
-    this.unblock();
+    /*this.unblock();
     if(Roles.userIsInRole(Meteor.userId(), 'active')) {
       const key = Meteor.user().orgKey;
       Meteor.call('priorityCacheUpdate', key, true);
-    }
+    }*/
+    return null;
   },
   
   REQUESTcacheUpdate() {
-    this.unblock();
+    /*this.unblock();
     if(Roles.userIsInRole(Meteor.userId(), 'active')) {
       const key = Meteor.user().orgKey;
       Meteor.defer( ()=>{
         Meteor.call('priorityCacheUpdate', key, false) });
-    }
+    }*/
+    return null;
   },
-  
+  /*
   priorityCacheUpdate(accessKey, force) {
     this.unblock();
     if(typeof accessKey === 'string') {
@@ -57,7 +59,7 @@ Meteor.methods({
       }
     }
   },
-  
+  */
   // a cache for a plain list of all part numbers for autocomplete
   partslistCacheUpdate(internalKey) {
     this.unblock();

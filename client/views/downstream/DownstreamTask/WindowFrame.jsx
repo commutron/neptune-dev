@@ -11,7 +11,6 @@ import { min2hr } from '/client/utility/Convert';
 
 const WindowFrame = ({ 
   windowMoment, indexKey, traceDT,
-  pCache, 
   app, user, isDebug, focusBy, dense
 })=> {
   
@@ -20,20 +19,19 @@ const WindowFrame = ({
   
   useLayoutEffect( ()=>{
     if(indexKey === 0) {
-      const lateShip = pCache.filter( x => moment(x.shipAim).isSameOrBefore(windowMoment, 'day') );
+      const lateShip = traceDT.filter( x => !x.completed && 
+                        moment(x.shipAim).isSameOrBefore(windowMoment, 'day') );
       wipOrdersSet( lateShip );
       mixedOrdersSet( lateShip );
     }else{
-      // const early = zCache.filter( x => {
-      //   if(moment(x.shipAim).isSame(windowMoment, 'day')) { return true } });
-      const early = traceDT.filter( x => {
-        return x.completed && moment(x.shipAim).isSame(windowMoment, 'day') });
-      
-      const shipIn = pCache.filter( x => moment(x.shipAim).isSame(windowMoment, 'day') );
+      const early = traceDT.filter( x => x.completed && 
+                      moment(x.shipAim).isSame(windowMoment, 'day') );
+      const shipIn = traceDT.filter( x => !x.completed && 
+                      moment(x.shipAim).isSame(windowMoment, 'day') );
       wipOrdersSet( shipIn );
       mixedOrdersSet( [...early,...shipIn] );
     }
-  }, [pCache, traceDT]);
+  }, [traceDT]);
   
   
   return(
@@ -45,7 +43,6 @@ const WindowFrame = ({
       <WindowHeader 
         windowMoment={windowMoment}
         shipIn={wipOrders}
-        pCache={pCache}
       />
         
       <div className='downOrdersFixed'>
@@ -55,7 +52,6 @@ const WindowFrame = ({
           traceDT={traceDT}
           title='things'
           showMore={true}
-          pCache={pCache}
           user={user}
           app={app}
           isDebug={isDebug}
@@ -71,7 +67,7 @@ const WindowFrame = ({
 export default WindowFrame;
 
 
-const WindowHeader = ({ windowMoment, shipIn, pCache })=> {
+const WindowHeader = ({ windowMoment, shipIn })=> {
   
   const reTimeArr = Array.from(shipIn, 
     x => typeof x.quote2tide === 'number' && x.quote2tide );

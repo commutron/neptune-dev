@@ -1,7 +1,4 @@
 import React, { useState, useLayoutEffect } from 'react';
-// import moment from 'moment';
-// import 'moment-timezone';
-// import 'moment-business-time';
 import '/client/utility/ShipTime.js';
 // import Pref from '/client/global/pref.js';
 
@@ -11,12 +8,11 @@ import WindowGlass from './WindowGlass';
 import { listShipDays } from '/client/utility/WorkTimeCalc';
 
 const ShipWindows = ({ 
-  calcFor, traceDT, pCache,
+  calcFor, traceDT,
   brancheS, app, user, isDebug, focusBy, dense, updateTrigger
 })=> {
   
   const [ nextShipDays, nextShipDaysSet ] = useState([]);
-  const [ pCacheSort, pCacheSSet ] = useState([]);
   const [ traceDTSort, traceDTSSet ] = useState([]);
   
   useLayoutEffect( ()=>{
@@ -25,25 +21,19 @@ const ShipWindows = ({
     // returns an array of moments
     nextShipDaysSet(getShipDays);
     
-    pCacheSSet( pCache.sort((p1, p2)=> {
+    traceDTSSet( traceDT.sort((p1, p2)=> {
       const p1bf = p1.estEnd2fillBuffer;
       const p2bf = p2.estEnd2fillBuffer;
       if (!p1bf) { return 1 }
       if (!p2bf) { return -1 }
-      if (p1.lateLate) { return -1 }
-      if (p2.lateLate) { return 1 }
+      if (p1.lateLate) { return 1 }
+      if (p2.lateLate) { return -1 }
       if (p1bf < p2bf) { return -1 }
       if (p1bf > p2bf) { return 1 }
       return 0;
     }) );
     
-    traceDTSSet( traceDT.sort((z1, z2)=> {
-      if (z1.completedAt < z2.completedAt) { return -1 }
-      if (z1.completedAt > z2.completedAt) { return 1 }
-      return 0;
-    }) );
-  }, [calcFor, pCache, traceDT]);
-
+  }, [calcFor, traceDT]);
          
   return(
     <div className={`downstreamContent forceScrollStyle ${dense}`}>
@@ -55,7 +45,6 @@ const ShipWindows = ({
             windowMoment={e}
             indexKey={ix}
             traceDT={traceDTSort}
-            pCache={pCacheSort}
             app={app}
             user={user}
             isDebug={isDebug}
@@ -72,7 +61,6 @@ const ShipWindows = ({
             windowMoment={e}
             indexKey={ix}
             traceDT={traceDTSort}
-            pCache={pCacheSort}
             brancheS={brancheS}
             app={app}
             user={user}

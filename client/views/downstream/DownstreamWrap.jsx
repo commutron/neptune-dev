@@ -11,7 +11,7 @@ import Outlook from './Outlook.jsx';
 
 const DownstreamWrap = ({ 
   view, subLink, 
-  traceDT, pCache,
+  traceDT,
   user, app,
   isDebug, isNightly
 })=> {
@@ -85,7 +85,7 @@ const DownstreamWrap = ({
         navBar='down'
       >
         <Outlook 
-          pCache={pCache}
+          traceDT={traceDT}
           app={app}
           user={user}
           isNightly={isNightly}
@@ -106,7 +106,6 @@ const DownstreamWrap = ({
     >
       <DownstreamView
         traceDT={traceDT}
-        pCache={pCache}
         user={user}
         app={app}
         isDebug={isDebug}

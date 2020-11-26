@@ -10,7 +10,7 @@ import DownstreamDetails from './DownstreamDetails';
 // import { min2hr } from '/client/utility/Convert';
 
 const WindowGlass = ({ 
-  windowMoment, indexKey, traceDT, pCache,
+  windowMoment, indexKey, traceDT,
   brancheS, app, user, isDebug, focusBy, dense, updateTrigger
 })=> {
   
@@ -18,18 +18,17 @@ const WindowGlass = ({
   
   useLayoutEffect( ()=>{
     if(indexKey === 0) {
-      const lateShip = pCache.filter( x => moment(x.shipAim).isSameOrBefore(windowMoment, 'day') );
+      const lateShip = traceDT.filter( x => !x.completed && 
+                        moment(x.shipAim).isSameOrBefore(windowMoment, 'day') );
       mixedOrdersSet( lateShip );
     }else{
-      // const early = zCache.filter( x => {
-      //  if(moment(x.shipAim).isSame(windowMoment, 'day')) { return true } });
-      const early = traceDT.filter( x => {
-        return x.completed && moment(x.shipAim).isSame(windowMoment, 'day') });
-      
-      const shipIn = pCache.filter( x => moment(x.shipAim).isSame(windowMoment, 'day') );
+      const early = traceDT.filter( x => x.completed && 
+                      moment(x.shipAim).isSame(windowMoment, 'day') );
+      const shipIn = traceDT.filter( x => !x.completed && 
+                      moment(x.shipAim).isSame(windowMoment, 'day') );
       mixedOrdersSet( [...early,...shipIn] );
     }
-  }, [pCache, traceDT]);
+  }, [traceDT]);
   
   const statCols = ['sales order','active','quote'];
   const progCols = ['total items',...Array.from(brancheS, x => x.common)];
@@ -57,7 +56,6 @@ const WindowGlass = ({
           traceDT={traceDT}
           title='things'
           showMore={true}
-          pCache={pCache}
           user={user}
           app={app}
           isDebug={isDebug}

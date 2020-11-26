@@ -4,10 +4,12 @@ import 'moment-timezone';
 // import Pref from '/client/global/pref.js';
 
 const TotalInQu = ({ ////////////  NO LONGER USES HOT ENOUGH DATA \\\\\\\\\\\
-  pCache, brCache,
+  traceDT,
   app, isNightly
 })=> {
  
+  const unfinTrace = traceDT.filter( t => t.completed === false );
+  
   const [ numState, numSet ] = useState(false);
   
   function inHours(minNum) {
@@ -24,31 +26,22 @@ const TotalInQu = ({ ////////////  NO LONGER USES HOT ENOUGH DATA \\\\\\\\\\\
   }
     
   useEffect( ()=> {
-    const brData = brCache.dataSet;
-    
-    const pData = pCache.dataSet;
     
     let kitTime = [];
     let openTime = [];
-    for( let pB of pData ) {
+    for( let pB of unfinTrace ) {
       if(!pB) {
         null;
       }else{
-        let rel = brData.find( y => y.batchID === pB.batchID );
-        if(!rel) {
-          break;
+        if(!pB.onFloor) {
+          kitTime.push(pB);
         }else{
-          let bar = rel.branchSets.every( z => z.condition === false );
-          if(bar) {
-            kitTime.push(pB);
-          }else{
-            openTime.push(pB);
-          }
+          openTime.push(pB);
         }
       }
     }
     
-    const liveMinutes = reduceCacheTo(pData);
+    const liveMinutes = reduceCacheTo(unfinTrace);
     const liveHours = inHours(liveMinutes);
     
     const kitMinutes = reduceCacheTo(kitTime);
@@ -62,7 +55,7 @@ const TotalInQu = ({ ////////////  NO LONGER USES HOT ENOUGH DATA \\\\\\\\\\\
       ['In Kitting', kitMinutes, kitHours],
       ['Released', openMinutes, openHours],
     ]);
-  }, [pCache, brCache, app]);
+  }, [traceDT, app]);
 
   return(
     <div className='max400 space line2x'>

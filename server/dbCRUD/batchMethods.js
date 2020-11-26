@@ -47,7 +47,6 @@ Meteor.methods({
         events: [],
       });
       Meteor.defer( ()=>{
-        Meteor.call('priorityCacheUpdate', accessKey, true);
         Meteor.call('buildNewTrace', accessKey);
       });
       return true;
@@ -102,7 +101,6 @@ Meteor.methods({
           }
         }});
       Meteor.defer( ()=>{
-        Meteor.call('priorityCacheUpdate', accessKey, true);
         Meteor.call('updateOneMovement', batchId, accessKey);
       });
       return true;
@@ -276,8 +274,7 @@ Meteor.methods({
             }
           }});
         Meteor.defer( ()=>{
-          Meteor.call('priorityCacheUpdate', accessKey, true);
-          // Meteor.call('updateOneMinify', batchId, accessKey);
+          Meteor.call('updateOneMinify', batchId, accessKey);
         });
       }else{
         null;
@@ -358,7 +355,6 @@ Meteor.methods({
   			  finishedAt: new Date()
       }});
       Meteor.defer( ()=>{
-        Meteor.call('completeCacheUpdate', privateKey, true);
         Meteor.call('updateOneMovement', batchId, privateKey);
       });
     }else{null}
@@ -385,7 +381,6 @@ Meteor.methods({
         }
       });
       Meteor.defer( ()=>{
-        Meteor.call('completeCacheUpdate', privateKey, true);
         Meteor.call('updateOneMovement', batchId, privateKey);
       });
     }else{null}
@@ -932,10 +927,9 @@ Meteor.methods({
           }
         }
       });
-      // Meteor.defer( ()=>{
-      //   Meteor.call('priorityCacheUpdate', accessKey, true);
-      //   Meteor.call('updateOneMovement', batchId, accessKey);
-      // });
+      Meteor.defer( ()=>{
+        Meteor.call('updateOneMovement', batchId, accessKey);
+      });
       return true;
     }else{
       return false;

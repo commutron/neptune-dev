@@ -43,7 +43,8 @@ function shrinkWhole(bData, accessKey) {
   const lateLate = didFinish ? gapZone[2] === 'late' : shpdlv[2];
   
   const actvLvl = Meteor.call('tideActivityLevel', bData._id, accessKey);
-  const brchCn = Meteor.call('branchCondition', bData._id, accessKey);
+  const brchCnd = Meteor.call('branchCondition', bData._id, accessKey);
+  const prtyRnk = Meteor.call('priorityRank', bData._id, accessKey);
   
   TraceDB.upsert({batchID: bData._id}, {
     $set : { 
@@ -65,8 +66,13 @@ function shrinkWhole(bData, accessKey) {
       completedAt: completedAt,
       lateLate: lateLate,
       isActive: actvLvl.isActive,
-      onFloor: brchCn.onFloor,
-      branchCondition: brchCn.branchSets
+      onFloor: brchCnd.onFloor,
+      branchCondition: brchCnd.branchSets,
+      quote2tide: prtyRnk.quote2tide,
+      estSoonest: prtyRnk.estSoonest,
+      estLatestBegin: prtyRnk.estLatestBegin,
+      bffrRel: prtyRnk.bffrRel,
+      estEnd2fillBuffer: prtyRnk.estEnd2fillBuffer
   }});
 }
 
@@ -119,7 +125,8 @@ function checkMovement(bData, accessKey) {
   const lateLate = didFinish ? gapZone[2] === 'late' : shpdlv[2];
   
   const actvLvl = Meteor.call('tideActivityLevel', bData._id, accessKey);
-  const brchCn = Meteor.call('branchCondition', bData._id, accessKey);
+  const brchCnd = Meteor.call('branchCondition', bData._id, accessKey);
+  const prtyRnk = Meteor.call('priorityRank', bData._id, accessKey);
   
   TraceDB.update({batchID: bData._id}, {
     $set : { 
@@ -131,8 +138,13 @@ function checkMovement(bData, accessKey) {
       completedAt: completedAt,
       lateLate: lateLate,
       isActive: actvLvl.isActive,
-      onFloor: brchCn.onFloor,
-      branchCondition: brchCn.branchSets
+      onFloor: brchCnd.onFloor,
+      branchCondition: brchCnd.branchSets,
+      quote2tide: prtyRnk.quote2tide,
+      estSoonest: prtyRnk.estSoonest,
+      estLatestBegin: prtyRnk.estLatestBegin,
+      bffrRel: prtyRnk.bffrRel,
+      estEnd2fillBuffer: prtyRnk.estEnd2fillBuffer
   }});
 }
 

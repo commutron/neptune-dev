@@ -171,7 +171,12 @@ Meteor.publish('traceDataLive', function(){
           'lateLate': 1,
           'isActive': 1,
           // 'onFloor': 1,
-          // 'branchCondition': 1
+          // 'branchCondition': 1,
+          'quote2tide': 1,
+          'estSoonest': 1,
+          'estLatestBegin': 1,
+          'bffrRel': 1,
+          'estEnd2fillBuffer': 1
         }
       })
     ];
@@ -209,7 +214,12 @@ Meteor.publish('traceDataActive', function(){
           // 'lateLate': 1,
           'isActive': 1,
           'onFloor': 1,
-          'branchCondition': 1
+          'branchCondition': 1,
+          'quote2tide': 1,
+          'estSoonest': 1,
+          'estLatestBegin': 1,
+          'bffrRel': 1,
+          'estEnd2fillBuffer': 1
         }
       })
     ];
@@ -248,14 +258,19 @@ Meteor.publish('traceDataOpen', function(){
           'lateLate': 1,
           'isActive': 1,
           'onFloor': 1,
-          'branchCondition': 1
+          'branchCondition': 1,
+          'quote2tide': 1,
+          'estSoonest': 1,
+          'estLatestBegin': 1,
+          'bffrRel': 1,
+          'estEnd2fillBuffer': 1
         }
       })
     ];
   }
 });
 
-Meteor.publish('cacheData', function(){
+/*Meteor.publish('cacheData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
   Meteor.defer( ()=>{ Meteor.call('priorityCacheUpdate', orgKey); });
@@ -271,7 +286,7 @@ Meteor.publish('cacheData', function(){
         }})
     ];
   }
-});
+});*/
 // PartsPlus
 Meteor.publish('partsPlusCacheData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
@@ -427,7 +442,6 @@ Meteor.publish('hotDataPlus', function(batch){
 Meteor.publish('skinnyData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  // Meteor.defer( ()=>{ Meteor.call('priorityCacheUpdate', orgKey); });
   if(!this.userId){
     return this.ready();
   }else{

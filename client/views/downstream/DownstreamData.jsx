@@ -10,10 +10,10 @@ import DownstreamWrap from './DownstreamWrap.jsx';
 
 const View = ({
   login,
-  readyUsers, readyC, readyT, view,
+  readyUsers, readyT, view,
   username, user, org, app,
   isDebug, isNightly,
-  traceDT, pCache
+  traceDT,
 })=> {
   
   const prevUser = usePrevious(user);
@@ -21,7 +21,7 @@ const View = ({
     InboxToastPop(prevUser, user);
   }, [user]);
     
-  if( !readyUsers || !readyC || !readyT || !app ) {
+  if( !readyUsers || !readyT || !app ) {
     return( <SpinWrap /> );
   }
 
@@ -30,7 +30,6 @@ const View = ({
       <DownstreamWrap 
         view={view}
         traceDT={traceDT}
-        pCache={pCache}
         user={user}
         app={app}
         isDebug={isDebug}
@@ -49,22 +48,17 @@ export default withTracker( ({ view } ) => {
   const isNightly = user ? Roles.userIsInRole(Meteor.userId(), 'nightly') : false;
   let org = user ? user.org : false;
   const usersSub = login ? Meteor.subscribe('usersData') : false;
-  
-  const subC = login ? Meteor.subscribe('cacheData') : false;
   const subT = login ? Meteor.subscribe('traceDataOpen') : false;
   
   if(!login || !active) {
     return {
       readyUsers: false,
-      readyC: false,
       readyT: false
     };
   }else{
     return {
       login: Meteor.userId(),
-      subC: subC,
       readyUsers: usersSub.ready(),
-      readyC: subC.ready(),
       readyT: subT.ready(),
       view: view,
       username: name,
@@ -73,7 +67,6 @@ export default withTracker( ({ view } ) => {
       isNightly: isNightly,
       org: org,
       app: AppDB.findOne({org: org}),
-      pCache: CacheDB.findOne({dataName: 'priorityRank'}),
       traceDT: TraceDB.find({}).fetch(),
     };
   }

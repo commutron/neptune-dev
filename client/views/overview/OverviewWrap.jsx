@@ -14,7 +14,6 @@ import BatchDetails from './columns/BatchDetails';
 
 const OverviewWrap = ({ 
   b, bx, traceDT,
-  pCache, 
   user, app, brancheS,
   isDebug, isNightly
 })=> {
@@ -53,7 +52,7 @@ const OverviewWrap = ({
   
   useLayoutEffect( ()=> {
     sortInitial();
-  }, [b, bx, pCache, filterBy, sortBy, ghost]);
+  }, [b, bx, traceDT, filterBy, sortBy, ghost]);
   
   function changeFilter(e) {
     const value = e.target.value;
@@ -93,16 +92,7 @@ const OverviewWrap = ({
   const [ updateTrigger, updateTriggerSet ] = useState(true);
   
   useEffect( ()=>{
-    Meteor.call('REQUESTcacheUpdate', 
-      false, // batchUp
-      true, // priorityUp
-      false, // activityUp
-      false, // branchConUp
-      false, // compUp
-    ()=>{
-      loadTimeSet( moment() );
-      Meteor.call('updateLiveMovement');
-    });
+    Meteor.call('updateLiveMovement', ()=>{ loadTimeSet( moment() ) });
   }, [b, bx, updateTrigger]);
   
   function sortInitial() {
@@ -140,12 +130,11 @@ const OverviewWrap = ({
       let orderedBatches = filteredBatches;
       
       if(sortBy === 'priority') {
-        const pData = pCache.dataSet;
         orderedBatches = filteredBatches.sort((b1, b2)=> {
           
-          const pB1 = pData.find( x => x.batchID === b1._id);
+          const pB1 = traceDT.find( x => x.batchID === b1._id);
           const pB1bf = pB1 ? pB1.estEnd2fillBuffer : null;
-          const pB2 = pData.find( x => x.batchID === b2._id);
+          const pB2 = traceDT.find( x => x.batchID === b2._id);
           const pB2bf = pB2 ? pB2.estEnd2fillBuffer : null;
           if (!pB1bf) { return 1 }
           if (!pB2bf) { return -1 }
@@ -234,8 +223,8 @@ const OverviewWrap = ({
             key='fancylist0'
             oB={liveState}
             traceDT={traceDT}
-            pCache={pCache}
             app={app}
+            isDebug={isDebug}
             title={!filterBy ? 'All Live' : filterBy}
             focusBy={focusBy}
           />
@@ -244,7 +233,6 @@ const OverviewWrap = ({
             key='fancylist1'
             oB={liveState}
             traceDT={traceDT}
-            pCache={pCache}
             user={user}
             app={app}
             brancheS={brancheS}

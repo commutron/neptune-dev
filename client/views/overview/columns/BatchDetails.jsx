@@ -10,7 +10,7 @@ import NonConCounts from './NonConCounts.jsx';
 import ProJump from '/client/components/smallUi/ProJump';
 
 const BatchDetails = ({
-  oB, traceDT, pCache,
+  oB, traceDT,
   user, app, brancheS,
   isDebug, isNightly,
   dense, filterBy, focusBy, branchArea, updateTrigger
@@ -57,7 +57,6 @@ const BatchDetails = ({
               oB={entry}
               tBatch={tBatch}
               user={user}
-              pCache={pCache}
               app={app}
               brancheS={brancheS}
               branchClear={branchClear}
@@ -82,7 +81,7 @@ export default BatchDetails;
 
 const BatchDetailChunk = ({ 
   rowIndex, oB, tBatch,
-  pCache, user, app, 
+  user, app, 
   brancheS, branchClear,
   isDebug, isNightly,
   statusCols, progCols, ncCols, 

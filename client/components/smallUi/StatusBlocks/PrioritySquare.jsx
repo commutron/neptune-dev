@@ -72,7 +72,7 @@ export const PrioritySquare = ({
     const overQuote = q2t < 0;
     isDebug && console.log({pt, batchID, bffrTime, q2t});
 
-    if(pt.isDone) {
+    if(pt.completed) {
       return(
         <div className='green'>
           <NumStat
@@ -138,7 +138,7 @@ export const PrioritySquare = ({
     const mustTxt = `Must Be Active By: ${moment(pt.estLatestBegin).format("ddd, MMM Do, h:mm a")}`;
     
     const title = `${prTxt}\n${ovrTxt}\n${treTxt}\n${soonTxt}\n${mustTxt}`;
-    const debugTitle = `${prTxt}\n${bffTxt}\n${ovrTxt}\n${treTxt}\n${soonTxt}\n${mustTxt}`;
+    const debugTitle = `${prTxt}\n${ovrTxt}\n${treTxt}\n${soonTxt}\n${mustTxt}\n\n${bffTxt}\n${pt.bffrRel}`;
     
     return(
       <div 

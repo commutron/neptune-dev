@@ -213,14 +213,16 @@ function collectPriority(privateKey, batchID, mockDay) {
                                                       // insert additional ship bumper
         //const estConclude = shipAim;//shipAim.clone().subtractWorkingTime(0, 'hours');
         const estLatestBegin = shipAim.clone().subtractWorkingTime(q2tNice, 'minutes');
-        const maxGap = shipAim.workingDiff(moment(b.createdAt), 'hours', true);
-        const isStupid =  maxGap < totalQuoteMinutes;
+        
+        const dayGap = shipAim.workingDiff(now, 'days');
         
         const estSoonest = now.clone().addWorkingTime(q2tNice, 'minutes');
 
         const buffer = shipAim.workingDiff(estSoonest, 'minutes');
         
         const estEnd2fillBuffer = buffer || null;
+        
+        const bffrRel =  Math.round( ( estEnd2fillBuffer / 100 ) - dayGap );
         
         collection = {
           batch: b.batch,
@@ -229,8 +231,8 @@ function collectPriority(privateKey, batchID, mockDay) {
           quote2tide: quote2tide,
           estSoonest: estSoonest.format(),
           estLatestBegin: estLatestBegin.format(),
-          isDone: doneEntry, 
-          isStupid: isStupid,
+          completed: doneEntry, 
+          bffrRel: bffrRel,
           estEnd2fillBuffer: estEnd2fillBuffer,
           // endEntry: endEntry,
           shipAim: shipAim.format(),
@@ -243,8 +245,8 @@ function collectPriority(privateKey, batchID, mockDay) {
           batchID: b._id,
           salesOrder: b.salesOrder,
           quote2tide: false,
-          isDone: doneEntry,
-          isStupid: false,
+          completed: doneEntry,
+          bffrRel: false,
           estEnd2fillBuffer: 0,
           // endEntry: endEntry,  
           shipAim: shipAim.format(),

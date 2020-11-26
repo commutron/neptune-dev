@@ -7,7 +7,6 @@ import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 
 const DownstreamHeaders = ({
   indexKey, oB, traceDT,
-  pCache,
   user, app,
   isDebug, isNightly,
   focusBy, dense
@@ -22,7 +21,6 @@ const DownstreamHeaders = ({
             key={indexKey+'c'+index}
             ck={entry}
             tBatch={tBatch}
-            pCache={pCache}
             app={app}
             user={user}
             isDebug={isDebug}
@@ -39,12 +37,10 @@ export default DownstreamHeaders;
 
 const DownstreamFixedChunk = ({
   ck, tBatch,
-  pCache,
   app, user, isDebug, focusBy, dense 
 })=> {
   
   const isDone = ck.completedAt ? true : false;
-  const pt = pCache.find( x => x.batchID === ck.batchID );
   
   let what = 'unavailable';
   let highG = '';
@@ -60,7 +56,7 @@ const DownstreamFixedChunk = ({
     <div className={`downRowFixed ${highG}`}>
       <PrioritySquare
         batchID={ck.batchID}
-        ptData={pt}
+        ptData={tBatch}
         isDone={isDone}
         app={app}
         isDebug={isDebug}

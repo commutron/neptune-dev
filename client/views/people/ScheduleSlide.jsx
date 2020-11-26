@@ -117,7 +117,7 @@ const ScheduleSlide = ({ app, user, users, isAdmin, isPeopleSuper })=> {
         </div>
         
         <div>
-          <h3>Next Year Holidays</h3>
+          <h3>Next Year Fixed Date Holidays</h3>
           <dl>
             {farList.map( (e, i)=>{
               return( 
