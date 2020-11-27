@@ -164,16 +164,14 @@ Meteor.methods({
   */
    
   fetchShortfallParts() {
-
-    const touchedB = BatchDB.find({
-      orgKey: Meteor.user().orgKey,
-      finishedAt: false,
-      shortfall: { $elemMatch: { inEffect: { $ne: true }, reSolve: { $ne: true } } }
-    }).fetch();
     
     let sMatch = [];
     
-    for(let iB of touchedB) {    // s.inEffect !== true && s.reSolve !== true
+    BatchDB.find({
+      orgKey: Meteor.user().orgKey,
+      finishedAt: false,
+      shortfall: { $elemMatch: { inEffect: { $ne: true }, reSolve: { $ne: true } } }
+    }).forEach( iB => {    // s.inEffect !== true && s.reSolve !== true
       const mShort = iB.shortfall.filter( s => !(s.inEffect || s.reSolve) );
       const describe = whatIsBatch(iB.batch)[0].join(' ');
 
@@ -194,7 +192,7 @@ Meteor.methods({
   	      sMatch.push(ent);
   	    });
       }
-    }
+    });
     return sMatch;
   },
   
@@ -206,12 +204,12 @@ Meteor.methods({
   ///////////////////////////////////////////////////////////////////////////////////
  
   scrapItems() {
-    const batchWithScrap = BatchDB.find({
-                            orgKey: Meteor.user().orgKey,
-                            'items.history.type': 'scrap'
-                          }).fetch();
     let compactData = [];
-    for(let b of batchWithScrap) {
+    
+    BatchDB.find({
+      orgKey: Meteor.user().orgKey,
+      'items.history.type': 'scrap'
+    }).forEach( b => {
       const w = WidgetDB.findOne({_id: b.widgetId});
       const g = GroupDB.findOne({_id: w.groupId});
       const items = b.items.filter( 
@@ -230,7 +228,7 @@ Meteor.methods({
           scEntry: scEntry
         });
       }
-    }
+    });
     return compactData;
   },
   
@@ -241,14 +239,14 @@ Meteor.methods({
   ///////////////////////////////////////////////////////////////////////////////////
  
   testFailItems() {
-    const batchWithTest = BatchDB.find({
-                            orgKey: Meteor.user().orgKey,
-                            // live: true,
-                            'items.history.type': 'test',
-                            'items.history.good': false
-                          }).fetch();
     let compactData = [];
-    for(let b of batchWithTest) {
+    
+    BatchDB.find({
+      orgKey: Meteor.user().orgKey,
+      // live: true,
+      'items.history.type': 'test',
+      'items.history.good': false
+    }).forEach( b => {
       const w = WidgetDB.findOne({_id: b.widgetId});
       const g = GroupDB.findOne({_id: w.groupId});
       const items = b.items.filter( x => {
@@ -276,7 +274,7 @@ Meteor.methods({
           tfEntries: tfEntries
         });
       }
-    }
+    });
     return compactData;
   },
   
@@ -288,9 +286,11 @@ Meteor.methods({
   ///////////////////////////////////////////////////////////////////////////////////
   
   componentFind(num, batchInfo, unitInfo) {
-    const variants = VariantDB.find({'assembly.component': num}).fetch();
     const data = [];
-    for(let v of variants) {
+    
+    VariantDB.find({
+      'assembly.component': num
+    }).forEach( v => {
       let findG = GroupDB.findOne({ _id: v.groupId });
       let findW = WidgetDB.findOne({ _id: v.widgetId });
 
@@ -317,7 +317,7 @@ Meteor.methods({
         places: 1
         //v.assembly.filter( x => x.component === num ).length,
       });
-    }
+    });
     return data;
   },
   
@@ -328,14 +328,15 @@ Meteor.methods({
   ///////////////////////////////////////////////////////////////////////////////////
   
   componentExportAll() {
-    const variants = VariantDB.find({orgKey: Meteor.user().orgKey}).fetch();
-    
     const data = [];
-    for(let v of variants) {
+    
+    VariantDB.find({
+      orgKey: Meteor.user().orgKey
+    }).forEach( v => {
       for(let a of v.assembly) {
         data.push(a.component);
       }
-    }
+    });
     const cleanData = [... new Set(data) ].sort();
     return cleanData;
   }

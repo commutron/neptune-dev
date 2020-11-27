@@ -171,7 +171,7 @@ Meteor.publish('traceDataLive', function(){
           'lateLate': 1,
           'isActive': 1,
           // 'onFloor': 1,
-          // 'branchCondition': 1,
+          'branchCondition': 1,
           'quote2tide': 1,
           'estSoonest': 1,
           'estLatestBegin': 1,
@@ -211,7 +211,7 @@ Meteor.publish('traceDataActive', function(){
           'shipAim': 1,
           // 'completed': 1,
           // 'completedAt': 1,
-          // 'lateLate': 1,
+          'lateLate': 1,
           'isActive': 1,
           'onFloor': 1,
           'branchCondition': 1,
@@ -573,13 +573,13 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
             'orgKey': 0,
             'shareKey': 0,
             'floorRelease': 0,
-            // 'lockTrunc': 0
+            'lockTrunc': 0
           }}),
         XBatchDB.find({batch: dataRequest, orgKey: orgKey}, {
           fields: {
             'orgKey': 0,
             'shareKey': 0,
-            // 'lockTrunc': 0
+            'lockTrunc': 0
         }})
       ];
     }

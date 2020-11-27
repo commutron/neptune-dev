@@ -162,6 +162,7 @@ const UpstreamView = ({
             oB={liveState}
             traceDT={traceDT}
             app={app}
+            isDebug={isDebug}
             title={Pref.kitting}
             focusBy={focusBy}
             showMore={true}

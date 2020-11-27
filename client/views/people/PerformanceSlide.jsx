@@ -125,9 +125,29 @@ const PerformanceSlide = ({ app, user, users, traceDT, isDebug })=> {
             totalLogHrsUP={(v)=>totalLogHrsSet(v)}
             diffPotHrsUP={(v)=>diffPotHrsSet(v)} />
           
-          <div className='balance dropCeiling'>
-          
-            <dl>
+          <div className='vgap centreRow'>
+            <NumLine
+              num={totalWeekHrsState}
+              name='Hours Maximum for the Week'
+              color='blueT'
+              big={true} />
+              
+            <NumLine
+              num={totalLogHrsState}
+              name='Hours Logged'
+              color='tealT'
+              big={true} />
+        
+            <NumLine
+              num={diffPotHrsState}
+              name='Hours Under Maximum'
+              color='grayT'
+              big={true} />
+          </div>
+            
+          <div className='autoGrid'>
+            
+            <dl className='vmargin'>
               <dt>User List ({userList.length}) [{selectDayState || 'Week'}]</dt>
               {userList.map( (ent, ix)=>(
                 <dd key={ent+ix}>
@@ -136,7 +156,7 @@ const PerformanceSlide = ({ app, user, users, traceDT, isDebug })=> {
               ))}
             </dl>
               
-            <dl>
+            <dl className='vmargin'>
               <dt>{Pref.Batch} List ({batchList.length}) [{selectDayState || 'Week'}]</dt>
               {batchList.map( (ent, ix)=>{
                 const moreInfo = traceDT ? traceDT.find( x => x.batch === ent) : false;
@@ -148,32 +168,12 @@ const PerformanceSlide = ({ app, user, users, traceDT, isDebug })=> {
               )})}
             </dl>
             
-            <dl>
+            <dl className='vmargin'>
               <dt>Known Tasks List ({taskList.length}) [{selectDayState || 'Week'}]</dt>
               {taskList.map( (ent, ix)=>(
                 <dd key={ent+ix}>{ent}</dd>
               ))}
             </dl>
-            
-            <div className='dropCeiling centreRow'>
-              <NumLine
-                num={totalWeekHrsState}
-                name='Total Hours for the Week'
-                color='blueT'
-                big={true} />
-                
-              <NumLine
-                num={totalLogHrsState}
-                name='Total Logged Hours'
-                color='tealT'
-                big={true} />
-          
-              <NumLine
-                num={diffPotHrsState}
-                name='Hours Missed Potential'
-                color='grayT'
-                big={true} />
-            </div>
             
           </div>
             

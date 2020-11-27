@@ -34,8 +34,8 @@ const ReleasedCheck = ({
         isX={isX}>
         <TrinaryStat
           status={releasedToFloor ? !floorRelease.caution ? true : false : null}
-          name='Released'
-          title={`Released from ${Pref.kitting}`}
+          name={Pref.kitting}
+          title='Released from'
           size=''
           onIcon='fas fa-flag fa-2x greenT'
           midIcon='fas fa-flag fa-2x yellowT'

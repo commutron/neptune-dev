@@ -90,13 +90,33 @@ const TrackStepSlide = ({ app, branchesS, sorted })=> {
         
         <hr />
       
-        {sorted.map( (entry, index)=>{
-          return( 
-            <TrackStepEdit 
-              key={rndmKey + index + entry.key} 
-              app={app}
-              branchesSort={branchesS}
-              data={entry} />
+        
+        <details>
+          <summary>no branch</summary>
+          {sorted.filter( s => !s.branchKey).map( (entry, index)=>{
+            return( 
+              <TrackStepEdit 
+                key={rndmKey + index + entry.key} 
+                app={app}
+                branchesSort={branchesS}
+                data={entry} />
+          )})}
+        </details>
+        
+        {branchesS.map( (bentry, bindex)=>{
+          const bsteps = sorted.filter( s => s.branchKey === bentry.brKey);
+          return(
+            <details key={bindex+'b'} className='vmargin'>
+              <summary>{bentry.branch}</summary>
+              {bsteps.map( (entry, index)=>{
+                return( 
+                  <TrackStepEdit 
+                    key={rndmKey + index + entry.key} 
+                    app={app}
+                    branchesSort={branchesS}
+                    data={entry} />
+              )})}
+            </details>
         )})}
       </ul>
     </div>

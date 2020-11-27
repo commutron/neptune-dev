@@ -1,8 +1,8 @@
 import React, { useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import moment from 'moment';
-import 'moment-timezone';
+// import moment from 'moment';
+// import 'moment-timezone';
 import { ToastContainer } from 'react-toastify';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
 import usePrevious from '/client/utility/usePreviousHook.js';
@@ -20,6 +20,7 @@ import PerformanceSlide from './PerformanceSlide.jsx';
 import HistorySlide from './HistorySlide.jsx';
 import ScheduleSlide from './ScheduleSlide.jsx';
 import AccountsManagePanel, { PermissionHelp } from './AccountsManagePanel.jsx';
+import TimeErrorCheck from './TimeErrorCheck';
 
 const PeopleDataWrap = ({
   ready, readyUsers, readybName, // subs
@@ -37,8 +38,8 @@ const PeopleDataWrap = ({
     return( <SpinWrap /> );
   }
   
-  const brancheS = app.branches.sort((b1, b2)=> {
-    return b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 });
+  const brancheS = app.branches.sort((b1, b2)=>
+          b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
      
   const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
   // const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
@@ -70,8 +71,9 @@ const PeopleDataWrap = ({
             <b><i className='far fa-calendar-alt fa-fw'></i>  Work Schedule</b>,
             <b><i className='fas fa-user-lock fa-fw'></i>  Permissions</b>,
             <b><i className='fas fa-users-cog fa-fw'></i>   Account Manager</b>,
+            <b><i className='fas fa-hourglass fa-fw'></i>   Error Check</b>,
           ]}
-          disable={[false, false, false, false, false, antiAuth]}>
+          disable={[false, false, false, false, false, antiAuth, antiAuth]}>
           
           <DashSlide
             key={0}
@@ -121,6 +123,10 @@ const PeopleDataWrap = ({
               traceDT={traceDT}
               brancheS={brancheS}
               isDebug={isDebug} />
+          : null }
+          
+          {isAdmin || isPeopleSuper ?
+            <TimeErrorCheck key={6} />
           : null }
           
         </Slides>

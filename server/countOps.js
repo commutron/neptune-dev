@@ -97,7 +97,7 @@ Meteor.methods({
     
   },
   
-  countMultiBatchTideToQuote(batchIDs, clientTZ) {
+  countMultiBatchTideToQuote(batchIDs) {
     
     let tidePerItem = [];
     
@@ -111,7 +111,7 @@ Meteor.methods({
     
     const discoverTQ = (b, itemQuantity)=> {
       // check for over quote
-      const distTB = distTimeBudget(b.tide, b.quoteTimeBudget, itemQuantity, itemQuantity);
+      const distTB = distTimeBudget(b.tide, b.quoteTimeBudget, itemQuantity, itemQuantity, b.lockTrunc);
       if(distTB) {
         tidePerItem.push( distTB[0] );
         quotePerItem.push( distTB[1] );
@@ -122,7 +122,7 @@ Meteor.methods({
     
     const discoverOT = (endTime, completeTime)=> {
       // duration between finish and fulfill
-      const deliveryResult = deliveryState(endTime, completeTime, clientTZ);
+      const deliveryResult = deliveryState(endTime, completeTime);
       const dr3 = deliveryResult[3];
       const timeVal = !dr3[0] ? 0 : 
                       dr3[1] === 'hour' || dr3[1] === 'hours' ? ( dr3[0] / 24 ) :

@@ -17,7 +17,7 @@ const UpstreamDetails = ({
   
   const branchClear = brancheS.filter( b => b.reqClearance === true );
   
-  const statusCols = ['due','remaining workdays','items quantity','serial flow'];
+  const statusCols = ['due','remaining workdays','items quantity','flow set'];
   
   const branchClearCols = Array.from(branchClear, x => x.common );
   const kitCols = [...branchClearCols, Pref.baseSerialPart+'s', 'released'];
@@ -113,6 +113,7 @@ const UpstreamDetailChunk = ({
       <KittingChecks
         batchID={oB._id}
         batchNum={oB.batch}
+        tBatch={tBatch}
         isX={isX}
         isDone={isDone}
         releasedToFloor={releasedToFloor}

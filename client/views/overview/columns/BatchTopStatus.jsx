@@ -66,11 +66,14 @@ const BatchTopStatus = ({
       <div>
         <TrinaryStat
           status={tBatch.riverChosen}
-          name='Flow'
+          name={tBatch.riverChosen ? 'Serial Flow' :
+                tBatch.riverChosen === false ? 'Counter Flow' :
+                'No Flow'}
           title='Process Flow Assignment'
           size=''
-          onIcon='far fa-check-circle fa-2x greenT' 
-          midIcon='far fa-times-circle fa-2x grayT' />
+          onIcon='fas fa-check-circle fa-2x greenT' 
+          midIcon='far fa-check-circle fa-2x greenT'
+          offIcon='far fa-question-circle fa-2x whiteT' />
       </div>}
       
     </Fragment>

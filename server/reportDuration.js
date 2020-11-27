@@ -29,13 +29,13 @@ function splitItmTm( items, tide ) {
     
     for( let en of etide ) {
       if( midMmnt.isBetween(en.startTime, en.stopTime ) ) {
-        lTide += ( moment.duration(midMmnt.diff(en.startTime)).asMinutes() );  
-        rTide += ( moment.duration(moment(en.stopTime).diff(midMmnt)).asMinutes() );  
+        lTide += ( Math.abs( moment.duration(midMmnt.diff(en.startTime)).asMinutes() ) );  
+        rTide += ( Math.abs( moment.duration(midMmnt.diff(en.stopTime)).asMinutes() ) );  
         
       }else if( midMmnt.isBefore(en.startTime) ) {
-        lTide += ( moment.duration(moment(en.stopTime).diff(en.startTime)).asMinutes() );
+        lTide += ( Math.abs( moment.duration(moment(en.stopTime).diff(en.startTime)).asMinutes() ) );
       }else{
-        rTide += ( moment.duration(moment(en.stopTime).diff(en.startTime)).asMinutes() );
+        rTide += ( Math.abs( moment.duration(moment(en.stopTime).diff(en.startTime)).asMinutes() ) );
       }
     }
     return [ lTide, rTide ];
@@ -190,13 +190,13 @@ Meteor.methods({
     const accessKey = Meteor.user().orgKey;
     
     async function collect() {
-      // try {
+      try {
         result = await collectAllGroupDur(accessKey, getWidgetPace);
         const resultString = JSON.stringify(result);
         return resultString;
-      // }catch (err) {
-      //   throw new Meteor.Error(err);
-      // }
+      }catch (err) {
+        throw new Meteor.Error(err);
+      }
     }
     return collect();
   },

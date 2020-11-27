@@ -602,6 +602,7 @@ main {
 .vmargin { margin: 24px 0; }
 .vmarginhalf { margin: 12px 0; }
 .vgap { margin-bottom: 2vh; }
+/*.wmargin { margin: 0 24px; }*/
 .nomargin { margin: 0; }
 
 .noindent,
@@ -696,6 +697,11 @@ main {
 .rowWrap { justify-content: flex-start; }
 .rowWrapR { justify-content: flex-end; }
 
+.autoGrid {
+  display: grid;
+  grid-template-columns: repeat( auto-fit, minmax(20ch, 1fr) );
+  align-items: baseline;
+}
 .wide {
   width: 100%;
   margin: 0 auto;

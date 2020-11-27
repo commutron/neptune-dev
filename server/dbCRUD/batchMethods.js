@@ -294,7 +294,11 @@ Meteor.methods({
           river: riverId,
           riverAlt: riverAltId,
         }});
-      Meteor.defer( ()=>{ Meteor.call('updateOneMinify', batchId, accessKey); });
+      Meteor.defer( ()=>{ 
+        Meteor.call('updateOneMinify', batchId, accessKey); 
+        Meteor.call('updateOneMovement', batchId, accessKey);
+
+      });
       return true;
     }else{
       return false;
@@ -356,6 +360,7 @@ Meteor.methods({
       }});
       Meteor.defer( ()=>{
         Meteor.call('updateOneMovement', batchId, privateKey);
+        Meteor.call('lockingCacheUpdate', privateKey);
       });
     }else{null}
   },

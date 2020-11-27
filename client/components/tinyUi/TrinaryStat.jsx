@@ -25,7 +25,7 @@ const TrinaryStat = ({ status, name, title, size, onIcon, midIcon, offIcon }) =>
     <i><i className={`${onIcon || 'fas fa-circle greenT'} ${size}`}></i></i>;
     
   return(
-    <div style={sty} title={title}>
+    <div style={sty} title={`${title}\n${name}`}>
       {iconState}
       <br />
       <i style={sSty} className='label'>{name}</i>

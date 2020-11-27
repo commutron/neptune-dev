@@ -201,7 +201,7 @@ function collectPriority(privateKey, batchID, mockDay) {
       
       const qtBready = !b.quoteTimeBudget ? false : true;
         
-      if(qtBready && b.tide) {
+      if(qtBready && b.tide && !doneEntry) {
         const totalQuoteMinutes = b.quoteTimeBudget.length === 0 ? 0 :
                                   b.quoteTimeBudget[0].timeAsMinutes;
                                   

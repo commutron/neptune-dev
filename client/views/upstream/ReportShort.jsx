@@ -21,22 +21,11 @@ const ReportShort = ({ app, user, isDebug })=> {
       setShortData(cronoTimes);
 	  });
     isDebug && console.log(shortData);
-    
-    // state memory leak?
   }, []);
-  
                      
   return(
     <div className='space5x5 invert overscroll'>
-      <div className='med vbreak comfort middle'>
-        <div className='line2x'>
-          
-        </div>
-      
-      </div>
-      
-      <h3 className='orangeBorder centreText'>Prototype. Not verified. Not tested for performance.</h3>
-      
+
       {!shortData ?
         <CalcSpin />
       :

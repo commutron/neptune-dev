@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 // import Pref from '/client/global/pref.js';
 import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 
@@ -13,50 +13,43 @@ const ReportsWrap = ({
   allBatch, allXBatch, 
   allWidget, allVariant, allGroup,
   app, isNightly
-})=> {
-  
-  useEffect( ()=>{
-    Meteor.call('lockingCacheUpdate');
-  }, []);
-  
-  return(
-    <div className='space36v'>
+})=> (
+  <div className='space36v'>
+    
+    <Tabs
+      tabs={[
+        <b><i className='fas fa-umbrella fa-fw'></i> General</b>,
+        <b><i className='fas fa-hourglass-end fa-fw'></i> Durrations</b>,
+        <b><i className='fas fa-icicles fa-fw' data-fa-transform='flip-v'></i> Cycle Pace</b>,
+        <b><i className='fas fa-calendar fa-fw'></i> Month Raw</b>
+      ]}
+      wide={false}
+      stick={false}
+      hold={true}
+      sessionTab='reportExPanelTabs'>
       
-      <Tabs
-        tabs={[
-          <b><i className='fas fa-umbrella fa-fw'></i> General</b>,
-          <b><i className='fas fa-hourglass-end fa-fw'></i> Durrations</b>,
-          <b><i className='fas fa-icicles fa-fw' data-fa-transform='flip-v'></i> Cycle Pace</b>,
-          <b><i className='fas fa-calendar fa-fw'></i> Month Raw</b>
-        ]}
-        wide={false}
-        stick={false}
-        hold={true}
-        sessionTab='reportExPanelTabs'>
+      <GeneralReport
+        batchData={allBatch}
+        widgetData={allWidget}
+        groupData={allGroup} 
+        app={app} />
         
-        <GeneralReport
+      <BuildDurration />
+      
+      <BuildPace />
+  
+      {isNightly ?
+        <MonthKPIReport
           batchData={allBatch}
           widgetData={allWidget}
           groupData={allGroup} 
           app={app} />
-          
-        <BuildDurration />
+        :
+        <div><em>available in the "nightly"</em></div>
+      }
         
-        <BuildPace />
-    
-        {isNightly ?
-          <MonthKPIReport
-            batchData={allBatch}
-            widgetData={allWidget}
-            groupData={allGroup} 
-            app={app} />
-          :
-          <div><em>available in the "nightly"</em></div>
-        }
-          
-      </Tabs> 
-    </div>
-  );
-};
+    </Tabs> 
+  </div>
+);
   
 export default ReportsWrap;

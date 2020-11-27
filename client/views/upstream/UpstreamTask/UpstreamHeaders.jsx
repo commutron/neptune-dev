@@ -34,7 +34,7 @@ const UpstreamHeaderChunk = ({ck, tBatch, bCache, app, focusBy })=> {
   
   const isDone = ck.completed || ck.finishedAt ? true : false;
 
-  const whaT = !tBatch ? 'unavailable' : `${tBatch.isWhat.join(' ')} ${tBatch.describe}`;
+  const whaT = !tBatch ? 'unavailable' : `${tBatch.isWhat.join(' ')}`;
   const highG = tBatch && focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
   
   return(
@@ -50,7 +50,8 @@ const UpstreamHeaderChunk = ({ck, tBatch, bCache, app, focusBy })=> {
       <div>
         <ExploreLinkBlock type='batch' keyword={ck.batch} wrap={false} />
       </div>
-      <div>{whaT.length <= 75 ? whaT : whaT.substring(0, 75) + '...'}</div>
+      <div title={tBatch.describe}
+      >{whaT.length <= 50 ? whaT : whaT.substring(0, 50) + '...'}</div>
     </div>
   );
 };

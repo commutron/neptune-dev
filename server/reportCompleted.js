@@ -39,9 +39,10 @@ export function calcShipDay( nowDay, futureDay ) {
 export function deliveryState(bEnd, bFinish) {
   const localEnd = moment.tz(bEnd, Config.clientTZ);
   
-  const salesEnd = localEnd.isWorkingDay() ?
-                    localEnd.clone().endOf('day').lastWorkingTime().format() :
-                    localEnd.clone().lastWorkingTime().format();
+  const endWork = localEnd.isWorkingDay() ?
+                    localEnd.clone().endOf('day').lastWorkingTime() :
+                    localEnd.clone().lastWorkingTime();
+  const salesEnd = endWork.format();
   
   const shipAim = localEnd.isShipDay() ?
                     localEnd.clone().startOf('day').nextShippingTime().format() :
@@ -51,26 +52,43 @@ export function deliveryState(bEnd, bFinish) {
                     localEnd.clone().endOf('day').lastShippingTime() :
                     localEnd.clone().lastShippingTime();
   
-  const didFinish = moment(bFinish).tz(Config.clientTZ).format();
-    
-  const isLate = moment(didFinish).isAfter(shipDue);
-  const hourGap = shipDue.workingDiff(didFinish, 'hours');
-  const dayGap = shipDue.workingDiff(didFinish, 'days', true);
+  const didFinish = moment(bFinish).tz(Config.clientTZ);
+  const didFinishNice = didFinish.format();
   
-  const hrGp = Math.abs(hourGap);
+  const lateLate = didFinish.isAfter(endWork);
+  const lateDay = didFinish.isSame(endWork, 'day');
+  
+  const eHrGp = Math.abs( endWork.diff(didFinish, 'hours') );
+  const eHourS = eHrGp == 0 || eHrGp > 1 ? 'hours' : 'hour';
+  
+  const eDyGp = Math.abs( Math.round( endWork.workingDiff(didFinish, 'days', true) ) );
+  const eDayS = eDyGp == 0 || eDyGp > 1 ? 'days' : 'day';
+  
+  const fillZ = !lateLate ?
+                    lateDay ?   // ON TIME
+                      [ null, null, 'on time' ] : [ eDyGp, eDayS, 'early' ] 
+                  : 
+                    lateDay ?  // LATE
+                      [  eHrGp, eHourS, 'overtime' ] : [ eDyGp, eDayS, 'late' ];
+  
+  const shipLate = didFinish.isAfter(shipDue);
+  
+  const hrGp = Math.abs( shipDue.workingDiff(didFinish, 'hours') );
   const hourS = hrGp == 0 || hrGp > 1 ? 'hours' : 'hour';
-  const dyGp = Math.abs( Math.round(dayGap) );
+  
+  const dyGp = Math.abs( Math.round( shipDue.workingDiff(didFinish, 'days', true) ) );
   const dayS = dyGp == 0 || dyGp > 1 ? 'days' : 'day';
   
-  const gapZone = !isLate || hrGp == 0 ?
+  const shipZ = !shipLate || hrGp == 0 ?
                     hrGp <= Config.dropShipBffr ?   // ON TIME
                       [ null, null, 'on time' ] : [ dyGp, dayS, 'early' ] 
                   : 
                     hrGp <= Config.dropShipBffr ?  // LATE
                       [ hrGp, hourS, 'late' ] : [ dyGp, dayS, 'late' ];
   
-  return [ salesEnd, shipAim, didFinish, gapZone ];
+  return [ salesEnd, shipAim, didFinishNice, fillZ, shipZ ];
 }
+
   
 function weekDoneAnalysis(rangeStart, rangeEnd) {
   
@@ -84,16 +102,14 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
     
   let batchMetrics = [];
   
-  const generalFind = BatchDB.find({
+  BatchDB.find({
     orgKey: Meteor.user().orgKey, 
     finishedAt: { 
       $gte: new Date(rangeStart),
       $lte: new Date(rangeEnd) 
     }
-  }).fetch();
-  
-  
-  for(let gf of generalFind) {
+  })
+  .forEach( gf => {
     const batchNum = gf.batch;
     const describe = whatIsBatch(batchNum)[0].join(' ');
     const salesOrder = gf.salesOrder;
@@ -129,7 +145,7 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
       salesEnd, shipDue, localFinish, endAlter,
       onTime, overQuote, percentOvUn
     ]);
-  }
+  });
   
   const generalFindX = XBatchDB.find({
     orgKey: Meteor.user().orgKey, 

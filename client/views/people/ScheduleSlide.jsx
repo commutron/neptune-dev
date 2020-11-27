@@ -6,9 +6,6 @@ import * as ShipTime from '/client/utility/ShipTime.js';
 import { toast } from 'react-toastify';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
-//import Pref from '/client/global/pref.js';
-
-// const clientTZ = moment.tz.guess();
 
 const ScheduleSlide = ({ app, user, users, isAdmin, isPeopleSuper })=> {
   
@@ -86,24 +83,21 @@ const ScheduleSlide = ({ app, user, users, isAdmin, isPeopleSuper })=> {
     <div className='space5x5'>
       
       <div className='comfort'>
-        <div>
+        <div className='overscroll'>
           <h3>Working Hours</h3>
           <TimeObjMap timeObj={ShipTime.workingHours} />
-        </div>
-        
-        <div>
+          
+          <hr className='vmargin' />
+          
           <h3>Shipping Hours</h3>
           <TimeObjMap timeObj={ShipTime.shippingHours} />
-        </div>
-      </div>
-      <p className='small grayT rightText'
-        >workinghours and shippinghours objects are hard coded and not user adjustable
-      </p>
+    
+          <p className='small grayT rightText'
+            >workinghours and shippinghours objects are hard coded and not user adjustable
+          </p>
       
-      <hr className='vmargin' />
+          <hr className='vmargin' />
       
-      <div className='comfort'>
-        <div>
           <h3>Upcoming Holidays</h3>
           <dl>
             {nextList.map( (e, i)=>{
@@ -114,9 +108,9 @@ const ScheduleSlide = ({ app, user, users, isAdmin, isPeopleSuper })=> {
               })
             }
           </dl>
-        </div>
+          
+          <hr className='vmargin' />
         
-        <div>
           <h3>Next Year Fixed Date Holidays</h3>
           <dl>
             {farList.map( (e, i)=>{
@@ -127,81 +121,84 @@ const ScheduleSlide = ({ app, user, users, isAdmin, isPeopleSuper })=> {
               })
             }
           </dl>
-        </div>
-      </div>
-      
-      <hr className='vmargin' />
-      
-      <h3>{isAuth ? 'Set Holiday' : 'Test'} Day</h3>
           
-        <div className='vspace balance'>
-          <Flatpickr
-            onChange={(e)=>handleDateChange(e)}
-            options={{
-              dateFormat: "Y-m-d",
-              defaultDate: new Date(),
-            }} />
-            
-          <button 
-            className='action clearBlue'
-            onClick={()=>handleTest()}
-          >Test {dateState}</button>
+          <hr className='vmargin' />
         </div>
         
-        {isAuth ?
-        <Fragment>
-          <div className='vspace balance'>
-            
-            <button 
-              className='action clearGreen'
-              onClick={()=>handleAdd(false)}
-              disabled={!isAuth}>Add {dateState}</button>
-            
-            <button
-              className='action clearRed'
-              onClick={()=>handleRemove(false)}
-              disabled={!isAuth || noRmv}>Remove {dateState}</button>
-          
-          </div>
+        <div className='overscroll'>
       
+          <h3>{isAuth ? 'Set Holiday' : 'Test'} Day</h3>
+          
           <div className='vspace balance'>
+            <Flatpickr
+              onChange={(e)=>handleDateChange(e)}
+              options={{
+                dateFormat: "Y-m-d",
+                defaultDate: new Date(),
+              }} />
               
             <button 
-              className='action clearGreen'
-              onClick={()=>handleAdd(true)}
-              disabled={!isAuth}>Add {wildState}</button>
+              className='action clearBlue'
+              onClick={()=>handleTest()}
+            >Test {dateState}</button>
+          </div>
+        
+          {isAuth ?
+          <Fragment>
+            <div className='vspace balance'>
+              
+              <button 
+                className='action clearGreen'
+                onClick={()=>handleAdd(false)}
+                disabled={!isAuth}>Add {dateState}</button>
+              
+              <button
+                className='action clearRed'
+                onClick={()=>handleRemove(false)}
+                disabled={!isAuth || noRmv}>Remove {dateState}</button>
+            
+            </div>
+      
+            <div className='vspace balance'>
+                
+              <button 
+                className='action clearGreen'
+                onClick={()=>handleAdd(true)}
+                disabled={!isAuth}>Add {wildState}</button>
+              
+              <button
+                className='action clearRed'
+                onClick={()=>handleRemove(true)}
+                disabled={!isAuth || noRmv}>Remove {wildState}</button>
+              
+            </div>
+          </Fragment>
+          :
+          <p className='small grayT rightText'
+            >adjusting holiday days requires 'Admin' or 'PeopleSuper' access
+          </p>
+          }
+      
+          <hr className='vmargin' />
+          
+          <details>
+            <summary>All recorded holidays</summary>
+            <ul>
+            {sortList.map( (e, i)=>{
+                return( <li key={i}>{e}</li> );
+              })
+            }
+            </ul>
+            
+            <hr />
             
             <button
-              className='action clearRed'
-              onClick={()=>handleRemove(true)}
-              disabled={!isAuth || noRmv}>Remove {wildState}</button>
-            
-          </div>
-        </Fragment>
-        :
-        <p className='small grayT rightText'
-          >adjusting holiday days requires 'Admin' or 'PeopleSuper' access
-        </p>
-        }
-      
-      <hr className='vmargin' />
-      
-      <details>
-        <summary>All recorded holidays</summary>
-        <ul>
-        {sortList.map( (e, i)=>{
-            return( <li key={i}>{e}</li> );
-          })
-        }
-        </ul>
-        
-        <hr />
-        
-        <button
-          className='action clearBlack'
-          onClick={()=>handleReset()}
-            disabled={!isAdmin}>RESET ALL</button>
-      </details>  
+              className='action clearBlack'
+              onClick={()=>handleReset()}
+                disabled={!isAdmin}>RESET ALL</button>
+          </details>
+        </div>
+      </div>
             
     </div>
   );

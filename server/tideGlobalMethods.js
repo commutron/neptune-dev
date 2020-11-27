@@ -55,9 +55,9 @@ export function checkTimeBudget(tide, quoteTimeBudget, lockTrunc) {
   return quote2tide;
 }
 
-export function distTimeBudget(tide, quoteTimeBudget, progQuantity, allQuantity) {
+export function distTimeBudget(tide, quoteTimeBudget, progQuantity, allQuantity, lockTrunc) {
   
-  const tideVquote = getTvals(tide, quoteTimeBudget);
+  const tideVquote = getTvals(tide, quoteTimeBudget, lockTrunc);
   
   if( tideVquote == undefined ) {
     return undefined;
@@ -353,6 +353,48 @@ Meteor.methods({
     }
   },
   
+  fetchErrorTimes() {
+    try {
+      
+      let badDurr = [];
+      
+      const screenT = (tideArr)=> {
+        for( let t of tideArr ) {
+          if( ( ( t.stopTime || new Date() ) - t.startTime ) 
+              > ( 500 * 60000 )
+          ) {
+            badDurr.push([
+              t.startTime, t.who
+            ]);
+          }
+        }
+      };
+      
+      BatchDB.find({
+        orgKey: Meteor.user().orgKey,
+        $or: [ { lock: false },
+               { lock: { $exists: false } }
+             ]
+      }).forEach( b => {
+        if(b.tide) { screenT(b.tide) }
+      });
+      
+      XBatchDB.find({
+        orgKey: Meteor.user().orgKey,
+        $or: [ { lock: false },
+               { lock: { $exists: false } }
+             ]
+      }).forEach( bx => {
+        if(bx.tide) { screenT(bx.tide) }
+      });
+      
+      const badDurrS = badDurr.sort( (d1, d2)=> 
+                          d1[1] < d2[1] ? 1 : d1[1] > d2[1] ? -1 : 0 );
+      return JSON.stringify(badDurrS);
+    }catch(err) {
+      throw new Meteor.Error(err);
+    }
+  },
   // FIX
   
   errorFixDeleteTideTimeBlock(batch) {

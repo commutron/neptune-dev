@@ -6,6 +6,8 @@ import Pref from '/client/global/pref.js';
 import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
+import NumBox from '/client/components/tinyUi/NumBox.jsx';
+
 
 import ReportBasicTable from '/client/components/tables/ReportBasicTable.jsx'; 
 
@@ -65,10 +67,12 @@ const DailyReport = ({ app, user, isDebug })=> {
             <br />
             {isHoliday ? <span className='bigger line05x'>Holiday</span> : null}
         </div>
-      
+        
+        <NumBox
+          num={dayData && dayData.length-1}
+          name={'Finished ' + Pref.items}
+          color='purpleT' />
       </div>
-      
-      <h3 className='orangeBorder centreText'>Prototype. Not tested for performance.</h3>
       
       {!dayData ?
         <CalcSpin />

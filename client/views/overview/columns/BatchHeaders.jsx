@@ -6,7 +6,7 @@ import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 
 const BatchHeaders = ({ 
   oB, traceDT,
-  app, title, focusBy 
+  app, isDebug, title, focusBy 
 })=> (
   <div className='overGridFixed'>
       
@@ -23,6 +23,7 @@ const BatchHeaders = ({
             ck={entry}
             tBatch={tBatch}
             app={app}
+            isDebug={isDebug}
             focusBy={focusBy} />
     )})}
     
@@ -31,7 +32,7 @@ const BatchHeaders = ({
 
 export default BatchHeaders;
 
-const BatchHeaderChunk = ({ ck, tBatch, app, focusBy })=> {
+const BatchHeaderChunk = ({ ck, tBatch, app, isDebug, focusBy })=> {
   
   const isDone = ck.completed || ck.finishedAt ? true : false;
   
@@ -49,7 +50,7 @@ const BatchHeaderChunk = ({ ck, tBatch, app, focusBy })=> {
         ptData={tBatch}
         isDone={isDone}
         app={app}
-        isDebug={false}
+        isDebug={isDebug}
         showLess={true}
       />
       <div>

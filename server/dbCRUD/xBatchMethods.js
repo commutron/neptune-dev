@@ -339,22 +339,30 @@ Meteor.methods({
             counts: []
           }
       }});
-      Meteor.defer( ()=>{ Meteor.call('updateOneMinify', batchId, accessKey); });
+      Meteor.defer( ()=>{ 
+        Meteor.call('updateOneMinify', batchId, accessKey);
+        Meteor.call('updateOneMovement', batchId, accessKey);
+      });
       return true;
     }else{
       return false;
     }
   },
   removeCounter(batchId, wfKey) {
+    const accessKey = Meteor.user().orgKey;
     const doc = XBatchDB.findOne({_id: batchId});
     const subdoc = doc ? doc.waterfall.find( x => x.wfKey === wfKey) : null;
     const inUse = subdoc ? subdoc.counts.length > 0 : null;
     if(doc && subdoc && !inUse) {
       if(Roles.userIsInRole(Meteor.userId(), 'run')) {
-        XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        XBatchDB.update({_id: batchId, orgKey: accessKey}, {
           $pull : {
             waterfall: { wfKey : wfKey }
           }});
+        Meteor.defer( ()=>{ 
+          Meteor.call('updateOneMinify', batchId, accessKey);
+          Meteor.call('updateOneMovement', batchId, accessKey);
+        });
         return true;
       }else{
         return false;
@@ -424,8 +432,8 @@ Meteor.methods({
     			  completedWho: Meteor.userId(),
         }});
         Meteor.defer( ()=>{
-          Meteor.call('completeCacheUpdate', privateKey, true);
           Meteor.call('updateOneMovement', batchId, privateKey);
+          Meteor.call('lockingCacheUpdate', privateKey);
         });
       }else{null}
     }
@@ -464,7 +472,6 @@ Meteor.methods({
               }
           }});
           Meteor.defer( ()=>{
-            Meteor.call('completeCacheUpdate', privateKey, true);
             Meteor.call('updateOneMovement', batchId, privateKey);
           });
           return true;

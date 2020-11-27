@@ -9,7 +9,7 @@ import { ReleaseWrapper } from '/client/components/bigUi/ReleasesModule.jsx';
 
 
 const KittingChecks = ({ 
-  batchID, batchNum, 
+  batchID, batchNum, tBatch,
   isX, isDone,
   releasedToFloor, releases,
   app, branchClear, 
@@ -29,34 +29,48 @@ const KittingChecks = ({
       <Fragment>
         
         {branchClear.map( (br, ix)=>{
-          const releasedBool = releases.findIndex( x => x.type === 'BRK'+br.brKey) >= 0;
-          const releaseObj = releases.find( x => x.type === 'BRK'+br.brKey);
-          return(
-            <ReleaseWrapper
-              key={batchID+'BRK'+br.brKey+ix}
-              id={batchID}
-              batchNum={batchNum}
-              releasedBool={releasedBool}
-              releaseObj={releaseObj}
-              actionKeyword={'BRK'+br.brKey}
-              actionText='Ready'
-              holdText={`Mark with ${Pref.shortfall}`}
-              unholdText={`Ready without ${Pref.shortfall}`}
-              undoText='Clear'
-              contextText={`for ${br.common}`}
-              lockout={isDone || isRO}
-              isX={isX}>
-              <TrinaryStat
-                status={releasedBool ? !releaseObj.caution ? true : false : null}
-                name={br.common}
-                title={`Ready for ${br.common}`}
-                size=''
-                onIcon='fas fa-check-square fa-2x greenT'
-                midIcon='far fa-minus-square fa-2x yellowT'
-                offIcon='far fa-check-square fa-2x grayT' 
-              />
-            </ReleaseWrapper>
-        )})}
+          const bstep = tBatch.branchCondition.find( bc => bc.brKey === br.brKey );
+          if(!bstep.condition) {
+            return(
+              <div title='N/A'>
+              <div className='infoSquareOuter noCopy'>
+                <i className='fas fa-minus fa-2x fa-fw grayT fade'></i>
+                <br />
+                <i className='label infoSquareLabel'></i>
+              </div>
+            </div>
+            );
+          }else{
+            const releasedBool = releases.findIndex( x => x.type === 'BRK'+br.brKey) >= 0;
+            const releaseObj = releases.find( x => x.type === 'BRK'+br.brKey);
+            return(
+              <ReleaseWrapper
+                key={batchID+'BRK'+br.brKey+ix}
+                id={batchID}
+                batchNum={batchNum}
+                releasedBool={releasedBool}
+                releaseObj={releaseObj}
+                actionKeyword={'BRK'+br.brKey}
+                actionText='Ready'
+                holdText={`Mark with ${Pref.shortfall}`}
+                unholdText={`Ready without ${Pref.shortfall}`}
+                undoText='Clear'
+                contextText={`for ${br.common}`}
+                lockout={isDone || isRO}
+                isX={isX}>
+                <TrinaryStat
+                  status={releasedBool ? !releaseObj.caution ? true : false : null}
+                  name={br.common}
+                  title='Ready for'
+                  size=''
+                  onIcon='fas fa-check-square fa-2x greenT'
+                  midIcon='far fa-minus-square fa-2x yellowT'
+                  offIcon='far fa-check-square fa-2x grayT' 
+                />
+              </ReleaseWrapper>
+            );
+          }
+        })}
         
         
         {isX /* && b.serialize */ ?
@@ -85,7 +99,7 @@ const KittingChecks = ({
             <TrinaryStat
               status={!serialRelease ? null : !serialRelease.caution ? true : false}
               name={`${Pref.baseSerialPart}s`}
-              title={`Ready ${Pref.baseSerialPart}s`}
+              title='Ready'
               size=''
               onIcon='fas fa-check-square fa-2x greenT'
               midIcon='far fa-minus-square fa-2x yellowT'
@@ -109,8 +123,8 @@ const KittingChecks = ({
           isX={isX}>
           <TrinaryStat
             status={releasedToFloor ? !floorRelease.caution ? true : false : null}
-            name='Released'
-            title={`Released from ${Pref.kitting}`}
+            name={Pref.kitting}
+            title='Released from'
             size=''
             onIcon='fas fa-flag fa-2x greenT'
             midIcon='fas fa-flag fa-2x yellowT'

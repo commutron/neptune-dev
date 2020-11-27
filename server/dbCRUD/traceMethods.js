@@ -24,6 +24,9 @@ function shrinkWhole(bData, accessKey) {
   
   const quantity = bData.quantity || bData.items.length;
   const serialize = bData.serialize || Array.isArray(bData.items);
+  const rFlow = bData.river ? true :
+                bData.waterfall && bData.waterfall.length > 0 ? false : 
+                null;
   
   const isX = bData.completed !== undefined;
   
@@ -58,7 +61,7 @@ function shrinkWhole(bData, accessKey) {
       describe: isWhat.more,
       quantity: Number(quantity),
       serialize: serialize,
-      riverChosen: bData.river !== false,
+      riverChosen: rFlow,
       live: bData.live,
       salesEnd: new Date(salesEnd),
       shipAim: new Date(shipAim),
@@ -81,7 +84,10 @@ function checkMinify(bData, accessKey) {
   
   const quantity = bData.quantity || bData.items.length;
   const serialize = bData.serialize || Array.isArray(bData.items);
-  
+  const rFlow = bData.river ? true :
+                bData.waterfall && bData.waterfall.length > 0 ? false : 
+                null;
+                
   TraceDB.update({batchID: bData._id}, {
     $set : { 
       orgKey: accessKey,
@@ -93,7 +99,7 @@ function checkMinify(bData, accessKey) {
       describe: isWhat.more,
       quantity: Number(quantity),
       serialize: serialize,
-      riverChosen: bData.river !== false
+      riverChosen: rFlow
   }});
 }
 

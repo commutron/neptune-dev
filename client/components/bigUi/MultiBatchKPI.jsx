@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
-import moment from 'moment';
-import 'moment-timezone';
 
 // import { min2hr } from '/client/utility/Convert';
 import NumLine from '/client/components/tinyUi/NumLine.jsx';
@@ -13,8 +11,7 @@ const MultiBatchKPI = ({ batchIDs, app })=> {
   const [ batchDT, batchDTset ] = useState(false);
   
   useEffect( ()=>{
-    const clientTZ = moment.tz.guess();
-    Meteor.call('countMultiBatchTideToQuote', batchIDs, clientTZ, (error, reply)=>{
+    Meteor.call('countMultiBatchTideToQuote', batchIDs, (error, reply)=>{
       error && console.log(error);
       batchDTset( reply );
     });
@@ -43,7 +40,7 @@ const MultiBatchKPI = ({ batchIDs, app })=> {
     const dlvColr = delvAvg < 0 ? 'redT' : 'greenT';
     
     return(
-      <div className='invert vspacehalf rowWrap' 
+      <div className='invert vspacehalf autoGrid' 
         title={`Mean Average of completed ${Pref.batches}`}>
         
         

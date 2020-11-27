@@ -19,7 +19,7 @@ const BatchDetails = ({
   const branchClear = brancheS.filter( b => b.reqClearance === true );
   
   const statusCols = branchArea ? ['due', 'remaining workdays', 'items quantity'] :
-                      ['due', 'remaining workdays', 'items quantity', 'serial flow'];
+                      ['due', 'remaining workdays', 'items quantity', 'flow set'];
   
   const progCols = branchArea ?
                     [ brancheS.find( x => x.branch === filterBy).common ] :

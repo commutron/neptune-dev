@@ -46,7 +46,7 @@ Meteor.methods({
         key: 'f1n15h1t3m5t3p',
         step: 'finish',
         type: 'finish',
-        branch: 't3rm1n2t1ng8r2nch',
+        branchKey: 't3rm1n2t1ng8r2nch',
         how: 'finish'
       },
       countOption: [],
