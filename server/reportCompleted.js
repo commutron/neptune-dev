@@ -4,7 +4,7 @@ import 'moment-business-time';
 
 import { distTimeBudget } from './tideGlobalMethods.js';
 import { whatIsBatch, whatIsBatchX } from './searchOps.js';
-// import { min2hr } from './calcOps';
+import { round1Decimal } from './calcOps';
 
 import Config from '/server/hardConfig.js';
 
@@ -61,7 +61,7 @@ export function deliveryState(bEnd, bFinish) {
   const eHrGp = Math.abs( endWork.diff(didFinish, 'hours') );
   const eHourS = eHrGp == 0 || eHrGp > 1 ? 'hours' : 'hour';
   
-  const eDyGp = Math.abs( Math.round( endWork.workingDiff(didFinish, 'days', true) ) );
+  const eDyGp = Math.abs( round1Decimal( endWork.workingDiff(didFinish, 'days', true) ) );
   const eDayS = eDyGp == 0 || eDyGp > 1 ? 'days' : 'day';
   
   const fillZ = !lateLate ?
@@ -132,14 +132,10 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
     const distTB = distTimeBudget(gf.tide, gf.quoteTimeBudget, itemQuantity, itemQuantity);
     //return [ tidePerItem, quotePerItem, quoteMNtide, tidePCquote ];
     
-    const overQuote = distTB === undefined ? 'n/a' :
+    const overQuote = distTB === undefined || NaN(distTB) ? 'n/a' :
                       distTB[2] < 0 ? 
                       `${Math.abs(distTB[2])} hours over (${Math.abs(distTB[3])}%)` : 
                       `${Math.abs(distTB[2])} hours under (${Math.abs(distTB[3])}%)`;
-    // const percentOvUn = distTB === undefined ? 'n/a' : 
-    //                     distTB[3] < 0 ? 
-    //                     `${Math.abs(distTB[3])}% over` : 
-    //                     `${Math.abs(distTB[3])}% under`;
     
     batchMetrics.push([
       batchNum, describe, 
@@ -177,7 +173,7 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
     const distTB = distTimeBudget(gf.tide, gf.quoteTimeBudget, itemQuantity, itemQuantity);
     //return [ tidePerItem, quotePerItem, quoteMNtide, tidePCquote ];
     
-    const overQuote = distTB === undefined ? 'n/a' :
+    const overQuote = distTB === undefined || NaN(distTB) ? 'n/a' :
                       distTB[2] < 0 ? 
                       `${Math.abs(distTB[2])} hours over (${Math.abs(distTB[3])}%)` : 
                       `${Math.abs(distTB[2])} hours under (${Math.abs(distTB[3])}%)`;

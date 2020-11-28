@@ -5,6 +5,7 @@ import Config from '/server/hardConfig.js';
 import { deliveryState } from '/server/reportCompleted.js';
 import { checkTimeBudget } from '/server/tideGlobalMethods';
 
+/*
   function timeRanges(accessKey, counter, cycles, bracket) {
     const nowLocal = moment().tz(Config.clientTZ);
     
@@ -18,18 +19,16 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
         const rangeEnd = loopBack.clone().endOf(bracket).toISOString();
         
         quantity = await new Promise(function(resolve) {
-          const fetch = counter(accessKey, rangeStart, rangeEnd);
+          const fetch = Meteor.defer( ()=> counter(accessKey, rangeStart, rangeEnd) );
           resolve(fetch);
         });
         countArray.unshift({ x:cycles-w, y:quantity });
       }
       return countArray;
     }
-      
-      return runLoop();
-    
+    return runLoop();
   }
-  
+*/
   export function countNewUser(accessKey, rangeStart, rangeEnd) {
     const userFind = Meteor.users.find({
       orgKey: accessKey, 
@@ -350,14 +349,36 @@ Meteor.methods({
         return false;
       }else{
         const accessKey = Meteor.user().orgKey;
-        return timeRanges(accessKey, loop, cycles, bracket);
+        return Meteor.call('loopTimeRanges', accessKey, loop, cycles, bracket);
       }
     }catch(err) {
       throw new Meteor.Error(err);
     }
-  }
+  },
   
-
+  loopTimeRanges(accessKey, counter, cycles, bracket) {
+    this.unblock();
+    const nowLocal = moment().tz(Config.clientTZ);
+    
+    async function runLoop() {
+      let countArray = [];
+      for(let w = 0; w < cycles; w++) {
+      
+        const loopBack = nowLocal.clone().subtract(w, bracket); 
+       
+        const rangeStart = loopBack.clone().startOf(bracket).toISOString();
+        const rangeEnd = loopBack.clone().endOf(bracket).toISOString();
+        
+        quantity = await new Promise(function(resolve) {
+          const fetch = counter(accessKey, rangeStart, rangeEnd);
+          resolve(fetch);
+        });
+        countArray.unshift({ x:cycles-w, y:quantity });
+      }
+      return countArray;
+    }
+    return runLoop();
+  }
   
   
   

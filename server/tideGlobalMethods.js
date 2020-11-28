@@ -361,7 +361,7 @@ Meteor.methods({
       const screenT = (tideArr)=> {
         for( let t of tideArr ) {
           if( ( ( t.stopTime || new Date() ) - t.startTime ) 
-              > ( 500 * 60000 )
+              > ( 600 * 60000 )
           ) {
             badDurr.push([
               t.startTime, t.who

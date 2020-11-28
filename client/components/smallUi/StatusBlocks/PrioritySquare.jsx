@@ -86,7 +86,7 @@ export const PrioritySquare = ({
       );
     }
     
-    if(!bffrRel) {
+    if(bffrRel === undefined || bffrRel === null || bffrRel === false) {
       return(
         <div>
           <NumStat

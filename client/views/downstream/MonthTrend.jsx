@@ -114,7 +114,7 @@ const MonthTrend = ({ app, isDebug })=>{
           height={250}
           containerComponent={<VictoryZoomContainer
             zoomDimension="x"
-            minimumZoom={{x: 1/0.2}}
+            minimumZoom={{x: 1/0.1}}
           />}
         >
         
@@ -146,7 +146,7 @@ const MonthTrend = ({ app, isDebug })=>{
             tickFormat={(t) => 
               tgglSpan == 'month' ?
               moment().subtract(durrState, 'month').add(t, 'month').format('MMM YYYY') :
-              moment().subtract(durrState, 'week').add(t, 'week').format('w YYYY') }
+              moment().subtract(durrState, 'week').add(t, 'week').format('w-YYYY') }
           />
           
             <VictoryLine

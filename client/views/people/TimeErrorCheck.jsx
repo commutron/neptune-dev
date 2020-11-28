@@ -38,7 +38,8 @@ const TimeErrorCheck = ()=> {
   
   return(
     <div className='overscroll wide space5x5'>
-      <p>Time durrations greater than 500 minutes</p>
+      <p>Time durrations greater than 600 minutes</p>
+      <p className='small'>aka 7:00am to 4:30pm day without any breaks</p>
       <br />
       
       <div className='rowWrapR middle '>
