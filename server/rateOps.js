@@ -2,20 +2,19 @@ import moment from 'moment';
 import timezone from 'moment-timezone';
 // import 'moment-business-time';
 
+import Config from '/server/hardConfig.js';
+
 Meteor.methods({
 
- ///////////////////////////////////////////////////////////////////////////////////
-  
+    /////////////////////////////////////////////////////////////////////////
    // Layered History Rate
-  
-  ///////////////////////////////////////////////////////////////////////////////////
-  
-  layeredHistoryRate(start, end, flowData, itemData, clientTZ) {
-    let now = moment().tz(clientTZ);
+  ////////////////////////////////////////////////////////////////////////////
+  layeredHistoryRate(start, end, flowData, itemData) {
+    let now = moment().tz(Config.clientTZ);
     const endDay = end !== false ? 
       moment(end).endOf('day').add(2, 'd') : 
       now.clone().endOf('day').add(1, 'd');
-    const startDay = moment(start).tz(clientTZ).endOf('day');
+    const startDay = moment(start).tz(Config.clientTZ).endOf('day');
     const howManyDays = endDay.diff(startDay, 'day');
     
     //const b = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
@@ -80,11 +79,9 @@ Meteor.methods({
   },
   
   
-   ///////////////////////////////////////////////////////////////////////////////////
-  
+   ///////////////////////////////////////////////////////////////////////////
   // nonCon Rate
-  
-  ///////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////
   
   nonConRateLoop(batches) {
 

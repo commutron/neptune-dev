@@ -98,6 +98,8 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
     
     let doneOnTime = 0;
     let doneLate = 0;
+    let shipOnTime = 0;
+    let shipLate = 0;
     let doneUnderQ = 0;
     let doneOverQ = 0;
     
@@ -108,12 +110,12 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
         $lte: new Date(rangeEnd) 
       }
     }).forEach( (gf)=> {
-      const dst = deliveryState(gf.end, gf.finishedAt)[3][2];
-      if( dst === 'late' ) {
-        doneLate++;
-      }else{
-        doneOnTime++;
-      }
+      const dst = deliveryState(gf.end, gf.finishedAt);
+      const endSt = dst[3][2];
+      endSt === 'late' ? doneLate++ : doneOnTime++;
+      const shpSt = dst[4][2];
+      shpSt === 'late' ? shipLate++ : shipOnTime++;
+      
       const q = checkTimeBudget(gf.tide, gf.quoteTimeBudget, gf.lockTrunc);
       if( !q ) {
         null;
@@ -126,6 +128,8 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
     
     let doneOnTimeX = 0;
     let doneLateX = 0;
+    let shipOnTimeX = 0;
+    let shipLateX = 0;
     let doneUnderQX = 0;
     let doneOverQX = 0;
     
@@ -136,12 +140,12 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
         $lte: new Date(rangeEnd) 
       }
     }).forEach( (gfx)=> {
-      const dst = deliveryState(gfx.salesEnd, gfx.completedAt)[3][2];
-      if( dst === 'late' ) {
-        doneLate++;
-      }else{
-        doneOnTime++;
-      }
+      const dst = deliveryState(gfx.salesEnd, gfx.completedAt);
+      const endSt = dst[3][2];
+      endSt === 'late' ? doneLateX++ : doneOnTimeX++;
+      const shpSt = dst[4][2];
+      shpSt === 'late' ? shipLateX++ : shipOnTimeX++;
+      
       const qx = checkTimeBudget(gfx.tide, gfx.quoteTimeBudget, gfx.lockTrunc);
       if( !qx ) {
         null;
@@ -155,6 +159,8 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
     return [ 
       doneOnTime + doneOnTimeX,
       doneLate + doneLateX,
+      shipOnTime + shipOnTimeX,
+      shipLate + shipLateX,
       doneUnderQ + doneUnderQX,
       doneOverQ + doneOverQX
     ];

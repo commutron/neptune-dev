@@ -11,13 +11,8 @@ import {
 } from 'victory';
 //import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
+import ToggleBar from '/client/components/bigUi/ToolBar/ToggleBar';
 
-// import ToggleBar from '/client/components/bigUi/ToolBar/ToggleBar';
-// <ToggleBar
-//         toggleOptions={['hours', 'minutes', 'percent']}
-//         toggleVal={conversion}
-//         toggleSet={(e)=>conversionSet(e)}
-//       />
 import { percentOf } from '/client/utility/Convert';
 
 
@@ -26,22 +21,32 @@ const MonthTrend = ({ app, isDebug })=>{
   const thingMounted = useRef(true);
   const blank =  [ {x:1,y:0} ];
   
+  const [ working, workingSet ] = useState(false);
+  
+  const [ tgglSpan, tgglSpanSet ] = useState( 'month' );
   const [ durrState, durrSet ] = useState( 1 );
-  const [ data, dataSet ] = useState( blank );
+  const [ tgglState, tgglSet ] = useState( 'fulfill' );
+  
+  const [ fillDT, fillSet ] = useState( blank );
+  const [ shipDT, shipSet ] = useState( blank );
   const [ dataQ, dataSetQ ] = useState( blank );
               
   useEffect( ()=>{
-    const dur = isDebug ?
-                  parseInt( moment.duration(
-                            moment().diff(moment(app.createdAt)))
-                            .asMonths(), 10 )
-                :
-                  parseInt( moment.duration(
-                            moment().diff(moment(app.tideWall)))
-                            .asMonths(), 10 );
-                            
-    durrSet( dur );
-    Meteor.call('cycleWeekRate', 'doneBatch', dur, 'month', (err, re)=>{
+    return () => { thingMounted.current = false };
+  }, []);
+  
+  function runLoop(tspan) {
+    workingSet(true);
+    tgglSpanSet(tspan);
+    
+    const backDate = isDebug ? app.createdAt : app.tideWall;
+    const dur = moment.duration(moment().diff(moment(backDate)));
+    const durCln = tspan == 'month' ?
+                    parseInt( dur.asMonths(), 10 ) :
+                    parseInt( dur.asWeeks(), 10 );
+    durrSet( durCln );
+    
+    Meteor.call('cycleWeekRate', 'doneBatch', durCln, tspan, (err, re)=>{
       err && console.log(err);
       if(re) {
         if(thingMounted.current) {
@@ -51,23 +56,56 @@ const MonthTrend = ({ app, isDebug })=>{
             const pof = percentOf( (w.y[0] + w.y[1]), w.y[0]);
             const np = isNaN(pof) ? 0 : pof;
             return { x: w.x, y: np } } );
-          dataSet(FasPercent);
-          const QasPercent = Array.from(re, w => { 
+          fillSet(FasPercent);
+          
+          const SasPercent = Array.from(re, w => { 
             const pof = percentOf( (w.y[2] + w.y[3]), w.y[2]);
             const np = isNaN(pof) ? 0 : pof;
             return { x: w.x, y: np } } );
+          shipSet(SasPercent);
+          
+          const QasPercent = Array.from(re, w => { 
+            const pof = percentOf( (w.y[4] + w.y[5]), w.y[4]);
+            const np = isNaN(pof) ? 0 : pof;
+            return { x: w.x, y: np } } );
           dataSetQ(QasPercent);
+          
+          workingSet(false);
         }
       }
     });
-    return () => { thingMounted.current = false };
-  }, []);
+  }
   
   return(
     <div className='space5x5'>
       
-      <h3 className='orangeBorder'>PROTOTYPE - Expected to Be Slow</h3>
-      
+      <div className='rowWrap'>
+        {working ?
+          <b><i className='fas fa-spinner fa-lg fa-spin'></i></b> :
+          <i><i className='fas fa-spinner fa-lg'></i></i>
+        }
+  
+        <button
+          className='action clearBlack gap'
+          onClick={()=>runLoop('month')}
+          disabled={working}
+        >Run Monthly</button>
+          
+        <button
+          className='action clearBlack gap'
+          onClick={()=>runLoop('week')}
+          disabled={working}
+        >Run Weekly</button>
+        
+        <span className='flexSpace' />
+        
+        <ToggleBar
+          toggleOptions={['fulfill', 'ship']}
+          toggleVal={tgglState}
+          toggleSet={(e)=>tgglSet(e)}
+        />
+      </div>
+
       <div style={{backgroundColor:'white'}}>
         <VictoryChart
           theme={Theme.NeptuneVictory}
@@ -76,7 +114,7 @@ const MonthTrend = ({ app, isDebug })=>{
           height={250}
           containerComponent={<VictoryZoomContainer
             zoomDimension="x"
-            minimumZoom={{x: 1/0.25}}
+            minimumZoom={{x: 1/0.2}}
           />}
         >
         
@@ -103,14 +141,16 @@ const MonthTrend = ({ app, isDebug })=>{
             tickFormat={(t) => `${t}%`}
           />
           <VictoryAxis
-            tickCount={data.length}
+            tickCount={fillDT.length}
             fixLabelOverlap={true}
             tickFormat={(t) => 
-              moment().subtract(durrState, 'month').add(t, 'month').format('MMM YYYY') }
+              tgglSpan == 'month' ?
+              moment().subtract(durrState, 'month').add(t, 'month').format('MMM YYYY') :
+              moment().subtract(durrState, 'week').add(t, 'week').format('w YYYY') }
           />
           
             <VictoryLine
-              data={data}
+              data={tgglState == 'fulfill' ? fillDT : shipDT}
               style={{ data: { stroke: 'rgb(142, 68, 173)' } }}
               interpolation="catmullRom"
               animate={{

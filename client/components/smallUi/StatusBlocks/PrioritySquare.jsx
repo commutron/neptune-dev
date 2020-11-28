@@ -69,8 +69,9 @@ export const PrioritySquare = ({
     
     const q2t = pt.quote2tide;
     const bffrTime = pt.estEnd2fillBuffer;
+    const bffrRel = pt.bffrRel;
     const overQuote = q2t < 0;
-    isDebug && console.log({pt, batchID, bffrTime, q2t});
+    isDebug && console.log({pt, batchID, bffrRel, bffrTime, q2t});
 
     if(pt.completed) {
       return(
@@ -85,7 +86,7 @@ export const PrioritySquare = ({
       );
     }
     
-    if(!bffrTime) {
+    if(!bffrRel) {
       return(
         <div>
           <NumStat
@@ -93,7 +94,7 @@ export const PrioritySquare = ({
             name=''
             title='priority rank unavailable'
             color='fade'
-            size='vbigger bold' />
+            size='vbigger' />
         </div>
       );
     }
@@ -102,16 +103,16 @@ export const PrioritySquare = ({
     const extraClass = showExtra ? 'centre' : '';
     
     const pScl = !app.priorityScale ? {
-      low: 6600,
-      high: 2200,
+      low: 66,
+      high: 22,
       max: 0,
     } : app.priorityScale;
     
     const priorityRank = 
-      bffrTime > pScl.low ? 'low' :
-        bffrTime > pScl.high ? 'medium' : 
-          bffrTime > pScl.max ? 'high' :
-            bffrTime <= pScl.max ? pt.lateLate ? 'severe' : 'urgent' :
+      bffrRel > pScl.low ? 'low' :
+        bffrRel > pScl.high ? 'medium' : 
+          bffrRel > pScl.max ? 'high' :
+            bffrRel <= pScl.max ? pt.lateLate ? 'severe' : 'urgent' :
             'pX';
     const priorityClass = 
       priorityRank === 'severe' ? 'pScale0' :
@@ -120,13 +121,12 @@ export const PrioritySquare = ({
       priorityRank === 'medium' ? 'pScale3' : 
       'pScale4';
     
-    const tNum = Math.round( ( bffrTime / 100 ) );
-    const tSym = pt.lateLate ? 'S!' : tNum < 0 ? 'U' : tNum;
+    const tSym = pt.lateLate ? 'S!' : bffrRel < 0 ? 'U' : bffrRel;
     
     const pLabel = <b>{showLess ? tSym : priorityRank}</b>;
     
     const subLabel = pt.lateLate ? 'Is Late' :
-      bffrTime < 0 ? 'Estimated Late' : tNum;
+      bffrRel < 0 ? 'Estimated Late' : bffrRel;
       
     const overClass = overQuote ? 'moreEphasis' : '';
     const ovrTxt = overQuote ? 'Over Quote' : 'Under Quote';
@@ -137,8 +137,8 @@ export const PrioritySquare = ({
     const soonTxt = `Soonest Complete: ${moment(pt.estSoonest).format("ddd, MMM Do, h:mm a")}`;
     const mustTxt = `Must Be Active By: ${moment(pt.estLatestBegin).format("ddd, MMM Do, h:mm a")}`;
     
-    const title = `${prTxt}\n${ovrTxt}\n${treTxt}\n${soonTxt}\n${mustTxt}`;
-    const debugTitle = `${prTxt}\n${ovrTxt}\n${treTxt}\n${soonTxt}\n${mustTxt}\n\n${bffTxt}\n${pt.bffrRel}`;
+    const title = `${prTxt}\n${ovrTxt}\n\n${treTxt}\n${soonTxt}\n${mustTxt}`;
+    const debugTitle = `${prTxt}\n${ovrTxt}\n\n${treTxt}\n${soonTxt}\n${mustTxt}\n\n${bffTxt}\n${pt.bffrRel}`;
     
     return(
       <div 
@@ -167,7 +167,7 @@ export const PrioritySquare = ({
         name=''
         title='priority rank unknown'
         color='fade'
-        size='vbigger bold' />
+        size='vbigger' />
     </div>
   );
 };

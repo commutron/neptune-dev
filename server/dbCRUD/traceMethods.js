@@ -120,15 +120,15 @@ function checkMovement(bData, accessKey) {
   const whenFinish = didFinish ? bData.completedAt || bData.finishedAt : false;
   
   const shpdlv = didFinish ? deliveryState( endDay, whenFinish )
-                            // salesEnd, shipAim, didFinish, gapZone
+                            // salesEnd, shipAim, didFinish, fillZ, shipZ
                            : calcShipDay( now, endDay );
                             // salesEnd, shipAim, lateLate, shipLate
     
   const salesEnd = shpdlv[0];
   const shipAim = didFinish ? shpdlv[1] : shpdlv[1].format();
   const completedAt = didFinish ? new Date(shpdlv[2]) : false;
-  const gapZone = didFinish ? shpdlv[3] : null;
-  const lateLate = didFinish ? gapZone[2] === 'late' : shpdlv[2];
+  const fillZ = didFinish ? shpdlv[3] : null;
+  const lateLate = didFinish ? fillZ[2] === 'late' : shpdlv[2];
   
   const actvLvl = Meteor.call('tideActivityLevel', bData._id, accessKey);
   const brchCnd = Meteor.call('branchCondition', bData._id, accessKey);

@@ -28,8 +28,8 @@ const CompletedReport = ({ app })=> {
         cronoTimes.unshift([
           Pref.batch, 'description', 
           'sales order', 'tracked items', 'nonCon rate',
-          'fulfill due', 'ship due', 'complete', 'moved fulfill', 
-          'delivery', 'quote hrs', 'quote %'
+          'fulfill due', 'ship due', 'moved fulfill', 'complete', 
+          'fullfiled', 'shipped', 'quote',
         ]);     
         setWeekData(cronoTimes);
   	  });

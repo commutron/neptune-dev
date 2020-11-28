@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { VictoryChart, VictoryAxis, VictoryArea } from 'victory';
 import Theme from '/client/global/themeV.js';
 
-import moment from 'moment';
-import 'moment-timezone';
 import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
 
 const ProgLayerBurndown = ({ id, start, floorRelease, end, flowData, itemData, title })=> {
@@ -12,12 +10,11 @@ const ProgLayerBurndown = ({ id, start, floorRelease, end, flowData, itemData, t
   const [ firstState, firstSet ] = useState( false );
   
   useEffect( ()=> {
-    let clientTZ = moment.tz.guess();
-    Meteor.call('firstFirst', id, clientTZ, (error, reply)=> {
+    Meteor.call('firstFirst', id, (error, reply)=> {
       error && console.log(error);
       reply && firstSet( reply );
     });
-    Meteor.call('layeredHistoryRate', start, end, flowData, itemData, clientTZ, (error, reply)=> {
+    Meteor.call('layeredHistoryRate', start, end, flowData, itemData, (error, reply)=> {
       error && console.log(error);
       reply && countSet( reply );
     });

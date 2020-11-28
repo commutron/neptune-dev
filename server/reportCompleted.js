@@ -121,10 +121,12 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
     
     // duration between finish and fulfill
     const deliveryResult = deliveryState(gf.end, gf.finishedAt);
+    // salesEnd, shipAim, didFinishNice, fillZ, shipZ
     const salesEnd = deliveryResult[0];
     const shipDue = deliveryResult[1];
     const localFinish = deliveryResult[2];
-    const onTime = deliveryResult[3].join(" ");
+    const fillOnTime = deliveryResult[3].join(" ");
+    const shipOnTime = deliveryResult[4].join(" ");
     
     // check for over quote
     const distTB = distTimeBudget(gf.tide, gf.quoteTimeBudget, itemQuantity, itemQuantity);
@@ -132,18 +134,18 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
     
     const overQuote = distTB === undefined ? 'n/a' :
                       distTB[2] < 0 ? 
-                      `${Math.abs(distTB[2])} hours over` : 
-                      `${Math.abs(distTB[2])} hours under`;
-    const percentOvUn = distTB === undefined ? 'n/a' : 
-                        distTB[3] < 0 ? 
-                        `${Math.abs(distTB[3])}% over` : 
-                        `${Math.abs(distTB[3])}% under`;
+                      `${Math.abs(distTB[2])} hours over (${Math.abs(distTB[3])}%)` : 
+                      `${Math.abs(distTB[2])} hours under (${Math.abs(distTB[3])}%)`;
+    // const percentOvUn = distTB === undefined ? 'n/a' : 
+    //                     distTB[3] < 0 ? 
+    //                     `${Math.abs(distTB[3])}% over` : 
+    //                     `${Math.abs(distTB[3])}% under`;
     
     batchMetrics.push([
       batchNum, describe, 
       salesOrder, itemQuantity, ncRate,
-      salesEnd, shipDue, localFinish, endAlter,
-      onTime, overQuote, percentOvUn
+      salesEnd, shipDue, endAlter, localFinish,
+      fillOnTime, shipOnTime, overQuote
     ]);
   });
   
@@ -168,7 +170,8 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
     const salesEnd = deliveryResult[0];
     const shipDue = deliveryResult[1];
     const localComplete = deliveryResult[2];
-    const onTime = deliveryResult[3].join(" ");
+    const fillOnTime = deliveryResult[3].join(" ");
+    const shipOnTime = deliveryResult[4].join(" ");
     
     // check for over quote
     const distTB = distTimeBudget(gf.tide, gf.quoteTimeBudget, itemQuantity, itemQuantity);
@@ -176,18 +179,18 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
     
     const overQuote = distTB === undefined ? 'n/a' :
                       distTB[2] < 0 ? 
-                      `${Math.abs(distTB[2])} hours over` : 
-                      `${Math.abs(distTB[2])} hours under`;
-    const percentOvUn = distTB === undefined ? 'n/a' : 
-                        distTB[3] < 0 ? 
-                        `${Math.abs(distTB[3])}% over` : 
-                        `${Math.abs(distTB[3])}% under`;
+                      `${Math.abs(distTB[2])} hours over (${Math.abs(distTB[3])}%)` : 
+                      `${Math.abs(distTB[2])} hours under (${Math.abs(distTB[3])}%)`;
+    // const percentOvUn = distTB === undefined ? 'n/a' : 
+    //                     distTB[3] < 0 ? 
+    //                     `${Math.abs(distTB[3])}% over` : 
+    //                     `${Math.abs(distTB[3])}% under`;
     
     batchMetrics.push([
       batchNum, describe, 
       salesOrder, itemQuantity, ncRate,
-      salesEnd, shipDue, localComplete, endAlter,
-      onTime, overQuote, percentOvUn
+      salesEnd, shipDue, endAlter, localComplete,
+      fillOnTime, shipOnTime, overQuote
     ]);
   }
   
