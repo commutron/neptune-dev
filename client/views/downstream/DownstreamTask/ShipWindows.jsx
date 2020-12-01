@@ -26,8 +26,8 @@ const ShipWindows = ({
       const p2bf = p2.bffrRel;
       if (!p1bf) { return 1 }
       if (!p2bf) { return -1 }
-      if (p1.lateLate && p1bf < p2bf) { return -1 }
-      if (p2.lateLate && p1bf > p2bf) { return 1 }
+      if (p1.lateLate) { return -1 }
+      if (p2.lateLate) { return 1 }
       if (p1bf < p2bf) { return -1 }
       if (p1bf > p2bf) { return 1 }
       return 0;

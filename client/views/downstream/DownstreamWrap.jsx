@@ -68,6 +68,7 @@ const DownstreamWrap = ({
           app={app}
           // user={user}
           isDebug={isDebug}
+          isNightly={isNightly}
         />
       </StreamLayout>
     );

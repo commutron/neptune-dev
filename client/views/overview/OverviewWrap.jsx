@@ -133,9 +133,9 @@ const OverviewWrap = ({
         orderedBatches = filteredBatches.sort((b1, b2)=> {
           
           const pB1 = traceDT.find( x => x.batchID === b1._id);
-          const pB1bf = pB1 ? pB1.estEnd2fillBuffer : null;
+          const pB1bf = pB1 ? pB1.bffrRel : null;
           const pB2 = traceDT.find( x => x.batchID === b2._id);
-          const pB2bf = pB2 ? pB2.estEnd2fillBuffer : null;
+          const pB2bf = pB2 ? pB2.bffrRel : null;
           if (!pB1bf) { return 1 }
           if (!pB2bf) { return -1 }
           if (pB1.lateLate) { return -1 }

@@ -20,11 +20,8 @@ const CompletedReport = ({ app })=> {
 
       Meteor.call('reportOnCompleted', yearNum, weekNum, (err, rtn)=>{
   	    err && console.log(err);
-  	    let cronoTimes = rtn.sort((x1, x2)=> {
-                            if (x1[3] < x2[3]) { return -1 }
-                            if (x1[3] > x2[3]) { return 1 }
-                            return 0;
-                          });
+  	    let cronoTimes = !rtn ? [] : 
+  	          rtn.sort((x1, x2)=> x1[3] < x2[3] ? -1 : x1[3] > x2[3] ? 1 : 0 );
         cronoTimes.unshift([
           Pref.batch, 'description', 
           'sales order', 'tracked items', 'nonCon rate',

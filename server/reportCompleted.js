@@ -89,6 +89,39 @@ export function deliveryState(bEnd, bFinish) {
   return [ salesEnd, shipAim, didFinishNice, fillZ, shipZ ];
 }
 
+export function deliveryBinary(bEnd, bFinish) {
+  const localEnd = moment.tz(bEnd, Config.clientTZ);
+  
+  const endWork = localEnd.isWorkingDay() ?
+                    localEnd.clone().endOf('day').lastWorkingTime() :
+                    localEnd.clone().lastWorkingTime();
+                    
+  const shipDue = localEnd.isShipDay() ?
+                    localEnd.clone().endOf('day').lastShippingTime() :
+                    localEnd.clone().lastShippingTime();
+  
+  const didFinish = moment(bFinish).tz(Config.clientTZ);
+  
+  const lateLate = didFinish.isAfter(endWork);
+  const lateDay = didFinish.isSame(endWork, 'day');
+  
+  const fillZ = !lateLate ?
+                    lateDay ? 'on time' : 'early' 
+                  : 
+                    lateDay ? 'overtime' :  'late';
+  
+  const shipLate = didFinish.isAfter(shipDue);
+  
+  const hrGp = Math.abs( shipDue.workingDiff(didFinish, 'hours') );
+  
+  const shipZ = !shipLate || hrGp == 0 ?
+                    hrGp <= Config.dropShipBffr ? 'on time' : 'early' 
+                  : 
+                    hrGp <= Config.dropShipBffr ? 'late' : 'late';
+  
+  return [ fillZ, shipZ ];
+}
+
   
 function weekDoneAnalysis(rangeStart, rangeEnd) {
   
@@ -132,10 +165,10 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
     const distTB = distTimeBudget(gf.tide, gf.quoteTimeBudget, itemQuantity, itemQuantity);
     //return [ tidePerItem, quotePerItem, quoteMNtide, tidePCquote ];
     
-    const overQuote = distTB === undefined || NaN(distTB) ? 'n/a' :
+    const overQuote = distTB === undefined || isNaN(distTB[2]) ? 'n/a' :
                       distTB[2] < 0 ? 
-                      `${Math.abs(distTB[2])} hours over (${Math.abs(distTB[3])}%)` : 
-                      `${Math.abs(distTB[2])} hours under (${Math.abs(distTB[3])}%)`;
+                      `${Math.abs(distTB[2])} hours (${Math.abs(distTB[3])}%) over` : 
+                      `${Math.abs(distTB[2])} hours (${Math.abs(distTB[3])}%) under`;
     
     batchMetrics.push([
       batchNum, describe, 
@@ -173,10 +206,10 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
     const distTB = distTimeBudget(gf.tide, gf.quoteTimeBudget, itemQuantity, itemQuantity);
     //return [ tidePerItem, quotePerItem, quoteMNtide, tidePCquote ];
     
-    const overQuote = distTB === undefined || NaN(distTB) ? 'n/a' :
+    const overQuote = distTB === undefined || isNaN(distTB[2]) ? 'n/a' :
                       distTB[2] < 0 ? 
-                      `${Math.abs(distTB[2])} hours over (${Math.abs(distTB[3])}%)` : 
-                      `${Math.abs(distTB[2])} hours under (${Math.abs(distTB[3])}%)`;
+                      `${Math.abs(distTB[2])} hours (${Math.abs(distTB[3])}%) over` : 
+                      `${Math.abs(distTB[2])} hours (${Math.abs(distTB[3])}%) under`;
     // const percentOvUn = distTB === undefined ? 'n/a' : 
     //                     distTB[3] < 0 ? 
     //                     `${Math.abs(distTB[3])}% over` : 

@@ -4,6 +4,7 @@ import moment from 'moment';
 // import 'moment-timezone';
 import { 
   VictoryLine,
+  VictoryScatter,
   VictoryChart, 
   VictoryAxis,
   VictoryLegend,
@@ -16,7 +17,7 @@ import ToggleBar from '/client/components/bigUi/ToolBar/ToggleBar';
 import { percentOf } from '/client/utility/Convert';
 
 
-const MonthTrend = ({ app, isDebug })=>{
+const MonthTrend = ({ app, isDebug, isNightly })=>{
 
   const thingMounted = useRef(true);
   const blank =  [ {x:1,y:0} ];
@@ -54,20 +55,23 @@ const MonthTrend = ({ app, isDebug })=>{
 
           const FasPercent = Array.from(re, w => { 
             const pof = percentOf( (w.y[0] + w.y[1]), w.y[0]);
-            const np = isNaN(pof) ? 0 : pof;
-            return { x: w.x, y: np } } );
+            const dtp = isNaN(pof) ? null : pof;
+            return { x: w.x, y: dtp };
+          });
           fillSet(FasPercent);
           
           const SasPercent = Array.from(re, w => { 
             const pof = percentOf( (w.y[2] + w.y[3]), w.y[2]);
-            const np = isNaN(pof) ? 0 : pof;
-            return { x: w.x, y: np } } );
+            const dtp = isNaN(pof) ? null : pof;
+            return { x: w.x, y: dtp };
+          });
           shipSet(SasPercent);
           
           const QasPercent = Array.from(re, w => { 
             const pof = percentOf( (w.y[4] + w.y[5]), w.y[4]);
-            const np = isNaN(pof) ? 0 : pof;
-            return { x: w.x, y: np } } );
+            const dtp = isNaN(pof) ? null : pof;
+            return { x: w.x, y: dtp };
+          });
           dataSetQ(QasPercent);
           
           workingSet(false);
@@ -79,6 +83,7 @@ const MonthTrend = ({ app, isDebug })=>{
   return(
     <div className='space5x5'>
       
+      <h4>Long Calculation, Please wait for results</h4>
       <div className='rowWrap'>
         {working ?
           <b><i className='fas fa-spinner fa-lg fa-spin'></i></b> :
@@ -90,7 +95,7 @@ const MonthTrend = ({ app, isDebug })=>{
           onClick={()=>runLoop('month')}
           disabled={working}
         >Run Monthly</button>
-          
+        
         <button
           className='action clearBlack gap'
           onClick={()=>runLoop('week')}
@@ -141,12 +146,12 @@ const MonthTrend = ({ app, isDebug })=>{
             tickFormat={(t) => `${t}%`}
           />
           <VictoryAxis
-            tickCount={fillDT.length}
+            tickCount={dataQ.filter(f => f.y !== null).length}
             fixLabelOverlap={true}
             tickFormat={(t) => 
               tgglSpan == 'month' ?
-              moment().subtract(durrState, 'month').add(t, 'month').format('MMM YYYY') :
-              moment().subtract(durrState, 'week').add(t, 'week').format('w-YYYY') }
+              moment().subtract(durrState, 'month').add(t, 'month').format('YY-MMM') :
+              moment().subtract(durrState, 'week').add(t, 'week').format('YY-w') }
           />
           
             <VictoryLine
@@ -158,19 +163,39 @@ const MonthTrend = ({ app, isDebug })=>{
                 onLoad: { duration: 500 }
               }}
             />
+            <VictoryScatter 
+              data={tgglState == 'fulfill' ? fillDT : shipDT}
+              style={{ data: { fill: 'rgb(142, 68, 173)' } }}
+              size={2}
+              animate={{
+                duration: 300,
+                onLoad: { duration: 300 }
+              }}
+            />
+            
+            
             <VictoryLine
               data={dataQ}
               style={{ data: { stroke: 'rgb(39, 174, 96)' } }}
-                interpolation="monotoneX"
+              interpolation="monotoneX"
               animate={{
                 duration: 500,
                 onLoad: { duration: 500 }
               }}
             />
+            <VictoryScatter 
+              data={dataQ}
+              style={{ data: { fill: 'rgb(39, 174, 96)' } }}
+              size={2}
+              animate={{
+                duration: 300,
+                onLoad: { duration: 300 }
+              }}
+            />
           </VictoryChart>
           
       </div>
-    
+      <p className='small rightText'>Gaps in the data are intentional. Indicate when no orders were completed</p>
     
     </div>
   );

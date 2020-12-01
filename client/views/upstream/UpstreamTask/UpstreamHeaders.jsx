@@ -6,7 +6,8 @@ import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 
 const UpstreamHeaders = ({ 
   oB, traceDT,
-  app, title, focusBy, showMore 
+  app, isDebug,
+  focusBy, title, showMore 
 })=> (
   <div className='overGridFixed'>
       
@@ -23,6 +24,7 @@ const UpstreamHeaders = ({
             ck={entry}
             tBatch={tBatch}
             app={app}
+            isDebug={isDebug}
             focusBy={focusBy} />
     )})}
   </div>
@@ -30,7 +32,7 @@ const UpstreamHeaders = ({
 
 export default UpstreamHeaders;
 
-const UpstreamHeaderChunk = ({ck, tBatch, bCache, app, focusBy })=> {
+const UpstreamHeaderChunk = ({ck, tBatch, bCache, app, isDebug, focusBy })=> {
   
   const isDone = ck.completed || ck.finishedAt ? true : false;
 
@@ -44,7 +46,7 @@ const UpstreamHeaderChunk = ({ck, tBatch, bCache, app, focusBy })=> {
         ptData={tBatch}
         isDone={isDone}
         app={app}
-        isDebug={false}
+        isDebug={isDebug}
         showLess={true}
       />
       <div>

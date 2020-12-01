@@ -2,7 +2,7 @@ import moment from 'moment';
 import 'moment-timezone';
 // import 'moment-business-time';
 import Config from '/server/hardConfig.js';
-import { deliveryState } from '/server/reportCompleted.js';
+import { deliveryState, deliveryBinary } from '/server/reportCompleted.js';
 import { checkTimeBudget } from '/server/tideGlobalMethods';
 
 /*
@@ -109,11 +109,9 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
         $lte: new Date(rangeEnd) 
       }
     }).forEach( (gf)=> {
-      const dst = deliveryState(gf.end, gf.finishedAt);
-      const endSt = dst[3][2];
-      endSt === 'late' ? doneLate++ : doneOnTime++;
-      const shpSt = dst[4][2];
-      shpSt === 'late' ? shipLate++ : shipOnTime++;
+      const dst = deliveryBinary(gf.end, gf.finishedAt);
+      dst[0] === 'late' ? doneLate++ : doneOnTime++;
+      dst[1] === 'late' ? shipLate++ : shipOnTime++;
       
       const q = checkTimeBudget(gf.tide, gf.quoteTimeBudget, gf.lockTrunc);
       if( !q ) {
@@ -139,11 +137,9 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
         $lte: new Date(rangeEnd) 
       }
     }).forEach( (gfx)=> {
-      const dst = deliveryState(gfx.salesEnd, gfx.completedAt);
-      const endSt = dst[3][2];
-      endSt === 'late' ? doneLateX++ : doneOnTimeX++;
-      const shpSt = dst[4][2];
-      shpSt === 'late' ? shipLateX++ : shipOnTimeX++;
+      const dst = deliveryBinary(gfx.salesEnd, gfx.completedAt);
+      dst[0] === 'late' ? doneLateX++ : doneOnTimeX++;
+      dst[0] === 'late' ? shipLateX++ : shipOnTimeX++;
       
       const qx = checkTimeBudget(gfx.tide, gfx.quoteTimeBudget, gfx.lockTrunc);
       if( !qx ) {
@@ -370,8 +366,7 @@ Meteor.methods({
         const rangeEnd = loopBack.clone().endOf(bracket).toISOString();
         
         quantity = await new Promise(function(resolve) {
-          const fetch = counter(accessKey, rangeStart, rangeEnd);
-          resolve(fetch);
+          resolve( counter(accessKey, rangeStart, rangeEnd) );
         });
         countArray.unshift({ x:cycles-w, y:quantity });
       }
