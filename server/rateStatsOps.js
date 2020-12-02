@@ -2,79 +2,104 @@ import moment from 'moment';
 import 'moment-timezone';
 // import 'moment-business-time';
 import Config from '/server/hardConfig.js';
-import { deliveryState, deliveryBinary } from '/server/reportCompleted.js';
+import { deliveryBinary } from '/server/reportCompleted.js';
 import { checkTimeBudget } from '/server/tideGlobalMethods';
 
-/*
-  function timeRanges(accessKey, counter, cycles, bracket) {
-    const nowLocal = moment().tz(Config.clientTZ);
-    
-    async function runLoop() {
-      let countArray = [];
-      for(let w = 0; w < cycles; w++) {
-      
-        const loopBack = nowLocal.clone().subtract(w, bracket); 
-       
-        const rangeStart = loopBack.clone().startOf(bracket).toISOString();
-        const rangeEnd = loopBack.clone().endOf(bracket).toISOString();
-        
-        quantity = await new Promise(function(resolve) {
-          const fetch = Meteor.defer( ()=> counter(accessKey, rangeStart, rangeEnd) );
-          resolve(fetch);
-        });
-        countArray.unshift({ x:cycles-w, y:quantity });
-      }
-      return countArray;
-    }
-    return runLoop();
-  }
-*/
+
   export function countNewUser(accessKey, rangeStart, rangeEnd) {
-    const userFind = Meteor.users.find({
+    /*const userFind = Meteor.users.find({
       orgKey: accessKey, 
       createdAt: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
       }
-    }).fetch();
-    return userFind.length;
+    }).fetch();*/
+    const fetchU = Meteor.users.aggregate([
+      { $match: { 
+          orgKey: accessKey,
+          createdAt: { 
+            $gte: new Date(rangeStart),
+            $lte: new Date(rangeEnd) 
+          }
+      } },
+      { $count: "uCount" }
+    ]);
+    const resultU = fetchU[0] ? fetchU[0].uCount : 0;
+    
+    return resultU;
   }
 
   export function countNewGroup(accessKey, rangeStart, rangeEnd) {
-    const groupFind = GroupDB.find({
+    /*const groupFind = GroupDB.find({
       orgKey: accessKey, 
       createdAt: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
       }
-    }).fetch();
-    return groupFind.length;
+    }).fetch();*/
+    const fetchG = GroupDB.aggregate([
+      { $match: { 
+          orgKey: accessKey,
+          createdAt: { 
+            $gte: new Date(rangeStart),
+            $lte: new Date(rangeEnd) 
+          }
+      } },
+      { $count: "gCount" }
+    ]);
+    const resultG = fetchG[0] ? fetchG[0].gCount : 0;
+    
+    return resultG;
   }
 
   export function countNewWidget(accessKey, rangeStart, rangeEnd) {
-    const widgetFind = WidgetDB.find({
+    /*const widgetFind = WidgetDB.find({
       orgKey: accessKey, 
       createdAt: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
       }
-    }).fetch();
-    return widgetFind.length;
+    }).fetch();*/
+    const fetchW = WidgetDB.aggregate([
+      { $match: { 
+          orgKey: accessKey,
+          createdAt: { 
+            $gte: new Date(rangeStart),
+            $lte: new Date(rangeEnd) 
+          }
+      } },
+      { $count: "wCount" }
+    ]);
+    const resultW = fetchW[0] ? fetchW[0].wCount : 0;
+    
+    return resultW;
   }
   
   export function countNewVariant(accessKey, rangeStart, rangeEnd) {
-    const variantFind = VariantDB.find({
+    /*const variantFind = VariantDB.find({
       orgKey: accessKey, 
       createdAt: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
       }
-    }).fetch();
-    return variantFind.length;
+    }).fetch();*/
+    const fetchV = VariantDB.aggregate([
+      { $match: { 
+          orgKey: accessKey,
+          createdAt: { 
+            $gte: new Date(rangeStart),
+            $lte: new Date(rangeEnd) 
+          }
+      } },
+      { $count: "vCount" }
+    ]);
+    const resultV = fetchV[0] ? fetchV[0].vCount : 0;
+    
+    return resultV;
   }
 
   export function countNewBatch(accessKey, rangeStart, rangeEnd) {
-    
+    /*
     const generalFind = BatchDB.find({
       orgKey: accessKey, 
       createdAt: { 
@@ -89,8 +114,33 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
         $lte: new Date(rangeEnd) 
       }
     }).fetch();
-      
-    return generalFind.length + generalFindX.length;
+    generalFind.length + generalFindX.length;
+    */
+    const fetchB = BatchDB.aggregate([
+      { $match: { 
+          orgKey: accessKey,
+          createdAt: { 
+            $gte: new Date(rangeStart),
+            $lte: new Date(rangeEnd) 
+          }
+      } },
+      { $count: "bCount" }
+    ]);
+    const resultB = fetchB[0] ? fetchB[0].bCount : 0;
+    
+    const fetchX = XBatchDB.aggregate([
+      { $match: { 
+          orgKey: accessKey, 
+          createdAt: { 
+            $gte: new Date(rangeStart),
+            $lte: new Date(rangeEnd) 
+          }
+      } },
+      { $count: "xCount" }
+    ]);
+    const resultX = fetchX[0] ? fetchX[0].xCount : 0;
+   
+    return resultB + resultX;
   }
   
   export function countDoneBatch(accessKey, rangeStart, rangeEnd) {
@@ -166,7 +216,10 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
     let diCount = 0;
     
     BatchDB.find({
-      orgKey: accessKey, 
+      orgKey: accessKey,
+      createdAt: { 
+        $lte: new Date(rangeEnd)
+      },
       items: { $elemMatch: { createdAt: {
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
@@ -186,7 +239,10 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
     let diCount = 0;
     
     BatchDB.find({
-      orgKey: accessKey, 
+      orgKey: accessKey,
+      createdAt: { 
+        $lte: new Date(rangeEnd)
+      },
       items: { $elemMatch: { finishedAt: {
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
@@ -206,16 +262,25 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
     let ncCount = 0;
     
     BatchDB.find({
-      orgKey: accessKey, 
+      orgKey: accessKey,
+      createdAt: { 
+        $lte: new Date(rangeEnd)
+      },
       nonCon: { $elemMatch: { time: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
       }}}
     }).forEach( (gf)=> {
-      const thisNC = gf.nonCon.filter( 
-        x => moment(x.time).isBetween(rangeStart, rangeEnd) 
-      );
-      ncCount = ncCount + thisNC.length;   
+      if(gf.lock) {
+        const tnc = gf.lockTrunc.ncTypes.reduce( 
+                      (acc, obj)=> { return acc + obj.count },0);
+        ncCount += tnc;
+      }else{
+        const thisNC = gf.nonCon.filter( 
+          x => moment(x.time).isBetween(rangeStart, rangeEnd) 
+        );
+        ncCount += thisNC.length;
+      }
     });
     /*
     const generalFindX = XBatchDB.find({
@@ -230,20 +295,28 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
   }
   
   export function countNewSH(accessKey, rangeStart, rangeEnd) {
-    
     let shCount = 0;
     
     BatchDB.find({
       orgKey: accessKey, 
+      createdAt: { 
+        $lte: new Date(rangeEnd)
+      },
       shortfall: { $elemMatch: { cTime: { 
         $gte: new Date(rangeStart),
-        $lte: new Date(rangeEnd) 
+        $lte: new Date(rangeEnd)
       }}}
     }).forEach( (gf)=> {
-      const thisSH = gf.shortfall.filter( 
-        x => moment(x.cTime).isBetween(rangeStart, rangeEnd) 
-      );
-      shCount = shCount + thisSH.length;   
+      if(gf.lock) {
+        const tsh = gf.lockTrunc.shTypes.reduce( 
+                      (acc, obj)=> { return acc + obj.count },0);
+        shCount += tsh;
+      }else{
+        const thisSH = gf.shortfall.filter( 
+          x => moment(x.cTime).isBetween(rangeStart, rangeEnd) 
+        );
+        shCount += thisSH.length;
+      }
     });
     /*
     const generalFindX = XBatchDB.find({
@@ -261,13 +334,16 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
     let tfCount = 0;
     
     BatchDB.find({
-      orgKey: accessKey, 
+      orgKey: accessKey,
+      createdAt: { 
+        $lte: new Date(rangeEnd)
+      },
       items: { $elemMatch: { 
         createdAt: { 
-          $lte: new Date(rangeEnd) 
+          $lte: new Date(rangeEnd)
         }, 
         finishedAt: { 
-          $gte: new Date(rangeStart) 
+          $gte: new Date(rangeStart)
       }}}
     }).forEach( (gf)=> {
       const thisTF = gf.items.filter( x =>
@@ -282,11 +358,13 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
   }
   
   export function countScrap(accessKey, rangeStart, rangeEnd) {
-
     let scCount = 0;
     
     BatchDB.find({
-      orgKey: accessKey, 
+      orgKey: accessKey,
+      createdAt: { 
+        $lte: new Date(rangeEnd)
+      },
       items: { $elemMatch: { finishedAt: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 

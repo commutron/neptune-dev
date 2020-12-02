@@ -332,6 +332,7 @@
 }
 .downGridFrameFixed:first-child > .downWeek {
   background-color: var(--alizarin);
+  padding-bottom: 0;
 }
 .downHeadFixed {
   grid-area: downHeaderF;

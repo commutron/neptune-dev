@@ -75,7 +75,7 @@ Meteor.methods({
           batch: newBatchNum,
           versionKey: vKey,
           salesOrder: salesNum,
-          salesStart: sDate,
+          salesStart: new Date(sDate),
   			  quantity: Number(quantity),
   			  updatedAt: new Date(),
   			  updatedWho: Meteor.userId()

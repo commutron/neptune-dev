@@ -19,21 +19,21 @@ const ExploreLanding = ({
           <TrendLine 
             title={`new ${Pref.batches}`}
             statType='newBatch'
-            cycleCount={isDebug ? 12 : 4}
+            cycleCount={isDebug ? 26 : 4}
             cycleBracket='week'
             lineColor='rgb(52, 152, 219)' />
           
           <TrendLine 
             title='new items'
             statType='newItem'
-            cycleCount={isDebug ? 12 : 4}
+            cycleCount={isDebug ? 26 : 4}
             cycleBracket='week'
             lineColor='rgb(52, 152, 219)' />
             
           <TrendLine 
             title={`discovered ${Pref.shortfall}s`}
             statType='newSH'
-            cycleCount={isDebug ? 12 : 4}
+            cycleCount={isDebug ? 26 : 4}
             cycleBracket='week'
             lineColor='rgb(230, 126, 34)' />
             
@@ -44,20 +44,20 @@ const ExploreLanding = ({
           <TrendBar
             title={`completed ${Pref.batches}`}
             statType='doneBatch'
-            cycleCount={isDebug ? 12 : 4}
+            cycleCount={isDebug ? 26 : 4}
             cycleBracket='week' />
             
           <TrendLine 
             title={`completed ${Pref.items}`}
             statType='doneItem'
-            cycleCount={isDebug ? 12 : 4}
+            cycleCount={isDebug ? 26 : 4}
             cycleBracket='week'
             lineColor='rgb(46, 204, 113)' />
             
           <TrendLine 
             title={`discovered ${Pref.nonCons}`}
             statType='newNC'
-            cycleCount={isDebug ? 12 : 4}
+            cycleCount={isDebug ? 26 : 4}
             cycleBracket='week'
             lineColor='rgb(231, 76, 60)' />
           
@@ -66,7 +66,7 @@ const ExploreLanding = ({
         <details className='footnotes'>
           <summary>Chart Details</summary>
           <p className='footnote'>
-            Trends include {isDebug ? 12 : 4} weeks, including the current week. 
+            Trends include {isDebug ? 26 : 4} weeks, including the current week. 
             Read left to right as past to current.
           </p>
           <p className='footnote'>

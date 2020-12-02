@@ -1,5 +1,5 @@
 
-function NonConOptionMerge(ncListKeys, app, allKeys) {
+function NonConOptionMerge(ncListKeys, app, user, allKeys) {
 
   const ncListKeysFlat = ncListKeys.flat();
   if(ncListKeysFlat.length === 0) {
@@ -14,9 +14,14 @@ function NonConOptionMerge(ncListKeys, app, allKeys) {
   	
   	const ncTypesCombo = [].concat(...ncTypeLists);
   	
-  	const ncTypesComboSort = ncTypesCombo.sort((n1, n2)=> {
-    return n1.typeCode < n2.typeCode ? -1 : n1.typeCode > n2.typeCode ? 1 : 0 });
-       
+  	const ncTypesComboSort = user.showNCcodes ?
+  	        ncTypesCombo.sort((n1, n2)=>
+              n1.typeCode < n2.typeCode ? -1 : 
+              n1.typeCode > n2.typeCode ? 1 : 0 )
+          :
+            ncTypesCombo.sort((n1, n2)=>
+              n1.typeText < n2.typeText ? -1 : 
+              n1.typeText > n2.typeText ? 1 : 0 );
        
     return ncTypesComboSort;
   }

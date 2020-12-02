@@ -16,7 +16,7 @@ const ReportStatsTable = ({ title, dateString, rows, extraClass })=> {
     );
     
   }
-  
+
   if(rows === false) {
     return(
       <div></div>

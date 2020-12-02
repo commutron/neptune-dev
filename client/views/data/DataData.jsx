@@ -59,6 +59,10 @@ const ExploreView = ({
       </ErrorCatch>
     );
   }
+  
+  const branchesSort = app.branches.sort((b1, b2)=>
+          b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
+       
     
   return(
     <ErrorCatch>
@@ -68,6 +72,7 @@ const ExploreView = ({
         org={org}
         users={users}
         app={app}
+        brancheS={branchesSort}
         allGroup={allGroup}
         allWidget={allWidget}
         allVariant={allVariant}

@@ -1,18 +1,23 @@
 import moment from 'moment';
 import 'moment-timezone';
+import Config from '/server/hardConfig.js';
 
-import { countNewBatch } from './rateStatsOps.js';
-import { countDoneBatch } from './rateStatsOps.js';
-import { countNewItem } from './rateStatsOps.js';
-import { countDoneItem } from './rateStatsOps.js';
-import { countNewNC } from './rateStatsOps.js';
-import { countNewSH } from './rateStatsOps.js';
-import { countScrap } from './rateStatsOps.js';
-import { itemsWithPromise } from './statOps.js';
-import { countNewGroup } from './rateStatsOps.js';
-import { countNewWidget } from './rateStatsOps.js';
-import { countNewVariant } from './rateStatsOps.js';
-import { countNewUser } from './rateStatsOps.js';
+import { 
+  countNewBatch, 
+  countDoneBatch,
+  countNewItem,
+  countDoneItem,
+  countNewNC,
+  countNewSH,
+  countScrap,
+  countTestFail,
+  countNewGroup,
+  countNewWidget,
+  countNewVariant,
+  countNewUser
+  
+} from './rateStatsOps.js';
+
 import { totalTideTimePromise } from './statOps.js';
 
 
@@ -27,15 +32,13 @@ const promiser = (counter, accessKey, rangeStart, rangeEnd)=> {
 Meteor.methods({
   
   
-  reportOnMonth(clientTZ, dateString) {
+  reportOnMonth(dateString) {
     const accessKey = Meteor.user().orgKey;
-    const requestLocal = moment.tz(dateString, clientTZ);
+    const requestLocal = moment.tz(dateString, Config.clientTZ);
       
     const rangeStart = requestLocal.clone().startOf('month').toISOString();
     const rangeEnd = requestLocal.clone().endOf('month').toISOString();
-      
-      // console.log(requestLocal);
-      
+    
     async function analyzeMonth() {
       try {
         newBatch = await promiser(countNewBatch, accessKey, rangeStart, rangeEnd);
@@ -47,8 +50,7 @@ Meteor.methods({
         noncon = await promiser(countNewNC, accessKey, rangeStart, rangeEnd);
         shortfall = await promiser(countNewSH, accessKey, rangeStart, rangeEnd);
         scrap = await promiser(countScrap, accessKey, rangeStart, rangeEnd);
-        
-        itemTestPass = await itemsWithPromise(accessKey, rangeStart, rangeEnd, 'test');
+        tfail = await promiser(countTestFail, accessKey, rangeStart, rangeEnd);
         newGroup = await promiser(countNewGroup, accessKey, rangeStart, rangeEnd);
         newWidget = await promiser(countNewWidget, accessKey, rangeStart, rangeEnd);
         newVariant = await promiser(countNewVariant, accessKey, rangeStart, rangeEnd);
@@ -59,13 +61,13 @@ Meteor.methods({
         let tttHours = moment.duration(totalTideTime, "minutes").asHours().toFixed(2, 10);
           
           
-        return {
+        return JSON.stringify({
           newBatch, doneBatchOnTime, doneBatchLate,
           newItem, doneItem, 
-          noncon, shortfall, scrap, itemTestPass,
+          noncon, shortfall, scrap, tfail,
           newGroup, newWidget, newVariant, newUser,
           tttMinutes, tttHours
-        };
+        });
       }catch (err) {
         throw new Meteor.Error(err);
       }

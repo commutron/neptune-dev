@@ -262,11 +262,9 @@ function collectPriority(privateKey, batchID, mockDay) {
 function collectProgress(privateKey, batchID, branchOnly) {
   return new Promise(resolve => {
     const app = AppDB.findOne({orgKey: privateKey});
-    const brancheS = app.branches.sort((b1, b2)=> {
-          if (b1.position < b2.position) { return 1 }
-          if (b1.position > b2.position) { return -1 }
-          return 0;
-        }); 
+    const brancheS = app.branches.sort((b1, b2)=>
+            b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
+            
     const relevantBrancheS = !branchOnly ? brancheS :
             brancheS.filter( b => b.branch === branchOnly );
             

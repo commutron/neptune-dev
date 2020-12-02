@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
 import Pref from '/client/global/pref.js';
@@ -11,21 +11,22 @@ import 'flatpickr/dist/plugins/monthSelect/style.css';
 
 import ReportStatsTable from '/client/components/tables/ReportStatsTable.jsx'; 
 
-const MonthKPIReport = ({ batchData, widgetData, groupData, app })=> {
+const MonthKPIReport = ({ batchData, widgetData, groupData, app, isDebug })=> {
+  
+  const [ working, workingSet ] = useState(false);
   
   const [ dateString, setDateString ] = useState(moment().format('YYYY-MM-DD'));
   const [ monthDataState, monthDataSet ] = useState(false);
   
-  
-  function getData(fresh) {
-    fresh && monthDataSet(false);
+  function handleRun(fresh) {
+    workingSet(true);
+    monthDataSet(false);
     if(dateString) {
 
-      const clientTZ = moment.tz.guess();
-
-      Meteor.call('reportOnMonth', clientTZ, dateString, (err, rtn)=>{
+      Meteor.call('reportOnMonth', dateString, (err, reply)=>{
   	    err && console.log(err);
-  	    if(rtn) {
+  	    if(reply) {
+  	      const rtn = JSON.parse(reply);
     	    let arrange = [
             [`${Pref.batches} Created`, rtn.newBatch ],
             [`${Pref.batches} Completed On Time`, rtn.doneBatchOnTime ],
@@ -35,7 +36,7 @@ const MonthKPIReport = ({ batchData, widgetData, groupData, app })=> {
             [`${Pref.nonCons} Discovered`, rtn.noncon ],
             ['Shortfalls Discovered', rtn.shortfall ],
             [`${Pref.items} Scrapped`, rtn.scrap ],
-            [`${Pref.items} Passed Test`, rtn.itemTestPass ],
+            [`${Pref.items} Test Failures`, rtn.tfail ],
             [`${Pref.groups} Created`, rtn.newGroup ],
             [`${Pref.widgets} Created`, rtn.newWidget ],
             [`${Pref.variants} Created`, rtn.newVariant ],
@@ -44,23 +45,18 @@ const MonthKPIReport = ({ batchData, widgetData, groupData, app })=> {
             [`Total ${Pref.tide} Hours`, rtn.tttHours ],
           ];
           monthDataSet(arrange);
+          workingSet(false);
         }
-        Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(rtn);
-
+        isDebug && console.log(rtn);
   	  });
-  	  
     }
   }
   
   function setMonth(input) {
-    const date = moment(input[0]).format('YYYY-MM-DD') || moment().format('YYYY-MM-DD');
-    console.log(date);
+    const date = moment(input[0]).format('YYYY-MM-DD') || 
+                 moment().format('YYYY-MM-DD');
     setDateString(date);
   }
-  
-  useEffect( ()=>{
-    getData(true);
-  }, [dateString]);
 
     
   return(
@@ -83,19 +79,25 @@ const MonthKPIReport = ({ batchData, widgetData, groupData, app })=> {
                 altFormat: "F Y"
               })
             ]}} 
-          />
+        />
+          
+        <button
+          className='action clearBlack gap'
+          onClick={()=>handleRun()}
+          disabled={working}
+        >Run Report</button>
        
       </div>
 
       
-      {monthDataState === false ?
-          <div>
-            <p className='centreText'>This may take a while...</p>
-            <CalcSpin />
-          </div>
-        :   
+      {working ?
+        <div>
+          <p className='centreText'>This may take a while...</p>
+          <CalcSpin />
+        </div>
+      :   
         <ReportStatsTable 
-          title={`monthly report`}
+          title={`monthly report for ${moment(dateString, 'YYYY-MM-DD').format('MMMM YYYY')}`}
           dateString={`${dateString}`}
           rows={monthDataState}
           extraClass='max500' />

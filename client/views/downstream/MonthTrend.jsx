@@ -168,8 +168,8 @@ const MonthTrend = ({ app, isDebug, isNightly })=>{
               style={{ data: { fill: 'rgb(142, 68, 173)' } }}
               size={2}
               animate={{
-                duration: 300,
-                onLoad: { duration: 300 }
+                duration: 500,
+                onLoad: { duration: 500 }
               }}
             />
             
@@ -188,8 +188,8 @@ const MonthTrend = ({ app, isDebug, isNightly })=>{
               style={{ data: { fill: 'rgb(39, 174, 96)' } }}
               size={2}
               animate={{
-                duration: 300,
-                onLoad: { duration: 300 }
+                duration: 500,
+                onLoad: { duration: 500 }
               }}
             />
           </VictoryChart>

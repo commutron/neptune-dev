@@ -4,7 +4,7 @@ import moment from 'moment';
 function flowLoop(river, items) {
   const now = moment().format();
   const wndw = (t)=>moment(t).isSame(now, 'day');
-  const byKey = (t, ky)=> { return ( k => k.key === ky )};
+  const byKey = (t, ky)=> { return ( k => k.key === ky && k.good === true )};
   
   const firsts = Array.from( items, 
                   x => x.history.filter( 
@@ -38,15 +38,14 @@ function flowLoop(river, items) {
       let unitCountNew = 0;
     
       for(var i of items) {
-        const h = i.history.filter( g => g.good === true);
-        const hNew = h.filter( q => wndw(q.time) === true );
+        const hNew = i.history.filter( q => wndw(q.time) === true && q.good === true );
         if(i.finishedAt !== false) {
           itemCount += 1;
-          unitCount += 1 * i.units;
+          unitCount += i.units;
         }else{
-          h.find( byKey(this, step.key) ) ? (itemCount += 1, unitCount += 1 * i.units ) : null;
+          i.history.find( byKey(this, step.key) ) ? (itemCount += 1, unitCount += i.units ) : null;
         }
-        hNew.find( byKey(this, step.key) ) ? (itemCountNew += 1, unitCountNew += 1 * i.units ) : null;
+        hNew.find( byKey(this, step.key) ) ? (itemCountNew += 1, unitCountNew += i.units ) : null;
       }
     
       stepsData.push({
@@ -75,14 +74,12 @@ function unitTotalCount(items) {
 function outScrap(items) { 
   return ( 
     items.filter( 
-      o => o.history.filter( 
-        s => s.type === 'scrap' && s.good === true ).length === 0 )
+      o => o.history.findIndex( 
+        s => s.type === 'scrap' && s.good === true ) === -1 )
   );
 }
     
 function ProgressCounter(flow, flowAlt, batchData) {
-  //const rSteps = flow.filter( r => r.type !== 'first' );
-  //const aSteps = flowAlt.filter( a => a.type !== 'first' );
   
   const allItems = batchData.items;
   

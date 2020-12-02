@@ -17,45 +17,40 @@ const NonConBubble = ({ ncOp, nonCons, app, isDebug })=> {
   
   useEffect( ()=> {
     const nonConOptions = ncOp || [];
+    const splitByWhere = [...new Set( Array.from(nonCons, n => n.where ) ) ];
+   
+    const splitOut = splitByWhere.map( (where, index)=> {
+      let match = nonCons.filter( y => y.where === where );
+      return{
+        'where': where,
+        'pNC': match
+      };
+    });
+      
+    isDebug && console.log(splitOut);
+      
+    let ncCounts = [];
+    let typeSet = new Set();
     
-    function ncCounter(ncArray, ncOptions, splitBy) {
-      
-      const splitOut = splitBy.map( (where, index)=> {
-        let match = ncArray.filter( y => y.where === where );
-        return{
-          'where': where,
-          'pNC': match
-        };
-      });
-      
-      isDebug && console.log(splitOut);
-      
-      let ncCounts = [];
-      let typeSet = new Set();
-      for(let ncSet of splitOut) {
-        for(let ncType of ncOptions) {
-          const typeCount = ncSet.pNC.filter( x => x.type === ncType ).length;
-          if(typeCount > 0) {
-            typeSet.add(ncType);
-            ncCounts.push({
-              x: ncSet.where,
-              y: ncType,
-              z: typeCount
-            });
-          }
+    for(let ncSet of splitOut) {
+      for(let ncType of nonConOptions) {
+        const typeCount = ncSet.pNC.filter( x => x.type === ncType ).length;
+        console.log(typeCount);
+        if(typeCount > 0) {
+          typeSet.add(ncType);
+          ncCounts.push({
+            x: ncSet.where,
+            y: ncType,
+            z: typeCount
+          });
         }
       }
-      typeNumSet([...typeSet].length);
-      return ncCounts;
     }
     
-    try{
-      const splitByWhere = [...new Set( Array.from(nonCons, n => n.where ) ) ];
-      let calc = ncCounter(nonCons, nonConOptions, splitByWhere);
-      seriesSet(calc);
-    }catch(err) {
-      console.log(err);
-    }
+    typeNumSet(typeSet.size);
+      
+    seriesSet(ncCounts);
+    
   }, []);
           
 
@@ -94,6 +89,8 @@ const NonConBubble = ({ ncOp, nonCons, app, isDebug })=> {
         <VictoryScatter
           data={series}
           bubbleProperty="z"
+          minBubbleSize={3}  
+          maxBubbleSize={20}
           labels={(d) => `Quantity: ${d.z}`}
           labelComponent={
             <VictoryTooltip 

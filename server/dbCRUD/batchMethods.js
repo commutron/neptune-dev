@@ -68,10 +68,21 @@ Meteor.methods({
           batch: newBatchNum,
           versionKey: vKey,
           salesOrder: salesNum,
-          start: sDate,
+          start: new Date(sDate),
   			  updatedAt: new Date(),
   			  updatedWho: Meteor.userId()
-        }});
+        }/*,
+        $push : {
+          altered: {
+            changeDate: new Date(),
+            changeWho: Meteor.userId(),
+            changeReason: 'user discretion',
+            changeKey: 'salesOrder',
+            oldValue: oldDate,
+            newValue: salesNum
+          }
+        }*/
+      });
       Meteor.defer( ()=>{
         Meteor.call('updateOneMinify', batchId, accessKey);
       });
@@ -297,7 +308,6 @@ Meteor.methods({
       Meteor.defer( ()=>{ 
         Meteor.call('updateOneMinify', batchId, accessKey); 
         Meteor.call('updateOneMovement', batchId, accessKey);
-
       });
       return true;
     }else{

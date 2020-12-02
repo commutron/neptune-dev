@@ -14,7 +14,7 @@ import RMATable from '/client/components/tables/RMATable.jsx';
 const BatchPanel = ({ 
   batchData, widgetData, //variantData,
   user, isDebug, app, 
-  flowData
+  brancheS, flowData
 })=> {
   
   const [ verifyListState, verifyListSet ] = useState([]);
@@ -81,7 +81,7 @@ const BatchPanel = ({
           progCounts={flowData.progCounts}
           riverTitle={flowData.riverTitle}
           riverAltTitle={flowData.riverAltTitle}
-          brancheS={flowData.branchesSort} />
+          brancheS={brancheS} />
       
         <TimeTab 
           a={app}
@@ -98,7 +98,7 @@ const BatchPanel = ({
           <EventsTimeline
             id={b._id}
             batchData={batchData}
-            brancheS={flowData.branchesSort}
+            brancheS={brancheS}
             releaseList={b.releases || []}
             verifyList={verifyListState}
             eventList={b.events || []}
@@ -113,7 +113,7 @@ const BatchPanel = ({
           riverFlow={flowData.riverFlow}
           riverAltFlow={flowData.riverAltFlow}
           ncTypesCombo={flowData.ncTypesComboFlat}
-          brancheS={flowData.branchesSort}
+          brancheS={brancheS}
           isDebug={isDebug} />
         
         <div>

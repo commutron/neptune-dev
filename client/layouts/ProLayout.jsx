@@ -43,7 +43,7 @@ export const ProWrap = ({
       if(riverAlt) {
         riverAlt.type === 'plus' && getNCListKeys.push(riverAlt.ncLists);
       }
-      getNCTypesCombo = NonConOptionMerge(getNCListKeys, app);
+      getNCTypesCombo = NonConOptionMerge(getNCListKeys, app, user);
     }
     ncTypesComboSet(getNCTypesCombo);
     

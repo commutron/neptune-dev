@@ -32,7 +32,7 @@ import NonConOptionMerge from '/client/utility/NonConOptionMerge.js';
 const DataViewOps = ({ 
   allXBatch, allBatch, 
   allGroup, allWidget, allVariant,
-  user, isDebug, app, users,
+  user, isDebug, app, brancheS, users,
   hotBatch, hotXBatch,
   view, request, specify,
   subLink, orb
@@ -89,9 +89,6 @@ const DataViewOps = ({
     let ncTypesComboFlat = [];
     let progCounts = false;
     
-    const branchesSort = appData.branches.sort((b1, b2)=> {
-    return b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 });
-             
     if( widgetData && batchData ) {
       
       const getRiverFirst = (w, b)=> {
@@ -115,7 +112,7 @@ const DataViewOps = ({
       const generateSecond = (w, b, app)=> {
         progCounts = ProgressCounter(riverFlow, riverFlowAlt, b);
         
-        ncTypesComboFlat = NonConOptionMerge(ncListKeys, app);
+        ncTypesComboFlat = NonConOptionMerge(ncListKeys, app, user, true);
       };
 
       getRiverFirst(widgetData, batchData)
@@ -125,8 +122,7 @@ const DataViewOps = ({
     return {
       riverTitle, riverFlow, 
       riverAltTitle, riverFlowAlt, 
-      ncTypesComboFlat, progCounts,
-      branchesSort
+      ncTypesComboFlat, progCounts
     };
   }
 
@@ -209,6 +205,7 @@ const DataViewOps = ({
           allVariant={allVariant}
           allGroup={allGroup} 
           app={app}
+          isDebug={isDebug}
           isNightly={isNightly} />
       </TraverseWrap>
     );
@@ -385,6 +382,7 @@ const DataViewOps = ({
               variantData={variant}
               groupData={group}
               app={app}
+              brancheS={brancheS}
               user={user}
               listTitle={true}
               flowData={flowData} />
@@ -449,6 +447,7 @@ const DataViewOps = ({
             variantData={variant}
             groupData={group} 
             app={app}
+            brancheS={brancheS}
             user={user}
             isDebug={isDebug}
             flowData={flowData} />

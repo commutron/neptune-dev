@@ -35,28 +35,46 @@ export function calcShipDay( nowDay, futureDay ) {
   return [ salesEnd, shipAim, lateLate, shipLate ];
 }
 
-
-export function deliveryState(bEnd, bFinish) {
+function coreDlvDays(bEnd, bFinish) {
   const localEnd = moment.tz(bEnd, Config.clientTZ);
   
   const endWork = localEnd.isWorkingDay() ?
                     localEnd.clone().endOf('day').lastWorkingTime() :
                     localEnd.clone().lastWorkingTime();
+  
+  const shipDue = localEnd.isShipDay() ?
+                    localEnd.clone().endOf('day').lastShippingTime() :
+                    localEnd.clone().lastShippingTime();
+                    
+  const didFinish = moment(bFinish).tz(Config.clientTZ);
+  
+  const lateLate = didFinish.isAfter(endWork);
+  const lateDay = didFinish.isSame(endWork, 'day');
+  
+  const shipLate = didFinish.isAfter(shipDue);
+  
+  return [ localEnd, endWork, shipDue, didFinish, lateLate, lateDay, shipLate ];
+}
+
+export function deliveryState(bEnd, bFinish) {
+  const dlvDy = coreDlvDays(bEnd, bFinish);
+  
+  const localEnd = dlvDy[0];
+  
+  const endWork = dlvDy[1];
   const salesEnd = endWork.format();
   
   const shipAim = localEnd.isShipDay() ?
                     localEnd.clone().startOf('day').nextShippingTime().format() :
                     localEnd.clone().lastShipDay().startOf('day').nextShippingTime().format();
                     
-  const shipDue = localEnd.isShipDay() ?
-                    localEnd.clone().endOf('day').lastShippingTime() :
-                    localEnd.clone().lastShippingTime();
+  const shipDue = dlvDy[2];
   
-  const didFinish = moment(bFinish).tz(Config.clientTZ);
+  const didFinish = dlvDy[3];
   const didFinishNice = didFinish.format();
   
-  const lateLate = didFinish.isAfter(endWork);
-  const lateDay = didFinish.isSame(endWork, 'day');
+  const lateLate = dlvDy[4];
+  const lateDay = dlvDy[5];
   
   const eHrGp = Math.abs( endWork.diff(didFinish, 'hours') );
   const eHourS = eHrGp == 0 || eHrGp > 1 ? 'hours' : 'hour';
@@ -64,14 +82,14 @@ export function deliveryState(bEnd, bFinish) {
   const eDyGp = Math.abs( round1Decimal( endWork.workingDiff(didFinish, 'days', true) ) );
   const eDayS = eDyGp == 0 || eDyGp > 1 ? 'days' : 'day';
   
-  const fillZ = !lateLate ?
+  const fillZ = !lateLate || eHrGp == 0 ?
                     lateDay ?   // ON TIME
                       [ null, null, 'on time' ] : [ eDyGp, eDayS, 'early' ] 
                   : 
                     lateDay ?  // LATE
                       [  eHrGp, eHourS, 'overtime' ] : [ eDyGp, eDayS, 'late' ];
   
-  const shipLate = didFinish.isAfter(shipDue);
+  const shipLate = dlvDy[6];
   
   const hrGp = Math.abs( shipDue.workingDiff(didFinish, 'hours') );
   const hourS = hrGp == 0 || hrGp > 1 ? 'hours' : 'hour';
@@ -90,34 +108,23 @@ export function deliveryState(bEnd, bFinish) {
 }
 
 export function deliveryBinary(bEnd, bFinish) {
-  const localEnd = moment.tz(bEnd, Config.clientTZ);
-  
-  const endWork = localEnd.isWorkingDay() ?
-                    localEnd.clone().endOf('day').lastWorkingTime() :
-                    localEnd.clone().lastWorkingTime();
-                    
-  const shipDue = localEnd.isShipDay() ?
-                    localEnd.clone().endOf('day').lastShippingTime() :
-                    localEnd.clone().lastShippingTime();
-  
-  const didFinish = moment(bFinish).tz(Config.clientTZ);
-  
-  const lateLate = didFinish.isAfter(endWork);
-  const lateDay = didFinish.isSame(endWork, 'day');
+  const dlvDy = coreDlvDays(bEnd, bFinish);
+  const shipDue = dlvDy[2];
+  const didFinish = dlvDy[3];
+  const lateLate = dlvDy[4];
+  const lateDay = dlvDy[5];
   
   const fillZ = !lateLate ?
-                    lateDay ? 'on time' : 'early' 
-                  : 
-                    lateDay ? 'overtime' :  'late';
+                  lateDay ? 'on time' : 'early' : 
+                  lateDay ? 'overtime' :  'late';
   
-  const shipLate = didFinish.isAfter(shipDue);
+  const shipLate = dlvDy[6];
   
   const hrGp = Math.abs( shipDue.workingDiff(didFinish, 'hours') );
   
   const shipZ = !shipLate || hrGp == 0 ?
-                    hrGp <= Config.dropShipBffr ? 'on time' : 'early' 
-                  : 
-                    hrGp <= Config.dropShipBffr ? 'late' : 'late';
+                  hrGp <= Config.dropShipBffr ? 'on time' : 'early' : 
+                  hrGp <= Config.dropShipBffr ? 'late' : 'late';
   
   return [ fillZ, shipZ ];
 }

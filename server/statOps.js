@@ -3,6 +3,7 @@ import 'moment-timezone';
 import 'moment-business-time';
 
 import Config from '/server/hardConfig.js';
+import { batchTideTime } from './tideGlobalMethods.js';
 
 moment.updateLocale('en', {
   workinghours: Config.workingHours,
@@ -39,34 +40,44 @@ export const itemsWithPromise = (accessKey, rangeStart, rangeEnd, historyType)=>
 
 
 export const totalTideTimePromise = (accessKey, rangeStart, rangeEnd)=> {
-  return new Promise(function(resolve) { // bigInt ????
+  return new Promise(function(resolve) {
     let totalCount = 0;
-  
-    const generalFind = BatchDB.find({
+    const rSdate = new Date(rangeStart);
+    const rEdate = new Date(rangeEnd);
+    
+    BatchDB.find({
       orgKey: accessKey,
+      createdAt: { 
+        $lte: rEdate
+      },
       tide: { $elemMatch: { startTime: {
-        $gte: new Date(rangeStart),
-        $lte: new Date(rangeEnd) 
+        $gte: rSdate,
+        $lte: rEdate
       }}}
-    }).fetch();
-  
-    for(let gf of generalFind) {
-      let tideTime = 0;
-      if(Array.isArray(gf.tide)) {
-        const windowedTide = gf.tide.filter( x =>
-          moment(x.startTime).isBetween(rangeStart, rangeEnd)
-        );
-        for(let bl of windowedTide) {
-          const mStart = moment(bl.startTime);
-          const mStop = !bl.stopTime ? moment() : moment(bl.stopTime);
-          const block = moment.duration(mStop.diff(mStart)).asMinutes();
-          tideTime = tideTime + block;
-        }
-        totalCount = totalCount + tideTime;   
-      }else{
-        null;
-      }
-    }
+    }).forEach( gf => {
+      const windowedTide = gf.tide.filter( x =>
+        moment(x.startTime).isBetween(rangeStart, rangeEnd)
+      );
+      const tcount = batchTideTime(windowedTide);
+      totalCount += tcount;
+    });
+    XBatchDB.find({
+      orgKey: accessKey,
+      createdAt: { 
+        $lte: rEdate
+      },
+      tide: { $elemMatch: { startTime: {
+        $gte: rSdate,
+        $lte: rEdate
+      }}}
+    }).forEach( gfx => {
+      const windowedTide = gfx.tide.filter( x =>
+        moment(x.startTime).isBetween(rangeStart, rangeEnd)
+      );
+      const tcount = batchTideTime(windowedTide);
+      totalCount += tcount;
+    });
+    
     resolve(totalCount);
   });
 };

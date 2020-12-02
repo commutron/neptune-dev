@@ -14,7 +14,7 @@ import ItemFeed from '/client/components/bigUi/ItemFeed/ItemFeed.jsx';
 const ItemPanel = ({ 
   batchData, itemData,
   widgetData, variantData, groupData, 
-  app, user, 
+  app, brancheS, user, 
   listTitle, flowData
 })=>	{
   
@@ -102,7 +102,7 @@ const ItemPanel = ({
           history={i.history}
           noncons={nc}
           ncTypesCombo={flowData && flowData.ncTypesComboFlat}
-          brancheS={flowData.branchesSort}
+          brancheS={brancheS}
           shortfalls={sh}
           rmas={i.rma}
           allRMA={b.cascade}

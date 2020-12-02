@@ -480,6 +480,7 @@ Meteor.publish('skinnyData', function(){
             'lock': 1,
             'salesOrder': 1,
             'finishedAt': 1,
+            // 'lockTrunc': 1
           }}),
     
       XBatchDB.find({orgKey: orgKey}, {

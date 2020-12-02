@@ -56,7 +56,7 @@ const TrendLine = ({
             style={{ data: { stroke: lineColor || 'black' } }}
             animate={{
               duration: 2000,
-              onLoad: { duration: 1000 }
+              onLoad: { duration: 500 }
             }}
           />
         </VictoryChart>
