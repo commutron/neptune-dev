@@ -145,7 +145,7 @@ Meteor.publish('bCacheData', function(){
 Meteor.publish('traceDataLive', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  Meteor.defer( ()=>{ Meteor.call('rebuildOpenTrace'); });
+  Meteor.defer( ()=>{ Meteor.call('reMiniOpenTrace'); });
   if(!this.userId){
     return this.ready();
   }else{
@@ -186,7 +186,7 @@ Meteor.publish('traceDataLive', function(){
 Meteor.publish('traceDataActive', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  Meteor.defer( ()=>{ Meteor.call('rebuildOpenTrace'); });
+  Meteor.defer( ()=>{ Meteor.call('reMiniOpenTrace'); });
   if(!this.userId){
     return this.ready();
   }else{
@@ -229,7 +229,7 @@ Meteor.publish('traceDataActive', function(){
 Meteor.publish('traceDataOpen', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  Meteor.defer( ()=>{ Meteor.call('rebuildOpenTrace'); });
+  Meteor.defer( ()=>{ Meteor.call('reMiniOpenTrace'); });
   const ystrday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date);
   if(!this.userId){
     return this.ready();

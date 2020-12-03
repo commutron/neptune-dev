@@ -10,13 +10,14 @@ const ProblemReport = (props)=> {
   
   const [ start, startSet ] = useState(false);
   const [ end, endSet ] = useState(false);
-  
+  const [ dataset, datasetSet ] = useState('noncon');
+
   const [ replyData, replySet ] = useState(false);
   
   function getReport() {
     workingSet(true);
     replySet(false);
-    Meteor.call('buildProblemReport', start, end, (err, reply)=> {
+    Meteor.call('buildProblemReport', start, end, dataset, (err, reply)=> {
       err && console.log(err);
       if(reply) {
         const re = JSON.parse(reply);
@@ -26,18 +27,20 @@ const ProblemReport = (props)=> {
           [ 'Finished Serialized Items', re.itemStats.finishedItems ],
           [ 'Scrapped Serialized Items', re.itemStats.scraps ],
           [ 'Failed Tests', re.itemStats.testFail ],
-          
-          [ 'Non-conformance Types', re.nonConStats.typeBreakdown ],
-          [ 'Non-conformance Departments', re.nonConStats.whereBreakdown ],
-          [ 'Discovered Non-conformances', re.nonConStats.foundNC ],
-          [ 'Items with Non-conformances', re.nonConStats.uniqueSerials ],
-          
-          [ 'Part Shortfall Numbers', re.shortfallStats.numBreakdown ],
-          [ 'Discovered Shortfalls', re.shortfallStats.foundSH ],
-          [ 'Items with Shortfalls', re.shortfallStats.uniqueSerials ]
         ];
+        const prob = dataset === 'noncon' ? 
+          [
+            [ 'Non-conformance Types', re.nonConStats.typeBreakdown ],
+            [ 'Non-conformance Departments', re.nonConStats.whereBreakdown ],
+            [ 'Discovered Non-conformances', re.nonConStats.foundNC ],
+            [ 'Items with Non-conformances', re.nonConStats.uniqueSerials ],
+          ] : [
+            [ 'Part Shortfall Numbers', re.shortfallStats.numBreakdown ],
+            [ 'Discovered Shortfalls', re.shortfallStats.foundSH ],
+            [ 'Items with Shortfalls', re.shortfallStats.uniqueSerials ]
+          ];
         workingSet(false);
-        replySet(arrange);
+        replySet([...arrange,...prob]);
       }
     });
   }
@@ -48,7 +51,8 @@ const ProblemReport = (props)=> {
           
         <ReportRangeRequest 
           setFrom={(v)=>startSet(v)}
-          setTo={(v)=>endSet(v)} />
+          setTo={(v)=>endSet(v)}
+          setData={(v)=>datasetSet(v)} />
         
         <div className='space'>
           <button 
@@ -80,10 +84,7 @@ const ProblemReport = (props)=> {
 export default ProblemReport;
 
 const ReportRangeRequest = ({ 
-  setFrom, setTo,
-  //ncCheck, setNC,
-  //typeCheck, setType,
-  //phaseCheck, setPhase 
+  setFrom, setTo, setData
 })=> (
   <div>
     <form id='formR' className=''>
@@ -93,34 +94,26 @@ const ReportRangeRequest = ({
           setFrom={setFrom}
           setTo={setTo} />
       </p>
-      {/*
+      
       <div className='centreRow'>
-        <span>
+        <span className='middle'>
           <input
-            type='checkbox'
+            type='radio'
             id='inputNC'
-            onChange={(e)=>setNC(inputNC.value)}
-            checked={ncCheck} />
+            name='inputData'
+            onChange={(e)=>setData('noncon')}
+            defaultChecked={true} />
           <label htmlFor='inputNC'>Non-conformances</label>
         </span>
-        <span>
+        <span className='middle'>
           <input
-            type='checkbox'
-            id='inputType'
-            onChange={(e)=>setType(inputType.value)}
-            checked={typeCheck} />
-          <label htmlFor='inputType'>Type Breakdown</label>
-        </span>
-        <span>
-          <input
-            type='checkbox'
-            id='inputPhase'
-            onChange={(e)=>setPhase(inputPhase.value)}
-            checked={phaseCheck} />
-          <label htmlFor='inputPhase'>Department Breakdown</label>
+            type='radio'
+            id='inputSH'
+            name='inputData'
+            onChange={(e)=>setData('short')} />
+          <label htmlFor='inputSH'>Shortfalls</label>
         </span>
       </div>
-      */}
       
     </form>
   </div>

@@ -10,14 +10,15 @@ moment.updateLocale('en', {
   shippinghours: Config.shippingHours
 });
 
-function shrinkWhole(bData, accessKey) {
-  const app = AppDB.findOne({orgKey: accessKey});
-  const nonWorkDays = app.nonWorkDays;
-  if( Array.isArray(nonWorkDays) ) {  
-    moment.updateLocale('en', {
-      holidays: nonWorkDays
-    });
+function syncHoliday(accessKey) {
+  const app = AppDB.findOne({orgKey:accessKey}, {fields:{'nonWorkDays':1}});
+  if(Array.isArray(app.nonWorkDays) ) {  
+    moment.updateLocale('en', { holidays: app.nonWorkDays });
   }
+}
+
+function shrinkWhole(bData, accessKey) {
+  
   const now = moment().tz(Config.clientTZ);
   
   const isWhat = Meteor.call('getBasicBatchInfo', bData.batch);
@@ -104,13 +105,7 @@ function checkMinify(bData, accessKey) {
 }
 
 function checkMovement(bData, accessKey) {
-  const app = AppDB.findOne({orgKey: accessKey});
-  const nonWorkDays = app.nonWorkDays;
-  if( Array.isArray(nonWorkDays) ) {  
-    moment.updateLocale('en', {
-      holidays: nonWorkDays
-    });
-  }
+  
   const now = moment().tz(Config.clientTZ);
   
   const isX = bData.completed !== undefined;
@@ -161,7 +156,8 @@ Meteor.methods({
     this.unblock();
     try {
       const accessKey = Meteor.user().orgKey;
-      
+      syncHoliday(accessKey);
+  
       BatchDB.find({orgKey: accessKey})
               .forEach( (b)=> {
                 shrinkWhole( b, accessKey );
@@ -197,6 +193,8 @@ Meteor.methods({
     this.unblock();
     try {
       const accessKey = privateKey || Meteor.user().orgKey;
+      syncHoliday(accessKey);
+      
       const ystrday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date);
       
       BatchDB.find({ createdAt: { $gte: ystrday } }).forEach( (b)=> {
@@ -211,6 +209,8 @@ Meteor.methods({
     this.unblock();
     try {
       const accessKey = privateKey || Meteor.user().orgKey;
+      syncHoliday(accessKey);
+      
       const ystrday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date);
       
       XBatchDB.find({ createdAt: { $gte: ystrday } }).forEach( (x)=> {
@@ -222,10 +222,12 @@ Meteor.methods({
     }
   },
   
-  rebuildOpenTrace(privateKey) {
+  reMiniOpenTrace(privateKey) {
     this.unblock();
     try {
       const accessKey = privateKey || Meteor.user().orgKey;
+      syncHoliday(accessKey);
+      
       const ystrday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date);
       const lstweek = ( d => new Date(d.setDate(d.getDate()-7)) )(new Date);
       
@@ -242,7 +244,7 @@ Meteor.methods({
             lastUpserted: { $gte: new Date(fresh) }
           });
           if(!t) {
-            shrinkWhole( b, accessKey );
+            checkMinify( b, accessKey );
           }
       });
       
@@ -257,7 +259,7 @@ Meteor.methods({
             lastUpserted: { $gte: new Date(fresh) }
           });
           if(!t) {
-            shrinkWhole( x, accessKey );
+            checkMinify( x, accessKey );
           }
       });
     }catch (err) {
@@ -267,7 +269,8 @@ Meteor.methods({
   
   rebuildOneTrace(bID, privateKey) {
     const accessKey = privateKey || Meteor.user().orgKey;
-    
+    syncHoliday(accessKey);
+      
     BatchDB.find({_id: bID})
             .forEach( (b)=> shrinkWhole( b, accessKey ) );
     
@@ -277,7 +280,8 @@ Meteor.methods({
   
   updateOneMinify(bID, privateKey) {
     const accessKey = privateKey || Meteor.user().orgKey;
-    
+    syncHoliday(accessKey);
+      
     BatchDB.find({_id: bID})
             .forEach( (b)=> checkMinify( b, accessKey ) );
     
@@ -287,7 +291,8 @@ Meteor.methods({
   
   updateOneMovement(bID, privateKey) {
     const accessKey = privateKey || Meteor.user().orgKey;
-    
+    syncHoliday(accessKey);
+      
     BatchDB.find({_id: bID})
             .forEach( (b)=> checkMovement( b, accessKey ) );
     
@@ -300,6 +305,8 @@ Meteor.methods({
     this.unblock();
     try {
       const accessKey = privateKey || Meteor.user().orgKey;
+      syncHoliday(accessKey);
+      
       const ystrday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date);
       const lstweek = ( d => new Date(d.setDate(d.getDate()-7)) )(new Date);
       const fresh = moment().subtract(5, 'minutes').toISOString();

@@ -116,7 +116,7 @@ export function deliveryBinary(bEnd, bFinish) {
   
   const fillZ = !lateLate ?
                   lateDay ? 'on time' : 'early' : 
-                  lateDay ? 'overtime' :  'late';
+                  lateDay ? 'overtime' : 'late';
   
   const shipLate = dlvDy[6];
   

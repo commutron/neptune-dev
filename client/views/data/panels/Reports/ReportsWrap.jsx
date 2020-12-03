@@ -38,11 +38,12 @@ const ReportsWrap = ({
         widgetData={allWidget}
         groupData={allGroup} 
         app={app} />
-        
-      <BuildDurration />
       
-      <BuildPace />
-  
+      {!isNightly ? <div><em>Nightly Only, Outstanding Performance Issues</em></div> :
+        <BuildDurration />}
+      
+      {!isNightly ? <div><em>Nightly Only, Outstanding Performance Issues</em></div> :
+        <BuildPace />}
         
     </Tabs> 
   </div>

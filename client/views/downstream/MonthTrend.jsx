@@ -99,7 +99,8 @@ const MonthTrend = ({ app, isDebug, isNightly })=>{
         <button
           className='action clearBlack gap'
           onClick={()=>runLoop('week')}
-          disabled={working}
+          disabled={working || !isNightly}
+          title={!isNightly ? `Nightly Only,\nOutstanding Performance Issues` : ''}
         >Run Weekly</button>
         
         <span className='flexSpace' />

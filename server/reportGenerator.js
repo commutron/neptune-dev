@@ -88,19 +88,20 @@ function loopNonCons(nonCons, from, to, flatTypeListClean) {
 
 Meteor.methods({
   
-  buildProblemReport(startDay, endDay) {
+  buildProblemReport(startDay, endDay, dataset) {
     const orgKey = Meteor.user().orgKey;
         
     const from = moment(startDay).tz(Config.clientTZ).startOf('day').format();
     const to = moment(endDay).tz(Config.clientTZ).endOf('day').format();
+    const nc = dataset === 'noncon';
     
     async function getBatches() {
       try {
         batchSlice = await findRelevantBatches(orgKey, from, to);
         batchArange = await loopBatches(batchSlice, from, to);
         itemStats = await loopItems(batchArange.allItems, from, to);
-        nonConStats = await loopNonCons(batchArange.allNonCons, from, to);
-        shortfallStats = await loopShortfalls(batchArange.allShortfalls, from, to);
+        nonConStats = !nc ? [] : await loopNonCons(batchArange.allNonCons, from, to);
+        shortfallStats = nc ? [] : await loopShortfalls(batchArange.allShortfalls, from, to);
         
         const batchInclude = batchSlice.length;
         const itemsInclude = batchArange.allItems.length;

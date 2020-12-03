@@ -47,10 +47,10 @@ Meteor.methods({
         let doneBatchLate = doneBatches[1];
         newItem = await promiser(countNewItem, accessKey, rangeStart, rangeEnd);
         doneItem = await promiser(countDoneItem, accessKey, rangeStart, rangeEnd);
-        noncon = await promiser(countNewNC, accessKey, rangeStart, rangeEnd);
-        shortfall = await promiser(countNewSH, accessKey, rangeStart, rangeEnd);
-        scrap = await promiser(countScrap, accessKey, rangeStart, rangeEnd);
-        tfail = await promiser(countTestFail, accessKey, rangeStart, rangeEnd);
+        // noncon = await promiser(countNewNC, accessKey, rangeStart, rangeEnd);
+        // shortfall = await promiser(countNewSH, accessKey, rangeStart, rangeEnd);
+        // scrap = await promiser(countScrap, accessKey, rangeStart, rangeEnd);
+        // tfail = await promiser(countTestFail, accessKey, rangeStart, rangeEnd);
         newGroup = await promiser(countNewGroup, accessKey, rangeStart, rangeEnd);
         newWidget = await promiser(countNewWidget, accessKey, rangeStart, rangeEnd);
         newVariant = await promiser(countNewVariant, accessKey, rangeStart, rangeEnd);
@@ -64,7 +64,7 @@ Meteor.methods({
         return JSON.stringify({
           newBatch, doneBatchOnTime, doneBatchLate,
           newItem, doneItem, 
-          noncon, shortfall, scrap, tfail,
+          // noncon, shortfall, scrap, tfail,
           newGroup, newWidget, newVariant, newUser,
           tttMinutes, tttHours
         });
