@@ -9,10 +9,8 @@ import { SpinWrap } from '/client/components/tinyUi/Spin.jsx';
 import DownstreamWrap from './DownstreamWrap.jsx';
 
 const View = ({
-  login,
-  readyUsers, readyT, view,
-  username, user, org, app,
-  isDebug, isNightly,
+  login, readyT, view,
+  user, app, isDebug,
   traceDT,
 })=> {
   
@@ -21,9 +19,11 @@ const View = ({
     InboxToastPop(prevUser, user);
   }, [user]);
     
-  if( !readyUsers || !readyT || !app ) {
+  if( !readyT || !app ) {
     return( <SpinWrap /> );
   }
+  
+  const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
 
   return(
     <ErrorCatch>
@@ -42,30 +42,22 @@ const View = ({
 export default withTracker( ({ view } ) => {
   let login = Meteor.userId() ? true : false;
   let user = login ? Meteor.user() : false;
-  let name = user ? user.username : false;
   let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   let isDebug = user ? Roles.userIsInRole(Meteor.userId(), 'debug') : false;
-  const isNightly = user ? Roles.userIsInRole(Meteor.userId(), 'nightly') : false;
   let org = user ? user.org : false;
-  const usersSub = login ? Meteor.subscribe('usersData') : false;
   const subT = login ? Meteor.subscribe('traceDataOpen') : false;
   
   if(!login || !active) {
     return {
-      readyUsers: false,
       readyT: false
     };
   }else{
     return {
       login: Meteor.userId(),
-      readyUsers: usersSub.ready(),
       readyT: subT.ready(),
       view: view,
-      username: name,
       user: user,
       isDebug: isDebug,
-      isNightly: isNightly,
-      org: org,
       app: AppDB.findOne({org: org}),
       traceDT: TraceDB.find({}).fetch(),
     };

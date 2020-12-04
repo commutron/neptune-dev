@@ -34,8 +34,12 @@ const DownstreamView = ({
   const [ updateTrigger, updateTriggerSet ] = useState(true);
   
   useEffect( ()=>{
-    Meteor.call('updateLiveMovement', ()=>{ loadTimeSet( moment() ) });
+    Meteor.call('updateLiveMovement');
   }, [updateTrigger]);
+  
+  useEffect( ()=>{
+    loadTimeSet( moment() );
+  }, [traceDT]);
   
   function changeNum(e) {
     const cleanVal = Number(e) < 1 ? 1 :

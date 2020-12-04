@@ -10,10 +10,8 @@ import { SpinWrap } from '../../components/tinyUi/Spin.jsx';
 import OverviewWrap from './OverviewWrap.jsx';
 
 const View = ({
-  login,
-  readyUsers, ready, readyT,
-  username, user, org, app,
-  isDebug, isNightly,
+  login, ready, readyT,
+  user, app, isDebug,
   batch, batchX, traceDT
 })=> {
   
@@ -23,14 +21,12 @@ const View = ({
   }, [user]);
   
     
-  if( !readyUsers || !ready || !readyT || !app ) {
+  if( !ready || !readyT || !app ) {
     return( <SpinWrap /> );
   }
   
   if( Array.isArray(app.nonWorkDays) ) {  
-    moment.updateLocale('en', {
-      holidays: app.nonWorkDays
-    });
+    moment.updateLocale('en', { holidays: app.nonWorkDays });
   }
     
   const branches = app.branches.filter( b => b.open === true );
@@ -46,8 +42,7 @@ const View = ({
         user={user}
         app={app}
         brancheS={brancheS}
-        isDebug={isDebug}
-        isNightly={isNightly} />
+        isDebug={isDebug} />
     </ErrorCatch>
   );
 };
@@ -56,31 +51,23 @@ const View = ({
 export default withTracker( () => {
   let login = Meteor.userId() ? true : false;
   let user = login ? Meteor.user() : false;
-  let name = user ? user.username : false;
-  let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
-  let isDebug = user ? Roles.userIsInRole(Meteor.userId(), 'debug') : false;
-  const isNightly = user ? Roles.userIsInRole(Meteor.userId(), 'nightly') : false;
-  let org = user ? user.org : false;
-  const usersSub = login ? Meteor.subscribe('usersData') : false;
+  const active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
+  const isDebug = user ? Roles.userIsInRole(Meteor.userId(), 'debug') : false;
+  const org = user ? user.org : false;
   const sub = login ? Meteor.subscribe('shaddowData') : false;
   const subT = login ? Meteor.subscribe('traceDataActive') : false;
   
   if(!login || !active) {
     return {
-      readyUsers: false,
       ready: false
     };
   }else{
     return {
       login: Meteor.userId(),
-      readyUsers: usersSub.ready(),
       ready: sub.ready(),
       readyT: subT.ready(),
-      username: name,
       user: user,
       isDebug: isDebug,
-      isNightly: isNightly,
-      org: org,
       app: AppDB.findOne({org: org}),
       batch: BatchDB.find({live: true}).fetch(),
       batchX: XBatchDB.find({live: true}).fetch(),

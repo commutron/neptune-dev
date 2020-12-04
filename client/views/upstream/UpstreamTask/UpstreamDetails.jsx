@@ -11,7 +11,7 @@ import ProJump from '/client/components/smallUi/ProJump';
 const UpstreamDetails = ({
   oB, traceDT,
   user, app, brancheS,
-  isDebug, isNightly,
+  isDebug,
   dense, focusBy
 })=> {
   
@@ -55,7 +55,6 @@ const UpstreamDetails = ({
               brancheS={brancheS}
               branchClear={branchClear}
               isDebug={isDebug}
-              isNightly={isNightly}
               statusCols={statusCols}
               kitCols={kitCols}
               dense={dense}
@@ -73,7 +72,7 @@ const UpstreamDetailChunk = ({
   rowIndex, oB, tBatch, user,
   app, 
   brancheS, branchClear,
-  isDebug, isNightly,
+  isDebug,
   statusCols, kitCols, 
   dense, focusBy
 })=> {
@@ -106,7 +105,6 @@ const UpstreamDetailChunk = ({
         tBatch={tBatch}
         app={app}
         isDebug={isDebug}
-        isNightly={isNightly}
         statusCols={statusCols}
         dense={dense} />
       

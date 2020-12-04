@@ -23,7 +23,7 @@ import AccountsManagePanel, { PermissionHelp } from './AccountsManagePanel.jsx';
 import TimeErrorCheck from './TimeErrorCheck';
 
 const PeopleDataWrap = ({
-  ready, readyUsers, readybName, // subs
+  readybName, readyPeople, // subs
   user, active, isDebug, // self
   org, users, app, // org
   traceDT // batch name cache
@@ -34,7 +34,7 @@ const PeopleDataWrap = ({
     InboxToastPop(prevUser, user);
   }, [user]);
     
-  if( !readyUsers || !readybName || !app) {
+  if( !readybName || !readyPeople || !app ) {
     return( <SpinWrap /> );
   }
   
@@ -143,22 +143,22 @@ export default withTracker( () => {
   let org = user ? user.org : false;
   let active = login ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   const isDebug = login ? Roles.userIsInRole(Meteor.userId(), 'debug') : false;
-  const usersSub = login ? Meteor.subscribe('usersData') : false;
-  const bNameSub = login ? Meteor.subscribe('bCacheData') : false;
+  const bNameSub = login ? Meteor.subscribe('bNameData') : false;
+  const peopleSub = login ? Meteor.subscribe('peopleData') : false;
   if(!login) {
     return {
-      readyUsers: false,
-      readybName: false
+      readybName: false,
+      readyPeople: false
     };
   }else if(!active) {
     return {
-      readyUsers: false,
-      readybName: false
+      readybName: false,
+      readyPeople: false
     };
   }else{
     return {
-      readyUsers: usersSub.ready(),
       readybName: bNameSub.ready(),
+      readyPeople: peopleSub.ready(),
       user: user,
       active: active,
       isDebug: isDebug,

@@ -4,7 +4,7 @@ import moment from 'moment';
 import { toast } from 'react-toastify';
 import { PermissionHelp } from '/client/views/people/AccountsManagePanel';
 
-const PrivacyPanel = ({ orb, bolt, app, user, isAdmin, traceDT })=> {
+const PrivacyPanel = ({ orb, bolt, app, user, isAdmin })=> {
   
   function clearthisUserCrumbs() {
     Meteor.call('clearBreadcrumbsRepair', (error, reply)=>{
@@ -13,48 +13,11 @@ const PrivacyPanel = ({ orb, bolt, app, user, isAdmin, traceDT })=> {
     });
   }
   
-  function jumpTo(location) {
-    Session.set('now', location);
-    FlowRouter.go('/production');
-  }
-  
-  const basket = user.breadcrumbs || [];
-  const limitedTrail = basket.reverse();
-  
   return(
     <div className='invert'>
       <div className=''>
         <p>Saved usage behaviour for {user.username}</p>
       </div>
-      <table className='wide cap space'>
-        {limitedTrail.map( (entry, index)=>{
-          const keyword = entry.keyword;
-          const link = keyword.length === 5 ? 'pro' : false;
-          const moreInfo = traceDT ? traceDT.find( x => x.batch === entry.keyword) : false;
-          const what = moreInfo ? moreInfo.isWhat : 'unavailable';
-          return(
-            <tbody key={index}>
-              <tr className='big leftText line4x'>
-                <th colSpan='4'>{moment(entry.time).format('dddd MMMM Do')}</th>
-              </tr>
-              <tr>
-                <td className='noRightBorder medBig'>{keyword}</td>
-                <td className='noRightBorder'>{what}</td>
-                <td className='noRightBorder'>{moment(entry.time).format('dddd MMMM Do')}</td>
-                <td className='noRightBorder noCopy'>
-                  {link === 'pro' &&
-                  <button
-                    onClick={()=>jumpTo(keyword)}
-                    className='textLinkButton'
-                  ><i className='fas fa-paper-plane fa-fw'></i> Production</button>}
-                </td>
-                
-              </tr>
-            </tbody>
-          );
-        })}
-      </table>
-      
       <p>
         <button
           onClick={()=>clearthisUserCrumbs()}

@@ -75,9 +75,8 @@ Meteor.methods({
   },
   
   serialLookup(orb) {
-    const itemsBatch = BatchDB.findOne({'items.serial': orb});
-    const found = itemsBatch ? itemsBatch.batch : false;
-    return found;
+    const itemsBatch = BatchDB.findOne({'items.serial': orb},{fields:{'batch':1}});
+    return itemsBatch ? itemsBatch.batch : false;
   },
   
   serialLookupPartial(orb) {

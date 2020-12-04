@@ -8,7 +8,7 @@ import { SpinWrap } from '../../components/tinyUi/Spin.jsx';
 import AppWrap from './AppWrap.jsx';
 
 const AppView = ({
-  readyUsers, readyDebug, // subs
+  readyDebug, // subs
   orb, bolt, // meta
   username, user, active, isAdmin, isDebug, // self
   org, app, users // org
@@ -20,7 +20,7 @@ const AppView = ({
   }, [user]);
   
    
-  if(!readyUsers || !readyDebug || !app ) {
+  if(!readyDebug || !app ) {
     return( <SpinWrap /> );
   }
   
@@ -56,21 +56,17 @@ export default withTracker( () => {
   let active = login ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   const isAdmin = login ? Roles.userIsInRole(Meteor.userId(), 'admin') : false;
   const isDebug = login ? Roles.userIsInRole(Meteor.userId(), 'debug') : false;
-  const usersSub = login ? Meteor.subscribe('usersData') : false;
   const usersDebugSub = login ? Meteor.subscribe('usersDataDebug') : false;
   if(!login) {
     return {
-      readyUsers: false,
       readyDebug: false
     };
   }else if(!active) {
     return {
-      readyUsers: false,
       readyDebug: false
     };
   }else{
     return {
-      readyUsers: usersSub.ready(),
       readyDebug: usersDebugSub.ready(),
       orb: Session.get('now'),
       bolt: Session.get('allData'),

@@ -12,7 +12,7 @@ import ProJump from '/client/components/smallUi/ProJump';
 const BatchDetails = ({
   oB, traceDT,
   user, app, brancheS,
-  isDebug, isNightly,
+  isDebug,
   dense, filterBy, focusBy, branchArea, updateTrigger
 })=> {
   
@@ -61,7 +61,6 @@ const BatchDetails = ({
               brancheS={brancheS}
               branchClear={branchClear}
               isDebug={isDebug}
-              isNightly={isNightly}
               statusCols={statusCols}
               progCols={progCols}
               ncCols={ncCols}
@@ -83,7 +82,7 @@ const BatchDetailChunk = ({
   rowIndex, oB, tBatch,
   user, app, 
   brancheS, branchClear,
-  isDebug, isNightly,
+  isDebug,
   statusCols, progCols, ncCols, 
   dense, filterBy, focusBy, branchArea,
   updateTrigger
@@ -127,7 +126,6 @@ const BatchDetailChunk = ({
         tBatch={tBatch}
         app={app}
         isDebug={isDebug}
-        isNightly={isNightly}
         statusCols={statusCols}
         branchArea={branchArea}
         dense={dense} />

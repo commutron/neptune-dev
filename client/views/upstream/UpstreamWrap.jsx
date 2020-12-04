@@ -12,7 +12,7 @@ const UpstreamWrap = ({
   view, subLink,
   batch, batchX, traceDT,
   user, app, brancheS,
-  isDebug, isNightly
+  isDebug
 })=> {
 
   if(view === 'parts') {
@@ -87,7 +87,6 @@ const UpstreamWrap = ({
         app={app}
         brancheS={brancheS}
         isDebug={isDebug}
-        isNightly={isNightly}
       />
     </StreamLayout>
   );

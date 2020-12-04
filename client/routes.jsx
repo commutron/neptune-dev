@@ -90,7 +90,9 @@ exposedRoutes.route('/meta', {
   }
 });
 
+SelfSub = new SubsManager();
 AppSub = new SubsManager();
+// UsersSub = new SubsManager();
 
 const privlegedRoutes = FlowRouter.group({
   triggersEnter: [
@@ -107,7 +109,9 @@ const privlegedRoutes = FlowRouter.group({
     }
   ],
   subscriptions: function(params, queryParams) {
-    this.register('routerSub', AppSub.subscribe('appData'));
+    this.register('routerSubSelf', SelfSub.subscribe('selfData'));
+    this.register('routerSubApp', AppSub.subscribe('appData'));
+    // this.register('routerSubUsers', UsersSub.subscribe('usersData'));
   }
 });
 

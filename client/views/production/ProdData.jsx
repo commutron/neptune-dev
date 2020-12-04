@@ -9,8 +9,9 @@ import usePrevious from '/client/utility/usePreviousHook.js';
 import { SpinWrap } from '/client/components/tinyUi/Spin.jsx';
 import ProductionFindOps from './ProductionFindOps.jsx';
 
+
 const ProdData = ({
-  usersReady, coldReady, hotReady, // subs
+  coldReady, hotReady, // subs
   orb, anchor, user, org, users, app, // self 
   allGroup, allWidget, allVariant, // customer data
   allBatch, allxBatch,
@@ -23,13 +24,7 @@ const ProdData = ({
   }, [user]);
   
 
-  if(
-     !usersReady ||
-     !coldReady || 
-     !hotReady ||
-     !user ||
-     !app
-    ) {
+  if( !coldReady || !hotReady || !user || !app ) {
     return( <SpinWrap /> );
   }
   
@@ -58,78 +53,68 @@ const ProdData = ({
 
 
 export default withTracker( () => {
-  
+
   const orb = Session.get('now');
   let login = Meteor.userId() ? true : false;
   let user = login ? Meteor.user() : false;
   let org = user ? user.org : false;
   let readOnly = user ? Roles.userIsInRole(Meteor.userId(), 'readOnly') : false;
-  const usersSub = login ? Meteor.subscribe('usersData') : false;
-  const coldSub = login ? Meteor.subscribe('thinData') : false;
-
-  let hotSub = Meteor.subscribe('hotDataPlus', false);
+  const coldSub = login ? Meteor.subscribe('skinnyData') : false;
+  
   let hotBatch = false;
   let hotxBatch = false;
   
-  if( coldSub ) {
+  let keyMatch = false;
+  let subBatch = false;
+    
+  if( coldSub && !subBatch ) {
     
     if( !isNaN(orb) && orb.length === 5 ) {
-      const oneBatch = BatchDB.findOne( { batch: orb } );
-      const onexBatch = XBatchDB.findOne( { batch: orb } );
       
-      if( oneBatch ) {
-        hotSub = Meteor.subscribe( 'hotDataPlus', orb );
+      const oneBatch = BatchDB.findOne({ batch: orb });
+      if(oneBatch) {
         hotBatch = oneBatch;
-      
-      }else if(onexBatch) {
-        hotSub = Meteor.subscribe( 'hotDataPlus', orb );
-        hotxBatch = onexBatch;
-      
+        keyMatch = true;
+        subBatch = orb;
       }else{
-        null;
+        const onexBatch = XBatchDB.findOne({ batch: orb });
+        if(onexBatch) {
+          hotBatch = onexBatch;
+          keyMatch = true;
+          subBatch = orb;
+        }
       }
-    }
-    else if( !isNaN(orb) && orb.length >= 8 && orb.length <= 10 ) {
       
+    }else if( !isNaN(orb) && orb.length >= 8 && orb.length <= 10 ) {
   		const itemsBatch = BatchDB.findOne( { 'items.serial': orb } );
-      
       if( itemsBatch ) {
-        hotSub = Meteor.subscribe( 'hotDataPlus', itemsBatch.batch );
         hotBatch = itemsBatch;
-      
+        keyMatch = true;
+        subBatch = itemsBatch.batch;
       }else{
-        Meteor.call( 'serialLookup', orb, ( err, reply )=>{
-          err && console.log(err);
-          const serverItemsBatch = BatchDB.findOne( { batch: reply } );
-          hotSub = Meteor.subscribe( 'hotDataPlus', reply );
-          hotBatch = serverItemsBatch;
-        });
+        hotBatch = itemsBatch;
+        subBatch = orb;
       }
-    
     }else{
-      null;
+      subBatch = false;
     }
-  
-  }else{
-    null;
   }
+
+  const hotSub = Meteor.subscribe('hotDataPlus', subBatch, keyMatch);
   
   if( !login ) {
     return {
-      usersReady: false,
       coldReady: false,
       hotReady: false
     };
   }else if( readOnly ) {
     FlowRouter.go('/');
     return {
-      usersReady: usersSub.ready(),
       coldReady: coldSub.ready(), 
       hotReady: hotSub.ready(),
     };
   }else{
     return {
-      usersReady: usersSub.ready(),
       coldReady: coldSub.ready(),
       hotReady: hotSub.ready(),
       orb: orb,

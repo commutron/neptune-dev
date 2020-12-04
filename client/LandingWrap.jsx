@@ -11,13 +11,13 @@ import { NavButtonShell } from '/client/layouts/NavButton/NavButton';
 //import { NavPlaceholderShell } from '/client/components/smallUi/NavButton/NavButton.jsx';
 import { NavPlaceholder } from '/client/layouts/NavButton/NavButton';
 
-const StartView = ({ready, readyUsers, user, org, app}) =>	{
+const StartView = ({user, app}) =>	{
   
   useLayoutEffect( ()=>{
     UnreadInboxToastPop(user);
   }, []);
   
-  if( !readyUsers || !user || !org || !app ) {
+  if( !user || !app ) {
     return (
       <div className='centreSpash'>
         <Spin color={true} message='Just a moment'/>
@@ -27,12 +27,12 @@ const StartView = ({ready, readyUsers, user, org, app}) =>	{
   
   const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
   const isReadOnly = Roles.userIsInRole(Meteor.userId(), 'readOnly');
-  const isNigh = Roles.userIsInRole(Meteor.userId(), 'nightly');
+  // const isNigh = Roles.userIsInRole(Meteor.userId(), 'nightly');
   
-  const isSales = Roles.userIsInRole(Meteor.userId(), 'sales');
-  const isPeople = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
+  // const isSales = Roles.userIsInRole(Meteor.userId(), 'sales');
+  // const isPeople = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
   // ${isNigh ?'fa-meteor'
-  const isPreview = isAdmin || isNigh || isSales || isPeople;
+  // const isPreview = isAdmin || isNigh || isSales || isPeople;
   
   return(
     <div className='homeNavi'>
@@ -92,18 +92,13 @@ export default withTracker( () => {
   let login = Meteor.userId() ? true : false;
   let user = login ? Meteor.user() : false;
   let org = user ? user.org : false;
-  const usersSub = login ? Meteor.subscribe('usersData') : false;
-  
-  //console.log(Meteor.status());
   
   if(!login) {
     return {
-      readyUsers: false,
       login: Meteor.userId(),
     };
   }else{
     return {
-      readyUsers: usersSub.ready(),
       login: Meteor.userId(),
       user: user,
       org: org,

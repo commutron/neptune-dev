@@ -33,6 +33,8 @@ const ClockString = ({ loadTime, doThing })=> {
   // new Date().toLocaleTimeString('en-CA', options) );
   const fstring = "MMM Do, h:mm:ss a";
   
+  const [ chill ] = useState(Roles.userIsInRole(Meteor.userId(), 'readOnly'));
+  
   const [ clockTime, clockTimeSet ] = useState( moment().format(fstring) );
   const [ tickingTime, tickingTimeSet ] = useState( moment.duration() );
 
@@ -40,7 +42,7 @@ const ClockString = ({ loadTime, doThing })=> {
     clockTimeSet( moment().format(fstring) );
     tickingTimeSet( tickingTime => tickingTime.add(1, 's') );
     
-    if(doThing && tickingTime.asMinutes() > 10) { 
+    if(doThing && tickingTime.asMinutes() > (chill ? 30 : 15)) {
       tickingTimeSet( moment.duration() );
       doThing(); }
   },1000);

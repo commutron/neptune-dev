@@ -35,7 +35,6 @@ const NonConBubble = ({ ncOp, nonCons, app, isDebug })=> {
     for(let ncSet of splitOut) {
       for(let ncType of nonConOptions) {
         const typeCount = ncSet.pNC.filter( x => x.type === ncType ).length;
-        console.log(typeCount);
         if(typeCount > 0) {
           typeSet.add(ncType);
           ncCounts.push({

@@ -11,7 +11,7 @@ import UpstreamDetails from './UpstreamDetails';
 
 const UpstreamView = ({ 
   batch, batchX, traceDT,
-  user, app, brancheS, isDebug, isNightly
+  user, app, brancheS, isDebug
 })=> {
   
   const sessionSticky = 'overviewUpstream';
@@ -41,8 +41,12 @@ const UpstreamView = ({
   const [ updateTrigger, updateTriggerSet ] = useState(true);
   
   useEffect( ()=>{
-    Meteor.call('updateLiveMovement', ()=>{ loadTimeSet( moment() ) });
+    Meteor.call('updateLiveMovement');
   }, [batch, batchX, updateTrigger]);
+  
+  useEffect( ()=>{
+    loadTimeSet( moment() );
+  }, [batch, batchX, traceDT]);
   
   function changeFocus(e) {
     const value = e.target.value;
@@ -90,8 +94,8 @@ const UpstreamView = ({
           const pB1bf = pB1 ? pB1.bffrRel : null;
           const pB2 = traceDT.find( x => x.batchID === b2._id);
           const pB2bf = pB2 ? pB2.bffrRel : null;
-          if (!pB1bf) { return 1 }
-          if (!pB2bf) { return -1 }
+          if (isNaN(pB1bf)) { return 1 }
+          if (isNaN(pB2bf)) { return -1 }
           if (pB1.lateLate) { return -1 }
           if (pB2.lateLate) { return 1 }
           if (pB1bf < pB2bf) { return -1 }
@@ -176,7 +180,6 @@ const UpstreamView = ({
             app={app}
             brancheS={brancheS}
             isDebug={isDebug}
-            isNightly={isNightly}
             dense={dense}
             focusBy={focusBy}
           />

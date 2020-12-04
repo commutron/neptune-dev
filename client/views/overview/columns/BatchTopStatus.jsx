@@ -9,8 +9,8 @@ import TrinaryStat from '/client/components/tinyUi/TrinaryStat.jsx';
 
 
 const BatchTopStatus = ({ 
-  rowIndex, batchID, tBatch, app,
-  isDebug, isNightly,
+  rowIndex, batchID, tBatch,
+  app, isDebug,
   statusCols, branchArea, dense
 })=> {
   

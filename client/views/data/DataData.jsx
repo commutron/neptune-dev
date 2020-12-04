@@ -2,8 +2,6 @@ import React, { useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
-import moment from 'moment';
-import 'moment-timezone';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
 import usePrevious from '/client/utility/usePreviousHook.js';
 
@@ -13,7 +11,7 @@ import Spin from '../../components/tinyUi/Spin.jsx';
 import DataViewOps from './DataViewOps.jsx';
 
 const ExploreView = ({
-  usersReady, coldReady, hotReady, // subs
+  coldReady, hotReady, // subs
   user, isDebug, org, users, app, // self
   allGroup, allWidget, allVariant, // customers
   allBatch, allXBatch, 
@@ -32,7 +30,6 @@ const ExploreView = ({
   
     
   if(
-    !usersReady ||
     !coldReady || 
     !hotReady ||
     !user ||
@@ -90,16 +87,14 @@ const ExploreView = ({
 };
 
 export default withTracker( ({ view, request, specify }) => {
-  //const orb = Session.get('now');
   let login = Meteor.userId() ? true : false;
   
   let user = login ? Meteor.user() : false;
   let org = user ? user.org : false;
   let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   const isDebug = user ? Roles.userIsInRole(Meteor.userId(), 'debug') : false;
-  const clientTZ = moment.tz.guess();
-  const usersSub = login ? Meteor.subscribe('usersData') : false;
-  const coldSub = login ? Meteor.subscribe('skinnyData', clientTZ) : false;
+
+  const coldSub = login ? Meteor.subscribe('skinnyData') : false;
   
   const hotBatch = BatchDB.findOne({ batch: request }) || false;
   const hotXBatch = XBatchDB.findOne({ batch: request }) || false;
@@ -109,13 +104,11 @@ export default withTracker( ({ view, request, specify }) => {
 
   if( !login || !active ) {
     return {
-      usersReady: false,
       coldReady: false,
       hotReady: false
     };
   }else{
     return {
-      usersReady: usersSub.ready(),
       coldReady: coldSub.ready(),
       hotReady: hotSubEx.ready(),
       user: user,

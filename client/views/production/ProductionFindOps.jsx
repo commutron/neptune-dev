@@ -58,10 +58,6 @@ const ProductionFindOps = ({
     return allWidget.filter(x => x.groupId === gId);
   }
   
-  function groupVariants(gId) {
-    return allVariant.filter(x => x.groupId === gId);
-  }
-  
   function variantDataByKey(vKey) {
     return allVariant.find(x => x.versionKey === vKey);
   }
@@ -247,7 +243,6 @@ const ProductionFindOps = ({
     if(lookupG) {
       Session.set('nowBatch', false);
       let widgets = groupWidgets(lookupG._id);
-      let variants = groupVariants(lookupG._id);
       let activeWidgets = groupActiveWidgets(lookupG._id);
       return (
         <ProWrap
@@ -259,7 +254,6 @@ const ProductionFindOps = ({
           <WidgetsList
             groupAlias={lookupG.alias}
             widgetData={widgets}
-            variantData={variants}
             active={activeWidgets} />
           <WikiOps 
             wi={lookupG.wiki} 

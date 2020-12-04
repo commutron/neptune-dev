@@ -490,6 +490,12 @@
   align-content: center;
   color: black;
 }
+.stoneForm .dropdown-content {
+  width: fit-content;
+}
+.stoneForm .dropdown-container input {
+  width: 1rem;
+}
 
 .testFail summary::-webkit-details-marker {
   display: none;

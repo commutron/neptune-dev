@@ -97,7 +97,7 @@ const MonthKPIReport = ({ batchData, widgetData, groupData, app, isDebug })=> {
         </div>
       :   
         <ReportStatsTable 
-          title={`monthly report for ${moment(dateString, 'YYYY-MM-DD').format('MMMM YYYY')}`}
+          title='monthly report'
           dateString={`${dateString}`}
           rows={monthDataState}
           extraClass='max500' />

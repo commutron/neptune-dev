@@ -15,7 +15,7 @@ import BatchDetails from './columns/BatchDetails';
 const OverviewWrap = ({ 
   b, bx, traceDT,
   user, app, brancheS,
-  isDebug, isNightly
+  isDebug
 })=> {
   
   const sessionSticky = 'overviewOverview';
@@ -54,6 +54,16 @@ const OverviewWrap = ({
     sortInitial();
   }, [b, bx, traceDT, filterBy, sortBy, ghost]);
   
+  const [ updateTrigger, updateTriggerSet ] = useState(true);
+  
+  useEffect( ()=>{
+    Meteor.call('updateLiveMovement');
+  }, [b, bx, updateTrigger]);
+  
+  useEffect( ()=>{
+    loadTimeSet( moment() );
+  }, [b, bx, traceDT]);
+  
   function changeFilter(e) {
     const value = e.target.value;
     const filter = value === 'false' ? false : value;
@@ -88,12 +98,6 @@ const OverviewWrap = ({
     themeSet( val );
     Session.set(sessionSticky+'lightTheme', val);
   }
-  
-  const [ updateTrigger, updateTriggerSet ] = useState(true);
-  
-  useEffect( ()=>{
-    Meteor.call('updateLiveMovement', ()=>{ loadTimeSet( moment() ) });
-  }, [b, bx, updateTrigger]);
   
   function sortInitial() {
     return new Promise((resolve) => {
@@ -136,8 +140,8 @@ const OverviewWrap = ({
           const pB1bf = pB1 ? pB1.bffrRel : null;
           const pB2 = traceDT.find( x => x.batchID === b2._id);
           const pB2bf = pB2 ? pB2.bffrRel : null;
-          if (!pB1bf) { return 1 }
-          if (!pB2bf) { return -1 }
+          if (isNaN(pB1bf)) { return 1 }
+          if (isNaN(pB2bf)) { return -1 }
           if (pB1.lateLate) { return -1 }
           if (pB2.lateLate) { return 1 }
           if (pB1bf < pB2bf) { return -1 }
@@ -237,7 +241,6 @@ const OverviewWrap = ({
             app={app}
             brancheS={brancheS}
             isDebug={isDebug}
-            isNightly={isNightly}
             dense={dense}
             filterBy={filterBy}
             focusBy={focusBy}

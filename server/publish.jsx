@@ -32,26 +32,28 @@ Meteor.publish('loginData', function(){
   }
 });
 
-Meteor.publish('appData', function(){
-  const user = Meteor.users.findOne({_id: this.userId});
-  const orgKey = user ? user.orgKey : false;
+Meteor.publish('selfData', function(){
   if(!this.userId){
     return this.ready();
-  }else if(!orgKey) {
-    return [
-      Meteor.users.find({_id: this.userId},
-        {fields: {
-          'services': 0,
-          'orgKey': 0,
-        }}),
-      ];
-  }else if(user) {
+  }else{
     return [
       Meteor.users.find({_id: this.userId},
         {fields: {
           'services': 0,
           'orgKey': 0
-        }}),
+        }})
+    ];
+  }
+});
+
+Meteor.publish('appData', function(){
+  const user = Meteor.users.findOne({_id: this.userId});
+  const orgKey = user ? user.orgKey : false;
+  const admin = Roles.userIsInRole(this.userId, 'admin');
+  if(!this.userId){
+    return this.ready();
+  }else if(admin) {
+    return [
       AppDB.find({orgKey: orgKey}, 
         {fields: { 
           'orgKey': 0,
@@ -60,13 +62,37 @@ Meteor.publish('appData', function(){
           'phases': 0,
           'toolOption': 0
         }}),
-      CacheDB.find({dataName: 'lockingTask'})
+      Meteor.users.find({},
+        {fields: {
+          'services': 0,
+          'orgKey': 0,
+          'usageLog': 0,
+          'watchlist': 0,
+          'inbox': 0,
+          'breadcrumbs': 0
+        }})
     ];
   }else{
-    return this.ready();
+    return [
+      AppDB.find({orgKey: orgKey}, 
+        {fields: { 
+          'orgKey': 0,
+          'orgPIN': 0,
+          'minorPIN': 0,
+          'phases': 0,
+          'toolOption': 0
+        }}),
+      Meteor.users.find({orgKey: orgKey},
+        {fields: {
+          'username': 1,
+          'org': 1,
+          'roles': 1,
+        }}),
+    ];
   }
 });
 
+// NOT IN USE
 Meteor.publish('usersData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
@@ -85,18 +111,16 @@ Meteor.publish('usersData', function(){
           'breadcrumbs': 0
         }})
     ];
-  }else if(user && orgKey) {
+  }else{
     return [
       Meteor.users.find({orgKey: orgKey},
         {fields: {
           'username': 1,
           'org': 1,
           'roles': 1,
-          'engaged': 1,
-          'proTimeShare' : 1
         }}),
       ];
-  }else{null}
+  }
 });
 
 Meteor.publish('usersDataDebug', function(){
@@ -121,8 +145,8 @@ Meteor.publish('usersDataDebug', function(){
 });
 
 
-// People
-Meteor.publish('bCacheData', function(){
+// isWhat
+Meteor.publish('bNameData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
   if(!this.userId){
@@ -137,6 +161,25 @@ Meteor.publish('bCacheData', function(){
           // 'describe': 1
         }
       })
+    ];
+  }
+});
+
+Meteor.publish('peopleData', function(){
+  const user = Meteor.users.findOne({_id: this.userId});
+  const orgKey = user ? user.orgKey : false;
+  if(!this.userId){
+    return this.ready();
+  }else{
+    return [
+      Meteor.users.find({orgKey: orgKey},
+        {fields: {
+          'username': 1,
+          'org': 1,
+          'roles': 1,
+          'engaged': 1,
+          'proTimeShare' : 1
+        }}),
     ];
   }
 });
@@ -270,23 +313,6 @@ Meteor.publish('traceDataOpen', function(){
   }
 });
 
-/*Meteor.publish('cacheData', function(){
-  const user = Meteor.users.findOne({_id: this.userId});
-  const orgKey = user ? user.orgKey : false;
-  Meteor.defer( ()=>{ Meteor.call('priorityCacheUpdate', orgKey); });
-  if(!this.userId){
-    return this.ready();
-  }else{
-    return [
-      CacheDB.find({orgKey: orgKey, dataName: 'priorityRank' }, {// structured: true}, {
-        fields: {
-          'orgKey': 0,
-          'structured' : 0,
-          'minified': 0
-        }})
-    ];
-  }
-});*/
 // PartsPlus
 Meteor.publish('partsPlusCacheData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
@@ -324,7 +350,7 @@ Meteor.publish('shaddowData', function(){
           'finishedAt': 1,
           'salesOrder': 1,
           'end': 1,
-          'releases': 1
+          'releases': 1,
         }}),
       XBatchDB.find({orgKey: orgKey, live: true}, {
         sort: {batch:-1},
@@ -345,7 +371,8 @@ Meteor.publish('shaddowData', function(){
   }
 });
 
-// production
+/* TRAIL - run pro off of explore's skinnyData
+// production 
 Meteor.publish('thinData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
@@ -399,19 +426,23 @@ Meteor.publish('thinData', function(){
       ];
   }
 });
-
-Meteor.publish('hotDataPlus', function(batch){
+*/
+Meteor.publish('hotDataPlus', function(scanOrb, keyMatch){
   const user = Meteor.users.findOne({_id: this.userId});
   const valid = user ? true : false;
   const orgKey = valid ? user.orgKey : false;
-  const bData = BatchDB.findOne({batch: batch, orgKey: orgKey});
-  const xbData = XBatchDB.findOne({batch: batch, orgKey: orgKey});
-  const wID = !bData ? !xbData ? false : xbData.widgetId : bData.widgetId;
+  
+  const trueBatch = keyMatch ? scanOrb : Meteor.call( 'serialLookup', scanOrb );
+  
+  const bxData = BatchDB.findOne({batch: trueBatch, orgKey: orgKey}) ||
+                 XBatchDB.findOne({batch: trueBatch, orgKey: orgKey});
+  
+  const wID = !bxData ? false : bxData.widgetId;
   if(!this.userId){
     return this.ready();
   }else{
     return [
-      BatchDB.find({batch: batch, orgKey: orgKey}, {
+      BatchDB.find({batch: trueBatch, orgKey: orgKey}, {
         fields: {
           'orgKey': 0,
           'shareKey': 0,
@@ -419,7 +450,7 @@ Meteor.publish('hotDataPlus', function(batch){
           'floorRelease': 0,
           'lockTrunc': 0
         }}),
-      XBatchDB.find({batch: batch, orgKey: orgKey}, {
+      XBatchDB.find({batch: trueBatch, orgKey: orgKey}, {
         fields: {
           'orgKey': 0,
           'shareKey': 0,
@@ -450,6 +481,7 @@ Meteor.publish('skinnyData', function(){
         fields: {
           'group': 1,
           'alias': 1,
+          'wiki' : 1, // just for pro
           'hibernate': 1
           // 'orgKey': 0,
           // 'shareKey': 0,

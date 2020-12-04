@@ -18,7 +18,7 @@ import UserSettings from '/client/components/forms/User/UserSettings';
 
 
 const UserDataWrap = ({
-  readyUsers, readybNames, // subs
+  readybNames, // subs
   orb, bolt, // meta
   user, isAdmin, isDebug, org, app, // self
   traceDT, users // working data
@@ -28,13 +28,13 @@ const UserDataWrap = ({
     UnreadInboxToastPop(user);
   }, []);
   
-  if( !readyUsers || !readybNames || !app ) {
+  if( !readybNames || !app ) {
     return( <SpinWrap /> );
   }
     
   const branches = app.branches.filter( b => b.open === true );
-  const brancheS = branches.sort((b1, b2)=> {
-    return b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 });
+  const brancheS = branches.sort((b1, b2)=>
+          b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
         
   return(
     <ErrorCatch>
@@ -98,7 +98,7 @@ const UserDataWrap = ({
             user={user}
             isAdmin={isAdmin}
             // isDebug={isDebug}
-            traceDT={traceDT} />
+          />
           
         </Slides>
 				
@@ -114,16 +114,13 @@ export default withTracker( () => {
   let org = user ? user.org : false;
   const isAdmin = login ? Roles.userIsInRole(Meteor.userId(), 'admin') : false;
   const isDebug = login ? Roles.userIsInRole(Meteor.userId(), 'debug') : false;
-  const usersSub = login ? Meteor.subscribe('usersData') : false;
-  const bNameSub = login ? Meteor.subscribe('bCacheData') : false;
+  const bNameSub = login ? Meteor.subscribe('bNameData') : false;
   if(!login) {
     return {
-      readyUsers: false,
       readybNames: false
     };
   }else{
     return {
-      readyUsers: usersSub.ready(),
       readybNames: bNameSub.ready(),
       orb: Session.get('now'),
       bolt: Session.get('allData'),
