@@ -55,7 +55,7 @@ Meteor.methods({
       });
       
       Meteor.defer( ()=>{
-        Meteor.call('buildNewTraceX', accessKey);
+        Meteor.call('buildNewTraceX', batchNum, accessKey);
       });
       return true;
     }else{
@@ -253,10 +253,12 @@ Meteor.methods({
   },
   
   cancelRelease(batchId, rType) {
+    const accessKey = Meteor.user().orgKey;
     if(Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])) {
-      XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'releases.type': rType}, {
+      XBatchDB.update({_id: batchId, orgKey: accessKey, 'releases.type': rType}, {
         $pull : { releases: { type: rType }
       }});
+      Meteor.defer( ()=>{ Meteor.call('updateOneMovement', batchId, accessKey); });
       return true;
     }else{
       return false;

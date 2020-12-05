@@ -188,7 +188,7 @@ Meteor.publish('peopleData', function(){
 Meteor.publish('traceDataLive', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  Meteor.defer( ()=>{ Meteor.call('reMiniOpenTrace'); });
+  // Meteor.defer( ()=>{ Meteor.call('reMiniOpenTrace'); });
   if(!this.userId){
     return this.ready();
   }else{
@@ -229,7 +229,7 @@ Meteor.publish('traceDataLive', function(){
 Meteor.publish('traceDataActive', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  Meteor.defer( ()=>{ Meteor.call('reMiniOpenTrace'); });
+  // Meteor.defer( ()=>{ Meteor.call('reMiniOpenTrace'); });
   if(!this.userId){
     return this.ready();
   }else{
@@ -272,7 +272,7 @@ Meteor.publish('traceDataActive', function(){
 Meteor.publish('traceDataOpen', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  Meteor.defer( ()=>{ Meteor.call('reMiniOpenTrace'); });
+  // Meteor.defer( ()=>{ Meteor.call('reMiniOpenTrace'); });
   const ystrday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date);
   if(!this.userId){
     return this.ready();
@@ -341,37 +341,31 @@ Meteor.publish('shaddowData', function(){
   }else{
     return [
       BatchDB.find({orgKey: orgKey, live: true}, {
-        sort: {batch:-1},
         fields: {
           'batch': 1,
-          //'widgetId': 1,
-          //'versionKey': 1,
           'live': 1,
           'finishedAt': 1,
           'salesOrder': 1,
           'end': 1,
           'releases': 1,
-        }}),
-      XBatchDB.find({orgKey: orgKey, live: true}, {
+        },
         sort: {batch:-1},
+      }),
+      XBatchDB.find({orgKey: orgKey, live: true}, {
         fields: {
           'batch': 1,
-          //'groupId': 1,
-          //'widgetId': 1,
-          //'versionKey': 1,
           'live': 1,
           'salesOrder': 1,
           'salesEnd': 1,
           'completed': 1,
-          //'completedAt': 1,
-          // 'serialize': 1,
           'releases': 1
-        }}),
+        },
+        sort: {batch:-1}
+      }),
     ];
   }
 });
 
-/* TRAIL - run pro off of explore's skinnyData
 // production 
 Meteor.publish('thinData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
@@ -402,7 +396,7 @@ Meteor.publish('thinData', function(){
           'variant': 1
         }}),
       
-      BatchDB.find({orgKey: orgKey}, {
+      BatchDB.find({orgKey: orgKey, live: true}, {
         sort: {batch:-1},
         fields: {
           'batch': 1,
@@ -412,7 +406,7 @@ Meteor.publish('thinData', function(){
           'finishedAt': 1,
         }}),
           
-      XBatchDB.find({orgKey: orgKey}, {
+      XBatchDB.find({orgKey: orgKey, live: true}, {
         sort: {batch:-1},
         fields: {
           'batch': 1,
@@ -426,13 +420,16 @@ Meteor.publish('thinData', function(){
       ];
   }
 });
-*/
+
 Meteor.publish('hotDataPlus', function(scanOrb, keyMatch){
   const user = Meteor.users.findOne({_id: this.userId});
   const valid = user ? true : false;
   const orgKey = valid ? user.orgKey : false;
   
-  const trueBatch = keyMatch ? scanOrb : Meteor.call( 'serialLookup', scanOrb );
+  const trueBatch = keyMatch ? scanOrb :
+                    !isNaN(scanOrb) && scanOrb.length >= 8 && scanOrb.length <= 10 ?
+                      Meteor.call( 'serialLookup', scanOrb ) :
+                      Meteor.call( 'batchLookup', scanOrb ) ? scanOrb : false;
   
   const bxData = BatchDB.findOne({batch: trueBatch, orgKey: orgKey}) ||
                  XBatchDB.findOne({batch: trueBatch, orgKey: orgKey});
@@ -511,7 +508,7 @@ Meteor.publish('skinnyData', function(){
             'live': 1,
             'lock': 1,
             'salesOrder': 1,
-            'finishedAt': 1,
+            'finishedAt': 1
             // 'lockTrunc': 1
           }}),
     
@@ -528,6 +525,7 @@ Meteor.publish('skinnyData', function(){
             'salesOrder': 1,
             'completed': 1,
             'completedAt': 1
+            // 'lockTrunc': 1
           }})
       ];
     }

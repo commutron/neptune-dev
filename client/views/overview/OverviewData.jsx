@@ -69,8 +69,8 @@ export default withTracker( () => {
       user: user,
       isDebug: isDebug,
       app: AppDB.findOne({org: org}),
-      batch: BatchDB.find({live: true}).fetch(),
-      batchX: XBatchDB.find({live: true}).fetch(),
+      batch: BatchDB.find({}).fetch(),
+      batchX: XBatchDB.find({}).fetch(),
       traceDT: TraceDB.find({}).fetch(),
     };
   }

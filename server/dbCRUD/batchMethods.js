@@ -47,7 +47,7 @@ Meteor.methods({
         events: [],
       });
       Meteor.defer( ()=>{
-        Meteor.call('buildNewTrace', accessKey);
+        Meteor.call('buildNewTrace', batchNum, accessKey);
       });
       return true;
     }else{
@@ -285,7 +285,7 @@ Meteor.methods({
             }
           }});
         Meteor.defer( ()=>{
-          Meteor.call('updateOneMinify', batchId, accessKey);
+          Meteor.call('updateOneMovement', batchId, accessKey);
         });
       }else{
         null;
@@ -334,11 +334,12 @@ Meteor.methods({
   },
   
   cancelReleaseLEGACY(batchId, rType) {
+    const accessKey = Meteor.user().orgKey;
     if(Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])) {
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'releases.type': rType}, {
+      BatchDB.update({_id: batchId, orgKey: accessKey, 'releases.type': rType}, {
         $pull : { releases: { type: rType }
       }});
-      // Meteor.defer( ()=>{ Meteor.call('updateOneMovement', batchId); });
+      Meteor.defer( ()=>{ Meteor.call('updateOneMovement', batchId, accessKey); });
       return true;
     }else{
       return false;

@@ -18,7 +18,7 @@ function syncHoliday(accessKey) {
 }
 
 function shrinkWhole(bData, now, accessKey) {
-  return new Promise( ()=> {
+  return new Promise( (resolve)=> {
     const isWhat = Meteor.call('getBasicBatchInfo', bData.batch);
     
     const quantity = bData.quantity || bData.items.length;
@@ -76,11 +76,12 @@ function shrinkWhole(bData, now, accessKey) {
         bffrRel: prtyRnk.bffrRel,
         estEnd2fillBuffer: prtyRnk.estEnd2fillBuffer
     }});
+    resolve(true);
   });
 }
 
 function checkMinify(bData, accessKey) {
-  return new Promise( ()=> {
+  return new Promise( (resolve)=> {
     const isWhat = Meteor.call('getBasicBatchInfo', bData.batch);
     
     const quantity = bData.quantity || bData.items.length;
@@ -102,11 +103,12 @@ function checkMinify(bData, accessKey) {
         serialize: serialize,
         riverChosen: rFlow
     }});
+    resolve(true);
   });
 }
 
 function checkMovement(bData, now, accessKey) {
-  return new Promise( ()=> {
+  return new Promise( (resolve)=> {
     const isX = bData.completed !== undefined;
     
     const endDay = isX ? bData.salesEnd : bData.end;
@@ -146,6 +148,7 @@ function checkMovement(bData, now, accessKey) {
         bffrRel: prtyRnk.bffrRel,
         estEnd2fillBuffer: prtyRnk.estEnd2fillBuffer
     }});
+    resolve(true);
   });
 }
 
@@ -160,15 +163,17 @@ Meteor.methods({
         syncHoliday(accessKey);
         const now = moment().tz(Config.clientTZ);
         
-        BatchDB.find({orgKey: accessKey})
-                .forEach( (b)=> {
-                  shrinkWhole( b, now, accessKey );
-                });
+        const fetchB = BatchDB.find({orgKey: accessKey}).fetch();
+        await Promise.all(fetchB.map(async (b) => {
+            await shrinkWhole( b, now, accessKey );
+        }));
         
-        XBatchDB.find({orgKey: accessKey})
-                  .forEach( (x)=> {
-                    shrinkWhole( x, now, accessKey );
-                  });
+        
+        const fetchX = XBatchDB.find({orgKey: accessKey}).fetch();
+        await Promise.all(fetchX.map(async (x) => {
+            await shrinkWhole( x, now, accessKey );
+        }));
+        
         return true;
       }catch (err) {
         throw new Meteor.Error(err);
@@ -192,7 +197,7 @@ Meteor.methods({
     }
   },
   
-  buildNewTrace(privateKey) {
+  buildNewTrace(batchNum, privateKey) {
     this.unblock();
     const accessKey = privateKey || Meteor.user().orgKey;
     (async ()=> {
@@ -200,18 +205,15 @@ Meteor.methods({
         syncHoliday(accessKey);
         const now = moment().tz(Config.clientTZ);
         
-        const ystrday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date);
-        
-        BatchDB.find({ createdAt: { $gte: ystrday } }).forEach( (b)=> {
-            const t = TraceDB.findOne({ batchID: b._id });
-            if(!t) { shrinkWhole( b, now, accessKey ) }
-        });
+        const batchB = BatchDB.findOne({batch: batchNum});
+                        
+        await shrinkWhole( batchB, now, accessKey );
       }catch (err) {
         throw new Meteor.Error(err);
       }
     })();
   },
-  buildNewTraceX(privateKey) {
+  buildNewTraceX(batchNum, privateKey) {
     this.unblock();
     const accessKey = privateKey || Meteor.user().orgKey;
     (async ()=> {
@@ -219,12 +221,9 @@ Meteor.methods({
         syncHoliday(accessKey);
         const now = moment().tz(Config.clientTZ);
         
-        const ystrday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date);
-        
-        XBatchDB.find({ createdAt: { $gte: ystrday } }).forEach( (x)=> {
-            const t = TraceDB.findOne({ batchID: x._id });
-            if(!t) { shrinkWhole( x, now, accessKey ) }
-        });
+        const batchX = XBatchDB.findOne({batch: batchNum});
+                        
+        await shrinkWhole( batchX, now, accessKey );
       }catch (err) {
         throw new Meteor.Error(err);
       }
@@ -243,35 +242,38 @@ Meteor.methods({
         
         const fresh = moment().subtract(12, 'hours').toISOString();
         
-        BatchDB.find({orgKey: accessKey, lock: {$ne: true},
+        const fetchB = BatchDB.find({orgKey: accessKey, lock: {$ne: true},
                         $or: [ { live: true }, 
                                { finishedAt: { $gte: lstweek } },
                                { end: { $gte: ystrday } }
                              ]
-        }).forEach( async (b)=> {
-            const t = TraceDB.findOne({
+        }).fetch();
+        await Promise.all(fetchB.map(async (b) => {
+          const t = TraceDB.find({
               batchID: b._id, 
               lastUpserted: { $gte: new Date(fresh) }
-            });
-            if(!t) {
-              await checkMinify( b, accessKey );
-            }
-        });
+            },{fields:{'batchID':1}},{limit:1}).count();
+          if(!t) {
+            await checkMinify( b, accessKey );
+          }
+        }));
       
-        XBatchDB.find({orgKey: accessKey, lock: {$ne: true},
+        const fetchX = XBatchDB.find({orgKey: accessKey, lock: {$ne: true},
                         $or: [ { live: true }, 
                                { completedAt: { $gte: lstweek } },
                                { salesEnd: { $gte: ystrday } }
                              ]
-        }).forEach( async (x)=> {
-            const t = TraceDB.findOne({
+        }).fetch();
+        await Promise.all(fetchX.map(async (x) => {
+          const t = TraceDB.find({
               batchID: x._id, 
               lastUpserted: { $gte: new Date(fresh) }
-            });
-            if(!t) {
-              await checkMinify( x, accessKey );
-            }
-        });
+            },{fields:{'batchID':1}},{limit:1}).count();
+          if(!t) {
+            await checkMinify( x, accessKey );
+          }
+        }));
+        
       }catch (err) {
         throw new Meteor.Error(err);
       }
@@ -285,11 +287,10 @@ Meteor.methods({
         syncHoliday(accessKey);
         const now = moment().tz(Config.clientTZ);
         
-        BatchDB.find({_id: bID})
-                .forEach( (b)=> shrinkWhole( b, now, accessKey ) );
-        
-        XBatchDB.find({_id: bID})
-                  .forEach( (x)=> shrinkWhole( x, now, accessKey ) );
+        const batchBX = BatchDB.findOne({_id: bID}) || 
+                        XBatchDB.findOne({_id: bID});
+                        
+        await shrinkWhole( batchBX, now, accessKey );
       }catch (err) {
         throw new Meteor.Error(err);
       }
@@ -301,12 +302,11 @@ Meteor.methods({
     (async ()=> {
       try {
         syncHoliday(accessKey);
-          
-        BatchDB.find({_id: bID})
-                .forEach( (b)=> checkMinify( b, accessKey ) );
         
-        XBatchDB.find({_id: bID})
-                  .forEach( (x)=> checkMinify( x, accessKey ) );
+        const batchBX = BatchDB.findOne({_id: bID}) || 
+                        XBatchDB.findOne({_id: bID});
+                        
+        await checkMinify( batchBX, accessKey );
       }catch (err) {
         throw new Meteor.Error(err);
       }
@@ -320,14 +320,13 @@ Meteor.methods({
         syncHoliday(accessKey);
         const now = moment().tz(Config.clientTZ);
         
-        BatchDB.find({_id: bID})
-                .forEach( async (b)=> await checkMovement( b, now, accessKey ) );
+        const batchBX = BatchDB.findOne({_id: bID}) || 
+                        XBatchDB.findOne({_id: bID});
         
-        XBatchDB.find({_id: bID})
-                  .forEach( async (x)=> await checkMovement( x, now, accessKey ) );
+        await checkMovement( batchBX, now, accessKey );
       }catch (err) {
-          throw new Meteor.Error(err);
-        }
+        throw new Meteor.Error(err);
+      }
     })();
   },
   
@@ -345,40 +344,41 @@ Meteor.methods({
         const lstweek = ( d => new Date(d.setDate(d.getDate()-7)) )(new Date);
         const fresh = moment().subtract(10, 'minutes').toISOString();
         
-        BatchDB.find({orgKey: accessKey, lock: {$ne: true},
+        const fetchB = BatchDB.find({orgKey: accessKey, lock: {$ne: true},
                         $or: [ { live: true }, 
                                { finishedAt: { $gte: lstweek } },
                                { end: { $gte: ystrday } }
                              ]
-        }).forEach( async (b)=> {
-            const t = TraceDB.findOne({
+        }).fetch();
+        await Promise.all(fetchB.map(async (b) => {
+          const t = TraceDB.find({
               batchID: b._id, 
               lastUpdated: { $gte: new Date(fresh) }
-            });
-            if(!t) {
-              await checkMovement( b, now, accessKey );
-            }
-          });
+            },{fields:{'batchID':1}},{limit:1}).count();
+          if(!t) {
+            await checkMovement( b, now, accessKey );
+          }
+        }));
       
-        XBatchDB.find({orgKey: accessKey, lock: {$ne: true},
+        const fetchX = XBatchDB.find({orgKey: accessKey, lock: {$ne: true},
                         $or: [ { live: true }, 
                                { completedAt: { $gte: lstweek } },
                                { salesEnd: { $gte: ystrday } }
                              ]
-        }).forEach( async (x)=> {
-            const t = TraceDB.findOne({
+        }).fetch();
+        await Promise.all(fetchX.map(async (x) => {
+          const t = TraceDB.find({
               batchID: x._id, 
               lastUpdated: { $gte: new Date(fresh) }
-            });
-            if(!t) {
-              await checkMovement( x, now, accessKey );
-            }
-          });
-        
-        }catch (err) {
-          throw new Meteor.Error(err);
-        }
-      })();
+            },{fields:{'batchID':1}},{limit:1}).count();
+          if(!t) {
+            await checkMovement( x, now, accessKey );
+          }
+        }));
+      }catch (err) {
+        throw new Meteor.Error(err);
+      }
+    })();
   }
   
   

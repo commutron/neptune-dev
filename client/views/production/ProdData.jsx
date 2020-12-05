@@ -59,7 +59,7 @@ export default withTracker( () => {
   let user = login ? Meteor.user() : false;
   let org = user ? user.org : false;
   let readOnly = user ? Roles.userIsInRole(Meteor.userId(), 'readOnly') : false;
-  const coldSub = login ? Meteor.subscribe('skinnyData') : false;
+  const coldSub = login ? Meteor.subscribe('thinData') : false;
   
   let hotBatch = false;
   let hotxBatch = false;
@@ -71,19 +71,21 @@ export default withTracker( () => {
     
     if( !isNaN(orb) && orb.length === 5 ) {
       
-      const oneBatch = BatchDB.findOne({ batch: orb });
+      const oneBatch = BatchDB.find({ batch: orb },{fields:{'batch':1}},{limit:1}).count();
       if(oneBatch) {
-        hotBatch = oneBatch;
         keyMatch = true;
         subBatch = orb;
       }else{
-        const onexBatch = XBatchDB.findOne({ batch: orb });
+        onexBatch = XBatchDB.find({ batch: orb },{fields:{'batch':1}},{limit:1}).count();
         if(onexBatch) {
-          hotBatch = onexBatch;
           keyMatch = true;
+          subBatch = orb;
+        }else{
           subBatch = orb;
         }
       }
+      hotBatch = BatchDB.findOne({ batch: orb });
+      hotxBatch = XBatchDB.findOne({ batch: orb });
       
     }else if( !isNaN(orb) && orb.length >= 8 && orb.length <= 10 ) {
   		const itemsBatch = BatchDB.findOne( { 'items.serial': orb } );

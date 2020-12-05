@@ -7,13 +7,14 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
 
 
   export function countNewUser(accessKey, rangeStart, rangeEnd) {
-    /*const userFind = Meteor.users.find({
+    const resultU = Meteor.users.find({
       orgKey: accessKey, 
       createdAt: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
       }
-    }).fetch();*/
+    },{fields:{'_id':1}},{limit:1}).count();
+    /*
     const fetchU = Meteor.users.aggregate([
       { $match: { 
           orgKey: accessKey,
@@ -25,18 +26,19 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
       { $count: "uCount" }
     ]);
     const resultU = fetchU[0] ? fetchU[0].uCount : 0;
-    
+    */
     return resultU;
   }
 
   export function countNewGroup(accessKey, rangeStart, rangeEnd) {
-    /*const groupFind = GroupDB.find({
+    const resultG = GroupDB.find({
       orgKey: accessKey, 
       createdAt: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
       }
-    }).fetch();*/
+    },{fields:{'_id':1}}).count();
+    /*
     const fetchG = GroupDB.aggregate([
       { $match: { 
           orgKey: accessKey,
@@ -48,18 +50,19 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
       { $count: "gCount" }
     ]);
     const resultG = fetchG[0] ? fetchG[0].gCount : 0;
-    
+    */
     return resultG;
   }
 
   export function countNewWidget(accessKey, rangeStart, rangeEnd) {
-    /*const widgetFind = WidgetDB.find({
+    const resultW = WidgetDB.find({
       orgKey: accessKey, 
       createdAt: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
       }
-    }).fetch();*/
+    },{fields:{'_id':1}}).count();
+    /*
     const fetchW = WidgetDB.aggregate([
       { $match: { 
           orgKey: accessKey,
@@ -71,18 +74,19 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
       { $count: "wCount" }
     ]);
     const resultW = fetchW[0] ? fetchW[0].wCount : 0;
-    
+    */
     return resultW;
   }
   
   export function countNewVariant(accessKey, rangeStart, rangeEnd) {
-    /*const variantFind = VariantDB.find({
+    const resultV = VariantDB.find({
       orgKey: accessKey, 
       createdAt: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
       }
-    }).fetch();*/
+    },{fields:{'_id':1}}).count();
+    /*
     const fetchV = VariantDB.aggregate([
       { $match: { 
           orgKey: accessKey,
@@ -94,28 +98,29 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
       { $count: "vCount" }
     ]);
     const resultV = fetchV[0] ? fetchV[0].vCount : 0;
-    
+    */
     return resultV;
   }
 
   export function countNewBatch(accessKey, rangeStart, rangeEnd) {
+    
+    const resultB = BatchDB.find({
+      orgKey: accessKey, 
+      createdAt: { 
+        $gte: new Date(rangeStart),
+        $lte: new Date(rangeEnd) 
+      }
+    },{fields:{'_id':1}}).count();
+    
+    const resultX = XBatchDB.find({
+      orgKey: accessKey, 
+      createdAt: { 
+        $gte: new Date(rangeStart),
+        $lte: new Date(rangeEnd) 
+      }
+    },{fields:{'_id':1}}).count();
+    
     /*
-    const generalFind = BatchDB.find({
-      orgKey: accessKey, 
-      createdAt: { 
-        $gte: new Date(rangeStart),
-        $lte: new Date(rangeEnd) 
-      }
-    }).fetch();
-    const generalFindX = XBatchDB.find({
-      orgKey: accessKey, 
-      createdAt: { 
-        $gte: new Date(rangeStart),
-        $lte: new Date(rangeEnd) 
-      }
-    }).fetch();
-    generalFind.length + generalFindX.length;
-    */
     const fetchB = BatchDB.aggregate([
       { $match: { 
           orgKey: accessKey,
@@ -139,7 +144,7 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
       { $count: "xCount" }
     ]);
     const resultX = fetchX[0] ? fetchX[0].xCount : 0;
-   
+   */
     return resultB + resultX;
   }
   

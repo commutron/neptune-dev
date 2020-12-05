@@ -74,6 +74,20 @@ Meteor.methods({
     return labelString;
   },
   
+  batchLookup(orb) { // significantly faster than findOne
+    const oneBatch = BatchDB.find({ batch: orb },{fields:{'batch':1}},{limit:1}).count();
+    if(oneBatch) {
+      return 'trueB';
+    }else{
+      const onexBatch = XBatchDB.find({ batch: orb },{fields:{'batch':1}},{limit:1}).count();
+      if(onexBatch) {
+        return 'trueX';
+      }else{
+        return false;
+      }
+    }
+  },
+  
   serialLookup(orb) {
     const itemsBatch = BatchDB.findOne({'items.serial': orb},{fields:{'batch':1}});
     return itemsBatch ? itemsBatch.batch : false;
@@ -82,7 +96,8 @@ Meteor.methods({
   serialLookupPartial(orb) {
     const itemsBatch = BatchDB.find({
       "items.serial": { $regex: new RegExp( orb ) }
-    }).fetch();
+    },{fields:{'batch':1,'items.serial':1}}).fetch();
+    
     const single = itemsBatch.length === 1;
     const exact = !single ? false : 
       itemsBatch[0].items.find( x => x.serial === orb ) ? true : false;
