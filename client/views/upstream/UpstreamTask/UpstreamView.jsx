@@ -41,7 +41,9 @@ const UpstreamView = ({
   const [ updateTrigger, updateTriggerSet ] = useState(true);
   
   useEffect( ()=>{
-    Meteor.call('updateLiveMovement');
+    Meteor.setTimeout( ()=> {
+      Meteor.call('updateLiveMovement');
+    },5000);
   }, [batch, batchX, updateTrigger]);
   
   useEffect( ()=>{

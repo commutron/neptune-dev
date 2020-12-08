@@ -46,7 +46,7 @@ function shrinkWhole(bData, now, accessKey) {
     
     const actvLvl = Meteor.call('tideActivityLevel', bData._id, accessKey);
     const brchCnd = Meteor.call('branchCondition', bData._id, accessKey);
-    const prtyRnk = Meteor.call('priorityRank', bData._id, accessKey);
+    const prtyRnk = Meteor.call('priorityFast', accessKey, bData, now, shipAim, lateLate);
     
     TraceDB.upsert({batchID: bData._id}, {
       $set : { 
@@ -128,7 +128,7 @@ function checkMovement(bData, now, accessKey) {
     
     const actvLvl = Meteor.call('tideActivityLevel', bData._id, accessKey);
     const brchCnd = Meteor.call('branchCondition', bData._id, accessKey);
-    const prtyRnk = Meteor.call('priorityRank', bData._id, accessKey);
+    const prtyRnk = Meteor.call('priorityFast', accessKey, bData, now, shipAim, lateLate);
     
     TraceDB.update({batchID: bData._id}, {
       $set : { 
@@ -151,12 +151,27 @@ function checkMovement(bData, now, accessKey) {
     resolve(true);
   });
 }
+/*function checkNoise(bData, accessKey) {
+  return new Promise( (resolve)=> {
+    
+    const actvLvl = Meteor.call('tideActivityLevel', bData._id, accessKey);
+    const brchCnd = Meteor.call('branchCondition', bData._id, accessKey);
+    
+    TraceDB.update({batchID: bData._id}, {
+      $set : { 
+        live: bData.live,
+        isActive: actvLvl.isActive,
+        onFloor: brchCnd.onFloor,
+        branchCondition: brchCnd.branchSets,
+    }});
+    resolve(true);
+  });
+}*/
 
 Meteor.methods({
 
   
   rebuildTrace() {
-    this.unblock();
     const accessKey = Meteor.user().orgKey;
     (async ()=> {
       try {
@@ -198,7 +213,6 @@ Meteor.methods({
   },
   
   buildNewTrace(batchNum, privateKey) {
-    this.unblock();
     const accessKey = privateKey || Meteor.user().orgKey;
     (async ()=> {
       try {
@@ -214,7 +228,6 @@ Meteor.methods({
     })();
   },
   buildNewTraceX(batchNum, privateKey) {
-    this.unblock();
     const accessKey = privateKey || Meteor.user().orgKey;
     (async ()=> {
       try {
@@ -231,7 +244,6 @@ Meteor.methods({
   },
   
   reMiniOpenTrace(privateKey) {
-    this.unblock();
     const accessKey = privateKey || Meteor.user().orgKey;
     (async ()=> {
       try {
@@ -332,8 +344,6 @@ Meteor.methods({
   
   
   updateLiveMovement(privateKey) {
-    this.unblock();
-    
     (async ()=> {
       const accessKey = privateKey || Meteor.user().orgKey;
       try {
@@ -343,6 +353,7 @@ Meteor.methods({
         const ystrday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date);
         const lstweek = ( d => new Date(d.setDate(d.getDate()-7)) )(new Date);
         const fresh = moment().subtract(10, 'minutes').toISOString();
+        //const hot = moment().subtract(5, 'minutes').toISOString();
         
         const fetchB = BatchDB.find({orgKey: accessKey, lock: {$ne: true},
                         $or: [ { live: true }, 
@@ -357,7 +368,15 @@ Meteor.methods({
             },{fields:{'batchID':1}},{limit:1}).count();
           if(!t) {
             await checkMovement( b, now, accessKey );
-          }
+          }/*else{
+            const t = TraceDB.find({
+              batchID: b._id, 
+              lastUpdated: { $gte: new Date(hot) }
+            },{fields:{'batchID':1}},{limit:1}).count();
+            if(!t) {
+              await checkNoise(b, accessKey);
+            }
+          }*/
         }));
       
         const fetchX = XBatchDB.find({orgKey: accessKey, lock: {$ne: true},
@@ -373,7 +392,15 @@ Meteor.methods({
             },{fields:{'batchID':1}},{limit:1}).count();
           if(!t) {
             await checkMovement( x, now, accessKey );
-          }
+          }/*else{
+            const t = TraceDB.find({
+              batchID: x._id, 
+              lastUpdated: { $gte: new Date(hot) }
+            },{fields:{'batchID':1}},{limit:1}).count();
+            if(!t) {
+              await checkNoise(x, accessKey);
+            }
+          }*/
         }));
       }catch (err) {
         throw new Meteor.Error(err);

@@ -57,7 +57,9 @@ const OverviewWrap = ({
   const [ updateTrigger, updateTriggerSet ] = useState(true);
   
   useEffect( ()=>{
-    Meteor.call('updateLiveMovement');
+    Meteor.setTimeout( ()=> {
+      Meteor.call('updateLiveMovement');
+    },5000);
   }, [b, bx, updateTrigger]);
   
   useEffect( ()=>{

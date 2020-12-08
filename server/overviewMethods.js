@@ -17,9 +17,9 @@ moment.updateLocale('en', {
 function collectBranchCondition(privateKey, batchID) {
   return new Promise(resolve => {
     const app = AppDB.findOne({orgKey: privateKey});
+    const branches = app.branches;
     const batchX = XBatchDB.findOne({_id: batchID});
     const batch = BatchDB.findOne({_id: batchID});
-    const branches = app.branches;
     
     if(batchX) {
       if(batchX.completed && !batchX.live) {
@@ -80,7 +80,6 @@ function collectBranchCondition(privateKey, batchID) {
         resolve({
           batch: batchX.batch,
           batchID: batchX._id,
-          // stepSets: progSteps, // only need for debug
           onFloor: released,
           branchSets: branchSets
         });
@@ -161,7 +160,6 @@ function collectBranchCondition(privateKey, batchID) {
         resolve({
           batch: batch.batch,
           batchID: batch._id,
-          // branchSets: progSteps, // only need for debug
           onFloor: released,
           branchSets: branchSets
         });
@@ -172,17 +170,45 @@ function collectBranchCondition(privateKey, batchID) {
   });
 }
 
+
+function dryPriorityCalc(bQuTmBdg, bTide, shipAim, now) {
+  const shipAimMmnt = moment(shipAim);
+  
+  const totalQuoteMinutes = bQuTmBdg.length === 0 ? 0 :
+                                bQuTmBdg[0].timeAsMinutes;
+                                
+  const totalTideMinutes = batchTideTime(bTide);
+  
+  const quote2tide = totalQuoteMinutes - totalTideMinutes;
+  const overQuote = quote2tide < 0 ? true : false;
+  const q2tNice = overQuote ? 0 : quote2tide;
+  
+  const estLatestBegin = shipAimMmnt.clone().subtractWorkingTime(q2tNice, 'minutes');
+    
+  const dayGap = shipAimMmnt.workingDiff(now, 'days');
+  
+  // insert additional ship bumper
+  //const estConclude = shipAimMmnt;//shipAimMmnt.clone().subtractWorkingTime(0, 'hours');
+  const estSoonest = now.clone().addWorkingTime(q2tNice, 'minutes');
+
+  const buffer = shipAimMmnt.workingDiff(estSoonest, 'minutes');
+  
+  const estEnd2fillBuffer = buffer || null;
+  
+  const bffrRel = Math.round( ( estEnd2fillBuffer / 100 ) - dayGap );
+  
+  return { quote2tide, estSoonest, estLatestBegin, bffrRel, estEnd2fillBuffer };
+}
+
 function collectPriority(privateKey, batchID, mockDay) {
   return new Promise(resolve => {
     let collection = false;
     
-    const app = AppDB.findOne({orgKey: privateKey});
-    const nonWorkDays = app.nonWorkDays;
-    if( Array.isArray(nonWorkDays) ) {  
-      moment.updateLocale('en', {
-        holidays: nonWorkDays
-      });
+    const app = AppDB.findOne({orgKey:privateKey}, {fields:{'nonWorkDays':1}});
+    if(Array.isArray(app.nonWorkDays) ) {  
+      moment.updateLocale('en', { holidays: app.nonWorkDays });
     }
+
     const now = moment().tz(Config.clientTZ);
     
     const b = BatchDB.findOne({_id: batchID}) ||
@@ -202,38 +228,18 @@ function collectPriority(privateKey, batchID, mockDay) {
       const qtBready = !b.quoteTimeBudget ? false : true;
         
       if(qtBready && b.tide && !doneEntry) {
-        const totalQuoteMinutes = b.quoteTimeBudget.length === 0 ? 0 :
-                                  b.quoteTimeBudget[0].timeAsMinutes;
-                                  
-        const totalTideMinutes = batchTideTime(b.tide);
-        
-        const quote2tide = totalQuoteMinutes - totalTideMinutes;
-        const overQuote = quote2tide < 0 ? true : false;
-        const q2tNice = overQuote ? 0 : quote2tide;
-                                                      // insert additional ship bumper
-        //const estConclude = shipAim;//shipAim.clone().subtractWorkingTime(0, 'hours');
-        const estLatestBegin = shipAim.clone().subtractWorkingTime(q2tNice, 'minutes');
-        
-        const dayGap = shipAim.workingDiff(now, 'days');
-        
-        const estSoonest = now.clone().addWorkingTime(q2tNice, 'minutes');
+        const dryCalc = dryPriorityCalc(b.quoteTimeBudget, b.tide, shipAim, now);
 
-        const buffer = shipAim.workingDiff(estSoonest, 'minutes');
-        
-        const estEnd2fillBuffer = buffer || null;
-        
-        const bffrRel =  Math.round( ( estEnd2fillBuffer / 100 ) - dayGap );
-        
         collection = {
           batch: b.batch,
           batchID: b._id,
           salesOrder: b.salesOrder,
-          quote2tide: quote2tide,
-          estSoonest: estSoonest.format(),
-          estLatestBegin: estLatestBegin.format(),
+          quote2tide: dryCalc.quote2tide,
+          estSoonest: dryCalc.estSoonest.format(),
+          estLatestBegin: dryCalc.estLatestBegin.format(),
           completed: doneEntry, 
-          bffrRel: bffrRel,
-          estEnd2fillBuffer: estEnd2fillBuffer,
+          bffrRel: dryCalc.bffrRel,
+          estEnd2fillBuffer: dryCalc.estEnd2fillBuffer,
           // endEntry: endEntry,
           shipAim: shipAim.format(),
           lateLate: lateLate
@@ -254,6 +260,35 @@ function collectPriority(privateKey, batchID, mockDay) {
         };
         resolve(collection);
       }
+    }
+  });
+}
+
+function getFastPriority(privateKey, bData, now, shipAim, lateLate) {
+  return new Promise(resolve => {
+    
+    const doneEntry = bData.completed ? bData.completedAt : bData.finishedAt;
+      
+    const qtBready = !bData.quoteTimeBudget ? false : true;
+        
+    if(qtBready && bData.tide && !doneEntry) {
+      const dryCalc = dryPriorityCalc(bData.quoteTimeBudget, bData.tide, shipAim, now);
+      
+      resolve({
+        quote2tide: dryCalc.quote2tide,
+        estSoonest: dryCalc.estSoonest.format(),
+        estLatestBegin: dryCalc.estLatestBegin.format(),
+        bffrRel: dryCalc.bffrRel,
+        estEnd2fillBuffer: dryCalc.estEnd2fillBuffer,
+      });
+    }else{
+      resolve({
+        quote2tide: false,
+        estSoonest: false,
+        estLatestBegin: false,
+        bffrRel: false,
+        estEnd2fillBuffer: 0,
+      });
     }
   });
 }
@@ -423,7 +458,19 @@ Meteor.methods({
         throw new Meteor.Error(err);
       }
     }
-    return bundlePriority();//batchID, mockDay);
+    return bundlePriority();
+  },
+  priorityFast(serverAccessKey, bData, now, shipAim, lateLate) {
+    async function bundlePriority() {
+      const accessKey = serverAccessKey || Meteor.user().orgKey;
+      try {
+        bundle = await getFastPriority(accessKey, bData, now, shipAim, lateLate);
+        return bundle;
+      }catch (err) {
+        throw new Meteor.Error(err);
+      }
+    }
+    return bundlePriority();
   },
   
   branchProgress(batchID, branchOnly) {

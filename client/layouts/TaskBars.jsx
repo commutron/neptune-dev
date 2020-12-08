@@ -148,9 +148,9 @@ export const DownTaskBar = ({ subLink }) => (
     />
     
     <TaskElement
-      title='Monthly Trend'
-      subON={subLink === 'trendmonth'}
-      goLink='/downstream/trendmonth'
+      title='Trends'
+      subON={subLink === 'trends'}
+      goLink='/downstream/trends'
       icon='fas fa-chart-line'
       iconAdj='down-1'
     />

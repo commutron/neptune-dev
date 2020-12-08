@@ -41,6 +41,7 @@ const SerialLookup = (props)=> {
             id='serialNum'
             className='cap'
             type='search'
+            pattern='[0000000000-9999999999]*'
             minLength='4'
             className='variableInput bigger'
             disabled={false}

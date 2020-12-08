@@ -6,7 +6,7 @@ import StreamLayout from '/client/layouts/StreamLayout.jsx';
 import DownstreamView from '/client/views/downstream/DownstreamTask/DownstreamView';
 import CompletedReport from './CompletedReport.jsx';
 import DailyReport from './DailyReport';
-import MonthTrend from './MonthTrend';
+import TrendWrap from './DownTrends/TrendWrap';
 import Outlook from './Outlook.jsx';
 
 const DownstreamWrap = ({ 
@@ -53,20 +53,19 @@ const DownstreamWrap = ({
     );
   }
   
-  if(view === 'trendmonth') {
+  if(view === 'trends') {
     return (
       <StreamLayout
         user={user}
         app={app}
-        title='Month to Month'
+        title='Trends'
         subLink={view}
         invertColor={true}
         action={false}
         navBar='down'
       >
-        <MonthTrend 
+        <TrendWrap 
           app={app}
-          // user={user}
           isDebug={isDebug}
           isNightly={isNightly}
         />

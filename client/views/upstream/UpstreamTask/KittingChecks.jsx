@@ -32,7 +32,7 @@ const KittingChecks = ({
           const bstep = tBatch.branchCondition.find( bc => bc.brKey === br.brKey );
           if(!bstep.condition) {
             return(
-              <div title='N/A'>
+              <div title='N/A' key={'skipBRK'+br.brKey+ix}>
               <div className='infoSquareOuter noCopy'>
                 <i className='fas fa-minus fa-2x fa-fw grayT fade'></i>
                 <br />

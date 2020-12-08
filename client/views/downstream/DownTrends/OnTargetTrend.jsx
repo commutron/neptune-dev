@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, Fragment } from 'react';
 // import Pref from '/client/global/pref.js';
 import moment from 'moment';
 // import 'moment-timezone';
@@ -17,7 +17,7 @@ import ToggleBar from '/client/components/bigUi/ToolBar/ToggleBar';
 import { percentOf } from '/client/utility/Convert';
 
 
-const MonthTrend = ({ app, isDebug, isNightly })=>{
+const OnTargetTrend = ({ app, isDebug, isNightly })=>{
 
   const thingMounted = useRef(true);
   const blank =  [ {x:1,y:0} ];
@@ -36,6 +36,31 @@ const MonthTrend = ({ app, isDebug, isNightly })=>{
     return () => { thingMounted.current = false };
   }, []);
   
+  function chartConvert(re) {
+    const FasPercent = Array.from(re, w => { 
+      const pof = percentOf( (w.y[0] + w.y[1]), w.y[0]);
+      const dtp = isNaN(pof) ? null : pof;
+      return { x: w.x, y: dtp };
+    });
+    fillSet(FasPercent);
+    
+    const SasPercent = Array.from(re, w => { 
+      const pof = percentOf( (w.y[2] + w.y[3]), w.y[2]);
+      const dtp = isNaN(pof) ? null : pof;
+      return { x: w.x, y: dtp };
+    });
+    shipSet(SasPercent);
+    
+    const QasPercent = Array.from(re, w => { 
+      const pof = percentOf( (w.y[4] + w.y[5]), w.y[4]);
+      const dtp = isNaN(pof) ? null : pof;
+      return { x: w.x, y: dtp };
+    });
+    dataSetQ(QasPercent);
+    
+    workingSet(false);
+  }
+  
   function runLoop(tspan) {
     workingSet(true);
     tgglSpanSet(tspan);
@@ -52,38 +77,94 @@ const MonthTrend = ({ app, isDebug, isNightly })=>{
       if(re) {
         if(thingMounted.current) {
           isDebug && console.log(re);
+        
+          chartConvert(re);
+        }
+      }
+    });
+  }
+  
+  function runLoopInSeq(tspan) {
+    workingSet(true);
+    tgglSpanSet(tspan);
+    
+    const backDate = isDebug ? app.createdAt : app.tideWall;
+    const dur = moment.duration(moment().diff(moment(backDate)));
+    const durCln = tspan == 'month' ?
+                    parseInt( dur.asMonths(), 10 ) :
+                    parseInt( dur.asWeeks(), 10 );
+    durrSet( durCln );
+    
+    Meteor.call('loopTimeRangesInSequence', 'doneBatch', durCln, tspan, (err, re)=>{
+    // Meteor.call('cycleWeekRate', 'doneBatch', durCln, tspan, (err, re)=>{
+      err && console.log(err);
+      if(re) {
+        if(thingMounted.current) {
+          isDebug && console.log(re);
+        
+          chartConvert(re);
+        }
+      }
+    });
+  }
+  
+  function runLoopInPar(tspan) {
+    workingSet(true);
+    tgglSpanSet(tspan);
+    
+    const backDate = isDebug ? app.createdAt : app.tideWall;
+    const dur = moment.duration(moment().diff(moment(backDate)));
+    const durCln = tspan == 'month' ?
+                    parseInt( dur.asMonths(), 10 ) :
+                    parseInt( dur.asWeeks(), 10 );
+    durrSet( durCln );
+    
+    Meteor.call('loopTimeRangesInParallel', 'doneBatch', durCln, tspan, (err, re)=>{
+      err && console.log(err);
+      if(re) {
+        if(thingMounted.current) {
+          isDebug && console.log(re);
 
-          const FasPercent = Array.from(re, w => { 
-            const pof = percentOf( (w.y[0] + w.y[1]), w.y[0]);
-            const dtp = isNaN(pof) ? null : pof;
-            return { x: w.x, y: dtp };
-          });
-          fillSet(FasPercent);
-          
-          const SasPercent = Array.from(re, w => { 
-            const pof = percentOf( (w.y[2] + w.y[3]), w.y[2]);
-            const dtp = isNaN(pof) ? null : pof;
-            return { x: w.x, y: dtp };
-          });
-          shipSet(SasPercent);
-          
-          const QasPercent = Array.from(re, w => { 
-            const pof = percentOf( (w.y[4] + w.y[5]), w.y[4]);
-            const dtp = isNaN(pof) ? null : pof;
-            return { x: w.x, y: dtp };
-          });
-          dataSetQ(QasPercent);
-          
-          workingSet(false);
+          chartConvert(re);
         }
       }
     });
   }
   
   return(
-    <div className='space5x5'>
+    <div className=''>
       
-      <h4>Long Calculation, Please wait for results</h4>
+      <h4>Long Calculation, Please wait for results. !! Outstanding Performance Issues !!</h4>
+      
+      {isNightly &&
+        <Fragment>
+          <button
+            className='action clearBlack gap'
+            onClick={()=>runLoopInSeq('month')}
+            disabled={working}
+          >Run Month Sequence</button>
+        
+          <button
+            className='action clearBlack gap'
+            onClick={()=>runLoopInSeq('week')}
+            disabled={working}
+          >Run Week Sequence</button>
+          
+          <button
+            className='action clearBlack gap'
+            onClick={()=>runLoopInPar('month')}
+            disabled={working}
+          >Run Month Parallel</button>
+        
+          <button
+            className='action clearBlack gap'
+            onClick={()=>runLoopInPar('week')}
+            disabled={working}
+          >Run Week Parallel</button>
+        
+        </Fragment>
+      }
+        
       <div className='rowWrap'>
         {working ?
           <b><i className='fas fa-spinner fa-lg fa-spin'></i></b> :
@@ -99,8 +180,7 @@ const MonthTrend = ({ app, isDebug, isNightly })=>{
         <button
           className='action clearBlack gap'
           onClick={()=>runLoop('week')}
-          disabled={working || !isNightly}
-          title={!isNightly ? `Nightly Only,\nOutstanding Performance Issues` : ''}
+          disabled={working}
         >Run Weekly</button>
         
         <span className='flexSpace' />
@@ -157,7 +237,7 @@ const MonthTrend = ({ app, isDebug, isNightly })=>{
           
             <VictoryLine
               data={tgglState == 'fulfill' ? fillDT : shipDT}
-              style={{ data: { stroke: 'rgb(142, 68, 173)' } }}
+              style={{ data: { stroke: 'rgb(155, 89, 182)' } }}
               interpolation="catmullRom"
               animate={{
                 duration: 500,
@@ -174,10 +254,9 @@ const MonthTrend = ({ app, isDebug, isNightly })=>{
               }}
             />
             
-            
             <VictoryLine
               data={dataQ}
-              style={{ data: { stroke: 'rgb(39, 174, 96)' } }}
+              style={{ data: { stroke: 'rgb(46, 204, 113)' } }}
               interpolation="monotoneX"
               animate={{
                 duration: 500,
@@ -202,4 +281,4 @@ const MonthTrend = ({ app, isDebug, isNightly })=>{
   );
 };
 
-export default MonthTrend;
+export default OnTargetTrend;
