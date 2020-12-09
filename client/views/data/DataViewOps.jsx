@@ -9,7 +9,6 @@ import ExploreLanding from './panels/ExploreLanding.jsx';
 import ReportsWrap from './panels/Reports/ReportsWrap.jsx';
 import AllGroups from './panels/AllGroups/AllGroups.jsx';
 import AllBatches from './panels/AllBatches.jsx';
-import AllItems from './panels/AllItems.jsx';
 
 import BuildHistory from './panels/BuildHistory.jsx';
 
@@ -265,30 +264,30 @@ const DataViewOps = ({
             isDebug={isDebug} />
         </TraverseWrap>
       );
-    }else if(request === 'items') {
-      return(
-        <TraverseWrap
-		      batchData={false}
-          widgetData={false}
-          variantData={false}
-          groupData={false}
-          user={user}
-          app={app}
-          title={Pref.items + ' Search'}
-          subLink={subLink}
-          action={false}
-          base={true}
-          invertColor={true}
-        >
-          <AllItems
-            batchData={allBatch}
-            xBatchData={allXBatch}
-            widgetData={allWidget}
-            variantData={allVariant}
-            groupData={allGroup} 
-            app={app} />
-        </TraverseWrap>
-      );
+    // }else if(request === 'items') {
+    //   return(
+    //     <TraverseWrap
+		  //     batchData={false}
+    //       widgetData={false}
+    //       variantData={false}
+    //       groupData={false}
+    //       user={user}
+    //       app={app}
+    //       title={Pref.items + ' Search'}
+    //       subLink={subLink}
+    //       action={false}
+    //       base={true}
+    //       invertColor={true}
+    //     >
+    //       <AllItems
+    //         batchData={allBatch}
+    //         xBatchData={allXBatch}
+    //         widgetData={allWidget}
+    //         variantData={allVariant}
+    //         groupData={allGroup} 
+    //         app={app} />
+    //     </TraverseWrap>
+    //   );
     }else if(request === 'testfail') {
       return(
         <TraverseWrap

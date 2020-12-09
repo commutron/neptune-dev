@@ -313,9 +313,9 @@ const AccountsTop = ({ users })=> {
   const pMulti = pSupNames.length < 2;
   
   return(
-    <div className='splitReverse'>
+    <div className='autoGrid'>
         
-      <div className='bigger'>
+      <div className='big' style={{alignSelf:'start'}}>
         <NumLine
           num={pSupNamesNice}
           name={`${pMulti ? 'is the' : 'are'} People Super${pMulti ? '' : 's'}`}
@@ -342,25 +342,23 @@ const AccountsTop = ({ users })=> {
       </div>
       
       <div className='centre'>
+      <NumStatRing
+        total={active}
+        nums={[ active, ( all - active ) ]}
+        name='Active Users'
+        title={`${active} active users,\n${( all - active )} inactive users`}
+        colour='blueBi'
+        maxSize='chart15Contain'
+        noGap={all - active === 0}
+      />
       
-        <NumStatRing
-          total={active}
-          nums={[ active, ( all - active ) ]}
-          name='Active Users'
-          title={`${active} active users,\n${( all - active )} inactive users`}
-          colour='blueBi'
-          maxSize='chart15Contain'
-          noGap={all - active === 0}
-        />
-        
-        <TrendLine 
-          title='new users'
-          statType='newUser'
-          cycleCount={12}
-          cycleBracket='month'
-          lineColor='rgb(52, 152, 219)' />
+      <TrendLine 
+        title='new users'
+        statType='newUser'
+        cycleCount={12}
+        cycleBracket='month'
+        lineColor='rgb(52, 152, 219)' />
       </div>
-      
     </div>
   );
 };

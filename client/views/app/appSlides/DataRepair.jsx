@@ -86,7 +86,7 @@ const DataRepair = ({ app, users })=> {
     });
   }
   function runTraceFix() {
-    Meteor.call('clearTraceErrors', (error, re)=>{
+    Meteor.call('cleanupTraceErrors', (error, re)=>{
       error && console.log(error);
       re && toast.success('method complete', { autoClose: false });
     });

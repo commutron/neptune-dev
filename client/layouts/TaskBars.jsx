@@ -38,7 +38,7 @@ export const ExTaskBar = ({ subLink }) => (
       icon='fas fa-cubes'
       iconAdj=''
     />
-    
+    {/*
     <TaskElement
       title={Pref.Item + 's'}
       subON={subLink === 'overviewitems'}
@@ -46,7 +46,7 @@ export const ExTaskBar = ({ subLink }) => (
       icon='fas fa-qrcode'
       iconAdj='down-1'
     />
-      
+     */} 
     <TaskElement
       title='Build History'
       subON={subLink === 'buildHistoryundefined'}

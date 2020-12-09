@@ -6,10 +6,11 @@ Meteor.methods({
   
   ///// With Duplicate Pre Check //////
   addMultiItems(batchId, barFirst, barLast, unit) {
+    const accessKey = Meteor.user().orgKey;
     
     const barEnd = barLast + 1;
     
-    const appSetting = AppDB.findOne({orgKey: Meteor.user().orgKey});
+    const appSetting = AppDB.findOne({orgKey: accessKey});
     const floor = barFirst.toString().length === 10 ?
                   appSetting.latestSerial.tenDigit :
                   barFirst.toString().length === 9 ?
@@ -31,7 +32,7 @@ Meteor.methods({
       &&
       unit <= 999
       ) {
-        const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
+        const doc = BatchDB.findOne({_id: batchId, orgKey: accessKey});
         const open = doc.finishedAt === false;
         const auth = Roles.userIsInRole(Meteor.userId(), 'create');
         
@@ -77,8 +78,8 @@ Meteor.methods({
                 history: [],
                 alt: false,
                 rma: []
-              }}});
-            }
+            }}});
+          }
           BatchDB.update({_id: batchId}, {
             $set : {
               updatedAt: new Date(),
@@ -86,17 +87,17 @@ Meteor.methods({
             }});
           if(barLast > floor) {
             if(barLast < 88888888 ) {
-              AppDB.update({orgKey: Meteor.user().orgKey}, {
+              AppDB.update({orgKey: accessKey}, {
                 $set : {
                   'latestSerial.eightDigit': Number(barLast)
                 }});
             }else if(barLast < 999999999 ) {
-              AppDB.update({orgKey: Meteor.user().orgKey}, {
+              AppDB.update({orgKey: accessKey}, {
                 $set : {
                   'latestSerial.nineDigit': Number(barLast)
                 }});
             }else if(barLast < 10000000000 ) {
-              AppDB.update({orgKey: Meteor.user().orgKey}, {
+              AppDB.update({orgKey: accessKey}, {
                 $set : {
                   'latestSerial.tenDigit': Number(barLast)
                 }});
@@ -106,6 +107,7 @@ Meteor.methods({
           }else{
             null;
           }
+          Meteor.defer( ()=>{ Meteor.call('updateOneMinify', batchId, accessKey); });
           return {
             success: true,
             message:'done'
@@ -139,12 +141,12 @@ Meteor.methods({
     },
     
   addYearWeekPanelItems(batchId, serialArr) {
-    this.unblock();
+    const accessKey = Meteor.user().orgKey;
     
     if(Roles.userIsInRole(Meteor.userId(), 'create')) {
     
       if(Array.isArray(serialArr) && serialArr.length > 0) {
-        const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
+        const doc = BatchDB.findOne({_id: batchId, orgKey: accessKey});
         const open = doc.finishedAt === false;
         
         if(open) {
@@ -182,7 +184,8 @@ Meteor.methods({
               updatedAt: new Date(),
       			  updatedWho: Meteor.userId()
             }});
-            
+          
+          Meteor.defer( ()=>{ Meteor.call('updateOneMinify', batchId, accessKey); }); 
           return {
             success: true,
             dupes: badBarcodes
@@ -203,18 +206,23 @@ Meteor.methods({
   
 // delete \\
   deleteItem(batchId, bar, pass) {
+    const accessKey = Meteor.user().orgKey;
+    
     const doc = BatchDB.findOne({_id: batchId});
     const subDoc = doc.items.find( x => x.serial === bar );
     const inUse = subDoc.history.length > 0 ? true : false;
+    
     if(!inUse) {
       const lock = subDoc.createdAt.toISOString().split("T")[0];
       const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
-      const access = doc.orgKey === Meteor.user().orgKey;
+      const access = doc.orgKey === accessKey;
       const unlock = lock === pass;
+      
       if(auth && access && unlock) {
     		BatchDB.update(batchId, {
           $pull : { items: { serial: bar }
         }});
+        Meteor.defer( ()=>{ Meteor.call('updateOneMinify', batchId, accessKey); });
         return true;
       }else{
         return false;
@@ -240,6 +248,7 @@ Meteor.methods({
             createdAt: new Date(dateStamp) 
           }
         }});
+        Meteor.defer( ()=>{ Meteor.call('updateOneMinify', batchId, accessKey); });
         return true;
       }else{
         return false;
@@ -250,6 +259,46 @@ Meteor.methods({
   },
   */
   
+  //// panel break
+  breakItemIntoUnits(id, bar, newSerials) {
+    const accessKey = Meteor.user().orgKey;
+    
+    const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
+    const batch = BatchDB.findOne({_id: id, orgKey: accessKey});
+    const item = batch ? batch.items.find( x => x.serial === bar ) : false;
+    if(auth && item) {
+      for(let sn of newSerials) {
+        BatchDB.update({_id: id}, {
+          $push : { items : {
+            serial: sn,
+            createdAt: new Date(),
+            createdWho: Meteor.userId(),
+            finishedAt: false,
+            finishedWho: false,
+            units: Number(1),
+            panel: false,
+            panelCode: bar,
+            subItems: [],
+            history: item.history,
+            alt: item.alt,
+            rma: []
+        }}});
+      }
+      BatchDB.update({_id: id}, {
+        $set : {
+          updatedAt: new Date(),
+  			  updatedWho: Meteor.userId()
+      }});
+      BatchDB.update(id, {
+        $pull : { items: { serial: bar }
+      }});
+      
+      Meteor.defer( ()=>{ Meteor.call('updateOneMinify', id, accessKey); });
+      return true;
+    }else{
+      return false;
+    }
+  },
   
   //// fork, use alternative flow
   forkItem(id, bar, choice) {
@@ -683,43 +732,6 @@ Meteor.methods({
   			  }}});
     }else{
       null;
-    }
-  },
-  
-//// panel break
-  breakItemIntoUnits(id, bar, newSerials) {
-    const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
-    const batch = BatchDB.findOne({_id: id, orgKey: Meteor.user().orgKey});
-    const item = batch ? batch.items.find( x => x.serial === bar ) : false;
-    if(auth && item) {
-      for(let sn of newSerials) {
-        BatchDB.update({_id: id}, {
-          $push : { items : {
-            serial: sn,
-            createdAt: new Date(),
-            createdWho: Meteor.userId(),
-            finishedAt: false,
-            finishedWho: false,
-            units: Number(1),
-            panel: false,
-            panelCode: bar,
-            subItems: [],
-            history: item.history,
-            alt: item.alt,
-            rma: []
-        }}});
-      }
-      BatchDB.update({_id: id}, {
-        $set : {
-          updatedAt: new Date(),
-  			  updatedWho: Meteor.userId()
-      }});
-      BatchDB.update(id, {
-        $pull : { items: { serial: bar }
-      }});
-      return true;
-    }else{
-      return false;
     }
   },
  

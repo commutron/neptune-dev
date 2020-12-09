@@ -121,12 +121,12 @@ export const PrioritySquare = ({
       priorityRank === 'medium' ? 'pScale3' : 
       'pScale4';
     
-    const tSym = pt.lateLate ? 'S!' : bffrRel <= 0 ? 'U' : bffrRel;
+    const tSym = pt.lateLate ? 'S!' : bffrRel <= pScl.max ? 'U' : bffrRel;
     
     const pLabel = <b>{showLess ? tSym : priorityRank}</b>;
     
     const subLabel = pt.lateLate ? 'Is Late' :
-      bffrRel <= 0 ? 'Estimated Late' : bffrRel;
+      bffrRel <= pScl.max ? 'Estimated Late' : bffrRel;
       
     const overClass = overQuote ? 'moreEphasis' : '';
     const ovrTxt = overQuote ? 'Over Quote' : 'Under Quote';

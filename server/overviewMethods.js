@@ -171,7 +171,7 @@ function collectBranchCondition(privateKey, batchID) {
 }
 
 
-function dryPriorityCalc(bQuTmBdg, bTide, shipAim, now) {
+function dryPriorityCalc(bQuTmBdg, bTide, shipAim, now, shipLoad) {
   const shipAimMmnt = moment(shipAim);
   
   const totalQuoteMinutes = bQuTmBdg.length === 0 ? 0 :
@@ -195,7 +195,8 @@ function dryPriorityCalc(bQuTmBdg, bTide, shipAim, now) {
   
   const estEnd2fillBuffer = buffer || null;
   
-  const bffrRel = Math.round( ( estEnd2fillBuffer / 100 ) - dayGap );
+  // const bffrRel = Math.round( ( estEnd2fillBuffer / 100 ) - dayGap );
+  const bffrRel = Math.round( ( estEnd2fillBuffer / 100 ) + dayGap - shipLoad );
   
   return { quote2tide, estSoonest, estLatestBegin, bffrRel, estEnd2fillBuffer };
 }
@@ -226,9 +227,14 @@ function collectPriority(privateKey, batchID, mockDay) {
       const lateLate = calcShip[2];
       
       const qtBready = !b.quoteTimeBudget ? false : true;
-        
+      
       if(qtBready && b.tide && !doneEntry) {
-        const dryCalc = dryPriorityCalc(b.quoteTimeBudget, b.tide, shipAim, now);
+        const shipLoad = TraceDB.find({shipAim: { 
+          $gte: new Date(now.clone().nextShippingTime().startOf('day').format()),
+          $lte: new Date(now.clone().nextShippingTime().endOf('day').format()) 
+        }},{fields:{'batchID':1}}).count();
+      
+        const dryCalc = dryPriorityCalc(b.quoteTimeBudget, b.tide, shipAim, now, shipLoad);
 
         collection = {
           batch: b.batch,
@@ -264,7 +270,7 @@ function collectPriority(privateKey, batchID, mockDay) {
   });
 }
 
-function getFastPriority(privateKey, bData, now, shipAim, lateLate) {
+function getFastPriority(privateKey, bData, now, shipAim, lateLate, shipLoad) {
   return new Promise(resolve => {
     
     const doneEntry = bData.completed ? bData.completedAt : bData.finishedAt;
@@ -272,7 +278,7 @@ function getFastPriority(privateKey, bData, now, shipAim, lateLate) {
     const qtBready = !bData.quoteTimeBudget ? false : true;
         
     if(qtBready && bData.tide && !doneEntry) {
-      const dryCalc = dryPriorityCalc(bData.quoteTimeBudget, bData.tide, shipAim, now);
+      const dryCalc = dryPriorityCalc(bData.quoteTimeBudget, bData.tide, shipAim, now, shipLoad);
       
       resolve({
         quote2tide: dryCalc.quote2tide,
@@ -460,11 +466,11 @@ Meteor.methods({
     }
     return bundlePriority();
   },
-  priorityFast(serverAccessKey, bData, now, shipAim, lateLate) {
+  priorityFast(serverAccessKey, bData, now, shipAim, lateLate, shipLoad) {
     async function bundlePriority() {
       const accessKey = serverAccessKey || Meteor.user().orgKey;
       try {
-        bundle = await getFastPriority(accessKey, bData, now, shipAim, lateLate);
+        bundle = await getFastPriority(accessKey, bData, now, shipAim, lateLate, shipLoad);
         return bundle;
       }catch (err) {
         throw new Meteor.Error(err);

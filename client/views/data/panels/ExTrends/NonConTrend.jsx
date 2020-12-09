@@ -17,7 +17,7 @@ import ToggleBar from '/client/components/bigUi/ToolBar/ToggleBar';
 import { percentOf } from '/client/utility/Convert';
 
 
-const OnTargetTrend = ({ app, isDebug, isNightly })=>{
+const NonConTrend = ({ app, isDebug, isNightly })=>{
 
   const thingMounted = useRef(true);
   const blank =  [ {x:1,y:0} ];
@@ -136,41 +136,13 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
       
       <h4>Long Calculation, Please wait for results. !! Outstanding Performance Issues !!</h4>
       
-      {isNightly &&
-        <Fragment>
-          <button
-            className='action clearBlack gap'
-            onClick={()=>runLoopInSeq('month')}
-            disabled={working}
-          >Run Month Sequence</button>
-        
-          <button
-            className='action clearBlack gap'
-            onClick={()=>runLoopInSeq('week')}
-            disabled={working}
-          >Run Week Sequence</button>
-          
-          <button
-            className='action clearBlack gap'
-            onClick={()=>runLoopInPar('month')}
-            disabled={working}
-          >Run Month Parallel</button>
-        
-          <button
-            className='action clearBlack gap'
-            onClick={()=>runLoopInPar('week')}
-            disabled={working}
-          >Run Week Parallel</button>
-        
-        </Fragment>
-      }
         
       <div className='rowWrap'>
         {working ?
           <b><i className='fas fa-spinner fa-lg fa-spin'></i></b> :
           <i><i className='fas fa-spinner fa-lg'></i></i>
         }
-  
+      {/*
         <button
           className='action clearBlack gap'
           onClick={()=>runLoop('month')}
@@ -190,6 +162,7 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
           toggleVal={tgglState}
           toggleSet={(e)=>tgglSet(e)}
         />
+        */}
       </div>
 
       <div style={{backgroundColor:'white'}}>
@@ -281,4 +254,4 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
   );
 };
 
-export default OnTargetTrend;
+export default NonConTrend;

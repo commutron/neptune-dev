@@ -64,13 +64,14 @@ Meteor.methods({
   },
   
   editBatchX(batchId, newBatchNum, vKey, salesNum, sDate, quantity) {
+    const accessKey = Meteor.user().orgKey;
     const doc = XBatchDB.findOne({_id: batchId});
     const legacyduplicate = BatchDB.findOne({batch: newBatchNum});
     let duplicate = XBatchDB.findOne({batch: newBatchNum});
     doc.batch === newBatchNum ? duplicate = false : null;
     const auth = Roles.userIsInRole(Meteor.userId(), 'edit');
-    if(auth && !duplicate && !legacyduplicate && doc.orgKey === Meteor.user().orgKey) {
-      XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+    if(auth && !duplicate && !legacyduplicate && doc.orgKey === accessKey) {
+      XBatchDB.update({_id: batchId, orgKey: accessKey}, {
         $set : {
           batch: newBatchNum,
           versionKey: vKey,

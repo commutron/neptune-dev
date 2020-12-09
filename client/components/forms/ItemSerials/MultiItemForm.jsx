@@ -101,97 +101,95 @@ const MultiItemForm = ({ id, unit, app })=> {
   let iconSty = workState ? 'workIcon' : 'transparent';
     
   return(
-    <div className='centre'>
-      <form onSubmit={(e)=>addItem(e)} autoComplete='off'>
-        <p>
-          <input
-            type='radio'
-            id='eightDigit'
-            name='digit'
-            defaultChecked={digitState === 8}
-            onChange={()=>digitSet(8)}
-            required />
-          <label htmlFor='eightDigit' className='beside'>8 digits</label>
-        <br />
+    <form className='centre' onSubmit={(e)=>addItem(e)} autoComplete='off'>
+      <p>
         <input
-            type='radio'
-            id='nineDigit'
-            name='digit'
-            defaultChecked={digitState === 9}
-            onChange={()=>digitSet(9)}
-            required />
-          <label htmlFor='nineDigit' className='beside'>9 digits</label>
-        <br />
-          <input
-            type='radio'
-            id='tenDigit'
-            name='digit'
-            defaultChecked={digitState === 10}
-            onChange={()=>digitSet(10)}
-            required />
-          <label htmlFor='tenDigit' className='beside'>10 digits</label>
-        </p>
-        <p>
-          <input
-            type='number'
-            id='unitInput'
-            pattern='[000-999]*'
-            maxLength='3'
-            minLength='1'
-            max='250'
-            min='1'
-            defaultValue={unit}
-            placeholder='1-250'
-            inputMode='numeric'
-            required
-            onInput={(e)=>checkRange(e)} />
-          <label htmlFor='unitInput'>{Pref.unit}s <em>Quantity per serial number</em></label>
-        </p>
-        <p>
-          <input
-            type='text'
-            id='barNumStart'
-            pattern='[0000000000-9999999999]*'
-            maxLength={digitState}
-            minLength={digitState}
-            placeholder='1000000000-9999999999'
-            defaultValue={today}
-            inputMode='numeric'
-            required
-            onInput={(e)=>checkRange(e)} />
-          <label htmlFor='barNumStart'>First {Pref.item} Number</label>
-        </p>
-        <p>
-          <input
-            type='text'
-            id='barNumEnd'
-            pattern='[0000000000-9999999999]*'
-            maxLength={digitState}
-            minLength={digitState}
-            placeholder='1000000000-9999999999'
-            defaultValue={today}
-            inputMode='numeric'
-            required
-            onInput={(e)=>checkRange(e)} />
-          <label htmlFor='barNumEnd'>Last {Pref.item} Number</label>
-        </p>
-        <br />
-        <div className='centre'>
-          <i className={iconSty}></i>
-          <output id='floorCheck' value='' />
-          <output id='message' value='' />
-        </div>
-        <br />
-        <p className='centre'>
-          <button
-            id='addGo'
-            disabled={true}
-            className='action clearGreen'
-            type='submit'
-          >Add</button>
-        </p>
-      </form>
-    </div>
+          type='radio'
+          id='eightDigit'
+          name='digit'
+          defaultChecked={digitState === 8}
+          onChange={()=>digitSet(8)}
+          required />
+        <label htmlFor='eightDigit' className='beside'>8 digits</label>
+      <br />
+      <input
+          type='radio'
+          id='nineDigit'
+          name='digit'
+          defaultChecked={digitState === 9}
+          onChange={()=>digitSet(9)}
+          required />
+        <label htmlFor='nineDigit' className='beside'>9 digits</label>
+      <br />
+        <input
+          type='radio'
+          id='tenDigit'
+          name='digit'
+          defaultChecked={digitState === 10}
+          onChange={()=>digitSet(10)}
+          required />
+        <label htmlFor='tenDigit' className='beside'>10 digits</label>
+      </p>
+      <p>
+        <input
+          type='number'
+          id='unitInput'
+          pattern='[000-999]*'
+          maxLength='3'
+          minLength='1'
+          max='250'
+          min='1'
+          defaultValue={unit}
+          placeholder='1-250'
+          inputMode='numeric'
+          required
+          onInput={(e)=>checkRange(e)} />
+        <label htmlFor='unitInput'>{Pref.unit}s <em>Quantity per serial number</em></label>
+      </p>
+      <p>
+        <input
+          type='text'
+          id='barNumStart'
+          pattern='[0000000000-9999999999]*'
+          maxLength={digitState}
+          minLength={digitState}
+          placeholder='1000000000-9999999999'
+          defaultValue={today}
+          inputMode='numeric'
+          required
+          onInput={(e)=>checkRange(e)} />
+        <label htmlFor='barNumStart'>First {Pref.item} Number</label>
+      </p>
+      <p>
+        <input
+          type='text'
+          id='barNumEnd'
+          pattern='[0000000000-9999999999]*'
+          maxLength={digitState}
+          minLength={digitState}
+          placeholder='1000000000-9999999999'
+          defaultValue={today}
+          inputMode='numeric'
+          required
+          onInput={(e)=>checkRange(e)} />
+        <label htmlFor='barNumEnd'>Last {Pref.item} Number</label>
+      </p>
+      <br />
+      <div className='centre'>
+        <i className={iconSty}></i>
+        <output id='floorCheck' value='' />
+        <output id='message' value='' />
+      </div>
+      <br />
+      <p className='centre'>
+        <button
+          id='addGo'
+          disabled={true}
+          className='action clearGreen'
+          type='submit'
+        >Add</button>
+      </p>
+    </form>
   );
 };
 

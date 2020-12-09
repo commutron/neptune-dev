@@ -16,8 +16,15 @@ function syncHoliday(accessKey) {
     moment.updateLocale('en', { holidays: app.nonWorkDays });
   }
 }
+function getShipLoad(now) {
+  const shipLoad = TraceDB.find({shipAim: { 
+    $gte: new Date(now.clone().nextShippingTime().startOf('day').format()),
+    $lte: new Date(now.clone().nextShippingTime().endOf('day').format()) 
+  }},{fields:{'batchID':1}}).count();
+  return shipLoad;
+}
 
-function shrinkWhole(bData, now, accessKey) {
+function shrinkWhole(bData, now, shipLoad, accessKey) {
   return new Promise( (resolve)=> {
     const isWhat = Meteor.call('getBasicBatchInfo', bData.batch);
     
@@ -46,7 +53,7 @@ function shrinkWhole(bData, now, accessKey) {
     
     const actvLvl = Meteor.call('tideActivityLevel', bData._id, accessKey);
     const brchCnd = Meteor.call('branchCondition', bData._id, accessKey);
-    const prtyRnk = Meteor.call('priorityFast', accessKey, bData, now, shipAim, lateLate);
+    const prtyRnk = Meteor.call('priorityFast', accessKey, bData, now, shipAim, lateLate, shipLoad);
     
     TraceDB.upsert({batchID: bData._id}, {
       $set : { 
@@ -107,7 +114,7 @@ function checkMinify(bData, accessKey) {
   });
 }
 
-function checkMovement(bData, now, accessKey) {
+function checkMovement(bData, now, shipLoad, accessKey) {
   return new Promise( (resolve)=> {
     const isX = bData.completed !== undefined;
     
@@ -128,7 +135,7 @@ function checkMovement(bData, now, accessKey) {
     
     const actvLvl = Meteor.call('tideActivityLevel', bData._id, accessKey);
     const brchCnd = Meteor.call('branchCondition', bData._id, accessKey);
-    const prtyRnk = Meteor.call('priorityFast', accessKey, bData, now, shipAim, lateLate);
+    const prtyRnk = Meteor.call('priorityFast', accessKey, bData, now, shipAim, lateLate, shipLoad);
     
     TraceDB.update({batchID: bData._id}, {
       $set : { 
@@ -196,7 +203,7 @@ Meteor.methods({
     })();
   },
   
-  clearTraceErrors() {
+  cleanupTraceErrors() {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       const allTrace = TraceDB.find({}).fetch();
       for( let t of allTrace ) {
@@ -206,6 +213,7 @@ Meteor.methods({
            TraceDB.remove({batchID: t.batchID});
         }
       }
+      Meteor.call('reMiniOpenTrace',);
       return true;
     }else{
       return false;
@@ -218,10 +226,11 @@ Meteor.methods({
       try {
         syncHoliday(accessKey);
         const now = moment().tz(Config.clientTZ);
+        const shipLoad = getShipLoad(now);
         
         const batchB = BatchDB.findOne({batch: batchNum});
                         
-        await shrinkWhole( batchB, now, accessKey );
+        await shrinkWhole( batchB, now, shipLoad, accessKey );
       }catch (err) {
         throw new Meteor.Error(err);
       }
@@ -233,10 +242,11 @@ Meteor.methods({
       try {
         syncHoliday(accessKey);
         const now = moment().tz(Config.clientTZ);
+        const shipLoad = getShipLoad(now);
         
         const batchX = XBatchDB.findOne({batch: batchNum});
                         
-        await shrinkWhole( batchX, now, accessKey );
+        await shrinkWhole( batchX, now, shipLoad, accessKey );
       }catch (err) {
         throw new Meteor.Error(err);
       }
@@ -298,11 +308,12 @@ Meteor.methods({
       try {
         syncHoliday(accessKey);
         const now = moment().tz(Config.clientTZ);
+        const shipLoad = getShipLoad(now);
         
         const batchBX = BatchDB.findOne({_id: bID}) || 
                         XBatchDB.findOne({_id: bID});
                         
-        await shrinkWhole( batchBX, now, accessKey );
+        await shrinkWhole( batchBX, now, shipLoad, accessKey );
       }catch (err) {
         throw new Meteor.Error(err);
       }
@@ -331,11 +342,12 @@ Meteor.methods({
       try {
         syncHoliday(accessKey);
         const now = moment().tz(Config.clientTZ);
+        const shipLoad = getShipLoad(now);
         
         const batchBX = BatchDB.findOne({_id: bID}) || 
                         XBatchDB.findOne({_id: bID});
         
-        await checkMovement( batchBX, now, accessKey );
+        await checkMovement( batchBX, now, shipLoad, accessKey );
       }catch (err) {
         throw new Meteor.Error(err);
       }
@@ -346,9 +358,10 @@ Meteor.methods({
   updateLiveMovement(privateKey) {
     (async ()=> {
       const accessKey = privateKey || Meteor.user().orgKey;
-      try {
+      // try {
         syncHoliday(accessKey);
         const now = moment().tz(Config.clientTZ);
+        const shipLoad = getShipLoad(now);
         
         const ystrday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date);
         const lstweek = ( d => new Date(d.setDate(d.getDate()-7)) )(new Date);
@@ -365,9 +378,9 @@ Meteor.methods({
           const t = TraceDB.find({
               batchID: b._id, 
               lastUpdated: { $gte: new Date(fresh) }
-            },{fields:{'batchID':1}},{limit:1}).count();
+            },{fields:{'batchID':1},limit:1}).count();
           if(!t) {
-            await checkMovement( b, now, accessKey );
+            await checkMovement( b, now, shipLoad, accessKey );
           }/*else{
             const t = TraceDB.find({
               batchID: b._id, 
@@ -389,9 +402,9 @@ Meteor.methods({
           const t = TraceDB.find({
               batchID: x._id, 
               lastUpdated: { $gte: new Date(fresh) }
-            },{fields:{'batchID':1}},{limit:1}).count();
+            },{fields:{'batchID':1},limit:1}).count();
           if(!t) {
-            await checkMovement( x, now, accessKey );
+            await checkMovement( x, now, shipLoad, accessKey );
           }/*else{
             const t = TraceDB.find({
               batchID: x._id, 
@@ -402,9 +415,9 @@ Meteor.methods({
             }
           }*/
         }));
-      }catch (err) {
-        throw new Meteor.Error(err);
-      }
+      // }catch (err) {
+      //   throw new Meteor.Error(err);
+      // }
     })();
   }
   

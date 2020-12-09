@@ -43,12 +43,12 @@ const UpstreamView = ({
   useEffect( ()=>{
     Meteor.setTimeout( ()=> {
       Meteor.call('updateLiveMovement');
-    },5000);
-  }, [batch, batchX, updateTrigger]);
+    },3000);
+  }, [updateTrigger]);
   
   useEffect( ()=>{
     loadTimeSet( moment() );
-  }, [batch, batchX, traceDT]);
+  }, [traceDT]);
   
   function changeFocus(e) {
     const value = e.target.value;

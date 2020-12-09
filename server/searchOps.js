@@ -75,11 +75,11 @@ Meteor.methods({
   },
   
   batchLookup(orb) { // significantly faster than findOne
-    const oneBatch = BatchDB.find({ batch: orb },{fields:{'batch':1}},{limit:1}).count();
+    const oneBatch = BatchDB.find({ batch: orb },{fields:{'batch':1},limit:1}).count();
     if(oneBatch) {
       return 'trueB';
     }else{
-      const onexBatch = XBatchDB.find({ batch: orb },{fields:{'batch':1}},{limit:1}).count();
+      const onexBatch = XBatchDB.find({ batch: orb },{fields:{'batch':1},limit:1}).count();
       if(onexBatch) {
         return 'trueX';
       }else{
@@ -112,7 +112,7 @@ Meteor.methods({
       });
     }
       
-    return { results, exact };
+    return [ results, exact ];
   },
   
   quickVariant(vKey) {

@@ -4,7 +4,7 @@ import { VictoryPie } from 'victory';
 //import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
 
-const NumStatRing = ({ total, nums, name, title, colour, maxSize, noGap })=> {
+const NumStatRing = ({ total, nums, name, title, colour, maxSize, noGap, isDebug })=> {
   
   const colours =
     colour === 'blue' ? ["#4181cb","#044289","#499eff","#0579ff","#7b9dc4"] :
@@ -14,9 +14,9 @@ const NumStatRing = ({ total, nums, name, title, colour, maxSize, noGap })=> {
     colour === 'red' ? ["#e74c46","#a30500","#720300","#8c0c08","#9b0500"] :
     colour === 'redTri' ? [ "rgb(192,57,43)", "rgb(231,76,60)", "rgba(39,174,96,0.5)" ] :
     colour === 'orangeBi' ? [ "rgb(230, 126, 34)", "rgba(39, 174, 96, 0.5)" ]:
-    null;
+    colour;
   
-  Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(nums);
+  isDebug && console.log(nums);
   
   const contain = maxSize || 'chart15Contain';
   

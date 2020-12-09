@@ -114,7 +114,7 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
             tickFormat={(t) => 
               tgglSpan == 'month' ?
               moment().subtract(durrState, 'month').add(t, 'month').format('MMM-YYYY') :
-              moment().subtract(durrState, 'week').add(t, 'week').format('w-YY') }
+              `w${moment().subtract(durrState, 'week').add(t, 'week').format('w-YYYY')}`}
           />
           
             <VictoryLine

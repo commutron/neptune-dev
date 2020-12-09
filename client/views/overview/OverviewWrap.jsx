@@ -59,12 +59,12 @@ const OverviewWrap = ({
   useEffect( ()=>{
     Meteor.setTimeout( ()=> {
       Meteor.call('updateLiveMovement');
-    },5000);
-  }, [b, bx, updateTrigger]);
+    },3000);
+  }, [updateTrigger]);
   
   useEffect( ()=>{
     loadTimeSet( moment() );
-  }, [b, bx, traceDT]);
+  }, [traceDT]);
   
   function changeFilter(e) {
     const value = e.target.value;
