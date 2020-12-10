@@ -1,5 +1,7 @@
 import React from 'react';
 
+/// MAY NOT BE IN USE ???
+
 const DumbFilter = ({ id, size, onTxtChange, labelText, list })=>	{
   
   function changeTextFilter() {

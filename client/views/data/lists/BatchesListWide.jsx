@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import LeapRow from '/client/components/tinyUi/LeapRow.jsx';
+import LeapLine from '/client/components/tinyUi/LeapLine';
 import DumbFilter from '/client/components/tinyUi/DumbFilter.jsx';
 
 const BatchesListWide = ({ 
@@ -21,7 +21,6 @@ const BatchesListWide = ({
     const w = widgetData;
     const v = variantData;
     const g = groupData;
-    //const bDt = allState ? batchData : batchData.filter( x => x.live === true);
     let blendedList = [];
     for(let b of batchData){
       const subW = w.find( x => x._id === b.widgetId);
@@ -53,12 +52,12 @@ const BatchesListWide = ({
   
   return(
     <div className='centre' key={1}>
-      <div className='tableList'>
+      <div className=''>
         <div>
           <DumbFilter
             id='batchOverview'
             size='bigger'
-            onTxtChange={e => setTextFilter(e)}
+            onTxtChange={(e)=>setTextFilter(e)}
             labelText='Filter any text, not case-sensitve.'
             list={app.tagOption} />
           <div className='centre'>
@@ -74,22 +73,22 @@ const BatchesListWide = ({
           </div>
         </div>
 
-        {showListState.map( (entry, index)=> {
-          const tags = entry[5].map( (et, ix)=>{
-            return(<span key={ix} className='tagFlag'><i>{et}</i></span>);
-          });
-          if(!allState && !entry[6]) { return null }else{
-            const sty = !entry[6] ? 'numFont gMark' : 'numFont activeMark';
+        {showListState.map( (ent, index)=> {
+          // const tags = ent[5].map( (et, ix)=>{
+          //   return(<span key={ix} className='tagFlag'><i>{et}</i></span>);
+          // });
+          if(!allState && !ent[6]) { return null }else{
+            const sty = !ent[6] ? 'numFont gMark' : 'numFont activeMark';
             return(
-              <LeapRow
+              <LeapLine
                 key={"wo"+index}
-                title={entry[0].toUpperCase()}
-                cTwo={<i><i className='smaller'>so: </i>{entry[1].toUpperCase()}</i>}
-                cThree={entry[2].toUpperCase()}
-                cFour={entry[3].toUpperCase() + ' v.' + entry[4]}
-                cFive={tags}
-                sty={`${sty} lastSpanRight`}
-                address={'/data/batch?request=' + entry[0]}
+                title={ent[0].toUpperCase()}
+                cTwo={<i><i className='smaller'>so: </i>{ent[1].toUpperCase()}</i>}
+                cThree={`${ent[2].toUpperCase()}`}
+                cFour={`${ent[3].toUpperCase()} v.${ent[4]}`}
+                // cFive={tags}
+                sty={sty}
+                address={'/data/batch?request=' + ent[0]}
               />
         )}})}
 

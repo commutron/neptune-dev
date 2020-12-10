@@ -32,22 +32,6 @@ export const ExTaskBar = ({ subLink }) => (
     />
       
     <TaskElement
-      title={Pref.Batch + 's'}
-      subON={subLink === 'overviewbatches'}
-      goLink='/data/overview?request=batches'
-      icon='fas fa-cubes'
-      iconAdj=''
-    />
-    {/*
-    <TaskElement
-      title={Pref.Item + 's'}
-      subON={subLink === 'overviewitems'}
-      goLink='/data/overview?request=items'
-      icon='fas fa-qrcode'
-      iconAdj='down-1'
-    />
-     */} 
-    <TaskElement
       title='Build History'
       subON={subLink === 'buildHistoryundefined'}
       goLink='/data/buildHistory'

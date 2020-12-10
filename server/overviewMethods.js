@@ -184,19 +184,19 @@ function dryPriorityCalc(bQuTmBdg, bTide, shipAim, now, shipLoad) {
   const q2tNice = overQuote ? 0 : quote2tide;
   
   const estLatestBegin = shipAimMmnt.clone().subtractWorkingTime(q2tNice, 'minutes');
-    
-  const dayGap = shipAimMmnt.workingDiff(now, 'days');
   
-  // insert additional ship bumper
-  //const estConclude = shipAimMmnt;//shipAimMmnt.clone().subtractWorkingTime(0, 'hours');
+  // additional ship bumper
+  // const estConclude = shipAimMmnt;//shipAimMmnt.clone().subtractWorkingTime(0, 'hours');
   const estSoonest = now.clone().addWorkingTime(q2tNice, 'minutes');
 
   const buffer = shipAimMmnt.workingDiff(estSoonest, 'minutes');
   
   const estEnd2fillBuffer = buffer || null;
   
+  const dayGap = shipAimMmnt.workingDiff(now, 'days', true);
+  const shipPull = dayGap <= 2.5 ? shipLoad * 2 : shipLoad;
   // const bffrRel = Math.round( ( estEnd2fillBuffer / 100 ) - dayGap );
-  const bffrRel = Math.round( ( estEnd2fillBuffer / 100 ) + dayGap - shipLoad );
+  const bffrRel = Math.round( ( estEnd2fillBuffer / 100 ) + dayGap - shipPull );
   
   return { quote2tide, estSoonest, estLatestBegin, bffrRel, estEnd2fillBuffer };
 }

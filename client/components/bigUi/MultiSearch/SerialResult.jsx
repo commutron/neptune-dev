@@ -1,51 +1,41 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import LeapRow from '/client/components/tinyUi/LeapRow.jsx';
+import LeapLine from '/client/components/tinyUi/LeapLine';
 
 const SerialResult = ({ queryState, resultState })=> {
 	
 	const re = resultState ? resultState[0] : resultState;
-	const exact = resultState ? resultState[1] : false;
+	const ex = resultState ? resultState[1] : false;
 	
 	return(
-		<div className='centre space'>
-	  
-	    <div className='tableList'>
-    
-      {re === null ?
-        <div></div>
+		<div className='centre centreText'>
+      {re === null || !queryState ?
+        null
       : re === undefined ?
-        <div>
-          <p className='centreText'><em>looking</em></p>
-        </div>
+        <p className='centreText'><em>looking</em></p>
       : re === false || re.length === 0 ?
-	      <div>
-          <p className='centreText'><b>NO RESULT</b></p>
-        </div>
-      : exact === true ?
-        <div>
-          <LeapRow
-            key='1a'
-            title={re[0].batch}
-            cTwo={re[0].meta}
-            cThree={queryState}
-            sty='greenB'
-            address={'/data/batch?request=' + re[0].batch + '&specify=' + queryState}
-          />
-        </div>
+        <p className='centreText'><b>NO RESULT</b></p>
+      : ex === true ?
+        <LeapLine
+          key='1a'
+          title={re[0][0]}
+          cTwo={re[0][1]}
+          cThree={queryState}
+          sty='greenB'
+          address={'/data/batch?request=' + re[0][0] + '&specify=' + queryState}
+        />
       :
         re.map( (entry, index)=> {
           return (
-            <LeapRow
+            <LeapLine
               key={index}
-              title={entry.batch}
-              cTwo={entry.meta}
-              address={'/data/batch?request=' + entry.batch}
+              title={entry[0]}
+              cTwo={entry[1]}
+              cThree=''
+              address={'/data/batch?request=' + entry[0]}
             />
         )})
       }
-      </div>    
-          
     </div>
 	);
 };

@@ -3,14 +3,12 @@ import React, { useState } from 'react';
 import Pref from '/client/global/pref.js';
 import TrendLine from '/client/components/charts/Trends/TrendLine.jsx';
 import TrendBar from '/client/components/charts/Trends/TrendBar.jsx';
-// import NumBox from '/client/components/tinyUi/NumBox.jsx';
-import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
+import NumStatBox from '/client/components/charts/Dash/NumStatBox';
+import BatchNewList from '../lists/BatchNewList';
 
 import ToggleSearch from '/client/components/bigUi/MultiSearch/ToggleSearch';
 import SerialResult from '/client/components/bigUi/MultiSearch/SerialResult';
-
-
-import BatchesListWide from '../lists/BatchesListWide.jsx';
+import BatchResult from '/client/components/bigUi/MultiSearch/BatchResult';
 
 const ExploreLanding = ({ 
   groupData, widgetData, variantData, 
@@ -18,6 +16,7 @@ const ExploreLanding = ({
   app, isDebug
 }) => {
   
+  const [ tggl, tgglSet ] = useState( true );
   const [ queryState, querySet ] = useState( null );
 	const [ resultState, resultSet ] = useState( null );
 	
@@ -32,107 +31,105 @@ const ExploreLanding = ({
   const xlocked = xBatchData.filter( x => x.lock === true ).length;
   
   return(
+    <section className='space1v'>
     
-  <section>
-    <div className='autoGrid wide'>
-    
-    <div className='vspace wide'>
-        
+      <div className='wide'>
+          
         <ToggleSearch
-          queryUP={(v)=>querySet(v)}
-          resultUP={(r)=>resultSet(r)} />
-        
-        
-        <SerialResult
+          tggl={tggl}
+          tgglSet={tgglSet}
           queryState={queryState}
-          resultState={resultState}
-          app={app} />
-        
-        
-        
-        <BatchesListWide
+          queryUP={(v)=>querySet(v)}
+          resultUP={(r)=>resultSet(r)}
           batchData={[...batchData, ...xBatchData]}
           widgetData={widgetData}
           variantData={variantData}
           groupData={groupData}
-          app={app} />
-        
-        
-        
-          
-      
-    </div>
-        
-        
-      <div className='centreRow'>
-        <NumStatRing
-          total={live + xlive}
-          nums={[ 1 ]}
-          name='WIP'
-          colour='blueBi'
-          maxSize='chart15Contain'
-        />
-        
-        <NumStatRing
-          total={( (live + xlive) - (process + xProcess) )}
-          nums={[ 1 ]}
-          name='RMA'
-          colour='redTri'
-          maxSize='chart15Contain'
+          app={app}
         />
       
-        <NumStatRing
-          total={(total + xTotal) - (process + xProcess)}
-          nums={[ 1 ]}
-          name='Completed'
-          colour='greenBi'
-          maxSize='chart15Contain med'
-        />
-        
-        <NumStatRing
-          total={(total + xTotal)}
-          nums={[ 1 ]}
-          name='Total'
-          maxSize='chart15Contain'
-        />
+      </div>
+    
+      {queryState ? 
       
-        <NumStatRing
-          total={locked + xlocked}
-          nums={[ 1 ]}
-          name='Locked'
-          colour={['rgb(155, 89, 182)']}
-          maxSize='chart15Contain'
-        />
+        <div className='fixedResults forceScrollStyle wide max750'>
+          {tggl ?
+            <BatchResult
+            queryState={queryState}
+            resultState={resultState}
+            app={app} />
+          :
+          <SerialResult
+            queryState={queryState}
+            resultState={resultState}
+            app={app} />
+          }
+        </div> 
         
-        <div className='centreRow'>
+      :
+        <div> 
           
-          <TrendLine 
-            title={`new ${Pref.batches}`}
-            statType='newBatch'
-            cycleCount={6}
-            cycleBracket='month'
-            lineColor='rgb(52, 152, 219)' />
-          
-          <TrendLine 
-            title='new items'
-            statType='newItem'
-            cycleCount={6}
-            cycleBracket='month'
-            lineColor='rgb(52, 152, 219)' />
-          
-          <TrendBar
-            title={`completed ${Pref.batches}`}
-            statType='doneBatch'
-            cycleCount={6}
-            cycleBracket='month' />
+          <div className='centreRow'>
+            <TrendLine 
+              title={`new ${Pref.batches}`}
+              statType='newBatch'
+              cycleCount={6}
+              cycleBracket='month'
+              lineColor='rgb(52, 152, 219)'
+            />
+            <TrendLine 
+              title='new items'
+              statType='newItem'
+              cycleCount={6}
+              cycleBracket='month'
+              lineColor='rgb(52, 152, 219)' 
+            />
+            <TrendBar
+              title={`completed ${Pref.batches}`}
+              statType='doneBatch'
+              cycleCount={6}
+              cycleBracket='month'
+            />
+          </div>
+        
+          <div className='centreRow vspacehalf'>
+            <NumStatBox
+              number={live + xlive}
+              name='WIP'
+              borderColour='blue'
+            />
+            <NumStatBox
+              number={( (live + xlive) - (process + xProcess) )}
+              name='RMA'
+              borderColour='red'
+            />
+            <NumStatBox
+              number={(total + xTotal) - (process + xProcess)}
+              name='Completed'
+              borderColour='green'
+            />
+             <NumStatBox
+              number={(total + xTotal)}
+              name='Total'
+            />
+            <NumStatBox
+              number={locked + xlocked}
+              name='Locked'
+              borderColour='rgb(155, 89, 182)'
+            />
+          </div>
+       
+          <div className='wide max750'>
+            <BatchNewList
+              batchData={[...batchData, ...xBatchData]}
+              widgetData={widgetData}
+              variantData={variantData}
+              groupData={groupData}
+            />
+          </div>
           
         </div>
-        
-      </div>
-      
-      
-        
-      </div>
+      }
     </section>
   );
 };

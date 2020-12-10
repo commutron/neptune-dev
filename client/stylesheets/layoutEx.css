@@ -281,6 +281,24 @@
   display: none;
 }
 
+.fixedResults {
+  max-height: calc(92vh - 2vmax - 110px);
+  overflow-y: scroll;
+}
+.dashNumBox {
+  min-width: 10vmin;
+  min-height: 10vmin;
+  font-size: 5vmin;
+  border-width: 1.5vmin;
+  border-style: solid;
+  padding: 1vmin 1.5vmin;
+  margin: 0;
+}
+.dashNumBox p {
+  font-size: 2vmin;
+  margin: 0;
+}
+
 
 @media (orientation: portrait) {
   .containerEx {

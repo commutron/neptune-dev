@@ -1,64 +1,128 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 
-const ToggleSearch = ({ queryUP, resultUP })=> {
+const ToggleSearch = ({ 
+  batchData, widgetData, variantData, groupData, app,
+  tggl, tgglSet, queryState, queryUP, resultUP
+})=> {
 	
-	const [ tggl, tgglSet ] = useState( true );
-	
-
-  function serialAction(value) {
-    resultUP(undefined);
-    Meteor.call('serialLookupPartial', value, (error, reply)=>{
-      error && console.log(error);
-      resultUP(reply);
-	  });
-  }
+	const [ blendedListState, blendedListSet ] = useState( [] );
   
-	function handleSmarts(e) {
-    const value = e.target.value;
-    const valid = !value || value.length < 4 ? false : true;
-    queryUP(value);
+	useEffect( ()=> {
+    const w = widgetData;
+    const v = variantData;
+    const g = groupData;
+    let blendedList = [];
+    for(let b of batchData){
+      const subW = w.find( x => x._id === b.widgetId);
+      const subV = v.find( x => x.versionKey === b.versionKey);
+      const subG = g.find( x => x._id === subW.groupId);
+      blendedList.push([
+        b.batch,
+        b.salesOrder || 'n/a',
+        subG.alias,
+        subW.widget, 
+        subV.variant,
+        b.tags,
+        b.live
+      ]);
+    }
+    blendedListSet( blendedList );
+  }, []);
+
+  function batchAction() {
+    const valid = queryState && queryState.length > 0;
     if(valid) {
-      serialAction(value);
+      let showList = blendedListState.filter( tx => tx.toString().toLowerCase()
+                                  .includes(queryState.toLowerCase()) === true );
+      let sortList = showList.sort((b1, b2)=> {
+                  if (b1[0] < b2[0]) { return 1 }
+                  if (b1[0] > b2[0]) { return -1 }
+                  return 0;
+                });
+      resultUP( sortList );
     }else{
       resultUP(null);
+    }
+  }
+  
+  function serialAction() {
+    resultUP(undefined);
+    const valid = queryState && queryState.length > 4;
+    if(valid) {
+      Meteor.call('serialLookupPartial', queryState, (error, reply)=>{
+        error && console.log(error);
+        resultUP(reply);
+  	  });
+    }else{
+      resultUP(null);
+    }
+  }
+  
+	useEffect( ()=> {
+    if(tggl) {
+      batchAction();
+    }else{
+      serialAction();
+    }
+  }, [queryState, tggl]);
+  
+  function handle(e) {
+    const value = e.target.value;
+    const valid = value && value.length > (tggl ? 0 : 4);
+    
+    if(valid) {
+      queryUP(value);
+    }else{
+      queryUP(value);
       e.target.reportValidity();
     }
   }
+  
+  const bttnClss = 'action variableInput big';
 	
 	return(
-		<div className='centre space'>
-	    
-	    
-        <p>
-      <label className='blackT variableInput bigger'>
-      
-	    <button
-        className={`action big ${tggl ? 'cloudsT black' : 'clearBlack'}`}
-          onClick={()=>tgglSet(true)}
-        ><i className="fas fa-cubes"></i></button>
+		<div className='centre centreText'>
+	    <p>
+        <label className='blackT variableInput big'>
+  	      <button
+  	        title={`${Pref.batches} & ${Pref.xBatchs}`}
+            className={`${bttnClss} ${tggl ? 'cloudsT black' : 'clearBlack'}`}
+            onClick={()=>tgglSet(true)}
+          ><i className="fas fa-cubes fa-fw"></i></button>
+          
+          <button
+            title={`${Pref.item} ${Pref.itemSerial}s/${Pref.serialType}s`}
+            className={`${bttnClss} ${!tggl ? 'cloudsT black' : 'clearBlack'}`}
+            onClick={()=>tgglSet(false)}
+          ><i className="fas fa-qrcode fa-fw"></i></button>
+        </label>
         
-        <button
-          className={`action big ${!tggl ? 'cloudsT black' : 'clearBlack'}`}
-          onClick={()=>tgglSet(false)}
-        ><i className="fas fa-qrcode"></i></button>
-        
-      </label>
-          <input
-            id='multiSearch'
-            type='search'
-            pattern={tggl ? '[A-Za-z0-9 _-]*' : '[0000000000-9999999999]*'}
-            minLength={tggl ? '0' : '4'}
-            className='variableInput bigger'
-            onChange={(e)=>handleSmarts(e)}
-            autoFocus={true}
-            required />
-        </p>
-        <p>{tggl ? `Find a ${Pref.batch} by number, ${Pref.group}, ${Pref.widget} or tag.` : 
-                   `Find an item by whole or partial serial number`}
-        </p>
+        <input
+          id='multiSearch'
+          type='search'
+          pattern={tggl ? '[A-Za-z0-9 _-]*' : '[0000000000-9999999999]*'}
+          minLength={tggl ? '0' : '4'}
+          className='variableInput big'
+          onChange={(e)=>handle(e)}
+          autoFocus={true}
+          required
+          list={tggl ? 'tagList' : null}
+        />
+        {tggl &&
+        <datalist id='tagList'>
+          {app.tagOption && app.tagOption.map( (entry, index)=>{
+            return ( 
+              <option key={index} value={entry} className=''>{entry}</option>
+          )})}
+        </datalist>}
+      </p>
       
-      </div>
+      <p>{tggl ? `Find a ${Pref.batch} by number, ${Pref.group}, ${Pref.widget} or tag.` : 
+                 `Find an item by whole or partial serial number`}
+      </p>
+      
+    </div>
   );
 };
 

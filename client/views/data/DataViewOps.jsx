@@ -8,7 +8,6 @@ import SearchHelp from './SearchHelp.jsx';
 import ExploreLanding from './panels/ExploreLanding.jsx';
 import ReportsWrap from './panels/Reports/ReportsWrap.jsx';
 import AllGroups from './panels/AllGroups/AllGroups.jsx';
-import AllBatches from './panels/AllBatches.jsx';
 
 import BuildHistory from './panels/BuildHistory.jsx';
 
@@ -237,34 +236,7 @@ const DataViewOps = ({
             specify={specify} />
         </TraverseWrap>
       );
-    }else if(request === 'batches') {
-      return(
-        <TraverseWrap
-		      batchData={false}
-          widgetData={false}
-          variantData={false}
-          groupData={false}
-          user={user}
-          app={app}
-          title={Pref.batches}
-          subLink={subLink}
-          action={false}
-          base={true}
-          invertColor={true}
-        >
-          <AllBatches
-            batchData={allBatch}
-            widgetData={allWidget}
-            groupData={allGroup}
-            allWidget={allWidget}
-            allVariant={allVariant}
-            allBatch={allBatch}
-            allXBatch={allXBatch}
-            app={app}
-            isDebug={isDebug} />
-        </TraverseWrap>
-      );
-    // }else if(request === 'items') {
+    // }else if(request === 'trends') {
     //   return(
     //     <TraverseWrap
 		  //     batchData={false}
@@ -273,21 +245,25 @@ const DataViewOps = ({
     //       groupData={false}
     //       user={user}
     //       app={app}
-    //       title={Pref.items + ' Search'}
+    //       title={Pref.batches}
     //       subLink={subLink}
     //       action={false}
     //       base={true}
     //       invertColor={true}
     //     >
-    //       <AllItems
+    //       <AllBatches
     //         batchData={allBatch}
-    //         xBatchData={allXBatch}
     //         widgetData={allWidget}
-    //         variantData={allVariant}
-    //         groupData={allGroup} 
-    //         app={app} />
+    //         groupData={allGroup}
+    //         allWidget={allWidget}
+    //         allVariant={allVariant}
+    //         allBatch={allBatch}
+    //         allXBatch={allXBatch}
+    //         app={app}
+    //         isDebug={isDebug} />
     //     </TraverseWrap>
     //   );
+    
     }else if(request === 'testfail') {
       return(
         <TraverseWrap

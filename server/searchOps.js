@@ -106,10 +106,7 @@ Meteor.methods({
     for(let iB of itemsBatch) {
       const describe = whatIsBatch(iB.batch)[0].join(' ');
       
-      results.push({
-        batch: iB.batch, 
-        meta: describe,
-      });
+      results.push([ iB.batch, describe ]);
     }
       
     return [ results, exact ];

@@ -21,7 +21,7 @@ const NumStatRing = ({ total, nums, name, title, colour, maxSize, noGap, isDebug
   const contain = maxSize || 'chart15Contain';
   
   return(
-    <div className='invert' className={`${contain} noCopy`} title={title}>
+    <div className={`${contain} invert noCopy`} title={title}>
       <div className='pieRing'>
         <VictoryPie
           theme={Theme.NeptuneVictory}

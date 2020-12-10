@@ -478,7 +478,6 @@ Meteor.publish('skinnyData', function(){
         fields: {
           'group': 1,
           'alias': 1,
-          'wiki' : 1, // just for pro
           'hibernate': 1
           // 'orgKey': 0,
           // 'shareKey': 0,
@@ -505,6 +504,7 @@ Meteor.publish('skinnyData', function(){
             'widgetId': 1,
             'versionKey': 1,
             'tags': 1,
+            'createdAt': 1,
             'live': 1,
             'lock': 1,
             'salesOrder': 1,
@@ -520,6 +520,7 @@ Meteor.publish('skinnyData', function(){
             'widgetId': 1,
             'versionKey': 1,
             'tags': 1,
+            'createdAt': 1,
             'live': 1,
             'lock': 1,
             'salesOrder': 1,

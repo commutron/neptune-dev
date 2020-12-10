@@ -139,6 +139,8 @@
   font-weight: 400;
 	padding: 12px 6px;
 	padding: calc(0.5em + 0.5vw) calc(0.5em + 0.5vw);
+  border-left-style: solid;
+  border-left-color: white;
   cursor: pointer;
 }
 
@@ -148,12 +150,14 @@
   border-bottom-style: outset;
   border-bottom-color: var(--silverfade);
   border-left-width: 5px;
-  border-left-style: solid;
-  border-left-color: white;
   background-color: rgb(25,25,25);
 	color: var(--clouds);
   word-break: keep-all;
   word-wrap: normal;
+}
+.leapBar:hover, .leapBar:focus, .leapBar:active {
+  background-color: var(--clouds);
+  color: var(--black);
 }
 
 .leapRow {
@@ -162,15 +166,6 @@
 	grid-gap: 0px 16px;
 	align-items: center;
 	border: none;
-  border-left-width: 8px;
-  border-left-style: solid;
-  border-left-color: white;
-  background-color: white;
-	color: var(--black);
-  overflow: hidden;
-  word-break: break-all;
-  word-wrap: break-word;
-  box-shadow: var(--dropShadow000);
 }
 .leapRow > span {
   display: flex;
@@ -186,12 +181,34 @@
   justify-self: center;
 }
 
-.leapBar:hover, .leapBar:focus, .leapBar:active {
-  background-color: var(--clouds);
+.leapRow, .leapLine {
+  border-left-width: 8px;
+  background-color: white;
   color: var(--black);
+  overflow: hidden;
+  word-break: break-all;
+  word-wrap: break-word;
+  box-shadow: var(--dropShadow000);
 }
-.leapRow:hover, .leapRow:focus, .leapRow:active {
-  box-shadow: var(--dropShadow00);
+.leapRow:hover, .leapRow:focus, .leapRow:active,
+.leapLine:hover, .leapLine:focus, .leapLine:active {
+  box-shadow: var(--dropShadow0);
+  border-bottom-color: black;
+}
+  
+.leapLine {
+  width: 100%;
+  padding: 1rem;
+  display: grid;
+  grid-template-rows: min-content;
+  grid-template-columns: 5ch repeat( auto-fit, minmax(0px, 1fr) );
+	grid-auto-flow: column;
+	grid-gap: 3ch;
+	align-items: center;
+	border-bottom: 1px inset grey;
+  border-left-style: solid;
+  border-left-color: white;
+  cursor: pointer;
 }
 
 .roundActionIcon {

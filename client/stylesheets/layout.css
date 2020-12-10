@@ -709,6 +709,7 @@ main {
 
 .hide { display: none !important; }
 .invisible { visibility: hidden; }
+/*.offscreen {content-visibility: auto; }*/
 
 .verLine { vertical-align: middle; }
 
