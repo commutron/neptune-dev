@@ -32,27 +32,30 @@ const ExploreLanding = ({
   
   return(
     <section className='space1v'>
+
+      <ToggleSearch
+        tggl={tggl}
+        tgglSet={tgglSet}
+        queryState={queryState}
+        queryUP={(v)=>querySet(v)}
+        resultUP={(r)=>resultSet(r)}
+        batchData={[...batchData, ...xBatchData]}
+        widgetData={widgetData}
+        variantData={variantData}
+        groupData={groupData}
+        app={app}
+      />
     
-      <div className='wide'>
-          
-        <ToggleSearch
-          tggl={tggl}
-          tgglSet={tgglSet}
-          queryState={queryState}
-          queryUP={(v)=>querySet(v)}
-          resultUP={(r)=>resultSet(r)}
-          batchData={[...batchData, ...xBatchData]}
-          widgetData={widgetData}
-          variantData={variantData}
-          groupData={groupData}
-          app={app}
-        />
+      {!queryState || resultState === null ? null
+        : resultState === undefined ?
+          <p className='centreText'><i className="far fa-compass fa-2x fa-spin"></i></p>
+        : resultState === false || resultState.length === 0 ?
+          <p className='centreText'><b>NO SEARCH RESULT</b></p>
+        : null
+      }
       
-      </div>
-    
-      {queryState ? 
-      
-        <div className='fixedResults forceScrollStyle wide max750'>
+      {resultState && resultState.length > 0 &&
+        <div className='fixedResults forceScrollStyle wide max1000'>
           {tggl ?
             <BatchResult
             queryState={queryState}
@@ -64,72 +67,76 @@ const ExploreLanding = ({
             resultState={resultState}
             app={app} />
           }
-        </div> 
+        </div>}
+      
+      <div 
+        hidden={
+          resultState === undefined || 
+          (resultState && resultState.length > 0)
+          ? 'hidden' : ''
+        }
+      >
         
-      :
-        <div> 
-          
-          <div className='centreRow'>
-            <TrendLine 
-              title={`new ${Pref.batches}`}
-              statType='newBatch'
-              cycleCount={6}
-              cycleBracket='month'
-              lineColor='rgb(52, 152, 219)'
-            />
-            <TrendLine 
-              title='new items'
-              statType='newItem'
-              cycleCount={6}
-              cycleBracket='month'
-              lineColor='rgb(52, 152, 219)' 
-            />
-            <TrendBar
-              title={`completed ${Pref.batches}`}
-              statType='doneBatch'
-              cycleCount={6}
-              cycleBracket='month'
-            />
-          </div>
-        
-          <div className='centreRow vspacehalf'>
-            <NumStatBox
-              number={live + xlive}
-              name='WIP'
-              borderColour='blue'
-            />
-            <NumStatBox
-              number={( (live + xlive) - (process + xProcess) )}
-              name='RMA'
-              borderColour='red'
-            />
-            <NumStatBox
-              number={(total + xTotal) - (process + xProcess)}
-              name='Completed'
-              borderColour='green'
-            />
-             <NumStatBox
-              number={(total + xTotal)}
-              name='Total'
-            />
-            <NumStatBox
-              number={locked + xlocked}
-              name='Locked'
-              borderColour='rgb(155, 89, 182)'
-            />
-          </div>
-       
-          <div className='wide max750'>
-            <BatchNewList
-              batchData={[...batchData, ...xBatchData]}
-              widgetData={widgetData}
-              variantData={variantData}
-              groupData={groupData}
-            />
-          </div>
-          
+        <div className='centreRow'>
+          <TrendLine 
+            title={`new ${Pref.batches}`}
+            statType='newBatch'
+            cycleCount={6}
+            cycleBracket='month'
+            lineColor='rgb(52, 152, 219)'
+          />
+          <TrendLine 
+            title='new items'
+            statType='newItem'
+            cycleCount={6}
+            cycleBracket='month'
+            lineColor='rgb(52, 152, 219)' 
+          />
+          <TrendBar
+            title={`completed ${Pref.batches}`}
+            statType='doneBatch'
+            cycleCount={6}
+            cycleBracket='month'
+          />
         </div>
-      }
+        
+        <div className='centreRow vspacehalf'>
+          <NumStatBox
+            number={live + xlive}
+            name='WIP'
+            borderColour='blue'
+          />
+          <NumStatBox
+            number={( (live + xlive) - (process + xProcess) )}
+            name='RMA'
+            borderColour='red'
+          />
+          <NumStatBox
+            number={(total + xTotal) - (process + xProcess)}
+            name='Completed'
+            borderColour='green'
+          />
+           <NumStatBox
+            number={(total + xTotal)}
+            name='Total'
+          />
+          <NumStatBox
+            number={locked + xlocked}
+            name='Locked'
+            borderColour='rgb(155, 89, 182)'
+          />
+        </div>
+       
+        <div className='wide max1000'>
+          <BatchNewList
+            batchData={[...batchData, ...xBatchData]}
+            widgetData={widgetData}
+            variantData={variantData}
+            groupData={groupData}
+          />
+        </div>
+        
+      </div>
     </section>
   );
 };

@@ -70,11 +70,8 @@ const ToggleSearch = ({
   function handle(e) {
     const value = e.target.value;
     const valid = value && value.length > (tggl ? 0 : 4);
-    
-    if(valid) {
-      queryUP(value);
-    }else{
-      queryUP(value);
+    queryUP(value);
+    if(!valid) {
       e.target.reportValidity();
     }
   }
@@ -82,7 +79,7 @@ const ToggleSearch = ({
   const bttnClss = 'action variableInput big';
 	
 	return(
-		<div className='centre centreText'>
+		<div className='wide centre centreText'>
 	    <p>
         <label className='blackT variableInput big'>
   	      <button
@@ -102,20 +99,20 @@ const ToggleSearch = ({
           id='multiSearch'
           type='search'
           pattern={tggl ? '[A-Za-z0-9 _-]*' : '[0000000000-9999999999]*'}
-          minLength={tggl ? '0' : '4'}
+          minLength={tggl ? '0' : '5'}
           className='variableInput big'
           onChange={(e)=>handle(e)}
           autoFocus={true}
           required
           list={tggl ? 'tagList' : null}
         />
-        {tggl &&
+        {/*tggl &&
         <datalist id='tagList'>
           {app.tagOption && app.tagOption.map( (entry, index)=>{
             return ( 
               <option key={index} value={entry} className=''>{entry}</option>
           )})}
-        </datalist>}
+        </datalist>*/}
       </p>
       
       <p>{tggl ? `Find a ${Pref.batch} by number, ${Pref.group}, ${Pref.widget} or tag.` : 

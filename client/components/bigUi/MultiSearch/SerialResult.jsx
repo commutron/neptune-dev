@@ -11,10 +11,6 @@ const SerialResult = ({ queryState, resultState })=> {
 		<div className='centre centreText'>
       {re === null || !queryState ?
         null
-      : re === undefined ?
-        <p className='centreText'><em>looking</em></p>
-      : re === false || re.length === 0 ?
-        <p className='centreText'><b>NO RESULT</b></p>
       : ex === true ?
         <LeapLine
           key='1a'

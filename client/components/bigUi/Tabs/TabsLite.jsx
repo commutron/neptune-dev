@@ -4,7 +4,7 @@ import './style.css';
 const TabsLite = ({ tabs, names, children })=> {
   
   const [ show, showSet ] = useState( 0 );
-    
+  
   return (
     <div>
       <div className='liteTabs flexRR'>
@@ -21,8 +21,15 @@ const TabsLite = ({ tabs, names, children })=> {
       </div>
         <div className='tabBody'>
 
-          {children[show]}
-        
+          {children.map( (child, index)=>{
+            return (
+              <span key={index+'tab'} hidden={index !== show}>
+               {child}
+              </span>
+          )})}
+            
+          {/*children[show]*/}
+
         </div>
     </div>
   );

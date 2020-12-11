@@ -198,17 +198,20 @@
   
 .leapLine {
   width: 100%;
-  padding: 1rem;
+  padding: 2vmin;
   display: grid;
   grid-template-rows: min-content;
   grid-template-columns: 5ch repeat( auto-fit, minmax(0px, 1fr) );
 	grid-auto-flow: column;
-	grid-gap: 3ch;
+	grid-gap: 5vmin;
 	align-items: center;
 	border-bottom: 1px inset grey;
   border-left-style: solid;
   border-left-color: white;
   cursor: pointer;
+}
+.leapLine > span:first-child {
+ font-weight: 600;
 }
 
 .roundActionIcon {
