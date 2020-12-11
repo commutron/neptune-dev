@@ -18,7 +18,7 @@ const BranchProgress = ({
       error && console.log(error);
       if( reply ) { 
         setProg( reply );
-        isDebug && console.log(progData);
+        isDebug && console.log(reply);
       }
     });
   }, [batchID, branchArea, filterBy, updateTrigger]);
@@ -40,17 +40,15 @@ const BranchProgress = ({
           </div>}
       
         {dt.branchSets.map( (branch, index)=>{
-          if(branch.steps.length === 0) {
+          if(branch.steps === 0) {
             return(
               <div key={batchID + branch + index + 'x'}>
                <i className='fade small label'>{branch.branch}</i>
               </div>
             );
           }else{
-            const calPer = ( branch.count / (dt.totalItems * branch.steps.length) ) * 100;
-            const calNum = calPer > 0 && calPer < 1 ? 
-                            calPer.toPrecision(1) : Math.floor( calPer );
-            isDebug && console.log(`${dt.batch} ${branch.branch} calNum: ${calNum}`);
+            const calNum = branch.calNum;
+            isDebug && console.log(`${dt.batchID} ${branch.branch} calNum: ${calNum}`);
             let fadeTick = isNaN(calNum) ? '' :
                calNum == 0 ? '0' :
                calNum < 2 ? '1' :
@@ -73,8 +71,8 @@ const BranchProgress = ({
             let ylwLne = isYllw ? ' yellowLeft' : '';
             let ylwTxt = isYllw ? `\nBlocked by ${Pref.shortfalls}` : '';
             
-            const ttlText = `Steps: ${branch.steps.length}${ylwTxt}${redtxt}`;
-            
+            const ttlText = `Steps: ${branch.steps}${ylwTxt}${redtxt}`;
+
             let niceName = branch.branch;
             return(
               <div 

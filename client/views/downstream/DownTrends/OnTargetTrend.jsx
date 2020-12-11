@@ -84,86 +84,10 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
     });
   }
   
-  function runLoopInSeq(tspan) {
-    workingSet(true);
-    tgglSpanSet(tspan);
-    
-    const backDate = isDebug ? app.createdAt : app.tideWall;
-    const dur = moment.duration(moment().diff(moment(backDate)));
-    const durCln = tspan == 'month' ?
-                    parseInt( dur.asMonths(), 10 ) :
-                    parseInt( dur.asWeeks(), 10 );
-    durrSet( durCln );
-    
-    Meteor.call('loopTimeRangesInSequence', 'doneBatch', durCln, tspan, (err, re)=>{
-    // Meteor.call('cycleWeekRate', 'doneBatch', durCln, tspan, (err, re)=>{
-      err && console.log(err);
-      if(re) {
-        if(thingMounted.current) {
-          isDebug && console.log(re);
-        
-          chartConvert(re);
-        }
-      }
-    });
-  }
-  
-  function runLoopInPar(tspan) {
-    workingSet(true);
-    tgglSpanSet(tspan);
-    
-    const backDate = isDebug ? app.createdAt : app.tideWall;
-    const dur = moment.duration(moment().diff(moment(backDate)));
-    const durCln = tspan == 'month' ?
-                    parseInt( dur.asMonths(), 10 ) :
-                    parseInt( dur.asWeeks(), 10 );
-    durrSet( durCln );
-    
-    Meteor.call('loopTimeRangesInParallel', 'doneBatch', durCln, tspan, (err, re)=>{
-      err && console.log(err);
-      if(re) {
-        if(thingMounted.current) {
-          isDebug && console.log(re);
-
-          chartConvert(re);
-        }
-      }
-    });
-  }
-  
   return(
     <div className=''>
       
       <h4>Long Calculation, Please wait for results. !! Outstanding Performance Issues !!</h4>
-      
-      {isNightly &&
-        <Fragment>
-          <button
-            className='action clearBlack gap'
-            onClick={()=>runLoopInSeq('month')}
-            disabled={working}
-          >Run Month Sequence</button>
-        
-          <button
-            className='action clearBlack gap'
-            onClick={()=>runLoopInSeq('week')}
-            disabled={working}
-          >Run Week Sequence</button>
-          
-          <button
-            className='action clearBlack gap'
-            onClick={()=>runLoopInPar('month')}
-            disabled={working}
-          >Run Month Parallel</button>
-        
-          <button
-            className='action clearBlack gap'
-            onClick={()=>runLoopInPar('week')}
-            disabled={working}
-          >Run Week Parallel</button>
-        
-        </Fragment>
-      }
         
       <div className='rowWrap'>
         {working ?

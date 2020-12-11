@@ -312,64 +312,50 @@ function collectProgress(privateKey, batchID, branchOnly) {
     const bx = XBatchDB.findOne({_id: batchID});
     const batch = BatchDB.findOne({_id: batchID});
     
-    let collection = false;
     let branchSets = [];
     
     if(bx) {
-      const waterfall = bx.waterfall;
+      const totalItems = bx.quantity;
       
       for(let branch of relevantBrancheS) {
-        const steps = waterfall.filter( x => x.branchKey === branch.brKey );
+        const steps = bx.waterfall.filter( x => x.branchKey === branch.brKey );
+        
+        let counter = 0;
+        for(let stp of steps) {
+          const wfCount = stp.counts.length === 0 ? 0 :
+            Array.from(stp.counts, x => x.tick).reduce((x,y)=> x + y);
+          counter = counter + wfCount;
+        }
+        
+        const calPer = ( counter / (totalItems * steps.length) ) * 100;
+        const calNum = calPer > 0 && calPer < 1 ? 
+                          calPer.toPrecision(1) : Math.floor( calPer );
         
         branchSets.push({
           branch: branch.branch,
-          steps: steps,
-          count: 0,
-          ncLeft: 0,
-          shLeft: 0
+          steps: steps.length,
+          // count: counter,
+          calNum: calNum,
+          ncLeft: false,
+          shLeft: false
         });
       }
-
-      branchSets.map( (brSet, index)=> {
-        for(let stp of brSet.steps) {
-          const wfCount = stp.counts.length === 0 ? 0 :
-              Array.from(stp.counts, x => x.tick).reduce((x,y)=> x + y);
-          branchSets[index].count = brSet.count + wfCount;
-        }
-      });
       
-      collection = {
-        batch: bx.batch,
+      resolve({
         batchID: bx._id,
-        totalItems: bx.quantity,
+        totalItems: totalItems,
         branchSets: branchSets,
-      };
-      resolve(collection);
+      });
     
     }else if(batch) {
       const docW = WidgetDB.findOne({_id: batch.widgetId});
       const flow = docW.flows.find( x => x.flowKey === batch.river );
       const riverFlow = flow ? flow.flow : [];
       
+      const totalItems = batch.items.length;
+      
       const rNC = batch.nonCon.filter( n => 
         !n.trash && n.inspect === false && n.skip === false );
-      
-      for(let branch of relevantBrancheS) {
-        const steps = riverFlow.filter( x => x.branchKey === branch.brKey && x.type !== 'first' );
-        const nonConLeft = branch.brKey === 't3rm1n2t1ng8r2nch' ? rNC.length > 0 :
-                            rNC.filter( x => x.where === branch.branch ).length > 0;
-        const shortLeft = batch.shortfall.filter( s => 
-                          s.inEffect !== true && s.reSolve !== true 
-                        ).length > 0;
-    
-        branchSets.push({
-          branch: branch.branch,
-          steps: steps,
-          count: 0,
-          ncLeft: nonConLeft,
-          shLeft: shortLeft
-        });
-      }
       
       const doneItems = batch.items.filter( x => x.finishedAt !== false ).length;
       const wipItems = batch.items.filter( 
@@ -378,24 +364,45 @@ function collectProgress(privateKey, batchID, branchOnly) {
                               x => x.history.filter( 
                                 y => y.type !== 'first' && y.good === true) );
       const historyFlat = [].concat(...wipItemHistory);
-
-      branchSets.map( (brSet, index)=> {
-        for(let stp of brSet.steps) {
+      
+      
+      for(let branch of relevantBrancheS) {
+        const steps = riverFlow.filter( x => x.branchKey === branch.brKey && x.type !== 'first' );
+        
+        let counter = 0;
+        for(let stp of steps) {
           const wipTally = historyFlat.filter( x => x.key === stp.key ).length;
-          branchSets[index].count = brSet.count + ( doneItems + wipTally );
+          counter = counter + ( doneItems + wipTally );
         }
-      });
+        
+        const nonConLeft = branch.brKey === 't3rm1n2t1ng8r2nch' ? rNC.length > 0 :
+                            rNC.filter( x => x.where === branch.branch ).length > 0;
+        const shortLeft = batch.shortfall.filter( s => 
+                          s.inEffect !== true && s.reSolve !== true 
+                        ).length > 0;
+        
+        const calPer = ( counter / (totalItems * steps.length) ) * 100;
+        const calNum = calPer > 0 && calPer < 1 ? 
+                          calPer.toPrecision(1) : Math.floor( calPer );
+        
+        branchSets.push({
+          branch: branch.branch,
+          steps: steps.length,
+          // count: counter,
+          calNum: calNum,
+          ncLeft: nonConLeft,
+          shLeft: shortLeft
+        });
+      }
  
-      collection = {
-        batch: batch.batch,
+      resolve({
         batchID: batch._id,
-        totalItems: batch.items.length,
+        totalItems: totalItems,
         branchSets: branchSets,
-      };
-      resolve(collection);
+      });
       
     }else{
-      resolve(collection);
+      resolve(false);
     }
   });
 }

@@ -25,7 +25,7 @@ function loopBatches(batches, from, to) {
     let allShortfalls = [];
     
     for(let b of batches) {
-      allNonCons.push(...b.nonCon);
+      allNonCons.push(...b.nonCon.filter( x => !x.trash ));
       allShortfalls.push(...b.shortfall);
       allItems.push(...b.items);
     }

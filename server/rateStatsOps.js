@@ -147,7 +147,7 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
     return resultB + resultX;
   }
   
-  export function countDoneBatch(accessKey, rangeStart, rangeEnd) {
+  export async function countDoneBatch(accessKey, rangeStart, rangeEnd) {
     
     let doneOnTime = 0;
     let doneLate = 0;
@@ -177,10 +177,19 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
       }
-    }).fetch();
-    for(let gf of b) {
-      doneCalc(gf.end, gf.finishedAt, gf.tide, gf.quoteTimeBudget, gf.lockTrunc);
-    }
+    },{fields:{
+      'end': 1,
+      'finishedAt': 1,
+      'tide': 1,
+      'quoteTimeBudget': 1,
+      'lockTrunc': 1
+    }}).fetch();
+    await Promise.all(b.map( async (gf, inx)=> {
+      await new Promise( (resolve)=> {
+        doneCalc(gf.end, gf.finishedAt, gf.tide, gf.quoteTimeBudget, gf.lockTrunc);
+        resolve(true);
+      });
+    }));
     
     const bx = XBatchDB.find({
       orgKey: accessKey, 
@@ -188,10 +197,19 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
       }
-    }).fetch();
-    for(let gfx of bx) {
-      doneCalc(gfx.salesEnd, gfx.completedAt, gfx.tide, gfx.quoteTimeBudget, gfx.lockTrunc);
-    }
+    },{fields:{
+      'salesEnd': 1,
+      'completedAt': 1,
+      'tide': 1,
+      'quoteTimeBudget': 1,
+      'lockTrunc': 1
+    }}).fetch();
+    await Promise.all(bx.map( async (gfx, inx)=> {
+      await new Promise( (resolve)=> {
+        doneCalc(gfx.salesEnd, gfx.completedAt, gfx.tide, gfx.quoteTimeBudget, gfx.lockTrunc);
+        resolve(true);
+      });
+    }));
     
     return [ 
       doneOnTime,
@@ -443,65 +461,6 @@ Meteor.methods({
     }
     return runLoop();
   },
-  
-  loopTimeRangesInSequence(counter, cycles, bracket) {
-    const accessKey = Meteor.user().orgKey;
-    const nowLocal = moment().tz(Config.clientTZ);
-    
-    let loopBrackets = [];
-    for(let w = 0; w < cycles; w++) {
-      const label = cycles-w;
-      
-      const loopBack = nowLocal.clone().subtract(w, bracket); 
-     
-      const rangeStart = loopBack.clone().startOf(bracket).toISOString();
-      const rangeEnd = loopBack.clone().endOf(bracket).toISOString();
-      
-      loopBrackets.push({label, rangeStart, rangeEnd});
-    }
-        
-    async function runLoop() {
-      let countArray = [];
-      for(let l of loopBrackets) {
-        const quantity = await new Promise(function(resolve) {
-          resolve( countDoneBatch(accessKey, l.rangeStart, l.rangeEnd) );
-        });
-        countArray.unshift({ x:l.label, y:quantity });
-      }
-      return countArray;
-    }
-    return runLoop();
-  },
-  
-  loopTimeRangesInParallel(counter, cycles, bracket) {
-    const accessKey = Meteor.user().orgKey;
-    const nowLocal = moment().tz(Config.clientTZ);
-    
-    let loopBrackets = [];
-    for(let w = 0; w < cycles; w++) {
-      const label = cycles-w;
-      
-      const loopBack = nowLocal.clone().subtract(w, bracket); 
-     
-      const rangeStart = loopBack.clone().startOf(bracket).toISOString();
-      const rangeEnd = loopBack.clone().endOf(bracket).toISOString();
-      
-      loopBrackets.push({label, rangeStart, rangeEnd});
-    }
-      
-    async function runLoop() {
-      let countArray = [];
-      await Promise.all(loopBrackets.map( async (l, inx)=> {
-        const quantity = await new Promise( (resolve)=> {
-          resolve( countDoneBatch(accessKey, l.rangeStart, l.rangeEnd) );
-        });
-        countArray.unshift({ x:l.label, y:quantity });
-      }));
-      return countArray;
-    }
-    return runLoop();
-  }
-  
   
   
   

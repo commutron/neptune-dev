@@ -55,7 +55,7 @@ const ExploreLanding = ({
       }
       
       {resultState && resultState.length > 0 &&
-        <div className='fixedResults forceScrollStyle wide max1000'>
+        <div className='fixedResults forceScrollStyle wide max875'>
           {tggl ?
             <BatchResult
             queryState={queryState}
@@ -81,21 +81,21 @@ const ExploreLanding = ({
           <TrendLine 
             title={`new ${Pref.batches}`}
             statType='newBatch'
-            cycleCount={6}
+            cycleCount={4}
             cycleBracket='month'
             lineColor='rgb(52, 152, 219)'
           />
           <TrendLine 
             title='new items'
             statType='newItem'
-            cycleCount={6}
+            cycleCount={4}
             cycleBracket='month'
             lineColor='rgb(52, 152, 219)' 
           />
           <TrendBar
             title={`completed ${Pref.batches}`}
             statType='doneBatch'
-            cycleCount={6}
+            cycleCount={4}
             cycleBracket='month'
           />
         </div>
@@ -127,7 +127,7 @@ const ExploreLanding = ({
           />
         </div>
        
-        <div className='wide max1000'>
+        <div className='wide max875'>
           <BatchNewList
             batchData={[...batchData, ...xBatchData]}
             widgetData={widgetData}

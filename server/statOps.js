@@ -83,8 +83,6 @@ export const totalTideTimePromise = (accessKey, rangeStart, rangeEnd)=> {
 };
 
 
-
-
 Meteor.methods({
 
   topViewStats(u, g, w, b, a) {
