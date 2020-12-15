@@ -28,4 +28,4 @@ fourseven:scss
 react-meteor-data
 meteorhacks:subs-manager
 msavin:usercache
-# littledata:synced-cron
+littledata:synced-cron

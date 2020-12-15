@@ -10,7 +10,7 @@ import 'moment-business-time';
 
 import Config from '/server/hardConfig.js';
 
-/*
+
 SyncedCron.config({
   log: true,// Log job run details to console
   
@@ -98,5 +98,3 @@ async function runLoop(countDoneItemDay) {
     }});
   }
 }
-
-*/
