@@ -1,3 +1,5 @@
+// import { SyncedCron } from 'meteor/littledata:synced-cron';
+
 import moment from 'moment';
 import 'moment-timezone';
 import 'moment-business-time';
@@ -8,7 +10,7 @@ import 'moment-business-time';
 
 import Config from '/server/hardConfig.js';
 
-
+/*
 SyncedCron.config({
   log: true,// Log job run details to console
   
@@ -96,3 +98,5 @@ async function runLoop(countDoneItemDay) {
     }});
   }
 }
+
+*/
