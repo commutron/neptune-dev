@@ -92,38 +92,8 @@ Meteor.publish('appData', function(){
   }
 });
 
-// NOT IN USE
-Meteor.publish('usersData', function(){
-  const user = Meteor.users.findOne({_id: this.userId});
-  const orgKey = user ? user.orgKey : false;
-  const admin = Roles.userIsInRole(this.userId, 'admin');
-  if(!this.userId){
-    return this.ready();
-  }else if(admin) {
-    return [
-      Meteor.users.find({},
-        {fields: {
-          'services': 0,
-          'orgKey': 0,
-          'usageLog': 0,
-          'watchlist': 0,
-          'inbox': 0,
-          'breadcrumbs': 0
-        }})
-    ];
-  }else{
-    return [
-      Meteor.users.find({orgKey: orgKey},
-        {fields: {
-          'username': 1,
-          'org': 1,
-          'roles': 1,
-        }}),
-      ];
-  }
-});
 
-Meteor.publish('usersDataDebug', function(){
+Meteor.publish('debugData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
   const admin = Roles.userIsInRole(this.userId, 'admin');
@@ -139,8 +109,12 @@ Meteor.publish('usersDataDebug', function(){
           'inbox': 1,
           'breadcrumbs': 1,
           'engaged': 1
-        }}),
-      ];
+      }}),
+      CacheDB.find({}, {
+        fields: {
+          'orgKey': 0,
+      }})
+    ];
   }
 });
 

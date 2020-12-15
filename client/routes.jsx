@@ -38,6 +38,14 @@ XBatchDB = new Mongo.Collection('xbatchdb');
 CacheDB = new Mongo.Collection('cachedb');
 TraceDB = new Mongo.Collection('tracedb');
 
+
+SubMngr = new SubsManager({
+  // maximum number of cache subscriptions
+  cacheLimit: 3,
+  // expire after 5 minute, if it's not subscribed again
+  expireIn: 5
+});
+
 FlowRouter.notFound = {
   action() {
     mount(PublicLayout, {
@@ -47,11 +55,9 @@ FlowRouter.notFound = {
   }
 };
 
-LoginSub = new SubsManager();
-
 const exposedRoutes = FlowRouter.group({
   subscriptions: function(params, queryParams) {
-    this.register('routerSub', LoginSub.subscribe('loginData'));
+    this.register('routerSub', SubMngr.subscribe('loginData'));
   }
 });
 
@@ -64,7 +70,7 @@ exposedRoutes.route('/login', {
     });
   }
 });
-
+/*
 exposedRoutes.route('/meta', {
   name: 'meta',
   action() {
@@ -89,10 +95,7 @@ exposedRoutes.route('/meta', {
     });
   }
 });
-
-SelfSub = new SubsManager();
-AppSub = new SubsManager();
-// UsersSub = new SubsManager();
+*/
 
 const privlegedRoutes = FlowRouter.group({
   triggersEnter: [
@@ -109,9 +112,8 @@ const privlegedRoutes = FlowRouter.group({
     }
   ],
   subscriptions: function(params, queryParams) {
-    this.register('routerSubSelf', SelfSub.subscribe('selfData'));
-    this.register('routerSubApp', AppSub.subscribe('appData'));
-    // this.register('routerSubUsers', UsersSub.subscribe('usersData'));
+    this.register('routerSubSelf', SubMngr.subscribe('selfData'));
+    this.register('routerSubApp', SubMngr.subscribe('appData'));
   }
 });
 

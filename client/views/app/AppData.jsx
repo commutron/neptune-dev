@@ -56,7 +56,7 @@ export default withTracker( () => {
   let active = login ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
   const isAdmin = login ? Roles.userIsInRole(Meteor.userId(), 'admin') : false;
   const isDebug = login ? Roles.userIsInRole(Meteor.userId(), 'debug') : false;
-  const usersDebugSub = login ? Meteor.subscribe('usersDataDebug') : false;
+  const debugSub = login ? Meteor.subscribe('debugData') : false;
   if(!login) {
     return {
       readyDebug: false
@@ -67,7 +67,7 @@ export default withTracker( () => {
     };
   }else{
     return {
-      readyDebug: usersDebugSub.ready(),
+      readyDebug: debugSub.ready(),
       orb: Session.get('now'),
       bolt: Session.get('allData'),
       username: name,

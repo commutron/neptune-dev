@@ -30,36 +30,7 @@ Meteor.methods({
     }*/
     return null;
   },
-  /*
-  priorityCacheUpdate(accessKey, force) {
-    this.unblock();
-    if(typeof accessKey === 'string') {
-      const timeOut = moment().subtract(60, 'minutes').toISOString();
-      const currentCache = CacheDB.findOne({
-        orgKey: accessKey, 
-        lastUpdated: { $gte: new Date(timeOut) },
-        dataName:'priorityRank'});
-      
-      if(force || !currentCache ) {
-        const batches = BatchDB.find({orgKey: accessKey, live: true}).fetch();
-        const batchesX = XBatchDB.find({orgKey: accessKey, live: true}).fetch();
-        const slim = [...batches,...batchesX].map( x => {
-          return Meteor.call('priorityRank', x._id, accessKey);
-        });
-        
-        CacheDB.upsert({orgKey: accessKey, dataName: 'priorityRank'}, {
-          $set : { 
-            orgKey: accessKey,
-            lastUpdated: new Date(),
-            dataName: 'priorityRank',
-            dataSet: slim,
-            structured: true,
-            minified: false
-        }});
-      }
-    }
-  },
-  */
+
   // a cache for a plain list of all part numbers for autocomplete
   partslistCacheUpdate(internalKey) {
     this.unblock();

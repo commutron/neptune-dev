@@ -1027,6 +1027,7 @@ button.numberSet {
 /*.twoSqIcons { width: 80px; }*/
 .max1200 { max-width: 1200px; }
 .max1000 { max-width: 1000px; }
+.max875 { max-width: 875px; }
 .max750 { max-width: 750px; }
 .max600 { max-width: 600px; }
 .max500 { max-width: 500px; }

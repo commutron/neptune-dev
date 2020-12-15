@@ -13,19 +13,6 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
         $lte: new Date(rangeEnd) 
       }
     },{fields:{'_id':1}},{limit:1}).count();
-    /*
-    const fetchU = Meteor.users.aggregate([
-      { $match: { 
-          orgKey: accessKey,
-          createdAt: { 
-            $gte: new Date(rangeStart),
-            $lte: new Date(rangeEnd) 
-          }
-      } },
-      { $count: "uCount" }
-    ]);
-    const resultU = fetchU[0] ? fetchU[0].uCount : 0;
-    */
     return resultU;
   }
 
@@ -37,19 +24,6 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
         $lte: new Date(rangeEnd) 
       }
     },{fields:{'_id':1}}).count();
-    /*
-    const fetchG = GroupDB.aggregate([
-      { $match: { 
-          orgKey: accessKey,
-          createdAt: { 
-            $gte: new Date(rangeStart),
-            $lte: new Date(rangeEnd) 
-          }
-      } },
-      { $count: "gCount" }
-    ]);
-    const resultG = fetchG[0] ? fetchG[0].gCount : 0;
-    */
     return resultG;
   }
 
@@ -61,19 +35,6 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
         $lte: new Date(rangeEnd) 
       }
     },{fields:{'_id':1}}).count();
-    /*
-    const fetchW = WidgetDB.aggregate([
-      { $match: { 
-          orgKey: accessKey,
-          createdAt: { 
-            $gte: new Date(rangeStart),
-            $lte: new Date(rangeEnd) 
-          }
-      } },
-      { $count: "wCount" }
-    ]);
-    const resultW = fetchW[0] ? fetchW[0].wCount : 0;
-    */
     return resultW;
   }
   
@@ -85,19 +46,6 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
         $lte: new Date(rangeEnd) 
       }
     },{fields:{'_id':1}}).count();
-    /*
-    const fetchV = VariantDB.aggregate([
-      { $match: { 
-          orgKey: accessKey,
-          createdAt: { 
-            $gte: new Date(rangeStart),
-            $lte: new Date(rangeEnd) 
-          }
-      } },
-      { $count: "vCount" }
-    ]);
-    const resultV = fetchV[0] ? fetchV[0].vCount : 0;
-    */
     return resultV;
   }
 
@@ -118,32 +66,6 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
         $lte: new Date(rangeEnd) 
       }
     },{fields:{'_id':1}}).count();
-    
-    /*
-    const fetchB = BatchDB.aggregate([
-      { $match: { 
-          orgKey: accessKey,
-          createdAt: { 
-            $gte: new Date(rangeStart),
-            $lte: new Date(rangeEnd) 
-          }
-      } },
-      { $count: "bCount" }
-    ]);
-    const resultB = fetchB[0] ? fetchB[0].bCount : 0;
-    
-    const fetchX = XBatchDB.aggregate([
-      { $match: { 
-          orgKey: accessKey, 
-          createdAt: { 
-            $gte: new Date(rangeStart),
-            $lte: new Date(rangeEnd) 
-          }
-      } },
-      { $count: "xCount" }
-    ]);
-    const resultX = fetchX[0] ? fetchX[0].xCount : 0;
-   */
     return resultB + resultX;
   }
   
@@ -461,6 +383,62 @@ Meteor.methods({
     }
     return runLoop();
   },
+  
+  
+  cycleLiteRate(stat, cycles, bracket) {
+    this.unblock();
+      try {
+      let cName = false;
+      
+      if( !stat || typeof stat !== 'string' ) {
+        null;
+      // }else if( stat === 'doneBatchLite' ) {
+      //   loop = ;
+      }else if( stat === 'doneItemLite' ) {
+        cName = 'itemDoneDays';
+      }else{
+        null;
+      }
+      
+      if( !cName || typeof cycles !== 'number' ) {
+        return false;
+      }else{
+        const accessKey = Meteor.user().orgKey;
+        return Meteor.call('loopTimeCacheRanges', 
+                accessKey, cName, cycles, bracket, );
+      }
+    }catch(err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  
+  loopTimeCacheRanges(accessKey, cacheName, cycles, bracket) {
+    const nowLocal = moment().tz(Config.clientTZ);
+  
+    const lite = CacheDB.findOne({ orgKey: accessKey, dataName: cacheName });
+    
+    if(lite) {
+      const liteSet = lite.dataSet;
+      
+      let countArray = [];
+  
+      for(let w = 0; w < cycles; w++) {
+        const loopBack = nowLocal.clone().subtract(w, bracket); 
+     
+        const thisRng = liteSet.filter( x =>
+          moment(x.label).isSame(loopBack, bracket)
+        );
+      
+        const quantity = Array.from(thisRng, r => r.y).reduce((a,b)=> a + b);
+
+        countArray.unshift({ x:cycles-w, y: quantity });
+      }
+      return countArray;
+    }else{
+      return [];
+    }
+  }
+
   
   
   

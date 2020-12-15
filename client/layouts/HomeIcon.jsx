@@ -35,7 +35,7 @@ const HomeIcon = () => {
       </a>
       
       </ContextMenuTrigger>
-      <ContextMenu id='absoluteHome01' className='medBig'>
+      <ContextMenu id='absoluteHome01' className='vbig'>
         <MenuItem disabled={true}>
           <i>{'Neptune v.' + Pref.neptuneVersion}</i><br />
           
