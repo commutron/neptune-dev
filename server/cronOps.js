@@ -24,7 +24,7 @@ SyncedCron.add({
   name: 'Daily Done Items',
   schedule: function(parser) {
     // parser is a later.parse object
-    return parser.text('at 7:45 am'); // for midnight tz(Regina/Central)
+    return parser.text('at 8:00 am'); // for midnight tz(Regina/Central)
   },
   job: function() {
     var numbersCrunched = runLoop(countDoneItemDay);
