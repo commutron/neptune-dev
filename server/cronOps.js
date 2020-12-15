@@ -10,7 +10,7 @@ import Config from '/server/hardConfig.js';
 
 
 SyncedCron.config({
-  log: false,// Log job run details to console
+  log: true,// Log job run details to console
   
   logger: null,// Defaults to Meteor's logging package
   
@@ -24,7 +24,7 @@ SyncedCron.add({
   name: 'Daily Done Items',
   schedule: function(parser) {
     // parser is a later.parse object
-    return parser.text('at 8:00 am'); // for midnight tz(Regina/Central)
+    return parser.text('at 8:30 am'); // for midnight tz(Regina/Central)
   },
   job: function() {
     var numbersCrunched = runLoop(countDoneItemDay);
