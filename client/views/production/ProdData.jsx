@@ -1,7 +1,7 @@
 import React, { useLayoutEffect} from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-//import Pref from '/client/global/pref.js';
+import Pref from '/client/global/pref.js';
 
 import InboxToastPop from '/client/utility/InboxToastPop.js';
 import usePrevious from '/client/utility/usePreviousHook.js';
@@ -66,6 +66,8 @@ export default withTracker( () => {
   
   let keyMatch = false;
   let subBatch = false;
+  // const regex810 = RegExp(/^(\d{8,10})$/);
+  // const regexNS = RegExp(/^(\d{6}\-\d{7})$/);
     
   if( coldSub && !subBatch ) {
     
@@ -87,7 +89,7 @@ export default withTracker( () => {
       hotBatch = BatchDB.findOne({ batch: orb });
       hotxBatch = XBatchDB.findOne({ batch: orb });
       
-    }else if( !isNaN(orb) && orb.length >= 8 && orb.length <= 10 ) {
+    }else if( Pref.regexSN.test(orb) ) {
   		const itemsBatch = BatchDB.findOne( { 'items.serial': orb } );
       if( itemsBatch ) {
         hotBatch = itemsBatch;
@@ -98,7 +100,8 @@ export default withTracker( () => {
         subBatch = orb;
       }
     }else{
-      subBatch = false;
+      // subBatch = false;
+      null;
     }
   }
 

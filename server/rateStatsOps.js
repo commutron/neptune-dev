@@ -311,8 +311,8 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
     });
     return scCount;
   }
-      
-  
+
+
 Meteor.methods({
   
   
@@ -385,62 +385,33 @@ Meteor.methods({
   },
   
   
-  cycleLiteRate(stat, cycles, bracket) {
+  cycleLiteRate(cName, cycles) {
     this.unblock();
       try {
-      let cName = false;
-      
-      if( !stat || typeof stat !== 'string' ) {
-        null;
-      // }else if( stat === 'doneBatchLite' ) {
-      //   loop = ;
-      }else if( stat === 'doneItemLite' ) {
-        cName = 'itemDoneDays';
-      }else{
-        null;
-      }
-      
-      if( !cName || typeof cycles !== 'number' ) {
+
+      if( !cName || typeof cName !== 'string' || typeof cycles !== 'number' ) {
         return false;
       }else{
         const accessKey = Meteor.user().orgKey;
-        return Meteor.call('loopTimeCacheRanges', 
-                accessKey, cName, cycles, bracket, );
+        
+        const lite = CacheDB.findOne({ orgKey: accessKey, dataName: cName });
+        const liteSet = lite.dataSet || [];
+        
+        if(liteSet.length >= cycles) {
+          
+          const cut = -Math.abs(cycles);
+  
+          const sliceSet = liteSet.slice(cut, liteSet.length);
+          
+          return sliceSet;
+        }else{
+          return [];
+        }
       }
     }catch(err) {
       throw new Meteor.Error(err);
     }
-  },
-  
-  loopTimeCacheRanges(accessKey, cacheName, cycles, bracket) {
-    const nowLocal = moment().tz(Config.clientTZ);
-  
-    const lite = CacheDB.findOne({ orgKey: accessKey, dataName: cacheName });
-    
-    if(lite) {
-      const liteSet = lite.dataSet;
-      
-      let countArray = [];
-  
-      for(let w = 0; w < cycles; w++) {
-        const loopBack = nowLocal.clone().subtract(w, bracket); 
-     
-        const thisRng = liteSet.filter( x =>
-          moment(x.label).isSame(loopBack, bracket)
-        );
-      
-        const quantity = Array.from(thisRng, r => r.y).reduce((a,b)=> a + b);
-
-        countArray.unshift({ x:cycles-w, y: quantity });
-      }
-      return countArray;
-    }else{
-      return [];
-    }
   }
-
-  
-  
   
   
 });

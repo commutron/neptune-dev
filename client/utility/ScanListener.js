@@ -15,7 +15,7 @@ function onPress(event) {
     if( inputKey ) {
       if( inputCode === 13 ) { // "enter"
         const slL = scanListener.length;
-        if( slL >= 8 && slL <= 10 ) {
+        if( slL >= 8 && slL <= 14 ) {
           !event.preventDefault ? null : event.preventDefault();
           Session.set('now', scanListener);
           document.getElementById('ncRefs') ?

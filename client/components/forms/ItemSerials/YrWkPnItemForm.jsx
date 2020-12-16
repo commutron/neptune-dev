@@ -104,13 +104,10 @@ const YrWkPnItemForm = ({ id, items, more, unit, app })=> {
           autoComplete='off'>
           <p>
             <input
-              type='number'
               id='yrDigits'
-              pattern='[00-99]*'
+              pattern='[\d\d]*'
               maxLength='2'
               minLength='2'
-              max='99'
-              min='01'
               defaultValue={thisYear}
               placeholder={thisYear}
               inputMode='numeric'
@@ -119,13 +116,10 @@ const YrWkPnItemForm = ({ id, items, more, unit, app })=> {
           </p>
           <p>
             <input
-              type='number'
               id='wkDigits'
-              pattern='[00-99]*'
+              pattern='[\d\d]*'
               maxLength='2'
               minLength='2'
-              max='99'
-              min='01'
               defaultValue={thisWeek}
               placeholder={thisWeek}
               inputMode='numeric'
@@ -135,13 +129,10 @@ const YrWkPnItemForm = ({ id, items, more, unit, app })=> {
           
           <p>
             <input
-              type='number'
               id='pnlStDigits'
-              pattern='[000-999]*'
+              pattern='[\d\d\d]*'
               maxLength='3'
               minLength='3'
-              max='999'
-              min='001'
               defaultValue={001}
               placeholder={001}
               inputMode='numeric'
@@ -151,13 +142,10 @@ const YrWkPnItemForm = ({ id, items, more, unit, app })=> {
           
           <p>
             <input
-              type='number'
               id='pnlDigits'
-              pattern='[0-9]*'
+              pattern='[\d]*'
               maxLength='1'
               minLength='1'
-              max='9'
-              min='2'
               defaultValue={2}
               placeholder={2}
               inputMode='numeric'
@@ -170,10 +158,8 @@ const YrWkPnItemForm = ({ id, items, more, unit, app })=> {
               type='number'
               id='quantDigits'
               pattern='[000-999]*'
-              maxLength='3'
-              minLength='3'
-              max='999'
-              min='001'
+              max={999}
+              min={1}
               defaultValue={1}
               placeholder={1}
               inputMode='numeric'
@@ -212,7 +198,7 @@ const YrWkPnItemForm = ({ id, items, more, unit, app })=> {
           >Create</button>
         </p>
         <p>{resultMess && resultMess.length > 0 ? 'DUPLICATES' : ''}</p>
-        <p>{resultMess ? resultMess.join(', ') : ''}</p>
+        <p className='stringFit'>{resultMess ? resultMess.join(', ') : ''}</p>
       </div>
     </div>
   );

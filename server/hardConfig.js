@@ -38,7 +38,9 @@ class Config {
       6: null
     };
     
-    
+    this.regexSN = RegExp(/^(\d{8,10})$|^(\d{6}\-\d{7})$/);
+    this.regex810 = RegExp(/^(\d{8,10})$/);
+    this.regexNS = RegExp(/^(\d{6}\-\d{7})$/);
   }
 }
 

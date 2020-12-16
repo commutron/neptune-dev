@@ -36,9 +36,7 @@ const DoneItemsTrend = ({ app, isDebug, isNightly })=>{
     const dur = moment.duration(moment().diff(moment(app.createdAt)));
     const durCln = tspan == 'month' ?
                     parseInt( dur.asMonths(), 10 ) :
-                   tspan == 'week' ?
-                    parseInt( dur.asWeeks(), 10 ) :
-                    parseInt( dur.asDays(), 10 );
+                    parseInt( dur.asWeeks(), 10 );
     durrSet( durCln );
     
     Meteor.call('cycleWeekRate', 'doneItem', durCln, tspan, (err, re)=>{
@@ -53,19 +51,17 @@ const DoneItemsTrend = ({ app, isDebug, isNightly })=>{
     });
   }
   
-  function runLoopLite(tspan) {
+  function runLoopLite(cName, tspan) {
     workingSet(true);
     tgglSpanSet(tspan);
     
     const dur = moment.duration(moment().diff(moment(app.createdAt)));
     const durCln = tspan == 'month' ?
                     parseInt( dur.asMonths(), 10 ) :
-                   tspan == 'week' ?
-                    parseInt( dur.asWeeks(), 10 ) :
-                    parseInt( dur.asDays(), 10 );
+                    parseInt( dur.asWeeks(), 10 );
     durrSet( durCln );
     
-    Meteor.call('cycleLiteRate', 'doneItemLite', durCln, tspan, (err, re)=>{
+    Meteor.call('cycleLiteRate', cName, durCln, (err, re)=>{
       err && console.log(err);
       if(re) {
         if(thingMounted.current) {
@@ -87,42 +83,30 @@ const DoneItemsTrend = ({ app, isDebug, isNightly })=>{
           <b><i className='fas fa-spinner fa-lg fa-spin'></i></b> :
           <i><i className='fas fa-spinner fa-lg'></i></i>
         }
-  
+      {isDebug &&
         <button
           className='action clearBlack gap'
           onClick={()=>runLoop('month')}
           disabled={working}
-        >Run Monthly</button>
-        
+        >Run Monthly</button>}
+      {isDebug &&  
         <button
           className='action clearBlack gap'
           onClick={()=>runLoop('week')}
           disabled={working}
-        >Run Weekly</button>
+        >Run Weekly</button>}
         
         <button
           className='action clearBlack gap'
-          onClick={()=>runLoop('day')}
-          disabled={working}
-        >Run Daily</button>
-        
-        <button
-          className='action clearBlack gap'
-          onClick={()=>runLoopLite('month')}
+          onClick={()=>runLoopLite('doneUnitLiteMonths', 'month')}
           disabled={working}
         >Run Monthly Lite</button>
         
         <button
           className='action clearBlack gap'
-          onClick={()=>runLoopLite('week')}
+          onClick={()=>runLoopLite('doneUnitLiteWeeks', 'week')}
           disabled={working}
         >Run Weekly Lite</button>
-        
-        <button
-          className='action clearBlack gap'
-          onClick={()=>runLoopLite('day')}
-          disabled={working}
-        >Run Daily Lite</button>
         
         <span className='flexSpace' />
         
@@ -164,10 +148,7 @@ const DoneItemsTrend = ({ app, isDebug, isNightly })=>{
             tickFormat={(t) => 
               tgglSpan == 'month' ?
               moment().subtract(durrState, 'month').add(t, 'month').format('MMM-YYYY') :
-              tgglSpan == 'week' ?
-              `w${moment().subtract(durrState, 'week').add(t, 'week').format('w-YYYY')}` :
-
-              moment().subtract(durrState, 'day').add(t, 'day').format('DD-MMM-YYYY')}
+              `w${moment().subtract(durrState, 'week').add(t, 'week').format('w-YYYY')}`}
           />
           
             <VictoryLine
@@ -192,8 +173,7 @@ const DoneItemsTrend = ({ app, isDebug, isNightly })=>{
           </VictoryChart>
           
       </div>
-      {/*<p className='small rightText'>Gaps in the data are intentional. Indicate when no orders were completed</p>
-      */}
+      <p className='small rightText'>Data is NOT live. Refreshed once a day</p>
     </div>
   );
 };

@@ -200,8 +200,7 @@ const ProductionFindOps = ({
   }
   
 // Item
-  ////// will need to be changed?? for alphnumeric barcodes such as with TGS
-	if(!isNaN(orb) && orb.length > 5 && orb.length <= 10) {
+	if( Pref.regexSN.test(orb) ) {
 	  //let lookup = batchByItem();
     if(hotBatch) {
       let item = itemData(hotBatch.items, orb);
@@ -265,7 +264,7 @@ const ProductionFindOps = ({
   }
   
   // number that looks like a barcode but such a barcode does not exist
-  if(!isNaN(orb) && orb.length > 5 && orb.length <= 10) {
+  if(!isNaN(orb) && orb.length > 5 && orb.length <= 14) {
     Session.set('nowBatch', orb);
     return(
       <ProWindow app={app}>

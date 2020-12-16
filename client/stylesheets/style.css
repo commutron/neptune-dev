@@ -435,6 +435,7 @@ input::-webkit-calendar-picker-indicator {
   word-break: break-all;
   word-wrap: break-word;
 }
+.stringFit { max-width: fit-content; }
 
 .noCopy {
  -webkit-user-select: none;

@@ -12,7 +12,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '2.10.1';
+    this.neptuneVersion = '2.11.0';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -64,8 +64,13 @@ class Pref {
 	  this.Item = 'Board';//Board
 	  this.items = 'boards';
 	  this.itm = 'b'; // item shortcut
+	  
 	  this.itemSerial = 'barcode';
 	  this.serialType = 'qrcode';
+	  this.regexSN = RegExp(/^(\d{8,10})$|^(\d{6}\-\d{7})$/);
+	  this.regex810 = RegExp(/^(\d{8,10})$/);
+    this.regexNS = RegExp(/^(\d{6}\-\d{7})$/);
+    
     this.group = 'customer';//customer
     this.Group = 'Customer';//Customer
     this.groups = 'customers';//customer

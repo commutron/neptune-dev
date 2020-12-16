@@ -4,6 +4,8 @@ import moment from 'moment';
 import 'moment-timezone';
 import 'moment-business-time';
 
+import { deliveryBinary } from '/server/reportCompleted.js';
+import { checkTimeBudget } from '/server/tideGlobalMethods';
 // import { distTimeBudget } from './tideGlobalMethods.js';
 // import { whatIsBatch, whatIsBatchX } from './searchOps.js';
 // import { round1Decimal } from './calcOps';
@@ -22,22 +24,34 @@ SyncedCron.config({
 });
   
   
+
 SyncedCron.add({
-  name: 'Daily Done Items',
-  schedule: function(parser) {
-    // parser is a later.parse object
-    return parser.text('at 6:00 pm'); // for midnight tz(Regina/Central)
-  },
-  job: function() {
-    var numbersCrunched = runLoop(countDoneItemDay);
-    return numbersCrunched;
-  }
+  name: 'Daily Done Units By Month',
+  schedule: (parser)=> parser.text('at 9:20 am'),
+  job: ()=> runLoop(countDoneUnits, 'doneUnitLiteMonths', 'month')
+});
+SyncedCron.add({
+  name: 'Daily Done Units By Week',
+  schedule: (parser)=> parser.text('at 9:21 am'),
+  job: ()=> runLoop(countDoneUnits, 'doneUnitLiteWeeks', 'week')
+});
+
+
+SyncedCron.add({
+  name: 'Daily Done Target By Month',
+  schedule: (parser)=> parser.text('at 9:22 am'),
+  job: ()=> runLoop(countDoneBatchTarget, 'doneBatchLiteMonths', 'month')
+});
+SyncedCron.add({
+  name: 'Daily Done Target By Week',
+  schedule: (parser)=> parser.text('at 9:23 am'),
+  job: ()=> runLoop(countDoneBatchTarget, 'doneBatchLiteWeeks', 'week')
 });
   
 SyncedCron.start();
   
   
-function countDoneItemDay(accessKey, rangeStart, rangeEnd) {
+function countDoneUnits(accessKey, rangeStart, rangeEnd) {
   return new Promise(function(resolve) {
     let diCount = 0;
   
@@ -64,36 +78,112 @@ function countDoneItemDay(accessKey, rangeStart, rangeEnd) {
     resolve(diCount);
   });
 }
+
+async function countDoneBatchTarget(accessKey, rangeStart, rangeEnd) {
+    
+  let doneOnTime = 0;
+  let doneLate = 0;
+  let shipOnTime = 0;
+  let shipLate = 0;
+  let doneUnderQ = 0;
+  let doneOverQ = 0;
+  
+  const doneCalc = (endAt, doneAt, tide, quoteTimeBudget, lockTrunc)=> {
+    const dst = deliveryBinary(endAt, doneAt);
+    dst[0] === 'late' ? doneLate++ : doneOnTime++;
+    dst[1] === 'late' ? shipLate++ : shipOnTime++;
+    
+    const q = checkTimeBudget(tide, quoteTimeBudget, lockTrunc);
+    !q ? null : q < 0 ? doneOverQ++ : doneUnderQ++;
+  };
+    
+  const b = BatchDB.find({
+    orgKey: accessKey, 
+    finishedAt: { 
+      $gte: new Date(rangeStart),
+      $lte: new Date(rangeEnd) 
+    }
+  },{fields:{
+    'end': 1,
+    'finishedAt': 1,
+    'tide': 1,
+    'quoteTimeBudget': 1,
+    'lockTrunc': 1
+  }}).fetch();
+  await Promise.all(b.map( async (gf, inx)=> {
+    await new Promise( (resolve)=> {
+      doneCalc(gf.end, gf.finishedAt, gf.tide, gf.quoteTimeBudget, gf.lockTrunc);
+      resolve(true);
+    });
+  }));
+    
+  const bx = XBatchDB.find({
+    orgKey: accessKey, 
+    completedAt: { 
+      $gte: new Date(rangeStart),
+      $lte: new Date(rangeEnd) 
+    }
+  },{fields:{
+    'salesEnd': 1,
+    'completedAt': 1,
+    'tide': 1,
+    'quoteTimeBudget': 1,
+    'lockTrunc': 1
+  }}).fetch();
+  await Promise.all(bx.map( async (gfx, inx)=> {
+    await new Promise( (resolve)=> {
+      doneCalc(gfx.salesEnd, gfx.completedAt, gfx.tide, gfx.quoteTimeBudget, gfx.lockTrunc);
+      resolve(true);
+    });
+  }));
+    
+  return [ 
+    doneOnTime,
+    doneLate,
+    shipOnTime,
+    shipLate,
+    doneUnderQ,
+    doneOverQ
+  ];
+}
   
   
-async function runLoop(countDoneItemDay) {
+async function runLoop(countFunc, dataName, tSpan) {
   const apps = AppDB.find({},{fields:{'orgKey':1, 'createdAt':1}}).fetch();
   for(let app of apps) {
     const accessKey = app.orgKey;
     
     const nowLocal = moment().tz(Config.clientTZ);
     
-    const dur = moment.duration(moment().diff(moment(app.createdAt)));
-    const cycles =  parseInt( dur.asDays(), 10 );
+    const dur = moment.duration(nowLocal.diff(moment(app.createdAt)));
+    const cycles = tSpan == 'week' ?
+                    parseInt( dur.asWeeks(), 10 ) :
+                   tSpan == 'month' ?
+                    parseInt( dur.asMonths(), 10 ) :
+                    parseInt( dur.asYears(), 10 );
+    const cySpan = tSpan || 'year';
     
     let countArray = [];
     for(let w = 0; w < cycles; w++) {
     
-      const loopBack = nowLocal.clone().subtract(w, 'day'); 
+      const loopBack = nowLocal.clone().subtract(w, cySpan); 
      
-      const rangeStart = loopBack.clone().startOf('day').toISOString();
-      const rangeEnd = loopBack.clone().endOf('day').toISOString();
+      const rangeStart = loopBack.clone().startOf(cySpan).toISOString();
+      const rangeEnd = loopBack.clone().endOf(cySpan).toISOString();
       
-      const quantity = await countDoneItemDay(accessKey, rangeStart, rangeEnd);
+      const quantity = await countFunc(accessKey, rangeStart, rangeEnd);
       
-      countArray.unshift({ x:cycles-w, y:quantity, label: rangeStart });
+      countArray.unshift({ 
+        x: moment(rangeStart).tz(Config.clientTZ).format(),
+        y:quantity
+      });
     }
     
-    CacheDB.upsert({orgKey: accessKey, dataName: 'itemDoneDays'}, {
+    CacheDB.upsert({orgKey: accessKey, dataName: dataName}, {
       $set : {
         orgKey: accessKey,
         lastUpdated: new Date(),
-        dataName: 'itemDoneDays',
+        dataName: dataName,
         dataSet: countArray
     }});
   }

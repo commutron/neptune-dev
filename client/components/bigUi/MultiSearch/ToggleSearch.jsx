@@ -67,6 +67,11 @@ const ToggleSearch = ({
     }
   }, [queryState, tggl]);
   
+  function doTog(v) {
+    tgglSet(v);
+    this.multiSearch.focus();
+  }
+  
   function handle(e) {
     const value = e.target.value;
     const valid = value && value.length > (tggl ? 0 : 4);
@@ -85,20 +90,20 @@ const ToggleSearch = ({
   	      <button
   	        title={`${Pref.batches} & ${Pref.xBatchs}`}
             className={`${bttnClss} ${tggl ? 'cloudsT black' : 'clearBlack'}`}
-            onClick={()=>tgglSet(true)}
+            onClick={(e)=>doTog(true)}
           ><i className="fas fa-cubes fa-fw"></i></button>
           
           <button
             title={`${Pref.item} ${Pref.itemSerial}s/${Pref.serialType}s`}
             className={`${bttnClss} ${!tggl ? 'cloudsT black' : 'clearBlack'}`}
-            onClick={()=>tgglSet(false)}
+            onClick={(e)=>doTog(false)}
           ><i className="fas fa-qrcode fa-fw"></i></button>
         </label>
         
         <input
           id='multiSearch'
           type='search'
-          pattern={tggl ? '[A-Za-z0-9 _-]*' : '[0000000000-9999999999]*'}
+          pattern={tggl ? '[A-Za-z0-9 _-]*' : '([0-9]{8,10})|([0-9]{6}[-][0-9]{7})*'}
           minLength={tggl ? '0' : '5'}
           className='variableInput big'
           onChange={(e)=>handle(e)}

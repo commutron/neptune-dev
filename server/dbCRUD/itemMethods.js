@@ -1,4 +1,5 @@
 import moment from 'moment';
+import Config from '/server/hardConfig.js';
 
 Meteor.methods({
 
@@ -203,6 +204,71 @@ Meteor.methods({
     }
   },
   
+  addSourceYearWeekSeqItems(batchId, serialArr) {
+    const accessKey = Meteor.user().orgKey;
+    
+    if(Roles.userIsInRole(Meteor.userId(), 'create')) {
+    
+      if(Array.isArray(serialArr) && serialArr.length > 0) {
+        const doc = BatchDB.findOne({_id: batchId, orgKey: accessKey});
+        const open = doc.finishedAt === false;
+      
+        if(open) {
+          
+          let badBarcodes = [];
+          
+          const regexNS = RegExp(/^(\d{6}\-\d{7})$/);
+          
+          for( let serialTry of serialArr ) {
+            let duplicate = BatchDB.findOne({ 'items.serial': serialTry });
+            const correctFormat = regexNS.test(serialTry);
+            
+            if(!duplicate && correctFormat) {
+              
+              BatchDB.update({_id: batchId}, {
+                $push : { items : {
+                  serial: serialTry,
+                  createdAt: new Date(),
+                  createdWho: Meteor.userId(),
+                  finishedAt: false,
+                  finishedWho: false,
+                  units: Number(1),
+                  panel: false,
+                  panelCode: false,
+                  subItems: [],
+                  history: [],
+                  alt: false,
+                  rma: []
+              }}});
+              
+            }else{
+              badBarcodes.push(serialTry);
+            }
+          }
+        
+          BatchDB.update({_id: batchId}, {
+            $set : {
+              updatedAt: new Date(),
+      			  updatedWho: Meteor.userId()
+            }});
+          
+          Meteor.defer( ()=>{ Meteor.call('updateOneMinify', batchId, accessKey); }); 
+          return {
+            success: true,
+            dupes: badBarcodes
+          };
+            
+        }else{
+          return false;
+        }
+        
+      }else{
+        return false;
+      }
+    }else{
+      return false;
+    }
+  },
   
 // delete \\
   deleteItem(batchId, bar, pass) {

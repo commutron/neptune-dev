@@ -84,6 +84,29 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
     });
   }
   
+  function runLoopLite(cName, tspan) {
+    workingSet(true);
+    tgglSpanSet(tspan);
+    
+    const backDate = isDebug ? app.createdAt : app.tideWall;
+    const dur = moment.duration(moment().diff(moment(backDate)));
+    const durCln = tspan == 'month' ?
+                    parseInt( dur.asMonths(), 10 ) :
+                    parseInt( dur.asWeeks(), 10 );
+    durrSet( durCln );
+                    
+    Meteor.call('cycleLiteRate', cName, durCln, (err, re)=>{
+      err && console.log(err);
+      if(re) {
+        if(thingMounted.current) {
+          isDebug && console.log(re);
+        
+          chartConvert(re);
+        }
+      }
+    });
+  }
+  
   return(
     <div className=''>
       
@@ -94,18 +117,31 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
           <b><i className='fas fa-spinner fa-lg fa-spin'></i></b> :
           <i><i className='fas fa-spinner fa-lg'></i></i>
         }
-  
+      
+      {isDebug &&
         <button
           className='action clearBlack gap'
           onClick={()=>runLoop('month')}
           disabled={working}
-        >Run Monthly</button>
-        
+        >Run Monthly</button>}
+      {isDebug &&
         <button
           className='action clearBlack gap'
           onClick={()=>runLoop('week')}
           disabled={working}
-        >Run Weekly</button>
+        >Run Weekly</button>}
+        
+        <button
+          className='action clearBlack gap'
+          onClick={()=>runLoopLite('doneBatchLiteMonths', 'month')}
+          disabled={working}
+        >Run Monthly Lite</button>
+        
+        <button
+          className='action clearBlack gap'
+          onClick={()=>runLoopLite('doneBatchLiteWeeks', 'week')}
+          disabled={working}
+        >Run Weekly Lite</button>
         
         <span className='flexSpace' />
         
@@ -200,7 +236,7 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
           
       </div>
       <p className='small rightText'>Gaps in the data are intentional. Indicate when no orders were completed</p>
-    
+      <p className='small rightText'>Data is NOT live. Refreshed once a day</p>
     </div>
   );
 };

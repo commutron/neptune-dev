@@ -4,9 +4,9 @@ import Pref from '/client/global/pref.js';
 import Model from '/client/components/smallUi/Model.jsx';
 import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 
-import MultiItemForm from './MultiItemForm.jsx';
-import YrWkPnItemForm from './YrWkPnItemForm.jsx';
-
+import MultiItemForm from './MultiItemForm';
+import YrWkPnItemForm from './YrWkPnItemForm';
+import NSYrWkSqItemForm from './NSYrWkSqItemForm';
 
 const ItemSerialsWrap = ({ id, items, more, unit, app })=> {
   
@@ -22,7 +22,7 @@ const ItemSerialsWrap = ({ id, items, more, unit, app })=> {
     
 
       <Tabs
-        tabs={['Sequential', 'Year-Week-Panel']}
+        tabs={['Sequential', 'Year-Week-Panel', 'NorthStar Complex']}
         wide={true}
         hold={false}>
     
@@ -33,6 +33,12 @@ const ItemSerialsWrap = ({ id, items, more, unit, app })=> {
           app={app} />
           
         <YrWkPnItemForm
+          id={id}
+          items={items}
+          unit={unit}
+          app={app} />
+          
+        <NSYrWkSqItemForm
           id={id}
           items={items}
           unit={unit}

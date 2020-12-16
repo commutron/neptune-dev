@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import React, { useState } from 'react';
 import Pref from '/client/global/pref.js';
 import TrendLine from '/client/components/charts/Trends/TrendLine.jsx';
-import TrendBar from '/client/components/charts/Trends/TrendBar.jsx';
+import TrendBar, { TrendBarCache } from '/client/components/charts/Trends/TrendBar.jsx';
 import NumStatBox from '/client/components/charts/Dash/NumStatBox';
 import BatchNewList from '../lists/BatchNewList';
 
@@ -82,21 +82,22 @@ const ExploreLanding = ({
             title={`new ${Pref.batches}`}
             statType='newBatch'
             cycleCount={4}
-            cycleBracket='month'
+            cycleBracket='week'
             lineColor='rgb(52, 152, 219)'
           />
           <TrendLine 
             title='new items'
             statType='newItem'
             cycleCount={4}
-            cycleBracket='month'
+            cycleBracket='week'
             lineColor='rgb(52, 152, 219)' 
           />
-          <TrendBar
+          <TrendBarCache
             title={`completed ${Pref.batches}`}
-            statType='doneBatch'
+            statType='doneBatchLiteWeeks'
             cycleCount={4}
-            cycleBracket='month'
+            cycleBracket='week'
+            isDebug={isDebug}
           />
         </div>
         

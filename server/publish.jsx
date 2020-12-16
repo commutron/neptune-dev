@@ -1,6 +1,7 @@
 // import moment from 'moment';
-// Collections \\
+import Config from '/server/hardConfig.js';
 
+// Collections \\
 AppDB = new Mongo.Collection('appdb');
 GroupDB = new Mongo.Collection('groupdb');
 WidgetDB = new Mongo.Collection('widgetdb');
@@ -399,12 +400,13 @@ Meteor.publish('hotDataPlus', function(scanOrb, keyMatch){
   const user = Meteor.users.findOne({_id: this.userId});
   const valid = user ? true : false;
   const orgKey = valid ? user.orgKey : false;
-  
+
   const trueBatch = keyMatch ? scanOrb :
-                    !isNaN(scanOrb) && scanOrb.length >= 8 && scanOrb.length <= 10 ?
+                    Config.regexSN.test(scanOrb) ?
                       Meteor.call( 'serialLookup', scanOrb ) :
                       Meteor.call( 'batchLookup', scanOrb ) ? scanOrb : false;
   
+
   const bxData = BatchDB.findOne({batch: trueBatch, orgKey: orgKey}) ||
                  XBatchDB.findOne({batch: trueBatch, orgKey: orgKey});
   
