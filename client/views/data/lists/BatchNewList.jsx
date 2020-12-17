@@ -1,15 +1,15 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 import LeapLine from '/client/components/tinyUi/LeapLine';
 
 const BatchNewList = ({ 
-  batchData, widgetData, variantData, groupData, app 
+  batchData, widgetData, variantData, groupData, app, daysBack
 }) => {
   
   const [ showListState, showListSet ] = useState( [] );
 
   useEffect( ()=> {
-    const ystrday = ( d => new Date(d.setDate(d.getDate()-7)) )(new Date);
+    const ystrday = ( d => new Date(d.setDate(d.getDate()-daysBack)) )(new Date);
     
     const recBatch = batchData.filter( b => b.createdAt > ystrday );
     
@@ -31,18 +31,14 @@ const BatchNewList = ({
         b.live
       ]);
     }
-    let sortList = blendedList.sort((b1, b2)=> {
-                if (b1[0] < b2[0]) { return 1 }
-                if (b1[0] > b2[0]) { return -1 }
-                return 0;
-              });
+    let sortList = blendedList.sort((b1, b2)=> 
+                    b1[0] < b2[0] ? 1 : b1[0] > b2[0] ? -1 : 0 );
     showListSet( sortList );
   }, [batchData]); 
   
   if(showListState.length > 0) {
     return(
       <Fragment>
-        <h4>New {Pref.batches}</h4>
         {showListState.map( (ent, index)=> {
           if(!ent[6]) { return null }else{
             const sty = !ent[6] ? 'numFont gMark' : 'numFont activeMark';

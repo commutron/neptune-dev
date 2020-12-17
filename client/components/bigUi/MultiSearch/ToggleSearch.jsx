@@ -86,20 +86,18 @@ const ToggleSearch = ({
 	return(
 		<div className='wide centre centreText'>
 	    <p>
-        <label className='blackT variableInput big'>
-  	      <button
-  	        title={`${Pref.batches} & ${Pref.xBatchs}`}
-            className={`${bttnClss} ${tggl ? 'cloudsT black' : 'clearBlack'}`}
-            onClick={(e)=>doTog(true)}
-          ><i className="fas fa-cubes fa-fw"></i></button>
-          
-          <button
-            title={`${Pref.item} ${Pref.itemSerial}s/${Pref.serialType}s`}
-            className={`${bttnClss} ${!tggl ? 'cloudsT black' : 'clearBlack'}`}
-            onClick={(e)=>doTog(false)}
-          ><i className="fas fa-qrcode fa-fw"></i></button>
-        </label>
+	      <button
+	        title={`${Pref.batches} & ${Pref.xBatchs}`}
+          className={`${bttnClss} ${tggl ? 'toggleOn' : 'toggleOff'}`}
+          onClick={(e)=>doTog(true)}
+        ><i className="fas fa-cubes fa-fw"></i></button>
         
+        <button
+          title={`${Pref.item} ${Pref.itemSerial}s/${Pref.serialType}s`}
+          className={`${bttnClss} ${!tggl ? 'toggleOn' : 'toggleOff'}`}
+          onClick={(e)=>doTog(false)}
+        ><i className="fas fa-qrcode fa-fw"></i></button>
+      
         <input
           id='multiSearch'
           type='search'

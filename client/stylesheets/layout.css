@@ -669,39 +669,37 @@ main {
   align-items: center;
 }
 
-.comfort {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-.balance {
-  display: flex;
-  justify-content: space-around;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-.balancer {
-  display: flex;
-  justify-content: space-evenly;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
+.autoFlex, .comfort, .balance, .balancer,
 .rowWrap, .rowWrapR {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: baseline;
+  flex-flow: row wrap;
 }
+
+.comfort { justify-content: space-between; }
+.balance { justify-content: space-around; }
+.balancer { justify-content: space-evenly; }
+
+.rowWrap, .rowWrapR { align-items: baseline; }
 .rowWrap { justify-content: flex-start; }
 .rowWrapR { justify-content: flex-end; }
+
+.autoFlex {
+  align-items: baseline;
+  justify-content: stretch;
+}
+.autoFlex > div {
+  width: fit-content;
+  padding: 2vmin;
+  margin: 3vmin;
+  box-shadow: var(--dropShadow00);
+}
 
 .autoGrid {
   display: grid;
   grid-template-columns: repeat( auto-fit, minmax(20ch, 1fr) );
   align-items: baseline;
 }
+
 .wide {
   width: 100%;
   margin: 0 auto;

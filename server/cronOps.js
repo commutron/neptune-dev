@@ -14,38 +14,36 @@ import Config from '/server/hardConfig.js';
 
 
 SyncedCron.config({
-  log: true,// Log job run details to console
+  log: false,// Log job run details to console
   
   logger: null,// Defaults to Meteor's logging package
   
   collectionName: 'cronHistory', // Default
 
-  utc: false,
+  utc: true,
 });
   
   
-
-SyncedCron.add({
-  name: 'Daily Done Units By Month',
-  schedule: (parser)=> parser.text('at 9:20 am'),
-  job: ()=> runLoop(countDoneUnits, 'doneUnitLiteMonths', 'month')
-});
-SyncedCron.add({
-  name: 'Daily Done Units By Week',
-  schedule: (parser)=> parser.text('at 9:21 am'),
-  job: ()=> runLoop(countDoneUnits, 'doneUnitLiteWeeks', 'week')
-});
-
-
 SyncedCron.add({
   name: 'Daily Done Target By Month',
-  schedule: (parser)=> parser.text('at 9:22 am'),
+  schedule: (parser)=> parser.text('at 6:00 am'),
   job: ()=> runLoop(countDoneBatchTarget, 'doneBatchLiteMonths', 'month')
 });
 SyncedCron.add({
   name: 'Daily Done Target By Week',
-  schedule: (parser)=> parser.text('at 9:23 am'),
+  schedule: (parser)=> parser.text('at 6:01 am'),
   job: ()=> runLoop(countDoneBatchTarget, 'doneBatchLiteWeeks', 'week')
+});
+
+SyncedCron.add({
+  name: 'Daily Done Units By Month',
+  schedule: (parser)=> parser.text('at 6:02 am'),
+  job: ()=> runLoop(countDoneUnits, 'doneUnitLiteMonths', 'month')
+});
+SyncedCron.add({
+  name: 'Daily Done Units By Week',
+  schedule: (parser)=> parser.text('at 6:03 am'),
+  job: ()=> runLoop(countDoneUnits, 'doneUnitLiteWeeks', 'week')
 });
   
 SyncedCron.start();

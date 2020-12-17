@@ -5,6 +5,7 @@ import Pref from '/client/global/pref.js';
 import GroupForm from '/client/components/forms/GroupForm.jsx';
 import NumBox from '/client/components/tinyUi/NumBox.jsx';
 import TrendLine from '/client/components/charts/Trends/TrendLine.jsx';
+import VariantNewList from '../../lists/VariantNewList';
 
 import { timeRanges } from '/client/utility/CycleCalc';
 
@@ -92,7 +93,18 @@ const GroupLanding = ({
           Read left to right as past to current.
         </p>
       </details>
-            
+      
+      <div className='wide max875 vspacehalf'>
+        <h3>New from the Last 14 Days</h3>
+        
+        <VariantNewList
+          widgetData={widgetData}
+          variantData={variantData}
+          groupData={groupData}
+          daysBack={14}
+        />
+
+      </div>
             
     </div>
   );

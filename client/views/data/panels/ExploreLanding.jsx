@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import React, { useState } from 'react';
 import Pref from '/client/global/pref.js';
 import TrendLine from '/client/components/charts/Trends/TrendLine.jsx';
-import TrendBar, { TrendBarCache } from '/client/components/charts/Trends/TrendBar.jsx';
+import { TrendBarCache } from '/client/components/charts/Trends/TrendBar.jsx';
 import NumStatBox from '/client/components/charts/Dash/NumStatBox';
 import BatchNewList from '../lists/BatchNewList';
 
@@ -19,7 +19,7 @@ const ExploreLanding = ({
   const [ tggl, tgglSet ] = useState( true );
   const [ queryState, querySet ] = useState( null );
 	const [ resultState, resultSet ] = useState( null );
-	
+  
   const total = batchData.length;
   const xTotal = xBatchData.length;
   const live = batchData.filter( x => x.live === true ).length;
@@ -77,7 +77,7 @@ const ExploreLanding = ({
         }
       >
         
-        <div className='centreRow'>
+        <div className='centreRow vspacehalf'>
           <TrendLine 
             title={`new ${Pref.batches}`}
             statType='newBatch'
@@ -128,12 +128,14 @@ const ExploreLanding = ({
           />
         </div>
        
-        <div className='wide max875'>
+        <div className='wide max875 vspacehalf'>
+          <h3>New from the Last 7 Days</h3>
           <BatchNewList
             batchData={[...batchData, ...xBatchData]}
             widgetData={widgetData}
             variantData={variantData}
             groupData={groupData}
+            daysBack={7}
           />
         </div>
         

@@ -1,26 +1,21 @@
 /* the point of this file is to have them all in one place so as to
  eventually figure out a way to limit the number of styles */
- 
-.action {
-  line-height: 2em;
+.action, .smallAction {
   font-size: medium;
-  font-weight: 600;
   letter-spacing: 1px;
-  /*min-width: 2.5rem;*/
+  padding: 0 10px;
+}
+.action {
+  line-height: 2rem;
+  font-weight: 600;
 	min-height: 2.5rem;
-	padding: 0 10px;
 	text-transform: uppercase;
 	overflow: hidden;
 }
-
 .smallAction {
   line-height: 1rem;
-  font-size: medium;
-  letter-spacing: 1px;
   min-width: 2rem;
-  min-height: fit-content;
-	height: 2rem;
-	padding: 0 10px;
+  min-height: 2.5rem;
 }
 /*
 .blendAction {
@@ -42,9 +37,7 @@
 }
 
 .closeAction {
-  /*font-size: 2vh;*/
   font-weight: 800;
-  /*height: 3rem;*/
 	padding: 0 10px;
 	text-transform: uppercase;
 	overflow: hidden;
@@ -75,11 +68,118 @@
   outline-offset: -0.25vmax;
 }
 
+.clear {
+  border: 0.05em solid;
+  border-radius: 0;
+  background-color: transparent;
+}
+.clear:hover {
+  background-color: rgba(255,255,255,0.1);
+}
+
+.clearWhite,
+.clearBlack,
+.clearGreen,
+.clearBlue,
+.clearRed,
+.clearOrange,
+.clearTeal,
+.clearPurple {
+  background-color: transparent;
+  border-width: 1.5px;
+  border-style: solid;
+  font-size: medium;
+  font-weight: 400;
+  text-shadow: 0 0 0 black;
+}
+.clearWhite:hover,
+.clearGreen:hover,
+.clearBlue:hover,
+.clearRed:hover,
+.clearOrange:hover,
+.clearTeal:hover,
+.clearPurple:hover {
+  color: black;
+}
+  
+.clearWhite {
+  color: white;
+  border-color: white;
+}
+.clearWhite:hover {
+  background-color: white;
+}
+.clearBlack {
+  color: var(--blackT);
+  border-color: var(--blackT);
+  background-color: transparent;
+}
+.clearBlack:hover {
+  color: var(--clouds);
+  background-color: var(--blackT);
+}
+.clearBlack:disabled {
+  color: var(--concrete);
+  border-color: var(--concrete);
+}
+
+.clearGreen, .invert .clearGreen{
+  color: var(--emerald);
+  border-color: var(--emerald);
+}
+.clearGreen:hover, .invert .clearGreen:hover {
+  background-color: var(--emerald);
+}
+
+.clearBlue, .invert .clearBlue {
+  color: var(--peterriver);
+	border-color: var(--peterriver);
+}
+.clearBlue:hover, .invert .clearBlue:hover {
+	background-color: var(--peterriver);
+}
+
+.clearRed, .invert .clearRed {
+  color: var(--alizarin);
+  border-color: var(--alizarin);
+}
+.clearRed:hover, .invert .clearRed:hover {
+  background-color: var(--alizarin);
+}
+
+.clearOrange, .invert .clearOrange {
+  color: var(--orange);
+  border-color: var(--orange);
+}
+.clearOrange:hover, .invert .clearOrange:hover {
+  background-color: var(--orange);
+  color: black;
+}
+
+.clearTeal, .invert .clearTeal {
+  color: var(--turquoise);
+  border-color: var(--turquoise);
+}
+.clearTeal:hover, .invert .clearTeal:hover {
+  background-color: var(--turquoise);
+}
+
+.clearPurple, .invert .clearPurple {
+  color: var(--amethyst);
+  border-color: var(--amethyst);
+}
+.clearPurple:hover, .invert .clearPurple:hover {
+  background-color: var(--amethyst);
+}
+
+.activeIndicator:focus, .activeIndicator:active {
+  outline: dotted;  
+}
+
 .mini15x {
   min-width: 1.5rem;
   min-height: 1.5rem;
 }
-
 .mini2x {
   min-width: 2rem;
   min-height: 2rem;
@@ -96,9 +196,13 @@
   text-decoration: underline; 
 }
 
+.textLinkButton, .inlineLink,
+.leapText, .leapBar, .leapRow {
+  font-size: 1rem;
+}
+
 .textLinkButton {
   color: var(--belizeHole);
-  font-size: 1rem;
   cursor: pointer;
   margin: 0px;
   border: none;
@@ -110,14 +214,12 @@
   color: white;
   background-color: transparent;
   border: none;
-  font-size: 1rem;
 }
 .inlineLink:hover {
   text-decoration: underline;
 }
 
 .leapText {
-  font-size: 1rem;
   min-width: 1rem;
 	min-height: 1rem;
 	text-transform: uppercase;
@@ -134,7 +236,6 @@
 .leapBar, .leapRow {
   width: 100%;
   min-height: 4vh;
-  font-size: 1rem;
   font-size: calc(0.6rem + 0.4vw);
   font-weight: 400;
 	padding: 12px 6px;
@@ -150,7 +251,7 @@
   border-bottom-style: outset;
   border-bottom-color: var(--silverfade);
   border-left-width: 5px;
-  background-color: rgb(25,25,25);
+  background-color: transparent;
 	color: var(--clouds);
   word-break: keep-all;
   word-wrap: normal;
@@ -166,6 +267,8 @@
 	grid-gap: 0px 16px;
 	align-items: center;
 	border: none;
+	
+	background-color: red !important;
 }
 .leapRow > span {
   display: flex;
@@ -182,7 +285,7 @@
 }
 
 .leapRow, .leapLine {
-  border-left-width: 8px;
+  border-left-width: 1vmin;
   background-color: white;
   color: var(--black);
   overflow: hidden;
@@ -201,9 +304,9 @@
   padding: 2vmin;
   display: grid;
   grid-template-rows: min-content;
-  grid-template-columns: 5ch repeat( auto-fit, minmax(0px, 1fr) );
+  grid-template-columns: minmax(1ch, 0.5fr) repeat( auto-fit, minmax(0px, 1fr) );
 	grid-auto-flow: column;
-	grid-gap: 5vmin;
+	grid-gap: 2vmin;
 	align-items: center;
 	border-bottom: 1px inset grey;
   border-left-style: solid;
@@ -214,27 +317,53 @@
  font-weight: 600;
 }
 
-.roundActionIcon {
-  display: block;
-  width: 2.5rem;
+.jump,
+.invert .leapText {
+  border-bottom-color: black;
+}
+.invert .jump:hover, .invert .jump:focus, .invert .jump:active {
+  border-bottom-color: #3498db;
+}
+.invert .jumpBar {
+  border-left-color: black;
+}
+.invert .jumpBar:hover, .invert .jumpBar:focus, .invert .jumpBar:active {
+  border-bottom-color: #3498db;
+}
+.invert .leapText:hover,
+.invert .leapText:focus,
+.invert .leapText:active {
+  color: var(--peterriver);
+  border-bottom-color: var(--peterriver);
+}
+.invert .leapBar {
+	color: var(--black);
+	border-top-color: var(--silverfade);
+  border-bottom-color: var(--silverfade);
+}
+.invert .leapBar:hover, .invert .leapBar:focus, .invert .leapBar:active {
+  background-color: var(--silverfade);
+}
+
+.roundActionIcon, .roundRadioSelect {
   height: 2.5rem;
-  padding: 5px;
-  border-radius: 50%;
   background-color: transparent;
   text-align: center;
 }
-
+.roundActionIcon {
+  display: block;
+  width: 2.5rem;
+  padding: 5px;
+  border-radius: 50%;
+}
 .roundRadioSelect {
   display: flex !important;
   border-bottom: none !important;
   flex-direction: row;
   align-items: center;
   margin: 0.5rem;
-  height: 2.5rem;
   padding: 1rem;
   border-radius: 25rem;
-  background-color: transparent;
-  text-align: center;
 }
 
 .dbblRound {
@@ -337,6 +466,17 @@ label.qdpplRound {
   filter: grayscale(0.9);
 }
 
+
+.toggleOff {
+  transition: background-color 400ms ease,
+              color 200ms ease;
+  color: var(--black);
+  background-color: var(--clouds);
+}
+.toggleOn, .toggleOff:hover {
+  color: var(--clouds);
+  background-color: var(--black);
+}
 
 .liteToolOn, 
 .liteToolOff {

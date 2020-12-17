@@ -310,6 +310,8 @@ const ItemsList = ({
     setList(showListOrder);
   }, [ batchData, keyword, timeModifyer, notModifyer ]);
   
+  const bttnClss = 'leapBar numFont blackblack';
+  
   return(
     <Fragment>
       <FilterItems
@@ -323,9 +325,9 @@ const ItemsList = ({
         onTimeChange={e => setTimeFilter(e)}
         onNotChange={e => setToggle(e)} />
       {stateList.map( (entry, index)=> {
-        let style = entry.history.length === 0 ? 'leapBar numFont' :
-                    entry.finishedAt === false ? 'leapBar numFont activeMark' : 
-                    scrap.scrapList.includes(entry.serial) ? 'leapBar numFont ngMark' : 'leapBar numFont gMark';
+        let style = entry.history.length === 0 ? bttnClss :
+                    entry.finishedAt === false ? `${bttnClss} activeMark` : 
+                    scrap.scrapList.includes(entry.serial) ? `${bttnClss} ngMark` : `${bttnClss} gMark`;
           return (
             <LeapButton
               key={index} 

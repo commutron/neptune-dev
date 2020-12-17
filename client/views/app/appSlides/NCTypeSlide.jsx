@@ -123,56 +123,56 @@ const TopNCSlide = ({ app })=> {
   }
   
   return(
-    <div>
+    <div className='autoFlex'>
       <h2 className='cap'>{Pref.nonCon} Types</h2>
-      <p>Options for types of {Pref.nonCon}s</p>
+      <h3>: Options for types of {Pref.nonCon}s</h3>
       
-      <hr className='vmargin'/>
-      <h3>Create A New List</h3>
-      <form 
-        id={rndmKey + 'form'} 
-        onSubmit={(e)=>newTypeList(e)}
-        className='inlineForm'>
-        <label htmlFor={rndmKey + 'inputTitle'}>List Title<br />
-          <input
-            type='text'
-            id={rndmKey + 'inputTitle'}
-            placeholder='Descriptive Name'
-            required
-          />
-        </label>
-        <label htmlFor={rndmKey + 'inputPre'}>Defect Code Prefix<br />
-          <input
-            type='text'
-            id={rndmKey + 'inputPre'}
-            maxLength={2}
-            pattern="[a-z]{1-2}"
-            placeholder='Letter Pefix'
-            required
-          />
-        </label>
-        <label htmlFor={rndmKey + 'go'}><br />
-          <button
-            type='submit'
-            id={rndmKey + 'go'}
-            className='smallAction clearGreen'
-            disabled={false}
-          >Add</button>
-        </label>
-      </form>
-      
-      <hr className='vmargin' />
+      <div>
+        <h3>Create A New List</h3>
+        <form 
+          id={rndmKey + 'form'} 
+          onSubmit={(e)=>newTypeList(e)}
+          className='inlineForm'>
+          <label htmlFor={rndmKey + 'inputTitle'}>List Title<br />
+            <input
+              type='text'
+              id={rndmKey + 'inputTitle'}
+              placeholder='Descriptive Name'
+              required
+            />
+          </label>
+          <label htmlFor={rndmKey + 'inputPre'}>Defect Code Prefix<br />
+            <input
+              type='text'
+              id={rndmKey + 'inputPre'}
+              maxLength={2}
+              pattern="[a-z]{1-2}"
+              placeholder='Letter Pefix'
+              required
+            />
+          </label>
+          <label htmlFor={rndmKey + 'go'}><br />
+            <button
+              type='submit'
+              id={rndmKey + 'go'}
+              className='smallAction clearGreen'
+              disabled={false}
+            >Add</button>
+          </label>
+        </form>
+      </div>
       
       <NCSupportChunk app={app} />
       
-      <hr className='vmargin' />
-      <h3>Legacy List</h3>
-      <ol>
-        {app.nonConOption.map( (entry, index)=>{
-          return( 
-            <li key={index}>{entry}</li>
-        )})}
-      </ol>
+      <div>
+        <h3>Legacy List</h3>
+        <ol>
+          {app.nonConOption.map( (entry, index)=>{
+            return( 
+              <li key={index}>{entry}</li>
+          )})}
+        </ol>
+      </div>
       
     </div>
   );

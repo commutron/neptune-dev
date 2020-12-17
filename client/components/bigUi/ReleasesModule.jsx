@@ -53,7 +53,7 @@ const ReleaseAction = ({
         <button
           onClick={(e)=>handleRelease(e, false)}
           title={`Release ${Pref.xBatch} to the floor`}
-          className='action clearGreen centreText bigger cap'
+          className='action clearGreen centreText big cap'
           style={sty}
           disabled={!Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])}
         >{actionText} {contextText}</button>

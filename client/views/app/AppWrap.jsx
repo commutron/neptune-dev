@@ -11,10 +11,8 @@ import BranchesSlide from './appSlides/BranchesSlide.jsx';
 import BehaviorSlide from './appSlides/BehaviorSlide.jsx';
 import TrackStepSlide from './appSlides/TrackStepSlide.jsx';
 import CounterSlide from './appSlides/CounterSlide.jsx';
-import ReasonsSlide from './appSlides/ReasonsSlide.jsx';
 import NCTypeSlide from './appSlides/NCTypeSlide.jsx';
-import ScalesSlide from './appSlides/ScalesSlide.jsx';
-import TagSlide from './appSlides/TagSlide.jsx';
+import ScalesTagsSlide from './appSlides/ScalesTagsSlide.jsx';
 import AddressSlide from './appSlides/AddressSlide.jsx';
 import ToastSlide from './appSlides/ToastSlide.jsx';
 import PINSlide from './appSlides/PINSlide.jsx';
@@ -62,42 +60,37 @@ const AppWrap = ({ isAdmin, isDebug, users, app })=> {
           
         <Slides
           menu={[
+            <b><i className='fas fa-wave-square fa-fw'></i>   Flow Behavior</b>,
             <b><i className='fas fa-code-branch fa-fw'></i>   {Pref.branches}</b>,
             <b><i className='fas fa-shoe-prints fa-fw'></i>   Track Steps</b>,
             <b><i className='fas fa-stopwatch fa-fw'></i>   Counter Steps</b>,
-            <b><i className='fas fa-wave-square fa-fw'></i>   Steps Behavior</b>,
-            <b><i className='fas fa-dice fa-fw'></i>   Reasons Options</b>,
             <b><i className='fas fa-times-circle fa-fw'></i>   NonCon Types</b>,
-            <b><i className='fas fa-ruler-horizontal fa-fw'></i>   Scales</b>,
-            <b><i className='fas fa-tag fa-fw'></i>   Tags</b>,
+            <b><i className='fas fa-ruler-horizontal fa-fw'></i>   Scales & Tags</b>,
             <b><i className='fas fa-link fa-fw'></i>   Addresses</b>,
             <b><i className='fas fa-key fa-fw'></i>   PINs</b>,//11
             <b><i className='fas fa-toolbox fa-fw'></i>  Data Repair</b>,//12
             <b><i className='fas fa-bell fa-fw'></i>  Test Alerts</b>,//13
             <b><i className='fas fa-life-ring fa-fw'></i>  Legacy Support</b>//14
           ]}>
-          {/*extraClass='space5x5'>*/}
           
-          <BranchesSlide key={0} app={app} isDebug={isDebug} />
+          <BehaviorSlide key={0} app={app} />
+          <BranchesSlide key={1} app={app} isDebug={isDebug} />
           <TrackStepSlide 
-            key={1}
+            key={2}
             app={app}
             branchesS={branchesS}
             sorted={sortedTrackOptions} />
           <CounterSlide
-            key={2}
+            key={3}
             app={app}
             branchesS={branchesS} />
-          <BehaviorSlide key={3} app={app} />
-          <ReasonsSlide key={4} app={app} />
-          <NCTypeSlide key={5} app={app} />
-          <ScalesSlide key={6} app={app} />
-          <TagSlide key={7} app={app} />
-          <AddressSlide key={8} app={app} />
-          <PINSlide key={9} />
-          <DataRepair key={10} app={app} users={users} />
-          <ToastSlide key={11} />
-          <div key={12} className='space3v'>
+          <NCTypeSlide key={4} app={app} />
+          <ScalesTagsSlide key={5} app={app} />
+          <AddressSlide key={6} app={app} />
+          <PINSlide key={7} />
+          <DataRepair key={8} app={app} users={users} />
+          <ToastSlide key={9} />
+          <div key={10} className='space3v'>
             <p>determine support needs</p>
             <p>
               <button

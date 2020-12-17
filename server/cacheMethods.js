@@ -11,26 +11,6 @@
 
 Meteor.methods({
 
-///////////// CACHES //////////////////
-  FORCEcacheUpdate() {
-    /*this.unblock();
-    if(Roles.userIsInRole(Meteor.userId(), 'active')) {
-      const key = Meteor.user().orgKey;
-      Meteor.call('priorityCacheUpdate', key, true);
-    }*/
-    return null;
-  },
-  
-  REQUESTcacheUpdate() {
-    /*this.unblock();
-    if(Roles.userIsInRole(Meteor.userId(), 'active')) {
-      const key = Meteor.user().orgKey;
-      Meteor.defer( ()=>{
-        Meteor.call('priorityCacheUpdate', key, false) });
-    }*/
-    return null;
-  },
-
   // a cache for a plain list of all part numbers for autocomplete
   partslistCacheUpdate(internalKey) {
     this.unblock();

@@ -470,7 +470,8 @@ Meteor.publish('skinnyData', function(){
           'groupId': 1,
           'widgetId': 1,
           'versionKey': 1,
-          'variant': 1
+          'variant': 1,
+          'createdAt': 1
         }}),
       
       BatchDB.find({orgKey: orgKey}, {

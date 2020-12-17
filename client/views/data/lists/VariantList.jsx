@@ -1,22 +1,19 @@
 import React from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
-import LeapRow from '/client/components/tinyUi/LeapRow.jsx';
+import LeapLine from '/client/components/tinyUi/LeapLine';
 
 
 const VariantList = ({ variantData, widgetData, app })=>	{
                 
-  let v = variantData.sort((v1, v2)=> {
-          if (v1.variant < v2.variant) { return 1 }
-          if (v1.variant > v2.variant) { return -1 }
-          return 0;
-        });
+  let v = variantData.sort((v1, v2)=>
+            v1.variant < v2.variant ? 1 : v1.variant > v2.variant ? -1 : 0 );
   
   return(
     <div className='space'>
       {v.length < 1 ? <p>no {Pref.variants} created</p> : null}
       {v.map( (entry, index)=> {
-        let ac = entry.live ? 'activeMark vmarginhalf' : 'vmarginhalf';
+        let ac = entry.live ? 'activeMark' : '';
         return(
           <VariantIndexCard 
             key={entry.versionKey} 
@@ -71,13 +68,11 @@ const VariantIndexCard = ({ widget, vTitle, vDate, barStyle })=> {
   const cTime = moment(vDate).calendar();
       
   return(
-    <LeapRow
+    <LeapLine
       title={vTitle}
       cTwo={`created: ${cTime}`}
       cThree=''
       cFour=''
-      cFive=''
-      cSix=''
       sty={barStyle}
       address={'/data/widget?request=' + widget + '&specify=' + vTitle}
     />

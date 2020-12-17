@@ -92,12 +92,6 @@ const DataRepair = ({ app, users })=> {
     });
   }
   
-  function updateCaches() {
-    Meteor.call('FORCEcacheUpdate', (error)=>{
-      error && console.log(error);
-      toast.success('method complete', { autoClose: false });
-    });
-  }
   
   function clearAllCaches() {
     Meteor.call('resetALLCacheDB', (error)=>{
@@ -120,28 +114,8 @@ const DataRepair = ({ app, users })=> {
     });
   }
   
-  return (
-    <div className='space3v'>
-      <h2 className='cap'>NonCon "Where" Data Repair</h2>
-      <p>Potentialy very damaging. This will change data of all batches. Be VERY carefull</p>
-      
-      <form onSubmit={(e)=>fixAthing(e, oldText.value, newText.value, textMatch.value)}>
-        <input id='oldText' />
-        <br /><br />
-        <input id='newText' />
-        <br /><br />
-        <select id='textMatch'>
-          <option value='exact'>Exact</option>
-          <option value='fuzzy'>Fuzzy</option>
-        </select>
-        <br /><br />
-        <button
-          type='submit'
-          className='action clear blackT'
-        >fix</button>
-      </form>
-      
-      <hr />
+  return(
+    <div className='space3v autoFlex'>
       {/*
       <div className='vspace'>
       <h2 className='cap'>Force Delete Serial Number</h2>
@@ -159,7 +133,6 @@ const DataRepair = ({ app, users })=> {
       </form>
       </div>
       */}
-      <hr />
       {/*<br />
       <hr />
       <h2 className='cap'>Fix Proto Key</h2>
@@ -170,55 +143,77 @@ const DataRepair = ({ app, users })=> {
       <hr />
       <br />*/}
       
-      <h2 className='cap'>Batch Locking</h2>
-      <button
-        onClick={()=>forceLockCheck()}
-        className='action clearPurple'
-      >Request Locking</button>
-      
+      <div>
+        <h3><i className="fas fa-key fa-lg gap"></i>
+          Lock Batch and Batch+
+        </h3>
+        <button
+          onClick={()=>forceLockCheck()}
+          className='action clearPurple'
+        >Request Locking</button>
+      </div>
 
-      <hr className='vmargin' />
-      
-      <h2 className='cap'>Delete all CacheDB Entries</h2>
-      <button
-        onClick={()=>clearAllCaches()}
-        className='action clear redT'
-      >Delete All Caches</button>
-      
-      <hr />
-      
-      <h2 className='cap'>Force Update CacheDB Entries</h2>
-      <button
-        onClick={()=>updateCaches()}
-        className='action clear blackT'
-      >Force Update All Caches</button>
-      
-      <hr />
-      
-      <h2 className='cap'>Build TraceDB</h2>
-      <button
-        onClick={()=>runTraceMinify()}
-        className='action clearPurple'
-      >FORCE Run TraceDB Rebuild</button>
-      
-      <hr />
-      
-      <h2 className='cap'>TraceDB Error Fix</h2>
-      <button
-        onClick={()=>runTraceFix()}
-        className='action clearOrange'
-      >Fix Errors in TraceDB</button>
-      
-      <hr />
+      <div>
+        <h3><i className="fas fa-hammer fa-lg gap"></i>
+          Delete all CacheDB Entries
+        </h3>
+        <button
+          onClick={()=>clearAllCaches()}
+          className='action clearRed'
+        >Delete All Caches</button>
+      </div>
       
       <div>
-        <p><b><i className='fas fa-user-shield fa-fw'></i>  Privacy</b></p>
-        <p>
+        <h3><i className="fas fa-screwdriver fa-lg gap"></i>
+          Build TraceDB
+        </h3>
+        <button
+          onClick={()=>runTraceMinify()}
+          className='action clearTeal'
+        >FORCE Run TraceDB Rebuild</button>
+      </div>
+      
+      <div>
+        <h3><i className="fas fa-wrench fa-lg gap"></i>
+          Fix TraceDB Errors
+        </h3>
+        <button
+          onClick={()=>runTraceFix()}
+          className='action clearOrange'
+        >Fix Errors in TraceDB</button>
+      </div>
+      
+      <div>
+        <h3><i className='fas fa-user-shield fa-lg gap'></i>
+          Clear `Usage Logs` and `Breadcrubs`
+        </h3>
+        <button
+          className='action clearBlue'
+          onClick={()=>clearUserLogs()}
+        >Clear Users with "debug" turned OFF</button>
+      </div>
+      
+      <div>
+        <h3><i className="fas fa-save fa-lg gap"></i>
+          Repair NonCon "Where" Data
+        </h3>
+        <p>Potentialy very damaging. This will change data of all batches. Be VERY carefull</p>
+        
+        <form onSubmit={(e)=>fixAthing(e, oldText.value, newText.value, textMatch.value)}>
+          <input id='oldText' />
+          <br /><br />
+          <input id='newText' />
+          <br /><br />
+          <select id='textMatch'>
+            <option value='exact'>Exact</option>
+            <option value='fuzzy'>Fuzzy</option>
+          </select>
+          <br /><br />
           <button
-            className='action clearBlue invert'
-            onClick={()=>clearUserLogs()}
-          >Clear `Usage Logs` and `Breadcrubs` of users with "debug" turned OFF</button>
-        </p>
+            type='submit'
+            className='action clearBlack'
+          >fix</button>
+        </form>
       </div>
     </div>
   );
