@@ -133,8 +133,6 @@ function checkMovement(bData, now, shipLoad, accessKey) {
     const fillZ = didFinish ? shpdlv[3] : null;
     const lateLate = didFinish ? fillZ[2] === 'late' : shpdlv[2];
     
-    const actvLvl = Meteor.call('tideActivityLevel', bData._id, accessKey);
-    const brchCnd = Meteor.call('branchCondition', bData._id, accessKey);
     const prtyRnk = Meteor.call('priorityFast', accessKey, bData, now, shipAim, lateLate, shipLoad);
     
     TraceDB.update({batchID: bData._id}, {
@@ -146,9 +144,6 @@ function checkMovement(bData, now, shipLoad, accessKey) {
         completed: didFinish,
         completedAt: completedAt,
         lateLate: lateLate,
-        isActive: actvLvl.isActive,
-        onFloor: brchCnd.onFloor,
-        branchCondition: brchCnd.branchSets,
         quote2tide: prtyRnk.quote2tide,
         estSoonest: prtyRnk.estSoonest,
         estLatestBegin: prtyRnk.estLatestBegin,
@@ -190,7 +185,6 @@ Meteor.methods({
         await Promise.all(fetchB.map(async (b) => {
             await shrinkWhole( b, now, accessKey );
         }));
-        
         
         const fetchX = XBatchDB.find({orgKey: accessKey}).fetch();
         await Promise.all(fetchX.map(async (x) => {

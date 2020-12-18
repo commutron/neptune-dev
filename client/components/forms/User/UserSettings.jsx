@@ -29,71 +29,71 @@ const UserSettings = ({ app, user, isAdmin, brancheS })=> {
   const overOps = [...overTopOp,...overBrOps];
   
   return(
-    <div className='comfort'>
+    <div>
+      <h3 className='clean'>Username: {user.username}</h3>
+      <h3 className='clean'>ID: {Meteor.user()._id}</h3>
+      <h3>Organization: <i className='greenT'>{Meteor.user().org}</i></h3>
+      <hr />
       
-      <div className=''>
-        <h3 className='clean'>Username: {user.username}</h3>
-        <h3 className='clean'>ID: {Meteor.user()._id}</h3>
-        <h3>Organization: <i className='greenT'>{Meteor.user().org}</i></h3>
-        <hr />
+      <div className='autoFlex'>  
         
-        <div className='grid vspace'>
+        <div>
+          <div className='grid'>
         
-          <UserToggleSetting
-            userSetting={Meteor.user().miniAction}
-            labelText='Prefer Mini / Dense'
-            callMethod='setUserMiniPrefer' />
+            <UserToggleSetting
+              userSetting={Meteor.user().miniAction}
+              labelText='Prefer Mini / Dense'
+              callMethod='setUserMiniPrefer' />
+              
+            <UserToggleSetting
+              userSetting={Meteor.user().preferLight}
+              labelText='Prefer Light Theme'
+              callMethod='setUserLightPrefer' />
             
-          <UserToggleSetting
-            userSetting={Meteor.user().preferLight}
-            labelText='Prefer Light Theme'
-            callMethod='setUserLightPrefer' />
+            <UserToggleSetting
+              userSetting={Meteor.user().autoScan}
+              labelText='Auto Scan'
+              callMethod='setAutoScan' />
+              
+            <UserToggleSetting
+              userSetting={Meteor.user().scrollInstruct}
+              labelText={`Autoscroll To Instruction Section`}
+              callMethod='setUserAutoscrollI' />
             
-          <UserToggleSetting
-            userSetting={Meteor.user().autoScan}
-            labelText='Auto Scan'
-            callMethod='setAutoScan' />
+            <UserToggleSetting
+              userSetting={Meteor.user().showNCcodes}
+              labelText={`Show ${Pref.nonCon} Codes`}
+              callMethod='setUserNCcodes' />
             
-          <UserToggleSetting
-            userSetting={Meteor.user().scrollInstruct}
-            labelText={`Autoscroll To Instruction Section`}
-            callMethod='setUserAutoscrollI' />
-          
-          <UserToggleSetting
-            userSetting={Meteor.user().showNCcodes}
-            labelText={`Show ${Pref.nonCon} Codes`}
-            callMethod='setUserNCcodes' />
+            <UserToggleSetting
+              userSetting={Meteor.user().typeNCselection}
+              labelText={`Search ${Pref.nonCon} Type List`}
+              callMethod='setUserNCselection' />
             
-          <UserToggleSetting
-            userSetting={Meteor.user().typeNCselection}
-            labelText={`Search ${Pref.nonCon} Type List`}
-            callMethod='setUserNCselection' />
-          
-          <UserSelectSetting
-            userSetting={Meteor.user().unlockSpeed || 2000}
-            optionObjArr={speedOps}
-            labelText='Step Unlock Speed'
-            callMethod='setSpeed' />
+            <UserSelectSetting
+              userSetting={Meteor.user().unlockSpeed || 2000}
+              optionObjArr={speedOps}
+              labelText='Step Unlock Speed'
+              callMethod='setSpeed' />
             
-          <UserSelectSetting
-            userSetting={Meteor.user().defaultOverview || false}
-            optionObjArr={overOps}
-            labelText='Default Overview Area'
-            callMethod='setDefaultOverview' />
-  
+            <UserSelectSetting
+              userSetting={Meteor.user().defaultOverview || false}
+              optionObjArr={overOps}
+              labelText='Default Overview Area'
+              callMethod='setDefaultOverview' />
+    
+          </div>
         </div>
-      </div>
       
-      <div>
-        
-        <fieldset>
+      
+        <div>
           <UsernameChange />
           <hr />
           <PasswordChange />
           <hr />
           { isAdmin ? <AdminDown /> : null }
-        </fieldset>
-      
+        </div>
+        
       </div>
       
     </div>

@@ -35,7 +35,7 @@ const DownstreamView = ({
   
   useEffect( ()=>{
     Meteor.setTimeout( ()=> {
-      Meteor.call('updateLiveMovement');
+      Meteor.call('updateLiveNoise');
     },3000);
   }, [updateTrigger]);
   

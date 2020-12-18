@@ -33,10 +33,6 @@ const MonthKPIReport = ({ batchData, widgetData, groupData, app, isDebug })=> {
             [`${Pref.batches} Completed Late`, rtn.doneBatchLate ],
             [`${Pref.items} Created`, rtn.newItem ],
             [`${Pref.items} Completed`, rtn.doneItem ],
-            // [`${Pref.nonCons} Discovered`, rtn.noncon ],
-            // ['Shortfalls Discovered', rtn.shortfall ],
-            // [`${Pref.items} Scrapped`, rtn.scrap ],
-            // [`${Pref.items} Test Failures`, rtn.tfail ],
             [`${Pref.groups} Created`, rtn.newGroup ],
             [`${Pref.widgets} Created`, rtn.newWidget ],
             [`${Pref.variants} Created`, rtn.newVariant ],
@@ -71,6 +67,7 @@ const MonthKPIReport = ({ batchData, widgetData, groupData, app, isDebug })=> {
             // dateFormat: "Y-m-d",
             // altFormat: "F Y",
             altInput: true,
+            altInputClass: 'variableInput medBig',
             defaultDate: moment().format("YYYY-MM-DD"),
             maxDate: moment().format("YYYY-MM-DD"),
             plugins: [
@@ -82,7 +79,7 @@ const MonthKPIReport = ({ batchData, widgetData, groupData, app, isDebug })=> {
         />
           
         <button
-          className='action clearBlack gap'
+          className='action clearBlack'
           onClick={()=>handleRun()}
           disabled={working}
         >Run Report</button>

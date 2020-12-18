@@ -19,47 +19,20 @@ const DoneItemsTrend = ({ app, isDebug, isNightly })=>{
   const blank =  [ {x:1,y:0} ];
   
   const [ working, workingSet ] = useState(false);
-  
-  const [ tgglSpan, tgglSpanSet ] = useState( 'month' );
-  const [ durrState, durrSet ] = useState( 1 );
-  
+  const [ tgglSpan, tgglSpanSet ] = useState( false );
   const [ fillDT, fillSet ] = useState( blank );
               
   useEffect( ()=>{
     return () => { thingMounted.current = false };
   }, []);
   
-  function runLoop(tspan) {
-    workingSet(true);
-    tgglSpanSet(tspan);
-    
-    const dur = moment.duration(moment().diff(moment(app.createdAt)));
-    const durCln = tspan == 'month' ?
-                    parseInt( dur.asMonths(), 10 ) :
-                    parseInt( dur.asWeeks(), 10 );
-    durrSet( durCln );
-    
-    Meteor.call('cycleWeekRate', 'doneItem', durCln, tspan, (err, re)=>{
-      err && console.log(err);
-      if(re) {
-        if(thingMounted.current) {
-          isDebug && console.log(re);
-          fillSet(re);
-          workingSet(false);
-        }
-      }
-    });
-  }
-  
   function runLoopLite(cName, tspan) {
     workingSet(true);
-    tgglSpanSet(tspan);
     
     const dur = moment.duration(moment().diff(moment(app.createdAt)));
     const durCln = tspan == 'month' ?
                     parseInt( dur.asMonths(), 10 ) :
                     parseInt( dur.asWeeks(), 10 );
-    durrSet( durCln );
     
     Meteor.call('cycleLiteRate', cName, durCln, (err, re)=>{
       err && console.log(err);
@@ -67,6 +40,7 @@ const DoneItemsTrend = ({ app, isDebug, isNightly })=>{
         if(thingMounted.current) {
           isDebug && console.log(re);
           fillSet(re);
+          tgglSpanSet(tspan);
           workingSet(false);
         }
       }
@@ -76,37 +50,23 @@ const DoneItemsTrend = ({ app, isDebug, isNightly })=>{
   return(
     <div className=''>
       
-      <h4>Long Calculation, Please wait for results. !! Outstanding Performance Issues !!</h4>
-        
       <div className='rowWrap'>
         {working ?
           <b><i className='fas fa-spinner fa-lg fa-spin'></i></b> :
           <i><i className='fas fa-spinner fa-lg'></i></i>
         }
-      {isDebug &&
-        <button
-          className='action clearBlack gap'
-          onClick={()=>runLoop('month')}
-          disabled={working}
-        >Run Monthly</button>}
-      {isDebug &&  
-        <button
-          className='action clearBlack gap'
-          onClick={()=>runLoop('week')}
-          disabled={working}
-        >Run Weekly</button>}
         
         <button
           className='action clearBlack gap'
           onClick={()=>runLoopLite('doneUnitLiteMonths', 'month')}
           disabled={working}
-        >Run Monthly Lite</button>
+        >By Month</button>
         
         <button
           className='action clearBlack gap'
           onClick={()=>runLoopLite('doneUnitLiteWeeks', 'week')}
           disabled={working}
-        >Run Weekly Lite</button>
+        >By Week</button>
         
         <span className='flexSpace' />
         
@@ -115,7 +75,7 @@ const DoneItemsTrend = ({ app, isDebug, isNightly })=>{
       <div style={{backgroundColor:'white'}}>
         <VictoryChart
           theme={Theme.NeptuneVictory}
-          padding={{top: 25, right: 25, bottom: 25, left: 30}}
+          padding={{top: 25, right: 25, bottom: 25, left: 50}}
           domainPadding={{x: 10, y: 40}}
           height={250}
           containerComponent={<VictoryZoomContainer
@@ -136,7 +96,7 @@ const DoneItemsTrend = ({ app, isDebug, isNightly })=>{
             title: { padding: 2, fontSize: 10 } 
           }}
           data={[
-          { name: "Serialized Item", symbol: { fill: "rgb(142, 68, 173)" } }
+          { name: "Serialized Units", symbol: { fill: "rgb(142, 68, 173)" } }
           ]}
           
         />
@@ -145,19 +105,17 @@ const DoneItemsTrend = ({ app, isDebug, isNightly })=>{
           />
           <VictoryAxis
             fixLabelOverlap={true}
-            tickFormat={(t) => 
+            tickFormat={(t) => !tgglSpan ? '*' :
               tgglSpan == 'month' ?
-              moment().subtract(durrState, 'month').add(t, 'month').format('MMM-YYYY') :
-              `w${moment().subtract(durrState, 'week').add(t, 'week').format('w-YYYY')}`}
+              moment(t).format('MMM-YYYY') :
+              moment(t).format('w-YYYY')}
           />
           
             <VictoryLine
               data={fillDT}
               style={{ data: { stroke: 'rgb(155, 89, 182)' } }}
-              // interpolation="catmullRom"
               animate={{
-                duration: 500,
-                onLoad: { duration: 500 }
+                onLoad: { duration: 800 }
               }}
             />
             <VictoryScatter 
@@ -165,8 +123,7 @@ const DoneItemsTrend = ({ app, isDebug, isNightly })=>{
               style={{ data: { fill: 'rgb(142, 68, 173)' } }}
               size={2}
               animate={{
-                duration: 500,
-                onLoad: { duration: 500 }
+                onLoad: { duration: 1000 }
               }}
             />
            

@@ -24,8 +24,7 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
   
   const [ working, workingSet ] = useState(false);
   
-  const [ tgglSpan, tgglSpanSet ] = useState( 'month' );
-  const [ durrState, durrSet ] = useState( 1 );
+  const [ tgglSpan, tgglSpanSet ] = useState( false );
   const [ tgglState, tgglSet ] = useState( 'fulfill' );
   
   const [ fillDT, fillSet ] = useState( blank );
@@ -61,47 +60,22 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
     workingSet(false);
   }
   
-  function runLoop(tspan) {
-    workingSet(true);
-    tgglSpanSet(tspan);
-    
-    const backDate = isDebug ? app.createdAt : app.tideWall;
-    const dur = moment.duration(moment().diff(moment(backDate)));
-    const durCln = tspan == 'month' ?
-                    parseInt( dur.asMonths(), 10 ) :
-                    parseInt( dur.asWeeks(), 10 );
-    durrSet( durCln );
-    
-    Meteor.call('cycleWeekRate', 'doneBatch', durCln, tspan, (err, re)=>{
-      err && console.log(err);
-      if(re) {
-        if(thingMounted.current) {
-          isDebug && console.log(re);
-        
-          chartConvert(re);
-        }
-      }
-    });
-  }
-  
   function runLoopLite(cName, tspan) {
     workingSet(true);
-    tgglSpanSet(tspan);
     
     const backDate = isDebug ? app.createdAt : app.tideWall;
     const dur = moment.duration(moment().diff(moment(backDate)));
     const durCln = tspan == 'month' ?
                     parseInt( dur.asMonths(), 10 ) :
                     parseInt( dur.asWeeks(), 10 );
-    durrSet( durCln );
                     
     Meteor.call('cycleLiteRate', cName, durCln, (err, re)=>{
       err && console.log(err);
       if(re) {
         if(thingMounted.current) {
           isDebug && console.log(re);
-        
           chartConvert(re);
+          tgglSpanSet(tspan);
         }
       }
     });
@@ -109,39 +83,24 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
   
   return(
     <div className=''>
-      
-      <h4>Long Calculation, Please wait for results. !! Outstanding Performance Issues !!</h4>
-        
+       
       <div className='rowWrap'>
         {working ?
           <b><i className='fas fa-spinner fa-lg fa-spin'></i></b> :
           <i><i className='fas fa-spinner fa-lg'></i></i>
         }
-      
-      {isDebug &&
-        <button
-          className='action clearBlack gap'
-          onClick={()=>runLoop('month')}
-          disabled={working}
-        >Run Monthly</button>}
-      {isDebug &&
-        <button
-          className='action clearBlack gap'
-          onClick={()=>runLoop('week')}
-          disabled={working}
-        >Run Weekly</button>}
         
         <button
           className='action clearBlack gap'
           onClick={()=>runLoopLite('doneBatchLiteMonths', 'month')}
           disabled={working}
-        >Run Monthly Lite</button>
+        >By Month</button>
         
         <button
           className='action clearBlack gap'
           onClick={()=>runLoopLite('doneBatchLiteWeeks', 'week')}
           disabled={working}
-        >Run Weekly Lite</button>
+        >By Week</button>
         
         <span className='flexSpace' />
         
@@ -187,12 +146,11 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
             tickFormat={(t) => `${t}%`}
           />
           <VictoryAxis
-            tickCount={dataQ.filter(f => f.y !== null).length}
             fixLabelOverlap={true}
-            tickFormat={(t) => 
+            tickFormat={(t) => !tgglSpan ? '*' :
               tgglSpan == 'month' ?
-              moment().subtract(durrState, 'month').add(t, 'month').format('MMM-YYYY') :
-              `w${moment().subtract(durrState, 'week').add(t, 'week').format('w-YYYY')}`}
+                moment(t).format('MMM-YYYY') :
+                moment(t).format('w-YYYY')}
           />
           
             <VictoryLine
@@ -200,8 +158,8 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
               style={{ data: { stroke: 'rgb(155, 89, 182)' } }}
               interpolation="catmullRom"
               animate={{
-                duration: 500,
-                onLoad: { duration: 500 }
+                duration: 800,
+                onLoad: { duration: 800 }
               }}
             />
             <VictoryScatter 
@@ -209,8 +167,8 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
               style={{ data: { fill: 'rgb(142, 68, 173)' } }}
               size={2}
               animate={{
-                duration: 500,
-                onLoad: { duration: 500 }
+                duration: 1100,
+                onLoad: { duration: 1100 }
               }}
             />
             
@@ -219,8 +177,8 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
               style={{ data: { stroke: 'rgb(46, 204, 113)' } }}
               interpolation="monotoneX"
               animate={{
-                duration: 500,
-                onLoad: { duration: 500 }
+                duration: 800,
+                onLoad: { duration: 800 }
               }}
             />
             <VictoryScatter 
@@ -228,8 +186,8 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
               style={{ data: { fill: 'rgb(39, 174, 96)' } }}
               size={2}
               animate={{
-                duration: 500,
-                onLoad: { duration: 500 }
+                duration: 1100,
+                onLoad: { duration: 1100 }
               }}
             />
           </VictoryChart>

@@ -191,14 +191,15 @@ Meteor.methods({
       let ncCounts = [];
       for(let ncType of ncOptions) {
         const typeCount = ncArray.filter( n => n.type === ncType && !n.trash ).length;
-        ncCounts.push({x: ncType, y: typeCount, l: batch});
+        ncCounts.unshift({x: ncType, y: typeCount, l: batch});
       }
       return ncCounts;
     }
     
     const ncOptions = Array.isArray(nonConOptions) ? nonConOptions : findOptions();
+    const ncOptionS = ncOptions.sort();
     const ncArray = Array.isArray(nonConArray) ? nonConArray : [];
-    const allTypes = ncCounter(ncArray, ncOptions);
+    const allTypes = ncCounter(ncArray, ncOptionS);
     return allTypes;
   },
   
@@ -214,13 +215,18 @@ Meteor.methods({
     };
     const allBatch = Array.from( batchIDs, bID => batch(bID) );
     
-    nonconCollection = [];
+    let allTypes = [];
     for(let b of allBatch) {
-      let counts = Meteor.call('countNonConTypes', b.batch, b.nonCon, false);
-      nonconCollection.push(counts);
+      allTypes.push(Array.from(b.nonCon, n => n.type));
     }
+    const nonConAll = _.uniq( [].concat(...allTypes) );
     
-    return nonconCollection;
+    let countNonCon = [];
+    for(let b of allBatch) {
+      const count = Meteor.call('countNonConTypes', b.batch, b.nonCon, nonConAll);
+      countNonCon.push( count );
+    }
+    return countNonCon;
   },
   
   

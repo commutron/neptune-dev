@@ -84,12 +84,12 @@ const GroupSlide = ({ groupData, widgetsList, batchData, batchDataX, app })=>{
         </div>
         
       </div>
-          
+      
       <WidgetsDepth
         groupAlias={g.alias}
         widgetData={widgetsList}
         active={active} />
-
+      
       <div className='wide space edit'>
         
         <p className='capFL'>

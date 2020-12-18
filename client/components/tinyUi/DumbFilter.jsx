@@ -1,7 +1,5 @@
 import React from 'react';
 
-/// MAY NOT BE IN USE ???
-
 const DumbFilter = ({ id, size, onTxtChange, labelText, list })=>	{
   
   function changeTextFilter() {
@@ -10,10 +8,7 @@ const DumbFilter = ({ id, size, onTxtChange, labelText, list })=>	{
   
   return(
     <div className='centre noCopy'>
-      <p className='med nomargin'>
-        <i>{labelText}</i>
-      </p>
-      <p className=''>
+      <p>
         <label className={'blackT variableInput ' + size}>
           <i className={size + ' fas fa-filter fa-fw' || 'med fas fa-filter fa-fw'}></i>
         </label>
@@ -34,9 +29,10 @@ const DumbFilter = ({ id, size, onTxtChange, labelText, list })=>	{
           )})}
         </datalist>
       </p>
-      
+      <p className='med nomargin'>
+        <i>{labelText}</i>
+      </p>
     </div>
-    
   );
 };
   

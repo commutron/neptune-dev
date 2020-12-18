@@ -22,27 +22,40 @@ SyncedCron.config({
 
   utc: true,
 });
-  
+
+
+
+SyncedCron.add({
+  name: 'Weekly Lock Check',
+  schedule: (parser)=> parser.text('at 6:00 am on Sat'),
+  job: ()=> goDo('lockingCacheUpdate')
+});
+
+SyncedCron.add({
+  name: 'Twice Daily Trace Priority',
+  schedule: (parser)=> parser.text('at 6:00 am every weekday also at 6:00 pm every weekday'),
+  job: ()=> goDo('updateLiveMovement')
+});
   
 SyncedCron.add({
   name: 'Daily Done Target By Month',
-  schedule: (parser)=> parser.text('at 6:00 am'),
+  schedule: (parser)=> parser.text('at 6:01 am every weekday'),
   job: ()=> runLoop(countDoneBatchTarget, 'doneBatchLiteMonths', 'month')
 });
 SyncedCron.add({
   name: 'Daily Done Target By Week',
-  schedule: (parser)=> parser.text('at 6:01 am'),
+  schedule: (parser)=> parser.text('at 6:02 am every weekday'),
   job: ()=> runLoop(countDoneBatchTarget, 'doneBatchLiteWeeks', 'week')
 });
 
 SyncedCron.add({
   name: 'Daily Done Units By Month',
-  schedule: (parser)=> parser.text('at 6:02 am'),
+  schedule: (parser)=> parser.text('at 6:03 am every weekday'),
   job: ()=> runLoop(countDoneUnits, 'doneUnitLiteMonths', 'month')
 });
 SyncedCron.add({
   name: 'Daily Done Units By Week',
-  schedule: (parser)=> parser.text('at 6:03 am'),
+  schedule: (parser)=> parser.text('at 6:04 am every weekday'),
   job: ()=> runLoop(countDoneUnits, 'doneUnitLiteWeeks', 'week')
 });
   
@@ -184,5 +197,13 @@ async function runLoop(countFunc, dataName, tSpan) {
         dataName: dataName,
         dataSet: countArray
     }});
+  }
+}
+
+function goDo(goFunc) {
+  const apps = AppDB.find({},{fields:{'orgKey':1}}).fetch();
+  for(let app of apps) {
+    const accessKey = app.orgKey;
+    Meteor.call(goFunc, accessKey);
   }
 }

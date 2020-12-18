@@ -436,7 +436,6 @@ Meteor.methods({
         }});
         Meteor.defer( ()=>{
           Meteor.call('updateOneMovement', batchId, privateKey);
-          Meteor.call('lockingCacheUpdate', privateKey);
         });
       }else{null}
     }

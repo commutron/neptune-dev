@@ -684,7 +684,7 @@ main {
 .rowWrapR { justify-content: flex-end; }
 
 .autoFlex {
-  align-items: baseline;
+  align-items: start;
   justify-content: stretch;
 }
 .autoFlex > div {

@@ -40,49 +40,47 @@ Meteor.methods({
   lockingCacheUpdate(internalKey, force) {
     this.unblock();
     const accessKey = internalKey || Meteor.user().orgKey;
-    
-    Meteor.defer( ()=>{
-      if(typeof accessKey === 'string') {
-        const lstyear = ( d => new Date(d.setDate(d.getDate()-365)) )(new Date);
-        const lstweek = ( d => new Date(d.setDate(d.getDate()-7)) )(new Date);
-  
-        const currentCache = CacheDB.findOne({
-          orgKey: accessKey, 
-          lastUpdated: { $gte: new Date(lstweek) },
-          dataName:'lockingTask'});
-        
-        if(force || !currentCache ) {
-          BatchDB.find({
-            orgKey: accessKey, 
-            live: false,
-            $or: [ { lock: false },
-                   { lock: { $exists: false } }
-                 ],
-            finishedAt: { $lt: lstyear }
-          }).forEach( (b)=> {
-            Meteor.defer( ()=>{ Meteor.call('enableLock', b._id, accessKey) });
-          });
+      
+    if(typeof accessKey === 'string') {
+      const lstyear = ( d => new Date(d.setDate(d.getDate()-365)) )(new Date);
+      const lstweek = ( d => new Date(d.setDate(d.getDate()-7)) )(new Date);
+
+      const currentCache = CacheDB.findOne({
+        orgKey: accessKey, 
+        lastUpdated: { $gte: new Date(lstweek) },
+        dataName:'lockingTask'});
+      
+    if(force || !currentCache ) {
+      BatchDB.find({
+        orgKey: accessKey, 
+        live: false,
+        $or: [ { lock: false },
+               { lock: { $exists: false } }
+             ],
+        finishedAt: { $lt: lstyear }
+      }).forEach( (b)=> {
+        Meteor.defer( ()=>{ Meteor.call('enableLock', b._id, accessKey) });
+      });
           
-          XBatchDB.find({
-            orgKey: accessKey, 
-            live: false,
-            $or: [ { lock: false },
-                   { lock: { $exists: false } }
-                 ],
-            completedAt: { $lt: lstyear }
-          }).forEach( (bx)=> {
-            Meteor.defer( ()=>{ Meteor.call('enableLockX', bx._id, accessKey) });
-          });
-        
-          CacheDB.upsert({orgKey: accessKey, dataName: 'lockingTask'}, {
-            $set : {
-              orgKey: accessKey,
-              lastUpdated: new Date(),
-              dataName: 'lockingTask',
-          }});
-        }
+        XBatchDB.find({
+          orgKey: accessKey, 
+          live: false,
+          $or: [ { lock: false },
+                 { lock: { $exists: false } }
+               ],
+          completedAt: { $lt: lstyear }
+        }).forEach( (bx)=> {
+          Meteor.defer( ()=>{ Meteor.call('enableLockX', bx._id, accessKey) });
+        });
+      
+        CacheDB.upsert({orgKey: accessKey, dataName: 'lockingTask'}, {
+          $set : {
+            orgKey: accessKey,
+            lastUpdated: new Date(),
+            dataName: 'lockingTask',
+        }});
       }
-    });
+    }
   }
   
 });
