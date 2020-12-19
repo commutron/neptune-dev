@@ -41,8 +41,7 @@ const FlowFormRoute = ({
   existFlows, edit, preFill,
   selfclose
 })=> {
-
-  const [ fill, fillSet ] = useState(false);
+  
   const [ warn, warnSet ] = useState(false);
   const [ flow, flowSet ] = useState(false);
   
@@ -62,9 +61,7 @@ const FlowFormRoute = ({
     const flowObj = flow;
     
     // edit existing
-    const f = fill;
-    const edit = f ? existFlows.find( x => x.flowKey === f ) : false;
-    const editId = edit ? edit.flowKey : false;
+    const editId = preFill ? preFill.flowKey : false;
     
     if(!flowObj) {
       toast.warning("Can't Save, missing flow");
@@ -83,22 +80,17 @@ const FlowFormRoute = ({
   useEffect( ()=> {
     const optn = preFill;
     if(!optn) {
-      fillSet(false);
+      null;
     }else{
-      fillSet(optn.flowKey);
       Meteor.call('activeFlowCheck', optn.flowKey, (error, reply)=>{
         error && console.log(error);
         warnSet(reply);
       });
     }
   }, []);
-
   
-  const f = fill;
-  const e = f ? existFlows.find( x => x.flowKey === f ) : false;
-  
-  const eN = e ? e.title : '';
-  const eF = e ? e.flow : false;
+  const fTitle = preFill ? preFill.title : '';
+  const fFlow = preFill ? preFill.flow : false;
 
   return(
     <div>
@@ -109,7 +101,7 @@ const FlowFormRoute = ({
       >
       {warn ?
         <div className='centre'>
-          <p><b>{eN}</b> is in used by</p>
+          <p><b>{fTitle}</b> is in used by</p>
           {warn === 'liveRiver' ?
             <h3>An Active {Pref.batch} as the {Pref.buildFlow}</h3>
           : warn === 'liveAlt' ?
@@ -128,7 +120,7 @@ const FlowFormRoute = ({
         app={app}
         options={app.trackOption}
         end={app.lastTrack}
-        baseline={eF}
+        baseline={fFlow}
         onClick={(e)=>setFlow(e)} />
         
       <hr />

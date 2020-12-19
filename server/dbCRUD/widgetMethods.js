@@ -1,10 +1,14 @@
 Meteor.methods({
   
   //// Widgets \\\\
-  addNewWidget(widget, groupId, desc, endTrack) {
+  addNewWidget(widget, groupId, desc) {
     const duplicate = WidgetDB.findOne({widget: widget});
     if(!duplicate && Roles.userIsInRole(Meteor.userId(), 'create')) {
-          
+      const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
+      const endTrack = appDoc.lastTrack;
+      const dfLists = appDoc.nonConTypeLists.filter( x => x.defaultOn === true );
+      const ncKeys = Array.from(dfLists, x => x.key);
+      
       WidgetDB.insert({
         widget: widget,
         describe: desc,
@@ -18,28 +22,11 @@ Meteor.methods({
           {
             flowKey: new Meteor.Collection.ObjectID().valueOf(),
 				    title: 'default flow',
-				    type: 'basic',
-            flow: [endTrack]
+				    type: 'plus',
+            flow: [endTrack],
+            ncLists: ncKeys
           }
-        ],/*
-        versions: [
-          {
-            versionKey: new Meteor.Collection.ObjectID().valueOf(),
-            version: version,
-            createdAt: new Date(),
-            createdWho: Meteor.userId(),
-            updatedAt: new Date(),
-  			    updatedWho: Meteor.userId(),
-            verifiedWho: false,
-            live: true,
-            tags: [],
-            wiki: wiki,
-            units: Number(unit),
-				    notes: false,
-				    assembly: [],
-				    subWidgets: [] // widgetId and versionKey
-          }
-				],*/
+        ]
       });
       return true;
     }else{
@@ -87,82 +74,6 @@ Meteor.methods({
     }
   },
   
-  /*
-  addVersion(widgetId, versionId, wiki, unit) {
-    const doc = WidgetDB.findOne({_id: widgetId});
-    const duplicate = doc.versions.find(x => x.version === versionId);
-    if(!duplicate && Roles.userIsInRole(Meteor.userId(), 'create')) {
-      WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey}, {
-        $push : {
-          versions:
-          {
-            versionKey: new Meteor.Collection.ObjectID().valueOf(),
-            version: versionId,
-            createdAt: new Date(),
-            createdWho: Meteor.userId(),
-            updatedAt: new Date(),
-            updatedWho: Meteor.userId(),
-            verifiedWho: false,
-            live: true,
-            tags: [],
-            wiki: wiki,
-            units: Number(unit),
-				    notes: false,
-				    assembly: [],
-				    subWidgets: [] // widgetId and versionKey
-          }
-        }});
-      return true;
-    }else{
-      return false;
-    }
-  },
-  
-
-  editVersion(widgetId, vKey, newVer, state, newWiki, newUnit) {
-    const doc = WidgetDB.findOne({_id: widgetId});
-    const ver = doc.versions.find(x => x.versionKey === vKey);
-    let duplicate = doc.versions.find(x => x.version === newVer);
-    ver.version === newVer ? duplicate = false : null;
-    if(!duplicate && Roles.userIsInRole(Meteor.userId(), 'edit')) {
-      WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.versionKey': vKey}, {
-        $set : {
-          'versions.$.updatedAt': new Date(),
-  			  'versions.$.updatedWho': Meteor.userId(),
-          'versions.$.version': newVer,
-          'versions.$.live': state,
-          'versions.$.wiki': newWiki,
-          'versions.$.units': newUnit
-        }});
-      return true;
-    }else{
-      return false;
-    }
-  },
-  
-
-  deleteVersion(widgetId, vKey, pass) {
-    const inUse = BatchDB.findOne({versionKey: vKey});
-    if(!inUse) {
-      const doc = WidgetDB.findOne({_id: widgetId});
-      const ver = doc.versions.find(x => x.versionKey === vKey);
-      const lock = ver.createdAt.toISOString().split("T")[0];
-      const user = Roles.userIsInRole(Meteor.userId(), 'remove');
-      const access = doc.orgKey === Meteor.user().orgKey;
-      const unlock = lock === pass;
-      if(user && access && unlock) {
-    		WidgetDB.update(widgetId, {
-          $pull : { versions: { versionKey: vKey }
-    		   }});
-    		return true;
-      }else{
-        return false;
-      }
-    }else{
-      return 'inUse';
-    }
-  },
-*/
 // new
   pushBasicPlusFlow(widgetId, flowTitle, ncLists) {
     const exdt = Array.isArray(ncLists);
@@ -304,85 +215,7 @@ Meteor.methods({
     }else{
       return false;
     }
-  },
-/*
-  setVersionNote(widgetId, vKey, note) {
-    if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
-      WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.versionKey': vKey}, {
-        $set : { 'versions.$.notes': {
-          time: new Date(),
-          who: Meteor.userId(),
-          content: note,
-        }}});
-      return true;
-    }else{
-      return false;
-    }
-  },
-  */
-  /*
-  // push a tag
-  pushWTag(widgetId, vKey, tag) {
-    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
-      WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.versionKey': vKey}, {
-        $push : { 
-          'versions.$.tags': tag
-        }});
-      BatchDB.update({orgKey: Meteor.user().orgKey, versionKey: vKey, live: true}, {
-        $push : { 
-          tags: tag
-        }});
-    }else{
-      null;
-    }
-  },
-  // pull a tag
-  pullWTag(widgetId, vKey, tag) {
-    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
-      WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.versionKey': vKey}, {
-        $pull : {
-          'versions.$.tags': tag
-        }});
-    }else{
-      null;
-    }
-  },
-*/
-/*
-// push a Component
-  pushComp(widgetId, vKey, comps) {
-    if(Roles.userIsInRole(Meteor.userId(), ['create', 'edit'])) {
-      for(let c of comps) {
-        WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.versionKey': vKey}, {
-          $push : { 
-            'versions.$.assembly': { 
-              ref: false,
-              component: c,
-              location: false,
-              theta: false,
-              bSide: false
-            }
-        }});
-      }
-    }else{
-      null;
-    }
-  },
-
-  // pull a Component
-  pullComp(widgetId, vKey, comp) {
-    if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
-      WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.versionKey': vKey}, {
-          $pull : { 
-            'versions.$.assembly': { 
-               component: comp
-            }
-        }});
-    }else{
-      null;
-    }
-  },
-*/
+  }
   
   
 });

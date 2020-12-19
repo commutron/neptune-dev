@@ -25,19 +25,6 @@ const NCTypeSlide = ({ app })=> {
     });
   }
   
-  function ncDormantType(listKey, typeKey) {
-    Meteor.call('switchStateNonConType', listKey, typeKey, (error, reply)=>{
-      if(error) {
-        console.log(error);
-        toast.warning('Server Error, see console log for details');
-      }else if(reply.pass === false) {
-        toast.warning(reply.message);
-      }else{
-        null;
-      }
-    });
-  }
-  
   
   const ncListS = app.nonConTypeLists.sort((b1, b2)=> {
     return b1.listPrefix < b2.listPrefix ? 1 : b1.listPrefix > b2.listPrefix ? 1 : 0 });
@@ -54,44 +41,48 @@ const NCTypeSlide = ({ app })=> {
         <TopNCSlide app={app} />
       }>
     
-        {ncListS.map( (entry, index)=>{
-          const listKey = entry.key;
-          return(
-            <div className='vspace' key={listKey+index}>
-              <h2>{entry.listPrefix}. {entry.listName}</h2>
-              <form 
-                id={listKey + 'form'} 
-                onSubmit={(e)=>addToList(e, listKey)}
-                className='inlineForm'>
-                <label htmlFor={listKey + 'input'}>Add A New Type To This List<br />
-                  <input
-                    type='text'
-                    id={listKey + 'input'}
-                    placeholder='Type Name'
-                    required
-                  />
-                </label>
-                <label htmlFor={listKey + 'go'}><br />
-                  <button
-                    type='submit'
-                    id={listKey + 'go'}
-                    className='smallAction clearGreen'
-                    disabled={false}
-                  >Add</button>
-                </label>
-              </form>
-              <dl className='line2x letterSpaced vspace'>
-              {entry.typeList.map( (type, ix)=>{
-                return( 
-                  <dd key={type.key+ix}>
-                    <i className={type.live ? '' : 'fade'}>{type.typeCode}. {type.typeText}</i>
-                    <button 
-                      className={`miniAction redT gap med ${type.live ? '' : 'fade'}`}                      onClick={()=>ncDormantType(listKey, type.key)}
-                    ><i className='fas fa-power-off fa-fw'></i></button>
-                  </dd>
-              )})}
-              </dl>
-            </div>
+      {ncListS.map( (entry, index)=>{
+        const listKey = entry.key;
+        return(
+          <div className='vspace' key={listKey+index}>
+            <h2>{entry.listPrefix}. {entry.listName}</h2>
+            <p>
+              <SetDefault 
+                listKey={listKey} 
+                defaultOn={entry.defaultOn} />
+            </p>
+            <form 
+              id={listKey + 'form'} 
+              onSubmit={(e)=>addToList(e, listKey)}
+              className='inlineForm'>
+              <label htmlFor={listKey + 'input'}>Add A New Type To This List<br />
+                <input
+                  type='text'
+                  id={listKey + 'input'}
+                  placeholder='Type Name'
+                  required
+                />
+              </label>
+              <label htmlFor={listKey + 'go'}><br />
+                <button
+                  type='submit'
+                  id={listKey + 'go'}
+                  className='action clearGreen'
+                  disabled={false}
+                >Add</button>
+              </label>
+            </form>
+            
+            <dl className='line2x letterSpaced vspace'>
+              {entry.typeList.map( (type, ix)=> ( 
+                <TypeEntry 
+                  key={type.key+ix}
+                  listKey={listKey}
+                  typeObj={type}
+                  listIndex={ix} />
+              ))}
+            </dl>
+          </div>
       )})}
     </SlidesNested>
   );
@@ -99,6 +90,59 @@ const NCTypeSlide = ({ app })=> {
 
 export default NCTypeSlide;
 
+const SetDefault = ({ listKey, defaultOn })=> {
+  
+  function change() {
+    const flip = !defaultOn ? true : false;
+    Meteor.call('setDefaultNCTL', listKey, flip, (error, reply)=>{
+      if(error)
+        console.log(error);
+      if(reply) {
+        toast.success('Saved');
+      }else{
+        console.log("BLOCKED BY SERVER");
+      }
+    });
+  }
+
+  return(
+    <span className='beside'>
+      <input
+        type='checkbox'
+        id={listKey+'dfon'}
+        defaultChecked={defaultOn}
+        onChange={()=>change()}
+        readOnly />
+      <label htmlFor={listKey+'dfon'}>On By Default</label>
+    </span>
+  );
+};
+
+const TypeEntry = ({ listKey, typeObj, listIndex })=> {
+  
+  function ncDormantType(typeKey) {
+    Meteor.call('switchStateNonConType', listKey, typeKey, (error, reply)=>{
+      if(error) {
+        console.log(error);
+        toast.warning('Server Error, see console log for details');
+      }else if(reply.pass === false) {
+        toast.warning(reply.message);
+      }else{
+        null;
+      }
+    });
+  }
+ 
+  return(
+    <dd>
+      <i className={typeObj.live ? '' : 'fade'}>{typeObj.typeCode}. {typeObj.typeText}</i>
+      <button 
+        className={`miniAction redT gap med ${typeObj.live ? '' : 'fade'}`}                      
+        onClick={()=>ncDormantType(typeObj.key)}
+      ><i className='fas fa-power-off fa-fw'></i></button>
+    </dd>
+  );
+};
 
 const TopNCSlide = ({ app })=> {
   

@@ -67,7 +67,6 @@ const GroupSlide = ({ groupData, widgetsList, batchData, batchDataX, app })=>{
             lockOut={g.hibernate} />
           <WidgetNewForm
             groupId={g._id}
-            endTrack={app.lastTrack}
             lock={g.hibernate} />
           <GroupHibernate
             id={g._id}

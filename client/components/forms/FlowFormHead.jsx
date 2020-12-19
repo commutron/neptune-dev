@@ -52,16 +52,19 @@ const FlowFormHead = ({ id, existFlows, preFill, app, selfclose })=> {
     const ncCombo = Array.from(app.nonConTypeLists, x => { 
                       return { 
                         label: x.listPrefix +". "+ x.listName, 
-                        value: x.key 
+                        value: x.key,
+                        dfOn: x.defaultOn
                       } } );
-    const ncComboSort = ncCombo.sort((n1, n2)=> {
-    return n1.label < n2.label ? -1 : n1.label > n2.label ? 1 : 0 });
+    const ncComboSort = ncCombo.sort((n1, n2)=>
+            n1.label < n2.label ? -1 : n1.label > n2.label ? 1 : 0 );
       
     ncOptionsSet(ncComboSort);
     
     const optn = preFill;
     if(!optn) {
       fillSet(false);
+      const ncDefault = ncCombo.filter( x => x.dfOn === true );
+      ncListSet(ncDefault);
     }else{
       if(optn.type === 'plus') {
         const ncDefault = ncCombo.filter( x => 
@@ -112,41 +115,39 @@ const FlowFormHead = ({ id, existFlows, preFill, app, selfclose })=> {
   const eN = e ? e.title : '';
 
   return(
-    <div>
-      <div className=''>
-        <form
-          id='flowSave'
-          className='centre'
-          onSubmit={(e)=>save(e)}
-        >
-        {warn ?
-          <div className='centre'>
-            <p><b>{eN}</b> is in used by</p>
-            {warn === 'liveRiver' ?
-              <h3>An Active {Pref.batch} as the {Pref.buildFlow}</h3>
-            : warn === 'liveAlt' ?
-              <h3>An Active {Pref.batch} as the {Pref.buildFlowAlt}</h3>
-            : warn === 'liveAlt' ?
-              <h3>An Inactive {Pref.batch} as the {Pref.buildFlow}</h3>
-            : warn === 'liveAlt' ?
-              <h3>An Inactive {Pref.batch} as the {Pref.buildFlowAlt}</h3>
-            :
-              <p>something</p>}
-          </div>
-        : null}
-          <em className='small'>duplicate {Pref.flow} names are ill advised but not blocked</em>
-          <p>
-            <input
-              type='text'
-              id='flwttl'
-              defaultValue={eN}
-              placeholder='descriptive title'
-              required />
-            <label htmlFor='flwttl'>{Pref.flow} title</label>
-          </p>
-        </form>
-      </div>
-      
+    <div className='overscroll2x'>
+      <form
+        id='flowSave'
+        className='centre'
+        onSubmit={(e)=>save(e)}
+      >
+      {warn ?
+        <div className='centre'>
+          <p><b>{eN}</b> is in used by</p>
+          {warn === 'liveRiver' ?
+            <h3>An Active {Pref.batch} as the {Pref.buildFlow}</h3>
+          : warn === 'liveAlt' ?
+            <h3>An Active {Pref.batch} as the {Pref.buildFlowAlt}</h3>
+          : warn === 'liveAlt' ?
+            <h3>An Inactive {Pref.batch} as the {Pref.buildFlow}</h3>
+          : warn === 'liveAlt' ?
+            <h3>An Inactive {Pref.batch} as the {Pref.buildFlowAlt}</h3>
+          :
+            <p>something</p>}
+        </div>
+      : null}
+        <em className='small'>duplicate {Pref.flow} names are ill advised but not blocked</em>
+        <p>
+          <input
+            type='text'
+            id='flwttl'
+            defaultValue={eN}
+            placeholder='descriptive title'
+            required />
+          <label htmlFor='flwttl'>{Pref.flow} title</label>
+        </p>
+      </form>
+    
       <hr />
       
       <h2 className='cap'>{Pref.nonCon} lists</h2>
@@ -163,9 +164,9 @@ const FlowFormHead = ({ id, existFlows, preFill, app, selfclose })=> {
         />List Options</label>
         <p><em>If none are chosen the Legacy List will be used</em></p>
       </div>
-      
+    
       <hr />
-
+  
       <div className='space centre'>
         <button
           type='submit'

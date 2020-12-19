@@ -4,29 +4,18 @@
   font-size: medium;
   letter-spacing: 1px;
   padding: 0 10px;
+  min-height: 32px;
+  line-height: 1rem;
 }
 .action {
-  line-height: 2rem;
   font-weight: 600;
-	min-height: 2.5rem;
 	text-transform: uppercase;
 	overflow: hidden;
 }
 .smallAction {
-  line-height: 1rem;
   min-width: 2rem;
-  min-height: 2.5rem;
 }
-/*
-.blendAction {
-  letter-spacing: 1px;
-	font-size: 1.5vw;
-  width: 2.5vw;
-  height: 2.5vw;
-	padding: 0;
-}
-.blendAction:focus, .blendAction:active,
-*/
+
 .iconAction {
 	padding: 0.25rem;
 	background-color: transparent;
@@ -367,7 +356,6 @@ label.qdpplRound {
   font-size: 2rem;
 }
 
-button.variableInput.med { height: 32px; }
 button.variableInput.medBig { height: 40px; }
 button.variableInput.big { height: 48px; }
 button.variableInput.bigger { height: 56px; }

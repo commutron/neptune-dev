@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import ModelMedium from '../smallUi/ModelMedium.jsx';
 
 
-const WidgetEditWrapper = ({ groupId, endTrack, lock })=> (
+const WidgetEditWrapper = ({ groupId, lock })=> (
   <ModelMedium
     button={'new ' + Pref.widget}
     title={'new ' + Pref.widget}
@@ -14,14 +14,13 @@ const WidgetEditWrapper = ({ groupId, endTrack, lock })=> (
     lock={!Roles.userIsInRole(Meteor.userId(), 'create') || lock}>
     <WidgetNewForm
       groupId={groupId}
-      endTrack={endTrack} 
     />
   </ModelMedium>
 );
 
 export default WidgetEditWrapper;
 
-const WidgetNewForm = ({ groupId, endTrack })=> {
+const WidgetNewForm = ({ groupId })=> {
 
   function save(e) {
     e.preventDefault();
@@ -29,7 +28,7 @@ const WidgetNewForm = ({ groupId, endTrack })=> {
     const newName = this.nwNm.value.trim().toLowerCase();
     const desc = this.prodiption.value.trim();
     
-    Meteor.call('addNewWidget', newName, groupId, desc, endTrack, (error, reply)=>{
+    Meteor.call('addNewWidget', newName, groupId, desc, (error, reply)=>{
       error && console.log(error);
       if(reply) {
         FlowRouter.go('/data/widget?request=' + newName);

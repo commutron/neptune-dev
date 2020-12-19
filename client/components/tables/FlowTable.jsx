@@ -18,12 +18,12 @@ const FlowTable = ({ id, flows, app })=> {
       });
     }
   }
-  
 
   let sty = {
     minWidth: '70%',
     maxWidth: '90%'
   };
+  
   return(
     <div>
       {flows.map( (entry, index)=>{ 
@@ -107,8 +107,8 @@ const NClists = ({ chosen, app })=> {
   
   const filtered = app.nonConTypeLists.filter( x => chosen.includes(x.key) );
   
-  const sorted = filtered.sort((n1, n2)=> {
-    return n1.listPrefix < n2.listPrefix ? -1 : n1.listPrefix > n2.listPrefix ? 1 : 0 });
+  const sorted = filtered.sort((n1, n2)=>
+    n1.listPrefix < n2.listPrefix ? -1 : n1.listPrefix > n2.listPrefix ? 1 : 0 );
                     
   return(
     <Fragment>

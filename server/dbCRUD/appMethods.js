@@ -503,6 +503,25 @@ Meteor.methods({
       throw new Meteor.Error(err);
     }
   },
+  
+  setDefaultNCTL(nclKey, newValue) {
+    try{
+      if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+        let setOp = !newValue || newValue === 'false' ? false : true;
+        
+        AppDB.update({orgKey: Meteor.user().orgKey, 'nonConTypeLists.key': nclKey}, {
+          $set : { 
+            'nonConTypeLists.$.defaultOn' : setOp 
+          }
+        });
+        return true;
+      }else{
+        return false;
+      }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
 
   addNonConTypeToList(listKey, inputType) {
     try{

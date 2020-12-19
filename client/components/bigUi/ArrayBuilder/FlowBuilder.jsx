@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 
 import './style.css';
@@ -10,13 +10,10 @@ const FlowBuilder = ({ app, options, end, baseline, onClick })=> {
   
   const [ toggle, toggleChange ] = useState( false );
   
-  const branchesSort = app.branches.sort((b1, b2)=> {
-          if (b1.position < b2.position) { return 1 }
-          if (b1.position > b2.position) { return -1 }
-          return 0;
-        });
-        
-  useLayoutEffect( ()=>{
+  const branchesSort = app.branches.sort((b1, b2)=>
+          b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
+  
+  useEffect( ()=>{
     if(baseline) {
       let baseSet = new Set();
       for(let t of baseline) {
@@ -26,7 +23,7 @@ const FlowBuilder = ({ app, options, end, baseline, onClick })=> {
       }
       stepsSet( [...baseSet] );
     }else{null}
-  }, [baseline]);
+  }, []);
   
   function sendUp() {
     // steps set from state
