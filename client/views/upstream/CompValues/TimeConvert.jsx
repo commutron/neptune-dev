@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 // import Pref from '/client/global/pref.js';
+import { FieldObject } from './CompValuesSlide';
 import { ms2sc, ms2mn, sc2hr } from '/client/utility/Convert';
 
 const TimeConvert = ()=> {
@@ -28,32 +29,29 @@ const TimeConvert = ()=> {
       
       <div className='rowWrap'>
         
-        <label className='gap'>Seconds <var>(sec)</var><br />
-          <input
-            type='number'
-            id='secInput'
-            value={sec}
-            onInput={(e)=>baseUnit(e, this.secInput.value, "seconds" )}
-          />
-        </label>
+        <FieldObject
+          titleVal='Seconds'
+          shortVal='sec'
+          idVal='secInput'
+          valueVal={sec}
+          funcVal={baseUnit}
+          factorVal="seconds" />
         
-        <label className='gap'>Minutes <var>(min)</var><br />
-          <input
-            type='number'
-            id='minInput'
-            value={min}
-            onInput={(e)=>baseUnit(e, this.minInput.value, "minutes" )}
-          />
-        </label>
+        <FieldObject
+          titleVal='Minutes'
+          shortVal='min'
+          idVal='minInput'
+          valueVal={min}
+          funcVal={baseUnit}
+          factorVal="minutes" />
         
-        <label className='gap'>Hours <var>(hr)</var><br />
-          <input
-            type='number'
-            id='hrInput'
-            value={hr}
-            onInput={(e)=>baseUnit(e, this.hrInput.value, "hours" )}
-          />
-        </label>
+        <FieldObject
+          titleVal='Hours'
+          shortVal='hr'
+          idVal='hrInput'
+          valueVal={hr}
+          funcVal={baseUnit}
+          factorVal="hours" />
         
       </div>
       

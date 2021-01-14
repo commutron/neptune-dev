@@ -114,6 +114,13 @@ const DataRepair = ({ app, users })=> {
     });
   }
   
+  function removeDamagedBatch() {
+    Meteor.call('fixRemoveDamagedBatch', (error)=>{
+      error && console.log(error);
+      toast.success('request sent');
+    });
+  }
+  
   return(
     <div className='space3v autoFlex'>
       {/*
@@ -181,6 +188,16 @@ const DataRepair = ({ app, users })=> {
           onClick={()=>runTraceFix()}
           className='action clearOrange'
         >Fix Errors in TraceDB</button>
+      </div>
+      
+      <div>
+        <h3><i className="fas fa-wrench fa-lg gap"></i>
+          Fix BatchDB & XBatchDB Errors
+        </h3>
+        <button
+          onClick={()=>removeDamagedBatch()}
+          className='action clearRed'
+        >Remove Damaged Batch</button>
       </div>
       
       <div>

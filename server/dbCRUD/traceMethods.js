@@ -53,7 +53,7 @@ function shrinkWhole(bData, now, shipLoad, accessKey) {
     
     const actvLvl = Meteor.call('tideActivityLevel', bData._id, accessKey);
     const brchCnd = Meteor.call('branchCondition', bData._id, accessKey);
-    const prtyRnk = Meteor.call('priorityFast', accessKey, bData, now, shipAim, lateLate, shipLoad);
+    const prtyRnk = Meteor.call('priorityFast', accessKey, bData, now, shipAim, shipLoad);
     
     TraceDB.upsert({batchID: bData._id}, {
       $set : { 
@@ -133,7 +133,7 @@ function checkMovement(bData, now, shipLoad, accessKey) {
     const fillZ = didFinish ? shpdlv[3] : null;
     const lateLate = didFinish ? fillZ[2] === 'late' : shpdlv[2];
     
-    const prtyRnk = Meteor.call('priorityFast', accessKey, bData, now, shipAim, lateLate, shipLoad);
+    const prtyRnk = Meteor.call('priorityFast', accessKey, bData, now, shipAim, shipLoad);
     
     TraceDB.update({batchID: bData._id}, {
       $set : { 
@@ -208,7 +208,7 @@ Meteor.methods({
            TraceDB.remove({batchID: t.batchID});
         }
       }
-      Meteor.call('reMiniOpenTrace',);
+      Meteor.call('reMiniOpenTrace');
       return true;
     }else{
       return false;

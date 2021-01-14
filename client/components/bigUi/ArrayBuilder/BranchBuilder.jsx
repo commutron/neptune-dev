@@ -7,14 +7,9 @@ import './style.css';
 const BranchBuilder = ({ app, isDebug, lockout })=> {
   
   const branches = app.branches || [];
-  const branchesSort = branches.sort((b1, b2)=> {
-          if (b1.position < b2.position) { return 1 }
-          if (b1.position > b2.position) { return -1 }
-          return 0;
-        });
+  const branchesSort = branches.sort((b1, b2)=>
+          b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
 
-  // useLayoutEffect( ()=>{
-  // }, []);
     
   return(
     <div className=''>

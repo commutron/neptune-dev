@@ -44,10 +44,19 @@ const CounterAssign = ({ id, app, lock, noText, waterfall })=> {
       toast.error('Server Error');
     });
   }
+  
+  function handlePosEdit(val, wfKey) {
+    Meteor.call('setCounterPosX', id, wfKey, val, (err)=>{
+      err && console.log(err);
+    });
+  }
 
   const cOp = app.countOption || [];
+  
+  const waterfallS = waterfall.sort((w1, w2)=> !w1.position ? -1 : 
+          w1.position > w2.position ? 1 : w1.position < w2.position ? -1 : 0 );
     
-  return (
+  return(
     <Model
       button={Pref.counter + 's'}
       title={'assign ' + Pref.counter + 's'}
@@ -90,14 +99,39 @@ const CounterAssign = ({ id, app, lock, noText, waterfall })=> {
         <p className='centreText'>Saved, assigned counters.</p>
         <p className='centreText'>To preserve important data, only unstarted counters can be removed</p> 
         <div className='gateList'>
-          {waterfall.map( (entry, index)=> {
+          <div>                      
+            <div></div>
+            <div>Name</div>
+            <div>Type</div>
+            <div>Branch</div>
+            <div></div>
+          </div>
+          {waterfallS.map( (entry, index)=> {
             const branchObj = app.branches.find( y => y.brKey === entry.branchKey );
             const branchName = branchObj ? branchObj.branch : 'n/a';
             return (                 
-              <div key={entry.wfKey}>                      
+              <div key={entry.wfKey}>
                 <div>
-                  {entry.gate} - {entry.type} - {branchName}
+                  <input
+                    type='number'
+                    title='Position'
+                    id={entry.wfKey+'chPos'}
+                    className='tableAction narrow blueHover'
+                    pattern='[0-99]*'
+                    maxLength='2'
+                    minLength='1'
+                    max={99}
+                    min={0}
+                    inputMode='numeric'
+                    value={entry.position || 0}
+                    onChange={(e)=>handlePosEdit(e.target.value, entry.wfKey)}
+                    disabled={lock}
+                    required
+                  />
                 </div>
+                <div>{entry.gate}</div>
+                <div>{entry.type}</div>
+                <div>{branchName}</div>
                 <div>
                   <button
                     type='button'

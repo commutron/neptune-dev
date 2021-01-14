@@ -328,7 +328,7 @@ Meteor.methods({
 
   //// Waterfall
   
-  addCounter(batchId, wfKey, gate, type, wfBranch) {
+  addCounter(batchId, wfKey, gate, type, wfBranch, wfPos) {
     const accessKey = Meteor.user().orgKey;
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
       XBatchDB.update({_id: batchId, orgKey: accessKey}, {
@@ -337,6 +337,7 @@ Meteor.methods({
             wfKey: wfKey,
             gate: gate,
             type: type,
+            position: Number(0),
             action: 'clicker',// "slider", "timer", "stopwatch"
             branchKey: wfBranch,
             counts: []
@@ -346,6 +347,22 @@ Meteor.methods({
         Meteor.call('updateOneMinify', batchId, accessKey);
         Meteor.call('updateOneMovement', batchId, accessKey);
       });
+      return true;
+    }else{
+      return false;
+    }
+  },
+  setCounterPosX(batchId, wfKey, wfPos) {
+    const accessKey = Meteor.user().orgKey;
+    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+      XBatchDB.update({
+        _id: batchId,
+        orgKey: accessKey,
+        'waterfall.wfKey': wfKey
+      }, {
+        $set : { 
+          'waterfall.$.position': Number(wfPos),
+      }});
       return true;
     }else{
       return false;

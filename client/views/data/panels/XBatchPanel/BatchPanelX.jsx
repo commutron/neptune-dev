@@ -91,7 +91,7 @@ const BatchPanelX = ({
           
           <div className='threeThirdsContent wide'>
             <WaterfallTimeline
-              waterfalls={b.waterfall}
+              waterfall={b.waterfall}
               quantity={b.quantity}
               app={a} />
           </div>

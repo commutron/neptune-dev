@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import './style';
 
 import Waterfall from './Waterfall.jsx';
@@ -10,17 +10,21 @@ import BatchXComplete from '/client/components/forms/Batch/BatchXComplete';
 const WaterfallSelect = ({ batchData, app })=> {
 
   let allTotal = [];
+  
+  const waterfall = batchData.waterfall;
+  const waterfallS = waterfall.sort((w1, w2)=> !w1.position ? -1 : 
+          w1.position > w2.position ? 1 : w1.position < w2.position ? -1 : 0 );
     
   Session.set('nowStep', '');
   Session.set('nowWanchor', '');
   return (
     <div className='waterfallSelector'>
-      {batchData.waterfall.length === 0 ?
+      {waterfall.length === 0 ?
         <div className='wide space orangeBorder'>
           <p>No {Pref.counter}s are assigned</p>
         </div>
       :
-      batchData.waterfall.map( (entry)=>{
+      waterfallS.map( (entry)=>{
         let total = entry.counts.length > 0 ?
           Array.from(entry.counts, x => x.tick).reduce((x,y)=> x + y) :
         0;

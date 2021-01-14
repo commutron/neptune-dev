@@ -95,13 +95,13 @@ const GroupLanding = ({
       </details>
       
       <div className='wide max875 vspacehalf'>
-        <h3>New from the Last 14 Days</h3>
+        <h3>New from the Last 7 Days</h3>
         
         <VariantNewList
           widgetData={widgetData}
           variantData={variantData}
           groupData={groupData}
-          daysBack={14}
+          daysBack={7}
         />
 
       </div>

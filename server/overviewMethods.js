@@ -203,7 +203,6 @@ function dryPriorityCalc(bQuTmBdg, bTide, shipAim, now, shipLoad) {
 
 function collectPriority(privateKey, batchID, mockDay) {
   return new Promise(resolve => {
-    let collection = false;
     
     const app = AppDB.findOne({orgKey:privateKey}, {fields:{'nonWorkDays':1}});
     if(Array.isArray(app.nonWorkDays) ) {  
@@ -216,7 +215,7 @@ function collectPriority(privateKey, batchID, mockDay) {
               XBatchDB.findOne({_id: batchID});
     
     if(!b) {
-      resolve(collection);
+      resolve(false);
     }else{
       const endEntry = b.salesEnd || b.end;
       const doneEntry = b.completed ? b.completedAt : b.finishedAt;
@@ -236,7 +235,7 @@ function collectPriority(privateKey, batchID, mockDay) {
       
         const dryCalc = dryPriorityCalc(b.quoteTimeBudget, b.tide, shipAim, now, shipLoad);
 
-        collection = {
+        resolve({
           batch: b.batch,
           batchID: b._id,
           salesOrder: b.salesOrder,
@@ -249,10 +248,9 @@ function collectPriority(privateKey, batchID, mockDay) {
           // endEntry: endEntry,
           shipAim: shipAim.format(),
           lateLate: lateLate
-        };
-        resolve(collection);
+        });
       }else{
-        collection = {
+        resolve({
           batch: b.batch,
           batchID: b._id,
           salesOrder: b.salesOrder,
@@ -263,14 +261,13 @@ function collectPriority(privateKey, batchID, mockDay) {
           // endEntry: endEntry,  
           shipAim: shipAim.format(),
           lateLate: lateLate
-        };
-        resolve(collection);
+        });
       }
     }
   });
 }
 
-function getFastPriority(privateKey, bData, now, shipAim, lateLate, shipLoad) {
+function getFastPriority(privateKey, bData, now, shipAim, shipLoad) {
   return new Promise(resolve => {
     
     const doneEntry = bData.completed ? bData.completedAt : bData.finishedAt;
@@ -473,11 +470,11 @@ Meteor.methods({
     }
     return bundlePriority();
   },
-  priorityFast(serverAccessKey, bData, now, shipAim, lateLate, shipLoad) {
+  priorityFast(serverAccessKey, bData, now, shipAim, shipLoad) {
     async function bundlePriority() {
       const accessKey = serverAccessKey || Meteor.user().orgKey;
       try {
-        bundle = await getFastPriority(accessKey, bData, now, shipAim, lateLate, shipLoad);
+        bundle = await getFastPriority(accessKey, bData, now, shipAim, shipLoad);
         return bundle;
       }catch (err) {
         throw new Meteor.Error(err);

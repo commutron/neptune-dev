@@ -104,6 +104,29 @@ Meteor.methods({
       return false;
     }
   },
+  
+  fixRemoveDamagedBatch() {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      const allBatch = BatchDB.find({}).fetch();
+      for( let b of allBatch ) {
+        if(!b.orgKey) {
+           BatchDB.remove({_id: b._id});
+        }
+      }
+      const allBatchX = XBatchDB.find({}).fetch();
+      for( let bx of allBatchX ) {
+        if(!bx.orgKey) {
+           XBatchDB.remove({_id: bx._id});
+        }
+      }
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  
+  
   /*
   dateObjBatchUPGRADE() {
     if(!Roles.userIsInRole(Meteor.userId(), 'admin')) {

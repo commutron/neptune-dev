@@ -33,3 +33,15 @@ const CompValuesSlide = ({
 );
 
 export default CompValuesSlide;
+
+export const FieldObject = ({ titleVal, shortVal, idVal, valueVal, funcVal, factorVal })=> (
+  <label className='gap'>{titleVal} <var>({shortVal})</var><br />
+    <input
+      type='number'
+      id={idVal}
+      value={valueVal}
+      min={0}
+      onInput={(e)=>funcVal(e, this[idVal].value, factorVal)}
+    />
+  </label>
+);

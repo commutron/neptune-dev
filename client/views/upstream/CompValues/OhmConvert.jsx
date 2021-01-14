@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 // import Pref from '/client/global/pref.js';
+import { FieldObject } from './CompValuesSlide';
 
 const OhmConvert = ()=> {
   
@@ -28,44 +29,39 @@ const OhmConvert = ()=> {
       <h2>Resistor Ohms</h2>
       
       <div className='rowWrap'>
-      
-        {/*
-        <label className='gap'>Mili <var>(mΩ)</var><br />
-          <input
-            type='number'
-            id='miliInput'
-            value={mili}
-            onInput={(e)=>changeOhm(e, this.miliInput.value, 0.001)}
-          />
-        </label>
+      {/*
+        <FieldObject
+          titleVal='Mili'
+          shortVal='mΩ'
+          idVal='miliInput'
+          valueVal={mili}
+          funcVal={changeOhm}
+          factorVal={0.001} />
         */}
+        <FieldObject
+          titleVal='Ohm'
+          shortVal='Ω'
+          idVal='ohmInput'
+          valueVal={ohm}
+          funcVal={changeOhm}
+          factorVal={1} />
         
-        <label className='gap'>Ohm <var>(Ω)</var><br />
-          <input
-            type='number'
-            id='ohmInput'
-            value={ohm}
-            onInput={(e)=>changeOhm(e, this.ohmInput.value, 1)}
-          />
-        </label>
+        <FieldObject
+          titleVal='Kilo'
+          shortVal='kΩ'
+          idVal='kiloInput'
+          valueVal={kilo}
+          funcVal={changeOhm}
+          factorVal={1000} />
         
-        <label className='gap'>Kilo <var>(kΩ)</var><br />
-          <input
-            type='number'
-            id='kiloInput'
-            value={kilo}
-            onInput={(e)=>changeOhm(e, this.kiloInput.value, 1000)}
-          />
-        </label>
-        
-        <label className='gap'>Mega <var>(MΩ)</var><br />
-          <input
-            type='number'
-            id='megaInput'
-            value={mega}
-            onInput={(e)=>changeOhm(e, this.megaInput.value, 1000000)}
-          />
-        </label>
+        <FieldObject
+          titleVal='Mega'
+          shortVal='MΩ'
+          idVal='megaInput'
+          valueVal={mega}
+          funcVal={changeOhm}
+          factorVal={1000000} />
+
       </div>
       
     </div>

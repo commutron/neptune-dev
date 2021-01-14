@@ -999,7 +999,7 @@ Meteor.methods({
       const unlock = lock === pass;
       if(access && unlock) {
         BatchDB.remove({_id: batchId});
-        TraceDB.remove({batchID: batchID});
+        TraceDB.remove({batchID: batchId});
         return true;
       }else{
         return false;

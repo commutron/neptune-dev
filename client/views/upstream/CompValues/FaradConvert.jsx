@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 // import Pref from '/client/global/pref.js';
+import { FieldObject } from './CompValuesSlide';
 
 const FaradConvert = ()=> {
   
@@ -26,33 +27,30 @@ const FaradConvert = ()=> {
       <h2>Capacitor Farads</h2>
       
       <div className='rowWrap'>
-      
-        <label className='gap'>Pico <var>(pF)</var><br />
-          <input
-            type='number'
-            id='picoInput'
-            value={pico}
-            onInput={(e)=>changeFarad(e, this.picoInput.value, 0.000000000001)}
-          />
-        </label>
         
-         <label className='gap'>Nano <var>(nF)</var><br />
-          <input
-            type='number'
-            id='nanoInput'
-            value={nano}
-            onInput={(e)=>changeFarad(e, this.nanoInput.value, 0.000000001)}
-          />
-        </label>
+        <FieldObject
+          titleVal='Pico'
+          shortVal='pF'
+          idVal='picoInput'
+          valueVal={pico}
+          funcVal={changeFarad}
+          factorVal={0.000000000001} />
         
-         <label className='gap'>Micro <var>(µF)</var><br />
-          <input
-            type='number'
-            id='microInput'
-            value={micro}
-            onInput={(e)=>changeFarad(e, this.microInput.value, 0.000001)}
-          />
-        </label>
+        <FieldObject
+          titleVal='Nano'
+          shortVal='nF'
+          idVal='nanoInput'
+          valueVal={nano}
+          funcVal={changeFarad}
+          factorVal={0.000000001} />
+        
+        <FieldObject
+          titleVal='Micro'
+          shortVal='µF'
+          idVal='microInput'
+          valueVal={micro}
+          funcVal={changeFarad}
+          factorVal={0.000001} />
       
       </div>
       

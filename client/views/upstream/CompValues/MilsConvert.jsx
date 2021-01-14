@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 // import Pref from '/client/global/pref.js';
+import { FieldObject } from './CompValuesSlide';
 
 const MilsConvert = ()=> {
   
@@ -27,33 +28,29 @@ const MilsConvert = ()=> {
       
       <div className='rowWrap'>
         
-        <label className='gap'>Millimeter <var>(mm)</var><br />
-          <input
-            type='number'
-            id='mmInput'
-            value={mm}
-            onChange={(e)=>changeMetric(e, this.mmInput.value, 1)}
-          />
-        </label>
-        
-        <label className='gap'>Mil <var>(1/1000")</var><br />
-          <input
-            type='number'
-            id='milInput'
-            value={mil}
-            onChange={(e)=>changeMetric(e, this.milInput.value, 0.0254 )}
-          />
-        </label>
-        
-        <label className='gap'>Inch <var>(1")</var><br />
-          <input
-            type='number'
-            id='inchInput'
-            value={inch}
-            onChange={(e)=>changeMetric(e, this.inchInput.value, 25.4 )}
-          />
-        </label>
-        
+        <FieldObject
+          titleVal='Millimeter'
+          shortVal='mm'
+          idVal='mmInput'
+          valueVal={mm}
+          funcVal={changeMetric}
+          factorVal={1} />
+          
+        <FieldObject
+          titleVal='Mil'
+          shortVal='1/1000"'
+          idVal='milInput'
+          valueVal={mil}
+          funcVal={changeMetric}
+          factorVal={0.0254} />
+          
+        <FieldObject
+          titleVal='Inch'
+          shortVal='1"'
+          idVal='inchInput'
+          valueVal={inch}
+          funcVal={changeMetric}
+          factorVal={25.4} />
       </div>
       
     </div>

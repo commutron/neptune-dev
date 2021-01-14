@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 const NSYrWkSqItemForm = ({ id, items, more, unit, app, isDebug })=> {
   
   const thisYear = moment().weekYear().toString().slice(-2);
-  const thisWeek = moment().week();
+  const thisWeek = moment().week().toString().padStart(2, 0);
   
   const [ previewData, previewSet ] = useState([]);
   const [ resultMess, resultSet ] = useState(false);
@@ -26,10 +26,9 @@ const NSYrWkSqItemForm = ({ id, items, more, unit, app, isDebug })=> {
     const lotVal = this.lotDigits.value; // 1234
     
     const yearVal = this.yrDigits.value;
-    const weekVal = this.wkDigits.value;
+    const weekVal = this.wkDigits.value.padStart(2, 0);
     
     const man_lot_year_week = manNum + lotVal + '-' + yearVal + weekVal;
-    
     
     const seqStVal = this.seqStDigits.value;
     
@@ -53,7 +52,6 @@ const NSYrWkSqItemForm = ({ id, items, more, unit, app, isDebug })=> {
     this.goNS13Save.disabled = false;
     // const regexNS = RegExp(/^(\d{6}\-\d{7})$/);
     // const found = regexNS.test(tryData[0]);
-    // console.log(found);
     
     isDebug && console.log({ 
       man_lot_year_week, seqStVal, weekQuVal,
