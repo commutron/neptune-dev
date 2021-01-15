@@ -708,6 +708,27 @@ main {
 .hide { display: none !important; }
 .invisible { visibility: hidden; }
 /*.offscreen {content-visibility: auto; }*/
+.hiddenPIN {
+  opacity: 0;
+}
+.showOnHover:hover > .hiddenPIN {
+  opacity: 1;
+}
+.hiddenPrime {
+  cursor: crosshair;
+  margin: 1vh 1vw;
+  border: 1ch groove lightgray;
+  padding: 2vh 2vw;
+  background-color: white;
+}
+.hiddenPrime > i {
+  width: 100%;
+  display: flex;
+  font-size: 10vh;
+  font-weight: 600;
+  letter-spacing: 1ch;
+  text-indent: 1ch;
+}
 
 .verLine { vertical-align: middle; }
 

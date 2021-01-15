@@ -1,4 +1,4 @@
-// import { Random } from 'meteor/random'
+import { Random } from 'meteor/random';
 // import moment from 'moment';
 
 Meteor.startup(function () {  
@@ -104,21 +104,28 @@ Meteor.methods({
       return false;
     }
   },
-  revealPIN(passCode) {
-    const adminPower = Roles.userIsInRole(Meteor.userId(), 'admin');
-    const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
-    const orgPIN = org ? org.orgPIN : false;
-    if(adminPower) {
-      const backdoor = "People don't appreciate the substance of things. Objects in space.";
-      if(passCode === backdoor) {
-        return [true, orgPIN];
-      }else{
-        return [false, 'no'];
-      }
-    }else{
-      return [false, 'no'];
+  randomizePIN(accessKey) {
+    const privateKey = accessKey || Meteor.user().orgKey;
+    if(privateKey) {
+      const rndm4 = Math.floor( Math.random() * 10000 ).toString().padStart(4, 0);
+      AppDB.update({orgKey: privateKey}, {
+        $set : { 
+          orgPIN : rndm4
+      }});
     }
   },
+  revealPIN() {
+    const pinPower = Roles.userIsInRole(Meteor.userId(), ['admin', 'peopleSuper']);
+    const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
+    const orgPIN = org ? org.orgPIN : false;
+    if(pinPower && orgPIN) {
+      // const backdoor = "People don't appreciate the substance of things. Objects in space.";
+      return orgPIN;
+    }else{
+      return false;
+    }
+  },
+  
   // // // // // // // // //
   setMinorPin(newPIN) {
     const adminPower = Roles.userIsInRole(Meteor.userId(), 'admin');

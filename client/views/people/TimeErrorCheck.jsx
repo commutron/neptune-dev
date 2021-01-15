@@ -1,21 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
 // import Pref from '/client/global/pref.js';
-import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
 import { toast } from 'react-toastify';
 
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 
 const TimeErrorCheck = ()=> {
   
+  const [ working, workingSet ] = useState(false);
   const [ result, resultSet ] = useState(false);
   
-  useEffect( ()=>{
+  const handleFetch = ()=>{
+    workingSet(true);
     Meteor.call('fetchErrorTimes', (err, reply)=>{
       err && console.log(err);
-      reply && resultSet(reply);
+      if(reply) {
+        resultSet(reply);
+        workingSet(false);
+      }
     });
-  }, []);
+  };
   
   function exportTable() {
     const dateString = new Date().toLocaleDateString();
@@ -26,21 +30,24 @@ const TimeErrorCheck = ()=> {
       , {autoClose: false, closeOnClick: false}
     );
   }
-
-  if(!result) {
-    return(
-      <div>
-        <p className='centreText'>fetching...may take several minutes...</p>
-        <CalcSpin />
-      </div>
-    );
-  }
   
   return(
     <div className='overscroll wide space5x5'>
-      <p>Time durrations greater than 600 minutes</p>
+      <h3>Check for Time durations greater than 600 minutes</h3>
       <p className='small'>aka 7:00am to 4:30pm day without any breaks</p>
+      <p>Resource intensive function. Run during idle times</p>
       <br />
+      <div className='rowWrap'>
+        {working ?
+          <b><i className='fas fa-spinner fa-lg fa-spin'></i></b> :
+          <i><i className='fas fa-spinner fa-lg'></i></i>
+        }
+        <button
+          className='action clearBlack gap'
+          onClick={()=>handleFetch()}
+          disabled={working}
+        >Run Check</button>
+      </div>
       
       <div className='rowWrapR middle '>
         <button
@@ -59,7 +66,7 @@ const TimeErrorCheck = ()=> {
           </tr>
         </thead>
         <tbody>
-          {JSON.parse(result).map( (entry, index)=>(
+          {result && JSON.parse(result).map( (entry, index)=>(
             <tr key={index}>
               <td><UserNice id={entry[1]} /></td>
               <td>{moment(entry[0]).format('w - ddd')}</td>

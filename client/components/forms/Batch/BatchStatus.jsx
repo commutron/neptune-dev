@@ -46,8 +46,9 @@ const BatchStatus = ({ batchId, finished, finishedAt, allFinished, live, bLock }
         button='Finish'
         title={'Finish ' + Pref.batch}
         color='whiteT'
-        icon='fa-flag-checkered fa-2x'
+        icon='fa-flag-checkered'
         lock={!auth}
+        lgIcon={true}
         noText={false}>
         <div>
           <p className='centreText'>All the {Pref.items} are finished</p>

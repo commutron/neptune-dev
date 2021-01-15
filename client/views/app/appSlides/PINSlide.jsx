@@ -27,18 +27,18 @@ const PINSlide = ()=> {
     }
   }
   
-  function tellMeThePin() {
-    const passCode = prompt('passcode', '');
-    Meteor.call('revealPIN', passCode, (err, reply)=>{
-      if(err)
-        console.log(err);
-      if(reply[0]) {
-        alert(reply[1]);
-      }else{
-        console.log(reply[1]);
-      }
-    });
-  }
+  // function tellMeThePin() {
+  //   const passCode = prompt('passcode', '');
+  //   Meteor.call('revealPIN', passCode, (err, reply)=>{
+  //     if(err)
+  //       console.log(err);
+  //     if(reply[0]) {
+  //       alert(reply[1]);
+  //     }else{
+  //       console.log(reply[1]);
+  //     }
+  //   });
+  // }
   
   function setMinor(e) {
     e.preventDefault();
@@ -116,12 +116,12 @@ const PINSlide = ()=> {
         </p>
       </form>
       <hr />
-      <legend>Forgot PIN</legend>
+      {/*<legend>Forgot PIN</legend>
       <button
         className='smallAction clearBlue'
         onClick={()=>tellMeThePin()}
       >Tell Me The Pin</button>
-      <hr />
+      <hr />*/}
         <form onSubmit={(e)=>setMinor(e)} autoComplete='off'>
         <p>A minor pin for operations that are risky, or outside of regular permissions</p>
         <p>

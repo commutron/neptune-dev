@@ -21,6 +21,7 @@ import HistorySlide from './HistorySlide.jsx';
 import ScheduleSlide from './ScheduleSlide.jsx';
 import AccountsManagePanel, { PermissionHelp } from './AccountsManagePanel.jsx';
 import TimeErrorCheck from './TimeErrorCheck';
+import RevolvingPINCheck from './RevolvingPINCheck';
 
 const PeopleDataWrap = ({
   readybName, readyPeople, // subs
@@ -72,8 +73,9 @@ const PeopleDataWrap = ({
             <b><i className='fas fa-user-lock fa-fw'></i>  Permissions</b>,
             <b><i className='fas fa-users-cog fa-fw'></i>   Account Manager</b>,
             <b><i className='fas fa-hourglass fa-fw'></i>   Error Check</b>,
+            antiAuth || <b><i className='fas fa-user-secret fa-fw'></i>   Organization PIN</b>,
           ]}
-          disable={[false, false, false, false, false, antiAuth, antiAuth]}>
+          disable={[false, false, false, false, false, antiAuth, antiAuth, antiAuth]}>
           
           <DashSlide
             key={0}
@@ -127,6 +129,13 @@ const PeopleDataWrap = ({
           
           {isAdmin || isPeopleSuper ?
             <TimeErrorCheck key={6} />
+          : null }
+          
+          {isAdmin || isPeopleSuper ?
+            <RevolvingPINCheck 
+              key={7}
+              isAdmin={isAdmin}
+              isPeopleSuper={isPeopleSuper} />
           : null }
           
         </Slides>
