@@ -131,19 +131,17 @@ export function deliveryBinary(bEnd, bFinish) {
 
   
 function weekDoneAnalysis(rangeStart, rangeEnd) {
+  const accessKey = Meteor.user().orgKey;
   
-  const app = AppDB.findOne({orgKey: Meteor.user().orgKey});
-  const nonWorkDays = app.nonWorkDays;
-  if( Array.isArray(nonWorkDays) ) {  
-    moment.updateLocale('en', {
-      holidays: nonWorkDays
-    });
+  const app = AppDB.findOne({orgKey:accessKey}, {fields:{'nonWorkDays':1}});
+  if( Array.isArray(app.nonWorkDays) ) {  
+    moment.updateLocale('en', { holidays: app.nonWorkDays });
   }
     
   let batchMetrics = [];
   
   BatchDB.find({
-    orgKey: Meteor.user().orgKey, 
+    orgKey: accessKey, 
     finishedAt: { 
       $gte: new Date(rangeStart),
       $lte: new Date(rangeEnd) 
@@ -186,7 +184,7 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
   });
   
   const generalFindX = XBatchDB.find({
-    orgKey: Meteor.user().orgKey, 
+    orgKey: accessKey, 
     completedAt: { 
       $gte: new Date(rangeStart),
       $lte: new Date(rangeEnd) 

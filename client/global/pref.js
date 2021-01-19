@@ -46,7 +46,7 @@ class Pref {
     
     // app navigation
     this.post = 'record';
-    this.close = 'X';
+    this.close = 'CLOSE';
     this.office = 'office';
     this.floor = 'floor';
     this.instruct = 'instructions';
@@ -59,12 +59,11 @@ class Pref {
 	  this.batch = 'work order';//order
 	  this.Batch = 'Work Order';//Order
 	  this.batches = 'work orders';
-	  this.btch = 'w'; // batch shortcut
 	  this.item = 'board';//board
 	  this.Item = 'Board';//Board
 	  this.items = 'boards';
-	  this.itm = 'b'; // item shortcut
 	  
+	  this.series = series;
 	  this.itemSerial = 'barcode';
 	  this.serialType = 'qrcode';
 	  this.regexSN = RegExp(/^(\d{8,10})$|^(\d{6}\-\d{7})$/);
@@ -74,15 +73,12 @@ class Pref {
     this.group = 'customer';//customer
     this.Group = 'Customer';//Customer
     this.groups = 'customers';//customer
-    this.grp = 'c'; // group shortcut
     this.widget = 'product';//product
     this.Widget = 'Product';//Product
     this.widgets = 'products';//product
-    this.wdgt = 'p'; // widget shortcut
     this.variant = 'variant';// variant, variation
     this.variants = 'variants';// variants, variations
     this.version = 'version';// version, revision
-    this.vrsn = 'v'; // version shorcut
     this.live = 'live'; // live / active in context of a product
     this.notlive = 'not live';
     this.npi = 'npi';
@@ -164,7 +160,6 @@ class Pref {
     this.rmaProcess = 'RMA process';
     // blocker tracking
     this.block = 'alert';
-    this.blck = 'a'; // blocker shortcut
     this.solve = 'solve';
     // non tracked, ancillary processes
     this.ancillary = 'indirect';

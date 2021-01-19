@@ -8,7 +8,7 @@ WidgetDB = new Mongo.Collection('widgetdb');
 VariantDB = new Mongo.Collection('variantdb');
 BatchDB = new Mongo.Collection('batchdb');
 XBatchDB = new Mongo.Collection('xbatchdb');
-//ItemDB = new Mongo.Collection('itemdb');// future plans, DO NOT enable
+XSeriesDB = new Mongo.Collection('xseriesdb');
 TraceDB = new Mongo.Collection('tracedb');
 
 CacheDB = new Mongo.Collection('cachedb');
@@ -504,9 +504,21 @@ Meteor.publish('skinnyData', function(){
             'completed': 1,
             'completedAt': 1
             // 'lockTrunc': 1
-          }})
-      ];
-    }
+        }}),
+      XSeriesDB.find({})//, {
+        //sort: {batch:-1}//,
+        // fields: {
+        //     'batch': 1,
+        //     'widgetId': 1,
+        //     'versionKey': 1,
+        //     'tags': 1,
+        //     'createdAt': 1,
+        //     'live': 1,
+        //     'lock': 1,
+        //     'salesOrder': 1,
+        //}}), 
+    ];
+  }
 });
 
 Meteor.publish('hotDataEx', function(dataRequest, hotWidget){

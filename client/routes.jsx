@@ -34,6 +34,7 @@ WidgetDB = new Mongo.Collection('widgetdb');
 VariantDB = new Mongo.Collection('variantdb');
 BatchDB = new Mongo.Collection('batchdb');
 XBatchDB = new Mongo.Collection('xbatchdb');
+XSeriesDB = new Mongo.Collection('xseriesdb');
 
 CacheDB = new Mongo.Collection('cachedb');
 TraceDB = new Mongo.Collection('tracedb');
@@ -264,8 +265,6 @@ privlegedRoutes.route('/data', {
   }
 });
 
-// FlowRouter.go('/data/my-post?comments=on&color=dark');
-
 privlegedRoutes.route('/data/:view', {
   name: 'explore', // optional
   // do some action for this route
@@ -295,10 +294,10 @@ FlowRouter.globals.push({
       sizes: "16x16 32x32 64x64",
       rel: "icon"
     },
-    manifest: {
-      href: "/pwa_manifest.json",
-      rel: "manifest",
-    },
+    // manifest: {
+    //   href: "/pwa_manifest.json",
+    //   rel: "manifest",
+    // },
   },
   /*
   script: {

@@ -326,6 +326,29 @@ Meteor.methods({
     }
   },
 
+  //// River \\\\
+  /*
+  setRiver(batchId, riverId, riverAltId) {
+    const accessKey = Meteor.user().orgKey;
+    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+      XBatchDB.update({_id: batchId, orgKey: accessKey}, {
+        $set : {
+          updatedAt: new Date(),
+  			  updatedWho: Meteor.userId(),
+          river: riverId,
+          riverAlt: riverAltId,
+        }});
+      Meteor.defer( ()=>{ 
+        Meteor.call('updateOneMinify', batchId, accessKey); 
+        Meteor.call('updateOneMovement', batchId, accessKey);
+      });
+      return true;
+    }else{
+      return false;
+    }
+  },
+  */
+  
   //// Waterfall
   
   addCounter(batchId, wfKey, gate, type, wfBranch, wfPos) {
@@ -502,35 +525,6 @@ Meteor.methods({
       }
     }
   },
-
-/*
-  addFirst(batchId, bar, key, step, good, whoB, howB, howI, diff, ng) {
-    if(!Roles.userIsInRole(Meteor.userId(), 'verify')) {
-      return false;
-    }else{
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
-        $push : { 'items.$.history': {
-          key: key,
-          step: step,
-          type: 'first',
-          good: good,
-          time: new Date(),
-          who: Meteor.userId(),
-          comm : '',
-          info: {
-            builder: whoB,
-            buildMethod: howB,
-            verifyMethod: howI,
-            change: diff,
-            issue: ng
-          }
-      }}});
-      return true;
-    }
-  },
-*/
-
-  
   /*
 
 // Escaped NonCon

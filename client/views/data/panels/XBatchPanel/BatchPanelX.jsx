@@ -36,8 +36,8 @@ const BatchPanelX = ({
   const b = batchData;
   // const w = widgetData;
   // const g = groupData;
-  const branchesSort = app.branches.sort((b1, b2)=> {
-    return b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 });
+  const branchesSort = app.branches.sort((b1, b2)=> 
+          b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
      
   // const v = variantData;
   
@@ -60,7 +60,9 @@ const BatchPanelX = ({
             'Info',
             'Progress',
             'Time',
-            'Events'
+            `Problems`,
+            'Events',
+            // 'Returns'
           ]
         }
         wide={true}

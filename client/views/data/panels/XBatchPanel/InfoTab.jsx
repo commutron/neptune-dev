@@ -70,6 +70,7 @@ const InfoTab = ({
                     batchID={b._id}
                     app={a}
                     dbDay={b.salesEnd}
+                    isDone={done}
                     isDebug={isDebug} />
                 </div>
                 <div className='statusBlock'>

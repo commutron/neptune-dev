@@ -27,14 +27,6 @@ const SearchHelp = ()=> (
           <li>users</li>
         </ul>
       </ul>
-      <ul>
-        <li>Shortcuts</li>
-        <ul>
-          <li>{Pref.btch} = {Pref.batch}</li>
-          <li>{Pref.grp} = {Pref.group}</li>
-          <li>{Pref.scrp} = {Pref.scrap}s</li>
-        </ul>
-      </ul>
 
       <hr />
     </div>

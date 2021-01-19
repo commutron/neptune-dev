@@ -15,7 +15,7 @@ const ExploreView = ({
   user, isDebug, org, users, app, // self
   allGroup, allWidget, allVariant, // customers
   allBatch, allXBatch, 
-  hotBatch, hotXBatch, // relevant
+  hotBatch, hotXBatch, hotXSeries, // relevant
   view, request, specify, subLink // routing
 })=> {
   
@@ -29,12 +29,7 @@ const ExploreView = ({
   }, [user]);
   
     
-  if(
-    !coldReady || 
-    !hotReady ||
-    !user ||
-    !app 
-  ) {
+  if( !coldReady || !hotReady || !user || !app ) {
     return(
       <ErrorCatch>
         <TraverseWrap
@@ -77,6 +72,7 @@ const ExploreView = ({
         allXBatch={allXBatch}
         hotBatch={hotBatch}
         hotXBatch={hotXBatch}
+        hotXSeries={hotXSeries}
         view={view}
         request={request}
         specify={specify}
@@ -98,6 +94,7 @@ export default withTracker( ({ view, request, specify }) => {
   
   const hotBatch = BatchDB.findOne({ batch: request }) || false;
   const hotXBatch = XBatchDB.findOne({ batch: request }) || false;
+  const hotXSeries = XSeriesDB.findOne({ batch: request }) || false;
   const hotWidget = view === 'widget' ? request : false;
   
   const hotSubEx = Meteor.subscribe('hotDataEx', request, hotWidget);
@@ -123,6 +120,7 @@ export default withTracker( ({ view, request, specify }) => {
       allXBatch: XBatchDB.find( {}, { sort: { batch: -1 } } ).fetch(),
       hotBatch: hotBatch,
       hotXBatch: hotXBatch,
+      hotXSeries: hotXSeries,
       view: view,
       request: request,
       specify: specify

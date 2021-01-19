@@ -12,6 +12,7 @@ import AllGroups from './panels/AllGroups/AllGroups.jsx';
 import BuildHistory from './panels/BuildHistory.jsx';
 
 import ItemPanel from './panels/ItemPanel.jsx';
+import ItemPanelX from './panels/ItemPanelX';
 import BatchPanel from './panels/BatchPanel/BatchPanel.jsx';
 import BatchPanelX from './panels/XBatchPanel/BatchPanelX.jsx';
 import WidgetPanel from './panels/WidgetPanel/WidgetPanel';
@@ -21,6 +22,8 @@ import ScrapPanel from './panels/ScrapPanel.jsx';
 
 import BatchesList from './lists/BatchesList.jsx';
 import ItemsList from './lists/ItemsList.jsx';
+import ItemsListX from './lists/ItemsListX';
+
 // import WidgetsList from './lists/WidgetsList.jsx';
 
 import ProgressCounter from '/client/utility/ProgressCounter.js';
@@ -31,7 +34,7 @@ const DataViewOps = ({
   allXBatch, allBatch, 
   allGroup, allWidget, allVariant,
   user, isDebug, app, brancheS, users,
-  hotBatch, hotXBatch,
+  hotBatch, hotXBatch, hotXSeries,
   view, request, specify,
   subLink, orb
 })=> {
@@ -390,6 +393,70 @@ const DataViewOps = ({
           </TraverseWrap>
         );
       }
+    }else if(hotXSeries) {
+      let item = itemData(hotXSeries.items, specify);
+      let widget = linkedWidget(hotXSeries.widgetId);
+      let variant = linkedVariantKey(hotXSeries.versionKey);
+      let group = linkedGroup(hotXSeries.groupId);
+                     
+      let flowData = false;// getFlowData(hotBatch, widget, app);
+      if(item && widget && variant && group) {
+        return (
+          <TraverseWrap
+            batchData={hotXBatch}
+            itemData={item}
+            widgetData={widget}
+            variantData={variant}
+            groupData={group}
+            user={user}
+            app={app}
+            title='Item'
+            subLink={subLink}
+            action='item'
+            invertColor={true}
+          >
+            <ItemPanelX
+              batchData={hotXBatch}
+              seriesData={hotXSeries}
+              itemData={item}
+              widgetData={widget}
+              variantData={variant}
+              groupData={group}
+              app={app}
+              brancheS={brancheS}
+              user={user}
+              listTitle={true}
+              flowData={flowData} />
+            <ItemsListX
+              seriesData={hotXSeries}
+              batchData={hotXBatch}
+              widgetData={widget}
+              flowData={flowData}
+              orb={orb}
+              isDebug={isDebug} />
+          </TraverseWrap>
+        );
+      }else{
+        return(
+          <TraverseWrap
+  		      batchData={false}
+            widgetData={false}
+            variantData={false}
+            groupData={false}
+            user={user}
+            app={app}
+            title='!!!'
+            subLink={subLink}
+            action={false}
+            base={true}
+          >
+            <div className='centre wide'>
+              <p className='big'>Data Does Not Exist</p>
+            </div>
+            <div></div>
+          </TraverseWrap>
+        );
+      }
     }
   }
 
@@ -439,6 +506,9 @@ const DataViewOps = ({
       let variant = linkedVariantKey(hotXBatch.versionKey);
       let allVariants = widgetVariants(hotXBatch.widgetId);
       let group = linkedGroup(hotXBatch.groupId);
+      
+      let flowData = false; //getFlowData(hotBatch, widget, app);
+      
       const isNigh = Roles.userIsInRole(Meteor.userId(), 'nightly');
       return (
 		    <TraverseWrap
@@ -456,6 +526,7 @@ const DataViewOps = ({
         >
           <BatchPanelX
             batchData={hotXBatch}
+            seriesData={hotXSeries}
             widgetData={widget}
             variantData={variant}
             groupData={group} 
@@ -463,14 +534,13 @@ const DataViewOps = ({
             user={user}
             isDebug={isDebug}
             isNigh={isNigh} />
-          <div>
-            <fieldset className='noteCard'>
-              <legend>Non-Serialized</legend>
-              <p className='numFont'>Quantity:
-                <b className='medBig'> {hotXBatch.quantity}</b>
-              </p>
-            </fieldset>
-          </div>
+          <ItemsListX
+            seriesData={hotXSeries}
+		        batchData={hotXBatch}
+		        widgetData={widget}
+		        flowData={flowData}
+		        orb={orb}
+		        isDebug={isDebug} />
         </TraverseWrap>
       );
     }
