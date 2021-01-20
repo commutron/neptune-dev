@@ -4,7 +4,7 @@ import moment from 'moment';
 
 import LeapButton from '/client/components/tinyUi/LeapButton.jsx';
 import FilterItems from '/client/components/bigUi/FilterItems.jsx';
-import SeriesForm from '/client/components/forms/ItemSerials/SeriesForm';
+import SeriesForm from '/client/components/forms/ItemSerialsX/SeriesForm';
 
 
 const ItemsListX = ({ 
@@ -14,18 +14,21 @@ const ItemsListX = ({
   
   if(!seriesData) {
     return(
-      <div>
+      <Fragment>
         <fieldset className='noteCard'>
           <legend>Non-Serialized</legend>
           <p className='numFont'>Quantity:
             <b className='medBig'> {batchData.quantity}</b>
           </p>
         </fieldset>
-        
-        <SeriesForm
-        //id, widget, lock, noText
-        />
-      </div>
+        <div className='centre'>
+          <SeriesForm
+            batchData={batchData}
+            lock={batchData.completed}
+            // noText
+          />
+        </div>
+      </Fragment>
     );
   }
   const sessionSticky = batchData.batch + 'batchXItemFilter' ;
@@ -51,21 +54,25 @@ const ItemsListX = ({
   
   // get flow steps for menu
   function flowSteps() {
-    let steps = new Set();
-    if(flowData.riverFlow) {
-      for(let s of flowData.riverFlow) {
-        steps.add(s);
-      }
-    }else{null}
-    if(flowData.riverFlowAlt) {
-      for(let as of flowData.riverFlowAlt) {
-        steps.has({key: as.key}) ? null : steps.add(as);
-      }
-    }else{null}
-    let niceSteps = [...steps]
-    // remove duplicate 'finish' step
-      .filter( ( v, indx, slf ) => slf.findIndex( x => x.key === v.key ) === indx);
-    return niceSteps;
+    if(!flowData) {
+      return [];
+    }else{
+      let steps = new Set();
+      if(flowData.riverFlow) {
+        for(let s of flowData.riverFlow) {
+          steps.add(s);
+        }
+      }else{null}
+      // if(flowData.riverFlowAlt) {
+      //   for(let as of flowData.riverFlowAlt) {
+      //     steps.has({key: as.key}) ? null : steps.add(as);
+      //   }
+      // }else{null}
+      let niceSteps = [...steps]
+      // remove duplicate 'finish' step
+        .filter( ( v, indx, slf ) => slf.findIndex( x => x.key === v.key ) === indx);
+      return niceSteps;
+    }
   }
 
   // Sort Filters
@@ -286,12 +293,12 @@ const ItemsListX = ({
     return filtered;                                 
   }
   
-  const i = itemData; 
+  const srs = seriesData;
   const b = batchData;
   const nonCon = b.nonCon;
   const short = b.shortfall || [];
   
-  const scrap = b ? fScrap(b.items, timeModifyer, notModifyer) : 
+  const scrap = b ? fScrap(srs.items, timeModifyer, notModifyer) : 
                     { scrapList: [], iList: [] };
   
   const steps = flowSteps();
@@ -303,26 +310,26 @@ const ItemsListX = ({
     
     let filteredList = 
     !K ?
-      b.items :
+      srs.items :
     K.startsWith('@') ?
-      fStep(b.items, K, timeModifyer, notModifyer) :
+      fStep(srs.items, K, timeModifyer, notModifyer) :
     K === 'complete' ?
-      fDone(b.items, timeModifyer, notModifyer) :
+      fDone(srs.items, timeModifyer, notModifyer) :
     K === 'in progress' ?
-      fInproc(b.items, timeModifyer, notModifyer) :
+      fInproc(srs.items, timeModifyer, notModifyer) :
     K === 'first offs' ?
-      fFirsts(b.items, timeModifyer, notModifyer) :
+      fFirsts(srs.items, timeModifyer, notModifyer) :
     K === 'nonconformances' ?
-      fNoncons(b.items, nonCon, timeModifyer, notModifyer) :
+      fNoncons(srs.items, nonCon, timeModifyer, notModifyer) :
     K === 'shortfalls' ?
-      fShortfalls(b.items, short, timeModifyer, notModifyer) :
+      fShortfalls(srs.items, short, timeModifyer, notModifyer) :
     K === 'alternative' ?
-      fAlt(b.items, notModifyer) :
+      fAlt(srs.items, notModifyer) :
     K === 'rma' ?
-      fRma(b.items, notModifyer) :
+      fRma(srs.items, notModifyer) :
     K === 'scrap' ? 
       scrap.iList :
-    b.items;
+    srs.items;
 
     let showListOrder = filteredList.sort( (x,y)=> x.serial - y.serial);
     

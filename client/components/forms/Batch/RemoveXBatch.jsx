@@ -20,6 +20,7 @@ const RemoveXBatchWrapper = ({ entry, title, check, lockOut })=> {
       color='redT'
       icon='fa-minus-circle'
       lock={!auth}
+      // menuItem={true}
     >
       <RemoveXBatch
         entry={entry}
@@ -142,8 +143,6 @@ const RemoveXBatch = ({ entry, title, check })=> {
           </p>
           <dl>
             <dt>This includes:</dt>
-            <dd>NonCons: {et.nonconformaces.length}</dd>
-            <dd>Verifications: {et.verifications.length}</dd>
             <dd>Blocks: {et.blocks.length}</dd>
             <dd>Releases: {et.releases.length}</dd>
             <dd>Alterations: {et.altered.length}</dd>

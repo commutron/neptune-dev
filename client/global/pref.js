@@ -63,7 +63,7 @@ class Pref {
 	  this.Item = 'Board';//Board
 	  this.items = 'boards';
 	  
-	  this.series = series;
+	  this.series = 'series';
 	  this.itemSerial = 'barcode';
 	  this.serialType = 'qrcode';
 	  this.regexSN = RegExp(/^(\d{8,10})$|^(\d{6}\-\d{7})$/);

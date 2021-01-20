@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-//import Pref from '/client/global/pref.js';
+import React, { useState, Fragment } from 'react';
+import { MenuItem } from 'react-contextmenu';
 
 const ModelMedium = ({ 
-  button, title, 
-  icon, color, noText, lgIcon, 
+  button, title, menuItem,
+  icon, color, noText, lgIcon,
   lock, children 
 })=> {
   
@@ -16,23 +16,36 @@ const ModelMedium = ({
   let iSize = lgIcon ? ' fa-2x ' : ' fa-lg ';
   
   return(
-    <span>
-      <button
-        title={title}
-        className='transparent'
-        onClick={()=>reveal()}
-        disabled={lock}>
-        <label className='navIcon actionIconWrap'>
-          <i className={`fas ${icon} ${iSize} fa-fw ${color}`}></i>
-          {!noText && <span className={'actionIconText ' + color}>{button}</span>}
-        </label>
-      </button>
+    <Fragment>
+      {menuItem ?
+        <MenuItem 
+          title={title}
+          // className='transparent'
+          onClick={()=>reveal()} 
+          disabled={lock}
+          preventClose={true}>
+          <label className='navIcon actionIconWrap'>
+            <i className={`fas ${icon} ${iSize} fa-fw ${color}`}></i>
+            <i className={`medBig ${color}`}>{button}</i>
+          </label>
+        </MenuItem>
+      :
+        <button
+          title={title}
+          className='transparent'
+          onClick={()=>reveal()}
+          disabled={lock}>
+          <label className='navIcon actionIconWrap'>
+            <i className={`fas ${icon} ${iSize} fa-fw ${color}`}></i>
+            {!noText && <span className={'actionIconText ' + color}>{button}</span>}
+          </label>
+        </button>
+      }
       
-    {show &&
-      <span>
+      <span hidden={!show}>
         <div className='overlay invert' key={1}>
-          <div className='medModel'>
-            <div className='medModelHead'>
+          <n-md-model>
+            <n-md-model-head>
               <span>
                 <i className={`fas ${icon} ${color}`}></i>
                 <i className='breath'></i>
@@ -43,19 +56,18 @@ const ModelMedium = ({
                 onClick={()=>reveal()}
                 title='close'
               ><i className='fas fa-times fa-lg'></i></button>
-            </div>
-            <div className='medModelContent centre'>
+            </n-md-model-head>
+            <n-md-model-content className='centre'>
               {React.cloneElement(children,
                 { 
                   selfclose: ()=>reveal()
                 }
               )}
-            </div>
-          </div>
+            </n-md-model-content>
+          </n-md-model>
         </div>
       </span>
-      }
-    </span>
+    </Fragment>
   );
 };
 

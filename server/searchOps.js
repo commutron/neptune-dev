@@ -89,14 +89,18 @@ Meteor.methods({
   },
   
   serialLookup(orb) {
-    const itemsBatch = BatchDB.findOne({'items.serial': orb},{fields:{'batch':1}});
+    const itemsBatch = BatchDB.findOne({'items.serial': orb},{fields:{'batch':1}}) ||
+                       XSeriesDB.findOne({'items.serial': orb},{fields:{'batch':1}});
     return itemsBatch ? itemsBatch.batch : false;
   },
   
   serialLookupPartial(orb) {
     const itemsBatch = BatchDB.find({
-      "items.serial": { $regex: new RegExp( orb ) }
-    },{fields:{'batch':1,'items.serial':1}}).fetch();
+                        "items.serial": { $regex: new RegExp( orb ) }
+                      },{fields:{'batch':1,'items.serial':1}}).fetch() ||
+                      XSeriesDB.find({
+                        "items.serial": { $regex: new RegExp( orb ) }
+                      },{fields:{'batch':1,'items.serial':1}}).fetch();
     
     const single = itemsBatch.length === 1;
     const exact = !single ? false : 

@@ -121,6 +121,20 @@ const DataRepair = ({ app, users })=> {
     });
   }
   
+  function removeNCkey() {
+    Meteor.call('UNSETbplusNonconKey', (error)=>{
+      error && console.log(error);
+      toast.success('request sent');
+    });
+  }
+  
+  function removeVRkey() {
+    Meteor.call('UNSETbplusVeriKey', (error)=>{
+      error && console.log(error);
+      toast.success('request sent');
+    });
+  }
+  
   return(
     <div className='space3v autoFlex'>
       {/*
@@ -191,13 +205,33 @@ const DataRepair = ({ app, users })=> {
       </div>
       
       <div>
-        <h3><i className="fas fa-wrench fa-lg gap"></i>
+        <h3><i className="fas fa-snowplow fa-lg gap"></i>
           Fix BatchDB & XBatchDB Errors
         </h3>
         <button
           onClick={()=>removeDamagedBatch()}
           className='action clearRed'
         >Remove Damaged Batch</button>
+      </div>
+      
+      <div>
+        <h3><i className="fas fa-eraser fa-lg gap"></i>
+          Unset the nonconformaces key from batch+
+        </h3>
+        <button
+          onClick={()=>removeNCkey()}
+          className='action clearOrange'
+        >Unset Key</button>
+      </div>
+      
+      <div>
+        <h3><i className="fas fa-eraser fa-lg gap"></i>
+          Unset the verifications key from batch+
+        </h3>
+        <button
+          onClick={()=>removeVRkey()}
+          className='action clearOrange'
+        >Unset Key</button>
       </div>
       
       <div>

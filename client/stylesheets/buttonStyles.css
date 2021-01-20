@@ -5,7 +5,7 @@
   letter-spacing: 1px;
   padding: 0 10px;
   min-height: 32px;
-  line-height: 1rem;
+  line-height: 1;
 }
 .action {
   font-weight: 600;

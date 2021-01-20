@@ -194,6 +194,37 @@ Meteor.methods({
     }
   },
   
+  UNSETbplusNonconKey() {
+    try{
+      if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+        XBatchDB.update({ orgKey: Meteor.user().orgKey }, {
+          $unset : { 
+            'nonconformaces': ""
+          }},{multi: true});
+          return true;
+      }else{
+        null;
+      }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  UNSETbplusVeriKey() {
+    try{
+      if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+        XBatchDB.update({ orgKey: Meteor.user().orgKey }, {
+          $unset : { 
+            'verifications': ""
+          }},{multi: true});
+          return true;
+      }else{
+        null;
+      }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  
   
   altFlowUse() {
     if(!Roles.userIsInRole(Meteor.userId(), 'admin')) {

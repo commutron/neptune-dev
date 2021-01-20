@@ -71,7 +71,8 @@
   
   --dropShadow2: 0 14px 28px rgba(0,0,0,0.25), 
                  0 10px 10px rgba(0,0,0,0.22);
-                 
+  
+  --dropShadowLeft00: -5px 0 10px 0px rgba(0,0,0,0.11);
   --dropShadowLeft0: -10px 0 15px 0px rgba(0,0,0,0.22);
   --dropShadowLeft1: -15px 0 20px 0px rgba(0,0,0,0.22);
 

@@ -11,6 +11,7 @@ import CookieBar from './CookieBar.jsx';
 
 export const TraverseWrap = ({
   itemData,
+  seriesData,
   batchData,
   widgetData,
   variantData,
@@ -119,6 +120,7 @@ export const TraverseWrap = ({
             <div className='actionBarEx'>
               <ActionBar
                 batchData={batchData}
+                seriesData={seriesData}
                 itemData={itemData}
                 groupData={groupData}
                 widgetData={widgetData}

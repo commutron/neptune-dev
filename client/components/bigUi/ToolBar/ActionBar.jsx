@@ -1,4 +1,6 @@
 import React, { Fragment } from 'react';
+// import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
+
 import './style.css';
 
 import ActionLink from '/client/components/tinyUi/ActionLink.jsx';
@@ -10,6 +12,9 @@ import RemoveBatch from '/client/components/forms/Batch/RemoveBatch';
 import BatchXCreate from '/client/components/forms/Batch/BatchXCreate';
 import BatchXEdit from '/client/components/forms/Batch/BatchXEdit';
 import RemoveXBatch from '/client/components/forms/Batch/RemoveXBatch';
+import ItemSerialsWrapX from '/client/components/forms/ItemSerialsX/ItemSerialsWrapX';
+import RiverSelectX from '/client/components/forms/RiverSelectX';
+
 
 import ItemSerialsWrap from '/client/components/forms/ItemSerials/ItemSerialsWrap';
 import RiverSelect from '/client/components/forms/RiverSelect.jsx';
@@ -32,7 +37,7 @@ import VariantForm from '/client/components/forms/VariantForm.jsx';
 import Remove from '/client/components/forms/Remove.jsx';
 
 const ActionBar = ({
-  batchData, itemData, 
+  batchData, seriesData, itemData, 
   groupData, widgetData, 
   variantData, allVariants,
   app, user,
@@ -40,8 +45,7 @@ const ActionBar = ({
   ncTypesCombo
 })=> (
   
-  <div className='actionBar'>
-    <div className='footLeft'>
+  <Fragment>
     { 
   	action === 'item' ?
   	  <Fragment> 
@@ -147,11 +151,13 @@ const ActionBar = ({
             quantity={batchData.quantity}
             allVariants={allVariants}
             lock={!variantData || !batchData.live} />
+      
           <CounterAssign
             id={batchData._id}
             waterfall={batchData.waterfall}
             app={app}
             lock={batchData.completed === true} />
+             
           <ActionLink
             address={'/print/generallabel/' + 
                       batchData.batch + 
@@ -163,17 +169,38 @@ const ActionBar = ({
                       '&quant=' + batchData.quantity }
             title='Print Label'
             icon='fa-print'
-            color='whiteT' />
+            color='blackT' />
+          
           <BlockForm
             id={batchData._id}
             edit={false}
             xBatch={true}
             lock={batchData.completed === true} />
+    
           <RemoveXBatch
             title={batchData.batch}
             check={batchData.createdAt.toISOString()}
             entry={batchData}
             lockOut={batchData.completed === true} />
+      
+          {seriesData &&
+            <ItemSerialsWrapX
+              bID={batchData._id}
+              seriesId={seriesData._id}
+              items={seriesData.items}
+              more={batchData.completed === false}
+              unit={variantData.runUnits}
+              app={app} />}
+              
+          {seriesData &&  
+            <RiverSelectX
+              bID={batchData._id}
+              widget={widgetData}
+              river={batchData.river}
+              // riverAlt={batchData.riverAlt}
+              lock={batchData.completed === true} />}
+          
+          
         </Fragment>
       :
       action === 'variant' && variantData ?
@@ -243,8 +270,25 @@ const ActionBar = ({
         </Fragment>
       : null
     }
-    </div>
-  </div>
+  </Fragment>
 );
 
 export default ActionBar;
+
+
+/*
+<ContextMenuTrigger
+            id={action+'actionmenu'}
+            holdToDisplay={1}
+            renderTag='span'>
+            <i className='fas fa-compass fa-fw fa-5x redT'></i>
+          </ContextMenuTrigger>
+          
+          <ContextMenu 
+            id={action+'actionmenu'}
+            hideOnLeave={false}
+            preventHideOnContextMenu={true}
+            preventHideOnResize={true}
+            preventHideOnScroll={true}>
+            
+            */

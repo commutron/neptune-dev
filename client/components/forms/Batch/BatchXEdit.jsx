@@ -15,6 +15,7 @@ const BatchXEdit = ({
     color='blueT'
     icon='fa-cubes'
     lock={!Roles.userIsInRole(Meteor.userId(), 'create') || lock}
+    // menuItem={true}
   >
   <BXEditForm 
     batchId={batchId}

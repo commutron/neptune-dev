@@ -46,6 +46,12 @@ XBatchDB.deny({
   remove: () => { return true; },
 });
 
+XSeriesDB.deny({
+  insert: () => { return true; },
+  update: () => { return true; },
+  remove: () => { return true; },
+});
+
 TraceDB.deny({
   insert: () => { return true; },
   update: () => { return true; },

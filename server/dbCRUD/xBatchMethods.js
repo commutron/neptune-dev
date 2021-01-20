@@ -48,8 +48,6 @@ Meteor.methods({
   			tide: [],
   			blocks: [],
         releases: [],
-        verifications: [],
-        nonconformaces: [],
         altered: [],
         events: []
       });
@@ -327,8 +325,7 @@ Meteor.methods({
   },
 
   //// River \\\\
-  /*
-  setRiver(batchId, riverId, riverAltId) {
+  setRiverX(batchId, riverId) {
     const accessKey = Meteor.user().orgKey;
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
       XBatchDB.update({_id: batchId, orgKey: accessKey}, {
@@ -336,7 +333,7 @@ Meteor.methods({
           updatedAt: new Date(),
   			  updatedWho: Meteor.userId(),
           river: riverId,
-          riverAlt: riverAltId,
+          // riverAlt: riverAltId,
         }});
       Meteor.defer( ()=>{ 
         Meteor.call('updateOneMinify', batchId, accessKey); 
@@ -347,7 +344,6 @@ Meteor.methods({
       return false;
     }
   },
-  */
   
   //// Waterfall
   

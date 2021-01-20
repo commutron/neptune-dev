@@ -15,32 +15,18 @@ import NCTypeSlide from './appSlides/NCTypeSlide.jsx';
 import ScalesTagsSlide from './appSlides/ScalesTagsSlide.jsx';
 import AddressSlide from './appSlides/AddressSlide.jsx';
 import ToastSlide from './appSlides/ToastSlide.jsx';
-import PINSlide from './appSlides/PINSlide.jsx';
+import LegacySlide from './appSlides/LegacySlide.jsx';
 
 import DataRepair from './appSlides/DataRepair.jsx';
 
 const AppWrap = ({ isAdmin, isDebug, users, app })=> {
+ 
   
-  function requestAltFlowInfo() {
-    Meteor.call('altFlowUse', (error, reply)=>{
-      error && console.log(error);
-      toast(<div>
-        Total Batches: {reply.totalAltBatch} <br />
-        Total Items: {reply.totalAltItems} <br />
-        Live Batches: {reply.totalLiveBatch} <br />
-        Live Items: {reply.totalLiveBatchItems} <br />
-        Dormant Batches: {reply.totalDormantBatch} <br />
-        Dormant Items: {reply.totalDormantBatchItems}
-      </div>, { autoClose: false });
-      console.log({ live: reply.aliveBatchInfo, dormant: reply.dormantBatchInfo});
-    });
-  }
+  const branchesS = app.branches.sort((b1, b2)=>
+          b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
   
-  const branchesS = app.branches.sort((b1, b2)=> {
-   return b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 });
-  
-  const sortedTrackOptions = app.trackOption.sort((t1, t2)=> {
-                  return t1.step < t2.step ? -1 : t1.step > t2.step ? 1 : 0 });
+  const sortedTrackOptions = app.trackOption.sort((t1, t2)=>
+                          t1.step < t2.step ? -1 : t1.step > t2.step ? 1 : 0 );
   
   return(
     <div className='simpleContainer'>
@@ -67,10 +53,9 @@ const AppWrap = ({ isAdmin, isDebug, users, app })=> {
             <b><i className='fas fa-times-circle fa-fw'></i>   NonCon Types</b>,
             <b><i className='fas fa-ruler-horizontal fa-fw'></i>   Scales & Tags</b>,
             <b><i className='fas fa-link fa-fw'></i>   Addresses</b>,
-            <b><i className='fas fa-key fa-fw'></i>   PINs</b>,//11
-            <b><i className='fas fa-toolbox fa-fw'></i>  Data Repair</b>,//12
-            <b><i className='fas fa-bell fa-fw'></i>  Test Alerts</b>,//13
-            <b><i className='fas fa-life-ring fa-fw'></i>  Legacy Support</b>//14
+            <b><i className='fas fa-toolbox fa-fw'></i>  Data Repair</b>,
+            <b><i className='fas fa-bell fa-fw'></i>  Test Alerts</b>,
+            <b><i className='fas fa-life-ring fa-fw'></i>  Legacy Support</b>
           ]}>
           
           <BehaviorSlide key={0} app={app} />
@@ -87,18 +72,9 @@ const AppWrap = ({ isAdmin, isDebug, users, app })=> {
           <NCTypeSlide key={4} app={app} />
           <ScalesTagsSlide key={5} app={app} />
           <AddressSlide key={6} app={app} />
-          <PINSlide key={7} />
-          <DataRepair key={8} app={app} users={users} />
-          <ToastSlide key={9} />
-          <div key={10} className='space3v'>
-            <p>determine support needs</p>
-            <p>
-              <button
-                className='action clearBlue invert'
-                onClick={()=>requestAltFlowInfo()}
-              >Info on Alt Flow Use</button>
-            </p>
-          </div>
+          <DataRepair key={7} app={app} users={users} />
+          <ToastSlide key={8} />
+          <LegacySlide key={9} />
           
         </Slides>
 				

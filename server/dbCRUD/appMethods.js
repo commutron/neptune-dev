@@ -81,29 +81,10 @@ Meteor.methods({
     return true;
   },
   */
-// Clearly this is not secure.
+// Clearly this is not the most secure.
 // The use case of this software is to be used by a single organization,
 // hosted and made available internaly.
-// In this context, the intention of a PIN is to promt behavior.
-// To encourage an interaction between the new user and the org's admin
-  setPin(oldPIN, newPIN) {
-    const adminPower = Roles.userIsInRole(Meteor.userId(), 'admin');
-    const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
-    const orgPIN = org ? org.orgPIN : false;
-    if(adminPower) {
-      if(!orgPIN || orgPIN === false || orgPIN === oldPIN) {
-        AppDB.update({orgKey: Meteor.user().orgKey}, {
-          $set : { 
-            orgPIN : newPIN
-        }});
-        return true;
-      }else{
-        return false;
-      }
-    }else{
-      return false;
-    }
-  },
+// IF Exposure Is Higher This Should Be Encrypted
   randomizePIN(accessKey) {
     const privateKey = accessKey || Meteor.user().orgKey;
     if(privateKey) {
@@ -119,7 +100,6 @@ Meteor.methods({
     const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
     const orgPIN = org ? org.orgPIN : false;
     if(pinPower && orgPIN) {
-      // const backdoor = "People don't appreciate the substance of things. Objects in space.";
       return orgPIN;
     }else{
       return false;

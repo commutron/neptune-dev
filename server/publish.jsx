@@ -405,7 +405,6 @@ Meteor.publish('hotDataPlus', function(scanOrb, keyMatch){
                     Config.regexSN.test(scanOrb) ?
                       Meteor.call( 'serialLookup', scanOrb ) :
                       Meteor.call( 'batchLookup', scanOrb ) ? scanOrb : false;
-  
 
   const bxData = BatchDB.findOne({batch: trueBatch, orgKey: orgKey}) ||
                  XBatchDB.findOne({batch: trueBatch, orgKey: orgKey});
@@ -428,6 +427,17 @@ Meteor.publish('hotDataPlus', function(scanOrb, keyMatch){
           'orgKey': 0,
           'shareKey': 0,
           'lockTrunc': 0
+        }}),
+      XSeriesDB.find({batch: trueBatch, orgKey: orgKey}, {
+          fields: {
+            'orgKey': 0
+        //  'groupId': 0,
+    	  // 'widgetId': 0,
+    		// 'versionKey': 0,
+        //  'createdAt': 0,
+        //  'createdWho': 0,
+        //  'updatedAt': 0,
+    		// 'updatedWho': 0
         }}),
       WidgetDB.find({_id: wID, orgKey: orgKey}, {
         fields: {
@@ -505,18 +515,11 @@ Meteor.publish('skinnyData', function(){
             'completedAt': 1
             // 'lockTrunc': 1
         }}),
-      XSeriesDB.find({})//, {
-        //sort: {batch:-1}//,
-        // fields: {
-        //     'batch': 1,
-        //     'widgetId': 1,
-        //     'versionKey': 1,
-        //     'tags': 1,
-        //     'createdAt': 1,
-        //     'live': 1,
-        //     'lock': 1,
-        //     'salesOrder': 1,
-        //}}), 
+      XSeriesDB.find({}, {
+        sort: {batch:-1},
+        fields: {
+          'batch': 1
+        }}), 
     ];
   }
 });
@@ -601,6 +604,17 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
             'orgKey': 0,
             'shareKey': 0,
             'lockTrunc': 0
+        }}),
+        XSeriesDB.find({batch: dataRequest, orgKey: orgKey}, {
+          fields: {
+            'orgKey': 0
+        //     'groupId': 0,
+    			 // 'widgetId': 0,
+    			 // 'versionKey': 0,
+        //     'createdAt': 0,
+        //     'createdWho': 0,
+        //     'updatedAt': 0,
+    			 // 'updatedWho': 0
         }})
       ];
     }

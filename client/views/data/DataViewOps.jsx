@@ -404,6 +404,7 @@ const DataViewOps = ({
         return (
           <TraverseWrap
             batchData={hotXBatch}
+            seriesData={hotXSeries}
             itemData={item}
             widgetData={widget}
             variantData={variant}
@@ -513,6 +514,7 @@ const DataViewOps = ({
       return (
 		    <TraverseWrap
 		      batchData={hotXBatch}
+          seriesData={hotXSeries}
           widgetData={widget}
           variantData={variant}
           allVariants={allVariants}

@@ -2,47 +2,55 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelMedium from '../smallUi/ModelMedium.jsx';
+import ModelSmall from '../smallUi/ModelSmall';
 
-const SeriesCreate = ({ id, widget, lock, noText })=> (
-  <ModelMedium
+const RiverSelectX = ({ 
+  bID, widget, river, 
+  //riverAlt,
+  lock, noText
+})=> (
+  <ModelSmall
     button={Pref.flow}
     title={'select ' + Pref.flow}
     color='greenT'
     icon='fa-project-diagram'
     lock={!Roles.userIsInRole(Meteor.userId(), 'run') || lock}
     noText={noText}>
-    <SeriesCreateForm
-      id={id}
+    <RiverSelectForm
+      bID={bID}
       widget={widget}
-       />
-  </ModelMedium>
+      river={river}
+      // riverAlt={riverAlt} 
+    />
+  </ModelSmall>
 );
       
       
-const SeriesCreateForm = ({ id, widget, selfclose })=> {
+const RiverSelectForm = ({ 
+  bID, widget, river, 
+  //riverAlt, 
+  selfclose })=> {
 
   function save(e) {
     e.preventDefault();
-    this.go.disabled = true;
-    /*
-    const batchID = id;
+    this.rvrXgo.disabled = true;
     let flow = this.choice.value;
     flow === 'false' ? flow = false : null;
-    let flowAlt = this.choiceAlt.value;
-    flowAlt === 'false' ? flowAlt = false : null;
+    // let flowAlt = this.choiceAlt.value;
+    // flowAlt === 'false' ? flowAlt = false : null;
 
-      Meteor.call('setRiver', batchID, flow, flowAlt, (error, reply)=>{
+      Meteor.call('setRiverX', bID, flow, //flowAlt, 
+      (error, reply)=>{
         error && console.log(error);
         if(reply) {
           toast.success('Saved');
+          this.rvrXgo.disabled = false;
           selfclose();
         }else{
           toast.error('Server Error');
-          this.go.disabled = false;
+          this.rvrXgo.disabled = false;
         }
       });
-      */
   }
   
   return(
@@ -58,10 +66,21 @@ const SeriesCreateForm = ({ id, widget, selfclose })=> {
         </select>
         <label htmlFor='choice'>Select {Pref.buildFlow}</label>
       </p>
-      
+      {/*<p>
+        <select id='choiceAlt' defaultValue={riverAlt}>
+        <option value={false}></option>
+        {widget.flows.map( (entry, index)=>{
+          return(
+           <option key={index} value={entry.flowKey}>{entry.title}</option>
+           );
+        })}
+        </select>
+        <label htmlFor='choiceAlt'>Enable <em>optional</em> {Pref.buildFlowAlt}</label>
+      </p>*/}
+      <br />
       <button
         type='submit'
-        id='go'
+        id='rvrXgo'
         disabled={false}
         className='action clearGreen'
       >Save</button>
@@ -69,4 +88,4 @@ const SeriesCreateForm = ({ id, widget, selfclose })=> {
   );
 };
 
-export default SeriesCreate;
+export default RiverSelectX;
