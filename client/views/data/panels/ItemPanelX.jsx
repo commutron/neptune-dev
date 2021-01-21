@@ -5,46 +5,29 @@ import CreateTag from '/client/components/tinyUi/CreateTag.jsx';
 
 import AnimateOnChange from 'react-animate-on-change';
   
-import ScrapBox from '/client/components/smallUi/ScrapBox.jsx';
+import ScrapBox from '/client/components/bigUi/ItemFeedX/ScrapBox';
 import SubItemLink from '/client/components/tinyUi/SubItemLink.jsx';
-//import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
-import ItemFeed from '/client/components/bigUi/ItemFeed/ItemFeed.jsx';
+import ItemFeedX from '/client/components/bigUi/ItemFeedX/ItemFeedX';
 
 const ItemPanelX = ({ 
   batchData, seriesData, itemData,
   widgetData, variantData, groupData, 
   app, brancheS, user, 
   listTitle, flowData
-})=>	{
+})=> {
   
-  function ncData() {
-    const batch = batchData;
-    const item = itemData;
-    let relevant = batch.nonCon.filter( x => x.serial === item.serial);
-    return relevant;
-  }
-  
-  function shData() {
-    const batch = batchData;
-    const item = itemData;
-    const shortfalls = batch.shortfall || [];
-    let relevant = shortfalls.filter( x => x.serial === item.serial);
-    return relevant;
-  }
-
   const a = app;
-  const b = batchData;
-  const i = itemData;
-  //const w = widgetData;
-  //const g = groupData;
-  //const v = variantData;
   
-  const nc = ncData();
-  const sh = shData();
+  const srs = seriesData;
+  const i = itemData;
+  const b = batchData;
+  
+  const nc = srs.nonCon.filter( x => x.serial === i.serial );
+  
+  const sh = srs.shortfall.filter( x => x.serial === i.serial);
   
   const start = i.history.length > 0;
-  const done = i.finishedAt !== false;
   const scrap = i.history.find(x => x.type === 'scrap' && x.good === true);
   
   return(
@@ -64,12 +47,12 @@ const ItemPanelX = ({
           <span>Units: {i.units}</span>
           <span>
             { !start ?
-              <i className='fas fa-hourglass-start' title='unstarted'></i>
+              <i className='fas fa-battery-empty' title='unstarted'></i>
               :
-              done ? 
-              <i className='fas fa-check-circle greenT' title='finished'></i>
+              i.completed ? 
+              <i className='fas fa-battery-full greenT' title='complete'></i>
               : 
-              <i className='fas fa-sync blueT' title='in progress'></i>
+              <i className='fas fa-battery-half blueT' title='in progress'></i>
             }
           </span>
         </div>
@@ -83,19 +66,19 @@ const ItemPanelX = ({
             {i.subItems.map((ent, inx)=> { 
               return( <i key={inx}><SubItemLink serial={ent} />, </i> ) } ) }
           </p>}
-        { i.panelCode !== false && <p>Panel: {i.panelCode}</p> }
         {scrap && 
           <ScrapBox 
-            id={b._id} 
+            seriesId={srs._id} 
             serial={i.serial} 
             entry={scrap}
-            eX={b.finishedAt !== false && b.live} />}
+            eX={!b.completed && b.live} />}
         
         <br />
         
-        <ItemFeed
-          id={b._id}
+        <ItemFeedX
+          batchId={b._id}
           batch={b.batch}
+          seriesId={srs._id}
           serial={i.serial}
           createTime={i.createdAt}
           createBy={i.createdWho}
@@ -104,9 +87,7 @@ const ItemPanelX = ({
           ncTypesCombo={flowData && flowData.ncTypesComboFlat}
           brancheS={brancheS}
           shortfalls={sh}
-          rmas={i.rma}
-          allRMA={b.cascade}
-          done={done}
+          done={i.completed}
           user={user}
           app={a} />
             

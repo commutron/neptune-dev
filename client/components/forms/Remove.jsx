@@ -83,20 +83,6 @@ const Remove = ({ action, entry, title, check })=> {
           }
         });
         break;
-      case 'xbatch':
-        Meteor.call('deleteBatchX', entry, confirm, (err, reply)=>{
-          err && console.log(err);
-          if(reply === 'inUse') {
-            toast.warning('Cannot do this, entry is in use');
-          }else if(reply) {
-            toast.success('Entry removed');
-            FlowRouter.go('/data/overview?request=batches');
-          }else{
-            toast.error('Rejected by Server');
-            this.cutGo.disabled = false;
-          }
-        });
-        break;
       case 'item':
         Meteor.call('deleteItem', entry._id, title, confirm, (err, reply)=>{
           err && console.log(err);

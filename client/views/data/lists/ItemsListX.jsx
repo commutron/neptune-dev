@@ -3,7 +3,7 @@ import moment from 'moment';
 //import Pref from '/client/global/pref.js';
 
 import LeapButton from '/client/components/tinyUi/LeapButton.jsx';
-import FilterItems from '/client/components/bigUi/FilterItems.jsx';
+import FilterItemsX from '/client/components/bigUi/FilterItemsX';
 import SeriesForm from '/client/components/forms/ItemSerialsX/SeriesForm';
 
 
@@ -79,18 +79,18 @@ const ItemsListX = ({
   function fDone(items, timeMod, notMod) {
     if(!timeMod || timeMod === '') {
       if(notMod === true) {
-        return items.filter( x => x.finishedAt === false );
+        return items.filter( x => x.completed === false );
       }else{
-        return items.filter( x => x.finishedAt !== false );
+        return items.filter( x => x.completed === true );
       }
     }else{
       if(notMod === true) {
-        return items.filter( x => x.finishedAt === false ||
-                !moment(moment(x.finishedAt).format('YYYY-MM-DD'))
+        return items.filter( x => x.completed === false ||
+                !moment(moment(x.completedAt).format('YYYY-MM-DD'))
                   .isSame(timeMod, 'day') );
       }else{
-        return items.filter( x => x.finishedAt !== false &&
-                moment(moment(x.finishedAt).format('YYYY-MM-DD'))
+        return items.filter( x => x.completed === true &&
+                moment(moment(x.completedAt).format('YYYY-MM-DD'))
                   .isSame(timeMod, 'day') );
       }
     }
@@ -99,17 +99,17 @@ const ItemsListX = ({
   function fInproc(items, timeMod, notMod) {
     if(!timeMod || timeMod === '') {
       if(notMod === true) {
-        return items.filter( x => x.finishedAt !== false );
+        return items.filter( x => x.completed === true );
       }else{
-        return items.filter( x => x.finishedAt === false );
+        return items.filter( x => x.completed === false );
       }
     }else{
       if(notMod === true) {
-        return items.filter( x => x.finishedAt !== false ||
+        return items.filter( x => x.completed === true ||
                 moment(moment(x.createdAt).format('YYYY-MM-DD'))
                   .isAfter(timeMod, 'day') );
       }else{
-        return items.filter( x => x.finishedAt === false &&
+        return items.filter( x => x.completed === false &&
                 moment(moment(x.createdAt).format('YYYY-MM-DD'))
                   .isSameOrBefore(timeMod, 'day') );
       }
@@ -206,21 +206,13 @@ const ItemsListX = ({
     return filtered;
   }
   
-  function fAlt(items, notMod) {
+  /*function fAlt(items, notMod) {
     if(notMod === true) {
       return items.filter( x => x.alt === 'no' );
     }else{
       return items.filter( x => x.alt === 'yes' );
     }
-  }
-  
-  function fRma(items, notMod) {
-    if(notMod === true) {
-      return items.filter( x => x.rma.length === 0);
-    }else{
-      return items.filter( x => x.rma.length > 0);
-    }
-  }
+  }*/
   
   function fScrap(items, timeMod, notMod) {
     let scrapList = [];
@@ -259,7 +251,6 @@ const ItemsListX = ({
     return { scrapList, iList };
   }
   
-  
   function fStep(items, flowKey, timeMod, notMod) {
     const key = flowKey.slice(1);
     let filtered = [];
@@ -294,11 +285,10 @@ const ItemsListX = ({
   }
   
   const srs = seriesData;
-  const b = batchData;
-  const nonCon = b.nonCon;
-  const short = b.shortfall || [];
+  const nonCon = srs.nonCon;
+  const short = srs.shortfall || [];
   
-  const scrap = b ? fScrap(srs.items, timeModifyer, notModifyer) : 
+  const scrap = srs ? fScrap(srs.items, timeModifyer, notModifyer) : 
                     { scrapList: [], iList: [] };
   
   const steps = flowSteps();
@@ -323,44 +313,44 @@ const ItemsListX = ({
       fNoncons(srs.items, nonCon, timeModifyer, notModifyer) :
     K === 'shortfalls' ?
       fShortfalls(srs.items, short, timeModifyer, notModifyer) :
-    K === 'alternative' ?
-      fAlt(srs.items, notModifyer) :
-    K === 'rma' ?
-      fRma(srs.items, notModifyer) :
+    // K === 'alternative' ?
+      // fAlt(srs.items, notModifyer) :
     K === 'scrap' ? 
       scrap.iList :
     srs.items;
 
-    let showListOrder = filteredList.sort( (x,y)=> x.serial - y.serial);
-    
-    setList(showListOrder);
+    const orderedList = filteredList.sort((x, y)=> 
+                      x.serial < y.serial ? -1 : x.serial > y.serial ? 1 : 0 );
+     
+    setList(orderedList);
   }, [ batchData, keyword, timeModifyer, notModifyer ]);
   
-  const bttnClss = 'leapBar numFont blackblack';
+  const bttnClss = 'leapBar numFont';
   
   return(
     <Fragment>
-      <FilterItems
-        title={b.batch}
+      <FilterItemsX
+        title={batchData.batch}
         total={stateList.length}
         advancedList={steps}
         selectedKeyword={keyword}
         selectedTime={timeModifyer}
         selectedToggle={notModifyer}
-        onKeywordChange={e => setKeywordFilter(e)}
-        onTimeChange={e => setTimeFilter(e)}
-        onNotChange={e => setToggle(e)} />
+        onKeywordChange={(e)=>setKeywordFilter(e)}
+        onTimeChange={(e)=>setTimeFilter(e)}
+        onNotChange={(e)=>setToggle(e)} />
       {stateList.map( (entry, index)=> {
         let style = entry.history.length === 0 ? bttnClss :
                     entry.finishedAt === false ? `${bttnClss} activeMark` : 
-                    scrap.scrapList.includes(entry.serial) ? `${bttnClss} ngMark` : `${bttnClss} gMark`;
-          return (
+                    scrap.scrapList.includes(entry.serial) ? `${bttnClss} ngMark` : 
+                    `${bttnClss} gMark`;
+          return(
             <LeapButton
               key={index} 
               title={entry.serial} 
               sub='' 
               sty={style}
-              address={'/data/batch?request=' + b.batch + '&specify=' + entry.serial}
+              address={`/data/batch?request=${batchData.batch}&specify=${entry.serial}`}
             />
           );
       })}

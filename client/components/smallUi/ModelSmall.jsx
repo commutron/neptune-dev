@@ -43,32 +43,33 @@ const ModelSmall = ({
         </button>
       }
       
-      <span hidden={!show}>
-        <div className='overlay invert' key={1}>
-          <n-sm-model>
-            <n-sm-model-head>
-              <span>
-                <i className={`fas ${icon} ${color}`}></i>
-                <i className='breath'></i>
-                {title}
-              </span>
-              <button
-                className='closeAction clearRed'
-                onClick={()=>reveal()}
-                title='close'
-              ><i className='fas fa-times fa-lg'></i></button>
-            </n-sm-model-head>
-            <n-sm-model-content className='centre'>
-              {React.cloneElement(children,
-                { 
-                  selfclose: ()=>reveal()
-                }
-              )}
-            </n-sm-model-content>
-          </n-sm-model>
-        </div>
-      </span>
-      
+      {show &&
+        <span>
+          <div className='overlay invert' key={1}>
+            <n-sm-model>
+              <n-sm-model-head>
+                <span>
+                  <i className={`fas ${icon} ${color}`}></i>
+                  <i className='breath'></i>
+                  {title}
+                </span>
+                <button
+                  className='closeAction clearRed'
+                  onClick={()=>reveal()}
+                  title='close'
+                ><i className='fas fa-times fa-lg'></i></button>
+              </n-sm-model-head>
+              <n-sm-model-content className='centre'>
+                {React.cloneElement(children,
+                  { 
+                    selfclose: ()=>reveal()
+                  }
+                )}
+              </n-sm-model-content>
+            </n-sm-model>
+          </div>
+        </span>
+      }
     </Fragment>
   );
 };

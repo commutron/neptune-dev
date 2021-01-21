@@ -413,7 +413,7 @@ const DataViewOps = ({
             app={app}
             title='Item'
             subLink={subLink}
-            action='item'
+            action='xitem'
             invertColor={true}
           >
             <ItemPanelX

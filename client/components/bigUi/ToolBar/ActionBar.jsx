@@ -15,6 +15,12 @@ import RemoveXBatch from '/client/components/forms/Batch/RemoveXBatch';
 import ItemSerialsWrapX from '/client/components/forms/ItemSerialsX/ItemSerialsWrapX';
 import RiverSelectX from '/client/components/forms/RiverSelectX';
 
+import UnitSetX from '/client/components/forms/ItemSerialsX/UnitSetX';
+import PanelBreakX from '/client/components/forms/ItemSerialsX/PanelBreakX';
+import UndoFinishX from '/client/components/forms/ItemSerialsX/UndoFinishX';
+import ItemIncompleteX from '/client/components/forms/ItemSerialsX/ItemIncompleteX';
+import ScrapItemX from '/client/components/forms/ItemSerialsX/ScrapItemX';
+import RemoveItem from '/client/components/forms/ItemSerialsX/RemoveItem';
 
 import ItemSerialsWrap from '/client/components/forms/ItemSerials/ItemSerialsWrap';
 import RiverSelect from '/client/components/forms/RiverSelect.jsx';
@@ -47,7 +53,40 @@ const ActionBar = ({
   
   <Fragment>
     { 
-  	action === 'item' ?
+  	action === 'xitem' ?
+  	  <Fragment> 
+    	  <UnitSetX
+    	    seriesId={seriesData._id}
+    	    item={itemData} />
+    	  <PanelBreakX
+          batchId={batchData._id}
+          seriesId={seriesData._id}
+          batchNum={batchData.batch}
+    	    item={itemData} />
+        <UndoFinishX
+    	    batchId={batchData._id}
+    	    finishedAtB={batchData.completedAt}
+    	    seriesId={seriesData._id}
+    	    serial={itemData.serial}
+    	    finishedAtI={itemData.completedAt} />
+        <ItemIncompleteX
+          seriesId={seriesData._id}
+          item={itemData}
+          app={app} />
+        <ScrapItemX
+          seriesId={seriesData._id}
+          item={itemData}
+          ancillary={app.ancillaryOption} />
+        <RemoveItem
+          batchId={batchData._id}
+          batch={batchData.batch}
+          seriesId={seriesData._id}
+          serial={itemData.serial}
+          check={itemData.createdAt.toISOString()}
+          lockOut={batchData.completed || itemData.completed} />
+      </Fragment>
+		:
+		action === 'item' ?
   	  <Fragment> 
     	  <UnitSet
     	    id={batchData._id}

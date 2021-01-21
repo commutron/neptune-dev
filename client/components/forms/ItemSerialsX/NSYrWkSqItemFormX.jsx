@@ -63,20 +63,20 @@ const NSYrWkSqItemFormX = ({ bID, seriesId, items, more, unit, app, isDebug })=>
           toastId: ( previewData[0] + 'pOp' ),
           autoClose: false
         });
-      // Meteor.call('addSourceYearWeekSeqItems', id, previewData, (error, reply)=>{
-      //   if(error)
-      //     console.log(error);
-      //   if(reply.success === true) {
-      //     toast.update(( previewData[0] + 'pOp' ), {
-      //       render: "Serials Created Successfully",
-      //       type: toast.TYPE.SUCCESS,
-      //       autoClose: 3000
-      //     });
-      //     resultSet(reply.dupes);
-      //   }else{
-      //     toast.error('There was a problem...');
-      //   }
-      // });
+      Meteor.call('addSourceYearWeekSeqItemsX', bID, seriesId, previewData, (error, reply)=>{
+        if(error)
+          console.log(error);
+        if(reply.success === true) {
+          toast.update(( previewData[0] + 'pOp' ), {
+            render: "Serials Created Successfully",
+            type: toast.TYPE.SUCCESS,
+            autoClose: 3000
+          });
+          resultSet(reply.dupes);
+        }else{
+          toast.error('There was a problem...');
+        }
+      });
     }
 	}
   

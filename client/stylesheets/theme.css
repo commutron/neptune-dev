@@ -3,41 +3,63 @@
   --neptuneColor: #007fff;
   --turquoise: rgb(26, 188, 156);
   --turquoisefade: rgba(26, 188, 156, 0.5);
+  
   --greenSea: rgb(22, 160, 133);
+  
   --emerald: rgb(46, 204, 113); /* light green */
-  --emeraldfrosted: rgba(46, 204, 113, 0.8);
+  --emeraldfrost: rgba(46, 204, 113, 0.8);
   --emeraldtrans: rgba(46, 204, 113, 0.4);
   --emeraldfade: rgba(46, 204, 113, 0.1);
+  
   --nephritis: rgb(39, 174, 96); /* dark green */
   --nephritisfade: rgba(39, 174, 96, 0.5); /* dark green fade */
+  
   --peterriver: rgb(52, 152, 219);/* light blue */
   --peterriverfade: rgba(52, 152, 219, 0.5);
+  
   --belizeHole: rgb(41, 128, 185); /* dark blue */
   --belizeHolefade: rgba(41, 128, 185, 0.5); /* dark blue fade */
   --amethyst: rgb(155, 89, 182); /* light purple */
+  
   --amethystfade: rgba(155, 89, 182, 0.5);
+  
   --wisteria: rgb(142, 68, 173); /* dark purple */
+  
   --sunflower: rgb(241, 196, 15);
   --sunflowerfade: rgba(241, 196, 15, 0.5);
+  
   --orange: rgb(243, 156, 18);
-  --orangefade: rgba(243, 156, 18, 0.8);
+  --orangefrost: rgba(243, 156, 18, 0.8);
+  --orangetrans: rgba(243, 156, 18, 0.5);
+  --orangefade: rgba(243, 156, 18, 0.1);
+  
   --carrot: rgb(230, 126, 34);
+  
   --pumpkin: rgb(211, 84, 0);
+  
   --alizarin: rgb(231, 76, 60);
+  --alizarintrans: rgba(231, 76, 60, 0.5);
   --alizarinfade: rgba(231, 76, 60, 0.1);
+  
   --pomegranate: rgb(192, 57, 43); /* dark red */
   --pomegranatefade: rgba(192, 57, 43, 0.5); /* dark red fade */
+  
   --silver: rgb(189, 195, 199);
   --silverfade: rgba(189, 195, 199, 0.5);
+  
   --clouds: rgb(236, 240, 241); /*off white */
   --cloudstrans: rgb(227,231,232);
   --cloudsfade: rgba(236, 240, 241, 0.5);
+  
   --concrete: rgb(149, 165, 166);
   --concretefade: rgba(149, 165, 166, 0.5);
+  
   --wetasphalt: rgb(52, 73, 94); /* lighter grey-blue */
   --wetasphaltfade: rgba(52, 73, 94, 0.3); /* lighter grey-blue */
+  
   --midnightblue: rgb(44, 62, 80); /* darker grey-blue */
   --midnightbluefade: rgba(44, 62, 80, 0.3); /* darker grey-blue */
+  
   --asbestos: rgb(127, 140, 141); /* gray */
   --asbestosfade: rgb(127, 140, 141, 0.5);
   

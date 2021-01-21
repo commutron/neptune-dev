@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 const YrWkPnItemFormX = ({ bID, seriesId, items, more, unit, app })=> {
   
   const thisYear = moment().weekYear().toString().slice(-2);
-  const thisWeek = moment().week();
+  const thisWeek = moment().week().toString().padStart(2, 0);
   
   const [ previewData, previewSet ] = useState([]);
   const [ resultMess, resultSet ] = useState(false);
@@ -18,7 +18,7 @@ const YrWkPnItemFormX = ({ bID, seriesId, items, more, unit, app })=> {
     resultSet(false);
     
     const yearVal = this.yrDigits.value;
-    const weekVal = this.wkDigits.value;
+    const weekVal = this.wkDigits.value.padStart(2, 0);
     const year_week = yearVal + weekVal;
     
     const panelStartVal = this.pnlStDigits.value;
@@ -67,20 +67,20 @@ const YrWkPnItemFormX = ({ bID, seriesId, items, more, unit, app })=> {
           toastId: ( previewData[0] + 'pOp' ),
           autoClose: false
         });
-      // Meteor.call('addYearWeekPanelItems', id, previewData, (error, reply)=>{
-      //   if(error)
-      //     console.log(error);
-      //   if(reply.success === true) {
-      //     toast.update(( previewData[0] + 'pOp' ), {
-      //       render: "Serials Created Successfully",
-      //       type: toast.TYPE.SUCCESS,
-      //       autoClose: 3000
-      //     });
-      //     resultSet(reply.dupes);
-      //   }else{
-      //     toast.error('There was a problem...');
-      //   }
-      // });
+      Meteor.call('addYearWeekPanelItemsX', bID, seriesId, previewData, (error, reply)=>{
+        if(error)
+          console.log(error);
+        if(reply.success === true) {
+          toast.update(( previewData[0] + 'pOp' ), {
+            render: "Serials Created Successfully",
+            type: toast.TYPE.SUCCESS,
+            autoClose: 3000
+          });
+          resultSet(reply.dupes);
+        }else{
+          toast.error('There was a problem...');
+        }
+      });
     }
 	}
   

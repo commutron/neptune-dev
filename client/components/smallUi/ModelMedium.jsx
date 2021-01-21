@@ -42,31 +42,33 @@ const ModelMedium = ({
         </button>
       }
       
-      <span hidden={!show}>
-        <div className='overlay invert' key={1}>
-          <n-md-model>
-            <n-md-model-head>
-              <span>
-                <i className={`fas ${icon} ${color}`}></i>
-                <i className='breath'></i>
-                {title}
-              </span>
-              <button
-                className='closeAction clearRed'
-                onClick={()=>reveal()}
-                title='close'
-              ><i className='fas fa-times fa-lg'></i></button>
-            </n-md-model-head>
-            <n-md-model-content className='centre'>
-              {React.cloneElement(children,
-                { 
-                  selfclose: ()=>reveal()
-                }
-              )}
-            </n-md-model-content>
-          </n-md-model>
-        </div>
-      </span>
+      {show &&
+        <span>
+          <div className='overlay invert' key={1}>
+            <n-md-model>
+              <n-md-model-head>
+                <span>
+                  <i className={`fas ${icon} ${color}`}></i>
+                  <i className='breath'></i>
+                  {title}
+                </span>
+                <button
+                  className='closeAction clearRed'
+                  onClick={()=>reveal()}
+                  title='close'
+                ><i className='fas fa-times fa-lg'></i></button>
+              </n-md-model-head>
+              <n-md-model-content className='centre'>
+                {React.cloneElement(children,
+                  { 
+                    selfclose: ()=>reveal()
+                  }
+                )}
+              </n-md-model-content>
+            </n-md-model>
+          </div>
+        </span>
+      }
     </Fragment>
   );
 };
