@@ -12,6 +12,7 @@ import XBatchTimeline from '/client/components/bigUi/BatchFeed/XBatchTimeline.js
 
 import InfoTab from './InfoTab';
 import TimeTab from './TimeTab';
+import ProblemTab from './ProblemTab';
 
 //import RiverSatus from '../../../components/smallUi/RiverStatus.jsx';
 //import FirstsOverview from '/client/components/bigUi/FirstsOverview.jsx';
@@ -28,28 +29,29 @@ import TimeTab from './TimeTab';
 
 
 const BatchPanelX = ({ 
-  batchData, widgetData, variantData, groupData,
+  batchData, seriesData, widgetData, variantData, groupData, flowData,
   user, app, isDebug, isNigh
 })=> {
-
-  const a = app;
+  
   const b = batchData;
   // const w = widgetData;
   // const g = groupData;
   const branchesSort = app.branches.sort((b1, b2)=> 
           b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
-     
+  
+  console.log(flowData);
+  
   // const v = variantData;
   
   //const flow = w.flows.find( x => x.flowKey === b.river );
-  //const flowAlt = w.flows.find( x => x.flowKey === b.riverAlt );
   
   //const riverTitle = flow ? flow.title : 'not found';
   //const riverFlow = flow ? flow.flow : [];
-  //const progCounts = ProgressCounter(riverFlow, riverAltFlow, b, true);
+  const progCounts = flowData.progCounts;
   
-  const done = b.completed === true && b.live === false; // no more boards if batch is finished
-  
+  const done = b.completed === true && b.live === false;
+  const allDone = !seriesData ? true : seriesData.items.every( x => x.completed );
+    
   
   return(
     <div className='section' key={b.batch}>
@@ -58,7 +60,7 @@ const BatchPanelX = ({
         tabs={
           [
             'Info',
-            'Progress',
+            'Waterfall',
             'Time',
             `Problems`,
             'Events',
@@ -71,9 +73,11 @@ const BatchPanelX = ({
         sessionTab='batchExPanelTabs'>
         
         <InfoTab
-          a={app}
+          app={app}
           user={user}
-          b={b}
+          b={batchData}
+          riverTitle={flowData.riverTitle}
+          progCounts={progCounts}
           done={done}
           isDebug={isDebug}
         />
@@ -85,17 +89,15 @@ const BatchPanelX = ({
           </div>
         
           <div className='twoThirdsContent'>
-            {/*<FirstsOverview
-            doneFirsts={filter.fList}
-            flow={riverFlow}
-            flowAlt={riverAltFlow} />*/}
+            <WaterfallTimeline
+              wfCounts={progCounts.wtrflProg}
+              waterfall={b.waterfall}
+              quantity={b.quantity}
+              app={app} />
           </div>
           
           <div className='threeThirdsContent wide'>
-            <WaterfallTimeline
-              waterfall={b.waterfall}
-              quantity={b.quantity}
-              app={a} />
+            
           </div>
         </div>
         
@@ -106,15 +108,24 @@ const BatchPanelX = ({
           isDebug={isDebug}
           totalUnits={b.quantity}
           done={done}
-          allDone={done}
-          riverFlow={false} />
+          allDone={allDone}
+          riverFlow={flowData.riverFlow} />
+        
+        <ProblemTab
+          batchData={batchData}
+          seriesData={seriesData}
+          riverFlow={flowData.riverFlow}
+          ncTypesCombo={flowData.ncTypesComboFlat}
+          brancheS={branchesSort}
+          app={app}
+          isDebug={isDebug} />
           
         <div className='space3v'>
           <XBatchTimeline
             id={b._id}
             batchData={b}
             releaseList={b.releases || []}
-            verifyList={[]}//filter.verifyList}
+            verifyList={progCounts.firstsFlat}
             eventList={b.events || []}
             alterList={b.altered || []}
             quoteList={b.quoteTimeBudget || []}

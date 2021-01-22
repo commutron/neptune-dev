@@ -135,49 +135,56 @@ Meteor.methods({
         const open = doc.completed === false;
         
         if(open && srs) {
-          
-          let badBarcodes = [];
-          
-          const regexWP = RegExp(/^(\d{8})$/);
-          
-          for( let serialTry of serialArr ) {
-            const dupOLD = BatchDB.findOne({ 'items.serial': serialTry }); // untill migration
-            const dupNew = XSeriesDB.findOne({ 'items.serial': serialTry });
-            const correctFormat = regexWP.test(serialTry);
-            
-            if(!dupOLD && !dupNew && correctFormat) {
-              
-              XSeriesDB.update({_id: seriesId}, {
-                $push : { items : {
-                  serial: serialTry,
-                  createdAt: new Date(),
-                  createdWho: Meteor.userId(),
-                  completed: false,
-                  completedAt: false,
-                  completedWho: false,
-                  units: Number(1),
-                  subItems: [],
-                  history: [],
-                  altPath: false
-              }}});
-              
-            }else{
-              badBarcodes.push(serialTry);
-            }
-          }
         
-          XSeriesDB.update({_id: seriesId}, {
-            $set : {
-              updatedAt: new Date(),
-      			  updatedWho: Meteor.userId()
-            }});
-          
-          Meteor.defer( ()=>{ Meteor.call('updateOneMinify', batchId, accessKey); }); 
-          return {
-            success: true,
-            dupes: badBarcodes
-          };
+          const seriesTotal = serialArr.length + srs.items.length;
+        
+          if(seriesTotal <= doc.quantity && seriesTotal <= 5000 ) {
             
+            let badBarcodes = [];
+            
+            const regexWP = RegExp(/^(\d{8})$/);
+            
+            for( let serialTry of serialArr ) {
+              const dupOLD = BatchDB.findOne({ 'items.serial': serialTry }); // untill migration
+              const dupNew = XSeriesDB.findOne({ 'items.serial': serialTry });
+              const correctFormat = regexWP.test(serialTry);
+              
+              if(!dupOLD && !dupNew && correctFormat) {
+                
+                XSeriesDB.update({_id: seriesId}, {
+                  $push : { items : {
+                    serial: serialTry,
+                    createdAt: new Date(),
+                    createdWho: Meteor.userId(),
+                    completed: false,
+                    completedAt: false,
+                    completedWho: false,
+                    units: Number(1),
+                    subItems: [],
+                    history: [],
+                    altPath: false
+                }}});
+                
+              }else{
+                badBarcodes.push(serialTry);
+              }
+            }
+        
+            XSeriesDB.update({_id: seriesId}, {
+              $set : {
+                updatedAt: new Date(),
+        			  updatedWho: Meteor.userId()
+              }});
+            
+            Meteor.defer( ()=>{ Meteor.call('updateOneMinify', batchId, accessKey); }); 
+            return {
+              success: true,
+              dupes: badBarcodes
+            };
+            
+          }else{
+            return false;
+          }   
         }else{
           return false;
         }
@@ -201,48 +208,55 @@ Meteor.methods({
         
         if(open && srs) {
           
-          let badBarcodes = [];
-          
-          const regexNS = RegExp(/^(\d{6}\-\d{7})$/);
-          
-          for( let serialTry of serialArr ) {
-            const dupOLD = BatchDB.findOne({ 'items.serial': serialTry }); // untill migration
-            const dupNew = XSeriesDB.findOne({ 'items.serial': serialTry });
-            const correctFormat = regexNS.test(serialTry);
-            
-            if(!dupOLD && !dupNew && correctFormat) {
-              
-              XSeriesDB.update({_id: seriesId}, {
-                $push : { items : {
-                  serial: serialTry,
-                  createdAt: new Date(),
-                  createdWho: Meteor.userId(),
-                  completed: false,
-                  completedAt: false,
-                  completedWho: false,
-                  units: Number(1),
-                  subItems: [],
-                  history: [],
-                  altPath: false
-              }}});
-              
-            }else{
-              badBarcodes.push(serialTry);
-            }
-          }
+          const seriesTotal = serialArr.length + srs.items.length;
         
-          XSeriesDB.update({_id: seriesId}, {
-            $set : {
-              updatedAt: new Date(),
-      			  updatedWho: Meteor.userId()
-            }});
+          if(seriesTotal <= doc.quantity && seriesTotal <= 5000 ) {
           
-          Meteor.defer( ()=>{ Meteor.call('updateOneMinify', batchId, accessKey); }); 
-          return {
-            success: true,
-            dupes: badBarcodes
-          };
+            let badBarcodes = [];
             
+            const regexNS = RegExp(/^(\d{6}\-\d{7})$/);
+            
+            for( let serialTry of serialArr ) {
+              const dupOLD = BatchDB.findOne({ 'items.serial': serialTry }); // untill migration
+              const dupNew = XSeriesDB.findOne({ 'items.serial': serialTry });
+              const correctFormat = regexNS.test(serialTry);
+              
+              if(!dupOLD && !dupNew && correctFormat) {
+                
+                XSeriesDB.update({_id: seriesId}, {
+                  $push : { items : {
+                    serial: serialTry,
+                    createdAt: new Date(),
+                    createdWho: Meteor.userId(),
+                    completed: false,
+                    completedAt: false,
+                    completedWho: false,
+                    units: Number(1),
+                    subItems: [],
+                    history: [],
+                    altPath: false
+                }}});
+              
+              }else{
+                badBarcodes.push(serialTry);
+              }
+            }
+          
+            XSeriesDB.update({_id: seriesId}, {
+              $set : {
+                updatedAt: new Date(),
+        			  updatedWho: Meteor.userId()
+              }});
+            
+            Meteor.defer( ()=>{ Meteor.call('updateOneMinify', batchId, accessKey); }); 
+            return {
+              success: true,
+              dupes: badBarcodes
+            };
+          
+          }else{
+            return false;
+          } 
         }else{
           return false;
         }

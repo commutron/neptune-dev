@@ -19,19 +19,16 @@ import TideActivityData from '/client/components/tide/TideActivity';
 import BatchXStatus from '/client/components/forms/Batch/BatchXStatus.jsx';
 
 //import BatchFinish from '/client/components/forms/Batch/BatchFinish.jsx';
-//import StepsProgress from '/client/components/bigUi/StepsProgress/StepsProgress.jsx';
+import StepsProgressX from '/client/components/bigUi/StepsProgress/StepsProgressX';
 
 const InfoTab = ({
-  a, b, user, isDebug,
-  done,
-  //progCounts, riverTitle, riverAltTitle,
+  app, b, user, isDebug,
+  done, progCounts, riverTitle
 }) =>	{
 
-  const nonWorkDays = a.nonWorkDays;
+  const nonWorkDays = app.nonWorkDays;
   if( Array.isArray(nonWorkDays) ) {  
-    moment.updateLocale('en', {
-      holidays: nonWorkDays
-    });
+    moment.updateLocale('en', { holidays: nonWorkDays });
   }
   
   const released = b.releases.findIndex( x => x.type === 'floorRelease') >= 0;
@@ -58,97 +55,97 @@ const InfoTab = ({
   
   
   return(
-    <div className='containerE space'>
-      <div className='oneEcontent min200'>
-
-        <div className='vmarginhalf centreText line2x'>
-            
-            { b.live &&
-              <div className='centreRow balance'>
-                <div className='statusBlock'>
-                  <PrioritySquareData
-                    batchID={b._id}
-                    app={a}
-                    dbDay={b.salesEnd}
-                    isDone={done}
-                    isDebug={isDebug} />
-                </div>
-                <div className='statusBlock'>
-                  <TideActivityData
-                    batchID={b._id}
-                    app={a} />
-                </div>
-              </div>
-            }
-            <BatchXStatus batchData={b} />
-          
-        </div>
-          
-        <fieldset className='noteCard'>
-          <legend className='cap'>Sales</legend>
-          
-          <p className='cap'>{Pref.salesOrder}: {b.salesOrder || 'not available'}</p>
-          
-          <p>Time Budget: {qtHours} hours</p>
-          
-        </fieldset>
-        
-        <fieldset className='noteCard'>
-          <legend>Time Range</legend>
-          
-          <p className='cap'>{Pref.start}: {moment(b.salesStart).format("MMMM Do, YYYY")}</p>
-          
-          <div className='cap'>{Pref.end}: {moment(b.salesEnd).format("MMMM Do, YYYY")}
-            <AlterFulfill
-              batchId={b._id}
-              isX={true}
-              end={b.salesEnd}
-              app={a}
-              lock={b.completed === true && !isDebug}
-              isDebug={isDebug} />
+    <div className='autoFlex space'>
+      
+      <div className='vmarginhalf centreText line2x'>
+        <h3>Status</h3>      
+        { b.live &&
+          <div className='centreRow balance'>
+            <div className='statusBlock'>
+              <PrioritySquareData
+                batchID={b._id}
+                app={app}
+                dbDay={b.salesEnd}
+                isDone={done}
+                isDebug={isDebug} />
+            </div>
+            <div className='statusBlock'>
+              <TideActivityData
+                batchID={b._id}
+                app={app} />
+            </div>
           </div>
-          
-          {cmplt !== null ?
-            <p>Finished: {cmplt}</p>
-          :
-            <p>Ship Date: {shipTime.format("MMMM Do, YYYY")}</p>
-          }
-          
-          <p>{cmplt !== null ? 'Total Time:' : 'Elapsed:'} {timeElapseClean}</p>
-          
-          {cmplt !== null ? null : 
-            <p>Time Remaining: 
-              <i className={remainClean < 0 ? 'yellowT' : ''}> {remainClean}</i> workdays
-            </p> }
+        }
+        <BatchXStatus batchData={b} />
         
-        </fieldset>
-        
-        
-        
-
+        <div className='cap middle'>
+          <p>Ship Due: <b>{shipTime.format("MMMM Do, YYYY")}</b></p>
+          <AlterFulfill
+            batchId={b._id}
+            isX={true}
+            end={b.salesEnd}
+            app={app}
+            lock={b.completed === true && !isDebug}
+            noText={true}
+            lgIcon={true}
+            isDebug={isDebug} />
+        </div>
       </div>
-      
-      <div className='twoEcontent'>
-      
+          
+      <div>
+        <h3>Sales Order</h3>
+        
+        <p className='cap'>{Pref.salesOrder}: <b>{b.salesOrder || 'not available'}</b></p>
+        
+        <p>Total Batch Quantity: <b className='numfont'>{b.quantity}</b></p>
+        
+        <p>Serialized Items: <b className='numfont'>{progCounts.liveItems}</b></p>
+        
+        <p>Serialized Units: <b className='numfont'>{progCounts.liveUnits}</b></p>
+        
+        <p>Scrapped Items: <b className='numfont redT'>{progCounts.scrapCount || null}</b></p>
+        
+        <p>Time Budget: <b>{qtHours} hours</b></p>
+        
+        <p className='cap'>{Pref.start}: <b>{moment(b.salesStart).format("MMMM Do, YYYY")}</b></p>
+        
+        <p className='cap'>{Pref.end}: <b>{moment(b.salesEnd).format("MMMM Do, YYYY")}</b></p>
+            
+        <p>{cmplt !== null ? 'Total Time:' : 'Elapsed:'} <b>{timeElapseClean} workdays</b></p>
+        
+        {cmplt !== null && <p>Complete: <b>{cmplt}</b></p> }
+        
+        {cmplt !== null ? null : 
+          <p>Time Remaining: 
+            <b className={remainClean < 0 ? 'yellowT' : ''}> {remainClean} workdays</b>
+          </p> }
+  
+      </div>
+    
+      <div>
+        <h3>General</h3>
+        
         <TagsModule
           action='xBatch'
           id={b._id}
           tags={b.tags}
-          tagOps={a.tagOption} />
+          tagOps={app.tagOption} />
           
         <NoteLine 
           action='xBatch'
           id={b._id}
           entry={b.notes} />
-        <BlockList id={b._id} data={b.blocks} xBatch={true} lock={done} expand={true} />
-          
-            
-        
+  
+        <BlockList 
+          id={b._id} 
+          data={b.blocks} 
+          xBatch={true} 
+          lock={done} 
+          expand={true} />
         
       </div>
               
-      <div className='threeEcontent'>
-        
+      <div>
         {!released &&
           <ReleaseAction 
             id={b._id} 
@@ -157,10 +154,15 @@ const InfoTab = ({
             contextText='to the floor'
             isX={true} />
         }
-        
       </div>
-        
       
+      <div>
+        <StepsProgressX
+          quantity={b.quantity}
+          progCounts={progCounts}
+          riverTitle={riverTitle}
+          truncate={false} />
+      </div>
 
     </div>
   );

@@ -484,7 +484,7 @@ n-sm-model {
 .popupHead, n-md-model-head, n-sm-model-head {
   display: flex;
   justify-content: space-between;
-  align-content: center;
+  align-items: center;
   text-transform: capitalize;
   height: 3vmax;
   font-size: 2.5vmax;

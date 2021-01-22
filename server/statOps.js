@@ -158,7 +158,7 @@ Meteor.methods({
   waterfallSelfCount(waterfallCol) {
     let keyArr = [];
     for(let wf of waterfallCol) {
-      const wfstep = `${wf.key}<|>${wf.gate}<|>${wf.type}`;
+      const wfstep = `${wf.wfKey}<|>${wf.gate}<|>${wf.type}`;
       const wfCount = wf.counts.length === 0 ? 0 :
                         Array.from(wf.counts, x => x.tick).reduce((x,y)=> x + y);
       keyArr.push({

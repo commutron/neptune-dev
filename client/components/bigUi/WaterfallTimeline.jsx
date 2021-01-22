@@ -6,7 +6,7 @@ import MiniBar from '/client/components/charts/MiniScales/MiniBar.jsx';
 
 import '/client/components/river/waterfall/style.css';
 
-const WaterfallTimeline = ({ waterfall, quantity, app })=> {
+const WaterfallTimeline = ({ wfCounts, waterfall, quantity, app })=> {
 
   const waterfallS = waterfall.sort((w1, w2)=> 
           !w1.position ? -1 : !w2.position ? -1 :
@@ -15,14 +15,12 @@ const WaterfallTimeline = ({ waterfall, quantity, app })=> {
   return(
     <div className='wide'>
       {waterfallS.map( (entry)=>{
-        let count = entry.counts.length > 0 ?
-        Array.from(entry.counts, x => x.tick).reduce((x,y)=> x + y) :
-        0;
+        const countObj = wfCounts.find( w => w.key === entry.wfKey );
+        const count = countObj ? countObj.count : 0;
+        const type = countObj ? countObj.type : false;
         
-        const type = entry.type || app.countOption.find( x => x.key === entry.wfKey ).type;
         let borderColor = 'borderBlue';
         let barColor = 'proBlue';
-        //// Style the Stone Accordingly \\\\
       	if(type === 'inspect'){
       		borderColor = 'borderGreen';
       		barColor = 'proGreen';

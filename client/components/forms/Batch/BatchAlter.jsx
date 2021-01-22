@@ -7,14 +7,15 @@ import ModelMedium from '/client/components/smallUi/ModelMedium.jsx';
 import PrioritySquareData from '/client/components/smallUi/StatusBlocks/PrioritySquare.jsx';
 
 
-export const AlterFulfill = ({ batchId, isX, end, app, lock })=> (
+export const AlterFulfill = ({ batchId, isX, end, app, lock, noText, lgIcon })=> (
   <ModelMedium
     button={'Alter ' + Pref.end}
     title={`Alter ${Pref.batch} ${Pref.end}`}
     color='blueT'
     icon='fa-calendar-alt'
     lock={!Roles.userIsInRole(Meteor.userId(), ['edit', 'sales']) || lock}
-    noText={true}>
+    noText={noText}
+    lgIcon={lgIcon}>
     <AlterFulfillForm
       batchId={batchId}
       isX={isX}
@@ -50,7 +51,7 @@ const AlterFulfillForm = ({ batchId, isX, end, app, selfclose })=> {
   }
     
   return(
-    <form className='centre' onSubmit={(e)=>save(e)}>
+    <form className='centre vmargin' onSubmit={(e)=>save(e)}>
       <div className='centreRow'>
         {app.alterFulfillReasons && 
           app.alterFulfillReasons.map( (entry, index)=>{

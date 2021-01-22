@@ -136,7 +136,10 @@
   vertical-align: middle;
 }
 .waterfallTimeline dd:nth-child(odd) {
-  background-color: rgba(50,50,50,0.3);
+  background-color: var(--contrast);
+}
+.waterfallTimeline dd:nth-child(even) {
+  background-color: var(--asbestosfade);
 }
 .waterfallTimeline b {
   font-size: 1.75em;

@@ -17,8 +17,6 @@ const ItemPanelX = ({
   listTitle, flowData
 })=> {
   
-  const a = app;
-  
   const srs = seriesData;
   const i = itemData;
   const b = batchData;
@@ -89,7 +87,7 @@ const ItemPanelX = ({
           shortfalls={sh}
           done={i.completed}
           user={user}
-          app={a} />
+          app={app} />
             
         <br />
       </div>

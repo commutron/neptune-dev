@@ -27,6 +27,7 @@ import ItemsListX from './lists/ItemsListX';
 // import WidgetsList from './lists/WidgetsList.jsx';
 
 import ProgressCounter from '/client/utility/ProgressCounter.js';
+import ProgressCounterX from '/client/utility/ProgressCounterX';
 import NonConOptionMerge from '/client/utility/NonConOptionMerge.js';
 
 
@@ -80,7 +81,7 @@ const DataViewOps = ({
   function widgetVariants(wId) {
     return allVariant.filter(x => x.widgetId === wId);
   }
-  
+
   function getFlowData(batchData, widgetData, appData) {
     let riverTitle = 'not found';
     let riverFlow = [];
@@ -123,6 +124,44 @@ const DataViewOps = ({
     return {
       riverTitle, riverFlow, 
       riverAltTitle, riverFlowAlt, 
+      ncTypesComboFlat, progCounts
+    };
+  }
+  
+  function getFlowDataX(batchData, seriesData, widgetData, appData) {
+    let riverTitle = 'not found';
+    let riverFlow = [];
+    
+    let ncListKeys = [];
+    let ncTypesComboFlat = [];
+    let progCounts = false;
+    
+    if( widgetData && batchData ) {
+      
+      const getRiverFirst = (w, bx)=> {
+        return new Promise(function(resolve) {
+          const river = w.flows.find( x => x.flowKey === bx.river);
+          if(river) {
+            riverTitle = river.title;
+            riverFlow = river.flow;
+            river.type === 'plus' && ncListKeys.push(river.ncLists);
+          }
+          resolve('Success');
+        });
+      };
+      
+      const generateSecond = (bx, srs, app)=> {
+        progCounts = ProgressCounterX(riverFlow, bx, srs, app);
+        
+        ncTypesComboFlat = NonConOptionMerge(ncListKeys, app, user, true);
+      };
+
+      getRiverFirst(widgetData, batchData)
+        .then(generateSecond(batchData, seriesData, appData));
+        
+    }
+    return {
+      riverTitle, riverFlow,
       ncTypesComboFlat, progCounts
     };
   }
@@ -399,7 +438,7 @@ const DataViewOps = ({
       let variant = linkedVariantKey(hotXSeries.versionKey);
       let group = linkedGroup(hotXSeries.groupId);
                      
-      let flowData = false;// getFlowData(hotBatch, widget, app);
+      let flowData = getFlowDataX(hotXBatch, hotXSeries, widget, app);
       if(item && widget && variant && group) {
         return (
           <TraverseWrap
@@ -508,7 +547,7 @@ const DataViewOps = ({
       let allVariants = widgetVariants(hotXBatch.widgetId);
       let group = linkedGroup(hotXBatch.groupId);
       
-      let flowData = false; //getFlowData(hotBatch, widget, app);
+      let flowData = getFlowDataX(hotXBatch, hotXSeries, widget, app);
       
       const isNigh = Roles.userIsInRole(Meteor.userId(), 'nightly');
       return (
@@ -531,7 +570,8 @@ const DataViewOps = ({
             seriesData={hotXSeries}
             widgetData={widget}
             variantData={variant}
-            groupData={group} 
+            groupData={group}
+            flowData={flowData}
             app={app}
             user={user}
             isDebug={isDebug}

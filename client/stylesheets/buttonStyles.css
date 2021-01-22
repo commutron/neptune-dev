@@ -27,7 +27,9 @@
 
 .closeAction {
   font-weight: 800;
-	padding: 0 10px;
+	min-width: 3vmax;
+  min-height: 3vmax;
+  padding: 0 10px;
 	text-transform: uppercase;
 	overflow: hidden;
 }
@@ -186,7 +188,7 @@
 }
 
 .textLinkButton, .inlineLink,
-.leapText, .leapBar, .leapRow {
+.leapText, .leapBar {
   font-size: 1rem;
 }
 
@@ -222,24 +224,20 @@
   border-bottom-color: var(--peterriver);
 }
 
-.leapBar, .leapRow {
+.leapBar, .leapLine {
   width: 100%;
-  min-height: 4vh;
-  font-size: calc(0.6rem + 0.4vw);
-  font-weight: 400;
-	padding: 12px 6px;
-	padding: calc(0.5em + 0.5vw) calc(0.5em + 0.5vw);
+  border-top: 1px inset transparent;
   border-left-style: solid;
   border-left-color: white;
   cursor: pointer;
 }
-
 .leapBar {
-	border-top: 1px inset transparent;
-	border-bottom-width: 1px;
-  border-bottom-style: outset;
-  border-bottom-color: var(--silverfade);
-  border-left-width: 5px;
+  min-height: 4vh;
+  font-size: calc(0.6rem + 0.4vw);
+  font-weight: 400;
+	padding: calc(0.5em + 0.5vw) calc(0.5em + 0.5vw);
+	border-bottom: 1px outset var(--silverfade);
+	border-left-width: 0.5vmax;
   background-color: transparent;
 	color: var(--clouds);
   word-break: keep-all;
@@ -251,26 +249,21 @@
 }
   
 .leapLine {
-  width: 100%;
-  padding: 2vmin;
   display: grid;
   grid-template-rows: min-content;
   grid-template-columns: minmax(1ch, 0.5fr) repeat( auto-fit, minmax(0px, 1fr) );
 	grid-auto-flow: column;
 	grid-gap: 2vmin;
 	align-items: center;
-	border-top: 1px inset transparent;
+	padding: 2vmin;
 	border-bottom: 1px outset grey;
-	border-left-width: 1vmin;
-	border-left-style: solid;
-  border-left-color: white;
+	border-left-width: 1vmax;
   background-color: white;
   color: var(--black);
   overflow: hidden;
   word-break: break-all;
   word-wrap: break-word;
   box-shadow: var(--dropShadow000);
-  cursor: pointer;
 }
 .leapLine > span:first-child {
  font-weight: 600;

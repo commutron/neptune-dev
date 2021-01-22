@@ -9,7 +9,7 @@ import AlterBlock from './AlterBlock.jsx';
 import QuoteBlock from './QuoteBlock.jsx';
 import ReleaseBlock from './ReleaseBlock.jsx';
 import CompleteBlock from './CompleteBlock.jsx';
-// import { HistoryBlock } from '/client/components/bigUi/ItemFeed/ItemFeed.jsx';
+import { HistoryBlock } from '/client/components/bigUi/ItemFeed/ItemFeed.jsx';
 
 const EventsTimeline = ({ 
   id, batchData, 
@@ -20,32 +20,31 @@ const EventsTimeline = ({
   const [ incList, incListSet ] = useState( [] );
   
   const [ incRelease, releaseSet ] = useState( true );
-  // const [ incVerify, verifySet ] = useState( true );
+  const [ incVerify, verifySet ] = useState( true );
   // const [ incEvent, eventSet ] = useState( true );
   const [ incAlter, alterSet ] = useState( true );
   const [ incQuote, quoteSet ] = useState( true );
   
   useEffect( ()=>{
     const rL = incRelease ? releaseList || [] : [];
-    // const vL = incVerify ? verifyList || [] : [];
+    const vL = incVerify ? verifyList || [] : [];
     // const eL = incEvent ? eventList || [] : [];
     const aL = incAlter ? alterList || [] : [];
     const qL = incQuote ? quoteList || [] : [];
     const fn = batchData.completed ? 
                 [{ complete: true, time: batchData.completedAt }] : [];
     
-    // const concatPings = [...rL, ...vL, ...eL, ...aL, ...qL, ...fn];
-    const concatPings = [...rL, ...aL, ...qL, ...fn];
+    const concatPings = [...rL, ...vL, ...aL, ...qL, ...fn]; // [...eL,];
     
     incListSet(concatPings);
     
   }, [
     releaseList, 
-    //verifyList, eventList, 
+    verifyList, //eventList, 
     alterList,
     quoteList,
     incRelease, 
-    // incVerify, incEvent, 
+    incVerify, // incEvent, 
     incAlter,
     incQuote
   ]);
@@ -70,7 +69,7 @@ const EventsTimeline = ({
               defaultChecked={incRelease} />
             <label htmlFor='inputRel'>Green-Lights</label>
           </span>
-          {/*<span title={`${Pref.trackFirst} verifications`}>
+          <span title={`${Pref.trackFirst} verifications`}>
             <input
               type='checkbox'
               id='inputVer'
@@ -78,6 +77,7 @@ const EventsTimeline = ({
               defaultChecked={incVerify} />
             <label htmlFor='inputVer'>{Pref.trackFirst}s</label>
           </span>
+          {/*
           <span title='general and benchmark events'>
             <input
               type='checkbox'
@@ -110,7 +110,7 @@ const EventsTimeline = ({
           datetime={batchData.createdAt} />
         
         {sortedList.map( (dt, ix)=>{
-          /*if(dt.key) {
+          if(dt.key) {
             return( 
               <HistoryBlock
                 key={dt.time.toISOString()+ix}
@@ -121,7 +121,7 @@ const EventsTimeline = ({
                 done={doneBatch}
                 showHeader={true} /> 
             );
-          }else */if( typeof dt.changeKey === 'string' ) {
+          }else if( typeof dt.changeKey === 'string' ) {
             return( 
               <AlterBlock
                 key={dt.changeDate.toISOString()+ix}
