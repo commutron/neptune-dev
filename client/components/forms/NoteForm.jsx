@@ -104,8 +104,8 @@ const NoteForm = ({ action, id, versionKey, content, selfclose })=> {
       <p>
         <textarea
           id='mess'
-          cols='30'
-          rows='6'
+          cols='40'
+          rows='15'
           placeholder='comments, alerts, messages'
           defaultValue={now}
           autoFocus={true}></textarea>

@@ -17,7 +17,7 @@ const NoteLine = ({ action, id, versionKey, entry, plain })=> {
             id={id}
             versionKey={versionKey}
             content={dt.content}
-            small={true} />;
+            small={false} />;
   
   if(plain && !dt.content) {
     return (

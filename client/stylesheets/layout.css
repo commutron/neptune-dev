@@ -700,7 +700,7 @@ n-sm-model-content {
 .autoFlex > div {
   width: fit-content;
   padding: 2vmin;
-  margin: 3vmin;
+  margin: 2vmin;
   box-shadow: var(--dropShadow00);
 }
 

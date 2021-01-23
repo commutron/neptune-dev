@@ -23,7 +23,7 @@ import StepsProgressX from '/client/components/bigUi/StepsProgress/StepsProgress
 
 const InfoTab = ({
   app, b, user, isDebug,
-  done, progCounts, riverTitle
+  done, progCounts, riverTitle, brancheS
 }) =>	{
 
   const nonWorkDays = app.nonWorkDays;
@@ -161,6 +161,7 @@ const InfoTab = ({
           quantity={b.quantity}
           progCounts={progCounts}
           riverTitle={riverTitle}
+          brancheS={brancheS}
           truncate={false} />
       </div>
 

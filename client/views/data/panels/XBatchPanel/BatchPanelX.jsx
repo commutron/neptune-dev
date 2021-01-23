@@ -1,7 +1,6 @@
 import React from 'react';
 // import moment from 'moment';
 // import Pref from '/client/global/pref.js';
-//import ProgressCounter from '/client/utility/ProgressCounter.js';
 import CreateTag from '/client/components/tinyUi/CreateTag.jsx';
 //import UserName from '/client/components/tinyUi/UserName.jsx';
 import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
@@ -14,17 +13,6 @@ import InfoTab from './InfoTab';
 import TimeTab from './TimeTab';
 import ProblemTab from './ProblemTab';
 
-//import RiverSatus from '../../../components/smallUi/RiverStatus.jsx';
-//import FirstsOverview from '/client/components/bigUi/FirstsOverview.jsx';
-//import FirstsTimeline from '/client/components/bigUi/FirstsTimeline.jsx';
-//import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
-//import ProgBurndown from '/client/components/charts/ProgBurndown.jsx';
-//import NonConOverview from '../../../components/charts/NonConOverview.jsx';
-//import NonConRate from '../../../components/charts/NonConRate.jsx';
-//import { HasNonCon } from '../../../components/bigUi/NonConMiniTops.jsx';
-//import { NonConPer } from '../../../components/bigUi/NonConMiniTops.jsx';
-//import { MostNonCon } from '../../../components/bigUi/NonConMiniTops.jsx';
-//import NonConPie from '../../../components/charts/NonConPie.jsx';
 //import RMATable from '../../../components/tables/RMATable.jsx';
 
 
@@ -36,10 +24,8 @@ const BatchPanelX = ({
   const b = batchData;
   // const w = widgetData;
   // const g = groupData;
-  const branchesSort = app.branches.sort((b1, b2)=> 
+  const brancheS = app.branches.sort((b1, b2)=> 
           b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
-  
-  console.log(flowData);
   
   // const v = variantData;
   
@@ -79,6 +65,7 @@ const BatchPanelX = ({
           riverTitle={flowData.riverTitle}
           progCounts={progCounts}
           done={done}
+          brancheS={brancheS}
           isDebug={isDebug}
         />
       
@@ -116,7 +103,7 @@ const BatchPanelX = ({
           seriesData={seriesData}
           riverFlow={flowData.riverFlow}
           ncTypesCombo={flowData.ncTypesComboFlat}
-          brancheS={branchesSort}
+          brancheS={brancheS}
           app={app}
           isDebug={isDebug} />
           
@@ -130,7 +117,7 @@ const BatchPanelX = ({
             alterList={b.altered || []}
             quoteList={b.quoteTimeBudget || []}
             doneBatch={done}
-            brancheS={branchesSort} />
+            brancheS={brancheS} />
         </div>
         
       </Tabs>
