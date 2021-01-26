@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 
-import LeapButton from '../../../components/tinyUi/LeapButton.jsx';
-import FilterActive from '../../../components/bigUi/FilterActive.jsx';
+import LeapButton from '/client/components/tinyUi/LeapButton.jsx';
+import FilterActive from '/client/components/bigUi/FilterActive.jsx';
 
 const WidgetsList = ({ active, widgetData, groupAlias })=> {
   
@@ -15,11 +15,9 @@ const WidgetsList = ({ active, widgetData, groupAlias })=> {
   }
   
   useEffect( ()=> {
-    const w = widgetData.sort((w1, w2)=> {
-                if (w1.widget < w2.widget) { return -1 }
-                if (w1.widget > w2.widget) { return 1 }
-                return 0;
-              });
+    const w = widgetData.sort((w1, w2)=>
+                  w1.widget < w2.widget ? -1 : w1.widget > w2.widget ? 1 : 0 );
+    
     const f = filterState;
   
     let basicFilter = 
@@ -36,7 +34,7 @@ const WidgetsList = ({ active, widgetData, groupAlias })=> {
   
   
   return(
-    <div className='section sidebar' key={1}>
+    <div key={1}>
     
       <FilterActive
         title={groupAlias.alias}
@@ -47,7 +45,7 @@ const WidgetsList = ({ active, widgetData, groupAlias })=> {
         
       {widgetData.length < 1 ? <p>no {Pref.widget}s created</p> : null}
         {showListState.map( (entry, index)=> {
-        let ac = active.includes(entry._id) ? 'leapBar activeMark' : 'leapBar';
+        let ac = active.includes(entry._id) ? 'leapBar dark activeMark' : 'leapBar dark';
           return (
             <LeapButton
               key={index}

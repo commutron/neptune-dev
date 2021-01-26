@@ -54,16 +54,14 @@ const GroupsList = ({ groupData, widgetData, batchData })=> {
       tx => tx.group.toLowerCase().includes(textString) === true ||
             tx.alias.toLowerCase().includes(textString) === true);
             
-    let sortList = showList.sort((g1, g2)=> {
-                    if (g1.alias < g2.alias) { return -1 }
-                    if (g1.alias > g2.alias) { return 1 }
-                    return 0;
-                  });
+    let sortList = showList.sort((g1, g2)=>
+                      g1.alias < g2.alias ? -1 : g1.alias > g2.alias ? 1 : 0 );
+                      
     showListSet(sortList);
   }, [ groupData, filterState, textString ]);
 
   return(
-    <div className='section sidebar' key={1}>
+    <div key={1}>
     
       <FilterActive
         title={groupData.alias}
@@ -72,8 +70,8 @@ const GroupsList = ({ groupData, widgetData, batchData })=> {
         onClick={e => setFilter(e)}
         onTxtChange={e => setTextFilter(e)} />
         
-      { showListState.map( (entry)=> {
-        let ac = activeListState.includes(entry._id) ? 'leapBar activeMark' : 'leapBar';
+      {showListState.map( (entry)=> {
+        let ac = activeListState.includes(entry._id) ? 'leapBar dark activeMark' : 'leapBar dark';
         return (
           <JumpButton
             key={entry._id}

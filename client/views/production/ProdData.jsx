@@ -15,7 +15,7 @@ const ProdData = ({
   orb, anchor, user, org, users, app, // self 
   allGroup, allWidget, allVariant, // customer data
   allBatch, allxBatch,
-  hotBatch, hotxBatch // working data
+  hotBatch, hotxBatch, hotxSeries // working data
 })=> {
 
   const prevUser = usePrevious(user);
@@ -47,6 +47,7 @@ const ProdData = ({
       allxBatch={allxBatch}
       hotBatch={hotBatch}
       hotxBatch={hotxBatch}
+      hotxSeries={hotxSeries}
     />
   );
 };
@@ -63,15 +64,15 @@ export default withTracker( () => {
   
   let hotBatch = false;
   let hotxBatch = false;
+  let hotxSeries = false;
   
   let keyMatch = false;
   let subBatch = false;
   // const regex810 = RegExp(/^(\d{8,10})$/);
-  // const regexNS = RegExp(/^(\d{6}\-\d{7})$/);
     
   if( coldSub && !subBatch ) {
     
-    if( !isNaN(orb) && orb.length === 5 ) {
+    if( Pref.regex5.test(orb) ) {
       
       const oneBatch = BatchDB.find({ batch: orb },{fields:{'batch':1}},{limit:1}).count();
       if(oneBatch) {
@@ -88,6 +89,8 @@ export default withTracker( () => {
       }
       hotBatch = BatchDB.findOne({ batch: orb });
       hotxBatch = XBatchDB.findOne({ batch: orb });
+      hotxSeries = XSeriesDB.findOne({ batch: orb });
+
       
     }else if( Pref.regexSN.test(orb) ) {
   		const itemsBatch = BatchDB.findOne( { 'items.serial': orb } );
@@ -96,8 +99,17 @@ export default withTracker( () => {
         keyMatch = true;
         subBatch = itemsBatch.batch;
       }else{
-        hotBatch = itemsBatch;
-        subBatch = orb;
+        const itemsxSeries = XSeriesDB.findOne( { 'items.serial': orb } );
+        if( itemsxSeries ) {
+          hotxSeries = itemsxSeries;
+          hotxBatch = XBatchDB.findOne( { batch: itemsxSeries.batch } );
+          keyMatch = true;
+          subBatch = itemsxSeries.batch;
+        }else{
+          // hotBatch = itemsBatch;
+          // hotxBatch = itemsxBatch;
+          subBatch = orb;
+        }
       }
     }else{
       // subBatch = false;
@@ -135,6 +147,7 @@ export default withTracker( () => {
       allxBatch: XBatchDB.find( {}, { sort: { batch: -1 } } ).fetch(),
       hotBatch: hotBatch,
       hotxBatch: hotxBatch,
+      hotxSeries: hotxSeries
     };
   }
 })(ProdData);

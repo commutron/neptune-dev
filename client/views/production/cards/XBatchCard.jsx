@@ -2,13 +2,9 @@ import React, { useState, useEffect, Fragment } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
-import TideDam from '/client/components/river/waterfall/TideDam.jsx';
-
 import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 
 //import JumpText from '../../../components/tinyUi/JumpText.jsx';
-import WaterfallSelect from '/client/components/river/waterfall/WaterfallSelect.jsx';
-import ReleaseAction from '/client/components/bigUi/ReleasesModule.jsx';
 //import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
 //import NonConMiniSatus from '/client/components/charts/NonConMiniStatus.jsx';
 //import NonConMiniTops from '/client/components/bigUi/NonConMiniTops.jsx';
@@ -17,7 +13,9 @@ import NoteLine from '/client/components/smallUi/NoteLine.jsx';
 import BlockList from '/client/components/bigUi/BlockList.jsx';
 
 const BatchCardX = ({ 
-  itemSerial, batchData, widgetData, groupData, 
+  itemSerial, batchData, bOpen, 
+  
+  widgetData, groupData, 
   user, app, 
   
   ncTypesCombo, tideKey,
@@ -25,23 +23,22 @@ const BatchCardX = ({
   tideFloodGate,
   expand, handleExpand,
   
-  flow, progCounts
+  flow, flowCounts, fallCounts
 })=> {
     
-  const [ brancheState, brancheSortSet ] = useState([]);
-  const [ plainBrancheS, plainBrancheSet ] = useState([]);
+  // const [ brancheState, brancheSortSet ] = useState([]);
 
   // const [ flowData, flowDataSet ] = useState(false);
 
-  useEffect( ()=>{
-    const branches = app.branches.filter( b => b.open === true );
-    const branchesSort = branches.sort((b1, b2)=> {
-      return b1.position < b2.position ? 1 : 
-             b1.position > b2.position ? -1 : 0 });
-     brancheSortSet(branchesSort);
-     const pBS = Array.from(brancheState, b => b.branch);
-     plainBrancheSet(pBS);
-  }, [app]);
+  // useEffect( ()=>{
+  //   const branches = app.branches.filter( b => b.open === true );
+  //   const branchesSort = branches.sort((b1, b2)=> {
+  //     return b1.position < b2.position ? 1 : 
+  //           b1.position > b2.position ? -1 : 0 });
+  //   brancheSortSet(branchesSort);
+  //   const pBS = Array.from(brancheState, b => b.branch);
+  //   plainBrancheSet(pBS);
+  // }, [app]);
   
   const b = batchData;
   //const iS = itemSerial;
@@ -49,112 +46,44 @@ const BatchCardX = ({
   //const g = groupData;
   // const u = user;
   const a = app;
-  const ancOptionS = app.ancillaryOption.sort();
   
   const bComplete = b.completed === true;
 
-  const bWrapUp = !bComplete ? false :
-                  moment().diff(b.completedAt, 'hours') <= Pref.timeAfterGrace;
-
-  const bOpen = batchData.live || bWrapUp;
-    //let iready = b.items.length === 0;
-
-    //iready ? warn++ : null;
-    
-    let released = b.releases.find( x => x.type === 'floorRelease');
-    
-    const insertTideWall = 
-            <TideDam
-              bID={batchData._id}
-              bComplete={bComplete}
-              bOpen={bOpen}
-              
-              ancOptionS={ancOptionS}
-              plainBrancheS={plainBrancheS}
-              tideKey={tideKey}
-              tideFloodGate={tideFloodGate} />;
-    
-    const insertAxion =
-            <div className='proPrimeSingle'>
-              {!released ?
-                <ReleaseAction 
-                  id={b._id} 
-                  rType='floorRelease'
-                  actionText='release'
-                  //contextText='to the floor'
-                  isX={true} />
-              :
-                <WaterfallSelect batchData={b} app={a} />
-              }
-            </div>;
-    
-    const insertBatchInfo = 
-            <Tabs
-              tabs={[
-                <i className='fas fa-info-circle fa-fw' data-fa-transform='down-2' title='Info'></i>, 
-                <i className='fas fa-tasks fa-fw' data-fa-transform='down-2' title='Progress'></i>,
-              ]}
-              names={false}
-              wide={true}
-              stick={false}
-              hold={true}
-              sessionTab='batchExPanelTabs'>
-          
-              <div className='space cap'>
-                <TagsModule
-                  action='xBatch'
-                  id={b._id}
-                  tags={b.tags}
-                  tagOps={a.tagOption} />
-                <br />
-                <NoteLine 
-                  action='xBatch'
-                  id={b._id}
-                  entry={b.notes} />
-                <BlockList id={b._id} data={b.blocks} xbatch={true} lock={bComplete} expand={expand} />
-              </div>
-        
-              <div className='space cap'>
-              {/*<StepsProgress
-                  mini={true}
-                  expand={expand}
-                  progCounts={progCounts} />*/}
-              </div>
-              
-            </Tabs>;
 
   return(
-    <Fragment>
+      <Tabs
+        tabs={[
+          <i className='fas fa-info-circle fa-fw' data-fa-transform='down-2' title='Info'></i>, 
+          <i className='fas fa-tasks fa-fw' data-fa-transform='down-2' title='Progress'></i>,
+        ]}
+        names={false}
+        wide={true}
+        stick={false}
+        hold={true}
+        sessionTab='batchExPanelTabs'>
     
-      {!tideFloodGate ? 
-        
-        insertTideWall :
-        
-        insertAxion
-      }
-      
-      
-      {( expand ) && ( !tideFloodGate && !bComplete ) ?
-  	    
-  	    <div className='proPrimeSingle'>
-  	      {insertBatchInfo}
-  	    </div>
-  	    
-  	    :
-  	    
-    	  expand ?
-  	    
-  	      <div className='proPrimeSingle'>
-  	        {insertTideWall}
-  	        {insertBatchInfo}
-  	      </div>
-  	      
-  	      :
-  	       
-  	      null
-  	}
+        <div className='space cap'>
+          <TagsModule
+            action='xBatch'
+            id={b._id}
+            tags={b.tags}
+            tagOps={a.tagOption} />
+          <br />
+          <NoteLine 
+            action='xBatch'
+            id={b._id}
+            entry={b.notes} />
+          <BlockList id={b._id} data={b.blocks} xbatch={true} lock={bComplete} expand={expand} />
+        </div>
   
-  	</Fragment>
+        <div className='space cap'>
+        {/*<StepsProgress
+            mini={true}
+            expand={expand}
+            flowCounts={flowCounts} />*/}
+        </div>
+        
+      </Tabs>
   );
 };
 

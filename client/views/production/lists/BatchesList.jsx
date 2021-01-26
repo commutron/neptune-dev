@@ -17,13 +17,11 @@ const BatchesList = ({ batchData, widgetData })=> {
     textStringSet(rule.toLowerCase());
   }
   
-  // what the what
   useEffect( ()=> {
     let vFetch = [];
     for(let b of batchData) {
       Meteor.call('quickVariant', b.versionKey, (error, reply)=>{
-        if(error)
-          console.log(error);
+        error && console.log(error);
         if(reply) {
           vFetch.push({vKey: b.versionKey, vName: reply});
         }else{null}
@@ -45,16 +43,14 @@ const BatchesList = ({ batchData, widgetData })=> {
     let showList = basicFilter.filter( 
                     tx => tx.batch.toLowerCase().includes(textString) === true );
     
-    let sortList = showList.sort((b1, b2)=> {
-                    if (b1.batch < b2.batch) { return 1 }
-                    if (b1.batch > b2.batch) { return -1 }
-                    return 0;
-                  });
+    let sortList = showList.sort((b1, b2)=>
+                      b1.batch < b2.batch ? 1 : b1.batch > b2.batch ? -1 : 0 );
+    
     showListSet(sortList);
   }, [ batchData, filter, textString ]);
   
   return(
-    <div className='section sidebar' key={1}>
+    <div key={1}>
     
       <FilterActive
         title={batchData.batch}
@@ -65,22 +61,21 @@ const BatchesList = ({ batchData, widgetData })=> {
         
       {showListState.map( (entry, index)=> {
         const style = entry.live === true ? 
-                      'leapBar numFont activeMark' : 
-                      'leapBar numFont gMark';
+                      'leapBar dark numFont activeMark' : 
+                      'leapBar dark numFont gMark';
         const subW = widgetData.find( x => x._id === entry.widgetId);
         const subV = variantNames.find( x => x.vKey === entry.versionKey);
         const subVname = !subV ? false : subV.vName;
-          return (
-            <JumpButton
-              key={index}
-              title={entry.batch} 
-              sub={<i><i className='up'>{subW.widget}</i> v.{subVname}</i>}
-              sty={style}
-            />
+        return(
+          <JumpButton
+            key={index}
+            title={entry.batch} 
+            sub={<i><i className='up'>{subW.widget}</i> v.{subVname}</i>}
+            sty={style}
+          />
       )})}
 		</div>
   );
 };
-
 
 export default BatchesList;

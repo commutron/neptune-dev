@@ -7,7 +7,9 @@ import WikiOps from '../wiki/WikiOps.jsx';
 import SearchHelp from './SearchHelp.jsx';
 
 import DoProCard from './cards/DoProCard.jsx';
-import XBatchCard from './cards/XBatchCard.jsx';
+
+import XDoProCard from './cards/XDoProCard.jsx';
+// import XBatchCard from './cards/XBatchCard.jsx';
 
 import BatchesList from './lists/BatchesList.jsx';
 import GroupsList from './lists/GroupsList.jsx';
@@ -16,7 +18,7 @@ import WidgetsList from './lists/WidgetsList.jsx';
 import NPICard from './cards/NPICard.jsx';
 
 const ProductionFindOps = ({ 
-  hotBatch, hotxBatch, 
+  hotBatch, hotxBatch, hotxSeries,
   allBatch, allxBatch,
   allGroup, allWidget, allVariant,
   user, activeUsers, app,
@@ -85,7 +87,7 @@ const ProductionFindOps = ({
     );
   }
   
-  if(orb === Pref.batch || orb === Pref.batch + 's' || orb === Pref.btch) {
+  if(orb === Pref.batch || orb === Pref.batch + 's') {
     Session.set('nowBatch', false);
     return (
       <ProWrap app={app}>
@@ -97,7 +99,7 @@ const ProductionFindOps = ({
     );
   }
   
-  if(orb === Pref.group || orb === Pref.group + 's' || orb === Pref.grp) {
+  if(orb === Pref.group || orb === Pref.group + 's') {
     Session.set('nowBatch', false);
     return (
       <ProWrap app={app}>
@@ -110,7 +112,7 @@ const ProductionFindOps = ({
     );
   }
   
-  if(orb === Pref.docs || orb === 'docs' || orb === 'd') {
+  if(orb === Pref.docs || orb === 'docs') {
     Session.set('now', Pref.docs);
     Session.set('nowBatch', false);
     return (
@@ -144,7 +146,7 @@ const ProductionFindOps = ({
   }
 
 // Batch
-  if(!isNaN(orb) && orb.length === 5) {
+  if( Pref.regex5.test(orb) ) {
     if(hotBatch) {
       let widget = linkedWidget(hotBatch.widgetId);
       let variant= variantDataByKey(hotBatch.versionKey);
@@ -156,7 +158,6 @@ const ProductionFindOps = ({
           user={user}
           app={app}
           action='batchBuild'
-          actionBar={true}
         >
           <DoProCard
             batchData={hotBatch}
@@ -177,15 +178,15 @@ const ProductionFindOps = ({
       return (
 		    <ProWrap
 		      batchData={hotxBatch}
+		      seriesData={hotxSeries}
 		      widgetData={widget}
           user={user}
           app={app}
           action='xBatchBuild'
-          actionBar={true}
-          // tideLockOut={false}
         >
-          <XBatchCard
+          <XDoProCard
             batchData={hotxBatch}
+            seriesData={hotxSeries}
             widgetData={widget}
             groupData={group}
             user={user}
@@ -201,7 +202,6 @@ const ProductionFindOps = ({
   
 // Item
 	if( Pref.regexSN.test(orb) ) {
-	  //let lookup = batchByItem();
     if(hotBatch) {
       let item = itemData(hotBatch.items, orb);
       let widget = linkedWidget(hotBatch.widgetId);
@@ -216,10 +216,41 @@ const ProductionFindOps = ({
           user={user}
           users={activeUsers}
           app={app}
-          actionBar={true}
         >
           <DoProCard
             batchData={hotBatch}
+            itemData={item}
+            widgetData={widget}
+            groupData={group}
+            user={user}
+            users={activeUsers}
+            app={app} />
+          <WikiOps 
+            wi={variant.instruct} 
+            root={app.instruct}
+            anchor={anchor} />
+        </ProWrap>
+      );
+    }else if(hotxSeries) {
+      let item = itemData(hotxSeries.items, orb);
+      let widget = linkedWidget(hotxSeries.widgetId);
+      let variant= variantDataByKey(hotxSeries.versionKey);
+      let group = linkedGroup(hotxSeries.groupId);
+      return (
+        <ProWrap
+          batchData={hotxBatch}
+          seriesData={hotxSeries}
+          itemData={item}
+          itemSerial={item.serial}
+          widgetData={widget}
+          user={user}
+          users={activeUsers}
+          app={app}
+          action='xItemBuild'
+        >
+          <XDoProCard
+            batchData={hotxBatch}
+            seriesData={hotxSeries}
             itemData={item}
             widgetData={widget}
             groupData={group}

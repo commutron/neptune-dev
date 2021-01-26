@@ -23,7 +23,7 @@ import StepsProgressX from '/client/components/bigUi/StepsProgress/StepsProgress
 
 const InfoTab = ({
   app, b, user, isDebug,
-  done, progCounts, riverTitle, brancheS
+  done, flowCounts, fallCounts, riverTitle, brancheS
 }) =>	{
 
   const nonWorkDays = app.nonWorkDays;
@@ -99,11 +99,11 @@ const InfoTab = ({
         
         <p>Total Batch Quantity: <b className='numfont'>{b.quantity}</b></p>
         
-        <p>Serialized Items: <b className='numfont'>{progCounts.liveItems}</b></p>
+        <p>Serialized Items: <b className='numfont'>{flowCounts.liveItems}</b></p>
         
-        <p>Serialized Units: <b className='numfont'>{progCounts.liveUnits}</b></p>
+        <p>Serialized Units: <b className='numfont'>{flowCounts.liveUnits}</b></p>
         
-        <p>Scrapped Items: <b className='numfont redT'>{progCounts.scrapCount || null}</b></p>
+        <p>Scrapped Items: <b className='numfont redT'>{flowCounts.scrapCount || null}</b></p>
         
         <p>Time Budget: <b>{qtHours} hours</b></p>
         
@@ -159,7 +159,8 @@ const InfoTab = ({
       <div>
         <StepsProgressX
           quantity={b.quantity}
-          progCounts={progCounts}
+          flowCounts={flowCounts}
+          fallCounts={fallCounts}
           riverTitle={riverTitle}
           brancheS={brancheS}
           truncate={false} />

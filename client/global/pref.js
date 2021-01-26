@@ -56,6 +56,9 @@ class Pref {
     this.user = 'employees';
     // terminology
     this.admin = 'org admin';
+    
+    this.regex5 = RegExp(/^(\d{5})$/);
+    
 	  this.batch = 'work order';//order
 	  this.Batch = 'Work Order';//Order
 	  this.batches = 'work orders';

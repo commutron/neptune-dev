@@ -17,23 +17,15 @@ import ProblemTab from './ProblemTab';
 
 
 const BatchPanelX = ({ 
-  batchData, seriesData, widgetData, variantData, groupData, flowData,
+  batchData, seriesData, widgetData, variantData, groupData, 
+  flowData, fallData,
   user, app, isDebug, isNigh
 })=> {
   
   const b = batchData;
-  // const w = widgetData;
-  // const g = groupData;
+
   const brancheS = app.branches.sort((b1, b2)=> 
           b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
-  
-  // const v = variantData;
-  
-  //const flow = w.flows.find( x => x.flowKey === b.river );
-  
-  //const riverTitle = flow ? flow.title : 'not found';
-  //const riverFlow = flow ? flow.flow : [];
-  const progCounts = flowData.progCounts;
   
   const done = b.completed === true && b.live === false;
   const allDone = !seriesData ? true : seriesData.items.every( x => x.completed );
@@ -63,13 +55,13 @@ const BatchPanelX = ({
           user={user}
           b={batchData}
           riverTitle={flowData.riverTitle}
-          progCounts={progCounts}
+          flowCounts={flowData.flowCounts}
+          fallCounts={fallData}
           done={done}
           brancheS={brancheS}
           isDebug={isDebug}
         />
       
-        
         <div className='oneTwoThreeContainer space'>
           <div className='oneThirdContent min200'>
             
@@ -77,7 +69,7 @@ const BatchPanelX = ({
         
           <div className='twoThirdsContent'>
             <WaterfallTimeline
-              wfCounts={progCounts.wtrflProg}
+              wfCounts={fallData}
               waterfall={b.waterfall}
               quantity={b.quantity}
               app={app} />
@@ -112,7 +104,7 @@ const BatchPanelX = ({
             id={b._id}
             batchData={b}
             releaseList={b.releases || []}
-            verifyList={progCounts.firstsFlat}
+            verifyList={flowData.flowCounts.firstsFlat}
             eventList={b.events || []}
             alterList={b.altered || []}
             quoteList={b.quoteTimeBudget || []}

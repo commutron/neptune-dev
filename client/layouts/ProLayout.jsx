@@ -10,10 +10,11 @@ import ErrorCatch from './ErrorCatch.jsx';
 import TideControl from '/client/components/tide/TideControl/TideControl.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
 import FormBar from '/client/components/bigUi/ToolBar/FormBar.jsx';
+import XFormBar from '/client/components/bigUi/ToolBar/XFormBar.jsx';
 import NonConOptionMerge from '/client/utility/NonConOptionMerge.js';
 
 export const ProWrap = ({ 
-  itemSerial, itemData, batchData, 
+  itemSerial, itemData, batchData, seriesData,
   widgetData, groupAlias, 
   user, users, app,
   action, tideLockOut, standAlone,
@@ -29,25 +30,29 @@ export const ProWrap = ({
   useLayoutEffect( ()=> {
     !Session.get('riverExpand') ? null : expandSet( true );
     
-    const b = batchData;
-    const w = widgetData;
     let getNCListKeys = [];
     let getNCTypesCombo = [];
     
-    if( b && w ) {
-      const river = w.flows.find( x => x.flowKey === b.river);
-      const riverAlt = w.flows.find( x => x.flowKey === b.riverAlt );
+    if( batchData && widgetData && seriesData ) {
+      const river = widgetData.flows.find( x => x.flowKey === batchData.river );
       if(river) {
         river.type === 'plus' && getNCListKeys.push(river.ncLists);
       }
-      if(riverAlt) {
-        riverAlt.type === 'plus' && getNCListKeys.push(riverAlt.ncLists);
+      getNCTypesCombo = NonConOptionMerge(getNCListKeys, app, user);
+    }else if( batchData && widgetData ) {
+      const river = widgetData.flows.find( x => x.flowKey === batchData.river );
+      const rvAlt = widgetData.flows.find( x => x.flowKey === batchData.riverAlt );
+      if(river) {
+        river.type === 'plus' && getNCListKeys.push(river.ncLists);
+      }
+      if(rvAlt) {
+        rvAlt.type === 'plus' && getNCListKeys.push(rvAlt.ncLists);
       }
       getNCTypesCombo = NonConOptionMerge(getNCListKeys, app, user);
     }
     ncTypesComboSet(getNCTypesCombo);
     
-  }, [batchData, widgetData, app]);
+  }, [batchData, /*seriesData,*/ widgetData, app]);
   
   
   function handleVerify(value, direct) {
@@ -66,13 +71,12 @@ export const ProWrap = ({
     overflowY: 'hidden'
   };
   
-  const u = user;
   const gAlias = groupAlias;
   const bData = batchData;
   const iS = itemSerial;
   const append = bData && iS ? bData.batch : null;
   
-  const et = !u || !u.engaged ? false : u.engaged.tKey;
+  const et = !user || !user.engaged ? false : user.engaged.tKey;
   const tide = !bData || !bData.tide ? [] : bData.tide;
   const tideFloodGate = tide.find( 
     x => x.tKey === et && x.who === Meteor.userId() 
@@ -131,7 +135,6 @@ export const ProWrap = ({
           <div className='proPrime forceScrollStyle'>
             {React.cloneElement(children[0],
               { 
-                //tideLockOut: tideLockOut,
                 tideKey: et,
                 ncTypesCombo: ncTypesComboFlat,
                 
@@ -159,20 +162,38 @@ export const ProWrap = ({
             {children[1]}
           </div>
         
-          <FormBar
-            batchData={batchData}
-            itemData={itemData}
-            widgetData={widgetData}
+          {seriesData ?
+            <XFormBar
+              batchData={batchData}
+              seriesData={seriesData}
+              itemData={itemData}
+              widgetData={widgetData}
+              
+              tideFloodGate={tideFloodGate}
+              ncTypesCombo={ncTypesComboFlat}
+              action={action}
+              showVerifyState={showVerifyState}
+              handleVerify={(q, d)=>handleVerify(q, d)}
             
-            tideFloodGate={tideFloodGate}
-            ncTypesCombo={ncTypesComboFlat}
-            action={action}
-            showVerifyState={showVerifyState}
-            handleVerify={(q, d)=>handleVerify(q, d)}
-          
-            users={users}
-            user={user}
-            app={app} />
+              users={users}
+              user={user}
+              app={app} />
+          :
+            <FormBar
+              batchData={batchData}
+              itemData={itemData}
+              widgetData={widgetData}
+              
+              tideFloodGate={tideFloodGate}
+              ncTypesCombo={ncTypesComboFlat}
+              action={action}
+              showVerifyState={showVerifyState}
+              handleVerify={(q, d)=>handleVerify(q, d)}
+            
+              users={users}
+              user={user}
+              app={app} />
+          }
         </Fragment>
 
       </div>

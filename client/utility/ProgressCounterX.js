@@ -61,25 +61,7 @@ function flowLoop(river, items, firstsFlat) {
   return stepsData;
 }
 
-function fallLoop(waterfall, app) {
-  let countData = [];
-  const appCO = app.countOption;
-  for(let wf of waterfall) {
-    const wfType = wf.type || appCO.find( x => x.key === entry.wfKey ).type;
-    const wfCount = wf.counts.length === 0 ? 0 :
-                      Array.from(wf.counts, x => x.tick).reduce((x,y)=> x + y);
-    countData.push({
-      obj: 'count',
-      key: wf.wfKey,
-      step: wf.gate,
-      type: wfType,
-      bKey: wf.branchKey,
-      pos: wf.position || 0,
-      count: wfCount
-    });
-  }
-  return countData;
-}
+
 
 function unitTotalCount(items) {
   let totalUnits = 0;
@@ -105,7 +87,7 @@ function getFirsts(items) {
   return fFlat;
 }
     
-function ProgressCounterX(flow, batchData, seriesData, app) {
+function FlowCounter(flow, seriesData) {
   
   const allItems = seriesData ? seriesData.items : [];
   
@@ -117,12 +99,9 @@ function ProgressCounterX(flow, batchData, seriesData, app) {
   const firstsFlat = getFirsts(allLiveItems);
   
   const riverProg = flowLoop(flow, allLiveItems, firstsFlat);
-  
-  const wtrflProg = fallLoop(batchData.waterfall, app);
 
   return {
     riverProg: riverProg,
-    wtrflProg: wtrflProg,
     liveItems: allLiveItems.length,
     liveUnits: liveUnits,
     firstsFlat: firstsFlat,
@@ -130,7 +109,35 @@ function ProgressCounterX(flow, batchData, seriesData, app) {
   };
 }
 
-export default ProgressCounterX;
+export default FlowCounter;
+
+
+function fallLoop(waterfall, app) {
+  let countData = [];
+  const appCO = app.countOption;
+  for(let wf of waterfall) {
+    const wfType = wf.type || appCO.find( x => x.key === entry.wfKey ).type;
+    const wfCount = wf.counts.length === 0 ? 0 :
+                      Array.from(wf.counts, x => x.tick).reduce((x,y)=> x + y);
+    countData.push({
+      obj: 'count',
+      key: wf.wfKey,
+      step: wf.gate,
+      type: wfType,
+      bKey: wf.branchKey,
+      pos: wf.position || 0,
+      count: wfCount
+    });
+  }
+  return countData;
+}
+
+export function FallCounter(batchData, app) {
+  
+  const wtrflProg = fallLoop(batchData.waterfall, app);
+
+  return wtrflProg;
+}
 
 
 // Other Methods \\

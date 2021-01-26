@@ -7,14 +7,18 @@ import MiniStack from '/client/components/charts/MiniScales/MiniStack.jsx';
 import NumBox from '/client/components/tinyUi/NumBox.jsx';
 
 
-const StepsProgressX  = ({ quantity, progCounts, riverTitle, brancheS, truncate })=> {
+const StepsProgressX  = ({ 
+  quantity, flowCounts, fallCounts,
+  riverTitle, brancheS, truncate 
+})=> {
   
   const [ countCalc, countSet ] = useState('item');
 
-  const dt = progCounts;
+  const dt = flowCounts;
     
   const rvrDt = dt.riverProg;
-  const wflDt = dt.wtrflProg.sort((w1, w2)=> 
+  
+  const wflDt = fallCounts.sort((w1, w2)=> 
                               w1.pos < w2.pos ? -1 : w1.pos > w2.pos ? 1 : 0 );
   
   const totalI = dt.liveItems;
