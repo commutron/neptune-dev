@@ -134,7 +134,7 @@
   max-width: 15vmax;
   border-collapse: collapse;
 }
-.miniHistory .mockTableCell {
+.miniHistory n-mock-table-cell {
   padding: 5px;
   text-align: center;
 }

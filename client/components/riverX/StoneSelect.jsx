@@ -11,17 +11,19 @@ import Shortfalls from './Shortfalls.jsx';
 import CompleteRest from './CompleteRest.jsx';
 
 const StoneSelect = ({ 
-  id, 
+  bID, 
   bComplete,
   flow,
-  isAlt,
-  hasAlt,
+  // isAlt,
+  // hasAlt,
+  seriesId,
+  item,
   allItems,
   nonCons,
-  sh,
-  iCascade,
+  shortfalls,
+  // iCascade,
   scrapCheck,
-  item,
+  
   brancheS,
   users,
   flowCounts,
@@ -38,13 +40,11 @@ const StoneSelect = ({
   
   const [ riverFlowState, riverFlowStateSet ] = useState( true );
   
-  useEffect( ()=>{
-    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(`rvrfl:${riverFlowState}`);
-  }, [riverFlowState]);
+  // useEffect( ()=>{
+  //   Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(`rvrfl:${riverFlowState}`);
+  // }, [riverFlowState]);
   
   const serial = item.serial;
-  const history = item.history;
-  const finishedAt = item.finishedAt;
   
   useEffect( ()=> {
     Session.set('ncWhere', null);
@@ -56,14 +56,11 @@ const StoneSelect = ({
 	
   const nc = nonCons.filter( 
               x => x.serial === serial && !x.trash && x.inspect === false )
-                .sort((n1, n2)=> {
-                  if (n1.ref < n2.ref) { return -1 }
-                  if (n1.ref > n2.ref) { return 1 }
-                  return 0;
-                });
-  const ncOutstanding = nc.filter( x => x.skip === false );
+                .sort((n1, n2)=> n1.ref < n2.ref ? -1 : n1.ref > n2.ref ? 1 : 0 );
+                
+  const ncOutstanding = nc.filter( x => x.snooze === false );
   
-  const iDone = history;
+  const iDone = item.history;
                                    
   const fDone = [];
   for(let item of allItems) {
@@ -72,11 +69,12 @@ const StoneSelect = ({
     firsts.forEach( x => fDone.push( 'first' + x.step ) );
   }
   
-  const allAnswered = sh.every( x => x.inEffect === true || x.reSolve === true );
+  const allAnswered = shortfalls.length === 0 ||
+            shortfalls.every( x => x.inEffect === true || x.reSolve === true );
   
   
   function handleStepUndo() {
-		Meteor.call('popHistory', id, serial, ()=>{
+		Meteor.call('popHistoryX', seriesId, serial, ()=>{
 			closeUndoOption();
 		});
 	}
@@ -100,7 +98,7 @@ const StoneSelect = ({
     const damStep = !branchObj ? null : branchObj.reqProblemDam;
   
     const ncAllClear = ncOutstanding.length === 0;
-    const shAllClear = sh.length === 0 || allAnswered === true;
+    const shAllClear = allAnswered === true;
       
     if( ( ( flowStep.type === 'first' || flowStep.type === 'build' ) && stepComplete ) 
         || ( stepComplete && ncResolved ) 
@@ -124,7 +122,7 @@ const StoneSelect = ({
 
 	        {flowStep.type === 'nest' ?
 	          <FoldInNested
-              id={id}
+              seriesId={seriesId}
               serial={serial}
               sKey={flowStep.key}
               step={flowStep.step}
@@ -134,15 +132,16 @@ const StoneSelect = ({
           : 
 	          <StoneControl
 		          key={flowStep.key + serial}
-              id={id}
+              batchId={bID}
+              seriesId={seriesId}
               serial={serial}
               sKey={flowStep.key}
               step={flowStep.step}
               type={flowStep.type}
               branchObj={branchObj}
               allItems={allItems}
-              isAlt={isAlt}
-              hasAlt={hasAlt}
+              // isAlt={isAlt}
+              // hasAlt={hasAlt}
               users={users}
               app={app}
               flowCounts={flowCounts}
@@ -172,14 +171,14 @@ const StoneSelect = ({
           
           <div>
             <NCTributary
-      			  id={id}
+      			  seriesId={seriesId}
       			  serial={serial}
       			  nonCons={nc}
       			  sType={flowStep.type} />
             <Shortfalls
-      			  id={id}
-      			  shortfalls={sh}
-      			  lock={finishedAt !== false} />
+      			  seriesId={seriesId}
+      			  shortfalls={shortfalls}
+      			  lock={item.completed} />
           </div>
   			</div>
       );
@@ -190,17 +189,17 @@ const StoneSelect = ({
 	Session.set('nowStepKey', 'c0mp13t3');
   Session.set('nowWanchor', '');
   // Complete
-  if(finishedAt !== false) {
+  if(item.completed) {
     return(
       <CompleteRest
-        id={id}
+        seriesId={seriesId}
+        serial={item.serial}
+        iComplete={item.completed}
+        history={item.history}
+        // iCascade={iCascade}
+        scrap={scrapCheck}
         bComplete={bComplete}
-        sh={sh}
-        serial={serial}
-        history={history}
-        finishedAt={finishedAt}
-        iCascade={iCascade}
-        scrap={scrapCheck} />
+        shortfallS={shortfalls} />
     );
   }
   

@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import MultiSelect from "react-multi-select-component";
 
 const FirstForm = ({ 
-  bID, serial,
+  batchId, seriesId, serial,
   sKey, sStep, sBranch,
   repeatOp,
   handleVerify,
@@ -74,8 +74,8 @@ const FirstForm = ({
     
     const fresh = !repeatOp;
     
-		Meteor.call('addFirst', 
-		  bID, serial, stepKey, stepName, 
+		Meteor.call('addFirstX', 
+		  batchId, seriesId, serial, stepKey, stepName, 
 		  good, whoB, howB, howI, 
 		  diff, ng, fresh, 
 		(error, reply)=>{

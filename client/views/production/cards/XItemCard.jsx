@@ -1,15 +1,13 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 
-import CompleteRest from '/client/components/river/CompleteRest.jsx';
+import CompleteRest from '/client/components/riverX/CompleteRest';
 //import ScrapBox from '/client/components/smallUi/ScrapBox.jsx';
 // import MiniHistory from '/client/components/river/MiniHistory.jsx';
 
 const XItemCard = ({ 
-  itemData, iSerial, 
-  hasRiver, isReleased, 
-  iComplete, scrap,
-  bID, bComplete, iCascade, shortfallS 
+  bComplete, isReleased, hasRiver, //iCascade, 
+  seriesId, itemData, iComplete, shortfallS, scrap 
 })=> {
 
   if(!hasRiver) {
@@ -47,15 +45,14 @@ const XItemCard = ({
     return(
       <div className='proPrimeSingle'>
         <CompleteRest
-          id={bID}
-          bComplete={bComplete}
-          shortfallS={shortfallS}
+          seriesId={seriesId}
           serial={itemData.serial}
+          iComplete={iComplete}
           history={itemData.history}
-          finishedAt={itemData.finishedAt}
-          iCascade={iCascade}
-          scrap={scrap} />
-        
+          // iCascade={iCascade}
+          scrap={scrap}
+          bComplete={bComplete}
+          shortfallS={shortfallS} />
       </div>
     );
   }

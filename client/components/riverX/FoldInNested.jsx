@@ -2,16 +2,14 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-const FoldInNested = ({ id, serial, sKey, step, lock })=> {
- //doneStone, subItems
- 
+const FoldInNested = ({ seriesId, serial, sKey, step, lock })=> {
+
   function passNested(e) {
     e.preventDefault();
     this.goNest.disabled = true;
 		const subSerial = this.nestSerial.value;
-		Meteor.call('addNested', id, serial, sKey, step, subSerial, (error, reply)=>{
-	    if(error)
-		    console.log(error);
+		Meteor.call('addNestedX', seriesId, serial, sKey, step, subSerial, (error, reply)=>{
+	    error && console.log(error);
 			if(reply) {
 			  document.getElementById('lookup').focus();
 			  this.nestSerial.value = '';

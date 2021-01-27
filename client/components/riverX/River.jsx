@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import Pref from '/client/global/pref.js';
 
 import StoneSelect from './StoneSelect.jsx';
-import RiverFork from './RiverFork.jsx';
+// import RiverFork from './RiverFork.jsx';
 // import RMACascade from './RMACascade.jsx';
-import MiniHistory from './MiniHistory.jsx';
-import AltMarker from '/client/components/tinyUi/AltMarker.jsx';
+// import MiniHistory from './MiniHistory.jsx';
+// import AltMarker from '/client/components/tinyUi/AltMarker.jsx';
 
 const River = ({ 
   batchData, seriesData, itemData, widgetData, 
@@ -85,21 +85,22 @@ const River = ({
         :null*/}
 		  
 		  <div>
-		    {i.finishedAt === false && b.riverAlt && i.alt !== false ? 
+		    {/*i.finishedAt === false && b.riverAlt && i.alt !== false ? 
 		      <AltMarker id={b._id} serial={i.serial} alt={i.alt} />
-		    : null}
+		    : null*/}
         <StoneSelect
-          id={b._id}
+          bID={b._id}
           bComplete={b.completed}
           flow={useFlow}
           // isAlt={i.alt === 'yes'}
           // hasAlt={!b.riverAlt ? false : true}
+          seriesId={seriesData._id}
+          item={i}
           allItems={seriesData.items}
           nonCons={seriesData.nonCon}
-          sh={shortfallS}
+          shortfalls={shortfallS}
           scrapCheck={scrapCheck}
           // iCascade={i.rma.length > 0}
-          item={i}
           brancheS={brancheS}
           users={users}
           flowCounts={flowCounts}
@@ -108,8 +109,8 @@ const River = ({
           showVerifyState={showVerifyState}
           optionVerify={optionVerify}
           handleVerify={handleVerify}
-          undoOption={undoStepOption}
           
+          undoOption={undoStepOption}
           openUndoOption={()=>tempOpenOption()}
           closeUndoOption={()=>closeOption()} />
       </div>

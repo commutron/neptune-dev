@@ -6,12 +6,13 @@ import StoneProgRing from './StoneProgRing.jsx';
 
 	
 const StoneReg = ({ 
-	id, barcode, sKey, step, type, 
-	flowCounts, 
+	batchId,
+	seriesId, barcode, sKey, step, type, 
+	flowCounts, benchmark,
 	lockout, 
 	topClass, topTitle,
 	
-	allItems, isAlt, hasAlt,
+	allItems,// isAlt, hasAlt,
 	
 	enactEntry,
 	resolveEntry,
@@ -27,13 +28,7 @@ const StoneReg = ({
     comPrompt ? comm = comPrompt : null;
     // if(doComm && !comPrompt) { unlock(); return false; }
     
-    const pre = flowCounts;
-    const preTotal = pre.regItems;
-    const preStep = pre.regStepData.find( x => x.key === sKey );
-    const preCount = preStep ? preStep.items : undefined;
-    const benchmark = preCount === 0 ? 'first' : preCount === preTotal - 1 ? 'last' : false;              
-    
-		Meteor.call('addHistory', id, barcode, sKey, step, type, comm, pass, benchmark, 
+		Meteor.call('addHistoryX', batchId, seriesId, barcode, sKey, step, type, comm, pass, benchmark, 
 			(error, reply)=>{
 	    if(error) {
 		    console.log(error);
@@ -70,8 +65,8 @@ const StoneReg = ({
       	<StoneProgRing
   				serial={barcode}
   				allItems={allItems}
-  				isAlt={isAlt}
-  				hasAlt={hasAlt}
+  				// isAlt={isAlt}
+  				// hasAlt={hasAlt}
   				sKey={sKey}
           step={step}
           type={type}

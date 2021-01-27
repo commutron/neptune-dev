@@ -7,7 +7,7 @@ const TestFails = ({ fails })=> {
     paddingLeft: '10px',
     paddingBottom: '5px',
     backgroundColor: 'transparent',
-    borderLeft: '5px solid var(--pomegranate)',
+    borderLeft: '0.5vmax solid var(--pomegranate)',
   };
   
   const dt = fails.sort();

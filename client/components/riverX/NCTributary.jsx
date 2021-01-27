@@ -3,73 +3,34 @@ import ReactDOM from 'react-dom';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import Pref from '/client/global/pref.js';
 
-const NCTributary = ({ id, serial, nonCons, sType })=> {
+const NCTributary = ({ seriesId, serial, nonCons, sType })=> {
 
-  function handleFix(ncKey) {
-    Meteor.call('fixNC', id, ncKey, (error)=> {
+  function handleAction(ncKey, ACT, extra) {
+    Meteor.call('runNCAction', seriesId, ncKey, ACT, extra, (error)=> {
 			if(error)
 			  console.log(error);
 		});
 		let findBox = document.getElementById('lookup');
 		findBox.focus();
-  }
-
-  function handleInspect(ncKey) {
-    Meteor.call('inspectNC', id, ncKey, (error)=> {
-			if(error)
-			  console.log(error);
-		});
-		let findBox = document.getElementById('lookup');
-		findBox.focus();
-  }
-    
-  function handleReject(ncKey, fixTime, fixWho) {
-    Meteor.call('rejectNC', id, ncKey, fixTime, fixWho, (error)=> {
-			if(error)
-			  console.log(error);
-		});
-		let findBox = document.getElementById('lookup');
-		findBox.focus();
-  }
-	
-	function handleSnooze(ncKey) {
-    Meteor.call('snoozeNC', id, ncKey, (error)=> {
-			if(error)
-        console.log(error);
-		});
-	}
-	
-	function handleUnSkip(ncKey) {
-    Meteor.call('UnSkipNC', id, ncKey, (error)=> {
-      if(error)
-        console.log(error);
-		});
   }
   
-  function handleComment(ncKey, com) {
-    Meteor.call('commentNC', id, ncKey, com, (error)=> {
-      if(error)
-        console.log(error);
-		});
-  }
+  const inspector = Roles.userIsInRole(Meteor.userId(), 'inspect');
+  const verifier = Roles.userIsInRole(Meteor.userId(), 'verify');
   
   return(
     <Fragment>
       {nonCons.map( (entry, index)=>{
         sType === 'finish' && entry.snooze === true ?
-          handleUnSkip(entry.key) : null;
-        return (
+          handleAction(entry.key, 'WAKE') : null;
+        return(
           <NCStream
             key={entry.key}
             entry={entry}
-            id={id}
+            seriesId={seriesId}
             end={sType === 'finish'}
-            doFix={()=> handleFix(entry.key)}
-            doInspect={()=> handleInspect(entry.key)}
-            doReject={()=> handleReject(entry.key, entry.fix.time, entry.fix.who)}
-            doSnooze={()=> handleSnooze(entry.key)}
-            doUnSkip={()=> handleUnSkip(entry.key)}
-            doComment={(e)=> handleComment(entry.key, e)}
+            doAction={(act, extra)=> handleAction(entry.key, act, extra)}
+            inspector={inspector}
+            verifier={verifier}
           />
         )})}
     </Fragment>
@@ -78,32 +39,26 @@ const NCTributary = ({ id, serial, nonCons, sType })=> {
 
 export default NCTributary;
 
-const NCStream = ({ 
-  entry, id,
-  end, 
-  doFix, doInspect, doReject, doSnooze, doUnSkip, doComment
-})=>{
+const NCStream = ({ entry, seriesId, end, doAction, inspector, verifier })=>{
   
   const [ selfLock, selfLockSet ] = useState(false);
   
   const handleComment = ()=> {
     let val = window.prompt('Add a comment');
-    val !== '' ? doComment(val) : null;
+    val !== '' ? doAction('COMM', val) : null;
   };
   
-  function handleClick(e, doThing) {
+  function handleClick(ACT, extra) {
     selfLockSet(true);
-    doThing();
+    doAction(ACT, extra);
   }
     
   const fixed = entry.fix;
-
   const same = entry.fix.who === Meteor.userId();
-  const inspector = Roles.userIsInRole(Meteor.userId(), 'inspect');
-  const verifier = Roles.userIsInRole(Meteor.userId(), 'verify');
+  
   const lockI = fixed ? !same && inspector ? false : true : false;
-  let skip = entry.skip;
-  let style = !skip ? 'cap tribRow tribRed noCopy' : 'cap tribRow yellowList noCopy';
+  let snooze = entry.snooze;
+  let style = !snooze ? 'cap tribRow tribRed noCopy' : 'cap tribRow yellowList noCopy';
 
   const smple = window.innerWidth <= 1200;
 
@@ -115,7 +70,7 @@ const NCStream = ({
       </div>
       <div className='tribAction'>
       <div className='tribActionMain'>
-          {skip ?
+          {snooze ?
             <span className='centre'>
               <i className='far fa-clock fa-lg'></i>{smple ? null : 'Snoozing'}
             </span>
@@ -125,7 +80,7 @@ const NCStream = ({
                 title='All Correct'
                 id='inspectline'
                 className='ncAct riverG'
-                onClick={(e)=>handleClick(e, doInspect)}
+                onClick={()=>handleClick('INSPECT')}
                 readOnly={true}
                 disabled={lockI || selfLock}>
               <img src='/inspectMini.svg' className='pebbleSVG' /><br />{smple ? null : 'OK'}</button>
@@ -133,7 +88,7 @@ const NCStream = ({
               <button
                 id='fixline'
                 className='ncAct riverInfo'
-                onClick={(e)=>handleClick(e, doFix)}
+                onClick={()=>handleClick('FIX')}
                 readOnly={true}
                 disabled={fixed === true || selfLock}>
               <img src='/repair.svg' className='pebbleSVG' /><br />{smple ? null : 'Repair'}</button>
@@ -149,16 +104,24 @@ const NCStream = ({
         
           <ContextMenu id={entry.key}>
           {!fixed &&
-            <MenuItem onClick={doInspect} disabled={!verifier}>
+            <MenuItem 
+              onClick={()=>handleClick('INSPECT')} 
+              disabled={!verifier}>
               Inspected, no repair required
             </MenuItem> }
-            <MenuItem onClick={doReject} disabled={lockI || !fixed}>
+            <MenuItem 
+              onClick={()=>handleClick('REJECT', [entry.fix.time, entry.fix.who])} 
+              disabled={lockI || !fixed}>
               {Pref.reject}
             </MenuItem>      
-            <MenuItem onClick={doSnooze} disabled={skip !== false || end}>
+            <MenuItem 
+              onClick={()=>handleClick('SNOOZE')}
+              disabled={snooze !== false || end}>
               Snooze, repair later
             </MenuItem>
-            <MenuItem onClick={doUnSkip} disabled={!skip}>
+            <MenuItem 
+              onClick={()=>handleClick('WAKE')} 
+              disabled={!snooze}>
               Wake Up, repair now
             </MenuItem>
             <MenuItem onClick={(e)=>handleComment(e)}>

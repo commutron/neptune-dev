@@ -196,6 +196,17 @@ Meteor.methods({
     }else{null}
   },
   
+  /////////////// Events ///////////////////////
+  setXBatchEvent(accessKey, batchId, eventTitle, eventDetail) {
+    XBatchDB.update({_id: batchId, orgKey: accessKey}, {
+      $push : { events : { 
+        title: eventTitle,
+        detail: eventDetail,
+        time: new Date()
+      }
+    }});
+  },
+  
   // push a tag
   pushBTagX(batchId, tag) {
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {

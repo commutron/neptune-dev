@@ -1,8 +1,9 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
+import { toast } from 'react-toastify';
 
 
-const ShortAdd = ({ bID, seriesId, serial, pastPN, pastRF, app, doneClose })=> {
+const ShortAdd = ({ seriesId, serial, pastPN, pastRF, app, doneClose })=> {
 
   function handleShort(e) {
     e.preventDefault();
@@ -13,14 +14,19 @@ const ShortAdd = ({ bID, seriesId, serial, pastPN, pastRF, app, doneClose })=> {
     const comm = this.comm.value.trim();
     const where = Session.get('ncWhere') || 'unavailable';
     
-    console.log({ bID, seriesId, partNum, refs, serial, where, comm });
-    
-    /*
-    Meteor.call('addShort', id, partNum, refs, serial, where, comm, (error, reply)=>{
+    Meteor.call('addShortX', seriesId, partNum, refs, serial, where, comm, (error, reply)=>{
       error && console.log(error);
-      doneClose();
+      if(reply) {
+        doneClose();
+      }else{
+        toast.warn("Part Number is already recorded.", {
+          position: toast.POSITION.BOTTOM_CENTER,
+          autoClose: 5000,
+          closeOnClick: false
+        });
+        this.goSh.disabled = false;
+      }
     });
-    */
   }
 
 	let now = Session.get('ncWhere');

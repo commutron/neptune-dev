@@ -97,23 +97,39 @@ Meteor.methods({
   serialLookupPartial(orb) {
     const itemsBatch = BatchDB.find({
                         "items.serial": { $regex: new RegExp( orb ) }
-                      },{fields:{'batch':1,'items.serial':1}}).fetch() ||
-                      XSeriesDB.find({
-                        "items.serial": { $regex: new RegExp( orb ) }
                       },{fields:{'batch':1,'items.serial':1}}).fetch();
+    if( itemsBatch.length === 1 ) {
+      const single = itemsBatch.length === 1;
+      
+      const exact = !single ? false : 
+        itemsBatch[0].items.find( x => x.serial === orb ) ? true : false;
+
+      const results = [];
+      for(let iB of itemsBatch) {
+        const describe = whatIsBatch(iB.batch)[0].join(' ');
+        if(describe) {
+          results.push([ iB.batch, describe ]);
+        }
+      }
+      return [ results, exact ];
+    }else{ 
+      const itemsSeries = XSeriesDB.find({
+                            "items.serial": { $regex: new RegExp( orb ) }
+                          },{fields:{'batch':1,'items.serial':1}}).fetch();
+                          
+      const single = itemsSeries.length === 1;
+      
+      const exact = !single ? false : 
+        itemsSeries[0].items.find( x => x.serial === orb ) ? true : false;
+
+      const results = [];
+      for(let iS of itemsSeries) {
+        const describe = whatIsBatchX(iS.batch)[0].join(' ');
+        results.push([ iS.batch, describe ]);
+      }
     
-    const single = itemsBatch.length === 1;
-    const exact = !single ? false : 
-      itemsBatch[0].items.find( x => x.serial === orb ) ? true : false;
-    //const results = Array.from(itemsBatch, x => x.batch);
-    const results = [];
-    for(let iB of itemsBatch) {
-      const describe = whatIsBatch(iB.batch)[0].join(' ');
-      
-      results.push([ iB.batch, describe ]);
+      return [ results, exact ];
     }
-      
-    return [ results, exact ];
   },
   
   quickVariant(vKey) {

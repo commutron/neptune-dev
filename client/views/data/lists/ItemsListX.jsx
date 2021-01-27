@@ -339,9 +339,10 @@ const ItemsListX = ({
         onKeywordChange={(e)=>setKeywordFilter(e)}
         onTimeChange={(e)=>setTimeFilter(e)}
         onNotChange={(e)=>setToggle(e)} />
+      <div>
       {stateList.map( (entry, index)=> {
         let style = entry.history.length === 0 ? bttnClss :
-                    entry.finishedAt === false ? `${bttnClss} activeMark` : 
+                    entry.completed === false ? `${bttnClss} activeMark` : 
                     scrap.scrapList.includes(entry.serial) ? `${bttnClss} ngMark` : 
                     `${bttnClss} gMark`;
           return(
@@ -354,6 +355,7 @@ const ItemsListX = ({
             />
           );
       })}
+      </div>
 		</Fragment>
   );
 };

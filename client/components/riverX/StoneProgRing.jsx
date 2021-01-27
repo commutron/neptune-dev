@@ -5,7 +5,7 @@ import AnimateOnChange from 'react-animate-on-change';
 
 const StoneProgRing = ({ 
   sKey, step, type, 
-  flowCounts, isAlt, 
+  flowCounts,
   workingState, lockout,
   children
 })=> {

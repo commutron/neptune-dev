@@ -5,12 +5,13 @@ import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import StoneProgRing from './StoneProgRing.jsx';
 
 const StoneTest = ({ 
-	id, barcode, sKey, step, type, 
-	flowCounts, 
+	batchId,
+	seriesId, barcode, sKey, step, type, 
+	flowCounts, benchmark,
 	lockout,
 	topClass, topTitle,
 	
-	allItems, isAlt, hasAlt,
+	allItems,// isAlt, hasAlt,
 	
 	enactEntry,
 	resolveEntry,
@@ -28,17 +29,11 @@ const StoneTest = ({
     
     const more = shipFail ? 'ship a failed test' : false;
     
-    const pre = flowCounts;
-    const preTotal = pre.regItems;
-    const preStep = pre.regStepData.find( x => x.key === sKey );
-    const preCount = preStep ? preStep.items : undefined;
-    const benchmark = preCount === 0 ? 'first' : preCount === preTotal - 1 ? 'last' : false;              
-		
     if(pass === false && ( !comm || comm == '' ) ) {
     	tryagainEntry();
     }else{
-			Meteor.call('addTest', 
-				id, barcode, sKey, step, type,
+			Meteor.call('addTestX', 
+				batchId, seriesId, barcode, sKey, step, type,
 				comm, pass, more, benchmark, 
 			(error, reply)=>{
 		    if(error) {
@@ -60,8 +55,8 @@ const StoneTest = ({
       	<StoneProgRing
   				serial={barcode}
   				allItems={allItems}
-  				isAlt={isAlt}
-  				hasAlt={hasAlt}
+  				// isAlt={isAlt}
+  				// hasAlt={hasAlt}
   				sKey={sKey}
           step={step}
           type={type}

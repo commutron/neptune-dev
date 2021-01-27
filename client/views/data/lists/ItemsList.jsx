@@ -324,6 +324,7 @@ const ItemsList = ({
         onKeywordChange={e => setKeywordFilter(e)}
         onTimeChange={e => setTimeFilter(e)}
         onNotChange={e => setToggle(e)} />
+      <div>
       {stateList.map( (entry, index)=> {
         let style = entry.history.length === 0 ? bttnClss :
                     entry.finishedAt === false ? `${bttnClss} activeMark` : 
@@ -338,6 +339,7 @@ const ItemsList = ({
             />
           );
       })}
+      </div>
 		</Fragment>
   );
 };

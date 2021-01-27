@@ -1,16 +1,17 @@
 import React from 'react';
 import { toast } from 'react-toastify';
-import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 import StoneProgRing from './StoneProgRing.jsx';
 
 
 const StoneFinish = ({ 
-	id, barcode, sKey, step, type,
-	flowCounts, 
+	batchId,
+	seriesId, barcode, sKey, step, type,
+	flowCounts, benchmark,
 	lockout, 
 	topClass, topTitle,
 	
-	allItems, isAlt, hasAlt,
+	allItems,// isAlt, hasAlt,
 	
 	enactEntry,
 	resolveEntry,
@@ -20,16 +21,8 @@ const StoneFinish = ({
   //// Action for marking the board as complete
 	function finish() {
 		enactEntry();
-	  
-    const batchId = id;
 
-    const pre = flowCounts;
-    const preTotal = pre.regItems;
-    const preStep = pre.regStepData.find( x => x.key === sKey );
-    const preCount = preStep ? preStep.items : undefined;
-    const benchmark = preCount === 0 ? 'first' : preCount === preTotal - 1 ? 'last' : false;              
-
-		Meteor.call('finishItem', batchId, barcode, sKey, step, type, benchmark, 
+		Meteor.call('finishItemX', batchId, seriesId, barcode, sKey, step, type, benchmark, 
 			(error, reply)=>{
 		  if(error) {
 		    console.log(error);
@@ -48,8 +41,8 @@ const StoneFinish = ({
     	<StoneProgRing
 				serial={barcode}
 				allItems={allItems}
-				isAlt={isAlt}
-				hasAlt={hasAlt}
+				// isAlt={isAlt}
+				// hasAlt={hasAlt}
 				sKey={sKey}
         step={step}
         type={type}

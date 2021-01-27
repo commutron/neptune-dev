@@ -3,10 +3,10 @@ import Pref from '/client/global/pref.js';
 // import { toast } from 'react-toastify';
 //import RoleCheck from '/client/utility/RoleCheck.js';
 
-import FirstForm from '/client/components/river/FirstForm.jsx';
+import FirstForm from '/client/components/riverX/FirstForm.jsx';
 
 const VerifyIsland = ({
-  bID, itemData, 
+  batchId, seriesId, itemData, 
   flowFirsts,
   brancheS,
   app, users,
@@ -90,7 +90,8 @@ const VerifyIsland = ({
       
       {optionVerify || (stepKeyState && repeatOpState) ?
         <FirstForm
-          bID={bID}
+          batchId={batchId}
+          seriesId={seriesId}
           serial={itemData.serial}
           sKey={stepKeyState}
           sStep={stepNameState}

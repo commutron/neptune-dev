@@ -79,8 +79,7 @@ const XFormBar = ({
         <TideLock currentLive={tideFloodGate} message={true}>
         {i && showItem ?
           show === 'NC' ?
-            <NCAdd 
-              bID={b._id}
+            <NCAdd
               seriesId={srs._id}
               barcode={i.serial}
               user={user}
@@ -88,7 +87,6 @@ const XFormBar = ({
               ncTypesCombo={ncTypesCombo} />
           : show === 'S' ?
             <ShortAdd
-              bID={b._id}
               seriesId={srs._id}
               serial={i.serial}
               pastPN={pastPN}
@@ -99,9 +97,8 @@ const XFormBar = ({
         : null
         }
             
-        {!i && showBatch && false ?  /// HOW to Flood without dumb mistakes
+        {!i && showBatch ?  /// HOW to Flood without dumb mistakes
           <NCFlood
-            bID={b._id}
             seriesId={srs._id}
             live={b.completed === false}
             user={user}

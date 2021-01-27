@@ -59,7 +59,7 @@ const HistoryBlock = ({
         <ul className='moreInfoList'>
           <li>Inspected: {inspect}</li>
           <li>Built: {builder} with {methodNice}</li>
-          {change !== '' && <li>{change}</li>}
+          {!change || change !== '' && <li>{change}</li>}
           {issue !== '' && <li>{issue}</li>}
         </ul>
       :

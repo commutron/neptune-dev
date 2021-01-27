@@ -70,8 +70,7 @@ const XDoProCard = ({
   const shortfallS = !iSerial ? shortfall :
           shortfall.filter( x => x.serial === iSerial )
             .sort((s1, s2)=>
-              s1.partNum < s2.partNum ? -1 : 
-              s1.partNum > s2.partNum ? 1 : 0 );
+              s1.partNum < s2.partNum ? -1 : s1.partNum > s2.partNum ? 1 : 0 );
   
   const bCompletedAt = batchData.completedAt;
   const bComplete = batchData.completed;
@@ -118,15 +117,15 @@ const XDoProCard = ({
             
   const insertItemCard = 
           <XItemCard
-            itemData={itemData}
-            hasRiver={flowData.hasRiver}
+            seriesId={seriesData._id}
+            bComplete={bComplete}
             isReleased={fallData.floorRel}
+            hasRiver={flowData.hasRiver}
+            itemData={itemData}
             iComplete={iComplete}
             // iCascade={iCascade}
-            scrap={scrapCheck}
-            bID={batchData._id}
-            bComplete={bComplete}
-            shortfallS={shortfallS} />;
+            shortfallS={shortfallS}
+            scrap={scrapCheck} />;
   
   const insertRiver = 
           <River
@@ -147,7 +146,8 @@ const XDoProCard = ({
             
   const insertVerifyIsland =
           <VerifyIsland
-            bID={batchData._id}
+            batchId={batchData._id}
+            seriesId={seriesData._id}
             itemData={itemData}
             flowFirsts={flows.filter( x => x.type === 'first' )}
             brancheS={brancheState}

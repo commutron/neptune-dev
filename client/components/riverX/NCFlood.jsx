@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-const NCFlood = ({ bID, seriesId, live, user, app, ncTypesCombo })=> {
+const NCFlood = ({ seriesId, live, user, app, ncTypesCombo })=> {
   
   function handleCheck(target) {
     const flatCheckList = Array.from(ncTypesCombo, x => 
@@ -24,8 +24,6 @@ const NCFlood = ({ bID, seriesId, live, user, app, ncTypesCombo })=> {
     
     const tgood = handleCheck(this.ncType);
     
-    /*
-    
     if( !tgood || refSplit.length < 1 || refSplit[0] === '' ) {
       this.ncRefs.reportValidity();
       this.ncType.reportValidity();
@@ -39,7 +37,7 @@ const NCFlood = ({ bID, seriesId, live, user, app, ncTypesCombo })=> {
             position: toast.POSITION.BOTTOM_CENTER,
             autoClose: false
           });
-          Meteor.call('floodNC', id, ref, type, (error, reply)=>{
+          Meteor.call('floodNCX', seriesId, ref, type, (error, reply)=>{
             error && console.log(error);
             if(reply) {
               toast.update(( 'floodpOp' ), {
@@ -63,8 +61,6 @@ const NCFlood = ({ bID, seriesId, live, user, app, ncTypesCombo })=> {
       // const findBox = document.getElementById('lookup');
       // findBox.focus();
     }
-    
-    */
   }
 
 	let lock = !live;

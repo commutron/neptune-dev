@@ -55,7 +55,7 @@ const ItemFeedX = ({
               <NonConBlock
                 key={dt.key+ix}
                 entry={dt}
-                id={id}
+                id={batchId}
                 seriesId={seriesId}
                 serial={serial}
                 done={done}
@@ -70,7 +70,7 @@ const ItemFeedX = ({
               <ShortBlock
                 key={dt.key+ix}
                 entry={dt}
-                id={id}
+                id={batchId}
                 seriesId={seriesId}
                 serial={serial}
                 done={done}

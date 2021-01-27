@@ -9,11 +9,12 @@ import StoneFinish from './StoneFinish.jsx';
 import useTimeOut from '/client/utility/useTimeOutHook.js';
 
 const StoneControl = ({
-	id, serial,
+	batchId,
+	seriesId, serial,
 	sKey, step, type,
 	branchObj,
 	allItems,
-	isAlt, hasAlt,
+	// isAlt, hasAlt,
 	users, app,
 	flowCounts,
 	blockStone, doneStone, compEntry,
@@ -48,8 +49,7 @@ const StoneControl = ({
   	}
 	}
 	
-	const speed = !Meteor.user().unlockSpeed ? 
-									5000 : ( Meteor.user().unlockSpeed );
+	const speed = !Meteor.user().unlockSpeed ? 5000 : Meteor.user().unlockSpeed;
 	
   const speedVar = riverFlowState === 'slow' ? ( speed * 6 ) : speed;
 	const confirmLock = !riverFlowState ? null : speed;
@@ -81,22 +81,29 @@ const StoneControl = ({
   								 blockStone ? 'blockStone' :
   								 reqULState ? 'authBanMask' : '';
   const topTitle = topClass !== '' ? Pref.stoneislocked : '';
-		
+  
+  const preTotal = flowCounts.liveItems;
+  const preStep = flowCounts.riverProg.find( x => x.key === sKey );
+  const preCount = preStep ? preStep.items : undefined;
+  const benchmark = preCount === 0 ? 'first' : preCount === preTotal - 1 ? 'last' : false;              
+  
 	const renderReg = 
 		<StoneReg 
-			key={id+serial+sKey}
-			id={id}
+			key={seriesId+serial+sKey}
+			batchId={batchId}
+			seriesId={seriesId}
 			barcode={serial}
 			sKey={sKey}
 			step={step}
 			type={type} 
-			flowCounts={flowCounts} 
+			flowCounts={flowCounts}
+			benchmark={benchmark}
 			lockout={lockout}
 			topClass={topClass}
 			topTitle={topTitle}
 			allItems={allItems}
-			isAlt={isAlt}
-			hasAlt={hasAlt}
+			// isAlt={isAlt}
+			// hasAlt={hasAlt}
 			enactEntry={()=>enactEntry()}
 			resolveEntry={()=>resolveEntry()}
 			workingState={workingState}
@@ -104,9 +111,10 @@ const StoneControl = ({
 	
 	const renderVerify = 
 		<StoneVerify 
-			key={id+serial+sKey}
-			id={id}
-			barcode={serial}
+			key={seriesId+serial+sKey}
+			// batchId={batchId}
+			// seriesId={seriesId}
+			// barcode={serial}
 			sKey={sKey}
 			step={step}
 			type={type} 
@@ -118,19 +126,21 @@ const StoneControl = ({
 	
 	const renderTest = 
 		<StoneTest
-			key={id+serial+sKey}
-			id={id}
+			key={seriesId+serial+sKey}
+			batchId={batchId}
+			seriesId={seriesId}
 			barcode={serial}
 			sKey={sKey}
 			step={step}
 			type={type} 
-			flowCounts={flowCounts} 
+			flowCounts={flowCounts}
+			benchmark={benchmark}
 			lockout={lockout}
 			topClass={topClass}
 			topTitle={topTitle}
 			allItems={allItems}
-			isAlt={isAlt}
-			hasAlt={hasAlt}
+			// isAlt={isAlt}
+			// hasAlt={hasAlt}
 			enactEntry={()=>enactEntry()}
 			resolveEntry={()=>resolveEntry()}
 			workingState={workingState}
@@ -139,19 +149,21 @@ const StoneControl = ({
 	
 	const renderFinish = 
 		<StoneFinish
-			key={id+serial+sKey}
-			id={id}
+			key={seriesId+serial+sKey}
+			batchId={batchId}
+			seriesId={seriesId}
 			barcode={serial}
 			sKey={sKey}
 			step={step}
 			type={type} 
-			flowCounts={flowCounts} 
+			flowCounts={flowCounts}
+			benchmark={benchmark}
 			lockout={lockout}
 			topClass={topClass}
 			topTitle={topTitle}
 			allItems={allItems}
-			isAlt={isAlt}
-			hasAlt={hasAlt}
+			// isAlt={isAlt}
+			// hasAlt={hasAlt}
 			enactEntry={()=>enactEntry()}
 			resolveEntry={()=>resolveEntry(true)}
 			workingState={workingState}

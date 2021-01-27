@@ -72,16 +72,16 @@ const TideWall = ({
         
         {itemData ?
           itemData.completed ?
-  		  
-      		  <CompleteRest
-              id={bID}
-              bComplete={bComplete}
-              sh={shortfallS}
+
+            <CompleteRest
+              seriesId={seriesData._id}
               serial={itemData.serial}
+              iComplete={itemData.completed}
               history={itemData.history}
-              finishedAt={itemData.completedAt}
               // iCascade={iCascade}
-              scrap={scrap} />
+              scrap={scrap}
+              bComplete={bComplete}
+              shortfallS={shortfallS} />
             
           :
             <MiniHistory history={itemData.history} />

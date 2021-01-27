@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import Pref from '/client/global/pref.js';
 
-const Shortfalls = ({ id, shortfalls, lock })=> {
+const Shortfalls = ({ seriesId, shortfalls, lock })=> {
   
   function handleChange(shKey, effect, solve) {
-    Meteor.call('setShort', id, shKey, effect, solve, (error)=> {
+    Meteor.call('setShortX', seriesId, shKey, effect, solve, (error)=> {
       error && console.log(error);
 		});
   }

@@ -76,25 +76,7 @@ const FormBar = ({
       : null}
       <div className='footFill'>
         <TideLock currentLive={tideFloodGate} classSty='' message={true}>
-        {b ?
-          showX && action === 'xBatchBuild' ?
-            show === 'NC' ?
-              //<NCAdd 
-                //id={b._id}
-                //barcode={i.serial}
-                //app={app}
-                //ncTypesCombo={ncTypesCombo} />
-              <p className='centreText'>Batch NC form <em>in development</em></p>
-            : show === 'S' ?
-              //<ShortAdd
-                //id={b._id}
-                //serial={i.serial}
-                //app={app}
-                //doneClose={()=>this.handleDone()} />
-                <p className='centreText'>Batch Omit form <em>in development</em></p>
-            : null
-          :
-            b && i && showlegacyItem ?
+        {b && i && showlegacyItem ?
               show === 'NC' ?
                 <NCAdd 
                   id={b._id}
@@ -112,7 +94,6 @@ const FormBar = ({
                   doneClose={(e)=>handleDone(e)} />
               : null
             : null
-          : null 
         }
             
         {

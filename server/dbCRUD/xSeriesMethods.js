@@ -77,14 +77,14 @@ Meteor.methods({
   },
 */
 
-/*
+
 //// Non-Cons \\\\
-  floodNC(batchId, ref, type) {
-    const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
-    if(!Meteor.userId() || !doc) { null }else{
-      const liveItems = doc.items.filter( x => x.finishedAt === false );
+  floodNCX(seriesId, ref, type) {
+    const srs = XSeriesDB.findOne({_id: seriesId, orgKey: Meteor.user().orgKey});
+    if(!Meteor.userId() || !srs) { null }else{
+      const liveItems = srs.items.filter( x => x.completed === false );
       const liveSerials = Array.from(liveItems, x => {
-                            const double = doc.nonCon.find( y => 
+                            const double = srs.nonCon.find( y => 
                               y.ref === ref &&
                               y.serial === x.serial &&
                               y.type === type &&
@@ -92,7 +92,7 @@ Meteor.methods({
                             );
                             if( !double ) { return x.serial } } );
       for( let sn of liveSerials ) {
-        BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey}, {
           $push : { nonCon: {
             key: new Meteor.Collection.ObjectID().valueOf(), // id of the nonCon entry
             serial: sn, // barcode id of item
@@ -112,10 +112,10 @@ Meteor.methods({
       return true;
     }
   },
-  
-  addNC(batchId, bar, ref, type, step, fix) {
-    const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
-    const double = doc.nonCon.find( x => 
+
+  addNCX(seriesId, bar, ref, type, step, fix) {
+    const srs = XSeriesDB.findOne({_id: seriesId, orgKey: Meteor.user().orgKey});
+    const double = srs.nonCon.find( x => 
                     x.serial === bar &&
                     x.ref === ref &&
                     x.type === type &&
@@ -125,7 +125,7 @@ Meteor.methods({
       
       let repaired = fix ? {time: new Date(),who: Meteor.userId()} : false;
       
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+      XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey}, {
         $push : { nonCon: {
           key: new Meteor.Collection.ObjectID().valueOf(), // id of the nonCon entry
           serial: bar, // barcode id of item
@@ -137,17 +137,41 @@ Meteor.methods({
           fix: repaired,
           inspect: false,
           reject: [],
-          skip: false,
           snooze: false,
           trash: false,
           comm: ''
       }}});
     }
   },
+  
+  runNCAction(seriesId, ncKey, ACT, extra) {
+    switch (ACT) {
+      case 'FIX':
+        Meteor.call('fixNCX', seriesId, ncKey);
+        break;
+      case 'INSPECT':
+        Meteor.call('inspectNCX', seriesId, ncKey);
+        break;
+      case 'SNOOZE':
+        Meteor.call('snoozeNCX', seriesId, ncKey);
+        break;
+      case 'WAKE':
+        Meteor.call('wakeNCX', seriesId, ncKey);
+        break;
+      case 'REJECT':
+        Meteor.call('rejectNCX', seriesId, ncKey, extra);
+        break;
+      case 'COMM':
+        Meteor.call('commentNCX', seriesId, ncKey, extra);
+        break;
+      default:
+        null;
+    }
+  },
 
-  fixNC(batchId, ncKey) {
+  fixNCX(seriesId, ncKey) {
     if(Meteor.userId()) {
-  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+  		XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
   			$set : { 
   			  'nonCon.$.fix': {
   			    time: new Date(),
@@ -158,9 +182,9 @@ Meteor.methods({
     }else{null}
   },
 
-  inspectNC(batchId, ncKey) {
+  inspectNCX(seriesId, ncKey) {
     if(Meteor.userId()) {
-  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+  		XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
   			$set : { 
   			  'nonCon.$.inspect': {
   			    time: new Date(),
@@ -171,12 +195,14 @@ Meteor.methods({
     }else{null}
   },
   
-  rejectNC(batchId, ncKey, timeRepair, whoRepair) {
-    if(Meteor.userId()) {
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+  rejectNCX(seriesId, ncKey, extra) {
+    if(Meteor.userId() && Array.isArray(extra)) {
+      const timeRepair = extra[0];
+      const whoRepair = extra[1];
+      XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
         $push : {
           'nonCon.$.reject': {
-            attemptTime: timeRepair,
+            attemptTime: new Date(timeRepair),
             attemptWho: whoRepair,
             rejectTime: new Date(),
             rejectWho: Meteor.userId()
@@ -188,7 +214,18 @@ Meteor.methods({
       });
     }else{null}
   },
-    
+  
+  // trigger a re-inspect
+  reInspectNCX(seriesId, ncKey) {
+    if(Roles.userIsInRole(Meteor.userId(), 'inspect')) {
+		  XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+  			$set : { 
+  			  'nonCon.$.inspect': false
+  			}
+  		});
+    }else{null}
+  },
+  /*
   editNC(batchId, serial, ncKey, ref, type, where) {
     const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
     const double = doc.nonCon.find( x => 
@@ -209,31 +246,38 @@ Meteor.methods({
     }
   },
   
-  // trigger a re-inspect
-  reInspectNC(batchId, ncKey) {
+*/
+  snoozeNCX(seriesId, ncKey) {
     if(Roles.userIsInRole(Meteor.userId(), 'inspect')) {
-		  BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
-  			$set : { 
-  			  'nonCon.$.inspect': false
-  			}
-  		});
-    }else{null}
-  },
-
-  snoozeNC(batchId, ncKey) {
-    if(Roles.userIsInRole(Meteor.userId(), 'inspect')) {
-  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+  		XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
   			$set : {
-  			  'nonCon.$.skip': { 
-  			    time: new Date(),
-  			    who: Meteor.userId()
-  			  },
   			  'nonCon.$.snooze': true
   			}
   		});
     }else{null}
   },
   
+  wakeNCX(seriesId, ncKey) {
+    if(Roles.userIsInRole(Meteor.userId(), 'inspect')) {
+  	  XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+  	    $set : {
+  			  'nonCon.$.snooze': false
+  			}
+  	  });
+    }else{null}
+  },
+  
+  commentNCX(seriesId, ncKey, comm) {
+    if(Roles.userIsInRole(Meteor.userId(), 'inspect') && typeof comm === 'string') {
+  		XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+  			$set : {
+  			  'nonCon.$.comm': comm
+  			}
+  		});
+    }else{null}
+  },
+  
+  /*
   trashNC(batchId, ncKey) {
     if(Roles.userIsInRole(Meteor.userId(), 'verify')) {
   		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
@@ -257,13 +301,13 @@ Meteor.methods({
     }else{null}
   },
 
-  
-  autoTrashShortNC(accessKey, batchId, serial, refs) {
-    const org = AppDB.findOne({ orgKey: accessKey });
-    const type = org ? org.missingType : false;
-    const doc = BatchDB.findOne({_id: batchId, orgKey: accessKey});
-    if(type && doc) {
-      const related = doc.nonCon.filter( x => 
+  */
+  autoTrashMissingNC(accessKey, seriesId, serial, refs) {
+    const app = AppDB.findOne({orgKey:accessKey}, {fields:{'missingType':1}});
+    const type = app ? app.missingType : false;
+    const srs = XSeriesDB.findOne({_id: seriesId, orgKey: accessKey});
+    if(type && srs) {
+      const related = srs.nonCon.filter( x => 
                         x.serial === serial &&
                         x.type === type &&
                         x.inspect === false &&
@@ -271,34 +315,15 @@ Meteor.methods({
                       );
       const trash = Array.from(related, x => x.key);
       for( let tKey of trash) {
-        BatchDB.update({_id: batchId, orgKey: accessKey, 'nonCon.key': tKey}, {
+        XSeriesDB.update({_id: seriesId, orgKey: accessKey, 'nonCon.key': tKey}, {
           $pull : { nonCon: {key: tKey}
         }});
       }
     }
   },
 
-  UnSkipNC(batchId, ncKey) {
-    if(Roles.userIsInRole(Meteor.userId(), 'inspect')) {
-  	  BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
-  	    $set : {
-  			  'nonCon.$.skip': false,
-  			  'nonCon.$.snooze': false
-  			}
-  	  });
-    }else{null}
-  },
   
-  commentNC(batchId, ncKey, com) {
-    if(Roles.userIsInRole(Meteor.userId(), 'inspect')) {
-  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
-  			$set : {
-  			  'nonCon.$.comm': com
-  			}
-  		});
-    }else{null}
-  },
-  
+  /*
   ncRemove(batchId, ncKey, override) {
     const auth = Roles.userIsInRole(Meteor.userId(), ['remove', 'qa']);
     if(!auth && override === undefined) {
@@ -320,37 +345,35 @@ Meteor.methods({
 */
   //// Shortages \\\\
   // Shortfall // Narrow Shortage
-  /*
-  addShort(batchId, partNum, refs, serial, step, comm) {
-    const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
-    const legacyCheck = doc.shortfall ? true : false;
-    const double = legacyCheck ? 
-                    doc.shortfall.find( x => 
-                      x.partNum === partNum &&
-                      x.serial === serial
-                    ) : false;
+  
+  addShortX(seriesId, partNum, refs, serial, step, comm) {
+    const srs = XSeriesDB.findOne({_id: seriesId, orgKey: Meteor.user().orgKey});
+    const double = srs.shortfall.find( x => 
+                      x.partNum === partNum && x.serial === serial );
+                      
     if(!Meteor.userId() || double) { return false }else{
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+      XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey}, {
         $push : { shortfall: {
           key: new Meteor.Collection.ObjectID().valueOf(), // id of the shortage entry
-          partNum: partNum || '', // short part number
+          partNum: partNum || '', // part number
           refs: refs || [], // referances on the widget
           serial: serial || '', // apply to item
           where: step || '', // where in the process
-          cTime: new Date(), // Object
-          cWho: Meteor.userId(), // Object
-          uTime: new Date(), // Object
-          uWho: Meteor.userId(), // Object
+          cTime: new Date(),
+          cWho: Meteor.userId(),
+          uTime: new Date(),
+          uWho: Meteor.userId(),
           inEffect: null, // Boolean or Null
           reSolve: null, // Boolean or Null
           comm: comm || '' // comments // String
       }}});
+
       const accessKey = Meteor.user().orgKey;
-      Meteor.call('autoTrashShortNC', accessKey, batchId, serial, refs);
+      Meteor.call('autoTrashMissingNC', accessKey, seriesId, serial, refs);
       return true;
     }
   },
-  
+  /*
   editShort(batchId, serial, shKey, partNum, refs, inEffect, reSolve, comm) {
     const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
     const double = doc.shortfall.filter( x => 
@@ -382,16 +405,16 @@ Meteor.methods({
   			}
   		});
   		const accessKey = Meteor.user().orgKey;
-  		Meteor.call('autoTrashShortNC', accessKey, batchId, serial, refs);
+  		Meteor.call('autoTrashMissingNC', accessKey, batchId, serial, refs);
     }
   },
-  
-  setShort(batchId, shKey, inEffect, reSolve) {
+  */
+  setShortX(seriesId, shKey, inEffect, reSolve) {
     if(!Roles.userIsInRole(Meteor.userId(), 'verify')) { null }else{
 		  let ef = inEffect === undefined ? null : inEffect;
       let sv = reSolve === undefined ? null : reSolve;
 		  
-		  BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'shortfall.key': shKey}, {
+		  XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'shortfall.key': shKey}, {
   			$set : {
   			  'shortfall.$.uTime': new Date(),
           'shortfall.$.uWho': Meteor.userId(),
@@ -401,7 +424,7 @@ Meteor.methods({
   		});
     }
   },
-  
+  /*
   removeShort(batchId, shKey, override) {
     const auth = Roles.userIsInRole(Meteor.userId(), ['remove', 'qa', 'run']);
     if(!auth && override === undefined) {

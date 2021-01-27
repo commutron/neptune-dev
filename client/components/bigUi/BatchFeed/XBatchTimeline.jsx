@@ -3,13 +3,13 @@ import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import '/client/components/bigUi/ItemFeed/style.css';
 
-import CreateBlock from '/client/components/bigUi/ItemFeed/CreateBlock.jsx';
-// import EventBlock from './EventBlock.jsx';
-import AlterBlock from './AlterBlock.jsx';
-import QuoteBlock from './QuoteBlock.jsx';
-import ReleaseBlock from './ReleaseBlock.jsx';
-import CompleteBlock from './CompleteBlock.jsx';
-import { HistoryBlock } from '/client/components/bigUi/ItemFeed/ItemFeed.jsx';
+import CreateBlock from '/client/components/bigUi/ItemFeedX/CreateBlock';
+import EventBlock from './EventBlock';
+import AlterBlock from './AlterBlock';
+import QuoteBlock from './QuoteBlock';
+import ReleaseBlock from './ReleaseBlock';
+import CompleteBlock from './CompleteBlock';
+import HistoryBlock from '/client/components/bigUi/ItemFeedX/HistoryBlock';
 
 const EventsTimeline = ({ 
   id, batchData, 
@@ -21,30 +21,32 @@ const EventsTimeline = ({
   
   const [ incRelease, releaseSet ] = useState( true );
   const [ incVerify, verifySet ] = useState( true );
-  // const [ incEvent, eventSet ] = useState( true );
+  const [ incEvent, eventSet ] = useState( true );
   const [ incAlter, alterSet ] = useState( true );
   const [ incQuote, quoteSet ] = useState( true );
   
   useEffect( ()=>{
     const rL = incRelease ? releaseList || [] : [];
     const vL = incVerify ? verifyList || [] : [];
-    // const eL = incEvent ? eventList || [] : [];
+    const eL = incEvent ? eventList || [] : [];
     const aL = incAlter ? alterList || [] : [];
     const qL = incQuote ? quoteList || [] : [];
     const fn = batchData.completed ? 
                 [{ complete: true, time: batchData.completedAt }] : [];
     
-    const concatPings = [...rL, ...vL, ...aL, ...qL, ...fn]; // [...eL,];
+    const concatPings = [...rL, ...vL, ...eL, ...aL, ...qL, ...fn];
     
     incListSet(concatPings);
     
   }, [
     releaseList, 
-    verifyList, //eventList, 
+    verifyList,
+    eventList, 
     alterList,
     quoteList,
     incRelease, 
-    incVerify, // incEvent, 
+    incVerify,
+    incEvent, 
     incAlter,
     incQuote
   ]);
@@ -77,7 +79,6 @@ const EventsTimeline = ({
               defaultChecked={incVerify} />
             <label htmlFor='inputVer'>{Pref.trackFirst}s</label>
           </span>
-          {/*
           <span title='general and benchmark events'>
             <input
               type='checkbox'
@@ -85,7 +86,7 @@ const EventsTimeline = ({
               onChange={(e)=>eventSet(!incEvent)}
               defaultChecked={incEvent} />
             <label htmlFor='inputEvt'>Events</label>
-          </span>*/}
+          </span>
           <span title='top-level alterations'>
             <input
               type='checkbox'
@@ -133,12 +134,12 @@ const EventsTimeline = ({
                 key={dt.updatedAt.toISOString()+ix}
                 dt={dt} /> 
             );
-          /*}else if( typeof dt.detail === 'string' ) {
+          }else if( typeof dt.detail === 'string' ) {
             return( 
               <EventBlock
                 key={dt.time.toISOString()+ix}
                 dt={dt} /> 
-            );*/
+            );
           }else if( typeof dt.who === 'string' ) {
             return( 
               <ReleaseBlock

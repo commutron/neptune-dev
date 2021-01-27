@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-const NCAdd = ({ bID, seriesId, barcode, user, app, ncTypesCombo })=> {
+const NCAdd = ({ seriesId, barcode, user, app, ncTypesCombo })=> {
   
   function handleCheck(target) {
     const flatCheckList = Array.from(ncTypesCombo, x => 
@@ -26,13 +26,11 @@ const NCAdd = ({ bID, seriesId, barcode, user, app, ncTypesCombo })=> {
     const refEntry = this.ncRefs.value.trim().toLowerCase();
     const refSplit = refEntry.split(/\s* \s*/);
     
-    /*
-    
     if(tgood && refSplit.length > 0 && refSplit[0] !== '') {
       for(let ref of refSplit) {
         ref = ref.replace(",", "");
         if(ref.length < 8) {
-          Meteor.call('addNC', id, barcode, ref, type, where, andFix, (error)=>{
+          Meteor.call('addNCX', seriesId, barcode, ref, type, where, andFix, (error)=>{
             error && console.log(error);
           });
         }else{
@@ -50,8 +48,6 @@ const NCAdd = ({ bID, seriesId, barcode, user, app, ncTypesCombo })=> {
       this.ncRefs.reportValidity();
       this.ncType.reportValidity();
     }
-    
-    */
   }
 
 	let now = Session.get('ncWhere');
