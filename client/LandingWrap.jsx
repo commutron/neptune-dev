@@ -5,6 +5,12 @@ import Pref from '/client/global/pref.js';
 import { UnreadInboxToastPop } from '/client/utility/InboxToastPop.js';
 import Spin from '/client/components/tinyUi/Spin.jsx';
 
+// import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
+import HomeIcon from '/client/layouts/HomeIcon.jsx';
+import TideFollow from '/client/components/tide/TideFollow.jsx';
+
+import { ToastContainer } from 'react-toastify';
+
 import HomeLogout from '/client/components/tinyUi/HomeLogout.jsx';
 import NavButton from '/client/layouts/NavButton/NavButton';
 import { NavButtonShell } from '/client/layouts/NavButton/NavButton';
@@ -18,9 +24,20 @@ const StartView = ({user, app}) =>	{
   }, []);
   
   if( !user || !app ) {
-    return (
-      <div className='centreSpash'>
-        <Spin color={true} message='Just a moment'/>
+    return(
+      <div className='splashContainer'>
+        <div className='tenHeader'>
+          <div className='topBorder' />
+          <HomeIcon />
+          <div className='frontCenterTitle'>
+            {Pref.neptuneIs}
+          </div>
+          <div className='auxRight' />
+          <div />
+        </div>
+        <div className='centreSpash'>
+          <Spin color={true} message='Just a moment'/>
+        </div>
       </div>
     );
   }
@@ -35,55 +52,71 @@ const StartView = ({user, app}) =>	{
   // const isPreview = isAdmin || isNigh || isSales || isPeople;
   
   return(
-    <div className='homeNavi'>
-      {isReadOnly ?
-        <NavPlaceholder 
-          title='Production'
-          icon='fas fa-paper-plane' /> :
-        <NavButton
-          title='Production' 
-          icon='fas fa-paper-plane'
-          link='/production' /> }
-      
-      <NavButton title='Overview' icon='fas fa-globe' link='/overview' tag='WIP' />
-      
-      <NavButtonShell title='People' link='/people'
-        icon={
-          <span className="fa-stack fa-fw navButtonIcon navButtonLayerCorrect">
-            <i className="fas fa-user-astronaut fa-stack-1x" data-fa-transform="shrink-5 left-10 down-1"></i>
-            <i className="fas fa-user-astronaut fa-stack-1x"></i>
-            <i className="fas fa-user-astronaut fa-stack-1x" data-fa-transform="shrink-5 right-10 down-1"></i>
-          </span>
-        } />
+    <div className='splashContainer'>
+      <ToastContainer
+        position="top-right"
+        autoClose={2500}
+        newestOnTop />
+      <div className='tenHeader'>
+        <div className='topBorder' />
+        <HomeIcon />
+        <div className='frontCenterTitle'>
+          {Pref.neptuneIs}
+        </div>
+        <div className='auxRight' />
+        <TideFollow />
+      </div>
+
+      <div className='homeNavi'>
+        {isReadOnly ?
+          <NavPlaceholder 
+            title='Production'
+            icon='fas fa-paper-plane' /> :
+          <NavButton
+            title='Production' 
+            icon='fas fa-paper-plane'
+            link='/production' /> }
         
-      <NavButton title='Explore' icon='fa-rocket' link='/data' />
+        <NavButton title='Overview' icon='fas fa-globe' link='/overview' tag='WIP' />
+        
+        <NavButtonShell title='People' link='/people'
+          icon={
+            <span className="fa-stack fa-fw navButtonIcon navButtonLayerCorrect">
+              <i className="fas fa-user-astronaut fa-stack-1x" data-fa-transform="shrink-5 left-10 down-1"></i>
+              <i className="fas fa-user-astronaut fa-stack-1x"></i>
+              <i className="fas fa-user-astronaut fa-stack-1x" data-fa-transform="shrink-5 right-10 down-1"></i>
+            </span>
+          } />
+        
+        <NavButton title='Explore' icon='fa-rocket' link='/data' />
+        
+        <NavButton title={Pref.upstream} icon='fa-satellite-dish' link='/upstream' tag='Kit' />
+        
+        <NavButton title={Pref.downstream} icon='fa-satellite' link='/downstream' tag='Ship' />
+        
+        <NavButton title={user.username} icon='fa-user-astronaut fa-flip-horizontal' link='/user' />
+        
+        {!app.timeClock || app.timeClock.trim() === '' ?  
+          <NavPlaceholder 
+            title={Pref.timeClock} 
+            icon='fas fa-clock' /> :
+          <NavButton
+            title={Pref.timeClock} 
+            icon='fa-clock' 
+            link={app.timeClock || ''} 
+            blank={true} /> }
+        
+        <NavButton title={Pref.docs} icon='fa-file-invoice' link={app.instruct || ''} blank={true} />
+        
+        <NavButton title='Help' icon='fa-question' link={app.help || ''} blank={true} />
+        
+        {isAdmin ?
+          <NavButton title='Settings' icon='fa-sliders-h' link='/app' />
+        : <NavPlaceholder title='Settings' icon='fas fa-sliders-h'/>}
+        
+        <HomeLogout currentUser={user.username} />
       
-      <NavButton title={Pref.upstream} icon='fa-satellite-dish' link='/upstream' tag='Kit' />
-      
-      <NavButton title={Pref.downstream} icon='fa-satellite' link='/downstream' tag='Ship' />
-      
-      <NavButton title={user.username} icon='fa-user-astronaut fa-flip-horizontal' link='/user' />
-      
-      {!app.timeClock || app.timeClock.trim() === '' ?  
-        <NavPlaceholder 
-          title={Pref.timeClock} 
-          icon='fas fa-clock' /> :
-        <NavButton
-          title={Pref.timeClock} 
-          icon='fa-clock' 
-          link={app.timeClock || ''} 
-          blank={true} /> }
-      
-      <NavButton title={Pref.docs} icon='fa-file-invoice' link={app.instruct || ''} blank={true} />
-      
-      <NavButton title='Help' icon='fa-question' link={app.help || ''} blank={true} />
-      
-      {isAdmin ?
-        <NavButton title='Settings' icon='fa-sliders-h' link='/app' />
-      : <NavPlaceholder title='Settings' icon='fas fa-sliders-h'/>}
-      
-      <HomeLogout currentUser={user.username} />
-    
+      </div>
     </div>
   );
 };

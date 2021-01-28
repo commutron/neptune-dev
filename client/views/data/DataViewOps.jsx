@@ -577,7 +577,7 @@ const DataViewOps = ({
           title='Batch+'
           subLink={subLink}
           action='xbatch'
-          invertColor={isNigh}
+          invertColor={true}
         >
           <BatchPanelX
             batchData={hotXBatch}

@@ -509,42 +509,6 @@
   --blurInColor: var(--amethystfade);
 }
 
-.bigTideContainer {
-  min-height: 14vmax;
-  margin: 0;
-  border-top: 2vh solid var(--black);
-  border-right: 2vh solid var(--blackFade);
-  border-left: 2vh solid var(--blackFade);
-}
-.bigTideTask {
-  margin: 0 0 2vmax 0;
-  width: 100%;
-  border-right: 2vh solid var(--blackFade);
-  border-bottom: 2vh solid var(--black);
-  border-left: 2vh solid var(--blackFade);
-}
-.bigTideTask select {
-  height: 3vmax;
-  width: inherit;
-}
-.bigTideTask label {
-  padding: 0;
-  max-width: inherit;
-  font-size: 1.3vmax;
-  text-align: center;
-  background-color: rgb(25,25,25);
-}
-.bigTideContainer button {
-  min-height: 14vmax;
-  font-size: 2.5vmax;
-  font-weight: bold;
-  line-height: 1.1;
-}
-.bigTideContainer .tideIcon {
-  font-size: 5vmax;
-  font-weight: 800;
-}
-
 .ncTypeList datalist {
   text-transform: capitalize;
 }

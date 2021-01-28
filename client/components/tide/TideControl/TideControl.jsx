@@ -143,7 +143,7 @@ const TideControl = ({
       >
       <i>
         <span className='fa-stack fa-fw tideIcon'>
-          <i className="far fa-circle fa-stack-2x tideIndicate"></i>
+          <i className="fas fa-circle-notch fa-stack-2x tideIndicate"></i>
           <i className="fas fa-exchange-alt fa-stack-1x" data-fa-transform="shrink-1"></i>
         </span> 
       </i>

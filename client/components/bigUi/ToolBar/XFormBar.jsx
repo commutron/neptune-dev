@@ -27,7 +27,9 @@ const XFormBar = ({
     
   const showBatch = b && srs && b.completed === false;
 
-  const showItem = srs && i && ( i.completed === false );
+  const showItem = srs && i && i.completed === false;
+    
+    console.log(showItem);
     
   const pastPN = srs && srs.shortfall ? [...new Set( Array.from(srs.shortfall, x => x.partNum ) )] : [];
   const pastRF = srs && srs.shortfall ? [...new Set( Array.from(srs.shortfall, x => x.refs.toString() ) )] : [];

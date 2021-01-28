@@ -27,26 +27,28 @@ export const PublicLayout = ({content, title}) => (
 
 export const SplashLayout = ({content, title}) => (
   <ErrorCatch>
-  <div className='splashContainer'>
-    <ToastContainer
-      position="top-right"
-      autoClose={2500}
-      newestOnTop />
-    <div className='tenHeader'>
-      <div className='topBorder' />
-      <HomeIcon />
-      <div className='frontCenterTitle'>
-        {title}
+    <div className='splashContainer'>
+      <ToastContainer
+        position="top-right"
+        autoClose={2500}
+        newestOnTop />
+      <div className='tenHeader'>
+        <div className='topBorder' />
+        <HomeIcon />
+        <div className='frontCenterTitle'>
+          {title}
+        </div>
+        <div className='auxRight' />
+        <TideFollow />
       </div>
-      <div className='auxRight' />
-      <TideFollow />
+      {content}
     </div>
-    {content}
-  </div>
   </ErrorCatch>
 );
 
-export const CleanLayout = ({content}) => ( content );
+export const CleanLayout = ({content}) => ( 
+  <ErrorCatch> {content} </ErrorCatch> 
+);
 
 export const LabelLayout = ({content}) => (
   <ErrorCatch>

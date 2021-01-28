@@ -24,7 +24,7 @@ const FormBar = ({
   const b = batchData;
   const i = itemData;
     
-  const showX = b && action === 'xBatchBuild' && b.completed === false;
+  const showX = action === 'xBatchBuild';
   const showlegacyBatch = b && b.finishedAt === false;
   const showlegacyItem = i && ( i.finishedAt === false || i.rma.length > 0);
     
@@ -36,7 +36,7 @@ const FormBar = ({
   
   return(
     <div className='proActionForm'>
-      {showX || (showlegacyItem) ?
+      {showlegacyItem ?
         <div className='footPick'>
           {action === 'xBatchBuild' ? null :
           <label htmlFor='firstselect' className='formBarToggle taskLink butBlue'>

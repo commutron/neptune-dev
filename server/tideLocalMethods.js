@@ -62,7 +62,7 @@ Meteor.methods({
   // RECORD
   
   startTideTask(batchId, newTkey, newTask) {
-    try {
+    // try {
       const orgKey = Meteor.user().orgKey;
       
       const user = Meteor.user();
@@ -106,8 +106,13 @@ Meteor.methods({
               $set: {
                 engaged: {
                   task: 'PRO',
-                  tKey: newTkey
+                  tKey: newTkey,
+                  tName: doc.batch,
+                  tTask: newTask
                 }
+              },
+              $push: {
+                tidepools: { $each: [doc.batch], $position: 0, $slice: 5 }
               }
             });
             return true;
@@ -132,8 +137,13 @@ Meteor.methods({
                 $set: {
                   engaged: {
                     task: 'PROX',
-                    tKey: newTkey
+                    tKey: newTkey,
+                    tName: docX.batch,
+                    tTask: newTask
                   }
+                },
+                $push: {
+                  tidepools: { $each: [docX.batch], $position: 0, $slice: 5 }
                 }
               });
               return true;
@@ -141,9 +151,9 @@ Meteor.methods({
           }
         }
       }
-    }catch (err) {
-      throw new Meteor.Error(err);
-    }
+    // }catch (err) {
+    //   throw new Meteor.Error(err);
+    // }
   },
   
   stopTideTask(tideKey) {

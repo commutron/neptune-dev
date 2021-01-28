@@ -5,7 +5,7 @@ import { ToastContainer } from 'react-toastify';
 
 import HomeIcon from './HomeIcon.jsx';
 import FindBox from './FindBox.jsx';
-import ErrorCatch from './ErrorCatch.jsx';
+// import ErrorCatch from './ErrorCatch.jsx';
 
 import TideControl from '/client/components/tide/TideControl/TideControl.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
@@ -97,107 +97,105 @@ export const ProWrap = ({
                                          'pro_40_60';
                         
   return(
-    <ErrorCatch>
-      <div className={viewContainer + ' containerPro'}>
-        <ToastContainer
-          position="top-right"
-          autoClose={2500}
-          newestOnTop />
-        <div className='tenHeader'>
-          <div className='topBorder' />
-          <HomeIcon />
-          {bData && 
-            <div className='auxLeft'>
-              <TideControl 
-                batchID={bData._id} 
-                tideKey={et} 
-                tideFloodGate={tideFloodGate}
-                tideLockOut={tideLockOut}
-                stopOnly={true} />
-            </div>}
-          <div className='frontCenterTitle'>
-            <FindBox append={append} />
-          </div>
-          <div className='auxRight'>
-            <button
-              id='exBatch'
-              title='View this in explore'
-              className='taskLink'
-              onClick={()=>FlowRouter.go(exploreLink)}>
-              <i className='fas fa-rocket' data-fa-transform='left-1 down-1'></i>
-            </button>
-          </div>
-          <TideFollow proRoute={true} user={user} />
+    <div className={viewContainer + ' containerPro'}>
+      <ToastContainer
+        position="top-right"
+        autoClose={2500}
+        newestOnTop />
+      <div className='tenHeader'>
+        <div className='topBorder' />
+        <HomeIcon />
+        {bData && 
+          <div className='auxLeft'>
+            <TideControl 
+              batchID={bData._id} 
+              tideKey={et} 
+              tideFloodGate={tideFloodGate}
+              tideLockOut={tideLockOut}
+              stopOnly={true} />
+          </div>}
+        <div className='frontCenterTitle'>
+          <FindBox append={append} />
+        </div>
+        <div className='auxRight'>
+          <button
+            id='exBatch'
+            title='View this in explore'
+            className='taskLink'
+            onClick={()=>FlowRouter.go(exploreLink)}>
+            <i className='fas fa-rocket' data-fa-transform='left-1 down-1'></i>
+          </button>
+        </div>
+        <TideFollow proRoute={true} user={user} />
+      </div>
+      
+      <Fragment>
+        
+        <div className='proPrime forceScrollStyle'>
+          {React.cloneElement(children[0],
+            { 
+              tideKey: et,
+              ncTypesCombo: ncTypesComboFlat,
+              
+              tideFloodGate: tideFloodGate,
+              expand: expand, 
+              handleExpand: (d)=>handleExpand(d),
+              
+              showVerifyState: showVerifyState,
+              optionVerify: optionVerify,
+              handleVerify: (q, d)=>handleVerify(q, d)
+            }
+          )}
         </div>
         
-        <Fragment>
-          
-          <div className='proPrime forceScrollStyle'>
-            {React.cloneElement(children[0],
-              { 
-                tideKey: et,
-                ncTypesCombo: ncTypesComboFlat,
-                
-                tideFloodGate: tideFloodGate,
-                expand: expand, 
-                handleExpand: (d)=>handleExpand(d),
-                
-                showVerifyState: showVerifyState,
-                optionVerify: optionVerify,
-                handleVerify: (q, d)=>handleVerify(q, d)
-              }
-            )}
-          </div>
-        
-          <button
-            type='button'
-            className={!riverExpand ? 
-              'riverExpandToggle' : 'riverShrinkToggle'
-            }
-            onClick={()=>handleExpand(null)}>
-            <i className='fas fa-sort fa-2x' data-fa-transform='rotate-90'></i>
-          </button>
-          
-          <div className='proInstruct' style={scrollFix}>
-            {children[1]}
-          </div>
-        
-          {seriesData ?
-            <XFormBar
-              batchData={batchData}
-              seriesData={seriesData}
-              itemData={itemData}
-              widgetData={widgetData}
-              
-              tideFloodGate={tideFloodGate}
-              ncTypesCombo={ncTypesComboFlat}
-              action={action}
-              showVerifyState={showVerifyState}
-              handleVerify={(q, d)=>handleVerify(q, d)}
-            
-              users={users}
-              user={user}
-              app={app} />
-          :
-            <FormBar
-              batchData={batchData}
-              itemData={itemData}
-              widgetData={widgetData}
-              
-              tideFloodGate={tideFloodGate}
-              ncTypesCombo={ncTypesComboFlat}
-              action={action}
-              showVerifyState={showVerifyState}
-              handleVerify={(q, d)=>handleVerify(q, d)}
-            
-              users={users}
-              user={user}
-              app={app} />
+        <button
+          type='button'
+          className={!riverExpand ? 
+            'riverExpandToggle' : 'riverShrinkToggle'
           }
-        </Fragment>
+          onClick={()=>handleExpand(null)}>
+          <i className='fas fa-sort fa-2x' data-fa-transform='rotate-90'></i>
+        </button>
+        
+        <div className='proInstruct' style={scrollFix}>
+          {children[1]}
+        </div>
+      
+        {seriesData ?
+          <XFormBar
+            batchData={batchData}
+            seriesData={seriesData}
+            itemData={itemData}
+            widgetData={widgetData}
+            
+            tideFloodGate={tideFloodGate}
+            ncTypesCombo={ncTypesComboFlat}
+            action={action}
+            showVerifyState={showVerifyState}
+            handleVerify={(q, d)=>handleVerify(q, d)}
+          
+            users={users}
+            user={user}
+            app={app} />
+        :
+          <FormBar
+            batchData={batchData}
+            itemData={itemData}
+            widgetData={widgetData}
+            
+            tideFloodGate={tideFloodGate}
+            ncTypesCombo={ncTypesComboFlat}
+            action={action}
+            showVerifyState={showVerifyState}
+            handleVerify={(q, d)=>handleVerify(q, d)}
+          
+            users={users}
+            user={user}
+            app={app} />
+        }
+      </Fragment>
 
-      </div>
-    </ErrorCatch>
+    </div>
   );
 };
 
@@ -209,28 +207,26 @@ export const ProWindow = ({ children })=> {
   // };
   
   return(
-    <ErrorCatch>
-      <section className='windowPro'>
-        <ToastContainer
-          position="top-right"
-          autoClose={2500}
-          newestOnTop />
-        <div className='tenHeader'>
-          <div className='topBorder' />
-          <HomeIcon />
-          <div className='auxLeft'></div>
-          <div className='frontCenterTitle'>
-            <FindBox />
-          </div>
-          <div className='auxRight'></div>
-          <TideFollow proRoute={true} />
+    <section className='windowPro'>
+      <ToastContainer
+        position="top-right"
+        autoClose={2500}
+        newestOnTop />
+      <div className='tenHeader'>
+        <div className='topBorder' />
+        <HomeIcon />
+        <div className='auxLeft'></div>
+        <div className='frontCenterTitle'>
+          <FindBox />
         </div>
-        <div className='proContent'>
-          <Fragment>
-            {children}
-          </Fragment>
-        </div>
-      </section>
-    </ErrorCatch>
+        <div className='auxRight'></div>
+        <TideFollow proRoute={true} />
+      </div>
+      <div className='proContent'>
+        <Fragment>
+          {children}
+        </Fragment>
+      </div>
+    </section>
   );
 };

@@ -136,7 +136,7 @@ exposedRoutes.route('/initialsetup', {
 privlegedRoutes.route('/', {
   name: 'home',
   action() {
-    mount(SplashLayout, {
+    mount(CleanLayout, {
        content: (<LandingWrap />),
        title: Pref.neptuneIs
     });

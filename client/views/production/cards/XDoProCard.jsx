@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 
 import HeadWater, { HighWater } from '/client/components/riverX/HeadWater';
 
-import TideWall from '/client/components/riverX/TideWall.jsx';
+import TideWall from '/client/components/riverX/TideWall';
 
 import ReleaseAction from '/client/components/bigUi/ReleasesModule.jsx';
 
@@ -66,8 +66,8 @@ const XDoProCard = ({
   const scrapCheck = !iSerial ? null :
     itemData.history.find(x => x.type === 'scrap' && x.good === true);
   
-  const shortfall = seriesData.shortfall || [];
-  const shortfallS = !iSerial ? shortfall :
+  const shortfall = !seriesData ? [] : seriesData.shortfall;
+  const shortfallS = !iSerial || !seriesData ? shortfall :
           shortfall.filter( x => x.serial === iSerial )
             .sort((s1, s2)=>
               s1.partNum < s2.partNum ? -1 : s1.partNum > s2.partNum ? 1 : 0 );
@@ -86,29 +86,32 @@ const XDoProCard = ({
   const plainBrancheS = Array.from(brancheState, b => b.branch);
   const ancOptionS = app.ancillaryOption.sort();
   
+  const flowAction = flowData.hasRiver && fallData.floorRel && !iComplete;
+  const fallAction = batchData.waterfall.length > 0;
+  
   const insertTideWall = 
           <TideWall
             bID={batchData._id}
             bComplete={bComplete}
             bOpen={bOpen}
             // bCascade={bCascade}
+            // iCascade={iCascade}
             seriesData={seriesData}
             itemData={itemData || null}
-            // iCascade={iCascade}
             shortfallS={shortfallS}
             scrap={scrapCheck}
             ancOptionS={ancOptionS}
             plainBrancheS={plainBrancheS}
             tideKey={tideKey}
             tideFloodGate={tideFloodGate} />;
-    
-    const insertAxion =
-            <ReleaseAction 
-              id={batchData._id} 
-              rType='floorRelease'
-              actionText='release'
-              //contextText='to the floor'
-              isX={true} />;
+  
+  const insertAxion =
+          <ReleaseAction 
+            id={batchData._id} 
+            rType='floorRelease'
+            actionText='release'
+            //contextText='to the floor'
+            isX={true} />;
 
   const insertWaterfall = 
           <WaterfallSelect 
@@ -117,7 +120,7 @@ const XDoProCard = ({
             
   const insertItemCard = 
           <XItemCard
-            seriesId={seriesData._id}
+            seriesId={seriesData && seriesData._id}
             bComplete={bComplete}
             isReleased={fallData.floorRel}
             hasRiver={flowData.hasRiver}
@@ -147,7 +150,7 @@ const XDoProCard = ({
   const insertVerifyIsland =
           <VerifyIsland
             batchId={batchData._id}
-            seriesId={seriesData._id}
+            seriesId={seriesData && seriesData._id}
             itemData={itemData}
             flowFirsts={flows.filter( x => x.type === 'first' )}
             brancheS={brancheState}
@@ -159,17 +162,20 @@ const XDoProCard = ({
   const insertBatchCard = 
           <XBatchCard
             batchData={batchData}
-            seriesData={seriesData}
-            itemData={itemData}
             bOpen={bOpen}
-            widgetData={widgetData}
             user={user}
             app={app}
             brancheS={brancheState}
+            plainBrancheS={plainBrancheS}
+            ancOptionS={ancOptionS}
             floorReleased={fallData.floorRel}
             flowCounts={flowData.flowCounts}
-            fallCounts={fallData.fallCounts} />;
-  
+            fallCounts={fallData.fallCounts}
+            tideKey={tideKey}
+            tideFloodGate={tideFloodGate}
+            expand={expand}
+            flowwater={flowAction && itemData}
+            fallwater={fallAction && !itemData} />;
   
   return(
     <Fragment>
@@ -180,29 +186,26 @@ const XDoProCard = ({
         
         !fallData.floorRel ? insertAxion : // @ Release
         
-        insertWaterfall // @ Waterfall
+          fallAction ? insertWaterfall // @ Waterfall
+        : 
+          !expand ? insertBatchCard // Batch Tab Info
+          : 
+            null
     : 
         
       !tideFloodGate ? insertTideWall : // @ Locked
         
-        !flowData.hasRiver || !fallData.floorRel || (iComplete) ? 
-          
-          insertItemCard : // @ Rest
+        !flowAction ? insertItemCard : // @ Rest
           
           showVerifyState ? insertVerifyIsland : // @ First Form
             
             insertRiver // @ River
     }
       
-  	{expand && !showVerifyState && // Toggled and No First Form
+  	{!showVerifyState &&  // Toggled and No First Form
+  	  ( expand ) &&
 
-      <div className='proPrimeSingle'>
-        
-        {tideFloodGate && bOpen && insertTideWall /* Task Switcher */ }
-  	   
-  	    {insertBatchCard /* Batch Tab Info */ }
-  	    
-      </div>
+      insertBatchCard /* Batch Tab Info */ 
   	}
   
     </Fragment>

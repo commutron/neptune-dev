@@ -1,11 +1,89 @@
+n-big-tide-container, 
+n-med-tide-container,
+n-tide-task {
+  display: block;
+  border-style: solid;
+  border-top-color: var(--black);
+  border-right-color: var(--blackFade);
+  border-bottom-color: var(--black);
+  border-left-color: var(--blackFade);
+}
+n-big-tide-container {
+  min-height: 14vmax;
+  margin: 0;
+  border-top-width: 2vh;
+  border-bottom-width: 0;
+}
+n-big-tide-container,
+n-big-tide-container + n-tide-task {
+  border-right-width: 2vh;
+  border-left-width: 2vh;
+}
+n-big-tide-container + n-tide-task {
+  margin: 0 0 2vmax 0;
+  border-bottom-width: 2vh;
+}
+n-big-tide-container button {
+  min-height: 14vmax;
+  font-size: 2.5vmax;
+  font-weight: bold;
+  line-height: 1.1;
+}
+n-big-tide-container .tideIcon {
+  font-size: 5vmax;
+  font-weight: 800;
+}
+
+n-med-tide-container,
+n-med-tide-container button {
+  min-height: 3vmax;
+}
+n-med-tide-container {
+  border-top-width: 1vh;
+  border-bottom-width: 0;
+}
+n-med-tide-container, 
+n-med-tide-container + n-tide-task {
+  margin: 0;
+  border-right-width: 1vh;
+  border-left-width: 1vh;
+}
+n-med-tide-container + n-tide-task {
+  border-bottom-width: 1vh;
+}
+n-med-tide-container button {
+  border: 0.4vmax solid var(--turquoise);
+}
+n-med-tide-container .tideIcon {
+  font-size: 3vmax;
+}
+
+n-tide-task {
+  width: 100%;
+  border-top-width: 0;
+}
+n-tide-task select {
+  height: 3vmax;
+  width: inherit;
+}
+n-tide-task label {
+  padding: 0;
+  max-width: inherit;
+  font-size: 1.3vmax;
+  text-align: center;
+  background-color: rgb(25,25,25);
+}
+
+
+
 .tideIn, .tideOut, .tideFlip, .tideLock {
   width: 100%;
   height: 100%;
   cursor: pointer;
-  font-size: 1.5vh;
+  /*font-size: 1.5vh;*/
   background-color: rgb(25,25,25);
   color: var(--asbestos);
-  padding-top: 0.2vmax;
+  /*padding-top: 0.2vmax;*/
   letter-spacing: 0.2ch;
 }
 

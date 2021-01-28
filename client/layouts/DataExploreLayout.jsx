@@ -90,7 +90,7 @@ export const TraverseWrap = ({
           }
         </div>
         
-      <TideFollow />
+      <TideFollow user={user} />
         
       </div>
       <aside className='taskBarEx noPrint'>

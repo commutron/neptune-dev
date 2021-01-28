@@ -1,56 +1,76 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import moment from 'moment';
+import React, { Fragment } from 'react';
+// import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
 import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 
-//import JumpText from '../../../components/tinyUi/JumpText.jsx';
-//import StepsProgress from '../../../components/bigUi/StepsProgress.jsx';
-//import NonConMiniSatus from '/client/components/charts/NonConMiniStatus.jsx';
-//import NonConMiniTops from '/client/components/bigUi/NonConMiniTops.jsx';
+import { TideBump } from '/client/components/riverX/TideWall';
+
+import StepsProgressX from '/client/components/bigUi/StepsProgress/StepsProgressX';
 import TagsModule from '/client/components/bigUi/TagsModule.jsx';
 import NoteLine from '/client/components/smallUi/NoteLine.jsx';
 import BlockList from '/client/components/bigUi/BlockList.jsx';
 
-const BatchCardX = ({ 
-  itemSerial, batchData, bOpen, 
-  
-  widgetData, groupData, 
-  user, app, 
-  
-  ncTypesCombo, tideKey,
-  
-  tideFloodGate,
-  expand, handleExpand,
-  
-  flow, flowCounts, fallCounts
+const BatchCardX = ({
+  batchData, bOpen, //seriesData, itemData
+  user, app, brancheS, plainBrancheS, ancOptionS,
+  floorReleased, flowCounts, fallCounts,
+  tideKey, tideFloodGate, 
+  expand, flowwater, fallwater
 })=> {
-    
-  // const [ brancheState, brancheSortSet ] = useState([]);
-
-  // const [ flowData, flowDataSet ] = useState(false);
-
-  // useEffect( ()=>{
-  //   const branches = app.branches.filter( b => b.open === true );
-  //   const branchesSort = branches.sort((b1, b2)=> {
-  //     return b1.position < b2.position ? 1 : 
-  //           b1.position > b2.position ? -1 : 0 });
-  //   brancheSortSet(branchesSort);
-  //   const pBS = Array.from(brancheState, b => b.branch);
-  //   plainBrancheSet(pBS);
-  // }, [app]);
   
-  const b = batchData;
-  //const iS = itemSerial;
-  // const w = widgetData;
-  //const g = groupData;
-  // const u = user;
-  const a = app;
+  const insertTideBump = 
+          <TideBump
+            bID={batchData._id}
+            bOpen={bOpen}
+            ancOptionS={ancOptionS}
+            plainBrancheS={plainBrancheS}
+            tideKey={tideKey}
+            tideFloodGate={tideFloodGate} />;
+            
+  const insertMiniInfo = 
+          <MiniInfo
+            batchData={batchData}
+            flowCounts={flowCounts}
+            app={app} />;
+            
+  const insertProgress = 
+          <div className='space1v'>
+            <StepsProgressX
+              quantity={batchData.quantity}
+              flowCounts={flowCounts}
+              fallCounts={fallCounts}
+              riverTitle=''
+              brancheS={brancheS}
+              truncate={true}
+            />
+          </div>;
   
-  const bComplete = b.completed === true;
-
-
+  if( expand && ( !flowwater && !fallwater ) ) {
+    return(
+      <Fragment>   
+        <div className='proPrimeSingle'>
+     
+          {tideFloodGate && bOpen && insertTideBump}
+      
+          {insertMiniInfo}
+          
+        </div>
+      
+        <div className='proPrimeSingle'>
+        
+          {insertProgress}
+  
+        </div>
+      </Fragment>
+    );
+  }
+  
   return(
+    <div className='proPrimeSingle'>
+      
+      {tideFloodGate && bOpen && insertTideBump}
+          
       <Tabs
         tabs={[
           <i className='fas fa-info-circle fa-fw' data-fa-transform='down-2' title='Info'></i>, 
@@ -61,30 +81,45 @@ const BatchCardX = ({
         stick={false}
         hold={true}
         sessionTab='batchExPanelTabs'>
-    
-        <div className='space cap'>
-          <TagsModule
-            action='xBatch'
-            id={b._id}
-            tags={b.tags}
-            tagOps={a.tagOption} />
-          <br />
-          <NoteLine 
-            action='xBatch'
-            id={b._id}
-            entry={b.notes} />
-          <BlockList id={b._id} data={b.blocks} xbatch={true} lock={bComplete} expand={expand} />
-        </div>
-  
-        <div className='space cap'>
-        {/*<StepsProgress
-            mini={true}
-            expand={expand}
-            flowCounts={flowCounts} />*/}
-        </div>
+      
+        {insertMiniInfo}
+          
+        {insertProgress}
         
       </Tabs>
+          
+    </div>
   );
 };
 
 export default BatchCardX;
+
+const MiniInfo = ({ batchData, flowCounts, app })=> (
+  <div className='space1v cap'>
+    
+    <p>{Pref.salesOrder}: <b>{batchData.salesOrder}</b></p>
+    
+    <p>Total Quantity: <b className='numfont'>{batchData.quantity}</b></p>
+    
+    <p>Serialized Items: <b className='numfont'>{flowCounts.liveItems}</b></p>
+    {flowCounts.scrapCount > 0 &&
+      <p>Scrapped Items: <b className='numfont redT'>{flowCounts.scrapCount}</b></p>}
+      
+    <hr />
+    <TagsModule
+      action='xBatch'
+      id={batchData._id}
+      tags={batchData.tags}
+      tagOps={app.tagOption} />
+    <NoteLine 
+      action='xBatch'
+      id={batchData._id}
+      entry={batchData.notes} />
+    <BlockList 
+      id={batchData._id} 
+      data={batchData.blocks}
+      xbatch={true} 
+      lock={batchData.completed} 
+      expand={false} />
+  </div>
+);
