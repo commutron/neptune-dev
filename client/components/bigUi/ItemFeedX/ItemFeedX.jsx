@@ -27,6 +27,15 @@ const ItemFeedX = ({
   
   const calString = "ddd, MMM D /YY, h:mm A";
   
+  const flatCheckList = Array.from(ncTypesCombo, x => 
+                                  x.key ? x.live === true && x.typeText : x);
+  
+  const canQA = Roles.userIsInRole(Meteor.userId(), ['remove', 'qa']);
+  const canRun = Roles.userIsInRole(Meteor.userId(), ['qa', 'remove', 'run']);
+  const canEdit = Roles.userIsInRole(Meteor.userId(), 'edit');
+  const canVerify = Roles.userIsInRole(Meteor.userId(), 'verify');
+  const canInspect = Roles.userIsInRole(Meteor.userId(), 'inspect');
+  
   return(
     <div className='scrollWrap'>
       <div className='infoFeed'>
@@ -47,6 +56,7 @@ const ItemFeedX = ({
                 seriesId={seriesId}
                 serial={serial}
                 done={done}
+                canEdit={canEdit}
                 showHeader={false}
                 calString={calString} /> 
             );
@@ -55,13 +65,16 @@ const ItemFeedX = ({
               <NonConBlock
                 key={dt.key+ix}
                 entry={dt}
-                id={batchId}
                 seriesId={seriesId}
                 serial={serial}
                 done={done}
                 user={user}
+                canQA={canQA}
+                canVerify={canVerify}
+                canInspect={canInspect}
                 app={app}
                 ncTypesCombo={ncTypesCombo}
+                flatCheckList={flatCheckList}
                 brancheS={brancheS}
                 calString={calString} />
             );
@@ -70,10 +83,10 @@ const ItemFeedX = ({
               <ShortBlock
                 key={dt.key+ix}
                 entry={dt}
-                id={batchId}
                 seriesId={seriesId}
                 serial={serial}
                 done={done}
+                deleteAuth={canRun}
                 calString={calString} /> 
             );
           }else{

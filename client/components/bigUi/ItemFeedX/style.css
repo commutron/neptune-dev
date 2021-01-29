@@ -8,28 +8,29 @@
   min-width: fit-content;
   margin: 0 4vw;
 }
-.infoBlock {
+.feedInfoBlock {
   width: 100%;
   margin: 2vh 0;
 }
 
-.blockHeader { padding: 1vh 2vw; }
-.blockHeader  button {  color: white; }
+.feedInfoHeader { padding: 1vh 2vw; }
+.feedInfoHeader button {  color: white; }
 
-.blockTitle {
+.feedInfoTitle {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  text-transform: capitalize;
 }
-.blockTitle > div {
+.feedInfoTitle > div {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   flex-wrap: nowrap;
 }
-.blockTitle > div > div {
+.feedInfoTitle > div > div {
   padding: 1vh 2vw;
   white-space: pre-wrap;
 }
@@ -42,8 +43,8 @@
 .leftAnchor {border-right: 1px inset rgba(0,0,0,0.1); }
 .leftAnchor .iPlain { color: var(--clouds); }
 .leftAnchor .iG { color: var(--emerald); }
-.leftAnchor .iWarn { color: var(--carrot); }
-.leftAnchor .iNG { color: var(--alizarin); }
+.leftAnchor .iWarn { color: var(--pumpkin); }
+.leftAnchor .iNG { color: var(--pomegranate); }
 
 .rightAnchor {
   min-height: 40.5px;
@@ -57,26 +58,26 @@
 .inspect { background-color: var(--emeraldtrans); }
 
 .history { background-color: var(--peterriverfade); }
-
-.noncon { background-color: rgba(231, 76, 60, 0.2); }
-.noncon { background-color: var(--alizarintrans); }
+.noncon { background-color: var(--alizarinfrost); }
 
 .short { background-color: rgba(243, 156, 18, 0.2); }
-.short { background-color: var(--orangetrans); }
+.short { background-color: var(--orangefrost); }
 
 .finish { background-color: var(--amethystfade); }
 
 .genericEvent { background-color: var(--midnightbluefade); }
 .alterEvent { background-color: var(--wetasphaltfade); }
 
-.moreInfoList {
+.feedInfoBlock > ul {
   margin: 0 0 0 75px;
   list-style: circle;
 }
-.moreInfoList li, .moreInfoList dd {
+.feedInfoBlock > ul li,
+.feedInfoBlock > ul dd {
   padding: 0.25rem 0;
 }
-.moreInfoList li:last-child, .moreInfoList dd:last-child {
+.feedInfoBlock > ul li:last-child,
+.feedInfoBlock > ul dd:last-child {
   padding: 0.25rem 0 0.5rem 0;
 }
 
@@ -89,12 +90,8 @@
   border: 1px solid rgba(255,255,255,0.5);
   min-height: 40.5px;
 }
-.inlineInput { 
+.inlineInput, .inlineSelect { 
   width: 12vw;
-  min-height: 40.5px;
-}
-.inlineSelect { 
-  width: 15vw;
   min-height: 40.5px;
 }
 .inlineButton { 

@@ -52,7 +52,7 @@ const ItemsListX = ({
     Session.set((sessionSticky+'toggle'), rule);
   }
   
-  // get flow steps for menu
+  /* get flow steps for menu
   function flowSteps() {
     if(!flowData) {
       return [];
@@ -73,7 +73,7 @@ const ItemsListX = ({
         .filter( ( v, indx, slf ) => slf.findIndex( x => x.key === v.key ) === indx);
       return niceSteps;
     }
-  }
+  }*/
 
   // Sort Filters
   function fDone(items, timeMod, notMod) {
@@ -291,7 +291,7 @@ const ItemsListX = ({
   const scrap = srs ? fScrap(srs.items, timeModifyer, notModifyer) : 
                     { scrapList: [], iList: [] };
   
-  const steps = flowSteps();
+  // const steps = flowSteps();
    
   useEffect( ()=> { 
     const K = keyword;
@@ -332,7 +332,7 @@ const ItemsListX = ({
       <FilterItemsX
         title={batchData.batch}
         total={stateList.length}
-        advancedList={steps}
+        advancedList={flowData.riverFlow || []}
         selectedKeyword={keyword}
         selectedTime={timeModifyer}
         selectedToggle={notModifyer}

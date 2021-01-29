@@ -7,7 +7,7 @@ Meteor.methods({
 
 
 //// For a Person \\\\\
-
+/*
   engagedState() {
     const user = Meteor.user();
     const eg = user && user.engaged;
@@ -27,7 +27,7 @@ Meteor.methods({
       return bounceX;
     }
   },
-  
+  */
   getEngagedBlocks(userTkeys) {
     if(Array.isArray(userTkeys) === false) {
       return false;
@@ -62,7 +62,7 @@ Meteor.methods({
   // RECORD
   
   startTideTask(batchId, newTkey, newTask) {
-    // try {
+    try {
       const orgKey = Meteor.user().orgKey;
       
       const user = Meteor.user();
@@ -151,9 +151,9 @@ Meteor.methods({
           }
         }
       }
-    // }catch (err) {
-    //   throw new Meteor.Error(err);
-    // }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
   },
   
   stopTideTask(tideKey) {

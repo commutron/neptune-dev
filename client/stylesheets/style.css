@@ -752,13 +752,11 @@ input::-webkit-calendar-picker-indicator {
 .uiCheck input[type='checkbox']:hover,
 .uiCheck input[type='checkbox']:active {
   text-decoration: underline solid var(--navIndicatorA);
-  color: white;
 }
 .uiCheck input[type='checkbox']:focus + label {
   outline-color: var(--navIndicatorB);
   outline-style: dotted;
   outline-width: thin;
-  color: white;
 }
 
 .chartTableAction {

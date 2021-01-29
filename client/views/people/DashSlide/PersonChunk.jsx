@@ -20,11 +20,7 @@ const PersonChunk = ({
     if(userChunk.tideBlock.task) {
       setGuess([ 'fromUserInput', [ userChunk.tideBlock.task ] ]);
     }else{
-      Meteor.call('branchBestGuess', 
-      userChunk.uID, 
-      userChunk.batch,
-      userChunk.tideBlock.startTime,
-      false,
+      Meteor.call('getOneBranchBestGuess', userChunk.batch, userChunk.tideBlock,
       (err, asw)=>{
         err && console.log(err);
         asw && setGuess(asw);

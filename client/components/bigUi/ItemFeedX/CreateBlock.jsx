@@ -6,8 +6,8 @@ import UserNice from '/client/components/smallUi/UserNice.jsx';
 
 const CreateBlock = ({ title, user, datetime, calString })=> (
   
-  <div className='infoBlock create'>
-    <div className='blockTitle cap'>
+  <div className='feedInfoBlock create'>
+    <div className='feedInfoTitle'>
       <div>
         <div className='leftAnchor'><i className="fas fa-plus-circle fa-lg fa-fw iPlain"></i></div>
         <div>{title}</div>

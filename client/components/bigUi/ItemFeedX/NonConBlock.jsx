@@ -7,11 +7,11 @@ import { toast } from 'react-toastify';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 
 const NonConBlock = ({
-  entry, id, serial,
-  done, user, app, ncTypesCombo, brancheS, calString
+  entry, seriesId, serial,
+  done, user, canQA, canVerify, canInspect,
+  app, ncTypesCombo, flatCheckList, brancheS, calString
 })=> {
   
-  const deleteAuth = Roles.userIsInRole(Meteor.userId(), ['remove', 'qa']);
   
   const [ editState, editSet ] = useState(false);
   
@@ -20,9 +20,6 @@ const NonConBlock = ({
   }
   
   function handleCheck(target, dflt) {
-    const flatCheckList = Array.from(ncTypesCombo, x => 
-                                  x.key ? x.live === true && x.typeText : x);
-  
     let match = target.value === dflt || 
                 flatCheckList.find( x => x === target.value);
     let message = !match ? 'please choose from the list' : '';
@@ -45,7 +42,7 @@ const NonConBlock = ({
     }else if(entry.ref !== ref || 
              entry.type !== type ||
              entry.where !== where) {  
-      Meteor.call('editNC', id, serial, ncKey, ref, type, where, (error)=> {
+      Meteor.call('editNCX', seriesId, serial, ncKey, ref, type, where, (error)=> {
         error && console.log(error);
   			editSet(false);
   		});
@@ -54,7 +51,7 @@ const NonConBlock = ({
   
   function handleReInspect(e) {
     const ncKey = entry.key;
-    Meteor.call('reInspectNC', id, ncKey, (error)=> {
+    Meteor.call('reInspectNCX', seriesId, ncKey, (error)=> {
 			error && console.log(error);
 			edit();
 		});
@@ -65,7 +62,7 @@ const NonConBlock = ({
     if(!Roles.userIsInRole(Meteor.userId(), 'verify')) {
       toast.warning("'First-off' permission is needed skip a nonconformance");
     }else{
-      Meteor.call('trashNC', id, ncKey, (error)=> {
+      Meteor.call('trashNCX', seriesId, ncKey, (error)=> {
   			error && console.log(error);
   			edit();
   		});
@@ -74,7 +71,7 @@ const NonConBlock = ({
   
   function handleUnTrash(e) {
     const ncKey = entry.key;
-    Meteor.call('unTrashNC', id, ncKey, (error)=> {
+    Meteor.call('unTrashNCX', seriesId, ncKey, (error)=> {
 			error && console.log(error);
 			edit();
 		});
@@ -84,9 +81,9 @@ const NonConBlock = ({
     const yes = window.confirm('Permanently delete this ' + Pref.nonCon + '?');
     if(yes) {
       const ncKey = entry.key;
-      const override = !deleteAuth ? 
+      const override = !canQA ? 
                         prompt("Enter PIN to override", "") : false;
-      Meteor.call('ncRemove', id, ncKey, override, (error)=>{
+      Meteor.call('removeNCX', seriesId, ncKey, override, (error)=>{
         error && console.log(error);
         editSet(false);
       });
@@ -98,7 +95,6 @@ const NonConBlock = ({
   const fx = typeof dt.fix === 'object';
   const ins = typeof dt.inspect === 'object';
   const rjc = !dt.reject || dt.reject.length === 0 ? false : true;
-  const skp = typeof dt.skip === 'object';
   
   const trashed = !dt.trash ? false : typeof dt.trash === 'object';
   const tSty = trashed ? 'trashStyle' : '';
@@ -110,31 +106,30 @@ const NonConBlock = ({
   
   let fixed = !fx ? '' : <li>Repaired: <UserNice id={dt.fix.who} /> {moment(dt.fix.time).calendar(null, {sameElse: calString})}</li>;
   let inspected = !ins ? '' : <li>Inspected: <UserNice id={dt.inspect.who} /> {moment(dt.inspect.time).calendar(null, {sameElse: calString})}</li>;
-  let skipped = !skp ? '' : <li>Skipped: <UserNice id={dt.skip.who} /> {moment(dt.skip.time).calendar(null, {sameElse: calString})}</li>;
   let snoozed = !dt.snooze ? false : true;
   let inTrash = !trashed ? '' : 
                 <Fragment>
                   <li>Trashed: <UserNice id={dt.trash.who} /> {moment(dt.trash.time).calendar(null, {sameElse: calString})}</li>
                   <li><button
-                        className='miniAction redT inlineButton'
-                        disabled={!deleteAuth}
+                        className='smallAction clearRed blackT inlineButton'
+                        disabled={!canQA}
                         onClick={(e)=>popNC(e)}
                       >Permanently Delete</button></li>
                 </Fragment>;
 
-  const editAllow = Roles.userIsInRole(Meteor.userId(), 'inspect') && !done;
+  const editAllow = canInspect && !done;
   const editIndicate = editState && 'editStandout';
 
 	  
   return(
-    <div className={`infoBlock noncon ${editIndicate} ${tSty}`}>
-      <div className='blockTitle cap'>
+    <div className={`feedInfoBlock noncon ${editIndicate} ${tSty}`}>
+      <div className={`feedInfoTitle ${editState ? 'doFlexWrap' : ''}`}>
         {editState === true ?
           <div>
             <input
               type='text'
               id='ncRef'
-              className='redIn up inlineInput'
+              className='up inlineInput'
               min={1}
               defaultValue={dt.ref}
               required />
@@ -142,7 +137,7 @@ const NonConBlock = ({
               <span>
                 <input 
                   id='ncType'
-                  className='redIn inlineSelect'
+                  className='inlineSelect'
                   type='search'
                   defaultValue={dt.type}
                   placeholder='Type'
@@ -176,7 +171,6 @@ const NonConBlock = ({
               <span>
                 <select 
                   id='ncType'
-                  className='redIn'
                   required
                   disabled={ncTypesCombo.length < 1}
                 >
@@ -204,10 +198,10 @@ const NonConBlock = ({
             }
             <input 
               id='ncWhere'
-              className='redIn inlineSelect'
+              className='inlineSelect'
               list='ncWhereList'
               defaultValue={dt.where || ''}
-              disabled={!Roles.userIsInRole(Meteor.userId(), ['run', 'edit', 'qa'])}
+              disabled={!canVerify}
               required />
               <datalist id='ncWhereList'>
                 <option value={dt.where || ''}>{dt.where || ''}</option>
@@ -241,32 +235,31 @@ const NonConBlock = ({
             <div className='rightText'>
               {ins ?
                 <button
-                  className='miniAction yellowT inlineButton'
+                  className='smallAction clearOrange blackT inlineButton'
                   onClick={(e)=>handleReInspect(e)}
                   disabled={done}>
-                  <i className='fas fa-redo fa-lg'></i>
                   <i className='med'> ReInspect</i>
                 </button>
               :null}
-              {!trashed ?
+              {!trashed && !ins ?
                 <button
-                  className='miniAction yellowT inlineButton'
-                  disabled={!Roles.userIsInRole(Meteor.userId(), 'verify')}
+                  className='smallAction clearOrange blackT inlineButton'
+                  disabled={!canVerify}
                   onClick={(e)=>handleTrash(e)}
                 >Remove</button>
-              :
+              : trashed &&
                 <button
-                  className='miniAction yellowT inlineButton'
-                  disabled={!Roles.userIsInRole(Meteor.userId(), 'inspect')}
+                  className='smallAction clearOrange blackT inlineButton'
+                  disabled={!canInspect}
                   onClick={(e)=>handleUnTrash(e)}
                 >Restore</button>
               }
               <button
-                className='miniAction greenT inlineButton'
+                className='smallAction clearGreen blackT inlineButton'
                 onClick={(e)=>handleChange(e)}
               >Save</button>
               <button
-                className='miniAction inlineButton'
+                className='smallAction clearBlack inlineButton'
                 onClick={()=>edit()}
               >Cancel</button>
             </div>
@@ -286,11 +279,10 @@ const NonConBlock = ({
             </div>
           }
         </div>
-      <ul className='moreInfoList'>
+      <ul>
         {fixed}
         {inspected}
         {snoozed && <li>Snoozed</li>}
-        {skipped}
         {rjc ?
           dt.reject.map( (entry, index)=>{
             return(

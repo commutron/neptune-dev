@@ -116,7 +116,7 @@ function fallLoop(waterfall, app) {
   let countData = [];
   const appCO = app.countOption;
   for(let wf of waterfall) {
-    const wfType = wf.type || appCO.find( x => x.key === entry.wfKey ).type;
+    const wfType = wf.type || appCO.find( x => x.key === wf.wfKey ).type;
     const wfCount = wf.counts.length === 0 ? 0 :
                       Array.from(wf.counts, x => x.tick).reduce((x,y)=> x + y);
     countData.push({

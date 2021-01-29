@@ -1,8 +1,6 @@
 import React from 'react';
 //import Pref from '/client/global/pref.js';
 
-import ProgLayerBurndown, { ProgLayerBurndownExplain } 
-  from '/client/components/charts/ProgLayerBurndown.jsx';
 import TimeBudgetsChunk from './TimeBudgetsChunk.jsx';
 import TimeBlocksRaw from './TimeBlocksRaw.jsx';
 
@@ -25,29 +23,6 @@ const TimeTab = ({
         b={b}
         totalUnits={totalUnits}
         isDebug={isDebug} />
-        
-      <div className='dropCeiling vmargin space'>
-        <ProgLayerBurndown
-          id={b._id}
-          start={b.start}
-          floorRelease={b.floorRelease}
-          end={b.finishedAt}
-          flowData={riverFlow || []}
-          itemData={b.items.filter( x => x.alt === 'no' || x.alt === false )}
-          title='Progress Burndown' />
-                
-        {b.riverAlt !== false &&  
-          <ProgLayerBurndown
-            id={b._id}
-            start={b.start}
-            floorRelease={b.floorRelease}
-            end={b.finishedAt}
-            flowData={riverAltFlow || []}
-            itemData={b.items.filter( x => x.alt === 'yes' )}
-            title='Alt Progress Burndown' />}
-              
-        <ProgLayerBurndownExplain />
-      </div>
       
       <div className='vmargin space'>
         <TimeBlocksRaw 

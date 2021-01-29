@@ -3,7 +3,7 @@
 .action, .smallAction {
   font-size: medium;
   letter-spacing: 1px;
-  padding: 0 10px;
+  padding: 0 1ch;
   min-height: 32px;
   line-height: 1;
 }
@@ -114,52 +114,52 @@
   border-color: var(--concrete);
 }
 
-.clearGreen, .invert .clearGreen{
+.clearGreen {
   color: var(--emerald);
   border-color: var(--emerald);
 }
-.clearGreen:hover, .invert .clearGreen:hover {
+.clearGreen:hover {
   background-color: var(--emerald);
 }
 
-.clearBlue, .invert .clearBlue {
+.clearBlue {
   color: var(--peterriver);
 	border-color: var(--peterriver);
 }
-.clearBlue:hover, .invert .clearBlue:hover {
+.clearBlue:hover {
 	background-color: var(--peterriver);
 }
 
-.clearRed, .invert .clearRed {
+.clearRed {
   color: var(--alizarin);
   border-color: var(--alizarin);
 }
-.clearRed:hover, .invert .clearRed:hover {
+.clearRed:hover {
   background-color: var(--alizarin);
 }
 
-.clearOrange, .invert .clearOrange {
+.clearOrange {
   color: var(--orange);
   border-color: var(--orange);
 }
-.clearOrange:hover, .invert .clearOrange:hover {
+.clearOrange:hover {
   background-color: var(--orange);
   color: black;
 }
 
-.clearTeal, .invert .clearTeal {
+.clearTeal {
   color: var(--turquoise);
   border-color: var(--turquoise);
 }
-.clearTeal:hover, .invert .clearTeal:hover {
+.clearTeal:hover {
   background-color: var(--turquoise);
 }
 
-.clearPurple, .invert .clearPurple {
+.clearPurple {
   color: var(--amethyst);
   border-color: var(--amethyst);
 }
-.clearPurple:hover, .invert .clearPurple:hover {
+.clearPurple:hover {
   background-color: var(--amethyst);
 }
 

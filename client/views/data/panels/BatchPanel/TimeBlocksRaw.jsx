@@ -72,7 +72,7 @@ const RawBlock = ({ tB, batch, isDebug, showZero })=> {
     if(tB.task) {
       setGuess([ 'fromUserInput', [ tB.task ] ]);
     }else{
-      Meteor.call('branchBestGuess', tB.who, batch, tB.startTime, tB.stopTime,
+      Meteor.call('getOneBranchBestGuess', batch, tB,
       (err, asw)=>{
         err && console.log(err);
         if(asw) {

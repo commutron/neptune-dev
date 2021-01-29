@@ -84,18 +84,10 @@ Invert Rules */
   color: black;
 }
 
-.invert .textLinkButton { color: var(--belizeHole); }
 .invert .open {
   color: white;
 }
-.invert .clearWhite {
-  color: black;
-  border-color: black;
-}
-.invert .clearWhite:hover,
-.invert .clearGreen:hover,
-.invert .clearBlue:hover,
-.invert .clearRed:hover,
+
 .invert .tagAddButton:hover {
   color: white;
 }
@@ -105,9 +97,7 @@ Invert Rules */
 .invert .cold:hover {
   color: black;
 }
-.invert .clearWhite:hover {
-  background-color: black;
-}
+
 .invert .moveLR:hover, .invert .moveLR:active {
   color: white;
   background-color: black;

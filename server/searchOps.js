@@ -141,11 +141,12 @@ Meteor.methods({
       /////////////////////////////////////////////////////////////////////////
     // First Firsts
    ///////////////////////////////////////////////////////////////////////////
-  firstFirst(batchId) {
-    const b = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
+  firstFirst(seriesId) {
+    const srs = XSeriesDB.findOne({_id: seriesId});
+                   
     let first = moment();
-    if(!b) { null }else{
-      for(let i of b.items) {
+    if(!srs) { null }else{
+      for(let i of srs.items) {
         let firstHistory = i.history[0];
         if(!firstHistory || moment(firstHistory.time).isSameOrAfter(first)) {
           null;

@@ -22,8 +22,9 @@ import BatchXStatus from '/client/components/forms/Batch/BatchXStatus.jsx';
 import StepsProgressX from '/client/components/bigUi/StepsProgress/StepsProgressX';
 
 const InfoTab = ({
-  app, b, user, isDebug,
-  done, flowCounts, fallCounts, riverTitle, brancheS
+  b, user, isDebug,
+  released, done, flowCounts, fallCounts, riverTitle, 
+  app, brancheS
 }) =>	{
 
   const nonWorkDays = app.nonWorkDays;
@@ -31,8 +32,6 @@ const InfoTab = ({
     moment.updateLocale('en', { holidays: nonWorkDays });
   }
   
-  const released = b.releases.findIndex( x => x.type === 'floorRelease') >= 0;
-
   const qtB = b.quoteTimeBudget && b.quoteTimeBudget.length > 0 ? 
                 b.quoteTimeBudget[0].timeAsMinutes : 0;
   const qtHours = min2hr(qtB);

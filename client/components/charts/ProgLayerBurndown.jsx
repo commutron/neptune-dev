@@ -4,24 +4,28 @@ import Theme from '/client/global/themeV.js';
 
 import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
 
-const ProgLayerBurndown = ({ id, start, floorRelease, end, flowData, itemData, title })=> {
+const ProgLayerBurndown = ({ 
+  seriesId, batchNum, start, floorRelease, end, riverFlow, 
+  itemData, title, isDebug
+})=> {
   
   const [ countState, countSet ] = useState( false );
   const [ firstState, firstSet ] = useState( false );
   
   useEffect( ()=> {
-    Meteor.call('firstFirst', id, (error, reply)=> {
+    Meteor.call('firstFirst', seriesId, (error, reply)=> {
       error && console.log(error);
       reply && firstSet( reply );
     });
-    Meteor.call('layeredHistoryRate', start, end, flowData, itemData, (error, reply)=> {
+    Meteor.call('layeredHistoryRate', seriesId, start, end, riverFlow, 
+    (error, reply)=> {
       error && console.log(error);
       reply && countSet( reply );
     });
   }, []);
   
     
-  Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(countState);
+  isDebug && console.log(countState);
   
   if(!countState || !firstState) {
     return(
@@ -46,7 +50,7 @@ const ProgLayerBurndown = ({ id, start, floorRelease, end, flowData, itemData, t
               axis: { stroke: 'grey' },
               grid: { stroke: '#5c5c5c' },
               ticks: { stroke: '#5c5c5c' },
-              tickLabels: { fill: 'lightgrey', fontSize: '6px' }
+              tickLabels: { fontSize: '6px' }
             } }
           />
           <VictoryAxis
@@ -56,7 +60,7 @@ const ProgLayerBurndown = ({ id, start, floorRelease, end, flowData, itemData, t
               axis: { stroke: 'grey' },
               grid: { stroke: '#5c5c5c' },
               ticks: { stroke: '#5c5c5c' },
-              tickLabels: { fill: 'lightgrey', fontSize: '4px' }
+              tickLabels: { fontSize: '4px' }
             } }
           />
         
@@ -70,7 +74,7 @@ const ProgLayerBurndown = ({ id, start, floorRelease, end, flowData, itemData, t
                 data: { 
                   stroke: 'rgb(41, 128, 185)',
                   strokeWidth: '1px',
-                  fill: 'rgba(41, 128, 185, 0.1)'
+                  fill: 'rgba(41, 128, 185, 0.2)'
                 },
               }}
               animate={{

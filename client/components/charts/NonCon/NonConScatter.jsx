@@ -90,7 +90,6 @@ const NonConScatter = ({ ncOp, flow, flowAlt, nonCons, app })=> {
             grid: { stroke: '#5c5c5c' },
             ticks: { stroke: '#5c5c5c' },
             tickLabels: { 
-              fill: 'lightgrey', 
               fontSize: '7px' }
           } }
         />
@@ -102,7 +101,6 @@ const NonConScatter = ({ ncOp, flow, flowAlt, nonCons, app })=> {
             grid: { stroke: '#5c5c5c' },
             ticks: { stroke: '#5c5c5c' },
             tickLabels: { 
-              fill: 'lightgrey', 
               fontSize: '7px' }
           } }
         />

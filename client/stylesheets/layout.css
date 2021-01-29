@@ -679,6 +679,8 @@ n-sm-model-content {
   align-items: center;
 }
 
+.doFlexWrap { flex-wrap: wrap; }
+
 .autoFlex, .comfort, .balance, .balancer,
 .rowWrap, .rowWrapR {
   display: flex;

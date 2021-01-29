@@ -27,6 +27,9 @@ const BatchPanelX = ({
   const brancheS = app.branches.sort((b1, b2)=> 
           b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
   
+  const floorRelease = b.releases.find( x => x.type === 'floorRelease');
+  const released = floorRelease ? true : false;
+
   const done = b.completed === true && b.live === false;
   const allDone = !seriesData ? true : seriesData.items.every( x => x.completed );
     
@@ -51,13 +54,14 @@ const BatchPanelX = ({
         sessionTab='batchExPanelTabs'>
         
         <InfoTab
-          app={app}
           user={user}
           b={batchData}
           riverTitle={flowData.riverTitle}
           flowCounts={flowData.flowCounts}
           fallCounts={fallData}
+          released={released}
           done={done}
+          app={app}
           brancheS={brancheS}
           isDebug={isDebug}
         />
@@ -81,19 +85,20 @@ const BatchPanelX = ({
         </div>
         
         <TimeTab 
-          a={app}
-          b={b}
+          batchData={batchData}
+          seriesData={seriesData}
           user={user}
           isDebug={isDebug}
           totalUnits={b.quantity}
+          floorRelease={floorRelease}
           done={done}
           allDone={allDone}
-          riverFlow={flowData.riverFlow} />
+          riverFlow={flowData.riverFlow}
+          app={app} />
         
         <ProblemTab
-          batchData={batchData}
+          batch={batchData.batch}
           seriesData={seriesData}
-          riverFlow={flowData.riverFlow}
           ncTypesCombo={flowData.ncTypesComboFlat}
           brancheS={brancheS}
           app={app}
@@ -101,8 +106,8 @@ const BatchPanelX = ({
           
         <div className='space3v'>
           <XBatchTimeline
-            id={b._id}
             batchData={b}
+            seriesId={seriesData._id}
             releaseList={b.releases || []}
             verifyList={flowData.flowCounts.firstsFlat}
             eventList={b.events || []}

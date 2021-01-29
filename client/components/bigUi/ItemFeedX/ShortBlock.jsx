@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import moment from 'moment';
 import './style.css';
 import Pref from '/client/global/pref.js';
 
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 
-const ShortBlock = ({ id, serial, entry, done, calString })=> {
+const ShortBlock = ({ seriesId, serial, entry, done, deleteAuth, calString })=> {
   
   const [ editState, editSet ] = useState(false);
 
@@ -42,7 +42,8 @@ const ShortBlock = ({ id, serial, entry, done, calString })=> {
     }
     const comm = this.shCm.value.trim();
     
-    Meteor.call('editShort', id, serial, shKey, partNum, refs, effect, solve, comm, (error)=> {
+    Meteor.call('editShortX', seriesId, serial, shKey, partNum, refs, effect, solve, comm, 
+    (error)=> {
       error && console.log(error);
 			editSet(false);
 		});
@@ -53,9 +54,9 @@ const ShortBlock = ({ id, serial, entry, done, calString })=> {
     const yes = window.confirm(check);
     if(yes) {
       const shKey = entry.key;
-      const override = !Roles.userIsInRole(Meteor.userId(), ['qa', 'remove', 'run']) ? 
+      const override = !deleteAuth ? 
                         prompt("Enter PIN to override", "") : false;
-      Meteor.call('removeShort', id, shKey, override, (error)=>{
+      Meteor.call('removeShortX', seriesId, shKey, override, (error)=>{
         error && console.log(error);
         editSet(false);
       });
@@ -76,29 +77,29 @@ const ShortBlock = ({ id, serial, entry, done, calString })=> {
     
   const open = inE === true || reS === true ?
           <i><i className="fas fa-check-circle fa-lg fa-fw iG" title='Good'></i></i> :
-          <b><i className="fas fa-wrench fa-lg fa-fw iNG" title='Awaiting Repair'></i></b>;
+          <b><i className="far fa-circle fa-lg fa-fw iNG" title='Awaiting Repair'></i></b>;
                 
   const editAllow = Roles.userIsInRole(Meteor.userId(), 'verify') && !done;
   const editIndicate = editState ? 'editStandout' : '';     
 
   return(
-    <div className={`infoBlock short ${editIndicate}`}>
-      <div className='blockTitle cap'>
+    <div className={`feedInfoBlock short ${editIndicate}`}>
+      <div className={`feedInfoTitle ${editState ? 'doFlexWrap' : ''}`}>
         {editState === true ?
           <div>
             <input
               type='text'
               id='shPN'
-              className='up orangeIn inlineInput'
+              className='up inlineInput'
               defaultValue={dt.partNum} />
             <input
               type='text'
               id='shRefs'
-              className='up orangeIn inlineInput'
+              className='up inlineInput'
               defaultValue={dt.refs.toString()} />
             <select 
               id='shAct'
-              className='orangeIn inlineSelect'
+              className='inlineSelect'
               defaultValue={actionState}
               required>
               <option value={Pref.shortagePending}>{Pref.shortagePending}</option>
@@ -109,7 +110,7 @@ const ShortBlock = ({ id, serial, entry, done, calString })=> {
             <input
               type='text'
               id='shCm'
-              className='orangeIn inlineInput'
+              className='inlineInput'
               placeholder='comment'
               defaultValue={dt.comm}/>
           </div>
@@ -124,15 +125,15 @@ const ShortBlock = ({ id, serial, entry, done, calString })=> {
         {editState === true ?
           <div className='rightText'>
             <button
-              className='miniAction inlineButton greenT'
-              onClick={(e)=>handleChange(e)}
-            >Save</button>
-            <button
-              className='miniAction inlineButton redT'
+              className='smallAction inlineButton clearRed'
               onClick={(e)=>popSh(e)}
             >Remove</button>
             <button
-              className='miniAction inlineButton'
+              className='smallAction inlineButton clearGreen'
+              onClick={(e)=>handleChange(e)}
+            >Save</button>
+            <button
+              className='smallAction inlineButton clearBlack'
               onClick={(e)=>edit(e)}
             >Cancel</button>
           </div>
@@ -161,6 +162,3 @@ const ShortBlock = ({ id, serial, entry, done, calString })=> {
 };
 
 export default ShortBlock;
-
-
-

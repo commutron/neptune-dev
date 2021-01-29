@@ -297,7 +297,7 @@ Meteor.methods({
       throw new Meteor.Error(err);
     }
   },
-  
+  /*
   fetch24TideActivity() {
     this.unblock();
     try {
@@ -351,7 +351,7 @@ Meteor.methods({
     }catch(err) {
       throw new Meteor.Error(err);
     }
-  },
+  },*/
   
   fetchErrorTimes() {
     try {

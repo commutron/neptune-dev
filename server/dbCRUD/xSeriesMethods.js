@@ -215,7 +215,6 @@ Meteor.methods({
     }else{null}
   },
   
-  // trigger a re-inspect
   reInspectNCX(seriesId, ncKey) {
     if(Roles.userIsInRole(Meteor.userId(), 'inspect')) {
 		  XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
@@ -225,10 +224,10 @@ Meteor.methods({
   		});
     }else{null}
   },
-  /*
-  editNC(batchId, serial, ncKey, ref, type, where) {
-    const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
-    const double = doc.nonCon.find( x => 
+
+  editNCX(seriesId, serial, ncKey, ref, type, where) {
+    const srs = XSeriesDB.findOne({_id: seriesId, orgKey: Meteor.user().orgKey});
+    const double = srs.nonCon.find( x => 
                     x.serial === serial &&
                     x.ref === ref &&
                     x.type === type &&
@@ -236,7 +235,7 @@ Meteor.methods({
                     x.inspect === false
                   );
     if(!Roles.userIsInRole(Meteor.userId(), 'inspect') || double) { null }else{
-		  BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+		  XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
   			$set : { 
   			  'nonCon.$.ref': ref,
   			  'nonCon.$.type': type,
@@ -246,7 +245,6 @@ Meteor.methods({
     }
   },
   
-*/
   snoozeNCX(seriesId, ncKey) {
     if(Roles.userIsInRole(Meteor.userId(), 'inspect')) {
   		XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
@@ -277,10 +275,9 @@ Meteor.methods({
     }else{null}
   },
   
-  /*
-  trashNC(batchId, ncKey) {
+  trashNCX(seriesId, ncKey) {
     if(Roles.userIsInRole(Meteor.userId(), 'verify')) {
-  		BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+  		XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
   			$set : {
   			  'nonCon.$.trash': { 
   			    time: new Date(),
@@ -291,9 +288,9 @@ Meteor.methods({
     }else{null}
   },
   
-  unTrashNC(batchId, ncKey) {
+  unTrashNCX(seriesId, ncKey) {
     if(Roles.userIsInRole(Meteor.userId(), 'inspect')) {
-  	  BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+  	  XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
   	    $set : {
   			  'nonCon.$.trash': false
   			}
@@ -301,7 +298,6 @@ Meteor.methods({
     }else{null}
   },
 
-  */
   autoTrashMissingNC(accessKey, seriesId, serial, refs) {
     const app = AppDB.findOne({orgKey:accessKey}, {fields:{'missingType':1}});
     const type = app ? app.missingType : false;
@@ -321,10 +317,8 @@ Meteor.methods({
       }
     }
   },
-
   
-  /*
-  ncRemove(batchId, ncKey, override) {
+  removeNCX(seriesId, ncKey, override) {
     const auth = Roles.userIsInRole(Meteor.userId(), ['remove', 'qa']);
     if(!auth && override === undefined) {
       null;
@@ -332,7 +326,7 @@ Meteor.methods({
       const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
       const minorPIN = org ? org.minorPIN : null;
       if(auth || minorPIN === override) {
-        BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+        XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
           $pull : { nonCon: {key: ncKey}
         }});
         return true;
@@ -342,7 +336,6 @@ Meteor.methods({
     }
   },
 
-*/
   //// Shortages \\\\
   // Shortfall // Narrow Shortage
   
@@ -373,30 +366,24 @@ Meteor.methods({
       return true;
     }
   },
-  /*
-  editShort(batchId, serial, shKey, partNum, refs, inEffect, reSolve, comm) {
-    const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
-    const double = doc.shortfall.filter( x => 
-                    x.partNum === partNum &&
-                    x.serial === serial
-                  );
+
+  editShortX(seriesId, serial, shKey, partNum, refs, inEffect, reSolve, comm) {
+    const srs = XSeriesDB.findOne({_id: seriesId, orgKey: Meteor.user().orgKey});
+    const double = srs.shortfall.filter( x => 
+                    x.partNum === partNum && x.serial === serial );
+                    
     if(!Roles.userIsInRole(Meteor.userId(), 'verify') || double.length > 1) { null }else{
-      const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
-      const prevSH = doc.shortfall.find( x => x.key === shKey );
+      const prevSH = srs.shortfall.find( x => x.key === shKey );
       let pn = partNum || prevSH.partNum;
       let rf = refs || prevSH.refs;
-      //let sn = serial;
-      //let st = step;
       let ef = inEffect === undefined ? prevSH.inEffect : inEffect;
       let sv = reSolve === undefined ? prevSH.reSolve : reSolve;
       let cm = comm || prevSH.comm;
 
-		  BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'shortfall.key': shKey}, {
+		  XSeriesDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'shortfall.key': shKey}, {
   			$set : { 
   			  'shortfall.$.partNum': pn || '',
   			  'shortfall.$.refs': rf || [],
-  			  //'shortfall.$.serial': sn || '',
-  			  //'shortfall.$.step': st || '',
   			  'shortfall.$.uTime': new Date(),
           'shortfall.$.uWho': Meteor.userId(),
           'shortfall.$.inEffect': ef,
@@ -405,10 +392,10 @@ Meteor.methods({
   			}
   		});
   		const accessKey = Meteor.user().orgKey;
-  		Meteor.call('autoTrashMissingNC', accessKey, batchId, serial, refs);
+  		Meteor.call('autoTrashMissingNC', accessKey, seriesId, serial, refs);
     }
   },
-  */
+
   setShortX(seriesId, shKey, inEffect, reSolve) {
     if(!Roles.userIsInRole(Meteor.userId(), 'verify')) { null }else{
 		  let ef = inEffect === undefined ? null : inEffect;
@@ -424,8 +411,8 @@ Meteor.methods({
   		});
     }
   },
-  /*
-  removeShort(batchId, shKey, override) {
+  
+  removeShortX(seriesId, shKey, override) {
     const auth = Roles.userIsInRole(Meteor.userId(), ['remove', 'qa', 'run']);
     if(!auth && override === undefined) {
       null;
@@ -433,7 +420,7 @@ Meteor.methods({
       const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
       const minorPIN = org ? org.minorPIN : null;
       if(auth || minorPIN === override) {
-        BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'shortfall.key': shKey}, {
+        XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'shortfall.key': shKey}, {
           $pull : { shortfall: {key: shKey}
         }});
         return true;
@@ -442,7 +429,6 @@ Meteor.methods({
       }
     }
   },
-  */
   
   /*
 //// RMA Cascade ////
@@ -512,10 +498,9 @@ Meteor.methods({
   },
 */
 
-  /*
   //////////////////// DESTRUCTIVE \\\\\\\\\\\\\\\\\\\\\
-  
-  deleteSeriesItems(batchId) {
+  /*
+  deleteSeriesItems(batchId, seriesId) {
     const accessKey = Meteor.user().orgKey;
     const doc = BatchDB.findOne({_id: batchId});
     const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
@@ -546,7 +531,7 @@ Meteor.methods({
   },
   */
   /*
-  deleteBatchProblems(batchId) {
+  deleteSeriesProblems(seriesId) {
     const accessKey = Meteor.user().orgKey;
     const doc = BatchDB.findOne({_id: batchId});
     const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
@@ -579,7 +564,7 @@ Meteor.methods({
     }
   },*/
   /*
-  deleteWholeSeries(batchId, pass) {
+  deleteWholeSeries(batchId, seriesId, pass) {
     const doc = BatchDB.findOne({_id: batchId});
     
     const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
@@ -593,8 +578,7 @@ Meteor.methods({
       const access = doc.orgKey === Meteor.user().orgKey;
       const unlock = lock === pass;
       if(access && unlock) {
-        BatchDB.remove({_id: batchId});
-        TraceDB.remove({batchID: batchId});
+        XSeriesDB.remove({_id: batchId});
         return true;
       }else{
         return false;

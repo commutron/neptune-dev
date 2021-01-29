@@ -8,12 +8,12 @@ import StepBackX from '/client/components/bigUi/ItemFeedX/StepBackX';
 
 const HistoryBlock = ({
   entry, batch, seriesId, serial, 
-  done, showHeader, calString
+  done, canEdit, showHeader, calString
 })=>{
   
   let dt = entry;
   
-  const redoAllow = Roles.userIsInRole(Meteor.userId(), 'edit') && !done && dt.good === true;
+  const redoAllow = canEdit && !done && dt.good === true;
   const redoButton = <StepBackX seriesId={seriesId} bar={serial} entry={entry} lock={!redoAllow} />;
                  
   const indictor = dt.good ?
@@ -35,15 +35,15 @@ const HistoryBlock = ({
   const colour = dt.type === 'finish' ? 'finish' : 'history';
    
   return(
-    <div className={`infoBlock ${colour}`}>
-      {showHeader &&
-        <div className='blockHeader'>
+    <div className={`feedInfoBlock ${colour}`}>
+      {/*showHeader &&
+        <div className='feedInfoHeader'>
           <button
             className='textAction numFont med'
             onClick={()=>FlowRouter.go(`/data/batch?request=${batch}&specify=${serial}`)}
-          >{serial}</button>
-        </div>}
-      <div className='blockTitle cap'>
+          >{serial} No serial from source</button>
+        </div>*/}
+      <div className='feedInfoTitle'>
         <div>
           <div className='leftAnchor'>{indictor}</div>
           <div>{dt.step}</div>

@@ -11,8 +11,8 @@ import ReleaseBlock from './ReleaseBlock';
 import CompleteBlock from './CompleteBlock';
 import HistoryBlock from '/client/components/bigUi/ItemFeedX/HistoryBlock';
 
-const EventsTimeline = ({ 
-  id, batchData, 
+const XBatchTimeline = ({ 
+  batchData, seriesId,
   releaseList, verifyList, eventList, alterList, quoteList, 
   doneBatch, brancheS
 })=> {
@@ -58,6 +58,8 @@ const EventsTimeline = ({
     if (moment(timeY).isBefore(timeX)) { return 1 }
     return 0;
   });
+  
+  const canEdit = Roles.userIsInRole(Meteor.userId(), 'edit');
                     
   return(
     <div className='scrollWrap'>
@@ -116,10 +118,11 @@ const EventsTimeline = ({
               <HistoryBlock
                 key={dt.time.toISOString()+ix}
                 entry={dt}
-                id={id}
                 batch={batchData.batch}
+                seriesId={seriesId}
                 serial={dt.serial}
                 done={doneBatch}
+                canEdit={canEdit}
                 showHeader={true} /> 
             );
           }else if( typeof dt.changeKey === 'string' ) {
@@ -144,7 +147,7 @@ const EventsTimeline = ({
             return( 
               <ReleaseBlock
                 key={dt.time+ix}
-                id={id}
+                id={batchData._id}
                 isX={true}
                 done={doneBatch}
                 dt={dt}
@@ -168,4 +171,4 @@ const EventsTimeline = ({
   );
 };
 
-export default EventsTimeline;
+export default XBatchTimeline;

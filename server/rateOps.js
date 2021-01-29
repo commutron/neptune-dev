@@ -9,34 +9,16 @@ Meteor.methods({
     /////////////////////////////////////////////////////////////////////////
    // Layered History Rate
   ////////////////////////////////////////////////////////////////////////////
-  layeredHistoryRate(start, end, flowData, itemData) {
+  layeredHistoryRate(seriesId, start, end, riverFlow) {
+    const srs = XSeriesDB.findOne({_id: seriesId});
+
     let now = moment().tz(Config.clientTZ);
-    const endDay = end !== false ? 
+    
+    const endDay = end == true ? 
       moment(end).endOf('day').add(2, 'd') : 
       now.clone().endOf('day').add(1, 'd');
     const startDay = moment(start).tz(Config.clientTZ).endOf('day');
     const howManyDays = endDay.diff(startDay, 'day');
-    
-    //const b = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey});
-    //const itemData = b ? b.items : [];
-    // + Alt handling
-    const flowKeys = Array.from( 
-                      flowData.filter( x => x.type !== 'first'), 
-                        x => x.key );
-
-    const outScrap = (itms)=> { return ( 
-                                  itms.filter( 
-                                    x => x.history.filter( 
-                                      y => y.type === 'scrap' )
-                                        .length === 0 ) ) };
-    const items = outScrap(itemData); // without scraps
-    const totalItems = items.length;
-    
-    const allItemHistory = Array.from( items, 
-                              x => x.history.filter( 
-                                y => y.type !== 'first' && y.good === true) );
-    const historyFlat = [].concat(...allItemHistory);
-    
     
     function historyPings(history, totalItems, flowKey, day) {
       const pings = history.filter( 
@@ -65,17 +47,36 @@ Meteor.methods({
       }
       return historyRemainOverTime;
     }
+      
+    if(srs) {
+      const flowKeys = Array.from( 
+                        riverFlow.filter( x => x.type !== 'first'), 
+                          x => x.key );
+  
+      const items = srs.items.filter( 
+                          x => x.history.filter( y => y.type === 'scrap' )
+                            .length === 0 );
+                          
+      const totalItems = items.length;
     
-    let flowSeries = [];
-    for(let flowKey of flowKeys) {
-      const dayCounts = loopDays(historyFlat, totalItems, startDay, howManyDays, flowKey);
-      flowSeries.push({
-        name: flowKey,
-        data: dayCounts
-      });
+      const allItemHistory = Array.from( items, 
+                              x => x.history.filter( 
+                                y => y.type !== 'first' && y.good === true) );
+      const historyFlat = [].concat(...allItemHistory);
+    
+      let flowSeries = [];
+      for(let flowKey of flowKeys) {
+        const dayCounts = loopDays(historyFlat, totalItems, startDay, howManyDays, flowKey);
+        flowSeries.push({
+          name: flowKey,
+          data: dayCounts
+        });
+      }
+      
+      return flowSeries;
+    }else{
+      return [];
     }
-    
-    return flowSeries;
   },
   
   
@@ -85,7 +86,11 @@ Meteor.methods({
   
   nonConRateLoop(batches) {
 
-    const allNC = Array.from( batches, x => BatchDB.findOne({batch: x}).nonCon );
+    const allNC = Array.from( batches, x => {
+      const bDT = XSeriesDB.findOne({batch: x}) ||
+                  BatchDB.findOne({batch: x});
+      if(bDT) { return bDT.nonCon }            
+    }).filter(f=>f);
     
     function oneRate(theseNC) {
       

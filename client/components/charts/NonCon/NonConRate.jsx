@@ -35,7 +35,7 @@ const NonConRate = ({ batches, title, lineColor })=> {
             axis: { stroke: 'grey' },
             grid: { stroke: '#5c5c5c' },
             ticks: { stroke: '#5c5c5c' },
-            tickLabels: { fill: 'lightgrey', fontSize: '7px' }
+            tickLabels: { fontSize: '7px' }
           } }
         />
         <VictoryAxis
@@ -45,7 +45,7 @@ const NonConRate = ({ batches, title, lineColor })=> {
             axis: { stroke: 'grey' },
             grid: { stroke: '#5c5c5c' },
             ticks: { stroke: '#5c5c5c' },
-            tickLabels: { fill: 'lightgrey', fontSize: '7px' }
+            tickLabels: { fontSize: '7px' }
           } }
         />
         

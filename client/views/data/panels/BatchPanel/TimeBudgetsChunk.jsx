@@ -22,7 +22,7 @@ const TimeBudgetsChunk = ({
   const [ conversion, conversionSet] = useState('hours');
   
   useEffect( ()=>{
-    Meteor.call('assembleBranchTime', b._id, (err, reply)=>{
+    Meteor.call('assembleBranchTime', b.batch, (err, reply)=>{
       err && console.log(err);
       reply && branchTimeSet( reply );
     });

@@ -93,8 +93,10 @@ const StepsProgressX  = ({
         const bWfl = wflDt.filter( r => r.bKey === branch.brKey );
         
         if( bRvr.length > 0 || bWfl.length > 0) {
+          let rndmKeyB = Math.random().toString(36).substr(2, 5);
           return(
             <BranchProgress
+              key={rndmKeyB}
               branch={branch}
               bRvr={bRvr}
               bWfl={bWfl}
