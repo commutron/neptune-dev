@@ -1,8 +1,7 @@
 import React from 'react';
 //import Pref from '/client/global/pref.js';
 
-import TimeBudgetsChunk from './TimeBudgetsChunk.jsx';
-import TimeBlocksRaw from './TimeBlocksRaw.jsx';
+import TimeBudgetsChunk from '/client/views/data/panels/XBatchPanel/TimeBudgetsChunk';
 
 const TimeTab = ({
   a, b,
@@ -19,18 +18,10 @@ const TimeTab = ({
     <div className='space3v'>
     
       <TimeBudgetsChunk
-        a={a}
+        tideWall={a.tideWall}
         b={b}
         totalUnits={totalUnits}
         isDebug={isDebug} />
-      
-      <div className='vmargin space'>
-        <TimeBlocksRaw 
-          batch={b.batch} 
-          tide={b.tide} 
-          lockOut={b.lock}
-          isDebug={isDebug} />
-      </div>
               
     </div>  
   );

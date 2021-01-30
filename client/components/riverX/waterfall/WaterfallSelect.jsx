@@ -17,6 +17,9 @@ const WaterfallSelect = ({ batchData, app })=> {
     
   Session.set('nowStep', '');
   Session.set('nowWanchor', '');
+  
+  const canRun = Roles.userIsInRole(Meteor.userId(), 'run');
+  
   return (
     <div className='waterfallSelector'>
       {waterfall.length === 0 ?
@@ -69,7 +72,7 @@ const WaterfallSelect = ({ batchData, app })=> {
           </details>
       )})}
       {allTotal.every( x => x === true ) &&
-        <BatchXComplete batchData={batchData} /> 
+        <BatchXComplete batchData={batchData} canRun={canRun} /> 
       }
     </div>
   );

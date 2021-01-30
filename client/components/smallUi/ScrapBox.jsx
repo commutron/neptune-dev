@@ -14,7 +14,7 @@ const ScrapBox = ({ id, serial, entry, eX })=> {
       <div className='titleBar centre'>
         <h1 className='up'>{entry.type}</h1>
       </div>
-      <div className='centre'>
+      <div className='centreText'>
         <p>{moment(entry.time).calendar()}</p>
         <p>by: <UserNice id={entry.who} />, at step: {entry.step}</p>
         <p className='capFL'>{entry.comm}</p>

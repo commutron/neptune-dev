@@ -56,7 +56,7 @@ const InfoTab = ({
   return(
     <div className='autoFlex space'>
       
-      <div className='vmarginhalf centreText line2x'>
+      <div className='vmarginhalf centreText'>
         <h3>Status</h3>      
         { b.live &&
           <div className='centreRow balance'>

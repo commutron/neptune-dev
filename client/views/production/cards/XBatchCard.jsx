@@ -46,7 +46,7 @@ const BatchCardX = ({
             />
           </div>;
   
-  if( expand && ( !flowwater && !fallwater ) ) {
+  if( tideFloodGate && expand && !flowwater && !fallwater ) {
     return(
       <Fragment>   
         <div className='proPrimeSingle'>
@@ -80,7 +80,7 @@ const BatchCardX = ({
         wide={true}
         stick={false}
         hold={true}
-        sessionTab='batchExPanelTabs'>
+        sessionTab='batchProPanelTabs'>
       
         {insertMiniInfo}
           

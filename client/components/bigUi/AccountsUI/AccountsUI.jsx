@@ -67,10 +67,6 @@ const AccountsUI = ({ login, uID, username })=> {
 	      			newUserResultSet( error.reason );
 	      		}else{
 	      			toast.success('Everything worked corectly');
-    					// const redirect = Session.get('redirectAfterLogin');
-    					// if(!redirect || redirect === '/login') {
-			    		// 	loginStatusSet( Meteor.userId() );
-			    		// }
 	      		}
 	      	});
 		    }else{
@@ -115,7 +111,6 @@ const AccountsUI = ({ login, uID, username })=> {
 	              type='text'
 	              id='loginUsername'
 	              onChange={()=>loginUsernameSet(loginUsername.value)}
-	              placeholder='username'
 	              required />
 	          </p>
 	          <p>
@@ -125,7 +120,7 @@ const AccountsUI = ({ login, uID, username })=> {
 	              type='password' 
 	              id='loginPassword'
 	              onChange={()=>loginPasswordSet( loginPassword.value )}
-	              placeholder='password'
+	              autoComplete="off"
 	              required />
 	          </p>
 	          <p>
@@ -139,7 +134,8 @@ const AccountsUI = ({ login, uID, username })=> {
 	        </form>
         
 	        <form 
-	          onSubmit={(e)=>doNew(e)}>
+	          onSubmit={(e)=>doNew(e)}
+	          autoComplete="off">
 	          <input type='hidden' value='autocompleteFix' autoComplete='off' />
 	          <p>
 	            <label htmlFor='newUsername'>Username</label>
@@ -152,7 +148,7 @@ const AccountsUI = ({ login, uID, username })=> {
 	              required
 	              minLength='4'
 	              pattern='[A-Za-z0-9 \._-]*'
-	              autoComplete="username" />
+	              autoComplete="off" />
 	          </p>
 	          <p>
 	            <label htmlFor='choicePassword'>New Password</label>
@@ -162,8 +158,8 @@ const AccountsUI = ({ login, uID, username })=> {
 	              id='choicePassword'
 	              onChange={()=>choicePasswordSet( choicePassword.value )}
 	              placeholder='password'
-	              required
-	              autoComplete="new-password" />
+	              autoComplete="new-password"
+	              required />
 	          </p>
 	          <p>
 	            <label htmlFor='confirmPassword'>New Password Again</label>
@@ -173,8 +169,8 @@ const AccountsUI = ({ login, uID, username })=> {
 	              id='confirmPassword'
 	              onChange={()=>confirmPasswordSet( confirmPassword.value )}
 	              placeholder='password'
-	              required
-	              autoComplete="new-password" />
+	              autoComplete="new-password"
+	              required />
 	          </p>
 	          <p>
 	            <label htmlFor='organizationName'>Organization</label>
@@ -184,6 +180,7 @@ const AccountsUI = ({ login, uID, username })=> {
 	              id='organizationName'
 	              onChange={()=>organizationNameSet( organizationName.value )}
 	              placeholder='Organization'
+	              autoComplete='organization'
 	              required />
 	          </p>
 	          <p>
@@ -199,7 +196,7 @@ const AccountsUI = ({ login, uID, username })=> {
 	              cols='4'
 	              placeholder='PIN'
 	              inputMode='numeric'
-	              autoComplete='org-pin'
+	              autoComplete="new-password"
 	              required />
 	          </p>
 	          <p>

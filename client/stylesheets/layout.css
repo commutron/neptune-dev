@@ -636,6 +636,12 @@ n-sm-model-content {
 .overscroll { margin-bottom: 5vh; }
 .overscroll2x { margin-bottom: 10vh; }
 
+.bottomLine {
+  padding-bottom: 0.5rem;
+  border-bottom: 1px groove lightgray;
+  margin-bottom: 0.5rem;
+}
+
 .noteCard {
   margin: 16px 0;
   border-top: 1px dotted var(--peterriver);
@@ -680,6 +686,7 @@ n-sm-model-content {
 }
 
 .doFlexWrap { flex-wrap: wrap; }
+.doJustWeen { justify-content: space-between; }
 
 .autoFlex, .comfort, .balance, .balancer,
 .rowWrap, .rowWrapR {
@@ -992,13 +999,6 @@ button.numberSet {
   background-color: var(--black);
 }
 
-/*
-.bottomRightFloat {
-  position: absolute;
-  right: -5px;
-  bottom: -5px;
-}
-*/
 .wellSpacedLine {
   margin-bottom: 8px;
   min-height: 3rem;

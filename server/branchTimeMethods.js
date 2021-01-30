@@ -100,7 +100,7 @@ function tryFromRelease(tideStart, tStop, releases) {
   return releasePrep;
 }
 
-function tryFromFinish(finishTime) {
+function tryFromFinish(tideStart, finishTime) {
   const finished = finishTime !== false && finishTime !== null;
   const afterFinish = finished && moment(tideStart)
                         .isAfter(moment(finishTime) );
@@ -223,7 +223,7 @@ function branchBestGuess(
           return [ 'fromRelease', ['before release'] ];
         }else{
             
-          const afterFinish = tryFromFinish(finishTime);
+          const afterFinish = tryFromFinish(tideStart, finishTime);
           
           if(afterFinish) {
             return [ 'fromAfterFinish', ['after finish'] ];
@@ -293,18 +293,17 @@ Meteor.methods({
     
     const widgetId = batch.widgetId;
     const river = batch.river;
-    const releases = batch.releases;
+    const releases = batch.releases || [];
     const finishTime = series ? batch.completedAt : batch.finishedAt;
-    const items = series ? series.items : batch.items;
-    const nonCon = series ? series.nonCon : batch.nonCon;
-    const shortfall = series ? series.shortfall : batch.shortfall;
+    const items = series ? series.items : batch.items || [];
+    const nonCon = series ? series.nonCon : batch.nonCon || [];
+    const shortfall = series ? series.shortfall : batch.shortfall || [];
     
     const bestGuess = branchBestGuess(tideObj.who, tideObj.startTime, tideObj.stopTime,
                         batchNum, widgetId, river, items, nonCon, shortfall, 
                         releases, finishTime, trackOptions, branchOptions);
                         
     return bestGuess;
-    
   },
   
   
@@ -322,11 +321,11 @@ Meteor.methods({
     
     const widgetId = batch.widgetId;
     const river = batch.river;
-    const releases = batch.releases;
+    const releases = batch.releases || [];
     const finishTime = series ? batch.completedAt : batch.finishedAt;
-    const items = series ? series.items : batch.items;
-    const nonCon = series ? series.nonCon : batch.nonCon;
-    const shortfall = series ? series.shortfall : batch.shortfall;
+    const items = series ? series.items : batch.items || [];
+    const nonCon = series ? series.nonCon : batch.nonCon || [];
+    const shortfall = series ? series.shortfall : batch.shortfall || [];
     
     let slimTimes = [];
     

@@ -601,8 +601,8 @@ Meteor.methods({
             'End of Process', 
             `Final item recorded as complete by ${username}`
           );
+          Meteor.call('finishBatchX', batchId, orgKey);
         }
-        // Meteor.call('finishBatch', batchId, orgKey);
       });
   		return true;
     }

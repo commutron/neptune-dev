@@ -86,7 +86,7 @@ const XDoProCard = ({
   const plainBrancheS = Array.from(brancheState, b => b.branch);
   const ancOptionS = app.ancillaryOption.sort();
   
-  const flowAction = flowData.hasRiver && fallData.floorRel && !iComplete;
+  const flowAction = flowData.hasRiver && fallData.floorRel;
   const fallAction = batchData.waterfall.length > 0;
   
   const insertTideWall = 
@@ -195,7 +195,7 @@ const XDoProCard = ({
         
       !tideFloodGate ? insertTideWall : // @ Locked
         
-        !flowAction ? insertItemCard : // @ Rest
+        !flowAction || iComplete ? insertItemCard : // @ Rest
           
           showVerifyState ? insertVerifyIsland : // @ First Form
             

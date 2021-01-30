@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Pref from '/client/global/pref.js';
 import './style.css';
 
+import ToggleBar from '/client/components/bigUi/ToolBar/ToggleBar';
 import MiniStack from '/client/components/charts/MiniScales/MiniStack.jsx';
 import NumBox from '/client/components/tinyUi/NumBox.jsx';
 
@@ -12,7 +13,7 @@ const StepsProgressX  = ({
   riverTitle, brancheS, truncate 
 })=> {
   
-  const [ countCalc, countSet ] = useState('item');
+  const [ countCalc, countSet ] = useState('items');
 
   const dt = flowCounts;
     
@@ -28,65 +29,55 @@ const StepsProgressX  = ({
   const scrapCount = dt.scrapCount;
   
   const unitsExist = totalIU > totalI ? true : false;
-  const calcItem = countCalc === 'item' ? true : false;
+  const calcItem = countCalc === 'items' ? true : false;
   
   return (
     <div>
-      <div className='numBoxRadio centreRow'>
-        <label>
-          <NumBox
-            num={quantity}
-            name='Total Quantity'
-            color='whiteT' />
-        </label>
-          
-        
-        {totalI &&
-          <label htmlFor='calcI'>
-            <input
-              type='radio'
-              id='calcI'
-              name='calc'
-              onChange={()=>countSet( 'item' )}
-              defaultChecked={unitsExist}
-              disabled={!unitsExist} />
+      {!truncate &&
+        <div className='centreRow'>
+          <label>
+            <NumBox
+              num={quantity}
+              name='Total Quantity'
+              color='whiteT' />
+          </label>
+            
+          <label>
             <NumBox
               num={totalI}
               name={Pref.itemSerial + 's'}
               color='whiteT' />
-          </label>}
-        
-        
-        {unitsExist ?
-          <label htmlFor='calcU'>
-            <input
-              type='radio'
-              id='calcU'
-              name='calc'
-              onChange={()=>countSet( 'unit' )} />
+          </label>
+          
+          <label>
             <NumBox
               num={totalIU}
               name={`${Pref.itemSerial} ${Pref.unit}s`}
               color='whiteT' />
           </label>
-        :null}
-        
-        {scrapCount > 0 ? 
-          <label>
-            <NumBox
-              num={scrapCount}
-              name={`${Pref.scrap} ${Pref.item}s`}
-              color='redT' />
-          </label>
-        :null}
-      </div>
+          
+          {scrapCount > 0 ? 
+            <label>
+              <NumBox
+                num={scrapCount}
+                name={`${Pref.scrap} ${Pref.item}s`}
+                color='redT' />
+            </label>
+          :null}
+        </div>}
       
-      {!riverTitle ? null :
-        <span className='cap wellSpacedLine wide'>
+      <div className={`${!truncate ? 'wellSpacedLine bottomLine' : ''} doJustWeen cap`}>
+        {!truncate &&
           <i>{Pref.buildFlow}: <b>{riverTitle || ''}</b></i>
-        </span>}
-        
-      <hr />
+        }
+        {unitsExist &&
+          <ToggleBar
+            toggleOptions={['units','items']}
+            toggleVal={countCalc}
+            toggleSet={countSet}
+          />
+        }
+      </div>
       
       {brancheS.map( (branch, index)=> {
         const bRvr = rvrDt.filter( r => r.bKey === branch.brKey );

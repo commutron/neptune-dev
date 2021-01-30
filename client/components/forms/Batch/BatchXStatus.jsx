@@ -27,18 +27,18 @@ const BatchXStatus = ({ batchData })=>	{
   }
   
   //const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
-  const isRun = Roles.userIsInRole(Meteor.userId(), 'run');
+  const canRun = Roles.userIsInRole(Meteor.userId(), 'run');
   
   if(batchData.waterfall.length === 0) {
     return(
-      <BatchXComplete batchData={batchData} />
+      <BatchXComplete batchData={batchData} canRun={canRun} />
     );
   }
   
   if(batchData.completed) {
     return(
       <div>
-        <BatchXComplete batchData={batchData} />
+        <BatchXComplete batchData={batchData} canRun={canRun} />
         
         {!batchData.live ?
           <Fragment>

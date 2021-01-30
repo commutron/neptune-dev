@@ -466,14 +466,34 @@ Meteor.methods({
   
   // Finish Batch
   finishBatchX(batchId) {
-    if(!Roles.userIsInRole(Meteor.userId(), "BRKt3rm1n2t1ng8r2nch")) {
+    if(!Roles.userIsInRole(Meteor.userId(), "BRKt3rm1n2t1ng8r2nch")
+      && !Roles.userIsInRole(Meteor.userId(), "run") ) {
       null;
     }else{
       const privateKey = Meteor.user().orgKey;
+      
       const doc = XBatchDB.findOne({_id: batchId});
-      const did = doc.quantity > 0;
-      const noItems = doc.serialize === false;
-      if(doc && did && noItems) {
+      
+      const didSome = doc.quantity > 0;
+      
+      const didFall = doc.waterfall.length > 0;
+      
+      let falling = [];
+      for(let wf of doc.waterfall) {
+        falling.push(wf.counts.length === 0 ? false :
+          Array.from(wf.counts, x => x.tick).reduce((x,y)=> x + y) 
+          === doc.quantity);
+      }
+      const allFall = !didFall ? true : falling.every( x => x === true );
+      
+      // const didFlow = doc.serialize === false;
+      const srs = /*didFlow &&*/ XSeriesDB.findOne({batch: doc.batch});
+      const allFlow = !srs ? true : srs.items.every( x => x.completed === true );
+    
+      if(didSome && allFall && allFlow) {
+        
+        console.log(' can FINISH ');
+        /*
         XBatchDB.update({_id: batchId, orgKey: privateKey}, {
     			$set : { 
     			  live: false,
@@ -484,7 +504,8 @@ Meteor.methods({
         Meteor.defer( ()=>{
           Meteor.call('updateOneMovement', batchId, privateKey);
         });
-      }else{null}
+        */
+      }else{ console.log(' can NOT finish '); }
     }
   },
   
@@ -496,7 +517,7 @@ Meteor.methods({
       const doc = XBatchDB.findOne({_id: batchId});
       const completed = doc && doc.completed;
       
-      if(completed) {
+      if(completed && !doc.lock) {
         const privateKey = Meteor.user().orgKey;
         const cmltDate = doc.completedAt;
         const inTime = moment().diff(moment(cmltDate), 'minutes') < 60;

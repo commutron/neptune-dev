@@ -28,7 +28,6 @@ const River = ({
   }
 
   const b = batchData;
-  const i = itemData;
   const w = widgetData;
 
   let useFlow = !flow ? w.flows.find( x => x.flowKey === b.river).flow : flow;
@@ -95,7 +94,7 @@ const River = ({
           // isAlt={i.alt === 'yes'}
           // hasAlt={!b.riverAlt ? false : true}
           seriesId={seriesData._id}
-          item={i}
+          item={itemData}
           allItems={seriesData.items}
           nonCons={seriesData.nonCon}
           shortfalls={shortfallS}

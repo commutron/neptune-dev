@@ -59,6 +59,12 @@ class Pref {
     
     this.regex5 = RegExp(/^(\d{5})$/);
     
+    // simpleBatch and counters
+    this.xBatch = 'work order+';
+    this.XBatch = 'Work Order+';
+    this.xBatchs = 'work orders+';
+    this.XBatchs = 'Work Orders+';
+    
 	  this.batch = 'work order';//order
 	  this.Batch = 'Work Order';//Order
 	  this.batches = 'work orders';
@@ -120,8 +126,10 @@ class Pref {
     this.buildFlow = 'main process flow';
     this.buildFlowAlt = 'alt process flow';
     
-    this.engaged = 'active';
-    this.engagedNot = 'not active';
+    this.counter = 'counter';
+    this.count = 'tick';
+    this.counts = 'ticks';
+    
     this.buildStep = 'build process';
     this.trackFirst = 'first-off';
     this.trackLast =  'finish';
@@ -178,15 +186,11 @@ class Pref {
       this.shortageWaiting = "waiting for the part";
       this.notResolved = "part available";
       this.isResolved = "part is no longer missing";
-    // simpleBatch and counters
-    this.xBatch = 'batch+';
-    this.xBatchs = 'batches+';
-    this.counter = 'counter';
-    this.count = 'tick';
-    this.counts = 'ticks';
     
     //global time
     this.tide = 'start-stop';
+    this.engaged = 'active';
+    this.engagedNot = 'not active';
     this.statisticalStartHour = 6; // 6am
     this.statisticalEndHour = 20; // 8pm
     //this.minWorkDayStartTime

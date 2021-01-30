@@ -30,6 +30,11 @@ Meteor.methods({
           nonCon: [],
           shortfall: [],
         });
+        XBatchDB.update({_id: batchId, orgKey: accessKey}, {
+          $set : {
+            serialize: true
+          }
+        });
         Meteor.defer( ()=>{
           Meteor.call('updateOneMinify', batchId, accessKey);
         });

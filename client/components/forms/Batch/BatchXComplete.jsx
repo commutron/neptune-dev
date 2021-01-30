@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 import '/client/components/river/waterfall/style';
 
-const BatchXComplete = ({ batchData, app })=> {
+const BatchXComplete = ({ batchData, canRun })=> {
   
   function finishBatchX() {
     const batchID = batchData._id;
@@ -24,7 +24,7 @@ const BatchXComplete = ({ batchData, app })=> {
   }
 
   return(
-    <div className='centre vmarginhalf vspacehalf purpleBorder'>
+    <div className='centre vmarginhalf space1v purpleBorder'>
       {batchData.completed === false ?
         <div className='centre'>
           <p className='centreText'>
@@ -57,7 +57,7 @@ const BatchXComplete = ({ batchData, app })=> {
             <button
               className='action clearWhite'
               onClick={()=>undoFinishBatchX(true)}
-              disabled={!Roles.userIsInRole(Meteor.userId(), 'run')}
+              disabled={!canRun}
             >Reactivate Anyway</button>
           </div>}
         </div>
