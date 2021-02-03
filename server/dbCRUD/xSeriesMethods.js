@@ -504,19 +504,21 @@ Meteor.methods({
 */
 
   //////////////////// DESTRUCTIVE \\\\\\\\\\\\\\\\\\\\\
-  /*
+  
   deleteSeriesItems(batchId, seriesId) {
     const accessKey = Meteor.user().orgKey;
-    const doc = BatchDB.findOne({_id: batchId});
-    const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
     const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
-    const inUse = doc.items.some( x => x.history.length > 0 ) && !isAdmin ? true : false;
-    const howMany = doc.items.length + ' items';
-    if(!inUse && auth && doc.orgKey === accessKey) {
-      BatchDB.update({_id: batchId, orgKey: accessKey}, {
+    const srs = XSeriesDB.findOne({_id: seriesId});
+    const inUse = srs.items.some( x => x.history.length > 0 );
+    const howMany = srs.items.length + ' items';
+    
+    if(!inUse && auth && srs.orgKey === accessKey) {
+      XSeriesDB.update({_id: seriesId, orgKey: accessKey}, {
         $set : {
           items: [],
-        },
+        }
+      });
+      XBatchDB.update({_id: batchId}, {
         $push : {
           altered: {
             changeDate: new Date(),
@@ -534,7 +536,7 @@ Meteor.methods({
       return false;
     }
   },
-  */
+  
   /*
   deleteSeriesProblems(seriesId) {
     const accessKey = Meteor.user().orgKey;
@@ -568,30 +570,41 @@ Meteor.methods({
       return false;
     }
   },*/
-  /*
-  deleteWholeSeries(batchId, seriesId, pass) {
-    const doc = BatchDB.findOne({_id: batchId});
+  
+  deleteWholeSeries(batchId, seriesId) {
+    const accessKey = Meteor.user().orgKey;
+    const doc = XBatchDB.findOne({_id: batchId, orgKey: accessKey});
+    const srs = XSeriesDB.findOne({_id: seriesId, orgKey: accessKey});
     
-    const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
-    const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
+    const auth = Roles.userIsInRole(Meteor.userId(), ['run', 'remove', 'admin']);
     
-    const inUse = doc.tide.length > 0 || doc.items.length > 0 ? true : false;
-      // nonCon.length > 0 || escaped.length > 0 || shortfall.length > 0
+    if(doc && srs && auth) {
+      const match = doc.batch === srs.batch;
+      
+      const emptySRS = srs.items.length === 0 &&
+                       srs.nonCon.length === 0 &&
+                       srs.shortfall.length === 0;
         
-    if(!inUse && isAdmin && auth) {
-      const lock = doc.createdAt.toISOString().split("T")[0];
-      const access = doc.orgKey === Meteor.user().orgKey;
-      const unlock = lock === pass;
-      if(access && unlock) {
-        XSeriesDB.remove({_id: batchId});
+      if(match && emptySRS) {
+        XSeriesDB.remove({_id: seriesId});
+        
+        XBatchDB.update({_id: batchId}, {
+          $set : {
+            serialize: false
+          }
+        });
+        
+        Meteor.defer( ()=>{
+          Meteor.call('updateOneMinify', batchId, accessKey);
+        });
         return true;
       }else{
         return false;
       }
     }else{
-      return 'inUse';
+      return false;
     }
   },
-  */
+
   
 });

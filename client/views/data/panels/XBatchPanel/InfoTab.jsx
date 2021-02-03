@@ -23,7 +23,8 @@ import StepsProgressX from '/client/components/bigUi/StepsProgress/StepsProgress
 
 const InfoTab = ({
   b, user, isDebug,
-  released, done, flowCounts, fallCounts, riverTitle, 
+  released, done, allFlow, allFall, nowater,
+  flowCounts, fallCounts, riverTitle, 
   app, brancheS
 }) =>	{
 
@@ -75,7 +76,11 @@ const InfoTab = ({
             </div>
           </div>
         }
-        <BatchXStatus batchData={b} />
+        <BatchXStatus 
+          batchData={b} 
+          allFlow={allFlow}
+          allFall={allFall}
+          nowater={nowater} />
         
         <div className='cap middle'>
           <p>Ship Due: <b>{shipTime.format("MMMM Do, YYYY")}</b></p>

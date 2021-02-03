@@ -99,26 +99,31 @@ function FlowCounter(flow, seriesData) {
   const firstsFlat = getFirsts(allLiveItems);
   
   const riverProg = flowLoop(flow, allLiveItems, firstsFlat);
+  
+  const allFlow = allItems.every( x => x.completed );
 
   return {
     riverProg: riverProg,
     liveItems: allLiveItems.length,
     liveUnits: liveUnits,
     firstsFlat: firstsFlat,
-    scrapCount: scrapCount
+    scrapCount: scrapCount,
+    allFlow: allFlow
   };
 }
 
 export default FlowCounter;
 
 
-function fallLoop(waterfall, app) {
+function fallLoop(waterfall, quantity, app) {
   let countData = [];
+  let doneCheck = [];
   const appCO = app.countOption;
   for(let wf of waterfall) {
     const wfType = wf.type || appCO.find( x => x.key === wf.wfKey ).type;
     const wfCount = wf.counts.length === 0 ? 0 :
                       Array.from(wf.counts, x => x.tick).reduce((x,y)=> x + y);
+    doneCheck.push( wfCount === quantity );
     countData.push({
       obj: 'count',
       key: wf.wfKey,
@@ -129,12 +134,17 @@ function fallLoop(waterfall, app) {
       count: wfCount
     });
   }
-  return countData;
+  const fallCounts = countData.sort((w1, w2)=> 
+                              w1.pos < w2.pos ? -1 : w1.pos > w2.pos ? 1 : 0 );
+  return {
+    fallProg: fallCounts,
+    allFall: doneCheck.every( x => x === true )
+  };
 }
 
 export function FallCounter(batchData, app) {
   
-  const wtrflProg = fallLoop(batchData.waterfall, app);
+  const wtrflProg = fallLoop(batchData.waterfall, batchData.quantity, app);
 
   return wtrflProg;
 }

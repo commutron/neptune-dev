@@ -225,7 +225,6 @@ Meteor.methods({
     }
   },
   
-  
   altFlowUse() {
     if(!Roles.userIsInRole(Meteor.userId(), 'admin')) {
       return [];

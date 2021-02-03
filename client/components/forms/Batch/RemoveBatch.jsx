@@ -88,7 +88,7 @@ const RemoveBatch = ({ entry, title, check })=> {
         if(reply === 'inUse') {
           toast.warning('Cannot do this, records are in use');
         }else if(reply) {
-          FlowRouter.go('/data/overview?request=batches');
+          FlowRouter.go('/data');
           toast.success('Entry in BatchDB removed');
         }else{
           toast.error('Rejected by Server, No Authorization');

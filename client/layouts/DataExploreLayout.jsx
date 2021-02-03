@@ -117,7 +117,7 @@ export const TraverseWrap = ({
             </aside>}
           
           {!base &&
-            <div className='actionBarEx'>
+            <div className='actionBarEx centreRow'>
               <ActionBar
                 batchData={batchData}
                 seriesData={seriesData}

@@ -11,7 +11,7 @@ const BatchXCreate = ({ groupId, widgetId, versionKey, allVariants, lock })=> (
   <ModelLarge
     button={'New ' + Pref.xBatch}
     title={'Create New ' + Pref.xBatch}
-    color='blueT'
+    color='greenT'
     icon='fa-cubes'
     lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'nightly']) || lock}>
     

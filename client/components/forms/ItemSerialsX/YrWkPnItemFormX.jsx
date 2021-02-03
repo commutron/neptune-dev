@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 
-const YrWkPnItemFormX = ({ bID, seriesId, items, more, unit, app })=> {
+const YrWkPnItemFormX = ({ bID, seriesId, more, unit, app })=> {
   
   const thisYear = moment().weekYear().toString().slice(-2);
   const thisWeek = moment().week().toString().padStart(2, 0);

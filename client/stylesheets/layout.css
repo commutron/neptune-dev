@@ -629,6 +629,7 @@ n-sm-model-content {
 
 .indent { padding-left: 16px; }
 .indenText { text-indent: 0.75ch; }
+.indentR { padding-right: 16px; }
 
 .breath { margin: 0 5px; }
 
@@ -811,6 +812,7 @@ input.miniIn6 { width: 6ch; }
 input.miniIn8 { width: 8ch; }
 
 .multiSelectContain .dropdown-container {
+  min-width: 15rem;
   max-width: 400px;
   margin: 0;
 }

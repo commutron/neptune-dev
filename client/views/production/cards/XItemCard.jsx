@@ -17,7 +17,7 @@ const XItemCard = ({
       <div className='proPrimeSingle centre centreText'>
         <p><i className="fas fa-exclamation-circle fa-5x redT"></i></p>
         <p className='medBig'>
-          This {Pref.batch} does not have a {Pref.flow}
+          This {Pref.xbatch} does not have a {Pref.flow}
         </p>
         <br />
       </div>
@@ -31,7 +31,7 @@ const XItemCard = ({
       <div className='proPrimeSingle centre centreText space'>
         <p><i className="fas fa-exclamation-triangle fa-5x orangeT"></i></p>
         <p className='medBig'>
-          This {Pref.batch} has not been released from Kitting
+          This {Pref.xbatch} has not been released from Kitting
         </p>
         <p><em>
           "Release to the Floor" must be recorded

@@ -4,28 +4,23 @@ import { toast } from 'react-toastify';
 
 import ModelMedium from '/client/components/smallUi/ModelMedium.jsx';
 
-// requires
-// title : a string of the thing you want to delete
-// check : a string for a conformation
-// entry : the object to be deleted
-
-const RemoveXBatchWrapper = ({ entry, title, check, lockOut })=> {
+const RemoveXBatchWrapper = ({ batchData, seriesData, check, lockOut })=> {
   
   const auth = Roles.userIsInRole(Meteor.userId(), 'remove') && !lockOut;
   
   return(
     <ModelMedium
       button='Delete'
-      title={`delete "${title}" permanently`}
+      title={`delete "${batchData.batch}" permanently`}
       color='redT'
       icon='fa-minus-circle'
       lock={!auth}
       // menuItem={true}
     >
       <RemoveXBatch
-        entry={entry}
-        title={title}
-        check={check}
+        batchData={batchData}
+        seriesData={seriesData}
+        checkStr={check}
       />
     </ModelMedium>
   );   
@@ -33,27 +28,28 @@ const RemoveXBatchWrapper = ({ entry, title, check, lockOut })=> {
 
 export default RemoveXBatchWrapper;  
       
-const RemoveXBatch = ({ entry, title, check })=> {
+const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
    
-  // function handleItemRemove(e) {
-  //   this.cutItemGo.disabled = true;
+  function handleItemRemove(e) {
+    this.cutItemGo.disabled = true;
+    const srsID = seriesData && seriesData._id;
     
-  //   const check = window.confirm('Permanently Delete All Items??');
+    const check = window.confirm('Permanently Delete All Items??');
     
-  //   if(check) {
-  //     Meteor.call('deleteBatchItems', entry._id, (err, reply)=>{
-  //       if(err) {
-  //         console.log(err);
-  //         toast.error('Server Error. see console');
-  //       }
-  //       if(reply) {
-  //         toast.success('Items in BatchDB removed');
-  //       }else{
-  //         toast.warning('Records are In-Use or No Authorization');
-  //       }
-  //     });
-  //   }
-  // }
+    if(check && srsID) {
+      Meteor.call('deleteSeriesItems', batchData._id, srsID, (err, reply)=>{
+        if(err) {
+          console.log(err);
+          toast.error('Server Error. see console');
+        }
+        if(reply) {
+          toast.success('Items of BatchDB removed');
+        }else{
+          toast.warning('Records are In-Use or No Authorization');
+        }
+      });
+    }
+  }
   
   function handleTideXRemove(e) {
     this.cutTideGo.disabled = true;
@@ -61,7 +57,7 @@ const RemoveXBatch = ({ entry, title, check })=> {
     const check = window.confirm('Permanently Delete All Times??');
     
     if(check) {
-      Meteor.call('deleteXBatchTide', entry._id, (err, reply)=>{
+      Meteor.call('deleteXBatchTide', batchData._id, (err, reply)=>{
         if(err) {
           console.log(err);
           toast.error('Server Error. see console');
@@ -84,12 +80,12 @@ const RemoveXBatch = ({ entry, title, check })=> {
     
     if(check) {
       
-      Meteor.call('deleteWholeXBatch', entry._id, confirm, (err, reply)=>{
+      Meteor.call('deleteWholeXBatch', batchData._id, confirm, (err, reply)=>{
         err && console.log(err);
         if(reply === 'inUse') {
           toast.warning('Cannot do this, records are in use');
         }else if(reply) {
-          FlowRouter.go('/data/overview?request=batches');
+          FlowRouter.go('/data');
           toast.success('Entry in BatchDB removed');
         }else{
           toast.error('Rejected by Server, No Authorization');
@@ -98,76 +94,80 @@ const RemoveXBatch = ({ entry, title, check })=> {
     }
   }
   
-  let checkshort = check.split('T')[0];
-
-  const et = entry;
+  let checkshort = checkStr.split('T')[0];
+  const srsQ = !seriesData ? 0 : seriesData.items.length;
   
   return(
-    <div className='vspace wide'>
-      <h2 className='centreText redT'>This cannot be undone</h2>
+    <div className='vspace wide centreText'>
+      <h2 className='redT'>This cannot be undone</h2>
       
       <div className='vspace balancer cap'>
-        {/*<div>
-          <p>Delete ALL {et.items.length} {Pref.items}</p>
+        <div>
+          <p>Delete ALL {srsQ} {Pref.items}</p>
           <button
             className='smallAction clearRed'
             type='button'
             onClick={(e)=>handleItemRemove(e)}
             id='cutItemGo'
-            disabled={et.items.length === 0}
+            disabled={srsQ === 0}
           >DELETE Items</button>
-        </div>*/}
+        </div>
         <div>
-          <p>Delete ALL {et.tide.length} {Pref.tide}s</p>
+          <p>Delete ALL {batchData.tide.length} {Pref.tide}s</p>
           <button
             className='smallAction clearRed'
             type='button'
             onClick={(e)=>handleTideXRemove(e)}
             id='cutTideGo'
-            disabled={et.tide.length === 0}
+            disabled={batchData.tide.length === 0}
           >DELETE Times</button>
         </div>
       </div>
       
       <hr />
       
-      {et.tide.length === 0 ? // && et.items.length === 0 ?
+      {batchData.tide.length === 0 && srsQ === 0 ?
         !Roles.userIsInRole(Meteor.userId(), 'admin') ? 
-          <p className='centreText'>
+          <p>
             <strong>An "Admin" account is required to delete the entire {Pref.xBatch}</strong>
           </p> 
         :
         <div>
-          <p className='centreText'>
-            <strong>Are you sure you want to try to delete all of "{title}"?</strong>
+        
+          <p>
+            <strong>Are you sure you want to try to delete all of "{batchData.batch}"?</strong>
           </p>
-          <dl>
-            <dt>This includes:</dt>
-            <dd>Blocks: {et.blocks.length}</dd>
-            <dd>Releases: {et.releases.length}</dd>
-            <dd>Alterations: {et.altered.length}</dd>
-            <dd>Events: {et.events.length}</dd>
-          </dl>
-      
-          <p>Enter "<i className='noCopy'>{checkshort + ' '}</i>" to confirm.</p>
-          <br />
-          <form onSubmit={(e)=>handleAllRemove(e)} className='inlineForm'>
-            <input
-              type='text'
-              id='confirmInput'
-              placeholder={checkshort}
-              className='noCopy redIn'
-              required />
-            <button
-              className='smallAction clearRed'
-              type='submit'
-              id='cutAllGo'
-              disabled={false}>DELETE Whole {Pref.xBatch}</button>
+          <p className='vspace max500'
+            >Including: NonCons ({!seriesData ? 0 : seriesData.nonCon.length}), 
+            Shortfalls ({!seriesData ? 0 : seriesData.shortfall.length}), 
+            Blocks ({batchData.blocks.length}), 
+            Releases ({batchData.releases.length}), 
+            Alterations ({batchData.altered.length}) and 
+            Events ({batchData.events.length}).
+          </p>
+            {/*<dd>Escaped: {et.escaped.length}</dd>*/}
+            
+          <form onSubmit={(e)=>handleAllRemove(e)} className='inlineForm centre'>
+            <label>
+              <input
+                type='text'
+                id='confirmInput'
+                placeholder={checkshort}
+                className='noCopy redIn'
+                required />
+              <button
+                className='smallAction clearRed'
+                type='submit'
+                id='cutAllGo'
+                disabled={false}>DELETE Entire {Pref.xBatch}
+              </button>
+              <br />Enter "<i className='noCopy'>{checkshort + ' '}</i>" to confirm.
+            </label>
           </form>
         </div>
       : 
-        <p className='centreText'>
-          <strong>{Pref.xBatch} cannot be deleted while there are recorded times</strong>
+        <p>
+          <strong>{Pref.XBatch} cannot be deleted while there are recorded times or item history</strong>
         </p>
       }
       

@@ -27,13 +27,13 @@ const XFormBar = ({
     
   const showBatch = b && srs && b.completed === false;
 
-  const showItem = srs && i && i.completed === false;
+  const showItem = srs && i && i.completed === false; // RMA !!!!!!
     
   const pastPN = srs && srs.shortfall ? [...new Set( Array.from(srs.shortfall, x => x.partNum ) )] : [];
   const pastRF = srs && srs.shortfall ? [...new Set( Array.from(srs.shortfall, x => x.refs.toString() ) )] : [];
   
   const verAuth = Roles.userIsInRole(Meteor.userId(), 'verify');
-  const lockOutAll = !tideFloodGate;
+  const lockOutAll = !tideFloodGate || !b.live;
   
   return(
     <div className='proActionForm'>
@@ -76,7 +76,7 @@ const XFormBar = ({
         </div>
       : null}
       <div className='footFill'>
-        <TideLock currentLive={tideFloodGate} message={true}>
+        <TideLock currentLive={tideFloodGate && b.live} message={true}>
         {i && showItem ?
           show === 'NC' ?
             <NCAdd

@@ -4,7 +4,7 @@ import moment from 'moment';
 
 import LeapButton from '/client/components/tinyUi/LeapButton.jsx';
 import FilterItemsX from '/client/components/bigUi/FilterItemsX';
-import SeriesForm from '/client/components/forms/ItemSerialsX/SeriesForm';
+import SeriesForm, { SeriesDelete } from '/client/components/forms/ItemSerialsX/SeriesForm';
 
 
 const ItemsListX = ({ 
@@ -31,6 +31,31 @@ const ItemsListX = ({
       </Fragment>
     );
   }
+  
+  const emptySeries = seriesData.items.length === 0 &&
+                      seriesData.nonCon.length === 0 &&
+                      seriesData.shortfall.length === 0;
+  if(emptySeries) {
+    return(
+      <Fragment>
+        <fieldset className='noteCard'>
+          <legend>Non-Serialized</legend>
+          <p className='numFont'>Quantity:
+            <b className='medBig'> {batchData.quantity}</b>
+          </p>
+        </fieldset>
+        <div className='centre'>
+          <SeriesDelete
+            batchId={batchData._id}
+            seriesId={seriesData._id}
+            lock={!emptySeries}
+            // noText
+          />
+        </div>
+      </Fragment>
+    );
+  }
+  
   const sessionSticky = batchData.batch + 'batchXItemFilter' ;
   
   const [ stateList, setList ] = useState([]);
@@ -51,29 +76,6 @@ const ItemsListX = ({
     setMod( rule );
     Session.set((sessionSticky+'toggle'), rule);
   }
-  
-  /* get flow steps for menu
-  function flowSteps() {
-    if(!flowData) {
-      return [];
-    }else{
-      let steps = new Set();
-      if(flowData.riverFlow) {
-        for(let s of flowData.riverFlow) {
-          steps.add(s);
-        }
-      }else{null}
-      // if(flowData.riverFlowAlt) {
-      //   for(let as of flowData.riverFlowAlt) {
-      //     steps.has({key: as.key}) ? null : steps.add(as);
-      //   }
-      // }else{null}
-      let niceSteps = [...steps]
-      // remove duplicate 'finish' step
-        .filter( ( v, indx, slf ) => slf.findIndex( x => x.key === v.key ) === indx);
-      return niceSteps;
-    }
-  }*/
 
   // Sort Filters
   function fDone(items, timeMod, notMod) {

@@ -465,12 +465,12 @@ Meteor.methods({
   },
   
   // Finish Batch
-  finishBatchX(batchId) {
-    if(!Roles.userIsInRole(Meteor.userId(), "BRKt3rm1n2t1ng8r2nch")
-      && !Roles.userIsInRole(Meteor.userId(), "run") ) {
-      null;
-    }else{
-      const privateKey = Meteor.user().orgKey;
+  finishBatchX(batchId, privateKey) {
+    if(privateKey ||
+      Roles.userIsInRole(Meteor.userId(), "BRKt3rm1n2t1ng8r2nch") ||
+      Roles.userIsInRole(Meteor.userId(), "run") )
+    {
+      const accessKey = privateKey || Meteor.user().orgKey;
       
       const doc = XBatchDB.findOne({_id: batchId});
       
@@ -486,15 +486,12 @@ Meteor.methods({
       }
       const allFall = !didFall ? true : falling.every( x => x === true );
       
-      // const didFlow = doc.serialize === false;
-      const srs = /*didFlow &&*/ XSeriesDB.findOne({batch: doc.batch});
+      const didFlow = doc.serialize === false;
+      const srs = didFlow && XSeriesDB.findOne({batch: doc.batch});
       const allFlow = !srs ? true : srs.items.every( x => x.completed === true );
     
       if(didSome && allFall && allFlow) {
-        
-        console.log(' can FINISH ');
-        /*
-        XBatchDB.update({_id: batchId, orgKey: privateKey}, {
+        XBatchDB.update({_id: batchId, orgKey: accessKey}, {
     			$set : { 
     			  live: false,
     			  completed: true,
@@ -502,11 +499,10 @@ Meteor.methods({
     			  completedWho: Meteor.userId(),
         }});
         Meteor.defer( ()=>{
-          Meteor.call('updateOneMovement', batchId, privateKey);
+          Meteor.call('updateOneMovement', batchId, accessKey);
         });
-        */
-      }else{ console.log(' can NOT finish '); }
-    }
+      }else{null}
+    }else{null}
   },
   
   // Undo Finish Batch
@@ -639,6 +635,8 @@ Meteor.methods({
   
     //////////////////// DESTRUCTIVE \\\\\\\\\\\\\\\\\\\\\
   
+  // Items delete is in the Series Methods
+  
   deleteXBatchTide(batchId) {
     const accessKey = Meteor.user().orgKey;
     const doc = XBatchDB.findOne({_id: batchId});
@@ -672,10 +670,12 @@ Meteor.methods({
   
   deleteWholeXBatch(batchID, pass) {
     const doc = XBatchDB.findOne({_id: batchID});
-    // if any items have history
+    const srs = XSeriesDB.findOne({batch: doc.batch});
+    
+    const items = !srs ? false : srs.items.length > 0;
     const inUse = doc.tide.length > 0 || doc.waterfall.length > 0;
                   
-    if(!inUse) {
+    if(!items && !inUse) {
       const lock = doc.createdAt.toISOString().split("T")[0];
       const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
       const access = doc.orgKey === Meteor.user().orgKey;
@@ -683,6 +683,9 @@ Meteor.methods({
       if(auth && access && unlock) {
         XBatchDB.remove({_id: batchID});
         TraceDB.remove({batchID: batchID});
+        if(srs) {
+          XSeriesDB.remove({_id: srs._id});
+        }
         return true;
       }else{
         return false;

@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 import MiniBar from '/client/components/charts/MiniScales/MiniBar.jsx';
 
-import '/client/components/river/waterfall/style.css';
+import '/client/components/riverX/waterfall/style.css';
 
 const WaterfallTimeline = ({ wfCounts, waterfall, quantity, app })=> {
 

@@ -5,11 +5,11 @@ import Pref from '/client/global/pref.js';
 const TideLock = ({ currentLive, classSty, children, message })=> {
   useEffect(() => {
     if(!currentLive && message) {
-      toast(`Read Only. Click 'START' to unlock \n
-             (you can only be ${Pref.engaged} \n
-             with one ${Pref.batch} at a time). \n
-             Click 'SWITCH' to stop your current ${Pref.batch} \n
-             and start this ${Pref.batch}.`, 
+      toast(`Click 'START' to unlock. \n
+             Click 'SWITCH' to stop your current ${Pref.batch}
+             and start this ${Pref.batch}. \n
+             (Only one ${Pref.batch} can be 
+             ${Pref.engaged} at a time).`, 
         {
           autoClose: false,
           position: toast.POSITION.BOTTOM_CENTER

@@ -190,13 +190,28 @@ const ActionBar = ({
             quantity={batchData.quantity}
             allVariants={allVariants}
             lock={!variantData || !batchData.live} />
-      
+          
+          <ItemSerialsWrapX
+            bID={batchData._id}
+            quantity={batchData.quantity}
+            seriesId={seriesData._id}
+            itemsQ={!seriesData ? 0 : seriesData.items.length}
+            unit={variantData.runUnits}
+            app={app}
+            lock={!seriesData || batchData.completed === true} />
+          
           <CounterAssign
             id={batchData._id}
             waterfall={batchData.waterfall}
             app={app}
             lock={batchData.completed === true} />
-             
+            
+          <RiverSelectX
+            bID={batchData._id}
+            widget={widgetData}
+            river={batchData.river}
+            lock={!seriesData || batchData.completed === true} />
+
           <ActionLink
             address={'/print/generallabel/' + 
                       batchData.batch + 
@@ -208,7 +223,7 @@ const ActionBar = ({
                       '&quant=' + batchData.quantity }
             title='Print Label'
             icon='fa-print'
-            color='blackT' />
+            color='cloudsT' />
           
           <BlockForm
             id={batchData._id}
@@ -217,28 +232,10 @@ const ActionBar = ({
             lock={batchData.completed === true} />
     
           <RemoveXBatch
-            title={batchData.batch}
+            batchData={batchData}
+            seriesData={seriesData}
             check={batchData.createdAt.toISOString()}
-            entry={batchData}
             lockOut={batchData.completed === true} />
-      
-          {seriesData &&
-            <ItemSerialsWrapX
-              bID={batchData._id}
-              seriesId={seriesData._id}
-              items={seriesData.items}
-              more={batchData.completed === false}
-              unit={variantData.runUnits}
-              app={app} />}
-              
-          {seriesData &&  
-            <RiverSelectX
-              bID={batchData._id}
-              widget={widgetData}
-              river={batchData.river}
-              // riverAlt={batchData.riverAlt}
-              lock={batchData.completed === true} />}
-          
           
         </Fragment>
       :

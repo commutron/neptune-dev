@@ -29,11 +29,9 @@ const BatchPanelX = ({
   
   const floorRelease = b.releases.find( x => x.type === 'floorRelease');
   const released = floorRelease ? true : false;
-
+  const hasFall = b.waterfall.length > 0;
   const done = b.completed === true && b.live === false;
-  const allDone = !seriesData ? true : seriesData.items.every( x => x.completed );
-    
-  
+   
   return(
     <div className='section' key={b.batch}>
       
@@ -61,6 +59,9 @@ const BatchPanelX = ({
           fallCounts={fallData}
           released={released}
           done={done}
+          allFlow={flowData.flowCounts.allFlow}
+          allFall={fallData.allFall}
+          nowater={!hasFall && !seriesData}
           app={app}
           brancheS={brancheS}
           isDebug={isDebug}
@@ -73,7 +74,7 @@ const BatchPanelX = ({
         
           <div className='twoThirdsContent'>
             <WaterfallTimeline
-              wfCounts={fallData}
+              wfCounts={fallData.fallProg}
               waterfall={b.waterfall}
               quantity={b.quantity}
               app={app} />
@@ -92,7 +93,7 @@ const BatchPanelX = ({
           totalUnits={b.quantity}
           floorRelease={floorRelease}
           done={done}
-          allDone={allDone}
+          allDone={flowData.allFlow}
           riverFlow={flowData.riverFlow}
           app={app} />
         

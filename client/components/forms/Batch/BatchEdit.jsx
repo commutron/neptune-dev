@@ -44,7 +44,7 @@ const BatchEdit = ({
     <Model
       button={'Edit ' + Pref.batch}
       title={`edit ${Pref.batch} ${batchNow}`}
-      color='greenT'
+      color='grayT'
       icon='fa-cubes'
       lock={!Roles.userIsInRole(Meteor.userId(), 'edit') || lock}
       noText={noText}>

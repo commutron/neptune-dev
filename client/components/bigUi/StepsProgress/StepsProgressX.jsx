@@ -18,9 +18,7 @@ const StepsProgressX  = ({
   const dt = flowCounts;
     
   const rvrDt = dt.riverProg;
-  
-  const wflDt = fallCounts.sort((w1, w2)=> 
-                              w1.pos < w2.pos ? -1 : w1.pos > w2.pos ? 1 : 0 );
+  const wflDt = fallCounts.fallProg;
   
   const totalI = dt.liveItems;
 
@@ -30,6 +28,10 @@ const StepsProgressX  = ({
   
   const unitsExist = totalIU > totalI ? true : false;
   const calcItem = countCalc === 'items' ? true : false;
+  
+  const oRvr = rvrDt.filter( r => !r.bKey );
+  const oWfl = wflDt.filter( r => !r.bKey );
+  let rndmKeyO = Math.random().toString(36).substr(2, 5);
   
   return (
     <div>
@@ -100,6 +102,20 @@ const StepsProgressX  = ({
           );
         }
       })}
+      
+      {oRvr.length > 0 || oWfl.length > 0 ?
+        <BranchProgress
+          key={rndmKeyO}
+          branch={{branch:"Other"}}
+          bRvr={oRvr}
+          bWfl={oWfl}
+          quantity={quantity}
+          calcItem={calcItem}
+          totalI={totalI}
+          totalIU={totalIU}
+          truncate={truncate}
+        />
+      : null}
       
     </div>
     

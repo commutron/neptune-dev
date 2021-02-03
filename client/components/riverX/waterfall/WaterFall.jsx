@@ -3,9 +3,10 @@ import './style';
 //import moment from 'moment';
 //import Pref from '/client/global/pref.js';
 
-// props id, fall, total, quantity, lock, app
-
-const WaterFall = (props)=> {
+const WaterFall = ({ 
+  batchId, fall, total, quantity, lock,
+  app, borderColor, fadeColor
+})=> {
   
   const [ lockPlus, lockPlusSet ] = useState( false );
   const [ lockMinus, lockMinusSet ] = useState( false );
@@ -13,9 +14,8 @@ const WaterFall = (props)=> {
   
   /*
   function plusMeta(e, meta) {
-    const batchID = props.id;
-    if(props.total < props.quantity) {
-      Meteor.call('metaCounter', batchID, props.fall.wfKey, meta, (error)=>{
+    if(total < quantity) {
+      Meteor.call('metaCounter', batchId, fall.key, meta, (error)=>{
         error && console.log(error);
       });
     }
@@ -23,9 +23,8 @@ const WaterFall = (props)=> {
   */
   function plusOne(e) {
     lockPlusSet( true );
-    const batchID = props.id;
-    if(props.total < props.quantity) {
-      Meteor.call('positiveCounter', batchID, props.fall.wfKey, (error)=>{
+    if(total < quantity) {
+      Meteor.call('positiveCounter', batchId, fall.key, (error)=>{
         error && console.log(error);
         let speed = !Meteor.user().unlockSpeed ? 2000 : Meteor.user().unlockSpeed; 
         Meteor.setTimeout(()=> {
@@ -37,9 +36,8 @@ const WaterFall = (props)=> {
   
   function minusOne(e) {
     lockMinusSet( true );
-    const batchID = props.id;
-    if(props.total > 0) {
-      Meteor.call('negativeCounter', batchID, props.fall.wfKey, (error)=>{
+    if(total > 0) {
+      Meteor.call('negativeCounter', batchId, fall.key, (error)=>{
         error && console.log(error);
         let speed = !Meteor.user().unlockSpeed ? 2000 : Meteor.user().unlockSpeed; 
         Meteor.setTimeout(()=> {
@@ -48,17 +46,13 @@ const WaterFall = (props)=> {
       });
     }
   }
+
+  // const metaTicks = fall.counts.filter( x => x.tick === 0);
+  // const starts = metaTicks.filter( x => x.meta === 'start').length;
+  // const stops = metaTicks.filter( x => x.meta === 'stop').length;
+  // const active = starts > 0 && starts > stops;
   
-    
-  const metaTicks = props.fall.counts.filter( x => x.tick === 0);
-  const starts = metaTicks.filter( x => x.meta === 'start').length;
-  const stops = metaTicks.filter( x => x.meta === 'stop').length;
-  const active = starts > 0 && starts > stops;
-  
-  let borderColor = props.borderColor;
-  let fadeColor = props.fadeColor;
-  
-  const fadeDeg = Math.floor( (props.total / props.quantity ) * 100 );
+  const fadeDeg = Math.floor( (total / quantity ) * 100 );
 
   let fadeTick = fadeDeg < 10 ? '0' :
                  fadeDeg < 20 ? '10' :
@@ -73,30 +67,30 @@ const WaterFall = (props)=> {
                  '100';
     
   let fadeClass = 'countFill' + fadeColor + fadeTick;
-  let startClass = fadeDeg <= 0 || props.lock ? 'countStop' : '';
-  let doneClass = fadeDeg >= 100 || props.lock ? 'countStop' : '';
-  let offClass = /*!active ? 'countStop' :*/ '';
+  let startClass = fadeDeg <= 0 || lock ? 'countStop' : '';
+  let doneClass = fadeDeg >= 100 || lock ? 'countStop' : '';
+  // let offClass = !active ? 'countStop' : '';
   
   return (
     <div className='waterfallGrid'>
       <button
-        id={'goMinus' + props.fall.wfKey}
-        className={offClass + ' countMinus numFont ' + startClass}
+        id={'goMinus' + fall.key}
+        className={`countMinus numFont ${startClass}`}
         onClick={(e)=>minusOne(e)}
-        disabled={/*!active ||*/ props.lock || lockMinus || props.total === 0}
+        disabled={lock || lockMinus || total === 0}
       >-1</button>
         
         {/*active ?
           <button
             className='countOnOff countOff action'
-            onClick={this.plusMeta.bind(this, 'stop')}
-            disabled={this.props.lock}
+            onClick={()=>plusMeta('stop')}
+            disabled={lock}
           >&#x2BC0;</button>
         :
           <button
-            className={'countOnOff countOn action ' + fadeColor.toLowerCase()}
-            onClick={this.plusMeta.bind(this, 'start')}
-            disabled={this.props.lock}
+            className={'countOnOff countOn action ' + fadeColor}
+            onClick={()=>plusMeta('start')}
+            disabled={lock}
           >&#9654;</button>
         */}
         
@@ -105,9 +99,8 @@ const WaterFall = (props)=> {
           className='countN action low'
           onClick={()=>showMenuSet(true)}
           disabled={
-            !active || props.lock || 
-            lockPlus || 
-            props.total >= props.quantity || true
+            lock || lockPlus || 
+            total >= quantity || true
           }
         >+n</button>
         {showMenu ?
@@ -128,20 +121,19 @@ const WaterFall = (props)=> {
       <button
         className='countRec action low'
         disabled={
-          !active || props.lock || 
-          lockPlus || 
-          props.total >= props.quantity || true
+          lock || lockPlus || 
+          total >= quantity || true
         }
       >rec</button>
       
       
       <button
-        id={'goPlus' + props.fall.wfKey}
-        className={offClass + ' countPlus ' + borderColor + ' ' + fadeClass + ' ' + doneClass}
+        id={'goPlus' + fall.key}
+        className={`countPlus ${borderColor} ${fadeClass} ${doneClass}`}
         onClick={(e)=>plusOne(e)}
-        disabled={/*!active || */ props.lock || lockPlus || props.total >= props.quantity}>
-        <i className='countPlusTop numFont'>{props.total}</i>
-        <br /><i className='numFont'>/{props.quantity}</i>
+        disabled={lock || lockPlus || total >= quantity}>
+        <i className='countPlusTop numFont'>{total}</i>
+        <br /><i className='numFont'>/{quantity}</i>
       </button>
   	</div>
   );

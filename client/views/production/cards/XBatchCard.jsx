@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-// import moment from 'moment';
+import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
 import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
@@ -12,7 +12,7 @@ import NoteLine from '/client/components/smallUi/NoteLine.jsx';
 import BlockList from '/client/components/bigUi/BlockList.jsx';
 
 const BatchCardX = ({
-  batchData, bOpen, //seriesData, itemData
+  batchData, bOpen, bClosed, //seriesData, itemData
   user, app, brancheS, plainBrancheS, ancOptionS,
   floorReleased, flowCounts, fallCounts,
   tideKey, tideFloodGate, 
@@ -32,6 +32,7 @@ const BatchCardX = ({
           <MiniInfo
             batchData={batchData}
             flowCounts={flowCounts}
+            bClosed={bClosed}
             app={app} />;
             
   const insertProgress = 
@@ -46,7 +47,7 @@ const BatchCardX = ({
             />
           </div>;
   
-  if( tideFloodGate && expand && !flowwater && !fallwater ) {
+  if( ( expand && !bOpen ) || ( tideFloodGate && expand && !flowwater && !fallwater ) ) {
     return(
       <Fragment>   
         <div className='proPrimeSingle'>
@@ -94,8 +95,19 @@ const BatchCardX = ({
 
 export default BatchCardX;
 
-const MiniInfo = ({ batchData, flowCounts, app })=> (
+const MiniInfo = ({ batchData, flowCounts, bClosed, app })=> (
   <div className='space1v cap'>
+    
+    {bClosed &&
+      <h4 className='centreText letterSpaced'>
+        <i className="far fa-lightbulb fa-4x grayT"></i>
+        <br />Unfinished & Deactivated
+      </h4>}
+      
+    {batchData.completed &&
+      <h4 className='centreText nomargin'
+        >{Pref.XBatch} Completed {moment(batchData.completedAt).calendar()}
+      </h4>}
     
     <p>{Pref.salesOrder}: <b>{batchData.salesOrder}</b></p>
     

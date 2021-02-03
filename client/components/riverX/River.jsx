@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 
 import StoneSelect from './StoneSelect.jsx';
@@ -15,12 +15,20 @@ const River = ({
   showVerifyState, optionVerify, handleVerify
 })=> {
   
+  const thingMounted = useRef(true);
+  
   const [ undoStepOption, undoOpSet ] = useState(false);
+  
+  useEffect(() => {
+    return () => { thingMounted.current = false;
+      // Meteor.clearTimeout(timer);
+    };
+  }, []);
   
   function tempOpenOption() {
     undoOpSet( true );
     Meteor.setTimeout(()=> {
-    	undoOpSet( false );
+      if(thingMounted.current) { undoOpSet( false ); }
     }, Pref.stepUndoWindow);
   }
   function closeOption() {

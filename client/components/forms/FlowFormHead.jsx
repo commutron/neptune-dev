@@ -21,7 +21,7 @@ const FlowFormHeadWrapper = ({
     <ModelMedium
       button={name}
       title={name}
-      color='greenT'
+      color='blueT'
       icon='fa-project-diagram gap'
       lock={!Roles.userIsInRole(Meteor.userId(), 'edit') || lock}
       noText={noText}
@@ -147,12 +147,8 @@ const FlowFormHead = ({ id, existFlows, preFill, app, selfclose })=> {
           <label htmlFor='flwttl'>{Pref.flow} title</label>
         </p>
       </form>
-    
-      <hr />
       
-      <h2 className='cap'>{Pref.nonCon} lists</h2>
-      
-      <div>
+      <div className='centre'>
         <label htmlFor='List Options' className='multiSelectContain'>
           <MultiSelect
             options={ncOptions}
@@ -161,11 +157,9 @@ const FlowFormHead = ({ id, existFlows, preFill, app, selfclose })=> {
             labelledBy={"List Options"}
             hasSelectAll={false}
             disableSearch={true}
-        />List Options</label>
+        />{Pref.nonCon} List Options</label>
         <p><em>If none are chosen the Legacy List will be used</em></p>
       </div>
-    
-      <hr />
   
       <div className='space centre'>
         <button

@@ -1,9 +1,9 @@
 .waterfallSelector details {
-  height: 3vmax;
+  height: 4vmax;
   box-shadow: none;
 }
 .waterfallSelector details[open] {
-  height: 16vmax;
+  height: 18vmax;
 }
 
 .waterfallWrap {
@@ -12,10 +12,7 @@
 }
 
 .waterfallTitle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 3vw;
+  height: 4vmax;
   font-size: calc(0.25rem + 1vmax);
   font-weight: 600;
   color: black;

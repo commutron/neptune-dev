@@ -20,11 +20,16 @@ const TideWall = ({
   
   const ctxLabel = tideFloodGate ? 'Set Different Task' : `Set A Task`;
   
+  if(!bOpen && bComplete) {
+    return(
+      null
+    );
+  }
   return(
     <div className='vgap'>
 
-  		{( !itemData && bOpen ) ||
-  		  ( itemData && itemData.completed === false ) ? 
+  		{bOpen && ( ( !itemData ) ||
+  		  ( itemData && itemData.completed === false ) ) ? 
   		  
 		    <Fragment>
           <n-big-tide-container>
@@ -62,7 +67,6 @@ const TideWall = ({
             <MiniHistory history={itemData.history} />
         : null
         }
-        
   	</div>
   );
 };

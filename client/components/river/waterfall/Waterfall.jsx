@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './style';
 //import moment from 'moment';
 //import Pref from '/client/global/pref.js';
 

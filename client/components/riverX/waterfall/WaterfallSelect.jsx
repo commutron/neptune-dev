@@ -7,33 +7,25 @@ import './style';
 import WaterFall from './WaterFall';
 import BatchXComplete from '/client/components/forms/Batch/BatchXComplete';
 
-const WaterfallSelect = ({ batchData, app })=> {
-
-  let allTotal = [];
+const WaterfallSelect = ({ batchData, allFlow, fallProg, allFall, nowater, app })=> {
   
-  const waterfall = batchData.waterfall;
-  const waterfallS = waterfall.sort((w1, w2)=> !w1.position ? -1 : 
-          w1.position > w2.position ? 1 : w1.position < w2.position ? -1 : 0 );
-    
   Session.set('nowStep', '');
   Session.set('nowWanchor', '');
   
   const canRun = Roles.userIsInRole(Meteor.userId(), 'run');
-  
-  return (
+  const dfopen = fallProg.length === 1;
+   
+  return(
     <div className='waterfallSelector'>
-      {waterfall.length === 0 ?
+      {nowater ?
         <div className='wide space orangeBorder'>
           <p>No {Pref.counter}s are assigned</p>
         </div>
       :
-      waterfallS.map( (entry)=>{
-        let total = entry.counts.length > 0 ?
-          Array.from(entry.counts, x => x.tick).reduce((x,y)=> x + y) :
-        0;
-        const clear = total >= batchData.quantity;
-        allTotal.push(clear);
-        const type = entry.type || app.countOption.find( x => x.key === entry.wfKey ).type;
+      fallProg.map( (entry)=>{
+        let total = entry.count; //entry.counts.length > 0 ?
+        
+        const type = entry.type || app.countOption.find( x => x.key === entry.key ).type;
         //let bannerColor = 'blue';
         let borderColor = 'borderBlue';
         let fadeColor = 'Blue';
@@ -58,10 +50,13 @@ const WaterfallSelect = ({ batchData, app })=> {
           null }
         const bannerColor = fadeColor.toLowerCase();
         return(
-          <details key={entry.wfKey} className='waterfallWrap'>
-            <summary className={'waterfallTitle ' + bannerColor}>{entry.gate} {type}</summary>
+          <details 
+            key={entry.key} 
+            className='waterfallWrap'
+            open={dfopen}>
+            <summary className={`waterfallTitle ${bannerColor}`}>{entry.gate} {type}</summary>
             <WaterFall
-              id={batchData._id}
+              batchId={batchData._id}
               fall={entry}
               total={total}
               quantity={batchData.quantity}
@@ -71,8 +66,14 @@ const WaterfallSelect = ({ batchData, app })=> {
               fadeColor={fadeColor} />
           </details>
       )})}
-      {allTotal.every( x => x === true ) &&
-        <BatchXComplete batchData={batchData} canRun={canRun} /> 
+      {nowater || (allFlow && allFall) ?
+        <BatchXComplete 
+          batchData={batchData} 
+          allFlow={allFlow}
+          allFall={allFall}
+          nowater={nowater}
+          canRun={canRun} /> 
+        : null
       }
     </div>
   );

@@ -12,7 +12,7 @@ const BatchXEdit = ({
   <ModelLarge
     button={'Edit ' + Pref.xBatch}
     title={'Edit ' + Pref.xBatch}
-    color='blueT'
+    color='greenT'
     icon='fa-cubes'
     lock={!Roles.userIsInRole(Meteor.userId(), 'create') || lock}
     // menuItem={true}
@@ -169,11 +169,13 @@ const BXEditForm = ({
         </label>
         
       </div>
-     
-      <button
-        type='submit'
-        className='action clearGreen'
-      >Save</button>
+      
+      <div className='centreRow vmargin'>
+        <button
+          type='submit'
+          className='action clearGreen'
+        >Save</button>
+      </div>
     </form>
   );
 };

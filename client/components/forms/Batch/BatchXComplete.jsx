@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
-import '/client/components/river/waterfall/style';
+import '/client/components/riverX/waterfall/style';
 
-const BatchXComplete = ({ batchData, canRun })=> {
+const BatchXComplete = ({ batchData, allFlow, allFall, nowater, canRun })=> {
   
   function finishBatchX() {
     const batchID = batchData._id;
@@ -26,41 +26,45 @@ const BatchXComplete = ({ batchData, canRun })=> {
   return(
     <div className='centre vmarginhalf space1v purpleBorder'>
       {batchData.completed === false ?
-        <div className='centre'>
-          <p className='centreText'>
-            <i>All assigned processes are complete</i>
-          </p>
-          <button
-            className='action clearPurple'
-            onClick={()=>finishBatchX()}
-            disabled={!Roles.userIsInRole(Meteor.userId(), "BRKt3rm1n2t1ng8r2nch")}
-          >Complete {Pref.xBatch}</button>
-        </div>
+        nowater || (allFlow && allFall) ?
+          <Fragment>
+            <p className='centreText'>
+              {nowater ?
+                <i>No assigned processes</i> :
+                <i>All assigned processes are complete</i> }
+            </p>
+            <button
+              className='action clearPurple'
+              onClick={()=>finishBatchX()}
+              disabled={!Roles.userIsInRole(Meteor.userId(), "BRKt3rm1n2t1ng8r2nch")}
+            >Complete {Pref.xBatch}</button>
+          </Fragment>
+        : null
       :
-        <div className='centre'>
-          <h2 className='actionBox centreText green'>
+        <Fragment>
+          <h2 className='green'>
             Completed: {moment(batchData.completedAt).calendar()}
           </h2>
           {moment().diff(moment(batchData.completedAt), 'minutes') < 60 ?
             <div className='centre'>
               <button
-                className='action clearWhite'
+                className='action clearPurple'
                 onClick={()=>undoFinishBatchX(false)}
                 disabled={!Roles.userIsInRole(Meteor.userId(), "BRKt3rm1n2t1ng8r2nch")}
-              >Reactivate</button>
+              >Reopen</button>
             </div>
           :
-          <div className='centre'>
-            <p className='centreText'>
+          <div>
+            <p>
               <i>This {Pref.xBatch} was completed more than an hour ago</i>
             </p>
             <button
-              className='action clearWhite'
+              className='action clearPurple'
               onClick={()=>undoFinishBatchX(true)}
               disabled={!canRun}
-            >Reactivate Anyway</button>
+            >Reopen Anyway</button>
           </div>}
-        </div>
+        </Fragment>
       }
     </div>
   );

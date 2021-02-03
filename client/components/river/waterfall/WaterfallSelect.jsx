@@ -2,7 +2,6 @@ import React from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 // import { toast } from 'react-toastify';
-import './style';
 
 import Waterfall from './Waterfall.jsx';
 import BatchXComplete from '/client/components/forms/Batch/BatchXComplete';

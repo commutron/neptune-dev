@@ -60,6 +60,7 @@
   transition: all 150ms ease-in-out;
   display: inline-grid;
   grid-template-columns: repeat(auto-fit, minmax(15vmax, 1fr));
+  grid-template-rows: max-content;
   align-items: stretch;
   justify-content: flex-start;
 }

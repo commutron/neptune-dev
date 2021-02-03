@@ -308,8 +308,10 @@ details[open] summary {
 }
 summary {
   margin: 0;
-  padding: 1vh 1vw;
+  padding: 0 1vw;
   cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 /*
 details:focus-within {

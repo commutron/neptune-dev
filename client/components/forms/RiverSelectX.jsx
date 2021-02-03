@@ -12,7 +12,7 @@ const RiverSelectX = ({
   <ModelSmall
     button={Pref.flow}
     title={'select ' + Pref.flow}
-    color='greenT'
+    color='blueT'
     icon='fa-project-diagram'
     lock={!Roles.userIsInRole(Meteor.userId(), 'run') || lock}
     noText={noText}>
@@ -54,7 +54,7 @@ const RiverSelectForm = ({
   }
   
   return(
-    <form className='centre' onSubmit={(e)=>save(e)}>
+    <form className='centre vmargin' onSubmit={(e)=>save(e)}>
       <p>
         <select id='choice' defaultValue={river} required>
         <option></option>

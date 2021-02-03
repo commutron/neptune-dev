@@ -137,30 +137,30 @@ const DataViewOps = ({
     let ncTypesComboFlat = [];
     let flowCounts = false;
     
-    if( widgetData && batchData ) {
-      
-      const getRiverFirst = (w, bx)=> {
-        return new Promise(function(resolve) {
+    const getRiverFirst = (w, bx)=> {
+      return new Promise(function(resolve) {
+        if( w && bx ) {
           const river = w.flows.find( x => x.flowKey === bx.river);
           if(river) {
             riverTitle = river.title;
             riverFlow = river.flow;
             river.type === 'plus' && ncListKeys.push(river.ncLists);
           }
-          resolve('Success');
-        });
-      };
+        }
+        resolve('Success');
+      });
+    };
+    
+    const generateSecond = (srs)=> {
+      flowCounts = FlowCounter(riverFlow, srs);
       
-      const generateSecond = (srs)=> {
-        flowCounts = FlowCounter(riverFlow, srs);
-        
-        ncTypesComboFlat = NonConOptionMerge(ncListKeys, appData, user, true);
-      };
+      ncTypesComboFlat = NonConOptionMerge(ncListKeys, appData, user, true);
+    };
 
-      getRiverFirst(widgetData, batchData)
-        .then(generateSecond(seriesData));
-        
-    }
+    getRiverFirst(widgetData, batchData)
+      .then(generateSecond(seriesData));
+      
+
     return {
       riverTitle, riverFlow,
       ncTypesComboFlat, flowCounts

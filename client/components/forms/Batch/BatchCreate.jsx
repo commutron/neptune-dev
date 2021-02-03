@@ -50,7 +50,7 @@ const BatchCreate = ({ widgetId, versionKey, allVariants, lock })=> {
     <Model
       button={'New ' + Pref.batch}
       title={'Create a new ' + Pref.batch}
-      color='greenT'
+      color='grayT'
       icon='fa-cubes'
       lock={!Roles.userIsInRole(Meteor.userId(), 'create') || lock}>
       <form className='centre' onSubmit={(e)=>save(e)}>

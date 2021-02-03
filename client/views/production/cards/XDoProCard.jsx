@@ -81,6 +81,7 @@ const XDoProCard = ({
   // const bCascade = batchData.cascade.length > 0;
   
   const bOpen = batchData.live || bWrapUp;
+  const bClosed = !batchData.live && !bComplete;
   
   const flows = flowData ? flowData.flow : [];
   const plainBrancheS = Array.from(brancheState, b => b.branch);
@@ -115,7 +116,11 @@ const XDoProCard = ({
 
   const insertWaterfall = 
           <WaterfallSelect 
-            batchData={batchData} 
+            batchData={batchData}
+            allFlow={flowData.flowCounts.allFlow}
+            fallProg={fallData.fallCounts.fallProg}
+            allFall={fallData.fallCounts.allFall}
+            nowater={!fallAction && !seriesData}
             app={app} />;
             
   const insertItemCard = 
@@ -163,6 +168,7 @@ const XDoProCard = ({
           <XBatchCard
             batchData={batchData}
             bOpen={bOpen}
+            bClosed={bClosed}
             user={user}
             app={app}
             brancheS={brancheState}
@@ -180,7 +186,9 @@ const XDoProCard = ({
   return(
     <Fragment>
     
-    {!itemData ? // @ Batch
+    {bClosed ? null :
+    
+    !itemData ? // @ Batch
       
       !tideFloodGate ? insertTideWall : // @ Locked
         
@@ -191,8 +199,8 @@ const XDoProCard = ({
           !expand ? insertBatchCard // Batch Tab Info
           : 
             null
-    : 
-        
+    : // @ Item
+      
       !tideFloodGate ? insertTideWall : // @ Locked
         
         !flowAction || iComplete ? insertItemCard : // @ Rest
@@ -203,7 +211,7 @@ const XDoProCard = ({
     }
       
   	{!showVerifyState &&  // Toggled and No First Form
-  	  ( expand ) &&
+  	  ( !bOpen || expand ) &&
 
       insertBatchCard /* Batch Tab Info */ 
   	}
