@@ -427,6 +427,42 @@ button.variableInput.biggest { height: 64px; }
   filter: grayscale(0.9);
 }
 
+.followTask i {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 5.5vh;
+  height: 5.5vh;
+  font-size: 2.5vh;
+  font-weight: 600;
+  color: var(--task-front-color);
+  transition: all 150ms ease-in-out;
+}
+.followTask i:first-child {
+  position: absolute;
+}
+.followTask i:last-child {
+  border-width: 0.3vh;
+  border-style: inset;
+  border-color: var(--task-front-color);
+  border-radius: 50%;
+}
+
+.followTask:hover i {
+  color: var(--task-back-color);
+}
+.followTask:disabled,
+.followTask:disabled > span {
+  opacity: 1 !important;
+  cursor: context-menu !important;
+}
+.followTask.fGreen i {
+  border-color: var(--emerald);
+}
+.followTask.fGreen:hover {
+  background-color: var(--emerald);
+}
 
 .toggleOff {
   transition: background-color 400ms ease,

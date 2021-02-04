@@ -123,16 +123,23 @@ const DataRepair = ({ app, users })=> {
   }
   
   function removeNCkey() {
-    Meteor.call('UNSETbplusNonconKey', (error)=>{
+    Meteor.call('UNSETbplusNonconKey', (error, re)=>{
       error && console.log(error);
-      toast.success('request sent');
+      re ? toast.success('success') : toast.error('unsuccessful');
     });
   }
   
   function removeVRkey() {
-    Meteor.call('UNSETbplusVeriKey', (error)=>{
+    Meteor.call('UNSETbplusVeriKey', (error, re)=>{
       error && console.log(error);
-      toast.success('request sent');
+      re ? toast.success('success') : toast.error('unsuccessful');
+    });
+  }
+  
+  function doUnlockAll() {
+    Meteor.call('unlockALLxbatch', (error, re)=>{
+      error && console.log(error);
+      re ? toast.success('success') : toast.error('unsuccessful');
     });
   }
   
@@ -167,12 +174,23 @@ const DataRepair = ({ app, users })=> {
       
       <div>
         <h3><i className="fas fa-key fa-lg gap"></i>
-          Lock Batch and Batch+
+          Run Batch and Batch+ Locker
         </h3>
+        <small>Runs every Saturday at 12:01am (CST)</small><br />
         <button
           onClick={()=>forceLockCheck()}
           className='action clearPurple'
         >Request Locking</button>
+      </div>
+      
+      <div>
+        <h3><i className="fas fa-unlock-alt fa-lg gap"></i>
+          Unlock All Batch+ (XBatchDB)
+        </h3>
+        <button
+          onClick={()=>doUnlockAll()}
+          className='action clearPurple'
+        >Set `lock` to false</button>
       </div>
 
       <div>

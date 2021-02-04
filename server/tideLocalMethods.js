@@ -7,27 +7,7 @@ Meteor.methods({
 
 
 //// For a Person \\\\\
-/*
-  engagedState() {
-    const user = Meteor.user();
-    const eg = user && user.engaged;
-    if(!eg || !eg.tKey || !eg.task) {
-      return false;
-    }else if(eg.task === 'PRO') {
-      const batch = BatchDB.findOne({ 'tide.tKey': eg.tKey });
-      const sub = batch && batch.tide.find( x => x.tKey === eg.tKey);
-      
-      const bounce = batch ? [ batch.batch, sub.task ] : false;
-      return bounce;
-    }else{
-      const batchX = XBatchDB.findOne({ 'tide.tKey': eg.tKey });
-      const subX = batchX && batchX.tide.find( x => x.tKey === eg.tKey);
 
-      const bounceX = batchX ? [ batchX.batch, subX.task ] : false;
-      return bounceX;
-    }
-  },
-  */
   getEngagedBlocks(userTkeys) {
     if(Array.isArray(userTkeys) === false) {
       return false;
@@ -110,9 +90,6 @@ Meteor.methods({
                   tName: doc.batch,
                   tTask: newTask
                 }
-              },
-              $push: {
-                tidepools: { $each: [doc.batch], $position: 0, $slice: 5 }
               }
             });
             return true;
@@ -141,9 +118,6 @@ Meteor.methods({
                     tName: docX.batch,
                     tTask: newTask
                   }
-                },
-                $push: {
-                  tidepools: { $each: [docX.batch], $position: 0, $slice: 5 }
                 }
               });
               return true;
@@ -173,6 +147,9 @@ Meteor.methods({
           Meteor.users.update(userId, {
             $set: {
               engaged: false
+            },
+            $push: {
+              tidepools: { $each: [doc.batch], $position: 0, $slice: 5 }
             }
           });    
          return true;
@@ -190,6 +167,9 @@ Meteor.methods({
             Meteor.users.update(userId, {
               $set: {
                 engaged: false
+              },
+              $push: {
+                tidepools: { $each: [docX.batch], $position: 0, $slice: 5 }
               }
             });    
             return true;

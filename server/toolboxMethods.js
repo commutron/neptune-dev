@@ -203,7 +203,7 @@ Meteor.methods({
           }},{multi: true});
           return true;
       }else{
-        null;
+        return false;
       }
     }catch (err) {
       throw new Meteor.Error(err);
@@ -218,7 +218,23 @@ Meteor.methods({
           }},{multi: true});
           return true;
       }else{
-        null;
+        return false;
+      }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  
+  unlockALLxbatch() {
+    try{
+      if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+        XBatchDB.update({ orgKey: Meteor.user().orgKey }, {
+          $set : { 
+            lock: false
+          }},{multi: true});
+          return true;
+      }else{
+        return false;
       }
     }catch (err) {
       throw new Meteor.Error(err);

@@ -182,7 +182,7 @@ input[type='checkbox']:hover + label, input[type='radio']:hover + label {
 
 input, select, textarea {
   line-height: 1.75rem;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   text-indent: 0.25rem;
   border-width: 1px;
   border-style: dashed;

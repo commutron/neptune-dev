@@ -59,6 +59,15 @@ main {
           filter: drop-shadow( -5px -5px 5px #000 );
 }
 
+@media screen and (prefers-reduced-motion: reduce) { 
+  .loading > .logoSVG {
+    animation: fadeIn 3s 1 linear;
+  }
+  .minispinLogoSVG {
+    animation: fadeIn 3s 1 linear;
+  }
+}
+
 .debugWarningLight {
   outline: 6px dotted red;
   outline-offset: -4vmin;
@@ -220,9 +229,7 @@ main {
   height: 8vh;
 }
 .homeIconLogo { padding: 1vh; }
-.homeIconLogo:hover, .homeIconLogo:active {
-  animation: spinAround 2s infinite linear;
-}
+
 .auxLeft { grid-area: auxLeft; }
 
 .homeNavi, .homeNaviMini {
@@ -627,7 +634,8 @@ n-sm-model-content {
 .line3x { line-height: 3; }
 .line4x { line-height: 4; }
 
-.indent { padding-left: 16px; }
+.indent { padding-left: 2ch; }
+.indent3 { padding-left: 3ch; }
 .indenText { text-indent: 0.75ch; }
 .indentR { padding-right: 16px; }
 

@@ -20,12 +20,13 @@ input::-webkit-calendar-picker-indicator {
 .logoSVG:hover, .logoSVG:active {
   animation: spinAround 1s infinite linear;
 }
+@media screen and (prefers-reduced-motion: reduce) { 
+  .logoSVG:hover, .logoSVG:active {
+    animation: fadeIn 3s 1 linear;
+  }
+}
 .logoSVG:hover svg, .logoSVG:active svg {
   fill: var(--neptuneColor);
-}
-
-.slowSpin {
-  animation: spinAround 5s infinite linear ;
 }
 
 .moveLR {
@@ -255,6 +256,7 @@ input::-webkit-calendar-picker-indicator {
 .white { background-color: var(--clouds); }
 .whiteT { color: white; }
 .cloudsT { color: var(--clouds); }
+.paleT { color: rgba(255,255,255,0.1); }
 
 .borderWhite { border-color: var(--clouds); }
 .borderGreen { border-color: var(--nephritis); }
@@ -710,17 +712,10 @@ input::-webkit-calendar-picker-indicator {
 }
 .numBoxRadio input { display: none; }
 
-.workIcon {
-  animation: spinAround 3s infinite linear;
-}
 .workIcon:after {
   content: '\f1ce';
   font-family: FontAwesome;
   font-size: 2em;
-}
-
-.spin2 {
-  animation: spinAround 2s infinite linear;
 }
 
 .searchResult {

@@ -136,6 +136,21 @@ n-tide-task label {
   animation-iteration-count: infinite;
 }
 
+@media screen and (prefers-reduced-motion: reduce) { 
+  .tideIn:active .tideIndicate,
+  .tideOut:active .tideIndicate,
+  .tideFlip:active .tideIndicate {
+    animation-name: hvr-buzz-out;
+    animation-duration: 3s;
+  }
+  .tideIn:disabled .tideIndicate,
+  .tideOut:disabled .tideIndicate,
+  .tideFlip:disabled .tideIndicate {
+    animation-name: hvr-buzz-out;
+    animation-duration: 6s;
+  }
+}
+
 .tideOut:before, .tideFollowTip:before {
   position: absolute;
   top: 1.5vh;

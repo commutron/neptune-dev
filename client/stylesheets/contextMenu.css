@@ -1,37 +1,23 @@
 .react-contextmenu {
-  min-width: 100px;
+  min-width: 10ch;
+  max-width: 30ch;
   padding: 5px 0;
   margin: 2px 0 0;
   font-size: 16px;
   color: #373a3c;
   text-align: left;
   background-color: rgb(0,0,0);
-  background-color: rgba(0,0,0,0.9);
+  background-color: rgba(0,0,0,0.95);
   background-clip: padding-box;
   border: 1px solid rgb(10,10,10);
-  border: 1px solid rgba(0,0,0,.15);
   border-radius:.25rem;
   outline: none;
-  opacity: 0;
+  /*opacity: 0;*/
   pointer-events: none;
   transition: opacity 250ms ease !important;
   z-index: 11;
+  box-shadow: var(--dropShadow0);
 }
-/*
-.react-contextmenu:before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 0;
-  margin-left: -10px;
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-  border-right: 10px solid rgb(0,0,0);
-  border-right: 10px solid rgba(0,0,0,0.9);
-}
-*/
 
 .react-contextmenu.react-contextmenu--visible {
   opacity: 1;
@@ -44,12 +30,18 @@
   line-height: 1.5;
   color: white;
   text-align: inherit;
-  white-space: nowrap;
   background: 0 0;
   border: 0;
-	/*cursor: pointer;*/
+	cursor: pointer;
+	word-break: break-word;
+  white-space: break-spaces;
+  overflow-wrap: break-word;
+}
+.react-contextmenu-item:first-child {
+  background-color: black;
 }
 
+.react-contextmenu-item.react-contextmenu-item--active,
 .react-contextmenu-item.react-contextmenu-item--active,
 .react-contextmenu-item.react-contextmenu-item--selected {
   background-color: var(--midnightblue);
@@ -82,10 +74,7 @@
 .react-contextmenu-item.react-contextmenu-submenu {
 	padding: 0;
 }
-/*
-.react-contextmenu-item.react-contextmenu-submenu > .react-contextmenu-item {
-}
-*/
+
 .react-contextmenu-item.react-contextmenu-submenu > .react-contextmenu-item:after {
   content: "▶";
   display: inline-block;

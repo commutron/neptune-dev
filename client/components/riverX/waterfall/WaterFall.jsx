@@ -54,7 +54,8 @@ const WaterFall = ({
   
   const fadeDeg = Math.floor( (total / quantity ) * 100 );
 
-  let fadeTick = fadeDeg < 10 ? '0' :
+  let fadeTick = fadeDeg === 0 ? '0' :
+                 fadeDeg < 10 ? '5' :
                  fadeDeg < 20 ? '10' :
                  fadeDeg < 30 ? '20' :
                  fadeDeg < 40 ? '30' :

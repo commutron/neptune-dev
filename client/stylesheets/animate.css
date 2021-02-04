@@ -251,9 +251,39 @@
   animation-iteration-count: 1;
 }
 
+.homeIconLogo:hover, .homeIconLogo:active {
+  animation: spinAround 2s infinite linear;
+}
+.workIcon {
+  animation: spinAround 3s infinite linear;
+}
+.spin2 {
+  animation: spinAround 2s infinite linear;
+}
+.slowSpin {
+  animation: spinAround 5s infinite linear ;
+}
+.turn {
+  animation: spinAround 200s infinite linear;
+}
+
 
 @media screen and (prefers-reduced-motion: reduce) { 
   .shaker-change {
     animation: none;
   }
+  .homeIconLogo:hover, .homeIconLogo:active {
+    animation: none
+  }
+  
+  .workIcon {
+    animation: spinAround 30s infinite linear;
+  }
+  .spin2 {
+    animation: spinAround 20s infinite linear;
+  }
+  .fa-spin {
+    animation: fa-spin 20s infinite linear;
+  }
+
 }

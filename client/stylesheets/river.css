@@ -89,7 +89,7 @@
 }
 @media screen and (prefers-reduced-motion: reduce) { 
   .stone, .crackedTop, .crackedBot {
-    transition: 0s;
+    transition: 500ms;
   }
   .stone:active,
   .crackedTop:active, 
