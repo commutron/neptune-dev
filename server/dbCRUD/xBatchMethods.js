@@ -149,37 +149,50 @@ Meteor.methods({
   enableLockX(batchId, privateKey) {
     const accessKey = privateKey || Meteor.user().orgKey;
     const doc = XBatchDB.findOne({_id: batchId});
+    const srs = XSeriesDB.findOne({batch: doc.batch});
     const clear = doc.live === false && doc.completed === true &&
                     doc.salesEnd < new Date();
     if(( privateKey || Roles.userIsInRole(Meteor.userId(), 'run') ) && clear) {
-      // let totalUnits = 0;
-      // let scrapUnits = 0;
-      // for(let i of doc.items) {
-      //   totalUnits += i.units;
-      //   const sc = i.history.find(s => s.type === 'scrap' && s.good === true);
-      //   !sc ? null : scrapUnits += i.units;
-      // }
+      
       const tTime = !doc.tide ? 0 : batchTideTime(doc.tide);
       const wfCount = Meteor.call('waterfallSelfCount', doc.waterfall);
+      
+      const items = !srs ? [] : srs.items;
+      let totalUnits = 0;
+      let scrapItems = 0;
+      let scrapUnits = 0;
+      for(let i of items) {
+        totalUnits += i.units;
+        const sc = i.history.find(s => s.type === 'scrap' && s.good === true);
+        !sc ? null : scrapItems += 1;
+        !sc ? null : scrapUnits += i.units;
+      }
+      const ncTypes = !srs ? [] : Meteor.call('nonConSelfCount', srs.nonCon);
+      const shPNums = !srs ? [] : Meteor.call('shortfallSelfCount', srs.shortfall);
+      const rvSteps = !srs ? [] : Meteor.call('riverStepSelfCount', srs.items);
       
       XBatchDB.update({_id: batchId, orgKey: accessKey}, {
   			$set : {
   			  lock: true,
   			  lockTrunc: {
   			    lockedAt: new Date(),
-  			    itemQuantity:  Number(doc.quantity),
-  			    unitQuantity: Number(doc.quantity),
-  			    scitemQuantity: Number(0),
-  			    scunitQuantity: Number(0),
+  			    totalQuantity:  Number(doc.quantity),
+  			    itemQuantity:  Number(items.length),
+  			    unitQuantity: Number(totalUnits),
+  			    scitemQuantity: Number(scrapItems),
+  			    scunitQuantity: Number(scrapUnits),
   			    tideTotal: Number(tTime),
-  			    ncTypes: [],
-  			    shTypes: [],
-  			    rvSteps: [],
+  			    ncTypes: ncTypes,
+  			    shTypes: shPNums,
+  			    rvSteps: rvSteps,
   			    wfSteps: wfCount
   			  }
         }
       });
-    }else{null}
+      return true;
+    }else{
+      return false;
+    }
   },
   
   disableLockX(batchId, privateKey) {
@@ -193,7 +206,10 @@ Meteor.methods({
   			  lock: false
         }
       });
-    }else{null}
+      return true;
+    }else{
+      return false;
+    }
   },
   
   /////////////// Events ///////////////////////

@@ -39,9 +39,9 @@ export const FieldObject = ({ titleVal, shortVal, idVal, valueVal, funcVal, fact
     <input
       type='number'
       id={idVal}
-      value={valueVal}
+      value={valueVal || ''}
       min={0}
-      onInput={(e)=>funcVal(e, this[idVal].value, factorVal)}
+      onChange={(e)=>funcVal(e, this[idVal].value, factorVal)}
     />
   </label>
 );

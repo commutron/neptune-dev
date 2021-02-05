@@ -515,11 +515,11 @@ Meteor.publish('skinnyData', function(){
             'completedAt': 1
             // 'lockTrunc': 1
         }}),
-      XSeriesDB.find({}, {
-        sort: {batch:-1},
-        fields: {
-          'batch': 1
-        }}), 
+      // XSeriesDB.find({}, {
+      //   sort: {batch:-1},
+      //   fields: {
+      //     'batch': 1
+      //   }}), 
     ];
   }
 });

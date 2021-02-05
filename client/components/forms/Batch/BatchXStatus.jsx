@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-//import moment from 'moment';
+import { toast } from 'react-toastify';
 import Pref from '/client/global/pref.js';
 
 import BatchXComplete from '/client/components/forms/Batch/BatchXComplete';
@@ -13,16 +13,18 @@ const BatchXStatus = ({ batchData, allFlow, allFall, nowater })=>	{
     });
   };
   
-  function handleLock(e) { // Manual Locking
+  /*function handleLock(e) { // Manual Locking
     this.doLock.disabled = true;
-    Meteor.call('enableLockX', batchData._id, (error)=>{
-      error && console.log(error);
+    Meteor.call('enableLockX', batchData._id, (err, re)=>{
+      err && console.log(err);
+      re ? null : toast.warning('Can Not Lock');
     });
-  }
+  }*/
   function handleUnLock(e) {
     this.doUnLock.disabled = true;
-    Meteor.call('disableLockX', batchData._id, (error)=>{
-      error && console.log(error);
+    Meteor.call('disableLockX', batchData._id, (err, re)=>{
+      err && console.log(err);
+      re ? null : toast.warning('Can Not Lock');
     });
   }
   
@@ -52,7 +54,7 @@ const BatchXStatus = ({ batchData, allFlow, allFall, nowater })=>	{
             ><i><i className='far fa-lightbulb grayT fa-lg fa-fw'></i></i>
             </button>   {Pref.xBatch} is {Pref.notlive}
           </p>
-          {isAdmin && !batchData.lock && // Manual Locking
+          {/*isAdmin && !batchData.lock && // Manual Locking
             <p>
               <button
                 id='doLock'
@@ -63,7 +65,7 @@ const BatchXStatus = ({ batchData, allFlow, allFall, nowater })=>	{
               ><i><i className='fas fa-lock-open purpleT fa-lg fa-fw'></i></i>
               </button>   UnLocked
             </p>
-          }
+          */}
           {canRun && batchData.lock &&
             <p>
               <button

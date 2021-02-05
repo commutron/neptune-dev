@@ -42,6 +42,9 @@
   text-align: center;
   color: var(--neptuneColor);
   text-transform: capitalize;
+  word-break: break-word;
+  white-space: break-spaces;
+  overflow-wrap: break-word;
 }
 .navButtonWrap:hover .navButtonIcon,
 .navButtonWrap:hover .navButtonText {

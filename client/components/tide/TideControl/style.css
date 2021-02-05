@@ -153,17 +153,17 @@ n-tide-task label {
 
 .tideOut:before, .tideFollowTip:before {
   position: absolute;
-  top: 1.5vh;
+  top: 2.25vh;
   background-color: rgb(0,0,0);
   border-radius: 25px;
   color: white;
-  padding: 1.5vh;
+  padding: 1.25vh;
   text-transform: capitalize;
   transition: all 0.5s ease;
   width: auto;
   font-family: 'VarelaLocal';
-  font-size: 2vh;
-  line-height: 2.5vh;
+  font-size: 1.75vh;
+  line-height: 2vh;
   opacity: 0;
   pointer-events: none;
 }
@@ -172,7 +172,7 @@ n-tide-task label {
   content: "STOP";
 }
 .tideFollowTip:before {
-  right: 7.5vh;
+  right: 7vh;
   content: attr(aria-label);
 }
 .tideOut:focus:before, .tideOut:hover:before, 

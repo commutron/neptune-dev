@@ -85,7 +85,7 @@ export const TraverseWrap = ({
               title='View this in production'
               className='taskLink'
               onClick={goFunc}>
-              <i className='fas fa-paper-plane' data-fa-transform='left-1'></i>
+              <i className='far fa-paper-plane' data-fa-transform='left-1'></i>
             </button>
           }
         </div>

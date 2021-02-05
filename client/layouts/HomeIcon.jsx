@@ -32,7 +32,7 @@ const HomeIcon = () => {
           <Fragment>
             <MenuItem onClick={()=>FlowRouter.go('/production')}
               disabled={Roles.userIsInRole(Meteor.userId(), 'readOnly')}>
-              <i className='fas fa-paper-plane fa-fw'></i>
+              <i className='far fa-paper-plane fa-fw'></i>
               <i className='noCopy'> Production</i>
             </MenuItem>
             

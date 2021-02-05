@@ -71,10 +71,10 @@ const StartView = ({user, app}) =>	{
         {isReadOnly ?
           <NavPlaceholder 
             title='Production'
-            icon='fas fa-paper-plane' /> :
+            icon='far fa-paper-plane' /> :
           <NavButton
             title='Production' 
-            icon='fas fa-paper-plane'
+            icon='far fa-paper-plane'
             link='/production' /> }
         
         <NavButton title='Overview' icon='fas fa-globe' link='/overview' tag='WIP' />
