@@ -3,10 +3,9 @@ import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-const MultiItemFormX = ({ bID, seriesId, unit, app })=> {
+const MultiItemFormX = ({ bID, seriesId, unit, app, showToast, updateToast })=> {
   
   const [ digitState, digitSet ] = useState(10);
-  const [ workState, workSet ] = useState(false);
   const [ resultMess, resultSet ] = useState(false);
   
   function checkRange(e) {
@@ -59,8 +58,7 @@ const MultiItemFormX = ({ bID, seriesId, unit, app })=> {
 	function addItem(e) {
     e.preventDefault();
     this.addGo.disabled = true;
-    workSet(true);
-    this.message.value = 'Working...';
+    showToast();
     
     const batchId = bID;
     const seqLth = digitState;
@@ -76,12 +74,8 @@ const MultiItemFormX = ({ bID, seriesId, unit, app })=> {
     (error, reply)=>{
       if(error)
         console.log(error);
-      if(reply.success === true) {
-        toast.success('Saved');
-        this.unitInput.value = unit;
-        this.barNumStart.value = moment().format('YYMMDD');
-        this.barNumEnd.value = moment().format('YYMMDD');
-        workSet(false);
+      if(reply && reply.success === true) {
+        updateToast();
         resultSet(reply.dupes);
         this.message.value = reply.message;
       }else{
@@ -89,13 +83,11 @@ const MultiItemFormX = ({ bID, seriesId, unit, app })=> {
         resultSet(reply.dupes);
         this.message.value = reply.message;
         console.log(reply.message);
-        workSet(false);
       }
     });
 	}
 
   const today = moment().format('YYMMDD');
-  let iconSty = workState ? 'workIcon' : 'transparent';
     
   return(
     <form className='centre' onSubmit={(e)=>addItem(e)} autoComplete='off'>
@@ -173,7 +165,6 @@ const MultiItemFormX = ({ bID, seriesId, unit, app })=> {
       </p>
       <br />
       <div className='centre'>
-        <i className={iconSty}></i>
         <output id='floorCheck' value='' />
         <output id='message' value='' />
       </div>
@@ -187,7 +178,9 @@ const MultiItemFormX = ({ bID, seriesId, unit, app })=> {
         >Add</button>
       </p>
       
-      <p>{resultMess && resultMess.length > 0 ? 'DUPLICATES' : ''}</p>
+      <p>{resultMess && resultMess.length > 0 ? 
+         'Duplicates / Bad Serial Numbers' : ''}
+      </p>
       <p className='stringFit'>{resultMess ? resultMess.join(', ') : ''}</p>
       
     </form>

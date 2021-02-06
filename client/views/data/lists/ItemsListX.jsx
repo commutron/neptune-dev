@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import moment from 'moment';
 //import Pref from '/client/global/pref.js';
-
+import LazyLoad from 'react-lazyload';
 import LeapButton from '/client/components/tinyUi/LeapButton.jsx';
 import FilterItemsX from '/client/components/bigUi/FilterItemsX';
 import SeriesForm, { SeriesDelete } from '/client/components/forms/ItemSerialsX/SeriesForm';
@@ -25,7 +25,6 @@ const ItemsListX = ({
           <SeriesForm
             batchData={batchData}
             lock={batchData.completed}
-            // noText
           />
         </div>
       </Fragment>
@@ -58,6 +57,9 @@ const ItemsListX = ({
   
   const sessionSticky = batchData.batch + 'batchXItemFilter' ;
   
+  const [ scrollY, scrollYSet ] = useState(200);
+  const [ itemLimit, itemLimitSet ] = useState(250);
+  
   const [ stateList, setList ] = useState([]);
   const [ keyword, setKeyword ] = useState( Session.get(sessionSticky+'keyword') || false);
   const [ timeModifyer, setTime ] = useState( Session.get(sessionSticky+'time') || false);
@@ -65,14 +67,17 @@ const ItemsListX = ({
 
   // update filter state
   function setKeywordFilter(keyword) {
+    itemLimitSet(250);
     setKeyword( keyword );
     Session.set((sessionSticky+'keyword'), keyword);
   }
   function setTimeFilter(rule) { 
+    itemLimitSet(250);
     setTime( rule );
     Session.set((sessionSticky+'time'), rule);
   }
   function setToggle(rule) { 
+    itemLimitSet(250);
     setMod( rule );
     Session.set((sessionSticky+'toggle'), rule);
   }
@@ -294,7 +299,35 @@ const ItemsListX = ({
                     { scrapList: [], iList: [] };
   
   // const steps = flowSteps();
-   
+  
+  
+  function handleScroll(e) {
+    if(e.target.scrollTop > scrollY) {
+      scrollYSet(e.target.scrollTop);
+    }
+  }
+  
+  useEffect( ()=> {
+    if(itemLimit < stateList.length) {
+      const newLimit = itemLimit + 25;
+      itemLimitSet(newLimit);
+    }
+  }, [scrollY]);
+  
+  useEffect( ()=> {
+    if(srs.items.length > 250) {
+      document.getElementById('exItemList')
+        .addEventListener('scroll', handleScroll);
+    }
+    return ()=> {
+      if(srs.items.length > 250) {
+        document.getElementById('exItemList')
+                    .removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, []);
+  
+  
   useEffect( ()=> { 
     const K = keyword;
     
@@ -325,10 +358,10 @@ const ItemsListX = ({
                       x.serial < y.serial ? -1 : x.serial > y.serial ? 1 : 0 );
      
     setList(orderedList);
-  }, [ batchData, keyword, timeModifyer, notModifyer ]);
+  }, [ seriesData, keyword, timeModifyer, notModifyer ]);
   
   const bttnClss = 'leapBar numFont';
-  
+      
   return(
     <Fragment>
       <FilterItemsX
@@ -342,24 +375,62 @@ const ItemsListX = ({
         onTimeChange={(e)=>setTimeFilter(e)}
         onNotChange={(e)=>setToggle(e)} />
       <div>
+      
       {stateList.map( (entry, index)=> {
-        let style = entry.history.length === 0 ? bttnClss :
-                    entry.completed === false ? `${bttnClss} activeMark` : 
-                    scrap.scrapList.includes(entry.serial) ? `${bttnClss} ngMark` : 
-                    `${bttnClss} gMark`;
-          return(
-            <LeapButton
-              key={index} 
-              title={entry.serial} 
-              sub='' 
-              sty={style}
-              address={`/data/batch?request=${batchData.batch}&specify=${entry.serial}`}
-            />
-          );
+        if(index < itemLimit) {
+          let style = entry.history.length === 0 ? bttnClss :
+                      entry.completed === false ? `${bttnClss} activeMark` : 
+                      scrap.scrapList.includes(entry.serial) ? `${bttnClss} ngMark` : 
+                      `${bttnClss} gMark`;
+            return(
+              <LeapButton
+                key={entry.serial} 
+                title={entry.serial} 
+                sub='' 
+                sty={style}
+                address={`/data/batch?request=${batchData.batch}&specify=${entry.serial}`}
+              />
+            );
+        }
       })}
+      
       </div>
 		</Fragment>
   );
 };
 
 export default ItemsListX;
+
+// const Loading = ()=> (
+//   <div>loading...</div>
+// );
+
+/*
+
+return(
+    <Fragment>
+      <FilterItemsX
+        title={batchData.batch}
+        total={stateList.length}
+        advancedList={flowData.riverFlow || []}
+        selectedKeyword={keyword}
+        selectedTime={timeModifyer}
+        selectedToggle={notModifyer}
+        onKeywordChange={(e)=>setKeywordFilter(e)}
+        onTimeChange={(e)=>setTimeFilter(e)}
+        onNotChange={(e)=>setToggle(e)} />
+      <div>
+      
+      </div>
+		</Fragment>
+  );
+  
+  
+  
+  <LazyLoad 
+            key={entry.serial}  
+            height={50} 
+            scrollContainer={document.querySelector('exItemList')}
+            placeholder={<Loading />} >
+  
+  */

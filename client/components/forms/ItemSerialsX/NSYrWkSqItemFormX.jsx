@@ -4,7 +4,10 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 
-const NSYrWkSqItemFormX = ({ bID, seriesId, more, unit, app, isDebug })=> {
+const NSYrWkSqItemFormX = ({ 
+  bID, seriesId, more, unit, app, 
+  showToast, updateToast
+})=> {
   
   const thisYear = moment().weekYear().toString().slice(-2);
   const thisWeek = moment().week().toString().padStart(2, 0);
@@ -48,30 +51,18 @@ const NSYrWkSqItemFormX = ({ bID, seriesId, more, unit, app, isDebug })=> {
     this.goNS13Save.disabled = false;
     // const regexNS = RegExp(/^(\d{6}\-\d{7})$/);
     // const found = regexNS.test(tryData[0]);
-    
-    isDebug && console.log({ 
-      man_lot_year_week, seqStVal, weekQuVal,
-      startLoopNum, stopLoopNum, tryData
-    });
 	}
 	
 	
 	function handleAdd(e) {
     if(previewData.length > 0) {
       this.goNS13Save.disabled = true;
-      toast.warn('Please Wait For Confirmation...', {
-          toastId: ( previewData[0] + 'pOp' ),
-          autoClose: false
-        });
+      showToast();
       Meteor.call('addSourceYearWeekSeqItemsX', bID, seriesId, previewData, (error, reply)=>{
         if(error)
           console.log(error);
         if(reply.success === true) {
-          toast.update(( previewData[0] + 'pOp' ), {
-            render: "Serials Created Successfully",
-            type: toast.TYPE.SUCCESS,
-            autoClose: 3000
-          });
+          updateToast();
           resultSet(reply.dupes);
         }else{
           toast.error('There was a problem...');
@@ -157,9 +148,10 @@ const NSYrWkSqItemFormX = ({ bID, seriesId, more, unit, app, isDebug })=> {
             
         <p>
           <input
-            type='number'
             id='quantDigits'
             pattern='[000-999]*'
+            maxLength='3'
+            minLength='3'
             max={999}
             min={1}
             defaultValue={1}
@@ -199,7 +191,9 @@ const NSYrWkSqItemFormX = ({ bID, seriesId, more, unit, app, isDebug })=> {
             onClick={(e)=>handleAdd(e)}
           >Create</button>
         </p>
-        <p>{resultMess && resultMess.length > 0 ? 'DUPLICATES' : ''}</p>
+        <p>{resultMess && resultMess.length > 0 ? 
+           'Duplicates / Bad Serial Numbers' : ''}
+        </p>
         <p className='stringFit'>{resultMess ? resultMess.join(', ') : ''}</p>
       </div>
     </div>

@@ -3,8 +3,43 @@ import moment from 'moment';
 
 Meteor.methods({
   
+  checkDuplicateItems(serialArr, unit, regexSN, rtnObj) {
+    let goodSerial = [];
+    let badSerial = [];
+    
+    for( let serialTry of serialArr ) {
+      
+      const dupOLD = BatchDB.findOne({ 'items.serial': serialTry }); // untill migration
+      const dupNew = XSeriesDB.findOne({ 'items.serial': serialTry });
+      const correctFormat = regexSN.test(serialTry);
+        
+      if(dupOLD || dupNew || !correctFormat) {
+        badSerial.push(serialTry);
+      }else{
+        if(rtnObj) {
+          goodSerial.push({
+            serial: serialTry,
+            createdAt: new Date(),
+            createdWho: Meteor.userId(),
+            completed: false,
+            completedAt: false,
+            completedWho: false,
+            units: Number(unit),
+            subItems: [],
+            history: [],
+            altPath: false
+          });
+        }else{
+          goodSerial.push(serialTry);
+        }
+      }
+    }
+    
+    return [ goodSerial, badSerial ];
+  },
+  
 //// Series Items \\\\
-  addMultiItemsX(batchId, seriesId, seqLth, barFirst, barLast, unit) { //serialArr) {
+  addMultiItemsX(batchId, seriesId, seqLth, barFirst, barLast, unit) {
     const accessKey = Meteor.user().orgKey;
     
     const appSetting = AppDB.findOne({orgKey: accessKey});
@@ -56,42 +91,29 @@ Meteor.methods({
           };
         }else{
           
-          let badBarcodes = [];
-            
+          let plainserialArr = [];
           for(let click = barFirst; click < barEnd; click++) {
-            const serialTry = click.toString();
-            
-            const dupOLD = BatchDB.findOne({ 'items.serial': serialTry }); // untill migration
-            const dupNew = XSeriesDB.findOne({ 'items.serial': serialTry });
-            const correctFormat = regexSQ.test(serialTry);
-              
-            if(dupOLD || dupNew || !correctFormat) {
-              badBarcodes.push(serialTry);
-            }else{
-              
-              XSeriesDB.update({_id: seriesId}, {
-                $push : { items : {
-                  serial: serialTry,
-                  createdAt: new Date(),
-                  createdWho: Meteor.userId(),
-                  completed: false,
-                  completedAt: false,
-                  completedWho: false,
-                  units: Number(unit),
-                  subItems: [],
-                  history: [],
-                  altPath: false
-              }}});
-              
-            }
+            plainserialArr.push(click.toString());
           }
+          
+          const dpCk = Meteor.call('checkDuplicateItems', 
+                                      plainserialArr, unit, regexSQ, true);
+                                      
+          const badBarcodes = dpCk[1] || [];
+          
+          const goodBarcodes = dpCk[0] || [];
+      
+          XSeriesDB.update({_id: seriesId}, {
+            $push : { items : {
+              $each: goodBarcodes
+          }}});
               
           XSeriesDB.update({_id: seriesId}, {
             $set : {
               updatedAt: new Date(),
       			  updatedWho: Meteor.userId()
-            }});
-          
+          }});
+      
           if(barLast > floor) {
             seqLth == 8 ?
               AppDB.update({orgKey: accessKey}, {
@@ -140,35 +162,19 @@ Meteor.methods({
         
           if(seriesTotal <= doc.quantity && seriesTotal <= 5000 ) {
             
-            let badBarcodes = [];
-            
             const regexWP = RegExp(/^(\d{8})$/);
             
-            for( let serialTry of serialArr ) {
-              const dupOLD = BatchDB.findOne({ 'items.serial': serialTry }); // untill migration
-              const dupNew = XSeriesDB.findOne({ 'items.serial': serialTry });
-              const correctFormat = regexWP.test(serialTry);
-              
-              if(!dupOLD && !dupNew && correctFormat) {
-                
-                XSeriesDB.update({_id: seriesId}, {
-                  $push : { items : {
-                    serial: serialTry,
-                    createdAt: new Date(),
-                    createdWho: Meteor.userId(),
-                    completed: false,
-                    completedAt: false,
-                    completedWho: false,
-                    units: Number(1),
-                    subItems: [],
-                    history: [],
-                    altPath: false
-                }}});
-                
-              }else{
-                badBarcodes.push(serialTry);
-              }
-            }
+            const dpCk = Meteor.call('checkDuplicateItems', 
+                                        serialArr, "1", regexWP, true);
+                                      
+            const badBarcodes = dpCk[1] || [];
+            
+            const goodBarcodes = dpCk[0] || [];
+        
+            XSeriesDB.update({_id: seriesId}, {
+              $push : { items : {
+                $each: goodBarcodes
+            }}});
         
             XSeriesDB.update({_id: seriesId}, {
               $set : {
@@ -211,36 +217,20 @@ Meteor.methods({
           const seriesTotal = serialArr.length + srs.items.length;
         
           if(seriesTotal <= doc.quantity && seriesTotal <= 5000 ) {
-          
-            let badBarcodes = [];
             
             const regexNS = RegExp(/^(\d{6}\-\d{7})$/);
             
-            for( let serialTry of serialArr ) {
-              const dupOLD = BatchDB.findOne({ 'items.serial': serialTry }); // untill migration
-              const dupNew = XSeriesDB.findOne({ 'items.serial': serialTry });
-              const correctFormat = regexNS.test(serialTry);
-              
-              if(!dupOLD && !dupNew && correctFormat) {
-                
-                XSeriesDB.update({_id: seriesId}, {
-                  $push : { items : {
-                    serial: serialTry,
-                    createdAt: new Date(),
-                    createdWho: Meteor.userId(),
-                    completed: false,
-                    completedAt: false,
-                    completedWho: false,
-                    units: Number(1),
-                    subItems: [],
-                    history: [],
-                    altPath: false
-                }}});
-              
-              }else{
-                badBarcodes.push(serialTry);
-              }
-            }
+            const dpCk = Meteor.call('checkDuplicateItems', 
+                                        serialArr, "1", regexNS, true);
+                                      
+            const badBarcodes = dpCk[1] || [];
+            
+            const goodBarcodes = dpCk[0] || [];
+        
+            XSeriesDB.update({_id: seriesId}, {
+              $push : { items : {
+                $each: goodBarcodes
+            }}});
           
             XSeriesDB.update({_id: seriesId}, {
               $set : {

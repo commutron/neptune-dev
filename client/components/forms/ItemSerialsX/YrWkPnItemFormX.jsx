@@ -4,7 +4,10 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 
-const YrWkPnItemFormX = ({ bID, seriesId, more, unit, app })=> {
+const YrWkPnItemFormX = ({ 
+  bID, seriesId, more, unit, app, 
+  showToast, updateToast
+})=> {
   
   const thisYear = moment().weekYear().toString().slice(-2);
   const thisWeek = moment().week().toString().padStart(2, 0);
@@ -63,19 +66,12 @@ const YrWkPnItemFormX = ({ bID, seriesId, more, unit, app })=> {
 	function handleAdd(e) {
     if(previewData.length > 0) {
       this.goYrWkSave.disabled = true;
-      toast.warn('Please Wait For Confirmation...', {
-          toastId: ( previewData[0] + 'pOp' ),
-          autoClose: false
-        });
+      showToast();
       Meteor.call('addYearWeekPanelItemsX', bID, seriesId, previewData, (error, reply)=>{
         if(error)
           console.log(error);
         if(reply.success === true) {
-          toast.update(( previewData[0] + 'pOp' ), {
-            render: "Serials Created Successfully",
-            type: toast.TYPE.SUCCESS,
-            autoClose: 3000
-          });
+          updateToast();
           resultSet(reply.dupes);
         }else{
           toast.error('There was a problem...');
@@ -151,9 +147,10 @@ const YrWkPnItemFormX = ({ bID, seriesId, more, unit, app })=> {
             
           <p>
             <input
-              type='number'
               id='quantDigits'
               pattern='[000-999]*'
+              maxLength='3'
+              minLength='1'
               max={999}
               min={1}
               defaultValue={1}
@@ -193,7 +190,9 @@ const YrWkPnItemFormX = ({ bID, seriesId, more, unit, app })=> {
             onClick={(e)=>handleAdd(e)}
           >Create</button>
         </p>
-        <p>{resultMess && resultMess.length > 0 ? 'DUPLICATES' : ''}</p>
+        <p>{resultMess && resultMess.length > 0 ? 
+           'Duplicates / Bad Serial Numbers' : ''}
+        </p>
         <p className='stringFit'>{resultMess ? resultMess.join(', ') : ''}</p>
       </div>
     </div>

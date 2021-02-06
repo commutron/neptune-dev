@@ -47,7 +47,7 @@ const TideFollow = ({ proRoute, invertColor })=> {
 	};
 	
 	const user = Meteor.user();
-	const username = user ? user.username : 'ab';
+	const username = user ? user.username : '??';
 	
 	const uFl = username.charAt(0);
 	const usp = username.split('.');

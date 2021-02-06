@@ -135,13 +135,11 @@ const BXCreateForm = ({ groupId, widgetId, versionKey, allVariants })=> {
       <div className='centreRow vmargin'>
         <label htmlFor='quant' className='breath'>Quantity<br />
         <input
-          type='number'
+          type='text'
           id='quant'
           pattern='[00000-99999]*'
           maxLength='5'
           minLength='1'
-          max={99999}
-          min={0}
           inputMode='numeric'
           placeholder='10000'
           required 

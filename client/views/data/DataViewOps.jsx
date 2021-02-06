@@ -1,4 +1,5 @@
 import React from 'react';
+
 import Pref from '/client/global/pref.js';
 
 import { TraverseWrap } from '/client/layouts/DataExploreLayout.jsx';
@@ -23,6 +24,7 @@ import ScrapPanel from './panels/ScrapPanel.jsx';
 import BatchesList from './lists/BatchesList.jsx';
 import ItemsList from './lists/ItemsList.jsx';
 import ItemsListX from './lists/ItemsListX';
+
 
 // import WidgetsList from './lists/WidgetsList.jsx';
 
