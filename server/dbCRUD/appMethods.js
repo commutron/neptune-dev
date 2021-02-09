@@ -7,7 +7,7 @@ Meteor.startup(function () {
   AppDB._ensureIndex({ org : 1, orgKey: 1 }, { unique: true });
   Meteor.users._ensureIndex({ orgKey: 1, username : 1 }, { unique: true });
   XBatchDB._ensureIndex({ orgKey: 1, batch : 1 }, { unique: true });
-  XSeriesDB._ensureIndex({ orgKey: 1, batch : 1 }, { unique: true });
+  XSeriesDB._ensureIndex({ orgKey: 1, batch : 1, 'items.serial' : 1 }, { unique: true });
   BatchDB._ensureIndex({ orgKey: 1, batch : 1 }, { unique: true });// , 'items.serial' : 'text'
   GroupDB._ensureIndex({ orgKey: 1, group : 1 }, { unique: true });
   WidgetDB._ensureIndex({ orgKey: 1, widget : 1 }, { unique: true });
@@ -341,14 +341,15 @@ Meteor.methods({
 // set last serial
   setlastestSerial(serialEight, serialNine, serialTen) {
     const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
-    const validNums = !isNaN(serialEight) && 
-                      !isNaN(serialNine) && 
-                      !isNaN(serialTen) 
-                      ? true : false;
-    const validE = serialEight.length === 8;
-    const validN = serialNine.length === 9;
-    const validT = serialTen.length === 10;
-    if(auth && validNums && validE && validN && validT) {
+    const regex10 = RegExp(/^(\d{10})$/);
+    const regex9 = RegExp(/^(\d{9})$/);
+    const regex8 = RegExp(/^(\d{8})$/);
+                    
+    const validNums = regex8.test(serialEight) && 
+                      regex9.test(serialNine) && 
+                      regex10.test(serialTen);
+
+    if(auth && validNums) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $set : { 
           'latestSerial.eightDigit': Number(serialEight),

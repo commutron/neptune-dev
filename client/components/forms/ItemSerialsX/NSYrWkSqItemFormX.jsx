@@ -5,12 +5,14 @@ import { toast } from 'react-toastify';
 
 
 const NSYrWkSqItemFormX = ({ 
-  bID, seriesId, more, unit, app, 
+  bID, seriesId, more, app, 
   showToast, updateToast
 })=> {
   
   const thisYear = moment().weekYear().toString().slice(-2);
   const thisWeek = moment().week().toString().padStart(2, 0);
+  
+  const [ quWarn, quWarnSet ] = useState(false);
   
   const [ previewData, previewSet ] = useState([]);
   const [ resultMess, resultSet ] = useState(false);
@@ -48,7 +50,12 @@ const NSYrWkSqItemFormX = ({
     
     previewSet(tryData);
     
-    this.goNS13Save.disabled = false;
+    const quChk = tryData.length > 0 && tryData.length < 5000 ? 
+                  false : 'Invalid Range';
+    quWarnSet(quChk);       
+                   
+    !quChk ? this.goNS13Save.disabled = false : null;
+    
     // const regexNS = RegExp(/^(\d{6}\-\d{7})$/);
     // const found = regexNS.test(tryData[0]);
 	}
@@ -88,6 +95,7 @@ const NSYrWkSqItemFormX = ({
         <p>
           <input
             id='manDigits'
+            className='miniIn18'
             pattern='[\d\d]*'
             maxLength='2'
             minLength='2'
@@ -99,6 +107,7 @@ const NSYrWkSqItemFormX = ({
         <p>
           <input
             id='lotDigits'
+            className='miniIn18'
             pattern='[\d\d\d\d]*'
             maxLength='4'
             minLength='4'
@@ -111,6 +120,7 @@ const NSYrWkSqItemFormX = ({
         <p>
           <input
             id='yrDigits'
+            className='miniIn18'
             pattern='[\d\d]*'
             maxLength='2'
             minLength='2'
@@ -123,6 +133,7 @@ const NSYrWkSqItemFormX = ({
         <p>
           <input
             id='wkDigits'
+            className='miniIn18'
             pattern='[\d\d]*'
             maxLength='2'
             minLength='2'
@@ -136,6 +147,7 @@ const NSYrWkSqItemFormX = ({
         <p>
           <input
             id='seqStDigits'
+            className='miniIn18'
             pattern='[\d\d\d]*'
             maxLength='3'
             minLength='3'
@@ -149,9 +161,10 @@ const NSYrWkSqItemFormX = ({
         <p>
           <input
             id='quantDigits'
+            className='miniIn18'
             pattern='[000-999]*'
             maxLength='3'
-            minLength='3'
+            minLength='1'
             max={999}
             min={1}
             defaultValue={1}
@@ -181,12 +194,15 @@ const NSYrWkSqItemFormX = ({
             return(<dd key={ix+'e'}>{ent}</dd>);
           })}
         </dl>
+        
+        {quWarn && <p className='medBig'>{quWarn}</p>}
+        
         <p className='medBig'><i className='numFont big'>{previewData.length}</i> {Pref.itemSerial}s</p>
         <p className='centreText'><em>duplicate checking is done on the server</em></p>
         <p className='centre'>
           <button
             id='goNS13Save'
-            disabled={previewData.length === 0}
+            disabled={false}
             className='action clearGreen'
             onClick={(e)=>handleAdd(e)}
           >Create</button>

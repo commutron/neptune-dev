@@ -3,151 +3,147 @@ import moment from 'moment';
 
 Meteor.methods({
   
-  checkDuplicateItems(serialArr, unit, regexSN, rtnObj) {
+  checkDuplicateItems(serialArr, unit, regexSN, staticStart, rtnObj) {
     let goodSerial = [];
     let badSerial = [];
+        
+    const narrowB = BatchDB.find({
+                      "items.serial": { $regex: new RegExp( staticStart ) }
+                    },{fields:{'items.serial':1}}).fetch();
+    const narrowS = XSeriesDB.find({
+                      "items.serial": { $regex: new RegExp( staticStart ) }
+                    },{fields:{'items.serial':1}}).fetch();
     
     for( let serialTry of serialArr ) {
-      
-      const dupOLD = BatchDB.findOne({ 'items.serial': serialTry }); // untill migration
-      const dupNew = XSeriesDB.findOne({ 'items.serial': serialTry });
       const correctFormat = regexSN.test(serialTry);
-        
-      if(dupOLD || dupNew || !correctFormat) {
+      
+      if(!correctFormat) {
         badSerial.push(serialTry);
       }else{
-        if(rtnObj) {
-          goodSerial.push({
-            serial: serialTry,
-            createdAt: new Date(),
-            createdWho: Meteor.userId(),
-            completed: false,
-            completedAt: false,
-            completedWho: false,
-            units: Number(unit),
-            subItems: [],
-            history: [],
-            altPath: false
-          });
+                      
+        const dupOLD = narrowB.find( b => b.items.find( i => i.serial === serialTry ) );
+
+        if(dupOLD) {
+          badSerial.push(serialTry);
         }else{
-          goodSerial.push(serialTry);
+          const dupNew = narrowS.find( s => s.items.find( i => i.serial === serialTry ) );
+
+          if(dupNew) {
+            badSerial.push(serialTry);
+          }else{
+            if(rtnObj) {
+              goodSerial.push({
+                serial: serialTry,
+                createdAt: new Date(),
+                createdWho: Meteor.userId(),
+                completed: false,
+                completedAt: false,
+                completedWho: false,
+                units: Number(unit),
+                subItems: [],
+                history: [],
+                altPath: false
+              });
+            }else{
+              goodSerial.push(serialTry);
+            }
+          }
         }
       }
     }
-    
     return [ goodSerial, badSerial ];
   },
   
-//// Series Items \\\\
-  addMultiItemsX(batchId, seriesId, seqLth, barFirst, barLast, unit) {
+  addYearMonthDayItems(batchId, seriesId, seqLth, serialArr, unit) {
     const accessKey = Meteor.user().orgKey;
     
     const appSetting = AppDB.findOne({orgKey: accessKey});
-
     const floor = seqLth === 10 ? appSetting.latestSerial.tenDigit :
-                    seqLth === 9 ? appSetting.latestSerial.nineDigit :
-                    appSetting.latestSerial.eightDigit;
+                                  appSetting.latestSerial.nineDigit;
                     
-    const regexSQ = seqLth === 10 ? RegExp(/^(\d{10})$/) :
-                    seqLth === 9 ? RegExp(/^(\d{9})$/) :
-                    RegExp(/^(\d{8})$/);
+    const regexSQ = seqLth === 10 ? RegExp(/^(\d{10})$/) : RegExp(/^(\d{9})$/);
+                    
+    if(Roles.userIsInRole(Meteor.userId(), 'create')) {
     
-    const barEnd = barLast + 1;
-    const serialCount =  barEnd - barFirst;
-    
-    if(
-      isNaN(barFirst) || isNaN(barEnd)
-      ||
-      barFirst > barEnd
-      ||
-      unit >= 1000 || unit <= 0
-    ) {
-      return {
-        success: false,
-        message: 'Invalid Sequence'
-      };
-    }else if(!Roles.userIsInRole(Meteor.userId(), 'create')) {
-      return {
-        success: false,
-        message: 'No Create Access'
-      };
-    }else{
-      const doc = XBatchDB.findOne({_id: batchId, orgKey: accessKey});
-      const srs = XSeriesDB.findOne({_id: seriesId, orgKey: accessKey});
-      const open = doc.completed === false;
-      
-      if(!doc || !srs || !open ) {
-        return {
-          success: false,
-          message: 'Unavailable Order'
-        };
-      }else{
-        const seriesTotal = serialCount + srs.items.length;
-      
-        if(seriesTotal > doc.quantity || seriesTotal > 5000 ) {
-          return {
-            success: false,
-            message: 'Too Many Items'
-          };
-        }else{
+      if(Array.isArray(serialArr) && serialArr.length > 0) {
+        const doc = XBatchDB.findOne({_id: batchId, orgKey: accessKey});
+        const srs = XSeriesDB.findOne({_id: seriesId, orgKey: accessKey});
+        const open = doc.completed === false;
+        
+        if(open && srs) {
+        
+          const seriesTotal = serialArr.length + srs.items.length;
+        
+          if(seriesTotal <= doc.quantity && seriesTotal <= 5000 && unit < 1000) {
+            
+            const staticStart = serialArr.length > 0 ?
+                                serialArr[0].substring(0, 6) : 'XX';
           
-          let plainserialArr = [];
-          for(let click = barFirst; click < barEnd; click++) {
-            plainserialArr.push(click.toString());
-          }
-          
-          const dpCk = Meteor.call('checkDuplicateItems', 
-                                      plainserialArr, unit, regexSQ, true);
+            const dpCk = Meteor.call('checkDuplicateItems', 
+                                  serialArr, unit, regexSQ, staticStart, true);
                                       
-          const badBarcodes = dpCk[1] || [];
-          
-          const goodBarcodes = dpCk[0] || [];
-      
-          XSeriesDB.update({_id: seriesId}, {
-            $push : { items : {
-              $each: goodBarcodes
-          }}});
+            const badBarcodes = dpCk[1] || [];
+            
+            const goodBarcodes = dpCk[0] || [];
+     
+            if(goodBarcodes.length > 0) {
               
-          XSeriesDB.update({_id: seriesId}, {
-            $set : {
-              updatedAt: new Date(),
-      			  updatedWho: Meteor.userId()
-          }});
-      
-          if(barLast > floor) {
-            seqLth == 8 ?
-              AppDB.update({orgKey: accessKey}, {
-                $set : {
-                  'latestSerial.eightDigit': Number(barLast)
-              }})
-            : seqLth == 9 ?
-              AppDB.update({orgKey: accessKey}, {
-                $set : {
-                  'latestSerial.nineDigit': Number(barLast)
-              }})
-            : seqLth == 10 ?
-              AppDB.update({orgKey: accessKey}, {
-                $set : {
-                  'latestSerial.tenDigit': Number(barLast)
-              }})
-            : null;
-          }else{
-            null;
-          }
+              XSeriesDB.update({_id: seriesId}, {
+                $push : { items : {
+                  $each: goodBarcodes
+              }}});
           
-          Meteor.defer( ()=>{ Meteor.call('updateOneMinify', batchId, accessKey); });
-          return {
-            success: true,
-            message:'done',
-            dupes: badBarcodes
-          };
+              XSeriesDB.update({_id: seriesId}, {
+                $set : {
+                  updatedAt: new Date(),
+          			  updatedWho: Meteor.userId()
+              }});
+              
+              const barLast = goodBarcodes[goodBarcodes.length - 1];
+              if(Number(barLast) > floor) {
+                seqLth == 9 ?
+                  AppDB.update({orgKey: accessKey}, {
+                    $set : {
+                      'latestSerial.nineDigit': Number(barLast)
+                  }})
+                : seqLth == 10 ?
+                  AppDB.update({orgKey: accessKey}, {
+                    $set : {
+                      'latestSerial.tenDigit': Number(barLast)
+                  }})
+                : null;
+              }else{
+                null;
+              }
+
+              Meteor.defer( ()=>{ 
+                Meteor.call('updateOneMinify', batchId, accessKey); 
+              }); 
+            }
+            return {
+              success: true,
+              dupes: badBarcodes
+            };
+            
+          }else{
+            return false;
+          }   
+        }else{
+          return false;
         }
+      }else{
+        return false;
       }
+    }else{
+      return false;
     }
   },
-          
+  
   addYearWeekPanelItemsX(batchId, seriesId, serialArr) {
     const accessKey = Meteor.user().orgKey;
+    
+    const appSetting = AppDB.findOne({orgKey: accessKey});
+    const floor = appSetting.latestSerial.eightDigit;
     
     if(Roles.userIsInRole(Meteor.userId(), 'create')) {
     
@@ -164,25 +160,42 @@ Meteor.methods({
             
             const regexWP = RegExp(/^(\d{8})$/);
             
+            const staticStart = serialArr.length > 0 ?
+                                serialArr[0].substring(0, 4) : 'XX';
+            
             const dpCk = Meteor.call('checkDuplicateItems', 
-                                        serialArr, "1", regexWP, true);
+                                    serialArr, "1", regexWP, staticStart, true);
                                       
             const badBarcodes = dpCk[1] || [];
             
             const goodBarcodes = dpCk[0] || [];
-        
-            XSeriesDB.update({_id: seriesId}, {
-              $push : { items : {
-                $each: goodBarcodes
-            }}});
-        
-            XSeriesDB.update({_id: seriesId}, {
-              $set : {
-                updatedAt: new Date(),
-        			  updatedWho: Meteor.userId()
-              }});
+   
+            if(goodBarcodes.length > 0) {
+              XSeriesDB.update({_id: seriesId}, {
+                $push : { items : {
+                  $each: goodBarcodes
+              }}});
+          
+              XSeriesDB.update({_id: seriesId}, {
+                $set : {
+                  updatedAt: new Date(),
+          			  updatedWho: Meteor.userId()
+                }});
+              
+              const barLast = goodBarcodes[goodBarcodes.length - 1];
+              if(Number(barLast) > floor) {
+                AppDB.update({orgKey: accessKey}, {
+                  $set : {
+                    'latestSerial.eightDigit': Number(barLast)
+                }});
+              }else{
+                null;
+              }
             
-            Meteor.defer( ()=>{ Meteor.call('updateOneMinify', batchId, accessKey); }); 
+              Meteor.defer( ()=>{ 
+                Meteor.call('updateOneMinify', batchId, accessKey); 
+              }); 
+            }
             return {
               success: true,
               dupes: badBarcodes
@@ -204,7 +217,7 @@ Meteor.methods({
 
   addSourceYearWeekSeqItemsX(batchId, seriesId, serialArr) {
     const accessKey = Meteor.user().orgKey;
-    
+                    
     if(Roles.userIsInRole(Meteor.userId(), 'create')) {
     
       if(Array.isArray(serialArr) && serialArr.length > 0) {
@@ -220,25 +233,33 @@ Meteor.methods({
             
             const regexNS = RegExp(/^(\d{6}\-\d{7})$/);
             
+            const staticStart = serialArr.length > 0 ?
+                                serialArr[0].substring(0, 11) : 'XX';
+                                
             const dpCk = Meteor.call('checkDuplicateItems', 
-                                        serialArr, "1", regexNS, true);
+                                    serialArr, "1", regexNS, staticStart, true);
                                       
             const badBarcodes = dpCk[1] || [];
             
             const goodBarcodes = dpCk[0] || [];
-        
-            XSeriesDB.update({_id: seriesId}, {
-              $push : { items : {
-                $each: goodBarcodes
-            }}});
-          
-            XSeriesDB.update({_id: seriesId}, {
-              $set : {
-                updatedAt: new Date(),
-        			  updatedWho: Meteor.userId()
-              }});
             
-            Meteor.defer( ()=>{ Meteor.call('updateOneMinify', batchId, accessKey); }); 
+            if(goodBarcodes.length > 0) {
+              
+              XSeriesDB.update({_id: seriesId}, {
+                $push : { items : {
+                  $each: goodBarcodes
+              }}});
+            
+              XSeriesDB.update({_id: seriesId}, {
+                $set : {
+                  updatedAt: new Date(),
+          			  updatedWho: Meteor.userId()
+                }});
+              
+              Meteor.defer( ()=>{ 
+                Meteor.call('updateOneMinify', batchId, accessKey); 
+              });
+            }
             return {
               success: true,
               dupes: badBarcodes
@@ -824,3 +845,113 @@ Meteor.methods({
   */
   
 });
+
+
+/*
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+//// JUST IN CASE - OLD MULTI ITEM CREATE FUNCTION \\\\
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+  addMultiItemsX(batchId, seriesId, seqLth, barFirst, barLast, unit) {
+    const accessKey = Meteor.user().orgKey;
+    
+    const appSetting = AppDB.findOne({orgKey: accessKey});
+
+    const floor = seqLth === 10 ? appSetting.latestSerial.tenDigit :
+                    seqLth === 9 ? appSetting.latestSerial.nineDigit :
+                    appSetting.latestSerial.eightDigit;
+                    
+    const regexSQ = seqLth === 10 ? RegExp(/^(\d{10})$/) :
+                    seqLth === 9 ? RegExp(/^(\d{9})$/) :
+                    RegExp(/^(\d{8})$/);
+    
+    const barEnd = barLast + 1;
+    const serialCount =  barEnd - barFirst;
+    
+    if(
+      isNaN(barFirst) || isNaN(barEnd)
+      || barFirst > barEnd || unit >= 1000 || unit <= 0
+    ) {
+      return {
+        success: false,
+        message: 'Invalid Sequence'
+      };
+    }else if(!Roles.userIsInRole(Meteor.userId(), 'create')) {
+      return {
+        success: false,
+        message: 'No Create Access'
+      };
+    }else{
+      const doc = XBatchDB.findOne({_id: batchId, orgKey: accessKey});
+      const srs = XSeriesDB.findOne({_id: seriesId, orgKey: accessKey});
+      const open = doc.completed === false;
+      
+      if(!doc || !srs || !open ) {
+        return {
+          success: false,
+          message: 'Unavailable Order'
+        };
+      }else{
+        const seriesTotal = serialCount + srs.items.length;
+      
+        if(seriesTotal > doc.quantity || seriesTotal > 5000 ) {
+          return {
+            success: false,
+            message: 'Too Many Items'
+          };
+        }else{
+          
+          let plainserialArr = [];
+          for(let click = barFirst; click < barEnd; click++) {
+            plainserialArr.push(click.toString());
+          }
+          
+          const staticStart = plainserialArr.length > 0 ?
+                                plainserialArr[0].substring(0, 6) : 'XX';
+          console.log(staticStart);
+          
+          const dpCk = Meteor.call('checkDuplicateItems', 
+                              plainserialArr, unit, regexSQ, staticStart, true);
+                                      
+          const badBarcodes = dpCk[1] || [];
+          
+          const goodBarcodes = dpCk[0] || [];
+
+      /*
+          XSeriesDB.update({_id: seriesId}, {
+            $push : { items : {
+              $each: goodBarcodes
+          }}});
+              
+          XSeriesDB.update({_id: seriesId}, {
+            $set : {
+              updatedAt: new Date(),
+      			  updatedWho: Meteor.userId()
+          }});
+      
+          if(barLast > floor) {
+            seqLth == 9 ?
+              AppDB.update({orgKey: accessKey}, {
+                $set : {
+                  'latestSerial.nineDigit': Number(barLast)
+              }})
+            : seqLth == 10 ?
+              AppDB.update({orgKey: accessKey}, {
+                $set : {
+                  'latestSerial.tenDigit': Number(barLast)
+              }})
+            : null;
+          }else{
+            null;
+          }
+          
+          Meteor.defer( ()=>{ Meteor.call('updateOneMinify', batchId, accessKey); });
+          return {
+            success: true,
+            message:'done',
+            dupes: badBarcodes
+          };
+        }
+      }
+    }
+  },
+   */

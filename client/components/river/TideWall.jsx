@@ -33,7 +33,7 @@ const TideWall = ({
   		  
   		    <Fragment>
             
-            <div className='bigTideContainer'>
+            <n-big-tide-container>
               <TideControl 
                 batchID={bID} 
                 tideKey={tideKey}
@@ -41,8 +41,8 @@ const TideWall = ({
                 tideLockOut={false}
                 taskState={taskState}
                 lockTaskSet={lockTaskSet} />
-            </div>
-            <div className='bigTideTask'>
+            </n-big-tide-container>
+            <n-tide-task>
               <select
                 id='tskSlct'
                 className='cap'
@@ -63,7 +63,7 @@ const TideWall = ({
                 </optgroup>
               </select>
               <label htmlFor='tskSlct'>{ctxLabel}</label>
-            </div>
+            </n-tide-task>
             
           </Fragment>
         

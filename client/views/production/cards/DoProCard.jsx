@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 
 import HeadWater from '/client/components/river/HeadWater.js';
 
-import TideWall from '/client/components/river/TideWall.jsx';
+import TideWall from '/client/components/river/TideWall';
 
 import River from '/client/components/river/River.jsx';
 

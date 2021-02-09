@@ -1,7 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import moment from 'moment';
 //import Pref from '/client/global/pref.js';
-import LazyLoad from 'react-lazyload';
 import LeapButton from '/client/components/tinyUi/LeapButton.jsx';
 import FilterItemsX from '/client/components/bigUi/FilterItemsX';
 import SeriesForm, { SeriesDelete } from '/client/components/forms/ItemSerialsX/SeriesForm';

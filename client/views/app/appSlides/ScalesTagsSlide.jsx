@@ -5,16 +5,17 @@ import AppSetSimple from '/client/components/forms/AppSetSimple';
 
 const ScalesTagsSlide = ({ app })=> {
   
-  const dfEight = app.latestSerial.eightDigit;
-  const dfNine = app.latestSerial.nineDigit;
-  const dfTen = app.latestSerial.tenDigit;
+  const dfEight = app.latestSerial.eightDigit || 0;
+  const dfNine = app.latestSerial.nineDigit || 0;
+  const dfTen = app.latestSerial.tenDigit || 0;
   
   function handle(e) {
     e.preventDefault();
     const serialEight = this.srlEight.value;
     const serialNine = this.srlNine.value;
     const serialTen = this.srlTen.value;
-    Meteor.call('setlastestSerial', serialEight, serialNine, serialTen, (error, reply)=>{
+    Meteor.call('setlastestSerial', serialEight, serialNine, serialTen, 
+    (error, reply)=>{
       if(error) {
         console.log(error);
         toast.error('Server Error');
@@ -38,6 +39,8 @@ const ScalesTagsSlide = ({ app })=> {
     <div className='space3v autoFlex'>
     <div>
       <h2 className='cap'>override last serials</h2>
+      
+      <h3 className='cap'>REBUILD FUNCTION IN DATA REPAIR</h3>
                 
       <label htmlFor='scaleForm'>Manualy Override Last Serial</label>
       <form onSubmit={(e)=>handle(e)}>

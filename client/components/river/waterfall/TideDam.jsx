@@ -1,4 +1,6 @@
 import React, { useState, Fragment } from 'react';
+import '/client/components/riverX/waterfall/style';
+
 // import moment from 'moment';
 import Pref from '/client/global/pref.js';
 

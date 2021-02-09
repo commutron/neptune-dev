@@ -538,14 +538,20 @@ n-sm-model-content {
   padding: 0;
 }
 
-.centreRow {
+.centreRow, .leftRow {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: center;
   align-items: center;
 }
+.centreRow {
+  justify-content: center;
+}
+.leftRow {
+  justify-content: flex-start;
+}
 .centreRow > span { margin: 0 10px; }
+
 
 .topLine > div { align-self: flex-start; }
 
@@ -818,6 +824,9 @@ input.variableInput.biggest {
 }
 input.miniIn6 { width: 6ch; }
 input.miniIn8 { width: 8ch; }
+input.miniIn12 { width: 12ch; }
+input.miniIn18 { width: 18ch; }
+input.miniIn24 { width: 24ch; }
 
 .multiSelectContain .dropdown-container {
   min-width: 15rem;

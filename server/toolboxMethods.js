@@ -225,6 +225,78 @@ Meteor.methods({
     }
   },
   
+  ResetAppLatestSerial() {
+    // try{
+      if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+
+        let max8s = [];
+        let max9s = [];
+        let max10s = [];
+        
+        const allBatch = BatchDB.find({}).fetch();
+        
+        for(let bdt of allBatch) {
+          if(bdt.items.length > 0) {
+            const highest = _.max(bdt.items, (it)=> {
+              if(it.serial.length <= 10) {
+                return Number(it.serial);
+              }
+            });
+            if(!highest.serial) {null;
+            }else if(highest.serial.length === 10) {
+              max10s.push(highest.serial);
+            }else if(highest.serial.length === 9) {
+              max9s.push(highest.serial);
+            }else if(highest.serial.length === 8) {
+              max8s.push(highest.serial);
+            }else{null}
+          }
+        }
+        
+        const allSeries = XSeriesDB.find({}).fetch();
+        
+        for(let sdt of allSeries) {
+          if(sdt.items.length > 0) {
+            const highest = _.max(sdt.items, (it)=> {
+              if(it.serial.length <= 10) {
+                return Number(it.serial);
+              }
+            });
+            if(!highest.serial) {null;
+            }else if(highest.serial.length === 10) {
+              max10s.push(highest.serial);
+            }else if(highest.serial.length === 9) {
+              max9s.push(highest.serial);
+            }else if(highest.serial.length === 8) {
+              max8s.push(highest.serial);
+            }else{null}
+          }
+        }
+        
+        let max8 = max8s.length == 0 ? 10000000 : 
+                    _.max(max8s, (it)=> it);
+        let max9 = max9s.length == 0 ? 100000000 :
+                    _.max(max9s, (it)=> it);
+        let max10 = max10s.length == 0 ? 1000000000 : 
+                    _.max(max10s, (it)=> it);
+        
+        AppDB.update({ orgKey: Meteor.user().orgKey }, {
+          $set : { 
+            latestSerial: {
+              eightDigit: Number(max8),
+              nineDigit: Number(max9),
+              tenDigit: Number(max10)
+            }
+          }});
+          return true;
+      }else{
+        return false;
+      }
+    // }catch (err) {
+    //   throw new Meteor.Error(err);
+    // }
+  },
+  
   unlockALLxbatch() {
     try{
       if(Roles.userIsInRole(Meteor.userId(), 'admin')) {

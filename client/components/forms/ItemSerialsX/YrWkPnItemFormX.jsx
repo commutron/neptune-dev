@@ -5,12 +5,16 @@ import { toast } from 'react-toastify';
 
 
 const YrWkPnItemFormX = ({ 
-  bID, seriesId, more, unit, app, 
+  bID, seriesId, more, app, 
   showToast, updateToast
 })=> {
   
   const thisYear = moment().weekYear().toString().slice(-2);
   const thisWeek = moment().week().toString().padStart(2, 0);
+  
+  const [ isPnl, isPnlSet ] = useState(true);
+  const [ flrWarn, flrWarnSet ] = useState(false);
+  const [ quWarn, quWarnSet ] = useState(false);
   
   const [ previewData, previewSet ] = useState([]);
   const [ resultMess, resultSet ] = useState(false);
@@ -20,40 +24,62 @@ const YrWkPnItemFormX = ({
     e.preventDefault();
     resultSet(false);
     
+    const padSqu = (v)=> isPnl ? v.padStart(3, 0) : v.padStart(4, 0);
+  
     const yearVal = this.yrDigits.value;
     const weekVal = this.wkDigits.value.padStart(2, 0);
     const year_week = yearVal + weekVal;
     
     const panelStartVal = this.pnlStDigits.value;
+    const realStartVal = padSqu(panelStartVal);
     
-    const itemPerVal = this.pnlDigits.value;
+    const itemPerVal = isPnl ? this.pnlDigits.value : '0';
     const itemPerNum = parseInt(itemPerVal, 10);
     
     const panelQuVal = this.quantDigits.value;
     
-    const startLoop = year_week + panelStartVal.padStart(3, 0);
+    const startLoop = year_week + realStartVal;
     const startLoopNum = parseInt(startLoop, 10);
     
     const endNum = parseInt(panelStartVal, 10) + parseInt(panelQuVal, 10) - 1;
-    const stopLoop = year_week + endNum.toString().padStart(3, 0);
+    const stopLoop = year_week + padSqu( endNum.toString() );
     const stopLoopNum = parseInt(stopLoop, 10);
     
     let itemLoop = [];
-    for(let it = 1; it <= itemPerNum; it++) {
-      itemLoop.push(it.toString());
-    }
-    
     let tryData = [];
-    for(let tick = startLoopNum; tick <= stopLoopNum; tick++) {
-      for( let tock of itemLoop ) {
-        const serial = tick.toString() + tock.toString();
+    
+    if(isPnl) {
+      for(let it = 1; it <= itemPerNum; it++) {
+        itemLoop.push(it.toString());
+      }
+      for(let tick = startLoopNum; tick <= stopLoopNum; tick++) {
+        for( let tock of itemLoop ) {
+          const serial = tick.toString() + tock.toString();
+          tryData.push(serial);
+        }
+      }
+  	}else{
+  	  for(let tick = startLoopNum; tick <= stopLoopNum; tick++) {
+        const serial = tick.toString();
         tryData.push(serial);
       }
-    }
-    
+  	}
+  	
     previewSet(tryData);
     
-    this.goYrWkSave.disabled = false;
+    const firstInSqu = tryData.length > 0 ? tryData[0] : 10000000;
+    const floor = app.latestSerial.eightDigit;
+                          
+    const flrChk = firstInSqu > floor ? false :
+                   `Not in sequence (Below ${floor})`;
+                   
+    flrWarnSet(flrChk);
+    
+    const quChk = tryData.length > 0 && tryData.length <= 5000 ? 
+                  false : 'Invalid Range';
+    quWarnSet(quChk);       
+                   
+    !quChk ? this.goYrWkSave.disabled = false : null;
     
     Roles.userIsInRole(Meteor.userId(), 'debug') &&
       console.log({ 
@@ -97,6 +123,7 @@ const YrWkPnItemFormX = ({
           <p>
             <input
               id='yrDigits'
+              className='miniIn18'
               pattern='[\d\d]*'
               maxLength='2'
               minLength='2'
@@ -109,6 +136,7 @@ const YrWkPnItemFormX = ({
           <p>
             <input
               id='wkDigits'
+              className='miniIn18'
               pattern='[\d\d]*'
               maxLength='2'
               minLength='2'
@@ -119,22 +147,47 @@ const YrWkPnItemFormX = ({
             <label htmlFor='wkDigits'>Week Number</label>
           </p>
           
-          <p>
+          <p className='centreRow'>
+            <label htmlFor='yesPnl' className='beside'>
             <input
-              id='pnlStDigits'
-              pattern='[\d\d\d]*'
-              maxLength='3'
-              minLength='3'
-              defaultValue={001}
-              placeholder={001}
-              inputMode='numeric'
-              required />
-            <label htmlFor='pnlStDigits'>Panel Number Starts At</label>
+              type='radio'
+              id='yesPnl'
+              name='ynPanlSelect'
+              defaultChecked={isPnl === true}
+              onChange={()=>isPnlSet(true)}
+              required
+            />Panels</label>
+            <label htmlFor='noPnl' className='beside'>
+            <input
+              type='radio'
+              id='noPnl'
+              name='ynPanlSelect'
+              defaultChecked={isPnl === false}
+              onChange={()=>isPnlSet(false)}
+              required
+            />NO Panels</label>
           </p>
           
           <p>
             <input
+              id='pnlStDigits'
+              className='miniIn18'
+              pattern={isPnl ? '[000-999]*' : '[0000-9999]*'}
+              maxLength={isPnl ? '3' : '4'}
+              minLength='1'
+              defaultValue={isPnl ? 001 : 0001}
+              placeholder={isPnl ? 001 : 0001}
+              inputMode='numeric'
+              required />
+            <label htmlFor='pnlStDigits'
+            >{isPnl ? 'Panel' : 'Sequence'} Starts At</label>
+         </p>
+         
+         {isPnl ?
+         <p>
+            <input
               id='pnlDigits'
+              className='miniIn18'
               pattern='[\d]*'
               maxLength='1'
               minLength='1'
@@ -142,22 +195,25 @@ const YrWkPnItemFormX = ({
               placeholder={2}
               inputMode='numeric'
               required />
-            <label htmlFor='pnlDigits'>Number of {Pref.items} per panel</label>
+            <label htmlFor='pnlDigits'
+            >{Pref.items} Per Panel</label>
           </p>
+          : null}
             
           <p>
             <input
               id='quantDigits'
+              className='miniIn18'
               pattern='[000-999]*'
-              maxLength='3'
+              maxLength={isPnl ? '3' : '4'}
               minLength='1'
-              max={999}
+              max={isPnl ? 999 : 9999}
               min={1}
               defaultValue={1}
               placeholder={1}
               inputMode='numeric'
               required />
-            <label htmlFor='quantDigits'>Number of panels</label>
+            <label htmlFor='quantDigits'>Total {isPnl ? 'Panels' : Pref.items}</label>
           </p>
           
           <p className='centre'>
@@ -180,12 +236,16 @@ const YrWkPnItemFormX = ({
             return(<dd key={ix+'e'}>{ent}</dd>);
           })}
         </dl>
+        
+        {flrWarn && <p>{flrWarn}</p>}
+        {quWarn && <p>{quWarn}</p>}
+        
         <p className='medBig'><i className='numFont big'>{previewData.length}</i> {Pref.itemSerial}s</p>
         <p className='centreText'><em>duplicate checking is done on the server</em></p>
         <p className='centre'>
           <button
             id='goYrWkSave'
-            disabled={previewData.length === 0}
+            disabled={false}
             className='action clearGreen'
             onClick={(e)=>handleAdd(e)}
           >Create</button>

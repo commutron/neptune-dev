@@ -6,7 +6,7 @@ import ModelLarge from '/client/components/smallUi/ModelLarge';
 import ModelSmall from '/client/components/smallUi/ModelSmall';
 import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 
-import MultiItemFormX from './MultiItemFormX';
+import YMDItemForm from './YMDItemForm';
 import YrWkPnItemFormX from './YrWkPnItemFormX';
 import NSYrWkSqItemFormX from './NSYrWkSqItemFormX';
 
@@ -27,7 +27,7 @@ const ItemSerialsWrapX = ({
       autoClose: 3000
     });
   }
-  if(quantity === itemsQ) {
+  if(itemsQ >= quantity) {
     updateToast();
     return(
       <ModelSmall
@@ -68,11 +68,11 @@ export default ItemSerialsWrapX;
 
 const ItemSerialsTabs = ({ bID, seriesId, unit, app, showToast, updateToast })=> (
   <Tabs
-    tabs={['Sequential', 'Year-Week-Panel', 'NorthStar Complex']}
+    tabs={['Year-Month-Day', 'Year-Week-Panel', 'NorthStar Complex']}
     wide={true}
     hold={false}>
-
-    <MultiItemFormX
+    
+    <YMDItemForm
       bID={bID}
       seriesId={seriesId}
       unit={unit}
@@ -83,7 +83,6 @@ const ItemSerialsTabs = ({ bID, seriesId, unit, app, showToast, updateToast })=>
     <YrWkPnItemFormX
       bID={bID}
       seriesId={seriesId}
-      unit={unit}
       app={app}
       showToast={showToast}
       updateToast={updateToast} />
@@ -91,7 +90,6 @@ const ItemSerialsTabs = ({ bID, seriesId, unit, app, showToast, updateToast })=>
     <NSYrWkSqItemFormX
       bID={bID}
       seriesId={seriesId}
-      unit={unit}
       app={app}
       showToast={showToast}
       updateToast={updateToast} />

@@ -1,3 +1,9 @@
+
+//////////////////////////////////////////////////////
+///////// NOT IN USE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////
+//////////  FALLBACK \\\\\\\\\\\\\\\\\\\\\\\\\\\\
+/*
 import React, { useState } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
@@ -13,9 +19,8 @@ const MultiItemFormX = ({ bID, seriesId, unit, app, showToast, updateToast })=> 
     const barEnd = this.barNumEnd.value.trim();
     const unitVal = this.unitInput.value.trim();
     
-    const floor = digitState === 10 ? app.latestSerial.tenDigit :
-                  digitState === 9 ? app.latestSerial.nineDigit :
-                  app.latestSerial.eightDigit;
+    const floor = digitState === 9 ? app.latestSerial.nineDigit :
+                  app.latestSerial.tenDigit;
     
     let first = parseInt(barStart, 10);
     let last = parseInt(barEnd, 10);
@@ -92,32 +97,24 @@ const MultiItemFormX = ({ bID, seriesId, unit, app, showToast, updateToast })=> 
   return(
     <form className='centre' onSubmit={(e)=>addItem(e)} autoComplete='off'>
       <p>
-        <input
-          type='radio'
-          id='eightDigit'
-          name='digit'
-          defaultChecked={digitState === 8}
-          onChange={()=>digitSet(8)}
-          required />
-        <label htmlFor='eightDigit' className='beside'>8 digits</label>
-      <br />
-      <input
-          type='radio'
-          id='nineDigit'
-          name='digit'
-          defaultChecked={digitState === 9}
-          onChange={()=>digitSet(9)}
-          required />
-        <label htmlFor='nineDigit' className='beside'>9 digits</label>
-      <br />
-        <input
-          type='radio'
-          id='tenDigit'
-          name='digit'
-          defaultChecked={digitState === 10}
-          onChange={()=>digitSet(10)}
-          required />
-        <label htmlFor='tenDigit' className='beside'>10 digits</label>
+        <label htmlFor='nineDigit' className='beside'>
+          <input
+            type='radio'
+            id='nineDigit'
+            name='digit'
+            defaultChecked={digitState === 9}
+            onChange={()=>digitSet(9)}
+            required
+          />9 digits</label>
+        <label htmlFor='tenDigit' className='beside'>
+          <input
+            type='radio'
+            id='tenDigit'
+            name='digit'
+            defaultChecked={digitState === 10}
+            onChange={()=>digitSet(10)}
+            required
+          />10 digits</label>
       </p>
       <p>
         <input
@@ -188,3 +185,6 @@ const MultiItemFormX = ({ bID, seriesId, unit, app, showToast, updateToast })=> 
 };
 
 export default MultiItemFormX;
+
+
+*/

@@ -6,13 +6,6 @@ import { toast } from 'react-toastify';
 
 const DataRepair = ({ app, users })=> {
   
-  // function fixDataKey() {
-  //   Meteor.call('dataFIXquoteBaseline', (error, reply)=>{
-  //     error && console.log(error);
-  //     if(reply) { toast.success('data edit complete', { autoClose: false }); }
-  //   });
-  // }
-  
   // function fixDuplicateSerial(e, batchText, serialNum, dateStamp) {
   //   e.preventDefault();
   //   Meteor.call('dataFIXduplicateserial', batchText, serialNum, dateStamp, (error, reply)=>{
@@ -31,15 +24,7 @@ const DataRepair = ({ app, users })=> {
       if(reply) { toast.success('data edit complete', { autoClose: false }); }
     });
   }
-  
-  /*
-  function clearAuserThing() {
-    Meteor.call('UNSETwatchlistKey', (error, reply)=>{
-      error && console.log(error);
-      if(reply) { toast.success('data edit complete', { autoClose: false }); }
-    });
-  }*/
-  
+
   /*
   function addAthing() {
     const departArray = [
@@ -80,34 +65,6 @@ const DataRepair = ({ app, users })=> {
   }
   */
   
-  function runTraceMinify() {
-    Meteor.call('rebuildTrace', (error, re)=>{
-      error && console.log(error);
-      re && toast.success('method complete', { autoClose: false });
-    });
-  }
-  function runTraceFix() {
-    Meteor.call('cleanupTraceErrors', (error, re)=>{
-      error && console.log(error);
-      re && toast.success('method complete', { autoClose: false });
-    });
-  }
-  
-  
-  function clearAllCaches() {
-    Meteor.call('resetALLCacheDB', (error)=>{
-      error && console.log(error);
-      toast.success('method called', { autoClose: false });
-    });
-  }
-  
-  function clearUserLogs() {
-    Meteor.call('clearNonDebugUserUsageLogs', (error)=>{
-      error && console.log(error);
-      toast.success('request sent');
-    });
-  }
-  
   function forceLockCheck() {
     Meteor.call('lockingCacheUpdate', false, true, (error)=>{
       error && console.log(error);
@@ -115,29 +72,8 @@ const DataRepair = ({ app, users })=> {
     });
   }
   
-  function removeDamagedBatch() {
-    Meteor.call('fixRemoveDamagedBatch', (error)=>{
-      error && console.log(error);
-      toast.success('request sent');
-    });
-  }
-  
-  function removeNCkey() {
-    Meteor.call('UNSETbplusNonconKey', (error, re)=>{
-      error && console.log(error);
-      re ? toast.success('success') : toast.error('unsuccessful');
-    });
-  }
-  
-  function removeVRkey() {
-    Meteor.call('UNSETbplusVeriKey', (error, re)=>{
-      error && console.log(error);
-      re ? toast.success('success') : toast.error('unsuccessful');
-    });
-  }
-  
-  function doUnlockAll() {
-    Meteor.call('unlockALLxbatch', (error, re)=>{
+  function doCallThing(mtrMethod) {
+    Meteor.call(mtrMethod, (error, re)=>{
       error && console.log(error);
       re ? toast.success('success') : toast.error('unsuccessful');
     });
@@ -188,7 +124,7 @@ const DataRepair = ({ app, users })=> {
           Unlock All Batch+ (XBatchDB)
         </h3>
         <button
-          onClick={()=>doUnlockAll()}
+          onClick={()=>doCallThing("unlockALLxbatch")}
           className='action clearPurple'
         >Set `lock` to false</button>
       </div>
@@ -198,7 +134,7 @@ const DataRepair = ({ app, users })=> {
           Delete all CacheDB Entries
         </h3>
         <button
-          onClick={()=>clearAllCaches()}
+          onClick={()=>doCallThing("resetALLCacheDB")}
           className='action clearRed'
         >Delete All Caches</button>
       </div>
@@ -208,7 +144,7 @@ const DataRepair = ({ app, users })=> {
           Build TraceDB
         </h3>
         <button
-          onClick={()=>runTraceMinify()}
+          onClick={()=>doCallThing("rebuildTrace")}
           className='action clearTeal'
         >FORCE Run TraceDB Rebuild</button>
       </div>
@@ -218,7 +154,7 @@ const DataRepair = ({ app, users })=> {
           Fix TraceDB Errors
         </h3>
         <button
-          onClick={()=>runTraceFix()}
+          onClick={()=>doCallThing("cleanupTraceErrors")}
           className='action clearOrange'
         >Fix Errors in TraceDB</button>
       </div>
@@ -228,9 +164,19 @@ const DataRepair = ({ app, users })=> {
           Fix BatchDB & XBatchDB Errors
         </h3>
         <button
-          onClick={()=>removeDamagedBatch()}
+          onClick={()=>doCallThing("fixRemoveDamagedBatch")}
           className='action clearRed'
         >Remove Damaged Batch</button>
+      </div>
+      
+      <div>
+        <h3><i className="fas fa-eraser fa-lg gap"></i>
+          Rebuild the LatestSerial Object
+        </h3>
+        <button
+          onClick={()=>doCallThing("ResetAppLatestSerial")}
+          className='action clearOrange'
+        >Rebuild</button>
       </div>
       
       <div>
@@ -238,7 +184,7 @@ const DataRepair = ({ app, users })=> {
           Unset the nonconformaces key from batch+
         </h3>
         <button
-          onClick={()=>removeNCkey()}
+          onClick={()=>doCallThing("UNSETbplusNonconKey")}
           className='action clearOrange'
         >Unset Key</button>
       </div>
@@ -248,7 +194,7 @@ const DataRepair = ({ app, users })=> {
           Unset the verifications key from batch+
         </h3>
         <button
-          onClick={()=>removeVRkey()}
+          onClick={()=>doCallThing("UNSETbplusVeriKey")}
           className='action clearOrange'
         >Unset Key</button>
       </div>
@@ -259,7 +205,7 @@ const DataRepair = ({ app, users })=> {
         </h3>
         <button
           className='action clearBlue'
-          onClick={()=>clearUserLogs()}
+          onClick={()=>doCallThing("clearNonDebugUserUsageLogs")}
         >Clear Users with "debug" turned OFF</button>
       </div>
       
