@@ -31,6 +31,7 @@ const ReleaseAction = ({
   
   let sty = {
     padding: '10px',
+    height: 'fit-content'
   };
   
   return(
@@ -53,7 +54,7 @@ const ReleaseAction = ({
         <button
           onClick={(e)=>handleRelease(e, false)}
           title={`Release ${Pref.xBatch} to the floor`}
-          className='action clearGreen centreText big cap'
+          className='action clearGreen centreText medBig cap'
           style={sty}
           disabled={!Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])}
         >{actionText} {contextText}</button>
@@ -61,7 +62,7 @@ const ReleaseAction = ({
       <button
         onClick={(e)=>handleRelease(e, Pref.shortfall)}
         title={`Release ${Pref.batch} to the floor`}
-        className='smallAction clearOrange medBig cap'
+        className='smallAction clearOrange cap'
         disabled={!Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])}
       >{actionText} with {Pref.shortfall}</button>
     </div>

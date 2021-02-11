@@ -15,13 +15,10 @@ const StreamLayout = ({
   flowData,
   title,
   subLink,
-  invertColor,
   tag,
   navBar,
   children
 })=>	{
-  
-  const invert = invertColor ? 'invert' : '';
               
   return(
     <div className='containerEx'>
@@ -45,7 +42,7 @@ const StreamLayout = ({
           <UpTaskBar subLink={subLink} />}
       </aside>
       
-      <div className={`contentAreaEx ${invert}`}>
+      <div className='contentAreaEx'>
         <div 
           className='baseContainer'>
           

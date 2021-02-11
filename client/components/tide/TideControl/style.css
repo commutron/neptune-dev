@@ -63,7 +63,7 @@ n-tide-task {
   border-top-width: 0;
 }
 n-tide-task select {
-  height: 3vmax;
+  height: 2.5vmax;
   width: inherit;
 }
 n-tide-task label {

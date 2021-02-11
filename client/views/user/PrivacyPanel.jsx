@@ -14,14 +14,14 @@ const PrivacyPanel = ({ orb, bolt, app, user, isAdmin })=> {
   }
   
   return(
-    <div className='invert'>
+    <div>
       <div className=''>
         <p>Saved usage behaviour for {user.username}</p>
       </div>
       <p>
         <button
           onClick={()=>clearthisUserCrumbs()}
-          className='action clearBlue invert'
+          className='action clearBlue'
         >Clear Your breadcrumbs</button>
       </p>
       

@@ -77,6 +77,9 @@ a {
 a:link, a:visited {
   text-decoration: none;
 }
+a:active {
+  border: 1px dotted black;
+}
 /*
 a:focus, a:active,
 button:focus, button:active {
@@ -95,9 +98,8 @@ input[type='checkbox'] {
   -o-transition: all 150ms ease-in-out;
   transition: all 150ms ease-in-out;
   border: 0;
-  border-color: white;
+  border-color: black;
   padding: 0;
-  /*color: white;*/
   text-indent: 0;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -120,12 +122,12 @@ input[type='reset'] {
   height: 32px;
   border-width: 1px;
   border-style: solid;
-  border-color: white;
+  border-color: black;
   background-color: transparent;
 }
 input[type='reset']:hover {
-  color: black;
-  background-color: white;
+  color: white;
+  background-color: black;
 }
 
 form {
@@ -186,7 +188,7 @@ input, select, textarea {
   text-indent: 0.25rem;
   border-width: 1px;
   border-style: dashed;
-  border-bottom-color: white;
+  border-bottom-color: black;
   border-radius: 0px;
 }
 input:required, 
@@ -209,21 +211,10 @@ input, select {
 input {
   border-top-color: transparent;
   border-right-color: transparent;
-  border-bottom-color: white;
+  border-bottom-color: black;
   border-left-color: transparent;
 }
-/*
-select {
-  -moz-appearance: none;
-  background-color: var(--clouds);
-  border-color: white;
-}
-option, optgroup {
-  color: black;
-  background-color: white;
-  white-space: nowrap;
-}
-*/
+
 option {
   min-width: fit-content;
 }
@@ -276,7 +267,6 @@ input + label, textarea + label, select + label {
   max-width: 15rem;
   word-wrap: normal;
   word-break: keep-all;
-  
 }
 
 input:focus + label,
@@ -300,25 +290,21 @@ details {
   margin: 0;
   padding: 0;
   text-transform: capitalize;
-  box-shadow: 0 0 5px 0px rgba(0,0,0,0.75);
+  box-shadow: none;
   cursor: default;
 }
 details[open] summary {
   opacity: 1;
 }
 summary {
+  min-height: 2.5rem;
   margin: 0;
   padding: 0 1vw;
   cursor: pointer;
   display: flex;
   align-items: center;
 }
-/*
-details:focus-within {
-  outline-style: dotted;
-  outline-width: thick;
-}
-*/
+
 input::-webkit-inner-spin-button,
 input::-webkit-outer-spin-button {
   opacity: 1;
@@ -387,12 +373,12 @@ tr {
 
 th {
   padding: 0 10px;
-  border-right: 1px solid rgba(255,255,255,0.5);
+  border-right: 1px solid rgba(0,0,0,0.2);
 }
 
 td {
-  border-bottom: 1px solid rgba(255,255,255,0.3);
-  border-right: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+  border-right: 1px solid rgba(0,0,0,0.2);
   padding: 10px;
 }
 
@@ -408,6 +394,5 @@ td:last-child, th:last-child {
   td {
     font-size: 1rem;
     line-height: 1.5rem;
-    /*text-indent: 0.25rem;*/
   }
 }

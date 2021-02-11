@@ -83,7 +83,7 @@ const DownstreamView = ({
     <div
       key={0} 
       className={`${light === true ? 
-        'lightTheme invert downstreamView' : 'downstreamView'}`}
+        'lightTheme downstreamView' : 'darkTheme downstreamView'}`}
     >
     
       <DownstreamTools

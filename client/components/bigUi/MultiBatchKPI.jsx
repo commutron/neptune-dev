@@ -40,7 +40,7 @@ const MultiBatchKPI = ({ batchIDs, app })=> {
     const dlvColr = delvAvg < 0 ? 'redT' : 'greenT';
     
     return(
-      <div className='invert vspacehalf autoGrid' 
+      <div className='vspacehalf autoGrid' 
         title={`Mean Average of completed ${Pref.batches}`}>
         
         

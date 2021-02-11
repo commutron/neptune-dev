@@ -50,7 +50,7 @@ const GeneralChunk = ({
     <div>
 
       <TagsModule
-        action='batch'
+        action={Pref.batch}
         id={b._id}
         tags={b.tags}
         tagOps={a.tagOption} />
@@ -100,7 +100,7 @@ const GeneralChunk = ({
         </fieldset>}
 
       <NoteLine 
-        action='batch'
+        action={Pref.batch}
         id={b._id}
         entry={b.notes} />
               

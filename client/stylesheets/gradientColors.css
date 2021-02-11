@@ -185,54 +185,41 @@
 
 .fillRight0 {
   background-color: transparent;
-  text-shadow: rgba(0,0,0,0.3) 0.03rem 0.03rem;
 }
 .fillRight1 {
-  background-image: linear-gradient(to right, var(--emeraldfrosted) 1%, transparent 5%);
-  text-shadow: rgba(0,0,0,0.3) 0.03rem 0.03rem
+  background-image: linear-gradient(to right, var(--emeraldfrost) 1%, transparent 5%);
 }
 .fillRight5 {
-  background-image: linear-gradient(to right, var(--emeraldfrosted) 5%, transparent 10%);
-  text-shadow: rgba(0,0,0,0.3) 0.03rem 0.03rem
+  background-image: linear-gradient(to right, var(--emeraldfrost) 5%, transparent 10%);
 }
 .fillRight10 {
-  background-image: linear-gradient(to right, var(--emeraldfrosted) 10%, transparent 20%);
-  text-shadow: rgba(0,0,0,0.3) 0.03rem 0.03rem
+  background-image: linear-gradient(to right, var(--emeraldfrost) 10%, transparent 20%);
 }
 .fillRight20 {
-  background-image: linear-gradient(to right, var(--emeraldfrosted) 20%, transparent 30%);
-  text-shadow: rgba(0,0,0,0.3) 0.03rem 0.03rem
+  background-image: linear-gradient(to right, var(--emeraldfrost) 20%, transparent 30%);
 }
 .fillRight30 {
-  background-image: linear-gradient(to right, var(--emeraldfrosted) 30%, transparent 40%);
-  text-shadow: rgba(0,0,0,0.3) 0.03rem 0.03rem
+  background-image: linear-gradient(to right, var(--emeraldfrost) 30%, transparent 40%);
 }
 .fillRight40 {
-  background-image: linear-gradient(to right, var(--emeraldfrosted) 40%, transparent 50%);
-  text-shadow: rgba(0,0,0,0.3) 0.03rem 0.03rem
+  background-image: linear-gradient(to right, var(--emeraldfrost) 40%, transparent 50%);
 }
 .fillRight50 {
-  background-image: linear-gradient(to right, var(--emeraldfrosted) 50%, transparent 60%);
-  text-shadow: rgba(0,0,0,0.3) 0.03rem 0.03rem
+  background-image: linear-gradient(to right, var(--emeraldfrost) 50%, transparent 60%);
 }
 .fillRight60 {
-  background-image: linear-gradient(to right, var(--emeraldfrosted) 60%, transparent 70%);
-  text-shadow: rgba(0,0,0,0.3) 0.03rem 0.03rem
+  background-image: linear-gradient(to right, var(--emeraldfrost) 60%, transparent 70%);
 }
 .fillRight70 {
-  background-image: linear-gradient(to right, var(--emeraldfrosted) 70%, transparent 80%);
-  text-shadow: rgba(0,0,0,0.3) 0.03rem 0.03rem
+  background-image: linear-gradient(to right, var(--emeraldfrost) 70%, transparent 80%);
 }
 .fillRight80 {
-  background-image: linear-gradient(to right, var(--emeraldfrosted) 80%, transparent 90%);
-  text-shadow: rgba(0,0,0,0.3) 0.03rem 0.03rem
+  background-image: linear-gradient(to right, var(--emeraldfrost) 80%, transparent 90%);
 }
 .fillRight90 {
-  background-image: linear-gradient(to right, var(--emeraldfrosted) 90%, transparent 100%);
-  text-shadow: rgba(0,0,0,0.3) 0.03rem 0.03rem
+  background-image: linear-gradient(to right, var(--emeraldfrost) 90%, transparent 100%);
 }
 .fillRight100 {
-  background-color: var(--emeraldfrosted);
-  text-shadow: rgba(0,0,0,0.3) 0.03rem 0.03rem
+  background-color: var(--emeraldfrost);
 }
 

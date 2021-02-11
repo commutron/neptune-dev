@@ -56,7 +56,7 @@ const FlowFormRoute = ({
   
   function save(e) {
     e.preventDefault();
-    this.go.disabled = true;
+    this.goFlow.disabled = true;
     const widgetId = id;
     const flowObj = flow;
     
@@ -119,7 +119,7 @@ const FlowFormRoute = ({
       <FlowBuilder
         app={app}
         options={app.trackOption}
-        end={app.lastTrack}
+        defaultEnd={app.lastTrack}
         baseline={fFlow}
         onClick={(e)=>setFlow(e)} />
         
@@ -128,7 +128,8 @@ const FlowFormRoute = ({
       <div className='space centre'>
         <button
           type='submit'
-          id='go'
+          id='goFlow'
+          className='medBig'
           disabled={!flow}
           form='flowSave'
           className='action clearGreen'>SAVE</button>

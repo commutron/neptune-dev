@@ -43,7 +43,7 @@ const WindowGlass = ({
           return(
             <div 
               key={entry+index} 
-              className={`cap grayT ${!dense ? 'invisible' : ''}`}
+              className={`cap blackT ${!dense ? 'invisible' : ''}`}
               >{entry}
             </div>
       )})}

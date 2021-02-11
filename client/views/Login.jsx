@@ -25,7 +25,7 @@ const Login = ({ login, uID, username, timeClock })=> {
         position="top-right"
         autoClose={10000}
         newestOnTop />
-      <div className='centre'>
+      <div className='centre darkTheme'>
         <AccountsUI
           login={login}
           uID={uID}

@@ -22,7 +22,6 @@ const UpstreamWrap = ({
         app={app}
         title='Parts Search'
         subLink={view}
-        invertColor={true}
         action={false}
       >
         <CompSearchData
@@ -41,7 +40,6 @@ const UpstreamWrap = ({
         app={app}
         title={Pref.shortfalls}
         subLink={view}
-        invertColor={true}
         action={false}
       >
         <ReportShort
@@ -59,7 +57,6 @@ const UpstreamWrap = ({
         app={app}
         title='Value Conversion'
         subLink={view}
-        invertColor={true}
         action={false}
       >
         <CompValuesSlide
@@ -76,7 +73,6 @@ const UpstreamWrap = ({
       app={app}
       title={Pref.upstream}
       subLink={false}
-      invertColor={false}
       tag='kit'
     >
       <UpstreamView

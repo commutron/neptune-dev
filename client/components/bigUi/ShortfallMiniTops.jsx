@@ -46,7 +46,7 @@ export const PartsShort = ({ shortfalls, items })=> {
   return(
     <NumStat
       num={partShort}
-      name='part numbers short'
+      name='partNums short'
       color='orangeT'
       size='bigger' />
   );

@@ -54,7 +54,7 @@ const BatchPanel = ({
   isDebug && console.log(JSON.stringify(flowData));
 
   return(
-    <div className='section' key={b.batch}>
+    <div className='section darkTheme' key={b.batch}>
       
       <Tabs
         tabs={

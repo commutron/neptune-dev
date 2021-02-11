@@ -1,43 +1,105 @@
 /* 
 @media (prefers-color-scheme: no-preference / light / dark) {
-  
-}
 
-Invert Rules */
-.invert {
+}
+*/
+.lightTheme {
   background-color: var(--clouds);
   color: black;
 }
 
-.invert .liteToolOn,
-.invert .liteToolOff { 
-	border-right-color: rgb(227,231,232);
-	border-left-color: rgb(227,231,232);
+.darkTheme {
+  background-color: var(--dark);
+  color: white;
+}
+.darkTheme .blackT {
+  color: var(--clouds);
+}
+.darkTheme .grayT {
+  color: var(--cloudstrans);
+}
+.darkTheme .liteToolOn,
+.darkTheme .liteToolOff { 
+	border-right-color: rgb(0,0,0);
+	border-left-color: rgb(0,0,0);
+}
+.darkTheme td,
+.darkTheme tr:last-child td,
+.darkTheme .mockTableCell,
+.darkTheme .mockTableRow {
+  border-color: white;
+  border-color: rgba(0,0,0,0.4);
 }
 
-.invert a:active {
-  border: 1px dotted black;
+.darkTheme .fltrs {
+	color: var(--black);
+  background-color: transparent;
 }
-.invert input[type='reset']:hover {
+.darkTheme .itmFltrBlock {
+  background-color: rgb(30,30,30);
+}
+
+
+.darkTheme .jump:hover, 
+.darkTheme .jump:focus, 
+.darkTheme .jump:active {
+  border-bottom-color: #3498db;
+}
+.darkTheme .jumpBar {
+  border-left-color: white;
+}
+.darkTheme .jumpBar:hover,
+.darkTheme .jumpBar:focus,
+.darkTheme .jumpBar:active {
+  border-bottom-color: #3498db;
+}
+.darkTheme .leapText:hover,
+.darkTheme .leapText:focus,
+.darkTheme .leapText:active {
+  color: var(--peterriver);
+  border-bottom-color: var(--peterriver);
+}
+.darkTheme .leapBar {
+	color: var(--white);
+	border-top-color: var(--silverfade);
+  border-bottom-color: var(--silverfade);
+}
+.darkTheme .leapBar:hover, 
+.darkTheme .leapBar:focus,
+.darkTheme .leapBar:active {
+  background-color: var(--silverfade);
+}
+
+
+/*
+.invert {
+  background-color: var(--dark);
   color: white;
-  background-color: black;
-  border-color: white;
+}
+
+
+
+.invert a:active {
+  border: 1px dotted white;
 }
 .invert input[type='reset'] {
-  color: black;
-  border-color: black;
-}
-.invert input[type='reset']:hover {
   color: white;
-  background-color: black;
   border-color: white;
 }
-.invert form:focus {
-  border-color: rgb(28,117,188);
+.invert input[type='reset']:hover {
+  color: black;
+  background-color: white;
+  border-color: black;
 }
+
+*/
+/*.invert form:focus {*/
+/*  border-color: rgb(28,117,188);*/
+/*}*/
+/*
 .invert input, .invert select, .invert textarea,
 .invert input {
-  border-bottom-color: black;
+  border-bottom-color: white;
 }
 .invert select {
   background-color: white;
@@ -55,23 +117,21 @@ Invert Rules */
 .invert select:focus + label {
   color: var(--neptuneColor);
 }
+.invert .listSortInput input,
+.invert .listSortInput select {
+  color: black;
+}
+
 .invert hr {
   opacity: 0.8; 
 }
-.invert td,
-.invert tr:last-child td,
-.invert .mockTableCell,
-.invert .mockTableRow {
-  border-color: black;
-  border-color: rgba(0,0,0,0.4);
-}
-.invert::-webkit-input-placeholder, /* Chrome/Opera/Safari */
-.invert::-moz-placeholder, /* Firefox 19+ */
-.invert:-moz-placeholder, /* Firefox 18- */
-.invert:-ms-input-placeholder { /* IE 10+ */
+
+.invert::-webkit-input-placeholder,
+.invert::-moz-placeholder,
+.invert:-moz-placeholder,
+.invert:-ms-input-placeholder { 
   opacity: 1;
 }
-
 .tenHeader.invert,
 .frontCenterTitle.invert,
 .auxRight.invert,
@@ -81,27 +141,29 @@ Invert Rules */
 }
 
 .invert .inlineLink {
-  color: black;
+  color: white;
 }
 
 .invert .open {
-  color: white;
+  color: black;
 }
 
 .invert .tagAddButton:hover {
-  color: white;
+  color: black;
 }
 .invert .moveLR,
-.invert .yellowBox > p,
+.invert .yellowBox > p, */
 /*.invert .actionIconText,*/
+/*
 .invert .cold:hover {
   color: black;
 }
 
 .invert .moveLR:hover, .invert .moveLR:active {
-  color: white;
-  background-color: black;
+  color: black;
+  background-color: white;
 }
+
 .invert .actionForm .redIn option,
 .invert .actionForm .redIn optgroup {
   color: black;
@@ -147,33 +209,26 @@ Invert Rules */
   background-color: var(--peterriver);
   color: white;
 }
+
 .invert .stickyBar {
-	color: var(--black);
-  background-color: transparent;
+	color: white;
+  background-color: rgba(30,30,30,0.5);
 }
-.invert .fltrs {
-	color: var(--black);
-  background-color: transparent;
-}
-.invert .itmFltrBlock {
-  background-color: var(--cloudstrans);
-}
+
+
 .invert details {
-  box-shadow: none;
+  box-shadow: 0 0 5px 0px rgba(0,0,0,0.75);
 }
 
 .invert .ct-label {
   color: black;
 }
 
-.invert .whiteT {
-  color: var(--blackT);
-}
+.invert .whiteT { color: var(--blackT); }
+.invert .blackT { color: white; }
 .invert .grayT {
-  color: var(--black);
+  color: var(--concrete);
 }
-/*
-.contrastList:nth-child(odd) {
-  background-color: rgba(50,50,50,0.3);
-}*/
+
+*/
 

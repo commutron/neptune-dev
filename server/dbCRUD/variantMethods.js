@@ -155,11 +155,15 @@ Meteor.methods({
     // push a tag
   pushVTag(vId, vKey, tag) {
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
-      WidgetDB.update({_id: vId, orgKey: Meteor.user().orgKey}, {
+      VariantDB.update({_id: vId, orgKey: Meteor.user().orgKey}, {
         $push : { 
           tags: tag
         }});
       BatchDB.update({orgKey: Meteor.user().orgKey, versionKey: vKey, live: true}, {
+        $push : { 
+          tags: tag
+        }});
+      XBatchDB.update({orgKey: Meteor.user().orgKey, versionKey: vKey, live: true}, {
         $push : { 
           tags: tag
         }});
@@ -170,7 +174,7 @@ Meteor.methods({
   // pull a tag
   pullVTag(vId, tag) {
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
-      WidgetDB.update({_id: vId, orgKey: Meteor.user().orgKey}, {
+      VariantDB.update({_id: vId, orgKey: Meteor.user().orgKey}, {
         $pull : {
           tags: tag
         }});

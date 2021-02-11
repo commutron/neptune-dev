@@ -24,7 +24,7 @@ const ReportShort = ({ app, user, isDebug })=> {
   }, []);
                      
   return(
-    <div className='space5x5 invert overscroll'>
+    <div className='space5x5 overscroll'>
 
       {!shortData ?
         <CalcSpin />

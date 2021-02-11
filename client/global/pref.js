@@ -103,7 +103,7 @@ class Pref {
     this.start = 'start date';
     this.end = 'fulfill date';
     this.timeBudget = 'time budget';
-    this.tag = 'flag';
+    this.tag = 'tag';
     
     this.upstream = 'upstream';
     this.kit = 'kit';

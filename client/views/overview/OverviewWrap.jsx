@@ -180,7 +180,7 @@ const OverviewWrap = ({
   const density = !dense ? '' : 'minifyed';
   
   return(
-    <div key={0} className={`overviewContainer ${light === true ? 'lightTheme invert' : ''}`}>
+    <div key={0} className={`overviewContainer ${light === true ? 'lightTheme' : 'darkTheme'}`}>
       <ToastContainer
         position="top-right"
         autoClose={2500}

@@ -131,7 +131,7 @@ export const ProWrap = ({
       
       <Fragment>
         
-        <div className='proPrime forceScrollStyle'>
+        <div className='proPrime forceScrollStyle darkTheme'>
           {React.cloneElement(children[0],
             { 
               tideKey: et,

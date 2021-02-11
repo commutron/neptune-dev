@@ -91,7 +91,7 @@ const PerformanceSlide = ({ app, user, users, traceDT, isDebug })=> {
   const niceP = weekEnd ? weekEnd.format('MMMM Do') : '';
 
   return(
-    <div className='space5x5 invert overscroll2x'>
+    <div className='space5x5 overscroll2x'>
       <div className='med vbreak comfort middle'>
         <WeekBrowse
           sendUp={(i)=>getBack(i)}

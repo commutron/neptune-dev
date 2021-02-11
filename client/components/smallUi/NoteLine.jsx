@@ -6,10 +6,11 @@ import UserNice from '/client/components/smallUi/UserNice.jsx';
 import NoteForm from '../forms/NoteForm';
 
 
-const NoteLine = ({ action, id, versionKey, entry, plain })=> {
+const NoteLine = ({ action, id, versionKey, entry, plain, lgIcon })=> {
 
   let dt = entry;
   const auth = Roles.userIsInRole(Meteor.userId(), ['edit', 'run']);
+  const dateStr = (date)=> moment(date).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm a"});
   
   const insertForm = !id || !auth ? null : 
           <NoteForm
@@ -17,7 +18,7 @@ const NoteLine = ({ action, id, versionKey, entry, plain })=> {
             id={id}
             versionKey={versionKey}
             content={dt.content}
-            small={false} />;
+            lgIcon={lgIcon} />;
   
   if(plain && !dt.content) {
     return (
@@ -33,7 +34,7 @@ const NoteLine = ({ action, id, versionKey, entry, plain })=> {
         {dt.content}
         <div className='footerBar'>
           {insertForm}
-          <i>{moment(dt.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm a"})} - <UserNice id={dt.who} /></i>
+          <i>{dateStr(dt.time)} - <UserNice id={dt.who} /></i>
         </div>
       </div>
     );
@@ -54,7 +55,7 @@ const NoteLine = ({ action, id, versionKey, entry, plain })=> {
       {dt.content}
       <div className='footerBar'>
         {insertForm}
-        <i>{moment(dt.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm a"})} - <UserNice id={dt.who} /></i>
+        <i>{dateStr(dt.time)} - <UserNice id={dt.who} /></i>
       </div>
     </fieldset>
   );

@@ -13,7 +13,7 @@ const ModelMedium = ({
     showChange( !show );
   };
     
-  let iSize = lgIcon ? ' fa-2x ' : ' fa-lg ';
+  let iSize = lgIcon ? 'fa-2x' : 'fa-lg';
   
   return(
     <Fragment>

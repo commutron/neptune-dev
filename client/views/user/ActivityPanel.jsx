@@ -43,7 +43,7 @@ const ActivityPanel = ({ app, brancheS, user, isDebug, users, traceDT })=> {
   const ancOptionS = app.ancillaryOption.sort();
     
   return(
-    <div className='invert overscroll'>
+    <div className='overscroll'>
       <div className='med vbreak comfort middle'>
         <WeekBrowse
           sendUp={(i)=>getBack(i)}

@@ -82,7 +82,7 @@ const BranchProgress = ({
                 <NumStat
                   num={isNaN(calNum) ? '' : `${calNum}%`}
                   name={niceName}
-                  color='whiteT'
+                  color='blackT'
                   size='big' />
             </div>
         )}})}

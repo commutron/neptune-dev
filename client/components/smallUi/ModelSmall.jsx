@@ -4,7 +4,7 @@ import { MenuItem } from 'react-contextmenu';
 
 const ModelSmall = ({ 
   button, title, menuItem,
-  icon, color, noText, lgIcon, 
+  icon, color, noText, inLine, lgIcon, 
   lock, children 
 })=> {
   
@@ -36,7 +36,7 @@ const ModelSmall = ({
           className='transparent'
           onClick={()=>reveal()}
           disabled={lock}>
-          <label className='navIcon actionIconWrap'>
+          <label className={`navIcon actionIconWrap ${inLine ? 'middle' : ''}`}>
             <i className={`fas ${icon} ${iSize} fa-fw ${color}`}></i>
             {!noText && <span className={'actionIconText ' + color}>{button}</span>}
           </label>

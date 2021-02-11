@@ -42,7 +42,6 @@ const ExploreView = ({
           subLink={subLink}
           action={false}
           base={true}
-          invertColor={true}
         >
           <div className='centre wide'>
             <Spin />

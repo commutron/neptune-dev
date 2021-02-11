@@ -30,11 +30,11 @@ input::-webkit-calendar-picker-indicator {
 }
 
 .moveLR {
-  color: white;
+  color: black;
 }
 .moveLR:hover, .moveLR:active {
-  color: black;
-  background-color: white;
+  color: white;
+  background-color: black;
 }
 
 .activeMark { border-left-color: var(--belizeHole); }
@@ -73,18 +73,15 @@ input::-webkit-calendar-picker-indicator {
 	box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2),
 	      inset 0 0 .1em .1em rgba(43,43,43,0.2);
 }
-.greenHover,
-.invert .greenHover {
+.greenHover {
 	color: var(--emerald);
 	background-color: transparent;
 }
-.greenHover:hover,
-.invert .greenHover:hover {
+.greenHover:hover {
   color: var(--clouds);
 	background-color: var(--emerald);
 }
-.greenHover:disabled:hover,
-.invert .greenHover:disabled:hover {
+.greenHover:disabled:hover {
   color: var(--emerald);
 	background-color: var(--clouds);
 }
@@ -103,28 +100,23 @@ input::-webkit-calendar-picker-indicator {
 
 .blue { background-color: var(--peterriver); }
 .blueT { color: var(--peterriver); }
-.blueHover ,
-.invert .blueHover {
+.blueHover {
 	color: var(--peterriver);
 	background-color: var(--clouds);
 }
-.blueHover:hover,
-.invert .blueHover:hover {
+.blueHover:hover {
   color: var(--clouds);
 	background-color: var(--peterriver);
 }
-.blueHover:disabled:hover,
-.invert .blueHover:disabled:hover {
+.blueHover:disabled:hover {
   color: var(--peterriver);
 	background-color: var(--clouds);
 }
-.onblueHover,
-.invert .onblueHover {
+.onblueHover {
   color: var(--clouds);
 	background-color: var(--peterriver);
 }
-.onblueHover:hover,
-.invert .onblueHover:hover {
+.onblueHover:hover {
   color: var(--peterriver);
 	background-color: var(--clouds);
 }
@@ -141,36 +133,30 @@ input::-webkit-calendar-picker-indicator {
 .darkRed { background-color: var(--pomegranate); }
 .redT { color: var(--alizarin); }
 .darkRedT { color: var(--pomegranate); }
-.redHover,
-.invert .redHover {
+.redHover {
 	color: var(--alizarin);
 	background-color: var(--clouds);
 }
-.redHover:hover,
-.invert .redHover:hover {
+.redHover:hover {
   color: var(--clouds);
 	background-color: var(--alizarin);
 }
-.redHover:disabled:hover,
-.invert .redHover:disabled:hover {
+.redHover:disabled:hover {
   color: var(--alizarin);
 	background-color: var(--clouds);
 }
 
 .orange { background-color: var(--carrot); }
 .orangeT { color: var(--carrot); }
-.orangeHover,
-.invert .orangeHover {
+.orangeHover {
 	color: var(--carrot);
 	background-color: var(--clouds);
 }
-.orangeHover:hover,
-.invert .orangeHover:hover {
+.orangeHover:hover {
   color: var(--clouds);
 	background-color: var(--carrot);
 }
-.orangeHover:disabled:hover,
-.invert .orangeHover:disabled:hover {
+.orangeHover:disabled:hover {
   color: var(--orange);
 	background-color: var(--clouds);
 }
@@ -232,12 +218,13 @@ input::-webkit-calendar-picker-indicator {
 	border: 3px solid var(--wetasphalt);
 }
 
-.grayT { color: var(--concrete); }
+.grayT { color: var(--black); }
 .darkgrayT { color: var(--asbestos); }
 
 
 .black { background-color: var(--black); }
 .blackblack { background-color: rgb(0,0,0); }
+.blackblackT { color: rgb(0,0,0); }
 .blackT { color: var(--blackT); }
 .blackFade { background-color: var(--blackFade); }
 .blackList:nth-child(odd) {
@@ -407,7 +394,7 @@ input::-webkit-calendar-picker-indicator {
   opacity: 0.9;
 }
 .cold:hover {
-  color: white;
+  color: black;
   transition: 0.4s cubic-bezier(0.2, 0.6, 0.3, 1.1);
 }
 
@@ -588,7 +575,7 @@ input::-webkit-calendar-picker-indicator {
   padding: 3px 5px 3px 5px;
   border: 0.5px solid white;
   border-radius: 1px 25px 25px 1px;
-  background-color: var(--belizeHole);
+  background-color: var(--peterriver);
   font-size: 1rem;
   color: white;
   word-break: keep-all;
@@ -607,24 +594,24 @@ input::-webkit-calendar-picker-indicator {
 }
 .tagFlag > button:hover {
   background-color: white;
-  color: var(--belizeHole);
+  color: var(--peterriver);
 }
 
 .tagAddButton {
   display: inline-block;
-  margin: 10px;
+  margin: 0 10px;
   padding: 2px;
   vertical-align: middle;
-  color: var(--belizeHole);
+  color: var(--peterriver);
   background-color: transparent;
   font-size: 1.75rem;
-  border-radius: 50%;
+  border-radius: 25%;
   transition: all 150ms ease-in-out;
   cursor: pointer;
 }
 .tagAddButton:hover {
-  color: black;
-  background-color: var(--belizeHole);
+  color: white;
+  background-color: var(--peterriver);
 }
 
 .tempTag { margin: 0 7px 0 0; }
@@ -650,7 +637,7 @@ input::-webkit-calendar-picker-indicator {
 .listSortInput input,
 .listSortInput select {
   background-color: transparent;
-  color: white;
+  /*color: white;*/
   text-align: center;
 }
 .listSortInput option {
@@ -737,6 +724,7 @@ input::-webkit-calendar-picker-indicator {
   width: 1%;
   border-color: black;
   border-color: rgba(0,0,0,0.2);
+  
 }
 .searchResult .mockTableRow {
   border-color: black;

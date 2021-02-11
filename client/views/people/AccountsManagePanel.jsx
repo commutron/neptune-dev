@@ -52,7 +52,7 @@ const AccountsManagePanel = ({ app, users, traceDT, brancheS, isDebug })=> {
       {usersSort.map( (entry, index)=>{
         if(isAdmin || isPeopleSuper) {
           return(
-            <div key={index+entry._id} className='invert'>
+            <div key={index+entry._id}>
               <Tabs
                 tabs={[
                   <b><i className='far fa-clock fa-fw'></i>   Time</b>,

@@ -1,11 +1,11 @@
 import React from 'react';
-// import Pref from '/client/global/pref.js';
+import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 import ModelMedium from '../smallUi/ModelMedium.jsx';
 
 
-const NotePopup = ({ action, id, versionKey, content, small })=> {
+const NotePopup = ({ action, id, versionKey, content, lgIcon })=> {
   
   const unlock = !versionKey ? 
                  !Roles.userIsInRole(Meteor.userId(), 'run') : 
@@ -17,7 +17,7 @@ const NotePopup = ({ action, id, versionKey, content, small })=> {
       title={action + ' notes'}
       color='blueT'
       icon='fa-edit'
-      smIcon={small}
+      lgIcon={lgIcon}
       lock={unlock}>
       <NoteForm 
         action={action}
@@ -38,7 +38,7 @@ const NoteForm = ({ action, id, versionKey, content, selfclose })=> {
     const content = this.mess.value.trim();
     
     switch(action) {
-      case 'xBatch':
+      case Pref.xBatch:
         Meteor.call('setBatchNoteX', id, content, (error, reply)=>{
           error && console.log(error);
           if(reply) {
@@ -49,7 +49,7 @@ const NoteForm = ({ action, id, versionKey, content, selfclose })=> {
           }
         });
         break;
-      case 'batch':
+      case Pref.batch:
         Meteor.call('setBatchNote', id, content, (error, reply)=>{
           error && console.log(error);
           if(reply) {

@@ -54,7 +54,10 @@ const BatchPanelX = ({
         <InfoTab
           user={user}
           b={batchData}
+          hasSeries={!seriesData ? false : true}
+          widgetData={widgetData}
           riverTitle={flowData.riverTitle}
+          srange={flowData.srange}
           flowCounts={flowData.flowCounts}
           fallCounts={fallData}
           released={released}
@@ -67,22 +70,12 @@ const BatchPanelX = ({
           isDebug={isDebug}
         />
       
-        <div className='oneTwoThreeContainer space'>
-          <div className='oneThirdContent min200'>
-            
-          </div>
-        
-          <div className='twoThirdsContent'>
-            <WaterfallTimeline
-              wfCounts={fallData.fallProg}
-              waterfall={b.waterfall}
-              quantity={b.quantity}
-              app={app} />
-          </div>
-          
-          <div className='threeThirdsContent wide'>
-            
-          </div>
+        <div className='space autoSelf max875'>
+          <WaterfallTimeline
+            wfCounts={fallData.fallProg}
+            waterfall={b.waterfall}
+            quantity={b.quantity}
+            app={app} />
         </div>
         
         <TimeTab 

@@ -139,6 +139,10 @@ const DataViewOps = ({
     let ncTypesComboFlat = [];
     let flowCounts = false;
     
+    const itemS = seriesData && seriesData.items.sort( (x,y)=> x.serial - y.serial);
+    const srange = itemS && itemS.length > 0 ?
+                  `${itemS[0].serial} - ${itemS[itemS.length-1].serial}` : null;
+                  
     const getRiverFirst = (w, bx)=> {
       return new Promise(function(resolve) {
         if( w && bx ) {
@@ -164,7 +168,7 @@ const DataViewOps = ({
       
 
     return {
-      riverTitle, riverFlow,
+      riverTitle, riverFlow, srange,
       ncTypesComboFlat, flowCounts
     };
   }
@@ -193,7 +197,6 @@ const DataViewOps = ({
         subLink={subLink}
         action={false}
         base={true}
-        invertColor={true}
       >
         <ExploreLanding
           batchData={allBatch}
@@ -221,7 +224,6 @@ const DataViewOps = ({
         subLink={subLink}
         action={false}
         base={true}
-        invertColor={true}
       >
         <BuildHistory
           allBatch={allBatch}
@@ -248,7 +250,6 @@ const DataViewOps = ({
         subLink={subLink}
         action={false}
         base={true}
-        invertColor={true}
       >
         <ReportsWrap
           allBatch={allBatch}
@@ -278,7 +279,6 @@ const DataViewOps = ({
           subLink={subLink}
           action='newGroup'
           base={true}
-          invertColor={true}
         >
           <AllGroups
             batchData={allBatch}
@@ -303,7 +303,6 @@ const DataViewOps = ({
     //       subLink={subLink}
     //       action={false}
     //       base={true}
-    //       invertColor={true}
     //     >
     //       <AllBatches
     //         batchData={allBatch}
@@ -332,7 +331,6 @@ const DataViewOps = ({
           action={false}
           beta={true}
           base={true}
-          invertColor={true}
         >
           <TestFailPanel 
             batchData={allBatch} 
@@ -352,7 +350,6 @@ const DataViewOps = ({
           subLink={subLink}
           action={false}
           base={true}
-          invertColor={true}
         >
           <ScrapPanel 
             batchData={allBatch} 
@@ -402,7 +399,7 @@ const DataViewOps = ({
             title='Item'
             subLink={subLink}
             action='item'
-            //invertColor={true}
+            darkTheme={true}
           >
             <ItemPanel
               batchData={hotBatch}
@@ -466,7 +463,6 @@ const DataViewOps = ({
             title='Item'
             subLink={subLink}
             action='xitem'
-            invertColor={true}
           >
             <ItemPanelX
               batchData={hotXBatch}
@@ -536,7 +532,7 @@ const DataViewOps = ({
           title='Batch'
           subLink={subLink}
           action='batch'
-          //invertColor={true}
+          darkTheme={true}
         >
           <BatchPanel
             batchData={hotBatch}
@@ -579,7 +575,6 @@ const DataViewOps = ({
           title='Batch+'
           subLink={subLink}
           action='xbatch'
-          invertColor={true}
         >
           <BatchPanelX
             batchData={hotXBatch}
@@ -630,7 +625,6 @@ const DataViewOps = ({
             title='Variant'
             subLink={subLink}
             action='variant'
-            invertColor={true}
           >
             <VariantPanel
               variantData={variant}
@@ -671,7 +665,6 @@ const DataViewOps = ({
           title='Widget'
           subLink={subLink}
           action='widget'
-          invertColor={true}
         >
           <WidgetPanel
             widgetData={widget}

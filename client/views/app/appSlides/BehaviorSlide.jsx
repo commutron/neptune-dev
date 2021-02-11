@@ -52,7 +52,7 @@ const BehaviorSlide = ({app})=> {
       
       
       <div>
-        <h2><i className='fas fa-flag-checkered fa-fw'></i> Finish Step</h2>
+        <h2><i className='fas fa-flag-checkered fa-fw'></i> Default Finish Step</h2>
         <i>the step that marks a {Pref.item} as finished</i>
         <label htmlFor={rndmKey2 + 'dnTrk'}><br />
           <form onSubmit={(e)=>endTrack(e)} className='inlineForm'>

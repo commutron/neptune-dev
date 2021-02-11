@@ -8,7 +8,7 @@ Accounts.config({
 });
 
 Accounts.validateLoginAttempt(function(attempt) {
-  if(!Roles.userIsInRole(attempt.user._id, 'active')) {
+  if(!attempt.user || !Roles.userIsInRole(attempt.user._id, 'active')) {
     attempt.allowed = false;
     throw new Meteor.Error(403, "User account is inactive");
   }

@@ -32,7 +32,7 @@
 
 .overviewToolbar,
 .downstreamToolbar {
-  background-color: rgb(50,50,50);
+  background-color: var(--silverfade);
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
@@ -229,8 +229,8 @@
 }
 
 .overGridRowScroll > div,
-.downRowScroll > div,
-.statusBlock {
+.downRowScroll > div /*,
+.statusBlock*/ {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -349,11 +349,11 @@
   grid-area: downOrdersS;
 }
 
-.gridViewTools input[type=range] {
+.darkTheme .gridViewTools input[type=range] {
   filter: grayscale(1) invert(1) brightness(0.9);
   overflow: hidden;
 }
-.invert .gridViewTools input[type=range] {
+.lightTheme .gridViewTools input[type=range] {
   filter: grayscale(0.95) brightness(1.4);
   overflow: hidden;
 }
@@ -412,9 +412,9 @@
 .minifyed .downOrdersScroll .big { 
   font-size: 1.5vh; }
 
-.lightTheme .overviewToolbar,
-.lightTheme .downstreamToolbar {
-  background-color: var(--silverfade);
+.darkTheme .overviewToolbar,
+.darkTheme .downstreamToolbar {
+  background-color: rgb(50,50,50);
 }
 
 .lightTheme .tenHeader,

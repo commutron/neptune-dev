@@ -3,10 +3,12 @@ import Pref from '/client/global/pref.js';
 
 import './style.css';
 
-const FlowBuilder = ({ app, options, end, baseline, onClick })=> {
+const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
 
   const [ branchSelect, branchSet ] = useState(false);
   const [ steps, stepsSet ] = useState( [] );
+  
+  const [ endState, endSet ] = useState( defaultEnd );
   
   const [ toggle, toggleChange ] = useState( false );
   
@@ -29,11 +31,18 @@ const FlowBuilder = ({ app, options, end, baseline, onClick })=> {
     // steps set from state
     let list = new Set( steps );
     // add the finish step back on the end
-    list.add(end);
+    list.add(endState);
     // update state
     stepsSet( [...list] );
     // Unlock save button
     onClick([...list]);
+  }
+  
+  function changeEnding(e) {
+    const endVal = this.endTrkStep.value;
+    let endObj = defaultEnd;
+    endObj.step = endVal;
+    endSet(endObj);
   }
 
   function addStep(e) {
@@ -47,7 +56,7 @@ const FlowBuilder = ({ app, options, end, baseline, onClick })=> {
     step['how'] = hw;
     
     // take off the end finish step
-    list.delete(end);
+    list.delete(endState);
     
     // add step to list
     list.add(step);
@@ -65,7 +74,7 @@ const FlowBuilder = ({ app, options, end, baseline, onClick })=> {
     const curr = new Set( steps );
     const nope = entry;
     // take of the end finish step
-    curr.delete(end);
+    curr.delete(endState);
     // take off selected step
     curr.delete(nope);
     // update state
@@ -83,7 +92,7 @@ const FlowBuilder = ({ app, options, end, baseline, onClick })=> {
       newList.splice(indx - 1, 0, obj);
     }
     stepsSet( newList );
-    toggleChange(!toggle); // rerender
+    toggleChange(!toggle);
     // lock save button
     onClick(false);
   }
@@ -97,7 +106,7 @@ const FlowBuilder = ({ app, options, end, baseline, onClick })=> {
       newList.splice(indx + 1, 0, obj);
     }
     stepsSet( newList );
-    toggleChange(!toggle); // rerender
+    toggleChange(!toggle);
     // lock save button
     onClick(false);
   }
@@ -113,24 +122,21 @@ const FlowBuilder = ({ app, options, end, baseline, onClick })=> {
                       .includes( 'f1n15h1t3m5t3p' ) )
                         .length > 0;
   
-  let optionsSort = options.sort((t1, t2)=> {
-                    if (t1.step < t2.step) { return -1 }
-                    if (t1.step > t2.step) { return 1 }
-                    return 0;
-                  });
+  let optionsSort = options.sort((t1, t2)=>
+               t1.step < t2.step ? -1 : t1.step > t2.step ? 1 : 0 );
+               
   const branchedOps = branchSelect === 'other' ?
     optionsSort.filter( x => !x.branchKey || x.branchKey === '') :
     optionsSort.filter( x => x.branchKey === branchSelect);
 
   return (
-    <div className=''>
-      <div className='space'>
+    <div>
+      <div className='space1v'>
         <p>
-          <label htmlFor='phasefltr'>{Pref.Branch}<br />
+          <label htmlFor='phasefltr' className='cap'>{Pref.branch}<br />
             <select 
               id='phasefltr' 
               onChange={(e)=>branchSet( e.target.value )} 
-              className='cap'
               required>
               <option value='other'>No Branch</option>
               {branchesSort.map( (entry, index)=>{
@@ -168,13 +174,13 @@ const FlowBuilder = ({ app, options, end, baseline, onClick })=> {
                 className='dbbleWide' /> 
               <button
                 type='submit' 
-                className='smallAction clearWhite'
+                className='smallAction clearBlack'
               >Add</button>
             </label>
           </p>
         </form>
       </div>
-      <div className='wide'>
+      <div className='wide space1v'>
         <div className='stepList'>
           {steps.map( (entry, index)=> {
           const branch = app.branches.find( x => x.brKey === entry.branchKey );
@@ -222,21 +228,33 @@ const FlowBuilder = ({ app, options, end, baseline, onClick })=> {
             </div>
           )})}
         </div>
-        <br />
-        <button
-          className='smallAction clearWhite up'
-          onClick={(e)=>clear(e)}
-          disabled={steps.length === 0}>clear</button>
-        <button
-          // value={steps}
-          className='smallAction clearGreen up'
-          disabled={false}
-          onClick={(e)=>sendUp(e)}>Set {Pref.flow}</button>
-        <br />
-        <p>
-          The Finish Step is added and reordering is locked once the process flow is set.
-          Remove the Finish Step to continue editing.
-        </p>
+        <div className='comfort vmarginhalf'>
+          <button
+            className='smallAction clearBlack up'
+            onClick={(e)=>clear(e)}
+            disabled={steps.length === 0}
+          >clear all</button>
+          <span>
+            <select
+              id='endTrkStep'
+              className='miniIn12'
+              defaultValue={defaultEnd.step}
+              onChange={(e)=>changeEnding(e)}
+              required
+            >
+              <option value='finish'>Finish</option>
+              <option value='pack'>Pack</option>
+              <option value='pack-ship'>Pack & Ship</option>
+            </select>
+            <button
+              className='smallAction clearGreen up'
+              disabled={false}
+              onClick={(e)=>sendUp(e)}>Finish {Pref.flow}</button>
+          </span>
+        </div>
+        <small>
+          Adding the Finish Step locks reordering. Remove the Finish Step to continue editing.
+        </small>
       </div>
     </div>
   );

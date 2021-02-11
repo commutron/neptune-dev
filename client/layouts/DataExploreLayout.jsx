@@ -25,7 +25,7 @@ export const TraverseWrap = ({
   action,
   base,
   beta,
-  invertColor,
+  darkTheme,
   children
 })=>	{
   
@@ -47,7 +47,7 @@ export const TraverseWrap = ({
     FlowRouter.go('/production');
   }
 
-  const invert = invertColor ? 'invert' : '';
+  const dark = darkTheme ? 'darkTheme' : '';
   const isRO = Roles.userIsInRole(Meteor.userId(), 'readOnly');
   
   const goFunc = itemData ? ()=>goPro(itemData.serial) :
@@ -97,7 +97,7 @@ export const TraverseWrap = ({
         <ExTaskBar subLink={subLink} />
       </aside>
       
-      <div className={'contentAreaEx ' + invert}>
+      <div className={'contentAreaEx ' + dark}>
         <div 
           className={
             base ? 'baseContainer' :

@@ -24,6 +24,7 @@
   grid-area: contentArea;
   overflow-y: auto;
   box-shadow: var(--dropShadowLeft1);
+  background-color: var(--clouds);
 }
 
 .baseContainer,
@@ -52,7 +53,7 @@
 }
 
 .traverseContainer {
-  grid-template-columns: auto 16vmax;
+  grid-template-columns: auto 24vmin;
   grid-template-rows: calc(92vh - 48px) 48px;
   grid-template-areas: 
     'traverseContent traverseList'
@@ -76,7 +77,7 @@
   display: flex;
   align-items: center;
   /*justify-content: space-evenly;*/
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 .actionBarEx > div {
   display: flex;
@@ -106,10 +107,10 @@
 .vFrameContainer {
   display: grid;
   grid-template-rows: auto auto;
-  grid-column-gap: 5vw;
-  grid-row-gap: 3vh;
+  grid-column-gap: 2vw;
+  grid-row-gap: 2vh;
   justify-items: stretch;
-  padding: 3vh 3vw;
+  padding: 2vh 2vw;
 }
 .oneTwoThreeContainer {
   grid-template-columns: 1fr 1fr 1fr;
@@ -252,7 +253,7 @@
   position: -webkit-sticky;
   position: sticky;
   top: 0;
-  background-color: rgb(30,30,30);
+  background-color: var(--cloudstrans);
 }
 .itmFltrBlock > div {
   max-width: 100%;

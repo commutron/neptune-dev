@@ -49,7 +49,7 @@ const BatchTopStatus = ({
                   weekDaysRemain === 1 ?
                     'Workday Remaining' :
                     'Workdays Remaining'}
-          color={weekDaysRemain < 0 ? 'orangeT' : 'whiteT'}
+          color={weekDaysRemain < 0 ? 'orangeT' : 'blackT'}
           size='big' />
       </div>
         
@@ -73,7 +73,7 @@ const BatchTopStatus = ({
           size=''
           onIcon='fas fa-check-circle fa-2x greenT' 
           midIcon='far fa-check-circle fa-2x greenT'
-          offIcon='far fa-question-circle fa-2x whiteT' />
+          offIcon='far fa-question-circle fa-2x blackT' />
       </div>}
       
     </Fragment>

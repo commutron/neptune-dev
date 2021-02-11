@@ -99,7 +99,7 @@ export const PrioritySquare = ({
       );
     }
     
-    const baseClass = 'blackT smCap big';
+    const baseClass = 'blackblackT smCap big';
     const extraClass = showExtra ? 'centre' : '';
     
     const pScl = !app.priorityScale ? {
@@ -148,7 +148,7 @@ export const PrioritySquare = ({
         <NumStat
           num={pLabel}
           name={showLess ? '' : subLabel}
-          color='blackT'
+          color='blackblackT'
           size='big' />
         {showExtra && !showLess ? 
           <dl className='med clean noindent espace'>

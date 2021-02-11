@@ -3,13 +3,15 @@ import React, { useState } from 'react';
 import Pref from '/client/global/pref.js';
 import './style.css';
 
+import RiverSelectX from '/client/components/forms/RiverSelectX';
+
 import ToggleBar from '/client/components/bigUi/ToolBar/ToggleBar';
 import MiniStack from '/client/components/charts/MiniScales/MiniStack.jsx';
 import NumBox from '/client/components/tinyUi/NumBox.jsx';
 
 
 const StepsProgressX  = ({ 
-  quantity, flowCounts, fallCounts,
+  b, widgetData, hasSeries, flowCounts, fallCounts,
   riverTitle, brancheS, truncate 
 })=> {
   
@@ -39,23 +41,23 @@ const StepsProgressX  = ({
         <div className='centreRow'>
           <label>
             <NumBox
-              num={quantity}
+              num={b.quantity}
               name='Total Quantity'
-              color='whiteT' />
+              color='blackT' />
           </label>
             
           <label>
             <NumBox
               num={totalI}
               name={Pref.itemSerial + 's'}
-              color='whiteT' />
+              color='blackT' />
           </label>
           
           <label>
             <NumBox
               num={totalIU}
               name={`${Pref.itemSerial} ${Pref.unit}s`}
-              color='whiteT' />
+              color='blackT' />
           </label>
           
           {scrapCount > 0 ? 
@@ -70,7 +72,15 @@ const StepsProgressX  = ({
       
       <div className={`${!truncate ? 'wellSpacedLine bottomLine' : ''} doJustWeen cap`}>
         {!truncate &&
-          <i>{Pref.buildFlow}: <b>{riverTitle || ''}</b></i>
+          <span>
+            <RiverSelectX
+              bID={b._id}
+              widget={widgetData}
+              river={b.river}
+              lock={!hasSeries || b.completed === true}
+              inLine={true} />
+            <i><b>{riverTitle || ''}</b></i>
+          </span>
         }
         {unitsExist &&
           <ToggleBar
@@ -93,7 +103,7 @@ const StepsProgressX  = ({
               branch={branch}
               bRvr={bRvr}
               bWfl={bWfl}
-              quantity={quantity}
+              quantity={b.quantity}
               calcItem={calcItem}
               totalI={totalI}
               totalIU={totalIU}
@@ -109,7 +119,7 @@ const StepsProgressX  = ({
           branch={{branch:"Other"}}
           bRvr={oRvr}
           bWfl={oWfl}
-          quantity={quantity}
+          quantity={b.quantity}
           calcItem={calcItem}
           totalI={totalI}
           totalIU={totalIU}

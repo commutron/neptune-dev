@@ -14,7 +14,7 @@ import BlockList from '/client/components/bigUi/BlockList.jsx';
 const BatchCardX = ({
   batchData, bOpen, bClosed, //seriesData, itemData
   user, app, brancheS, plainBrancheS, ancOptionS,
-  floorReleased, flowCounts, fallCounts,
+  floorReleased, srange, flowCounts, fallCounts,
   tideKey, tideFloodGate, 
   expand, flowwater, fallwater
 })=> {
@@ -31,6 +31,7 @@ const BatchCardX = ({
   const insertMiniInfo = 
           <MiniInfo
             batchData={batchData}
+            srange={srange}
             flowCounts={flowCounts}
             bClosed={bClosed}
             app={app} />;
@@ -95,7 +96,7 @@ const BatchCardX = ({
 
 export default BatchCardX;
 
-const MiniInfo = ({ batchData, flowCounts, bClosed, app })=> (
+const MiniInfo = ({ batchData, srange, flowCounts, bClosed, app })=> (
   <div className='space1v cap'>
     
     {bClosed &&
@@ -113,18 +114,21 @@ const MiniInfo = ({ batchData, flowCounts, bClosed, app })=> (
     
     <p>Total Quantity: <b className='numfont'>{batchData.quantity}</b></p>
     
-    <p>Serialized Items: <b className='numfont'>{flowCounts.liveItems}</b></p>
+    {srange && <p>Serialized Items: <b className='numfont'>{flowCounts.liveItems}</b></p>}
+    
+    {srange && <p>Serial Range: <b className='numFont'>{srange}</b></p>}
+    
     {flowCounts.scrapCount > 0 &&
       <p>Scrapped Items: <b className='numfont redT'>{flowCounts.scrapCount}</b></p>}
       
     <hr />
     <TagsModule
-      action='xBatch'
+      action={Pref.xBatch}
       id={batchData._id}
       tags={batchData.tags}
       tagOps={app.tagOption} />
     <NoteLine 
-      action='xBatch'
+      action={Pref.xBatch}
       id={batchData._id}
       entry={batchData.notes} />
     <BlockList 

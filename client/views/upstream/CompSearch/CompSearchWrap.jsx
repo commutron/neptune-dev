@@ -83,10 +83,10 @@ const CompSearchWrap = ({ plCache, user, app })=> {
   results && results.forEach( y => batchCount += y.btchs.length );
   
   return(
-    <div className='simpleContent invert starfishAccents'>
+    <div className='simpleContent starfishAccents'>
     
-      <div className='wide rowWrapR'>
-        <div className='invert'>
+      <div className='wide rowWrapR lightTheme'>
+        <div>
           <button
             type='button'
             title='Download All Parts'
@@ -95,7 +95,7 @@ const CompSearchWrap = ({ plCache, user, app })=> {
           <i className='fas fa-download'></i>
           </button>
         </div>
-        <div className='invert'>
+        <div>
           <button
             id='cachePLupdate'
             type='button'

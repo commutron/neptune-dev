@@ -93,7 +93,7 @@ const DashSlide = ({ app, user, users, traceDT, brancheS, isDebug })=> {
   }, [brList]);
 
   return(
-    <div className='space5x5 invert overscroll'>
+    <div className='space5x5 overscroll'>
       
       <p className='rightText nomargin'>
         <button

@@ -175,6 +175,7 @@ const XDoProCard = ({
             plainBrancheS={plainBrancheS}
             ancOptionS={ancOptionS}
             floorReleased={fallData.floorRel}
+            srange={flowData.srange}
             flowCounts={flowData.flowCounts}
             fallCounts={fallData.fallCounts}
             tideKey={tideKey}

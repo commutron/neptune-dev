@@ -29,7 +29,7 @@ const UserDMForm = ({ userID })=> {
         <textarea id='mesSage'></textarea>
         <br />
         <button
-          className='action clearBlue invert'
+          className='action clearBlue'
           onClick={(e)=>sendAdirect(e)}
         >Send Direct Message to THIS user</button>
       </form>

@@ -12,7 +12,7 @@ const InboxPanel = ({ orb, bolt, app, user, users })=> {
   });
   
   return (
-    <div className='invert'>
+    <div>
       <p className='vspace'></p>
       <table className=' wide cap'>
         {orderedInbox.map( (entry, index)=>{

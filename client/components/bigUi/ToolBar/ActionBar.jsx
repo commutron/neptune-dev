@@ -13,7 +13,7 @@ import BatchXCreate from '/client/components/forms/Batch/BatchXCreate';
 import BatchXEdit from '/client/components/forms/Batch/BatchXEdit';
 import RemoveXBatch from '/client/components/forms/Batch/RemoveXBatch';
 import ItemSerialsWrapX from '/client/components/forms/ItemSerialsX/ItemSerialsWrapX';
-import RiverSelectX from '/client/components/forms/RiverSelectX';
+// import RiverSelectX from '/client/components/forms/RiverSelectX';
 
 import UnitSetX from '/client/components/forms/ItemSerialsX/UnitSetX';
 import PanelBreakX from '/client/components/forms/ItemSerialsX/PanelBreakX';
@@ -205,13 +205,13 @@ const ActionBar = ({
             waterfall={batchData.waterfall}
             app={app}
             lock={batchData.completed === true} />
-            
+          {/*
           <RiverSelectX
             bID={batchData._id}
             widget={widgetData}
             river={batchData.river}
             lock={!seriesData || batchData.completed === true} />
-
+          */}
           <ActionLink
             address={'/print/generallabel/' + 
                       batchData.batch + 

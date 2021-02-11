@@ -196,7 +196,7 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
     const describe = whatIsBatchX(batchNum)[0].join(' ');
     const salesOrder = gf.salesOrder;
     const itemQuantity = gf.quantity;
-    const ncQuantity = gf.nonconformaces.filter( n => !n.trash ).length;
+    const ncQuantity = 0; //gf.nonconformaces.filter( n => !n.trash ).length;
     const ncRate = ( ncQuantity / itemQuantity ).toFixed(1, 10);
     const endAlter = gf.altered.filter( a => a.changeKey === 'salesEnd' ).length;
     

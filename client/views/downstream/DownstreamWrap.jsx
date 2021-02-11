@@ -23,7 +23,6 @@ const DownstreamWrap = ({
         app={app}
         title='Completed Report'
         subLink={view}
-        invertColor={true}
         action={false}
         navBar='down'
       >
@@ -40,7 +39,6 @@ const DownstreamWrap = ({
         app={app}
         title='Daily Completed'
         subLink={view}
-        invertColor={true}
         action={false}
         navBar='down'
       >
@@ -60,7 +58,6 @@ const DownstreamWrap = ({
         app={app}
         title='Trends'
         subLink={view}
-        invertColor={true}
         action={false}
         navBar='down'
       >
@@ -80,7 +77,6 @@ const DownstreamWrap = ({
         app={app}
         title='Future Outlook'
         subLink={view}
-        invertColor={false}
         action={false}
         navBar='down'
       >
@@ -100,7 +96,6 @@ const DownstreamWrap = ({
       app={app}
       title={Pref.downstream}
       subLink={false}
-      invertColor={false}
       tag='ship'
       navBar='down'
     >

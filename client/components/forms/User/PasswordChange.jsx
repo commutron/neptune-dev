@@ -27,7 +27,7 @@ const PasswordChange = (props)=> {
 	};
 	
 	return(
-		<div className='invert'>
+		<div>
       <form 
         onSubmit={(e)=>doChange(e)}>
         <p>

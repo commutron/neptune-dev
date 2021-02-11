@@ -7,7 +7,7 @@ import ModelSmall from '../smallUi/ModelSmall';
 const RiverSelectX = ({ 
   bID, widget, river, 
   //riverAlt,
-  lock, noText
+  lock, noText, inLine
 })=> (
   <ModelSmall
     button={Pref.flow}
@@ -15,7 +15,8 @@ const RiverSelectX = ({
     color='blueT'
     icon='fa-project-diagram'
     lock={!Roles.userIsInRole(Meteor.userId(), 'run') || lock}
-    noText={noText}>
+    noText={noText}
+    inLine={inLine} >
     <RiverSelectForm
       bID={bID}
       widget={widget}

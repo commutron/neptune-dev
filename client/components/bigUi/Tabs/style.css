@@ -5,46 +5,20 @@
   min-height: 2.5rem;
   line-height: 2em;
   font-size: medium;
-  color: white;
+  color: black;
   letter-spacing: 1px;
 	text-transform: capitalize;
 	overflow: hidden;
 }
-.invert .tabOn, .invert .tabOff {
-  color: black;
+.darkTheme .tabOn, .darkTheme .tabOff {
+  color: white;
 }
-/*
-.tabOn {
-	background-color: var(--wetasphalt);
-  border-bottom-color: var(--silver);
-}
-.invert .tabOn {
-	background-color: var(--concretefade);
-  border-bottom-color: var(--asbestos);
-}
-
-.tabOff {
-	background-color: var(--midnightblue);
-	border-bottom-color: transparent;
-}
-.invert .tabOff {
-	background-color: var(--asbestosfade);
-	border-bottom-color: transparent;
-}
-.tabOff:hover {
-	background-color: var(--wetasphalt);
-}
-.invert .tabOff:hover {
-	background-color: var(--concretefade);
-}
-*/
 
 .tabOn {
 	background-color: var(--navIndicatorB);
   /*border-bottom-color: var(--silver);*/
   box-shadow: var(--navIndicatorOut);
 }
-
 
 .tabOff {
 	background-color: var(--navIndicatorA);

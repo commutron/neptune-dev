@@ -15,12 +15,12 @@ const TagsModule = ({ action, id, vKey, tags, tagOps })=>	{
       null;
     }else{
       switch(action) {
-      case 'xBatch':
+      case Pref.xBatch:
         Meteor.call('pushBTagX', id, cleanTag, (err)=>{
           err && console.log(err);
         });
         break;
-      case 'batch':
+      case Pref.batch:
         Meteor.call('pushBTag', id, cleanTag, (err)=>{
           err && console.log(err);
         });
@@ -30,18 +30,12 @@ const TagsModule = ({ action, id, vKey, tags, tagOps })=>	{
           err && console.log(err);
         });
         break;
-      case 'version':
-        Meteor.call('pushWTag', id, vKey, cleanTag, (err)=>{
-          err && console.log(err);
-        });
-        break;
       case 'group':
         Meteor.call('pushGTag', id, cleanTag, (err)=>{
           err && console.log(err);
         });
         break;
       default:
-        toast.error('Server Error');
         console.log('this component is not wired properly');
       }
     }
@@ -53,12 +47,12 @@ const TagsModule = ({ action, id, vKey, tags, tagOps })=>	{
       null;
     }else{
       switch(action) {
-      case 'xBatch':
+      case Pref.xBatch:
         Meteor.call('pullBTagX', id, tag, (err)=>{
           err && console.log(err);
         });
         break;
-      case 'batch':
+      case Pref.batch:
         Meteor.call('pullBTag', id, tag, (err)=>{
           err && console.log(err);
         });
@@ -68,18 +62,12 @@ const TagsModule = ({ action, id, vKey, tags, tagOps })=>	{
           err && console.log(err);
         });
         break;
-      case 'version':
-        Meteor.call('pullWTag', id, vKey, tag, (err)=>{
-          err && console.log(err);
-        });
-        break;
       case 'group':
         Meteor.call('pullGTag', id, tag, (err)=>{
           err && console.log(err);
         });
         break;
       default:
-        toast.error('Server Error');
         console.log('this component is not wired properly');
       }
     }
@@ -103,7 +91,7 @@ const TagsModule = ({ action, id, vKey, tags, tagOps })=>	{
           id={id+'tagnew'}
           holdToDisplay={1}
           renderTag='span'>
-          <i className='fas fa-plus-circle tagAddButton'></i>
+          <i className='fas fa-tags tagAddButton'></i>
         </ContextMenuTrigger>
       :null}
       

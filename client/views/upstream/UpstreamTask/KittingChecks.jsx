@@ -34,7 +34,7 @@ const KittingChecks = ({
             return(
               <div title='N/A' key={'skipBRK'+br.brKey+ix}>
               <div className='infoSquareOuter noCopy'>
-                <i className='fas fa-minus fa-2x fa-fw grayT fade'></i>
+                <i className='fas fa-minus fa-2x fa-fw darkgrayT fade'></i>
                 <br />
                 <i className='label infoSquareLabel'></i>
               </div>
@@ -65,7 +65,7 @@ const KittingChecks = ({
                   size=''
                   onIcon='fas fa-check-square fa-2x greenT'
                   midIcon='far fa-minus-square fa-2x yellowT'
-                  offIcon='far fa-check-square fa-2x grayT' 
+                  offIcon='far fa-check-square fa-2x darkgrayT' 
                 />
               </ReleaseWrapper>
             );
@@ -76,7 +76,7 @@ const KittingChecks = ({
         {isX /* && b.serialize */ ?
           <div title='N/A'>
             <div className='infoSquareOuter noCopy'>
-              <i className='fas fa-minus fa-2x fa-fw grayT fade'></i>
+              <i className='fas fa-minus fa-2x fa-fw darkgrayT fade'></i>
               <br />
               <i className='label infoSquareLabel'></i>
             </div>
@@ -103,7 +103,7 @@ const KittingChecks = ({
               size=''
               onIcon='fas fa-check-square fa-2x greenT'
               midIcon='far fa-minus-square fa-2x yellowT'
-              offIcon='far fa-check-square fa-2x grayT' 
+              offIcon='far fa-check-square fa-2x darkgrayT' 
             />
           </ReleaseWrapper>
         }
@@ -128,7 +128,7 @@ const KittingChecks = ({
             size=''
             onIcon='fas fa-flag fa-2x greenT'
             midIcon='fas fa-flag fa-2x yellowT'
-            offIcon='far fa-flag fa-2x grayT' />
+            offIcon='far fa-flag fa-2x darkgrayT' />
         </ReleaseWrapper>
         
       </Fragment>
