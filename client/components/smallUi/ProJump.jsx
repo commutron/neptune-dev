@@ -17,7 +17,7 @@ const ProJump = ({ batchNum, dense })=> {
         onClick={()=>goPro(batchNum)}
         disabled={isRO}>
         <label className='navIcon actionIconWrap taskLink'>
-          <i className='fas fa-paper-plane' data-fa-transform='left-1 down-2 shrink-3'></i>
+          <i className='far fa-paper-plane' data-fa-transform='left-1 down-2 shrink-3'></i>
         </label><br />
         {!dense && <i className='label infoSquareLabel whiteT'>Production</i>}
       </a>

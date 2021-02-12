@@ -222,7 +222,7 @@ export const ProWindow = ({ children })=> {
         <div className='auxRight'></div>
         <TideFollow proRoute={true} />
       </div>
-      <div className='proContent'>
+      <div className='proContent darkTheme'>
         <Fragment>
           {children}
         </Fragment>

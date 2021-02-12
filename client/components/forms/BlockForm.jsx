@@ -2,27 +2,32 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelMedium from '../smallUi/ModelMedium.jsx';
+import ModelMedium from '/client/components/smallUi/ModelMedium';
 
-const BlockAdd = ({ id, edit, xBatch, lock, noText, smIcon })=> {
+const BlockAdd = ({ id, edit, lock, noText, smIcon, lgIcon })=> {
   
   const bttn = edit ? 'edit' : 'Add ' + Pref.block;
   const title = edit ? 'edit ' + Pref.block : 'add ' + Pref.block;
-
+  
+  const isOpen = Roles.userIsInRole(Meteor.userId(), 'nightly'/*'run'*/);
+  
+  if(!isOpen) { 
+    return null;
+  }
   return(
     <ModelMedium
       button={bttn}
       title={title}
-      color='yellowT'
-      icon='fa-exclamation-triangle'
+      color='blueT'
+      icon={edit ? 'fa-edit' : 'fa-comment-medical'}
+      lgIcon={lgIcon}
       smIcon={smIcon}
-      lock={!Roles.userIsInRole(Meteor.userId(), 'nightly'/*'run'*/) || lock}
+      lock={!isOpen || lock}
       noText={noText}
     >
       <BlockAddForm
         id={id}
         edit={edit}
-        xBatch={xBatch}
         lock={lock}
      />
     </ModelMedium>
@@ -30,7 +35,7 @@ const BlockAdd = ({ id, edit, xBatch, lock, noText, smIcon })=> {
 };
 
 
-const BlockAddForm = ({ id, edit, xBatch, lock, selfclose })=> {
+const BlockAddForm = ({ id, edit, lock, selfclose })=> {
 
   function addBlock(e) {
     e.preventDefault();
@@ -40,39 +45,16 @@ const BlockAddForm = ({ id, edit, xBatch, lock, selfclose })=> {
     const blKey = edit ? edit.key : false;
     const text = this.blTxt.value.trim();
     
-    if(xBatch) {
-      if(blKey) {
-        Meteor.call('editBlockX', batchId, blKey, text, (error, reply)=>{
-          error && console.log(error);
-          !reply && toast.error('Server Error');
-        });
-      }else{
-        Meteor.call('addBlockX', batchId, text, (error, reply)=>{
-          error && console.log(error);
-          reply ? selfclose() : toast.error('Server Error');
-        });
-      }
+    if(blKey) {
+      Meteor.call('editBlockX', batchId, blKey, text, (error, reply)=>{
+        error && console.log(error);
+        !reply && toast.error('Server Error');
+      });
     }else{
-      if(blKey) {
-        Meteor.call('editBlock', batchId, blKey, text, (error, reply)=>{
-          if(error)
-            console.log(error);
-          if(reply) {
-          }else{
-            toast.error('Server Error');
-          }
-        });
-      }else{
-        Meteor.call('addBlock', batchId, text, (error, reply)=>{
-          if(error)
-            console.log(error);
-          if(reply) {
-            selfclose();
-          }else{
-            toast.error('Server Error');
-          }
-        });
-      }
+      Meteor.call('addBlockX', batchId, text, (error, reply)=>{
+        error && console.log(error);
+        reply ? selfclose() : toast.error('Server Error');
+      });
     }
   }
 
@@ -80,29 +62,29 @@ const BlockAddForm = ({ id, edit, xBatch, lock, selfclose })=> {
 
   return(
     <div>
+      {edit &&
+        <p><RemoveBlock id={id} blKey={edit.key} inLine={true} /></p>
+      }
       <form className='centre' onSubmit={(e)=>addBlock(e)}>
         <p>
           <textarea
             type='text'
             id='blTxt'
-            cols='30'
-            rows='6'
+            cols='40'
+            rows='10'
             placeholder='110072 short 25pcs'
             defaultValue={eTx}
             autoFocus={true}
             required>
           </textarea>
-          <label htmlFor='blTxt'>Describe the Impediment</label>
         </p>
-        <br />
         <p><button
           type='submit'
           id='addBlockGo'
           disabled={lock}
-          className='action clearGreen'>{Pref.post}</button>
+          className='action clearGreen'>Save</button>
         </p>
       </form>
-      <br />
     </div>
   );
 };
@@ -110,7 +92,7 @@ const BlockAddForm = ({ id, edit, xBatch, lock, selfclose })=> {
 export default BlockAdd;
 
 
-export const SolveBlock = ({ id, blKey, xBatch, lock, noText })=> {
+export const SolveBlock = ({ id, blKey, lock, noText })=> {
   
   function addSolve(e) {
     const act = prompt('Solution', '');
@@ -118,18 +100,10 @@ export const SolveBlock = ({ id, blKey, xBatch, lock, noText })=> {
     if(!act || act === '') {
       null;
     }else{
-      if(xBatch) {
-        Meteor.call('solveBlockX', id, blKey, act, (error, reply)=> {
-          error && console.log(error);
-          reply ? toast.success('Saved') : toast.error('Server Error'); 
-  			});
-      }else{
-        Meteor.call('solveBlock', id, blKey, act, (error, reply)=> {
-          if(error)
-            console.log(error);
-          reply ? toast.success('Saved') : toast.error('Server Error');
-  			});
-      }
+      Meteor.call('solveBlockX', id, blKey, act, (error, reply)=> {
+        error && console.log(error);
+        reply ? toast.success('Saved') : toast.error('Server Error'); 
+			});
     }
   }
   
@@ -142,41 +116,30 @@ export const SolveBlock = ({ id, blKey, xBatch, lock, noText })=> {
       onClick={(e)=>addSolve(e)}
       disabled={lock}>
       <label className='navIcon actionIconWrap'>
-        <i className='fas fa-check-circle greenT'></i>
+        <i className='fas fa-reply greenT'></i>
         {!noText && <span className='actionIconText greenT'>Solve</span>}
       </label>
     </button>
   );
 };
 
-export const RemoveBlock = ({ id, blKey, xBatch, lock, noText })=> {
+const RemoveBlock = ({ id, blKey, lock, noText })=> {
   
   function remove() {
-		if(xBatch) {
-      Meteor.call('removeBlockX', id, blKey, (error, reply)=> {
-        error && console.log(error);
-        reply ? toast.success('Saved') : toast.error('Server Error');
-			});
-    }else{
-			Meteor.call('removeBlock', id, blKey, (error, reply)=> {
-        if(error)
-          console.log(error);
-        reply ? toast.success('Saved') : toast.error('Server Error');
-			});
-    }
+    Meteor.call('removeBlockX', id, blKey, (error, reply)=> {
+      error && console.log(error);
+      reply ? toast.success('Saved') : toast.error('Server Error');
+		});
   }
   
   return(
     <button
       type='button'
       title={'Remove this ' + Pref.block}
-      className='transparent'
+      className='action middle'
       onClick={(e)=>remove(e)}
       disabled={lock}>
-      <label className='navIcon actionIconWrap'>
-        <i className='fas fa-trash redT'></i>
-        {!noText && <span className='actionIconText redT'>Remove</span>}
-      </label>
+      <i className='fas fa-trash fa-lg redT'></i> Delete
     </button>
   );
 };

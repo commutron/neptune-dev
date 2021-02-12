@@ -70,7 +70,7 @@ const StepsProgressX  = ({
           :null}
         </div>}
       
-      <div className={`${!truncate ? 'wellSpacedLine bottomLine' : ''} doJustWeen cap`}>
+      <div className={`${!truncate ? 'comfort bottomLine' : ''} vmarginhalf cap`}>
         {!truncate &&
           <span>
             <RiverSelectX

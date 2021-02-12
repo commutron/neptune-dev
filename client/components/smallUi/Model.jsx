@@ -22,7 +22,7 @@ const Model = ({
   
   let iSize = lgIcon ? ' fa-2x ' : ' fa-lg ';
   
-  return (
+  return(
     <span>
       <button
         title={title}

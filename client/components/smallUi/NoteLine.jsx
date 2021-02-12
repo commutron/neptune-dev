@@ -21,11 +21,7 @@ const NoteLine = ({ action, id, versionKey, entry, plain, lgIcon })=> {
             lgIcon={lgIcon} />;
   
   if(plain && !dt.content) {
-    return (
-      <div className='noteCard'>
-        {insertForm}
-      </div>
-    );
+    return insertForm;
   }
     
   if(plain) {

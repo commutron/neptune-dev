@@ -180,6 +180,17 @@ const DataRepair = ({ app, users })=> {
       </div>
       
       <div>
+        <h3><i className="fas fa-comment-medical fa-lg gap"></i>
+          Convert All Batch+ Notes into Blocks
+        </h3>
+        <button
+          onClick={()=>doCallThing("makeNotesIntoBlockXBatch")}
+          className='action clearBlue'
+        >Convert</button>
+      </div>
+      
+      
+      <div>
         <h3><i className="fas fa-eraser fa-lg gap"></i>
           Unset the nonconformaces key from batch+
         </h3>

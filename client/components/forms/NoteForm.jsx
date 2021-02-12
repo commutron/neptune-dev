@@ -16,7 +16,7 @@ const NotePopup = ({ action, id, versionKey, content, lgIcon })=> {
       button=''
       title={action + ' notes'}
       color='blueT'
-      icon='fa-edit'
+      icon='fa-sticky-note'
       lgIcon={lgIcon}
       lock={unlock}>
       <NoteForm 

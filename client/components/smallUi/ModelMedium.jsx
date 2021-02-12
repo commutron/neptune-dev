@@ -1,9 +1,9 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState } from 'react';
 import { MenuItem } from 'react-contextmenu';
 
 const ModelMedium = ({ 
   button, title, menuItem,
-  icon, color, noText, lgIcon,
+  icon, color, noText, lgIcon, smIcon,
   lock, children 
 })=> {
   
@@ -13,10 +13,10 @@ const ModelMedium = ({
     showChange( !show );
   };
     
-  let iSize = lgIcon ? 'fa-2x' : 'fa-lg';
+  let iSize = smIcon ? '' : lgIcon ? 'fa-2x' : 'fa-lg';
   
   return(
-    <Fragment>
+    <span>
       {menuItem ?
         <MenuItem 
           title={title}
@@ -69,7 +69,7 @@ const ModelMedium = ({
           </div>
         </span>
       }
-    </Fragment>
+    </span>
   );
 };
 

@@ -410,26 +410,22 @@ input::-webkit-calendar-picker-indicator {
   margin: 10px 0;
 }
 .blockerCard {
-  margin-top: 8px;
-  margin-bottom: 16px;
-  border-top: 1px dotted var(--sunflower);
+  margin: 0.5ch 0;
+  border-top: 1px dotted;
   border-right: none;
-  border-bottom: none;
+  border-bottom: 1px dotted;
   border-left: none;
   padding: 8px 0px;
 }
 .blockerCard > div {
   padding-bottom: 10px;
 }
-.blockerHead {
+.blockerCard legend {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: 0.8rem;
 }
-.blockerHead > span:last-child {
-  min-width:  90px;
-}
-.blockerSolve { font-weight: bold; }
 
 .infoBox {
   background-color: rgba(48,48,48,0.1);

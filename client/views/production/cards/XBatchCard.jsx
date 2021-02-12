@@ -39,7 +39,7 @@ const BatchCardX = ({
   const insertProgress = 
           <div className='space1v'>
             <StepsProgressX
-              quantity={batchData.quantity}
+              b={batchData}
               flowCounts={flowCounts}
               fallCounts={fallCounts}
               riverTitle=''

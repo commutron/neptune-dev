@@ -3,13 +3,10 @@ import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelLarge from '/client/components/smallUi/ModelLarge.jsx';
+import ModelMedium from '/client/components/smallUi/ModelMedium';
 
-const BatchXEdit = ({ 
-  batchId, batchNow, versionKey, allVariants,
-  salesOrder, start, end, quantity, lock
-})=> (
-  <ModelLarge
+const BatchXEdit = ({ batchData, seriesData, allVariants, lock })=> (
+  <ModelMedium
     button={'Edit ' + Pref.xBatch}
     title={'Edit ' + Pref.xBatch}
     color='greenT'
@@ -18,28 +15,22 @@ const BatchXEdit = ({
     // menuItem={true}
   >
   <BXEditForm 
-    batchId={batchId}
-    batchNow={batchNow}
-    versionKey={versionKey}
+    batchData={batchData}
+    seriesData={seriesData}
     allVariants={allVariants}
-    salesOrder={salesOrder}
-    start={start}
-    end={end}
-    quantity={quantity}
   />
-  </ModelLarge>
+  </ModelMedium>
 );
 
 export default BatchXEdit;
 
 
-const BXEditForm = ({ 
-  batchId, batchNow, versionKey, allVariants,
-  salesOrder, start, end, quantity
-})=> {
+const BXEditForm = ({ batchData, seriesData, allVariants })=> {
 
   function save(e) {
     e.preventDefault();
+    const batchId = batchData._id;
+    
     const vKey = this.vrsn.value;
     const batchNum = this.oNum.value.trim().toLowerCase();
     const salesNum = this.soNum.value.trim().toLowerCase();
@@ -49,7 +40,8 @@ const BXEditForm = ({
 
     const quantity = this.quant.value.trim().toLowerCase();
 
-    Meteor.call('editBatchX', batchId, batchNum, vKey, salesNum, corStart, quantity, (error, reply)=>{
+    Meteor.call('editBatchX', batchId, batchNum, vKey, salesNum, corStart, quantity, 
+    (error, reply)=>{
       if(error) {
         console.log(error);
         toast.error('Server Error');
@@ -58,28 +50,19 @@ const BXEditForm = ({
         toast.success('Saved');
         FlowRouter.go('/data/batch?request=' + batchNum);
       }else{
-        toast.warning('Duplicate');
+        toast.warning('Duplicate or In Use');
       }
     });
   }
-    
-  const ex = batchNow;
-  let eNum = ex === 'new' ? '' : ex;
   
-  const exV = versionKey;
-  let eVer = !exV ? '' : exV;
-  
-  let eSO = salesOrder || '';
-  let eS = start || moment().format('YYYY-MM-DD');
-  let eE = end || '';
-  let eQ = quantity || '';
-    
+  const bDt = batchData;
+
   return(
     <form className='centre' onSubmit={(e)=>save(e)}>
       <p>
         <select
           id='vrsn'
-          defaultValue={eVer}
+          defaultValue={bDt.versionKey}
           required>
         {allVariants.map( (entry)=>{
           if(entry.live) {
@@ -101,7 +84,7 @@ const BXEditForm = ({
           maxLength='5'
           minLength='5'
           inputMode='numeric'
-          defaultValue={eNum}
+          defaultValue={bDt.batch}
           placeholder='17947'
           autoFocus={true}
           required
@@ -113,7 +96,7 @@ const BXEditForm = ({
           id='soNum'
           maxLength='32'
           minLength='1'
-          defaultValue={eSO}
+          defaultValue={bDt.salesOrder}
           placeholder='179470b'
           required
         /></label>
@@ -124,7 +107,7 @@ const BXEditForm = ({
         <input
           type='date'
           id='sDate'
-          defaultValue={moment(eS).format('YYYY-MM-DD')}
+          defaultValue={moment(bDt.salesStart).format('YYYY-MM-DD')}
           pattern='[0-9]{4}-[0-9]{2}-[0-9]{2}'
           required 
         /></label>
@@ -133,7 +116,7 @@ const BXEditForm = ({
         <input
           type='date'
           id='eDate'
-          defaultValue={moment(eE).format('YYYY-MM-DD')}
+          defaultValue={moment(bDt.salesEnd).format('YYYY-MM-DD')}
           pattern='[0-9]{4}-[0-9]{2}-[0-9]{2}'
           disabled={true}
         /></label>
@@ -149,9 +132,9 @@ const BXEditForm = ({
           maxLength='5'
           minLength='1'
           max={99999}
-          min={0}
+          min={seriesData ? seriesData.items.length : 0}
           inputMode='numeric'
-          defaultValue={eQ}
+          defaultValue={bDt.quantity}
           placeholder='10000'
           required 
         /></label>
@@ -163,7 +146,7 @@ const BXEditForm = ({
             id='srlz'
             title='for future release'
             className='indenText inlineCheckbox'
-            defaultChecked={false}
+            defaultChecked={bDt.serialize}
             disabled={true}
           /><i className='medBig'>Use {Pref.itemSerial} numbers</i></label>
         </label>

@@ -5,15 +5,15 @@ import 'moment-timezone';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelLarge from '/client/components/smallUi/ModelLarge.jsx';
+import ModelMedium from '/client/components/smallUi/ModelMedium';
 
 const BatchXCreate = ({ groupId, widgetId, versionKey, allVariants, lock })=> (
-  <ModelLarge
+  <ModelMedium
     button={'New ' + Pref.xBatch}
     title={'Create New ' + Pref.xBatch}
     color='greenT'
     icon='fa-cubes'
-    lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'nightly']) || lock}>
+    lock={!Roles.userIsInRole(Meteor.userId(), 'create') || lock}>
     
     <BXCreateForm
       groupId={groupId}
@@ -21,7 +21,7 @@ const BatchXCreate = ({ groupId, widgetId, versionKey, allVariants, lock })=> (
       versionKey={versionKey}
       allVariants={allVariants}
     />
-  </ModelLarge>
+  </ModelMedium>
 );
 
 export default BatchXCreate;
@@ -42,12 +42,14 @@ const BXCreateForm = ({ groupId, widgetId, versionKey, allVariants })=> {
     const corEnd = moment(endDate).endOf('day').format();
     
     const quantity = this.quant.value.trim().toLowerCase();
+    
+    const doSerialize = this.srlz.checked;
     const quoteTimeInput = this.hourNum.value;
-
+    
     Meteor.call('addBatchX', 
       batchNum, groupId, widgetId, vKey, 
       salesNum, corStart, corEnd,
-      quantity, quoteTimeInput,
+      quantity, doSerialize, quoteTimeInput,
       (error, reply)=>{
         if(error) {
           console.log(error);
@@ -146,14 +148,12 @@ const BXCreateForm = ({ groupId, widgetId, versionKey, allVariants })=> {
         /></label>
         
         <label className='breath'>Serialize<br />
-          <label htmlFor='srlz' className='beside mockInputBoxOFF'>
+          <label htmlFor='srlz' className='beside'>
           <input
             type='checkbox'
             id='srlz'
-            title='for future release'
             className='indenText inlineCheckbox'
             defaultChecked={false}
-            disabled={true}
           /><i className='medBig'>Use {Pref.itemSerial} numbers</i></label>
         </label>
         

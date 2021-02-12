@@ -77,7 +77,7 @@ const TagsModule = ({ action, id, vKey, tags, tagOps })=>	{
   const currTags = tags || [];
   
   return (
-    <div className='rowWrap vmarginhalf'>
+    <div className='rowWrap'>
       {currTags.map( (entry, index)=>{
         return(
           <IndieTag

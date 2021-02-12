@@ -36,7 +36,7 @@ n-big-tide-container .tideIcon {
 
 n-med-tide-container,
 n-med-tide-container button {
-  min-height: 3vmax;
+  min-height: 2.5vmax;
 }
 n-med-tide-container {
   border-top-width: 1vh;
@@ -55,7 +55,7 @@ n-med-tide-container button {
   border: 0.4vmax solid var(--turquoise);
 }
 n-med-tide-container .tideIcon {
-  font-size: 3vmax;
+  font-size: 2.5vmax;
 }
 
 n-tide-task {

@@ -125,8 +125,67 @@ Meteor.methods({
     }
   },
   
+  fixRemoveDamagedBatch() {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      const allBatch = BatchDB.find({}).fetch();
+      for( let b of allBatch ) {
+        if(!b.orgKey) {
+           BatchDB.remove({_id: b._id});
+        }
+      }
+      const allBatchX = XBatchDB.find({}).fetch();
+      for( let bx of allBatchX ) {
+        if(!bx.orgKey) {
+           XBatchDB.remove({_id: bx._id});
+        }
+      }
+      return true;
+    }else{
+      return false;
+    }
+  },
   
-  
+  makeNotesIntoBlockXBatch() {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      const allBatchX = XBatchDB.find({}).fetch();
+      for( let bx of allBatchX ) {
+        if(bx.notes) {
+          XBatchDB.update({_id: bx._id, orgKey: Meteor.user().orgKey}, {
+            $push : { blocks: {
+              key: new Meteor.Collection.ObjectID().valueOf(),
+              block: bx.notes.content,
+              time: bx.notes.time,
+              who: bx.notes.who,
+              solve: false
+            }},
+            $set : {
+              notes : false
+            }
+          });
+        }
+      }
+      return true;
+    }else{
+      return false;
+    }
+  },
+  /*
+  UNSETbplusNotesKey() {
+    try{
+      if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+        XBatchDB.update({ orgKey: Meteor.user().orgKey }, {
+          $unset : { 
+            'notes': ""
+          }},{multi: true});
+          return true;
+      }else{
+        return false;
+      }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  */
   /*
   dateObjBatchUPGRADE() {
     if(!Roles.userIsInRole(Meteor.userId(), 'admin')) {

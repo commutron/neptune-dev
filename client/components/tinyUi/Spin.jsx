@@ -4,7 +4,7 @@ const Spin = ({ color, message }) => {
   let img = !color ? '/neptune-logo-white.svg' : '/neptune-logo-color.svg';
   let sty = { height: '50vh' };
   
-  let text = message || 'Fetching Records From The Server, Please Wait';
+  let text = message || '';
   
   return (
     <div className='loading'>

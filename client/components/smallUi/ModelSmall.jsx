@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState } from 'react';
 import { MenuItem } from 'react-contextmenu';
 
 
@@ -17,7 +17,7 @@ const ModelSmall = ({
   let iSize = lgIcon ? ' fa-2x ' : ' fa-lg ';
   
   return(
-    <Fragment>
+    <span>
       {menuItem ?
         <MenuItem 
           title={title}
@@ -70,7 +70,7 @@ const ModelSmall = ({
           </div>
         </span>
       }
-    </Fragment>
+    </span>
   );
 };
 

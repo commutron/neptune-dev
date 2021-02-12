@@ -4,7 +4,9 @@ import { batchTideTime } from '/server/tideGlobalMethods';
 Meteor.methods({
 
 //// Complex, Dexterous, Multiplex Batches \\\\
-  addBatchX(batchNum, groupId, widgetId, vKey, salesNum, sDate, eDate, quantity, qTime) {
+  addBatchX(batchNum, groupId, widgetId, vKey, 
+            salesNum, sDate, eDate, quantity, withSeries, qTime
+  ) {
     const doc = WidgetDB.findOne({ _id: widgetId });
     const legacyduplicate = BatchDB.findOne({ batch: batchNum });
     const duplicateX = XBatchDB.findOne({ batch: batchNum });
@@ -42,7 +44,7 @@ Meteor.methods({
   			completedAt: null,
   			completedWho: null,
   			quantity: Number(quantity),
-  			serialize: false,
+  			serialize: withSeries,
   			river: false,
   			waterfall: [],
   			tide: [],
@@ -51,6 +53,27 @@ Meteor.methods({
         altered: [],
         events: []
       });
+      
+      if(withSeries) {
+        const duplicate = XSeriesDB.findOne({batch: batchNum});
+        
+        if(!duplicate) {
+          XSeriesDB.insert({
+      			batch: batchNum,
+      			orgKey: accessKey,
+      	    groupId: groupId,
+      			widgetId: widgetId,
+      			versionKey: vKey,
+            createdAt: new Date(),
+            createdWho: Meteor.userId(),
+            updatedAt: new Date(),
+      			updatedWho: Meteor.userId(),
+            items: [],
+            nonCon: [],
+            shortfall: [],
+          });
+        }
+      }
       
       Meteor.defer( ()=>{
         Meteor.call('buildNewTraceX', batchNum, accessKey);
@@ -63,26 +86,46 @@ Meteor.methods({
   
   editBatchX(batchId, newBatchNum, vKey, salesNum, sDate, quantity) {
     const accessKey = Meteor.user().orgKey;
-    const doc = XBatchDB.findOne({_id: batchId});
-    const legacyduplicate = BatchDB.findOne({batch: newBatchNum});
-    let duplicate = XBatchDB.findOne({batch: newBatchNum});
-    doc.batch === newBatchNum ? duplicate = false : null;
     const auth = Roles.userIsInRole(Meteor.userId(), 'edit');
-    if(auth && !duplicate && !legacyduplicate && doc.orgKey === accessKey) {
-      XBatchDB.update({_id: batchId, orgKey: accessKey}, {
-        $set : {
-          batch: newBatchNum,
-          versionKey: vKey,
-          salesOrder: salesNum,
-          salesStart: new Date(sDate),
-  			  quantity: Number(quantity),
-  			  updatedAt: new Date(),
-  			  updatedWho: Meteor.userId()
-        }});
-      Meteor.defer( ()=>{
-        Meteor.call('updateOneMinify', batchId, accessKey);
-      });
-      return true;
+    
+    const doc = XBatchDB.findOne({_id: batchId});
+    const srs = XSeriesDB.findOne({batch: doc.batch});
+
+    if(auth && doc.orgKey === accessKey) {
+      const openTide = doc.tide && doc.tide.find( t => t.stopTime === false );
+      
+      const legacyduplicate = BatchDB.findOne({batch: newBatchNum});
+      let duplicate = XBatchDB.findOne({batch: newBatchNum});
+      doc.batch === newBatchNum ? duplicate = false : null;
+    
+      if(!openTide && !duplicate && !legacyduplicate) {
+        XBatchDB.update({_id: batchId, orgKey: accessKey}, {
+          $set : {
+            batch: newBatchNum,
+            versionKey: vKey,
+            salesOrder: salesNum,
+            salesStart: new Date(sDate),
+    			  quantity: Number(quantity),
+    			  updatedAt: new Date(),
+    			  updatedWho: Meteor.userId()
+          }});
+        
+        if(srs) {
+          XSeriesDB.update({batch: doc.batch}, {
+            $set : {
+        			batch: newBatchNum,
+        			versionKey: vKey,
+              updatedAt: new Date(),
+        			updatedWho: Meteor.userId(),
+            }
+          });
+        }
+        
+        Meteor.defer( ()=>{
+          Meteor.call('updateOneMinify', batchId, accessKey);
+        });
+        return true;
+      }
     }else{
       return false;
     }

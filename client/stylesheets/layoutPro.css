@@ -274,6 +274,12 @@
     height: 5vh;
     font-size: 3vh;
   }
+  .windowPro  .followTask i,
+  .containerPro .followTask i {
+    width: 5vh;
+    height: 5vh;
+    font-size: 2vh;
+  }
 }
 
 

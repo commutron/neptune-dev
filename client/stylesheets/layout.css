@@ -117,6 +117,7 @@ main {
 
 .autoSelf { margin: 0 auto; }
 .centreSelf { align-self: center; }
+.startSelf { align-self: flex-start; }
 .endSelf { align-self: flex-end; }
 /* ============================================= */
 
@@ -469,6 +470,7 @@ main {
 .popup {
   margin: 48px auto 5vh auto;
   max-width: 70%;
+  min-height: 75%;
   max-height: 80%;
   padding: 1vmax 3vmax 3vmax 3vmax;
 }
@@ -720,9 +722,16 @@ n-sm-model-content {
 .cardify > span > span > div,
 .autoFlex > div {
   width: fit-content;
-  padding: 2vmin;
   margin: 2vmin;
+  padding: 1vmin 2vmin 2vmin 2vmin;
   box-shadow: var(--dropShadow00);
+}
+.cardify > div > h3,
+.cardify > span > div > h3,
+.cardify > span > span > div > h3,
+.autoFlex > div > h3 {
+  padding-bottom: 0.5vmin;
+  border-bottom: 1px groove;
 }
 
 .autoGrid {
@@ -731,8 +740,9 @@ n-sm-model-content {
   align-items: baseline;
 }
 
-.maxWide { width: max-content; }
-.fitWide { width: fit-content; }
+.minWide { width: min-content !important; }
+.maxWide { width: max-content !important; }
+.fitWide { width: fit-content !important; }
 .wide {
   width: 100%;
   margin: 0 auto;
@@ -907,7 +917,7 @@ button.numberSet {
 
 .actionBox .flatpickr-input ~ .form-control {
   max-width: 100%;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   text-indent: 0rem;
 }
 
@@ -1127,22 +1137,23 @@ n-mock-table-cell:last-child {
     height: 7vmin;
     font-size: 4vmin;
   }
-  .taskLink {
-    margin: 1vmin 0;
-    width: 5vmin;
-    height: 5vmin;
-    font-size: 3vmin;
-  }
-  .followTask i {
-    width: 5vmin;
-    height: 5vmin;
-    font-size: 2vmin;
-  }
   .navButtonText {
     font-size: 3vmin;
   }
   .slidesLayout, .slidesNestedLayout {
     grid-template-rows: calc(100vh - 8vmin);
     height: calc(100% - 8vmin);
+  }
+  
+  .taskLink {
+    margin: 1vmin 0;
+    width: 5.5vmin;
+    height: 5.5vmin;
+    font-size: 3.25vmin;
+  }
+  .followTask i {
+    width: 5.5vmin;
+    height: 5.5vmin;
+    font-size: 2.25vmin;
   }
 }

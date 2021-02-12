@@ -10,6 +10,7 @@ import TagsModule from '/client/components/bigUi/TagsModule.jsx';
 
 import ReleaseAction from '/client/components/bigUi/ReleasesModule.jsx';
 import NoteLine from '/client/components/smallUi/NoteLine.jsx';
+import BlockForm from '/client/components/forms/BlockForm.jsx';
 import BlockList from '/client/components/bigUi/BlockList.jsx';
 
 import { AlterFulfill } from '/client/components/forms/Batch/BatchAlter.jsx';
@@ -47,7 +48,7 @@ const InfoTab = ({
       <span className='oneThirdContent'>
       
       <div className='centreText'>
-        <h3>Status</h3>      
+        <h3 className='leftText'>Status</h3>      
         { b.live &&
           <div className='centreRow balance'>
             <div className='statusBlock'>
@@ -93,7 +94,16 @@ const InfoTab = ({
             isX={true} />
         :null}  
       </div>
-          
+      
+      <div className='minHeight cap'>
+        <TagsModule
+          action={Pref.xBatch}
+          id={b._id}
+          tags={b.tags}
+          tagOps={app.tagOption} />
+      </div>
+        
+        
       <SalesSegment 
         b={b}
         flowCounts={flowCounts}
@@ -103,20 +113,21 @@ const InfoTab = ({
     
     </span>
     
-    <span className='twoThirdsContent centre'>
-    
-      <span className='split w100'>
+    <span className='twoThirdsContent rowWrap w100 minHeight'>
       
-        <div className='minHeight cap'>
-          <h3>{Pref.tag}s</h3>
-          <TagsModule
-            action={Pref.xBatch}
-            id={b._id}
-            tags={b.tags}
-            tagOps={app.tagOption} />
+        <div className='flxGrow'>
+          <StepsProgressX
+            b={b}
+            widgetData={widgetData}
+            hasSeries={hasSeries}
+            flowCounts={flowCounts}
+            fallCounts={fallCounts}
+            riverTitle={riverTitle}
+            brancheS={brancheS}
+            truncate={false} />
         </div>
             
-        <div className='endSelf'>
+        <div className='flxGrow startSelf'>
           <h3>Notes</h3>
           
           <NoteLine 
@@ -125,28 +136,21 @@ const InfoTab = ({
             entry={b.notes}
             plain={true}
             lgIcon={true} />
-    
+          
+          <BlockForm
+            id={b._id}
+            edit={false}
+            lock={b.completed === true}
+            noText={true}
+            lgIcon={true} />
+            
           <BlockList 
             id={b._id} 
             data={b.blocks} 
-            xBatch={true} 
             lock={done} 
             expand={true} />
         </div>
-      
-      </span>
-      
-      <div className='w100'>
-        <StepsProgressX
-          b={b}
-          widgetData={widgetData}
-          hasSeries={hasSeries}
-          flowCounts={flowCounts}
-          fallCounts={fallCounts}
-          riverTitle={riverTitle}
-          brancheS={brancheS}
-          truncate={false} />
-      </div>
+     
     </span>
 
     </div>

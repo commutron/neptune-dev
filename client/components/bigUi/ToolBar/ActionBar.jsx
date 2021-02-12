@@ -4,7 +4,6 @@ import React, { Fragment } from 'react';
 import './style.css';
 
 import ActionLink from '/client/components/tinyUi/ActionLink.jsx';
-import BlockForm from '/client/components/forms/BlockForm.jsx';
 
 import BatchCreate from '/client/components/forms/Batch/BatchCreate';
 import BatchEdit from '/client/components/forms/Batch/BatchEdit';
@@ -152,10 +151,6 @@ const ActionBar = ({
           title='Print Label'
           icon='fa-print'
           color='whiteT' />
-        <BlockForm
-          id={batchData._id}
-          edit={false}
-          lock={batchData.finishedAt !== false} />
         <RMAForm
           id={batchData._id}
           editObj={false}
@@ -181,13 +176,8 @@ const ActionBar = ({
       action === 'xbatch' ?
         <Fragment>
           <BatchXEdit
-            batchId={batchData._id}
-            batchNow={batchData.batch}
-            versionKey={variantData.versionKey}
-            salesOrder={batchData.salesOrder}
-            start={batchData.salesStart}
-            end={batchData.salesEnd}
-            quantity={batchData.quantity}
+            batchData={batchData}
+            seriesData={seriesData}
             allVariants={allVariants}
             lock={!variantData || !batchData.live} />
           
@@ -212,25 +202,21 @@ const ActionBar = ({
             river={batchData.river}
             lock={!seriesData || batchData.completed === true} />
           */}
-          <ActionLink
-            address={'/print/generallabel/' + 
-                      batchData.batch + 
-                      '?group=' + groupData.alias +
-                      '&widget=' + widgetData.widget + 
-                      '&ver=' + variantData.variant +
-                      '&desc=' + widgetData.describe +
-                      '&sales=' + (batchData.salesOrder || '') +
-                      '&quant=' + batchData.quantity }
-            title='Print Label'
-            icon='fa-print'
-            color='cloudsT' />
-          
-          <BlockForm
-            id={batchData._id}
-            edit={false}
-            xBatch={true}
-            lock={batchData.completed === true} />
-    
+          <span>
+            <ActionLink
+              address={'/print/generallabel/' + 
+                        batchData.batch + 
+                        '?group=' + groupData.alias +
+                        '&widget=' + widgetData.widget + 
+                        '&ver=' + variantData.variant +
+                        '&desc=' + widgetData.describe +
+                        '&sales=' + (batchData.salesOrder || '') +
+                        '&quant=' + batchData.quantity }
+              title='Print Label'
+              icon='fa-print'
+              color='cloudsT' />
+          </span>
+
           <RemoveXBatch
             batchData={batchData}
             seriesData={seriesData}

@@ -39,6 +39,7 @@ const ReleaseAction = ({
       <Flatpickr
         id='rDateTime'
         value={datetime}
+        className='minWide'
         onChange={(e)=>handleDatetime(e)}
         options={{
           defaultDate: datetime,

@@ -70,7 +70,9 @@
   background-color: var(--silverfade);
 }
 
-
+.darkTheme .flatpickr-input ~ .form-control {
+  color: white;
+}
 /*
 .invert {
   background-color: var(--dark);

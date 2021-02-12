@@ -473,3 +473,8 @@ button.variableInput.biggest { height: 64px; }
 .liteToolOff { background-color: var(--navIndicatorA); }
 .liteToolOff:active { background-color: var(--navIndicatorB); }
 
+
+/*@media (orientation: portrait) {*/
+  
+/*}*/
+

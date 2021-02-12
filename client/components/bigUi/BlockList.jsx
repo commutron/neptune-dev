@@ -3,17 +3,21 @@ import moment from 'moment';
 
 import UserNice from '../smallUi/UserNice.jsx';
 import BlockForm from '../forms/BlockForm.jsx';
-import {SolveBlock} from '../forms/BlockForm.jsx';
-import {RemoveBlock} from '../forms/BlockForm.jsx';
+import { SolveBlock } from '../forms/BlockForm.jsx';
 
-const BlockList = ({ id, data, xBatch, lock, expand })=> {
+const BlockList = ({ id, data, lock, expand })=> {
   let blocks = data.sort((s1, s2) => {return s1.time < s2.time});
   if(blocks.length > 0) {
     return (
       <div className='blockerList'>
           {blocks.map( (entry, index)=>{
             return (
-              <BlockRow key={index} entry={entry} id={id} xBatch={xBatch} lock={lock} expand={expand} />
+              <BlockRow 
+                key={index}
+                entry={entry}
+                id={id}
+                lock={lock} 
+                expand={expand} />
           )})}
       </div>
     );
@@ -23,33 +27,34 @@ const BlockList = ({ id, data, xBatch, lock, expand })=> {
   );
 };
 
-const BlockRow = ({ entry, id, xBatch, lock, expand })=> {
+const BlockRow = ({ entry, id, lock, expand })=> {
   let dt = entry;
   let unlock = Roles.userIsInRole(Meteor.userId(), 'run');
-  let solved = dt.solve && typeof dt.solve === 'object' &&
-    <i>
-      {moment(dt.solve.time).calendar()} <br /> {dt.solve.action} - <UserNice id={dt.solve.who} />
-    </i>;
+  let solved = dt.solve && typeof dt.solve === 'object';
+    
   return(
 		<fieldset className='blockerCard'>
 		  <legend className='blockerHead'>
-		    <span>{moment(dt.time).calendar()}</span>
+		    <span>{moment(dt.time).calendar()} - <UserNice id={dt.who} /></span>
 		    {expand &&
-  		    <span>
+  		    <span className='middle'>
     		    {unlock && !lock && !solved &&
-              <SolveBlock id={id} blKey={dt.key} xBatch={xBatch} noText={true} />}
-            {!lock && !solved &&
-              <BlockForm id={id} edit={dt} xBatch={xBatch} smIcon={true} noText={true} />}
-            {unlock && !lock && !solved &&
-              <RemoveBlock id={id} blKey={dt.key} xBatch={xBatch} noText={true} />}
+              <SolveBlock id={id} blKey={dt.key} noText={true} />}
+            {unlock && !lock &&
+              <BlockForm id={id} edit={dt} smIcon={true} noText={true} />}
           </span>}
 		  </legend>
       <div>
-        {dt.block} - <UserNice id={dt.who} />
+        {dt.block}
       </div>
-      <div className='blockerSolve'>
-        {solved}
-      </div>
+      {solved &&
+        <em>
+          <legend>
+            <span>{moment(dt.solve.time).calendar()} - <UserNice id={dt.solve.who} /></span>
+          </legend>
+           {dt.solve.action}
+        </em>
+      }
     </fieldset>
   );
 };
