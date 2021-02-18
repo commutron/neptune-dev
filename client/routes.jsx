@@ -35,6 +35,7 @@ VariantDB = new Mongo.Collection('variantdb');
 BatchDB = new Mongo.Collection('batchdb');
 XBatchDB = new Mongo.Collection('xbatchdb');
 XSeriesDB = new Mongo.Collection('xseriesdb');
+XRapidsDB = new Mongo.Collection('xrapidsdb');
 
 CacheDB = new Mongo.Collection('cachedb');
 TraceDB = new Mongo.Collection('tracedb');

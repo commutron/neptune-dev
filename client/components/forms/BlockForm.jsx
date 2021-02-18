@@ -2,40 +2,40 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelMedium from '/client/components/smallUi/ModelMedium';
+import ModelSmall from '/client/components/smallUi/ModelSmall';
 
-const BlockAdd = ({ id, edit, lock, noText, smIcon, lgIcon })=> {
+const BlockAdd = ({ id, edit, noText, smIcon, lgIcon, doneLock })=> {
   
   const bttn = edit ? 'edit' : 'Add ' + Pref.block;
   const title = edit ? 'edit ' + Pref.block : 'add ' + Pref.block;
   
-  const isOpen = Roles.userIsInRole(Meteor.userId(), 'nightly'/*'run'*/);
+  const isOpen = Roles.userIsInRole(Meteor.userId(), 'run');
   
   if(!isOpen) { 
     return null;
   }
   return(
-    <ModelMedium
+    <ModelSmall
       button={bttn}
       title={title}
       color='blueT'
       icon={edit ? 'fa-edit' : 'fa-comment-medical'}
       lgIcon={lgIcon}
       smIcon={smIcon}
-      lock={!isOpen || lock}
+      lock={!isOpen}
       noText={noText}
     >
       <BlockAddForm
         id={id}
         edit={edit}
-        lock={lock}
+        doneLock={doneLock}
      />
-    </ModelMedium>
+    </ModelSmall>
   );
 };
 
 
-const BlockAddForm = ({ id, edit, lock, selfclose })=> {
+const BlockAddForm = ({ id, edit, doneLock, selfclose })=> {
 
   function addBlock(e) {
     e.preventDefault();
@@ -63,7 +63,13 @@ const BlockAddForm = ({ id, edit, lock, selfclose })=> {
   return(
     <div>
       {edit &&
-        <p><RemoveBlock id={id} blKey={edit.key} inLine={true} /></p>
+        <p>
+          <RemoveBlock
+            id={id} 
+            blKey={edit.key}
+            doneLock={doneLock}
+            inLine={true} />
+        </p>
       }
       <form className='centre' onSubmit={(e)=>addBlock(e)}>
         <p>
@@ -71,7 +77,7 @@ const BlockAddForm = ({ id, edit, lock, selfclose })=> {
             type='text'
             id='blTxt'
             cols='40'
-            rows='10'
+            rows='6'
             placeholder='110072 short 25pcs'
             defaultValue={eTx}
             autoFocus={true}
@@ -81,7 +87,6 @@ const BlockAddForm = ({ id, edit, lock, selfclose })=> {
         <p><button
           type='submit'
           id='addBlockGo'
-          disabled={lock}
           className='action clearGreen'>Save</button>
         </p>
       </form>
@@ -92,7 +97,7 @@ const BlockAddForm = ({ id, edit, lock, selfclose })=> {
 export default BlockAdd;
 
 
-export const SolveBlock = ({ id, blKey, lock, noText })=> {
+export const SolveBlock = ({ id, blKey, noText })=> {
   
   function addSolve(e) {
     const act = prompt('Solution', '');
@@ -113,8 +118,7 @@ export const SolveBlock = ({ id, blKey, lock, noText })=> {
       id='slvBlkGo'
       title={'Solve this ' + Pref.block}
       className='transparent'
-      onClick={(e)=>addSolve(e)}
-      disabled={lock}>
+      onClick={(e)=>addSolve(e)}>
       <label className='navIcon actionIconWrap'>
         <i className='fas fa-reply greenT'></i>
         {!noText && <span className='actionIconText greenT'>Solve</span>}
@@ -123,7 +127,7 @@ export const SolveBlock = ({ id, blKey, lock, noText })=> {
   );
 };
 
-const RemoveBlock = ({ id, blKey, lock, noText })=> {
+const RemoveBlock = ({ id, blKey, doneLock, noText })=> {
   
   function remove() {
     Meteor.call('removeBlockX', id, blKey, (error, reply)=> {
@@ -138,7 +142,7 @@ const RemoveBlock = ({ id, blKey, lock, noText })=> {
       title={'Remove this ' + Pref.block}
       className='action middle'
       onClick={(e)=>remove(e)}
-      disabled={lock}>
+      disabled={doneLock}>
       <i className='fas fa-trash fa-lg redT'></i> Delete
     </button>
   );

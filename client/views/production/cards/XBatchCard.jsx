@@ -8,7 +8,8 @@ import { TideBump } from '/client/components/riverX/TideWall';
 
 import StepsProgressX from '/client/components/bigUi/StepsProgress/StepsProgressX';
 import TagsModule from '/client/components/bigUi/TagsModule.jsx';
-import NoteLine from '/client/components/smallUi/NoteLine.jsx';
+// import NoteLine from '/client/components/smallUi/NoteLine.jsx';
+import BlockForm from '/client/components/forms/BlockForm.jsx';
 import BlockList from '/client/components/bigUi/BlockList.jsx';
 
 const BatchCardX = ({
@@ -114,9 +115,11 @@ const MiniInfo = ({ batchData, srange, flowCounts, bClosed, app })=> (
     
     <p>Total Quantity: <b className='numfont'>{batchData.quantity}</b></p>
     
-    {srange && <p>Serialized Items: <b className='numfont'>{flowCounts.liveItems}</b></p>}
+    {srange && flowCounts.liveItems !== batchData.quantity ? 
+      <p>Serialized Items: <b className='numfont'>{flowCounts.liveItems}</b></p>
+    : null}
     
-    {srange && <p>Serial Range: <b className='numFont'>{srange}</b></p>}
+    {srange && <p>Serials: <b className='numFont'>{srange}</b></p>}
     
     {flowCounts.scrapCount > 0 &&
       <p>Scrapped Items: <b className='numfont redT'>{flowCounts.scrapCount}</b></p>}
@@ -126,16 +129,22 @@ const MiniInfo = ({ batchData, srange, flowCounts, bClosed, app })=> (
       action={Pref.xBatch}
       id={batchData._id}
       tags={batchData.tags}
-      tagOps={app.tagOption} />
-    <NoteLine 
+      tagOps={app.tagOption}
+      truncate={true} />
+    {/*<NoteLine 
       action={Pref.xBatch}
       id={batchData._id}
-      entry={batchData.notes} />
+      entry={batchData.notes} />*/}
+    <BlockForm
+      id={batchData._id}
+      edit={false}
+      doneLock={batchData.completed}
+      noText={true}
+      lgIcon={true} />
     <BlockList 
       id={batchData._id} 
       data={batchData.blocks}
-      xbatch={true} 
-      lock={batchData.completed} 
-      expand={false} />
+      doneLock={batchData.completed} 
+      truncate={true} />
   </div>
 );

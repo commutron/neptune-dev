@@ -1,22 +1,7 @@
 import React from 'react';
 import { toast } from 'react-toastify';
 
-export default function InboxToastPop(prevUser, currUser) {
-  if(currUser) {
-    if(prevUser) {
-      if(currUser.inbox && prevUser.inbox) {
-        if(currUser.inbox.length > prevUser.inbox.length) {
-          const newNotify = currUser.inbox[currUser.inbox.length-1];
-          toast(`${String.fromCodePoint(0x1F4EC)} ${newNotify.title}: ${newNotify.detail}`, {
-            autoClose: false
-          } );
-        }
-      }
-    }
-  }
-}
-
-export function UnreadInboxToastPop(currUser) {
+export default function InboxToastPop(currUser) {
   if(currUser) {
     const uID = currUser._id;
     if(currUser.inbox) {
@@ -25,7 +10,9 @@ export function UnreadInboxToastPop(currUser) {
           const nKey = inbox.notifyKey;
           toast(
             <div>
-              <i className="fas fa-envelope-open-text fa-lg fa-fw"></i>  <b>{inbox.title}</b><br />
+              <i className="fas fa-envelope-square fa-lg fa-fw"></i><b>New Message</b><br />
+              <h4>{inbox.title}</h4>
+              <hr />
               <p>{inbox.detail}</p>
             </div>, {
             autoClose: false,

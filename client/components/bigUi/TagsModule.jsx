@@ -7,7 +7,7 @@ import Pref from '/client/global/pref.js';
 // Batch ._id as "id"
 // flags array as "tags"
 
-const TagsModule = ({ action, id, vKey, tags, tagOps })=>	{
+const TagsModule = ({ action, id, vKey, tags, tagOps, truncate })=>	{
 
   function addTag(tag) {
     const cleanTag = !tag ? false : tag.trim();
@@ -86,7 +86,7 @@ const TagsModule = ({ action, id, vKey, tags, tagOps })=>	{
             removeTag={()=>removeTag(entry)} 
             lock={!auth} />
       )})}
-      {auth ?
+      {auth && !truncate ?
         <ContextMenuTrigger
           id={id+'tagnew'}
           holdToDisplay={1}

@@ -13,20 +13,13 @@ const ItemsListX = ({
   
   if(!seriesData) {
     return(
-      <Fragment>
-        <fieldset className='noteCard'>
-          <legend>Non-Serialized</legend>
-          <p className='numFont'>Quantity:
-            <b className='medBig'> {batchData.quantity}</b>
-          </p>
-        </fieldset>
-        <div className='centre'>
-          <SeriesForm
-            batchData={batchData}
-            lock={batchData.completed}
-          />
-        </div>
-      </Fragment>
+      <div className='centre'>
+        <h4>Non-Serialized</h4>
+        <SeriesForm
+          batchData={batchData}
+          lock={batchData.completed}
+        />
+      </div>
     );
   }
   
@@ -35,22 +28,14 @@ const ItemsListX = ({
                       seriesData.shortfall.length === 0;
   if(emptySeries) {
     return(
-      <Fragment>
-        <fieldset className='noteCard'>
-          <legend>Non-Serialized</legend>
-          <p className='numFont'>Quantity:
-            <b className='medBig'> {batchData.quantity}</b>
-          </p>
-        </fieldset>
-        <div className='centre'>
-          <SeriesDelete
-            batchId={batchData._id}
-            seriesId={seriesData._id}
-            lock={!emptySeries}
-            // noText
-          />
-        </div>
-      </Fragment>
+      <div className='centre'>
+        <h4>Empty Series</h4>
+        <SeriesDelete
+          batchId={batchData._id}
+          seriesId={seriesData._id}
+          lock={!emptySeries}
+        />
+      </div>
     );
   }
   
@@ -374,13 +359,12 @@ const ItemsListX = ({
         onTimeChange={(e)=>setTimeFilter(e)}
         onNotChange={(e)=>setToggle(e)} />
       <div>
-      
-      {stateList.map( (entry, index)=> {
-        if(index < itemLimit) {
-          let style = entry.history.length === 0 ? bttnClss :
-                      entry.completed === false ? `${bttnClss} activeMark` : 
-                      scrap.scrapList.includes(entry.serial) ? `${bttnClss} ngMark` : 
-                      `${bttnClss} gMark`;
+        {stateList.map( (entry, index)=> {
+          if(index < itemLimit) {
+            let style = entry.history.length === 0 ? bttnClss :
+                        entry.completed === false ? `${bttnClss} activeMark` : 
+                        scrap.scrapList.includes(entry.serial) ? `${bttnClss} ngMark` : 
+                        `${bttnClss} gMark`;
             return(
               <LeapButton
                 key={entry.serial} 
@@ -389,47 +373,11 @@ const ItemsListX = ({
                 sty={style}
                 address={`/data/batch?request=${batchData.batch}&specify=${entry.serial}`}
               />
-            );
-        }
-      })}
-      
+              );
+        }})}
       </div>
 		</Fragment>
   );
 };
 
 export default ItemsListX;
-
-// const Loading = ()=> (
-//   <div>loading...</div>
-// );
-
-/*
-
-return(
-    <Fragment>
-      <FilterItemsX
-        title={batchData.batch}
-        total={stateList.length}
-        advancedList={flowData.riverFlow || []}
-        selectedKeyword={keyword}
-        selectedTime={timeModifyer}
-        selectedToggle={notModifyer}
-        onKeywordChange={(e)=>setKeywordFilter(e)}
-        onTimeChange={(e)=>setTimeFilter(e)}
-        onNotChange={(e)=>setToggle(e)} />
-      <div>
-      
-      </div>
-		</Fragment>
-  );
-  
-  
-  
-  <LazyLoad 
-            key={entry.serial}  
-            height={50} 
-            scrollContainer={document.querySelector('exItemList')}
-            placeholder={<Loading />} >
-  
-  */

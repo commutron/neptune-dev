@@ -473,8 +473,18 @@ button.variableInput.biggest { height: 64px; }
 .liteToolOff { background-color: var(--navIndicatorA); }
 .liteToolOff:active { background-color: var(--navIndicatorB); }
 
+.interSelect {
+  line-height: 1;
+  font-size: 1rem;
+  background-color: transparent;
+  margin: 0 0.5ch;
+}
+.interSelect:disabled {
+  opacity: 1;
+  color: black;
+  border: 1px dotted lightgray
+}
 
 /*@media (orientation: portrait) {*/
   
 /*}*/
-

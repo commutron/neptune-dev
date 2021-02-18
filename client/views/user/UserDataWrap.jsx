@@ -2,7 +2,7 @@ import React, { useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import { ToastContainer } from 'react-toastify';
-import { UnreadInboxToastPop } from '/client/utility/InboxToastPop.js';
+import InboxToastPop from '/client/utility/InboxToastPop.js';
 
 // import Pref from '/client/global/pref.js';
 import { SpinWrap } from '/client/components/tinyUi/Spin.jsx';
@@ -25,8 +25,8 @@ const UserDataWrap = ({
 })=> {
   
   useLayoutEffect( ()=>{
-    UnreadInboxToastPop(user);
-  }, []);
+    InboxToastPop(user);
+  }, [user]);
   
   if( !readybNames || !app ) {
     return( <SpinWrap /> );

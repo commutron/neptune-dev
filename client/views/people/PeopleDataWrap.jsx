@@ -5,7 +5,6 @@ import { withTracker } from 'meteor/react-meteor-data';
 // import 'moment-timezone';
 import { ToastContainer } from 'react-toastify';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
-import usePrevious from '/client/utility/usePreviousHook.js';
 
 import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
 import Pref from '/client/global/pref.js';
@@ -30,9 +29,8 @@ const PeopleDataWrap = ({
   traceDT // batch name cache
 })=> {
   
-  const prevUser = usePrevious(user);
   useLayoutEffect( ()=>{
-    InboxToastPop(prevUser, user);
+    InboxToastPop(user);
   }, [user]);
     
   if( !readybName || !readyPeople || !app ) {

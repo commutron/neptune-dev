@@ -2,18 +2,53 @@ import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import Model from '../smallUi/Model.jsx';
+import ModelLarge from '../smallUi/ModelLarge';
 import FlowBuilder from '/client/components/bigUi/ArrayBuilder/FlowBuilder.jsx';
 //requires
 // id
 // barcode
 
-const RMAForm = ({ 
+const RMAModel = ({ 
   id, editObj, 
   trackOptions, end,
   app, user,
   ncTypesCombo,
   lockOut
+})=> {
+  
+  const edit = editObj ? editObj : false;
+  const title = edit ? 'edit ' + Pref.rmaProcess : 'create ' + Pref.rmaProcess;
+  const bttn = edit ? 'edit' : Pref.rmaProcess;
+   
+
+  return(
+    <ModelLarge
+      button={bttn}
+      title={title}
+      color='orangeT'
+      icon='fa-exchange-alt'
+      lock={!Roles.userIsInRole(Meteor.userId(), 'qa') || lockOut}>
+      
+      <RMAForm
+        id={id}
+        editObj={editObj}
+        trackOptions={trackOptions}
+        end={end}
+        app={app}
+        user={user}
+        ncTypesCombo={ncTypesCombo}
+      />
+    </ModelLarge>
+  );
+};
+  
+export default RMAModel;
+  
+const RMAForm = ({ 
+  id, editObj, 
+  trackOptions, end,
+  app, user,
+  ncTypesCombo
 })=> {
   
   const [ flowState, flowSet ] = useState(false);
@@ -66,6 +101,9 @@ const RMAForm = ({
           let ncObj = {'ref': ref, 'type': type};
           allNonCons.push(ncObj);
         }
+        
+        console.log(allNonCons);
+        
         nonConsSet(allNonCons);
         this.ncRefs.value = '';
       }else{null}
@@ -122,16 +160,9 @@ const RMAForm = ({
   const numE = edit ? edit.rmaId : '';
   const quE = edit ? edit.quantity : '';
   const quC = edit ? edit.comm : '';
-  const title = edit ? 'edit ' + Pref.rmaProcess : 'create ' + Pref.rmaProcess;
-  const bttn = edit ? 'edit' : Pref.rmaProcess;
-    
+   
   return (
-    <Model
-      button={bttn}
-      title={title}
-      color='orangeT'
-      icon='fa-exchange-alt'
-      lock={!Roles.userIsInRole(Meteor.userId(), 'qa') || lockOut}>
+    <div>
       <div className='space'>
         <form
           id='rmaSave'
@@ -274,7 +305,7 @@ const RMAForm = ({
         <FlowBuilder
           app={app}
           options={trackOptions.filter( x => x.type !== 'first')}
-          end={end}
+          defaultEnd={end}
           baseline={false}
           onClick={(e)=>setFlow(e)} />
           
@@ -293,8 +324,6 @@ const RMAForm = ({
         <p><output id='rmaOut' /></p>
         <br />
       </div>
-    </Model>
+    </div>
   );
 };
-
-export default RMAForm;

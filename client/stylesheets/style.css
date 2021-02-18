@@ -413,7 +413,6 @@ input::-webkit-calendar-picker-indicator {
   margin: 0.5ch 0;
   border-top: 1px dotted;
   border-right: none;
-  border-bottom: 1px dotted;
   border-left: none;
   padding: 8px 0px;
 }
@@ -422,9 +421,9 @@ input::-webkit-calendar-picker-indicator {
 }
 .blockerCard legend {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  font-size: 0.8rem;
+  justify-content: flex-end;
+  font-size: 0.6rem;
 }
 
 .infoBox {

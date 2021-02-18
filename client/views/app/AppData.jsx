@@ -1,8 +1,6 @@
-import React, { useLayoutEffect } from 'react';
+import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import InboxToastPop from '/client/utility/InboxToastPop.js';
-import usePrevious from '/client/utility/usePreviousHook.js';
 
 import { SpinWrap } from '../../components/tinyUi/Spin.jsx';
 import AppWrap from './AppWrap.jsx';
@@ -13,12 +11,6 @@ const AppView = ({
   username, user, active, isAdmin, isDebug, // self
   org, app, users // org
 })=> {
-  
-  const prevUser = usePrevious(user);
-  useLayoutEffect( ()=>{
-    InboxToastPop(prevUser, user);
-  }, [user]);
-  
    
   if(!readyDebug || !app ) {
     return( <SpinWrap /> );

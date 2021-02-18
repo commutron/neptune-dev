@@ -46,7 +46,7 @@ const ModelMedium = ({
         <span>
           <div className='overlay invert' key={1}>
             <n-md-model>
-              <n-md-model-head>
+              <n-model-head>
                 <span>
                   <i className={`fas ${icon} ${color}`}></i>
                   <i className='breath'></i>
@@ -57,7 +57,7 @@ const ModelMedium = ({
                   onClick={()=>reveal()}
                   title='close'
                 ><i className='fas fa-times fa-lg'></i></button>
-              </n-md-model-head>
+              </n-model-head>
               <n-md-model-content className='centre'>
                 {React.cloneElement(children,
                   { 

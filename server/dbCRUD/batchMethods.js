@@ -678,7 +678,7 @@ Meteor.methods({
           quantity: Number(qua),
           comm: com,
           flow: flowObj,
-          nonCons: nonConArr
+          nonCons: nonConArr // {ref: "k1", type: "upside down"}
         }},
         $set : {
   			  live: true

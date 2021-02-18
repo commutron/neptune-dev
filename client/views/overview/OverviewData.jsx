@@ -4,7 +4,6 @@ import { withTracker } from 'meteor/react-meteor-data';
 import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
 import moment from 'moment';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
-import usePrevious from '/client/utility/usePreviousHook.js';
 
 import { SpinWrap } from '../../components/tinyUi/Spin.jsx';
 import OverviewWrap from './OverviewWrap.jsx';
@@ -15,9 +14,8 @@ const View = ({
   batch, batchX, traceDT
 })=> {
   
-  const prevUser = usePrevious(user);
   useLayoutEffect( ()=>{
-    InboxToastPop(prevUser, user);
+    InboxToastPop(user);
   }, [user]);
   
     

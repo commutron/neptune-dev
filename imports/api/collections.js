@@ -52,6 +52,12 @@ XSeriesDB.deny({
   remove: () => { return true; },
 });
 
+XRapidsDB.deny({
+  insert: () => { return true; },
+  update: () => { return true; },
+  remove: () => { return true; },
+});
+
 TraceDB.deny({
   insert: () => { return true; },
   update: () => { return true; },

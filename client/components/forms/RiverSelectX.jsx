@@ -2,91 +2,43 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelSmall from '../smallUi/ModelSmall';
 
-const RiverSelectX = ({ 
-  bID, widget, river, 
-  //riverAlt,
-  lock, noText, inLine
-})=> (
-  <ModelSmall
-    button={Pref.flow}
-    title={'select ' + Pref.flow}
-    color='blueT'
-    icon='fa-project-diagram'
-    lock={!Roles.userIsInRole(Meteor.userId(), 'run') || lock}
-    noText={noText}
-    inLine={inLine} >
-    <RiverSelectForm
-      bID={bID}
-      widget={widget}
-      river={river}
-      // riverAlt={riverAlt} 
-    />
-  </ModelSmall>
-);
-      
-      
-const RiverSelectForm = ({ 
-  bID, widget, river, 
-  //riverAlt, 
-  selfclose })=> {
+const RiverSelect = ({ bID, wFlows, river, riverTitle, lock })=> {
 
-  function save(e) {
-    e.preventDefault();
-    this.rvrXgo.disabled = true;
-    let flow = this.choice.value;
+  function handleChange(e) {
+    let flow = this.riverchoice.value;
     flow === 'false' ? flow = false : null;
-    // let flowAlt = this.choiceAlt.value;
-    // flowAlt === 'false' ? flowAlt = false : null;
-
-      Meteor.call('setRiverX', bID, flow, //flowAlt, 
-      (error, reply)=>{
-        error && console.log(error);
-        if(reply) {
-          toast.success('Saved');
-          this.rvrXgo.disabled = false;
-          selfclose();
-        }else{
-          toast.error('Server Error');
-          this.rvrXgo.disabled = false;
-        }
-      });
+   
+    Meteor.call('setRiverX', bID, flow, (error, reply)=>{
+      if(error) {
+        console.log(error);
+        toast.error('Server Error');
+      }
+    });
   }
   
+  const adaptSize = riverTitle.length < 5 ? '5ch' :
+                    riverTitle.length * 0.7 + 5 + 'ch';
+  
   return(
-    <form className='centre vmargin' onSubmit={(e)=>save(e)}>
-      <p>
-        <select id='choice' defaultValue={river} required>
-        <option></option>
-        {widget.flows.map( (entry, index)=>{
-          return(
-           <option key={index} value={entry.flowKey}>{entry.title}</option>
-           );
-        })}
-        </select>
-        <label htmlFor='choice'>Select {Pref.buildFlow}</label>
-      </p>
-      {/*<p>
-        <select id='choiceAlt' defaultValue={riverAlt}>
-        <option value={false}></option>
-        {widget.flows.map( (entry, index)=>{
-          return(
-           <option key={index} value={entry.flowKey}>{entry.title}</option>
-           );
-        })}
-        </select>
-        <label htmlFor='choiceAlt'>Enable <em>optional</em> {Pref.buildFlowAlt}</label>
-      </p>*/}
-      <br />
-      <button
-        type='submit'
-        id='rvrXgo'
-        disabled={false}
-        className='action clearGreen'
-      >Save</button>
-    </form>
+    <i><i className='fas fa-project-diagram fa-fw greenT'></i> {Pref.flow}:
+      <select 
+        id='riverchoice'
+        className='interSelect'
+        defaultValue={river}
+        onChange={(e)=>handleChange(e)}
+        style={{ width: adaptSize }}
+        disabled={lock}
+        required>
+      <option></option>
+      {wFlows.map( (entry, index)=>{
+        return(
+         <option key={index} value={entry.flowKey}>{entry.title}</option>
+         );
+      })}
+      </select>
+    </i>
   );
 };
 
-export default RiverSelectX;
+export default RiverSelect;

@@ -132,7 +132,7 @@ const DataViewOps = ({
   }
   
   function getFlowData(batchData, seriesData, widgetData, appData) {
-    let riverTitle = 'not found';
+    let riverTitle = 'unset';
     let riverFlow = [];
     
     let ncListKeys = [];

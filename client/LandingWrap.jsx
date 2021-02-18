@@ -2,7 +2,7 @@ import React, { useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import Pref from '/client/global/pref.js';
-import { UnreadInboxToastPop } from '/client/utility/InboxToastPop.js';
+import InboxToastPop from '/client/utility/InboxToastPop.js';
 import Spin from '/client/components/tinyUi/Spin.jsx';
 
 // import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
@@ -20,8 +20,8 @@ import { NavPlaceholder } from '/client/layouts/NavButton/NavButton';
 const StartView = ({user, app}) =>	{
   
   useLayoutEffect( ()=>{
-    UnreadInboxToastPop(user);
-  }, []);
+    InboxToastPop(user);
+  }, [user]);
   
   if( !user || !app ) {
     return(

@@ -381,8 +381,8 @@ Meteor.methods({
   },
   
   sendUserDM(userID, title, message) {
-    const mssgTitle = title || 'Sample Notification';
-    const mssgDetail = message || 'This is a test';
+    const mssgTitle = title || '';
+    const mssgDetail = message || '';
     try {
       Meteor.users.update(userID, {
         $push : { inbox : {

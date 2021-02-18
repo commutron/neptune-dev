@@ -6,8 +6,10 @@ Meteor.startup(function () {
   // but the new createIndex errors as "not a function"
   AppDB._ensureIndex({ org : 1, orgKey: 1 }, { unique: true });
   Meteor.users._ensureIndex({ orgKey: 1, username : 1 }, { unique: true });
-  XBatchDB._ensureIndex({ orgKey: 1, batch : 1 }, { unique: true });
-  XSeriesDB._ensureIndex({ orgKey: 1, batch : 1, 'items.serial' : 1 }, { unique: true });
+  XBatchDB._ensureIndex({ orgKey: 1, batch: 1 }, { unique: true });
+  XSeriesDB._ensureIndex({ orgKey: 1, batch: 1, 'items.serial' : 1 }, { unique: true });
+  XRapidsDB._ensureIndex({ orgKey: 1, rapid: 1, extendBatch: 1 }, { unique: true });
+  
   BatchDB._ensureIndex({ orgKey: 1, batch : 1 }, { unique: true });// , 'items.serial' : 'text'
   GroupDB._ensureIndex({ orgKey: 1, group : 1 }, { unique: true });
   WidgetDB._ensureIndex({ orgKey: 1, widget : 1 }, { unique: true });

@@ -5,8 +5,8 @@ import UserNice from '../smallUi/UserNice.jsx';
 import BlockForm from '../forms/BlockForm.jsx';
 import { SolveBlock } from '../forms/BlockForm.jsx';
 
-const BlockList = ({ id, data, lock, expand })=> {
-  let blocks = data.sort((s1, s2) => {return s1.time < s2.time});
+const BlockList = ({ id, data, doneLock, truncate })=> {
+  let blocks = data.sort((s1, s2) => s1.time < s2.time);
   if(blocks.length > 0) {
     return (
       <div className='blockerList'>
@@ -16,8 +16,8 @@ const BlockList = ({ id, data, lock, expand })=> {
                 key={index}
                 entry={entry}
                 id={id}
-                lock={lock} 
-                expand={expand} />
+                doneLock={doneLock} 
+                truncate={truncate} />
           )})}
       </div>
     );
@@ -27,35 +27,40 @@ const BlockList = ({ id, data, lock, expand })=> {
   );
 };
 
-const BlockRow = ({ entry, id, lock, expand })=> {
+const BlockRow = ({ entry, id, doneLock, truncate })=> {
   let dt = entry;
   let unlock = Roles.userIsInRole(Meteor.userId(), 'run');
   let solved = dt.solve && typeof dt.solve === 'object';
     
   return(
-		<fieldset className='blockerCard'>
-		  <legend className='blockerHead'>
-		    <span>{moment(dt.time).calendar()} - <UserNice id={dt.who} /></span>
-		    {expand &&
-  		    <span className='middle'>
-    		    {unlock && !lock && !solved &&
-              <SolveBlock id={id} blKey={dt.key} noText={true} />}
-            {unlock && !lock &&
-              <BlockForm id={id} edit={dt} smIcon={true} noText={true} />}
-          </span>}
-		  </legend>
+		<div className='blockerCard'>
       <div>
         {dt.block}
-      </div>
+        <legend>
+  		    {!truncate &&
+    		    <span className='middle'>
+      		    {unlock && !solved &&
+                <SolveBlock id={id} blKey={dt.key} noText={true} />}
+              {unlock &&
+                <BlockForm 
+                  id={id} 
+                  edit={dt} 
+                  smIcon={true} 
+                  noText={true}
+                  doneLock={doneLock} />}
+            </span>}
+            <span>{moment(dt.time).calendar()} - <UserNice id={dt.who} /></span>
+  		  </legend>
+		  </div>
       {solved &&
         <em>
+          {dt.solve.action}
           <legend>
             <span>{moment(dt.solve.time).calendar()} - <UserNice id={dt.solve.who} /></span>
           </legend>
-           {dt.solve.action}
         </em>
       }
-    </fieldset>
+    </div>
   );
 };
 

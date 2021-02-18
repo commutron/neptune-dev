@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
-import usePrevious from '/client/utility/usePreviousHook.js';
+// import usePrevious from '/client/utility/usePreviousHook.js';
 
 //import Pref from '/client/global/pref.js';
 import { TraverseWrap } from '/client/layouts/DataExploreLayout.jsx';
@@ -19,13 +19,12 @@ const ExploreView = ({
   view, request, specify, subLink // routing
 })=> {
   
-  const prevRequest = usePrevious(request);
-  const prevUser = usePrevious(user);
+  // const prevRequest = usePrevious(request);
   useLayoutEffect( ()=>{
-    if(prevRequest !== request) {
-      Session.set('itemListScrollPos', {b: false, num: 0});
-    }
-    InboxToastPop(prevUser, user);
+    // if(prevRequest !== request) {
+    //   Session.set('itemListScrollPos', {b: false, num: 0});
+    // }
+    InboxToastPop(user);
   }, [user]);
   
     

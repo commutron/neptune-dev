@@ -45,8 +45,8 @@ const ModelLarge = ({
     {show &&
       <span>
         <div className='overlay invert' key={1}>
-          <div className='popup'>
-            <div className='popupHead'>
+          <n-lg-model>
+            <n-model-head>
               <span>
                 <i className={`fas ${icon} ${color}`}></i>
                 <i className='breath'></i>
@@ -57,15 +57,15 @@ const ModelLarge = ({
                 onClick={()=>reveal()}
                 title='close'
               ><i className='fas fa-times fa-lg'></i></button>
-            </div>
-            <div className='popupContent'>
+            </n-model-head>
+            <n-lg-model-content>
               {React.cloneElement(children,
                 { 
                   selfclose: ()=>reveal()
                 }
               )}
-            </div>
-          </div>
+            </n-lg-model-content>
+          </n-lg-model>
         </div>
       </span>
     }

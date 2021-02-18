@@ -78,7 +78,7 @@ const FilterItems = ({
       </label>
     </div>
       
-    <p className='centreText'>Total: {total}</p>
+    <p className='centreText'>{total} items</p>
   </div>
 );
 

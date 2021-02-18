@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import Pref from '/client/global/pref.js';
 import './style.css';
 
-import RiverSelectX from '/client/components/forms/RiverSelectX';
+import RiverSelect from '/client/components/forms/RiverSelectX';
 
 import ToggleBar from '/client/components/bigUi/ToolBar/ToggleBar';
 import MiniStack from '/client/components/charts/MiniScales/MiniStack.jsx';
@@ -45,20 +45,24 @@ const StepsProgressX  = ({
               name='Total Quantity'
               color='blackT' />
           </label>
-            
-          <label>
-            <NumBox
-              num={totalI}
-              name={Pref.itemSerial + 's'}
-              color='blackT' />
-          </label>
           
-          <label>
-            <NumBox
-              num={totalIU}
-              name={`${Pref.itemSerial} ${Pref.unit}s`}
-              color='blackT' />
-          </label>
+          {totalI !== b.quantity ?  
+            <label>
+              <NumBox
+                num={totalI}
+                name={Pref.itemSerial + 's'}
+                color='blackT' />
+            </label>
+          :null}
+          
+          {totalIU > totalI ?
+            <label>
+              <NumBox
+                num={totalIU}
+                name={`${Pref.itemSerial} ${Pref.unit}s`}
+                color='blackT' />
+            </label>
+          :null}
           
           {scrapCount > 0 ? 
             <label>
@@ -70,17 +74,14 @@ const StepsProgressX  = ({
           :null}
         </div>}
       
-      <div className={`${!truncate ? 'comfort bottomLine' : ''} vmarginhalf cap`}>
+      <div className={`${!truncate ? 'bottomLine' : ''} vmarginhalf cap`}>
         {!truncate &&
-          <span>
-            <RiverSelectX
-              bID={b._id}
-              widget={widgetData}
-              river={b.river}
-              lock={!hasSeries || b.completed === true}
-              inLine={true} />
-            <i><b>{riverTitle || ''}</b></i>
-          </span>
+          <RiverSelect
+            bID={b._id}
+            wFlows={widgetData.flows}
+            river={b.river}
+            riverTitle={riverTitle}
+            lock={!hasSeries || b.completed === true} />
         }
         {unitsExist &&
           <ToggleBar

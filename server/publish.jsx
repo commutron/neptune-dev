@@ -9,6 +9,7 @@ VariantDB = new Mongo.Collection('variantdb');
 BatchDB = new Mongo.Collection('batchdb');
 XBatchDB = new Mongo.Collection('xbatchdb');
 XSeriesDB = new Mongo.Collection('xseriesdb');
+XRapidsDB = new Mongo.Collection('xrapidsdb');
 TraceDB = new Mongo.Collection('tracedb');
 
 CacheDB = new Mongo.Collection('cachedb');
@@ -520,6 +521,11 @@ Meteor.publish('skinnyData', function(){
       //   fields: {
       //     'batch': 1
       //   }}), 
+      XRapidsDB.find({}, {
+        sort: {rapid:-1},
+        fields: {
+          
+        }}), 
     ];
   }
 });

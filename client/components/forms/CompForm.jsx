@@ -1,9 +1,26 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 
-import Model from '../smallUi/Model.jsx';
+import ModelMedium from '../smallUi/ModelMedium';
 
-const CompForm = ({ vID, lockOut })=> {
+const CompModel = ({ vID, lockOut })=> (
+
+  <ModelMedium
+    button={'Add ' + Pref.comp + 's'}
+    title={'Add ' + Pref.comp + 's'}
+    color='greenT'
+    icon='fa-microchip'
+    lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit']) || lockOut}>
+  
+    <CompForm
+      vID={vID}
+    />
+  </ModelMedium>
+);
+
+export default CompModel;
+
+const CompForm = ({ vID })=> {
   
   function addParts(e) {
     e.preventDefault();
@@ -25,33 +42,24 @@ const CompForm = ({ vID, lockOut })=> {
   }
   
   return (
-    <Model
-      button={'Add ' + Pref.comp + 's'}
-      title={'Add ' + Pref.comp + 's'}
-      color='greenT'
-      icon='fa-microchip'
-      lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit']) || lockOut}>
-      <form id='new' className='centre' onSubmit={(e)=>addParts(e)}>
-        <p>Add multiple {Pref.comp}s seperated by pipe, space or new line</p>
-        <p>
-          <textarea
-            id='parts'
-            cols='40'
-            rows='15'
-            autoFocus={true}
-            required></textarea>
-          <label htmlFor='parts'>{Pref.comp} Numbers</label>
-        </p>
-        <p>
-          <button
-            id='go'
-            disabled={false}
-            className='action clearGreen'
-            type='submit'>Add</button>
-        </p>
-      </form>
-    </Model>
+    <form id='new' className='centre' onSubmit={(e)=>addParts(e)}>
+      <p>Add multiple {Pref.comp}s seperated by pipe, space or new line</p>
+      <p>
+        <textarea
+          id='parts'
+          cols='40'
+          rows='15'
+          autoFocus={true}
+          required></textarea>
+        <label htmlFor='parts'>{Pref.comp} Numbers</label>
+      </p>
+      <p>
+        <button
+          id='go'
+          disabled={false}
+          className='action clearGreen'
+          type='submit'>Add</button>
+      </p>
+    </form>
   );
 };
-
-export default CompForm;

@@ -3,7 +3,6 @@ import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
-import usePrevious from '/client/utility/usePreviousHook.js';
 
 import { SpinWrap } from '/client/components/tinyUi/Spin.jsx';
 import DownstreamWrap from './DownstreamWrap.jsx';
@@ -14,9 +13,8 @@ const View = ({
   traceDT,
 })=> {
   
-  const prevUser = usePrevious(user);
   useLayoutEffect( ()=>{
-    InboxToastPop(prevUser, user);
+    InboxToastPop(user);
   }, [user]);
     
   if( !readyT || !app ) {

@@ -104,26 +104,7 @@ Meteor.methods({
       return false;
     }
   },
-  
-  fixRemoveDamagedBatch() {
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      const allBatch = BatchDB.find({}).fetch();
-      for( let b of allBatch ) {
-        if(!b.orgKey) {
-           BatchDB.remove({_id: b._id});
-        }
-      }
-      const allBatchX = XBatchDB.find({}).fetch();
-      for( let bx of allBatchX ) {
-        if(!bx.orgKey) {
-           XBatchDB.remove({_id: bx._id});
-        }
-      }
-      return true;
-    }else{
-      return false;
-    }
-  },
+
   
   fixRemoveDamagedBatch() {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
@@ -191,17 +172,6 @@ Meteor.methods({
     if(!Roles.userIsInRole(Meteor.userId(), 'admin')) {
       return false;
     }else{
-      const allBatches = BatchDB.find({}).fetch();
-      for(let batch of allBatches) {
-        const salesStart = moment(batch.start).startOf('day').format();
-        const salesEnd = moment(batch.end).endOf('day').format();
-        BatchDB.update({_id: batch._id}, {
-    			$set : { 
-    			  start: new Date(salesStart),
-    			  end: new Date(salesEnd)
-    			}
-    		});
-      }
       const allXBatches = XBatchDB.find({}).fetch();
       for(let xbatch of allXBatches) {
         const salesStartX = moment(xbatch.salesStart).startOf('day').format();
@@ -285,7 +255,7 @@ Meteor.methods({
   },
   
   ResetAppLatestSerial() {
-    // try{
+    try{
       if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
 
         let max8s = [];
@@ -351,9 +321,9 @@ Meteor.methods({
       }else{
         return false;
       }
-    // }catch (err) {
-    //   throw new Meteor.Error(err);
-    // }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
   },
   
   unlockALLxbatch() {

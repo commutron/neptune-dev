@@ -13,7 +13,7 @@ import { AlterFulfill } from '/client/components/forms/Batch/BatchAlter.jsx';
 
 const GeneralChunk = ({
   a, b, 
-  done, expand, isDebug
+  done, isDebug
 }) =>	{
   
   const nonWorkDays = a.nonWorkDays;
@@ -104,7 +104,11 @@ const GeneralChunk = ({
         id={b._id}
         entry={b.notes} />
               
-      <BlockList id={b._id} data={b.blocks} lock={done} expand={expand} />
+      <BlockList 
+        id={b._id}
+        data={b.blocks} 
+        lock={done} 
+        truncate={true} />
 
     </div>
   );

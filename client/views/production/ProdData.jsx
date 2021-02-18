@@ -4,7 +4,6 @@ import { withTracker } from 'meteor/react-meteor-data';
 import Pref from '/client/global/pref.js';
 
 import InboxToastPop from '/client/utility/InboxToastPop.js';
-import usePrevious from '/client/utility/usePreviousHook.js';
 
 import { SpinWrap } from '/client/components/tinyUi/Spin.jsx';
 import ProductionFindOps from './ProductionFindOps.jsx';
@@ -18,9 +17,8 @@ const ProdData = ({
   hotBatch, hotxBatch, hotxSeries // working data
 })=> {
 
-  const prevUser = usePrevious(user);
   useLayoutEffect( ()=>{
-    InboxToastPop(prevUser, user);
+    InboxToastPop(user);
   }, [user]);
   
 

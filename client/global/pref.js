@@ -170,8 +170,8 @@ class Pref {
     this.rma = 'RMA';
     this.rmaProcess = 'RMA process';
     // blocker tracking
-    this.block = 'alert';
-    this.solve = 'solve';
+    this.block = 'caution';
+    this.solve = 'solution';
     // non tracked, ancillary processes
     this.ancillary = 'indirect';
     // shortage tracking

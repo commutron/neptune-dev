@@ -140,15 +140,15 @@ const InfoTab = ({
           <BlockForm
             id={b._id}
             edit={false}
-            lock={b.completed === true}
+            doneLock={b.completed}
             noText={true}
             lgIcon={true} />
             
           <BlockList 
             id={b._id} 
             data={b.blocks} 
-            lock={done} 
-            expand={true} />
+            doneLock={done} 
+            truncate={false} />
         </div>
      
     </span>

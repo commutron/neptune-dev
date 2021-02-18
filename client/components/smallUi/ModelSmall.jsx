@@ -47,7 +47,7 @@ const ModelSmall = ({
         <span>
           <div className='overlay invert' key={1}>
             <n-sm-model>
-              <n-sm-model-head>
+              <n-model-head>
                 <span>
                   <i className={`fas ${icon} ${color}`}></i>
                   <i className='breath'></i>
@@ -58,7 +58,7 @@ const ModelSmall = ({
                   onClick={()=>reveal()}
                   title='close'
                 ><i className='fas fa-times fa-lg'></i></button>
-              </n-sm-model-head>
+              </n-model-head>
               <n-sm-model-content className='centre'>
                 {React.cloneElement(children,
                   { 

@@ -69,7 +69,7 @@ const BatchCard = ({
           sessionTab='batchProPanelTabs'>
           
           <div className='space cap'>
-            <GeneralChunk a={a} b={b} done={done} expand={false} />
+            <GeneralChunk a={a} b={b} done={done} />
           </div>
           
           <div className='space cap'>

@@ -80,7 +80,7 @@ const GroupForm = ({ id, name, alias, wiki, title, selfclose })=> {
   const orWiki = wiki ? wiki : '';
 
   return(
-    <form id='new' onSubmit={(e)=>createCustomer(e)}>
+    <form id='newGroup' className='fitWide' onSubmit={(e)=>createCustomer(e)}>
       <p>
         <span>
           <input
