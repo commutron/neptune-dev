@@ -18,7 +18,7 @@ import WidgetsList from './lists/WidgetsList.jsx';
 import NPICard from './cards/NPICard.jsx';
 
 const ProductionFindOps = ({ 
-  hotBatch, hotxBatch, hotxSeries,
+  hotBatch, hotxBatch, hotxSeries, hotxRapids,
   allBatch, allxBatch,
   allGroup, allWidget, allVariant,
   user, activeUsers, app,
@@ -187,6 +187,7 @@ const ProductionFindOps = ({
           <XDoProCard
             batchData={hotxBatch}
             seriesData={hotxSeries}
+            rapidsData={hotxRapids}
             widgetData={widget}
             groupData={group}
             user={user}
@@ -251,6 +252,7 @@ const ProductionFindOps = ({
           <XDoProCard
             batchData={hotxBatch}
             seriesData={hotxSeries}
+            rapidsData={hotxRapids}
             itemData={item}
             widgetData={widget}
             groupData={group}

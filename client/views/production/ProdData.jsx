@@ -14,7 +14,7 @@ const ProdData = ({
   orb, anchor, user, org, users, app, // self 
   allGroup, allWidget, allVariant, // customer data
   allBatch, allxBatch,
-  hotBatch, hotxBatch, hotxSeries // working data
+  hotBatch, hotxBatch, hotxSeries, hotxRapids // working data
 })=> {
 
   useLayoutEffect( ()=>{
@@ -46,6 +46,7 @@ const ProdData = ({
       hotBatch={hotBatch}
       hotxBatch={hotxBatch}
       hotxSeries={hotxSeries}
+      hotxRapids={hotxRapids}
     />
   );
 };
@@ -63,6 +64,7 @@ export default withTracker( () => {
   let hotBatch = false;
   let hotxBatch = false;
   let hotxSeries = false;
+  let hotxRapids = [];
   
   let keyMatch = false;
   let subBatch = false;
@@ -88,7 +90,7 @@ export default withTracker( () => {
       hotBatch = BatchDB.findOne({ batch: orb });
       hotxBatch = XBatchDB.findOne({ batch: orb });
       hotxSeries = XSeriesDB.findOne({ batch: orb });
-
+      hotxRapids = XRapidsDB.find({ extendBatch: orb }).fetch();
       
     }else if( Pref.regexSN.test(orb) ) {
   		const itemsBatch = BatchDB.findOne( { 'items.serial': orb } );
@@ -101,16 +103,14 @@ export default withTracker( () => {
         if( itemsxSeries ) {
           hotxSeries = itemsxSeries;
           hotxBatch = XBatchDB.findOne( { batch: itemsxSeries.batch } );
+          hotxRapids = XRapidsDB.find( { extendBatch: itemsxSeries.batch } ).fetch();
           keyMatch = true;
           subBatch = itemsxSeries.batch;
         }else{
-          // hotBatch = itemsBatch;
-          // hotxBatch = itemsxBatch;
           subBatch = orb;
         }
       }
     }else{
-      // subBatch = false;
       null;
     }
   }
@@ -145,7 +145,8 @@ export default withTracker( () => {
       allxBatch: XBatchDB.find( {}, { sort: { batch: -1 } } ).fetch(),
       hotBatch: hotBatch,
       hotxBatch: hotxBatch,
-      hotxSeries: hotxSeries
+      hotxSeries: hotxSeries,
+      hotxRapids: hotxRapids
     };
   }
 })(ProdData);

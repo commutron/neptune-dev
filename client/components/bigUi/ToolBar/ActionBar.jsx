@@ -13,6 +13,8 @@ import BatchXEdit from '/client/components/forms/Batch/BatchXEdit';
 import RemoveXBatch from '/client/components/forms/Batch/RemoveXBatch';
 import ItemSerialsWrapX from '/client/components/forms/ItemSerialsX/ItemSerialsWrapX';
 // import RiverSelectX from '/client/components/forms/RiverSelectX';
+import RapidCreate from '/client/components/forms/Rapid/RapidCreate';
+
 
 import UnitSetX from '/client/components/forms/ItemSerialsX/UnitSetX';
 import PanelBreakX from '/client/components/forms/ItemSerialsX/PanelBreakX';
@@ -216,6 +218,19 @@ const ActionBar = ({
               icon='fa-print'
               color='cloudsT' />
           </span>
+          
+          <RapidCreate
+            batchId={batchData._id}
+            batchNum={batchData.batch}
+            groupId={batchData.groupId}
+            hasSeries={!seriesData ? false : true}
+            srsQ={!seriesData ? 0 : seriesData.items.length}
+            allQ={batchData.quantity}
+            flows={widgetData.flows}
+            lock={batchData.lock}
+            user={user}
+            ncTypesCombo={ncTypesCombo || []}
+            vassembly={variantData.assembly} />
 
           <RemoveXBatch
             batchData={batchData}

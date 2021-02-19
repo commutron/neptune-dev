@@ -38,7 +38,7 @@ const DataViewOps = ({
   allXBatch, allBatch, 
   allGroup, allWidget, allVariant,
   user, isDebug, app, brancheS, users,
-  hotBatch, hotXBatch, hotXSeries,
+  hotBatch, hotXBatch, hotXSeries, hotXRapids,
   view, request, specify,
   subLink, orb
 })=> {
@@ -566,6 +566,7 @@ const DataViewOps = ({
 		    <TraverseWrap
 		      batchData={hotXBatch}
           seriesData={hotXSeries}
+          flowData={flowData}
           widgetData={widget}
           variantData={variant}
           allVariants={allVariants}
@@ -579,6 +580,7 @@ const DataViewOps = ({
           <BatchPanelX
             batchData={hotXBatch}
             seriesData={hotXSeries}
+            rapidsData={hotXRapids}
             widgetData={widget}
             variantData={variant}
             groupData={group}

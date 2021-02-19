@@ -51,7 +51,7 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, canRun })=> {
                 className='action clearPurple'
                 onClick={()=>undoFinishBatchX(false)}
                 disabled={!Roles.userIsInRole(Meteor.userId(), "BRKt3rm1n2t1ng8r2nch")}
-              >Reopen</button>
+              >Cancel Complete</button>
             </div>
           :
           <div>
@@ -62,7 +62,7 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, canRun })=> {
               className='action clearPurple'
               onClick={()=>undoFinishBatchX(true)}
               disabled={!canRun}
-            >Reopen Anyway</button>
+            >Cancel Complete</button>
           </div>}
         </Fragment>
       }

@@ -9,39 +9,10 @@ import ModelLarge from '/client/components/smallUi/ModelLarge';
 import AddAutoNC from './AddAutoNC';
 import AddAutoSH from './AddAutoSH';
 
-const RapidCreate = ({ 
-  batchId, batchNum, groupId, hasSeries, srsQ, allQ,
-  flows, user, ncTypesCombo, vassembly,
-  lock 
-})=> (
-  <ModelLarge
-    button={'Extend'}
-    title={'Extend ' + Pref.xBatch}
-    color='orangeT'
-    icon='fa-sitemap'
-    lock={!Roles.userIsInRole(Meteor.userId(), ['run', 'qa']) || lock}>
-    
-    <RapidCreateForm
-      groupId={groupId}
-      batchId={batchId}
-      batchNum={batchNum}
-      hasSeries={hasSeries}
-      srsQ={srsQ}
-      allQ={allQ}
-      flows={flows}
-      ncTypesCombo={ncTypesCombo}
-      vassembly={vassembly}
-      user={user}
-    />
-  </ModelLarge>
-);
-
-export default RapidCreate;
-
-const RapidCreateForm = ({ 
+const RapidCard = ({ 
   batchId, batchNum, groupId, 
   hasSeries, srsQ, allQ, flows,
-  ncTypesCombo, vassembly, user, selfclose
+  ncTypesCombo, vassembly, user
 })=> {
 
   const [ typeState, typeSet ] = useState(false);
@@ -62,8 +33,8 @@ const RapidCreateForm = ({
   function save(e) {
     e.preventDefault();
     
-    const rType = this.rType.value;
-    const issueNum = this.issNum.value.trim();
+    const rType = this.rType.value.trim().toLowerCase();
+    const issueNum = this.issNum.value.trim().toLowerCase();
     
     const exTime = this.hourNum.value;
     
@@ -82,7 +53,7 @@ const RapidCreateForm = ({
     const howLink = howText.length === 0 ? false : howText;
     
     const applyAll = this.applyAll.checked;
-    const quant = this.quant.value.trim();
+    const quant = this.quant.value.trim().toLowerCase();
     
     const nonConArr = nonConsState || [];
     const shortArr = shortState || [];
@@ -107,7 +78,7 @@ const RapidCreateForm = ({
   
   
   return(
-    <form className='balancer' onSubmit={(e)=>save(e)}>
+    <div className='balancer'>
       <div>
         <div className='centre vmargin'>
         
@@ -296,14 +267,11 @@ const RapidCreateForm = ({
           </div>
         }
         
-        <div className='dropCeiling centre'>
-          <button
-            type='submit'
-            className='action clear greenHover'
-          >Create</button>
-        </div>
+        
       
       </div>
-    </form>
+    </div>
   );
 };
+
+export default RapidCard;

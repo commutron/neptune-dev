@@ -440,6 +440,10 @@ Meteor.publish('hotDataPlus', function(scanOrb, keyMatch){
         //  'updatedAt': 0,
     		// 'updatedWho': 0
         }}),
+      XRapidsDB.find({extendBatch: trueBatch, orgKey: orgKey}, {
+          fields: {
+            'orgKey': 0
+        }}),
       WidgetDB.find({_id: wID, orgKey: orgKey}, {
         fields: {
           'orgKey': 0,
@@ -612,6 +616,17 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
             'lockTrunc': 0
         }}),
         XSeriesDB.find({batch: dataRequest, orgKey: orgKey}, {
+          fields: {
+            'orgKey': 0
+        //     'groupId': 0,
+    			 // 'widgetId': 0,
+    			 // 'versionKey': 0,
+        //     'createdAt': 0,
+        //     'createdWho': 0,
+        //     'updatedAt': 0,
+    			 // 'updatedWho': 0
+        }}),
+        XRapidsDB.find({extendBatch: dataRequest, orgKey: orgKey}, {
           fields: {
             'orgKey': 0
         //     'groupId': 0,

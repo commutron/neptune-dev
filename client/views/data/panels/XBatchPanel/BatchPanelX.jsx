@@ -12,12 +12,13 @@ import XBatchTimeline from '/client/components/bigUi/BatchFeed/XBatchTimeline.js
 import InfoTab from './InfoTab';
 import TimeTab from './TimeTab';
 import ProblemTab from './ProblemTab';
+import RapidExtendTab from './RapidExtendTab';
 
 //import RMATable from '../../../components/tables/RMATable.jsx';
 
 
 const BatchPanelX = ({ 
-  batchData, seriesData, widgetData, variantData, groupData, 
+  batchData, seriesData, rapidsData, widgetData, variantData, groupData, 
   flowData, fallData,
   user, app, isDebug, isNigh
 })=> {
@@ -31,21 +32,21 @@ const BatchPanelX = ({
   const released = floorRelease ? true : false;
   const hasFall = b.waterfall.length > 0;
   const done = b.completed === true && b.live === false;
-   
+  
+  let tabbar = [
+    'Info',
+    'Waterfall',
+    'Time',
+    `Problems`,
+    'Events',
+  ];
+  rapidsData.length > 0 ? tabbar.push('Entended') : null;
+          
   return(
     <div className='section' key={b.batch}>
       
       <Tabs
-        tabs={
-          [
-            'Info',
-            'Waterfall',
-            'Time',
-            `Problems`,
-            'Events',
-            // 'Returns'
-          ]
-        }
+        tabs={ tabbar }
         wide={true}
         stick={false}
         hold={true}
@@ -110,6 +111,24 @@ const BatchPanelX = ({
             doneBatch={done}
             brancheS={brancheS} />
         </div>
+        
+        {rapidsData.length > 0 ?
+          <RapidExtendTab
+            batchData={batchData}
+            seriesData={seriesData}
+            rapidsData={rapidsData}
+            widgetData={widgetData}
+            flowData={flowData}
+            fallData={fallData}
+            released={released}
+            done={done}
+            nowater={!hasFall && !seriesData}
+            app={app}
+            user={user}
+            brancheS={brancheS}
+            isDebug={isDebug}
+          />
+        :null}
         
       </Tabs>
       
