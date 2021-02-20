@@ -430,19 +430,23 @@ Meteor.publish('hotDataPlus', function(scanOrb, keyMatch){
           'lockTrunc': 0
         }}),
       XSeriesDB.find({batch: trueBatch, orgKey: orgKey}, {
-          fields: {
-            'orgKey': 0
-        //  'groupId': 0,
-    	  // 'widgetId': 0,
-    		// 'versionKey': 0,
-        //  'createdAt': 0,
-        //  'createdWho': 0,
-        //  'updatedAt': 0,
-    		// 'updatedWho': 0
+        fields: {
+          'orgKey': 0
+      //  'groupId': 0,
+  	  // 'widgetId': 0,
+  		// 'versionKey': 0,
+      //  'createdAt': 0,
+      //  'createdWho': 0,
+      //  'updatedAt': 0,
+  		// 'updatedWho': 0
         }}),
       XRapidsDB.find({extendBatch: trueBatch, orgKey: orgKey}, {
-          fields: {
-            'orgKey': 0
+        fields: {
+          'orgKey': 0,
+          'gadget': 0,
+          'createdAt': 0,
+          'createdWho': 0,
+          'closedWho': 0
         }}),
       WidgetDB.find({_id: wID, orgKey: orgKey}, {
         fields: {
@@ -628,7 +632,8 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
         }}),
         XRapidsDB.find({extendBatch: dataRequest, orgKey: orgKey}, {
           fields: {
-            'orgKey': 0
+            'orgKey': 0,
+            'gadget': 0
         //     'groupId': 0,
     			 // 'widgetId': 0,
     			 // 'versionKey': 0,

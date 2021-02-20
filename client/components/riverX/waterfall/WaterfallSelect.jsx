@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment';
+// import moment from 'moment';
 import Pref from '/client/global/pref.js';
 // import { toast } from 'react-toastify';
 import './style';
@@ -7,7 +7,10 @@ import './style';
 import WaterFall from './WaterFall';
 import BatchXComplete from '/client/components/forms/Batch/BatchXComplete';
 
-const WaterfallSelect = ({ batchData, allFlow, fallProg, allFall, nowater, app })=> {
+const WaterfallSelect = ({ 
+  batchData, allFlow, fallProg, allFall, nowater, rapidData,
+  app
+})=> {
   
   Session.set('nowStep', '');
   Session.set('nowWanchor', '');
@@ -26,24 +29,19 @@ const WaterfallSelect = ({ batchData, allFlow, fallProg, allFall, nowater, app }
         let total = entry.count; //entry.counts.length > 0 ?
         
         const type = entry.type || app.countOption.find( x => x.key === entry.key ).type;
-        //let bannerColor = 'blue';
         let borderColor = 'borderBlue';
         let fadeColor = 'Blue';
         //// Style the Stone Accordingly \\\\
       	if(type === 'inspect'){
-      	  //bannerColor = 'green';
       		borderColor = 'borderGreen';
       		fadeColor = 'Green';
         }else if(type === 'checkpoint'){
-          //bannerColor = 'white';
       		borderColor = 'borderWhite';
       		fadeColor = 'White';
         }else if(type === 'test'){
-          //bannerColor = 'teal';
       		borderColor = 'borderTeal';
       		fadeColor = 'Teal';
         }else if(type === 'finish'){
-          //bannerColor = 'purple';
       		borderColor = 'borderPurple';
       		fadeColor = 'Purple';
         }else{

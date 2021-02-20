@@ -62,13 +62,13 @@ const StoneSelect = ({
   
   const iDone = item.history;
                                    
-  const fDone = [];
+  /*const fDone = [];
   for(let item of allItems) {
     let firsts = item.history.filter( 
       x => x.type === 'first' && x.good !== false );
     firsts.forEach( x => fDone.push( 'first' + x.step ) );
-  }
-  
+  }*/
+
   const allAnswered = shortfalls.length === 0 ||
             shortfalls.every( x => x.inEffect === true || x.reSolve === true );
   
@@ -86,9 +86,12 @@ const StoneSelect = ({
     const stepBranch = branchObj ? branchObj.branch : flowStep.step;
     
     const first = flowStep.type === 'first';
-
+      
+    const didFirst = first && allItems.find( i => i.history.find( 
+            x => x.key === flowStep.key && x.good !== false ) ) ? true : false;
+  
     const stepComplete = first ? 
-      iDone.find(ip => ip.key === flowStep.key) || fDone.includes('first' + flowStep.step)
+      iDone.find(ip => ip.key === flowStep.key) || didFirst
       :
       iDone.find(ip => ip.key === flowStep.key && ip.good === true);
     

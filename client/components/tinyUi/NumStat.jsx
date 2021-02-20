@@ -19,9 +19,12 @@ import React from 'react';
     wordWrap: 'keep-all',
   };
  
-const NumStat = ({ num, name, title, color, size, moreClass }) => (
+const NumStat = ({ num, icon, name, title, color, size, moreClass }) => (
   <div style={sty} title={title} className={'noCopy ' + moreClass || ''}>
-    <i style={bSty} className={color + ' numFont ' + size}>{num}</i>
+    <i 
+      style={bSty} 
+      className={color + ' numFont ' + size}
+    >{num || <i className={`${icon} fa-lg`}></i>}</i>
     <br />
     <i style={sSty} className='label'>{name}</i>
   </div>

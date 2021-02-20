@@ -77,12 +77,13 @@ export const PrioritySquare = ({
       return(
         <div className='green'>
           <NumStat
-            num={<i className="far fa-star fa-lg"></i>}
+            num={false}
+            icon='far fa-star'
             name=''
             title='Complete'
             color=''
             size='' />
-      </div>
+        </div>
       );
     }
     

@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import { round2Decimal, avgOfArray } from '/client/utility/Convert';
 
 // ALT PATH HANDLING !! \\
 
@@ -147,6 +148,28 @@ export function FallCounter(batchData, app) {
   const wtrflProg = fallLoop(batchData.waterfall, batchData.quantity, app);
 
   return wtrflProg;
+}
+
+
+  
+export function CascadeCounter(rapidData, avg) {
+  const totalQ = rapidData.quantity;
+  
+  let pointArr = [];
+  const fallS = rapidData.cascade.sort((w1, w2)=> 
+          w1.position < w2.position ? -1 : w1.position > w2.position ? 1 : 0 );
+  
+  for(let wf of fallS) {
+    const wfCount = wf.counts.length === 0 ? 0 :
+                      Array.from(wf.counts, x => x.tick).reduce((x,y)=> x + y);
+    const point = round2Decimal( wfCount / totalQ );
+    pointArr.push(point);
+  }
+  if(avg) {
+    return avgOfArray(pointArr);
+  }else{
+    return pointArr;
+  }
 }
 
 

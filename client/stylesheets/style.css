@@ -122,9 +122,7 @@ input::-webkit-calendar-picker-indicator {
 }
 .blueBorder {
   background-color: transparent;
-	border: 3px solid var(--peterriver);;
-	box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2),
-	      inset 0 0 .1em .1em rgba(43,43,43,0.2);
+	border: 3px solid var(--peterriver);
 }
 
 .logoBlue { background-color: var(--neptuneColor); }

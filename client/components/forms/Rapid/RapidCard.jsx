@@ -58,7 +58,7 @@ const RapidCard = ({
     const nonConArr = nonConsState || [];
     const shortArr = shortState || [];
     
-    Meteor.call('addRapid', 
+    Meteor.call('addExtendRapid', 
       batchId, groupId, rType, batchNum, issueNum,
       exTime, doneTarget, flowKey, falls, howLink, applyAll, quant,
       nonConArr, shortArr,

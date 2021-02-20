@@ -2,7 +2,7 @@ import React, { useState, useEffect, useLayoutEffect, Fragment } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
-import HeadWater, { HighWater } from '/client/components/riverX/HeadWater';
+import HeadWater, { HighWater, WhiteWater } from '/client/components/riverX/HeadWater';
 
 import TideWall from '/client/components/riverX/TideWall';
 
@@ -19,7 +19,8 @@ import XBatchCard from './XBatchCard';
 
 
 const XDoProCard = ({ 
-  itemData, seriesData, batchData, widgetData, groupData,
+  itemData, seriesData, batchData, rapidsData,
+  widgetData, groupData,
   user, users, app, 
   
   ncTypesCombo, tideKey,
@@ -36,7 +37,8 @@ const XDoProCard = ({
 
   const [ flowData, flowDataSet ] = useState(false);
   const [ fallData, fallDataSet ] = useState(false);
-
+  const [ rapidData, rapidDataSet ] = useState(false);
+  
   useEffect( ()=>{
     const branches = app.branches.filter( b => b.open === true );
     const branchesSort = branches.sort((b1, b2)=>
@@ -53,6 +55,15 @@ const XDoProCard = ({
     const getFallData = HighWater(batchData, app);
     fallDataSet(getFallData);
   }, [batchData]);
+  
+  useLayoutEffect( ()=> {
+    const getRapidData = WhiteWater( itemData, seriesData, rapidsData );
+    rapidDataSet(getRapidData);
+    
+    console.log(getRapidData);
+    
+  }, [rapidsData]);
+  
   
   if(!batchData || !fallData) {
     return <div>nope</div>;
@@ -95,8 +106,7 @@ const XDoProCard = ({
             bID={batchData._id}
             bComplete={bComplete}
             bOpen={bOpen}
-            // bCascade={bCascade}
-            // iCascade={iCascade}
+            rapidData={rapidData}
             seriesData={seriesData}
             itemData={itemData || null}
             shortfallS={shortfallS}
@@ -111,7 +121,6 @@ const XDoProCard = ({
             id={batchData._id} 
             rType='floorRelease'
             actionText='release'
-            //contextText='to the floor'
             isX={true} />;
 
   const insertWaterfall = 
@@ -120,7 +129,8 @@ const XDoProCard = ({
             allFlow={flowData.flowCounts.allFlow}
             fallProg={fallData.fallCounts.fallProg}
             allFall={fallData.fallCounts.allFall}
-            nowater={!fallAction && !seriesData}
+            nowater={!fallAction && !seriesData && !rapidData}
+            rapidData={rapidData}
             app={app} />;
             
   const insertItemCard = 
@@ -131,7 +141,7 @@ const XDoProCard = ({
             hasRiver={flowData.hasRiver}
             itemData={itemData}
             iComplete={iComplete}
-            // iCascade={iCascade}
+            rapidData={rapidData}
             shortfallS={shortfallS}
             scrap={scrapCheck} />;
   
@@ -146,6 +156,7 @@ const XDoProCard = ({
             brancheS={brancheState}
             flow={flowData.flow}
             flowCounts={flowData.flowCounts}
+            rapidData={rapidData}
             shortfallS={shortfallS}
             scrapCheck={scrapCheck}
             showVerifyState={showVerifyState}
@@ -158,6 +169,7 @@ const XDoProCard = ({
             seriesId={seriesData && seriesData._id}
             itemData={itemData}
             flowFirsts={flows.filter( x => x.type === 'first' )}
+            rapidData={rapidData}
             brancheS={brancheState}
             app={app}
             users={users}
@@ -178,6 +190,7 @@ const XDoProCard = ({
             srange={flowData.srange}
             flowCounts={flowData.flowCounts}
             fallCounts={fallData.fallCounts}
+            rapidData={rapidData}
             tideKey={tideKey}
             tideFloodGate={tideFloodGate}
             expand={expand}

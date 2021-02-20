@@ -64,14 +64,7 @@ const StoneSelect = ({
   const ncOutstanding = nc.filter( x => x.skip === false );
   
   const iDone = history;
-                                   
-  const fDone = [];
-  for(let item of allItems) {
-    let firsts = item.history.filter( 
-      x => x.type === 'first' && x.good !== false );
-    firsts.forEach( x => fDone.push( 'first' + x.step ) );
-  }
-  
+ 
   const allAnswered = sh.every( x => x.inEffect === true || x.reSolve === true );
   
   
@@ -89,8 +82,11 @@ const StoneSelect = ({
     
     const first = flowStep.type === 'first';
 
+    const didFirst = first && allItems.find( i => i.history.find( 
+          x => x.key === flowStep.key && x.good !== false ) ) ? true : false;
+  
     const stepComplete = first ? 
-      iDone.find(ip => ip.key === flowStep.key) || fDone.includes('first' + flowStep.step)
+      iDone.find(ip => ip.key === flowStep.key) || didFirst
       :
       iDone.find(ip => ip.key === flowStep.key && ip.good === true);
     

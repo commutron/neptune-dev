@@ -3,7 +3,10 @@ import './style.css';
 
 const Tabs = ({ tabs, names, wide, stick, hold, sessionTab, disable, children })=> {
   
-  const [ sect, setSect ] = useState( Session.get(sessionTab) || 0 );
+  const ssn = Session.get(sessionTab);
+  const dfTab = tabs[ssn] ? ssn : 0;
+  
+  const [ sect, setSect ] = useState( dfTab );
 
   function handleClick(clk) {
     setSect(clk);

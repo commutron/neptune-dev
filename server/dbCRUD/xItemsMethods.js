@@ -42,7 +42,7 @@ Meteor.methods({
                 units: Number(unit),
                 subItems: [],
                 history: [],
-                altPath: false
+                altPath: []
               });
             }else{
               goodSerial.push(serialTry);
@@ -279,33 +279,7 @@ Meteor.methods({
     }
   },
   
-// delete \\
-  deleteItemX(batchId, seriesId, serial, pass) {
-    const accessKey = Meteor.user().orgKey;
-    
-    const doc = XSeriesDB.findOne({_id: seriesId});
-    const subDoc = doc.items.find( x => x.serial === serial );
-    const inUse = subDoc.history.length > 0 ? true : false;
-    
-    if(!inUse) {
-      const lock = subDoc.createdAt.toISOString().split("T")[0];
-      const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
-      const access = doc.orgKey === accessKey;
-      const unlock = lock === pass;
-      
-      if(auth && access && unlock) {
-    		XSeriesDB.update(seriesId, {
-          $pull : { items: { serial: serial }
-        }});
-        Meteor.defer( ()=>{ Meteor.call('updateOneMinify', batchId, accessKey); });
-        return true;
-      }else{
-        return false;
-      }
-    }else{
-      return 'inUse';
-    }
-  },
+
 
   /* YXXYXXXXXYXXXXXXXXXXXXXYXXXXXXXXXXXXXXXXXXXXX
   dataFIXduplicateserial(batchNum, serialNum, dateStamp) {
@@ -843,6 +817,34 @@ Meteor.methods({
     }
   }
   */
+  
+  // delete \\
+  deleteItemX(batchId, seriesId, serial, pass) {
+    const accessKey = Meteor.user().orgKey;
+    
+    const doc = XSeriesDB.findOne({_id: seriesId});
+    const subDoc = doc.items.find( x => x.serial === serial );
+    const inUse = subDoc.history.length > 0 ? true : false;
+    
+    if(!inUse) {
+      const lock = subDoc.createdAt.toISOString().split("T")[0];
+      const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
+      const access = doc.orgKey === accessKey;
+      const unlock = lock === pass;
+      
+      if(auth && access && unlock) {
+    		XSeriesDB.update(seriesId, {
+          $pull : { items: { serial: serial }
+        }});
+        Meteor.defer( ()=>{ Meteor.call('updateOneMinify', batchId, accessKey); });
+        return true;
+      }else{
+        return false;
+      }
+    }else{
+      return 'inUse';
+    }
+  },
   
 });
 

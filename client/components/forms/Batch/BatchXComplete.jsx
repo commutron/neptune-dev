@@ -42,7 +42,7 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, canRun })=> {
         : null
       :
         <Fragment>
-          <h2 className='green'>
+          <h2 className='green centreText'>
             Completed: {moment(batchData.completedAt).calendar()}
           </h2>
           {moment().diff(moment(batchData.completedAt), 'minutes') < 60 ?

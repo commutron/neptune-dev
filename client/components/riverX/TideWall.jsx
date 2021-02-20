@@ -9,7 +9,7 @@ import CompleteRest from './CompleteRest.jsx';
 import MiniHistory from './MiniHistory.jsx';
   
 const TideWall = ({ 
-  bID, bComplete, bOpen, //bCascade, iCascade
+  bID, bComplete, bOpen, rapidData,
   itemData, seriesData, shortfallS, scrap,
   ancOptionS, plainBrancheS,
   tideKey, tideFloodGate
@@ -20,16 +20,14 @@ const TideWall = ({
   
   const ctxLabel = tideFloodGate ? 'Set Different Task' : `Set A Task`;
   
-  if(!bOpen && bComplete) {
-    return(
-      null
-    );
+  if(!bOpen && bComplete && !rapidData) {
+    return null;
   }
   return(
     <div className='vgap'>
 
   		{bOpen && ( ( !itemData ) ||
-  		  ( itemData && itemData.completed === false ) ) ? 
+  		  ( itemData && ( itemData.completed === false || rapidData.rapid ) ) ) ? 
   		  
 		    <Fragment>
           <n-big-tide-container>
@@ -50,23 +48,23 @@ const TideWall = ({
             taskSet={taskSet} /> 
         </Fragment>
         
-        : null }
-        
-        {itemData ?
-          itemData.completed ?
-            <CompleteRest
-              seriesId={seriesData._id}
-              serial={itemData.serial}
-              iComplete={itemData.completed}
-              history={itemData.history}
-              // iCascade={iCascade}
-              scrap={scrap}
-              bComplete={bComplete}
-              shortfallS={shortfallS} />
-          :
-            <MiniHistory history={itemData.history} />
-        : null
-        }
+      : null }
+      
+      {itemData ?
+        itemData.completed ?
+          <CompleteRest
+            seriesId={seriesData._id}
+            serial={itemData.serial}
+            iComplete={itemData.completed}
+            history={itemData.history}
+            iAlt={itemData.altPath}
+            scrap={scrap}
+            bComplete={bComplete}
+            shortfallS={shortfallS} />
+        :
+          <MiniHistory history={itemData.history} />
+      : null
+      }
   	</div>
   );
 };

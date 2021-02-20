@@ -254,6 +254,22 @@ Meteor.methods({
     }
   },
   
+  RESETitemAltPathArray() {
+    try{
+      if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+        XSeriesDB.update({ orgKey: Meteor.user().orgKey, 'items.altPath': false }, {
+          $set : { 
+            'items.$.altPath': []
+          }},{multi: true});
+          return true;
+      }else{
+        return false;
+      }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  
   ResetAppLatestSerial() {
     try{
       if(Roles.userIsInRole(Meteor.userId(), 'admin')) {

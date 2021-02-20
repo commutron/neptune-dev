@@ -13,7 +13,7 @@ import BlockForm from '/client/components/forms/BlockForm.jsx';
 import BlockList from '/client/components/bigUi/BlockList.jsx';
 
 const BatchCardX = ({
-  batchData, bOpen, bClosed, //seriesData, itemData
+  batchData, bOpen, bClosed, rapidData, //seriesData, itemData
   user, app, brancheS, plainBrancheS, ancOptionS,
   floorReleased, srange, flowCounts, fallCounts,
   tideKey, tideFloodGate, 

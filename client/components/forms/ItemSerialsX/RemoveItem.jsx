@@ -62,7 +62,7 @@ const RemoveItemForm = ({ batchId, batch, seriesId, serial, check })=> {
           id='confirmInput'
           placeholder={checkshort}
           autoFocus={true}
-          className='noCopy redIn'
+          className='noCopy'
           required />
         <button
           className='smallAction clearRed'
