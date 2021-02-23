@@ -13,7 +13,7 @@ const Slides = ({ menu, disable, extraClass, children })=> {
     
   return(
     <div className='slidesLayout'>
-      <div className='slidesMenu noPrint'>
+      <div className='slidesMenu forceScrollStyle noPrint'>
         {menu.map( (entry, index)=>{
           let clss =  show === index ? 
                       'slideMenuButton cap slideOn' : 

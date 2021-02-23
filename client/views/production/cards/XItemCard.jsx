@@ -20,7 +20,6 @@ const XItemCard = ({
         <p><em>
           "Release to the Floor" must be recorded
         </em></p>
-        <br />
       </div>
     );
   }
@@ -34,7 +33,6 @@ const XItemCard = ({
         <p className='medBig'>
           This {Pref.xbatch} does not have a {Pref.flow}
         </p>
-        <br />
       </div>
     );
   }

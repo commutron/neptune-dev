@@ -27,7 +27,7 @@ const SlidesNested = ({
   
   return(
     <div className='slidesNestedLayout'>
-      <div className='slidesNestedMenu noPrint'>
+      <div className='slidesNestedMenu forceScrollStyle noPrint'>
 
         <input 
           key={'1a1'} 
