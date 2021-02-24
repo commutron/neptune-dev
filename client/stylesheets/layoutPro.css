@@ -189,12 +189,10 @@
   text-align: center;
   line-height: normal;
   height: 100%;
+  min-height: min-content;
   width: 100%;
 	color: white;
-	border-top: 3px solid transparent;
-	border-right: 0;
-	border-bottom: 3px solid transparent;
-	border-left: 0;
+	border: none;
 	background-color: transparent;
   padding: 0;
   border-radius: 0%;

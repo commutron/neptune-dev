@@ -49,7 +49,8 @@ const BatchCardX = ({
             />
           </div>;
   
-  if( ( expand && !bOpen ) || ( tideFloodGate && expand && !flowwater && !fallwater ) ) {
+  if( ( expand && !bOpen ) || 
+      ( tideFloodGate && expand && !flowwater && !fallwater ) ) {
     return(
       <Fragment>   
         <div className='proPrimeSingle'>

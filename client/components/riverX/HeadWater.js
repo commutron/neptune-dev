@@ -43,78 +43,58 @@ export function WhiteWater( itemData, seriesData, rapidsData ) {
   
   if(rapidsData.length > 0) {
     
+    let rapIs = false;
+    let rapDo = [];
     let rapDids = [];
     
     if(!seriesData) {
       
-      for(const rapid of rapidsData) {
+      for(let rapid of rapidsData) {
         
         const casCount = CascadeCounter(rapid, true);
         
+        rapid.count = casCount;
+        
         if( rapid.live === true && casCount !== 1 ) {
-          return {
-            rapid: rapid,
-            runCount: casCount,
-            rapDids: rapDids,
-            iRapid: false
-          };
+          rapDo.push(rapid);
         }else{
           rapDids.push({
             rapid: rapid.rapid, 
             type: rapid.type,
-            quantity: rapid.quantity,
-            count: casCount
+            quantity: rapid.quantity
           });
         }
       }
-      return {
-        rapid: false,
-        runCount: false,
-        rapDids: rapDids,
-        iRapid: false
-      };
+      return { rapIs, rapDo, rapDids };
     }else{
       
-      for(const rapid of rapidsData) {
+      for(let rapid of rapidsData) {
         
         const rapDidI = seriesData.items.filter( i => 
                           i.altPath.find( r => 
-                            r.rapidId === rapid._id && r.completed === true ) 
-                         ).length;
+                            r.rapId === rapid._id && r.completed === true ) 
+                        ).length;
         const iDone = round2Decimal( rapDidI / rapid.quantity );
         
-        const iRapid = !itemData ? false : 
-                        itemData.altPath.find( i => i.rapId === rapid._id );
+        rapid.count = iDone;
         
         if( rapid.live === true && iDone !== 1 ) {
-          return {
-            rapid: rapid,
-            runCount: iDone,
-            rapDids: rapDids,
-            iRapid: iRapid
-          };
+          
+          rapIs = !itemData ? false : itemData.altPath.find( i => i.rapId === rapid._id );
+          
+          rapDo.push(rapid);
+          
         }else{
           rapDids.push({
             rapid: rapid.rapid, 
             type: rapid.type,
             quantity: rapid.quantity,
-            count: iDone
           });
         }
       }
-      return {
-        rapid: false,
-        runCount: false,
-        rapDids: rapDids,
-        iRapid: false
-      };
+      return { rapIs, rapDo, rapDids };
     }
   }else{
-    return {
-      rapid: false,
-      runCount: false,
-      rapDids: false,
-      iRapid: false
-    };
+    return { rapIs, rapDo, rapDids };
   }
 }

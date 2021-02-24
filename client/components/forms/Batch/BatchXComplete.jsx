@@ -18,7 +18,7 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, canRun })=> {
     if(batchData.completed === true) {
       Meteor.call('undoFinishBatchX', batchID, override, (error, reply)=>{
         error && console.log(error);
-        reply ? null : toast.error('Server Error');
+        reply ? null : toast.error('Cannot Perform Function');
       });
     }
   }

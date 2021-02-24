@@ -74,8 +74,6 @@ n-tide-task label {
   background-color: rgb(25,25,25);
 }
 
-
-
 .tideIn, .tideOut, .tideFlip, .tideLock {
   width: 100%;
   height: 100%;
@@ -85,11 +83,20 @@ n-tide-task label {
   color: var(--asbestos);
   /*padding-top: 0.2vmax;*/
   letter-spacing: 0.2ch;
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .tideIcon {
   font-size: 2.5vh;
   border-radius: 50%;
+}
+.tideIcon svg {
+  width: 100%;
+  height: 100%;
 }
 
 .tideIn .tideIndicate { color: var(--pomegranate); }
@@ -178,4 +185,26 @@ n-tide-task label {
 .tideOut:focus:before, .tideOut:hover:before, 
 .tideFollowTip:focus:before, .tideFollowTip:hover:before {
   opacity: 1;
+}
+
+@media (orientation: portrait) {
+ 
+  /*.taskLink {*/
+  /*  margin: 1vmin 0;*/
+  /*  width: 5.5vmin;*/
+  /*  height: 5.5vmin;*/
+  /*  font-size: 3.25vmin;*/
+  /*}*/
+  /*.followTask i {*/
+  /*  width: 5.5vmin;*/
+  /*  height: 5.5vmin;*/
+  /*  font-size: 2.25vmin;*/
+  /*}*/
+  /*.tideIcon {*/
+  /*  font-size: 2.5vmin;*/
+
+  /*}*/
+ 
+ 
+  
 }

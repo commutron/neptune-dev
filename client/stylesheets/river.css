@@ -512,3 +512,22 @@
 .ncTypeList datalist {
   text-transform: capitalize;
 }
+
+.forkButton {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  word-break: keep-all;
+  padding: 1vmin;
+  width: 100%;
+  min-height: 12vmin;
+  text-transform: capitalize;
+}
+.forkButton {
+  font-size: 6vmin;
+}
+.forkButton b {
+  font-size: 3vmin;
+}

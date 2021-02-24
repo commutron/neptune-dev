@@ -764,21 +764,34 @@ Meteor.methods({
 		}}});
   },
 
- /*
-  setRMA(batchId, bar, cKey) {
-    const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar});
-    const subDoc = doc.items.find( x => x.serial === bar );
-    const rmaDoc = doc.cascade.find( x => x.key === cKey );
-    if( Roles.userIsInRole(Meteor.userId(), ['qa', 'run', 'inspect']) && 
-        subDoc.rma.includes( cKey ) === false ) {
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
+ 
+  setRapidFork(seriesId, serial, rapId) {
+    const doc = XSeriesDB.findOne({_id: seriesId, orgKey: Meteor.user().orgKey, 'items.serial': serial});
+    const subDoc = doc.items.find( x => x.serial === serial );
+    
+    const rapid = XRapidsDB.findOne({_id: rapId});
+    
+    const auth = Roles.userIsInRole(Meteor.userId(), ['qa', 'run', 'inspect']);
+    
+    if( auth && !subDoc.altPath.find( a => a.rapId === rapId ) ) {
+          
+      XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'items.serial': serial}, {
         $push : { 
-          'items.$.rma': cKey
+          'items.$.altPath': {
+            flowKey: false,
+            rapId: rapId,
+            assignedAt: new Date(),
+            completed: false,
+            completedAt: null,
+            completedWho: null
+          }
         }});
       // add noncons
+      
+      /*
       const nonCons = rmaDoc.nonCons || [];
       for(let nc of nonCons) {
-        BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey}, {
           $push : { nonCon: {
             key: new Meteor.Collection.ObjectID().valueOf(), // id of the nonCon entry
             serial: bar, // barcode id of item
@@ -795,12 +808,13 @@ Meteor.methods({
             comm: ''
         }}});
       }
+      */
+      
       return true;
     }else{
       return false;
     }
   },
-  */
   /*
   /// unset an rma on an item
   unsetRMA(batchId, serial, cKey) {
@@ -816,7 +830,7 @@ Meteor.methods({
       return false;
     }
   }
-  */
+*/
   
   // delete \\
   deleteItemX(batchId, seriesId, serial, pass) {

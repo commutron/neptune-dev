@@ -19,7 +19,7 @@ const CompleteRest = ({
       {scrap ?
         <ScrapBox entry={scrap} />
       :
-        <div className='finishBanner wide'>
+        <div className='finishBanner wide wordBr'>
           <div className='purpleBorder centreText cap'>
             <h2>{Pref.trackLast}ed</h2>
             <h3>{moment(iDone[iDone.length -1].time).calendar()}</h3>

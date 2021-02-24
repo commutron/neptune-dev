@@ -221,7 +221,7 @@ option {
 
 textarea {
   min-width: 20rem;
-  min-height: 6rem;
+  min-height: 3rem;
   border-color: inherit;
 }
 

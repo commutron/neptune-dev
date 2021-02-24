@@ -4,7 +4,7 @@ import moment from 'moment';
 Meteor.methods({
 
   addExtendRapid(batchId, groupId, rType, exBatch, issueNum,
-    exTime, doneTarget, flowKey, falls, howLink, applyAll, quant,
+    exTime, doneTarget, flows, falls, howLink, note, applyAll, quant,
     nonConArr, shortArr
   ) {
     const accessKey = Meteor.user().orgKey;
@@ -20,43 +20,53 @@ Meteor.methods({
         const inMinutes = moment.duration(inHours, 'hours').asMinutes();
         const exTimeNum = isNaN(inMinutes) ? false : Number(inMinutes);
         
-        let fallObjs = [];
-        falls.includes('doBuild') ? fallObjs.push({
-          wfKey: new Meteor.Collection.ObjectID().valueOf(),
-          gate: rType,
-          type: 'build',
-          position: Number(1),
-          action: 'clicker',
-          branchKey: 'r@p1d8r2nch',
-          counts: []
-        }) : null;
-        falls.includes('doInspect') ? fallObjs.push({
-          wfKey: new Meteor.Collection.ObjectID().valueOf(),
-          gate: 'inspect',
-          type: 'inspect',
-          position: Number(2),
-          action: 'clicker',
-          branchKey: 'r@p1d8r2nch',
-          counts: []
-        }) : null;
-        falls.includes('doTest') ? fallObjs.push({
-          wfKey: new Meteor.Collection.ObjectID().valueOf(),
-          gate: 'test',
-          type: 'test',
-          position: Number(3),
-          action: 'clicker',
-          branchKey: 'r@p1d8r2nch',
-          counts: []
-        }) : null;
-        falls.includes('doFinish') ? fallObjs.push({
-          wfKey: new Meteor.Collection.ObjectID().valueOf(),
-          gate: 'finish',
-          type: 'finish',
-          position: Number(4),
-          action: 'clicker',
-          branchKey: 't3rm1n2t1ng8r2nch',
-          counts: []
-        }) : null;
+        let wwObjs = [];
+        if(flows) {
+          for(let fl of flows) {
+            let uniqueStep = fl;
+            uniqueStep['key'] = new Meteor.Collection.ObjectID().valueOf();
+            uniqueStep['branchKey'] = 'r@p1d8r2nch';
+            
+            wwObjs.push(uniqueStep);
+          }
+        }else{
+          falls.includes('doBuild') ? wwObjs.push({
+            wfKey: new Meteor.Collection.ObjectID().valueOf(),
+            gate: rType,
+            type: 'build',
+            position: Number(1),
+            action: 'clicker',
+            branchKey: 'r@p1d8r2nch',
+            counts: []
+          }) : null;
+          falls.includes('doInspect') ? wwObjs.push({
+            wfKey: new Meteor.Collection.ObjectID().valueOf(),
+            gate: 'inspect',
+            type: 'inspect',
+            position: Number(2),
+            action: 'clicker',
+            branchKey: 'r@p1d8r2nch',
+            counts: []
+          }) : null;
+          falls.includes('doTest') ? wwObjs.push({
+            wfKey: new Meteor.Collection.ObjectID().valueOf(),
+            gate: 'test',
+            type: 'test',
+            position: Number(3),
+            action: 'clicker',
+            branchKey: 'r@p1d8r2nch',
+            counts: []
+          }) : null;
+          falls.includes('doFinish') ? wwObjs.push({
+            wfKey: new Meteor.Collection.ObjectID().valueOf(),
+            gate: 'finish',
+            type: 'finish',
+            position: Number(4),
+            action: 'clicker',
+            branchKey: 't3rm1n2t1ng8r2nch',
+            counts: []
+          }) : null;
+        }
            
         XRapidsDB.insert({
           orgKey: accessKey,
@@ -75,9 +85,9 @@ Meteor.methods({
           deliverAt: new Date(doneTarget),
           quantity: Number(quant),
           instruct: howLink,
-          cascade: fallObjs,
+          notes: note,
           applyAll: applyAll,
-          whitewater: flowKey, // if extended & serialized
+          whitewater: wwObjs, // if extended & serialized
           autoNC: nonConArr, // {ref: "k1", type: "upside down"}
           autoSH: shortArr, // {refs: "k1", part: "750001005"}
         });

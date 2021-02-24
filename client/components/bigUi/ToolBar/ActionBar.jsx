@@ -229,6 +229,7 @@ const ActionBar = ({
             flows={widgetData.flows}
             lock={batchData.lock}
             user={user}
+            app={app}
             ncTypesCombo={ncTypesCombo || []}
             vassembly={variantData.assembly} />
 

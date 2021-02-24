@@ -101,6 +101,8 @@ const XDoProCard = ({
   const flowAction = flowData.hasRiver && fallData.floorRel;
   const fallAction = batchData.waterfall.length > 0;
   
+  const rapIs = rapidData.rapIs;
+  
   const insertTideWall = 
           <TideWall
             bID={batchData._id}
@@ -156,7 +158,7 @@ const XDoProCard = ({
             brancheS={brancheState}
             flow={flowData.flow}
             flowCounts={flowData.flowCounts}
-            rapidData={rapidData}
+            rapIs={rapidData.rapIs}
             shortfallS={shortfallS}
             scrapCheck={scrapCheck}
             showVerifyState={showVerifyState}
@@ -194,7 +196,7 @@ const XDoProCard = ({
             tideKey={tideKey}
             tideFloodGate={tideFloodGate}
             expand={expand}
-            flowwater={flowAction && itemData}
+            flowwater={itemData}
             fallwater={fallAction && !itemData} />;
   
   return(
@@ -217,7 +219,7 @@ const XDoProCard = ({
       
       !tideFloodGate ? insertTideWall : // @ Locked
         
-        !flowAction || iComplete ? insertItemCard : // @ Rest
+        !flowAction || ( iComplete && !rapIs ) ? insertItemCard : // @ Rest
           
           showVerifyState ? insertVerifyIsland : // @ First Form
             

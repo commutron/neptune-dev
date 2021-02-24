@@ -40,7 +40,7 @@ const BatchPanelX = ({
     `Problems`,
     'Events',
   ];
-  rapidsData.length > 0 ? tabbar.push('Entended') : null;
+  rapidsData.length > 0 ? tabbar.push('Extended') : null;
           
   return(
     <div className='section' key={b.batch}>

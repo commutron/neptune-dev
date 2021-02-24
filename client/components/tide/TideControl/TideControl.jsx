@@ -105,12 +105,11 @@ const TideControl = ({
         disabled={lock}
       >
       <em>
-        <span className='fa-stack fa-fw tideIcon'>
+        <span className='fa-stack tideIcon'>
           <i className="fas fa-circle-notch fa-stack-2x fa-spin tideIndicate"></i>
           <i className="fas fa-stop fa-stack-1x" data-fa-transform="shrink-1"></i>
         </span> 
       </em>
-      {/*<br />STOP */}
       </button>
     );
   }
@@ -124,12 +123,11 @@ const TideControl = ({
         disabled={lock || tideLockOut}
       >
       <b>
-        <span className='fa-stack fa-fw tideIcon'>
+        <span className='fa-stack tideIcon'>
           <i className="fas fa-circle-notch fa-stack-2x tideIndicate"></i>
           <i className="fas fa-play fa-stack-1x" data-fa-transform="shrink-1 right-2"></i>
         </span>
-      </b>
-      <br />START</button>
+      </b>START</button>
     );
   }
   
@@ -142,24 +140,22 @@ const TideControl = ({
         disabled={lock || tideLockOut}
       >
       <i>
-        <span className='fa-stack fa-fw tideIcon'>
+        <span className='fa-stack tideIcon'>
           <i className="fas fa-circle-notch fa-stack-2x tideIndicate"></i>
           <i className="fas fa-exchange-alt fa-stack-1x" data-fa-transform="shrink-1"></i>
         </span> 
-      </i>
-      <br />SWITCH</button>
+      </i>SWITCH</button>
     );
   }
   
   return(
     <button className='tideLock' disabled={true}>
-      <b>
-        <span className='fa-stack fa-fw tideIcon'>
+      <i>
+        <span className='fa-stack tideIcon'>
           <i className="fas fa-ban fa-stack-2x tideIndicate"></i>
           <i className="fas fa-play fa-stack-1x" data-fa-transform="shrink-1 right-2"></i>
         </span>
-      </b>
-      {/*<br />LOCKED */}
+      </i>
     </button>
   );
 };

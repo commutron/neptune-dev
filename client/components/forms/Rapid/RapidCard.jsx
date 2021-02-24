@@ -5,7 +5,6 @@ import 'moment-timezone';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelLarge from '/client/components/smallUi/ModelLarge';
 import AddAutoNC from './AddAutoNC';
 import AddAutoSH from './AddAutoSH';
 
@@ -42,6 +41,7 @@ const RapidCard = ({
     const doneTarget = moment(endDate).endOf('day').format();
     
     const flowKey = this.flowKey ? this.flowKey.value : false;
+    // let flows = hasSeries ? [] : false;
     
     let falls = [];
     this.doBuild && this.doBuild.checked ? falls.push('doBuild') : null;
@@ -52,6 +52,8 @@ const RapidCard = ({
     const howText = this.howLink.value.trim();
     const howLink = howText.length === 0 ? false : howText;
     
+    const noteText = this.noteText.value.trim();
+    
     const applyAll = this.applyAll.checked;
     const quant = this.quant.value.trim().toLowerCase();
     
@@ -60,7 +62,7 @@ const RapidCard = ({
     
     Meteor.call('addExtendRapid', 
       batchId, groupId, rType, batchNum, issueNum,
-      exTime, doneTarget, flowKey, falls, howLink, applyAll, quant,
+      exTime, doneTarget, flowKey, falls, howLink, noteText, applyAll, quant,
       nonConArr, shortArr,
     
       (error, reply)=>{
@@ -168,6 +170,18 @@ const RapidCard = ({
             id='howLink'
             placeholder="http://"
           /></label>
+          
+        </div>
+        
+        <div className='centreRow vmargin'>  
+          
+          <label htmlFor='noteText' className='breath'>Notes<br />
+          <textarea
+            id='noteText'
+            rows={2}
+            columns={10}
+          ></textarea>
+          </label>
           
         </div>
       

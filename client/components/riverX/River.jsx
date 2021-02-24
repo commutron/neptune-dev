@@ -8,7 +8,7 @@ import StoneSelect from './StoneSelect.jsx';
 // import AltMarker from '/client/components/tinyUi/AltMarker.jsx';
 
 const River = ({ 
-  batchData, seriesData, itemData, widgetData, 
+  batchData, seriesData, itemData, widgetData, rapIs,
   app, users, brancheS,
   flow, flowCounts,
   shortfallS, scrapCheck,
@@ -36,9 +36,10 @@ const River = ({
   }
 
   const b = batchData;
-  const w = widgetData;
 
-  let useFlow = !flow ? w.flows.find( x => x.flowKey === b.river).flow : flow;
+  let useFlow = itemData.completed ?
+                !rapIs ? [] : rapIs.whitewater :
+                !flow ? [] : flow;
   // let rma = [];
   /*
   if(i.finishedAt !== false) {

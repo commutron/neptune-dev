@@ -6,13 +6,14 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 import ModelLarge from '/client/components/smallUi/ModelLarge';
+import AddFlowSteps from './AddFlowSteps';
 import AddAutoNC from './AddAutoNC';
 import AddAutoSH from './AddAutoSH';
 
 const RapidCreate = ({ 
   batchId, batchNum, groupId, hasSeries, srsQ, allQ,
   flows, user, ncTypesCombo, vassembly,
-  lock 
+  app, lock
 })=> (
   <ModelLarge
     button={'Extend'}
@@ -32,6 +33,7 @@ const RapidCreate = ({
       ncTypesCombo={ncTypesCombo}
       vassembly={vassembly}
       user={user}
+      app={app}
     />
   </ModelLarge>
 );
@@ -41,11 +43,13 @@ export default RapidCreate;
 const RapidCreateForm = ({ 
   batchId, batchNum, groupId, 
   hasSeries, srsQ, allQ, flows,
-  ncTypesCombo, vassembly, user, selfclose
+  ncTypesCombo, vassembly, user, app, selfclose
 })=> {
 
   const [ typeState, typeSet ] = useState(false);
   const [ applyState, applySet ] = useState(false);
+  
+  const [ flowsState, flowsSet ] = useState(false);
   
   const [ nonConsState, nonConsSet ] = useState([]);
 
@@ -70,7 +74,7 @@ const RapidCreateForm = ({
     const endDate = this.eDate.value;
     const doneTarget = moment(endDate).endOf('day').format();
     
-    const flowKey = this.flowKey ? this.flowKey.value : false;
+    let flows = hasSeries ? flowsState : false;
     
     let falls = [];
     this.doBuild && this.doBuild.checked ? falls.push('doBuild') : null;
@@ -81,6 +85,8 @@ const RapidCreateForm = ({
     const howText = this.howLink.value.trim();
     const howLink = howText.length === 0 ? false : howText;
     
+    const noteText = this.noteText.value.trim();
+    
     const applyAll = this.applyAll.checked;
     const quant = this.quant.value.trim();
     
@@ -89,7 +95,7 @@ const RapidCreateForm = ({
     
     Meteor.call('addExtendRapid', 
       batchId, groupId, rType, batchNum, issueNum,
-      exTime, doneTarget, flowKey, falls, howLink, applyAll, quant,
+      exTime, doneTarget, flows, falls, howLink, noteText, applyAll, quant,
       nonConArr, shortArr,
     
       (error, reply)=>{
@@ -164,7 +170,7 @@ const RapidCreateForm = ({
           /></label>
         </div>
       
-        <div className='vmargin'>
+        <div className='centre vmargin'>
           <label htmlFor='quant' className='breath'>Quantity<br />
           <input
             type='number'
@@ -175,9 +181,7 @@ const RapidCreateForm = ({
             placeholder={allQ}
             disabled={applyState}
             required 
-          /></label>
-        
-          <label className='breath'><br />
+          /><br />
             <label htmlFor='applyAll' className='beside'>
             <input
               type='checkbox'
@@ -197,6 +201,18 @@ const RapidCreateForm = ({
             id='howLink'
             placeholder="http://"
           /></label>
+        
+        </div>
+        
+        <div className='centreRow vmargin'>  
+          
+          <label htmlFor='noteText' className='breath'>Notes<br />
+          <textarea
+            id='noteText'
+            rows={1}
+            columns={10}
+          ></textarea>
+          </label>
           
         </div>
       
@@ -207,20 +223,17 @@ const RapidCreateForm = ({
         {hasSeries ?
           
           <div className='centre'>
-
-            <label htmlFor='flowKey' className='breath'>Flow<br />
-              <select 
-                id='flowKey'
-                disabled={!hasSeries}
-                required>
-              <option></option>
-              {flows.map( (entry, index)=>{
-                return(
-                 <option key={index} value={entry.flowKey}>{entry.title}</option>
-                 );
-              })}
-            </select></label>
-        
+            
+            <div className='vmargin'>
+              <AddFlowSteps
+                app={app}
+                user={user}
+                flowsState={flowsState}
+                flowsSet={flowsSet}
+                lockOut={!typeState || typeState === 'modify'}
+              />
+            </div>
+            
             <div className='vmargin'>
               <AddAutoNC
                 ncTypesCombo={ncTypesCombo}
@@ -229,11 +242,6 @@ const RapidCreateForm = ({
                 nonConsSet={nonConsSet}
                 lockOut={!typeState || typeState === 'modify'}
               />
-              <ol className='indenText'>
-                {hasSeries && nonConsState.map( (entry, index)=>(
-                    <li key={index}>{entry.ref} | {entry.type}</li>
-                ))}
-              </ol>
             </div>
           
             <div className='vmargin'>
@@ -243,11 +251,6 @@ const RapidCreateForm = ({
                 shortSet={shortSet}
                 lockOut={!typeState || typeState === 'modify'}
               />
-              <ol className='indenText'>
-                {hasSeries && shortState.map( (entry, index)=>(
-                  <li key={index}>{entry.refs} | {entry.part}</li>
-                ))}
-              </ol>
             </div>
           </div>
           
@@ -300,6 +303,7 @@ const RapidCreateForm = ({
           <button
             type='submit'
             className='action clear greenHover'
+            disabled={hasSeries ? !flowsState : false}
           >Create</button>
         </div>
       

@@ -39,100 +39,129 @@ const AddAutoNC = ({ ncTypesCombo, user, nonConsState, nonConsSet, lockOut })=> 
     }else{
       this.ncType.reportValidity();
     }
-    
+  }
+  
+  function removeOne(entry) {
+    const curr = new Set( nonConsState );
+    const nope = entry;
+    // take off selected step
+    curr.delete(nope);
+    // update state
+    nonConsSet( [...curr] );
   }
   
   return(
-    <div className='inlineForm'>
-    
-      <label htmlFor='ncRefs' className='breath'>Referances<br />
-        <input
-          type='text'
-          id='ncRefs'
-          className='up miniIn12'
-          disabled={lockOut} />
-      </label>
+    <div>
+      <div className='inlineForm'>
       
-      
-      <label htmlFor='ncType' className='breath'>Type<br />
-      {user.typeNCselection ?
-        <span>
-          <input 
-            id='ncType'
-            type='search'
-            className='miniIn18'
-            placeholder='Type'
-            list='ncTypeList'
-            onInput={(e)=>handleCheck(e.target)}
-            disabled={ncTypesCombo.length < 1 || lockOut}
-            autoComplete={navigator.userAgent.includes('Firefox/') ? "off" : ""}
-              // ^^^ workaround for persistent bug in desktop Firefox ^^^
-          />
-          <datalist id='ncTypeList'>
-            {ncTypesCombo.map( (entry, index)=>{
-              if(!entry.key) {
-                return ( 
-                  <option 
-                    key={index} 
-                    value={entry}
-                  >{index + 1}. {entry}</option>
-                );
-              }else if(entry.live === true) {
-                let cd = user.showNCcodes ? `${entry.typeCode}. ` : '';
-                return( 
-                  <option 
-                    key={index}
-                    data-id={entry.key}
-                    value={entry.typeText}
-                  label={cd + entry.typeText}
-                />
-                );
-              }})
-            }
-          </datalist>
-          </span>
-          :
+        <label htmlFor='ncRefs' className='breath'>Referances<br />
+          <input
+            type='text'
+            id='ncRefs'
+            className='up miniIn12'
+            disabled={lockOut} />
+        </label>
+        
+        
+        <label htmlFor='ncType' className='breath'>Type<br />
+        {user.typeNCselection ?
           <span>
-            <select 
+            <input 
               id='ncType'
-              className='redIn miniIn18'
-              required
+              type='search'
+              className='miniIn18'
+              placeholder='Type'
+              list='ncTypeList'
+              onInput={(e)=>handleCheck(e.target)}
               disabled={ncTypesCombo.length < 1 || lockOut}
-            >
-            {ncTypesCombo.map( (entry, index)=>{
-              if(!entry.key) {
-                return ( 
-                  <option 
-                    key={index} 
-                    value={entry}
-                  >{index + 1}. {entry}</option>
-                );
-              }else if(entry.live === true) {
-                let cd = user.showNCcodes ? `${entry.typeCode}. ` : '';
-                return ( 
-                  <option 
-                    key={entry.key}
-                    data-id={entry.key}
-                    value={entry.typeText}
+              autoComplete={navigator.userAgent.includes('Firefox/') ? "off" : ""}
+                // ^^^ workaround for persistent bug in desktop Firefox ^^^
+            />
+            <datalist id='ncTypeList'>
+              {ncTypesCombo.map( (entry, index)=>{
+                if(!entry.key) {
+                  return ( 
+                    <option 
+                      key={index} 
+                      value={entry}
+                    >{index + 1}. {entry}</option>
+                  );
+                }else if(entry.live === true) {
+                  let cd = user.showNCcodes ? `${entry.typeCode}. ` : '';
+                  return( 
+                    <option 
+                      key={index}
+                      data-id={entry.key}
+                      value={entry.typeText}
                     label={cd + entry.typeText}
                   />
-                );
-            }})}
-            </select>
-          </span>
-        }
-      </label>
-      
-      <label><br /> 
-        <button
-          type='button'
-          id='addNC'
-          onClick={(e)=>handleNC(e)}
-          disabled={lockOut}
-          className='smallAction clearRed'
-        >Add</button>
-      </label>
-      
+                  );
+                }})
+              }
+            </datalist>
+            </span>
+            :
+            <span>
+              <select 
+                id='ncType'
+                className='redIn miniIn18'
+                required
+                disabled={ncTypesCombo.length < 1 || lockOut}
+              >
+              {ncTypesCombo.map( (entry, index)=>{
+                if(!entry.key) {
+                  return ( 
+                    <option 
+                      key={index} 
+                      value={entry}
+                    >{index + 1}. {entry}</option>
+                  );
+                }else if(entry.live === true) {
+                  let cd = user.showNCcodes ? `${entry.typeCode}. ` : '';
+                  return ( 
+                    <option 
+                      key={entry.key}
+                      data-id={entry.key}
+                      value={entry.typeText}
+                      label={cd + entry.typeText}
+                    />
+                  );
+              }})}
+              </select>
+            </span>
+          }
+        </label>
+        
+        <label><br /> 
+          <button
+            type='button'
+            id='addNC'
+            onClick={(e)=>handleNC(e)}
+            disabled={lockOut}
+            className='smallAction clearRed'
+          >Add</button>
+        </label>
+        
+      </div>
+    
+      <div className='stepList vmarginhalf'>
+        {nonConsState.map( (entry, index)=> {
+          return(                 
+            <div key={index}>                      
+              <div>{entry.ref}</div>
+              <div>{entry.type}</div>
+              <div>
+                <button
+                  type='button'
+                  name='Remove'
+                  id='ex'
+                  className='smallAction redHover'
+                  onClick={()=>removeOne(entry)}
+                ><i className='fas fa-times'></i></button>
+              </div>
+            </div>
+        )})}
+      </div>
     </div>
   );
 };

@@ -2,6 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 
 import CompleteRest from '/client/components/riverX/CompleteRest';
+import RapidFork from '/client/components/riverX/RapidFork';
 
 const XItemCard = ({ 
   bComplete, isReleased, hasRiver, rapidData,
@@ -41,9 +42,13 @@ const XItemCard = ({
     return(
       <div className='proPrimeSingle'>
         {
-          rapidData.iRapid ? <em>is rapid</em>
+          rapidData.rapIs ? <em>is rapid</em>
           :
-          rapidData.rapid && <em>could be rapid</em>
+          rapidData.rapDo.length > 0 && 
+            <RapidFork 
+              seriesId={seriesId}
+              serial={itemData.serial}
+              rapidData={rapidData} />
         }
         <CompleteRest
           seriesId={seriesId}

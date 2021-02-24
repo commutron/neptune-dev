@@ -20,14 +20,15 @@ const TideWall = ({
   
   const ctxLabel = tideFloodGate ? 'Set Different Task' : `Set A Task`;
   
-  if(!bOpen && bComplete && !rapidData) {
+  if(!bOpen && bComplete && !rapidData.rapDo) {
     return null;
   }
   return(
     <div className='vgap'>
 
   		{bOpen && ( ( !itemData ) ||
-  		  ( itemData && ( itemData.completed === false || rapidData.rapid ) ) ) ? 
+  		  ( itemData && ( itemData.completed === false || 
+  		    rapidData.rapIs || rapidData.rapDo.length > 0 ) ) ) ? 
   		  
 		    <Fragment>
           <n-big-tide-container>
