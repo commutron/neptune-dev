@@ -38,6 +38,7 @@
 }
 .navButtonText {
   margin: 1vh 0 0 0;
+  padding: 0 1vh;
   font-size: 3vh;
   text-align: center;
   color: var(--neptuneColor);

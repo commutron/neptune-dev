@@ -467,6 +467,7 @@ const DataViewOps = ({
             <ItemPanelX
               batchData={hotXBatch}
               seriesData={hotXSeries}
+              rapidsData={hotXRapids}
               itemData={item}
               widgetData={widget}
               variantData={variant}

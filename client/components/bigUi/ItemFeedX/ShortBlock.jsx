@@ -1,11 +1,10 @@
-import React, { useState, Fragment } from 'react';
-import moment from 'moment';
+import React, { useState } from 'react';
 import './style.css';
 import Pref from '/client/global/pref.js';
 
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 
-const ShortBlock = ({ seriesId, serial, entry, done, deleteAuth, calString })=> {
+const ShortBlock = ({ seriesId, serial, entry, done, deleteAuth, cal })=> {
   
   const [ editState, editSet ] = useState(false);
 
@@ -76,8 +75,8 @@ const ShortBlock = ({ seriesId, serial, entry, done, deleteAuth, calString })=> 
                       'unknown';
     
   const open = inE === true || reS === true ?
-          <i><i className="fas fa-check-circle fa-lg fa-fw iG" title='Good'></i></i> :
-          <b><i className="far fa-circle fa-lg fa-fw iNG" title='Awaiting Repair'></i></b>;
+          <i><i className="fas fa-check-circle fa-lg fa-fw" title='Good'></i></i> :
+          <b><i className="far fa-circle fa-lg fa-fw" title='Awaiting Repair'></i></b>;
                 
   const editAllow = Roles.userIsInRole(Meteor.userId(), 'verify') && !done;
   const editIndicate = editState ? 'editStandout' : '';     
@@ -140,7 +139,7 @@ const ShortBlock = ({ seriesId, serial, entry, done, deleteAuth, calString })=> 
         :
           <div className='rightText'>
             <div><UserNice id={dt.cWho} /></div>
-            <div>{moment(dt.cTime).calendar(null, {sameElse: calString})}</div>
+            <div>{cal(dt.cTime)}</div>
             <div className='rightAnchor'>
               <button
                 className='miniAction'
@@ -153,7 +152,7 @@ const ShortBlock = ({ seriesId, serial, entry, done, deleteAuth, calString })=> 
         }
       </div>
       <ul className='moreInfoList'>
-        <li>Last Updated: <UserNice id={dt.uWho} /> {moment(dt.uTime).calendar(null, {sameElse: calString})}</li>
+        <li>Last Updated: <UserNice id={dt.uWho} /> {cal(dt.uTime)}</li>
         <li>{actionState}</li>
       </ul>
       {dt.comm !== '' && <p className='endComment'>{dt.comm}</p>}

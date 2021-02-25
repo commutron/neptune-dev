@@ -41,15 +41,12 @@ const XItemCard = ({
   if(iComplete) {
     return(
       <div className='proPrimeSingle'>
-        {
-          rapidData.rapIs ? <em>is rapid</em>
-          :
-          rapidData.rapDo.length > 0 && 
-            <RapidFork 
-              seriesId={seriesId}
-              serial={itemData.serial}
-              rapidData={rapidData} />
-        }
+        {!rapidData.rapIs && rapidData.rapDo.length > 0 ?
+          <RapidFork 
+            seriesId={seriesId}
+            serial={itemData.serial}
+            rapidData={rapidData} />
+        :null}
         <CompleteRest
           seriesId={seriesId}
           serial={itemData.serial}

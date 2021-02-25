@@ -1,5 +1,4 @@
 import React from 'react';
-import moment from 'moment';
 import './style.css';
 //import Pref from '/client/global/pref.js';
 
@@ -8,7 +7,7 @@ import StepBackX from '/client/components/bigUi/ItemFeedX/StepBackX';
 
 const HistoryBlock = ({
   entry, batch, seriesId, serial, 
-  done, canEdit, showHeader, calString
+  done, canEdit, showHeader, cal
 })=>{
   
   let dt = entry;
@@ -17,8 +16,8 @@ const HistoryBlock = ({
   const redoButton = <StepBackX seriesId={seriesId} bar={serial} entry={entry} lock={!redoAllow} />;
                  
   const indictor = dt.good ?
-          <i><i className="fas fa-check-circle fa-lg fa-fw iG" title='Good'></i></i> :
-          <b><i className="fas fa-times-circle fa-lg fa-fw iNG" title='No Good'></i></b>;
+          <i><i className="fas fa-check-circle fa-lg fa-fw" title='Good'></i></i> :
+          <b><i className="fas fa-times-circle fa-lg fa-fw" title='No Good'></i></b>;
    
   const infoF = dt.type === 'first' && typeof dt.info === 'object';
   const infoT = dt.type === 'test' && typeof dt.info === 'string';
@@ -51,7 +50,7 @@ const HistoryBlock = ({
         </div>
         <div className='rightText'>
           <div><UserNice id={dt.who} /></div>
-          <div>{moment(dt.time).calendar(null, {sameElse: calString})}</div>
+          <div>{cal(dt.time)}</div>
           <div className='rightAnchor'>{entry.good && redoButton}</div>
         </div>
       </div>
@@ -65,7 +64,7 @@ const HistoryBlock = ({
       :
         dt.type === 'undo' && dt.info.formerWhen && dt.info.formerWho ?
           <ul className='moreInfoList'>
-            <li>Previously finished: {moment(dt.info.formerWhen).calendar(null, {sameElse: calString})}</li>
+            <li>Previously finished: {cal(dt.info.formerWhen)}</li>
             <li>Previously finished by: <UserNice id={dt.info.formerWho} /></li>
           </ul>
       : null}

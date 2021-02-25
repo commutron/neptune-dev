@@ -41,11 +41,11 @@ export function HighWater( batchData, app ) {
 
 export function WhiteWater( itemData, seriesData, rapidsData ) {
   
-  if(rapidsData.length > 0) {
+  let rapIs = false;
+  let rapDo = [];
+  let rapDids = [];
     
-    let rapIs = false;
-    let rapDo = [];
-    let rapDids = [];
+  if(rapidsData.length > 0) {
     
     if(!seriesData) {
       

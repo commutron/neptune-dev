@@ -14,8 +14,7 @@ const StoneSelect = ({
   bID, 
   bComplete,
   flow,
-  // isAlt,
-  // hasAlt,
+  rapIs, rarapid,
   seriesId,
   item,
   allItems,
@@ -61,17 +60,9 @@ const StoneSelect = ({
   const ncOutstanding = nc.filter( x => x.snooze === false );
   
   const iDone = item.history;
-                                   
-  /*const fDone = [];
-  for(let item of allItems) {
-    let firsts = item.history.filter( 
-      x => x.type === 'first' && x.good !== false );
-    firsts.forEach( x => fDone.push( 'first' + x.step ) );
-  }*/
 
   const allAnswered = shortfalls.length === 0 ||
             shortfalls.every( x => x.inEffect === true || x.reSolve === true );
-  
   
   function handleStepUndo() {
 		Meteor.call('popHistoryX', seriesId, serial, ()=>{
@@ -141,10 +132,10 @@ const StoneSelect = ({
               sKey={flowStep.key}
               step={flowStep.step}
               type={flowStep.type}
+              rapIs={rapIs}
+              rarapid={rarapid}
               branchObj={branchObj}
               allItems={allItems}
-              // isAlt={isAlt}
-              // hasAlt={hasAlt}
               users={users}
               app={app}
               flowCounts={flowCounts}
@@ -181,7 +172,7 @@ const StoneSelect = ({
             <Shortfalls
       			  seriesId={seriesId}
       			  shortfalls={shortfalls}
-      			  lock={item.completed} />
+      			  lock={item.completed && !rapIs} />
           </div>
   			</div>
       );
@@ -199,7 +190,7 @@ const StoneSelect = ({
         serial={item.serial}
         iComplete={item.completed}
         history={item.history}
-        // iCascade={iCascade}
+        altPath={item.altPath}
         scrap={scrapCheck}
         bComplete={bComplete}
         shortfallS={shortfalls} />

@@ -11,7 +11,7 @@ import SubItemLink from '/client/components/tinyUi/SubItemLink.jsx';
 import ItemFeedX from '/client/components/bigUi/ItemFeedX/ItemFeedX';
 
 const ItemPanelX = ({ 
-  batchData, seriesData, itemData,
+  batchData, seriesData, rapidsData, itemData,
   widgetData, variantData, groupData, 
   app, brancheS, user, 
   listTitle, flowData
@@ -81,11 +81,13 @@ const ItemPanelX = ({
           createTime={i.createdAt}
           createBy={i.createdWho}
           history={i.history}
+          altPath={i.altPath}
           noncons={nc}
           ncTypesCombo={flowData && flowData.ncTypesComboFlat}
           brancheS={brancheS}
           shortfalls={sh}
           done={i.completed}
+          rapidsData={rapidsData}
           user={user}
           app={app} />
             

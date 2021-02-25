@@ -1141,6 +1141,7 @@ n-mock-table-cell:last-child {
   }
   .navButtonText {
     font-size: 3vmin;
+    padding: 0 1vmin;
   }
   .slidesLayout, .slidesNestedLayout {
     grid-template-rows: calc(100vh - 8vmin);

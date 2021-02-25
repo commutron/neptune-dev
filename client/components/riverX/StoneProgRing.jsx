@@ -35,7 +35,7 @@ const StoneProgRing = ({
     count();
   }, [sKey, flowCounts]);
     
-  const color0 = 'rgb(60,60,60)';
+  const color0 = 'rgb(40,40,40)';
   const color1 =
     type === 'build' ? 'rgb(41, 128, 185)' :
     type === 'checkpoint' ? 'rgb(127, 140, 141)' :

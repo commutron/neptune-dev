@@ -2,7 +2,8 @@
   --commutron: rgb(65, 129, 203);/*commutron brand blue*/
   --neptuneColor: #007fff;
   --turquoise: rgb(26, 188, 156);
-  --turquoisefade: rgba(26, 188, 156, 0.5);
+  --turquoisetrans: rgba(26, 188, 156, 0.5);
+  --turquoisefade: rgba(26, 188, 156, 0.2);
   
   --greenSea: rgb(22, 160, 133);
   
@@ -69,6 +70,7 @@
   /* black */
   --black: rgb(48,48,48);
   --blackT: rgb(24,24,24);
+  --blackfrost: rgba(5,5,5,0.7);
   --blackFade: rgba(5,5,5,0.5);
   --dark: rgb(35,35,35);
   

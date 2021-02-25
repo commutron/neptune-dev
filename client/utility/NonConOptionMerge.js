@@ -2,7 +2,7 @@
 function NonConOptionMerge(ncListKeys, app, user, allKeys) {
 
   const ncListKeysFlat = ncListKeys.flat();
-  if(ncListKeysFlat.length === 0) {
+  if(ncListKeysFlat.length === 0 && !allKeys) {
     return app.nonConOption;
   }else{
     const asignedNCLists = allKeys ? app.nonConTypeLists :

@@ -396,6 +396,46 @@ Meteor.methods({
     }
   },
   
+  escapeUse() {
+    if(!Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      return [];
+    }else{
+      const allBatches = BatchDB.find({ $where: "this.escaped.length > 0" }).fetch();
+            
+      const totalOne = allBatches.filter( x => x.escaped.length === 1 ).length;
+      const multi = allBatches.filter( x => x.escaped.length > 1 );
+      
+      const totalMulti = multi.length;
+      const multiBatch = Array.from(multi, m => m.batch );
+      
+      return {
+        totalBatch: totalOne,
+        totalMulti: totalMulti,
+        multiBatch: multiBatch,
+      };
+    }
+  },
+  
+  cascadeUse() {
+    if(!Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      return [];
+    }else{
+      
+      const allBatches = BatchDB.find({ $where: "this.cascade.length > 0" }).fetch();
+            
+      const totalOne = allBatches.filter( x => x.cascade.length === 1 ).length;
+      const multi = allBatches.filter( x => x.cascade.length > 1 );
+      
+      const totalMulti = multi.length;
+      const multiBatch = Array.from(multi, m => m.batch );
+      
+      return {
+        totalBatch: totalOne,
+        totalMulti: totalMulti,
+        multiBatch: multiBatch,
+      };
+    }
+  },
           
         
 });

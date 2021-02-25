@@ -8,9 +8,9 @@ import StoneSelect from './StoneSelect.jsx';
 // import AltMarker from '/client/components/tinyUi/AltMarker.jsx';
 
 const River = ({ 
-  batchData, seriesData, itemData, widgetData, rapIs,
+  batchData, seriesData, itemData, widgetData, rapid, rapIs,
   app, users, brancheS,
-  flow, flowCounts,
+  useFlow, flowCounts,
   shortfallS, scrapCheck,
   showVerifyState, optionVerify, handleVerify
 })=> {
@@ -35,94 +35,38 @@ const River = ({
     undoOpSet( false );
   }
 
-  const b = batchData;
-
-  let useFlow = itemData.completed ?
-                !rapIs ? [] : rapIs.whitewater :
-                !flow ? [] : flow;
-  // let rma = [];
-  /*
-  if(i.finishedAt !== false) {
-  // set flow as rma steps
-    for(let doRMA of i.rma) {
-      let match = b.cascade.find( x => x.key === doRMA);
-      match ? rma.push(match) : false;
-    }
-    for(let rflw of rma) {
-      for(let step of rflw.flow) {
-        useFlow.push(step);
-      }
-    }
-  }else if(b.riverAlt && i.alt === 'yes') {
-  // set flow as Alt River
-    useFlow = !flowAlt ? w.flows.find( x => x.flowKey === b.riverAlt).flow : flowAlt;
-  }else{
-  // set flow as River
-    useFlow = !flow ? w.flows.find( x => x.flowKey === b.river).flow : flow;
-  }
-  */
-  /*
-	// present option between River and Alt River
-	if(i.completed === false && b.riverAlt && !i.alt) {
-	  return(
-	    <div>
-        <div>
-    	    <RiverFork
-            id={b._id}
-            serial={i.serial}
-            flows={w.flows}
-            river={b.river}
-            riverAlt={b.riverAlt} />
-        </div>
-  		  <MiniHistory history={i.history} />
-    	</div>
-    );
-	}
-*/
   return(
-		<div>
+		<div className={rapIs ? 'altHighlight' : ''}>
 		
-		  {/*i.finishedAt !== false && b.cascade.length > 0 ?
-		    <RMACascade 
-          id={b._id}
-          barcode={i.serial}
-          rma={rma}
-          cascadeData={b.cascade}
-          rmaList={i.rma}
-          allItems={b.items} />
-        :null*/}
-		  
-		  <div>
-		    {/*i.finishedAt === false && b.riverAlt && i.alt !== false ? 
-		      <AltMarker id={b._id} serial={i.serial} alt={i.alt} />
-		    : null*/}
-        <StoneSelect
-          bID={b._id}
-          bComplete={b.completed}
-          flow={useFlow}
-          // isAlt={i.alt === 'yes'}
-          // hasAlt={!b.riverAlt ? false : true}
-          seriesId={seriesData._id}
-          item={itemData}
-          allItems={seriesData.items}
-          nonCons={seriesData.nonCon}
-          shortfalls={shortfallS}
-          scrapCheck={scrapCheck}
-          // iCascade={i.rma.length > 0}
-          brancheS={brancheS}
-          users={users}
-          flowCounts={flowCounts}
-          app={app}
-          
-          showVerifyState={showVerifyState}
-          optionVerify={optionVerify}
-          handleVerify={handleVerify}
-          
-          undoOption={undoStepOption}
-          openUndoOption={()=>tempOpenOption()}
-          closeUndoOption={()=>closeOption()} />
-      </div>
-      
+	    {/*i.finishedAt === false && b.riverAlt && i.alt !== false ? 
+	      <AltMarker id={b._id} serial={i.serial} alt={i.alt} />
+	    : null*/}
+      <StoneSelect
+        bID={batchData._id}
+        bComplete={batchData.completed}
+        flow={useFlow}
+        rapIs={rapIs}
+        rarapid={rapid ? rapid.rapid : false}
+        seriesId={seriesData._id}
+        item={itemData}
+        allItems={seriesData.items}
+        nonCons={seriesData.nonCon}
+        shortfalls={shortfallS}
+        scrapCheck={scrapCheck}
+        
+        brancheS={brancheS}
+        users={users}
+        flowCounts={flowCounts}
+        app={app}
+        
+        showVerifyState={showVerifyState}
+        optionVerify={optionVerify}
+        handleVerify={handleVerify}
+        
+        undoOption={undoStepOption}
+        openUndoOption={()=>tempOpenOption()}
+        closeUndoOption={()=>closeOption()} />
+    
 		</div>
 	);
 };

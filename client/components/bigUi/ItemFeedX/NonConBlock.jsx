@@ -1,5 +1,4 @@
 import React, { useState, Fragment } from 'react';
-import moment from 'moment';
 import './style.css';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
@@ -9,7 +8,7 @@ import UserNice from '/client/components/smallUi/UserNice.jsx';
 const NonConBlock = ({
   entry, seriesId, serial,
   done, user, canQA, canVerify, canInspect,
-  app, ncTypesCombo, flatCheckList, brancheS, calString
+  app, ncTypesCombo, flatCheckList, brancheS, cal
 })=> {
   
   
@@ -101,15 +100,15 @@ const NonConBlock = ({
   const open = trashed ?
                <pre><i className="far fa-trash-alt fa-lg fa-fw" title='Trashed'></i></pre> :
                dt.inspect === false ?
-                <i><i className="fas fa-wrench fa-lg fa-fw iNG" title='Awaiting Repair'></i></i> :
-                <b><i className="fas fa-check-circle fa-lg fa-fw iG" title='Good'></i></b>;
+                <i><i className="fas fa-wrench fa-lg fa-fw" title='Awaiting Repair'></i></i> :
+                <b><i className="fas fa-check-circle fa-lg fa-fw" title='Good'></i></b>;
   
-  let fixed = !fx ? '' : <li>Repaired: <UserNice id={dt.fix.who} /> {moment(dt.fix.time).calendar(null, {sameElse: calString})}</li>;
-  let inspected = !ins ? '' : <li>Inspected: <UserNice id={dt.inspect.who} /> {moment(dt.inspect.time).calendar(null, {sameElse: calString})}</li>;
+  let fixed = !fx ? '' : <li>Repaired: <UserNice id={dt.fix.who} /> {cal(dt.fix.time)}</li>;
+  let inspected = !ins ? '' : <li>Inspected: <UserNice id={dt.inspect.who} /> {cal(dt.inspect.time)}</li>;
   let snoozed = !dt.snooze ? false : true;
   let inTrash = !trashed ? '' : 
                 <Fragment>
-                  <li>Trashed: <UserNice id={dt.trash.who} /> {moment(dt.trash.time).calendar(null, {sameElse: calString})}</li>
+                  <li>Trashed: <UserNice id={dt.trash.who} /> {cal(dt.trash.time)}</li>
                   <li><button
                         className='smallAction clearRed blackT inlineButton'
                         disabled={!canQA}
@@ -266,7 +265,7 @@ const NonConBlock = ({
           :
             <div className='rightText'>
               <div><UserNice id={dt.who} /></div>
-              <div>{moment(dt.time).calendar(null, {sameElse: calString})}</div>
+              <div>{cal(dt.time)}</div>
               <div className='rightAnchor'>
                 <button
                   className='miniAction'
@@ -288,9 +287,9 @@ const NonConBlock = ({
             return(
               <ul key={index}>
                 <li colSpan='2'>
-                  Attempt: <UserNice id={entry.attemptWho} /> {moment(entry.attemptTime).calendar(null, {sameElse: calString})}
+                  Attempt: <UserNice id={entry.attemptWho} /> {cal(entry.attemptTime)}
                   <br />
-                  Reject: <UserNice id={entry.rejectWho} /> {moment(entry.rejectTime).calendar(null, {sameElse: calString})}
+                  Reject: <UserNice id={entry.rejectWho} /> {cal(entry.rejectTime)}
                 </li>
               </ul>
             )})

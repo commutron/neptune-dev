@@ -7,6 +7,7 @@ const LegacySlide = ()=> {
     Meteor.call('altFlowUse', (error, reply)=>{
       error && console.log(error);
       toast(<div>
+        <h3>Alt Flow</h3>
         Total Batches: {reply.totalAltBatch} <br />
         Total Items: {reply.totalAltItems} <br />
         Live Batches: {reply.totalLiveBatch} <br />
@@ -15,6 +16,30 @@ const LegacySlide = ()=> {
         Dormant Items: {reply.totalDormantBatchItems}
       </div>, { autoClose: false });
       console.log({ live: reply.aliveBatchInfo, dormant: reply.dormantBatchInfo});
+    });
+  }
+  
+  function requestEscapeUse() {
+    Meteor.call('escapeUse', (error, reply)=>{
+      error && console.log(error);
+      toast(<div>
+        <h3>Escaped</h3>
+        Total Batches: {reply.totalBatch} <br />
+        > 1 Batches: {reply.totalMulti} <br />
+      </div>, { autoClose: false });
+      console.log(reply.multiBatch);
+    });
+  }
+  
+  function requestCascadeUse() {
+    Meteor.call('cascadeUse', (error, reply)=>{
+      error && console.log(error);
+      toast(<div>
+        <h3>Cascades</h3>
+        Total Batches: {reply.totalBatch} <br />
+        > 1 Batches: {reply.totalMulti} <br />
+      </div>, { autoClose: false });
+      console.log(reply.multiBatch);
     });
   }
   
@@ -48,6 +73,20 @@ const LegacySlide = ()=> {
           className='action clearBlue invert'
           onClick={()=>requestAltFlowInfo()}
         >Info on Alt Flow Use</button>
+      </p>
+      
+      <p>
+        <button
+          className='action clearBlue invert'
+          onClick={()=>requestEscapeUse()}
+        >Info on Escaped Use</button>
+      </p>
+      
+      <p>
+        <button
+          className='action clearBlue invert'
+          onClick={()=>requestCascadeUse()}
+        >Info on Cascade Use</button>
       </p>
       
       <br />

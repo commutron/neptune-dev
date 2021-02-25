@@ -25,10 +25,18 @@ export const ProWrap = ({
   const [ showVerifyState, showVerifySet ] = useState(false);
   const [ optionVerify, optionVerifySet ] = useState(false);
   
+  const [ rapIs, rapIsSet ] = useState(false);
+  
   const [ ncTypesComboFlat, ncTypesComboSet ] = useState([]);
   
   useLayoutEffect( ()=> {
     !Session.get('riverExpand') ? null : expandSet( true );
+    
+    rapIsSet( itemData && itemData.altPath.find( x => x.rapId && !x.completed ) );
+    
+  }, [(itemData && itemData.altPath)]);
+  
+  useLayoutEffect( ()=> {
     
     let getNCListKeys = [];
     let getNCTypesCombo = [];
@@ -38,7 +46,9 @@ export const ProWrap = ({
       if(river) {
         river.type === 'plus' && getNCListKeys.push(river.ncLists);
       }
-      getNCTypesCombo = NonConOptionMerge(getNCListKeys, app, user);
+      const allKeys = rapIs ? true : false;
+      getNCTypesCombo = NonConOptionMerge(getNCListKeys, app, user, allKeys);
+      
     }else if( batchData && widgetData ) {
       const river = widgetData.flows.find( x => x.flowKey === batchData.river );
       const rvAlt = widgetData.flows.find( x => x.flowKey === batchData.riverAlt );
@@ -52,7 +62,7 @@ export const ProWrap = ({
     }
     ncTypesComboSet(getNCTypesCombo);
     
-  }, [batchData, /*seriesData,*/ widgetData, app]);
+  }, [batchData, widgetData, app]);
   
   
   function handleVerify(value, direct) {
@@ -166,6 +176,7 @@ export const ProWrap = ({
             batchData={batchData}
             seriesData={seriesData}
             itemData={itemData}
+            rapIs={rapIs}
             widgetData={widgetData}
             
             tideFloodGate={tideFloodGate}

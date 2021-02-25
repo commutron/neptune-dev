@@ -8,7 +8,7 @@ import NCFlood from '/client/components/riverX/NCFlood.jsx';
 import ShortAdd from '/client/components/riverX/ShortAdd.jsx';
 
 const XFormBar = ({ 
-  batchData, seriesData, itemData, widgetData,
+  batchData, seriesData, itemData, rapIs, widgetData,
   tideFloodGate, ncTypesCombo, 
   action, showVerifyState, handleVerify, 
   user, users, app 
@@ -27,7 +27,7 @@ const XFormBar = ({
     
   const showBatch = b && srs && b.completed === false;
 
-  const showItem = srs && i && i.completed === false; // RMA !!!!!!
+  const showItem = srs && i && (i.completed === false || rapIs);
     
   const pastPN = srs && srs.shortfall ? [...new Set( Array.from(srs.shortfall, x => x.partNum ) )] : [];
   const pastRF = srs && srs.shortfall ? [...new Set( Array.from(srs.shortfall, x => x.refs.toString() ) )] : [];

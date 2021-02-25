@@ -7,25 +7,27 @@ import CreateBlock from './CreateBlock';
 import HistoryBlock from './HistoryBlock';
 import NonConBlock from './NonConBlock';
 import ShortBlock from './ShortBlock';
-// import RmaBlock from './RmaBlock';
+import RapidBlock from './RapidBlock';
 
 const ItemFeedX = ({ 
   batchId, batch, seriesId, serial,
   createTime, createBy,
-  history, 
+  history, altPath,
   noncons, ncTypesCombo, brancheS,
   shortfalls,
-  done,
+  done, rapidsData,
   user, app 
 })=> {
   
-  const assembly = [...history, ...noncons, ...shortfalls];
+  const assembly = [...history, ...altPath, ...noncons, ...shortfalls, ];
   
-  const ordered = assembly.sort((t1, t2)=>
-          moment(t1.time || t1.cTime).isAfter(t2.time || t2.cTime) ? 1 :
-          moment(t1.time || t1.cTime).isBefore(t2.time || t2.cTime) ? -1 : 0 );
+  const ordered = assembly.sort((t1, t2)=> {
+          const mt1 = moment( t1.time || t1.cTime || t1.assignedAt );
+          const nt2 = t2.time || t2.cTime || t2.assignedAt;
+          return( mt1.isAfter(nt2) ? 1 : mt1.isBefore(nt2) ? -1 : 0 )});
   
   const calString = "ddd, MMM D /YY, h:mm A";
+  const calFunc = (d)=> moment(d).calendar(null, {sameElse: calString});
   
   const flatCheckList = Array.from(ncTypesCombo, x => 
                                   x.key ? x.live === true && x.typeText : x);
@@ -44,7 +46,7 @@ const ItemFeedX = ({
           title='serial number created'
           user={createBy}
           datetime={createTime}
-          calString={calString} />
+          cal={calFunc} />
         
         {ordered.map( (dt, ix)=>{
           if(typeof dt.step === 'string') {
@@ -58,7 +60,7 @@ const ItemFeedX = ({
                 done={done}
                 canEdit={canEdit}
                 showHeader={false}
-                calString={calString} /> 
+                cal={calFunc} /> 
             );
           }else if(typeof dt.ref === 'string') {
             return( 
@@ -76,7 +78,7 @@ const ItemFeedX = ({
                 ncTypesCombo={ncTypesCombo}
                 flatCheckList={flatCheckList}
                 brancheS={brancheS}
-                calString={calString} />
+                cal={calFunc} />
             );
           }else if(Array.isArray(dt.refs) === true) {
             return( 
@@ -87,7 +89,19 @@ const ItemFeedX = ({
                 serial={serial}
                 done={done}
                 deleteAuth={canRun}
-                calString={calString} /> 
+                cal={calFunc} /> 
+            );
+          }else if(typeof dt.rapId === 'string') {
+            return( 
+              <RapidBlock
+                key={dt.rapId+ix}
+                rapIs={dt}
+                rapidsData={rapidsData}
+                seriesId={seriesId}
+                serial={serial}
+                done={done}
+                deleteAuth={canQA}
+                cal={calFunc} /> 
             );
           }else{
             null;

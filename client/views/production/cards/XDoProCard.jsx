@@ -59,9 +59,6 @@ const XDoProCard = ({
   useLayoutEffect( ()=> {
     const getRapidData = WhiteWater( itemData, seriesData, rapidsData );
     rapidDataSet(getRapidData);
-    
-    console.log(getRapidData);
-    
   }, [rapidsData]);
   
   
@@ -94,14 +91,22 @@ const XDoProCard = ({
   const bOpen = batchData.live || bWrapUp;
   const bClosed = !batchData.live && !bComplete;
   
-  const flows = flowData ? flowData.flow : [];
+  const rapid = !rapidData.rapIs ? false :
+                  rapidData.rapDo.find( r => r._id === rapidData.rapIs.rapId );
+          
+  let useFlow = !itemData ? [] :
+                itemData.completed ? 
+                rapid ? rapid.whitewater : []
+                :
+                flowData ? flowData.flow : [];
+                
+  const flowFirsts = useFlow.filter( x => x.type === 'first' );
+  
   const plainBrancheS = Array.from(brancheState, b => b.branch);
   const ancOptionS = app.ancillaryOption.sort();
   
-  const flowAction = flowData.hasRiver && fallData.floorRel;
+  const flowAction = ( flowData.hasRiver || rapidData.rapIs ) && fallData.floorRel;
   const fallAction = batchData.waterfall.length > 0;
-  
-  const rapIs = rapidData.rapIs;
   
   const insertTideWall = 
           <TideWall
@@ -156,8 +161,9 @@ const XDoProCard = ({
             app={app}
             users={users}
             brancheS={brancheState}
-            flow={flowData.flow}
+            useFlow={useFlow}
             flowCounts={flowData.flowCounts}
+            rapid={rapid}
             rapIs={rapidData.rapIs}
             shortfallS={shortfallS}
             scrapCheck={scrapCheck}
@@ -170,7 +176,7 @@ const XDoProCard = ({
             batchId={batchData._id}
             seriesId={seriesData && seriesData._id}
             itemData={itemData}
-            flowFirsts={flows.filter( x => x.type === 'first' )}
+            flowFirsts={flowFirsts}
             rapidData={rapidData}
             brancheS={brancheState}
             app={app}
@@ -219,7 +225,7 @@ const XDoProCard = ({
       
       !tideFloodGate ? insertTideWall : // @ Locked
         
-        !flowAction || ( iComplete && !rapIs ) ? insertItemCard : // @ Rest
+        !flowAction || ( iComplete && !rapidData.rapIs ) ? insertItemCard : // @ Rest
           
           showVerifyState ? insertVerifyIsland : // @ First Form
             

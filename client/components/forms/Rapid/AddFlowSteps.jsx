@@ -149,6 +149,7 @@ const AddFlowSteps = ({ app, flowsState, flowsSet })=> {
           
           <label htmlFor='goAddStp'><br />
             <button
+              type='button'
               id='goAddStp'
               onClick={(e)=>addStep(e)}
               className='smallAction clearBlack'
@@ -206,6 +207,7 @@ const AddFlowSteps = ({ app, flowsState, flowsSet })=> {
               <option value='pack-ship'>Pack & Ship</option>
             </select>
             <button
+              type='button'
               className='smallAction clearGreen up'
               disabled={false}
               onClick={(e)=>sendUp(e)}>Finish Mini Flow</button>

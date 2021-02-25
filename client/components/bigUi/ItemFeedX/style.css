@@ -40,11 +40,14 @@
   display: flex;
   justify-content: center;
 }
-.leftAnchor {border-right: 1px inset rgba(0,0,0,0.1); }
-.leftAnchor .iPlain { color: var(--clouds); }
-.leftAnchor .iG { color: var(--emerald); }
-.leftAnchor .iWarn { color: var(--pumpkin); }
-.leftAnchor .iNG { color: var(--pomegranate); }
+.leftAnchor {
+  border-right: 1px inset rgba(0,0,0,0.1);
+  color: var(--blackfrost);
+}
+/*.leftAnchor .iPlain { color: var(--clouds); }*/
+/*.leftAnchor .iG { color: var(--emerald); }*/
+/*.leftAnchor .iWarn { color: var(--pumpkin); }*/
+/*.leftAnchor .iNG { color: var(--pomegranate); }*/
 
 .rightAnchor {
   min-height: 40.5px;
@@ -58,6 +61,7 @@
 .inspect { background-color: var(--emeraldtrans); }
 
 .history { background-color: var(--peterriverfade); }
+.rapid { background-color: var(--turquoisetrans); }
 .noncon { background-color: var(--alizarinfrost); }
 
 .short { background-color: rgba(243, 156, 18, 0.2); }

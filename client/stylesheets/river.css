@@ -15,6 +15,12 @@
   margin: 8px 0;
   color: var(--asbestos);
 }
+
+.altHighlight {
+  box-shadow: inset 0 0px 40px 5px var(--turquoisefade),
+                    0 0px 40px 5px var(--turquoisefade);
+}
+
 .undoStepWrap {
   display: flex;
   align-items: center;
@@ -22,14 +28,17 @@
   width: 100%;
   min-height: 2rem;
   text-align: center;
-  background-color: rgb(30,30,30);
-  border: 3px solid rgb(33,33,33);
+  /*background-color: rgb(30,30,30);*/
+  /*border: 3px solid rgb(33,33,33);*/
 }
 .undoStepWrap button {
   line-height: 1rem;
   font-size: 1.3rem;
-  color: var(--asbestos);
-  background-color: rgb(25,25,25);
+  width: 100%;
+  min-height: 2rem;
+  color: var(--concrete);
+  text-transform: capitalize;
+  /*background-color: rgb(25,25,25);*/
 }
 .moreStepAction {
   min-width: 20%;
@@ -57,7 +66,7 @@
   height: 13vmax;
   font-size: calc(0.5rem + 1vmax);
   font-weight: bolder;
-  text-shadow: 0 5px 10px #000;
+  text-shadow: 0 0 25px #000;
   letter-spacing: 0.1ch;
 	text-transform: uppercase;
 	word-break: break-word;
@@ -299,6 +308,11 @@
   background-color: var(--wisteria);
   --high-color: var(--amethyst);
 }
+
+.iRapid {
+  border-radius: 0;
+  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+}
 /*
 .ncTrib, .shortGrid {
   position: relative;
@@ -497,8 +511,8 @@
   width: 1rem;
 }
 
-.testFail summary::-webkit-details-marker {
-  display: none;
+.testFail summary {
+  padding: 0.5vh 1vw 0.5vh 0;
 }
 
 .finishBanner, .scrapBanner {
@@ -520,14 +534,21 @@
   justify-content: center;
   align-items: center;
   word-break: keep-all;
-  padding: 1vmin;
+  padding: 1vmax 1vmin;
   width: 100%;
   min-height: 12vmin;
   text-transform: capitalize;
+  background-color: transparent;
+  color: var(--greenSea);
+  border: 1vmax solid var(--greenSea);
 }
 .forkButton {
-  font-size: 6vmin;
+  font-size: 5vmax;
 }
 .forkButton b {
-  font-size: 3vmin;
+  font-size: 2.5vmax;
+}
+.forkButton:hover, .forkButton:active {
+  background-color: var(--greenSea);
+  color: var(--blackT);
 }

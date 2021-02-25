@@ -592,6 +592,43 @@ Meteor.methods({
   		return true;
     }
   },
+  
+  finishItemRapid(seriesId, serial, key, step, type, rapId) {
+    if(!Roles.userIsInRole(Meteor.userId(), "BRKt3rm1n2t1ng8r2nch")) {
+      return false;
+    }else{
+      const orgKey = Meteor.user().orgKey;
+      
+      const srs = XSeriesDB.findOne({_id: seriesId});
+      const item = srs.items.find( x => x.serial === serial );
+      let rapidPath = item.altPath.find( y => y.rapId === rapId );
+      rapidPath['completed'] = true;
+      rapidPath['completedAt'] = new Date();
+      rapidPath['completedWho'] = Meteor.userId();
+      
+      XSeriesDB.update({_id: seriesId, orgKey: orgKey, 'items.serial': serial}, {
+        $push : { 
+  			  'items.$.history': {
+  			    key: key,
+            step: step,
+            type: type,
+            good: true,
+            time: new Date(),
+            who: Meteor.userId(),
+            comm : '',
+            info: false
+  			  },
+  			  'items.$.altPath': rapidPath
+  			}
+      });
+      XSeriesDB.update({_id: seriesId, orgKey: orgKey, 'items.serial': serial}, {
+  			$pull : {
+          'items.$.altPath': { rapId: rapId, completed: false }
+        }
+      });
+  		return true;
+    }
+  },
 
 // Scrap \\
   scrapItemX(seriesId, bar, step, comm) {
@@ -778,7 +815,7 @@ Meteor.methods({
       XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'items.serial': serial}, {
         $push : { 
           'items.$.altPath': {
-            flowKey: false,
+            river: false,
             rapId: rapId,
             assignedAt: new Date(),
             completed: false,
@@ -786,51 +823,74 @@ Meteor.methods({
             completedWho: null
           }
         }});
-      // add noncons
-      
-      /*
-      const nonCons = rmaDoc.nonCons || [];
-      for(let nc of nonCons) {
-        XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey}, {
-          $push : { nonCon: {
-            key: new Meteor.Collection.ObjectID().valueOf(), // id of the nonCon entry
-            serial: bar, // barcode id of item
-            ref: nc.ref, // referance on the widget
-            type: nc.type, // type of nonCon
-            where: 'rma', // where in the process
-            time: new Date(), // when nonCon was discovered
-            who: Meteor.userId(),
-            fix: false,
-            inspect: false,
-            reject: [],
-            skip: false,
-            snooze: false,
-            comm: ''
-        }}});
+
+      if(rapid.autoNC) {
+        for(let nc of rapid.autoNC) {
+          XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey}, {
+            $push : { nonCon: {
+              key: new Meteor.Collection.ObjectID().valueOf(),
+              serial: serial,
+              ref: nc.ref,
+              type: nc.type,
+              where: 'extend',
+              time: new Date(), 
+              who: Meteor.userId(),
+              fix: false,
+              inspect: false,
+              reject: [],
+              snooze: false,
+              trash: false,
+              comm: ''
+          }}});
+        }
       }
-      */
-      
+      if(rapid.autoSH) {
+        for(let sh of rapid.autoSH) {
+          XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey}, {
+            $push : { shortfall: {
+              key: new Meteor.Collection.ObjectID().valueOf(),
+              partNum: sh.part,
+              refs: sh.refs,
+              serial: serial,
+              where: 'extend', 
+              cTime: new Date(),
+              cWho: Meteor.userId(),
+              uTime: new Date(),
+              uWho: Meteor.userId(),
+              inEffect: null, // Boolean or Null
+              reSolve: null, // Boolean or Null
+              comm: ''
+          }}});
+        }
+      }
       return true;
     }else{
       return false;
     }
   },
-  /*
-  /// unset an rma on an item
-  unsetRMA(batchId, serial, cKey) {
-    const doc = BatchDB.findOne({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': serial});
-    const outstndng = doc.nonCon.filter( x => x.serial === serial && x.inspect !== false && x.skip === false );
-    if(outstndng.length === 0 && Roles.userIsInRole(Meteor.userId(), ['qa', 'remove'])) {
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'items.serial': serial}, {
+  
+  /// unset an rapid alt path
+  unsetRapidFork(seriesId, serial, rapId) {
+    const doc = XSeriesDB.findOne({_id: seriesId, orgKey: Meteor.user().orgKey, 'items.serial': serial});
+    const subDoc = doc.items.find( x => x.serial === serial );
+    const rapIs = subDoc.altPath.find( y => y.rapId === rapId );
+    
+    const openNC = doc.nonCon.filter( x => x.serial === serial && 
+                                      x.inspect === false && x.trash === false );
+    
+    const auth = Roles.userIsInRole(Meteor.userId(), ['qa', 'remove']);
+    
+    if(rapIs.completed === false && openNC.length === 0 && auth) {
+      
+      XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'items.serial': serial}, {
         $pull : {
-          'items.$.rma': cKey
-        }});
+         'items.$.altPath': { rapId: rapId }
+      }});
       return true;
     }else{
       return false;
     }
-  }
-*/
+  },
   
   // delete \\
   deleteItemX(batchId, seriesId, serial, pass) {

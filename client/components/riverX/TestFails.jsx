@@ -16,9 +16,13 @@ const TestFails = ({ fails })=> {
     <Fragment>
       {dt.map( (entry, index)=>{
         return(
-          <details style={styD} className='testFail'>
+          <details 
+            key={'testfail'+index}
+            style={styD} 
+            className='testFail'
+          >
             <summary>
-              Fail {moment(entry.time).calendar()}
+              Failed {moment(entry.time).calendar()}
             </summary>
             {entry.comm}
           </details>

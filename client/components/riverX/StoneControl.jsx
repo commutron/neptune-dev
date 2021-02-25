@@ -11,10 +11,9 @@ import useTimeOut from '/client/utility/useTimeOutHook.js';
 const StoneControl = ({
 	batchId,
 	seriesId, serial,
-	sKey, step, type,
+	sKey, step, type, rapIs, rarapid,
 	branchObj,
 	allItems,
-	// isAlt, hasAlt,
 	users, app,
 	flowCounts,
 	blockStone, doneStone, compEntry,
@@ -102,8 +101,6 @@ const StoneControl = ({
 			topClass={topClass}
 			topTitle={topTitle}
 			allItems={allItems}
-			// isAlt={isAlt}
-			// hasAlt={hasAlt}
 			enactEntry={()=>enactEntry()}
 			resolveEntry={()=>resolveEntry()}
 			workingState={workingState}
@@ -112,9 +109,6 @@ const StoneControl = ({
 	const renderVerify = 
 		<StoneVerify 
 			key={seriesId+serial+sKey}
-			// batchId={batchId}
-			// seriesId={seriesId}
-			// barcode={serial}
 			sKey={sKey}
 			step={step}
 			type={type} 
@@ -139,8 +133,6 @@ const StoneControl = ({
 			topClass={topClass}
 			topTitle={topTitle}
 			allItems={allItems}
-			// isAlt={isAlt}
-			// hasAlt={hasAlt}
 			enactEntry={()=>enactEntry()}
 			resolveEntry={()=>resolveEntry()}
 			workingState={workingState}
@@ -152,18 +144,18 @@ const StoneControl = ({
 			key={seriesId+serial+sKey}
 			batchId={batchId}
 			seriesId={seriesId}
-			barcode={serial}
+			serial={serial}
 			sKey={sKey}
 			step={step}
-			type={type} 
+			type={type}
+			rapIs={rapIs}
+			rarapid={rarapid}
 			flowCounts={flowCounts}
 			benchmark={benchmark}
 			lockout={lockout}
 			topClass={topClass}
 			topTitle={topTitle}
 			allItems={allItems}
-			// isAlt={isAlt}
-			// hasAlt={hasAlt}
 			enactEntry={()=>enactEntry()}
 			resolveEntry={()=>resolveEntry(true)}
 			workingState={workingState}

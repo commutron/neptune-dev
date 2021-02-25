@@ -24,7 +24,7 @@ const RapidFork = ({ seriesId, serial, rapidData })=> {
         <button
           type='submit'
           form='srtcsc'
-          className='clearOrange forkButton'
+          className='forkButton'
           disabled={lock}
         ><i className='fas fa-project-diagram fa-fw' data-fa-transform='flip-v'></i>
          <b>Extend {Pref.item}</b></button>
