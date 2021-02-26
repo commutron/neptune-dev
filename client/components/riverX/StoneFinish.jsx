@@ -64,7 +64,7 @@ const StoneFinish = ({
         lockout={lockout}
       >
       	<button
-      	  className={`stone iFinish ${rapIs ? 'iRapid' : '' }`}
+      	  className='stone iFinish'
       	  name={rapIs ? `${step} Extension` : step }
   				id='stoneButton'
   				onClick={()=>finish()}

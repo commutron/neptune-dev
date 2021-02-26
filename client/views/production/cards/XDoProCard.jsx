@@ -69,7 +69,6 @@ const XDoProCard = ({
   const iSerial = !itemData ? null : itemData.serial;
   
   const iComplete = !iSerial ? null : itemData.completed;
-  // const iCascade = !iSerial ? null : itemData.rma.length > 0;
   
   const scrapCheck = !iSerial ? null :
     itemData.history.find(x => x.type === 'scrap' && x.good === true);
@@ -85,8 +84,6 @@ const XDoProCard = ({
   
   const bWrapUp = !bComplete ? false :
                     moment().diff(bCompletedAt, 'hours') <= Pref.timeAfterGrace;
-  
-  // const bCascade = batchData.cascade.length > 0;
   
   const bOpen = batchData.live || bWrapUp;
   const bClosed = !batchData.live && !bComplete;
@@ -177,7 +174,6 @@ const XDoProCard = ({
             seriesId={seriesData && seriesData._id}
             itemData={itemData}
             flowFirsts={flowFirsts}
-            rapidData={rapidData}
             brancheS={brancheState}
             app={app}
             users={users}

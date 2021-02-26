@@ -11,7 +11,7 @@ import NumBox from '/client/components/tinyUi/NumBox.jsx';
 
 
 const StepsProgressX  = ({ 
-  b, widgetData, hasSeries, flowCounts, fallCounts,
+  b, widgetData, hasSeries, flowCounts, fallCounts, rapidsData,
   riverTitle, brancheS, truncate 
 })=> {
   
@@ -127,6 +127,15 @@ const StepsProgressX  = ({
           truncate={truncate}
         />
       : null}
+      
+      {rapidsData && rapidsData.map( (r, ix)=>(
+        <MiniStack
+          key={'rapid'+ix}
+          title={`${r.rapid} ${r.issueOrder}`}
+          count={r.quantity * (r.count || 1)}
+          countNew={0}
+          total={r.quantity} />
+      ))}
       
     </div>
     

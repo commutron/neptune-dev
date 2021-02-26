@@ -13,8 +13,8 @@ const RapidFork = ({ seriesId, serial, rapidData })=> {
         console.log(error);
     });
   }
-    
-  if(rapidData.rapDo.length > 0) { 
+  
+  if(rapidData.rapDo.every( r => rapidData.rapDid.includes(r._id) ) === false) { 
     return(
       <form 
         id='srtcsc'
@@ -33,7 +33,11 @@ const RapidFork = ({ seriesId, serial, rapidData })=> {
           className='wide'
           required>
           {rapidData.rapDo.map( (rp)=>(
-            <option key={rp._id} value={rp._id}>
+            <option 
+              key={rp._id} 
+              value={rp._id}
+              disabled={rapidData.rapDid.includes(rp._id)}
+            >
               {rp.rapid.split('-')[1]} - {rp.issueOrder}
             </option>
           ))}

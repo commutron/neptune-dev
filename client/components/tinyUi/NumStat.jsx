@@ -21,10 +21,10 @@ import React from 'react';
  
 const NumStat = ({ num, icon, name, title, color, size, moreClass }) => (
   <div style={sty} title={title} className={'noCopy ' + moreClass || ''}>
-    <i 
+    <span 
       style={bSty} 
       className={color + ' numFont ' + size}
-    >{num || <i className={`${icon} fa-lg`}></i>}</i>
+    >{num ? num : <n-fa1><i className={`${icon} fa-lg`}></i></n-fa1>}</span>
     <br />
     <i style={sSty} className='label'>{name}</i>
   </div>

@@ -1081,6 +1081,7 @@ n-mock-table-cell {
   border-bottom: 1px solid rgba(255,255,255,0.1);
   vertical-align: middle;
   padding: 1ch 0.5ch;
+  text-align: center;
 }
 n-mock-table-cell:last-child {
   border-right: none;

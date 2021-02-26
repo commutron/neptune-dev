@@ -26,7 +26,6 @@ Meteor.methods({
             let uniqueStep = fl;
             uniqueStep['key'] = new Meteor.Collection.ObjectID().valueOf();
             // uniqueStep['branchKey'] = 'r@p1d8r2nch';
-            
             wwObjs.push(uniqueStep);
           }
         }else{

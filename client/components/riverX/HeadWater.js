@@ -1,5 +1,4 @@
-import FlowCounter, { FallCounter, CascadeCounter } from '/client/utility/ProgressCounterX';
-import { round2Decimal } from '/client/utility/Convert';
+import FlowCounter, { FallCounter, WhiteWaterCounter } from '/client/utility/ProgressCounterX';
 
 function HeadWater( batchData, seriesData, widgetData ) {
   
@@ -43,6 +42,7 @@ export function WhiteWater( itemData, seriesData, rapidsData ) {
   
   let rapIs = false;
   let rapDo = [];
+  let rapDid = [];
   let rapDids = [];
     
   if(rapidsData.length > 0) {
@@ -51,7 +51,7 @@ export function WhiteWater( itemData, seriesData, rapidsData ) {
       
       for(let rapid of rapidsData) {
         
-        const casCount = CascadeCounter(rapid, true);
+        const casCount = WhiteWaterCounter(rapid, true);
         
         rapid.count = casCount;
         
@@ -61,40 +61,44 @@ export function WhiteWater( itemData, seriesData, rapidsData ) {
           rapDids.push({
             rapid: rapid.rapid, 
             type: rapid.type,
+            issueOrder: rapid.issueOrder,
             quantity: rapid.quantity
           });
         }
       }
-      return { rapIs, rapDo, rapDids };
+      return { rapIs, rapDid, rapDo, rapDids };
     }else{
       
       for(let rapid of rapidsData) {
         
-        const rapDidI = seriesData.items.filter( i => 
-                          i.altPath.find( r => 
-                            r.rapId === rapid._id && r.completed === true ) 
-                        ).length;
-        const iDone = round2Decimal( rapDidI / rapid.quantity );
+        const iCount = WhiteWaterCounter(rapid, true, seriesData);
         
-        rapid.count = iDone;
+        rapid.count = iCount;
         
-        if( rapid.live === true && iDone !== 1 ) {
+        if( rapid.live === true && iCount !== 1 ) {
           
-          rapIs = !itemData ? false : itemData.altPath.find( i => i.rapId === rapid._id );
-          
+          const alt = !itemData ? false : 
+                        itemData.altPath.find( i => i.rapId === rapid._id );
+          if(alt) {
+            if(alt.completed === false) {
+              rapIs = alt;
+            }else{
+              rapDid.push(alt.rapId);
+            }
+          }
           rapDo.push(rapid);
-          
         }else{
           rapDids.push({
             rapid: rapid.rapid, 
             type: rapid.type,
+            issueOrder: rapid.issueOrder,
             quantity: rapid.quantity,
           });
         }
       }
-      return { rapIs, rapDo, rapDids };
+      return { rapIs, rapDid, rapDo, rapDids };
     }
   }else{
-    return { rapIs, rapDo, rapDids };
+    return { rapIs, rapDid, rapDo, rapDids };
   }
 }

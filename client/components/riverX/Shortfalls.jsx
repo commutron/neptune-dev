@@ -37,10 +37,26 @@ const ShortLine = ({ entry, doSet, lock })=>{
     reS === true ? 'greenList' :
     'unknown';
   const actionState = 
-    inE === null ? <span title={Pref.Pending} className='centre'><i><i className='fas fa-hand-paper fa-lg'></i></i>Decide</span> :
-    inE === true ? <span title={Pref.doOmit} className='centre'><b><i className='fas fa-hand-scissors fa-lg'></i></b>Leave</span> :
-    !reS ? <span title={Pref.shortageWaiting} className='centre'><em><i className='fas fa-hand-holding fa-lg'></i></em>Wait</span> :
-    reS === true ? <span title={Pref.isResolved} className='centre'><ins><i className='fas fa-thumbs-up'></i></ins>Good</span> :
+    inE === null ? 
+      <span title={Pref.Pending} className='centre'>
+        <n-fa1><i className='fas fa-hand-paper fa-lg'></i></n-fa1>
+        <i>Decide</i>
+      </span> :
+    inE === true ? 
+      <span title={Pref.doOmit} className='centre'>
+        <n-fa2><i className='fas fa-hand-scissors fa-lg'></i></n-fa2>
+        <i>Leave</i>
+      </span> :
+    !reS ? 
+      <span title={Pref.shortageWaiting} className='centre'>
+        <n-fa3><i className='fas fa-hand-holding fa-lg'></i></n-fa3>
+        <i>Wait</i>
+      </span> :
+    reS === true ? 
+      <span title={Pref.isResolved} className='centre'>
+        <n-fa4><i className='fas fa-thumbs-up'></i></n-fa4>
+        <i>Good</i>
+      </span> :
     'unknown';
 
   return(

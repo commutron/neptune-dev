@@ -152,23 +152,34 @@ export function FallCounter(batchData, app) {
 
 
   
-export function CascadeCounter(rapidData, avg) {
+export function WhiteWaterCounter(rapidData, avg, seriesData) {
   const totalQ = rapidData.quantity;
   
-  let pointArr = [];
-  const fallS = rapidData.cascade.sort((w1, w2)=> 
-          w1.position < w2.position ? -1 : w1.position > w2.position ? 1 : 0 );
-  
-  for(let wf of fallS) {
-    const wfCount = wf.counts.length === 0 ? 0 :
-                      Array.from(wf.counts, x => x.tick).reduce((x,y)=> x + y);
-    const point = round2Decimal( wfCount / totalQ );
-    pointArr.push(point);
-  }
-  if(avg) {
-    return avgOfArray(pointArr);
+  if(rapidData.extendBatch && seriesData) {
+    
+    const rapDidI = seriesData.items.filter( i => 
+                      i.altPath.find( r => 
+                        r.rapId === rapidData._id && r.completed === true ) 
+                    ).length;
+    const iDone = round2Decimal( rapDidI / totalQ );
+    return iDone;
+    
   }else{
-    return pointArr;
+    let pointArr = [];
+    const fallS = rapidData.whitewater.sort((w1, w2)=> 
+            w1.position < w2.position ? -1 : w1.position > w2.position ? 1 : 0 );
+    
+    for(let wf of fallS) {
+      const wfCount = wf.counts.length === 0 ? 0 :
+                        Array.from(wf.counts, x => x.tick).reduce((x,y)=> x + y);
+      const point = round2Decimal( wfCount / totalQ );
+      pointArr.push(point);
+    }
+    if(avg) {
+      return avgOfArray(pointArr);
+    }else{
+      return pointArr;
+    }
   }
 }
 

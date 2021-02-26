@@ -41,7 +41,7 @@ const XItemCard = ({
   if(iComplete) {
     return(
       <div className='proPrimeSingle'>
-        {!rapidData.rapIs && rapidData.rapDo.length > 0 ?
+        {rapidData.rapDo.length > 0 && !rapidData.rapIs ?
           <RapidFork 
             seriesId={seriesId}
             serial={itemData.serial}
@@ -50,7 +50,7 @@ const XItemCard = ({
         <CompleteRest
           seriesId={seriesId}
           serial={itemData.serial}
-          iComplete={iComplete}
+          iComplete={itemData.completedAt}
           history={itemData.history}
           iAlt={itemData.altPath}
           scrap={scrap}

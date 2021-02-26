@@ -188,7 +188,7 @@ const StoneSelect = ({
       <CompleteRest
         seriesId={seriesId}
         serial={item.serial}
-        iComplete={item.completed}
+        iComplete={item.completedAt}
         history={item.history}
         altPath={item.altPath}
         scrap={scrapCheck}

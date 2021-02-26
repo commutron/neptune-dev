@@ -19,9 +19,10 @@
   --peterriverfade: rgba(52, 152, 219, 0.5);
   
   --belizeHole: rgb(41, 128, 185); /* dark blue */
-  --belizeHolefade: rgba(41, 128, 185, 0.5); /* dark blue fade */
-  --amethyst: rgb(155, 89, 182); /* light purple */
+  --belizeHoletrans: rgba(41, 128, 185, 0.5);
+  --belizeHolefade: rgba(41, 128, 185, 0.2); /* dark blue fade */
   
+  --amethyst: rgb(155, 89, 182); /* light purple */
   --amethystfade: rgba(155, 89, 182, 0.5);
   
   --wisteria: rgb(142, 68, 173); /* dark purple */
@@ -44,7 +45,9 @@
   --alizarinfade: rgba(231, 76, 60, 0.1);
   
   --pomegranate: rgb(192, 57, 43); /* dark red */
-  --pomegranatefade: rgba(192, 57, 43, 0.5); /* dark red fade */
+  --pomegranatefrost: rgba(192, 57, 43, 0.8);
+  --pomegranatetrans: rgba(192, 57, 43, 0.5);
+  --pomegranatefade: rgba(192, 57, 43, 0.2);
   
   --silver: rgb(189, 195, 199);
   --silverfade: rgba(189, 195, 199, 0.5);

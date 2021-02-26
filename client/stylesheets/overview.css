@@ -437,6 +437,9 @@
 .statusBlock {
   max-width: 11vh;
   min-width: 50%;
+  min-height: 6vh;
+  display: flex;
+  align-items: center;
 }
 .statusBlock > div {
   width: 100%;

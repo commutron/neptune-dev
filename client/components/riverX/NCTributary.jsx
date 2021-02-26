@@ -72,7 +72,8 @@ const NCStream = ({ entry, seriesId, end, doAction, inspector, verifier })=>{
       <div className='tribActionMain'>
           {snooze ?
             <span className='centre'>
-              <i className='far fa-clock fa-lg'></i>{smple ? null : 'Snoozing'}
+              <i className='far fa-clock fa-lg'></i>
+              <i>{smple ? null : 'Snoozing'}</i>
             </span>
           :
             fixed ?
@@ -83,7 +84,9 @@ const NCStream = ({ entry, seriesId, end, doAction, inspector, verifier })=>{
                 onClick={()=>handleClick('INSPECT')}
                 readOnly={true}
                 disabled={lockI || selfLock}>
-              <img src='/inspectMini.svg' className='pebbleSVG' /><br />{smple ? null : 'OK'}</button>
+                <img src='/inspectMini.svg' className='pebbleSVG' /><br />
+                <i>{smple ? null : 'OK'}</i>
+              </button>
           :
               <button
                 id='fixline'
@@ -91,7 +94,9 @@ const NCStream = ({ entry, seriesId, end, doAction, inspector, verifier })=>{
                 onClick={()=>handleClick('FIX')}
                 readOnly={true}
                 disabled={fixed === true || selfLock}>
-              <img src='/repair.svg' className='pebbleSVG' /><br />{smple ? null : 'Repair'}</button>
+                <img src='/repair.svg' className='pebbleSVG' /><br />
+                <i>{smple ? null : 'Repair'}</i>
+              </button>
           }
         </div>
         <div className='tribActionExtra'>

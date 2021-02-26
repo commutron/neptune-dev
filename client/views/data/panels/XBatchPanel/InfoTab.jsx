@@ -25,7 +25,7 @@ import StepsProgressX from '/client/components/bigUi/StepsProgress/StepsProgress
 const InfoTab = ({
   b, hasSeries, widgetData, user, isDebug,
   released, done, allFlow, allFall, nowater,
-  flowCounts, fallCounts, riverTitle, srange,
+  flowCounts, fallCounts, rapidsData, riverTitle, srange,
   app, brancheS
 }) =>	{
 
@@ -122,6 +122,7 @@ const InfoTab = ({
             hasSeries={hasSeries}
             flowCounts={flowCounts}
             fallCounts={fallCounts}
+            rapidsData={rapidsData}
             riverTitle={riverTitle}
             brancheS={brancheS}
             truncate={false} />
@@ -178,33 +179,33 @@ const SalesSegment = ({ b, srange, flowCounts, end, remain })=> {
     <div>
       <h3>Sales Order</h3>
       
-      <p className='cap'>{Pref.salesOrder}: <b>{b.salesOrder || 'not available'}</b></p>
+      <p className='cap'>{Pref.salesOrder}: <n-num>{b.salesOrder || 'not available'}</n-num></p>
       
-      <p>Total Batch Quantity: <b className='numfont'>{b.quantity}</b></p>
+      <p>Total Batch Quantity: <n-num>{b.quantity}</n-num></p>
       
-      <p>Serialized Items: <b className='numfont'>{flowCounts.liveItems}</b></p>
+      <p>Serialized Items: <n-num>{flowCounts.liveItems}</n-num></p>
       
       {flowCounts.liveUnits > 0 ?
-        <p>Serialized Units: <b className='numfont'>{flowCounts.liveUnits}</b></p>
+        <p>Serialized Units: <n-num>{flowCounts.liveUnits}</n-num></p>
       : null}
       
-      {srange && <p>Serial Range: <b className='numFont'>{srange}</b></p>}
+      {srange && <p>Serial Range: <n-num>{srange}</n-num></p>}
       
-      <p>Scrapped Items: <b className='numfont redT'>{flowCounts.scrapCount || null}</b></p>
+      <p>Scrapped Items: <n-num className='redT'>{flowCounts.scrapCount || 0}</n-num></p>
       
-      <p>Time Budget: <b>{qtHours} hours</b></p>
+      <p>Time Budget: <n-num>{qtHours} hours</n-num></p>
       
-      <p className='cap'>{Pref.start}: <b>{moment(b.salesStart).format("MMMM Do, YYYY")}</b></p>
+      <p className='cap'>{Pref.start}: <n-num>{moment(b.salesStart).format("MMMM Do, YYYY")}</n-num></p>
       
-      <p className='cap'>{Pref.end}: <b>{moment(b.salesEnd).format("MMMM Do, YYYY")}</b></p>
+      <p className='cap'>{Pref.end}: <n-num>{moment(b.salesEnd).format("MMMM Do, YYYY")}</n-num></p>
           
-      <p>{cmplt !== null ? 'Total Time:' : 'Elapsed:'} <b>{timeElapseClean} workdays</b></p>
+      <p>{cmplt !== null ? 'Total Time:' : 'Elapsed:'} <n-num>{timeElapseClean} workdays</n-num></p>
       
-      {cmplt !== null && <p>Complete: <b>{cmplt}</b></p> }
+      {cmplt !== null && <p>Complete: <n-num>{cmplt}</n-num></p> }
       
       {cmplt !== null ? null : 
         <p>Time Remaining: 
-          <b className={remainClean < 0 ? 'yellowT' : ''}> {remainClean} workdays</b>
+          <n-num className={remainClean < 0 ? 'yellowT' : ''}> {remainClean} workdays</n-num>
         </p> }
   
     </div>

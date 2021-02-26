@@ -30,7 +30,7 @@ import ItemsListX from './lists/ItemsListX';
 
 import ProgressCounter from '/client/utility/ProgressCounter.js';
 
-import FlowCounter, { FallCounter } from '/client/utility/ProgressCounterX';
+import FlowCounter, { FallCounter, WhiteWaterCounter } from '/client/utility/ProgressCounterX';
 import NonConOptionMerge from '/client/utility/NonConOptionMerge.js';
 
 
@@ -181,7 +181,21 @@ const DataViewOps = ({
       return fallCounts;
     }
   }
-
+  
+  function getRapidData(batchData, seriesData, rapidsData) {
+    if( batchData, rapidsData ) {
+      
+      let calcRapids = [];
+      for(let rapid of rapidsData) {
+        const rapidCount = WhiteWaterCounter(rapid, true, seriesData);
+        rapid.count = rapidCount;
+        calcRapids.push( rapid );
+      }
+      return calcRapids;
+    }else{
+      return null;
+    }
+  }
  
   if(!view) {
     Session.set('nowBatch', false);
@@ -449,6 +463,8 @@ const DataViewOps = ({
                      
       let flowData = getFlowData(hotXBatch, hotXSeries, widget, app);
       let fallData = getFallData(hotXBatch, app);
+      let rapXData = getRapidData(hotXBatch, hotXSeries, hotXRapids);
+      
       if(item && widget && variant && group) {
         return (
           <TraverseWrap
@@ -467,7 +483,7 @@ const DataViewOps = ({
             <ItemPanelX
               batchData={hotXBatch}
               seriesData={hotXSeries}
-              rapidsData={hotXRapids}
+              rapidsData={rapXData}
               itemData={item}
               widgetData={widget}
               variantData={variant}
@@ -561,6 +577,7 @@ const DataViewOps = ({
       
       let flowData = getFlowData(hotXBatch, hotXSeries, widget, app);
       let fallData = getFallData(hotXBatch, app);
+      let rapXData = getRapidData(hotXBatch, hotXSeries, hotXRapids);
       
       const isNigh = Roles.userIsInRole(Meteor.userId(), 'nightly');
       return (
@@ -581,7 +598,7 @@ const DataViewOps = ({
           <BatchPanelX
             batchData={hotXBatch}
             seriesData={hotXSeries}
-            rapidsData={hotXRapids}
+            rapidsData={rapXData}
             widgetData={widget}
             variantData={variant}
             groupData={group}

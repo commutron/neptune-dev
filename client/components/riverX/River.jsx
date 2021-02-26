@@ -3,12 +3,11 @@ import Pref from '/client/global/pref.js';
 
 import StoneSelect from './StoneSelect.jsx';
 // import RiverFork from './RiverFork.jsx';
-// import RMACascade from './RMACascade.jsx';
-// import MiniHistory from './MiniHistory.jsx';
 // import AltMarker from '/client/components/tinyUi/AltMarker.jsx';
 
 const River = ({ 
-  batchData, seriesData, itemData, widgetData, rapid, rapIs,
+  batchData, seriesData, itemData, widgetData, 
+  altIs, rapid, rapIs,
   app, users, brancheS,
   useFlow, flowCounts,
   shortfallS, scrapCheck,
@@ -20,9 +19,7 @@ const River = ({
   const [ undoStepOption, undoOpSet ] = useState(false);
   
   useEffect(() => {
-    return () => { thingMounted.current = false;
-      // Meteor.clearTimeout(timer);
-    };
+    return () => { thingMounted.current = false; };
   }, []);
   
   function tempOpenOption() {
@@ -36,11 +33,8 @@ const River = ({
   }
 
   return(
-		<div className={rapIs ? 'altHighlight' : ''}>
+		<div className={altIs ? 'altHighlight' : rapIs ? 'rapIsHighlight' : ''}>
 		
-	    {/*i.finishedAt === false && b.riverAlt && i.alt !== false ? 
-	      <AltMarker id={b._id} serial={i.serial} alt={i.alt} />
-	    : null*/}
       <StoneSelect
         bID={batchData._id}
         bComplete={batchData.completed}

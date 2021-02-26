@@ -56,14 +56,16 @@ const TideWall = ({
           <CompleteRest
             seriesId={seriesData._id}
             serial={itemData.serial}
-            iComplete={itemData.completed}
+            iComplete={itemData.completedAt}
             history={itemData.history}
             iAlt={itemData.altPath}
             scrap={scrap}
             bComplete={bComplete}
             shortfallS={shortfallS} />
         :
-          <MiniHistory history={itemData.history} />
+          <MiniHistory 
+            history={itemData.history} 
+            iAlt={itemData.altPath} />
       : null
       }
   	</div>

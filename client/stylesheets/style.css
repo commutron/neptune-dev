@@ -1,7 +1,7 @@
 .monoFont {
   font-family: monospace;  
 }
-.numFont {
+.numFont, n-num {
   font-family: 'VarelaLocal';
 }
 
@@ -205,9 +205,7 @@ input::-webkit-calendar-picker-indicator {
 .purpleT { color: var(--amethyst); }
 .purpleBorder { 
   background-color: transparent;
-	border: 5px solid var(--amethyst);
-	box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2),
-	      inset 0 0 .1em .1em rgba(43,43,43,0.2);
+	border: 5px solid var(--wisteria);
 }
 
 .wetasphalt { background-color: var(--wetasphalt); }

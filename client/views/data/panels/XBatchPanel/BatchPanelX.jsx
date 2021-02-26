@@ -61,6 +61,7 @@ const BatchPanelX = ({
           srange={flowData.srange}
           flowCounts={flowData.flowCounts}
           fallCounts={fallData}
+          rapidsData={rapidsData}
           released={released}
           done={done}
           allFlow={flowData.flowCounts.allFlow}

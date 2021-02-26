@@ -2,11 +2,25 @@ import React, { Fragment } from 'react';
 import Pref from '/client/global/pref.js';
 import moment from 'moment';
 
-const MiniHistory = ({ history })=> (
-  <Fragment>
-    {history.length > 0 ?
-      <n-mock-table className='miniHistory vgap'>
-        {history.map( (hst, idx)=>{
+const MiniHistory = ({ history, iAlt })=> {
+  
+  const altriver = iAlt && iAlt.find( x => x.river !== false );
+  const extended = iAlt ? iAlt.filter( x => x.rapId !== false ) : [];
+
+  return(
+    <Fragment>
+      
+      {altriver && <div className='altBanner'>Alternative Flow</div> }
+            
+      {extended.map( (e, ix)=>(
+        <div key={ix} className='rapDidBanner'
+          >Extended <n-num>{moment(e.assignedAt).calendar()}</n-num>
+        </div>
+      ))}
+        
+      {history.length > 0 ?
+        <n-mock-table className='miniHistory vgap'>
+          {history.map( (hst, idx)=>{
         		return( 
         		  <n-mock-table-row className='cap' key={idx}>
         		    <n-mock-table-cell>
@@ -17,10 +31,11 @@ const MiniHistory = ({ history })=> (
         		      >{moment(hst.time).calendar()}
         		    </n-mock-table-cell>
         		  </n-mock-table-row>
-        )})}
-      </n-mock-table>
-      : <h3 className='centreText'>{Pref.Item} Unstarted</h3> }
-  </Fragment>
-);
+          )})}
+        </n-mock-table>
+        : <h3 className='centreText'>{Pref.Item} Unstarted</h3> }
+    </Fragment>
+  );
+};
   
 export default MiniHistory;

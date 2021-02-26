@@ -20,6 +20,8 @@ const BatchCardX = ({
   expand, flowwater, fallwater
 })=> {
   
+  const rapidMerge = [...rapidData.rapDo,...rapidData.rapDids];
+  
   const insertTideBump = 
           <TideBump
             bID={batchData._id}
@@ -34,6 +36,7 @@ const BatchCardX = ({
             batchData={batchData}
             srange={srange}
             flowCounts={flowCounts}
+            rapidMerge={rapidMerge}
             bClosed={bClosed}
             app={app} />;
             
@@ -43,6 +46,7 @@ const BatchCardX = ({
               b={batchData}
               flowCounts={flowCounts}
               fallCounts={fallCounts}
+              rapidsData={rapidMerge}
               riverTitle=''
               brancheS={brancheS}
               truncate={true}
@@ -98,7 +102,7 @@ const BatchCardX = ({
 
 export default BatchCardX;
 
-const MiniInfo = ({ batchData, srange, flowCounts, bClosed, app })=> (
+const MiniInfo = ({ batchData, srange, flowCounts, rapidMerge, bClosed, app })=> (
   <div className='space1v cap'>
     
     {bClosed &&
@@ -108,22 +112,27 @@ const MiniInfo = ({ batchData, srange, flowCounts, bClosed, app })=> (
       </h4>}
       
     {batchData.completed &&
-      <h4 className='centreText nomargin'
-        >{Pref.XBatch} Completed {moment(batchData.completedAt).calendar()}
-      </h4>}
+      <div className='finishBanner'
+        >{Pref.XBatch} Completed <n-num>{moment(batchData.completedAt).calendar()}</n-num>
+      </div>}
+      
+    {rapidMerge.map( (r, ix)=>(
+      <div key={ix} className='rapDidBanner'
+        >{r.type} - {r.issueOrder}
+      </div>))}
     
-    <p>{Pref.salesOrder}: <b>{batchData.salesOrder}</b></p>
+    <p>{Pref.salesOrder}: <n-num>{batchData.salesOrder}</n-num></p>
     
-    <p>Total Quantity: <b className='numfont'>{batchData.quantity}</b></p>
+    <p>Total Quantity: <n-num>{batchData.quantity}</n-num></p>
     
     {srange && flowCounts.liveItems !== batchData.quantity ? 
-      <p>Serialized Items: <b className='numfont'>{flowCounts.liveItems}</b></p>
+      <p>Serialized Items: <n-num>{flowCounts.liveItems}</n-num></p>
     : null}
     
-    {srange && <p>Serials: <b className='numFont'>{srange}</b></p>}
+    {srange && <p>Serials: <n-num>{srange}</n-num></p>}
     
     {flowCounts.scrapCount > 0 &&
-      <p>Scrapped Items: <b className='numfont redT'>{flowCounts.scrapCount}</b></p>}
+      <p>Scrapped Items: <n-num className='redT'>{flowCounts.scrapCount}</n-num></p>}
       
     <hr />
     <TagsModule
