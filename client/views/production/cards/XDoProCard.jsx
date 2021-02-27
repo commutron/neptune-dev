@@ -88,7 +88,8 @@ const XDoProCard = ({
   const bOpen = batchData.live || bWrapUp;
   const bClosed = !batchData.live && !bComplete;
   
-  const rapid = !rapidData.rapIs ? false :
+  const rapid = !rapidData.rapIs ? 
+                  rapidData.rapDo.find( r => r.live === true ) :
                   rapidData.rapDo.find( r => r._id === rapidData.rapIs.rapId );
           
   let useFlow = !itemData ? [] :
@@ -133,8 +134,9 @@ const XDoProCard = ({
             allFlow={flowData.flowCounts.allFlow}
             fallProg={fallData.fallCounts.fallProg}
             allFall={fallData.fallCounts.allFall}
-            nowater={!fallAction && !seriesData && !rapidData}
-            rapidData={rapidData}
+            nowater={!fallAction && !seriesData && !rapid}
+            rapid={rapid}
+            rapIs={rapidData.rapIs}
             app={app} />;
             
   const insertItemCard = 

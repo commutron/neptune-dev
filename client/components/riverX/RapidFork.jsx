@@ -38,7 +38,7 @@ const RapidFork = ({ seriesId, serial, rapidData })=> {
               value={rp._id}
               disabled={rapidData.rapDid.includes(rp._id)}
             >
-              {rp.rapid.split('-')[1]} - {rp.issueOrder}
+              {rp.rapid} - {rp.issueOrder}
             </option>
           ))}
         </select>

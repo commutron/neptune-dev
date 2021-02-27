@@ -65,7 +65,7 @@ const TideFollow = ({ proRoute, invertColor })=> {
     <Fragment>
       <ContextMenuTrigger
   			id='tideF0ll0w1'
-  			holdToDisplay={!engaged || proRoute ? 1 : 500}
+  			holdToDisplay={!engaged /*|| proRoute*/ ? 1 : 500}
   			attributes={ {className: `proRight ${invertColor ? 'invert' : ''}`} }>
         <button 
           aria-label={tootip}

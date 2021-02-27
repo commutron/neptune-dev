@@ -116,18 +116,17 @@ function FlowCounter(flow, seriesData) {
 export default FlowCounter;
 
 
-function fallLoop(waterfall, quantity, app) {
+function fallLoop(waterfall, quantity) {
   let countData = [];
   let doneCheck = [];
-  const appCO = app.countOption;
   for(let wf of waterfall) {
-    const wfType = wf.type || appCO.find( x => x.key === wf.wfKey ).type;
+    const wfType = wf.type;
     const wfCount = wf.counts.length === 0 ? 0 :
                       Array.from(wf.counts, x => x.tick).reduce((x,y)=> x + y);
     doneCheck.push( wfCount === quantity );
     countData.push({
       obj: 'count',
-      key: wf.wfKey,
+      wfKey: wf.wfKey,
       step: wf.gate,
       type: wfType,
       bKey: wf.branchKey,
@@ -143,28 +142,34 @@ function fallLoop(waterfall, quantity, app) {
   };
 }
 
-export function FallCounter(batchData, app) {
+export function FallCounter(batchData) {
   
-  const wtrflProg = fallLoop(batchData.waterfall, batchData.quantity, app);
+  const wtrflProg = fallLoop(batchData.waterfall, batchData.quantity);
 
   return wtrflProg;
 }
 
 
   
-export function WhiteWaterCounter(rapidData, avg, seriesData) {
+export function WhiteWaterCounter(rapidData, seriesData) {
   const totalQ = rapidData.quantity;
   
   if(rapidData.extendBatch && seriesData) {
     
-    const rapDidI = seriesData.items.filter( i => 
+    const rapSetI = seriesData.items.filter( i => 
+                      i.altPath.find( r => r.rapId === rapidData._id ) );
+    const iSet = rapSetI.length;
+    
+    const rapDidI = rapSetI.filter( i => 
                       i.altPath.find( r => 
                         r.rapId === rapidData._id && r.completed === true ) 
                     ).length;
     const iDone = round2Decimal( rapDidI / totalQ );
-    return iDone;
+    
+    return [ iSet, iDone ];
     
   }else{
+    let countArr = [];
     let pointArr = [];
     const fallS = rapidData.whitewater.sort((w1, w2)=> 
             w1.position < w2.position ? -1 : w1.position > w2.position ? 1 : 0 );
@@ -172,14 +177,11 @@ export function WhiteWaterCounter(rapidData, avg, seriesData) {
     for(let wf of fallS) {
       const wfCount = wf.counts.length === 0 ? 0 :
                         Array.from(wf.counts, x => x.tick).reduce((x,y)=> x + y);
+      countArr.push(wfCount);
       const point = round2Decimal( wfCount / totalQ );
       pointArr.push(point);
     }
-    if(avg) {
-      return avgOfArray(pointArr);
-    }else{
-      return pointArr;
-    }
+    return [ fallS.length, avgOfArray(pointArr), countArr ];
   }
 }
 

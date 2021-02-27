@@ -50,6 +50,9 @@ const EventsTimeline = ({
     if (moment(timeY).isBefore(timeX)) { return 1 }
     return 0;
   });
+  
+  const calString = "ddd, MMM D /YY, h:mm A";
+  const calFunc = (d)=> moment(d).calendar(null, {sameElse: calString});
                     
   return(
     <div className='scrollWrap'>
@@ -112,25 +115,29 @@ const EventsTimeline = ({
                 batch={batchData.batch}
                 serial={dt.serial}
                 done={doneBatch}
-                showHeader={true} /> 
+                showHeader={true}
+                cal={calFunc} /> 
             );
           }else if( typeof dt.changeKey === 'string' ) {
             return( 
               <AlterBlock
                 key={dt.changeDate.toISOString()+ix}
-                dt={dt} /> 
+                dt={dt}
+                cal={calFunc} /> 
             );
           }else if( typeof dt.timeAsMinutes === 'number' ) {
             return( 
               <QuoteBlock
                 key={dt.updatedAt.toISOString()+ix}
-                dt={dt} /> 
+                dt={dt}
+                cal={calFunc} /> 
             );
           }else if( typeof dt.detail === 'string' ) {
             return( 
               <EventBlock
                 key={dt.time.toISOString()+ix}
-                dt={dt} /> 
+                dt={dt}
+                cal={calFunc} /> 
             );
           }else if( typeof dt.who === 'string' ) {
             return( 
@@ -141,14 +148,16 @@ const EventsTimeline = ({
                 done={doneBatch}
                 dt={dt}
                 icon={dt.type === 'floorRelease' && 'fas fa-flag'}
-                brancheS={brancheS} /> 
+                brancheS={brancheS}
+                cal={calFunc} /> 
             );
           }else if( typeof dt.complete === 'boolean' ) {
             return( 
               <CompleteBlock
                 key={'completefinish'+ix}
                 title={`${Pref.batch} complete`}
-                datetime={dt.time} />
+                datetime={dt.time}
+                cal={calFunc} />
             );
           }else{
             return( null );

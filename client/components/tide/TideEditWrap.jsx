@@ -100,9 +100,8 @@ const TideEditWrap = ({
           return(
             <Fragment key={index+blk.tKey}>
               <tr key={blk.startTime.toISOString()} className='big leftText line4x'>
-                <th colSpan='6'>{newDayTime.format('dddd MMMM Do')}</th>
-                <th colSpan='2' className='rightText'>
-                  {isHoliday ? <span className='big'>Holiday</span> : null}
+                <th colSpan='8'>{newDayTime.format('dddd MMMM Do')}
+                  {isHoliday ? <span className=''> (Holiday)</span> : null}
                 </th>
               </tr>
               <tr>

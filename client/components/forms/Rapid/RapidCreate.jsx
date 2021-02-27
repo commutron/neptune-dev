@@ -123,8 +123,8 @@ const RapidCreateForm = ({
               onChange={(e)=>typeSet(e.target.value)}
               required>
                 <option></option>
-                <option value='repair'>Repair</option>
-                <option value='refurbish'>Refurbish</option>
+                <option value='warranty-repair'>Warranty Repair</option>
+                <option value='out-of-warranty-repair'>Out-of-Warranty-Repair</option>
                 <option value='modify'>Modify</option>
             </select>
           </label>
@@ -141,7 +141,7 @@ const RapidCreateForm = ({
         </div>
       
         <div className='centre vmargin'>
-          <label htmlFor='hourNum' className='breath'>{Pref.timeBudget} <em>(in hours)</em><br />
+          <label htmlFor='hourNum' className='breath'>Add to {Pref.timeBudget} <em>(in hours)</em><br />
           <input
             type='number'
             id='hourNum'
@@ -230,7 +230,7 @@ const RapidCreateForm = ({
                 user={user}
                 flowsState={flowsState}
                 flowsSet={flowsSet}
-                lockOut={!typeState || typeState === 'modify'}
+                lockOut={!typeState}
               />
             </div>
             

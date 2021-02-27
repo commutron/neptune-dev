@@ -32,8 +32,9 @@ export const ProWrap = ({
   useLayoutEffect( ()=> {
     !Session.get('riverExpand') ? null : expandSet( true );
     
-    rapIsSet( itemData && itemData.altPath.find( x => x.rapId && !x.completed ) );
-    
+    if(itemData && itemData.altPath) {
+      rapIsSet( itemData.altPath.find( x => x.rapId && !x.completed ) );
+    }
   }, [(itemData && itemData.altPath)]);
   
   useLayoutEffect( ()=> {

@@ -132,7 +132,7 @@ const StepsProgressX  = ({
         <MiniStack
           key={'rapid'+ix}
           title={`${r.rapid} ${r.issueOrder}`}
-          count={r.quantity * (r.count || 1)}
+          count={r.quantity * (isNaN(r.rDone) ? 1 : r.rDone)}
           countNew={0}
           total={r.quantity} />
       ))}

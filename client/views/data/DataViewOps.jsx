@@ -187,8 +187,9 @@ const DataViewOps = ({
       
       let calcRapids = [];
       for(let rapid of rapidsData) {
-        const rapidCount = WhiteWaterCounter(rapid, true, seriesData);
-        rapid.count = rapidCount;
+        const rapidCount = WhiteWaterCounter(rapid, seriesData);
+        rapid.rSet = rapidCount[0];
+        rapid.rDone = rapidCount[1];
         calcRapids.push( rapid );
       }
       return calcRapids;

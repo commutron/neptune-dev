@@ -1,18 +1,17 @@
 import React from 'react';
-import moment from 'moment';
 // import Pref from '/client/global/pref.js';
 import '/client/components/bigUi/ItemFeed/style.css';
 
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 
-const AlterBlock = ({ dt })=>{
+const AlterBlock = ({ dt, cal })=>{
 
   return(
     <div className='infoBlock alterEvent'>
       <div className='blockTitle cap'>
         <div>
           <div className='leftAnchor'>
-            <i className="fas fa-eraser fa-lg fa-fw iG"></i>
+            <i className="fas fa-eraser fa-lg fa-fw"></i>
           </div>
           
           <div>Altered: <em className='clean'>"{dt.changeKey}"</em></div>
@@ -22,7 +21,7 @@ const AlterBlock = ({ dt })=>{
         
         <div className='rightText'>
           <div><UserNice id={dt.changeWho} /></div>
-          <div>{moment(dt.changeDate).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</div>
+          <div>{cal(dt.changeDate)}</div>
           <div className='rightAnchor'></div>
         </div>
         

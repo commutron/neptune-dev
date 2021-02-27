@@ -20,17 +20,17 @@ const TideWall = ({
   
   const ctxLabel = tideFloodGate ? 'Set Different Task' : `Set A Task`;
   
-  if(!bOpen && bComplete && !rapidData.rapDo) {
+  if(!bOpen && bComplete && rapidData.rapDo.length === 0 ) {
     return null;
   }
   return(
-    <div className='vgap'>
+    <span>
 
   		{bOpen && ( ( !itemData ) ||
   		  ( itemData && ( itemData.completed === false || 
   		    rapidData.rapIs || rapidData.rapDo.length > 0 ) ) ) ? 
   		  
-		    <Fragment>
+		    <div className='vgap'>
           <n-big-tide-container>
             <TideControl 
               batchID={bID} 
@@ -47,7 +47,7 @@ const TideWall = ({
             taskState={taskState}
             lockTaskState={lockTaskState}
             taskSet={taskSet} /> 
-        </Fragment>
+        </div>
         
       : null }
       
@@ -68,7 +68,7 @@ const TideWall = ({
             iAlt={itemData.altPath} />
       : null
       }
-  	</div>
+  	</span>
   );
 };
 

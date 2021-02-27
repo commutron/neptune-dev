@@ -533,10 +533,10 @@
   border: 1vmax solid var(--greenSea);
 }
 .forkButton {
-  font-size: 5vmax;
+  font-size: 4vmax;
 }
 .forkButton b {
-  font-size: 2.5vmax;
+  font-size: 2vmax;
 }
 .forkButton:hover, .forkButton:active {
   background-color: var(--greenSea);
@@ -551,7 +551,7 @@
 }
 
 .finishBanner, .rapDidBanner, .altBanner {
-  margin: 0.5vh 0.5vw;
+  margin: 0.5vh 0;
   border-top: 1px solid;
   border-bottom: 1px solid;
   padding: 0.5vh 0.5vw;

@@ -4,7 +4,7 @@ import './style';
 //import Pref from '/client/global/pref.js';
 
 const WaterFall = ({ 
-  batchId, fall, total, quantity, lock,
+  batchId, rapidId, fall, total, quantity, speed, lock,
   app, borderColor, fadeColor
 })=> {
   
@@ -12,10 +12,11 @@ const WaterFall = ({
   const [ lockMinus, lockMinusSet ] = useState( false );
   const [ showMenu, showMenuSet ] = useState( false );
   
+
   /*
   function plusMeta(e, meta) {
     if(total < quantity) {
-      Meteor.call('metaCounter', batchId, fall.key, meta, (error)=>{
+      Meteor.call('metaCounter', batchId, fall.wfKey, meta, (error)=>{
         error && console.log(error);
       });
     }
@@ -24,26 +25,34 @@ const WaterFall = ({
   function plusOne(e) {
     lockPlusSet( true );
     if(total < quantity) {
-      Meteor.call('positiveCounter', batchId, fall.key, (error)=>{
-        error && console.log(error);
-        let speed = !Meteor.user().unlockSpeed ? 2000 : Meteor.user().unlockSpeed; 
-        Meteor.setTimeout(()=> {
-          lockPlusSet( false );
-        }, speed);
-      });
+      if(batchId) {
+        Meteor.call('positiveCounter', batchId, fall.wfKey, (error)=>{
+          error && console.log(error);
+          Meteor.setTimeout(()=> { lockPlusSet( false ); }, speed);
+        });
+      }else if(rapidId) {
+        Meteor.call('rapidPositiveCounter', rapidId, fall.wfKey, (error)=>{
+          error && console.log(error);
+          Meteor.setTimeout(()=> { lockPlusSet( false ); }, speed);
+        });
+      }else{null}
     }
   }
   
   function minusOne(e) {
     lockMinusSet( true );
     if(total > 0) {
-      Meteor.call('negativeCounter', batchId, fall.key, (error)=>{
-        error && console.log(error);
-        let speed = !Meteor.user().unlockSpeed ? 2000 : Meteor.user().unlockSpeed; 
-        Meteor.setTimeout(()=> {
-          lockMinusSet( false );
-        }, speed);
-      });
+      if(batchId) {
+        Meteor.call('negativeCounter', batchId, fall.wfKey, (error)=>{
+          error && console.log(error);
+          Meteor.setTimeout(()=> { lockMinusSet( false ); }, speed);
+        });
+      }else if(rapidId) {
+        Meteor.call('rapidNegativeCounter', rapidId, fall.wfKey, (error)=>{
+          error && console.log(error);
+          Meteor.setTimeout(()=> { lockMinusSet( false ); }, speed);
+        });
+      }else{null}
     }
   }
 
@@ -75,7 +84,7 @@ const WaterFall = ({
   return (
     <div className='waterfallGrid'>
       <button
-        id={'goMinus' + fall.key}
+        id={'goMinus' + fall.wfKey}
         className={`countMinus numFont ${startClass}`}
         onClick={(e)=>minusOne(e)}
         disabled={lock || lockMinus || total === 0}
@@ -129,7 +138,7 @@ const WaterFall = ({
       
       
       <button
-        id={'goPlus' + fall.key}
+        id={'goPlus' + fall.wfKey}
         className={`countPlus ${borderColor} ${fadeClass} ${doneClass}`}
         onClick={(e)=>plusOne(e)}
         disabled={lock || lockPlus || total >= quantity}>

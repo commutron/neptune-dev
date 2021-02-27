@@ -26,13 +26,13 @@ function HeadWater( batchData, seriesData, widgetData ) {
     
 export default HeadWater;
 
-export function HighWater( batchData, app ) {
+export function HighWater( batchData ) {
   
-  if( batchData && app ) {
+  if( batchData ) {
     
     const floorRel = batchData.releases.findIndex( x => x.type === 'floorRelease') >= 0;
     
-    const fallCounts = FallCounter(batchData, app);
+    const fallCounts = FallCounter(batchData);
    
     return { floorRel, fallCounts };
   }
@@ -43,6 +43,7 @@ export function WhiteWater( itemData, seriesData, rapidsData ) {
   let rapIs = false;
   let rapDo = [];
   let rapDid = [];
+  let rapMax = false;
   let rapDids = [];
     
   if(rapidsData.length > 0) {
@@ -51,31 +52,35 @@ export function WhiteWater( itemData, seriesData, rapidsData ) {
       
       for(let rapid of rapidsData) {
         
-        const casCount = WhiteWaterCounter(rapid, true);
+        const casCount = WhiteWaterCounter(rapid);
         
-        rapid.count = casCount;
-        
-        if( rapid.live === true && casCount !== 1 ) {
+        if( rapid.live === true /* && casCount[1] !== 1 */) {
+          rapid.rSet = casCount[0];
+          rapid.rDone = casCount[1];
+          rapid.rCounts = casCount[2];
           rapDo.push(rapid);
         }else{
           rapDids.push({
             rapid: rapid.rapid, 
             type: rapid.type,
             issueOrder: rapid.issueOrder,
-            quantity: rapid.quantity
+            quantity: rapid.quantity,
+            rSet: casCount[0],
+            rDone: casCount[1],
+            rCounts: casCount[2]
           });
         }
       }
-      return { rapIs, rapDid, rapDo, rapDids };
+      return { rapIs, rapDid, rapDo, rapMax, rapDids };
     }else{
       
       for(let rapid of rapidsData) {
         
-        const iCount = WhiteWaterCounter(rapid, true, seriesData);
+        const iCount = WhiteWaterCounter(rapid, seriesData);
         
-        rapid.count = iCount;
+        iCount[0] === rapid.quantity ? rapMax = true : null; 
         
-        if( rapid.live === true && iCount !== 1 ) {
+        if( rapid.live === true && iCount[1] !== 1 ) {
           
           const alt = !itemData ? false : 
                         itemData.altPath.find( i => i.rapId === rapid._id );
@@ -86,6 +91,8 @@ export function WhiteWater( itemData, seriesData, rapidsData ) {
               rapDid.push(alt.rapId);
             }
           }
+          rapid.rSet = iCount[0];
+          rapid.rDone = iCount[1];
           rapDo.push(rapid);
         }else{
           rapDids.push({
@@ -93,12 +100,14 @@ export function WhiteWater( itemData, seriesData, rapidsData ) {
             type: rapid.type,
             issueOrder: rapid.issueOrder,
             quantity: rapid.quantity,
+            rSet: iCount[0],
+            rDone: iCount[1]
           });
         }
       }
-      return { rapIs, rapDid, rapDo, rapDids };
+      return { rapIs, rapDid, rapDo, rapMax, rapDids };
     }
   }else{
-    return { rapIs, rapDid, rapDo, rapDids };
+    return { rapIs, rapDid, rapDo, rapMax, rapDids };
   }
 }

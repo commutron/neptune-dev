@@ -211,16 +211,6 @@ const DataRepair = ({ app, users })=> {
       </div>
       
       <div>
-        <h3><i className="fas fa-trash fa-lg gap redT"></i>
-          Fix Dev Error and Delete Rapids
-        </h3>
-        <button
-          onClick={()=>doCallThing("removeALLrapids")}
-          className='action clearRed'
-        >Delete ALL Rapids</button>
-      </div>
-      
-      <div>
         <h3><i className='fas fa-user-shield fa-lg gap'></i>
           Clear `Usage Logs` and `Breadcrubs`
         </h3>

@@ -1,12 +1,11 @@
 import React from 'react';
-import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import '/client/components/bigUi/ItemFeed/style.css';
 
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 
 
-const ReleaseBlock = ({ id, isX, done, dt, icon, brancheS })=>{
+const ReleaseBlock = ({ id, isX, done, dt, icon, brancheS, cal })=>{
 
   const aK = dt.type;
   const niceB = brancheS.find( b => ( 'BRK' + b.brKey ) === aK );
@@ -36,7 +35,7 @@ const ReleaseBlock = ({ id, isX, done, dt, icon, brancheS })=>{
     <div className='infoBlock genericEvent'>
       <div className='blockTitle cap'>
         <div>
-          <div className={`leftAnchor ${dt.caution ? 'yellowT' : 'greenT'}`}>
+          <div className='leftAnchor'>
             <i className={`${icon || 'fas fa-check-square'} fa-lg fa-fw`}></i>
           </div>
           <div>{actionString} by <UserNice id={dt.who} /></div>
@@ -45,7 +44,7 @@ const ReleaseBlock = ({ id, isX, done, dt, icon, brancheS })=>{
           : null}
         </div>
         <div className='rightText'>
-          <div>{moment(dt.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm A"})}</div>
+          <div>{cal(dt.time)}</div>
           <div className='rightAnchor'>
 	          <button
 	            title='Cancel'
