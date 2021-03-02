@@ -45,69 +45,40 @@ export function WhiteWater( itemData, seriesData, rapidsData ) {
   let rapDid = [];
   let rapMax = false;
   let rapDids = [];
+   
+  for(let rapid of rapidsData) {
     
-  if(rapidsData.length > 0) {
+    const rCount = WhiteWaterCounter(rapid, seriesData);
     
-    if(!seriesData) {
+    rCount[0] === rapid.quantity ? rapMax = true : null; 
+    
+    if( rapid.live === true /*&& rCount[1] !== 1 */ ) {
       
-      for(let rapid of rapidsData) {
-        
-        const casCount = WhiteWaterCounter(rapid);
-        
-        if( rapid.live === true /* && casCount[1] !== 1 */) {
-          rapid.rSet = casCount[0];
-          rapid.rDone = casCount[1];
-          rapid.rCounts = casCount[2];
-          rapDo.push(rapid);
+      const alt = !itemData ? false : 
+                    itemData.altPath.find( i => i.rapId === rapid._id );
+      if(alt) {
+        if(alt.completed === false) {
+          rapIs = alt;
         }else{
-          rapDids.push({
-            rapid: rapid.rapid, 
-            type: rapid.type,
-            issueOrder: rapid.issueOrder,
-            quantity: rapid.quantity,
-            rSet: casCount[0],
-            rDone: casCount[1],
-            rCounts: casCount[2]
-          });
+          rapDid.push(alt.rapId);
         }
       }
-      return { rapIs, rapDid, rapDo, rapMax, rapDids };
+      rapid.rSet = rCount[0];
+      rapid.rDone = rCount[1];
+      rapid.rCounts = rCount[2];
+      rapDo.push(rapid);
     }else{
-      
-      for(let rapid of rapidsData) {
-        
-        const iCount = WhiteWaterCounter(rapid, seriesData);
-        
-        iCount[0] === rapid.quantity ? rapMax = true : null; 
-        
-        if( rapid.live === true && iCount[1] !== 1 ) {
-          
-          const alt = !itemData ? false : 
-                        itemData.altPath.find( i => i.rapId === rapid._id );
-          if(alt) {
-            if(alt.completed === false) {
-              rapIs = alt;
-            }else{
-              rapDid.push(alt.rapId);
-            }
-          }
-          rapid.rSet = iCount[0];
-          rapid.rDone = iCount[1];
-          rapDo.push(rapid);
-        }else{
-          rapDids.push({
-            rapid: rapid.rapid, 
-            type: rapid.type,
-            issueOrder: rapid.issueOrder,
-            quantity: rapid.quantity,
-            rSet: iCount[0],
-            rDone: iCount[1]
-          });
-        }
-      }
-      return { rapIs, rapDid, rapDo, rapMax, rapDids };
+      rapDids.push({
+        rapid: rapid.rapid, 
+        type: rapid.type,
+        issueOrder: rapid.issueOrder,
+        quantity: rapid.quantity,
+        rSet: rCount[0],
+        rDone: rCount[1],
+        rCounts: rCount[2]
+      });
     }
-  }else{
-    return { rapIs, rapDid, rapDo, rapMax, rapDids };
   }
+  
+  return { rapIs, rapDid, rapDo, rapMax, rapDids };
 }

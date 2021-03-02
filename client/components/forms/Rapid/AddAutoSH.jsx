@@ -31,7 +31,7 @@ const AddAutoSH = ({ vassembly, shortState, shortSet, lockOut })=> {
     <div>
       <div className='inlineForm'>
       
-        <label htmlFor='shRefs' className='breath'>Referances<br />
+        <label htmlFor='shRefs' className='gapR'>Referances<br />
           <input
             type='text'
             id='shRefs'
@@ -39,7 +39,7 @@ const AddAutoSH = ({ vassembly, shortState, shortSet, lockOut })=> {
             disabled={lockOut} />
         </label>
       
-        <label htmlFor='shPart' className='breath'>Part Number<br />
+        <label htmlFor='shPart' className='gapR'>Part Number<br />
           <input
             type='text'
             id='shPart'

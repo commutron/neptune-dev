@@ -88,7 +88,7 @@ const ActivityPanel = ({ app, brancheS, user, isDebug, users, traceDT })=> {
           plainBrancheS={plainBrancheS} />
       </table>
       }
-      <div className='dropCeiling'>
+      <div className='dropCeiling smTxt'>
         <p><sup>i.</sup>Times are displayed for timezone: {moment.tz.guess()}</p>
         <p><sup>ii.</sup>Durations are rounded to the nearest minute</p>
         <p><sup>o.</sup>Piece bar is 10 minute chunks for the whole day including breaks, lunch and overtime</p>

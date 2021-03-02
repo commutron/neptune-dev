@@ -20,7 +20,7 @@ const WaterfallSelect = ({
   
   const dfopen = !batchData.completed ? true :
                   rapid ? rapid.live : false;
-   
+  
   return(
     <div className={`waterfallSelector ${rapid ? 'rapIsHighlight' : ''}`}>
       {rapid &&
@@ -48,7 +48,7 @@ const WaterfallSelect = ({
             app={app} />
         ))
       :
-        rapid ? rapid.whitewater.map( (entry, index)=>(
+        rapid ? rapid.cascade.map( (entry, index)=>(
           <Clif 
             key={entry.wfKey} 
             entry={entry}

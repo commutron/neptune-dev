@@ -48,6 +48,9 @@ const RapidCreateForm = ({
 
   const [ typeState, typeSet ] = useState(false);
   const [ applyState, applySet ] = useState(false);
+  const [ noLimitState, noLimitSet ] = useState(false);
+  
+  const [ waterState, waterSet ] = useState('fall');
   
   const [ flowsState, flowsSet ] = useState(false);
   
@@ -56,16 +59,28 @@ const RapidCreateForm = ({
   const [ shortState, shortSet ] = useState([]);
   
   useEffect( ()=> {
-    if(applyState === true) {
+    if(applyState) {
+      noLimitSet(false);
+    }
+  }, [applyState]);
+  
+  useEffect( ()=> {
+    if(noLimitState) {
+      applySet(false);
+    }
+  }, [noLimitState]);
+  
+  useEffect( ()=> {
+    if(applyState || noLimitState) {
       this.quant.value = hasSeries ? srsQ : allQ;
     }else{
       this.quant.value = 0;
     }
-  }, [applyState]);
+  }, [applyState, noLimitState]);
   
   function save(e) {
     e.preventDefault();
-    
+
     const rType = this.rType.value;
     const issueNum = this.issNum.value.trim();
     
@@ -74,28 +89,32 @@ const RapidCreateForm = ({
     const endDate = this.eDate.value;
     const doneTarget = moment(endDate).endOf('day').format();
     
-    let flows = hasSeries ? flowsState : false;
-    
-    let falls = [];
-    this.doBuild && this.doBuild.checked ? falls.push('doBuild') : null;
-    this.doInspect && this.doInspect.checked ? falls.push('doInspect') : null;
-    this.doTest && this.doTest.checked ? falls.push('doTest') : null;
-    this.doFinish && this.doFinish.checked ? falls.push('doFinish') : null;
-
     const howText = this.howLink.value.trim();
     const howLink = howText.length === 0 ? false : howText;
     
     const noteText = this.noteText.value.trim();
     
-    const applyAll = this.applyAll.checked;
+    const noLimit = this.noLimit.checked;
     const quant = this.quant.value.trim();
     
-    const nonConArr = nonConsState || [];
-    const shortArr = shortState || [];
+    const addFlow = waterState === 'both' || waterState === 'flow';
+    const addFall = waterState === 'both' || waterState === 'fall';
+      
+    let flows = addFlow ? flowsState : false;
+    
+    const nonConArr = addFlow ? nonConsState : [];
+    const shortArr = addFlow ? shortState : [];
+    
+    let falls = addFall ? [] : false;
+    addFall && this.doPre.checked ? falls.push('doPre') : null;
+    addFall && this.doBuild.checked ? falls.push('doBuild') : null;
+    addFall && this.doInspect.checked ? falls.push('doInspect') : null;
+    addFall && this.doTest.checked ? falls.push('doTest') : null;
+    addFall && this.doFinish.checked ? falls.push('doFinish') : null;
     
     Meteor.call('addExtendRapid', 
       batchId, groupId, rType, batchNum, issueNum,
-      exTime, doneTarget, flows, falls, howLink, noteText, applyAll, quant,
+      exTime, doneTarget, flows, falls, howLink, noteText, noLimit, quant,
       nonConArr, shortArr,
     
       (error, reply)=>{
@@ -179,17 +198,30 @@ const RapidCreateForm = ({
             min={0}
             max={allQ}
             placeholder={allQ}
-            disabled={applyState}
+            disabled={applyState || noLimitState}
             required 
           /><br />
-            <label htmlFor='applyAll' className='beside'>
-            <input
-              type='checkbox'
-              id='applyAll'
-              className='indenText inlineCheckbox'
-              onChange={(e)=>applySet(e.target.checked)}
-              defaultChecked={false}
-            />Apply to All</label>
+            <label htmlFor='applyAll' className='beside'
+              title='Set quantity to maximum value'>
+              <input
+                type='checkbox'
+                id='applyAll'
+                className='indenText inlineCheckbox'
+                onChange={(e)=>applySet(e.target.checked)}
+                checked={applyState}
+              />Apply to All
+            </label>
+            <label 
+              htmlFor='noLimit' className='beside' 
+              title={`No fixed quantity.\nMin: 0, Max: ${allQ}`}>
+              <input
+                type='checkbox'
+                id='noLimit'
+                className='indenText inlineCheckbox'
+                onChange={(e)=>noLimitSet(e.target.checked)}
+                checked={noLimitState}
+              />No Limit
+            </label>
           </label>
         </div>
         
@@ -210,7 +242,7 @@ const RapidCreateForm = ({
           <textarea
             id='noteText'
             rows={1}
-            columns={10}
+            columns={5}
           ></textarea>
           </label>
           
@@ -220,7 +252,42 @@ const RapidCreateForm = ({
       
       <div className='vmargin'>
         
-        {hasSeries ?
+        {hasSeries &&
+          <div className='centreRow vmargin'>
+            <label htmlFor='dofall' className='beside'>
+              <input
+                type='radio'
+                id='dofall'
+                name='watertype'
+                className='indenText inlineCheckbox gap'
+                onChange={()=>waterSet('fall')}
+                defaultChecked={true}
+              />General Counters
+            </label>
+            <label htmlFor='doflow' className='beside'>
+              <input
+                type='radio'
+                id='doflow'
+                name='watertype'
+                className='indenText inlineCheckbox gap'
+                onChange={()=>waterSet('flow')}
+              />Serial Steps
+            </label>
+            <label 
+              htmlFor='doboth' className='beside' 
+              title={`No fixed quantity.\nMin: 0, Max: ${allQ}`}>
+              <input
+                type='radio'
+                id='doboth'
+                name='watertype'
+                className='indenText inlineCheckbox'
+                onChange={()=>waterSet('both')}
+              />Both
+            </label>
+          </div>
+        }
+        
+        {waterState === 'both' || waterState === 'flow' ?
           
           <div className='centre'>
             
@@ -253,10 +320,21 @@ const RapidCreateForm = ({
               />
             </div>
           </div>
-          
-          :
+        :null}
+        
+        {waterState === 'both' || waterState === 'fall' ?
           
           <div className='fitWide'>
+            <label className='breath'><br />
+              <label htmlFor='doPre' className='beside'>
+              <input
+                type='checkbox'
+                id='doPre'
+                className='indenText inlineCheckbox'
+                defaultChecked={false}
+              />Count Pre-Checks</label>
+            </label>
+            
             <label className='breath'><br />
               <label htmlFor='doBuild' className='beside'>
               <input
@@ -297,14 +375,17 @@ const RapidCreateForm = ({
               />Count Finshing</label>
             </label>
           </div>
-        }
+        :null}
         
         <div className='dropCeiling centre'>
+        {(waterState === 'both' || waterState === 'flow') && !flowsState ?
+          <small>Must Finish Flow</small> : null}
           <button
             type='submit'
+            id='extendGo'
             className='action clear greenHover'
-            disabled={hasSeries ? !flowsState : false}
-          >Create</button>
+            disabled={waterState === 'both' || waterState === 'flow' ? !flowsState : false}
+          >Create Extension</button>
         </div>
       
       </div>

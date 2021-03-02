@@ -315,7 +315,7 @@ main {
   width: 100%;
   min-height: 6vh;
   padding: 0 2vw 0 1vw;
-  font-size: 2vh;
+  font-size: 1.75vmin;
   background-color: transparent;
   border-bottom: 1px solid black;
   cursor: pointer;
@@ -386,6 +386,7 @@ main {
 }
 
 .gap { margin: 0 5px; }
+.gapR { margin: 0 5px 0 0; }
 
 .badge {
   position: absolute;
@@ -711,7 +712,7 @@ n-sm-model-content {
 .balance { justify-content: space-around; }
 .balancer { justify-content: space-evenly; }
 
-.rowWrap, .rowWrapR { align-items: baseline; }
+.rowWrap, .rowWrapR { align-items: center; }
 .rowWrap { justify-content: flex-start; }
 .rowWrapR { justify-content: flex-end; }
 

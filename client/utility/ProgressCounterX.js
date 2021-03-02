@@ -154,35 +154,38 @@ export function FallCounter(batchData) {
 export function WhiteWaterCounter(rapidData, seriesData) {
   const totalQ = rapidData.quantity;
   
+  let countArr = [];
+  let pointArr = [];
+  let iSet = 0;
+  let iDone = null;
+  
+  const fallS = rapidData.cascade.sort((w1, w2)=> 
+          w1.position < w2.position ? -1 : w1.position > w2.position ? 1 : 0 );
+  
+  for(let wf of fallS) {
+    const wfCount = wf.counts.length === 0 ? 0 :
+                      Array.from(wf.counts, x => x.tick).reduce((x,y)=> x + y);
+    countArr.push(wfCount);
+    const point = ( wfCount / totalQ );
+    pointArr.push(point);
+  }
+  
   if(rapidData.extendBatch && seriesData) {
     
     const rapSetI = seriesData.items.filter( i => 
                       i.altPath.find( r => r.rapId === rapidData._id ) );
-    const iSet = rapSetI.length;
+    iSet = rapSetI.length;
     
     const rapDidI = rapSetI.filter( i => 
                       i.altPath.find( r => 
                         r.rapId === rapidData._id && r.completed === true ) 
                     ).length;
-    const iDone = round2Decimal( rapDidI / totalQ );
-    
-    return [ iSet, iDone ];
-    
-  }else{
-    let countArr = [];
-    let pointArr = [];
-    const fallS = rapidData.whitewater.sort((w1, w2)=> 
-            w1.position < w2.position ? -1 : w1.position > w2.position ? 1 : 0 );
-    
-    for(let wf of fallS) {
-      const wfCount = wf.counts.length === 0 ? 0 :
-                        Array.from(wf.counts, x => x.tick).reduce((x,y)=> x + y);
-      countArr.push(wfCount);
-      const point = round2Decimal( wfCount / totalQ );
-      pointArr.push(point);
-    }
-    return [ fallS.length, avgOfArray(pointArr), countArr ];
+    iDone = ( rapDidI / totalQ );
   }
+  
+  const pointProgress = round2Decimal( avgOfArray([...pointArr,iDone]) );
+  
+  return [ iSet, pointProgress, countArr ];
 }
 
 

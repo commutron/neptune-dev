@@ -35,8 +35,8 @@ const BatchPanelX = ({
   
   let tabbar = [
     'Info',
-    'Waterfall',
     'Time',
+    'Waterfall',
     `Problems`,
     'Events',
   ];
@@ -71,14 +71,6 @@ const BatchPanelX = ({
           brancheS={brancheS}
           isDebug={isDebug}
         />
-      
-        <div className='space autoSelf max875'>
-          <WaterfallTimeline
-            wfCounts={fallData.fallProg}
-            waterfall={b.waterfall}
-            quantity={b.quantity}
-            app={app} />
-        </div>
         
         <TimeTab 
           batchData={batchData}
@@ -91,6 +83,14 @@ const BatchPanelX = ({
           allDone={flowData.allFlow}
           riverFlow={flowData.riverFlow}
           app={app} />
+        
+        <div className='space autoSelf max875'>
+          <WaterfallTimeline
+            wfCounts={fallData.fallProg}
+            waterfall={b.waterfall}
+            quantity={b.quantity}
+            app={app} />
+        </div>
         
         <ProblemTab
           batch={batchData.batch}

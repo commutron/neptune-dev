@@ -4,7 +4,7 @@ import moment from 'moment';
 Meteor.methods({
 
   addExtendRapid(batchId, groupId, rType, exBatch, issueNum,
-    exTime, doneTarget, flows, falls, howLink, note, applyAll, quant,
+    exTime, doneTarget, flows, falls, howLink, note, noLimit, quant,
     nonConArr, shortArr
   ) {
     const accessKey = Meteor.user().orgKey;
@@ -30,51 +30,63 @@ Meteor.methods({
         const exTimeNum = isNaN(inMinutes) ? false : Number(inMinutes);
         
         let wwObjs = [];
-        if(flows) {
+        if(Array.isArray(flows)) {
           for(let fl of flows) {
             let uniqueStep = fl;
             uniqueStep['key'] = new Meteor.Collection.ObjectID().valueOf();
             wwObjs.push(uniqueStep);
           }
-        }else{
-          falls.includes('doBuild') ? wwObjs.push({
+        }
+        
+        let wfObjs = [];
+        if(Array.isArray(falls)) {
+          falls.includes('doPre') ? wfObjs.push({
             wfKey: new Meteor.Collection.ObjectID().valueOf(),
-            gate: rType,
-            type: 'build',
+            gate: 'Pre-Check',
+            type: 'checkpoint',
             position: Number(1),
             action: 'clicker',
             branchKey: 'r@p1d8r2nch',
             counts: []
           }) : null;
-          falls.includes('doInspect') ? wwObjs.push({
+          falls.includes('doBuild') ? wfObjs.push({
             wfKey: new Meteor.Collection.ObjectID().valueOf(),
-            gate: 'inspect',
-            type: 'inspect',
+            gate: rType,
+            type: 'build',
             position: Number(2),
             action: 'clicker',
             branchKey: 'r@p1d8r2nch',
             counts: []
           }) : null;
-          falls.includes('doTest') ? wwObjs.push({
+          falls.includes('doInspect') ? wfObjs.push({
             wfKey: new Meteor.Collection.ObjectID().valueOf(),
-            gate: 'test',
-            type: 'test',
+            gate: 'inspect',
+            type: 'inspect',
             position: Number(3),
             action: 'clicker',
             branchKey: 'r@p1d8r2nch',
             counts: []
           }) : null;
-          falls.includes('doFinish') ? wwObjs.push({
+          falls.includes('doTest') ? wfObjs.push({
+            wfKey: new Meteor.Collection.ObjectID().valueOf(),
+            gate: 'test',
+            type: 'test',
+            position: Number(4),
+            action: 'clicker',
+            branchKey: 'r@p1d8r2nch',
+            counts: []
+          }) : null;
+          falls.includes('doFinish') ? wfObjs.push({
             wfKey: new Meteor.Collection.ObjectID().valueOf(),
             gate: 'finish',
             type: 'finish',
-            position: Number(4),
+            position: Number(5),
             action: 'clicker',
             branchKey: 't3rm1n2t1ng8r2nch',
             counts: []
           }) : null;
         }
-           
+
         XRapidsDB.insert({
           orgKey: accessKey,
           rapid: nextRapid, 
@@ -93,7 +105,8 @@ Meteor.methods({
           quantity: Number(quant),
           instruct: howLink,
           notes: note,
-          applyAll: applyAll,
+          unlimited: noLimit,
+          cascade: wfObjs,
           whitewater: wwObjs, // if extended & serialized
           autoNC: nonConArr, // {ref: "k1", type: "upside down"}
           autoSH: shortArr, // {refs: "k1", part: "750001005"}
@@ -107,7 +120,7 @@ Meteor.methods({
           });
           Meteor.defer( ()=>{ Meteor.call('updateOneMovement', batchId, accessKey); });
         }
-      return true;
+        return true;
       }else{ 
         return false;
       }
@@ -138,8 +151,8 @@ Meteor.methods({
     if(!Roles.userIsInRole(Meteor.userId(), 'active')) {
       null;
     }else{
-      XRapidsDB.update({_id: rapidId, orgKey: Meteor.user().orgKey, 'whitewater.wfKey': wfKey}, {
-        $push : { 'whitewater.$.counts': { 
+      XRapidsDB.update({_id: rapidId, orgKey: Meteor.user().orgKey, 'cascade.wfKey': wfKey}, {
+        $push : { 'cascade.$.counts': { 
           tick: Number(1),
           time: new Date(),
           who: Meteor.userId()
@@ -151,8 +164,8 @@ Meteor.methods({
     if(!Roles.userIsInRole(Meteor.userId(), 'active')) {
       null;
     }else{
-      XRapidsDB.update({_id: rapidId, orgKey: Meteor.user().orgKey, 'whitewater.wfKey': wfKey}, {
-        $push : { 'whitewater.$.counts': { 
+      XRapidsDB.update({_id: rapidId, orgKey: Meteor.user().orgKey, 'cascade.wfKey': wfKey}, {
+        $push : { 'cascade.$.counts': { 
           tick: Number(-1),
           time: new Date(),
           who: Meteor.userId()
@@ -160,26 +173,28 @@ Meteor.methods({
     }
   },
   
-  
-  // fixFirstRapids() {
-  //   const rapids = XRapidsDB.find({},{fields:{'rapid':1}}).fetch();
+  /*
+  fixFirstRapids() {
+    const rapids = XRapidsDB.find({}).fetch();
     
-  //   let itr = 0;
-    
-  //   for(let rp of rapids) {
-  //     const num = parseInt( rp.rapid.substring(2), 10) + itr;
+    for(let rp of rapids) {
+      const apAl = rp.applyAll;
       
-  //     const replace = 'ER' + num.toString().padStart(2, 0);
+      XRapidsDB.update(rp._id, {
+        $set: {
+          unlimited: apAl,
+          cascade: []
+        },
+      });
+      XRapidsDB.update(rp._id, {
+        $unset: {
+          'applyAll': "" 
+        }
+      });
       
-  //     XRapidsDB.update(rp._id, {
-  //       $set: {
-  //         rapid: replace 
-  //       }
-  //     });
-      
-  //     itr = num;
-  //   }
-  // },
+    }
+    return true;
+  },*/
   
   
   

@@ -46,7 +46,7 @@ h1, h2, h3 {
 }
 
 p {
-	font-size: medium;
+	font-size: 0.95rem;
   margin: 10px auto;
 }
 
@@ -220,7 +220,7 @@ option {
 }
 
 textarea {
-  min-width: 20rem;
+  min-width: 15rem;
   min-height: 3rem;
   border-color: inherit;
 }

@@ -15,9 +15,9 @@ const WaterfallTimeline = ({ wfCounts, waterfall, quantity, app })=> {
   return(
     <div className='wide'>
       {waterfallS.map( (entry)=>{
-        const countObj = wfCounts.find( w => w.key === entry.wfKey );
+        const countObj = wfCounts.find( w => w.wfKey === entry.wfKey );
         const count = countObj ? countObj.count : 0;
-        const type = countObj ? countObj.type : false;
+        const type = entry.type || false;
         
         let borderColor = 'borderBlue';
         let barColor = 'proBlue';

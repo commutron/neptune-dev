@@ -7,10 +7,10 @@ const DumbFilter = ({ id, size, onTxtChange, labelText, list })=>	{
   }
   
   return(
-    <div className='centre noCopy'>
+    <div className='centre vmarginhalf noCopy'>
       <p>
-        <label className={'blackT variableInput ' + size}>
-          <i className={size + ' fas fa-filter fa-fw' || 'med fas fa-filter fa-fw'}></i>
+        <label className={`blackT variableInput ${size}`}>
+          <i className='fas fa-filter fa-fw'></i>
         </label>
         <input
           id={id}
@@ -29,7 +29,7 @@ const DumbFilter = ({ id, size, onTxtChange, labelText, list })=>	{
           )})}
         </datalist>
       </p>
-      <p className='med nomargin'>
+      <p className='nomargin'>
         <i>{labelText}</i>
       </p>
     </div>

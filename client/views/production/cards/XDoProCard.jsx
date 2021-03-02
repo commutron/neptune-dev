@@ -104,7 +104,10 @@ const XDoProCard = ({
   const ancOptionS = app.ancillaryOption.sort();
   
   const flowAction = ( flowData.hasRiver || rapidData.rapIs ) && fallData.floorRel;
-  const fallAction = batchData.waterfall.length > 0;
+  
+  const allFall = fallData.fallCounts.allFall;
+  const fallAction = ( batchData.waterfall.length > 0 && !allFall ) ||
+                     ( rapid && rapid.cascade.length > 0 ); 
   
   const insertTideWall = 
           <TideWall
@@ -133,7 +136,7 @@ const XDoProCard = ({
             batchData={batchData}
             allFlow={flowData.flowCounts.allFlow}
             fallProg={fallData.fallCounts.fallProg}
-            allFall={fallData.fallCounts.allFall}
+            allFall={allFall}
             nowater={!fallAction && !seriesData && !rapid}
             rapid={rapid}
             rapIs={rapidData.rapIs}

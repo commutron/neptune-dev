@@ -210,6 +210,19 @@ const DataRepair = ({ app, users })=> {
         >Unset Key</button>
       </div>
       
+      
+      {/*
+      <div>
+        <h3><i className="fas fa-screwdriver fa-lg gap orangeT"></i>
+          Fix/Update Rapid Scheme
+        </h3>
+        <button
+          onClick={()=>doCallThing("fixFirstRapids")}
+          className='action clearOrange'
+        >Fix Keys</button>
+      </div>
+      */}
+      
       <div>
         <h3><i className='fas fa-user-shield fa-lg gap'></i>
           Clear `Usage Logs` and `Breadcrubs`

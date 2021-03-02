@@ -54,7 +54,7 @@ const AddAutoNC = ({ ncTypesCombo, user, nonConsState, nonConsSet, lockOut })=> 
     <div>
       <div className='inlineForm'>
       
-        <label htmlFor='ncRefs' className='breath'>Referances<br />
+        <label htmlFor='ncRefs' className='gapR'>Referances<br />
           <input
             type='text'
             id='ncRefs'
@@ -63,7 +63,7 @@ const AddAutoNC = ({ ncTypesCombo, user, nonConsState, nonConsSet, lockOut })=> 
         </label>
         
         
-        <label htmlFor='ncType' className='breath'>Type<br />
+        <label htmlFor='ncType' className='gapR'>Type<br />
         {user.typeNCselection ?
           <span>
             <input 

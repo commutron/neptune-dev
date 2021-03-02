@@ -80,12 +80,11 @@ const TideBlockRow = ({
   });
   
     return(
-      <Fragment>
-      <tr className={editOn ? 'pop' : ''}>
-        <td className='noRightBorder medBig'>
+      <tr className={`smTxt ${editOn ? 'pop' : ''}`}>
+        <td className='noRightBorder med'>
           <ExploreLinkBlock type='batch' keyword={batch} />
         </td>
-        <td className='noRightBorder smTxt'>{describe}</td>
+        <td className='noRightBorder'>{describe}</td>
         
         <TideTaskExplicit
           taskIs={taskU}
@@ -194,8 +193,6 @@ const TideBlockRow = ({
           </Fragment>
         }
     </tr>
-    
-    </Fragment>
   );
 };
 

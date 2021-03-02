@@ -23,7 +23,7 @@ const WidgetsDepth = ({ groupAlias, widgetData, active })=> {
   return(
     <Fragment>
       <DumbFilter
-        size='big'
+        size='medBig'
         onTxtChange={(e)=>setTextFilter(e)}
         labelText='Filter searches id and description, not case-sensitve.' />
       

@@ -8,7 +8,7 @@ import RiverSelect from '/client/components/forms/RiverSelectX';
 import ToggleBar from '/client/components/bigUi/ToolBar/ToggleBar';
 import MiniStack from '/client/components/charts/MiniScales/MiniStack.jsx';
 import NumBox from '/client/components/tinyUi/NumBox.jsx';
-
+import { round2Decimal } from '/client/utility/Convert';
 
 const StepsProgressX  = ({ 
   b, widgetData, hasSeries, flowCounts, fallCounts, rapidsData,
@@ -132,7 +132,7 @@ const StepsProgressX  = ({
         <MiniStack
           key={'rapid'+ix}
           title={`${r.rapid} ${r.issueOrder}`}
-          count={r.quantity * (isNaN(r.rDone) ? 1 : r.rDone)}
+          count={round2Decimal(r.quantity * (isNaN(r.rDone) ? 1 : r.rDone))}
           countNew={0}
           total={r.quantity} />
       ))}
