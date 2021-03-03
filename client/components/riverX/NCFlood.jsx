@@ -155,7 +155,7 @@ const NCFlood = ({ seriesId, live, user, app, ncTypesCombo })=> {
             id='go'
             disabled={lock}
             className='smallAction clearRed bold'
-          >Record On All WIP Serialized {Pref.items}</button>
+          >Record On All WIP {Pref.items}</button>
       </form>
     </fieldset>
   );

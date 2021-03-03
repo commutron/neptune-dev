@@ -106,8 +106,9 @@ const XDoProCard = ({
   const flowAction = ( flowData.hasRiver || rapidData.rapIs ) && fallData.floorRel;
   
   const allFall = fallData.fallCounts.allFall;
-  const fallAction = ( batchData.waterfall.length > 0 && !allFall ) ||
-                     ( rapid && rapid.cascade.length > 0 ); 
+  const fallAction = ( batchData.waterfall.length > 0 &&
+                        batchData.completed === false ) ||
+                     ( rapid && rapid.cascade.length > 0 );
   
   const insertTideWall = 
           <TideWall

@@ -31,9 +31,11 @@
 }
 .pro_20_80 {
   grid-template-columns: 16vmax 1fr;
+  grid-template-columns: 14vmax 1fr;
 }
 .pro_40_60 {
   grid-template-columns: 32vmax 1fr;
+  grid-template-columns: 28vmax 1fr;
 }
 
 .proSearch {
@@ -60,15 +62,20 @@
   transition: all 150ms ease-in-out;
   display: inline-grid;
   grid-template-columns: repeat(auto-fit, minmax(15vmax, 1fr));
-  /*grid-template-rows: max-content;*/
+  grid-template-columns: repeat(auto-fit, minmax(13vmax, 1fr));
   grid-template-rows: auto;
   align-items: stretch;
   justify-content: flex-start;
 }
 .proPrimeSingle { 
   min-width: 15vmax;
+  
+  min-width: 13vmax;
+  
   width: 100%;
   max-width: 16vmax;
+  
+  max-width: 14vmax;
 }
 
 .proInstruct {
@@ -124,6 +131,9 @@
 }
 .riverExpandToggle { left: 16vmax; }
 .riverShrinkToggle { left: 32vmax; }
+
+.riverExpandToggle { left: 14vmax; }
+.riverShrinkToggle { left: 28vmax; }
 
 .riverExpandToggle:hover, 
 .riverShrinkToggle:hover {

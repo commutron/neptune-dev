@@ -58,6 +58,7 @@ const DownstreamFixedChunk = ({
         batchID={ck.batchID}
         ptData={tBatch}
         isDone={isDone}
+        oRapid={tBatch.oRapid}
         app={app}
         isDebug={isDebug}
         showLess={true}

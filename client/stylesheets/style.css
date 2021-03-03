@@ -213,6 +213,7 @@ input::-webkit-calendar-picker-indicator {
   background-color: transparent;
 	border: 3px solid var(--wetasphalt);
 }
+.concrete { background-color: var(--concrete); }
 
 .grayT { color: var(--black); }
 .darkgrayT { color: var(--asbestos); }
@@ -242,6 +243,7 @@ input::-webkit-calendar-picker-indicator {
 .paleT { color: rgba(255,255,255,0.1); }
 
 .borderWhite { border-color: var(--clouds); }
+.borderGray { border-color: var(--concrete); }
 .borderGreen { border-color: var(--nephritis); }
 .borderBlue { border-color: var(--belizeHole); }
 .borderRed { border-color: var(--alizarin); }
@@ -606,19 +608,6 @@ input::-webkit-calendar-picker-indicator {
 }
 
 .tempTag { margin: 0 7px 0 0; }
-
-.fltrsInput {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.fltrsInput input, .fltrsInput select {
-  height: 1.25rem;
-  max-width: 12vmax;
-  font-size: 0.9rem;
-  margin: 5px 5px;
-}
 
 .listSort {
   width: 100%;

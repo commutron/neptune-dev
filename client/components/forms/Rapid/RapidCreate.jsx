@@ -132,7 +132,7 @@ const RapidCreateForm = ({
   
   
   return(
-    <form className='balancer' onSubmit={(e)=>save(e)}>
+    <form id='createRapid' className='balancer' onSubmit={(e)=>save(e)}>
       <div>
         <div className='centre vmargin'>
         
@@ -377,11 +377,12 @@ const RapidCreateForm = ({
           </div>
         :null}
         
-        <div className='dropCeiling centre'>
+        <div className='vmargin centre'>
         {(waterState === 'both' || waterState === 'flow') && !flowsState ?
           <small>Must Finish Flow</small> : null}
           <button
             type='submit'
+            form='createRapid'
             id='extendGo'
             className='action clear greenHover'
             disabled={waterState === 'both' || waterState === 'flow' ? !flowsState : false}

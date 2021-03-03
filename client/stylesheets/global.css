@@ -183,8 +183,8 @@ input[type='checkbox']:hover + label, input[type='radio']:hover + label {
 }
 
 input, select, textarea {
-  line-height: 1.75rem;
-  font-size: 1.1rem;
+  line-height: 1.5;
+  font-size: 1rem;
   text-indent: 0.25rem;
   border-width: 1px;
   border-style: dashed;
@@ -298,6 +298,7 @@ details[open] summary {
 }
 summary {
   min-height: 2.5rem;
+  line-height: 1.2;
   margin: 0;
   padding: 0 1vw;
   cursor: pointer;

@@ -647,6 +647,10 @@ n-sm-model-content {
 
 .breath { margin: 0 5px; }
 
+.readlines p {
+  margin: 10px 0 15px 0;
+}
+
 .dropCeiling { margin-top: calc(4vh + 1rem); }
 .overscroll { margin-bottom: 5vh; }
 .overscroll2x { margin-bottom: 10vh; }
@@ -863,6 +867,20 @@ button.numberSet {
   min-height: 2rem;
   font-size: 0.9rem;
   text-transform: none;
+}
+
+.fltrsInput {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.fltrsInput input, .fltrsInput select {
+  height: 1.25rem;
+  min-width: 10ch;
+  width: 100%;
+  font-size: 0.9rem;
+  margin: 5px 5px;
 }
 
 .navIcon {

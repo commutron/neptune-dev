@@ -227,6 +227,8 @@ function collectPriority(privateKey, batchID, mockDay) {
       
       const qtBready = !b.quoteTimeBudget ? false : true;
       
+      const oRapid = XRapidsDB.findOne({extendBatch: b.batch, live: true}) ? true : false;
+      
       if(qtBready && b.tide && !doneEntry) {
         const shipLoad = TraceDB.find({shipAim: { 
           $gte: new Date(now.clone().nextShippingTime().startOf('day').format()),
@@ -247,7 +249,8 @@ function collectPriority(privateKey, batchID, mockDay) {
           estEnd2fillBuffer: dryCalc.estEnd2fillBuffer,
           // endEntry: endEntry,
           shipAim: shipAim.format(),
-          lateLate: lateLate
+          lateLate: lateLate,
+          oRapid: oRapid
         });
       }else{
         resolve({
@@ -260,21 +263,27 @@ function collectPriority(privateKey, batchID, mockDay) {
           estEnd2fillBuffer: 0,
           // endEntry: endEntry,  
           shipAim: shipAim.format(),
-          lateLate: lateLate
+          lateLate: lateLate,
+          oRapid: oRapid
         });
       }
     }
   });
 }
 
-function getFastPriority(privateKey, bData, now, shipAim, shipLoad) {
+function getFastPriority(privateKey, bData, now, shipAim) {
   return new Promise(resolve => {
     
     const doneEntry = bData.completed ? bData.completedAt : bData.finishedAt;
       
     const qtBready = !bData.quoteTimeBudget ? false : true;
-        
+    
     if(qtBready && bData.tide && !doneEntry) {
+      const shipLoad = TraceDB.find({shipAim: { 
+        $gte: new Date(now.clone().nextShippingTime().startOf('day').format()),
+        $lte: new Date(now.clone().nextShippingTime().endOf('day').format()) 
+      }},{fields:{'batchID':1}}).count();
+        
       const dryCalc = dryPriorityCalc(bData.quoteTimeBudget, bData.tide, shipAim, now, shipLoad);
       
       resolve({
@@ -282,7 +291,7 @@ function getFastPriority(privateKey, bData, now, shipAim, shipLoad) {
         estSoonest: dryCalc.estSoonest.format(),
         estLatestBegin: dryCalc.estLatestBegin.format(),
         bffrRel: dryCalc.bffrRel,
-        estEnd2fillBuffer: dryCalc.estEnd2fillBuffer,
+        estEnd2fillBuffer: dryCalc.estEnd2fillBuffer
       });
     }else{
       resolve({
@@ -290,7 +299,7 @@ function getFastPriority(privateKey, bData, now, shipAim, shipLoad) {
         estSoonest: false,
         estLatestBegin: false,
         bffrRel: false,
-        estEnd2fillBuffer: 0,
+        estEnd2fillBuffer: 0
       });
     }
   });
@@ -470,11 +479,11 @@ Meteor.methods({
     }
     return bundlePriority();
   },
-  priorityFast(serverAccessKey, bData, now, shipAim, shipLoad) {
+  priorityFast(serverAccessKey, bData, now, shipAim) {
     async function bundlePriority() {
       const accessKey = serverAccessKey || Meteor.user().orgKey;
       try {
-        bundle = await getFastPriority(accessKey, bData, now, shipAim, shipLoad);
+        bundle = await getFastPriority(accessKey, bData, now, shipAim);
         return bundle;
       }catch (err) {
         throw new Meteor.Error(err);

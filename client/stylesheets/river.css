@@ -2,6 +2,10 @@
 .stoneFrame {
   max-width: 16vmax;
   min-height: 16vmax;
+  
+  max-width: 14vmax;
+  min-height: 14vmax;
+  
   display: flex;
   justify-content: center;
   align-items: center;
@@ -22,15 +26,17 @@
   justify-content: center;
   width: 100%;
   min-height: 2rem;
+  min-height: 1.75rem;
   text-align: center;
   /*background-color: rgb(30,30,30);*/
   /*border: 3px solid rgb(33,33,33);*/
 }
 .undoStepWrap button {
-  line-height: 1rem;
-  font-size: 1.3rem;
+  line-height: 1;
+  font-size: 1.2rem;
   width: 100%;
   min-height: 2rem;
+  min-height: 1.75rem;
   color: var(--concrete);
   text-transform: capitalize;
   /*background-color: rgb(25,25,25);*/
@@ -44,6 +50,8 @@
   z-index: 0;
   width: 15vmax;
   height: 15vmax;
+  width: 13vmax;
+  height: 13vmax;
 }
 .spinOuterSVG svg {
   animation: spinAround 10s infinite linear;
@@ -59,7 +67,9 @@
   border: 10px solid transparent;
   width: 13vmax;
   height: 13vmax;
-  font-size: calc(0.5rem + 1vmax);
+  width: 11.5vmax;
+  height: 11.5vmax;
+  font-size: calc(0.5rem + 0.75vmax);
   font-weight: bolder;
   text-shadow: 0 0 25px #000;
   letter-spacing: 0.1ch;
@@ -115,7 +125,12 @@
 .stone label {
   width: 100%;
   padding: 0;
-  font-size: calc(0.5rem + 1vmax);
+  font-size: calc(0.5rem + 0.75vmax);
+}
+.stone label,
+.crackedTop label,
+.crackedBot label {
+  line-height: 1.2;
 }
 .stone br {
   margin: 0;
@@ -182,20 +197,20 @@
 .crackedTop, .crackedBot {
   width: 13vmax;
   height: 6.5vmax;
+  width: 11.5vmax;
+  height: 5.75vmax;
   z-index: 2;
   background-position: top;
   background-size: 80%;
   background-repeat: no-repeat;
-  font-size: calc(0.5rem + 1vmax);
+  font-size: calc(0.5rem + 0.75vmax);
   color: white;
   box-shadow: var(--dropShadow1);
 }
-
 .crackedTop {
   border-radius: 9rem 9rem 0 0;
   margin: -0.25em 0.25em 0 0.25em;
 }
-
 .crackedBot {
   border-radius: 0 0 9rem 9rem;
   margin: 0 0.25em -0.25em 0.25em;
@@ -257,26 +272,22 @@
   background-color: var(--belizeHole);
   --high-color: var(--peterriver);
 }
-
 .iCheck {
   background-image: url(inspect.svg);
   background-color: var(--nephritis);
   --high-color: var(--emerald);
 }
-
 .iTest {
   background-image: url(test.svg);
   background-color: var(--greenSea);
   --high-color: var(--turquoise);
 }
-
 .iBuild {
   background-image: url(build.svg);
   background-color: transparent;
   border-color: var(--belizeHole);
   --high-color: var(--peterriver);
 }
-
 .iPoint {
   background-color: transparent;
   border-color: var(--asbestos);
@@ -301,7 +312,6 @@
   transform: translate(-50%, -50%);
   z-index: 1;
 }
-
 .iFinish {
   background-image: url(inspect.svg);
   background-color: var(--wisteria);
@@ -322,6 +332,8 @@
   padding: 0px;
 	min-width: 15vmax;
   max-width: 16vmax;
+  min-width: 13vmax;
+  max-width: 14vmax;
 	min-height: 65px;
 	transition: background-color 250ms ease-in;
 }
@@ -435,6 +447,7 @@
 }
 .wideStone {
   min-width: 13vmax;
+  min-width: 11vmax;
   width: fit-content;
   max-width: 30vmax;
   min-height: 1rem;
@@ -442,12 +455,14 @@
 }
 .wideStone textarea {
   min-width: 13vmax;
+  min-width: 11vmax;
   width: 100%;
 }
 .stoneForm input[type='text'],
 .stoneForm select,
 .stoneForm details {
   max-width: 13vmax;
+  max-width: 11vmax;
 }
 
 .stoneForm textarea { border-color: black; }
@@ -488,6 +503,8 @@
   color: black;
   min-width: 13vmax;
   max-width: 13vmax;
+  min-width: 11vmax;
+  max-width: 11vmax;
 }
 .stoneForm .item-renderer {
   display: flex;
@@ -526,17 +543,17 @@
   word-break: keep-all;
   padding: 1vmax 1vmin;
   width: 100%;
-  min-height: 12vmin;
+  min-height: 10vmin;
   text-transform: capitalize;
   background-color: transparent;
   color: var(--greenSea);
   border: 1vmax solid var(--greenSea);
 }
 .forkButton {
-  font-size: 4vmax;
+  font-size: 3vmax;
 }
 .forkButton b {
-  font-size: 2vmax;
+  font-size: 1.75vmax;
 }
 .forkButton:hover, .forkButton:active {
   background-color: var(--greenSea);
@@ -560,3 +577,12 @@
 .finishBanner { border-color: var(--wisteria); }
 .rapDidBanner { border-color: var(--turquoise); }
 .altBanner { border-color: var(--belizeHole); }
+
+.endBox {
+  display: flex;
+  flex-flow: column nowrap;
+  width: 100%;
+  margin: 1vh 0;
+  border: 5px solid; 
+  padding: 0 1vmax 1vmax 1vmax;
+}

@@ -1,38 +1,38 @@
-.countFillWhite0 {
-  background-image: linear-gradient(var(--clouds), transparent 0%);
+.countFillConcrete0 {
+  background-image: linear-gradient(var(--concrete), transparent 0%);
 }
-.countFillWhite5 {
-  background-image: linear-gradient(var(--clouds), transparent 9%);
+.countFillConcrete5 {
+  background-image: linear-gradient(var(--concrete), transparent 9%);
 }
-.countFillWhite10 {
-  background-image: linear-gradient(var(--clouds), transparent 19%);
+.countFillConcrete10 {
+  background-image: linear-gradient(var(--concrete), transparent 19%);
 }
-.countFillWhite20 {
-  background-image: linear-gradient(var(--clouds), transparent 29%);
+.countFillConcrete20 {
+  background-image: linear-gradient(var(--concrete), transparent 29%);
 }
-.countFillWhite30 {
-  background-image: linear-gradient(var(--clouds), transparent 39%);
+.countFillConcrete30 {
+  background-image: linear-gradient(var(--concrete), transparent 39%);
 }
-.countFillWhite40 {
-  background-image: linear-gradient(var(--clouds), transparent 49%);
+.countFillConcrete40 {
+  background-image: linear-gradient(var(--concrete), transparent 49%);
 }
-.countFillWhite50 {
-  background-image: linear-gradient(var(--clouds), transparent 59%);
+.countFillConcrete50 {
+  background-image: linear-gradient(var(--concrete), transparent 59%);
 }
-.countFillWhite60 {
-  background-image: linear-gradient(var(--clouds), transparent 69%);
+.countFillConcrete60 {
+  background-image: linear-gradient(var(--concrete), transparent 69%);
 }
-.countFillWhite70 {
-  background-image: linear-gradient(var(--clouds), transparent 79%);
+.countFillConcrete70 {
+  background-image: linear-gradient(var(--concrete), transparent 79%);
 }
-.countFillWhite80 {
-  background-image: linear-gradient(var(--clouds), transparent 89%);
+.countFillConcrete80 {
+  background-image: linear-gradient(var(--concrete), transparent 89%);
 }
-.countFillWhite90 {
-  background-image: linear-gradient(var(--clouds), transparent 99%);
+.countFillConcrete90 {
+  background-image: linear-gradient(var(--concrete), transparent 99%);
 }
-.countFillWhite100 {
-  background-image: linear-gradient(var(--clouds) 0%, var(--clouds));
+.countFillConcrete100 {
+  background-image: linear-gradient(var(--concrete) 0%, var(--concrete));
 }
 
 .countFillBlue0 {

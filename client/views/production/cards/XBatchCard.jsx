@@ -119,6 +119,12 @@ const MiniInfo = ({ batchData, srange, flowCounts, rapidMerge, bClosed, app })=>
     {rapidMerge.map( (r, ix)=>(
       <div key={ix} className='rapDidBanner'
         >{r.type} - {r.issueOrder}
+        {r.live ? 
+          r.rDone === 1 ?
+            <Fragment><br />(Ready to Close)</Fragment> :
+            <Fragment><br />(Open)</Fragment> : 
+          <Fragment><br />Closed <n-num>{moment(r.closedAt).calendar()}</n-num></Fragment>
+        }
       </div>))}
     
     <p>{Pref.salesOrder}: <n-num>{batchData.salesOrder}</n-num></p>

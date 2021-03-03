@@ -66,7 +66,7 @@ const ProblemTab = ({
         : <h4>Not Tracking {Pref.shortfalls}</h4>}
       </div>
       
-      <div className='avThreeContent'>
+      <div className='avThreeContent vmargin'>
         {nonConArrayClean.length > 0 ?
           <TabsLite 
             tabs={ [ 

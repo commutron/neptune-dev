@@ -6,6 +6,7 @@ import './style';
 
 import WaterFall from './WaterFall';
 import BatchXComplete from '/client/components/forms/Batch/BatchXComplete';
+import RapidClose from '/client/components/riverX/RapidClose';
 
 const WaterfallSelect = ({ 
   batchData, allFlow, fallProg, allFall, nowater, rapid,
@@ -73,6 +74,11 @@ const WaterfallSelect = ({
           canRun={canRun && !rapid} /> 
         : null
       }
+      {rapid && rapid.live && ( rapid.unlimited || rapid.rDone === 1 ) ?
+        <RapidClose 
+          rapidData={rapid} /> 
+        : null
+      }
     </div>
   );
 };
@@ -92,8 +98,8 @@ const Clif = ({
 		borderColor = 'borderGreen';
 		fadeColor = 'Green';
   }else if(type === 'checkpoint'){
-		borderColor = 'borderWhite';
-		fadeColor = 'White';
+		borderColor = 'borderGray';
+		fadeColor = 'Concrete';
   }else if(type === 'test'){
 		borderColor = 'borderTeal';
 		fadeColor = 'Teal';

@@ -117,7 +117,7 @@ const NCStream = ({
       <div className='tribActionMain'>
           {skip ?
             <span className='centre'>
-              <i className='far fa-clock fa-lg'></i>{smple ? null : 'Snoozing'}
+              <i className='far fa-clock fa-lg'></i>{smple ? null : 'Later'}
             </span>
           :
             fixed ?

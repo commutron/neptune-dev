@@ -27,7 +27,7 @@ const RiverSelect = ({ bID, wFlows, river, riverTitle, lock })=> {
         className='interSelect'
         defaultValue={river}
         onChange={(e)=>handleChange(e)}
-        style={{ width: adaptSize }}
+        style={{ maxWidth: adaptSize, minWidth: '5ch', width: '100%' }}
         disabled={lock}
         required>
       <option></option>

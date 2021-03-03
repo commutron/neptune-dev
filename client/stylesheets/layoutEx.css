@@ -107,13 +107,13 @@
 .vFrameContainer {
   display: grid;
   grid-template-rows: auto auto;
-  grid-column-gap: 2vw;
+  grid-column-gap: 0.5vw;
   grid-row-gap: 2vh;
   justify-items: stretch;
-  padding: 2vh 2vw;
 }
 .oneTwoThreeContainer {
-  grid-template-columns: 1fr 1fr 1fr;
+  padding: 1vh 1vw;
+  grid-template-columns: 2fr 3fr 3fr;
   grid-template-areas: 
     'oneThird twoThirds twoThirds'
     'threeThirds threeThirds threeThirds';
@@ -124,6 +124,7 @@
 
 .aFrameContainer, .vFrameContainer {
   grid-template-columns: 1fr 1fr;
+  padding: 2vh 2vw;
 }
 .aFrameContainer {
   grid-template-areas: 
@@ -264,7 +265,6 @@
 }
 .itmFltrBlock input, .itmFltrBlock select {
   height: 1.25rem;
-  width: 12vmax;
   font-size: calc(0.7rem + 0.3vw);
   margin: 5px;
 }

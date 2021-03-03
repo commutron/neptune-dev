@@ -8,7 +8,7 @@ Meteor.methods({
     nonConArr, shortArr
   ) {
     const accessKey = Meteor.user().orgKey;
-    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+    if(Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])) {
       
       const allRapids = XRapidsDB.find({},{fields:{'rapid':1}}).fetch();
       const rapidS = allRapids.sort( (r1, r2)=>{
@@ -131,7 +131,23 @@ Meteor.methods({
   
   
   
-  
+  setRapidClose(rapidId) {
+    
+    if(Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])) {
+      XRapidsDB.update(rapidId, {
+        $set: {
+          live: false,
+          closedAt: new Date(),
+          closedWho: Meteor.userId()
+        }
+      });
+        
+      return true;
+    }else{
+      return false;
+    }
+    
+  },
   
   
   

@@ -49,6 +49,7 @@ const BatchHeaderChunk = ({ ck, tBatch, app, isDebug, focusBy })=> {
         batchID={ck._id}
         ptData={tBatch}
         isDone={isDone}
+        oRapid={tBatch.oRapid}
         app={app}
         isDebug={isDebug}
         showLess={true}

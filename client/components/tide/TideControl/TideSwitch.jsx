@@ -60,7 +60,7 @@ const TideSwitch = ({
   if(tideKey && !tideFloodGate) {
     return(
       <button
-        title={`Switch to ${Pref.batch}`}
+        title={`Switch Task`}
         className={`tideFlip ${working ? 'flipWork' : ''}`}
         onClick={()=>handleSwitch()}
         disabled={lock || tideLockOut}

@@ -51,10 +51,12 @@ function shrinkWhole(bData, now, shipLoad, accessKey) {
     const gapZone = didFinish ? shpdlv[3] : null;
     const lateLate = didFinish ? gapZone[2] === 'late' : shpdlv[2];
     
+    const oRapid = XRapidsDB.findOne({extendBatch: bData.batch, live: true}) ? true : false;
+    
     const actvLvl = Meteor.call('tideActivityLevel', bData._id, accessKey);
     const brchCnd = Meteor.call('branchCondition', bData._id, accessKey);
     const prtyRnk = Meteor.call('priorityFast', accessKey, bData, now, shipAim, shipLoad);
-    
+
     TraceDB.upsert({batchID: bData._id}, {
       $set : { 
         orgKey: accessKey,
@@ -74,6 +76,7 @@ function shrinkWhole(bData, now, shipLoad, accessKey) {
         completed: didFinish,
         completedAt: completedAt,
         lateLate: lateLate,
+        oRapid: oRapid,
         isActive: actvLvl.isActive,
         onFloor: brchCnd.onFloor,
         branchCondition: brchCnd.branchSets,
@@ -133,8 +136,10 @@ function checkMovement(bData, now, shipLoad, accessKey) {
     const fillZ = didFinish ? shpdlv[3] : null;
     const lateLate = didFinish ? fillZ[2] === 'late' : shpdlv[2];
     
-    const prtyRnk = Meteor.call('priorityFast', accessKey, bData, now, shipAim, shipLoad);
+    const oRapid = XRapidsDB.findOne({extendBatch: bData.batch, live: true}) ? true : false;
     
+    const prtyRnk = Meteor.call('priorityFast', accessKey, bData, now, shipAim);
+      
     TraceDB.update({batchID: bData._id}, {
       $set : { 
         lastUpdated: new Date(),
@@ -144,6 +149,7 @@ function checkMovement(bData, now, shipLoad, accessKey) {
         completed: didFinish,
         completedAt: completedAt,
         lateLate: lateLate,
+        oRapid: oRapid,
         quote2tide: prtyRnk.quote2tide,
         estSoonest: prtyRnk.estSoonest,
         estLatestBegin: prtyRnk.estLatestBegin,
@@ -177,7 +183,7 @@ Meteor.methods({
   rebuildTrace() {
     const accessKey = Meteor.user().orgKey;
     (async ()=> {
-      try {
+      // try {
         syncHoliday(accessKey);
         const now = moment().tz(Config.clientTZ);
         
@@ -192,9 +198,9 @@ Meteor.methods({
         }));
         
         return true;
-      }catch (err) {
-        throw new Meteor.Error(err);
-      }
+      // }catch (err) {
+      //   throw new Meteor.Error(err);
+      // }
     })();
   },
   

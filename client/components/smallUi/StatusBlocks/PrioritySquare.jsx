@@ -46,17 +46,21 @@ export default PrioritySquareData;
 ///////////////////////////////////////////////////////////////////////////////
 
 export const PrioritySquare = ({ 
-  batchID, ptData, isDone,
+  batchID, ptData, isDone, oRapid,
   altNumber, app, isDebug, showExtra, showLess
 })=> {
   
   if(isDone) {
+    const doneColor = oRapid ? 'teal' : 'green';
+    const doneIcon = oRapid ? 'far fa-dot-circle' : 'far fa-star';
+    const doneName = oRapid ? 'Extended' : 'Complete';
     return(
-      <div className='green'>
+      <div className={doneColor}>
         <NumStat
-          num={<i className="far fa-star fa-lg"></i>}
+          num={false}
+          icon={doneIcon}
           name=''
-          title='Complete'
+          title={doneName}
           color=''
           size='' />
       </div>
@@ -72,15 +76,18 @@ export const PrioritySquare = ({
     const bffrRel = pt.bffrRel;
     const overQuote = q2t < 0;
     isDebug && console.log({pt, batchID, bffrRel, bffrTime, q2t});
-
+    
     if(pt.completed) {
+      const doneColor = pt.oRapid ? 'teal' : 'green';
+      const doneIcon = pt.oRapid ? 'far fa-dot-circle' : 'far fa-star';
+      const doneName = oRapid ? 'Extended' : 'Complete';
       return(
-        <div className='green'>
+        <div className={doneColor}>
           <NumStat
             num={false}
-            icon='far fa-star'
+            icon={doneIcon}
             name=''
-            title='Complete'
+            title={doneName}
             color=''
             size='' />
         </div>
@@ -124,7 +131,7 @@ export const PrioritySquare = ({
     
     const tSym = pt.lateLate ? 'S!' : bffrRel <= pScl.max ? 'U' : bffrRel;
     
-    const pLabel = <b>{showLess ? tSym : priorityRank}</b>;
+    const pLabel = showLess ? tSym : priorityRank;
     
     const subLabel = pt.lateLate ? 'Is Late' :
       bffrRel <= pScl.max ? 'Estimated Late' : bffrRel;

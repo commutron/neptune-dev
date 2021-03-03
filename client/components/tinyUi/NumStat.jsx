@@ -24,7 +24,7 @@ const NumStat = ({ num, icon, name, title, color, size, moreClass }) => (
     <span 
       style={bSty} 
       className={color + ' numFont ' + size}
-    >{num ? num : <n-fa1><i className={`${icon} fa-lg`}></i></n-fa1>}</span>
+    >{num !== false ? num : <n-fa1><i className={`${icon} fa-lg`}></i></n-fa1>}</span>
     <br />
     <i style={sSty} className='label'>{name}</i>
   </div>

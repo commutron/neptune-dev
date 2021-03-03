@@ -37,6 +37,8 @@ const StoneSelect = ({
   closeUndoOption
 })=> {
   
+  // const thingMounted = useRef(true);
+  
   const [ riverFlowState, riverFlowStateSet ] = useState( true );
   
   // useEffect( ()=>{
@@ -44,6 +46,10 @@ const StoneSelect = ({
   // }, [riverFlowState]);
   
   const serial = item.serial;
+  
+  // useEffect(() => {
+  //   return () => { thingMounted.current = false; };
+  // }, []);
   
   useEffect( ()=> {
     Session.set('ncWhere', null);

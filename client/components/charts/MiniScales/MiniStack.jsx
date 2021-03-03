@@ -22,7 +22,10 @@ const MiniStack = ({ title, count, countNew, total })=> {
   };
     
   return(
-    <div className='wide miniScale miniStack meterprogStack'>
+    <div 
+      className='wide miniScale miniStack meterprogStack noCopy'
+      title={`New: ${dataArr[1]}\nRemaining: ${dataArr[2]}`}
+      >
       <p style={name} className='cap'>{title}</p>
 
       <VictoryStack
@@ -65,6 +68,8 @@ const MiniStack = ({ title, count, countNew, total })=> {
               orientation='top' 
               dx={-10}
               dy={10}
+              flyoutWidth={50}
+              flyoutHeight={50}
             />
           }
         />

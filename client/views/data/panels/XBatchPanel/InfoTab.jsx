@@ -176,7 +176,7 @@ const SalesSegment = ({ b, srange, flowCounts, end, remain })=> {
   const cmplt = b.completed ? end.format("MMMM Do, YYYY h:mm A") : null;       
   
   return(
-    <div>
+    <div className='readlines'>
       <h3>Sales Order</h3>
       
       <p className='cap'>{Pref.salesOrder}: <n-num>{b.salesOrder || 'not available'}</n-num></p>

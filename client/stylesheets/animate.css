@@ -264,7 +264,7 @@
   animation: spinAround 5s infinite linear ;
 }
 .turn {
-  animation: spinAround 200s infinite linear;
+  animation: spinAround 500s infinite linear;
 }
 
 

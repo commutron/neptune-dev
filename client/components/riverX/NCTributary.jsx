@@ -73,7 +73,7 @@ const NCStream = ({ entry, seriesId, end, doAction, inspector, verifier })=>{
           {snooze ?
             <span className='centre'>
               <i className='far fa-clock fa-lg'></i>
-              <i>{smple ? null : 'Snoozing'}</i>
+              <i>{smple ? null : 'Later'}</i>
             </span>
           :
             fixed ?

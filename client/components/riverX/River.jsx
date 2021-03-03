@@ -29,7 +29,7 @@ const River = ({
     }, Pref.stepUndoWindow);
   }
   function closeOption() {
-    undoOpSet( false );
+    if(thingMounted.current) { undoOpSet( false ); }
   }
 
   return(

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 
 import StoneReg from './StoneReg.jsx';
@@ -22,15 +22,21 @@ const StoneControl = ({
 	riverFlowState, riverFlowStateSet
 })=> {
 	
+	const thingMounted = useRef(true);
+	
   const [ holdState, holdSet ] = useState( true );
   const [ lockout, lockoutSet ] = useState( true );
 	const [ workingState, workingSet ] = useState( false );
 	
 	const [ reqULState, reqULSet ] = useState( false );
-
+	
+	useEffect(() => {
+    return () => { thingMounted.current = false; };
+  }, []);
+  
 	useEffect( ()=> {
 		const checkLock = holdState || blockStone || ( !doneStone ? false : true );
-		lockoutSet(checkLock);
+		if(thingMounted.current) { lockoutSet(checkLock) }
 	}, [ serial, sKey, holdState, blockStone, doneStone ]);
 	
 	function unlockAllow() {

@@ -148,8 +148,8 @@ export default StepsProgressX;
 const BranchProgress = ({ 
   branch, bRvr, bWfl, quantity, calcItem, totalI, totalIU, truncate
 })=> (
-  <div className='cap'>
-    <h4>{branch.branch}</h4>
+  <div className='cap noCopy'>
+    {!truncate && <h4>{branch.branch}</h4>}
      
     {bWfl.map( (entry)=>{
       let rndmKeyW = Math.random().toString(36).substr(2, 5);

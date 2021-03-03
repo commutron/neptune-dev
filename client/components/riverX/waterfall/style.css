@@ -1,19 +1,27 @@
 .waterfallSelector details {
   height: 4vmax;
+  height: 3vmax;
   box-shadow: none;
 }
 .waterfallSelector details[open] {
   height: 18vmax;
+  
+  height: 16vmax;
 }
 
 .waterfallWrap {
   min-width: 15vmax;
   max-width: 16vmax;
+  
+  min-width: 13vmax;
+  max-width: 14vmax;
 }
 
 .waterfallTitle {
   height: 4vmax;
+  height: 3vmax;
   font-size: calc(0.25rem + 1vmax);
+  font-size: calc(0.25rem + 0.75vmax);
   font-weight: 600;
   color: black;
   border-top: 5px solid var(--silverfade);
@@ -23,6 +31,7 @@
   display: grid;
   width: 100%;
   height: 12vmax;
+  height: 10vmax;
   grid-template-columns: 1fr 3fr;
   grid-template-rows: repeat(3, 1fr);
   grid-template-areas: 
@@ -64,7 +73,6 @@
 
 .countMinus {
   grid-area: minusOne;
-  font-size: calc(0.5rem + 1vmax);
   background-color: var(--alizarin);
 }
 .countMinus:hover,
@@ -72,16 +80,27 @@
   background-color: var(--pomegranate);
 }
 
-.countN {
-  grid-area: plusN;
+.countN { grid-area: plusN; }
+.countRec { grid-area: recKey; }
+
+.countMinus, .countN, .countRec {
   font-size: calc(0.5rem + 1vmax);
+  font-size: calc(0.5rem + 0.75vmax);
 }
 
-.countRec {
-  grid-area: recKey;
-  font-size: calc(0.5rem + 1vmax);
+.countPlus {
+  grid-area: plusOne;
+  font-size: calc(0.5rem + 1.25vmax);
+  background-color: transparent;
+  border-width: 10px;
+  border-style: solid;
+  
+  border-radius: 0;
 }
 
+.countPlusTop {
+  font-size: calc(1.5rem + 1.5vmax);
+}  
 /*
 .countOnOff {
   grid-area: onoffKey;
@@ -95,19 +114,7 @@
 }
 */
 
-.countPlus {
-  grid-area: plusOne;
-  font-size: calc(0.5rem + 1.25vmax);
-  background-color: transparent;
-  border-width: 10px;
-  border-style: solid;
-  
-  border-radius: 0;
-}
 
-.countPlusTop {
-  font-size: calc(2rem + 2vmax);
-}  
 
 .waterfallHistory {
   margin: 2vh 0;

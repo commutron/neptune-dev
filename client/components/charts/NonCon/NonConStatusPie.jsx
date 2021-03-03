@@ -15,10 +15,10 @@ const NonConSatusPie = ({ nonCons })=> {
     const ncG = nonCons;
     totalSet(ncG.length);
 
-    const none = ncG.filter( n => n.fix === false && n.inspect === false && n.skip === false ).length;
-    const fix = ncG.filter( n => n.fix !== false && n.inspect === false && n.skip === false ).length;
-    const done = ncG.filter( n => n.inspect !== false && n.skip === false ).length;
-    const skip = ncG.filter( n => n.inspect === false && ( n.skip !== false || n.snooze === true || n.comm === 'sn00ze' ) ).length;
+    const none = ncG.filter( n => n.fix === false && n.inspect === false ).length;
+    const fix = ncG.filter( n => n.fix !== false && n.inspect === false ).length;
+    const done = ncG.filter( n => n.inspect !== false ).length;
+    const skip = ncG.filter( n => n.inspect === false && n.snooze === true ).length;
 
     const counts = [ none, fix, done, skip ];
     countSet(counts);

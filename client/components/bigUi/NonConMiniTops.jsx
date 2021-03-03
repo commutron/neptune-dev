@@ -85,12 +85,10 @@ export const TodayNonCon = ({ noncons })=> {
 export const LeftFxNonCon = ({ noncons })=> {
   const ncG = noncons.filter( n => !n.trash );
   const leftToFix = ncG.filter( x => 
-    x.fix === false && x.inspect === false &&
-      ( x.skip === false || x.snooze === true )
-    ).length;
+    x.fix === false && x.inspect === false ).length;
   return(
     <NumStat
-      num={leftToFix}
+      num={leftToFix || 0}
       name='Left To Repair'
       title='quantity remaining'
       color='redT'
@@ -100,13 +98,10 @@ export const LeftFxNonCon = ({ noncons })=> {
 
 export const LeftInNonCon = ({ noncons })=> {
   const ncG = noncons.filter( n => !n.trash );
-  const leftToInspect = ncG.filter( x => 
-    x.inspect === false && 
-      ( x.skip === false || x.snooze === true )
-    ).length;
+  const leftToInspect = ncG.filter( x => x.inspect === false ).length;
   return(
     <NumStat
-      num={leftToInspect}
+      num={leftToInspect || 0}
       name='Left To Inspect'
       title='quantity remaining'
       color='orangeT'

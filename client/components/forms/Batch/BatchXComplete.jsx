@@ -28,7 +28,7 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, canRun })=> {
   const canFin = Roles.userIsInRole(Meteor.userId(), "BRKt3rm1n2t1ng8r2nch");
 
   return(
-    <div className='centre vmarginhalf space1v purpleBorder'>
+    <div className='endBox borderPurple'>
       {batchData.completed === false ?
         nowater || (allFlow && allFall) ?
           <Fragment>
