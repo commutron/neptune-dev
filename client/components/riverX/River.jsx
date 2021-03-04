@@ -31,6 +31,8 @@ const River = ({
   function closeOption() {
     if(thingMounted.current) { undoOpSet( false ); }
   }
+  
+  const canVerify = Roles.userIsInRole(Meteor.userId(), 'verify');
 
   return(
 		<div className={altIs ? 'altHighlight' : rapIs ? 'rapIsHighlight' : ''}>
@@ -44,11 +46,15 @@ const River = ({
         seriesId={seriesData._id}
         item={itemData}
         allItems={seriesData.items}
+        altIs={altIs}
+        wFlowOps={widgetData.flows}
+        wFlowNow={batchData.river}
         nonCons={seriesData.nonCon}
         shortfalls={shortfallS}
         scrapCheck={scrapCheck}
         
         brancheS={brancheS}
+        canVerify={canVerify}
         users={users}
         flowCounts={flowCounts}
         app={app}

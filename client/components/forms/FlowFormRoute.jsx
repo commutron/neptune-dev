@@ -12,27 +12,24 @@ const FlowFormRouteWrapper = ({
   id, app,
   existFlows, edit, preFill,
   noText, lock
-})=> {
-  const name = edit ? 'Edit' : 'New Flow';
-  return(
-    <ModelLarge
-      button={name}
-      title={`${name} ${Pref.flow}`}
-      color='greenT'
-      icon='fa-stream'
-      lock={!Roles.userIsInRole(Meteor.userId(), 'edit') || lock}
-      noText={noText}
-    >
-      <FlowFormRoute
-        id={id}
-        app={app}
-        existFlows={existFlows}
-        edit={edit}
-        preFill={preFill}
-      />
-    </ModelLarge>
-  );
-};
+})=> (
+  <ModelLarge
+    button='Change Flow'
+    title={`Change ${Pref.flow}`}
+    color='blueT'
+    icon='fa-stream'
+    lock={!Roles.userIsInRole(Meteor.userId(), 'edit') || lock}
+    noText={noText}
+  >
+    <FlowFormRoute
+      id={id}
+      app={app}
+      existFlows={existFlows}
+      edit={edit}
+      preFill={preFill}
+    />
+  </ModelLarge>
+);
 
 export default FlowFormRouteWrapper;
   

@@ -14,9 +14,9 @@ const CompleteRest = ({
     {scrap ?
       <ScrapBox entry={scrap} />
     :
-      <div className='purpleBorder centreText cap wordBr'>
-        <h2>Completed</h2>
-        <h3>{moment(iComplete).calendar()}</h3>
+      <div className='endBox borderPurple wordBr'>
+        <h3>Completed</h3>
+        <h4>{moment(iComplete).calendar()}</h4>
       </div>
     }
     

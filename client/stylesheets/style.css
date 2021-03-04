@@ -243,7 +243,7 @@ input::-webkit-calendar-picker-indicator {
 .paleT { color: rgba(255,255,255,0.1); }
 
 .borderWhite { border-color: var(--clouds); }
-.borderGray { border-color: var(--concrete); }
+.borderGray { border-color: var(--asbestos); }
 .borderGreen { border-color: var(--nephritis); }
 .borderBlue { border-color: var(--belizeHole); }
 .borderRed { border-color: var(--alizarin); }

@@ -2,7 +2,6 @@ import React from 'react';
 import moment from 'moment';
 import { round2Decimal, avgOfArray } from '/client/utility/Convert';
 
-// ALT PATH HANDLING !! \\
 
 function flowLoop(river, items, firstsFlat) {
   const now = moment().format();
@@ -63,7 +62,6 @@ function flowLoop(river, items, firstsFlat) {
 }
 
 
-
 function unitTotalCount(items) {
   let totalUnits = 0;
   for(let i of items) {
@@ -90,23 +88,34 @@ function getFirsts(items) {
     
 function FlowCounter(flow, seriesData) {
   
-  const allItems = seriesData ? seriesData.items : [];
+  const flowSeries = seriesData && flow.length > 0;
+  const allItems = flowSeries ? seriesData.items : [];
   
   const allLiveItems = outScrap(allItems);
   const scrapCount = allItems.length - allLiveItems.length;
   
-  const liveUnits = unitTotalCount(allLiveItems);
-  
   const firstsFlat = getFirsts(allLiveItems);
   
-  const riverProg = flowLoop(flow, allLiveItems, firstsFlat);
+  const stndItems = allLiveItems.filter( i => i.altPath.every( a => !a.river ) );
+  const althItems = allLiveItems.filter( i => i.altPath.some( a => a.river !== false ) );
   
-  const allFlow = allItems.every( x => x.completed );
+  const liveUnits = unitTotalCount(stndItems);
+  const altUnits = unitTotalCount(althItems);
+  
+  const altDone = althItems.filter( x => x.completed ).length;
+  
+  const riverProg = flowLoop(flow, stndItems, firstsFlat);
+  
+  const allFlow = !flowSeries ? true :
+          allItems.length > 0 && allItems.every( x => x.completed );
 
   return {
     riverProg: riverProg,
-    liveItems: allLiveItems.length,
+    liveItems: stndItems.length,
     liveUnits: liveUnits,
+    altDone: altDone,
+    altItems: althItems.length,
+    altUnits: altUnits,
     firstsFlat: firstsFlat,
     scrapCount: scrapCount,
     allFlow: allFlow
@@ -138,7 +147,8 @@ function fallLoop(waterfall, quantity) {
                               w1.pos < w2.pos ? -1 : w1.pos > w2.pos ? 1 : 0 );
   return {
     fallProg: fallCounts,
-    allFall: doneCheck.every( x => x === true )
+    allFall: doneCheck.length === 0 ? true :
+      doneCheck.length > 0 && doneCheck.every( x => x === true )
   };
 }
 

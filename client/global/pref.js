@@ -195,7 +195,7 @@ class Pref {
     this.statisticalEndHour = 20; // 8pm
     //this.minWorkDayStartTime
     //this.maxWorkDayEndTime
-    this.stepUndoWindow = 1000*30;
+    this.stepUndoWindow = 1000*30; // remember to match ".spinRe"
     this.timeAfterGrace = 48; // keep the tideControl unlocked for how many hours
 
   }

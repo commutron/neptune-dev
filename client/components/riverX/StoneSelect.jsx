@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 // import moment from 'moment';
 // import Pref from '/client/global/pref.js';
 
-import StoneControl from './StoneControl.jsx';
-
-import FoldInNested from './FoldInNested.jsx';
-import TestFails from './TestFails.jsx';
-import NCTributary from './NCTributary.jsx';
-import Shortfalls from './Shortfalls.jsx';
-import CompleteRest from './CompleteRest.jsx';
+import StoneControl from './StoneControl';
+import ForkMenu from './ForkMenu';
+import FoldInNested from './FoldInNested';
+import TestFails from './TestFails';
+import NCTributary from './NCTributary';
+import Shortfalls from './Shortfalls';
+import CompleteRest from './CompleteRest';
 
 const StoneSelect = ({ 
   bID, 
@@ -18,13 +18,13 @@ const StoneSelect = ({
   seriesId,
   item,
   allItems,
+  altIs, wFlowOps, wFlowNow,
   nonCons,
   shortfalls,
-  // iCascade,
   scrapCheck,
   
   brancheS,
-  users,
+  canVerify, users,
   flowCounts,
   app,
   
@@ -37,25 +37,21 @@ const StoneSelect = ({
   closeUndoOption
 })=> {
   
-  // const thingMounted = useRef(true);
+  const mounted = useRef(true);
+  
+  useEffect(() => {
+    return () => { mounted.current = false; };
+  }, []);
   
   const [ riverFlowState, riverFlowStateSet ] = useState( true );
   
-  // useEffect( ()=>{
-  //   Roles.userIsInRole(Meteor.userId(), 'debug') && console.log(`rvrfl:${riverFlowState}`);
-  // }, [riverFlowState]);
-  
   const serial = item.serial;
-  
-  // useEffect(() => {
-  //   return () => { thingMounted.current = false; };
-  // }, []);
   
   useEffect( ()=> {
     Session.set('ncWhere', null);
 	  Session.set('nowStepKey', null);
     Session.set('nowWanchor', null);
-		riverFlowStateSet( true );
+		if(mounted.current) { riverFlowStateSet( true ); }
 		closeUndoOption();
 	}, [ serial ]);
 	
@@ -76,16 +72,21 @@ const StoneSelect = ({
 		});
 	}
 	
-	
   for(let flowStep of flow) {
     const brKey = flowStep && flowStep.branchKey;
     const branchObj = brancheS.find( b => b.brKey === brKey ) || null;
     const stepBranch = branchObj ? branchObj.branch : flowStep.step;
     
     const first = flowStep.type === 'first';
-      
-    const didFirst = first && allItems.find( i => i.history.find( 
-            x => x.key === flowStep.key && x.good !== false ) ) ? true : false;
+    
+    const didFirst = !first ? false : altIs ? 
+            allItems.find( i => i.altPath.some( x => x.river !== false ) &&
+              i.history.find( x => x.key === flowStep.key && x.good !== false ) 
+            ) ? true : false
+            :
+            allItems.find( i => i.altPath.every( x => !x.river ) &&
+              i.history.find( x => x.key === flowStep.key && x.good !== false ) 
+        ) ? true : false;
   
     const stepComplete = first ? 
       iDone.find(ip => ip.key === flowStep.key) || didFirst
@@ -118,7 +119,7 @@ const StoneSelect = ({
       const doneStone = stepComplete || false;
 	    
 	    return(
-        <div>
+        <div className='stoneGrid'>
 
 	        {flowStep.type === 'nest' ?
 	          <FoldInNested
@@ -127,7 +128,6 @@ const StoneSelect = ({
               sKey={flowStep.key}
               step={flowStep.step}
               doneStone={doneStone}
-              //subItems={subItems}
               lock={false} />
           : 
 	          <StoneControl
@@ -138,10 +138,12 @@ const StoneSelect = ({
               sKey={flowStep.key}
               step={flowStep.step}
               type={flowStep.type}
+              altIs={altIs}
               rapIs={rapIs}
               rarapid={rarapid}
               branchObj={branchObj}
               allItems={allItems}
+              canVerify={canVerify}
               users={users}
               app={app}
               flowCounts={flowCounts}
@@ -154,27 +156,37 @@ const StoneSelect = ({
               riverFlowState={riverFlowState}
               riverFlowStateSet={(e)=>riverFlowStateSet(e)} />
 	        }
-  	          
+  	      
+  	      {canVerify && wFlowOps.length > 1 && !rapIs ?
+    	      <ForkMenu
+    	        seriesId={seriesId}
+    	        serial={serial}
+    	        wFlowOps={wFlowOps}
+    	        wFlowNow={wFlowNow}
+    	        altIs={altIs}
+    	      />
+  	       : null}
+  	      
           <div className='undoStepWrap'>
   					{undoOption ? 
   						<button
   							className='textAction'
   							onClick={(e)=>handleStepUndo(e)}
-  						>undo last step</button>
+  						><i className="fas fa-undo-alt spinRe"></i> Go Back</button>
   					: null}
   				</div>
           
-            
-          {fTest.length > 0 && 
-            <TestFails fails={fTest} />
-          }
+          <div className='riverErrors'>
+            {fTest.length > 0 && 
+              <TestFails fails={fTest} />
+            }
           
-          <div>
             <NCTributary
       			  seriesId={seriesId}
       			  serial={serial}
       			  nonCons={nc}
       			  sType={flowStep.type} />
+      			  
             <Shortfalls
       			  seriesId={seriesId}
       			  shortfalls={shortfalls}

@@ -801,9 +801,37 @@ Meteor.methods({
 		}}});
   },
 
- 
+  setInflowAltPath(seriesId, serial, altKey) {
+    const doc = XSeriesDB.findOne({_id: seriesId, 'items.serial': serial});
+    const subDoc = doc.items.find( x => x.serial === serial );
+    const isAlt = subDoc.altPath.find( a => a.river !== false );
+    
+    if(isAlt) {
+      XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'items.serial': serial}, {
+        $pull : {
+         'items.$.altPath': { river: isAlt.river }
+      }});
+    }
+    
+    XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'items.serial': serial}, {
+      $push : { 
+        'items.$.altPath': {
+          river: altKey,
+          rapId: false,
+          assignedAt: new Date()
+        }
+    }});
+  },
+  
+  unsetInflowAltPath(seriesId, serial, altKey) {
+    XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'items.serial': serial}, {
+      $pull : {
+       'items.$.altPath': { river: altKey }
+    }});
+  },
+  
   setRapidFork(seriesId, serial, rapId) {
-    const doc = XSeriesDB.findOne({_id: seriesId, orgKey: Meteor.user().orgKey, 'items.serial': serial});
+    const doc = XSeriesDB.findOne({_id: seriesId, 'items.serial': serial});
     const subDoc = doc.items.find( x => x.serial === serial );
     
     const rapid = XRapidsDB.findOne({_id: rapId});
@@ -822,7 +850,7 @@ Meteor.methods({
             completedAt: null,
             completedWho: null
           }
-        }});
+      }});
 
       if(rapid.autoNC) {
         for(let nc of rapid.autoNC) {

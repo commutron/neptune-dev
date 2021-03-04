@@ -46,9 +46,9 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, canRun })=> {
         : null
       :
         <Fragment>
-          <h2 className='centreText'>
+          <h3 className='centreText'>
             Completed: {moment(batchData.completedAt).calendar()}
-          </h2>
+          </h3>
           {moment().diff(moment(batchData.completedAt), 'minutes') < 60 ?
             <div className='centre'>
               <p>
@@ -61,7 +61,7 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, canRun })=> {
               >Cancel Complete</button>
             </div>
           :
-          canFin ?
+          canFin && !batchData.lock ?
             !reopenState ?
               <div>
                 <button

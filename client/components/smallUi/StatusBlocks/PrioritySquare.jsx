@@ -51,8 +51,8 @@ export const PrioritySquare = ({
 })=> {
   
   if(isDone) {
-    const doneColor = oRapid ? 'teal' : 'green';
-    const doneIcon = oRapid ? 'far fa-dot-circle' : 'far fa-star';
+    const doneColor = oRapid ? 'darkOrange' : 'green';
+    const doneIcon = oRapid ? 'fas fa-bolt' : 'far fa-star';
     const doneName = oRapid ? 'Extended' : 'Complete';
     return(
       <div className={doneColor}>
@@ -61,7 +61,7 @@ export const PrioritySquare = ({
           icon={doneIcon}
           name=''
           title={doneName}
-          color=''
+          color='blackblackT'
           size='' />
       </div>
     );
@@ -78,8 +78,8 @@ export const PrioritySquare = ({
     isDebug && console.log({pt, batchID, bffrRel, bffrTime, q2t});
     
     if(pt.completed) {
-      const doneColor = pt.oRapid ? 'teal' : 'green';
-      const doneIcon = pt.oRapid ? 'far fa-dot-circle' : 'far fa-star';
+      const doneColor = pt.oRapid ? 'darkOrange' : 'green';
+      const doneIcon = pt.oRapid ? 'fas fa-bolt fa-lg' : 'far fa-star fa-lg';
       const doneName = oRapid ? 'Extended' : 'Complete';
       return(
         <div className={doneColor}>
@@ -88,7 +88,7 @@ export const PrioritySquare = ({
             icon={doneIcon}
             name=''
             title={doneName}
-            color=''
+            color='blackblackT'
             size='' />
         </div>
       );

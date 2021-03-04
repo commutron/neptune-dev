@@ -18,7 +18,7 @@ const RapidCreate = ({
   <ModelLarge
     button={'Extend'}
     title={'Extend ' + Pref.xBatch}
-    color='orangeT'
+    color='darkOrangeT'
     icon='fa-sitemap'
     lock={!Roles.userIsInRole(Meteor.userId(), ['run', 'qa']) || lock}>
     

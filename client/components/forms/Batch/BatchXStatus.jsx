@@ -33,14 +33,14 @@ const BatchXStatus = ({ batchData, allFlow, allFall, nowater })=>	{
   
   return(
     <div className='cap'>
-      {nowater || (allFlow && allFall) &&
+      {nowater || (allFlow && allFall) ?
         <BatchXComplete 
           batchData={batchData}
           allFlow={allFlow}
           allFall={allFall}
           nowater={nowater}
           canRun={canRun} />
-      }
+      :null}
         
       {!batchData.live ?
         <Fragment>

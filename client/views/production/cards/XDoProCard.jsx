@@ -47,7 +47,7 @@ const XDoProCard = ({
   }, [app]);
   
   useLayoutEffect( ()=> {
-    const getFlowData = HeadWater(batchData, seriesData, widgetData);
+    const getFlowData = HeadWater(batchData, seriesData, widgetData, itemData);
     flowDataSet(getFlowData);
   }, [batchData.river, seriesData, widgetData]);
   
@@ -88,6 +88,9 @@ const XDoProCard = ({
   const bOpen = batchData.live || bWrapUp;
   const bClosed = !batchData.live && !bComplete;
   
+  const altIs = !itemData ? false : itemData.altPath.find( x => x.river !== false );
+  const altFlow = altIs && widgetData.flows.find( f => f.flowKey === altIs.river );
+  
   const rapid = !rapidData.rapIs ? 
                   rapidData.rapDo.find( r => r.live === true ) :
                   rapidData.rapDo.find( r => r._id === rapidData.rapIs.rapId );
@@ -95,6 +98,8 @@ const XDoProCard = ({
   let useFlow = !itemData ? [] :
                 itemData.completed ? 
                 rapid ? rapid.whitewater : []
+                :
+                altIs ? altFlow.flow 
                 :
                 flowData ? flowData.flow : [];
                 
@@ -166,6 +171,7 @@ const XDoProCard = ({
             brancheS={brancheState}
             useFlow={useFlow}
             flowCounts={flowData.flowCounts}
+            altIs={altIs}
             rapid={rapid}
             rapIs={rapidData.rapIs}
             shortfallS={shortfallS}

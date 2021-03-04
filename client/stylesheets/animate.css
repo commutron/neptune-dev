@@ -38,7 +38,7 @@
 @keyframes slideInLeft {
   0% {
     opacity: 0;
-    transform: translate3d(-500px, 0, 0);
+    transform: translate3d(-500px, 0, 1px);
   }
   100% {
     opacity: 1;
@@ -135,6 +135,11 @@
 @keyframes spinAround {
   0%   { transform: translate3d(0, 0, 0) rotate(0deg); }
   100% { transform: translate3d(0, 0, 0) rotate(360deg); }
+}
+
+@keyframes spinBack {
+  0%   { transform: translate3d(0, 0, 0) rotate(360deg); }
+  100% { transform: translate3d(0, 0, 0) rotate(0deg); }
 }
 
 @keyframes blinker {
@@ -257,6 +262,14 @@
 .workIcon {
   animation: spinAround 3s infinite linear;
 }
+
+.spinRe {
+  animation-name: spinBack;
+  animation-duration: 30s;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+}
+
 .spin2 {
   animation: spinAround 2s infinite linear;
 }

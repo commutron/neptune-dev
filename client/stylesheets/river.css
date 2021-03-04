@@ -1,45 +1,74 @@
 /* River */
+.stoneGrid {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr 2.5fr 1fr;
+  grid-template-rows: 1fr 1.5rem 1.75rem auto;
+  grid-template-areas: 
+    'stoneF stoneF stoneF'
+    'pathC undoS menu1'
+    'feedA feedA feedA';
+  justify-content: stretch;
+  align-content: stretch;
+  grid-gap: 0 0.5vmax;
+}
+
+.riverErrors {
+  grid-area: feedA;
+  margin: 1vh 0;
+}
+
 .stoneFrame {
+  grid-area: stoneF;
+  
   max-width: 16vmax;
   min-height: 16vmax;
   
   max-width: 14vmax;
   min-height: 14vmax;
+  padding-top: 0.5vmax;
   
   display: flex;
   justify-content: center;
   align-items: center;
 }
+.riverPath {
+  grid-area: pathC;
+  padding-left: 0.5vmax;
+}
 .stoneBase {
-  display: flex;
+  grid-area: menu1;
   flex-direction: row-reverse;
+  padding-right: 0.5vmax;
+}
+.riverPath, .stoneBase {
+  display: flex;
   flex-wrap: nowrap;
-  align-content: center;
+  align-items: center;
   min-width: 100%;
-  margin: 8px 0;
+  /*margin: 8px 0;*/
   color: var(--asbestos);
 }
 
 .undoStepWrap {
+  grid-area: undoS;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: 2rem;
   min-height: 1.75rem;
   text-align: center;
-  /*background-color: rgb(30,30,30);*/
-  /*border: 3px solid rgb(33,33,33);*/
 }
 .undoStepWrap button {
   line-height: 1;
-  font-size: 1.2rem;
+  font-size: 1.3vmax;
   width: 100%;
   min-height: 2rem;
   min-height: 1.75rem;
   color: var(--concrete);
   text-transform: capitalize;
-  /*background-color: rgb(25,25,25);*/
+  border-right: 1px groove lightgray;
+  border-left: 1px groove lightgray;
 }
 .moreStepAction {
   min-width: 20%;
@@ -101,19 +130,7 @@
   animation-iteration-count: infinite;
   box-shadow: 0 0 0 2em rgba(255, 255, 255, 0);
 }
-@media screen and (prefers-reduced-motion: reduce) { 
-  .stone, .crackedTop, .crackedBot {
-    transition: 500ms;
-  }
-  .stone:active,
-  .crackedTop:active, 
-  .crackedBot:active {
-    filter: brightness(0.75);
-    animation: none;
-    box-shadow: 0 0 0 1vmax black,
-                0 0 0 2vmax var(--high-color);
-  }
-}
+
 .stone:disabled:active,
 .crackedTop:disabled:active, 
 .crackedBot:disabled:active {
@@ -323,6 +340,7 @@
   animation-duration: 0.5s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: 1;
+  overflow: hidden;
 }
 .tribRow, .shortRow {
   display: flex;
@@ -385,9 +403,10 @@
 }
 
 .tribActionMain > button > i,
-  .tribActionMain > span > i {
-    font-size: calc( 0.5rem + 0.5vmin);
-  }
+.tribActionMain > span > i {
+  font-size: calc( 0.5rem + 0.5vmin);
+}
+
 @media (orientation: portrait) {
   .tribActionMain > button > i,
   .tribActionMain > span > i {
@@ -546,8 +565,8 @@
   min-height: 10vmin;
   text-transform: capitalize;
   background-color: transparent;
-  color: var(--greenSea);
-  border: 1vmax solid var(--greenSea);
+  color: var(--pumpkin);
+  border: 1vmax solid var(--pumpkin);
 }
 .forkButton {
   font-size: 3vmax;
@@ -556,15 +575,15 @@
   font-size: 1.75vmax;
 }
 .forkButton:hover, .forkButton:active {
-  background-color: var(--greenSea);
+  background-color: var(--pumpkin);
   color: var(--blackT);
 }
 
 .rapIsHighlight {
-  box-shadow: inset 0 0px 6vmin 1vmin var(--turquoisefade);
+  box-shadow: inset 0 0px 6vmin 1vmin var(--pumpkinfade);
 }
 .altHighlight {
-  box-shadow: inset 0 0px 6vmin 2vmin var(--belizeHolefade);
+  box-shadow: inset 0 0px 6vmin 1vmin var(--turquoisefade);
 }
 
 .finishBanner, .rapDidBanner, .altBanner {
@@ -575,14 +594,33 @@
   text-align: center;
 }
 .finishBanner { border-color: var(--wisteria); }
-.rapDidBanner { border-color: var(--turquoise); }
-.altBanner { border-color: var(--belizeHole); }
+.rapDidBanner { border-color: var(--pumpkin); }
+.altBanner { border-color: var(--turquoise); }
 
 .endBox {
   display: flex;
   flex-flow: column nowrap;
   width: 100%;
-  margin: 1vh 0;
+  margin: 0 0 1vh 0;
   border: 5px solid; 
   padding: 0 1vmax 1vmax 1vmax;
+  text-align: center;
+}
+
+
+@media screen and (prefers-reduced-motion: reduce) { 
+  .stone, .crackedTop, .crackedBot {
+    transition: 500ms;
+  }
+  .stone:active,
+  .crackedTop:active, 
+  .crackedBot:active {
+    filter: brightness(0.75);
+    animation: none;
+    box-shadow: 0 0 0 1vmax black,
+                0 0 0 2vmax var(--high-color);
+  }
+  .tribRow, .shortRow, .testFail {
+  	animation-name: fadeIn;
+  }
 }

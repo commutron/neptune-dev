@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
@@ -8,6 +8,12 @@ const NSYrWkSqItemFormX = ({
   bID, seriesId, more, app, 
   showToast, updateToast
 })=> {
+  
+  const thingMounted = useRef(true);
+  
+  useEffect(() => {
+    return () => { thingMounted.current = false; };
+  }, []);
   
   const thisYear = moment().weekYear().toString().slice(-2);
   const thisWeek = moment().week().toString().padStart(2, 0);
@@ -70,7 +76,7 @@ const NSYrWkSqItemFormX = ({
           console.log(error);
         if(reply.success === true) {
           updateToast();
-          resultSet(reply.dupes);
+          if(thingMounted.current) { resultSet(reply.dupes); }
         }else{
           toast.error('There was a problem...');
         }

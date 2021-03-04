@@ -5,7 +5,6 @@ import { ToastContainer } from 'react-toastify';
 
 import HomeIcon from './HomeIcon.jsx';
 import FindBox from './FindBox.jsx';
-// import ErrorCatch from './ErrorCatch.jsx';
 
 import TideControl from '/client/components/tide/TideControl/TideControl.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
@@ -43,7 +42,12 @@ export const ProWrap = ({
     let getNCTypesCombo = [];
     
     if( batchData && widgetData && seriesData ) {
-      const river = widgetData.flows.find( x => x.flowKey === batchData.river );
+      const riverKey = !itemData ? batchData.river :
+                        itemData.altPath.find( x => x.river !== false ) ?
+                        itemData.altPath.find( x => x.river !== false ).river :
+                        batchData.river;
+                        
+      const river = widgetData.flows.find( x => x.flowKey === riverKey );
       if(river) {
         river.type === 'plus' && getNCListKeys.push(river.ncLists);
       }

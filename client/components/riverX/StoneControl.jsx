@@ -11,10 +11,11 @@ import useTimeOut from '/client/utility/useTimeOutHook.js';
 const StoneControl = ({
 	batchId,
 	seriesId, serial,
-	sKey, step, type, rapIs, rarapid,
+	sKey, step, type, 
+	altIs, rapIs, rarapid,
 	branchObj,
 	allItems,
-	users, app,
+	canVerify, users, app,
 	flowCounts,
 	blockStone, doneStone, compEntry,
 	handleVerify,
@@ -22,7 +23,7 @@ const StoneControl = ({
 	riverFlowState, riverFlowStateSet
 })=> {
 	
-	const thingMounted = useRef(true);
+	const mounted = useRef(true);
 	
   const [ holdState, holdSet ] = useState( true );
   const [ lockout, lockoutSet ] = useState( true );
@@ -31,12 +32,12 @@ const StoneControl = ({
 	const [ reqULState, reqULSet ] = useState( false );
 	
 	useEffect(() => {
-    return () => { thingMounted.current = false; };
+    return () => { mounted.current = false; };
   }, []);
   
 	useEffect( ()=> {
 		const checkLock = holdState || blockStone || ( !doneStone ? false : true );
-		if(thingMounted.current) { lockoutSet(checkLock) }
+		if(mounted.current) { lockoutSet(checkLock) }
 	}, [ serial, sKey, holdState, blockStone, doneStone ]);
 	
 	function unlockAllow() {
@@ -47,7 +48,7 @@ const StoneControl = ({
   		reqULSet(true);
   	}else if(type === 'inspect' && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
   		reqULSet(true);
-  	}else if(type === 'first' && !Roles.userIsInRole(Meteor.userId(), 'verify')) {
+  	}else if(type === 'first' && !canVerify) {
   		reqULSet(true);
   	}else{
 		  holdSet( false );
@@ -77,7 +78,7 @@ const StoneControl = ({
   }
   function resolveEntry(blockUndo) {
   	riverFlowStateSet( 'slow' );
-		workingSet( false );
+		if(mounted.current) { workingSet( false ); }
 		!blockUndo && openUndoOption();
 	  document.getElementById('lookup').focus();
   }
@@ -90,7 +91,10 @@ const StoneControl = ({
   const preTotal = flowCounts.liveItems;
   const preStep = flowCounts.riverProg.find( x => x.key === sKey );
   const preCount = preStep ? preStep.items : undefined;
-  const benchmark = preCount === 0 ? 'first' : preCount === preTotal - 1 ? 'last' : false;              
+  const benchmark = preCount === 0 ? 'first' : 
+  									(preCount === preTotal - 1 ) ||
+  									(altIs && flowCounts.altDone === flowCounts.altItems -1 ) ? 
+  									'last' : false;              
   
 	const renderReg = 
 		<StoneReg 
