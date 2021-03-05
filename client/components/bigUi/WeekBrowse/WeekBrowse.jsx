@@ -58,7 +58,7 @@ const WeekBrowse = ({ sendUp, app })=> {
           className='BTTNtxtBTTN clear clearBlack'
           onClick={()=>tickWeek(false)} 
           disabled={backwardLock}
-        ><i className="fas fa-angle-double-left fa-lg fa-fw"></i></button>
+        ><i className="fas fa-angle-double-left fa-fw"></i></button>
       </label>
       <label>
         <button 
@@ -66,25 +66,24 @@ const WeekBrowse = ({ sendUp, app })=> {
           className='BTTNtxtBTTN clear clearBlack'
           onClick={()=>tickWeek('down')} 
           disabled={backwardLock}
-        ><i className="fas fa-angle-left fa-lg fa-fw"></i></button>
+        ><i className="fas fa-angle-left fa-fw"></i></button>
       </label>
       <span className='bttnTXTbttn numFont'> {yearNum}<sub>w</sub>{weekNum} </span>
-      <label>
+      
         <button 
           title='Next'
           className='BTTNtxtBTTN clear clearBlack'
           onClick={()=>tickWeek('up')} 
           disabled={forwardLock}
-        ><i className="fas fa-angle-right fa-lg fa-fw"></i></button>
-      </label>
-      <label>
+        ><i className="fas fa-angle-right fa-fw"></i></button>
+      
         <button 
           title='This week'
           className='BTTNtxtBTTN clear clearBlack'
           onClick={()=>tickWeek('now')} 
           disabled={forwardLock}
-        ><i className="fas fa-angle-double-right fa-lg fa-fw"></i></button>
-      </label>
+        ><i className="fas fa-angle-double-right fa-fw"></i></button>
+      
     </span>
   );
 };

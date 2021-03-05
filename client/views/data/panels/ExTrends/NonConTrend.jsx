@@ -12,7 +12,7 @@ import {
 } from 'victory';
 //import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
-import ToggleBar from '/client/components/bigUi/ToolBar/ToggleBar';
+// import ToggleBar from '/client/components/smallUi/Tabs/ToggleBar';
 
 import { percentOf } from '/client/utility/Convert';
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Accounts } from 'meteor/accounts-base';
 import { toast } from 'react-toastify';
-import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
+import Tabs from '/client/components/smallUi/Tabs/Tabs.jsx';
 
 import './style.css';
 

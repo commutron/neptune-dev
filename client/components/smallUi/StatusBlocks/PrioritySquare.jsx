@@ -157,7 +157,7 @@ export const PrioritySquare = ({
           num={pLabel}
           name={showLess ? '' : subLabel}
           color='blackblackT'
-          size='big' />
+          size='bold big' />
         {showExtra && !showLess ? 
           <dl className='med clean noindent espace'>
             <dd>{treTxt}</dd>

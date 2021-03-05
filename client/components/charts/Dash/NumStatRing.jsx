@@ -18,7 +18,7 @@ const NumStatRing = ({ total, nums, name, title, colour, maxSize, noGap, isDebug
   
   isDebug && console.log(nums);
   
-  const contain = maxSize || 'chart15Contain';
+  const contain = maxSize || 'chart10Contain';
   
   return(
     <div className={`${contain} noCopy`} title={title}>

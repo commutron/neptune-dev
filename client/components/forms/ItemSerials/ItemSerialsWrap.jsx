@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 
 import Model from '/client/components/smallUi/Model.jsx';
-import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
+import Tabs from '/client/components/smallUi/Tabs/Tabs.jsx';
 
 import MultiItemForm from './MultiItemForm';
 import YrWkPnItemForm from './YrWkPnItemForm';

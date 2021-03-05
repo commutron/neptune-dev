@@ -150,7 +150,6 @@ Meteor.methods({
       return false;
     }
   },
-  /*
   UNSETbplusNotesKey() {
     try{
       if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
@@ -166,7 +165,6 @@ Meteor.methods({
       throw new Meteor.Error(err);
     }
   },
-  */
   /*
   dateObjBatchUPGRADE() {
     if(!Roles.userIsInRole(Meteor.userId(), 'admin')) {
@@ -253,22 +251,7 @@ Meteor.methods({
       throw new Meteor.Error(err);
     }
   },
-  
-  RESETitemAltPathArray() {
-    try{
-      if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-        XSeriesDB.update({ orgKey: Meteor.user().orgKey, 'items.altPath': false }, {
-          $set : { 
-            'items.$.altPath': []
-          }},{multi: true});
-          return true;
-      }else{
-        return false;
-      }
-    }catch (err) {
-      throw new Meteor.Error(err);
-    }
-  },
+
   
   ResetAppLatestSerial() {
     try{

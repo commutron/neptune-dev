@@ -1,14 +1,15 @@
 .tabNav { display: flex; }
 .tabBody { overflow-x: auto; }
 .tabOn, .tabOff {
-  padding: 0 10px;
-  min-height: 2.5rem;
-  line-height: 2em;
-  font-size: medium;
+  padding: 0.75vmax 1vmin;
+  min-height: 2.5vmax;
+  line-height: 1.25;
+  font-size: 1.25vmax;
   color: black;
   letter-spacing: 1px;
 	text-transform: capitalize;
 	overflow: hidden;
+	border-radius: 0;
 }
 .darkTheme .tabOn, .darkTheme .tabOff {
   color: white;
@@ -16,13 +17,11 @@
 
 .tabOn {
 	background-color: var(--navIndicatorB);
-  /*border-bottom-color: var(--silver);*/
   box-shadow: var(--navIndicatorOut);
 }
 
 .tabOff {
 	background-color: var(--navIndicatorA);
-	/*border-bottom-color: transparent;*/
 	box-shadow: var(--navIndicatorIn);
 }
 

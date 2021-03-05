@@ -313,8 +313,8 @@ main {
 
 .slideMenuButton, .slideNestedMenuButton {
   width: 100%;
-  min-height: 6vh;
-  padding: 0 2vw 0 1vw;
+  min-height: 6vmin;
+  padding: 0 2vmin 0 1vmin;
   font-size: 1.75vmin;
   background-color: transparent;
   border-bottom: 1px solid black;
@@ -666,7 +666,6 @@ n-sm-model-content {
   border-right: none;
   border-bottom: none;
   border-left: none;
-  padding: 8px 0;
 }
 .noteCard > i {
   padding-left: 8px;
@@ -701,6 +700,20 @@ n-sm-model-content {
   display: flex;
   align-content: center;
   align-items: center;
+}
+
+.evenRow, .rightRow {
+  width: 100%;
+  margin: 0;
+  display: flex;
+  flex-flow: row nowrap;
+  align-content: center;
+}
+.evenRow {
+  justify-content: space-evenly;
+}
+.rightRow {
+  justify-content: flex-end;
 }
 
 .doFlexWrap { flex-wrap: wrap; }
@@ -754,9 +767,8 @@ n-sm-model-content {
   width: 100%;
   margin: 0 auto;
 }
-.w100 {
-  width: 100% !important;
-}
+.w100 { width: 100% !important; }
+.wAuto { width: auto !important; }
 
 .minHeight {
   height: min-content;
@@ -871,6 +883,7 @@ button.numberSet {
 
 .fltrsInput {
   width: 100%;
+  padding: 0 1vmin;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -878,7 +891,6 @@ button.numberSet {
 .fltrsInput input, .fltrsInput select {
   height: 1.25rem;
   min-width: 10ch;
-  width: 100%;
   font-size: 0.9rem;
   margin: 5px 5px;
 }
@@ -913,7 +925,7 @@ button.numberSet {
 
 .tableInput {
   min-width: 10ch;
-  max-width: fit-content;
+  max-width: min-content;
   height: 1.5rem;
 }
 
@@ -943,7 +955,7 @@ button.numberSet {
 }
 
 .timeInputs .flatpickr-input ~ .form-control {
-  width: 8ch;
+  width: 9ch;
   font-size: 1rem;
   text-indent: 0.10rem;
 }

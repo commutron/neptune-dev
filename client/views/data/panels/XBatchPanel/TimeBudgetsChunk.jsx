@@ -4,7 +4,7 @@ import 'moment-timezone';
 import Pref from '/client/global/pref.js';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
-import ToggleBar from '/client/components/bigUi/ToolBar/ToggleBar';
+import ToggleBar from '/client/components/smallUi/Tabs/ToggleBar';
 
 import { TimeBudgetUpgrade, WholeTimeBudget } from '/client/components/forms/QuoteTimeBudget.jsx';
 import TimeBudgetBar from '/client/components/charts/Tides/TimeBudgetBar.jsx';

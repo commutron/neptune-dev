@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
 
 // import { min2hr } from '/client/utility/Convert';
@@ -8,12 +8,18 @@ import Pref from '/client/global/pref.js';
 
 const MultiBatchKPI = ({ batchIDs, app })=> {
   
+  const mounted = useRef(true);
+  
   const [ batchDT, batchDTset ] = useState(false);
+  
+  useEffect( ()=>{
+    return ()=> mounted.current = false; 
+  }, []);
   
   useEffect( ()=>{
     Meteor.call('countMultiBatchTideToQuote', batchIDs, (error, reply)=>{
       error && console.log(error);
-      batchDTset( reply );
+      if(mounted.current) { batchDTset( reply ); }
     });
   }, []);
   

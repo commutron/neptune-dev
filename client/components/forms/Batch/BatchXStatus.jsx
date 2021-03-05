@@ -51,7 +51,7 @@ const BatchXStatus = ({ batchData, allFlow, allFall, nowater })=>	{
               className='miniAction noFade medBig'
               onClick={()=>handleLive(true)}
               disabled={!canRun}
-            ><i><i className='far fa-lightbulb grayT fa-lg fa-fw'></i></i>
+            ><n-fa1><i className='fas fa-power-off grayT fa-lg fa-fw'></i></n-fa1>
             </button>   {Pref.xBatch} is {Pref.notlive}
           </p>
           {/*isAdmin && !batchData.lock && // Manual Locking
@@ -62,7 +62,7 @@ const BatchXStatus = ({ batchData, allFlow, allFall, nowater })=>	{
                 className='miniAction noFade medBig'
                 onClick={(e)=>handleLock(e)}
                 disabled={!canRun}
-              ><i><i className='fas fa-lock-open purpleT fa-lg fa-fw'></i></i>
+              ><n-fa4><i className='fas fa-lock-open purpleT fa-lg fa-fw'></i></n-fa4>
               </button>   UnLocked
             </p>
           */}
@@ -74,7 +74,7 @@ const BatchXStatus = ({ batchData, allFlow, allFall, nowater })=>	{
                 className='miniAction noFade medBig'
                 onClick={(e)=>handleUnLock(e)}
                 disabled={!canRun}
-              ><i><i className='fas fa-lock purpleT fa-lg fa-fw'></i></i>
+              ><n-fa2><i className='fas fa-lock purpleT fa-lg fa-fw'></i></n-fa2>
               </button>   Locked
             </p>
           }
@@ -87,7 +87,7 @@ const BatchXStatus = ({ batchData, allFlow, allFall, nowater })=>	{
             className='miniAction noFade medBig'
             onClick={()=>handleLive(false)}
             disabled={!canRun}
-          ><b><i className='fas fa-lightbulb trueyellowT fa-lg fa-fw'></i></b>
+          ><n-fa3><i className='fas fa-lightbulb trueyellowT fa-lg fa-fw'></i></n-fa3>
           </button>   {Pref.xBatch} is {Pref.live}
         </p>
         : null

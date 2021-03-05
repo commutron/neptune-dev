@@ -172,7 +172,7 @@ const TideBlockRow = ({
         :
           <Fragment>
             <td className='noRightBorder clean numFont rightText'>
-              {isStop ? Math.round( tideObj.durrAsMin ) : '...'}<i className='small'> minutes</i>
+              {isStop ? Math.round( tideObj.durrAsMin ) : '...'}<i className='small'> min</i>
             </td>
             <td className='noRightBorder centreText'>
             {!isStop ?
@@ -213,8 +213,7 @@ const TideTaskExplicit = ({
   }
 
   return(
-    <td className='noRightBorder centreText'>
-      <em><i className="fas fa-exchange-alt fa-fw tealT"></i> </em>
+    <td className='noRightBorder centreText' title='Task'>
       <select
         id='tskSlctEdit'
         className='cap tableInput smTxt'

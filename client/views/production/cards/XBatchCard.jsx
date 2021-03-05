@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
-import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
+import Tabs from '/client/components/smallUi/Tabs/Tabs.jsx';
 
 import { TideBump } from '/client/components/riverX/TideWall';
 

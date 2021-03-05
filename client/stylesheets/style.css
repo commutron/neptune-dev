@@ -305,6 +305,10 @@ input::-webkit-calendar-picker-indicator {
 .popText { text-shadow: rgb(20,20,20) 1px 1px;}
 
 .wordBr {
+  word-break: break-word;
+  word-wrap: break-word;
+}
+.letterBr {
   word-break: break-all;
   word-wrap: break-word;
 }
@@ -489,9 +493,9 @@ input::-webkit-calendar-picker-indicator {
 
 .progBlue { 
   background: var(--silver); 
-  margin: 0.5vh 0 3vh 0;
-  width: 100%;
-  height: 0.75vh;
+  /*margin: 0.5vh 0 3vh 0;*/
+  /*width: 100%;*/
+  /*height: 0.75vh;*/
 }
 .progBlue::-webkit-progress-bar {
   background: var(--silver);
@@ -505,50 +509,62 @@ input::-webkit-calendar-picker-indicator {
 
 @keyframes scaleUp {
   0% { height: 0; }
-  100% { height: 1vh; }
+  100% { height: 100%; }
 }
 @keyframes scaleUpDelay {
   0% { height: 0; }
   50% { height: 0; }
-  100% { height: 1vh; }
+  100% { height: 100%; }
 }
 
-.pcBarWrap {
-  margin: 0;
-  width: 100%;
-  height: 1vh;
+n-piece-bar-wrap {
+  
+  display: block;
+}
+n-piece-bar {
   display: flex;
   justify-content: stretch;
+  flex-flow: row nowrap;
+  margin: 0;
+  width: 100%;
+  height: 6px;
+  
 }
-.pcBarWrap > div {
+n-pc-off, n-pc-on {
   flex: 2;
   border-right: 1px solid var(--clouds);
-  
   animation-timing-function: ease-out;
   animation-iteration-count: 1;
 }
-.pcBarWrap > div:last-child {
+n-pc-off:last-child,
+n-pc-on:last-child {
+  display: block;
   border-right: none;
 }
-.pcOn { 
+n-pc-on { 
   background-color: var(--peterriver);
   animation-name: scaleUpDelay;
 }
-.pcOn:nth-child(odd) { 
+n-pc-on:nth-child(odd) { 
   animation-duration: 300ms;
 }
-.pcOn:nth-child(even) { 
+n-pc-on:nth-child(even) { 
   animation-duration: 600ms;
 }
-.pcOff { 
+n-pc-off { 
   background-color: var(--silverfade);
   animation-name: scaleUp;
 }
-.pcOff:nth-child(even) { 
+n-pc-off:nth-child(even) { 
   animation-duration: 150ms;
 }
-.pcOff:nth-child(even) { 
+n-pc-off:nth-child(even) { 
   animation-duration: 250ms;
+}
+n-prog-bar progress {
+  margin: 0.5vh 0 3vh 0;
+  width: 100%;
+  height: 3px;
 }
 
 .eventList {

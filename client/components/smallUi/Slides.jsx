@@ -27,7 +27,7 @@ const Slides = ({ menu, disable, extraClass, children })=> {
             >{entry}</button>
         )})}
       </div>
-      <div className={`slidesSlide ${extraClass || ''}`}>
+      <div className={`slidesSlide forceScrollStyle ${extraClass || ''}`}>
 
         {children[show]}
       

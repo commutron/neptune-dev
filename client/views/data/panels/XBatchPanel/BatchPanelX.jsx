@@ -3,7 +3,7 @@ import React from 'react';
 // import Pref from '/client/global/pref.js';
 import CreateTag from '/client/components/tinyUi/CreateTag.jsx';
 //import UserName from '/client/components/tinyUi/UserName.jsx';
-import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
+import Tabs from '/client/components/smallUi/Tabs/Tabs.jsx';
 
 import WaterfallTimeline from '/client/components/bigUi/WaterfallTimeline.jsx';
 
@@ -13,9 +13,6 @@ import InfoTab from './InfoTab';
 import TimeTab from './TimeTab';
 import ProblemTab from './ProblemTab';
 import RapidExtendTab from './RapidExtendTab';
-
-//import RMATable from '../../../components/tables/RMATable.jsx';
-
 
 const BatchPanelX = ({ 
   batchData, seriesData, rapidsData, widgetData, variantData, groupData, 
@@ -119,8 +116,12 @@ const BatchPanelX = ({
             seriesData={seriesData}
             rapidsData={rapidsData}
             widgetData={widgetData}
-            flowData={flowData}
-            fallData={fallData}
+            urlString={
+              '?group=' + groupData.alias +
+              '&widget=' + widgetData.widget + 
+              '&ver=' + variantData.variant +
+              '&desc=' + widgetData.describe
+            }
             released={released}
             done={done}
             nowater={!hasFall && !seriesData}

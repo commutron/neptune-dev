@@ -6,7 +6,7 @@ import './style.css';
 import RiverSelect from '/client/components/forms/RiverSelectX';
 import BranchProgress from './BranchProgress';
 
-import ToggleBar from '/client/components/bigUi/ToolBar/ToggleBar';
+import ToggleBar from '/client/components/smallUi/Tabs/ToggleBar';
 import MiniStack from '/client/components/charts/MiniScales/MiniStack.jsx';
 import NumBox from '/client/components/tinyUi/NumBox.jsx';
 import { round2Decimal } from '/client/utility/Convert';

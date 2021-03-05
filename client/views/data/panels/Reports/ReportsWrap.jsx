@@ -1,6 +1,6 @@
 import React from 'react';
 // import Pref from '/client/global/pref.js';
-import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
+import Tabs from '/client/components/smallUi/Tabs/Tabs.jsx';
 
 import MonthKPIReport from './MonthKPIReport'; 
 import ProblemReport from './ProblemReport';

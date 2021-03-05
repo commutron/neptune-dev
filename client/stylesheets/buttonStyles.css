@@ -20,6 +20,7 @@
 	padding: 0.25rem;
 	background-color: transparent;
 	transition: all 250ms ease;
+	font-size: 1vmax;
 }
 .iconAction:focus, .iconAction:active {
   outline: dotted thick;
@@ -79,7 +80,6 @@
   background-color: transparent;
   border-width: 1.5px;
   border-style: solid;
-  font-size: medium;
   font-weight: 400;
   text-shadow: 0 0 0 black;
 }
@@ -332,7 +332,7 @@ button.variableInput.biggest { height: 64px; }
 .buttonLayerCorrect { height: 1em; }
 
 .taskLink {
-  margin: 0.75vh 0;
+  margin: 0.75vmax 0;
   width: 5.5vh;
   height: 5.5vh;
   border-radius: 50%;

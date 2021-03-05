@@ -13,7 +13,7 @@ import { RefCount } from '/client/components/bigUi/ShortfallMiniTops.jsx';
 import { PartsShort } from '/client/components/bigUi/ShortfallMiniTops.jsx';
 import { LeftToResolve } from '/client/components/bigUi/ShortfallMiniTops.jsx';
 import ShortfallStatusPie from '/client/components/charts/Blockers/ShortfallStatusPie.jsx';
-import TabsLite from '/client/components/bigUi/Tabs/TabsLite.jsx';
+import TabsLite from '/client/components/smallUi/Tabs/TabsLite.jsx';
 import NonConBubble from '/client/components/charts/NonCon/NonConBubble.jsx';
 import NonConBar from '/client/components/charts/NonCon/NonConBar.jsx';
 import NonConBarRefs from '/client/components/charts/NonCon/NonConBarRefs.jsx';

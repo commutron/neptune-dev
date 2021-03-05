@@ -104,7 +104,11 @@ Meteor.methods({
           deliverAt: new Date(doneTarget),
           quantity: Number(quant),
           instruct: howLink,
-          notes: note,
+          notes: {
+            time: new Date(),
+            who: Meteor.userId(),
+            content: note
+          },
           unlimited: noLimit,
           cascade: wfObjs,
           whitewater: wwObjs, // if extended & serialized
@@ -151,7 +155,19 @@ Meteor.methods({
   
   
   
-  
+  setRapidNote(rapidId, noteContent) {
+    if(Roles.userIsInRole(Meteor.userId(), ['edit','run'])) {
+      XRapidsDB.update({_id: rapidId, orgKey: Meteor.user().orgKey}, {
+        $set : { notes : {
+          time: new Date(),
+          who: Meteor.userId(),
+          content: noteContent
+        }}});
+      return true;
+    }else{
+      return false;
+    }
+  },
   
   
   

@@ -27,7 +27,7 @@ const PeoplePanel = ({
     <div>
       <table className='wide cap space'>
         <tbody key='engagedpeoplescope0'>
-          <tr className='leftText line2x big'>
+          <tr className='leftText line2x medBig'>
             <th colSpan='5'>{Pref.engaged} with a {Pref.batch}</th>
           </tr>
           {userChunks.map( (entry, index)=>{
@@ -47,7 +47,7 @@ const PeoplePanel = ({
       <p className='vmargin' />
       <table className='wide cap space'>
         <tbody key='dormantpeoplescope0'>
-          <tr className='leftText line2x big'>
+          <tr className='leftText line2x medBig'>
             <th colSpan='5'>{Pref.engagedNot}</th>
           </tr>
           {dUsers.map( (entry, index)=>{

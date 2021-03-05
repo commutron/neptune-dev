@@ -239,20 +239,6 @@ Meteor.methods({
       null;
     }
   },
-
-  setBatchNote(batchId, note) {
-    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
-        $set : { notes : {
-          time: new Date(),
-          who: Meteor.userId(),
-          content: note
-        }}});
-      return true;
-    }else{
-      return false;
-    }
-  },
   
 // setup quote time key // LEGACY SUPPORT
   upBatchTimeBudget(batchId) {

@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
-import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
+import Tabs from '/client/components/smallUi/Tabs/Tabs.jsx';
 
 import GeneralChunk from '/client/views/data/panels/BatchPanel/GeneralChunk.jsx';
 import ReleaseAction from '/client/components/bigUi/ReleasesModule.jsx';

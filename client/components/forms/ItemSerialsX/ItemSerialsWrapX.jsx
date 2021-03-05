@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 
 import ModelLarge from '/client/components/smallUi/ModelLarge';
 import ModelSmall from '/client/components/smallUi/ModelSmall';
-import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
+import Tabs from '/client/components/smallUi/Tabs/Tabs.jsx';
 
 import YMDItemForm from './YMDItemForm';
 import YrWkPnItemFormX from './YrWkPnItemFormX';

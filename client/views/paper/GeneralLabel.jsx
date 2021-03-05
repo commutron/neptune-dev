@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 const GeneralLabel = ({ batch, data })=> (
   <div className='noCopy'>
     <div className='centre'>
-      <div className='centreRow'>
+      <div className='evenRow'>
         <div className='centreText'>
           <i className='pxlg'>{batch}</i>
         </div>
@@ -18,8 +18,8 @@ const GeneralLabel = ({ batch, data })=> (
       <div className='centre up'>
         <i className='plg'>{data.group}</i>
         <i className='pmd'>{data.widget} Rev. {data.ver}</i>
-        <i className='pmd'>{data.desc}</i>
-        {/*<i className='pmd'>{data.sales}</i>*/}
+        <i className='psm'>{data.desc}</i>
+        <i className='psm'>{data.sales}</i>
       </div>
     </div>
   </div>

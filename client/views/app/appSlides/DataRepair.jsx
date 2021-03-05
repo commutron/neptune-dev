@@ -210,6 +210,17 @@ const DataRepair = ({ app, users })=> {
         >Unset Key</button>
       </div>
       
+      <div>
+        <h3><i className="fas fa-eraser fa-lg gap"></i>
+          Unset the notes key from batch+
+        </h3>
+        <button
+          onClick={()=>doCallThing("UNSETbplusNotesKey")}
+          className='action clearOrange'
+          disabled={true}
+        >Unset Key</button>
+      </div>
+      
       
       {/*
       <div>

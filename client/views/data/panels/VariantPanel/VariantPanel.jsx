@@ -1,12 +1,13 @@
 import React from 'react';
-// import moment from 'moment';
+import moment from 'moment';
 import { toast } from 'react-toastify';
 import Pref from '/client/global/pref.js';
 
 import CreateTag from '/client/components/tinyUi/CreateTag.jsx';
 // import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
-import TagsModule from '/client/components/bigUi/TagsModule.jsx';
-import NoteLine from '/client/components/smallUi/NoteLine.jsx';
+import TagsModule from '/client/components/bigUi/TagsModule';
+import NotesModule from '/client/components/bigUi/NotesModule';
+
 import VariantLive from '/client/components/forms/VariantLive';
 
 
@@ -18,8 +19,9 @@ const VariantPanel = ({
   
   const v = variantData;
   const w = widgetData;
-  // const g = groupData;
-  // const b = batchRelated;
+  
+  const calString = "ddd, MMM D /YY, h:mm A";
+  const calFunc = (d)=> moment(d).calendar(null, {sameElse: calString});
 
   const vAssmbl = v.assembly.sort((p1, p2)=> {
                   if (p1.component < p2.component) { return -1 }
@@ -96,10 +98,11 @@ const VariantPanel = ({
               
           <p className='numFont'>default units: {v.runUnits}</p>
           
-          <NoteLine 
-            action='variant'
-            id={v._id}
-            entry={v.notes} />
+          <NotesModule
+            sourceId={v._id}
+            noteObj={v.notes}
+            editMethod='setVariantNote'
+            cal={calFunc} />
             
         </div>
         

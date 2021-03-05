@@ -57,21 +57,20 @@ const DayPieceBar = ({ tideTimes, dateTime, regDayStart, regDayEnd, app, user })
   }, [dateTime]);
   
   return(
-    <Fragment>
-    <div className='pcBarWrap'>
-      
-      {chunkArr.map( (et, ix)=>{
-        if(!et) { 
-          return <div key={ix} className='pcOff'></div>;
-        }else{
-          return <div key={ix} className='pcOn'></div>;
-        }
-      })}
-      </div>
-    <div className='balance'>
-      <progress className='progBlue' value={durrTotal} max={maxHours}></progress>
-    </div>
-    </Fragment>
+    <n-piece-bar-wrap>
+      <n-piece-bar>
+        {chunkArr.map( (et, ix)=>{
+          if(!et) { 
+            return <n-pc-off key={ix}></n-pc-off>;
+          }else{
+            return <n-pc-on key={ix}></n-pc-on>;
+          }
+        })}
+      </n-piece-bar>
+      <n-prog-bar className='balance'>
+        <progress className='progBlue' value={durrTotal} max={maxHours}></progress>
+      </n-prog-bar>
+    </n-piece-bar-wrap>
   );
 };
 

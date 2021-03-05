@@ -56,56 +56,77 @@
 }
 
 .chart5Contain {
-  width: 5vw;
+  width: 5vmax;
   padding: 1vmax;
 }
-.chart5Contain .pieCore { font-size: 1vw; }
-.chart5Contain p { font-size: 1vw; }
+.chart5Contain .pieCore,
+.chart5Contain p { 
+  font-size: 1vmax; 
+  margin: 0;
+}
 
 .chart10Contain {
-  width: 10vw;
+  width: 10vmax;
   padding: 1vmax;
 }
-.chart10Contain .pieCore { font-size: 2.5vw; }
-.chart10Contain p { font-size: 1.25vw; margin: 5px 0; }
+.chart10Contain .pieCore { font-size: 2.5vmax; }
+.chart10Contain p { 
+  font-size: 1.25vmax; 
+  margin: 0;
+}
 
 .chart15Contain {
-  width: 15vw;
+  width: 15vmax;
   padding: 1vmax;
 }
-.chart15Contain .pieCore { font-size: 5vw; }
-.chart15Contain p { font-size: 1.5vw; }
-.chart15sq { height: 15vw; }
+.chart15Contain .pieCore { font-size: 5vmax; }
+.chart15Contain p { 
+  font-size: 1.5vmax;
+  margin: 0;
+}
+.chart15sq { height: 15vmax; }
 
 .chart20Contain {
-  width: 20vw;
+  width: 20vmax;
   padding: 1vmax;
 }
-.chart20Contain .pieCore { font-size: 8vw; }
-.chart20Contain p { font-size: 2vw; }
+.chart20Contain .pieCore { font-size: 8vmax; }
+.chart20Contain p { 
+  font-size: 2vmax;
+  margin: 0;
+}
 
 .chart25Contain {
-  width: 25vw;
+  width: 25vmax;
   padding: 1vmax;
 }
-.chart25Contain .pieCore { font-size: 10vw; }
-.chart25Contain p { font-size: 2.5vw; }
+.chart25Contain .pieCore { font-size: 10vmax; }
+.chart25Contain p { 
+  font-size: 2.5vmax;
+  margin: 0;
+}
 
 
 .chart30Contain {
-  width: 30vw;
-  height: 30vw;
+  width: 30vmax;
+  height: 30vmax;
   padding: 1vmax;
 }
-.chart30Contain .pieCore { font-size: 12vw; }
-.chart30Contain p { font-size: 3vw; }
+.chart30Contain .pieCore { font-size: 12vmax; }
+.chart30Contain p { 
+  font-size: 3vmax;
+  margin: 0;
+}
 
 .chart40Contain {
-  width: 40vw;
+  width: 40vmax;
   padding: 1vmax;
 }
-.chart40Contain .pieCore { font-size: 15vh; }
-.chart40Contain p { font-size: 3vw; }
+.chart40Contain .pieCore { font-size: 15vmax; }
+.chart40Contain p { 
+  font-size: 3vmax;
+  margin: 0;
+}
 
 .pieRing {
   position: relative;

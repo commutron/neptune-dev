@@ -27,7 +27,6 @@ Meteor.methods({
   			widgetId: widgetId,
   			versionKey: vKey,
         tags: [],
-        notes: false,
         createdAt: new Date(),
         createdWho: Meteor.userId(),
         updatedAt: new Date(),
@@ -286,20 +285,6 @@ Meteor.methods({
         }});
     }else{
       null;
-    }
-  },
-
-  setBatchNoteX(batchId, note) {
-    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
-      XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
-        $set : { notes : {
-          time: new Date(),
-          who: Meteor.userId(),
-          content: note
-        }}});
-      return true;
-    }else{
-      return false;
     }
   },
   
