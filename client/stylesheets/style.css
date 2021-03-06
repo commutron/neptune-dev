@@ -81,6 +81,9 @@ input::-webkit-calendar-picker-indicator {
   color: var(--clouds);
 	background-color: var(--emerald);
 }
+.greenLineHover:hover {
+  border-bottom-color: var(--nephritis);
+}
 .greenHover:disabled:hover {
   color: var(--emerald);
 	background-color: var(--clouds);

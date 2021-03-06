@@ -15,6 +15,9 @@ const RapidExtendTab = ({
   const calString = "ddd, MMM D /YY, h:mm A";
   const calFunc = (d)=> moment(d).calendar(null, {sameElse: calString});
   
+  const setItems = !seriesData ? 0 : seriesData.items.filter( 
+                        i => i.altPath.find( r => r.rapId !== false) ).length;
+  
   return(
     <div className='cardify'>
       {rapidsData.map( (r, ix)=>(
@@ -22,6 +25,8 @@ const RapidExtendTab = ({
         <RapidExtendCard 
           key={r._id+'rEx'+ix}
           batchData={batchData}
+          hasSeries={seriesData ? true : false}
+          rSetItems={setItems}
           widgetData={widgetData}
           urlString={urlString}
           rapid={r}

@@ -3,9 +3,10 @@ import Pref from '/client/global/pref.js';
 
 const UserNice = ({ id })=> {
   const name = Meteor.users.findOne({_id : id});
-  let nice = name ? name.username.split('.') : 'not found';
-  return (
-    <i className='cap'>{nice[0]} {nice[1] || null}</i>
+  let nice = !name ? 'not found' :
+              name.username.replace('.', ' ').replace('_', ' ');
+  return(
+    <i className='cap'>{nice}</i>
   );
 };
 

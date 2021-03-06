@@ -50,7 +50,7 @@ const InfoTab = ({
       <div className='centreText'>
         <h3 className='leftText'>Status</h3>      
         { b.live &&
-          <div className='centreRow balance'>
+          <div className='balance'>
             <div className='statusBlock'>
               <PrioritySquareData
                 batchID={b._id}

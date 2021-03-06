@@ -29,7 +29,7 @@ const NotesModule = ({ sourceId, noteObj, editMethod, cal })=> {
               defaultValue={noteObj.content}></textarea>
             <span className='rightRow'>
               <button 
-                className='miniAction gap med' 
+                className='miniAction gap med greenLineHover' 
                 type='submit' 
                 form='noteForm'
               >Save</button>

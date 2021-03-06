@@ -65,13 +65,12 @@ const TideFollow = ({ proRoute, invertColor })=> {
     <Fragment>
       <ContextMenuTrigger
   			id='tideF0ll0w1'
-  			holdToDisplay={!engaged /*|| proRoute*/ ? 1 : 500}
+  			holdToDisplay={!engaged ? 1 : 500}
   			attributes={ {className: `proRight ${invertColor ? 'invert' : ''}`} }>
         <button 
           aria-label={tootip}
-          onClick={()=>go(engaged && engaged.tName)}
+          onClick={()=>!engaged ? null :go(engaged && engaged.tName)}
           className={`taskLink followTask tideFollowTip ${!engaged ? '' : 'fGreen'}`}
-          disabled={!engaged}
         ><i className='numFont up'>{uFl}{uLl}</i>
          <i className={!engaged ? '' : engaged.tName !== proRoute ? 'spin2' : 'turn'}></i>
         </button>

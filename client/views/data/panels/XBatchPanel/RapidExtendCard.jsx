@@ -1,21 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
 import 'moment-business-time';
 import '/client/utility/ShipTime.js';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import UserNice from '/client/components/smallUi/UserNice.jsx';
-
 import ActionLink from '/client/components/tinyUi/ActionLink.jsx';
-
-import { min2hr } from '/client/utility/Convert.js';
 
 import NotesModule from '/client/components/bigUi/NotesModule';
 
+import InfoEditBlock from '/client/components/forms/Rapid/InfoEditBlock';
+
 
 const RapidExtendCard = ({ 
-  batchData, widgetData, urlString,
+  batchData, hasSeries, rSetItems, widgetData, urlString,
   rapid, cal
 })=> {
   
@@ -33,16 +31,9 @@ const RapidExtendCard = ({
   
   return(
     <div className='wAuto'>
-      <p>
-        
-      </p>
+     
           
-          
-          
-          
-          
-          
-      <div className='comfort'>
+      <div className='comfort vmarginhalf'>
         
         <div className='centreRow'>
           
@@ -54,7 +45,7 @@ const RapidExtendCard = ({
             }
           </span>
           <span className='big gapR'>{rapid.rapid}</span>
-          <span className='medBig gap'>{rapid.issueOrder}</span>
+          
         </div>
       
       
@@ -76,7 +67,7 @@ const RapidExtendCard = ({
               onClick={()=>handleRemove(rapid._id)}
               className='action clearRed'
               disabled={!rapid.live}
-            ><i className="fas fa-trash fa-lg gap redT"></i> Delete Extension</button>
+            ><i className="fas fa-trash fa-lg gap redT"></i> Delete</button>
 
 
         </div>
@@ -85,60 +76,57 @@ const RapidExtendCard = ({
       </div>
       
       <div className='comfort'>
+        
+        <span>  
+          <InfoEditBlock 
+            rapidData={rapid}
+            allQ={batchData.quantity}
+            rSetItems={rSetItems}
+            cal={cal} />
           
-         
-        <div className='readlines'>  
-          <p>Created: {cal(rapid.createdAt)} by <UserNice id={rapid.createdWho} /></p>
+          <br /><hr />
           
-          <p>Delivery Goal: {cal(rapid.deliverAt)}</p>
           
-          {rapid.closedWho &&
-            <p>Closed {cal(rapid.closedAt)} by <UserNice id={rapid.closedWho} /></p>}
-          
-          <p>Quantity: <n-num>{rapid.unlimited ? 'Unlimited' : rapid.quantity}</n-num></p>
+          <NotesModule
+            sourceId={rapid._id}
+            noteObj={rapid.notes}
+            editMethod='setRapidNote'
+            cal={cal} />
             
-          <p>Extra Minutes: <n-num>{rapid.timeBudget}</n-num></p>
-          
-          <p className='wordBr'>Override Instruction: {rapid.instruct}</p>  
-        </div>
-        
-        <NotesModule
-          sourceId={rapid._id}
-          noteObj={rapid.notes}
-          editMethod='setRapidNote'
-          cal={cal} /> 
+        </span>
             
-      </div>
-
-      <div>    
+        
+        <span>  
           
-        <dl>
-          <dt>Cascade</dt>
-          {rapid.cascade.map( (e, ix)=>(
-            <dd key={'cs'+ix}>{e.gate}</dd>
-          ))}
-        </dl>
-        
-        <dl>
-          <dt>Whitewater</dt>
-          {rapid.whitewater.map( (e, ix)=>(
-            <dd key={'ww'+ix}>{e.step}</dd>
-          ))}
-        </dl>
-        
-        <dl>
-          <dt>Auto NonCons</dt>
-          {rapid.autoNC.map( (e, ix)=>(
-            <dd key={'nc'+ix}>{e.type} - {e.ref}</dd>
-          ))}
-        </dl>
-        
-        <dl>
-          <dt>Auto Shortfalls</dt>
-          {rapid.autoSH.map( (e, ix)=>(
-            <dd key={'sh'+ix}>{e.part} - {e.refs}</dd>
-          ))}
-        </dl>
+          <dl>
+            <dt>Cascade</dt>
+            {rapid.cascade.map( (e, ix)=>(
+              <dd key={'cs'+ix}>{e.gate}</dd>
+            ))}
+          </dl>
+          
+          <dl>
+            <dt>Whitewater</dt>
+            {rapid.whitewater.map( (e, ix)=>(
+              <dd key={'ww'+ix}>{e.step}</dd>
+            ))}
+          </dl>
+          
+          <dl>
+            <dt>Auto NonCons</dt>
+            {rapid.autoNC.map( (e, ix)=>(
+              <dd key={'nc'+ix}>{e.type} - {e.ref}</dd>
+            ))}
+          </dl>
+          
+          <dl>
+            <dt>Auto Shortfalls</dt>
+            {rapid.autoSH.map( (e, ix)=>(
+              <dd key={'sh'+ix}>{e.part} - {e.refs}</dd>
+            ))}
+          </dl>
+          
+        </span>
         
         
       </div>

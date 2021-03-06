@@ -79,7 +79,7 @@ const DownstreamScrollChunk = ({
       </div>
       
       {!isDone ?
-        <div title={`${q2t} minutes`}>{q2tStatus}</div>
+        <div title={`${Math.round(q2t)} minutes`}>{q2tStatus}</div>
       : <div>{Pref.batch} {Pref.isDone}</div> }
       
       <BranchProgress

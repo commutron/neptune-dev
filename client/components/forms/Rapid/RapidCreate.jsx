@@ -11,7 +11,7 @@ import AddAutoNC from './AddAutoNC';
 import AddAutoSH from './AddAutoSH';
 
 const RapidCreate = ({ 
-  batchId, batchNum, groupId, hasSeries, srsQ, allQ,
+  batchId, batchNum, groupId, hasSeries, allQ,
   flows, user, ncTypesCombo, vassembly,
   app, lock
 })=> (
@@ -27,7 +27,6 @@ const RapidCreate = ({
       batchId={batchId}
       batchNum={batchNum}
       hasSeries={hasSeries}
-      srsQ={srsQ}
       allQ={allQ}
       flows={flows}
       ncTypesCombo={ncTypesCombo}
@@ -42,7 +41,7 @@ export default RapidCreate;
 
 const RapidCreateForm = ({ 
   batchId, batchNum, groupId, 
-  hasSeries, srsQ, allQ, flows,
+  hasSeries, allQ, flows,
   ncTypesCombo, vassembly, user, app, selfclose
 })=> {
 
@@ -72,7 +71,7 @@ const RapidCreateForm = ({
   
   useEffect( ()=> {
     if(applyState || noLimitState) {
-      this.quant.value = hasSeries ? srsQ : allQ;
+      this.quant.value = allQ;
     }else{
       this.quant.value = 0;
     }

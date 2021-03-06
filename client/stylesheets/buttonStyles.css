@@ -473,10 +473,37 @@ button.variableInput.biggest { height: 64px; }
 .liteToolOff { background-color: var(--navIndicatorA); }
 .liteToolOff:active { background-color: var(--navIndicatorB); }
 
+
+.interForm {
+  background-color: transparent;
+  margin: 0;
+  
+}
+.interForm p {
+  padding: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.interInput {
+  border-top: 0.5px inset lightgray;
+  border-right: 0.5px inset lightgray;
+  border-left: 0.5px inset lightgray;
+  background-color: transparent;
+  margin: 0 0 0 0.5ch;
+  width: 18ch;
+  background-color: var(--cloudstrans);
+}
+input[type='checkbox'].interInput,
+input[type='radio'].interInput {
+  filter: saturate(0);
+}
+
 .interSelect {
   line-height: 1;
-  font-size: 1rem;
-  background-color: transparent;
+  /*font-size: 1rem;*/
+  background-color: var(--cloudstrans);
   margin: 0 0.5ch;
 }
 .interSelect:disabled {

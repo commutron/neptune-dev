@@ -4,7 +4,7 @@ import moment from 'moment';
 Meteor.methods({
 
   addExtendRapid(batchId, groupId, rType, exBatch, issueNum,
-    exTime, doneTarget, flows, falls, howLink, note, noLimit, quant,
+    exTime, doneTarget, flows, falls, howLink, note, quant,
     nonConArr, shortArr
   ) {
     const accessKey = Meteor.user().orgKey;
@@ -109,7 +109,6 @@ Meteor.methods({
             who: Meteor.userId(),
             content: note
           },
-          unlimited: noLimit,
           cascade: wfObjs,
           whitewater: wwObjs, // if extended & serialized
           autoNC: nonConArr, // {ref: "k1", type: "upside down"}
@@ -210,17 +209,16 @@ Meteor.methods({
     const rapids = XRapidsDB.find({}).fetch();
     
     for(let rp of rapids) {
-      const apAl = rp.applyAll;
       
-      XRapidsDB.update(rp._id, {
-        $set: {
-          unlimited: apAl,
-          cascade: []
-        },
-      });
+      // XRapidsDB.update(rp._id, {
+      //   $set: {
+      //     unlimited: apAl,
+      //     cascade: []
+      //   },
+      // });
       XRapidsDB.update(rp._id, {
         $unset: {
-          'applyAll': "" 
+          'unlimited': "" 
         }
       });
       
