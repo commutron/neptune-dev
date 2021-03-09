@@ -707,7 +707,7 @@ n-sm-model-content {
   margin: 0;
   display: flex;
   flex-flow: row nowrap;
-  align-content: center;
+  align-items: center;
 }
 .evenRow {
   justify-content: space-evenly;

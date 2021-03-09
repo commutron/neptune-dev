@@ -487,14 +487,15 @@ button.variableInput.biggest { height: 64px; }
 }
 
 .interInput {
-  border-top: 0.5px inset lightgray;
+  border-top: 0.5px outset lightgray;
   border-right: 0.5px inset lightgray;
-  border-left: 0.5px inset lightgray;
+  border-left: 0.5px outset lightgray;
   background-color: transparent;
   margin: 0 0 0 0.5ch;
   width: 18ch;
   background-color: var(--cloudstrans);
 }
+
 input[type='checkbox'].interInput,
 input[type='radio'].interInput {
   filter: saturate(0);
@@ -504,7 +505,7 @@ input[type='radio'].interInput {
   line-height: 1;
   /*font-size: 1rem;*/
   background-color: var(--cloudstrans);
-  margin: 0 0.5ch;
+  margin: 0 0 0 0.5ch;
 }
 .interSelect:disabled {
   opacity: 1;

@@ -5,7 +5,7 @@ import StoneSelect from './StoneSelect.jsx';
 import RiverFork from './RiverFork.jsx';
 import RMACascade from './RMACascade.jsx';
 import MiniHistory from './MiniHistory.jsx';
-import AltMarker from '/client/components/tinyUi/AltMarker.jsx';
+import AltMarker from './AltMarker.jsx';
 
 const River = ({ 
   batchData, itemData, widgetData, 

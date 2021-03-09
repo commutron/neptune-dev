@@ -64,8 +64,35 @@ SyncedCron.add({
   job: ()=> runLoop(countDoneUnits, 'doneUnitLiteWeeks', 'week')
 });
   
+// daily events
+SyncedCron.add({
+  name: 'Daily Lunch Break',
+  schedule: (parser)=> parser.text('at 5:52 am'),
+  job: ()=> setDailyEvent(1)
+});
+
 SyncedCron.start();
   
+  
+function setDailyEvent(ev) {
+  // const apps = AppDB.find({},{fields:{'orgKey':1}}).fetch();
+  // for(let app of apps) {
+    
+    AppDB.update({}, {
+      $set : { 
+        dailyEvent : ev
+    }});
+    
+    Meteor.setTimeout(()=>{
+      AppDB.update({}, {
+        $set : { 
+          dailyEvent : 0
+      }});
+    }, 10000);
+      
+      
+  // }
+}
   
 function countDoneUnits(accessKey, rangeStart, rangeEnd) {
   return new Promise(function(resolve) {

@@ -47,7 +47,6 @@ const RapidCreateForm = ({
 
   const [ typeState, typeSet ] = useState(false);
   const [ applyState, applySet ] = useState(false);
-  const [ noLimitState, noLimitSet ] = useState(false);
   
   const [ waterState, waterSet ] = useState('fall');
   
@@ -59,23 +58,11 @@ const RapidCreateForm = ({
   
   useEffect( ()=> {
     if(applyState) {
-      noLimitSet(false);
-    }
-  }, [applyState]);
-  
-  useEffect( ()=> {
-    if(noLimitState) {
-      applySet(false);
-    }
-  }, [noLimitState]);
-  
-  useEffect( ()=> {
-    if(applyState || noLimitState) {
       this.quant.value = allQ;
     }else{
       this.quant.value = 0;
     }
-  }, [applyState, noLimitState]);
+  }, [applyState]);
   
   function save(e) {
     e.preventDefault();
@@ -93,7 +80,6 @@ const RapidCreateForm = ({
     
     const noteText = this.noteText.value.trim();
     
-    const noLimit = this.noLimit.checked;
     const quant = this.quant.value.trim();
     
     const addFlow = waterState === 'both' || waterState === 'flow';
@@ -113,7 +99,7 @@ const RapidCreateForm = ({
     
     Meteor.call('addExtendRapid', 
       batchId, groupId, rType, batchNum, issueNum,
-      exTime, doneTarget, flows, falls, howLink, noteText, noLimit, quant,
+      exTime, doneTarget, flows, falls, howLink, noteText, quant,
       nonConArr, shortArr,
     
       (error, reply)=>{
@@ -189,7 +175,7 @@ const RapidCreateForm = ({
         </div>
       
         <div className='centre vmargin'>
-          <label htmlFor='quant' className='breath'>Quantity<br />
+          <label htmlFor='quant' className='breath'>Max Quantity<br />
           <input
             type='number'
             id='quant'
@@ -197,7 +183,7 @@ const RapidCreateForm = ({
             min={0}
             max={allQ}
             placeholder={allQ}
-            disabled={applyState || noLimitState}
+            disabled={applyState}
             required 
           /><br />
             <label htmlFor='applyAll' className='beside'
@@ -208,29 +194,20 @@ const RapidCreateForm = ({
                 className='indenText inlineCheckbox'
                 onChange={(e)=>applySet(e.target.checked)}
                 checked={applyState}
-              />Apply to All
-            </label>
-            <label 
-              htmlFor='noLimit' className='beside' 
-              title={`No fixed quantity.\nMin: 0, Max: ${allQ}`}>
-              <input
-                type='checkbox'
-                id='noLimit'
-                className='indenText inlineCheckbox'
-                onChange={(e)=>noLimitSet(e.target.checked)}
-                checked={noLimitState}
-              />No Limit
+              />Apply to Maximum
             </label>
           </label>
         </div>
         
         <div className='centreRow vmargin'>
         
-          <label htmlFor='howLink' className='breath'>Alternative Instruction<br />
+          <label htmlFor='howLink' className='breath'>
+            <strike>Alternative Instruction</strike><br />
           <input
             type='url'
             id='howLink'
             placeholder="http://"
+            disabled={true}
           /></label>
         
         </div>

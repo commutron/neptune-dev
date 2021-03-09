@@ -204,14 +204,14 @@ input, select, textarea {
   font-size: 1rem;
   text-indent: 0.25rem;
   border-width: 1px;
-  border-style: dashed;
+  border-style: solid;
   border-bottom-color: black;
   border-radius: 0px;
 }
-input:required, 
-select:required, 
-textarea:required{
-  border-style: solid;
+input:optional, 
+select:optional, 
+textarea:optional {
+  border-style: dashed;
 }
 
 input:invalid, select:invalid, textarea:invalid {

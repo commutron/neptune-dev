@@ -20,8 +20,8 @@ import { NavPlaceholder } from '/client/layouts/NavButton/NavButton';
 const StartView = ({user, app}) =>	{
   
   useLayoutEffect( ()=>{
-    InboxToastPop(user);
-  }, [user]);
+    InboxToastPop(user, app);
+  }, [user, app]);
   
   if( !user || !app ) {
     return(

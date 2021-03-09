@@ -30,6 +30,7 @@
 
 .printLabel input {
   width: 300px;
+  height: auto;
   border: none;
   font-weight: 800;
   text-align: center;
@@ -48,6 +49,7 @@
 }
 .pmd { font-size: 3rem; }
 .psm { font-size: 2.5rem; }
+.pxsm { font-size: 2rem; }
 
 @media print {
   .printLabel {

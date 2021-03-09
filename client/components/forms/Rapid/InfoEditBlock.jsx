@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-business-time';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
-// import { min2hr } from '/client/utility/Convert.js';
+import { toast } from 'react-toastify';
 
 
 const InfoEditBlock = ({ rapidData, allQ, rSetItems, cal })=> {
@@ -14,7 +14,6 @@ const InfoEditBlock = ({ rapidData, allQ, rSetItems, cal })=> {
     deliverAt: null,
     closedAt: null,
     closedWho: null,
-    unlimited: null,
     quantity: null,
     timeBudget: null,
     instruct: null
@@ -30,7 +29,7 @@ const InfoEditBlock = ({ rapidData, allQ, rSetItems, cal })=> {
       if(applyState) {
         this.rQty.value = allQ;
       }else{
-        this.rQty.value = 0;
+        this.rQty.value = rSetItems || 0;
       }
     }
   }, [applyState]);
@@ -54,12 +53,13 @@ const InfoEditBlock = ({ rapidData, allQ, rSetItems, cal })=> {
     const howLink = howText.length === 0 ? false : howText;
     
     
-    
-    
-    
-    console.log({
-      rapidType, issueNum, doneTarget, quant, exTime, howLink
-    });
+    Meteor.call('editExRapidBasic', rapidData._id, 
+      rapidType, issueNum, doneTarget, quant, exTime, howLink,
+      (error, re)=>{
+        error && console.log(error);
+        re ? toast.success('Saved') : toast.error('unsuccessful');
+      });
+      
     editSet(false);
   }
   
@@ -78,7 +78,7 @@ const InfoEditBlock = ({ rapidData, allQ, rSetItems, cal })=> {
         <p>Extend Type:
           <select
             id='rType'
-            className='interInput miniIn18'
+            className='interSelect miniIn18'
             defaultValue={rapid.type}
             required>
               <option></option>
@@ -150,13 +150,14 @@ const InfoEditBlock = ({ rapidData, allQ, rSetItems, cal })=> {
             required />
         </p>
         
-        <p>Override Instruction:
+        <p title='unavailable'><strike>Override Instruction:</strike>
           <input 
             type='url'
             id='rInsc'
             className='interInput'
             placeholder='http://'
-            defaultValue={rapid.instruct || ''} />
+            defaultValue={rapid.instruct || ''}
+            disabled={true} />
         </p>
         
         <span className='rightRow'>
@@ -165,12 +166,12 @@ const InfoEditBlock = ({ rapidData, allQ, rSetItems, cal })=> {
             type='button'
             className='miniAction med gap'
             onClick={()=>editSet(false)}
-          >cancel</button>
+          ><i className='far fa-edit'></i> cancel</button>
         
           <button
             type='submit'
             className='miniAction med gap greenLineHover'
-          >save</button>
+          ><i className='fas fa-check'></i> save</button>
         </span>
         
       </form>
@@ -188,7 +189,7 @@ const InfoEditBlock = ({ rapidData, allQ, rSetItems, cal })=> {
       {rapid.closedWho &&
         <p>Closed By: <UserNice id={rapid.closedWho} /></p>}
       
-      <p>Extend Type: <span className='med'>{rapid.rapid}</span></p>
+      <p>Extend Type: <span className='med cap'>{rapid.type}</span></p>
       
       <p>Issue Number: <span className='med'>{rapid.issueOrder}</span></p>
       
@@ -198,7 +199,9 @@ const InfoEditBlock = ({ rapidData, allQ, rSetItems, cal })=> {
         
       <p>Extra Minutes: <n-num>{rapid.timeBudget}</n-num></p>
       
-      <p className='wordBr'>Override Instruction: {rapid.instruct || ''}</p>  
+      <p className='wordBr' title='unavailable'>
+        <strike>Override Instruction: {rapid.instruct || ''}</strike>
+      </p>  
       
       <span className='rightRow'>
         <button
@@ -208,7 +211,7 @@ const InfoEditBlock = ({ rapidData, allQ, rSetItems, cal })=> {
             !rapidData.live || 
             !Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])
           }
-        >edit</button>
+        ><i className='fas fa-edit'></i> edit</button>
       </span>
     </div>
   );

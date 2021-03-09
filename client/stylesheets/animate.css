@@ -16,7 +16,7 @@
 @keyframes slideInRight {
   0% {
     opacity: 0;
-    transform: translate3d(500px, 0, 0);
+    transform: translate3d(110%, 0, 0);
   }
   100% {
     opacity: 1;
@@ -31,14 +31,14 @@
   }
   100% {
     opacity: 0;
-    transform: translate3d(500px, 0, 0);
+    transform: translate3d(110%, 0, 0);
   }
 }
 
 @keyframes slideInLeft {
   0% {
     opacity: 0;
-    transform: translate3d(-500px, 0, 1px);
+    transform: translate3d(-110%, 0, 1px);
   }
   100% {
     opacity: 1;
@@ -53,7 +53,7 @@
   }
   100% {
     opacity: 0;
-    transform: translate3d(-750px, 0, 0);
+    transform: translate3d(-110%, 0, 0);
   }
 }
 

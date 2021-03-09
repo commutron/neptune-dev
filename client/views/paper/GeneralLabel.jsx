@@ -11,7 +11,7 @@ const GeneralLabel = ({ batch, data })=> (
           <i className='pxlg'>{batch}</i>
         </div>
         <div className='centreText'>
-          <i className='psm'>Qty</i><br />
+          <i className='pxsm'>Qty</i><br />
           <i><input className='plg' defaultValue={data.quant} maxLength='5' /></i>
         </div>
       </div>
