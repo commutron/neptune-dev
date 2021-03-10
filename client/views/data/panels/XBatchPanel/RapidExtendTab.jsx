@@ -7,7 +7,7 @@ import RapidExtendCard from './RapidExtendCard';
 
 const RapidExtendTab = ({ 
   batchData, seriesData, rapidsData, 
-  widgetData, urlString,
+  widgetData, vassembly, urlString,
   released, done, nowater,
   app, user, brancheS, isDebug
 })=> {
@@ -28,8 +28,11 @@ const RapidExtendTab = ({
           hasSeries={seriesData ? true : false}
           rSetItems={setItems}
           widgetData={widgetData}
+          vassembly={vassembly}
           urlString={urlString}
           rapid={r}
+          app={app}
+          user={user}
           cal={calFunc}
         />
       ))}

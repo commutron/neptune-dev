@@ -1,31 +1,131 @@
 import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
+import { toast } from 'react-toastify';
 
 import '/client/components/bigUi/ArrayBuilder/style.css';
 
-const AddFlowSteps = ({ app, flowsState, flowsSet })=> {
+export const FlowStepsWrap = ({ rapidData, hasSeries, rSetItems, app })=> {
+  
+  const [ editState, editSet ] = useState(false);
+  
+  const defaultFlow = rapidData ? rapidData.whitewater : [];
+  
+  const [ flowsState, flowsSet ] = useState(defaultFlow);
+  
+  function handleSave() {
+      
+    let flows = flowsState;
+  
+    Meteor.call('setExRapidFlow', rapidData._id, flows, (error, reply)=> {
+      if(error) {
+        console.log(error);
+        toast.error('Server Error');
+      }
+      if(reply) {
+        null;
+      }else{
+        toast.warning('error');
+      }
+    });
+    editSet(false);
+  }
+  
+  function handleClear() {
+    Meteor.call('clearExRapidFlow', rapidData._id,
+      (error, reply)=>{
+        if(error) {
+          console.log(error);
+          toast.error('Server Error');
+        }
+        if(reply) {
+          null;
+        }else{
+          toast.warning('error');
+        }
+    });
+  }
+  
+  function handleCancel() {
+    editSet(false);
+    flowsSet(defaultFlow);
+  }
+  
+  if(!hasSeries) { 
+    return null;
+  }
+  
+  return(
+    <div className='vmargin'>
+      
+      <dt className='fullline'>Flow Steps</dt>
+      
+      <AddFlowSteps
+        rSetItems={rSetItems}
+        app={app}
+        flowsState={flowsState}
+        flowsSet={flowsSet}
+        editState={editState}
+        handleClear={handleClear}
+      />
+      
+      {editState ?
+        <span className='rightRow'>
+          <button
+            type='button'
+            className='miniAction med gap'
+            onClick={()=>handleCancel()}
+          ><n-fa1><i className='far fa-edit'></i></n-fa1> cancel</button>
+          
+          <button
+            className='smallAction gap clearGreen'
+            onClick={()=>handleSave()}
+            disabled={
+              !rapidData.live || flowsState.length === 0 || 
+              flowsState[flowsState.length-1].type !== 'finish'
+            }
+          >Save</button>
+        </span>
+      :
+        <span className='rightRow'>
+          <button
+            className='miniAction gap'
+            onClick={()=>editSet(!editState)}
+            disabled={
+              !rapidData.live || 
+              !Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])
+            }
+          ><n-fa2><i className='fas fa-edit'></i></n-fa2> edit</button>
+        </span>
+      }
+    </div>
+  );
+};
 
+
+
+const AddFlowSteps = ({ 
+  rSetItems, app, 
+  flowsState, flowsSet, editState, handleClear 
+})=> {
+  
+  const dfEnd = flowsState.length > 0 && 
+                flowsState[flowsState.length-1].type === 'finish' ?
+                flowsState[flowsState.length-1] : app.lastTrack;
+                
   const [ branchSelect, branchSet ] = useState(false);
   const [ steps, stepsSet ] = useState( [] );
   
-  const [ endState, endSet ] = useState( app.lastTrack );
+  const [ endState, endSet ] = useState( dfEnd );
   
   const [ toggle, toggleChange ] = useState( false );
   
+  useEffect( ()=>{
+    stepsSet(flowsState);
+    endSet(dfEnd);
+  }, [editState]);
+  
   const branchesSort = app.branches.sort((b1, b2)=>
           b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
-  
-  // useEffect( ()=>{
-  //   if(baseline) {
-  //     let baseSet = new Set();
-  //     for(let t of baseline) {
-  //       let o = options.find(x => x.key === t.key);
-  //       o ? o['how'] = t.how : null;
-  //       o ? baseSet.add(o) : null;
-  //     }
-  //     stepsSet( [...baseSet] );
-  //   }else{null}
-  // }, []);
   
   function sendUp() {
     // steps set from state
@@ -40,29 +140,27 @@ const AddFlowSteps = ({ app, flowsState, flowsSet })=> {
   
   function changeEnding(e) {
     const endVal = this.endTrkStep.value;
-    let endObj = app.lastTrack;
+    let endObj = dfEnd;
     endObj.step = endVal;
     endSet(endObj);
   }
 
   function addStep(e) {
     e.preventDefault();
-    let list = new Set( steps ); // steps set from state
+    let list = new Set( steps ); // set from state
     const sk = this.rStep.value;
-    const step = app.trackOption.find( x => x.key === sk ); // the step object
+    const step = app.trackOption.find( x => x.key === sk ); // step object
     
     if(step) {
       // take off the end finish step
       list.delete(endState);
-      
       // add step to list
       list.add(step);
       // update state with the new list
       stepsSet( [...list] );
-      
       // clear form
       this.rStep.value = '';
-      flowsSet(false);
+      flowsSet([]);
     }
   }
 
@@ -76,7 +174,7 @@ const AddFlowSteps = ({ app, flowsState, flowsSet })=> {
     // update state
     stepsSet( [...curr] );
     if(nope.type === 'finish') {
-      flowsSet(false);
+      flowsSet([]);
     }
   }
   
@@ -106,7 +204,7 @@ const AddFlowSteps = ({ app, flowsState, flowsSet })=> {
   
   const lockout = steps.filter( 
                     y => Object.values( y )
-                      .includes( 'f1n15h1t3m5t3p' ) )
+                      .includes( 'finish' ) )
                         .length > 0;
   
   let optionsSort = app.trackOption.sort((t1, t2)=>
@@ -116,54 +214,56 @@ const AddFlowSteps = ({ app, flowsState, flowsSet })=> {
     optionsSort.filter( x => !x.branchKey || x.branchKey === '') :
     optionsSort.filter( x => x.branchKey === branchSelect);
 
-  return (
+  return(
     <div>
-      <div className='inlineForm'>
-          <label htmlFor='phasefltr' className='cap'>{Pref.branch}<br />
-            <select 
-              id='phasefltr' 
-              className='miniIn12'
-              onChange={(e)=>branchSet( e.target.value )} 
-              >
-              <option value='other'>No Branch</option>
-              {branchesSort.map( (entry, index)=>{
-                return( 
-                  <option 
-                    key={index+'br'} 
-                    value={entry.brKey}
-                  >{entry.branch}</option>
-              )})}
-            </select>
-          </label>
+    {rSetItems > 0 && 
+      <p className='trueyellow centreText'>Items have begun this flow</p>}
+    {editState &&
+      <div className='inlineForm interForm'>
+        <label htmlFor='phasefltr' className='cap'>{Pref.branch}<br />
+          <select 
+            id='phasefltr' 
+            className='miniIn12 interSelect'
+            onChange={(e)=>branchSet( e.target.value )} 
+            >
+            <option value='other'>No Branch</option>
+            {branchesSort.map( (entry, index)=>{
+              return( 
+                <option 
+                  key={index+'br'} 
+                  value={entry.brKey}
+                >{entry.branch}</option>
+            )})}
+          </select>
+        </label>
         
-            <label 
-              htmlFor='rStep' 
-            >Tracking Step<br />
-              <select id='rStep' className='cap'>
-                <option value=''></option>
-                {branchedOps.map( (entry, index)=>{
-                  return ( <option key={index} value={entry.key}>{entry.step + ' - ' + entry.type}</option> );
-                })}
-              </select>
-            </label>
-          
-          <label htmlFor='goAddStp'><br />
-            <button
-              type='button'
-              id='goAddStp'
-              onClick={(e)=>addStep(e)}
-              className='smallAction clearBlack'
-            >Add</button>
-          </label>
-            
-          </div>
+        <label htmlFor='rStep'>Tracking Step<br />
+          <select id='rStep' className='cap interSelect'>
+            <option value=''></option>
+            {branchedOps.map( (entry, index)=>{
+              return ( <option key={index} value={entry.key}>{entry.step + ' - ' + entry.type}</option> );
+            })}
+          </select>
+        </label>
+        
+        <label htmlFor='goAddStp'><br />
+          <button
+            type='button'
+            id='goAddStp'
+            onClick={(e)=>addStep(e)}
+            className='smallAction clearBlack'
+          >Add</button>
+        </label>
+      </div>
+    }
       <div className='vmarginhalf'>
         <div className='stepList'>
-          {steps.map( (entry, index)=> {
+          {(editState ? steps : flowsState).map( (entry, index)=> {
           return(                 
             <div key={index}>                      
               <div>{entry.step}</div>
               <div>{entry.type}</div>
+              {!editState ? <span></span> :
               <div>
                 <button
                   type='button'
@@ -187,18 +287,21 @@ const AddFlowSteps = ({ app, flowsState, flowsSet })=> {
                   id='ex'
                   className='smallAction redHover'
                   onClick={()=>removeOne(entry)}
-                  disabled={lockout && entry.key !== 'f1n15h1t3m5t3p'}
+                  disabled={lockout && entry.type !== 'finish'}
                 ><i className='fas fa-times'></i></button>
               </div>
+              }
             </div>
           )})}
         </div>
+        
+      {editState &&
         <div className='flexRR vmarginhalf'>
           <span>
             <select
               id='endTrkStep'
-              className='miniIn12'
-              defaultValue={app.lastTrack.step}
+              className='miniIn12 interSelect'
+              defaultValue={dfEnd.step}
               onChange={(e)=>changeEnding(e)}
               required
             >
@@ -208,12 +311,20 @@ const AddFlowSteps = ({ app, flowsState, flowsSet })=> {
             </select>
             <button
               type='button'
-              className='smallAction clearGreen up'
-              disabled={false}
+              className='smallAction clearGreen'
+              disabled={lockout}
               onClick={(e)=>sendUp(e)}>Finish Mini Flow</button>
           </span>
         </div>
-       
+      }
+      {editState && handleClear && steps.length === 0 ?
+        <span className='rightRow'>
+          <button
+            className='miniAction gap greenLineHover'
+            onClick={()=>handleClear()}
+          >Save Empty Flow</button>
+        </span>
+      : null}
       </div>
     </div>
   );

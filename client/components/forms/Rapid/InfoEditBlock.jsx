@@ -164,13 +164,13 @@ const InfoEditBlock = ({ rapidData, allQ, rSetItems, cal })=> {
         
           <button
             type='button'
-            className='miniAction med gap'
+            className='miniAction gap'
             onClick={()=>editSet(false)}
           ><i className='far fa-edit'></i> cancel</button>
         
           <button
             type='submit'
-            className='miniAction med gap greenLineHover'
+            className='miniAction gap greenLineHover'
           ><i className='fas fa-check'></i> save</button>
         </span>
         
@@ -205,7 +205,7 @@ const InfoEditBlock = ({ rapidData, allQ, rSetItems, cal })=> {
       
       <span className='rightRow'>
         <button
-          className='miniAction med gap'
+          className='miniAction gap'
           onClick={()=>editSet(!editState)}
           disabled={
             !rapidData.live || 

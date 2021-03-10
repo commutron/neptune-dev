@@ -50,7 +50,7 @@ const RapidCreateForm = ({
   
   const [ waterState, waterSet ] = useState('fall');
   
-  const [ flowsState, flowsSet ] = useState(false);
+  const [ flowsState, flowsSet ] = useState([]);
   
   const [ nonConsState, nonConsSet ] = useState([]);
 
@@ -270,10 +270,10 @@ const RapidCreateForm = ({
             <div className='vmargin'>
               <AddFlowSteps
                 app={app}
-                user={user}
                 flowsState={flowsState}
                 flowsSet={flowsSet}
-                lockOut={!typeState}
+                editState={true}
+                rSetItems={0}
               />
             </div>
             

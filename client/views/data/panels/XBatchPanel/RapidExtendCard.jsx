@@ -11,15 +11,18 @@ import ActionFunc from '/client/components/tinyUi/ActionFunc';
 import NotesModule from '/client/components/bigUi/NotesModule';
 
 import InfoEditBlock from '/client/components/forms/Rapid/InfoEditBlock';
+import { FlowStepsWrap } from '/client/components/forms/Rapid/AddFlowSteps';
+import { AddAutoSHwrap } from '/client/components/forms/Rapid/AddAutoSH';
+import AddFall from '/client/components/forms/Rapid/AddFall';
 
 
 const RapidExtendCard = ({ 
-  batchData, hasSeries, rSetItems, widgetData, urlString,
-  rapid, cal
+  batchData, hasSeries, rSetItems, widgetData, vassembly, urlString,
+  rapid, app, user, cal
 })=> {
   
   function handleLive() {
-    const check = window.confirm('Close Rapid');
+    const check = window.confirm(rapid.live ? 'Close Rapid' : 'Open Rapid');
     if(check) {
       if(rapid.live) {
         Meteor.call('setRapidClose', rapid._id, batchData._id, batchData.batch,
@@ -134,21 +137,16 @@ const RapidExtendCard = ({
         </span>
             
         
-        <span>  
+        <span className='min200'>  
           
-          <dl>
-            <dt>Cascade</dt>
-            {rapid.cascade.map( (e, ix)=>(
-              <dd key={'cs'+ix}>{e.gate}</dd>
-            ))}
-          </dl>
+          <AddFall 
+            rapidData={rapid} />
           
-          <dl>
-            <dt>Whitewater</dt>
-            {rapid.whitewater.map( (e, ix)=>(
-              <dd key={'ww'+ix}>{e.step}</dd>
-            ))}
-          </dl>
+          <FlowStepsWrap 
+            rapidData={rapid}
+            hasSeries={hasSeries}
+            rSetItems={rSetItems}
+            app={app} />
           
           <dl>
             <dt>Auto NonCons</dt>
@@ -157,12 +155,9 @@ const RapidExtendCard = ({
             ))}
           </dl>
           
-          <dl>
-            <dt>Auto Shortfalls</dt>
-            {rapid.autoSH.map( (e, ix)=>(
-              <dd key={'sh'+ix}>{e.part} - {e.refs}</dd>
-            ))}
-          </dl>
+          <AddAutoSHwrap
+            rapidData={rapid}
+            vassembly={vassembly || []} />
           
         </span>
         

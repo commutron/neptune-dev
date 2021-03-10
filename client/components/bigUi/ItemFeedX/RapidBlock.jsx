@@ -46,7 +46,6 @@ const RapidBlock = ({
           </div>
         </div>
       </div>
-      {rapDo.notes !== '' && <p className='endComment'>{rapDo.notes}</p>}
       {rapIs.completed && 
         <p className='endComment'>
           Completed {cal(rapIs.completedAt)} by <UserNice id={rapIs.completedWho} />

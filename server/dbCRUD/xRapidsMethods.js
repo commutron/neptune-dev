@@ -158,7 +158,151 @@ Meteor.methods({
     // Meteor.defer( ()=>{ Meteor.call('updateOneMovement', batchId, accessKey); });
   },
   
+  setExRapidFall(rapId, falls) {
+    if(Array.isArray(falls) && Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])) {
+      
+      const doc = XRapidsDB.findOne({_id: rapId});
+      const csc = doc.cascade;
+      
+      let wfObjs = [];
+      
+      if(falls.includes('doPre')) {
+        const match = csc.find( w => w.type === 'checkpoint' );
+        match ? wfObjs.push(match) :
+          wfObjs.push({
+            wfKey: new Meteor.Collection.ObjectID().valueOf(),
+            gate: 'Pre-Check',
+            type: 'checkpoint',
+            position: Number(1),
+            action: 'clicker',
+            branchKey: 'r@p1d8r2nch',
+            counts: []
+          });
+      }
+      if(falls.includes('doBuild')) {
+        const match = csc.find( w => w.type === 'build' );
+        match ? wfObjs.push(match) :
+          wfObjs.push({
+            wfKey: new Meteor.Collection.ObjectID().valueOf(),
+            gate: doc.type,
+            type: 'build',
+            position: Number(2),
+            action: 'clicker',
+            branchKey: 'r@p1d8r2nch',
+            counts: []
+          });
+      }
+      if(falls.includes('doInspect')) {
+        const match = csc.find( w => w.type === 'inspect' );
+        match ? wfObjs.push(match) :
+          wfObjs.push({
+            wfKey: new Meteor.Collection.ObjectID().valueOf(),
+            gate: 'inspect',
+            type: 'inspect',
+            position: Number(3),
+            action: 'clicker',
+            branchKey: 'r@p1d8r2nch',
+            counts: []
+          });
+      }
+      if(falls.includes('doTest')) {
+        const match = csc.find( w => w.type === 'test' );
+        match ? wfObjs.push(match) :
+          wfObjs.push({
+            wfKey: new Meteor.Collection.ObjectID().valueOf(),
+            gate: 'test',
+            type: 'test',
+            position: Number(4),
+            action: 'clicker',
+            branchKey: 'r@p1d8r2nch',
+            counts: []
+          });
+      }
+      if(falls.includes('doFinish')) {
+        const match = csc.find( w => w.type === 'finish' );
+        match ? wfObjs.push(match) :
+          wfObjs.push({
+            wfKey: new Meteor.Collection.ObjectID().valueOf(),
+            gate: 'finish',
+            type: 'finish',
+            position: Number(5),
+            action: 'clicker',
+            branchKey: 't3rm1n2t1ng8r2nch',
+            counts: []
+          });
+      }
+        
+      XRapidsDB.update(rapId, {
+        $set: {
+          cascade: wfObjs
+        }
+      });
+      return true;
+    }
+  },
   
+  setExRapidFlow(rapId, flows) {
+    if(Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])) {
+      
+      const app = AppDB.findOne({orgKey: Meteor.user().orgKey});
+      
+      let wwObjs = [];
+      if(Array.isArray(flows)) {
+        for(let fl of flows) {
+          const match = app.trackOption.find( x => x.key === fl.key );
+          if(!match) {
+            wwObjs.push(fl);
+          }else{
+            let uniqueStep = fl;
+            uniqueStep['key'] = new Meteor.Collection.ObjectID().valueOf();
+            wwObjs.push(uniqueStep);
+          }
+        }
+      }
+        
+      XRapidsDB.update(rapId, {
+        $set: {
+          whitewater: wwObjs
+        }
+      });
+      return true;
+    }
+  },
+  
+  clearExRapidFlow(rapId) {
+    if(Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])) {
+      XRapidsDB.update(rapId, {
+        $set: {
+          whitewater: []
+        }
+      });
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  setExRapidNC(rapId, nonConArr) {
+    if(Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])) {
+      XRapidsDB.update(rapId, {
+        $set: {
+          autoNC: nonConArr
+        }
+      });
+      return true;
+    }
+  },
+  
+  setExRapidSH(rapId, shortArr) {
+    if(Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])) {
+      XRapidsDB.update(rapId, {
+        $set: {
+          autoSH: shortArr
+        }
+      });
+      return true;
+    }
+  },
   
   
   

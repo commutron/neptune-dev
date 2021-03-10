@@ -485,6 +485,10 @@ button.variableInput.biggest { height: 64px; }
   align-items: flex-end;
   justify-content: space-between;
 }
+.interForm label {
+  font-size: 0.9rem;
+  text-indent: 0.5ch;
+}
 
 .interInput {
   border-top: 0.5px outset lightgray;
@@ -498,6 +502,7 @@ button.variableInput.biggest { height: 64px; }
 
 input[type='checkbox'].interInput,
 input[type='radio'].interInput {
+  width: 1.25rem;
   filter: saturate(0);
 }
 

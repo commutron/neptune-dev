@@ -116,6 +116,7 @@ const BatchPanelX = ({
             seriesData={seriesData}
             rapidsData={rapidsData}
             widgetData={widgetData}
+            vassembly={variantData.assembly}
             urlString={
               '?group=' + groupData.alias +
               '&widget=' + widgetData.widget + 

@@ -199,6 +199,7 @@ input::-webkit-calendar-picker-indicator {
   background-color: var(--orange);
 }
 
+.trueyellow { background-color: var(--sunflower); }
 .trueyellowT { color: var(--sunflower); }
 
 .teal { background-color: var(--turquoise); }
@@ -300,6 +301,8 @@ input::-webkit-calendar-picker-indicator {
 .letterSpaced { letter-spacing: 2px; }
 
 .strike { text-decoration: line-through; }
+.underline { text-decoration: underline; }
+.fullline { border-bottom: 1px solid #000; }
 
 .fade { opacity: 0.6; }
 .fadeMore { opacity: 0.4; }
