@@ -4,6 +4,7 @@ import 'moment-business-time';
 
 import Config from '/server/hardConfig.js';
 import { batchTideTime } from './tideGlobalMethods.js';
+import { countWaterfall } from './utility';
 
 moment.updateLocale('en', {
   workinghours: Config.workingHours,
@@ -159,8 +160,8 @@ Meteor.methods({
     let keyArr = [];
     for(let wf of waterfallCol) {
       const wfstep = `${wf.wfKey}<|>${wf.gate}<|>${wf.type}`;
-      const wfCount = wf.counts.length === 0 ? 0 :
-                        Array.from(wf.counts, x => x.tick).reduce((x,y)=> x + y);
+      const wfCount = countWaterfall(wf.counts);
+      
       keyArr.push({
         keystep: wfstep,
         count: wfCount

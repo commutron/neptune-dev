@@ -4,6 +4,8 @@ import timezone from 'moment-timezone';
 
 import Config from '/server/hardConfig.js';
 
+import { flattenHistory } from './utility';
+
 Meteor.methods({
 
     /////////////////////////////////////////////////////////////////////////
@@ -59,11 +61,8 @@ Meteor.methods({
                           
       const totalItems = items.length;
     
-      const allItemHistory = Array.from( items, 
-                              x => x.history.filter( 
-                                y => y.type !== 'first' && y.good === true) );
-      const historyFlat = [].concat(...allItemHistory);
-    
+      const historyFlat = flattenHistory(items);
+      
       let flowSeries = [];
       for(let flowKey of flowKeys) {
         const dayCounts = loopDays(historyFlat, totalItems, startDay, howManyDays, flowKey);

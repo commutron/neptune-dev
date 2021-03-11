@@ -10,7 +10,7 @@ import TideControl from '/client/components/tide/TideControl/TideControl.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
 import FormBar from '/client/components/bigUi/ToolBar/FormBar.jsx';
 import XFormBar from '/client/components/bigUi/ToolBar/XFormBar.jsx';
-import NonConOptionMerge from '/client/utility/NonConOptionMerge.js';
+import { NonConMerge } from '/client/utility/NonConOptions';
 
 export const ProWrap = ({ 
   itemSerial, itemData, batchData, seriesData,
@@ -52,7 +52,7 @@ export const ProWrap = ({
         river.type === 'plus' && getNCListKeys.push(river.ncLists);
       }
       const allKeys = rapIs ? true : false;
-      getNCTypesCombo = NonConOptionMerge(getNCListKeys, app, user, allKeys);
+      getNCTypesCombo = NonConMerge(getNCListKeys, app, user, allKeys);
       
     }else if( batchData && widgetData ) {
       const river = widgetData.flows.find( x => x.flowKey === batchData.river );
@@ -63,7 +63,7 @@ export const ProWrap = ({
       if(rvAlt) {
         rvAlt.type === 'plus' && getNCListKeys.push(rvAlt.ncLists);
       }
-      getNCTypesCombo = NonConOptionMerge(getNCListKeys, app, user);
+      getNCTypesCombo = NonConMerge(getNCListKeys, app, user);
     }
     ncTypesComboSet(getNCTypesCombo);
     

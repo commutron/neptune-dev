@@ -3,13 +3,11 @@ import moment from 'moment';
 
 import RapidExtendCard from './RapidExtendCard';
 
-
-
 const RapidExtendTab = ({ 
   batchData, seriesData, rapidsData, 
   widgetData, vassembly, urlString,
   released, done, nowater,
-  app, user, brancheS, isDebug
+  app, user, brancheS, ncTypesCombo, isDebug
 })=> {
   
   const calString = "ddd, MMM D /YY, h:mm A";
@@ -17,6 +15,8 @@ const RapidExtendTab = ({
   
   const setItems = !seriesData ? 0 : seriesData.items.filter( 
                         i => i.altPath.find( r => r.rapId !== false) ).length;
+  
+  const editAuth = Roles.userIsInRole(Meteor.userId(), ['run', 'qa']);
   
   return(
     <div className='cardify'>
@@ -32,7 +32,9 @@ const RapidExtendTab = ({
           urlString={urlString}
           rapid={r}
           app={app}
+          ncTypesCombo={ncTypesCombo}
           user={user}
+          editAuth={editAuth}
           cal={calFunc}
         />
       ))}

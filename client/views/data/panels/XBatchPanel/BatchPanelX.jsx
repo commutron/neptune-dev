@@ -129,6 +129,7 @@ const BatchPanelX = ({
             app={app}
             user={user}
             brancheS={brancheS}
+            ncTypesCombo={flowData.ncTypesComboFlat}
             isDebug={isDebug}
           />
         :null}

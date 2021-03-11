@@ -31,7 +31,7 @@ import ItemsListX from './lists/ItemsListX';
 import ProgressCounter from '/client/utility/ProgressCounter.js';
 
 import FlowCounter, { FallCounter, WhiteWaterCounter } from '/client/utility/ProgressCounterX';
-import NonConOptionMerge from '/client/utility/NonConOptionMerge.js';
+import { NonConMerge } from '/client/utility/NonConOptions';
 
 
 const DataViewOps = ({ 
@@ -117,7 +117,7 @@ const DataViewOps = ({
       const generateSecond = (w, b, app)=> {
         progCounts = ProgressCounter(riverFlow, riverFlowAlt, b);
         
-        ncTypesComboFlat = NonConOptionMerge(ncListKeys, app, user, true);
+        ncTypesComboFlat = NonConMerge(ncListKeys, app, user, true);
       };
 
       getRiverFirst(widgetData, batchData)
@@ -160,7 +160,7 @@ const DataViewOps = ({
     const generateSecond = (srs)=> {
       flowCounts = FlowCounter(riverFlow, srs);
       
-      ncTypesComboFlat = NonConOptionMerge(ncListKeys, appData, user, true);
+      ncTypesComboFlat = NonConMerge(ncListKeys, appData, user, true);
     };
 
     getRiverFirst(widgetData, batchData)

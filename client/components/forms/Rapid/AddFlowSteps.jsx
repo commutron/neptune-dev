@@ -4,7 +4,10 @@ import { toast } from 'react-toastify';
 
 import '/client/components/bigUi/ArrayBuilder/style.css';
 
-export const FlowStepsWrap = ({ rapidData, hasSeries, rSetItems, app })=> {
+export const FlowStepsWrap = ({ 
+  rapidData, hasSeries, rSetItems,
+  editAuth, app
+})=> {
   
   const [ editState, editSet ] = useState(false);
   
@@ -16,16 +19,17 @@ export const FlowStepsWrap = ({ rapidData, hasSeries, rSetItems, app })=> {
       
     let flows = flowsState;
   
-    Meteor.call('setExRapidFlow', rapidData._id, flows, (error, reply)=> {
-      if(error) {
-        console.log(error);
-        toast.error('Server Error');
-      }
-      if(reply) {
-        null;
-      }else{
-        toast.warning('error');
-      }
+    Meteor.call('setExRapidFlow', rapidData._id, flows, rapidData.extendBatch,
+      (error, reply)=> {
+        if(error) {
+          console.log(error);
+          toast.error('Server Error');
+        }
+        if(reply) {
+          null;
+        }else{
+          toast.warning('error');
+        }
     });
     editSet(false);
   }
@@ -43,6 +47,7 @@ export const FlowStepsWrap = ({ rapidData, hasSeries, rSetItems, app })=> {
           toast.warning('error');
         }
     });
+    editSet(false);
   }
   
   function handleCancel() {
@@ -57,7 +62,7 @@ export const FlowStepsWrap = ({ rapidData, hasSeries, rSetItems, app })=> {
   return(
     <div className='vmargin'>
       
-      <dt className='fullline'>Flow Steps</dt>
+      <dt className='fullline'>Steps</dt>
       
       <AddFlowSteps
         rSetItems={rSetItems}
@@ -90,10 +95,7 @@ export const FlowStepsWrap = ({ rapidData, hasSeries, rSetItems, app })=> {
           <button
             className='miniAction gap'
             onClick={()=>editSet(!editState)}
-            disabled={
-              !rapidData.live || 
-              !Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])
-            }
+            disabled={!rapidData.live || !editAuth}
           ><n-fa2><i className='fas fa-edit'></i></n-fa2> edit</button>
         </span>
       }

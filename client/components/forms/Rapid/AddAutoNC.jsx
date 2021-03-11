@@ -1,23 +1,85 @@
-import React from 'react';
+import React, { useState } from 'react';
 
+import { NonConCheck } from '/client/utility/NonConOptions';
 
-const AddAutoNC = ({ ncTypesCombo, user, nonConsState, nonConsSet, lockOut })=> {
+export const AddAutoNCwrap = ({ rapidData, ncTypesCombo, user, editAuth })=> {
+  
+  const defaultNC = rapidData ? rapidData.autoNC : [];
+  
+  const [ editState, editSet ] = useState( false );
+  const [ nonConsState, nonConsSet ] = useState( defaultNC );
+  
+  function handleSave() {
+      
+    const nonConArr = nonConsState;
+  
+    Meteor.call('setExRapidNC', rapidData._id, nonConArr, (error, reply)=> {
+      if(error) {
+        console.log(error);
+        toast.error('Server Error');
+      }
+      if(reply) {
+        null;
+      }else{
+        toast.warning('error');
+      }
+    });
+    editSet(false);
+  }
+  
+  if(rapidData.type === 'modify') {
+    return null;
+  }
+  
+  return(
+    <div className='vmargin'>
+      
+      <dt className='fullline'>Auto Nonconformaces</dt>
+      
+      <AddAutoNC
+        ncTypesCombo={ncTypesCombo} 
+        user={user}
+        nonConsState={nonConsState}
+        nonConsSet={nonConsSet}
+        editState={editState} />
+  
+      {editState ?
+        <span className='rightRow'>
+          <button
+            type='button'
+            className='miniAction med gap'
+            onClick={()=>editSet(false)}
+          ><n-fa1><i className='far fa-edit'></i></n-fa1> cancel</button>
+          
+          <button
+            className='smallAction gap clearGreen'
+            onClick={()=>handleSave()}
+            disabled={!rapidData.live}
+          >Save</button>
+        </span>
+      :
+        <span className='rightRow'>
+          <button
+            className='miniAction gap'
+            onClick={()=>editSet(true)}
+            disabled={!rapidData.live || !editAuth}
+          ><n-fa2><i className='fas fa-edit'></i></n-fa2> edit</button>
+        </span>
+      }
+      
+    </div>
+  );
+};
 
+const AddAutoNC = ({ ncTypesCombo, user, nonConsState, nonConsSet, editState })=> {
 
   const flatCheckList = Array.from(ncTypesCombo, x => 
                                   x.key ? x.live === true && x.typeText : x);
-                                  
-  function handleCheck(target) {
-    let match = flatCheckList.find( x => x === target.value);
-    let message = !match ? 'please choose from the list' : '';
-    target.setCustomValidity(message);
-    return !match ? false : true;
-  }
   
   function handleNC(e) {
     const type = this.ncType.value.trim().toLowerCase();
     
-    const tgood = handleCheck(this.ncType);
+    const tgood = NonConCheck(this.ncType, flatCheckList);
     
     const refEntry = this.ncRefs.value.trim().toLowerCase();
     const refSplit = refEntry.split(/\s* \s*/);
@@ -44,22 +106,20 @@ const AddAutoNC = ({ ncTypesCombo, user, nonConsState, nonConsSet, lockOut })=> 
   function removeOne(entry) {
     const curr = new Set( nonConsState );
     const nope = entry;
-    // take off selected step
     curr.delete(nope);
-    // update state
     nonConsSet( [...curr] );
   }
   
   return(
     <div>
-      <div className='inlineForm'>
+      {editState &&
+      <div className='inlineForm interForm'>
       
         <label htmlFor='ncRefs' className='gapR'>Referances<br />
           <input
             type='text'
             id='ncRefs'
-            className='up miniIn12'
-            disabled={lockOut} />
+            className='up miniIn12 interInput' />
         </label>
         
         
@@ -69,11 +129,11 @@ const AddAutoNC = ({ ncTypesCombo, user, nonConsState, nonConsSet, lockOut })=> 
             <input 
               id='ncType'
               type='search'
-              className='miniIn18'
+              className='miniIn18 interInput'
               placeholder='Type'
               list='ncTypeList'
-              onInput={(e)=>handleCheck(e.target)}
-              disabled={ncTypesCombo.length < 1 || lockOut}
+              onInput={(e)=>NonConCheck(e.target, flatCheckList)}
+              disabled={ncTypesCombo.length < 1}
               autoComplete={navigator.userAgent.includes('Firefox/') ? "off" : ""}
                 // ^^^ workaround for persistent bug in desktop Firefox ^^^
             />
@@ -104,7 +164,7 @@ const AddAutoNC = ({ ncTypesCombo, user, nonConsState, nonConsSet, lockOut })=> 
             <span>
               <select 
                 id='ncType'
-                className='redIn miniIn18'
+                className='redIn miniIn18 interSelect'
                 required
                 disabled={ncTypesCombo.length < 1 || lockOut}
               >
@@ -137,19 +197,20 @@ const AddAutoNC = ({ ncTypesCombo, user, nonConsState, nonConsSet, lockOut })=> 
             type='button'
             id='addNC'
             onClick={(e)=>handleNC(e)}
-            disabled={lockOut}
             className='smallAction clearRed'
           >Add</button>
         </label>
         
       </div>
-    
-      <div className='stepList vmarginhalf'>
+      }
+      
+      <div className='gateList w100 vmarginhalf'>
         {nonConsState.map( (entry, index)=> {
           return(                 
             <div key={index}>                      
               <div>{entry.ref}</div>
               <div>{entry.type}</div>
+              {!editState ? <span></span> :
               <div>
                 <button
                   type='button'
@@ -158,7 +219,7 @@ const AddAutoNC = ({ ncTypesCombo, user, nonConsState, nonConsSet, lockOut })=> 
                   className='smallAction redHover'
                   onClick={()=>removeOne(entry)}
                 ><i className='fas fa-times'></i></button>
-              </div>
+              </div>}
             </div>
         )})}
       </div>

@@ -53,7 +53,7 @@
 }
 
 .traverseContainer {
-  grid-template-columns: auto 24vmin;
+  grid-template-columns: auto 15vmax;
   grid-template-rows: calc(92vh - 48px) 48px;
   grid-template-areas: 
     'traverseContent traverseList'

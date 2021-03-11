@@ -1,10 +1,9 @@
 .tabNav { display: flex; }
 .tabBody { overflow-x: auto; }
 .tabOn, .tabOff {
-  padding: 0.75vmax 1vmin;
-  min-height: 2.5vmax;
-  line-height: 1.25;
-  font-size: 1.25vmax;
+  padding: 0.5vmax 1vmin;
+  line-height: 1.5;
+  font-size: 1rem;
   color: black;
   letter-spacing: 1px;
 	text-transform: capitalize;

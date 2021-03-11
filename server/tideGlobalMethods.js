@@ -220,11 +220,10 @@ Meteor.methods({
           moment.tz(x.startTime, Config.clientTZ).year() === getYear && 
           moment.tz(x.startTime, Config.clientTZ).dayOfYear() === getDay);
         
-        slimTideCollection.push(
-          slimBlockReturnData(btch.batch, theDay, btch.lock)
-        );
+        const slimData = slimBlockReturnData(btch.batch, theDay, btch.lock);
+        Array.prototype.push.apply(slimTideCollection, slimData);
       }
-      return [].concat(...slimTideCollection);
+      return slimTideCollection;
     }catch(err) {
       throw new Meteor.Error(err);
     }
@@ -289,10 +288,9 @@ Meteor.methods({
           moment(x.startTime).week() === getWeek);
           
         const rtnBlock = slimBlockReturnData(btch.batch, yourWeek, btch.lock);
-        //sendAll ? durrBlockReturnData(btch.batch, yourWeek, Config.clientTZ);
-        slimTideCollection.push( rtnBlock );
+        Array.prototype.push.apply(slimTideCollection, rtnBlock);
       }
-      return [].concat(...slimTideCollection);
+      return slimTideCollection;
     }catch(err) {
       throw new Meteor.Error(err);
     }

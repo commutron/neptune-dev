@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 // import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-const AddFall = ({ rapidData })=> {
+const AddFall = ({ rapidData, editAuth })=> {
   
   const csc = rapidData ? rapidData.cascade : [];
   
@@ -39,7 +39,7 @@ const AddFall = ({ rapidData })=> {
   
   return(
     <div className='vmargin'>
-      <dt className='fullline'>Cascade</dt>
+      <dt className='fullline'>Counters</dt>
       
       <div className='fitWide'>
       
@@ -104,10 +104,7 @@ const AddFall = ({ rapidData })=> {
           <button
             className='miniAction gap'
             onClick={()=>editSet(!editState)}
-            disabled={
-              !rapidData.live || 
-              !Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])
-            }
+            disabled={!rapidData.live || !editAuth}
           ><n-fa2><i className='fas fa-edit'></i></n-fa2> edit</button>
         </span>
       }

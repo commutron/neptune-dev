@@ -5,7 +5,7 @@ import UserNice from '/client/components/smallUi/UserNice.jsx';
 import { toast } from 'react-toastify';
 
 
-const InfoEditBlock = ({ rapidData, allQ, rSetItems, cal })=> {
+const InfoEditBlock = ({ rapidData, allQ, rSetItems, editAuth, cal })=> {
   
   const rapid = rapidData || {
     issueOrder: null,
@@ -207,10 +207,7 @@ const InfoEditBlock = ({ rapidData, allQ, rSetItems, cal })=> {
         <button
           className='miniAction gap'
           onClick={()=>editSet(!editState)}
-          disabled={
-            !rapidData.live || 
-            !Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])
-          }
+          disabled={!rapidData.live || !editAuth}
         ><i className='fas fa-edit'></i> edit</button>
       </span>
     </div>

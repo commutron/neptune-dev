@@ -3,6 +3,8 @@ import './style.css';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
+import { NonConCheck } from '/client/utility/NonConOptions';
+
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 
 const NonConBlock = ({
@@ -18,21 +20,14 @@ const NonConBlock = ({
     editSet(!editState);
   }
   
-  function handleCheck(target, dflt) {
-    let match = target.value === dflt || 
-                flatCheckList.find( x => x === target.value);
-    let message = !match ? 'please choose from the list' : '';
-    target.setCustomValidity(message);
-    return !match ? false : true;
-  }
-  
   function handleChange(e) {
     const ncKey = entry.key;
     const ref = this.ncRef.value.trim().toLowerCase();
     const type = this.ncType.value.trim();
     const where = this.ncWhere.value.trim().toLowerCase();
     
-    const tgood = handleCheck(this.ncType, entry.type);
+    const tgood = this.ncType === entry.type || 
+                  NonConCheck(this.ncType, flatCheckList);
     
     if( typeof ref !== 'string' || ref.length < 1 ||  !tgood || where.length < 1 ) {
       this.ncRef.reportValidity();
@@ -141,7 +136,7 @@ const NonConBlock = ({
                   defaultValue={dt.type}
                   placeholder='Type'
                   list='ncTypeList'
-                  onInput={(e)=>handleCheck(e.target, dt.type)}
+                  onInput={(e)=>NonConCheck(e.target, flatCheckList)}
                   required
                   autoComplete={navigator.userAgent.includes('Firefox/') ? "off" : ""}
                   disabled={ncTypesCombo.length < 1}/>

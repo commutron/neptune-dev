@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '/client/components/bigUi/ArrayBuilder/style.css';
 
-export const AddAutoSHwrap = ({ rapidData, vassembly })=> {
+export const AddAutoSHwrap = ({ rapidData, vassembly, editAuth })=> {
   
   const defaultSH = rapidData ? rapidData.autoSH : [];
   
@@ -25,10 +25,6 @@ export const AddAutoSHwrap = ({ rapidData, vassembly })=> {
     });
     editSet(false);
   }
-  
-  // if(rapidData.type === 'modify') {
-  //   return null;
-  // }
   
   return(
     <div className='vmargin'>
@@ -60,10 +56,7 @@ export const AddAutoSHwrap = ({ rapidData, vassembly })=> {
           <button
             className='miniAction gap'
             onClick={()=>editSet(true)}
-            disabled={
-              !rapidData.live || 
-              !Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])
-            }
+            disabled={!rapidData.live || !editAuth}
           ><n-fa2><i className='fas fa-edit'></i></n-fa2> edit</button>
         </span>
       }

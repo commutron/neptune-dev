@@ -1,5 +1,11 @@
+export function NonConCheck(target, flatCheckList) {
+  let match = flatCheckList.find( x => x === target.value);
+  let message = !match ? 'please choose from the list' : '';
+  target.setCustomValidity(message);
+  return !match ? false : true;
+}
 
-function NonConOptionMerge(ncListKeys, app, user, allKeys) {
+export function NonConMerge(ncListKeys, app, user, allKeys) {
 
   const ncListKeysFlat = ncListKeys.flat();
   if(ncListKeysFlat.length === 0 && !allKeys) {
@@ -25,7 +31,4 @@ function NonConOptionMerge(ncListKeys, app, user, allKeys) {
        
     return ncTypesComboSort;
   }
-  
 }
-
-export default NonConOptionMerge;

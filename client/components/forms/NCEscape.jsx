@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 import Model from '../smallUi/Model.jsx';
 //requires
 // id
-
+// import { NonConCheck } from '/client/utility/NonConOptions';
 const NCEscape = (props)=> {
 
   function handleNC(e) {

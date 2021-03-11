@@ -12,13 +12,14 @@ import NotesModule from '/client/components/bigUi/NotesModule';
 
 import InfoEditBlock from '/client/components/forms/Rapid/InfoEditBlock';
 import { FlowStepsWrap } from '/client/components/forms/Rapid/AddFlowSteps';
+import { AddAutoNCwrap } from '/client/components/forms/Rapid/AddAutoNC';
 import { AddAutoSHwrap } from '/client/components/forms/Rapid/AddAutoSH';
 import AddFall from '/client/components/forms/Rapid/AddFall';
 
 
 const RapidExtendCard = ({ 
   batchData, hasSeries, rSetItems, widgetData, vassembly, urlString,
-  rapid, app, user, cal
+  rapid, app, ncTypesCombo, user, editAuth, cal
 })=> {
   
   function handleLive() {
@@ -54,12 +55,11 @@ const RapidExtendCard = ({
   
   
   return(
-    <div className='wAuto'>
+    <div className=''>
      
-          
-      <div className='comfort vmarginhalf'>
+      <div className='comfort'>
         
-        <div className='centreRow'>
+        <div className='centreRow vmarginhalf'>
           
           <span>
             {rapid.live ?
@@ -73,11 +73,7 @@ const RapidExtendCard = ({
         </div>
       
       
-        <div className='centreRow'>
-          
-          
-          
-          
+        <div className='centreRow vmarginhalf'>
             
           <ActionLink
             address={'/print/generallabel/' + 
@@ -93,77 +89,72 @@ const RapidExtendCard = ({
             title='Open'
             icon='fa-bolt'
             color='darkOrangeT gap'
-            lockOut={rapid.live} />
+            lockOut={!editAuth || rapid.live} />
           
           <ActionFunc
             doFunc={handleLive}
             title='Close'
             icon='fa-power-off'
             color='blackT gap'
-            lockOut={!rapid.live} />  
+            lockOut={!editAuth || !rapid.live} />  
           
           <ActionFunc
             doFunc={handleRemove}
             title='Delete'
             icon='fa-trash'
             color='redT gap'
-            lockOut={!rapid.live || rSetItems > 0} />
-          
-            
+            lockOut={!editAuth || !rapid.live || rSetItems > 0} />
 
         </div>
         
-        
       </div>
       
-      <div className='comfort'>
+      <div className='comfort gapsC vmarginhalf'>
         
-        <span>  
+        <span className='min200'>
+          
           <InfoEditBlock 
             rapidData={rapid}
             allQ={batchData.quantity}
             rSetItems={rSetItems}
+            editAuth={editAuth}
             cal={cal} />
-          
-          <br /><hr />
-          
-          
+        
           <NotesModule
             sourceId={rapid._id}
             noteObj={rapid.notes}
             editMethod='setRapidNote'
             cal={cal} />
-            
-        </span>
-            
-        
-        <span className='min200'>  
           
+        </span>
+        
+        <span className='min200'>
+      
           <AddFall 
-            rapidData={rapid} />
+            rapidData={rapid}
+            editAuth={editAuth} />
           
           <FlowStepsWrap 
             rapidData={rapid}
             hasSeries={hasSeries}
             rSetItems={rSetItems}
+            editAuth={editAuth}
             app={app} />
           
-          <dl>
-            <dt>Auto NonCons</dt>
-            {rapid.autoNC.map( (e, ix)=>(
-              <dd key={'nc'+ix}>{e.type} - {e.ref}</dd>
-            ))}
-          </dl>
+          <AddAutoNCwrap
+            rapidData={rapid}
+            ncTypesCombo={ncTypesCombo} 
+            user={user}
+            editAuth={editAuth} />
           
           <AddAutoSHwrap
             rapidData={rapid}
-            vassembly={vassembly || []} />
+            vassembly={vassembly || []}
+            editAuth={editAuth} />
           
         </span>
         
-        
       </div>
-    
     
     </div>
   );

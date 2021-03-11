@@ -241,22 +241,34 @@ Meteor.methods({
     }
   },
   
-  setExRapidFlow(rapId, flows) {
-    if(Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])) {
+  setExRapidFlow(rapId, flows, batchNum) {
+    if(Array.isArray(flows) && Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])) {
       
       const app = AppDB.findOne({orgKey: Meteor.user().orgKey});
+      const srs = XSeriesDB.findOne({batch: batchNum});
+      const items = srs ? srs.items : [];
       
       let wwObjs = [];
-      if(Array.isArray(flows)) {
-        for(let fl of flows) {
-          const match = app.trackOption.find( x => x.key === fl.key );
-          if(!match) {
-            wwObjs.push(fl);
-          }else{
-            let uniqueStep = fl;
-            uniqueStep['key'] = new Meteor.Collection.ObjectID().valueOf();
-            wwObjs.push(uniqueStep);
+      for(let fl of flows) {
+        const amatch = app.trackOption.find( x => x.key === fl.key );
+        const lmatch = app.lastTrack.key === fl.key;
+        if(!amatch && !lmatch) {
+          wwObjs.push(fl);
+        }else{
+          let imatch = false;
+          for(let i of items) {
+            const hmatch = i.history.find( x => x.key !== fl.key && 
+                                    x.step === fl.step && x.type === fl.type );
+            if(hmatch) {
+              imatch = hmatch.key;
+              break;
+            }
           }
+          const useKey = imatch ? imatch : new Meteor.Collection.ObjectID().valueOf();
+          
+          let uniqueStep = fl;
+          uniqueStep['key'] = useKey;
+          wwObjs.push(uniqueStep);
         }
       }
         

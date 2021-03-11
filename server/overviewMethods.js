@@ -6,6 +6,11 @@ import Config from '/server/hardConfig.js';
 
 import { batchTideTime } from './tideGlobalMethods.js';
 import { calcShipDay } from './reportCompleted.js';
+import { 
+  sortBranches, 
+  flattenHistory,
+  countWaterfall
+} from './utility';
 
 moment.updateLocale('en', {
   workinghours: Config.workingHours,
@@ -41,9 +46,7 @@ function collectBranchCondition(privateKey, batchID) {
             progSteps[index].condition = 'onHold';
           }else{
             
-            const wfCount = step.counts.length === 0 ? 0 :
-              Array.from(step.counts, x => x.tick).reduce((x,y)=> x + y);
-            
+            const wfCount = countWaterfall(step.counts);
             if( wfCount <= 0 ) {
               progSteps[index].condition = 'canStart';
               previous = false;
@@ -309,8 +312,7 @@ function getFastPriority(privateKey, bData, now, shipAim) {
 function collectProgress(privateKey, batchID, branchOnly) {
   return new Promise(resolve => {
     const app = AppDB.findOne({orgKey: privateKey});
-    const brancheS = app.branches.sort((b1, b2)=>
-            b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
+    const brancheS = sortBranches(app.branches);
             
     const relevantBrancheS = !branchOnly ? brancheS :
             brancheS.filter( b => b.branch === branchOnly );
@@ -366,11 +368,8 @@ function collectProgress(privateKey, batchID, branchOnly) {
       const doneItems = batch.items.filter( x => x.finishedAt !== false ).length;
       const wipItems = batch.items.filter( 
                         x => x.finishedAt === false ); // not done
-      const wipItemHistory = Array.from( wipItems, 
-                              x => x.history.filter( 
-                                y => y.type !== 'first' && y.good === true) );
-      const historyFlat = [].concat(...wipItemHistory);
       
+      const historyFlat = flattenHistory(wipItems);
       
       for(let branch of relevantBrancheS) {
         const steps = riverFlow.filter( x => x.branchKey === branch.brKey && x.type !== 'first' );

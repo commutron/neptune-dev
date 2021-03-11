@@ -2,24 +2,18 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
+import { NonConCheck } from '/client/utility/NonConOptions';
+
 const NCAdd = ({ seriesId, barcode, user, app, ncTypesCombo })=> {
   
-  function handleCheck(target) {
-    const flatCheckList = Array.from(ncTypesCombo, x => 
+  const flatCheckList = Array.from(ncTypesCombo, x => 
                                   x.key ? x.live === true && x.typeText : x);
-
-    let match = flatCheckList.find( x => x === target.value);
-
-    let message = !match ? 'please choose from the list' : '';
-    target.setCustomValidity(message);
-    return !match ? false : true;
-  }
   
   function handleNC(e, andFix) {
     e.preventDefault();
     const type = this.ncType.value.trim();
     
-    const tgood = handleCheck(this.ncType);
+    const tgood = NonConCheck(this.ncType, flatCheckList);
     
     const where = Session.get('ncWhere') || "";
     
@@ -76,7 +70,7 @@ const NCAdd = ({ seriesId, barcode, user, app, ncTypesCombo })=> {
           type='search'
           placeholder='Type'
           list='ncTypeList'
-          onInput={(e)=>handleCheck(e.target)}
+          onInput={(e)=>NonConCheck(e.target, flatCheckList)}
           required
           disabled={lock || ncTypesCombo.length < 1}
           autoComplete={navigator.userAgent.includes('Firefox/') ? "off" : ""}
