@@ -16,6 +16,10 @@ const NotesModule = ({ sourceId, noteObj, editMethod, cal })=> {
     editSet(false);
   }
   
+  if(!noteObj || typeof noteObj !== 'object') {
+    return null;
+  }
+  
   const auth = Roles.userIsInRole(Meteor.userId(), ['edit', 'run']);
   
   return(

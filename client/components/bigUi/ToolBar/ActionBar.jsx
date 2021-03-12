@@ -12,9 +12,6 @@ import BatchXCreate from '/client/components/forms/Batch/BatchXCreate';
 import BatchXEdit from '/client/components/forms/Batch/BatchXEdit';
 import RemoveXBatch from '/client/components/forms/Batch/RemoveXBatch';
 import ItemSerialsWrapX from '/client/components/forms/ItemSerialsX/ItemSerialsWrapX';
-// import RiverSelectX from '/client/components/forms/RiverSelectX';
-import RapidCreate from '/client/components/forms/Rapid/RapidCreate';
-
 
 import UnitSetX from '/client/components/forms/ItemSerialsX/UnitSetX';
 import PanelBreakX from '/client/components/forms/ItemSerialsX/PanelBreakX';
@@ -151,7 +148,7 @@ const ActionBar = ({
                     '&sales=' + '' +
                     '&quant=' + batchData.items.length }
           title='Print Label'
-          icon='fa-print'
+          icon='fas fa-print'
           color='whiteT' />
         <RMAForm
           id={batchData._id}
@@ -197,13 +194,7 @@ const ActionBar = ({
             waterfall={batchData.waterfall}
             app={app}
             lock={batchData.completed === true} />
-          {/*
-          <RiverSelectX
-            bID={batchData._id}
-            widget={widgetData}
-            river={batchData.river}
-            lock={!seriesData || batchData.completed === true} />
-          */}
+          
           <span>
             <ActionLink
               address={'/print/generallabel/' + 
@@ -215,23 +206,9 @@ const ActionBar = ({
                         '&sales=' + (batchData.salesOrder || '') +
                         '&quant=' + batchData.quantity }
               title='Print Label'
-              icon='fa-print'
+              icon='fas fa-print'
               color='cloudsT' />
           </span>
-          
-          <RapidCreate
-            batchId={batchData._id}
-            batchNum={batchData.batch}
-            groupId={batchData.groupId}
-            hasSeries={!seriesData ? false : true}
-            srsQ={!seriesData ? 0 : seriesData.items.length}
-            allQ={batchData.quantity}
-            flows={widgetData.flows}
-            lock={batchData.lock}
-            user={user}
-            app={app}
-            ncTypesCombo={ncTypesCombo || []}
-            vassembly={variantData.assembly} />
 
           <RemoveXBatch
             batchData={batchData}

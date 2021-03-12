@@ -26,7 +26,7 @@ const RapidFork = ({ seriesId, serial, rapidData })=> {
           form='srtcsc'
           className='forkButton'
           disabled={lock}
-        ><i className='fas fa-bolt fa-fw' data-fa-transform='flip-v'></i>
+        ><i className='fas fa-bolt fa-fw'></i>
          <b>Extend {Pref.item}</b></button>
         <select 
           id='op'

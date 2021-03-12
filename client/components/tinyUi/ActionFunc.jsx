@@ -4,10 +4,10 @@ const ActionFunc = ({ doFunc, title, icon, color, noText, lockOut }) => (
   <button
     title={title}
     className='transparent'
-    onClick={()=>doFunc()}
+    onClick={()=>_.isFunction(doFunc) ? doFunc() : null}
     disabled={lockOut}>
     <label className='navIcon actionIconWrap'>
-      <i className={'fa ' + icon + ' fa-lg ' + color}></i>
+      <i className={icon + ' fa-lg ' + color}></i>
       {!noText && <span className={'actionIconText ' + color}> {title}</span>}
     </label>
   </button>

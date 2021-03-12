@@ -73,6 +73,7 @@ export function WhiteWater( itemData, seriesData, rapidsData ) {
         type: rapid.type,
         issueOrder: rapid.issueOrder,
         quantity: rapid.quantity,
+        closedAt: rapid.closedAt,
         rSet: rCount[0],
         rDone: rCount[1],
         rCounts: rCount[2]

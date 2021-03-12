@@ -22,6 +22,8 @@ const RapidBlock = ({
   }
   
   const rapDo = rapidsData.find( x => x._id === rapIs.rapId );
+  const rarapid = rapDo ? rapDo.rapid : rapIs ? rapIs.rapId : '___';
+  const raissue = rapDo ? rapDo.issueOrder : '___';
   
   return(
     <div key={rapIs.rapId} className='infoBlock rapid'>
@@ -33,7 +35,7 @@ const RapidBlock = ({
               title='Extend'
             ></i>
           </div>
-          <div>{rapDo.rapid} - {rapDo.issueOrder}</div>
+          <div>{rarapid} - {raissue}</div>
         </div>
         <div className='rightText'>
           <div>{cal(rapIs.assignedAt)}</div>

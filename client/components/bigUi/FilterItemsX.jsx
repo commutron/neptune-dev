@@ -39,10 +39,11 @@ const FilterItems = ({
           <optgroup label='Categories'>
             <option value='complete'>Complete</option>
             <option value='in progress'>In Progress</option>
-            {/*<option value='alternative'>Alternative Flow</option>*/}
             <option value='first offs'>First Offs</option>
             <option value='nonconformances'>Nonconformances</option>
             <option value='shortfalls'>Shortfalls</option>
+            <option value='alternative'>Alternative Flow</option>
+            <option value='extended'>Extended Flow</option>
             <option value='scrap'>Scrap</option>
           </optgroup>
           <optgroup label='Steps'>

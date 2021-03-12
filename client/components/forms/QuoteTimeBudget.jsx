@@ -80,7 +80,7 @@ export const WholeTimeBudget = ({ bID, isX })=>	{
         pattern="^\d*(\.\d{0,2})?$"
         maxLength='6'
         minLength='1'
-        max='1000'
+        max='2000'
         min='0.01'
         step=".01"
         inputMode='numeric'

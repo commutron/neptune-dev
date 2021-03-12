@@ -197,13 +197,23 @@ const ItemsListX = ({
     return filtered;
   }
   
-  /*function fAlt(items, notMod) {
+  function fAlt(items, notMod) {
     if(notMod === true) {
-      return items.filter( x => x.alt === 'no' );
+      return items.filter( i => i.altPath.length === 0 || 
+                                i.altPath.every( a => a.river === false) );
     }else{
-      return items.filter( x => x.alt === 'yes' );
+      return items.filter( i => i.altPath.find( a => a.river !== false) );
     }
-  }*/
+  }
+  
+  function fExt(items, notMod) {
+    if(notMod === true) {
+      return items.filter( i => i.altPath.length === 0 ||
+                                i.altPath.every( a => a.rapId === false) );
+    }else{
+      return items.filter( i => i.altPath.find( a => a.rapId !== false) );
+    }
+  }
   
   function fScrap(items, timeMod, notMod) {
     let scrapList = [];
@@ -332,10 +342,12 @@ const ItemsListX = ({
       fNoncons(srs.items, nonCon, timeModifyer, notModifyer) :
     K === 'shortfalls' ?
       fShortfalls(srs.items, short, timeModifyer, notModifyer) :
-    // K === 'alternative' ?
-      // fAlt(srs.items, notModifyer) :
+    K === 'alternative' ?
+      fAlt(srs.items, notModifyer) :
     K === 'scrap' ? 
       scrap.iList :
+    K === 'extended' ? 
+      fExt(srs.items, notModifyer) :
     srs.items;
 
     const orderedList = filteredList.sort((x, y)=> 

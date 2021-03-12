@@ -1,8 +1,4 @@
-import React, { useState } from 'react';
-import moment from 'moment';
-import 'moment-business-time';
-import '/client/utility/ShipTime.js';
-import Pref from '/client/global/pref.js';
+import React from 'react';
 import { toast } from 'react-toastify';
 
 import ActionLink from '/client/components/tinyUi/ActionLink';
@@ -10,7 +6,7 @@ import ActionFunc from '/client/components/tinyUi/ActionFunc';
 
 import NotesModule from '/client/components/bigUi/NotesModule';
 
-import InfoEditBlock from '/client/components/forms/Rapid/InfoEditBlock';
+import RapidInfoEdit from '/client/components/forms/Rapid/RapidInfo';
 import { FlowStepsWrap } from '/client/components/forms/Rapid/AddFlowSteps';
 import { AddAutoNCwrap } from '/client/components/forms/Rapid/AddAutoNC';
 import { AddAutoSHwrap } from '/client/components/forms/Rapid/AddAutoSH';
@@ -19,7 +15,7 @@ import AddFall from '/client/components/forms/Rapid/AddFall';
 
 const RapidExtendCard = ({ 
   batchData, hasSeries, rSetItems, widgetData, vassembly, urlString,
-  rapid, app, ncTypesCombo, user, editAuth, cal
+  rapid, rOpenid, app, ncTypesCombo, user, editAuth, cal
 })=> {
   
   function handleLive() {
@@ -42,10 +38,9 @@ const RapidExtendCard = ({
   }
   
   function handleRemove() {
-    const check = window.confirm('Permanently Delete Extension??');
-    
+    const check = window.prompt('Enter Org PIN to permanently delete this extension');
     if(check) {
-      Meteor.call('deleteExtendRapid', rapid._id, batchData._id, 
+      Meteor.call('deleteExtendRapid', rapid._id, batchData._id, check,
       (error, re)=>{
         error && console.log(error);
         re ? toast.success('success') : toast.error('unsuccessful');
@@ -53,14 +48,11 @@ const RapidExtendCard = ({
     }
   }
   
-  
   return(
-    <div className=''>
-     
+    <div>
       <div className='comfort'>
         
         <div className='centreRow vmarginhalf'>
-          
           <span>
             {rapid.live ?
               <n-fa1><i className='fas fa-bolt fa-2x darkOrangeT'></i></n-fa1>
@@ -69,9 +61,7 @@ const RapidExtendCard = ({
             }
           </span>
           <span className='big gapR'>{rapid.rapid}</span>
-          
         </div>
-      
       
         <div className='centreRow vmarginhalf'>
             
@@ -81,27 +71,27 @@ const RapidExtendCard = ({
                       '&sales=' + 'Issue: ' + rapid.issueOrder +
                       '&quant=' + rapid.quantity }
             title='Print Label'
-            icon='fa-print'
+            icon='fas fa-print'
             color='blackT gap' />
           
           <ActionFunc
             doFunc={handleLive}
             title='Open'
-            icon='fa-bolt'
+            icon='fas fa-bolt'
             color='darkOrangeT gap'
-            lockOut={!editAuth || rapid.live} />
+            lockOut={!editAuth || rOpenid || rapid.live} />
           
           <ActionFunc
             doFunc={handleLive}
             title='Close'
-            icon='fa-power-off'
+            icon='fas fa-power-off'
             color='blackT gap'
             lockOut={!editAuth || !rapid.live} />  
           
           <ActionFunc
             doFunc={handleRemove}
             title='Delete'
-            icon='fa-trash'
+            icon='fas fa-trash'
             color='redT gap'
             lockOut={!editAuth || !rapid.live || rSetItems > 0} />
 
@@ -113,8 +103,8 @@ const RapidExtendCard = ({
         
         <span className='min200'>
           
-          <InfoEditBlock 
-            rapidData={rapid}
+          <RapidInfoEdit 
+            rapid={rapid}
             allQ={batchData.quantity}
             rSetItems={rSetItems}
             editAuth={editAuth}

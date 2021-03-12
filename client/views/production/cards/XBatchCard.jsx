@@ -20,7 +20,10 @@ const BatchCardX = ({
   expand, flowwater, fallwater
 })=> {
   
-  const rapidMerge = [...rapidData.rapDo,...rapidData.rapDids];
+  const rapidMerge = [...rapidData.rapDo,...rapidData.rapDids]
+                      .sort((r1, r2)=> !r1.closedAt ? -1 : !r2.closedAt ? -1 :
+                                       r1.closedAt < r2.closedAt ? -1 :
+                                       r1.closedAt > r2.closedAt ? 1 : 0 );
   
   const insertTideBump = 
           <TideBump
@@ -118,7 +121,7 @@ const MiniInfo = ({ batchData, srange, flowCounts, rapidMerge, bClosed, app })=>
       
     {rapidMerge.map( (r, ix)=>(
       <div key={ix} className='rapDidBanner'
-        >{r.type} - {r.issueOrder}
+        >{r.rapid} - {r.issueOrder}
         {r.live ? 
           r.rDone === 1 ?
             <Fragment><br />(Ready to Close)</Fragment> :

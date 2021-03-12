@@ -1113,6 +1113,9 @@ n-mock-table-cell {
   vertical-align: middle;
   padding: 1ch 0.5ch;
   text-align: center;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 n-mock-table-cell:last-child {
   border-right: none;
