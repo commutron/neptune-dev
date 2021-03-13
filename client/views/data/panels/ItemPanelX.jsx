@@ -17,6 +17,8 @@ const ItemPanelX = ({
   listTitle, flowData
 })=> {
   
+  console.log(rapidsData);
+  
   const srs = seriesData;
   const i = itemData;
   const b = batchData;
@@ -26,6 +28,7 @@ const ItemPanelX = ({
   const sh = srs.shortfall.filter( x => x.serial === i.serial);
   
   const start = i.history.length > 0;
+  const rapid = i.altPath.find( a => a.rapId !== false && a.completed === false ) ? true : false;
   const scrap = i.history.find(x => x.type === 'scrap' && x.good === true);
   
   return(
@@ -87,6 +90,7 @@ const ItemPanelX = ({
           brancheS={brancheS}
           shortfalls={sh}
           done={i.completed}
+          rapIs={rapid}
           rapidsData={rapidsData}
           user={user}
           app={app} />

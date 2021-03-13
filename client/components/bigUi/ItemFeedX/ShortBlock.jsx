@@ -4,13 +4,10 @@ import Pref from '/client/global/pref.js';
 
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 
-const ShortBlock = ({ seriesId, serial, entry, done, deleteAuth, cal })=> {
+const ShortBlock = ({ seriesId, serial, entry, done, rapIs, deleteAuth, cal })=> {
   
   const [ editState, editSet ] = useState(false);
 
-  function edit() {
-    editSet(!editState);
-  }
   
   function handleChange() {
     const shKey = entry.key;
@@ -78,85 +75,86 @@ const ShortBlock = ({ seriesId, serial, entry, done, deleteAuth, cal })=> {
           <i><i className="fas fa-check-circle fa-lg fa-fw" title='Good'></i></i> :
           <b><i className="far fa-circle fa-lg fa-fw" title='Awaiting Repair'></i></b>;
                 
-  const editAllow = Roles.userIsInRole(Meteor.userId(), 'verify') && !done;
+  const editAllow = Roles.userIsInRole(Meteor.userId(), 'verify') && (!done || rapIs) ;
   const editIndicate = editState ? 'editStandout' : '';     
 
   return(
-    <div className={`feedInfoBlock short ${editIndicate}`}>
-      <div className={`feedInfoTitle ${editState ? 'doFlexWrap' : ''}`}>
-        {editState === true ?
-          <div>
-            <input
-              type='text'
-              id='shPN'
-              className='up inlineInput'
-              defaultValue={dt.partNum} />
-            <input
-              type='text'
-              id='shRefs'
-              className='up inlineInput'
-              defaultValue={dt.refs.toString()} />
-            <select 
-              id='shAct'
-              className='inlineSelect'
-              defaultValue={actionState}
-              required>
-              <option value={Pref.shortagePending}>{Pref.shortagePending}</option>
-              <option value={Pref.doOmit}>{Pref.doOmit}</option>
-              <option value={Pref.shortageWaiting}>{Pref.shortageWaiting}</option>
-              <option value={Pref.isResolved}>{Pref.isResolved}</option>
-            </select>
-            <input
-              type='text'
-              id='shCm'
-              className='inlineInput'
-              placeholder='comment'
-              defaultValue={dt.comm}/>
-          </div>
-        :
-          <div>
-            <div className='leftAnchor'>{open}</div>
-            <div className='up'>{dt.partNum}</div>
-            <div className='cap'>{dt.refs.toString().toUpperCase()}</div>
-            <div className='cap'>{dt.where}</div>
-          </div>
-        }
-        {editState === true ?
-          <div className='rightText'>
+    <n-feed-info-block class={`short ${editIndicate}`}>
+      <n-feed-left-anchor>{open}</n-feed-left-anchor>
+      <n-feed-info-center>
+      {editState === true ?
+        <n-feed-info-title>
+          <input
+            type='text'
+            id='shPN'
+            className='up miniIn24'
+            placeholder='References'
+            defaultValue={dt.partNum} />
+          <input
+            type='text'
+            id='shRefs'
+            className='up miniIn24'
+            placeholder='Part Number'
+            defaultValue={dt.refs.toString()} />
+          <select 
+            id='shAct'
+            className='miniIn24'
+            defaultValue={actionState}
+            required>
+            <option value={Pref.shortagePending}>{Pref.shortagePending}</option>
+            <option value={Pref.doOmit}>{Pref.doOmit}</option>
+            <option value={Pref.shortageWaiting}>{Pref.shortageWaiting}</option>
+            <option value={Pref.isResolved}>{Pref.isResolved}</option>
+          </select>
+          <input
+            type='text'
+            id='shCm'
+            className='miniIn24'
+            placeholder='comment'
+            defaultValue={dt.comm}/>
+              
+          <span className='rightRow'> 
             <button
-              className='smallAction inlineButton clearRed'
+              className='smallAction inlineButton vmarginhalf clearRed blackT'
               onClick={(e)=>popSh(e)}
             >Remove</button>
             <button
-              className='smallAction inlineButton clearGreen'
+              className='smallAction inlineButton vmarginhalf clearGreen blackT'
               onClick={(e)=>handleChange(e)}
             >Save</button>
-            <button
-              className='smallAction inlineButton clearBlack'
-              onClick={(e)=>edit(e)}
-            >Cancel</button>
-          </div>
-        :
-          <div className='rightText'>
-            <div><UserNice id={dt.cWho} /></div>
-            <div>{cal(dt.cTime)}</div>
-            <div className='rightAnchor'>
-              <button
-                className='miniAction'
-                onClick={(e)=>edit(e)}
-                disabled={!editAllow}>
-                <i className='fas fa-edit fa-lg fa-fw'></i>
-              </button>
-            </div>
-          </div>
-        }
-      </div>
-      <ul className='moreInfoList'>
+          </span>
+          
+        </n-feed-info-title>
+      :
+        <n-feed-info-title class='doFlexWrap'>
+          
+          <span className='up'>{dt.partNum}</span>
+          <span className='cap'>{dt.refs.toString().toUpperCase()}</span>
+          <span className='cap'>{dt.where}</span>
+          <span></span>
+          <span><UserNice id={dt.cWho} /></span>
+          <span>{cal(dt.cTime)}</span>
+
+        </n-feed-info-title>
+      }
+
+      <ul>
         <li>Last Updated: <UserNice id={dt.uWho} /> {cal(dt.uTime)}</li>
         <li>{actionState}</li>
       </ul>
-      {dt.comm !== '' && <p className='endComment'>{dt.comm}</p>}
-    </div>
+      {dt.comm !== '' && <p>{dt.comm}</p>}
+    
+    </n-feed-info-center>
+    <n-feed-right-anchor>
+      <button
+        className='miniAction'
+        onClick={(e)=>editSet(!editState)}
+        disabled={!editAllow}>
+        {editState === true ? 'cancel' : 
+          <n-fa1><i className='fas fa-edit fa-lg fa-fw'></i></n-fa1>}
+      </button>
+      </n-feed-right-anchor>
+    </n-feed-info-block>
   );
 };
 

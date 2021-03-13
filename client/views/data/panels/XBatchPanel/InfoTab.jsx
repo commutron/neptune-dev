@@ -42,6 +42,7 @@ const InfoTab = ({
   
   const remain = shipTime.workingDiff(moment(), 'days', true);
   
+  const rOpen = rapidsData && rapidsData.some( r => r.live === true );
   
   return(
     <div className='cardify oneTwoThreeContainer'>
@@ -70,7 +71,8 @@ const InfoTab = ({
           batchData={b} 
           allFlow={allFlow}
           allFall={allFall}
-          nowater={nowater} />
+          nowater={nowater}
+          rapid={rOpen} />
         
         <div className='cap middle'>
           <p>Ship Due: <b>{shipTime.format("MMMM Do, YYYY")}</b></p>

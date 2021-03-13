@@ -4,34 +4,24 @@ import '/client/components/bigUi/ItemFeed/style.css';
 
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 
-const AlterBlock = ({ dt, cal })=>{
-
-  return(
-    <div className='infoBlock alterEvent'>
-      <div className='blockTitle cap'>
-        <div>
-          <div className='leftAnchor'>
-            <i className="fas fa-eraser fa-lg fa-fw"></i>
-          </div>
-          
-          <div>Altered: <em className='clean'>"{dt.changeKey}"</em></div>
-          <div>for {dt.changeReason}</div>
-          
-        </div>
+const AlterBlock = ({ dt, cal })=> (
+  <n-feed-info-block class='alterEvent'>
+    <n-feed-left-anchor>
+      <i className="fas fa-eraser fa-lg fa-fw"></i>
+    </n-feed-left-anchor>
+    <n-feed-info-center>
+      <n-feed-info-title>      
+        <span>Altered: <em className='clean'>"{dt.changeKey}"</em></span>
+        <span>for {dt.changeReason}</span>
+        <span></span>
+        <span><UserNice id={dt.changeWho} /></span>
+        <span>{cal(dt.changeDate)}</span>
+      </n-feed-info-title>
         
-        <div className='rightText'>
-          <div><UserNice id={dt.changeWho} /></div>
-          <div>{cal(dt.changeDate)}</div>
-          <div className='rightAnchor'></div>
-        </div>
-        
-      </div>
-      
-      <div className='moreInfoList'>
-        <dd>{dt.oldValue.toLocaleString()} <i className="fas fa-arrow-right fa-fw"></i> {dt.newValue.toLocaleString()}</dd>
-      </div>
-    </div>
-  );
-};
+      <dd>{dt.oldValue.toLocaleString()} <i className="fas fa-arrow-right fa-fw"></i> {dt.newValue.toLocaleString()}</dd>
+    </n-feed-info-center>
+    <n-feed-right-anchor></n-feed-right-anchor>
+  </n-feed-info-block>
+);
 
 export default AlterBlock;

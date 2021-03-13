@@ -179,24 +179,6 @@ Meteor.methods({
     }
   },
   
-  /*reSetBranchOrder(newOrderArr) { // UNUSED and UNTESTED
-    const goodArr = Array.isArray(newOrderArr);
-
-    if(goodArr && Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      for(let br of newOrderArr) {
-        const brK = br.brKey;
-        const brPos = br.position;
-        AppDB.update({orgKey: Meteor.user().orgKey, 'branches.brKey': brK}, {
-          $set : { 
-            'branches.$.position': Number(brPos)
-        }});
-      }
-      return true;
-    }else{
-      return false;
-    }
-  },*/
-  
   canBranchRemove(keyCheck) {
     try{
       const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});

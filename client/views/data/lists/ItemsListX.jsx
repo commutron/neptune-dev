@@ -374,8 +374,9 @@ const ItemsListX = ({
         {stateList.map( (entry, index)=> {
           if(index < itemLimit) {
             let style = entry.history.length === 0 ? bttnClss :
-                        entry.completed === false ? `${bttnClss} activeMark` : 
+                        entry.completed === false ? `${bttnClss} activeMark` :
                         scrap.scrapList.includes(entry.serial) ? `${bttnClss} ngMark` : 
+                        entry.altPath.find( a => a.rapId !== false) ? `${bttnClss} exMark` : 
                         `${bttnClss} gMark`;
             return(
               <LeapButton

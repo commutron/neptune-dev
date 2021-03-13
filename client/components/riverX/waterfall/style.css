@@ -1,72 +1,66 @@
 .waterfallSelector details {
   height: 4vmax;
-  height: 3vmax;
   box-shadow: none;
 }
 .waterfallSelector details[open] {
-  height: 18vmax;
-  
   height: 16vmax;
 }
 
 .waterfallWrap {
-  min-width: 15vmax;
-  max-width: 16vmax;
-  
   min-width: 13vmax;
   max-width: 14vmax;
 }
 
 .waterfallTitle {
   height: 4vmax;
-  height: 3vmax;
-  font-size: calc(0.25rem + 1vmax);
   font-size: calc(0.25rem + 0.75vmax);
   font-weight: 600;
   color: black;
   border-top: 5px solid var(--silverfade);
 }
 
-.waterfallGrid {
+
+.waterfallGridClick, .waterfallGridSlide {
   display: grid;
   width: 100%;
-  height: 12vmax;
   height: 10vmax;
-  grid-template-columns: 1fr 3fr;
-  grid-template-rows: repeat(3, 1fr);
-  grid-template-areas: 
-    'minusOne plusOne'
-    'plusN plusOne'
-    'recKey plusOne';
   justify-content: stretch;
   align-content: stretch;
 }
+.waterfallGridClick {
+  grid-template-columns: 1fr 3fr;
+  grid-template-rows: repeat(2, 1fr);
+  grid-template-areas: 
+    'minusOne plusOne'
+    'minusOne plusOne';
+}
 
 .countMinus,
-.countN,
-.countRec,
 .countPlus {
   width: 100%;
   height: 100%;
   cursor: pointer;
   color: white;
   transition-duration: 0s;
+  line-height: 1;
 }
 .countPlus:disabled { opacity: 1; }
 .countPlus:disabled:hover { opacity: 1; }
 
-.countPlus:active,
-.countPlus:disabled,
-.countMinus:active,
-.countMinus:disabled,
-.countOn:active,
-.countOn:disabled,
-.countOff:active,
-.countOff:disabled {
+.countPlus:active, .countPlus:disabled,
+.countMinus:active, .countMinus:disabled,
+.countOn:active, .countOn:disabled,
+.countOff:active, .countOff:disabled,
+.slidePlus:active, .slidePlus:disabled,
+.slideMinus:active, .slideMinus:disabled {
   filter: blur(5px);
 }
 .countPlus.countStop:disabled,
-.countMinus.countStop:disabled {
+.countMinus.countStop:disabled,
+.slidePlus.countStop:disabled,
+.slideMinus.countStop:disabled,
+.slidePlus.countStop:disabled,
+.slideMinus.countStop:disabled {
   filter: none;
   border: none;
 }
@@ -74,46 +68,59 @@
 .countMinus {
   grid-area: minusOne;
   background-color: var(--alizarin);
+  font-size: 1.25vmax;
 }
 .countMinus:hover,
 .countMinus:active {
   background-color: var(--pomegranate);
 }
 
-.countN { grid-area: plusN; }
-.countRec { grid-area: recKey; }
-
-.countMinus, .countN, .countRec {
-  font-size: calc(0.5rem + 1vmax);
-  font-size: calc(0.5rem + 0.75vmax);
-}
-
 .countPlus {
   grid-area: plusOne;
-  font-size: calc(0.5rem + 1.25vmax);
+  font-size: 1.5vmax;
   background-color: transparent;
-  border-width: 10px;
+  border-width: 1vmax;
   border-style: solid;
-  
   border-radius: 0;
 }
-
 .countPlusTop {
-  font-size: calc(1.5rem + 1.5vmax);
+  font-size: 3vmax;
 }  
-/*
-.countOnOff {
-  grid-area: onoffKey;
-  font-size: calc(0.5rem + 1vw);
-}
-.countOff {
-  background-color: var(--alizarin);
-}
-.countOff:hover {
-  background-color: var(--pomegranate);
-}
-*/
 
+.waterfallGridSlide {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(3, 1fr);
+  grid-template-areas: 
+    'PerCount PerCount'
+    'PerCount PerCount'
+    'minusOne plusOne';
+}
+
+.slideCount {
+  grid-area: PerCount;
+  font-size: 3vmax;
+  background-color: transparent;
+  border-width: 0;
+  border-style: none;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+}
+.slideMinus, .slidePlus {
+  font-size: 1.5vmax;
+  transition-duration: 0s;
+  color: white;
+  background-color: var(--midnightblue);
+}
+.slideMinus { grid-area: minusOne; }
+.slidePlus { grid-area: plusOne; }
+.slideMinus:hover, .slidePlus:hover {
+  background-color: var(--wetasphalt);
+}
+
+/*///////////////\\\\\\\\\\\\\\\\\\\\\\///////////*/
 
 
 .waterfallHistory {

@@ -1,76 +1,55 @@
-.countFillConcrete0 {
-  background-image: linear-gradient(var(--asbestos), transparent 0%);
-}
-.countFillConcrete5 {
-  background-image: linear-gradient(var(--asbestos), transparent 9%);
-}
-.countFillConcrete10 {
-  background-image: linear-gradient(var(--asbestos), transparent 19%);
-}
-.countFillConcrete20 {
-  background-image: linear-gradient(var(--asbestos), transparent 29%);
-}
-.countFillConcrete30 {
-  background-image: linear-gradient(var(--asbestos), transparent 39%);
-}
-.countFillConcrete40 {
-  background-image: linear-gradient(var(--asbestos), transparent 49%);
-}
-.countFillConcrete50 {
-  background-image: linear-gradient(var(--asbestos), transparent 59%);
-}
-.countFillConcrete60 {
-  background-image: linear-gradient(var(--asbestos), transparent 69%);
-}
-.countFillConcrete70 {
-  background-image: linear-gradient(var(--asbestos), transparent 79%);
-}
-.countFillConcrete80 {
-  background-image: linear-gradient(var(--asbestos), transparent 89%);
-}
-.countFillConcrete90 {
-  background-image: linear-gradient(var(--asbestos), transparent 99%);
-}
-.countFillConcrete100 {
-  background-image: linear-gradient(var(--asbestos) 0%, var(--asbestos));
-}
+.countFillConcrete0 { background-image: linear-gradient(var(--asbestos), transparent 0%); }
+.countFillConcrete5 { background-image: linear-gradient(var(--asbestos), transparent 9%); }
+.countFillConcrete10 { background-image: linear-gradient(var(--asbestos), transparent 19%); }
+.countFillConcrete20 { background-image: linear-gradient(var(--asbestos), transparent 29%); }
+.countFillConcrete30 { background-image: linear-gradient(var(--asbestos), transparent 39%); }
+.countFillConcrete40 { background-image: linear-gradient(var(--asbestos), transparent 49%); }
+.countFillConcrete50 { background-image: linear-gradient(var(--asbestos), transparent 59%); }
+.countFillConcrete60 { background-image: linear-gradient(var(--asbestos), transparent 69%); }
+.countFillConcrete70 { background-image: linear-gradient(var(--asbestos), transparent 79%); }
+.countFillConcrete80 { background-image: linear-gradient(var(--asbestos), transparent 89%); }
+.countFillConcrete90 { background-image: linear-gradient(var(--asbestos), transparent 99%); }
+.countFillConcrete100 { background-image: linear-gradient(var(--asbestos) 0%, var(--asbestos)); }
 
-.countFillBlue0 {
-  background-image: linear-gradient(var(--belizeHole), transparent 0%);
-}
-.countFillBlue5 {
-  background-image: linear-gradient(var(--belizeHole), transparent 9%);
-}
-.countFillBlue10 {
-  background-image: linear-gradient(var(--belizeHole), transparent 19%);
-}
-.countFillBlue20 {
-  background-image: linear-gradient(var(--belizeHole), transparent 29%);
-}
-.countFillBlue30 {
-  background-image: linear-gradient(var(--belizeHole), transparent 39%);
-}
-.countFillBlue40 {
-  background-image: linear-gradient(var(--belizeHole), transparent 49%);
-}
-.countFillBlue50 {
-  background-image: linear-gradient(var(--belizeHole), transparent 59%);
-}
-.countFillBlue60 {
-  background-image: linear-gradient(var(--belizeHole), transparent 69%);
-}
-.countFillBlue70 {
-  background-image: linear-gradient(var(--belizeHole), transparent 79%);
-}
-.countFillBlue80 {
-  background-image: linear-gradient(var(--belizeHole), transparent 89%);
-}
-.countFillBlue90 {
-  background-image: linear-gradient(var(--belizeHole), transparent 99%);
-}
-.countFillBlue100 {
-  background-image: linear-gradient(var(--belizeHole) 0%, var(--belizeHole));
-}
+.slideFillConcrete0 { background-image: linear-gradient(to right, var(--asbestos) 0%, transparent 0%); }
+.slideFillConcrete5 { background-image: linear-gradient(to right, var(--asbestos) 5%, transparent 9%); }
+.slideFillConcrete10 { background-image: linear-gradient(to right, var(--asbestos) 10%, transparent 19%); }
+.slideFillConcrete20 { background-image: linear-gradient(to right, var(--asbestos) 20%, transparent 29%); }
+.slideFillConcrete30 { background-image: linear-gradient(to right, var(--asbestos) 30%, transparent 39%); }
+.slideFillConcrete40 { background-image: linear-gradient(to right, var(--asbestos) 40%, transparent 49%); }
+.slideFillConcrete50 { background-image: linear-gradient(to right, var(--asbestos) 50%, transparent 59%); }
+.slideFillConcrete60 { background-image: linear-gradient(to right, var(--asbestos) 40%, transparent 69%); }
+.slideFillConcrete70 { background-image: linear-gradient(to right, var(--asbestos) 30%, transparent 79%); }
+.slideFillConcrete80 { background-image: linear-gradient(to right, var(--asbestos) 20%, transparent 89%); }
+.slideFillConcrete90 { background-image: linear-gradient(to right, var(--asbestos) 10%, transparent 99%); }
+.slideFillConcrete100 { background-image: linear-gradient(to right, var(--asbestos) 0%, var(--asbestos)); }
+
+.countFillBlue0 { background-image: linear-gradient(var(--belizeHole), transparent 0%); }
+.countFillBlue5 { background-image: linear-gradient(var(--belizeHole), transparent 9%); }
+.countFillBlue10 { background-image: linear-gradient(var(--belizeHole), transparent 19%); }
+.countFillBlue20 { background-image: linear-gradient(var(--belizeHole), transparent 29%); }
+.countFillBlue30 { background-image: linear-gradient(var(--belizeHole), transparent 39%); }
+.countFillBlue40 { background-image: linear-gradient(var(--belizeHole), transparent 49%); }
+.countFillBlue50 { background-image: linear-gradient(var(--belizeHole), transparent 59%); }
+.countFillBlue60 { background-image: linear-gradient(var(--belizeHole), transparent 69%); }
+.countFillBlue70 { background-image: linear-gradient(var(--belizeHole), transparent 79%); }
+.countFillBlue80 { background-image: linear-gradient(var(--belizeHole), transparent 89%); }
+.countFillBlue90 { background-image: linear-gradient(var(--belizeHole), transparent 99%); }
+.countFillBlue100 { background-image: linear-gradient(var(--belizeHole) 0%, var(--belizeHole)); }
+
+.slideFillBlue0 { background-image: linear-gradient(to right, var(--belizeHole) 0%, transparent 0%); }
+.slideFillBlue5 { background-image: linear-gradient(to right, var(--belizeHole) 5%, transparent 9%); }
+.slideFillBlue10 { background-image: linear-gradient(to right, var(--belizeHole) 10%, transparent 19%); }
+.slideFillBlue20 { background-image: linear-gradient(to right, var(--belizeHole) 20%, transparent 29%); }
+.slideFillBlue30 { background-image: linear-gradient(to right, var(--belizeHole) 30%, transparent 39%); }
+.slideFillBlue40 { background-image: linear-gradient(to right, var(--belizeHole) 40%, transparent 49%); }
+.slideFillBlue50 { background-image: linear-gradient(to right, var(--belizeHole) 50%, transparent 59%); }
+.slideFillBlue60 { background-image: linear-gradient(to right, var(--belizeHole) 40%, transparent 69%); }
+.slideFillBlue70 { background-image: linear-gradient(to right, var(--belizeHole) 30%, transparent 79%); }
+.slideFillBlue80 { background-image: linear-gradient(to right, var(--belizeHole) 20%, transparent 89%); }
+.slideFillBlue90 { background-image: linear-gradient(to right, var(--belizeHole) 10%, transparent 99%); }
+.slideFillBlue100 { background-image: linear-gradient(to right, var(--belizeHole) 0%, var(--belizeHole)); }
+
 
 .countFillGreen0 {
   background-image: linear-gradient(var(--nephritis), transparent 0%);

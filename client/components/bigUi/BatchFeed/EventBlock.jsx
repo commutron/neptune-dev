@@ -1,25 +1,21 @@
 import React from 'react';
-// import Pref from '/client/global/pref.js';
 import '/client/components/bigUi/ItemFeed/style.css';
 
-const EventBlock = ({ dt, cal })=>{
-
-  return(
-    <div className='infoBlock genericEvent'>
-      <div className='blockTitle cap'>
-        <div>
-          <div className='leftAnchor'>
-            <i className="far fa-calendar-plus fa-lg fa-fw"></i>
-          </div>
-          <div>{dt.title} - {dt.detail}</div>
-        </div>
-        <div className='rightText'>
-          <div>{cal(dt.time)}</div>
-          <div className='rightAnchor'></div>
-        </div>
-      </div>
-    </div>
-  );
-};
+const EventBlock = ({ dt, cal })=> (
+  <n-feed-info-block class='genericEvent'>
+    <n-feed-left-anchor>
+      <i className="far fa-calendar-plus fa-lg fa-fw"></i>
+    </n-feed-left-anchor>
+    <n-feed-info-center>
+      <n-feed-info-title class='cap'>  
+        <span>{dt.title}</span>
+        <span>{dt.detail}</span>
+        <span></span>
+        <span>{cal(dt.time)}</span>
+      </n-feed-info-title>
+    </n-feed-info-center>
+    <n-feed-right-anchor></n-feed-right-anchor>
+  </n-feed-info-block>
+);
 
 export default EventBlock;

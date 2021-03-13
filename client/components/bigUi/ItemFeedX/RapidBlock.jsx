@@ -26,33 +26,33 @@ const RapidBlock = ({
   const raissue = rapDo ? rapDo.issueOrder : '___';
   
   return(
-    <div key={rapIs.rapId} className='infoBlock rapid'>
-      <div className='blockTitle cap'>
-        <div>
-          <div className='leftAnchor'>
-            <i className='fas fa-project-diagram fa-lg fa-fw' 
-              data-fa-transform='flip-v'
-              title='Extend'
-            ></i>
-          </div>
-          <div>{rarapid} - {raissue}</div>
-        </div>
-        <div className='rightText'>
-          <div>{cal(rapIs.assignedAt)}</div>
-          <div className='rightAnchor'>
-            <button
-              className='miniAction'
-              onClick={()=>popRapid()}
-              disabled={!deleteAuth || rapIs.completed}
-              ><i className='fas fa-ban fa-lg fa-fw'></i></button>
-          </div>
-        </div>
-      </div>
-      {rapIs.completed && 
-        <p className='endComment'>
-          Completed {cal(rapIs.completedAt)} by <UserNice id={rapIs.completedWho} />
-        </p>}
-    </div>
+    <n-feed-info-block class='rapid'>
+      <n-feed-left-anchor>
+        <i className='fas fa-bolt fa-lg fa-fw' 
+          title='Extend'
+        ></i>
+      </n-feed-left-anchor>
+      <n-feed-info-center>
+        <n-feed-info-title class='cap'>
+          <span>{rarapid}</span>
+          <span>{raissue}</span>
+          <span></span>
+          <span>{cal(rapIs.assignedAt)}</span>
+        </n-feed-info-title>
+        {rapIs.completed && 
+          <p>
+            Completed {cal(rapIs.completedAt)} by <UserNice id={rapIs.completedWho} />
+          </p>}
+      </n-feed-info-center>
+      <n-feed-right-anchor>
+        <button
+          className='miniAction'
+          onClick={()=>popRapid()}
+          disabled={!deleteAuth || rapIs.completed}
+          ><i className='fas fa-ban fa-lg fa-fw'></i>
+        </button>
+      </n-feed-right-anchor>
+    </n-feed-info-block>
   );
 };
 

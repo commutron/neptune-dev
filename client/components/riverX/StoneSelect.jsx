@@ -40,7 +40,10 @@ const StoneSelect = ({
   const mounted = useRef(true);
   
   useEffect(() => {
-    return () => { mounted.current = false; };
+    return () => { 
+      closeUndoOption();
+      mounted.current = false;
+    };
   }, []);
   
   const [ riverFlowState, riverFlowStateSet ] = useState( true );
@@ -52,9 +55,27 @@ const StoneSelect = ({
 	  Session.set('nowStepKey', null);
     Session.set('nowWanchor', null);
 		if(mounted.current) { riverFlowStateSet( true ); }
-		closeUndoOption();
+		if(mounted.current) { closeUndoOption(); }
 	}, [ serial ]);
 	
+  // Complete or Scrap
+  if((item.completed && !rapIs) || scrapCheck) {
+    Session.set('ncWhere', 'isC0mpl3t3d');
+	  Session.set('nowStepKey', 'c0mp13t3');
+    Session.set('nowWanchor', '');
+    return(
+      <CompleteRest
+        seriesId={seriesId}
+        serial={item.serial}
+        iComplete={item.completedAt}
+        history={item.history}
+        altPath={item.altPath}
+        scrap={scrapCheck}
+        bComplete={bComplete}
+        shortfallS={shortfalls} />
+    );
+  }
+  
   const nc = nonCons.filter( 
               x => x.serial === serial && !x.trash && x.inspect === false )
                 .sort((n1, n2)=> n1.ref < n2.ref ? -1 : n1.ref > n2.ref ? 1 : 0 );
@@ -200,20 +221,6 @@ const StoneSelect = ({
   Session.set('ncWhere', 'isC0mpl3t3d');
 	Session.set('nowStepKey', 'c0mp13t3');
   Session.set('nowWanchor', '');
-  // Complete
-  if(item.completed) {
-    return(
-      <CompleteRest
-        seriesId={seriesId}
-        serial={item.serial}
-        iComplete={item.completedAt}
-        history={item.history}
-        altPath={item.altPath}
-        scrap={scrapCheck}
-        bComplete={bComplete}
-        shortfallS={shortfalls} />
-    );
-  }
   
   return(null);
 };

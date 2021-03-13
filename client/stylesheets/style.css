@@ -40,7 +40,7 @@ input::-webkit-calendar-picker-indicator {
 .activeMark { border-left-color: var(--belizeHole); }
 .gMark { border-left-color: var(--nephritis); }
 .ngMark { border-left-color: var(--pomegranate); }
-
+.exMark { border-left-color: var(--pumpkinfrost); }
 
 .open {
   color: black;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 
 import TideMultiBatchBar from '/client/components/charts/Tides/TideMultiBatchBar.jsx';
@@ -10,12 +10,18 @@ const WTimeTab = ({
   app
 })=> {
   
+  const mounted = useRef(true);
+  
+  useEffect(() => {
+    return () => { mounted.current = false; };
+  }, []);
+  
   const [ result, resultSet ] = useState(false);
   
   useEffect( ()=>{
     Meteor.call('oneWidgetTurnAround', widgetData._id, (err, reply)=>{
       err && console.log(err);
-      reply && resultSet(reply);
+      reply && mounted.current ? resultSet(reply) : null;
     });
   }, []);
   

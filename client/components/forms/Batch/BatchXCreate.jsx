@@ -168,9 +168,9 @@ const BXCreateForm = ({ groupId, widgetId, versionKey, allVariants })=> {
           title={`update quoted time budget\n in hours to 2 decimal places`}
           className='numberSet indenText'
           pattern="^\d*(\.\d{0,2})?$"
-          maxLength='6'
+          maxLength='7'
           minLength='1'
-          max='2000'
+          max='10000'
           min='0.01'
           step=".01"
           inputMode='numeric'

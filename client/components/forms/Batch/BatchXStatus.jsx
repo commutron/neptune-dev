@@ -5,7 +5,7 @@ import Pref from '/client/global/pref.js';
 import BatchXComplete from '/client/components/forms/Batch/BatchXComplete';
 
 
-const BatchXStatus = ({ batchData, allFlow, allFall, nowater })=>	{
+const BatchXStatus = ({ batchData, allFlow, allFall, nowater, rapid })=>	{
   
   const handleLive = (change)=> {
     Meteor.call('changeStatusX', batchData._id, change, (error)=>{
@@ -33,7 +33,7 @@ const BatchXStatus = ({ batchData, allFlow, allFall, nowater })=>	{
   
   return(
     <div className='cap'>
-      {nowater || (allFlow && allFall) ?
+      {!rapid && ( nowater || (allFlow && allFall) || batchData.completed ) ?
         <BatchXComplete 
           batchData={batchData}
           allFlow={allFlow}

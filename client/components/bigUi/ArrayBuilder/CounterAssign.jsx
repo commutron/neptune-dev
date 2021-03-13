@@ -38,8 +38,12 @@ const CounterAssignForm = ({ bID, app, lock, noText, waterfall })=> {
     const wfGate = option ? option.gate : null;
     const wfType = option ? option.type : null;
     const wfBranch = option ? option.branchKey : null;
+    
+    const action = this.wfaction.value;
+    
     if(typeof wfKey === 'string' && wfGate) {
-      Meteor.call('addCounter', bID, wfKey, wfGate, wfType, wfBranch, (error, reply)=>{
+      Meteor.call('addCounter', bID, wfKey, wfGate, wfType, wfBranch, action,
+      (error, reply)=>{
         error && console.log(error);
         reply ? toast.success('Saved') : toast.error('Server Error');
         this.go.disabled = false;
@@ -76,24 +80,36 @@ const CounterAssignForm = ({ bID, app, lock, noText, waterfall })=> {
       <p className='centreText'>A process gate marks the end of one phase and the start of the next.</p>
       <p className='centreText'>A counter is a record of items, without serial numbers, passing through a gate.</p>
       <form className='centre' onSubmit={(e)=>handleAssign(e)}>
-        <p>
-          <select id='choice' required>
-          <option></option>
-          {cOp.map( (entry)=>{
-            let opLock = waterfall.find( x => x.wfKey === entry.key);
-            const branchObj = app.branches.find( y => y.brKey === entry.branchKey );
-            const branchName = branchObj ? branchObj.branch : 'n/a';
-            return(
-              <option 
-                key={entry.key} 
-                value={entry.key}
-                disabled={opLock}
-              >{entry.gate} - {entry.type} - {branchName}</option>
-             );
-          })}
-          </select>
-          <label htmlFor='choice'>Process Gate</label>
-        </p>
+        <div className='rowWrap'>
+          <label htmlFor='choice'>Process Gate<br />
+            <select id='choice' required>
+            <option></option>
+            {cOp.map( (entry)=>{
+              let opLock = waterfall.find( x => x.wfKey === entry.key);
+              const branchObj = app.branches.find( y => y.brKey === entry.branchKey );
+              const branchName = branchObj ? branchObj.branch : 'n/a';
+              return(
+                <option 
+                  key={entry.key} 
+                  value={entry.key}
+                  disabled={opLock}
+                >{entry.gate} - {entry.type} - {branchName}</option>
+               );
+            })}
+            </select>
+          </label>
+          
+          <label htmlFor='wfaction'>Action<br />
+            <select 
+              id='wfaction'
+              className='miniIn16'
+              required
+            >
+              <option value='clicker'>Count Clicker</option>
+              <option value='slider'>Percent Slider</option>
+            </select>
+          </label>
+        </div>
         <p>
           <button
             type='submit'
@@ -112,6 +128,7 @@ const CounterAssignForm = ({ bID, app, lock, noText, waterfall })=> {
           <div>Name</div>
           <div>Type</div>
           <div>Branch</div>
+          <div>Action</div>
           <div></div>
         </div>
         {waterfallS.map( (entry, index)=> {
@@ -140,6 +157,7 @@ const CounterAssignForm = ({ bID, app, lock, noText, waterfall })=> {
               <div>{entry.gate}</div>
               <div>{entry.type}</div>
               <div>{branchName}</div>
+              <div>{entry.action}</div>
               <div>
                 <button
                   type='button'

@@ -47,9 +47,11 @@ const BatchesList = ({ batchData, widgetData, variantData })=> {
           onTxtChange={(e)=>setTextFilter(e)} />
      
       {list.map( (entry, index)=> {
-        const style = entry.live === true ? 
-                      'leapBar numFont activeMark' :
-                      'leapBar numFont gMark';
+        const style = entry.completed ?
+                        entry.live ? 
+                          'leapBar numFont exMark' :
+                        'leapBar numFont gMark' :
+                      'leapBar numFont activeMark';
         const subW = w.find( x => x._id === entry.widgetId);
         const subV = variantData.find( x => x.versionKey === entry.versionKey);
           return(

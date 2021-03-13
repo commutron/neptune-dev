@@ -50,7 +50,7 @@ const ShortAdd = ({ seriesId, serial, pastPN, pastRF, app, doneClose })=> {
           placeholder='13-bC_047'
           disabled={lock}
           required />
-        <label htmlFor='partNum'>Part Number</label>
+        <label htmlFor='partNum' className='whiteT'>Part Number</label>
       </span>
       <span>
         <datalist id='pastRFlist'>
@@ -66,7 +66,7 @@ const ShortAdd = ({ seriesId, serial, pastPN, pastRF, app, doneClose })=> {
           placeholder='R1 R2 R3'
           disabled={lock}
           required />
-        <label htmlFor='shRefs'>{Pref.nonConRef}</label>
+        <label htmlFor='shRefs' className='whiteT'>{Pref.nonConRef}</label>
       </span>
       <span>
         <input
@@ -75,7 +75,7 @@ const ShortAdd = ({ seriesId, serial, pastPN, pastRF, app, doneClose })=> {
           className='orangeIn'
           placeholder='...'
           disabled={lock} />
-        <label htmlFor='shRefs'>Comments</label>
+        <label htmlFor='shRefs' className='whiteT'>Comments</label>
       </span>
       
       <button

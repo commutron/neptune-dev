@@ -7,12 +7,12 @@ import StepBackX from '/client/components/bigUi/ItemFeedX/StepBackX';
 
 const HistoryBlock = ({
   entry, batch, seriesId, serial, 
-  done, canEdit, showHeader, cal
+  done, rapIs, canEdit, showHeader, cal
 })=>{
   
   let dt = entry;
   
-  const redoAllow = canEdit && !done && dt.good === true;
+  const redoAllow = canEdit && (!done || rapIs) && dt.good === true;
   const redoButton = <StepBackX seriesId={seriesId} bar={serial} entry={entry} lock={!redoAllow} />;
                  
   const indictor = dt.good ?
@@ -34,42 +34,36 @@ const HistoryBlock = ({
   const colour = dt.type === 'finish' ? 'finish' : 'history';
    
   return(
-    <div className={`feedInfoBlock ${colour}`}>
-      {/*showHeader &&
-        <div className='feedInfoHeader'>
-          <button
-            className='textAction numFont med'
-            onClick={()=>FlowRouter.go(`/data/batch?request=${batch}&specify=${serial}`)}
-          >{serial} No serial from source</button>
-        </div>*/}
-      <div className='feedInfoTitle'>
-        <div>
-          <div className='leftAnchor'>{indictor}</div>
-          <div>{dt.step}</div>
-          <div>{dt.type}</div>
-        </div>
-        <div className='rightText'>
-          <div><UserNice id={dt.who} /></div>
-          <div>{cal(dt.time)}</div>
-          <div className='rightAnchor'>{entry.good && redoButton}</div>
-        </div>
-      </div>
-      {dt.type === 'first' ?
-        <ul className='moreInfoList'>
-          <li>Inspected: {inspect}</li>
-          <li>Built: {builder} with {methodNice}</li>
-          {!change || change !== '' && <li>{change}</li>}
-          {issue !== '' && <li>{issue}</li>}
-        </ul>
-      :
-        dt.type === 'undo' && dt.info.formerWhen && dt.info.formerWho ?
-          <ul className='moreInfoList'>
-            <li>Previously finished: {cal(dt.info.formerWhen)}</li>
-            <li>Previously finished by: <UserNice id={dt.info.formerWho} /></li>
+    <n-feed-info-block class={colour}>
+      <n-feed-left-anchor>{indictor}</n-feed-left-anchor>
+      <n-feed-info-center>
+        <n-feed-info-title>
+          <span>{dt.step}</span>
+          <span>{dt.type}</span>
+          <span></span>
+          <span><UserNice id={dt.who} /></span>
+          <span>{cal(dt.time)}</span>
+        </n-feed-info-title>
+      
+        {dt.type === 'first' ?
+          <ul>
+            <li>Inspected: {inspect}</li>
+            <li>Built: {builder} with {methodNice}</li>
+            {!change || change !== '' && <li>{change}</li>}
+            {issue !== '' && <li>{issue}</li>}
           </ul>
-      : null}
-      {dt.comm !== '' && <p className='endComment'>{dt.comm}</p>}
-    </div>
+        :
+          dt.type === 'undo' && dt.info.formerWhen && dt.info.formerWho ?
+            <ul>
+              <li>Previously finished: {cal(dt.info.formerWhen)}</li>
+              <li>Previously finished by: <UserNice id={dt.info.formerWho} /></li>
+            </ul>
+        : null}
+        {dt.comm !== '' && <p className='endComment'>{dt.comm}</p>}
+        
+      </n-feed-info-center>
+      <n-feed-right-anchor>{entry.good && redoButton}</n-feed-right-anchor>
+    </n-feed-info-block>
   );
 };
 

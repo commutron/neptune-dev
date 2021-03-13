@@ -4,22 +4,20 @@ import './style.css';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 
 const CreateBlock = ({ title, user, datetime, cal })=> (
-  
-  <div className='feedInfoBlock create'>
-    <div className='feedInfoTitle'>
-      <div>
-        <div className='leftAnchor'>
-          <i className="fas fa-plus-circle fa-lg fa-fw"></i>
-        </div>
-        <div>{title}</div>
-      </div>
-      <div className='rightText'>
-        <div><UserNice id={user} /></div>
-        <div>{cal(datetime)}</div>
-        <div className='rightAnchor'></div>
-      </div>
-    </div>
-  </div>
+  <n-feed-info-block class='create'>
+    <n-feed-left-anchor>
+      <i className="fas fa-plus-circle fa-lg fa-fw"></i>
+    </n-feed-left-anchor>
+    <n-feed-info-center>
+      <n-feed-info-title>
+        <span>{title}</span>
+        <span></span>
+        <span><UserNice id={user} /></span>
+        <span>{cal(datetime)}</span>
+      </n-feed-info-title>
+    </n-feed-info-center>
+    <n-feed-right-anchor></n-feed-right-anchor>
+  </n-feed-info-block>
 );
 
 export default CreateBlock;

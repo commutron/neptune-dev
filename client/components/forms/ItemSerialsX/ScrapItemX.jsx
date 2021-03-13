@@ -7,6 +7,7 @@ import ModelMedium from '/client/components/smallUi/ModelMedium';
 const ScrapItemX = ({ seriesId, item, ancillary, noText })=> {
   
   let done = item.completed;
+  let rapid = item.altPath.find( a => a.rapId !== false && a.completed === false );
   let scrap = item.history.find(x => x.type === 'scrap' && x.good === true);
 		
 	return(
@@ -15,7 +16,7 @@ const ScrapItemX = ({ seriesId, item, ancillary, noText })=> {
       title={`${Pref.scrap} ${Pref.item}`}
       color='redT'
       icon='fa-trash'
-      lock={!Roles.userIsInRole(Meteor.userId(), 'qa') || done || scrap}
+      lock={!Roles.userIsInRole(Meteor.userId(), 'qa') || scrap || (done && !rapid)}
       noText={noText}
     >
       <ScrapForm
@@ -54,13 +55,11 @@ const ScrapForm = ({ seriesId, item, ancillary, selfclose })=> {
 	
 	return(
 	  <form className='centre' onSubmit={(e)=>handleScrap(e)}>
-	    <br />
       <p><b>Are you sure you want to do this?</b></p>
-      <br />
       <p>
         <input
           id='discStp'
-          className='cap redIn'
+          className='cap'
           list='shortcuts'
           required />
         <label htmlFor='discStp'>current process</label>
@@ -74,7 +73,7 @@ const ScrapForm = ({ seriesId, item, ancillary, selfclose })=> {
       <p>
         <textarea
           id='scomment'
-          className='redIn'
+          className=''
           placeholder='reason for scrapping'
           rows='5'
           required></textarea>

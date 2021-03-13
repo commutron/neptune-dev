@@ -7,6 +7,7 @@ import CreateBlock from './CreateBlock';
 import HistoryBlock from './HistoryBlock';
 import NonConBlock from './NonConBlock';
 import ShortBlock from './ShortBlock';
+import AltBlock from './AltBlock';
 import RapidBlock from './RapidBlock';
 
 const ItemFeedX = ({ 
@@ -15,7 +16,7 @@ const ItemFeedX = ({
   history, altPath,
   noncons, ncTypesCombo, brancheS,
   shortfalls,
-  done, rapidsData,
+  done, rapIs, rapidsData,
   user, app 
 })=> {
   
@@ -58,6 +59,7 @@ const ItemFeedX = ({
                 seriesId={seriesId}
                 serial={serial}
                 done={done}
+                rapIs={rapIs}
                 canEdit={canEdit}
                 showHeader={false}
                 cal={calFunc} /> 
@@ -70,6 +72,7 @@ const ItemFeedX = ({
                 seriesId={seriesId}
                 serial={serial}
                 done={done}
+                rapIs={rapIs}
                 user={user}
                 canQA={canQA}
                 canVerify={canVerify}
@@ -88,6 +91,7 @@ const ItemFeedX = ({
                 seriesId={seriesId}
                 serial={serial}
                 done={done}
+                rapIs={rapIs}
                 deleteAuth={canRun}
                 cal={calFunc} /> 
             );
@@ -102,6 +106,13 @@ const ItemFeedX = ({
                 done={done}
                 deleteAuth={canQA}
                 cal={calFunc} /> 
+            );
+          }else if(typeof dt.river === 'string') {
+            return( 
+              <AltBlock
+                key={dt.river+ix}
+                entry={dt}
+                cal={calFunc} />
             );
           }else{
             null;

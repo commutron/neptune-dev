@@ -402,8 +402,9 @@ Meteor.methods({
   
   //// Waterfall
   
-  addCounter(batchId, wfKey, gate, type, wfBranch, wfPos) {
+  addCounter(batchId, wfKey, gate, type, wfBranch, actionVal) {
     const accessKey = Meteor.user().orgKey;
+    const action = actionVal ? actionVal : 'clicker';
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
       XBatchDB.update({_id: batchId, orgKey: accessKey}, {
         $push : { 
@@ -412,7 +413,7 @@ Meteor.methods({
             gate: gate,
             type: type,
             position: Number(0),
-            action: 'clicker',// "slider", "timer", "stopwatch"
+            action: action,// "slider", --"timer", "stopwatch"--
             branchKey: wfBranch,
             counts: []
           }
@@ -466,42 +467,30 @@ Meteor.methods({
     }
   },
   
-  //// counter entries \\\\ // meteor.apply( noRetry ) ????
-  
-  metaCounter(batchId, wfKey, meta) {
+  positiveCounter(batchId, wfKey, upVal) {
     if(!Roles.userIsInRole(Meteor.userId(), 'active')) {
       null;
     }else{
+      const num = upVal ? Math.abs(upVal) : Math.abs(1);
+      
       XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'waterfall.wfKey': wfKey}, {
         $push : { 'waterfall.$.counts': { 
-          tick: Number(0),
-          time: new Date(),
-          who: Meteor.userId(),
-          meta: meta
-      }}});
-    }
-  },
-  
-  positiveCounter(batchId, wfKey) {
-    if(!Roles.userIsInRole(Meteor.userId(), 'active')) {
-      null;
-    }else{
-      XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'waterfall.wfKey': wfKey}, {
-        $push : { 'waterfall.$.counts': { 
-          tick: Number(1),
+          tick: Number(num),
           time: new Date(),
           who: Meteor.userId()
       }}});
     }
   },
   
-  negativeCounter(batchId, wfKey) {
+  negativeCounter(batchId, wfKey, dnVal) {
     if(!Roles.userIsInRole(Meteor.userId(), 'active')) {
       null;
     }else{
+      const num = dnVal ? -Math.abs(dnVal) : -Math.abs(1);
+      
       XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'waterfall.wfKey': wfKey}, {
         $push : { 'waterfall.$.counts': { 
-          tick: Number(-1),
+          tick: Number(num),
           time: new Date(),
           who: Meteor.userId()
       }}});
@@ -593,26 +582,6 @@ Meteor.methods({
       }
     }
   },
-  
-  /*
-
-// Escaped NonCon
-  addEscape(batchId, ref, type, quant, ncar) {
-    if(Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])) {
-      BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
-        $push : { escaped: {
-          key: new Meteor.Collection.ObjectID().valueOf(), // flag id
-          ref: ref, // referance on the widget
-          type: type, // type of nonCon
-          quantity: Number(quant),
-          ncar: ncar,
-          time: new Date(), // when nonCon was discovered
-          who: Meteor.userId(),
-          }}});
-    }else{null}
-  },
-  
-  */
 
   //// Blockers \\\\
   addBlockX(batchId, blockTxt) {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-business-time';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
+import { min2hr } from '/client/utility/Convert.js';
 import { toast } from 'react-toastify';
 
 export const RapidInfoCreate = ({ 
@@ -18,12 +19,15 @@ export const RapidInfoCreate = ({
     const endDate = this.rDlvr.value;
     const doneTarget = moment(endDate).endOf('day').lastWorkingTime().format();
     const quant = this.rQty.value.trim();
-    const exTime = this.rTmBg.value;
+    
+    const inHours = parseFloat( this.rTmBg.value );
+    const inMinutes = moment.duration(inHours, 'hours').asMinutes();
+    
     const howText = this.rInsc.value.trim();
     const howLink = howText.length === 0 ? false : howText;
     
     Meteor.call('createExRapidBasic', batchId, groupId, exBatch, 
-      rapidType, issueNum, doneTarget, quant, exTime, howLink,
+      rapidType, issueNum, doneTarget, quant, inMinutes, howLink,
       (error, re)=>{
         error && console.log(error);
         re ? toast.success('Saved') : toast.error('unsuccessful');
@@ -59,13 +63,14 @@ const RapidInfoEdit = ({ rapid, allQ, rSetItems, editAuth, cal })=> {
     
     const quant = this.rQty.value.trim();
     
-    const exTime = this.rTmBg.value;
+    const inHours = parseFloat( this.rTmBg.value );
+    const inMinutes = moment.duration(inHours, 'hours').asMinutes();
     
     const howText = this.rInsc.value.trim();
     const howLink = howText.length === 0 ? false : howText;
     
     Meteor.call('editExRapidBasic', rapid._id, 
-      rapidType, issueNum, doneTarget, quant, exTime, howLink,
+      rapidType, issueNum, doneTarget, quant, inMinutes, howLink,
       (error, re)=>{
         error && console.log(error);
         re ? toast.success('Saved') : toast.error('unsuccessful');
@@ -107,7 +112,7 @@ const RapidInfoEdit = ({ rapid, allQ, rSetItems, editAuth, cal })=> {
       
       <p>Max Quantity: <n-num>{rapid.quantity}</n-num></p>
         
-      <p>Extra Minutes: <n-num>{rapid.timeBudget}</n-num></p>
+      <p>Extra Hours: <n-num>{min2hr(rapid.timeBudget || 0)}</n-num></p>
       
       <p className='wordBr' title='unavailable'>
         <strike>Override Instruction: {rapid.instruct || ''}</strike>
@@ -227,20 +232,20 @@ const RapidInfoFormBlock = ({
         />
       </p>
      
-      <p>Extra Minutes: 
+      <p>Extra Hours: 
         <input 
           type='number' 
           id='rTmBg'
           className='interInput'
           pattern="^\d*(\.\d{0,1})?$"
-          maxLength='6'
+          maxLength='7'
           minLength='1'
-          max='60000'
+          max='10000'
           min='0'
-          step=".5"
+          step=".05"
           inputMode='numeric'
           placeholder='12.5'
-          defaultValue={rDt.timeBudget || 0}
+          defaultValue={min2hr(rDt.timeBudget || 0)}
           required />
       </p>
       

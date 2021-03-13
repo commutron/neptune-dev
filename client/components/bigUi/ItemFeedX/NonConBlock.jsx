@@ -9,16 +9,12 @@ import UserNice from '/client/components/smallUi/UserNice.jsx';
 
 const NonConBlock = ({
   entry, seriesId, serial,
-  done, user, canQA, canVerify, canInspect,
+  done, rapIs, user, canQA, canVerify, canInspect,
   app, ncTypesCombo, flatCheckList, brancheS, cal
 })=> {
   
   
   const [ editState, editSet ] = useState(false);
-  
-  function edit() {
-    editSet(!editState);
-  }
   
   function handleChange(e) {
     const ncKey = entry.key;
@@ -111,89 +107,89 @@ const NonConBlock = ({
                       >Permanently Delete</button></li>
                 </Fragment>;
 
-  const editAllow = canInspect && !done;
+  const editAllow = canInspect && (!done || rapIs);
   const editIndicate = editState && 'editStandout';
 
 	  
   return(
-    <div className={`feedInfoBlock noncon ${editIndicate} ${tSty}`}>
-      <div className={`feedInfoTitle ${editState ? 'doFlexWrap' : ''}`}>
-        {editState === true ?
-          <div>
-            <input
-              type='text'
-              id='ncRef'
-              className='up inlineInput'
-              min={1}
-              defaultValue={dt.ref}
-              required />
+    <n-feed-info-block class={`noncon ${editIndicate} ${tSty}`}>
+      <n-feed-left-anchor>{open}</n-feed-left-anchor>
+      <n-feed-info-center>
+      {editState === true ?
+        <n-feed-info-title>
+          <input
+            type='text'
+            id='ncRef'
+            className='up miniIn24'
+            placeholder='Reference'
+            min={1}
+            defaultValue={dt.ref}
+            required />
             {user.typeNCselection ?
-              <span>
-                <input 
-                  id='ncType'
-                  className='inlineSelect'
-                  type='search'
-                  defaultValue={dt.type}
-                  placeholder='Type'
-                  list='ncTypeList'
-                  onInput={(e)=>NonConCheck(e.target, flatCheckList)}
-                  required
-                  autoComplete={navigator.userAgent.includes('Firefox/') ? "off" : ""}
-                  disabled={ncTypesCombo.length < 1}/>
-                  <datalist id='ncTypeList'>
-                    {ncTypesCombo.map( (entry, index)=>{
-                      if(!entry.key) {
-                        return ( 
-                          <option 
-                            key={index} 
-                            value={entry}
-                          >{index + 1}. {entry}</option>
-                        );
-                      }else if(entry.live === true) {
-                        let cd = user.showNCcodes ? `${entry.typeCode}. ` : '';
-                        return ( 
-                          <option 
-                            key={index}
-                            data-id={entry.key}
-                            value={entry.typeText}
-                            label={cd + entry.typeText}
-                          />
-                    )}})}
-                  </datalist>
-              </span>
-              :
-              <span>
-                <select 
-                  id='ncType'
-                  required
-                  disabled={ncTypesCombo.length < 1}
-                >
-                {ncTypesCombo.map( (entry, index)=>{
-                  if(!entry.key) {
-                    return ( 
-                      <option 
-                        key={index} 
-                        value={entry}
-                      >{entry}</option>
-                    );
-                  }else if(entry.live === true) {
-                    let cd = user.showNCcodes ? `${entry.typeCode}. ` : '';
-                    return ( 
-                      <option 
-                        key={entry.key}
-                        data-id={entry.key}
-                        value={entry.typeText}
-                        label={cd + entry.typeText}
-                      />
-                    );
-                }})}
-                </select>
-              </span>
+              <input 
+                id='ncType'
+                type='search'
+                defaultValue={dt.type}
+                placeholder='Type'
+                list='ncTypeList'
+                className='miniIn24'
+                onInput={(e)=>NonConCheck(e.target, flatCheckList)}
+                required
+                autoComplete={navigator.userAgent.includes('Firefox/') ? "off" : ""}
+                disabled={ncTypesCombo.length < 1}/>
+            :
+              <select 
+                id='ncType'
+                className='miniIn24'
+                required
+                disabled={ncTypesCombo.length < 1}
+              >
+              {ncTypesCombo.map( (entry, index)=>{
+                if(!entry.key) {
+                  return ( 
+                    <option 
+                      key={index} 
+                      value={entry}
+                    >{entry}</option>
+                  );
+                }else if(entry.live === true) {
+                  let cd = user.showNCcodes ? `${entry.typeCode}. ` : '';
+                  return ( 
+                    <option 
+                      key={entry.key}
+                      data-id={entry.key}
+                      value={entry.typeText}
+                      label={cd + entry.typeText}
+                    />
+                  );
+              }})}
+              </select>
             }
+            <datalist id='ncTypeList'>
+              {ncTypesCombo.map( (entry, index)=>{
+                if(!entry.key) {
+                  return ( 
+                    <option 
+                      key={index} 
+                      value={entry}
+                    >{index + 1}. {entry}</option>
+                  );
+                }else if(entry.live === true) {
+                  let cd = user.showNCcodes ? `${entry.typeCode}. ` : '';
+                  return ( 
+                    <option 
+                      key={index}
+                      data-id={entry.key}
+                      value={entry.typeText}
+                      label={cd + entry.typeText}
+                    />
+              )}})}
+            </datalist>
             <input 
               id='ncWhere'
-              className='inlineSelect'
               list='ncWhereList'
+              className='miniIn18'
+              placeholder='Branch'
               defaultValue={dt.where || ''}
               disabled={!canVerify}
               required />
@@ -216,84 +212,79 @@ const NonConBlock = ({
                   })}
                 </optgroup>
               </datalist>
-            </div>
+            
+              <span className='rightRow'>
+                {ins ?
+                  <button
+                    className='smallAction clearOrange blackT inlineButton vmarginhalf'
+                    onClick={(e)=>handleReInspect(e)}
+                    disabled={done}>
+                    <i className='med'> ReInspect</i>
+                  </button>
+                :null}
+                {!trashed && !ins ?
+                  <button
+                    className='smallAction clearOrange blackT inlineButton vmarginhalf'
+                    disabled={!canVerify}
+                    onClick={(e)=>handleTrash(e)}
+                  >Remove</button>
+                : trashed &&
+                  <button
+                    className='smallAction clearOrange blackT inlineButton vmarginhalf'
+                    disabled={!canInspect}
+                    onClick={(e)=>handleUnTrash(e)}
+                  >Restore</button>
+                }
+                <button
+                  className='smallAction clearGreen blackT inlineButton vmarginhalf'
+                  onClick={(e)=>handleChange(e)}
+                >Save</button>
+                
+              </span>
+            </n-feed-info-title>
           :
-            <div>
-              <div className='leftAnchor'>{open}</div>
-              <div className='up'>{dt.ref}</div>
-              <div className=''>{dt.type}</div>
-              <div className=''>{dt.where}</div>
-            </div>
+            <n-feed-info-title>
+              <span className='up'>{dt.ref}</span>
+              <span className=''>{dt.type}</span>
+              <span className=''>{dt.where}</span>
+              <span></span>
+              <span><UserNice id={dt.who} /></span>
+              <span>{cal(dt.time)}</span>
+            </n-feed-info-title>  
           }
-          {editState === true ?
-            <div className='rightText'>
-              {ins ?
-                <button
-                  className='smallAction clearOrange blackT inlineButton'
-                  onClick={(e)=>handleReInspect(e)}
-                  disabled={done}>
-                  <i className='med'> ReInspect</i>
-                </button>
-              :null}
-              {!trashed && !ins ?
-                <button
-                  className='smallAction clearOrange blackT inlineButton'
-                  disabled={!canVerify}
-                  onClick={(e)=>handleTrash(e)}
-                >Remove</button>
-              : trashed &&
-                <button
-                  className='smallAction clearOrange blackT inlineButton'
-                  disabled={!canInspect}
-                  onClick={(e)=>handleUnTrash(e)}
-                >Restore</button>
-              }
-              <button
-                className='smallAction clearGreen blackT inlineButton'
-                onClick={(e)=>handleChange(e)}
-              >Save</button>
-              <button
-                className='smallAction clearBlack inlineButton'
-                onClick={()=>edit()}
-              >Cancel</button>
-            </div>
-          :
-            <div className='rightText'>
-              <div><UserNice id={dt.who} /></div>
-              <div>{cal(dt.time)}</div>
-              <div className='rightAnchor'>
-                <button
-                  className='miniAction'
-                  onClick={()=>edit()}
-                  disabled={!editAllow}
-                  readOnly={true}>
-                  <i className='fas fa-edit fa-lg fa-fw'></i>
-                </button>
-              </div>
-            </div>
-          }
-        </div>
-      <ul>
-        {fixed}
-        {inspected}
-        {snoozed && <li>Snoozed</li>}
-        {rjc ?
-          dt.reject.map( (entry, index)=>{
-            return(
-              <ul key={index}>
-                <li colSpan='2'>
-                  Attempt: <UserNice id={entry.attemptWho} /> {cal(entry.attemptTime)}
-                  <br />
-                  Reject: <UserNice id={entry.rejectWho} /> {cal(entry.rejectTime)}
-                </li>
-              </ul>
-            )})
-        : null}
-        {inTrash}
-      </ul>
-      {dt.comm !== '' && <p className='endComment'><i className='far fa-comment'></i> {dt.comm}</p>}
-
-    </div>
+        
+        <ul>
+          {fixed}
+          {inspected}
+          {snoozed && <li>Snoozed</li>}
+          {rjc ?
+            dt.reject.map( (entry, index)=>{
+              return(
+                <ul key={index}>
+                  <li colSpan='2'>
+                    Attempt: <UserNice id={entry.attemptWho} /> {cal(entry.attemptTime)}
+                    <br />
+                    Reject: <UserNice id={entry.rejectWho} /> {cal(entry.rejectTime)}
+                  </li>
+                </ul>
+              )})
+          : null}
+          {inTrash}
+        </ul>
+        {dt.comm !== '' && <p className='endComment'><i className='far fa-comment'></i> {dt.comm}</p>}
+    
+      </n-feed-info-center>
+      <n-feed-right-anchor>
+        <button
+          className='miniAction'
+          onClick={()=>editSet(!editState)}
+          disabled={!editAllow}
+          readOnly={true}>
+          {editState === true ? 'cancel' : 
+          <n-fa1><i className='fas fa-edit fa-lg fa-fw'></i></n-fa1>}
+        </button>
+      </n-feed-right-anchor>
+    </n-feed-info-block>
   );
 };
   

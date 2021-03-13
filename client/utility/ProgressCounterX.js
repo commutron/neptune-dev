@@ -139,6 +139,7 @@ function fallLoop(waterfall, quantity) {
       step: wf.gate,
       type: wfType,
       bKey: wf.branchKey,
+      action: wf.action,
       pos: wf.position || 0,
       count: wfCount
     });

@@ -75,7 +75,7 @@ const NCFlood = ({ seriesId, live, user, app, ncTypesCombo })=> {
             placeholder={Pref.nonConRef}
             disabled={lock}
             required />
-          <label htmlFor='ncRefs'>{Pref.nonConRef}</label>
+          <label htmlFor='ncRefs' className='whiteT'>{Pref.nonConRef}</label>
         </span>
         {user.typeNCselection ?
           <span>
@@ -91,7 +91,7 @@ const NCFlood = ({ seriesId, live, user, app, ncTypesCombo })=> {
               autoComplete={navigator.userAgent.includes('Firefox/') ? "off" : ""}
                 // ^^^ workaround for persistent bug in desktop Firefox ^^^
             />
-            <label htmlFor='ncType'>{Pref.nonConType}</label>
+            <label htmlFor='ncType' className='whiteT'>{Pref.nonConType}</label>
             <datalist id='ncTypeList'>
               {ncTypesCombo.map( (entry, index)=>{
                 if(!entry.key) {
@@ -142,7 +142,7 @@ const NCFlood = ({ seriesId, live, user, app, ncTypesCombo })=> {
                 );
             }})}
             </select>
-            <label htmlFor='ncType'>{Pref.nonConType}</label>
+            <label htmlFor='ncType' className='whiteT'>{Pref.nonConType}</label>
           </span>
         }
           <button

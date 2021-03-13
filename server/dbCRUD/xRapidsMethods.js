@@ -191,25 +191,32 @@ Meteor.methods({
       
       let wwObjs = [];
       for(let fl of flows) {
-        const amatch = app.trackOption.find( x => x.key === fl.key );
-        const lmatch = app.lastTrack.key === fl.key;
-        if(!amatch && !lmatch) {
-          wwObjs.push(fl);
-        }else{
-          let imatch = false;
-          for(let i of items) {
-            const hmatch = i.history.find( x => x.key !== fl.key && 
-                                    x.step === fl.step && x.type === fl.type );
-            if(hmatch) {
-              imatch = hmatch.key;
-              break;
-            }
-          }
-          const useKey = imatch ? imatch : new Meteor.Collection.ObjectID().valueOf();
-          
+        if(fl.key === 'f1n15h1t3m5t3p') {
           let uniqueStep = fl;
-          uniqueStep['key'] = useKey;
+          uniqueStep['key'] = new Meteor.Collection.ObjectID().valueOf();
           wwObjs.push(uniqueStep);
+        }else{
+          const amatch = app.trackOption.find( x => x.key === fl.key );
+          if(!amatch) {
+            wwObjs.push(fl);
+          }else{
+            let imatch = false;
+            let ritems = items.filter( i => i.altPath.find( a => 
+                                  a.rapId === rapId && a.completed === false ) );
+            for(let i of ritems) {
+              const hmatch = i.history.find( x => x.key !== fl.key && 
+                                      x.step === fl.step && x.type === fl.type );
+              if(hmatch) {
+                imatch = hmatch.key;
+                break;
+              }
+            }
+            const useKey = imatch ? imatch : new Meteor.Collection.ObjectID().valueOf();
+            
+            let uniqueStep = fl;
+            uniqueStep['key'] = useKey;
+            wwObjs.push(uniqueStep);
+          }
         }
       }
         
@@ -272,35 +279,30 @@ Meteor.methods({
   },
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  rapidPositiveCounter(rapidId, wfKey) {
+  rapidPositiveCounter(rapidId, wfKey, upVal) {
     if(!Roles.userIsInRole(Meteor.userId(), 'active')) {
       null;
     }else{
+      const num = upVal ? Math.abs(upVal) : Math.abs(1);
+      
       XRapidsDB.update({_id: rapidId, orgKey: Meteor.user().orgKey, 'cascade.wfKey': wfKey}, {
         $push : { 'cascade.$.counts': { 
-          tick: Number(1),
+          tick: Number(num),
           time: new Date(),
           who: Meteor.userId()
       }}});
     }
   },
   
-  rapidNegativeCounter(rapidId, wfKey) {
+  rapidNegativeCounter(rapidId, wfKey, dnVal) {
     if(!Roles.userIsInRole(Meteor.userId(), 'active')) {
       null;
     }else{
+      const num = dnVal ? -Math.abs(dnVal) : -Math.abs(1);
+      
       XRapidsDB.update({_id: rapidId, orgKey: Meteor.user().orgKey, 'cascade.wfKey': wfKey}, {
         $push : { 'cascade.$.counts': { 
-          tick: Number(-1),
+          tick: Number(num),
           time: new Date(),
           who: Meteor.userId()
       }}});

@@ -114,18 +114,18 @@ const Clif = ({
     <details
       className='waterfallWrap'
       open={dfopen}>
-      <summary className={`waterfallTitle ${bannerColor}`}>{entry.gate} {type}</summary>
-      <WaterFall
-        batchId={batchId}
-        rapidId={rapidId}
-        fall={entry}
-        total={total}
-        quantity={quantity}
-        speed={speed}
-        lock={lockOut}
-        app={app}
-        borderColor={borderColor}
-        fadeColor={fadeColor} />
+      <summary className={`waterfallTitle ${bannerColor}`}>{entry.step} {type}</summary>
+        <WaterFall
+          batchId={batchId}
+          rapidId={rapidId}
+          fall={entry}
+          total={total}
+          quantity={quantity}
+          speed={speed}
+          lock={lockOut}
+          app={app}
+          borderColor={borderColor}
+          fadeColor={fadeColor} />
     </details>
   );
 };
