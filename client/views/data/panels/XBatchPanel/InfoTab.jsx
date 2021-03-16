@@ -9,7 +9,6 @@ import { min2hr } from '/client/utility/Convert.js';
 import TagsModule from '/client/components/bigUi/TagsModule.jsx';
 
 import ReleaseAction from '/client/components/bigUi/ReleasesModule.jsx';
-import NoteLine from '/client/components/smallUi/NoteLine.jsx';
 import BlockForm from '/client/components/forms/BlockForm.jsx';
 import BlockList from '/client/components/bigUi/BlockList.jsx';
 
@@ -132,13 +131,6 @@ const InfoTab = ({
             
         <div className='flxGrow startSelf'>
           <h3>Notes</h3>
-          
-          <NoteLine 
-            action={Pref.xBatch}
-            id={b._id}
-            entry={b.notes}
-            plain={true}
-            lgIcon={true} />
           
           <BlockForm
             id={b._id}
