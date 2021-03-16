@@ -17,8 +17,6 @@ const ItemPanelX = ({
   listTitle, flowData
 })=> {
   
-  console.log(rapidsData);
-  
   const srs = seriesData;
   const i = itemData;
   const b = batchData;

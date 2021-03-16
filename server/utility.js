@@ -28,7 +28,6 @@ export function flattenHistory(itemArr) {
 }
 
 export function countWaterfall(stepCounts) {
-  return stepCounts.length === 0 ? 0 :
-            Array.from(stepCounts, x => x.tick)
-              .reduce((x,y)=> x + y);
+  return !Array.isArray(stepCounts) || stepCounts.length === 0 ? 0 :
+            Array.from(stepCounts, x => x.tick).reduce((x,y)=> x + y);
 }

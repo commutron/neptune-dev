@@ -1,12 +1,15 @@
 import React from 'react';
 import moment from 'moment';
 import { round2Decimal, avgOfArray } from '/client/utility/Convert';
-
+import { countWaterfall } from '/client/utility/Arrays';
 
 function flowLoop(river, items, firstsFlat) {
   const now = moment().format();
   const wndw = (t)=>moment(t).isSame(now, 'day');
   const byKey = (t, ky)=> { return ( k => k.key === ky && k.good === true )};
+  
+  const doneItems = items.filter( x => x.completed );
+  const wipItems = items.filter( x => !x.completed && x.history.length > 0 );
       
   let stepsData = [];
   for( let [index, step] of river.entries()) {
@@ -32,16 +35,22 @@ function flowLoop(river, items, firstsFlat) {
       let itemCountNew = 0;
       let unitCountNew = 0;
       
-      for(var ix = items.length-1; ix>=0; ix--){
-        const i = items[ix];
-        const hNew = i.history.filter( q => wndw(q.time) === true && q.good === true );
-        if(i.completed) {
-          itemCount += 1;
-          unitCount += i.units;
-        }else{
-          i.history.find( byKey(this, step.key) ) ? (itemCount += 1, unitCount += i.units ) : null;
-        }
-        hNew.find( byKey(this, step.key) ) ? (itemCountNew += 1, unitCountNew += i.units ) : null;
+      for(var dix = doneItems.length-1; dix>=0; dix--){
+        const di = doneItems[dix];
+        itemCount += 1;
+        unitCount += di.units;
+        
+        const hNew = di.history.filter( q => wndw(q.time) === true && q.good === true );
+        hNew.find( byKey(this, step.key) ) ? (itemCountNew += 1, unitCountNew += di.units ) : null;
+      }
+      
+      for(var wix = wipItems.length-1; wix>=0; wix--){
+        const wi = wipItems[wix];
+        
+        wi.history.find( byKey(this, step.key) ) ? (itemCount += 1, unitCount += wi.units ) : null;
+        
+        const hNew = wi.history.filter( q => wndw(q.time) === true && q.good === true );
+        hNew.find( byKey(this, step.key) ) ? (itemCountNew += 1, unitCountNew += wi.units ) : null;
       }
     
       stepsData.push({
@@ -125,14 +134,18 @@ function FlowCounter(flow, seriesData) {
 export default FlowCounter;
 
 
-function fallLoop(waterfall, quantity) {
+export function FallCounter(batchData) {
+  const waterfall = batchData.waterfall;
+  const quantity = batchData.quantity;
+  
   let countData = [];
   let doneCheck = [];
   for(let wf of waterfall) {
     const wfType = wf.type;
-    const wfCount = wf.counts.length === 0 ? 0 :
-                      Array.from(wf.counts, x => x.tick).reduce((x,y)=> x + y);
-    doneCheck.push( wfCount === quantity );
+    const wfCount = countWaterfall(wf.counts);
+    const topNum = wf.action === 'slider' ? 100 : quantity;
+    
+    doneCheck.push( wfCount === topNum );
     countData.push({
       obj: 'count',
       wfKey: wf.wfKey,
@@ -152,15 +165,6 @@ function fallLoop(waterfall, quantity) {
       doneCheck.length > 0 && doneCheck.every( x => x === true )
   };
 }
-
-export function FallCounter(batchData) {
-  
-  const wtrflProg = fallLoop(batchData.waterfall, batchData.quantity);
-
-  return wtrflProg;
-}
-
-
   
 export function WhiteWaterCounter(rapidData, seriesData) {
   const totalQ = rapidData.quantity;
@@ -174,8 +178,7 @@ export function WhiteWaterCounter(rapidData, seriesData) {
           w1.position < w2.position ? -1 : w1.position > w2.position ? 1 : 0 );
   
   for(let wf of fallS) {
-    const wfCount = wf.counts.length === 0 ? 0 :
-                      Array.from(wf.counts, x => x.tick).reduce((x,y)=> x + y);
+    const wfCount = countWaterfall(wf.counts);
     countArr.push(wfCount);
     const point = ( wfCount / totalQ );
     pointArr.push(point);
@@ -200,22 +203,3 @@ export function WhiteWaterCounter(rapidData, seriesData) {
 }
 
 
-// Other Methods \\
-
-/*
-  riverStepSelfCount(itemsCol) {
-    const itemHistory = Array.from( itemsCol, x => 
-              x.history.filter( y => 
-                y.type !== 'first' && y.type !== 'scrap' && y.good === true) );
-    
-    const itemHkeys = Array.from( itemHistory, x => x.map( s => 
-                                      `${s.key}<|>${s.step}<|>${s.type}` ) );
-    
-    const keysFlat = [].concat(...itemHkeys);
-    const keyObj = _.countBy(keysFlat, x => x);
-    const itr = Object.entries(keyObj);
-
-    const keyArr = Array.from(itr, (a)=> ( {keystep: a[0], count: a[1]} ) );
-    return keyArr;
-  },
-*/

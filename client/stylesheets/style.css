@@ -258,6 +258,9 @@ input::-webkit-calendar-picker-indicator {
 .proWhite::-webkit-progress-value { background-color: var(--clouds); }
 .proWhite::-moz-progress-bar { background-color: var(--clouds); }
 
+.proGray::-webkit-progress-value { background-color: var(--concrete); }
+.proGray::-moz-progress-bar { background-color: var(--concrete); }
+
 .proGreen::-webkit-progress-value { background-color: var(--nephritis); }
 .proGreen::-moz-progress-bar { background-color: var(--nephritis); }
 

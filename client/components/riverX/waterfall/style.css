@@ -100,8 +100,10 @@
   grid-area: PerCount;
   font-size: 3vmax;
   background-color: transparent;
-  border-width: 0;
-  border-style: none;
+  border-top: none;
+  border-right: 1vmax solid;
+  border-bottom: 1vmax solid;
+  border-left: 1vmax solid;
   border-radius: 0;
   display: flex;
   align-items: center;

@@ -3,7 +3,7 @@ import './style.css';
 
 const MiniBar = ({ title, count, total, barColor })=> {
   let v = count;
-  let t = total;
+  let t = total === 'percent' ? 100 : total;
   
   let name = {
     position: 'relative',
@@ -17,7 +17,9 @@ const MiniBar = ({ title, count, total, barColor })=> {
     <div className='miniScale meterprogStack'>
       <p style={name} className='cap'>{title}</p>
       <progress className={barColor || 'proGood'} value={v} max={t}></progress>
-      <p style={num} className='numFont'>{v}/{t}</p>
+      <p style={num} className='numFont'
+        >{total === 'percent' ? `${v}%` : `${v}/${t}`}
+      </p>
     </div>
   );
 };

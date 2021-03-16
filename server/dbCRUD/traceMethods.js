@@ -183,7 +183,7 @@ Meteor.methods({
   rebuildTrace() {
     const accessKey = Meteor.user().orgKey;
     (async ()=> {
-      // try {
+      try {
         syncHoliday(accessKey);
         const now = moment().tz(Config.clientTZ);
         
@@ -198,9 +198,9 @@ Meteor.methods({
         }));
         
         return true;
-      // }catch (err) {
-      //   throw new Meteor.Error(err);
-      // }
+      }catch (err) {
+        throw new Meteor.Error(err);
+      }
     })();
   },
   

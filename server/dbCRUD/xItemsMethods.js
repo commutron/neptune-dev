@@ -357,20 +357,6 @@ Meteor.methods({
     }
   },
 
-  /*
-  //// fork, use alternative flow
-  forkItem(id, bar, choice) {
-    if(Meteor.userId()) {
-      BatchDB.update({_id: id, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
-        $set : { 
-          'items.$.alt': choice 
-        }});
-      return true;
-    }else{
-      return false;
-    }
-  },
-  */
   //// unit corection
   setItemUnitX(seriesId, bar, unit) {
     const auth = Roles.userIsInRole(Meteor.userId(), ['edit', 'run']);

@@ -308,14 +308,6 @@ Meteor.methods({
       }}});
     }
   },
-  
-  
-  
-  
-  
-  
- 
-      
       
   setRapidClose(rapidId, batchId, batchNum) {
     const accessKey = Meteor.user().orgKey;

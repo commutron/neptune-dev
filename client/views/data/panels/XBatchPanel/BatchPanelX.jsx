@@ -86,6 +86,7 @@ const BatchPanelX = ({
             wfCounts={fallData.fallProg}
             waterfall={b.waterfall}
             quantity={b.quantity}
+            rapidsData={rapidsData}
             app={app} />
         </div>
         
