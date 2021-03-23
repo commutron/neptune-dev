@@ -28,9 +28,7 @@ const VariantModel = ({ widgetData, variantData, app, rootWI, lockOut })=> {
   
 export default VariantModel;
 
-const VariantForm = ({ widgetData, variantData, app, rootWI, lockOut })=> {
-
-  // const [ instructState, instructSet ] = useState( '...' );
+const VariantForm = ({ widgetData, variantData, app, rootWI, lockOut, selfclose })=> {
 
   function save(e) {
     e.preventDefault();
@@ -50,7 +48,7 @@ const VariantForm = ({ widgetData, variantData, app, rootWI, lockOut })=> {
         error && console.log(error);
         if(reply) {
           toast.success('Saved');
-          FlowRouter.go('/data/widget?request=' + widgetData.widget + '&specify=' + variant);
+          selfclose();
         }else{
           toast.error('Server Error');
           this.go.disabled = false;

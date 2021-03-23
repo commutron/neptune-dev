@@ -189,7 +189,6 @@ const DataRepair = ({ app, users })=> {
         >Convert</button>
       </div>
       
-      
       <div>
         <h3><i className="fas fa-eraser fa-lg gap"></i>
           Unset the nonconformaces key from batch+

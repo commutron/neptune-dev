@@ -1,15 +1,22 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
-import CreateTag from '/client/components/tinyUi/CreateTag.jsx';
-import Tabs from '/client/components/smallUi/Tabs/Tabs.jsx';
+import CreateTag from '/client/components/tinyUi/CreateTag';
+import Tabs from '/client/components/smallUi/Tabs/Tabs';
 
-import VariantList from '../../lists/VariantList.jsx';
+import VariantCard from './VariantCard';
+
+import WidgetEditForm from '/client/components/forms/WidgetEditForm';
+import FlowFormHead from '/client/components/forms/FlowFormHead';
+import VariantForm from '/client/components/forms/VariantForm';
+import BatchXCreate from '/client/components/forms/Batch/BatchXCreate';
+
+import Remove from '/client/components/forms/Remove';
 
 import MultiBatchKPI from '/client/components/bigUi/MultiBatchKPI';
 
-import FlowTable from '/client/components/tables/FlowTable.jsx';
+import FlowTable from '/client/components/tables/FlowTable';
 import WTimeTab from './WTimeTab';
-import NonConMultiBatchBar from '/client/components/charts/NonCon/NonConMultiBatchBar.jsx';
+import NonConMultiBatchBar from '/client/components/charts/NonCon/NonConMultiBatchBar';
 
 import { flipArray } from '/client/utility/Convert';
 
@@ -19,7 +26,6 @@ const WidgetPanel = ({
   app, user
 })=> {
 
-  // const g = groupData;
   const w = widgetData;
   const b = batchRelated;
   const a = app;
@@ -28,14 +34,51 @@ const WidgetPanel = ({
 
   return(
     <div className='space' key={w.widget}>
-    
-      <div className='titleSection'>
-        <span className='cap'>{w.describe}</span>
+      <div className='split bspace'>
+        
+        <div className='wordBr vmarginhalf titleSection'>
+          <span className='cap'>{w.describe}</span>
+        </div>
+        
+        <div className='centreRow vwrap vmarginhalf'>
+        
+          <WidgetEditForm
+            id={widgetData._id}
+            now={widgetData}
+            lockOut={groupData.hibernate} />
+            
+          <VariantForm
+            widgetData={widgetData}
+            variantData={false}
+            app={app}
+            rootWI={groupData.wiki}
+            lockOut={groupData.hibernate} />
+            
+          <FlowFormHead
+            id={widgetData._id}
+            edit={false}
+            existFlows={widgetData.flows}
+            app={app} />
+            
+          <BatchXCreate
+            groupId={groupData._id}
+            widgetId={widgetData._id}
+            versionKey={false}
+            allVariants={variantData}
+            lock={!variantData || variantData.every(v => v.live === false)} />
+            
+          <Remove
+            action='widget'
+            title={widgetData.widget}
+            check={widgetData.createdAt && widgetData.createdAt.toISOString()}
+            entry={widgetData._id}
+            lockOut={!variantData.every( x => x.live === false )} />
+        
+        </div>
+        
       </div>
       
-      <div className='edit'>
-        
-      <br />
+      <div>
           
       <Tabs
         tabs={[Pref.variants, Pref.flow + 's', 'Times', Pref.nonCon + 's']}
@@ -44,16 +87,27 @@ const WidgetPanel = ({
         hold={true}
         sessionTab='widgetExPanelTabs'>
         
-        <div className=''>
+        <div className='cardify autoFlex'>
             
           <MultiBatchKPI
             batchIDs={batchIDs}
             app={a} />
+            
+          {variantData.length < 1 ? <p>no {Pref.variants} created</p> : null}
           
-          <VariantList 
-            variantData={variantData}
-            widgetData={w} 
-            app={a} />
+            {variantData.map( (ventry, index)=> {
+              return(  
+                <VariantCard
+                  key={ventry._id+index}
+                  variantData={ventry}
+                  widgetData={widgetData} 
+                  groupData={groupData}
+                  batchRelated={batchRelated} 
+                  app={app}
+                  user={user}
+                />
+            )})}
+  
         </div>
         
         <FlowTable id={w._id} flows={w.flows} app={a} />

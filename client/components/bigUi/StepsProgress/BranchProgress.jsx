@@ -11,13 +11,14 @@ const BranchProgress = ({
      
     {bWfl.map( (entry)=>{
       let rndmKeyW = Math.random().toString(36).substr(2, 5);
+      const topNum = entry.action === 'slider' ? 'percent' : quantity;
       return(
         <MiniStack
           key={rndmKeyW}
           title={`${entry.step} ${entry.type}`}
           count={entry.count}
           countNew={0}
-          total={quantity} />
+          total={topNum} />
     )})}
     
     {bRvr.map( (entry)=>{

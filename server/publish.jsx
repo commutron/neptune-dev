@@ -435,13 +435,6 @@ Meteor.publish('hotDataPlus', function(scanOrb, keyMatch){
       XSeriesDB.find({batch: trueBatch, orgKey: orgKey}, {
         fields: {
           'orgKey': 0
-      //  'groupId': 0,
-  	  // 'widgetId': 0,
-  		// 'versionKey': 0,
-      //  'createdAt': 0,
-      //  'createdWho': 0,
-      //  'updatedAt': 0,
-  		// 'updatedWho': 0
         }}),
       XRapidsDB.find({extendBatch: trueBatch, orgKey: orgKey}, {
         fields: {
@@ -532,11 +525,9 @@ Meteor.publish('skinnyData', function(){
       //   fields: {
       //     'batch': 1
       //   }}), 
-      XRapidsDB.find({}, {
-        sort: {rapid:-1},
-        fields: {
-          
-        }}), 
+      // XRapidsDB.find({}, {
+      //   sort: {rapid:-1},
+      // }), 
     ];
   }
 });
@@ -625,25 +616,11 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
         XSeriesDB.find({batch: dataRequest, orgKey: orgKey}, {
           fields: {
             'orgKey': 0
-        //     'groupId': 0,
-    			 // 'widgetId': 0,
-    			 // 'versionKey': 0,
-        //     'createdAt': 0,
-        //     'createdWho': 0,
-        //     'updatedAt': 0,
-    			 // 'updatedWho': 0
         }}),
         XRapidsDB.find({extendBatch: dataRequest, orgKey: orgKey}, {
           fields: {
             'orgKey': 0,
             'gadget': 0
-        //     'groupId': 0,
-    			 // 'widgetId': 0,
-    			 // 'versionKey': 0,
-        //     'createdAt': 0,
-        //     'createdWho': 0,
-        //     'updatedAt': 0,
-    			 // 'updatedWho': 0
         }})
       ];
     }

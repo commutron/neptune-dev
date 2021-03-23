@@ -25,18 +25,6 @@ const ToastSlide = ({app})=> {
     });
   }
   
-  function fireNoise() {
-    
-    const audioObj = new Audio('/pacman.wav');
-      
-    audioObj.addEventListener("canplay", event => {
-      console.log(audioObj.volume);
-      audioObj.play();
-    });
-    
-  }
-  
-  
   return(
     <div className='space3v'>
       <h2 className='cap'>Notification Styles:</h2>
@@ -68,15 +56,6 @@ const ToastSlide = ({app})=> {
         >Send Inbox Notification Test to ALL USERS</button>
       </form>
       
-      
-      <hr />
-      
-      <p>
-        <button
-          className='action clearTeal'
-          onClick={()=>fireNoise()}
-        >Test Audio</button>
-      </p>
     </div>
   );
 };

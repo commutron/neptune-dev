@@ -2,14 +2,14 @@ import React from 'react';
 import './style.css';
 
 import { VictoryBar, VictoryStack, VictoryTooltip } from 'victory';
-//import Pref from '/client/global/pref.js';
 
 const MiniStack = ({ title, count, countNew, total })=> {
   
   const v = count;
   const vX = countNew;
+  let t = total === 'percent' ? 100 : total;
   
-  const dataArr = [ [v - vX], [vX], [total - v] ];
+  const dataArr = [ [v - vX], [vX], [t - v] ];
   
   let name = {
     fontSize: '0.9rem',
@@ -75,7 +75,9 @@ const MiniStack = ({ title, count, countNew, total })=> {
         />
       </VictoryStack>
       
-      <p style={num} className='numFont'>{v}/{total}</p>
+      <p style={num} className='numFont'
+        >{total === 'percent' ? `${v}%` : `${v}/${t}`}
+      </p>
     </div>
   );
 };

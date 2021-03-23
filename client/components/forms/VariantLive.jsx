@@ -24,7 +24,8 @@ const VariantLive = ({ vId, vKey, vState, selfclose })=> {
         className='miniAction noFade med'
         title={`Archive ${Pref.variant}\nNO data will be deleted.`}
         onClick={(e)=>handleVive(e)}
-      ><i><i className='fas fa-folder-open blueT fa-2x fa-fw'></i></i><br />Live
+      ><i><i className='fas fa-folder-open blueT fa-2x fa-fw'></i></i>
+      <br /><small>Open</small>
       </button>
     );
   }
@@ -34,7 +35,8 @@ const VariantLive = ({ vId, vKey, vState, selfclose })=> {
       className='miniAction noFade med'
       title={`Re-activate ${Pref.variant}`}
       onClick={(e)=>handleVive(e)}
-    ><b><i className='fas fa-folder grayT fa-2x fa-fw'></i></b><br />Archived
+    ><b><i className='fas fa-folder grayT fa-2x fa-fw'></i></b>
+    <br /><small>Archived</small>
     </button>
   );
 };

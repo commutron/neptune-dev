@@ -1,26 +1,9 @@
 import React from 'react';
 import { toast } from 'react-toastify';
 
-export default function InboxToastPop(currUser, app) {
+export default function InboxToastPop(currUser) {
   if(currUser) {
     const uID = currUser._id;
-    if(app) {
-      if(app.dailyEvent === 1) {
-        const audioObj = new Audio('/pacman.wav');
-      
-        audioObj.addEventListener("canplay", event => {
-          audioObj.play();
-        
-          toast(
-            <div>
-              <i className="fas fa-utensils fa-lg fa-fw"></i> <b>Lunch Break</b><br />
-            </div>, {
-            autoClose: false,
-          } );
-        
-        });
-      }
-    }
     if(currUser.inbox) {
       for( let inbox of currUser.inbox ) {
         if(inbox.unread) {

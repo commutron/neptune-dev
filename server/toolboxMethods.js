@@ -234,7 +234,6 @@ Meteor.methods({
       throw new Meteor.Error(err);
     }
   },
-
   
   ResetAppLatestSerial() {
     try{

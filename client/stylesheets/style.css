@@ -782,11 +782,7 @@ details[open].dropEvents summary {
   color: white;
   background-color: #00bde0;
 }
-/*
-.starfishAccents #pnFind::-webkit-search-cancel-button {
-  -webkit-appearance: none;
-}
-*/
+
 .starfishAccents #pnFind {
   border-color: #00bde0;
   border-right-color: transparent;

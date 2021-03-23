@@ -29,14 +29,14 @@
 
 .baseContainer,
 .traverseContainer,
-.baseTraverseContainer {
+.midTraverseContainer {
   display: grid;
   align-content: center;
   overflow-y: hidden !important;
   overflow-x: hidden !important;
 }
 
-.baseContainer, .baseTraverseContainer {
+.baseContainer, .midTraverseContainer {
   grid-template-columns: auto;
 }
 .baseContainer {
@@ -45,11 +45,11 @@
     'traverseContent'
     'traverseContent';
 }
-.baseTraverseContainer {
-  grid-template-rows: calc(92vh - 48px) 48px;
+.midTraverseContainer {
+  grid-template-columns: auto minmax(10vmin, 14vmax);
+  grid-template-rows: 92vh;
   grid-template-areas: 
-    'traverseContent'
-    'actionBarEx';
+    'traverseContent traverseList';
 }
 
 .traverseContainer {
@@ -74,9 +74,11 @@
   grid-area: actionBarEx;
   align-self: stretch;
   background-color: rgb(25,25,25);
+  background-color: var(--contrast);
+  box-shadow: var(--dropShadow1);
   display: flex;
   align-items: center;
-  /*justify-content: space-evenly;*/
+  justify-content: space-evenly;
   flex-wrap: nowrap;
 }
 .actionBarEx > div {
@@ -320,7 +322,10 @@
   .baseContainer {
     grid-template-rows: calc(100vh - 8vmin) 0px;
   }
-  .traverseContainer, .baseTraverseContainer {
+  .midTraverseContainer {
+    grid-template-rows: calc(100vh - 8vmin);
+  }
+  .traverseContainer {
     grid-template-rows: calc(100vh - 8vmin - 48px) 48px;
   }
   .cookieRow { grid-area: frontCenter; }

@@ -4,32 +4,35 @@ import { toast } from 'react-toastify';
 
 import ModelMedium from '/client/components/smallUi/ModelMedium';
 
-const ItemIncompleteX = ({ seriesId, item, app, noText })=> {
+const BatchXIncomplete = ({ batchData, seriesData, app, noText })=> {
   
-  let done = item.completed;
+  let done = batchData.completed;
 	  
 	return(
     <ModelMedium
       button='Force Finish'
-      title={`Force Finish Incomplete ${Pref.item}`}
+      title={`Force Finish Incomplete ${Pref.xBatch}`}
       color='darkOrangeT'
       icon='fa-flag-checkered'
-      lock={!Roles.userIsInRole(Meteor.userId(), ['qa', 'run']) || done}
+      lock={!Roles.userIsInRole(Meteor.userId(), ['qa', 'admin']) || done}
       noText={noText}>
-      <ItemIncompleteForm
-        seriesId={seriesId}
-        item={item}
+      <BatchXIncompleteForm
+        batchData={batchData}
+        seriesData={seriesData}
         app={app} />
   	</ModelMedium>
   );
 };
 
-export default ItemIncompleteX;     
+export default BatchXIncomplete;     
 	        
-const ItemIncompleteForm = ({ seriesId, item, app, selfclose })=> {
+const BatchXIncompleteForm = ({ batchData, seriesData, app, selfclose })=> {
   
+
   function handleFinish(e) {
     e.preventDefault();
+    
+    /*
     this.inFinGo.disabled = true;
     const bar = item.serial;
     const comm = this.fincomment.value.trim();
@@ -48,6 +51,8 @@ const ItemIncompleteForm = ({ seriesId, item, app, selfclose })=> {
         }
       });
     }
+    
+    */
   }
   	
 	return(
@@ -67,8 +72,8 @@ const ItemIncompleteForm = ({ seriesId, item, app, selfclose })=> {
           type="submit"
           id='inFinGo'
           className='action orangeHover orangeBorder'
-          disabled={false}
-          >Finish {item.serial}</button>
+          disabled={true}
+          >Close {Pref.xBatch}</button>
       </p>
     </form>
   );

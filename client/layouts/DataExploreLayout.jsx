@@ -1,7 +1,6 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { ToastContainer } from 'react-toastify';
-//import Pref from '/client/global/pref.js';
 
 import HomeIcon from '/client/layouts/HomeIcon.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
@@ -23,26 +22,13 @@ export const TraverseWrap = ({
   title,
   subLink,
   action,
-  base,
+  base, mid,
   beta,
   darkTheme,
   children
 })=>	{
-  
-  // useEffect( ()=> {
-  //   if(batchData) {
-  //     let el = document.getElementById('exItemList');
-  //     const pos = Session.get('itemListScrollPos') || {b: false, num: 0};
-  //     console.log(pos);
-  //     if(batchData.batch === pos.b) { el.scrollTop = pos.num || 0 }
-  //   }
-  // }, [batchData]);
-  
+
   function goPro(location) {
-    // if(batchData) {
-    //   let el = document.getElementById('exItemList');
-    //   Session.set('itemListScrollPos', {b: batchData.batch, num: el.scrollTop});
-    // }
     Session.set('now', location);
     FlowRouter.go('/production');
   }
@@ -100,9 +86,8 @@ export const TraverseWrap = ({
       <div className={'contentAreaEx ' + dark}>
         <div 
           className={
-            base ? 'baseContainer' :
-            !children[1] ?
-              'baseTraverseContainer' : 'traverseContainer'}>
+            base || !children[1] ? 'baseContainer' :
+            mid ? 'midTraverseContainer' : 'traverseContainer'}>
           
           <div className='traverseContent forceScroll forceScrollStyle' >
             {children[0] || children}
@@ -116,7 +101,7 @@ export const TraverseWrap = ({
               {children[1]}
             </aside>}
           
-          {!base &&
+          {!base && !mid ?
             <div className='actionBarEx centreRow'>
               <ActionBar
                 batchData={batchData}
@@ -130,7 +115,8 @@ export const TraverseWrap = ({
                 user={user}
                 action={action}
                 ncTypesCombo={flowData && flowData.ncTypesComboFlat} />
-            </div>}
+            </div>
+          : null }
             
         </div>
         

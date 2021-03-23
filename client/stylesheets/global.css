@@ -302,7 +302,7 @@ hr {
 }
 
 details {
-  line-height: 1.25rem;
+  line-height: 1;
   font-size: 1rem;
 	border: 0;
   margin: 0;
@@ -318,10 +318,16 @@ summary {
   min-height: 2.5rem;
   line-height: 1.2;
   margin: 0;
-  padding: 0 1vw;
+  padding: 1vw;
   cursor: pointer;
-  display: flex;
-  align-items: center;
+}
+summary:hover {
+  filter: brightness(1.1);
+}
+summary:focus,
+summary:active {
+  outline: 1px dashed;
+  outline-offset: 1px;
 }
 
 input::-webkit-inner-spin-button,

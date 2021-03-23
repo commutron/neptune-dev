@@ -46,7 +46,7 @@ const MultiBatchKPI = ({ batchIDs, app })=> {
     const dlvColr = delvAvg < 0 ? 'redT' : 'greenT';
     
     return(
-      <div className='vspacehalf autoGrid' 
+      <div className='autoGrid' 
         title={`Mean Average of completed ${Pref.batches}`}>
         
         
@@ -63,8 +63,7 @@ const MultiBatchKPI = ({ batchIDs, app })=> {
         <NumLine
           num={`${Math.abs(t2qPr)}%`}
           name={toPtext}
-          color={prColor}
-          big={true} />
+          color={prColor} />
           
         <NumLine
           num={Math.abs(delvAvg)}

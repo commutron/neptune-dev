@@ -14,7 +14,7 @@ const PanelBreakX = ({ seriesId, batchId, batchNum, item })=> {
     <ModelLarge
       button='Split Panel'
       title='Split Panel Into Its Units'
-      color='yellowT'
+      color='orangeT'
       icon='fa-cut'
       lock={done || item.units < 2 || !auth}
     >

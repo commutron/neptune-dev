@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 
 import ModelMedium from '/client/components/smallUi/ModelMedium';
 
-const BatchXCreate = ({ groupId, widgetId, versionKey, allVariants, lock })=> (
+const BatchXCreate = ({ groupId, widgetId, allVariants, lock })=> (
   <ModelMedium
     button={'New ' + Pref.xBatch}
     title={'Create New ' + Pref.xBatch}
@@ -18,7 +18,6 @@ const BatchXCreate = ({ groupId, widgetId, versionKey, allVariants, lock })=> (
     <BXCreateForm
       groupId={groupId}
       widgetId={widgetId}
-      versionKey={versionKey}
       allVariants={allVariants}
     />
   </ModelMedium>
@@ -26,7 +25,7 @@ const BatchXCreate = ({ groupId, widgetId, versionKey, allVariants, lock })=> (
 
 export default BatchXCreate;
 
-const BXCreateForm = ({ groupId, widgetId, versionKey, allVariants })=> {
+const BXCreateForm = ({ groupId, widgetId, allVariants })=> {
 
   function save(e) {
     e.preventDefault();
@@ -63,15 +62,12 @@ const BXCreateForm = ({ groupId, widgetId, versionKey, allVariants })=> {
     });
   }
   
-  let eVer = !versionKey ? '' : versionKey;
-  
   return(
     <form className='centre' onSubmit={(e)=>save(e)}>
       <p>
         <label htmlFor='vrsn'>{Pref.version}</label><br />
         <select
           id='vrsn'
-          defaultValue={eVer}
           required>
         {allVariants.map( (entry)=>{
           if(entry.live) {

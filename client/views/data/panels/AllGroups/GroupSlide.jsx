@@ -84,24 +84,22 @@ const GroupSlide = ({ groupData, widgetsList, batchData, batchDataX, app })=>{
         
       </div>
       
+      <p className='capFL vmargin'>
+        {Pref.instruct} index: <a className='clean wordBr' href={g.wiki} target='_blank'>{g.wiki}</a>
+      </p>
+        
       <WidgetsDepth
         groupAlias={g.alias}
         widgetData={widgetsList}
         active={active} />
       
       <div className='wide space edit'>
-        
-        <p className='capFL'>
-          {Pref.instruct} index: <a className='clean wordBr' href={g.wiki} target='_blank'>{g.wiki}</a>
-        </p>
-        
         <CreateTag
           when={g.createdAt}
           who={g.createdWho}
           whenNew={g.updatedAt}
           whoNew={g.updatedWho}
           dbKey={g._id} />
-        
       </div>
     </div>
   );

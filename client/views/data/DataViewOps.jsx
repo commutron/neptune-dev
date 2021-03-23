@@ -17,7 +17,6 @@ import ItemPanelX from './panels/ItemPanelX';
 import BatchPanel from './panels/BatchPanel/BatchPanel.jsx';
 import BatchPanelX from './panels/XBatchPanel/BatchPanelX.jsx';
 import WidgetPanel from './panels/WidgetPanel/WidgetPanel';
-import VariantPanel from './panels/VariantPanel/VariantPanel.jsx';
 import TestFailPanel from './panels/TestFailPanel.jsx';
 import ScrapPanel from './panels/ScrapPanel.jsx';
 
@@ -48,12 +47,6 @@ const DataViewOps = ({
   function allLinkedBatches(wId) {
     const xBatches = allXBatch.filter(x => x.widgetId === wId);
     const legacyBatches = allBatch.filter(x => x.widgetId === wId);
-    return [...xBatches, ...legacyBatches ];
-  }
-  
-  function verLinkedBatches(vKey) {
-    const xBatches = allXBatch.filter(x => x.versionKey === vKey);
-    const legacyBatches = allBatch.filter(x => x.versionKey === vKey);
     return [...xBatches, ...legacyBatches ];
   }
   
@@ -621,49 +614,6 @@ const DataViewOps = ({
       );
     }
   }
-
-// Variant
-  if(view === 'widget' && specify) {
-    let widget = getWidget(request);
-    if(widget) {
-      Session.set('nowBatch', false);
-      let allVariants = widgetVariants(widget._id);
-      let variant = allVariants.find( x => x.variant === specify);
-      if(variant) {
-        let group = linkedGroup(widget.groupId);
-        let allWidgets = groupWidgets(widget.groupId);
-        let allBatches = verLinkedBatches(variant.versionKey);
-        return (
-          <TraverseWrap
-            batchData={false}
-            itemData={false}
-            widgetData={widget}
-            variantData={variant}
-            allVariants={allVariants}
-            groupData={group}
-            user={user}
-            app={app}
-            title='Variant'
-            subLink={subLink}
-            action='variant'
-          >
-            <VariantPanel
-              variantData={variant}
-              widgetData={widget}
-              groupData={group}
-              batchRelated={allBatches}
-              app={app}
-              user={user}
-            />
-            <BatchesList
-              batchData={allBatches}
-              widgetData={allWidgets}
-              variantData={allVariants} />
-          </TraverseWrap>
-        );
-      }
-    }
-  }
 // Widget
   if(view === 'widget') {
     const widget = getWidget(request);
@@ -685,7 +635,7 @@ const DataViewOps = ({
           app={app}
           title='Widget'
           subLink={subLink}
-          action='widget'
+          mid={true}
         >
           <WidgetPanel
             widgetData={widget}

@@ -12,6 +12,8 @@
 }
 
 .waterfallTitle {
+  display: flex;
+  align-items: center;
   height: 4vmax;
   font-size: calc(0.25rem + 0.75vmax);
   font-weight: 600;

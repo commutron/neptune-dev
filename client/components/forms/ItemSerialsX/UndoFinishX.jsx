@@ -19,7 +19,7 @@ const UndoFinishX = ({
     <ModelSmall
       button='Undo Finish'
       title={'Undo Finish and Reactivate ' + Pref.item}
-      color='yellowT'
+      color='orangeT'
       icon={icon}
       lock={!auth}
       noText={noText}

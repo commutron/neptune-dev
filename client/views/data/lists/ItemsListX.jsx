@@ -3,7 +3,7 @@ import moment from 'moment';
 //import Pref from '/client/global/pref.js';
 import LeapButton from '/client/components/tinyUi/LeapButton.jsx';
 import FilterItemsX from '/client/components/bigUi/FilterItemsX';
-import SeriesForm, { SeriesDelete } from '/client/components/forms/ItemSerialsX/SeriesForm';
+import { SeriesDelete } from '/client/components/forms/ItemSerialsX/SeriesForm';
 
 
 const ItemsListX = ({ 
@@ -15,10 +15,6 @@ const ItemsListX = ({
     return(
       <div className='centre'>
         <h4>Non-Serialized</h4>
-        <SeriesForm
-          batchData={batchData}
-          lock={batchData.completed}
-        />
       </div>
     );
   }

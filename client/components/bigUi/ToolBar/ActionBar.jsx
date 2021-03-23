@@ -1,16 +1,16 @@
 import React, { Fragment } from 'react';
-// import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 
 import './style.css';
 
 import ActionLink from '/client/components/tinyUi/ActionLink.jsx';
 
-import BatchCreate from '/client/components/forms/Batch/BatchCreate';
 import BatchEdit from '/client/components/forms/Batch/BatchEdit';
 import RemoveBatch from '/client/components/forms/Batch/RemoveBatch';
-import BatchXCreate from '/client/components/forms/Batch/BatchXCreate';
 import BatchXEdit from '/client/components/forms/Batch/BatchXEdit';
+import BatchXIncomplete from '/client/components/forms/Batch/BatchXIncomplete';
 import RemoveXBatch from '/client/components/forms/Batch/RemoveXBatch';
+
+import SeriesForm from '/client/components/forms/ItemSerialsX/SeriesForm';
 import ItemSerialsWrapX from '/client/components/forms/ItemSerialsX/ItemSerialsWrapX';
 
 import UnitSetX from '/client/components/forms/ItemSerialsX/UnitSetX';
@@ -31,12 +31,6 @@ import PanelBreak from '/client/components/forms/PanelBreak.jsx';
 import UndoFinish from '/client/components/forms/UndoFinish.jsx';
 import ItemIncompleteForm from '/client/components/forms/ItemIncompleteForm.jsx';
 import ScrapForm from '/client/components/forms/ScrapForm.jsx';
-
-import WidgetEditForm from '/client/components/forms/WidgetEditForm.jsx';
-import CompForm from '/client/components/forms/CompForm.jsx';
-import FlowFormHead from '/client/components/forms/FlowFormHead.jsx';
-
-import VariantForm from '/client/components/forms/VariantForm.jsx';
 
 import Remove from '/client/components/forms/Remove.jsx';
 
@@ -180,6 +174,11 @@ const ActionBar = ({
             allVariants={allVariants}
             lock={!variantData || !batchData.live} />
           
+          <SeriesForm
+            batchData={batchData}
+            lock={seriesData || batchData.completed}
+          />
+        
           <ItemSerialsWrapX
             bID={batchData._id}
             quantity={batchData.quantity}
@@ -207,9 +206,14 @@ const ActionBar = ({
                         '&quant=' + batchData.quantity }
               title='Print Label'
               icon='fas fa-print'
-              color='cloudsT' />
+              color='blackT' />
           </span>
-
+          
+          <BatchXIncomplete
+            batchData={batchData}
+            seriesData={seriesData}
+            app={app} />
+          
           <RemoveXBatch
             batchData={batchData}
             seriesData={seriesData}
@@ -217,93 +221,9 @@ const ActionBar = ({
             lockOut={batchData.completed === true} />
           
         </Fragment>
-      :
-      action === 'variant' && variantData ?
-        <Fragment>
-          <VariantForm
-            widgetData={widgetData}
-            variantData={variantData}
-            app={app}
-            rootWI={variantData.instruct}
-            lockOut={groupData.hibernate} />
-          <CompForm 
-            vID={variantData._id}
-            lockOut={groupData.hibernate} />
-          <BatchCreate
-            versionKey={variantData.versionKey}
-            widgetId={widgetData._id}
-            allVariants={allVariants}
-            lock={!allVariants || variantData.live === false} />
-          <BatchXCreate
-            groupId={groupData._id}
-            widgetId={widgetData._id}
-            versionKey={variantData.versionKey}
-            allVariants={allVariants}
-            lock={!allVariants || variantData.live === false} />
-          <Remove
-            action='variant'
-            title={variantData.variant}
-            check={variantData.createdAt.toISOString()}
-            entry={variantData}
-            lockOut={variantData.live === true} />
-        </Fragment>
-      :
-      action === 'widget' ?
-        <Fragment>
-          <WidgetEditForm
-            id={widgetData._id}
-            now={widgetData}
-            lockOut={groupData.hibernate} />
-          <VariantForm
-            widgetData={widgetData}
-            variantData={false}
-            app={app}
-            rootWI={groupData.wiki}
-            lockOut={groupData.hibernate} />
-          <FlowFormHead
-            id={widgetData._id}
-            edit={false}
-            existFlows={widgetData.flows}
-            app={app} />
-          <BatchCreate
-            versionKey={false}
-            widgetId={widgetData._id}
-            allVariants={allVariants}
-            lock={!allVariants || allVariants.every(v => v.live === false)} />
-          <BatchXCreate
-            groupId={groupData._id}
-            widgetId={widgetData._id}
-            versionKey={false}
-            allVariants={allVariants}
-            lock={!allVariants || allVariants.every(v => v.live === false)} />
-          <Remove
-            action='widget'
-            title={widgetData.widget}
-            check={widgetData.createdAt && widgetData.createdAt.toISOString()}
-            entry={widgetData._id}
-            lockOut={!allVariants.every( x => x.live === false )} />
-        </Fragment>
       : null
     }
   </Fragment>
 );
 
 export default ActionBar;
-
-
-/*
-<ContextMenuTrigger
-            id={action+'actionmenu'}
-            holdToDisplay={1}
-            renderTag='span'>
-            <i className='fas fa-compass fa-fw fa-5x redT'></i>
-          </ContextMenuTrigger>
-          
-          <ContextMenu 
-            id={action+'actionmenu'}
-            hideOnLeave={false}
-            preventHideOnContextMenu={true}
-            preventHideOnResize={true}
-            preventHideOnScroll={true}>
-            
-            */

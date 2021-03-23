@@ -9,10 +9,9 @@ const SeriesCreate = ({ batchData, lock, noText })=> (
     button={`Add ${Pref.series}`}
     title={`Add ${Pref.series}`}
     color='greenT'
-    icon='fa-barcode'
+    icon='fa-layer-group'
     lock={!Roles.userIsInRole(Meteor.userId(), 'run') || lock}
-    noText={noText}
-    lgIcon={true}>
+    noText={noText}>
     <SeriesCreateForm batchData={batchData} />
   </ModelSmall>
 );
@@ -32,6 +31,7 @@ const SeriesCreateForm = ({ batchData, selfclose })=> {
       error && console.log(error);
       if(reply) {
         toast.success('Saved');
+        selfclose();
       }else{
         toast.error('Server Error');
         this.goSRS.disabled = false;

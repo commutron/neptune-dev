@@ -20,7 +20,7 @@ const CompModel = ({ vID, lockOut })=> (
 
 export default CompModel;
 
-const CompForm = ({ vID })=> {
+const CompForm = ({ vID, selfclose })=> {
   
   function addParts(e) {
     e.preventDefault();
@@ -36,8 +36,7 @@ const CompForm = ({ vID })=> {
     
     Meteor.call('pushCompV', vID, indieNums, (error)=>{
       error && console.log(error);
-      this.parts.value = '';
-      this.go.disabled = false;
+      selfclose();
     });
   }
   
