@@ -1,4 +1,4 @@
-
+////////////////////////////////////////////////////// LEGACY AGNOSTIC
 
 export function sortBranches(branches) {
   const brancheS = branches.sort((b1, b2)=>
@@ -30,4 +30,21 @@ export function flattenHistory(itemArr) {
 export function countWaterfall(stepCounts) {
   return !Array.isArray(stepCounts) || stepCounts.length === 0 ? 0 :
             Array.from(stepCounts, x => x.tick).reduce((x,y)=> x + y);
+}
+
+export function allNCOptions() {
+  let org = AppDB.findOne({orgKey: Meteor.user().orgKey});
+  if(!org) {
+    return [];
+  }else{
+    const ncTypesCombo = Array.from(org.nonConTypeLists, x => x.typeList);
+    const ncTCF = [].concat(...ncTypesCombo,...org.nonConOption);
+
+	  const flatTypeList = Array.from(ncTCF, x => 
+	    typeof x === 'string' ? x : 
+	    x.live === true && x.typeText
+	  );
+	  const flatTypeListClean = [...new Set( flatTypeList.filter( x => x !== false) ) ];
+    return flatTypeListClean;
+  }
 }

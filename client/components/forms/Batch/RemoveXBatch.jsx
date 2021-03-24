@@ -33,11 +33,12 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
   function handleItemRemove(e) {
     this.cutItemGo.disabled = true;
     const srsID = seriesData && seriesData._id;
+    const pinVal = this.orgPINitem.value;
     
     const check = window.confirm('Permanently Delete All Items??');
     
     if(check && srsID) {
-      Meteor.call('deleteSeriesItems', batchData._id, srsID, (err, reply)=>{
+      Meteor.call('deleteSeriesItems', batchData._id, srsID, pinVal, (err, reply)=>{
         if(err) {
           console.log(err);
           toast.error('Server Error. see console');
@@ -46,6 +47,29 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
           toast.success('Items of BatchDB removed');
         }else{
           toast.warning('Records are In-Use or No Authorization');
+          this.cutItemGo.disabled = false;
+        }
+      });
+    }
+  }
+  
+  function handleFallRemove(e) {
+    this.cutFallGo.disabled = true;
+    const pinVal = this.orgPINfall.value;
+    
+    const check = window.confirm('Permanently Delete All Waterfall Counters??');
+    
+    if(check) {
+      Meteor.call('deleteXBatchFall', batchData._id, pinVal, (err, reply)=>{
+        if(err) {
+          console.log(err);
+          toast.error('Server Error. see console');
+        }
+        if(reply) {
+          toast.success('Waterfall of BatchDB removed');
+        }else{
+          toast.warning('Records are In-Use or No Authorization');
+          this.cutFallGo.disabled = false;
         }
       });
     }
@@ -53,11 +77,12 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
   
   function handleTideXRemove(e) {
     this.cutTideGo.disabled = true;
-
+    const pinVal = this.orgPINtime.value;
+    
     const check = window.confirm('Permanently Delete All Times??');
     
     if(check) {
-      Meteor.call('deleteXBatchTide', batchData._id, (err, reply)=>{
+      Meteor.call('deleteXBatchTide', batchData._id, pinVal, (err, reply)=>{
         if(err) {
           console.log(err);
           toast.error('Server Error. see console');
@@ -66,6 +91,7 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
           toast.success('Times in BatchDB removed');
         }else{
           toast.warning('Records are In-Use or No Authorization');
+          this.cutTideGo.disabled = false;
         }
       });
     }
@@ -74,13 +100,15 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
   function handleAllRemove(e) {
     e.preventDefault();
     this.cutAllGo.disabled = true;
+    const pinVal = this.orgPINall.value;
+    
     const confirm = this.confirmInput.value.trim();
     
     const check = window.confirm(`Delete this ${Pref.xBatch} Forever??`);
     
     if(check) {
       
-      Meteor.call('deleteWholeXBatch', batchData._id, confirm, (err, reply)=>{
+      Meteor.call('deleteWholeXBatch', batchData._id, confirm, pinVal, (err, reply)=>{
         err && console.log(err);
         if(reply === 'inUse') {
           toast.warning('Cannot do this, records are in use');
@@ -89,6 +117,7 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
           toast.success('Entry in BatchDB removed');
         }else{
           toast.error('Rejected by Server, No Authorization');
+          this.cutAllGo.disabled = false;
         }
       });
     }
@@ -104,6 +133,16 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
       <div className='vspace balancer cap'>
         <div>
           <p>Delete ALL {srsQ} {Pref.items}</p>
+          <input
+            id='orgPINitem'
+            autoComplete="false"
+            className='noCopy miniIn12 interSelect centreText gap redHover'
+            pattern='[\d\d\d\d]*'
+            maxLength='4'
+            minLength='4'
+            placeholder='PIN'
+            required />
+          <br />
           <button
             className='smallAction clearRed'
             type='button'
@@ -112,8 +151,40 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
             disabled={srsQ === 0}
           >DELETE Items</button>
         </div>
+        
+        <div>
+          <p>Delete ALL {Pref.counter}s</p>
+          <input
+            id='orgPINfall'
+            autoComplete="false"
+            className='noCopy miniIn12 interSelect centreText gap redHover'
+            pattern='[\d\d\d\d]*'
+            maxLength='4'
+            minLength='4'
+            placeholder='PIN'
+            required />
+          <br />
+          <button
+            className='smallAction clearRed'
+            type='button'
+            onClick={(e)=>handleFallRemove(e)}
+            id='cutFallGo'
+            disabled={batchData.waterfall.length === 0}
+          >DELETE Counts</button>
+        </div>
+        
         <div>
           <p>Delete ALL {batchData.tide.length} {Pref.tide}s</p>
+          <input
+            id='orgPINtime'
+            autoComplete="false"
+            className='noCopy miniIn12 interSelect centreText gap redHover'
+            pattern='[\d\d\d\d]*'
+            maxLength='4'
+            minLength='4'
+            placeholder='PIN'
+            required />
+          <br />
           <button
             className='smallAction clearRed'
             type='button'
@@ -126,7 +197,9 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
       
       <hr />
       
-      {batchData.tide.length === 0 && srsQ === 0 ?
+      {batchData.tide.length === 0 &&
+       batchData.waterfall.length === 0 && 
+       srsQ === 0 ?
         !Roles.userIsInRole(Meteor.userId(), 'admin') ? 
           <p>
             <strong>An "Admin" account is required to delete the entire {Pref.xBatch}</strong>
@@ -145,24 +218,31 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
             Alterations ({batchData.altered.length}) and 
             Events ({batchData.events.length}).
           </p>
-            {/*<dd>Escaped: {et.escaped.length}</dd>*/}
-            
-          <form onSubmit={(e)=>handleAllRemove(e)} className='inlineForm centre'>
-            <label>
-              <input
-                type='text'
-                id='confirmInput'
-                placeholder={checkshort}
-                className='noCopy redIn'
-                required />
-              <button
-                className='smallAction clearRed'
-                type='submit'
-                id='cutAllGo'
-                disabled={false}>DELETE Entire {Pref.xBatch}
-              </button>
-              <br />Enter "<i className='noCopy'>{checkshort + ' '}</i>" to confirm.
-            </label>
+          
+          <p>Enter "<i className='noCopy'>{checkshort + ' '}</i>" and PIN to confirm.</p>
+          
+          <form onSubmit={(e)=>handleAllRemove(e)} className='inlineForm centreRow'>
+            <input
+              type='text'
+              id='confirmInput'
+              placeholder={checkshort}
+              className='noCopy miniIn12 interSelect centreText gap redHover'
+              required />
+            <input
+              id='orgPINall'
+              autoComplete="false"
+              className='noCopy miniIn12 interSelect centreText gap redHover'
+              pattern='[\d\d\d\d]*'
+              maxLength='4'
+              minLength='4'
+              placeholder='PIN'
+              required />
+            <button
+              className='smallAction clearRed'
+              type='submit'
+              id='cutAllGo'
+              disabled={false}>DELETE Entire {Pref.xBatch}
+            </button>
           </form>
         </div>
       : 

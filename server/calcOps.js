@@ -1,19 +1,5 @@
 import moment from 'moment';
 
-
-export function avgOfArray(arr) {
-  const cArr = arr.filter( f => f );
-  
-  if(cArr.length == 1) {
-    return cArr[0];
-  }else if(cArr.length > 1) {
-    const reduced = cArr.reduce( (a,c)=>a+c) / cArr.length;
-    return reduced;
-  }else{
-    return 0;
-  }
-}
-
 export function sc2mn(seconds) {
   const asMinutes = moment.duration(seconds, "seconds").asMinutes();
   const trunc = ( Math.round(
@@ -49,4 +35,18 @@ export function round2Decimal(thrtytw) {
   const trunc = Math.round((thrtytw + Number.EPSILON) * 100) / 100;
   // exactly rounding to 2 decimal points
   return trunc;
+}
+
+export function avgOfArray(arr) {
+  const cArr = arr.filter( f => f );
+  
+  if(cArr.length == 1) {
+    return cArr[0];
+  }else if(cArr.length > 1) {
+    const reduced = cArr.reduce( (a,c)=>a+c) / cArr.length;
+    const clean = round2Decimal( reduced );
+    return clean;
+  }else{
+    return 0;
+  }
 }

@@ -437,14 +437,20 @@ Meteor.methods({
 
   //////////////////// DESTRUCTIVE \\\\\\\\\\\\\\\\\\\\\
   
-  deleteSeriesItems(batchId, seriesId) {
+  deleteSeriesItems(batchId, seriesId, pinInput) {
     const accessKey = Meteor.user().orgKey;
     const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
     const srs = XSeriesDB.findOne({_id: seriesId});
     const inUse = srs.items.some( x => x.history.length > 0 );
     const howMany = srs.items.length + ' items';
     
-    if(!inUse && auth && srs.orgKey === accessKey) {
+    const keyMatch = srs.orgKey === accessKey;
+    
+    const org = AppDB.findOne({ orgKey: accessKey });
+    const orgPIN = org ? org.orgPIN : null;
+    const pinMatch = pinInput === orgPIN;
+      
+    if(!inUse && auth && keyMatch && pinMatch) {
       XSeriesDB.update({_id: seriesId, orgKey: accessKey}, {
         $set : {
           items: [],

@@ -933,6 +933,11 @@ Meteor.methods({
       return 'inUse';
     }
   },
+  authPullItemX(seriesId, serial, accessKey) {
+		XSeriesDB.update({_id: seriesId, orgKey: accessKey}, {
+      $pull : { items: { serial: serial }
+    }});
+  },
   
 });
 

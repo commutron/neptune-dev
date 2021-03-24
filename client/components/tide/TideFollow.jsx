@@ -1,7 +1,6 @@
 import React, { /*useRef, useEffect,*/ Fragment } from 'react';
 import Pref from '/client/global/pref.js';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
-// import UserNice from '/client/components/smallUi/UserNice.jsx';
 // import { toast } from 'react-toastify';
 
 const TideFollow = ({ proRoute, invertColor })=> {
@@ -20,26 +19,6 @@ const TideFollow = ({ proRoute, invertColor })=> {
 		  Meteor.logout();
 	  }
 	}
-	
-  // useEffect(() => {
-  //   if(!proRoute) {
-  //     loopClock = Meteor.setInterval( ()=>{
-  //       if(Meteor.user().engaged) {
-  //         toast.dismiss();
-  //         toast(<i>⏰ Remember <UserNice id={Meteor.userId()} />,
-  //           you are still {Pref.engaged} with a {Pref.batch}. 
-  //           <a onClick={()=>go(Meteor.user().engaged.tName)}
-  //             >Go back there now</a></i>, { 
-  //           autoClose: false
-  //         });
-  //       }
-  //     },1000*60*15);
-  // 	}
-  //   return () => { 
-  //     thingMounted.current = false;
-  //     if(!proRoute) { Meteor.clearInterval(loopClock); }
-  //   };
-  // }, [proRoute]);
   
 	const go = (goto)=> {
 	  Session.set('now', goto);
@@ -81,21 +60,17 @@ const TideFollow = ({ proRoute, invertColor })=> {
           <i className='fas fa-user-astronaut fa-flip-horizontal fa-fw'></i>
           <i className='noCopy'> {user && user.username}</i>
         </MenuItem>
-        
-        {recent.length > 0 && 
-          <Fragment>
-            <MenuItem disabled={true}>
-              <i className="fas fa-street-view fa-fw"></i><i> Recent</i>
-            </MenuItem>
-            {recent.map( (val, ix)=>(  
-              <MenuItem key={ix} onClick={()=>go(val)} className='indent3'>
-                <i>{val}</i>
-              </MenuItem>
-            ))}
-          </Fragment>
-        }
-        
-         <MenuItem onClick={()=>doLogout()}>
+        <MenuItem divider />
+        <MenuItem disabled={true}>
+          <i className="fas fa-street-view fa-fw"></i><i> Recent</i>
+        </MenuItem>
+        {recent.map( (val, ix)=>(  
+          <MenuItem key={ix} onClick={()=>go(val)} className='indent3'>
+            <i>{val}</i>
+          </MenuItem>
+        ))}
+        <MenuItem divider />
+        <MenuItem onClick={()=>doLogout()}>
           <i className='fas fa-sign-out-alt fa-fw'></i><i className='noCopy'> Sign-out</i>
         </MenuItem>
       </ContextMenu>

@@ -31,7 +31,6 @@ function collectBranchCondition(privateKey, batchID) {
         const srs = XSeriesDB.findOne({batch: batchX.batch});
         const rNC = !srs ? [] : srs.nonCon.filter( n => !n.trash && n.inspect === false );
         
-        
         const waterfall = batchX.waterfall;
         const items = !srs ? [] : srs.items;
         const released = batchX.releases.findIndex( x => x.type === 'floorRelease') >= 0;

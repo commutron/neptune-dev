@@ -166,7 +166,7 @@
   white-space: nowrap;
   transition: all 150ms ease-in-out;
   color: var(--silver);
-  max-width: 20vw;
+  max-width: 25vw;
   font-size: 2.5vmin;
   text-indent: 1vmin;
   word-break: keep-all;

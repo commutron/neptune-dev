@@ -18,8 +18,6 @@ import FlowTable from '/client/components/tables/FlowTable';
 import WTimeTab from './WTimeTab';
 import NonConMultiBatchBar from '/client/components/charts/NonCon/NonConMultiBatchBar';
 
-import { flipArray } from '/client/utility/Convert';
-
 const WidgetPanel = ({ 
   groupData, widgetData, variantData,
   batchRelated, 
@@ -30,7 +28,10 @@ const WidgetPanel = ({
   const b = batchRelated;
   const a = app;
   
-  const batchIDs = flipArray( Array.from( b, x => x._id ) );
+  const bS = b.sort((b1, b2)=> b1.batch < b2.batch ? -1 : 
+                               b1.batch > b2.batch ? 1 : 0 );
+  const batchIDs = Array.from( bS, x => x._id );
+  const batches = Array.from( bS, x => x.batch );
 
   return(
     <div className='space' key={w.widget}>
@@ -117,7 +118,7 @@ const WidgetPanel = ({
           batchIDs={batchIDs}
           app={a} />
           
-        <NonConMultiBatchBar batchIDs={batchIDs} />
+        <NonConMultiBatchBar batches={batches} />
         
       </Tabs>
 

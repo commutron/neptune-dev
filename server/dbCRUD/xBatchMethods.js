@@ -519,7 +519,7 @@ Meteor.methods({
       }
       const allFall = !didFall ? true : falling.every( x => x === true );
       
-      const didFlow = doc.serialize === false;
+      const didFlow = doc.serialize === true;
       const srs = didFlow && XSeriesDB.findOne({batch: doc.batch});
       const allFlow = !srs ? true : srs.items.every( x => x.completed === true );
     
@@ -582,7 +582,7 @@ Meteor.methods({
       }
     }
   },
-
+  
   //// Blockers \\\\
   addBlockX(batchId, blockTxt) {
     if(Meteor.userId()) {
@@ -646,18 +646,104 @@ Meteor.methods({
     }
   },
   
+  // FORCE FINISH ALL
+  FORCEfinishBatchX(batchId, 
+    doneScrap, remainScrap, unstartDelete, unstartScrap, comm, pinInput
+  ) {
+    if(Roles.userIsInRole(Meteor.userId(), "qa") ) {
+      const accessKey = Meteor.user().orgKey;
+      
+      const org = AppDB.findOne({ orgKey: accessKey });
+      const orgPIN = org ? org.orgPIN : null;
+        
+      const doc = XBatchDB.findOne({_id: batchId});
+      
+      if(pinInput === orgPIN) {
   
+        const didFlow = doc.serialize === true;
+        const srs = didFlow && XSeriesDB.findOne({batch: doc.batch});
+        
+        const srsId = !srs ? null : srs._id;
+        
+        const srsI = !srs ? [] : srs.items;
+        
+        const doneI = srsI.filter( i=> i.completed && i.history.findIndex( s => 
+                              s.type === 'scrap' && s.good === true ) === -1 );
+        for(let di of doneI) {
+          if(doneScrap) {  
+            Meteor.call('scrapItemX', srsId, di.serial, 'force finish', 'Force Finish All');
+          }
+        }
+        
+        const runI = srsI.filter( i=> !i.completed && i.history.length > 0 );
+        for(let ri of runI) {
+          if(remainScrap) {  
+            Meteor.call('scrapItemX', srsId, ri.serial, 'force finish', 'Force Finish All');
+          }else{
+            Meteor.call('finishIncompleteItemX', srsId, ri.serial, 'Force Finish All');
+          }
+        }
+        
+        const noI = srsI.filter( i=> !i.completed && i.history.length === 0 );
+        for(let ni of noI) {
+          if(unstartDelete) { 
+            Meteor.call('authPullItemX', srsId, ni.serial, accessKey);
+          }else if(unstartScrap) {
+            Meteor.call('scrapItemX', srsId, ni.serial, 'force finish', 'Force Finish All');
+          }else{
+            Meteor.call('finishIncompleteItemX', srsId, ni.serial, 'Force Finish All');
+          }
+        }
+      
+        XBatchDB.update({_id: batchId, orgKey: accessKey}, {
+    			$set : { 
+    			  live: false,
+    			  completed: true,
+    			  completedAt: new Date(),
+    			  completedWho: Meteor.userId(),
+    			},
+    			$push : {
+            altered: {
+              changeDate: new Date(),
+              changeWho: Meteor.userId(),
+              changeReason: 'user discretion',
+              changeKey: 'completed',
+              oldValue: 'false',
+              newValue: 'true'
+            },
+            blocks: {
+              key: new Meteor.Collection.ObjectID().valueOf(),
+              block: comm,
+              time: new Date(),
+              who: Meteor.userId(),
+              solve: false
+            }
+        }});
+        Meteor.defer( ()=>{
+          Meteor.call('updateOneMovement', batchId, accessKey);
+        });
+        return true;
+      }else{ return false }
+    }else{ return false }
+  },
     //////////////////// DESTRUCTIVE \\\\\\\\\\\\\\\\\\\\\
   
   // Items delete is in the Series Methods
   
-  deleteXBatchTide(batchId) {
+  deleteXBatchTide(batchId, pinInput) {
     const accessKey = Meteor.user().orgKey;
     const doc = XBatchDB.findOne({_id: batchId});
     const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
     const inUse = doc.tide.some( x => x.stopTime === false ) ? true : false;
     const howMany = doc.tide.length + ' times';
-    if(!inUse && auth && doc.orgKey === accessKey) {
+    
+    const keyMatch = doc.orgKey === accessKey;
+    
+    const org = AppDB.findOne({ orgKey: accessKey });
+    const orgPIN = org ? org.orgPIN : null;
+    const pinMatch = pinInput === orgPIN;
+    
+    if(!inUse && auth && keyMatch && pinMatch) {
       XBatchDB.update({_id: batchId, orgKey: accessKey}, {
         $set : {
           tide: [],
@@ -682,7 +768,46 @@ Meteor.methods({
     }
   },
   
-  deleteWholeXBatch(batchID, pass) {
+  deleteXBatchFall(batchId, pinInput) {
+    const accessKey = Meteor.user().orgKey;
+    const doc = XBatchDB.findOne({_id: batchId});
+    const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
+    const howMany = doc.waterfall.length + ' counters';
+    
+    const keyMatch = doc.orgKey === accessKey;
+    
+    const org = AppDB.findOne({ orgKey: accessKey });
+    const orgPIN = org ? org.orgPIN : null;
+    const pinMatch = pinInput === orgPIN;
+    
+    if(auth && keyMatch && pinMatch) {
+      XBatchDB.update({_id: batchId, orgKey: accessKey}, {
+        $set : {
+          waterfall: [],
+        },
+        $push : {
+          altered: {
+            changeDate: new Date(),
+            changeWho: Meteor.userId(),
+            changeReason: 'user discretion',
+            changeKey: 'waterfall',
+            oldValue: howMany,
+            newValue: '0 counters'
+          }
+        }
+      });
+      Meteor.defer( ()=>{
+        Meteor.call('updateOneMovement', batchId, accessKey);
+      });
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  deleteWholeXBatch(batchID, pass, pinInput) {
+    const accessKey = Meteor.user().orgKey;
+    
     const doc = XBatchDB.findOne({_id: batchID});
     const srs = XSeriesDB.findOne({batch: doc.batch});
     
@@ -692,9 +817,14 @@ Meteor.methods({
     if(!items && !inUse) {
       const lock = doc.createdAt.toISOString().split("T")[0];
       const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
-      const access = doc.orgKey === Meteor.user().orgKey;
+      const access = doc.orgKey === accessKey;
       const unlock = lock === pass;
-      if(auth && access && unlock) {
+      
+      const org = AppDB.findOne({ orgKey: accessKey });
+      const orgPIN = org ? org.orgPIN : null;
+      const pinMatch = pinInput === orgPIN;
+      
+      if(auth && access && unlock && pinMatch) {
         XBatchDB.remove({_id: batchID});
         TraceDB.remove({batchID: batchID});
         if(srs) {

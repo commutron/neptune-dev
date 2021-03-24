@@ -96,34 +96,54 @@ const BlockAddForm = ({ id, edit, doneLock, selfclose })=> {
 
 export default BlockAdd;
 
+export const SolveBlock = ({ id, blKey, noText })=> (
+  <ModelSmall
+    button='Solve'
+    title={'Solve this ' + Pref.block}
+    color='greenT'
+    icon='fas fa-reply'
+    lock={!Roles.userIsInRole(Meteor.userId(), 'run')}
+    noText={noText}
+  >
+    <SolveBlockForm
+      id={id}
+      blKey={blKey}
+   />
+  </ModelSmall>
+);
 
-export const SolveBlock = ({ id, blKey, noText })=> {
+const SolveBlockForm = ({ id, blKey, selfclose })=> {
   
   function addSolve(e) {
-    const act = prompt('Solution', '');
-    !act ? null : act.trim();
-    if(!act || act === '') {
-      null;
-    }else{
-      Meteor.call('solveBlockX', id, blKey, act, (error, reply)=> {
-        error && console.log(error);
-        reply ? toast.success('Saved') : toast.error('Server Error'); 
-			});
-    }
+    e.preventDefault();
+    this.slvBlockGo.disabled = true;
+    
+    const text = this.slvTxt.value.trim();
+    
+    Meteor.call('solveBlockX', id, blKey, text, (error, reply)=> {
+      error && toast.error('Server Error');
+      selfclose(); 
+		});
   }
-  
+
   return(
-    <button
-      type='button'
-      id='slvBlkGo'
-      title={'Solve this ' + Pref.block}
-      className='transparent'
-      onClick={(e)=>addSolve(e)}>
-      <label className='navIcon actionIconWrap'>
-        <i className='fas fa-reply greenT'></i>
-        {!noText && <span className='actionIconText greenT'>Solve</span>}
-      </label>
-    </button>
+    <form className='centre' onSubmit={(e)=>addSolve(e)}>
+      <p>
+        <textarea
+          type='text'
+          id='slvTxt'
+          cols='40'
+          rows='6'
+          autoFocus={true}
+          required>
+        </textarea>
+      </p>
+      <p><button
+        type='submit'
+        id='slvBlockGo'
+        className='action clearGreen'>Save</button>
+      </p>
+    </form>
   );
 };
 

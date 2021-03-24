@@ -119,9 +119,6 @@ class Pref {
     this.branch = 'branch';
     this.branches = 'branches';
     
-    this.phase = 'phase';
-    this.phases = 'phases';
-    
     this.flow = 'process flow';
     this.buildFlow = 'main process flow';
     this.buildFlowAlt = 'alt process flow';

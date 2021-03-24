@@ -10,16 +10,16 @@ import {
 import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
 
-const NonConMultiBatchBar = ({ batchIDs })=> {
+const NonConMultiBatchBar = ({ batches })=> {
   
   const [ seriesState, seriesSet ] = useState( false );
   
   useEffect( ()=> {
-    Meteor.call('nonConBatchesTypes', batchIDs, (error, reply)=>{
+    Meteor.call('nonConBatchesTypes', batches, (error, reply)=>{
       error && console.log(error);
       reply && seriesSet(reply);
     });
-  }, [batchIDs]);
+  }, [batches]);
 
   if(!seriesState) {
     return(
@@ -27,10 +27,11 @@ const NonConMultiBatchBar = ({ batchIDs })=> {
     );
   }
   
-  if(seriesState.length > 0) {
+  const ncsObj = JSON.parse(seriesState);
+  
+  if(ncsObj.length > 0) {
 
-    const typeCount = seriesState[0] ?
-    seriesState[0].length : seriesState.length;
+    const typeCount = ncsObj[0] ? ncsObj[0].length : ncsObj.length;
     
     return(
       <div className='chartNoHeightContain'>
@@ -68,7 +69,7 @@ const NonConMultiBatchBar = ({ batchIDs })=> {
             horizontal={true}
             padding={0}
           >
-            {seriesState.map( (entry, index)=>{
+            {ncsObj.map( (entry, index)=>{
               if(entry.length > 0) {
                 return(
                   <VictoryBar

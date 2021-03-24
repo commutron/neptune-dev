@@ -172,11 +172,12 @@ const ActionBar = ({
             batchData={batchData}
             seriesData={seriesData}
             allVariants={allVariants}
-            lock={!variantData || !batchData.live} />
+            lock={!variantData || !batchData.live || batchData.completed}
+          />
           
           <SeriesForm
             batchData={batchData}
-            lock={seriesData || batchData.completed}
+            lock={!batchData.live || seriesData || batchData.completed}
           />
         
           <ItemSerialsWrapX
@@ -186,13 +187,13 @@ const ActionBar = ({
             itemsQ={!seriesData ? 0 : seriesData.items.length}
             unit={variantData.runUnits}
             app={app}
-            lock={!seriesData || batchData.completed === true} />
+            lock={!batchData.live || !seriesData || batchData.completed} />
           
           <CounterAssign
             id={batchData._id}
             waterfall={batchData.waterfall}
             app={app}
-            lock={batchData.completed === true} />
+            lock={!batchData.live || batchData.completed} />
           
           <span>
             <ActionLink
@@ -212,13 +213,14 @@ const ActionBar = ({
           <BatchXIncomplete
             batchData={batchData}
             seriesData={seriesData}
-            app={app} />
+            app={app}
+            lockOut={!batchData.live || batchData.completed} />
           
           <RemoveXBatch
             batchData={batchData}
             seriesData={seriesData}
             check={batchData.createdAt.toISOString()}
-            lockOut={batchData.completed === true} />
+            lockOut={!batchData.live || batchData.completed} />
           
         </Fragment>
       : null

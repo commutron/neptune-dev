@@ -34,7 +34,7 @@ const FlowTable = ({ id, flows, app })=> {
               <table className='wide'>
                 <tbody className='clean'>
                   <tr>
-                    <td>type: {entry.type} <br />key: <i className='small wordBr'>{entry.flowKey}</i></td>
+                    <td>type: {entry.type}</td>
                     <td><dl>
                     <dt>{Pref.nonCon} Lists:</dt>
                       {entry.type === 'plus' ?
@@ -53,12 +53,22 @@ const FlowTable = ({ id, flows, app })=> {
                         small={true} />
                     </td>
                     <td className='centreText'>
+                      <FlowFormRoute
+                        id={id}
+                        edit={true}
+                        preFill={entry}
+                        existFlows={flows}
+                        app={app}
+                        small={true} />
+                    </td>
+                    <td className='centreText'>
                       <FlowRemove id={id} fKey={entry.flowKey} />
                     </td>
                   </tr>
                 </tbody>
               </table>
-              <table style={sty} className='wide'>
+              <br />
+              <table style={sty} className='w100 vmargin wmargin'>
                 <thead className='cap'>
                   <tr className='line3x'>
                     <th>step</th>
@@ -75,16 +85,6 @@ const FlowTable = ({ id, flows, app })=> {
                         app={app}
                         step={step} />
                     )})}
-                  <tr>
-                    <td colSpan='4' className='rightText'>
-                    <FlowFormRoute
-                      id={id}
-                      edit={true}
-                      preFill={entry}
-                      existFlows={flows}
-                      app={app}
-                      small={true} />
-                  </td></tr>
                 </tbody>
               </table>
             </div>

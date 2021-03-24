@@ -70,6 +70,7 @@ const MultiBatchKPI = ({ batchIDs, app })=> {
           name={dlvText}
           color={dlvColr} />
         
+        <span className='small fadeMore'>Based on completed orders only</span>
       </div>
     );
   }

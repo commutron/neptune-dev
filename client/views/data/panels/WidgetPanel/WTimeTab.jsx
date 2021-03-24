@@ -3,7 +3,6 @@ import Pref from '/client/global/pref.js';
 
 import TideMultiBatchBar from '/client/components/charts/Tides/TideMultiBatchBar.jsx';
 import { round1Decimal } from '/client/utility/Convert';
-// import { min2hr, flipArray } from '/client/utility/Convert';
 
 const WTimeTab = ({ 
   widgetData, batchIDs, 
