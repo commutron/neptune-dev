@@ -1,5 +1,4 @@
-/* the point of this file is to have them all in one place so as to
- eventually figure out a way to limit the number of styles */
+
 .action, .smallAction {
   font-size: medium;
   letter-spacing: 1px;
@@ -439,6 +438,30 @@ button.variableInput.biggest { height: 64px; }
   background-color: var(--emerald);
 }
 
+.saveTask {
+  font-weight: 400;
+  font-style: italic;
+  font-size: 1rem;
+  height: 1.5rem;
+  line-height: 1.5;
+}
+.saveTask:disabled,
+.saveTask:disabled:hover{ 
+  opacity: 1; 
+  cursor: default;
+  border-bottom-color: transparent;
+}
+.saveTask:enabled:hover:before {
+  font-weight: 600;
+  content: "\2713";
+  display: inline-block;
+  width: 1.25em;
+  height: 1.5rem;
+}
+.saveTask:enabled:hover > .guessTask {
+  display: none;
+}
+
 .toggleOff {
   transition: background-color 400ms ease,
               color 200ms ease;
@@ -508,7 +531,6 @@ input[type='radio'].interInput {
 
 .interSelect {
   line-height: 1;
-  /*font-size: 1rem;*/
   background-color: var(--cloudstrans);
   margin: 0 0 0 0.5ch;
 }
@@ -517,7 +539,3 @@ input[type='radio'].interInput {
   color: black;
   border: 1px dotted lightgray
 }
-
-/*@media (orientation: portrait) {*/
-  
-/*}*/

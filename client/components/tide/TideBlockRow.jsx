@@ -231,6 +231,12 @@ const TideTaskExplicit = ({
             <option key={ix+'o2'} value={v}>{v}</option>
           ))}
         </optgroup>
+        <optgroup label='Other'>
+          <option value='before release'>before release</option>
+          <option value='after finish'>after finish</option>
+          {/*<option value='out of route'>out of route</option>
+          <option value='extend'>extend</option>*/}
+        </optgroup>
       </select>
     </td>
   );

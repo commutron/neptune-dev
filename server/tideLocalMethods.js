@@ -261,6 +261,46 @@ Meteor.methods({
     }
   },
   
+  setTideTimeTask(batch, tideKey, taskIs) {
+    try {
+      const accessKey = Meteor.user().orgKey;
+      const userId = Meteor.userId();
+      const isSuper = Roles.userIsInRole(userId, 'peopleSuper');
+      
+      const doc = BatchDB.findOne({ batch: batch, 'tide.tKey': tideKey });
+      if(doc) {
+        const sub = doc.tide.find( x => x.tKey === tideKey );
+        const auth = sub.who === userId || isSuper;
+        if(!auth) {
+          return false;
+        }else{
+          BatchDB.update({ batch: batch, orgKey: accessKey, 'tide.tKey': tideKey}, {
+            $set : { 
+              'tide.$.task' : taskIs
+          }});
+          return true;
+        }
+      }else{
+          const docX = XBatchDB.findOne({ batch: batch, 'tide.tKey': tideKey });
+          if(docX) {
+            const subX = docX.tide.find( x => x.tKey === tideKey );
+            const authX = subX.who === userId || isSuper;
+            if(!authX) {
+              return false;
+            }else{
+              XBatchDB.update({ batch: batch, orgKey: accessKey, 'tide.tKey': tideKey}, {
+                $set : { 
+                  'tide.$.task' : taskIs
+              }});
+              return true;
+            }
+          }
+        }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  
   stopTideTimeBlock(batch, tideKey) {
     try {
       const doc = BatchDB.findOne({ batch: batch, 'tide.tKey': tideKey });

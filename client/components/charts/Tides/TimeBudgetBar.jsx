@@ -7,7 +7,7 @@ const TimeBudgetBar = ({ title, a, b, c})=> {
   const B = a === 0 && b === 0 && c === 0 ? 1 : b;
   
   return(
-    <div className='invert' className='noCopy' title={title}>
+    <div className='noCopy horizontalBarContain' title={title}>
     
       <VictoryStack
         colorScale={["rgb(52, 152, 219)", "rgb(149, 165, 166)", "rgb(241, 196, 15)"]}

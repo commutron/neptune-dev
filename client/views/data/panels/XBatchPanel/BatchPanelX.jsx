@@ -72,6 +72,7 @@ const BatchPanelX = ({
         <TimeTab 
           batchData={batchData}
           seriesData={seriesData}
+          rapidsData={rapidsData}
           user={user}
           isDebug={isDebug}
           totalUnits={b.quantity}

@@ -2,6 +2,7 @@ import moment from 'moment';
 //import timezone from 'moment-timezone';
 //import business from 'moment-business';
 import Config from '/server/hardConfig.js';
+import { sortBranches } from '/server/utility';
 
 function deriveFromHistory(history, trackOptions, branchOptions) {
   
@@ -88,6 +89,25 @@ function tryFromSH(tideStart, tStop, uID, shortfall) {
   
   // console.log(fromSHtally);
   return fromSHclean;
+}
+
+function tryFromWaterfall(tideStart, tStop, branchOptions, uID, waterfall) {
+  
+  let yourFall = [];
+  for( let fall of waterfall ) { 
+    if(fall.counts.filter( y => y.who === uID && y.time > tideStart && y.time < tStop 
+      ).length > 0 ) 
+    {
+      const branchObj = branchOptions.find( y => y.brKey === fall.branchKey );
+      yourFall.push( branchObj ? branchObj.branch : 'out of route' );
+    }
+  }
+  const uniqBranches = _.uniq( yourFall );
+  const cleanResult = uniqBranches.length > 0 && 
+                      uniqBranches[0] !== null && uniqBranches[0] !== 'null' ? 
+                      uniqBranches : false;
+
+  return cleanResult;
 }
 
 function tryFromRelease(tideStart, tStop, releases) {
@@ -180,20 +200,23 @@ function tryFromNext(tideStart, widgetId, river, items) {
   
 function branchBestGuess(
   uID, tideStart, tideStop, 
-  batchNum, widgetId, river, items, nonCon, shortfall, releases, finishTime,
+  batchNum, widgetId, river, items, nonCon, shortfall, waterfall,
+  releases, finishTime,
   trackOptions, branchOptions 
 ) {
   const tStop = tideStop ? tideStop : new Date();
 
   
   if(!batchNum) {
-    return [ 'guessUnsupported', [ "" ] ];
+    return [ ['guessUnsupported'], [ "unavailable" ] ];
   }
     
-    const yourHistory = Array.from( items, x =>
-                      x.history.filter( y => y.who === uID || 
-                      ( y.type === 'first' && y.info.builder.includes(uID) )
-                    ) );
+    let yourHistory = [];
+    for( let i of items ) { 
+      yourHistory.push( i.history.filter( y => y.who === uID || 
+                      ( y.type === 'first' && y.info.builder.includes(uID) ) )
+      );
+    }
     const yourHistoryFlat = [].concat(...yourHistory);
   
     const fromHistoryWithinClean = tryFromHistory(
@@ -216,51 +239,60 @@ function branchBestGuess(
       if(fromSHclean) {
         return [ 'fromSH', fromSHclean ];
       }else{
-        
-        const releasePrep = tryFromRelease(tideStart, tStop, releases);
-        
-        if(releasePrep) {
-          return [ 'fromRelease', ['before release'] ];
-        }else{
-            
-          const afterFinish = tryFromFinish(tideStart, finishTime);
+         
+        const fromWFclean = tryFromWaterfall(tideStart, tStop, 
+                                              branchOptions, uID, waterfall);
           
-          if(afterFinish) {
-            return [ 'fromAfterFinish', ['after finish'] ];
-          }else{
+        if(fromWFclean) {
+          return [ 'fromWF', fromWFclean ];
+        }else{  
+          
         
-            const fromSameHourClean = tryFromHour(tStop,
-                                        trackOptions, branchOptions, 
-                                        yourHistoryFlat);
-             
-            if(fromSameHourClean) {
-              return [ 'fromSameHourHistory', fromSameHourClean ];
-            }else{
+          const releasePrep = tryFromRelease(tideStart, tStop, releases);
+          
+          if(releasePrep) {
+            return [ 'fromRelease', ['before release'] ];
+          }else{
               
-              const fromSameDayClean = tryFromDay(tStop, 
-                                        trackOptions, branchOptions, 
-                                        yourHistoryFlat);
+            const afterFinish = tryFromFinish(tideStart, finishTime);
+            
+            if(afterFinish) {
+              return [ 'fromAfterFinish', ['after finish'] ];
+            }else{
+          
+              const fromSameHourClean = tryFromHour(tStop,
+                                          trackOptions, branchOptions, 
+                                          yourHistoryFlat);
                
-              if(fromSameDayClean) {
-                return [ 'fromSameDayHistory', fromSameDayClean ];
+              if(fromSameHourClean) {
+                return [ 'fromSameHourHistory', fromSameHourClean ];
               }else{
+                
+                const fromSameDayClean = tryFromDay(tStop, 
+                                          trackOptions, branchOptions, 
+                                          yourHistoryFlat);
+                 
+                if(fromSameDayClean) {
+                  return [ 'fromSameDayHistory', fromSameDayClean ];
+                }else{
+                      
+                  if( !tideStop ) {
                     
-                if( !tideStop ) {
-                  
-                  const fromOnlyOpen = tryFromOpen(batchNum);
-                  
-                  if(fromOnlyOpen) {
-                    return [ 'fromOnlyOpen', fromOnlyOpen ];
-                  }else{
+                    const fromOnlyOpen = tryFromOpen(batchNum);
                     
-                    const nextPrepBranch = tryFromNext(tideStart, widgetId, river, items);
-                    
-                    if(nextPrepBranch) {
-                      const branchObj = branchOptions.find( y => y.brKey === nextPrepBranch );
-                      const branchName = branchObj.branch; 
-                      return [ 'nextPrepBranch', [`${branchName} prep`] ];
+                    if(fromOnlyOpen) {
+                      return [ 'fromOnlyOpen', fromOnlyOpen ];
                     }else{
-                      return [ 'noGuess', [ "" ] ];
+                      
+                      const nextPrepBranch = tryFromNext(tideStart, widgetId, river, items);
+                      
+                      if(nextPrepBranch) {
+                        const branchObj = branchOptions.find( y => y.brKey === nextPrepBranch );
+                        const branchName = branchObj.branch; 
+                        return [ 'nextPrepBranch', [`${branchName} prep`] ];
+                      }else{
+                        return [ 'noGuess', [ "" ] ];
+                      }
                     }
                   }
                 }
@@ -294,14 +326,16 @@ Meteor.methods({
     const widgetId = batch.widgetId;
     const river = batch.river;
     const releases = batch.releases || [];
-    const finishTime = series ? batch.completedAt : batch.finishedAt;
+    const finishTime = batch.completedAt ? batch.completedAt : batch.finishedAt;
     const items = series ? series.items : batch.items || [];
     const nonCon = series ? series.nonCon : batch.nonCon || [];
     const shortfall = series ? series.shortfall : batch.shortfall || [];
+    const waterfall = batch.waterfall || [];
     
     const bestGuess = branchBestGuess(tideObj.who, tideObj.startTime, tideObj.stopTime,
                         batchNum, widgetId, river, items, nonCon, shortfall, 
-                        releases, finishTime, trackOptions, branchOptions);
+                        waterfall, releases, finishTime, 
+                        trackOptions, branchOptions);
                         
     return bestGuess;
   },
@@ -310,8 +344,7 @@ Meteor.methods({
   assembleBranchTime(batchNum) {
     const accessKey = Meteor.user().orgKey;
     const app = AppDB.findOne({ orgKey: accessKey});
-    const branchOptions = app.branches.sort((b1, b2)=>
-            b1.position < b2.position ? 1 :b1.position > b2.position ? -1 : 0 );
+    const branchOptions = sortBranches(app.branches);
     const trackOptions = [...app.trackOption, app.lastTrack];
     
     const batch = BatchDB.findOne({batch: batchNum, orgKey: accessKey}) ||
@@ -322,10 +355,11 @@ Meteor.methods({
     const widgetId = batch.widgetId;
     const river = batch.river;
     const releases = batch.releases || [];
-    const finishTime = series ? batch.completedAt : batch.finishedAt;
+    const finishTime = batch.completedAt ? batch.completedAt : batch.finishedAt;
     const items = series ? series.items : batch.items || [];
     const nonCon = series ? series.nonCon : batch.nonCon || [];
     const shortfall = series ? series.shortfall : batch.shortfall || [];
+    const waterfall = batch.waterfall || [];
     
     let slimTimes = [];
     
@@ -335,7 +369,8 @@ Meteor.methods({
         const dt = known || 
           branchBestGuess(x.who, x.startTime, x.stopTime,
                         batchNum, widgetId, river, items, nonCon, shortfall, 
-                        releases, finishTime, trackOptions, branchOptions);
+                        waterfall, releases, finishTime, 
+                        trackOptions, branchOptions);
                         
         const mStart = moment(x.startTime);
         const mStop = !x.stopTime ? moment() : moment(x.stopTime);
@@ -377,6 +412,7 @@ Meteor.methods({
       }
       let aDurr = 0;
       let zDurr = 0;
+      let yDurr = 0;
       let xDurr = 0;
       for(let t of slim) {
         if( !t.branchGuess || t.branchGuess[1].includes( 'guessUnsupported' ) ) {
@@ -385,12 +421,15 @@ Meteor.methods({
           aDurr = aDurr + t.duration;
         }else if( t.branchGuess[1].includes( 'after finish' ) ) {
           zDurr = zDurr + t.duration;
+        }else if( t.branchGuess[1].includes( 'out of route' ) ) {
+          yDurr = yDurr + t.duration;
         }else{
           null;
         }
       }
       slimTimes.unshift({ x: 'before release', y: aDurr });
       slimTimes.push({ x: 'after finish', y: zDurr });
+      slimTimes.push({ x: 'out of route', y: yDurr });
       slimTimes.push({ x: 'unknown', y: xDurr });
       
       return slimTimes;

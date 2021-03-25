@@ -98,10 +98,9 @@ const UserManageForm = ({
       </div>
       
       <div className='balance'>
-        <fieldset className=''>
+        <fieldset className='readlines min200'>
           <legend>Account Permissions</legend>
-          <br />
-          <ul>
+          <dl>
             {auths.map( (entry, index)=>{
               if(entry === 'peopleSuper') {
                 return(
@@ -120,13 +119,12 @@ const UserManageForm = ({
                     roleName={entry}
                   />
               )}})}
-          </ul>
+          </dl>
         </fieldset>
         
-        <fieldset className=''>
+        <fieldset className='readlines min200'>
           <legend>Job Areas</legend>
-          <br />
-          <ul>
+          <dl>
             {areas.map( (entry, index)=>{
               return(
                 <SetCheck
@@ -136,13 +134,12 @@ const UserManageForm = ({
                   roleName={entry}
                 />
               )})}
-          </ul>
+          </dl>
         </fieldset>
         
-        <fieldset className=''>
+        <fieldset className='readlines min200'>
           <legend>Task {Pref.branches}</legend>
-          <br />
-          <ul>
+          <dl>
             {reqBrancheS.map( (entry, index)=>{
               return(
                 <SetCheck
@@ -152,7 +149,7 @@ const UserManageForm = ({
                   roleName={entry.branch}
                 />
               )})}
-          </ul>
+          </dl>
         </fieldset>
       </div>
       
@@ -196,17 +193,17 @@ const SetCheckSuper = ({ user, role, roleName })=>	{
     });
   }
   return(
-    <li>
-      <input
-        type='checkbox'
-        id={role}
-        title="only one user can have a 'super' permission at a time"
-        defaultChecked={check}
-        onChange={()=>changeSuper()}
-        readOnly />
-      <label htmlFor={role}>{roleName}*</label>
-      <br />
-    </li>
+    <dd>
+      <label htmlFor={role} className='middle'>
+        <input
+          type='checkbox'
+          id={role}
+          title="only one user can have a 'super' permission at a time"
+          defaultChecked={check}
+          onChange={()=>changeSuper()}
+          readOnly
+      />{roleName}*</label>
+    </dd>
   );
 };
 
@@ -231,16 +228,16 @@ const SetCheck = ({ user, role, roleName })=> {
                   true : false;
     
   return(
-    <li>
-      <input
-        type='checkbox'
-        id={role}
-        defaultChecked={check}
-        onChange={()=>change()}
-        readOnly 
-        disabled={lockout} />
-      <label htmlFor={role}>{roleName}</label>
-      <br />
-    </li>
+    <dd>
+      <label htmlFor={role} className='middle'>
+        <input
+          type='checkbox'
+          id={role}
+          defaultChecked={check}
+          onChange={()=>change()}
+          readOnly 
+          disabled={lockout} 
+      />{roleName}</label>
+    </dd>
   );
 };

@@ -15,8 +15,7 @@ import TimeBlocksRaw from '/client/views/data/panels/XBatchPanel/TimeBlocksRaw';
 import { min2hr, percentOf, percentOverUnder } from '/client/utility/Convert';
 
 const TimeBudgetsChunk = ({
-  tideWall, b, isX,
-  totalUnits, isDebug
+  tideWall, b, isX, isDebug
 }) =>	{
   
   const [ branchTime, branchTimeSet ] = useState(false);
@@ -155,7 +154,7 @@ const TimeBudgetsChunk = ({
         
           <div className='twoEcontent numFont'>
             <TimeBudgetBar a={tP} b={0} c={0} />
-            <dl>
+            <dl className='readlines'>
               {totalPeople.map((per, ix)=>{
                 if(per.uTime > 0) {
                   const timeAs = conversion === 'minutes' ? per.uTime :
@@ -165,8 +164,8 @@ const TimeBudgetsChunk = ({
                   return( 
                     <dt 
                       key={ix}
-                      className='comfort middle'
-                    ><i className='big'><UserNice id={per.uID} /></i>
+                      className='rightRow doJustWeen'
+                    ><i className='big gapR'><UserNice id={per.uID} /> </i>
                     <i className='grayT'> {timeAs} {conversion}</i></dt> 
               )}})}
             </dl>
@@ -183,7 +182,7 @@ const TimeBudgetsChunk = ({
                     title={Pref.branches}
                     nums={branchTime}
                     colour='blue' />
-                  <dl>
+                  <dl className='readlines'>
                     {branchTime.map((br, ix)=>{
                       if(br.y > 0) {
                         const timeAs = conversion === 'minutes' ? 
@@ -195,7 +194,7 @@ const TimeBudgetsChunk = ({
                           <dt
                             key={ix}
                             title={`${Math.round(br.y)} minutes`}
-                            className='comfort middle'
+                            className='rightRow doJustWeen'
                           ><i className='big cap'>{br.x}</i>
                           <i className='grayT'> {timeAs} {conversion}</i></dt> 
                     )}})}

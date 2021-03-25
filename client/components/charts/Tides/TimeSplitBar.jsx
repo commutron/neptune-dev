@@ -15,7 +15,7 @@ const TimeSplitBar = ({ title, nums, colour})=> {
     console.log(nums);
   
   return(
-    <div className='invert' className='noCopy' title={title}>
+    <div className='noCopy horizontalBarContain' title={title}>
     
       <VictoryStack
         colorScale={colours}
