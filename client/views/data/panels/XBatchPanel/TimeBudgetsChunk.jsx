@@ -12,15 +12,16 @@ import TimeSplitBar from '/client/components/charts/Tides/TimeSplitBar.jsx';
 
 import TimeBlocksRaw from '/client/views/data/panels/XBatchPanel/TimeBlocksRaw';
 
+import { splitTidebyPeople } from '/client/utility/WorkTimeCalc';
 import { min2hr, percentOf, percentOverUnder } from '/client/utility/Convert';
 
 const TimeBudgetsChunk = ({
-  tideWall, b, isX, isDebug
+  tideWall, b, isX, addTime, 
+  conversion, conversionSet, plus, plusSet,
+  isDebug
 }) =>	{
   
   const [ branchTime, branchTimeSet ] = useState(false);
-  
-  const [ conversion, conversionSet] = useState('hours');
   
   useEffect( ()=>{
     Meteor.call('assembleBranchTime', b.batch, (err, reply)=>{
@@ -29,75 +30,47 @@ const TimeBudgetsChunk = ({
     });
   }, []);
   
-  
-  const totalSTbyPeople = ()=> {
-    let totalTimeNum = 0;
-    let peopleTime = [];
-    let usersNice = [];
-    if(!b.tide) {
-      null;
-    }else{
-      const usersGrab = Array.from(b.tide, x => x.who );
-      usersNice = [...new Set(usersGrab)];
-      
-      for(let ul of usersNice) {
-        let userTimeNum = 0;
-        const userTide = b.tide.filter( x => x.who === ul );
-        for(let bl of userTide) {
-          const mStart = moment(bl.startTime);
-          const mStop = !bl.stopTime ? moment() : moment(bl.stopTime);
-          const block = moment.duration(mStop.diff(mStart)).asMinutes();
-          totalTimeNum = totalTimeNum + block;
-          userTimeNum = userTimeNum + block;
-        }
-        const userTime = Math.round( userTimeNum );
-        peopleTime.push({
-          uID: ul,
-          uTime: userTime
-        });
-      }
-    }
-    const totalTime = Math.round( totalTimeNum );
-    
-    return { totalTime, peopleTime };
-  };
-  
-  const totalsCalc = totalSTbyPeople();
+  const totalsCalc = splitTidebyPeople(b.tide);
 
   const qtBready = !b.quoteTimeBudget ? false : true;
   const qtB = qtBready && b.quoteTimeBudget.length > 0 ? 
                 b.quoteTimeBudget[0].timeAsMinutes : 0;
   
-  const totalQuoteMinutes = qtB || 0;
-  const totalQuoteAs = conversion === 'minutes' ? 
-                        Math.round(totalQuoteMinutes) :
-                        min2hr(totalQuoteMinutes);
+  const totalBudgetMinutes = !plus ? Number(qtB) : Number(qtB) + Number(addTime);
+  const totalBudgetAs = conversion === 'minutes' ? 
+                        Math.round(totalBudgetMinutes) :
+                        min2hr(totalBudgetMinutes);
+  
+  const extraAs = conversion === 'minutes' ? 
+                    Math.round(Number(addTime)) :
+                    min2hr(Number(addTime));
+  
+  const totalMessage = conversion === 'minutes' ? 'minutes' : 'hours';
   
   const totalTideMinutes = totalsCalc.totalTime;
   const totalTideAs = conversion === 'minutes' ? 
-                        Math.round(totalTideMinutes) :
+                      Math.round(totalTideMinutes) :
                       conversion === 'percent' ?
-                        percentOf(totalQuoteMinutes, totalTideMinutes) :
+                        percentOf(totalBudgetMinutes, totalTideMinutes) :
                         min2hr(totalTideMinutes);
-                        
-  const quote2tide = totalQuoteMinutes - totalTideMinutes;
+     
+  const quote2tide = totalBudgetMinutes - totalTideMinutes;
   const bufferNice = Math.abs(quote2tide);
   
   const bufferAs = conversion === 'minutes' ? 
-                    bufferNice :
+                   bufferNice :
                    conversion === 'percent' ?
-                    Math.abs(percentOverUnder(totalQuoteMinutes, totalTideMinutes)) :
+                    Math.abs(percentOverUnder(totalBudgetMinutes, totalTideMinutes)) :
                     min2hr(bufferNice);
   
-  const bufferMessage = quote2tide < 0 ?
-    "exceeding quoted" : "remaining of quoted";
+  const bufferMessage = quote2tide < 0 ? "exceeding" : "remaining";
   
   const totalLeftMinutes = quote2tide < 0 ? 0 : bufferNice;
   const totalOverMinutes = quote2tide < 0 ? bufferNice : 0;
   
-  isDebug && 
-  console.log({
+  isDebug && console.log({
     totalQuoteMinutes,
+    totalBudgetMinutes,
     totalTideMinutes,
     totalLeftMinutes,
     totalOverMinutes
@@ -121,7 +94,6 @@ const TimeBudgetsChunk = ({
           </p>
         </div>}
       
-      
       {conversion === 'raw' ?
         <TimeBlocksRaw 
           batch={b.batch}
@@ -134,21 +106,35 @@ const TimeBudgetsChunk = ({
           <div className='oneEcontent numFont'>
             <TimeBudgetBar a={totalTideMinutes} b={totalLeftMinutes} c={totalOverMinutes} />
             
-            <p className='bigger'
-              >{totalQuoteAs} <i className='med'>{conversion === 'minutes' ? 'minutes' : 'hours'} budgeted</i>
+            <p className='bigger line1x'
+              >{totalBudgetAs} <i className='med'>{totalMessage} budgeted</i>
             </p>
+            {addTime > 0 && 
+              <div className='middle'>
+                <input
+                  type='checkbox'
+                  className='minHeight'
+                  defaultChecked={plus}
+                  onChange={()=>plusSet(!plus)} 
+                /><i className='small fade'
+                  >Including {extraAs} {totalMessage} of extra time</i>
+              </div>
+            }
             
-            <p className='bigger'
+            <p className='bigger line1x'
               >{totalTideAs} <i className='med'>{conversion} logged</i>
             </p>
             
-            <p className='bigger' 
+            <p className='bigger line1x' 
               >{bufferAs} <i className='med'>{conversion} {bufferMessage}</i>
             </p>
             
             <div className='vmargin'>
               {!qtBready ? <TimeBudgetUpgrade bID={b._id} isX={isX} /> :
-                <WholeTimeBudget bID={b._id} isX={isX} /> }
+                <WholeTimeBudget 
+                  bID={b._id} 
+                  isX={isX}
+                  lockOut={b.lock} /> }
             </div>
           </div>
         
@@ -166,7 +152,9 @@ const TimeBudgetsChunk = ({
                       key={ix}
                       className='rightRow doJustWeen'
                     ><i className='big gapR'><UserNice id={per.uID} /> </i>
-                    <i className='grayT'> {timeAs} {conversion}</i></dt> 
+                      <i className='grayT rightText'
+                      > {timeAs} {conversion}</i>
+                    </dt> 
               )}})}
             </dl>
           </div>
@@ -196,7 +184,9 @@ const TimeBudgetsChunk = ({
                             title={`${Math.round(br.y)} minutes`}
                             className='rightRow doJustWeen'
                           ><i className='big cap'>{br.x}</i>
-                          <i className='grayT'> {timeAs} {conversion}</i></dt> 
+                            <i className='grayT rightText'
+                            > {timeAs} {conversion}</i>
+                          </dt> 
                     )}})}
                   </dl>
                 </div>

@@ -444,6 +444,7 @@ button.variableInput.biggest { height: 64px; }
   font-size: 1rem;
   height: 1.5rem;
   line-height: 1.5;
+  color: black;
 }
 .saveTask:disabled,
 .saveTask:disabled:hover{ 

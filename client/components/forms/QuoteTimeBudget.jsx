@@ -40,7 +40,7 @@ export const TimeBudgetUpgrade = ({ bID, isX })=>	{
   );
 };
 
-export const WholeTimeBudget = ({ bID, isX })=>	{
+export const WholeTimeBudget = ({ bID, isX, lockOut })=>	{
   
   const auth = Roles.userIsInRole(Meteor.userId(), ['sales', 'edit']);
   
@@ -48,18 +48,16 @@ export const WholeTimeBudget = ({ bID, isX })=>	{
     e.preventDefault();
     const inHours = parseFloat( e.target.hourNum.value );
     const inMinutes = moment.duration(inHours, 'hours').asMinutes();
-    //const niceMinutes = Math.round(inMinutes);
-    const clientTZ = moment.tz.guess();
     if(auth) {
       if(isX) {
-        Meteor.call('pushBatchXTimeBudget', bID, inMinutes, clientTZ, (error)=>{
+        Meteor.call('pushBatchXTimeBudget', bID, inMinutes, (error)=>{
           if(error) {
             console.log(error);
             toast.error('Server Error');
           }
         });
       }else{
-        Meteor.call('pushBatchTimeBudget', bID, inMinutes, clientTZ, (error)=>{
+        Meteor.call('pushBatchTimeBudget', bID, inMinutes, (error)=>{
           if(error) {
             console.log(error);
             toast.error('Server Error');
@@ -84,7 +82,7 @@ export const WholeTimeBudget = ({ bID, isX })=>	{
         min='0.01'
         step=".01"
         inputMode='numeric'
-        disabled={!auth}
+        disabled={!auth || lockOut}
         required
       />
       <button

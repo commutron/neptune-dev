@@ -126,6 +126,42 @@ export function UsersTimeTotal( userIDs, allUsers, dateTime, span, spanHours ) {
   return userTimeTotal;
 }
 
+export const splitTidebyPeople = (tideArray)=> {
+  
+  let totalTimeNum = 0;
+  let peopleTime = [];
+  let usersNice = [];
+  if(!tideArray) {
+    null;
+  }else{
+    const usersGrab = Array.from(tideArray, x => x.who );
+    usersNice = [...new Set(usersGrab)];
+    
+    for(let ul of usersNice) {
+      let userTimeNum = 0;
+      const userTide = tideArray.filter( x => x.who === ul );
+      for(let bl of userTide) {
+        const mStart = moment(bl.startTime);
+        const mStop = !bl.stopTime ? moment() : moment(bl.stopTime);
+        const block = moment.duration(mStop.diff(mStart)).asMinutes();
+        totalTimeNum = totalTimeNum + block;
+        userTimeNum = userTimeNum + block;
+      }
+      const userTime = Math.round( userTimeNum );
+      peopleTime.push({
+        uID: ul,
+        uTime: userTime
+      });
+    }
+  }
+  const totalTime = Math.round( totalTimeNum );
+  
+  return { totalTime, peopleTime };
+};
+  
+  
+  //////
+  
 /*
 export function TimeRemainDay( nonWorkDays, dayTime ) {
   if( Array.isArray(nonWorkDays) ) {  

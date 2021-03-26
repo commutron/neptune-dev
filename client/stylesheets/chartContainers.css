@@ -138,7 +138,13 @@
 	transform: translate(-50%, -50%) rotate(0deg);
 }
 
-.horizontalBarContain {
-  height: 25px; 
+.hzBarContain15,
+.hzBarContain25 {
   overflow: hidden;
+}
+.hzBarContain15 {
+  height: 15px; 
+}
+.hzBarContain25 {
+  height: 25px; 
 }

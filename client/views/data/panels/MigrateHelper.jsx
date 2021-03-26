@@ -1,0 +1,66 @@
+import React, { useState, useEffect, Fragment } from 'react';
+// import moment from 'moment';
+// import Pref from '/client/global/pref.js';
+import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock';
+
+
+
+const MigrateHelper = ({ allBatch, allXBatch })=> {
+
+  function adminFORCERemoveOldBatch() {
+    console.log('not yet');
+    
+    /*
+    Meteor.call('adminFORCERemoveOldBatch');
+    */
+  }
+
+  function findBinX(oldbatch) {
+    return allXBatch.find( x => x.batch === oldbatch ) ? true : false;
+  }
+
+  return(
+    <div className='balance space36v'>
+    
+      <div>
+        <h3>Batch</h3>
+        <ol>
+          {allBatch.map( (entry, index)=>(
+            <li 
+              key={index}
+              className='vmarginhalf'>
+              <ExploreLinkBlock
+                keyword={entry.batch}
+                type='batch'
+                />
+              {findBinX(entry.batch) && 
+                <button 
+                  className='gap miniAction clearRed' 
+                  onClick={()=>adminFORCERemoveOldBatch(entry.batch)}
+                >DELETE</button>
+              }
+            </li>
+          ))}
+        </ol>
+      </div>
+      
+      <div>
+        <h3>XBatch</h3>
+        <ol>
+          {allXBatch.map( (entry, index)=>(
+            <li
+              key={index}
+              className='vmarginhalf'>
+              <ExploreLinkBlock
+                keyword={entry.batch}
+                type='batch'
+                />
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  );
+};
+  
+export default MigrateHelper;

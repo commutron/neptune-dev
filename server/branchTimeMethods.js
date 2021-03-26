@@ -257,7 +257,7 @@ function branchBestGuess(
             const afterFinish = tryFromFinish(tideStart, finishTime);
             
             if(afterFinish) {
-              return [ 'fromAfterFinish', ['after finish'] ];
+              return [ 'fromAfterFinish', ['after complete'] ];
             }else{
           
               const fromSameHourClean = tryFromHour(tStop,
@@ -419,7 +419,7 @@ Meteor.methods({
           xDurr = xDurr + t.duration;
         }else if( t.branchGuess[1].includes( 'before release' ) ) {
           aDurr = aDurr + t.duration;
-        }else if( t.branchGuess[1].includes( 'after finish' ) ) {
+        }else if( t.branchGuess[1].includes( 'after complete' ) ) {
           zDurr = zDurr + t.duration;
         }else if( t.branchGuess[1].includes( 'out of route' ) ) {
           yDurr = yDurr + t.duration;
@@ -428,7 +428,7 @@ Meteor.methods({
         }
       }
       slimTimes.unshift({ x: 'before release', y: aDurr });
-      slimTimes.push({ x: 'after finish', y: zDurr });
+      slimTimes.push({ x: 'after complete', y: zDurr });
       slimTimes.push({ x: 'out of route', y: yDurr });
       slimTimes.push({ x: 'unknown', y: xDurr });
       

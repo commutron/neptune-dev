@@ -36,7 +36,7 @@ body {
   font-family: 'NunitoLocal', 'VarelaLocal', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: greyscale;
-  font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 @-moz-document url-prefix() {

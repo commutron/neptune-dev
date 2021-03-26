@@ -8,79 +8,26 @@ import ToggleBar from '/client/components/smallUi/Tabs/ToggleBar';
 
 import TimeBudgetBar from '/client/components/charts/Tides/TimeBudgetBar.jsx';
 
-
+import { splitTidebyPeople } from '/client/utility/WorkTimeCalc';
 import { min2hr, percentOf, percentOverUnder } from '/client/utility/Convert';
 
-const TimeExtendChunk = ({ b, rapid, isDebug }) =>	{
+const TimeExtendChunk = ({ b, rapid, conversion, conversionSet, isDebug }) =>	{
   
   const [ rapidTide, rapidTideSet ] = useState(false);
   
-  const [ conversion, conversionSet] = useState('hours');
-  
   useEffect( ()=>{
-    
+    const rapidStart = moment(rapid.createdAt);
+    const rapidEnd = rapid.closedAt ? moment(rapid.closedAt) : moment();
   
-  
-  const rapidStart = moment(rapid.createdAt);
-  const rapidEnd = rapid.closedAt ? moment(rapid.closedAt) : moment();
-  
-  
-  
-  const tideBween = b.tide.filter( t => 
+    const tideBween = b.tide.filter( t => 
                         moment(t.startTime).isBetween(rapidStart, rapidEnd) ||
                         ( t.stopTime &&
                         moment(t.stopTime).isBetween(rapidStart, rapidEnd) ) );
                         
-  rapidTideSet(tideBween);
-  
-  
-  
-  
+    rapidTideSet(tideBween);
   }, []);
   
-  
-  
-  
-  
-  
-  
-  const totalSTbyPeople = ()=> {
-    let totalTimeNum = 0;
-    let peopleTime = [];
-    let usersNice = [];
-    if(!rapidTide) {
-      null;
-    }else{
-      const usersGrab = Array.from(rapidTide, x => x.who );
-      usersNice = [...new Set(usersGrab)];
-      
-      for(let ul of usersNice) {
-        let userTimeNum = 0;
-        const userTide = rapidTide.filter( x => x.who === ul );
-        for(let bl of userTide) {
-          const mStart = moment(bl.startTime);
-          const mStop = !bl.stopTime ? moment() : moment(bl.stopTime);
-          const block = moment.duration(mStop.diff(mStart)).asMinutes();
-          totalTimeNum = totalTimeNum + block;
-          userTimeNum = userTimeNum + block;
-        }
-        const userTime = Math.round( userTimeNum );
-        peopleTime.push({
-          uID: ul,
-          uTime: userTime
-        });
-      }
-    }
-    const totalTime = Math.round( totalTimeNum );
-    
-    return { totalTime, peopleTime };
-  };
-  
-  
-  /////////////////////////////////
-  
-  
-  const totalsCalc = totalSTbyPeople();
+  const totalsCalc = splitTidebyPeople(rapidTide);
 
   const totalQuoteMinutes = rapid.timeBudget;
   
@@ -104,14 +51,12 @@ const TimeExtendChunk = ({ b, rapid, isDebug }) =>	{
                     Math.abs(percentOverUnder(totalQuoteMinutes, totalTideMinutes)) :
                     min2hr(bufferNice);
   
-  const bufferMessage = quote2tide < 0 ?
-    "exceeding" : "remaining";
+  const bufferMessage = quote2tide < 0 ? "exceeding" : "remaining";
   
   const totalLeftMinutes = quote2tide < 0 ? 0 : bufferNice;
   const totalOverMinutes = quote2tide < 0 ? bufferNice : 0;
   
-  isDebug && 
-  console.log({
+  isDebug && console.log({
     totalQuoteMinutes,
     totalTideMinutes,
     totalLeftMinutes,
@@ -122,57 +67,53 @@ const TimeExtendChunk = ({ b, rapid, isDebug }) =>	{
   const tP = totalPeople.length;
   
   return(
-    <div className='flxGrow startSelf max400'>
-      <h3>{rapid.rapid}</h3>
+    <div className='flxGrow startSelf max500'>
+      <h3>{rapid.rapid}</h3> 
       
+      <div className='split gapsC'>
       
-      
-      <ToggleBar
-        toggleOptions={['hours', 'minutes', 'percent']}
-        toggleVal={conversion}
-        toggleSet={(e)=>conversionSet(e)}
-      />
-      
-  
-     
-
-          <div className='numFont'>
-            <TimeBudgetBar a={totalTideMinutes} b={totalLeftMinutes} c={totalOverMinutes} />
-            
-            <p className='bigger'
-              >{totalQuoteAs} <i className='med'>{conversion === 'minutes' ? 'minutes' : 'hours'} budgeted</i>
-            </p>
-            
-            <p className='bigger'
-              >{totalTideAs} <i className='med'>{conversion} logged</i>
-            </p>
-            
-            <p className='bigger' 
-              >{bufferAs} <i className='med'>{conversion} {bufferMessage}</i>
-            </p>
-            
-          </div>
-        
-          <div className='numFont'>
-            <TimeBudgetBar a={tP} b={0} c={0} />
-            <dl className='readlines'>
-              {totalPeople.map((per, ix)=>{
-                if(per.uTime > 0) {
-                  const timeAs = conversion === 'minutes' ? per.uTime :
-                                  conversion === 'percent' ?
-                                  percentOf(totalTideMinutes, per.uTime) :
-                                  min2hr(per.uTime);
-                  return( 
-                    <dt 
-                      key={ix}
-                      className='rightRow doJustWeen'
-                    ><i className='big gapR'><UserNice id={per.uID} /></i>
-                    <i className='grayT'> {timeAs} {conversion}</i></dt> 
-              )}})}
-            </dl>
-          </div>
-        
+        <div className='numFont'>
+          <TimeBudgetBar 
+            a={totalTideMinutes} 
+            b={totalLeftMinutes} 
+            c={totalOverMinutes}
+            thin={true} />
           
+          <p className='big line1x'
+            >{totalQuoteAs} <i className='med'>{conversion === 'minutes' ? 'minutes' : 'hours'} budgeted</i>
+          </p>
+          
+          <p className='big line1x'
+            >{totalTideAs} <i className='med'>{conversion} logged</i>
+          </p>
+          
+          <p className='big line1x' 
+            >{bufferAs} <i className='med'>{conversion} {bufferMessage}</i>
+          </p>
+          
+        </div>
+        
+        <div className='numFont'>
+          <TimeBudgetBar a={tP} b={0} c={0} thin={true} />
+          <dl className='readlines'>
+            {totalPeople.map((per, ix)=>{
+              if(per.uTime > 0) {
+                const timeAs = conversion === 'minutes' ? per.uTime :
+                                conversion === 'percent' ?
+                                percentOf(totalTideMinutes, per.uTime) :
+                                min2hr(per.uTime);
+                return( 
+                  <dt 
+                    key={ix}
+                    className='rightRow doJustWeen'
+                  ><i className='big gapR'><UserNice id={per.uID} /> </i>
+                    <i className='grayT rightText'
+                    > {timeAs} {conversion}</i>
+                  </dt> 
+            )}})}
+          </dl>
+        </div>
+      </div>
     </div>  
   );
 };

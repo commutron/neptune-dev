@@ -878,7 +878,7 @@ input.miniIn24, select.miniIn24 { width: 24ch; }
   margin: 0;
 }
 .numberSet {
-  height: 2rem;
+  min-height: 2rem;
   line-height: 1.1;
   font-family: 'VarelaLocal';
 }
@@ -886,7 +886,6 @@ input.numberSet:focus, input.numberSet:active {
   border-color: var(--neptuneColor);
 }
 button.numberSet {
-  min-height: 2rem;
   font-size: 0.9rem;
   text-transform: none;
 }
