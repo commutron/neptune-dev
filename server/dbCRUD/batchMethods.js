@@ -240,21 +240,6 @@ Meteor.methods({
     }
   },
   
-// setup quote time key // LEGACY SUPPORT
-  upBatchTimeBudget(batchId) {
-    try{
-      if(Roles.userIsInRole(Meteor.userId(), ['sales', 'edit'])) {
-        BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
-          $set : { 
-            'quoteTimeBudget': []
-          }});
-      }else{
-        null;
-      }
-    }catch (err) {
-      throw new Meteor.Error(err);
-    }
-  },
   // push time budget, whole time for batch
   pushBatchTimeBudget(batchId, qTime) {
     try{

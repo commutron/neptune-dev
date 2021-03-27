@@ -13,6 +13,7 @@ import Slides from '../../components/smallUi/Slides.jsx';
 import ActivityPanel from './ActivityPanel.jsx';
 import InboxPanel from './InboxPanel.jsx';
 import PrivacyPanel from './PrivacyPanel.jsx';
+import IdCardPanel from './IdCardPanel';
 
 import UserSettings from '/client/components/forms/User/UserSettings';
 
@@ -55,10 +56,11 @@ const UserDataWrap = ({
       
         <Slides
           menu={[
-            <b><i className='fas fa-history fa-fw'></i>  Production Activity</b>,
-            <b><i className='fas fa-inbox fa-fw'></i>  Inbox</b>,
-            <b><i className='fas fa-sliders-h fa-fw'></i>  Preferences</b>,
-            <b><i className='fas fa-shield-alt fa-fw'></i>  Privacy & Access</b>,
+            <b><i className='fas fa-user-clock fa-fw'></i>  Production Activity</b>,
+            <b><i className='fas fa-user-cog fa-fw'></i>  Preferences</b>,
+            <b><i className='fas fa-user-shield fa-fw'></i>  Privacy & Access</b>,
+            <b><i className='fas fa-envelope fa-fw'></i>  Messages</b>,
+            <b><i className='fas fa-id-card fa-fw'></i>  ID Card</b>,
           ]}
           extraClass='space5x5'>
             
@@ -72,18 +74,8 @@ const UserDataWrap = ({
             users={users}
             traceDT={traceDT} />
             
-          <InboxPanel
-            key={3}
-            orb={orb}
-            bolt={bolt}
-            app={app}
-            user={user}
-            // isAdmin={isAdmin}
-            // isDebug={isDebug}
-            users={users} />
-            
           <UserSettings
-            key={4}
+            key={2}
             app={app}
             user={user}
             isAdmin={isAdmin}
@@ -91,7 +83,7 @@ const UserDataWrap = ({
             brancheS={brancheS} />
           
           <PrivacyPanel
-            key={5}
+            key={3}
             orb={orb}
             bolt={bolt}
             app={app}
@@ -99,6 +91,21 @@ const UserDataWrap = ({
             isAdmin={isAdmin}
             // isDebug={isDebug}
           />
+          
+          <InboxPanel
+            key={4}
+            orb={orb}
+            bolt={bolt}
+            app={app}
+            user={user}
+            // isAdmin={isAdmin}
+            // isDebug={isDebug}
+            users={users} />
+          
+          <IdCardPanel
+            key={5}
+            app={app} 
+            user={user} />
           
         </Slides>
 				

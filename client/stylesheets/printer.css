@@ -78,3 +78,44 @@
     color: black;
   }
 }
+
+.userCard {
+  width: 5.5cm;
+  height: 8.5cm;
+  /*border: 2px dotted;*/
+}
+.userCardContent {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  border: 15px double var(--neptuneColor);
+  border-radius: 25px;
+  background-color: white;
+}
+.userCardContent > img {
+  position: relative;
+  top: 5px;
+  height: 1.5cm; 
+}
+.userCardContent > n-username {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5em;
+  margin: 5px;
+  height: 3cm;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.userCardContent > span {
+  display: flex;
+  align-items: center;
+  position: relative;
+  bottom: 5px;
+  margin: 0 auto;
+  height: 3cm;
+}

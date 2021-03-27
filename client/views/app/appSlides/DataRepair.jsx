@@ -196,7 +196,7 @@ const DataRepair = ({ app, users })=> {
         <button
           onClick={()=>doCallThing("UNSETbplusNonconKey")}
           className='action clearOrange'
-        >Unset Key</button>
+        >Unset "nonconformaces" Key</button>
       </div>
       
       <div>
@@ -206,8 +206,29 @@ const DataRepair = ({ app, users })=> {
         <button
           onClick={()=>doCallThing("UNSETbplusVeriKey")}
           className='action clearOrange'
-        >Unset Key</button>
+        >Unset "verifications" Key</button>
       </div>
+      
+      <div>
+        <h3><i className="fas fa-eraser fa-lg gap"></i>
+          Unset the rapids key from batch+
+        </h3>
+        <button
+          onClick={()=>doCallThing("UNSETbplusRapidKey")}
+          className='action clearOrange'
+        >Unset "rapid" Key</button>
+      </div>
+      
+      <div>
+        <h3><i className="fas fa-eraser fa-lg gap"></i>
+          Unset the Omitted key from batch+
+        </h3>
+        <button
+          onClick={()=>doCallThing("UNSETbplusOmittedKey")}
+          className='action clearOrange'
+        >Unset "omitted" Key</button>
+      </div>
+      
       
       <div>
         <h3><i className="fas fa-eraser fa-lg gap"></i>

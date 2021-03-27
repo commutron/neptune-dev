@@ -204,6 +204,37 @@ Meteor.methods({
     }
   },
   
+  
+  UNSETbplusOmittedKey() {
+    try{
+      if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+        XBatchDB.update({ orgKey: Meteor.user().orgKey }, {
+          $unset : { 
+            'omitted': ""
+          }},{multi: true});
+          return true;
+      }else{
+        return false;
+      }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  UNSETbplusRapidKey() {
+    try{
+      if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+        XBatchDB.update({ orgKey: Meteor.user().orgKey }, {
+          $unset : { 
+            'rapids': ""
+          }},{multi: true});
+          return true;
+      }else{
+        return false;
+      }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
   UNSETbplusNonconKey() {
     try{
       if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
@@ -407,7 +438,7 @@ Meteor.methods({
     
     const doc = XBatchDB.findOne({_id: bxID});
     const tide = !doc ? false : doc.tide;
-    const good = !tide || !Array.isArray(tide) ? false : true;
+    const good = !tide || !Array.isArray(tide) ? 'nogood' : true;
     return good;
   }  
         

@@ -84,8 +84,8 @@ const XLineItem = ({ entry })=>{
         type='batch'
         />
       
-      {tCheck === null ? '?' :
-       tCheck === false ? <i className='fas fa-radiation'></i> : null}
+      {!tCheck ? '?' : tCheck === 'nogood' ? 
+        <i className='fas fa-radiation'></i> : null}
     </li>
             
   );

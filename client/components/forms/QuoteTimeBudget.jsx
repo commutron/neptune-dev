@@ -10,23 +10,18 @@ export const TimeBudgetUpgrade = ({ bID, isX })=>	{
   
   const upgradeForQuoteTime = ()=> {
     if(auth) {
-      if(isX) {
-        Meteor.call('upBatchXTimeBudget', bID, (error)=>{
+      Meteor.call('upBatchXTimeBudget', bID, (error)=>{
         if(error) {
           console.log(error);
           toast.error('Server Error');
         }
       });
-      }else{
-        Meteor.call('upBatchTimeBudget', bID, (error)=>{
-          if(error) {
-            console.log(error);
-            toast.error('Server Error');
-          }
-        });
-      }
     }else{ toast.error('NO Permission'); }
   };
+  
+  if(!isX) {
+    return null;
+  }
   
   return(
     <label>
@@ -89,7 +84,7 @@ export const WholeTimeBudget = ({ bID, isX, lockOut })=>	{
         type='submit'
         id='goscale'
         className='action clearGreen numberSet minIn7'
-        disabled={!auth}
+        disabled={!auth || lockOut}
       >Update {Pref.timeBudget}</button>
     </form>
   );

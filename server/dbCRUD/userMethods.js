@@ -56,6 +56,18 @@ Meteor.methods({
       return false;
     }
   },
+  
+  dbblCheckPassword(passVal) {
+    const user = Meteor.user();
+    
+    const result = Accounts._checkPassword(user, passVal);
+    
+    if(result.error === undefined) {
+      return true;
+    }else{
+      return false;
+    }
+  },
 
   adminUpgrade(userId, pin) {
     const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
