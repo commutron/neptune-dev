@@ -401,6 +401,14 @@ Meteor.methods({
       };
     }
   },
-          
+  
+  checkForTide(bxID) {
+    this.unblock();
+    
+    const doc = XBatchDB.findOne({_id: bxID});
+    const tide = !doc ? false : doc.tide;
+    const good = !tide || !Array.isArray(tide) ? false : true;
+    return good;
+  }  
         
 });

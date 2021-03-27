@@ -18,6 +18,8 @@ const MigrateHelper = ({ allBatch, allXBatch })=> {
   function findBinX(oldbatch) {
     return allXBatch.find( x => x.batch === oldbatch ) ? true : false;
   }
+  
+  
 
   return(
     <div className='balance space36v'>
@@ -48,14 +50,10 @@ const MigrateHelper = ({ allBatch, allXBatch })=> {
         <h3>XBatch</h3>
         <ol>
           {allXBatch.map( (entry, index)=>(
-            <li
+            <XLineItem
               key={index}
-              className='vmarginhalf'>
-              <ExploreLinkBlock
-                keyword={entry.batch}
-                type='batch'
-                />
-            </li>
+              entry={entry}
+            />
           ))}
         </ol>
       </div>
@@ -64,3 +62,31 @@ const MigrateHelper = ({ allBatch, allXBatch })=> {
 };
   
 export default MigrateHelper;
+
+
+const XLineItem = ({ entry })=>{
+  
+  const [ tCheck, tCheckSet ] = useState(null);
+  
+  useEffect( ()=> {
+    Meteor.call('checkForTide', entry._id, (err, re)=>{
+      err && console.log(err);
+      if(re) { tCheckSet(re) }
+    });
+  },[]);
+  
+  
+  return(
+    <li
+      className='vmarginhalf'>
+      <ExploreLinkBlock
+        keyword={entry.batch}
+        type='batch'
+        />
+      
+      {tCheck === null ? '?' :
+       tCheck === false ? <i className='fas fa-radiation'></i> : null}
+    </li>
+            
+  );
+};
