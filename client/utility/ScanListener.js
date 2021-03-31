@@ -37,10 +37,10 @@ function onPress(event) {
 }
 
 function onMessage(event) {
-  // if(event.data.dtOrigin === 'pisces') {
+  if(event.data.keyCode !== undefined) {
     console.log(event);
     onPress(event.data);
-  // }else{null}
+  }
 }
 
 export function ScanListenerUtility(user) {
@@ -54,7 +54,8 @@ export function ScanListenerUtility(user) {
   //   const check = window.confirm('Would you like to use a barcode scanner from anywhere in this window?');
   //   Meteor.call('setAutoScan', check, (error)=> error && console.log(error));
   
-  document.getElementById('instruct').contentWindow.document.addEventListener('focus',function(){
+  const wikiwin = document.getElementById('instruct');
+  wikiwin && wikiwin.contentWindow.document.addEventListener('focus',function(){
     console.log("contentWindow listener");
   });
 
@@ -71,7 +72,7 @@ export function ScanListenerUtility(user) {
 export function ScanListenerOff() {
   window.removeEventListener('visibilitychange', reFocus);
   window.removeEventListener('focus', reFocus);
-  window.removeEventListener('keypress', onPress);
+  window.removeEventListener('keydown', onPress);
   window.removeEventListener('message', onMessage);
   Session.set('scanListener', '');
 }

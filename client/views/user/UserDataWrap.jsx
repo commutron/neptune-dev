@@ -13,7 +13,6 @@ import Slides from '../../components/smallUi/Slides.jsx';
 import ActivityPanel from './ActivityPanel.jsx';
 import InboxPanel from './InboxPanel.jsx';
 import PrivacyPanel from './PrivacyPanel.jsx';
-import IdCardPanel from './IdCardPanel';
 
 import UserSettings from '/client/components/forms/User/UserSettings';
 
@@ -59,8 +58,7 @@ const UserDataWrap = ({
             <b><i className='fas fa-user-clock fa-fw'></i>  Production Activity</b>,
             <b><i className='fas fa-user-cog fa-fw'></i>  Preferences</b>,
             <b><i className='fas fa-user-shield fa-fw'></i>  Privacy & Access</b>,
-            <b><i className='fas fa-envelope fa-fw'></i>  Messages</b>,
-            <b><i className='fas fa-id-card fa-fw'></i>  ID Card</b>,
+            <b><i className='fas fa-envelope fa-fw'></i>  Messages</b>
           ]}
           extraClass='space5x5'>
             
@@ -101,11 +99,6 @@ const UserDataWrap = ({
             // isAdmin={isAdmin}
             // isDebug={isDebug}
             users={users} />
-          
-          <IdCardPanel
-            key={5}
-            app={app} 
-            user={user} />
           
         </Slides>
 				

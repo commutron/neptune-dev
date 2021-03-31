@@ -119,7 +119,7 @@ const GroupForm = ({ id, name, alias, wiki, title, selfclose })=> {
         <label htmlFor='gWiki' className='cap'>{Pref.group} {Pref.instruct} index</label>
       </p>
       <span className='centre'>
-        <Submit name={title} type='action' />
+        <Submit name='Save' type='action' />
       </span>
     </form>
   );

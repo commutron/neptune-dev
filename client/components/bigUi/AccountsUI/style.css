@@ -1,5 +1,6 @@
 .loginCard {
   min-height: 300px;
+  max-width: 400px;
   margin: 5vh 0 0 0;
 }
 

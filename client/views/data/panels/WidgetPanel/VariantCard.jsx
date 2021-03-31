@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
-// import Pref from '/client/global/pref.js';
+import Pref from '/client/global/pref.js';
+import { toast } from 'react-toastify';
 
 import CreateTag from '/client/components/tinyUi/CreateTag';
 import TagsModule from '/client/components/bigUi/TagsModule';
 import NotesModule from '/client/components/bigUi/NotesModule';
 
-import VariantForm from '/client/components/forms/VariantForm';
 import VariantLive from '/client/components/forms/VariantLive';
 import Remove from '/client/components/forms/Remove';
 
@@ -24,7 +24,7 @@ const VariantCard = ({
   const calFunc = (d)=> moment(d).calendar(null, {sameElse: calString});
 
   return(
-    <div className='min350 max400'>
+    <div className='min300 max300'>
       <div className='comfort'>
         
         <div className='wordBr vmarginhalf middle'>
@@ -40,13 +40,6 @@ const VariantCard = ({
         </div>
       
         <div className='centreRow vmarginhalf'>
-          
-          <VariantForm
-            widgetData={widgetData}
-            variantData={variantData}
-            app={app}
-            rootWI={variantData.instruct}
-            lockOut={groupData.hibernate} />
 
           <Remove
             action='variant'
@@ -70,15 +63,9 @@ const VariantCard = ({
             vKey={v.versionKey}
             tagOps={app.tagOption} />
           
-          <p className='numFont'>default units: {v.runUnits}</p>
-          
-          <p>
-            <a 
-              className='clean wordBr' 
-              href={v.instruct} 
-              target='_blank'
-            >{v.instruct}</a>
-          </p>
+          <InlineForm
+            widgetData={widgetData}
+            variantData={variantData} />
         
           <NotesModule
             sourceId={v._id}
@@ -104,6 +91,116 @@ const VariantCard = ({
 };
 
 export default VariantCard;
+
+const InlineForm = ({ widgetData, variantData })=> {
+  
+  const [ editState, editSet ] = useState(false);
+  
+  function handleFunc(e) {
+    e.preventDefault();
+    
+    const wId = widgetData._id;
+    const vId = variantData._id;
+    
+    const variant = this.rev.value.trim();
+    const wiki = this.wikdress.value.trim();
+    const unit = this.unit.value.trim();
+    
+    Meteor.call('editVariant', wId, vId, variant, wiki, unit, (error, reply)=>{
+      error && console.log(error);
+      if(reply) {
+        toast.success('Saved');
+      }else{
+        toast.error('Server Error');
+      }
+    });
+    editSet(false);
+  }
+  
+  const editAuth = Roles.userIsInRole(Meteor.userId(), 'edit');
+  
+  
+  if(!editState) {
+    return(
+      <div className='readlines'>
+        <p className='numFont'>default units: {variantData.runUnits}</p>
+          
+        <p className='max250' >
+          <a 
+            className='clean wordBr' 
+            href={variantData.instruct} 
+            target='_blank'
+          >{variantData.instruct}</a>
+        </p>
+    
+        <span className='rightRow'>
+          <button
+            className='miniAction gap'
+            onClick={()=>editSet(!editState)}
+            disabled={!variantData.live || !editAuth}
+          ><i className='fas fa-edit'></i> edit</button>
+        </span>
+      </div>
+    );
+  }
+  
+  return(
+    <form 
+      id='varInfoForm'
+      className='interForm'
+      onSubmit={(e)=>handleFunc(e)}
+    >
+      <p className='cap'>{Pref.variant}
+        <input
+          type='text'
+          id='rev'
+          className='interInput'
+          defaultValue={variantData.variant}
+          placeholder='1a'
+          pattern='[A-Za-z0-9 \._-]*'
+          required />
+      </p>       
+          
+      <p className='cap'>{Pref.unit} Quantity
+        <input
+          type='number'
+          id='unit'
+          className='interInput'
+          pattern='[0-999]*'
+          maxLength='3'
+          minLength='1'
+          max='100'
+          min='1'
+          defaultValue={variantData.runUnits}
+          placeholder='1-100'
+          inputMode='numeric'
+          required />
+      </p>
+  
+      <p>Work Instructions
+        <input
+          type='url'
+          id='wikdress'
+          className='interInput'
+          defaultValue={variantData.instruct}
+          placeholder='Full Address' />
+      </p>
+          
+      <span className='rightRow'>
+        <button
+          type='button'
+          className='miniAction gap'
+          onClick={()=>editSet(false)}
+        ><i className='far fa-edit'></i> cancel</button>
+      
+        <button
+          type='submit'
+          className='miniAction gap greenLineHover'
+        ><i className='fas fa-check'></i> save</button>
+      </span>
+    </form>
+  );
+};
 
 /*
   totalI(mData) {

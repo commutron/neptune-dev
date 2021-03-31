@@ -34,7 +34,7 @@ const UsernameChange = (props)=> {
             type='text'
             id='unPass'
             minLength='4'
-	          pattern='[A-Za-z0-9 \._-]*'
+	          pattern='[A-Za-z0-9\._-]*'
             onChange={()=>choiceNameSet(unPass.value)}
             placeholder={Meteor.user().username}
             required

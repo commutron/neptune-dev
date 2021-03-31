@@ -1,7 +1,9 @@
-import React, { useState, useLayoutEffect, Fragment } from 'react';
+import React, { useState, useEffect, useLayoutEffect, Fragment } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { ToastContainer } from 'react-toastify';
 //import Pref from '/client/global/pref.js';
+
+import { ScanListenerUtility, ScanListenerOff } from '/client/utility/ScanListener.js';
 
 import HomeIcon from './HomeIcon.jsx';
 import FindBox from './FindBox.jsx';
@@ -27,6 +29,13 @@ export const ProWrap = ({
   const [ rapIs, rapIsSet ] = useState(false);
   
   const [ ncTypesComboFlat, ncTypesComboSet ] = useState([]);
+  
+  useEffect( ()=> {
+    if(Meteor.user()) {
+      ScanListenerUtility(Meteor.user());
+    }
+    return ()=> ScanListenerOff();
+  }, []);
   
   useLayoutEffect( ()=> {
     !Session.get('riverExpand') ? null : expandSet( true );
@@ -218,9 +227,12 @@ export const ProWrap = ({
 
 export const ProWindow = ({ children })=> {
   
-  // let scrollFix = {
-  //   overflowY: 'auto'
-  // };
+  useEffect( ()=> {
+    if(Meteor.user()) {
+      ScanListenerUtility(Meteor.user());
+    }
+    return ()=> ScanListenerOff();
+  }, []);
   
   return(
     <section className='windowPro'>

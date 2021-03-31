@@ -251,7 +251,7 @@
 
 .slideIn-change {
   animation-name: slideInLeft;
-  animation-duration: 0.5s;
+  animation-duration: 0.3s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: 1;
 }

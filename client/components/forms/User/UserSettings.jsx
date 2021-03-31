@@ -8,6 +8,7 @@ import PasswordChange from './PasswordChange';
 
 import { AdminDown } from './AdminForm.jsx';
 
+import IdCardCard from '/client/views/user/IdCardCard';
 
 const UserSettings = ({ app, user, isAdmin, brancheS })=> {
   
@@ -30,14 +31,16 @@ const UserSettings = ({ app, user, isAdmin, brancheS })=> {
   
   return(
     <div>
-      <h3 className='clean'>Username: {user.username}</h3>
-      <h3 className='clean'>ID: {Meteor.user()._id}</h3>
-      <h3>Organization: <i className='greenT'>{Meteor.user().org}</i></h3>
-      <hr />
+      <span className='noPrint'>
+        <h3 className='clean'>Username: {user.username}</h3>
+        <h3 className='clean'>ID: {Meteor.user()._id}</h3>
+        <h3>Organization: <i className='greenT'>{Meteor.user().org}</i></h3>
+      </span>
       
-      <div className='autoFlex'>  
+      <div className='balance cardify'>  
         
-        <div>
+        <div className='noPrint'>
+          <h3><i className='fas fa-sliders-h fa-fw'></i> Preferences</h3>
           <div className='grid'>
         
             <UserToggleSetting
@@ -85,14 +88,17 @@ const UserSettings = ({ app, user, isAdmin, brancheS })=> {
           </div>
         </div>
       
-      
-        <div>
+        
+        <div className='noPrint'>
+          <h3><i className='fas fa-passport fa-fw'></i> Sign In</h3>
           <UsernameChange />
           <hr />
           <PasswordChange />
           <hr />
           { isAdmin ? <AdminDown /> : null }
         </div>
+        
+        <IdCardCard user={user} />
         
       </div>
       

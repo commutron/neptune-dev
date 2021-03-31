@@ -4,9 +4,9 @@ import { toast } from 'react-toastify';
 
 import ModelLarge from '../smallUi/ModelLarge';
 
-const VariantModel = ({ widgetData, variantData, app, rootWI, lockOut })=> {
+const VariantModel = ({ widgetData, app, rootWI, lockOut })=> {
   
-  let name = variantData ? `edit ${Pref.variant}` : `new ${Pref.variant}`;
+  let name = `new ${Pref.variant}`;
   
   return(
     <ModelLarge
@@ -18,7 +18,6 @@ const VariantModel = ({ widgetData, variantData, app, rootWI, lockOut })=> {
       
       <VariantForm
         widgetData={widgetData}
-        variantData={variantData}
         app={app}
         rootWI={rootWI}
       />
@@ -28,7 +27,7 @@ const VariantModel = ({ widgetData, variantData, app, rootWI, lockOut })=> {
   
 export default VariantModel;
 
-const VariantForm = ({ widgetData, variantData, app, rootWI, lockOut, selfclose })=> {
+const VariantForm = ({ widgetData, app, rootWI, lockOut, selfclose })=> {
 
   function save(e) {
     e.preventDefault();
@@ -36,44 +35,22 @@ const VariantForm = ({ widgetData, variantData, app, rootWI, lockOut, selfclose 
     const wId = widgetData._id;
     const gId = widgetData.groupId;
     
-    const edit = variantData;
-    const vId = edit ? variantData._id : false;
-    
     const variant = this.rev.value.trim();
     const wiki = this.wikdress.value.trim();
     const unit = this.unit.value.trim();
     
-    if(edit) {
-      Meteor.call('editVariant', wId, vId, variant, wiki, unit, (error, reply)=>{
-        error && console.log(error);
-        if(reply) {
-          toast.success('Saved');
-          selfclose();
-        }else{
-          toast.error('Server Error');
-          this.go.disabled = false;
-        }
-      });
-    }else{
-      Meteor.call('addNewVariant', wId, gId, variant, wiki, unit, (error, reply)=>{
-        error && console.log(error);
-        if(reply) {
-          toast.success('Saved');
-        }else{
-          toast.error('Server Error');
-          this.go.disabled = false;
-        }
-      });
-    }
+    Meteor.call('addNewVariant', wId, gId, variant, wiki, unit, (error, reply)=>{
+      error && console.log(error);
+      if(reply) {
+        toast.success('Saved');
+      }else{
+        toast.error('Server Error');
+        this.go.disabled = false;
+      }
+    });
   }
-  
-  let e = variantData;
-  let eV = e ? e.variant : null;
-  let eU = e ? e.runUnits : null;
-  
-  const instruct = !e ? app.instruct : e.instruct;
 
-  return (
+  return(
     <div className='split'>
 
       <div className='half space edit'>
@@ -85,7 +62,6 @@ const VariantForm = ({ widgetData, variantData, app, rootWI, lockOut, selfclose 
             <input
               type='text'
               id='rev'
-              defaultValue={eV}
               placeholder='1a'
               pattern='[A-Za-z0-9 \._-]*'
               className='wide'
@@ -101,7 +77,6 @@ const VariantForm = ({ widgetData, variantData, app, rootWI, lockOut, selfclose 
               minLength='1'
               max='100'
               min='1'
-              defaultValue={eU}
               placeholder='1-100'
               inputMode='numeric'
               className='wide'
@@ -113,7 +88,6 @@ const VariantForm = ({ widgetData, variantData, app, rootWI, lockOut, selfclose 
             <input
               type='url'
               id='wikdress'
-              defaultValue={instruct}
               placeholder='Full Address'
               className='wide' />{/*instructState*/}
             <label htmlFor='wikdress'>Work Instructions</label>
@@ -129,7 +103,7 @@ const VariantForm = ({ widgetData, variantData, app, rootWI, lockOut, selfclose 
       <div className='half'>
         <iframe
           id='instructMini'
-          src={instruct}
+          src={app.instruct}
           height='600'
           width='100%' />
       </div>

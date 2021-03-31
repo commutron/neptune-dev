@@ -150,7 +150,7 @@ Meteor.methods({
       return false;
     }
   },
-  
+
   deleteUserForever(userId, pin) {
     const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
     const user = Meteor.users.findOne({_id: userId});
@@ -358,19 +358,6 @@ Meteor.methods({
         },
       },{multi: true});
       return true;
-    }
-  },
-  
-  logLogInOut(login, agent, sessionID) {
-    if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
-      const inout = !login ? 'logout' : 'login';
-      const time = moment().format();
-      const logString = `${inout}: ${time} ${agent} ${sessionID}`;
-      Meteor.users.update(Meteor.userId(), {
-        $push: {
-          usageLog: logString,
-        }
-      });
     }
   },
   

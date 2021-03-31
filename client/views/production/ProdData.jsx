@@ -55,6 +55,7 @@ const ProdData = ({
 export default withTracker( () => {
 
   const orb = Session.get('now');
+  
   let login = Meteor.userId() ? true : false;
   let user = login ? Meteor.user() : false;
   let org = user ? user.org : false;

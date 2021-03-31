@@ -114,8 +114,8 @@ const RapidInfoEdit = ({ rapid, allQ, rSetItems, editAuth, cal })=> {
         
       <p>Extra Hours: <n-num>{min2hr(rapid.timeBudget || 0)}</n-num></p>
       
-      <p className='wordBr' title='unavailable'>
-        <strike>Override Instruction: {rapid.instruct || ''}</strike>
+      <p className='wordBr max300'>
+        Override Instruction: {rapid.instruct || ''}
       </p>  
       
       <span className='rightRow'>
@@ -249,14 +249,13 @@ const RapidInfoFormBlock = ({
           required />
       </p>
       
-      <p title='unavailable'><strike>Override Instruction:</strike>
+      <p>Override Instruction: 
         <input 
           type='url'
           id='rInsc'
           className='interInput'
           placeholder='http://'
-          defaultValue={rDt.instruct || ''}
-          disabled={true} />
+          defaultValue={rDt.instruct || ''} />
       </p>
       
       <span className='rightRow'>

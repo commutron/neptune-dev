@@ -89,6 +89,7 @@ const ProductionFindOps = ({
   
   if(orb === Pref.batch || orb === Pref.batch + 's') {
     Session.set('nowBatch', false);
+    Session.set('nowInstruct', undefined);
     return (
       <ProWrap app={app}>
         <BatchesList 
@@ -101,6 +102,7 @@ const ProductionFindOps = ({
   
   if(orb === Pref.group || orb === Pref.group + 's') {
     Session.set('nowBatch', false);
+    Session.set('nowInstruct', undefined);
     return (
       <ProWrap app={app}>
         <GroupsList 
@@ -115,9 +117,13 @@ const ProductionFindOps = ({
   if(orb === Pref.docs || orb === 'docs') {
     Session.set('now', Pref.docs);
     Session.set('nowBatch', false);
+    Session.set('nowInstruct', undefined);
     return (
       <ProWindow app={app}>
-        <WikiOps wi={false} root={app.instruct} anchor={false} full={true} />
+        <WikiOps 
+          root={app.instruct} 
+          anchor={false} 
+          full={true} />
       </ProWindow>
     );
   }
@@ -125,6 +131,7 @@ const ProductionFindOps = ({
   if(orb === Pref.npi || orb === Pref.npiFull) {
     Session.set('now', Pref.npiFull);
     Session.set('nowBatch', false);
+    Session.set('nowInstruct', undefined);
     return (
       <ProWrap
         user={user}
@@ -138,7 +145,6 @@ const ProductionFindOps = ({
           user={user}
           app={app} />
         <WikiOps 
-          wi={false} 
           root={app.instruct} 
           anchor={false} />
       </ProWrap>
@@ -151,6 +157,7 @@ const ProductionFindOps = ({
       let widget = linkedWidget(hotBatch.widgetId);
       let variant= variantDataByKey(hotBatch.versionKey);
       let group = linkedGroup(widget.groupId);
+      Session.set('nowInstruct', variant.instruct);
       return (
 		    <ProWrap
 		      batchData={hotBatch}
@@ -166,7 +173,6 @@ const ProductionFindOps = ({
             user={user}
             app={app} />
           <WikiOps 
-            wi={variant.instruct} 
             root={app.instruct} 
             anchor={anchor} />
         </ProWrap>
@@ -175,6 +181,7 @@ const ProductionFindOps = ({
       let widget = linkedWidget(hotxBatch.widgetId);
       let variant = variantDataByKey(hotxBatch.versionKey);
       let group = linkedGroup(hotxBatch.groupId);
+      Session.set('nowInstruct', variant.instruct);
       return (
 		    <ProWrap
 		      batchData={hotxBatch}
@@ -193,7 +200,6 @@ const ProductionFindOps = ({
             user={user}
             app={app} />
           <WikiOps 
-            wi={variant.instruct}
             root={app.instruct}
             anchor={anchor} />
         </ProWrap>
@@ -208,6 +214,7 @@ const ProductionFindOps = ({
       let widget = linkedWidget(hotBatch.widgetId);
       let variant= variantDataByKey(hotBatch.versionKey);
       let group = linkedGroup(widget.groupId);
+      Session.set('nowInstruct', variant.instruct);
       return (
         <ProWrap
           batchData={hotBatch}
@@ -227,7 +234,6 @@ const ProductionFindOps = ({
             users={activeUsers}
             app={app} />
           <WikiOps 
-            wi={variant.instruct} 
             root={app.instruct}
             anchor={anchor} />
         </ProWrap>
@@ -237,6 +243,7 @@ const ProductionFindOps = ({
       let widget = linkedWidget(hotxSeries.widgetId);
       let variant= variantDataByKey(hotxSeries.versionKey);
       let group = linkedGroup(hotxSeries.groupId);
+      Session.set('nowInstruct', variant.instruct);
       return (
         <ProWrap
           batchData={hotxBatch}
@@ -259,8 +266,7 @@ const ProductionFindOps = ({
             user={user}
             users={activeUsers}
             app={app} />
-          <WikiOps 
-            wi={variant.instruct} 
+          <WikiOps
             root={app.instruct}
             anchor={anchor} />
         </ProWrap>
@@ -274,6 +280,7 @@ const ProductionFindOps = ({
     let lookupG = alias ? alias : false;
     if(lookupG) {
       Session.set('nowBatch', false);
+      Session.set('nowInstruct', lookupG.wiki);
       let widgets = groupWidgets(lookupG._id);
       let activeWidgets = groupActiveWidgets(lookupG._id);
       return (
@@ -288,7 +295,6 @@ const ProductionFindOps = ({
             widgetData={widgets}
             active={activeWidgets} />
           <WikiOps 
-            wi={lookupG.wiki} 
             root={app.instruct} 
             anchor={anchor} />
         </ProWrap>

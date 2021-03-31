@@ -3,53 +3,31 @@ import React from 'react';
 
 
 const ZpassScan = ()=> {
-  
-	function eThing(e) {
     
-    var encodedData = window.btoa( e );
-    
-    console.log('§'+encodedData+'§');
-    
-    // user.name¶p@ssW0rD
-    // §dXNlci5uYW1ltnBAc3NXMHJE§
-    
-    // malcolm.reynolds¶malmal
-    // §bWFsY29sbS5yZXlub2xkc7ZtYWxtYWw=§
-  }
-  
-  
 	function dThing(input) {
 	  const e = input.trim();
     if(e.length > 3) {
-   
-      const strt = e.indexOf("\u00A7");
-      const endng = e.indexOf("\u00A7", (strt+1));
       
-      if(strt >= 0 && endng > 0) {
-        
-        let clean = e.substring(strt+1, endng); 
-        console.log(clean);
-        
-        let decode = window.atob( clean );
-        if(!decode) {
-          console.error('bad decode');
-        }else{
-        
-          console.log(decode);
-          
-          const split = decode.split("\u00B6");
-          const usrnm = split[0];
-          const psswrd1 = split[1];
-          
-          console.log({usrnm, psswrd1});
+      const useE = e.split(",");
+      let utf8decoder = new TextDecoder();
+      let u8arr = new Uint8Array(useE);
+      const decode = utf8decoder.decode(u8arr);
+  
       
-        }
+      if(!decode) {
+        console.error('bad decode');
       }else{
-        console.error('fromat wrong');
+        
+        const cut2 = e.split("<+>");
+        const usrnm = cut2[0];
+        const psswrd1 = cut2[1];
+        
+        console.log({usrnm, psswrd1});
       }
+    }else{
+      console.error('format wrong');
     }
   }
-  
  
 
   return(
@@ -58,18 +36,6 @@ const ZpassScan = ()=> {
       
       <h2>EXPERIMENT</h2>
       
-      <br />
-      <p>
-        <textarea
-          id='xxZencode'
-          cols='30'
-          rows='5'
-          onInput={(e)=>eThing(e.target.value)}
-          placeholder='encode'
-          autoFocus={true}></textarea>
-      </p>
-      
-      <br />
       <p>
         <textarea
           id='xxZdecode'

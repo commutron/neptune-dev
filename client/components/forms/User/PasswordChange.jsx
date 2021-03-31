@@ -36,8 +36,11 @@ const PasswordChange = (props)=> {
           <input
             type='password'
             id='chPass'
+            className='showValid'
             onChange={()=>choicePasswordSet(chPass.value)}
-            placeholder='password'
+            pattern='[A-Za-z0-9\.!@#$%^&*()_\-,?`<>[\]{}~=/\\]*'
+	          minLength='6'
+	          placeholder='password'
             required
             autoComplete="new-password" />
         </p>
@@ -47,6 +50,7 @@ const PasswordChange = (props)=> {
           <input
             type='password'
             id='coPass'
+            className='showValid'
             onChange={()=>confirmPasswordSet(coPass.value)}
             placeholder='password'
             required

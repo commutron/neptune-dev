@@ -77,7 +77,7 @@ const StartView = ({user, app}) =>	{
             icon='far fa-paper-plane'
             link='/production' /> }
         
-        <NavButton title='Overview' icon='fas fa-globe' link='/overview' tag='WIP' />
+        <NavButton title='Overview' icon='fas fa-globe' link='/overview' />
         
         <NavButtonShell title='People' link='/people'
           icon={
@@ -90,9 +90,9 @@ const StartView = ({user, app}) =>	{
         
         <NavButton title='Explore' icon='fa-rocket' link='/data' />
         
-        <NavButton title={Pref.upstream} icon='fa-satellite-dish' link='/upstream' tag='Kit' />
+        <NavButton title={Pref.upstream} icon='fa-satellite-dish' link='/upstream' />
         
-        <NavButton title={Pref.downstream} icon='fa-satellite' link='/downstream' tag='Ship' />
+        <NavButton title={Pref.downstream} icon='fa-satellite' link='/downstream' />
         
         <NavButton title={user.username} icon='fa-user-astronaut fa-flip-horizontal' link='/user' />
         

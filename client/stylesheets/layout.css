@@ -1140,6 +1140,7 @@ n-mock-table-cell:last-child {
 .max500 { max-width: 500px; }
 .max400 { max-width: 400px; }
 .max300 { max-width: 300px; }
+.max250 { max-width: 250px; }
 .min600 { min-width: 600px; }
 .min400 { min-width: 400px; }
 .min350 { min-width: 350px; }

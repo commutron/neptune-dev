@@ -94,7 +94,9 @@ const XDoProCard = ({
   const rapid = !rapidData.rapIs ? 
                   rapidData.rapDo.find( r => r.live === true ) :
                   rapidData.rapDo.find( r => r._id === rapidData.rapIs.rapId );
-          
+  
+  tideFloodGate && rapid && rapid.instruct && Session.set('nowInstruct', rapid.instruct);
+  
   let useFlow = !itemData ? [] :
                 itemData.completed ? 
                 rapid ? rapid.whitewater : []
