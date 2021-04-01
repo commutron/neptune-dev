@@ -51,8 +51,7 @@ SubMngr = new SubsManager({
 FlowRouter.notFound = {
   action() {
     mount(PublicLayout, {
-      content: (<p className='centreText'>Page Not Found</p>),
-      title: '404'
+      content: (<p className='centreText'><h1>404 - Page Not Found</h1></p>),
     });
   }
 };
@@ -68,7 +67,6 @@ exposedRoutes.route('/login', {
   action() {
     mount(PublicLayout, {
        content: (<Login />),
-       title: 'Sign In'
     });
   }
 });
@@ -92,8 +90,7 @@ exposedRoutes.route('/meta', {
             </div>
           </div>
         </div>
-      ),
-      title: Pref.neptuneIs
+      )
     });
   }
 });
@@ -128,8 +125,7 @@ exposedRoutes.route('/initialsetup', {
         <div>
           <InitialSetup />
         </div>
-      ),
-      title: 'Initial App Setup'
+      )
     });
   }
 });

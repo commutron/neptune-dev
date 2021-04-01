@@ -195,8 +195,11 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
     const batchNum = gf.batch;
     const describe = whatIsBatchX(batchNum)[0].join(' ');
     const salesOrder = gf.salesOrder;
-    const itemQuantity = gf.quantity;
-    const ncQuantity = 0; //gf.nonconformaces.filter( n => !n.trash ).length;
+    const allQuantity = gf.quantity;
+    
+    const srs = XSeriesDB.findOne({batch: gf.batch});
+    const itemQuantity = srs ? srs.items.length : 0;
+    const ncQuantity = srs ? srs.nonCon.filter( n => !n.trash ).length : 0;
     const ncRate = ( ncQuantity / itemQuantity ).toFixed(1, 10);
     const endAlter = gf.altered.filter( a => a.changeKey === 'salesEnd' ).length;
     
@@ -208,21 +211,17 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
     const shipOnTime = deliveryResult[4].join(" ");
     
     // check for over quote
-    const distTB = distTimeBudget(gf.tide, gf.quoteTimeBudget, itemQuantity, itemQuantity);
-    //return [ tidePerItem, quotePerItem, quoteMNtide, tidePCquote ];
+    const distTB = distTimeBudget(gf.tide, gf.quoteTimeBudget, allQuantity, allQuantity);
+    //returns [ tidePerItem, quotePerItem, quoteMNtide, tidePCquote ];
     
     const overQuote = distTB === undefined || isNaN(distTB[2]) ? 'n/a' :
                       distTB[2] < 0 ? 
                       `${Math.abs(distTB[2])} hours (${Math.abs(distTB[3])}%) over` : 
                       `${Math.abs(distTB[2])} hours (${Math.abs(distTB[3])}%) under`;
-    // const percentOvUn = distTB === undefined ? 'n/a' : 
-    //                     distTB[3] < 0 ? 
-    //                     `${Math.abs(distTB[3])}% over` : 
-    //                     `${Math.abs(distTB[3])}% under`;
     
     batchMetrics.push([
       batchNum, describe, 
-      salesOrder, itemQuantity, ncRate,
+      salesOrder, allQuantity, ncRate,
       salesEnd, shipDue, endAlter, localComplete,
       fillOnTime, shipOnTime, overQuote
     ]);
@@ -253,6 +252,8 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
     
     const localDate = moment.tz(dateString, Config.clientTZ);
     
+    let itemsMatch = [];
+    
     const touchedB = BatchDB.find({
       orgKey: Meteor.user().orgKey,
       items: { $elemMatch: { finishedAt: {
@@ -260,8 +261,6 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
       $lte: new Date(localDate.endOf('day').format())
     }}}
     }).fetch();
-    
-    let itemsMatch = [];
     
     for(let iB of touchedB) {
       const mItems = iB.items.filter( i => i.finishedAt && localDate.isSame(i.finishedAt, 'day') );
@@ -275,7 +274,29 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
         ]);
       }
     }
+    
+    const touchedSRS = XSeriesDB.find({
+      orgKey: Meteor.user().orgKey,
+      items: { $elemMatch: { completedAt: {
+      $gte: new Date(localDate.startOf('day').format()),
+      $lte: new Date(localDate.endOf('day').format())
+    }}}
+    }).fetch();
+    
+    for(let srs of touchedSRS) {
+      const items = srs.items.filter( i => i.completed && localDate.isSame(i.completedAt, 'day') );
+      const describe = whatIsBatchX(srs.batch)[0].join(' ');
+      const batchX = XBatchDB.findOne({batch: srs.batch});
+      const salesOrder = batchX ? batchX.salesOrder : '';
       
+      for(let ic of items) {
+        const time = moment.tz(ic.completedAt, Config.clientTZ).format('HH:mm:ss');
+        
+        itemsMatch.push([ 
+          srs.batch, salesOrder, describe, ic.serial, time
+        ]);
+      }
+    }
     return itemsMatch;
   },
   

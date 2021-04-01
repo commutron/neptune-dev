@@ -221,6 +221,7 @@ input::-webkit-calendar-picker-indicator {
 
 .grayT { color: var(--black); }
 .darkgrayT { color: var(--asbestos); }
+.darkT { color: var(--dark); }
 
 
 .black { background-color: var(--black); }

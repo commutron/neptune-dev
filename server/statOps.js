@@ -16,7 +16,7 @@ function countItemsWith(accessKey, rangeStart, rangeEnd, historyType) {
   
   let itemCount = 0;
   
-  BatchDB.find({
+  XSeriesDB.find({
     orgKey: accessKey, 
     items: { $elemMatch: { createdAt: {
       $lte: new Date(rangeEnd) 
@@ -62,6 +62,7 @@ export const totalTideTimePromise = (accessKey, rangeStart, rangeEnd)=> {
       const tcount = batchTideTime(windowedTide);
       totalCount += tcount;
     });
+    
     XBatchDB.find({
       orgKey: accessKey,
       createdAt: { 
@@ -90,9 +91,9 @@ Meteor.methods({
     const usrC = u ? Meteor.users.find({orgKey: Meteor.user().orgKey}).fetch().length : 0;
     const grpC = g ? GroupDB.find({orgKey: Meteor.user().orgKey}).fetch().length : 0;
     const wdgtC = w ? WidgetDB.find({orgKey: Meteor.user().orgKey}).fetch().length : 0;
-    const btch = b ? BatchDB.find({orgKey: Meteor.user().orgKey}).fetch() : [];
+    const btch = b ? XBatchDB.find({orgKey: Meteor.user().orgKey}).fetch() : [];
     const btchC = b ? btch.length : 0;
-    const btchLv = a ? btch.filter( x => x.finishedAt === false ).length : 0;
+    const btchLv = a ? btch.filter( x => x.completed === false ).length : 0;
     return {
       usrC, grpC, wdgtC, btchC, btchLv
     };
@@ -115,8 +116,7 @@ Meteor.methods({
     const nonConClean = nonConCol.filter( x => !x.trash );
     const typeObj = _.countBy(nonConClean, x => x.type);
     // const typeObjClean = _.omit(typeObj, (value, key, object)=> {
-    //   return key == false;
-    // });
+    //  return key == false; });
     const itr = Object.entries(typeObj);
     const typeArr = Array.from(itr, (arr)=> { return {type: arr[0], count: arr[1]} } );
     return typeArr;

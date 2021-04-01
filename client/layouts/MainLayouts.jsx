@@ -3,17 +3,18 @@ import React from 'react';
 import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
 import HomeIcon from '/client/layouts/HomeIcon.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
+import Pref from '/client/global/pref.js';
 
 import { ToastContainer } from 'react-toastify';
 
-export const PublicLayout = ({content, title}) => (
+export const PublicLayout = ({content}) => (
   <ErrorCatch>
   <div className='simpleContainer'>
     <div className='tenHeader'>
       <div className='topBorder' />
       <HomeIcon />
       <div className='frontCenterTitle'>
-        {title}
+        {Pref.neptuneIs}
       </div>
       <div className='auxRight' />
       <div className='proRight' />

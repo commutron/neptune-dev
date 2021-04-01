@@ -53,8 +53,8 @@ const BuildPace = ()=> {
           <tr>
             <th>Customer</th>
             <th>Product Batch</th>
-            <th>0%->50% minutes</th>
-            <th>51%->100% minutes</th>
+            <th>{"0%->50% minutes"}</th>
+            <th>{"51%->100% minutes"}</th>
             </tr>
         </thead>
         <tbody>
@@ -69,8 +69,8 @@ const BuildPace = ()=> {
                 {entry.durrArray
                   .sort((w1, w2)=> w1[0] < w2[0] ? -1 : w1[0] > w2[0] ? 1 : 0)
                   .map( (e, ix)=>(
-                    <Fragment>
-                      <tr key={'t'+ix}>
+                    <Fragment key={'t'+ix}>
+                      <tr>
                         <td></td>
                         <td className='bold' colSpan='3'>{ e[0].toUpperCase() }</td>
                       </tr>

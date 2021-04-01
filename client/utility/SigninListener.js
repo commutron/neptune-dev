@@ -4,6 +4,9 @@ function onBarcodePress(event) {
   
   let signinListener = Session.get('signinListener') || '';
   
+  const thisEvent = event.currentTarget;
+  let turnOff = ()=> thisEvent.upFunc(false);
+  
   const inputKey = event.key;
   const inputCode = event.keyCode;
   
@@ -32,24 +35,29 @@ function onBarcodePress(event) {
         const decode = utf8decoder.decode(u8arr);
     
         if(!decode) {
-          console.error('bad decode');
-          Session.set('signinAttempt', false);
+          console.error('utf8decoder was unable to decode the array provided');
+          window.alert('Barcode is unreadable');
+          turnOff();
         }else{
           const cut2 = decode.split("<+>");
           
           const usrnm = cut2[0];
           const psswrd1 = cut2[1];
           
-          // console.log({usrnm, psswrd1});
-          
           if(typeof usrnm === 'string' && typeof psswrd1 === 'string') {
             Meteor.loginWithPassword(usrnm, psswrd1, (error)=>{
         	    if(error) {
-        	      console.log(error);
+        	      console.error(`SERVER ERROR : ${error}`);
+                window.alert(error);
+                turnOff();
         	    }else{
         	    	Meteor.logoutOtherClients();
         	    }
         	  });
+          }else{
+            console.error(`invalid decoded string = ${usrnm}, ${psswrd1}`);
+            window.alert('Barcode does not contain valid information');
+            turnOff();
           }
         }
         signinListener = '';
@@ -57,7 +65,7 @@ function onBarcodePress(event) {
     }else if( !inputKey.match(/[0-9\,]/) ) {
       
       signinListener = '';
-      event.currentTarget.upFunc(false);
+      turnOff();
       
     }else if( inputKey.match(/[0-9\,]/) ) {
       

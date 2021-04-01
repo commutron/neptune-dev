@@ -3,12 +3,6 @@
 
 // import Config from '/server/hardConfig.js';
 
-// moment.updateLocale('en', {
-//   workinghours: Config.workingHours,
-//   shippinghours: Config.shippingHours
-// });
-
-
 Meteor.methods({
 
   // a cache for a plain list of all part numbers for autocomplete
@@ -50,17 +44,17 @@ Meteor.methods({
         lastUpdated: { $gte: new Date(lstweek) },
         dataName:'lockingTask'});
       
-    if(force || !currentCache ) {
-      BatchDB.find({
-        orgKey: accessKey, 
-        live: false,
-        $or: [ { lock: false },
-               { lock: { $exists: false } }
-             ],
-        finishedAt: { $lt: lstyear }
-      }).forEach( (b)=> {
-        Meteor.defer( ()=>{ Meteor.call('enableLock', b._id, accessKey) });
-      });
+      if(force || !currentCache ) {
+        BatchDB.find({
+          orgKey: accessKey, 
+          live: false,
+          $or: [ { lock: false },
+                 { lock: { $exists: false } }
+               ],
+          finishedAt: { $lt: lstyear }
+        }).forEach( (b)=> {
+          Meteor.defer( ()=>{ Meteor.call('enableLock', b._id, accessKey) });
+        });
           
         XBatchDB.find({
           orgKey: accessKey, 

@@ -1,7 +1,11 @@
 .loginCard {
   min-height: 300px;
+  min-width: 250px;
   max-width: 400px;
   margin: 5vh 0 0 0;
+}
+.loginCard input {
+  width: 100%;
 }
 
 .userFormButtons {
@@ -42,4 +46,13 @@
   box-shadow: 
     0 0 0 3px rgb(35,35,35),
     0 0 0 5px var(--emerald);
+}
+
+.scanInIndicator {
+  margin: 30px;
+  color: var(--neptuneColor);
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

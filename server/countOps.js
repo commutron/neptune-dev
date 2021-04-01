@@ -152,7 +152,6 @@ Meteor.methods({
     return allTypes;
   },
   
-   
     //////////////////////////////////////////////////////////////////////////
    // nonCons of Multiple Batches
   ////////////////////////////////////////////////////////////////////////////
@@ -182,8 +181,6 @@ Meteor.methods({
     }
     return JSON.stringify(countNonCon);
   },
-  
-  
   
   
 });

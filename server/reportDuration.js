@@ -1,10 +1,8 @@
 import moment from 'moment';
-// import 'moment-timezone';
 import 'moment-business-time';
 
 // import { checkTimeBudget } from './tideMethods.js';
 // import { whatIsBatch, whatIsBatchX } from './searchOps.js';
-
 import { avgOfArray } from '/server/calcOps';
 import Config from '/server/hardConfig.js';
 
@@ -14,15 +12,15 @@ moment.updateLocale('en', {
 });
 
 function splitItmTm( items, tide ) {
-  const fitems = items.filter( i => i.finishedAt !== false);
+  const fitems = items.filter( i => i.completed );
   const etide = tide.filter( t => t.stopTime !== false);
   if(fitems.length > 0 && tide && tide.length > 0) {
     const itemS = fitems.sort( (i1, i2)=> {
-      return i1.finishedAt < i2.finishedAt ? -1 : i1.finishedAt > i2.finishedAt ? 1 : 0; });
+      return i1.completedAt < i2.completedAt ? -1 : i1.completedAt > i2.completedAt ? 1 : 0; });
       
     const itemMidex = Math.floor( itemS.length / 2 );
     const midItem = itemS[itemMidex];
-    const midMmnt = moment(midItem.finishedAt);
+    const midMmnt = moment(midItem.completedAt);
     
     let lTide = 0;
     let rTide = 0;
@@ -113,15 +111,15 @@ function getWidgetPace(accessKey, widget) {
   
   let btchs = [];
   
-  const compB = BatchDB.find({widgetId: widget._id, live: false});
+  const compB = XBatchDB.find({widgetId: widget._id, live: false});
   for( let b of compB ) {
-    const spliTime = splitItmTm(b.items, b.tide || []);
+    const srs = XSeriesDB.findOne({batch: b.batch});
+    const items = srs ? srs.items : [];
+    const tide = b.tide ? b.tide : [];
+    
+    const spliTime = splitItmTm(items, tide);
     btchs.push( [ b.batch, spliTime[0], spliTime[1] ] );
   }
-  // const compX = XBatchDB.find({widgetId: widget._id, completed: true}).fetch();
-  // for( let x of compX ) {
-  //   relAvg.push( splitItmTm(x.salesStart, x.releases) );
-  // }
 
   const testTheTime = [
     widget.widget, btchs

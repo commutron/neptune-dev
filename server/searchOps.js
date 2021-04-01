@@ -161,61 +161,42 @@ Meteor.methods({
      /////////////////////////////////////////////////////////////////////////
    // Shortfall Items
   ///////////////////////////////////////////////////////////////////////////
- /*
-  fetchShortfalls() {
-
-    const touchedB = BatchDB.find({
-      orgKey: Meteor.user().orgKey,
-      finishedAt: false,
-      shortfall: { $elemMatch: { inEffect: { $ne: true }, reSolve: { $ne: true } } }
-    }).fetch();
-     
-    let sMatch = [];
-    
-    for(let iB of touchedB) {
-      const mShort = iB.shortfall.filter( s => !(s.inEffect || s.reSolve) );
-      const describe = whatIsBatch(iB.batch)[0].join(' ');
-      
-      for(let mS of mShort) {
-        const time = moment.tz(mS.cTime, Config.clientTZ).format();
-        
-        sMatch.push([ 
-          iB.batch, iB.salesOrder, what, mS.serial, mS.partNum, mS.refs, time
-        ]);
-      }
-    }
-    return sMatch;
-  },
-  */
-   
   fetchShortfallParts() {
     
     let sMatch = [];
     
-    BatchDB.find({
-      orgKey: Meteor.user().orgKey,
-      finishedAt: false,
+    /* All, Complete or Not
+      XSeriesDB.find({
       shortfall: { $elemMatch: { inEffect: { $ne: true }, reSolve: { $ne: true } } }
-    }).forEach( iB => {    // s.inEffect !== true && s.reSolve !== true
-      const mShort = iB.shortfall.filter( s => !(s.inEffect || s.reSolve) );
-      const describe = whatIsBatch(iB.batch)[0].join(' ');
-
-      if(mShort.length > 0) {
-        const unqShort = _.uniq(mShort, false, n=> n.partNum );
-
-        let bsMatch = [];
-        for(let mS of unqShort) {
+    }); // s.inEffect !== true && s.reSolve !== true
+    */
+    // Complete Only
+    XBatchDB.find({
+      orgKey: Meteor.user().orgKey,
+      completed: false
+    }).forEach( bx => {
+      const srs = XSeriesDB.findOne({batch: bx.batch});
+      if(srs) {
+        const mShort = srs.shortfall.filter( s => !(s.inEffect || s.reSolve) );
           
-          bsMatch.push([
-            iB.batch, iB.salesOrder, describe, mS.partNum
-          ]);
+        if(mShort.length > 0) {
+          const describe = whatIsBatchX(bx.batch)[0].join(' ');
+          
+          const unqShort = _.uniq(mShort, false, n=> n.partNum );
+  
+          let bsMatch = [];
+          for(let mS of unqShort) {
+            bsMatch.push([
+              bx.batch, bx.salesOrder, describe, mS.partNum
+            ]);
+          }
+    	    bsMatch.map((ent, ix)=>{
+    	      const same = srs.shortfall.filter( s => s.partNum === ent[3] );
+    	      const locations = [].concat(...Array.from(same, sm => sm.refs));
+    	      ent.push(_.uniq(locations).join(", "), locations.length);
+    	      sMatch.push(ent);
+    	    });
         }
-  	    bsMatch.map((ent, ix)=>{
-  	      const same = iB.shortfall.filter( s => s.partNum === ent[3] );
-  	      const locations = [].concat(...Array.from(same, sm => sm.refs));
-  	      ent.push(_.uniq(locations).join(", "), locations.length);
-  	      sMatch.push(ent);
-  	    });
       }
     });
     return sMatch;
@@ -228,13 +209,13 @@ Meteor.methods({
   scrapItems() {
     let compactData = [];
     
-    BatchDB.find({
+    XSeriesDB.find({
       orgKey: Meteor.user().orgKey,
       'items.history.type': 'scrap'
-    }).forEach( b => {
-      const w = WidgetDB.findOne({_id: b.widgetId});
-      const g = GroupDB.findOne({_id: w.groupId});
-      const items = b.items.filter( 
+    }).forEach( srs => {
+      const w = WidgetDB.findOne({_id: srs.widgetId});
+      const g = GroupDB.findOne({_id: srs.groupId});
+      const items = srs.items.filter( 
                       x => x.history.find( y => 
                         y.type === 'scrap' && 
                         y.good === true ) );
@@ -243,7 +224,7 @@ Meteor.methods({
                           y.type === 'scrap' && 
                           y.good === true );
         compactData.push({
-          batch: b.batch,
+          batch: srs.batch,
           widget: w.widget,
           group: g.alias,
           serial: i.serial,
@@ -260,20 +241,19 @@ Meteor.methods({
   testFailItems() {
     let compactData = [];
     
-    BatchDB.find({
+    XSeriesDB.find({
       orgKey: Meteor.user().orgKey,
-      // live: true,
       'items.history.type': 'test',
       'items.history.good': false
-    }).forEach( b => {
-      const w = WidgetDB.findOne({_id: b.widgetId});
-      const g = GroupDB.findOne({_id: w.groupId});
-      const items = b.items.filter( x => {
+    }).forEach( srs => {
+      const w = WidgetDB.findOne({_id: srs.widgetId});
+      const g = GroupDB.findOne({_id: srs.groupId});
+      
+      const items = srs.items.filter( x => {
         let fail = x.history.find( y => y.type === 'test' && y.good === false );
         if(fail) {
           let passAfter = x.history.find( y => y.key === fail.key && y.good === true );
-          let finished = x.finishedAt !== false;
-          if(!passAfter && !finished) {
+          if(!passAfter && !x.completed) {
             return true;
           }else{
             return false;
@@ -286,7 +266,7 @@ Meteor.methods({
         const tfEntries = i.history.filter( y => 
                             y.type === 'test' && y.good === false );
         compactData.push({
-          batch: b.batch,
+          batch: srs.batch,
           widget: w.widget,
           group: g.alias,
           serial: i.serial,
@@ -312,16 +292,15 @@ Meteor.methods({
 
       let batches = [];
       if(batchInfo) {
-        const findB = BatchDB.find({live: true, versionKey: v.versionKey}).fetch();
+        const findB = XBatchDB.find({live: true, versionKey: v.versionKey}).fetch();
         batches = Array.from(findB, x => { 
-                    countI = 0;
-                    unitInfo ? 
-                      x.items.forEach( y => countI += y.units )
-                    : null;
+                    let countI = 0;
+                    !unitInfo ? null : 
+                      x.items.forEach( y => countI += y.units );
                     return {
                       btch: x.batch,
                       cnt: countI
-                  } } );
+                  }});
       }else{null}
 
       data.push({
@@ -331,7 +310,6 @@ Meteor.methods({
         dsc: findW.describe,
         btchs: batches,
         places: 1
-        //v.assembly.filter( x => x.component === num ).length,
       });
     });
     return data;

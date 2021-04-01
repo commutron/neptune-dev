@@ -91,6 +91,28 @@ function countDoneUnits(accessKey, rangeStart, rangeEnd) {
       }
       diCount = diCount + doneUnits;   
     });
+    
+    XSeriesDB.find({
+      orgKey: accessKey,
+      createdAt: { 
+        $lte: new Date(rangeEnd)
+      },
+      items: { $elemMatch: { completedAt: {
+        $gte: new Date(rangeStart),
+        $lte: new Date(rangeEnd) 
+      }}}
+    }).forEach( (srs)=> {
+      const thisI = srs.items.filter( x =>
+        x.completed &&
+        moment(x.completedAt).isBetween(rangeStart, rangeEnd)
+      );
+      let doneUnits = 0;
+      for(let i of thisI) {
+        doneUnits += i.units;
+      }
+      diCount = diCount + doneUnits;   
+    });
+    
     resolve(diCount);
   });
 }

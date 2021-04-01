@@ -7,10 +7,10 @@ import {
   countDoneBatch,
   countNewItem,
   countDoneItem,
-  countNewNC,
-  countNewSH,
-  countScrap,
-  countTestFail,
+  // countNewNC,
+  // countNewSH,
+  // countScrap,
+  // countTestFail,
   countNewGroup,
   countNewWidget,
   countNewVariant,
@@ -75,9 +75,5 @@ Meteor.methods({
     return analyzeMonth();
 
   }
-  
-  
-  
-  
   
 })

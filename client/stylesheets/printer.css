@@ -86,9 +86,8 @@
 }
 
 .userCard {
-  width: 5.5cm;
-  height: 8.5cm;
-  /*border: 2px dotted;*/
+  width: 6cm;
+  height: 9cm;
 }
 .userCardContent {
   display: flex;
@@ -105,7 +104,6 @@
   position: relative;
   top: 5px;
   height: 1.5cm; 
-  display: none;
 }
 .userCardContent > n-username {
   display: flex;
@@ -118,11 +116,6 @@
   line-height: 1.2;
   text-overflow: ellipsis;
   overflow: hidden;
-  
-  background-image: url(/neptune-logo-fade.svg);
-  background-repeat: space;
-  background-position: center center;
-  background-size: 125% 125%, cover;
 }
 .userCardContent > span {
   display: flex;

@@ -185,11 +185,12 @@ Meteor.methods({
   pullFlow(widgetId, fKey) {
     const inUseR = BatchDB.findOne({river: fKey});
     const inUseRA = BatchDB.findOne({riverAlt: fKey});
-    if(!inUseR && !inUseRA) {
+    const inUseX = XBatchDB.findOne({river: fKey});
+    if(!inUseR && !inUseRA && !inUseX) {
       if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
     		WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey}, {
           $pull : { flows: { flowKey: fKey }
-    		   }});
+    		}});
     		return true;
       }else{
         return false;
@@ -201,15 +202,20 @@ Meteor.methods({
   
   activeFlowCheck(fKey) {
     const inUseRA = BatchDB.findOne({active: true, river: fKey});
-    const inUseAA = BatchDB.findOne({active: true, riverAlt: fKey});
+    const inUseXA = XBatchDB.findOne({active: true, river: fKey});
+    
     const inUseR = BatchDB.findOne({active: false, river: fKey});
+    const inUseX = XBatchDB.findOne({active: false, river: fKey});
+    
+    const inUseAA = BatchDB.findOne({active: true, riverAlt: fKey});
     const inUseA = BatchDB.findOne({active: false, riverAlt: fKey});
-    if(inUseRA) {
+    
+    if(inUseRA || inUseXA) {
       return 'liveRiver';
+    }else if(inUseR || inUseX) {
+      return 'deadRiver';
     }else if(inUseAA) {
       return 'liveAlt';
-    }else if(inUseR) {
-      return 'deadRiver';
     }else if(inUseA) {
       return 'deadAlt';
     }else{

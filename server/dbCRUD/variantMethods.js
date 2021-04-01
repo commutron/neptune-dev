@@ -152,7 +152,7 @@ Meteor.methods({
   },
   
   
-    // push a tag
+  // push a tag
   pushVTag(vId, vKey, tag) {
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
       VariantDB.update({_id: vId, orgKey: Meteor.user().orgKey}, {

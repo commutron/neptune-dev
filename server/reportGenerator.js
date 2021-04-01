@@ -2,32 +2,39 @@ import moment from 'moment';
 import timezone from 'moment-timezone';
 import Config from '/server/hardConfig.js';
 
-function findRelevantBatches(orgKey, from, to) {
+function findRelevantSeries(orgKey, from, to) {
   return new Promise(resolve => {
-    const batchPack = BatchDB.find({
+    const batchPack = XBatchDB.find({
         orgKey: Meteor.user().orgKey,
         $and : [
           { createdAt: { $lte: new Date( to ) } },
           { $or : [ 
-            { finishedAt : false }, 
-            { finishedAt : { $gte: new Date( from ) } } 
+            { completed : false }, 
+            { completedAt : { $gte: new Date( from ) } } 
           ] }
         ]
-      }).fetch();
-    resolve(batchPack);
+      },{fields:{'batch':1}}).fetch();
+    
+    let seriesPack = [];
+    for(let b of batchPack) {
+      const srs = XSeriesDB.findOne({batch: b.batch});
+      !srs ? null : seriesPack.push(srs);
+    }
+    
+    resolve(seriesPack);
   });
 }
 
-function loopBatches(batches, from, to) {
+function loopSerieses(serieses, from, to) {
   return new Promise(resolve => {
     let allItems = [];
     let allNonCons = [];
     let allShortfalls = [];
     
-    for(let b of batches) {
-      allNonCons.push(...b.nonCon.filter( x => !x.trash ));
-      allShortfalls.push(...b.shortfall);
-      allItems.push(...b.items);
+    for(let srs of serieses) {
+      allNonCons.push(...srs.nonCon.filter( x => !x.trash ));
+      allShortfalls.push(...srs.shortfall);
+      allItems.push(...srs.items);
     }
     resolve({allItems, allNonCons, allShortfalls});
   });
@@ -48,14 +55,14 @@ function loopShortfalls(shortfall, from, to) {
 
 function loopItems(items, from, to ) {
   return new Promise(resolve => {
-    let finishedItems = 0;
+    let completedItems = 0;
     // let firstPass = 0;
     // let firstFail = 0;
     let testFail = 0;
     let scraps = 0;
     for(let i of items) {
-      if(i.finishedAt !== false && moment(i.finishedAt).isBetween(from, to) ) { 
-        finishedItems += 1;
+      if(i.completed && moment(i.completedAt).isBetween(from, to) ) { 
+        completedItems += 1;
       }
       const inTime = i.history.filter( x => moment(x.time).isBetween(from, to) );
       
@@ -65,7 +72,7 @@ function loopItems(items, from, to ) {
       scraps += inTime.filter( x => x.type === 'scrap' && x.good === true ).length;
     }
     
-    resolve({finishedItems, testFail, scraps});
+    resolve({completedItems, testFail, scraps});
   });
 }
 
@@ -97,18 +104,18 @@ Meteor.methods({
     
     async function getBatches() {
       try {
-        batchSlice = await findRelevantBatches(orgKey, from, to);
-        batchArange = await loopBatches(batchSlice, from, to);
-        itemStats = await loopItems(batchArange.allItems, from, to);
-        nonConStats = !nc ? [] : await loopNonCons(batchArange.allNonCons, from, to);
-        shortfallStats = nc ? [] : await loopShortfalls(batchArange.allShortfalls, from, to);
+        seriesSlice = await findRelevantSeries(orgKey, from, to);
+        seriesArange = await loopSerieses(seriesSlice, from, to);
+        itemStats = await loopItems(seriesArange.allItems, from, to);
+        nonConStats = !nc ? [] : await loopNonCons(seriesArange.allNonCons, from, to);
+        shortfallStats = nc ? [] : await loopShortfalls(seriesArange.allShortfalls, from, to);
         
-        const batchInclude = batchSlice.length;
-        const itemsInclude = batchArange.allItems.length;
+        const seriesInclude = seriesSlice.length;
+        const itemsInclude = seriesArange.allItems.length;
         //const itemsWithPercent = ( ( nonConStats.uniqueSerials / itemsInclude ) * 100 ).toFixed(1) + '%';
         
         return JSON.stringify({
-          batchInclude, itemsInclude, itemStats, nonConStats, shortfallStats
+          seriesInclude, itemsInclude, itemStats, nonConStats, shortfallStats
         });
       }catch (err) {
         throw new Meteor.Error(err);

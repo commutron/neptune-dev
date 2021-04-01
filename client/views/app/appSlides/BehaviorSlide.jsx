@@ -146,13 +146,15 @@ const FirstRepeat = ({ app })=> {
             <li key={entry.key}>
               <i className={entry.live ? '' : 'fade'}>{entry.reason}</i>
               <button 
-                className='miniAction redT'
-                onClick={()=>reptRemove(entry.key, entry.reason)}
-              ><i className='fas fa-times fa-fw'></i></button>
-              <button 
-                className='miniAction redT'
+                title='disable temporarily'
+                className='miniAction redT gap'
                 onClick={()=>reptDormant(entry.key, entry.live)}
               ><i className='fas fa-power-off fa-fw'></i></button>
+              <button 
+                title='permanently delete'
+                className='miniAction redT gap'
+                onClick={()=>reptRemove(entry.key, entry.reason)}
+              ><i className='fas fa-times fa-fw'></i></button>
             </li>
         )})}
       </ol>

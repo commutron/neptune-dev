@@ -82,7 +82,6 @@ Meteor.methods({
    ///////////////////////////////////////////////////////////////////////////
   // nonCon Rate
   ////////////////////////////////////////////////////////////////////////////
-  
   nonConRateLoop(batches) {
 
     const allNC = Array.from( batches, x => {
@@ -128,7 +127,6 @@ Meteor.methods({
     
     return nonconCollection;
   },
-  
   
   
 });

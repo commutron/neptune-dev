@@ -106,6 +106,31 @@
   }
 }
 
+@keyframes hueCycle {
+  0% {
+    filter: hue-rotate(0deg);
+    transform: translate3d(0, 0, 0) rotate(360deg);
+  }
+  50% {
+    filter: hue-rotate(180deg);
+  }
+  100% {
+    filter: hue-rotate(0deg);
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+}
+
+@keyframes spinOut {
+  0% {
+    filter: blur(0px);
+    transform: translate3d(0, 0, 0) rotate(360deg);
+  }
+  100% {
+    filter: blur(50px);
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+}
+
 /*/////////////////////////////////////////////////*/
 
 .cardTrans-enter, .cardTrans-appear {
@@ -280,6 +305,14 @@
   animation: spinAround 500s infinite linear;
 }
 
+.spinOut {
+  animation: spinOut 1s infinite linear;
+  overflow: hidden;
+}
+.colorShift {
+  animation: hueCycle 60s infinite linear;
+  overflow: hidden;
+}
 
 @media screen and (prefers-reduced-motion: reduce) { 
   .shaker-change {

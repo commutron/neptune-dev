@@ -51,7 +51,7 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
 
   export function countNewBatch(accessKey, rangeStart, rangeEnd) {
     
-    const resultB = BatchDB.find({
+    const result = XBatchDB.find({
       orgKey: accessKey, 
       createdAt: { 
         $gte: new Date(rangeStart),
@@ -59,14 +59,7 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
       }
     },{fields:{'_id':1}}).count();
     
-    const resultX = XBatchDB.find({
-      orgKey: accessKey, 
-      createdAt: { 
-        $gte: new Date(rangeStart),
-        $lte: new Date(rangeEnd) 
-      }
-    },{fields:{'_id':1}}).count();
-    return resultB + resultX;
+    return result;
   }
   
   export async function countDoneBatch(accessKey, rangeStart, rangeEnd) {
@@ -92,26 +85,6 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
         doneUnderQ++;
       }
     };
-    
-    const b = BatchDB.find({
-      orgKey: accessKey, 
-      finishedAt: { 
-        $gte: new Date(rangeStart),
-        $lte: new Date(rangeEnd) 
-      }
-    },{fields:{
-      'end': 1,
-      'finishedAt': 1,
-      'tide': 1,
-      'quoteTimeBudget': 1,
-      'lockTrunc': 1
-    }}).fetch();
-    await Promise.all(b.map( async (gf, inx)=> {
-      await new Promise( (resolve)=> {
-        doneCalc(gf.end, gf.finishedAt, gf.tide, gf.quoteTimeBudget, gf.lockTrunc);
-        resolve(true);
-      });
-    }));
     
     const bx = XBatchDB.find({
       orgKey: accessKey, 
@@ -145,9 +118,9 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
   
   export function countNewItem(accessKey, rangeStart, rangeEnd) {
     
-    let diCount = 0;
+    let niCount = 0;
     
-    BatchDB.find({
+    XSeriesDB.find({
       orgKey: accessKey,
       createdAt: { 
         $lte: new Date(rangeEnd)
@@ -156,36 +129,38 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
       }}}
-    }).forEach( (gf)=> {
-      const thisDI = gf.items.filter( x =>
+    }).forEach( (srs)=> {
+      const thisI = srs.items.filter( x =>
         moment(x.createdAt).isBetween(rangeStart, rangeEnd)
       );
       
-      diCount = diCount + thisDI.length;   
+      niCount = niCount + thisI.length;   
     });
-    return diCount;
+    
+    return niCount;
   }
   
   export function countDoneItem(accessKey, rangeStart, rangeEnd) {
     
     let diCount = 0;
     
-    BatchDB.find({
+    XSeriesDB.find({
       orgKey: accessKey,
       createdAt: { 
         $lte: new Date(rangeEnd)
       },
-      items: { $elemMatch: { finishedAt: {
+      items: { $elemMatch: { completedAt: {
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
       }}}
-    }).forEach( (gf)=> {
-      const thisDI = gf.items.filter( x =>
-        x.finishedAt !== false &&
-        moment(x.finishedAt).isBetween(rangeStart, rangeEnd)
+    }).forEach( (srs)=> {
+      const thisI = srs.items.filter( x =>
+        x.completed &&
+        moment(x.completedAt).isBetween(rangeStart, rangeEnd)
       );
-      diCount = diCount + thisDI.length;   
+      diCount = diCount + thisI.length;   
     });
+    
     return diCount;
   }
   
@@ -193,7 +168,7 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
     
     let ncCount = 0;
     
-    BatchDB.find({
+    XSeriesDB.find({
       orgKey: accessKey,
       createdAt: { 
         $lte: new Date(rangeEnd)
@@ -202,34 +177,24 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
       }}}
-    }).forEach( (gf)=> {
-      if(gf.lock) {
-        const tnc = gf.lockTrunc.ncTypes.reduce( 
-                      (acc, obj)=> { return acc + obj.count },0);
-        ncCount += tnc;
-      }else{
-        const thisNC = gf.nonCon.filter( 
-          x => moment(x.time).isBetween(rangeStart, rangeEnd) 
-        );
-        ncCount += thisNC.length;
-      }
+    }).forEach( (srs)=> {
+      const thisNC = srs.nonCon.filter( 
+        x => moment(x.time).isBetween(rangeStart, rangeEnd) 
+      );
+      ncCount += thisNC.length;
     });
-    /*
-    const generalFindX = XBatchDB.find({
-      orgKey: accessKey, 
-      'nonconformaces.time': { 
-        $gte: new Date(rangeStart),
-        $lte: new Date(rangeEnd) 
-      }
-    }).fetch();
-    */  
+    /* // count from batch lockTrunc \\
+      const tnc = batch.lockTrunc.ncTypes.reduce( 
+                      (acc, obj)=> { return acc + obj.count },0);
+      ncCount += tnc; */
+      
     return ncCount;
   }
   
   export function countNewSH(accessKey, rangeStart, rangeEnd) {
     let shCount = 0;
     
-    BatchDB.find({
+    XSeriesDB.find({
       orgKey: accessKey, 
       createdAt: { 
         $lte: new Date(rangeEnd)
@@ -238,34 +203,24 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd)
       }}}
-    }).forEach( (gf)=> {
-      if(gf.lock) {
-        const tsh = gf.lockTrunc.shTypes.reduce( 
-                      (acc, obj)=> { return acc + obj.count },0);
-        shCount += tsh;
-      }else{
-        const thisSH = gf.shortfall.filter( 
-          x => moment(x.cTime).isBetween(rangeStart, rangeEnd) 
-        );
-        shCount += thisSH.length;
-      }
+    }).forEach( (srs)=> {
+      const thisSH = srs.shortfall.filter( 
+        x => moment(x.cTime).isBetween(rangeStart, rangeEnd) 
+      );
+      shCount += thisSH.length;
     });
-    /*
-    const generalFindX = XBatchDB.find({
-      orgKey: accessKey, 
-      'omitted.time': { 
-        $gte: new Date(rangeStart),
-        $lte: new Date(rangeEnd) 
-      }
-    }).fetch();
-    */  
+    /* // count from batch lockTrunc \\
+      const tsh = batch.lockTrunc.shTypes.reduce( 
+                      (acc, obj)=> { return acc + obj.count },0);
+      shCount += tsh; */
+      
     return shCount;
   }
   
   export function countTestFail(accessKey, rangeStart, rangeEnd) {
     let tfCount = 0;
     
-    BatchDB.find({
+    XSeriesDB.find({
       orgKey: accessKey,
       createdAt: { 
         $lte: new Date(rangeEnd)
@@ -274,11 +229,11 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
         createdAt: { 
           $lte: new Date(rangeEnd)
         }, 
-        finishedAt: { 
+        completedAt: { 
           $gte: new Date(rangeStart)
       }}}
-    }).forEach( (gf)=> {
-      const thisTF = gf.items.filter( x =>
+    }).forEach( (srs)=> {
+      const thisTF = srs.items.filter( x =>
         x.history.find( y =>
           moment(y.time).isBetween(rangeStart, rangeEnd) &&
           y.type === 'test' && y.good === false )
@@ -292,17 +247,17 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
   export function countScrap(accessKey, rangeStart, rangeEnd) {
     let scCount = 0;
     
-    BatchDB.find({
+    XSeriesDB.find({
       orgKey: accessKey,
       createdAt: { 
         $lte: new Date(rangeEnd)
       },
-      items: { $elemMatch: { finishedAt: { 
+      items: { $elemMatch: { completedAt: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
       }}}
-    }).forEach( (gf)=> {
-      const thisSC = gf.items.filter( x =>
+    }).forEach( (srs)=> {
+      const thisSC = srs.items.filter( x =>
         x.history.find( y =>
           moment(y.time).isBetween(rangeStart, rangeEnd) &&
           y.type === 'scrap' && y.good === true )

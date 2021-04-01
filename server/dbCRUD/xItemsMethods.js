@@ -278,35 +278,6 @@ Meteor.methods({
       return false;
     }
   },
-  
-
-
-  /* YXXYXXXXXYXXXXXXXXXXXXXYXXXXXXXXXXXXXXXXXXXXX
-  dataFIXduplicateserial(batchNum, serialNum, dateStamp) {
-  
-    const doc = BatchDB.findOne({batch: batchNum});
-    const subDocMatch = doc && doc.items.find( x => 
-      x.serial === serialNum && x.createdAt.toISOString() === dateStamp );
-    if(subDocMatch) {
-      const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
-      if(auth) {
-    		BatchDB.update({batch: batchNum}, {
-          $pull : { items: { 
-            serial: serialNum, 
-            createdAt: new Date(dateStamp) 
-          }
-        }});
-        Meteor.defer( ()=>{ Meteor.call('updateOneMinify', batchId, accessKey); });
-        return true;
-      }else{
-        return false;
-      }
-    }else{
-      return false;
-    }
-  },
-  KXXXXXXKXXXXKXXXXXXXXXXXXKXXXXXXXXXXXXXXXXXXXXXXX
-  */
 
   //// panel break
   breakItemIntoUnitsX(batchId, seriesId, bar, newSerials) {
@@ -372,7 +343,6 @@ Meteor.methods({
   },
   
   //// history entries
-
   addHistoryX(batchId, seriesId, bar, key, step, type, com, pass, benchmark) {
     if(type === 'inspect' && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
       return false;

@@ -1,4 +1,4 @@
-import { Random } from 'meteor/random';
+// import { Random } from 'meteor/random';
 // import moment from 'moment';
 
 Meteor.startup(function () {  
@@ -84,9 +84,7 @@ Meteor.methods({
   },
   */
 // Clearly this is not the most secure.
-// The use case of this software is to be used by a single organization,
-// hosted and made available internaly.
-// IF Exposure Is Higher This Should Be Encrypted
+// If Exposure Is Higher This Should Be Encrypted
   randomizePIN(accessKey) {
     const privateKey = accessKey || Meteor.user().orgKey;
     if(privateKey) {
@@ -122,10 +120,8 @@ Meteor.methods({
     }
   },
   
-  
   // / / / / / / / / / / / / / / / 
   // Branches
-  
   addBranchOption(nameVal, commonVal) {
     const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
     if(appDoc && Roles.userIsInRole(Meteor.userId(), 'admin')) {
@@ -287,7 +283,6 @@ Meteor.methods({
       return false;
     }
   },
-
   editCountOption(opKey, gate, type, branch) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       AppDB.update({orgKey: Meteor.user().orgKey, 'countOption.key' : opKey}, {
@@ -304,7 +299,6 @@ Meteor.methods({
   },
 
   ////////// Lock Unlock control type ////////////////
-  
   setLockType(lockVal) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       
@@ -391,22 +385,15 @@ Meteor.methods({
   },
   removeRepeatOption(badKey, reason) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      //const usedLegacy = BatchDB.findOne({orgKey: Meteor.user().orgKey, 'nonCon.type': reason});
-      const usedX = XBatchDB.findOne({orgKey: Meteor.user().orgKey, 'verifications.change': reason});
-      if(!usedX) {
-        AppDB.update({orgKey: Meteor.user().orgKey}, {
-          $pull : { 
-            repeatOption : { key : badKey }
-        }});
-        return true;
-      }else{
-        return false;
-      }
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $pull : { 
+          repeatOption : { key : badKey }
+      }});
+      return true;
     }else{
       return false;
     }
   },
-  ////////////
   
 ////// Alter Fulfill Reason
   addAlterFulfillOption(reason) {
@@ -431,7 +418,6 @@ Meteor.methods({
       return false;
     }
   },
-  ////////////
   
 // Smarter NonCon Types
   
@@ -502,7 +488,6 @@ Meteor.methods({
       
       if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
         
-        // Check
         const doc = AppDB.findOne({orgKey: Meteor.user().orgKey});
         const list = !doc || doc.nonConTypeLists.find( x => x.key === listKey );
         if(list) {
@@ -511,7 +496,6 @@ Meteor.methods({
           const code = sequence < 10 ? `${list.listPrefix}0${sequence}` : `${list.listPrefix}${sequence}`;
           if(!dbblType) {
             
-            // Insert
             AppDB.update({orgKey: Meteor.user().orgKey, 'nonConTypeLists.key': listKey}, {
               $push : { 
                 'nonConTypeLists.$.typeList' : { 
@@ -523,7 +507,6 @@ Meteor.methods({
             }});
             return { pass: true, message: '' };
             
-          // Fail
           }else{
             return { pass: false, message: 'duplicate type' };
           }
@@ -713,7 +696,5 @@ Meteor.methods({
       throw new Meteor.Error(err);
     }
   }
-  
-
         
 });

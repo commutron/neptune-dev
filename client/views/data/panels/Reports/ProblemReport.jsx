@@ -22,9 +22,9 @@ const ProblemReport = (props)=> {
       if(reply) {
         const re = JSON.parse(reply);
         let arrange = [
-          ['Included ' + Pref.batches, re.batchInclude ],
+          ['Included ' + Pref.batches, re.seriesInclude ],
           [ 'Included Serialized Items', re.itemsInclude ],
-          [ 'Finished Serialized Items', re.itemStats.finishedItems ],
+          [ 'Finished Serialized Items', re.itemStats.completedItems ],
           [ 'Scrapped Serialized Items', re.itemStats.scraps ],
           [ 'Failed Tests', re.itemStats.testFail ],
         ];
@@ -56,7 +56,7 @@ const ProblemReport = (props)=> {
         
         <div className='space'>
           <button 
-            className='action clearWhite'
+            className='action clearBlack'
             onClick={(e)=>getReport(e)} 
             disabled={!start || !end || working}
           >Generate Report</button>

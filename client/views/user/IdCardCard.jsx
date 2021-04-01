@@ -33,7 +33,7 @@ const IdCardCard = ({ user })=> {
         
     let svgNode = DATAMatrix({
                     msg :  ePass,
-                    dim :   150,
+                    dim :   128,
                     pal : ["#000000", "#ffffff"]
                   });
                   
@@ -73,6 +73,7 @@ const IdCardCard = ({ user })=> {
           
           <div className='userCard'>
             <div className='userCardContent'>
+              <img src='/neptune-logo-color.svg' className='alwaysPrint'/>
               <n-username class='centreText wordBr cap'>{fineName}</n-username>
               <span dangerouslySetInnerHTML={createMarkup()} />
             </div>

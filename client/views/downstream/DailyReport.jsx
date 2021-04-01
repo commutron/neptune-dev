@@ -62,7 +62,7 @@ const DailyReport = ({ app, user, isDebug })=> {
               altFormat: "F J",
             }} />
             <br />
-            <span className='biggester breath numFont'
+            <span className='bigger breath numFont'
               > {localDate.year()}<sub>d</sub>{localDate.dayOfYear()} </span>
             <br />
             {isHoliday ? <span className='bigger line05x'>Holiday</span> : null}
@@ -70,7 +70,7 @@ const DailyReport = ({ app, user, isDebug })=> {
         
         <NumBox
           num={dayData && dayData.length-1}
-          name={'Finished ' + Pref.items}
+          name={'Completed ' + Pref.items}
           color='purpleT' />
       </div>
       
@@ -80,12 +80,12 @@ const DailyReport = ({ app, user, isDebug })=> {
       dayData.length === 0 ?
         <div>
           <p className='centreText'><i className="fas fa-ghost fa-4x grayT fade"></i></p>
-          <p className='medBig centreText line3x'>No finished on this day</p>
+          <p className='medBig centreText line3x'>No completed on this day</p>
         </div>
       :
       
       <ReportBasicTable 
-        title={`finished ${Pref.items} report`}
+        title={`completed ${Pref.items} report`}
         dateString={dateString}
         rows={dayData}
       />
