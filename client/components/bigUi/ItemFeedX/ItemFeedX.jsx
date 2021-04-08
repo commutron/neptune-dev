@@ -8,6 +8,7 @@ import HistoryBlock from './HistoryBlock';
 import NonConBlock from './NonConBlock';
 import ShortBlock from './ShortBlock';
 import AltBlock from './AltBlock';
+import NestBlock from './NestBlock';
 import RapidBlock from './RapidBlock';
 
 const ItemFeedX = ({ 
@@ -35,7 +36,7 @@ const ItemFeedX = ({
   
   const canQA = Roles.userIsInRole(Meteor.userId(), ['remove', 'qa']);
   const canRun = Roles.userIsInRole(Meteor.userId(), ['qa', 'remove', 'run']);
-  const canEdit = Roles.userIsInRole(Meteor.userId(), 'edit');
+  const canEdit = Roles.userIsInRole(Meteor.userId(), ['edit', 'run']);
   const canVerify = Roles.userIsInRole(Meteor.userId(), 'verify');
   const canInspect = Roles.userIsInRole(Meteor.userId(), 'inspect');
   
@@ -51,19 +52,34 @@ const ItemFeedX = ({
         
         {ordered.map( (dt, ix)=>{
           if(typeof dt.step === 'string') {
-            return( 
-              <HistoryBlock
-                key={dt.key+ix}
-                entry={dt}
-                batch={batch}
-                seriesId={seriesId}
-                serial={serial}
-                done={done}
-                rapIs={rapIs}
-                canEdit={canEdit}
-                showHeader={false}
-                cal={calFunc} /> 
-            );
+            if(dt.type === 'nest' || dt.type === 'nested') {
+              return( 
+                <NestBlock
+                  key={dt.key+ix}
+                  entry={dt}
+                  batch={batch}
+                  seriesId={seriesId}
+                  serial={serial}
+                  done={done}
+                  rapIs={rapIs}
+                  canEdit={canEdit}
+                  cal={calFunc} /> 
+              );
+            }else{
+              return( 
+                <HistoryBlock
+                  key={dt.key+ix}
+                  entry={dt}
+                  batch={batch}
+                  seriesId={seriesId}
+                  serial={serial}
+                  done={done}
+                  rapIs={rapIs}
+                  canEdit={canEdit}
+                  showHeader={false}
+                  cal={calFunc} /> 
+              );
+            }
           }else if(typeof dt.ref === 'string') {
             return( 
               <NonConBlock

@@ -1,4 +1,4 @@
-Neptune v.2.XX.X
+Neptune v.3.XX.X
 
 A highly customized statistical process control web app for electronics manufacturing.
 
@@ -15,7 +15,7 @@ Highly experimental, potentialy unstable.
 
 Copyright (c) 2016-present Commutron Industries, https://www.commutron.ca
 
-Author 2016-present Matthew Andreas https://github.com/mattandwhatnot
+Author 2016-2021 Matthew Andreas https://github.com/mattandwhatnot
 
 All Rights Reserved, No Public License
 

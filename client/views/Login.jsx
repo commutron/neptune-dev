@@ -22,7 +22,7 @@ const Login = ({ login, uID, username, timeClock })=> {
   return(
     <div>
       <ToastContainer
-        position="top-right"
+        position="top-center"
         autoClose={10000}
         newestOnTop />
       <div className='centre darkTheme'>

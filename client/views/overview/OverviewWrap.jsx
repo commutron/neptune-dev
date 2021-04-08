@@ -182,8 +182,7 @@ const OverviewWrap = ({
   return(
     <div key={0} className={`overviewContainer ${light === true ? 'lightTheme' : 'darkTheme'}`}>
       <ToastContainer
-        position="top-right"
-        autoClose={2500}
+        position="top-center"
         newestOnTop />
       <div className='tenHeader'>
         <div className='topBorder'></div>

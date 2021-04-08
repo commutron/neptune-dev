@@ -123,8 +123,7 @@ export const ProWrap = ({
   return(
     <div className={viewContainer + ' containerPro'}>
       <ToastContainer
-        position="top-right"
-        autoClose={2500}
+        position="top-center"
         newestOnTop />
       <div className='tenHeader'>
         <div className='topBorder' />

@@ -109,8 +109,8 @@ Meteor.methods({
             fix: false,
             inspect: false,
             reject: [],
-            skip: false,
             snooze: false,
+            trash: false,
             comm: ''
         }}});
       }

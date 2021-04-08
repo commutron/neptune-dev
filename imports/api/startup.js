@@ -11,13 +11,9 @@ Tracker.autorun( ()=> {
 
 
 /*
-
-
 // Alanning Role V2 Migration
 import { Roles } from 'meteor/alanning:roles'
 Meteor.startup(() => {
   Roles._forwardMigrate()
 })
-
-
 */

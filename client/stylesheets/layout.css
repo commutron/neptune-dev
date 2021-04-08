@@ -650,6 +650,8 @@ n-sm-model-content {
 .indent3 { padding-left: 3ch; }
 .indenText { text-indent: 0.75ch; }
 .indentR { padding-right: 16px; }
+.indent2v { padding-left: 2vw; }
+.indent5v { padding-left: 5vw; }
 
 .breath { margin: 0 5px; }
 

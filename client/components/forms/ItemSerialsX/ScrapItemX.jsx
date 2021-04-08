@@ -15,7 +15,7 @@ const ScrapItemX = ({ seriesId, item, ancillary, noText })=> {
       button={Pref.scrap}
       title={`${Pref.scrap} ${Pref.item}`}
       color='redT'
-      icon='fa-trash'
+      icon='fa-trash-alt'
       lock={!Roles.userIsInRole(Meteor.userId(), 'qa') || scrap || (done && !rapid)}
       noText={noText}
     >

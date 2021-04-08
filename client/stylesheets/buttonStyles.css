@@ -1,15 +1,18 @@
 
-.action, .smallAction {
+.action, .smallAction, .roundAction {
   font-size: medium;
   letter-spacing: 1px;
   padding: 0.5ch 1ch;
   min-height: 32px;
   line-height: 1;
 }
-.action {
+.action, .roundAction {
   font-weight: 600;
 	text-transform: uppercase;
 	overflow: hidden;
+}
+.roundAction {
+  border-radius: 50px;
 }
 .smallAction {
   min-width: 2rem;
@@ -207,6 +210,16 @@
 }
 .inlineLink:hover {
   text-decoration: underline;
+}
+.inlineLink:disabled { 
+  opacity: 1;
+  user-select: text;
+}
+.inlineLink:disabled:hover {
+  text-decoration: none;
+  cursor: text;
+  user-select: text;
+  opacity: 1;
 }
 
 .leapText {

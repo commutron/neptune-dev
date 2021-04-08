@@ -31,8 +31,7 @@ const AppWrap = ({ isAdmin, isDebug, users, app })=> {
   return(
     <div className='simpleContainer'>
       <ToastContainer
-        position="top-right"
-        autoClose={5000}
+        position="top-center"
         newestOnTop />
       <div className='tenHeader'>
         <div className='topBorder' />

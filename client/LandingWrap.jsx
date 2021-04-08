@@ -54,8 +54,7 @@ const StartView = ({user, app}) =>	{
   return(
     <div className='splashContainer'>
       <ToastContainer
-        position="top-right"
-        autoClose={2500}
+        position="top-center"
         newestOnTop />
       <div className='tenHeader'>
         <div className='topBorder' />

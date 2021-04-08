@@ -6,7 +6,7 @@ import CreateTag from '/client/components/tinyUi/CreateTag.jsx';
 import AnimateOnChange from 'react-animate-on-change';
   
 import ScrapBox from '../../../components/smallUi/ScrapBox.jsx';
-import SubItemLink from '/client/components/tinyUi/SubItemLink.jsx';
+import SubItemLink from '/client/components/smallUi/SubItemLink.jsx';
 //import WatchButton from '/client/components/bigUi/WatchModule/WatchModule.jsx';
 
 import ItemFeed from '/client/components/bigUi/ItemFeed/ItemFeed.jsx';

@@ -58,7 +58,7 @@ export const ExTaskBar = ({ subLink }) => (
       title={Pref.Scrap + 's'}
       subON={subLink === 'overviewscraps'}
       goLink='/data/overview?request=scraps'
-      icon='fas fa-trash'
+      icon='fas fa-trash-alt'
       iconAdj='down-1'
     />
     

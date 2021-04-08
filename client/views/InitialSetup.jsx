@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import { toast } from 'react-toastify';

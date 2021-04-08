@@ -23,8 +23,7 @@ const StreamLayout = ({
   return(
     <div className='containerEx'>
       <ToastContainer
-        position="top-right"
-        autoClose={2500}
+        position="top-center"
         newestOnTop />
       <div className='tenHeader noPrint'>
         <div className='topBorder' />

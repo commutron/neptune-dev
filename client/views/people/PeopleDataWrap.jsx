@@ -49,8 +49,7 @@ const PeopleDataWrap = ({
     <ErrorCatch>
     <div className='simpleContainer'>
       <ToastContainer
-        position="top-right"
-        autoClose={2500}
+        position="top-center"
         newestOnTop />
       <div className='tenHeader'>
         <div className='topBorder' />

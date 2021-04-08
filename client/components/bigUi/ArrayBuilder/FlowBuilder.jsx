@@ -131,8 +131,8 @@ const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
 
   return (
     <div>
-      <div className='space1v'>
-        <p>
+      <div className='space1v rightText'>
+        <p className='nomargin'>
           <label htmlFor='phasefltr' className='cap'>{Pref.branch}<br />
             <select 
               id='phasefltr' 
@@ -150,7 +150,7 @@ const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
           </label>
         </p>
         <form onSubmit={(e)=>addStep(e)}>
-          <p>
+          <p className='nomargin'>
             <label 
               htmlFor='rStep' 
               className=''
@@ -163,7 +163,7 @@ const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
               </select>
             </label>
           </p>
-          <p>
+          <p className='nomargin'>
             <label 
               htmlFor='rHow' 
               className=''

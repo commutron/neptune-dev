@@ -474,9 +474,29 @@ Meteor.methods({
       return true;
     }
   },
-
-  addNestedX(seriesId, serial, key, step, subSerial) {
-    if(!Roles.userIsInRole(Meteor.userId(), 'active')) {
+  
+  checkNestX(serial) {
+    
+    const elsewhere = XSeriesDB.findOne({"items.subItems": { $in: [ serial ] } });
+    const isSubed = !elsewhere ? false : true; 
+                    
+    const internal = XSeriesDB.findOne({'items.serial': serial});
+    const exists = !internal ? false : true;
+    const icomplete = !exists ? false : 
+            internal.items.findIndex( i => i.serial === serial && i.completed === true) >= 0;
+    const openNC = !exists ? false : 
+            internal.nonCon.findIndex( x => x.serial === serial && x.inspect === false && x.trash === false) >= 0;
+    const openSH = !exists ? false : 
+            internal.shortfall.findIndex( s => s.serial === serial && !(s.inEffect || s.reSolve)) >= 0;
+    const iscrap = !exists ? false : 
+            internal.items.findIndex( i => i.serial === serial &&
+              i.history.findIndex( s => s.type === 'scrap' && s.good === true ) >= 0 ) >= 0;
+        
+    return [ isSubed, exists, icomplete, openNC, openSH, iscrap ];
+  },
+  
+  addNestedX(seriesId, serial, key, step, subSerial, exists, complete) {
+    if(!subSerial || !Roles.userIsInRole(Meteor.userId(), 'active')) {
       return false;
     }else{
       XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'items.serial': serial}, {
@@ -488,12 +508,53 @@ Meteor.methods({
             good: true,
             time: new Date(),
             who: Meteor.userId(),
-            comm : subSerial,
-            info: false
+            comm : '',
+            info: {
+              subSerial: subSerial
+            }
           },
           'items.$.subItems' : subSerial
         }
       });
+      if(exists && !complete) {
+        XSeriesDB.update({'items.serial': subSerial}, {
+          $push : { 
+    			  'items.$.history': {
+    			    key: 'f1n15h1t3m5t3p',
+              step: 'nested incomplete',
+              type: 'finish',
+              good: true,
+              time: new Date(),
+              who: Meteor.userId(),
+              comm: '',
+              info: false
+    			  }
+    			},
+    			$set : { 
+    			  'items.$.completed': true,
+    			  'items.$.completedAt': new Date(),
+    			  'items.$.completedWho': Meteor.userId()
+    			}
+        });
+      }
+      if(exists) {
+        XSeriesDB.update({'items.serial': subSerial}, {
+          $push : { 
+            'items.$.history': {
+              key: key,
+              step: step,
+              type: 'nested',
+              good: true,
+              time: new Date(),
+              who: Meteor.userId(),
+              comm : '',
+              info: {
+                parentSerial: serial
+              }
+            }
+          }
+        });
+      }
       return true;
     }
   },
@@ -670,7 +731,34 @@ Meteor.methods({
       }
     }
   },
-
+  
+  pullNestedX(seriesId, serial, nestedSerial, eKey, time) {
+    if(Roles.userIsInRole(Meteor.userId(), ['edit', 'run'])) {
+      
+      Meteor.call('pullHistoryX', seriesId, serial, eKey, time);
+      
+      XSeriesDB.update({_id: seriesId, 'items.serial': serial}, {
+        $pull : {
+          'items.$.subItems': nestedSerial
+      }});
+      
+      const srSub = XSeriesDB.findOne({'items.serial': nestedSerial});
+      const itSub = srSub ? srSub.items.find( x => x.serial === nestedSerial ) : null;
+      const hiSub = itSub ? itSub.history.find( x => x.type === 'nested' && 
+                              x.info && x.info.parentSerial === serial) : null;
+      if(hiSub) {
+        let idSub = srSub._id;
+        let eKeySub = hiSub.key;
+        let timeSub = hiSub.time;
+        Meteor.call('pullHistoryX', idSub, nestedSerial, eKeySub, timeSub);
+      }
+      return true;
+    }else{
+      return false;
+    }
+      
+  },
+  
 //  remove a step
   pullHistoryX(seriesId, serial, eKey, time) {
     const accessKey = Meteor.user().orgKey;
