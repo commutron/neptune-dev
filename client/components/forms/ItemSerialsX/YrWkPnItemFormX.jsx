@@ -11,7 +11,7 @@ const YrWkPnItemFormX = ({
   
   const thingMounted = useRef(true);
   
-  useEffectuseEffect(() => {
+  useEffect(() => {
     return () => { thingMounted.current = false; };
   }, []);
   
@@ -81,7 +81,7 @@ const YrWkPnItemFormX = ({
                    
     flrWarnSet(flrChk);
     
-    const quChk = tryData.length > 0 && tryData.length <= 5000 ? 
+    const quChk = tryData.length > 0 && tryData.length <= Pref.seriesLimit ? 
                   false : 'Invalid Range';
     quWarnSet(quChk);       
                    

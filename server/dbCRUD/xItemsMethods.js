@@ -1,5 +1,5 @@
 import moment from 'moment';
-// import Config from '/server/hardConfig.js';
+import Config from '/server/hardConfig.js';
 
 Meteor.methods({
   
@@ -74,7 +74,9 @@ Meteor.methods({
         
           const seriesTotal = serialArr.length + srs.items.length;
         
-          if(seriesTotal <= doc.quantity && seriesTotal <= 5000 && unit < 1000) {
+          if(seriesTotal <= doc.quantity && 
+              seriesTotal <= Config.seriesLimit && unit <= Config.unitLimit
+          ) {
             
             const staticStart = serialArr.length > 0 ?
                                 serialArr[0].substring(0, 6) : 'XX';
@@ -156,7 +158,7 @@ Meteor.methods({
         
           const seriesTotal = serialArr.length + srs.items.length;
         
-          if(seriesTotal <= doc.quantity && seriesTotal <= 5000 ) {
+          if(seriesTotal <= doc.quantity && seriesTotal <= Config.seriesLimit ) {
             
             const regexWP = RegExp(/^(\d{8})$/);
             
@@ -229,7 +231,7 @@ Meteor.methods({
           
           const seriesTotal = serialArr.length + srs.items.length;
         
-          if(seriesTotal <= doc.quantity && seriesTotal <= 5000 ) {
+          if(seriesTotal <= doc.quantity && seriesTotal <= Config.seriesLimit ) {
             
             const regexNS = RegExp(/^(\d{6}\-\d{7})$/);
             
@@ -331,7 +333,7 @@ Meteor.methods({
   //// unit corection
   setItemUnitX(seriesId, bar, unit) {
     const auth = Roles.userIsInRole(Meteor.userId(), ['edit', 'run']);
-    if(auth && unit >= 1 && unit <= 1000) {
+    if(auth && unit >= 1 && unit <= Config.unitLimit) {
       XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'items.serial': bar}, {
         $set : { 
           'items.$.units': Number(unit)
@@ -1022,7 +1024,7 @@ Meteor.methods({
     
     if(
       isNaN(barFirst) || isNaN(barEnd)
-      || barFirst > barEnd || unit >= 1000 || unit <= 0
+      || barFirst > barEnd || unit >= Config.unitLimit || unit <= 0
     ) {
       return {
         success: false,
@@ -1046,7 +1048,7 @@ Meteor.methods({
       }else{
         const seriesTotal = serialCount + srs.items.length;
       
-        if(seriesTotal > doc.quantity || seriesTotal > 5000 ) {
+        if(seriesTotal > doc.quantity || seriesTotal > Config.seriesLimit ) {
           return {
             success: false,
             message: 'Too Many Items'

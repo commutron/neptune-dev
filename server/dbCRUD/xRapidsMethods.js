@@ -1,5 +1,26 @@
 import moment from 'moment';
 
+function getNextRapidNumber(rapidType) {
+  const allRapids = XRapidsDB.find({},{fields:{'rapid':1}}).fetch();
+  
+  const rapidS = allRapids.sort( (r1, r2)=>{
+    const r1n = r1.rapid.substring(2);
+    const r2n = r2.rapid.substring(2);
+    return( r1n > r2n ? -1 : r1n < r2n ? 1 : 0 );
+  });
+    
+  const next = rapidS.length === 0 ? 1 : 
+                parseInt( rapidS[0].rapid.substring(2), 10 ) + 1;
+  
+  const apend = rapidType === 'modify' ? 'EM' : 'ER';
+  
+  if(!isNaN(next)) {
+    const nextRapid = apend + next.toString().padStart(2, 0);
+    return nextRapid;
+  }else{ 
+    return false;
+  }
+}
 
 Meteor.methods({
   
@@ -9,20 +30,9 @@ Meteor.methods({
     const accessKey = Meteor.user().orgKey;
     if(Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])) {
       
-      const allRapids = XRapidsDB.find({},{fields:{'rapid':1}}).fetch();
-      const rapidS = allRapids.sort( (r1, r2)=>{
-        const r1n = r1.rapid.substring(2);
-        const r2n = r2.rapid.substring(2);
-        return( r1n > r2n ? -1 : r1n < r2n ? 1 : 0 );
-      });
+      const nextRapid = getNextRapidNumber(rapidType);
       
-      const next = !rapidS.length === 0 ? 1 : 
-                    parseInt( rapidS[0].rapid.substring(2), 10) + 1;
-      
-      const apend = rapidType === 'modify' ? 'EM' : 'ER';
-      
-      if(!isNaN(next)) {
-        const nextRapid = apend + next.toString().padStart(2, 0);
+      if(nextRapid) {
         
         const inHours = parseFloat( exTime );
         const inMinutes = moment.duration(inHours, 'hours').asMinutes();
@@ -31,7 +41,7 @@ Meteor.methods({
         XRapidsDB.insert({
           orgKey: accessKey,
           rapid: nextRapid, 
-          type: rapidType, // repair, refurb, mod
+          type: rapidType,
           extendBatch: exBatch,
           groupId: groupId,
           gadget: false,

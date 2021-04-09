@@ -6,13 +6,26 @@ import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock';
 
 
 const MigrateHelper = ({ allBatch, allXBatch })=> {
-
-  function adminFORCERemoveOldBatch() {
-    console.log('not yet');
-    
-    /*
-    Meteor.call('adminFORCERemoveOldBatch');
-    */
+  
+  const [ rmaList, rmaListSet ] = useState(false);
+  const [ blockList, blockListSet ] = useState(false);
+  
+  useEffect( ()=>{
+    Meteor.call('findAllCascade', (err, re)=>{
+      err && console.error(err);
+      re && rmaListSet(re);
+    });
+    ///////////
+    Meteor.call('findAnyLegacyBlocks', (err, re)=>{
+      err && console.error(err);
+      re && blockListSet(re);
+    });
+  }, []);
+  
+  function handleFORCERemove(batchID, batchNUM) {
+    Meteor.call('adminFORCERemoveOldBatch', batchID, batchNUM, (err)=>{
+      err && console.error(err);
+    });
   }
 
   function findBinX(oldbatch) {
@@ -38,7 +51,7 @@ const MigrateHelper = ({ allBatch, allXBatch })=> {
               {findBinX(entry.batch) && 
                 <button 
                   className='gap miniAction clearRed' 
-                  onClick={()=>adminFORCERemoveOldBatch(entry.batch)}
+                  onClick={()=>handleFORCERemove(entry._id, entry.batch)}
                 >DELETE</button>
               }
             </li>
@@ -57,6 +70,40 @@ const MigrateHelper = ({ allBatch, allXBatch })=> {
           ))}
         </ol>
       </div>
+      
+      
+      <div>
+        <h3>RMAs</h3>
+        <ol>
+          {rmaList && rmaList.map( (entry, index)=>(
+            <li 
+              key={index}
+              className='vmarginhalf'
+            > {entry} </li>
+          ))}
+        </ol>
+      </div>
+      
+      <div>
+        <h3>BatchDB Blocks</h3>
+        {!blockList ?
+          <li><em>checking</em></li>
+          :
+          blockList.length === 0 ?
+            <li><b>NONE</b></li>
+            :
+            <ol>
+              {blockList.map( (entry, index)=>(
+                <li 
+                  key={index}
+                  className='vmarginhalf'
+                > {entry} </li>
+              ))}
+            </ol>
+        }
+      </div>
+      
+      
     </div>
   );
 };

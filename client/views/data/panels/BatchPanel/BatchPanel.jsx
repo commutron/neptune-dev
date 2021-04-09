@@ -17,6 +17,64 @@ const BatchPanel = ({
   brancheS, flowData
 })=> {
   
+  const [ rapidCheck, rapidCheckSet ] = useState(false);
+  const [ seriesCheck, seriesCheckSet ] = useState(false);
+  const [ batchCheck, batchCheckSet ] = useState(false);
+  
+  useEffect( ()=>{
+    Meteor.call('checkIfRapidConverted', batchData._id, (err, re)=>{
+      err && console.error(err);
+      rapidCheckSet(re); 
+    });
+    ///
+    Meteor.call('checkIfBatchConverted', batchData._id, (err, re)=>{
+      err && console.error(err);
+      batchCheckSet(re); 
+    });
+    ///
+    Meteor.call('checkIfSeriesConverted', batchData._id, (err, re)=>{
+      err && console.error(err);
+      seriesCheckSet(re); 
+    });
+  });
+  
+  
+  function runRapidConvert(e) {
+    this.cnvrtRapid.disabled = true;
+    Meteor.call('convertToRapid', batchData._id, (err, re)=>{
+      err && console.error(err);
+      re === 'isDone' && window.alert('Rapid Already Exists'); 
+      console.log(re);
+    });
+  }
+  
+  function runSeriesConvert(e) {
+    this.cnvrtSeries.disabled = true;
+    Meteor.call('convertToSeries', batchData._id, (err, re)=>{
+      err && console.error(err);
+      re === 'hasSeries' && window.alert('Series Already Exists');
+      console.log(re);
+    });
+  }
+  
+  function runBatchConvert(e) {
+    this.cnvrtBatch.disabled = true;
+    Meteor.call('convertToXBatch', batchData._id, (err, re)=>{
+      err && console.error(err);
+      re === 'isX' && window.alert('XBatch Already Exists');
+      console.log(re);
+    });
+  }
+  
+  function runOldDelete(e) {
+    this.dltBatch.disabled = true;
+    Meteor.call('adminFORCERemoveOldBatch', batchData._id, batchData.batch, 
+    (err)=>{
+      err && console.error(err);
+    });
+  }
+  
+  
   const [ verifyListState, verifyListSet ] = useState([]);
   const [ rmaListState, rmaListSet ] = useState([]);
   
@@ -55,6 +113,46 @@ const BatchPanel = ({
 
   return(
     <div className='section darkTheme' key={b.batch}>
+      
+      {Roles.userIsInRole(Meteor.userId(), 'admin') &&
+        <div className='vmargin'>
+          <div className='vmargin balancer'>
+          
+            <button
+              id='cnvrtRapid'
+              className='action bigger clearOrange'
+              onClick={()=>runRapidConvert()}
+              disabled={rapidCheck}
+            >Create RAPID</button>
+            
+            <button
+              id='cnvrtSeries'
+              className='action bigger clearOrange'
+              onClick={()=>runSeriesConvert()}
+              disabled={!rapidCheck || seriesCheck}
+            >Create Series</button>
+            
+            <button
+              id='cnvrtBatch'
+              className='action bigger clearOrange'
+              onClick={()=>runBatchConvert()}
+              disabled={!rapidCheck || !seriesCheck || batchCheck}
+            >Create XBatch</button>
+            
+          </div>
+          
+          <div className='vmargin centre'>
+      
+            <button
+              id='dltBatch'
+              className='action biggest clearRed'
+              onClick={()=>runOldDelete()}
+              disabled={!(rapidCheck && seriesCheck && batchCheck)}
+            >DELETE Legacy</button>
+            
+          </div>
+        </div>
+      }
       
       <Tabs
         tabs={

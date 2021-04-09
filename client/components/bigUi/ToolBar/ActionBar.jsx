@@ -4,7 +4,6 @@ import './style.css';
 
 import ActionLink from '/client/components/tinyUi/ActionLink.jsx';
 
-import BatchEdit from '/client/components/forms/Batch/BatchEdit';
 import RemoveBatch from '/client/components/forms/Batch/RemoveBatch';
 import BatchXEdit from '/client/components/forms/Batch/BatchXEdit';
 import BatchXIncomplete from '/client/components/forms/Batch/BatchXIncomplete';
@@ -23,7 +22,6 @@ import RemoveItem from '/client/components/forms/ItemSerialsX/RemoveItem';
 import ItemSerialsWrap from '/client/components/forms/ItemSerials/ItemSerialsWrap';
 import RiverSelect from '/client/components/forms/RiverSelect.jsx';
 import CounterAssign from '/client/components/bigUi/ArrayBuilder/CounterAssign.jsx';
-import NCEscape from '/client/components/forms/NCEscape.jsx';
 import RMAForm from '/client/components/forms/RMAForm.jsx';
 
 import UnitSet from '/client/components/forms/UnitSet.jsx';
@@ -110,16 +108,6 @@ const ActionBar = ({
 		:
     action === 'batch' ?
       <Fragment>
-        <BatchEdit
-          batchId={batchData._id}
-          batchNow={batchData.batch}
-          versionKey={variantData.versionKey}
-          salesOrder={batchData.salesOrder || ''}
-          start={batchData.start}
-          end={batchData.end}
-          quoteTimeBudget={batchData.quoteTimeBudget}
-          allVariants={allVariants}
-          lock={!variantData || !batchData.live} />
         <ItemSerialsWrap
           id={batchData._id}
           items={batchData.items}
@@ -151,12 +139,6 @@ const ActionBar = ({
           end={app.lastTrack}
           app={app}
           user={user}
-          ncTypesCombo={ncTypesCombo || []}
-          lockOut={batchData.lock} />
-        <NCEscape
-          id={batchData._id}
-          user={user}
-          nons={app.nonConOption}
           ncTypesCombo={ncTypesCombo || []}
           lockOut={batchData.lock} />
         <RemoveBatch

@@ -68,7 +68,7 @@ const YMDItemForm = ({
                    `Not in sequence (Below ${floor})`;
     flrWarnSet(flrChk);
     
-    const quChk = tryData.length > 0 && tryData.length < 5000 ? 
+    const quChk = tryData.length > 0 && tryData.length < Pref.seriesLimit ? 
                   false : 'Invalid Range';
     quWarnSet(quChk);       
                    
@@ -144,13 +144,13 @@ const YMDItemForm = ({
               type='number'
               id='unitInput'
               className='miniIn18'
-              pattern='[000-999]*'
+              pattern='[0000-9999]*'
               maxLength='3'
               minLength='1'
-              max='250'
+              max={Pref.unitLimit}
               min='1'
               defaultValue={unit}
-              placeholder='1-250'
+              placeholder='1-1000'
               inputMode='numeric'
               required />
             <label htmlFor='unitInput'

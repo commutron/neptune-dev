@@ -173,24 +173,6 @@ export const ReleaseWrapper = ({
   	        >{undoText}
   	      </MenuItem>
   	    }
-  	    {/*
-	      <MenuItem
-	        onClick={(e)=>handleRelease(e, Pref.shortfall)}
-	        disabled={clear || lockout}
-	        >{holdText} with {Pref.shortfall}
-	      </MenuItem>
-	      <MenuItem
-	        onClick={(e)=>handleCautionFlip(e)}
-	        disabled={!clear || lockout}>
-	        {!clear ? 'Change' : cautionState ? 'Disable' : 'Enable'} {Pref.shortfall} caution
-	      </MenuItem>
-	      <MenuItem
-	        onClick={()=>handleCancel()} 
-	        disabled={!clear || lockout}
-	        >Cancel {actionText}
-	      </MenuItem>
-	      */}
-	      
 	    </ContextMenu>
 	  </Fragment>
   );

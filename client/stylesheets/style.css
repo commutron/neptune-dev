@@ -596,7 +596,7 @@ n-prog-bar progress {
   border: 0.5px solid white;
   border-radius: 1px 25px 25px 1px;
   background-color: var(--peterriver);
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: white;
   word-break: keep-all;
   word-wrap: normal;
@@ -624,7 +624,7 @@ n-prog-bar progress {
   vertical-align: middle;
   color: var(--peterriver);
   background-color: transparent;
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   border-radius: 25%;
   transition: all 150ms ease-in-out;
   cursor: pointer;

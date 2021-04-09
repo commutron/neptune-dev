@@ -190,6 +190,17 @@ const DataRepair = ({ app, users })=> {
       </div>
       
       <div>
+        <h3><i className="fas fa-shapes fa-lg gap"></i>
+          Recreate Track Option without phase
+        </h3>
+        <button
+          onClick={()=>doCallThing("resetTrackWithoutPhase")}
+          className='action clearTeal'
+        >Clear Phase</button>
+      </div>
+      
+      
+      <div>
         <h3><i className="fas fa-eraser fa-lg gap"></i>
           Unset the nonconformaces key from batch+
         </h3>
