@@ -1,4 +1,4 @@
-
+import moment from 'moment';
 
 Meteor.methods({
   
@@ -32,14 +32,16 @@ Meteor.methods({
         
         const quantity = bdoc.items.length;
         
-        const noteblock = !bdoc.notes ? [] :
-                [{
-                  key: new Meteor.Collection.ObjectID().valueOf(),
-                  block: bdoc.notes.content || '',
-                  time: bdoc.notes.time || new Date(),
-                  who: bdoc.notes.who || 'unknown',
-                  solve: false
-                }];
+        let blocksArr = bdoc.blocks || [];
+        
+        !bdoc.notes ? null :
+          blocksArr.push({
+            key: new Meteor.Collection.ObjectID().valueOf(),
+            block: bdoc.notes.content || '',
+            time: bdoc.notes.time || new Date(),
+            who: bdoc.notes.who || 'unknown',
+            solve: false
+          });
                 
         const releases = bdoc.releases !== undefined ? bdoc.releases :
                 [{
@@ -74,7 +76,7 @@ Meteor.methods({
     			river: bdoc.river,
     			waterfall: [],
     			tide: bdoc.tide || [],
-    			blocks: noteblock,
+    			blocks: blocksArr,
           releases: releases,
           altered: bdoc.altered || [],
           events: bdoc.events || []
@@ -98,25 +100,14 @@ Meteor.methods({
     const ok = xbatch ? true : false;
     return ok;
   },
-  
-  
-  findAnyLegacyBlocks() {
-    const bbatch = BatchDB.find( { $where: "this.blocks.length > 0" } ).fetch();
-    
-    let blockList = [];
-    
-    for( let bb of bbatch ) {
-      blockList.push(bb.batch);
-    }
-    return blockList;
-  },
-  
+
   
   adminFORCERemoveOldBatch(batchId, batchNum) {
     const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
     const privateKey = Meteor.user().orgKey;
     
     const doc = BatchDB.findOne({_id: batchId, batch: batchNum});
+    const docTide = doc.tide || [];
     
     if(isAdmin && doc) {
       
@@ -126,9 +117,20 @@ Meteor.methods({
       
       if( rapids === true && series === true && batchX === true ) {
         
-        BatchDB.remove({_id: batchId});
-        TraceDB.remove({batchID: batchId});
-
+        const xdoc = XBatchDB.findOne({batch: batchNum});
+        const srs = XSeriesDB.findOne({batch: batchNum});
+        
+        if(
+          docTide.length === xdoc.tide.length &&
+          doc.items.length === srs.items.length &&
+          doc.nonCon.length === srs.nonCon.length &&
+          doc.shortfall.length === srs.shortfall.length
+        ) {
+        
+          BatchDB.remove({_id: batchId});
+          TraceDB.remove({batchID: batchId});
+          
+        }
       }
     }
     

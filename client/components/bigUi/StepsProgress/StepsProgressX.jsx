@@ -51,7 +51,7 @@ const StepsProgressX  = ({
             <label>
               <NumBox
                 num={totalI}
-                name={Pref.itemSerial + 's'}
+                name={Pref.items}
                 color='blackT' />
             </label>
           :null}
@@ -60,7 +60,7 @@ const StepsProgressX  = ({
             <label>
               <NumBox
                 num={totalIU}
-                name={`${Pref.itemSerial} ${Pref.unit}s`}
+                name={`${Pref.item} ${Pref.unit}s`}
                 color='blackT' />
             </label>
           :null}

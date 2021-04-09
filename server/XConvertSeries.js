@@ -21,7 +21,7 @@ function convertItems(bdoc, xrapids) {
       const bcas = bdoc.cascade.find( x => x.key === cKey );
       
       if(bcas) {
-        const newxrapid = xrapids.find( r => r.issueOrder === bcas.rmaId );
+        const newxrapid = xrapids.find( r => r.issueOrder === ('rma-' + bcas.rmaId) );
         const rapId = newxrapid ? newxrapid._id : false;
         
         if(rapId) {

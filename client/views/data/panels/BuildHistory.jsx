@@ -107,7 +107,7 @@ const BuildHistory = ({ allBatch, allXBatch, allVariant, allWidget, allGroup })=
     }
     
     const arrayView = Array.from(result, r => [
-                        fillG(r.groupId), fillW(r.widgetId), r.variant
+                        fillG(r.groupId), fillW(r.widgetId), ('v. ' + r.variant)
                       ] );
     const arrayViewS = arrayView.sort((A1, A2)=> {
                 let a10 = A1[0].toLowerCase();

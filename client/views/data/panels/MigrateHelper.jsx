@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 // import moment from 'moment';
 // import Pref from '/client/global/pref.js';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock';
@@ -8,18 +8,13 @@ import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock';
 const MigrateHelper = ({ allBatch, allXBatch })=> {
   
   const [ rmaList, rmaListSet ] = useState(false);
-  const [ blockList, blockListSet ] = useState(false);
   
   useEffect( ()=>{
     Meteor.call('findAllCascade', (err, re)=>{
       err && console.error(err);
       re && rmaListSet(re);
     });
-    ///////////
-    Meteor.call('findAnyLegacyBlocks', (err, re)=>{
-      err && console.error(err);
-      re && blockListSet(re);
-    });
+    
   }, []);
   
   function handleFORCERemove(batchID, batchNUM) {
@@ -83,26 +78,6 @@ const MigrateHelper = ({ allBatch, allXBatch })=> {
           ))}
         </ol>
       </div>
-      
-      <div>
-        <h3>BatchDB Blocks</h3>
-        {!blockList ?
-          <li><em>checking</em></li>
-          :
-          blockList.length === 0 ?
-            <li><b>NONE</b></li>
-            :
-            <ol>
-              {blockList.map( (entry, index)=>(
-                <li 
-                  key={index}
-                  className='vmarginhalf'
-                > {entry} </li>
-              ))}
-            </ol>
-        }
-      </div>
-      
       
     </div>
   );

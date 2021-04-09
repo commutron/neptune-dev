@@ -67,7 +67,7 @@ Meteor.methods({
           
           if(nextRapid && lastfin) {
             
-            const issueStr = 'rma' + cas.rmaId;
+            const issueStr = 'rma-' + cas.rmaId;
             const closeTime = bdoc.live ? null : lastfin[0];
             const closeWho = bdoc.live ? null : lastfin[1];
             

@@ -288,8 +288,6 @@ const ItemsListX = ({
   const scrap = srs ? fScrap(srs.items, timeModifyer, notModifyer) : 
                     { scrapList: [], iList: [] };
   
-  // const steps = flowSteps();
-  
   
   function handleScroll(e) {
     if(e.target.scrollTop > scrollY) {
@@ -321,30 +319,32 @@ const ItemsListX = ({
   useEffect( ()=> { 
     const K = keyword;
     
+    const items = srs ? srs.items : [];
+    
     isDebug && console.log({ K, timeModifyer, notModifyer });
     
     let filteredList = 
     !K ?
-      srs.items :
+      items :
     K.startsWith('@') ?
-      fStep(srs.items, K, timeModifyer, notModifyer) :
+      fStep(items, K, timeModifyer, notModifyer) :
     K === 'complete' ?
-      fDone(srs.items, timeModifyer, notModifyer) :
+      fDone(items, timeModifyer, notModifyer) :
     K === 'in progress' ?
-      fInproc(srs.items, timeModifyer, notModifyer) :
+      fInproc(items, timeModifyer, notModifyer) :
     K === 'first offs' ?
-      fFirsts(srs.items, timeModifyer, notModifyer) :
+      fFirsts(items, timeModifyer, notModifyer) :
     K === 'nonconformances' ?
-      fNoncons(srs.items, nonCon, timeModifyer, notModifyer) :
+      fNoncons(items, nonCon, timeModifyer, notModifyer) :
     K === 'shortfalls' ?
-      fShortfalls(srs.items, short, timeModifyer, notModifyer) :
+      fShortfalls(items, short, timeModifyer, notModifyer) :
     K === 'alternative' ?
-      fAlt(srs.items, notModifyer) :
+      fAlt(items, notModifyer) :
     K === 'scrap' ? 
       scrap.iList :
     K === 'extended' ? 
-      fExt(srs.items, notModifyer) :
-    srs.items;
+      fExt(items, notModifyer) :
+    items;
 
     const orderedList = filteredList.sort((x, y)=> 
                       x.serial < y.serial ? -1 : x.serial > y.serial ? 1 : 0 );

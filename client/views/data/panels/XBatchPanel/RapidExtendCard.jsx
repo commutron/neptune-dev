@@ -101,7 +101,7 @@ const RapidExtendCard = ({
       
       <div className='comfort gapsC vmarginhalf'>
         
-        <span className='min200'>
+        <span className='min200 max250'>
           
           <RapidInfoEdit 
             rapid={rapid}
