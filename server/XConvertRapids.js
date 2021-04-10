@@ -110,7 +110,7 @@ Meteor.methods({
                 },
                 cascade: [],
                 whitewater: rflow,
-                autoNC: cas.nonCons,
+                autoNC: cas.nonCons || [],
                 autoSH: []
               });
             }

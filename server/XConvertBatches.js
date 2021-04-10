@@ -24,7 +24,7 @@ Meteor.methods({
           
           const quoteTB = bdoc.quoteTimeBudget !== undefined ? bdoc.quoteTimeBudget :
                   [{
-                    updatedAt: new Date(),
+                    updatedAt: new Date(bdoc.createdAt),
                     timeAsMinutes: 0
                   }];
                   

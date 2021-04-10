@@ -10,6 +10,8 @@ import ProblemTab from './ProblemTab.jsx';
 import EventsTimeline from '/client/components/bigUi/BatchFeed/EventsTimeline.jsx';
 import RMATable from '/client/components/tables/RMATable.jsx';
 
+import { toast } from 'react-toastify';
+
 
 const BatchPanel = ({ 
   batchData, widgetData, //variantData,
@@ -44,7 +46,7 @@ const BatchPanel = ({
     Meteor.call('convertToRapid', batchData._id, (err, re)=>{
       err && console.error(err);
       re === 'isDone' && window.alert('Rapid Already Exists'); 
-      console.log(re);
+      re ? toast.success('GOOD') : toast.error('ERROR');
     });
   }
   
@@ -53,7 +55,7 @@ const BatchPanel = ({
     Meteor.call('convertToSeries', batchData._id, (err, re)=>{
       err && console.error(err);
       re === 'hasSeries' && window.alert('Series Already Exists');
-      console.log(re);
+      re ? toast.success('GOOD') : toast.error('ERROR');
     });
   }
   
@@ -62,7 +64,7 @@ const BatchPanel = ({
     Meteor.call('convertToXBatch', batchData._id, (err, re)=>{
       err && console.error(err);
       re === 'isX' && window.alert('XBatch Already Exists');
-      console.log(re);
+      re ? toast.success('GOOD') : toast.error('ERROR');
     });
   }
   
@@ -71,8 +73,9 @@ const BatchPanel = ({
     Meteor.call('adminFORCERemoveOldBatch', batchData._id, batchData.batch, 
     (err, re)=>{
       err && console.error(err);
-      console.log(re);
+      re ? toast.success('GOOD') : toast.error('ERROR');
     });
+    window.location.reload();
   }
   
   

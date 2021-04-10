@@ -4,7 +4,7 @@ import { NonConCheck } from '/client/utility/NonConOptions';
 
 export const AddAutoNCwrap = ({ rapidData, ncTypesCombo, user, editAuth })=> {
   
-  const defaultNC = rapidData ? rapidData.autoNC : [];
+  const defaultNC = rapidData ? rapidData.autoNC || [] : [];
   
   const [ editState, editSet ] = useState( false );
   const [ nonConsState, nonConsSet ] = useState( defaultNC );

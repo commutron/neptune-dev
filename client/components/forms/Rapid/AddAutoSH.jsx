@@ -3,7 +3,7 @@ import '/client/components/bigUi/ArrayBuilder/style.css';
 
 export const AddAutoSHwrap = ({ rapidData, vassembly, editAuth })=> {
   
-  const defaultSH = rapidData ? rapidData.autoSH : [];
+  const defaultSH = rapidData ? rapidData.autoSH || [] : [];
   
   const [ editState, editSet ] = useState( false );
   const [ shortState, shortSet ] = useState( defaultSH );

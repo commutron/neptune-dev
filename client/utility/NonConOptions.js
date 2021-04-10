@@ -18,7 +18,8 @@ export function NonConMerge(ncListKeys, app, user, allKeys) {
     
     const ncTypeLists = Array.from(asignedNCLists, x => x.typeList);
   	
-  	const ncTypesCombo = [].concat(...ncTypeLists);
+  	const ncTypesCombo = !allKeys ? [].concat(...ncTypeLists) :
+  	                      [].concat(...ncTypeLists,...app.nonConOption);
   	
   	const ncTypesComboSort = user.showNCcodes ?
   	        ncTypesCombo.sort((n1, n2)=>

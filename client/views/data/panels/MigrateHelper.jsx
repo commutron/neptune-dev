@@ -74,9 +74,9 @@ const MigrateHelper = ({ allBatch, allXBatch })=> {
               />
               {findBinX(entry.batch) &&
                 <button 
-                  className='gap miniAction clearRed' 
+                  className='gap miniAction line2x clearRed' 
                   onClick={()=>handleFORCERemove(entry._id, entry.batch)}
-                > DELETE </button>
+                >_DELETE_</button>
               }
             </li>
           ))}
