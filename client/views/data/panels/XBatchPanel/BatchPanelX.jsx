@@ -5,12 +5,11 @@ import CreateTag from '/client/components/tinyUi/CreateTag.jsx';
 //import UserName from '/client/components/tinyUi/UserName.jsx';
 import Tabs from '/client/components/smallUi/Tabs/Tabs.jsx';
 
-import WaterfallTimeline from '/client/components/bigUi/WaterfallTimeline.jsx';
-
 import XBatchTimeline from '/client/components/bigUi/BatchFeed/XBatchTimeline.jsx';
 
 import InfoTab from './InfoTab';
 import TimeTab from './TimeTab';
+import WaterfallTimeline from './WaterfallTimeline';
 import ProblemTab from './ProblemTab';
 import RapidExtendTab from './RapidExtendTab';
 
@@ -33,7 +32,7 @@ const BatchPanelX = ({
   let tabbar = [
     'Info',
     'Time',
-    'Waterfall',
+    'Counters',
     `Problems`,
     'Events',
   ];

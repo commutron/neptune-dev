@@ -28,7 +28,7 @@ function shrinkWhole(bData, now, shipLoad, accessKey) {
   return new Promise( (resolve)=> {
     const isWhat = Meteor.call('getBasicBatchInfo', bData.batch);
     
-    const quantity = bData.quantity || bData.items.length;
+    const quantity = bData.quantity !== undefined ? bData.quantity : bData.items.length;
     const serialize = bData.serialize || Array.isArray(bData.items);
     const rFlow = bData.river ? true :
                   bData.waterfall && bData.waterfall.length > 0 ? false : 

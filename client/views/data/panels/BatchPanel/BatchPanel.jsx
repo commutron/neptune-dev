@@ -69,8 +69,9 @@ const BatchPanel = ({
   function runOldDelete(e) {
     this.dltBatch.disabled = true;
     Meteor.call('adminFORCERemoveOldBatch', batchData._id, batchData.batch, 
-    (err)=>{
+    (err, re)=>{
       err && console.error(err);
+      console.log(re);
     });
   }
   

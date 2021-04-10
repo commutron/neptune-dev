@@ -96,15 +96,6 @@ Meteor.methods({
     const ok = xbatch ? true : false;
     return ok;
   },
-  
-  checkForTide(bxID) {
-    this.unblock();
-    
-    const doc = XBatchDB.findOne({_id: bxID});
-    const tide = !doc ? false : doc.tide;
-    const good = !tide || !Array.isArray(tide) ? 'nogood' : true;
-    return good;
-  },
 
   
   adminFORCERemoveOldBatch(batchId, batchNum) {
@@ -143,6 +134,8 @@ Meteor.methods({
       Meteor.defer( ()=>{
         Meteor.call('buildNewTraceX', batchNum, privateKey);
       });
+      
+      return true;
     }catch (err) {
       throw new Meteor.Error(err);
     }

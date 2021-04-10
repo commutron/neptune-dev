@@ -81,7 +81,7 @@ function outScrap(items) {
     
 function ProgressCounter(flow, flowAlt, batchData) {
   
-  const allItems = batchData.items;
+  const allItems = batchData ? batchData.items || [] : [];
   
   const allLiveItems = outScrap(allItems);
   const scrapCount = allItems.length - allLiveItems.length;
