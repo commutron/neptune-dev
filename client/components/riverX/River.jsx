@@ -2,8 +2,6 @@ import React, { useRef, useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 
 import StoneSelect from './StoneSelect.jsx';
-// import RiverFork from './RiverFork.jsx';
-// import AltMarker from '/client/components/tinyUi/AltMarker.jsx';
 
 const River = ({ 
   batchData, seriesData, itemData, widgetData, 

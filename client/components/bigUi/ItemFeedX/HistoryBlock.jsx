@@ -13,8 +13,7 @@ const HistoryBlock = ({
   let dt = entry;
   
   const redoAllow = canEdit && iopen && dt.good === true;
-  const redoButton = <StepBackX seriesId={seriesId} bar={serial} entry={entry} lock={!redoAllow} />;
-                 
+               
   const indictor = dt.good ?
           <i><i className="fas fa-check-circle fa-lg fa-fw" title='Good'></i></i> :
           <b><i className="fas fa-times-circle fa-lg fa-fw" title='No Good'></i></b>;
@@ -62,7 +61,14 @@ const HistoryBlock = ({
         {dt.comm !== '' && <p className='endComment'>{dt.comm}</p>}
         
       </n-feed-info-center>
-      <n-feed-right-anchor>{entry.good && redoButton}</n-feed-right-anchor>
+      <n-feed-right-anchor>
+        {entry.good && 
+          <StepBackX 
+            seriesId={seriesId} 
+            bar={serial} 
+            entry={entry} 
+            lock={!redoAllow} />
+        }</n-feed-right-anchor>
     </n-feed-info-block>
   );
 };

@@ -38,15 +38,18 @@ const WaterfallTimeline = ({ wfCounts, waterfall, quantity, rapidsData, app })=>
         return(
           <div key={index}>
             <h4>{entry.rapid}</h4>
-            {entry.cascade.map( (cas)=> {
-              const count = countWaterfall(cas.counts);
-              return(
-                <FallsHistory
-                  key={cas.wfKey}
-                  entry={cas}
-                  count={count}
-                  quantity={entry.quantity}
-                />
+            {entry.cascade.length === 0 ?
+              <p className='medBig grayT'>No Counters</p>
+              :
+              entry.cascade.map( (cas)=> {
+                const count = countWaterfall(cas.counts);
+                return(
+                  <FallsHistory
+                    key={cas.wfKey}
+                    entry={cas}
+                    count={count}
+                    quantity={entry.quantity}
+                  />
             )})}
           </div>
       )})}

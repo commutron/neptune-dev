@@ -26,7 +26,7 @@ const ItemPanelX = ({
   const sh = srs.shortfall.filter( x => x.serial === i.serial);
   
   const start = i.history.length > 0;
-  const rapid = i.altPath.find( a => a.rapId !== false && a.completed === false ) ? true : false;
+  const rapid = i.altPath.find( a => a.rapId !== false && a.completed === false );
   const scrap = i.history.find(x => x.type === 'scrap' && x.good === true);
   
   return(
@@ -86,7 +86,7 @@ const ItemPanelX = ({
           brancheS={brancheS}
           shortfalls={sh}
           done={i.completed}
-          rapIs={rapid}
+          rapId={rapid ? rapid.rapId : false}
           rapidsData={rapidsData}
           user={user}
           app={app} />

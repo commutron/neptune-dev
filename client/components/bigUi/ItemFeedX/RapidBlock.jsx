@@ -6,7 +6,7 @@ import Pref from '/client/global/pref.js';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 
 const RapidBlock = ({ 
-  rapIs, rapDo, rapive, rapidsData, seriesId, serial, done, 
+  rapIs, rapidsData, seriesId, serial, done, 
   deleteAuth, cal
 })=> {
   
@@ -21,6 +21,7 @@ const RapidBlock = ({
     }else{null}
   }
   
+  const rapDo = rapidsData.find( x => x._id === rapIs.rapId );
   const rarapid = rapDo ? rapDo.rapid : rapIs ? rapIs.rapId : '___';
   const raissue = rapDo ? rapDo.issueOrder : '___';
   
@@ -47,7 +48,7 @@ const RapidBlock = ({
         <button
           className='miniAction'
           onClick={()=>popRapid()}
-          disabled={!deleteAuth || rapIs.completed || !rapive}
+          disabled={!deleteAuth || rapIs.completed || !rapDo.live}
           ><i className='fas fa-ban fa-lg fa-fw'></i>
         </button>
       </n-feed-right-anchor>

@@ -215,22 +215,23 @@ const XDoProCard = ({
             flowwater={itemData}
             fallwater={fallAction && !itemData} />;
   
+  
   return(
     <Fragment>
     
     {bClosed ? null :
     
-    !itemData ? // @ Batch
-      
-      !tideFloodGate ? insertTideWall : // @ Locked
+      !itemData ? // @ Batch
         
-        !fallData.floorRel ? insertAxion : // @ Release
-        
-          fallAction ? insertWaterfall // @ Waterfall
-        : 
-          !expand ? insertBatchCard // Batch Tab Info
+        !tideFloodGate ? insertTideWall : // @ Locked
+          
+          !fallData.floorRel ? insertAxion : // @ Release
+          
+            fallAction ? insertWaterfall // @ Waterfall
           : 
-            null
+            !expand ? insertBatchCard // Batch Tab Info
+            : 
+              null
     : // @ Item
       
       !tideFloodGate ? insertTideWall : // @ Locked
@@ -243,9 +244,11 @@ const XDoProCard = ({
     }
       
   	{!showVerifyState &&  // Toggled and No First Form
-  	  ( !bOpen || expand ) &&
+  	  ( ( !bOpen && !tideFloodGate ) || ( bClosed && tideFloodGate ) || expand ) ?
 
-      insertBatchCard /* Batch Tab Info */ 
+        insertBatchCard /* Batch Tab Info */ 
+        
+        : null
   	}
   
     </Fragment>

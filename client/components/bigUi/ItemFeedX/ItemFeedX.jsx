@@ -17,7 +17,7 @@ const ItemFeedX = ({
   history, altPath,
   noncons, ncTypesCombo, brancheS,
   shortfalls,
-  done, rapIs, rapidsData,
+  done, rapId, rapidsData,
   user, app 
 })=> {
   
@@ -40,7 +40,7 @@ const ItemFeedX = ({
   const canVerify = Roles.userIsInRole(Meteor.userId(), 'verify');
   const canInspect = Roles.userIsInRole(Meteor.userId(), 'inspect');
   
-  const rapDo = !rapIs ? false : rapidsData.find( x => x._id === rapIs.rapId );
+  const rapDo = !rapId ? false : rapidsData.find( x => x._id === rapId );
   const rapive = rapDo && rapDo.live;
   
   const iopen = (!done || rapive);
@@ -121,8 +121,6 @@ const ItemFeedX = ({
               <RapidBlock
                 key={dt.rapId+ix}
                 rapIs={dt}
-                rapDo={rapDo}
-                rapive={rapive}
                 rapidsData={rapidsData}
                 seriesId={seriesId}
                 serial={serial}
