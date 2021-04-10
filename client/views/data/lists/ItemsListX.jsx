@@ -38,7 +38,7 @@ const ItemsListX = ({
   const sessionSticky = batchData.batch + 'batchXItemFilter' ;
   
   const [ scrollY, scrollYSet ] = useState(200);
-  const [ itemLimit, itemLimitSet ] = useState(250);
+  const [ itemLimit, itemLimitSet ] = useState(200);
   
   const [ stateList, setList ] = useState([]);
   const [ keyword, setKeyword ] = useState( Session.get(sessionSticky+'keyword') || false);
@@ -47,17 +47,17 @@ const ItemsListX = ({
 
   // update filter state
   function setKeywordFilter(keyword) {
-    itemLimitSet(250);
+    itemLimitSet(200);
     setKeyword( keyword );
     Session.set((sessionSticky+'keyword'), keyword);
   }
   function setTimeFilter(rule) { 
-    itemLimitSet(250);
+    itemLimitSet(200);
     setTime( rule );
     Session.set((sessionSticky+'time'), rule);
   }
   function setToggle(rule) { 
-    itemLimitSet(250);
+    itemLimitSet(200);
     setMod( rule );
     Session.set((sessionSticky+'toggle'), rule);
   }
@@ -303,12 +303,12 @@ const ItemsListX = ({
   }, [scrollY]);
   
   useEffect( ()=> {
-    if(srs.items.length > 250) {
+    if(srs.items.length > 200) {
       document.getElementById('exItemList')
         .addEventListener('scroll', handleScroll);
     }
     return ()=> {
-      if(srs.items.length > 250) {
+      if(srs.items.length > 200) {
         document.getElementById('exItemList')
                     .removeEventListener('scroll', handleScroll);
       }

@@ -35,9 +35,9 @@ function convertItems(bdoc, xrapids) {
           const rmaIndex = litem.rma.findIndex( x => x === cKey );
           const rmadone = otherfin[rmaIndex];
           
-          const isdone = rmadone ? true : scrapfin ? true : false;
-          const atdone = rmadone ? rmadone.time : scrapfin ? scrapfin.time : litem.finishedAt;
-          const whodone = rmadone ? rmadone.who : scrapfin ? scrapfin.who : litem.finishedWho;
+          const isdone = rmadone ? true : scrapfin ? true : newxrapid.live ? false : true;
+          const atdone = rmadone ? rmadone.time : scrapfin ? scrapfin.time : newxrapid.closedAt;
+          const whodone = rmadone ? rmadone.who : scrapfin ? scrapfin.who : newxrapid.closedWho;
           
           altPathArr.push({
             river: false,

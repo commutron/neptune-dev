@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 
-const ShortBlock = ({ seriesId, serial, entry, done, rapIs, deleteAuth, cal })=> {
+const ShortBlock = ({ seriesId, serial, entry, done, iopen, deleteAuth, cal })=> {
   
   const [ editState, editSet ] = useState(false);
 
@@ -75,7 +75,7 @@ const ShortBlock = ({ seriesId, serial, entry, done, rapIs, deleteAuth, cal })=>
           <i><i className="fas fa-check-circle fa-lg fa-fw" title='Good'></i></i> :
           <b><i className="far fa-circle fa-lg fa-fw" title='Awaiting Repair'></i></b>;
                 
-  const editAllow = Roles.userIsInRole(Meteor.userId(), 'verify') && (!done || rapIs) ;
+  const editAllow = Roles.userIsInRole(Meteor.userId(), 'verify') && iopen;
   const editIndicate = editState ? 'editStandout' : '';     
 
   return(

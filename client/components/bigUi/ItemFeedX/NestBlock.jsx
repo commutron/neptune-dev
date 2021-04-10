@@ -8,12 +8,12 @@ import SubItemLink from '/client/components/smallUi/SubItemLink';
 
 const NestBlock = ({
   entry, batch, seriesId, serial, 
-  done, rapIs, canEdit, cal
+  done, iopen, canEdit, cal
 })=>{
   
   let dt = entry;
   
-  const redoAllow = canEdit && (!done || rapIs) && dt.good === true;
+  const redoAllow = canEdit && iopen && dt.good === true;
                  
   const indictor = dt.good ?
           <i><i className="fas fa-check-circle fa-lg fa-fw" title='Good'></i></i> :

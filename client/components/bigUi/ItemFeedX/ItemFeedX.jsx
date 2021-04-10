@@ -40,6 +40,11 @@ const ItemFeedX = ({
   const canVerify = Roles.userIsInRole(Meteor.userId(), 'verify');
   const canInspect = Roles.userIsInRole(Meteor.userId(), 'inspect');
   
+  const rapDo = !rapIs ? false : rapidsData.find( x => x._id === rapIs.rapId );
+  const rapive = rapDo && rapDo.live;
+  
+  const iopen = (!done || rapive);
+  
   return(
     <div className='scrollWrap'>
       <div className='infoFeed'>
@@ -61,7 +66,7 @@ const ItemFeedX = ({
                   seriesId={seriesId}
                   serial={serial}
                   done={done}
-                  rapIs={rapIs}
+                  iopen={iopen}
                   canEdit={canEdit}
                   cal={calFunc} /> 
               );
@@ -74,7 +79,7 @@ const ItemFeedX = ({
                   seriesId={seriesId}
                   serial={serial}
                   done={done}
-                  rapIs={rapIs}
+                  iopen={iopen}
                   canEdit={canEdit}
                   showHeader={false}
                   cal={calFunc} /> 
@@ -88,7 +93,7 @@ const ItemFeedX = ({
                 seriesId={seriesId}
                 serial={serial}
                 done={done}
-                rapIs={rapIs}
+                iopen={iopen}
                 user={user}
                 canQA={canQA}
                 canVerify={canVerify}
@@ -107,7 +112,7 @@ const ItemFeedX = ({
                 seriesId={seriesId}
                 serial={serial}
                 done={done}
-                rapIs={rapIs}
+                iopen={iopen}
                 deleteAuth={canRun}
                 cal={calFunc} /> 
             );
@@ -116,6 +121,8 @@ const ItemFeedX = ({
               <RapidBlock
                 key={dt.rapId+ix}
                 rapIs={dt}
+                rapDo={rapDo}
+                rapive={rapive}
                 rapidsData={rapidsData}
                 seriesId={seriesId}
                 serial={serial}

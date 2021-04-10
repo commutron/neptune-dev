@@ -7,12 +7,12 @@ import StepBackX from '/client/components/bigUi/ItemFeedX/StepBackX';
 
 const HistoryBlock = ({
   entry, batch, seriesId, serial, 
-  done, rapIs, canEdit, showHeader, cal
+  done, iopen, canEdit, showHeader, cal
 })=>{
   
   let dt = entry;
   
-  const redoAllow = canEdit && (!done || rapIs) && dt.good === true;
+  const redoAllow = canEdit && iopen && dt.good === true;
   const redoButton = <StepBackX seriesId={seriesId} bar={serial} entry={entry} lock={!redoAllow} />;
                  
   const indictor = dt.good ?

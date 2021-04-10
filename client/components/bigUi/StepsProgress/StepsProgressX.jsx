@@ -65,6 +65,15 @@ const StepsProgressX  = ({
             </label>
           :null}
           
+          {dt.altItems > 0 ?  
+            <label>
+              <NumBox
+                num={dt.altItems}
+                name={`Alt ${Pref.items}`}
+                color='tealT' />
+            </label>
+          :null}
+          
           {scrapCount > 0 ? 
             <label>
               <NumBox

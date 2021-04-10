@@ -9,7 +9,7 @@ import UserNice from '/client/components/smallUi/UserNice.jsx';
 
 const NonConBlock = ({
   entry, seriesId, serial,
-  done, rapIs, user, canQA, canVerify, canInspect,
+  done, iopen, user, canQA, canVerify, canInspect,
   app, ncTypesCombo, flatCheckList, brancheS, cal
 })=> {
   
@@ -107,7 +107,7 @@ const NonConBlock = ({
                       >Permanently Delete</button></li>
                 </Fragment>;
 
-  const editAllow = canInspect && (!done || rapIs);
+  const editAllow = canInspect && iopen;
   const editIndicate = editState && 'editStandout';
 
 	  
