@@ -36,8 +36,8 @@ function convertItems(bdoc, xrapids) {
           const rmadone = otherfin[rmaIndex];
           
           const isdone = rmadone ? true : scrapfin ? true : false;
-          const atdone = rmadone ? rmadone.time : scrapfin.time ? scrapfin : litem.finishedAt;
-          const whodone = rmadone ? rmadone.who : scrapfin.who ? scrapfin : litem.finishedWho;
+          const atdone = rmadone ? rmadone.time : scrapfin ? scrapfin.time : litem.finishedAt;
+          const whodone = rmadone ? rmadone.who : scrapfin ? scrapfin.who : litem.finishedWho;
           
           altPathArr.push({
             river: false,

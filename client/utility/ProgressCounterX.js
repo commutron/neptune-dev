@@ -96,9 +96,10 @@ function getFirsts(items) {
 }
     
 function FlowCounter(flow, seriesData) {
+  const srsItems = seriesData && Array.isArray(seriesData.items) ? seriesData.items : [];
   
   const flowSeries = seriesData && flow.length > 0;
-  const allItems = flowSeries ? seriesData.items || [] : [];
+  const allItems = flowSeries ? srsItems : [];
   
   const allLiveItems = outScrap(allItems);
   const scrapCount = allItems.length - allLiveItems.length;

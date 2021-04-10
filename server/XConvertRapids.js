@@ -144,7 +144,7 @@ Meteor.methods({
     
     for( let cb of cbatch ) {
       for( let cas of cb.cascade ) {
-        rmaList.push(cb.batch + ' = ' + cas.rmaId);
+        rmaList.push([cb.batch, cas.rmaId]);
       }
     }
     return rmaList;

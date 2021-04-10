@@ -431,15 +431,6 @@ Meteor.methods({
         multiBatch: multiBatch,
       };
     }
-  },
-  
-  checkForTide(bxID) {
-    this.unblock();
-    
-    const doc = XBatchDB.findOne({_id: bxID});
-    const tide = !doc ? false : doc.tide;
-    const good = !tide || !Array.isArray(tide) ? 'nogood' : true;
-    return good;
-  }  
+  }
         
 });

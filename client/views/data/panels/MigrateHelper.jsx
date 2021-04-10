@@ -23,45 +23,62 @@ const MigrateHelper = ({ allBatch, allXBatch })=> {
     });
   }
 
+  function findBinOLD(newbatch) {
+    return allBatch.find( x => x.batch === newbatch ) ? true : false;
+  }
+  
   function findBinX(oldbatch) {
     return allXBatch.find( x => x.batch === oldbatch ) ? true : false;
   }
   
   
-
+  const allXBatcheS = allXBatch.sort( (x1, x2)=>
+          x1 > x2 ? 1 : x1 < x2 ? -1 : 0);
+          
+  const allBatcheS = allBatch.sort( (b1, b2)=>
+          b1 > b2 ? 1 : b1 < b2 ? -1 : 0);
+  
   return(
     <div className='balance space36v'>
-    
+      
       <div>
-        <h3>Batch</h3>
+        <h3>XBatch</h3>
         <ol>
-          {allBatch.map( (entry, index)=>(
-            <li 
+          {allXBatcheS.map( (entry, index)=>(
+            <li
               key={index}
               className='vmarginhalf'>
               <ExploreLinkBlock
                 keyword={entry.batch}
                 type='batch'
-                />
-              {findBinX(entry.batch) && 
-                <button 
-                  className='gap miniAction clearRed' 
-                  onClick={()=>handleFORCERemove(entry._id, entry.batch)}
-                >DELETE</button>
+              />
+              {findBinOLD(entry.batch) &&
+                <n-fa1><i className='gap orangeT fas fa-radiation'></i></n-fa1>
               }
             </li>
           ))}
         </ol>
       </div>
       
-      <div>
-        <h3>XBatch</h3>
+      
+      <div className='infoBox'>
+        <h3>Batch</h3>
         <ol>
-          {allXBatch.map( (entry, index)=>(
-            <XLineItem
+          {allBatcheS.map( (entry, index)=>(
+            <li 
               key={index}
-              entry={entry}
-            />
+              className='vmarginhalf'>
+              <ExploreLinkBlock
+                keyword={entry.batch}
+                type='batch'
+              />
+              {findBinX(entry.batch) &&
+                <button 
+                  className='gap miniAction clearRed' 
+                  onClick={()=>handleFORCERemove(entry._id, entry.batch)}
+                > DELETE </button>
+              }
+            </li>
           ))}
         </ol>
       </div>
@@ -74,7 +91,10 @@ const MigrateHelper = ({ allBatch, allXBatch })=> {
             <li 
               key={index}
               className='vmarginhalf'
-            > {entry} </li>
+            ><ExploreLinkBlock
+                keyword={entry[0]}
+                type='batch'
+              /> = {entry[1]} </li>
           ))}
         </ol>
       </div>
@@ -84,31 +104,3 @@ const MigrateHelper = ({ allBatch, allXBatch })=> {
 };
   
 export default MigrateHelper;
-
-
-const XLineItem = ({ entry })=>{
-  
-  const [ tCheck, tCheckSet ] = useState(null);
-  
-  useEffect( ()=> {
-    Meteor.call('checkForTide', entry._id, (err, re)=>{
-      err && console.log(err);
-      if(re) { tCheckSet(re) }
-    });
-  },[]);
-  
-  
-  return(
-    <li
-      className='vmarginhalf'>
-      <ExploreLinkBlock
-        keyword={entry.batch}
-        type='batch'
-        />
-      
-      {!tCheck ? '?' : tCheck === 'nogood' ? 
-        <i className='fas fa-radiation'></i> : null}
-    </li>
-            
-  );
-};

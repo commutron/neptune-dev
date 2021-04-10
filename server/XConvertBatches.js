@@ -43,14 +43,6 @@ Meteor.methods({
               who: bdoc.notes.who || 'unknown',
               solve: false
             });
-                  
-          const releases = bdoc.releases !== undefined ? bdoc.releases :
-                  [{
-                    type: 'floorRelease',
-                    time: bdoc.createdAt,
-                    who: bdoc.createdWho,
-                    caution: false
-                  }];
           
           XBatchDB.insert({
       			batch: bdoc.batch,
@@ -78,7 +70,7 @@ Meteor.methods({
       			waterfall: [],
       			tide: bdoc.tide || [],
       			blocks: blocksArr,
-            releases: releases,
+            releases: bdoc.releases || [],
             altered: bdoc.altered || [],
             events: bdoc.events || []
           });
@@ -103,6 +95,15 @@ Meteor.methods({
     
     const ok = xbatch ? true : false;
     return ok;
+  },
+  
+  checkForTide(bxID) {
+    this.unblock();
+    
+    const doc = XBatchDB.findOne({_id: bxID});
+    const tide = !doc ? false : doc.tide;
+    const good = !tide || !Array.isArray(tide) ? 'nogood' : true;
+    return good;
   },
 
   
