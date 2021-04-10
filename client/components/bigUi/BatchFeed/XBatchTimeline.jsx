@@ -68,7 +68,7 @@ const XBatchTimeline = ({
     <div className='scrollWrap'>
       <div className='infoFeed'>
         <div className='comfort uiCheck vbreak'>
-          <span title='releases and clearances'>
+          <span title='releases and clearances' className='middle'>
             <input
               type='checkbox'
               id='inputRel'
@@ -76,7 +76,7 @@ const XBatchTimeline = ({
               defaultChecked={incRelease} />
             <label htmlFor='inputRel'>Green-Lights</label>
           </span>
-          <span title={`${Pref.trackFirst} verifications`}>
+          <span title={`${Pref.trackFirst} verifications`} className='middle'>
             <input
               type='checkbox'
               id='inputVer'
@@ -84,7 +84,7 @@ const XBatchTimeline = ({
               defaultChecked={incVerify} />
             <label htmlFor='inputVer'>{Pref.trackFirst}s</label>
           </span>
-          <span title='general and benchmark events'>
+          <span title='general and benchmark events' className='middle'>
             <input
               type='checkbox'
               id='inputEvt'
@@ -92,7 +92,7 @@ const XBatchTimeline = ({
               defaultChecked={incEvent} />
             <label htmlFor='inputEvt'>Events</label>
           </span>
-          <span title='top-level alterations'>
+          <span title='top-level alterations' className='middle'>
             <input
               type='checkbox'
               id='inputAlt'
@@ -100,7 +100,7 @@ const XBatchTimeline = ({
               defaultChecked={incAlter} />
             <label htmlFor='inputAlt'>Alters</label>
           </span>
-          <span title={`quote ${Pref.timeBudget} changes`}>
+          <span title={`quote ${Pref.timeBudget} changes`} className='middle'>
             <input
               type='checkbox'
               id='inputQut'

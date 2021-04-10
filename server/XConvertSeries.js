@@ -27,15 +27,17 @@ function convertItems(bdoc, xrapids) {
         if(rapId) {
           const cstart = bcas.time;
         
+          const scrapfin = litem.history.find( x => x.type === 'scrap' );
+          
           const otherfin = litem.history.filter( x =>
                     x.type === 'finish' && x.key !== "f1n15h1t3m5t3p" );
-          
+                    
           const rmaIndex = litem.rma.findIndex( x => x === cKey );
           const rmadone = otherfin[rmaIndex];
           
-          const isdone = rmadone ? true : false;
-          const atdone = rmadone ? rmadone.time : null;
-          const whodone = rmadone ? rmadone.who : null;
+          const isdone = rmadone ? true : scrapfin ? true : false;
+          const atdone = rmadone ? rmadone.time : scrapfin.time ? scrapfin : litem.finishedAt;
+          const whodone = rmadone ? rmadone.who : scrapfin.who ? scrapfin : litem.finishedWho;
           
           altPathArr.push({
             river: false,
@@ -99,47 +101,50 @@ Meteor.methods({
   
   
   convertToSeries(batchId) {
-    const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
-    const bdoc = BatchDB.findOne({_id: batchId});
-    const xrapids = XRapidsDB.find({extendBatch: bdoc.batch}).fetch();
-    
-    if(auth && bdoc) {
-      const widget = WidgetDB.findOne({_id: bdoc.widgetId});
-      const group = GroupDB.findOne({_id: widget.groupId});
+    try {
+      const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
+      const bdoc = BatchDB.findOne({_id: batchId});
+      const xrapids = XRapidsDB.find({extendBatch: bdoc.batch}).fetch();
       
-      const hasSeries = XSeriesDB.findOne({batch: bdoc.batch});
-      
-      if(!hasSeries) {
-      
-        const newItems = convertItems(bdoc, xrapids);
+      if(auth && bdoc) {
+        const widget = WidgetDB.findOne({_id: bdoc.widgetId});
+        const group = GroupDB.findOne({_id: widget.groupId});
         
-        const newNonCon = convertNonCons(bdoc.nonCon);
+        const hasSeries = XSeriesDB.findOne({batch: bdoc.batch});
         
-        const goodShortfall = bdoc.shortfall;
+        if(!hasSeries) {
         
-        XSeriesDB.insert({
-    			batch: bdoc.batch,
-    			orgKey: bdoc.orgKey,
-    	    groupId: group._id,
-    			widgetId: bdoc.widgetId,
-    			versionKey: bdoc.versionKey,
-          createdAt: bdoc.createdAt,
-          createdWho: bdoc.createdWho,
-          updatedAt: bdoc.updatedAt,
-    			updatedWho: bdoc.updatedWho,
-          items: newItems,
-          nonCon: newNonCon,
-          shortfall: goodShortfall || []
-        });
-        
-        return true; // done in theory
+          const newItems = convertItems(bdoc, xrapids);
+          
+          const newNonCon = convertNonCons(bdoc.nonCon);
+          
+          const goodShortfall = bdoc.shortfall;
+          
+          XSeriesDB.insert({
+      			batch: bdoc.batch,
+      			orgKey: bdoc.orgKey,
+      	    groupId: group._id,
+      			widgetId: bdoc.widgetId,
+      			versionKey: bdoc.versionKey,
+            createdAt: bdoc.createdAt,
+            createdWho: bdoc.createdWho,
+            updatedAt: bdoc.updatedAt,
+      			updatedWho: bdoc.updatedWho,
+            items: newItems,
+            nonCon: newNonCon,
+            shortfall: goodShortfall || []
+          });
+          
+          return true; // done in theory
+        }else{
+          return 'hasSeries'; // already done
+        }
       }else{
-        return 'hasSeries'; // already done
+        return false; // no batch
       }
-    }else{
-      return false; // no batch
+    }catch (err) {
+      throw new Meteor.Error(err);
     }
-    
   },
   
   

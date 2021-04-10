@@ -10,14 +10,14 @@ const ScrapBox = ({ seriesId, serial, entry, eX })=> {
   const isQA = Roles.userIsInRole(Meteor.userId(), 'qa');
    
    return(
-    <div className='actionBox scrapBanner red vgap'>
+    <div className='infoFeed scrapBanner red vgap'>
       <div className='titleBar centre'>
         <h1 className='up'>{entry.type}</h1>
       </div>
       <div className='centre'>
         <p>{moment(entry.time).calendar()}</p>
         <p>by: <UserNice id={entry.who} />, at step: {entry.step}</p>
-        <p className='capFL'>{entry.comm}</p>
+        <p className='capFL max400'>{entry.comm}</p>
         {eX && isAdmin && isQA ?
         <p>Undo Scrap Entry
           <StepBackX

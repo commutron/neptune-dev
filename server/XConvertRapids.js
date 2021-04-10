@@ -47,79 +47,83 @@ Meteor.methods({
   
   
   convertToRapid(batchId) {
-    const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
-    const bdoc = BatchDB.findOne({_id: batchId});
-    
-    if(auth && bdoc) {         
+    try {
+      const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
+      const bdoc = BatchDB.findOne({_id: batchId});
       
-      const isDone = XRapidsDB.findOne({ extendBatch: bdoc.batch });
-      
-      if(!isDone) {
-        const widget = WidgetDB.findOne({_id: bdoc.widgetId});
-        const group = GroupDB.findOne({_id: widget.groupId});
+      if(auth && bdoc) {         
         
-        for( const cas of bdoc.cascade ) {
-  
-          const nextRapid = getNextRapidNumber();
+        const isDone = XRapidsDB.findOne({ extendBatch: bdoc.batch });
+        
+        if(!isDone) {
+          const widget = WidgetDB.findOne({_id: bdoc.widgetId});
+          const group = GroupDB.findOne({_id: widget.groupId});
           
-          const casItems = bdoc.items.filter( x => x.rma.includes(cas.key) );
-          const lastfin = getLastItemFinish(casItems, bdoc.finishedAt);
-          
-          if(nextRapid && lastfin) {
+          for( const cas of bdoc.cascade ) {
+    
+            const nextRapid = getNextRapidNumber();
             
-            const issueStr = 'rma-' + cas.rmaId;
-            const closeTime = bdoc.live ? null : lastfin[0];
-            const closeWho = bdoc.live ? null : lastfin[1];
+            const casItems = bdoc.items.filter( x => x.rma.includes(cas.key) );
+            const lastfin = getLastItemFinish(casItems, bdoc.finishedAt);
             
-            const delEst = moment(cas.time).add(14, 'days').format();
-            const setCQ = cas.quantity === 0 ? casItems.length : cas.quantity;
+            if(nextRapid && lastfin) {
+              
+              const issueStr = 'rma-' + cas.rmaId;
+              const closeTime = bdoc.live ? null : lastfin[0];
+              const closeWho = bdoc.live ? null : lastfin[1];
+              
+              const delEst = moment(cas.time).add(14, 'days').format();
+              const setCQ = cas.quantity === 0 ? casItems.length : cas.quantity;
+              
+              let rflow = [];
+              for( let f of cas.flow ) {
+                rflow.push({
+                  key: f.key,
+                  step: f.step,
+                  type: f.type,
+                  branchKey: f.branchKey || "t3rm1n2t1ng8r2nch",
+                  how: f.how || ""
+                });
+              }
             
-            let rflow = [];
-            for( let f of cas.flow ) {
-              rflow.push({
-                key: f.key,
-                step: f.step,
-                type: f.type,
-                branchKey: f.branchKey || "t3rm1n2t1ng8r2nch",
-                how: f.how || ""
+              XRapidsDB.insert({
+                orgKey: bdoc.orgKey,
+                rapid: nextRapid, 
+                type: "converted-rma",
+                extendBatch: bdoc.batch,
+                groupId: group._id,
+                gadget: false,
+                issueOrder: issueStr,
+                live: bdoc.live,
+                createdAt: cas.time,
+                createdWho: cas.who,
+                closedAt: closeTime,
+                closedWho: closeWho,
+                timeBudget: '0',
+                deliverAt: new Date(delEst),
+                quantity: Number(setCQ),
+                instruct: false,
+                notes: {
+                  time: cas.time,
+                  who: cas.who,
+                  content: cas.comm
+                },
+                cascade: [],
+                whitewater: rflow,
+                autoNC: cas.nonCons,
+                autoSH: []
               });
             }
-          
-            XRapidsDB.insert({
-              orgKey: bdoc.orgKey,
-              rapid: nextRapid, 
-              type: "converted-rma",
-              extendBatch: bdoc.batch,
-              groupId: group._id,
-              gadget: false,
-              issueOrder: issueStr,
-              live: bdoc.live,
-              createdAt: cas.time,
-              createdWho: cas.who,
-              closedAt: closeTime,
-              closedWho: closeWho,
-              timeBudget: '0',
-              deliverAt: new Date(delEst),
-              quantity: Number(setCQ),
-              instruct: false,
-              notes: {
-                time: cas.time,
-                who: cas.who,
-                content: cas.comm
-              },
-              cascade: [],
-              whitewater: rflow,
-              autoNC: cas.nonCons,
-              autoSH: []
-            });
           }
+          return true; // after loop
+        }else{
+          return 'isDone'; // aready done
         }
-        return true; // after loop
       }else{
-        return 'isDone'; // aready done
+        return false; // no doc
       }
-    }else{
-      return false; // no doc
+    }catch (err) {
+      throw new Meteor.Error(err);
     }
   },
   
