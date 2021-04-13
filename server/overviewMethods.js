@@ -175,9 +175,7 @@ function collectNonCon(privateKey, batchID, temp) {
         ((hasNonCon / itemQuantity) * 100 ).toFixed(0);
       // how many items are scrapped
       const itemIsScrap = temp === 'cool' ? 0 :
-        b.items.filter( x => x.history.find( 
-                          y => y.type === 'scrap' && y.good === true ) )
-                            .length;
+        b.items.filter( x => x.scrapped ).length;
       // how many items with RMA
       let itemHasRMA = temp === 'cool' ? 0 :
         b.items.filter( x => x.rma.length > 0).length;
@@ -215,8 +213,7 @@ function collectNonCon(privateKey, batchID, temp) {
         ((hasNonCon / itemQuantity) * 100 ).toFixed(0);
       // how many items are scrapped
       const itemIsScrap = temp === 'cool' ? 0 :
-        items.filter( x => x.history.find( 
-          y => y.type === 'scrap' && y.good === true ) ).length;
+        items.filter( x => x.scrapped ).length;
       // how many items with RMA
       let itemHasRapid = temp === 'cool' ? 0 :
         items.filter( x => x.altPath.find( y => y.rapId !== false) ).length;

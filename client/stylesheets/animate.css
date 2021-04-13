@@ -310,7 +310,7 @@
   overflow: hidden;
 }
 .colorShift {
-  animation: hueCycle 60s infinite linear;
+  animation: hueCycle 90s infinite linear;
   overflow: hidden;
 }
 

@@ -205,7 +205,7 @@ Meteor.methods({
       let scrapUnits = 0;
       for(let i of items) {
         totalUnits += i.units;
-        const sc = i.history.find(s => s.type === 'scrap' && s.good === true);
+        const sc = i.scrapped;
         !sc ? null : scrapItems += 1;
         !sc ? null : scrapUnits += i.units;
       }

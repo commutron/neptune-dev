@@ -212,13 +212,6 @@ const ItemsListX = ({
   }
   
   function fScrap(items, timeMod, notMod) {
-    let scrapList = [];
-    items.map( (entry)=>{
-      for(let v of entry.history) {
-        v.type === 'scrap' && v.good === true ? 
-        scrapList.push(entry.serial) : null;
-      }
-    });
     let iList = [];
     if(!timeMod || timeMod === '') {
       if(notMod === true) {
@@ -245,7 +238,7 @@ const ItemsListX = ({
                     .length > 0 );
       }
     }
-    return { scrapList, iList };
+    return iList;
   }
   
   function fStep(items, flowKey, timeMod, notMod) {
@@ -284,10 +277,6 @@ const ItemsListX = ({
   const srs = seriesData;
   const nonCon = srs.nonCon;
   const short = srs.shortfall || [];
-  
-  const scrap = srs ? fScrap(srs.items, timeModifyer, notModifyer) : 
-                    { scrapList: [], iList: [] };
-  
   
   function handleScroll(e) {
     if(e.target.scrollTop > scrollY) {
@@ -341,7 +330,7 @@ const ItemsListX = ({
     K === 'alternative' ?
       fAlt(items, notModifyer) :
     K === 'scrap' ? 
-      scrap.iList :
+      fScrap(items, timeModifyer, notModifyer) :
     K === 'extended' ? 
       fExt(items, notModifyer) :
     items;
@@ -371,7 +360,7 @@ const ItemsListX = ({
           if(index < itemLimit) {
             let style = entry.history.length === 0 ? bttnClss :
                         entry.completed === false ? `${bttnClss} activeMark` :
-                        scrap.scrapList.includes(entry.serial) ? `${bttnClss} ngMark` : 
+                        entry.scrapped ? `${bttnClss} ngMark` : 
                         entry.altPath.find( a => a.rapId !== false) ? `${bttnClss} exMark` : 
                         `${bttnClss} gMark`;
             return(

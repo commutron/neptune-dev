@@ -27,7 +27,9 @@ const ItemPanelX = ({
   
   const start = i.history.length > 0;
   const rapid = i.altPath.find( a => a.rapId !== false && a.completed === false );
-  const scrap = i.history.find(x => x.type === 'scrap' && x.good === true);
+  
+  const scrap = !i.scrapped ? null :
+                  i.history.find(x => x.type === 'scrap' && x.good === true);
   
   return(
     <div className='section' key={i.serial}>

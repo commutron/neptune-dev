@@ -70,8 +70,8 @@ const XDoProCard = ({
   
   const iComplete = !iSerial ? null : itemData.completed;
   
-  const scrapCheck = !iSerial ? null :
-    itemData.history.find(x => x.type === 'scrap' && x.good === true);
+  const scrapCheck = !iSerial ? null : itemData.scrapped &&
+          itemData.history.find(x => x.type === 'scrap' && x.good === true);
   
   const shortfall = !seriesData ? [] : seriesData.shortfall;
   const shortfallS = !iSerial || !seriesData ? shortfall :

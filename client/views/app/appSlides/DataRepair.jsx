@@ -253,18 +253,6 @@ const DataRepair = ({ app, users })=> {
       </div>
       
       
-      <div>
-        <h3><i className="fas fa-edit fa-lg gap"></i>
-          Dedicated "scrapped" key on item
-        </h3>
-        <button
-          onClick={()=>doCallThing("addScrappedKeytoXSeries")}
-          className='action clearTeal'
-        >Add Key</button>
-      </div>
-      
-      
-      
       {/*
       <div>
         <h3><i className="fas fa-screwdriver fa-lg gap orangeT"></i>

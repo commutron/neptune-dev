@@ -107,7 +107,7 @@ const StartView = ({user, app}) =>	{
         
         <NavButton title={Pref.docs} icon='fa-file-invoice' link={app.instruct || ''} blank={true} />
         
-        <NavButton title='Help' icon='fa-question' link={app.help || ''} blank={true} />
+        <NavButton title='Help' icon='fa-question' link={app.helpDocs || ''} blank={true} />
         
         {isAdmin ?
           <NavButton title='Settings' icon='fa-sliders-h' link='/app' />
