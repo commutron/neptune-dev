@@ -98,11 +98,11 @@ function getFirsts(items) {
 function FlowCounter(flow, seriesData) {
   const srsItems = seriesData && Array.isArray(seriesData.items) ? seriesData.items : [];
   
-  const flowSeries = seriesData && flow.length > 0;
-  const allItems = flowSeries ? srsItems : [];
+  // const flowSeries = seriesData && flow.length > 0;
+  // const allItems = flowSeries ? srsItems : [];
   
-  const allLiveItems = outScrap(allItems);
-  const scrapCount = allItems.length - allLiveItems.length;
+  const allLiveItems = outScrap(srsItems);
+  const scrapCount = srsItems.length - allLiveItems.length;
   
   const firstsFlat = getFirsts(allLiveItems);
   
@@ -116,8 +116,7 @@ function FlowCounter(flow, seriesData) {
   
   const riverProg = flowLoop(flow, stndItems, firstsFlat);
   
-  const allFlow = !flowSeries ? true :
-          allItems.length > 0 && allItems.every( x => x.completed );
+  const allFlow = srsItems.length > 0 && srsItems.every( x => x.completed );
 
   return {
     riverProg: riverProg,

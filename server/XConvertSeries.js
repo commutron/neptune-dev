@@ -151,7 +151,7 @@ Meteor.methods({
   checkIfSeriesConverted(batchId) {
     const bdoc = BatchDB.findOne({_id: batchId});
     
-    const srs = XSeriesDB.findOne({ batch: bdoc.batch });
+    const srs = !bdoc ? false : XSeriesDB.findOne({ batch: bdoc.batch });
     
     const ok = srs ? true : false;
     return ok;

@@ -17,8 +17,8 @@ const RiverSelect = ({ bID, wFlows, river, riverTitle, lock })=> {
     });
   }
   
-  const adaptSize = riverTitle.length < 5 ? '5ch' :
-                    riverTitle.length * 0.7 + 5 + 'ch';
+  const adaptSize = riverTitle.length < 5 ? '6ch' :
+                    riverTitle.length * 0.7 + 6 + 'ch';
   
   return(
     <i><i className='fas fa-project-diagram fa-fw greenT'></i> {Pref.flow}:

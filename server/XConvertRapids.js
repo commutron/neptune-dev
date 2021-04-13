@@ -129,9 +129,9 @@ Meteor.methods({
   
   checkIfRapidConverted(batchId) {
     const bdoc = BatchDB.findOne({_id: batchId});
-    const cas = bdoc.cascade;
+    const cas = !bdoc ? [] : bdoc.cascade;
     
-    const xrapids = XRapidsDB.find({ extendBatch: bdoc.batch }).fetch();
+    const xrapids = !bdoc ? false : XRapidsDB.find({ extendBatch: bdoc.batch }).fetch();
     
     const ok = cas.length === xrapids.length;
     return ok;
@@ -142,9 +142,13 @@ Meteor.methods({
     
     let rmaList = [];
     
-    for( let cb of cbatch ) {
-      for( let cas of cb.cascade ) {
-        rmaList.push([cb.batch, cas.rmaId]);
+    if(cbatch) {
+      for( let cb of cbatch ) {
+        if(cb && cb.cascade) {
+          for( let cas of cb.cascade ) {
+            rmaList.push([cb.batch, cas.rmaId]);
+          }
+        }
       }
     }
     return rmaList;

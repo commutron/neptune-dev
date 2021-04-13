@@ -91,7 +91,7 @@ Meteor.methods({
   checkIfBatchConverted(batchId) {
     const bdoc = BatchDB.findOne({_id: batchId});
     
-    const xbatch = XBatchDB.findOne({ batch: bdoc.batch });
+    const xbatch = !bdoc ? false : XBatchDB.findOne({ batch: bdoc.batch });
     
     const ok = xbatch ? true : false;
     return ok;

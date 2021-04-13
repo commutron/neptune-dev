@@ -16,7 +16,7 @@ const WaterfallTimeline = ({ wfCounts, waterfall, quantity, rapidsData, app })=>
   return(
     <div className='wide'>
       
-      {waterfall.length === 0 && !rapidsData ?
+      {waterfall.length === 0 && (!rapidsData || rapidsData.length === 0) ?
         <div className='centreText fade'>
           <i className='fas fa-stopwatch fa-3x'></i>
           <p className='big'>No Counters</p>

@@ -68,16 +68,6 @@ const BatchPanel = ({
     });
   }
   
-  function runOldDelete(e) {
-    this.dltBatch.disabled = true;
-    Meteor.call('adminFORCERemoveOldBatch', batchData._id, batchData.batch, 
-    (err, re)=>{
-      err && console.error(err);
-      re ? toast.success('GOOD') : toast.error('ERROR');
-    });
-    window.location.reload();
-  }
-  
   
   const [ verifyListState, verifyListSet ] = useState([]);
   const [ rmaListState, rmaListSet ] = useState([]);
@@ -119,8 +109,7 @@ const BatchPanel = ({
     <div className='section darkTheme' key={b.batch}>
       
       {Roles.userIsInRole(Meteor.userId(), 'admin') &&
-        <div className='vmargin'>
-          <div className='vmargin balancer'>
+        <div className='vmargin balancer'>
           
             <button
               id='cnvrtRapid'
@@ -143,18 +132,6 @@ const BatchPanel = ({
               disabled={!rapidCheck || !seriesCheck || batchCheck}
             >Create XBatch</button>
             
-          </div>
-          
-          <div className='vmargin centre'>
-      
-            <button
-              id='dltBatch'
-              className='action biggest clearRed'
-              onClick={()=>runOldDelete()}
-              disabled={!(rapidCheck && seriesCheck && batchCheck)}
-            >DELETE Legacy</button>
-            
-          </div>
         </div>
       }
       

@@ -68,9 +68,9 @@ class Pref {
 	  this.batch = 'work order';//order
 	  this.Batch = 'Work Order';//Order
 	  this.batches = 'work orders';
-	  this.item = 'board';//board
-	  this.Item = 'Board';//Board
-	  this.items = 'boards';
+	  this.item = 'item';//board
+	  this.Item = 'Item';//Board
+	  this.items = 'items';
 	  
 	  this.series = 'series';
 	  this.itemSerial = 'barcode';

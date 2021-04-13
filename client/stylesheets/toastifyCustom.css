@@ -5,10 +5,10 @@
   width: 25vw;
   color: #fff; }
   .Toastify__toast-container--top-center {
-    width: 40vw;
+    width: 30vw;
     top: 1vh;
     left: 50%;
-    margin-left: -20vw;
+    margin-left: -15vw;
     text-align: center; }
   .Toastify__toast-container--top-right {
     top: 1vh;

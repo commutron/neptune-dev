@@ -21,16 +21,14 @@ import RemoveItem from '/client/components/forms/ItemSerialsX/RemoveItem';
 
 import ItemSerialsWrap from '/client/components/forms/ItemSerials/ItemSerialsWrap';
 import RiverSelect from '/client/components/forms/RiverSelect.jsx';
+
 import CounterAssign from '/client/components/bigUi/ArrayBuilder/CounterAssign.jsx';
-import RMAForm from '/client/components/forms/RMAForm.jsx';
 
 import UnitSet from '/client/components/forms/UnitSet.jsx';
 import PanelBreak from '/client/components/forms/PanelBreak.jsx';
 import UndoFinish from '/client/components/forms/UndoFinish.jsx';
 import ItemIncompleteForm from '/client/components/forms/ItemIncompleteForm.jsx';
 import ScrapForm from '/client/components/forms/ScrapForm.jsx';
-
-import Remove from '/client/components/forms/Remove.jsx';
 
 const ActionBar = ({
   batchData, seriesData, itemData, 
@@ -98,12 +96,6 @@ const ActionBar = ({
           id={batchData._id}
           item={itemData}
           anc={app.ancillaryOption} />
-        <Remove
-          action='item'
-          title={itemData.serial}
-          check={itemData.createdAt.toISOString()}
-          entry={batchData}
-          lockOut={batchData.finishedAt !== false} />
       </Fragment>
 		:
     action === 'batch' ?
@@ -132,20 +124,6 @@ const ActionBar = ({
           title='Print Label'
           icon='fas fa-print'
           color='whiteT' />
-        <RMAForm
-          id={batchData._id}
-          editObj={false}
-          trackOptions={app.trackOption}
-          end={app.lastTrack}
-          app={app}
-          user={user}
-          ncTypesCombo={ncTypesCombo || []}
-          lockOut={batchData.lock} />
-        <RemoveBatch
-          title={batchData.batch}
-          check={batchData.createdAt.toISOString()}
-          entry={batchData}
-          lockOut={batchData.finishedAt !== false} />
       </Fragment>
       :
       action === 'xbatch' ?

@@ -8,14 +8,11 @@ import SearchHelp from './SearchHelp.jsx';
 
 import DoProCard from './cards/DoProCard.jsx';
 
-import XDoProCard from './cards/XDoProCard.jsx';
-// import XBatchCard from './cards/XBatchCard.jsx';
+import XDoProCard from './cards/XDoProCard';
 
 import BatchesList from './lists/BatchesList.jsx';
 import GroupsList from './lists/GroupsList.jsx';
 import WidgetsList from './lists/WidgetsList.jsx';
-
-import NPICard from './cards/NPICard.jsx';
 
 const ProductionFindOps = ({ 
   hotBatch, hotxBatch, hotxSeries, hotxRapids,
@@ -41,9 +38,6 @@ const ProductionFindOps = ({
     return items.find(x => x.serial === bar);
   }
 
-  // function group() {
-  //  return allGroup.find(x => x.group === orb);
-  // }
   function groupAlias() {
     return allGroup.find(x => x.alias === orb);
   }
@@ -70,18 +64,6 @@ const ProductionFindOps = ({
       <ProWindow app={app}>
         <div className='centre wide'>
           <SearchHelp />
-        </div>
-      </ProWindow>
-    );
-  }
-
-  // Easter eggs, hidden features or dark patterns \\
-  if(orb === '.') {
-    Session.set('nowBatch', false);
-    return (
-      <ProWindow app={app}>
-        <div className='centre'>
-          <p>the special hell</p>
         </div>
       </ProWindow>
     );
@@ -125,29 +107,6 @@ const ProductionFindOps = ({
           anchor={false} 
           full={true} />
       </ProWindow>
-    );
-  }
-  
-  if(orb === Pref.npi || orb === Pref.npiFull) {
-    Session.set('now', Pref.npiFull);
-    Session.set('nowBatch', false);
-    Session.set('nowInstruct', undefined);
-    return (
-      <ProWrap
-        user={user}
-        app={app}
-        action='npiDo'
-      >
-        <NPICard
-          allGroup={allGroup}
-          allWidget={allWidget}
-          allVariant={allVariant}
-          user={user}
-          app={app} />
-        <WikiOps 
-          root={app.instruct} 
-          anchor={false} />
-      </ProWrap>
     );
   }
 
