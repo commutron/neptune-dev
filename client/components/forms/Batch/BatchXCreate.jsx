@@ -150,7 +150,7 @@ const BXCreateForm = ({ groupId, widgetId, allVariants })=> {
             id='srlz'
             className='indenText inlineCheckbox'
             defaultChecked={false}
-          /><i className='medBig'>Use {Pref.itemSerial} numbers</i></label>
+          /><i>Use {Pref.itemSerial} numbers</i></label>
         </label>
         
       </div>

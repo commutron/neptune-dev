@@ -23,6 +23,8 @@ export default BatchXIncomplete;
 	        
 const BatchXIncompleteForm = ({ batchData, seriesData, app, selfclose })=> {
   
+  const [ workingState, workingSet ] = useState(false);
+  
   const [ doneScrap, doneScrapSet ] = useState(false);
   
   const [ remainScrap, remainScrapSet ] = useState(false);
@@ -43,6 +45,7 @@ const BatchXIncompleteForm = ({ batchData, seriesData, app, selfclose })=> {
       toastId: ( batchData._id + 'FORCE' ),
       autoClose: false
     });
+    workingSet(true);
     
     const comm = this.fincomment.value.trim();
     const pinVal = this.orgPINgo.value;
@@ -63,12 +66,22 @@ const BatchXIncompleteForm = ({ batchData, seriesData, app, selfclose })=> {
         }else{
           console.log('BLOCKED BY SERVER METHOD');
           toast.error('Server Error');
-          this.inFinGo.disabled = false;
+          workingSet(false);
         }
       });
     }
   }
-  	
+  
+  if(workingState) {
+    return(
+      <div className='centreText'>
+        <p><n-num>{doneI}</n-num> Items Completed</p>
+        <p><n-num>{runI}</n-num> Items In Progress</p>
+        <p><n-num>{noI}</n-num> Items Unstarted</p>
+      </div>
+    );
+  }
+  
 	return(
   	<form className='line2x overscroll' onSubmit={(e)=>handleForceFinish(e)}>
 	    <p>Cut off the remaining flow and finish {Pref.xBatch}.

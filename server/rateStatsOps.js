@@ -257,7 +257,8 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
         $lte: new Date(rangeEnd) 
       }}}
     }).forEach( (srs)=> {
-      const thisSC = srs.items.filter( x =>
+      const scItems = srs.items.filter( i => i.scrapped === true );
+      const thisSC = scItems.filter( x =>
         x.history.find( y =>
           moment(y.time).isBetween(rangeStart, rangeEnd) &&
           y.type === 'scrap' && y.good === true )

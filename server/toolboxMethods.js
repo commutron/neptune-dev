@@ -109,6 +109,30 @@ Meteor.methods({
     }
   },
   
+  addScrappedKeytoXSeries() {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      const allSeries = XSeriesDB.find({}).fetch();
+      
+      for( let srs of allSeries ) {
+        for( let it of srs.items) {
+          const isScrap = it.history.findIndex( s => 
+                            s.type === 'scrap' && s.good === true ) >= 0;
+          if(isScrap) {
+            
+            XSeriesDB.update({_id: srs._id, 'items.serial': it.serial}, {
+        			$set : {
+        			  'items.$.scrapped': true
+        			}
+            });
+          }
+        }
+      }
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
   makeNotesIntoBlockXBatch() {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       const allBatchX = XBatchDB.find({}).fetch();
@@ -412,25 +436,5 @@ Meteor.methods({
     }
   },
   
-  cascadeUse() {
-    if(!Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      return [];
-    }else{
-      
-      const allBatches = BatchDB.find({ $where: "this.cascade.length > 0" }).fetch();
-            
-      const totalOne = allBatches.filter( x => x.cascade.length === 1 ).length;
-      const multi = allBatches.filter( x => x.cascade.length > 1 );
-      
-      const totalMulti = multi.length;
-      const multiBatch = Array.from(multi, m => m.batch );
-      
-      return {
-        totalBatch: totalOne,
-        totalMulti: totalMulti,
-        multiBatch: multiBatch,
-      };
-    }
-  }
         
 });

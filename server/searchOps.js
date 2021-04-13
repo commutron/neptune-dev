@@ -211,14 +211,11 @@ Meteor.methods({
     
     XSeriesDB.find({
       orgKey: Meteor.user().orgKey,
-      'items.history.type': 'scrap'
+      'items.scrapped': true
     }).forEach( srs => {
       const w = WidgetDB.findOne({_id: srs.widgetId});
       const g = GroupDB.findOne({_id: srs.groupId});
-      const items = srs.items.filter( 
-                      x => x.history.find( y => 
-                        y.type === 'scrap' && 
-                        y.good === true ) );
+      const items = srs.items.filter( x => x.scrapped === true );
       for(let i of items) {
         const scEntry = i.history.find( y => 
                           y.type === 'scrap' && 

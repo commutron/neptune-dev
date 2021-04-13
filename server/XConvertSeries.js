@@ -50,19 +50,37 @@ function convertItems(bdoc, xrapids) {
         }
       }
     }
-          
-    goodItems.push({
-      serial: litem.serial,
-      createdAt: litem.createdAt,
-      createdWho: litem.createdWho,
-      completed: itemcomplete,
-      completedAt: litem.finishedAt,
-      completedWho: litem.finishedWho,
-      units: Number(litem.units),
-      subItems: litem.subItems,
-      history: litem.history,
-      altPath: altPathArr
-    });
+    
+    const isScrap = litem.history.findIndex( s => 
+                      s.type === 'scrap' && s.good === true ) >= 0;
+    if(isScrap == true) {
+      goodItems.push({
+        serial: litem.serial,
+        createdAt: litem.createdAt,
+        createdWho: litem.createdWho,
+        completed: itemcomplete,
+        completedAt: litem.finishedAt,
+        completedWho: litem.finishedWho,
+        units: Number(litem.units),
+        subItems: litem.subItems,
+        history: litem.history,
+        altPath: altPathArr,
+        scrapped: true
+      });
+  	}else{
+      goodItems.push({
+        serial: litem.serial,
+        createdAt: litem.createdAt,
+        createdWho: litem.createdWho,
+        completed: itemcomplete,
+        completedAt: litem.finishedAt,
+        completedWho: litem.finishedWho,
+        units: Number(litem.units),
+        subItems: litem.subItems,
+        history: litem.history,
+        altPath: altPathArr
+      });
+  	}
     
   }
   

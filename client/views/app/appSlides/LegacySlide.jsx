@@ -25,19 +25,7 @@ const LegacySlide = ()=> {
       toast(<div>
         <h3>Escaped</h3>
         Total Batches: {reply.totalBatch} <br />
-        > 1 Batches: {reply.totalMulti} <br />
-      </div>, { autoClose: false });
-      console.log(reply.multiBatch);
-    });
-  }
-  
-  function requestCascadeUse() {
-    Meteor.call('cascadeUse', (error, reply)=>{
-      error && console.log(error);
-      toast(<div>
-        <h3>Cascades</h3>
-        Total Batches: {reply.totalBatch} <br />
-        > 1 Batches: {reply.totalMulti} <br />
+        {"> 1 Batches:"} {reply.totalMulti} <br />
       </div>, { autoClose: false });
       console.log(reply.multiBatch);
     });
@@ -80,13 +68,6 @@ const LegacySlide = ()=> {
           className='action clearBlue invert'
           onClick={()=>requestEscapeUse()}
         >Info on Escaped Use</button>
-      </p>
-      
-      <p>
-        <button
-          className='action clearBlue invert'
-          onClick={()=>requestCascadeUse()}
-        >Info on Cascade Use</button>
       </p>
       
       <br />

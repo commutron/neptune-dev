@@ -68,7 +68,7 @@ const DataRepair = ({ app, users })=> {
   function forceLockCheck() {
     Meteor.call('lockingCacheUpdate', false, true, (error)=>{
       error && console.log(error);
-      toast.success('request sent');
+      toast.success('Lock Request Completed');
     });
   }
   
@@ -251,6 +251,19 @@ const DataRepair = ({ app, users })=> {
           disabled={true}
         >Unset Key</button>
       </div>
+      
+      
+      <div>
+        <h3><i className="fas fa-edit fa-lg gap"></i>
+          Dedicated "scrapped" key on item
+        </h3>
+        <button
+          onClick={()=>doCallThing("addScrappedKeytoXSeries")}
+          className='action clearTeal'
+        >Add Key</button>
+      </div>
+      
+      
       
       {/*
       <div>

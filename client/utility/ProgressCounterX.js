@@ -81,9 +81,7 @@ function unitTotalCount(items) {
 
 function outScrap(items) { 
   return ( 
-    items.filter( 
-      o => o.history.findIndex( 
-        s => s.type === 'scrap' && s.good === true ) === -1 )
+    items.filter( o => !o.scrapped )
   );
 }
 

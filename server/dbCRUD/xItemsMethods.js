@@ -672,7 +672,8 @@ Meteor.methods({
   			$set : { 
   			  'items.$.completed': true,
   			  'items.$.completedAt': new Date(),
-  			  'items.$.completedWho': Meteor.userId()
+  			  'items.$.completedWho': Meteor.userId(),
+  			  'items.$.scrapped': true
   			}
       });
       return true;
@@ -789,11 +790,18 @@ Meteor.methods({
   },
   // replace a step
   pushHistoryEntry(seriesId, serial, accessKey, replace) {
-    //some validation on the replace would be good
+    
     XSeriesDB.update({_id: seriesId, orgKey: accessKey, 'items.serial': serial}, {
       $push : { 
-        'items.$.history': replace
+        'items.$.history': replace,
     }});
+    
+    if(replace.type === 'scrap') {
+      XSeriesDB.update({_id: seriesId, orgKey: accessKey, 'items.serial': serial}, {
+        $set : {
+          'items.$.scrapped': false
+      }});
+    }
   },
 
   //  Undo a Finish

@@ -113,31 +113,39 @@ Meteor.methods({
   },
   
   nonConSelfCount(nonConCol) {
-    const nonConClean = nonConCol.filter( x => !x.trash );
-    const typeObj = _.countBy(nonConClean, x => x.type);
-    // const typeObjClean = _.omit(typeObj, (value, key, object)=> {
-    //  return key == false; });
-    const itr = Object.entries(typeObj);
-    const typeArr = Array.from(itr, (arr)=> { return {type: arr[0], count: arr[1]} } );
-    return typeArr;
+    if(!Array.isArray(nonConCol)) {
+      return [];
+    }else{
+      const nonConClean = nonConCol.filter( x => !x.trash );
+      const typeObj = _.countBy(nonConClean, x => x.type);
+      // const typeObjClean = _.omit(typeObj, (value, key, object)=> {
+      //  return key == false; });
+      const itr = Object.entries(typeObj);
+      const typeArr = Array.from(itr, (arr)=> { return {type: arr[0], count: arr[1]} } );
+      return typeArr;
+    }
   },
   
   shortfallSelfCount(shortfallCol) {
-    const pnums = _.uniq( Array.from(shortfallCol, x => x.partNum) );
-    
-    let pnCounts = [];
-    for( let pn of pnums) {
-      const shOf = shortfallCol.filter( s => s.partNum === pn );
-      let shCount = 0;
-      for(let sh of shOf) {
-        shCount += sh.refs.length;
+    if(!Array.isArray(shortfallCol)) {
+      return [];
+    }else{
+      const pnums = _.uniq( Array.from(shortfallCol, x => x.partNum) );
+      
+      let pnCounts = [];
+      for( let pn of pnums) {
+        const shOf = shortfallCol.filter( s => s.partNum === pn );
+        let shCount = 0;
+        for(let sh of shOf) {
+          shCount += sh.refs.length;
+        }
+        pnCounts.push({
+          partNum: pn,
+          count: shCount
+        });
       }
-      pnCounts.push({
-        partNum: pn,
-        count: shCount
-      });
+      return pnCounts;
     }
-    return pnCounts;
   },
   
   riverStepSelfCount(itemsCol) {

@@ -163,46 +163,6 @@ Meteor.methods({
     }else{null}
   },
   
-  enableLock(batchId, privateKey) {
-    const accessKey = privateKey || Meteor.user().orgKey;
-    const doc = BatchDB.findOne({_id: batchId});
-    const clear = doc.live === false && doc.finishedAt !== false &&
-                    doc.end < new Date();
-    if(( privateKey || Roles.userIsInRole(Meteor.userId(), 'run') ) && clear) {
-      let totalUnits = 0;
-      let scrapItems = 0;
-      let scrapUnits = 0;
-      for(let i of doc.items) {
-        totalUnits += i.units;
-        const sc = i.history.find(s => s.type === 'scrap' && s.good === true);
-        !sc ? null : scrapItems += 1;
-        !sc ? null : scrapUnits += i.units;
-      }
-      const tTime = !doc.tide ? 0 : batchTideTime(doc.tide);
-      const ncTypes = Meteor.call('nonConSelfCount', doc.nonCon);
-      const shPNums = Meteor.call('shortfallSelfCount', doc.shortfall);
-      const rvSteps = Meteor.call('riverStepSelfCount', doc.items);
-    
-      BatchDB.update({_id: batchId, orgKey: accessKey}, {
-  			$set : {
-  			  lock: true,
-  			  lockTrunc: {
-  			    lockedAt: new Date(),
-  			    itemQuantity: Number(doc.items.length),
-  			    unitQuantity: Number(totalUnits),
-  			    scitemQuantity: Number(scrapItems),
-  			    scunitQuantity: Number(scrapUnits),
-  			    tideTotal: Number(tTime),
-  			    ncTypes: ncTypes,
-  			    shTypes: shPNums,
-  			    rvSteps: rvSteps,
-  			    wfSteps: []
-  			  }
-        }
-      });
-    }else{null}
-  },
-  
   disableLock(batchId, privateKey) {
     const doc = BatchDB.findOne({_id: batchId});
     const accessKey = privateKey || Meteor.user().orgKey;

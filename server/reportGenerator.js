@@ -64,12 +64,12 @@ function loopItems(items, from, to ) {
       if(i.completed && moment(i.completedAt).isBetween(from, to) ) { 
         completedItems += 1;
       }
+      i.scrapped === true ? scraps += 1 : null;
       const inTime = i.history.filter( x => moment(x.time).isBetween(from, to) );
       
       // firstPass += inTime.filter( x => x.type === 'first' && x.good !== false ).length;
       // firstFail += inTime.filter( x => x.type === 'first' && x.good === false ).length;
       testFail += inTime.filter( x => x.type === 'test' && x.good === false ).length;
-      scraps += inTime.filter( x => x.type === 'scrap' && x.good === true ).length;
     }
     
     resolve({completedItems, testFail, scraps});

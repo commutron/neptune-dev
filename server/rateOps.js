@@ -55,10 +55,8 @@ Meteor.methods({
                         riverFlow.filter( x => x.type !== 'first'), 
                           x => x.key );
   
-      const items = srs.items.filter( 
-                          x => x.history.filter( y => y.type === 'scrap' )
-                            .length === 0 );
-                          
+      const items = srs.items.filter( x => !x.scrapped );
+
       const totalItems = items.length;
     
       const historyFlat = flattenHistory(items);

@@ -13,7 +13,7 @@ const Spin = ({ color, message }) => {
         className='logoSVG shadow'
         style={sty} />
       <br />
-      <p className='centreText'>{text}</p>
+      <p className='centreText darkgrayT'>{text}</p>
     </div>
   );
 };

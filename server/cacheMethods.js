@@ -45,16 +45,6 @@ Meteor.methods({
         dataName:'lockingTask'});
       
       if(force || !currentCache ) {
-        BatchDB.find({
-          orgKey: accessKey, 
-          live: false,
-          $or: [ { lock: false },
-                 { lock: { $exists: false } }
-               ],
-          finishedAt: { $lt: lstyear }
-        }).forEach( (b)=> {
-          Meteor.defer( ()=>{ Meteor.call('enableLock', b._id, accessKey) });
-        });
           
         XBatchDB.find({
           orgKey: accessKey, 

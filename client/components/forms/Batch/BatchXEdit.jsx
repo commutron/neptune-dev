@@ -148,7 +148,7 @@ const BXEditForm = ({ batchData, seriesData, allVariants })=> {
             className='indenText inlineCheckbox'
             defaultChecked={bDt.serialize}
             disabled={true}
-          /><i className='medBig'>Use {Pref.itemSerial} numbers</i></label>
+          /><i>Use {Pref.itemSerial} numbers</i></label>
         </label>
         
       </div>
