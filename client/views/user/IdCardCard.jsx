@@ -46,7 +46,7 @@ const IdCardCard = ({ user })=> {
   return(
     <div>
       <h3 className='noPrint'>
-        <i className='fas fa-id-badge fa-fw'></i> Generate ID Card
+        <i className='fas fa-id-badge fa-fw'></i> Generate ID Badge
       </h3>
       
       {!ready ?

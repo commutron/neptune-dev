@@ -56,7 +56,7 @@ const UserDataWrap = ({
           menu={[
             <b><i className='fas fa-user-clock fa-fw'></i>  Production Activity</b>,
             <b><i className='fas fa-user-cog fa-fw'></i>  Preferences</b>,
-            <b><i className='fas fa-user-shield fa-fw'></i>  Privacy & Access</b>,
+            <b><i className='fas fa-user-shield fa-fw'></i>  Access & Privacy</b>,
             <b><i className='fas fa-envelope fa-fw'></i>  Messages</b>
           ]}
           extraClass='space5x5'>

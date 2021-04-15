@@ -35,8 +35,8 @@ const BatchPanelX = ({
     'Counters',
     `Problems`,
     'Events',
+    rapidsData.length > 0 ? 'Extended' : 'Extend'
   ];
-  rapidsData.length > 0 ? tabbar.push('Extended') : null;
           
   return(
     <div className='section' key={b.batch}>
@@ -111,29 +111,27 @@ const BatchPanelX = ({
             brancheS={brancheS} />
         </div>
         
-        {rapidsData.length > 0 ?
-          <RapidExtendTab
-            batchData={batchData}
-            seriesData={seriesData}
-            rapidsData={rapidsData}
-            widgetData={widgetData}
-            vassembly={variantData.assembly}
-            urlString={
-              '?group=' + groupData.alias +
-              '&widget=' + widgetData.widget + 
-              '&ver=' + variantData.variant +
-              '&desc=' + widgetData.describe
-            }
-            released={released}
-            done={done}
-            nowater={!hasFall && !seriesData}
-            app={app}
-            user={user}
-            brancheS={brancheS}
-            ncTypesCombo={flowData.ncTypesComboFlat}
-            isDebug={isDebug}
-          />
-        :null}
+        <RapidExtendTab
+          batchData={batchData}
+          seriesData={seriesData}
+          rapidsData={rapidsData}
+          widgetData={widgetData}
+          vassembly={variantData.assembly}
+          urlString={
+            '?group=' + groupData.alias +
+            '&widget=' + widgetData.widget + 
+            '&ver=' + variantData.variant +
+            '&desc=' + widgetData.describe
+          }
+          released={released}
+          done={done}
+          nowater={!hasFall && !seriesData}
+          app={app}
+          user={user}
+          brancheS={brancheS}
+          ncTypesCombo={flowData.ncTypesComboFlat}
+          isDebug={isDebug}
+        />
         
       </Tabs>
       

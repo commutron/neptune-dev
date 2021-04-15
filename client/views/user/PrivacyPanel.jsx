@@ -15,7 +15,11 @@ const PrivacyPanel = ({ orb, bolt, app, user, isAdmin })=> {
   
   return(
     <div>
-      <div className=''>
+      <PermissionHelp auths={Meteor.user().roles} admin={isAdmin} />
+      
+      <hr />
+      
+      <div>
         <p>Saved usage behaviour for {user.username}</p>
       </div>
       <p>
@@ -24,8 +28,6 @@ const PrivacyPanel = ({ orb, bolt, app, user, isAdmin })=> {
           className='action clearBlue'
         >Clear Your breadcrumbs</button>
       </p>
-      
-      <PermissionHelp auths={Meteor.user().roles} admin={isAdmin} />
       
     </div>
   );

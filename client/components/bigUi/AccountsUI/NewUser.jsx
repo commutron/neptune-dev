@@ -102,7 +102,7 @@ const NewUser = ({ sty })=> {
           type='text' 
           id='organizationName'
           onChange={()=>organizationNameSet( organizationName.value )}
-          placeholder='Organization'
+          placeholder='organization'
           autoComplete='organization'
           required />
       </p>

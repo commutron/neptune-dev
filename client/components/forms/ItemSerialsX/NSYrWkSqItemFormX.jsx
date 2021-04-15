@@ -56,7 +56,7 @@ const NSYrWkSqItemFormX = ({
     
     previewSet(tryData);
     
-    const quChk = tryData.length > 0 && tryData.length < Pref.seriesLimit ? 
+    const quChk = tryData.length > 0 && tryData.length <= Pref.seriesLimit ? 
                   false : 'Invalid Range';
     quWarnSet(quChk);       
                    

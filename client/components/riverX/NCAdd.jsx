@@ -78,15 +78,17 @@ const NCAdd = ({ seriesId, barcode, user, app, ncTypesCombo })=> {
           <label htmlFor='ncType' className='whiteT'>{Pref.nonConType}</label>
           <datalist id='ncTypeList'>
             {ncTypesCombo.map( (entry, index)=>{
+              let cd = !user.showNCcodes ? '' :
+                         entry.typeCode ? `${entry.typeCode}. ` : `${index + 1}. `;
               if(!entry.key) {
                 return ( 
                   <option 
                     key={index}
                     value={entry}
-                  >{index + 1}. {entry}</option>
+                    label={cd + entry}
+                  />
                 );
               }else if(entry.live === true) {
-                let cd = user.showNCcodes ? `${entry.typeCode}. ` : '';
                 return ( 
                   <option 
                     key={entry.key}
@@ -108,23 +110,25 @@ const NCAdd = ({ seriesId, barcode, user, app, ncTypesCombo })=> {
           >
           <option />
           {ncTypesCombo.map( (entry, index)=>{
-              if(!entry.key) {
-                return ( 
-                  <option 
-                    key={index} 
-                    value={entry}
-                  >{index + 1}. {entry}</option>
-                );
-              }else if(entry.live === true) {
-                let cd = user.showNCcodes ? `${entry.typeCode}. ` : '';
-                return ( 
-                  <option 
-                    key={entry.key}
-                    data-id={entry.key}
-                    value={entry.typeText}
-                    label={cd + entry.typeText}
-                  />
-                );
+            let cd = !user.showNCcodes ? '' :
+                         entry.typeCode ? `${entry.typeCode}. ` : `${index + 1}. `;
+            if(!entry.key) {
+              return ( 
+                <option 
+                  key={index} 
+                  value={entry}
+                  label={cd + entry}
+                />
+              );
+            }else if(entry.live === true) {
+              return ( 
+                <option 
+                  key={entry.key}
+                  data-id={entry.key}
+                  value={entry.typeText}
+                  label={cd + entry.typeText}
+                />
+              );
           }})}
           </select>
           <label htmlFor='ncType' className='whiteT'>{Pref.nonConType}</label>

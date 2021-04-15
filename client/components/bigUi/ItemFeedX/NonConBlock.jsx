@@ -145,12 +145,15 @@ const NonConBlock = ({
                 disabled={ncTypesCombo.length < 1}
               >
               {ncTypesCombo.map( (entry, index)=>{
+                let cd = !user.showNCcodes ? '' :
+                         entry.typeCode ? `${entry.typeCode}. ` : `${index + 1}. `;
                 if(!entry.key) {
                   return ( 
                     <option 
                       key={index} 
                       value={entry}
-                    >{entry}</option>
+                      label={cd + entry}
+                    />
                   );
                 }else if(entry.live === true) {
                   let cd = user.showNCcodes ? `${entry.typeCode}. ` : '';
@@ -167,15 +170,17 @@ const NonConBlock = ({
             }
             <datalist id='ncTypeList'>
               {ncTypesCombo.map( (entry, index)=>{
+                let cd = !user.showNCcodes ? '' :
+                         entry.typeCode ? `${entry.typeCode}. ` : `${index + 1}. `;
                 if(!entry.key) {
                   return ( 
                     <option 
                       key={index} 
                       value={entry}
-                    >{index + 1}. {entry}</option>
+                      label={cd + entry}
+                    />
                   );
                 }else if(entry.live === true) {
-                  let cd = user.showNCcodes ? `${entry.typeCode}. ` : '';
                   return ( 
                     <option 
                       key={index}

@@ -25,7 +25,7 @@ const BatchXEdit = ({ batchData, seriesData, allVariants, lock })=> (
 export default BatchXEdit;
 
 
-const BXEditForm = ({ batchData, seriesData, allVariants })=> {
+const BXEditForm = ({ batchData, seriesData, allVariants, selfclose })=> {
 
   function save(e) {
     e.preventDefault();
@@ -48,7 +48,11 @@ const BXEditForm = ({ batchData, seriesData, allVariants })=> {
       }
       if(reply) {
         toast.success('Saved');
-        FlowRouter.go('/data/batch?request=' + batchNum);
+        if(batchData.batch !== batchNum) {
+          FlowRouter.go('/data/batch?request=' + batchNum);
+        }else{
+          selfclose();
+        }
       }else{
         toast.warning('Duplicate or In Use');
       }

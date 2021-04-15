@@ -68,7 +68,7 @@ const YMDItemForm = ({
                    `Not in sequence (Below ${floor})`;
     flrWarnSet(flrChk);
     
-    const quChk = tryData.length > 0 && tryData.length < Pref.seriesLimit ? 
+    const quChk = tryData.length > 0 && tryData.length <= Pref.seriesLimit ? 
                   false : 'Invalid Range';
     quWarnSet(quChk);       
                    

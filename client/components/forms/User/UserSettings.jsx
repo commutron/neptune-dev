@@ -40,7 +40,7 @@ const UserSettings = ({ app, user, isAdmin, brancheS })=> {
       <div className='balance cardify'>  
         
         <div className='noPrint'>
-          <h3><i className='fas fa-sliders-h fa-fw'></i> Preferences</h3>
+          <h3><i className='fas fa-sliders-h fa-fw'></i> Interface Preferences</h3>
           <div className='grid'>
         
             <UserToggleSetting
@@ -55,7 +55,7 @@ const UserSettings = ({ app, user, isAdmin, brancheS })=> {
             
             <UserToggleSetting
               userSetting={Meteor.user().autoScan}
-              labelText='Auto Scan'
+              labelText='Barcode scan outside of search field'
               callMethod='setAutoScan' />
               
             <UserToggleSetting
@@ -90,7 +90,7 @@ const UserSettings = ({ app, user, isAdmin, brancheS })=> {
       
         
         <div className='noPrint'>
-          <h3><i className='fas fa-passport fa-fw'></i> Sign In</h3>
+          <h3><i className='fas fa-passport fa-fw'></i> Account Details</h3>
           <UsernameChange />
           <hr />
           <PasswordChange />
