@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 // import moment from 'moment';
-// import Pref from '/client/global/pref.js';
+import Pref from '/client/global/pref.js';
 
 import StoneControl from './StoneControl';
 import ForkMenu from './ForkMenu';
@@ -222,7 +222,12 @@ const StoneSelect = ({
 	Session.set('nowStepKey', 'c0mp13t3');
   Session.set('nowWanchor', '');
   
-  return(null);
+  return(
+    <div className='centre centreText'>
+      <p><i className="fas fa-ghost fa-5x fade darkgrayT"></i></p>
+      <p className='medBig cap'>no {Pref.flow} available</p>
+    </div>
+  );
 };
   
 export default StoneSelect;

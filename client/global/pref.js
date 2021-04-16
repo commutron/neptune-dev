@@ -73,8 +73,8 @@ class Pref {
 	  this.items = 'items';
 	  
 	  this.series = 'series';
-	  this.itemSerial = 'barcode';
-	  this.serialType = 'qrcode';
+	  this.itemSerial = 'serial';
+	  this.serialIcon = 'qrcode';
 	  this.regexSN = RegExp(/^(\d{8,10})$|^(\d{6}\-\d{7})$/);
 	  this.regex810 = RegExp(/^(\d{8,10})$/);
     this.regexNS = RegExp(/^(\d{6}\-\d{7})$/);

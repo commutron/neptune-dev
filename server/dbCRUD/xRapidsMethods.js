@@ -36,7 +36,7 @@ Meteor.methods({
         
         const inHours = parseFloat( exTime );
         const inMinutes = moment.duration(inHours, 'hours').asMinutes();
-        const exTimeNum = isNaN(inMinutes) ? false : Number(inMinutes);
+        const exTimeNum = isNaN(inHours) ? Number(0) : Number(inMinutes);
 
         XRapidsDB.insert({
           orgKey: accessKey,
@@ -92,13 +92,17 @@ Meteor.methods({
       const apend = rType === 'modify' ? 'EM' : 'ER';
       
       const rarapid = apend + currNum;
-        
+      
+      const inHours = parseFloat( exTime );
+      const inMinutes = moment.duration(inHours, 'hours').asMinutes();
+      const exTimeNum = isNaN(inHours) ? Number(0) : Number(inMinutes);
+
       XRapidsDB.update(rapId, {
         $set: {
           rapid: rarapid, 
           type: rType,
           issueOrder: iNum,
-          timeBudget: exTime,
+          timeBudget: exTimeNum,
           deliverAt: new Date(dTgt),
           quantity: Number(quant),
           instruct: howLink,

@@ -71,6 +71,9 @@ const CounterAssignForm = ({ bID, app, lock, noText, waterfall })=> {
   }
 
   const cOp = app.countOption || [];
+  const cOpS = cOp.sort((c1, c2)=> 
+                c1.gate.toLowerCase() > c2.gate.toLowerCase() ? 1 : 
+                c1.gate.toLowerCase() < c2.gate.toLowerCase() ? -1 : 0 );
   
   const waterfallS = waterfall.sort((w1, w2)=> !w1.position ? -1 : 
           w1.position > w2.position ? 1 : w1.position < w2.position ? -1 : 0 );
@@ -84,7 +87,7 @@ const CounterAssignForm = ({ bID, app, lock, noText, waterfall })=> {
           <label htmlFor='choice'>Process Gate<br />
             <select id='choice' required>
             <option></option>
-            {cOp.map( (entry)=>{
+            {cOpS.map( (entry)=>{
               let opLock = waterfall.find( x => x.wfKey === entry.key);
               const branchObj = app.branches.find( y => y.brKey === entry.branchKey );
               const branchName = branchObj ? branchObj.branch : 'n/a';

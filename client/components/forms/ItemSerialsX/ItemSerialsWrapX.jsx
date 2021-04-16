@@ -34,7 +34,7 @@ const ItemSerialsWrapX = ({
         button={'Add ' + Pref.item + 's'}
         title={'add ' + Pref.item + ' ' + Pref.itemSerial + ' numbers'}
         color='greenT'
-        icon={'fa-' + Pref.serialType}
+        icon={'fa-' + Pref.serialIcon}
         lgIcon={lgIcon}
         lock={!Roles.userIsInRole(Meteor.userId(), 'create') || lock}
       >
@@ -48,7 +48,7 @@ const ItemSerialsWrapX = ({
       button={'Add ' + Pref.item + 's'}
       title={'add ' + Pref.item + ' ' + Pref.itemSerial + ' numbers'}
       color='greenT'
-      icon={'fa-' + Pref.serialType}
+      icon={'fa-' + Pref.serialIcon}
       lgIcon={lgIcon}
       lock={!Roles.userIsInRole(Meteor.userId(), 'create') || lock}
     >

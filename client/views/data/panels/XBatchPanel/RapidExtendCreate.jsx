@@ -11,7 +11,7 @@ const RapidExtendCreate = ({ rOpenid, batchData, editAuth, cal, cancelFunc })=> 
       <button
         className={`centreRow miniAction ${createState ? 'vmarginhalf' : ''}`}
         onClick={()=>createSet(!createState)}
-        disabled={!editAuth || rOpenid}
+        disabled={!editAuth || rOpenid || batchData.lock}
       >
         <span>
           <i className='fas fa-sitemap fa-2x darkOrangeT'></i>

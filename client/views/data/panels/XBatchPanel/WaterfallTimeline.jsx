@@ -93,9 +93,9 @@ const FallsHistory = ({ entry, count, quantity })=> {
       </summary>
       <dl className='waterfallTimeline'>
       {entry.counts.map( (dt, index)=>{
-        const tickColor = dt.tick === 0 ? 'whiteT small numFont' : dt.tick === 1 ? 'greenT' : 'redT';
+        const tickColor = dt.tick === 0 ? 'whiteT small numFont' : dt.tick > 0 ? 'greenT' : 'redT';
         const tickSymbol = dt.tick === 0 ? dt.meta === 'start' ?  '\u25B6' : '\u2BC0' :
-                            dt.tick === 1 ? '+' : '\u2212';
+                            dt.tick > 0 ? '+' : '\u2212';
         return(
           <dd key={index}>
             <b className={tickColor}>{tickSymbol}</b>

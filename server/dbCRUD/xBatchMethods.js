@@ -525,12 +525,19 @@ Meteor.methods({
     
       if(didSome && allFall && allFlow) {
         XBatchDB.update({_id: batchId, orgKey: accessKey}, {
-    			$set : { 
-    			  live: false,
+    			$set : {
     			  completed: true,
     			  completedAt: new Date(),
     			  completedWho: Meteor.userId(),
         }});
+        
+        const openRapid = XRapidsDB.findOne({extendBatch: doc.batch, live: true});
+        if(!openRapid) {
+          XBatchDB.update({_id: batchId, orgKey: accessKey}, {
+      			$set : { 
+      			  live: false
+          }});
+        }
         Meteor.defer( ()=>{
           Meteor.call('updateOneMovement', batchId, accessKey);
         });
@@ -697,7 +704,6 @@ Meteor.methods({
       
         XBatchDB.update({_id: batchId, orgKey: accessKey}, {
     			$set : { 
-    			  live: false,
     			  completed: true,
     			  completedAt: new Date(),
     			  completedWho: Meteor.userId(),
@@ -719,6 +725,14 @@ Meteor.methods({
               solve: false
             }
         }});
+        
+        const openRapid = XRapidsDB.findOne({extendBatch: doc.batch, live: true});
+        if(!openRapid) {
+          XBatchDB.update({_id: batchId, orgKey: accessKey}, {
+      			$set : { 
+      			  live: false
+          }});
+        }
         Meteor.defer( ()=>{
           Meteor.call('updateOneMovement', batchId, accessKey);
         });

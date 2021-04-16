@@ -12,11 +12,11 @@ import IdCardCard from '/client/views/user/IdCardCard';
 
 const UserSettings = ({ app, user, isAdmin, brancheS })=> {
   
-  const sup = Roles.userIsInRole(Meteor.userId(), ['admin', 'nightly']);
+  // const sup = Roles.userIsInRole(Meteor.userId(), ['admin', 'nightly']);
   
   const speedOps = [
-    {value: 100, lock: !sup, name: 'Too Fast' },
-    {value: 250, lock: !sup, name: 'Crazy Fast' },
+    // {value: 100, lock: !sup, name: 'Too Fast' },
+    // {value: 250, lock: !sup, name: 'Crazy Fast' },
     {value: 500, name: 'Very Fast' },
     {value: 1000, name: 'Fast' },
     {value: 1500, name: 'Medium' },

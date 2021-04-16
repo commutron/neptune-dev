@@ -20,14 +20,13 @@ export const RapidInfoCreate = ({
     const doneTarget = moment(endDate).endOf('day').lastWorkingTime().format();
     const quant = this.rQty.value.trim();
     
-    const inHours = parseFloat( this.rTmBg.value );
-    const inMinutes = moment.duration(inHours, 'hours').asMinutes();
+    const inHours = this.rTmBg.value;
     
     const howText = this.rInsc.value.trim();
     const howLink = howText.length === 0 ? false : howText;
     
     Meteor.call('createExRapidBasic', batchId, groupId, exBatch, 
-      rapidType, issueNum, doneTarget, quant, inMinutes, howLink,
+      rapidType, issueNum, doneTarget, quant, inHours, howLink,
       (error, re)=>{
         error && console.log(error);
         re ? toast.success('Saved') : toast.error('unsuccessful');
@@ -63,14 +62,13 @@ const RapidInfoEdit = ({ rapid, allQ, rSetItems, editAuth, cal })=> {
     
     const quant = this.rQty.value.trim();
     
-    const inHours = parseFloat( this.rTmBg.value );
-    const inMinutes = moment.duration(inHours, 'hours').asMinutes();
+    const inHours = this.rTmBg.value;
     
     const howText = this.rInsc.value.trim();
     const howLink = howText.length === 0 ? false : howText;
     
     Meteor.call('editExRapidBasic', rapid._id, 
-      rapidType, issueNum, doneTarget, quant, inMinutes, howLink,
+      rapidType, issueNum, doneTarget, quant, inHours, howLink,
       (error, re)=>{
         error && console.log(error);
         re ? toast.success('Saved') : toast.error('unsuccessful');
