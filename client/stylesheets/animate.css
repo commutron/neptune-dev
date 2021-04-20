@@ -186,6 +186,14 @@
     transform: translateY(-5px);
   }
 }
+@keyframes stretch {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
 
 
 @keyframes rolley {
@@ -316,20 +324,20 @@
 
 @media screen and (prefers-reduced-motion: reduce) { 
   .shaker-change {
-    animation: none;
+    animation-name: stretch;
+    animation-duration: 2s;
   }
   .homeIconLogo:hover, .homeIconLogo:active {
     animation: none
   }
-  
   .workIcon {
     animation: spinAround 30s infinite linear;
   }
   .spin2 {
-    animation: spinAround 20s infinite linear;
+    animation: spinAround 10s infinite linear;
   }
   .fa-spin {
-    animation: fa-spin 20s infinite linear;
+    animation: fa-spin 10s infinite linear;
   }
 
 }

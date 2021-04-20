@@ -4,7 +4,6 @@ import './style.css';
 
 import ActionLink from '/client/components/tinyUi/ActionLink.jsx';
 
-import RemoveBatch from '/client/components/forms/Batch/RemoveBatch';
 import BatchXEdit from '/client/components/forms/Batch/BatchXEdit';
 import BatchXIncomplete from '/client/components/forms/Batch/BatchXIncomplete';
 import RemoveXBatch from '/client/components/forms/Batch/RemoveXBatch';
@@ -19,16 +18,7 @@ import ItemIncompleteX from '/client/components/forms/ItemSerialsX/ItemIncomplet
 import ScrapItemX from '/client/components/forms/ItemSerialsX/ScrapItemX';
 import RemoveItem from '/client/components/forms/ItemSerialsX/RemoveItem';
 
-import ItemSerialsWrap from '/client/components/forms/ItemSerials/ItemSerialsWrap';
-import RiverSelect from '/client/components/forms/RiverSelect.jsx';
-
 import CounterAssign from '/client/components/bigUi/ArrayBuilder/CounterAssign.jsx';
-
-import UnitSet from '/client/components/forms/UnitSet.jsx';
-import PanelBreak from '/client/components/forms/PanelBreak.jsx';
-import UndoFinish from '/client/components/forms/UndoFinish.jsx';
-import ItemIncompleteForm from '/client/components/forms/ItemIncompleteForm.jsx';
-import ScrapForm from '/client/components/forms/ScrapForm.jsx';
 
 const ActionBar = ({
   batchData, seriesData, itemData, 
@@ -74,58 +64,6 @@ const ActionBar = ({
           lockOut={batchData.completed || itemData.completed} />
       </Fragment>
 		:
-		action === 'item' ?
-  	  <Fragment> 
-    	  <UnitSet
-    	    id={batchData._id}
-    	    item={itemData} />
-    	  <PanelBreak
-          id={batchData._id}
-          batch={batchData.batch}
-    	    item={itemData} />
-        <UndoFinish
-    	    id={batchData._id}
-    	    finishedAtB={batchData.finishedAt}
-    	    serial={itemData.serial}
-    	    finishedAtI={itemData.finishedAt} />
-        <ItemIncompleteForm
-          id={batchData._id}
-          item={itemData}
-          app={app} />
-        <ScrapForm
-          id={batchData._id}
-          item={itemData}
-          anc={app.ancillaryOption} />
-      </Fragment>
-		:
-    action === 'batch' ?
-      <Fragment>
-        <ItemSerialsWrap
-          id={batchData._id}
-          items={batchData.items}
-          more={batchData.finishedAt === false}
-          unit={variantData.runUnits}
-          app={app} />
-        <RiverSelect
-          id={batchData._id}
-          widget={widgetData}
-          river={batchData.river}
-          riverAlt={batchData.riverAlt}
-          lock={batchData.finishedAt !== false} />
-        <ActionLink
-          address={'/print/generallabel/' + 
-                    batchData.batch + 
-                    '?group=' + groupData.alias +
-                    '&widget=' + widgetData.widget + 
-                    '&ver=' + variantData.variant +
-                    '&desc=' + widgetData.describe +
-                    '&sales=' + '' +
-                    '&quant=' + batchData.items.length }
-          title='Print Label'
-          icon='fas fa-print'
-          color='whiteT' />
-      </Fragment>
-      :
       action === 'xbatch' ?
         <Fragment>
           <BatchXEdit

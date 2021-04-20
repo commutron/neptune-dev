@@ -10,8 +10,6 @@ import ExploreLanding from './panels/ExploreLanding.jsx';
 import ReportsWrap from './panels/Reports/ReportsWrap.jsx';
 import AllGroups from './panels/AllGroups/AllGroups.jsx';
 
-import MigrateHelper from './panels/MigrateHelper';
-
 import BuildHistory from './panels/BuildHistory.jsx';
 
 import ItemPanel from './panels/ItemPanel.jsx';
@@ -218,29 +216,6 @@ const DataViewOps = ({
       </TraverseWrap>
     );
   }
-  
-  if(view === 'migrate') {
-    // Session.set('nowBatch', false);
-    return (
-      <TraverseWrap
-	      batchData={false}
-        widgetData={false}
-        variantData={false}
-        groupData={false}
-        user={user}
-        app={app}
-        title='Migrate Helper'
-        subLink={subLink}
-        action={false}
-        base={true}
-      >
-        <MigrateHelper
-          allBatch={allBatch}
-          allXBatch={allXBatch}
-          app={app} />
-      </TraverseWrap>
-    );
-  }  
   
   if(view === 'buildHistory') {
     // Session.set('nowBatch', false);

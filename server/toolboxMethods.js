@@ -91,12 +91,6 @@ Meteor.methods({
   
   fixRemoveDamagedBatch() {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      const allBatch = BatchDB.find({}).fetch();
-      for( let b of allBatch ) {
-        if(!b.orgKey) {
-           BatchDB.remove({_id: b._id});
-        }
-      }
       const allBatchX = XBatchDB.find({}).fetch();
       for( let bx of allBatchX ) {
         if(!bx.orgKey) {
@@ -110,26 +104,18 @@ Meteor.methods({
   },
 
   
-  makeNotesIntoBlockXBatch() {
+  ensureNotesAreFalse() {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      let notesClear = true;
+      
       const allBatchX = XBatchDB.find({}).fetch();
       for( let bx of allBatchX ) {
-        if(bx.notes) {
-          XBatchDB.update({_id: bx._id, orgKey: Meteor.user().orgKey}, {
-            $push : { blocks: {
-              key: new Meteor.Collection.ObjectID().valueOf(),
-              block: bx.notes.content,
-              time: bx.notes.time,
-              who: bx.notes.who,
-              solve: false
-            }},
-            $set : {
-              notes : false
-            }
-          });
+        if(bx.notes && bx.notes !== false) {
+          notesClear = false;
         }
       }
-      return true;
+      
+      return notesClear;
     }else{
       return false;
     }
@@ -206,67 +192,6 @@ Meteor.methods({
   },
   
   
-  UNSETbplusOmittedKey() {
-    try{
-      if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-        XBatchDB.update({ orgKey: Meteor.user().orgKey }, {
-          $unset : { 
-            'omitted': ""
-          }},{multi: true});
-          return true;
-      }else{
-        return false;
-      }
-    }catch (err) {
-      throw new Meteor.Error(err);
-    }
-  },
-  UNSETbplusRapidKey() {
-    try{
-      if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-        XBatchDB.update({ orgKey: Meteor.user().orgKey }, {
-          $unset : { 
-            'rapids': ""
-          }},{multi: true});
-          return true;
-      }else{
-        return false;
-      }
-    }catch (err) {
-      throw new Meteor.Error(err);
-    }
-  },
-  UNSETbplusNonconKey() {
-    try{
-      if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-        XBatchDB.update({ orgKey: Meteor.user().orgKey }, {
-          $unset : { 
-            'nonconformaces': ""
-          }},{multi: true});
-          return true;
-      }else{
-        return false;
-      }
-    }catch (err) {
-      throw new Meteor.Error(err);
-    }
-  },
-  UNSETbplusVeriKey() {
-    try{
-      if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-        XBatchDB.update({ orgKey: Meteor.user().orgKey }, {
-          $unset : { 
-            'verifications': ""
-          }},{multi: true});
-          return true;
-      }else{
-        return false;
-      }
-    }catch (err) {
-      throw new Meteor.Error(err);
-    }
-  },
-  
   ResetAppLatestSerial() {
     try{
       if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
@@ -336,80 +261,6 @@ Meteor.methods({
       }
     }catch (err) {
       throw new Meteor.Error(err);
-    }
-  },
-  
-  unlockALLxbatch() {
-    try{
-      if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-        XBatchDB.update({ orgKey: Meteor.user().orgKey }, {
-          $set : { 
-            lock: false
-          }},{multi: true});
-          return true;
-      }else{
-        return false;
-      }
-    }catch (err) {
-      throw new Meteor.Error(err);
-    }
-  },
-  
-  altFlowUse() {
-    if(!Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      return [];
-    }else{
-      let alive = [];
-      let dormant = [];
-      const allBatches = BatchDB.find({orgKey: Meteor.user().orgKey}).fetch();
-      for(let batch of allBatches) {
-        const batchId = batch._id;
-        const batchNum = batch.batch;
-        const bAlt = batch.riverAlt !== false;
-        const iAlt = batch.items.filter( x => x.alt === 'yes' ).length;
-        if(batch.live === true) {
-          alive.push({ batchId, batchNum, bAlt, iAlt });
-        }else{
-          dormant.push({ batchId, batchNum, bAlt, iAlt });
-        }
-      }
-      const totalAliveAltBatch = alive.filter( x => x.bAlt === true ).length;
-      const totalAliveAltItems = alive.reduce( (x, y) => x + y.iAlt, 0 );
-
-      
-      const totalDormantAltBatch = dormant.filter( x => x.bAlt === true ).length;
-      const totalDormantAltItems = dormant.reduce( (x, y) => x + y.iAlt, 0 );
-        //(x, y) => { if(x.iAlt > 0 || y.iAlt > 0) { return x.iAlt + y.iAlt } } );
-      return {
-        aliveBatchInfo: alive,
-        dormantBatchInfo: dormant,
-        totalAltBatch: totalAliveAltBatch + totalDormantAltBatch,
-        totalAltItems: totalAliveAltItems + totalDormantAltItems,
-        totalLiveBatch: totalAliveAltBatch,
-        totalLiveBatchItems: totalAliveAltItems,
-        totalDormantBatch: totalDormantAltBatch,
-        totalDormantBatchItems: totalDormantAltItems
-      };
-    }
-  },
-  
-  escapeUse() {
-    if(!Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      return [];
-    }else{
-      const allBatches = BatchDB.find({ $where: "this.escaped.length > 0" }).fetch();
-            
-      const totalOne = allBatches.filter( x => x.escaped.length === 1 ).length;
-      const multi = allBatches.filter( x => x.escaped.length > 1 );
-      
-      const totalMulti = multi.length;
-      const multiBatch = Array.from(multi, m => m.batch );
-      
-      return {
-        totalBatch: totalOne,
-        totalMulti: totalMulti,
-        multiBatch: multiBatch,
-      };
     }
   },
   

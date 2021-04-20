@@ -81,52 +81,16 @@ const DataRepair = ({ app, users })=> {
   
   return(
     <div className='space3v autoFlex'>
-      {/*
-      <div className='vspace'>
-      <h2 className='cap'>Force Delete Serial Number</h2>
-      <form onSubmit={(e)=>fixDuplicateSerial(e, batchText.value, serialText.value, dateText.value)}>
-        <p>Batch: <input id='batchText' /></p>
-        <br /><br />
-        <p>Serial: <input id='serialText' /></p>
-        <br /><br />
-        <p>ISODate: <input id='dateText' /></p>
-        <br /><br />
-        <button
-          type='submit'
-          className='action clear blackT'
-        >fix duplicate serial</button>
-      </form>
-      </div>
-      */}
-      {/*<br />
-      <hr />
-      <h2 className='cap'>Fix Proto Key</h2>
-      <button
-        onClick={()=>fixDataKey()}
-        className='action clear blackT orangeHover'
-      >Fix Basline Time Key</button>
-      <hr />
-      <br />*/}
-      
+    
       <div>
         <h3><i className="fas fa-key fa-lg gap"></i>
-          Run Batch and Batch+ Locker
+          Run Batch+ Locker
         </h3>
         <small>Runs every Saturday at 12:01am (CST)</small><br />
         <button
           onClick={()=>forceLockCheck()}
           className='action clearPurple'
         >Request Locking</button>
-      </div>
-      
-      <div>
-        <h3><i className="fas fa-unlock-alt fa-lg gap"></i>
-          Unlock All Batch+ (XBatchDB)
-        </h3>
-        <button
-          onClick={()=>doCallThing("unlockALLxbatch")}
-          className='action clearPurple'
-        >Set `lock` to false</button>
       </div>
 
       <div>
@@ -161,7 +125,7 @@ const DataRepair = ({ app, users })=> {
       
       <div>
         <h3><i className="fas fa-snowplow fa-lg gap"></i>
-          Fix BatchDB & XBatchDB Errors
+          Fix XBatchDB Errors
         </h3>
         <button
           onClick={()=>doCallThing("fixRemoveDamagedBatch")}
@@ -180,66 +144,14 @@ const DataRepair = ({ app, users })=> {
       </div>
       
       <div>
-        <h3><i className="fas fa-comment-medical fa-lg gap"></i>
-          Convert All Batch+ Notes into Blocks
+        <h3><i className="fas fa-eraser fa-lg gap"></i>
+          Check the notes key for all batch+
         </h3>
         <button
-          onClick={()=>doCallThing("makeNotesIntoBlockXBatch")}
+          onClick={()=>doCallThing("ensureNotesAreFalse")}
           className='action clearBlue'
-        >Convert</button>
+        >Check Notes</button>
       </div>
-      
-      <div>
-        <h3><i className="fas fa-shapes fa-lg gap"></i>
-          Recreate Track Option without phase
-        </h3>
-        <button
-          onClick={()=>doCallThing("resetTrackWithoutPhase")}
-          className='action clearTeal'
-        >Clear Phase</button>
-      </div>
-      
-      
-      <div>
-        <h3><i className="fas fa-eraser fa-lg gap"></i>
-          Unset the nonconformaces key from batch+
-        </h3>
-        <button
-          onClick={()=>doCallThing("UNSETbplusNonconKey")}
-          className='action clearOrange'
-        >Unset "nonconformaces" Key</button>
-      </div>
-      
-      <div>
-        <h3><i className="fas fa-eraser fa-lg gap"></i>
-          Unset the verifications key from batch+
-        </h3>
-        <button
-          onClick={()=>doCallThing("UNSETbplusVeriKey")}
-          className='action clearOrange'
-        >Unset "verifications" Key</button>
-      </div>
-      
-      <div>
-        <h3><i className="fas fa-eraser fa-lg gap"></i>
-          Unset the rapids key from batch+
-        </h3>
-        <button
-          onClick={()=>doCallThing("UNSETbplusRapidKey")}
-          className='action clearOrange'
-        >Unset "rapid" Key</button>
-      </div>
-      
-      <div>
-        <h3><i className="fas fa-eraser fa-lg gap"></i>
-          Unset the Omitted key from batch+
-        </h3>
-        <button
-          onClick={()=>doCallThing("UNSETbplusOmittedKey")}
-          className='action clearOrange'
-        >Unset "omitted" Key</button>
-      </div>
-      
       
       <div>
         <h3><i className="fas fa-eraser fa-lg gap"></i>
@@ -248,22 +160,8 @@ const DataRepair = ({ app, users })=> {
         <button
           onClick={()=>doCallThing("UNSETbplusNotesKey")}
           className='action clearOrange'
-          disabled={true}
         >Unset Key</button>
       </div>
-      
-      
-      {/*
-      <div>
-        <h3><i className="fas fa-screwdriver fa-lg gap orangeT"></i>
-          Fix/Update Rapid Scheme
-        </h3>
-        <button
-          onClick={()=>doCallThing("fixFirstRapids")}
-          className='action clearOrange'
-        >Fix Keys</button>
-      </div>
-      */}
       
       <div>
         <h3><i className='fas fa-user-shield fa-lg gap'></i>

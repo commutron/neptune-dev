@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 
-import StoneSelect from './StoneSelect.jsx';
+import StoneWeir from './StoneWeir';
 
 const River = ({ 
   batchData, seriesData, itemData, widgetData, 
@@ -35,7 +35,7 @@ const River = ({
   return(
 		<div className={altIs ? 'altHighlight' : rapIs ? 'rapIsHighlight' : ''}>
 		
-      <StoneSelect
+      <StoneWeir
         bID={batchData._id}
         bComplete={batchData.completed}
         flow={useFlow}
@@ -63,8 +63,8 @@ const River = ({
         
         undoOption={undoStepOption}
         openUndoOption={()=>tempOpenOption()}
-        closeUndoOption={()=>closeOption()} />
-    
+        closeUndoOption={()=>closeOption()} 
+      />
 		</div>
 	);
 };

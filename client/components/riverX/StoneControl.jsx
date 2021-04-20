@@ -20,7 +20,7 @@ const StoneControl = ({
 	blockStone, doneStone, compEntry,
 	handleVerify,
 	openUndoOption,
-	riverFlowState, riverFlowStateSet
+	timeOutCntrl, riverFlowStateSet
 })=> {
 	
 	const mounted = useRef(true);
@@ -54,22 +54,9 @@ const StoneControl = ({
 		  holdSet( false );
   	}
 	}
-	
-	const speed = !Meteor.user().unlockSpeed ? 5000 : Meteor.user().unlockSpeed;
-	
-  const speedVar = riverFlowState === 'slow' ? ( speed * 6 ) : speed;
-	const confirmLock = !riverFlowState ? null : speed;
-	const confirmLockVar = !riverFlowState ? null : 
-													riverFlowState === 'slow' ? ( speed * 6 ) : speed;
-
-	const timeOutCntrl = !app.lockType || app.lockType === 'timer' ? speed :
-																				app.lockType === 'timerVar' ? speedVar :
-																				app.lockType === 'confirm' ? confirmLock :
-																				app.lockType === 'confirmVar' ? confirmLockVar :
-																				0;
-	
+					
 	useTimeOut( unlockAllow, timeOutCntrl );
-  
+	
   function enactEntry() {
   	if(holdState === true) { return false; }
 	  holdSet( true );
@@ -200,8 +187,7 @@ function areEqual(prevProps, nextProps) {
 		prevProps.serial !== nextProps.serial ||
 		prevProps.doneStone !== nextProps.doneStone ||
 		prevProps.blockStone !== nextProps.blockStone ||
-		prevProps.sKey !== nextProps.sKey ||
-		prevProps.riverFlowState !== nextProps.riverFlowState
+		prevProps.sKey !== nextProps.sKey
 	) {
   	return false;
 	}else{

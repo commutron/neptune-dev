@@ -4,10 +4,6 @@ import { toast } from 'react-toastify';
 import AppSetSimple from '/client/components/forms/AppSetSimple';
 
 
-import ZpassScan from '/client/components/forms/ZpassScan';
-
-
-
 const BehaviorSlide = ({app})=> {
   
   const rndmKey2 = Math.random().toString(36).substr(2, 5);
@@ -45,11 +41,6 @@ const BehaviorSlide = ({app})=> {
   
   return (
     <div className='space3v autoFlex'>
-      
-      
-      <ZpassScan />
-      
-      
       
       <div>
         <h2><i className='fas fa-flag-checkered fa-fw'></i> Default Finish Step</h2>

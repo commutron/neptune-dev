@@ -6,8 +6,6 @@ import { ProWrap, ProWindow } from '/client/layouts/ProLayout.jsx';
 import WikiOps from '../wiki/WikiOps.jsx';
 import SearchHelp from './SearchHelp.jsx';
 
-import DoProCard from './cards/DoProCard.jsx';
-
 import XDoProCard from './cards/XDoProCard';
 
 import BatchesList from './lists/BatchesList.jsx';
@@ -15,8 +13,8 @@ import GroupsList from './lists/GroupsList.jsx';
 import WidgetsList from './lists/WidgetsList.jsx';
 
 const ProductionFindOps = ({ 
-  hotBatch, hotxBatch, hotxSeries, hotxRapids,
-  allBatch, allxBatch,
+  hotxBatch, hotxSeries, hotxRapids,
+  allxBatch,
   allGroup, allWidget, allVariant,
   user, activeUsers, app,
   orb, anchor
@@ -25,8 +23,7 @@ const ProductionFindOps = ({
   function groupActiveWidgets(gId) {
     let widgetsList = allWidget.filter(x => x.groupId === gId);
     let xActive = allxBatch.filter( b => b.completed === false);
-    let legacyActive = allBatch.filter( b => b.finishedAt === false);
-    const activeBatch = [...xActive, ...legacyActive ];
+    const activeBatch = xActive;
     
     const hasBatch = (id)=> activeBatch.find( b => b.widgetId === id) ? true : false;
     let activeWidgets = widgetsList.filter( w => hasBatch(w._id) == true );
@@ -75,7 +72,7 @@ const ProductionFindOps = ({
     return (
       <ProWrap app={app}>
         <BatchesList 
-          batchData={[...allBatch, ...allxBatch]} 
+          batchData={allxBatch} 
           widgetData={allWidget} />
         <div></div>
       </ProWrap>
@@ -89,7 +86,7 @@ const ProductionFindOps = ({
       <ProWrap app={app}>
         <GroupsList 
           groupData={allGroup} 
-          batchData={allBatch} 
+          batchData={allxBatch} 
           widgetData={allWidget} />
         <div></div>
       </ProWrap>
@@ -112,31 +109,7 @@ const ProductionFindOps = ({
 
 // Batch
   if( Pref.regex5.test(orb) ) {
-    if(hotBatch) {
-      let widget = linkedWidget(hotBatch.widgetId);
-      let variant= variantDataByKey(hotBatch.versionKey);
-      let group = linkedGroup(widget.groupId);
-      Session.set('nowInstruct', variant.instruct);
-      return (
-		    <ProWrap
-		      batchData={hotBatch}
-		      widgetData={widget}
-          user={user}
-          app={app}
-          action='batchBuild'
-        >
-          <DoProCard
-            batchData={hotBatch}
-            widgetData={widget}
-            groupData={group}
-            user={user}
-            app={app} />
-          <WikiOps 
-            root={app.instruct} 
-            anchor={anchor} />
-        </ProWrap>
-      );
-    }else if(hotxBatch) {
+    if(hotxBatch) {
       let widget = linkedWidget(hotxBatch.widgetId);
       let variant = variantDataByKey(hotxBatch.versionKey);
       let group = linkedGroup(hotxBatch.groupId);
@@ -168,36 +141,7 @@ const ProductionFindOps = ({
   
 // Item
 	if( Pref.regexSN.test(orb) ) {
-    if(hotBatch) {
-      let item = itemData(hotBatch.items, orb);
-      let widget = linkedWidget(hotBatch.widgetId);
-      let variant= variantDataByKey(hotBatch.versionKey);
-      let group = linkedGroup(widget.groupId);
-      Session.set('nowInstruct', variant.instruct);
-      return (
-        <ProWrap
-          batchData={hotBatch}
-          itemData={item}
-          itemSerial={item.serial}
-          widgetData={widget}
-          user={user}
-          users={activeUsers}
-          app={app}
-        >
-          <DoProCard
-            batchData={hotBatch}
-            itemData={item}
-            widgetData={widget}
-            groupData={group}
-            user={user}
-            users={activeUsers}
-            app={app} />
-          <WikiOps 
-            root={app.instruct}
-            anchor={anchor} />
-        </ProWrap>
-      );
-    }else if(hotxSeries) {
+    if(hotxSeries) {
       let item = itemData(hotxSeries.items, orb);
       let widget = linkedWidget(hotxSeries.widgetId);
       let variant= variantDataByKey(hotxSeries.versionKey);

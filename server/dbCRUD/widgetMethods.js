@@ -55,9 +55,8 @@ Meteor.methods({
   
   
   deleteWidget(widgetId, pass) {
-    const inUse = BatchDB.findOne({widgetId: widgetId});
     const inUseX = XBatchDB.findOne({widgetId: widgetId});
-    if(!inUse && !inUseX) {
+    if(!inUseX) {
       const doc = WidgetDB.findOne({_id: widgetId});
       const lock = doc.createdAt.toISOString().split("T")[0];
       const user = Roles.userIsInRole(Meteor.userId(), 'remove');
@@ -183,10 +182,10 @@ Meteor.methods({
 
 // remove
   pullFlow(widgetId, fKey) {
-    const inUseR = BatchDB.findOne({river: fKey});
-    const inUseRA = BatchDB.findOne({riverAlt: fKey});
     const inUseX = XBatchDB.findOne({river: fKey});
-    if(!inUseR && !inUseRA && !inUseX) {
+    const inUseS = XSeriesDB.findOne({'items.altPath.river': fKey});
+    
+    if(!inUseX && !inUseS) {
       if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
     		WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey}, {
           $pull : { flows: { flowKey: fKey }
@@ -201,22 +200,19 @@ Meteor.methods({
   },
   
   activeFlowCheck(fKey) {
-    const inUseRA = BatchDB.findOne({active: true, river: fKey});
-    const inUseXA = XBatchDB.findOne({active: true, river: fKey});
+    const inUseXA = XBatchDB.findOne({live: true, river: fKey});
+    const inUseX = XBatchDB.findOne({live: false, river: fKey});
     
-    const inUseR = BatchDB.findOne({active: false, river: fKey});
-    const inUseX = XBatchDB.findOne({active: false, river: fKey});
+    const inUseSA = XSeriesDB.findOne({live: true, 'items.altPath.river': fKey});
+    const inUseS = XSeriesDB.findOne({live: false, 'items.altPath.river': fKey});
     
-    const inUseAA = BatchDB.findOne({active: true, riverAlt: fKey});
-    const inUseA = BatchDB.findOne({active: false, riverAlt: fKey});
-    
-    if(inUseRA || inUseXA) {
+    if(inUseXA) {
       return 'liveRiver';
-    }else if(inUseR || inUseX) {
+    }else if(inUseX) {
       return 'deadRiver';
-    }else if(inUseAA) {
+    }else if(inUseSA) {
       return 'liveAlt';
-    }else if(inUseA) {
+    }else if(inUseS) {
       return 'deadAlt';
     }else{
       return false;

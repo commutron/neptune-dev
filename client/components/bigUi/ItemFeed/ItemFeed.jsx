@@ -4,11 +4,7 @@ import './style.css';
 //import Pref from '/client/global/pref.js';
 
 import UserNice from '/client/components/smallUi/UserNice.jsx';
-import StepBack from '/client/components/river/StepBack.jsx';
 import CreateBlock from './CreateBlock';
-import NonConBlock from './NonConBlock';
-import ShortBlock from './ShortBlock';
-import RmaBlock from './RmaBlock';
 
 const ItemFeed = ({ 
   id, batch, serial,
@@ -21,69 +17,18 @@ const ItemFeed = ({
   user, app 
 })=> {
   
-  const assembly = [...history, ...noncons, ...shortfalls];
-  
-  const ordered = assembly.sort((t1, t2)=> {
-            if (moment(t1.time || t1.cTime).isAfter(t2.time || t2.cTime)) { return 1 }
-            if (moment(t1.time || t1.cTime).isBefore(t2.time || t2.cTime)) { return -1 }
-            return 0;
-          });
   
   return(
     <div className='scrollWrap'>
       <div className='infoFeed'>
+      
+        <p>NO FEED AVAILABLE</p>
       
         <CreateBlock
           title='serial number created'
           user={createBy}
           datetime={createTime} />
         
-        {ordered.map( (dt, ix)=>{
-          if(typeof dt.step === 'string') {
-            return( 
-              <HistoryBlock
-                key={dt.key+ix}
-                entry={dt}
-                id={id}
-                batch={batch}
-                serial={serial}
-                done={done}
-                showHeader={false} /> 
-            );
-          }else if(typeof dt.ref === 'string') {
-            return( 
-              <NonConBlock
-                key={dt.key+ix}
-                entry={dt}
-                id={id}
-                serial={serial}
-                done={done}
-                user={user}
-                app={app}
-                ncTypesCombo={ncTypesCombo}
-                brancheS={brancheS} />
-            );
-          }else if(Array.isArray(dt.refs) === true) {
-            return( 
-              <ShortBlock
-                key={dt.key+ix}
-                entry={dt}
-                id={id}
-                serial={serial}
-                done={done} /> 
-            );
-          }else{
-            null;
-          }
-        })}
-        
-        {rmas.length > 0 &&
-          <RmaBlock
-            id={id}
-            serial={serial}
-            iRMA={rmas}
-            allRMA={allRMA} />
-        }
       </div>
     </div>
   );
@@ -96,8 +41,7 @@ export const HistoryBlock = ({entry, id, batch, serial, done, showHeader})=>{
   
   let dt = entry;
   
-  const redoAllow = Roles.userIsInRole(Meteor.userId(), 'edit') && !done && dt.good === true;
-  const redoButton = <StepBack id={id} bar={serial} entry={entry} lock={!redoAllow} />;
+  const redoButton = null;
                  
   const indictor = dt.good ?
                 <i><i className="fas fa-check-circle fa-lg fa-fw iG" title='Good'></i></i> :

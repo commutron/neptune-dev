@@ -2,35 +2,7 @@ import React from 'react';
 import { toast } from 'react-toastify';
 
 const LegacySlide = ()=> {
-  
-  function requestAltFlowInfo() {
-    Meteor.call('altFlowUse', (error, reply)=>{
-      error && console.log(error);
-      toast(<div>
-        <h3>Alt Flow</h3>
-        Total Batches: {reply.totalAltBatch} <br />
-        Total Items: {reply.totalAltItems} <br />
-        Live Batches: {reply.totalLiveBatch} <br />
-        Live Items: {reply.totalLiveBatchItems} <br />
-        Dormant Batches: {reply.totalDormantBatch} <br />
-        Dormant Items: {reply.totalDormantBatchItems}
-      </div>, { autoClose: false });
-      console.log({ live: reply.aliveBatchInfo, dormant: reply.dormantBatchInfo});
-    });
-  }
-  
-  function requestEscapeUse() {
-    Meteor.call('escapeUse', (error, reply)=>{
-      error && console.log(error);
-      toast(<div>
-        <h3>Escaped</h3>
-        Total Batches: {reply.totalBatch} <br />
-        {"> 1 Batches:"} {reply.totalMulti} <br />
-      </div>, { autoClose: false });
-      console.log(reply.multiBatch);
-    });
-  }
-  
+
   function setMinorPIN(e) {
     e.preventDefault();
     const newOne = this.newOneM.value.trim();
@@ -56,21 +28,6 @@ const LegacySlide = ()=> {
   return(
     <div className='space3v'>
       <p>determine support needs</p>
-      <p>
-        <button
-          className='action clearBlue invert'
-          onClick={()=>requestAltFlowInfo()}
-        >Info on Alt Flow Use</button>
-      </p>
-      
-      <p>
-        <button
-          className='action clearBlue invert'
-          onClick={()=>requestEscapeUse()}
-        >Info on Escaped Use</button>
-      </p>
-      
-      <br />
       
       <form onSubmit={(e)=>setMinorPIN(e)} autoComplete='off'>
         <p>A minor pin for operations that are risky, or outside of regular permissions</p>

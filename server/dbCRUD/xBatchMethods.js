@@ -8,7 +8,6 @@ Meteor.methods({
             salesNum, sDate, eDate, quantity, withSeries, qTime
   ) {
     const doc = WidgetDB.findOne({ _id: widgetId });
-    const legacyduplicate = BatchDB.findOne({ batch: batchNum });
     const duplicateX = XBatchDB.findOne({ batch: batchNum });
     const auth = Roles.userIsInRole(Meteor.userId(), 'create');
     const accessKey = Meteor.user().orgKey;
@@ -17,7 +16,7 @@ Meteor.methods({
     const inMinutes = moment.duration(inHours, 'hours').asMinutes();
     const qTimeNum = isNaN(inMinutes) ? false : Number(inMinutes);
 
-    if(auth && !legacyduplicate && !duplicateX && doc.orgKey === accessKey) {
+    if(auth && !duplicateX && doc.orgKey === accessKey) {
 
       XBatchDB.insert({
   			batch: batchNum,
@@ -91,13 +90,14 @@ Meteor.methods({
     const srs = XSeriesDB.findOne({batch: doc.batch});
 
     if(auth && doc.orgKey === accessKey) {
-      const openTide = doc.tide && doc.tide.find( t => t.stopTime === false );
+      const numswitch = doc.batch !== newBatchNum;
       
-      const legacyduplicate = BatchDB.findOne({batch: newBatchNum});
-      let duplicate = XBatchDB.findOne({batch: newBatchNum});
-      doc.batch === newBatchNum ? duplicate = false : null;
+      const openTide = numswitch ?
+              doc.tide && doc.tide.find( t => t.stopTime === false ) : false;
+      
+      let duplicate = numswitch ? XBatchDB.findOne({batch: newBatchNum}) : false;
     
-      if(!openTide && !duplicate && !legacyduplicate) {
+      if(!openTide && !duplicate) {
         XBatchDB.update({_id: batchId, orgKey: accessKey}, {
           $set : {
             batch: newBatchNum,

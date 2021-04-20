@@ -54,7 +54,8 @@ const BXEditForm = ({ batchData, seriesData, allVariants, selfclose })=> {
           selfclose();
         }
       }else{
-        toast.warning('Duplicate or In Use');
+        toast.warning(`Duplicate or In Use.\n
+          Changing the ${Pref.xBatch} number while recording time will cause errors`);
       }
     });
   }

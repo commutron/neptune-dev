@@ -62,15 +62,6 @@ export const ExTaskBar = ({ subLink }) => (
       iconAdj='down-1'
     />
     
-    {Roles.userIsInRole(Meteor.userId(), 'admin') &&
-      <TaskElement
-        title='Migration'
-        subON={subLink === 'migrateundefined'}
-        goLink='/data/migrate'
-        icon='fas fa-recycle'
-      />
-    }
-    
   </div>
 );
 

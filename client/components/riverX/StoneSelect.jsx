@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 // import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
@@ -34,11 +34,13 @@ const StoneSelect = ({
   
   undoOption,
   openUndoOption,
-  closeUndoOption
+  closeUndoOption,
+  
+  timeOutCntrl, riverFlowStateSet
 })=> {
   
   const mounted = useRef(true);
-  
+ 
   useEffect(() => {
     return () => { 
       closeUndoOption();
@@ -46,18 +48,13 @@ const StoneSelect = ({
     };
   }, []);
   
-  const [ riverFlowState, riverFlowStateSet ] = useState( true );
-  
-  const serial = item.serial;
-  
   useEffect( ()=> {
     Session.set('ncWhere', null);
 	  Session.set('nowStepKey', null);
     Session.set('nowWanchor', null);
-		if(mounted.current) { riverFlowStateSet( true ); }
 		if(mounted.current) { closeUndoOption(); }
-	}, [ serial ]);
-	
+	}, [ item.serial ]);
+					
   // Complete or Scrap
   if((item.completed && !rapIs) || scrapCheck) {
     Session.set('ncWhere', 'isC0mpl3t3d');
@@ -77,7 +74,7 @@ const StoneSelect = ({
   }
   
   const nc = nonCons.filter( 
-              x => x.serial === serial && !x.trash && x.inspect === false )
+              x => x.serial === item.serial && !x.trash && x.inspect === false )
                 .sort((n1, n2)=> n1.ref < n2.ref ? -1 : n1.ref > n2.ref ? 1 : 0 );
                 
   const ncOutstanding = nc.filter( x => x.snooze === false );
@@ -88,7 +85,7 @@ const StoneSelect = ({
             shortfalls.every( x => x.inEffect === true || x.reSolve === true );
   
   function handleStepUndo() {
-		Meteor.call('popHistoryX', seriesId, serial, ()=>{
+		Meteor.call('popHistoryX', seriesId, item.serial, ()=>{
 			closeUndoOption();
 		});
 	}
@@ -145,17 +142,17 @@ const StoneSelect = ({
 	        {flowStep.type === 'nest' ?
 	          <FoldInNested
               seriesId={seriesId}
-              serial={serial}
+              serial={item.serial}
               sKey={flowStep.key}
               step={flowStep.step}
               doneStone={doneStone}
               lock={false} />
           : 
 	          <StoneControl
-		          key={flowStep.key + serial}
+		          key={flowStep.key + item.serial}
               batchId={bID}
               seriesId={seriesId}
-              serial={serial}
+              serial={item.serial}
               sKey={flowStep.key}
               step={flowStep.step}
               type={flowStep.type}
@@ -172,16 +169,16 @@ const StoneSelect = ({
               doneStone={doneStone}
               compEntry={compEntry}
               handleVerify={handleVerify}
-              undoOption={undoOption}
               openUndoOption={openUndoOption}
-              riverFlowState={riverFlowState}
-              riverFlowStateSet={(e)=>riverFlowStateSet(e)} />
+              timeOutCntrl={timeOutCntrl}
+              riverFlowStateSet={riverFlowStateSet}
+            />
 	        }
   	      
   	      {canVerify && wFlowOps.length > 1 && !rapIs ?
     	      <ForkMenu
     	        seriesId={seriesId}
-    	        serial={serial}
+    	        serial={item.serial}
     	        wFlowOps={wFlowOps}
     	        wFlowNow={wFlowNow}
     	        altIs={altIs}
@@ -204,7 +201,7 @@ const StoneSelect = ({
           
             <NCTributary
       			  seriesId={seriesId}
-      			  serial={serial}
+      			  serial={item.serial}
       			  nonCons={nc}
       			  sType={flowStep.type} />
       			  
