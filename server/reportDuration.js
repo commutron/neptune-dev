@@ -2,7 +2,7 @@ import moment from 'moment';
 import 'moment-business-time';
 
 // import { checkTimeBudget } from './tideMethods.js';
-// import { whatIsBatch, whatIsBatchX } from './searchOps.js';
+// import { whatIsBatchX } from './searchOps.js';
 import { avgOfArray } from '/server/calcOps';
 import Config from '/server/hardConfig.js';
 
@@ -80,14 +80,6 @@ function getWidgetDur(accessKey, widget) {
   let stAvg = [];
   let endAvg = [];
   let compAvg = [];
-              
-  const compB = BatchDB.find({widgetId: widget._id, live: false});
-  for( let b of compB ) {
-    relAvg.push( toRelDiff(b.start, b.releases) );
-    stAvg.push( toStrtDiff(b.start, b.tide) );
-    endAvg.push( toEndDiff(b.start, b.end) );
-    compAvg.push( toCompDiff(b.start, b.finishedAt) );
-  }
     
   const compX = XBatchDB.find({widgetId: widget._id, completed: true}).fetch();
   for( let x of compX ) {

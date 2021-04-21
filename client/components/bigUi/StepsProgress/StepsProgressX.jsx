@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import Pref from '/client/global/pref.js';
 import './style.css';
 
-import RiverSelect from '/client/components/forms/RiverSelectX';
+import RiverSelect from '/client/components/forms/Batch/RiverSelectX';
 import BranchProgress from './BranchProgress';
 
 import ToggleBar from '/client/components/smallUi/Tabs/ToggleBar';

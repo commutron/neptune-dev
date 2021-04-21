@@ -113,7 +113,12 @@ const RapidInfoEdit = ({ rapid, allQ, rSetItems, editAuth, cal })=> {
       <p>Extra Hours: <n-num>{min2hr(rapid.timeBudget || 0)}</n-num></p>
       
       <p className='wordBr max300'>
-        Override Instruction: {rapid.instruct || ''}
+        Override Instruction: {rapid.instruct ?
+          <a 
+            className='clean wordBr' 
+            href={rapid.instruct} 
+            target='_blank'
+          >{rapid.instruct}</a> : ""}
       </p>  
       
       <span className='rightRow'>

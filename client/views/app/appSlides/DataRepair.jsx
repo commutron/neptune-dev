@@ -144,26 +144,6 @@ const DataRepair = ({ app, users })=> {
       </div>
       
       <div>
-        <h3><i className="fas fa-eraser fa-lg gap"></i>
-          Check the notes key for all batch+
-        </h3>
-        <button
-          onClick={()=>doCallThing("ensureNotesAreFalse")}
-          className='action clearBlue'
-        >Check Notes</button>
-      </div>
-      
-      <div>
-        <h3><i className="fas fa-eraser fa-lg gap"></i>
-          Unset the notes key from batch+
-        </h3>
-        <button
-          onClick={()=>doCallThing("UNSETbplusNotesKey")}
-          className='action clearOrange'
-        >Unset Key</button>
-      </div>
-      
-      <div>
         <h3><i className='fas fa-user-shield fa-lg gap'></i>
           Clear `Usage Logs` and `Breadcrubs`
         </h3>

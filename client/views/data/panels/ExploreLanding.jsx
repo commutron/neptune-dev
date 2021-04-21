@@ -11,8 +11,7 @@ import SerialResult from '/client/components/bigUi/MultiSearch/SerialResult';
 import BatchResult from '/client/components/bigUi/MultiSearch/BatchResult';
 
 const ExploreLanding = ({ 
-  groupData, widgetData, variantData, 
-  batchData, xBatchData, 
+  groupData, widgetData, variantData, xBatchData, 
   app, isDebug
 }) => {
   
@@ -20,14 +19,10 @@ const ExploreLanding = ({
   const [ queryState, querySet ] = useState( null );
 	const [ resultState, resultSet ] = useState( null );
   
-  const total = batchData.length;
   const xTotal = xBatchData.length;
-  const live = batchData.filter( x => x.live === true ).length;
   const xlive = xBatchData.filter( x => x.live === true ).length;
-  const process = batchData.filter( x => x.finishedAt === false ).length;
   const xProcess = xBatchData.filter( x => x.completed === false ).length;
   
-  const locked = batchData.filter( x => x.lock === true ).length;
   const xlocked = xBatchData.filter( x => x.lock === true ).length;
   
   return(
@@ -39,7 +34,7 @@ const ExploreLanding = ({
         queryState={queryState}
         queryUP={(v)=>querySet(v)}
         resultUP={(r)=>resultSet(r)}
-        batchData={[...batchData, ...xBatchData]}
+        batchData={xBatchData}
         widgetData={widgetData}
         variantData={variantData}
         groupData={groupData}
@@ -58,9 +53,9 @@ const ExploreLanding = ({
         <div className='fixedResults forceScrollStyle wide max875'>
           {tggl ?
             <BatchResult
-            queryState={queryState}
-            resultState={resultState}
-            app={app} />
+              queryState={queryState}
+              resultState={resultState}
+              app={app} />
           :
           <SerialResult
             queryState={queryState}
@@ -103,26 +98,26 @@ const ExploreLanding = ({
         
         <div className='centreRow vspacehalf'>
           <NumStatBox
-            number={live + xlive}
+            number={xlive}
             name='WIP'
             borderColour='blue'
           />
           <NumStatBox
-            number={( (live + xlive) - (process + xProcess) )}
+            number={xlive - xProcess}
             name='RMA'
             borderColour='red'
           />
           <NumStatBox
-            number={(total + xTotal) - (process + xProcess)}
+            number={xTotal - xProcess}
             name='Completed'
             borderColour='green'
           />
            <NumStatBox
-            number={(total + xTotal)}
+            number={xTotal}
             name='Total'
           />
           <NumStatBox
-            number={locked + xlocked}
+            number={xlocked}
             name='Locked'
             borderColour='rgb(155, 89, 182)'
           />
@@ -131,7 +126,7 @@ const ExploreLanding = ({
         <div className='wide max875 vspacehalf'>
           <h3>New from the Last 7 Days</h3>
           <BatchNewList
-            batchData={[...batchData, ...xBatchData]}
+            batchData={xBatchData}
             widgetData={widgetData}
             variantData={variantData}
             groupData={groupData}
@@ -173,16 +168,15 @@ export default ExploreLanding;
     
   </div>
   
-  
   <details className='footnotes'>
-            <summary>Chart Details</summary>
-            <p className='footnote'>
-              Trends include {isDebug ? 26 : 4} weeks, including the current week. 
-              Read left to right as past to current.
-            </p>
-            <p className='footnote'>
-              Completed on time {Pref.batches} are indicated in green.
-              Completed late {Pref.batches} are indicated in yellow.
-            </p>
-          </details>
+    <summary>Chart Details</summary>
+    <p className='footnote'>
+      Trends include {isDebug ? 26 : 4} weeks, including the current week. 
+      Read left to right as past to current.
+    </p>
+    <p className='footnote'>
+      Completed on time {Pref.batches} are indicated in green.
+      Completed late {Pref.batches} are indicated in yellow.
+    </p>
+  </details>
   */

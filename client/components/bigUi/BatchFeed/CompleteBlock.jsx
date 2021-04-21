@@ -1,5 +1,5 @@
 import React from 'react';
-import '/client/components/bigUi/ItemFeed/style.css';
+import '/client/components/bigUi/ItemFeedX/style.css';
 
 const CompleteBlock = ({ title, datetime, cal })=> (
   <n-feed-info-block class='finish'>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
-import '/client/components/bigUi/ItemFeed/style.css';
+import '/client/components/bigUi/ItemFeedX/style.css';
 
 import CreateBlock from '/client/components/bigUi/ItemFeedX/CreateBlock';
 import EventBlock from './EventBlock';

@@ -7,10 +7,10 @@ import ModelMedium from '/client/components/smallUi/ModelMedium.jsx';
 import PrioritySquareData from '/client/components/smallUi/StatusBlocks/PrioritySquare.jsx';
 
 
-export const AlterFulfill = ({ batchId, isX, end, app, lock, noText, lgIcon })=> (
+export const AlterFulfill = ({ batchId, end, app, lock, noText, lgIcon })=> (
   <ModelMedium
     button={'Alter ' + Pref.end}
-    title={`Alter ${Pref.batch} ${Pref.end}`}
+    title={`Alter ${Pref.xBatch} ${Pref.end}`}
     color='blueT'
     icon='fa-calendar-alt'
     lock={!Roles.userIsInRole(Meteor.userId(), ['edit', 'sales']) || lock}
@@ -18,14 +18,13 @@ export const AlterFulfill = ({ batchId, isX, end, app, lock, noText, lgIcon })=>
     lgIcon={lgIcon}>
     <AlterFulfillForm
       batchId={batchId}
-      isX={isX}
       end={end}
       app={app} />
   </ModelMedium>
 );
 
 
-const AlterFulfillForm = ({ batchId, isX, end, app, selfclose })=> {
+const AlterFulfillForm = ({ batchId, end, app, selfclose })=> {
 
   const [ reasonState, reasonSet ] = useState(false);
   const [ endDateState, endDateSet ] = useState( end );
@@ -33,10 +32,10 @@ const AlterFulfillForm = ({ batchId, isX, end, app, selfclose })=> {
   function save(e) {
     e.preventDefault();
     
-    const callMthd = !isX ? 'alterBatchFulfill' : 'alterBatchXFulfill';
     const correctedEnd = moment(endDateState).endOf('day').format();
     
-    Meteor.call(callMthd, batchId, end, correctedEnd, reasonState, (error, reply)=>{
+    Meteor.call('alterBatchXFulfill', batchId, end, correctedEnd, reasonState, 
+    (error, reply)=>{
       if(error) {
         console.log(error);
         toast.error('Server Error');

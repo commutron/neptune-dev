@@ -42,6 +42,8 @@ const StartView = ({user, app}) =>	{
     );
   }
   
+	const usernice = user.username.replaceAll(Pref.usrCut, " ");
+	
   const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
   const isReadOnly = Roles.userIsInRole(Meteor.userId(), 'readOnly');
   // const isNigh = Roles.userIsInRole(Meteor.userId(), 'nightly');
@@ -93,7 +95,7 @@ const StartView = ({user, app}) =>	{
         
         <NavButton title={Pref.downstream} icon='fa-satellite' link='/downstream' />
         
-        <NavButton title={user.username} icon='fa-user-astronaut fa-flip-horizontal' link='/user' />
+        <NavButton title={usernice} icon='fa-user-astronaut fa-flip-horizontal' link='/user' />
         
         {!app.timeClock || app.timeClock.trim() === '' ?  
           <NavPlaceholder 

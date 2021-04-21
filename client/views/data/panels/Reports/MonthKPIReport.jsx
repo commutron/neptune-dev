@@ -11,7 +11,7 @@ import 'flatpickr/dist/plugins/monthSelect/style.css';
 
 import ReportStatsTable from '/client/components/tables/ReportStatsTable.jsx'; 
 
-const MonthKPIReport = ({ batchData, widgetData, groupData, app, isDebug })=> {
+const MonthKPIReport = ({ isDebug })=> {
   
   const [ working, workingSet ] = useState(false);
   

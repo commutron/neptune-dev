@@ -103,38 +103,6 @@ Meteor.methods({
     }
   },
 
-  
-  ensureNotesAreFalse() {
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      let notesClear = true;
-      
-      const allBatchX = XBatchDB.find({}).fetch();
-      for( let bx of allBatchX ) {
-        if(bx.notes && bx.notes !== false) {
-          notesClear = false;
-        }
-      }
-      
-      return notesClear;
-    }else{
-      return false;
-    }
-  },
-  UNSETbplusNotesKey() {
-    try{
-      if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-        XBatchDB.update({ orgKey: Meteor.user().orgKey }, {
-          $unset : { 
-            'notes': ""
-          }},{multi: true});
-          return true;
-      }else{
-        return false;
-      }
-    }catch (err) {
-      throw new Meteor.Error(err);
-    }
-  },
   /*
   dateObjBatchUPGRADE() {
     if(!Roles.userIsInRole(Meteor.userId(), 'admin')) {
@@ -164,10 +132,10 @@ Meteor.methods({
     if(!Roles.userIsInRole(Meteor.userId(), 'admin')) {
       return false;
     }else{
-      const allBatches = BatchDB.find({orgKey: Meteor.user().orgKey}).fetch();
-      for(let batch of allBatches) {
-        const batchId = batch._id;
-        const nonCons = batch.nonCon;
+      const allSeries = XSeriesDB.find({orgKey: Meteor.user().orgKey}).fetch();
+      for(let srs of allSeries) {
+        const srsId = srs._id;
+        const nonCons = srs.nonCon;
         for(let nc of nonCons) {
           const where = nc.where;
           if(!where) {
@@ -178,7 +146,7 @@ Meteor.methods({
             if(!match) {
               null;
             }else{
-              BatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'nonCon.key': nc.key}, {
+              XSeriesDB.update({_id: srsId, orgKey: Meteor.user().orgKey, 'nonCon.key': nc.key}, {
           			$set : { 
           			  'nonCon.$.where': newText
           			}
@@ -199,26 +167,6 @@ Meteor.methods({
         let max8s = [];
         let max9s = [];
         let max10s = [];
-        
-        const allBatch = BatchDB.find({}).fetch();
-        
-        for(let bdt of allBatch) {
-          if(bdt.items.length > 0) {
-            const highest = _.max(bdt.items, (it)=> {
-              if(it.serial.length <= 10) {
-                return Number(it.serial);
-              }
-            });
-            if(!highest.serial) {null;
-            }else if(highest.serial.length === 10) {
-              max10s.push(highest.serial);
-            }else if(highest.serial.length === 9) {
-              max9s.push(highest.serial);
-            }else if(highest.serial.length === 8) {
-              max8s.push(highest.serial);
-            }else{null}
-          }
-        }
         
         const allSeries = XSeriesDB.find({}).fetch();
         

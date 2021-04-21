@@ -7,7 +7,7 @@ import 'moment-business-time';
 import { deliveryBinary } from '/server/reportCompleted.js';
 import { checkTimeBudget } from '/server/tideGlobalMethods';
 // import { distTimeBudget } from './tideGlobalMethods.js';
-// import { whatIsBatch, whatIsBatchX } from './searchOps.js';
+// import { whatIsBatchX } from './searchOps.js';
 // import { round1Decimal } from './calcOps';
 
 import Config from '/server/hardConfig.js';
@@ -70,27 +70,6 @@ SyncedCron.start();
 function countDoneUnits(accessKey, rangeStart, rangeEnd) {
   return new Promise(function(resolve) {
     let diCount = 0;
-  
-    BatchDB.find({
-      orgKey: accessKey,
-      createdAt: { 
-        $lte: new Date(rangeEnd)
-      },
-      items: { $elemMatch: { finishedAt: {
-        $gte: new Date(rangeStart),
-        $lte: new Date(rangeEnd) 
-      }}}
-    }).forEach( (gf)=> {
-      const thisDI = gf.items.filter( x =>
-        x.finishedAt !== false &&
-        moment(x.finishedAt).isBetween(rangeStart, rangeEnd)
-      );
-      let doneUnits = 0;
-      for(let i of thisDI) {
-        doneUnits += i.units;
-      }
-      diCount = diCount + doneUnits;   
-    });
     
     XSeriesDB.find({
       orgKey: accessKey,
@@ -134,26 +113,6 @@ async function countDoneBatchTarget(accessKey, rangeStart, rangeEnd) {
     const q = checkTimeBudget(tide, quoteTimeBudget, lockTrunc);
     !q ? null : q < 0 ? doneOverQ++ : doneUnderQ++;
   };
-    
-  const b = BatchDB.find({
-    orgKey: accessKey, 
-    finishedAt: { 
-      $gte: new Date(rangeStart),
-      $lte: new Date(rangeEnd) 
-    }
-  },{fields:{
-    'end': 1,
-    'finishedAt': 1,
-    'tide': 1,
-    'quoteTimeBudget': 1,
-    'lockTrunc': 1
-  }}).fetch();
-  await Promise.all(b.map( async (gf, inx)=> {
-    await new Promise( (resolve)=> {
-      doneCalc(gf.end, gf.finishedAt, gf.tide, gf.quoteTimeBudget, gf.lockTrunc);
-      resolve(true);
-    });
-  }));
     
   const bx = XBatchDB.find({
     orgKey: accessKey, 

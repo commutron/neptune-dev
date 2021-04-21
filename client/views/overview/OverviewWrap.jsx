@@ -13,7 +13,7 @@ import BatchDetails from './columns/BatchDetails';
 
 
 const OverviewWrap = ({ 
-  b, bx, traceDT,
+  bx, traceDT,
   user, app, brancheS,
   isDebug
 })=> {
@@ -52,7 +52,7 @@ const OverviewWrap = ({
   
   useLayoutEffect( ()=> {
     sortInitial();
-  }, [b, bx, traceDT, filterBy, sortBy, ghost]);
+  }, [bx, traceDT, filterBy, sortBy, ghost]);
   
   const [ updateTrigger, updateTriggerSet ] = useState(true);
   
@@ -103,10 +103,7 @@ const OverviewWrap = ({
   
   function sortInitial() {
     return new Promise((resolve) => {
-      const batches = b;
-      const batchesX = bx;
-      
-      let liveBatches = [...batches,...batchesX];
+      let liveBatches = bx;
       
       let filteredBatches = filterBy === false ? 
         ghost === true ? liveBatches 

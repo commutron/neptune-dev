@@ -6,7 +6,7 @@ import ReportStatsTable from '/client/components/tables/ReportStatsTable.jsx';
 import NumLine from '/client/components/tinyUi/NumLine.jsx';
 
 
-const BuildHistory = ({ allBatch, allXBatch, allVariant, allWidget, allGroup })=> {
+const BuildHistory = ({ allXBatch, allVariant, allWidget, allGroup })=> {
   
   const [ vPack, vPackSet ] = useState([]);
 
@@ -35,15 +35,13 @@ const BuildHistory = ({ allBatch, allXBatch, allVariant, allWidget, allGroup })=
     
     let orderDates = [];
     for( let v of allVariant ) {
-      const btchs = allBatch.filter( b => b.versionKey === v.versionKey);
-      const dates = Array.from(btchs, b => !b.finishedAt ? new Date() : b.finishedAt);
       const btchsX = allXBatch.filter( b => b.versionKey === v.versionKey);
       const datesX = Array.from(btchsX, b => !b.completedAt ? new Date() : b.completedAt);
       orderDates.push({
         variant: v.variant,
         widgetId: v.widgetId,
         groupId: v.groupId,
-        dates: [...dates,...datesX]
+        dates: datesX
       });
     }
     vPackSet( orderDates );
@@ -226,7 +224,7 @@ const BuildHistory = ({ allBatch, allXBatch, allVariant, allWidget, allGroup })=
         <i className='medBig line2x'> built last?</i>
       </p>
       
-      <p className='overscroll minH60'>
+      <span className='overscroll minH60'>
         {answerState === undefined ? null :
           answerState === false ? <i className='bigger smCap'>Never</i> :
           <NumLine
@@ -235,7 +233,7 @@ const BuildHistory = ({ allBatch, allXBatch, allVariant, allWidget, allGroup })=
             color='blueT'
             big={true} />
         }
-      </p>
+      </span>
       
       <hr className='vmargin' />
       

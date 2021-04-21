@@ -22,9 +22,9 @@ const BatchesList = ({ batchData, widgetData, variantData })=> {
   useEffect( ()=> { 
     let basicFilter = 
       filter === 'done' ?
-      b.filter( x => x.finishedAt ? x.finishedAt !== false : x.live === false ) :
+      b.filter( x => x.completed ? x.completed : x.live === false ) :
       filter === 'inproc' ?
-      b.filter( x => x.finishedAt ? x.finishedAt === false : x.live === true ) :
+      b.filter( x => !x.completed ? !x.completed : x.live === true ) :
       b;
     let showList = basicFilter.filter( 
                     tx => tx.batch.toLowerCase().includes(textString) === true );
@@ -41,7 +41,7 @@ const BatchesList = ({ batchData, widgetData, variantData })=> {
       
         <FilterActive
           title={b.batch}
-          done='Finished'
+          done='Completed'
           total={list.length}
           onClick={(e)=>setFilter(e)}
           onTxtChange={(e)=>setTextFilter(e)} />

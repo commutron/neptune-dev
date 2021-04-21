@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useLayoutEffect, Fragment } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { ToastContainer } from 'react-toastify';
-//import Pref from '/client/global/pref.js';
+import Pref from '/client/global/pref.js';
 
 import { ScanListenerUtility, ScanListenerOff } from '/client/utility/ScanListener.js';
 
@@ -10,7 +10,6 @@ import FindBox from './FindBox.jsx';
 
 import TideControl from '/client/components/tide/TideControl/TideControl.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
-import FormBar from '/client/components/bigUi/ToolBar/FormBar.jsx';
 import XFormBar from '/client/components/bigUi/ToolBar/XFormBar.jsx';
 import { NonConMerge } from '/client/utility/NonConOptions';
 
@@ -63,16 +62,6 @@ export const ProWrap = ({
       const allKeys = rapIs ? true : false;
       getNCTypesCombo = NonConMerge(getNCListKeys, app, user, allKeys);
       
-    }else if( batchData && widgetData ) {
-      const river = widgetData.flows.find( x => x.flowKey === batchData.river );
-      const rvAlt = widgetData.flows.find( x => x.flowKey === batchData.riverAlt );
-      if(river) {
-        river.type === 'plus' && getNCListKeys.push(river.ncLists);
-      }
-      if(rvAlt) {
-        rvAlt.type === 'plus' && getNCListKeys.push(rvAlt.ncLists);
-      }
-      getNCTypesCombo = NonConMerge(getNCListKeys, app, user);
     }
     ncTypesComboSet(getNCTypesCombo);
     
@@ -201,21 +190,10 @@ export const ProWrap = ({
             users={users}
             user={user}
             app={app} />
-        :
-          <FormBar
-            batchData={batchData}
-            itemData={itemData}
-            widgetData={widgetData}
-            
-            tideFloodGate={tideFloodGate}
-            ncTypesCombo={ncTypesComboFlat}
-            action={action}
-            showVerifyState={showVerifyState}
-            handleVerify={(q, d)=>handleVerify(q, d)}
-          
-            users={users}
-            user={user}
-            app={app} />
+        : 
+          <p className='whiteT centreText wide'>
+            <em>{Pref.nonCon}, {Pref.shortfall}, and {Pref.trackFirst} require a Series</em>
+          </p>
         }
       </Fragment>
 

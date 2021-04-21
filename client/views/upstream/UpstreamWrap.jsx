@@ -10,7 +10,7 @@ import ReportShort from '/client/views/upstream/ReportShort';
 
 const UpstreamWrap = ({ 
   view, subLink,
-  batch, batchX, traceDT,
+  batchX, traceDT,
   user, app, brancheS,
   isDebug
 })=> {
@@ -76,7 +76,6 @@ const UpstreamWrap = ({
       tag='kit'
     >
       <UpstreamView
-        batch={batch}
         batchX={batchX}
         traceDT={traceDT}
         user={user}

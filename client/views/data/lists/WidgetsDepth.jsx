@@ -56,29 +56,18 @@ const WidgetIndexCard = ({ data, barStyle })=>{
     });
   }, []);
   
-  function totalB(mData) {
-    let batch = mData.batchInfo.length;
-    let batchX = mData.batchInfoX.length;
-    let total = batch + batchX;
-    return total;
-  }
-  
   function totalI(mData) {
-    let items = Array.from(mData.batchInfo, x => x.items);
-    let quantities = Array.from(mData.batchInfoX, x => x.quantity);
-    let total = items.length > 0 ? items.reduce((x,y)=>x+y) : 0;
+    let quantities = Array.from(mData, x => x.quantity);
     let totalX = quantities.length > 0 ? quantities.reduce((x,y)=>x+y) : 0;
-    return total + totalX;
+    return totalX;
   }
   
-  const mData = moreData;
-  
-  if(!mData) {
+  if(!moreData) {
     return( <em>. . .</em> );
   }
     
-  let totalBatches = totalB(mData);
-  let totalItems = totalI(mData);
+  let totalBatches = moreData[1].length;
+  let totalItems = totalI(moreData[1]);
     
   return(
     <LeapLine
@@ -87,7 +76,7 @@ const WidgetIndexCard = ({ data, barStyle })=>{
       cThree={
         <span className='centreRow'>
           <NumStat
-            num={mData.variants}
+            num={moreData[0]}
             name={Pref.variants}
             title={`total ${Pref.variants}`}
             color='blueT'

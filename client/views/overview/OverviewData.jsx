@@ -11,7 +11,7 @@ import OverviewWrap from './OverviewWrap.jsx';
 const View = ({
   login, ready, readyT,
   user, app, isDebug,
-  batch, batchX, traceDT
+  batchX, traceDT
 })=> {
   
   useLayoutEffect( ()=>{
@@ -34,7 +34,6 @@ const View = ({
   return(
     <ErrorCatch>
       <OverviewWrap 
-        b={batch}
         bx={batchX}
         traceDT={traceDT}
         user={user}
@@ -67,7 +66,6 @@ export default withTracker( () => {
       user: user,
       isDebug: isDebug,
       app: AppDB.findOne({org: org}),
-      batch: BatchDB.find({}).fetch(),
       batchX: XBatchDB.find({}).fetch(),
       traceDT: TraceDB.find({}).fetch(),
     };

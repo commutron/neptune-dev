@@ -22,6 +22,7 @@ const TideFollow = ({ proRoute, invertColor })=> {
 	
 	const user = Meteor.user();
 	const username = user ? user.username : '__';
+	const usernice = username.replaceAll(Pref.usrCut, " ");
 	
 	const uFl = username.charAt(0);
 	const usp = username.split('.');
@@ -53,7 +54,7 @@ const TideFollow = ({ proRoute, invertColor })=> {
       <ContextMenu id='tideF0ll0w1' className='noCopy cap vbig'>
         <MenuItem onClick={()=>FlowRouter.go('/user')}>
           <i className='fas fa-user-astronaut fa-flip-horizontal fa-fw'></i>
-          <i className='noCopy'> {user && user.username}</i>
+          <i className='noCopy'> {usernice}</i>
         </MenuItem>
         <MenuItem divider />
         <MenuItem disabled={true}>

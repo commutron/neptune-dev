@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-import JumpButton from '/client/components/tinyUi/JumpButton.jsx';
-import FilterActive from '/client/components/bigUi/FilterActive.jsx';
+import LeapButton from '/client/components/tinyUi/LeapButton';
+import FilterActive from '/client/components/bigUi/FilterActive';
 
 const BatchesList = ({ batchData, widgetData })=> {
   
@@ -36,9 +36,9 @@ const BatchesList = ({ batchData, widgetData })=> {
     
     let basicFilter = 
       f === 'done' ?
-      b.filter( x => x.finishedAt !== false ) :
+      b.filter( x => x.completed ) :
       f === 'inproc' ?
-      b.filter( x => x.finishedAt === false ) :
+      b.filter( x => !x.completed ) :
       b;
     let showList = basicFilter.filter( 
                     tx => tx.batch.toLowerCase().includes(textString) === true );
@@ -54,7 +54,7 @@ const BatchesList = ({ batchData, widgetData })=> {
     
       <FilterActive
         title={batchData.batch}
-        done='Finished'
+        done='Completed'
         total={showListState.length}
         onClick={e => setFilter(e)}
         onTxtChange={e => setTextFilter(e)} />
@@ -67,11 +67,12 @@ const BatchesList = ({ batchData, widgetData })=> {
         const subV = variantNames.find( x => x.vKey === entry.versionKey);
         const subVname = !subV ? false : subV.vName;
         return(
-          <JumpButton
+          <LeapButton
             key={index}
             title={entry.batch} 
             sub={<i><i className='up'>{subW.widget}</i> v.{subVname}</i>}
             sty={style}
+            address={'/data/batch?request=' + entry.batch}
           />
       )})}
 		</div>

@@ -86,8 +86,7 @@ export function distTimeBudget(tide, quoteTimeBudget, itemQuantity, allQuantity,
   
 function collectActivtyLevel(privateKey, batchID) {
   return new Promise(resolve => {
-    const batch = BatchDB.findOne({_id: batchID}) ||
-                  XBatchDB.findOne({_id: batchID});
+    const batch = XBatchDB.findOne({_id: batchID});
     
     const now = moment().tz(Config.clientTZ);
     
@@ -98,7 +97,7 @@ function collectActivtyLevel(privateKey, batchID) {
     if(!batch) {
       resolve(false);
     }else{
-      const aDone = batch.completedAt || batch.finishedAt;
+      const aDone = batch.completedAt;
       const rested = !batch.live && aDone && 
                         moment.duration(now.diff(moment(aDone))).asHours() > 24;
       
@@ -195,13 +194,6 @@ Meteor.methods({
       const getYear = localDate.year();
       const getDay = localDate.dayOfYear();
       
-      const touchedB = BatchDB.find({
-        orgKey: Meteor.user().orgKey,
-        tide: { $elemMatch: { startTime: {
-        $gte: new Date(localDate.startOf('day').format()),
-        $lte: new Date(localDate.endOf('day').format())
-      }}}
-      }).fetch();
       const touchedBX = XBatchDB.find({
         orgKey: Meteor.user().orgKey,
         tide: { $elemMatch: { startTime: {
@@ -210,10 +202,8 @@ Meteor.methods({
       }}}
       }).fetch();
       
-      const allTouched = [...touchedB,...touchedBX];
-      
       let slimTideCollection = [];
-      for(let btch of allTouched) {
+      for(let btch of touchedBX) {
         const theDay = !btch.tide ? [] : btch.tide.filter( x => 
           moment.tz(x.startTime, Config.clientTZ).year() === getYear && 
           moment.tz(x.startTime, Config.clientTZ).dayOfYear() === getDay);
@@ -239,24 +229,6 @@ Meteor.methods({
       const sendAll = allOrg;
       const sendOneID = !mockUserId ? Meteor.userId() :
                         isAuth ? mockUserId : null;
-      
-      const touchedB = !sendAll ?
-        BatchDB.find({
-          orgKey: Meteor.user().orgKey, 
-          tide: { $elemMatch: { startTime: {
-            $gte: new Date(pinDate.startOf('week').format()),
-            $lte: new Date(pinDate.endOf('week').format())
-          }}},
-          'tide.who': sendOneID
-        }).fetch()
-        :
-        BatchDB.find({
-          orgKey: Meteor.user().orgKey,
-          tide: { $elemMatch: { startTime: {
-            $gte: new Date(pinDate.startOf('week').format()),
-            $lte: new Date(pinDate.endOf('week').format())
-          }}},
-        }).fetch();
 
       const touchedBX = !sendAll ?
         XBatchDB.find({
@@ -275,11 +247,9 @@ Meteor.methods({
             $lte: new Date(pinDate.endOf('week').format())
           }}},
         }).fetch();
-        
-      const allTouched = [...touchedB,...touchedBX];
       
       let slimTideCollection = [];
-      for(let btch of allTouched) {
+      for(let btch of touchedBX) {
         const yourWeek = !btch.tide ? [] : btch.tide.filter( x => 
           (sendAll || x.who === sendOneID ) && 
           moment(x.startTime).weekYear() === getYear && 
@@ -311,15 +281,6 @@ Meteor.methods({
         }
       };
       
-      BatchDB.find({
-        orgKey: Meteor.user().orgKey,
-        $or: [ { lock: false },
-               { lock: { $exists: false } }
-             ]
-      }).forEach( b => {
-        if(b.tide) { screenT(b.tide) }
-      });
-      
       XBatchDB.find({
         orgKey: Meteor.user().orgKey,
         $or: [ { lock: false },
@@ -336,7 +297,6 @@ Meteor.methods({
       throw new Meteor.Error(err);
     }
   },
-  // FIX
   
   errorFixDeleteTideTimeBlock(batch) {
     try {
@@ -344,35 +304,24 @@ Meteor.methods({
       if(!auth) {
         return false;
       }else{
-        const doc = BatchDB.findOne({ batch: batch });
-      
-        if( doc ) {
-          BatchDB.update({
+        
+        const docx = XBatchDB.findOne({ batch: batch });
+        
+        if( docx ) {
+          XBatchDB.update({
             batch: batch,
             orgKey: Meteor.user().orgKey
           }, {
             $pop: { tide : 1
           }});
         }else{
-          const docx = XBatchDB.findOne({ batch: batch });
-          
-          if( docx ) {
-            XBatchDB.update({
-              batch: batch,
-              orgKey: Meteor.user().orgKey
-            }, {
-              $pop: { tide : 1
-            }});
-          }else{
-            return false;
-          }
+          return false;
         }
       }
     }catch (err) {
       throw new Meteor.Error(err);
     }
   },
-  
   
 
 });

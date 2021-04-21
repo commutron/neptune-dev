@@ -10,11 +10,9 @@ import WidgetNewForm from '/client/components/forms/WidgetNewForm.jsx';
 import Remove from '/client/components/forms/Remove.jsx';
 
 
-function groupActiveWidgets(gId, widgetsList, allBatch, allXBatch) {
+function groupActiveWidgets(gId, widgetsList, allXBatch) {
   
-  let xActive = allXBatch.filter( b => b.completed === false);
-  let legacyActive = allBatch.filter( b => b.finishedAt === false);
-  const activeBatch = [...xActive, ...legacyActive ];
+  let activeBatch = allXBatch.filter( b => b.completed === false);
 
   const hasBatch = (id)=> activeBatch.find( b => b.widgetId === id) ? true : false;
   
@@ -25,10 +23,10 @@ function groupActiveWidgets(gId, widgetsList, allBatch, allXBatch) {
 }
 
 
-const GroupSlide = ({ groupData, widgetsList, batchData, batchDataX, app })=>{
+const GroupSlide = ({ groupData, widgetsList, batchDataX, app })=>{
   
   const g = groupData;
-  const active = groupActiveWidgets(g._id, widgetsList, batchData, batchDataX);
+  const active = groupActiveWidgets(g._id, widgetsList, batchDataX);
   
   return(
     <div className='section centre overscroll' key={g.alias}>

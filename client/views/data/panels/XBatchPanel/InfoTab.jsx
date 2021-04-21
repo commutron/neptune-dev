@@ -6,19 +6,18 @@ import Pref from '/client/global/pref.js';
 
 import { min2hr } from '/client/utility/Convert.js';
 
-import TagsModule from '/client/components/bigUi/TagsModule.jsx';
+import TagsModule from '/client/components/bigUi/TagsModule';
 
-import ReleaseAction from '/client/components/bigUi/ReleasesModule.jsx';
-import BlockForm from '/client/components/forms/BlockForm.jsx';
-import BlockList from '/client/components/bigUi/BlockList.jsx';
+import ReleaseAction from '/client/components/bigUi/ReleasesModule';
+import BlockForm from '/client/components/forms/BlockForm';
+import BlockList from '/client/components/bigUi/BlockList';
 
-import { AlterFulfill } from '/client/components/forms/Batch/BatchAlter.jsx';
+import { AlterFulfill } from '/client/components/forms/Batch/BatchAlter';
 
 import PrioritySquareData from '/client/components/smallUi/StatusBlocks/PrioritySquare';
 import TideActivityData from '/client/components/tide/TideActivity';
-import BatchXStatus from '/client/components/forms/Batch/BatchXStatus.jsx';
+import BatchXStatus from '/client/components/forms/Batch/BatchXStatus';
 
-//import BatchFinish from '/client/components/forms/Batch/BatchFinish.jsx';
 import StepsProgressX from '/client/components/bigUi/StepsProgress/StepsProgressX';
 
 const InfoTab = ({

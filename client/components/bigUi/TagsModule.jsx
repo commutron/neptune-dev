@@ -3,9 +3,6 @@ import ReactDOM from 'react-dom';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import Pref from '/client/global/pref.js';
 
-// requires data
-// Batch ._id as "id"
-// flags array as "tags"
 
 const TagsModule = ({ action, id, vKey, tags, tagOps, truncate })=>	{
 
@@ -17,11 +14,6 @@ const TagsModule = ({ action, id, vKey, tags, tagOps, truncate })=>	{
       switch(action) {
       case Pref.xBatch:
         Meteor.call('pushBTagX', id, cleanTag, (err)=>{
-          err && console.log(err);
-        });
-        break;
-      case Pref.batch:
-        Meteor.call('pushBTag', id, cleanTag, (err)=>{
           err && console.log(err);
         });
         break;
@@ -52,11 +44,6 @@ const TagsModule = ({ action, id, vKey, tags, tagOps, truncate })=>	{
           err && console.log(err);
         });
         break;
-      case Pref.batch:
-        Meteor.call('pullBTag', id, tag, (err)=>{
-          err && console.log(err);
-        });
-        break;
       case 'variant':
         Meteor.call('pullVTag', id, tag, (err)=>{
           err && console.log(err);
@@ -76,7 +63,7 @@ const TagsModule = ({ action, id, vKey, tags, tagOps, truncate })=>	{
   const auth = Roles.userIsInRole(Meteor.userId(), 'run');
   const currTags = tags || [];
   
-  return (
+  return(
     <div className='rowWrap'>
       {currTags.map( (entry, index)=>{
         return(

@@ -6,10 +6,7 @@ Meteor.methods({
   checkDuplicateItems(serialArr, unit, regexSN, staticStart, rtnObj) {
     let goodSerial = [];
     let badSerial = [];
-        
-    const narrowB = BatchDB.find({
-                      "items.serial": { $regex: new RegExp( staticStart ) }
-                    },{fields:{'items.serial':1}}).fetch();
+
     const narrowS = XSeriesDB.find({
                       "items.serial": { $regex: new RegExp( staticStart ) }
                     },{fields:{'items.serial':1}}).fetch();
@@ -20,33 +17,27 @@ Meteor.methods({
       if(!correctFormat) {
         badSerial.push(serialTry);
       }else{
-                      
-        const dupOLD = narrowB.find( b => b.items.find( i => i.serial === serialTry ) );
+        
+        const dupNew = narrowS.find( s => s.items.find( i => i.serial === serialTry ) );
 
-        if(dupOLD) {
+        if(dupNew) {
           badSerial.push(serialTry);
         }else{
-          const dupNew = narrowS.find( s => s.items.find( i => i.serial === serialTry ) );
-
-          if(dupNew) {
-            badSerial.push(serialTry);
+          if(rtnObj) {
+            goodSerial.push({
+              serial: serialTry,
+              createdAt: new Date(),
+              createdWho: Meteor.userId(),
+              completed: false,
+              completedAt: false,
+              completedWho: false,
+              units: Number(unit),
+              subItems: [],
+              history: [],
+              altPath: []
+            });
           }else{
-            if(rtnObj) {
-              goodSerial.push({
-                serial: serialTry,
-                createdAt: new Date(),
-                createdWho: Meteor.userId(),
-                completed: false,
-                completedAt: false,
-                completedWho: false,
-                units: Number(unit),
-                subItems: [],
-                history: [],
-                altPath: []
-              });
-            }else{
-              goodSerial.push(serialTry);
-            }
+            goodSerial.push(serialTry);
           }
         }
       }
@@ -292,11 +283,10 @@ Meteor.methods({
     if(auth && item) {
       for(let serialTry of newSerials) {
         
-        const dupOLD = BatchDB.findOne({ 'items.serial': serialTry }); // untill migration
         const dupNew = XSeriesDB.findOne({ 'items.serial': serialTry });
         const correctFormat = regexSN.test(serialTry);
         
-        if(dupOLD || dupNew || !correctFormat) {
+        if(dupNew || !correctFormat) {
           null;
         }else{
               

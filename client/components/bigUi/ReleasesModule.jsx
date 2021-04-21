@@ -2,13 +2,10 @@ import React, { useState, Fragment } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
-// import UserNice from '/client/components/smallUi/UserNice.jsx';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
 
-const ReleaseAction = ({ 
-  id, rType, actionText, contextText, isX
-})=> {
+const ReleaseAction = ({ id, rType, actionText, contextText })=> {
   
   const [ datetime, datetimeSet ] = useState( moment().format() );
   
@@ -18,15 +15,9 @@ const ReleaseAction = ({
   }
   
   function handleRelease(e, caution) {
-    if(isX) {
-      Meteor.call('addRelease', id, rType, datetime, caution, (err)=>{
-        err && console.log(err);
-      });
-    }else{
-      Meteor.call('addReleaseLEGACY', id, rType, datetime, caution, (err)=>{
-        err && console.log(err);
-      });
-    }
+    Meteor.call('addRelease', id, rType, datetime, caution, (err)=>{
+      err && console.log(err);
+    });
   }
   
   let sty = {
@@ -77,7 +68,7 @@ export const ReleaseWrapper = ({
   releasedBool, releaseObj, 
   actionKeyword, actionText, 
   holdText, unholdText, undoText, contextText,
-  lockout, isX, children
+  lockout, children
 })=> {
   
   const clear = releasedBool === true;
@@ -85,40 +76,22 @@ export const ReleaseWrapper = ({
   
   function handleRelease(e, caution) {
     const datetime = moment().format();
-    if(isX) {
-      Meteor.call('addRelease', id, actionKeyword, datetime, caution, (err)=>{
-        err && console.log(err);
-      });
-    }else{
-        Meteor.call('addReleaseLEGACY', id, actionKeyword, datetime, caution, (err)=>{
-          err && console.log(err);
-        });
-    }
+    Meteor.call('addRelease', id, actionKeyword, datetime, caution, (err)=>{
+      err && console.log(err);
+    });
   }
   
   function handleCancel() {
-    if(isX) {
-      Meteor.call('cancelRelease', id, actionKeyword, (err)=>{
-        err && console.log(err);
-      });
-    }else{
-      Meteor.call('cancelReleaseLEGACY', id, actionKeyword, (err)=>{
-        err && console.log(err);
-      });
-    }
+    Meteor.call('cancelRelease', id, actionKeyword, (err)=>{
+      err && console.log(err);
+    });
   }
   
   function handleCautionFlip() {
     const newCaution = cautionState ? false : Pref.shortfall;
-    if(isX) {
-      Meteor.call('cautionFlipRelease', id, actionKeyword, newCaution, (err)=>{
-        err && console.log(err);
-      });
-    }else{
-      Meteor.call('cautionFlipReleaseLEGACY', id, actionKeyword, newCaution, (err)=>{
-        err && console.log(err);
-      });
-    }
+    Meteor.call('cautionFlipRelease', id, actionKeyword, newCaution, (err)=>{
+      err && console.log(err);
+    });
   }
   
   const isAuth = Roles.userIsInRole(Meteor.userId(), ['run', 'kitting']);

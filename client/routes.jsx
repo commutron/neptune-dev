@@ -32,7 +32,6 @@ AppDB = new Mongo.Collection('appdb');
 GroupDB = new Mongo.Collection('groupdb');
 WidgetDB = new Mongo.Collection('widgetdb');
 VariantDB = new Mongo.Collection('variantdb');
-BatchDB = new Mongo.Collection('batchdb');
 XBatchDB = new Mongo.Collection('xbatchdb');
 XSeriesDB = new Mongo.Collection('xseriesdb');
 XRapidsDB = new Mongo.Collection('xrapidsdb');
@@ -70,21 +69,21 @@ exposedRoutes.route('/login', {
     });
   }
 });
-/*
+
 exposedRoutes.route('/meta', {
   name: 'meta',
   action() {
     mount(SplashLayout, {
       content: (
         <div className='centreSpash'>
-          <div>
+          <div className='monoFont centreText whiteT'>
             <p className='centre'>
               <img src='/titleLogo.svg' className='shadow noCopy' height='400' />
             </p>
-            <div className='monoFont centreText'>
+            <div>
               <p>Neptune {Pref.neptuneVersion}</p>
               <p>Copyright (c) 2016-present Commutron Industries <a href='https://www.commutron.ca' target='_blank'>https://www.commutron.ca</a></p>
-              <p>Author 2016-present Matthew Andreas <a href='https://github.com/mattandwhatnot' target='_blank'>https://github.com/mattandwhatnot</a></p>
+              <p>Author 2016-2021 Matthew Andreas <a href='https://github.com/mattandwhatnot' target='_blank'>https://github.com/mattandwhatnot</a></p>
               <p>All Rights Reserved, No Public License</p>
               <p>Source avaliable <a href='https://github.com/commutron/neptune-dev' target='_blank'>https://github.com/commutron/neptune-dev</a></p>
             </div>
@@ -94,7 +93,6 @@ exposedRoutes.route('/meta', {
     });
   }
 });
-*/
 
 const privlegedRoutes = FlowRouter.group({
   triggersEnter: [

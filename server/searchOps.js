@@ -3,34 +3,6 @@ import moment from 'moment';
 
 import Config from '/server/hardConfig.js';
 
-export function whatIsBatch(keyword, labelString) {
-  const batch = BatchDB.findOne({batch: keyword});
-  if(!batch) {
-    return false;
-  }else{
-    const widget = WidgetDB.findOne({_id: batch.widgetId});
-    const group = GroupDB.findOne({_id: widget.groupId});
-    const groupH = group.hibernate ? "."+group.alias : group.alias;
-    const variant = VariantDB.findOne({versionKey: batch.versionKey});
-    const more = widget.describe;
-    
-    if(labelString) {
-      const label = '/print/generallabel/' + keyword +
-                    '?group=' + group.alias +
-                    '&widget=' + widget.widget +
-                    '&ver=' + variant.variant +
-                    '&desc=' + more +
-                    '&sales=' + batch.salesOrder +
-                    '&quant=' + batch.items.length; 
-      return label;     
-    }else{
-      const vNice = `v.${variant.variant}`;
-      const nice = [ groupH.toUpperCase(), widget.widget.toUpperCase(), vNice ];
-      return [ nice, more ];
-    }
-  }
-}
-
 export function whatIsBatchX(keyword, labelString) {
   const batch = XBatchDB.findOne({batch: keyword});
   const group = GroupDB.findOne({_id: batch.groupId});
@@ -55,12 +27,11 @@ export function whatIsBatchX(keyword, labelString) {
   }
 }
 
-
     
 Meteor.methods({
   
   getBasicBatchInfo(keyword) {
-    const niceString = whatIsBatch(keyword) || whatIsBatchX(keyword);
+    const niceString = whatIsBatchX(keyword);
     const niceObj = {
       batch: keyword, 
       isWhat: niceString[0],
@@ -70,66 +41,41 @@ Meteor.methods({
   },
   
   getBatchPrintLink(keyword) {
-    const labelString = whatIsBatch(keyword, true) || whatIsBatchX(keyword, true);
+    const labelString = whatIsBatchX(keyword, true);
     return labelString;
   },
   
   batchLookup(orb) { // significantly faster than findOne
-    const oneBatch = BatchDB.find({ batch: orb },{fields:{'batch':1},limit:1}).count();
-    if(oneBatch) {
-      return 'trueB';
+   const onexBatch = XBatchDB.find({ batch: orb },{fields:{'batch':1},limit:1}).count();
+    if(onexBatch) {
+      return 'trueX';
     }else{
-      const onexBatch = XBatchDB.find({ batch: orb },{fields:{'batch':1},limit:1}).count();
-      if(onexBatch) {
-        return 'trueX';
-      }else{
-        return false;
-      }
+      return false;
     }
   },
   
   serialLookup(orb) {
-    const itemsBatch = BatchDB.findOne({'items.serial': orb},{fields:{'batch':1}}) ||
-                       XSeriesDB.findOne({'items.serial': orb},{fields:{'batch':1}});
+    const itemsBatch = XSeriesDB.findOne({'items.serial': orb},{fields:{'batch':1}});
     return itemsBatch ? itemsBatch.batch : false;
   },
   
   serialLookupPartial(orb) {
-    const itemsBatch = BatchDB.find({
-                        "items.serial": { $regex: new RegExp( orb ) }
-                      },{fields:{'batch':1,'items.serial':1}}).fetch();
-    if( itemsBatch.length === 1 ) {
-      const single = itemsBatch.length === 1;
-      
-      const exact = !single ? false : 
-        itemsBatch[0].items.find( x => x.serial === orb ) ? true : false;
-
-      const results = [];
-      for(let iB of itemsBatch) {
-        const describe = whatIsBatch(iB.batch)[0].join(' ');
-        if(describe) {
-          results.push([ iB.batch, describe ]);
-        }
-      }
-      return [ results, exact ];
-    }else{ 
-      const itemsSeries = XSeriesDB.find({
-                            "items.serial": { $regex: new RegExp( orb ) }
-                          },{fields:{'batch':1,'items.serial':1}}).fetch();
-                          
-      const single = itemsSeries.length === 1;
-      
-      const exact = !single ? false : 
-        itemsSeries[0].items.find( x => x.serial === orb ) ? true : false;
-
-      const results = [];
-      for(let iS of itemsSeries) {
-        const describe = whatIsBatchX(iS.batch)[0].join(' ');
-        results.push([ iS.batch, describe ]);
-      }
+    const itemsSeries = XSeriesDB.find({
+                          "items.serial": { $regex: new RegExp( orb ) }
+                        },{fields:{'batch':1,'items.serial':1}}).fetch();
+                        
+    const single = itemsSeries.length === 1;
     
-      return [ results, exact ];
+    const exact = !single ? false : 
+      itemsSeries[0].items.find( x => x.serial === orb ) ? true : false;
+
+    const results = [];
+    for(let iS of itemsSeries) {
+      const describe = whatIsBatchX(iS.batch)[0].join(' ');
+      results.push([ iS.batch, describe ]);
     }
+  
+    return [ results, exact ];
   },
   
   quickVariant(vKey) {

@@ -11,7 +11,6 @@ function collectBranchCondition(privateKey, batchID) {
     const app = AppDB.findOne({orgKey: privateKey});
     const branches = app.branches;
     const batchX = XBatchDB.findOne({_id: batchID});
-    const batch = BatchDB.findOne({_id: batchID});
     
     if(batchX) {
       if(batchX.completed && !batchX.live) {
@@ -109,86 +108,6 @@ function collectBranchCondition(privateKey, batchID) {
           branchSets: branchSets
         });
       }
-    }else if(batch) {
-      if(batch.finishedAt !== false && !batch.live) {
-        resolve({
-          batch: batch.batch,
-          batchID: batch._id,
-          onFloor: false,
-          branchSets: []
-        });
-      }else{
-        const docW = WidgetDB.findOne({_id: batch.widgetId});
-        const flow = docW.flows.find( x => x.flowKey === batch.river );
-        const riverFlow = flow ? flow.flow : [];
-        
-        const rNC = batch.nonCon.filter( n => 
-          !n.trash && n.inspect === false && n.skip === false );
-        
-        const released = batch.releases.findIndex( x => x.type === 'floorRelease') >= 0;
-        let previous = released;
-        
-        let progSteps = riverFlow;
-        progSteps.map( (step, index)=> {
-          if(!previous) {
-            progSteps[index].condition = 'onHold';
-          }else{
-            
-            const wipStart = batch.items.some( 
-              x => x.history.find( 
-                y => y.key === step.key && y.good === true
-            ) );
-            
-            if( wipStart === false ) {
-              progSteps[index].condition = 'canStart';
-              previous = false;
-            }else if(step.type === 'first') {
-              progSteps[index].condition = 'allClear';
-            }else{
-              
-              const wipDone = batch.items.every( 
-                x => x.finishedAt !== false || x.history.find( 
-                  y => ( y.key === step.key && y.good === true ) )
-              );
-              
-              let condition = !wipDone ? 'stepRemain' : 'allClear';
-                           
-              progSteps[index].condition = condition;
-            }
-          }
-        });
-        
-        let branchSets = [];
-        for(let branch of branches) {
-          const branchSteps = progSteps.filter( x => x.branchKey === branch.brKey );
-          const conArr = Array.from(branchSteps, x => x.condition );
-          
-          const nonConLeft = branch.brKey === 't3rm1n2t1ng8r2nch' ? rNC.length :
-                              rNC.filter( x => x.where === branch.branch ).length;
-              
-          const branchCon = branchSteps.length === 0 ? false :
-            conArr.includes('canStart') ||
-            conArr.includes('stepRemain') ||
-            nonConLeft > 0 ?
-            'open' :
-            conArr.includes('onHold') ? 
-            'onHold' :
-            'closed';
-            
-          branchSets.push({
-            brKey: branch.brKey,
-            branch: branch.branch,
-            condition: branchCon
-          });
-        }
-   
-        resolve({
-          batch: batch.batch,
-          batchID: batch._id,
-          onFloor: released,
-          branchSets: branchSets
-        });
-      }
     }else{
       resolve(false);
     }
@@ -205,7 +124,6 @@ function collectProgress(privateKey, batchID, branchOnly) {
             brancheS.filter( b => b.branch === branchOnly );
             
     const bx = XBatchDB.findOne({_id: batchID});
-    const batch = BatchDB.findOne({_id: batchID});
     
     let branchSets = [];
     
@@ -270,57 +188,6 @@ function collectProgress(privateKey, batchID, branchOnly) {
       resolve({
         batchID: bx._id,
         totalItems: totalTotal,
-        branchSets: branchSets,
-      });
-    
-    }else if(batch) {
-      const docW = WidgetDB.findOne({_id: batch.widgetId});
-      const flow = docW.flows.find( x => x.flowKey === batch.river );
-      const riverFlow = flow ? flow.flow : [];
-      
-      const totalItems = batch.items.length;
-      
-      const rNC = batch.nonCon.filter( n => 
-        !n.trash && n.inspect === false && n.skip === false );
-      
-      const doneItems = batch.items.filter( x => x.finishedAt !== false ).length;
-      const wipItems = batch.items.filter( 
-                        x => x.finishedAt === false ); // not done
-      
-      const historyFlat = flattenHistory(wipItems);
-      
-      for(let branch of relevantBrancheS) {
-        const steps = riverFlow.filter( x => x.branchKey === branch.brKey && x.type !== 'first' );
-        
-        let counter = 0;
-        for(let stp of steps) {
-          const wipTally = historyFlat.filter( x => x.key === stp.key ).length;
-          counter = counter + ( doneItems + wipTally );
-        }
-        
-        const nonConLeft = branch.brKey === 't3rm1n2t1ng8r2nch' ? rNC.length > 0 :
-                            rNC.filter( x => x.where === branch.branch ).length > 0;
-        const shortLeft = batch.shortfall.filter( s => 
-                          s.inEffect !== true && s.reSolve !== true 
-                        ).length > 0;
-        
-        const calPer = ( counter / (totalItems * steps.length) ) * 100;
-        const calNum = calPer > 0 && calPer < 1 ? 
-                          calPer.toPrecision(1) : Math.floor( calPer );
-        
-        branchSets.push({
-          branch: branch.branch,
-          steps: steps.length,
-          // count: counter,
-          calNum: calNum,
-          ncLeft: nonConLeft,
-          shLeft: shortLeft
-        });
-      }
- 
-      resolve({
-        batchID: batch._id,
-        totalItems: totalItems,
         branchSets: branchSets,
       });
       

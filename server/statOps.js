@@ -46,23 +46,6 @@ export const totalTideTimePromise = (accessKey, rangeStart, rangeEnd)=> {
     const rSdate = new Date(rangeStart);
     const rEdate = new Date(rangeEnd);
     
-    BatchDB.find({
-      orgKey: accessKey,
-      createdAt: { 
-        $lte: rEdate
-      },
-      tide: { $elemMatch: { startTime: {
-        $gte: rSdate,
-        $lte: rEdate
-      }}}
-    }).forEach( gf => {
-      const windowedTide = gf.tide.filter( x =>
-        moment(x.startTime).isBetween(rangeStart, rangeEnd)
-      );
-      const tcount = batchTideTime(windowedTide);
-      totalCount += tcount;
-    });
-    
     XBatchDB.find({
       orgKey: accessKey,
       createdAt: { 
@@ -101,15 +84,12 @@ Meteor.methods({
   
   widgetTops(wID) {
     const variants = VariantDB.find({widgetId: wID}).fetch().length;
-    const batches = BatchDB.find({orgKey: Meteor.user().orgKey, widgetId: wID}).fetch();
     const batchesX = XBatchDB.find({orgKey: Meteor.user().orgKey, widgetId: wID}).fetch();
-    const batchInfo = Array.from(batches, x => { return { 
-      items: x.items.length,
-    }});
+    
     const batchInfoX = Array.from(batchesX, x => { return { 
       quantity: x.quantity,
     }});
-    return { batchInfo, batchInfoX, variants };
+    return [ variants, batchInfoX ];
   },
   
   nonConSelfCount(nonConCol) {

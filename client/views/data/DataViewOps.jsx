@@ -12,32 +12,24 @@ import AllGroups from './panels/AllGroups/AllGroups.jsx';
 
 import BuildHistory from './panels/BuildHistory.jsx';
 
-import ItemPanel from './panels/ItemPanel.jsx';
 import ItemPanelX from './panels/ItemPanelX';
-import BatchPanel from './panels/BatchPanel/BatchPanel.jsx';
 import BatchPanelX from './panels/XBatchPanel/BatchPanelX.jsx';
 import WidgetPanel from './panels/WidgetPanel/WidgetPanel';
 import TestFailPanel from './panels/TestFailPanel.jsx';
 import ScrapPanel from './panels/ScrapPanel.jsx';
 
 import BatchesList from './lists/BatchesList.jsx';
-import ItemsList from './lists/ItemsList.jsx';
 import ItemsListX from './lists/ItemsListX';
-
-
-// import WidgetsList from './lists/WidgetsList.jsx';
-
-import ProgressCounter from '/client/utility/ProgressCounter.js';
 
 import FlowCounter, { FallCounter, WhiteWaterCounter } from '/client/utility/ProgressCounterX';
 import { NonConMerge } from '/client/utility/NonConOptions';
 
 
 const DataViewOps = ({ 
-  allXBatch, allBatch, 
+  allXBatch, 
   allGroup, allWidget, allVariant,
   user, isDebug, app, brancheS, users,
-  hotBatch, hotXBatch, hotXSeries, hotXRapids,
+  hotXBatch, hotXSeries, hotXRapids,
   view, request, specify,
   subLink, orb
 })=> {
@@ -46,8 +38,7 @@ const DataViewOps = ({
   
   function allLinkedBatches(wId) {
     const xBatches = allXBatch.filter(x => x.widgetId === wId);
-    const legacyBatches = allBatch.filter(x => x.widgetId === wId);
-    return [...xBatches, ...legacyBatches ];
+    return xBatches;
   }
   
   function itemData(items, bar) {
@@ -59,8 +50,7 @@ const DataViewOps = ({
   }
   
   function getWidget(request) {
-    return allWidget.find( x => 
-              x._id === request || x.widget === request );
+    return allWidget.find( x => x._id === request || x.widget === request );
   }
   function linkedWidget(wId) {
     return allWidget.find(x => x._id === wId);
@@ -76,52 +66,6 @@ const DataViewOps = ({
   
   function widgetVariants(wId) {
     return allVariant.filter(x => x.widgetId === wId);
-  }
-
-  function getFlowDataLEGACY(batchData, widgetData, appData) {
-    let riverTitle = 'not found';
-    let riverFlow = [];
-    let riverAltTitle = 'not found';
-    let riverFlowAlt = [];
-    let ncListKeys = [];
-    let ncTypesComboFlat = [];
-    let progCounts = false;
-    
-    if( widgetData && batchData ) {
-      
-      const getRiverFirst = (w, b)=> {
-        return new Promise(function(resolve) {
-          const river = w.flows.find( x => x.flowKey === b.river);
-          const riverAlt = w.flows.find( x => x.flowKey === b.riverAlt );
-          if(river) {
-            riverTitle = river.title;
-            riverFlow = river.flow;
-            river.type === 'plus' && ncListKeys.push(river.ncLists);
-          }
-          if(riverAlt) {
-            riverAltTitle = riverAlt.title;
-            riverFlowAlt = riverAlt.flow;
-            riverAlt.type === 'plus' && ncListKeys.push(riverAlt.ncLists);
-          }
-          resolve('Success');
-        });
-      };
-      
-      const generateSecond = (w, b, app)=> {
-        progCounts = ProgressCounter(riverFlow, riverFlowAlt, b);
-        
-        ncTypesComboFlat = NonConMerge(ncListKeys, app, user, true);
-      };
-
-      getRiverFirst(widgetData, batchData)
-        .then(generateSecond(widgetData, batchData, appData));
-        
-    }
-    return {
-      riverTitle, riverFlow, 
-      riverAltTitle, riverFlowAlt, 
-      ncTypesComboFlat, progCounts
-    };
   }
   
   function getFlowData(batchData, seriesData, widgetData, appData) {
@@ -206,7 +150,6 @@ const DataViewOps = ({
         base={true}
       >
         <ExploreLanding
-          batchData={allBatch}
           xBatchData={allXBatch}
           widgetData={allWidget}
           variantData={allVariant}
@@ -233,7 +176,6 @@ const DataViewOps = ({
         base={true}
       >
         <BuildHistory
-          allBatch={allBatch}
           allXBatch={allXBatch}
           allVariant={allVariant}
           allWidget={allWidget}
@@ -259,7 +201,6 @@ const DataViewOps = ({
         base={true}
       >
         <ReportsWrap
-          allBatch={allBatch}
           allXBatch={allXBatch}
           allWidget={allWidget}
           allVariant={allVariant}
@@ -288,7 +229,6 @@ const DataViewOps = ({
           base={true}
         >
           <AllGroups
-            batchData={allBatch}
             batchDataX={allXBatch}
             widgetData={allWidget}
             variantData={allVariant}
@@ -312,12 +252,11 @@ const DataViewOps = ({
     //       base={true}
     //     >
     //       <AllBatches
-    //         batchData={allBatch}
+    //         batchData={allXBatch}
     //         widgetData={allWidget}
     //         groupData={allGroup}
     //         allWidget={allWidget}
     //         allVariant={allVariant}
-    //         allBatch={allBatch}
     //         allXBatch={allXBatch}
     //         app={app}
     //         isDebug={isDebug} />
@@ -340,7 +279,7 @@ const DataViewOps = ({
           base={true}
         >
           <TestFailPanel 
-            batchData={allBatch} 
+            batchData={allXBatch} 
             app={app} />
         </TraverseWrap>
       );
@@ -359,7 +298,7 @@ const DataViewOps = ({
           base={true}
         >
           <ScrapPanel 
-            batchData={allBatch} 
+            batchData={allXBatch} 
             app={app} />
         </TraverseWrap>
       );
@@ -387,68 +326,7 @@ const DataViewOps = ({
     
 // Item
 	if(view === 'batch' && specify) {
-    if(hotBatch) {
-      let item = itemData(hotBatch.items, specify);
-      let widget = linkedWidget(hotBatch.widgetId);
-      let variant = linkedVariantKey(hotBatch.versionKey);
-      let group = linkedGroup(widget.groupId);
-      let flowData = getFlowDataLEGACY(hotBatch, widget, app);
-      if(item && widget && variant && group) {
-        return (
-          <TraverseWrap
-            batchData={hotBatch}
-            itemData={item}
-            widgetData={widget}
-            variantData={variant}
-            groupData={group}
-            user={user}
-            app={app}
-            title='Item'
-            subLink={subLink}
-            action='item'
-            darkTheme={true}
-          >
-            <ItemPanel
-              batchData={hotBatch}
-              itemData={item}
-              widgetData={widget}
-              variantData={variant}
-              groupData={group}
-              app={app}
-              brancheS={brancheS}
-              user={user}
-              listTitle={true}
-              flowData={flowData} />
-            <ItemsList
-              batchData={hotBatch}
-              widgetData={widget}
-              flowData={flowData}
-              orb={orb}
-              isDebug={isDebug} />
-          </TraverseWrap>
-        );
-      }else{
-        return(
-          <TraverseWrap
-  		      batchData={false}
-            widgetData={false}
-            variantData={false}
-            groupData={false}
-            user={user}
-            app={app}
-            title='!!!'
-            subLink={subLink}
-            action={false}
-            base={true}
-          >
-            <div className='centre wide'>
-              <p className='big'>Data Does Not Exist</p>
-            </div>
-            <div></div>
-          </TraverseWrap>
-        );
-      }
-    }else if(hotXSeries) {
+    if(hotXSeries) {
       let item = itemData(hotXSeries.items, specify);
       let widget = linkedWidget(hotXSeries.widgetId);
       let variant = linkedVariantKey(hotXSeries.versionKey);
@@ -459,7 +337,7 @@ const DataViewOps = ({
       let rapXData = getRapidData(hotXBatch, hotXSeries, hotXRapids);
       
       if(item && widget && variant && group) {
-        return (
+        return(
           <TraverseWrap
             batchData={hotXBatch}
             seriesData={hotXSeries}
@@ -523,46 +401,7 @@ const DataViewOps = ({
 
 // Batch
   if(view === 'batch') {
-    if(hotBatch) {
-      let widget = linkedWidget(hotBatch.widgetId);
-      let variant = linkedVariantKey(hotBatch.versionKey);
-      let allVariants = widgetVariants(hotBatch.widgetId);
-      let group = linkedGroup(widget.groupId);
-      let flowData = getFlowDataLEGACY(hotBatch, widget, app);
-      return(
-		    <TraverseWrap
-		      batchData={hotBatch}
-          widgetData={widget}
-          variantData={variant}
-          allVariants={allVariants}
-          groupData={group}
-          user={user}
-          app={app}
-          flowData={flowData}
-          title='Batch'
-          subLink={subLink}
-          action='batch'
-          darkTheme={true}
-        >
-          <BatchPanel
-            batchData={hotBatch}
-            widgetData={widget}
-            variantData={variant}
-            groupData={group} 
-            app={app}
-            brancheS={brancheS}
-            user={user}
-            isDebug={isDebug}
-            flowData={flowData} />
-          <ItemsList
-		        batchData={hotBatch}
-		        widgetData={widget}
-		        flowData={flowData}
-		        orb={orb}
-		        isDebug={isDebug} />
-        </TraverseWrap>
-      );
-    }else if(hotXBatch) {
+    if(hotXBatch) {
       let widget = linkedWidget(hotXBatch.widgetId);
       let variant = linkedVariantKey(hotXBatch.versionKey);
       let allVariants = widgetVariants(hotXBatch.widgetId);
@@ -572,8 +411,7 @@ const DataViewOps = ({
       let fallData = getFallData(hotXBatch, app);
       let rapXData = getRapidData(hotXBatch, hotXSeries, hotXRapids);
       
-      const isNigh = Roles.userIsInRole(Meteor.userId(), 'nightly');
-      return (
+      return(
 		    <TraverseWrap
 		      batchData={hotXBatch}
           seriesData={hotXSeries}
@@ -599,8 +437,7 @@ const DataViewOps = ({
             fallData={fallData}
             app={app}
             user={user}
-            isDebug={isDebug}
-            isNigh={isNigh} />
+            isDebug={isDebug} />
           <ItemsListX
             seriesData={hotXSeries}
 		        batchData={hotXBatch}

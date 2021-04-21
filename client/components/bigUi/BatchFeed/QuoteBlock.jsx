@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import '/client/components/bigUi/ItemFeed/style.css';
+import '/client/components/bigUi/ItemFeedX/style.css';
 
 const QuoteBlock = ({ dt, cal })=>{
 

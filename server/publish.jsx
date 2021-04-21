@@ -6,7 +6,7 @@ AppDB = new Mongo.Collection('appdb');
 GroupDB = new Mongo.Collection('groupdb');
 WidgetDB = new Mongo.Collection('widgetdb');
 VariantDB = new Mongo.Collection('variantdb');
-BatchDB = new Mongo.Collection('batchdb');
+BatchDB = new Mongo.Collection('batchdb');//XXXX\\
 XBatchDB = new Mongo.Collection('xbatchdb');
 XSeriesDB = new Mongo.Collection('xseriesdb');
 XRapidsDB = new Mongo.Collection('xrapidsdb');
@@ -319,17 +319,6 @@ Meteor.publish('shaddowData', function(){
     return this.ready();
   }else{
     return [
-      BatchDB.find({orgKey: orgKey, live: true}, {
-        fields: {
-          'batch': 1,
-          'live': 1,
-          'finishedAt': 1,
-          'salesOrder': 1,
-          'end': 1,
-          'releases': 1,
-        },
-        sort: {batch:-1},
-      }),
       XBatchDB.find({orgKey: orgKey, live: true}, {
         fields: {
           'batch': 1,
@@ -374,16 +363,6 @@ Meteor.publish('thinData', function(){
           'versionKey': 1,
           'variant': 1
         }}),
-      
-      BatchDB.find({orgKey: orgKey, live: true}, {
-        sort: {batch:-1},
-        fields: {
-          'batch': 1,
-          'widgetId': 1,
-          'versionKey': 1,
-          'live': 1,
-          'finishedAt': 1,
-        }}),
           
       XBatchDB.find({orgKey: orgKey, live: true}, {
         sort: {batch:-1},
@@ -410,22 +389,13 @@ Meteor.publish('hotDataPlus', function(scanOrb, keyMatch){
                       Meteor.call( 'serialLookup', scanOrb ) :
                       Meteor.call( 'batchLookup', scanOrb ) ? scanOrb : false;
 
-  const bxData = BatchDB.findOne({batch: trueBatch, orgKey: orgKey}) ||
-                 XBatchDB.findOne({batch: trueBatch, orgKey: orgKey});
+  const bxData = XBatchDB.findOne({batch: trueBatch, orgKey: orgKey});
   
   const wID = !bxData ? false : bxData.widgetId;
   if(!this.userId){
     return this.ready();
   }else{
     return [
-      BatchDB.find({batch: trueBatch, orgKey: orgKey}, {
-        fields: {
-          'orgKey': 0,
-          'shareKey': 0,
-          'events': 0,
-          'floorRelease': 0,
-          'lockTrunc': 0
-        }}),
       XBatchDB.find({batch: trueBatch, orgKey: orgKey}, {
         fields: {
           'orgKey': 0,
@@ -488,21 +458,6 @@ Meteor.publish('skinnyData', function(){
           'variant': 1,
           'createdAt': 1
         }}),
-      
-      BatchDB.find({orgKey: orgKey}, {
-        sort: {batch:-1},
-        fields: {
-            'batch': 1,
-            'widgetId': 1,
-            'versionKey': 1,
-            'tags': 1,
-            'createdAt': 1,
-            'live': 1,
-            'lock': 1,
-            'salesOrder': 1,
-            'finishedAt': 1
-            // 'lockTrunc': 1
-          }}),
     
       XBatchDB.find({orgKey: orgKey}, {
         sort: {batch:-1},
@@ -540,10 +495,9 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
   let hothotWidget = hotWidget || false;
   
   if(!hothotWidget) {
-    const hotBatchXBatch = BatchDB.findOne({ batch: dataRequest }) ||
-                           XBatchDB.findOne({ batch: dataRequest });
-    if(hotBatchXBatch) {
-      const maybe = WidgetDB.findOne({ _id: hotBatchXBatch.widgetId });
+    const hotXBatch = XBatchDB.findOne({ batch: dataRequest });
+    if(hotXBatch) {
+      const maybe = WidgetDB.findOne({ _id: hotXBatch.widgetId });
       if(maybe) {
         hothotWidgetID = maybe._id;
         hothotWidget = maybe.widget;
@@ -599,13 +553,6 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
         VariantDB.find({widgetId: hothotWidgetID, orgKey: orgKey}, {
           fields: {
             'orgKey': 0,
-          }}),
-        BatchDB.find({batch: dataRequest, orgKey: orgKey}, {
-          fields: {
-            'orgKey': 0,
-            'shareKey': 0,
-            'floorRelease': 0,
-            'lockTrunc': 0
           }}),
         XBatchDB.find({batch: dataRequest, orgKey: orgKey}, {
           fields: {

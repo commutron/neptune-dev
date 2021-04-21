@@ -340,10 +340,9 @@ Meteor.methods({
     return runLoop();
   },
   
-  
   cycleLiteRate(cName, cycles) {
     this.unblock();
-      try {
+    try {
 
       if( !cName || typeof cName !== 'string' || typeof cycles !== 'number' ) {
         return false;

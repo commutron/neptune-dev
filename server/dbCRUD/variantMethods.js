@@ -100,9 +100,8 @@ Meteor.methods({
   changeVive(vId, vKey, status) {
     const flip = !status;
     const accessKey = Meteor.user().orgKey;
-    const inUse = BatchDB.findOne({versionKey: vKey, live: true});
     const inUseX = XBatchDB.findOne({versionKey: vKey, live: true});
-    if(!inUse && !inUseX && Roles.userIsInRole(Meteor.userId(), 'edit')) {
+    if(!inUseX && Roles.userIsInRole(Meteor.userId(), 'edit')) {
       VariantDB.update({_id: vId, orgKey: accessKey}, {
   			$set : {
   			  live: flip
@@ -119,9 +118,8 @@ Meteor.methods({
   deleteVariant(vObj, pass) {
     const doc = VariantDB.findOne({_id: vObj._id});
     const versionKey = doc.versionKey;
-    const inUse = BatchDB.findOne({versionKey: versionKey});
     const inUseX = XBatchDB.findOne({versionKey: versionKey});
-    if(!inUse && !inUseX) {
+    if(!inUseX) {
       const lock = doc.createdAt.toISOString().split("T")[0];
       const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
       const access = doc.orgKey === Meteor.user().orgKey;
@@ -156,10 +154,6 @@ Meteor.methods({
   pushVTag(vId, vKey, tag) {
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
       VariantDB.update({_id: vId, orgKey: Meteor.user().orgKey}, {
-        $push : { 
-          tags: tag
-        }});
-      BatchDB.update({orgKey: Meteor.user().orgKey, versionKey: vKey, live: true}, {
         $push : { 
           tags: tag
         }});

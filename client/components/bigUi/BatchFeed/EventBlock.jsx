@@ -1,5 +1,5 @@
 import React from 'react';
-import '/client/components/bigUi/ItemFeed/style.css';
+import '/client/components/bigUi/ItemFeedX/style.css';
 
 const EventBlock = ({ dt, cal })=> (
   <n-feed-info-block class='genericEvent'>

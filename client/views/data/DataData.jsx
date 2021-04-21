@@ -14,8 +14,7 @@ const ExploreView = ({
   coldReady, hotReady, // subs
   user, isDebug, org, users, app, // self
   allGroup, allWidget, allVariant, // customers
-  allBatch, allXBatch, 
-  hotBatch, hotXBatch, hotXSeries, hotXRapids, // relevant
+  allXBatch, hotXBatch, hotXSeries, hotXRapids, // relevant
   view, request, specify, subLink // routing
 })=> {
   
@@ -52,7 +51,6 @@ const ExploreView = ({
   
   const branchesSort = app.branches.sort((b1, b2)=>
           b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
-       
     
   return(
     <ErrorCatch>
@@ -66,9 +64,7 @@ const ExploreView = ({
         allGroup={allGroup}
         allWidget={allWidget}
         allVariant={allVariant}
-        allBatch={allBatch}
         allXBatch={allXBatch}
-        hotBatch={hotBatch}
         hotXBatch={hotXBatch}
         hotXSeries={hotXSeries}
         hotXRapids={hotXRapids}
@@ -91,7 +87,6 @@ export default withTracker( ({ view, request, specify }) => {
 
   const coldSub = login ? Meteor.subscribe('skinnyData') : false;
   
-  const hotBatch = BatchDB.findOne({ batch: request }) || false;
   const hotXBatch = XBatchDB.findOne({ batch: request }) || false;
   const hotXSeries = XSeriesDB.findOne({ batch: request }) || false;
   const hotXRapids = XRapidsDB.find({ extendBatch: request }).fetch() || false;
@@ -116,9 +111,7 @@ export default withTracker( ({ view, request, specify }) => {
       allGroup: GroupDB.find( {}, { sort: { group: 1 } } ).fetch(),
       allWidget: WidgetDB.find( {}, { sort: { widget: 1 } } ).fetch(),
       allVariant: VariantDB.find( {} ).fetch(),
-      allBatch: BatchDB.find( {}, { sort: { batch: -1 } } ).fetch(),
       allXBatch: XBatchDB.find( {}, { sort: { batch: -1 } } ).fetch(),
-      hotBatch: hotBatch,
       hotXBatch: hotXBatch,
       hotXSeries: hotXSeries,
       hotXRapids: hotXRapids,

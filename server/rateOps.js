@@ -83,8 +83,7 @@ Meteor.methods({
   nonConRateLoop(batches) {
 
     const allNC = Array.from( batches, x => {
-      const bDT = XSeriesDB.findOne({batch: x}) ||
-                  BatchDB.findOne({batch: x});
+      const bDT = XSeriesDB.findOne({batch: x});
       if(bDT) { return bDT.nonCon }            
     }).filter(f=>f);
     

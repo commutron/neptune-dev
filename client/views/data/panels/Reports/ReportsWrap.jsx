@@ -8,8 +8,7 @@ import BuildDurration from './BuildDurration';
 import BuildPace from './BuildPace';
 
 const ReportsWrap = ({ 
-  allBatch, allXBatch, 
-  allWidget, allVariant, allGroup,
+  allXBatch, allWidget, allVariant, allGroup,
   app, isDebug, isNightly
 })=> (
   <div className='space36v'>
@@ -26,18 +25,9 @@ const ReportsWrap = ({
       hold={true}
       sessionTab='reportExPanelTabs'>
       
-      <MonthKPIReport
-        batchData={allBatch}
-        widgetData={allWidget}
-        groupData={allGroup} 
-        app={app}
-        isDebug={isDebug} />
+      <MonthKPIReport isDebug={isDebug} />
           
-      <ProblemReport
-        batchData={allBatch}
-        widgetData={allWidget}
-        groupData={allGroup} 
-        app={app} />
+      <ProblemReport />
       
       {!isNightly ? <div><em>Nightly Only, Outstanding Performance Issues</em></div> :
         <BuildDurration />}

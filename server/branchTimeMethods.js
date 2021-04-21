@@ -205,7 +205,6 @@ function branchBestGuess(
   trackOptions, branchOptions 
 ) {
   const tStop = tideStop ? tideStop : new Date();
-
   
   if(!batchNum) {
     return [ ['guessUnsupported'], [ "unavailable" ] ];
@@ -311,25 +310,20 @@ Meteor.methods({
   getOneBranchBestGuess(batchNum, tideObj) {
     const accessKey = Meteor.user().orgKey;
     const app = AppDB.findOne({ orgKey: accessKey });
-    const branchOptions = app.branches.sort((b1, b2)=> {
-          if (b1.position < b2.position) { return 1 }
-          if (b1.position > b2.position) { return -1 }
-          return 0;
-        });
+    const branchOptions = sortBranches(app.branches);
     const trackOptions = [...app.trackOption, app.lastTrack];
     
-    const batch = BatchDB.findOne({batch: batchNum, orgKey: accessKey}) ||
-                  XBatchDB.findOne({batch: batchNum, orgKey: accessKey});
+    const batch = XBatchDB.findOne({batch: batchNum, orgKey: accessKey});
                   
     const series = XSeriesDB.findOne({batch: batchNum});
     
     const widgetId = batch.widgetId;
     const river = batch.river;
     const releases = batch.releases || [];
-    const finishTime = batch.completedAt ? batch.completedAt : batch.finishedAt;
-    const items = series ? series.items : batch.items || [];
-    const nonCon = series ? series.nonCon : batch.nonCon || [];
-    const shortfall = series ? series.shortfall : batch.shortfall || [];
+    const finishTime = batch.completedAt;
+    const items = series ? series.items : [];
+    const nonCon = series ? series.nonCon : [];
+    const shortfall = series ? series.shortfall : [];
     const waterfall = batch.waterfall || [];
     
     const bestGuess = branchBestGuess(tideObj.who, tideObj.startTime, tideObj.stopTime,
@@ -347,18 +341,17 @@ Meteor.methods({
     const branchOptions = sortBranches(app.branches);
     const trackOptions = [...app.trackOption, app.lastTrack];
     
-    const batch = BatchDB.findOne({batch: batchNum, orgKey: accessKey}) ||
-                  XBatchDB.findOne({batch: batchNum, orgKey: accessKey});
+    const batch = XBatchDB.findOne({batch: batchNum, orgKey: accessKey});
                   
     const series = XSeriesDB.findOne({batch: batchNum});
     
     const widgetId = batch.widgetId;
     const river = batch.river;
     const releases = batch.releases || [];
-    const finishTime = batch.completedAt ? batch.completedAt : batch.finishedAt;
-    const items = series ? series.items : batch.items || [];
-    const nonCon = series ? series.nonCon : batch.nonCon || [];
-    const shortfall = series ? series.shortfall : batch.shortfall || [];
+    const finishTime = batch.completedAt;
+    const items = series ? series.items : [];
+    const nonCon = series ? series.nonCon : [];
+    const shortfall = series ? series.shortfall : [];
     const waterfall = batch.waterfall || [];
     
     let slimTimes = [];
@@ -443,12 +436,12 @@ Meteor.methods({
 
 /*
 if(rvrstp.type === 'first') {
-  const pastFirst = batch.items.some( 
+  const pastFirst = items.some( 
                       x => x.history.find( y => 
                         y.key === rvrstp.key && 
                         y.good === true &&
                         y.time < tideStart ) );
-  const futureFirst = batch.items.some( 
+  const futureFirst = items.some( 
                       x => x.history.find( y => 
                         y.key === rvrstp.key && 
                         y.time > tideStart &&

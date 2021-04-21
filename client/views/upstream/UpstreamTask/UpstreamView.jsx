@@ -9,10 +9,7 @@ import UpstreamHeaders from './UpstreamHeaders';
 import UpstreamDetails from './UpstreamDetails';
 
 
-const UpstreamView = ({ 
-  batch, batchX, traceDT,
-  user, app, brancheS, isDebug
-})=> {
+const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isDebug })=> {
   
   const sessionSticky = 'overviewUpstream';
   
@@ -36,7 +33,7 @@ const UpstreamView = ({
   
   useLayoutEffect( ()=> {
     sortInitial();
-  }, [batch, batchX, traceDT, sortBy]);
+  }, [batchX, traceDT, sortBy]);
   
   const [ updateTrigger, updateTriggerSet ] = useState(true);
   
@@ -76,7 +73,7 @@ const UpstreamView = ({
   function sortInitial() {
     return new Promise((resolve) => {
       
-      let liveBatches = [...batch,...batchX];
+      let liveBatches = batchX;
       
       let filteredBatches = liveBatches.filter( bx => {
         const releasedToFloor = Array.isArray(bx.releases) ?

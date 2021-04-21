@@ -17,11 +17,7 @@ function countNewCollection(collected, rangeStart, rangeEnd) {
   return collectFind.length;
 }
 
-const GroupLanding = ({ 
-  groupData, widgetData, variantData,
-  batchData, batchDataX, 
-  app
-})=> {
+const GroupLanding = ({ groupData, widgetData, variantData, app })=> {
   
   const xyG = timeRanges(groupData, countNewCollection, 12, 'month');
   const xyW = timeRanges(widgetData, countNewCollection, 12, 'month');

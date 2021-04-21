@@ -6,9 +6,7 @@ import GroupLanding from './GroupLanding.jsx';
 import GroupSlide from './GroupSlide.jsx';
 
 const AllGroups = ({ 
-  groupData, widgetData, variantData,
-  batchData, batchDataX, 
-  app, specify 
+  groupData, widgetData, variantData, batchDataX, app, specify 
 }) => {
   
   const sortList = groupData.sort((g1, g2)=> {
@@ -34,8 +32,6 @@ const AllGroups = ({
       topPage={
         <GroupLanding
           groupData={groupData}
-          batchData={batchData}
-          batchDataX={batchDataX}
           widgetData={widgetData}
           variantData={variantData} />
       }
@@ -50,7 +46,6 @@ const AllGroups = ({
             key={index+entry._id}
             groupData={entry}
             widgetsList={widgetsList}
-            batchData={batchData}
             batchDataX={batchDataX}
             app={app} />
         )})} 

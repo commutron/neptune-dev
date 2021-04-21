@@ -11,9 +11,8 @@ import UpstreamWrap from './UpstreamWrap.jsx';
 const View = ({
   login,
   ready, readyT, view,
-  user, app,
-  isDebug,
-  batch, batchX, traceDT,
+  user, app, isDebug,
+  batchX, traceDT,
 })=> {
   
   useLayoutEffect( ()=>{
@@ -39,7 +38,6 @@ const View = ({
     <ErrorCatch>
       <UpstreamWrap 
         view={view}
-        batch={batch}
         batchX={batchX}
         traceDT={traceDT}
         user={user}
@@ -74,7 +72,6 @@ export default withTracker( ({ view } ) => {
       user: user,
       isDebug: isDebug,
       app: AppDB.findOne({org: org}),
-      batch: BatchDB.find({live: true}).fetch(),
       batchX: XBatchDB.find({live: true}).fetch(),
       traceDT: TraceDB.find({}).fetch(),
     };

@@ -12,7 +12,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '3.0.2';
+    this.neptuneVersion = '3.0.3';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -54,22 +54,23 @@ class Pref {
     this.helpDocs = 'help';
     this.timeClock = 'Fishbowl';
     this.user = 'employees';
+    this.usrCut = RegExp(/\.|\-|\_/g);
     // terminology
     this.admin = 'org admin';
     
     this.regex5 = RegExp(/^(\d{5})$/);
     
     // simpleBatch and counters
-    this.xBatch = 'work order+';
-    this.XBatch = 'Work Order+';
-    this.xBatchs = 'work orders+';
-    this.XBatchs = 'Work Orders+';
+    this.xBatch = 'work order';
+    this.XBatch = 'Work Order';
+    this.xBatchs = 'work orders';
+    this.XBatchs = 'Work Orders';
     
-	  this.batch = 'work order';//order
-	  this.Batch = 'Work Order';//Order
-	  this.batches = 'work orders';
-	  this.item = 'item';//board
-	  this.Item = 'Item';//Board
+	  this.batch = 'legacy work order';//order
+	  this.Batch = 'Legacy Work Order';//Order
+	  this.batches = 'legacy work orders';
+	  this.item = 'item';
+	  this.Item = 'Item';
 	  this.items = 'items';
 	  
 	  this.series = 'series';
@@ -92,11 +93,11 @@ class Pref {
     this.version = 'version';// version, revision
     this.live = 'live'; // live / active in context of a product
     this.notlive = 'not live';
-    this.npi = 'npi';
-    this.npiFull = 'new product intro';
+    // this.npi = 'npi';
+    // this.npiFull = 'new product intro';
     this.unit = 'unit';// how many in a panel/set
-    this.panel = 'set of tracked items';
-    this.panelCode = 'panel serial';
+    this.panel = 'set of items';
+    this.panelCode = 'set serial';
     this.inspect = 'inspect';
     this.test = 'tester';
     this.create = 'creator';
@@ -158,25 +159,21 @@ class Pref {
     this.skipDescribe = 'Ship With Defect';
     this.snooze = 'snooze';
     this.snoozeDescribe = 'Resolve Later';
-    // escaped nonCons
-    this.escape = 'escaped';
     // scrap
     this.scrap = 'scrap';
     this.Scrap = 'Scrap';
     this.scraps = 'scraps';
     this.scrapped = 'scrapped';
     // rma
-    this.rma = 'RMA';
-    this.rmaProcess = 'RMA process';
+    this.rma = 'legacy RMA';
+    this.rmaProcess = 'legacy RMA process';
     // blocker tracking
     this.block = 'caution';
     this.solve = 'solution';
     // non tracked, ancillary processes
     this.ancillary = 'indirect';
     // shortage tracking
-    this.omit = 'omit'; // wide
-    this.omitted = 'omitted';
-    this.shortfall = 'shortfall'; // narrow
+    this.shortfall = 'shortfall';
     this.shortfalls = 'shortfalls';
       // shortage states
       this.shortagePending = "part is missing, awaiting answer";

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import JumpButton from '/client/components/tinyUi/JumpButton.jsx';
+import LeapButton from '/client/components/tinyUi/LeapButton';
 import FilterActive from '/client/components/bigUi/FilterActive.jsx';
 
 const GroupsList = ({ groupData, widgetData, batchData })=> {
@@ -73,11 +73,12 @@ const GroupsList = ({ groupData, widgetData, batchData })=> {
       {showListState.map( (entry)=> {
         let ac = activeListState.includes(entry._id) ? 'leapBar dark activeMark' : 'leapBar dark';
         return (
-          <JumpButton
+          <LeapButton
             key={entry._id}
             title={entry.alias}
             sub=''
             sty={ac}
+            address={'/data/overview?request=groups&specify=' + entry.alias}
           />
         )})}
 		</div>

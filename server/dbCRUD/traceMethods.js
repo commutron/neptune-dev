@@ -28,17 +28,15 @@ function shrinkWhole(bData, now, shipLoad, accessKey) {
   return new Promise( (resolve)=> {
     const isWhat = Meteor.call('getBasicBatchInfo', bData.batch);
     
-    const quantity = bData.quantity !== undefined ? bData.quantity : bData.items.length;
-    const serialize = bData.serialize || Array.isArray(bData.items);
+    const quantity = bData.quantity;
+    const serialize = bData.serialize;
     const rFlow = bData.river ? true :
                   bData.waterfall && bData.waterfall.length > 0 ? false : 
                   null;
     
-    const isX = bData.completed !== undefined;
-    
-    const endDay = isX ? bData.salesEnd : bData.end;
-    const didFinish = isX ? bData.completed : bData.finishedAt !== false;
-    const whenFinish = didFinish ? bData.completedAt || bData.finishedAt : false;
+    const endDay = bData.salesEnd;
+    const didFinish = bData.completed;
+    const whenFinish = didFinish ? bData.completedAt : false;
     
     const shpdlv = didFinish ? deliveryState( endDay, whenFinish )
                               // salesEnd, shipAim, didFinish, gapZone
@@ -94,8 +92,8 @@ function checkMinify(bData, accessKey) {
   return new Promise( (resolve)=> {
     const isWhat = Meteor.call('getBasicBatchInfo', bData.batch);
     
-    const quantity = bData.quantity || bData.items.length;
-    const serialize = bData.serialize || Array.isArray(bData.items);
+    const quantity = bData.quantity;
+    const serialize = bData.serialize;
     const rFlow = bData.river ? true :
                   bData.waterfall && bData.waterfall.length > 0 ? false : 
                   null;
@@ -119,11 +117,10 @@ function checkMinify(bData, accessKey) {
 
 function checkMovement(bData, now, shipLoad, accessKey) {
   return new Promise( (resolve)=> {
-    const isX = bData.completed !== undefined;
     
-    const endDay = isX ? bData.salesEnd : bData.end;
-    const didFinish = isX ? bData.completed : bData.finishedAt !== false;
-    const whenFinish = didFinish ? bData.completedAt || bData.finishedAt : false;
+    const endDay = bData.salesEnd;
+    const didFinish = bData.completed;
+    const whenFinish = didFinish ? bData.completedAt : false;
     
     const shpdlv = didFinish ? deliveryState( endDay, whenFinish )
                               // salesEnd, shipAim, didFinish, fillZ, shipZ
@@ -187,11 +184,6 @@ Meteor.methods({
         syncHoliday(accessKey);
         const now = moment().tz(Config.clientTZ);
         
-        const fetchB = BatchDB.find({orgKey: accessKey}).fetch();
-        await Promise.all(fetchB.map(async (b) => {
-            await shrinkWhole( b, now, accessKey );
-        }));
-        
         const fetchX = XBatchDB.find({orgKey: accessKey}).fetch();
         await Promise.all(fetchX.map(async (x) => {
             await shrinkWhole( x, now, accessKey );
@@ -208,9 +200,8 @@ Meteor.methods({
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       const allTrace = TraceDB.find({}).fetch();
       for( let t of allTrace ) {
-        const doc = BatchDB.findOne({_id: t.batchID});
         const docX = XBatchDB.findOne({_id: t.batchID});
-        if(!doc && !docX) {
+        if(!docX) {
            TraceDB.remove({batchID: t.batchID});
         }
       }
@@ -221,22 +212,6 @@ Meteor.methods({
     }
   },
   
-  buildNewTrace(batchNum, privateKey) {
-    const accessKey = privateKey || Meteor.user().orgKey;
-    (async ()=> {
-      try {
-        syncHoliday(accessKey);
-        const now = moment().tz(Config.clientTZ);
-        const shipLoad = getShipLoad(now);
-        
-        const batchB = BatchDB.findOne({batch: batchNum});
-                        
-        await shrinkWhole( batchB, now, shipLoad, accessKey );
-      }catch (err) {
-        throw new Meteor.Error(err);
-      }
-    })();
-  },
   buildNewTraceX(batchNum, privateKey) {
     const accessKey = privateKey || Meteor.user().orgKey;
     (async ()=> {
@@ -264,22 +239,6 @@ Meteor.methods({
         const lstweek = ( d => new Date(d.setDate(d.getDate()-7)) )(new Date);
         
         const fresh = moment().subtract(12, 'hours').toISOString();
-        
-        const fetchB = BatchDB.find({orgKey: accessKey, lock: {$ne: true},
-                        $or: [ { live: true }, 
-                               { finishedAt: { $gte: lstweek } },
-                               { end: { $gte: ystrday } }
-                             ]
-        }).fetch();
-        await Promise.all(fetchB.map(async (b) => {
-          const t = TraceDB.find({
-              batchID: b._id, 
-              lastUpserted: { $gte: new Date(fresh) }
-            },{fields:{'batchID':1}},{limit:1}).count();
-          if(!t) {
-            await checkMinify( b, accessKey );
-          }
-        }));
       
         const fetchX = XBatchDB.find({orgKey: accessKey, lock: {$ne: true},
                         $or: [ { live: true }, 
@@ -311,8 +270,7 @@ Meteor.methods({
         const now = moment().tz(Config.clientTZ);
         const shipLoad = getShipLoad(now);
         
-        const batchBX = BatchDB.findOne({_id: bID}) || 
-                        XBatchDB.findOne({_id: bID});
+        const batchBX = XBatchDB.findOne({_id: bID});
                         
         await shrinkWhole( batchBX, now, shipLoad, accessKey );
       }catch (err) {
@@ -327,8 +285,7 @@ Meteor.methods({
       try {
         syncHoliday(accessKey);
         
-        const batchBX = BatchDB.findOne({_id: bID}) || 
-                        XBatchDB.findOne({_id: bID});
+        const batchBX = XBatchDB.findOne({_id: bID});
                         
         await checkMinify( batchBX, accessKey );
       }catch (err) {
@@ -345,8 +302,7 @@ Meteor.methods({
         const now = moment().tz(Config.clientTZ);
         const shipLoad = getShipLoad(now);
         
-        const batchBX = BatchDB.findOne({_id: bID}) || 
-                        XBatchDB.findOne({_id: bID});
+        const batchBX = XBatchDB.findOne({_id: bID});
         
         await checkMovement( batchBX, now, shipLoad, accessKey );
       }catch (err) {
@@ -367,22 +323,6 @@ Meteor.methods({
         const ystrday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date);
         const lstweek = ( d => new Date(d.setDate(d.getDate()-7)) )(new Date);
         const fresh = moment().subtract(10, 'minutes').toISOString();
-        
-        const fetchB = BatchDB.find({orgKey: accessKey, lock: {$ne: true},
-                        $or: [ { live: true }, 
-                               { finishedAt: { $gte: lstweek } },
-                               { end: { $gte: ystrday } }
-                             ]
-        }).fetch();
-        await Promise.all(fetchB.map(async (b) => {
-          const t = TraceDB.find({
-              batchID: b._id, 
-              lastUpdated: { $gte: new Date(fresh) }
-            },{fields:{'batchID':1},limit:1}).count();
-          if(!t) {
-            await checkMovement( b, now, shipLoad, accessKey );
-          }
-        }));
       
         const fetchX = XBatchDB.find({orgKey: accessKey, lock: {$ne: true},
                         $or: [ { live: true }, 
@@ -412,22 +352,6 @@ Meteor.methods({
         const ystrday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date);
         const lstweek = ( d => new Date(d.setDate(d.getDate()-7)) )(new Date);
         const hot = moment().subtract(10, 'minutes').toISOString();
-        
-        const fetchB = BatchDB.find({orgKey: accessKey, lock: {$ne: true},
-                        $or: [ { live: true }, 
-                               { finishedAt: { $gte: lstweek } },
-                               { end: { $gte: ystrday } }
-                             ]
-        }).fetch();
-        await Promise.all(fetchB.map(async (b) => {
-          const t = TraceDB.find({
-              batchID: b._id, 
-              lastUpdated: { $gte: new Date(hot) }
-            },{fields:{'batchID':1},limit:1}).count();
-          if(!t) {
-            await checkNoise( b, accessKey );
-          }
-        }));
       
         const fetchX = XBatchDB.find({orgKey: accessKey, lock: {$ne: true},
                         $or: [ { live: true }, 
