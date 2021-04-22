@@ -46,7 +46,7 @@ export const RapidInfoCreate = ({
 };
 
   
-const RapidInfoEdit = ({ rapid, allQ, rSetItems, editAuth, cal })=> {
+const RapidInfoEdit = ({ batchId, rapid, allQ, rSetItems, editAuth, cal })=> {
   
   const [ editState, editSet ] = useState(false);
  
@@ -67,7 +67,7 @@ const RapidInfoEdit = ({ rapid, allQ, rSetItems, editAuth, cal })=> {
     const howText = this.rInsc.value.trim();
     const howLink = howText.length === 0 ? false : howText;
     
-    Meteor.call('editExRapidBasic', rapid._id, 
+    Meteor.call('editExRapidBasic', batchId, rapid._id, 
       rapidType, issueNum, doneTarget, quant, inHours, howLink,
       (error, re)=>{
         error && console.log(error);

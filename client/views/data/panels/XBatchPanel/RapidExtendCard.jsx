@@ -104,6 +104,7 @@ const RapidExtendCard = ({
         <span className='min200 max250'>
           
           <RapidInfoEdit 
+            batchId={batchData._id}
             rapid={rapid}
             allQ={batchData.quantity}
             rSetItems={rSetItems}

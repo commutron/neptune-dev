@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-const FoldInNested = ({ seriesId, serial, sKey, step, lock })=> {
+const FoldInNested = ({ 
+	seriesId, serial, sKey, step, lock, 
+	riverFlowStateSet, closeUndoOption
+})=> {
 	
 	const [ subState, subSet ] = useState(false);
 	const [ checkState, checkSet ] = useState(false);
@@ -35,10 +38,13 @@ const FoldInNested = ({ seriesId, serial, sKey, step, lock })=> {
   }
   
   function passNested(subSerial, exists, complete) {
+  	riverFlowStateSet( false );
+  	closeUndoOption();
 		Meteor.call('addNestedX', seriesId, serial, sKey, step, subSerial, exists, complete,
 		(error, reply)=>{
 	    error && console.log(error);
 			if(reply) {
+				riverFlowStateSet( 'slow' );
 			  document.getElementById('lookup').focus();
 		  }else{
 		    toast.error('Server Error');

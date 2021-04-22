@@ -752,6 +752,16 @@ Meteor.methods({
       
   },
   
+  DEBUGpullSubItem(seriesId, serial, nestedSerial) {
+    if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
+      
+      XSeriesDB.update({_id: seriesId, 'items.serial': serial}, {
+        $pull : {
+          'items.$.subItems': nestedSerial
+      }});
+    }
+  },
+  
 //  remove a step
   pullHistoryX(seriesId, serial, eKey, time) {
     const accessKey = Meteor.user().orgKey;

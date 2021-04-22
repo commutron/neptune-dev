@@ -19,7 +19,7 @@ const StoneControl = ({
 	flowCounts,
 	blockStone, doneStone, compEntry,
 	handleVerify,
-	openUndoOption,
+	openUndoOption, closeUndoOption,
 	timeOutCntrl, riverFlowStateSet
 })=> {
 	
@@ -36,8 +36,11 @@ const StoneControl = ({
   }, []);
   
 	useEffect( ()=> {
-		const checkLock = holdState || blockStone || ( !doneStone ? false : true );
-		if(mounted.current) { lockoutSet(checkLock) }
+		// const checkLock = holdState || blockStone || ( !doneStone ? false : true );
+		if(mounted.current) {
+			const checkLock = holdState || blockStone || doneStone;
+			lockoutSet(checkLock);
+		}
 	}, [ serial, sKey, holdState, blockStone, doneStone ]);
 	
 	function unlockAllow() {
@@ -62,6 +65,7 @@ const StoneControl = ({
 	  holdSet( true );
 	  riverFlowStateSet( false );
 	  workingSet( true );
+	  closeUndoOption();
   }
   function resolveEntry(blockUndo) {
   	riverFlowStateSet( 'slow' );

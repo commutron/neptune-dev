@@ -1,12 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react';
-import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 
 import StoneWeir from './StoneWeir';
 
 const River = ({ 
   batchData, seriesData, itemData, widgetData, 
   altIs, rapid, rapIs,
-  app, users, brancheS,
+  app, userSpeed, users, brancheS,
   useFlow, flowCounts,
   shortfallS, scrapCheck,
   showVerifyState, optionVerify, handleVerify
@@ -20,14 +20,11 @@ const River = ({
     return () => { thingMounted.current = false; };
   }, []);
   
+  function closeOption() {
+    if(thingMounted.current) { undoOpSet( false ) }
+  }
   function tempOpenOption() {
     undoOpSet( true );
-    Meteor.setTimeout(()=> {
-      if(thingMounted.current) { undoOpSet( false ); }
-    }, Pref.stepUndoWindow);
-  }
-  function closeOption() {
-    if(thingMounted.current) { undoOpSet( false ); }
   }
   
   const canVerify = Roles.userIsInRole(Meteor.userId(), 'verify');
@@ -53,9 +50,10 @@ const River = ({
         
         brancheS={brancheS}
         canVerify={canVerify}
-        users={users}
         flowCounts={flowCounts}
         app={app}
+        userSpeed={userSpeed}
+        users={users}
         
         showVerifyState={showVerifyState}
         optionVerify={optionVerify}
@@ -63,7 +61,7 @@ const River = ({
         
         undoOption={undoStepOption}
         openUndoOption={()=>tempOpenOption()}
-        closeUndoOption={()=>closeOption()} 
+        closeUndoOption={()=>closeOption()}
       />
 		</div>
 	);

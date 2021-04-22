@@ -364,7 +364,8 @@ const DataViewOps = ({
               user={user}
               listTitle={true}
               flowData={flowData}
-              fallData={fallData} />
+              fallData={fallData}
+              isDebug={isDebug} />
             <ItemsListX
               seriesData={hotXSeries}
               batchData={hotXBatch}

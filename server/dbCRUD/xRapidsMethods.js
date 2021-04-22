@@ -83,7 +83,8 @@ Meteor.methods({
     }
   },
   
-  editExRapidBasic(rapId, rType, iNum, dTgt, quant, exTime, howLink) {
+  editExRapidBasic(batchId, rapId, rType, iNum, dTgt, quant, exTime, howLink) {
+    const accessKey = Meteor.user().orgKey;
     if(Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])) {
       
       const rapid = XRapidsDB.findOne({_id: rapId});
@@ -108,9 +109,9 @@ Meteor.methods({
           instruct: howLink,
         }
       });
+      Meteor.defer( ()=>{ Meteor.call('updateOneMovement', batchId, accessKey); });
       return true;
     }
-    // Meteor.defer( ()=>{ Meteor.call('updateOneMovement', batchId, accessKey); });
   },
   
   setExRapidFall(rapId, falls) {

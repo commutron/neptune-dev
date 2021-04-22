@@ -17,12 +17,15 @@ const WindowGlass = ({
   const [ mixedOrders, mixedOrdersSet ] = useState([]);
   
   useLayoutEffect( ()=>{
-    if(indexKey === 0) {
+    if(indexKey === -1) {
+      const rapidShip = traceDT.filter( x => x.oRapid );
+      mixedOrdersSet( rapidShip );
+    }else if(indexKey === 0) {
       const lateShip = traceDT.filter( x => !x.completed && 
                         moment(x.shipAim).isSameOrBefore(windowMoment, 'day') );
       mixedOrdersSet( lateShip );
     }else{
-      const early = traceDT.filter( x => x.completed && 
+      const early = traceDT.filter( x => x.completed &&
                       moment(x.shipAim).isSame(windowMoment, 'day') );
       const shipIn = traceDT.filter( x => !x.completed && 
                       moment(x.shipAim).isSame(windowMoment, 'day') );
@@ -36,7 +39,10 @@ const WindowGlass = ({
   const headersArr = [...statCols,...progCols,...ncCols,''];
 
   return(
-    <div className='downGridFrameScroll' tabIndex='1'>
+    <div className={`downGridFrameScroll 
+                    ${indexKey === -1 ? 'rapidtitle' : 
+                      indexKey === 0 ? 'latetitle' : ''}`}
+    tabIndex='1'>
      
       <div className='downHeadScroll'>
         {headersArr.map( (entry, index)=>{

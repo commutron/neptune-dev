@@ -19,7 +19,8 @@ const NestBlock = ({
           <i><i className="fas fa-check-circle fa-lg fa-fw" title='Good'></i></i> :
           <b><i className="fas fa-times-circle fa-lg fa-fw" title='No Good'></i></b>;
    
-  const infoSub = dt.type === 'nest' && typeof dt.info === 'object' ? dt.info.subSerial : null;
+  const infoSub = dt.type === 'nest' ? typeof dt.info === 'object' ? 
+                    dt.info.subSerial : dt.comm : null;
   const infoPar = dt.type === 'nested' && typeof dt.info === 'object' ? dt.info.parentSerial : null;
   
   let subText = dt.good ? 'Contains nested item' : 'Previously contained nested item';

@@ -22,7 +22,6 @@ const ExploreLanding = ({
   const xTotal = xBatchData.length;
   const xlive = xBatchData.filter( x => x.live === true ).length;
   const xProcess = xBatchData.filter( x => x.completed === false ).length;
-  
   const xlocked = xBatchData.filter( x => x.lock === true ).length;
   
   return(
@@ -74,7 +73,7 @@ const ExploreLanding = ({
         
         <div className='centreRow vspacehalf'>
           <TrendLine 
-            title={`new ${Pref.batches}`}
+            title={`new ${Pref.xBatchs}`}
             statType='newBatch'
             cycleCount={4}
             cycleBracket='week'
@@ -88,7 +87,7 @@ const ExploreLanding = ({
             lineColor='rgb(52, 152, 219)' 
           />
           <TrendBarCache
-            title={`completed ${Pref.batches}`}
+            title={`completed ${Pref.xBatchs}`}
             statType='doneBatchLiteWeeks'
             cycleCount={4}
             cycleBracket='week'

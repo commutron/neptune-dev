@@ -18,13 +18,17 @@ const WindowFrame = ({
   const [ mixedOrders, mixedOrdersSet ] = useState([]);
   
   useLayoutEffect( ()=>{
-    if(indexKey === 0) {
+    if(indexKey === -1) {
+      const rapidShip = traceDT.filter( x => x.oRapid );
+      wipOrdersSet( rapidShip );
+      mixedOrdersSet( rapidShip );
+    }else if(indexKey === 0) {
       const lateShip = traceDT.filter( x => !x.completed && 
-                        moment(x.shipAim).isSameOrBefore(windowMoment, 'day') );
+                        moment(x.shipAim).isSameOrBefore(windowMoment, 'day'));
       wipOrdersSet( lateShip );
       mixedOrdersSet( lateShip );
     }else{
-      const early = traceDT.filter( x => x.completed && 
+      const early = traceDT.filter( x => x.completed &&
                       moment(x.shipAim).isSame(windowMoment, 'day') );
       const shipIn = traceDT.filter( x => !x.completed && 
                       moment(x.shipAim).isSame(windowMoment, 'day') );
@@ -35,9 +39,14 @@ const WindowFrame = ({
   
   
   return(
-    <div className='downGridFrameFixed'>
+    <div className={`downGridFrameFixed 
+                    ${indexKey === -1 ? 'rapidtitle' : 
+                      indexKey === 0 ? 'latetitle' : ''}`}
+    >
       <div className='downWeek' title={`ship day ${indexKey+1}`}
-        >{indexKey === 0 ? 'Late' : windowMoment.format('dddd MMM DD')}
+        >{indexKey === -1 ? 'Rapid' : indexKey === 0 ? 'Late' : 
+          windowMoment.format('dddd MMM DD')
+        }
       </div>
       
       <WindowHeader 

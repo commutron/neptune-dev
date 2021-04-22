@@ -146,7 +146,9 @@ const StoneSelect = ({
               sKey={flowStep.key}
               step={flowStep.step}
               doneStone={doneStone}
-              lock={false} />
+              lock={false}
+              riverFlowStateSet={riverFlowStateSet}
+              closeUndoOption={closeUndoOption} />
           : 
 	          <StoneControl
 		          key={flowStep.key + item.serial}
@@ -170,6 +172,7 @@ const StoneSelect = ({
               compEntry={compEntry}
               handleVerify={handleVerify}
               openUndoOption={openUndoOption}
+              closeUndoOption={closeUndoOption}
               timeOutCntrl={timeOutCntrl}
               riverFlowStateSet={riverFlowStateSet}
             />
@@ -187,10 +190,10 @@ const StoneSelect = ({
   	      
           <div className='undoStepWrap'>
   					{undoOption ? 
-  						<button
-  							className='textAction'
-  							onClick={(e)=>handleStepUndo(e)}
-  						><i className="fas fa-undo-alt spinRe"></i> Go Back</button>
+  					  <GoBack 
+  					    handleStepUndo={(e)=>handleStepUndo(e)}
+  					    selfCancel={closeUndoOption}
+  					  />
   					: null}
   				</div>
           
@@ -228,3 +231,18 @@ const StoneSelect = ({
 };
   
 export default StoneSelect;
+
+const GoBack = ({ handleStepUndo, selfCancel })=> {
+  
+  useEffect( ()=>{
+    let t = Meteor.setTimeout(selfCancel, Pref.stepUndoWindow);
+    return ()=> { Meteor.clearTimeout(t) };
+  },[]);
+  
+  return(
+    <button
+			className='textAction'
+			onClick={(e)=>handleStepUndo(e)}
+		><i className="fas fa-undo-alt spinRe"></i> Go Back</button>
+  );
+};

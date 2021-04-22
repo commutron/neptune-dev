@@ -28,13 +28,16 @@ function shrinkWhole(bData, now, shipLoad, accessKey) {
   return new Promise( (resolve)=> {
     const isWhat = Meteor.call('getBasicBatchInfo', bData.batch);
     
+    const oRapid = XRapidsDB.findOne({extendBatch: bData.batch, live: true});
+    const rapIs = oRapid ? true : false;
+    
     const quantity = bData.quantity;
     const serialize = bData.serialize;
     const rFlow = bData.river ? true :
                   bData.waterfall && bData.waterfall.length > 0 ? false : 
                   null;
     
-    const endDay = bData.salesEnd;
+    const endDay = rapIs ? oRapid.deliverAt : bData.salesEnd;
     const didFinish = bData.completed;
     const whenFinish = didFinish ? bData.completedAt : false;
     
@@ -48,8 +51,6 @@ function shrinkWhole(bData, now, shipLoad, accessKey) {
     const completedAt = didFinish ? new Date(shpdlv[2]) : false;
     const gapZone = didFinish ? shpdlv[3] : null;
     const lateLate = didFinish ? gapZone[2] === 'late' : shpdlv[2];
-    
-    const oRapid = XRapidsDB.findOne({extendBatch: bData.batch, live: true}) ? true : false;
     
     const actvLvl = Meteor.call('tideActivityLevel', bData._id, accessKey);
     const brchCnd = Meteor.call('branchCondition', bData._id, accessKey);
@@ -74,7 +75,7 @@ function shrinkWhole(bData, now, shipLoad, accessKey) {
         completed: didFinish,
         completedAt: completedAt,
         lateLate: lateLate,
-        oRapid: oRapid,
+        oRapid: rapIs,
         isActive: actvLvl.isActive,
         onFloor: brchCnd.onFloor,
         branchCondition: brchCnd.branchSets,
@@ -118,10 +119,13 @@ function checkMinify(bData, accessKey) {
 function checkMovement(bData, now, shipLoad, accessKey) {
   return new Promise( (resolve)=> {
     
-    const endDay = bData.salesEnd;
+    const oRapid = XRapidsDB.findOne({extendBatch: bData.batch, live: true});
+    const rapIs = oRapid ? true : false;
+    
+    const endDay = rapIs ? oRapid.deliverAt : bData.salesEnd;
     const didFinish = bData.completed;
     const whenFinish = didFinish ? bData.completedAt : false;
-    
+                       
     const shpdlv = didFinish ? deliveryState( endDay, whenFinish )
                               // salesEnd, shipAim, didFinish, fillZ, shipZ
                              : calcShipDay( now, endDay );
@@ -132,8 +136,6 @@ function checkMovement(bData, now, shipLoad, accessKey) {
     const completedAt = didFinish ? new Date(shpdlv[2]) : false;
     const fillZ = didFinish ? shpdlv[3] : null;
     const lateLate = didFinish ? fillZ[2] === 'late' : shpdlv[2];
-    
-    const oRapid = XRapidsDB.findOne({extendBatch: bData.batch, live: true}) ? true : false;
     
     const prtyRnk = Meteor.call('priorityFast', accessKey, bData, now, shipAim);
       
@@ -146,7 +148,7 @@ function checkMovement(bData, now, shipLoad, accessKey) {
         completed: didFinish,
         completedAt: completedAt,
         lateLate: lateLate,
-        oRapid: oRapid,
+        oRapid: rapIs,
         quote2tide: prtyRnk.quote2tide,
         estSoonest: prtyRnk.estSoonest,
         estLatestBegin: prtyRnk.estLatestBegin,

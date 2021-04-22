@@ -250,7 +250,6 @@ Meteor.publish('traceDataActive', function(){
 Meteor.publish('traceDataOpen', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  // Meteor.defer( ()=>{ Meteor.call('reMiniOpenTrace'); });
   const ystrday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date);
   if(!this.userId){
     return this.ready();

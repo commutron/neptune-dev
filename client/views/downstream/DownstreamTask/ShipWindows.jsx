@@ -12,11 +12,15 @@ const ShipWindows = ({
   brancheS, app, user, isDebug, focusBy, dense, updateTrigger
 })=> {
   
+  const [ traceRapid, traceRapidSet ] = useState(false);
   const [ nextShipDays, nextShipDaysSet ] = useState([]);
   const [ traceDTSort, traceDTSSet ] = useState([]);
   
   useLayoutEffect( ()=>{
-    const numOf = calcFor + 1;
+    const someR = traceDT.some( x => x.oRapid === true);
+    traceRapidSet(someR);
+    const incR = someR ? 2 : 1;
+    const numOf = calcFor + incR;
     const getShipDays = listShipDays( app.nonWorkDays, numOf, true );
     // returns an array of moments
     nextShipDaysSet(getShipDays);
@@ -43,7 +47,7 @@ const ShipWindows = ({
           <WindowFrame 
             key={'f'+ix}
             windowMoment={e}
-            indexKey={ix}
+            indexKey={ix - (traceRapid ? 1 : 0)}
             traceDT={traceDTSort}
             app={app}
             user={user}
@@ -59,7 +63,7 @@ const ShipWindows = ({
           <WindowGlass
             key={'s'+ix}
             windowMoment={e}
-            indexKey={ix}
+            indexKey={ix - (traceRapid ? 1 : 0)}
             traceDT={traceDTSort}
             brancheS={brancheS}
             app={app}

@@ -10,13 +10,39 @@ function flowGo(serial) {
   });
 }
 
-const SubItemLink = ({ serial })=> (
-  <button
-    className='inlineLink'
-    onClick={()=>flowGo(serial)}
-    disabled={!Pref.regexSN.test(serial)}
-    readOnly
-  >{serial}</button>
-);
+const SubItemLink = ({ seriesId, serial, nestedSerial, isDebug })=> {
+  
+  
+  function handleFix() {
+    Meteor.call('DEBUGpullSubItem', seriesId, serial, nestedSerial);
+  }
+  
+  if(isDebug) {
+    return(
+      <span>
+        <button
+          className='inlineLink'
+          onClick={()=>flowGo(nestedSerial)}
+          disabled={!Pref.regexSN.test(nestedSerial)}
+          readOnly
+        >{nestedSerial}</button>
+        <button
+          className='miniAction gap redT'
+          onClick={()=>handleFix()}
+          disabled={!Pref.regexSN.test(nestedSerial)}
+          readOnly
+        >remove</button>
+      </span>
+    );
+  }
+  return(
+    <button
+      className='inlineLink'
+      onClick={()=>flowGo(nestedSerial)}
+      disabled={!Pref.regexSN.test(nestedSerial)}
+      readOnly
+    >{nestedSerial}</button>
+  );
+};
 
 export default SubItemLink;

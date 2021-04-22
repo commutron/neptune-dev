@@ -33,8 +33,8 @@ const TideFollow = ({ proRoute, invertColor })=> {
   const recent = [...new Set(tpool)];
 	
   const taskT = !engaged || !engaged.tTask ? '' : `, ${engaged.tTask}`;
-  const tootip = !engaged ? `No Active ${Pref.batch}` : 
-	         `${Pref.batch} ${engaged.tName}${taskT}`;
+  const tootip = !engaged ? `No Active ${Pref.xBatch}` : 
+	         `${Pref.xBatch} ${engaged.tName}${taskT}`;
 	
   return(
     <Fragment>

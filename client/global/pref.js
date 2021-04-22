@@ -82,6 +82,10 @@ class Pref {
     this.seriesLimit = 5000;
     this.unitLimit = 1000;
     
+    this.rapid = 'rapid';
+    this.rapidEx = 'extend';
+    this.rapidExd = 'extended';
+    
     this.group = 'customer';//customer
     this.Group = 'Customer';//Customer
     this.groups = 'customers';//customer

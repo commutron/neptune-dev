@@ -16,18 +16,19 @@ const DownstreamHeaders = ({
     {!oB ? null :
       oB.map( (entry, index)=>{
         const tBatch = traceDT.find( t => t.batchID === entry.batchID );
-        return(
-          <DownstreamFixedChunk
-            key={indexKey+'c'+index}
-            ck={entry}
-            tBatch={tBatch}
-            app={app}
-            user={user}
-            isDebug={isDebug}
-            focusBy={focusBy}
-            dense={dense}
-          />
-    )})}
+        if(tBatch) {
+          return(
+            <DownstreamFixedChunk
+              key={indexKey+'c'+index}
+              ck={entry}
+              tBatch={tBatch}
+              app={app}
+              user={user}
+              isDebug={isDebug}
+              focusBy={focusBy}
+              dense={dense}
+            />
+      )}})}
     
   </Fragment>
 );
@@ -46,9 +47,9 @@ const DownstreamFixedChunk = ({
   let highG = '';
   let describe = '';
   
-  what = !tBatch ? 'unavailable' : tBatch.isWhat.join(' ');
+  what = tBatch.isWhat.join(' ');
   describe = tBatch.describe || '';
-  highG = tBatch && focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
+  highG = focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
   
   isDebug && console.log(ck.batch+'='+ck.batchID);
   

@@ -17,9 +17,11 @@ const StoneWeir = ({
   scrapCheck,
   
   brancheS,
-  canVerify, users,
+  canVerify,
   flowCounts,
   app,
+  userSpeed,
+  users,
   
   showVerifyState,
   optionVerify,
@@ -37,26 +39,23 @@ const StoneWeir = ({
   }, []);
   
   const [ riverFlowState, riverFlowStateSet ] = useState( true );
-
-  console.log('select: ' + riverFlowState);
   
   useEffect( ()=> {
 		if(mounted.current) { riverFlowStateSet( true ) }
 	}, [ item.serial ]);
 	
-	const speed = !Meteor.user().unlockSpeed ? 5000 : Meteor.user().unlockSpeed;
+	const speed = !userSpeed ? 2000 : userSpeed;
 
 	const timeOutCntrl = !app.lockType || 
 					app.lockType === 'timer' ? speed :
 					app.lockType === 'timerVar' ? 
-						riverFlowState === 'slow' ? ( speed * 6 ) : speed : ///////
+						riverFlowState === 'slow' ? ( speed * 4 ) : speed : //
 					app.lockType === 'confirm' ? 
 						!riverFlowState ? null : speed :
 					app.lockType === 'confirmVar' ? 
 						!riverFlowState ? null : 
-							riverFlowState === 'slow' ? ( speed * 6 ) : speed :
-					0;				
-
+							riverFlowState === 'slow' ? ( speed * 4 ) : speed :
+					0;
 
   return(
     <StoneSelect

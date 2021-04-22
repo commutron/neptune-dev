@@ -169,6 +169,7 @@ const XDoProCard = ({
             batchData={batchData}
             widgetData={widgetData}
             app={app}
+            userSpeed={user.unlockSpeed}
             users={users}
             brancheS={brancheState}
             useFlow={useFlow}

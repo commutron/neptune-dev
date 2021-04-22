@@ -13,7 +13,7 @@ import ItemFeedX from '/client/components/bigUi/ItemFeedX/ItemFeedX';
 const ItemPanelX = ({ 
   batchData, seriesData, rapidsData, itemData,
   widgetData, variantData, groupData, 
-  app, brancheS, user, 
+  app, brancheS, user, isDebug,
   listTitle, flowData
 })=> {
   
@@ -65,7 +65,16 @@ const ItemPanelX = ({
           <p className='indent5v'>
             <i>Nested sub {Pref.item}s: </i>
             {i.subItems.map((ent, inx)=> { 
-              return( <i key={inx}><SubItemLink serial={ent} />, </i> ) } ) }
+              return( 
+                <i key={inx}>
+                  <SubItemLink 
+                    seriesId={srs._id}
+                    serial={i.serial}
+                    nestedSerial={ent}
+                    isDebug={isDebug} />, 
+                </i> 
+              ) ;
+            })}
           </p>}
         {scrap && 
           <ScrapBox 

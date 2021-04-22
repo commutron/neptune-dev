@@ -326,12 +326,18 @@
 .downGridFrameScroll:nth-child(even) > .downHeadScroll {
   background-color: rgba(52, 152, 219, 0.1);
 }
-.downGridFrameFixed:first-child,
-.downGridFrameScroll:first-child {
+.downGridFrameFixed.rapidtitle,
+.downGridFrameFixed.latetitle,
+.downGridFrameScroll.rapidtitle,
+.downGridFrameScroll.latetitle {
   min-height: 15vh;
 }
-.downGridFrameFixed:first-child > .downWeek {
-  background-color: var(--alizarin);
+.downGridFrameFixed.rapidtitle > .downWeek {
+  background-color: var(--pumpkinfrost);
+  padding-bottom: 0;
+}
+.downGridFrameFixed.latetitle > .downWeek {
+  background-color: var(--pomegranatefrost);
   padding-bottom: 0;
 }
 .downHeadFixed {

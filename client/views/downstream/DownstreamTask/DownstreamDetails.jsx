@@ -18,21 +18,22 @@ const DownstreamDetails = ({
     {!oB ? null :
       oB.map( (entry, index)=>{
         const tBatch = traceDT.find( t => t.batchID === entry.batchID );
-        return(
-          <DownstreamScrollChunk
-            key={indexKey+'c'+index}
-            ck={entry}
-            tBatch={tBatch}
-            app={app}
-            user={user}
-            isDebug={isDebug}
-            focusBy={focusBy}
-            dense={dense}
-            progCols={progCols}
-            ncCols={ncCols}
-            updateTrigger={updateTrigger}
-          />
-    )})}
+        if(tBatch) {
+          return(
+            <DownstreamScrollChunk
+              key={indexKey+'c'+index}
+              ck={entry}
+              tBatch={tBatch}
+              app={app}
+              user={user}
+              isDebug={isDebug}
+              focusBy={focusBy}
+              dense={dense}
+              progCols={progCols}
+              ncCols={ncCols}
+              updateTrigger={updateTrigger}
+            />
+      )}})}
   </Fragment>
 );
 
@@ -53,7 +54,7 @@ const DownstreamScrollChunk = ({
             `${min2hr(q2t)} hr remain` :
             'remaining time unknown';
   
-  let highG = tBatch && focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
+  let highG = focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
 
   const releasedToFloor = tBatch.onFloor || false;
   
@@ -78,9 +79,10 @@ const DownstreamScrollChunk = ({
       }    
       </div>
       
-      {!isDone ?
-        <div title={`${Math.round(q2t)} minutes`}>{q2tStatus}</div>
-      : <div>{Pref.batch} {Pref.isDone}</div> }
+      {ck.oRapid ? <div>{Pref.xBatch} {Pref.rapidExd}</div> :
+        isDone ? <div>{Pref.xBatch} {Pref.isDone}</div> :
+        <div title={`${Math.round(q2t)} minutes`}>{q2tStatus}</div>}
+      
       
       <BranchProgress
         batchID={ck.batchID}
