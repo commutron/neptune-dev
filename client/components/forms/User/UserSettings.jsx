@@ -37,7 +37,7 @@ const UserSettings = ({ app, user, isAdmin, brancheS })=> {
         <h3>Organization: <i className='greenT'>{Meteor.user().org}</i></h3>
       </span>
       
-      <div className='balance cardify'>  
+      <div className='autoFlex'>  
         
         <div className='noPrint'>
           <h3><i className='fas fa-sliders-h fa-fw'></i> Interface Preferences</h3>
@@ -87,18 +87,26 @@ const UserSettings = ({ app, user, isAdmin, brancheS })=> {
     
           </div>
         </div>
-      
         
-        <div className='noPrint'>
-          <h3><i className='fas fa-passport fa-fw'></i> Account Details</h3>
+        <div className='noPrint minHeight'>
+          <h3><i className='fas fa-user-edit fa-fw'></i> Change Username</h3>
           <UsernameChange />
-          <hr />
+        </div>
+        
+        <div className='noPrint minHeight'>
+          <h3><i className='fas fa-key fa-fw'></i> Change Password</h3>
           <PasswordChange />
-          <hr />
-          { isAdmin ? <AdminDown /> : null }
         </div>
         
         <IdCardCard user={user} />
+        
+        {isAdmin ?
+          <div className='noPrint minHeight'>
+            <h3><i className='fas fa-user-secret fa-fw'></i> Admin Status</h3>
+             <AdminDown />
+          </div>
+          : null
+        }
         
       </div>
       

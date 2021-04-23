@@ -57,7 +57,7 @@ const WindowGlass = ({
         
       <div className='downOrdersScroll'>
         <DownstreamDetails
-          indexKey={'fancylist0S'+indexKey}
+          indexKey={indexKey}
           oB={mixedOrders}
           traceDT={traceDT}
           title='things'

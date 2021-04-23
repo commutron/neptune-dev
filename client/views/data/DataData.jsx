@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
-// import usePrevious from '/client/utility/usePreviousHook.js';
+import moment from 'moment';
 
 //import Pref from '/client/global/pref.js';
 import { TraverseWrap } from '/client/layouts/DataExploreLayout.jsx';
@@ -49,6 +49,9 @@ const ExploreView = ({
     );
   }
   
+  if( Array.isArray(app.nonWorkDays) ) {  
+    moment.updateLocale('en', { holidays: app.nonWorkDays });
+  }
   const branchesSort = app.branches.sort((b1, b2)=>
           b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
     

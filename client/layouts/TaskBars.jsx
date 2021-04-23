@@ -16,7 +16,7 @@ export const ExTaskBar = ({ subLink }) => (
   <div className='taskColumn'>
   
     <TaskElement
-      title='Exlore'
+      title='Explore'
       subON={!subLink}
       goLink='/data'
       icon='fas fa-rocket'
@@ -28,9 +28,16 @@ export const ExTaskBar = ({ subLink }) => (
       subON={subLink === 'overviewgroups'}
       goLink='/data/overview?request=groups'
       icon='fas fa-industry'
-      iconAdj=''
     />
-      
+    
+    <TaskElement
+      title="Rapid Products"
+      subON={subLink === 'overviewrapid'}
+      goLink='/data/overview?request=rapid'
+      icon='fas fa-shapes'
+      iconAdj='flip-h right-1'
+    />
+    
     <TaskElement
       title='Build History'
       subON={subLink === 'buildHistoryundefined'}
@@ -45,7 +52,15 @@ export const ExTaskBar = ({ subLink }) => (
       goLink='/data/reports'
       icon='fas fa-clipboard-list'
     />
-      
+    
+    <TaskElement
+      title="Extended"
+      subON={subLink === 'overviewrapidex'}
+      goLink='/data/overview?request=rapidex'
+      icon='fas fa-bolt'
+      iconAdj='down-1'
+    />
+    
     <TaskElement
       title='Test Fail Tracker'
       subON={subLink === 'overviewtestfail'}

@@ -91,6 +91,7 @@ const WidgetPanel = ({
         <div className='cardify autoFlex'>
             
           <MultiBatchKPI
+            widgetId={widgetData._id}
             batchIDs={batchIDs}
             app={a} />
             

@@ -22,6 +22,7 @@ const DownstreamHeaders = ({
               key={indexKey+'c'+index}
               ck={entry}
               tBatch={tBatch}
+              topRapid={indexKey === -1}
               app={app}
               user={user}
               isDebug={isDebug}
@@ -37,7 +38,7 @@ export default DownstreamHeaders;
 
 
 const DownstreamFixedChunk = ({
-  ck, tBatch,
+  ck, tBatch, topRapid,
   app, user, isDebug, focusBy, dense 
 })=> {
   
@@ -64,7 +65,13 @@ const DownstreamFixedChunk = ({
         isDebug={isDebug}
         showLess={true}
       />
-      <div><ExploreLinkBlock type='batch' keyword={ck.batch} wrap={false} /></div>
+      <div>
+        <ExploreLinkBlock 
+          type='batch' 
+          keyword={ck.batch}
+          altName={topRapid ? tBatch.oRapid : false}
+          wrap={false} />
+        </div>
       <div title={describe}
         >{what.length <= 75 ? what : what.substring(0, 75) + '...'}</div>
     </div>

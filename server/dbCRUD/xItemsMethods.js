@@ -753,7 +753,9 @@ Meteor.methods({
   },
   
   DEBUGpullSubItem(seriesId, serial, nestedSerial) {
-    if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
+    const auth = Roles.userIsInRole(Meteor.userId(), 'admin') &&
+                Roles.userIsInRole(Meteor.userId(), 'debug');
+    if(auth) {
       
       XSeriesDB.update({_id: seriesId, 'items.serial': serial}, {
         $pull : {

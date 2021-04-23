@@ -3,24 +3,24 @@ import { toast } from 'react-toastify';
 
 const UsernameChange = (props)=> {
 	
+	const [ passState, passStateSet ] = useState( false );
 	const [ choiceName, choiceNameSet ] = useState( false );
 
 	function doChange(e) {
 	  e.preventDefault();
-	  const check = window.confirm('Are you sure you want to change your Username?');
-
-    if(check) {
-  		Meteor.call('selfUsernameChange', choiceName, (error, reply)=>{
-  			if(error) {
-  			  toast.error('Could not change username');
-  			  console.log(error);
-  			}
-  			if(reply) {
-  				toast.success('Username changed corectly');
-  				this.unPass.value = '';
-  			}
-  		});
-    }
+	  
+		Meteor.call('selfUsernameChange', passState, choiceName, (error, reply)=>{
+			if(error) {
+			  console.log(error);
+			  toast.error( error.reason || 'Undefined' );
+			}
+			if(reply === true) {
+				toast.success('Username changed corectly');
+				this.unPass.value = '';
+			}else if(reply) {
+			  toast.error(reply.reason);
+			}
+		});
 	}
 	
 	return(
@@ -28,11 +28,22 @@ const UsernameChange = (props)=> {
       <form 
         onSubmit={(e)=>doChange(e)}>
         <p>
+          <label htmlFor='chPass'>Current Password<br />
+            <input
+              type='password'
+              id='nowPassUser'
+              onChange={()=>passStateSet(nowPassUser.value)}
+              autoComplete="new-password" 
+              required
+          /></label>
+        </p>
+        <p>
           <label htmlFor='chPass'>New Username</label>
           <br />
           <input
             type='text'
             id='unPass'
+            className='showValid'
             minLength='4'
 	          pattern='[A-Za-z0-9\._-]*'
             onChange={()=>choiceNameSet(unPass.value)}

@@ -555,5 +555,5 @@ input[type='radio'].interInput {
 }
 
 .showValid:invalid {
-  box-shadow: 0 0 10px var(--sunflower);
+  box-shadow: 0 0 10px var(--sunflowerfade);
 }

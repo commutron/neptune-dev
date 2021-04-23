@@ -15,7 +15,8 @@ const NCFlood = ({ seriesId, live, user, app, ncTypesCombo })=> {
     const type = this.ncType.value.trim();
     
     const refEntry = this.ncRefs.value.trim().toLowerCase();
-    const refSplit = refEntry.split(/\s* \s*/);
+    const refCut = refEntry.replace(Pref.listCut, "|");
+    const refSplit = refCut.split("|");
     
     const tgood = NonConCheck(this.ncType, flatCheckList);
     
@@ -25,7 +26,6 @@ const NCFlood = ({ seriesId, live, user, app, ncTypesCombo })=> {
       this.go.disabled = false;
     }else{
       for(let ref of refSplit) {
-        ref = ref.replace(",", "");
         if(ref.length < 8) {
           toast.warn('Please Wait For Confirmation...', {
             toastId: ( 'floodpOp' ),

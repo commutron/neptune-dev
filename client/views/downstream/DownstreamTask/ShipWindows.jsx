@@ -17,7 +17,7 @@ const ShipWindows = ({
   const [ traceDTSort, traceDTSSet ] = useState([]);
   
   useLayoutEffect( ()=>{
-    const someR = traceDT.some( x => x.oRapid === true);
+    const someR = traceDT.some( x => x.oRapid );
     traceRapidSet(someR);
     const incR = someR ? 2 : 1;
     const numOf = calcFor + incR;

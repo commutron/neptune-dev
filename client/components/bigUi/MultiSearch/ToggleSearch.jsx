@@ -87,7 +87,7 @@ const ToggleSearch = ({
 		<div className='wide centre centreText'>
 	    <p>
 	      <button
-	        title={`${Pref.batches} & ${Pref.xBatchs}`}
+	        title={`${Pref.xBatchs}`}
           className={`${bttnClss} ${tggl ? 'toggleOn' : 'toggleOff'}`}
           onClick={(e)=>doTog(true)}
         ><i className="fas fa-cubes fa-fw"></i></button>
@@ -118,7 +118,7 @@ const ToggleSearch = ({
         </datalist>*/}
       </p>
       
-      <p>{tggl ? `Find a ${Pref.batch} by number, ${Pref.group}, ${Pref.widget} or tag.` : 
+      <p>{tggl ? `Find a ${Pref.xBatch} by number, ${Pref.group}, ${Pref.widget} or tag.` : 
                  `Find an item by whole or partial serial number`}
       </p>
       

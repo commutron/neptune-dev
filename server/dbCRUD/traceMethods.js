@@ -29,7 +29,7 @@ function shrinkWhole(bData, now, shipLoad, accessKey) {
     const isWhat = Meteor.call('getBasicBatchInfo', bData.batch);
     
     const oRapid = XRapidsDB.findOne({extendBatch: bData.batch, live: true});
-    const rapIs = oRapid ? true : false;
+    const rapIs = oRapid ? oRapid.rapid : false;
     
     const quantity = bData.quantity;
     const serialize = bData.serialize;
@@ -120,7 +120,7 @@ function checkMovement(bData, now, shipLoad, accessKey) {
   return new Promise( (resolve)=> {
     
     const oRapid = XRapidsDB.findOne({extendBatch: bData.batch, live: true});
-    const rapIs = oRapid ? true : false;
+    const rapIs = oRapid ? oRapid.rapid : false;
     
     const endDay = rapIs ? oRapid.deliverAt : bData.salesEnd;
     const didFinish = bData.completed;

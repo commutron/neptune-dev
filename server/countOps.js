@@ -1,3 +1,4 @@
+import moment from 'moment';
 
 import { batchTideTime, distTimeBudget } from './tideGlobalMethods.js';
 import { deliveryState } from './reportCompleted.js';
@@ -69,67 +70,91 @@ Meteor.methods({
     
   },
   
-  countMultiBatchTideToQuote(batchIDs) {
+  countMultiBatchTideToQuote(widgetId, batchIDs) {
     this.unblock();
     
-    let tidePerItem = [];
-    
-    let quotePerItem = [];
-    
-    let tideToQuoteHours = [];
-    
-    let tideToQuotePercent = [];
-    
-    let wasDelivered = [];
-    
-    const discoverTQ = (b, itemQuantity)=> {
-      // check for over quote
-      const distTB = distTimeBudget(b.tide, b.quoteTimeBudget, itemQuantity, b.quantity, b.lockTrunc);
-      if(distTB) {
-        tidePerItem.push( distTB[0] );
-        quotePerItem.push( distTB[1] );
-        tideToQuoteHours.push( distTB[2] );
-        tideToQuotePercent.push( distTB[3] );
-      }
-    };
-    
-    const discoverOT = (endTime, completeTime)=> {
-      // duration between finish and fulfill
-      const deliveryResult = deliveryState(endTime, completeTime);
-      const dr3 = deliveryResult[3];
-      const timeVal = !dr3[0] ? 0 : 
-                      dr3[1] === 'hour' || dr3[1] === 'hours' ? ( dr3[0] / 24 ) :
-                      dr3[0];
-      const timeNum = dr3[2] === 'late' ? -Math.abs(timeVal) : timeVal;
+    const widget = WidgetDB.findOne({_id: widgetId});
+    const quoteStats = widget.quoteStats || null;
+    const statime = quoteStats ? quoteStats.updatedAt : null;
+    const stale = !statime ? true :
+            moment.duration(moment().diff(moment(statime))).as('hours') > 12;
+    if(stale) {
+
+      let tidePerItem = [];
       
-      wasDelivered.push( timeNum );
-    };
+      let quotePerItem = [];
       
-    try {
-      for(let batchID of batchIDs) {
-        const xbatch = XBatchDB.findOne({_id: batchID});
-        if(xbatch && xbatch.completed) {
-          const srs = XSeriesDB.findOne({batch: xbatch.batch});
-          const srsQ = !srs ? xbatch.quantity : srs.items.length;
-          discoverTQ(xbatch, srsQ);
-          discoverOT(xbatch.salesEnd, xbatch.completedAt);
-        }else{null}
+      let tideToQuoteHours = [];
+      
+      let tideToQuotePercent = [];
+      
+      let wasDelivered = [];
+      
+      const discoverTQ = (b, itemQuantity)=> {
+        // check for over quote
+        const distTB = distTimeBudget(b.tide, b.quoteTimeBudget, itemQuantity, b.quantity, b.lockTrunc);
+        if(distTB) {
+          tidePerItem.push( distTB[0] );
+          quotePerItem.push( distTB[1] );
+          tideToQuoteHours.push( distTB[2] );
+          tideToQuotePercent.push( distTB[3] );
+        }
+      };
+    
+      const discoverOT = (endTime, completeTime)=> {
+        // duration between finish and fulfill
+        const deliveryResult = deliveryState(endTime, completeTime);
+        const dr3 = deliveryResult[3];
+        const timeVal = !dr3[0] ? 0 : 
+                        dr3[1] === 'hour' || dr3[1] === 'hours' ? ( dr3[0] / 24 ) :
+                        dr3[0];
+        const timeNum = dr3[2] === 'late' ? -Math.abs(timeVal) : timeVal;
+        
+        wasDelivered.push( timeNum );
+      };
+      
+      try {
+        for(let batchID of batchIDs) {
+          const xbatch = XBatchDB.findOne({_id: batchID});
+          if(xbatch && xbatch.completed) {
+            const srs = XSeriesDB.findOne({batch: xbatch.batch});
+            const srsQ = !srs ? xbatch.quantity : srs.items.length;
+            discoverTQ(xbatch, srsQ);
+            discoverOT(xbatch.salesEnd, xbatch.completedAt);
+          }else{null}
+        }
+      }catch(err) {
+        throw new Meteor.Error(err);
       }
-    }catch(err) {
-      throw new Meteor.Error(err);
+      
+      const tidePerItemAvg = avgOfArray(tidePerItem);
+      const quotePerItemAvg = avgOfArray(quotePerItem);
+      const tideToQuoteHoursAvg = avgOfArray(tideToQuoteHours);
+      const tideToQuotePercentAvg = avgOfArray(tideToQuotePercent);
+      const deliveryGap = avgOfArray(wasDelivered);
+      
+      const avgArrays = {
+        tidePerItemAvg: tidePerItemAvg,
+        quotePerItemAvg: quotePerItemAvg, 
+        tideToQuoteHoursAvg: tideToQuoteHoursAvg, 
+        tideToQuotePercentAvg: tideToQuotePercentAvg,
+        deliveryGap: deliveryGap
+      };
+      
+      WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey}, {
+        $set : {
+          quoteStats: {
+            stats: avgArrays,
+            updatedAt: new Date(),
+          }
+        }});
+      
+      const thin = JSON.stringify(avgArrays);
+      return thin;
+    }else{
+      const avgArrays = quoteStats.stats;
+      return JSON.stringify(avgArrays);
     }
-    
-    const delvAvg = avgOfArray(wasDelivered);
-    
-    const avgArrays = {
-      tidePerItemAvg: avgOfArray(tidePerItem),
-      quotePerItemAvg: avgOfArray(quotePerItem), 
-      tideToQuoteHoursAvg: avgOfArray(tideToQuoteHours), 
-      tideToQuotePercentAvg: avgOfArray(tideToQuotePercent),
-      deliveryGap: delvAvg
-    };
-    
-    return JSON.stringify(avgArrays);
   },
 
      //////////////////////////////////////////////////////////////////////////

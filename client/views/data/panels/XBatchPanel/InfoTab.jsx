@@ -26,19 +26,16 @@ const InfoTab = ({
   flowCounts, fallCounts, rapidsData, riverTitle, srange,
   app, brancheS
 }) =>	{
-
-  const nonWorkDays = app.nonWorkDays;
-  if( Array.isArray(nonWorkDays) ) {  
-    moment.updateLocale('en', { holidays: nonWorkDays });
-  }
   
   const end = !b.completed ? moment() : moment(b.completedAt);
   
   const endDay = moment(b.salesEnd);
-  const shipTime = endDay.isShipDay() ? 
-    endDay.nextShippingTime() : endDay.lastShippingTime();
   
-  const remain = shipTime.workingDiff(moment(), 'days', true);
+  const shipDue = endDay.isShipDay() ?
+                    endDay.clone().endOf('day').lastShippingTime() :
+                    endDay.clone().lastShippingTime();
+                    
+  const remain = shipDue.workingDiff(moment(), 'days', true);
   
   const rOpen = rapidsData && rapidsData.some( r => r.live === true );
   
@@ -73,7 +70,7 @@ const InfoTab = ({
           rapid={rOpen} />
         
         <div className='cap middle'>
-          <p>Ship Due: <b>{shipTime.format("MMMM Do, YYYY")}</b></p>
+          <p>Ship Due: <b>{shipDue.format("MMMM Do, YYYY")}</b></p>
           <AlterFulfill
             batchId={b._id}
             isX={true}

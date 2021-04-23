@@ -43,7 +43,7 @@ const NonConBlock = ({
     const ncKey = entry.key;
     Meteor.call('reInspectNCX', seriesId, ncKey, (error)=> {
 			error && console.log(error);
-			edit();
+			editSet(false);
 		});
   }
   
@@ -54,7 +54,7 @@ const NonConBlock = ({
     }else{
       Meteor.call('trashNCX', seriesId, ncKey, (error)=> {
   			error && console.log(error);
-  			edit();
+  			editSet(false);
   		});
     }
   }
@@ -63,7 +63,7 @@ const NonConBlock = ({
     const ncKey = entry.key;
     Meteor.call('unTrashNCX', seriesId, ncKey, (error)=> {
 			error && console.log(error);
-			edit();
+			editSet(false);
 		});
   }
   
@@ -71,8 +71,7 @@ const NonConBlock = ({
     const yes = window.confirm('Permanently delete this ' + Pref.nonCon + '?');
     if(yes) {
       const ncKey = entry.key;
-      const override = !canQA ? 
-                        prompt("Enter PIN to override", "") : false;
+      const override = !canQA ? prompt("Enter PIN to override", "") : false;
       Meteor.call('removeNCX', seriesId, ncKey, override, (error)=>{
         error && console.log(error);
         editSet(false);

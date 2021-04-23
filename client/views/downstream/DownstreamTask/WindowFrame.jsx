@@ -56,7 +56,7 @@ const WindowFrame = ({
         
       <div className='downOrdersFixed'>
         <DownstreamHeaders
-          indexKey={'fancylist0F'+indexKey}
+          indexKey={indexKey}
           oB={mixedOrders}
           traceDT={traceDT}
           title='things'

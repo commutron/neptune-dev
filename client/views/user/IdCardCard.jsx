@@ -44,7 +44,7 @@ const IdCardCard = ({ user })=> {
 	const fineName = splitName[1] ? splitName[0] + " " + splitName[1] : splitName[0];
 	
   return(
-    <div>
+    <div className='minHeight'>
       <h3 className='noPrint'>
         <i className='fas fa-id-badge fa-fw'></i> Generate ID Badge
       </h3>

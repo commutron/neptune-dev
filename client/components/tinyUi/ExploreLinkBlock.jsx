@@ -1,7 +1,8 @@
 import React from 'react';
 
-const ExploreLinkBlock = ({type, keyword, wrap})=>{
+const ExploreLinkBlock = ({type, keyword, altName, wrap})=>{
   const title = keyword.split('+')[0];
+  const label = typeof altName === 'string' ? altName : title;
   const link = type === 'group' ? 
                   '/data/group?request=' + title
                 : type === 'widget' ? 
@@ -14,7 +15,7 @@ const ExploreLinkBlock = ({type, keyword, wrap})=>{
   const noWrap = wrap ? '' : 'noWrap';
   return(                    
     <a href={link} className={noWrap + ' numFont'}>
-      <i className='fas fa-rocket fa-fw'></i>{title}
+      <i className='fas fa-rocket fa-fw'></i>{label}
     </a>
   );
 };

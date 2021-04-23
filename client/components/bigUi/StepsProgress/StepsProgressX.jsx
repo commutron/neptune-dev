@@ -143,7 +143,7 @@ const StepsProgressX  = ({
           key='altCombo'
           title={`Alternative ${Pref.items}`}
           count={calcItem ? dt.altDone : dt.altDone * ( dt.altUnits / dt.altItems )}
-          countNew={0}
+          countNew={dt.altDoneNew}
           total={calcItem ? dt.altItems : dt.altUnits} />
       }
     

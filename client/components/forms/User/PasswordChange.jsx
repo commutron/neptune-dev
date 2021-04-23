@@ -1,38 +1,44 @@
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 
 const PasswordChange = (props)=> {
 	
+	const [ nowPassword, nowPasswordSet ] = useState( false );
 	const [ choicePassword, choicePasswordSet ] = useState( false );
 	const [ confirmPassword, confirmPasswordSet ] = useState( false );
-	const [	changeResult, changeResultSet ] = useState( '' );
 
 	function doChange(e) {
 	  e.preventDefault();
 	  
 	  if(choicePassword === confirmPassword) {
-	    changeResultSet("");
-			Meteor.call('selfPasswordChange', confirmPassword, (error, reply)=>{
-				error && console.log(error);
-				if(reply) {
-					changeResultSet('saved');
-				}
-			});
+	    Accounts.changePassword(nowPassword, confirmPassword, (error)=>{
+	      if(error !== undefined) {
+	        toast.error( error.reason );
+	      }else{
+	        toast.success('New Password Saved');
+	      }
+	    });
 	  }else{
-	    changeResultSet("the password fields don't match, try typing them in again");
+	    toast.warning("Password fields do not match. Try again");
 	  }
 	}
-	
-	let sty = {
-		maxWidth: '240px'
-	};
 	
 	return(
 		<div>
       <form 
         onSubmit={(e)=>doChange(e)}>
         <p>
-          <label htmlFor='chPass'>New Password</label>
-          <br />
+          <label htmlFor='chPass'>Current Password<br />
+            <input
+              type='password'
+              id='nowPassPass'
+              onChange={()=>nowPasswordSet(nowPassPass.value)}
+              required
+              autoComplete="password" 
+          /></label>
+        </p>
+        <p>
+          <label htmlFor='chPass'>New Password<br />
           <input
             type='password'
             id='chPass'
@@ -40,21 +46,19 @@ const PasswordChange = (props)=> {
             onChange={()=>choicePasswordSet(chPass.value)}
             pattern='[A-Za-z0-9\.!@#$%^&*()_\-,?`<>[\]{}~=/\\]*'
 	          minLength='6'
-	          placeholder='password'
             required
-            autoComplete="new-password" />
-        </p>
-        <p>
-          <label htmlFor='coPass'>New Password Again</label>
+            autoComplete="new-password" 
+          /></label>
           <br />
+          <label htmlFor='coPass'>New Password Again<br />
           <input
             type='password'
             id='coPass'
             className='showValid'
             onChange={()=>confirmPasswordSet(coPass.value)}
-            placeholder='password'
+            pattern='[A-Za-z0-9\.!@#$%^&*()_\-,?`<>[\]{}~=/\\]*'
             required
-            autoComplete="new-password" />
+            autoComplete="new-password" /></label>
         </p>
         <p>
           <button
@@ -63,7 +67,6 @@ const PasswordChange = (props)=> {
             className='action clearGreen'
            >Save New Password</button>
         </p>
-        <p style={sty}>{changeResult}</p>
       </form>
     </div>
 	);

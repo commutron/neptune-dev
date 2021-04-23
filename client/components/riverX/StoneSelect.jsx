@@ -52,7 +52,7 @@ const StoneSelect = ({
     Session.set('ncWhere', null);
 	  Session.set('nowStepKey', null);
     Session.set('nowWanchor', null);
-		if(mounted.current) { closeUndoOption(); }
+		if(mounted.current) { closeUndoOption() }
 	}, [ item.serial ]);
 					
   // Complete or Scrap

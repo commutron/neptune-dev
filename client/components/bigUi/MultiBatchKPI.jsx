@@ -1,12 +1,12 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, Fragment } from 'react';
 import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
 
-// import { min2hr } from '/client/utility/Convert';
+import { round2Decimal } from '/client/utility/Convert';
 import NumLine from '/client/components/tinyUi/NumLine.jsx';
 
 import Pref from '/client/global/pref.js';
 
-const MultiBatchKPI = ({ batchIDs, app })=> {
+const MultiBatchKPI = ({ widgetId, batchIDs, app })=> {
   
   const mounted = useRef(true);
   
@@ -17,17 +17,29 @@ const MultiBatchKPI = ({ batchIDs, app })=> {
   }, []);
   
   useEffect( ()=>{
-    Meteor.call('countMultiBatchTideToQuote', batchIDs, (error, reply)=>{
+    Meteor.call('countMultiBatchTideToQuote', widgetId, batchIDs, (error, reply)=>{
       error && console.log(error);
       if(mounted.current) { batchDTset( reply ); }
     });
   }, []);
   
-  if(!batchDT) {
-    return(
-      <CalcSpin />
-    );
-  }
+  return(
+    <div className='autoGrid' 
+      title={`Mean Average of completed ${Pref.batches}`}>
+      <h3>Averages</h3>
+      
+      <KPIBlocks batchDT={batchDT} />
+      
+      <span className='small fadeMore'
+        >Based on completed orders only.<br />Updates once a day.
+      </span>
+    </div>
+  );
+};
+
+export default MultiBatchKPI;
+
+const KPIBlocks = ({ batchDT })=> {
   
   if(batchDT) {
     const bdtObj = JSON.parse(batchDT);
@@ -46,41 +58,29 @@ const MultiBatchKPI = ({ batchIDs, app })=> {
     const dlvColr = delvAvg < 0 ? 'redT' : 'greenT';
     
     return(
-      <div className='autoGrid' 
-        title={`Mean Average of completed ${Pref.batches}`}>
-        
-        
+      <Fragment>
         <NumLine
-          num={bdtObj.tidePerItemAvg}
+          num={round2Decimal(bdtObj.tidePerItemAvg)}
           name='minutes per item (recored)'
           color='blackT' />
          
         <NumLine
-          num={Math.abs(t2qHr)}
+          num={round2Decimal(Math.abs(t2qHr))}
           name={toQtext}
           color={hrColor} />
           
         <NumLine
-          num={`${Math.abs(t2qPr)}%`}
+          num={`${round2Decimal(Math.abs(t2qPr))}%`}
           name={toPtext}
           color={prColor} />
           
         <NumLine
-          num={Math.abs(delvAvg)}
+          num={Math.round(Math.abs(delvAvg))}
           name={dlvText}
           color={dlvColr} />
-        
-        <span className='small fadeMore'>Based on completed orders only</span>
-      </div>
+      </Fragment>
     );
   }
-    
-  return(
-    <div className='centreText fade'>
-      <i className='fas fa-ghost fa-3x grayT'></i>
-      <p className='big cap'>no {Pref.batches}</p>
-    </div>
-  );
+  
+  return( <CalcSpin /> );
 };
-
-export default MultiBatchKPI;

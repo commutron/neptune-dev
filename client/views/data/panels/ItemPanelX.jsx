@@ -13,7 +13,7 @@ import ItemFeedX from '/client/components/bigUi/ItemFeedX/ItemFeedX';
 const ItemPanelX = ({ 
   batchData, seriesData, rapidsData, itemData,
   widgetData, variantData, groupData, 
-  app, brancheS, user, isDebug,
+  app, brancheS, user,
   listTitle, flowData
 })=> {
   
@@ -71,7 +71,7 @@ const ItemPanelX = ({
                     seriesId={srs._id}
                     serial={i.serial}
                     nestedSerial={ent}
-                    isDebug={isDebug} />, 
+                    debugPull={true} />, 
                 </i> 
               ) ;
             })}

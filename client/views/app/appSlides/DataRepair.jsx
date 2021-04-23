@@ -75,7 +75,7 @@ const DataRepair = ({ app, users })=> {
   function doCallThing(mtrMethod) {
     Meteor.call(mtrMethod, (error, re)=>{
       error && console.log(error);
-      re ? toast.success('success') : toast.error('unsuccessful');
+      re && toast.success('success');
     });
   }
   

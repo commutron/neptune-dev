@@ -3,9 +3,7 @@ import moment from 'moment';
 import { round2Decimal, avgOfArray } from '/client/utility/Convert';
 import { countWaterfall } from '/client/utility/Arrays';
 
-function flowLoop(river, items, firstsFlat) {
-  const now = moment().format();
-  const wndw = (t)=>moment(t).isSame(now, 'day');
+function flowLoop(river, items, firstsFlat, wndw) {
   const byKey = (t, ky)=> { return ( k => k.key === ky && k.good === true )};
   
   const doneItems = items.filter( x => x.completed );
@@ -96,6 +94,8 @@ function getFirsts(items) {
 function FlowCounter(flow, seriesData) {
   const srsItems = seriesData && Array.isArray(seriesData.items) ? seriesData.items : [];
   
+  const now = moment().format();
+  const wndw = (t)=>moment(t).isSame(now, 'day');
   // const flowSeries = seriesData && flow.length > 0;
   // const allItems = flowSeries ? srsItems : [];
   
@@ -111,8 +111,9 @@ function FlowCounter(flow, seriesData) {
   const altUnits = unitTotalCount(althItems);
   
   const altDone = althItems.filter( x => x.completed ).length;
+  const altDoneNew = althItems.filter( x => x.completed && wndw(x.completedAt) ).length;
   
-  const riverProg = flowLoop(flow, stndItems, firstsFlat);
+  const riverProg = flowLoop(flow, stndItems, firstsFlat, wndw);
   
   const allFlow = srsItems.length > 0 && srsItems.every( x => x.completed );
 
@@ -121,6 +122,7 @@ function FlowCounter(flow, seriesData) {
     liveItems: stndItems.length,
     liveUnits: liveUnits,
     altDone: altDone,
+    altDoneNew: altDoneNew,
     altItems: althItems.length,
     altUnits: altUnits,
     firstsFlat: firstsFlat,

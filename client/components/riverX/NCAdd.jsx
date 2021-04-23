@@ -18,11 +18,11 @@ const NCAdd = ({ seriesId, barcode, user, app, ncTypesCombo })=> {
     const where = Session.get('ncWhere') || "";
     
     const refEntry = this.ncRefs.value.trim().toLowerCase();
-    const refSplit = refEntry.split(/\s* \s*/);
+    const refCut = refEntry.replace(Pref.listCut, "|");
+    const refSplit = refCut.split("|");
     
     if(tgood && refSplit.length > 0 && refSplit[0] !== '') {
       for(let ref of refSplit) {
-        ref = ref.replace(",", "");
         if(ref.length < 8) {
           Meteor.call('addNCX', seriesId, barcode, ref, type, where, andFix, (error)=>{
             error && console.log(error);

@@ -148,6 +148,32 @@ Meteor.methods({
     return sMatch;
   },
   
+  //////////////////////////////////////////////////////////////////////////
+   // Rapid Extend Lite
+  ///////////////////////////////////////////////////////////////////////////
+  fetchRapidsThin() {
+    let compactData = [];
+    
+    XRapidsDB.find({extendBatch: {$ne: false} })
+    .forEach( r => {
+      // const w = WidgetDB.findOne({_id: srs.widgetId});
+      const g = GroupDB.findOne({_id: r.groupId});
+
+      compactData.push({
+        rapid: r.rapid, 
+        type: r.type,
+        extendBatch: r.extendBatch,
+        group: g.group,
+        issueOrder: r.issueOrder,
+        live: r.live,
+        createdAt: r.createdAt,
+        closedAt: r.closedAt
+      });
+    });
+    
+    const thin = JSON.stringify(compactData);
+    return thin;
+  },
   
     //////////////////////////////////////////////////////////////////////////
    // Scrap Items

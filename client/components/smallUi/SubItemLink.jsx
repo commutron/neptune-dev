@@ -10,14 +10,18 @@ function flowGo(serial) {
   });
 }
 
-const SubItemLink = ({ seriesId, serial, nestedSerial, isDebug })=> {
-  
+const SubItemLink = ({ seriesId, serial, nestedSerial, debugPull })=> {
   
   function handleFix() {
-    Meteor.call('DEBUGpullSubItem', seriesId, serial, nestedSerial);
+    if(seriesId && serial && nestedSerial && debugPull) {
+      Meteor.call('DEBUGpullSubItem', seriesId, serial, nestedSerial);
+    }
   }
   
-  if(isDebug) {
+  const auth = Roles.userIsInRole(Meteor.userId(), 'admin') &&
+                Roles.userIsInRole(Meteor.userId(), 'debug');
+                
+  if(debugPull && auth) {
     return(
       <span>
         <button
@@ -29,7 +33,6 @@ const SubItemLink = ({ seriesId, serial, nestedSerial, isDebug })=> {
         <button
           className='miniAction gap redT'
           onClick={()=>handleFix()}
-          disabled={!Pref.regexSN.test(nestedSerial)}
           readOnly
         >remove</button>
       </span>

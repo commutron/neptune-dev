@@ -12,7 +12,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '3.0.3';
+    this.neptuneVersion = '3.1.0';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -66,9 +66,9 @@ class Pref {
     this.xBatchs = 'work orders';
     this.XBatchs = 'Work Orders';
     
-	  this.batch = 'legacy work order';//order
-	  this.Batch = 'Legacy Work Order';//Order
-	  this.batches = 'legacy work orders';
+	  this.batch = 'work order';//order
+	  this.Batch = 'Work Order';//Order
+	  this.batches = 'work orders';
 	  this.item = 'item';
 	  this.Item = 'Item';
 	  this.items = 'items';
@@ -163,6 +163,10 @@ class Pref {
     this.skipDescribe = 'Ship With Defect';
     this.snooze = 'snooze';
     this.snoozeDescribe = 'Resolve Later';
+    // this.listCut = RegExp(/(\s*\,\s*|\,|\s*)/g);
+    // this.listCut = RegExp(/(\s\,\s|\,|\s*)/);
+    this.listCut = RegExp(/(\s*\,\s*|\,|\ +)/g);
+    // this.listCut = RegExp(/(\s*\,\s*|\,|\s*)/g);
     // scrap
     this.scrap = 'scrap';
     this.Scrap = 'Scrap';

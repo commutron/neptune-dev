@@ -416,7 +416,8 @@ Meteor.publish('hotDataPlus', function(scanOrb, keyMatch){
       WidgetDB.find({_id: wID, orgKey: orgKey}, {
         fields: {
           'orgKey': 0,
-          'versions': 0
+          'versions': 0,
+          'quoteStats': 0
         }}),
       VariantDB.find({widgetId: wID, orgKey: orgKey}, {
         fields: {
@@ -535,19 +536,29 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
         WidgetDB.find({_id: hothotWidgetID, orgKey: orgKey}, {
           fields: {
             'orgKey': 0,
-            'versions': 0
+            'versions': 0,
+            'quoteStats': 0
           }}),
         VariantDB.find({widgetId: hothotWidgetID, orgKey: orgKey}, {
           fields: {
             'orgKey': 0,
           }}),
       ];
+    }else if( dataRequest === 'rapid' ) {
+      return [
+        XRapidsDB.find({gadget: {$ne: false}, orgKey: orgKey}, {
+          fields: {
+            'orgKey': 0,
+            'extendBatch': 0
+        }})
+      ];
     }else {
       return [
         WidgetDB.find({widget: hothotWidget, orgKey: orgKey}, {
           fields: {
             'orgKey': 0,
-            'versions': 0
+            'versions': 0,
+            'quoteStats': 0
           }}),
         VariantDB.find({widgetId: hothotWidgetID, orgKey: orgKey}, {
           fields: {

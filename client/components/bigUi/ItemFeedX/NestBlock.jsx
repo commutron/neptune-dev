@@ -24,9 +24,9 @@ const NestBlock = ({
   const infoPar = dt.type === 'nested' && typeof dt.info === 'object' ? dt.info.parentSerial : null;
   
   let subText = dt.good ? 'Contains nested item' : 'Previously contained nested item';
-  let subItem = infoSub ? <i>{subText} <SubItemLink serial={infoSub} /></i> : '';
+  let subItem = infoSub ? <i>{subText} <SubItemLink nestedSerial={infoSub} /></i> : '';
   let parText = dt.good ? 'Is nested within' : 'Previously nested within';
-  let parItem = infoPar ? <i>{parText} <SubItemLink serial={infoPar} /></i> : '';
+  let parItem = infoPar ? <i>{parText} <SubItemLink nestedSerial={infoPar} /></i> : '';
    
   return(
     <n-feed-info-block class='altflow'>

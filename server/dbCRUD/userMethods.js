@@ -117,24 +117,21 @@ Meteor.methods({
       return false;
     }
   },
- 
-  selfPasswordChange(newPassword) {
-    const id = Meteor.userId();
-    if(!id) {
-      return false;
-    }else{
-      Accounts.setPassword(id, newPassword, {logout: false});
-      return true;
-    }
-  },
   
-  selfUsernameChange(newUsername) {
+  selfUsernameChange(pass, newUsername) {
     const userId = Meteor.userId();
-    if(!userId) {
-      return false;
+    const user = Meteor.user();
+   
+    if(typeof pass === 'string' && typeof newUsername === 'string') {
+      const result = Accounts._checkPassword(user, pass);
+      if(result.error === undefined) {
+        Accounts.setUsername(userId, newUsername);
+        return true;
+      }else{
+        return result.error;
+      }
     }else{
-      Accounts.setUsername(userId, newUsername);
-      return true;
+      throw new Meteor.Error();
     }
   },
 

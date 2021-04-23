@@ -15,10 +15,12 @@ import BuildHistory from './panels/BuildHistory.jsx';
 import ItemPanelX from './panels/ItemPanelX';
 import BatchPanelX from './panels/XBatchPanel/BatchPanelX.jsx';
 import WidgetPanel from './panels/WidgetPanel/WidgetPanel';
-import TestFailPanel from './panels/TestFailPanel.jsx';
-import ScrapPanel from './panels/ScrapPanel.jsx';
+import RapidsPanel from './panels/RapidsPanel';
+import RextendPanel from './panels/RextendPanel';
+import TestFailPanel from './panels/TestFailPanel';
+import ScrapPanel from './panels/ScrapPanel';
 
-import BatchesList from './lists/BatchesList.jsx';
+import BatchesList from './lists/BatchesList';
 import ItemsListX from './lists/ItemsListX';
 
 import FlowCounter, { FallCounter, WhiteWaterCounter } from '/client/utility/ProgressCounterX';
@@ -237,6 +239,25 @@ const DataViewOps = ({
             specify={specify} />
         </TraverseWrap>
       );
+    }else if(request === 'rapid') {
+      return(
+        <TraverseWrap
+		      batchData={false}
+          widgetData={false}
+          variantData={false}
+          groupData={false}
+          user={user}
+          app={app}
+          title='Rapids Free'
+          subLink={subLink}
+          action={false}
+          beta={true}
+          base={true}
+        >
+          <RapidsPanel
+            app={app} />
+        </TraverseWrap>
+      );
     // }else if(request === 'trends') {
     //   return(
     //     <TraverseWrap
@@ -262,7 +283,25 @@ const DataViewOps = ({
     //         isDebug={isDebug} />
     //     </TraverseWrap>
     //   );
-    
+    }else if(request === 'rapidex') {
+      return(
+        <TraverseWrap
+		      batchData={false}
+          widgetData={false}
+          variantData={false}
+          groupData={false}
+          user={user}
+          app={app}
+          title='Extended'
+          subLink={subLink}
+          action={false}
+          beta={true}
+          base={true}
+        >
+          <RextendPanel
+            app={app} />
+        </TraverseWrap>
+      );
     }else if(request === 'testfail') {
       return(
         <TraverseWrap
@@ -364,8 +403,7 @@ const DataViewOps = ({
               user={user}
               listTitle={true}
               flowData={flowData}
-              fallData={fallData}
-              isDebug={isDebug} />
+              fallData={fallData} />
             <ItemsListX
               seriesData={hotXSeries}
               batchData={hotXBatch}

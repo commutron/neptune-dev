@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 
 import StoneSelect from './StoneSelect';
 
+import usePrevious from '/client/utility/usePreviousHook.js';
 
 const StoneWeir = ({
 	bID, 
@@ -33,30 +34,28 @@ const StoneWeir = ({
 })=> {
   
   const mounted = useRef(true);
- 
+  const preSerial = usePrevious(item.serial);
+  
   useEffect(() => {
     return () => { mounted.current = false };
   }, []);
   
   const [ riverFlowState, riverFlowStateSet ] = useState( true );
-  
-  useEffect( ()=> {
-		if(mounted.current) { riverFlowStateSet( true ) }
-	}, [ item.serial ]);
 	
 	const speed = !userSpeed ? 2000 : userSpeed;
-
+  const delay = preSerial !== item.serial ? true : riverFlowState;
+  
 	const timeOutCntrl = !app.lockType || 
 					app.lockType === 'timer' ? speed :
 					app.lockType === 'timerVar' ? 
-						riverFlowState === 'slow' ? ( speed * 4 ) : speed : //
+						delay === 'slow' ? ( speed * 6 ) : speed : //
 					app.lockType === 'confirm' ? 
-						!riverFlowState ? null : speed :
+						!delay ? null : speed :
 					app.lockType === 'confirmVar' ? 
-						!riverFlowState ? null : 
-							riverFlowState === 'slow' ? ( speed * 4 ) : speed :
+						!delay ? null : 
+							delay === 'slow' ? ( speed * 6 ) : speed :
 					0;
-
+					
   return(
     <StoneSelect
       bID={bID}
