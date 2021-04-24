@@ -62,23 +62,31 @@ export function percentOverUnder(goalNumber, realNumber) {
 // milliseconds
 
 export function ms2sc(milliseconds) {
-    const asSeconds = moment.duration(milliseconds).asSeconds();
-    const trunc = ( Math.round(
-                     (asSeconds + Number.EPSILON) * 100) 
-                        / 100 ).toFixed(2, 10);
-    return parseFloat(trunc);
-  }   
+  const asSeconds = moment.duration(milliseconds).asSeconds();
+  const trunc = ( Math.round(
+                   (asSeconds + Number.EPSILON) * 100) 
+                      / 100 ).toFixed(2, 10);
+  return parseFloat(trunc);
+}   
 export function ms2mn(milliseconds) {
-    const asMinutes = moment.duration(milliseconds).asMinutes();
-    const trunc = ( Math.round(
-                     (asMinutes + Number.EPSILON) * 100) 
-                        / 100 ).toFixed(2, 10);
-    return parseFloat(trunc);
-  }
+  const asMinutes = moment.duration(milliseconds).asMinutes();
+  const trunc = ( Math.round(
+                   (asMinutes + Number.EPSILON) * 100) 
+                      / 100 ).toFixed(2, 10);
+  return parseFloat(trunc);
+}
 export function sc2hr(milliseconds) {
-    const asHours = moment.duration(milliseconds).asHours();
-    const trunc = ( Math.round(
-                     (asHours + Number.EPSILON) * 100) 
-                        / 100 ).toFixed(2, 10);
-    return parseFloat(trunc);
-  }
+  const asHours = moment.duration(milliseconds).asHours();
+  const trunc = ( Math.round(
+                   (asHours + Number.EPSILON) * 100) 
+                      / 100 ).toFixed(2, 10);
+  return parseFloat(trunc);
+}
+
+export function chunkArray(input, size) {
+  return input.reduce((arr, item, idx) => {
+    return idx % size === 0
+      ? [...arr, [item]]
+      : [...arr.slice(0, -1), [...arr.slice(-1)[0], item]];
+  }, []);
+} // https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore

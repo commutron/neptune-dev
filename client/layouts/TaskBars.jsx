@@ -30,13 +30,14 @@ export const ExTaskBar = ({ subLink }) => (
       icon='fas fa-industry'
     />
     
+    {Roles.userIsInRole(Meteor.userId(), 'nightly') &&
     <TaskElement
       title="Rapid Products"
       subON={subLink === 'overviewrapid'}
       goLink='/data/overview?request=rapid'
       icon='fas fa-shapes'
       iconAdj='flip-h right-1'
-    />
+    />}
     
     <TaskElement
       title='Build History'
@@ -54,7 +55,7 @@ export const ExTaskBar = ({ subLink }) => (
     />
     
     <TaskElement
-      title="Extended"
+      title={`${Pref.rapidExd} ${Pref.xBatchs}`}
       subON={subLink === 'overviewrapidex'}
       goLink='/data/overview?request=rapidex'
       icon='fas fa-bolt'

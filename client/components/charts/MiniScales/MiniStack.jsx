@@ -3,7 +3,7 @@ import './style.css';
 
 import { VictoryBar, VictoryStack, VictoryTooltip } from 'victory';
 
-const MiniStack = ({ title, count, countNew, total })=> {
+const MiniStack = ({ title, subtitle, count, countNew, total, truncate })=> {
   
   const v = count;
   const vX = countNew;
@@ -23,7 +23,7 @@ const MiniStack = ({ title, count, countNew, total })=> {
     
   return(
     <div 
-      className='wide miniScale miniStack meterprogStack noCopy'
+      className={`wide miniStack meterprogStack noCopy ${t === 0 ? 'empty' : ''}`}
       title={`New: ${dataArr[1]}\nRemaining: ${dataArr[2]}`}
       >
       <p style={name} className='cap'>{title}</p>
@@ -75,8 +75,9 @@ const MiniStack = ({ title, count, countNew, total })=> {
         />
       </VictoryStack>
       
-      <p style={num} className='numFont'
-        >{total === 'percent' ? `${v}%` : `${v}/${t}`}
+      <p style={num} className={truncate ? '' : 'comfort'}>
+        {!truncate && <i className='smaller'>{subtitle}</i>}
+        <n-num>{total === 'percent' ? `${v}%` : `${v}/${t}`}</n-num>
       </p>
     </div>
   );

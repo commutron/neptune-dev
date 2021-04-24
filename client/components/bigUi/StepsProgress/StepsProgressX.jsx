@@ -4,9 +4,9 @@ import Pref from '/client/global/pref.js';
 import './style.css';
 
 import RiverSelect from '/client/components/forms/Batch/RiverSelectX';
-import BranchProgress from './BranchProgress';
 
 import ToggleBar from '/client/components/smallUi/Tabs/ToggleBar';
+import StepRateDisplay from './StepRateDisplay';
 import MiniStack from '/client/components/charts/MiniScales/MiniStack.jsx';
 import NumBox from '/client/components/tinyUi/NumBox.jsx';
 import { round2Decimal } from '/client/utility/Convert';
@@ -32,11 +32,11 @@ const StepsProgressX  = ({
   const unitsExist = totalIU > totalI ? true : false;
   const calcItem = countCalc === 'items' ? true : false;
   
-  const oRvr = rvrDt.filter( r => !r.bKey );
-  const oWfl = wflDt.filter( r => !r.bKey );
-  let rndmKeyO = Math.random().toString(36).substr(2, 5);
+  // const oRvr = rvrDt.filter( r => !r.bKey );
+  // const oWfl = wflDt.filter( r => !r.bKey );
+  // let rndmKeyO = Math.random().toString(36).substr(2, 5);
   
-  return (
+  return(
     <div>
       {!truncate &&
         <div className='centreRow'>
@@ -102,40 +102,58 @@ const StepsProgressX  = ({
         }
       </div>
       
-      {brancheS.map( (branch, index)=> {
-        const bRvr = rvrDt.filter( r => r.bKey === branch.brKey );
-        const bWfl = wflDt.filter( r => r.bKey === branch.brKey );
-        
-        if( bRvr.length > 0 || bWfl.length > 0) {
-          let rndmKeyB = Math.random().toString(36).substr(2, 5);
+      {wflDt.length > 0 ? 
+        <details className='cap noCopy vmarginquarter bottomLine'
+          open={!truncate || rvrDt.length === 0}>
+        <summary className='nospace line2x autoHeight'><b>{Pref.fall}</b></summary>
+    
+        {wflDt.map( (entry)=>{
+          const brch = brancheS.find( br => br.brKey === entry.bKey );
+          const topNum = entry.action === 'slider' ? 'percent' : b.quantity;
           return(
-            <BranchProgress
-              key={rndmKeyB}
-              branch={branch}
-              bRvr={bRvr}
-              bWfl={bWfl}
-              quantity={b.quantity}
-              calcItem={calcItem}
-              totalI={totalI}
-              totalIU={totalIU}
-              truncate={truncate}
-            />
-          );
-        }
-      })}
+            <MiniStack
+              key={entry.wfKey}
+              title={`${entry.step} ${entry.type}`}
+              subtitle={brch ? brch.branch : ''}
+              count={entry.count}
+              countNew={0}
+              total={topNum}
+              truncate={truncate} />
+        )})}
+        </details>
+      : null}
       
-      {oRvr.length > 0 || oWfl.length > 0 ?
-        <BranchProgress
-          key={rndmKeyO}
-          branch={{branch:"Other"}}
-          bRvr={oRvr}
-          bWfl={oWfl}
-          quantity={b.quantity}
-          calcItem={calcItem}
-          totalI={totalI}
-          totalIU={totalIU}
-          truncate={truncate}
-        />
+      {rvrDt.length > 0 ? 
+        <span className='cap noCopy vmarginquarter'>
+        
+        {rvrDt.map( (entry)=>{
+          const brch = brancheS.find( br => br.brKey === entry.bKey );
+          if(entry.obj === 'ping') {
+            return(
+              <StepRateDisplay
+                key={entry.key}
+                step={entry.step}
+                subtitle={brch ? brch.branch : ''}
+                gFirst={entry.goodFirst}
+                ngFirst={entry.ngFirst}
+                truncate={truncate} />
+            );
+          }else{
+            let count = calcItem ? entry.items : entry.units;
+            let countNew = calcItem ? entry.itemsNew : entry.unitsNew;
+            let total = calcItem ? totalI : totalIU;
+            return(
+              <MiniStack
+                key={entry.key}
+                title={`${entry.step} ${entry.type}`}
+                subtitle={brch ? brch.branch : ''}
+                count={count}
+                countNew={countNew}
+                total={total}
+                truncate={truncate} />
+            );
+        }})}
+        </span>
       : null}
       
       {dt.altItems > 0 &&
@@ -147,14 +165,17 @@ const StepsProgressX  = ({
           total={calcItem ? dt.altItems : dt.altUnits} />
       }
     
-      {rapidsData && rapidsData.map( (r, ix)=>(
-        <MiniStack
-          key={'rapid'+ix}
-          title={`${r.rapid} ${r.issueOrder}`}
-          count={round2Decimal(r.quantity * (isNaN(r.rDone) ? 1 : r.rDone))}
-          countNew={0}
-          total={r.quantity} />
-      ))}
+      {rapidsData && rapidsData.map( (r, ix)=>{
+        return(
+          <MiniStack
+            key={'rapid'+ix}
+            title={`${r.rapid} ${r.issueOrder}`}
+            subtitle={r.type}
+            count={round2Decimal(r.quantity * (isNaN(r.rDone) ? 1 : r.rDone))}
+            countNew={0}
+            total={r.quantity}
+            truncate={truncate} />
+      )})}
       
     </div>
     

@@ -79,8 +79,9 @@ const DownstreamScrollChunk = ({
       }    
       </div>
       
-      {ck.oRapid ? <div>{Pref.xBatch} {Pref.rapidExd}</div> :
-        isDone ? <div>{Pref.xBatch} {Pref.isDone}</div> :
+      {isDone ? 
+        ck.oRapid ? <div>{Pref.xBatch} {Pref.rapidExd}</div> :
+        <div>{Pref.xBatch} {Pref.isDone}</div> :
         <div title={`${Math.round(q2t)} minutes`}>{q2tStatus}</div>}
       
       

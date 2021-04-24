@@ -251,7 +251,6 @@ const DataViewOps = ({
           title='Rapids Free'
           subLink={subLink}
           action={false}
-          beta={true}
           base={true}
         >
           <RapidsPanel
@@ -292,10 +291,9 @@ const DataViewOps = ({
           groupData={false}
           user={user}
           app={app}
-          title='Extended'
+          title={`${Pref.rapidExd} ${Pref.xBatchs}`}
           subLink={subLink}
           action={false}
-          beta={true}
           base={true}
         >
           <RextendPanel

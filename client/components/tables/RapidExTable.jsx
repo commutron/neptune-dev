@@ -7,9 +7,8 @@ import { LeapTextLink } from '../tinyUi/LeapText.jsx';
 
 import './style.css';
 
-const RapidExTable = ({ thinData })=> {
+const RapidExTable = ({ dataObj })=> {
   
-  const dataObj = JSON.parse(thinData);
   const dataObjS = dataObj.sort((r1, r2)=>
       r1.createdAt > r2.createdAt ? -1 : r1.createdAt < r2.createdAt ? 1 : 0 );
   
@@ -21,7 +20,7 @@ const RapidExTable = ({ thinData })=> {
         <thead className='fadeRed cap'>
           <tr>
             <th></th>
-            <th>{Pref.rapidExd}</th>
+            <th></th>
             <th>{Pref.batch}</th>
             <th>{Pref.group}</th>
             <th>type</th>

@@ -57,6 +57,28 @@ export const FocusSelect = ({ gList, focusState, changeFunc })=> (
   </span>
 );
 
+export const FilterSelect = ({ 
+  unqID, title, selectList, selectState, falsey, changeFunc 
+})=> (
+  <span>
+    <i className='fas fa-filter fa-fw darkgrayT'></i>
+    <select
+      id={'filterSelect'+unqID}
+      title={title}
+      className='overToolSort liteToolOn'
+      defaultValue={selectState}
+      onChange={(e)=>changeFunc(e)}>
+      {falsey &&
+        <option value={false}>{falsey}</option>
+      }
+      {selectList.map( (op, ix)=> {
+        return(
+          <option key={op+'x'+ix}>{op}</option>
+      )})}
+    </select>
+  </span>
+);
+
 
 export const LayoutSwitch = ({ denseState, changeFunc })=> (
   <span>

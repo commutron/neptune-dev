@@ -782,9 +782,8 @@ n-sm-model-content {
 .w100 { width: 100% !important; }
 .wAuto { width: auto !important; }
 
-.minHeight {
-  height: min-content;
-}
+.minHeight { height: min-content; }
+.autoHeight { min-height: auto; }
 .hide { display: none !important; }
 .invisible { visibility: hidden; }
 /*.offscreen {content-visibility: auto; }*/

@@ -12,7 +12,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '3.1.0';
+    this.neptuneVersion = '3.1.1';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -43,6 +43,7 @@ class Pref {
     this.userTimePublic = true;
     this.groupMax = 128;
     this.aliasMax = 16;
+    this.pagingSize = 25;
     
     // app navigation
     this.post = 'record';
@@ -83,8 +84,10 @@ class Pref {
     this.unitLimit = 1000;
     
     this.rapid = 'rapid';
+    this.rapids = 'rapids';
     this.rapidEx = 'extend';
     this.rapidExd = 'extended';
+    this.rapidExs = 'extensions';
     
     this.group = 'customer';//customer
     this.Group = 'Customer';//Customer
@@ -130,6 +133,7 @@ class Pref {
     this.buildFlow = 'main process flow';
     this.buildFlowAlt = 'alt process flow';
     
+    this.fall = 'counters';
     this.counter = 'counter';
     this.count = 'tick';
     this.counts = 'ticks';
