@@ -7,42 +7,34 @@ import { LeapTextLink } from '../tinyUi/LeapText.jsx';
 
 import './style.css';
 
-const RapidExTable = ({ dataObj })=> {
-  
-  const dataObjS = dataObj.sort((r1, r2)=>
-      r1.createdAt > r2.createdAt ? -1 : r1.createdAt < r2.createdAt ? 1 : 0 );
-  
-  const calString = "MMMM Do YYYY";
-  
-  return(
-    <div>
-      <table className='wide overviewTable'>
-        <thead className='fadeRed cap'>
-          <tr>
-            <th></th>
-            <th></th>
-            <th>{Pref.batch}</th>
-            <th>{Pref.group}</th>
-            <th>type</th>
-  					<th>issue</th>
-  					<th>created</th>
-            <th>closed</th>
-          </tr>
-        </thead>
-        <tbody>
-        {dataObjS.map( (rex, index)=>{
-          return (
-            <RapidExRow 
-              key={rex.rapid+index}
-              rex={rex}
-              calString={calString} />
-          );
-        })}
-        </tbody>
-      </table>
-    </div>
-  );
-};
+const RapidExTable = ({ dataObj })=> (
+  <div>
+    <table className='wide overviewTable'>
+      <thead className='fadeRed cap'>
+        <tr>
+          <th></th>
+          <th></th>
+          <th>{Pref.batch}</th>
+          <th>{Pref.group}</th>
+          <th>type</th>
+					<th>issue</th>
+					<th>created</th>
+          <th>closed</th>
+        </tr>
+      </thead>
+      <tbody>
+      {dataObj.map( (rex, index)=>{
+        return (
+          <RapidExRow 
+            key={rex.rapid+index}
+            rex={rex}
+            calString="MMMM Do YYYY" />
+        );
+      })}
+      </tbody>
+    </table>
+  </div>
+);
 
 export default RapidExTable;
 

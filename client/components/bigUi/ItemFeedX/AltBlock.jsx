@@ -1,7 +1,7 @@
 import React from 'react';
 import './style.css';
 
-const AltBlock = ({ entry, cal })=> (
+const AltBlock = ({ entry, cal, flowName })=> (
   <n-feed-info-block class='altflow'>
     <n-feed-left-anchor>
       <i className='fas fa-directions fa-lg fa-fw' 
@@ -12,7 +12,7 @@ const AltBlock = ({ entry, cal })=> (
       <n-feed-info-title class='cap'>
         <span>Switched to Alternative Flow</span>
         <span></span>
-        <span><small>ID: {entry.river}</small></span>
+        <span>{flowName}</span>
         <span>{cal(entry.assignedAt)}</span>
       </n-feed-info-title>
     </n-feed-info-center>

@@ -43,8 +43,12 @@ const RextendPanel = ({ batchData, app })=> {
       const byType = !typeState || typeState === 'false' ? byYear :
                 byYear.filter( r => r.type === typeState );
       
+      const sorted = byType.sort((r1, r2)=>
+                      r1.createdAt > r2.createdAt ? -1 : 
+                      r1.createdAt < r2.createdAt ? 1 : 0 );
+
       pageSet(0);
-      workingListSet(byType);
+      workingListSet(sorted);
     }
                     
   }, [rapex, groupState, yearState, typeState]);
@@ -57,10 +61,10 @@ const RextendPanel = ({ batchData, app })=> {
     );
   }
   
-  const gList = _.uniq( Array.from(rapex, r => r.group ).sort() );
-  const yList = _.uniq( Array.from(rapex, r => moment(r.createdAt).year() )
-                  .sort((a, b)=>b-a) );
-  const tList = _.uniq( Array.from(rapex, r => r.type ).sort() );
+  const gList = _.uniq( Array.from(rapex, r => r.group ) ).sort();
+  const tList = _.uniq( Array.from(rapex, r => r.type ) ).sort();
+  const yList = _.uniq( Array.from(rapex, r => moment(r.createdAt).year() ) )
+                  .sort((a,b)=>b-a);
   
   const inpieces = chunkArray(workingList, Pref.pagingSize);
   

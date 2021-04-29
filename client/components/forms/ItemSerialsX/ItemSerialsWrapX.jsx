@@ -100,7 +100,7 @@ const ItemSerialsTabs = ({ bID, seriesId, unit, app, showToast, updateToast })=>
 const NoBox = ()=> (
   <div className='centreText vmargin space2vsq'>
     <h2>No More Items</h2>
-    <h4>Number of serialized items equals the order quantity.
-    <br />To create more items, first increase the order quantity</h4>
+    <h3>Number of serialized items equals the order quantity.
+    <br />To create more items, first increase the order quantity.</h3>
   </div>
 );

@@ -135,6 +135,25 @@ const DataRepair = ({ app, users })=> {
       
       <div>
         <h3><i className="fas fa-eraser fa-lg gap"></i>
+          Fix Nested Keys
+        </h3>
+        <button
+          onClick={()=>doCallThing("FIXNestedKeys")}
+          className='action clearOrange'
+        >Fix Nest Key Errors</button>
+      </div>
+      <div>
+        <h3><i className="fas fa-eraser fa-lg gap"></i>
+          Fix Nested Links
+        </h3>
+        <button
+          onClick={()=>doCallThing("FIXNestLinks")}
+          className='action clearOrange'
+        >Fix Nest Link Errors</button>
+      </div>
+      
+      <div>
+        <h3><i className="fas fa-eraser fa-lg gap"></i>
           Rebuild the LatestSerial Object
         </h3>
         <button

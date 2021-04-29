@@ -1,4 +1,6 @@
 // import moment from 'moment';
+import Config from '/server/hardConfig.js';
+
 
 Meteor.methods({
 
@@ -211,6 +213,76 @@ Meteor.methods({
       throw new Meteor.Error(err);
     }
   },
+  
+  
+  FIXNestLinks() {
+    
+    const allSeries = XSeriesDB.find({orgKey: Meteor.user().orgKey}).fetch();
+    
+    for( let srs of allSeries ) {
+      const hasProb = srs.items.some( x => x.history.find( y => y.type === 'nest') !== undefined);
+      if(hasProb) {
+        for( let i of srs.items ) {
+          const probs = i.history.find( y => y.type === 'nest' && y.good && !y.info );
+          if(probs) {
+            const nestSerial = Config.regexSN.test(probs.comm) ? probs.comm : false;
+            if(nestSerial) {
+              
+              XSeriesDB.update({_id: srs._id, 'items.serial': nestSerial}, {
+                $push : { 
+                  'items.$.history': {
+                    key: key+'n3st3d',
+                    step: step,
+                    type: 'nested',
+                    good: true,
+                    time: new Date(),
+                    who: Meteor.userId(),
+                    comm : '',
+                    info: {
+                      parentSerial: i.serial
+                  }
+                }}});
+            }
+          }
+        }
+      }
+    }
+    return true;
+  },
+  
+  FIXNestedKeys() {
+    
+    const allSeries = XSeriesDB.find({orgKey: Meteor.user().orgKey}).fetch();
+    
+    for( let srs of allSeries ) {
+      const hasProb = srs.items.some( x => x.history.find( y => y.type === 'nested') !== undefined);
+      if(hasProb) {
+        for( let i of srs.items ) {
+          const probs = i.history.filter( y => y.type === 'nested' );
+          for(let hist of probs) {
+            
+            const oldKey = hist.key;
+            const oldTime = hist.time;
+            
+            let entory = hist;
+            entory.key = oldKey+'n3st3d';
+
+            XSeriesDB.update({_id: srs._id, 'items.serial': i.serial}, {
+              $pull : {
+                'items.$.history': {key: oldKey, time: oldTime}
+            }});
+            
+            XSeriesDB.update({_id: srs._id, 'items.serial': i.serial}, {
+              $push : { 
+                'items.$.history': entory,
+            }});
+          }
+        }
+      }
+    }
+    return true;
+  },
+  
   
         
 });

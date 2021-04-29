@@ -533,7 +533,7 @@ Meteor.methods({
         XSeriesDB.update({'items.serial': subSerial}, {
           $push : { 
             'items.$.history': {
-              key: key,
+              key: key+'n3st3d',
               step: step,
               type: 'nested',
               good: true,
@@ -763,6 +763,22 @@ Meteor.methods({
       }});
     }
   },
+  DEBUGFixDbblSubItem(seriesId, serial, nestedSerial) {
+    const auth = Roles.userIsInRole(Meteor.userId(), 'admin') &&
+                Roles.userIsInRole(Meteor.userId(), 'debug');
+    if(auth) {
+      const goodNested = nestedSerial;
+      
+      XSeriesDB.update({_id: seriesId, 'items.serial': serial}, {
+        $pull : {
+          'items.$.subItems': nestedSerial
+        },
+        $push : {
+          'items.$.subItems': goodNested
+        }
+      });
+    }
+  },
   
 //  remove a step
   pullHistoryX(seriesId, serial, eKey, time) {
@@ -771,7 +787,7 @@ Meteor.methods({
       const srs = XSeriesDB.findOne({_id: seriesId});
       const item = srs ? srs.items.find( x => x.serial === serial ) : null;
       
-      const entory = item.history.find( x => x.key === eKey && 
+      let entory = item.history.find( x => x.key === eKey && 
                                   x.time.toISOString() === time.toISOString() );
       if(entory) {
         entory.good = false;

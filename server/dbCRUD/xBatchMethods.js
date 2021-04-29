@@ -84,7 +84,7 @@ Meteor.methods({
   
   editBatchX(batchId, newBatchNum, vKey, salesNum, sDate, quantity) {
     const accessKey = Meteor.user().orgKey;
-    const auth = Roles.userIsInRole(Meteor.userId(), 'edit');
+    const auth = Roles.userIsInRole(Meteor.userId(), ['edit','run']);
     
     const doc = XBatchDB.findOne({_id: batchId});
     const srs = XSeriesDB.findOne({batch: doc.batch});

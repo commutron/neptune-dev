@@ -12,7 +12,7 @@ import NestBlock from './NestBlock';
 import RapidBlock from './RapidBlock';
 
 const ItemFeedX = ({ 
-  batchId, batch, seriesId, serial,
+  widgetData, batchId, batch, seriesId, serial,
   createTime, createBy,
   history, altPath,
   noncons, ncTypesCombo, brancheS,
@@ -129,11 +129,13 @@ const ItemFeedX = ({
                 cal={calFunc} /> 
             );
           }else if(typeof dt.river === 'string') {
+            const rvr = widgetData.flows.find(w=>w.flowKey === dt.river);
             return( 
               <AltBlock
                 key={dt.river+ix}
                 entry={dt}
-                cal={calFunc} />
+                cal={calFunc}
+                flowName={rvr ? rvr.title : `ID: ${dt.river}`}/>
             );
           }else{
             null;

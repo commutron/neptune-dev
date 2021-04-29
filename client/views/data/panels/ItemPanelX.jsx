@@ -73,8 +73,12 @@ const ItemPanelX = ({
                     nestedSerial={ent}
                     debugPull={true} />, 
                 </i> 
-              ) ;
+              );
             })}
+            <FixDoubles 
+              seriesId={srs._id}
+              serial={i.serial}
+              subItems={i.subItems} />
           </p>}
         {scrap && 
           <ScrapBox 
@@ -84,6 +88,7 @@ const ItemPanelX = ({
             eX={!b.completed && b.live} />}
         
         <ItemFeedX
+          widgetData={widgetData}
           batchId={b._id}
           batch={b.batch}
           seriesId={srs._id}
@@ -116,3 +121,32 @@ const ItemPanelX = ({
 };
 
 export default ItemPanelX;
+
+const FixDoubles = ({ seriesId, serial, subItems })=> {
+  
+  function handleFix() {
+    if(seriesId && serial && subItems[0]) {
+      Meteor.call('DEBUGFixDbblSubItem', seriesId, serial, subItems[0]);
+    }
+  }
+  
+  const auth = Roles.userIsInRole(Meteor.userId(), 'admin') &&
+                Roles.userIsInRole(Meteor.userId(), 'debug');
+                
+  if(auth) {
+    if(subItems.length > 1 && i.subItems.every(s=> s === subItems[0])) {
+      return(
+        <span>
+          <button
+            className='miniAction gap redT'
+            onClick={()=>handleFix()}
+            readOnly
+          >FIX</button>
+        </span>
+      );
+    }else{
+      return null;
+    }
+  }
+  return null;
+};

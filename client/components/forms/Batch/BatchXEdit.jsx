@@ -5,27 +5,34 @@ import { toast } from 'react-toastify';
 
 import ModelMedium from '/client/components/smallUi/ModelMedium';
 
-const BatchXEdit = ({ batchData, seriesData, allVariants, lock })=> (
-  <ModelMedium
-    button={'Edit ' + Pref.xBatch}
-    title={'Edit ' + Pref.xBatch}
-    color='greenT'
-    icon='fa-cubes'
-    lock={!Roles.userIsInRole(Meteor.userId(), 'create') || lock}
-    // menuItem={true}
-  >
-  <BXEditForm 
-    batchData={batchData}
-    seriesData={seriesData}
-    allVariants={allVariants}
-  />
-  </ModelMedium>
-);
+const BatchXEdit = ({ batchData, seriesData, allVariants, lock })=> {
+  
+  const canRun = Roles.userIsInRole(Meteor.userId(), 'run');
+  const canEdit = Roles.userIsInRole(Meteor.userId(), 'edit');
+  
+  return(
+    <ModelMedium
+      button={'Edit ' + Pref.xBatch}
+      title={'Edit ' + Pref.xBatch}
+      color='greenT'
+      icon='fa-cubes'
+      lock={!(canEdit || canRun) || lock}
+      // menuItem={true}
+    >
+    <BXEditForm 
+      batchData={batchData}
+      seriesData={seriesData}
+      allVariants={allVariants}
+      canEdit={canEdit}
+    />
+    </ModelMedium>
+  );
+};
 
 export default BatchXEdit;
 
 
-const BXEditForm = ({ batchData, seriesData, allVariants, selfclose })=> {
+const BXEditForm = ({ batchData, seriesData, allVariants, canEdit, selfclose })=> {
 
   function save(e) {
     e.preventDefault();
@@ -68,6 +75,7 @@ const BXEditForm = ({ batchData, seriesData, allVariants, selfclose })=> {
         <select
           id='vrsn'
           defaultValue={bDt.versionKey}
+          disabled={!canEdit}
           required>
         {allVariants.map( (entry)=>{
           if(entry.live) {
@@ -92,6 +100,7 @@ const BXEditForm = ({ batchData, seriesData, allVariants, selfclose })=> {
           defaultValue={bDt.batch}
           placeholder='17947'
           autoFocus={true}
+          disabled={!canEdit}
           required
         /></label>
 
