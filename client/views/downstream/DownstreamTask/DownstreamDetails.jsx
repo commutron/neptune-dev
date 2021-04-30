@@ -6,12 +6,13 @@ import { min2hr } from '/client/utility/Convert';
 import ProJump from '/client/components/smallUi/ProJump';
 import TideActivityData, { TideActivitySquare } from '/client/components/tide/TideActivity';
 import BranchProgress from '../../overview/columns/BranchProgress.jsx';
-import NonConCounts from '../../overview/columns/NonConCounts.jsx';
+import NonConCounts from '../../overview/columns/NonConCounts';
+import AlterFulfill from '/client/components/forms/Batch/AlterFulfill';
 
 const DownstreamDetails = ({
   indexKey, oB, traceDT,
   user, app,
-  isDebug, isNightly,
+  isDebug, isNightly, canDo,
   focusBy, dense, progCols, ncCols, updateTrigger
 })=> (
   <Fragment>
@@ -27,6 +28,7 @@ const DownstreamDetails = ({
               app={app}
               user={user}
               isDebug={isDebug}
+              canDo={canDo}
               focusBy={focusBy}
               dense={dense}
               progCols={progCols}
@@ -42,7 +44,7 @@ export default DownstreamDetails;
 
 const DownstreamScrollChunk = ({
   ck, tBatch,
-  app, user, focusBy, isDebug, dense, progCols, ncCols,
+  app, user, focusBy, isDebug, canDo, dense, progCols, ncCols,
   updateTrigger
 })=> {
 
@@ -84,7 +86,6 @@ const DownstreamScrollChunk = ({
         <div>{Pref.xBatch} {Pref.isDone}</div> :
         <div title={`${Math.round(q2t)} minutes`}>{q2tStatus}</div>}
       
-      
       <BranchProgress
         batchID={ck.batchID}
         showTotal={true}
@@ -103,6 +104,19 @@ const DownstreamScrollChunk = ({
         ncCols={ncCols}
         updateTrigger={updateTrigger}
         isDebug={isDebug} />
+      
+      <div className='overButton'>  
+        <AlterFulfill
+          batchId={ck.batchID}
+          batch={ck.batch}
+          end={ck.salesEnd}
+          app={app}
+          lock={isDone && !isDebug}
+          canDo={canDo}
+          noText={dense}
+          cleanIcon={true}
+          isDebug={isDebug} />
+      </div>
       
       <ProJump batchNum={ck.batch} dense={dense} />
       

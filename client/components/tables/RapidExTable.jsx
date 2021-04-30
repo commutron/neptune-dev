@@ -16,6 +16,7 @@ const RapidExTable = ({ dataObj })=> (
           <th></th>
           <th>{Pref.batch}</th>
           <th>{Pref.group}</th>
+          <th>{Pref.widget}</th>
           <th>type</th>
 					<th>issue</th>
 					<th>created</th>
@@ -55,7 +56,18 @@ const RapidExRow = ({ rex, calString })=> (
       />
     </td>
     <td>
-      {rex.group}
+      <LeapTextLink
+        title={rex.group} 
+        sty='blackT'
+        address={'/data/overview?request=groups&specify=' + rex.group}
+      />
+    </td>
+    <td>
+      <LeapTextLink
+        title={rex.widget} 
+        sty='blackT'
+        address={'/data/widget?request=' + rex.widget}
+      />
     </td>
     <td>
       {rex.type}

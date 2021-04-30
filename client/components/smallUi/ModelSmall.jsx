@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { MenuItem } from 'react-contextmenu';
 
 
 const ModelSmall = ({ 
-  button, title, menuItem,
+  button, title, cleanIcon,
   icon, color, noText, inLine, lgIcon, 
   lock, children 
 })=> {
@@ -18,18 +17,16 @@ const ModelSmall = ({
   
   return(
     <span>
-      {menuItem ?
-        <MenuItem 
+      {cleanIcon ?
+        <button
           title={title}
-          // className='transparent'
-          onClick={()=>reveal()} 
-          disabled={lock}
-          preventClose={true}>
-          <label className='navIcon actionIconWrap'>
-            <i className={`fas ${icon} ${iSize} fa-fw ${color}`}></i>
-            <i className={`medBig ${color}`}>{button}</i>
+          onClick={()=>reveal()}
+          disabled={lock}>
+          <label>
+            <n-fa1><i className={`${icon} fa-fw ${color}`}></i></n-fa1>
+            {!noText && <span className='blackT'>{button}</span>}
           </label>
-        </MenuItem>
+        </button>
       :
         <button
           title={title}

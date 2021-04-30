@@ -60,21 +60,27 @@ const WidgetPanel = ({
             edit={false}
             existFlows={widgetData.flows}
             app={app} />
-            
-          <BatchXCreate
-            groupId={groupData._id}
-            widgetId={widgetData._id}
-            versionKey={false}
-            allVariants={variantData}
-            lock={!variantData || variantData.every(v => v.live === false)} />
-            
-          <Remove
-            action='widget'
-            title={widgetData.widget}
-            check={widgetData.createdAt && widgetData.createdAt.toISOString()}
-            entry={widgetData._id}
-            lockOut={!variantData.every( x => x.live === false )} />
-        
+          
+          {variantData && variantData.length > 0 ?
+            <BatchXCreate
+              groupId={groupData._id}
+              widgetId={widgetData._id}
+              versionKey={false}
+              allVariants={variantData}
+              lock={variantData.every(v => v.live === false)}
+            />
+          : null}
+          
+          {batchRelated.length === 0 && 
+          (!variantData || variantData.length === 0) ?  
+            <Remove
+              action='widget'
+              title={widgetData.widget}
+              check={widgetData.createdAt && widgetData.createdAt.toISOString()}
+              entry={widgetData._id}
+              lockOut={false}
+            />
+          : null}
         </div>
         
       </div>
@@ -104,7 +110,7 @@ const WidgetPanel = ({
                   variantData={ventry}
                   widgetData={widgetData} 
                   groupData={groupData}
-                  batchRelated={batchRelated} 
+                  batchRelated={batchRelated.filter(b=> b.versionKey === ventry.versionKey)} 
                   app={app}
                   user={user}
                 />

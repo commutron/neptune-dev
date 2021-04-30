@@ -475,7 +475,6 @@ input::-webkit-calendar-picker-indicator {
 }
 .meterprogStack p { margin: 0; }
 .meterprogStack progress { width: 100%; }
-.meterprogStack.empty svg { background-color: whitesmoke; }
 
 .proGood::-webkit-progress-value {
   background-color: #27ae60;

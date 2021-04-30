@@ -223,25 +223,47 @@ Meteor.methods({
       const hasProb = srs.items.some( x => x.history.find( y => y.type === 'nest') !== undefined);
       if(hasProb) {
         for( let i of srs.items ) {
-          const probs = i.history.find( y => y.type === 'nest' && y.good && !y.info );
-          if(probs) {
-            const nestSerial = Config.regexSN.test(probs.comm) ? probs.comm : false;
+          const probs = i.history.filter( y => y.type === 'nest' && !y.info );
+          for(const hist of probs) {
+            const nestSerial = hist.comm;
+            
+            const oldKey = hist.key;
+            const oldTime = hist.time;
+            
             if(nestSerial) {
+            
+              let entory = hist;
+              entory.info = { subSerial: nestSerial };
+              entory.comm = '';
+  
+              XSeriesDB.update({_id: srs._id, 'items.serial': i.serial}, {
+                $pull : {
+                  'items.$.history': {key: oldKey, time: oldTime}
+              }});
               
-              XSeriesDB.update({_id: srs._id, 'items.serial': nestSerial}, {
+              XSeriesDB.update({_id: srs._id, 'items.serial': i.serial}, {
                 $push : { 
-                  'items.$.history': {
-                    key: key+'n3st3d',
-                    step: step,
-                    type: 'nested',
-                    good: true,
-                    time: new Date(),
-                    who: Meteor.userId(),
-                    comm : '',
-                    info: {
-                      parentSerial: i.serial
-                  }
+                  'items.$.history': entory,
+              }});
+          
+              const exist = XSeriesDB.findOne({'items.serial': nestSerial});
+              if(exist) {
+                
+                XSeriesDB.update({_id: srs._id, 'items.serial': nestSerial}, {
+                  $push : { 
+                    'items.$.history': {
+                      key: hist.key+'n3st3d',
+                      step: hist.step,
+                      type: 'nested',
+                      good: hist.good,
+                      time: hist.time,
+                      who: hist.who,
+                      comm : '',
+                      info: {
+                        parentSerial: i.serial
+                    }
                 }}});
+              }
             }
           }
         }
@@ -259,28 +281,65 @@ Meteor.methods({
       if(hasProb) {
         for( let i of srs.items ) {
           const probs = i.history.filter( y => y.type === 'nested' );
-          for(let hist of probs) {
+          for(const hist of probs) {
             
             const oldKey = hist.key;
             const oldTime = hist.time;
             
-            let entory = hist;
-            entory.key = oldKey+'n3st3d';
-
-            XSeriesDB.update({_id: srs._id, 'items.serial': i.serial}, {
-              $pull : {
-                'items.$.history': {key: oldKey, time: oldTime}
-            }});
+            if(oldKey.includes('n3st3d')) {
+              null;
+            }else{
             
-            XSeriesDB.update({_id: srs._id, 'items.serial': i.serial}, {
-              $push : { 
-                'items.$.history': entory,
-            }});
+              let entory = hist;
+              entory.key = oldKey+'n3st3d';
+  
+              XSeriesDB.update({_id: srs._id, 'items.serial': i.serial}, {
+                $pull : {
+                  'items.$.history': {key: oldKey, time: oldTime}
+              }});
+              
+              XSeriesDB.update({_id: srs._id, 'items.serial': i.serial}, {
+                $push : { 
+                  'items.$.history': entory,
+              }});
+            }
           }
         }
       }
     }
     return true;
+  },
+  
+  WhatNestFlows() {
+    
+    const allWidgets = WidgetDB.find({orgKey: Meteor.user().orgKey}).fetch();
+    
+    let found = [];
+    
+    for( let wgt of allWidgets ) {
+      const has = wgt.flows.find( x => x.flow.some( y => y.type === 'nest') );
+      
+      if(has) {
+        found.push(wgt.widget);
+      }
+    }
+    return found;
+  },
+  
+  NonArrayRelease() {
+    
+    const allBatch = XBatchDB.find({orgKey: Meteor.user().orgKey}).fetch();
+    
+    let found = [];
+    
+    for( let bch of allBatch ) {
+      const has = !Array.isArray(bch.releases);
+      
+      if(has) {
+        found.push(bch.batch);
+      }
+    }
+    return found;
   },
   
   

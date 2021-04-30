@@ -2,10 +2,10 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelMedium from '../smallUi/ModelMedium.jsx';
+import ModelSmall from '../smallUi/ModelSmall';
 
 const WidgetEditWrapper = ({ id, now, lockOut })=> (
-  <ModelMedium
+  <ModelSmall
     button={'Edit ' + Pref.widget}
     title={'edit ' + Pref.widget}
     color='greenT'
@@ -15,7 +15,7 @@ const WidgetEditWrapper = ({ id, now, lockOut })=> (
       id={id}
       now={now} 
     />
-  </ModelMedium>
+  </ModelSmall>
 );
 
 export default WidgetEditWrapper;

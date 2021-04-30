@@ -1,16 +1,13 @@
 import React, { Fragment } from 'react';
 // import moment from 'moment';
 import Pref from '/client/global/pref.js';
-// import NumStat from '/client/components/tinyUi/NumStat.jsx';
-// import PrioritySquareData from '/client/components/bigUi/PrioritySquare.jsx';
-// import { PrioritySquare } from '/client/components/bigUi/PrioritySquare.jsx';
 import TrinaryStat from '/client/components/tinyUi/TrinaryStat.jsx';
 import { ReleaseWrapper } from '/client/components/bigUi/ReleasesModule.jsx';
 
 
 const KittingChecks = ({ 
   batchID, batchNum, tBatch,
-  isX, isDone,
+  hasSeries, isDone,
   releasedToFloor, releases,
   app, branchClear, 
   kitCols, dense, isDebug
@@ -56,8 +53,7 @@ const KittingChecks = ({
                 unholdText={`Ready without ${Pref.shortfall}`}
                 undoText='Clear'
                 contextText={`for ${br.common}`}
-                lockout={isDone || isRO}
-                isX={isX}>
+                lockout={isDone || isRO}>
                 <TrinaryStat
                   status={releasedBool ? !releaseObj.caution ? true : false : null}
                   name={br.common}
@@ -73,7 +69,7 @@ const KittingChecks = ({
         })}
         
         
-        {isX /* && b.serialize */ ?
+        {!hasSeries ?
           <div title='N/A'>
             <div className='infoSquareOuter noCopy'>
               <i className='fas fa-minus fa-2x fa-fw darkgrayT fade'></i>
@@ -94,8 +90,7 @@ const KittingChecks = ({
             unholdText={`Ready without ${Pref.shortfall}`}
             undoText='Clear'
             contextText={`${Pref.baseSerialPart}s`}
-            lockout={isDone || isRO}
-            isX={isX}>
+            lockout={isDone || isRO}>
             <TrinaryStat
               status={!serialRelease ? null : !serialRelease.caution ? true : false}
               name={`${Pref.baseSerialPart}s`}
@@ -119,8 +114,7 @@ const KittingChecks = ({
           unholdText={`Released without ${Pref.shortfall}`}
           undoText='Cancel Release'
           contextText='to the floor'
-          lockout={isDone || isRO}
-          isX={isX}>
+          lockout={isDone || isRO}>
           <TrinaryStat
             status={releasedToFloor ? !floorRelease.caution ? true : false : null}
             name={Pref.kitting}

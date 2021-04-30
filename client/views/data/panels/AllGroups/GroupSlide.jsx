@@ -71,13 +71,17 @@ const GroupSlide = ({ groupData, widgetsList, batchDataX, app })=>{
             hState={g.hibernate}
             noText={false}
             primeTopRight={false} />
-          <Remove
-            action='group'
-            title={g.group}
-            check={g.createdAt.toISOString()}
-            entry={g._id}
-            noText={false}
-            lockOut={g.hibernate !== true} />
+          
+          {!widgetsList || widgetsList.length === 0 ?
+            <Remove
+              action='group'
+              title={g.group}
+              check={g.createdAt.toISOString()}
+              entry={g._id}
+              noText={false}
+              lockOut={g.hibernate !== true}
+            />
+          : null}
         </div>
         
       </div>

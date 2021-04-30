@@ -12,7 +12,7 @@ import ReleaseAction from '/client/components/bigUi/ReleasesModule';
 import BlockForm from '/client/components/forms/BlockForm';
 import BlockList from '/client/components/bigUi/BlockList';
 
-import { AlterFulfill } from '/client/components/forms/Batch/BatchAlter';
+import AlterFulfill from '/client/components/forms/Batch/AlterFulfill';
 
 import PrioritySquareData from '/client/components/smallUi/StatusBlocks/PrioritySquare';
 import TideActivityData from '/client/components/tide/TideActivity';
@@ -73,10 +73,10 @@ const InfoTab = ({
           <p>Ship Due: <b>{shipDue.format("MMMM Do, YYYY")}</b></p>
           <AlterFulfill
             batchId={b._id}
-            isX={true}
             end={b.salesEnd}
             app={app}
             lock={b.completed === true && !isDebug}
+            canDo={Roles.userIsInRole(Meteor.userId(), ['edit', 'sales'])}
             noText={true}
             lgIcon={true}
             isDebug={isDebug} />

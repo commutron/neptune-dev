@@ -40,13 +40,15 @@ const VariantCard = ({
         </div>
       
         <div className='centreRow vmarginhalf'>
-
-          <Remove
-            action='variant'
-            title={variantData.variant}
-            check={variantData.createdAt.toISOString()}
-            entry={variantData}
-            lockOut={variantData.live === true} />
+          {batchRelated.length === 0 ?
+            <Remove
+              action='variant'
+              title={variantData.variant}
+              check={variantData.createdAt.toISOString()}
+              entry={variantData}
+              lockOut={variantData.live === true} 
+            />
+          : null}
             
         </div>
           

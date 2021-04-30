@@ -4,11 +4,11 @@ import { toast } from 'react-toastify';
 
 import './style.css';
 
-import ModelLarge from '/client/components/smallUi/ModelLarge';
+import ModelMedium from '/client/components/smallUi/ModelMedium';
 
 
 const CounterAssign = ({ id, app, lock, noText, waterfall })=> (
-  <ModelLarge
+  <ModelMedium
     button={Pref.counter + 's'}
     title={'assign ' + Pref.counter + 's'}
     color='blueT'
@@ -22,7 +22,7 @@ const CounterAssign = ({ id, app, lock, noText, waterfall })=> (
       lock={lock}
       waterfall={waterfall}
     />
-  </ModelLarge>
+  </ModelMedium>
 );
 
 export default CounterAssign;

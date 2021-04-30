@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
-// import Pref from '/client/global/pref.js';
+import Pref from '/client/global/pref.js';
 
 import DownstreamTools from './DownstreamTools';
 import ShipWindows from './ShipWindows';
@@ -27,7 +27,7 @@ const DownstreamView = ({
   const [ calcFor, calcForSet ] = useState(6);
   
   const [ focusBy, focusBySet ] = useState( Session.get(sessionSticky+'focus') || false );
-  //const [ sortBy, sortBySet ] = useState( Session.get(sessionSticky+'sort') || 'priority' );
+  const [ salesBy, salesBySet ] = useState( Session.get(sessionSticky+'sales') || false );
   const [ dense, denseSet ] = useState( defaultDense );
   const [ light, themeSet ] = useState( defaultLight );
   
@@ -45,8 +45,7 @@ const DownstreamView = ({
   
   function changeNum(e) {
     const cleanVal = Number(e) < 1 ? 1 :
-                    Number(e) > 24 ? 24 :
-                    Number(e);
+            Number(e) > Pref.downDayMax ? Pref.downDayMax : Number(e);
     calcForSet( cleanVal );
   }
   
@@ -61,6 +60,13 @@ const DownstreamView = ({
     const focus = value === 'false' ? false : value;
     focusBySet( focus );
     Session.set(sessionSticky+'focus', focus);
+  }
+
+  function changeSales(e) {
+    const value = e.target.value;
+    const sales = value === 'false' ? false : value;
+    salesBySet( sales );
+    Session.set(sessionSticky+'sales', sales);
   }
   
   function changeDense(val) {
@@ -94,13 +100,12 @@ const DownstreamView = ({
         changeNumUP={(e)=>changeNum(e.target.value)}
         
         focusByUP={focusBy}
-        changeFocusByUP={(e)=>changeFocus(e)}
-        
-        // sortByUP={sortBy}
+        salesByUP={salesBy}
         denseUP={dense}
         lightUP={light}
         
-        // changeSortUP={(e)=>changeSort(e)}
+        changeFocusByUP={(e)=>changeFocus(e)}
+        changeSalesUP={(e)=>changeSales(e)}
         denseSetUP={(e)=>changeDense(e)}
         themeSetUP={(e)=>changeTheme(e)}
         
@@ -115,6 +120,7 @@ const DownstreamView = ({
         user={user}
         isDebug={isDebug}
         focusBy={focusBy}
+        salesBy={salesBy}
         dense={density}
         updateTrigger={updateTrigger}
       />

@@ -156,14 +156,16 @@ Meteor.methods({
     
     XRapidsDB.find({extendBatch: {$ne: false} })
     .forEach( r => {
-      // const w = WidgetDB.findOne({_id: srs.widgetId});
+      const b = XBatchDB.findOne({batch: r.extendBatch});
+      const w = WidgetDB.findOne({_id: b.widgetId});
       const g = GroupDB.findOne({_id: r.groupId});
 
       compactData.push({
         rapid: r.rapid, 
         type: r.type,
         extendBatch: r.extendBatch,
-        group: g.group,
+        group: g.alias,
+        widget: w.widget,
         issueOrder: r.issueOrder,
         live: r.live,
         createdAt: r.createdAt,

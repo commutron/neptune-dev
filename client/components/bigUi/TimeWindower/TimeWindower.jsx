@@ -27,7 +27,7 @@ const TimeWindower = ({ app, changeCount, changeBracket, stickyValue, sessionSti
   return(
     <nav>
       <span>
-        <i className='fas fa-filter fa-fw grayT'></i>
+        <i className='fas fa-filter fa-fw darkgrayT'></i>
         <select
           id='rangeSelect'
           title={`Change ${Pref.phase} Filter`}

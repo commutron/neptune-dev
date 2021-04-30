@@ -3,7 +3,6 @@ import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
 import { LeapTextLink } from '../tinyUi/LeapText.jsx';
-import UserNice from '../smallUi/UserNice.jsx';
 
 import './style.css';
 
@@ -17,8 +16,7 @@ const ScrapTableAll = ({ scrapData })=> (
           <th>{Pref.group}</th>
           <th>{Pref.widget}</th>
 					<th>when</th>
-					<th>who</th>
-					<th>where</th>
+					<th>step</th>
           <th>comment</th>
         </tr>
       </thead>
@@ -72,7 +70,6 @@ const ScrapRow = ({ entry, group, batchNum, widget, barcode })=> (
       />
     </td>
     <td>{moment(entry.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm a"})}</td>
-    <td className='cap'><UserNice id={entry.who} /></td>
     <td>{entry.step}</td>
     <td>{entry.comm}</td>
 	</tr>

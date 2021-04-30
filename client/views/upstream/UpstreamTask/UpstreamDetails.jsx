@@ -5,7 +5,7 @@ import Pref from '/client/global/pref.js';
 import BatchTopStatus from '../../overview/columns/BatchTopStatus.jsx';
 import KittingChecks from './KittingChecks';
 import { TideActivitySquare } from '/client/components/tide/TideActivity';
-import PrintLink from '/client/components/smallUi/PrintLink.jsx';
+import PrintJump from '/client/components/smallUi/PrintJump';
 import ProJump from '/client/components/smallUi/ProJump';
 
 const UpstreamDetails = ({
@@ -122,13 +122,11 @@ const UpstreamDetailChunk = ({
         dense={dense}
         isDebug={isDebug} />
     
-      <div>
-        <PrintLink
-          batchNum={oB.batch}
-          title='Print Label'
-          iText={!dense}
-        />
-      </div>
+      <PrintJump
+        batchNum={oB.batch}
+        title='Print Label'
+        iText={!dense}
+      />
       
       <ProJump batchNum={oB.batch} dense={dense} />
         

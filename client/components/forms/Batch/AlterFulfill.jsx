@@ -3,26 +3,31 @@ import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelMedium from '/client/components/smallUi/ModelMedium.jsx';
-import PrioritySquareData from '/client/components/smallUi/StatusBlocks/PrioritySquare.jsx';
+import ModelSmall from '/client/components/smallUi/ModelSmall';
+import PrioritySquareData from '/client/components/smallUi/StatusBlocks/PrioritySquare';
 
 
-export const AlterFulfill = ({ batchId, end, app, lock, noText, lgIcon })=> (
-  <ModelMedium
+const AlterFulfill = ({ 
+  batchId, batch, end, app, canDo, lock, 
+  noText, lgIcon, cleanIcon
+})=> (
+  <ModelSmall
     button={'Alter ' + Pref.end}
-    title={`Alter ${Pref.xBatch} ${Pref.end}`}
+    title={`Alter ${batch || Pref.xBatch} ${Pref.end}`}
     color='blueT'
-    icon='fa-calendar-alt'
-    lock={!Roles.userIsInRole(Meteor.userId(), ['edit', 'sales']) || lock}
+    icon='far fa-calendar-alt'
+    lock={!canDo || lock}
     noText={noText}
-    lgIcon={lgIcon}>
+    lgIcon={lgIcon}
+    cleanIcon={cleanIcon}>
     <AlterFulfillForm
       batchId={batchId}
       end={end}
       app={app} />
-  </ModelMedium>
+  </ModelSmall>
 );
 
+export default AlterFulfill;
 
 const AlterFulfillForm = ({ batchId, end, app, selfclose })=> {
 
@@ -38,7 +43,7 @@ const AlterFulfillForm = ({ batchId, end, app, selfclose })=> {
     (error, reply)=>{
       if(error) {
         console.log(error);
-        toast.error('Server Error');
+        toast.error(error.reason || 'Server Error');
       }
       if(reply) {
         toast.success('Saved');
@@ -51,14 +56,14 @@ const AlterFulfillForm = ({ batchId, end, app, selfclose })=> {
     
   return(
     <form className='centre vmargin' onSubmit={(e)=>save(e)}>
-      <div className='centreRow'>
+      <div className='centreRow max600'>
         {app.alterFulfillReasons && 
           app.alterFulfillReasons.map( (entry, index)=>{
             return(
               <label 
                 key={index}
                 htmlFor={entry+index} 
-                className='beside breath'>
+                className='beside breath med'>
                 <input
                   type='radio'
                   id={entry+index}
@@ -66,7 +71,7 @@ const AlterFulfillForm = ({ batchId, end, app, selfclose })=> {
                   className='inlineRadio cap'
                   defaultChecked={reasonState === entry}
                   onChange={()=>reasonSet(entry)}
-                  required 
+                  required={app.alterFulfillReasons ? true : false}
               />{entry}</label>
         )})}
       </div>

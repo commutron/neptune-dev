@@ -35,13 +35,13 @@ const RextendPanel = ({ batchData, app })=> {
     if(Array.isArray(rapex)) {
       
       const byGroup = !groupState || groupState === 'false' ? rapex :
-                rapex.filter( r => r.group === groupState );
+              rapex.filter( r => r.group.toUpperCase() === groupState );
       
       const byYear = !yearState || yearState === 'false' ? byGroup :
-                byGroup.filter( r => moment(r.createdAt).year() == yearState );
+              byGroup.filter( r => moment(r.createdAt).year() == yearState );
       
       const byType = !typeState || typeState === 'false' ? byYear :
-                byYear.filter( r => r.type === typeState );
+              byYear.filter( r => r.type === typeState );
       
       const sorted = byType.sort((r1, r2)=>
                       r1.createdAt > r2.createdAt ? -1 : 
@@ -61,7 +61,7 @@ const RextendPanel = ({ batchData, app })=> {
     );
   }
   
-  const gList = _.uniq( Array.from(rapex, r => r.group ) ).sort();
+  const gList = _.uniq( Array.from(rapex, r => r.group.toUpperCase() ) ).sort();
   const tList = _.uniq( Array.from(rapex, r => r.type ) ).sort();
   const yList = _.uniq( Array.from(rapex, r => moment(r.createdAt).year() ) )
                   .sort((a,b)=>b-a);

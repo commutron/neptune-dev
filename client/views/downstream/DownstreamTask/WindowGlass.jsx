@@ -11,7 +11,7 @@ import DownstreamDetails from './DownstreamDetails';
 
 const WindowGlass = ({ 
   windowMoment, indexKey, traceDT,
-  brancheS, app, user, isDebug, focusBy, dense, updateTrigger
+  brancheS, app, user, isDebug, canDo, focusBy, dense, updateTrigger
 })=> {
   
   const [ mixedOrders, mixedOrdersSet ] = useState([]);
@@ -65,6 +65,7 @@ const WindowGlass = ({
           user={user}
           app={app}
           isDebug={isDebug}
+          canDo={canDo}
           isNightly={false}
           dense={dense}
           focusBy={focusBy}

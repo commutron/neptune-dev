@@ -9,7 +9,7 @@ import { listShipDays } from '/client/utility/WorkTimeCalc';
 
 const ShipWindows = ({ 
   calcFor, traceDT,
-  brancheS, app, user, isDebug, focusBy, dense, updateTrigger
+  brancheS, app, user, isDebug, focusBy, salesBy, dense, updateTrigger
 })=> {
   
   const [ traceRapid, traceRapidSet ] = useState(false);
@@ -25,7 +25,10 @@ const ShipWindows = ({
     // returns an array of moments
     nextShipDaysSet(getShipDays);
     
-    traceDTSSet( traceDT.sort((p1, p2)=> {
+    const limitToSales = !salesBy ? traceDT :
+                          traceDT.filter( t => t.salesOrder === salesBy );
+      
+    traceDTSSet( limitToSales.sort((p1, p2)=> {
       const p1bf = p1.bffrRel;
       const p2bf = p2.bffrRel;
       if (isNaN(p1bf)) { return 1 }
@@ -37,7 +40,9 @@ const ShipWindows = ({
       return 0;
     }) );
     
-  }, [calcFor, traceDT]);
+  }, [calcFor, traceDT, salesBy]);
+  
+  const canDo = Roles.userIsInRole(Meteor.userId(), ['edit', 'sales']);
          
   return(
     <div className={`downstreamContent forceScrollStyle ${dense}`}>
@@ -69,6 +74,7 @@ const ShipWindows = ({
             app={app}
             user={user}
             isDebug={isDebug}
+            canDo={canDo}
             focusBy={focusBy}
             dense={dense}
             updateTrigger={updateTrigger}

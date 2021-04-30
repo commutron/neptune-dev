@@ -28,6 +28,22 @@
   outline: dotted thick;
 }
 
+.actionIconWrap {
+  margin: 0 0.5rem;
+}
+.actionIconText {
+  color: white;
+  text-transform: capitalize;
+  line-height: 1rem;
+  display: block;
+  white-space: nowrap;
+  border-bottom-style: hidden;
+  text-decoration: none;
+}
+.actionIconWrap:hover .actionIconText {
+  text-decoration: underline;
+}
+
 .closeAction {
   font-weight: 800;
 	min-width: 3vmax;
@@ -56,7 +72,9 @@
 .hoverAction {
   cursor: pointer;
 }
-.hoverAction:hover, .hoverAction:focus-within {
+.hoverAction:hover,
+.hoverAction:focus-within,
+.hoverAction:active {
   outline-color: var(--neptuneColor);
   outline-style: dotted;
   outline-offset: -0.25vmax;

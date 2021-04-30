@@ -10,16 +10,17 @@ const ProJump = ({ batchNum, dense })=> {
   const isRO = Roles.userIsInRole(Meteor.userId(), 'readOnly');
   
   return(
-    <div>
+    <div className='overButton'>
 			<a
         title={`View ${batchNum} in production`}
-        className='transparent'
         onClick={()=>goPro(batchNum)}
         disabled={isRO}>
-        <label className='navIcon actionIconWrap taskLink'>
-          <i className='far fa-paper-plane' data-fa-transform='left-1 down-2 shrink-3'></i>
-        </label><br />
-        {!dense && <i className='label infoSquareLabel whiteT'>Production</i>}
+        <label>
+          <n-fa1>
+            <i className='far fa-paper-plane darkgrayT'></i>
+          </n-fa1>
+          {!dense && <span className='label darkgrayT'>Production</span>}
+        </label>
       </a>
     </div>
   );

@@ -1,7 +1,8 @@
 import React from 'react';
+import Pref from '/client/global/pref.js';
 import ClockString from '/client/components/smallUi/ClockString';
 import { 
-  FocusSelect,
+  FocusSelect, FilterSelect,
   LayoutSwitch, ThemeSwitch
 } from '/client/components/smallUi/ToolBarTools';
 
@@ -10,13 +11,16 @@ const DownstreamTools = ({
   app, traceDT, loadTimeUP, 
   numUP, changeNumUP,
   focusByUP, changeFocusByUP,
-  sortByUP, denseUP, lightUP,
-  changeSortUP, denseSetUP, themeSetUP,
+  salesByUP, denseUP, lightUP,
+  changeSalesUP, denseSetUP, themeSetUP,
   doThing
 })=> {
   const gList = _.uniq( Array.from(traceDT, g =>
                           !g.isWhat[0].startsWith('.') && g.isWhat[0] ))
                             .filter( f => f ).sort();
+                            
+  const slList = _.uniq( Array.from(traceDT, s => s.salesOrder ) ).sort();
+  
   return(
     <nav className='downstreamToolbar gridViewTools'>
       
@@ -28,10 +32,7 @@ const DownstreamTools = ({
           id='numTick'
           title='Change Number of Days'
           className='overToolSort liteToolOn'
-          pattern='[0-99]*'
-          maxLength='2'
-          minLength='1'
-          max='24'
+          max={Pref.downDayMax.toString()}
           min='1'
           inputMode='numeric'
           defaultValue={numUP}
@@ -42,6 +43,15 @@ const DownstreamTools = ({
         gList={gList}
         focusState={focusByUP}
         changeFunc={changeFocusByUP}
+      />
+      
+      <FilterSelect
+        unqID='fltrSALES'
+        title='Filter Sales Order'
+        selectList={slList}
+        selectState={salesByUP}
+        falsey='All Sales Orders'
+        changeFunc={changeSalesUP} 
       />
         
       <LayoutSwitch

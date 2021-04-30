@@ -45,14 +45,13 @@ export const FocusSelect = ({ gList, focusState, changeFunc })=> (
     <select
       id='focusSelect'
       title={`Focus on ${Pref.group}`}
-      className='overToolSort liteToolOn'
+      className={`overToolSort liteToolOn`}
       defaultValue={focusState}
       onChange={(e)=>changeFunc(e)}>
-      <option value={false}>All {Pref.group}s</option>
-      {gList.map( (gr, ix)=> {
-        return(
-          <option key={gr+ix}>{gr}</option>
-      )})}
+      <option value={false} className='clean'>All {Pref.group}s</option>
+      {gList.map( (gr, ix)=> (
+        <option key={gr+ix}>{gr}</option>
+      ))}
     </select>
   </span>
 );

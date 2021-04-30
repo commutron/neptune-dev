@@ -24,8 +24,9 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isDebug })=> {
                         user.preferLight || false;
   
   const [ focusBy, focusBySet ] = useState( Session.get(sessionSticky+'focus') || false );
-                     
-  const [ sortBy, sortBySet ] = useState( Session.get(sessionSticky+'sort') || 'priority' );
+  const [ salesBy, salesBySet ] = useState( Session.get(sessionSticky+'sales') || false );
+
+  // const [ sortBy, sortBySet ] = useState( Session.get(sessionSticky+'sort') || 'priority' );
   const [ dense, denseSet ] = useState( defaultDense );
   const [ light, themeSet ] = useState( defaultLight );
   
@@ -33,7 +34,7 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isDebug })=> {
   
   useLayoutEffect( ()=> {
     sortInitial();
-  }, [batchX, traceDT, sortBy]);
+  }, [batchX, traceDT, salesBy]);
   
   const [ updateTrigger, updateTriggerSet ] = useState(true);
   
@@ -54,10 +55,16 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isDebug })=> {
     Session.set(sessionSticky+'focus', focus);
   }
   
-  function changeSort(e) {
-    const sort = e.target.value;
-    sortBySet( sort );
-    Session.set(sessionSticky+'sort', sort);
+  // function changeSort(e) {
+  //   const sort = e.target.value;
+  //   sortBySet( sort );
+  //   Session.set(sessionSticky+'sort', sort);
+  // }
+  function changeSales(e) {
+    const value = e.target.value;
+    const sales = value === 'false' ? false : value;
+    salesBySet( sales );
+    Session.set(sessionSticky+'sales', sales);
   }
   
   function changeDense(val) {
@@ -84,45 +91,47 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isDebug })=> {
         }
       });
         
-      let orderedBatches = filteredBatches;
+      // let orderedBatches = filteredBatches;
+      const limitToSales = !salesBy ? filteredBatches :
+                      filteredBatches.filter( l => l.salesOrder === salesBy );
       
-      if(sortBy === 'priority') {
-        orderedBatches = filteredBatches.sort((b1, b2)=> {
+      // if(sortBy === 'priority') {
+      const orderedBatches = limitToSales.sort((b1, b2)=> {
           
-          const pB1 = traceDT.find( x => x.batchID === b1._id);
-          const pB1bf = pB1 ? pB1.bffrRel : null;
-          const pB2 = traceDT.find( x => x.batchID === b2._id);
-          const pB2bf = pB2 ? pB2.bffrRel : null;
-          if (isNaN(pB1bf)) { return 1 }
-          if (isNaN(pB2bf)) { return -1 }
-          if (pB1.lateLate) { return -1 }
-          if (pB2.lateLate) { return 1 }
-          if (pB1bf < pB2bf) { return -1 }
-          if (pB1bf > pB2bf) { return 1 }
-          return 0;
-        });
+        const pB1 = traceDT.find( x => x.batchID === b1._id);
+        const pB1bf = pB1 ? pB1.bffrRel : null;
+        const pB2 = traceDT.find( x => x.batchID === b2._id);
+        const pB2bf = pB2 ? pB2.bffrRel : null;
+        if (isNaN(pB1bf)) { return 1 }
+        if (isNaN(pB2bf)) { return -1 }
+        if (pB1.lateLate) { return -1 }
+        if (pB2.lateLate) { return 1 }
+        if (pB1bf < pB2bf) { return -1 }
+        if (pB1bf > pB2bf) { return 1 }
+        return 0;
+      });
         
-      }else if(sortBy === 'sales') {
-        orderedBatches = filteredBatches.sort((b1, b2)=> {
-          if (b1.salesOrder < b2.salesOrder) { return -1 }
-          if (b1.salesOrder > b2.salesOrder) { return 1 }
-          return 0;
-        });
-      }else if( sortBy === 'due') {
-        orderedBatches = filteredBatches.sort((b1, b2)=> {
-          let endDate1 = b1.salesEnd || b1.end;
-          let endDate2 = b2.salesEnd || b2.end;
-          if (endDate1 < endDate2) { return -1 }
-          if (endDate1 > endDate2) { return 1 }
-          return 0;
-        });
-      }else{
-        orderedBatches = filteredBatches.sort((b1, b2)=> {
-          if (b1.batch < b2.batch) { return 1 }
-          if (b1.batch > b2.batch) { return -1 }
-          return 0;
-        });
-      }
+      // }else if(sortBy === 'sales') {
+      //   orderedBatches = filteredBatches.sort((b1, b2)=> {
+      //     if (b1.salesOrder < b2.salesOrder) { return -1 }
+      //     if (b1.salesOrder > b2.salesOrder) { return 1 }
+      //     return 0;
+      //   });
+      // }else if( sortBy === 'due') {
+      //   orderedBatches = filteredBatches.sort((b1, b2)=> {
+      //     let endDate1 = b1.salesEnd || b1.end;
+      //     let endDate2 = b2.salesEnd || b2.end;
+      //     if (endDate1 < endDate2) { return -1 }
+      //     if (endDate1 > endDate2) { return 1 }
+      //     return 0;
+      //   });
+      // }else{
+      //   orderedBatches = filteredBatches.sort((b1, b2)=> {
+      //     if (b1.batch < b2.batch) { return 1 }
+      //     if (b1.batch > b2.batch) { return -1 }
+      //     return 0;
+      //   });
+      // }
       
       liveSet( orderedBatches );
     });
@@ -140,10 +149,10 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isDebug })=> {
         loadTimeUP={loadTime}
         focusByUP={focusBy}
         changeFocusByUP={(e)=>changeFocus(e)}
-        sortByUP={sortBy}
+        salesByUP={salesBy}
         denseUP={dense}
         lightUP={light}
-        changeSortUP={(e)=>changeSort(e)}
+        changeSalesUP={(e)=>changeSales(e)}
         denseSetUP={(e)=>changeDense(e)}
         themeSetUP={(e)=>changeTheme(e)}
         doThing={()=>updateTriggerSet(!updateTrigger)}

@@ -183,7 +183,7 @@
 .overGridRowFixed > div:nth-child(2),
 .downRowFixed > div:nth-child(2) {
   border-right: 1px outset rgba(255,255,255,0.4);
-  font-size: 2.5vh;
+  font-size: 2.25vh;
 }
 .overGridRowFixed > div:last-child,
 .downRowFixed > div:last-child {
@@ -232,8 +232,7 @@
 }
 
 .overGridRowScroll > div,
-.downRowScroll > div /*,
-.statusBlock*/ {
+.downRowScroll > div {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -426,6 +425,25 @@
   background-color: rgb(50,50,50);
 }
 
+n-sm-model .label { display: block !important; }
+n-sm-model .big { font-size: 1.5rem !important; }
+
+.darkTheme n-sm-model {
+  background-color: rgb(50,50,50);
+  color: rgb(225,225,225);
+}
+.darkTheme n-sm-model input[type='date'] {
+  background-color: rgb(100,100,100);
+  color: rgb(225,225,225);
+}
+.darkTheme n-sm-model input[type='radio'] {
+  filter: grayscale(1) invert(1) brightness(0.9);
+  overflow: hidden;
+}
+.darkTheme n-sm-model .greenHover:hover {
+  color: rgb(50,50,50);
+}
+
 .lightTheme .tenHeader,
 .lightTheme .frontCenterTitle,
 .lightTheme .auxRight,
@@ -473,6 +491,39 @@
   overflow-x: hidden;
 }
 
+.overButton {
+  font-size: 1.5vh;
+  vertical-align: top;
+  text-transform: capitalize;
+}
+.overButton > span > button,
+.overButton > a,
+.overAction { 
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 200ms ease-in-out;
+}
+.overButton > span > button:hover,
+.overButton > span > button:active,
+.overButton > a:hover, 
+.overButton > a:active,
+.overAction:hover, .overAction:active {
+  border-bottom: 5px solid var(--neptuneColor);
+}
+.overButton > span > button > label,
+.overButton > a > label {
+  display: flex;
+  flex-flow: column nowrap;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  line-height: 1.3;
+  cursor: pointer;
+}
+.overButton > span > button > label > span,
+.overButton > a > label > span { 
+  font-size: smaller; }
+.overButton n-fa1 { font-size: 2.25vh; }
 
 @media (orientation: portrait) {
   .overviewContainer {
@@ -490,6 +541,10 @@
   /*}*/
   .overviewContent {
     min-height: calc( 100vh - 8vmin);
+  }
+  .upstreamView,
+  .downstreamView {
+    grid-template-rows: 3vh calc(97vh - 8vmin);
   }
   /*.overGridFrame {*/
   /*  grid-template-columns: minmax(30vw, 35vw) auto;*/

@@ -23,8 +23,7 @@ const OverviewWrap = ({
   const [ loadTime, loadTimeSet ] = useState( moment() );
   
   const sessionFilter = Session.get(sessionSticky+'filter');
-  // const userDefault = brancheS.find( x => x.branch === user.defaultOverview ) ?
-  //                     user.defaultOverview : false; // validate default (legacy support)
+  
   const defaultFilter = sessionFilter !== undefined ? sessionFilter :
                         user.defaultOverview || false;
   
@@ -42,8 +41,9 @@ const OverviewWrap = ({
   const [ filterBy, filterBySet ] = useState( defaultFilter );
   
   const [ focusBy, focusBySet ] = useState( Session.get(sessionSticky+'focus') || false );
-  
-  const [ sortBy, sortBySet ] = useState( Session.get(sessionSticky+'sort') || 'priority' );
+  const [ salesBy, salesBySet ] = useState( Session.get(sessionSticky+'sales') || false );
+
+  // const [ sortBy, sortBySet ] = useState( Session.get(sessionSticky+'sort') || 'priority' );
   const [ ghost, ghostSet ] = useState( defaultGhost );
   const [ dense, denseSet ] = useState( defaultDense );
   const [ light, themeSet ] = useState( defaultLight );
@@ -52,7 +52,7 @@ const OverviewWrap = ({
   
   useLayoutEffect( ()=> {
     sortInitial();
-  }, [bx, traceDT, filterBy, sortBy, ghost]);
+  }, [bx, traceDT, filterBy, salesBy, ghost]);
   
   const [ updateTrigger, updateTriggerSet ] = useState(true);
   
@@ -80,11 +80,17 @@ const OverviewWrap = ({
     Session.set(sessionSticky+'focus', focus);
   }
   
-  function changeSort(e) {
-    const sort = e.target.value;
-    sortBySet( sort );
-    Session.set(sessionSticky+'sort', sort);
+  function changeSales(e) {
+    const value = e.target.value;
+    const sales = value === 'false' ? false : value;
+    salesBySet( sales );
+    Session.set(sessionSticky+'sales', sales);
   }
+  // function changeSort(e) {
+  //   const sort = e.target.value;
+  //   sortBySet( sort );
+  //   Session.set(sessionSticky+'sort', sort);
+  // }
   
   function changeGhost(val) {
     ghostSet( val );
@@ -109,13 +115,13 @@ const OverviewWrap = ({
         ghost === true ? liveBatches 
         :
         liveBatches.filter( bx => {
-          const releasedToFloor = Array.isArray(bx.releases) ?
-            bx.releases.findIndex( x => x.type === 'floorRelease') >= 0 :
-            typeof bx.floorRelease === 'object';
+          const releasedToFloor = //Array.isArray(bx.releases) ?
+            bx.releases.findIndex( x => x.type === 'floorRelease') >= 0;// :
+            //typeof bx.floorRelease === 'object';
           if(releasedToFloor) {
             return bx;
           }
-        }) 
+        })
         :
         liveBatches.filter( bbx => {
           const tBatch = traceDT.find( t => t.batchID === bbx._id );
@@ -129,11 +135,14 @@ const OverviewWrap = ({
             return bbx;
           }
         });
+        
+      const limitToSales = !salesBy ? filteredBatches :
+                      filteredBatches.filter( l => l.salesOrder === salesBy );
       
-      let orderedBatches = filteredBatches;
+      // let orderedBatches = filteredBatches;
       
-      if(sortBy === 'priority') {
-        orderedBatches = filteredBatches.sort((b1, b2)=> {
+      // if(sortBy === 'priority') {
+      const orderedBatches = limitToSales.sort((b1, b2)=> {
           
           const pB1 = traceDT.find( x => x.batchID === b1._id);
           const pB1bf = pB1 ? pB1.bffrRel : null;
@@ -148,27 +157,27 @@ const OverviewWrap = ({
           return 0;
         });
         
-      }else if(sortBy === 'sales') {
-        orderedBatches = filteredBatches.sort((b1, b2)=> {
-          if (b1.salesOrder < b2.salesOrder) { return -1 }
-          if (b1.salesOrder > b2.salesOrder) { return 1 }
-          return 0;
-        });
-      }else if( sortBy === 'due') {
-        orderedBatches = filteredBatches.sort((b1, b2)=> {
-          let endDate1 = b1.salesEnd || b1.end;
-          let endDate2 = b2.salesEnd || b2.end;
-          if (endDate1 < endDate2) { return -1 }
-          if (endDate1 > endDate2) { return 1 }
-          return 0;
-        });
-      }else{
-        orderedBatches = filteredBatches.sort((b1, b2)=> {
-          if (b1.batch < b2.batch) { return 1 }
-          if (b1.batch > b2.batch) { return -1 }
-          return 0;
-        });
-      }
+      // }else if(sortBy === 'sales') {
+      //   orderedBatches = filteredBatches.sort((b1, b2)=> {
+      //     if (b1.salesOrder < b2.salesOrder) { return -1 }
+      //     if (b1.salesOrder > b2.salesOrder) { return 1 }
+      //     return 0;
+      //   });
+      // }else if( sortBy === 'due') {
+      //   orderedBatches = filteredBatches.sort((b1, b2)=> {
+      //     let endDate1 = b1.salesEnd || b1.end;
+      //     let endDate2 = b2.salesEnd || b2.end;
+      //     if (endDate1 < endDate2) { return -1 }
+      //     if (endDate1 > endDate2) { return 1 }
+      //     return 0;
+      //   });
+      // }else{
+      //   orderedBatches = filteredBatches.sort((b1, b2)=> {
+      //     if (b1.batch < b2.batch) { return 1 }
+      //     if (b1.batch > b2.batch) { return -1 }
+      //     return 0;
+      //   });
+      // }
       
       liveSet( orderedBatches );
     });
@@ -198,12 +207,14 @@ const OverviewWrap = ({
         focusByUP={focusBy}
         changeFocusByUP={(e)=>changeFocus(e)}
         filterByUP={filterBy}
-        sortByUP={sortBy}
+        // sortByUP={sortBy}
+        salesByUP={salesBy}
         ghostUP={ghost}
         denseUP={dense}
         lightUP={light}
         changeFilterUP={(e)=>changeFilter(e)}
-        changeSortUP={(e)=>changeSort(e)}
+        // changeSortUP={(e)=>changeSort(e)}
+        changeSalesUP={(e)=>changeSales(e)}
         ghostSetUP={(e)=>changeGhost(e)}
         denseSetUP={(e)=>changeDense(e)}
         themeSetUP={(e)=>changeTheme(e)}

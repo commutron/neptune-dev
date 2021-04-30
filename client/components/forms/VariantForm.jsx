@@ -43,6 +43,7 @@ const VariantForm = ({ widgetData, app, rootWI, lockOut, selfclose })=> {
       error && console.log(error);
       if(reply) {
         toast.success('Saved');
+        selfclose();
       }else{
         toast.error('Server Error');
         this.go.disabled = false;

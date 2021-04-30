@@ -43,6 +43,7 @@ class Pref {
     this.userTimePublic = true;
     this.groupMax = 128;
     this.aliasMax = 16;
+    this.downDayMax = 24;
     this.pagingSize = 25;
     
     // app navigation
@@ -67,9 +68,9 @@ class Pref {
     this.xBatchs = 'work orders';
     this.XBatchs = 'Work Orders';
     
-	  this.batch = 'work order';//order
-	  this.Batch = 'Work Order';//Order
-	  this.batches = 'work orders';
+	  this.batch = 'legacy work order';//order
+	  this.Batch = 'legacy Work Order';//Order
+	  this.batches = 'legacy work orders';
 	  this.item = 'item';
 	  this.Item = 'Item';
 	  this.items = 'items';

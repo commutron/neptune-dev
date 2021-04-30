@@ -177,24 +177,6 @@
   flex-grow: 2;
 }
 
-.actionIconWrap {
-  margin: 0 0.5rem;
-}
-.actionIconText {
-  color: white;
-  font-size: small;
-  text-transform: capitalize;
-  line-height: 1rem;
-  display: block;
-  white-space: nowrap;
-  border-bottom-style: hidden;
-  text-decoration: none;
-}
-
-.actionIconWrap:hover .actionIconText {
-  text-decoration: underline;
-}
-
 #lookup {
   font-size: 4.5vh;
   text-align: center;

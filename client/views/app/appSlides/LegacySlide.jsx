@@ -25,6 +25,27 @@ const LegacySlide = ()=> {
     }
   }
   
+  function checkNest(e) {
+    Meteor.call('WhatNestFlows', (err, reply)=>{
+      if(err)
+        console.log(err);
+      if(reply) {
+        console.log(reply);
+      }
+    });
+  }
+  
+  function checkRelease(e) {
+    Meteor.call('NonArrayRelease', (err, reply)=>{
+      if(err)
+        console.log(err);
+      if(reply) {
+        console.log(reply);
+      }
+    });
+  }
+  
+  
   return(
     <div className='space3v'>
       <p>determine support needs</p>
@@ -66,6 +87,23 @@ const LegacySlide = ()=> {
           >Save</button>
         </p>
       </form>
+      
+      <hr />
+      
+      
+      <button
+        onClick={()=>checkNest()}
+        className='smallAction clearGreen'
+        disabled={false}
+      >Check Nesting Widgets</button>
+      
+      <hr />
+      
+      <button
+        onClick={()=>checkRelease()}
+        className='smallAction clearGreen'
+        disabled={false}
+      >Check Release Arrays</button>
     </div>
   );
 };

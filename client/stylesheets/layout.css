@@ -472,22 +472,24 @@ n-lg-model, n-md-model, n-sm-model {
   color: black;
 }
 n-lg-model {
-  margin: 5vh auto auto auto;
+  margin: 5vh auto 5vh auto;
   max-width: 80%;
   min-height: 75%;
   max-height: 90vh;
   padding: 1vmax 3vmax 3vmax 3vmax;
 }
 n-md-model {
-  margin: 10vh auto auto auto;
+  margin: 10vh auto 5vh auto;
   max-width: 60%;
   min-height: 60vh;
+  max-height: 85vh;
   padding: 1vmax 2vmax 2vmax 2vmax;
 }
 n-sm-model {
-  margin: 15vh auto auto auto;
+  margin: 15vh auto 15vh auto;
   max-width: 50%;
   min-height: 40vh;
+  max-height: 60vh;
   padding: 1vmax 1vmax;
 }
 n-model-head {
@@ -496,35 +498,37 @@ n-model-head {
   align-items: center;
   text-transform: capitalize;
   height: 3vmax;
-  font-size: 2.5vmax;
+  font-size: 2.25vmax;
   font-weight: 600;
   white-space: nowrap;
 }
 n-lg-model-content, n-md-model-content, n-sm-model-content {
   overflow-y: auto;
-  max-height: 80vh;
   margin: 8px 0 0 0;
   border-top: 1px dotted black;
   border-bottom: 1px dotted black;
 }
 n-lg-model-content {
   display: block;
-  height: calc(100% - 25px - 3vh);
+  min-height: calc(75% - 30px - 3vmax);
+  max-height: calc(90vh - 30px - 3vmax);
 }
 n-md-model-content {
   display: block;
   min-height: calc(60vh - 30px - 3vmax);
+  max-height: calc(85vh - 30px - 3vmax);
 }
 n-sm-model-content {
   display: block;
   min-height: calc(40vh - 30px - 3vmax);
+  max-height: calc(60vh - 30px - 3vmax);
 }
 
 @media screen and (max-width: 1150px){
-  n-lg-model{ max-width: 90%; }
+  n-lg-model { max-width: 90%; }
 }
 @media screen and (max-width: 1000px){
-  n-lg-model{ max-width: 95%; }
+  n-lg-model { max-width: 95%; }
 }
 
 .centre {

@@ -2,7 +2,7 @@ import React from 'react';
 //import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelMedium from '../smallUi/ModelMedium.jsx';
+import ModelSmall from '../smallUi/ModelSmall';
 
 // requires Data
 // action : a string to determine which method to use
@@ -15,7 +15,7 @@ const RemoveWrapper = ({ action, entry, title, check, lockOut })=> {
   const auth = Roles.userIsInRole(Meteor.userId(), 'remove') && !lockOut;
   
   return(
-    <ModelMedium
+    <ModelSmall
       button='Delete'
       title={`delete "${title}"`}
       color='redT'
@@ -28,7 +28,7 @@ const RemoveWrapper = ({ action, entry, title, check, lockOut })=> {
         title={title}
         check={check}
       />
-    </ModelMedium>
+    </ModelSmall>
   );   
 };
 
@@ -76,7 +76,6 @@ const Remove = ({ action, entry, title, check })=> {
             toast.warning('Cannot do this, entry is in use');
           }else if(reply) {
             toast.success('Entry removed');
-            FlowRouter.go('/data/overview?request=groups');
           }else{
             toast.error('Rejected by Server');
             this.cutGo.disabled = false;
@@ -92,12 +91,11 @@ const Remove = ({ action, entry, title, check })=> {
   let checkshort = check.split('T')[0];
 
   return(
-    <div className='actionBox redT'>
-      <br />
+    <div className='actionBox centre centreText'>
       <p>Are you sure you want to try to delete "{title}"?</p>
       <p>This cannot be undone and could cause unexpected consequences.</p>
       <br />
-      <p>Enter "<i className='noCopy'>{checkshort + ' '}</i>" to confirm.</p>
+      <p>Enter "<i className='noCopy redT'>{checkshort}</i>" to confirm.</p>
       <br />
       <form onSubmit={(e)=>handleRemove(e)} className='inlineForm'>
         <input
@@ -105,7 +103,7 @@ const Remove = ({ action, entry, title, check })=> {
           id='confirmInput'
           placeholder={checkshort}
           autoFocus={true}
-          className='noCopy redIn'
+          className='noCopy'
           required />
         <button
           className='smallAction clearRed'
