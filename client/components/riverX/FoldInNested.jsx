@@ -3,7 +3,7 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 const FoldInNested = ({ 
-	seriesId, serial, sKey, step, lock, 
+	seriesId, serial, sKey, step, lockout, topClass, topTitle,
 	riverFlowStateSet, closeUndoOption
 })=> {
 	
@@ -59,7 +59,7 @@ const FoldInNested = ({
   
   if(!Array.isArray(checkState)) {
   	return(
-	    <div className='stoneFrame nestBox teal centre centreText'>
+	    <div className={topClass + ' stoneFrame nestBox teal centre centreText noCopy'} title={topTitle}>
 	    	<p><i className="fas fa-object-group fa-lg fa-fw"></i> Nest</p>
 	      <p className='up wordBr'>{step}</p>
 	  		<form 
@@ -74,6 +74,7 @@ const FoldInNested = ({
 	          minLength={6}
 	          placeholder='serial number'
 	          inputMode='numeric'
+	          disabled={lockout}
 	          required />
 	        <br />
 			    <button
@@ -82,7 +83,7 @@ const FoldInNested = ({
 					  name='include this serial number'
 					  id='goNeck'
 					  tabIndex={-1}
-					  disabled={lock}
+					  disabled={lockout}
 					>{Pref.nest}</button>
 				</form>
     	</div>

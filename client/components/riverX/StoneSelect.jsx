@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 
 import StoneControl from './StoneControl';
 import ForkMenu from './ForkMenu';
-import FoldInNested from './FoldInNested';
+// import FoldInNested from './FoldInNested';
 import TestFails from './TestFails';
 import NCTributary from './NCTributary';
 import Shortfalls from './Shortfalls';
@@ -139,45 +139,33 @@ const StoneSelect = ({
 	    return(
         <div className='stoneGrid'>
 
-	        {flowStep.type === 'nest' ?
-	          <FoldInNested
-              seriesId={seriesId}
-              serial={item.serial}
-              sKey={flowStep.key}
-              step={flowStep.step}
-              doneStone={doneStone}
-              lock={false}
-              riverFlowStateSet={riverFlowStateSet}
-              closeUndoOption={closeUndoOption} />
-          : 
-	          <StoneControl
-		          key={flowStep.key + item.serial}
-              batchId={bID}
-              seriesId={seriesId}
-              serial={item.serial}
-              sKey={flowStep.key}
-              step={flowStep.step}
-              type={flowStep.type}
-              altIs={altIs}
-              rapIs={rapIs}
-              rarapid={rarapid}
-              branchObj={branchObj}
-              allItems={allItems}
-              canVerify={canVerify}
-              users={users}
-              app={app}
-              flowCounts={flowCounts}
-              blockStone={blockStone}
-              doneStone={doneStone}
-              compEntry={compEntry}
-              handleVerify={handleVerify}
-              openUndoOption={openUndoOption}
-              closeUndoOption={closeUndoOption}
-              timeOutCntrl={timeOutCntrl}
-              riverFlowStateSet={riverFlowStateSet}
-            />
-	        }
-  	      
+          <StoneControl
+	          key={flowStep.key + item.serial}
+            batchId={bID}
+            seriesId={seriesId}
+            serial={item.serial}
+            sKey={flowStep.key}
+            step={flowStep.step}
+            type={flowStep.type}
+            altIs={altIs}
+            rapIs={rapIs}
+            rarapid={rarapid}
+            branchObj={branchObj}
+            allItems={allItems}
+            canVerify={canVerify}
+            users={users}
+            app={app}
+            flowCounts={flowCounts}
+            blockStone={blockStone}
+            doneStone={doneStone}
+            compEntry={compEntry}
+            handleVerify={handleVerify}
+            openUndoOption={openUndoOption}
+            closeUndoOption={closeUndoOption}
+            timeOutCntrl={timeOutCntrl}
+            riverFlowStateSet={riverFlowStateSet}
+          />
+	        
   	      {canVerify && wFlowOps.length > 1 && !rapIs ?
     	      <ForkMenu
     	        seriesId={seriesId}
@@ -196,6 +184,11 @@ const StoneSelect = ({
   					  />
   					: null}
   				</div>
+  				
+  				{altIs && 
+  				  <div className='altTitle'>
+  				    <small>{wFlowOps.find(f => f.flowKey === altIs.river).title}</small>
+  				  </div>}
           
           <div className='riverErrors'>
             {fTest.length > 0 && 

@@ -3,13 +3,6 @@ import moment from 'moment';
 
 const TestFails = ({ fails })=> {
   
-  let styD = {
-    paddingLeft: '10px',
-    paddingBottom: '5px',
-    backgroundColor: 'transparent',
-    borderLeft: '0.5vmax solid var(--pomegranate)',
-  };
-  
   const dt = fails.sort();
   
   return(
@@ -18,7 +11,6 @@ const TestFails = ({ fails })=> {
         return(
           <details 
             key={'testfail'+index}
-            style={styD} 
             className='testFail'
           >
             <summary>

@@ -4,6 +4,7 @@ import Pref from '/client/global/pref.js';
 import StoneReg from './StoneReg.jsx';
 import StoneVerify from './StoneVerify.jsx';
 import StoneTest from './StoneTest.jsx';
+import FoldInNested from './FoldInNested';
 import StoneFinish from './StoneFinish.jsx';
 
 import useTimeOut from '/client/utility/useTimeOutHook.js';
@@ -140,6 +141,19 @@ const StoneControl = ({
 			tryagainEntry={()=>resolveEntry(true)}
 		/>;
 	
+	const renderNest =
+		<FoldInNested
+      seriesId={seriesId}
+      serial={serial}
+      sKey={sKey}
+      step={step}
+      topClass={topClass}
+			topTitle={topTitle}
+      lockout={lockout}
+      riverFlowStateSet={riverFlowStateSet}
+      closeUndoOption={closeUndoOption} 
+    />;
+    
 	const renderFinish = 
 		<StoneFinish
 			key={seriesId+serial+sKey}
@@ -171,6 +185,12 @@ const StoneControl = ({
 	if(type === 'test') {
 		return(
 			renderTest
+		);
+	}
+	
+	if(type === 'nest') {
+		return(
+			renderNest
 		);
 	}
 	

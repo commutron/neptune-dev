@@ -37,7 +37,7 @@ const ForkMenu = ({ seriesId, serial, wFlowOps, wFlowNow, altIs })=> {
                 <MenuItem 
                   key={index}
                   onClick={()=>handleNoAlt(altIs.river)}
-                >Return to {entry.title}</MenuItem>
+                ><em>Return to </em>{entry.title}</MenuItem>
              );
             }else{ return null }
           }else{
