@@ -249,7 +249,7 @@ Meteor.methods({
               const exist = XSeriesDB.findOne({'items.serial': nestSerial});
               if(exist) {
                 
-                XSeriesDB.update({_id: srs._id, 'items.serial': nestSerial}, {
+                XSeriesDB.update({'items.serial': nestSerial}, {
                   $push : { 
                     'items.$.history': {
                       key: hist.key+'n3st3d',

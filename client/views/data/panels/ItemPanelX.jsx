@@ -134,7 +134,7 @@ const FixDoubles = ({ seriesId, serial, subItems })=> {
                 Roles.userIsInRole(Meteor.userId(), 'debug');
                 
   if(auth) {
-    if(subItems.length > 1 && i.subItems.every(s=> s === subItems[0])) {
+    if(subItems.length > 1 && subItems.every(s=> s === subItems[0])) {
       return(
         <span>
           <button
