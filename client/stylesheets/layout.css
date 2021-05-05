@@ -1113,6 +1113,16 @@ button.numberSet {
   border-right: 1px solid rgba(255,255,255,0.3);
 }
 
+.nestedTable { table-layout: fixed; }
+
+.nestedTable td {
+  border-bottom: none;
+  border-right: none;
+  border-top: 1px solid rgba(0,0,0,0.2);
+}
+.nestedTable td:empty {
+  border-top: none;
+}
 n-mock-table { display: table; }
 n-mock-table-head { display: table-header-group; }
 n-mock-table-group { display: table-row-group; }

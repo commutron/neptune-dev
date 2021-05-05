@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
@@ -7,28 +7,61 @@ import UserNice from '../smallUi/UserNice.jsx';
 
 import './style.css';
 
-const FailAllTable = ({ failData })=> (
+const FailAllTable = ({ failData, gList })=> (
   <div>
-    <table className='wide overviewTable subrows'>
+    <table className='wide overviewTable subrows nestedTable'>
       <thead className='fadeRed cap'>
         <tr>
-          <th>{Pref.xBatch}</th>
           <th>{Pref.group}</th>
           <th>{Pref.widget}</th>
-          <th colSpan={2}>{Pref.item}</th>
+          <th colSpan={3}>{Pref.xBatch} / {Pref.items}</th>
         </tr>
       </thead>
-      {failData.map( (tf, index)=>{
-        return (
-          <FailRow 
-            key={tf.tfEntries[0].key+index}
-            entries={tf.tfEntries}
-            group={tf.group}
-            batchNum={tf.batch}
-            widget={tf.widget}
-            barcode={tf.serial} />
-        );
-      })}
+      {gList.map( (g, index)=>{
+        const gData = failData.filter( f => f.group.toUpperCase() === g );
+        const wList = _.uniq( Array.from(gData, r => r.widget.toUpperCase() )
+                                  ).filter(f=>f).sort();
+        return(
+          <tbody key={index}>
+            <tr>
+              <td colSpan={5} className='bold'>
+                <LeapTextLink
+                  title={g} 
+                  sty='blackT medBig'
+                  address={'/data/overview?request=groups&specify=' + g}
+                />
+              </td>
+            </tr>
+              {wList.map( (w, windex)=>{
+                const wfails = gData.filter( f => f.widget === w.toLowerCase() )
+                      .sort((w1,w2)=>w1.batch > w2.batch ? -1 : w1.batch < w2.batch ? 1 : 0);
+                return(
+                  <Fragment key={windex}>
+                    <tr>
+                      <td colSpan={1}></td>
+      	              <td colSpan={4} className='bold'>
+                        <LeapTextLink
+                          title={w} 
+                          sty='blackT'
+                          address={'/data/widget?request=' + w}
+                        />
+                      </td>
+                    </tr>
+                    {wfails.map( (tf, findex)=>{
+                      return(
+                        <FailRow 
+                          key={tf.tfEntries[0].key+findex}
+                          entries={tf.tfEntries}
+                          group={tf.group}
+                          batchNum={tf.batch}
+                          widget={tf.widget}
+                          barcode={tf.serial} />
+                    )})}
+                  </Fragment>
+              )})
+            }
+          </tbody>
+      )})}
     </table>
   </div>
 );
@@ -36,30 +69,16 @@ const FailAllTable = ({ failData })=> (
 export default FailAllTable;
 
 const FailRow = ({ entries, group, batchNum, widget, barcode })=> (
-	<tbody>
+	<Fragment>
 	<tr>
-    <td>
+    <td colSpan={2}></td>
+    <td colSpan={3}>
       <LeapTextLink
         title={batchNum} 
         sty='numFont noWrap blackT'
         address={'/data/batch?request=' + batchNum}
       />
-    </td>
-    <td>
-      <LeapTextLink
-        title={group} 
-        sty='blackT'
-        address={'/data/overview?request=groups&specify=' + group}
-      />
-    </td>
-    <td>
-      <LeapTextLink
-        title={widget} 
-        sty='blackT'
-        address={'/data/widget?request=' + widget}
-      />
-    </td>
-    <td colSpan={2}>
+      {" / "}
       <LeapTextLink
         title={barcode}
         sty='numFont noWrap blackT'
@@ -71,17 +90,14 @@ const FailRow = ({ entries, group, batchNum, widget, barcode })=> (
     return(
       <tr key={ix+e.serial+e.time.toISOString()}>
         <td colSpan={3}></td>
-        <td colSpan={1}>
-    		  <span className='inline max300'
-    		    >{moment(e.time).calendar(null, 
+        <td colSpan={2}>
+    		  <span>
+    		    <small>{moment(e.time).calendar(null, 
     		      {sameElse: "ddd, MMM D /YY, h:mm a"})
-    		     } by <UserNice id={e.who} />
-          </span>
-        </td>
-        <td colSpan={1}>
-    		  <span className='inline max300'>{e.comm}</span>
+    		     } by <UserNice id={e.who} />.</small><br />{e.comm}
+    		  </span>
         </td>
     	</tr>
   )})}
-	</tbody>
+	</Fragment>
 );

@@ -18,7 +18,6 @@ import WidgetPanel from './panels/WidgetPanel/WidgetPanel';
 import RapidsPanel from './panels/RapidsPanel';
 import RextendPanel from './panels/RextendPanel';
 import TestFailPanel from './panels/TestFailPanel';
-import TestFailComparePanel from './panels/TestFailComparePanel';
 
 import ScrapPanel from './panels/ScrapPanel';
 
@@ -321,25 +320,6 @@ const DataViewOps = ({
             app={app} />
         </TraverseWrap>
       );
-    }else if(request === 'testfail2') {
-      return(
-        <TraverseWrap
-		      batchData={false}
-          widgetData={false}
-          variantData={false}
-          groupData={false}
-          user={user}
-          app={app}
-          title='Tests Failed'
-          subLink={subLink}
-          action={false}
-          base={true}
-        >
-          <TestFailComparePanel 
-            groupData={allGroup} 
-            app={app} />
-        </TraverseWrap>
-      );  
     }else if(request === 'scraps') {
       return(
         <TraverseWrap

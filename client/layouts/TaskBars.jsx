@@ -71,14 +71,6 @@ export const ExTaskBar = ({ subLink }) => (
     />
     
     <TaskElement
-      title='Test Fail Compare'
-      subON={subLink === 'overviewtestfail2'}
-      goLink='/data/overview?request=testfail2'
-      icon='far fa-microscope'
-      iconAdj='down-1'
-    />
-    
-    <TaskElement
       title={Pref.Scrap + 's'}
       subON={subLink === 'overviewscraps'}
       goLink='/data/overview?request=scraps'

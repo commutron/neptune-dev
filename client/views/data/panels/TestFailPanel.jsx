@@ -133,7 +133,9 @@ const TestFailPanel = ({ batchData, app })=> {
           isSet={pageState}
           doChange={(e)=>pageSet(e)} />
           
-        <FailAllTable failData={inpieces[pageState] || []} />
+        <FailAllTable 
+          failData={inpieces[pageState] || []}
+          gList={gList} />
         
         <PagingSelect 
           multiArray={inpieces}
@@ -216,8 +218,8 @@ const FailCharts = ({ workingList, cycleCount, cycleBracket })=> {
       <NumStatRing
         total={workingList.length}
         nums={[ workingList.length, 0, 0 ]}
-        name={`Current Failing ${Pref.items}`}
-        title={`Current Failing ${Pref.items}`}
+        name={`Failed ${Pref.items}`}
+        title={`Failed ${Pref.items}`}
         colour='redTri'
         maxSize='chart15Contain'
         noGap={true}
@@ -229,20 +231,11 @@ const FailCharts = ({ workingList, cycleCount, cycleBracket })=> {
 const FailDetail = ()=> (
   <details className='footnotes'>
     <summary>Method Details</summary>
-    <p className='footnote capFL'>
-      {Pref.items} collected are those with failed tests that have 
-      <em> neither</em> been passed after nor been scrapped.
-    </p>
     <p className='footnote'>
       Top stats are based on currently collected {Pref.items} only.
     </p>
     <p className='footnote'>
       Rate Chart is based on selected time period.
-      <em> inconsistent and limited for work in progress performance issues</em>
-    </p>
-    <p className='footnote'>
-      Table is sorted first by {Pref.xBatch} number, high to low;
-      second by serial number, low to high.
     </p>
   </details>  
 );

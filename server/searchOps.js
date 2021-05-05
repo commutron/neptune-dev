@@ -237,62 +237,6 @@ Meteor.methods({
     return compactData;
   },
   
-  testFailWidgets(gID) {
-    let compactData = [];
-    let totalItems = 0;
-    let totalFails = 0;
-    
-    const allWidgets = WidgetDB.find({
-      orgKey: Meteor.user().orgKey,
-      groupId: gID
-    }).fetch();
-    
-    for(let wgt of allWidgets) {
-      const g = GroupDB.findOne({_id: wgt.groupId});
-        
-      let failItems = [];
-      let allComms = [];
-      
-      XSeriesDB.find({
-        orgKey: Meteor.user().orgKey,
-        widgetId: wgt._id,
-        'items.history.type': 'test',
-        'items.history.good': false
-      }).forEach( srs => {
-        
-        for(let i of srs.items) {
-          const tfEntries = i.history.filter( y => 
-                              y.type === 'test' && y.good === false );
-          const tfComms = Array.from(tfEntries, f => f.comm);
-  
-          if(tfEntries.length > 0) {
-            totalItems += 1;
-            totalFails += tfEntries.length;
-            allComms.push(tfComms);
-            failItems.push({
-              batch: srs.batch,
-              serial: i.serial
-            });
-          }
-        }
-      });
-      
-      if(failItems.length > 0) {
-        const failComms = _.uniq( allComms.flat() );
-        compactData.push({
-          widget: wgt.widget,
-          group: g.alias,
-          totalItems: totalItems,
-          totalFails: totalFails,
-          failComms: failComms,
-          failItems: failItems
-        });
-      }
-    }
-    return compactData;
-  },
-  
-  
    ///////////////////////////////////////////////////////////////////////////
   // Component Search
   ////////////////////////////////////////////////////////////////////////////
