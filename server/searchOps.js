@@ -237,18 +237,21 @@ Meteor.methods({
     return compactData;
   },
   
-  testFailWidgets() {
+  testFailWidgets(gID) {
     let compactData = [];
     let totalItems = 0;
     let totalFails = 0;
-    let allComms = [];
     
-    const allWidgets = WidgetDB.find({orgKey: Meteor.user().orgKey}).fetch();
+    const allWidgets = WidgetDB.find({
+      orgKey: Meteor.user().orgKey,
+      groupId: gID
+    }).fetch();
     
     for(let wgt of allWidgets) {
       const g = GroupDB.findOne({_id: wgt.groupId});
         
       let failItems = [];
+      let allComms = [];
       
       XSeriesDB.find({
         orgKey: Meteor.user().orgKey,
@@ -268,9 +271,7 @@ Meteor.methods({
             allComms.push(tfComms);
             failItems.push({
               batch: srs.batch,
-              serial: i.serial,
-              tfComms: tfComms,
-              tfEntries: tfEntries
+              serial: i.serial
             });
           }
         }

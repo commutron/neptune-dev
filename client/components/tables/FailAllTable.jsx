@@ -15,7 +15,7 @@ const FailAllTable = ({ failData })=> (
           <th>{Pref.xBatch}</th>
           <th>{Pref.group}</th>
           <th>{Pref.widget}</th>
-          <th>{Pref.item}</th>
+          <th colSpan={2}>{Pref.item}</th>
         </tr>
       </thead>
       {failData.map( (tf, index)=>{
@@ -59,7 +59,7 @@ const FailRow = ({ entries, group, batchNum, widget, barcode })=> (
         address={'/data/widget?request=' + widget}
       />
     </td>
-    <td>
+    <td colSpan={2}>
       <LeapTextLink
         title={barcode}
         sty='numFont noWrap blackT'
@@ -71,13 +71,15 @@ const FailRow = ({ entries, group, batchNum, widget, barcode })=> (
     return(
       <tr key={ix+e.serial+e.time.toISOString()}>
         <td colSpan={3}></td>
-    		<td colSpan={1}>
-    		  <dl className='inline max500'>
-    		    <dd>{moment(e.time).calendar(null, 
-    		          {sameElse: "ddd, MMM D /YY, h:mm a"})
-    		        } by <UserNice id={e.who} /></dd>
-            <dd>{e.comm}</dd>
-          </dl>
+        <td colSpan={1}>
+    		  <span className='inline max300'
+    		    >{moment(e.time).calendar(null, 
+    		      {sameElse: "ddd, MMM D /YY, h:mm a"})
+    		     } by <UserNice id={e.who} />
+          </span>
+        </td>
+        <td colSpan={1}>
+    		  <span className='inline max300'>{e.comm}</span>
         </td>
     	</tr>
   )})}

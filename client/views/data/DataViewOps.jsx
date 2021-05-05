@@ -317,7 +317,7 @@ const DataViewOps = ({
           base={true}
         >
           <TestFailPanel 
-            batchData={allXBatch} 
+            groupData={allGroup}
             app={app} />
         </TraverseWrap>
       );
@@ -336,7 +336,7 @@ const DataViewOps = ({
           base={true}
         >
           <TestFailComparePanel 
-            batchData={allXBatch} 
+            groupData={allGroup} 
             app={app} />
         </TraverseWrap>
       );  

@@ -8,9 +8,9 @@ import { FocusSelect, FilterSelect } from '/client/components/smallUi/ToolBarToo
 import FailWidgetTable from '/client/components/tables/FailWidgetTable';
 
 
-const TestFailComparePanel = ({ batchData, app })=> {
+const TestFailComparePanel = ({ groupData, app })=> {
   
-  const [ fails, failsSet ] = useState(false);
+  const [ fails, failsSet ] = useState([]);
   
   const [ groupState, groupSet ] = useState(false);
   const [ widgetState, widgetSet ] = useState(false);
@@ -19,21 +19,22 @@ const TestFailComparePanel = ({ batchData, app })=> {
   
   
   useEffect( ()=> {
-    Meteor.call('testFailWidgets', (error, reply)=> {
-      error && console.log(error);
-      failsSet( reply );
-    });
-  }, []);
+    if(groupState) {
+      const match = groupData.find( g => g.alias === groupState.toLowerCase() );
+      if(match) {
+        Meteor.call('testFailWidgets', match._id, (error, reply)=> {
+          error && console.log(error);
+          failsSet( reply );
+        });
+      }
+    }
+  }, [groupState]);
   
   useEffect( ()=>{
     if(Array.isArray(fails)) {
-      const byGroup = !groupState || groupState === 'false' ? fails :
-                fails.filter( r => r.group.toUpperCase() === groupState );
+      const byWidget = !widgetState || widgetState === 'false' ? fails :
+                fails.filter( r => r.widget.toUpperCase() === widgetState );
       
-      const byWidget = !widgetState || widgetState === 'false' ? byGroup :
-                byGroup.filter( r => r.widget.toUpperCase() === widgetState );
-      
-     
       // const sortList = byWidget.sort((f1, f2)=> {
       //         let f1t = f1.tfEntries[f1.tfEntries.length-1].time;
       //         let f2t = f2.tfEntries[f2.tfEntries.length-1].time;
@@ -43,22 +44,25 @@ const TestFailComparePanel = ({ batchData, app })=> {
       workingListSet(byWidget);
     }
                     
-  }, [fails, groupState, widgetState]);
+  }, [fails, widgetState]);
   
   function changeGroup(val) {
     groupSet(val);
     widgetSet(false);
   }
   
-  if(!fails) {
-    return(
-      <div className='centreBox'>
-        <Spin />
-      </div>
-    );
-  }
+  // if(!fails) {
+  //   return(
+  //     <div className='centreBox'>
+  //       <Spin />
+  //     </div>
+  //   );
+  // }
   
-  const gList = _.uniq( Array.from(fails, r => r.group.toUpperCase() ) ).sort();
+  const allGroupS = groupData.sort((x1, x2)=> 
+	                    x1.alias > x2.alias ? 1 : x1.alias < x2.alias ? -1 : 0 );
+  
+  // const gList = _.uniq( Array.from(fails, r => r.group.toUpperCase() ) ).sort();
   const wList = _.uniq( Array.from(fails, r => 
                     r.group.toUpperCase() === groupState && r.widget.toUpperCase()
                 ) ).filter(f=>f).sort();
@@ -71,11 +75,28 @@ const TestFailComparePanel = ({ batchData, app })=> {
         <div className='comfort'>
           
           <span className='balancer gapsC'>
-            <FocusSelect
+          
+            <input
+              type='search'
+              list='grpList'
+              style={ { width: `${Pref.aliasMax+2}ch`, border: 'none' } }
+              onChange={(e)=>changeGroup(e.target.value)} />
+              <datalist id='grpList'>
+                {allGroupS.map( (e, ix)=>(
+                  <option 
+                    key={ix+'g'+e._id} 
+                    value={e.alias.toUpperCase()}
+                    className='cap'
+                  >{e.group}</option>
+                ))}
+              </datalist>
+            
+            
+            {/*<FocusSelect
               gList={gList}
               focusState={groupState}
               changeFunc={(e)=>changeGroup(e.target.value)}
-            />
+            />*/}
             <FilterSelect
               unqID='fltrTYPE'
               title={`Filter ${Pref.widgets}`}
