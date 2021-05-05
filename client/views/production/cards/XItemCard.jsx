@@ -5,7 +5,7 @@ import CompleteRest from '/client/components/riverX/CompleteRest';
 import RapidFork from '/client/components/riverX/RapidFork';
 
 const XItemCard = ({ 
-  bComplete, isReleased, hasRiver, rapidData,
+  bComplete, isReleased, hasRiver, altitle, rapidData,
   seriesId, itemData, iComplete, shortfallS, scrap 
 })=> {
   
@@ -53,6 +53,7 @@ const XItemCard = ({
           iComplete={itemData.completedAt}
           history={itemData.history}
           iAlt={itemData.altPath}
+          altitle={altitle}
           scrap={scrap}
           bComplete={bComplete}
           shortfallS={shortfallS} />

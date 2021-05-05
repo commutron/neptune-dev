@@ -18,7 +18,7 @@ const StoneSelect = ({
   seriesId,
   item,
   allItems,
-  altIs, wFlowOps, wFlowNow,
+  altIs, altitle, wFlowOps, wFlowNow,
   nonCons,
   shortfalls,
   scrapCheck,
@@ -54,7 +54,7 @@ const StoneSelect = ({
     Session.set('nowWanchor', null);
 		if(mounted.current) { closeUndoOption() }
 	}, [ item.serial ]);
-					
+	
   // Complete or Scrap
   if((item.completed && !rapIs) || scrapCheck) {
     Session.set('ncWhere', 'isC0mpl3t3d');
@@ -66,7 +66,7 @@ const StoneSelect = ({
         serial={item.serial}
         iComplete={item.completedAt}
         history={item.history}
-        altPath={item.altPath}
+        altitle={altitle}
         scrap={scrapCheck}
         bComplete={bComplete}
         shortfallS={shortfalls} />
@@ -186,8 +186,8 @@ const StoneSelect = ({
   				</div>
   				
   				{altIs && 
-  				  <div className='altTitle'>
-  				    <small>{wFlowOps.find(f => f.flowKey === altIs.river).title}</small>
+  				  <div className='altTitle cap'>
+  				    <small>Alt Flow: {altitle}</small>
   				  </div>}
           
           <div className='riverErrors'>

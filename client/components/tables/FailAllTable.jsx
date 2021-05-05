@@ -7,12 +7,12 @@ import UserNice from '../smallUi/UserNice.jsx';
 
 import './style.css';
 
-const TestFailTableAll = ({ failData })=> (
+const FailAllTable = ({ failData })=> (
   <div>
     <table className='wide overviewTable subrows'>
       <thead className='fadeRed cap'>
         <tr>
-          <th>{Pref.batch}</th>
+          <th>{Pref.xBatch}</th>
           <th>{Pref.group}</th>
           <th>{Pref.widget}</th>
           <th>{Pref.item}</th>
@@ -33,7 +33,7 @@ const TestFailTableAll = ({ failData })=> (
   </div>
 );
 
-export default TestFailTableAll;
+export default FailAllTable;
 
 const FailRow = ({ entries, group, batchNum, widget, barcode })=> (
 	<tbody>
@@ -61,7 +61,7 @@ const FailRow = ({ entries, group, batchNum, widget, barcode })=> (
     </td>
     <td>
       <LeapTextLink
-        title={barcode} 
+        title={barcode}
         sty='numFont noWrap blackT'
         address={'/data/batch?request=' + batchNum + '&specify=' + barcode}
       />
@@ -72,8 +72,12 @@ const FailRow = ({ entries, group, batchNum, widget, barcode })=> (
       <tr key={ix+e.serial+e.time.toISOString()}>
         <td colSpan={3}></td>
     		<td colSpan={1}>
-    		  <dd>{moment(e.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm a"})} by <UserNice id={e.who} /></dd>
-          <dd>{e.comm}</dd>
+    		  <dl className='inline max500'>
+    		    <dd>{moment(e.time).calendar(null, 
+    		          {sameElse: "ddd, MMM D /YY, h:mm a"})
+    		        } by <UserNice id={e.who} /></dd>
+            <dd>{e.comm}</dd>
+          </dl>
         </td>
     	</tr>
   )})}

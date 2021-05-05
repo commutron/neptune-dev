@@ -18,6 +18,8 @@ import WidgetPanel from './panels/WidgetPanel/WidgetPanel';
 import RapidsPanel from './panels/RapidsPanel';
 import RextendPanel from './panels/RextendPanel';
 import TestFailPanel from './panels/TestFailPanel';
+import TestFailComparePanel from './panels/TestFailComparePanel';
+
 import ScrapPanel from './panels/ScrapPanel';
 
 import BatchesList from './lists/BatchesList';
@@ -312,7 +314,6 @@ const DataViewOps = ({
           title='Tests Failed'
           subLink={subLink}
           action={false}
-          beta={true}
           base={true}
         >
           <TestFailPanel 
@@ -320,6 +321,25 @@ const DataViewOps = ({
             app={app} />
         </TraverseWrap>
       );
+    }else if(request === 'testfail2') {
+      return(
+        <TraverseWrap
+		      batchData={false}
+          widgetData={false}
+          variantData={false}
+          groupData={false}
+          user={user}
+          app={app}
+          title='Tests Failed'
+          subLink={subLink}
+          action={false}
+          base={true}
+        >
+          <TestFailComparePanel 
+            batchData={allXBatch} 
+            app={app} />
+        </TraverseWrap>
+      );  
     }else if(request === 'scraps') {
       return(
         <TraverseWrap

@@ -752,34 +752,6 @@ Meteor.methods({
       
   },
   
-  DEBUGpullSubItem(seriesId, serial, nestedSerial) {
-    const auth = Roles.userIsInRole(Meteor.userId(), 'admin') &&
-                Roles.userIsInRole(Meteor.userId(), 'debug');
-    if(auth) {
-      
-      XSeriesDB.update({_id: seriesId, 'items.serial': serial}, {
-        $pull : {
-          'items.$.subItems': nestedSerial
-      }});
-    }
-  },
-  DEBUGFixDbblSubItem(seriesId, serial, nestedSerial) {
-    const auth = Roles.userIsInRole(Meteor.userId(), 'admin') &&
-                Roles.userIsInRole(Meteor.userId(), 'debug');
-    if(auth) {
-      const goodNested = nestedSerial;
-      
-      XSeriesDB.update({_id: seriesId, 'items.serial': serial}, {
-        $pull : {
-          'items.$.subItems': nestedSerial
-        },
-        $push : {
-          'items.$.subItems': goodNested
-        }
-      });
-    }
-  },
-  
 //  remove a step
   pullHistoryX(seriesId, serial, eKey, time) {
     const accessKey = Meteor.user().orgKey;

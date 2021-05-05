@@ -11,7 +11,7 @@ const ScrapTableAll = ({ scrapData })=> (
     <table className='wide overviewTable'>
       <thead className='fadeRed cap'>
         <tr>
-          <th>{Pref.batch}</th>
+          <th>{Pref.xBatch}</th>
           <th>{Pref.item}</th>
           <th>{Pref.group}</th>
           <th>{Pref.widget}</th>
@@ -21,17 +21,15 @@ const ScrapTableAll = ({ scrapData })=> (
         </tr>
       </thead>
       <tbody>
-      {scrapData.map( (sc, index)=>{
-        return (
-          <ScrapRow 
-            key={sc.scEntry.key+index}
-            entry={sc.scEntry}
-            group={sc.group}
-            batchNum={sc.batch}
-            widget={sc.widget}
-            barcode={sc.serial} />
-        );
-      })}
+      {scrapData.map( (sc, index)=>(
+        <ScrapRow 
+          key={sc.scEntry.key+index}
+          entry={sc.scEntry}
+          group={sc.group}
+          batchNum={sc.batch}
+          widget={sc.widget}
+          barcode={sc.serial} />
+      ))}
       </tbody>
     </table>
   </div>
@@ -71,6 +69,6 @@ const ScrapRow = ({ entry, group, batchNum, widget, barcode })=> (
     </td>
     <td>{moment(entry.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm a"})}</td>
     <td>{entry.step}</td>
-    <td>{entry.comm}</td>
+    <td><span className='inline max300'>{entry.comm}</span></td>
 	</tr>
 );

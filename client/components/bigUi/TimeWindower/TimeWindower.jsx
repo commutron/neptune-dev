@@ -9,7 +9,7 @@ const TimeWindower = ({ app, changeCount, changeBracket, stickyValue, sessionSti
     const selection = e.split(',');
     changeCount(Math.abs(selection[0]));
     changeBracket(selection[1]);
-    Session.set(sessionSticky, e);
+    sessionSticky && Session.set(sessionSticky, e);
   }
   
   const floorDate = moment(app.createdAt);

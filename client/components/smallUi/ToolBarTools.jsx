@@ -66,7 +66,8 @@ export const FilterSelect = ({
       title={title}
       className='overToolSort liteToolOn'
       defaultValue={selectState}
-      onChange={(e)=>changeFunc(e)}>
+      onChange={(e)=>changeFunc(e)}
+      disabled={selectList.length === 0}>
       {falsey &&
         <option value={false}>{falsey}</option>
       }

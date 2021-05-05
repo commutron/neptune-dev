@@ -19,13 +19,9 @@ import { timeRanges } from '/client/utility/CycleCalc';
 
 const ScrapPanel = ({ batchData, app })=> {
   
-  const sessionSticky = 'scrapOverview';
-  const ss = Session.get(sessionSticky) || '2,week';
-  const selection = ss.split(',');
-  
   const [ scraps, scrapsSet ] = useState(false);
-  const [ cycleCount, cycleCountSet ] = useState( Math.abs(selection[0]) || 2);
-  const [ cycleBracket, cycleBracketSet ] = useState( selection[1] || 'week');
+  const [ cycleCount, cycleCountSet ] = useState(2);
+  const [ cycleBracket, cycleBracketSet ] = useState('week');
   
   const [ groupState, groupSet ] = useState(false);
   const [ typeState, typeSet ] = useState(false);
@@ -69,11 +65,9 @@ const ScrapPanel = ({ batchData, app })=> {
   
   
   if(!scraps) {
-    return(
-      <div className='centreContainer'>
-        <div className='centrecentre'>
-          <Spin />
-        </div>
+   return(
+      <div className='centreBox'>
+        <Spin />
       </div>
     );
   }
@@ -90,8 +84,7 @@ const ScrapPanel = ({ batchData, app })=> {
       <div className='space'>
         
         <div className='comfort'>
-          
-          
+
           <span className='balancer gapsC'>
             <FocusSelect
               gList={gList}
@@ -111,7 +104,7 @@ const ScrapPanel = ({ batchData, app })=> {
               changeCount={(e)=>cycleCountSet(e)}
               changeBracket={(e)=>cycleBracketSet(e)}
               stickyValue={cycleCount+','+cycleBracket}
-              sessionSticky={sessionSticky} />
+              sessionSticky={false} />
           </span>
               
         </div>

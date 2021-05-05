@@ -12,7 +12,7 @@ const StoneWeir = ({
   seriesId,
   item,
   allItems,
-  altIs, wFlowOps, wFlowNow,
+  altIs, altitle, wFlowOps, wFlowNow,
   nonCons,
   shortfalls,
   scrapCheck,
@@ -67,6 +67,7 @@ const StoneWeir = ({
       item={item}
       allItems={allItems}
       altIs={altIs}
+      altitle={altitle}
       wFlowOps={wFlowOps}
       wFlowNow={wFlowNow}
       nonCons={nonCons}

@@ -154,7 +154,7 @@ Meteor.methods({
   fetchRapidsThin() {
     let compactData = [];
     
-    XRapidsDB.find({extendBatch: {$ne: false} })
+    XRapidsDB.find({orgKey: Meteor.user().orgKey, extendBatch: {$ne: false} })
     .forEach( r => {
       const b = XBatchDB.findOne({batch: r.extendBatch});
       const w = WidgetDB.findOne({_id: b.widgetId});
@@ -207,7 +207,7 @@ Meteor.methods({
   },
   
     ////////////////////////////////////////////////////////////////////////
-   // Test Fail Items
+   // Test Fail
   ////////////////////////////////////////////////////////////////////////////
   testFailItems() {
     let compactData = [];
@@ -220,31 +220,74 @@ Meteor.methods({
       const w = WidgetDB.findOne({_id: srs.widgetId});
       const g = GroupDB.findOne({_id: srs.groupId});
       
-      const items = srs.items.filter( x => {
-        let fail = x.history.find( y => y.type === 'test' && y.good === false );
-        if(fail) {
-          let passAfter = x.history.find( y => y.key === fail.key && y.good === true );
-          if(!passAfter && !x.completed) {
-            return true;
-          }else{
-            return false;
-          }
-        }else{
-          return false;
-        }
-      });
-      for(let i of items) {
+      for(let i of srs.items) {
         const tfEntries = i.history.filter( y => 
                             y.type === 'test' && y.good === false );
-        compactData.push({
-          batch: srs.batch,
-          widget: w.widget,
-          group: g.alias,
-          serial: i.serial,
-          tfEntries: tfEntries
-        });
+        if(tfEntries.length > 0) {
+          compactData.push({
+            batch: srs.batch,
+            widget: w.widget,
+            group: g.alias,
+            serial: i.serial,
+            tfEntries: tfEntries
+          });
+        }
       }
     });
+    return compactData;
+  },
+  
+  testFailWidgets() {
+    let compactData = [];
+    let totalItems = 0;
+    let totalFails = 0;
+    let allComms = [];
+    
+    const allWidgets = WidgetDB.find({orgKey: Meteor.user().orgKey}).fetch();
+    
+    for(let wgt of allWidgets) {
+      const g = GroupDB.findOne({_id: wgt.groupId});
+        
+      let failItems = [];
+      
+      XSeriesDB.find({
+        orgKey: Meteor.user().orgKey,
+        widgetId: wgt._id,
+        'items.history.type': 'test',
+        'items.history.good': false
+      }).forEach( srs => {
+        
+        for(let i of srs.items) {
+          const tfEntries = i.history.filter( y => 
+                              y.type === 'test' && y.good === false );
+          const tfComms = Array.from(tfEntries, f => f.comm);
+  
+          if(tfEntries.length > 0) {
+            totalItems += 1;
+            totalFails += tfEntries.length;
+            allComms.push(tfComms);
+            failItems.push({
+              batch: srs.batch,
+              serial: i.serial,
+              tfComms: tfComms,
+              tfEntries: tfEntries
+            });
+          }
+        }
+      });
+      
+      if(failItems.length > 0) {
+        const failComms = _.uniq( allComms.flat() );
+        compactData.push({
+          widget: wgt.widget,
+          group: g.alias,
+          totalItems: totalItems,
+          totalFails: totalFails,
+          failComms: failComms,
+          failItems: failItems
+        });
+      }
+    }
     return compactData;
   },
   
@@ -256,6 +299,7 @@ Meteor.methods({
     const data = [];
     
     VariantDB.find({
+      orgKey: Meteor.user().orgKey,
       'assembly.component': num
     }).forEach( v => {
       let findG = GroupDB.findOne({ _id: v.groupId });

@@ -56,7 +56,7 @@ const ModelSmall = ({
                   title='close'
                 ><i className='fas fa-times fa-lg'></i></button>
               </n-model-head>
-              <n-sm-model-content className='centre'>
+              <n-sm-model-content className='centre forceScrollStyle'>
                 {React.cloneElement(children,
                   { 
                     selfclose: ()=>reveal()

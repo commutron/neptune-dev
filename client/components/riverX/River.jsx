@@ -5,7 +5,7 @@ import StoneWeir from './StoneWeir';
 
 const River = ({ 
   batchData, seriesData, itemData, widgetData, 
-  altIs, rapid, rapIs,
+  altIs, altitle, rapid, rapIs,
   app, userSpeed, users, brancheS,
   useFlow, flowCounts,
   shortfallS, scrapCheck,
@@ -42,6 +42,7 @@ const River = ({
         item={itemData}
         allItems={seriesData.items}
         altIs={altIs}
+        altitle={altitle}
         wFlowOps={widgetData.flows}
         wFlowNow={batchData.river}
         nonCons={seriesData.nonCon}

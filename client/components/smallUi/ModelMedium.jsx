@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { MenuItem } from 'react-contextmenu';
 
 const ModelMedium = ({ 
-  button, title, menuItem,
+  button, title,
   icon, color, noText, lgIcon, smIcon,
   lock, children 
 })=> {
@@ -17,30 +16,16 @@ const ModelMedium = ({
   
   return(
     <span>
-      {menuItem ?
-        <MenuItem 
-          title={title}
-          // className='transparent'
-          onClick={()=>reveal()} 
-          disabled={lock}
-          preventClose={true}>
-          <label className='navIcon actionIconWrap'>
-            <i className={`fas ${icon} ${iSize} fa-fw ${color}`}></i>
-            <i className={`medBig ${color}`}>{button}</i>
-          </label>
-        </MenuItem>
-      :
-        <button
-          title={title}
-          className='transparent'
-          onClick={()=>reveal()}
-          disabled={lock}>
-          <label className='navIcon actionIconWrap'>
-            <i className={`fas ${icon} ${iSize} fa-fw ${color}`}></i>
-            {!noText && <span className={'actionIconText ' + color}>{button}</span>}
-          </label>
-        </button>
-      }
+      <button
+        title={title}
+        className='transparent'
+        onClick={()=>reveal()}
+        disabled={lock}>
+        <label className='navIcon actionIconWrap'>
+          <i className={`fas ${icon} ${iSize} fa-fw ${color}`}></i>
+          {!noText && <span className={'actionIconText ' + color}>{button}</span>}
+        </label>
+      </button>
       
       {show &&
         <span>
@@ -58,7 +43,7 @@ const ModelMedium = ({
                   title='close'
                 ><i className='fas fa-times fa-lg'></i></button>
               </n-model-head>
-              <n-md-model-content className='centre'>
+              <n-md-model-content className='centre forceScrollStyle'>
                 {React.cloneElement(children,
                   { 
                     selfclose: ()=>reveal()

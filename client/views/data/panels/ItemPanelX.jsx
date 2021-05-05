@@ -70,15 +70,10 @@ const ItemPanelX = ({
                   <SubItemLink 
                     seriesId={srs._id}
                     serial={i.serial}
-                    nestedSerial={ent}
-                    debugPull={true} />, 
+                    nestedSerial={ent} />, 
                 </i> 
               );
             })}
-            <FixDoubles 
-              seriesId={srs._id}
-              serial={i.serial}
-              subItems={i.subItems} />
           </p>}
         {scrap && 
           <ScrapBox 
@@ -121,32 +116,3 @@ const ItemPanelX = ({
 };
 
 export default ItemPanelX;
-
-const FixDoubles = ({ seriesId, serial, subItems })=> {
-  
-  function handleFix() {
-    if(seriesId && serial && subItems[0]) {
-      Meteor.call('DEBUGFixDbblSubItem', seriesId, serial, subItems[0]);
-    }
-  }
-  
-  const auth = Roles.userIsInRole(Meteor.userId(), 'admin') &&
-                Roles.userIsInRole(Meteor.userId(), 'debug');
-                
-  if(auth) {
-    if(subItems.length > 1 && subItems.every(s=> s === subItems[0])) {
-      return(
-        <span>
-          <button
-            className='miniAction gap redT'
-            onClick={()=>handleFix()}
-            readOnly
-          >FIX</button>
-        </span>
-      );
-    }else{
-      return null;
-    }
-  }
-  return null;
-};

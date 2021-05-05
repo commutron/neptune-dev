@@ -53,6 +53,8 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isDebug })=> {
     const focus = value === 'false' ? false : value;
     focusBySet( focus );
     Session.set(sessionSticky+'focus', focus);
+    salesBySet( false );
+    Session.set(sessionSticky+'sales', false);
   }
   
   // function changeSort(e) {

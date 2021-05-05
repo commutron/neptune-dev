@@ -2,15 +2,15 @@ import React, { Fragment } from 'react';
 import Pref from '/client/global/pref.js';
 import moment from 'moment';
 
-const MiniHistory = ({ history, iAlt })=> {
+const MiniHistory = ({ history, iAlt, altitle })=> {
   
-  const altriver = iAlt && iAlt.find( x => x.river !== false );
   const extended = iAlt ? iAlt.filter( x => x.rapId !== false ) : [];
 
   return(
     <Fragment>
       
-      {altriver && <div className='altBanner'>Alternative Flow</div> }
+      {altitle && 
+        <div className='altBanner cap'>Alt Flow: {altitle}</div> }
             
       {extended.map( (e, ix)=>(
         <div key={ix} className='rapDidBanner'

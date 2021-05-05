@@ -90,7 +90,8 @@ const XDoProCard = ({
   
   const altIs = !itemData ? false : itemData.altPath.find( x => x.river !== false );
   const altFlow = altIs && widgetData.flows.find( f => f.flowKey === altIs.river );
-  
+  const altitle = altFlow && altFlow.title;
+	
   const rapid = !rapidData.rapIs ? 
                   rapidData.rapDo.find( r => r.live === true ) :
                   rapidData.rapDo.find( r => r._id === rapidData.rapIs.rapId );
@@ -125,6 +126,7 @@ const XDoProCard = ({
             rapidData={rapidData}
             seriesData={seriesData}
             itemData={itemData || null}
+            altitle={altitle}
             shortfallS={shortfallS}
             scrap={scrapCheck}
             ancOptionS={ancOptionS}
@@ -156,6 +158,7 @@ const XDoProCard = ({
             bComplete={bComplete}
             isReleased={fallData.floorRel}
             hasRiver={flowData.hasRiver}
+            altitle={altitle}
             itemData={itemData}
             iComplete={iComplete}
             rapidData={rapidData}
@@ -175,6 +178,7 @@ const XDoProCard = ({
             useFlow={useFlow}
             flowCounts={flowData.flowCounts}
             altIs={altIs}
+            altitle={altitle}
             rapid={rapid}
             rapIs={rapidData.rapIs}
             shortfallS={shortfallS}

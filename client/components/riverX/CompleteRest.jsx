@@ -6,7 +6,7 @@ import Shortfalls from './Shortfalls.jsx';
 import MiniHistory from './MiniHistory.jsx';
 
 const CompleteRest = ({ 
-  bComplete, iAlt, shortfallS, 
+  bComplete, iAlt, altitle, shortfallS, 
   seriesId, serial, iComplete, history, scrap
 })=> (
   <Fragment>
@@ -20,7 +20,10 @@ const CompleteRest = ({
       </div>
     }
     
-    <MiniHistory history={history} iAlt={iAlt} />
+    <MiniHistory 
+      history={history} 
+      iAlt={iAlt} 
+      altitle={altitle} />
     
     <Shortfalls
 		  seriesId={seriesId}

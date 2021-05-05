@@ -9,7 +9,7 @@ import MiniHistory from './MiniHistory.jsx';
   
 const TideWall = ({ 
   bID, bComplete, bOpen, rapidData,
-  itemData, seriesData, shortfallS, scrap,
+  itemData, seriesData, shortfallS, altitle, scrap,
   ancOptionS, plainBrancheS,
   tideKey, tideFloodGate
 })=> {
@@ -58,13 +58,15 @@ const TideWall = ({
             iComplete={itemData.completedAt}
             history={itemData.history}
             iAlt={itemData.altPath}
+            altitle={altitle}
             scrap={scrap}
             bComplete={bComplete}
             shortfallS={shortfallS} />
         :
           <MiniHistory 
             history={itemData.history} 
-            iAlt={itemData.altPath} />
+            iAlt={itemData.altPath}
+            altitle={altitle} />
       : null
       }
   	</span>

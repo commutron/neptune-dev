@@ -14,7 +14,7 @@ const RapidExTable = ({ dataObj })=> (
         <tr>
           <th></th>
           <th></th>
-          <th>{Pref.batch}</th>
+          <th>{Pref.xBatch}</th>
           <th>{Pref.group}</th>
           <th>{Pref.widget}</th>
           <th>type</th>

@@ -113,11 +113,12 @@ const AddAutoSH = ({ vassembly, shortState, shortSet, editState })=> {
         </label>
           
         <datalist id='shPartList'>
-          {vassembly.map( (entry)=>{
-            return( 
-              <option key={entry.component} value={entry.component}>{entry.component}</option>
-            );
-          })}
+          {vassembly.map( (entry)=>( 
+            <option 
+              key={entry.component} 
+              value={entry.component}
+            >{entry.component}</option>
+          ))}
         </datalist>
       
         <label><br />   

@@ -78,6 +78,8 @@ const OverviewWrap = ({
     const focus = value === 'false' ? false : value;
     focusBySet( focus );
     Session.set(sessionSticky+'focus', focus);
+    salesBySet( false );
+    Session.set(sessionSticky+'sales', false);
   }
   
   function changeSales(e) {

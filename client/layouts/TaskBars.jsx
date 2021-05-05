@@ -63,10 +63,18 @@ export const ExTaskBar = ({ subLink }) => (
     />
     
     <TaskElement
-      title='Test Fail Tracker'
+      title='Test Fail History'
       subON={subLink === 'overviewtestfail'}
       goLink='/data/overview?request=testfail'
       icon='fas fa-microscope'
+      iconAdj='down-1'
+    />
+    
+    <TaskElement
+      title='Test Fail Compare'
+      subON={subLink === 'overviewtestfail2'}
+      goLink='/data/overview?request=testfail2'
+      icon='far fa-microscope'
       iconAdj='down-1'
     />
     

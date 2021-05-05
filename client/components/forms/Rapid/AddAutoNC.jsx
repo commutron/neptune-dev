@@ -168,7 +168,7 @@ const AddAutoNC = ({ ncTypesCombo, user, nonConsState, nonConsSet, editState })=
                 id='ncType'
                 className='redIn miniIn18 interSelect'
                 required
-                disabled={ncTypesCombo.length < 1 || lockOut}
+                disabled={ncTypesCombo.length < 1}
               >
               {ncTypesCombo.map( (entry, index)=>{
                 let cd = !user.showNCcodes ? '' :
