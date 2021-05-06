@@ -487,7 +487,7 @@ Meteor.methods({
     return [ isSubed, exists, icomplete, openNC, openSH, iscrap ];
   },
   
-  addNestedX(seriesId, serial, key, step, subSerial, exists, complete) {
+  addNestedX(seriesId, serial, key, step, com, subSerial, exists, complete) {
     if(!subSerial || !Roles.userIsInRole(Meteor.userId(), 'active')) {
       return false;
     }else{
@@ -500,7 +500,7 @@ Meteor.methods({
             good: true,
             time: new Date(),
             who: Meteor.userId(),
-            comm : '',
+            comm : com,
             info: {
               subSerial: subSerial
             }
@@ -552,7 +552,7 @@ Meteor.methods({
   },
 
   // finish Item
-  finishItemX(batchId, seriesId, serial, key, step, type, benchmark) {
+  finishItemX(batchId, seriesId, serial, key, step, type, com, benchmark) {
     if(!Roles.userIsInRole(Meteor.userId(), "BRKt3rm1n2t1ng8r2nch")) {
       return false;
     }else{
@@ -567,7 +567,7 @@ Meteor.methods({
             good: true,
             time: new Date(),
             who: Meteor.userId(),
-            comm : '',
+            comm : com,
             info: false
   			  }
   			},
@@ -602,7 +602,7 @@ Meteor.methods({
     }
   },
   
-  finishItemRapid(seriesId, serial, key, step, type, rapId) {
+  finishItemRapid(seriesId, serial, key, step, type, com, rapId) {
     if(!Roles.userIsInRole(Meteor.userId(), "BRKt3rm1n2t1ng8r2nch")) {
       return false;
     }else{
@@ -624,7 +624,7 @@ Meteor.methods({
             good: true,
             time: new Date(),
             who: Meteor.userId(),
-            comm : '',
+            comm : com,
             info: false
   			  },
   			  'items.$.altPath': rapidPath

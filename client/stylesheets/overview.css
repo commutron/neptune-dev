@@ -461,17 +461,6 @@ n-sm-model .big { font-size: 1.5rem !important; }
   color: var(--blackT); 
 }
 
-.statusBlock {
-  max-width: 11vh;
-  min-width: 50%;
-  min-height: 6vh;
-  display: flex;
-  align-items: center;
-}
-.statusBlock > div {
-  width: 100%;
-}
-
 .infoSquareOuter {
   display: inline-block;
   text-align: center;

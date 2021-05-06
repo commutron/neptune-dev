@@ -1,14 +1,15 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 // import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
 import StoneControl from './StoneControl';
 import ForkMenu from './ForkMenu';
-// import FoldInNested from './FoldInNested';
+import { CommField } from './CommField';
 import TestFails from './TestFails';
 import NCTributary from './NCTributary';
 import Shortfalls from './Shortfalls';
 import CompleteRest from './CompleteRest';
+import { CommTrigger } from './CommField';
 
 const StoneSelect = ({ 
   bID, 
@@ -47,6 +48,14 @@ const StoneSelect = ({
       mounted.current = false;
     };
   }, []);
+  
+  const [ commDoState, commDoSet ] = useState(false);
+  const [ commTxtState, commTxtSet ] = useState("");
+  
+  const commTrigger = (flip)=> {
+    commDoSet(flip);
+    commTxtSet("");
+  };
   
   useEffect( ()=> {
     Session.set('ncWhere', null);
@@ -136,6 +145,9 @@ const StoneSelect = ({
       const blockStone = damStep && ( !ncAllClear || !shAllClear ) ? true : false;
       const doneStone = stepComplete || false;
 	    
+	    
+	    console.log({rapIs});
+	    
 	    return(
         <div className='stoneGrid'>
 
@@ -164,6 +176,8 @@ const StoneSelect = ({
             closeUndoOption={closeUndoOption}
             timeOutCntrl={timeOutCntrl}
             riverFlowStateSet={riverFlowStateSet}
+            commTrigger={(e)=>commTrigger(e)}
+            commTxtState={commTxtState}
           />
 	        
   	      {canVerify && wFlowOps.length > 1 && !rapIs ?
@@ -185,10 +199,21 @@ const StoneSelect = ({
   					: null}
   				</div>
   				
-  				{altIs && 
-  				  <div className='altTitle cap'>
-  				    <small>Alt Flow: {altitle}</small>
-  				  </div>}
+  				{flowStep.type !== 'first' &&
+  				  <div className='stoneComm'>
+      				<CommTrigger
+      					commTrigger={()=>commTrigger(!commDoState)} />
+          	</div>}
+  				
+  				{rapIs ?
+  				  <div className='altTitle cap'><small>Rapid Flow: ?</small></div>
+  				  :
+  				  altIs && 
+  				  <div className='altTitle cap'><small>Alt Flow: {altitle}</small></div>
+  				}
+  				
+  				{commDoState &&
+  				  <CommField commSet={(e)=>commTxtSet(e)} />}
           
           <div className='riverErrors'>
             {fTest.length > 0 && 

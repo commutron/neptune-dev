@@ -528,6 +528,15 @@ button.variableInput.biggest { height: 64px; }
 .liteToolOff { background-color: var(--navIndicatorA); }
 .liteToolOff:active { background-color: var(--navIndicatorB); }
 
+.liteTool { cursor: pointer; }
+.liteTool input[type="checkbox"] {
+  filter: grayscale(1) invert(0.5) brightness(1);
+  overflow: hidden;
+  cursor: pointer;
+}
+.liteTool input[type="checkbox"]:checked {
+  filter: grayscale(1) invert(1) brightness(1);
+}
 
 .interForm {
   background-color: transparent;

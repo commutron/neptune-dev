@@ -21,7 +21,8 @@ const StoneControl = ({
 	blockStone, doneStone, compEntry,
 	handleVerify,
 	openUndoOption, closeUndoOption,
-	timeOutCntrl, riverFlowStateSet
+	timeOutCntrl, riverFlowStateSet,
+	commTrigger, commTxtState
 })=> {
 	
 	const mounted = useRef(true);
@@ -37,7 +38,6 @@ const StoneControl = ({
   }, []);
   
 	useEffect( ()=> {
-		// const checkLock = holdState || blockStone || ( !doneStone ? false : true );
 		if(mounted.current) {
 			const checkLock = holdState || blockStone || doneStone;
 			lockoutSet(checkLock);
@@ -68,10 +68,12 @@ const StoneControl = ({
 	  workingSet( true );
 	  closeUndoOption();
   }
-  function resolveEntry(blockUndo) {
+  function resolveEntry(blockUndo, repeat) {
+  	commTrigger(false);
   	riverFlowStateSet( 'slow' );
 		if(mounted.current) { workingSet( false ); }
 		!blockUndo && openUndoOption();
+		repeat && unlockAllow();
 	  document.getElementById('lookup').focus();
   }
    
@@ -106,6 +108,7 @@ const StoneControl = ({
 			enactEntry={()=>enactEntry()}
 			resolveEntry={()=>resolveEntry()}
 			workingState={workingState}
+			commTxtState={commTxtState}
 		/>;
 	
 	const renderVerify = 
@@ -138,7 +141,9 @@ const StoneControl = ({
 			enactEntry={()=>enactEntry()}
 			resolveEntry={()=>resolveEntry()}
 			workingState={workingState}
-			tryagainEntry={()=>resolveEntry(true)}
+			tryagainEntry={()=>resolveEntry(true, true)}
+			commTrigger={commTrigger}
+			commTxtState={commTxtState}
 		/>;
 	
 	const renderNest =
@@ -151,7 +156,8 @@ const StoneControl = ({
 			topTitle={topTitle}
       lockout={lockout}
       riverFlowStateSet={riverFlowStateSet}
-      closeUndoOption={closeUndoOption} 
+      closeUndoOption={closeUndoOption}
+    	commTxtState={commTxtState}
     />;
     
 	const renderFinish = 
@@ -174,6 +180,7 @@ const StoneControl = ({
 			enactEntry={()=>enactEntry()}
 			resolveEntry={()=>resolveEntry(true)}
 			workingState={workingState}
+			commTxtState={commTxtState}
 		/>;
 		
 	if(type === 'first') {
@@ -211,7 +218,8 @@ function areEqual(prevProps, nextProps) {
 		prevProps.serial !== nextProps.serial ||
 		prevProps.doneStone !== nextProps.doneStone ||
 		prevProps.blockStone !== nextProps.blockStone ||
-		prevProps.sKey !== nextProps.sKey
+		prevProps.sKey !== nextProps.sKey ||
+		prevProps.commTxtState !== nextProps.commTxtState
 	) {
   	return false;
 	}else{

@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 
 const FoldInNested = ({ 
 	seriesId, serial, sKey, step, lockout, topClass, topTitle,
-	riverFlowStateSet, closeUndoOption
+	riverFlowStateSet, closeUndoOption, commTxtState
 })=> {
 	
 	const [ subState, subSet ] = useState(false);
@@ -40,7 +40,8 @@ const FoldInNested = ({
   function passNested(subSerial, exists, complete) {
   	riverFlowStateSet( false );
   	closeUndoOption();
-		Meteor.call('addNestedX', seriesId, serial, sKey, step, subSerial, exists, complete,
+  	const comm = commTxtState;
+		Meteor.call('addNestedX', seriesId, serial, sKey, step, comm, subSerial, exists, complete,
 		(error, reply)=>{
 	    error && console.log(error);
 			if(reply) {
@@ -59,7 +60,8 @@ const FoldInNested = ({
   
   if(!Array.isArray(checkState)) {
   	return(
-	    <div className={topClass + ' stoneFrame nestBox teal centre centreText noCopy'} title={topTitle}>
+	    <div className={topClass + ' stoneFrame nestBox teal centre centreText noCopy'} 
+	    	title={topTitle}>
 	    	<p><i className="fas fa-object-group fa-lg fa-fw"></i> Nest</p>
 	      <p className='up wordBr'>{step}</p>
 	  		<form 

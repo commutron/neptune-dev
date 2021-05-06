@@ -3,7 +3,6 @@ import { toast } from 'react-toastify';
 // import Pref from '/client/global/pref.js';
 import StoneProgRing from './StoneProgRing.jsx';
 
-
 const StoneFinish = ({ 
 	batchId,
 	seriesId, serial, sKey, step, type, rapIs, rarapid,
@@ -15,15 +14,16 @@ const StoneFinish = ({
 	
 	enactEntry,
 	resolveEntry,
-	workingState
+	workingState,
+	commTxtState
 })=> { 
 	
-  //// Action for marking the board as complete
 	function finish() {
 		enactEntry();
+		const comm = commTxtState;
 
 		if(rapIs) {
-			Meteor.call('finishItemRapid', seriesId, serial, sKey, step, type, rapIs.rapId, 
+			Meteor.call('finishItemRapid', seriesId, serial, sKey, step, type, comm, rapIs.rapId, 
 				(error, reply)=>{
 			  if(error) {
 			    console.log(error);
@@ -36,7 +36,7 @@ const StoneFinish = ({
 			  }
 			});
 		}else{
-			Meteor.call('finishItemX', batchId, seriesId, serial, sKey, step, type, benchmark, 
+			Meteor.call('finishItemX', batchId, seriesId, serial, sKey, step, type, comm, benchmark, 
 				(error, reply)=>{
 			  if(error) {
 			    console.log(error);

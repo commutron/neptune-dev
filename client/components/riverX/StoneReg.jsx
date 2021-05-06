@@ -1,9 +1,7 @@
-import React , { Fragment } from 'react';
+import React from 'react';
 import { toast } from 'react-toastify';
-import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 
-import StoneProgRing from './StoneProgRing.jsx';
-
+import StoneProgRing from './StoneProgRing';
 	
 const StoneReg = ({ 
 	batchId,
@@ -16,18 +14,15 @@ const StoneReg = ({
 	
 	enactEntry,
 	resolveEntry,
-	workingState
+	workingState,
+	commTxtState
 })=> { 
 	
 	//// Action for standard step
   function passS(pass, doComm) {
 	  enactEntry();
-		
-    let comm = '';
-    let comPrompt = doComm ? prompt('Enter A Comment', '') : false;
-    comPrompt ? comm = comPrompt : null;
-    // if(doComm && !comPrompt) { unlock(); return false; }
-    
+    let comm = commTxtState;
+   
 		Meteor.call('addHistoryX', batchId, seriesId, barcode, sKey, step, type, comm, pass, benchmark, 
 			(error, reply)=>{
 	    if(error) {
@@ -60,48 +55,32 @@ const StoneReg = ({
 	              <label className='big'><br />{type}</label> : null;
 	
   return(
-   	<Fragment>
-  		<div className={topClass + ' stoneFrame noCopy'} title={topTitle}>
-      	<StoneProgRing
-  				serial={barcode}
-  				allItems={allItems}
-  				// isAlt={isAlt}
-  				// hasAlt={hasAlt}
-  				sKey={sKey}
-          step={step}
-          type={type}
-          flowCounts={flowCounts}
-          workingState={workingState}
-          lockout={lockout}
-        >
-	      	<button
-	      	  className={shape}
-	  				name={step}
-	  				id='stoneButton'
-	  				onClick={()=>passS(true, false)}
-	  				tabIndex={-1}
-	  				disabled={lockout}>
-	  				{prepend}
-						<i>{step}</i>
-						{apend}
-					</button>
-				</StoneProgRing>
-			</div>
-			<div className='stoneBase'>
-				<ContextMenuTrigger
-					id={barcode}
-					attributes={ {className:'moreStepAction centre'} }
-					holdToDisplay={1}
-          renderTag='div'>
-          <i className='fas fa-comment fa-fw fa-lg'></i>
-				</ContextMenuTrigger>
-        <ContextMenu id={barcode}>
-          <MenuItem onClick={()=>passS(true, true)} disabled={lockout}>
-            Pass with Comment
-          </MenuItem>
-        </ContextMenu>
-    	</div>
-    </Fragment>
+		<div className={topClass + ' stoneFrame noCopy'} title={topTitle}>
+    	<StoneProgRing
+				serial={barcode}
+				allItems={allItems}
+				// isAlt={isAlt}
+				// hasAlt={hasAlt}
+				sKey={sKey}
+        step={step}
+        type={type}
+        flowCounts={flowCounts}
+        workingState={workingState}
+        lockout={lockout}
+      >
+      	<button
+      	  className={shape}
+  				name={step}
+  				id='stoneButton'
+  				onClick={()=>passS(true, false)}
+  				tabIndex={-1}
+  				disabled={lockout}>
+  				{prepend}
+					<i>{step}</i>
+					{apend}
+				</button>
+			</StoneProgRing>
+		</div>
   );
 };
 

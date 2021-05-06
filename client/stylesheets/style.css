@@ -285,6 +285,7 @@ input::-webkit-calendar-picker-indicator {
   text-transform: none;
   text-decoration: none;
   font-variant: normal;
+  font-weight: normal;
 }
 
 .noBorder { border: none; }

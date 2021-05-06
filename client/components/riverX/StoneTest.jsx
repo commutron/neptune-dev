@@ -1,6 +1,5 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { toast } from 'react-toastify';
-import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 // import Pref from '/client/global/pref.js';
 import StoneProgRing from './StoneProgRing.jsx';
 
@@ -16,22 +15,33 @@ const StoneTest = ({
 	enactEntry,
 	resolveEntry,
 	workingState,
-	tryagainEntry
+	tryagainEntry,
+	commTrigger, commTxtState
 })=> { 
 	
+	const [ failing, failingSet ] = useState(false);
+	
+	function passF() {
+		failingSet(true);
+		commTrigger(true);
+		
+		passT(false, false);
+	}
   //// Action for test step
-  function passT(pass, doComm, shipFail) {
-	  enactEntry();
+  function passT(pass, shipFail) {
     
-    let comm = '';
-    let comPrompt = doComm ? prompt('Enter A Comment', '') : false;
-    comPrompt ? comm = comPrompt : null;
+    let comm = commTxtState;
     
-    const more = shipFail ? 'ship a failed test' : false;
-    
-    if(pass === false && ( !comm || comm == '' ) ) {
-    	tryagainEntry();
+    if(( shipFail || !pass ) && comm.trim() === "") {
+    	var element = document.getElementById("stoneCommField");
+    	element ? element.reportValidity() : null;
     }else{
+    
+    	enactEntry();
+    	failingSet(false);
+    	
+    	const more = shipFail ? 'ship a failed test' : false;
+
 			Meteor.call('addTestX', 
 				batchId, seriesId, barcode, sKey, step, type,
 				comm, pass, more, benchmark, 
@@ -41,7 +51,7 @@ const StoneTest = ({
 			    toast.error('Server Error');
 		    }
 				if(reply === true) {
-					resolveEntry();
+					!pass ? tryagainEntry() : resolveEntry();
 			  }else{
 			    toast.warning('Insufficient Permissions');
 			  }
@@ -69,17 +79,17 @@ const StoneTest = ({
 		      	  className='crackedTop iTest'
 		  				name={step + ' pass'}
 		  				id='stonepassButton'
-		  				onClick={()=>passT(true, false, false)}
+		  				onClick={()=>passT(true, false)}
 		  				tabIndex={-1}
 		  				disabled={lockout}>
 		  				Pass
 		  				<label className=''><br />{step}</label>
 						</button>
 						<button
-		      	  className='crackedBot'
+		      	  className={`crackedBot ${failing ? 'fail2step' : ''}`}
 		  				name={step + ' fail'}
 		  				id='stonefailButton'
-		  				onClick={()=>passT(false, true, false)}
+		  				onClick={()=>passF(false, false)}
 		  				tabIndex={-1}
 		  				disabled={lockout}>
 		  				Fail
@@ -88,25 +98,18 @@ const StoneTest = ({
 					</div>
 				</StoneProgRing>
 			</div>
-			<div className='stoneBase'>
-				{type === 'first' || type === 'finish' ? null :
-					<ContextMenuTrigger
-						id={barcode}
-						attributes={ {className:'moreStepAction centre'} }
-						holdToDisplay={1}
-            renderTag='div'>
-            <i className='fas fa-comment fa-fw fa-lg'></i>
-					</ContextMenuTrigger>
-				}
-	        <ContextMenu id={barcode}>
-	          <MenuItem onClick={()=>passT(true, true)} disabled={lockout}>
-	            Pass with Comment
-	          </MenuItem>
-	          <MenuItem onClick={()=>passT(true, true, true)} disabled={lockout}>
-	            Ship a Failed Test
-	          </MenuItem>
-        </ContextMenu>
-    	</div>
+			
+			{failing &&
+				<button
+      	  className='crackedBot stoneExtra'
+  				name={step + ' bypass'}
+  				id='stonebypassButton'
+  				onClick={()=>passT(true, true)}
+  				tabIndex={-1}
+  				disabled={lockout}>
+  				<label className=''>Bypass Failed Test</label>
+				</button>
+			}
     </Fragment>
   );
 };

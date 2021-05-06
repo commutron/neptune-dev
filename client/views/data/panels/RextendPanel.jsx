@@ -71,8 +71,8 @@ const RextendPanel = ({ batchData, app })=> {
   return(
     <div className='section space overscroll'>
       
-      <div className='comfort middle overscroll'>
-        <span className='balancer gapsC'>
+      <div className='comfort stickInPlace middle overscroll'>
+        <span className='rowWrap gapsC'>
           <FocusSelect
             gList={gList}
             focusState={groupState}

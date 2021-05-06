@@ -15,8 +15,10 @@ const HistoryBlock = ({
   const redoAllow = canEdit && iopen && dt.good === true;
                
   const indictor = dt.good ?
-          <i><i className="fas fa-check-circle fa-lg fa-fw" title='Good'></i></i> :
-          <b><i className="fas fa-times-circle fa-lg fa-fw" title='No Good'></i></b>;
+          dt.type === 'test' && dt.info !== false ?
+          <n-fa1><i className="fas fa-exclamation-circle fa-lg fa-fw" title='Bypass'></i></n-fa1> :
+          <n-fa2><i className="fas fa-check-circle fa-lg fa-fw" title='Good'></i></n-fa2> :
+          <n-fa3><i className="fas fa-times-circle fa-lg fa-fw" title='No Good'></i></n-fa3>;
    
   const infoF = dt.type === 'first' && typeof dt.info === 'object';
   const infoT = dt.type === 'test' && typeof dt.info === 'string';
@@ -44,13 +46,16 @@ const HistoryBlock = ({
           <span>{cal(dt.time)}</span>
         </n-feed-info-title>
       
-        {dt.type === 'first' ?
-          <ul>
-            <li>Inspected: {inspect}</li>
-            <li>Built: {builder} with {methodNice}</li>
-            {!change || change !== '' && <li>{change}</li>}
-            {issue !== '' && <li>{issue}</li>}
-          </ul>
+        {dt.type === 'test' && dt.info !== false ?
+          <ul><li className='cap'>bypass: {dt.info}</li></ul>
+        : 
+          dt.type === 'first' ?
+            <ul>
+              <li>Inspected: {inspect}</li>
+              <li>Built: {builder} with {methodNice}</li>
+              {!change || change !== '' && <li>{change}</li>}
+              {issue !== '' && <li>{issue}</li>}
+            </ul>
         :
           dt.type === 'undo' && dt.info.formerWhen && dt.info.formerWho ?
             <ul>

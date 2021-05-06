@@ -1,15 +1,15 @@
 import React from 'react';
 import ClockString from '/client/components/smallUi/ClockString';
 import { 
-  FocusSelect, FilterSelect,
+  FocusSelect, FilterSelect, SortSelect,
   LayoutSwitch, ThemeSwitch
 } from '/client/components/smallUi/ToolBarTools';
 
 const UpstreamTools = ({
   app, traceDT, loadTimeUP,
   focusByUP, changeFocusByUP,
-  salesByUP, denseUP, lightUP,
-  changeSalesUP, denseSetUP, themeSetUP,
+  salesByUP, sortByUP, denseUP, lightUP,
+  changeSalesUP, changeSortUP, denseSetUP, themeSetUP,
   doThing
 })=> {
   const gList = _.uniq( Array.from(traceDT, g =>
@@ -22,11 +22,6 @@ const UpstreamTools = ({
             
   return(
     <nav className='overviewToolbar gridViewTools'>
-      
-      {/*<SortSelect
-        sortState={sortByUP}
-        changeFunc={changeSortUP}
-      />*/}
       
       <FocusSelect
         gList={gList}
@@ -41,6 +36,11 @@ const UpstreamTools = ({
         selectState={salesByUP}
         falsey='All Sales Orders'
         changeFunc={changeSalesUP} 
+      />
+      
+      <SortSelect
+        sortState={sortByUP}
+        changeFunc={changeSortUP}
       />
         
       <LayoutSwitch

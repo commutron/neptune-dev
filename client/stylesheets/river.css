@@ -3,10 +3,12 @@
   display: grid;
   width: 100%;
   grid-template-columns: 1fr 2.5fr 1fr;
-  grid-template-rows: 1fr auto auto auto;
+  grid-template-rows: 1fr auto auto auto auto auto;
   grid-template-areas: 
     'stoneF stoneF stoneF'
     'pathC undoS menu1'
+    'comIn comIn comIn'
+    'comB comB comB'
     'alert alert alert'
     'feedA feedA feedA';
   justify-content: stretch;
@@ -39,17 +41,43 @@
   grid-area: pathC;
   padding-left: 0.5vmax;
 }
-.stoneBase {
+.stoneComm {
   grid-area: menu1;
   flex-direction: row-reverse;
   padding-right: 0.5vmax;
 }
-.riverPath, .stoneBase {
+.stoneComm > button {
+  background-color: transparent;
+  color: var(--asbestos);
+  font-size: initial;
+}
+.stoneBase {
+  grid-area: comIn;
+  padding: 0;
+  min-width: auto;
+  max-width: 100%;
+  min-height: 8rem;
+  max-height: 20rem;
+  background-color: var(--clouds);
+  border-style: solid !important;
+  border-color: black;
+}
+.stoneExtra {
+  grid-area: comB;
+}
+button.stoneExtra {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  background-image: none;
+  margin: 0;
+  padding: 0.25rem;
+}
+.riverPath, .stoneComm {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
   min-width: 100%;
-  /*margin: 8px 0;*/
   color: var(--asbestos);
 }
 
@@ -127,6 +155,12 @@
   animation: pulse 0.5s;
   animation-iteration-count: infinite;
   box-shadow: 0 0 0 2em rgba(255, 255, 255, 0);
+}
+.crackedBot.fail2step {
+  background-color: var(--high-color); 
+  animation: pulse 0.5s;
+  animation-iteration-count: 1;
+  box-shadow: 0 0 10px 5px var(--pomegranatefrost);
 }
 
 .stone:disabled:active,

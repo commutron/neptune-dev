@@ -143,18 +143,17 @@ const CompSearchWrap = ({ plCache, user, app })=> {
           </label>
         </form>
         
-        <div className='balance'>
-          <br />
-          <span>
+        <div className='balance gapsC vmarginquarter'>
+          <span className='beside'>
             <input
               type='checkbox'
               id='bc'
               defaultChecked={bChk}
               onChange={()=>setB(!bChk)}
             />
-            <label htmlFor='bc'>{Pref.batch} Info</label>
+            <label htmlFor='bc'>{Pref.xBatch} Info</label>
           </span>
-          <span>
+          <span className='beside'>
             <input
               type='checkbox'
               id='uc'
@@ -169,7 +168,7 @@ const CompSearchWrap = ({ plCache, user, app })=> {
       <div className='centre space'>
         <div className='balance min400 cap'>
           <i>{Pref.widget} {Pref.variants}: {results ? results.length : 0}</i>
-          <i>{Pref.batch}s: {batchCount}</i>
+          <i>{Pref.xBatchs}: {batchCount}</i>
         </div>
       </div>
       

@@ -42,27 +42,28 @@ const UnitSetForm = ({ seriesId, item, selfclose })=> {
   let done = item.completed !== false;
     
   return(
-    <p className='centre centreTrue'>
+    <div className='centre centreText max300 wide'>
       {done &&
-        <b className='big'>
-          This serial number is finished, are you sure you want to adjust how many units were included under this serial?
-        </b>}
-      <br />
-      <input
-        type='number'
-        id='unit'
-        pattern='[0000-9999]*'
-        maxLength='4'
-        minLength='1'
-        max='1000'
-        min='1'
-        defaultValue={item.units}
-        placeholder='1-1000'
-        inputMode='numeric'
-        required
-        onChange={(e)=>unitSet(e)}
-      />
-      <label htmlFor='unit'>{Pref.unit} Quantity <em>max 1000</em></label>
-    </p>
+        <p className='bold medBig'
+          >This serial number is finished, are you sure you want to adjust how many units were included under this serial?
+        </p>}
+      <p>
+        <input
+          type='number'
+          id='unit'
+          pattern='[0000-9999]*'
+          maxLength='4'
+          minLength='1'
+          max='1000'
+          min='1'
+          defaultValue={item.units}
+          placeholder='1-1000'
+          inputMode='numeric'
+          required
+          onChange={(e)=>unitSet(e)}
+        />
+        <label htmlFor='unit'>{Pref.unit} Quantity <em>max 1000</em></label>
+      </p>
+    </div>
   );
 };

@@ -83,9 +83,9 @@ const ScrapPanel = ({ batchData, app })=> {
     <div className='section overscroll' key={1}>
       <div className='space'>
         
-        <div className='comfort'>
+        <div className='comfort stickInPlace'>
 
-          <span className='balancer gapsC'>
+          <span className='rowWrap gapsC'>
             <FocusSelect
               gList={gList}
               focusState={groupState}

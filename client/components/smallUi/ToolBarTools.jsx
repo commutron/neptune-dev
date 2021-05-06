@@ -31,7 +31,7 @@ export const SortSelect = ({ sortState, changeFunc })=> (
       defaultValue={sortState}
       onChange={(e)=>changeFunc(e)}>
       <option value='priority'>priority</option>
-      <option value='batch'>{Pref.batch}</option>
+      <option value='batch'>{Pref.xBatch}</option>
       <option value='sales'>{Pref.salesOrder}</option>
       <option value='due'>due date</option>
     </select>

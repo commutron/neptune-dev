@@ -1,7 +1,7 @@
 import React from 'react';
 import ClockString from '/client/components/smallUi/ClockString';
 import { 
-  BranchFilterSelect, //SortSelect, 
+  BranchFilterSelect, SortSelect, 
   FocusSelect, FilterSelect,
   LayoutSwitch, ThemeSwitch
 } from '/client/components/smallUi/ToolBarTools';
@@ -11,6 +11,7 @@ const OverviewTools = ({
   filterByUP, changeFilterUP,
   focusByUP, changeFocusByUP,
   salesByUP, changeSalesUP,
+  sortByUP, changeSortUP,
   ghostUP, ghostSetUP, 
   denseUP, denseSetUP,
   lightUP, themeSetUP,
@@ -32,11 +33,7 @@ const OverviewTools = ({
         filterState={filterByUP}
         changeFunc={changeFilterUP}
       />
-      {/*
-      <SortSelect
-        sortState={sortByUP}
-        changeFunc={changeSortUP}
-      />*/}
+      
       <FocusSelect
         gList={gList}
         focusState={focusByUP}
@@ -50,6 +47,11 @@ const OverviewTools = ({
         selectState={salesByUP}
         falsey='All Sales Orders'
         changeFunc={changeSalesUP} 
+      />
+      
+      <SortSelect
+        sortState={sortByUP}
+        changeFunc={changeSortUP}
       />
     
       <span>

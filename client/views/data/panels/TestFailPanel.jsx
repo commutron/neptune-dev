@@ -11,9 +11,6 @@ import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
 import TrendLine from '/client/components/charts/Trends/TrendLine.jsx';
 import FailAllTable from '/client/components/tables/FailAllTable';
 
-import PagingSelect from '/client/components/tinyUi/PagingSelect.jsx';
-import { chunkArray } from '/client/utility/Convert';
-
 import { timeRanges } from '/client/utility/CycleCalc';
 
 
@@ -25,8 +22,7 @@ const TestFailPanel = ({ batchData, app })=> {
   
   const [ groupState, groupSet ] = useState(false);
   const [ widgetState, widgetSet ] = useState(false);
-  
-  const [ pageState, pageSet ] = useState(0);
+  const [ entryState, entrySet ] = useState(false);
   
   const [ workingList, workingListSet ] = useState([]);
   
@@ -52,14 +48,13 @@ const TestFailPanel = ({ batchData, app })=> {
       const chunk = byWidget.filter( x => x.tfEntries.some( y =>
                                         moment(y.time).isAfter(rangeStart) ) );
       
-      const sortList = chunk.sort((f1, f2)=> {
-              let f1t = f1.tfEntries[f1.tfEntries.length-1].time;
-              let f2t = f2.tfEntries[f2.tfEntries.length-1].time;
-              return f1t < f2t ? 1 : f1t > f2t ? -1 : 0;
-      });
-                  
-      pageSet(0);
-      workingListSet(sortList);
+      // const sortList = chunk.sort((f1, f2)=> {
+      //         let f1t = f1.tfEntries[f1.tfEntries.length-1].time;
+      //         let f2t = f2.tfEntries[f2.tfEntries.length-1].time;
+      //         return f1t < f2t ? 1 : f1t > f2t ? -1 : 0;
+      // });
+
+      workingListSet(chunk);
     }
                     
   }, [fails, cycleCount, cycleBracket, groupState, widgetState]);
@@ -84,15 +79,13 @@ const TestFailPanel = ({ batchData, app })=> {
                     r.group.toUpperCase() === groupState && r.widget.toUpperCase()
                 ) ).filter(f=>f).sort();
   
-  const inpieces = chunkArray(workingList, Pref.pagingSize);
-  
   return(
     <div className='section overscroll' key={1}>
       <div className='space'>
         
-        <div className='comfort'>
+        <div className='comfort stickInPlace'>
           
-          <span className='balancer gapsC'>
+          <span className='rowWrap gapsC'>
             <FocusSelect
               gList={gList}
               focusState={groupState}
@@ -113,6 +106,14 @@ const TestFailPanel = ({ batchData, app })=> {
               changeBracket={(e)=>cycleBracketSet(e)}
               stickyValue={cycleCount+','+cycleBracket}
               sessionSticky={false} />
+              
+            <label className='liteTool blackT beside'>
+              <input
+                type='checkbox'
+                className='minHeight'
+                defaultChecked={entryState}
+                onChange={()=>entrySet(!entryState)} 
+              /><i>Show Entries</i></label>
           </span>
             
         </div>
@@ -127,20 +128,11 @@ const TestFailPanel = ({ batchData, app })=> {
             cycleCount={cycleCount} 
             cycleBracket={cycleBracket} />
         </div>
-        
-        <PagingSelect 
-          multiArray={inpieces}
-          isSet={pageState}
-          doChange={(e)=>pageSet(e)} />
-          
+       
         <FailAllTable 
-          failData={inpieces[pageState] || []}
-          gList={gList} />
-        
-        <PagingSelect 
-          multiArray={inpieces}
-          isSet={pageState}
-          doChange={(e)=>pageSet(e)} />
+          failData={workingList}
+          gList={gList}
+          showEntries={entryState} />
         
         <FailDetail />
           
