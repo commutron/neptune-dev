@@ -408,7 +408,6 @@ Meteor.publish('hotDataPlus', function(scanOrb, keyMatch){
       XRapidsDB.find({extendBatch: trueBatch, orgKey: orgKey}, {
         fields: {
           'orgKey': 0,
-          'gadget': 0,
           'createdAt': 0,
           'createdWho': 0,
           'closedWho': 0
@@ -544,14 +543,6 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
             'orgKey': 0,
           }}),
       ];
-    }else if( dataRequest === 'rapid' ) {
-      return [
-        XRapidsDB.find({gadget: {$ne: false}, orgKey: orgKey}, {
-          fields: {
-            'orgKey': 0,
-            'extendBatch': 0
-        }})
-      ];
     }else {
       return [
         WidgetDB.find({widget: hothotWidget, orgKey: orgKey}, {
@@ -576,8 +567,7 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
         }}),
         XRapidsDB.find({extendBatch: dataRequest, orgKey: orgKey}, {
           fields: {
-            'orgKey': 0,
-            'gadget': 0
+            'orgKey': 0
         }})
       ];
     }

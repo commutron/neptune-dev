@@ -15,7 +15,6 @@ import BuildHistory from './panels/BuildHistory.jsx';
 import ItemPanelX from './panels/ItemPanelX';
 import BatchPanelX from './panels/XBatchPanel/BatchPanelX.jsx';
 import WidgetPanel from './panels/WidgetPanel/WidgetPanel';
-import RapidsPanel from './panels/RapidsPanel';
 import RextendPanel from './panels/RextendPanel';
 import TestFailPanel from './panels/TestFailPanel';
 
@@ -238,24 +237,6 @@ const DataViewOps = ({
             groupData={allGroup} 
             app={app}
             specify={specify} />
-        </TraverseWrap>
-      );
-    }else if(request === 'rapid') {
-      return(
-        <TraverseWrap
-		      batchData={false}
-          widgetData={false}
-          variantData={false}
-          groupData={false}
-          user={user}
-          app={app}
-          title='Rapids Free'
-          subLink={subLink}
-          action={false}
-          base={true}
-        >
-          <RapidsPanel
-            app={app} />
         </TraverseWrap>
       );
     // }else if(request === 'trends') {

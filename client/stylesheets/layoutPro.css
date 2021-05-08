@@ -30,11 +30,9 @@
   grid-template-columns: 1vw 1fr;
 }
 .pro_20_80 {
-  grid-template-columns: 16vmax 1fr;
   grid-template-columns: 14vmax 1fr;
 }
 .pro_40_60 {
-  grid-template-columns: 32vmax 1fr;
   grid-template-columns: 28vmax 1fr;
 }
 
@@ -61,20 +59,14 @@
   background-color: rgb(35,35,35);
   transition: all 150ms ease-in-out;
   display: inline-grid;
-  grid-template-columns: repeat(auto-fit, minmax(15vmax, 1fr));
   grid-template-columns: repeat(auto-fit, minmax(13vmax, 1fr));
   grid-template-rows: auto;
   align-items: stretch;
   justify-content: flex-start;
 }
 .proPrimeSingle { 
-  min-width: 15vmax;
-  
   min-width: 13vmax;
-  
   width: 100%;
-  max-width: 16vmax;
-  
   max-width: 14vmax;
 }
 
@@ -84,7 +76,6 @@
   background-color: var(--clouds);
   box-shadow: var(--dropShadow2);
 }
-
 
 .proActionForm {
   grid-area: proForm;
@@ -99,7 +90,6 @@
   flex-wrap: nowrap;
   flex-shrink: 0;
   align-items: center;
-  
 }
 
 .cardTitle {
@@ -129,12 +119,8 @@
   background-color: var(--asbestos);
   color: var(--clouds);
 }
-.riverExpandToggle { left: 16vmax; }
-.riverShrinkToggle { left: 32vmax; }
-
 .riverExpandToggle { left: 14vmax; }
 .riverShrinkToggle { left: 28vmax; }
-
 .riverExpandToggle:hover, 
 .riverShrinkToggle:hover {
   opacity: 1;

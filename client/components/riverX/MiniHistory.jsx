@@ -25,7 +25,7 @@ const MiniHistory = ({ history, iAlt, altitle })=> {
         		  <n-mock-table-row className='cap' key={idx}>
         		    <n-mock-table-cell>
         		      {!hst.good && <i className='fas fa-times fa-fw redT'></i>}
-        		      {hst.type} {hst.step}</n-mock-table-cell>
+        		      {hst.type}-{hst.step}</n-mock-table-cell>
         		    <n-mock-table-cell
         		      >{moment(hst.time).calendar()}
         		    </n-mock-table-cell>

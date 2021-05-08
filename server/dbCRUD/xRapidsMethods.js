@@ -44,7 +44,6 @@ Meteor.methods({
           type: rapidType,
           extendBatch: exBatch,
           groupId: groupId,
-          gadget: false,
           issueOrder: issueNum, // RMA, NCAR,
           live: true,
           createdAt: new Date(),

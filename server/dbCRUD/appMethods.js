@@ -60,6 +60,8 @@ Meteor.methods({
       },
       missingType: 'missing',
       ancillaryOption: [],
+      repeatOption: [],
+      alterFulfillReasons: [],
       tagOption: [],
       instruct: '',
       helpDocs: '',
@@ -69,7 +71,12 @@ Meteor.methods({
         nineDigit: Number(123456789),
         tenDigit: Number(1234567890)
       },
-      ndaMode: false,
+      priorityScale : {
+        low: Number(66),
+        high: Number(22),
+        max: Number(0),
+      },
+      lockType: 'timer',
       nonWorkDays: []
     });
     Meteor.users.update(Meteor.userId(), {
@@ -312,8 +319,6 @@ Meteor.methods({
       return false;
     }
   },
-  
-  //////////////////////////////////
   
 // set last serial
   setlastestSerial(serialEight, serialNine, serialTen) {

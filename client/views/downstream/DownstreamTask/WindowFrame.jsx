@@ -3,7 +3,7 @@ import moment from 'moment';
 // import 'moment-timezone';
 import 'moment-business-time';
 import '/client/utility/ShipTime.js';
-// import Pref from '/client/global/pref.js';
+import Pref from '/client/global/pref.js';
 
 import DownstreamHeaders from './DownstreamHeaders';
 
@@ -44,7 +44,7 @@ const WindowFrame = ({
                       indexKey === 0 ? 'latetitle' : ''}`}
     >
       <div className='downWeek' title={`ship day ${indexKey+1}`}
-        >{indexKey === -1 ? 'Rapid' : indexKey === 0 ? 'Late' : 
+        >{indexKey === -1 ? Pref.rapidEx : indexKey === 0 ? 'Late' : 
           windowMoment.format('dddd MMM DD')
         }
       </div>

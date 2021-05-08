@@ -892,6 +892,7 @@ input.miniIn24, select.miniIn24 { width: 24ch; }
   min-width: 15rem;
   max-width: 400px;
   margin: 0;
+  text-align: initial;
 }
 .numberSet {
   min-height: 2rem;

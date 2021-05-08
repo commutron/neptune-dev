@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from 'react';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import Pref from '/client/global/pref.js';
 
@@ -17,22 +17,68 @@ const NCTributary = ({ seriesId, serial, nonCons, sType })=> {
   const inspector = Roles.userIsInRole(Meteor.userId(), 'inspect');
   const verifier = Roles.userIsInRole(Meteor.userId(), 'verify');
   
+  // const nc = nonCons.filter( 
+  //             x => x.serial === item.serial && !x.trash && x.inspect === false )
+  //               .sort((n1, n2)=> n1.ref < n2.ref ? -1 : n1.ref > n2.ref ? 1 : 0 );
+
+  const chunkNC = Object.entries( _.groupBy(nonCons, x=> x.type) );
+  
   return(
     <Fragment>
-      {nonCons.map( (entry, index)=>{
-        sType === 'finish' && entry.snooze === true ?
-          handleAction(entry.key, 'WAKE') : null;
-        return(
-          <NCStream
-            key={entry.key}
-            entry={entry}
-            seriesId={seriesId}
-            end={sType === 'finish'}
-            doAction={(act, extra)=> handleAction(entry.key, act, extra)}
-            inspector={inspector}
-            verifier={verifier}
-          />
-        )})}
+      {chunkNC.map( (chunk, chindex)=>{
+        const rL = chunk[1][0].ref.charAt(0);
+        const cluster = chunk[1].length >= Pref.clusterMin &&
+          chunk[1].every(c=>c.ref.charAt(0) === rL);/*&&
+        /*( chunk[1].every(c=>c.fix === false) || 
+          chunk[1].every(c=>c.fix !== false) );*/
+        
+        if(cluster) {
+          return( 
+            <details key={'cluster'+chindex} className='tribCluster'>
+              <summary><em><small>NC cluster</small></em>
+                <span className='tribInfo'
+                  ><n-sm-b>{chunk[0]}</n-sm-b>
+                  <n-num>{Array.from(chunk[1], x=>x.ref).join(", ")}</n-num>
+                </span>
+              </summary>
+            
+              {chunk[1].map( (entry, index)=>{
+                sType === 'finish' && entry.snooze === true ?
+                  handleAction(entry.key, 'WAKE') : null;
+                return(
+                  <NCStream
+                    key={'cluster'+chindex+entry.key}
+                    entry={entry}
+                    seriesId={seriesId}
+                    end={sType === 'finish'}
+                    doAction={(act, extra)=> handleAction(entry.key, act, extra)}
+                    inspector={inspector}
+                    verifier={verifier}
+                  />
+                )})}
+            </details>
+          );
+        }else{
+          return(
+            <Fragment key={'cluster'+chindex}>
+              {chunk[1].map( (entry, index)=>{
+                sType === 'finish' && entry.snooze === true ?
+                  handleAction(entry.key, 'WAKE') : null;
+                return(
+                  <NCStream
+                    key={'indie'+entry.key}
+                    entry={entry}
+                    seriesId={seriesId}
+                    end={sType === 'finish'}
+                    doAction={(act, extra)=>handleAction(entry.key, act, extra)}
+                    inspector={inspector}
+                    verifier={verifier}
+                  />
+              )})}
+            </Fragment>
+          );
+        }
+      })}
     </Fragment>
   );
 };
@@ -58,14 +104,14 @@ const NCStream = ({ entry, seriesId, end, doAction, inspector, verifier })=>{
   
   const lockI = fixed ? !same && inspector ? false : true : false;
   let snooze = entry.snooze;
-  let style = !snooze ? 'cap tribRow tribRed noCopy' : 'cap tribRow yellowList noCopy';
-
-  const smple = window.innerWidth <= 1200;
+  let snstyle = !snooze ? 'tribRed' : 'yellowList';
 
   return(
-    <div className={style}>
+    <div className={`cap noCopy tribRow ${snstyle}`}>
       <div className='tribInfo' title={entry.comm}>
-        <div className='up numFont'>{entry.ref} {entry.comm !== '' && <i className='far fa-comment'></i>}</div>
+        <div className='up numFont'
+          >{entry.ref} {entry.comm !== '' && <i className='far fa-comment'></i>}
+        </div>
         <div>{entry.type}</div>
       </div>
       <div className='tribAction'>
@@ -73,29 +119,28 @@ const NCStream = ({ entry, seriesId, end, doAction, inspector, verifier })=>{
           {snooze ?
             <span className='centre'>
               <i className='far fa-clock fa-lg'></i>
-              <i>{smple ? null : 'Later'}</i>
+              <i>{window.innerWidth <= 1200 ? null : 'Later'}</i>
             </span>
           :
             fixed ?
               <button
                 title='All Correct'
                 id='inspectline'
+                data-name='OK'
                 className='ncAct riverG'
                 onClick={()=>handleClick('INSPECT')}
                 readOnly={true}
                 disabled={lockI || selfLock}>
-                <img src='/inspectMini.svg' className='pebbleSVG' /><br />
-                <i>{smple ? null : 'OK'}</i>
               </button>
           :
               <button
+                title='Fix Complete'
                 id='fixline'
+                data-name={Pref.fix}
                 className='ncAct riverInfo'
                 onClick={()=>handleClick('FIX')}
                 readOnly={true}
                 disabled={fixed === true || selfLock}>
-                <img src='/repair.svg' className='pebbleSVG' /><br />
-                <i>{smple ? null : 'Repair'}</i>
               </button>
           }
         </div>

@@ -154,7 +154,7 @@ Meteor.methods({
   fetchRapidsThin() {
     let compactData = [];
     
-    XRapidsDB.find({orgKey: Meteor.user().orgKey, extendBatch: {$ne: false} })
+    XRapidsDB.find({orgKey: Meteor.user().orgKey})
     .forEach( r => {
       const b = XBatchDB.findOne({batch: r.extendBatch});
       const w = WidgetDB.findOne({_id: b.widgetId});

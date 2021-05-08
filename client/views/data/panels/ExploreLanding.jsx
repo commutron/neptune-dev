@@ -98,14 +98,15 @@ const ExploreLanding = ({
         <div className='centreRow vspacehalf'>
           <NumStatBox
             number={xlive}
-            name='WIP'
+            name={Pref.live}
             borderColour='blue'
           />
+          {xlive - xProcess > 0 &&
           <NumStatBox
             number={xlive - xProcess}
-            name='RMA'
-            borderColour='red'
-          />
+            name={`${Pref.live} ${Pref.rapidEx}`}
+            borderColour='orange'
+          />}
           <NumStatBox
             number={xTotal - xProcess}
             name='Completed'

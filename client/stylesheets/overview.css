@@ -316,6 +316,7 @@
   transform: rotate(-180deg);
   font-size: 3vmin;
   text-align: center;
+  text-transform: capitalize;
   padding-bottom: 3vh;
 }
 .downGridFrameFixed:nth-child(odd) > .downWeek,

@@ -125,13 +125,13 @@ const FlowFormHead = ({ id, existFlows, preFill, app, selfclose })=> {
         <div className='centre'>
           <p><b>{eN}</b> is in used by</p>
           {warn === 'liveRiver' ?
-            <h3>An Active {Pref.batch} as the {Pref.buildFlow}</h3>
+            <h3>An Active {Pref.xBatch} as the {Pref.buildFlow}</h3>
           : warn === 'liveAlt' ?
-            <h3>An Active {Pref.batch} as the {Pref.buildFlowAlt}</h3>
+            <h3>An Active {Pref.xBatch} as the {Pref.buildFlowAlt}</h3>
           : warn === 'liveAlt' ?
-            <h3>An Inactive {Pref.batch} as the {Pref.buildFlow}</h3>
+            <h3>An Inactive {Pref.xBatch} as the {Pref.buildFlow}</h3>
           : warn === 'liveAlt' ?
-            <h3>An Inactive {Pref.batch} as the {Pref.buildFlowAlt}</h3>
+            <h3>An Inactive {Pref.xBatch} as the {Pref.buildFlowAlt}</h3>
           :
             <p>something</p>}
         </div>

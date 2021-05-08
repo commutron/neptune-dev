@@ -3,7 +3,6 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 import ModelMedium from '../smallUi/ModelMedium.jsx';
-import {Submit} from './Inputs.jsx';
 
 const GroupFormWrapper = ({ id, name, alias, wiki, noText, primeTopRight, lockOut})=> {
   const bttn = name ? `edit ${Pref.group}` : `new ${Pref.group}`;
@@ -119,7 +118,12 @@ const GroupForm = ({ id, name, alias, wiki, title, selfclose })=> {
         <label htmlFor='gWiki' className='cap'>{Pref.group} {Pref.instruct} index</label>
       </p>
       <span className='centre'>
-        <Submit name='Save' type='action' />
+        <button
+          type='submit'
+          id='grpSave'
+          className='action clearGreen'
+          >Save
+        </button>
       </span>
     </form>
   );

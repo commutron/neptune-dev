@@ -2,7 +2,7 @@
 .stoneGrid {
   display: grid;
   width: 100%;
-  grid-template-columns: 1fr 2.5fr 1fr;
+  grid-template-columns: 1fr 2.25fr 1fr;
   grid-template-rows: 1fr auto auto auto auto auto;
   grid-template-areas: 
     'stoneF stoneF stoneF'
@@ -13,7 +13,7 @@
     'feedA feedA feedA';
   justify-content: stretch;
   align-content: stretch;
-  grid-gap: 0 0.5vmax;
+  grid-gap: 0 0;
 }
 
 .altTitle {
@@ -32,7 +32,6 @@
   max-width: 14vmax;
   min-height: 14vmax;
   padding-top: 0.5vmax;
-  
   display: flex;
   justify-content: center;
   align-items: center;
@@ -73,12 +72,21 @@ button.stoneExtra {
   margin: 0;
   padding: 0.25rem;
 }
+
 .riverPath, .stoneComm {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
   min-width: 100%;
   color: var(--asbestos);
+}
+.riverPath:hover,
+.riverPath:focus,
+.riverPath:active,
+.stoneComm:hover > button,
+.stoneComm:focus > button,
+.stoneComm:active > button {
+  color: var(--silver);
 }
 
 .undoStepWrap {
@@ -97,8 +105,8 @@ button.stoneExtra {
   min-height: 1.75rem;
   color: var(--concrete);
   text-transform: capitalize;
-  border-right: 1px groove lightgray;
-  border-left: 1px groove lightgray;
+  border-right: 1px solid dimgray;
+  border-left: 1px solid dimgray;
 }
 .moreStepAction {
   min-width: 20%;
@@ -291,10 +299,12 @@ button.stoneExtra {
 .riverInfo {
   background-color: var(--belizeHole);
   --high-color: var(--peterriver);
+  background-image: url(repair.svg);
 }
 .riverG {
   background-color: var(--nephritis);
   --high-color: var(--emerald);
+  background-image: url(inspectMini.svg);
 }
 
 .riverNG {
@@ -395,11 +405,11 @@ button.stoneExtra {
 	transition: background-color 250ms ease-in;
 }
 .tribRed {
-  background-color: rgba(192, 57, 43, 0.8);
+  background-color: var(--pomegranatefrost);
 }
 .tribRed:hover,
 .tribRed:active {
-  background-color: rgb(192, 57, 43);
+  background-color: var(--pomegranate);
 }
 .tribRow:last-child,
 .shortRow:last-child {
@@ -439,15 +449,30 @@ button.stoneExtra {
   cursor: pointer;
 	vertical-align: middle;
   transition: background-color 500ms ease-in-out;
+  background-position: 50% 25%;
+  background-repeat: no-repeat;
+  background-origin: content-box;
+  background-size: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-overflow: fade;
+}
+.tribActionMain > button:after {
+  content: attr(data-name);
+  position: relative;
+  left: 0;
+  bottom: -20%;
 }
 
-.tribActionMain > button > i,
+.tribActionMain > button:after,
 .tribActionMain > span > i {
   font-size: calc( 0.5rem + 0.5vmin);
 }
-
 @media (orientation: portrait) {
-  .tribActionMain > button > i,
+  .tribActionMain > button {
+    background-position: 50% 50%;
+  }
+  .tribActionMain > button:after,
   .tribActionMain > span > i {
     display: none;
   }
@@ -474,6 +499,19 @@ button.stoneExtra {
   justify-content: center;
   height: 100%;
 }
+
+.tribCluster {
+  background-color: var(--pomegranatetrans);
+}
+.tribCluster summary {
+  margin: 12px 0;
+  padding: 0px;
+  min-width: 13vmax;
+  max-width: 14vmax;
+	min-height: 65px;
+	transition: background-color 250ms ease-in;
+}
+.tribCluster > summary > .tribInfo { width: 100%; }
 
 .pebbleSVG {
   backface-visibility: hidden;
@@ -642,7 +680,7 @@ button.stoneExtra {
   width: 100%;
   margin: 0 0 1vh 0;
   border: 5px solid; 
-  padding: 0 1vmax 1vmax 1vmax;
+  padding: 0 1vmax;
   text-align: center;
 }
 

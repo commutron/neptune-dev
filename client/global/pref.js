@@ -84,8 +84,6 @@ class Pref {
     this.seriesLimit = 5000;
     this.unitLimit = 1000;
     
-    this.rapid = 'rapid';
-    this.rapids = 'rapids';
     this.rapidEx = 'extend';
     this.rapidExd = 'extended';
     this.rapidExs = 'extensions';
@@ -101,8 +99,7 @@ class Pref {
     this.version = 'version';// version, revision
     this.live = 'live'; // live / active in context of a product
     this.notlive = 'not live';
-    // this.npi = 'npi';
-    // this.npiFull = 'new product intro';
+    
     this.unit = 'unit';// how many in a panel/set
     this.panel = 'set of items';
     this.panelCode = 'set serial';
@@ -156,6 +153,7 @@ class Pref {
     this.stoneislocked = 'locked. \n unable to proceed';
     this.outOfFlow = 'out of flow';
     // bad tracking
+    this.fix = 'Repair';
     this.fixFlow = 'repair process';
     this.fixStep = 'repair step';
     this.nonCon = 'nonCon';
@@ -168,10 +166,8 @@ class Pref {
     this.skipDescribe = 'Ship With Defect';
     this.snooze = 'snooze';
     this.snoozeDescribe = 'Resolve Later';
-    // this.listCut = RegExp(/(\s*\,\s*|\,|\s*)/g);
-    // this.listCut = RegExp(/(\s\,\s|\,|\s*)/);
     this.listCut = RegExp(/(\s*\,\s*|\,|\ +)/g);
-    // this.listCut = RegExp(/(\s*\,\s*|\,|\s*)/g);
+    this.clusterMin = 4;
     // scrap
     this.scrap = 'scrap';
     this.Scrap = 'Scrap';

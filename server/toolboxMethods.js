@@ -1,5 +1,5 @@
 // import moment from 'moment';
-import Config from '/server/hardConfig.js';
+// import Config from '/server/hardConfig.js';
 
 
 Meteor.methods({
@@ -105,31 +105,63 @@ Meteor.methods({
     }
   },
 
-  /*
-  dateObjBatchUPGRADE() {
-    if(!Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      return false;
-    }else{
-      const allXBatches = XBatchDB.find({}).fetch();
-      for(let xbatch of allXBatches) {
-        const salesStartX = moment(xbatch.salesStart).startOf('day').format();
-        const salesEndX = moment(xbatch.salesEnd).endOf('day').format();
-        XBatchDB.update({_id: xbatch._id}, {
-    			$set : { 
-    			  salesStart: new Date(salesStartX),
-    			  salesEnd: new Date(salesEndX)
-    			}
-    		});
-    		XBatchDB.update({_id: xbatch._id}, {
-    			$unset : { 
-    			  end: ''
-    			}
-    		});
+  UNSETrapidGadgetKey() {
+    try{
+      if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+        XRapidsDB.update({ orgKey: Meteor.user().orgKey }, {
+          $unset : { 
+            'gadget': ""
+          }},{multi: true});
+          return true;
+      }else{
+        return false;
       }
-      return true;
+    }catch (err) {
+      throw new Meteor.Error(err);
     }
   },
-  */
+  
+  ForceFinishLeftovers() {
+    
+    const nestedSrs = XSeriesDB.find({
+      'items.history.type': 'nested',
+      'items.history.good': true
+    }).fetch();
+    
+    for( const srs of nestedSrs ) {
+      const incomplete = srs.items.filter( x => x.completed === false );
+      
+      for( let i of incomplete ) {
+        const nestedHistory = i.history.find( h => h.type === 'nested' && i.good === true );
+        const nestDate = nestedHistory ? nestedHistory.time : null;
+        const nestWho = nestedHistory ? nestedHistory.who : null;
+        
+        if( nestDate && nestWho ) {
+          XSeriesDB.update({_id: srs._id, 'items.serial': i.serial}, {
+            $push : { 
+      			  'items.$.history': {
+      			    key: 'f1n15h1t3m5t3p',
+                step: 'nested incomplete',
+                type: 'finish',
+                good: true,
+                time: new Date(nestDate),
+                who: nestWho,
+                comm: '',
+                info: false
+      			  }
+      			},
+      			$set : { 
+      			  'items.$.completed': true,
+      			  'items.$.completedAt': new Date(nestDate),
+      			  'items.$.completedWho': nestWho
+      			}
+          });
+        }
+      }
+    }
+    return true;
+  },
+  
   repairNonConsDANGEROUS(oldText, newText, exact) {
     if(!Roles.userIsInRole(Meteor.userId(), 'admin')) {
       return false;

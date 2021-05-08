@@ -24,7 +24,8 @@ const ForkMenu = ({ seriesId, serial, wFlowOps, wFlowNow, altIs })=> {
   				id={serial+'pathChange'}
   				attributes={ {className:'moreStepAction centre'} }
   				holdToDisplay={1}
-          renderTag='div'>
+          renderTag='div'
+          >
           <i className='fas fa-directions fa-fw fa-lg'></i>
   			</ContextMenuTrigger>}
   		

@@ -145,9 +145,6 @@ const StoneSelect = ({
       const blockStone = damStep && ( !ncAllClear || !shAllClear ) ? true : false;
       const doneStone = stepComplete || false;
 	    
-	    
-	    console.log({rapIs});
-	    
 	    return(
         <div className='stoneGrid'>
 
@@ -205,11 +202,15 @@ const StoneSelect = ({
       					commTrigger={()=>commTrigger(!commDoState)} />
           	</div>}
   				
-  				{rapIs ?
-  				  <div className='altTitle cap'><small>Rapid Flow: ?</small></div>
-  				  :
-  				  altIs && 
-  				  <div className='altTitle cap'><small>Alt Flow: {altitle}</small></div>
+  				{rarapid ?
+  				  <div className='altTitle cap'>
+  				    <small>{Pref.rapidEx}: {rarapid}</small>
+  				  </div>
+  				:
+  				 altIs && 
+  				  <div className='altTitle cap'>
+  				    <small>Alt Flow: {altitle}</small>
+  				  </div>
   				}
   				
   				{commDoState &&
