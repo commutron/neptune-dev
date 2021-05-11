@@ -41,6 +41,7 @@ const FoldInNested = ({
   	riverFlowStateSet( false );
   	closeUndoOption();
   	const comm = commTxtState;
+  	
 		Meteor.call('addNestedX', seriesId, serial, sKey, step, comm, subSerial, exists, complete,
 		(error, reply)=>{
 	    error && console.log(error);

@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import ModelSmall from '/client/components/smallUi/ModelSmall';
 
 const UndoFinishX = ({ 
-  batchId, finishedAtB, seriesId, serial, finishedAtI, 
+  batchId, finishedAtB, seriesId, serial, finishedAtI, rapidData, rapids,
   noText 
 })=>	{
   
@@ -29,7 +29,9 @@ const UndoFinishX = ({
         finishedAtB={finishedAtB}
         seriesId={seriesId}
         serial={serial}
-        finishedAtI={finishedAtI} 
+        finishedAtI={finishedAtI}
+        rapidData={rapidData}
+        rapids={rapids}
       />
     </ModelSmall>
   );
@@ -37,7 +39,10 @@ const UndoFinishX = ({
 
 export default UndoFinishX;
 
-const UndoFinishForm = ({ batchId, finishedAtB, seriesId, serial, finishedAtI, selfclose })=> {
+const UndoFinishForm = ({ 
+  batchId, finishedAtB, seriesId, serial, finishedAtI, rapidData, rapids,
+  selfclose
+})=> {
   
   const handleUndo = ()=> {
     Meteor.call('pullFinishX', batchId, seriesId, serial, (error, reply)=>{
@@ -51,16 +56,62 @@ const UndoFinishForm = ({ batchId, finishedAtB, seriesId, serial, finishedAtI, s
     });
   };
   
+  const handleRapidUndo = (rapId)=> {
+    Meteor.call('unfinishRapidFork', seriesId, serial, rapId, (error, reply)=>{
+      error && console.log(error);
+      if(reply) {
+        toast.success('Saved');
+        selfclose();
+      }else{
+        toast.error('Server Error');
+      }
+    });
+  };
+  
   const howLong = moment().diff(moment(finishedAtI), 'hours');
   const grace = howLong < 24 || Roles.userIsInRole(Meteor.userId(), 'run');
-    
+  
+  const completedRapids = rapids.filter(r=> r.completed);
+  
+  if(rapids.length > 0) {
+    return(
+      <div>
+        <p className='centreText'>This {Pref.item} has been {Pref.rapidExd}.</p>
+        <p className='centreText'>The original {Pref.flow} can no longer be unfinished.</p>
+      <br />
+      {completedRapids.length > 0 ?
+        <div>
+          {completedRapids.map( (rentry, rindex)=>{
+            const rapid = rapidData.find(x=> x._id === rentry.rapId);
+            if(rapid.live === false) {
+              return(
+                <p key={rindex} className='centreText'
+                  >{rapid.rapid} is closed.
+                </p>
+              );
+            }
+            return(
+            <p key={rindex} className='centreText'>
+              <button
+                id='notDone'
+                className='action orangeHover'
+                onClick={()=>handleRapidUndo(rentry.rapId)}
+              >Undo {rapid.rapid} Finish</button>
+            </p>
+          )})}
+        </div>
+      : null } 
+      </div>
+    );
+  }
+  
   return(
     <div>
-      {!grace ? <p className='centreText'>This action requires "Run" permission</p> :
-                <p className='centreText'>This action requires "Complete" permission</p>}
-      <p className='centreText'>After the {Pref.batch} is finished, {Pref.items} are locked and cannot be changed</p>
+      {!grace ? <p className='centreText'>This action requires "Run" permission.</p> :
+                <p className='centreText'>This action requires "Complete" permission.</p>}
+      <p className='centreText'>After the {Pref.xBatch} is complete, {Pref.items} are locked and cannot be changed.</p>
       <br />
-      <p className='centreText'>This {Pref.item} was finished <b>{moment(finishedAtI).fromNow()}</b></p>
+      <p className='centreText'>This {Pref.item} was finished <b>{moment(finishedAtI).fromNow()}.</b></p>
       
       <p className='centre'>
         <button

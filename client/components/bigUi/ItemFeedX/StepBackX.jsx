@@ -9,7 +9,10 @@ const StepBackX = ({ seriesId, bar, entry, lock })=> {
       error && console.log(error);
     });
   }
-
+  
+  if(entry.type === 'finish') {
+    return null;
+  }
   return(
     <button
       title="'No Good', Undo Step"

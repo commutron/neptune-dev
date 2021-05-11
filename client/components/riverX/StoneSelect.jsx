@@ -202,9 +202,9 @@ const StoneSelect = ({
       					commTrigger={()=>commTrigger(!commDoState)} />
           	</div>}
   				
-  				{rarapid ?
+  				{rapIs && rarapid ?
   				  <div className='altTitle cap'>
-  				    <small>{Pref.rapidEx}: {rarapid}</small>
+  				    <small>{Pref.rapidExd}: {rarapid}</small>
   				  </div>
   				:
   				 altIs && 

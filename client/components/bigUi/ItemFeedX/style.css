@@ -56,21 +56,17 @@ n-feed-info-title > span {
 
 .create { background-color: var(--concretefade); }
 
-.inspect { background-color: rgba(46, 204, 113, 0.2); }
 .inspect { background-color: var(--emeraldtrans); }
-
 .history { background-color: var(--peterriverfade); }
 .altflow { background-color: var(--turquoisetrans); }
 .rapid { background-color: var(--pumpkinfrost); }
 .noncon { background-color: var(--alizarinfrost); }
-
-.short { background-color: rgba(243, 156, 18, 0.2); }
 .short { background-color: var(--orangefrost); }
 
 .finish { background-color: var(--amethystfade); }
 
 .genericEvent { background-color: var(--midnightbluefade); }
-.alterEvent { background-color: var(--wetasphaltfade); }
+.alterEvent { background-color: var(--wetasphalttrans); }
 
 n-feed-info-block > ul {
   margin: 0 0 0 75px;

@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Pref from '/client/global/pref.js';
 
+import useTimeOut from '/client/utility/useTimeOutHook.js';
 
 const RapidFork = ({ seriesId, serial, rapidData })=> {
 
-  let lock = !Roles.userIsInRole(Meteor.userId(), ['qa', 'run', 'inspect']);
+  const [ lockState, lockSet ] = useState(true);
+
+  const conUnlock = ()=> {
+    if(Roles.userIsInRole(Meteor.userId(), ['qa', 'run', 'inspect'])) {
+      lockSet(false);
+    }
+  };
+  useTimeOut( conUnlock, 2000 );
   
   function handleFork(e, rapId) {
     e.preventDefault();
@@ -25,7 +33,7 @@ const RapidFork = ({ seriesId, serial, rapidData })=> {
           type='submit'
           form='srtcsc'
           className='forkButton'
-          disabled={lock}
+          disabled={lockState}
         ><i className='fas fa-bolt fa-fw'></i>
          <b>Extend {Pref.item}</b></button>
         <select 

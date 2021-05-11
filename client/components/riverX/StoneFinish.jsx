@@ -5,7 +5,8 @@ import StoneProgRing from './StoneProgRing.jsx';
 
 const StoneFinish = ({ 
 	batchId,
-	seriesId, serial, sKey, step, type, rapIs, rarapid,
+	seriesId, serial, sKey, step, type, 
+	rapIs, rarapid,
 	flowCounts, benchmark,
 	lockout, 
 	topClass, topTitle,
@@ -70,7 +71,7 @@ const StoneFinish = ({
   				onClick={()=>finish()}
   				tabIndex={-1}
   				disabled={lockout}>
-					<i>{rarapid ? `${step} ${rarapid}` : step }</i>
+					<i>{rapIs && rarapid ? `${step} ${rarapid}` : step }</i>
 				</button>
 			</StoneProgRing>
 		</div>

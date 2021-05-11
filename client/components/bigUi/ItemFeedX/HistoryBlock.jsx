@@ -32,7 +32,8 @@ const HistoryBlock = ({
   let change = infoF ? dt.info.change : '';
   let issue = infoF ? dt.info.issue : infoT ? dt.info : '';
   
-  const colour = dt.type === 'finish' ? 'finish' : 'history';
+  const colour = dt.type === 'finish' ? dt.good ? 'finish' : 'alterEvent' :
+                 dt.type === 'undo' ? 'alterEvent' : 'history';
    
   return(
     <n-feed-info-block class={colour}>
@@ -47,21 +48,22 @@ const HistoryBlock = ({
         </n-feed-info-title>
       
         {dt.type === 'test' && dt.info !== false ?
-          <ul><li className='cap'>bypass: {dt.info}</li></ul>
+          <dl><dd className='cap'>bypass: {dt.info}</dd></dl>
         : 
           dt.type === 'first' ?
-            <ul>
-              <li>Inspected: {inspect}</li>
-              <li>Built: {builder} with {methodNice}</li>
-              {!change || change !== '' && <li>{change}</li>}
-              {issue !== '' && <li>{issue}</li>}
-            </ul>
+            <dl>
+              <dd>Inspected: {inspect}</dd>
+              <dd>Built: {builder} with {methodNice}</dd>
+              {!change || change !== '' && <dd>{change}</dd>}
+              {issue !== '' && <dd>{issue}</dd>}
+            </dl>
         :
           dt.type === 'undo' && dt.info.formerWhen && dt.info.formerWho ?
-            <ul>
-              <li>Previously finished: {cal(dt.info.formerWhen)}</li>
-              <li>Previously finished by: <UserNice id={dt.info.formerWho} /></li>
-            </ul>
+            <dl>
+              <dt>Previously finished:</dt>
+              <dd>{cal(dt.info.formerWhen)}</dd>
+              <dd>by: <UserNice id={dt.info.formerWho} /></dd>
+            </dl>
         : null}
         {dt.comm !== '' && <p className='endComment'>{dt.comm}</p>}
         

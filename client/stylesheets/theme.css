@@ -63,6 +63,7 @@
   --concretefade: rgba(149, 165, 166, 0.2);
   
   --wetasphalt: rgb(52, 73, 94); /* lighter grey-blue */
+  --wetasphalttrans: rgba(52, 73, 94, 0.5);
   --wetasphaltfade: rgba(52, 73, 94, 0.3); /* lighter grey-blue */
   
   --midnightblue: rgb(44, 62, 80); /* darker grey-blue */

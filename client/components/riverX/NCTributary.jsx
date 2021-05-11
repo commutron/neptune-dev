@@ -21,16 +21,16 @@ const NCTributary = ({ seriesId, serial, nonCons, sType })=> {
   //             x => x.serial === item.serial && !x.trash && x.inspect === false )
   //               .sort((n1, n2)=> n1.ref < n2.ref ? -1 : n1.ref > n2.ref ? 1 : 0 );
 
-  const chunkNC = Object.entries( _.groupBy(nonCons, x=> x.type) );
-  
+  // const chunkNC = Object.entries( _.groupBy(nonCons, x=> x.type) );
+  /*
   return(
     <Fragment>
       {chunkNC.map( (chunk, chindex)=>{
         const rL = chunk[1][0].ref.charAt(0);
         const cluster = chunk[1].length >= Pref.clusterMin &&
           chunk[1].every(c=>c.ref.charAt(0) === rL);/*&&
-        /*( chunk[1].every(c=>c.fix === false) || 
-          chunk[1].every(c=>c.fix !== false) );*/
+          ( chunk[1].every(c=>c.fix === false) || 
+          chunk[1].every(c=>c.fix !== false) );
         
         if(cluster) {
           return( 
@@ -58,10 +58,10 @@ const NCTributary = ({ seriesId, serial, nonCons, sType })=> {
                 )})}
             </details>
           );
-        }else{
+        }else{*/
           return(
-            <Fragment key={'cluster'+chindex}>
-              {chunk[1].map( (entry, index)=>{
+            <Fragment /*key={'cluster'+chindex}*/>
+              {/*chunk[1]*/nonCons.map( (entry, index)=>{
                 sType === 'finish' && entry.snooze === true ?
                   handleAction(entry.key, 'WAKE') : null;
                 return(
@@ -76,11 +76,11 @@ const NCTributary = ({ seriesId, serial, nonCons, sType })=> {
                   />
               )})}
             </Fragment>
-          );
+          );/*
         }
       })}
     </Fragment>
-  );
+  );*/
 };
 
 export default NCTributary;

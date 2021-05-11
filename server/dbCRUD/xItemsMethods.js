@@ -488,7 +488,7 @@ Meteor.methods({
   },
   
   addNestedX(seriesId, serial, key, step, com, subSerial, exists, complete) {
-    if(!subSerial || !Roles.userIsInRole(Meteor.userId(), 'active')) {
+    if(!subSerial || serial === subSerial || !Roles.userIsInRole(Meteor.userId(), 'active')) {
       return false;
     }else{
       XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'items.serial': serial}, {
@@ -958,6 +958,42 @@ Meteor.methods({
         $pull : {
          'items.$.altPath': { rapId: rapId }
       }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  unfinishRapidFork(seriesId, serial, rapId) {
+    const accessKey = Meteor.user().orgKey;
+    const doc = XSeriesDB.findOne({_id: seriesId, orgKey: accessKey, 'items.serial': serial});
+    const subDoc = doc.items.find( x => x.serial === serial );
+    const rapIs = subDoc.altPath.find( y => y.rapId === rapId );
+    
+    const finStep = subDoc.history.find( x => moment(x.time).isSame(rapIs.completedAt, 'minute') );
+    const finKey = finStep.key;
+    const finTime = finStep.time;
+    
+    if(Roles.userIsInRole(Meteor.userId(), "BRKt3rm1n2t1ng8r2nch")) {
+      
+      let rapidPath = rapIs;
+      rapidPath['completed'] = false;
+      rapidPath['completedAt'] = false;
+      rapidPath['completedWho'] = false;
+      
+      XSeriesDB.update({_id: seriesId, orgKey: accessKey, 'items.serial': serial}, {
+        $push : { 
+  			  'items.$.altPath': rapidPath
+  			}
+      });
+      XSeriesDB.update({_id: seriesId, orgKey: accessKey, 'items.serial': serial}, {
+  			$pull : {
+          'items.$.altPath': { rapId: rapId, completed: true }
+        }
+      });
+      if(finKey && finTime) {
+        Meteor.call('pullHistoryX', seriesId, serial, finKey, finTime);
+      }
       return true;
     }else{
       return false;

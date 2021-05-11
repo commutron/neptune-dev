@@ -21,7 +21,7 @@ import RemoveItem from '/client/components/forms/ItemSerialsX/RemoveItem';
 import CounterAssign from '/client/components/bigUi/ArrayBuilder/CounterAssign.jsx';
 
 const ActionBar = ({
-  batchData, seriesData, itemData, 
+  batchData, seriesData, rapidData, itemData, 
   groupData, widgetData, 
   variantData, allVariants,
   app, user,
@@ -46,7 +46,9 @@ const ActionBar = ({
     	    finishedAtB={batchData.completedAt}
     	    seriesId={seriesData._id}
     	    serial={itemData.serial}
-    	    finishedAtI={itemData.completedAt} />
+    	    finishedAtI={itemData.completedAt}
+    	    rapidData={rapidData}
+    	    rapids={itemData.altPath.filter(x=> x.rapId !== false)} />
         <ItemIncompleteX
           seriesId={seriesData._id}
           item={itemData}

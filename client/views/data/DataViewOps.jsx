@@ -359,6 +359,7 @@ const DataViewOps = ({
           <TraverseWrap
             batchData={hotXBatch}
             seriesData={hotXSeries}
+            rapidData={hotXRapids}
             itemData={item}
             widgetData={widget}
             variantData={variant}
