@@ -21,14 +21,16 @@ const WaterfallSelect = ({
   
   const dfopen = !batchData.completed ? true :
                   rapid ? rapid.live : false;
+                  
+  const rpopen = rapid && batchData.completed;
   
   return(
-    <div className={`waterfallSelector ${rapid ? 'rapIsHighlight' : ''}`}>
-      {rapid &&
+    <div className={`waterfallSelector ${rpopen ? 'rapIsHighlight' : ''}`}>
+      {rpopen ?
         <div className='rapDidBanner'
           >Extended <n-num>{moment(rapid.createdAt).calendar()}</n-num>
         </div>
-      }
+      : null}
       
       {nowater ?
         <div className='wide space orangeBorder'>

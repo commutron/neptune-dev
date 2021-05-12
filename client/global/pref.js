@@ -167,7 +167,7 @@ class Pref {
     this.snooze = 'snooze';
     this.snoozeDescribe = 'Resolve Later';
     this.listCut = RegExp(/(\s*\,\s*|\,|\ +)/g);
-    this.clusterMin = 4;
+    this.clusterMin = 3;
     // scrap
     this.scrap = 'scrap';
     this.Scrap = 'Scrap';

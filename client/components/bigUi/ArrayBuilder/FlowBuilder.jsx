@@ -3,6 +3,13 @@ import Pref from '/client/global/pref.js';
 
 import './style.css';
 
+import { 
+  branchOptions,
+  FinishOptions
+} from './FlowElements';
+
+import { branchesSort } from '/client/utility/Arrays';
+
 const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
 
   const [ branchSelect, branchSet ] = useState(false);
@@ -12,8 +19,7 @@ const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
   
   const [ toggle, toggleChange ] = useState( false );
   
-  const branchesSort = app.branches.sort((b1, b2)=>
-          b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
+  const brancheS = branchesSort(app.branches);
   
   useEffect( ()=>{
     if(baseline) {
@@ -54,18 +60,14 @@ const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
    
     // set how key in the track object
     step['how'] = hw;
-    
     // take off the end finish step
     list.delete(endState);
-    
     // add step to list
     list.add(step);
     // update state with the new list
     stepsSet( [...list] );
-    
     // clear form
     this.rStep.value = '';
-    
     // lock save button
     onClick(false);
   }
@@ -122,14 +124,9 @@ const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
                       .includes( 'f1n15h1t3m5t3p' ) )
                         .length > 0;
   
-  let optionsSort = options.sort((t1, t2)=>
-               t1.step < t2.step ? -1 : t1.step > t2.step ? 1 : 0 );
-               
-  const branchedOps = branchSelect === 'other' ?
-    optionsSort.filter( x => !x.branchKey || x.branchKey === '') :
-    optionsSort.filter( x => x.branchKey === branchSelect);
-
-  return (
+  const branchOps = branchOptions(branchSelect, options);
+  
+  return(
     <div>
       <div className='space1v rightText'>
         <p className='nomargin'>
@@ -139,7 +136,7 @@ const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
               onChange={(e)=>branchSet( e.target.value )} 
               required>
               <option value='other'>No Branch</option>
-              {branchesSort.map( (entry, index)=>{
+              {brancheS.map( (entry, index)=>{
                 return( 
                   <option 
                     key={index+'br'} 
@@ -157,9 +154,14 @@ const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
             >Tracking Step<br />
               <select id='rStep' className='cap' required>
                 <option value=''></option>
-                {branchedOps.map( (entry, index)=>{
-                  return ( <option key={index} value={entry.key}>{entry.step + ' - ' + entry.type}</option> );
-                })}
+                {branchOps.map( (entry, index)=>{
+                  return( 
+                    <option 
+                      key={index} 
+                      value={entry.key}
+                      >{entry.step + ' - ' + entry.type}
+                    </option> 
+                )})}
               </select>
             </label>
           </p>
@@ -187,18 +189,10 @@ const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
           const niceBr =  branch ? branch.branch : '';
           return(                 
             <div key={index}>                      
-              <div>
-                {entry.step}
-              </div>
-              <div>
-                {entry.type}
-              </div>
-              <div>
-                {niceBr}
-              </div>
-              <div>
-                {entry.how}
-              </div>
+              <div>{entry.step}</div>
+              <div>{entry.type}</div>
+              <div>{niceBr}</div>
+              <div>{entry.how}</div>
               <div>
                 <button
                   type='button'
@@ -242,9 +236,7 @@ const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
               onChange={(e)=>changeEnding(e)}
               required
             >
-              <option value='finish'>Finish</option>
-              <option value='pack'>Pack</option>
-              <option value='pack-ship'>Pack & Ship</option>
+              <FinishOptions />
             </select>
             <button
               className='smallAction clearGreen up'

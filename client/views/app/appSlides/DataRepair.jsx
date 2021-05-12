@@ -144,26 +144,6 @@ const DataRepair = ({ app, users })=> {
       </div>
       
       <div>
-        <h3><i className="fas fa-eraser fa-lg gap"></i>
-          UNSET Rapid "gadget" Key
-        </h3>
-        <button
-          onClick={()=>doCallThing("UNSETrapidGadgetKey")}
-          className='action clearRed'
-        >Remove Key</button>
-      </div>
-      
-      <div>
-        <h3><i className="fas fa-cogs fa-lg gap"></i>
-          Repair Unfinished Nested Items
-        </h3>
-        <button
-          onClick={()=>doCallThing("ForceFinishLeftovers")}
-          className='action clearBlue'
-        >Finish Nested Incomplete</button>
-      </div>
-      
-      <div>
         <h3><i className='fas fa-user-shield fa-lg gap'></i>
           Clear `Usage Logs` and `Breadcrubs`
         </h3>

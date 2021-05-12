@@ -60,21 +60,21 @@ const ShortLine = ({ entry, doSet, lock })=>{
     'unknown';
 
   return(
-    <div className={'shortRow noCopy ' + actionColor }>
-      <div className='tribInfo' title={entry.comm}>
+    <n-short-row class={'noCopy ' + actionColor}>
+      <n-trib-info title={entry.comm}>
         <div className='up numFont'>{entry.partNum} {entry.comm !== '' && <i className='far fa-comment'></i>}</div>
         <div className='up'>{entry.refs.toString()}</div>
-      </div>
-      <div className='tribAction'>
-        <div className='tribActionMain'>
+      </n-trib-info>
+      <n-trib-action>
+        <n-trib-action-main>
           {actionState}
-        </div>
-        <div className='tribActionExtra'>
+        </n-trib-action-main>
+        <n-trib-action-extra>
           <ContextMenuTrigger
             id={entry.key}
             holdToDisplay={1}
             renderTag='span'>
-            <i className='fas fa-ellipsis-v fa-fw fa-lg'></i>
+            <i className='fas fa-ellipsis-v fa-lg'></i>
           </ContextMenuTrigger>
           <ContextMenu id={entry.key}>
             {!Roles.userIsInRole(Meteor.userId(), 'verify') &&
@@ -95,9 +95,9 @@ const ShortLine = ({ entry, doSet, lock })=>{
               <i className='fas fa-thumbs-up'></i>  {Pref.isResolved}
             </MenuItem>
           </ContextMenu>
-        </div>
-      </div>
-    </div>
+        </n-trib-action-extra>
+      </n-trib-action>
+    </n-short-row>
   );
 };
 

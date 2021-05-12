@@ -3,6 +3,8 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 import AppSetSimple from '/client/components/forms/AppSetSimple';
 
+import { FinishOptions } from '/client/components/bigUi/ArrayBuilder/FlowElements';
+
 
 const BehaviorSlide = ({app})=> {
   
@@ -52,9 +54,7 @@ const BehaviorSlide = ({app})=> {
               defaultValue={dfStep}
               required
             >
-              <option value='finish'>Finish</option>
-              <option value='pack'>Pack</option>
-              <option value='pack-ship'>Pack & Ship</option>
+              <FinishOptions />
             </select>
             <input 
               id={rndmKey2 + 'dnTrkHow'}

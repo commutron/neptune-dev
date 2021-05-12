@@ -72,6 +72,7 @@ const StoneFinish = ({
   				tabIndex={-1}
   				disabled={lockout}>
 					<i>{rapIs && rarapid ? `${step} ${rarapid}` : step }</i>
+					{type !== step && <label>{type}</label>}
 				</button>
 			</StoneProgRing>
 		</div>

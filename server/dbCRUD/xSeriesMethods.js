@@ -173,6 +173,25 @@ Meteor.methods({
         null;
     }
   },
+  
+  loopNCActions(seriesId, ncKeys, ACT) {
+    if(Array.isArray(ncKeys)) {
+      switch (ACT) {
+        case 'FIXALL':
+          for(let nCey of ncKeys) {
+            Meteor.call('fixNCX', seriesId, nCey);
+          }
+          break;
+        case 'INSPECTALL':
+          for(let nCey of ncKeys) {
+            Meteor.call('inspectNCX', seriesId, nCey);
+          }
+          break;
+        default:
+          null;
+      }
+    }
+  },
 
   fixNCX(seriesId, ncKey) {
     if(Meteor.userId()) {

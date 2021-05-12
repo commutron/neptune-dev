@@ -14,54 +14,48 @@ const NCTributary = ({ seriesId, serial, nonCons, sType })=> {
 		findBox.focus();
   }
   
+  function handleCluster(ncKeys, ACT) {
+    Meteor.call('loopNCActions', seriesId, ncKeys, ACT, (error)=> {
+			error && console.log(error);
+		});
+		let findBox = document.getElementById('lookup');
+		findBox.focus();
+  }
+  
   const inspector = Roles.userIsInRole(Meteor.userId(), 'inspect');
   const verifier = Roles.userIsInRole(Meteor.userId(), 'verify');
+ 
+  const chunkNC = Object.entries( _.groupBy(nonCons, x=> x.type) );
   
-  // const nc = nonCons.filter( 
-  //             x => x.serial === item.serial && !x.trash && x.inspect === false )
-  //               .sort((n1, n2)=> n1.ref < n2.ref ? -1 : n1.ref > n2.ref ? 1 : 0 );
-
-  // const chunkNC = Object.entries( _.groupBy(nonCons, x=> x.type) );
-  /*
   return(
     <Fragment>
       {chunkNC.map( (chunk, chindex)=>{
         const rL = chunk[1][0].ref.charAt(0);
+        const allFixed = chunk[1].every(c=>c.fix !== false);
+        
         const cluster = chunk[1].length >= Pref.clusterMin &&
-          chunk[1].every(c=>c.ref.charAt(0) === rL);/*&&
-          ( chunk[1].every(c=>c.fix === false) || 
-          chunk[1].every(c=>c.fix !== false) );
+          chunk[1].every(c=>c.ref.charAt(0) === rL) &&
+          ( chunk[1].every(c=>c.fix === false) || allFixed );
         
         if(cluster) {
-          return( 
-            <details key={'cluster'+chindex} className='tribCluster'>
-              <summary><em><small>NC cluster</small></em>
-                <span className='tribInfo'
-                  ><n-sm-b>{chunk[0]}</n-sm-b>
-                  <n-num>{Array.from(chunk[1], x=>x.ref).join(", ")}</n-num>
-                </span>
-              </summary>
-            
-              {chunk[1].map( (entry, index)=>{
-                sType === 'finish' && entry.snooze === true ?
-                  handleAction(entry.key, 'WAKE') : null;
-                return(
-                  <NCStream
-                    key={'cluster'+chindex+entry.key}
-                    entry={entry}
-                    seriesId={seriesId}
-                    end={sType === 'finish'}
-                    doAction={(act, extra)=> handleAction(entry.key, act, extra)}
-                    inspector={inspector}
-                    verifier={verifier}
-                  />
-                )})}
-            </details>
-          );
-        }else{*/
           return(
-            <Fragment /*key={'cluster'+chindex}*/>
-              {/*chunk[1]*/nonCons.map( (entry, index)=>{
+            <NCCluster
+              key={'cluster'+chindex}
+              seriesId={seriesId}
+              chunk={chunk}
+              chindex={chindex}
+              sType={sType}
+              allFixed={allFixed}
+              inspector={inspector}
+              verifier={verifier}
+              handleCluster={handleCluster}
+              handleAction={handleAction}
+            />
+          );
+        }else{
+          return(
+            <Fragment key={'cluster'+chindex}>
+              {chunk[1].map( (entry, index)=>{
                 sType === 'finish' && entry.snooze === true ?
                   handleAction(entry.key, 'WAKE') : null;
                 return(
@@ -76,14 +70,82 @@ const NCTributary = ({ seriesId, serial, nonCons, sType })=> {
                   />
               )})}
             </Fragment>
-          );/*
+          );
         }
       })}
     </Fragment>
-  );*/
+  );
 };
 
 export default NCTributary;
+
+const NCCluster = ({ 
+  seriesId, chunk, chindex, sType,
+  allFixed, inspector, verifier,
+  handleCluster, handleAction
+})=> {
+  
+  const [ clickState, clickSet ] = useState(0);
+  
+  const doFunc = allFixed ? 'INSPECTALL' : 'FIXALL';
+  
+  const keys = Array.from(chunk[1], x=> x.key);
+  
+  const handleSelf = ()=> {
+    if(clickState === 1) {
+      clickSet(0);
+      handleCluster(keys, doFunc);
+    }else{
+      clickSet(1);
+    }
+  };
+  
+  const sameLock = chunk[1].some(c=>c.fix && c.fix.who === Meteor.userId());
+  const lockI = allFixed ? inspector ? false : true : false;
+  
+  const clr = allFixed ? 'riverG' : 'riverInfo';
+  const on = clickState === 0 ? '' : 'pass2step';
+  const sty = `ncAct ${clr} ${on}`;
+  
+  return( 
+    <details className='tribCluster'>
+      <summary>
+        <i>{chunk[0]}</i>
+        <n-trib-cluster-head>
+        <n-trib-info>
+          <n-num>{Array.from(chunk[1], x=>x.ref).join(", ")}</n-num>
+        </n-trib-info>
+        <n-trib-action-all>
+          <button
+            title={allFixed ? 'All OK' : 'All Fixed'}
+            id={'cluster'+chindex+'doAll'}
+            data-name={allFixed ? 'OK' : Pref.fix}
+            className={sty}
+            onClick={()=>handleSelf(keys)}
+            readOnly={true}
+            disabled={lockI || sameLock}
+          ></button>
+        </n-trib-action-all>
+        </n-trib-cluster-head>
+      </summary>
+      
+      {chunk[1].map( (entry, index)=>{
+        sType === 'finish' && entry.snooze === true ?
+          handleAction(entry.key, 'WAKE') : null;
+        return(
+          <NCStream
+            key={'cluster'+chindex+entry.key}
+            entry={entry}
+            seriesId={seriesId}
+            end={sType === 'finish'}
+            doAction={(act, extra)=> handleAction(entry.key, act, extra)}
+            inspector={inspector}
+            verifier={verifier}
+          />
+        )})}
+    </details>
+  );
+};
 
 const NCStream = ({ entry, seriesId, end, doAction, inspector, verifier })=>{
   
@@ -107,15 +169,15 @@ const NCStream = ({ entry, seriesId, end, doAction, inspector, verifier })=>{
   let snstyle = !snooze ? 'tribRed' : 'yellowList';
 
   return(
-    <div className={`cap noCopy tribRow ${snstyle}`}>
-      <div className='tribInfo' title={entry.comm}>
+    <n-trib-row class={`cap noCopy ${snstyle}`}>
+      <n-trib-info title={entry.comm}>
         <div className='up numFont'
           >{entry.ref} {entry.comm !== '' && <i className='far fa-comment'></i>}
         </div>
         <div>{entry.type}</div>
-      </div>
-      <div className='tribAction'>
-      <div className='tribActionMain'>
+      </n-trib-info>
+      <n-trib-action>
+        <n-trib-action-main>
           {snooze ?
             <span className='centre'>
               <i className='far fa-clock fa-lg'></i>
@@ -143,13 +205,13 @@ const NCStream = ({ entry, seriesId, end, doAction, inspector, verifier })=>{
                 disabled={fixed === true || selfLock}>
               </button>
           }
-        </div>
-        <div className='tribActionExtra'>
+        </n-trib-action-main>
+        <n-trib-action-extra>
           <ContextMenuTrigger
             id={entry.key}
             holdToDisplay={1}
             renderTag='span'>
-            <i className='fas fa-ellipsis-v fa-fw fa-lg'></i>
+            <i className='fas fa-ellipsis-v fa-lg'></i>
           </ContextMenuTrigger>
         
           <ContextMenu id={entry.key}>
@@ -178,8 +240,8 @@ const NCStream = ({ entry, seriesId, end, doAction, inspector, verifier })=>{
               {entry.comm !== '' ? 'Change' : 'Add'} Comment
             </MenuItem>
           </ContextMenu>
-        </div>
-      </div>
-    </div>
+        </n-trib-action-extra>
+      </n-trib-action>
+    </n-trib-row>
   );
 };

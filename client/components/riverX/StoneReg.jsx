@@ -49,10 +49,8 @@ const StoneReg = ({
   }else{
     null }
     
-	let prepend = type === 'build' ?
-	              <label className='big'>{type}<br /></label> : null;
-	let apend = type === 'inspect' ?
-	              <label className='big'><br />{type}</label> : null;
+	let prepend = type === 'build' ? <label>{type}</label> : null;
+	let apend = type === 'inspect' ? <label>{type}</label> : null;
 	
   return(
 		<div className={topClass + ' stoneFrame noCopy'} title={topTitle}>

@@ -142,8 +142,12 @@ button.stoneExtra {
   background-position: 50% 50%;
   background-repeat: no-repeat;
   background-origin: content-box;
-  background-size: 125%;
+  background-size: 150%;
   border-radius: 50%;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
   transition: 0.25s;
   opacity: 1;
   will-change: transform;
@@ -182,16 +186,12 @@ button.stoneExtra {
 .stone label {
   width: 100%;
   padding: 0;
-  font-size: calc(0.5rem + 0.75vmax);
+  font-size: calc(0.5rem + 0.5vmax);
 }
 .stone label,
 .crackedTop label,
 .crackedBot label {
   line-height: 1.2;
-}
-.stone br {
-  margin: 0;
-  padding: 0;
 }
 
 .stone:focus {
@@ -204,9 +204,6 @@ button.stoneExtra {
 .doneStoneMask, .blockStone, .authBanMask {
   position: relative;
   transition: all 200ms ease-out;
-}
-
-.doneStoneMask, .blockStone, .authBanMask {
   -webkit-filter: grayscale(75%);
   filter: grayscale(75%);
 }
@@ -290,6 +287,10 @@ button.stoneExtra {
   font-weight: bolder;
 }
 
+.ncAct.pass2step {
+  background-color: var(--high-color);
+  box-shadow: 0 0 15px 10px var(--high-color);
+}
 .ncAct:hover { background-color: var(--high-color); }
 .ncAct:active {
   animation: pulse 0.5s;
@@ -386,14 +387,14 @@ button.stoneExtra {
   --high-color: var(--amethyst);
 }
 
-.tribRow, .shortRow, .testFail {
-	animation-name: slideInLeft;
-  animation-duration: 0.5s;
-  animation-timing-function: ease-in-out;
+n-trib-row, n-short-row, .testFail {
+	animation-name: fadeIn;
+  animation-duration: 1s;
+  animation-timing-function: var(--scottsCurve);
   animation-iteration-count: 1;
   overflow: hidden;
 }
-.tribRow, .shortRow {
+n-trib-row, n-short-row {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -407,16 +408,16 @@ button.stoneExtra {
 .tribRed {
   background-color: var(--pomegranatefrost);
 }
-.tribRed:hover,
-.tribRed:active {
-  background-color: var(--pomegranate);
-}
-.tribRow:last-child,
-.shortRow:last-child {
+n-trib-row:last-child,
+n-short-row:last-child {
   margin-bottom: 32px;
 }
 
-.tribInfo {
+n-trib-row, n-short-row {
+  border-left: 0.25rem solid var(--black);
+}
+
+n-trib-info {
   width: 60%;
   display: flex;
   flex-direction: column;
@@ -428,7 +429,7 @@ button.stoneExtra {
   word-wrap: break-word;
   font-size: calc( 0.75rem + 0.5vmin);
 }
-.tribAction {
+n-trib-action {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -436,11 +437,12 @@ button.stoneExtra {
   justify-content: center;
   width: 40%;
 }
-.tribActionMain {
+n-trib-action-main {
   width: 70%;
   height: 100%;
 }
-.tribActionMain > button {
+n-trib-action-main > button,
+n-trib-action-all > button {
   border: none;
   line-height: 1.5;
   width: 100%;
@@ -449,36 +451,43 @@ button.stoneExtra {
   cursor: pointer;
 	vertical-align: middle;
   transition: background-color 500ms ease-in-out;
-  background-position: 50% 25%;
-  background-repeat: no-repeat;
   background-origin: content-box;
-  background-size: 100%;
+  
   overflow: hidden;
   text-overflow: ellipsis;
   text-overflow: fade;
 }
-.tribActionMain > button:after {
+n-trib-action-main > button {
+  background-repeat: no-repeat;
+  background-position: 50% 25%;
+  background-size: 100%;
+}
+n-trib-action-all > button {
+  background-position: 0% 0%;
+  background-size: 50%;
+}
+n-trib-action-main > button:after {
   content: attr(data-name);
   position: relative;
   left: 0;
   bottom: -20%;
 }
 
-.tribActionMain > button:after,
-.tribActionMain > span > i {
+n-trib-action-main > button:after,
+n-trib-action-main > span > i {
   font-size: calc( 0.5rem + 0.5vmin);
 }
 @media (orientation: portrait) {
-  .tribActionMain > button {
+  n-trib-action-main > button {
     background-position: 50% 50%;
   }
-  .tribActionMain > button:after,
-  .tribActionMain > span > i {
+  n-trib-action-main > button:after,
+  n-trib-action-main > span > i {
     display: none;
   }
 }
 
-.tribActionExtra {
+n-trib-action-extra {
   width: 30%;
   color: var(--clouds);
   cursor: pointer;
@@ -486,12 +495,12 @@ button.stoneExtra {
   border-left: 1px inset rgba(0,0,0,0.1);
 }
 .moreStepAction > .react-contextmenu-wrapper,
-.tribActionExtra > .react-contextmenu-wrapper {
+n-trib-action-extra > .react-contextmenu-wrapper {
   width: 100%;
   height: 100%;
 }
-.tribActionMain, .tribActionExtra,
-.tribActionExtra > .react-contextmenu-wrapper {
+n-trib-action-main, n-trib-action-extra,
+n-trib-action-extra > .react-contextmenu-wrapper {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -501,17 +510,39 @@ button.stoneExtra {
 }
 
 .tribCluster {
-  background-color: var(--pomegranatetrans);
+  background-color: var(--black);
+	animation-name: fadeIn;
+  animation-duration: 1s;
+  animation-timing-function: var(--scottsCurve);
+  animation-iteration-count: 1;
 }
 .tribCluster summary {
   margin: 12px 0;
-  padding: 0px;
+  padding: 0.5rem 0 0 0.25rem;
   min-width: 13vmax;
   max-width: 14vmax;
 	min-height: 65px;
 	transition: background-color 250ms ease-in;
 }
-.tribCluster > summary > .tribInfo { width: 100%; }
+.tribCluster summary:hover {
+  filter: none;
+}
+n-trib-cluster-head {
+	display: flex;
+	flex-flow: row nowrap;
+	margin-top: 0.5rem;
+	background-color: var(--pomegranatefrost);
+}
+
+.tribCluster n-trib-info  {
+  height: 100%;
+  min-height: 50px;
+  padding: 8px 8px 8px 0.25rem;
+}
+n-trib-action-all {
+  width: 40%;
+  min-height: 100%;
+}
 
 .pebbleSVG {
   backface-visibility: hidden;
@@ -697,7 +728,7 @@ button.stoneExtra {
     box-shadow: 0 0 0 1vmax black,
                 0 0 0 2vmax var(--high-color);
   }
-  .tribRow, .shortRow, .testFail {
+  n-trib-row, n-short-row, .testFail {
   	animation-name: fadeIn;
   }
 }

@@ -3,9 +3,14 @@ export function countWaterfall(stepCounts) {
             Array.from(stepCounts, x => x.tick).reduce((x,y)=> x + y);
 }
 
+export const branchesSort = (branches)=> {
+  return branches.sort((b1, b2)=>
+          b1.position < b2.position ? 1 : 
+          b1.position > b2.position ? -1 : 0 );
+};
+  
 
 /*
-
 export function flattenHistory(itemArr) {
                        
   let wipItemHistory = [];
@@ -18,7 +23,8 @@ export function flattenHistory(itemArr) {
 
   return historyFlat;
 }
-
+*/
+/*
 riverStepSelfCount(itemsCol) {
   const itemHistory = Array.from( itemsCol, x => 
             x.history.filter( y => 

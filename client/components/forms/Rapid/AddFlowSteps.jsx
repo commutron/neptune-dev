@@ -4,6 +4,13 @@ import { toast } from 'react-toastify';
 
 import '/client/components/bigUi/ArrayBuilder/style.css';
 
+import { 
+  branchOptions,
+  FinishOptions
+} from '/client/components/bigUi/ArrayBuilder/FlowElements';
+
+import { branchesSort } from '/client/utility/Arrays';
+
 export const FlowStepsWrap = ({ 
   rapidData, hasSeries, rSetItems,
   editAuth, app
@@ -126,8 +133,7 @@ const AddFlowSteps = ({
     endSet(dfEnd);
   }, [editState]);
   
-  const branchesSort = app.branches.sort((b1, b2)=>
-          b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
+  const brancheS = branchesSort(app.branches);
   
   function sendUp() {
     // steps set from state
@@ -209,13 +215,8 @@ const AddFlowSteps = ({
                       .includes( 'finish' ) )
                         .length > 0;
   
-  let optionsSort = app.trackOption.sort((t1, t2)=>
-               t1.step < t2.step ? -1 : t1.step > t2.step ? 1 : 0 );
-               
-  const branchedOps = branchSelect === 'other' ?
-    optionsSort.filter( x => !x.branchKey || x.branchKey === '') :
-    optionsSort.filter( x => x.branchKey === branchSelect);
-
+  const branchOps = branchOptions(branchSelect, app.trackOption);
+  
   return(
     <div>
     {editState && rSetItems > 0 ?
@@ -229,7 +230,7 @@ const AddFlowSteps = ({
             onChange={(e)=>branchSet( e.target.value )} 
             >
             <option value='other'>No Branch</option>
-            {branchesSort.map( (entry, index)=>{
+            {brancheS.map( (entry, index)=>{
               return( 
                 <option 
                   key={index+'br'} 
@@ -242,7 +243,7 @@ const AddFlowSteps = ({
         <label htmlFor='rStep'>Tracking Step<br />
           <select id='rStep' className='cap interSelect'>
             <option value=''></option>
-            {branchedOps.map( (entry, index)=>{
+            {branchOps.map( (entry, index)=>{
               return ( <option key={index} value={entry.key}>{entry.step + ' - ' + entry.type}</option> );
             })}
           </select>
@@ -307,9 +308,7 @@ const AddFlowSteps = ({
               onChange={(e)=>changeEnding(e)}
               required
             >
-              <option value='finish'>Finish</option>
-              <option value='pack'>Pack</option>
-              <option value='pack-ship'>Pack & Ship</option>
+              <FinishOptions />
             </select>
             <button
               type='button'

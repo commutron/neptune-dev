@@ -82,8 +82,7 @@ const StoneTest = ({
 		  				onClick={()=>passT(true, false)}
 		  				tabIndex={-1}
 		  				disabled={lockout}>
-		  				Pass
-		  				<label className=''><br />{step}</label>
+		  				<label>Pass<br />{step}</label>
 						</button>
 						<button
 		      	  className={`crackedBot ${failing ? 'fail2step' : ''}`}
@@ -92,8 +91,7 @@ const StoneTest = ({
 		  				onClick={()=>passF(false, false)}
 		  				tabIndex={-1}
 		  				disabled={lockout}>
-		  				Fail
-		  				<label className=''><br />{step}</label>
+		  				<label>Fail<br />{step}</label>
 						</button>
 					</div>
 				</StoneProgRing>
