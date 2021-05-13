@@ -172,7 +172,8 @@ const NCStream = ({ entry, seriesId, end, doAction, inspector, verifier })=>{
     <n-trib-row class={`cap noCopy ${snstyle}`}>
       <n-trib-info title={entry.comm}>
         <div className='up numFont'
-          >{entry.ref} {entry.comm !== '' && <i className='far fa-comment'></i>}
+          >{entry.ref} {entry.multi > 1 && <sup>x{entry.multi} </sup>}
+          {entry.comm !== '' && <i className='fas fa-comment'></i>}
         </div>
         <div>{entry.type}</div>
       </n-trib-info>

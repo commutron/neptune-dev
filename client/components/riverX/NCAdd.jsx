@@ -4,13 +4,14 @@ import { toast } from 'react-toastify';
 
 import { NonConCheck } from '/client/utility/NonConOptions';
 
-const NCAdd = ({ seriesId, barcode, user, app, ncTypesCombo })=> {
+const NCAdd = ({ seriesId, serial, units, user, app, ncTypesCombo })=> {
   
   const flatCheckList = Array.from(ncTypesCombo, x => 
                                   x.key ? x.live === true && x.typeText : x);
   
   function handleNC(e, andFix) {
     e.preventDefault();
+    const uMulti = units > 1 ? this.ncMulti.value : undefined;
     const type = this.ncType.value.trim();
     
     const tgood = NonConCheck(this.ncType, flatCheckList);
@@ -24,7 +25,8 @@ const NCAdd = ({ seriesId, barcode, user, app, ncTypesCombo })=> {
     if(tgood && refSplit.length > 0 && refSplit[0] !== '') {
       for(let ref of refSplit) {
         if(ref.length < 8) {
-          Meteor.call('addNCX', seriesId, barcode, ref, type, where, andFix, (error)=>{
+          Meteor.call('addNCX', seriesId, serial, ref, uMulti, type, where, andFix, 
+          (error)=>{
             error && console.log(error);
           });
         }else{
@@ -36,6 +38,7 @@ const NCAdd = ({ seriesId, barcode, user, app, ncTypesCombo })=> {
         }
       }
       this.ncRefs.value = '';
+      units > 1 ? this.ncMulti.value = 1 : null;
       // const findBox = document.getElementById('lookup');
       // findBox.focus();
     }else{
@@ -62,6 +65,24 @@ const NCAdd = ({ seriesId, barcode, user, app, ncTypesCombo })=> {
         required />
       <label htmlFor='ncRefs' className='whiteT'>{Pref.nonConRef}</label>
     </span>
+    
+    {units > 1 &&
+      <span>
+        <input
+          type='number'
+          id='ncMulti'
+          title={`${Pref.nonCon} occurs on how many ${Pref.unit}s?`}
+          className='redIn up'
+          pattern='[0-9]*'
+          maxLength='4'
+          max={units}
+          min={1}
+          defaultValue={1}
+          disabled={lock}
+          required />
+        <label htmlFor='ncMulti' className='whiteT'>{Pref.unit}s</label>
+      </span>
+    }
     {user.typeNCselection ?
       <span>
         <input 

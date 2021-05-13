@@ -66,7 +66,7 @@ var {
   font-style: inherit;
 }
 sup, sub {
-  color: var(--asbestos);
+  text-transform: none;
 }
 
 dl {

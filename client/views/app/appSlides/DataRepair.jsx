@@ -105,12 +105,22 @@ const DataRepair = ({ app, users })=> {
       
       <div>
         <h3><i className="fas fa-screwdriver fa-lg gap"></i>
-          Build TraceDB
+          FORCE Run TraceDB Rebuild
         </h3>
         <button
           onClick={()=>doCallThing("rebuildTrace")}
           className='action clearTeal'
-        >FORCE Run TraceDB Rebuild</button>
+        >Rebuild TraceDB</button>
+      </div>
+      
+      <div>
+        <h3><i className="fas fa-barcode fa-lg gap"></i>
+          Rebuild the LatestSerial Object
+        </h3>
+        <button
+          onClick={()=>doCallThing("ResetAppLatestSerial")}
+          className='action clearTeal'
+        >Rebuild LatestSerial</button>
       </div>
       
       <div>
@@ -119,7 +129,7 @@ const DataRepair = ({ app, users })=> {
         </h3>
         <button
           onClick={()=>doCallThing("cleanupTraceErrors")}
-          className='action clearOrange'
+          className='action clearRed'
         >Fix Errors in TraceDB</button>
       </div>
       
@@ -134,16 +144,6 @@ const DataRepair = ({ app, users })=> {
       </div>
       
       <div>
-        <h3><i className="fas fa-barcode fa-lg gap"></i>
-          Rebuild the LatestSerial Object
-        </h3>
-        <button
-          onClick={()=>doCallThing("ResetAppLatestSerial")}
-          className='action clearOrange'
-        >Rebuild</button>
-      </div>
-      
-      <div>
         <h3><i className='fas fa-user-shield fa-lg gap'></i>
           Clear `Usage Logs` and `Breadcrubs`
         </h3>
@@ -153,11 +153,24 @@ const DataRepair = ({ app, users })=> {
         >Clear Users with "debug" turned OFF</button>
       </div>
       
+      
+      <div>
+        <h3><i className="fas fa-screwdriver fa-lg gap"></i>
+          Fix Tide Task "false" Errors
+        </h3>
+        <button
+          onClick={()=>doCallThing("repairFalseTask")}
+          className='action clearOrange'
+        >Fix Errors</button>
+      </div>
+      
+      
       <div>
         <h3><i className="fas fa-save fa-lg gap"></i>
           Repair NonCon "Where" Data
         </h3>
-        <p>Potentialy very damaging. This will change data of all batches. Be VERY carefull</p>
+        <p>Potentialy very damaging. This will change data of all batches.</p>
+        <p><b>Be VERY carefull</b></p>
         
         <form onSubmit={(e)=>fixAthing(e, oldText.value, newText.value, textMatch.value)}>
           <input id='oldText' />

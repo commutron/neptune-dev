@@ -118,7 +118,7 @@ Meteor.methods({
     }
   },
 
-  addNCX(seriesId, bar, ref, type, step, fix) {
+  addNCX(seriesId, bar, ref, multi, type, step, fix) {
     const srs = XSeriesDB.findOne({_id: seriesId, orgKey: Meteor.user().orgKey});
     const double = srs.nonCon.find( x => 
                     x.serial === bar &&
@@ -133,11 +133,12 @@ Meteor.methods({
       XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey}, {
         $push : { nonCon: {
           key: new Meteor.Collection.ObjectID().valueOf(), // id of the nonCon entry
-          serial: bar, // barcode id of item
-          ref: ref, // referance on the widget
-          type: type, // type of nonCon
+          serial: bar, 
+          ref: ref, // location
+          multi: multi, // on number of units
+          type: type,
           where: step, // where in the process
-          time: new Date(), // when nonCon was discovered
+          time: new Date(),
           who: Meteor.userId(),
           fix: repaired,
           inspect: false,
@@ -249,11 +250,12 @@ Meteor.methods({
     }else{null}
   },
 
-  editNCX(seriesId, serial, ncKey, ref, type, where) {
+  editNCX(seriesId, serial, ncKey, ref, multi, type, where) {
     const srs = XSeriesDB.findOne({_id: seriesId, orgKey: Meteor.user().orgKey});
     const double = srs.nonCon.find( x => 
                     x.serial === serial &&
                     x.ref === ref &&
+                    x.multi === multi &&
                     x.type === type &&
                     x.where === where &&
                     x.inspect === false
@@ -262,6 +264,7 @@ Meteor.methods({
 		  XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
   			$set : { 
   			  'nonCon.$.ref': ref,
+  			  'nonCon.$.multi': multi,
   			  'nonCon.$.type': type,
   			  'nonCon.$.where': where
   			}
@@ -363,7 +366,7 @@ Meteor.methods({
   //// Shortages \\\\
   // Shortfall // Narrow Shortage
   
-  addShortX(seriesId, partNum, refs, serial, step, comm) {
+  addShortX(seriesId, partNum, refs, multi, serial, step, comm) {
     const srs = XSeriesDB.findOne({_id: seriesId, orgKey: Meteor.user().orgKey});
     const double = srs.shortfall.find( x => 
                       x.partNum === partNum && x.serial === serial );
@@ -372,10 +375,11 @@ Meteor.methods({
       XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey}, {
         $push : { shortfall: {
           key: new Meteor.Collection.ObjectID().valueOf(), // id of the shortage entry
-          partNum: partNum || '', // part number
-          refs: refs || [], // referances on the widget
-          serial: serial || '', // apply to item
-          where: step || '', // where in the process
+          partNum: partNum, // part number
+          refs: refs, // referances on the widget
+          multi: multi, // on number of units
+          serial: serial, // apply to item
+          where: step, // where in the process
           cTime: new Date(),
           cWho: Meteor.userId(),
           uTime: new Date(),
@@ -391,7 +395,7 @@ Meteor.methods({
     }
   },
 
-  editShortX(seriesId, serial, shKey, partNum, refs, inEffect, reSolve, comm) {
+  editShortX(seriesId, serial, shKey, partNum, refs, multi, inEffect, reSolve, comm) {
     const srs = XSeriesDB.findOne({_id: seriesId, orgKey: Meteor.user().orgKey});
     const double = srs.shortfall.filter( x => 
                     x.partNum === partNum && x.serial === serial );
@@ -400,14 +404,16 @@ Meteor.methods({
       const prevSH = srs.shortfall.find( x => x.key === shKey );
       let pn = partNum || prevSH.partNum;
       let rf = refs || prevSH.refs;
+      let ml = multi || prevSH.multi;
       let ef = inEffect === undefined ? prevSH.inEffect : inEffect;
       let sv = reSolve === undefined ? prevSH.reSolve : reSolve;
       let cm = comm || prevSH.comm;
 
-		  XSeriesDB.update({_id: batchId, orgKey: Meteor.user().orgKey, 'shortfall.key': shKey}, {
+		  XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'shortfall.key': shKey}, {
   			$set : { 
   			  'shortfall.$.partNum': pn || '',
   			  'shortfall.$.refs': rf || [],
+  			  'shortfall.$.multi': ml || [],
   			  'shortfall.$.uTime': new Date(),
           'shortfall.$.uWho': Meteor.userId(),
           'shortfall.$.inEffect': ef,

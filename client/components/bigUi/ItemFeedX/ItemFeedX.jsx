@@ -12,7 +12,7 @@ import NestBlock from './NestBlock';
 import RapidBlock from './RapidBlock';
 
 const ItemFeedX = ({ 
-  widgetData, batchId, batch, seriesId, serial,
+  widgetData, batchId, batch, seriesId, serial, units,
   createTime, createBy,
   history, altPath,
   noncons, ncTypesCombo, brancheS,
@@ -92,6 +92,7 @@ const ItemFeedX = ({
                 entry={dt}
                 seriesId={seriesId}
                 serial={serial}
+                units={units}
                 done={done}
                 iopen={iopen}
                 user={user}
@@ -111,6 +112,7 @@ const ItemFeedX = ({
                 entry={dt}
                 seriesId={seriesId}
                 serial={serial}
+                units={units}
                 done={done}
                 iopen={iopen}
                 deleteAuth={canRun}

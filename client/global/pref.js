@@ -102,7 +102,6 @@ class Pref {
     
     this.unit = 'unit';// how many in a panel/set
     this.panel = 'set of items';
-    this.panelCode = 'set serial';
     this.inspect = 'inspect';
     this.test = 'tester';
     this.create = 'creator';

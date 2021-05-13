@@ -6,9 +6,9 @@ const TideLock = ({ currentLive, classSty, children, message })=> {
   useEffect(() => {
     if(!currentLive && message) {
       toast(`Click 'START' to unlock. \n
-             Click 'SWITCH' to stop your current ${Pref.batch}
-             and start this ${Pref.batch}. \n
-             (Only one ${Pref.batch} can be 
+             Click 'SWITCH' to stop your current ${Pref.xBatch}
+             and start this ${Pref.xBatch}. \n
+             (Only one ${Pref.xBatch} can be 
              ${Pref.engaged} at a time).`, 
         {
           autoClose: false,

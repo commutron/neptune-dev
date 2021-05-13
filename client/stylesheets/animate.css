@@ -317,9 +317,18 @@
   animation: spinOut 1s infinite linear;
   overflow: hidden;
 }
-.colorShift {
-  animation: hueCycle 90s infinite linear;
-  overflow: hidden;
+
+@supports (filter: none) {
+	.colorShift {
+    animation: hueCycle 90s infinite linear;
+    overflow: hidden;
+  }
+}
+@supports not (filter: none) {
+  .colorShift {
+    animation: spinAround 90s infinite linear;
+    overflow: hidden;
+  }
 }
 
 @media screen and (prefers-reduced-motion: reduce) { 

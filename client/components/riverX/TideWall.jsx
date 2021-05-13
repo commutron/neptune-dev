@@ -16,7 +16,7 @@ const TideWall = ({
   
   const [ taskState, taskSet ] = useState( tideFloodGate ? tideFloodGate.task : false );
   const [ lockTaskState, lockTaskSet ] = useState(false);
-  
+ 
   const ctxLabel = tideFloodGate ? 'Set Different Task' : `Set A Task`;
   
   if(!bOpen && bComplete && rapidData.rapDo.length === 0 ) {

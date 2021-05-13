@@ -62,8 +62,10 @@ const ShortLine = ({ entry, doSet, lock })=>{
   return(
     <n-short-row class={'noCopy ' + actionColor}>
       <n-trib-info title={entry.comm}>
-        <div className='up numFont'>{entry.partNum} {entry.comm !== '' && <i className='far fa-comment'></i>}</div>
-        <div className='up'>{entry.refs.toString()}</div>
+        <div className='up numFont'>{entry.partNum} {entry.comm !== '' && <i className='fas fa-comment'></i>}</div>
+        <div className='up'
+          >{entry.refs.toString()}{entry.multi > 1 && <sup> x{entry.multi}</sup>}
+        </div>
       </n-trib-info>
       <n-trib-action>
         <n-trib-action-main>

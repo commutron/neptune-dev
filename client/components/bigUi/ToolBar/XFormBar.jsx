@@ -36,7 +36,7 @@ const XFormBar = ({
   const lockOutAll = !tideFloodGate || !b.live;
   
   return(
-    <div className='proActionForm'>
+    <div className='proActionForm forceScrollStyle'>
       {showItem ?
         <div className='footPick'>
           {action === 'xBatchBuild' ? null :
@@ -81,7 +81,8 @@ const XFormBar = ({
           show === 'NC' ?
             <NCAdd
               seriesId={srs._id}
-              barcode={i.serial}
+              serial={i.serial}
+              units={i.units}
               user={user}
               app={app}
               ncTypesCombo={ncTypesCombo} />
@@ -89,6 +90,7 @@ const XFormBar = ({
             <ShortAdd
               seriesId={srs._id}
               serial={i.serial}
+              units={i.units}
               pastPN={pastPN}
               pastRF={pastRF}
               app={app}

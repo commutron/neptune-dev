@@ -220,6 +220,10 @@ main {
   font-weight: 900;
   color: var(--silver);
 }
+.frontCenterTitle > sup,
+.frontCenterTitle > sub {
+  color: var(--asbestos);
+}
 .homeIcon, .homeIconLink, .homeName,
 .frontCenterTitle,
 .auxRight,

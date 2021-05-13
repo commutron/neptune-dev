@@ -8,17 +8,17 @@ import { NonConCheck } from '/client/utility/NonConOptions';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 
 const NonConBlock = ({
-  entry, seriesId, serial,
+  entry, seriesId, serial, units,
   done, iopen, user, canQA, canVerify, canInspect,
   app, ncTypesCombo, flatCheckList, brancheS, cal
 })=> {
-  
   
   const [ editState, editSet ] = useState(false);
   
   function handleChange(e) {
     const ncKey = entry.key;
     const ref = this.ncRef.value.trim().toLowerCase();
+    const multi = units > 1 ? this.ncMulti.value : undefined;
     const type = this.ncType.value.trim();
     const where = this.ncWhere.value.trim().toLowerCase();
     
@@ -30,9 +30,11 @@ const NonConBlock = ({
       this.ncType.reportValidity();
       this.ncWhere.reportValidity();
     }else if(entry.ref !== ref || 
+             entry.multi !== multi ||
              entry.type !== type ||
              entry.where !== where) {  
-      Meteor.call('editNCX', seriesId, serial, ncKey, ref, type, where, (error)=> {
+      Meteor.call('editNCX', seriesId, serial, ncKey, ref, multi, type, where, 
+      (error)=> {
         error && console.log(error);
   			editSet(false);
   		});
@@ -88,22 +90,23 @@ const NonConBlock = ({
   const trashed = !dt.trash ? false : typeof dt.trash === 'object';
   const tSty = trashed ? 'trashStyle' : '';
   const open = trashed ?
-               <pre><i className="far fa-trash-alt fa-lg fa-fw" title='Trashed'></i></pre> :
+               <n-fa1><i className="far fa-trash-alt fa-lg fa-fw" title='Trashed'></i></n-fa1> :
                dt.inspect === false ?
-                <i><i className="fas fa-wrench fa-lg fa-fw" title='Awaiting Repair'></i></i> :
-                <b><i className="fas fa-check-circle fa-lg fa-fw" title='Good'></i></b>;
+                <n-fa2><i className="fas fa-wrench fa-lg fa-fw" title='Awaiting Repair'></i></n-fa2> :
+                <n-fa3><i className="fas fa-check-circle fa-lg fa-fw" title='Good'></i></n-fa3>;
   
-  let fixed = !fx ? '' : <li>Repaired: <UserNice id={dt.fix.who} /> {cal(dt.fix.time)}</li>;
-  let inspected = !ins ? '' : <li>Inspected: <UserNice id={dt.inspect.who} /> {cal(dt.inspect.time)}</li>;
+  let fixed = !fx ? '' : <dd>Repaired: <UserNice id={dt.fix.who} /> {cal(dt.fix.time)}</dd>;
+  let inspected = !ins ? '' : <dd>Inspected: <UserNice id={dt.inspect.who} /> {cal(dt.inspect.time)}</dd>;
   let snoozed = !dt.snooze ? false : true;
   let inTrash = !trashed ? '' : 
                 <Fragment>
-                  <li>Trashed: <UserNice id={dt.trash.who} /> {cal(dt.trash.time)}</li>
-                  <li><button
+                  <dt>Trashed: <UserNice id={dt.trash.who} /> {cal(dt.trash.time)}</dt>
+                  <dd><button
                         className='smallAction clearRed blackT inlineButton'
                         disabled={!canQA}
                         onClick={(e)=>popNC(e)}
-                      >Permanently Delete</button></li>
+                      >Permanently Delete</button>
+                  </dd>
                 </Fragment>;
 
   const editAllow = canInspect && iopen;
@@ -119,11 +122,25 @@ const NonConBlock = ({
           <input
             type='text'
             id='ncRef'
-            className='up miniIn24'
+            className='up miniIn12'
             placeholder='Reference'
             min={1}
             defaultValue={dt.ref}
             required />
+            {units > 1 &&
+              <input
+                type='number'
+                id='ncMulti'
+                title={`${Pref.nonCon} occurs on how many ${Pref.unit}s?`}
+                className='up miniIn8'
+                pattern='[0-9]*'
+                maxLength='4'
+                max={units}
+                min={1}
+                defaultValue={dt.multi || 1}
+                required
+                placeholder={Pref.unit+'s'} />
+            }
             {user.typeNCselection ?
               <input 
                 id='ncType'
@@ -248,7 +265,7 @@ const NonConBlock = ({
             </n-feed-info-title>
           :
             <n-feed-info-title>
-              <span className='up'>{dt.ref}</span>
+              <span className='up'>{dt.ref}{dt.multi > 1 && <sup> x{dt.multi}</sup>}</span>
               <span className=''>{dt.type}</span>
               <span className=''>{dt.where}</span>
               <span></span>
@@ -257,24 +274,25 @@ const NonConBlock = ({
             </n-feed-info-title>  
           }
         
-        <ul>
+        <dl>
           {fixed}
           {inspected}
           {snoozed && <li>Snoozed</li>}
           {rjc ?
             dt.reject.map( (entry, index)=>{
               return(
-                <ul key={index}>
-                  <li colSpan='2'>
+                <dl key={index}>
+                  <dd>
                     Attempt: <UserNice id={entry.attemptWho} /> {cal(entry.attemptTime)}
-                    <br />
+                  </dd>
+                  <dd>
                     Reject: <UserNice id={entry.rejectWho} /> {cal(entry.rejectTime)}
-                  </li>
-                </ul>
+                  </dd>
+                </dl>
               )})
           : null}
           {inTrash}
-        </ul>
+        </dl>
         {dt.comm !== '' && <p className='endComment'><i className='far fa-comment'></i> {dt.comm}</p>}
     
       </n-feed-info-center>

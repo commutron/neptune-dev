@@ -50,13 +50,15 @@ Meteor.methods({
           if(!keyChecX) { 
             null;
           }else{
+            const taskVal = !newTask || newTask === 'false' ? false : newTask;
+            
             XBatchDB.update({ _id: batchId }, {
               $push : { tide: { 
                 tKey: newTkey,
                 who: Meteor.userId(),
                 startTime: new Date(),
                 stopTime: false,
-                task: newTask
+                task: taskVal
             }}});
             Meteor.users.update(Meteor.userId(), {
               $set: {
@@ -64,7 +66,7 @@ Meteor.methods({
                   task: 'PROX',
                   tKey: newTkey,
                   tName: docX.batch,
-                  tTask: newTask
+                  tTask: taskVal
                 }
               }
             });
@@ -184,9 +186,10 @@ Meteor.methods({
         if(!authX) {
           return false;
         }else{
+          const taskVal = !taskIs || taskIs === 'false' ? false : taskIs;
           XBatchDB.update({ batch: batch, orgKey: accessKey, 'tide.tKey': tideKey}, {
             $set : { 
-              'tide.$.task' : taskIs
+              'tide.$.task' : taskVal
           }});
           return true;
         }

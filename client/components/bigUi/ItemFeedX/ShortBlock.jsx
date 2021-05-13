@@ -4,16 +4,17 @@ import Pref from '/client/global/pref.js';
 
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 
-const ShortBlock = ({ seriesId, serial, entry, done, iopen, deleteAuth, cal })=> {
+const ShortBlock = ({ seriesId, serial, units, entry, done, iopen, deleteAuth, cal })=> {
   
   const [ editState, editSet ] = useState(false);
 
-  
   function handleChange() {
     const shKey = entry.key;
     const partNum = this.shPN.value.trim();
     const refs = this.shRefs.value.trim().toLowerCase()
                   .replace(",", " ").split(/\s* \s*/);
+    const multi = units > 1 ? this.shMulti.value : undefined;           
+                  
     let effect = null;
     let solve = null;
     const act = this.shAct.value;
@@ -38,7 +39,8 @@ const ShortBlock = ({ seriesId, serial, entry, done, iopen, deleteAuth, cal })=>
     }
     const comm = this.shCm.value.trim();
     
-    Meteor.call('editShortX', seriesId, serial, shKey, partNum, refs, effect, solve, comm, 
+    Meteor.call('editShortX', 
+      seriesId, serial, shKey, partNum, refs, multi, effect, solve, comm, 
     (error)=> {
       error && console.log(error);
 			editSet(false);
@@ -72,8 +74,8 @@ const ShortBlock = ({ seriesId, serial, entry, done, iopen, deleteAuth, cal })=>
                       'unknown';
     
   const open = inE === true || reS === true ?
-          <i><i className="fas fa-check-circle fa-lg fa-fw" title='Good'></i></i> :
-          <b><i className="far fa-circle fa-lg fa-fw" title='Awaiting Repair'></i></b>;
+          <n-fa1><i className="fas fa-check-circle fa-lg fa-fw" title='Good'></i></n-fa1> :
+          <n-fa2><i className="far fa-circle fa-lg fa-fw" title='Awaiting Repair'></i></n-fa2>;
                 
   const editAllow = Roles.userIsInRole(Meteor.userId(), 'verify') && iopen;
   const editIndicate = editState ? 'editStandout' : '';     
@@ -87,18 +89,32 @@ const ShortBlock = ({ seriesId, serial, entry, done, iopen, deleteAuth, cal })=>
           <input
             type='text'
             id='shPN'
-            className='up miniIn24'
+            className='up miniIn18'
             placeholder='References'
             defaultValue={dt.partNum} />
           <input
             type='text'
             id='shRefs'
-            className='up miniIn24'
+            className='up miniIn18'
             placeholder='Part Number'
             defaultValue={dt.refs.toString()} />
+          {units > 1 &&
+            <input
+              type='number'
+              id='shMulti'
+              title={`${Pref.nonCon} occurs on how many ${Pref.unit}s?`}
+              className='up miniIn8'
+              pattern='[0-9]*'
+              maxLength='4'
+              max={units}
+              min={1}
+              defaultValue={dt.multi || 1}
+              required
+              placeholder={Pref.unit+'s'} />
+          }
           <select 
             id='shAct'
-            className='miniIn24'
+            className='miniIn18'
             defaultValue={actionState}
             required>
             <option value={Pref.shortagePending}>{Pref.shortagePending}</option>
@@ -129,7 +145,9 @@ const ShortBlock = ({ seriesId, serial, entry, done, iopen, deleteAuth, cal })=>
         <n-feed-info-title class='doFlexWrap'>
           
           <span className='up'>{dt.partNum}</span>
-          <span className='cap'>{dt.refs.toString().toUpperCase()}</span>
+          <span className='up'
+            >{dt.refs.toString()}{dt.multi > 1 && <sup> x{dt.multi}</sup>}
+          </span>
           <span className='cap'>{dt.where}</span>
           <span></span>
           <span><UserNice id={dt.cWho} /></span>
@@ -138,11 +156,11 @@ const ShortBlock = ({ seriesId, serial, entry, done, iopen, deleteAuth, cal })=>
         </n-feed-info-title>
       }
 
-      <ul>
-        <li>Last Updated: <UserNice id={dt.uWho} /> {cal(dt.uTime)}</li>
-        <li>{actionState}</li>
-      </ul>
-      {dt.comm !== '' && <p>{dt.comm}</p>}
+      <dl>
+        <dd>Last Updated: <UserNice id={dt.uWho} /> {cal(dt.uTime)}</dd>
+        <dd>{actionState}</dd>
+      </dl>
+      {dt.comm !== '' && <p className='endComment'><i className='far fa-comment'></i> {dt.comm}</p>}
     
     </n-feed-info-center>
     <n-feed-right-anchor>

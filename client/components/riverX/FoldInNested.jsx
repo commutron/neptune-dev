@@ -79,10 +79,9 @@ const FoldInNested = ({
 	          inputMode='numeric'
 	          disabled={lockout}
 	          required />
-	        <br />
 			    <button
 			      type='submit'
-					  className='roundAction clearWhite up'
+					  className='roundAction clearWhite up vmargin'
 					  name='include this serial number'
 					  id='goNeck'
 					  tabIndex={-1}

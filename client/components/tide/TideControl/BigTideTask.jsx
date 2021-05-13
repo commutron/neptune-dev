@@ -8,8 +8,9 @@ const BigTideTask = ({
 })=> {
   
   function handleTask(val) {
-    taskSet(val);
-    Session.set('userSetTask', val);
+    const trueVal = val === 'false' ? false : val;
+    taskSet(trueVal);
+    Session.set('userSetTask', trueVal);
   }
   
   return(

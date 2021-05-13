@@ -427,7 +427,7 @@ n-trib-info {
   padding: 8px;
   word-break: break-word;/*weird no standerd thing but it works*/
   word-wrap: break-word;
-  font-size: calc( 0.75rem + 0.5vmin);
+  font-size: calc( 0.5rem + 0.75vmin);
 }
 n-trib-action {
   display: flex;
@@ -727,8 +727,5 @@ n-trib-action-all {
     animation: none;
     box-shadow: 0 0 0 1vmax black,
                 0 0 0 2vmax var(--high-color);
-  }
-  n-trib-row, n-short-row, .testFail {
-  	animation-name: fadeIn;
   }
 }

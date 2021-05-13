@@ -3,18 +3,21 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 
-const ShortAdd = ({ seriesId, serial, pastPN, pastRF, app, doneClose })=> {
+const ShortAdd = ({ seriesId, serial, units, pastPN, pastRF, app, doneClose })=> {
 
   function handleShort(e) {
     e.preventDefault();
     this.goSh.disabled = true;
     const partNum = this.partNum.value.trim();
     const refs = this.shRefs.value.trim().toLowerCase()
-                  .replace(",", " ").split(/\s* \s*/);
+                  .replace(Pref.listCut, "|").split("|");
+                  
+    const uMulti = units > 1 ? this.shMulti.value : undefined;
     const comm = this.comm.value.trim();
     const where = Session.get('ncWhere') || 'unavailable';
     
-    Meteor.call('addShortX', seriesId, partNum, refs, serial, where, comm, (error, reply)=>{
+    Meteor.call('addShortX', seriesId, partNum, refs, uMulti, serial, where, comm, 
+    (error, reply)=>{
       error && console.log(error);
       if(reply) {
         doneClose();
@@ -68,6 +71,23 @@ const ShortAdd = ({ seriesId, serial, pastPN, pastRF, app, doneClose })=> {
           required />
         <label htmlFor='shRefs' className='whiteT'>{Pref.nonConRef}</label>
       </span>
+      {units > 1 &&
+        <span>
+          <input
+            type='number'
+            id='shMulti'
+            title={`${Pref.shortage} occurs on how many ${Pref.unit}s?`}
+            className='orangeIn up'
+            pattern='[0-9]*'
+            maxLength='4'
+            max={units}
+            min={1}
+            defaultValue={1}
+            disabled={lock}
+            required />
+          <label htmlFor='shMulti' className='whiteT'>{Pref.unit}s</label>
+        </span>
+      }
       <span>
         <input
           type='text'

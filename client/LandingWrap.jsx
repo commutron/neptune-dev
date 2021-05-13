@@ -42,7 +42,7 @@ const StartView = ({user, app}) =>	{
     );
   }
   
-	const usernice = user.username.replaceAll(Pref.usrCut, " ");
+	const usernice = user.username.replace(Pref.usrCut, " ");
 	
   const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
   const isReadOnly = Roles.userIsInRole(Meteor.userId(), 'readOnly');

@@ -189,5 +189,28 @@ Meteor.methods({
     }
   },
   
+  repairFalseTask() {
+    if(!Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      return false;
+    }else{
+      const allBatch = XBatchDB.find({
+        orgKey: Meteor.user().orgKey,
+        'tide.task': "false"
+      }).fetch();
+      
+      for(let bx of allBatch) {
         
+        for(let t of bx.tide) {
+          if(t.task === "false") {
+            XSeriesDB.update({_id: bx._id, 'tide.tKey': t.tKey}, {
+        			$set : { 
+        			  'tide.$.task': false
+        			}
+        		});
+          }
+        }
+      }
+      return true;
+    }
+  }, 
 });

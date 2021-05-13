@@ -40,7 +40,6 @@ n-feed-right-anchor > button {
 
 n-feed-info-center {
   padding: 1vh 2vw;
-  white-space: pre-wrap;
 }
 
 n-feed-info-title {
@@ -68,21 +67,19 @@ n-feed-info-title > span {
 .genericEvent { background-color: var(--midnightbluefade); }
 .alterEvent { background-color: var(--wetasphalttrans); }
 
-n-feed-info-block > ul {
+n-feed-info-block > dl {
   margin: 0 0 0 75px;
   list-style: circle;
 }
-n-feed-info-block > ul li,
-n-feed-info-block > ul dd {
+n-feed-info-block > dl dd {
   padding: 0.25rem 0;
 }
-n-feed-info-block > ul li:last-child,
-n-feed-info-block > ul dd:last-child {
+n-feed-info-block > dl dd:last-child {
   padding: 0.25rem 0 0.5rem 0;
 }
 
 .endComment {
-  margin: 0 0 0 75px;
+  margin: 0;
   padding: 0.25rem 0 0.5rem 40px;
 }
 

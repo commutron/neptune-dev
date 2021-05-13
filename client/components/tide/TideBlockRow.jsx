@@ -204,6 +204,10 @@ const TideTaskExplicit = ({
   editOn, splitOn, tempTask, setTempTask
 })=> {
   
+  const handleTask = (val)=> {
+    setTempTask( val === 'false' ? false : val );
+  };
+  
   if( !editOn || splitOn ) {
     return(
       <td className='noRightBorder smTxt'>
@@ -217,7 +221,7 @@ const TideTaskExplicit = ({
       <select
         id='tskSlctEdit'
         className='cap tableInput smTxt'
-        onChange={(e)=>setTempTask(e.target.value)}
+        onChange={(e)=>handleTask(e.target.value)}
         defaultValue={taskIs}
         disabled={false}>
         <option value={false}></option>

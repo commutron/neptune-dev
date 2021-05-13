@@ -88,6 +88,7 @@ const ItemPanelX = ({
           batch={b.batch}
           seriesId={srs._id}
           serial={i.serial}
+          units={i.units}
           createTime={i.createdAt}
           createBy={i.createdWho}
           history={i.history}
