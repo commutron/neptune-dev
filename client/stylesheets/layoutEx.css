@@ -152,6 +152,7 @@
   width: 100%;
   max-width: calc(100vw - 20vh);
   height: 100%;
+  max-height: 8vh;
   padding: 0;
   overflow: hidden;
 }
@@ -160,13 +161,14 @@
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
-  height: 100%;
   background-color: transparent;
   overflow: hidden;
   white-space: nowrap;
   transition: all 150ms ease-in-out;
   color: var(--silver);
   max-width: 25vw;
+  height: 100%;
+  max-height: 8vh;
   font-size: 2.5vmin;
   text-indent: 1vmin;
   word-break: keep-all;
@@ -328,5 +330,10 @@
   .traverseContainer {
     grid-template-rows: calc(100vh - 8vmin - 48px) 48px;
   }
-  .cookieRow { grid-area: frontCenter; }
+  .cookieRow { 
+    grid-area: frontCenter;
+  }
+  .cookieRow, .cookieCrumb {
+    max-height: 8vmin
+  }
 }

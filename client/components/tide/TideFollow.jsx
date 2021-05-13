@@ -1,11 +1,8 @@
-import React, { /*useRef, useEffect,*/ Fragment } from 'react';
+import React, { Fragment } from 'react';
 import Pref from '/client/global/pref.js';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
-// import { toast } from 'react-toastify';
 
 const TideFollow = ({ proRoute, invertColor })=> {
-  
-  // const thingMounted = useRef(true);
   
   function doLogout() {
 	  const tideOut = !Meteor.user().engaged ? true : 

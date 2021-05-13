@@ -7,7 +7,7 @@
 
 .windowPro {
   display: grid;
-  grid-template-rows: 8vh 92vh;
+  grid-template-rows: calc(8 * var(--vh)) calc(92 * var(--vh));
   grid-template-columns: auto;
   grid-template-areas: 
     "tenHeader"
@@ -21,6 +21,10 @@
 .containerPro {
   display: grid;
   grid-template-rows: 8vh calc(92vh - 65px) 65px;
+  grid-template-rows: 
+    calc(8 * var(--vh)) 
+    calc(92 * var(--vh) - 65px)
+    65px;
   grid-template-areas: 
     "tenHeader tenHeader"
     "proPrime proInstruct"
@@ -75,6 +79,7 @@
   height: 100%;
   background-color: var(--clouds);
   box-shadow: var(--dropShadow2);
+  z-index: 1;
 }
 
 .proActionForm {
@@ -95,7 +100,11 @@
 .proActionForm::-webkit-scrollbar {
   height: 0.5vmax;
 }
-
+.proActionForm {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+}
 
 .cardTitle {
   display: flex;

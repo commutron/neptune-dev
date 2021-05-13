@@ -1254,7 +1254,6 @@ n-col-table-head > span {
     grid-template-rows: calc(100vh - 8vmin);
     height: calc(100% - 8vmin);
   }
-  
   .taskLink {
     margin: 1vmin 0;
     width: 5.5vmin;

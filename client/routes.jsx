@@ -318,10 +318,10 @@ FlowRouter.globals.push({
       name: "apple-mobile-web-app-capable" ,
       content: "yes"
     },
-    meta4: {
-      name: "viewport",
-      content: "minimum-scale=0.25, maximum-scale=3"
-    }
+    // meta4: {
+    //   name: "viewport",
+    //   content: "minimum-scale=0.25, maximum-scale=3"
+    // }
   }
 });
 
@@ -331,6 +331,11 @@ var disconnectTimer = null;
 
 Meteor.startup(disconnectIfHidden);
 
+window.addEventListener('resize', () => { 
+  document.querySelector(':root').style
+    .setProperty('--vh', window.innerHeight/100 + 'px');
+});
+  
 document.addEventListener('visibilitychange', disconnectIfHidden);
 
 function disconnectIfHidden() {
