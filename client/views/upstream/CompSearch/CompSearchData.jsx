@@ -21,10 +21,8 @@ const View = ({
     
   if( !ready || !app ) {
     return (
-      <div className='centreContainer'>
-        <div className='centrecentre'>
-          <Spin />
-        </div>
+      <div className='centrecentre'>
+        <Spin />
       </div>
     );
   }

@@ -45,8 +45,8 @@ main {
 .loading > .logoSVG {
   opacity: 0.2;
   animation: spinAround 6s infinite linear;
-  width: 60vh;
-  height: 60vh;
+  width: calc(60 * var(--vh));
+  height: calc(60 * var(--vh));
   -webkit-filter: drop-shadow( -5px -5px 5px #000 );
           filter: drop-shadow( -5px -5px 5px #000 );
 }
@@ -130,7 +130,7 @@ main {
 .centreContainer {
   display: grid;
   width: 100vw;
-  height: 100vh;
+  height: calc(100 * var(--vh));
   grid-template-columns: 100%;
   grid-template-rows: 100%;
   grid-template-areas: 
@@ -140,14 +140,14 @@ main {
 }
 .centreBox { grid-area: centrecentre; }
 
-/* simple */
-
 .simpleContainer {
   display: grid;
   /*min-width: 768px;*/
   min-height: 100%;
   max-height: 100%;
-  grid-template-rows: 8vh 92vh;
+  grid-template-rows: 
+    calc(8 * var(--vh)) 
+    calc(92 * var(--vh));
   grid-template-columns: 100%;
   grid-template-areas: 
     'tenHeader'
@@ -171,16 +171,13 @@ main {
 .proRight {
   grid-area: proRight;
   background-color: rgb(25,25,25);
-  /*animation: blinker 100ms ease infinite;*/
 }
-
-/* home / landing page */
 
 .splashContainer {
   display: grid;
   width: 100vw;
-  height: 100vh;
-  grid-template-rows: 8vh 1fr;
+  height: calc(100 * var(--vh));
+  grid-template-rows: calc(8 * var(--vh)) 1fr;
   grid-template-columns: 100%;
   grid-template-areas: 
     'tenHeader'
@@ -191,8 +188,13 @@ main {
   grid-area: tenHeader;
   display: grid;
   max-width: 100vw;
-  grid-template-rows: 1vh 7vh;
-  grid-template-columns: 8vh 7vh 1fr 7vh 7vh;
+  grid-template-rows: var(--vh) calc(7 * var(--vh));
+  grid-template-columns: 
+    calc(8 * var(--vh))
+    calc(7 * var(--vh))
+    1fr 
+    calc(7 * var(--vh))
+    calc(7 * var(--vh));
   grid-template-areas: 
     'topBorder topBorder topBorder topBorder topBorder'
     'homeIcon auxLeft frontCenter auxRight proRight';
@@ -208,15 +210,15 @@ main {
 .homeIcon {
   grid-area: homeIcon;
   background-color: var(--neptuneColor);
-  padding-bottom: 1vh;
+  padding-bottom: var(--vh);
   z-index: 7;
 }
 .frontCenterTitle {
   grid-area: frontCenter;
-  max-width: calc(100vw - 24vh);
-  height: 7vh;
+  max-width: calc(100vw - (24 * var(--vh)) );
+  height: calc(7 * var(--vh));
   background-color: rgb(25,25,25);
-  font-size: 4vh;
+  font-size: calc(4 * var(--vh));
   font-weight: 900;
   color: var(--silver);
 }
@@ -238,33 +240,36 @@ main {
   text-overflow: ellipsis;
 }
 .homeIconLink, .homeIconLogo {
-  width: 8vh;
-  height: 8vh;
+  width: calc(8 * var(--vh));
+  height: calc(8 * var(--vh));
 }
-.homeIconLogo { padding: 1vh; }
+.homeIconLogo { padding: var(--vh); }
 
 .auxLeft { grid-area: auxLeft; }
 
 .homeNavi, .homeNaviMini {
   display: grid;
-  grid-gap: 1vh 1vw;
+  grid-gap: var(--vh) 1vw;
   place-self: center center;
   place-items: stretch stretch;
 }
 .homeNavi {
   grid-area: splashContent;
-  grid-template-rows: 20vh 20vh 20vh;
+  grid-template-rows: 
+    calc(20 * var(--vh))
+    calc(20 * var(--vh))
+    calc(20 * var(--vh));
   grid-template-columns: repeat(4, 20vw);
 }
 .homeNaviMini {
-  grid-template-rows: 20vh;
+  grid-template-rows: calc(20 * var(--vh));
   grid-template-columns: repeat(2, 20vw);
 }
 
 .centreSpash {
   grid-area: splashContent;
   display: grid;
-  grid-template-rows: 75vh;
+  grid-template-rows: calc(75 * var(--vh));
   grid-template-columns: 75vw;
   place-self: center center;
   place-items: stretch stretch;
@@ -272,10 +277,10 @@ main {
 
 .slidesLayout, .slidesNestedLayout {
   display: grid;
-  grid-template-rows: 92vh;
+  grid-template-rows: calc(92 * var(--vh));
   grid-template-columns: minmax(min-content, 15vmin) 1fr;
   width: 100%;
-  height: calc(100% - 8vh);
+  height: calc(100% - (8 * var(--vh)) );
 }
 .slidesLayout {
   grid-template-areas: 
@@ -298,7 +303,7 @@ main {
 }
 .slidesNestedSlide {
   grid-area: slidesubarea;
-  padding: 2vh 3vw;
+  padding: calc(2 * var(--vh)) 3vw;
 }
 
 .slidesMenu, .slidesNestedMenu {
@@ -346,9 +351,9 @@ main {
 .slideNestedSearch {
   display: block;
   width: 100%;
-  min-height: 4vh;
-  max-height: 4vh;
-  font-size: 2vh;
+  min-height: calc(4 * var(--vh));
+  max-height: calc(4 * var(--vh));
+  font-size: calc(2 * var(--vh));
   text-indent: 1ch;
   padding-right: 0.75ch;
   border-width: 0;
@@ -382,7 +387,6 @@ main {
   background-color: transparent;
   box-shadow: none;
 }
-
 /* ////////////////////////// */
 
 .bleed {
@@ -425,7 +429,7 @@ main {
   }
 }
 
-/* wrapDeck is a snaking flex layout */
+/*
 .wrapDeck {
   display: flex;
   width: 100%;
@@ -448,9 +452,9 @@ main {
     width: 96%
   }
 }
-
+*/
 .tableList {
-  min-width: calc(75vw - 10vh - 0.75vw);
+  min-width: calc(75vw - (10 * var(--vh)) - 0.75vw);
   display: table;
 }
 .tableList > div,
@@ -482,24 +486,24 @@ n-lg-model, n-md-model, n-sm-model {
   color: black;
 }
 n-lg-model {
-  margin: 5vh auto 5vh auto;
+  margin: calc(5 * var(--vh)) auto;
   max-width: 80%;
   min-height: 75%;
-  max-height: 90vh;
+  max-height: calc(90 * var(--vh));
   padding: 1vmax 3vmax 3vmax 3vmax;
 }
 n-md-model {
-  margin: 10vh auto 5vh auto;
+  margin: calc(10 * var(--vh)) auto calc(5 * var(--vh)) auto;
   max-width: 60%;
-  min-height: 60vh;
-  max-height: 85vh;
+  min-height: calc(60 * var(--vh));
+  max-height: calc(85 * var(--vh));
   padding: 1vmax 2vmax 2vmax 2vmax;
 }
 n-sm-model {
-  margin: 15vh auto 15vh auto;
+  margin: calc(15 * var(--vh)) auto;
   max-width: 50%;
-  min-height: 40vh;
-  max-height: 60vh;
+  min-height: calc(40 * var(--vh));
+  max-height: calc(60 * var(--vh));
   padding: 1vmax 1vmax;
 }
 n-model-head {
@@ -521,17 +525,17 @@ n-lg-model-content, n-md-model-content, n-sm-model-content {
 n-lg-model-content {
   display: block;
   min-height: calc(75% - 30px - 3vmax);
-  max-height: calc(90vh - 30px - 3vmax);
+  max-height: calc( (90 * var(--vh)) - 30px - 3vmax);
 }
 n-md-model-content {
   display: block;
-  min-height: calc(60vh - 30px - 3vmax);
-  max-height: calc(85vh - 30px - 3vmax);
+  min-height: calc( (60 * var(--vh)) - 30px - 3vmax);
+  max-height: calc( (85 * var(--vh)) - 30px - 3vmax);
 }
 n-sm-model-content {
   display: block;
-  min-height: calc(40vh - 30px - 3vmax);
-  max-height: calc(60vh - 30px - 3vmax);
+  min-height: calc( (40 * var(--vh)) - 30px - 3vmax);
+  max-height: calc( (60 * var(--vh)) - 30px - 3vmax);
 }
 
 @media screen and (max-width: 1150px){
@@ -569,7 +573,6 @@ n-sm-model-content {
   justify-content: flex-start;
 }
 .centreRow > span { margin: 0 10px; }
-
 
 .topLine > div { align-self: flex-start; }
 
@@ -1217,11 +1220,10 @@ n-col-table-head > span {
 .minH60 { min-height: 60px; }
 
 
-
 @media (orientation: portrait) {
   
   .simpleContainer, .splashContainer {
-    grid-template-rows: 8vmin calc(100vh - 8vmin);
+    grid-template-rows: 8vmin calc( (100 * var(--vh)) - 8vmin);
   }
   .simpleContainer .tenHeader,
   .splashContainer .tenHeader {
@@ -1251,7 +1253,7 @@ n-col-table-head > span {
     padding: 0 1vmin;
   }
   .slidesLayout, .slidesNestedLayout {
-    grid-template-rows: calc(100vh - 8vmin);
+    grid-template-rows: calc( (100 * var(--vh)) - 8vmin);
     height: calc(100% - 8vmin);
   }
   .taskLink {

@@ -509,9 +509,6 @@ n-sm-b {
 
 .progBlue { 
   background: var(--silver); 
-  /*margin: 0.5vh 0 3vh 0;*/
-  /*width: 100%;*/
-  /*height: 0.75vh;*/
 }
 .progBlue::-webkit-progress-bar {
   background: var(--silver);

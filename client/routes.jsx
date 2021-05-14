@@ -329,13 +329,17 @@ FlowRouter.globals.push({
 
 var disconnectTimer = null;
 
-Meteor.startup(disconnectIfHidden);
-
-window.addEventListener('resize', () => { 
+function customViewHeight() { 
   document.querySelector(':root').style
     .setProperty('--vh', window.innerHeight/100 + 'px');
-});
-  
+}
+
+Meteor.startup(customViewHeight);
+
+window.addEventListener('resize', customViewHeight);
+
+Meteor.startup(disconnectIfHidden);
+
 document.addEventListener('visibilitychange', disconnectIfHidden);
 
 function disconnectIfHidden() {

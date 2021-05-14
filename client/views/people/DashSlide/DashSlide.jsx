@@ -110,7 +110,7 @@ const DashSlide = ({ app, user, users, traceDT, brancheS, isDebug })=> {
           total={eUsersState.length}
           nums={[eUsersState.length, dUsersState.length ]}
           name={`${eUsersState.length == 1 ? 'Person Is' : 'People Are'} ${Pref.engaged}`} 
-          title={`${eUsersState.length} people currently\n${Pref.engaged} with ${Pref.batches}`} 
+          title={`${eUsersState.length} people currently\n${Pref.engaged} with ${Pref.xBatchs}`} 
           colour='blue'
         />
         
@@ -125,8 +125,8 @@ const DashSlide = ({ app, user, users, traceDT, brancheS, isDebug })=> {
         <NumStatRing
           total={xyBatchState.length}
           nums={xyBatchState}
-          name={`${xyBatchState.length == 1 ? `${Pref.batch} Is` : `${Pref.batches} Are`} ${Pref.engaged}`}
-          title={`${xyBatchState.length} ${Pref.batches} currently\n${Pref.engaged} by people`} 
+          name={`${xyBatchState.length == 1 ? `${Pref.xBatch} Is` : `${Pref.xBatchs} Are`} ${Pref.engaged}`}
+          title={`${xyBatchState.length} ${Pref.xBatchs} currently\n${Pref.engaged} by people`} 
           colour='blue'
         />
             

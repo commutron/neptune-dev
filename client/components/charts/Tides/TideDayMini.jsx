@@ -64,8 +64,8 @@ const TideDayMini = ({ tideTimes, dateTime, showUser, app, users })=> {
       <NumStatRing
         total={batchTotal.length}
         nums={batchTotal}
-        name={batchTotal.length == 1 ? Pref.batch : Pref.batches}
-        title={`how many different ${Pref.batches}`}
+        name={batchTotal.length == 1 ? Pref.xBatch : Pref.xBatchs}
+        title={`how many different ${Pref.xBatchs}`}
         colour='blue'
         maxSize='chart10Contain'
       />

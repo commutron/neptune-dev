@@ -7,8 +7,11 @@
 }
 
 .overviewContainer {
-  height: 100vh;
-  grid-template-rows: 8vh 3vh 1fr;/*87vh*/
+  height: calc(100 * var(--vh));
+  grid-template-rows: 
+    calc(8 * var(--vh)) 
+    calc(3 * var(--vh))
+    1fr;/*87vh*/
   grid-template-columns: 100%;
   grid-template-areas: 
     'tenHeader'
@@ -17,7 +20,9 @@
 }
 .upstreamView,
 .downstreamView {
-  grid-template-rows: 3vh 89vh;
+  grid-template-rows: 
+    calc(3 * var(--vh)) 
+    calc(89 * var(--vh));
 }
 .upstreamView {
   grid-template-areas: 
@@ -49,11 +54,11 @@
 .gridViewTools select,
 .gridViewTools button,
 .gridViewTools input { 
-  font-size: 1.7vh;
+  font-size: calc(1.7 * var(--vh));
 }
 .gridViewTools span { 
   padding: 0 1vw;
-  max-height: 3vh;
+  max-height: calc(3 * var(--vh));
   display: flex;
   align-items: center;
 }
@@ -63,7 +68,7 @@
   cursor: pointer; 
 }
 .overlistSort {
-  height: 3vh;
+  height: calc(3 * var(--vh));
   font-size: 1rem;
   line-height: 1.1;
   width: 12ch;
@@ -93,7 +98,7 @@
 }
 .overviewContent {
   grid-area: overviewContent;
-  min-height: 89vh;
+  min-height: calc(89 * var(--vh));
 }
 .downstreamContent {
   grid-area: downContent;
@@ -102,8 +107,6 @@
   grid-template-areas:
     'downFixed downScroll';
 }
-
-/*OverGrid */
 
 .overGridFrame, .overGridWideFrame {
   display: grid;
@@ -120,7 +123,7 @@
 .overGridFixed, .overGridScroll,
 .downOrdersFixed, .downOrdersScroll {
   display: grid;
-  grid-auto-rows: 10vh;
+  grid-auto-rows: calc(10 * var(--vh));
 }
 
 .overGridFixed {
@@ -136,9 +139,9 @@
 }
 .overGridRowFixedHeader > span {
   color: var(--silver);
-  padding: 1vh 2vw;
+  padding: var(--vh) 2vw;
   text-transform: capitalize;
-  font-size: 3vh;
+  font-size: calc(3 * var(--vh));
   font-weight: 600;
 }
 
@@ -161,7 +164,7 @@
   display: flex;
   align-items: center;
   /*white-space: nowrap;*/
-  padding: 1vh 1vw;
+  padding: var(--vh) 1vw;
   line-height: 1.3;
 }
 .downRowFixed > div {
@@ -183,14 +186,14 @@
 .overGridRowFixed > div:nth-child(2),
 .downRowFixed > div:nth-child(2) {
   border-right: 1px outset rgba(255,255,255,0.4);
-  font-size: 2.25vh;
+  font-size: calc(2.25 * var(--vh));
 }
 .overGridRowFixed > div:last-child,
 .downRowFixed > div:last-child {
   overflow: hidden;
   text-overflow: ellipsis;
   word-break: break-word;
-  font-size: 1.75vh;
+  font-size: calc(1.75 * var(--vh));
 }
 .downRowFixed > div:last-child {
   border-right: 1px outset rgba(255,255,255,0.3);
@@ -220,13 +223,13 @@
 .downRowScroll {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: 11vh;
+  grid-auto-columns: calc(11 * var(--vh));
   place-items: stretch stretch;
 }
 .downHeadScroll {
   grid-area: downHeaderS;
   line-height: 1;
-  font-size: 1.2vh;
+  font-size: calc(1.2 * var(--vh));
   text-align: center;
   align-items: center;
 }
@@ -237,12 +240,12 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-top: 1vh;
+  padding-top: var(--vh);
   padding-right: 1vmin;
-  padding-bottom: 1vh;
+  padding-bottom: var(--vh);
   padding-left: 1vmin;
   overflow: hidden;
-  font-size: 1.5vh;
+  font-size: calc(1.5 * var(--vh));
   line-height: 1.3;
   text-overflow: ellipsis;
   text-align: center;
@@ -256,11 +259,11 @@
 
 .overGridRowScroll .big,
 .downRowScroll .big {
-  font-size: 2vh;
+  font-size: calc(2 * var(--vh));
 }
 .overGridRowScroll .small,
 .downRowScroll .small {
-  font-size: 1vh;
+  font-size: var(--vh);
 }
 
 .ovColhead { color: white; }
@@ -292,8 +295,8 @@
 }
 .downGridFrameFixed, .downGridFrameScroll {
   display: grid;
-  grid-template-rows: 3vh auto;
-  min-height: 30vh;
+  grid-template-rows: calc(3 * var(--vh)) auto;
+  min-height: calc(30 * var(--vh));
 }
 .downGridFrameFixed:last-child,
 .downGridFrameScroll:last-child {
@@ -317,7 +320,7 @@
   font-size: 3vmin;
   text-align: center;
   text-transform: capitalize;
-  padding-bottom: 3vh;
+  padding-bottom: calc(3 * var(--vh));
 }
 .downGridFrameFixed:nth-child(odd) > .downWeek,
 .downGridFrameFixed:nth-child(odd) > .downHeadFixed,
@@ -333,7 +336,7 @@
 .downGridFrameFixed.latetitle,
 .downGridFrameScroll.rapidtitle,
 .downGridFrameScroll.latetitle {
-  min-height: 15vh;
+  min-height: calc(15 * var(--vh));
 }
 .downGridFrameFixed.rapidtitle > .downWeek {
   background-color: var(--pumpkinfrost);
@@ -346,7 +349,7 @@
 .downHeadFixed {
   grid-area: downHeaderF;
   line-height: 1;
-  font-size: 1.5vh;
+  font-size: calc(1.5 * var(--vh));
   padding-left: 1vmin;
   display: flex;
   align-items: center;
@@ -368,7 +371,6 @@
 }
 
 /* dense minifyed layout */
-
 .overGridFrame.minifyed,
 .downstreamContent.minifyed {
   grid-template-columns: minmax(min-content, 25vw) auto; }
@@ -376,18 +378,18 @@
 .minifyed .label { display: none; }
 
 .minifyed .overGridRowFixedHeader > span {
-  font-size: 2vh;
+  font-size: calc(2 * var(--vh));
 }
 
 .minifyed .overGridFixed,
 .minifyed .overGridScroll,
 .minifyed .downOrdersFixed, 
 .minifyed .downOrdersScroll { 
-  grid-auto-rows: 5vh; }
+  grid-auto-rows: calc(5 * var(--vh)); }
 .minifyed .overGridRowScroll,
 .minifyed .downRowScroll,
 .minifyed .downHeadScroll { 
-  grid-auto-columns: 8.25vh;
+  grid-auto-columns: calc(8.25 * var(--vh));
 }
 
 
@@ -404,22 +406,22 @@
   align-items: center; }
 .minifyed .overGridRowFixed > div:first-child .big,
 .minifyed .downRowFixed > div:first-child .big { 
-  font-size: 1.5vmin; }
+  font-size: calc(1.5 * var(--vh)); }
 .minifyed .overGridRowFixed > div:nth-child(2),
 .minifyed .downRowFixed > div:nth-child(2) { 
-  font-size: 1.75vh; }
+  font-size: calc(1.75 * var(--vh)); }
 .minifyed .overGridRowFixed > div:last-child,
 .minifyed .downRowFixed > div:last-child{ 
-  font-size: 1.25vh; }
+  font-size: calc(1.25 * var(--vh)); }
 
 .minifyed .overGridRowScroll > div,
 .minifyed .downRowScroll > div,
 .minifyed .statusBlock {
-  font-size: 1.2vh; }
+  font-size: calc(1.2 * var(--vh)); }
 
 .minifyed .overGridRowScroll .big,
 .minifyed .downOrdersScroll .big { 
-  font-size: 1.5vh; }
+  font-size: calc(1.5 * var(--vh)); }
 
 .darkTheme .overviewToolbar,
 .darkTheme .downstreamToolbar {
@@ -482,7 +484,7 @@ n-sm-model .big { font-size: 1.5rem !important; }
 }
 
 .overButton {
-  font-size: 1.5vh;
+  font-size: calc(1.5 * var(--vh));
   vertical-align: top;
   text-transform: capitalize;
 }
@@ -513,11 +515,14 @@ n-sm-model .big { font-size: 1.5rem !important; }
 .overButton > span > button > label > span,
 .overButton > a > label > span { 
   font-size: smaller; }
-.overButton n-fa1 { font-size: 2.25vh; }
+.overButton n-fa1 { font-size: calc(2.25 * var(--vh)); }
 
 @media (orientation: portrait) {
   .overviewContainer {
-    grid-template-rows: 8vmin 3vh calc(97vh - 8vmin);
+    grid-template-rows: 
+      8vmin
+      calc(3 * var(--vh)) 
+      calc( (97 * var(--vh)) - 8vmin );
   }
   .overviewContainer .tenHeader {
     grid-template-rows: 1vmin 7vmin;
@@ -526,20 +531,11 @@ n-sm-model .big { font-size: 1.5rem !important; }
       'topBorder topBorder topBorder topBorder'
       'homeIcon frontCenter auxRight proRight';
   }
-  /*.overviewContainer .overviewToolbar {*/
-  /*  align-items: stretch;*/
-  /*}*/
   .overviewContent {
-    min-height: calc( 100vh - 8vmin);
+    min-height: calc( (100 * var(--vh)) - 8vmin);
   }
   .upstreamView,
   .downstreamView {
-    grid-template-rows: 3vh calc(97vh - 8vmin);
+    grid-template-rows: calc(3 * var(--vh)) calc( (97 * var(--vh)) - 8vmin);
   }
-  /*.overGridFrame {*/
-  /*  grid-template-columns: minmax(30vw, 35vw) auto;*/
-  /*}*/
-  /*.overGridFrame.minifyed {*/
-  /*  grid-template-columns: minmax(20vw, 30vw) auto;*/
-  /*}*/
 }

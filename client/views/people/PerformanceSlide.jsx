@@ -147,33 +147,39 @@ const PerformanceSlide = ({ app, user, users, traceDT, isDebug })=> {
             
           <div className='autoGrid'>
             
-            <dl className='vmargin'>
-              <dt>User List ({userList.length}) [{selectDayState || 'Week'}]</dt>
-              {userList.map( (ent, ix)=>(
-                <dd key={ent+ix}>
-                  <UserNice id={ent} />
-                </dd>
-              ))}
-            </dl>
-              
-            <dl className='vmargin'>
-              <dt>{Pref.Batch} List ({batchList.length}) [{selectDayState || 'Week'}]</dt>
-              {batchList.map( (ent, ix)=>{
-                const moreInfo = traceDT ? traceDT.find( x => x.batch === ent) : false;
-                const what = moreInfo ? moreInfo.isWhat.join(' ') : 'unavailable';
-                return(
+            <span className='space1v centre'>
+              <h4>{userList.length} Users [{selectDayState || 'Week ' + weekChoice.weekNum}]</h4>
+              <dl>
+                {userList.map( (ent, ix)=>(
                   <dd key={ent+ix}>
-                    <ExploreLinkBlock type='batch' keyword={ent} /> <em>{what}</em>
+                    <UserNice id={ent} />
                   </dd>
-              )})}
-            </dl>
+                ))}
+              </dl>
+            </span>
+              
+            <span className='space1v centre'>
+              <h4>{batchList.length} {Pref.XBatchs} [{selectDayState || 'Week ' + weekChoice.weekNum}]</h4>
+              <dl>
+                {batchList.map( (ent, ix)=>{
+                  const moreInfo = traceDT ? traceDT.find( x => x.batch === ent) : false;
+                  const what = moreInfo ? moreInfo.isWhat.join(' ') : 'unavailable';
+                  return(
+                    <dd key={ent+ix}>
+                      <ExploreLinkBlock type='batch' keyword={ent} /> <em>{what}</em>
+                    </dd>
+                )})}
+              </dl>
+            </span>
             
-            <dl className='vmargin'>
-              <dt>Known Tasks List ({taskList.length}) [{selectDayState || 'Week'}]</dt>
-              {taskList.map( (ent, ix)=>(
-                <dd key={ent+ix}>{ent}</dd>
-              ))}
-            </dl>
+            <span className='space1v center'>
+              <h4> {taskList.length} Known Tasks [{selectDayState || 'Week ' + weekChoice.weekNum}]</h4>
+              <dl>
+                {taskList.map( (ent, ix)=>(
+                  <dd key={ent+ix}>{ent}</dd>
+                ))}
+              </dl>
+            </span>
             
           </div>
             

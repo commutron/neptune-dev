@@ -363,10 +363,10 @@ button.variableInput.biggest { height: 64px; }
 
 .taskLink {
   margin: 0.75vmax 0;
-  width: 5.5vh;
-  height: 5.5vh;
+  width: calc(5.5 * var(--vh));
+  height: calc(5.5 * var(--vh));
   border-radius: 50%;
-  font-size: 3.5vh;
+  font-size: calc(3.5 * var(--vh));
   cursor: pointer;
 }
 
@@ -437,9 +437,9 @@ button.variableInput.biggest { height: 64px; }
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 5.5vh;
-  height: 5.5vh;
-  font-size: 2.5vh;
+  width: calc(5.5 * var(--vh));
+  height: calc(5.5 * var(--vh));
+  font-size: calc(2.5 * var(--vh));
   font-weight: 600;
   color: var(--task-front-color);
   transition: all 150ms ease-in-out;
@@ -507,7 +507,7 @@ button.variableInput.biggest { height: 64px; }
 
 .liteToolOn, 
 .liteToolOff {
-  min-height: 3vh;
+  min-height: calc(3 * var(--vh));
   padding: 0 5px;
   line-height: 1.5;
   font-size: medium;

@@ -1,7 +1,9 @@
 .containerEx {
   display: grid;
-  grid-template-rows: 8vh 92vh;
-  grid-template-columns: 8vh auto;
+  grid-template-rows: 
+    calc(8 * var(--vh)) 
+    calc(92 * var(--vh));
+  grid-template-columns: calc(8 * var(--vh)) auto;
   grid-template-areas: 
     'tenHeader tenHeader'
     'taskBar contentArea';
@@ -40,21 +42,21 @@
   grid-template-columns: auto;
 }
 .baseContainer {
-  grid-template-rows: 92vh 0px;
+  grid-template-rows: calc(92 * var(--vh)) 0px;
   grid-template-areas: 
     'traverseContent'
     'traverseContent';
 }
 .midTraverseContainer {
   grid-template-columns: auto minmax(10vmin, 14vmax);
-  grid-template-rows: 92vh;
+  grid-template-rows: calc(92 * var(--vh));
   grid-template-areas: 
     'traverseContent traverseList';
 }
 
 .traverseContainer {
   grid-template-columns: auto minmax(10vmin, 14vmax);
-  grid-template-rows: calc(92vh - 48px) 48px;
+  grid-template-rows: calc( (92 * var(--vh)) - 48px) 48px;
   grid-template-areas: 
     'traverseContent traverseList'
     'actionBarEx actionBarEx';
@@ -84,11 +86,9 @@
 .actionBarEx > div {
   display: flex;
   flex-shrink: 0;
-  /*flex-grow: 2;*/
 }
 
 /* ////////////////////////////////// */
-
 .containerE {
   display: grid;
   grid-template-rows: auto;
@@ -101,8 +101,6 @@
 .oneEcontent { grid-area: oneE; }
 .twoEcontent { grid-area: twoE; }
 .threeEcontent { grid-area: threeE; }
-
-/* ////////////////////////////////// */
 
 .oneTwoThreeContainer, 
 .aFrameContainer,
@@ -150,9 +148,9 @@
   flex-wrap: nowrap;
   align-items: center;
   width: 100%;
-  max-width: calc(100vw - 20vh);
+  max-width: calc( 100vw - (20 * var(--vh)) );
   height: 100%;
-  max-height: 8vh;
+  max-height: calc(8 * var(--vh));
   padding: 0;
   overflow: hidden;
 }
@@ -168,7 +166,7 @@
   color: var(--silver);
   max-width: 25vw;
   height: 100%;
-  max-height: 8vh;
+  max-height: calc(8 * var(--vh));
   font-size: 2.5vmin;
   text-indent: 1vmin;
   word-break: keep-all;
@@ -220,7 +218,7 @@
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: center;
-  padding-top: 1vh;
+  padding-top: var(--vh);
   height: 100%;
 }
 
@@ -288,7 +286,7 @@
 }
 
 .fixedResults {
-  max-height: calc(92vh - 2vmax - 110px);
+  max-height: calc( (92 * var(--vh)) - 2vmax - 110px);
   overflow-y: scroll;
 }
 .dashNumBox {
@@ -308,7 +306,7 @@
 
 @media (orientation: portrait) {
   .containerEx {
-    grid-template-rows: 8vmin calc(100vh - 8vmin);
+    grid-template-rows: 8vmin calc( (100 * var(--vh)) - 8vmin);
     grid-template-columns: 8vmin auto;
   }
   .containerEx .tenHeader {
@@ -322,13 +320,13 @@
     padding-top: 1vmin;
   }
   .baseContainer {
-    grid-template-rows: calc(100vh - 8vmin) 0px;
+    grid-template-rows: calc( (100 * var(--vh)) - 8vmin) 0px;
   }
   .midTraverseContainer {
-    grid-template-rows: calc(100vh - 8vmin);
+    grid-template-rows: calc( (100 * var(--vh)) - 8vmin);
   }
   .traverseContainer {
-    grid-template-rows: calc(100vh - 8vmin - 48px) 48px;
+    grid-template-rows: calc( (100 * var(--vh)) - 8vmin - 48px) 48px;
   }
   .cookieRow { 
     grid-area: frontCenter;

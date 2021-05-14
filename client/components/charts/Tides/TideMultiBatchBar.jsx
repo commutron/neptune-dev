@@ -99,7 +99,7 @@ const TideMultiBatchBar = ({ batchIDs, app })=> {
   return(
     <div className='centreText fade'>
       <i className='fas fa-ghost fa-3x grayT'></i>
-      <p className='big cap'>no {Pref.batches}</p>
+      <p className='big cap'>no {Pref.xBatchs}</p>
     </div>
   );
 };

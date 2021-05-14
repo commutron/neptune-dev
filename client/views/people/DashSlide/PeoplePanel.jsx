@@ -28,7 +28,7 @@ const PeoplePanel = ({
       <table className='wide cap space'>
         <tbody key='engagedpeoplescope0'>
           <tr className='leftText line2x medBig'>
-            <th colSpan='5'>{Pref.engaged} with a {Pref.batch}</th>
+            <th colSpan='5'>{Pref.engaged} with a {Pref.xBatch}</th>
           </tr>
           {userChunks.map( (entry, index)=>{
             return(
@@ -44,23 +44,17 @@ const PeoplePanel = ({
           )})}
         </tbody>
       </table>
-      <p className='vmargin' />
-      <table className='wide cap space'>
-        <tbody key='dormantpeoplescope0'>
-          <tr className='leftText line2x medBig'>
-            <th colSpan='5'>{Pref.engagedNot}</th>
-          </tr>
-          {dUsers.map( (entry, index)=>{
-            return(
-              <tr key={entry._id} className='leftText line2x'>
-                <td 
-                  colSpan='4' 
-                  className='noRightBorder medBig'
-                ><UserNice id={entry._id} /></td>
-              </tr>
-          )})}
-        </tbody>
-      </table>
+
+      <div className='wide space cap'>
+        <h3>{Pref.engagedNot}</h3>
+        <ul className='autoGrid'>
+          {dUsers.map( (entry, index)=>(
+            <li key={entry._id} className='leftText line2x'>
+              <UserNice id={entry._id} />
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

@@ -20,7 +20,6 @@
 
 .containerPro {
   display: grid;
-  grid-template-rows: 8vh calc(92vh - 65px) 65px;
   grid-template-rows: 
     calc(8 * var(--vh)) 
     calc(92 * var(--vh) - 65px)
@@ -100,11 +99,11 @@
 .proActionForm::-webkit-scrollbar {
   height: 0.5vmax;
 }
-.proActionForm {
-  position: sticky;
-  bottom: 0;
-  left: 0;
-}
+/*.proActionForm {*/
+/*  position: sticky;*/
+/*  bottom: 0;*/
+/*  left: 0;*/
+/*}*/
 
 .cardTitle {
   display: flex;
@@ -178,7 +177,7 @@
 }
 
 #lookup {
-  font-size: 4.5vh;
+  font-size: calc(4.5 * var(--vh));
   text-align: center;
   line-height: normal;
   height: 100%;
@@ -195,10 +194,10 @@
 }
 
 @media screen and (max-width: 885px){
-  #lookup { font-size: 4vh; }
+  #lookup { font-size: calc(4 * var(--vh)); }
 }
 @media screen and (max-width: 785px){
-  #lookup { font-size: 3.5vh; }
+  #lookup { font-size: calc(3.5 * var(--vh)); }
 }
 
 #lookup::selection {
@@ -226,11 +225,16 @@
 
 @media (orientation: portrait) {
   .windowPro {
-    grid-template-rows: 8vh 92vh;
+    grid-template-rows: 
+      calc(8 * var(--vh)) 
+      calc(92 * var(--vh));
   }
   .containerPro {
     display: grid;
-    grid-template-rows: 8vh calc(92vh - 65px) 65px;
+    grid-template-rows: 
+      calc(8 * var(--vh)) 
+      calc(92 * var(--vh) - 65px) 
+      65px;
     grid-template-areas: 
       "tenHeader tenHeader"
       "proPrime proInstruct"
@@ -238,8 +242,15 @@
   }
   .windowPro .tenHeader,
   .containerPro .tenHeader {
-    grid-template-rows: 1vh 7vh;
-    grid-template-columns: 8vh 7vh 1fr 6vh 6vh;
+    grid-template-rows: 
+      calc(1 * var(--vh)) 
+      calc(7 * var(--vh));
+    grid-template-columns: 
+      calc(8 * var(--vh)) 
+      calc(7 * var(--vh)) 
+      1fr 
+      calc(6 * var(--vh))
+      calc(6 * var(--vh));
     grid-template-areas: 
       'topBorder topBorder topBorder topBorder topBorder'
       'homeIcon auxLeft frontCenter auxRight proRight';
@@ -248,28 +259,28 @@
   .windowPro .homeIconLogo,
   .containerPro .homeIconLink, 
   .containerPro .homeIconLogo {
-    width: 8vh;
-    height: 8vh;
-    padding: 1vh;
+    width: calc(8 * var(--vh));
+    height: calc(8 * var(--vh));
+    padding: var(--vh);
   }
   .windowPro .frontCenterTitle,
   .containerPro .frontCenterTitle {
-    max-width: calc(100vw - 16vh);
-    height: 7vh;
-    font-size: 4vh;
+    max-width: calc(100vw - (16 * var(--vh)));
+    height: calc(7 * var(--vh));
+    font-size: calc(4 * var(--vh));
   }
   .windowPro .taskLink,
   .containerPro .taskLink {
-    margin: 1vh 0;
-    width: 5vh;
-    height: 5vh;
-    font-size: 3vh;
+    margin: var(--vh) 0;
+    width: calc(5 * var(--vh));
+    height: calc(5 * var(--vh));
+    font-size: calc(3 * var(--vh));
   }
   .windowPro  .followTask i,
   .containerPro .followTask i {
-    width: 5vh;
-    height: 5vh;
-    font-size: 2vh;
+    width: calc(5 * var(--vh));
+    height: calc(5 * var(--vh));
+    font-size: calc(2 * var(--vh));
   }
 }
 

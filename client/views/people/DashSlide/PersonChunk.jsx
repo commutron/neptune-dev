@@ -4,7 +4,7 @@ import moment from 'moment';
 //import Pref from '/client/global/pref.js';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 import TaskTag from '/client/components/tinyUi/TaskTag.jsx';
-
+import { LeapTextLink } from '/client/components/tinyUi/LeapText.jsx';
 
 const PersonChunk = ({ 
   userChunk, traceDT, app,
@@ -49,7 +49,13 @@ const PersonChunk = ({
       <td className='noRightBorder'>
         <TaskTag task={branchGuess[1]} guess={branchGuess[0] === 'fromUserInput'} />
       </td>
-      <td className='noRightBorder'>{uC.batch}</td>
+      <td className='noRightBorder'>
+        <LeapTextLink
+          title={uC.batch} 
+          sty='numFont noWrap blackT'
+          address={'/data/batch?request=' + uC.batch}
+        />
+      </td>
       <td className='noRightBorder'>{what}</td>
       <td className='noRightBorder centreText'>
         {moment(uC.tideBlock.startTime).isSameOrBefore(moment().startOf('day')) ?
