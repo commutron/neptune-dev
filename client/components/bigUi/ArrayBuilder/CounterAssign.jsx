@@ -7,27 +7,32 @@ import './style.css';
 import ModelMedium from '/client/components/smallUi/ModelMedium';
 
 
-const CounterAssign = ({ id, app, lock, noText, waterfall })=> (
-  <ModelMedium
-    button={Pref.counter + 's'}
-    title={'assign ' + Pref.counter + 's'}
-    color='blueT'
-    icon='fa-stopwatch'
-    lock={!Roles.userIsInRole(Meteor.userId(), 'run') || lock}
-    noText={noText}
-    >
-    <CounterAssignForm
-      bID={id}
-      app={app}
-      lock={lock}
-      waterfall={waterfall}
-    />
-  </ModelMedium>
-);
+const CounterAssign = ({ id, app, noText, waterfall, lock })=> {
+  const access = Roles.userIsInRole(Meteor.userId(), 'run');
+  const aT = !access ? Pref.norole : '';
+  const lT = lock ? lock : '';
+  const title = access && !lock ? `Assign ${Pref.counter}s` : `${aT}\n${lT}`;
+  return(
+    <ModelMedium
+      button={Pref.counter + 's'}
+      title={title}
+      color='blueT'
+      icon='fa-stopwatch'
+      lock={!access || lock}
+      noText={noText}
+      >
+      <CounterAssignForm
+        bID={id}
+        app={app}
+        waterfall={waterfall}
+      />
+    </ModelMedium>
+  );
+};
 
 export default CounterAssign;
 
-const CounterAssignForm = ({ bID, app, lock, noText, waterfall })=> {
+const CounterAssignForm = ({ bID, app, waterfall })=> {
 
   function handleAssign(e) {
     e.preventDefault();
@@ -153,7 +158,6 @@ const CounterAssignForm = ({ bID, app, lock, noText, waterfall })=> {
                   inputMode='numeric'
                   value={entry.position || 0}
                   onChange={(e)=>handlePosEdit(e.target.value, entry.wfKey)}
-                  disabled={lock}
                   required
                 />
               </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import NumStat from '/client/components/tinyUi/NumStat.jsx';
+import { countMulti } from '/client/utility/Arrays';
 
 const NonConMiniTops = ({ noncons, items, user, app })=> (
   <div className='centre'>
@@ -25,21 +26,22 @@ export default NonConMiniTops;
 
 export const HasNonCon = ({ noncons, items })=> {
   const ncG = noncons.filter( n => !n.trash );
-  const hasNonCon = [... new Set( Array.from(ncG, x => { return x.serial }) ) ].length;
+  const hasNonCon = [... new Set( Array.from(ncG, x => x.serial) ) ].length;
   return(
     <NumStat
       num={((hasNonCon / items.length) * 100 ).toFixed(0) + '%'}
       name={'of ' + Pref.item + 's have nonCons'}
       color='redT'
-      size='bigger' />
+      size='bigger'
+      moreClass='max100 wmargin' />
   );
 };
 
 export const NonConPer = ({ noncons, items })=> {
-  const ncG = noncons.filter( n => !n.trash );
+  const ncG = countMulti( noncons.filter( n => !n.trash ) );
   return(
     <NumStat
-      num={(ncG.length / items.length).toFixed(1, 10)}
+      num={(ncG / items.length).toFixed(1, 10)}
       name={'nonCons per ' + Pref.item}
       title='mean average'
       color='redT'
@@ -52,7 +54,7 @@ export const MostNonCon = ({ noncons, app })=> {
   const mostType = ()=> {
     let types = [];
     for(let t of app.nonConOption) {
-      types.push( ncG.filter( x => x.type === t ).length );
+      types.push( countMulti( ncG.filter( x => x.type === t ) ) );
     }
     const indexOfMax = types.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
     return indexOfMax;
@@ -71,10 +73,11 @@ export const TodayNonCon = ({ noncons })=> {
   const ncG = noncons.filter( n => !n.trash );
   const now = moment().format();
   const foundToday = ncG.filter( x => 
-    moment(x.time).isSame(now, 'day') === true ).length;
+    moment(x.time).isSame(now, 'day') === true );
+  const todayCount = countMulti(foundToday);
   return(
     <NumStat
-      num={foundToday}
+      num={todayCount}
       name='Recorded Today'
       title='12:00am to 11:59pm'
       color='redT'
@@ -84,8 +87,8 @@ export const TodayNonCon = ({ noncons })=> {
 
 export const LeftFxNonCon = ({ noncons })=> {
   const ncG = noncons.filter( n => !n.trash );
-  const leftToFix = ncG.filter( x => 
-    x.fix === false && x.inspect === false ).length;
+  const leftToFix = countMulti( ncG.filter( x => 
+          x.fix === false && x.inspect === false ) );
   return(
     <NumStat
       num={leftToFix || 0}
@@ -98,7 +101,7 @@ export const LeftFxNonCon = ({ noncons })=> {
 
 export const LeftInNonCon = ({ noncons })=> {
   const ncG = noncons.filter( n => !n.trash );
-  const leftToInspect = ncG.filter( x => x.inspect === false ).length;
+  const leftToInspect = countMulti( ncG.filter( x => x.inspect === false ) );
   return(
     <NumStat
       num={leftToInspect || 0}
@@ -111,9 +114,10 @@ export const LeftInNonCon = ({ noncons })=> {
 
 export const UserNonCon = ({ noncons, user })=> {
   const ncG = noncons.filter( n => !n.trash );
+  const count = countMulti( ncG.filter( x => x.who === user._id ) );
   return(
     <NumStat
-      num={ncG.filter( x => x.who === user._id ).length}
+      num={count}
       name={'Recorded by ' + user.username.split('.')[0]}
       title='no blame'
       color='redT'

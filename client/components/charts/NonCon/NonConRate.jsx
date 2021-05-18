@@ -57,10 +57,6 @@ const NonConRate = ({ batches, title, lineColor })=> {
               strokeWidth: '2px'
             },
           }}
-          // animate={{
-          //   duration: 2000,
-          //   onLoad: { duration: 1000 }
-          // }}
         />
       </VictoryChart>
       

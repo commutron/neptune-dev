@@ -5,20 +5,26 @@ import { toast } from 'react-toastify';
 import ModelMedium from '../smallUi/ModelMedium.jsx';
 
 
-const WidgetEditWrapper = ({ groupId, lock })=> (
-  <ModelMedium
-    button={'new ' + Pref.widget}
-    title={'new ' + Pref.widget}
-    color='greenT'
-    icon='fa-cube'
-    lock={!Roles.userIsInRole(Meteor.userId(), 'create') || lock}>
-    <WidgetNewForm
-      groupId={groupId}
-    />
-  </ModelMedium>
-);
+const WidgetNewWrapper = ({ groupId, lock })=> {
+  const access = Roles.userIsInRole(Meteor.userId(), 'create');
+  const aT = !access ? Pref.norole : '';
+  const lT = lock ? `${Pref.group} is hibernated` : '';
+  const title = access && !lock ? `New ${Pref.widget}` : `${aT}\n${lT}`;
+  return(
+    <ModelMedium
+      button={'new ' + Pref.widget}
+      title={title}
+      color='greenT'
+      icon='fa-cube'
+      lock={!access || lock}>
+      <WidgetNewForm
+        groupId={groupId}
+      />
+    </ModelMedium>
+  );
+};
 
-export default WidgetEditWrapper;
+export default WidgetNewWrapper;
 
 const WidgetNewForm = ({ groupId })=> {
 

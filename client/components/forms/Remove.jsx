@@ -1,5 +1,5 @@
 import React from 'react';
-//import Pref from '/client/global/pref.js';
+import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 import ModelSmall from '../smallUi/ModelSmall';
@@ -12,15 +12,18 @@ import ModelSmall from '../smallUi/ModelSmall';
 
 const RemoveWrapper = ({ action, entry, title, check, lockOut })=> {
   
-  const auth = Roles.userIsInRole(Meteor.userId(), 'remove') && !lockOut;
+  const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
+  const aT = !auth ? Pref.norole : '';
+  const lT = lockOut ? lockOut : '';
+  const btitle = auth && !lockOut ? `delete "${title}"` : `${aT}\n${lT}`;
   
   return(
     <ModelSmall
       button='Delete'
-      title={`delete "${title}"`}
+      title={btitle}
       color='redT'
       icon='fa-minus-circle'
-      lock={!auth || !check}
+      lock={!auth || !check || lockOut}
     >
       <Remove
         action={action}

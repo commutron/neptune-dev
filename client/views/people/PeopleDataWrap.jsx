@@ -5,7 +5,7 @@ import { withTracker } from 'meteor/react-meteor-data';
 // import 'moment-timezone';
 import { ToastContainer } from 'react-toastify';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
-
+import { branchesSort } from '/client/utility/Arrays.js';
 import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
 import Pref from '/client/global/pref.js';
 import { SpinWrap } from '../../components/tinyUi/Spin.jsx';
@@ -37,8 +37,10 @@ const PeopleDataWrap = ({
     return( <SpinWrap /> );
   }
   
-  const brancheS = app.branches.sort((b1, b2)=>
-          b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
+  const userS = users.sort((u1, u2)=>
+          u1.username.toLowerCase() > u2.username.toLowerCase() ? 1 : 
+          u1.username.toLowerCase() < u2.username.toLowerCase() ? -1 : 0 );
+  const brancheS = branchesSort(app.branches);
      
   const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
   // const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
@@ -78,7 +80,7 @@ const PeopleDataWrap = ({
             key={0}
             app={app}
             user={user}
-            users={users}
+            users={userS}
             traceDT={traceDT}
             brancheS={brancheS}
             isDebug={isDebug} />
@@ -87,7 +89,7 @@ const PeopleDataWrap = ({
             key={1}
             app={app}
             user={user}
-            users={users}
+            users={userS}
             traceDT={traceDT}
             brancheS={brancheS}
             allUsers={true}
@@ -97,7 +99,7 @@ const PeopleDataWrap = ({
             key={2}
             app={app}
             user={user}
-            users={users}
+            users={userS}
             traceDT={traceDT}
             brancheS={brancheS}
             isDebug={isDebug} />
@@ -106,7 +108,7 @@ const PeopleDataWrap = ({
             key={3}
             app={app}
             user={user}
-            users={users}
+            users={userS}
             isAdmin={isAdmin}
             isPeopleSuper={isPeopleSuper} />
           
@@ -118,7 +120,7 @@ const PeopleDataWrap = ({
             <AccountsManagePanel 
               key={5} 
               app={app}
-              users={users}
+              users={userS}
               traceDT={traceDT}
               brancheS={brancheS}
               isDebug={isDebug} />
@@ -171,7 +173,7 @@ export default withTracker( () => {
       org: org,
       app: AppDB.findOne({org: org}),
       traceDT: TraceDB.find({}).fetch(),
-      users: Meteor.users.find({}, { sort: { username: 1 } } ).fetch()
+      users: Meteor.users.find({}).fetch()
     };
   }
 })(PeopleDataWrap);

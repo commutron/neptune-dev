@@ -7,21 +7,27 @@ import { toast } from 'react-toastify';
 
 import ModelMedium from '/client/components/smallUi/ModelMedium';
 
-const BatchXCreate = ({ groupId, widgetId, allVariants, lock })=> (
-  <ModelMedium
-    button={'New ' + Pref.xBatch}
-    title={'Create New ' + Pref.xBatch}
-    color='greenT'
-    icon='fa-cubes'
-    lock={!Roles.userIsInRole(Meteor.userId(), 'create') || lock}>
-    
-    <BXCreateForm
-      groupId={groupId}
-      widgetId={widgetId}
-      allVariants={allVariants}
-    />
-  </ModelMedium>
-);
+const BatchXCreate = ({ groupId, widgetId, allVariants, lock })=> {
+  const access = Roles.userIsInRole(Meteor.userId(), 'create');
+  const aT = !access ? Pref.norole : '';
+  const lT = lock ? lock : '';
+  const title = access && !lock ? 'Create new ' + Pref.xBatch : `${aT}\n${lT}`;
+  return(
+    <ModelMedium
+      button={'New ' + Pref.xBatch}
+      title={title}
+      color='greenT'
+      icon='fa-cubes'
+      lock={!access || lock}
+    >
+      <BXCreateForm
+        groupId={groupId}
+        widgetId={widgetId}
+        allVariants={allVariants}
+      />
+    </ModelMedium>
+  );
+};
 
 export default BatchXCreate;
 

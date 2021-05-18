@@ -67,7 +67,7 @@ const WidgetPanel = ({
               widgetId={widgetData._id}
               versionKey={false}
               allVariants={variantData}
-              lock={variantData.every(v => v.live === false)}
+              lock={variantData.every(v => v.live === false) ? `No live ${Pref.variants}` : false}
             />
           : null}
           
@@ -78,7 +78,6 @@ const WidgetPanel = ({
               title={widgetData.widget}
               check={widgetData.createdAt && widgetData.createdAt.toISOString()}
               entry={widgetData._id}
-              lockOut={false}
             />
           : null}
         </div>

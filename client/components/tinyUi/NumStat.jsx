@@ -1,9 +1,7 @@
 import React from 'react';
-
+  
   const sty = {
-    textAlign: 'center',
-    margin: '5px',
-
+    textAlign: 'center'
   };
   const bSty = {
     verticalAlign: 'bottom',
@@ -20,7 +18,7 @@ import React from 'react';
   };
  
 const NumStat = ({ num, icon, name, title, color, size, moreClass }) => (
-  <div style={sty} title={title} className={'noCopy ' + moreClass || ''}>
+  <div style={sty} title={title} className={'noCopy margin5 ' + moreClass}>
     <span 
       style={bSty} 
       className={color + ' numFont ' + size}

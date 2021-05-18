@@ -10,6 +10,12 @@ export const branchesSort = (branches)=> {
 };
   
 
+export function countMulti(ncArr) {
+  const inst = Array.from(ncArr, x => Number(x.multi) || 1);
+  const count = inst.length > 0 ? inst.reduce((x,y)=> x + y) : 0;
+  return count;
+}
+
 /*
 export function flattenHistory(itemArr) {
                        
@@ -39,5 +45,15 @@ riverStepSelfCount(itemsCol) {
 
   const keyArr = Array.from(itr, (a)=> ( {keystep: a[0], count: a[1]} ) );
   return keyArr;
+},
+*/
+
+/*
+arraySelfCount(inputArray) {
+  const typeObj = _.countBy(inputArray, x => x.type);
+  const typeObjClean = _.omit(typeObj, (value, key, object)=> { return key == false; });
+  const itr = Object.entries(typeObj);
+  const typeArr = Array.from(itr, (arr)=> { return {type: arr[0], count: arr[1]} } );
+  return typeArr;
 },
 */

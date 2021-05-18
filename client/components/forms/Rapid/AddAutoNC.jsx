@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import Pref from '/client/global/pref.js';
 import { NonConCheck } from '/client/utility/NonConOptions';
 
 export const AddAutoNCwrap = ({ rapidData, ncTypesCombo, user, editAuth })=> {
@@ -60,6 +60,7 @@ export const AddAutoNCwrap = ({ rapidData, ncTypesCombo, user, editAuth })=> {
       :
         <span className='rightRow'>
           <button
+            title={!editAuth ? Pref.norole : !rapidData.live ? 'not open' : ''}
             className='miniAction gap'
             onClick={()=>editSet(true)}
             disabled={!rapidData.live || !editAuth}

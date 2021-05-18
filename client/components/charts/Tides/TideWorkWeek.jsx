@@ -3,7 +3,7 @@ import moment from 'moment';
 import { 
   TimeInDay, UsersTimeTotal, HolidayCheck
 } from '/client/utility/WorkTimeCalc.js';
-import { round1Decimal, round2Decimal } from '/client/utility/Convert.js';
+import { round2Decimal } from '/client/utility/Convert.js';
 // import Pref from '/client/global/pref.js';
 import { 
   VictoryChart, VictoryArea, VictoryBar,

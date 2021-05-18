@@ -165,13 +165,17 @@
   transition: all 150ms ease-in-out;
   color: var(--silver);
   max-width: 25vw;
-  height: 100%;
-  max-height: calc(8 * var(--vh));
+  margin: 0;
+  /*height: 100%;*/
+  /*max-height: calc(8 * var(--vh));*/
   font-size: 2.5vmin;
   text-indent: 1vmin;
   word-break: keep-all;
   text-overflow: ellipsis;
   cursor: pointer;
+}
+.cookieCrumb:first-child {
+  height: 100%;
 }
 .crumb, .endCrumb {
   color: var(--silverfade);
@@ -331,7 +335,7 @@
   .cookieRow { 
     grid-area: frontCenter;
   }
-  .cookieRow, .cookieCrumb {
+  .cookieRow {
     max-height: 8vmin
   }
 }

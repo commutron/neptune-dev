@@ -100,6 +100,7 @@ export const FlowStepsWrap = ({
       :
         <span className='rightRow'>
           <button
+            title={!editAuth ? Pref.norole : !rapidData.live ? 'not open' : ''}
             className='miniAction gap'
             onClick={()=>editSet(!editState)}
             disabled={!rapidData.live || !editAuth}

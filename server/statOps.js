@@ -4,7 +4,7 @@ import 'moment-business-time';
 
 import Config from '/server/hardConfig.js';
 import { batchTideTime } from './tideGlobalMethods.js';
-import { countWaterfall } from './utility';
+import { countWaterfall, countMulti } from './utility';
 
 moment.updateLocale('en', {
   workinghours: Config.workingHours,
@@ -97,12 +97,17 @@ Meteor.methods({
       return [];
     }else{
       const nonConClean = nonConCol.filter( x => !x.trash );
-      const typeObj = _.countBy(nonConClean, x => x.type);
-      // const typeObjClean = _.omit(typeObj, (value, key, object)=> {
-      //  return key == false; });
-      const itr = Object.entries(typeObj);
-      const typeArr = Array.from(itr, (arr)=> { return {type: arr[0], count: arr[1]} } );
-      return typeArr;
+      const types = _.uniq( Array.from(nonConClean, x => x.type) );
+      
+      let typeCounts = [];
+      for( let t of types) {
+        const ncCount = countMulti( nonConClean.filter( n => n.type === t ) );
+        typeCounts.push({
+          type: t,
+          count: ncCount
+        });
+      }
+      return typeCounts;
     }
   },
   
@@ -117,7 +122,7 @@ Meteor.methods({
         const shOf = shortfallCol.filter( s => s.partNum === pn );
         let shCount = 0;
         for(let sh of shOf) {
-          shCount += sh.refs.length;
+          shCount += ( sh.refs.length * (sh.multi || 1) );
         }
         pnCounts.push({
           partNum: pn,

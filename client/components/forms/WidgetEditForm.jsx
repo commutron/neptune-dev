@@ -4,19 +4,25 @@ import { toast } from 'react-toastify';
 
 import ModelSmall from '../smallUi/ModelSmall';
 
-const WidgetEditWrapper = ({ id, now, lockOut })=> (
-  <ModelSmall
-    button={'Edit ' + Pref.widget}
-    title={'edit ' + Pref.widget}
-    color='greenT'
-    icon='fa-cube'
-    lock={!Roles.userIsInRole(Meteor.userId(), 'edit') || lockOut}>
-    <WidgetEditForm
-      id={id}
-      now={now} 
-    />
-  </ModelSmall>
-);
+const WidgetEditWrapper = ({ id, now, lockOut })=> {
+  const access = Roles.userIsInRole(Meteor.userId(), 'edit');
+  const aT = !access ? Pref.norole : '';
+  const lT = lockOut ? `${Pref.group} is hibernated` : '';
+  const title = access && !lockOut ? `Edit ${Pref.widget}` : `${aT}\n${lT}`;
+  return(
+    <ModelSmall
+      button={'Edit ' + Pref.widget}
+      title={title}
+      color='greenT'
+      icon='fa-cube'
+      lock={!access || lockOut}>
+      <WidgetEditForm
+        id={id}
+        now={now} 
+      />
+    </ModelSmall>
+  );
+};
 
 export default WidgetEditWrapper;
 

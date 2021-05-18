@@ -6,15 +6,20 @@ import ModelMedium from '../smallUi/ModelMedium.jsx';
 
 const GroupFormWrapper = ({ id, name, alias, wiki, noText, primeTopRight, lockOut})=> {
   const bttn = name ? `edit ${Pref.group}` : `new ${Pref.group}`;
-  const title = name ? 'edit' : 'create new';
+  const otitle = name ? 'edit ' + Pref.group : 'create new ' + Pref.group;
+  
+  const access = Roles.userIsInRole(Meteor.userId(), ['create', 'edit']);
+  const aT = !access ? Pref.norole : '';
+  const lT = lockOut ? `${Pref.group} is hibernated` : '';
+  const title = access && !lockOut ? otitle : `${aT}\n${lT}`;
   
   return(
     <ModelMedium
       button={bttn}
-      title={title + ' ' + Pref.group}
+      title={title}
       color='greenT'
       icon='fa-industry'
-      lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit']) || lockOut}
+      lock={!access || lockOut}
       noText={noText}
       primeTopRight={primeTopRight}>
       <GroupForm 
@@ -32,47 +37,47 @@ export default GroupFormWrapper;
 
 const GroupForm = ({ id, name, alias, wiki, title, selfclose })=> {
 
-    function createCustomer(e) {
-      e.preventDefault();
-      const groupId = id;
-      const groupName = this.gName.value.trim();
-      const groupAlias = this.gAlias.value.trim().toLowerCase();
-      const groupWiki = this.gWiki.value.trim();
-      
-      function create(groupName, groupAlias, groupWiki) {
-        Meteor.call('addGroup', groupName, groupAlias, groupWiki, (error, reply)=>{
-          if(error)
-            console.log(error);
-          if(reply) {
-            toast.success('Saved');
-            selfclose();
-          }else{
-            toast.error('Server Error');
-          }
-        });
-      }
-      
-      function edit(groupId, groupName, groupAlias, groupWiki) {
-        Meteor.call('editGroup', groupId, groupName, groupAlias, groupWiki, (error, reply)=>{
-          if(error)
-            console.log(error);
-          if(reply) {
-            toast.success('Saved');
-            FlowRouter.go('/data/overview?request=groups&specify=' + groupAlias);
-          }else{
-            toast.error('Server Error');
-          }
-        });
-      }
-      
-      /////////Selection/////////
-      if(name === false) {
-        create(groupName, groupAlias, groupWiki);
-      }else{
-        edit(groupId, groupName, groupAlias, groupWiki);
-      }
-      
+  function createCustomer(e) {
+    e.preventDefault();
+    const groupId = id;
+    const groupName = this.gName.value.trim();
+    const groupAlias = this.gAlias.value.trim().toLowerCase();
+    const groupWiki = this.gWiki.value.trim();
+    
+    function create(groupName, groupAlias, groupWiki) {
+      Meteor.call('addGroup', groupName, groupAlias, groupWiki, (error, reply)=>{
+        if(error)
+          console.log(error);
+        if(reply) {
+          toast.success('Saved');
+          selfclose();
+        }else{
+          toast.error('Server Error');
+        }
+      });
     }
+      
+    function edit(groupId, groupName, groupAlias, groupWiki) {
+      Meteor.call('editGroup', groupId, groupName, groupAlias, groupWiki, (error, reply)=>{
+        if(error)
+          console.log(error);
+        if(reply) {
+          toast.success('Saved');
+          FlowRouter.go('/data/overview?request=groups&specify=' + groupAlias);
+        }else{
+          toast.error('Server Error');
+        }
+      });
+    }
+    
+    /////////Selection/////////
+    if(name === false) {
+      create(groupName, groupAlias, groupWiki);
+    }else{
+      edit(groupId, groupName, groupAlias, groupWiki);
+    }
+    
+  }
     
   const orName = name ? name : '';
   const orAlias = alias ? alias : '';

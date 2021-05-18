@@ -9,6 +9,7 @@ import {
 } from 'victory';
 // import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
+import { countMulti } from '/client/utility/Arrays';
 
 const NonConBar = ({ ncOp, nonCons, app, isDebug })=> {
   
@@ -35,7 +36,7 @@ const NonConBar = ({ ncOp, nonCons, app, isDebug })=> {
       for(let ncSet of splitOut) {
         let ncWhere = [];
         for(let ncType of ncOptions) {
-          const typeCount = ncSet.pNC.filter( x => x.type === ncType ).length || 0;
+          const typeCount = countMulti( ncSet.pNC.filter( x => x.type === ncType ) || [] );
           if(typeCount > 0) {
             typeSet.add(ncType);
             ncWhere.push({

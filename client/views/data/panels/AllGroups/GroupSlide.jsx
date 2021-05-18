@@ -6,7 +6,7 @@ import TagsModule from '/client/components/bigUi/TagsModule.jsx';
 
 import GroupForm from '/client/components/forms/GroupForm.jsx';
 import GroupHibernate from '/client/components/forms/GroupHibernate';
-import WidgetNewForm from '/client/components/forms/WidgetNewForm.jsx';
+import WidgetNewForm from '/client/components/forms/WidgetNewForm';
 import Remove from '/client/components/forms/Remove.jsx';
 
 
@@ -40,7 +40,7 @@ const GroupSlide = ({ groupData, widgetsList, batchDataX, app })=>{
       <div className='wide comfort'>
       
         {g.hibernate &&
-          <div className='wide centreText comfort middle wetasphaltBorder'>
+          <div className='centreText comfort middle w100 vmargin wetasphaltBorder'>
             <i className='fas fa-archive fa-fw fa-2x'></i>
             <h3>Hibernated {Pref.group}</h3>
             <i className='fas fa-bed fa-fw fa-2x'></i>
@@ -79,7 +79,7 @@ const GroupSlide = ({ groupData, widgetsList, batchDataX, app })=>{
               check={g.createdAt.toISOString()}
               entry={g._id}
               noText={false}
-              lockOut={g.hibernate !== true}
+              lockOut={g.hibernate !== true ? 'still active' : false}
             />
           : null}
         </div>

@@ -17,6 +17,11 @@ const RiverSelect = ({ bID, wFlows, river, riverTitle, lock })=> {
     });
   }
   
+  const access = Roles.userIsInRole(Meteor.userId(), 'run');
+  const aT = !access ? Pref.norole : '';
+  const lT = lock ? lock : '';
+  const title = access && !lock ? `Set ${Pref.flow}` : `${aT}\n${lT}`;
+  
   const adaptSize = riverTitle.length < 5 ? '6ch' :
                     riverTitle.length * 0.7 + 6 + 'ch';
   
@@ -24,11 +29,12 @@ const RiverSelect = ({ bID, wFlows, river, riverTitle, lock })=> {
     <i><i className='fas fa-project-diagram fa-fw greenT'></i> {Pref.flow}:
       <select 
         id='riverchoice'
+        title={title}
         className='interSelect'
         defaultValue={river}
         onChange={(e)=>handleChange(e)}
         style={{ maxWidth: adaptSize, minWidth: '5ch', width: '100%' }}
-        disabled={lock}
+        disabled={!access || lock}
         required>
       <option></option>
       {wFlows.map( (entry, index)=>{

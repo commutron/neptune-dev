@@ -96,6 +96,13 @@ button:focus, button:active {
 }
 */
 button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  -webkit-appearance: button;
+}
+
+button,
 button span,
 button label,
 input[type='submit'],
@@ -337,7 +344,13 @@ input[type='date']::-webkit-inner-spin-button,
 input[type='date']::-webkit-outer-spin-button {
   display: none;
 }
-input[type='search'] { border-radius: 0 !important; }
+input[type='search'] { 
+  border-radius: 0;
+}
+select,
+input[type='searchbox'] { 
+  -webkit-appearance: menulist-text;
+}
 input[type='search']::-webkit-search-cancel-button {
   background-color: pink;
 }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-business-time';
+import Pref from '/client/global/pref.js';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 import { min2hr } from '/client/utility/Convert.js';
 import { toast } from 'react-toastify';
@@ -123,6 +124,7 @@ const RapidInfoEdit = ({ batchId, rapid, allQ, rSetItems, editAuth, cal })=> {
       
       <span className='rightRow'>
         <button
+          title={!editAuth ? Pref.norole : !rapid.live ? 'not open' : ''}
           className='miniAction gap'
           onClick={()=>editSet(!editState)}
           disabled={!rapid.live || !editAuth}

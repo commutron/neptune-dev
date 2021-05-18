@@ -25,6 +25,9 @@ const ReleaseAction = ({ id, rType, actionText, contextText })=> {
     height: 'fit-content'
   };
   
+  const access = Roles.userIsInRole(Meteor.userId(), ['run', 'kitting']);
+  const title = access ? `Release ${Pref.xBatch} to the floor` : Pref.norole;
+  
   return(
     <div className='actionBox centre greenBorder listSortInput' style={sty}>
       <Flatpickr
@@ -45,17 +48,17 @@ const ReleaseAction = ({ id, rType, actionText, contextText })=> {
       <p>
         <button
           onClick={(e)=>handleRelease(e, false)}
-          title={`Release ${Pref.xBatch} to the floor`}
+          title={title}
           className='action clearGreen centreText medBig cap'
           style={sty}
-          disabled={!Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])}
+          disabled={!access}
         >{actionText} {contextText}</button>
       </p>
       <button
         onClick={(e)=>handleRelease(e, Pref.shortfall)}
-        title={`Release ${Pref.batch} to the floor`}
+        title={title}
         className='smallAction clearOrange cap'
-        disabled={!Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])}
+        disabled={!access}
       >{actionText} with {Pref.shortfall}</button>
     </div>
   );

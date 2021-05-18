@@ -3,20 +3,26 @@ import Pref from '/client/global/pref.js';
 
 import ModelMedium from '../smallUi/ModelMedium';
 
-const CompModel = ({ vID, lockOut })=> (
-
-  <ModelMedium
-    button={'Add ' + Pref.comp + 's'}
-    title={'Add ' + Pref.comp + 's'}
-    color='greenT'
-    icon='fa-microchip'
-    lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit']) || lockOut}>
+const CompModel = ({ vID, lockOut })=> {
+  const access = Roles.userIsInRole(Meteor.userId(), ['create', 'edit']);
+  const aT = !access ? Pref.norole : '';
+  const lT = lockOut ? `${Pref.variant} is archived` : '';
+  const title = access && !lockOut ? `Add ${Pref.comp}s` : `${aT}\n${lT}`;
   
-    <CompForm
-      vID={vID}
-    />
-  </ModelMedium>
-);
+  return(
+    <ModelMedium
+      button={'Add ' + Pref.comp + 's'}
+      title={title}
+      color='greenT'
+      icon='fa-microchip'
+      lock={!access || lockOut}
+    >
+      <CompForm
+        vID={vID}
+      />
+    </ModelMedium>
+  );
+};
 
 export default CompModel;
 

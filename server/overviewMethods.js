@@ -3,7 +3,7 @@ import 'moment-timezone';
 import 'moment-business-time';
 
 import Config from '/server/hardConfig.js';
-
+import { countMulti } from './utility.js';
 import { batchTideTime } from './tideGlobalMethods.js';
 import { calcShipDay } from './reportCompleted.js';
 
@@ -160,14 +160,14 @@ function collectNonCon(privateKey, batchID, temp) {
       // nonCon relevant
       const rNC = !srs ? [] : srs.nonCon.filter( n => !n.trash );
       // how many nonCons
-      const nonConTotal = temp === 'cool' ? 0 : rNC.length;
+      const nonConTotal = temp === 'cool' ? 0 : countMulti(rNC);
       // how many are unresolved  
-      const nonConLeft = rNC.filter( x => x.inspect === false ).length;
+      const nonConLeft = countMulti( rNC.filter( x => x.inspect === false ) );
       // nc rate
       const ncRate = ( nonConTotal / itemQuantity ).toFixed(1, 10);
       // how many items have nonCons
       const hasNonCon = temp === 'cool' ? 0 :
-        [... new Set( Array.from(rNC, x => { return x.serial }) ) ].length;
+        [... new Set( Array.from(rNC, x => x.serial) ) ].length;
       // what percent of items have nonCons
       const percentOfNCitems = temp === 'cool' ? 0 :
         ((hasNonCon / itemQuantity) * 100 ).toFixed(0);

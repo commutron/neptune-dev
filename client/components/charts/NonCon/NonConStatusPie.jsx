@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { VictoryPie, VictoryTooltip } from 'victory';
 import Theme from '/client/global/themeV.js';
+import { countMulti } from '/client/utility/Arrays';
 
 const NonConSatusPie = ({ nonCons })=> {
   
@@ -13,12 +14,12 @@ const NonConSatusPie = ({ nonCons })=> {
   
   useEffect( ()=>{
     const ncG = nonCons;
-    totalSet(ncG.length);
+    totalSet(countMulti(ncG));
 
-    const none = ncG.filter( n => n.fix === false && n.inspect === false ).length;
-    const fix = ncG.filter( n => n.fix !== false && n.inspect === false ).length;
-    const done = ncG.filter( n => n.inspect !== false ).length;
-    const skip = ncG.filter( n => n.inspect === false && n.snooze === true ).length;
+    const none = countMulti( ncG.filter( n => n.fix === false && n.inspect === false ) );
+    const fix = countMulti( ncG.filter( n => n.fix !== false && n.inspect === false ) );
+    const done = countMulti( ncG.filter( n => n.inspect !== false ) );
+    const skip = countMulti( ncG.filter( n => n.inspect === false && n.snooze === true ) );
 
     const counts = [ none, fix, done, skip ];
     countSet(counts);

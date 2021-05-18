@@ -10,11 +10,8 @@ const AssemblyList = ({ variantData, widgetData, groupData })=> {
   const v = variantData;
   const w = widgetData;
 
-  const vAssmbl = v.assembly.sort((p1, p2)=> {
-                  if (p1.component < p2.component) { return -1 }
-                  if (p1.component > p2.component) { return 1 }
-                  return 0;
-                });
+  const vAssmbl = v.assembly.sort((p1, p2)=>
+      p1.component < p2.component ? -1 : p1.component > p2.component ? 1 : 0 );
   
   function removeComp(compPN) {
     const check = confirm('Are you sure you want to remove this ' + Pref.comp + '?');
@@ -58,7 +55,8 @@ const AssemblyList = ({ variantData, widgetData, groupData })=> {
         
         <CompForm 
           vID={variantData._id}
-          lockOut={groupData.hibernate} />
+          lockOut={!v.live} 
+        />
         
         <ActionFunc
           doFunc={downloadComp}

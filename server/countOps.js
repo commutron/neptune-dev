@@ -3,7 +3,7 @@ import moment from 'moment';
 import { batchTideTime, distTimeBudget } from './tideGlobalMethods.js';
 import { deliveryState } from './reportCompleted.js';
 import { avgOfArray } from './calcOps';
-import { allNCOptions } from './utility';
+import { allNCOptions, countMulti } from './utility';
 
 ////////////////////////////////////////////////////////// NO LEGACY
 
@@ -164,7 +164,7 @@ Meteor.methods({
     function ncCounter(ncArray, ncOptions) {
       let ncCounts = [];
       for(let ncType of ncOptions) {
-        const typeCount = ncArray.filter( n => n.type === ncType && !n.trash ).length;
+        const typeCount = countMulti( ncArray.filter( n => n.type === ncType && !n.trash ) );
         ncCounts.unshift({x: ncType, y: typeCount, l: batch});
       }
       return ncCounts;

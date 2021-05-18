@@ -4,6 +4,7 @@ import 'moment-timezone';
 import Config from '/server/hardConfig.js';
 import { deliveryBinary } from '/server/reportCompleted.js';
 import { checkTimeBudget } from '/server/tideGlobalMethods';
+import { countMulti } from './utility';
 
   export function countNewUser(accessKey, rangeStart, rangeEnd) {
     const resultU = Meteor.users.find({
@@ -181,7 +182,7 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
       const thisNC = srs.nonCon.filter( 
         x => moment(x.time).isBetween(rangeStart, rangeEnd) 
       );
-      ncCount += thisNC.length;
+      ncCount += countMulti( thisNC );
     });
     /* // count from batch lockTrunc \\
       const tnc = batch.lockTrunc.ncTypes.reduce( 
@@ -207,7 +208,7 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
       const thisSH = srs.shortfall.filter( 
         x => moment(x.cTime).isBetween(rangeStart, rangeEnd) 
       );
-      shCount += thisSH.length;
+      shCount += countMulti( thisSH );
     });
     /* // count from batch lockTrunc \\
       const tsh = batch.lockTrunc.shTypes.reduce( 

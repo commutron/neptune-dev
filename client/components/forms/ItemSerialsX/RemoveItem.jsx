@@ -1,27 +1,35 @@
 import React from 'react';
-//import Pref from '/client/global/pref.js';
+import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 import ModelMedium from '/client/components/smallUi/ModelMedium';
 
 
-const RemoveItem = ({ batchId, batch, seriesId, serial, check, lockOut })=> (
-  <ModelMedium
-    button='Delete'
-    title={`delete "${serial}"`}
-    color='redT'
-    icon='fa-minus-circle'
-    lock={!Roles.userIsInRole(Meteor.userId(), 'remove') || lockOut}
-  >
-    <RemoveItemForm
-      batchId={batchId}
-      batch={batch}
-      seriesId={seriesId}
-      serial={serial}
-      check={check}
-    />
-  </ModelMedium>
-);  
+const RemoveItem = ({ batchId, batch, seriesId, serial, check, lockOut })=> {
+  
+  const access = Roles.userIsInRole(Meteor.userId(), 'remove');
+  const aT = !access ? Pref.norole : '';
+  const lT = lockOut ? lockOut : '';
+  const title = access && !lockOut ? `Delete "${serial}"` : `${aT}\n${lT}`;
+  
+  return(
+    <ModelMedium
+      button='Delete'
+      title={title}
+      color='redT'
+      icon='fa-minus-circle'
+      lock={!access || lockOut}
+    >
+      <RemoveItemForm
+        batchId={batchId}
+        batch={batch}
+        seriesId={seriesId}
+        serial={serial}
+        check={check}
+      />
+    </ModelMedium>
+  );  
+};
 
 export default RemoveItem;  
       

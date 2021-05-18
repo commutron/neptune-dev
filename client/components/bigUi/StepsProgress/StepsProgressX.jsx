@@ -91,7 +91,8 @@ const StepsProgressX  = ({
             wFlows={widgetData.flows}
             river={b.river}
             riverTitle={riverTitle}
-            lock={!hasSeries || b.completed === true} />
+            lock={b.completed ? Pref.isDone :
+                 !hasSeries ? `No ${Pref.series}` : false} />
         }
         {unitsExist &&
           <ToggleBar

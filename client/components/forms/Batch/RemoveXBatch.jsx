@@ -4,18 +4,20 @@ import { toast } from 'react-toastify';
 
 import ModelMedium from '/client/components/smallUi/ModelMedium.jsx';
 
-const RemoveXBatchWrapper = ({ batchData, seriesData, check, lockOut })=> {
+const RemoveXBatchWrapper = ({ batchData, seriesData, check, lock })=> {
   
-  const auth = Roles.userIsInRole(Meteor.userId(), 'remove') && !lockOut;
+  const access = Roles.userIsInRole(Meteor.userId(), 'remove');
+  const aT = !access ? Pref.norole : '';
+  const lT = lock ? lock : '';
+  const title = access && !lock ? `Delete "${batchData.batch}" permanently` : `${aT}\n${lT}`;
   
   return(
     <ModelMedium
       button='Delete'
-      title={`delete "${batchData.batch}" permanently`}
+      title={title}
       color='redT'
       icon='fa-minus-circle'
-      lock={!auth}
-      // menuItem={true}
+      lock={!access || lock}
     >
       <RemoveXBatch
         batchData={batchData}

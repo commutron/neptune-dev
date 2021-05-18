@@ -4,20 +4,26 @@ import { toast } from 'react-toastify';
 
 import ModelMedium from '/client/components/smallUi/ModelMedium';
 
-const BatchXIncomplete = ({ batchData, seriesData, app, lockOut, noText })=> (
-  <ModelMedium
-    button='Force Finish'
-    title={`Force Finish Incomplete ${Pref.xBatch}`}
-    color='darkOrangeT'
-    icon='fa-flag-checkered'
-    lock={!Roles.userIsInRole(Meteor.userId(), ['qa', 'admin']) || lockOut}
-    noText={noText}>
-    <BatchXIncompleteForm
-      batchData={batchData}
-      seriesData={seriesData}
-      app={app} />
-	</ModelMedium>
-);
+const BatchXIncomplete = ({ batchData, seriesData, app, lock, noText })=> {
+  const access = Roles.userIsInRole(Meteor.userId(), ['qa', 'admin']);
+  const aT = !access ? Pref.norole : '';
+  const lT = lock ? lock : '';
+  const title = access && !lock ? `Force Finish Incomplete ${Pref.xBatch}` : `${aT}\n${lT}`;
+  return(
+    <ModelMedium
+      button='Force Finish'
+      title={title}
+      color='darkOrangeT'
+      icon='fa-flag-checkered'
+      lock={!access || lock}
+      noText={noText}>
+      <BatchXIncompleteForm
+        batchData={batchData}
+        seriesData={seriesData}
+        app={app} />
+  	</ModelMedium>
+  );
+};
 
 export default BatchXIncomplete;     
 	        

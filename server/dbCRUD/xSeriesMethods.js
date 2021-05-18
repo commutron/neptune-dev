@@ -135,7 +135,7 @@ Meteor.methods({
           key: new Meteor.Collection.ObjectID().valueOf(), // id of the nonCon entry
           serial: bar, 
           ref: ref, // location
-          multi: multi, // on number of units
+          multi: Number(multi), // on number of units
           type: type,
           where: step, // where in the process
           time: new Date(),
@@ -255,7 +255,7 @@ Meteor.methods({
     const double = srs.nonCon.find( x => 
                     x.serial === serial &&
                     x.ref === ref &&
-                    x.multi === multi &&
+                    x.multi == multi &&
                     x.type === type &&
                     x.where === where &&
                     x.inspect === false
@@ -264,7 +264,7 @@ Meteor.methods({
 		  XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
   			$set : { 
   			  'nonCon.$.ref': ref,
-  			  'nonCon.$.multi': multi,
+  			  'nonCon.$.multi': Number(multi),
   			  'nonCon.$.type': type,
   			  'nonCon.$.where': where
   			}
@@ -377,7 +377,7 @@ Meteor.methods({
           key: new Meteor.Collection.ObjectID().valueOf(), // id of the shortage entry
           partNum: partNum, // part number
           refs: refs, // referances on the widget
-          multi: multi, // on number of units
+          multi: Number(multi), // on number of units
           serial: serial, // apply to item
           where: step, // where in the process
           cTime: new Date(),
@@ -413,7 +413,7 @@ Meteor.methods({
   			$set : { 
   			  'shortfall.$.partNum': pn || '',
   			  'shortfall.$.refs': rf || [],
-  			  'shortfall.$.multi': ml || [],
+  			  'shortfall.$.multi': Number(ml),
   			  'shortfall.$.uTime': new Date(),
           'shortfall.$.uWho': Meteor.userId(),
           'shortfall.$.inEffect': ef,

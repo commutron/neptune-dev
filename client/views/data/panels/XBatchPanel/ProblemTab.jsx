@@ -40,13 +40,14 @@ const ProblemTab = ({
       <div className='avOneContent centreSelf centreText'>
         <p className='small'>NonCons</p>
         {srsNonCon ?
-          <div className='wide balancer topLine'>  
+          <div className='wide autoGrid topLine'>  
             <NonConStatusPie nonCons={nonConArrayClean} />
-            
-            <HasNonCon noncons={srsNonCon} items={srsItems} />
-            <NonConPer noncons={srsNonCon} items={srsItems} />
-            <LeftFxNonCon noncons={srsNonCon} />
-            <LeftInNonCon noncons={srsNonCon} />
+            <span>
+              <HasNonCon noncons={srsNonCon} items={srsItems} />
+              <NonConPer noncons={srsNonCon} items={srsItems} />
+              <LeftFxNonCon noncons={srsNonCon} />
+              <LeftInNonCon noncons={srsNonCon} />
+            </span>
           </div>
         : <h4>Not Tracking {Pref.nonCons}</h4>}
       </div>
@@ -55,13 +56,14 @@ const ProblemTab = ({
       <div className='avTwoContent centreText'>
         <p className='small'>Shortfalls</p>
         {srsShorts ?
-          <div className='wide balancer topLine'>  
+          <div className='wide autoGrid topLine'>  
             <ShortfallStatusPie shortfalls={srsShorts} />
-            
-            <HasShortfall shortfalls={srsShorts} items={srsItems} />
-            <PartsShort shortfalls={srsShorts} />
-            <RefCount shortfalls={srsShorts} />
-            <LeftToResolve shortfalls={srsShorts} />
+            <span>
+              <HasShortfall shortfalls={srsShorts} items={srsItems} />
+              <PartsShort shortfalls={srsShorts} />
+              <RefCount shortfalls={srsShorts} />
+              <LeftToResolve shortfalls={srsShorts} />
+            </span>
           </div>
         : <h4>Not Tracking {Pref.shortfalls}</h4>}
       </div>

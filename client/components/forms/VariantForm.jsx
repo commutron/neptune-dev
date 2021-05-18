@@ -7,15 +7,19 @@ import ModelLarge from '../smallUi/ModelLarge';
 const VariantModel = ({ widgetData, app, rootWI, lockOut })=> {
   
   let name = `new ${Pref.variant}`;
+  const access = Roles.userIsInRole(Meteor.userId(), ['create', 'edit']);
+  const aT = !access ? Pref.norole : '';
+  const lT = lockOut ? `${Pref.group} is hibernated` : '';
+  const title = access && !lockOut ? name : `${aT}\n${lT}`;
   
   return(
     <ModelLarge
       button={name}
-      title={name}
+      title={title}
       color='greenT'
       icon='fa-cube fa-rotate-90'
-      lock={!Roles.userIsInRole(Meteor.userId(), ['create', 'edit']) || lockOut}>
-      
+      lock={!access || lockOut}
+    >
       <VariantForm
         widgetData={widgetData}
         app={app}
@@ -27,7 +31,7 @@ const VariantModel = ({ widgetData, app, rootWI, lockOut })=> {
   
 export default VariantModel;
 
-const VariantForm = ({ widgetData, app, rootWI, lockOut, selfclose })=> {
+const VariantForm = ({ widgetData, app, rootWI, selfclose })=> {
 
   function save(e) {
     e.preventDefault();

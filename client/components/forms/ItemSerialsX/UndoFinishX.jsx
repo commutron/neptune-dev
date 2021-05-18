@@ -8,20 +8,21 @@ import ModelSmall from '/client/components/smallUi/ModelSmall';
 const UndoFinishX = ({ 
   batchId, finishedAtB, seriesId, serial, finishedAtI, rapidData, rapids,
   noText 
-})=>	{
+})=> {
   
-  const auth = Roles.userIsInRole(Meteor.userId(), 'BRKt3rm1n2t1ng8r2nch') && 
-                !finishedAtB && typeof finishedAtI === 'object';
-  
-  const icon = !finishedAtB ? 'fa-backward' : 'fa-lock';
+  const access = Roles.userIsInRole(Meteor.userId(), 'BRKt3rm1n2t1ng8r2nch');
+  const clear = !finishedAtB && typeof finishedAtI === 'object';
+  const aT = !access ? Pref.norole : '';
+  const lT = !clear ? 'unavailable' : '';
+  const title = access && clear ? `Undo Finish and Reactivate ${Pref.item}` : `${aT}\n${lT}`;
   
   return(
     <ModelSmall
       button='Undo Finish'
-      title={'Undo Finish and Reactivate ' + Pref.item}
+      title={title}
       color='orangeT'
-      icon={icon}
-      lock={!auth}
+      icon={'fa-backward'}
+      lock={!access || !clear}
       noText={noText}
     >
       <UndoFinishForm

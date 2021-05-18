@@ -12,7 +12,7 @@ const VariantLive = ({ vId, vKey, vState, selfclose })=> {
       if(reply) {
         toast.success('Saved');
       }else{
-        toast.warning(`Not changed. Live ${Pref.batches} found`,
+        toast.warning(`Not changed. Live ${Pref.xBatchs} found`,
         { autoClose: false });
       }
     });

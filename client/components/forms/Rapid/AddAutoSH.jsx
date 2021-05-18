@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Pref from '/client/global/pref.js';
 import '/client/components/bigUi/ArrayBuilder/style.css';
 
 export const AddAutoSHwrap = ({ rapidData, vassembly, editAuth })=> {
@@ -54,6 +55,7 @@ export const AddAutoSHwrap = ({ rapidData, vassembly, editAuth })=> {
       :
         <span className='rightRow'>
           <button
+            title={!editAuth ? Pref.norole : !rapidData.live ? 'not open' : ''}
             className='miniAction gap'
             onClick={()=>editSet(true)}
             disabled={!rapidData.live || !editAuth}

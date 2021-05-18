@@ -59,6 +59,7 @@ class Pref {
     this.usrCut = RegExp(/\.|\-|\_/g);
     // terminology
     this.admin = 'org admin';
+    this.norole = 'insufficient permissions';
     
     this.regex5 = RegExp(/^(\d{5})$/);
     

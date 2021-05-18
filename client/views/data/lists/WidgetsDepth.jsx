@@ -83,14 +83,14 @@ const WidgetIndexCard = ({ data, barStyle })=>{
             size='medBig' />
           <NumStat
             num={totalBatches}
-            name={Pref.batches}
-            title={'all ' + Pref.batches + ' & Batch+'}
+            name={Pref.xBatchs}
+            title={'all ' + Pref.xBatchs + ' & Batch+'}
             color='blueT'
             size='medBig' />
           <NumStat
             num={totalItems}
             name={Pref.items}
-            title={'serialized items of all ' + Pref.batch + 'es'}
+            title={'serialized items of all ' + Pref.xBatch + 'es'}
             color='blueT'
             size='medBig' />
         </span>

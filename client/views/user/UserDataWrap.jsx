@@ -5,6 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
 
 // import Pref from '/client/global/pref.js';
+import { branchesSort } from '/client/utility/Arrays.js';
 import { SpinWrap } from '/client/components/tinyUi/Spin.jsx';
 import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
 import HomeIcon from '/client/layouts/HomeIcon.jsx';
@@ -33,9 +34,10 @@ const UserDataWrap = ({
   }
     
   const branches = app.branches.filter( b => b.open === true );
-  const brancheS = branches.sort((b1, b2)=>
-          b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
-        
+  const brancheS = branchesSort(branches);
+  
+  const iL = <i className='rAlign'>{user.inbox.length}</i>
+     
   return(
     <ErrorCatch>
     <div className='simpleContainer'>
@@ -57,7 +59,7 @@ const UserDataWrap = ({
             <b><i className='fas fa-user-clock fa-fw'></i>  Production Activity</b>,
             <b><i className='fas fa-user-cog fa-fw'></i>  Preferences</b>,
             <b><i className='fas fa-user-shield fa-fw'></i>  Access & Privacy</b>,
-            <b><i className='fas fa-envelope fa-fw'></i>  Messages</b>
+            <b><i className='fas fa-envelope fa-fw'></i>  Messages{iL}</b>
           ]}
           extraClass='space5x5'>
             

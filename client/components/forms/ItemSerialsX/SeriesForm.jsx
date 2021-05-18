@@ -4,17 +4,23 @@ import { toast } from 'react-toastify';
 
 import ModelSmall from '/client/components/smallUi/ModelSmall';
 
-const SeriesCreate = ({ batchData, lock, noText })=> (
-  <ModelSmall
-    button={`Add ${Pref.series}`}
-    title={`Add ${Pref.series}`}
-    color='greenT'
-    icon='fa-layer-group'
-    lock={!Roles.userIsInRole(Meteor.userId(), 'run') || lock}
-    noText={noText}>
-    <SeriesCreateForm batchData={batchData} />
-  </ModelSmall>
-);
+const SeriesCreate = ({ batchData, lock, noText })=> {
+  const access = Roles.userIsInRole(Meteor.userId(), 'run');
+  const aT = !access ? Pref.norole : '';
+  const lT = lock ? `${Pref.series} has been added` : '';
+  const title = access && !lock ? `Add ${Pref.series}` : `${aT}\n${lT}`;
+  return(
+    <ModelSmall
+      button={`Add ${Pref.series}`}
+      title={title}
+      color='greenT'
+      icon='fa-layer-group'
+      lock={!access || lock}
+      noText={noText}>
+      <SeriesCreateForm batchData={batchData} />
+    </ModelSmall>
+  );
+};
       
       
 const SeriesCreateForm = ({ batchData, selfclose })=> {
@@ -62,19 +68,24 @@ const SeriesCreateForm = ({ batchData, selfclose })=> {
 
 export default SeriesCreate;
 
-export const SeriesDelete = ({ batchId, seriesId, lock })=> (
-  <ModelSmall
-    button={`Delete ${Pref.series}`}
-    title={`Delete ${Pref.series}`}
-    color='redT'
-    icon='fa-trash'
-    lock={!Roles.userIsInRole(Meteor.userId(), 'run') || lock}
-    lgIcon={true}>
-    <SeriesRemoveForm 
-      batchId={batchId}
-      seriesId={seriesId} />
-  </ModelSmall>
-);
+export const SeriesDelete = ({ batchId, seriesId })=> {
+  const access = Roles.userIsInRole(Meteor.userId(), 'run');
+  const aT = !access ? Pref.norole : '';
+  const title = access ? `Delete ${Pref.series}` : aT;
+  return(
+    <ModelSmall
+      button={`Delete ${Pref.series}`}
+      title={title}
+      color='redT'
+      icon='fa-trash'
+      lock={!access}
+      lgIcon={true}>
+      <SeriesRemoveForm 
+        batchId={batchId}
+        seriesId={seriesId} />
+    </ModelSmall>
+  );
+};
       
 
 const SeriesRemoveForm = ({ batchId, seriesId, selfclose })=> {

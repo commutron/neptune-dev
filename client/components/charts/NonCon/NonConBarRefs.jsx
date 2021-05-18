@@ -9,6 +9,7 @@ import {
 //import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
 import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
+import { countMulti } from '/client/utility/Arrays';
 
 const NonConBarRefs = ({ ncOp, nonCons, app, isDebug })=> {
   
@@ -33,7 +34,7 @@ const NonConBarRefs = ({ ncOp, nonCons, app, isDebug })=> {
     for(let ref of splitByRef) {
       let type = [];
       for(let n of nonConOptions) {
-        const typeCount = ref.ncs.filter( x => x.type === n ).length;
+        const typeCount = countMulti( ref.ncs.filter( x => x.type === n ) );
         if(typeCount > 0) {
           typeSet.add(n);
           type.push({
@@ -92,10 +93,6 @@ const NonConBarRefs = ({ ncOp, nonCons, app, isDebug })=> {
           colorScale='heatmap'
           horizontal={true}
           padding={0}
-          // animate={{
-          //   duration: 500,
-          //   onLoad: { duration: 250 }
-          // }}
         >
         
         {series.map( (entry, index)=>{

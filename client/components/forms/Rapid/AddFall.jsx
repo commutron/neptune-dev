@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-// import Pref from '/client/global/pref.js';
+import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 const AddFall = ({ rapidData, editAuth })=> {
@@ -102,6 +102,7 @@ const AddFall = ({ rapidData, editAuth })=> {
       :
         <span className='rightRow'>
           <button
+            title={!editAuth ? Pref.norole : !rapidData.live ? 'not open' : ''}
             className='miniAction gap'
             onClick={()=>editSet(!editState)}
             disabled={!rapidData.live || !editAuth}

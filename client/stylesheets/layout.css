@@ -640,6 +640,7 @@ n-sm-model-content {
 .vbreak { padding: 0 0 24px 0; }
 .nospace { padding: 0; }
 
+.margin5 { margin: 5px; }
 .vmargin { margin: 24px 0; }
 .vmarginhalf { margin: 12px 0; }
 .vmarginquarter { margin: 6px 0; }
@@ -1204,6 +1205,7 @@ n-col-table-head > span {
 .max400 { max-width: 400px; }
 .max300 { max-width: 300px; }
 .max250 { max-width: 250px; }
+.max100 { max-width: 100px; }
 .min600 { min-width: 600px; }
 .min400 { min-width: 400px; }
 .min350 { min-width: 350px; }

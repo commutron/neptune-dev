@@ -27,30 +27,36 @@ const ItemSerialsWrapX = ({
       autoClose: 3000
     });
   }
+  
+  const access = Roles.userIsInRole(Meteor.userId(), 'create');
+  const aT = !access ? Pref.norole : '';
+  const lT = lock ? lock : '';
+  const title = access && !lock ? `Add ${Pref.item} ${Pref.itemSerial} numbers` : `${aT}\n${lT}`;
+
   if(itemsQ >= quantity) {
     updateToast();
     return(
       <ModelSmall
         button={'Add ' + Pref.item + 's'}
-        title={'add ' + Pref.item + ' ' + Pref.itemSerial + ' numbers'}
+        title={title}
         color='greenT'
         icon={'fa-' + Pref.serialIcon}
         lgIcon={lgIcon}
-        lock={!Roles.userIsInRole(Meteor.userId(), 'create') || lock}
+        lock={!access || lock}
       >
         <NoBox />
       </ModelSmall>
     );
   }
-
+  
   return(
     <ModelLarge
       button={'Add ' + Pref.item + 's'}
-      title={'add ' + Pref.item + ' ' + Pref.itemSerial + ' numbers'}
+      title={title}
       color='greenT'
       icon={'fa-' + Pref.serialIcon}
       lgIcon={lgIcon}
-      lock={!Roles.userIsInRole(Meteor.userId(), 'create') || lock}
+      lock={!access || lock}
     >
       <ItemSerialsTabs
         bID={bID}

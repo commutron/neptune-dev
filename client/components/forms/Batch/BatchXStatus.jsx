@@ -47,7 +47,7 @@ const BatchXStatus = ({ batchData, allFlow, allFall, nowater, rapid })=>	{
           <p>
             <button
               id='isDone'
-              title='Turn ON'
+              title={canRun ? 'Turn ON' : Pref.norole}
               className='miniAction noFade medBig'
               onClick={()=>handleLive(true)}
               disabled={!canRun}
@@ -58,7 +58,7 @@ const BatchXStatus = ({ batchData, allFlow, allFall, nowater, rapid })=>	{
             <p>
               <button
                 id='doLock'
-                title='Enable Lock'
+                title={canRun ? 'Enable Lock' : Pref.norole}
                 className='miniAction noFade medBig'
                 onClick={(e)=>handleLock(e)}
                 disabled={!canRun}
@@ -70,7 +70,7 @@ const BatchXStatus = ({ batchData, allFlow, allFall, nowater, rapid })=>	{
             <p>
               <button
                 id='doUnLock'
-                title='Disable Lock'
+                title={canRun ? 'Disable Lock' : Pref.norole}
                 className='miniAction noFade medBig'
                 onClick={(e)=>handleUnLock(e)}
                 disabled={!canRun}
@@ -83,7 +83,7 @@ const BatchXStatus = ({ batchData, allFlow, allFall, nowater, rapid })=>	{
         <p>
           <button
             id='isDone'
-            title='Turn OFF'
+            title={canRun ? 'Turn OFF' : Pref.norole}
             className='miniAction noFade medBig'
             onClick={()=>handleLive(false)}
             disabled={!canRun}

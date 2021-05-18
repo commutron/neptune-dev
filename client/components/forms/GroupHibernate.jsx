@@ -2,26 +2,30 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelMedium from '../smallUi/ModelMedium.jsx';
+import ModelSmall from '../smallUi/ModelSmall';
 
 const GroupHibernateWrapper = ({ id, hState, noText, primeTopRight })=> {
   const actTtl = !hState ? `Hibernate ${Pref.group}` : 
                            `Wake Up ${Pref.group} from hibernation`;
   
+  const access = Roles.userIsInRole(Meteor.userId(), 'edit');
+  const aT = !access ? Pref.norole : '';
+  const title = access ? actTtl : aT;
+  
   return(
-    <ModelMedium
+    <ModelSmall
       button='Hibernation'
-      title={actTtl}
+      title={title}
       color='grayT'
       icon='fa-archive'
-      lock={!Roles.userIsInRole(Meteor.userId(), ['edit'])}
+      lock={!access}
       noText={noText}
       primeTopRight={primeTopRight}>
       <GroupHibernate
         id={id}
         hState={hState}
       />
-    </ModelMedium>
+    </ModelSmall>
   );
 };
 

@@ -1,4 +1,3 @@
-////////////////////////////////////////////////////// LEGACY AGNOSTIC
 
 export function sortBranches(branches) {
   const brancheS = branches.sort((b1, b2)=>
@@ -7,10 +6,6 @@ export function sortBranches(branches) {
 }
 
 export function flattenHistory(itemArr) {
-  // const wipItemHistory = Array.from( itemArr, 
-  //                             x => x.history.filter( 
-  //  /* Slower */                y => y.type !== 'first' && y.good === true) );
-                                
   let wipItemHistory = [];
   for( let i of itemArr ) { 
     wipItemHistory.push( 
@@ -19,11 +14,6 @@ export function flattenHistory(itemArr) {
   }
   const historyFlat = [].concat(...wipItemHistory);
 
-  // let historyFlat = [];
-  // for(const h of wipItemHistory) {
-  //   Array.prototype.push.apply(historyFlat, h);
-  // }  /* Slower */   
-  
   return historyFlat;
 }
 
@@ -47,4 +37,10 @@ export function allNCOptions() {
 	  const flatTypeListClean = [...new Set( flatTypeList.filter( x => x !== false) ) ];
     return flatTypeListClean;
   }
+}
+
+export function countMulti(ncArr) {
+  const inst = Array.from(ncArr, x => Number(x.multi) || 1);
+  const count = inst.length > 0 ? inst.reduce((x,y)=> x + y) : 0;
+  return count;
 }

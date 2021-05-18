@@ -75,7 +75,7 @@ const InfoTab = ({
             batchId={b._id}
             end={b.salesEnd}
             app={app}
-            lock={b.completed === true && !isDebug}
+            lock={b.completed === true && !isDebug ? Pref.isDone : false}
             canDo={Roles.userIsInRole(Meteor.userId(), ['edit', 'sales'])}
             noText={true}
             lgIcon={true}
@@ -99,7 +99,6 @@ const InfoTab = ({
           tags={b.tags}
           tagOps={app.tagOption} />
       </div>
-        
         
       <SalesSegment 
         b={b}

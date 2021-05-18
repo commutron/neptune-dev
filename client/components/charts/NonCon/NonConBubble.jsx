@@ -9,6 +9,7 @@ import {
 } from 'victory';
 // import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
+import { countMulti } from '/client/utility/Arrays';
 
 const NonConBubble = ({ ncOp, nonCons, app, isDebug })=> {
   
@@ -34,7 +35,7 @@ const NonConBubble = ({ ncOp, nonCons, app, isDebug })=> {
     
     for(let ncSet of splitOut) {
       for(let ncType of nonConOptions) {
-        const typeCount = ncSet.pNC.filter( x => x.type === ncType ).length;
+        const typeCount = countMulti( ncSet.pNC.filter( x => x.type === ncType ) );
         if(typeCount > 0) {
           typeSet.add(ncType);
           ncCounts.push({

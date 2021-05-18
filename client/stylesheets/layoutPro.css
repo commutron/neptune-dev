@@ -165,16 +165,6 @@
   padding: 0;
   width: 100%;
 }
-.footPick {
-  display: flex;
-  flex-direction: row;
-  align-content: center;
-  justify-content: center;
-  
-}
-.footFill {
-  flex-grow: 2;
-}
 
 #lookup {
   font-size: calc(4.5 * var(--vh));

@@ -2,6 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import NumStat from '/client/components/tinyUi/NumStat.jsx';
+import { countMulti } from '/client/utility/Arrays';
 
 const ShortfallMiniTops = ({ shortfalls, items, user, app })=> (
   <div className='centre'>
@@ -19,19 +20,20 @@ export default ShortfallMiniTops;
 
 
 export const HasShortfall = ({ shortfalls, items })=> {
-  const hasShort = [... new Set( Array.from(shortfalls, x => { return x.serial }) ) ].length;
+  const hasShort = [... new Set( Array.from(shortfalls, x => x.serial) ) ].length;
   return(
     <NumStat
       num={((hasShort / items.length) * 100 ).toFixed(0) + '%'}
       name={'of ' + Pref.item + 's have shortfalls'}
       color='orangeT'
-      size='bigger' />
+      size='bigger'
+      moreClass='max100 wmargin' />
   );
 };
 
 export const RefCount = ({ shortfalls })=> {
   const refTotal = shortfalls.reduce( (arr, x)=>
-      arr + x.refs.length, 0 );
+      arr + ( x.refs.length * (x.multi || 1) ), 0 );
   return(
     <NumStat
       num={refTotal}
@@ -42,7 +44,7 @@ export const RefCount = ({ shortfalls })=> {
 };
 
 export const PartsShort = ({ shortfalls, items })=> {
-  const partShort = [... new Set( Array.from(shortfalls, x => { return x.partNum }) ) ].length;
+  const partShort = [... new Set( Array.from(shortfalls, x => x.partNum) ) ].length;
   return(
     <NumStat
       num={partShort}
@@ -54,7 +56,7 @@ export const PartsShort = ({ shortfalls, items })=> {
 
 export const LeftToResolve = ({ shortfalls })=> {
   const done = shortfalls.filter( s => s.inEffect === true || s.reSolve === true ).length;
-  const left = shortfalls.length - done;
+  const left = countMulti(shortfalls) - done;
   return(
     <NumStat
       num={left}

@@ -1,5 +1,4 @@
 import React, { useState, Fragment } from 'react';
-// import ReactDOM from 'react-dom';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import Pref from '/client/global/pref.js';
 
@@ -7,8 +6,7 @@ const NCTributary = ({ seriesId, serial, nonCons, sType })=> {
 
   function handleAction(ncKey, ACT, extra) {
     Meteor.call('runNCAction', seriesId, ncKey, ACT, extra, (error)=> {
-			if(error)
-			  console.log(error);
+			error && console.log(error);
 		});
 		let findBox = document.getElementById('lookup');
 		findBox.focus();

@@ -27,6 +27,7 @@ export const TimeBudgetUpgrade = ({ bID, isX })=>	{
     <label>
       <button
         type='submit'
+        title={auth ? 'upgrade' : Pref.norole}
         className='action greenHover'
         onClick={(e)=>upgradeForQuoteTime(e)}
         disabled={!auth}
@@ -63,12 +64,19 @@ export const WholeTimeBudget = ({ bID, isX, lockOut })=>	{
     }else{ toast.error('NO Permission'); }
   };
   
+  const aT = !auth ? Pref.norole : '';
+  const lT = lockOut ? `${Pref.xBatch} is locked` : '';
+  const title = auth && !lockOut ? `update quoted time budget\n in hours to 2 decimal places` : `${aT}\n${lT}`;
+  
   return(
-    <form className='inlineForm' onSubmit={(e)=>addTimeInHours(e)}>
+    <form 
+      title={title}
+      className='inlineForm'
+      onSubmit={(e)=>addTimeInHours(e)}
+    >
       <input
         type='number'
         id='hourNum'
-        title={`update quoted time budget\n in hours to 2 decimal places`}
         className='numberSet miniIn8'
         pattern="^\d*(\.\d{0,2})?$"
         maxLength='7'

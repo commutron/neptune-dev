@@ -8,7 +8,7 @@ import {
 } from 'victory';
 //import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
-
+import { countMulti } from '/client/utility/Arrays';
 
 // Not In Use
 //// Keeping as example
@@ -48,7 +48,7 @@ const NonConScatter = ({ ncOp, flow, flowAlt, nonCons, app })=> {
       
       for(let ncSet of splitByPhase) {
         for(let ncType of ncOptions) {
-          const typeCount = ncSet.pNC.filter( x => x.type === ncType ).length;
+          const typeCount = countMulti( ncSet.pNC.filter( x => x.type === ncType ) );
           if(typeCount > 0) {
             ncCounts.push({
               x: typeCount,

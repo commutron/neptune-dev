@@ -46,7 +46,7 @@ const VariantCard = ({
               title={variantData.variant}
               check={variantData.createdAt.toISOString()}
               entry={variantData}
-              lockOut={variantData.live === true} 
+              lockOut={variantData.live === true ? 'still open' : false} 
             />
           : null}
             
@@ -137,6 +137,7 @@ const InlineForm = ({ widgetData, variantData })=> {
     
         <span className='rightRow'>
           <button
+            title={!editAuth ? Pref.norole : !variantData.live ? 'not open' : ''}
             className='miniAction gap'
             onClick={()=>editSet(!editState)}
             disabled={!variantData.live || !editAuth}

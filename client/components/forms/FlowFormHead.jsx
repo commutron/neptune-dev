@@ -4,26 +4,23 @@ import { toast } from 'react-toastify';
 
 import ModelMedium from '/client/components/smallUi/ModelMedium.jsx';
 import MultiSelect from "react-multi-select-component";
-// requires
-// id = widget ID
-// existFlows = existing flows
-// options = buildStep options from the app settings
-// end = lastStep from app settings
 
 const FlowFormHeadWrapper = ({
   id, app,
   existFlows, edit, preFill, 
-  noText, lock
+  noText
 })=> {
   const name = edit ? 'Edit' : 'New Flow';
-  
+  const access = Roles.userIsInRole(Meteor.userId(), 'edit');
+  const aT = !access ? Pref.norole : '';
+  const title = access ? name : aT;
   return(
     <ModelMedium
       button={name}
-      title={name}
+      title={title}
       color='blueT'
       icon='fa-project-diagram gap'
-      lock={!Roles.userIsInRole(Meteor.userId(), 'edit') || lock}
+      lock={!access}
       noText={noText}
     >
       <FlowFormHead
@@ -32,13 +29,11 @@ const FlowFormHeadWrapper = ({
         preFill={preFill}
         app={app}
       />
-      
     </ModelMedium>
   );
 };
 
 export default FlowFormHeadWrapper;
-
 
 
 const FlowFormHead = ({ id, existFlows, preFill, app, selfclose })=> {
@@ -189,14 +184,17 @@ export const FlowRemove = ({ id, fKey })=>	{
       }
     });
   }
+  
+  const access = Roles.userIsInRole(Meteor.userId(), 'edit');
+  const title = access ? 'delete process flow if not in use' : Pref.norole;
     
   return(
     <span>
       <button
-        title='delete process flow *if not in use'
+        title={title}
         className='transparent'
         onClick={()=>pull()}
-        disabled={!Roles.userIsInRole(Meteor.userId(), 'edit')}>
+        disabled={!access}>
         <label className='navIcon actionIconWrap'>
           <i className={'fas fa-minus-circle fa-lg fa-fw redT'}></i>
           <span className='actionIconText redT'>Delete</span>

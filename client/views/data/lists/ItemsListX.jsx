@@ -29,7 +29,6 @@ const ItemsListX = ({
         <SeriesDelete
           batchId={batchData._id}
           seriesId={seriesData._id}
-          lock={!emptySeries}
         />
       </div>
     );

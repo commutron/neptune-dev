@@ -4,7 +4,7 @@ import timezone from 'moment-timezone';
 
 import Config from '/server/hardConfig.js';
 
-import { flattenHistory } from './utility';
+import { flattenHistory, countMulti } from './utility';
 
 Meteor.methods({
 
@@ -95,7 +95,7 @@ Meteor.methods({
                           .isSameOrBefore(qDay, 'day') );
         let ncPack = {
           'x': new Date(qDay),
-          'y': relevant.length
+          'y': countMulti(relevant)
         };
         return ncPack;
       }

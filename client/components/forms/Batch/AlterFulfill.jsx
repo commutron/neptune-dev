@@ -10,22 +10,29 @@ import PrioritySquareData from '/client/components/smallUi/StatusBlocks/Priority
 const AlterFulfill = ({ 
   batchId, batch, end, app, canDo, lock, 
   noText, lgIcon, cleanIcon
-})=> (
-  <ModelSmall
-    button={'Alter ' + Pref.end}
-    title={`Alter ${batch || Pref.xBatch} ${Pref.end}`}
-    color='blueT'
-    icon='far fa-calendar-alt'
-    lock={!canDo || lock}
-    noText={noText}
-    lgIcon={lgIcon}
-    cleanIcon={cleanIcon}>
-    <AlterFulfillForm
-      batchId={batchId}
-      end={end}
-      app={app} />
-  </ModelSmall>
-);
+})=> {
+  const aT = !canDo ? Pref.norole : '';
+  const lT = lock ? lock : '';
+  const title = canDo && !lock ? `Alter ${batch || Pref.xBatch} ${Pref.end}` : `${aT}\n${lT}`;
+  return(
+    <ModelSmall
+      button={'Alter ' + Pref.end}
+      title={title}
+      color='blueT'
+      icon='far fa-calendar-alt'
+      lock={!canDo || lock}
+      noText={noText}
+      lgIcon={lgIcon}
+      cleanIcon={cleanIcon}
+    >
+      <AlterFulfillForm
+        batchId={batchId}
+        end={end}
+        app={app} 
+      />
+    </ModelSmall>
+  );
+};
 
 export default AlterFulfill;
 

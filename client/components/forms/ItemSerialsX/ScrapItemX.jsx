@@ -9,14 +9,20 @@ const ScrapItemX = ({ seriesId, item, ancillary, noText })=> {
   let done = item.completed;
   let rapid = item.altPath.find( a => a.rapId !== false && a.completed === false );
   let scrap = item.history.find(x => x.type === 'scrap' && x.good === true);
-		
+	
+	const access = Roles.userIsInRole(Meteor.userId(), 'qa');
+  const aT = !access ? Pref.norole : '';
+  const lock = scrap || (done && !rapid);
+  const lT = lock ? 'unavailable' : '';
+  const title = access && !lock ? `${Pref.scrap} ${Pref.item}` : `${aT}\n${lT}`;
+  
 	return(
     <ModelMedium
       button={Pref.scrap}
-      title={`${Pref.scrap} ${Pref.item}`}
+      title={title}
       color='redT'
       icon='fa-trash-alt'
-      lock={!Roles.userIsInRole(Meteor.userId(), 'qa') || scrap || (done && !rapid)}
+      lock={!access || lock }
       noText={noText}
     >
       <ScrapForm

@@ -12,8 +12,9 @@ const InboxPanel = ({ orb, bolt, app, user, users })=> {
   });
   
   return (
-    <div>
-      <p className='vspace'></p>
+    <div className='vspace'>
+      {user.inbox.length === 0 && 
+        <p className='centreText medBig darkgrayT'>No Messages <i className="fas fa-inbox"></i></p>}
       <table className=' wide cap'>
         {orderedInbox.map( (entry, index)=>{
           const link = entry.type === 'batch' ? 

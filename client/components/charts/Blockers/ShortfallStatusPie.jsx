@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { VictoryPie, VictoryTooltip } from 'victory';
 import Theme from '/client/global/themeV.js';
+import { countMulti } from '/client/utility/Arrays';
 
 const ShortfallSatusPie = ({ shortfalls })=> {
   
@@ -13,12 +14,12 @@ const ShortfallSatusPie = ({ shortfalls })=> {
   
   useEffect( ()=>{
     const sh = shortfalls;
-    totalSet(sh.length);
+    totalSet( countMulti(sh) );
 
-    const pending = sh.filter( s => s.inEffect === null ).length;
-    const doOmit = sh.filter( s => s.inEffect === true ).length;
-    const waiting = sh.filter( s => !s.reSolve ).length - pending - doOmit;
-    const good = sh.filter( s => s.reSolve === true ).length;
+    const pending = countMulti( sh.filter( s => s.inEffect === null ) );
+    const doOmit = countMulti( sh.filter( s => s.inEffect === true ) );
+    const waiting = countMulti( sh.filter( s => !s.reSolve ) ) - pending - doOmit;
+    const good = countMulti( sh.filter( s => s.reSolve === true ) );
 
     const counts = [ pending, doOmit, waiting, good ];
     countSet(counts);

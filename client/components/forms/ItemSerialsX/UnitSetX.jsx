@@ -4,19 +4,24 @@ import { toast } from 'react-toastify';
 
 import ModelSmall from '/client/components/smallUi/ModelSmall';
 
-const UnitSetX = ({ seriesId, item, noText })=> (
-  <ModelSmall
-    button={Pref.unit + ' set'}
-    title={'set ' + Pref.unit}
-    color='greenT'
-    icon='fa-th'
-    lock={!Roles.userIsInRole(Meteor.userId(), ['edit', 'run'])}
-    noText={noText}>
-    <UnitSetForm
-      seriesId={seriesId}
-      item={item} />
-  </ModelSmall>
-);
+const UnitSetX = ({ seriesId, item, noText })=> {
+  const access = Roles.userIsInRole(Meteor.userId(), ['edit', 'run']);
+  return(
+    <ModelSmall
+      button={Pref.unit + ' set'}
+      title={access ? `Set ${Pref.unit}` : Pref.norole}
+      color='greenT'
+      icon='fa-th'
+      lock={!access}
+      noText={noText}
+    >
+      <UnitSetForm
+        seriesId={seriesId}
+        item={item} 
+      />
+    </ModelSmall>
+  );
+};
 
 export default UnitSetX;
       

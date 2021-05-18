@@ -6,15 +6,19 @@ import ModelMedium from '/client/components/smallUi/ModelMedium';
 
 const ItemIncompleteX = ({ seriesId, item, app, noText })=> {
   
-  let done = item.completed;
-	  
+  const done = item.completed;
+  const access = Roles.userIsInRole(Meteor.userId(), ['qa', 'run']);
+  const aT = !access ? Pref.norole : '';
+  const lT = done ? `${Pref.item} ${Pref.isDone}` : '';
+  const title = access && !done ? `Force Finish Incomplete ${Pref.item}` : `${aT}\n${lT}`;
+  
 	return(
     <ModelMedium
       button='Force Finish'
-      title={`Force Finish Incomplete ${Pref.item}`}
+      title={title}
       color='darkOrangeT'
       icon='fa-flag-checkered'
-      lock={!Roles.userIsInRole(Meteor.userId(), ['qa', 'run']) || done}
+      lock={!access || done}
       noText={noText}>
       <ItemIncompleteForm
         seriesId={seriesId}

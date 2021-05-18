@@ -10,14 +10,17 @@ const BatchXEdit = ({ batchData, seriesData, allVariants, lock })=> {
   const canRun = Roles.userIsInRole(Meteor.userId(), 'run');
   const canEdit = Roles.userIsInRole(Meteor.userId(), 'edit');
   
+  const aT = !(canEdit || canRun) ? Pref.norole : '';
+  const lT = lock ? lock : '';
+  const title = (canEdit || canRun) && !lock ? `Edit ${Pref.xBatch}` : `${aT}\n${lT}`;
+  
   return(
     <ModelMedium
       button={'Edit ' + Pref.xBatch}
-      title={'Edit ' + Pref.xBatch}
+      title={title}
       color='greenT'
       icon='fa-cubes'
       lock={!(canEdit || canRun) || lock}
-      // menuItem={true}
     >
     <BXEditForm 
       batchData={batchData}

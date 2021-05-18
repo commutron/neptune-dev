@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from 'react';
-// import Pref from '/client/global/pref.js';
+import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 import ModelLarge from '/client/components/smallUi/ModelLarge';
@@ -10,13 +10,18 @@ const PanelBreakX = ({ seriesId, batchId, batchNum, item })=> {
   let done = item.completed;
   this.regex810 = RegExp(/^(\d{8,10})$/);
   
+  const aT = !auth ? Pref.norole : '';
+  const lock = done || item.units < 2;
+  const lT = lock ? 'unavailable' : '';
+  const title = auth && !lock ? 'Split Panel Into Its Units' : `${aT}\n${lT}`;
+  
   return(
     <ModelLarge
       button='Split Panel'
-      title='Split Panel Into Its Units'
+      title={title}
       color='orangeT'
       icon='fa-cut'
-      lock={done || item.units < 2 || !auth}
+      lock={!auth || lock}
     >
       <PanelBreakForm
         seriesId={seriesId}

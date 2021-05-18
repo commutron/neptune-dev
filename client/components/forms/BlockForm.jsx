@@ -9,9 +9,7 @@ const BlockAdd = ({ id, edit, noText, smIcon, lgIcon, doneLock })=> {
   const bttn = edit ? 'edit' : 'Add ' + Pref.block;
   const title = edit ? 'edit ' + Pref.block : 'add ' + Pref.block;
   
-  const isOpen = Roles.userIsInRole(Meteor.userId(), 'run');
-  
-  if(!isOpen) { 
+  if(!Roles.userIsInRole(Meteor.userId(), 'run')) { 
     return null;
   }
   return(
@@ -22,7 +20,6 @@ const BlockAdd = ({ id, edit, noText, smIcon, lgIcon, doneLock })=> {
       icon={edit ? 'fa-edit' : 'fa-comment-medical'}
       lgIcon={lgIcon}
       smIcon={smIcon}
-      lock={!isOpen}
       noText={noText}
     >
       <BlockAddForm
@@ -96,21 +93,24 @@ const BlockAddForm = ({ id, edit, doneLock, selfclose })=> {
 
 export default BlockAdd;
 
-export const SolveBlock = ({ id, blKey, noText })=> (
-  <ModelSmall
-    button='Solve'
-    title={'Solve this ' + Pref.block}
-    color='greenT'
-    icon='fas fa-reply'
-    lock={!Roles.userIsInRole(Meteor.userId(), 'run')}
-    noText={noText}
-  >
-    <SolveBlockForm
-      id={id}
-      blKey={blKey}
-   />
-  </ModelSmall>
-);
+export const SolveBlock = ({ id, blKey, noText })=> {
+  const access = Roles.userIsInRole(Meteor.userId(), 'run');
+  return(
+    <ModelSmall
+      button='Solve'
+      title={access ? 'Solve this ' + Pref.block : Pref.norole}
+      color='greenT'
+      icon='fas fa-reply'
+      lock={!access}
+      noText={noText}
+    >
+      <SolveBlockForm
+        id={id}
+        blKey={blKey}
+     />
+    </ModelSmall>
+  );
+};
 
 const SolveBlockForm = ({ id, blKey, selfclose })=> {
   
@@ -159,7 +159,7 @@ const RemoveBlock = ({ id, blKey, doneLock, noText })=> {
   return(
     <button
       type='button'
-      title={'Remove this ' + Pref.block}
+      title={!doneLock ? 'Remove this ' + Pref.block : Pref.isDone}
       className='action middle'
       onClick={(e)=>remove(e)}
       disabled={doneLock}>

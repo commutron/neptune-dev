@@ -51,7 +51,8 @@
 .scanInIndicator {
   margin: 30px;
   color: var(--neptuneColor);
-  position: absolute;
+  /*position: absolute;*/
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;

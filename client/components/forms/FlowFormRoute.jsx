@@ -9,27 +9,29 @@ import FlowBuilder from '/client/components/bigUi/ArrayBuilder/FlowBuilder.jsx';
 // existFlows = existing flows
 
 const FlowFormRouteWrapper = ({ 
-  id, app,
-  existFlows, edit, preFill,
-  noText, lock
-})=> (
-  <ModelLarge
-    button='Change Flow'
-    title={`Change ${Pref.flow}`}
-    color='blueT'
-    icon='fa-stream'
-    lock={!Roles.userIsInRole(Meteor.userId(), 'edit') || lock}
-    noText={noText}
-  >
-    <FlowFormRoute
-      id={id}
-      app={app}
-      existFlows={existFlows}
-      edit={edit}
-      preFill={preFill}
-    />
-  </ModelLarge>
-);
+  id, app, existFlows, edit, preFill, noText
+})=> {
+  const access = Roles.userIsInRole(Meteor.userId(), 'edit');
+
+  return(
+    <ModelLarge
+      button='Change Flow'
+      title={access ? `Change ${Pref.flow}` : Pref.norole}
+      color='blueT'
+      icon='fa-stream'
+      lock={!access}
+      noText={noText}
+    >
+      <FlowFormRoute
+        id={id}
+        app={app}
+        existFlows={existFlows}
+        edit={edit}
+        preFill={preFill}
+      />
+    </ModelLarge>
+  );
+};
 
 export default FlowFormRouteWrapper;
   
@@ -64,8 +66,7 @@ const FlowFormRoute = ({
       toast.warning("Can't Save, missing flow");
     }else if(editId) {
       Meteor.call('setBasicPlusFlowRoute', widgetId, editId, flowObj, (error)=>{
-        if(error)
-          console.log(error);
+        error && console.log(error);
         toast.success('Saved');
         selfclose();
       });
@@ -100,13 +101,13 @@ const FlowFormRoute = ({
         <div className='centre'>
           <p><b>{fTitle}</b> is in used by</p>
           {warn === 'liveRiver' ?
-            <h3>An Active {Pref.batch} as the {Pref.buildFlow}</h3>
+            <h3>An Active {Pref.xBatch} as the {Pref.buildFlow}</h3>
           : warn === 'liveAlt' ?
-            <h3>An Active {Pref.batch} as the {Pref.buildFlowAlt}</h3>
+            <h3>An Active {Pref.xBatch} as the {Pref.buildFlowAlt}</h3>
           : warn === 'liveAlt' ?
-            <h3>An Inactive {Pref.batch} as the {Pref.buildFlow}</h3>
+            <h3>An Inactive {Pref.xBatch} as the {Pref.buildFlow}</h3>
           : warn === 'liveAlt' ?
-            <h3>An Inactive {Pref.batch} as the {Pref.buildFlowAlt}</h3>
+            <h3>An Inactive {Pref.xBatch} as the {Pref.buildFlowAlt}</h3>
           :
             <p>something</p>}
         </div>

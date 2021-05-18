@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-
+import Pref from '/client/global/pref.js';
 import './style.css';
 
 import ActionLink from '/client/components/tinyUi/ActionLink.jsx';
@@ -63,7 +63,8 @@ const ActionBar = ({
           seriesId={seriesData._id}
           serial={itemData.serial}
           check={itemData.createdAt.toISOString()}
-          lockOut={batchData.completed || itemData.completed} />
+          lockOut={batchData.completed || itemData.completed ? Pref.isDone : false}
+        />
       </Fragment>
 		:
       action === 'xbatch' ?
@@ -72,7 +73,8 @@ const ActionBar = ({
             batchData={batchData}
             seriesData={seriesData}
             allVariants={allVariants}
-            lock={!variantData || !batchData.live || batchData.completed}
+            lock={batchData.completed ? Pref.isDone :
+                 !batchData.live ? Pref.notlive : false}
           />
           
           <SeriesForm
@@ -87,13 +89,16 @@ const ActionBar = ({
             itemsQ={!seriesData ? 0 : seriesData.items.length}
             unit={variantData.runUnits}
             app={app}
-            lock={!batchData.live || !seriesData || batchData.completed} />
+            lock={batchData.completed ? Pref.isDone :
+                 !batchData.live ? Pref.notlive :
+                 !seriesData ? `No ${Pref.series}` : false} />
           
           <CounterAssign
             id={batchData._id}
             waterfall={batchData.waterfall}
             app={app}
-            lock={!batchData.live || batchData.completed} />
+            lock={batchData.completed ? Pref.isDone :
+                 !batchData.live ? Pref.notlive : false} />
           
           <span>
             <ActionLink
@@ -114,13 +119,15 @@ const ActionBar = ({
             batchData={batchData}
             seriesData={seriesData}
             app={app}
-            lockOut={!batchData.live || batchData.completed} />
+            lock={batchData.completed ? Pref.isDone :
+                 !batchData.live ? Pref.notlive : false} />
           
           <RemoveXBatch
             batchData={batchData}
             seriesData={seriesData}
             check={batchData.createdAt.toISOString()}
-            lockOut={!batchData.live || batchData.completed} />
+            lock={batchData.completed ? Pref.isDone :
+                 !batchData.live ? Pref.notlive : false} />
           
         </Fragment>
       : null
