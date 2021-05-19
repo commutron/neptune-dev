@@ -217,8 +217,9 @@ Meteor.methods({
     }
   },
   
-  fetchWeekTideActivity(yearNum, weekNum, allOrg, mockUserId) {
+  fetchWeekTideActivity(yearNum, weekNum, allOrg, mockUserId, accessKey) {
     try {
+      const orgKey = accessKey || Meteor.user().orgKey;
       const getYear = yearNum || moment().weekYear();
       const getWeek = weekNum || moment().week();
       const pinDate = moment.tz(Config.clientTZ).year(getYear).week(getWeek);
@@ -232,7 +233,7 @@ Meteor.methods({
 
       const touchedBX = !sendAll ?
         XBatchDB.find({
-          orgKey: Meteor.user().orgKey, 
+          orgKey: orgKey, 
           tide: { $elemMatch: { startTime: {
             $gte: new Date(pinDate.startOf('week').format()),
             $lte: new Date(pinDate.endOf('week').format())
@@ -241,7 +242,7 @@ Meteor.methods({
         }).fetch()
         :
         XBatchDB.find({
-          orgKey: Meteor.user().orgKey,
+          orgKey: orgKey,
           tide: { $elemMatch: { startTime: {
             $gte: new Date(pinDate.startOf('week').format()),
             $lte: new Date(pinDate.endOf('week').format())
@@ -264,16 +265,45 @@ Meteor.methods({
     }
   },
   
-  fetchErrorTimes() {
-    try {
+  fetchWeekAvg(accessKey) {
+    if(accessKey) {
+      const now = moment.tz(Config.clientTZ);
+      const yearNum = now.weekYear();
+      const weekNum = now.week();
+      const weekTides = Meteor.call('fetchWeekTideActivity', 
+                          yearNum, weekNum, true, false, accessKey);
       
+      const totalDurr = Array.from(weekTides, x => x.durrAsMin).reduce((x,y)=> x + y);
+      const days = [...new Set(Array.from(weekTides, x => moment(x.startTime).day())) ].length;
+      
+      const avgperday = totalDurr / days;
+  
+      const runningavg = CacheDB.findOne({dataName: 'avgDayTime'});
+      
+      const newavg = runningavg ? ( runningavg.dataNum + avgperday ) / 2 : avgperday;
+      const cleanavg = Math.round(newavg);
+      
+      CacheDB.upsert({dataName: 'avgDayTime'}, {
+        $set : {
+          orgKey: accessKey,
+          lastUpdated: new Date(),
+          dataName: 'avgDayTime',
+          dataNum: Number(cleanavg)
+      }});
+    }
+  },
+  
+  fetchErrorTimes(tooVal) {
+    try {
+      const now = new Date();
       let badDurr = [];
+      
+      const tooManyMin = tooVal ? Number(tooVal) : 500;
+      const tooManyMs = tooManyMin * 60000;
       
       const screenT = (tideArr)=> {
         for( let t of tideArr ) {
-          if( ( ( t.stopTime || new Date() ) - t.startTime ) 
-              > ( 600 * 60000 )
-          ) {
+          if( ( ( t.stopTime || now ) - t.startTime ) > tooManyMs ) {
             badDurr.push([
               t.startTime, t.who
             ]);

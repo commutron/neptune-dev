@@ -41,26 +41,32 @@ SyncedCron.add({
   schedule: (parser)=> parser.text('at 6:01 am every weekday also at 6:00 pm every weekday'),
   job: ()=> goDo('updateLiveMovement')
 });
-  
+
+SyncedCron.add({
+  name: 'Weekly Avg Day Time',
+  schedule: (parser)=> parser.text('at 6:02 am on Sat'),
+  job: ()=> goDo('fetchWeekAvg')
+});
+
 SyncedCron.add({
   name: 'Daily Done Target By Month',
-  schedule: (parser)=> parser.text('at 6:02 am every weekday'),
+  schedule: (parser)=> parser.text('at 6:03 am every weekday'),
   job: ()=> runLoop(countDoneBatchTarget, 'doneBatchLiteMonths', 'month')
 });
 SyncedCron.add({
   name: 'Daily Done Target By Week',
-  schedule: (parser)=> parser.text('at 6:03 am every weekday'),
+  schedule: (parser)=> parser.text('at 6:04 am every weekday'),
   job: ()=> runLoop(countDoneBatchTarget, 'doneBatchLiteWeeks', 'week')
 });
 
 SyncedCron.add({
   name: 'Daily Done Units By Month',
-  schedule: (parser)=> parser.text('at 6:04 am every weekday'),
+  schedule: (parser)=> parser.text('at 6:05 am every weekday'),
   job: ()=> runLoop(countDoneUnits, 'doneUnitLiteMonths', 'month')
 });
 SyncedCron.add({
   name: 'Daily Done Units By Week',
-  schedule: (parser)=> parser.text('at 6:05 am every weekday'),
+  schedule: (parser)=> parser.text('at 6:06 am every weekday'),
   job: ()=> runLoop(countDoneUnits, 'doneUnitLiteWeeks', 'week')
 });
 

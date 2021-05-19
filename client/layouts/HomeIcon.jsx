@@ -13,11 +13,7 @@ const HomeIcon = () => {
       <ContextMenuTrigger
 				id='absoluteHome01'>
 							
-      <a className={'homeIconLink ' + warningLight} href='/' title='Home'>
-        <img
-          src='/neptune-logo-white.svg'
-          className='homeIconLogo' />
-      </a>
+      <a className={'homeIconLink ' + warningLight} href='/' title='Home'></a>
       
       </ContextMenuTrigger>
       <ContextMenu id='absoluteHome01' className='vbig'>

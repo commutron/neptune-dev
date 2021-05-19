@@ -1,6 +1,6 @@
 Neptune v.3.XX.X
 
-A highly customized statistical process control web app for electronics manufacturing.
+A highly opinionated statistical process control web app for electronics manufacturing.
 
 Track all aspects of building a widget.
 
@@ -11,7 +11,7 @@ A Commutron Industries project.
 
 Built with ReactJS, MeteorJS, and MongoDB.
 
-Highly experimental, potentialy unstable.
+Potentialy unstable.
 
 Copyright (c) 2016-present Commutron Industries, https://www.commutron.ca
 

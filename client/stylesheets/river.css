@@ -452,7 +452,6 @@ n-trib-action-all > button {
 	vertical-align: middle;
   transition: background-color 500ms ease-in-out;
   background-origin: content-box;
-  
   overflow: hidden;
   text-overflow: ellipsis;
   text-overflow: fade;

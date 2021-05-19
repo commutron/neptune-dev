@@ -41,6 +41,7 @@ class Pref {
     
     // config
     this.userTimePublic = true;
+    this.tooManyMin = 600;
     this.groupMax = 128;
     this.aliasMax = 16;
     this.downDayMax = 24;

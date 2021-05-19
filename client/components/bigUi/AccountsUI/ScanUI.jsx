@@ -13,15 +13,17 @@ const ScanUI = ({ listenSet })=> {
     return ()=>{ SigninListenerOff() };
   }, []);
 
-		
+		// /Mac|iPod|iPhone|iPad/
 	return(
-		<div className={`centre`}>
+		<div className='scanIn centre'>
+		{/iPod|iPhone|iPad/.test(navigator.platform) ? null :
       <span className={`fa-stack fa-6x scanInIndicator ${loginState ? 'spinOut':''}`}>
         <i className="fas fa-sun fa-stack-2x colorShift"></i>
         <i className="fas fa-user-astronaut fa-stack-1x darkT" 
            data-fa-transform='shrink-5 flip-h'
         ></i>
       </span>
+		}
     </div>
 	);
 };

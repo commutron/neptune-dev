@@ -35,6 +35,10 @@ Accounts.onCreateUser((options, user) => {
       autoScan: true,
       unlockSpeed: 2000,
       usageLog: [],
+      proTimeShare: [{
+        updatedAt: new Date(),
+        timeAsDecimal: Number(1)
+      }],
       engaged: false
     }, user);
   
@@ -277,22 +281,6 @@ Meteor.methods({
     Meteor.users.update(Meteor.userId(), {
       $set: {
         defaultOverview: setOp,
-      }
-    });
-    return true;
-  },
-  
-  setProductionPercent(userID, option) {
-
-    const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
-    const backdate = appDoc.tideWall || new Date();
-    
-    Meteor.users.update(userID, {
-      $set: {
-        proTimeShare: [ {
-          updatedAt: backdate,
-          timeAsDecimal: Number(option)
-        } ]
       }
     });
     return true;

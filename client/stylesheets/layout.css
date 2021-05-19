@@ -67,8 +67,8 @@ main {
 }
 
 .debugWarningLight {
-  outline: 6px dotted red;
-  outline-offset: -4vmin;
+  outline: 10px dotted red;
+  outline-offset: -1vmin;
   animation: blinker 3s ease-out infinite;
 }
 
@@ -212,6 +212,10 @@ main {
   background-color: var(--neptuneColor);
   padding-bottom: var(--vh);
   z-index: 7;
+  background-image: url(neptune-logo-white.svg);
+  background-repeat: no-repeat;
+  background-position: 50% 30%;
+  background-size: 75%;
 }
 .frontCenterTitle {
   grid-area: frontCenter;
@@ -1238,6 +1242,7 @@ n-col-table-head > span {
   .homeIcon {
     grid-area: topBorder / topBorder / homeIcon / homeIcon;
     padding: 0;
+    background-position: 50% 50%;
   }
   .homeIconLink, 
   .homeIconLogo {

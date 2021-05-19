@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import moment from 'moment';
-// import Pref from '/client/global/pref.js';
+import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 import UserNice from '/client/components/smallUi/UserNice.jsx';
@@ -12,7 +12,7 @@ const TimeErrorCheck = ()=> {
   
   const handleFetch = ()=>{
     workingSet(true);
-    Meteor.call('fetchErrorTimes', (err, reply)=>{
+    Meteor.call('fetchErrorTimes', Pref.tooManyMin, (err, reply)=>{
       err && console.log(err);
       if(reply) {
         resultSet(reply);
@@ -33,8 +33,8 @@ const TimeErrorCheck = ()=> {
   
   return(
     <div className='overscroll wide space5x5'>
-      <h3>Check for Time durations greater than 600 minutes</h3>
-      <p className='small'>aka 7:00am to 4:30pm day without any breaks</p>
+      <h3>Check for Time durations greater than {Pref.tooManyMin} minutes</h3>
+      <p className='small'>aka a full day without any breaks</p>
       <p>Resource intensive function. Run during idle times</p>
       <br />
       <div className='rowWrap'>

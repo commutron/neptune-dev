@@ -57,3 +57,12 @@
   align-items: center;
   justify-content: center;
 }
+@supports (-webkit-touch-callout: none) {
+  .scanIn {
+    min-height: 250px;
+    background-image: url(neptune-logo-color.svg);
+    background-repeat: no-repeat;
+    background-position: 50% 30%;
+    background-size: 75%;
+  }
+}
