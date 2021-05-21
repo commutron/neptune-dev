@@ -4,7 +4,7 @@ import 'moment-business-time';
 
 import { distTimeBudget } from './tideGlobalMethods.js';
 import { whatIsBatchX } from './searchOps.js';
-import { round1Decimal } from './calcOps';
+import { round1Decimal, diffTrend, percentOf } from './calcOps';
 
 import Config from '/server/hardConfig.js';
 
@@ -190,7 +190,6 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
   
   Meteor.methods({
   
-  
   reportOnCompleted(yearNum, weekNum) {
     try {
       const requestLocal = moment().tz(Config.clientTZ).set({'year': yearNum, 'week': weekNum});
@@ -203,6 +202,62 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
     }catch(err) {
       throw new Meteor.Error(err);
     }
+  },
+  
+  reportMonthsFromCache(yearNum) {
+    const allCache = CacheDB.findOne({
+                      orgKey: Meteor.user().orgKey, 
+                      dataName: 'doneBatchLiteWeeks'
+                    });
+    
+    const yearCache = allCache.dataSet.filter( c => moment(c.x).year() === yearNum );
+    
+    let yearSet = [];
+    
+    for( let m = 0; m < 12; m++) {
+    
+      const monthCache = yearCache.filter( c => moment(c.x).month() === m );
+      
+      let monthSet = [];
+      
+      let totalOnTime = 0;
+      
+      let totalOnBdgt = 0;
+      
+      let totalIsDone = 0;
+      
+      for( let week of monthCache ) {
+        
+        totalOnTime += week.y[0];
+        totalOnBdgt += week.y[4];
+        totalIsDone += ( week.y[0] + week.y[1] );
+        
+        monthSet.push({
+          onTime : week.y[0],
+          missed : week.y[0] > week.y[2],
+          onBdgt : week.y[4],
+          isDone : week.y[4] + week.y[5]
+        });
+        
+      }
+
+      const percentOnTime = percentOf(totalIsDone, totalOnTime);
+      
+      const percentOnBdgt = percentOf(totalIsDone, totalOnBdgt);
+      
+      yearSet.push({
+        monthNum : m,
+        monthSet,
+        totalOnTime,
+        totalOnBdgt,
+        totalIsDone,
+        percentOnTime,
+        percentOnBdgt
+      });
+      
+    }
+
+    return yearSet;
   },
   
   fetchFinishOnDay(dateString) {
@@ -234,6 +289,51 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
       }
     }
     return itemsMatch;
+  },
+  
+  fetchWeekAvgSerial(accessKey) {
+    if(accessKey) {
+      const now = moment.tz(Config.clientTZ);
+
+      let itemsMatch = [];
+      
+      const touchedSRS = XSeriesDB.find({
+        orgKey: accessKey,
+        items: { $elemMatch: { completedAt: {
+          $gte: new Date(now.startOf('week').format()),
+          $lte: new Date(now.endOf('week').format())
+        }}}
+      }).fetch();
+      
+      for(let srs of touchedSRS) {
+        const items = srs.items.filter( i => i.completed && now.isSame(i.completedAt, 'week') );
+        for(let ic of items) {
+          itemsMatch.push(moment(ic.completedAt).day());
+        }
+      }
+    
+      const totalI = itemsMatch.length;
+      const days = [...new Set( itemsMatch ) ].length;
+      
+      const avgperday = totalI / days;
+  
+      const lastavg = CacheDB.findOne({dataName: 'avgDayItemFin'});
+      const runningavg = lastavg ? lastavg.dataNum : 0;
+      
+      const newavg = !lastavg ? avgperday :
+              Math.round( ( runningavg + avgperday ) / 2 );
+      
+      const trend = diffTrend(newavg, runningavg);
+      
+      CacheDB.upsert({dataName: 'avgDayItemFin'}, {
+        $set : {
+          orgKey: accessKey,
+          lastUpdated: new Date(),
+          dataName: 'avgDayItemFin',
+          dataNum: Number(newavg),
+          dataTrend: trend
+      }});
+    }
   },
   
   

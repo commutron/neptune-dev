@@ -66,8 +66,8 @@ export const TraverseWrap = ({
           {!goFunc || isRO ? null 
           :
             <button 
-              title='View this in production'
-              className='taskLink'
+              aria-label='Production'
+              className='taskLink auxTipScale'
               onClick={goFunc}>
               <i className='far fa-paper-plane' data-fa-transform='left-1'></i>
             </button>

@@ -197,7 +197,7 @@ export function WhiteWaterCounter(rapidData, seriesData) {
     iDone = ( rapDidI / totalQ );
   }
   
-  const pointProgress = round2Decimal( avgOfArray([...pointArr,iDone]) );
+  const pointProgress = avgOfArray([...pointArr,iDone]);
   
   return [ iSet, pointProgress, countArr ];
 }

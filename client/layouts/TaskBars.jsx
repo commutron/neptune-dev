@@ -5,8 +5,8 @@ import Pref from '/client/global/pref.js';
 
 const TaskElement = ({ title, subON, goLink, icon, iconAdj  }) => (
   <button
-    title={title}
-    className={subON ? 'taskLink onTL' : 'taskLink'}
+    aria-label={title}
+    className={`taskLink taskTip ${subON ? 'onTL' : ''}`}
     onClick={()=>FlowRouter.go (goLink )}
   ><i className={icon} data-fa-transform={iconAdj}></i></button>
 );
@@ -101,7 +101,7 @@ export const UpTaskBar = ({ subLink }) => (
     />
     
     <TaskElement
-      title='Part Value Conversion'
+      title='Conversion Calculators'
       subON={subLink === 'values'}
       goLink='/upstream/values'
       icon='fas fa-calculator'
@@ -126,16 +126,21 @@ export const DownTaskBar = ({ subLink }) => (
       title='Daily Completed'
       subON={subLink === 'reportday'}
       goLink='/downstream/reportday'
-      icon='far fa-calendar-check'
-      //iconAdj=''
+      icon='fas fa-calendar-day'
     />
     
     <TaskElement
-      title='Week Reports'
+      title='Weekly Completed'
       subON={subLink === 'reportweek'}
       goLink='/downstream/reportweek'
-      icon='fas fa-flag-checkered'
-      //iconAdj=''
+      icon='fas fa-calendar-week'
+    />
+    
+    <TaskElement
+      title='Monthly Completed'
+      subON={subLink === 'reportmonths'}
+      goLink='/downstream/reportmonths'
+      icon='far fa-calendar-alt'
     />
     
     <TaskElement

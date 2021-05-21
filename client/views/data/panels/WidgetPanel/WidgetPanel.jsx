@@ -28,6 +28,9 @@ const WidgetPanel = ({
   const b = batchRelated;
   const a = app;
   
+  const varS = variantData.sort((v1, v2)=> 
+              v1.variant > v2.variant ? -1 : v1.variant < v2.variant ? 1 : 0 );
+                               
   const bS = b.sort((b1, b2)=> b1.batch < b2.batch ? -1 : 
                                b1.batch > b2.batch ? 1 : 0 );
   const batchIDs = Array.from( bS, x => x._id );
@@ -102,18 +105,18 @@ const WidgetPanel = ({
             
           {variantData.length < 1 ? <p>no {Pref.variants} created</p> : null}
           
-            {variantData.map( (ventry, index)=> {
-              return(  
-                <VariantCard
-                  key={ventry._id+index}
-                  variantData={ventry}
-                  widgetData={widgetData} 
-                  groupData={groupData}
-                  batchRelated={batchRelated.filter(b=> b.versionKey === ventry.versionKey)} 
-                  app={app}
-                  user={user}
-                />
-            )})}
+          {varS.map( (ventry, index)=> {
+            return(  
+              <VariantCard
+                key={ventry._id+index}
+                variantData={ventry}
+                widgetData={widgetData} 
+                groupData={groupData}
+                batchRelated={batchRelated.filter(b=> b.versionKey === ventry.versionKey)} 
+                app={app}
+                user={user}
+              />
+          )})}
   
         </div>
         

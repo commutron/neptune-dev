@@ -163,6 +163,4 @@ Meteor.methods({
     return keyArr;
   }
 
-
-
 });

@@ -4,23 +4,22 @@ import React from 'react';
 // import Pref from '/client/global/pref.js';
 
 import TotalInQu from './cards/TotalInQu';
-
+import AvgDay from './cards/AvgDayTime';
 
 const Outlook = ({ 
   traceDT,
   user, app, isNightly
 })=> {
 
-    
   return(
     <div className='space5x5 forceScrollStyle'>
-    
         
-      <div className='balance numFont letterSpaced overscroll'>
+      <div className='autoFlex numFont letterSpaced overscroll'>
           <TotalInQu
             traceDT={traceDT}
             app={app} />
         
+          <AvgDay />
         
       </div>
     </div>

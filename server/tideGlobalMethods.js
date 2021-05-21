@@ -4,7 +4,7 @@ import 'moment-business-time';
 
 import Config from '/server/hardConfig.js';
 
-import { min2hr, round2Decimal } from './calcOps';
+import { min2hr, round2Decimal, diffTrend } from './calcOps';
 
 export function batchTideTime(batchTide, lockTrunc) {
     
@@ -265,7 +265,7 @@ Meteor.methods({
     }
   },
   
-  fetchWeekAvg(accessKey) {
+  fetchWeekAvgTime(accessKey) {
     if(accessKey) {
       const now = moment.tz(Config.clientTZ);
       const yearNum = now.weekYear();
@@ -278,17 +278,21 @@ Meteor.methods({
       
       const avgperday = totalDurr / days;
   
-      const runningavg = CacheDB.findOne({dataName: 'avgDayTime'});
+      const lastavg = CacheDB.findOne({dataName: 'avgDayTime'});
+      const runningavg = lastavg ? lastavg.dataNum : 0;
       
-      const newavg = runningavg ? ( runningavg.dataNum + avgperday ) / 2 : avgperday;
-      const cleanavg = Math.round(newavg);
+      const newavg = !lastavg ? avgperday :
+              Math.round( ( runningavg + avgperday ) / 2 );
+              
+      const trend = diffTrend(newavg, runningavg);
       
       CacheDB.upsert({dataName: 'avgDayTime'}, {
         $set : {
           orgKey: accessKey,
           lastUpdated: new Date(),
           dataName: 'avgDayTime',
-          dataNum: Number(cleanavg)
+          dataNum: Number(newavg),
+          dataTrend: trend
       }});
     }
   },

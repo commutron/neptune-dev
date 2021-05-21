@@ -393,48 +393,5 @@ Meteor.methods({
     }
   },
   
-
-   /*
-  addOneOffRapid(batchId, groupId, rType, exBatch, issueNum,
-    exTime, doneTarget, flowKey, falls, howLink, applyAll, quant,
-    nonConArr, shortArr
-  ) {
-    const accessKey = Meteor.user().orgKey;
-    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
-      
-      const thisYear = moment().weekYear().toString().slice(-2);
-      
-      */
-  /*
-  fixFirstRapids() {
-    const rapids = XRapidsDB.find({}).fetch();
-    
-    for(let rp of rapids) {
-      
-      // XRapidsDB.update(rp._id, {
-      //   $set: {
-      //     unlimited: apAl,
-      //     cascade: []
-      //   },
-      // });
-      XRapidsDB.update(rp._id, {
-        $unset: {
-          'unlimited': "" 
-        }
-      });
-      
-    }
-    return true;
-  },*/
-  // removeALLrapids() {
-  //   if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-  //     XRapidsDB.remove({});
-  //     return true;
-  //   }else{
-  //     return false;
-  //   }
-  // },
-  
-  
   
 });

@@ -27,8 +27,9 @@ export function round2Decimal(thrtytw) {
 // console.log(array1.reduce(reducer));
 // // expected output: 10
 
-export function avgOfArray(arr) {
-  const cArr = arr.filter( f => f && !isNaN(f) );
+export function avgOfArray(arr, zeros) {
+  const cArr = zeros ? arr.filter( f => ( f || f === 0 ) && !isNaN(f) ) :
+                       arr.filter( f => f && !isNaN(f) );
   
   if(cArr.length == 1) {
     return cArr[0];

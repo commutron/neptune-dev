@@ -45,3 +45,44 @@
 .overviewTable.subrows tbody:nth-child(odd) { 
   background-color: var(--contrast);
 }
+
+.monthsTable {
+  margin: 25px;
+  font-family: VarelaLocal;
+}
+
+.monthsTable th {
+  text-align: center;
+  white-space: nowrap;
+  padding: 0.5rem;
+  border-bottom: 1px solid black;
+}
+.monthsTable th.big {
+  font-size: 1.5rem;
+  background-color: var(--contrast);
+}
+.monthsTable td {
+  text-align: center;
+  white-space: nowrap;
+  font-size: 0.8rem;
+  border-bottom: none;
+}
+.monthsTable td:nth-child(even) {
+  border-right: none;
+}
+
+.monthsTable .miniThead th {
+  font-size: 0.6rem;
+  font-weight: 400;
+}
+.monthsTable .leftThead {
+  font-size: 0.6rem;
+  border-bottom: none;
+}
+
+.monthsTable .botThead td {
+  font-size: 1rem;
+  border-top: 1px solid black;
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
+}

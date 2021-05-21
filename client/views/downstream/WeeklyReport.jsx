@@ -6,7 +6,7 @@ import WeekBrowse from '/client/components/bigUi/WeekBrowse/WeekBrowse.jsx';
 import ReportBasicTable from '/client/components/tables/ReportBasicTable.jsx'; 
 import ReportStatsTable from '/client/components/tables/ReportStatsTable.jsx'; 
 
-const CompletedReport = ({ app })=> {
+const WeeklyReport = ({ app })=> {
   
   const [weekChoice, setWeekChoice] = useState(false);
   const [weekData, setWeekData] = useState(false);
@@ -23,7 +23,7 @@ const CompletedReport = ({ app })=> {
   	    let cronoTimes = !rtn ? [] : 
   	          rtn.sort((x1, x2)=> x1[3] < x2[3] ? -1 : x1[3] > x2[3] ? 1 : 0 );
         cronoTimes.unshift([
-          Pref.batch, 'description', 
+          Pref.xBatch, 'description', 
           'sales order', 'tracked items', 'nonCon rate',
           'fulfill due', 'ship due', 'moved fulfill', 'complete', 
           'fullfiled', 'shipped', 'quote',
@@ -75,7 +75,7 @@ const CompletedReport = ({ app })=> {
       const na = wd.filter( x => x[10].includes('n/a') ).length;
       
       let arrange = [
-        ['Completed ' + Pref.batches, woTotal ],
+        ['Completed ' + Pref.xBatchs, woTotal ],
         ['Unique ' + Pref.widgets, wdgUnique ],
         ['Unique Sales Orders', slsUnique ],
         ['Unique Tracked Items', itmQu ],
@@ -113,7 +113,7 @@ const CompletedReport = ({ app })=> {
           </div>
         :   
         <ReportBasicTable 
-          title={`completed ${Pref.batches} report`}
+          title={`completed ${Pref.xBatchs} report`}
           dateString={`${weekChoice.yearNum}w${weekChoice.weekNum}`}
           rows={weekData} />
       }
@@ -127,7 +127,7 @@ const CompletedReport = ({ app })=> {
           </div>
         :   
         <ReportStatsTable 
-          title={`completed ${Pref.batches} report totals`}
+          title={`completed ${Pref.xBatchs} report totals`}
           dateString={`${weekChoice.yearNum}w${weekChoice.weekNum}`}
           rows={totalData}
           extraClass='max500' />
@@ -137,4 +137,4 @@ const CompletedReport = ({ app })=> {
   );
 };
   
-export default CompletedReport;
+export default WeeklyReport;

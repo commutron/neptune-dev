@@ -132,8 +132,8 @@ export const ProWrap = ({
         <div className='auxRight'>
           <button
             id='exBatch'
-            title='View this in explore'
-            className='taskLink'
+            aria-label='Explore'
+            className='taskLink auxTip'
             onClick={()=>FlowRouter.go(exploreLink)}>
             <i className='fas fa-rocket' data-fa-transform='left-1 down-1'></i>
           </button>

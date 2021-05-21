@@ -23,7 +23,7 @@ const DailyReport = ({ app, user, isDebug })=> {
 	    const cronoTimes = rtn.sort((x1, x2)=> 
 	                        x1[4] > x2[4] ? 1 : x1[4] < x2[4] ? -1 : 0 );
       cronoTimes.unshift([
-          Pref.batch, 'sales order', 'product', 'serial number', 'time'
+          Pref.xBatch, 'sales order', 'product', 'serial number', 'time'
         ]);
       setDayData(cronoTimes);
 	  });

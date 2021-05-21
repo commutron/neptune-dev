@@ -4,10 +4,11 @@ import Pref from '/client/global/pref.js';
 import StreamLayout from '/client/layouts/StreamLayout.jsx';
 
 import DownstreamView from '/client/views/downstream/DownstreamTask/DownstreamView';
-import CompletedReport from './CompletedReport.jsx';
+import MonthlyReport from './MonthlyReport';
+import WeeklyReport from './WeeklyReport';
 import DailyReport from './DailyReport';
 import TrendWrap from './DownTrends/TrendWrap';
-import Outlook from './Outlook.jsx';
+import Outlook from './Outlook';
 
 const DownstreamWrap = ({ 
   view, subLink, 
@@ -21,12 +22,12 @@ const DownstreamWrap = ({
       <StreamLayout
         user={user}
         app={app}
-        title='Completed Report'
+        title='Weekly Completed'
         subLink={view}
         action={false}
         navBar='down'
       >
-        <CompletedReport
+        <WeeklyReport
           app={app} />
       </StreamLayout>
     );
@@ -43,6 +44,25 @@ const DownstreamWrap = ({
         navBar='down'
       >
         <DailyReport 
+          app={app}
+          user={user}
+          isDebug={isDebug}
+        />
+      </StreamLayout>
+    );
+  }
+  
+  if(view === 'reportmonths') {
+    return (
+      <StreamLayout
+        user={user}
+        app={app}
+        title='Monthly Completed'
+        subLink={view}
+        action={false}
+        navBar='down'
+      >
+        <MonthlyReport 
           app={app}
           user={user}
           isDebug={isDebug}

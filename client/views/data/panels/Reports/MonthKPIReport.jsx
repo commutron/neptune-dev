@@ -64,8 +64,8 @@ const MonthKPIReport = ({ isDebug })=> {
           value={moment().format('YYYY-MM-DD')}
           onChange={(e)=>setMonth(e)} 
           options={{
-            // dateFormat: "Y-m-d",
-            // altFormat: "F Y",
+            disableMobile: "true",
+          
             altInput: true,
             altInputClass: 'variableInput medBig',
             defaultDate: moment().format("YYYY-MM-DD"),

@@ -37,9 +37,16 @@ export function round2Decimal(thrtytw) {
   return trunc;
 }
 
-export function avgOfArray(arr) {
-  const cArr = arr.filter( f => f );
-  
+export function percentOf(goalNumber, realNumber) {
+  const perOf = ( realNumber / goalNumber ) * 100;
+  const perOfClean = round2Decimal(perOf);
+  return perOfClean;
+}
+
+export function avgOfArray(arr, zeros) {
+  const cArr = zeros ? arr.filter( f => ( f || f === 0 ) && !isNaN(f) ) :
+                       arr.filter( f => f && !isNaN(f) );
+                       
   if(cArr.length == 1) {
     return cArr[0];
   }else if(cArr.length > 1) {
@@ -49,4 +56,11 @@ export function avgOfArray(arr) {
   }else{
     return 0;
   }
+}
+
+export function diffTrend(newavg, runningavg) {
+  const diff = newavg - runningavg;
+  const trend = Math.abs(diff) <= (runningavg * 0.05) ? 'flat' : 
+                diff < 0 ? 'down' : 'up';
+  return trend;
 }
