@@ -236,7 +236,7 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
           onTime : week.y[0],
           missed : week.y[0] > week.y[2],
           onBdgt : week.y[4],
-          isDone : week.y[4] + week.y[5]
+          isDone : week.y[0] + week.y[1]
         });
         
       }

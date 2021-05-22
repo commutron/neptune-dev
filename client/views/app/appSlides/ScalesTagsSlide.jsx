@@ -93,6 +93,8 @@ const ScalesTagsSlide = ({ app })=> {
       
       <PriorityScale app={app} />
       
+      <OnTargetScale app={app} />
+      
       <TagSlide app={app} />
       
     </div>
@@ -116,8 +118,7 @@ const PriorityScale = ({ app })=> {
     const highNum = e.target.high.value;
     const maxNum = e.target.max.value;
     Meteor.call('setPriorityScale', lowNum, highNum, maxNum, (error, reply)=>{
-      if(error)
-        console.log(error);
+      error && console.log(error);
       if(reply) {
         toast.success('Saved');
       }else{
@@ -132,29 +133,10 @@ const PriorityScale = ({ app })=> {
       <label htmlFor='scaleForm'>Set Scale in Minutes</label>
       <p><em>remember higher the minutes buffer, the lower the priority</em></p>
       <form id='scaleForm' className='inlineForm' onSubmit={(e)=>handlePriorityScale(e)}>
-        <input 
-          type='number' 
-          id='low' 
-          className='miniIn8' 
-          placeholder='p4 is >'
-          defaultValue={pScl.low} />
-        <input 
-          type='number' 
-          id='high' 
-          className='miniIn8' 
-          placeholder='p3 is >'
-          defaultValue={pScl.high} />
-        <input 
-          type='number' 
-          id='max' 
-          className='miniIn8'
-          placeholder='p2 to p1'
-          defaultValue={pScl.max} />
-        <input 
-          type='number' 
-          className='miniIn8'
-          value={pScl.max}
-          disabled />
+        <ScaleInput idStr='low' place='p4 is >' dfltVal={pScl.low} />
+        <ScaleInput idStr='high' place='p3 is >' dfltVal={pScl.high} />
+        <ScaleInput idStr='max' place='p2 to p1' dfltVal={pScl.max} />
+        <ScaleInput idStr='over' dfltVal={pScl.max} lock={true} />
         <button type='submit' className='smallAction clearGreen'>Save</button>
       </form>
       <div className='vmarginhalf inlineForm'>
@@ -166,6 +148,62 @@ const PriorityScale = ({ app })=> {
     </div>
   );
 };
+
+const OnTargetScale = ({ app })=> {
+  
+  const scl = !app.onScale ? {
+    low : 50,
+    high: 90,
+  } : app.onScale;
+  
+  function handleScale(e) {
+    e.preventDefault();
+    const lowNum = e.target.onlow.value;
+    const highNum = e.target.onhigh.value;
+    Meteor.call('addOnTargetScale', lowNum, highNum, (err, reply)=>{
+      err && console.log(error);
+      if(reply) {
+        toast.success('Saved');
+      }else{
+        toast.error('Server Error');
+      }
+    });
+  }
+  
+  return(
+    <div>
+      <h2 className='cap'>On target scale</h2>
+      <label htmlFor='scaleForm'>Set Scale in Percent</label>
+      <p><em>How to rank performance</em></p>
+      <form 
+        id='onscaleForm' 
+        className='inlineForm' 
+        onSubmit={(e)=>handleScale(e)}
+      >
+        <ScaleInput idStr='onlow' place='50' dfltVal={scl.low} />
+        <ScaleInput idStr='onmed' lock={true} dfltVal='' />
+        <ScaleInput idStr='onhigh' place='90' dfltVal={scl.high} />
+        <button type='submit' className='smallAction clearGreen'>Save</button>
+      </form>
+      <div className='vmarginhalf inlineForm'>
+        <span className='progMockMeter red'></span>
+        <span className='progMockMeter trueyellow'></span>
+        <span className='progMockMeter green'></span>
+      </div>
+    </div>
+  );
+};
+
+const ScaleInput = ({ idStr, place, dfltVal, lock })=>(
+  <input 
+    type='number' 
+    id={idStr}
+    className='miniIn8' 
+    placeholder={place || ''}
+    defaultValue={dfltVal}
+    disabled={lock}
+  />
+);
 
 const TagSlide = ({ app })=> (
   <div className='space3v'>

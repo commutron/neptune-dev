@@ -501,8 +501,8 @@ n-sm-b {
 
 .progMockMeter {
   display: inline-block;
-  min-width: 80.62px;
-  width: 80.62px;
+  min-width: 8ch;
+  width: 8ch;
   min-height: 16px;
   height: 16px;
 }

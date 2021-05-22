@@ -58,6 +58,11 @@ Meteor.methods({
         high: Number(10),
         max: Number(25)
       },
+      onScale: {
+        low: Number(50),
+        high: Number(70),
+        max: Number(90)
+      },
       missingType: 'missing',
       ancillaryOption: [],
       repeatOption: [],
@@ -569,6 +574,21 @@ Meteor.methods({
             low: Number(low),
             high : Number(high),
             max : Number(max)
+          }
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  addOnTargetScale(low, high) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $set : { 
+          onScale : {
+            low: Number(low),
+            high : Number(high)
           }
       }});
       return true;

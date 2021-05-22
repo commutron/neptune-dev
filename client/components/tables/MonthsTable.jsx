@@ -1,13 +1,15 @@
 import React, { Fragment } from 'react';
 import './style.css';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 
 const MonthsTable = ({ 
-  title, data, total, stat, statTotal, statPer,
-  date, extraClass 
+  title, donetitle, date, data, total, 
+  yrStatTotal, yrDoneTotal,
+  stat, statTotal, statPer,
+  app, extraClass, miss 
 })=> {
   
-  function exportTable() {
+  /*function exportTable() {
     const filename = title.split(" ").join("_");
     const outputLines = rows.join('\n');
     
@@ -18,7 +20,7 @@ const MonthsTable = ({
       , {autoClose: false, closeOnClick: false}
     );
     
-  }
+  }*/
 
   if(data === false) {
     return null;
@@ -27,25 +29,23 @@ const MonthsTable = ({
   return(
     <div className='printTable'>
         
-      <div className={`space w100 ${extraClass}`}>
+      <div className={`space w100 ${extraClass || ''}`}>
         
-        <div className='comfort middle'>
+        {/*<div className='comfort middle'>
           <button
             className='chartTableAction'
             title='Download Table'
             onClick={()=>exportTable()}
             // disabled={rows.length < 1}
-            disabled={true}
           ><i className='fas fa-download fa-fw'></i></button>
-        </div>
+        </div>*/}
           
           <table className='monthsTable'>
             
             <tbody>
               <tr>
-                <th colSpan='26' className='bold noBorder big'>{date} {title}</th>
+                <th colSpan='27' className='bold noBorder big'>{date} {title}</th>
               </tr>
-              
               
               <tr>
                 <th></th>
@@ -55,17 +55,17 @@ const MonthsTable = ({
                   .map( (m, index)=>(
                     <th colSpan='2' key={index}>{m}</th>
                 ))}
-                <th>Year</th>
+                <th colSpan='2'>Year</th>
               </tr>
               
               <tr className='miniThead'>
                 <th></th>
                 {data.map( (a, adex)=>(
                   <Fragment key={adex}>
-                    <th>On Time</th><th>Shipped</th>
+                    <th>{title}</th><th>{donetitle}</th>
                   </Fragment>
                 ))}
-                <td></td>
+                <td colSpan='2'></td>
               </tr>
               
               <WeekRows data={data} w={0} stat={stat} />
@@ -85,22 +85,22 @@ const MonthsTable = ({
                     <td><b>{tt[statTotal]}</b></td><td><b>{tt.totalIsDone}</b></td>
                   </Fragment>
                 ))}
-                <td></td>
+                <td><b>{yrStatTotal}</b></td>
+                <td><b>{yrDoneTotal}</b></td>
               </tr>
               
-              <tr className='botThead'>
-                <th></th>
-                {data.map( (tt, ttdex)=>(
-                  <td colSpan='2' key={ttdex}>{tt[statPer] || '0.00'}%</td>
-                ))}
-                <td>{total}%</td>
-              </tr>
+              <TotalsRow data={data} statPer={statPer} total={total} app={app} />
              
             </tbody>
                
           </table>
-         
-            
+          
+          {miss && 
+            <p className='indent3'><n-sm>
+              <i className='redT'>Red</i> = 
+              Technically missed its standard ship day but was completed by its Sales Fulfill date.
+            </n-sm></p>
+          }
         </div>
         
     </div>
@@ -117,7 +117,10 @@ const WeekRows = ({ data, w, stat })=> (
       if(e.monthSet[w]) {
         return(
           <Fragment key={e.monthNum}>
-            <td>{e.monthSet[w][stat]}</td><td>{e.monthSet[w].isDone}</td>
+            <td className={e.monthSet[w].missed ? 'redT' : ''}
+              >{e.monthSet[w][stat]}
+            </td>
+            <td>{e.monthSet[w].isDone}</td>
           </Fragment>
         );
       }else{
@@ -128,6 +131,33 @@ const WeekRows = ({ data, w, stat })=> (
         );
       }
     })}
-    <td></td>
+    <td colSpan='2'></td>
   </tr>
 );
+
+const TotalsRow = ({ data, statPer, total, app })=> {
+  
+  const sTy = !app.onScale ? '' :
+              total >= app.onScale.high ? 'greenGlow' :
+              total <= app.onScale.low ? 'redGlow' :
+              'yellowGlow';
+  return(
+    <tr className='botThead'>
+      <th></th>
+      {data.map( (tt, ttdex)=>{
+        const tots = tt[statPer];
+        const sty = !app.onScale ? '' :
+                    tots >= app.onScale.high ? 'greenGlow' :
+                    tots <= app.onScale.low ? 'redGlow' :
+                    'yellowGlow';
+        return(
+          <td 
+            colSpan='2' 
+            key={ttdex}
+            className={`bold ${sty}`}
+          >{tt[statPer] || '0.00'}%</td>
+      )})}
+      <td colSpan='2' className={`bold ${sTy}`}>{total}%</td>
+    </tr>
+  );
+};

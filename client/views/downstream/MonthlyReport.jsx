@@ -17,8 +17,12 @@ const MonthlyReport = ({ app })=> {
   const [ dataState, dataSet ] = useState(false);
   
   const [ yrOnTime, setYrOnTime ] = useState(0);
+  const [ yrTimeTotal, setYrTimeTotal ] = useState(0);
   
   const [ yrOnBdgt, setYrOnBdgt ] = useState(0);
+  const [ yrBdgtTotal, setYrBdgtTotal ] = useState(0);
+  
+  const [ yrDoneTotal, setYrDoneTotal ] = useState(0);
   
   function getData(fresh) {
     fresh && dataSet(false);
@@ -53,9 +57,18 @@ const MonthlyReport = ({ app })=> {
       const avgPerOnTime = round2Decimal( avgOfArray(allPerOnTime, true) );
       setYrOnTime(avgPerOnTime);
       
+      const allOnTime = Array.from(dataState, x => x.totalOnTime).reduce((x,y)=>x+y);
+      setYrTimeTotal(allOnTime);
+      
       const allPerOnBdgt = Array.from(dataState, x => x.percentOnBdgt);
       const avgPerOnBdgt = round2Decimal( avgOfArray(allPerOnBdgt, true) );
       setYrOnBdgt(avgPerOnBdgt);
+      
+      const allOnBdgt = Array.from(dataState, x => x.totalOnBdgt).reduce((x,y)=>x+y);
+      setYrBdgtTotal(allOnBdgt);
+      
+      const allIsDone = Array.from(dataState, x => x.totalIsDone).reduce((x,y)=>x+y);
+      setYrDoneTotal(allIsDone);
     }
   }, [dataState]);
     
@@ -84,22 +97,31 @@ const MonthlyReport = ({ app })=> {
         
           <MonthsTable 
             title='On Time'
+            donetitle='Shipped'
             date={yearState}
             data={dataState} 
             total={yrOnTime}
+            yrStatTotal={yrTimeTotal}
+            yrDoneTotal={yrDoneTotal}
             stat='onTime'
             statTotal='totalOnTime'
             statPer='percentOnTime' 
+            app={app}
+            miss={true}
           />
             
           <MonthsTable 
             title='On Budget'
+            donetitle='Filled'
             date={yearState}
             data={dataState} 
             total={yrOnBdgt}
+            yrStatTotal={yrBdgtTotal}
+            yrDoneTotal={yrDoneTotal}
             stat='onBdgt'
             statTotal='totalOnBdgt'
             statPer='percentOnBdgt' 
+            app={app}
           />
         
         </div>
