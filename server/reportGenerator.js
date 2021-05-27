@@ -13,12 +13,15 @@ function findRelevantSeries(orgKey, from, to) {
             { completedAt : { $gte: new Date( from ) } } 
           ] }
         ]
-      },{fields:{'batch':1}}).fetch();
+      },{fields:{'batch':1,'groupId':1}}).fetch();
     
     let seriesPack = [];
     for(let b of batchPack) {
+      const g = GroupDB.findOne({_id: b.groupId});
       const srs = XSeriesDB.findOne({batch: b.batch});
-      !srs ? null : seriesPack.push(srs);
+      if(srs && !g.internal) {
+        seriesPack.push(srs);
+      }
     }
     
     resolve(seriesPack);

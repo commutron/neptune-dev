@@ -15,7 +15,7 @@ const ExploreLinkBlock = ({type, keyword, altName, wrap})=>{
   const noWrap = wrap ? '' : 'noWrap';
   return(                    
     <a href={link} className={noWrap + ' numFont'}>
-      <i className='fas fa-rocket fa-fw'></i>{label}
+      <i className='fas fa-rocket fa-fw noPrint'></i>{label}
     </a>
   );
 };

@@ -4,7 +4,7 @@ import 'moment-timezone';
 import Config from '/server/hardConfig.js';
 import { deliveryBinary } from '/server/reportCompleted.js';
 import { checkTimeBudget } from '/server/tideGlobalMethods';
-import { countMulti } from './utility';
+import { countMulti, noIg } from './utility';
 
   export function countNewUser(accessKey, rangeStart, rangeEnd) {
     const resultU = Meteor.users.find({
@@ -23,14 +23,17 @@ import { countMulti } from './utility';
       createdAt: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
-      }
+      },
+      internal: { $ne: true }
     },{fields:{'_id':1}}).count();
     return resultG;
   }
 
   export function countNewWidget(accessKey, rangeStart, rangeEnd) {
+    const xid = noIg();
     const resultW = WidgetDB.find({
       orgKey: accessKey, 
+      groupId: { $ne: xid },
       createdAt: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
@@ -40,8 +43,10 @@ import { countMulti } from './utility';
   }
   
   export function countNewVariant(accessKey, rangeStart, rangeEnd) {
+    const xid = noIg();
     const resultV = VariantDB.find({
-      orgKey: accessKey, 
+      orgKey: accessKey,
+      groupId: { $ne: xid },
       createdAt: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
@@ -51,9 +56,10 @@ import { countMulti } from './utility';
   }
 
   export function countNewBatch(accessKey, rangeStart, rangeEnd) {
-    
+    const xid = noIg();
     const result = XBatchDB.find({
-      orgKey: accessKey, 
+      orgKey: accessKey,
+      groupId: { $ne: xid },
       createdAt: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
@@ -64,6 +70,7 @@ import { countMulti } from './utility';
   }
   
   export async function countDoneBatch(accessKey, rangeStart, rangeEnd) {
+    const xid = noIg();
     
     let doneOnTime = 0;
     let doneLate = 0;
@@ -88,7 +95,8 @@ import { countMulti } from './utility';
     };
     
     const bx = XBatchDB.find({
-      orgKey: accessKey, 
+      orgKey: accessKey,
+      groupId: { $ne: xid },
       completedAt: { 
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
@@ -118,11 +126,13 @@ import { countMulti } from './utility';
   }
   
   export function countNewItem(accessKey, rangeStart, rangeEnd) {
+    const xid = noIg();
     
     let niCount = 0;
     
     XSeriesDB.find({
       orgKey: accessKey,
+      groupId: { $ne: xid },
       createdAt: { 
         $lte: new Date(rangeEnd)
       },
@@ -142,11 +152,13 @@ import { countMulti } from './utility';
   }
   
   export function countDoneItem(accessKey, rangeStart, rangeEnd) {
+    const xid = noIg();
     
     let diCount = 0;
     
     XSeriesDB.find({
       orgKey: accessKey,
+      groupId: { $ne: xid },
       createdAt: { 
         $lte: new Date(rangeEnd)
       },
@@ -166,11 +178,13 @@ import { countMulti } from './utility';
   }
   
   export function countNewNC(accessKey, rangeStart, rangeEnd) {
+    const xid = noIg();
     
     let ncCount = 0;
     
     XSeriesDB.find({
       orgKey: accessKey,
+      groupId: { $ne: xid },
       createdAt: { 
         $lte: new Date(rangeEnd)
       },
@@ -193,10 +207,13 @@ import { countMulti } from './utility';
   }
   
   export function countNewSH(accessKey, rangeStart, rangeEnd) {
+    const xid = noIg();
+    
     let shCount = 0;
     
     XSeriesDB.find({
-      orgKey: accessKey, 
+      orgKey: accessKey,
+      groupId: { $ne: xid },
       createdAt: { 
         $lte: new Date(rangeEnd)
       },
@@ -219,10 +236,13 @@ import { countMulti } from './utility';
   }
   
   export function countTestFail(accessKey, rangeStart, rangeEnd) {
+    const xid = noIg();
+    
     let tfCount = 0;
     
     XSeriesDB.find({
       orgKey: accessKey,
+      groupId: { $ne: xid },
       createdAt: { 
         $lte: new Date(rangeEnd)
       },
@@ -246,10 +266,13 @@ import { countMulti } from './utility';
   }
   
   export function countScrap(accessKey, rangeStart, rangeEnd) {
+    const xid = noIg();
+    
     let scCount = 0;
     
     XSeriesDB.find({
       orgKey: accessKey,
+      groupId: { $ne: xid },
       createdAt: { 
         $lte: new Date(rangeEnd)
       },

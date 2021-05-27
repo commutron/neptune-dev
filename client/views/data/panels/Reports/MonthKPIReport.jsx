@@ -28,9 +28,9 @@ const MonthKPIReport = ({ isDebug })=> {
   	    if(reply) {
   	      const rtn = JSON.parse(reply);
     	    let arrange = [
-            [`${Pref.batches} Created`, rtn.newBatch ],
-            [`${Pref.batches} Completed On Time`, rtn.doneBatchOnTime ],
-            [`${Pref.batches} Completed Late`, rtn.doneBatchLate ],
+            [`${Pref.xBatchs} Created`, rtn.newBatch ],
+            [`${Pref.xBatchs} Completed On Time`, rtn.doneBatchOnTime ],
+            [`${Pref.xBatchs} Completed Late`, rtn.doneBatchLate ],
             [`${Pref.items} Created`, rtn.newItem ],
             [`${Pref.items} Completed`, rtn.doneItem ],
             [`${Pref.groups} Created`, rtn.newGroup ],

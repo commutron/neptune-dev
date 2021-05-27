@@ -104,6 +104,7 @@ Meteor.methods({
         $set : { 
           orgPIN : rndm4
       }});
+      return true;
     }
   },
   revealPIN() {

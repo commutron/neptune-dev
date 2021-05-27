@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import moment from 'moment';
-import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
+import { CalcSpin } from '/client/components/tinyUi/Spin';
+import PrintThis from '/client/components/tinyUi/PrintThis';
 import { avgOfArray, round2Decimal } from '/client/utility/Convert';
 import { FilterSelect } from '/client/components/smallUi/ToolBarTools';
 
@@ -75,8 +76,7 @@ const MonthlyReport = ({ app })=> {
   return(
     <div className='w100 minWfit space2v'>
         
-      <div className='med line2x'>
-        
+      <div className='comfort med line2x noPrint'>
         <FilterSelect
           unqID='fltrYEAR'
           title='Filter Year'
@@ -85,6 +85,7 @@ const MonthlyReport = ({ app })=> {
           falsey={false}
           changeFunc={(e)=>yearSet(e.target.value)} 
         />
+        <PrintThis />
       </div>
       
       {dataState === false ?
@@ -109,7 +110,9 @@ const MonthlyReport = ({ app })=> {
             app={app}
             miss={true}
           />
-            
+          
+          <div className='printBr' />
+          
           <MonthsTable 
             title='On Budget'
             donetitle='Filled'

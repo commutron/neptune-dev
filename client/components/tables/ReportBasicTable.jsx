@@ -31,9 +31,11 @@ const ReportBasicTable = ({ title, dateString, rows })=> {
     <div className='printTable'>
       <div className='wide'>
         <div className='comfort middle'>
-          <h3 className='cap'>{title}</h3>
+          <h3 className='cap'>
+            <n-print>{dateString} </n-print>{title}
+          </h3>
           <button
-            className='chartTableAction'
+            className='chartTableAction noPrint'
             title='Download Table'
             onClick={()=>exportTable()}
             disabled={rows.length === 1}

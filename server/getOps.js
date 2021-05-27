@@ -2,8 +2,10 @@
 Meteor.methods({
 
   fetchWeekAvg(accessKey) {
-    Meteor.call('fetchWeekAvgTime', accessKey);
-    Meteor.call('fetchWeekAvgSerial', accessKey);
+    const privateKey = accessKey || Meteor.user().orgKey;
+
+    Meteor.call('fetchWeekAvgTime', privateKey);
+    Meteor.call('fetchWeekAvgSerial', privateKey);
     return true;
   },
   

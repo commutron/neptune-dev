@@ -3,10 +3,11 @@ import moment from 'moment';
 import 'moment-timezone';
 import { HolidayCheck } from '/client/utility/WorkTimeCalc.js';
 import Pref from '/client/global/pref.js';
-import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
+import PrintThis from '/client/components/tinyUi/PrintThis';
+import { CalcSpin } from '/client/components/tinyUi/Spin';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
-import NumBox from '/client/components/tinyUi/NumBox.jsx';
+import NumLine from '/client/components/tinyUi/NumLine';
 
 
 import ReportBasicTable from '/client/components/tables/ReportBasicTable.jsx'; 
@@ -47,7 +48,7 @@ const DailyReport = ({ app, user, isDebug })=> {
                       
   return(
     <div className='space5x5 overscroll'>
-      <div className='med vbreak comfort middle'>
+      <div className='med vbreak comfort middle noPrint'>
         <div className='line2x'>
           <Flatpickr
             value={moment().format('YYYY-MM-DD')}
@@ -68,10 +69,12 @@ const DailyReport = ({ app, user, isDebug })=> {
             {isHoliday ? <span className='bigger line05x'>Holiday</span> : null}
         </div>
         
-        <NumBox
+        <NumLine
           num={dayData && dayData.length-1}
           name={'Completed ' + Pref.items}
           color='purpleT' />
+      
+        <PrintThis />
       </div>
       
       {!dayData ?

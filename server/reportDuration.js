@@ -15,8 +15,8 @@ function splitItmTm( items, tide ) {
   const fitems = items.filter( i => i.completed );
   const etide = tide.filter( t => t.stopTime !== false);
   if(fitems.length > 0 && tide && tide.length > 0) {
-    const itemS = fitems.sort( (i1, i2)=> {
-      return i1.completedAt < i2.completedAt ? -1 : i1.completedAt > i2.completedAt ? 1 : 0; });
+    const itemS = fitems.sort( (i1, i2)=>
+      i1.completedAt < i2.completedAt ? -1 : i1.completedAt > i2.completedAt ? 1 : 0 );
       
     const itemMidex = Math.floor( itemS.length / 2 );
     const midItem = itemS[itemMidex];

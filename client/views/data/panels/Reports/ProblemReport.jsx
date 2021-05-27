@@ -22,7 +22,7 @@ const ProblemReport = (props)=> {
       if(reply) {
         const re = JSON.parse(reply);
         let arrange = [
-          ['Included ' + Pref.batches, re.seriesInclude ],
+          ['Included ' + Pref.xBatchs, re.seriesInclude ],
           [ 'Included Serialized Items', re.itemsInclude ],
           [ 'Finished Serialized Items', re.itemStats.completedItems ],
           [ 'Scrapped Serialized Items', re.itemStats.scraps ],
@@ -118,4 +118,3 @@ const ReportRangeRequest = ({
     </form>
   </div>
 );
-

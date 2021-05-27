@@ -433,25 +433,3 @@ Meteor.methods({
   
   
 });
-
-/*
-if(rvrstp.type === 'first') {
-  const pastFirst = items.some( 
-                      x => x.history.find( y => 
-                        y.key === rvrstp.key && 
-                        y.good === true &&
-                        y.time < tideStart ) );
-  const futureFirst = items.some( 
-                      x => x.history.find( y => 
-                        y.key === rvrstp.key && 
-                        y.time > tideStart &&
-                        y.info.builder.includes(uID) ) );
-  
-  const prep = pastFirst === false && futureFirst === true;
-  if(prep) {
-    nextFirstPhase = rvrstp.phase;
-    break;
-  }
-*/
-
-

@@ -38,7 +38,6 @@ const WidgetNewForm = ({ groupId })=> {
       error && console.log(error);
       if(reply) {
         FlowRouter.go('/data/widget?request=' + newName);
-        toast.success('Saved');
       }else{
         toast.error('Server Error');
         this.go.disabled = false;

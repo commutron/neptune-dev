@@ -39,13 +39,30 @@ class Pref {
       'kitting'
     ];
     
-    // config
+    // Config
     this.userTimePublic = true;
     this.tooManyMin = 600;
     this.groupMax = 128;
     this.aliasMax = 16;
     this.downDayMax = 24;
     this.pagingSize = 25;
+    this.statisticalStartHour = 6; // 6am
+    this.statisticalEndHour = 20; // 8pm
+    this.stepUndoWindow = 1000*30; // remember to match ".spinRe"
+    this.timeAfterGrace = 48; // keep the tideControl unlocked for how many hours
+    this.seriesLimit = 5000;
+    this.unitLimit = 1000;
+    this.clusterMin = 3; // noncon sets
+    
+    this.regex5 = RegExp(/^(\d{5})$/); // batch number
+    
+    this.regexSN = RegExp(/^(\d{8,10})$|^(\d{6}\-\d{7})$/);
+	  this.regex810 = RegExp(/^(\d{8,10})$/);
+    this.regexNS = RegExp(/^(\d{6}\-\d{7})$/);
+    
+    this.usrCut = RegExp(/\.|\-|\_/g); // nice-ify usernames
+    
+    this.listCut = RegExp(/(\s*\,\s*|\,|\ +)/g); // cut up noncon refs
     
     // app navigation
     this.post = 'record';
@@ -57,12 +74,10 @@ class Pref {
     this.helpDocs = 'help';
     this.timeClock = 'Fishbowl';
     this.user = 'employees';
-    this.usrCut = RegExp(/\.|\-|\_/g);
+    
     // terminology
     this.admin = 'org admin';
     this.norole = 'insufficient permissions';
-    
-    this.regex5 = RegExp(/^(\d{5})$/);
     
     // simpleBatch and counters
     this.xBatch = 'work order';
@@ -80,11 +95,6 @@ class Pref {
 	  this.series = 'series';
 	  this.itemSerial = 'serial';
 	  this.serialIcon = 'qrcode';
-	  this.regexSN = RegExp(/^(\d{8,10})$|^(\d{6}\-\d{7})$/);
-	  this.regex810 = RegExp(/^(\d{8,10})$/);
-    this.regexNS = RegExp(/^(\d{6}\-\d{7})$/);
-    this.seriesLimit = 5000;
-    this.unitLimit = 1000;
     
     this.rapidEx = 'extend';
     this.rapidExd = 'extended';
@@ -167,8 +177,7 @@ class Pref {
     this.skipDescribe = 'Ship With Defect';
     this.snooze = 'snooze';
     this.snoozeDescribe = 'Resolve Later';
-    this.listCut = RegExp(/(\s*\,\s*|\,|\ +)/g);
-    this.clusterMin = 3;
+    
     // scrap
     this.scrap = 'scrap';
     this.Scrap = 'Scrap';
@@ -197,13 +206,6 @@ class Pref {
     this.tide = 'start-stop';
     this.engaged = 'active';
     this.engagedNot = 'not active';
-    this.statisticalStartHour = 6; // 6am
-    this.statisticalEndHour = 20; // 8pm
-    //this.minWorkDayStartTime
-    //this.maxWorkDayEndTime
-    this.stepUndoWindow = 1000*30; // remember to match ".spinRe"
-    this.timeAfterGrace = 48; // keep the tideControl unlocked for how many hours
-
   }
 }
 

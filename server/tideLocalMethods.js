@@ -27,7 +27,6 @@ Meteor.methods({
     }
   },
 
-  
   // RECORD
   
   startTideTask(batchId, newTkey, newTask) {
@@ -138,7 +137,6 @@ Meteor.methods({
       throw new Meteor.Error(error);
     }finally{ return true }
   },
-  
   
   // CHANGE
   

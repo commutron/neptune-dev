@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import './style.css';
-// import { toast } from 'react-toastify';
 
 const MonthsTable = ({ 
   title, donetitle, date, data, total, 
@@ -8,19 +7,6 @@ const MonthsTable = ({
   stat, statTotal, statPer,
   app, extraClass, miss 
 })=> {
-  
-  /*function exportTable() {
-    const filename = title.split(" ").join("_");
-    const outputLines = rows.join('\n');
-    
-    toast(
-      <a href={`data:text/plain;charset=UTF-8,${outputLines}`}
-        download={`${filename}_${dateString}.csv`}
-      >Download {title} for {dateString} to your computer as a comma-delimited CSV file</a>
-      , {autoClose: false, closeOnClick: false}
-    );
-    
-  }*/
 
   if(data === false) {
     return null;
@@ -30,15 +16,6 @@ const MonthsTable = ({
     <div className='printTable'>
         
       <div className={`space w100 ${extraClass || ''}`}>
-        
-        {/*<div className='comfort middle'>
-          <button
-            className='chartTableAction'
-            title='Download Table'
-            onClick={()=>exportTable()}
-            // disabled={rows.length < 1}
-          ><i className='fas fa-download fa-fw'></i></button>
-        </div>*/}
           
           <table className='monthsTable'>
             

@@ -19,9 +19,14 @@ function countNewCollection(collected, rangeStart, rangeEnd) {
 
 const GroupLanding = ({ groupData, widgetData, variantData, app })=> {
   
-  const xyG = timeRanges(groupData, countNewCollection, 12, 'month');
-  const xyW = timeRanges(widgetData, countNewCollection, 12, 'month');
-  const xyV = timeRanges(variantData, countNewCollection, 12, 'month');
+  const og = groupData.find( x => x.internal );
+  const ogID = og ? og._id : 'none';
+  const g = groupData.filter( x => x._id !== ogID );
+  const xyG = timeRanges(g, countNewCollection, 12, 'month');
+  const w = widgetData.filter( x => x.groupId !== ogID );
+  const xyW = timeRanges(w, countNewCollection, 12, 'month');
+  const v = variantData.filter( x => x.groupId !== ogID );
+  const xyV = timeRanges(v, countNewCollection, 12, 'month');
   
   return(
     <div className='overscroll'>
@@ -32,12 +37,8 @@ const GroupLanding = ({ groupData, widgetData, variantData, app })=> {
         </div>
         <div className='centreRow'>
           <GroupForm
-            id={false}
             name={false}
-            alias={false}
-            wiki={false}
-            noText={false}
-            primeTopRight={true} />
+            lgIcon={true} />
           <NumBox
             num={groupData.length}
             name={Pref.group + 's'}

@@ -438,7 +438,8 @@ Meteor.publish('skinnyData', function(){
         fields: {
           'group': 1,
           'alias': 1,
-          'hibernate': 1
+          'hibernate': 1,
+          'internal': 1
           // 'orgKey': 0,
           // 'shareKey': 0,
         }}),

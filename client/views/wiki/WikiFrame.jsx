@@ -11,9 +11,7 @@ const WikiFrame = ({ go, full, anchor })=> {
   };
   //let correct = full ? 45 : 115;
   
-  //console.log(go);
-  
-  return (
+  return(
     <iframe
       id='instruct'
       style={sty}

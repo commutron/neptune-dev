@@ -101,7 +101,7 @@ export const ProWrap = ({
                       '/data/batch?request=' + bData.batch :
                       gAlias ?
                       '/data/overview?request=groups&specify=' + gAlias :
-                      '/data/overview?request=batches';
+                      '/data/overview?request=groups';
   
   let riverExpand = expand;
   

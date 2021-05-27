@@ -33,7 +33,7 @@ const WidgetsDepth = ({ groupAlias, widgetData, active })=> {
           let ac = active.includes(entry._id) ? 'activeMark' : '';
             return(
               <WidgetIndexCard 
-                key={index} 
+                key={entry._id} 
                 data={entry} 
                 barStyle={ac} />
           )})}
@@ -96,7 +96,6 @@ const WidgetIndexCard = ({ data, barStyle })=>{
         </span>
       }
       sty={barStyle}
-      // address={'/data/widget?request=' + data.widget}
       address={'/data/widget?request=' + data._id}
     />
   );

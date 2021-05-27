@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
+import PrintThis from '/client/components/tinyUi/PrintThis';
 import WeekBrowse from '/client/components/bigUi/WeekBrowse/WeekBrowse.jsx';
 
 import ReportBasicTable from '/client/components/tables/ReportBasicTable.jsx'; 
@@ -99,11 +100,12 @@ const WeeklyReport = ({ app })=> {
   return(
     <div className='wide space2v'>
         
-      <div className='med line2x'>
+      <div className='comfort med line2x noPrint'>
         <WeekBrowse
           sendUp={(i)=>getBack(i)}
           app={app}
         />
+        <PrintThis />
       </div>
       
       {weekData === false ?
@@ -118,7 +120,7 @@ const WeeklyReport = ({ app })=> {
           rows={weekData} />
       }
       
-      <br /><br />
+      <div className='printBr' />
       
       {totalData === false ?
           <div>
@@ -127,7 +129,7 @@ const WeeklyReport = ({ app })=> {
           </div>
         :   
         <ReportStatsTable 
-          title={`completed ${Pref.xBatchs} report totals`}
+          title={`${Pref.xBatchs} totals`}
           dateString={`${weekChoice.yearNum}w${weekChoice.weekNum}`}
           rows={totalData}
           extraClass='max500' />

@@ -7,7 +7,7 @@ import DoneItemsTrend from './DoneItemsTrend';
 
 const TrendWrap = ({ app, isDebug, isNightly })=> (
   <div className='space36v'>
-    
+
     <Tabs
       tabs={[
         <b><i className='fas fa-bullseye fa-fw'></i> On Target</b>,

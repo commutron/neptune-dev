@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-//import { toast } from 'react-toastify';
 import Pref from '/client/global/pref.js';
-//import Tabs from '/client/components/bigUi/Tabs/Tabs.jsx';
 import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
 import PeoplePanel from './PeoplePanel.jsx';
 

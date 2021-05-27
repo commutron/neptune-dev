@@ -5,6 +5,7 @@ import 'moment-business-time';
 import Config from '/server/hardConfig.js';
 
 import { min2hr, round2Decimal, diffTrend } from './calcOps';
+import { noIg } from './utility';
 
 export function batchTideTime(batchTide, lockTrunc) {
     
@@ -17,13 +18,14 @@ export function batchTideTime(batchTide, lockTrunc) {
       return lockTrunc.tideTotal;
     }else{
       
-      const tideTime = Array.from(batchTide, bl => {
+      const tideDurr = Array.from(batchTide, bl => {
         const mStart = moment(bl.startTime);
         const mStop = !bl.stopTime ? moment() : moment(bl.stopTime);
         return moment.duration(mStop.diff(mStart)).asMinutes();
-      }).reduce((x,y)=> x + y);
+      });
+      const tideTime = tideDurr.length > 0 ? tideDurr.reduce((x,y)=> x + y) : 0;
 
-      if( !tideTime || typeof tideTime !== 'number' ) {
+      if( typeof tideTime !== 'number' ) {
         return false;
       }else{
         const cleanTime = tideTime;
@@ -82,7 +84,6 @@ export function distTimeBudget(tide, quoteTimeBudget, itemQuantity, allQuantity,
     return [ tidePerItem, quotePerItem, qMNt, tPCq ];
   }
 }
-
   
 function collectActivtyLevel(privateKey, batchID) {
   return new Promise(resolve => {
@@ -183,9 +184,9 @@ Meteor.methods({
     return bundleActivity(batchID);
   },
   
-  ////////////////////////////////////////////////////
-  // Tide Records \\
-  ////////////////////////////////////////////////////
+  ///////////////////////////////////////
+  // Tide Records \\\\\\\\\\\\\\\\\\\\\\\
+  ///////////////////////////////////////
 
   fetchOrgTideActivity(dateString) {
     try {
@@ -217,9 +218,11 @@ Meteor.methods({
     }
   },
   
-  fetchWeekTideActivity(yearNum, weekNum, allOrg, mockUserId, accessKey) {
+  fetchWeekTideActivity(yearNum, weekNum, allOrg, mockUserId, accessKey, block) {
     try {
       const orgKey = accessKey || Meteor.user().orgKey;
+      const xid = block ? noIg() : 'noblock';
+      
       const getYear = yearNum || moment().weekYear();
       const getWeek = weekNum || moment().week();
       const pinDate = moment.tz(Config.clientTZ).year(getYear).week(getWeek);
@@ -234,6 +237,7 @@ Meteor.methods({
       const touchedBX = !sendAll ?
         XBatchDB.find({
           orgKey: orgKey, 
+          groupId: { $ne: xid },
           tide: { $elemMatch: { startTime: {
             $gte: new Date(pinDate.startOf('week').format()),
             $lte: new Date(pinDate.endOf('week').format())
@@ -243,6 +247,7 @@ Meteor.methods({
         :
         XBatchDB.find({
           orgKey: orgKey,
+          groupId: { $ne: xid },
           tide: { $elemMatch: { startTime: {
             $gte: new Date(pinDate.startOf('week').format()),
             $lte: new Date(pinDate.endOf('week').format())
@@ -270,13 +275,14 @@ Meteor.methods({
       const now = moment.tz(Config.clientTZ);
       const yearNum = now.weekYear();
       const weekNum = now.week();
-      const weekTides = Meteor.call('fetchWeekTideActivity', 
-                          yearNum, weekNum, true, false, accessKey);
+      const weekTides = Meteor.call('fetchWeekTideActivity',
+                          yearNum, weekNum, true, false, accessKey, true);
       
-      const totalDurr = Array.from(weekTides, x => x.durrAsMin).reduce((x,y)=> x + y);
+      const durrs = Array.from(weekTides, x => x.durrAsMin);
+      const total = durrs.length > 0 ? durrs.reduce((x,y)=> x + y) : 0;
       const days = [...new Set(Array.from(weekTides, x => moment(x.startTime).day())) ].length;
       
-      const avgperday = totalDurr / days;
+      const avgperday = total > 0 ? total / days : 0;
   
       const lastavg = CacheDB.findOne({dataName: 'avgDayTime'});
       const runningavg = lastavg ? lastavg.dataNum : 0;

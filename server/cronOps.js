@@ -9,7 +9,7 @@ import { checkTimeBudget } from '/server/tideGlobalMethods';
 // import { distTimeBudget } from './tideGlobalMethods.js';
 // import { whatIsBatchX } from './searchOps.js';
 // import { round1Decimal } from './calcOps';
-
+import { noIg } from '/server/utility';
 import Config from '/server/hardConfig.js';
 
 
@@ -75,10 +75,13 @@ SyncedCron.start();
   
 function countDoneUnits(accessKey, rangeStart, rangeEnd) {
   return new Promise(function(resolve) {
+    const xid = noIg();
+    
     let diCount = 0;
     
     XSeriesDB.find({
       orgKey: accessKey,
+      groupId: { $ne: xid },
       createdAt: { 
         $lte: new Date(rangeEnd)
       },
@@ -103,7 +106,8 @@ function countDoneUnits(accessKey, rangeStart, rangeEnd) {
 }
 
 async function countDoneBatchTarget(accessKey, rangeStart, rangeEnd) {
-    
+  const xid = noIg();
+  
   let doneOnTime = 0;
   let doneLate = 0;
   let shipOnTime = 0;
@@ -122,6 +126,7 @@ async function countDoneBatchTarget(accessKey, rangeStart, rangeEnd) {
     
   const bx = XBatchDB.find({
     orgKey: accessKey, 
+    groupId: { $ne: xid },
     completedAt: { 
       $gte: new Date(rangeStart),
       $lte: new Date(rangeEnd) 
@@ -133,6 +138,7 @@ async function countDoneBatchTarget(accessKey, rangeStart, rangeEnd) {
     'quoteTimeBudget': 1,
     'lockTrunc': 1
   }}).fetch();
+  
   await Promise.all(bx.map( async (gfx, inx)=> {
     await new Promise( (resolve)=> {
       doneCalc(gfx.salesEnd, gfx.completedAt, gfx.tide, gfx.quoteTimeBudget, gfx.lockTrunc);

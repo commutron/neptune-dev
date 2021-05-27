@@ -1,7 +1,5 @@
 import { Meteor } from 'meteor/meteor';
 
-//// Preferences singleton class \\\\
-
 let instance = null;
 
 class Config {
@@ -10,9 +8,20 @@ class Config {
       instance = this;
     }
     
-    this.clientTZ = "America/Regina";
+    this.clientTZ = "America/Regina"; // correct all server time to local timezone
     
-    this.allowedSupers = 2;
+    this.allowedSupers = 2; // max users that may hold a 'super' role
+    
+    this.maxShift = 10; // max number of consecutive hours 
+    this.dropShipBffr = 5; // number of hours late is allowed
+                          // compensating for out of hours hand delivery
+    
+    this.seriesLimit = 5000; // max items in a series
+    this.unitLimit = 1000; // max units per item
+    
+    this.regexSN = RegExp(/^(\d{8,10})$|^(\d{6}\-\d{7})$/);
+    this.regex810 = RegExp(/^(\d{8,10})$/);
+    this.regexNS = RegExp(/^(\d{6}\-\d{7})$/);
     
     this.workingHours = {
       0: null,
@@ -23,9 +32,6 @@ class Config {
       5: ['07:00:00', '12:00:00'],
       6: null
     };
-    
-    this.maxShift = 10;
-    this.dropShipBffr = 5;
     
     // treated as a ship deadline
     this.shippingHours = {
@@ -38,12 +44,6 @@ class Config {
       6: null
     };
     
-    this.regexSN = RegExp(/^(\d{8,10})$|^(\d{6}\-\d{7})$/);
-    this.regex810 = RegExp(/^(\d{8,10})$/);
-    this.regexNS = RegExp(/^(\d{6}\-\d{7})$/);
-    
-    this.seriesLimit = 5000;
-    this.unitLimit = 1000;
   }
 }
 

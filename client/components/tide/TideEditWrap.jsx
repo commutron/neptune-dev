@@ -3,6 +3,7 @@ import moment from 'moment';
 import 'moment-business-time';
 // import Pref from '/client/global/pref.js';
 import { HolidayCheck } from '/client/utility/WorkTimeCalc.js';
+import { min2hr } from '/client/utility/Convert';
 import DayPieceBar from '/client/components/charts/Tides/DayPieceBar.jsx';
 import TideBlockRow from '/client/components/tide/TideBlockRow.jsx';
 
@@ -86,8 +87,6 @@ const TideEditWrap = ({
         
         const lastStart = weekData[index-1] && weekData[index-1].startTime;
         const lastStop = weekData[index+1] && weekData[index+1].stopTime;
-        // const lastStart = weekData[index-1]?.startTime; // STILL
-        // const lastStop = weekData[index+1]?.stopTime; // WONT LINT
         const nextStart = lastStart ? lastStart : false;
         
         if(index === 0 || moment(blk.startTime).isSame(lastStart, 'day') === false) {
@@ -96,13 +95,18 @@ const TideEditWrap = ({
           const dayEnd = newDayTime.clone().endOf('day').lastWorkingTime();
           const restOfDay = weekData.filter( x => newDayTime.isSame(x.startTime, 'day') );
           const isHoliday = HolidayCheck( app.nonWorkDays, newDayTime);
-
+          const dayDurr = Array.from(restOfDay, x => Math.round(x.durrAsMin) );
+          const dayTotal = dayDurr.reduce((x,y)=>x+y);
+          
           return(
             <Fragment key={index+blk.tKey}>
-              <tr key={blk.startTime.toISOString()} className='medBig leftText line4x'>
-                <th colSpan='8'>{newDayTime.format('dddd MMMM Do')}
+              <tr key={blk.startTime.toISOString()} className=' '>
+                <th colSpan='7' className='noRightBorder line4x medBig leftText'
+                  >{newDayTime.format('dddd MMMM Do')}
                   {isHoliday ? <span className=''> (Holiday)</span> : null}
                 </th>
+                <th title={`${dayTotal} minutes`}
+                  ><n-num>{min2hr(dayTotal)}</n-num> <n-n>hrs</n-n></th>
               </tr>
               <tr>
                 <th colSpan='8'>

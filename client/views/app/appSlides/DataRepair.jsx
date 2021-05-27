@@ -92,6 +92,28 @@ const DataRepair = ({ app, users })=> {
           className='action clearPurple'
         >Request Locking</button>
       </div>
+      
+      <div>
+        <h3><i className="fas fa-calculator fa-lg gap"></i>
+          Run Weekly Avg Update
+        </h3>
+        <small>Runs every Saturday at 12:02am (CST)</small><br />
+        <button
+          onClick={()=>doCallThing("fetchWeekAvg")}
+          className='action clearPurple'
+        >Request Avg</button>
+      </div>
+      
+      <div>
+        <h3><i className="fas fa-user-secret fa-lg gap"></i>
+          Force Randomize Org PIN
+        </h3>
+        <small>Runs every day at 12:00am (CST)</small><br />
+        <button
+          onClick={()=>doCallThing("randomizePIN")}
+          className='action clearPurple'
+        >Randomize PIN</button>
+      </div>
 
       <div>
         <h3><i className="fas fa-hammer fa-lg gap"></i>
@@ -152,18 +174,6 @@ const DataRepair = ({ app, users })=> {
           onClick={()=>doCallThing("clearNonDebugUserUsageLogs")}
         >Clear Users with "debug" turned OFF</button>
       </div>
-      
-      
-      <div>
-        <h3><i className="fas fa-screwdriver fa-lg gap"></i>
-          Fix Tide Task "false" Errors
-        </h3>
-        <button
-          onClick={()=>doCallThing("repairFalseTask")}
-          className='action clearOrange'
-        >Fix Errors</button>
-      </div>
-      
       
       <div>
         <h3><i className="fas fa-save fa-lg gap"></i>

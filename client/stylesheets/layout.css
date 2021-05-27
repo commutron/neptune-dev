@@ -403,6 +403,7 @@ main {
 
 .gap { margin: 0 5px; }
 .gapR { margin: 0 5px 0 0; }
+.gapL { margin: 0 0 0 5px; }
 .gapsR { row-gap: 2vh; }
 .gapsC { column-gap: 2vw; }
 
@@ -819,6 +820,11 @@ n-sm-model-content {
 }
 .showOnHover:hover > .hiddenPIN {
   opacity: 1;
+}
+@supports (-webkit-touch-callout: none) {
+  .showOnHover:focus > .hiddenPIN {
+    opacity: 1;
+  }
 }
 .hiddenPrime {
   cursor: crosshair;

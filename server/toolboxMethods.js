@@ -1,10 +1,8 @@
 // import moment from 'moment';
 // import Config from '/server/hardConfig.js';
 
-
 Meteor.methods({
-
-  ////////////
+  
   // Testing Functions //
   
   sendTestMail(all, title, message) {
@@ -62,24 +60,6 @@ Meteor.methods({
   
   
  ///////////// Repair \\\\\\\\\\\\\\\\\\\\\
-
-  /*
-  migrateALLWidgetVersions() {
-    this.unblock();
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      // const accessKey = Meteor.userId();
-      const allWidgets = WidgetDB.find({orgKey: Meteor.user().orgKey}).fetch();
-      
-      for( let wijt of allWidgets ) {
-        Meteor.call('migrateWidgetVersions', wijt._id);
-      }
-      
-      return true;  
-    }else{
-      return false;
-    }
-  },
-  */
   
   resetALLCacheDB() {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
@@ -189,28 +169,4 @@ Meteor.methods({
     }
   },
   
-  repairFalseTask() {
-    if(!Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      return false;
-    }else{
-      const allBatch = XBatchDB.find({
-        orgKey: Meteor.user().orgKey,
-        'tide.task': "false"
-      }).fetch();
-      
-      for(let bx of allBatch) {
-        
-        for(let t of bx.tide) {
-          if(t.task === "false") {
-            XSeriesDB.update({_id: bx._id, 'tide.tKey': t.tKey}, {
-        			$set : { 
-        			  'tide.$.task': false
-        			}
-        		});
-          }
-        }
-      }
-      return true;
-    }
-  }, 
 });

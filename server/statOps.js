@@ -70,7 +70,7 @@ export const totalTideTimePromise = (accessKey, rangeStart, rangeEnd)=> {
 
 Meteor.methods({
 
-  topViewStats(u, g, w, b, a) {
+  /*topViewStats(u, g, w, b, a) {
     const usrC = u ? Meteor.users.find({orgKey: Meteor.user().orgKey}).fetch().length : 0;
     const grpC = g ? GroupDB.find({orgKey: Meteor.user().orgKey}).fetch().length : 0;
     const wdgtC = w ? WidgetDB.find({orgKey: Meteor.user().orgKey}).fetch().length : 0;
@@ -80,7 +80,7 @@ Meteor.methods({
     return {
       usrC, grpC, wdgtC, btchC, btchLv
     };
-  },
+  },*/
   
   widgetTops(wID) {
     const variants = VariantDB.find({widgetId: wID}).fetch().length;

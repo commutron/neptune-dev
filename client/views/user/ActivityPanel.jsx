@@ -21,11 +21,9 @@ const ActivityPanel = ({ app, brancheS, user, isDebug, users, traceDT })=> {
       Meteor.call('fetchWeekTideActivity', yearNum, weekNum, false, userID,
       (err, rtn)=>{
   	    err && console.log(err);
-  	    const cronoTimes = rtn.sort((x1, x2)=> {
-                            if (x1.startTime < x2.startTime) { return 1 }
-                            if (x1.startTime > x2.startTime) { return -1 }
-                            return 0;
-                          });
+  	    const cronoTimes = rtn.sort((x1, x2)=>
+                              x1.startTime < x2.startTime ? 1 : 
+                              x1.startTime > x2.startTime ? -1 : 0 );
         setWeekData(cronoTimes);
   	  });
     }
@@ -61,9 +59,9 @@ const ActivityPanel = ({ app, brancheS, user, isDebug, users, traceDT })=> {
         <CalcSpin />
       :
       weekData.length === 0 ?
-        <div>
-          <p className='centreText'><i className="fas fa-ghost fa-4x grayT fade"></i></p>
-          <p className='medBig centreText line3x'>No activity this week</p>
+        <div className='darkgrayT'>
+          <p className='centreText'><i className="fas fa-ghost fa-3x"></i></p>
+          <p className='medBig centreText line2x'>No activity this week</p>
         </div>
       :
       <table className='wide cap space'>

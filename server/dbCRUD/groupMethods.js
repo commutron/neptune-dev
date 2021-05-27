@@ -64,6 +64,34 @@ Meteor.methods({
     }
   },
 
+  internalizeGroup(groupId) {
+    const auth = Roles.userIsInRole(Meteor.userId(), ['edit','run']);
+    
+    if(auth) {
+      const inter = GroupDB.find({ internal: true }).count();
+      
+      if(inter === 0) {
+        GroupDB.update({_id: groupId, orgKey: Meteor.user().orgKey}, {
+          $set : {
+            internal: true,
+            updatedAt: new Date(),
+    			  updatedWho: Meteor.userId(),
+        }});
+        return true;
+      }else{
+        GroupDB.update({_id: groupId, orgKey: Meteor.user().orgKey}, {
+          $set : {
+            internal: false,
+            updatedAt: new Date(),
+    			  updatedWho: Meteor.userId(),
+        }});
+        return true;
+      }
+    }else{
+      return false;
+    }
+  },
+  
   deleteGroup(groupId, pass) {
     const inUse = WidgetDB.findOne({groupId: groupId});
     if(!inUse) {

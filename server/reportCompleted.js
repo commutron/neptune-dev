@@ -5,6 +5,7 @@ import 'moment-business-time';
 import { distTimeBudget } from './tideGlobalMethods.js';
 import { whatIsBatchX } from './searchOps.js';
 import { round1Decimal, diffTrend, percentOf } from './calcOps';
+import { noIg } from './utility';
 
 import Config from '/server/hardConfig.js';
 
@@ -294,11 +295,13 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
   fetchWeekAvgSerial(accessKey) {
     if(accessKey) {
       const now = moment.tz(Config.clientTZ);
-
+      const xid = noIg();
+      
       let itemsMatch = [];
       
       const touchedSRS = XSeriesDB.find({
         orgKey: accessKey,
+        groupId: { $ne: xid },
         items: { $elemMatch: { completedAt: {
           $gte: new Date(now.startOf('week').format()),
           $lte: new Date(now.endOf('week').format())
@@ -315,7 +318,7 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
       const totalI = itemsMatch.length;
       const days = [...new Set( itemsMatch ) ].length;
       
-      const avgperday = totalI / days;
+      const avgperday = totalI > 0 ? totalI / days : 0;
   
       const lastavg = CacheDB.findOne({dataName: 'avgDayItemFin'});
       const runningavg = lastavg ? lastavg.dataNum : 0;

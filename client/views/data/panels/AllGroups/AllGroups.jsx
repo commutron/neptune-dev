@@ -9,6 +9,8 @@ const AllGroups = ({
   groupData, widgetData, variantData, batchDataX, app, specify 
 }) => {
   
+  const inter = groupData.find( g => g.internal );
+  
   const sortList = groupData.sort((g1, g2)=> {
                     //if (g1.hibernate) { return 1 }
                     //if (g2.hibernate) { return -1 }
@@ -19,7 +21,8 @@ const AllGroups = ({
         
   const menuList = sortList.map( (entry, index)=> {
                     const clss = entry.hibernate ? 'strike fade' : '';
-                    return [entry.alias, clss];
+                    let it = entry.internal ? ' intrBlue' : '';
+                    return [entry.alias, clss+it];
                   });
   
   const defaultSlide = specify ? 
@@ -47,7 +50,9 @@ const AllGroups = ({
             groupData={entry}
             widgetsList={widgetsList}
             batchDataX={batchDataX}
-            app={app} />
+            app={app}
+            inter={!inter || inter._id === entry._id}
+          />
         )})} 
     </SlidesNested>
   );

@@ -30,7 +30,6 @@ const TideActivityData = ({ batchID, isDebug })=> {
 
 export default TideActivityData;
 
-///////////////////////////////////////////////////////////////////////////////
 
 export const TideActivitySquare = ({ batchID, acData, isDebug })=> {
   

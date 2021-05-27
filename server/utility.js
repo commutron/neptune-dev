@@ -18,8 +18,13 @@ export function flattenHistory(itemArr) {
 }
 
 export function countWaterfall(stepCounts) {
-  return !Array.isArray(stepCounts) || stepCounts.length === 0 ? 0 :
-            Array.from(stepCounts, x => x.tick).reduce((x,y)=> x + y);
+  if(!Array.isArray(stepCounts) || stepCounts.length === 0) {
+    return 0;
+  }else{
+    const ticks = Array.from(stepCounts, x => x.tick);
+    const total = ticks.length > 0 ? ticks.reduce((x,y)=> x + y) : 0;
+    return total;
+  }
 }
 
 export function allNCOptions() {
@@ -43,4 +48,9 @@ export function countMulti(ncArr) {
   const inst = Array.from(ncArr, x => Number(x.multi) || 1);
   const count = inst.length > 0 ? inst.reduce((x,y)=> x + y) : 0;
   return count;
+}
+
+export function noIg() {
+  const xg = GroupDB.findOne({internal: true},{fields:{'_id':1}});
+  return xg ? xg._id : 'n0ne';
 }

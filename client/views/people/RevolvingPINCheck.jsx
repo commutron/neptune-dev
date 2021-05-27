@@ -26,7 +26,7 @@ const RevolvingPINCheck = ({ isAdmin, isPeopleSuper })=> {
   
   return(
     <div className='centre centreText space5x5'>
-      <h3>Org PIN as of {moment().format('dddd MMMM Do YYYY')}</h3>
+      <h3>Org PIN for {moment().format('dddd MMMM Do YYYY')}</h3>
       <p>Automatically Changes Daily</p>
       <div className='hiddenPrime showOnHover'>
         <i className='hiddenPIN numFont noCopy'>{result ? result  : '0000'}</i>

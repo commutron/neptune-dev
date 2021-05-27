@@ -74,15 +74,20 @@ const PerformanceSlide = ({ app, user, users, traceDT, isDebug })=> {
     const dayFiltered = !ttDay ? tideTime :
       tideTime.filter( x => moment(x.startTime).day() === ttDay );
     
-    const unqUsers = new Set( Array.from(dayFiltered, x => x.who ) );
-    setUserList([...unqUsers]);
+    const unqUsers = [...new Set( Array.from(dayFiltered, x => users.find( u => u._id === x.who )) )];
+    const unqUserS = unqUsers.sort((u1, u2)=>
+            u1.username.toLowerCase() > u2.username.toLowerCase() ? 1 : 
+            u1.username.toLowerCase() < u2.username.toLowerCase() ? -1 : 0 );
+    setUserList(unqUserS);
     
-    const unqBatches = new Set( Array.from(dayFiltered, x => x.batch ) );
-    setBatchList([...unqBatches].sort());
+    const unqBatches = [...new Set( Array.from(dayFiltered, x => x.batch ) )];
+    const unqBatcheS = unqBatches.sort((b1, b2)=> b1 < b2 ? 1 : b1 > b2 ? -1 : 0 );
+    setBatchList(unqBatcheS);
     
     const unqTasks = new Set( Array.from(dayFiltered, x => x.task ) );
-    const unqTasksClean = [...unqTasks].filter( x => x !== null );
-    setTaskList(unqTasksClean.sort());
+    const unqTasksclean = [...unqTasks].filter( x => x !== null );
+    const unqTaskSclean = unqTasksclean.sort((t1, t2)=> t1 > t2 ? 1 : t1 < t2 ? -1 : 0 );
+    setTaskList(unqTaskSclean);
     
   }, [weekData, selectDayState]);
   
@@ -152,7 +157,7 @@ const PerformanceSlide = ({ app, user, users, traceDT, isDebug })=> {
               <dl>
                 {userList.map( (ent, ix)=>(
                   <dd key={ent+ix}>
-                    <UserNice id={ent} />
+                    <UserNice id={ent._id} />
                   </dd>
                 ))}
               </dl>

@@ -4,7 +4,11 @@ import { toast } from 'react-toastify';
 
 import ModelMedium from '../smallUi/ModelMedium.jsx';
 
-const GroupFormWrapper = ({ id, name, alias, wiki, noText, primeTopRight, lockOut})=> {
+const GroupFormWrapper = ({ 
+  id, name, alias, wiki, 
+  noText, primeTopRight, lgIcon,
+  lockOut
+})=> {
   const bttn = name ? `edit ${Pref.group}` : `new ${Pref.group}`;
   const otitle = name ? 'edit ' + Pref.group : 'create new ' + Pref.group;
   
@@ -21,7 +25,8 @@ const GroupFormWrapper = ({ id, name, alias, wiki, noText, primeTopRight, lockOu
       icon='fa-industry'
       lock={!access || lockOut}
       noText={noText}
-      primeTopRight={primeTopRight}>
+      primeTopRight={primeTopRight}
+      lgIcon={lgIcon}>
       <GroupForm 
         id={id}
         name={name}

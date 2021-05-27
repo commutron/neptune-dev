@@ -51,6 +51,15 @@
 .psm { font-size: 2.5rem; }
 .pxsm { font-size: 2rem; }
 
+.printBr {
+  page-break-after: always;
+  break-after: always;
+}
+
+n-print {
+  display: none;
+}
+
 @media print {
   .printLabel {
      position: absolute;
@@ -63,15 +72,28 @@
   .noPrint {
     display: none;
   }
+  n-print {
+    display: block;
+  }
   body {
     background-color: white;
+  }
+  a {
+    color: black;
+    text-decoration: none;
   }
   header, h1, header nav, footer, img,
   .taskColumn, .taskLink, .tenHeader, .Toastify {
     display: none;
   }
   .simpleContainer, .slidesLayout, 
-  .balance { display: block; }
+  .containerEx, .baseContainer, 
+  .balance { 
+    display: block; 
+  }
+  .contentAreaEx {
+    background-color: transparent; 
+  }
   .slidesSlide { padding: 0; }
   .cardify > div, .autoFlex > div { box-shadow: none; }
   
@@ -83,7 +105,16 @@
     background-color: white;
     color: black;
   }
+  .space5x5, 
+  .space2vsq, 
+  .space1v, 
+  .space2v, 
+  .space3v, 
+  .space36v { 
+    padding: 0;
+  }
 }
+
 
 .userCard {
   width: 6cm;
