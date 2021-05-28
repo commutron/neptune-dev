@@ -37,7 +37,7 @@ function dryPriorityCalc(bQuTmBdg, bTide, shipAim, now, shipLoad) {
   const estEnd2fillBuffer = buffer || null;
   
   const dayGap = shipAimMmnt.workingDiff(now, 'days', true);
-  const shipPull = dayGap <= 2.5 ? shipLoad * 2 : shipLoad;
+  const shipPull = dayGap <= Config.shipSoon ? shipLoad * 2 : shipLoad;
   // const bffrRel = Math.round( ( estEnd2fillBuffer / 100 ) - dayGap );
   const bffrRel = Math.round( ( estEnd2fillBuffer / 100 ) + dayGap - shipPull );
   

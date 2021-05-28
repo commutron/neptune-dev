@@ -43,7 +43,7 @@ const WTimeTab = ({
         </tr>
       </tbody></table>
       <p className='small rightText'
-        >{Pref.batches} mean average, counting scheduled work days</p>
+        >{Pref.xBatchs} mean average, counting scheduled work days</p>
      
       <TideMultiBatchBar 
         batchIDs={batchIDs}

@@ -38,7 +38,7 @@ const BuildPace = ()=> {
   
   return(
     <div className='overscroll wide'>
-      <p>All complete, serialized orders since pertinent records began. Expressed in minutes.</p>
+      <p>All complete, serialized orders since pertinent records began.</p>
       <br />
       
       <div className='rowWrapR middle '>
@@ -53,8 +53,8 @@ const BuildPace = ()=> {
           <tr>
             <th>Customer</th>
             <th>Product Batch</th>
-            <th>{"0%->50% minutes"}</th>
-            <th>{"51%->100% minutes"}</th>
+            <th>{"time % to go 0%->50% completed"}</th>
+            <th>{"time % to go 51%->100% completed"}</th>
             </tr>
         </thead>
         <tbody>

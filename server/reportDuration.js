@@ -3,7 +3,7 @@ import 'moment-business-time';
 
 // import { checkTimeBudget } from './tideMethods.js';
 // import { whatIsBatchX } from './searchOps.js';
-import { avgOfArray } from '/server/calcOps';
+import { avgOfArray, percentOf } from '/server/calcOps';
 import Config from '/server/hardConfig.js';
 
 moment.updateLocale('en', {
@@ -14,29 +14,33 @@ moment.updateLocale('en', {
 function splitItmTm( items, tide ) {
   const fitems = items.filter( i => i.completed );
   const etide = tide.filter( t => t.stopTime !== false);
+  
+  const durrs = Array.from(etide, x => 
+                  moment.duration(moment(x.stopTime).diff(x.startTime)).asMinutes());
+  const total = durrs.length > 0 ? durrs.reduce((x,y)=> x + y) : 0;
+    
   if(fitems.length > 0 && tide && tide.length > 0) {
     const itemS = fitems.sort( (i1, i2)=>
       i1.completedAt < i2.completedAt ? -1 : i1.completedAt > i2.completedAt ? 1 : 0 );
-      
+    
     const itemMidex = Math.floor( itemS.length / 2 );
     const midItem = itemS[itemMidex];
     const midMmnt = moment(midItem.completedAt);
     
     let lTide = 0;
-    let rTide = 0;
-    
+
     for( let en of etide ) {
       if( midMmnt.isBetween(en.startTime, en.stopTime ) ) {
         lTide += ( Math.abs( moment.duration(midMmnt.diff(en.startTime)).asMinutes() ) );  
-        rTide += ( Math.abs( moment.duration(midMmnt.diff(en.stopTime)).asMinutes() ) );  
-        
-      }else if( midMmnt.isBefore(en.startTime) ) {
+      }else if( midMmnt.isAfter(en.stopTime) ) {
         lTide += ( Math.abs( moment.duration(moment(en.stopTime).diff(en.startTime)).asMinutes() ) );
-      }else{
-        rTide += ( Math.abs( moment.duration(moment(en.stopTime).diff(en.startTime)).asMinutes() ) );
       }
     }
-    return [ lTide, rTide ];
+    
+    const lpercent = percentOf(total, lTide);
+    const rpercent = 100 - lpercent;
+    
+    return [ lpercent, rpercent ];
   }else{
     return [ 0, 0 ];
   }

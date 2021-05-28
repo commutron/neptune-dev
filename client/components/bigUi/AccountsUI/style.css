@@ -64,5 +64,6 @@
     background-repeat: no-repeat;
     background-position: 50% 30%;
     background-size: 75%;
+    animation: spinAround 90s infinite linear;
   }
 }
