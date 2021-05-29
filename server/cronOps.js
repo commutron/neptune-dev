@@ -70,9 +70,22 @@ SyncedCron.add({
   job: ()=> runLoop(countDoneUnits, 'doneUnitLiteWeeks', 'week')
 });
 
+// SyncedCron.add({ // Not required as not using TurnAround in agregate
+//   name: 'Weekly Update Turn Around',
+//   schedule: (parser)=> parser.text('at 6:07 am on Sat'),
+//   job: ()=> goDo('allWidgetTurnAround')
+// });
+
 SyncedCron.start();
   
-  
+function goDo(goFunc) {
+  const apps = AppDB.find({},{fields:{'orgKey':1}}).fetch();
+  for(let app of apps) {
+    const accessKey = app.orgKey;
+    Meteor.call(goFunc, accessKey);
+  }
+}
+
 function countDoneUnits(accessKey, rangeStart, rangeEnd) {
   return new Promise(function(resolve) {
     const xid = noIg();
@@ -155,8 +168,7 @@ async function countDoneBatchTarget(accessKey, rangeStart, rangeEnd) {
     doneOverQ
   ];
 }
-  
-  
+
 async function runLoop(countFunc, dataName, tSpan) {
   const apps = AppDB.find({},{fields:{'orgKey':1, 'createdAt':1}}).fetch();
   for(let app of apps) {
@@ -198,10 +210,3 @@ async function runLoop(countFunc, dataName, tSpan) {
   }
 }
 
-function goDo(goFunc) {
-  const apps = AppDB.find({},{fields:{'orgKey':1}}).fetch();
-  for(let app of apps) {
-    const accessKey = app.orgKey;
-    Meteor.call(goFunc, accessKey);
-  }
-}

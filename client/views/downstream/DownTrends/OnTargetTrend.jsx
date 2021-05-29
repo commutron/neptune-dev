@@ -84,7 +84,7 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
   return(
     <div className=''>
        
-      <div className='rowWrap'>
+      <div className='rowWrap noPrint'>
         {working ?
           <b><i className='fas fa-spinner fa-lg fa-spin'></i></b> :
           <i><i className='fas fa-spinner fa-lg'></i></i>
@@ -194,7 +194,7 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
           
       </div>
       <p className='small rightText'>Gaps in the data are intentional. Indicate when no orders were completed</p>
-      <p className='small rightText'>Data is NOT live. Refreshed once a day</p>
+      <p className='small rightText noPrint'>Data is NOT live. Refreshed once a day</p>
     </div>
   );
 };

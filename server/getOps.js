@@ -6,21 +6,22 @@ Meteor.methods({
 
     Meteor.call('fetchWeekAvgTime', privateKey);
     Meteor.call('fetchWeekAvgSerial', privateKey);
+    Meteor.call('updateAvgTimeShare', privateKey);
     return true;
   },
   
   getAvgDayCache() {
-    const cachTim = CacheDB.findOne({orgKey: Meteor.user().orgKey, dataName: 'avgDayTime'});
-    const timeTim = cachTim ? cachTim.dataNum : 0;
-    const trndTim = cachTim ? cachTim.dataTrend : 'flat';
-    
-    const cachFin = CacheDB.findOne({orgKey: Meteor.user().orgKey, dataName: 'avgDayItemFin'});
-    const timeFin = cachFin ? cachFin.dataNum : 0;
-    const trndFin = cachFin ? cachFin.dataTrend : 'flat';
+    const smplresult = (name)=> {
+      const cache = CacheDB.findOne({ orgKey: Meteor.user().orgKey, dataName: name });
+      const numbr = cache ? cache.dataNum : 0;
+      const trend = cache ? cache.dataTrend : 'flat';
+      return [ numbr, trend ];
+    };
     
     return {
-      avgTime : [ timeTim, trndTim ],
-      avgItem : [ timeFin, trndFin ]
+      avgTime : smplresult('avgDayTime'),
+      avgItem : smplresult('avgDayItemFin'),
+      avgShar : smplresult('avgTimeShare')
     };
   },
   

@@ -77,13 +77,11 @@ const UpstreamDetailChunk = ({
   dense, focusBy
 })=> {
   
-  const isX = oB.completed === undefined ? false : true;
-  const isDone = isX ? oB.completed : oB.finishedAt !== false;
+  const isDone = oB.completed;
   
   const highG = tBatch && focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
   
-  const releasedToFloor = oB.releases.findIndex( 
-                            x => x.type === 'floorRelease') >= 0;
+  const releasedToFloor = oB.releases.findIndex( x => x.type === 'floorRelease') >= 0;
   
   return(
     <div className={`overGridRowScroll ${highG}`}>
@@ -112,7 +110,6 @@ const UpstreamDetailChunk = ({
         batchID={oB._id}
         batchNum={oB.batch}
         tBatch={tBatch}
-        isX={isX}
         isDone={isDone}
         releasedToFloor={releasedToFloor}
         releases={oB.releases}

@@ -25,7 +25,7 @@ const MultiBatchKPI = ({ widgetId, batchIDs, app })=> {
   
   return(
     <div className='autoGrid' 
-      title={`Mean Average of completed ${Pref.batches}`}>
+      title={`Mean Average of completed ${Pref.xBatchs}`}>
       <h3>Averages</h3>
       
       <KPIBlocks batchDT={batchDT} />
@@ -45,8 +45,8 @@ const KPIBlocks = ({ batchDT })=> {
     const bdtObj = JSON.parse(batchDT);
     
     const t2qHr = bdtObj.tideToQuoteHoursAvg;
-    const toQtext = t2qHr < 0 ? `hours over per ${Pref.batch} quote` : 
-                                `hours under per ${Pref.batch} quote`;
+    const toQtext = t2qHr < 0 ? `hours over per ${Pref.xBatch} quote` : 
+                                `hours under per ${Pref.xBatch} quote`;
     const hrColor = t2qHr < 0 ? 'redT' : 'tealT';
     
     const t2qPr = bdtObj.tideToQuotePercentAvg;                  

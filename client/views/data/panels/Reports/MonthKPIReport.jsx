@@ -1,91 +1,54 @@
-import React, { useState } from 'react';
-import moment from 'moment';
-import 'moment-timezone';
+import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
 
-import Flatpickr from 'react-flatpickr';
-//import 'flatpickr/dist/themes/airbnb.css';
-import monthSelectPlugin from 'flatpickr/dist/plugins/monthSelect';
-import 'flatpickr/dist/plugins/monthSelect/style.css';
-
 import ReportStatsTable from '/client/components/tables/ReportStatsTable.jsx'; 
 
-const MonthKPIReport = ({ isDebug })=> {
+const MonthKPIReport = ({ start, end, dataset, isDebug })=> {
   
   const [ working, workingSet ] = useState(false);
+  const [ dataState, dataSet ] = useState(false);
   
-  const [ dateString, setDateString ] = useState(moment().format('YYYY-MM-DD'));
-  const [ monthDataState, monthDataSet ] = useState(false);
+  useEffect( ()=>{
+    dataSet(false);
+  },[start, end, dataset]);
   
   function handleRun(fresh) {
     workingSet(true);
-    monthDataSet(false);
-    if(dateString) {
-
-      Meteor.call('reportOnMonth', dateString, (err, reply)=>{
-  	    err && console.log(err);
-  	    if(reply) {
-  	      const rtn = JSON.parse(reply);
-    	    let arrange = [
-            [`${Pref.xBatchs} Created`, rtn.newBatch ],
-            [`${Pref.xBatchs} Completed On Time`, rtn.doneBatchOnTime ],
-            [`${Pref.xBatchs} Completed Late`, rtn.doneBatchLate ],
-            [`${Pref.items} Created`, rtn.newItem ],
-            [`${Pref.items} Completed`, rtn.doneItem ],
-            [`${Pref.groups} Created`, rtn.newGroup ],
-            [`${Pref.widgets} Created`, rtn.newWidget ],
-            [`${Pref.variants} Created`, rtn.newVariant ],
-            ['Users Created', rtn.newUser ],
-            [`Total ${Pref.tide} Minutes`, rtn.tttMinutes ],
-            [`Total ${Pref.tide} Hours`, rtn.tttHours ],
-          ];
-          monthDataSet(arrange);
-          workingSet(false);
-        }
-        isDebug && console.log(rtn);
-  	  });
-    }
+    Meteor.call('reportOnMonth', start, end, (err, reply)=>{
+	    err && console.log(err);
+	    if(reply) {
+	      const rtn = JSON.parse(reply);
+  	    let arrange = [
+          [`${Pref.xBatchs} Created`, rtn.newBatch ],
+          [`${Pref.xBatchs} Completed On Time`, rtn.doneBatchOnTime ],
+          [`${Pref.xBatchs} Completed Late`, rtn.doneBatchLate ],
+          [`${Pref.items} Created`, rtn.newItem ],
+          [`${Pref.items} Completed`, rtn.doneItem ],
+          [`${Pref.groups} Created`, rtn.newGroup ],
+          [`${Pref.widgets} Created`, rtn.newWidget ],
+          [`${Pref.variants} Created`, rtn.newVariant ],
+          ['Users Created', rtn.newUser ],
+          [`Total ${Pref.tide} Minutes`, rtn.tttMinutes ],
+          [`Total ${Pref.tide} Hours`, rtn.tttHours ],
+        ];
+        dataSet(arrange);
+        workingSet(false);
+      }
+      isDebug && console.log(rtn);
+	  });
   }
-  
-  function setMonth(input) {
-    const date = moment(input[0]).format('YYYY-MM-DD') || 
-                 moment().format('YYYY-MM-DD');
-    setDateString(date);
-  }
-
     
   return(
     <div className='wide'>
-        
-      <div className='med line2x'>
-        
-        <Flatpickr
-          value={moment().format('YYYY-MM-DD')}
-          onChange={(e)=>setMonth(e)} 
-          options={{
-            disableMobile: "true",
-          
-            altInput: true,
-            altInputClass: 'variableInput medBig',
-            defaultDate: moment().format("YYYY-MM-DD"),
-            maxDate: moment().format("YYYY-MM-DD"),
-            plugins: [
-              new monthSelectPlugin({
-                dateFormat: "Y-m-d",
-                altFormat: "F Y"
-              })
-            ]}} 
-        />
-          
-        <button
+      
+      <div className='vmargin centreText noPrint'>
+        <button 
           className='action clearBlack'
-          onClick={()=>handleRun()}
-          disabled={working}
-        >Run Report</button>
-       
+          onClick={(e)=>handleRun(e)} 
+          disabled={!start || !end || working}
+        >Generate Report</button>
       </div>
-
       
       {working ?
         <div>
@@ -95,8 +58,8 @@ const MonthKPIReport = ({ isDebug })=> {
       :   
         <ReportStatsTable 
           title='monthly report'
-          dateString={`${dateString}`}
-          rows={monthDataState}
+          dateString={`${start} to ${end}`}
+          rows={dataState}
           extraClass='max500' />
       }
            

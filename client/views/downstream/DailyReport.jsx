@@ -61,6 +61,7 @@ const DailyReport = ({ app, user, isDebug })=> {
               maxDate: moment().format("YYYY-MM-DD"),
               altInput: true,
               altFormat: "F J",
+              weekNumbers: true
             }} />
             <br />
             <span className='bigger breath numFont'

@@ -20,7 +20,8 @@ const WTimeTab = ({
   useEffect( ()=>{
     Meteor.call('oneWidgetTurnAround', widgetData._id, (err, reply)=>{
       err && console.log(err);
-      reply && mounted.current ? resultSet(reply) : null;
+      reply && mounted.current ? 
+        resultSet(reply) : null;
     });
   }, []);
   
@@ -36,10 +37,10 @@ const WTimeTab = ({
         </tr>
       </thead><tbody>
         <tr className='centreText'>
-          <td>{ result[1] && `${round1Decimal(result[1])} days`}</td>
-          <td>{ result[2] && `${round1Decimal(result[2])} days`}</td>
-          {/*<td>{ result[3] && `${round1Decimal(result[3])} days`}</td>*/}
-          <td>{ result[4] && `${round1Decimal(result[4])} days`}</td>
+          <td>{ result['relAvg'] && `${round1Decimal(result['relAvg'])} days`}</td>
+          <td>{ result['stAvg'] && `${round1Decimal(result['stAvg'])} days`}</td>
+          {/*<td>{ result['endAvg'] && `${round1Decimal(result['endAvg'])} days`}</td>*/}
+          <td>{ result['compAvg'] && `${round1Decimal(result['compAvg'])} days`}</td>
         </tr>
       </tbody></table>
       <p className='small rightText'

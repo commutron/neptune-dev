@@ -27,7 +27,7 @@ const Tabs = ({ tabs, names, wide, stick, hold, sessionTab, disable, children })
             <button
               key={index}
               onClick={()=>handleClick(index)}
-              className={clss}
+              className={'noPrint '+clss}
               style={styl}
               disabled={dA[index]}
             >{entry} {names && names[index]}</button>

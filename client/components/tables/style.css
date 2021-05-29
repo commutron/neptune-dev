@@ -2,22 +2,29 @@
   font-family: 'VarelaLocal';
   background-color: white;
 }
+.reportReceipt th {
+  line-height: 2;
+  border-right: none;
+  text-transform: capitalize;
+}
 .reportReceipt td {
   border-left-width: 0px;
   border-left-color: transparent;
   border-left-style: hidden;
 }
+.reportReceipt th,
+.reportReceipt td {
+  text-align: right;
+  padding-right: 2ch;
+  padding-left: 2ch;
+}
+.reportReceipt th:first-child,
 .reportReceipt td:first-child {
   text-transform: capitalize;
-}
-.reportReceipt td:last-child {
-  text-align: right;
-  padding-right: 50px;
-  padding-left: 50px;
+  text-align: left;
 }
 .reportReceipt .indent {
-  padding-right: 50px;
-  padding-left: 100px;
+  padding-left: 4ch;
 }
 
 .reportTable {

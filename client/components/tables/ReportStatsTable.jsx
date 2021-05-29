@@ -63,6 +63,17 @@ const ReportStatsTable = ({ title, dateString, rows, extraClass })=> {
                     )})}
                   </tbody>
                 );
+              }else if(index === 0 && entry[0] === '' ) {
+                return(
+                  <thead key={index}>
+                    <tr>
+                      <th>{entry[0]}</th>
+                      <th>{entry[1]}</th>
+                      {entry[2] && <th>{entry[2]}</th>}
+                      {entry[3] && <th>{entry[3]}</th>}
+                    </tr>
+                  </thead>
+                );
               }else{
                 return(
                   <tbody key={index}>

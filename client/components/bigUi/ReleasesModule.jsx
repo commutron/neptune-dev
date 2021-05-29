@@ -115,7 +115,7 @@ export const ReleaseWrapper = ({
         className='cap noCopy'
         hideOnLeave={true}>
         <MenuItem disabled={true}>
-          <em>{Pref.batch} {batchNum}{lockout && ' is complete'}</em>
+          <em>{Pref.xBatch} {batchNum}{lockout && ' is complete'}</em>
         </MenuItem>
         
         {!clear &&

@@ -7,10 +7,6 @@ import {
   countDoneBatch,
   countNewItem,
   countDoneItem,
-  // countNewNC,
-  // countNewSH,
-  // countScrap,
-  // countTestFail,
   countNewGroup,
   countNewWidget,
   countNewVariant,
@@ -32,12 +28,11 @@ const promiser = (counter, accessKey, rangeStart, rangeEnd)=> {
 Meteor.methods({
   
   
-  reportOnMonth(dateString) {
+  reportOnMonth(startDay, endDay) {
     const accessKey = Meteor.user().orgKey;
-    const requestLocal = moment.tz(dateString, Config.clientTZ);
-      
-    const rangeStart = requestLocal.clone().startOf('month').toISOString();
-    const rangeEnd = requestLocal.clone().endOf('month').toISOString();
+    
+    const rangeStart = moment(startDay).tz(Config.clientTZ).startOf('day').toISOString();
+    const rangeEnd = moment(endDay).tz(Config.clientTZ).endOf('day').toISOString();
     
     async function analyzeMonth() {
       try {
@@ -47,10 +42,6 @@ Meteor.methods({
         let doneBatchLate = doneBatches[1];
         newItem = await promiser(countNewItem, accessKey, rangeStart, rangeEnd);
         doneItem = await promiser(countDoneItem, accessKey, rangeStart, rangeEnd);
-        // noncon = await promiser(countNewNC, accessKey, rangeStart, rangeEnd);
-        // shortfall = await promiser(countNewSH, accessKey, rangeStart, rangeEnd);
-        // scrap = await promiser(countScrap, accessKey, rangeStart, rangeEnd);
-        // tfail = await promiser(countTestFail, accessKey, rangeStart, rangeEnd);
         newGroup = await promiser(countNewGroup, accessKey, rangeStart, rangeEnd);
         newWidget = await promiser(countNewWidget, accessKey, rangeStart, rangeEnd);
         newVariant = await promiser(countNewVariant, accessKey, rangeStart, rangeEnd);
@@ -64,7 +55,6 @@ Meteor.methods({
         return JSON.stringify({
           newBatch, doneBatchOnTime, doneBatchLate,
           newItem, doneItem, 
-          // noncon, shortfall, scrap, tfail,
           newGroup, newWidget, newVariant, newUser,
           tttMinutes, tttHours
         });

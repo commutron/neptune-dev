@@ -1,42 +1,97 @@
-import React from 'react';
+import React, { useState } from 'react';
 // import Pref from '/client/global/pref.js';
-import Tabs from '/client/components/smallUi/Tabs/Tabs.jsx';
-
+import DateRangeSelect from '/client/components/smallUi/DateRangeSelect';
+import PrintThis from '/client/components/tinyUi/PrintThis';
 import MonthKPIReport from './MonthKPIReport'; 
 import ProblemReport from './ProblemReport';
-import BuildDurration from './BuildDurration';
-import BuildPace from './BuildPace';
 
 const ReportsWrap = ({ 
   allXBatch, allWidget, allVariant, allGroup,
   app, isDebug, isNightly
-})=> (
-  <div className='space36v'>
-    
-    <Tabs
-      tabs={[
-        <b><i className='fas fa-calendar fa-fw'></i> Monthly Stats</b>,
-        <b><i className='fas fa-exclamation-circle fa-fw'></i> Problems</b>,
-        <b><i className='fas fa-hourglass-end fa-fw'></i> Durrations</b>,
-        <b><i className='fas fa-icicles fa-fw' data-fa-transform='flip-v'></i> Cycle Pace</b>,
-      ]}
-      wide={false}
-      stick={false}
-      hold={true}
-      sessionTab='reportExPanelTabs'>
+})=> {
+  
+  const [ start, startSet ] = useState(false);
+  const [ end, endSet ] = useState(false);
+  const [ dataset, datasetSet ] = useState('stats');
+
+  return(
+    <div className='space2v'>
       
-      <MonthKPIReport isDebug={isDebug} />
+      <div className='rowWrapR noPrint'><PrintThis /></div>
+      
+      <div className='centre vmarginhalf noPrint'>
           
-      <ProblemReport />
-      
-      {!isNightly ? <div><em>Nightly Only, Outstanding Performance Issues</em></div> :
-        <BuildDurration />}
-      
-      {!isNightly ? <div><em>Nightly Only, Outstanding Performance Issues</em></div> :
-        <BuildPace />}
+        <ReportRangeRequest 
+          setFrom={(v)=>startSet(v)}
+          setTo={(v)=>endSet(v)}
+          setData={(v)=>datasetSet(v)} 
+        />
         
-    </Tabs> 
-  </div>
-);
+      </div>
+      
+      {dataset === 'stats' ?
+        <MonthKPIReport 
+          start={start} 
+          end={end} 
+          dataset={dataset}
+          isDebug={isDebug} 
+        />
+      :      
+        <ProblemReport 
+          start={start} 
+          end={end} 
+          dataset={dataset} 
+        />
+      }
+
+    </div>
+  );
+};
   
 export default ReportsWrap;
+
+const ReportRangeRequest = ({ 
+  setFrom, setTo, setData
+})=> (
+  <div>
+    <h3 className='centreText'>Date Range</h3>
+      
+    <p>
+      <DateRangeSelect
+        setFrom={setFrom}
+        setTo={setTo} />
+    </p>
+      
+    <div className='centreRow'>
+      <span className='middle'>
+        <input
+          type='radio'
+          id='inputStats'
+          name='inputData'
+          onChange={(e)=>setData('stats')}
+          defaultChecked={true} 
+        />
+        <label htmlFor='inputStats'>Overall Stats</label>
+      </span>
+      <span className='middle'>
+        <input
+          type='radio'
+          id='inputNC'
+          name='inputData'
+          onChange={(e)=>setData('noncon')}
+        />
+        <label htmlFor='inputNC'>Non-conformances</label>
+      </span>
+      <span className='middle'>
+        <input
+          type='radio'
+          id='inputSH'
+          name='inputData'
+          onChange={(e)=>setData('short')}
+        />
+        <label htmlFor='inputSH'>Shortfalls</label>
+      </span>
+    </div>
+      
+  </div>
+);

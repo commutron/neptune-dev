@@ -5,6 +5,7 @@
   padding: 0.5ch 1ch;
   min-height: 32px;
   line-height: 1;
+  background-color: transparent;
 }
 .action, .roundAction {
   font-weight: 600;

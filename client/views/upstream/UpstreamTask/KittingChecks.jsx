@@ -1,14 +1,13 @@
 import React, { Fragment } from 'react';
 // import moment from 'moment';
 import Pref from '/client/global/pref.js';
-import TrinaryStat from '/client/components/tinyUi/TrinaryStat.jsx';
-import { ReleaseWrapper } from '/client/components/bigUi/ReleasesModule.jsx';
+import TrinaryStat from '/client/components/tinyUi/TrinaryStat';
+import { ReleaseWrapper } from '/client/components/bigUi/ReleasesModule';
 
 
 const KittingChecks = ({ 
   batchID, batchNum, tBatch,
-  hasSeries, isDone,
-  releasedToFloor, releases,
+  isDone, releasedToFloor, releases,
   app, branchClear, 
   kitCols, dense, isDebug
 })=> {
@@ -69,7 +68,7 @@ const KittingChecks = ({
         })}
         
         
-        {!hasSeries ?
+        {!tBatch.serialize ?
           <div title='N/A'>
             <div className='infoSquareOuter noCopy'>
               <i className='fas fa-minus fa-2x fa-fw darkgrayT fade'></i>

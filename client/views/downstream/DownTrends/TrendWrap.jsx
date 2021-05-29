@@ -1,13 +1,15 @@
 import React from 'react';
 // import Pref from '/client/global/pref.js';
 import Tabs from '/client/components/smallUi/Tabs/Tabs.jsx';
-
+import PrintThis from '/client/components/tinyUi/PrintThis';
 import OnTargetTrend from './OnTargetTrend'; 
 import DoneItemsTrend from './DoneItemsTrend';
 
 const TrendWrap = ({ app, isDebug, isNightly })=> (
   <div className='space36v'>
-
+    
+    <div className='rowWrapR noPrint'><PrintThis /></div>
+    
     <Tabs
       tabs={[
         <b><i className='fas fa-bullseye fa-fw'></i> On Target</b>,

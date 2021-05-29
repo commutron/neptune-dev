@@ -25,7 +25,7 @@ const WeeklyReport = ({ app })=> {
   	          rtn.sort((x1, x2)=> x1[3] < x2[3] ? -1 : x1[3] > x2[3] ? 1 : 0 );
         cronoTimes.unshift([
           Pref.xBatch, 'description', 
-          'sales order', 'tracked items', 'nonCon rate',
+          'sales order', 'quantity', 'nonCon rate',
           'fulfill due', 'ship due', 'moved fulfill', 'complete', 
           'fullfiled', 'shipped', 'quote',
         ]);     
@@ -44,7 +44,7 @@ const WeeklyReport = ({ app })=> {
   
   function getTotals() {
     const wd = weekData;
-    
+   
     if(wd) {
       const woTotal = wd.length -1;
       const wdgUnique = new Set( Array.from(wd, x => x[1] ) ).size -1;
@@ -71,9 +71,9 @@ const WeeklyReport = ({ app })=> {
       const onTime = wd.filter( x => x[9].includes('on time') ).length;
       const late = wd.filter( x => x[9].includes('late') ).length;
       
-      const under = wd.filter( x => x[10].includes('under') ).length;
-      const over = wd.filter( x => x[10].includes('over') ).length;
-      const na = wd.filter( x => x[10].includes('n/a') ).length;
+      const under = wd.filter( x => x[11].includes('under') ).length;
+      const over = wd.filter( x => x[11].includes('over') ).length;
+      const na = wd.filter( x => x[11].includes('n/a') ).length;
       
       let arrange = [
         ['Completed ' + Pref.xBatchs, woTotal ],

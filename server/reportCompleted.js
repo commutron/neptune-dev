@@ -156,9 +156,9 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
     const allQuantity = gf.quantity;
     
     const srs = XSeriesDB.findOne({batch: gf.batch});
-    const itemQuantity = srs ? srs.items.length : 0;
-    const ncQuantity = srs ? srs.nonCon.filter( n => !n.trash ).length : 0;
-    const ncRate = ( ncQuantity / itemQuantity ).toFixed(1, 10);
+    const itemQty = srs ? srs.items.length : 0;
+    const ncQty = srs ? srs.nonCon.filter( n => !n.trash ).length : 0;
+    const ncRate = ncQty ? ( ncQty / itemQty ).toFixed(1, 10) : 0;
     const endAlter = gf.altered.filter( a => a.changeKey === 'salesEnd' ).length;
     
     const deliveryResult = deliveryState(gf.salesEnd, gf.completedAt);

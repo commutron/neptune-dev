@@ -115,8 +115,7 @@ Meteor.methods({
         
         const seriesInclude = seriesSlice.length;
         const itemsInclude = seriesArange.allItems.length;
-        //const itemsWithPercent = ( ( nonConStats.uniqueSerials / itemsInclude ) * 100 ).toFixed(1) + '%';
-        
+       
         return JSON.stringify({
           seriesInclude, itemsInclude, itemStats, nonConStats, shortfallStats
         });
