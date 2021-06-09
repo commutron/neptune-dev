@@ -59,20 +59,16 @@ function loopShortfalls(shortfall, from, to) {
 function loopItems(items, from, to ) {
   return new Promise(resolve => {
     let completedItems = 0;
-    // let firstPass = 0;
-    // let firstFail = 0;
     let testFail = 0;
     let scraps = 0;
     for(let i of items) {
       if(i.completed && moment(i.completedAt).isBetween(from, to) ) { 
         completedItems += 1;
       }
-      i.scrapped === true ? scraps += 1 : null;
       const inTime = i.history.filter( x => moment(x.time).isBetween(from, to) );
-      
-      // firstPass += inTime.filter( x => x.type === 'first' && x.good !== false ).length;
-      // firstFail += inTime.filter( x => x.type === 'first' && x.good === false ).length;
       testFail += inTime.filter( x => x.type === 'test' && x.good === false ).length;
+      i.scrapped === true && inTime.find( x => x.type === 'scrap' && x.good === true ) ?
+        scraps += 1 : null;
     }
     
     resolve({completedItems, testFail, scraps});

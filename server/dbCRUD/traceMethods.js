@@ -37,7 +37,9 @@ function shrinkWhole(bData, now, shipLoad, accessKey) {
                   bData.waterfall && bData.waterfall.length > 0 ? false : 
                   null;
     
-    const endDay = rapIs ? oRapid.deliverAt : bData.salesEnd;
+    const endDay = rapIs && moment(oRapid.deliverAt).isAfter(bData.salesEnd) ? 
+                    oRapid.deliverAt : bData.salesEnd;
+      
     const didFinish = bData.completed;
     const whenFinish = didFinish ? bData.completedAt : false;
     
@@ -55,7 +57,7 @@ function shrinkWhole(bData, now, shipLoad, accessKey) {
     const actvLvl = Meteor.call('tideActivityLevel', bData._id, accessKey);
     const brchCnd = Meteor.call('branchCondition', bData._id, accessKey);
     const prtyRnk = Meteor.call('priorityFast', accessKey, bData, now, shipAim, shipLoad);
-
+    
     TraceDB.upsert({batchID: bData._id}, {
       $set : { 
         orgKey: accessKey,
@@ -81,9 +83,9 @@ function shrinkWhole(bData, now, shipLoad, accessKey) {
         branchCondition: brchCnd.branchSets,
         quote2tide: prtyRnk.quote2tide,
         estSoonest: prtyRnk.estSoonest,
-        estLatestBegin: prtyRnk.estLatestBegin,
         bffrRel: prtyRnk.bffrRel,
-        estEnd2fillBuffer: prtyRnk.estEnd2fillBuffer
+        estEnd2fillBuffer: prtyRnk.estEnd2fillBuffer,
+        minDiff: prtyRnk.minDiff
     }});
     resolve(true);
   });
@@ -104,7 +106,6 @@ function checkMinify(bData, accessKey) {
         orgKey: accessKey,
         lastUpserted: new Date(),
         batch: bData.batch,
-        // batchID: bData._id,
         salesOrder: bData.salesOrder,
         isWhat: isWhat.isWhat,
         describe: isWhat.more,
@@ -122,7 +123,9 @@ function checkMovement(bData, now, shipLoad, accessKey) {
     const oRapid = XRapidsDB.findOne({extendBatch: bData.batch, live: true});
     const rapIs = oRapid ? oRapid.rapid : false;
     
-    const endDay = rapIs ? oRapid.deliverAt : bData.salesEnd;
+    const endDay = rapIs && moment(oRapid.deliverAt).isAfter(bData.salesEnd) ? 
+                    oRapid.deliverAt : bData.salesEnd;
+                    
     const didFinish = bData.completed;
     const whenFinish = didFinish ? bData.completedAt : false;
                        
@@ -151,9 +154,9 @@ function checkMovement(bData, now, shipLoad, accessKey) {
         oRapid: rapIs,
         quote2tide: prtyRnk.quote2tide,
         estSoonest: prtyRnk.estSoonest,
-        estLatestBegin: prtyRnk.estLatestBegin,
         bffrRel: prtyRnk.bffrRel,
-        estEnd2fillBuffer: prtyRnk.estEnd2fillBuffer
+        estEnd2fillBuffer: prtyRnk.estEnd2fillBuffer,
+        minDiff: prtyRnk.minDiff
     }});
     resolve(true);
   });

@@ -84,6 +84,18 @@ Meteor.methods({
     return found;
   },
   
+  getNextBatch() {
+    const last = XBatchDB.find({},
+                  {
+                    fields:{'batch':1}, 
+                    sort: { batch: -1 },
+                    limit: 1
+                  }
+                ).fetch();
+    const next = !last ? '00000' : ( parseInt( last[0].batch ) + 1 ).toString();
+    return next;
+  },
+  
       /////////////////////////////////////////////////////////////////////////
     // First Firsts
    ///////////////////////////////////////////////////////////////////////////

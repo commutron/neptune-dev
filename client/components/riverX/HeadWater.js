@@ -41,7 +41,7 @@ export function HighWater( batchData ) {
 export function WhiteWater( itemData, seriesData, rapidsData ) {
   
   let rapIs = false;
-  let rapDo = [];
+  let rapDo = false;
   let rapDid = [];
   let rapMax = false;
   let rapDids = [];
@@ -50,10 +50,10 @@ export function WhiteWater( itemData, seriesData, rapidsData ) {
     
     const rCount = WhiteWaterCounter(rapid, seriesData);
     
-    rCount[0] === rapid.quantity ? rapMax = true : null; 
-    
-    if( rapid.live === true /*&& rCount[1] !== 1 */ ) {
+    if( rapid.live === true ) {
       
+      rCount[0] === rapid.quantity ? rapMax = true : null; 
+       
       const alt = !itemData ? false : 
                     itemData.altPath.find( i => i.rapId === rapid._id );
       if(alt) {
@@ -66,7 +66,7 @@ export function WhiteWater( itemData, seriesData, rapidsData ) {
       rapid.rSet = rCount[0];
       rapid.rDone = rCount[1];
       rapid.rCounts = rCount[2];
-      rapDo.push(rapid);
+      rapDo = rapid;
     }else{
       rapDids.push({
         rapid: rapid.rapid, 

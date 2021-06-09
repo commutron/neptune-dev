@@ -111,7 +111,7 @@ const OverviewWrap = ({
   
   function sortInitial() {
     return new Promise((resolve) => {
-      let liveBatches = bx;
+      let liveBatches = bx.filter( bx => bx.releases !== undefined );
       
       let filteredBatches = filterBy === false ? 
         ghost === true ? liveBatches 

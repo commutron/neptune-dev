@@ -4,7 +4,7 @@ import { withTracker } from 'meteor/react-meteor-data';
 import moment from 'moment';
 import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
-
+import { branchesOpenSort } from '/client/utility/Arrays.js';
 import { SpinWrap } from '/client/components/tinyUi/Spin.jsx';
 import UpstreamWrap from './UpstreamWrap.jsx';
 
@@ -30,9 +30,7 @@ const View = ({
     });
   }
   
-  const branches = app.branches.filter( b => b.open === true );
-  const brancheS = branches.sort((b1, b2)=>
-            b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );               
+  const brancheS = branchesOpenSort(app.branches);
 
   return(
     <ErrorCatch>

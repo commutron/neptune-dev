@@ -408,6 +408,9 @@ button.variableInput.biggest { height: 64px; }
     0 0 0 12px var(--box-shadow-color);
 }
 
+.auxTip {
+  vertical-align: middle;
+}
 .taskTip:before, .auxTip:before, .auxTipScale:before {
   position: absolute;
   content: attr(aria-label);
@@ -415,6 +418,7 @@ button.variableInput.biggest { height: 64px; }
   padding: calc(1 * var(--vh));
   width: auto;
   max-width: max-content;
+  min-height: calc(3.5 * var(--vh));
   background-color: var(--task-front-color);
   border-radius: 25px;
   text-transform: capitalize;

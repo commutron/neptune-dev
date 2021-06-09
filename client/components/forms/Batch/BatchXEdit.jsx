@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
@@ -36,7 +36,16 @@ export default BatchXEdit;
 
 
 const BXEditForm = ({ batchData, seriesData, allVariants, canEdit, selfclose })=> {
-
+  
+  const [ nxtNum, nxtSet ] = useState(false);
+  
+  useEffect( ()=>{
+    Meteor.call('getNextBatch', (err, re)=>{
+      err && console.log(err);
+      re && nxtSet(re);
+     }); 
+  }, []);
+   
   function save(e) {
     e.preventDefault();
     const batchId = batchData._id;
@@ -96,17 +105,23 @@ const BXEditForm = ({ batchData, seriesData, allVariants, canEdit, selfclose })=
         <input
           type='text'
           id='oNum'
+          list='nextbatch'
           pattern='[00000-99999]*'
           maxLength='5'
           minLength='5'
           inputMode='numeric'
           defaultValue={bDt.batch}
-          placeholder='17947'
+          placeholder={bDt.batch}
           autoFocus={true}
           disabled={!canEdit}
           required
         /></label>
-
+        
+        <datalist id='nextbatch'>
+          <option value={bDt.batch}>{bDt.batch}</option>
+          {nxtNum ? <option value={nxtNum}>{nxtNum}</option> : null}
+        </datalist>
+        
         <label htmlFor='soNum' className='breath'>{Pref.salesOrder} number<br />
         <input
           type='text'

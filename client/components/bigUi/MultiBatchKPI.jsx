@@ -45,8 +45,7 @@ const KPIBlocks = ({ batchDT })=> {
     const bdtObj = JSON.parse(batchDT);
     
     const t2qHr = bdtObj.tideToQuoteHoursAvg;
-    const toQtext = t2qHr < 0 ? `hours over per ${Pref.xBatch} quote` : 
-                                `hours under per ${Pref.xBatch} quote`;
+    const toQtext = t2qHr < 0 ? 'hours over quote' : 'hours under quote';
     const hrColor = t2qHr < 0 ? 'redT' : 'tealT';
     
     const t2qPr = bdtObj.tideToQuotePercentAvg;                  
@@ -61,7 +60,7 @@ const KPIBlocks = ({ batchDT })=> {
       <Fragment>
         <NumLine
           num={round2Decimal(bdtObj.tidePerItemAvg)}
-          name='minutes per item (recored)'
+          name='minutes per item'
           color='blackT' />
          
         <NumLine

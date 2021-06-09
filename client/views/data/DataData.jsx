@@ -7,6 +7,7 @@ import moment from 'moment';
 
 //import Pref from '/client/global/pref.js';
 import { TraverseWrap } from '/client/layouts/DataExploreLayout.jsx';
+import { branchesSort } from '/client/utility/Arrays.js';
 import Spin from '../../components/tinyUi/Spin.jsx';
 import DataViewOps from './DataViewOps.jsx';
 
@@ -52,9 +53,8 @@ const ExploreView = ({
   if( Array.isArray(app.nonWorkDays) ) {  
     moment.updateLocale('en', { holidays: app.nonWorkDays });
   }
-  const branchesSort = app.branches.sort((b1, b2)=>
-          b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
-    
+  const brancheS = branchesSort(app.branches);
+
   return(
     <ErrorCatch>
       <DataViewOps
@@ -63,7 +63,7 @@ const ExploreView = ({
         org={org}
         users={users}
         app={app}
-        brancheS={branchesSort}
+        brancheS={brancheS}
         allGroup={allGroup}
         allWidget={allWidget}
         allVariant={allVariant}

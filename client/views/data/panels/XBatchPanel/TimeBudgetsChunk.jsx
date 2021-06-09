@@ -69,7 +69,6 @@ const TimeBudgetsChunk = ({
   const totalOverMinutes = quote2tide < 0 ? bufferNice : 0;
   
   isDebug && console.log({
-    totalQuoteMinutes,
     totalBudgetMinutes,
     totalTideMinutes,
     totalLeftMinutes,

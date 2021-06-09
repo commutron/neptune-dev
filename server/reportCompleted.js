@@ -169,7 +169,7 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
     const shipOnTime = deliveryResult[4].join(" ");
     
     // check for over quote
-    const distTB = distTimeBudget(gf.tide, gf.quoteTimeBudget, allQuantity, allQuantity);
+    const distTB = distTimeBudget(gf.tide, gf.quoteTimeBudget, allQuantity);
     //returns [ tidePerItem, quotePerItem, quoteMNtide, tidePCquote ];
     
     const overQuote = distTB === undefined || isNaN(distTB[2]) ? 'n/a' :

@@ -92,9 +92,8 @@ const XDoProCard = ({
   const altFlow = altIs && widgetData.flows.find( f => f.flowKey === altIs.river );
   const altitle = altFlow && altFlow.title;
 	
-  const rapid = !rapidData.rapIs ? 
-                  rapidData.rapDo.find( r => r.live === true ) :
-                  rapidData.rapDo.find( r => r._id === rapidData.rapIs.rapId );
+  const rapid = !rapidData.rapIs ? rapidData.rapDo :
+                  rapidData.rapDo._id === rapidData.rapIs.rapId ? rapidData.rapDo : false;
   
   tideFloodGate && rapid && rapid.instruct && Session.set('nowInstruct', rapid.instruct);
   

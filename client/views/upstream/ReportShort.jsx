@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 
 import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
-
+import PrintThis from '/client/components/tinyUi/PrintThis';
 import ReportBasicTable from '/client/components/tables/ReportBasicTable.jsx'; 
 
 const ReportShort = ({ app, user, isDebug })=> {
@@ -15,7 +15,7 @@ const ReportShort = ({ app, user, isDebug })=> {
 	    const cronoTimes = rtn.sort((x1, x2)=> 
 	                        x1[3] > x2[3] ? 1 : x1[3] < x2[3] ? -1 : 0 );
       cronoTimes.unshift([
-          Pref.batch, 'sales order', 'product', 
+          Pref.xBatch, 'sales order', 'product', 
           'part number', 'references', 'piece quantity'
         ]);
       setShortData(cronoTimes);
@@ -25,7 +25,9 @@ const ReportShort = ({ app, user, isDebug })=> {
                      
   return(
     <div className='space5x5 overscroll'>
-
+      
+      <div className='rowWrapR noPrint'><PrintThis /></div>
+      
       {!shortData ?
         <CalcSpin />
       :
@@ -38,7 +40,7 @@ const ReportShort = ({ app, user, isDebug })=> {
       
       <ReportBasicTable 
         title={`unresolved ${Pref.shortfalls} report`}
-        dateString={(new Date).toISOString()}
+        dateString={(new Date).toLocaleString()}
         rows={shortData}
       />
       }

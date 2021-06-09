@@ -337,7 +337,10 @@ n-sm-b {
   word-break: break-all;
   word-wrap: break-word;
 }
-.stringFit { max-width: fit-content; }
+.stringFit { 
+  max-width: -moz-fit-content;
+  max-width: fit-content;
+}
 
 .noCopy {
  -webkit-user-select: none;

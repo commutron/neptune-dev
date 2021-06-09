@@ -241,6 +241,7 @@ input {
 }
 
 option {
+  min-width: -moz-fit-content;
   min-width: fit-content;
 }
 

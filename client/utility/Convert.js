@@ -49,13 +49,13 @@ export function flipArray(originalArr) {
 
 export function percentOf(goalNumber, realNumber) {
   const perOf = ( realNumber / goalNumber ) * 100;
-  const perOfClean = round2Decimal(perOf);
+  const perOfClean = isNaN(perOf) ? 0 : round2Decimal(perOf);
   return perOfClean;
 }
 
 export function percentOverUnder(goalNumber, realNumber) {
   const overunder = ( 1 - ( realNumber / goalNumber ) ) * 100;
-  const overunderClean = round2Decimal(overunder);
+  const overunderClean = isNaN(overunder) ? 0 : round2Decimal(overunder);
   return overunderClean;
 }
 

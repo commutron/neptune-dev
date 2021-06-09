@@ -487,6 +487,7 @@ n-lg-model, n-md-model, n-sm-model {
   border: 1px solid rgb(0,0,0);
   box-shadow: 0 0 100px 500px rgba(0,0,0,0.5);
   display: block;
+  min-width: -moz-fit-content;
   min-width: fit-content;
   color: black;
 }
@@ -779,6 +780,7 @@ n-sm-model-content {
 .cardify > span > div,
 .cardify > span > span > div,
 .autoFlex > div {
+  width: -moz-fit-content;
   width: fit-content;
   margin: 2vmin;
   padding: 1vmin 2vmin 2vmin 2vmin;
@@ -800,7 +802,10 @@ n-sm-model-content {
 
 .minWide { width: min-content !important; }
 .maxWide { width: max-content !important; }
-.fitWide { width: fit-content !important; }
+.fitWide { 
+  width: -moz-fit-content !important;
+  width: fit-content !important; 
+}
 .wide {
   width: 100%;
   margin: 0 auto;
@@ -1226,7 +1231,10 @@ n-col-table-head > span {
 .min300 { min-width: 300px; }
 .min200 { min-width: 200px; }
 
-.minWfit { min-width: fit-content; }
+.minWfit { 
+  min-width: -moz-fit-content;
+  min-width: fit-content;
+}
 .maxW70 { max-width: 70vw; }
 .maxW50 { max-width: 50vw; }
 .maxW30 { max-width: 30vw; }

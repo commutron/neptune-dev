@@ -573,6 +573,7 @@ n-trib-action-all {
 }
 .wideStone {
   min-width: 11vmax;
+  width: -moz-fit-content;
   width: fit-content;
   max-width: 30vmax;
   min-height: 1rem;
@@ -633,6 +634,7 @@ n-trib-action-all {
   color: black;
 }
 .stoneForm .dropdown-content {
+  width: -moz-fit-content;
   width: fit-content;
 }
 .stoneForm .dropdown-container input {
@@ -678,7 +680,7 @@ n-trib-action-all {
 .forkButton {
   font-size: 3vmax;
 }
-.forkButton b {
+.forkButton b, .forkButton i {
   font-size: 1.75vmax;
 }
 .forkButton:hover, .forkButton:active {

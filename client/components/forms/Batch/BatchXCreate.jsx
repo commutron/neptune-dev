@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 // import 'moment-business-time';
 import 'moment-timezone';
@@ -32,7 +32,16 @@ const BatchXCreate = ({ groupId, widgetId, allVariants, lock })=> {
 export default BatchXCreate;
 
 const BXCreateForm = ({ groupId, widgetId, allVariants })=> {
-
+  
+  const [ nxtNum, nxtSet ] = useState(false);
+  
+  useEffect( ()=>{
+    Meteor.call('getNextBatch', (err, re)=>{
+      err && console.log(err);
+      re && nxtSet(re);
+     }); 
+   }, []);
+   
   function save(e) {
     e.preventDefault();
     
@@ -90,14 +99,20 @@ const BXCreateForm = ({ groupId, widgetId, allVariants })=> {
         <input
           type='text'
           id='oNum'
+          list='nextbatch'
           pattern='[00000-99999]*'
           maxLength='5'
           minLength='5'
           inputMode='numeric'
-          placeholder='21947'
+          placeholder={nxtNum || '21356'}
           autoFocus={true}
           required
+          autoComplete={navigator.userAgent.includes('Firefox/') ? "off" : ""}
         /></label>
+        
+        <datalist id='nextbatch'>
+          {nxtNum ? <option value={nxtNum}>{nxtNum}</option> : null}
+        </datalist>
       
         <label htmlFor='soNum' className='breath'>{Pref.salesOrder} number<br />
         <input

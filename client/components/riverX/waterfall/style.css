@@ -126,7 +126,6 @@
 
 /*///////////////\\\\\\\\\\\\\\\\\\\\\\///////////*/
 
-
 .waterfallHistory {
   margin: 2vh 0;
   border-width: 2px;
@@ -140,7 +139,8 @@
 .waterfallHistory summary .meterprogStack {
   display: inline-block;
 }
-.waterfallHistory summary::-webkit-details-marker {
+.waterfallHistory summary::-webkit-details-marker,
+.waterfallHistory summary::marker {
   display: none;
 }
 

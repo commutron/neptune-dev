@@ -14,43 +14,27 @@ const RapidFork = ({ seriesId, serial, rapidData })=> {
   };
   useTimeOut( conUnlock, 2000 );
   
-  function handleFork(e, rapId) {
-    e.preventDefault();
+  function handleFork() {
+    const rapId = rapidData.rapDo._id;
     Meteor.call('setRapidFork', seriesId, serial, rapId, (error)=>{
-      if(error)
-        console.log(error);
+      error && console.log(error);
     });
   }
   
-  if(rapidData.rapDo.every( r => rapidData.rapDid.includes(r._id) ) === false) { 
+  if(rapidData.rapDid.includes(rapidData.rapDo._id) === false) { 
     return(
-      <form 
-        id='srtcsc'
-        className='vmargin centre'
-        onSubmit={(e)=>handleFork(e, this.op.value)}
-      >
+      <div id='srtcsc' className='vmargin centre'>
         <button
-          type='submit'
+          type='button'
           form='srtcsc'
           className='forkButton'
+          onClick={(e)=>handleFork(e)}
           disabled={lockState}
         ><i className='fas fa-bolt fa-fw'></i>
-         <b>Extend {Pref.item}</b></button>
-        <select 
-          id='op'
-          className='wide'
-          required>
-          {rapidData.rapDo.map( (rp)=>(
-            <option 
-              key={rp._id} 
-              value={rp._id}
-              disabled={rapidData.rapDid.includes(rp._id)}
-            >
-              {rp.rapid} - {rp.issueOrder}
-            </option>
-          ))}
-        </select>
-      </form>
+         <b>Extend {Pref.item}</b>
+         <i>{rapidData.rapDo.rapid}<wbr /> {rapidData.rapDo.issueOrder}</i>
+        </button>
+      </div>
     );
   }
   

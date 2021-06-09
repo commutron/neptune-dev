@@ -90,9 +90,9 @@ Meteor.methods({
       
       let wasDelivered = [];
       
-      const discoverTQ = (b, itemQuantity)=> {
+      const discoverTQ = (b)=> {
         // check for over quote
-        const distTB = distTimeBudget(b.tide, b.quoteTimeBudget, itemQuantity, b.quantity, b.lockTrunc);
+        const distTB = distTimeBudget(b.tide, b.quoteTimeBudget, b.quantity, b.lockTrunc);
         if(distTB) {
           tidePerItem.push( distTB[0] );
           quotePerItem.push( distTB[1] );
@@ -117,9 +117,7 @@ Meteor.methods({
         for(let batchID of batchIDs) {
           const xbatch = XBatchDB.findOne({_id: batchID});
           if(xbatch && xbatch.completed) {
-            const srs = XSeriesDB.findOne({batch: xbatch.batch});
-            const srsQ = !srs ? xbatch.quantity : srs.items.length;
-            discoverTQ(xbatch, srsQ);
+            discoverTQ(xbatch);
             discoverOT(xbatch.salesEnd, xbatch.completedAt);
           }else{null}
         }

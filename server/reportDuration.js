@@ -1,7 +1,6 @@
 import moment from 'moment';
 import 'moment-business-time';
 
-// import { checkTimeBudget } from './tideMethods.js';
 import { avgOfArray, percentOf, diffTrend } from '/server/calcOps';
 import Config from '/server/hardConfig.js';
 
@@ -132,16 +131,6 @@ Meteor.methods({
     
     return timeArr;
   },
-  
-  /*allWidgetTurnAround(accessKey) {
-    this.unblock();
-    
-    const widgets = WidgetDB.find({ orgKey: accessKey }).fetch();
-    
-    for( let widget of widgets ) {
-      getWidgetDur(widget);
-    }
-  },*/
   
   updateAvgTimeShare(accessKey) {
     this.unblock();

@@ -59,7 +59,7 @@ export function checkTimeBudget(tide, quoteTimeBudget, lockTrunc) {
   return quote2tide;
 }
 
-export function distTimeBudget(tide, quoteTimeBudget, itemQuantity, allQuantity, lockTrunc) {
+export function distTimeBudget(tide, quoteTimeBudget, allQuantity, lockTrunc) {
   
   const tideVquote = getTvals(tide, quoteTimeBudget, lockTrunc);
   
@@ -69,7 +69,7 @@ export function distTimeBudget(tide, quoteTimeBudget, itemQuantity, allQuantity,
     const totalTide = tideVquote[0];
     const trueQuote = tideVquote[1];
     
-    const tidePerItem = round2Decimal( totalTide / itemQuantity );
+    const tidePerItem = round2Decimal( totalTide / allQuantity );
     
     const quotePerItem = round2Decimal( trueQuote / allQuantity );
     

@@ -47,7 +47,7 @@ const DailyReport = ({ app, user, isDebug })=> {
   const isHoliday = HolidayCheck( app.nonWorkDays, moment(dateString, 'YYYY-MM-DD').format());
                       
   return(
-    <div className='space5x5 overscroll'>
+    <div className='space36v overscroll'>
       <div className='med vbreak comfort middle noPrint'>
         <div className='line2x'>
           <Flatpickr

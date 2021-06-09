@@ -20,10 +20,10 @@ const BatchCardX = ({
   expand, flowwater, fallwater
 })=> {
   
-  const rapidMerge = [...rapidData.rapDo,...rapidData.rapDids]
-                      .sort((r1, r2)=> !r1.closedAt ? -1 : !r2.closedAt ? -1 :
-                                       r1.closedAt < r2.closedAt ? -1 :
-                                       r1.closedAt > r2.closedAt ? 1 : 0 );
+  const rapDo = rapidData.rapDo ? [rapidData.rapDo] : [];
+  const rapidMerge = [...rapDo,...rapidData.rapDids]
+                      .sort((r1, r2)=> r1.createdAt > r2.createdAt ? 1 :
+                                       r1.createdAt < r2.createdAt ? -1 : 0 );
   
   const insertTideBump = 
           <TideBump

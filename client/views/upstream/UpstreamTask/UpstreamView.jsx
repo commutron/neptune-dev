@@ -81,12 +81,11 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isDebug })=> {
   function sortInitial() {
     return new Promise((resolve) => {
       
-      let liveBatches = batchX;
+      let liveBatches = batchX.filter( bx => bx.releases !== undefined );
       
       let filteredBatches = liveBatches.filter( bx => {
-        const releasedToFloor = Array.isArray(bx.releases) ?
-          bx.releases.findIndex( x => x.type === 'floorRelease') >= 0 :
-          typeof bx.floorRelease === 'object';
+        const releasedToFloor =
+          bx.releases.findIndex( x => x.type === 'floorRelease') >= 0;
         if(!releasedToFloor) {
           return bx;
         }

@@ -3,6 +3,7 @@ import 'moment-timezone';
 import 'moment-business-time';
 
 import Config from '/server/hardConfig.js';
+import { avgOfArray } from './calcOps.js';
 import { countMulti } from './utility.js';
 import { batchTideTime } from './tideGlobalMethods.js';
 import { calcShipDay } from './reportCompleted.js';
@@ -14,22 +15,21 @@ moment.updateLocale('en', {
 
 //const isNow = (t)=>{ return ( now.isSame(moment(t), 'day') ) };
 
-function dryPriorityCalc(bQuTmBdg, bTide, shipAim, now, shipLoad) {
+function dryPriorityCalc(bQuTmBdg, mEst, bTide, shipAim, now, shipLoad) {
   const shipAimMmnt = moment(shipAim);
   
-  const totalQuoteMinutes = bQuTmBdg.length === 0 ? 0 :
-                                bQuTmBdg[0].timeAsMinutes;
-                                
+  const totalQuoteMinutes = bQuTmBdg.length === 0 ? 0 : bQuTmBdg[0].timeAsMinutes;
+  const estimatedMinutes = avgOfArray([totalQuoteMinutes, mEst]);
+  const minDiff = `${mEst} (${mEst - totalQuoteMinutes})`;
+  
   const totalTideMinutes = batchTideTime(bTide);
   
-  const quote2tide = totalQuoteMinutes - totalTideMinutes;
+  const quote2tide = estimatedMinutes - totalTideMinutes;
   const overQuote = quote2tide < 0 ? true : false;
   const q2tNice = overQuote ? 0 : quote2tide;
   
-  const estLatestBegin = shipAimMmnt.clone().subtractWorkingTime(q2tNice, 'minutes');
-  
   // additional ship bumper
-  // const estConclude = shipAimMmnt;//shipAimMmnt.clone().subtractWorkingTime(0, 'hours');
+  // const estConclude = shipAimMmnt.clone().subtractWorkingTime(0, 'hours');
   const estSoonest = now.clone().addWorkingTime(q2tNice, 'minutes');
 
   const buffer = shipAimMmnt.workingDiff(estSoonest, 'minutes');
@@ -38,10 +38,10 @@ function dryPriorityCalc(bQuTmBdg, bTide, shipAim, now, shipLoad) {
   
   const dayGap = shipAimMmnt.workingDiff(now, 'days', true);
   const shipPull = dayGap <= Config.shipSoon ? shipLoad * 2 : shipLoad;
-  // const bffrRel = Math.round( ( estEnd2fillBuffer / 100 ) - dayGap );
+
   const bffrRel = Math.round( ( estEnd2fillBuffer / 100 ) + dayGap - shipPull );
   
-  return { quote2tide, estSoonest, estLatestBegin, bffrRel, estEnd2fillBuffer };
+  return { quote2tide, estSoonest, bffrRel, estEnd2fillBuffer, minDiff };
 }
 
 function collectPriority(privateKey, batchID, mockDay) {
@@ -59,25 +59,32 @@ function collectPriority(privateKey, batchID, mockDay) {
     if(!b) {
       resolve(false);
     }else{
-      const endEntry = b.salesEnd || b.end;
-      const doneEntry = b.completed ? b.completedAt : b.finishedAt;
+      const wdjt = WidgetDB.findOne({ _id: b.widgetId });
+      const perQ = !wdjt.quoteStats ? 0 : wdjt.quoteStats.stats.tidePerItemAvg;
+      const mEst = perQ * b.quantity;
+
+      const oRapid = XRapidsDB.findOne({extendBatch: b.batch, live: true});
+      const rapIs = oRapid ? oRapid.rapid : false;
+    
+      const endDay = rapIs && moment(oRapid.deliverAt).isAfter(b.salesEnd) ? 
+                      oRapid.deliverAt : b.salesEnd;
       
-      const future = mockDay ? mockDay : endEntry;
+      const doneEntry = b.completedAt;
+      
+      const future = mockDay ? mockDay : endDay;
       const calcShip = calcShipDay( now, future );
       const shipAim = calcShip[1];
       const lateLate = calcShip[2];
       
       const qtBready = !b.quoteTimeBudget ? false : true;
       
-      const oRapid = XRapidsDB.findOne({extendBatch: b.batch, live: true}) ? true : false;
-      
       if(qtBready && b.tide && !doneEntry) {
         const shipLoad = TraceDB.find({shipAim: { 
           $gte: new Date(now.clone().nextShippingTime().startOf('day').format()),
           $lte: new Date(now.clone().nextShippingTime().endOf('day').format()) 
         }},{fields:{'batchID':1}}).count();
-      
-        const dryCalc = dryPriorityCalc(b.quoteTimeBudget, b.tide, shipAim, now, shipLoad);
+
+        const dryCalc = dryPriorityCalc(b.quoteTimeBudget, mEst, b.tide, shipAim, now, shipLoad);
 
         resolve({
           batch: b.batch,
@@ -85,14 +92,13 @@ function collectPriority(privateKey, batchID, mockDay) {
           salesOrder: b.salesOrder,
           quote2tide: dryCalc.quote2tide,
           estSoonest: dryCalc.estSoonest.format(),
-          estLatestBegin: dryCalc.estLatestBegin.format(),
           completed: doneEntry, 
           bffrRel: dryCalc.bffrRel,
           estEnd2fillBuffer: dryCalc.estEnd2fillBuffer,
-          // endEntry: endEntry,
+          minDiff: dryCalc.minDiff,
           shipAim: shipAim.format(),
           lateLate: lateLate,
-          oRapid: oRapid
+          oRapid: rapIs
         });
       }else{
         resolve({
@@ -103,10 +109,10 @@ function collectPriority(privateKey, batchID, mockDay) {
           completed: doneEntry,
           bffrRel: false,
           estEnd2fillBuffer: 0,
-          // endEntry: endEntry,  
+          minDiff: false,
           shipAim: shipAim.format(),
           lateLate: lateLate,
-          oRapid: oRapid
+          oRapid: rapIs
         });
       }
     }
@@ -116,7 +122,7 @@ function collectPriority(privateKey, batchID, mockDay) {
 function getFastPriority(privateKey, bData, now, shipAim) {
   return new Promise(resolve => {
     
-    const doneEntry = bData.completed ? bData.completedAt : false;
+    const doneEntry = bData.completedAt;
       
     const qtBready = !bData.quoteTimeBudget ? false : true;
     
@@ -125,23 +131,27 @@ function getFastPriority(privateKey, bData, now, shipAim) {
         $gte: new Date(now.clone().nextShippingTime().startOf('day').format()),
         $lte: new Date(now.clone().nextShippingTime().endOf('day').format()) 
       }},{fields:{'batchID':1}}).count();
-        
-      const dryCalc = dryPriorityCalc(bData.quoteTimeBudget, bData.tide, shipAim, now, shipLoad);
+      
+      const wdjt = WidgetDB.findOne({ _id: bData.widgetId });
+      const perQ = !wdjt.quoteStats ? 0 : wdjt.quoteStats.stats.tidePerItemAvg;
+      const mEst = perQ * bData.quantity;
+      
+      const dryCalc = dryPriorityCalc(bData.quoteTimeBudget, mEst, bData.tide, shipAim, now, shipLoad);
       
       resolve({
         quote2tide: dryCalc.quote2tide,
         estSoonest: dryCalc.estSoonest.format(),
-        estLatestBegin: dryCalc.estLatestBegin.format(),
         bffrRel: dryCalc.bffrRel,
-        estEnd2fillBuffer: dryCalc.estEnd2fillBuffer
+        estEnd2fillBuffer: dryCalc.estEnd2fillBuffer,
+        minDiff: dryCalc.minDiff
       });
     }else{
       resolve({
         quote2tide: false,
         estSoonest: false,
-        estLatestBegin: false,
         bffrRel: false,
-        estEnd2fillBuffer: 0
+        estEnd2fillBuffer: 0,
+        minDiff: false
       });
     }
   });
@@ -170,6 +180,7 @@ function collectNonCon(privateKey, batchID, temp) {
         [... new Set( Array.from(rNC, x => x.serial) ) ].length;
       // what percent of items have nonCons
       const percentOfNCitems = temp === 'cool' ? 0 :
+        itemQuantity === 0 ? 0 : hasNonCon >= itemQuantity ? 100 :
         ((hasNonCon / itemQuantity) * 100 ).toFixed(0);
       // how many items are scrapped
       const itemIsScrap = temp === 'cool' ? 0 :

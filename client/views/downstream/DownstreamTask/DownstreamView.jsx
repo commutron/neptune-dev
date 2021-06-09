@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
 import Pref from '/client/global/pref.js';
-
+import { branchesOpenSort } from '/client/utility/Arrays.js';
 import DownstreamTools from './DownstreamTools';
 import ShipWindows from './ShipWindows';
 
@@ -83,10 +83,8 @@ const DownstreamView = ({
   
   const density = !dense ? '' : 'minifyed';
   
-  const branches = app.branches.filter( b => b.open === true );
-  const brancheS = branches.sort((b1, b2)=>
-          b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
-
+  const brancheS = branchesOpenSort(app.branches);
+  
   return(
     <div
       key={0} 

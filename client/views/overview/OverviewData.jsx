@@ -4,7 +4,7 @@ import { withTracker } from 'meteor/react-meteor-data';
 import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
 import moment from 'moment';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
-
+import { branchesOpenSort } from '/client/utility/Arrays.js';
 import { SpinWrap } from '../../components/tinyUi/Spin.jsx';
 import OverviewWrap from './OverviewWrap.jsx';
 
@@ -26,11 +26,9 @@ const View = ({
   if( Array.isArray(app.nonWorkDays) ) {  
     moment.updateLocale('en', { holidays: app.nonWorkDays });
   }
-    
-  const branches = app.branches.filter( b => b.open === true );
-  const brancheS = branches.sort((b1, b2)=>
-           b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );  
-
+  
+  const brancheS = branchesOpenSort(app.branches);
+  
   return(
     <ErrorCatch>
       <OverviewWrap 

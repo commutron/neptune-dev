@@ -143,10 +143,11 @@ export const PrioritySquare = ({
     const bffTxt = `buffer: ${bffrTime} minutes`;
     const treTxt = `Quote Time Remaining: ${min2hr(q2t)} hours`;
     const soonTxt = `Soonest Complete: ${moment(pt.estSoonest).format("ddd, MMM Do, h:mm a")}`;
-    const mustTxt = `Must Be Active By: ${moment(pt.estLatestBegin).format("ddd, MMM Do, h:mm a")}`;
     
-    const title = `${prTxt}\n${ovrTxt}\n\n${treTxt}\n${soonTxt}\n${mustTxt}`;
-    const debugTitle = `${prTxt}\n${ovrTxt}\n\n${treTxt}\n${soonTxt}\n${mustTxt}\n\n${bffTxt}\n${pt.bffrRel}`;
+    const tstTxt = `diff minutes = ${pt.minDiff}`;
+    
+    const title = `${prTxt}\n${ovrTxt}\n\n${treTxt}\n${soonTxt}\n\n${tstTxt}`;
+    const debugTitle = `${prTxt}\n${ovrTxt}\n\n${treTxt}\n${soonTxt}\n\n${bffTxt}\n${pt.bffrRel}\n\n${tstTxt}`;
     
     return(
       <div 
@@ -162,7 +163,6 @@ export const PrioritySquare = ({
           <dl className='med clean noindent espace'>
             <dd>{treTxt}</dd>
             <dd>{soonTxt}</dd>
-            <dd>{mustTxt}</dd>
           </dl> : null}
       </div>
     );

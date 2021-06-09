@@ -194,7 +194,6 @@ Meteor.publish('traceDataLive', function(){
           'branchCondition': 1,
           'quote2tide': 1,
           'estSoonest': 1,
-          'estLatestBegin': 1,
           'bffrRel': 1,
           'estEnd2fillBuffer': 1
         }
@@ -238,9 +237,9 @@ Meteor.publish('traceDataActive', function(){
           'branchCondition': 1,
           'quote2tide': 1,
           'estSoonest': 1,
-          'estLatestBegin': 1,
           'bffrRel': 1,
-          'estEnd2fillBuffer': 1
+          'estEnd2fillBuffer': 1,
+          'minDiff': 1
         }
       })
     ];
@@ -282,7 +281,6 @@ Meteor.publish('traceDataOpen', function(){
           'branchCondition': 1,
           'quote2tide': 1,
           'estSoonest': 1,
-          'estLatestBegin': 1,
           'bffrRel': 1,
           'estEnd2fillBuffer': 1
         }
@@ -538,8 +536,8 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
           fields: {
             'orgKey': 0,
             'versions': 0,
-            'quoteStats': 0,
-            'turnStats': 0
+            // 'quoteStats': 0,
+            // 'turnStats': 0
           }}),
         VariantDB.find({widgetId: hothotWidgetID, orgKey: orgKey}, {
           fields: {
@@ -552,8 +550,8 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
           fields: {
             'orgKey': 0,
             'versions': 0,
-            'quoteStats': 0,
-            'turnStats': 0
+            // 'quoteStats': 0,
+            // 'turnStats': 0
           }}),
         VariantDB.find({widgetId: hothotWidgetID, orgKey: orgKey}, {
           fields: {
