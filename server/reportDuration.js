@@ -3,6 +3,7 @@ import 'moment-business-time';
 
 import { avgOfArray, percentOf, diffTrend } from '/server/calcOps';
 import Config from '/server/hardConfig.js';
+import { noIg } from './utility';
 
 moment.updateLocale('en', {
   workinghours: Config.workingHours,
@@ -123,9 +124,8 @@ function splitItmTm( items, tide ) {
 Meteor.methods({
   
   oneWidgetTurnAround(wID) {
-    const accessKey = Meteor.user().orgKey;
     
-    const widget = WidgetDB.findOne({ _id: wID, orgKey: accessKey });
+    const widget = WidgetDB.findOne({ _id: wID });
     
     const timeArr = getWidgetDur(widget);
     
@@ -137,7 +137,9 @@ Meteor.methods({
   
     let percentsArr = [];
     
-    const compB = XBatchDB.find({live: false});
+    const xid = noIg();
+    const compB = XBatchDB.find({live: false, groupId: { $ne: xid }});
+    
     for( let b of compB ) {
       const srs = XSeriesDB.findOne({batch: b.batch});
       const items = srs ? srs.items : [];

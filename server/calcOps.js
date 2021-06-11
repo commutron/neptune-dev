@@ -48,7 +48,7 @@ export function avgOfArray(arr, zeros) {
                        arr.filter( f => f && !isNaN(f) );
                        
   if(cArr.length == 1) {
-    return cArr[0];
+    return round2Decimal( cArr[0] );
   }else if(cArr.length > 0) {
     const reduced = cArr.reduce( (a,c)=>a+c) / cArr.length;
     const clean = round2Decimal( reduced );

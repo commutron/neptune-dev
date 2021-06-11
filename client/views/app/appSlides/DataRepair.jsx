@@ -83,7 +83,7 @@ const DataRepair = ({ app, users })=> {
     <div className='space3v autoFlex'>
     
       <div>
-        <h3><i className="fas fa-key fa-lg gap"></i>
+        <h3><i className="fas fa-lock fa-lg gap"></i>
           Run Batch+ Locker
         </h3>
         <small>Runs every Saturday at 12:01am (CST)</small><br />
@@ -102,6 +102,17 @@ const DataRepair = ({ app, users })=> {
           onClick={()=>doCallThing("fetchWeekAvg")}
           className='action clearPurple'
         >Request Avg</button>
+      </div>
+      
+      <div>
+        <h3><i className="fas fa-cash-register fa-lg gap"></i>
+          Run All Widget Avg Update
+        </h3>
+        {/*<small>Runs every Saturday at 12:02am (CST)</small><br />*/}
+        <button
+          onClick={()=>doCallThing("updateAllWidgetAvg")}
+          className='action clearPurple'
+        >Request Update</button>
       </div>
       
       <div>

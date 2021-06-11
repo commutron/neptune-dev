@@ -654,7 +654,7 @@ n-sm-model-content {
 .wmargin { 
   margin-right: auto;
   margin-left: auto;}
-.nomargin { margin: 0; }
+.nomargin, .nopmargin p { margin: 0; }
 
 .vwrap > span { margin-top: 0.5rem; }
 

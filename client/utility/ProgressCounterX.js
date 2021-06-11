@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { round2Decimal, avgOfArray } from '/client/utility/Convert';
+import { avgOfArray } from '/client/utility/Convert';
 import { countWaterfall } from '/client/utility/Arrays';
 
 function flowLoop(river, items, firstsFlat, wndw) {
@@ -115,7 +115,8 @@ function FlowCounter(flow, seriesData) {
   
   const riverProg = flowLoop(flow, stndItems, firstsFlat, wndw);
   
-  const allFlow = srsItems.length > 0 && srsItems.every( x => x.completed );
+  const allFlow = srsItems.length === 0 ||
+                  srsItems.length > 0 && srsItems.every( x => x.completed );
 
   return {
     riverProg: riverProg,

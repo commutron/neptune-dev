@@ -11,8 +11,9 @@ const WaterFall = ({
   
   function plusOne(e, fast) {
     const time = fast ? 0 : speed;
-    const num = fast ? 10 : false;lockPlusSet( true );
-    if(total < quantity) {
+    const num = fast ? 10 : false;
+    lockPlusSet( true );
+    if(fall.action === 'slider' ? total < 100 : total < quantity) {
       if(batchId) {
         Meteor.call('positiveCounter', batchId, fall.wfKey, num, (error)=>{
           error && console.log(error);

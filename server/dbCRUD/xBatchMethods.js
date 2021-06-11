@@ -515,7 +515,7 @@ Meteor.methods({
       for(let wf of doc.waterfall) {
         falling.push(wf.counts.length === 0 ? false :
           Array.from(wf.counts, x => x.tick).reduce((x,y)=> x + y) 
-          === doc.quantity);
+          === ( wf.action === "slider" ? 100 : doc.quantity ) );
       }
       const allFall = !didFall ? true : falling.every( x => x === true );
       

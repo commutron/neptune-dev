@@ -28,7 +28,7 @@
 
 .navButtonWrap:focus-within {
   outline-color: var(--neptuneColor);
-  outline-style: dotted;
+  outline-style: double;
   outline-width: thick;
 }
 .navButtonIcon {

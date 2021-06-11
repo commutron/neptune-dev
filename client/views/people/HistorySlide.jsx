@@ -20,11 +20,8 @@ const HistorySlide = ({ app, user, users, traceDT, isDebug })=> {
     setDayData(false);
     Meteor.call('fetchOrgTideActivity', dateString, (err, rtn)=>{
 	    err && console.log(err);
-	    const cronoTimes = rtn.sort((x1, x2)=> {
-                          if (x1.startTime < x2.startTime) { return 1 }
-                          if (x1.startTime > x2.startTime) { return -1 }
-                          return 0;
-                        });
+	    const cronoTimes = rtn.sort((x1, x2)=>
+              x1.startTime < x2.startTime ? 1 : x1.startTime > x2.startTime ? -1 : 0 );
       setDayData(cronoTimes);
 	  });
   }
@@ -111,7 +108,7 @@ const HistorySlide = ({ app, user, users, traceDT, isDebug })=> {
           if(index === 0 || moment(blk.startTime).isSame(lastStart, 'hour') === false) {
             return(
               <Fragment key={blk.tKey+index}>
-                <tr key={blk.startTime.toISOString()} className='big leftText line4x'>
+                <tr key={blk.startTime.toISOString()} className='medBig leftText line4x'>
                   <th colSpan='4'>{moment(blk.startTime).format('h A')}</th>
                 </tr>
                 <TidePlainRow
@@ -134,7 +131,7 @@ const HistorySlide = ({ app, user, users, traceDT, isDebug })=> {
         </tbody>
       </table>
       }
-      <div>
+      <div className='small fadeMore vmargin nopmargin'>
         <p><sup>i.</sup>Times are displayed for timezone: {moment.tz.guess()}</p>
         <p><sup>ii.</sup>Task is from direct user input only</p>
         <p><sup>iii.</sup>Durations are rounded to the nearest minute</p>
@@ -161,10 +158,10 @@ const TidePlainRow = ({
   // const staticFormat = Roles.userIsInRole(Meteor.userId(), 'debug') ? 'hh:mm:ss A' : 'hh:mm A';
   
   return(
-    <tr>
+    <tr className='smTxt'>
       <td className='noRightBorder'><AnonyUser id={tideWho} /></td>
       
-      <td className='noRightBorder medBig'>
+      <td className='noRightBorder'>
         <ExploreLinkBlock type='batch' keyword={batch} />
       </td>
       

@@ -1,4 +1,10 @@
-
+const smplresult = (name, accessKey)=> {
+  const cache = CacheDB.findOne({ orgKey: accessKey, dataName: name });
+  const numbr = cache ? cache.dataNum : 0;
+  const trend = cache ? cache.dataTrend : 'flat';
+  return [ numbr, trend ];
+};
+    
 Meteor.methods({
 
   fetchWeekAvg(accessKey) {
@@ -11,18 +17,31 @@ Meteor.methods({
   },
   
   getAvgDayCache() {
-    const smplresult = (name)=> {
-      const cache = CacheDB.findOne({ orgKey: Meteor.user().orgKey, dataName: name });
-      const numbr = cache ? cache.dataNum : 0;
-      const trend = cache ? cache.dataTrend : 'flat';
-      return [ numbr, trend ];
-    };
-    
+    const accessKey = Meteor.user().orgKey;
     return {
-      avgTime : smplresult('avgDayTime'),
-      avgItem : smplresult('avgDayItemFin'),
-      avgShar : smplresult('avgTimeShare')
+      avgTime : smplresult('avgDayTime', accessKey),
+      avgItem : smplresult('avgDayItemFin', accessKey),
+      avgShar : smplresult('avgTimeShare', accessKey)
     };
   },
+  
+  getAvgDayFin() {
+    return smplresult('avgDayItemFin', Meteor.user().orgKey);
+  },
+  
+  updateAllWidgetAvg() {
+
+    const widgets = WidgetDB.find({},{fields:{'_id':1}}).fetch();
+    
+    // async function runLoop(widgets) {
+      for(let w of widgets) {
+        Meteor.call('countMultiBatchTideToQuote', w._id);
+        Meteor.call('oneWidgetTurnAround', w._id);
+      }
+      return true;
+    // }
+    // runLoop(widgets);
+  }
+  
   
 });

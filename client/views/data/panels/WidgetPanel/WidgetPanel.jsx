@@ -16,7 +16,8 @@ import MultiBatchKPI from '/client/components/bigUi/MultiBatchKPI';
 
 import FlowTable from '/client/components/tables/FlowTable';
 import WTimeTab from './WTimeTab';
-import NonConMultiBatchBar from '/client/components/charts/NonCon/NonConMultiBatchBar';
+import WNCTab from './WNCTab';
+
 
 const WidgetPanel = ({ 
   groupData, widgetData, variantData,
@@ -31,8 +32,7 @@ const WidgetPanel = ({
   const varS = variantData.sort((v1, v2)=> 
               v1.variant > v2.variant ? -1 : v1.variant < v2.variant ? 1 : 0 );
                                
-  const bS = b.sort((b1, b2)=> b1.batch < b2.batch ? -1 : 
-                               b1.batch > b2.batch ? 1 : 0 );
+  const bS = b.sort((b1, b2)=> b1.batch < b2.batch ? -1 : b1.batch > b2.batch ? 1 : 0 );
   const batchIDs = Array.from( bS, x => x._id );
   const batches = Array.from( bS, x => x.batch );
 
@@ -100,7 +100,6 @@ const WidgetPanel = ({
             
           <MultiBatchKPI
             widgetId={widgetData._id}
-            batchIDs={batchIDs}
             app={a} />
             
           {variantData.length < 1 ? <p>no {Pref.variants} created</p> : null}
@@ -127,7 +126,11 @@ const WidgetPanel = ({
           batchIDs={batchIDs}
           app={a} />
           
-        <NonConMultiBatchBar batches={batches} />
+        <WNCTab
+          widgetData={widgetData}
+          batchIDs={batchIDs}
+          app={a}
+          batches={batches} />
         
       </Tabs>
 

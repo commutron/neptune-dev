@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 // import moment from 'moment';
 // import 'moment-timezone';
 import Pref from '/client/global/pref.js';
+import AvgStat from '/client/components/tinyUi/AvgStat';
 
 const AvgDay = ({ traceDT, app, isNightly })=> {
  
@@ -33,16 +34,3 @@ const AvgDay = ({ traceDT, app, isNightly })=> {
 };
 
 export default AvgDay;
-
-const AvgStat = ({ num, trend, type })=> (
-  <span title={trend || ''} className='beside bigger'>
-    <n-num class='centre'>{num}<n-sm>{type}</n-sm></n-num>
-    {!trend ? null :
-    trend === 'up' ?
-    <n-fa1><i className='fas fa-long-arrow-alt-up greenT'></i></n-fa1> :
-    trend === 'down' ?
-    <n-fa2><i className='fas fa-long-arrow-alt-down redT'></i></n-fa2> :
-    <n-fa3><i className='fas fa-caret-right darkgrayT'></i></n-fa3>
-    }
-  </span>
-);

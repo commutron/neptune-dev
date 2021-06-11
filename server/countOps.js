@@ -2,7 +2,7 @@ import moment from 'moment';
 
 import { batchTideTime, distTimeBudget } from './tideGlobalMethods.js';
 import { deliveryState } from './reportCompleted.js';
-import { avgOfArray } from './calcOps';
+import { avgOfArray, diffTrend } from './calcOps';
 import { allNCOptions, countMulti } from './utility';
 
 
@@ -70,16 +70,16 @@ Meteor.methods({
     
   },
   
-  countMultiBatchTideToQuote(widgetId, batchIDs) {
+  countMultiBatchTideToQuote(widgetId) {
     this.unblock();
     
-    const widget = WidgetDB.findOne({_id: widgetId});
+    const widget = WidgetDB.findOne({ _id: widgetId });
     const quoteStats = widget.quoteStats || null;
     const statime = quoteStats ? quoteStats.updatedAt : null;
     const stale = !statime ? true :
             moment.duration(moment().diff(moment(statime))).as('hours') > 12;
     if(stale) {
-
+      
       let tidePerItem = [];
       
       let quotePerItem = [];
@@ -114,11 +114,12 @@ Meteor.methods({
       };
       
       try {
-        for(let batchID of batchIDs) {
-          const xbatch = XBatchDB.findOne({_id: batchID});
-          if(xbatch && xbatch.completed) {
-            discoverTQ(xbatch);
-            discoverOT(xbatch.salesEnd, xbatch.completedAt);
+        const batches = XBatchDB.find({ widgetId: widgetId }).fetch();
+        
+        for(let batch of batches) {
+          if(batch.completed) {
+            discoverTQ(batch);
+            discoverOT(batch.salesEnd, batch.completedAt);
           }else{null}
         }
       }catch(err) {
@@ -139,7 +140,7 @@ Meteor.methods({
         deliveryGap: deliveryGap
       };
       
-      WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey}, {
+      WidgetDB.update({ _id: widgetId }, {
         $set : {
           quoteStats: {
             stats: avgArrays,
@@ -204,6 +205,46 @@ Meteor.methods({
     }
     return JSON.stringify(countNonCon);
   },
+  
+  nonConBatchTrend(wID) {
+    const widget = WidgetDB.findOne({ _id: wID });
+    
+    const ncRate = widget.ncRate || null;
+    const statime = ncRate ? ncRate.updatedAt : null;
+    const stale = !statime ? true :
+              moment.duration(moment().diff(moment(statime))).as('hours') > 12;
+    if(stale) {
+      const series = XSeriesDB.find({ widgetId: wID }).fetch();
+    
+      let rateArr = [];
+    
+      for(let srs of series) {
+        const b = XBatchDB.findOne({ batch: srs.batch });
+        if(b.completed) {
+          const rate = srs.nonCon.length / srs.items.length;
+          isFinite(rate) ? rateArr.push(rate) : rateArr.push(0);
+        }
+      }
+      const avgRate = avgOfArray(rateArr, true);
+      
+      const lastavg = widget.ncRate;
+      const runningavg = lastavg ? lastavg.rate : 0;
+        
+      const trend = !lastavg ? 'flat' : diffTrend(avgRate, runningavg);
+      
+      WidgetDB.update({ _id: wID }, {
+        $set : {
+          ncRate: {
+            rate: avgRate,
+            trend: trend,
+            updatedAt: new Date(),
+          }
+      }});
+      return [ avgRate, trend ];
+    }else{
+      return [ ncRate.rate, ncRate.trend ];
+    }
+  }
   
   
 });

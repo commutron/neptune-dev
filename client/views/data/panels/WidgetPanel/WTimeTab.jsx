@@ -43,8 +43,8 @@ const WTimeTab = ({
           <td>{ result['compAvg'] && `${round1Decimal(result['compAvg'])} days`}</td>
         </tr>
       </tbody></table>
-      <p className='small rightText'
-        >{Pref.xBatchs} mean average, counting scheduled work days</p>
+      <p className='small rightText fadeMore'
+        >{Pref.xBatchs} mean, counting scheduled work days</p>
      
       <TideMultiBatchBar 
         batchIDs={batchIDs}

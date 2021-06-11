@@ -33,7 +33,9 @@ const BatchXStatus = ({ batchData, allFlow, allFall, nowater, rapid })=>	{
   
   return(
     <div className='cap'>
-      {!rapid && ( nowater || (allFlow && allFall) || batchData.completed ) ?
+      {!rapid && 
+       batchData.quantity > 0 &&
+       ( nowater || (allFlow && allFall) || batchData.completed ) ?
         <BatchXComplete 
           batchData={batchData}
           allFlow={allFlow}

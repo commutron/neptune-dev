@@ -537,7 +537,8 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
             'orgKey': 0,
             'versions': 0,
             // 'quoteStats': 0,
-            // 'turnStats': 0
+            // 'turnStats': 0,
+            // 'ncRate': 0
           }}),
         VariantDB.find({widgetId: hothotWidgetID, orgKey: orgKey}, {
           fields: {
@@ -551,7 +552,8 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
             'orgKey': 0,
             'versions': 0,
             // 'quoteStats': 0,
-            // 'turnStats': 0
+            // 'turnStats': 0,
+            // 'ncRate': 0
           }}),
         VariantDB.find({widgetId: hothotWidgetID, orgKey: orgKey}, {
           fields: {

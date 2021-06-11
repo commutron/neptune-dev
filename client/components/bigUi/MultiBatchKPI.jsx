@@ -6,7 +6,7 @@ import NumLine from '/client/components/tinyUi/NumLine.jsx';
 
 import Pref from '/client/global/pref.js';
 
-const MultiBatchKPI = ({ widgetId, batchIDs, app })=> {
+const MultiBatchKPI = ({ widgetId, app })=> {
   
   const mounted = useRef(true);
   
@@ -17,7 +17,7 @@ const MultiBatchKPI = ({ widgetId, batchIDs, app })=> {
   }, []);
   
   useEffect( ()=>{
-    Meteor.call('countMultiBatchTideToQuote', widgetId, batchIDs, (error, reply)=>{
+    Meteor.call('countMultiBatchTideToQuote', widgetId, (error, reply)=>{
       error && console.log(error);
       if(mounted.current) { batchDTset( reply ); }
     });

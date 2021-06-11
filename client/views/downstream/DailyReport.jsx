@@ -7,15 +7,17 @@ import PrintThis from '/client/components/tinyUi/PrintThis';
 import { CalcSpin } from '/client/components/tinyUi/Spin';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
-import NumLine from '/client/components/tinyUi/NumLine';
-
+import NumStat from '/client/components/tinyUi/NumStat';
+import AvgStat from '/client/components/tinyUi/AvgStat';
 
 import ReportBasicTable from '/client/components/tables/ReportBasicTable.jsx'; 
 
 const DailyReport = ({ app, user, isDebug })=> {
   
-  const [dateString, setDateString] = useState(moment().format('YYYY-MM-DD'));
-  const [dayData, setDayData] = useState(false);
+  const [ rate, rateSet ] = useState([0,'flat']);
+  
+  const [ dateString, setDateString ] = useState(moment().format('YYYY-MM-DD'));
+  const [ dayData, setDayData ] = useState(false);
   
   function getData() {
     setDayData(false);
@@ -29,6 +31,13 @@ const DailyReport = ({ app, user, isDebug })=> {
       setDayData(cronoTimes);
 	  });
   }
+  
+  useEffect(() => {
+    Meteor.call('getAvgDayFin', (err, rtn)=>{
+	    err && console.log(err);
+      rateSet(rtn);
+	  });
+  }, []);
   
   useEffect(() => {
     getData();
@@ -70,11 +79,14 @@ const DailyReport = ({ app, user, isDebug })=> {
             {isHoliday ? <span className='bigger line05x'>Holiday</span> : null}
         </div>
         
-        <NumLine
+        <NumStat
           num={dayData && dayData.length-1}
           name={'Completed ' + Pref.items}
-          color='purpleT' />
-      
+          color='purpleT'
+          size='bigger' />
+        
+        <AvgStat num={rate[0]} trend={rate[1]} type={'avg ' + Pref.items} />
+        
         <PrintThis />
       </div>
       
