@@ -4,9 +4,10 @@ import ProgLayerBurndown, { ProgLayerBurndownExplain }
   from '/client/components/charts/ProgLayerBurndown.jsx';
 import TimeBudgetsChunk from '/client/views/data/panels/XBatchPanel/TimeBudgetsChunk';
 import TimeExtendChunk from '/client/views/data/panels/XBatchPanel/TimeExtendChunk';
+import TimeNextChunk from './TimeNextChunk';
 
 const TimeTab = ({
-  batchData, seriesData, rapidsData,
+  batchData, seriesData, rapidsData, widgetData,
   floorRelease, done, allDone, riverFlow,
   user, isDebug, app
 })=> {
@@ -60,6 +61,13 @@ const TimeTab = ({
               
         <ProgLayerBurndownExplain />
       </div>
+      
+      <TimeNextChunk
+        batchData={batchData}
+        widgetData={widgetData}
+        floorRelease={floorRelease}
+        done={done}
+        app={app} />
               
     </div>
   );

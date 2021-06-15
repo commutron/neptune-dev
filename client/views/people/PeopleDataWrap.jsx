@@ -65,14 +65,14 @@ const PeopleDataWrap = ({
       
         <Slides
           menu={[
-            <b><i className='fas fa-walking fa-fw'></i>  Current</b>,
-            <b><i className='fas fa-history fa-fw'></i>  Daily History</b>,
-            <b><i className='fas fa-tachometer-alt fa-fw'></i>  Weekly Metrics</b>,
-            <b><i className='far fa-calendar-alt fa-fw'></i>  Work Schedule</b>,
-            <b><i className='fas fa-user-lock fa-fw'></i>  Permissions</b>,
-            <b><i className='fas fa-users-cog fa-fw'></i>   Account Manager</b>,
-            <b><i className='fas fa-hourglass fa-fw'></i>   Error Check</b>,
-            antiAuth || <b><i className='fas fa-user-secret fa-fw'></i>   Organization PIN</b>,
+            <b><i className='fas fa-walking fa-fw gapR'></i>Current</b>,
+            <b><i className='fas fa-history fa-fw gapR'></i>Daily History</b>,
+            <b><i className='fas fa-tachometer-alt fa-fw gapR'></i>Weekly Metrics</b>,
+            <b><i className='far fa-calendar-alt fa-fw gapR'></i>Work Schedule</b>,
+            <b><i className='fas fa-user-lock fa-fw gapR'></i>Permissions</b>,
+            <b><i className='fas fa-users-cog fa-fw gapR'></i>Account Manager</b>,
+            <b><i className='fas fa-hourglass fa-fw gapR'></i>Error Check</b>,
+            antiAuth || <b><i className='fas fa-user-secret fa-fw gapR'></i>Organization PIN</b>,
           ]}
           disable={[false, false, false, false, false, antiAuth, antiAuth, antiAuth]}>
           

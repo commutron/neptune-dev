@@ -60,7 +60,7 @@ export function avgOfArray(arr, zeros) {
 
 export function diffTrend(newavg, runningavg) {
   const diff = newavg - runningavg;
-  const trend = Math.abs(diff) <= (runningavg * 0.05) ? 'flat' : 
+  const trend = Math.abs(diff) <= (runningavg * 0.03) ? 'flat' : 
                 diff < 0 ? 'down' : 'up';
   return trend;
 }

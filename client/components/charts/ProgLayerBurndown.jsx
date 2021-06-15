@@ -13,10 +13,10 @@ const ProgLayerBurndown = ({
   const [ firstState, firstSet ] = useState( false );
   
   useEffect( ()=> {
-    Meteor.call('firstFirst', seriesId, (error, reply)=> {
-      error && console.log(error);
-      reply && firstSet( reply );
-    });
+    // Meteor.call('firstFirst', seriesId, (error, reply)=> {
+    //   error && console.log(error);
+    //   reply && firstSet( reply );
+    // });
     Meteor.call('layeredHistoryRate', seriesId, start, end, riverFlow, 
     (error, reply)=> {
       error && console.log(error);
@@ -27,7 +27,7 @@ const ProgLayerBurndown = ({
     
   isDebug && console.log(countState);
   
-  if(!countState || !firstState) {
+  if(!countState /*|| !firstState*/) {
     return(
       <CalcSpin />
     );

@@ -32,15 +32,12 @@ Meteor.methods({
   updateAllWidgetAvg() {
 
     const widgets = WidgetDB.find({},{fields:{'_id':1}}).fetch();
-    
-    // async function runLoop(widgets) {
-      for(let w of widgets) {
-        Meteor.call('countMultiBatchTideToQuote', w._id);
-        Meteor.call('oneWidgetTurnAround', w._id);
-      }
-      return true;
-    // }
-    // runLoop(widgets);
+
+    for(let w of widgets) {
+      Meteor.call('countMultiBatchTideToQuote', w._id);
+      Meteor.call('oneWidgetTurnAround', w._id);
+    }
+    return true;
   }
   
   

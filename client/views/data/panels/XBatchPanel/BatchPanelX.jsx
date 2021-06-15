@@ -16,14 +16,11 @@ import RapidExtendTab from './RapidExtendTab';
 const BatchPanelX = ({ 
   batchData, seriesData, rapidsData, widgetData, variantData, groupData, 
   flowData, fallData,
-  user, app, isDebug, isNigh
+  user, app, brancheS, isDebug, isNigh
 })=> {
   
   const b = batchData;
 
-  const brancheS = app.branches.sort((b1, b2)=> 
-          b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
-  
   const floorRelease = b.releases.find( x => x.type === 'floorRelease');
   const released = floorRelease ? true : false;
   const hasFall = b.waterfall.length > 0;
@@ -44,7 +41,7 @@ const BatchPanelX = ({
       <Tabs
         tabs={ tabbar }
         wide={true}
-        stick={false}
+        stick={true}
         hold={true}
         sessionTab='batchExPanelTabs'>
         
@@ -72,6 +69,7 @@ const BatchPanelX = ({
           batchData={batchData}
           seriesData={seriesData}
           rapidsData={rapidsData}
+          widgetData={widgetData}
           user={user}
           isDebug={isDebug}
           totalUnits={b.quantity}

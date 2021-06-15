@@ -56,10 +56,10 @@ const UserDataWrap = ({
       
         <Slides
           menu={[
-            <b><i className='fas fa-user-clock fa-fw'></i>  Production Activity</b>,
-            <b><i className='fas fa-user-cog fa-fw'></i>  Preferences</b>,
-            <b><i className='fas fa-user-shield fa-fw'></i>  Access & Privacy</b>,
-            <b><i className='fas fa-envelope fa-fw'></i>  Messages{iL}</b>
+            <b><i className='fas fa-user-clock fa-fw gapR'></i>Production Activity</b>,
+            <b><i className='fas fa-user-cog fa-fw gapR'></i>Preferences</b>,
+            <b><i className='fas fa-user-shield fa-fw gapR'></i>Access & Privacy</b>,
+            <b><i className='fas fa-envelope fa-fw gapR'></i>Messages{iL}</b>
           ]}
           extraClass='space5x5'>
             

@@ -25,7 +25,6 @@ Meteor.methods({
       org: 'crew',
       orgKey: orgKey,
       orgPIN: '0000',
-      minorPIN: '000',
       createdAt: new Date(),
       branches: [
         {
@@ -113,20 +112,6 @@ Meteor.methods({
     const orgPIN = org ? org.orgPIN : false;
     if(pinPower && orgPIN) {
       return orgPIN;
-    }else{
-      return false;
-    }
-  },
-  
-  // // // // // // // // //
-  setMinorPin(newPIN) {
-    const adminPower = Roles.userIsInRole(Meteor.userId(), 'admin');
-    if(adminPower) {
-      AppDB.update({orgKey: Meteor.user().orgKey}, {
-        $set : { 
-          minorPIN : newPIN
-      }});
-      return true;
     }else{
       return false;
     }

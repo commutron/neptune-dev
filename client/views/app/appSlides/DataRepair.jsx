@@ -1,18 +1,7 @@
 import React from 'react';
-//import Pref from '/client/global/pref.js';
-// import moment from 'moment';
-// import 'moment-timezone';
 import { toast } from 'react-toastify';
 
 const DataRepair = ({ app, users })=> {
-  
-  // function fixDuplicateSerial(e, batchText, serialNum, dateStamp) {
-  //   e.preventDefault();
-  //   Meteor.call('dataFIXduplicateserial', batchText, serialNum, dateStamp, (error, reply)=>{
-  //     error && console.log(error);
-  //     if(reply) { toast.success('data edit complete', { autoClose: false }); }
-  //   });
-  // }
   
   function fixAthing(e, oldText, newText, textMatch) {
     e.preventDefault();
@@ -24,46 +13,6 @@ const DataRepair = ({ app, users })=> {
       if(reply) { toast.success('data edit complete', { autoClose: false }); }
     });
   }
-
-  /*
-  function addAthing() {
-    const departArray = [
-      'surface mount',
-      'through hole',
-      'selective solder',
-      'wave solder',
-      'testing',
-      'conformal coat',
-      'shipping',
-      'finish'
-    ];
-    Meteor.call('addPhasesRepair', departArray, (error, reply)=>{
-      error && console.log(error);
-      if(reply) { toast.success('data edit complete', { autoClose: false }); }
-    });
-  }
-  */
-  /*
-  function rebuildTheBigThing() {
-    toast.warn('Method Called, Please Wait...', {
-      toastId: ( 'ReBuildAllOp' ),
-      autoClose: false
-    });
-        
-    Meteor.call('migrateALLWidgetVersions', (error, reply)=>{
-      error && console.log(error);
-      if(reply === true) {
-        toast.update(( 'ReBuildAllOp' ), {
-          render: "Complete Success",
-          type: toast.TYPE.SUCCESS,
-          autoClose: 10000
-        });
-      }else{
-        toast.error('There was a problem...');
-      }
-    });
-  }
-  */
   
   function forceLockCheck() {
     Meteor.call('lockingCacheUpdate', false, true, (error)=>{
@@ -81,7 +30,16 @@ const DataRepair = ({ app, users })=> {
   
   return(
     <div className='space3v autoFlex'>
-    
+      
+      <DoCard
+        title='Force Randomize Org PIN'
+        sub='Runs every day at 12:00am (CST)'
+        icon='user-secret'
+        color='clearPurple'
+        button='Randomize PIN'
+        action={()=>doCallThing('randomizePIN')}
+      />
+      
       <div>
         <h3><i className="fas fa-lock fa-lg gap"></i>
           Run Batch+ Locker
@@ -93,101 +51,75 @@ const DataRepair = ({ app, users })=> {
         >Request Locking</button>
       </div>
       
-      <div>
-        <h3><i className="fas fa-calculator fa-lg gap"></i>
-          Run Weekly Avg Update
-        </h3>
-        <small>Runs every Saturday at 12:02am (CST)</small><br />
-        <button
-          onClick={()=>doCallThing("fetchWeekAvg")}
-          className='action clearPurple'
-        >Request Avg</button>
-      </div>
+      <DoCard
+        title='Run Weekly Avg Update'
+        sub='Runs every Saturday at 12:03am (CST)'
+        icon='calculator'
+        color='clearPurple'
+        button='Request Avg'
+        action={()=>doCallThing('fetchWeekAvg')}
+      />
+      
+      <DoCard
+        title='Run All Widget Avg Update'
+        sub='Runs every Saturday at 12:04am (CST)'
+        icon='cash-register'
+        color='clearPurple'
+        button='Request Update'
+        action={()=>doCallThing('updateAllWidgetAvg')}
+      />
+      
+      <DoCard
+        title='FORCE Run TraceDB Rebuild'
+        icon='screwdriver'
+        color='clearTeal'
+        button='Rebuild TraceDB'
+        action={()=>doCallThing('rebuildTrace')}
+      />
+      
+      <DoCard
+        title='Rebuild the LatestSerial Object'
+        icon='barcode'
+        color='clearTeal'
+        button='Rebuild LatestSerial'
+        action={()=>doCallThing('ResetAppLatestSerial')}
+      />
+      
+      <DoCard
+        title='Delete all CacheDB Entries'
+        icon='hammer'
+        color='clearRed'
+        button='Delete All Caches'
+        action={()=>doCallThing('resetALLCacheDB')}
+      />
+      
+      <DoCard
+        title='Fix Errors in TraceDB'
+        icon='wrench'
+        color='clearRed'
+        button='Fix Trace Errors'
+        action={()=>doCallThing('cleanupTraceErrors')}
+      />
+      
+      <DoCard
+        title='Fix XBatchDB Errors'
+        icon='snowplow'
+        color='clearRed'
+        button='Remove Damaged Batch'
+        action={()=>doCallThing('fixRemoveDamagedBatch')}
+      />
+      
+      <DoCard
+        title='Clear `Usage Logs` and `Breadcrubs`'
+        sub='Only affects users with "debug" turned OFF'
+        icon='user-shield'
+        color='clearBlue'
+        button='Clear Logs'
+        action={()=>doCallThing('clearNonDebugUserUsageLogs')}
+      />
       
       <div>
-        <h3><i className="fas fa-cash-register fa-lg gap"></i>
-          Run All Widget Avg Update
-        </h3>
-        {/*<small>Runs every Saturday at 12:02am (CST)</small><br />*/}
-        <button
-          onClick={()=>doCallThing("updateAllWidgetAvg")}
-          className='action clearPurple'
-        >Request Update</button>
-      </div>
-      
-      <div>
-        <h3><i className="fas fa-user-secret fa-lg gap"></i>
-          Force Randomize Org PIN
-        </h3>
-        <small>Runs every day at 12:00am (CST)</small><br />
-        <button
-          onClick={()=>doCallThing("randomizePIN")}
-          className='action clearPurple'
-        >Randomize PIN</button>
-      </div>
-
-      <div>
-        <h3><i className="fas fa-hammer fa-lg gap"></i>
-          Delete all CacheDB Entries
-        </h3>
-        <button
-          onClick={()=>doCallThing("resetALLCacheDB")}
-          className='action clearRed'
-        >Delete All Caches</button>
-      </div>
-      
-      <div>
-        <h3><i className="fas fa-screwdriver fa-lg gap"></i>
-          FORCE Run TraceDB Rebuild
-        </h3>
-        <button
-          onClick={()=>doCallThing("rebuildTrace")}
-          className='action clearTeal'
-        >Rebuild TraceDB</button>
-      </div>
-      
-      <div>
-        <h3><i className="fas fa-barcode fa-lg gap"></i>
-          Rebuild the LatestSerial Object
-        </h3>
-        <button
-          onClick={()=>doCallThing("ResetAppLatestSerial")}
-          className='action clearTeal'
-        >Rebuild LatestSerial</button>
-      </div>
-      
-      <div>
-        <h3><i className="fas fa-wrench fa-lg gap"></i>
-          Fix TraceDB Errors
-        </h3>
-        <button
-          onClick={()=>doCallThing("cleanupTraceErrors")}
-          className='action clearRed'
-        >Fix Errors in TraceDB</button>
-      </div>
-      
-      <div>
-        <h3><i className="fas fa-snowplow fa-lg gap"></i>
-          Fix XBatchDB Errors
-        </h3>
-        <button
-          onClick={()=>doCallThing("fixRemoveDamagedBatch")}
-          className='action clearRed'
-        >Remove Damaged Batch</button>
-      </div>
-      
-      <div>
-        <h3><i className='fas fa-user-shield fa-lg gap'></i>
-          Clear `Usage Logs` and `Breadcrubs`
-        </h3>
-        <button
-          className='action clearBlue'
-          onClick={()=>doCallThing("clearNonDebugUserUsageLogs")}
-        >Clear Users with "debug" turned OFF</button>
-      </div>
-      
-      <div>
-        <h3><i className="fas fa-save fa-lg gap"></i>
+        <h3><i className="fas fa-map-marker-alt fa-lg gap"></i>
           Repair NonCon "Where" Data
         </h3>
         <p>Potentialy very damaging. This will change data of all batches.</p>
@@ -215,7 +147,19 @@ const DataRepair = ({ app, users })=> {
 
 export default DataRepair;
 
-
+const DoCard = ({ title, sub, icon, color, button, action })=> (
+  <div>
+    <h3><i className={`fas fa-${icon} fa-lg gap`}></i>
+      {title}
+    </h3>
+    {sub && <small>{sub}</small>}
+    <br />
+    <button
+      onClick={()=>action()}
+      className={`action ${color}`}
+    >{button}</button>
+  </div>
+);
 
 export const ForceStopEngage = ({ userID, isAdmin, isDebug })=> {
   

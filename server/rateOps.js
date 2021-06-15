@@ -12,6 +12,7 @@ Meteor.methods({
    // Layered History Rate ////////////////////////////////
   ////////////////////////////////////////////////////////
   layeredHistoryRate(seriesId, start, end, riverFlow) {
+    this.unblock();
     const srs = XSeriesDB.findOne({_id: seriesId});
 
     let now = moment().tz(Config.clientTZ);

@@ -65,6 +65,9 @@ var {
   text-transform: none;
   font-style: inherit;
 }
+code {
+  font-family: revert;
+}
 sup, sub {
   text-transform: none;
 }
@@ -408,16 +411,20 @@ table {
 
 tr {
   min-height: 1rem;
+  border-bottom: 1px solid lightgray;
 }
 
 th {
   padding: 0 10px;
-  border-right: 1px solid rgba(0,0,0,0.2);
+  border-right: 1px solid lightgray;
 }
 
 td {
-  border-bottom: 1px solid rgba(0,0,0,0.2);
-  border-right: 1px solid rgba(0,0,0,0.2);
+  -webkit-border-horizontal-spacing: 0;
+  -webkit-border-vertical-spacing: 0;
+  border-spacing: 0;
+  /*border-bottom: 1px solid lightgray;*/
+  border-right: 1px solid lightgray;
   padding: 10px;
 }
 

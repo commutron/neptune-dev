@@ -38,43 +38,43 @@ SyncedCron.add({
 
 SyncedCron.add({
   name: 'Twice Daily Trace Priority',
-  schedule: (parser)=> parser.text('at 6:01 am every weekday also at 6:00 pm every weekday'),
+  schedule: (parser)=> parser.text('at 6:02 am every weekday also at 6:02 pm every weekday'),
   job: ()=> goDo('updateLiveMovement')
 });
 
 SyncedCron.add({
   name: 'Weekly Avg Day Time',
-  schedule: (parser)=> parser.text('at 6:02 am on Sat'),
+  schedule: (parser)=> parser.text('at 6:03 am on Sat'),
   job: ()=> goDo('fetchWeekAvg')
 });
 
 SyncedCron.add({
+  name: 'Weekly Widget Avgs',
+  schedule: (parser)=> parser.text('at 6:04 am on Sat'),
+  job: ()=> goDo('updateAllWidgetAvg')
+});
+
+SyncedCron.add({
   name: 'Daily Done Target By Month',
-  schedule: (parser)=> parser.text('at 6:03 am every weekday'),
+  schedule: (parser)=> parser.text('at 6:05 am every weekday'),
   job: ()=> runLoop(countDoneBatchTarget, 'doneBatchLiteMonths', 'month')
 });
 SyncedCron.add({
   name: 'Daily Done Target By Week',
-  schedule: (parser)=> parser.text('at 6:04 am every weekday'),
+  schedule: (parser)=> parser.text('at 6:06 am every weekday'),
   job: ()=> runLoop(countDoneBatchTarget, 'doneBatchLiteWeeks', 'week')
 });
 
 SyncedCron.add({
   name: 'Daily Done Units By Month',
-  schedule: (parser)=> parser.text('at 6:05 am every weekday'),
+  schedule: (parser)=> parser.text('at 6:07 am every weekday'),
   job: ()=> runLoop(countDoneUnits, 'doneUnitLiteMonths', 'month')
 });
 SyncedCron.add({
   name: 'Daily Done Units By Week',
-  schedule: (parser)=> parser.text('at 6:06 am every weekday'),
+  schedule: (parser)=> parser.text('at 6:08 am every weekday'),
   job: ()=> runLoop(countDoneUnits, 'doneUnitLiteWeeks', 'week')
 });
-
-// SyncedCron.add({ // Not required as not using TurnAround in agregate
-//   name: 'Weekly Update Turn Around',
-//   schedule: (parser)=> parser.text('at 6:07 am on Sat'),
-//   job: ()=> goDo('allWidgetTurnAround')
-// });
 
 SyncedCron.start();
   

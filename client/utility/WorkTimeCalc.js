@@ -93,9 +93,10 @@ export function TimeInDay( nonWorkDays, dayStart ) {
 }
 
 export function UserTime( userObj, dateTime, span, spanHours ) {
+  const validate = moment.isDate(dateTime) || moment.isMoment(dateTime);
   
   const userProTime = userObj.proTimeShare || false;
-  const relProTime = !userProTime ? false : 
+  const relProTime = !userProTime || !validate ? false : 
           userProTime.find( x => moment(x.updatedAt).isSameOrBefore(dateTime, span) );
   
   const proTime = !relProTime ? 1 : relProTime.timeAsDecimal;

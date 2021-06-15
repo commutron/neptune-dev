@@ -1,4 +1,5 @@
 import moment from 'moment';
+import 'moment-timezone';
 import 'moment-business-time';
 
 import { avgOfArray, percentOf, diffTrend } from '/server/calcOps';
@@ -165,6 +166,38 @@ Meteor.methods({
         dataTrend: trend
     }});
   },
+  
+  estBatchTurnAround(bID, wID) {
+    this.unblock();
+    const now = moment().tz(Config.clientTZ);
+    
+    const batch = XBatchDB.findOne({ _id: bID },{fields:{'salesStart':1}});
+    const salesMnt = moment(batch.salesStart).tz(Config.clientTZ);
+    
+    const widget = WidgetDB.findOne({ _id: wID },{fields:{'turnStats':1}});
+    const turnStats = widget.turnStats || null;
+    
+    if(turnStats) {
+      const trn = turnStats.stats;
+      
+      const relEst = salesMnt.clone().addWorkingTime(trn.relAvg, 'days');
+      const relDif = relEst.workingDiff(now, 'days');
+      
+      const wrkEst = salesMnt.clone().addWorkingTime(trn.stAvg, 'days');
+      const wrkDif = wrkEst.workingDiff(now, 'days');
+      
+      const finEst = salesMnt.clone().addWorkingTime(trn.compAvg, 'days');
+      const finDif = finEst.workingDiff(now, 'days');
+      
+      return [ 
+        relEst.format(), relDif,
+        wrkEst.format(), wrkDif,
+        finEst.format(), finDif
+      ];
+    }else{
+      return 'na';
+    }
+  }
 
 
 });
