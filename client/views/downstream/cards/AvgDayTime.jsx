@@ -27,8 +27,6 @@ const AvgDay = ({ traceDT, app, isNightly })=> {
       <h3>average daily completed {Pref.items}</h3>
       <AvgStat num={stat.avgItem[0]} trend={stat.avgItem[1]} type={Pref.items} />
       <hr />
-      <h3>average time logged from 0% to 50% {Pref.items} completed</h3>
-      <AvgStat num={stat.avgShar[0]+'%'} trend={false} type='' />
     </div>
   );
 };

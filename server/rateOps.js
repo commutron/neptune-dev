@@ -4,20 +4,22 @@ import timezone from 'moment-timezone';
 
 import Config from '/server/hardConfig.js';
 
-import { flattenHistory, countMulti } from './utility';
+import { flattenHistory, countMulti, countWaterfall } from './utility';
+import { percentOf } from './calcOps';
 
 Meteor.methods({
 
     /////////////////////////////////////////////////////////
    // Layered History Rate ////////////////////////////////
   ////////////////////////////////////////////////////////
-  layeredHistoryRate(seriesId, start, end, riverFlow) {
+  layeredHistoryRate(batchId, seriesId, start, end, riverFlow) {
     this.unblock();
+    const b = XBatchDB.findOne({_id: batchId});
     const srs = XSeriesDB.findOne({_id: seriesId});
 
     let now = moment().tz(Config.clientTZ);
     
-    const endDay = end == true ? 
+    const endDay = end === true ? 
       moment(end).endOf('day').add(2, 'd') : 
       now.clone().endOf('day').add(1, 'd');
     const startDay = moment(start).tz(Config.clientTZ).endOf('day');
@@ -28,11 +30,22 @@ Meteor.methods({
                       y => y.key === flowKey && y.good === true &&
                        moment(y.time).isSameOrBefore(day)
                     ).length;
-      const remain = totalItems - pings;
+      const remain = percentOf( totalItems, ( totalItems - pings ) );
       return remain;
     }
+    function fallPings(fall, totalQ, day) {
+      const pings = fall.counts.filter( y => moment(y.time).isSameOrBefore(day) );
+      const pingcount = countWaterfall(pings);
+      if(fall.action === 'slider') {
+        const remain = 100 - pingcount;
+        return remain;
+      }else{
+        const remain = percentOf( totalQ, ( totalQ - pingcount ) );
+        return remain;
+      }
+    }
     
-    function loopDays(historyFlat, totalItems, startDay, howManyDays, flowKey) {
+    function loopDays(historyFlat, totalItems, startDay, howManyDays, flowKey, waterfall, totalQ) {
       let historyRemainOverTime = [];
       
       for(let i = 0; i < howManyDays; i++) {
@@ -50,33 +63,57 @@ Meteor.methods({
       }
       return historyRemainOverTime;
     }
+    function loopFallDays(waterfall, totalQ, startDay, howManyDays) {
+      let fallRemainOverTime = [];
       
+      for(let i = 0; i < howManyDays; i++) {
+        const day = startDay.clone().add(i, 'day');
+        
+        if(day.isWorkingDay()) {
+          const fallRemain = fallPings(waterfall, totalQ, day);
+          fallRemainOverTime.push({
+            x: new Date( day.format() ),
+            y: fallRemain,
+          });
+        }
+      }
+      return fallRemainOverTime;
+    }
+    
+    let burnSeries = [];
+    
     if(srs) {
       const flowKeys = Array.from( 
                         riverFlow.filter( x => x.type !== 'first'), 
                           x => x.key );
   
       const items = srs.items.filter( x => !x.scrapped );
-
       const totalItems = items.length;
     
       const historyFlat = flattenHistory(items);
       
-      let flowSeries = [];
       for(let flowKey of flowKeys) {
         const dayCounts = loopDays(historyFlat, totalItems, startDay, howManyDays, flowKey);
-        flowSeries.push({
+        burnSeries.push({
           name: flowKey,
           data: dayCounts
         });
       }
-      
-      return flowSeries;
-    }else{
-      return [];
     }
+    
+    const totalQ = b.quantity;
+
+    for(let fall of b.waterfall) {
+      const dayCounts = loopFallDays(fall, totalQ, startDay, howManyDays);
+      burnSeries.push({
+        name: fall.gate,
+        data: dayCounts
+      });
+    }
+      
+    return burnSeries;
+
   },
-  
   
    ///////////////////////////
   // nonCon Rate ////////////

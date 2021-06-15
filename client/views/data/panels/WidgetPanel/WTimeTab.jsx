@@ -31,15 +31,15 @@ const WTimeTab = ({
       <table className='wide'><thead>
         <tr className='cap'>
           <th>Sales Start → {Pref.kitting} Release</th>
-          <th>Sales Start → First Timer Start</th>
-          {/*<th>Sales Start → Sales End</th>*/}
+          <th>Sales Start → Production Start</th>
+          {/*<th>Sales Start → First Completed Item</th>*/}
           <th>Sales Start → Complete</th>
         </tr>
       </thead><tbody>
         <tr className='centreText'>
           <td>{ result['relAvg'] && `${round1Decimal(result['relAvg'])} days`}</td>
           <td>{ result['stAvg'] && `${round1Decimal(result['stAvg'])} days`}</td>
-          {/*<td>{ result['endAvg'] && `${round1Decimal(result['endAvg'])} days`}</td>*/}
+          {/*<td>{ result['ffinAvg'] && `${round1Decimal(result['ffinAvg'])} days`}</td>*/}
           <td>{ result['compAvg'] && `${round1Decimal(result['compAvg'])} days`}</td>
         </tr>
       </tbody></table>

@@ -1,38 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { VictoryChart, VictoryAxis, VictoryArea } from 'victory';
 import Theme from '/client/global/themeV.js';
 
 import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
 
 const ProgLayerBurndown = ({ 
-  seriesId, batchNum, start, floorRelease, end, riverFlow, 
+  batchId, seriesId, batchNum, start, floorRelease, end, riverFlow, 
   itemData, title, isDebug
 })=> {
   
-  const [ countState, countSet ] = useState( false );
-  const [ firstState, firstSet ] = useState( false );
+  const mounted = useRef(true);
   
+  useEffect(() => { return () => { mounted.current = false; }; }, []);
+  
+  const [ countState, countSet ] = useState( false );
+ 
   useEffect( ()=> {
-    // Meteor.call('firstFirst', seriesId, (error, reply)=> {
-    //   error && console.log(error);
-    //   reply && firstSet( reply );
-    // });
-    Meteor.call('layeredHistoryRate', seriesId, start, end, riverFlow, 
+    Meteor.call('layeredHistoryRate', batchId, seriesId, start, end, riverFlow, 
     (error, reply)=> {
       error && console.log(error);
-      reply && countSet( reply );
+      reply && mounted.current ? countSet( reply ) : null;
     });
   }, []);
   
     
   isDebug && console.log(countState);
   
-  if(!countState /*|| !firstState*/) {
-    return(
-      <CalcSpin />
-    );
+  if(!countState) {
+    return <CalcSpin />;
   }
-   
     
   return(
     <span className='burndownFill centre'>
@@ -101,7 +97,7 @@ export const ProgLayerBurndownExplain = ()=>(
   <details className='footnotes'>
     <summary>Chart Details</summary>
     <p className='footnote'>
-      The X axis is the number of serialized items remaining.
+      The X axis is the percentage of counters and serialized items remaining.
     </p>
     <p className='footnote'>
       The Y axis starts with the batch creation date and ends with 

@@ -50,6 +50,7 @@ const TimeTab = ({
     
       <div className='dropCeiling vmargin space'>
         <ProgLayerBurndown
+          batchId={batchData._id}
           seriesId={seriesData._id}
           start={batchData.salesStart}
           floorRelease={floorRelease}
@@ -60,10 +61,12 @@ const TimeTab = ({
           isDebug={isDebug} />
               
         <ProgLayerBurndownExplain />
+
       </div>
       
       <TimeNextChunk
         batchData={batchData}
+        seriesData={seriesData}
         widgetData={widgetData}
         floorRelease={floorRelease}
         done={done}

@@ -312,10 +312,7 @@ input::-webkit-calendar-picker-indicator {
 /*.low { text-transform: lowercase; }*/
 
 .bold { font-weight: 600; }
-n-sm-b {
-  font-weight: 600;
-  letter-spacing: 1px;
-}
+
 .letterSpaced { letter-spacing: 2px; }
 
 .strike { text-decoration: line-through; }

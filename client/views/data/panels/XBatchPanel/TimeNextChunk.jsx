@@ -3,21 +3,21 @@ import moment from 'moment';
 import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
 
 const TimeNextChunk = ({
-  batchData, widgetData,
+  batchData, seriesData, widgetData,
   floorRelease, done, app
 })=> {
   
-  const [ est, estSet] = useState(null);
+  const [ est, estSet] = useState(false);
 
   useEffect( ()=>{
     Meteor.call('estBatchTurnAround', batchData._id, widgetData._id, (err, re)=>{
       err && console.log(err);
-      estSet(re);
-      // [ relEst, relDif, wrkEst, wrkDif, finEst, finDif ]
+      re && estSet(re);
+      // [ relEst, relDif, wrkEst, wrkDif, finEst, finDif, cmpEst, cmpDif]
     });
   }, []);
   
-  if(est === null) {
+  if(est === false) {
     return <CalcSpin />;
   }
   
@@ -27,24 +27,44 @@ const TimeNextChunk = ({
     );
   }
   
-  const toDay = (t)=> moment(t).format('ddd MMMM Do YYYY');
+  const toDay = (t)=> moment(t).format('dddd MMMM Do YYYY');
+  const toDur = (d)=> d > 0 ? ` (in ${d} workdays)` : ` (${Math.abs(d)} workdays ago)`;
   
   const flrRel = floorRelease ? floorRelease.time : false;
   
   const stTide = batchData.tide.length > 0  ? batchData.tide[0].startTime : false;
   
-  const finfin = batchData.completed ? batchData.completedAt : false;
-  
+  const fitems = seriesData ? seriesData.items.filter( i => i.completed ) : [];
+  const itemS = fitems.sort( (i1, i2)=>
+    i1.completedAt < i2.completedAt ? -1 : i1.completedAt > i2.completedAt ? 1 : 0 );
+  const fin = itemS.length > 0 ? itemS[0].completedAt : false; 
+   
+  const comp = batchData.completed ? batchData.completedAt : false;
   
   return(
-    <div>
-      <p>Release: {flrRel && toDay(flrRel)} / {toDay(est[0])} / in {est[1]} days</p>
+    <div className='space'>
+      <h3>Estimated Benchmarks</h3>
       
-      <p>Start Tide: {stTide && toDay(stTide)} / {toDay(est[2])} / in {est[3]} days</p>
+      <p>
+        Release: {toDay(est[0])}
+        <n-sm>{flrRel ? ` (Real: ${toDay(flrRel)})` : toDur(est[1])}</n-sm>
+      </p>
       
-      <p>Complete: {finfin && toDay(finfin)} / {toDay(est[4])} / in {est[5]} days</p>
-    
-              
+      <p>
+        Production Start: {toDay(est[2])}
+        <n-sm>{stTide ? ` (Real: ${toDay(stTide)})` : toDur(est[3])}</n-sm>
+      </p>
+      
+      <p>
+        First Completed Item: {toDay(est[4])}
+        <n-sm>{fin ? ` (Real: ${toDay(fin)})` : toDur(est[5])}</n-sm>
+      </p>
+      
+      <p>
+        All Completed: {toDay(est[6])}
+        <n-sm>{comp ? ` (Real: ${toDay(comp)})` : toDur(est[7])}</n-sm>
+      </p>
+      
     </div>
   );
 };

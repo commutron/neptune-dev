@@ -861,12 +861,18 @@ n-sm-model-content {
   border-bottom: 5vh solid var(--clouds);
 }
 
-.smaller { font-size: smaller; }
-.small { font-size: small; }
+.smaller { font-size: 0.7rem; }
+.small { font-size: 0.8rem; }
 .smTxt { font-size: 0.9rem; }
 n-sm { 
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   line-height: 1;
+  letter-spacing: 0.5px;
+}
+n-sm-b {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
 .med { font-size: 1rem; }
