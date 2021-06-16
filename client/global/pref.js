@@ -52,7 +52,7 @@ class Pref {
     this.timeAfterGrace = 48; // keep the tideControl unlocked for how many hours
     this.seriesLimit = 5000;
     this.unitLimit = 1000;
-    this.clusterMin = 3; // noncon sets
+    this.clusterMin = 2; // noncon sets
     
     this.regex5 = RegExp(/^(\d{5})$/); // batch number
     

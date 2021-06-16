@@ -2,8 +2,9 @@ import moment from 'moment';
 import 'moment-timezone';
 import 'moment-business-time';
 
-import { avgOfArray } from '/server/calcOps';
+import { avgOfArray, percentOf } from '/server/calcOps';
 import Config from '/server/hardConfig.js';
+import { noIg } from './utility';
 
 moment.updateLocale('en', {
   workinghours: Config.workingHours,
@@ -94,6 +95,39 @@ function getWidgetDur(widget) {
   }
 }
 
+function splitItmTm( items, tide, perBaseTen ) {
+  const fitems = items.filter( i => i.completed );
+  const etide = tide.filter( t => t.stopTime !== false);
+  
+  const durrs = Array.from(etide, x => 
+                  moment.duration(moment(x.stopTime).diff(x.startTime)).asMinutes());
+  const total = durrs.length > 0 ? durrs.reduce((x,y)=> x + y) : 0;
+    
+  if(fitems.length > 0 && tide && tide.length > 0) {
+    const itemS = fitems.sort( (i1, i2)=>
+      i1.completedAt < i2.completedAt ? -1 : i1.completedAt > i2.completedAt ? 1 : 0 );
+    
+    const itemCut = Math.floor( ( itemS.length / 100 ) * perBaseTen );
+    const cutItem = itemS[itemCut];
+    const cutMmnt = moment(cutItem.completedAt);
+    
+    let lTide = 0;
+
+    for( let en of etide ) {
+      if( cutMmnt.isBetween(en.startTime, en.stopTime ) ) {
+        lTide += ( Math.abs( moment.duration(cutMmnt.diff(en.startTime)).asMinutes() ) );  
+      }else if( cutMmnt.isAfter(en.stopTime) ) {
+        lTide += ( Math.abs( moment.duration(moment(en.stopTime).diff(en.startTime)).asMinutes() ) );
+      }
+    }
+    
+    const lpercent = percentOf(total, lTide);
+    
+    return lpercent;
+  }else{
+    return 0;
+  }
+}
 
 Meteor.methods({
   
@@ -147,7 +181,48 @@ Meteor.methods({
       return 'na';
     }
     
-  }
-
+  },
+  
+  updateAvgTimeShare(accessKey) {
+    this.unblock();
+  
+    let onePerArr = [];
+    let tenPerArr = [];
+    let fftyPerArr = [];
+    let svtyfvPerArr = [];
+    let ntyPerArr = [];
+    
+    const xid = noIg();
+    const compB = XBatchDB.find({live: false, groupId: { $ne: xid }});
+    
+    for( let b of compB ) {
+      const srs = XSeriesDB.findOne({batch: b.batch});
+      const items = srs ? srs.items : [];
+      const tide = b.tide;
+      
+      onePerArr.push( splitItmTm(items, tide, 1) );
+      tenPerArr.push( splitItmTm(items, tide, 10) );
+      fftyPerArr.push( splitItmTm(items, tide, 50) );
+      svtyfvPerArr.push( splitItmTm(items, tide, 75) );
+      ntyPerArr.push( splitItmTm(items, tide, 90) );
+    }
+    
+    const dataAvgs = [
+      avgOfArray( onePerArr ),
+      avgOfArray( tenPerArr ),
+      avgOfArray( fftyPerArr ),
+      avgOfArray( svtyfvPerArr ),
+      avgOfArray( ntyPerArr )
+    ];
+    
+    CacheDB.upsert({dataName: 'avgTimeShare'}, {
+      $set : {
+        orgKey: accessKey,
+        lastUpdated: new Date(),
+        dataName: 'avgTimeShare',
+        dataNum: dataAvgs,
+        dataTrend: 'flat'
+    }});
+  },
 
 });
