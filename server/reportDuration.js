@@ -198,7 +198,7 @@ Meteor.methods({
     for( let b of compB ) {
       const srs = XSeriesDB.findOne({batch: b.batch});
       const items = srs ? srs.items : [];
-      const tide = b.tide;
+      const tide = b.tide ? b.tide : [];
       
       onePerArr.push( splitItmTm(items, tide, 1) );
       tenPerArr.push( splitItmTm(items, tide, 10) );
@@ -206,6 +206,13 @@ Meteor.methods({
       svtyfvPerArr.push( splitItmTm(items, tide, 75) );
       ntyPerArr.push( splitItmTm(items, tide, 90) );
     }
+    
+    /*
+      Number( Math.log(Number(0.95)) / Math.log(Number(0.75)) ).toFixed(2)
+      "0.18"
+      Number( Math.pow(0.75, 0.18) ).toFixed(2)
+      "0.95"
+    */
     
     const dataAvgs = [
       avgOfArray( onePerArr ),
