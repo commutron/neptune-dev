@@ -37,16 +37,20 @@ const AvgDay = ({ traceDT, app, isNightly })=> {
           <AvgStat num={stat.avgShar[0][1]+'%'} type='' />
           
           <hr />
-          <h3>avg time for 50% {Pref.items} completed</h3>
+          <h3>avg time for 25% {Pref.items} completed</h3>
           <AvgStat num={stat.avgShar[0][2]+'%'} type='' />
           
           <hr />
-          <h3>avg time for 75% {Pref.items} completed</h3>
+          <h3>avg time for 50% {Pref.items} completed</h3>
           <AvgStat num={stat.avgShar[0][3]+'%'} type='' />
           
           <hr />
-          <h3>avg time for 90% {Pref.items} completed</h3>
+          <h3>avg time for 75% {Pref.items} completed</h3>
           <AvgStat num={stat.avgShar[0][4]+'%'} type='' />
+          
+          <hr />
+          <h3>avg time for 90% {Pref.items} completed</h3>
+          <AvgStat num={stat.avgShar[0][5]+'%'} type='' />
         </div>
       : null}
       

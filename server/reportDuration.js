@@ -141,9 +141,6 @@ function splitItemTime(itemS, tailTime, tailTide, perBaseTen ) {
   const cutItem = itemS[itemCut];
   const cutMmnt = moment(cutItem.completedAt);
   
-  const itemTotal = itemS.slice(0, itemCut).length;
-  const iT = itemTotal > 0 ? itemTotal : 1;
-  
   let iTime = 0;
 
   for( let tt of tailTide ) {
@@ -154,7 +151,7 @@ function splitItemTime(itemS, tailTime, tailTide, perBaseTen ) {
     }
   }
   
-  const ipercent = percentOf(tailTime, iTime) / iT;
+  const ipercent = percentOf(tailTime, iTime);
   
   return ipercent;
 }
@@ -218,6 +215,7 @@ Meteor.methods({
   
     let onePerArr = [];
     let tenPerArr = [];
+    let twtyfvPerArr = [];
     let fftyPerArr = [];
     let svtyfvPerArr = [];
     let ntyPerArr = [];
@@ -235,6 +233,7 @@ Meteor.methods({
       if(tSplit) {
         onePerArr.push( splitItemTime(tSplit.itemS, tSplit.tailTime, tSplit.tailTide, 1) );
         tenPerArr.push( splitItemTime(tSplit.itemS, tSplit.tailTime, tSplit.tailTide, 10) );
+        twtyfvPerArr.push( splitItemTime(tSplit.itemS, tSplit.tailTime, tSplit.tailTide, 25) );
         fftyPerArr.push( splitItemTime(tSplit.itemS, tSplit.tailTime, tSplit.tailTide, 50) );
         svtyfvPerArr.push( splitItemTime(tSplit.itemS, tSplit.tailTime, tSplit.tailTide, 75) );
         ntyPerArr.push( splitItemTime(tSplit.itemS, tSplit.tailTime, tSplit.tailTide, 90) );
@@ -264,6 +263,7 @@ Meteor.methods({
     const dataAvgs = [
       avgOfArray( onePerArr ),
       avgOfArray( tenPerArr ),
+      avgOfArray( twtyfvPerArr ),
       avgOfArray( fftyPerArr ),
       avgOfArray( svtyfvPerArr ),
       avgOfArray( ntyPerArr )
