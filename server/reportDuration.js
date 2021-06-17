@@ -95,38 +95,68 @@ function getWidgetDur(widget) {
   }
 }
 
-function splitItmTm( items, tide, perBaseTen ) {
-  const fitems = items.filter( i => i.completed );
+function splitTideTime( items, tide ) {
   const etide = tide.filter( t => t.stopTime !== false);
   
-  const durrs = Array.from(etide, x => 
-                  moment.duration(moment(x.stopTime).diff(x.startTime)).asMinutes());
-  const total = durrs.length > 0 ? durrs.reduce((x,y)=> x + y) : 0;
+  const fitems = items.filter( i => i.completed );
+  const itemS = fitems.sort( (i1, i2)=>
+    i1.completedAt < i2.completedAt ? -1 : i1.completedAt > i2.completedAt ? 1 : 0 );
+  
+  const firstComplete = itemS.length > 0 ? itemS[0] : false;
+  
+  if(firstComplete && tide && tide.length > 0) {
+    const ftime = moment(firstComplete.completedAt);
     
-  if(fitems.length > 0 && tide && tide.length > 0) {
-    const itemS = fitems.sort( (i1, i2)=>
-      i1.completedAt < i2.completedAt ? -1 : i1.completedAt > i2.completedAt ? 1 : 0 );
+    let leadTime = 0;
+    let tailTime = 0;
+    let tailTide = [];
     
-    const itemCut = Math.floor( ( itemS.length / 100 ) * perBaseTen );
-    const cutItem = itemS[itemCut];
-    const cutMmnt = moment(cutItem.completedAt);
-    
-    let lTide = 0;
-
     for( let en of etide ) {
-      if( cutMmnt.isBetween(en.startTime, en.stopTime ) ) {
-        lTide += ( Math.abs( moment.duration(cutMmnt.diff(en.startTime)).asMinutes() ) );  
-      }else if( cutMmnt.isAfter(en.stopTime) ) {
-        lTide += ( Math.abs( moment.duration(moment(en.stopTime).diff(en.startTime)).asMinutes() ) );
+      if( ftime.isBetween(en.startTime, en.stopTime ) ) {
+        leadTime += ( Math.abs( moment.duration(ftime.diff(en.startTime)).asMinutes() ) ); 
+        tailTime += ( Math.abs( moment.duration(ftime.diff(en.stopTime)).asMinutes() ) );
+        tailTide.push( en ); 
+      }else if( ftime.isAfter(en.stopTime) ) {
+        leadTime += ( Math.abs( moment.duration(moment(en.stopTime).diff(en.startTime)).asMinutes() ) );
+      }else{
+        tailTime += ( Math.abs( moment.duration(moment(en.stopTime).diff(en.startTime)).asMinutes() ) );
+        tailTide.push( en ); 
       }
     }
     
-    const lpercent = percentOf(total, lTide);
-    
-    return lpercent;
+    return {
+      itemS: itemS,
+      leadTime: leadTime,
+      tailTime: tailTime,
+      tailTide: tailTide
+    };
   }else{
-    return 0;
+    return false;
   }
+}
+
+function splitItemTime(itemS, tailTime, tailTide, perBaseTen ) {
+  
+  const itemCut = Math.floor( ( itemS.length / 100 ) * perBaseTen );
+  const cutItem = itemS[itemCut];
+  const cutMmnt = moment(cutItem.completedAt);
+  
+  const itemTotal = itemS.slice(0, itemCut).length;
+  const iT = itemTotal > 0 ? itemTotal : 1;
+  
+  let iTime = 0;
+
+  for( let tt of tailTide ) {
+    if( cutMmnt.isBetween(tt.startTime, tt.stopTime ) ) {
+      iTime += ( Math.abs( moment.duration(cutMmnt.diff(tt.startTime)).asMinutes() ) );  
+    }else if( cutMmnt.isAfter(tt.stopTime) ) {
+      iTime += ( Math.abs( moment.duration(moment(tt.stopTime).diff(tt.startTime)).asMinutes() ) );
+    }
+  }
+  
+  const ipercent = percentOf(tailTime, iTime) / iT;
+  
+  return ipercent;
 }
 
 Meteor.methods({
@@ -200,11 +230,15 @@ Meteor.methods({
       const items = srs ? srs.items : [];
       const tide = b.tide ? b.tide : [];
       
-      onePerArr.push( splitItmTm(items, tide, 1) );
-      tenPerArr.push( splitItmTm(items, tide, 10) );
-      fftyPerArr.push( splitItmTm(items, tide, 50) );
-      svtyfvPerArr.push( splitItmTm(items, tide, 75) );
-      ntyPerArr.push( splitItmTm(items, tide, 90) );
+      const tSplit = splitTideTime( items, tide );
+      
+      if(tSplit) {
+        onePerArr.push( splitItemTime(tSplit.itemS, tSplit.tailTime, tSplit.tailTide, 1) );
+        tenPerArr.push( splitItemTime(tSplit.itemS, tSplit.tailTime, tSplit.tailTide, 10) );
+        fftyPerArr.push( splitItemTime(tSplit.itemS, tSplit.tailTime, tSplit.tailTide, 50) );
+        svtyfvPerArr.push( splitItemTime(tSplit.itemS, tSplit.tailTime, tSplit.tailTide, 75) );
+        ntyPerArr.push( splitItemTime(tSplit.itemS, tSplit.tailTime, tSplit.tailTide, 90) );
+      }
     }
     
     /*
@@ -212,6 +246,19 @@ Meteor.methods({
       "0.18"
       Number( Math.pow(0.75, 0.18) ).toFixed(2)
       "0.95"
+      
+      ///////////////////
+      
+      Number( Math.log(Number(0.80)) / Math.log(Number(0.01)) ).toFixed(2)
+      "0.05"
+      Number( Math.log(Number(0.84)) / Math.log(Number(0.10)) ).toFixed(2)
+      "0.08"
+      Number( Math.log(Number(0.92)) / Math.log(Number(0.50)) ).toFixed(2)
+      "0.12"
+      Number( Math.log(Number(0.95)) / Math.log(Number(0.75)) ).toFixed(2)
+      "0.18"
+      Number( Math.log(Number(0.97)) / Math.log(Number(0.90)) ).toFixed(2)
+      "0.29"
     */
     
     const dataAvgs = [
