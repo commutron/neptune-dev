@@ -105,6 +105,7 @@ function splitTideTime( items, tide ) {
   const firstComplete = itemS.length > 0 ? itemS[0] : false;
   
   if(firstComplete && tide && tide.length > 0) {
+    /*
     const ftime = moment(firstComplete.completedAt);
     
     let leadTime = 0;
@@ -122,13 +123,18 @@ function splitTideTime( items, tide ) {
         tailTime += ( Math.abs( moment.duration(moment(en.stopTime).diff(en.startTime)).asMinutes() ) );
         tailTide.push( en ); 
       }
-    }
+    }*/
+    
+    const durrs = Array.from(etide, x => 
+                  moment.duration(moment(x.stopTime).diff(x.startTime)).asMinutes());
+    const total = durrs.length > 0 ? durrs.reduce((x,y)=> x + y) : 0;
+
     
     return {
       itemS: itemS,
-      leadTime: leadTime,
-      tailTime: tailTime,
-      tailTide: tailTide
+      leadTime: 0,
+      tailTime: total,
+      tailTide: etide
     };
   }else{
     return false;
@@ -241,23 +247,11 @@ Meteor.methods({
     }
     
     /*
-      Number( Math.log(Number(0.95)) / Math.log(Number(0.75)) ).toFixed(2)
-      "0.18"
-      Number( Math.pow(0.75, 0.18) ).toFixed(2)
-      "0.95"
+    // without leadtime
+      x = %_of_completed
+      %_of_time_used = 16.1430735 + (1.261328591 * x ) + ( -0.00415922376 * Math.pow(x, 2) )
       
-      ///////////////////
       
-      Number( Math.log(Number(0.80)) / Math.log(Number(0.01)) ).toFixed(2)
-      "0.05"
-      Number( Math.log(Number(0.84)) / Math.log(Number(0.10)) ).toFixed(2)
-      "0.08"
-      Number( Math.log(Number(0.92)) / Math.log(Number(0.50)) ).toFixed(2)
-      "0.12"
-      Number( Math.log(Number(0.95)) / Math.log(Number(0.75)) ).toFixed(2)
-      "0.18"
-      Number( Math.log(Number(0.97)) / Math.log(Number(0.90)) ).toFixed(2)
-      "0.29"
     */
     
     const dataAvgs = [
