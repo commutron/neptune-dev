@@ -12,7 +12,6 @@ Meteor.methods({
 
     Meteor.call('fetchWeekAvgTime', privateKey);
     Meteor.call('fetchWeekAvgSerial', privateKey);
-    Meteor.call('updateAvgTimeShare', privateKey);
     return true;
   },
   
@@ -21,7 +20,6 @@ Meteor.methods({
     return {
       avgTime : smplresult('avgDayTime', accessKey),
       avgItem : smplresult('avgDayItemFin', accessKey),
-      avgShar : smplresult('avgTimeShare', accessKey)
     };
   },
   

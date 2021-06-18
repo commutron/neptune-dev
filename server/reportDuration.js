@@ -2,7 +2,7 @@ import moment from 'moment';
 import 'moment-timezone';
 import 'moment-business-time';
 
-import { avgOfArray, percentOf } from '/server/calcOps';
+import { avgOfArray, percentOf, QuadRegression } from '/server/calcOps';
 import Config from '/server/hardConfig.js';
 import { noIg } from './utility';
 
@@ -65,7 +65,7 @@ function getWidgetDur(widget) {
       
     const compX = XBatchDB.find({widgetId: widget._id, completed: true}).fetch();
     for( let x of compX ) {
-      const srs = XSeriesDB.findOne({_id: x._id});
+      const srs = XSeriesDB.findOne({batch: x.batch});
       const items = srs ? srs.items : [];
       
       relAvg.push( toRelDiff(x.salesStart, x.releases) );
@@ -102,64 +102,40 @@ function splitTideTime( items, tide ) {
   const itemS = fitems.sort( (i1, i2)=>
     i1.completedAt < i2.completedAt ? -1 : i1.completedAt > i2.completedAt ? 1 : 0 );
   
-  const firstComplete = itemS.length > 0 ? itemS[0] : false;
-  
-  if(firstComplete && tide && tide.length > 0) {
-    /*
-    const ftime = moment(firstComplete.completedAt);
-    
-    let leadTime = 0;
-    let tailTime = 0;
-    let tailTide = [];
-    
-    for( let en of etide ) {
-      if( ftime.isBetween(en.startTime, en.stopTime ) ) {
-        leadTime += ( Math.abs( moment.duration(ftime.diff(en.startTime)).asMinutes() ) ); 
-        tailTime += ( Math.abs( moment.duration(ftime.diff(en.stopTime)).asMinutes() ) );
-        tailTide.push( en ); 
-      }else if( ftime.isAfter(en.stopTime) ) {
-        leadTime += ( Math.abs( moment.duration(moment(en.stopTime).diff(en.startTime)).asMinutes() ) );
-      }else{
-        tailTime += ( Math.abs( moment.duration(moment(en.stopTime).diff(en.startTime)).asMinutes() ) );
-        tailTide.push( en ); 
-      }
-    }*/
-    
-    const durrs = Array.from(etide, x => 
+  const durrs = Array.from(etide, x => 
                   moment.duration(moment(x.stopTime).diff(x.startTime)).asMinutes());
-    const total = durrs.length > 0 ? durrs.reduce((x,y)=> x + y) : 0;
+  const total = durrs.length > 0 ? durrs.reduce((x,y)=> x + y) : 0;
 
-    
-    return {
-      itemS: itemS,
-      leadTime: 0,
-      tailTime: total,
-      tailTide: etide
-    };
-  }else{
-    return false;
-  }
+  return {
+    itemS: itemS,
+    total: total,
+    tide: etide
+  };
 }
 
-function splitItemTime(itemS, tailTime, tailTide, perBaseTen ) {
+function splitItemTime(itemS, total, tide, perBaseTen ) {
   
-  const itemCut = Math.floor( ( itemS.length / 100 ) * perBaseTen );
-  const cutItem = itemS[itemCut];
-  const cutMmnt = moment(cutItem.completedAt);
+  if(itemS.length > 0) {
+    const itemCut = Math.floor( ( itemS.length / 100 ) * perBaseTen );
+    const cutItem = itemS[itemCut];
+    const cutMmnt = moment(cutItem.completedAt);
+    
+    let iTime = 0;
   
-  let iTime = 0;
-
-  for( let tt of tailTide ) {
-    if( cutMmnt.isBetween(tt.startTime, tt.stopTime ) ) {
-      iTime += ( Math.abs( moment.duration(cutMmnt.diff(tt.startTime)).asMinutes() ) );  
-    }else if( cutMmnt.isAfter(tt.stopTime) ) {
-      iTime += ( Math.abs( moment.duration(moment(tt.stopTime).diff(tt.startTime)).asMinutes() ) );
+    for( let tt of tide ) {
+      if( cutMmnt.isBetween(tt.startTime, tt.stopTime ) ) {
+        iTime += ( Math.abs( moment.duration(cutMmnt.diff(tt.startTime)).asMinutes() ) );  
+      }else if( cutMmnt.isAfter(tt.stopTime) ) {
+        iTime += ( Math.abs( moment.duration(moment(tt.stopTime).diff(tt.startTime)).asMinutes() ) );
+      }
     }
+    
+    const ipercent = percentOf(total, iTime);
+    
+    return ipercent;
+  }else{
+    return 0;
   }
-  
-  const ipercent = percentOf(tailTime, iTime);
-  
-  return ipercent;
 }
 
 Meteor.methods({
@@ -189,20 +165,20 @@ Meteor.methods({
       
       const rel = Math.round( trn.relAvg );
       const relEst = salesMnt.clone().addWorkingTime(rel, 'days');
-      const relDif = relEst.workingDiff(now, 'days');
+      const relDif = relEst.workingDiff(now, 'days', true);
       
       const wrk = Math.round( trn.stAvg );
       const wrkEst = salesMnt.clone().addWorkingTime(wrk, 'days');
-      const wrkDif = wrkEst.workingDiff(now, 'days');
+      const wrkDif = wrkEst.workingDiff(now, 'days', true);
       
       const ffinAvg = trn.ffinAvg;
       const fin = ffinAvg ? Math.round( ffinAvg ) : 0;
       const finEst = salesMnt.clone().addWorkingTime(fin, 'days');
-      const finDif = finEst.workingDiff(now, 'days');
+      const finDif = finEst.workingDiff(now, 'days', true);
       
       const cmp = Math.round( trn.compAvg );
       const cmpEst = salesMnt.clone().addWorkingTime(cmp, 'days');
-      const cmpDif = cmpEst.workingDiff(now, 'days');
+      const cmpDif = cmpEst.workingDiff(now, 'days', true);
       
       return [ 
         relEst.format(), relDif,
@@ -216,9 +192,9 @@ Meteor.methods({
     
   },
   
-  updateAvgTimeShare(accessKey) {
+  getAvgTimeShare() {
     this.unblock();
-  
+    
     let onePerArr = [];
     let tenPerArr = [];
     let twtyfvPerArr = [];
@@ -237,24 +213,16 @@ Meteor.methods({
       const tSplit = splitTideTime( items, tide );
       
       if(tSplit) {
-        onePerArr.push( splitItemTime(tSplit.itemS, tSplit.tailTime, tSplit.tailTide, 1) );
-        tenPerArr.push( splitItemTime(tSplit.itemS, tSplit.tailTime, tSplit.tailTide, 10) );
-        twtyfvPerArr.push( splitItemTime(tSplit.itemS, tSplit.tailTime, tSplit.tailTide, 25) );
-        fftyPerArr.push( splitItemTime(tSplit.itemS, tSplit.tailTime, tSplit.tailTide, 50) );
-        svtyfvPerArr.push( splitItemTime(tSplit.itemS, tSplit.tailTime, tSplit.tailTide, 75) );
-        ntyPerArr.push( splitItemTime(tSplit.itemS, tSplit.tailTime, tSplit.tailTide, 90) );
+        onePerArr.push( splitItemTime(tSplit.itemS, tSplit.total, tSplit.tide, 1) );
+        tenPerArr.push( splitItemTime(tSplit.itemS, tSplit.total, tSplit.tide, 10) );
+        twtyfvPerArr.push( splitItemTime(tSplit.itemS, tSplit.total, tSplit.tide, 25) );
+        fftyPerArr.push( splitItemTime(tSplit.itemS, tSplit.total, tSplit.tide, 50) );
+        svtyfvPerArr.push( splitItemTime(tSplit.itemS, tSplit.total, tSplit.tide, 75) );
+        ntyPerArr.push( splitItemTime(tSplit.itemS, tSplit.total, tSplit.tide, 90) );
       }
     }
-    
-    /*
-    // without leadtime
-      x = %_of_completed
-      %_of_time_used = 16.1430735 + (1.261328591 * x ) + ( -0.00415922376 * Math.pow(x, 2) )
-      
-      
-    */
-    
-    const dataAvgs = [
+  
+    return [
       avgOfArray( onePerArr ),
       avgOfArray( tenPerArr ),
       avgOfArray( twtyfvPerArr ),
@@ -262,15 +230,6 @@ Meteor.methods({
       avgOfArray( svtyfvPerArr ),
       avgOfArray( ntyPerArr )
     ];
-    
-    CacheDB.upsert({dataName: 'avgTimeShare'}, {
-      $set : {
-        orgKey: accessKey,
-        lastUpdated: new Date(),
-        dataName: 'avgTimeShare',
-        dataNum: dataAvgs,
-        dataTrend: 'flat'
-    }});
-  },
+  }
 
 });

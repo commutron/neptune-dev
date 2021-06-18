@@ -28,6 +28,26 @@ const DataRepair = ({ app, users })=> {
     });
   }
   
+  function doProgToTimeCurve() {
+    Meteor.call('getAvgTimeShare', (err, reply)=>{
+	    err && console.log(err);
+	    if(reply) {
+	      toast(JSON.stringify([
+          `1% = ${reply[0]}%`,
+          `10% = ${reply[1]}%`,
+          `25% = ${reply[2]}%`,
+          `50% = ${reply[3]}%`,
+          `75% = ${reply[4]}%`,
+          `90% = ${reply[5]}%`
+        ]), { 
+          closeOnClick: false,
+          draggable: false,
+          autoClose: false 
+        });
+      }
+    });
+  }
+  
   return(
     <div className='space3v autoFlex'>
       
@@ -117,6 +137,16 @@ const DataRepair = ({ app, users })=> {
         button='Clear Logs'
         action={()=>doCallThing('clearNonDebugUserUsageLogs')}
       />
+      
+      <div>
+        <h3><i className="fas fa-superscript fa-lg gap"></i>
+          Get Progress to Time values for <br /> Quadratic Regression Equation
+        </h3>
+        <button
+          onClick={()=>doProgToTimeCurve()}
+          className='action clearBlack'
+        >Get Values</button>
+      </div>
       
       <div>
         <h3><i className="fas fa-map-marker-alt fa-lg gap"></i>

@@ -84,8 +84,8 @@ const BatchCardX = ({
           
       <Tabs
         tabs={[
-          <i className='fas fa-info-circle fa-fw' data-fa-transform='down-2' title='Info'></i>, 
-          <i className='fas fa-tasks fa-fw' data-fa-transform='down-2' title='Progress'></i>,
+          <i className='fas fa-info-circle fa-fw' title='Info'></i>, 
+          <i className='fas fa-tasks fa-fw' title='Progress'></i>,
         ]}
         names={false}
         wide={true}

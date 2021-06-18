@@ -65,24 +65,87 @@
   border-bottom: 1px solid rgba(100,100,100,0.5);
   cursor: inherit;
 }
-/*.react-contextmenu-item--divider:hover {*/
-/*  background-color: transparent;*/
-/*  border-color: rgb(10,10,10);*/
-/*  border-color: rgba(0,0,0,.15);*/
-/*}*/
-
+/*
 .react-contextmenu-item.react-contextmenu-submenu {
 	padding: 0;
 }
-
 .react-contextmenu-item.react-contextmenu-submenu > .react-contextmenu-item:after {
   content: "▶";
   display: inline-block;
   position: absolute;
   right: 7px;
 }
-
+*/
 .example-multiple-targets::after {
   content: attr(data-count);
   display: block;
+}
+
+/* TIMELINE */
+n-timeline {
+  display: block;
+  line-height: 1.4em;
+  list-style: none;
+  margin: 0 0 0 15px;
+  padding: 0;
+  width: 100%;
+}
+n-timeline-item {
+  display: block;
+  padding-left: 40px;
+  position: relative;
+}
+n-timeline-item:last-child {
+  padding-bottom: 0;
+}
+n-timeline-info {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  margin: 0 0 0.5rem 0;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+n-timeline-title {
+  display: block;
+  line-height: inherit;
+  font-size: 1.15rem;
+  padding-bottom: 40px;
+}
+
+n-timeline-marker {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 15px;
+}
+n-timeline-marker:before {
+  background: transparent;
+  border: 2px solid var(--black);
+  border-radius: 100%;
+  content: "";
+  display: block;
+  height: 15px;
+  position: absolute;
+  top: 4px;
+  left: 0;
+  width: 15px;
+}
+n-timeline-marker.done:before {
+  background: var(--emerald);
+}
+n-timeline-marker:after {
+  content: "";
+  width: 2px;
+  background: var(--black);
+  display: block;
+  position: absolute;
+  top: 24px;
+  bottom: 0;
+  left: 6px;
+}
+n-timeline-item:last-child n-timeline-marker:after {
+  content: none;
 }

@@ -1,4 +1,5 @@
 import moment from 'moment';
+import Config from '/server/hardConfig.js';
 
 export function sc2mn(seconds) {
   const asMinutes = moment.duration(seconds, "seconds").asMinutes();
@@ -63,4 +64,12 @@ export function diffTrend(newavg, runningavg) {
   const trend = Math.abs(diff) <= (runningavg * 0.03) ? 'flat' : 
                 diff < 0 ? 'down' : 'up';
   return trend;
+}
+
+// Quadratic Regression Equation
+export function QuadRegression(x) {
+  // x = %_of_completed
+  // y = %_of_time_used
+  const y = Config.qregA + (Config.qregB * x ) + ( Config.qregC * Math.pow(x, 2) );
+  return y;
 }

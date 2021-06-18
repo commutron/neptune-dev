@@ -20,6 +20,12 @@ class Config {
     this.seriesLimit = 5000; // max items in a series
     this.unitLimit = 1000; // max units per item
     
+    // Relationship between % of completed and % of tide time 
+    // is expressed as a Quadratic Regression Equation
+    this.qregA = 80.6898916;
+    this.qregB = 0.26632669;
+    this.qregC = -0.0007738926;
+    
     this.regexSN = RegExp(/^(\d{8,10})$|^(\d{6}\-\d{7})$/);
     this.regex810 = RegExp(/^(\d{8,10})$/);
     this.regexNS = RegExp(/^(\d{6}\-\d{7})$/);
