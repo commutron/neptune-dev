@@ -165,20 +165,20 @@ Meteor.methods({
       
       const rel = Math.round( trn.relAvg );
       const relEst = salesMnt.clone().addWorkingTime(rel, 'days');
-      const relDif = relEst.workingDiff(now, 'days', true);
+      const relDif = relEst.workingDiff(now, 'days');
       
       const wrk = Math.round( trn.stAvg );
       const wrkEst = salesMnt.clone().addWorkingTime(wrk, 'days');
-      const wrkDif = wrkEst.workingDiff(now, 'days', true);
+      const wrkDif = wrkEst.workingDiff(now, 'days');
       
       const ffinAvg = trn.ffinAvg;
       const fin = ffinAvg ? Math.round( ffinAvg ) : 0;
       const finEst = salesMnt.clone().addWorkingTime(fin, 'days');
-      const finDif = finEst.workingDiff(now, 'days', true);
+      const finDif = finEst.workingDiff(now, 'days');
       
       const cmp = Math.round( trn.compAvg );
       const cmpEst = salesMnt.clone().addWorkingTime(cmp, 'days');
-      const cmpDif = cmpEst.workingDiff(now, 'days', true);
+      const cmpDif = cmpEst.workingDiff(now, 'days');
       
       return [ 
         relEst.format(), relDif,

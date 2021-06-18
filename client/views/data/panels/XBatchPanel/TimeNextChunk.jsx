@@ -23,25 +23,24 @@ const TimeNextChunk = ({
   }
   
   if(est === 'na') {
-    return(
-      <p>no est</p>
-    );
+    return <p>no est</p>;
   }
   
   const toDay = (t, o = 0)=> moment(t).addWorkingTime(o, 'days').format('dddd MMMM Do YYYY');
   const toDur = (d)=> d > 0 ? ` (in ${d} workdays)` : ` (${Math.abs(d)} workdays ago)`;
   
   const flrRel = floorRelease ? floorRelease.time : false;
-  const flgap = flrRel ? moment(flrRel).workingDiff(est[0], 'days', true) : 0;
+  
+  const flgap = flrRel ? moment(flrRel).workingDiff(est[0], 'days') : 0;
       
   const stTide = batchData.tide.length > 0  ? batchData.tide[0].startTime : false;
-  const stgap = stTide ? moment(stTide).workingDiff(est[2], 'days', true) : 0;
+  const stgap = stTide ? moment(stTide).workingDiff(est[2], 'days') : 0;
   
   const fitems = seriesData ? seriesData.items.filter( i => i.completed ) : [];
   const itemS = fitems.sort( (i1, i2)=>
     i1.completedAt < i2.completedAt ? -1 : i1.completedAt > i2.completedAt ? 1 : 0 );
   const fin = itemS.length > 0 ? itemS[0].completedAt : false; 
-  const fngap = fin ? moment(fin).workingDiff(est[4], 'days', true) : 0;
+  const fngap = fin ? moment(fin).workingDiff(est[4], 'days') : 0;
   
   const comp = batchData.completed ? batchData.completedAt : false;
   
