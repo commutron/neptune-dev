@@ -20,6 +20,8 @@ class Config {
     this.seriesLimit = 5000; // max items in a series
     this.unitLimit = 1000; // max units per item
     
+    this.avgSpan = 10000; // in days, how far back to count for statistic averages
+    
     // Relationship between % of completed and % of tide time 
     // is expressed as a Quadratic Regression Equation
     this.qregA = 80.6898916;

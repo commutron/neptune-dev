@@ -46,40 +46,38 @@ const TimeNextChunk = ({
   
   return(
     <div className='space'>
-      <h3>Estimated Benchmarks</h3>
+      <h3>Approximate Benchmarks</h3>
       
       <n-timeline>
         <n-timeline-item>
-          <n-timeline-info>
-            {toDay(est[0])}
-            {flrRel ? ` (Real: ${toDay(flrRel)})` : toDur(est[1])}
+          <n-timeline-info title={`${toDay(est[0])}`}>
+            {flrRel ? toDay(flrRel) : `${toDay(est[0])} (${toDur(est[1])})`}
           </n-timeline-info>
           <n-timeline-marker class={flrRel ? 'done' : ''} />
           <n-timeline-title>Release</n-timeline-title>
         </n-timeline-item>
         
         <n-timeline-item>
-          <n-timeline-info>
-            {toDay(est[2], flgap)}
-            {stTide ? ` (Real: ${toDay(stTide)})` : toDur(est[3])}
+          <n-timeline-info title={`${toDay(est[2])} ${flgap}`}>
+            {stTide ? toDay(stTide) : `${toDay(est[2])} (${toDur(est[3])})`}
           </n-timeline-info>
           <n-timeline-marker class={stTide ? 'done' : ''} />
           <n-timeline-title>Production Start</n-timeline-title>
         </n-timeline-item>
         
-        <n-timeline-item>
-          <n-timeline-info>
-            {toDay(est[4], flgap+stgap)}
-            {fin ? ` (Real: ${toDay(fin)})` : toDur(est[5])}
-          </n-timeline-info>
-          <n-timeline-marker class={fin ? 'done' : ''} />
-          <n-timeline-title>First Completed Item</n-timeline-title>
-        </n-timeline-item>
+        {seriesData &&
+          <n-timeline-item>
+            <n-timeline-info title={`${toDay(est[4])} ${flgap+stgap}`}>
+              {fin ? toDay(fin) : `${toDay(est[4])} (${toDur(est[5])})`}
+            </n-timeline-info>
+            <n-timeline-marker class={fin ? 'done' : ''} />
+            <n-timeline-title>First Completed Item</n-timeline-title>
+          </n-timeline-item>
+        }
         
         <n-timeline-item>
-          <n-timeline-info>
-            {toDay(est[6], flgap+stgap+fngap)}
-            {comp ? ` (Real: ${toDay(comp)})` : toDur(est[7])}
+          <n-timeline-info title={`${toDay(est[6])} ${flgap+stgap+fngap}`}>
+            {comp ? toDay(comp) : `${toDay(est[6])} (${toDur(est[7])})`}
           </n-timeline-info>
           <n-timeline-marker class={comp ? 'done' : ''} />
           <n-timeline-title>All Completed</n-timeline-title>

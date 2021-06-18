@@ -27,13 +27,13 @@ Meteor.methods({
     return smplresult('avgDayItemFin', Meteor.user().orgKey);
   },
   
-  updateAllWidgetAvg() {
+  updateAllWidgetAvg(accessKey) {
 
     const widgets = WidgetDB.find({},{fields:{'_id':1}}).fetch();
 
     for(let w of widgets) {
       Meteor.call('countMultiBatchTideToQuote', w._id);
-      Meteor.call('oneWidgetTurnAround', w._id);
+      Meteor.call('oneWidgetTurnAround', w._id, accessKey);
     }
     return true;
   }

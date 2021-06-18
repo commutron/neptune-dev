@@ -17,7 +17,7 @@ function toRelDiff(bSalesStart, bReleases) {
   const floorRelease = bReleases.find( x => x.type === 'floorRelease');
   const flrRelTime = floorRelease && floorRelease.time;
   
-  const gapSale2Rel = !flrRelTime ? null :
+  const gapSale2Rel = !flrRelTime ? 0 :
     moment(flrRelTime).workingDiff(bSalesStart, 'days');
 
   return gapSale2Rel;
@@ -28,7 +28,7 @@ function toStrtDiff(bSalesStart, bTide) {
   const tideBegin = bTide && bTide.length > 0 ? bTide[0] : null;
   const beginTime = tideBegin ? tideBegin.startTime : null;
   
-  const gapSale2Start = !beginTime ? null :
+  const gapSale2Start = !beginTime ? 0 :
     moment(beginTime).workingDiff(bSalesStart, 'days');
   
   return gapSale2Start;
@@ -50,20 +50,31 @@ function toCompDiff(bSalesStart, bComplete) {
   return gapSale2Complete;
 }
   
-function getWidgetDur(widget) {
+function getWidgetDur(widget, accessKey) {
   
   const turnStats = widget.turnStats || null;
   const statime = turnStats ? turnStats.updatedAt : null;
   const stale = !statime ? true :
             moment.duration(moment().diff(moment(statime))).as('hours') > 12;
   if(stale) {
-      
+    const app = AppDB.findOne({orgKey:accessKey}, {fields:{'nonWorkDays':1}});
+    if( Array.isArray(app.nonWorkDays) ) {  
+      moment.updateLocale('en', { holidays: app.nonWorkDays });
+    }
+    const cutoff = ( d => new Date(d.setDate(d.getDate()-Config.avgSpan)) )(new Date);
+  
     let relAvg = [];
     let stAvg = [];
     let ffinAvg = [];
     let compAvg = [];
       
-    const compX = XBatchDB.find({widgetId: widget._id, completed: true}).fetch();
+    const compX = XBatchDB.find({
+      widgetId: widget._id, 
+      completed: true,
+      createdAt: { 
+        $gte: new Date(cutoff)
+      },
+    }).fetch();
     for( let x of compX ) {
       const srs = XSeriesDB.findOne({batch: x.batch});
       const items = srs ? srs.items : [];
@@ -140,17 +151,23 @@ function splitItemTime(itemS, total, tide, perBaseTen ) {
 
 Meteor.methods({
   
-  oneWidgetTurnAround(wID) {
+  oneWidgetTurnAround(wID, privateKey) {
+    const accessKey = privateKey || Meteor.user().orgKey;
     
     const widget = WidgetDB.findOne({ _id: wID });
     
-    const timeArr = getWidgetDur(widget);
+    const timeArr = getWidgetDur(widget, accessKey);
     
     return timeArr;
   },
   
   estBatchTurnAround(bID, wID) {
     this.unblock();
+    const accessKey = Meteor.user().orgKey;
+    const app = AppDB.findOne({orgKey:accessKey}, {fields:{'nonWorkDays':1}});
+    if( Array.isArray(app.nonWorkDays) ) {  
+      moment.updateLocale('en', { holidays: app.nonWorkDays });
+    }
     
     const now = moment().tz(Config.clientTZ);
     
