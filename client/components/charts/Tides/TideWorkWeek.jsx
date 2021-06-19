@@ -48,7 +48,7 @@ const TideWorkWeek = ({
           const tideTime = tideTimes.filter( x => 
                               moment(x.startTime).isSame(dateTime, 'day') );
   
-          const dTotal = tideTime.reduce( (arr, x)=> { return arr + x.durrAsMin }, 0);
+          const dTotal = tideTime.reduce( (arr, x)=> arr + x.durrAsMin, 0);
           const durrHr = moment.duration(dTotal, 'minutes').asHours();
           const dTotalNice = round2Decimal(durrHr);
     

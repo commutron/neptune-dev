@@ -1001,19 +1001,29 @@ Meteor.methods({
   },
   
   // delete \\
-  deleteItemX(batchId, seriesId, serial, pass) {
+  deleteItemX(batchId, seriesId, serial, pass, pinVal) {
     const accessKey = Meteor.user().orgKey;
     
     const doc = XSeriesDB.findOne({_id: seriesId});
     const subDoc = doc.items.find( x => x.serial === serial );
-    const inUse = subDoc.history.length > 0 ? true : false;
     
-    if(!inUse) {
-      const lock = subDoc.createdAt.toISOString().split("T")[0];
-      const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
-      const access = doc.orgKey === accessKey;
-      const unlock = lock === pass;
-      
+    const inUse = subDoc.history.length > 0 ? true : false;
+    const alBad = subDoc.history.every( x => !x.good );
+    
+    const lock = subDoc.createdAt.toISOString().split("T")[0];
+    const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
+    const access = doc.orgKey === accessKey;
+    const unlock = lock === pass;
+    
+    const org = AppDB.findOne({ orgKey: accessKey });
+    const orgPIN = org ? org.orgPIN : null;
+    const pinMatch = pinVal === orgPIN;
+    
+    const clear = !inUse ? true : alBad && pinMatch ? true : false;
+    
+    if(!clear) {
+      return 'inUse';
+    }else{
       if(auth && access && unlock) {
     		XSeriesDB.update(seriesId, {
           $pull : { items: { serial: serial }
@@ -1023,10 +1033,9 @@ Meteor.methods({
       }else{
         return false;
       }
-    }else{
-      return 'inUse';
     }
   },
+  
   authPullItemX(seriesId, serial, accessKey) {
 		XSeriesDB.update({_id: seriesId, orgKey: accessKey}, {
       $pull : { items: { serial: serial }

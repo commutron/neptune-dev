@@ -3,9 +3,31 @@ import moment from 'moment';
 // import Pref from '/client/global/pref.js';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 import MiniBar from '/client/components/charts/MiniScales/MiniBar.jsx';
+import TickScatter from '/client/components/charts/TickScatter';
 import { countWaterfall } from '/client/utility/Arrays';
 
 import '/client/components/riverX/waterfall/style.css';
+
+const CountTab = ({ batchData, fallData, rapidsData, app })=> {
+  
+  return(
+    <div className='space autoSelf max875'>
+      <WaterfallTimeline
+        wfCounts={fallData.fallProg}
+        waterfall={batchData.waterfall}
+        quantity={batchData.quantity}
+        rapidsData={rapidsData}
+        app={app} />
+        
+      <TickScatter
+        waterfall={batchData.waterfall}
+        app={app}
+      />
+    </div>
+  );
+};
+
+export default CountTab;
 
 const WaterfallTimeline = ({ wfCounts, waterfall, quantity, rapidsData, app })=> {
 
@@ -56,8 +78,6 @@ const WaterfallTimeline = ({ wfCounts, waterfall, quantity, rapidsData, app })=>
     </div> 
   );
 };
-
-export default WaterfallTimeline;
 
 const FallsHistory = ({ entry, count, quantity })=> {
 

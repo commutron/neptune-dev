@@ -9,7 +9,7 @@ import XBatchTimeline from '/client/components/bigUi/BatchFeed/XBatchTimeline.js
 
 import InfoTab from './InfoTab';
 import TimeTab from './TimeTab';
-import WaterfallTimeline from './WaterfallTimeline';
+import CountTab from './CountTab';
 import ProblemTab from './ProblemTab';
 import RapidExtendTab from './RapidExtendTab';
 
@@ -79,14 +79,12 @@ const BatchPanelX = ({
           riverFlow={flowData.riverFlow}
           app={app} />
         
-        <div className='space autoSelf max875'>
-          <WaterfallTimeline
-            wfCounts={fallData.fallProg}
-            waterfall={b.waterfall}
-            quantity={b.quantity}
-            rapidsData={rapidsData}
-            app={app} />
-        </div>
+        <CountTab
+          batchData={batchData}
+          fallData={fallData}
+          rapidsData={rapidsData}
+          app={app}
+        />
         
         <ProblemTab
           batch={batchData.batch}

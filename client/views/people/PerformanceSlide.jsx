@@ -52,20 +52,42 @@ const PerformanceSlide = ({ app, user, users, traceDT, isDebug })=> {
     if(weekChoice) {
       const pinDate = moment().year(weekChoice.yearNum).week(weekChoice.weekNum);
       
-      const start = pinDate.clone().startOf('week');
-      const startCorrect = start.isWorkingDay() ? start : start.clone().add(1, 'day');
-      const end = pinDate.clone().endOf('week');
-      const endCorrect = end.isWorkingDay() ? end : end.clone().subtract(1, 'day');
-      
-      const from = startCorrect.day() === 0 ? 0 : 1;
-      const to = endCorrect.day() === 6 ? 7 : 6;
-      const weekdays = alldays.slice(from, to);
-      
-      setWeekStart(startCorrect);
-      setWeekEnd(endCorrect);
+      const start = pinDate.clone().startOf('week').add(1, 'day');
+      const end = pinDate.clone().endOf('week').subtract(1, 'day');
+
+      const weekdays = alldays.slice(1, 6);
+     
+      setWeekStart(start);
+      setWeekEnd(end);
       setWeekDays(weekdays);
     }
   }, [weekChoice]);
+  
+  useLayoutEffect( ()=>{ // re-check for weekend days
+    if(weekChoice && weekData) {
+      const realdays = _.countBy(weekData, x => moment(x.startTime).day());
+      const zro = realdays['0'] ? true : false;
+      const six = realdays['6'] ? true : false;
+      
+      const from = zro ? 0 : 1;
+      const to = six ? 7 : 6;
+      const weekdays = alldays.slice(from, to);
+      
+      if(weekDays && weekDays.length < weekdays.length) {
+        const pinDate = moment().year(weekChoice.yearNum).week(weekChoice.weekNum);
+      
+        const start = pinDate.clone().startOf('week');
+        const startCorrect = zro ? start : start.clone().add(1, 'day');
+        const end = pinDate.clone().endOf('week');
+        const endCorrect = six ? end : end.clone().subtract(1, 'day');
+      
+        setWeekStart(startCorrect);
+        setWeekEnd(endCorrect);
+        setWeekDays(weekdays);
+      }
+    }
+  }, [weekData]);
+  
   
   useLayoutEffect( ()=>{ // fetch data handling
     const tideTime = weekData || [];
@@ -89,7 +111,7 @@ const PerformanceSlide = ({ app, user, users, traceDT, isDebug })=> {
     const unqTaskSclean = unqTasksclean.sort((t1, t2)=> t1 > t2 ? 1 : t1 < t2 ? -1 : 0 );
     setTaskList(unqTaskSclean);
     
-  }, [weekData, selectDayState]);
+  }, [weekData, selectDayState, weekDays]);
   
   
   const niceS = weekStart ? weekStart.format('MMMM Do') : '';

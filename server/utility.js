@@ -17,6 +17,19 @@ export function flattenHistory(itemArr) {
   return historyFlat;
 }
 
+// export function flattenWaterfall(waterfallArr) {
+//   let wipFallTicks = [];
+//   for( let p of waterfallArr ) { 
+//     wipFallTicks.push( 
+//       p.counts.filter( y => y.tick > 0 )
+//     );
+//   }
+//   const ticksFlat = [].concat(...wipFallTicks);
+//   const ticksSort = ticksFlat.sort((t1, t2)=>
+//                       t1.time < t2.time ? -1 : t1.time > t2.time ? 1 : 0 );
+//   return ticksSort;
+// }
+
 export function countWaterfall(stepCounts) {
   if(!Array.isArray(stepCounts) || stepCounts.length === 0) {
     return 0;

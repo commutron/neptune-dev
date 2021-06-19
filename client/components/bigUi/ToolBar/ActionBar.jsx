@@ -63,6 +63,7 @@ const ActionBar = ({
           seriesId={seriesData._id}
           serial={itemData.serial}
           check={itemData.createdAt.toISOString()}
+          verify={itemData.history.length > 0}
           lockOut={batchData.completed || itemData.completed ? Pref.isDone : false}
         />
       </Fragment>
