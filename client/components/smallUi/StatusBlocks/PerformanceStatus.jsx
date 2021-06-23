@@ -49,25 +49,19 @@ export const PerformanceSquare = ({
   app, isDebug, showExtra, showLess
 })=> {
   
-  // const q2t = pt.quote2tide;
-    // const bffrTime = pt.estEnd2fillBuffer;
-    // const bffrRel = pt.bffrRel;
-    // const overQuote = q2t < 0;
-    // isDebug && console.log({pt, batchID, bffrRel, bffrTime, q2t});
-    
     const baseClass = 'blur-change smCap big';
     const extraClass = showExtra ? 'centre' : '';
     
     
     
     const pfRank = 
-      pf.gold <= -3 ? <n-fa1><i className='fas fa-sad-tear fa-lg'></i></n-fa1> :
-      pf.gold === -2 ? <n-fa2><i className='fas fa-frown-open fa-lg'></i></n-fa2> :
-      pf.gold === -1 ? <n-fa3><i className='fas fa-frown fa-lg'></i></n-fa3> :
+      pf.gold <= -4 ? <n-fa3><i className='fas fa-sad-tear fa-lg'></i></n-fa3> :
+      pf.gold <= -2 ? <n-fa2><i className='fas fa-frown-open fa-lg'></i></n-fa2> :
+      pf.gold <= -1 ? <n-fa1><i className='fas fa-frown fa-lg'></i></n-fa1> :
       pf.gold === 0 ? <n-fa0><i className='fas fa-smile fa-lg'></i></n-fa0> :
-      pf.gold === 1 ? <n-fa4><i className='fas fa-smile-wink fa-lg'></i></n-fa4> :
-      pf.gold === 2 ? <n-fa5><i className='fas fa-grin-alt fa-lg'></i></n-fa5> :
-      pf.gold >= 3 ? <n-fa6><i className='fas fa-grin-hearts fa-lg'></i></n-fa6> : 
+      pf.gold >= 4 ? <n-fa6><i className='fas fa-grin-hearts fa-lg'></i></n-fa6> :
+      pf.gold >= 2 ? <n-fa5><i className='fas fa-grin-alt fa-lg'></i></n-fa5> :
+      pf.gold >= 1 ? <n-fa4><i className='fas fa-smile-wink fa-lg'></i></n-fa4> :
       <n-faX><i className='fas fa-meh fa-lg'></i></n-faX>;
       
     return(

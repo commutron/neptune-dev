@@ -56,7 +56,7 @@ export function avgOfArray(arr, zeros) {
                        
   if(cArr.length == 1) {
     return round2Decimal( cArr[0] );
-  }else if(cArr.length > 0) {
+  }else if(cArr.length > 1) {
     const reduced = cArr.reduce( (a,c)=>a+c) / cArr.length;
     const clean = round2Decimal( reduced );
     return clean;
