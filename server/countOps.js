@@ -1,5 +1,6 @@
 import moment from 'moment';
 
+import Config from '/server/hardConfig.js';
 import { batchTideTime, distTimeBudget } from './tideGlobalMethods.js';
 import { deliveryState } from './reportCompleted.js';
 import { avgOfArray, diffTrend } from './calcOps';
@@ -114,13 +115,19 @@ Meteor.methods({
       };
       
       try {
-        const batches = XBatchDB.find({ widgetId: widgetId }).fetch();
+        const cutoff = ( d => new Date(d.setDate(d.getDate()-Config.avgSpan)) )(new Date);
+        
+        const batches = XBatchDB.find({ 
+          widgetId: widgetId, 
+          completed: true,
+          createdAt: { 
+            $gte: new Date(cutoff)
+          }
+        }).fetch();
         
         for(let batch of batches) {
-          if(batch.completed) {
-            discoverTQ(batch);
-            discoverOT(batch.salesEnd, batch.completedAt);
-          }else{null}
+          discoverTQ(batch);
+          discoverOT(batch.salesEnd, batch.completedAt);
         }
       }catch(err) {
         throw new Meteor.Error(err);

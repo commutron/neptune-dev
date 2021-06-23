@@ -50,7 +50,7 @@ const TimeNextChunk = ({
       <h3>Benchmarks</h3>
       
       <n-timeline>
-        <n-timeline-item>
+        <n-timeline-item title={toDay(est[0])}>
           <n-timeline-info>
             {flrRel ? toDay(flrRel) : toDay(est[0]) + toDur(est[1])}
             {label(flrRel)}
@@ -59,7 +59,7 @@ const TimeNextChunk = ({
           <n-timeline-title>Release</n-timeline-title>
         </n-timeline-item>
         
-        <n-timeline-item title={stTide ? '' : 'Estimation'}>
+        <n-timeline-item title={toDay(est[2], flgap)}>
           <n-timeline-info>
             {stTide ? toDay(stTide) : toDay(est[2], flgap) + toDur(est[3]+flgap)}
             {label(stTide)}
@@ -69,7 +69,7 @@ const TimeNextChunk = ({
         </n-timeline-item>
         
         {seriesData &&
-          <n-timeline-item title={fin ? '' : 'Estimation'}>
+          <n-timeline-item title={toDay(est[4], flgap+stgap)}>
             <n-timeline-info>
               {fin ? toDay(fin) : toDay(est[4], flgap+stgap) + toDur(est[5]+flgap+stgap)}
               {label(fin)}
@@ -79,7 +79,7 @@ const TimeNextChunk = ({
           </n-timeline-item>
         }
         
-        <n-timeline-item title={comp ? '' : 'Estimation'}>
+        <n-timeline-item title={toDay(est[6], flgap+stgap+fngap)}>
           <n-timeline-info>
             {comp ? toDay(comp) : 
              toDay(est[6], flgap+stgap+fngap) + toDur(est[7]+flgap+stgap+fngap)}

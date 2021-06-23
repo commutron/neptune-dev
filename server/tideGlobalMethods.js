@@ -4,7 +4,7 @@ import 'moment-business-time';
 
 import Config from '/server/hardConfig.js';
 
-import { min2hr, round2Decimal, diffTrend } from './calcOps';
+import { min2hr, round2Decimal, percentOverUnder, diffTrend } from './calcOps';
 import { noIg } from './utility';
 
 export function batchTideTime(batchTide, lockTrunc) {
@@ -78,8 +78,7 @@ export function distTimeBudget(tide, quoteTimeBudget, allQuantity, lockTrunc) {
     const qMNt = min2hr( quoteMNtide );
     
     // tide is xx% under/over quote
-    const tidePCquote = ( 1 - ( tidePerItem / quotePerItem ) ) * 100;
-    const tPCq = round2Decimal(tidePCquote);
+    const tPCq = percentOverUnder(trueQuote, totalTide);
     
     return [ tidePerItem, quotePerItem, qMNt, tPCq ];
   }

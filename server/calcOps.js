@@ -44,11 +44,11 @@ export function percentOf(goalNumber, realNumber) {
   return perOfClean;
 }
 
-// export function percentOverUnder(goalNumber, realNumber) {
-//   const overunder = ( 1 - ( realNumber / goalNumber ) ) * 100;
-//   const overunderClean = isNaN(overunder) ? 0 : round2Decimal(overunder);
-//   return overunderClean;
-// }
+export function percentOverUnder(goalNumber, realNumber) {
+  const overunder = ( 1 - ( realNumber / goalNumber ) ) * 100;
+  const overunderClean = isNaN(overunder) ? 0 : round2Decimal(overunder);
+  return overunderClean;
+}
 
 export function avgOfArray(arr, zeros) {
   const cArr = zeros ? arr.filter( f => ( f || f === 0 ) && !isNaN(f) ) :

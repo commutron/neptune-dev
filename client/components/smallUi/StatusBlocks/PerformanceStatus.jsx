@@ -61,7 +61,7 @@ export const PerformanceSquare = ({
       pf.gold === 0 ? <n-fa0><i className='fas fa-smile fa-lg'></i></n-fa0> :
       pf.gold >= 4 ? <n-fa6><i className='fas fa-grin-hearts fa-lg'></i></n-fa6> :
       pf.gold >= 2 ? <n-fa5><i className='fas fa-grin-alt fa-lg'></i></n-fa5> :
-      pf.gold >= 1 ? <n-fa4><i className='fas fa-smile-wink fa-lg'></i></n-fa4> :
+      pf.gold >= 1 ? <n-fa4><i className='fas fa-grin fa-lg'></i></n-fa4> :
       <n-faX><i className='fas fa-meh fa-lg'></i></n-faX>;
       
     return(
