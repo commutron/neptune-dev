@@ -15,6 +15,7 @@ import BlockList from '/client/components/bigUi/BlockList';
 import AlterFulfill from '/client/components/forms/Batch/AlterFulfill';
 
 import PrioritySquareData from '/client/components/smallUi/StatusBlocks/PrioritySquare';
+import PerformanceData from '/client/components/smallUi/StatusBlocks/PerformanceStatus';
 import TideActivityData from '/client/components/tide/TideActivity';
 import BatchXStatus from '/client/components/forms/Batch/BatchXStatus';
 
@@ -59,6 +60,9 @@ const InfoTab = ({
               <TideActivityData
                 batchID={b._id}
                 app={app} />
+            </div>
+            <div className='statusBlock'>
+              <PerformanceData batchID={b._id} />
             </div>
           </div>
         }

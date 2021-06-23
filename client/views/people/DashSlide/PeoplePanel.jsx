@@ -48,11 +48,13 @@ const PeoplePanel = ({
       <div className='wide space cap'>
         <h3>{Pref.engagedNot}</h3>
         <ul className='autoGrid'>
-          {dUsers.map( (entry, index)=>(
-            <li key={entry._id} className='leftText line2x'>
-              <UserNice id={entry._id} />
-            </li>
-          ))}
+          {dUsers.map( (entry, index)=>{
+            if(entry.proTimeShare && entry.proTimeShare[0].timeAsDecimal > 0) {
+              return(
+                <li key={entry._id} className='leftText line2x'>
+                  <UserNice id={entry._id} />
+                </li>
+          )}})}
         </ul>
       </div>
     </div>

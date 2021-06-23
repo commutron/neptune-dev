@@ -12,17 +12,28 @@ const CountTab = ({ batchData, fallData, rapidsData, app })=> {
   
   return(
     <div className='space autoSelf max875'>
-      <WaterfallTimeline
-        wfCounts={fallData.fallProg}
-        waterfall={batchData.waterfall}
-        quantity={batchData.quantity}
-        rapidsData={rapidsData}
-        app={app} />
-        
-      <TickScatter
-        waterfall={batchData.waterfall}
-        app={app}
-      />
+      
+      {batchData.waterfall.length === 0 && (!rapidsData || rapidsData.length === 0) ?
+        <div className='centreText fade'>
+          <i className='fas fa-stopwatch fa-2x'></i>
+          <p className='medBig'>No Counters</p>
+        </div>
+      : 
+        <span>
+          <WaterfallTimeline
+            wfCounts={fallData.fallProg}
+            waterfall={batchData.waterfall}
+            quantity={batchData.quantity}
+            rapidsData={rapidsData}
+            app={app} />
+            
+          <TickScatter
+            waterfall={batchData.waterfall}
+            rapidsData={rapidsData}
+            app={app}
+          />
+        </span>
+      }
     </div>
   );
 };
@@ -37,13 +48,6 @@ const WaterfallTimeline = ({ wfCounts, waterfall, quantity, rapidsData, app })=>
   
   return(
     <div className='wide'>
-      
-      {waterfall.length === 0 && (!rapidsData || rapidsData.length === 0) ?
-        <div className='centreText fade'>
-          <i className='fas fa-stopwatch fa-3x'></i>
-          <p className='big'>No Counters</p>
-        </div>
-      : null}
       
       {waterfallS.map( (entry)=> {
         const countObj = wfCounts.find( w => w.wfKey === entry.wfKey );

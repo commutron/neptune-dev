@@ -19,7 +19,7 @@ export const PublicLayout = ({content}) => (
       <div className='auxRight' />
       <div className='proRight' />
     </div>
-    <div className='simpleContent'>
+    <div className='simpleContent darkTheme'>
       {content}
     </div>
   </div>
@@ -29,9 +29,6 @@ export const PublicLayout = ({content}) => (
 export const SplashLayout = ({content, title}) => (
   <ErrorCatch>
     <div className='splashContainer'>
-      <ToastContainer
-        position="top-center"
-        newestOnTop />
       <div className='tenHeader'>
         <div className='topBorder' />
         <HomeIcon />

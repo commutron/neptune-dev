@@ -2,9 +2,9 @@ import moment from 'moment';
 import 'moment-timezone';
 import 'moment-business-time';
 
-import { avgOfArray, percentOf, QuadRegression } from '/server/calcOps';
+import { avgOfArray, percentOf } from '/server/calcOps';
 import Config from '/server/hardConfig.js';
-import { noIg, flattenWaterfall } from './utility';
+import { noIg } from './utility';
 
 moment.updateLocale('en', {
   workinghours: Config.workingHours,
@@ -153,11 +153,7 @@ function splitItemTime(itemS, total, tide, perBaseTen ) {
 
 Meteor.methods({
   
-  // getAllTickTime(batchId) {
-  //   const b = XBatchDB.findOne({_id: batchId});
-  //   const allTicks = flattenWaterfall(b.waterfall);
-  //   return allTicks;
-  // },
+ 
 
   oneWidgetTurnAround(wID, privateKey) {
     const accessKey = privateKey || Meteor.user().orgKey;

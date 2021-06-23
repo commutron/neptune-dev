@@ -40,9 +40,15 @@ export function round2Decimal(thrtytw) {
 
 export function percentOf(goalNumber, realNumber) {
   const perOf = ( realNumber / goalNumber ) * 100;
-  const perOfClean = round2Decimal(perOf);
+  const perOfClean = isNaN(perOf) ? 0 : round2Decimal(perOf);
   return perOfClean;
 }
+
+// export function percentOverUnder(goalNumber, realNumber) {
+//   const overunder = ( 1 - ( realNumber / goalNumber ) ) * 100;
+//   const overunderClean = isNaN(overunder) ? 0 : round2Decimal(overunder);
+//   return overunderClean;
+// }
 
 export function avgOfArray(arr, zeros) {
   const cArr = zeros ? arr.filter( f => ( f || f === 0 ) && !isNaN(f) ) :
@@ -67,9 +73,10 @@ export function diffTrend(newavg, runningavg) {
 }
 
 // Quadratic Regression Equation
-export function QuadRegression(x) {
+export function quadRegression(x) {
   // x = %_of_completed
   // y = %_of_time_used
   const y = Config.qregA + (Config.qregB * x ) + ( Config.qregC * Math.pow(x, 2) );
-  return y;
+  const v = isNaN(y) ? 0 : round2Decimal(y);
+  return v;
 }

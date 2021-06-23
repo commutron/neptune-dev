@@ -5,19 +5,24 @@ import {
   VictoryScatter, 
   VictoryChart, 
   VictoryAxis, 
-  VictoryTooltip
 } from 'victory';
 //import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
 
 
-const TickScatter = ({ waterfall, app })=> {
+const TickScatter = ({ waterfall, rapidsData, app })=> {
   
   const [ tickXY, tickXYSet ] = useState([]);
   
   useEffect( ()=> {
+    let waterfalls = waterfall;
+    for(let cas of rapidsData) {
+      waterfalls.push( cas.cascade );
+    }
+    const flatfalls = waterfalls.flat();
+    
     let wipFallTicks = [];
-    for( let fall of waterfall ) {
+    for( let fall of flatfalls ) {
       const tp = fall.type;
       let color = tp === 'inspect' ? 'rgb(39, 174, 96)' :
         		      tp === 'checkpoint' ? 'rgb(127, 140, 141)' :
@@ -26,14 +31,16 @@ const TickScatter = ({ waterfall, app })=> {
         		      'rgb(41, 128, 185)';
       fall.counts.map( (tick, index)=>{ 
         if(tick.tick > 0) {
-          wipFallTicks.push( {x: tick.time, y: index, datum: color} );
+          for(let t = tick.tick; t > 0; t--) {
+            wipFallTicks.push({
+              x: tick.time, 
+              y: index+t,
+              datum: color
+            });
+          }
         }
       });
     }
-    // const ticksFlat = [].concat(...wipFallTicks);
-    //const ticksSort = ticksFlat.sort((t1, t2)=>
-      //                  t1.time < t2.time ? -1 : t1.time > t2.time ? 1 : 0 );
-    
     tickXYSet(wipFallTicks);
   }, []);
   
@@ -56,7 +63,7 @@ const TickScatter = ({ waterfall, app })=> {
           } }
           scale={{ x: "time" }}
         />
-        <VictoryAxis 
+        {/*<VictoryAxis 
           dependentAxis
           fixLabelOverlap={true}
           style={ {
@@ -66,8 +73,7 @@ const TickScatter = ({ waterfall, app })=> {
             tickLabels: { 
               fontSize: '7px' }
           } }
-          minDomain={{ y: 0 }}
-        />
+        />*/}
           
         <VictoryScatter
           data={tickXY}

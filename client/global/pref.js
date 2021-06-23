@@ -41,6 +41,7 @@ class Pref {
     
     // Config
     this.userTimePublic = true;
+    this.blurOut = 5; // minutes in background before DDP disconnects
     this.tooManyMin = 600;
     this.groupMax = 128;
     this.aliasMax = 16;
@@ -205,7 +206,7 @@ class Pref {
     //global time
     this.tide = 'start-stop';
     this.engaged = 'active';
-    this.engagedNot = 'not active';
+    this.engagedNot = 'idle';
   }
 }
 

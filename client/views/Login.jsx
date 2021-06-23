@@ -8,6 +8,7 @@ import AccountsUI from '/client/components/bigUi/AccountsUI/AccountsUI.jsx';
 import NavButton from '/client/layouts/NavButton/NavButton.jsx';
 import { NavPlaceholder } from '/client/layouts/NavButton/NavButton.jsx';
 import Spin from '/client/components/tinyUi/Spin.jsx';
+import { MetaLink } from '/client/views/app/appSlides/MetaSlide';
 
 const Login = ({ login, uID, username, timeClock })=> {
   
@@ -51,9 +52,11 @@ const Login = ({ login, uID, username, timeClock })=> {
               icon='fa-clock' 
               link={timeClock} 
               blank={true} /> }
-           
+        
         </div>
-    
+        
+        <MetaLink />
+        
       </div>
     
     </div>

@@ -3,6 +3,7 @@ import 'moment-timezone';
 import 'moment-business-time';
 
 import Config from '/server/hardConfig.js';
+import { syncHoliday } from '/server/utility.js';
 import { deliveryState, calcShipDay } from '/server/reportCompleted.js';
 
 moment.updateLocale('en', {
@@ -10,12 +11,6 @@ moment.updateLocale('en', {
   shippinghours: Config.shippingHours
 });
 
-function syncHoliday(accessKey) {
-  const app = AppDB.findOne({orgKey:accessKey}, {fields:{'nonWorkDays':1}});
-  if(Array.isArray(app.nonWorkDays) ) {  
-    moment.updateLocale('en', { holidays: app.nonWorkDays });
-  }
-}
 function getShipLoad(now) {
   const shipLoad = TraceDB.find({shipAim: { 
     $gte: new Date(now.clone().nextShippingTime().startOf('day').format()),
@@ -119,7 +114,6 @@ function checkMinify(bData, accessKey) {
 
 function checkMovement(bData, now, shipLoad, accessKey) {
   return new Promise( (resolve)=> {
-    
     const oRapid = XRapidsDB.findOne({extendBatch: bData.batch, live: true});
     const rapIs = oRapid ? oRapid.rapid : false;
     

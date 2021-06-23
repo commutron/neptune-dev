@@ -3,8 +3,8 @@ import 'moment-timezone';
 import 'moment-business-time';
 
 import Config from '/server/hardConfig.js';
-import { avgOfArray } from './calcOps.js';
-import { countMulti } from './utility.js';
+import { avgOfArray, percentOf, quadRegression } from './calcOps.js';
+import { syncHoliday, countMulti, getEst } from './utility.js';
 import { batchTideTime } from './tideGlobalMethods.js';
 import { calcShipDay } from './reportCompleted.js';
 
@@ -12,8 +12,6 @@ moment.updateLocale('en', {
   workinghours: Config.workingHours,
   shippinghours: Config.shippingHours
 });
-
-//const isNow = (t)=>{ return ( now.isSame(moment(t), 'day') ) };
 
 function dryPriorityCalc(bQuTmBdg, mEst, bTide, shipAim, now, shipLoad) {
   const shipAimMmnt = moment(shipAim);
@@ -47,21 +45,14 @@ function dryPriorityCalc(bQuTmBdg, mEst, bTide, shipAim, now, shipLoad) {
 function collectPriority(privateKey, batchID, mockDay) {
   return new Promise(resolve => {
     
-    const app = AppDB.findOne({orgKey:privateKey}, {fields:{'nonWorkDays':1}});
-    if(Array.isArray(app.nonWorkDays) ) {  
-      moment.updateLocale('en', { holidays: app.nonWorkDays });
-    }
-
     const now = moment().tz(Config.clientTZ);
-    
+
     const b = XBatchDB.findOne({_id: batchID});
     
     if(!b) {
       resolve(false);
     }else{
-      const wdjt = WidgetDB.findOne({ _id: b.widgetId });
-      const perQ = !wdjt.quoteStats ? 0 : wdjt.quoteStats.stats.tidePerItemAvg;
-      const mEst = perQ * b.quantity;
+      const mEst = getEst(b.widgetId, b.quantity);
 
       const oRapid = XRapidsDB.findOne({extendBatch: b.batch, live: true});
       const rapIs = oRapid ? oRapid.rapid : false;
@@ -73,7 +64,7 @@ function collectPriority(privateKey, batchID, mockDay) {
       
       const future = mockDay ? mockDay : endDay;
       const calcShip = calcShipDay( now, future );
-      const shipAim = calcShip[1];
+      const shipAim = calcShip[1].format();
       const lateLate = calcShip[2];
       
       const qtBready = !b.quoteTimeBudget ? false : true;
@@ -96,7 +87,7 @@ function collectPriority(privateKey, batchID, mockDay) {
           bffrRel: dryCalc.bffrRel,
           estEnd2fillBuffer: dryCalc.estEnd2fillBuffer,
           minDiff: dryCalc.minDiff,
-          shipAim: shipAim.format(),
+          shipAim: shipAim,
           lateLate: lateLate,
           oRapid: rapIs
         });
@@ -110,7 +101,7 @@ function collectPriority(privateKey, batchID, mockDay) {
           bffrRel: false,
           estEnd2fillBuffer: 0,
           minDiff: false,
-          shipAim: shipAim.format(),
+          shipAim: shipAim,
           lateLate: lateLate,
           oRapid: rapIs
         });
@@ -121,9 +112,8 @@ function collectPriority(privateKey, batchID, mockDay) {
 
 function getFastPriority(privateKey, bData, now, shipAim) {
   return new Promise(resolve => {
-    
     const doneEntry = bData.completedAt;
-      
+
     const qtBready = !bData.quoteTimeBudget ? false : true;
     
     if(qtBready && bData.tide && !doneEntry) {
@@ -132,9 +122,7 @@ function getFastPriority(privateKey, bData, now, shipAim) {
         $lte: new Date(now.clone().nextShippingTime().endOf('day').format()) 
       }},{fields:{'batchID':1}}).count();
       
-      const wdjt = WidgetDB.findOne({ _id: bData.widgetId });
-      const perQ = !wdjt.quoteStats ? 0 : wdjt.quoteStats.stats.tidePerItemAvg;
-      const mEst = perQ * bData.quantity;
+      const mEst = getEst(bData.widgetId, bData.quantity);
       
       const dryCalc = dryPriorityCalc(bData.quoteTimeBudget, mEst, bData.tide, shipAim, now, shipLoad);
       
@@ -213,6 +201,7 @@ Meteor.methods({
   priorityRank(batchID, serverAccessKey, mockDay) {
     async function bundlePriority() {//batchID, orgKey, mockDay) {
       const accessKey = serverAccessKey || Meteor.user().orgKey;
+      syncHoliday(accessKey);
       try {
         bundle = await collectPriority(accessKey, batchID, mockDay);
         return bundle;
@@ -233,6 +222,66 @@ Meteor.methods({
       }
     }
     return bundlePriority();
+  },
+  priorityTrace(batchID) {
+    const b = XBatchDB.findOne({_id: batchID});
+    const t = b && TraceDB.findOne({batch: b.batch});
+    
+    if(!b || !t) {
+      return false;
+    }else{
+      return {
+        batch: b.batch,
+        batchID: b._id,
+        salesOrder: b.salesOrder,
+        quote2tide: t.quote2tide,
+        estSoonest: t.estSoonest,
+        completed: b.completed, 
+        bffrRel: t.bffrRel,
+        estEnd2fillBuffer: t.estEnd2fillBuffer,
+        minDiff: t.minDiff,
+        shipAim: t.shipAim,
+        lateLate: t.lateLate,
+        oRapid: t.oRapid
+      };
+    }
+  },
+  
+  performTarget(batchID) {
+    const b = XBatchDB.findOne({_id: batchID});
+    
+    if(!b) {
+      return false;
+    }else{
+      const srs = XSeriesDB.findOne({batch: b.batch});
+      const items = srs ? srs.items : [];
+      const done = items.filter( i => i.completed );
+      
+      const donePer = percentOf( items.length, done.length );
+      const goalTimePer = quadRegression(donePer);
+      
+      const tide = b.tide || [];
+      const totalTideMinutes = batchTideTime(tide);
+      
+      const mEst = getEst(b.widgetId, b.quantity);
+      const budget = b.quoteTimeBudget || [];
+      const totalQuoteMinutes = budget.length === 0 ? 0 : budget[0].timeAsMinutes;
+      const estimatedMinutes = avgOfArray([totalQuoteMinutes, mEst]);
+      
+      const realTimePer = percentOf( estimatedMinutes, totalTideMinutes );
+      
+      const diff = Math.round( goalTimePer - realTimePer );
+                    
+      const gold = donePer === 0 ? false : Math.round( diff * 0.05 );
+      
+      return {
+        donePer: donePer,
+        goalTimePer: goalTimePer,
+        realTimePer: realTimePer,
+        diff: diff,
+        gold: gold
+      };
+    }
   },
   
   nonconQuickStats(batchID, temp) {

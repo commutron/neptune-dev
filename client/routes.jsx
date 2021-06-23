@@ -9,23 +9,24 @@ import { SplashLayout } from './layouts/MainLayouts.jsx';
 import { CleanLayout } from './layouts/MainLayouts.jsx';
 import { LabelLayout } from './layouts/MainLayouts.jsx';
 
-import Login from './views/Login.jsx';
+import Login from './views/Login';
+import MetaSlide from './views/app/appSlides/MetaSlide';
 //import InitialSetup from './views/InitialSetup.jsx';
 
-import ProdData from './views/production/ProdData.jsx';
+import ProdData from './views/production/ProdData';
 
-import UpstreamData from './views/upstream/UpstreamData.jsx';
-import OverviewData from './views/overview/OverviewData.jsx';
-import DownstreamData from './views/downstream/DownstreamData.jsx';
+import UpstreamData from './views/upstream/UpstreamData';
+import OverviewData from './views/overview/OverviewData';
+import DownstreamData from './views/downstream/DownstreamData';
 
-import PeopleDataWrap from './views/people/PeopleDataWrap.jsx';
-import UserDataWrap from './views/user/UserDataWrap.jsx';
-import DataData from './views/data/DataData.jsx';
-import AppData from './views/app/AppData.jsx';
+import PeopleDataWrap from './views/people/PeopleDataWrap';
+import UserDataWrap from './views/user/UserDataWrap';
+import DataData from './views/data/DataData';
+import AppData from './views/app/AppData';
 
-import GeneralLabel from './views/paper/GeneralLabel.jsx';
+import GeneralLabel from './views/paper/GeneralLabel';
 
-import LandingWrap from './LandingWrap.jsx';
+import LandingWrap from './LandingWrap';
 
 // Client Side Colllections
 AppDB = new Mongo.Collection('appdb');
@@ -50,7 +51,7 @@ SubMngr = new SubsManager({
 FlowRouter.notFound = {
   action() {
     mount(PublicLayout, {
-      content: (<p className='centreText'><h1>404 - Page Not Found</h1></p>),
+      content: (<p className='centreText bigger'>404 - Page Not Found</p>),
     });
   }
 };
@@ -74,22 +75,7 @@ exposedRoutes.route('/meta', {
   name: 'meta',
   action() {
     mount(SplashLayout, {
-      content: (
-        <div className='centreSpash'>
-          <div className='monoFont centreText whiteT'>
-            <p className='centre'>
-              <img src='/titleLogo.svg' className='shadow noCopy' height='400' />
-            </p>
-            <div>
-              <p>Neptune {Pref.neptuneVersion}</p>
-              <p>Copyright (c) 2016-present Commutron Industries <a href='https://www.commutron.ca' target='_blank'>https://www.commutron.ca</a></p>
-              <p>Author 2016-2021 Matthew Andreas <a href='https://github.com/mattandwhatnot' target='_blank'>https://github.com/mattandwhatnot</a></p>
-              <p>All Rights Reserved, No Public License</p>
-              <p>Source avaliable <a href='https://github.com/commutron/neptune-dev' target='_blank'>https://github.com/commutron/neptune-dev</a></p>
-            </div>
-          </div>
-        </div>
-      )
+      content: ( <MetaSlide /> )
     });
   }
 });
@@ -241,7 +227,7 @@ privlegedRoutes.route('/print/generallabel/:batch', {
       }
     }else{
       mount(SplashLayout, {
-        content: (<p>Page Not Found</p>),
+        content: (<p className='centreText bigger'>Page Not Found</p>),
         title: '404'
       });
     }
@@ -289,16 +275,7 @@ FlowRouter.globals.push({
       sizes: "16x16 32x32 64x64",
       rel: "icon"
     },
-    // manifest: {
-    //   href: "/pwa_manifest.json",
-    //   rel: "manifest",
-    // },
   },
-  /*
-  script: {
-    twbs: 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'
-  }
-  */
   meta: {
     meta00: {
       charset: "UTF-8"
@@ -318,10 +295,6 @@ FlowRouter.globals.push({
       name: "apple-mobile-web-app-capable" ,
       content: "yes"
     },
-    // meta4: {
-    //   name: "viewport",
-    //   content: "minimum-scale=0.25, maximum-scale=3"
-    // }
   }
 });
 
@@ -357,7 +330,7 @@ function createDisconnectTimeout() {
 
   disconnectTimer = setTimeout(function () {
     Meteor.disconnect();
-  },1000 * 60 * 5);
+  },1000 * 60 * Pref.blurOut);
 }
 
 function removeDisconnectTimeout() {

@@ -150,7 +150,7 @@ const TimeBudgetsChunk = ({
                     <dt 
                       key={ix}
                       className='rightRow doJustWeen'
-                    ><i className='big gapR'><UserNice id={per.uID} /> </i>
+                    ><i className='medBig gapR'><UserNice id={per.uID} /> </i>
                       <i className='grayT rightText'
                       > {timeAs} {conversion}</i>
                     </dt> 
@@ -182,7 +182,7 @@ const TimeBudgetsChunk = ({
                             key={ix}
                             title={`${Math.round(br.y)} minutes`}
                             className='rightRow doJustWeen'
-                          ><i className='big cap'>{br.x}</i>
+                          ><i className='medBig cap'>{br.x}</i>
                             <i className='grayT rightText'
                             > {timeAs} {conversion}</i>
                           </dt> 

@@ -15,13 +15,23 @@ const PrioritySquareData = ({
   const [ ptData, setPriority ] = useState(false);
   
   useEffect( ()=> {
-    Meteor.call('priorityRank', batchID, false, mockDay, (error, reply)=>{
-      error && console.log(error);
-      if( reply ) { 
-        if(thingMounted.current) { setPriority( reply ); }
-        isDebug && console.log(ptData);
-      }
-    });
+    if(mockDay) {
+      Meteor.call('priorityRank', batchID, false, mockDay, (error, reply)=>{
+        error && console.log(error);
+        if( reply ) { 
+          if(thingMounted.current) { setPriority( reply ); }
+          isDebug && console.log(ptData);
+        }
+      });
+    }else{
+      Meteor.call('priorityTrace', batchID, (error, reply)=>{
+        error && console.log(error);
+        if( reply ) { 
+          if(thingMounted.current) { setPriority( reply ); }
+          isDebug && console.log(ptData);
+        }
+      });
+    }
   }, [batchID, dbDay, mockDay]);
   
   useEffect( ()=> {

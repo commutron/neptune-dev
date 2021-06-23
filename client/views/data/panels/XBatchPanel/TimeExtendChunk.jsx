@@ -106,7 +106,7 @@ const TimeExtendChunk = ({ b, rapid, conversion, conversionSet, isDebug }) =>	{
                   <dt 
                     key={ix}
                     className='rightRow doJustWeen'
-                  ><i className='big gapR'><UserNice id={per.uID} /> </i>
+                  ><i className='medBig gapR'><UserNice id={per.uID} /> </i>
                     <i className='grayT rightText'
                     > {timeAs} {conversion}</i>
                   </dt> 

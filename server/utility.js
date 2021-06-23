@@ -1,3 +1,11 @@
+import moment from 'moment';
+
+export function syncHoliday(accessKey) {
+  const app = AppDB.findOne({orgKey:accessKey}, {fields:{'nonWorkDays':1}});
+  if(Array.isArray(app.nonWorkDays) ) {  
+    moment.updateLocale('en', { holidays: app.nonWorkDays });
+  }
+}
 
 export function sortBranches(branches) {
   const brancheS = branches.sort((b1, b2)=>
@@ -66,4 +74,11 @@ export function countMulti(ncArr) {
 export function noIg() {
   const xg = GroupDB.findOne({internal: true},{fields:{'_id':1}});
   return xg ? xg._id : 'n0ne';
+}
+
+export function getEst(widgetId, quantity) {
+  const wdjt = WidgetDB.findOne({ _id: widgetId });
+  const perQ = !wdjt.quoteStats ? 0 : wdjt.quoteStats.stats.tidePerItemAvg;
+  const mEst = perQ * quantity;
+  return mEst;
 }
