@@ -17,7 +17,7 @@ function toRelDiff(bSalesStart, bReleases) {
   const floorRelease = bReleases.find( x => x.type === 'floorRelease');
   const flrRelTime = floorRelease && floorRelease.time;
   
-  const gapSale2Rel = !flrRelTime ? 0 :
+  const gapSale2Rel = !flrRelTime ? false :
     moment(flrRelTime).workingDiff(bSalesStart, 'days');
 
   return gapSale2Rel;
@@ -28,7 +28,7 @@ function toStrtDiff(bSalesStart, bTide) {
   const tideBegin = bTide && bTide.length > 0 ? bTide[0] : null;
   const beginTime = tideBegin ? tideBegin.startTime : null;
   
-  const gapSale2Start = !beginTime ? 0 :
+  const gapSale2Start = !beginTime ? false :
     moment(beginTime).workingDiff(bSalesStart, 'days');
   
   return gapSale2Start;
@@ -63,6 +63,7 @@ function getWidgetDur(widget, accessKey) {
     }
     const cutoff = ( d => new Date(d.setDate(d.getDate()-Config.avgSpan)) )(new Date);
   
+    let qtyAvg = [];
     let relAvg = [];
     let stAvg = [];
     let ffinAvg = [];
@@ -78,6 +79,7 @@ function getWidgetDur(widget, accessKey) {
     for( let x of compX ) {
       const srs = XSeriesDB.findOne({batch: x.batch});
       const items = srs ? srs.items : [];
+      qtyAvg.push( b.quantity );
       
       relAvg.push( toRelDiff(x.salesStart, x.releases) );
       stAvg.push( toStrtDiff(x.salesStart, x.tide) );
@@ -86,8 +88,9 @@ function getWidgetDur(widget, accessKey) {
     }
   
     const avgWorkDays = {
-      relAvg: avgOfArray( relAvg ),
-      stAvg: avgOfArray( stAvg ),
+      qtyAvg: avgOfArray( qtyAvg, true ),
+      relAvg: avgOfArray( relAvg, true ),
+      stAvg: avgOfArray( stAvg, true ),
       ffinAvg: avgOfArray( ffinAvg ),
       compAvg: avgOfArray( compAvg )
     };
@@ -186,26 +189,27 @@ Meteor.methods({
       
       const rel = Math.round( trn.relAvg );
       const relEst = salesMnt.clone().addWorkingTime(rel, 'days');
-      const relDif = relEst.workingDiff(now, 'days');
+      const relDif = relEst.workingDiff(now, 'days', true);
       
       const wrk = Math.round( trn.stAvg );
       const wrkEst = salesMnt.clone().addWorkingTime(wrk, 'days');
-      const wrkDif = wrkEst.workingDiff(now, 'days');
+      const wrkDif = wrkEst.workingDiff(now, 'days', true);
       
       const ffinAvg = trn.ffinAvg;
       const fin = ffinAvg ? Math.round( ffinAvg ) : 0;
       const finEst = salesMnt.clone().addWorkingTime(fin, 'days');
-      const finDif = finEst.workingDiff(now, 'days');
+      const finDif = finEst.workingDiff(now, 'days', true);
       
       const cmp = Math.round( trn.compAvg );
       const cmpEst = salesMnt.clone().addWorkingTime(cmp, 'days');
-      const cmpDif = cmpEst.workingDiff(now, 'days');
+      const cmpDif = cmpEst.workingDiff(now, 'days', true);
       
       return [ 
         relEst.format(), relDif,
         wrkEst.format(), wrkDif,
         finEst.format(), finDif,
-        cmpEst.format(), cmpDif
+        cmpEst.format(), cmpDif,
+        trn.qtyAvg
       ];
     }else{
       return 'na';

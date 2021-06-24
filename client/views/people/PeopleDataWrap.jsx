@@ -69,12 +69,12 @@ const PeopleDataWrap = ({
             <b><i className='fas fa-history fa-fw gapR'></i>Daily History</b>,
             <b><i className='fas fa-tachometer-alt fa-fw gapR'></i>Weekly Metrics</b>,
             <b><i className='far fa-calendar-alt fa-fw gapR'></i>Work Schedule</b>,
-            <b><i className='fas fa-user-lock fa-fw gapR'></i>Permissions</b>,
+            <b><i className='fas fa-hourglass-end fa-fw gapR'></i>Overtime Errors</b>,
             <b><i className='fas fa-users-cog fa-fw gapR'></i>Account Manager</b>,
-            <b><i className='fas fa-hourglass fa-fw gapR'></i>Error Check</b>,
-            antiAuth || <b><i className='fas fa-user-secret fa-fw gapR'></i>Organization PIN</b>,
+            <b><i className='fas fa-user-lock fa-fw gapR'></i>Permissions</b>,
+            <b><i className='fas fa-dice fa-fw gapR'></i>Revolving PIN</b>,
           ]}
-          disable={[false, false, false, false, false, antiAuth, antiAuth, antiAuth]}>
+          disable={[false, false, false, false, antiAuth, antiAuth, false, antiAuth]}>
           
           <DashSlide
             key={0}
@@ -112,9 +112,9 @@ const PeopleDataWrap = ({
             isAdmin={isAdmin}
             isPeopleSuper={isPeopleSuper} />
           
-          <div key={4}>
-            <PermissionHelp auths={Pref.auths} admin={false} />
-          </div>
+          {isAdmin || isPeopleSuper ?
+            <TimeErrorCheck key={6} />
+          : null }
           
           {isAdmin || isPeopleSuper ?
             <AccountsManagePanel 
@@ -126,9 +126,9 @@ const PeopleDataWrap = ({
               isDebug={isDebug} />
           : null }
           
-          {isAdmin || isPeopleSuper ?
-            <TimeErrorCheck key={6} />
-          : null }
+          <div key={4}>
+            <PermissionHelp auths={Pref.auths} admin={false} />
+          </div>
           
           {isAdmin || isPeopleSuper ?
             <RevolvingPINCheck 

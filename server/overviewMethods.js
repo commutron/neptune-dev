@@ -265,18 +265,18 @@ Meteor.methods({
       
       const mEst = getEst(b.widgetId, b.quantity);
       const budget = b.quoteTimeBudget || [];
-      const totalQuoteMinutes = budget.length === 0 ? 0 : Number(budget[0].timeAsMinutes);
-      const estimatedMinutes = avgOfArray([totalQuoteMinutes, mEst]);
+      const mQuote = budget.length === 0 ? 0 : Number(budget[0].timeAsMinutes);
+      const estimatedMinutes = mQuote < mEst ? mQuote : avgOfArray([mQuote, mEst]);
       
       const realTimePer = percentOf( estimatedMinutes, totalTideMinutes );
       
       const diff = Math.round( goalTimePer - realTimePer );
                     
-      const gold = !isFinite(diff) || donePer === 0 ? false : 
+      const gold = !isFinite(diff) || totalTideMinutes === 0 ? null :
+                   donePer === 0 ? realTimePer < Config.qregA ? 0 : -1 :
                    Math.round( diff * 0.075 );
       
       return {
-        estimatedMinutes: estimatedMinutes,
         donePer: donePer,
         goalTimePer: goalTimePer,
         realTimePer: realTimePer,

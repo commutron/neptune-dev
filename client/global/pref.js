@@ -45,8 +45,9 @@ class Pref {
     this.tooManyMin = 600;
     this.groupMax = 128;
     this.aliasMax = 16;
-    this.downDayMax = 24;
+    this.downDayMax = 24; // max ship days in downstream
     this.pagingSize = 25;
+    this.idleMinutes = 0; // minus idle time from timeInDay calculation
     this.statisticalStartHour = 6; // 6am
     this.statisticalEndHour = 20; // 8pm
     this.stepUndoWindow = 1000*30; // remember to match ".spinRe"

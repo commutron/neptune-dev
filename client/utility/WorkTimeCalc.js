@@ -2,6 +2,7 @@ import moment from 'moment';
 // import 'moment-timezone';
 import 'moment-business-time';
 import './ShipTime.js';
+import Pref from '/client/global/pref.js';
 
 import { round2Decimal } from '/client/utility/Convert.js';
 
@@ -51,8 +52,9 @@ export function TimeInWeek( nonWorkDays, weekStart ) {
       const dayTotal = dayEnd.workingDiff(dayStart, 'hours', true);
       
       const breakTime = dayTotal <= 5 ? 15 : 30; // << hard coded 15min breaks
-      //const idleTime = breakTime + 15; // << hard coded common idle
-      const minusTime = ( dayTotal * 60 ) < breakTime ? 0 : breakTime;
+      const idleTime = breakTime + Pref.idleMinutes;
+      const minusTime = ( dayTotal * 60 ) < breakTime ? 0 :
+                        ( dayTotal * 60 ) < idleTime ? breakTime : idleTime;
         
       const workTime = moment.duration(dayTotal, 'hours')
                         .subtract(minusTime, 'minutes').asHours();
@@ -79,9 +81,10 @@ export function TimeInDay( nonWorkDays, dayStart ) {
     const end = moment(dayStart).endOf('day').format();
     const dayTotal = moment(end).workingDiff(begin, 'hours', true);
 
-    const breakTime = dayTotal <= 5 ? 15 : 30; // << hard coded 15min breaks
-    //const idleTime = breakTime + 15; // << hard coded common idle
-    const minusTime = ( dayTotal * 60 ) < breakTime ? 0 : breakTime;
+    const breakTime = dayTotal <= 5 ? 15 : 30; //<< hard coded 15min breaks
+    const idleTime = breakTime + Pref.idleMinutes;
+    const minusTime = ( dayTotal * 60 ) < breakTime ? 0 :
+                      ( dayTotal * 60 ) < idleTime ? breakTime : idleTime;
     
     const workTime = moment.duration(dayTotal, 'hours')
                       .subtract(minusTime, 'minutes').asHours();

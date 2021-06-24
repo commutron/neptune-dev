@@ -36,8 +36,6 @@ const InfoTab = ({
                     endDay.clone().endOf('day').lastShippingTime() :
                     endDay.clone().lastShippingTime();
                     
-  const remain = shipDue.workingDiff(moment(), 'days', true);
-  
   const rOpen = rapidsData && rapidsData.some( r => r.live === true );
   
   return(
@@ -109,7 +107,7 @@ const InfoTab = ({
         flowCounts={flowCounts}
         srange={srange}
         end={end}
-        remain={remain} />
+        shipDue={shipDue} />
     
     </span>
     
@@ -153,7 +151,7 @@ const InfoTab = ({
 
 export default InfoTab;
 
-const SalesSegment = ({ b, srange, flowCounts, end, remain })=> {
+const SalesSegment = ({ b, srange, flowCounts, end, shipDue })=> {
   
   const qtB = b.quoteTimeBudget && b.quoteTimeBudget.length > 0 ? 
                 b.quoteTimeBudget[0].timeAsMinutes : 0;
@@ -163,6 +161,7 @@ const SalesSegment = ({ b, srange, flowCounts, end, remain })=> {
   const timeElapseClean = timeElapse > -1 && timeElapse < 1 ? 
           timeElapse.toPrecision(1) : Math.round(timeElapse);
   
+  const remain = shipDue.workingDiff(moment(), 'days', true);
   const remainClean = remain > -1 && remain < 1 ? 
           remain.toPrecision(1) : Math.round(remain);
 
@@ -197,7 +196,7 @@ const SalesSegment = ({ b, srange, flowCounts, end, remain })=> {
       {cmplt !== null && <p>Complete: <n-num>{cmplt}</n-num></p> }
       
       {cmplt !== null ? null : 
-        <p>Time Remaining: 
+        <p>Ship Due in: 
           <n-num className={remainClean < 0 ? 'yellowT' : ''}> {remainClean} workdays</n-num>
         </p> }
   

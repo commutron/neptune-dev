@@ -32,19 +32,28 @@ const WTimeTab = ({
         <tr className='cap'>
           <th>Sales Start → {Pref.kitting} Release</th>
           <th>Sales Start → Production Start</th>
-          {/*<th>Sales Start → First Completed Item</th>*/}
+          <th>Sales Start → First Finished Item*</th>
           <th>Sales Start → Complete</th>
         </tr>
       </thead><tbody>
         <tr className='centreText'>
           <td>{ result['relAvg'] && `${round1Decimal(result['relAvg'])} days`}</td>
           <td>{ result['stAvg'] && `${round1Decimal(result['stAvg'])} days`}</td>
-          {/*<td>{ result['ffinAvg'] && `${round1Decimal(result['ffinAvg'])} days`}</td>*/}
+          <td>{ result['ffinAvg'] && `${round1Decimal(result['ffinAvg'])} days`}</td>
           <td>{ result['compAvg'] && `${round1Decimal(result['compAvg'])} days`}</td>
         </tr>
       </tbody></table>
+      {result['qtyAvg'] &&
+        <p className='small rightText fade'
+          >Based on an average quantity of <n-num>{result['qtyAvg']}</n-num> per {Pref.xBatch}
+        </p>
+      }
       <p className='small rightText fadeMore'
-        >{Pref.xBatchs} mean, counting scheduled work days</p>
+        >Counts completed {Pref.xBatchs} and scheduled work days
+      </p>
+      <p className='small rightText fadeMore'
+        >* Only applicable to {Pref.xBatchs} that include serialized items
+      </p>
      
       <TideMultiBatchBar 
         batchIDs={batchIDs}
