@@ -79,7 +79,7 @@ function getWidgetDur(widget, accessKey) {
     for( let x of compX ) {
       const srs = XSeriesDB.findOne({batch: x.batch});
       const items = srs ? srs.items : [];
-      qtyAvg.push( b.quantity );
+      qtyAvg.push( x.quantity );
       
       relAvg.push( toRelDiff(x.salesStart, x.releases) );
       stAvg.push( toStrtDiff(x.salesStart, x.tide) );

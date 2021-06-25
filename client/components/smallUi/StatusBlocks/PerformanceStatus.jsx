@@ -52,7 +52,9 @@ export const PerformanceSquare = ({
     const baseClass = 'blur-change smCap big';
     const extraClass = showExtra ? 'centre' : '';
     
+    const pos = pf.gold >= 0 ? '+' : '';
     
+    const golden = <b className='bigger gapR numFont'>{pos}{pf.gold}</b>;
     
     const pfRank = 
       pf.gold <= -4 ? <n-fa3><i className='fas fa-sad-tear fa-lg'></i></n-fa3> :
@@ -69,7 +71,7 @@ export const PerformanceSquare = ({
         className={`${baseClass} ${extraClass}`}
       >
         <NumStat
-          num={pfRank}
+          num={<span>{golden}{pfRank}</span>}
           name='Performance'
           color='blackblackT'
           size='bold big' />

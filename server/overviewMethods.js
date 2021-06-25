@@ -255,6 +255,11 @@ Meteor.methods({
     }else{
       const srs = XSeriesDB.findOne({batch: b.batch});
       const items = srs ? srs.items : [];
+      
+      const nc = srs ? srs.nonCon.filter( n => !n.trash ) : [];
+      const rate = nc.length / b.quantity;
+      const pb = isFinite(rate) ? rate < 1 ? Math.round(rate) : Math.ceil(rate*0.1) : 0;
+          
       const done = items.filter( i => i.completed );
       
       const donePer = percentOf( items.length, done.length );
@@ -281,7 +286,8 @@ Meteor.methods({
         goalTimePer: goalTimePer,
         realTimePer: realTimePer,
         diff: diff,
-        gold: gold
+        gold: gold,
+        pb: pb
       };
     }
   },
