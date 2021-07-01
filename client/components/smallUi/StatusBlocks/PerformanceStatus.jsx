@@ -60,10 +60,7 @@ export const PerformanceSquare = ({ perf })=> {
     'On Target';
     
   return(
-    <div 
-      // className='smCap'
-      title={pfText}
-    >
+    <div title={pfText}>
       <NumStat
         num={<span className='perf'>{golden}{pfRank}</span>}
         name='Performance'
