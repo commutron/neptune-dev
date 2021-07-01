@@ -4,9 +4,8 @@ import 'moment-business-time';
 import '/client/utility/ShipTime.js';
 // import glTest from '/client/utility/GoodLocal.js';
 // import Pref from '/client/global/pref.js';
-import NumStat from '/client/components/tinyUi/NumStat.jsx';
-import TrinaryStat from '/client/components/tinyUi/TrinaryStat.jsx';
-
+import NumStat from '/client/components/tinyUi/NumStat';
+import TrinaryStat from '/client/components/tinyUi/TrinaryStat';
 
 const BatchTopStatus = ({ 
   rowIndex, batchID, tBatch,
@@ -21,8 +20,7 @@ const BatchTopStatus = ({
     if(tBatch) {
       const shipAimMmnt = moment(tBatch.shipAim);
       
-      const adaptDate = shipAimMmnt.isAfter(moment(), 'year') ?
-                                  "MMM Do, YYYY" : "MMM Do";
+      const adaptDate = shipAimMmnt.isAfter(moment(), 'year') ? "MMM Do, YYYY" : "MMM Do";
       dueDateShipSet(shipAimMmnt.format(adaptDate));
       
       const timeRemain = !tBatch.completed ?
@@ -79,17 +77,5 @@ const BatchTopStatus = ({
     </Fragment>
   );
 };
- /* 
-  return(
-    <Fragment>
-      {statusCols.map( (st, index)=>{
-        return(
-          <div key={batchID + st + index + 'x'}>
-            <i className='fade small label'>{st}</i>
-          </div>
-      )})}
-    </Fragment>
-  );
-};
-*/
+
 export default BatchTopStatus;

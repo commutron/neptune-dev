@@ -22,17 +22,14 @@ const PerformanceData = ({ batchID })=> {
   }, []);
   
   return(
-    <PerformanceSquare 
-      batchID={batchID} 
-      perf={pfData}
-    /> 
+    <PerformanceSquare perf={pfData} /> 
   );
 };
 
 export default PerformanceData;
 
 
-export const PerformanceSquare = ({ batchID, perf })=> {
+export const PerformanceSquare = ({ perf })=> {
   
   const pos = perf === null ? '±' : perf > 0 ? '+' : '';
   
@@ -64,11 +61,11 @@ export const PerformanceSquare = ({ batchID, perf })=> {
     
   return(
     <div 
-      className='smCap'
+      // className='smCap'
       title={pfText}
     >
       <NumStat
-        num={<span>{golden}{pfRank}</span>}
+        num={<span className='perf'>{golden}{pfRank}</span>}
         name='Performance'
         color='blackblackT'
         size='bold bigger' />

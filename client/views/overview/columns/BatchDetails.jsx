@@ -5,6 +5,7 @@ import Pref from '/client/global/pref.js';
 import BatchTopStatus from './BatchTopStatus.jsx';
 import ReleasedCheck from './ReleasedCheck.jsx';
 import TideActivityData, { TideActivitySquare } from '/client/components/tide/TideActivity';
+import { PerformanceSquare } from '/client/components/smallUi/StatusBlocks/PerformanceStatus';
 import BranchProgress from './BranchProgress.jsx';
 import NonConCounts from './NonConCounts.jsx';
 import ProJump from '/client/components/smallUi/ProJump';
@@ -26,8 +27,8 @@ const BatchDetails = ({
                     Array.from(brancheS, x => x.common);
   const ncCols = ['NC total', 'NC remain', 'NC per item', 'NC items', 'scrap', 'RMA'];
 
-  const fullHead = ['sales order','active',...statusCols,'released',...progCols,...ncCols,''];
-  const brchHead = ['sales order','active',...statusCols,...progCols,...ncCols,''];
+  const fullHead = ['sales order','active',...statusCols,'released',...progCols,'Perfomance',...ncCols,''];
+  const brchHead = ['sales order','active',...statusCols,...progCols,'Perfomance',...ncCols,''];
   
   const headersArr = branchArea ? brchHead : fullHead;
   
@@ -152,7 +153,9 @@ const BatchDetailChunk = ({
         branchArea={branchArea}
         updateTrigger={updateTrigger}
         isDebug={isDebug} />
-        
+      
+      <PerformanceSquare perf={tBatch.performTgt} />
+      
       <NonConCounts
         batchID={oB._id}
         releasedToFloor={releasedToFloor}

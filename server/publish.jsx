@@ -241,8 +241,8 @@ Meteor.publish('traceDataActive', function(){
           'estSoonest': 1,
           'bffrRel': 1,
           'estEnd2fillBuffer': 1,
-          'overQuote': 1
-          // 'performTgt': 1
+          'overQuote': 1,
+          'performTgt': 1
         }
       })
     ];
@@ -286,8 +286,8 @@ Meteor.publish('traceDataOpen', function(){
           'estSoonest': 1,
           'bffrRel': 1,
           'estEnd2fillBuffer': 1,
-          'overQuote': 1
-          // 'performTgt': 1
+          'overQuote': 1,
+          'performTgt': 1
         }
       })
     ];

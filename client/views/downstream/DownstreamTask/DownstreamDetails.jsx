@@ -5,6 +5,7 @@ import { min2hr } from '/client/utility/Convert';
 
 import ProJump from '/client/components/smallUi/ProJump';
 import TideActivityData, { TideActivitySquare } from '/client/components/tide/TideActivity';
+import { PerformanceSquare } from '/client/components/smallUi/StatusBlocks/PerformanceStatus';
 import BranchProgress from '../../overview/columns/BranchProgress.jsx';
 import NonConCounts from '../../overview/columns/NonConCounts';
 import AlterFulfill from '/client/components/forms/Batch/AlterFulfill';
@@ -95,7 +96,9 @@ const DownstreamScrollChunk = ({
         branchArea={false}
         updateTrigger={updateTrigger}
         isDebug={isDebug} />
-        
+      
+      <PerformanceSquare perf={ck.performTgt} />
+      
       <NonConCounts
         batchID={ck.batchID}
         releasedToFloor={releasedToFloor}

@@ -27,3 +27,26 @@
 .agScale2 { background-color: #DD1F4E; }
 .agScale3 { background-color: #F4426E; }
 .agScale4 { background-color: #EDADC7; }
+
+.overGridRowScroll .perf,
+.downRowScroll  .perf {
+  font-size: calc(2 * var(--vh));
+}
+.minifyed .overGridRowScroll .perf,
+.minifyed .downRowScroll .perf {
+  font-size: calc(1.5 * var(--vh));
+}
+.darkTheme .perf {
+  color: var(--clouds);
+}
+.minifyed .perf n-faX,
+.minifyed .perf n-fa4,
+.minifyed .perf n-fa3,
+.minifyed .perf n-fa2,
+.minifyed .perf n-fa1,
+.minifyed .perf n-fa7,
+.minifyed .perf n-fa6,
+.minifyed .perf n-fa5,
+.minifyed .perf n-fa0 {
+  display: none;
+}

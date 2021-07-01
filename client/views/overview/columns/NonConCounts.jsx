@@ -35,47 +35,47 @@ const NonConCounts = ({
             title='Total Noncons'
             color='redT'
             size='big' />
-          </div>
-          <div>
-            <NumStat
-              num={dt.nonConLeft}
-              name='NC Remain'
-              title='Unresolved Noncons'
-              color='orangeT'
-              size='big' />
-          </div>
-          <div>
-            <NumStat
-              num={dt.nonConRate}
-              name='NC per Item'
-              title='Rate of Noncons per Item'
-              color='redT'
-              size='big' />
-          </div>
-          <div>
-            <NumStat
-              num={dt.percentOfNCitems}
-              name='NC Items'
-              title='Percent of Items with Noncons'
-              color='redT'
-              size='big' />
-          </div>
-          <div>
-            <NumStat
-              num={dt.itemIsScrap}
-              name='Scrap Boards'
-              title=''
-              color='redT'
-              size='big' />
-          </div>
-          <div>
-            <NumStat
-              num={dt.itemHasRMA}
-              name='RMA Boards'
-              title=''
-              color='redT'
-              size='big' />
-          </div>
+        </div>
+        <div>
+          <NumStat
+            num={dt.nonConLeft}
+            name='NC Remain'
+            title='Unresolved Noncons'
+            color='orangeT'
+            size='big' />
+        </div>
+        <div>
+          <NumStat
+            num={dt.nonConRate}
+            name='NC per Item'
+            title='Rate of Noncons per Item'
+            color='redT'
+            size='big' />
+        </div>
+        <div>
+          <NumStat
+            num={dt.percentOfNCitems}
+            name='NC Items'
+            title='Percent of Items with Noncons'
+            color='redT'
+            size='big' />
+        </div>
+        <div>
+          <NumStat
+            num={dt.itemIsScrap}
+            name='Scrap Boards'
+            title=''
+            color='redT'
+            size='big' />
+        </div>
+        <div>
+          <NumStat
+            num={dt.itemHasRMA}
+            name='RMA Boards'
+            title=''
+            color='redT'
+            size='big' />
+        </div>
       </Fragment>
     );
   }
