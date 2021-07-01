@@ -4,7 +4,7 @@ import 'moment-business-time';
 
 import { avgOfArray, percentOf } from '/server/calcOps';
 import Config from '/server/hardConfig.js';
-import { noIg } from './utility';
+import { noIg, syncHoliday } from './utility';
 
 moment.updateLocale('en', {
   workinghours: Config.workingHours,
@@ -57,10 +57,8 @@ function getWidgetDur(widget, accessKey) {
   const stale = !statime ? true :
             moment.duration(moment().diff(moment(statime))).as('hours') > 12;
   if(stale) {
-    const app = AppDB.findOne({orgKey:accessKey}, {fields:{'nonWorkDays':1}});
-    if( Array.isArray(app.nonWorkDays) ) {  
-      moment.updateLocale('en', { holidays: app.nonWorkDays });
-    }
+    syncHoliday(accessKey);
+   
     const cutoff = ( d => new Date(d.setDate(d.getDate()-Config.avgSpan)) )(new Date);
   
     let qtyAvg = [];
@@ -171,10 +169,7 @@ Meteor.methods({
   estBatchTurnAround(bID, wID) {
     this.unblock();
     const accessKey = Meteor.user().orgKey;
-    const app = AppDB.findOne({orgKey:accessKey}, {fields:{'nonWorkDays':1}});
-    if( Array.isArray(app.nonWorkDays) ) {  
-      moment.updateLocale('en', { holidays: app.nonWorkDays });
-    }
+    syncHoliday(accessKey);
     
     const now = moment().tz(Config.clientTZ);
     

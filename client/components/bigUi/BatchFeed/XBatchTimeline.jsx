@@ -167,7 +167,7 @@ const XBatchTimeline = ({
             return( 
               <CompleteBlock
                 key={'completefinish'+ix}
-                title={`${Pref.batch} complete`}
+                title={`${Pref.xBatch} complete`}
                 datetime={dt.time}
                 cal={calFunc} />
             );
