@@ -17,6 +17,7 @@ import TabsLite from '/client/components/smallUi/Tabs/TabsLite.jsx';
 import NonConBubble from '/client/components/charts/NonCon/NonConBubble.jsx';
 import NonConBar from '/client/components/charts/NonCon/NonConBar.jsx';
 import NonConBarRefs from '/client/components/charts/NonCon/NonConBarRefs.jsx';
+import ShortScatter from '/client/components/charts/ShortScatter';
 
 const ProblemTab = ({
   batch, seriesData,
@@ -75,10 +76,15 @@ const ProblemTab = ({
               <i className="fas fa-braille fa-lg fa-fw"></i>,
               <i className="fas fa-chart-bar fa-lg fa-fw"></i>,
               <i className="fas fa-chess-board fa-lg fa-fw"></i>,
-              <i className="fas fa-chart-area fa-lg fa-fw"></i>
+              <i className="fas fa-chart-area fa-lg fa-fw"></i>,
+              <i className="fas fa-th fa-lg fa-fw"></i>,
             ] }
             names={[ 
-              'type bubbles', 'type bars', 'referance bars', 'recorded rate'
+              'Type Bubbles', 
+              'Type Bars', 
+              'Referance Bars', 
+              'Recorded Rate', 
+              'Shortfall Scatter'
             ]}>
            
             <NonConBubble
@@ -104,11 +110,14 @@ const ProblemTab = ({
               title='NonCon Rate'
               lineColor='rgb(231, 76, 60)' />
             
+            <ShortScatter
+              shortfalls={srsShorts}
+              app={app}
+              isDebug={isDebug} />
           </TabsLite>
         :
           <div className='centreText fade'>
-            <i className='fas fa-smile-beam fa-3x'></i>
-            <p className='big cap'>no {Pref.nonCons}</p>
+            <p className='cap'>no data to chart</p>
           </div>}
       </div>
     </div>

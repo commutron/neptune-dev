@@ -31,7 +31,6 @@ const TimeNextChunk = ({
   const label = (l)=> l ? <n-sm-i> (Actual)</n-sm-i> : <n-sm-i> (Estimation)</n-sm-i>;
   
   const flrRel = floorRelease ? floorRelease.time : false;
-  
   const flgap = flrRel ? moment(flrRel).workingDiff(est[0], 'days', true) : 0;
   
   const flDelay = flrRel ? flgap : est[1] < 0 ? est[1] : 0;
@@ -39,7 +38,7 @@ const TimeNextChunk = ({
   const stTide = batchData.tide.length > 0  ? batchData.tide[0].startTime : false;
   const stgap = stTide ? moment(stTide).workingDiff(est[2], 'days', true) : 0;
   
-  const stDelay = stTide ? stgap + flDelay : est[3] < 0 ? est[3] + flDelay : 0;
+  const stDelay = stTide ? stgap : est[3] < 0 ? est[3] : 0;
   
   const fitems = seriesData ? seriesData.items.filter( i => i.completed ) : [];
   const itemS = fitems.sort( (i1, i2)=>
@@ -53,7 +52,7 @@ const TimeNextChunk = ({
       <h3>Benchmarks</h3>
       
       <n-timeline>
-        <n-timeline-item title={toDay(est[0])}>
+        <n-timeline-item>
           <n-timeline-info>
             {flrRel ? toDay(flrRel) : toDay(est[0]) + toDur(est[1])}
             {label(flrRel)}
@@ -62,7 +61,7 @@ const TimeNextChunk = ({
           <n-timeline-title>Release</n-timeline-title>
         </n-timeline-item>
         
-        <n-timeline-item title={toDay(est[2], flDelay)}>
+        <n-timeline-item>
           <n-timeline-info>
             {stTide ? toDay(stTide) : toDay(est[2], flDelay) + toDur(est[3]+flDelay)}
             {label(stTide)}
@@ -72,7 +71,7 @@ const TimeNextChunk = ({
         </n-timeline-item>
         
         {seriesData &&
-          <n-timeline-item title={toDay(est[4], stDelay)}>
+          <n-timeline-item>
             <n-timeline-info>
               {fin ? toDay(fin) : toDay(est[4], stDelay) + toDur(est[5]+stDelay)}
               {label(fin)}
@@ -82,7 +81,7 @@ const TimeNextChunk = ({
           </n-timeline-item>
         }
         
-        <n-timeline-item title={toDay(est[6], stDelay)}>
+        <n-timeline-item>
           <n-timeline-info>
             {comp ? toDay(comp) : 
              toDay(est[6], stDelay) + toDur(est[7]+stDelay)}
