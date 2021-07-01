@@ -4,8 +4,6 @@ import Pref from '/client/global/pref.js';
 
 import { TraverseWrap } from '/client/layouts/DataExploreLayout.jsx';
 
-import SearchHelp from './SearchHelp.jsx';
-
 import ExploreLanding from './panels/ExploreLanding.jsx';
 import ReportsWrap from './panels/Reports/ReportsWrap.jsx';
 import AllGroups from './panels/AllGroups/AllGroups.jsx';
@@ -526,8 +524,6 @@ const DataViewOps = ({
     >
       <div className='centre wide'>
         <p className='biggest'>¯\_(ツ)_/¯</p>
-        <br />
-        <SearchHelp />
       </div>
       <div></div>
     </TraverseWrap>

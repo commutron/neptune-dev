@@ -5,19 +5,12 @@ import 'moment-business-time';
 import Config from '/server/hardConfig.js';
 import { syncHoliday } from '/server/utility.js';
 import { deliveryState, calcShipDay } from '/server/reportCompleted.js';
+import { getShipLoad } from '/server/shipOps';
 
 moment.updateLocale('en', {
   workinghours: Config.workingHours,
   shippinghours: Config.shippingHours
 });
-
-function getShipLoad(now) {
-  const shipLoad = TraceDB.find({shipAim: { 
-    $gte: new Date(now.clone().nextShippingTime().startOf('day').format()),
-    $lte: new Date(now.clone().nextShippingTime().endOf('day').format()) 
-  }},{fields:{'batchID':1}}).count();
-  return shipLoad;
-}
 
 function shrinkWhole(bData, now, shipLoad, accessKey) {
   return new Promise( (resolve)=> {
@@ -38,13 +31,13 @@ function shrinkWhole(bData, now, shipLoad, accessKey) {
     const didFinish = bData.completed;
     const whenFinish = didFinish ? bData.completedAt : false;
     
-    const shpdlv = didFinish ? deliveryState( endDay, whenFinish )
+    const shpdlv = didFinish ? deliveryState( bData._id, endDay, whenFinish )
                               // salesEnd, shipAim, didFinish, gapZone
-                             : calcShipDay( now, endDay );
+                             : calcShipDay( bData._id, now, endDay );
                               // salesEnd, shipAim, lateLate, shipLate
       
     const salesEnd = shpdlv[0];
-    const shipAim = didFinish ? shpdlv[1] : shpdlv[1].format();
+    const shipAim = didFinish ? shpdlv[1] : shpdlv[1];
     const completedAt = didFinish ? new Date(shpdlv[2]) : false;
     const gapZone = didFinish ? shpdlv[3] : null;
     const lateLate = didFinish ? gapZone[2] === 'late' : shpdlv[2];
@@ -52,6 +45,7 @@ function shrinkWhole(bData, now, shipLoad, accessKey) {
     const actvLvl = Meteor.call('tideActivityLevel', bData._id, accessKey);
     const brchCnd = Meteor.call('branchCondition', bData._id, accessKey);
     const prtyRnk = Meteor.call('priorityFast', accessKey, bData, now, shipAim, shipLoad);
+    const perfFtr = Meteor.call('performTarget', bData._id);
     
     TraceDB.upsert({batchID: bData._id}, {
       $set : { 
@@ -80,7 +74,8 @@ function shrinkWhole(bData, now, shipLoad, accessKey) {
         estSoonest: prtyRnk.estSoonest,
         bffrRel: prtyRnk.bffrRel,
         estEnd2fillBuffer: prtyRnk.estEnd2fillBuffer,
-        minDiff: prtyRnk.minDiff
+        overQuote: prtyRnk.overQuote,
+        performTgt: perfFtr
     }});
     resolve(true);
   });
@@ -123,19 +118,20 @@ function checkMovement(bData, now, shipLoad, accessKey) {
     const didFinish = bData.completed;
     const whenFinish = didFinish ? bData.completedAt : false;
                        
-    const shpdlv = didFinish ? deliveryState( endDay, whenFinish )
+    const shpdlv = didFinish ? deliveryState( bData._id, endDay, whenFinish )
                               // salesEnd, shipAim, didFinish, fillZ, shipZ
-                             : calcShipDay( now, endDay );
+                             : calcShipDay( bData._id, now, endDay );
                               // salesEnd, shipAim, lateLate, shipLate
       
     const salesEnd = shpdlv[0];
-    const shipAim = didFinish ? shpdlv[1] : shpdlv[1].format();
+    const shipAim = didFinish ? shpdlv[1] : shpdlv[1];
     const completedAt = didFinish ? new Date(shpdlv[2]) : false;
     const fillZ = didFinish ? shpdlv[3] : null;
     const lateLate = didFinish ? fillZ[2] === 'late' : shpdlv[2];
     
     const prtyRnk = Meteor.call('priorityFast', accessKey, bData, now, shipAim);
-      
+    const perfFtr = Meteor.call('performTarget', bData._id);
+    
     TraceDB.update({batchID: bData._id}, {
       $set : { 
         lastUpdated: new Date(),
@@ -150,7 +146,8 @@ function checkMovement(bData, now, shipLoad, accessKey) {
         estSoonest: prtyRnk.estSoonest,
         bffrRel: prtyRnk.bffrRel,
         estEnd2fillBuffer: prtyRnk.estEnd2fillBuffer,
-        minDiff: prtyRnk.minDiff
+        overQuote: prtyRnk.overQuote,
+        performTgt: perfFtr
     }});
     resolve(true);
   });

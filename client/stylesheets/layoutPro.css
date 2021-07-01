@@ -189,7 +189,6 @@
 @media screen and (max-width: 785px){
   #lookup { font-size: calc(3.5 * var(--vh)); }
 }
-
 #lookup::selection {
 	color: white;
 	background: rgb(30,30,30);
@@ -198,7 +197,6 @@
 	color: white;
 	background: rgb(30,30,30);
 }
-
 #lookup::-webkit-input-placeholder { /* Chrome/Opera/Safari */
   color: white;
   opacity: 0.9;
@@ -207,9 +205,9 @@
   color: white;
   opacity: 0.9;
 }
-#lookup:-ms-input-placeholder { /* IE 10+ */
-  color: white;
-  opacity: 0.9;
+#lookup:focus {
+  outline-offset: -2px;
+  outline-style: solid;
 }
 
 

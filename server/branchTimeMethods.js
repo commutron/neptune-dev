@@ -1,6 +1,5 @@
 import moment from 'moment';
-//import timezone from 'moment-timezone';
-//import business from 'moment-business';
+
 import Config from '/server/hardConfig.js';
 import { sortBranches } from '/server/utility';
 
@@ -17,9 +16,7 @@ function deriveFromHistory(history, trackOptions, branchOptions) {
   
   const branches = Array.from(foundTrackKeys, x => key2branch(x) );
   const qbranches = _.countBy(branches, x => x);
-  // const qKeysClean = _.omit(qKeys, (value, key)=> {
-  //   return key == false;
-  // });
+  // const qKeysClean = _.omit(qKeys, (value, key)=> key === false );
   
   const entryBranches = Object.entries(qbranches);
   const uniqBranches = _.uniq( Array.from(entryBranches, z => z[0] ) );
@@ -50,10 +47,7 @@ function tryFromHistory(tideStart, tStop, trackOptions, branchOptions, yourHisto
   
   const fromHistoryWithin = deriveFromHistory(withinTide, trackOptions, branchOptions);
   const fromHistoryWithinClean = fromHistoryWithin.cleanResult;
-  // const fromHistoryWithinTally= fromHistoryWithin.qbranches;
-  
-  // console.log(fromHistoryWithinTally);
-  
+
   return fromHistoryWithinClean;
 }
 
@@ -68,9 +62,6 @@ function tryFromNC(tideStart, tStop, uID, nonCon) {
   
   const fromNC = deriveFromProb(anyNC);
   const fromNCclean = fromNC.cleanResult;
-  // const fromNCtally = fromNC.qKeys;
-  
-  // console.log(fromNCtally);
   
   return fromNCclean;
 }
@@ -85,9 +76,7 @@ function tryFromSH(tideStart, tStop, uID, shortfall) {
 
   const fromSH = deriveFromProb(anySH);
   const fromSHclean = fromSH.cleanResult;
-  // const fromSHtally = fromSH.qKeys;
   
-  // console.log(fromSHtally);
   return fromSHclean;
 }
 
@@ -136,7 +125,6 @@ function tryFromHour(tStop, trackOptions, branchOptions, yourHistoryFlat) {
   const fromSameHourClean = fromSameHour.cleanResult;
   // const fromSameHourTally= fromSameHour.qbranches;
   
-  // console.log(fromSameHourTally);
   return fromSameHourClean;
 }
 
@@ -147,9 +135,7 @@ function tryFromDay(tStop, trackOptions, branchOptions, yourHistoryFlat) {
 
   const fromSameDay = deriveFromHistory(sameDayTide, trackOptions, branchOptions);
   const fromSameDayClean = fromSameDay.cleanResult;
-  // const fromSameDayTally= fromSameDay.qbranches;
-  
-  // console.log(fromSameDayTally);
+
   return fromSameDayClean;
 }
 

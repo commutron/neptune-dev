@@ -7,6 +7,7 @@ import { avgOfArray, percentOf, quadRegression } from './calcOps.js';
 import { syncHoliday, countMulti, getEst } from './utility.js';
 import { batchTideTime } from './tideGlobalMethods.js';
 import { calcShipDay } from './reportCompleted.js';
+import { getShipLoad } from '/server/shipOps';
 
 moment.updateLocale('en', {
   workinghours: Config.workingHours,
@@ -16,14 +17,13 @@ moment.updateLocale('en', {
 function dryPriorityCalc(bQuTmBdg, mEst, bTide, shipAim, now, shipLoad) {
   const shipAimMmnt = moment(shipAim);
   
-  const totalQuoteMinutes = bQuTmBdg.length === 0 ? 0 : bQuTmBdg[0].timeAsMinutes;
-  const estimatedMinutes = avgOfArray([totalQuoteMinutes, mEst]);
-  const minDiff = `${mEst} (${mEst - totalQuoteMinutes})`;
+  const mQuote = bQuTmBdg.length === 0 ? 0 : bQuTmBdg[0].timeAsMinutes;
+  const estimatedMinutes = avgOfArray([mQuote, mEst]);
   
   const totalTideMinutes = batchTideTime(bTide);
   
   const quote2tide = estimatedMinutes - totalTideMinutes;
-  const overQuote = quote2tide < 0 ? true : false;
+  const overQuote = totalTideMinutes > mQuote;
   const q2tNice = overQuote ? 0 : quote2tide;
   
   // additional ship bumper
@@ -39,7 +39,7 @@ function dryPriorityCalc(bQuTmBdg, mEst, bTide, shipAim, now, shipLoad) {
 
   const bffrRel = Math.round( ( estEnd2fillBuffer / 100 ) + dayGap - shipPull );
   
-  return { quote2tide, estSoonest, bffrRel, estEnd2fillBuffer, minDiff };
+  return { quote2tide, estSoonest, bffrRel, estEnd2fillBuffer, overQuote };
 }
 
 function collectPriority(privateKey, batchID, mockDay) {
@@ -63,17 +63,14 @@ function collectPriority(privateKey, batchID, mockDay) {
       const doneEntry = b.completedAt;
       
       const future = mockDay ? mockDay : endDay;
-      const calcShip = calcShipDay( now, future );
-      const shipAim = calcShip[1].format();
+      const calcShip = calcShipDay( batchID, now, future );
+      const shipAim = calcShip[1];
       const lateLate = calcShip[2];
       
       const qtBready = !b.quoteTimeBudget ? false : true;
       
       if(qtBready && b.tide && !doneEntry) {
-        const shipLoad = TraceDB.find({shipAim: { 
-          $gte: new Date(now.clone().nextShippingTime().startOf('day').format()),
-          $lte: new Date(now.clone().nextShippingTime().endOf('day').format()) 
-        }},{fields:{'batchID':1}}).count();
+        const shipLoad = getShipLoad(now);
 
         const dryCalc = dryPriorityCalc(b.quoteTimeBudget, mEst, b.tide, shipAim, now, shipLoad);
 
@@ -86,7 +83,7 @@ function collectPriority(privateKey, batchID, mockDay) {
           completed: doneEntry, 
           bffrRel: dryCalc.bffrRel,
           estEnd2fillBuffer: dryCalc.estEnd2fillBuffer,
-          minDiff: dryCalc.minDiff,
+          overQuote: dryCalc.overQuote,
           shipAim: shipAim,
           lateLate: lateLate,
           oRapid: rapIs
@@ -100,7 +97,7 @@ function collectPriority(privateKey, batchID, mockDay) {
           completed: doneEntry,
           bffrRel: false,
           estEnd2fillBuffer: 0,
-          minDiff: false,
+          overQuote: false,
           shipAim: shipAim,
           lateLate: lateLate,
           oRapid: rapIs
@@ -110,17 +107,14 @@ function collectPriority(privateKey, batchID, mockDay) {
   });
 }
 
-function getFastPriority(privateKey, bData, now, shipAim) {
+function getFastPriority(bData, now, shipAim) {
   return new Promise(resolve => {
     const doneEntry = bData.completedAt;
 
     const qtBready = !bData.quoteTimeBudget ? false : true;
     
     if(qtBready && bData.tide && !doneEntry) {
-      const shipLoad = TraceDB.find({shipAim: { 
-        $gte: new Date(now.clone().nextShippingTime().startOf('day').format()),
-        $lte: new Date(now.clone().nextShippingTime().endOf('day').format()) 
-      }},{fields:{'batchID':1}}).count();
+      const shipLoad = getShipLoad(now);
       
       const mEst = getEst(bData.widgetId, bData.quantity);
       
@@ -131,7 +125,7 @@ function getFastPriority(privateKey, bData, now, shipAim) {
         estSoonest: dryCalc.estSoonest.format(),
         bffrRel: dryCalc.bffrRel,
         estEnd2fillBuffer: dryCalc.estEnd2fillBuffer,
-        minDiff: dryCalc.minDiff
+        overQuote: dryCalc.overQuote
       });
     }else{
       resolve({
@@ -139,7 +133,7 @@ function getFastPriority(privateKey, bData, now, shipAim) {
         estSoonest: false,
         bffrRel: false,
         estEnd2fillBuffer: 0,
-        minDiff: false
+        overQuote: false
       });
     }
   });
@@ -213,9 +207,8 @@ Meteor.methods({
   },
   priorityFast(serverAccessKey, bData, now, shipAim) {
     async function bundlePriority() {
-      const accessKey = serverAccessKey || Meteor.user().orgKey;
       try {
-        bundle = await getFastPriority(accessKey, bData, now, shipAim);
+        bundle = await getFastPriority(bData, now, shipAim);
         return bundle;
       }catch (err) {
         throw new Meteor.Error(err);
@@ -224,26 +217,39 @@ Meteor.methods({
     return bundlePriority();
   },
   priorityTrace(batchID) {
-    const b = XBatchDB.findOne({_id: batchID});
-    const t = b && TraceDB.findOne({batch: b.batch});
+    const t = TraceDB.findOne({batchID: batchID});
     
-    if(!b || !t) {
+    if(!t) {
       return false;
     }else{
       return {
-        batch: b.batch,
-        batchID: b._id,
-        salesOrder: b.salesOrder,
+        batch: t.batch,
+        batchID: t.batchID,
+        salesOrder: t.salesOrder,
         quote2tide: t.quote2tide,
         estSoonest: t.estSoonest,
-        completed: b.completed, 
+        completed: t.completed, 
         bffrRel: t.bffrRel,
         estEnd2fillBuffer: t.estEnd2fillBuffer,
-        minDiff: t.minDiff,
+        overQuote: t.overQuote,
         shipAim: t.shipAim,
         lateLate: t.lateLate,
         oRapid: t.oRapid
       };
+    }
+  },
+  
+  performTrace(batchID) {
+    const b = XBatchDB.findOne({_id: batchID},{fields:{'lockTrunc':1}});
+    if(b && b.lockTrunc && b.lockTrunc.performTgt !== undefined) {
+      return b.lockTrunc.performTgt;
+    }else{
+      const t = TraceDB.findOne({batchID: batchID},{fields:{'performTgt':1}});
+      if(t && t.performTgt !== undefined) {
+        return t.performTgt;
+      }else{
+        return Meteor.call('performTarget', batchID);
+      }
     }
   },
   
@@ -261,8 +267,8 @@ Meteor.methods({
       const pb = isFinite(rate) ? rate < 1 ? Math.round(rate) : Math.ceil(rate*0.1) : 0;
           
       const done = items.filter( i => i.completed );
+      const donePer = b.completed ? 100 : percentOf( items.length, done.length );
       
-      const donePer = percentOf( items.length, done.length );
       const goalTimePer = quadRegression(donePer);
       
       const tide = b.tide || [];
@@ -271,24 +277,18 @@ Meteor.methods({
       const mEst = getEst(b.widgetId, b.quantity);
       const budget = b.quoteTimeBudget || [];
       const mQuote = budget.length === 0 ? 0 : Number(budget[0].timeAsMinutes);
-      const estimatedMinutes = mQuote < mEst ? mQuote : avgOfArray([mQuote, mEst]);
+      const estMinutes = mQuote > 0 && mQuote < mEst ? mQuote : avgOfArray([mQuote, mEst]);
       
-      const realTimePer = percentOf( estimatedMinutes, totalTideMinutes );
+      const realTimePer = percentOf( estMinutes, totalTideMinutes );
       
       const diff = Math.round( goalTimePer - realTimePer );
                     
-      const gold = !isFinite(diff) || totalTideMinutes === 0 ? null :
+      const au = !isFinite(diff) || totalTideMinutes === 0 ? null :
                    donePer === 0 ? realTimePer < Config.qregA ? 0 : -1 :
-                   Math.round( diff * 0.075 );
+                   Math.round( diff * 0.15 );
       
-      return {
-        donePer: donePer,
-        goalTimePer: goalTimePer,
-        realTimePer: realTimePer,
-        diff: diff,
-        gold: gold,
-        pb: pb
-      };
+      const factor = isFinite(au) && isFinite(pb) ? au - pb : null;
+      return factor;
     }
   },
   

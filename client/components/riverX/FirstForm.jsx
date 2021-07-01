@@ -18,6 +18,7 @@ const FirstForm = ({
   const [ howIState, howISet ] = useState( false );
   const [ whoBState, whoBSet ] = useState( false );
   const [ howBState, howBSet ] = useState( false );
+  const [ wthBState, wthBSet ] = useState( false );
   
   const [ ngState, ngSet ] = useState('');
   
@@ -43,6 +44,14 @@ const FirstForm = ({
   
   
   
+  function consume() {
+    let val = this.consume.value.trim();
+    if(!val || val === '') {
+      null;
+    }else{
+      wthBSet( val );
+    }
+  }
   function flaw() {
     let val = this.issue.value.trim();
     if(!val || val === '') {
@@ -65,8 +74,8 @@ const FirstForm = ({
       
     const howI = howIState;
     const whoB = Array.from(whoBState, u => u.value);
-    
     const howB = Array.from(howBState, u => u.value);
+    const wthB = wthBState;
     
     const good = goodness;
     const diff = repeatOp;
@@ -76,7 +85,7 @@ const FirstForm = ({
     
 		Meteor.call('addFirstX', 
 		  batchId, seriesId, serial, stepKey, stepName, 
-		  good, whoB, howB, howI, 
+		  good, whoB, howB, wthB, howI, 
 		  diff, ng, fresh, 
 		(error, reply)=>{
 			if(error) {
@@ -147,8 +156,18 @@ const FirstForm = ({
               disableSearch={true}
           />{Pref.method}</label>
         : null}
-      </div>
         
+        {sBranch.reqConsumable ?
+          <label htmlFor='consume' className='vmarginhalf wideStone w100'>
+            <textarea
+    			    type='text'
+    			    id='consume'
+    			    onChange={(e)=>consume(e)}
+    			    required>
+    			</textarea><br />{Pref.consume}</label>
+        : null}
+      </div>
+			
       <div className='fakeFielset'> 
         <label htmlFor='issue' className='wideStone'>
           <textarea

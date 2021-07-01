@@ -57,7 +57,7 @@ export function avgOfArray(arr, zeros) {
   if(cArr.length == 1) {
     return round2Decimal( cArr[0] );
   }else if(cArr.length > 1) {
-    const reduced = cArr.reduce( (a,c)=>a+c) / cArr.length;
+    const reduced = cArr.reduce( (a,c)=>a+c ) / cArr.length;
     const clean = round2Decimal( reduced );
     return clean;
   }else{
@@ -66,7 +66,7 @@ export function avgOfArray(arr, zeros) {
 }
 
 export function diffTrend(newavg, runningavg) {
-  const diff = newavg - runningavg;
+  const diff = Number(newavg) - Number(runningavg);
   const trend = Math.abs(diff) <= (runningavg * 0.03) ? 'flat' : 
                 diff < 0 ? 'down' : 'up';
   return trend;

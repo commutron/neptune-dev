@@ -10,6 +10,8 @@ class Config {
     
     this.clientTZ = "America/Regina"; // correct all server time to local timezone
     
+    this.loginExpire = 0.54; // in days, auto logout after experation
+    this. minUsernameChar = 4;
     this.allowedSupers = 2; // max users that may hold a 'super' role
     
     this.maxShift = 10; // max number of consecutive hours 

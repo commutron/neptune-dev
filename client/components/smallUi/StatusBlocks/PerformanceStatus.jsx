@@ -1,26 +1,18 @@
 import React, { useRef, useState, useEffect } from 'react';
-import moment from 'moment';
-import 'moment-timezone';
-import { min2hr } from '/client/utility/Convert.js';
-import NumStat from '/client/components/tinyUi/NumStat.jsx';
+import NumStat from '/client/components/tinyUi/NumStat';
 
 import './style';
 
-const PerformanceData = ({ 
-  batchID, app, dbDay,
-  altNumber, isDebug, showExtra, showLess
-})=> {
+const PerformanceData = ({ batchID })=> {
   
   const thingMounted = useRef(true);
-  const [ pfData, setPerform ] = useState(false);
+  const [ pfData, setPerform ] = useState(null);
   
   useEffect( ()=> {
-    Meteor.call('performTarget', batchID, (err, re)=>{
+    Meteor.call('performTrace', batchID, (err, re)=>{
       err && console.log(err);
-      if( re ) { 
+      if( isFinite(re) ) { 
         if(thingMounted.current) { setPerform( re ); }
-        // isDebug && 
-        console.log(re);
       }
     });
   }, [batchID]);
@@ -32,49 +24,54 @@ const PerformanceData = ({
   return(
     <PerformanceSquare 
       batchID={batchID} 
-      pf={pfData}
-      app={app}
-      isDebug={isDebug}
-      showExtra={showExtra}
-      showLess={showLess} /> 
+      perf={pfData}
+    /> 
   );
 };
 
 export default PerformanceData;
 
-///////////////////////////////////////////////////////////////////////////////
 
-export const PerformanceSquare = ({ 
-  batchID, pf,
-  app, isDebug, showExtra, showLess
-})=> {
+export const PerformanceSquare = ({ batchID, perf })=> {
   
-    const baseClass = 'blur-change smCap big';
-    const extraClass = showExtra ? 'centre' : '';
+  const pos = perf === null ? '±' : perf > 0 ? '+' : '';
+  
+  const golden = <b className='gapR numFont'>{pos}{perf}</b>;
+  
+  const pfRank = 
+    perf === null ? <n-faX><i className='fas fa-meh'></i></n-faX> :
+    perf <= -6 ? <n-fa4><i className='fas fa-sad-cry'></i></n-fa4> :
+    perf <= -4 ? <n-fa3><i className='fas fa-sad-tear'></i></n-fa3> :
+    perf <= -2 ? <n-fa2><i className='fas fa-frown-open'></i></n-fa2> :
+    perf <= -1 ? <n-fa1><i className='fas fa-frown'></i></n-fa1> :
+    perf >= 6 ? <n-fa7><i className='fas fa-grin-hearts'></i></n-fa7> :
+    perf >= 4 ? <n-fa6><i className='fas fa-grin-alt'></i></n-fa6> :
+    perf >= 2 ? <n-fa5><i className='fas fa-grin'></i></n-fa5> :
+    // perf >= 0 ? 
+    <n-fa0><i className='fas fa-smile'></i></n-fa0>;
+  
+  const pfText = 
+    perf === null ? 'Fine, Indiscernible' :
+    perf <= -6 ? 'Dreadful' :
+    perf <= -4 ? 'Terrible' :
+    perf <= -2 ? 'Awful' :
+    perf <= -1 ? 'Below Target' :
+    perf >= 6 ? 'Tremendous' :
+    perf >= 4 ? 'Exceptional' :
+    perf >= 2 ? 'Above Target' :
+    // perf >= 0 ? 
+    'On Target';
     
-    const pos = pf.gold >= 0 ? '+' : '';
-    
-    const golden = <b className='bigger gapR numFont'>{pos}{pf.gold}</b>;
-    
-    const pfRank = 
-      pf.gold <= -4 ? <n-fa3><i className='fas fa-sad-tear fa-lg'></i></n-fa3> :
-      pf.gold <= -2 ? <n-fa2><i className='fas fa-frown-open fa-lg'></i></n-fa2> :
-      pf.gold <= -1 ? <n-fa1><i className='fas fa-frown fa-lg'></i></n-fa1> :
-      pf.gold === 0 ? <n-fa0><i className='fas fa-smile fa-lg'></i></n-fa0> :
-      pf.gold >= 4 ? <n-fa6><i className='fas fa-grin-hearts fa-lg'></i></n-fa6> :
-      pf.gold >= 2 ? <n-fa5><i className='fas fa-grin-alt fa-lg'></i></n-fa5> :
-      pf.gold >= 1 ? <n-fa4><i className='fas fa-grin fa-lg'></i></n-fa4> :
-      <n-faX><i className='fas fa-meh fa-lg'></i></n-faX>;
-      
-    return(
-      <div 
-        className={`${baseClass} ${extraClass}`}
-      >
-        <NumStat
-          num={<span>{golden}{pfRank}</span>}
-          name='Performance'
-          color='blackblackT'
-          size='bold big' />
-      </div>
-    );
+  return(
+    <div 
+      className='smCap'
+      title={pfText}
+    >
+      <NumStat
+        num={<span>{golden}{pfRank}</span>}
+        name='Performance'
+        color='blackblackT'
+        size='bold bigger' />
+    </div>
+  );
 };

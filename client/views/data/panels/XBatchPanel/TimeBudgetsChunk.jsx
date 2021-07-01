@@ -55,7 +55,7 @@ const TimeBudgetsChunk = ({
                         min2hr(totalTideMinutes);
      
   const quote2tide = totalBudgetMinutes - totalTideMinutes;
-  const bufferNice = Math.abs(quote2tide);
+  const bufferNice = Math.round(Math.abs(quote2tide));
   
   const bufferAs = conversion === 'minutes' ? 
                    bufferNice :

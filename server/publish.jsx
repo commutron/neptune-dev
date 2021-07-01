@@ -195,7 +195,9 @@ Meteor.publish('traceDataLive', function(){
           'quote2tide': 1,
           'estSoonest': 1,
           'bffrRel': 1,
-          'estEnd2fillBuffer': 1
+          'estEnd2fillBuffer': 1,
+          'overQuote': 1
+          // 'performTgt': 1
         }
       })
     ];
@@ -239,7 +241,8 @@ Meteor.publish('traceDataActive', function(){
           'estSoonest': 1,
           'bffrRel': 1,
           'estEnd2fillBuffer': 1,
-          'minDiff': 1
+          'overQuote': 1
+          // 'performTgt': 1
         }
       })
     ];
@@ -282,7 +285,9 @@ Meteor.publish('traceDataOpen', function(){
           'quote2tide': 1,
           'estSoonest': 1,
           'bffrRel': 1,
-          'estEnd2fillBuffer': 1
+          'estEnd2fillBuffer': 1,
+          'overQuote': 1
+          // 'performTgt': 1
         }
       })
     ];
@@ -397,7 +402,8 @@ Meteor.publish('hotDataPlus', function(scanOrb, keyMatch){
         fields: {
           'orgKey': 0,
           'shareKey': 0,
-          'lockTrunc': 0
+          'lockTrunc': 0,
+          'finBffrRel': 0
         }}),
       XSeriesDB.find({batch: trueBatch, orgKey: orgKey}, {
         fields: {
@@ -472,7 +478,8 @@ Meteor.publish('skinnyData', function(){
             'salesOrder': 1,
             'completed': 1,
             'completedAt': 1
-            // 'lockTrunc': 1
+            // 'lockTrunc': 1,
+            // 'finBffrRel': 1
         }}),
       // XSeriesDB.find({}, {
       //   sort: {batch:-1},
@@ -536,9 +543,9 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
           fields: {
             'orgKey': 0,
             'versions': 0,
-            // 'quoteStats': 0,
-            // 'turnStats': 0,
-            // 'ncRate': 0
+            'quoteStats': 0,
+            'turnStats': 0,
+            'ncRate': 0
           }}),
         VariantDB.find({widgetId: hothotWidgetID, orgKey: orgKey}, {
           fields: {
@@ -551,9 +558,9 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
           fields: {
             'orgKey': 0,
             'versions': 0,
-            // 'quoteStats': 0,
-            // 'turnStats': 0,
-            // 'ncRate': 0
+            'quoteStats': 0,
+            'turnStats': 0,
+            'ncRate': 0
           }}),
         VariantDB.find({widgetId: hothotWidgetID, orgKey: orgKey}, {
           fields: {
@@ -563,7 +570,8 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
           fields: {
             'orgKey': 0,
             'shareKey': 0,
-            'lockTrunc': 0
+            'lockTrunc': 0,
+            'finBffrRel': 0
         }}),
         XSeriesDB.find({batch: dataRequest, orgKey: orgKey}, {
           fields: {

@@ -84,8 +84,8 @@ export const PrioritySquare = ({
     const q2t = pt.quote2tide;
     const bffrTime = pt.estEnd2fillBuffer;
     const bffrRel = pt.bffrRel;
-    const overQuote = q2t < 0;
-    isDebug && console.log({pt, batchID, bffrRel, bffrTime, q2t});
+    const overQuote = pt.overQuote;
+    isDebug && console.log({pt, batchID, bffrRel, bffrTime, q2t, overQuote});
     
     if(pt.completed) {
       const doneColor = pt.oRapid ? 'darkOrange' : 'green';
@@ -151,13 +151,11 @@ export const PrioritySquare = ({
     
     const prTxt = `Priority Rank "${priorityRank}"`;
     const bffTxt = `buffer: ${bffrTime} minutes`;
-    const treTxt = `Quote Time Remaining: ${min2hr(q2t)} hours`;
+    const treTxt = `Estimated Time Remaining: ${min2hr(q2t)} hours`;
     const soonTxt = `Soonest Complete: ${moment(pt.estSoonest).format("ddd, MMM Do, h:mm a")}`;
     
-    const tstTxt = `diff minutes = ${pt.minDiff}`;
-    
-    const title = `${prTxt}\n${ovrTxt}\n\n${treTxt}\n${soonTxt}\n\n${tstTxt}`;
-    const debugTitle = `${prTxt}\n${ovrTxt}\n\n${treTxt}\n${soonTxt}\n\n${bffTxt}\n${pt.bffrRel}\n\n${tstTxt}`;
+    const title = `${prTxt}\n${ovrTxt}\n\n${treTxt}\n${soonTxt}`;
+    const debugTitle = `${prTxt}\n${ovrTxt}\n\n${treTxt}\n${soonTxt}\n\n${bffTxt}\n${pt.bffrRel}`;
     
     return(
       <div 

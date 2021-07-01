@@ -70,26 +70,19 @@ export const totalTideTimePromise = (accessKey, rangeStart, rangeEnd)=> {
 
 Meteor.methods({
 
-  /*topViewStats(u, g, w, b, a) {
-    const usrC = u ? Meteor.users.find({orgKey: Meteor.user().orgKey}).fetch().length : 0;
-    const grpC = g ? GroupDB.find({orgKey: Meteor.user().orgKey}).fetch().length : 0;
-    const wdgtC = w ? WidgetDB.find({orgKey: Meteor.user().orgKey}).fetch().length : 0;
-    const btch = b ? XBatchDB.find({orgKey: Meteor.user().orgKey}).fetch() : [];
-    const btchC = b ? btch.length : 0;
-    const btchLv = a ? btch.filter( x => x.completed === false ).length : 0;
-    return {
-      usrC, grpC, wdgtC, btchC, btchLv
-    };
-  },*/
-  
   widgetTops(wID) {
-    const variants = VariantDB.find({widgetId: wID}).fetch().length;
-    const batchesX = XBatchDB.find({orgKey: Meteor.user().orgKey, widgetId: wID}).fetch();
+    const widget = WidgetDB.findOne({ _id: wID });
+    const ncRate = widget.ncRate || null;
+    const rate = ncRate ? ncRate.rate : 0;
     
+    const variants = VariantDB.find({widgetId: wID}).fetch().length;
+    
+    const batchesX = XBatchDB.find({orgKey: Meteor.user().orgKey, widgetId: wID}).fetch();
     const batchInfoX = Array.from(batchesX, x => { return { 
       quantity: x.quantity,
     }});
-    return [ variants, batchInfoX ];
+    
+    return [ variants, batchInfoX, rate ];
   },
   
   nonConSelfCount(nonConCol) {

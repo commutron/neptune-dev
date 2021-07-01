@@ -589,7 +589,10 @@ n-trib-action-all {
   max-width: 11vmax;
 }
 
-.stoneForm textarea { border-color: black; }
+.stoneForm textarea { 
+  border-color: black;
+  resize: vertical;
+}
 
 .stoneForm input:focus + label,
 .stoneForm select:focus + label,

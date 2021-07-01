@@ -1,5 +1,7 @@
 import moment from 'moment';
 import { batchTideTime } from '/server/tideGlobalMethods';
+import { syncHoliday } from '/server/utility.js';
+import { getShipDue, getEndWork } from '/server/shipOps';
 
 Meteor.methods({
 
@@ -52,6 +54,7 @@ Meteor.methods({
         events: []
       });
       
+      // full scheme adds lock, lockTrunc, finBffrRel, finShipAim, finShipDue, finEndWork
       if(withSeries) {
         const duplicate = XSeriesDB.findOne({batch: batchNum});
         
@@ -213,6 +216,8 @@ Meteor.methods({
       const shPNums = !srs ? [] : Meteor.call('shortfallSelfCount', srs.shortfall);
       const rvSteps = !srs ? [] : Meteor.call('riverStepSelfCount', srs.items);
       
+      const endPerformance = Meteor.call('performTarget', batchId);
+      
       XBatchDB.update({_id: batchId, orgKey: accessKey}, {
   			$set : {
   			  lock: true,
@@ -227,7 +232,8 @@ Meteor.methods({
   			    ncTypes: ncTypes,
   			    shTypes: shPNums,
   			    rvSteps: rvSteps,
-  			    wfSteps: wfCount
+  			    wfSteps: wfCount,
+  			    performTgt: endPerformance
   			  }
         }
       });
@@ -481,7 +487,6 @@ Meteor.methods({
       }}});
     }
   },
-  
   negativeCounter(batchId, wfKey, dnVal) {
     if(!Roles.userIsInRole(Meteor.userId(), 'active')) {
       null;
@@ -540,9 +545,34 @@ Meteor.methods({
         }
         Meteor.defer( ()=>{
           Meteor.call('updateOneMovement', batchId, accessKey);
+          Meteor.call('saveEndState', batchId, accessKey);
         });
       }else{null}
     }else{null}
+  },
+  
+  saveEndState(batchId, privateKey) {
+    this.unblock();
+    const b = XBatchDB.findOne({_id: batchId},{fields:{'salesEnd':1}});
+    if(b) {
+      syncHoliday(privateKey);
+      
+      const endPriority = Meteor.call('priorityRank', batchId, privateKey);
+      
+      const endBffrRel = endPriority.bffrRel;
+      const endShipAim = endPriority.shipAim;
+
+      const endShipDue = getShipDue(batchId, b.salesEnd);
+      const endEndWork = getEndWork(batchId, b.salesEnd);
+      
+      XBatchDB.update(batchId, {
+  			$set : { 
+  			  finBffrRel: endBffrRel,
+  			  finShipAim: endShipAim,
+  			  finShipDue: endShipDue,
+  			  finEndWork: endEndWork,
+      }});
+    }
   },
   
   // Undo Finish Batch
@@ -735,6 +765,7 @@ Meteor.methods({
         }
         Meteor.defer( ()=>{
           Meteor.call('updateOneMovement', batchId, accessKey);
+          Meteor.call('saveEndState', batchId, accessKey);
         });
         return true;
       }else{ return false }

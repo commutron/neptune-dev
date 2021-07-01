@@ -19,11 +19,7 @@ const ExploreView = ({
   view, request, specify, subLink // routing
 })=> {
   
-  // const prevRequest = usePrevious(request);
   useLayoutEffect( ()=>{
-    // if(prevRequest !== request) {
-    //   Session.set('itemListScrollPos', {b: false, num: 0});
-    // }
     InboxToastPop(user);
   }, [user]);
   

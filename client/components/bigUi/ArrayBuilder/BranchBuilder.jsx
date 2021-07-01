@@ -36,9 +36,9 @@ const BranchHeadRow = ()=> (
     <div>Common</div>
     <div>Open</div>
     <div>Clear</div>
-    <div>Consume</div>
     <div>Dam</div>
     <div>User</div>
+    <div>Consume</div>
     <div>Build</div>
     <div>Inspect</div>
     <div></div>
@@ -54,9 +54,9 @@ const BranchEditRow = ({ branch, isDebug, lockout })=> {
   const [ comState, comSet ] = useState(br.common);
   const [ openState, openSet ] = useState(br.open);
   const [ clearState, clearSet ] = useState(br.reqClearance);
-  const [ consumeState, consumeSet ] = useState(br.reqConsumable);
   const [ damState, damSet ] = useState(br.reqProblemDam);
   const [ uLockState, uLockSet ] = useState(br.reqUserLock);
+  const [ consumeState, consumeSet ] = useState(br.reqConsumable);
   const [ buildState, buildSet ] = useState(br.buildMethods);
   const [ inspectState, inspectSet ] = useState(br.inspectMethods);
   
@@ -102,9 +102,9 @@ const BranchEditRow = ({ branch, isDebug, lockout })=> {
     comSet(br.common);
     openSet(br.open);
     clearSet(br.reqClearance);
-    // consumeSet(br.reqConsumable);
     damSet(br.reqProblemDam);
     uLockSet(br.reqUserLock);
+    consumeSet(br.reqConsumable);
     buildSet(br.buildMethods);
     this[id+'tpBldMth'].value = br.buildMethods.join(", ");
     inspectSet(br.inspectMethods);
@@ -120,6 +120,7 @@ const BranchEditRow = ({ branch, isDebug, lockout })=> {
                   clearState,
                   damState,
                   uLockState,
+                  consumeState,
                   buildState,
                   inspectState,
       (error, reply)=>{
@@ -142,8 +143,6 @@ const BranchEditRow = ({ branch, isDebug, lockout })=> {
       }
     });
   }
-  
-  //console.log({posState, comState, openState, clearState, damState, uLockState});
   
   return(                 
     <div>
@@ -189,7 +188,6 @@ const BranchEditRow = ({ branch, isDebug, lockout })=> {
           checked={openState}
           onChange={(e)=>openSet(e.target.checked)}
           disabled={lockout}
-          // required
         />
       </div>
       <div>
@@ -201,19 +199,6 @@ const BranchEditRow = ({ branch, isDebug, lockout })=> {
           checked={clearState}
           onChange={(e)=>clearSet(e.target.checked)}
           disabled={lockout}
-          // required
-        />
-      </div>
-      <div>
-        <input
-          type='checkbox'
-          title='Require Consumable Tracing'
-          id={id+'chkConsume'}
-          className='tableAction blueHover'
-          checked={consumeState}
-          onChange={(e)=>consumeSet(e.target.checked)}
-          disabled={true || lockout}
-          // required
         />
       </div>
       <div>
@@ -225,7 +210,6 @@ const BranchEditRow = ({ branch, isDebug, lockout })=> {
           checked={damState}
           onChange={(e)=>damSet(e.target.checked)}
           disabled={lockout}
-          // required
         />
       </div>
       <div>
@@ -237,7 +221,17 @@ const BranchEditRow = ({ branch, isDebug, lockout })=> {
           checked={uLockState}
           onChange={(e)=>uLockSet(e.target.checked)}
           disabled={lockout}
-          // required
+        />
+      </div>
+       <div>
+        <input
+          type='checkbox'
+          title='Require Consumable Tracing'
+          id={id+'chkConsume'}
+          className='tableAction blueHover'
+          checked={consumeState}
+          onChange={(e)=>consumeSet(e.target.checked)}
+          disabled={lockout}
         />
       </div>
       <div>

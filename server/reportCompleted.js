@@ -2,6 +2,8 @@ import moment from 'moment';
 import 'moment-timezone';
 import 'moment-business-time';
 
+import { syncHoliday } from '/server/utility.js';
+import { getShipAim, getShipDue, getEndWork } from '/server/shipOps';
 import { distTimeBudget } from './tideGlobalMethods.js';
 import { whatIsBatchX } from './searchOps.js';
 import { round1Decimal, diffTrend, percentOf } from './calcOps';
@@ -14,39 +16,24 @@ moment.updateLocale('en', {
   shippinghours: Config.shippingHours
 });
 
-export function calcShipDay( nowDay, futureDay ) {
-  const endDay = moment.tz(futureDay, Config.clientTZ);
+export function calcShipDay( batchId, nowDay, futureDay ) {
+  const shipAim = getShipAim(batchId, futureDay);
 
-  const shipAim = endDay.isShipDay() ?
-                    endDay.clone().startOf('day').nextShippingTime() :
-                    endDay.clone().lastShipDay().startOf('day').nextShippingTime();
+  const shipDue = getShipDue(batchId, futureDay);
 
-  const shipDue = endDay.isShipDay() ?
-                    endDay.clone().endOf('day').lastShippingTime() :
-                    endDay.clone().lastShippingTime();
-
-  const endWork = endDay.isWorkingDay() ?
-                    endDay.clone().endOf('day').lastWorkingTime() :
-                    endDay.clone().lastWorkingTime();
-  const salesEnd = endWork.format();
+  const endWork = getEndWork(batchId, futureDay);
   
   const lateLate = nowDay.clone().isAfter(endWork);
   const shipLate = nowDay.clone().isAfter(shipDue);
   
-  return [ salesEnd, shipAim, lateLate, shipLate ];
+  return [ endWork, shipAim, lateLate, shipLate ];
 }
 
-function coreDlvDays(bEnd, bFinish) {
-  const localEnd = moment.tz(bEnd, Config.clientTZ);
+function coreDlvDays(batchId, bEnd, bFinish) {
+  const shipDue = getShipDue(batchId, bEnd);
+
+  const endWork = getEndWork(batchId, bEnd);
   
-  const endWork = localEnd.isWorkingDay() ?
-                    localEnd.clone().endOf('day').lastWorkingTime() :
-                    localEnd.clone().lastWorkingTime();
-  
-  const shipDue = localEnd.isShipDay() ?
-                    localEnd.clone().endOf('day').lastShippingTime() :
-                    localEnd.clone().lastShippingTime();
-                    
   const didFinish = moment(bFinish).tz(Config.clientTZ);
   
   const lateLate = didFinish.isAfter(endWork);
@@ -54,33 +41,27 @@ function coreDlvDays(bEnd, bFinish) {
   
   const shipLate = didFinish.isAfter(shipDue);
   
-  return [ localEnd, endWork, shipDue, didFinish, lateLate, lateDay, shipLate ];
+  return [ endWork, shipDue, didFinish, lateLate, lateDay, shipLate ];
 }
 
-export function deliveryState(bEnd, bFinish) {
-  const dlvDy = coreDlvDays(bEnd, bFinish);
+export function deliveryState(batchId, bEnd, bFinish) {
+  const dlvDy = coreDlvDays(batchId, bEnd, bFinish);
   
-  const localEnd = dlvDy[0];
+  const endWork = dlvDy[0];
   
-  const endWork = dlvDy[1];
-  const salesEnd = endWork.format();
+  const shipAim = getShipAim(batchId, bEnd);
   
-  const shipAim = localEnd.isShipDay() ?
-                    localEnd.clone().startOf('day').nextShippingTime().format() :
-                    localEnd.clone().lastShipDay().startOf('day').nextShippingTime().format();
-                    
-  const shipDue = dlvDy[2];
+  const shipDue = dlvDy[1];
   
-  const didFinish = dlvDy[3];
-  const didFinishNice = didFinish.format();
+  const didFinish = dlvDy[2];
   
-  const lateLate = dlvDy[4];
-  const lateDay = dlvDy[5];
+  const lateLate = dlvDy[3];
+  const lateDay = dlvDy[4];
   
-  const eHrGp = Math.abs( endWork.diff(didFinish, 'hours') );
+  const eHrGp = Math.abs( moment(endWork).diff(didFinish, 'hours') );
   const eHourS = eHrGp == 0 || eHrGp > 1 ? 'hours' : 'hour';
   
-  const eDyGp = Math.abs( round1Decimal( endWork.workingDiff(didFinish, 'days', true) ) );
+  const eDyGp = Math.abs( round1Decimal( moment(endWork).workingDiff(didFinish, 'days', true) ) );
   const eDayS = eDyGp == 0 || eDyGp > 1 ? 'days' : 'day';
   
   const fillZ = !lateLate || eHrGp == 0 ?
@@ -90,12 +71,12 @@ export function deliveryState(bEnd, bFinish) {
                     lateDay ?  // LATE
                       [  eHrGp, eHourS, 'overtime' ] : [ eDyGp, eDayS, 'late' ];
   
-  const shipLate = dlvDy[6];
+  const shipLate = dlvDy[5];
   
-  const hrGp = Math.abs( shipDue.workingDiff(didFinish, 'hours') );
+  const hrGp = Math.abs( moment(shipDue).workingDiff(didFinish, 'hours') );
   const hourS = hrGp == 0 || hrGp > 1 ? 'hours' : 'hour';
   
-  const dyGp = Math.abs( Math.round( shipDue.workingDiff(didFinish, 'days', true) ) );
+  const dyGp = Math.abs( Math.round( moment(shipDue).workingDiff(didFinish, 'days', true) ) );
   const dayS = dyGp == 0 || dyGp > 1 ? 'days' : 'day';
   
   const shipZ = !shipLate || hrGp == 0 ?
@@ -105,23 +86,23 @@ export function deliveryState(bEnd, bFinish) {
                     hrGp <= Config.dropShipBffr ?  // LATE
                       [ hrGp, hourS, 'late' ] : [ dyGp, dayS, 'late' ];
   
-  return [ salesEnd, shipAim, didFinishNice, fillZ, shipZ ];
+  return [ endWork, shipAim, didFinish, fillZ, shipZ ];
 }
 
-export function deliveryBinary(bEnd, bFinish) {
-  const dlvDy = coreDlvDays(bEnd, bFinish);
-  const shipDue = dlvDy[2];
-  const didFinish = dlvDy[3];
-  const lateLate = dlvDy[4];
-  const lateDay = dlvDy[5];
+export function deliveryBinary(batchId, bEnd, bFinish) {
+  const dlvDy = coreDlvDays(batchId, bEnd, bFinish);
+  const shipDue = dlvDy[1];
+  const didFinish = dlvDy[2];
+  const lateLate = dlvDy[3];
+  const lateDay = dlvDy[4];
   
   const fillZ = !lateLate ?
                   lateDay ? 'on time' : 'early' : 
                   lateDay ? 'overtime' : 'late';
   
-  const shipLate = dlvDy[6];
+  const shipLate = dlvDy[5];
   
-  const hrGp = Math.abs( shipDue.workingDiff(didFinish, 'hours') );
+  const hrGp = Math.abs( moment(shipDue).workingDiff(didFinish, 'hours') );
   
   const shipZ = !shipLate || hrGp == 0 ?
                   hrGp <= Config.dropShipBffr ? 'on time' : 'early' : 
@@ -134,10 +115,7 @@ export function deliveryBinary(bEnd, bFinish) {
 function weekDoneAnalysis(rangeStart, rangeEnd) {
   const accessKey = Meteor.user().orgKey;
   
-  const app = AppDB.findOne({orgKey:accessKey}, {fields:{'nonWorkDays':1}});
-  if( Array.isArray(app.nonWorkDays) ) {  
-    moment.updateLocale('en', { holidays: app.nonWorkDays });
-  }
+  syncHoliday(accessKey);
     
   let batchMetrics = [];
   
@@ -161,14 +139,13 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
     const ncRate = ncQty ? ( ncQty / itemQty ).toFixed(1, 10) : 0;
     const endAlter = gf.altered.filter( a => a.changeKey === 'salesEnd' ).length;
     
-    const deliveryResult = deliveryState(gf.salesEnd, gf.completedAt);
+    const deliveryResult = deliveryState(gf._id, gf.salesEnd, gf.completedAt);
     const salesEnd = deliveryResult[0];
     const shipDue = deliveryResult[1];
     const localComplete = deliveryResult[2];
     const fillOnTime = deliveryResult[3].join(" ");
     const shipOnTime = deliveryResult[4].join(" ");
     
-    // check for over quote
     const distTB = distTimeBudget(gf.tide, gf.quoteTimeBudget, allQuantity);
     //returns [ tidePerItem, quotePerItem, quoteMNtide, tidePCquote ];
     

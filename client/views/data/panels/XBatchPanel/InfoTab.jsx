@@ -32,9 +32,10 @@ const InfoTab = ({
   
   const endDay = moment(b.salesEnd);
   
-  const shipDue = endDay.isShipDay() ?
-                    endDay.clone().endOf('day').lastShippingTime() :
-                    endDay.clone().lastShippingTime();
+  const shipDue =  b.finShipDue ? moment(b.finShipDue) :
+                    endDay.isShipDay() ?
+                      endDay.clone().endOf('day').lastShippingTime() :
+                      endDay.clone().lastShippingTime();
                     
   const rOpen = rapidsData && rapidsData.some( r => r.live === true );
   
@@ -44,8 +45,9 @@ const InfoTab = ({
       
       <div className='centreText'>
         <h3 className='leftText'>Status</h3>      
-        { b.live &&
-          <div className='balance'>
+        
+        <div className='balance'>
+          {b.live &&
             <div className='statusBlock'>
               <PrioritySquareData
                 batchID={b._id}
@@ -54,16 +56,19 @@ const InfoTab = ({
                 isDone={done}
                 isDebug={isDebug} />
             </div>
+          }
+          {!b.lock &&
             <div className='statusBlock'>
               <TideActivityData
                 batchID={b._id}
                 app={app} />
             </div>
-            <div className='statusBlock'>
-              <PerformanceData batchID={b._id} />
-            </div>
+          }
+          <div className='statusBlock'>
+            <PerformanceData batchID={b._id} />
           </div>
-        }
+        </div>
+        
         <BatchXStatus 
           batchData={b} 
           allFlow={allFlow}

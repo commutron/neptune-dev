@@ -5,9 +5,9 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   font-family: inherit;
-  /*outline-color: var(--neptuneColor);*/
+  outline-color: var(--neptuneColor);
    -moz-outline: none;
-  outline: none;/*This is of course awfull*/
+  /*outline: none;This is of course awfull*/
 }
 
 @font-face {
@@ -20,7 +20,7 @@
 }
 @font-face {
   font-family: 'NunitoLocalLight';
-  src: url('/fonts/Nunito-Light.ttf')  format('truetype');
+  src: url('/fonts/Nunito-Light.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
 }
@@ -168,7 +168,7 @@ legend {
 }
 
 label {
-  line-height: 1.75rem;
+  line-height: 1.75;
   text-transform: capitalize;
 }
 

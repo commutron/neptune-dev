@@ -303,7 +303,7 @@ input::-webkit-calendar-picker-indicator {
 
 .low { text-transform: lowercase; }
 
-.cap { text-transform: capitalize; }
+.cap, n-c { text-transform: capitalize; }
 .capFL:first-letter { text-transform: capitalize; }
 
 .smCap { font-variant: small-caps; }

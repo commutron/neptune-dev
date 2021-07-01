@@ -1,6 +1,5 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
-import moment from 'moment';
 
 const MetaSlide = ()=> (
   <div className='space3v lightTheme scrollWrap'>
@@ -10,7 +9,7 @@ const MetaSlide = ()=> (
       </p>
       <div className='max750 autoSelf'>
         <h2>Neptune {Pref.neptuneVersion}</h2>
-        <p>Copyright ©{moment().year()} Commutron Industries Ltd. <a href='https://www.commutron.ca' target='_blank'>https://www.commutron.ca</a></p>
+        <p>Copyright ©{new Date().getFullYear()} Commutron Industries Ltd. <a href='https://www.commutron.ca' target='_blank'>https://www.commutron.ca</a></p>
         <p>All Rights Reserved, No Public License</p>
         <p>All 3rd party packages used with permission under the MIT License</p>
         <p>Source avaliable <a href='https://github.com/commutron/neptune-dev' target='_blank'>https://github.com/commutron/neptune-dev</a></p>
@@ -45,6 +44,6 @@ export default MetaSlide;
 
 export const MetaLink = ()=> (
   <p className='vmargin'>
-    <a href='/meta'>Neptune {Pref.neptuneVersion} ©{moment().year()} Commutron Industries Ltd.</a>
+    <a href='/meta'>Neptune {Pref.neptuneVersion} ©{new Date().getFullYear()} Commutron Industries Ltd.</a>
   </p>
 );

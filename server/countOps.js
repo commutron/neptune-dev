@@ -102,9 +102,9 @@ Meteor.methods({
         }
       };
     
-      const discoverOT = (endTime, completeTime)=> {
+      const discoverOT = (bID, endTime, completeTime)=> {
         // duration between finish and fulfill
-        const deliveryResult = deliveryState(endTime, completeTime);
+        const deliveryResult = deliveryState(bID, endTime, completeTime);
         const dr3 = deliveryResult[3];
         const timeVal = !dr3[0] ? 0 : 
                         dr3[1] === 'hour' || dr3[1] === 'hours' ? ( dr3[0] / 24 ) :
@@ -127,7 +127,7 @@ Meteor.methods({
         
         for(let batch of batches) {
           discoverTQ(batch);
-          discoverOT(batch.salesEnd, batch.completedAt);
+          discoverOT(batch._id, batch.salesEnd, batch.completedAt);
         }
       }catch(err) {
         throw new Meteor.Error(err);

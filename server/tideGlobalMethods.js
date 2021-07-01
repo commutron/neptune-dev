@@ -75,12 +75,12 @@ export function distTimeBudget(tide, quoteTimeBudget, allQuantity, lockTrunc) {
     
     // xx quote minutes remain
     const quoteMNtide = trueQuote - totalTide;
-    const qMNt = min2hr( quoteMNtide );
+    const qHRt = min2hr( quoteMNtide );
     
     // tide is xx% under/over quote
     const tPCq = percentOverUnder(trueQuote, totalTide);
     
-    return [ tidePerItem, quotePerItem, qMNt, tPCq ];
+    return [ tidePerItem, quotePerItem, qHRt, tPCq ];
   }
 }
   

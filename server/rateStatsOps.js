@@ -79,8 +79,8 @@ import { countMulti, noIg } from './utility';
     let doneUnderQ = 0;
     let doneOverQ = 0;
     
-    const doneCalc = (endAt, doneAt, tide, quoteTimeBudget, lockTrunc)=> {
-      const dst = deliveryBinary(endAt, doneAt);
+    const doneCalc = (bID, endAt, doneAt, tide, quoteTimeBudget, lockTrunc)=> {
+      const dst = deliveryBinary(bID, endAt, doneAt);
       dst[0] === 'late' ? doneLate++ : doneOnTime++;
       dst[1] === 'late' ? shipLate++ : shipOnTime++;
       
@@ -110,7 +110,7 @@ import { countMulti, noIg } from './utility';
     }}).fetch();
     await Promise.all(bx.map( async (gfx, inx)=> {
       await new Promise( (resolve)=> {
-        doneCalc(gfx.salesEnd, gfx.completedAt, gfx.tide, gfx.quoteTimeBudget, gfx.lockTrunc);
+        doneCalc(gfx._id, gfx.salesEnd, gfx.completedAt, gfx.tide, gfx.quoteTimeBudget, gfx.lockTrunc);
         resolve(true);
       });
     }));

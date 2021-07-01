@@ -14,7 +14,6 @@ const TimeNextChunk = ({
     Meteor.call('estBatchTurnAround', batchData._id, widgetData._id, (err, re)=>{
       err && console.log(err);
       re && estSet(re);
-      console.log(re);
       // [ relEst, relDif, wrkEst, wrkDif, finEst, finDif, cmpEst, cmpDif]
     });
   }, []);
@@ -34,15 +33,18 @@ const TimeNextChunk = ({
   const flrRel = floorRelease ? floorRelease.time : false;
   
   const flgap = flrRel ? moment(flrRel).workingDiff(est[0], 'days', true) : 0;
-      
+  
+  const flDelay = flrRel ? flgap : est[1] < 0 ? est[1] : 0;
+  
   const stTide = batchData.tide.length > 0  ? batchData.tide[0].startTime : false;
   const stgap = stTide ? moment(stTide).workingDiff(est[2], 'days', true) : 0;
+  
+  const stDelay = stTide ? stgap + flDelay : est[3] < 0 ? est[3] + flDelay : 0;
   
   const fitems = seriesData ? seriesData.items.filter( i => i.completed ) : [];
   const itemS = fitems.sort( (i1, i2)=>
     i1.completedAt < i2.completedAt ? -1 : i1.completedAt > i2.completedAt ? 1 : 0 );
   const fin = itemS.length > 0 ? itemS[0].completedAt : false; 
-  const fngap = fin ? moment(fin).workingDiff(est[4], 'days', true) : 0;
   
   const comp = batchData.completed ? batchData.completedAt : false;
   
@@ -60,9 +62,9 @@ const TimeNextChunk = ({
           <n-timeline-title>Release</n-timeline-title>
         </n-timeline-item>
         
-        <n-timeline-item title={toDay(est[2], flgap)}>
+        <n-timeline-item title={toDay(est[2], flDelay)}>
           <n-timeline-info>
-            {stTide ? toDay(stTide) : toDay(est[2], flgap) + toDur(est[3]+flgap)}
+            {stTide ? toDay(stTide) : toDay(est[2], flDelay) + toDur(est[3]+flDelay)}
             {label(stTide)}
           </n-timeline-info>
           <n-timeline-marker class={stTide ? 'done' : ''} />
@@ -70,9 +72,9 @@ const TimeNextChunk = ({
         </n-timeline-item>
         
         {seriesData &&
-          <n-timeline-item title={toDay(est[4], flgap+stgap)}>
+          <n-timeline-item title={toDay(est[4], stDelay)}>
             <n-timeline-info>
-              {fin ? toDay(fin) : toDay(est[4], flgap+stgap) + toDur(est[5]+flgap+stgap)}
+              {fin ? toDay(fin) : toDay(est[4], stDelay) + toDur(est[5]+stDelay)}
               {label(fin)}
             </n-timeline-info>
             <n-timeline-marker class={fin ? 'done' : ''} />
@@ -80,10 +82,10 @@ const TimeNextChunk = ({
           </n-timeline-item>
         }
         
-        <n-timeline-item title={toDay(est[6], flgap+stgap+fngap)}>
+        <n-timeline-item title={toDay(est[6], stDelay)}>
           <n-timeline-info>
             {comp ? toDay(comp) : 
-             toDay(est[6], flgap+stgap+fngap) + toDur(est[7]+flgap+stgap+fngap)}
+             toDay(est[6], stDelay) + toDur(est[7]+stDelay)}
             {label(comp)}
           </n-timeline-info>
           <n-timeline-marker class={comp ? 'done' : ''} />

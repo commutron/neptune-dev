@@ -4,7 +4,7 @@ import { Accounts } from 'meteor/accounts-base';
 import Config from '/server/hardConfig.js';
 
 Accounts.config({ 
-  loginExpirationInDays: 0.54
+  loginExpirationInDays: Config.loginExpire
 });
 
 Accounts.validateLoginAttempt(function(attempt) {
@@ -16,7 +16,7 @@ Accounts.validateLoginAttempt(function(attempt) {
 });
 
 Accounts.validateNewUser(function(attempt) {
-  if(attempt.username.length >= 4) {
+  if(attempt.username.length >= Config.minUsernameChar) {
     return true;
   }else {
     throw new Meteor.Error(403, 'Username must have at least 4 characters');

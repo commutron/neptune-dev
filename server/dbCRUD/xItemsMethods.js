@@ -376,7 +376,7 @@ Meteor.methods({
     }
   },
 
-  addFirstX(batchId, seriesId, bar, key, step, good, whoB, howB, howI, diff, ng, firstfirst) {
+  addFirstX(batchId, seriesId, bar, key, step, good, whoB, howB, withB, howI, diff, ng, firstfirst) {
     if(!Roles.userIsInRole(Meteor.userId(), 'verify')) {
       return false;
     }else{
@@ -394,6 +394,7 @@ Meteor.methods({
           info: {
             builder: whoB,
             buildMethod: howB,
+            buildConsume: withB,
             verifyMethod: howI,
             change: diff,
             issue: ng

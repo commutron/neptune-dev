@@ -2,8 +2,7 @@
 // import moment from 'moment';
 
 Meteor.startup(function () {  
-  // ensureIndex is depreciated 
-  // but the new createIndex errors as "not a function"
+  // ensureIndex is depreciated but new createIndex errors as "not a function"
   AppDB._ensureIndex({ org : 1, orgKey: 1 }, { unique: true });
   Meteor.users._ensureIndex({ orgKey: 1, username : 1 }, { unique: true });
   XBatchDB._ensureIndex({ orgKey: 1, batch: 1 }, { unique: true });
@@ -149,7 +148,7 @@ Meteor.methods({
     }
   },
   
-  editBranchConfig(key, posVal, commonVal, opVal, clrVal, prbVal, usrVal, bMthdArr, iMthdArr) {
+  editBranchConfig(key, posVal, commonVal, opVal, clrVal, prbVal, usrVal, conVal, bMthdArr, iMthdArr) {
     const chB = Array.isArray(bMthdArr);
     const chI = Array.isArray(iMthdArr);
     
@@ -160,7 +159,7 @@ Meteor.methods({
           'branches.$.position': Number(posVal),
           'branches.$.open': opVal,
           'branches.$.reqClearance': clrVal,
-          // 'branches.$.reqConsumable': false,
+          'branches.$.reqConsumable': conVal,
           'branches.$.reqProblemDam': prbVal,
           'branches.$.reqUserLock': usrVal,
           'branches.$.buildMethods': bMthdArr,
@@ -415,7 +414,6 @@ Meteor.methods({
   },
   
 // Smarter NonCon Types
-  
   addNonConTypeList(inputValue, inputPrefix) {
     try{
       const newListName = inputValue.toLowerCase().trim();

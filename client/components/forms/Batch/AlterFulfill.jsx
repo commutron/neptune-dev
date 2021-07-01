@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
@@ -41,6 +41,15 @@ const AlterFulfillForm = ({ batchId, end, app, selfclose })=> {
   const [ reasonState, reasonSet ] = useState(false);
   const [ endDateState, endDateSet ] = useState( end );
   
+  const [ loadState, loadSet ] = useState( null );
+  
+  useEffect( ()=> {
+    Meteor.call('mockDayShipLoad', endDateState, (error, reply)=>{
+      error && console.log(error);
+      loadSet(reply);
+    });
+  }, [endDateState]);
+  
   function save(e) {
     e.preventDefault();
     
@@ -60,7 +69,11 @@ const AlterFulfillForm = ({ batchId, end, app, selfclose })=> {
       }
     });
   }
-    
+  
+  const daymoment = moment(endDateState);
+  const shipAim = daymoment.isShipDay() ? daymoment.format('YYYY-MM-DD') :
+                  daymoment.lastShippingTime().format('YYYY-MM-DD');
+   
   return(
     <form className='centre vmargin' onSubmit={(e)=>save(e)}>
       <div className='centreRow max600'>
@@ -94,6 +107,12 @@ const AlterFulfillForm = ({ batchId, end, app, selfclose })=> {
         /></label>
         <button type='submit' className='action clear greenHover'>Save</button>
       </p>
+      <hr className='nomargin w100' />
+      <p className='nomargin clean'>Ship Due {shipAim}</p>
+      {loadState === null ? <em>...</em> :
+       <p className='nomargin nospace clean'
+        >with <b>{loadState}</b> uncompleted {Pref.xBatchs}</p>
+      }
       <div className='vmarginhalf'>
         <PrioritySquareData
           batchID={batchId}

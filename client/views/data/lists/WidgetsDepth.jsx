@@ -63,7 +63,7 @@ const WidgetIndexCard = ({ data, barStyle })=>{
   }
   
   if(!moreData) {
-    return( <em>. . .</em> );
+    return null;
   }
     
   let totalBatches = moreData[1].length;
@@ -74,24 +74,30 @@ const WidgetIndexCard = ({ data, barStyle })=>{
       title={data.widget.toUpperCase()}
       cTwo={data.describe}
       cThree={
-        <span className='centreRow'>
+        <span className='balancer'>
           <NumStat
             num={moreData[0]}
             name={Pref.variants}
-            title={`total ${Pref.variants}`}
+            title={`Total ${Pref.variants}`}
             color='blueT'
             size='medBig' />
           <NumStat
             num={totalBatches}
             name={Pref.xBatchs}
-            title={'all ' + Pref.xBatchs + ' & Batch+'}
+            title={`Total ${Pref.xBatchs}`}
             color='blueT'
             size='medBig' />
           <NumStat
             num={totalItems}
             name={Pref.items}
-            title={'serialized items of all ' + Pref.xBatch + 'es'}
+            title={`Total serialized items of all ${Pref.xBatchs}`}
             color='blueT'
+            size='medBig' />
+          <NumStat
+            num={moreData[2]}
+            name='NC Rate'
+            title={`Average ${Pref.nonCon} rate`}
+            color='redT'
             size='medBig' />
         </span>
       }

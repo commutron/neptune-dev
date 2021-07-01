@@ -162,33 +162,3 @@ export const splitTidebyPeople = (tideArray)=> {
   
   return { totalTime, peopleTime };
 };
-  
-  
-  //////
-  
-/*
-export function TimeRemainDay( nonWorkDays, dayTime ) {
-  if( Array.isArray(nonWorkDays) ) {  
-    moment.updateLocale('en', {
-      holidays: nonWorkDays
-    });
-  }
-  
-  if(moment(dayTime).isValid()) {
-  
-    const end = moment(dayTime).endOf('day');
-    
-    const dayTotal = end.workingDiff(dayTime, 'hours', true);
-                      
-    const breakTime = dayTotal <= 5 ? 15 : 30; // fuzzy
-
-    const minusTime = dayTotal === 0 || ( dayTotal * 60 ) < breakTime ? 0 : breakTime;
-    
-    const workTime = moment.duration(dayTotal, 'hours')
-                      .subtract(minusTime, 'minutes').asHours();
-    
-    return workTime;
-  }else{
-    return 0;
-  }
-}*/

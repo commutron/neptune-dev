@@ -160,6 +160,7 @@ class Pref {
     this.autoI = 'aoi';
     this.method = 'method';
     this.proChange = 'process changes';
+    this.consume = 'consumables';
     this.outIssue = 'outstanding issues';
     this.gComm = 'general comments';
     this.nest = 'nest';
