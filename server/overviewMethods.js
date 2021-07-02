@@ -239,20 +239,6 @@ Meteor.methods({
     }
   },
   
-  performTrace(batchID) {
-    const b = XBatchDB.findOne({_id: batchID},{fields:{'lockTrunc':1}});
-    if(b && b.lockTrunc && b.lockTrunc.performTgt !== undefined) {
-      return b.lockTrunc.performTgt;
-    }else{
-      const t = TraceDB.findOne({batchID: batchID},{fields:{'performTgt':1}});
-      if(t && t.performTgt !== undefined) {
-        return t.performTgt;
-      }else{
-        return Meteor.call('performTarget', batchID);
-      }
-    }
-  },
-  
   performTarget(batchID) {
     const b = XBatchDB.findOne({_id: batchID});
     
@@ -290,6 +276,37 @@ Meteor.methods({
       const factor = isFinite(au) && isFinite(pb) ? au - pb : null;
       return factor;
     }
+  },
+  
+  performTrace(batchID) {
+    const b = XBatchDB.findOne({_id: batchID},{fields:{'lockTrunc':1}});
+    if(b && b.lockTrunc && b.lockTrunc.performTgt !== undefined) {
+      return b.lockTrunc.performTgt;
+    }else{
+      const t = TraceDB.findOne({batchID: batchID},{fields:{'performTgt':1}});
+      if(t && t.performTgt !== undefined) {
+        return t.performTgt;
+      }else{
+        return Meteor.call('performTarget', batchID);
+      }
+    }
+  },
+  
+  getAllPerform() {
+    const batches = XBatchDB.find(
+      {orgKey: Meteor.user().orgKey},
+      {fields:{'completedAt':1}}
+    ).fetch();
+    
+    let perfset = [];
+    for( let batch of batches) {
+      perfset.push({
+        y: Meteor.call('performTrace', batch._id),
+        x: batch.completedAt || new Date(),
+        symbol: 'diamond'
+      });
+    }
+    return perfset;
   },
   
   nonconQuickStats(batchID, temp) {

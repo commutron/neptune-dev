@@ -65,6 +65,38 @@ Meteor.methods({
         }});
       }
     }
+  },
+  /*
+  function getWidgetDur(widget, accessKey) {
+  
+  const turnStats = widget.turnStats || null;
+  const statime = turnStats ? turnStats.updatedAt : null;
+  const stale = !statime ? true :
+            moment.duration(moment().diff(moment(statime))).as('hours') > 12;
+  if(stale) {
+      
+    const compX = XBatchDB.find({
+      widgetId: widget._id, 
+      completed: true,
+      
+    }).fetch();
+    for( let x of compX ) {
+      
+    }
+    
+    CacheDB.upsert({dataName: 'avgDayItemFin'}, {
+      $set : {
+        orgKey: accessKey,
+        lastUpdated: new Date(),
+        dataName: 'avgDayItemFin',
+        dataNum: Number(newavg),
+        dataTrend: trend
+    }});
+      
+    return avgWorkDays;
+  }else{
+    return turnStats.stats;
   }
+}*/
   
 });

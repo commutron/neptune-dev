@@ -6,6 +6,7 @@ import { TraverseWrap } from '/client/layouts/DataExploreLayout.jsx';
 
 import ExploreLanding from './panels/ExploreLanding.jsx';
 import ReportsWrap from './panels/Reports/ReportsWrap.jsx';
+import TrendWrap from './panels/ExTrends/TrendWrap';
 import AllGroups from './panels/AllGroups/AllGroups.jsx';
 
 import BuildHistory from './panels/BuildHistory.jsx';
@@ -205,6 +206,32 @@ const DataViewOps = ({
           allWidget={allWidget}
           allVariant={allVariant}
           allGroup={allGroup} 
+          app={app}
+          isDebug={isDebug}
+          isNightly={isNightly} />
+      </TraverseWrap>
+    );
+  }
+  
+  if(view === 'trends') {
+    return (
+      <TraverseWrap
+	      batchData={false}
+        widgetData={false}
+        variantData={false}
+        groupData={false}
+        user={user}
+        app={app}
+        title='Trends'
+        subLink={subLink}
+        action={false}
+        base={true}
+      >
+        <TrendWrap
+          // allXBatch={allXBatch}
+          // allWidget={allWidget}
+          // allVariant={allVariant}
+          // allGroup={allGroup} 
           app={app}
           isDebug={isDebug}
           isNightly={isNightly} />

@@ -46,6 +46,14 @@ export const ExTaskBar = ({ subLink }) => (
     />
     
     <TaskElement
+      title='Trends'
+      subON={subLink === 'trendsundefined'}
+      goLink='/data/trends'
+      icon='fas fa-chart-line'
+      iconAdj='down-1'
+    />
+    
+    <TaskElement
       title={`${Pref.rapidExd} ${Pref.xBatchs}`}
       subON={subLink === 'overviewrapidex'}
       goLink='/data/overview?request=rapidex'

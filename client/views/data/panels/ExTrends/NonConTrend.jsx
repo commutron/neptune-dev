@@ -131,39 +131,10 @@ const NonConTrend = ({ app, isDebug, isNightly })=>{
     });
   }
   
-  return(
-    <div className=''>
-      
-      <h4>Long Calculation, Please wait for results. !! Outstanding Performance Issues !!</h4>
-      
-        
-      <div className='rowWrap'>
-        {working ?
-          <b><i className='fas fa-spinner fa-lg fa-spin'></i></b> :
-          <i><i className='fas fa-spinner fa-lg'></i></i>
-        }
-      {/*
-        <button
-          className='action clearBlack gap'
-          onClick={()=>runLoop('month')}
-          disabled={working}
-        >Run Monthly</button>
-        
-        <button
-          className='action clearBlack gap'
-          onClick={()=>runLoop('week')}
-          disabled={working}
-        >Run Weekly</button>
-        
-        <span className='flexSpace' />
-        
-        <ToggleBar
-          toggleOptions={['fulfill', 'ship']}
-          toggleVal={tgglState}
-          toggleSet={(e)=>tgglSet(e)}
-        />
-        */}
-      </div>
+  return null;
+  
+  /*
+  
 
       <div style={{backgroundColor:'white'}}>
         <VictoryChart
@@ -252,6 +223,7 @@ const NonConTrend = ({ app, isDebug, isNightly })=>{
     
     </div>
   );
+  */
 };
 
 export default NonConTrend;
