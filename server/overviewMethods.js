@@ -292,23 +292,6 @@ Meteor.methods({
     }
   },
   
-  getAllPerform() {
-    const batches = XBatchDB.find(
-      {orgKey: Meteor.user().orgKey},
-      {fields:{'completedAt':1}}
-    ).fetch();
-    
-    let perfset = [];
-    for( let batch of batches) {
-      perfset.push({
-        y: Meteor.call('performTrace', batch._id),
-        x: batch.completedAt || new Date(),
-        symbol: 'diamond'
-      });
-    }
-    return perfset;
-  },
-  
   nonconQuickStats(batchID, temp) {
     async function bundleNonCon(batchID) {
       const accessKey = Meteor.user().orgKey;

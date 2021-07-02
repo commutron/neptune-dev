@@ -12,14 +12,14 @@ import {
 import Theme from '/client/global/themeV.js';
 
 
-const PerfScatter = ({ app })=> {
+const QtyScatter = ({ app })=> {
   
   const thingMounted = useRef(true);
   
   const [ tickXY, tickXYSet ] = useState([]);
   
   useEffect( ()=> {
-    Meteor.call('getAllPerform', (err, re)=>{
+    Meteor.call('getAllQuantity', (err, re)=>{
       err && console.log(err);
       if(re) {
         if(thingMounted.current) {
@@ -33,34 +33,22 @@ const PerfScatter = ({ app })=> {
     <div className='chartNoHeightContain'>
       <VictoryChart
         theme={Theme.NeptuneVictory}
-        padding={{top: 25, right: 25, bottom: 10, left: 25}}
+        padding={{top: 25, right: 25, bottom: 25, left: 40}}
         domainPadding={25}
         height={250}
-        containerComponent={
-          <VictoryZoomContainer
-            zoomDimension="x"
-            minimumZoom={{x: 1000/500, y: 0.1}}
-          />}
+        containerComponent={<VictoryZoomContainer />}
       >
         <VictoryAxis
           tickFormat={(t) => moment(t).format('MMM D YYYY')}
           fixLabelOverlap={true}
-          offsetY={15}
           style={ {
             axis: { stroke: 'grey' },
-            grid: { stroke: 'transparent' },
+            grid: { stroke: '#5c5c5c' },
             ticks: { stroke: '#5c5c5c' },
             tickLabels: { 
               fontSize: '7px' }
           } }
           scale={{ x: "time" }}
-        />
-        <VictoryAxis
-          style={ {
-            axis: { stroke: 'rgb(46, 204, 113)', strokeWidth: '3px' },
-            ticks: { stroke: 'transparent' },
-          } }
-          tickFormat={() => ''}
         />
         <VictoryAxis 
           dependentAxis
@@ -95,14 +83,12 @@ const PerfScatter = ({ app })=> {
       </VictoryChart>
       
       <p className='lightgray fade'>
-        ◆ = Completed <br />
-        ★ = WIP <br />
         Scroll to Zoom <br />
         Click and Drag to Pan <br />
-        Reliable data begins {moment(app.tideWall).format('MMMM YYYY')}
+        Reliable data begins {moment(app.createdAt).format('MMMM YYYY')}
       </p>
     </div>
   );
 };
 
-export default PerfScatter;
+export default QtyScatter;

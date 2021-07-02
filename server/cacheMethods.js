@@ -1,5 +1,5 @@
 // import { Random } from 'meteor/random'
-// import moment from 'moment';
+import moment from 'moment';
 
 // import Config from '/server/hardConfig.js';
 
@@ -66,37 +66,131 @@ Meteor.methods({
       }
     }
   },
-  /*
-  function getWidgetDur(widget, accessKey) {
   
-  const turnStats = widget.turnStats || null;
-  const statime = turnStats ? turnStats.updatedAt : null;
-  const stale = !statime ? true :
-            moment.duration(moment().diff(moment(statime))).as('hours') > 12;
-  if(stale) {
-      
-    const compX = XBatchDB.find({
-      widgetId: widget._id, 
-      completed: true,
-      
-    }).fetch();
-    for( let x of compX ) {
-      
-    }
+  getAllPerform() {
+    const accessKey = Meteor.user().orgKey;
     
-    CacheDB.upsert({dataName: 'avgDayItemFin'}, {
-      $set : {
+    const perfShade = CacheDB.findOne({orgKey: accessKey, dataName: 'performShadow'});
+    const preftime = perfShade ? perfShade.lastUpdated : null;
+    const stale = !preftime ? true :
+              moment.duration(moment().diff(moment(preftime))).as('hours') > 12;
+    if(true) {
+      const app = AppDB.findOne({ orgKey: accessKey });
+      const tideWall = app && app.tideWall;
+
+      const batches = XBatchDB.find({
         orgKey: accessKey,
-        lastUpdated: new Date(),
-        dataName: 'avgDayItemFin',
-        dataNum: Number(newavg),
-        dataTrend: trend
-    }});
+        createdAt: { 
+          $gte: new Date(tideWall)
+        }
+      },
+        {fields:{'batch':1,'completedAt':1}}
+      ).fetch();
       
-    return avgWorkDays;
-  }else{
-    return turnStats.stats;
+      let perfset = [];
+      for( let batch of batches) {
+        const p = Meteor.call('performTrace', batch._id);
+        perfset.push({
+          y: p,
+          x: batch.completedAt || new Date(),
+          z: `${batch.batch} = ${p > 0 ? '+'+p : p}`,
+          symbol: batch.completedAt ? 'diamond' : 'star',
+          size: '3'
+        });
+      }
+      
+      CacheDB.upsert({dataName: 'performShadow'}, {
+        $set : {
+          orgKey: accessKey,
+          lastUpdated: new Date(),
+          dataName: 'performShadow',
+          dataArray: perfset
+      }});
+    
+      return perfset;
+    }else{
+      return perfShade.dataArray;
+    }
+  },
+  
+  getAllNCCount() {
+    const accessKey = Meteor.user().orgKey;
+    
+    const nccountShade = CacheDB.findOne({orgKey: accessKey, dataName: 'nccountShadow'});
+    const nctime = nccountShade ? nccountShade.lastUpdated : null;
+    const stale = !nctime ? true :
+              moment.duration(moment().diff(moment(nctime))).as('hours') > 12;
+    if(true) {
+      const batches = XBatchDB.find({
+        orgKey: accessKey,
+      },
+        {fields:{'batch':1,'completedAt':1}}
+      ).fetch();
+      
+      let ncset = [];
+      for( let batch of batches) {
+        const srs = XSeriesDB.findOne({batch: batch.batch});
+        const nc = srs ? srs.nonCon.length : 0;
+        ncset.push({
+          y: nc,
+          x: batch.completedAt || new Date(),
+          z: `${batch.batch} = ${nc}`,
+          symbol: batch.completedAt ? 'diamond' : 'star',
+          size: '3'
+        });
+      }
+      
+      CacheDB.upsert({dataName: 'nccountShadow'}, {
+        $set : {
+          orgKey: accessKey,
+          lastUpdated: new Date(),
+          dataName: 'nccountShadow',
+          dataArray: ncset
+      }});
+    
+      return ncset;
+    }else{
+      return nccountShade.dataArray;
+    }
+  },
+  
+  getAllQuantity() {
+    const accessKey = Meteor.user().orgKey;
+    
+    const qtyShade = CacheDB.findOne({orgKey: accessKey, dataName: 'qtyShadow'});
+    const qtytime = qtyShade ? qtyShade.lastUpdated : null;
+    const stale = !qtytime ? true :
+              moment.duration(moment().diff(moment(qtytime))).as('hours') > 12;
+    if(true) {
+      const batches = XBatchDB.find({
+        orgKey: accessKey,
+      },
+        {fields:{'batch':1,'createdAt':1,'quantity':1,'salesOrder':1}}
+      ).fetch();
+      
+      let qtyset = [];
+      for( let batch of batches) {
+        qtyset.push({
+          y: batch.quantity,
+          x: batch.createdAt,
+          z: `${batch.batch} (so.${batch.salesOrder}) = ${batch.quantity}`,
+          symbol: 'triangleUp',
+          size: '3'
+        });
+      }
+      
+      CacheDB.upsert({dataName: 'qtyShadow'}, {
+        $set : {
+          orgKey: accessKey,
+          lastUpdated: new Date(),
+          dataName: 'qtyShadow',
+          dataArray: qtyset
+      }});
+    
+      return qtyset;
+    }else{
+      return qtyShade.dataArray;
+    }
   }
-}*/
   
 });
